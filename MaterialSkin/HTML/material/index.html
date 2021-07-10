@@ -56,10 +56,10 @@
     <lms-server></lms-server>
     <lms-toolbar></lms-toolbar>
     <div v-if="desktopLayout" class="lms-desktop-toolbar-pad"></div>
-    <vue-splitter :margin="(desktopLayout && showQueue) ? 20 : 0" :percent="desktopLayout ? showQueue ? splitterPercent : 100 : 0" @resize="splitterResized" class="hide-for-mini">
+    <lms-splitter :margin="(desktopLayout && showQueue) ? 20 : 0" class="hide-for-mini">
      <div slot="left-pane"><lms-browse v-show="desktopLayout || page=='browse'"></lms-browse></div>
      <div slot="right-pane"><lms-queue v-show="(desktopLayout && showQueue) || page=='queue'"></lms-queue></div>
-    </vue-splitter>
+    </lms-splitter>
     <lms-now-playing v-show="desktopLayout || page=='now-playing'"></lms-now-playing>
     <lms-bottomnav v-if="!desktopLayout"></lms-bottomnav>
     <lms-ui-settings v-if="dialogs.uisettings"></lms-ui-settings>
@@ -137,7 +137,6 @@
   <script src="html/lib/intersection-observer.min.js?r=0.5.0"></script>
   <script src="html/lib/vue-virtual-scroller.min.js?r=1.0.10mod"></script>
   <script src="html/lib/vue-lazyload.js?r=1.3.3"></script>
-  <script src="html/lib/vue-splitter.js?r=1.3.0m1"></script>
   <script src="html/lib/vue-touch-events.min.js?r=2.2.1pre1502"></script>
   <script src="html/lib/mousetrap.min.js?r=a4098"></script>
   [% PERL %]
@@ -156,6 +155,7 @@
   print("  <script src=\"html/js/bottomnav.js?r=$version\"></script>\n");
   print("  <script src=\"html/js/icon-mapping.js?r=$version\"></script>\n");
   print("  <script src=\"html/js/itemlinks.js?r=$version\"></script>\n");
+  print("  <script src=\"html/js/splitter.js?r=$version\"></script>\n");
   print("  <script src=\"html/js/browse-page.js?r=$version\"></script>\n");
   print("  <script src=\"html/js/nowplaying-page.js?r=$version\"></script>\n");
   print("  <script src=\"html/js/queue-page.js?r=$version\"></script>\n");

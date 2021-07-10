@@ -63,14 +63,27 @@
  left:calc(((100vw * (var(--splitter-pc)/100))/2) - 32px);
 }
 
-.vue-splitter .splitter {
+.lms-splitter {
+ height: inherit;
+ display: flex;
+ flex-direction: row;
+ .splitter-pane {
+  height: inherit;
+  overflow-y: auto;
+ }
+ .splitter {
+  width: 5px;
+ }
+}
+
+.lms-splitter .splitter {
  border-left:1px solid var(--background-color);
  border-right:1px solid var(--background-color);
  background-color:var(--splitter-color) !important;
  width:var(--splitter-width)!important;
 }
 
-.vue-splitter .splitter:before {
+.lms-splitter .splitter:before {
  position: absolute;
  content: '';
  top: var(--main-toolbar-height);
@@ -81,9 +94,10 @@
 }
 
 @media (hover: hover) and (pointer: fine) {
- .vue-splitter .splitter:hover {
+ .lms-splitter .splitter:hover {
   border:none;
   background-color:var(--primary-color)!important;
+  cursor: ew-resize;
  }
 }
 

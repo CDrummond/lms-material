@@ -27,9 +27,6 @@ var app = new Vue({
             document.getElementsByTagName("head")[0].appendChild(s);
         }
         this.autoLayout = true;
-        this.splitterPercent = parseInt(getLocalStorageVal("splitter", "50"));
-        this.splitter = this.splitterPercent;
-        document.documentElement.style.setProperty('--splitter-pc', this.splitter);
         this.$store.commit('initUiSettings');
         this.$store.commit('setShowQueue', getLocalStorageBool('showQueue', true));
         if (queryParams.player) {
@@ -294,12 +291,6 @@ var app = new Vue({
         bus.$on('changeLayout', function(layout) {
             this.setLayout(layout);
         }.bind(this));
-
-        bus.$on('setSplitter', function(pc) {
-            this.splitterPercent = pc;
-            this.splitter = this.splitterPercent;
-            document.documentElement.style.setProperty('--splitter-pc', this.splitter);
-        }.bind(this));
         bus.$store = this.$store;
     },
     computed: {
@@ -380,23 +371,6 @@ var app = new Vue({
                 }
             }
         },
-        splitterResized(val) {
-            if (!this.$store.state.desktopLayout || !this.$store.state.showQueue) {
-                return;
-            }
-            var f = Math.floor(val/2)*2;
-            if (f!=this.splitter) {
-                setLocalStorageVal("splitter", f);
-                document.documentElement.style.setProperty('--splitter-pc', f);
-                this.splitter=f;
-                if (!this.splitterChangedAnimationFrameReq) {
-                    this.scrollAnimationFrameReq = window.requestAnimationFrame(() => {
-                        bus.$emit('splitterChanged');
-                        this.scrollAnimationFrameReq = undefined;
-                    });
-                }
-            }
-        },
         doQueryActions(actOnPlayers) {
             for (var i=0; i<queryParams.actions.length; ) {
                 if ( (actOnPlayers && queryParams.actions[i].startsWith("dlg.")) || (!actOnPlayers && !queryParams.actions[i].startsWith("dlg."))) {
@@ -470,9 +444,6 @@ var app = new Vue({
                 }
             }
         }
-    },
-    components: {
-        VueSplitter: VueSplitter
     },
     store,
     lmsServer

@@ -993,6 +993,7 @@ div.v-subheader {
  left:0px;
  top:var(--np-portrait-image-size);
  text-shadow: 2px 2px 5px var(--text-shadow-color);
+ margin:0px!important
 }
 
 .np-portrait-rating .v-rating {
@@ -2330,6 +2331,10 @@ img[lazy='loaded'].np-image-desktop, img[lazy='loaded'].np-image-landscape, img[
 /* Material Design 2 changes */
 .v-dialog:not(.v-dialog--fullscreen), .vol-sheet {
  border-radius:12px;
+}
+.v-snack__wrapper {
+ border-radius:8px;
+ margin-top:8px;
 }
 .vol-sheet {
  border:1px solid var(--dialog-border-color);

@@ -61,9 +61,11 @@ const PQ_COPY_ACTION          = 47;
 const ADV_SEARCH_ACTION       = 48;
 const SAVE_VLIB_ACTION        = 49;
 
+const DOWNLOAD_ACTION         = 50;
+
 // TODO Remove after LMS8.2 released
-const ADD_PODCAST_ACTION      = 50;
-const SEARCH_PODCAST_ACTION   = 51;
+const ADD_PODCAST_ACTION      = 51;
+const SEARCH_PODCAST_ACTION   = 52;
 
 var ACTIONS=[
     {cmd:"play",         icon:"play_circle_outline"},
@@ -122,6 +124,8 @@ var ACTIONS=[
     {cmd:"copy-here",    icon:"content_copy"},
     {cmd:"adv-search",   svg:"text-search"},
     {cmd:"save-vlib",    icon:"library_add"},
+
+    {cmd:"download",     icon:"cloud_download"},
 
     // TODO Remove after LMS8.2 released
     {cmd:"add-podcast",  icon:"add_box"},
@@ -187,6 +191,8 @@ function updateActionStrings() {
     ACTIONS[PQ_COPY_ACTION].title=i18n("Copy browse selection here");
     ACTIONS[ADV_SEARCH_ACTION].title=i18n("Advanced search");
     ACTIONS[SAVE_VLIB_ACTION].title=i18n("Save as virtual library");
+
+    ACTIONS[DOWNLOAD_ACTION].title=i18n("Download");
 
     // TODO Remove after LMS8.2 released
     ACTIONS[ADD_PODCAST_ACTION].title=i18n("Add podcast");

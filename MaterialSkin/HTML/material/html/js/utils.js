@@ -51,7 +51,7 @@ function parseQueryParams() {
         queryString=queryString.substring(0, hash);
     }
     var query = queryString.split('&');
-    var resp = { actions:[], debug:new Set(), hide:new Set(), layout:undefined, player:undefined, single:false, nativeStatus:false, nativeColors:false, nativePlayer:false, appSettings:undefined, appQuit:undefined, css:undefined };
+    var resp = { actions:[], debug:new Set(), hide:new Set(), layout:undefined, player:undefined, single:false, nativeStatus:false, nativeColors:false, nativePlayer:false, appSettings:undefined, appQuit:undefined, css:undefined, download:'browser' };
 
     for (var i = query.length - 1; i >= 0; i--) {
         var kv = query[i].split('=');
@@ -76,6 +76,10 @@ function parseQueryParams() {
         } else if("css"==kv[0]) {
             resp.css = kv[1];
             changeLink("/material/customcss/"+kv[1]+"?r=" + LMS_MATERIAL_REVISION, "customcss");
+        } else if("js"==kv[0]) {
+            var element = document.createElement("script");
+            element.src = "/material/customjs/"+kv[1]+"?r=" + LMS_MATERIAL_REVISION;
+            document.body.appendChild(element);
         } else if ("layout"==kv[0]) {
             resp.layout=kv[1];
         } else if ("nativeStatus"==kv[0]) {
@@ -103,6 +107,8 @@ function parseQueryParams() {
             }
         } else if ("single"==kv[0]) {
             resp.single=true;
+        } else if ("download"==kv[0] && kv.length>1) {
+            resp.download=kv[1];
         }
     }
     return resp;
@@ -926,11 +932,28 @@ function isAudioTrack(item) {
                 (item.goAction && (item.goAction == "playControl" || item.goAction == "play"));
 }
 
-function setElemSizes(larger) {
-    document.documentElement.style.setProperty('--std-font-size', larger ? '19px' : '16px');
-    document.documentElement.style.setProperty('--small-font-size', larger ? '18px' : '14px');
-    document.documentElement.style.setProperty('--icon-size', larger ? '28px' : '24px');
-    document.documentElement.style.setProperty('--toolbar-button-margin', larger ? '2px' : '4px');
+function setFontSize(sz) {
+    let std = 16;
+    let small = 14;
+    let icon = 24;
+    switch(sz) {
+    case 'l':
+        std = 19;
+        small = 18;
+        icon = 26;
+        break;
+    case 'r':
+        break;
+    case 's':
+        std = 13;
+        small = 11;
+        icon = 22;
+        break;
+    }
+
+    document.documentElement.style.setProperty('--std-font-size', std+'px');
+    document.documentElement.style.setProperty('--small-font-size', small+'px');
+    document.documentElement.style.setProperty('--icon-size', icon+'px');
 }
 
 var lastShortcut={key:undefined, modifier:undefined, time:undefined};

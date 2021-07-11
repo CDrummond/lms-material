@@ -152,3 +152,9 @@ PLUGIN_MATERIAL_SKIN_SHOW_ALL_ARTISTS_DESC
 	FR	Si un morceau a plusieurs artistes ou artistes d'album, compositeurs, etc., choisir de les afficher tous (lors de la navigation dans les albums, dans la vue 'lecture en cours' et dans la liste de lecture) ou de n'afficher que le premier de chaque type.
 	NL	Als een nummer meerdere artiesten, albumartiesten, componisten, etc. heeft, laat ze dan allemaal zien bij het bladeren door albums, bij het afspelen en in de afspeellijst. Laat anders gewoon de eerste van elk zien.
 	RU	Если в треке есть несколько исполнителей, музыкантов, композиторов и т. д., Тогда показывать все при просмотре альбомов, в «Сейчас играет» и в очереди. В противном случае просто позать первое из каждого
+
+PLUGIN_MATERIAL_SKIN_ALLOW_DOWNLOAD
+	EN	Allow downloading
+
+PLUGIN_MATERIAL_SKIN_ALLOW_DOWNLOAD_DESC
+	EN	Add download actions to tracks, albums, and playlists to allow users to download tracks.

@@ -16,6 +16,7 @@ function copyPlayer(p){
 
 function updateUiSettings(state, val) {
     var browseDisplayChanged = false;
+    var relayoutGrid = false;
     var themeChanged = false;
     if (undefined!=val.theme && state.theme!=val.theme) {
         state.theme = val.theme;
@@ -32,10 +33,10 @@ function updateUiSettings(state, val) {
         setTheme(state.theme, state.color);
         bus.$emit('themeChanged');
     }
-    if (undefined!=val.largerElements && state.largerElements!=val.largerElements && !queryParams.hide.has('scale')) {
-        state.largerElements = val.largerElements;
-        setLocalStorageVal('largerElements', state.largerElements);
-        setElemSizes(state.largerElements);
+    if (undefined!=val.fontSize && state.fontSize!=val.fontSize) {
+        state.fontSize = val.fontSize;
+        setLocalStorageVal('fontSize', state.fontSize);
+        setFontSize(state.fontSize);
     }
     if (undefined!=val.sortFavorites && state.sortFavorites!=val.sortFavorites) {
         state.sortFavorites = val.sortFavorites;
@@ -152,6 +153,11 @@ function updateUiSettings(state, val) {
         state.powerButton = val.powerButton;
         setLocalStorageVal('powerButton', state.powerButton);
     }
+    if (undefined!=val.largeCovers && state.largeCovers!=val.largeCovers) {
+        state.largeCovers = val.largeCovers;
+        setLocalStorageVal('largeCovers', state.largeCovers);
+        relayoutGrid = true;
+    }
     if (undefined!=val.showRating && state.showRating!=val.showRating) {
         state.showRating = val.showRating;
         setLocalStorageVal('showRating', state.showRating);
@@ -169,6 +175,8 @@ function updateUiSettings(state, val) {
     lmsOptions.infoPlugin = state.infoPlugin;
     if (browseDisplayChanged) {
         bus.$emit('browseDisplayChanged');
+    } else if (relayoutGrid) {
+        bus.$emit('relayoutGrid');
     }
     if (val.sorts) {
         for (let [key, value] of Object.entries(val.sorts)) {
@@ -241,7 +249,7 @@ const store = new Vuex.Store({
         theme: defaultTheme(),
         color: 'blue',
         darkUi: true,
-        largerElements: false,
+        fontSize: 'r',
         letterOverlay:false,
         sortFavorites:true,
         showMenuAudio:true,
@@ -282,7 +290,9 @@ const store = new Vuex.Store({
         homeButton: false,
         lang: 'en-US',
         twentyFourHour: false,
-        powerButton: false
+        powerButton: false,
+        largeCovers: false,
+        downloadStatus: []
     },
     mutations: {
         setPlayers(state, players) {
@@ -448,7 +458,13 @@ const store = new Vuex.Store({
             state.theme = getLocalStorageVal('theme', state.theme);
             state.darkUi = !state.theme.startsWith('light') && state.theme.indexOf("/light/")<0;
             state.color = getLocalStorageVal('color', state.color);
-            state.largerElements = queryParams.hide.has('scale') ? false : getLocalStorageBool('largerElements', getLocalStorageBool('largeFonts', state.largerElements));
+            var larger = getLocalStorageBool('largerElements', getLocalStorageBool('largeFonts', undefined));
+            var fontSize = getLocalStorageVal('fontSize', undefined);
+            if (undefined==fontSize && undefined!=larger) {
+                fontSize = larger ? 'l' : 'r';
+                setLocalStorageVal('fontSize', fontSize);
+            }
+            state.fontSize = undefined==fontSize ? 'r' : fontSize;
             state.autoScrollQueue = getLocalStorageBool('autoScrollQueue', state.autoScrollQueue);
             state.library = getLocalStorageVal('library', state.library);
             state.sortFavorites = getLocalStorageBool('sortFavorites', state.sortFavorites);
@@ -482,13 +498,14 @@ const store = new Vuex.Store({
             state.homeButton = getLocalStorageBool('homeButton', state.homeButton);
             state.disabledBrowseModes = new Set(JSON.parse(getLocalStorageVal('disabledBrowseModes', '["myMusicFlopTracks", "myMusicTopTracks", "myMusicMusicFolder", "myMusicFileSystem", "myMusicArtistsComposers", "myMusicArtistsConductors", "myMusicArtistsJazzComposers", "myMusicAlbumsAudiobooks"]')));
             state.powerButton = getLocalStorageBool('powerButton', state.powerButton);
+            state.largeCovers = getLocalStorageBool('largeCovers', state.largeCovers);
             // Ensure theme is in settings, so that it can be use in classic skin mods...
             if (undefined==getLocalStorageVal('theme')) {
                 setLocalStorageVal('theme', state.theme);
             }
             setTheme(state.theme, state.color);
-            if (state.largerElements) {
-                setElemSizes(state.largerElements);
+            if (state.fontSize!='r') {
+                setFontSize(state.fontSize);
             }
             lmsOptions.techInfo = state.techInfo;
             lmsOptions.infoPlugin = state.infoPlugin;
@@ -579,6 +596,7 @@ const store = new Vuex.Store({
                         var opts = { theme: getLocalStorageVal('theme', undefined==prefs.theme ? state.theme : prefs.theme),
                                      color: getLocalStorageVal('color', undefined==prefs.color ? state.color : prefs.color),
                                      largerElements: getLocalStorageBool('largerElements', undefined==prefs.largerElements ? state.largerElements : prefs.largerElements),
+                                     fontSize: getLocalStorageVal('fontSize', undefined==prefs.fontSize ? state.fontSize : prefs.fontSize),
                                      autoScrollQueue: getLocalStorageBool('autoScrollQueue', undefined==prefs.autoScrollQueue ? state.autoScrollQueue : prefs.autoScrollQueue),
                                      letterOverlay: getLocalStorageBool('letterOverlay', undefined==prefs.letterOverlay ? state.letterOverlay : prefs.letterOverlay),
                                      sortFavorites: getLocalStorageBool('sortFavorites', undefined==prefs.sortFavorites ? state.sortFavorites : prefs.sortFavorites),
@@ -604,7 +622,8 @@ const store = new Vuex.Store({
                                      screensaver: getLocalStorageBool('screensaver', undefined==prefs.screensaver ? state.screensaver : prefs.screensaver),
                                      homeButton: getLocalStorageBool('homeButton', undefined==prefs.homeButton ? state.homeButton : prefs.homeButton),
                                      showRating: getLocalStorageBool('showRating', undefined==prefs.showRating ? state.showRating : prefs.showRating),
-                                     powerButton: getLocalStorageBool('powerButton', undefined==prefs.powerButton ? state.powerButton : prefs.powerButton) };
+                                     powerButton: getLocalStorageBool('powerButton', undefined==prefs.powerButton ? state.powerButton : prefs.powerButton),
+                                     largeCovers: getLocalStorageBool('largeCovers', undefined==prefs.largeCovers ? state.largeCovers : prefs.largeCovers) };
                         if (undefined!=prefs.hidden && undefined==getLocalStorageVal('hidden', undefined)) {
                             opts.hidden=new Set(prefs.hidden);
                         }
@@ -620,6 +639,9 @@ const store = new Vuex.Store({
                                     opts.sorts[key]=value;
                                 }
                             }
+                        }
+                        if (undefined==opts.fontSize && undefined!=opts.largerElements) {
+                            opts.fontSize = opts.largerElements ? 'l' : 'r';
                         }
                     updateUiSettings(state, opts);
                     } catch(e) {
@@ -749,6 +771,9 @@ const store = new Vuex.Store({
                 bus.$emit('showQueue', val);
                 document.documentElement.style.setProperty('--splitter-width', val ? '3px' : '0px');
             }
+        },
+        setDownloadStatus(state, val) {
+            state.downloadStatus = val;
         }
     }
 })

@@ -43,15 +43,18 @@ my $MAX_ADV_SEARCH_RESULTS = 1000;
 my $DESKTOP_URL_PARSER_RE = qr{^desktop$}i;
 my $MINI_URL_PARSER_RE = qr{^mini$}i;
 my $NOW_PLAYING_URL_PARSER_RE = qr{^now-playing$}i;
+my $NOW_PLAYING_ONLY_URL_PARSER_RE = qr{^np-only$}i;
 my $MOBILE_URL_PARSER_RE = qr{^mobile$}i;
 my $SVG_URL_PARSER_RE = qr{material/svg/([a-z0-9-]+)}i;
 my $CSS_URL_PARSER_RE = qr{material/customcss/([a-z0-9-]+)}i;
 my $JS_URL_PARSER_RE = qr{material/custom.js}i;
+my $OTHER_JS_URL_PARSER_RE = qr{material/customjs/([a-z0-9-]+)}i;
 my $ICON_URL_PARSER_RE = qr{material/icon\.png}i;
 my $ACTIONS_URL_PARSER_RE = qr{material/customactions\.json}i;
 my $MAIFEST_URL_PARSER_RE = qr{material/material\.webmanifest}i;
 my $USER_THEME_URL_PARSER_RE = qr{material/usertheme/.+}i;
 my $USER_COLOR_URL_PARSER_RE = qr{material/usercolor/.+}i;
+my $DOWNLOAD_PARSER_RE = qr{material/download/.+}i;
 
 my $DEFAULT_COMPOSER_GENRES = string('PLUGIN_MATERIAL_SKIN_DEFAULT_COMPOSER_GENRES');
 my $DEFAULT_CONDUCTOR_GENRES = string('PLUGIN_MATERIAL_SKIN_DEFAULT_CONDUCTOR_GENRES');
@@ -100,7 +103,8 @@ sub initPlugin {
         respectFixedVol => '1',
         showAllArtists => '1',
         artistFirst => '1',
-        password => ''
+        password => '',
+        downloading => '0'
     });
 
     if (main::WEBUI) {
@@ -119,6 +123,10 @@ sub initPlugin {
             my ($client, $params) = @_;
             return Slim::Web::HTTP::filltemplatefile('now-playing.html', $params);
         } );
+        Slim::Web::Pages->addPageFunction( $NOW_PLAYING_ONLY_URL_PARSER_RE, sub {
+            my ($client, $params) = @_;
+            return Slim::Web::HTTP::filltemplatefile('np-only.html', $params);
+        } );
         Slim::Web::Pages->addPageFunction( $MOBILE_URL_PARSER_RE, sub {
             my ($client, $params) = @_;
             return Slim::Web::HTTP::filltemplatefile('mobile.html', $params);
@@ -127,11 +135,13 @@ sub initPlugin {
         Slim::Web::Pages->addRawFunction($SVG_URL_PARSER_RE, \&_svgHandler);
         Slim::Web::Pages->addRawFunction($CSS_URL_PARSER_RE, \&_customCssHandler);
         Slim::Web::Pages->addRawFunction($JS_URL_PARSER_RE, \&_customJsHandler);
+        Slim::Web::Pages->addRawFunction($OTHER_JS_URL_PARSER_RE, \&_customJsHandler);
         Slim::Web::Pages->addRawFunction($ICON_URL_PARSER_RE, \&_iconHandler);
         Slim::Web::Pages->addRawFunction($ACTIONS_URL_PARSER_RE, \&_customActionsHandler);
         Slim::Web::Pages->addRawFunction($MAIFEST_URL_PARSER_RE, \&_manifestHandler);
         Slim::Web::Pages->addRawFunction($USER_THEME_URL_PARSER_RE, \&_userThemeHandler);
         Slim::Web::Pages->addRawFunction($USER_COLOR_URL_PARSER_RE, \&_userColorHandler);
+        Slim::Web::Pages->addRawFunction($DOWNLOAD_PARSER_RE, \&_downloadHandler);
         # make sure scanner does pre-cache artwork in the size the skin is using in browse modesl
         Slim::Control::Request::executeRequest(undef, [ 'artworkspec', 'add', '300x300_f', 'Material Skin' ]);
 
@@ -209,6 +219,7 @@ sub _cliCommand {
         $request->addResult('respectFixedVol', $prefs->get('respectFixedVol'));
         $request->addResult('showAllArtists', $prefs->get('showAllArtists'));
         $request->addResult('artistFirst', $prefs->get('artistFirst'));
+        $request->addResult('allowDownload', $prefs->get('allowDownload'));
         $request->setStatusDone();
         return;
     }
@@ -1195,10 +1206,23 @@ sub _customCssHandler {
     return unless $httpClient->connected;
 
     my $request = $response->request;
-    my $filePath = Slim::Utils::Prefs::dir() . "/material-skin/css/" . basename($request->uri->path) . ".css";
-    if (! -e $filePath) { # Try pre 1.6.0 path
-        $filePath = Slim::Utils::Prefs::dir() . "/plugin/material-skin." . basename($request->uri->path) . ".css";
+    my $fileName = basename($request->uri->path);
+    my $filePath = '';
+
+    if ('msk--' eq substr($fileName, 0, 5)) {
+        my $dir = dirname(__FILE__);
+        $fileName = substr($fileName, 5);
+        $filePath = $dir . "/HTML/material/html/css/other/" . $fileName . ".min.css";
+        if (! -e $filePath) {
+            $filePath = $dir . "/HTML/material/html/css/other/" . $fileName . ".css";
+        }
+    } else {
+        $filePath = Slim::Utils::Prefs::dir() . "/material-skin/css/" . $fileName . ".css";
+        if (! -e $filePath) { # Try pre 1.6.0 path
+            $filePath = Slim::Utils::Prefs::dir() . "/plugin/material-skin." . $fileName . ".css";
+        }
     }
+
     $response->code(RC_OK);
     if (-e $filePath) {
         Slim::Web::HTTP::sendStreamingFile( $httpClient, $response, 'text/css', $filePath, '', 'noAttachment' );
@@ -1216,9 +1240,25 @@ sub _customJsHandler{
     return unless $httpClient->connected;
 
     my $request = $response->request;
-    my $filePath = Slim::Utils::Prefs::dir() . "/material-skin/custom.js";
+    my $fileName = basename($request->uri->path);
+    my $filePath = '';
+
+    if ('custom.js' eq $fileName) {
+        $filePath = Slim::Utils::Prefs::dir() . "/material-skin/custom.js";
+    } elsif ('msk--' eq substr($fileName, 0, 5)) {
+        my $dir = dirname(__FILE__);
+        $fileName = substr($fileName, 5);
+        $filePath = $dir . "/HTML/material/html/js/other/" . $fileName . ".min.js";
+        if (! -e $filePath) {
+            $filePath = $dir . "/HTML/material/html/js/other/" . $fileName . ".js";
+        }
+    } else {
+        $filePath = Slim::Utils::Prefs::dir() . "/material-skin/js/" . $fileName . ".js";
+    }
+
     $response->code(RC_OK);
     if (-e $filePath) {
+        print("LOAD JS: " . $filePath . "\n");
         Slim::Web::HTTP::sendStreamingFile( $httpClient, $response, 'application/javascript', $filePath, '', 'noAttachment' );
     } else {
         $response->content_type('application/javascript');
@@ -1349,6 +1389,24 @@ sub _userColorHandler {
     }
     $response->code(RC_OK);
     Slim::Web::HTTP::sendStreamingFile( $httpClient, $response, 'text/css', $filePath, '', 'noAttachment' );
+}
+
+sub _downloadHandler {
+    my ( $httpClient, $response ) = @_;
+    return unless $httpClient->connected;
+
+    my $request = $response->request;
+    my $obj = Slim::Schema->find('Track', basename($request->uri->path));
+
+    if (blessed($obj) && Slim::Music::Info::isSong($obj) && Slim::Music::Info::isFile($obj->url)) {
+        $response->code(RC_OK);
+        $response->headers->remove_content_headers;
+        Slim::Web::HTTP::sendStreamingFile( $httpClient, $response, 'application/octet-stream', Slim::Utils::Misc::pathFromFileURL($obj->url), $obj, 1 );
+    } else {
+        $response->code(RC_NOT_FOUND);
+        $httpClient->send_response($response);
+        Slim::Web::HTTP::closeHTTPSocket($httpClient);
+    }
 }
 
 1;

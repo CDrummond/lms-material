@@ -243,7 +243,7 @@ var lmsBrowse = Vue.component("lms-browse", {
      </v-list-tile-avatar>
      <v-list-tile-title>{{ACTIONS[UNSELECT_ACTION].title}}</v-list-tile-title>
     </v-list-tile>
-    <v-list-tile v-else-if="action==BR_COPY_ACTION ? queueSelection : action==MOVE_HERE_ACTION ? (selection.size>0 && !menu.item.selected) : (action!=RATING_ACTION || undefined!=ratingsPlugin)" @click="itemAction(action, menu.item, menu.index, $event)">
+    <v-list-tile v-else-if="action==BR_COPY_ACTION ? queueSelection : action==MOVE_HERE_ACTION ? (selection.size>0 && !menu.item.selected) : action==DOWNLOAD_ACTION ? lmsOptions.allowDownload && undefined==menu.item.emblem : (action!=RATING_ACTION || undefined!=ratingsPlugin)" @click="itemAction(action, menu.item, menu.index, $event)">
      <v-list-tile-avatar v-if="menuIcons">
       <v-icon v-if="undefined==ACTIONS[action].svg">{{ACTIONS[action].icon}}</v-icon>
       <img v-else class="svg-img" :src="ACTIONS[action].svg | svgIcon(darkUi)"></img>
@@ -1201,12 +1201,12 @@ var lmsBrowse = Vue.component("lms-browse", {
                 });
             }
         },
-        calcSizes(quantity, listWidth) {
+        calcSizes(quantity, listWidth, maxItemWidth) {
             var width = GRID_MIN_WIDTH;
             var height = GRID_MIN_HEIGHT;
             var steps = 0;
             if (0!=quantity) {
-                while (listWidth>=((width+GRID_STEP)*quantity) && (width+GRID_STEP)<=GRID_MAX_WIDTH) {
+                while (listWidth>=((width+GRID_STEP)*quantity) && (width+GRID_STEP)<=maxItemWidth) {
                     width += GRID_STEP;
                     height += GRID_STEP;
                     steps++;
@@ -1230,9 +1230,22 @@ var lmsBrowse = Vue.component("lms-browse", {
             var listWidth = thisWidth - ((/*scrollbar*/ IS_MOBILE ? 0 : 20) + (/*this.filteredJumplist.length>1 && this.items.length>10 ? */JUMP_LIST_WIDTH/* :0*/) + RIGHT_PADDING);
 
             // Calculate what grid item size we should use...
+            var allowLarge = this.$store.state.largeCovers;
+            if (allowLarge && this.items.length<100) {
+                allowLarge = false;
+                for (var i=0, len=this.items.length; i<len; ++i) {
+                   if (this.items[i].image) {
+                       allowLarge = true;
+                       break;
+                   }
+                }
+            }
+
             var sz = undefined;
-            for (var i=4; i>=1; --i) {
-                sz = this.calcSizes(i, listWidth);
+            var preferredColumns = (allowLarge && listWidth>750) ? 3 : 4;
+            var maxItemWidth = Math.floor(GRID_MAX_WIDTH * (allowLarge ? 1.5 : 1.0));
+            for (var i=preferredColumns; i>=1; --i) {
+                sz = this.calcSizes(i, listWidth, maxItemWidth);
                 if (sz.mc>=i) {
                     break;
                 }
@@ -1657,6 +1670,9 @@ var lmsBrowse = Vue.component("lms-browse", {
         });
 
         bus.$on('splitterChanged', function() {
+            this.layoutGrid();
+        }.bind(this));
+        bus.$on('relayoutGrid', function() {
             this.layoutGrid();
         }.bind(this));
         bus.$on('layoutChanged', function() {

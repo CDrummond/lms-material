@@ -12,12 +12,15 @@
  --sub-opacity:0.7;
  --bold-weight:500;
  --std-weight:400;
+ --main-toolbar-height:48px;
+ --sub-toolbar-height:48px;
  --list-elem-height:48px;
  --list-elem-3line-height:68px;
  scrollbar-color:var(--scrollbar-thumb-color) var(--scrollbar-track-color);
  --image-grid-factor:0;
  --dialog-list-max-width:1000px;
  --icon-size:24px;
+ --hover-icon-size:24px;
  --toolbar-button-margin:4px;
  --thin-portrait-adjust:0px; /* Spread things out for tall and thin phones - S20/iphoneX */
  --fade-size:16px;
@@ -1525,10 +1528,11 @@ progress {
  text-align:center;
 }
 
-.v-icon:not(.image-grid-item-icon):not(.shuffle-albums), .svg-list-img, .svg-img, .radio-image .svg-img {
+.v-icon:not(.image-grid-item-icon):not(.media-icon), .svg-list-img, .svg-img, .radio-image .svg-img {
  width:var(--icon-size) !important;
  height:var(--icon-size) !important;
- vertical-align:middle;
+ font-size:var(--icon-size) !important;
+ vertical-align:middle !important;
  border-radius:unset !important;
 }
 
@@ -1667,6 +1671,7 @@ div.v-subheader {
  margin-right:4px;
  opacity:var(--sub-opacity);
  justify-content:flex-start;
+ font-size:var(--std-font-size);
 }
 
 .v-menu__content .v-list__tile .player-menu-shortcut {
@@ -1962,8 +1967,12 @@ img[lazy='loaded'].np-image-desktop, img[lazy='loaded'].np-image-landscape, img[
  line-height:32px;
  text-align:center;
  font-family: "Material Icons";
- font-size:var(--icon-size);
+ font-size:var(--hover-icon-size);
  text-decoration:none;
+}
+
+.menu-btn {
+ font-size:var(--icon-size)!important;
 }
 
 .list-btn {

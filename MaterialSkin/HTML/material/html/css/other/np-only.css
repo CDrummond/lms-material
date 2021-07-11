@@ -1,0 +1,23 @@
+.lms-toolbar {
+ display:none!important;
+}
+
+:root {
+ --main-toolbar-height:0px!important;
+}
+
+.no-control-adjust {
+ margin-top:16px;
+}
+
+.np-controls-wide {
+ bottom:32px;
+}
+
+.v-btn {
+ display:none!important;
+}
+
+body {
+ pointer-events:none!important;
+}

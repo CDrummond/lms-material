@@ -6,11 +6,10 @@
  */
 
 :root {
- --main-toolbar-height:48px;
- --sub-toolbar-height:48px;
  --bottom-toolbar-height:80px;
  --np-portrait-image-size:min(calc((var(--vh, 1vh)*100) - (var(--main-toolbar-height) + 260px)), 100vw);
  --splitter-width:3px;
+ --np-icon-size:24px;
 }
 
 /* For old browser's that dont support min() */
@@ -166,17 +165,17 @@
 
 .np-details-desktop {
  position:fixed;
- left:calc(250px + (var(--icon-size) - 24px));
+ left:calc(250px + (var(--np-icon-size) - 24px));
  bottom:20px;
- width:calc(100vw - calc(254px + (var(--icon-size) - 24px)));
+ width:calc(100vw - calc(254px + (var(--np-icon-size) - 24px)));
  height:54px;
  padding:0px;
  background:transparent!important;
 }
 
 .np-details-desktop-sb {
- left:calc(298px + ((var(--icon-size) - 24px)*4))!important;
- width:calc(100vw - (302px + ((var(--icon-size) - 24px)*4)))!important;
+ left:calc(298px + ((var(--np-icon-size) - 24px)*4))!important;
+ width:calc(100vw - (302px + ((var(--np-icon-size) - 24px)*4)))!important;
 }
 
 .np-details-desktop div .v-list__tile {
@@ -221,16 +220,16 @@
 
 .np-slider-desktop {
  position:fixed;
- left:calc(250px + (var(--icon-size) - 24px));
+ left:calc(250px + (var(--np-icon-size) - 24px));
  bottom:6px;
- width:calc(100vw - calc(262px + (var(--icon-size) - 24px)));
+ width:calc(100vw - calc(262px + (var(--np-icon-size) - 24px)));
  height:10px !important;
  margin:0px !important; /* v-progress-linear has margin: 1rem 0; */
 }
 
 .np-slider-desktop-sb {
- left:calc(298px + ((var(--icon-size) - 24px)*4))!important;
- width:calc(100vw - calc(310px + ((var(--icon-size) - 24px)*4)))!important;
+ left:calc(298px + ((var(--np-icon-size) - 24px)*4))!important;
+ width:calc(100vw - calc(310px + ((var(--np-icon-size) - 24px)*4)))!important;
 }
 
 .np-bar .np-playpause {

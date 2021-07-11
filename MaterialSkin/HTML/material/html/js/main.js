@@ -14,7 +14,7 @@ var app = new Vue({
         return { dialogs: { uisettings: false, playersettings: false, info: false, sync: false, group: false, volume: false,
                             manage: false, rndmix: false, favorite: false, rating: false, sleep: false, movequeue: false,
                             iteminfo: false, iframe: false, dstm: false, savequeue: false, icon: false, prompt:false,
-                            addtoplaylist: false, file: false, groupvolume: false, advancedsearch: false,
+                            addtoplaylist: false, file: false, groupvolume: false, advancedsearch: false, downloadstatus:false,
                             podcast: false, podcastsearch: false // TODO Remove after LMS8.2 released.
                           } }
     },
@@ -124,7 +124,7 @@ var app = new Vue({
                         }
                     }
                 }
-                const BOOL_OPTS = ['showComposer', 'showConductor', 'showBand', 'showAllArtists', 'artistFirst'];
+                const BOOL_OPTS = ['showComposer', 'showConductor', 'showBand', 'showAllArtists', 'artistFirst', 'allowDownload'];
                 for (var i=0, len=BOOL_OPTS.length; i<len; ++i) {
                     if (undefined!=data.result[BOOL_OPTS[i]]) {
                         lmsOptions[BOOL_OPTS[i]] = 1 == parseInt(data.result[BOOL_OPTS[i]]);
@@ -291,6 +291,7 @@ var app = new Vue({
         bus.$on('changeLayout', function(layout) {
             this.setLayout(layout);
         }.bind(this));
+        bus.$store = this.$store;
     },
     computed: {
         darkUi() {

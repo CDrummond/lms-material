@@ -89,7 +89,7 @@ function browseActions(view, item, args, count) {
     }
     if (undefined!=item && undefined!=item.stdItem && undefined!=STD_ITEMS[item.stdItem].actionMenu) {
         for (var i=0, loop=STD_ITEMS[item.stdItem].actionMenu, len=loop.length; i<len; ++i) {
-            if (ADD_RANDOM_ALBUM_ACTION!=loop[i] || count>1) {
+            if ((ADD_RANDOM_ALBUM_ACTION!=loop[i] || count>1) && (DOWNLOAD_ACTION!=loop[i] || (lmsOptions.allowDownload && undefined==item.emblem))) {
                 actions.push({action:loop[i], weight:300+i});
             }
         }
@@ -228,7 +228,8 @@ function browseHandleListResponse(view, item, command, resp, prevPage) {
             }
         // ...TODO Remove after LMS8.2 released
         } else if (SECTION_PLAYLISTS==view.current.section && view.current.id.startsWith("playlist_id:")) {
-            view.tbarActions=[REMOVE_DUPES_ACTION, PLAY_ACTION, ADD_ACTION];
+            view.tbarActions=[PLAY_ACTION, ADD_ACTION];
+            view.currentActions={show:true, items: browseActions(view, resp.items.length>0 ? item : undefined, {}, resp.items.length)};
         } else if (view.allSongsItem) {
             view.tbarActions=[PLAY_ALL_ACTION, ADD_ALL_ACTION];
         } else if ("albums"==command.command[0] && command.params.find(elem => elem=="sort:random")) {
@@ -844,25 +845,7 @@ function browseItemAction(view, act, item, index, event) {
         }).catch(err => {
             logAndShowError(err, undefined, command.command);
         });
-    } /*else if (PLAY_DISC_ACTION==act) {
-        // TODO: Need to re-add 'index' to doList if enable view action
-        var itemList = [];
-        var index = undefined;
-        for (var i=0, len=view.items.length; i<len; ++i) {
-            if (view.items[i].filter==item.filter) {
-                if (!view.items[i].header) {
-                    itemList.push(view.items[i]);
-                    if (index==undefined && view.items[i].id==item.id) {
-                        index=i-1; // Skip header
-                    }
-                }
-            } else if (view.items[i].header && itemList.length>0) {
-                break;
-            }
-        }
-        view.doList(itemList, PLAY_ACTION, index);
-        bus.$emit('showMessage', i18n("Adding tracks..."));
-    }*/
+    }
     // TODO Remove after LMS8.2 released...
     else if (SEARCH_PODCAST_ACTION==act) {
         bus.$emit('dlg.open', 'podcastsearch');
@@ -942,6 +925,8 @@ function browseItemAction(view, act, item, index, event) {
         });
     } else if (BR_COPY_ACTION==act) {
         bus.$emit('queueGetSelectedUrls', index, item.id);
+    } else if (DOWNLOAD_ACTION==act) {
+        download(item);
     } else {
         var command = browseBuildFullCommand(view, item, act);
         if (command.command.length===0) {

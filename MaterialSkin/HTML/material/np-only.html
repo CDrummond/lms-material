@@ -1,0 +1,40 @@
+<!--
+ * LMS-Material
+ *
+ * Copyright (c) 2018-2021 Craig Drummond <craig.p.drummond@gmail.com>
+ * MIT license.
+-->
+ 
+<!DOCTYPE html>
+<html>
+ <head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, minimal-ui">
+  <title>LMS</title>
+ </head>
+ <body>
+  <script>
+   var queryPos = window.location.href.indexOf('?');
+   var queryString = window.location.href.substring(queryPos+1);
+   var hash = queryString.indexOf('#');
+   if (hash>0) {
+     queryString=queryString.substring(0, hash);
+   }
+   var query = queryString.split('&');
+   var havePlayer = false;
+   for (var i = query.length - 1; i >= 0; i--) {
+     var kv = query[i].split('=');
+     if ("player"==kv[0]) {
+       havePlayer = true;
+       break;
+     }
+   }
+
+   if (havePlayer) {
+     window.location.href = window.location.href.replace(/\/np-only/i, '/').replace(/\.html/i, '') + (queryPos>0 ? "&" : "?")+"layout=desktop&action=expandNowPlaying/true&css=msk--np-only&js=msk--np-only&single=true";
+   } else {
+     window.alert("No player name or ID in URL\n\nSupply player via \"?player=Name\" or \"?player=ID\"");
+   }
+  </script>
+ </body>
+</html>

@@ -7,6 +7,8 @@
 4. Add setting to allow larger covers in grid view - up to 312px.
 5. Add a now-playing only page, requires specifying player name (or ID) in URL.
    e.g. http://SERVER:9000/material/np-only?player=Kitchen
+6. Change webapp display property from "fullscreen" to "standalone", so that
+   navigation controls are not hidden.
 
 2.5.2
 -----

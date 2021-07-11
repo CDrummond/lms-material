@@ -1,3 +1,7 @@
+2.5.3
+-----
+1. Don't add ios pad to bottom nav buttons, make padding inactive.
+
 2.5.2
 -----
 1. Enable 'More' menu action in year entry of song info list.

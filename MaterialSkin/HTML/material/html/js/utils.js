@@ -93,7 +93,7 @@ function parseQueryParams() {
             resp.appSettings=kv[1];
         } else if ("appQuit"==kv[0]) {
             resp.appQuit=kv[1];
-        } else if ("ios"==kv[0]) {
+        } else if ("ios"==kv[0] || "addpad"==kv[0]) {
             document.documentElement.style.setProperty('--bottom-nav-pad', '12px');
         } else if ("theme"==kv[0]) {
             var parts = kv[1].split(",");

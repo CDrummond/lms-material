@@ -9,11 +9,7 @@
    e.g. http://SERVER:9000/material/np-only?player=Kitchen
 6. Change webapp display property from "fullscreen" to "standalone", so that
    navigation controls are not hidden.
-
-2.5.3
------
-1. Don't add ios pad to bottom nav buttons, make padding inactive.
-2. Allow "?addpad" to add extra padding to bottom nav.
+7. Don't add ios pad to bottom nav buttons, make padding inactive.
 
 2.5.2
 -----

@@ -493,7 +493,9 @@ function setTheme(theme, color) {
         } else {
             changeLink("html/css/colors/" + color + ".css?r=" + LMS_MATERIAL_REVISION, "colorcss");
         }
-        emitToolbarColors("--top-toolbar-color", "--bottom-toolbar-color");
+        window.setTimeout(function() {
+            emitToolbarColors("--top-toolbar-color", "--bottom-toolbar-color");
+        }, 250);
     }
 }
 

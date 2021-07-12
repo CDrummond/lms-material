@@ -10,6 +10,8 @@
 6. Change webapp display property from "fullscreen" to "standalone", so that
    navigation controls are not hidden.
 7. Don't add ios pad to bottom nav buttons, make padding inactive.
+8. When change theme, delay calling native update colours function by 250ms to
+   allow CSS to be loaded.
 
 2.5.2
 -----

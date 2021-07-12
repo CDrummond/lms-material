@@ -793,23 +793,15 @@ function browseItemAction(view, act, item, index, event) {
             view.selectionDuration += itemDuration(view.items[index]);
             item.selected = true;
             forceItemUpdate(view, item);
-            if (event && event.shiftKey) {
-                if (undefined!=view.selectStart) {
-                    for (var i=view.selectStart<index ? view.selectStart : index, stop=view.selectStart<index ? index : view.selectStart, len=view.items.length; i<=stop && i<len; ++i) {
-                        view.itemAction(SELECT_ACTION, view.items[i], i);
-                    }
-                    view.selectStart = undefined;
-                } else {
-                    view.selectStart = index;
+            if (event && event.shiftKey && undefined!=view.lastSelect && index!=view.lastSelect) {
+                for (var i=view.lastSelect<index ? view.lastSelect : index, stop=view.lastSelect<index ? index : view.lastSelect, len=view.items.length; i<=stop && i<len; ++i) {
+                    view.itemAction(SELECT_ACTION, view.items[i], i);
                 }
-            } else {
-                view.selectStart = undefined;
             }
-        } else {
-            view.selectStart = undefined;
         }
+        view.lastSelect = index;
     } else if (UNSELECT_ACTION===act) {
-        view.selectStart = undefined;
+        view.lastSelect = undefined;
         if (view.selection.has(index)) {
             view.selection.delete(index);
             view.selectionDuration -= itemDuration(view.items[index]);

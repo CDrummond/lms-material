@@ -1085,7 +1085,7 @@ var lmsBrowse = Vue.component("lms-browse", {
             }
             this.selection = new Set();
             this.selectionDuration = 0;
-            this.selectStart = undefined;
+            this.lastSelect = undefined;
             bus.$emit('browseSelection', false);
         },
         select(item, index, event) {

@@ -12,6 +12,8 @@
 7. Don't add ios pad to bottom nav buttons, make padding inactive.
 8. When change theme, delay calling native update colours function by 250ms to
    allow CSS to be loaded.
+9. More intuitive shift select behaviour. Select an item, shift+select then
+   selects from this to previously selected item.
 
 2.5.2
 -----

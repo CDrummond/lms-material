@@ -700,23 +700,15 @@ var lmsQueue = Vue.component("lms-queue", {
                     this.selectionDuration += itemDuration(this.items[index]);
                     item.selected = true;
                     forceItemUpdate(this, item);
-                    if (event && event.shiftKey) {
-                        if (undefined!=this.selectStart) {
-                            for (var i=this.selectStart<index ? this.selectStart : index, stop=this.selectStart<index ? index : this.selectStart, len=this.items.length; i<=stop && i<len; ++i) {
-                                this.itemAction(SELECT_ACTION, this.items[i], i);
-                            }
-                            this.selectStart = undefined;
-                        } else {
-                            this.selectStart = index;
+                    if (event && event.shiftKey && undefined!=this.lastSelect && index!=this.lastSelect) {
+                        for (var i=this.lastSelect<index ? this.lastSelect : index, stop=this.lastSelect<index ? index : this.lastSelect, len=this.items.length; i<=stop && i<len; ++i) {
+                            this.itemAction(SELECT_ACTION, this.items[i], i);
                         }
-                    } else {
-                        this.selectStart = undefined;
                     }
-                } else {
-                    this.selectStart = undefined;
                 }
+                this.lastSelect = index;
             } else if (UNSELECT_ACTION===act) {
-                this.selectStart = undefined;
+                this.lastSelect = undefined;
                 if (this.selection.has(index)) {
                     this.selection.delete(index);
                     this.selectionDuration -= itemDuration(this.items[index]);
@@ -804,7 +796,7 @@ var lmsQueue = Vue.component("lms-queue", {
             }
         },
         clearSelection() {
-            this.selectStart = undefined;
+            this.lastSelect = undefined;
             var selection = Array.from(this.selection);
             for (var i=0, len=selection.length; i<len; ++i) {
                 var index = selection[i];

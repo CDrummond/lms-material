@@ -155,6 +155,8 @@ PLUGIN_MATERIAL_SKIN_SHOW_ALL_ARTISTS_DESC
 
 PLUGIN_MATERIAL_SKIN_ALLOW_DOWNLOAD
 	EN	Allow downloading
+	FR	Autoriser le téléchargement
 
 PLUGIN_MATERIAL_SKIN_ALLOW_DOWNLOAD_DESC
 	EN	Add download actions to tracks, albums, and playlists to allow users to download tracks.
+	FR	Ajouter des commandes de téléchargement aux morceaux, albums et listes de lecture pour permettre aux utilisateurs de télécharger des morceaux.

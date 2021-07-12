@@ -1,19 +1,20 @@
 2.6.0
 -----
-1. Add ability to download tracks - must be enabled in MaterialSkin's server
-   side settings.
-2. Add 'More' action to subtoolbar when listing playlist contents.
-3. Make font size configurable; Large, Regular, Small.
-4. Add setting to allow larger covers in grid view - up to 312px.
-5. Add a now-playing only page, requires specifying player name (or ID) in URL.
-   e.g. http://SERVER:9000/material/np-only?player=Kitchen
-6. Change webapp display property from "fullscreen" to "standalone", so that
-   navigation controls are not hidden.
-7. Don't add ios pad to bottom nav buttons, make padding inactive.
-8. When change theme, delay calling native update colours function by 250ms to
-   allow CSS to be loaded.
-9. More intuitive shift select behaviour. Select an item, shift+select then
-   selects from this to previously selected item.
+ 1. Add ability to download tracks - must be enabled in MaterialSkin's server
+    side settings.
+ 2. Add 'More' action to subtoolbar when listing playlist contents.
+ 3. Make font size configurable; Large, Regular, Small.
+ 4. Add setting to allow larger covers in grid view - up to 312px.
+ 5. Add a now-playing only page, requires specifying player name (or ID) in URL.
+    e.g. http://SERVER:9000/material/np-only?player=Kitchen
+ 6. Change webapp display property from "fullscreen" to "standalone", so that
+    navigation controls are not hidden.
+ 7. Don't add ios pad to bottom nav buttons, make padding inactive.
+ 8. When change theme, delay calling native update colours function by 250ms to
+    allow CSS to be loaded.
+ 9. More intuitive shift select behaviour. Select an item, shift+select then
+    selects from this to previously selected item.
+10. Better invert selection icon.
 
 2.5.2
 -----

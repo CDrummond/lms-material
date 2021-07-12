@@ -306,6 +306,10 @@ function titleSort(a, b) {
     return fixedSort(a.title, b.title);
 }
 
+function weightSort(a, b) {
+    return a.weight!=b.weight ? a.weight<b.weight ? -1 : 1 : titleSort(a, b);
+}
+
 function yearAlbumTrackSort(a, b) {
     var va=a.year ? a.year : 0;
     var vb=b.year ? b.year : 0;

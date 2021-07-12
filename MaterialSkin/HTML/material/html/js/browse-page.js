@@ -971,7 +971,7 @@ var lmsBrowse = Vue.component("lms-browse", {
             browseMyMusicMenu(this);
         },
         processMyMusicMenu() {
-            this.myMusic.sort(function(a, b) { return a.weight!=b.weight ? a.weight<b.weight ? -1 : 1 : titleSort(a, b); });
+            this.myMusic.sort(weightSort);
             for (var i=0, len=this.myMusic.length; i<len; ++i) {
                 this.myMusic[i].menu=[this.options.pinned.has(this.myMusic[i].id) ? UNPIN_ACTION : PIN_ACTION];
             }

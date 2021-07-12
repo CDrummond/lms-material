@@ -15,6 +15,7 @@
  9. More intuitive shift select behaviour. Select an item, shift+select then
     selects from this to previously selected item.
 10. Better invert selection icon.
+11. Sort Radio entries by weight.
 
 2.5.2
 -----

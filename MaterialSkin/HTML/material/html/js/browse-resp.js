@@ -459,7 +459,7 @@ function parseBrowseResp(data, parent, options, cacheKey, parentCommand, parentG
                 resp.baseActions['playControl'] && resp.baseActions['playControl'].params && resp.baseActions['playControl'].params.item_id) {
                 resp.allSongsItem={id:resp.baseActions['playControl'].params.item_id, params:resp.baseActions['playControl'].params};
             }
-            if (isRadios && !isRadiosTop && resp.items.length>1 && resp.items.length<15) {
+            if (isRadios && resp.items.length>1 && resp.items.length<15) {
                 // If listing a radio app's entries and all images are the same, then hide images. e.g. iHeartRadio and RadioNet
                 var image = undefined;
                 var images = 0;
@@ -536,6 +536,8 @@ function parseBrowseResp(data, parent, options, cacheKey, parentCommand, parentG
                 resp.items = resp.items.concat(after);
             } else if (isFavorites) {
                 resp.items.sort(options.sortFavorites ? favSort : partialFavSort);
+            } else if (isRadiosTop) {
+                resp.items.sort(weightSort);
             }
             if (numImages>0 && numImages==resp.items.length) {
                 resp.subtitle=i18np("1 Image", "%1 Images", resp.items.length);

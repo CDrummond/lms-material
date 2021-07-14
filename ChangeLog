@@ -16,6 +16,8 @@
     selects from this to previously selected item.
 10. Better invert selection icon.
 11. Sort Radio entries by weight.
+12. Try to detect if started fullscreen on iOS and if so auto-apply padding to
+    bottom nav.
 
 2.5.2
 -----

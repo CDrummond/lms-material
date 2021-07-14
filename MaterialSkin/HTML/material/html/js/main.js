@@ -25,6 +25,12 @@ var app = new Vue({
             var s = document.createElement("style");
             s.innerHTML = ".v-btn:hover:before { background-color:transparent!important; }";
             document.getElementsByTagName("head")[0].appendChild(s);
+
+            if (IS_IOS) {
+                if ( ((screen.availHeight || screen.height)-48) <= window.innerHeight ) {
+                    document.documentElement.style.setProperty('--bottom-nav-pad', '12px');
+                }
+            }
         }
         this.autoLayout = true;
         this.$store.commit('initUiSettings');

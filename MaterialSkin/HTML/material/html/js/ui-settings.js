@@ -470,6 +470,9 @@ Vue.component('lms-ui-settings', {
                 }
             }).catch(err => {
             });
+            if (queryParams.nativeUiChanges) {
+                this.currentSettings = JSON.stringify(this.settings(true, true));
+            }
             lmsCommand("", ["material-skin", "browsemodes"]).then(({data}) => {
                 this.browseModesDialog.modes=[];
                 if (data && data.result && data.result.modes_loop) {
@@ -619,39 +622,7 @@ Vue.component('lms-ui-settings', {
         close() {
             this.show=false;
             this.showMenu = false;
-            this.$store.commit('setUiSettings', { theme:this.theme+(this.colorToolbars ? '-colored' : ''),
-                                                  color:this.color,
-                                                  fontSize:this.fontSize,
-                                                  autoScrollQueue:this.autoScrollQueue,
-                                                  letterOverlay:this.letterOverlay,
-                                                  sortFavorites:this.sortFavorites,
-                                                  sortHome:this.sortHome,
-                                                  showMenuAudio:this.showMenuAudio,
-                                                  stopButton:this.stopButton,
-                                                  browseBackdrop:this.browseBackdrop,
-                                                  queueBackdrop:this.queueBackdrop,
-                                                  nowPlayingBackdrop:this.nowPlayingBackdrop,
-                                                  infoBackdrop:this.infoBackdrop,
-                                                  techInfo:this.techInfo,
-                                                  queueShowTrackNum:this.queueShowTrackNum,
-                                                  nowPlayingTrackNum:this.nowPlayingTrackNum,
-                                                  nowPlayingClock:this.nowPlayingClock,
-                                                  swipeVolume:this.swipeVolume,
-                                                  keyboardControl:this.keyboardControl,
-                                                  showArtwork:this.showArtwork,
-                                                  queueThreeLines:this.queueThreeLines,
-                                                  volumeStep:this.volumeStep,
-                                                  showPlayerMenuEntry:this.showPlayerMenuEntry,
-                                                  menuIcons:this.menuIcons,
-                                                  hidden:this.hiddenItems(),
-                                                  skipSeconds:this.skipSeconds,
-                                                  disabledBrowseModes:this.disabledBrowseModes(),
-                                                  screensaver:this.screensaver,
-                                                  homeButton:this.homeButton,
-                                                  powerButton:this.powerButton,
-                                                  largeCovers:this.largeCovers,
-                                                  showRating:this.showRating
-                                                } );
+            this.$store.commit('setUiSettings', this.settings(false, false) );
 
             if (this.allowLayoutAdjust && (this.layout != this.layoutOrig)) {
                 setLocalStorageVal("layout", this.layout);
@@ -661,53 +632,71 @@ Vue.component('lms-ui-settings', {
             if (this.password != getLocalStorageVal('password', '-')) {
                 this.$store.commit('setPassword', this.password);
             }
+
+            if (queryParams.nativeUiChanges) {
+                let settingsNow = JSON.stringify(this.settings(true, true));
+                if (settingsNow!=this.currentSettings) {
+                    try {
+                        NativeReceiver.updateUiSettings(settingsNow);
+                    } catch (e) {
+                    }
+                }
+                this.currentSettings = undefined;
+            }
+        },
+        settings(arrays, withSorts) {
+            let settings = {
+                      theme:this.theme+(this.colorToolbars ? '-colored' : ''),
+                      color:this.color,
+                      fontSize:this.fontSize,
+                      autoScrollQueue:this.autoScrollQueue,
+                      letterOverlay:this.letterOverlay,
+                      sortFavorites:this.sortFavorites,
+                      sortHome:this.sortHome,
+                      showMenuAudio:this.showMenuAudio,
+                      stopButton:this.stopButton,
+                      browseBackdrop:this.browseBackdrop,
+                      queueBackdrop:this.queueBackdrop,
+                      nowPlayingBackdrop:this.nowPlayingBackdrop,
+                      infoBackdrop:this.infoBackdrop,
+                      techInfo:this.techInfo,
+                      queueShowTrackNum:this.queueShowTrackNum,
+                      nowPlayingTrackNum:this.nowPlayingTrackNum,
+                      nowPlayingClock:this.nowPlayingClock,
+                      swipeVolume:this.swipeVolume,
+                      keyboardControl:this.keyboardControl,
+                      showArtwork:this.showArtwork,
+                      queueThreeLines:this.queueThreeLines,
+                      volumeStep:this.volumeStep,
+                      showPlayerMenuEntry:this.showPlayerMenuEntry,
+                      menuIcons:this.menuIcons,
+                      hidden:arrays ? Array.from(this.hiddenItems()) : this.hiddenItems(),
+                      skipSeconds:this.skipSeconds,
+                      disabledBrowseModes:arrays ? Array.from(this.disabledBrowseModes()) : this.disabledBrowseModes(),
+                      screensaver:this.screensaver,
+                      homeButton:this.homeButton,
+                      powerButton:this.powerButton,
+                      largeCovers:this.largeCovers,
+                      showRating:this.showRating
+                  };
+             if (withSorts) {
+                for (var key in window.localStorage) {
+                    if (key.startsWith(LS_PREFIX+ALBUM_SORT_KEY) || key.startsWith(LS_PREFIX+ARTIST_ALBUM_SORT_KEY)) {
+                        if (undefined==settings.sorts) {
+                            settings.sorts={}
+                        }
+                        settings.sorts[key.substring(LS_PREFIX.length)]=window.localStorage.getItem(key);
+                    }
+                }
+            }
+            return settings;
         },
         saveAsDefault() {
             confirm(i18n("Save the current settings as default for new users?")+
                          (this.allowLayoutAdjust ? addNote(i18n("NOTE:'Application layout' is not saved, as this is a per-device setting.")) : ""),
                     i18n('Set Defaults')).then(res => {
                 if (res) {
-                    var settings = { theme:this.theme+(this.colorToolbars ? '-colored' : ''),
-                                     color:this.color,
-                                     fontSize:this.fontSize,
-                                     autoScrollQueue:this.autoScrollQueue,
-                                     letterOverlay:this.letterOverlay,
-                                     sortFavorites:this.sortFavorites,
-                                     sortHome:this.sortHome,
-                                     showMenuAudio:this.showMenuAudio,
-                                     stopButton:this.stopButton,
-                                     browseBackdrop:this.browseBackdrop,
-                                     queueBackdrop:this.queueBackdrop,
-                                     nowPlayingBackdrop:this.nowPlayingBackdrop,
-                                     infoBackdrop:this.infoBackdrop,
-                                     techInfo:this.techInfo,
-                                     queueShowTrackNum:this.queueShowTrackNum,
-                                     nowPlayingTrackNum:this.nowPlayingTrackNum,
-                                     nowPlayingClock:this.nowPlayingClock,
-                                     swipeVolume:this.swipeVolume,
-                                     keyboardControl:this.keyboardControl,
-                                     queueThreeLines:this.queueThreeLines,
-                                     showArtwork:this.showArtwork,
-                                     volumeStep:this.volumeStep,
-                                     showPlayerMenuEntry:this.showPlayerMenuEntry,
-                                     menuIcons:this.menuIcons,
-                                     hidden:Array.from(this.hiddenItems()),
-                                     skipSeconds:this.skipSeconds,
-                                     disabledBrowseModes:Array.from(this.disabledBrowseModes()),
-                                     screensaver:this.screensaver,
-                                     homeButton:this.homeButton,
-                                     powerButton:this.powerButton,
-                                     largeCovers:this.largeCovers,
-                                     showRating:this.showRating
-                                   };
-                    for (var key in window.localStorage) {
-                        if (key.startsWith(LS_PREFIX+ALBUM_SORT_KEY) || key.startsWith(LS_PREFIX+ARTIST_ALBUM_SORT_KEY)) {
-                            if (undefined==settings.sorts) {
-                                settings.sorts={}
-                            }
-                            settings.sorts[key.substring(LS_PREFIX.length)]=window.localStorage.getItem(key);
-                        }
-                    }
+                    var settings = this.settings(true, true);
 
                     lmsCommand("", ["pref", LMS_MATERIAL_UI_DEFAULT_PREF, JSON.stringify(settings)]);
                     lmsCommand("", ["pref", LMS_MATERIAL_DEFAULT_ITEMS_PREF, getLocalStorageVal("topItems", "[]")]);

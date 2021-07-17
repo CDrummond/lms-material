@@ -152,7 +152,7 @@ Vue.component('lms-downloadstatus', {
   <v-card-text style="padding-top:0px">
    <v-container grid-list-md style="padding:0px">
     <v-layout wrap>
-     <v-flex xs12>
+     <v-flex xs12 v-if="undefined!=items && items.length>0">
       <v-list class="lms-list" style="padding-top:0px;position:unset;top:unset;height:100%!important;width:100%!important">
        <div class="dialog-padding"></div>
        <template v-for="(item, index) in items">
@@ -168,8 +168,11 @@ Vue.component('lms-downloadstatus', {
        </template>
       </v-list>
      </v-flex>
+     <v-flex xs12 v-else>
+      <div style="padding-top:64px;width:100%;display:flex;justify-content:center;align-items:center;">{{i18n('All downloads complete')}}</div>
+     </v-flex>
      <div class="dialog-padding"></div>
-     <v-flex xs23 v-if="items.length>1">
+     <v-flex xs23 v-if="undefined!=items && items.length>1">
       <v-btn flat @click.native="abortAll()" style="float:right"><v-icon style="padding-right:8px">cancel</v-icon>{{i18n('Abort all')}}</v-btn>
      </v-flex>
     </v-layout>
@@ -232,11 +235,6 @@ Vue.component('lms-downloadstatus', {
     watch: {
         'show': function(val) {
             this.$store.commit('dialogOpen', {name:'downloadstatus', shown:val});
-        },
-        '$store.state.downloadStatus' : function() {
-            if (this.$store.state.downloadStatus.length<1) {
-                this.close();
-            }
         }
     }
 })

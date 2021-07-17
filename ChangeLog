@@ -19,6 +19,8 @@
 12. Try to detect if started fullscreen on iOS and if so auto-apply padding to
     bottom nav.
 13. Add native interface to be informed of UI changes.
+14. In 'Information' dialog make only plugin name (and version) clickable, not
+    the whole line.
 
 2.5.2
 -----

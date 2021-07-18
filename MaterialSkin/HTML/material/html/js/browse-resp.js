@@ -53,7 +53,8 @@ function parseBrowseResp(data, parent, options, cacheKey, parentCommand, parentG
             var isPlaylists = parent && parent.section == SECTION_PLAYLISTS;
             var isRadios = parent && parent.section == SECTION_RADIO;
             var isRadiosTop = isRadios && parent.id == TOP_RADIO_ID;
-            var isApps = parent && parent.id == TOP_APPS_ID;
+            var isApps = parent && parent.section == SECTION_APPS;
+            var isAppsTop = parent && parent.id == TOP_APPS_ID;
             var isPodcastList = parent && parent.id == "apps.podcasts" && command == "podcasts" && 5==data.params[1].length && "items" == data.params[1][1] && "menu:podcasts"==data.params[1][4];
             var isPodcastSearch = command == "podcasts" && getIndex(data.params[1], "search:")>0;
             var isBmf = command == "browselibrary" && data.params[1].length>=5 && data.params[1].indexOf("mode:bmf")>0;
@@ -304,7 +305,7 @@ function parseBrowseResp(data, parent, options, cacheKey, parentCommand, parentG
                     i.type = "text";
                 }
 
-                if (isApps && i.actions && i.actions.go && i.actions.go.params && i.actions.go.params.menu) {
+                if (isAppsTop && i.actions && i.actions.go && i.actions.go.params && i.actions.go.params.menu) {
                     if ("myapps" == i.actions.go.params.menu) { // mysqueezebox.com apps
                         if (i.actions.go.params.item_id) {
                             i.id = fixId(i.actions.go.params.item_id, "myapps");
@@ -459,11 +460,11 @@ function parseBrowseResp(data, parent, options, cacheKey, parentCommand, parentG
                 resp.baseActions['playControl'] && resp.baseActions['playControl'].params && resp.baseActions['playControl'].params.item_id) {
                 resp.allSongsItem={id:resp.baseActions['playControl'].params.item_id, params:resp.baseActions['playControl'].params};
             }
-            if (isRadios && resp.items.length>1 && resp.items.length<15) {
+            if ((isRadios || (isApps && parent.id.split('.').length==2)) && resp.items.length>1 && resp.items.length<=15) {
                 // If listing a radio app's entries and all images are the same, then hide images. e.g. iHeartRadio and RadioNet
                 var image = undefined;
                 var images = 0;
-                for (var i=0, len=resp.items.length; i<len; ++i) {
+                for (var i=0, len=resp.items.length; i<len && undefined==resp.items[i].image; ++i) {
                     if (undefined==image) {
                         image=resp.items[i].icon ? resp.items[i].icon : resp.items[i].svg;
                         images++;
@@ -473,7 +474,7 @@ function parseBrowseResp(data, parent, options, cacheKey, parentCommand, parentG
                 }
                 if (images==resp.items.length && undefined!=image) {
                     for (var i=0, len=resp.items.length; i<len; ++i) {
-                        resp.items[i].image = resp.items[i].icon = resp.items[i].svg = undefined;
+                        resp.items[i].icon = resp.items[i].svg = undefined;
                     }
                     resp.canUseGrid=false;
                 }
@@ -502,7 +503,7 @@ function parseBrowseResp(data, parent, options, cacheKey, parentCommand, parentG
                 resp.items=[];
             }
 
-            if (isApps) {
+            if (isAppsTop) {
                 resp.items.sort(titleSort);
             } else if (isPodcastList) {
                 /* Only want to sort podcast feeds, and not actions. So create lists for:

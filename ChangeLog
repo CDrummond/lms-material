@@ -21,6 +21,9 @@
 13. Add native interface to be informed of UI changes.
 14. In 'Information' dialog make only plugin name (and version) clickable, not
     the whole line.
+15. If top-level of an app's listing has between 1 and 15 items all with the
+    same icon then remove icon and disallow grid. Same behaviour as was
+    implemented for radio.
 
 2.5.2
 -----

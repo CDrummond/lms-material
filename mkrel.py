@@ -290,7 +290,8 @@ def combineFiles():
                 out.writelines(f.readlines())
                 out.write("\n")
             info("......... %s" % script)
-            os.remove(script)
+            if not script.endswith("mousetrap.min.js"): # Embedded settings pages use mousetrap
+                os.remove(script)
     info("......Deferred JS")
     with open("%s/js/%s" % (HTML_FOLDER, JS_DEFERRED_FILE), "w") as out:
         for script in deferredScripts:
@@ -319,7 +320,10 @@ def combineFiles():
     for entry in os.listdir("%s/lib/photoswipe/default-skin/" % HTML_FOLDER):
         if entry.endswith(".png") or entry.endswith(".svg") or  entry.endswith(".gif"):
             os.rename("%s/lib/photoswipe/default-skin/%s" % (HTML_FOLDER, entry), "%s/css/%s" % (HTML_FOLDER, entry))
-    shutil.rmtree("%s/lib/" % HTML_FOLDER)
+
+    # Can't remove complete lib folder - as want moustrap
+    os.remove("%s/lib/LICENSES" % HTML_FOLDER)
+    shutil.rmtree("%s/lib/photoswipe" % HTML_FOLDER)
 
 
 def fixHtml(version):

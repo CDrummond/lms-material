@@ -169,7 +169,7 @@ Vue.component('lms-downloadstatus', {
       </v-list>
      </v-flex>
      <v-flex xs12 v-else>
-      <div style="padding-top:64px;width:100%;display:flex;justify-content:center;align-items:center;">{{i18n('All downloads complete')}}</div>
+      <div style="padding-top:64px;width:100%;display:flex;justify-content:center;align-items:center;">{{i18n('All downloads complete.')}}</div>
      </v-flex>
      <div class="dialog-padding"></div>
      <v-flex xs23 v-if="undefined!=items && items.length>1">

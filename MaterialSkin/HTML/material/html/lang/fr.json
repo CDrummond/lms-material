@@ -42,6 +42,7 @@
 "Albums":"Albums",
 "All":"Tout",
 "All Artists":"Tous les Artistes",
+"All downloads complete.":"Tous les téléchargements sont terminés.",
 "All duplicates removed":"Doublons supprimés",
 "All options":"Toutes les options",
 "All songs":"Tous les morceaux",
@@ -584,6 +585,5 @@
 "1 Year":"1 année",
 "%1 Years":"%1 années",
 "1 day":"1 jour",
-"%1 days":"%1 jours",
-"All downloads complete.":"Tous les téléchargements sont terminés."
+"%1 days":"%1 jours"
 }

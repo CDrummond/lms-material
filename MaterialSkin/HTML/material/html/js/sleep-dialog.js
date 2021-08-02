@@ -29,7 +29,7 @@ Vue.component('lms-sleep-dialog', {
    </v-container>
   </v-card-text>
   <v-card-actions>
-   <p v-if="undefined!=sleepTime">{{i18n("%1 until sleep", formatSeconds(sleepTime))}}</p>
+   <p v-if="undefined!=sleepTime" style="margin-left:10px" class="dimmed">{{i18n("%1 until sleep", formatSeconds(sleepTime))}}</p>
    <v-spacer></v-spacer>
    <v-btn flat @click.native="cancel()">{{i18n('Cancel')}}</v-btn>
   </v-card-actions>

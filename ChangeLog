@@ -1,6 +1,7 @@
 2.6.1
 -----
 1. Fix icon sizes of player status icons (sync, sleep) in main toolbar.
+2. Fix icon size of launch mini player icon in player menu.
 
 2.6.0
 -----

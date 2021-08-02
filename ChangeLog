@@ -1,3 +1,7 @@
+2.6.1
+-----
+1. Fix icon sizes of player status icons (sync, sleep) in main toolbar.
+
 2.6.0
 -----
  1. Add ability to download tracks - must be enabled in MaterialSkin's server

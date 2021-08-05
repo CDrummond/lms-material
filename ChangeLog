@@ -5,6 +5,7 @@
 2. Fix icon size of launch mini player icon in player menu.
 3. Dim player status icons in main toolbar, and 'Manage players' dialog.
 4. Dim time remaining label in sleep dialog.
+5. Don't allow download from iOS, doesn't work.
 
 2.6.0
 -----

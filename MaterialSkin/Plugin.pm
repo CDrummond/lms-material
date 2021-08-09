@@ -1283,13 +1283,26 @@ sub _iconHandler {
 
     my $request = $response->request;
     my $ua = $request->header('user-agent');
+        
     my $icon = "icon.png";
+    my $iconPath = '';
     if (index($ua, 'iPad') != -1 || index($ua, 'iPhone') != -1 || index($ua, 'MobileSafari') != -1 ||
        # Detect iPadOS??? https://forums.developer.apple.com/thread/119186
        (index($ua, 'Macintosh') != -1 && index($ua, '(KHTML, like Gecko) Version') != -1)) {
         $icon ="icon-ios.png";
+        
+        my $prefPath = $prefs->get('iosIcon');
+        if ($prefPath && $prefPath ne '') {
+            $iconPath = $prefPath;
+        }
+    } else {
+        my $prefPath = $prefs->get('icon');
+        if ($prefPath && $prefPath ne '') {
+            $iconPath = $prefPath;
+        }
     }
-    my $filePath = dirname(__FILE__) . "/HTML/material/html/images/" . $icon;
+
+    my $filePath = $iconPath ne '' ? $iconPath : dirname(__FILE__) . "/HTML/material/html/images/" . $icon;
     $response->code(RC_OK);
     Slim::Web::HTTP::sendStreamingFile( $httpClient, $response, "image/png", $filePath, '', 'noAttachment' );
 }

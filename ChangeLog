@@ -8,6 +8,8 @@
 5. Don't allow download from iOS, doesn't work.
 6. Allow setting a custom window title via 'windowTitle' server-side preference
    file. e.g. set "windowTitle: 'Test'" in "prefs/plugin/material-skin.prefs"
+7. Allow making release builds without checking if version exists. Pass
+   "--nocheck" as last parameter to mkrel.py - e.g. "mkrel.ply 2.6.0 --nocheck"
 
 2.6.0
 -----

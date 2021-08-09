@@ -174,6 +174,14 @@ sub pluginVersion {
     return $version;
 }
 
+sub windowTitle {
+    my $title = $prefs->get('windowTitle');
+    if (!$title || $title eq '') {
+        return 'Logitech Media Server';
+    }
+    return $title;
+}
+
 sub initCLI {
     #                                                                      |requires Client
     #                                                                      |  |is a Query

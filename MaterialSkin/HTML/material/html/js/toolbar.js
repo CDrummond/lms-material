@@ -326,7 +326,7 @@ Vue.component('lms-toolbar', {
                 }
                 this.songInfo = addPart(this.playerStatus.current.title, artistComp);
                 if (!IS_MOBILE) {
-                    var title = (undefined==this.songInfo ? "" : (this.songInfo.replaceAll(SEPARATOR, " - ") + " :: ")) + "Logitech Media Server";
+                    var title = (undefined==this.songInfo ? "" : (this.songInfo.replaceAll(SEPARATOR, " - ") + " :: ")) + LMS_WINDOW_TITLE;
                     if (title!=document.title) {
                         document.title = title;
                     }

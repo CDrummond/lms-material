@@ -8,9 +8,11 @@
 5. Don't allow download from iOS, doesn't work.
 6. Allow setting a custom window title via 'windowTitle' server-side preference
    file. e.g. set "windowTitle: 'Test'" in "prefs/plugin/material-skin.prefs"
-7. Allow setting custom icon via 'icon' server-side preference file - string
+7. Allow specify manifest short name via 'shortTitle' server-side preference
+   file.
+8. Allow setting custom icon via 'icon' server-side preference file - string
    should be path to icon file. Likewise 'iosIcon' for iOS specific icon.
-8. Allow making release builds without checking if version exists. Pass
+9. Allow making release builds without checking if version exists. Pass
    "--nocheck" as last parameter to mkrel.py - e.g. "mkrel.ply 2.6.0 --nocheck"
 
 2.6.0

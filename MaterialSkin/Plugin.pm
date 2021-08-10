@@ -1361,6 +1361,15 @@ sub _manifestHandler {
         $manifest =~ s/\"#424242\"/\"#202020\"/g;
     }
 
+    my $title = $prefs->get('windowTitle');
+    if ($title && $title ne '') {
+        $manifest =~ s/\"LMS Mobile UI\"/\"${title}\"/g;
+    }
+    my $shortTitle = $prefs->get('shortTitle');
+    if ($shortTitle && $shortTitle ne '') {
+        $manifest =~ s/\"LMS\"/\"${shortTitle}\"/g;
+    }
+
     $response->code(RC_OK);
     $response->content_type('application/manifest+json');
     $response->header('Connection' => 'close');

@@ -10,7 +10,6 @@
  <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, minimal-ui">
-  <title>Logitech Media Server</title>
   <link href="html/font/font.css?r=49" rel="stylesheet">
   <!--CSS start-->
   <link href="html/lib/vuetify.min.css?r=1.5.24trim" rel="stylesheet">
@@ -18,6 +17,7 @@
   <!--CSS end-->
   [% PERL %]
   my $version=Plugins::MaterialSkin::Plugin->pluginVersion();
+  my $windowTitle=Plugins::MaterialSkin::Plugin->windowTitle();
   my $ua=$stash->get('userAgent');
   print("<link href=\"html/css/themes/");
   # Keep in sync with store.js (defaultTheme)
@@ -38,7 +38,10 @@
   print("  <link href=\"html/css/variant/standard.css?r=$version\" rel=\"stylesheet\" id=\"variantcss\">\n");
   print("  <link href=\"html/css/colors/blue.css?r=$version\" rel=\"stylesheet\" id=\"colorcss\">\n");
   print("  <link href=\"html/css/style.css?r=$version\" rel=\"stylesheet\">\n");
-  print("  <link href=\"html/css/mobile.css?r=$version\" rel=\"stylesheet\" id=\"layoutcss\">");
+  print("  <link href=\"html/css/mobile.css?r=$version\" rel=\"stylesheet\" id=\"layoutcss\">\n");
+  print("  <title>${windowTitle}</title>\n");
+  print("  <meta name=\"apple-mobile-web-app-title\" content=\"${windowTitle}\">\n");
+  print("  <meta name=\"application-name\" content=\"${windowTitle}\">");
   [% END %]
   <link href="/material/customcss/mobile" rel="stylesheet" id="customcss">
   <link href="/material/material.webmanifest" rel="manifest">
@@ -47,8 +50,6 @@
   <meta name="mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="black">
-  <meta name="apple-mobile-web-app-title" content="Logitech Media Server">
-  <meta name="application-name" content="Logitech Media Server">
  </head>
  <body>
   <div id="app" v-cloak>
@@ -143,7 +144,7 @@
   [% PERL %]
   my $version=Plugins::MaterialSkin::Plugin->pluginVersion();
   my $windowTitle=Plugins::MaterialSkin::Plugin->windowTitle();
-  print("<script>const LMS_MATERIAL_REVISION=\"$version\"; const LMS_WINDOW_TITLE=\"$windowTitle\"; document.title = LMS_WINDOW_TITLE;</script>\n");
+  print("<script>const LMS_MATERIAL_REVISION=\"$version\"; const LMS_WINDOW_TITLE=\"$windowTitle\";</script>\n");
   print("  <script src=\"html/lib/longpress.min.js?r=$version\"></script>\n");
   print("  <script src=\"html/js/actions.js?r=$version\"></script>\n");
   print("  <script src=\"html/js/constants.js?r=$version\"></script>\n");

@@ -122,6 +122,7 @@ function doReplacements(string, player, item) {
             }
         }
     }
+    val=val.replace("$HOST", window.location.hostname);
     for (var i=0, len=ACTION_KEYS.length; i<len; ++i) {
         val = val.replace("+$"+ACTION_KEYS[i], "").replace("$"+ACTION_KEYS[i]+"+", "").replace("$"+ACTION_KEYS[i], "");
     }

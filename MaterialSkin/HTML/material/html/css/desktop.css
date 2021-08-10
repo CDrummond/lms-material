@@ -90,7 +90,7 @@
  width: 12px;
  height: calc((var(--vh, 1vh)*100) - (var(--main-toolbar-height) + var(--bottom-toolbar-height)));
  margin-left:-2px;
- z-index: 40;
+ z-index: 4;
 }
 
 @media (hover: hover) and (pointer: fine) {

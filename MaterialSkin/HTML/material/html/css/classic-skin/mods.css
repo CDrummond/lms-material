@@ -140,7 +140,7 @@ div#topGraphicMenu3 #statusMessage {
 }
 
 table td {
-  padding-bottom:8px;
+ padding-bottom:8px;
 }
 
 .homeMenuSection div, .settingSection .groupHead, .settingSection .prefHead, .prefHead {
@@ -221,8 +221,39 @@ input[type="submit"], input[type="button"] {
 
 input[type=checkbox], input[type=radio] {
  vertical-align: middle;
+ text-align:center;
+ border:none;
+ background-color: transparent;
  width:24px;
  height:24px;
+ min-width:24px;
+ min-height:24px;
+ max-width:24px;
+ max-height:24px;
+}
+
+input[type=checkbox]:before {
+ content:"check_box_outline_blank";
+}
+
+input[type=checkbox]:checked:before {
+ content:"check_box";
+}
+
+[type="checkbox"]:focus, [type="radio"]:focus {
+ border-bottom: none !important;
+}
+
+input[type=radio]:before {
+ content:"radio_button_unchecked";
+}
+
+input[type=radio]:checked:before {
+ content:"radio_button_checked";
+}
+
+[type="checkbox"]:before, [type="radio"]:before {
+ border: 1px solid transparent;
 }
 
 #activePlugins input[type=checkbox],
@@ -330,35 +361,6 @@ input[type=checkbox], input[type=radio] {
  width:48px!important;
  max-width:48px!important;
  min-width:48px!important;
-}
-
-input[type=checkbox]:before {
- content:"check_box_outline_blank";
-}
-
-input[type=checkbox]:checked:before {
- content:"check_box";
-}
-
-input[type=checkbox], input[type=radio] {
- border:none;
- background-color: transparent;
-}
-
-[type="checkbox"]:focus, [type="radio"]:focus {
- border-bottom: none !important;
-}
-
-input[type=radio]:before {
- content:"radio_button_unchecked";
-}
-
-input[type=radio]:checked:before {
- content:"radio_button_checked";
-}
-
-[type="checkbox"]:before, [type="radio"]:before {
- border: 1px solid transparent;
 }
 
 #saveSettings {

@@ -16,6 +16,7 @@
     "--nocheck" as last parameter to mkrel.py - e.g. "mkrel.ply 2.6.0 --nocheck"
 10. Move hidden slider area lower in z-stack so that it is not ave popup menus.
 11. Always add bottom padding for iOS.
+12. Remove long-press functionality from now-playing button.
 
 2.6.0
 -----

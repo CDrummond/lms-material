@@ -17,7 +17,7 @@ Vue.component('lms-bottomnav', {
     <span>{{item.text}}</span>
     <img class="nav-svg-img" :src="activeBtn==index ? libraryActiveSvg : libraryInactiveSvg"></img>
    </v-btn>
-   <v-btn v-else-if="index==1" flat class="lms-bottom-nav-button" v-longpress="npPressed" v-bind:class="{'active-nav': activeBtn==index, 'inactive-nav': activeBtn!=index}" id="browse-nav-btn">
+   <v-btn v-else-if="index==1" flat class="lms-bottom-nav-button" @click="npPressed" v-bind:class="{'active-nav': activeBtn==index, 'inactive-nav': activeBtn!=index}" id="browse-nav-btn">
     <span>{{item.text}}</span>
     <v-icon>{{item.icon}}</v-icon>
    </v-btn>
@@ -129,8 +129,8 @@ Vue.component('lms-bottomnav', {
         browsePressed(longPress) {
             this.setPage(this.items[0].page, longPress);
         },
-        npPressed(longPress) {
-            this.setPage(this.items[1].page, longPress);
+        npPressed() {
+            this.setPage(this.items[1].page, false);
         },
         queuePressed(longPress) {
             this.setPage(this.items[2].page, longPress);

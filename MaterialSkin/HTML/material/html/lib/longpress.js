@@ -13,7 +13,7 @@ Vue.directive('longpress', {
         }
 
         el.longpress={time:undefined, stated:false, timedout:false, touchOnly:false, start:undefined, cancel:undefined,
-                      binding:binding, repeat:'repeat'==binding.arg, stopProp:'stop'==binding.arg};
+                      binding:binding, repeat:'repeat'==binding.arg, stopProp:'stop'==binding.arg, nomove:'nomove'==binding.arg};
 
         // Define funtion handlers
         // Create timeout ( run function after 1s )
@@ -92,18 +92,21 @@ Vue.directive('longpress', {
         }
 
         // Try to detect if moved while pressing, and if so don't fire any events
-        el.longpress.move = (e) => {
-            if (el.longpress.started && undefined!=el.longpress.startPos && !el.longpress.moved && undefined!=e.touches && e.touches.length>0 && 
-               (Math.abs(el.longpress.startPos.x-e.touches[0].clientX)>4 || Math.abs(el.longpress.startPos.y-e.touches[0].clientY)>4)) {
-                console.log('Moved while checking for longpress, disabling events');
-                el.longpress.moved = true;
+        if (el.longpress.nomove) {
+            el.longpress.move = (e) => {
+                if (el.longpress.started && undefined!=el.longpress.startPos && !el.longpress.moved && undefined!=e.touches && e.touches.length>0 && 
+                   (Math.abs(el.longpress.startPos.x-e.touches[0].clientX)>4 || Math.abs(el.longpress.startPos.y-e.touches[0].clientY)>4)) {
+                    el.longpress.moved = true;
+                }
             }
         }
 
         el.addEventListener("touchstart", el.longpress.start, { passive: true });
         el.addEventListener("touchend", el.longpress.cancel);
         el.addEventListener("touchcancel", el.longpress.cancel);
-        el.addEventListener("touchmove", el.longpress.move, { passive: true });
+        if (el.longpress.nomove) {
+            el.addEventListener("touchmove", el.longpress.move, { passive: true });
+        }
         el.addEventListener("mousedown", el.longpress.start);
         el.addEventListener("click", el.longpress.cancel);
         el.addEventListener("mouseout", el.longpress.cancel);
@@ -116,7 +119,9 @@ Vue.directive('longpress', {
         el.removeEventListener("touchstart", el.longpress.start);
         el.removeEventListener("touchend", el.longpress.cancel);
         el.removeEventListener("touchcancel", el.longpress.cancel);
-        el.removeEventListener("touchmove", el.longpress.move);
+        if (el.longpress.nomove) {
+            el.removeEventListener("touchmove", el.longpress.move);
+        }
         el.removeEventListener("mousedown", el.longpress.start);
         el.removeEventListener("click", el.longpress.cancel);
         el.removeEventListener("mouseout", el.longpress.cancel);

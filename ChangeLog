@@ -19,6 +19,8 @@
 12. Remove long-press functionality from now-playing button.
 13. When checking for longpress, do not emit events if detect touch move of more
     than 4px.
+14. Change dot-stlye jumplist inactive item as it looked 3d-ish (on Android at
+    least).
 
 2.6.0
 -----

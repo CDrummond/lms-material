@@ -24,6 +24,9 @@ Vue.directive('longpress', {
             }
             if (e.type=="touchstart") {
                 el.longpress.touchOnly = true;
+                if (undefined!=e.touches && e.touches.length>0) {
+                    el.longpress.startPos = {x:e.touches[0].clientX, y:e.touches[0].clientY};
+                }
             } else if (el.longpress.touchOnly && !e.type.startsWith("touch")) {
                 return;
             }
@@ -31,8 +34,10 @@ Vue.directive('longpress', {
             if (el.longpress.started || ((e.type === 'click' || e.type === 'mousedown') && e.button !== 0)) {
                 return;
             }
+
             el.longpress.started = true;
             el.longpress.timedout = false;
+            el.longpress.moved = false;
             if (el.longpress.pressTimer === undefined) {
                 if (el.longpress.repeat) {
                     el.longpress.pressTimer = setInterval(() => {
@@ -50,10 +55,12 @@ Vue.directive('longpress', {
                         el.longpress.timedout = true;
                         el.longpress.started = false;
                         // Run function
-                        if (undefined==el.longpress.binding.value.method) {
-                            el.longpress.binding.value(true, el);
-                        } else {
-                            el.longpress.binding.value.method(binding.value.item, true, el);
+                        if (!el.longpress.moved) {
+                            if (undefined==el.longpress.binding.value.method) {
+                                el.longpress.binding.value(true, el);
+                            } else {
+                                el.longpress.binding.value.method(binding.value.item, true, el);
+                            }
                         }
                     }, 500)
                 }
@@ -66,7 +73,7 @@ Vue.directive('longpress', {
                 try { e.preventDefault(); } catch(e) { }
                 try { e.stopPropagation();} catch(e) { }
             }
-            if (el.longpress.started && !el.longpress.timedout) {
+            if (el.longpress.started && !el.longpress.timedout && !el.longpress.moved) {
                 if (undefined==el.longpress.binding.value.method) {
                     el.longpress.binding.value(false, el);
                 } else {
@@ -76,15 +83,27 @@ Vue.directive('longpress', {
             }
             el.longpress.started = false;
             el.longpress.timedout = false;
+            el.longpress.moved = false;
+            el.longpress.startPos = undefined;
             if (el.longpress.pressTimer !== undefined) {
                 clearTimeout(el.longpress.pressTimer);
                 el.longpress.pressTimer = undefined;
             }
         }
 
+        // Try to detect if moved while pressing, and if so don't fire any events
+        el.longpress.move = (e) => {
+            if (el.longpress.started && undefined!=el.longpress.startPos && !el.longpress.moved && undefined!=e.touches && e.touches.length>0 && 
+               (Math.abs(el.longpress.startPos.x-e.touches[0].clientX)>4 || Math.abs(el.longpress.startPos.y-e.touches[0].clientY)>4)) {
+                console.log('Moved while checking for longpress, disabling events');
+                el.longpress.moved = true;
+            }
+        }
+
         el.addEventListener("touchstart", el.longpress.start, { passive: true });
         el.addEventListener("touchend", el.longpress.cancel);
         el.addEventListener("touchcancel", el.longpress.cancel);
+        el.addEventListener("touchmove", el.longpress.move, { passive: true });
         el.addEventListener("mousedown", el.longpress.start);
         el.addEventListener("click", el.longpress.cancel);
         el.addEventListener("mouseout", el.longpress.cancel);
@@ -97,6 +116,7 @@ Vue.directive('longpress', {
         el.removeEventListener("touchstart", el.longpress.start);
         el.removeEventListener("touchend", el.longpress.cancel);
         el.removeEventListener("touchcancel", el.longpress.cancel);
+        el.removeEventListener("touchmove", el.longpress.move);
         el.removeEventListener("mousedown", el.longpress.start);
         el.removeEventListener("click", el.longpress.cancel);
         el.removeEventListener("mouseout", el.longpress.cancel);

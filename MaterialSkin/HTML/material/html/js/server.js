@@ -277,9 +277,6 @@ var lmsServer = Vue.component('lms-server', {
                     this.cometd.subscribe('/slim/subscribe',
                                     function(res) { },
                                     {data:{response:'/'+this.cometd.getClientId()+'/slim/serverprefs', request:[['prefset']]}});
-                    this.cometd.subscribe('/slim/subscribe',
-                                    function(res) { },
-                                    {data:{response:'/'+this.cometd.getClientId()+'/slim/material-skin', request:['material-skin', ['notification']]}});
                     this.updateFavorites();
                 }
             });
@@ -300,8 +297,6 @@ var lmsServer = Vue.component('lms-server', {
                 this.handlePlayerPrefs(msg.channel.split('/').pop(), msg.data);
             } else if (msg.channel.endsWith('/slim/serverprefs')) {
                 this.handleServerPrefs(msg.data);
-            } else if (msg.channel.endsWith('/slim/material-skin')) {
-                console.log("MSK", JSON.stringify(msg));
             } else {
                 logCometdDebug("ERROR: Unexpected channel:"+msg.channel);
             }

@@ -8,13 +8,14 @@
  5. Don't allow download from iOS, doesn't work.
  6. Allow setting a custom window title via 'windowTitle' server-side preference
     file. e.g. set "windowTitle: 'Test'" in "prefs/plugin/material-skin.prefs"
- 7. Allow specify manifest short name via 'shortTitle' server-side preference
+ 7. Allow setting manifest short name via 'shortTitle' server-side preference
     file.
  8. Allow setting custom icon via 'icon' server-side preference file - string
     should be path to icon file. Likewise 'iosIcon' for iOS specific icon.
  9. Allow making release builds without checking if version exists. Pass
     "--nocheck" as last parameter to mkrel.py - e.g. "mkrel.ply 2.6.0 --nocheck"
-10. Move hidden slider area lower in z-stack so that it is not ave popup menus.
+10. Move hidden slider area lower in z-stack so that it is not above popup
+    menus.
 11. Always add bottom padding for iOS.
 12. Remove long-press functionality from now-playing button.
 13. When checking for longpress, do not emit events if detect touch move of more

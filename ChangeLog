@@ -22,6 +22,8 @@
     than 4px.
 14. Change dot-stlye jumplist inactive item as it looked 3d-ish (on Android at
     least).
+15. Revert webapp manifest back to "fullscreen", as issue that forced previous
+    change should now be fixed.
 
 2.6.0
 -----

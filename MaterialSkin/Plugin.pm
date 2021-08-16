@@ -191,6 +191,9 @@ sub initCLI {
     Slim::Control::Request::addDispatch(['material-skin', '_cmd'],        [0, 0, 1, \&_cliCommand]);
     Slim::Control::Request::addDispatch(['material-skin-client', '_cmd'], [1, 0, 1, \&_cliClientCommand]);
     Slim::Control::Request::addDispatch(['material-skin-group', '_cmd'],  [1, 0, 1, \&_cliGroupCommand]);
+
+    # Notification
+    Slim::Control::Request::addDispatch(['material-skin', 'notification', '_msg'], [0, 0, 0, undef]);
 }
 
 sub _startsWith {
@@ -212,7 +215,8 @@ sub _cliCommand {
                                                   'add-podcast', 'edit-podcast', 'podcast-url', # TODO Remove after LMS8.2 released...
                                                   'plugins', 'plugins-status', 'plugins-update', 'extras', 'delete-vlib', 'pass-isset',
                                                   'pass-check', 'browsemodes', 'geturl', 'command', 'scantypes', 'server', 'themes',
-                                                  'playericons', 'activeplayers', 'urls', 'adv-search', 'adv-search-params', 'protocols']) ) {
+                                                  'playericons', 'activeplayers', 'urls', 'adv-search', 'adv-search-params', 'protocols',
+                                                  'send-notif']) ) {
         $request->setStatusBadParams();
         return;
     }
@@ -1054,6 +1058,17 @@ sub _cliCommand {
                 }
             }
         }
+        $request->setStatusDone();
+        return;
+    }
+
+    if ($cmd eq 'send-notif') {
+        my $msg = $request->getParam('msg');
+        if (!$msg) {
+            $request->setStatusBadParams();
+            return;
+        }
+        Slim::Control::Request::notifyFromArray(undef, ['material-skin', 'notification', $msg]);
         $request->setStatusDone();
         return;
     }

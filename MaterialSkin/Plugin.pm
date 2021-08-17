@@ -194,7 +194,7 @@ sub initCLI {
     Slim::Control::Request::addDispatch(['material-skin-group', '_cmd'],  [1, 0, 1, \&_cliGroupCommand]);
 
     # Notification
-    Slim::Control::Request::addDispatch(['material-skin', 'notification', '_msg'], [0, 0, 0, undef]);
+    Slim::Control::Request::addDispatch(['material-skin', 'notification', '_type', '_msg'], [0, 0, 0, undef]);
 }
 
 sub _startsWith {

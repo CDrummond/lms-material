@@ -35,7 +35,7 @@ function getCustomActions(id, lockedActions) {
         } else if (id.endsWith('-dialog')) {
             getSectionActions(id, actions, lockedActions);
         } else {
-            if ("item"!=id && "artist"!=id && "album"!=id && "settings"!=id) {
+            if ("item"!=id && "artist"!=id && "album"!=id && "settings"!=id && 'notifications'!=id) {
                 getSectionActions('allplayers', actions, lockedActions);
             }
             getSectionActions(id, actions, lockedActions);

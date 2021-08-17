@@ -1064,11 +1064,12 @@ sub _cliCommand {
 
     if ($cmd eq 'send-notif') {
         my $msg = $request->getParam('msg');
-        if (!$msg) {
+        my $type = $request->getParam('type');
+        if (!$msg || !$type || ($type ne 'info' && $type ne 'error' && $type ne 'alert')) {
             $request->setStatusBadParams();
             return;
         }
-        Slim::Control::Request::notifyFromArray(undef, ['material-skin', 'notification', $msg]);
+        Slim::Control::Request::notifyFromArray(undef, ['material-skin', 'notification', $type, $msg]);
         $request->setStatusDone();
         return;
     }

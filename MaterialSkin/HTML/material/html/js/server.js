@@ -544,8 +544,14 @@ var lmsServer = Vue.component('lms-server', {
             }
         },
         handleNotification(data) {
-            if (data.length==3) {
-                console.log("NOTIF", data[2]);
+            if (data.length==4) {
+                if (data[2]=='info') {
+                    bus.$emit('showMessage', data[3]);
+                } else if (data[2]=='error') {
+                    bus.$emit('showError', undefined, data[3]);
+                } else if (data[2]=='alert') {
+                    alert(data[3]);
+                }
             }
         },
         handleFavoritesUpdate() {

@@ -13,11 +13,11 @@ var lmsPromptDialog = Vue.component("lms-prompt-dialog", {
   <v-card-title v-if="undefined!=title">{{title}}</v-card-title>
   <v-card-text>
    <v-text-field v-if="type=='text'" single-line :label="hint" v-model="text" @keyup.enter="close(true);" ref="entry"></v-text-field>
-   <div v-else v-html="text"></div>
+   <div v-else v-html="text" class="prompt-dlg" ref="prompt-dlg-text"></div>
   </v-card-text>
   <v-card-actions>
    <v-spacer></v-spacer>
-   <v-btn flat @click.native="close(undefined==otherButton ? false : 0)">{{negativeButton}}</v-btn>
+   <v-btn v-if="type!='alert'" flat @click.native="close(undefined==otherButton ? false : 0)">{{negativeButton}}</v-btn>
    <v-btn flat @click.native="close(undefined==otherButton ? true : 1)">{{positiveButton}}</v-btn>
    <v-btn v-if="undefined!=otherButton" flat @click.native="close(2)">{{otherButton}}</v-btn>
   </v-card-actions>
@@ -38,15 +38,44 @@ var lmsPromptDialog = Vue.component("lms-prompt-dialog", {
     mounted() {
         bus.$on('prompt.open', function(type, title, text, hint, positiveButton, negativeButton, otherButton) {
             this.text = text ? text : "";
+            if ('alert'==type) {
+                if (this.text=='-') {
+                    this.show=false;
+                    return;
+                }
+                let promptDlg = this;
+                this.$nextTick(() => { this.$nextTick(() => {
+                    this.$refs['prompt-dlg-text'].addEventListener('click', function(event) {
+                        if (event.target.tagName=='A') {
+                            promptDlg.close(false);
+                            if (event.target.href.startsWith("msk:")) {
+                                event.preventDefault();
+                                let act = event.target.href.substring(4).replace('/', '');
+                                if (act!=undefined && act.length>0) {
+                                    let customActions = getCustomActions("notifications", promptDlg.$store.state.unlockAll);
+                                    if (undefined!=customActions) {
+                                        for (let i=0, len=customActions.length; i<len; ++i) {
+                                            if (customActions[i].title==act) {
+                                                performCustomAction(promptDlg, customActions[i], promptDlg.$store.state.player);
+                                                break;
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    });
+                })});
+            }
             this.maxWidth = this.text.length>=50 || 'confirm'!=type ? 500 : 300;
             this.type = type;
             this.title = title;
             this.hint = hint;
-            this.positiveButton = undefined==positiveButton ? i18n('OK') : positiveButton;
+            this.positiveButton = undefined==positiveButton ? type=='alert' ? i18n('Close') : i18n('OK') : positiveButton;
             this.negativeButton = undefined==negativeButton ? i18n('Cancel') : negativeButton;
             this.otherButton = otherButton;
             this.show = true;
-            if ('confirm'!=type) {
+            if ('text'==type) {
                 focusEntry(this);
             }
         }.bind(this));
@@ -83,6 +112,15 @@ function promptForText(title, hint, text, positiveButton, negativeButton) {
         bus.$emit('dlg.open', 'prompt', 'text', title, text, hint, positiveButton, negativeButton);
         bus.$once('prompt.resp', function(resp, value, hint) {
             response({ok:resp, value:value.trim()});
+        });
+    });
+}
+
+function alert(text, button) {
+    return new Promise(function(response) {
+        bus.$emit('dlg.open', 'prompt', 'alert', undefined, text, undefined, button);
+        bus.$once('prompt.resp', function(resp) {
+            response(resp);
         });
     });
 }

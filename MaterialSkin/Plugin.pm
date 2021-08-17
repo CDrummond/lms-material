@@ -38,6 +38,7 @@ my $log = Slim::Utils::Log->addLogCategory({
 my $prefs = preferences('plugin.material-skin');
 my $serverprefs = preferences('server');
 my $skinMgr;
+my $mskLastAlert = '-';
 
 my $MAX_ADV_SEARCH_RESULTS = 1000;
 my $DESKTOP_URL_PARSER_RE = qr{^desktop$}i;
@@ -216,7 +217,7 @@ sub _cliCommand {
                                                   'plugins', 'plugins-status', 'plugins-update', 'extras', 'delete-vlib', 'pass-isset',
                                                   'pass-check', 'browsemodes', 'geturl', 'command', 'scantypes', 'server', 'themes',
                                                   'playericons', 'activeplayers', 'urls', 'adv-search', 'adv-search-params', 'protocols',
-                                                  'send-notif']) ) {
+                                                  'send-notif', 'get-last-notif']) ) {
         $request->setStatusBadParams();
         return;
     }
@@ -1069,7 +1070,16 @@ sub _cliCommand {
             $request->setStatusBadParams();
             return;
         }
+        if ($type eq 'alert') {
+            $mskLastAlert = $msg;
+        }
         Slim::Control::Request::notifyFromArray(undef, ['material-skin', 'notification', $type, $msg]);
+        $request->setStatusDone();
+        return;
+    }
+
+    if ($cmd eq 'get-last-notif') {
+        $request->addResult("last", $mskLastAlert);
         $request->setStatusDone();
         return;
     }

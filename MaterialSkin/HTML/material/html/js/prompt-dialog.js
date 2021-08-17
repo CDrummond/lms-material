@@ -116,7 +116,7 @@ function promptForText(title, hint, text, positiveButton, negativeButton) {
     });
 }
 
-function alert(text, button) {
+function showAlert(text, button) {
     return new Promise(function(response) {
         bus.$emit('dlg.open', 'prompt', 'alert', undefined, text, undefined, button);
         bus.$once('prompt.resp', function(resp) {

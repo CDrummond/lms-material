@@ -550,7 +550,7 @@ var lmsServer = Vue.component('lms-server', {
                 } else if (data[2]=='error') {
                     bus.$emit('showError', undefined, data[3]);
                 } else if (data[2]=='alert') {
-                    alert(data[3]);
+                    showAlert(data[3]);
                 }
             }
         },

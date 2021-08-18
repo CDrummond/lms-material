@@ -20,7 +20,7 @@
 12. Remove long-press functionality from now-playing button.
 13. When checking for longpress, do not emit events if detect touch move of more
     than 4px.
-14. Change dot-stlye jumplist inactive item as it looked 3d-ish (on Android at
+14. Change dot-style jumplist inactive item as it looked 3d-ish (on Android at
     least).
 15. Revert webapp manifest back to "fullscreen", as issue that forced previous
     change should now be fixed.

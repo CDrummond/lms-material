@@ -345,7 +345,6 @@ def fixHtml(version):
                     inCss = False
                 elif "<!--JS start-->" in line:
                     inJs = True
-                    fixedLines.append('  <script>const LMS_MATERIAL_REVISION="%s";</script>\n' % version)
                     fixedLines.append('  <script src="html/js/%s?r=%s"></script>\n' % (JS_FILE, version))
                 elif "<!--JS end-->" in line:
                     inJs = False

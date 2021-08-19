@@ -1,3 +1,7 @@
+2.6.2
+-----
+1. Fix browser tab/title not showing song details.
+
 2.6.1
 -----
  1. Fix icon sizes of player status icons (sync, sleep) in main toolbar, and

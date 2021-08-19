@@ -129,6 +129,11 @@
     </div>
    </v-app>
   </div>
+  [% PERL %]
+  my $version=Plugins::MaterialSkin::Plugin->pluginVersion();
+  my $windowTitle=Plugins::MaterialSkin::Plugin->windowTitle();
+  print("<script>const LMS_MATERIAL_REVISION=\"$version\"; const LMS_WINDOW_TITLE=\"$windowTitle\";</script>\n");
+  [% END %]
   <!--JS start-->
   <script src="html/lib/axios.min.js?r=0.19.2"></script>
   <script src="html/lib/libcometd.min.js?r=4.0.3mod2"></script>
@@ -143,8 +148,6 @@
   <script src="html/lib/mousetrap.min.js?r=a4098"></script>
   [% PERL %]
   my $version=Plugins::MaterialSkin::Plugin->pluginVersion();
-  my $windowTitle=Plugins::MaterialSkin::Plugin->windowTitle();
-  print("<script>const LMS_MATERIAL_REVISION=\"$version\"; const LMS_WINDOW_TITLE=\"$windowTitle\";</script>\n");
   print("  <script src=\"html/lib/longpress.min.js?r=$version\"></script>\n");
   print("  <script src=\"html/js/actions.js?r=$version\"></script>\n");
   print("  <script src=\"html/js/constants.js?r=$version\"></script>\n");

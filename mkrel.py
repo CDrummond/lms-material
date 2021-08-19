@@ -350,15 +350,15 @@ def fixHtml(version):
                     inJs = False
                 elif "// DEFFERED start" in line:
                     inDeferred = True
-                    fixedLines.append('  function loadOtherFiles() {\n')
-                    fixedLines.append('    var script = document.createElement("script");\n')
-                    fixedLines.append('    script.src = "html/js/%s?r=%s";\n' % (JS_DEFERRED_FILE, version))
-                    fixedLines.append('    document.body.appendChild(script);\n')
-                    fixedLines.append('    var link = document.createElement("link");\n')
-                    fixedLines.append('    link.href = "html/css/%s?r=%s";\n' % (LIB_DEFERRED_CSS, version))
-                    fixedLines.append('    link.rel = "stylesheet";\n')
-                    fixedLines.append('    document.body.appendChild(link);\n')
-                    fixedLines.append('  }\n')
+                    fixedLines.append('   function loadOtherFiles() {\n')
+                    fixedLines.append('     var script = document.createElement("script");\n')
+                    fixedLines.append('     script.src = "html/js/%s?r=%s";\n' % (JS_DEFERRED_FILE, version))
+                    fixedLines.append('     document.body.appendChild(script);\n')
+                    fixedLines.append('     var link = document.createElement("link");\n')
+                    fixedLines.append('     link.href = "html/css/%s?r=%s";\n' % (LIB_DEFERRED_CSS, version))
+                    fixedLines.append('     link.rel = "stylesheet";\n')
+                    fixedLines.append('     document.body.appendChild(link);\n')
+                    fixedLines.append('   }\n')
                 elif "// DEFFERED end" in line:
                     inDeferred = False
                 elif not inCss and not inJs and not inDeferred:

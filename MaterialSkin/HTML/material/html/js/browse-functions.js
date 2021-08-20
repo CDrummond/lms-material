@@ -1356,6 +1356,7 @@ function browseMyMusicMenu(view) {
                                  type: "group",
                                  icon: "music_note"
                                 };
+                    var tryMapping = false;
                     if (c.id.startsWith("myMusicArtistsAudiobooks")) {
                         item.icon = "edit";
                         item.cancache = true;
@@ -1409,7 +1410,15 @@ function browseMyMusicMenu(view) {
                         } else if (c.icon.endsWith("/genres.png")) {
                             item.svg = "guitar-acoustic";
                             item.icon = undefined;
+                        } else {
+                            tryMapping = true;
                         }
+                    } else {
+                        tryMapping = true;
+                    }
+                    if (tryMapping && mapIcon(c)) {
+                        item.svg = c.svg;
+                        item.icon = c.icon;
                     }
                     item.params.push("menu:1");
                     if (getField(item, "genre_id:")>=0) {

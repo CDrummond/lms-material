@@ -67,10 +67,12 @@ function isCueTrack(filename) {
     return true;
 }
 
-function download(item) {
+function download(item, command) {
     let lkey = item.id.startsWith("playlist_id:") ? "playlisttracks_loop" : "titles_loop";
     let cmd = ['tracks', 0, 1000, DOWNLOAD_TAGS, 'sort:tracknum', item.id];
-    if (item.artist_id) {
+    // Only include artist_id if we have no list command, or the list command has artist_id
+    // -> otherwise downloading a 'Various Artists' album from 'New Music' fails.
+    if (item.artist_id && (undefined==command || getField(command, 'artist_id')>=0)) {
         cmd.push('artist_id:'+item.artist_id);
     }
     if (item.id.startsWith("playlist_id:")) {

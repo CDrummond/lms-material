@@ -919,7 +919,7 @@ function browseItemAction(view, act, item, index, event) {
     } else if (BR_COPY_ACTION==act) {
         bus.$emit('queueGetSelectedUrls', index, item.id);
     } else if (DOWNLOAD_ACTION==act) {
-        download(item);
+        download(item, item.id.startsWith("album_id:") ? view.buildCommand(item) : undefined);
     } else {
         var command = browseBuildFullCommand(view, item, act);
         if (command.command.length===0) {

@@ -2,6 +2,7 @@
 -----
 1. Fix browser tab/title not showing song details.
 2. Call icon mapping code for items in 'My Music'.
+3. Fix downloading a 'Various Artists' album from 'New Music'.
 
 2.6.1
 -----

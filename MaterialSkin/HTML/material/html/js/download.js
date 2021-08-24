@@ -149,6 +149,8 @@ Vue.component('lms-downloadstatus', {
    <v-toolbar app-data class="dialog-toolbar">
     <v-btn flat icon v-longpress:stop="close" :title="i18n('Go back')"><v-icon>arrow_back</v-icon></v-btn>
     <v-toolbar-title>{{i18n('Downloading')}}</v-toolbar-title>
+    <v-spacer></v-spacer>
+    <v-btn icon v-if="undefined!=items && items.length>1" flat @click.native="abortAll()" :title="i18n('Abort all')"><img class="svg-img" :src="'close-all' | svgIcon(darkUi)"></img></v-btn>
    </v-toolbar>
   </v-card-title>
   <v-card-text style="padding-top:0px">
@@ -174,9 +176,6 @@ Vue.component('lms-downloadstatus', {
       <div style="padding-top:64px;width:100%;display:flex;justify-content:center;align-items:center;">{{i18n('All downloads complete.')}}</div>
      </v-flex>
      <div class="dialog-padding"></div>
-     <v-flex xs23 v-if="undefined!=items && items.length>1">
-      <v-btn flat @click.native="abortAll()" style="float:right"><v-icon style="padding-right:8px">cancel</v-icon>{{i18n('Abort all')}}</v-btn>
-     </v-flex>
     </v-layout>
    </v-container>
   </v-card-text>
@@ -232,6 +231,14 @@ Vue.component('lms-downloadstatus', {
     computed: {
         items () {
             return this.$store.state.downloadStatus
+        },
+        darkUi () {
+            return this.$store.state.darkUi
+        }
+    },
+    filters: {
+        svgIcon: function (name, dark, coloredToolbars) {
+            return "/material/svg/"+name+"?c="+(dark || coloredToolbars ? LMS_DARK_SVG : LMS_LIGHT_SVG)+"&r="+LMS_MATERIAL_REVISION;
         }
     },
     watch: {

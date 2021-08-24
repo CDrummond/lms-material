@@ -210,6 +210,7 @@ function browseHandleListResponse(view, item, command, resp, prevPage) {
                             }
                         }
                     }
+                }).catch(err => {
                 });
             }
         }

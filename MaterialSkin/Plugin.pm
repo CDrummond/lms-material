@@ -38,6 +38,7 @@ my $log = Slim::Utils::Log->addLogCategory({
 my $prefs = preferences('plugin.material-skin');
 my $serverprefs = preferences('server');
 my $skinMgr;
+my $mskLastAlert = '-';
 
 my $MAX_ADV_SEARCH_RESULTS = 1000;
 my $DESKTOP_URL_PARSER_RE = qr{^desktop$}i;
@@ -191,6 +192,9 @@ sub initCLI {
     Slim::Control::Request::addDispatch(['material-skin', '_cmd'],        [0, 0, 1, \&_cliCommand]);
     Slim::Control::Request::addDispatch(['material-skin-client', '_cmd'], [1, 0, 1, \&_cliClientCommand]);
     Slim::Control::Request::addDispatch(['material-skin-group', '_cmd'],  [1, 0, 1, \&_cliGroupCommand]);
+
+    # Notification
+    Slim::Control::Request::addDispatch(['material-skin', 'notification', '_type', '_msg'], [0, 0, 0, undef]);
 }
 
 sub _startsWith {
@@ -212,7 +216,8 @@ sub _cliCommand {
                                                   'add-podcast', 'edit-podcast', 'podcast-url', # TODO Remove after LMS8.2 released...
                                                   'plugins', 'plugins-status', 'plugins-update', 'extras', 'delete-vlib', 'pass-isset',
                                                   'pass-check', 'browsemodes', 'geturl', 'command', 'scantypes', 'server', 'themes',
-                                                  'playericons', 'activeplayers', 'urls', 'adv-search', 'adv-search-params', 'protocols']) ) {
+                                                  'playericons', 'activeplayers', 'urls', 'adv-search', 'adv-search-params', 'protocols',
+                                                  'send-notif', 'get-last-notif']) ) {
         $request->setStatusBadParams();
         return;
     }
@@ -1054,6 +1059,27 @@ sub _cliCommand {
                 }
             }
         }
+        $request->setStatusDone();
+        return;
+    }
+
+    if ($cmd eq 'send-notif') {
+        my $msg = $request->getParam('msg');
+        my $type = $request->getParam('type');
+        if (!$msg || !$type || ($type ne 'info' && $type ne 'error' && $type ne 'alert')) {
+            $request->setStatusBadParams();
+            return;
+        }
+        if ($type eq 'alert') {
+            $mskLastAlert = $msg;
+        }
+        Slim::Control::Request::notifyFromArray(undef, ['material-skin', 'notification', $type, $msg]);
+        $request->setStatusDone();
+        return;
+    }
+
+    if ($cmd eq 'get-last-notif') {
+        $request->addResult("last", $mskLastAlert);
         $request->setStatusDone();
         return;
     }

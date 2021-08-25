@@ -277,6 +277,9 @@ var lmsServer = Vue.component('lms-server', {
                     this.cometd.subscribe('/slim/subscribe',
                                     function(res) { },
                                     {data:{response:'/'+this.cometd.getClientId()+'/slim/serverprefs', request:[['prefset']]}});
+                    this.cometd.subscribe('/slim/subscribe',
+                                    function(res) { },
+                                    {data:{response:'/'+this.cometd.getClientId()+'/slim/material-skin', request:['material-skin', ['notification']]}});
                     this.updateFavorites();
                 }
             });
@@ -297,6 +300,8 @@ var lmsServer = Vue.component('lms-server', {
                 this.handlePlayerPrefs(msg.channel.split('/').pop(), msg.data);
             } else if (msg.channel.endsWith('/slim/serverprefs')) {
                 this.handleServerPrefs(msg.data);
+            } else if (msg.channel.endsWith('/slim/material-skin')) {
+                this.handleNotification(msg.data);
             } else {
                 logCometdDebug("ERROR: Unexpected channel:"+msg.channel);
             }
@@ -536,6 +541,17 @@ var lmsServer = Vue.component('lms-server', {
             }
             if (data[1]=="server" && data[2]=="useUnifiedArtistsList") {
                 bus.$emit("prefset", data[1]+":"+data[2], data[3]);
+            }
+        },
+        handleNotification(data) {
+            if (data.length==4) {
+                if (data[2]=='info') {
+                    bus.$emit('showMessage', data[3]);
+                } else if (data[2]=='error') {
+                    bus.$emit('showError', undefined, data[3]);
+                } else if (data[2]=='alert') {
+                    showAlert(data[3]);
+                }
             }
         },
         handleFavoritesUpdate() {

@@ -8,6 +8,7 @@
    value from the current browe history. If this still fails and the track is
    marked as comming from a compilation then use LMS's 'Various Artists' string.
 6. Call icon mapping for favourites.
+7. Add support for sending notifications from perl to webapp.
 
 2.6.1
 -----

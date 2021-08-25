@@ -514,7 +514,7 @@ const store = new Vuex.Store({
             //   All Artists + Album Artists, or just Artists?
             //   Filer albums/tracks on genre?
             //   Filter album/tracks on role?
-            lmsCommand("", ["serverstatus", 0, 0, "prefs:useUnifiedArtistsList,noGenreFilter,noRoleFilter,browseagelimit,useLocalImageproxy"]).then(({data}) => {
+            lmsCommand("", ["serverstatus", 0, 0, "prefs:useUnifiedArtistsList,noGenreFilter,noRoleFilter,browseagelimit,useLocalImageproxy,variousArtistsString"]).then(({data}) => {
                 if (data && data.result) {
                     lmsOptions.separateArtists = 1!=parseInt(data.result.useUnifiedArtistsList);
                     if (lmsOptions.separateArtists!=getLocalStorageBool('separateArtists', false)) {
@@ -529,9 +529,12 @@ const store = new Vuex.Store({
                     if (undefined!=data.result.browseagelimit) {
                         lmsOptions.newMusicLimit = parseInt(data.result.browseagelimit);
                     }
-                    // useMySqueezeboxImageProxy defined in utils.js
+
                     lmsOptions.useMySqueezeboxImageProxy = undefined==data.result.useLocalImageproxy || 0 == parseInt(data.result.useLocalImageproxy);
                     setLocalStorageVal('useMySqueezeboxImageProxy', lmsOptions.useMySqueezeboxImageProxy);
+
+                    lmsOptions.variousArtistsString = undefined==data.result.variousArtistsString || data.result.variousArtistsString.length<1 ? 'Various Artists' : data.result.variousArtistsString;
+                    setLocalStorageVal('variousArtistsString', lmsOptions.variousArtistsString);
                 }
             });
             // Artist images?

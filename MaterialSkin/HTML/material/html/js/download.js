@@ -6,7 +6,7 @@
  */
 'use strict';
 
-const DOWNLOAD_TAGS = 'tags:aAeiltuyK';
+const DOWNLOAD_TAGS = 'tags:aACeiltuyK';
 
 var downloadElem = undefined;
 
@@ -67,7 +67,7 @@ function isCueTrack(filename) {
     return true;
 }
 
-function download(item, command) {
+function download(item, command, albumartist) {
     let lkey = item.id.startsWith("playlist_id:") ? "playlisttracks_loop" : "titles_loop";
     let cmd = ['tracks', 0, 1000, DOWNLOAD_TAGS, 'sort:tracknum', item.id];
     // Only include artist_id if we have no list command, or the list command has artist_id
@@ -90,11 +90,18 @@ function download(item, command) {
                         let ext=uparts[uparts.length-1];
                         splitMultiples(item);
                         let tracknum = undefined==item.tracknum ? 0 : parseInt(item.tracknum);
+                        let aa = undefined!=item.albumartist
+                                    ? item.albumartist
+                                    : undefined!=albumartist
+                                        ? albumartist
+                                        : undefined!=item.compilation && 1==parseInt(item.compilation)
+                                            ? lmsOptions.variousArtistsString
+                                            : item.artist;
                         tracks.push({id: item.id,
                             title: item.title,
                             filename: filename,
                             ext: ext,
-                            artist: item.albumartist ? item.albumartist : item.artist,
+                            artist: aa,
                             album: item.album,
                             tracknum: tracknum>0 ? (tracknum>9 ? tracknum : ('0' + tracknum)) : undefined,
                             disc: item.disc,

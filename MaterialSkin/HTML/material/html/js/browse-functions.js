@@ -919,7 +919,35 @@ function browseItemAction(view, act, item, index, event) {
     } else if (BR_COPY_ACTION==act) {
         bus.$emit('queueGetSelectedUrls', index, item.id);
     } else if (DOWNLOAD_ACTION==act) {
-        download(item, item.id.startsWith("album_id:") ? view.buildCommand(item) : undefined);
+        // See if we can get album-artist from current view / history
+        let aa = view.current.id.startsWith("artist_id:") ? view.current.title : undefined;
+        if (aa == undefined) {
+            let alb = item.id.startsWith("album_id:") ? item : view.current.id.startsWith("album_id:") ? view.current : undefined;
+            if (undefined!=alb) {
+                if (undefined!=alb.artists) {
+                    aa = alb.artists[0];
+                } else if (undefined!=alb.subtitle) {
+                    aa = alb.subtitle;
+                }
+            }
+        }
+        if (aa == undefined) {
+            for (let loop=view.history, len=loop.length, i=len-1; i>0 && aa==undefined; ++i) {
+                let hi = loop[i].current;
+                if (undefined!=hi) {
+                    if (hi.id.startsWith("artist_id:")) {
+                        aa = hi.title;
+                    } else if (hi.id.startsWith("album_id:")) {
+                        if (undefined!=hi.artists) {
+                            aa = hi.artists[0];
+                        } else if (undefined!=hi.subtitle) {
+                            aa = hi.subtitle;
+                        }
+                    }
+                }
+            }
+        }
+        download(item, item.id.startsWith("album_id:") ? view.buildCommand(item) : undefined, aa);
     } else {
         var command = browseBuildFullCommand(view, item, act);
         if (command.command.length===0) {

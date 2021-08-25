@@ -241,6 +241,8 @@ function parseBrowseResp(data, parent, options, cacheKey, parentCommand, parentG
                         } else if (i['icon-id']=="html/images/favorites.png") {
                             i.icon="favorite";
                             i.image=undefined;
+                        } else {
+                            mapIcon(i);
                         }
                         if (i.presetParams.favorites_url.startsWith("http:") || i.presetParams.favorites_url.startsWith("https:")) {
                             i.isRadio = true;
@@ -253,6 +255,8 @@ function parseBrowseResp(data, parent, options, cacheKey, parentCommand, parentG
                     } else if (i['icon-id']=="html/images/favorites.png") {
                         i.icon="favorite";
                         i.image=undefined;
+                    } else {
+                        mapIcon(i);
                     }
                 } else if (i.presetParams) {
                     if (i.menu.length>0) {

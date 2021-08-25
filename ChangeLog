@@ -7,6 +7,7 @@
 5. When dowloading, if track has no album artist then see if we can use the
    value from the current browe history. If this still fails and the track is
    marked as comming from a compilation then use LMS's 'Various Artists' string.
+6. Call icon mapping for favourites.
 
 2.6.1
 -----

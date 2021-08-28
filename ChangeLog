@@ -4,9 +4,9 @@
 2. Call icon mapping code for items in 'My Music' and favourites.
 3. Fix downloading a 'Various Artists' album from 'New Music'.
 4. Move 'Abort all' downloads button into toolbar.
-5. When dowloading, if track has no album artist then see if we can use the
+5. When downloading, if track has no album artist then see if we can use the
    value from the current browse history. If this still fails and the track is
-   marked as comming from a compilation then use LMS's 'Various Artists' string.
+   marked as part of a compilation then use LMS's 'Various Artists' string.
 6. Add support for sending notifications from perl to webapp.
 
 2.6.1

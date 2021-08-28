@@ -55,7 +55,7 @@ var lmsPromptDialog = Vue.component("lms-prompt-dialog", {
                                     let customActions = getCustomActions("notifications", promptDlg.$store.state.unlockAll);
                                     if (undefined!=customActions) {
                                         for (let i=0, len=customActions.length; i<len; ++i) {
-                                            if (customActions[i].title==act) {
+                                            if (customActions[i].id==act) {
                                                 performCustomAction(promptDlg, customActions[i], promptDlg.$store.state.player);
                                                 break;
                                             }

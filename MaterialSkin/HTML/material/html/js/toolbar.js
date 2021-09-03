@@ -317,14 +317,7 @@ Vue.component('lms-toolbar', {
                 this.playerStatus.current.title=playerStatus.current.title;
                 this.playerStatus.current.artist=playerStatus.current.artist ? playerStatus.current.artist : playerStatus.current.trackartist;
                 this.playerStatus.current.album=playerStatus.current.album;
-                var artistComp = this.playerStatus.current.artist;
-                if (playerStatus.current.composer && useComposer(playerStatus.current.genre) && playerStatus.current.composer!=this.playerStatus.current.artist) {
-                    artistComp = addPart(playerStatus.current.composer, artistComp);
-                }
-                if (playerStatus.current.band && useBand(playerStatus.current.genre) && playerStatus.current.band!=this.playerStatus.current.artist && playerStatus.current.band!=playerStatus.current.composer) {
-                    artistComp = addPart(playerStatus.current.band, artistComp);
-                }
-                this.songInfo = addPart(this.playerStatus.current.title, artistComp);
+                this.songInfo = addPart(playerStatus.current.title, buildArtistLine(playerStatus.current, 'np', true));
                 if (!IS_MOBILE) {
                     var title = (undefined==this.songInfo ? "" : (this.songInfo.replaceAll(SEPARATOR, " - ") + " :: ")) + LMS_WINDOW_TITLE;
                     if (title!=document.title) {

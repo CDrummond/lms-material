@@ -3,6 +3,7 @@
 1. Fix parsing of BBC Sounds error response.
 2. Revert webapp manifest back to "standalone" as some users report issues
    with "fullscreen"
+3. Use composer, conductor, band, etc, in window titlebar as per elsewhere.
 
 2.6.2
 -----

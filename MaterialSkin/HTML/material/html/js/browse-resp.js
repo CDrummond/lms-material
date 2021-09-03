@@ -111,6 +111,15 @@ function parseBrowseResp(data, parent, options, cacheKey, parentCommand, parentG
                 }
                 var addedPlayAction = false;
 
+                if (undefined!=i.text && undefined!=i.text.name && 'text'==i.text.type) {
+                    // BBC Sounds seems to place error message in '"text":{"name":"<sting>, "type":"text"}'
+                    // So, we need to check for this and use text.name as text and text.type as type.
+                    // See https://forums.slimdevices.com/showthread.php?113045-Announce-BBC-Sounds-Plugin&p=1032136&viewfull=1#post1032136
+                    i.text = i.text.name;
+                    i.type = i.text.type;
+                    i.style = i.goAction = undefined;
+                }
+
                 if ("text"==i.type) {
                     // Exclude 'More' Play,Insert commands
                     if ( (i.style && MORE_COMMANDS.has(i.style)) ||

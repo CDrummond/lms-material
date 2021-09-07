@@ -20,6 +20,7 @@ Vue.component('lms-mediasession', {
     },
     mounted() {
         if ('mediaSession' in navigator) {
+            this.mediaSessionInit = false;
             this.playerStatus = { isplaying: false,
                                   current: { title:undefined, artist:undefined, album:undefined } };
             bus.$on('playerStatus', function(playerStatus) {
@@ -33,13 +34,13 @@ Vue.component('lms-mediasession', {
                     this.playerStatus.current.artist=playerStatus.current.artist ? playerStatus.current.artist : playerStatus.current.trackartist;
                     this.playerStatus.current.album=playerStatus.current.album;
                 }
-                this.updateMediaSession(this.playerStatus.current);
+                this.updateMediaSession(false);
             }.bind(this));
 
             this.media={title:undefined, artist:undefined, album:undefined, cover:undefined};
             bus.$on('currentCover', function(coverUrl) {
                 this.media.cover = coverUrl;
-                this.updateMediaSession(this.playerStatus.current, true);
+                this.updateMediaSession(true);
             }.bind(this));
             bus.$emit('getCurrentCover');
             this.haveLocalAndroidPlayer = false;
@@ -84,7 +85,7 @@ Vue.component('lms-mediasession', {
                     if (localAndroidPlayer != this.haveLocalAndroidPlayer) {
                         this.haveLocalAndroidPlayer = localAndroidPlayer;
                         if (this.haveLocalAndroidPlayer) {
-                            this.updateMediaSession(undefined, true);
+                            this.updateMediaSession(true);
                         }
                     }
                 }.bind(this));       
@@ -100,6 +101,7 @@ Vue.component('lms-mediasession', {
     },
     methods: {
         initMediaSessionAudio() {
+            this.mediaSessionInit = true;
             if (this.mediaAudio == undefined) {
                 this.mediaAudio = document.createElement('audio');
                 this.mediaAudio.src = "html/audio/silence.ogg";
@@ -126,10 +128,11 @@ Vue.component('lms-mediasession', {
             }
             this.removeListener();
             setTimeout(function () {
-                this.updateMediaSession(this.playerStatus.current, true);
+                this.updateMediaSession(true);
             }.bind(this), 500);
         },
         disableMediaSessionAudio() {
+            this.mediaSessionInit = false;
             if (undefined!=this.mediaAudio) {
                 document.body.removeChild(this.mediaAudio);
                 this.mediaAudio = undefined;
@@ -145,25 +148,26 @@ Vue.component('lms-mediasession', {
             this.media.album = undefined;
             this.removeListener();
         },
-        updateMediaSession(track, force) {
-            if (!this.mediaAudio) {
-                return;
-            }
+        updateMediaSession(force) {
             if ('mediaSession' in navigator) {
-                if (this.haveLocalAndroidPlayer || !this.$store.state.mediaControls) {
-                    disableMediaSessionAudio();
+                var artist = this.playerStatus.current.trackartist ? this.playerStatus.current.trackartist : this.playerStatus.current.artist;
+                var empty = undefined==artist && undefined==this.playerStatus.current.title && undefined==this.playerStatus.current.album;
+                if (this.haveLocalAndroidPlayer || !this.$store.state.mediaControls || empty) {
+                    this.disableMediaSessionAudio();
                 } else {
+                    if (!this.mediaSessionInit) {
+                        this.initMediaSessionAudio();
+                    }
                     if (this.playerStatus.isplaying) {
                         this.playSilence();
                     } else {
                         this.pauseSilence();
                     }
                     navigator.mediaSession.playbackState = this.playerStatus && this.playerStatus.isplaying ? "playing" : "paused";
-                    var artist = track.trackartist ? track.trackartist : track.artist;
-                    if (force || track.title!=this.media.title || artist!=this.media.artist || track.album!=this.media.album) {
-                        this.media.title = track.title;
+                    if (force || this.playerStatus.current.title!=this.media.title || artist!=this.media.artist || this.playerStatus.current.album!=this.media.album) {
+                        this.media.title = this.playerStatus.current.title;
                         this.media.artist = artist;
-                        this.media.album = track.album;
+                        this.media.album = this.playerStatus.current.album;
                         navigator.mediaSession.metadata = new MediaMetadata({
                             title: this.media.title,
                             artist: this.media.artist,
@@ -180,7 +184,7 @@ Vue.component('lms-mediasession', {
             }
             this.mediaAudio.play().then(_ => {
                 this.mediaAudioStarted = true;
-                this.updateMediaSession(this.playerStatus.current, true);
+                this.updateMediaSession(true);
                 navigator.mediaSession.playbackState = this.playerStatus && this.playerStatus.isplaying ? "playing" : "paused";
             }).catch(err => {
                 this.addListener();
@@ -190,7 +194,7 @@ Vue.component('lms-mediasession', {
             if (undefined!=this.mediaAudio && undefined==this.mediaAudioStarted) {
                 this.mediaAudio.play().then(_ => {
                     this.mediaAudioStarted = false;
-                    this.updateMediaSession(this.playerStatus.current, true);
+                    this.updateMediaSession(true);
                     navigator.mediaSession.playbackState = this.playerStatus && this.playerStatus.isplaying ? "playing" : "paused";
                     this.mediaAudio.pause();
                 }).catch(err => {
@@ -203,7 +207,7 @@ Vue.component('lms-mediasession', {
             }
             this.mediaAudio.pause();
             this.mediaAudioStarted = false;
-            this.updateMediaSession(this.playerStatus.current, true);
+            this.updateMediaSession(true);
             navigator.mediaSession.playbackState = this.playerStatus && this.playerStatus.isplaying ? "playing" : "paused"
         },
         removeListener() {

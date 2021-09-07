@@ -292,7 +292,8 @@ const store = new Vuex.Store({
         twentyFourHour: false,
         powerButton: false,
         largeCovers: false,
-        downloadStatus: []
+        downloadStatus: [],
+        mediaControls: true
     },
     mutations: {
         setPlayers(state, players) {

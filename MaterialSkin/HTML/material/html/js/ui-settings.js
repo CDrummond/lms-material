@@ -83,14 +83,14 @@ Vue.component('lms-ui-settings', {
     </v-list-tile>
     <v-divider></v-divider>
 
-    <v-list-tile>
+    <v-list-tile v-if="mediaControlsSupported">
      <v-list-tile-content @click="mediaControls = !mediaControls" class="switch-label">
       <v-list-tile-title>{{i18n('Media keys and notifications')}}</v-list-tile-title>
       <v-list-tile-sub-title>{{i18n("Enable support for media keys on desktop machines and notification controls on mobile devices")}} <v-btn flat icon style="margin-top:4px;height:18px;width:18px; opacity:var(--sub-opacity)" @click.stop="mediaControlsInfo"><v-icon small>help_outline</v-icon></v-btn</v-list-tile-sub-title>
      </v-list-tile-content>
      <v-list-tile-action><v-switch v-model="mediaControls"></v-switch></v-list-tile-action>
     </v-list-tile>
-    <v-divider></v-divider>
+    <v-divider v-if="mediaControlsSupported"></v-divider>
 
     <v-list-tile v-if="!IS_MOBILE">
      <v-list-tile-content @click="keyboardControl = !keyboardControl" class="switch-label">
@@ -431,7 +431,8 @@ Vue.component('lms-ui-settings', {
             powerButton: false,
             largeCovers: false,
             width: 500,
-            mediaControls: false
+            mediaControls: false,
+            mediaControlsSupported: !queryParams.hide.has('mediaControls') && ('mediaSession' in navigator)
         }
     },
     computed: {

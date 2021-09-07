@@ -134,6 +134,7 @@ Vue.component('lms-mediasession', {
         disableMediaSessionAudio() {
             this.mediaSessionInit = false;
             if (undefined!=this.mediaAudio) {
+                this.mediaAudio.src = "";
                 document.body.removeChild(this.mediaAudio);
                 this.mediaAudio = undefined;
                 navigator.mediaSession.setActionHandler('play', undefined);

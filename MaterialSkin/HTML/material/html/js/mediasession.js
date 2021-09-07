@@ -37,22 +37,6 @@ Vue.component('lms-mediasession', {
             }.bind(this));
 
             this.media={title:undefined, artist:undefined, album:undefined, cover:undefined};
-            navigator.mediaSession.setActionHandler('play', () => {
-                if (this.playerStatus && this.playerStatus.isplaying) {
-                    bus.$emit('playerCommand', ['pause']);
-                } else {
-                    bus.$emit('playerCommand', ['play']);
-                }
-            });
-            navigator.mediaSession.setActionHandler('pause', function() {
-                bus.$emit('playerCommand', ['pause']);
-            });
-            navigator.mediaSession.setActionHandler('previoustrack', function() {
-                bus.$emit('playerCommand', ['button', 'jump_rew']);
-            });
-            navigator.mediaSession.setActionHandler('nexttrack', function() {
-                bus.$emit('playerCommand', ['playlist', 'index', '+1']);
-            });
             bus.$on('currentCover', function(coverUrl) {
                 this.media.cover = coverUrl;
                 this.updateMediaSession(this.playerStatus.current, true);
@@ -119,8 +103,26 @@ Vue.component('lms-mediasession', {
             if (this.mediaAudio == undefined) {
                 this.mediaAudio = document.createElement('audio');
                 this.mediaAudio.src = "html/audio/silence.ogg";
-            	this.mediaAudio.loop = true;
-            	this.mediaAudio.volume = 0;
+                this.mediaAudio.loop = true;
+                this.mediaAudio.volume = 0;
+                document.body.appendChild(this.mediaAudio);
+
+                navigator.mediaSession.setActionHandler('play', () => {
+                    if (this.playerStatus && this.playerStatus.isplaying) {
+                        bus.$emit('playerCommand', ['pause']);
+                    } else {
+                        bus.$emit('playerCommand', ['play']);
+                    }
+                });
+                navigator.mediaSession.setActionHandler('pause', function() {
+                    bus.$emit('playerCommand', ['pause']);
+                });
+                navigator.mediaSession.setActionHandler('previoustrack', function() {
+                    bus.$emit('playerCommand', ['button', 'jump_rew']);
+                });
+                navigator.mediaSession.setActionHandler('nexttrack', function() {
+                    bus.$emit('playerCommand', ['playlist', 'index', '+1']);
+                });
             }
             this.removeListener();
             setTimeout(function () {
@@ -129,9 +131,18 @@ Vue.component('lms-mediasession', {
         },
         disableMediaSessionAudio() {
             if (undefined!=this.mediaAudio) {
-                this.mediaAudio.remove();
+                document.body.removeChild(this.mediaAudio);
                 this.mediaAudio = undefined;
+                navigator.mediaSession.setActionHandler('play', undefined);
+                navigator.mediaSession.setActionHandler('pause', undefined);
+                navigator.mediaSession.setActionHandler('previoustrack', undefined);
+                navigator.mediaSession.setActionHandler('nexttrack', undefined);
             }
+            navigator.mediaSession.playbackState = 'none';
+            navigator.mediaSession.metadata = undefined;
+            this.media.title = undefined;
+            this.media.artist = undefined;
+            this.media.album = undefined;
             this.removeListener();
         },
         updateMediaSession(track, force) {
@@ -139,12 +150,8 @@ Vue.component('lms-mediasession', {
                 return;
             }
             if ('mediaSession' in navigator) {
-                // haveLocalAndroidPlayer is defined in server.js
                 if (this.haveLocalAndroidPlayer || !this.$store.state.mediaControls) {
                     disableMediaSessionAudio();
-                    this.media.title = undefined;
-                    this.media.artist = undefined;
-                    this.media.album = undefined;
                 } else {
                     if (this.playerStatus.isplaying) {
                         this.playSilence();
@@ -176,7 +183,6 @@ Vue.component('lms-mediasession', {
                 this.updateMediaSession(this.playerStatus.current, true);
                 navigator.mediaSession.playbackState = this.playerStatus && this.playerStatus.isplaying ? "playing" : "paused";
             }).catch(err => {
-            console.log("EXP", err);
                 this.addListener();
             });
         },
@@ -188,7 +194,6 @@ Vue.component('lms-mediasession', {
                     navigator.mediaSession.playbackState = this.playerStatus && this.playerStatus.isplaying ? "playing" : "paused";
                     this.mediaAudio.pause();
                 }).catch(err => {
-                console.log("EXp", err);
                     this.addListener();
                 });
                 return;
@@ -213,7 +218,7 @@ Vue.component('lms-mediasession', {
         '$store.state.mediaControls': function (newVal) {
             if (newVal) {
                 this.addListener();
-               this.initMediaSessionAudio();
+                this.initMediaSessionAudio();
             } else {
                 this.disableMediaSessionAudio();
             }

@@ -157,8 +157,16 @@ Vue.component('lms-mediasession', {
                     } else {
                         this.pauseSilence();
                     }
+                    console.log(this.media.cover);
                     navigator.mediaSession.playbackState = this.playerStatus && this.playerStatus.isplaying ? "playing" : "paused";
                     if (force || this.playerStatus.current.title!=this.media.title || artist!=this.media.artist || this.playerStatus.current.album!=this.media.album) {
+                        let artwork = undefined;
+                        if (undefined!=this.media.cover && this.media.cover.endsWith('_1024x1024_f')) {
+                            artwork = [ {src: this.media.cover.replace('_1024x1024_f', '_300x300_f') , sizes: '300x300', type: 'image/jpeg'},
+                                        {src: ""+this.media.cover, sizes: '1024x1024', type: 'image/jpeg'} ];
+                        } else {
+                            artwork = [ {src: ""+this.media.cover, type: 'image/jpeg'} ];
+                        }
                         this.media.title = this.playerStatus.current.title;
                         this.media.artist = artist;
                         this.media.album = this.playerStatus.current.album;
@@ -166,7 +174,7 @@ Vue.component('lms-mediasession', {
                             title: this.media.title,
                             artist: this.media.artist,
                             album: this.media.album,
-                            artwork: [ {src: ""+this.media.cover, type: 'image/jpeg'}]
+                            artwork: artwork
                         });
                     }
                 }

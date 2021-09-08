@@ -85,8 +85,8 @@ Vue.component('lms-ui-settings', {
 
     <v-list-tile v-if="mediaControlsSupported">
      <v-list-tile-content @click="mediaControls = !mediaControls" class="switch-label">
-      <v-list-tile-title>{{i18n('Media keys and notifications')}}</v-list-tile-title>
-      <v-list-tile-sub-title>{{i18n("Enable support for media keys on desktop machines and notification controls on mobile devices")}} <v-btn flat icon style="margin-top:4px;height:18px;width:18px; opacity:var(--sub-opacity)" @click.stop="mediaControlsInfo"><v-icon small>help_outline</v-icon></v-btn</v-list-tile-sub-title>
+      <v-list-tile-title>{{IS_MOBILE ? i18n('Lock screen and notifications') : i18n('Media keys and notifications')}}</v-list-tile-title>
+      <v-list-tile-sub-title>{{IS_MOBILE ? i18n('Show playback controls on lock screen and in notification area.') : i18n('Allow control via media keys.')}} <v-btn flat icon style="margin-top:4px;height:18px;width:18px; opacity:var(--sub-opacity)" @click.stop="mediaControlsInfo"><v-icon small>help_outline</v-icon></v-btn</v-list-tile-sub-title>
      </v-list-tile-content>
      <v-list-tile-action><v-switch v-model="mediaControls"></v-switch></v-list-tile-action>
     </v-list-tile>
@@ -809,7 +809,7 @@ Vue.component('lms-ui-settings', {
             bus.$emit('dlg.open', 'iteminfo', { list:list });
         },
         mediaControlsInfo() {
-            showAlert(i18n('To support media keys and notifications, this app needs to fool your browser into thinking its is playing audio. To accomplish this, a 10 seconds of silence file is played in a loop. Most browsers block auto-playing of audio so this cannot start until you have interacted with the app (e.g. clicked somewhere). Alternatively you can configure your browser to allow auto-play of audio for the URL you use to access this app.'));
+            showAlert(i18n('To support this feature, this app needs to fool your browser into thinking its is playing audio. This is accomplished by playing a silent audio file in a loop. Most browsers block auto-playing of audio so this cannot start until you have interacted with the app (e.g. clicked somewhere). Alternatively you can configure your browser to allow auto-play of audio for the URL you use to access this app.'));
         },
         i18n(str) {
             if (this.show) {

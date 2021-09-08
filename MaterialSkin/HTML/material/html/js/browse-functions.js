@@ -222,12 +222,6 @@ function browseHandleListResponse(view, item, command, resp, prevPage) {
             }
         } else if (SECTION_FAVORITES==view.current.section && view.current.isFavFolder) {
             view.tbarActions=[ADD_FAV_FOLDER_ACTION, ADD_FAV_ACTION];
-        // TODO Remove after LMS8.2 released...
-        } else if (command.command.length==2 && command.command[0]=="podcasts" && command.command[1]=="items" && command.params.length==1 && command.params[0]=="menu:podcasts") {
-            if (resp.items.length==0 || resp.items[0].type!='search') {
-                view.tbarActions=[ADD_PODCAST_ACTION, SEARCH_PODCAST_ACTION];
-            }
-        // ...TODO Remove after LMS8.2 released
         } else if (SECTION_PLAYLISTS==view.current.section && view.current.id.startsWith("playlist_id:")) {
             view.tbarActions=[PLAY_ACTION, ADD_ACTION];
             view.currentActions={show:true, items: browseActions(view, resp.items.length>0 ? item : undefined, {}, resp.items.length)};
@@ -400,11 +394,6 @@ function browseClick(view, item, index, event) {
         if (view.canClickText(item)) {
             view.doTextClick(item);
         }
-        // TODO Remove after LMS8.2 released...
-        else if (item.isPodcast) {
-            view.fetchUrlItems(item.id, 'rss', item);
-        }
-        // ...TODO Remove after LMS8.2 released
         return;
     }
     if (item.type=="extra") {
@@ -621,12 +610,7 @@ function browseItemAction(view, act, item, index, event) {
     } else if (act==ADD_FAV_ACTION) {
         bus.$emit('dlg.open', 'favorite', 'add', {id:(view.current.id.startsWith("item_id:") ? view.current.id+"." : "item_id:")+view.items.length});
     } else if (act==EDIT_ACTION) {
-        // TODO Refactor after LMS8.2 released (remove podcast)
-        if (SECTION_PODCASTS==item.section) {
-            bus.$emit('dlg.open', 'podcast', 'edit', item);
-        } else {
-            bus.$emit('dlg.open', 'favorite', 'edit', item);
-        }
+        bus.$emit('dlg.open', 'favorite', 'edit', item);
     } else if (act==ADD_FAV_FOLDER_ACTION) {
         promptForText(ACTIONS[ADD_FAV_FOLDER_ACTION].title, undefined, undefined, i18n("Create")).then(resp => {
             if (resp.ok && resp.value && resp.value.length>0) {
@@ -838,24 +822,7 @@ function browseItemAction(view, act, item, index, event) {
         }).catch(err => {
             logAndShowError(err, undefined, command.command);
         });
-    }
-    // TODO Remove after LMS8.2 released...
-    else if (SEARCH_PODCAST_ACTION==act) {
-        bus.$emit('dlg.open', 'podcastsearch');
-    } else if (ADD_PODCAST_ACTION==act) {
-        if (item.isPodcast) {
-            lmsCommand("", ["material-skin", "add-podcast", "url:"+item.id, "name:"+item.title]).then(({data}) => {
-                view.history[view.history.length-1].needsRefresh = true;
-                bus.$emit('showMessage', i18n("Added '%1'", item.title));
-            }).catch(err => {
-                logAndShowError(err, i18n("Failed to add podcast!"), command);
-            });
-        } else {
-            bus.$emit('dlg.open', 'podcast', 'add');
-        }
-    }
-    // ...TODO Remove after LMS8.2 released
-    else if (UNSUB_PODCAST_ACTION==act) {
+    } else if (UNSUB_PODCAST_ACTION==act) {
         confirm(i18n("Unubscribe from '%1'?", item.title), i18n("Unsubscribe")).then(res => {
             if (res) {
                 lmsCommand("", ["material-skin", "delete-podcast", "pos:"+item.index, "name:"+item.title]).then(({data}) => {

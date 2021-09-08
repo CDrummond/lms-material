@@ -157,7 +157,6 @@ Vue.component('lms-mediasession', {
                     } else {
                         this.pauseSilence();
                     }
-                    console.log(this.media.cover);
                     navigator.mediaSession.playbackState = this.playerStatus && this.playerStatus.isplaying ? "playing" : "paused";
                     if (force || this.playerStatus.current.title!=this.media.title || artist!=this.media.artist || this.playerStatus.current.album!=this.media.album) {
                         let artwork = undefined;

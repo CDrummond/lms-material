@@ -130,13 +130,15 @@ Vue.component('lms-mediasession', {
                 this.updateMediaSession(true);
             }.bind(this), 500);
         },
-        disableMediaSessionAudio() {
+        disableMediaSessionAudio(showNothingPlaying) {
             this.mediaSessionInit = false;
-            if (undefined!=this.mediaAudio) {
+            if (undefined!=this.mediaAudio && !showNothingPlaying) {
                 this.mediaAudio.src = "";
             }
             navigator.mediaSession.playbackState = 'none';
-            navigator.mediaSession.metadata = undefined;
+            navigator.mediaSession.metadata = showNothingPlaying
+                        ? navigator.mediaSession.metadata = new MediaMetadata({title:i18n('Nothing playing')})
+                        : undefined;
             this.media.title = undefined;
             this.media.artist = undefined;
             this.media.album = undefined;
@@ -147,7 +149,7 @@ Vue.component('lms-mediasession', {
                 var artist = this.playerStatus.current.trackartist ? this.playerStatus.current.trackartist : this.playerStatus.current.artist;
                 var empty = undefined==artist && undefined==this.playerStatus.current.title && undefined==this.playerStatus.current.album;
                 if (this.haveLocalAndroidPlayer || !this.$store.state.mediaControls || empty) {
-                    this.disableMediaSessionAudio();
+                    this.disableMediaSessionAudio(empty && IS_MOBILE);
                 } else {
                     if (!this.mediaSessionInit) {
                         this.initMediaSessionAudio();

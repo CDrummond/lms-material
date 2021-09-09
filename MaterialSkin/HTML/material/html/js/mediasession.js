@@ -19,7 +19,8 @@ Vue.component('lms-mediasession', {
         return { };
     },
     mounted() {
-        if ('mediaSession' in navigator) {
+        this.mediaControlsSupported = !queryParams.hide.has('mediaControls') && ('mediaSession' in navigator);
+        if (this.mediaControlsSupported) {
             this.mediaSessionInit = false;
             this.playerStatus = { isplaying: false,
                                   current: { title:undefined, artist:undefined, album:undefined } };
@@ -221,11 +222,13 @@ Vue.component('lms-mediasession', {
     },
     watch: {
         '$store.state.mediaControls': function (newVal) {
-            if (newVal) {
-                this.addListener();
-                this.initMediaSessionAudio();
-            } else {
-                this.disableMediaSessionAudio();
+            if (this.mediaControlsSupported) {
+                if (newVal) {
+                    this.addListener();
+                    this.initMediaSessionAudio();
+                } else {
+                    this.disableMediaSessionAudio();
+                }
             }
         }
     }

@@ -9,6 +9,7 @@
 2. Revert webapp manifest back to "standalone" as some users report issues
    with "fullscreen"
 3. Use composer, conductor, band, etc, in window titlebar as per elsewhere.
+4. Set HTML meta theme-color to botton toolbar colour.
 
 2.6.2
 -----

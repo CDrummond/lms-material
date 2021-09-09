@@ -1041,17 +1041,21 @@ function addNote(str) {
 
 let lastToolbarColors = {top: undefined, bot:undefined};
 function emitToolbarColors(top, bot) {
-    if (queryParams.nativeColors) {
-        let t = getComputedStyle(document.documentElement).getPropertyValue(top);
-        let b = getComputedStyle(document.documentElement).getPropertyValue(bot);
-        if (t!=lastToolbarColors.top || b!=lastToolbarColors.bot) {
-            if (undefined==t || 0==t.length || undefined==b || 0==b.length) {
-                setTimeout(function() {
-                    emitToolbarColors(top, bot);
-                }, 100);
-                return;
-            }
-            lastToolbarColors={top:t, bot:b};
+    let t = getComputedStyle(document.documentElement).getPropertyValue(top);
+    let b = getComputedStyle(document.documentElement).getPropertyValue(bot);
+    if (t!=lastToolbarColors.top || b!=lastToolbarColors.bot) {
+        if (undefined==t || 0==t.length || undefined==b || 0==b.length) {
+            setTimeout(function() {
+                emitToolbarColors(top, bot);
+            }, 100);
+            return;
+        }
+        let tc = document.querySelector('meta[name="theme-color"]');
+        if (tc!=null) {
+            tc.setAttribute('content',  b);
+        }
+        lastToolbarColors={top:t, bot:b};
+        if (queryParams.nativeColors) {
             bus.$nextTick(function () {
                 try {
                     NativeReceiver.updateToolbarColors(lastToolbarColors.top, lastToolbarColors.bot);

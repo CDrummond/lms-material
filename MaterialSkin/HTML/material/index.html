@@ -18,30 +18,34 @@
   [% PERL %]
   my $version=Plugins::MaterialSkin::Plugin->pluginVersion();
   my $windowTitle=Plugins::MaterialSkin::Plugin->windowTitle();
-  my $ua=$stash->get('userAgent');
-  print("<link href=\"html/css/themes/");
+  my $ua=$stash->get("userAgent");
+  my $theme='dark';
+  my $themeColor='#212121';
   # Keep in sync with store.js (defaultTheme)
   if (index($ua, 'Android') != -1) {
-      print("darker");
+    $theme='darker';
   } elsif (index($ua, 'iPad') != -1 || index($ua, 'iPhone') != -1 || index($ua, 'MobileSafari') != -1) { # || (index($ua, 'Macintosh') != -1 && index($ua, '(KHTML, like Gecko) Version') != -1)) {
-      print("light");
+    $theme='light';
+    $themeColor='#f5f5f5';
   } elsif (index($ua, 'Linux') != -1) {
-      print("linux/dark/Adwaita-Dark");
+    $theme='linux/dark/Adwaita-Dark';
+    $themeColor='#2d2d2d';
   } elsif (index($ua, 'Win') != -1) {
-     print("windows/dark/Windows-10-Dark");
+    $theme='windows/dark/Windows-10-Dark';
+    $themeColor='#000000';
   } elsif (index($ua, 'Mac') != -1) {
-     print("mac/dark/Mojave-Dark");
-  } else {
-      print("dark");
+    $theme='mac/dark/Mojave-Dark';
+    $themeColor='#353537';
   }
-  print(".css?r=$version\" rel=\"stylesheet\" id=\"themecss\" rel=\"stylesheet\" onerror=\"setTheme('dark')\">\n");
+  print("  <link href=\"html/css/themes/${theme}.css?r=$version\" rel=\"stylesheet\" id=\"themecss\" rel=\"stylesheet\" onerror=\"setTheme('dark')\">\n");
   print("  <link href=\"html/css/variant/standard.css?r=$version\" rel=\"stylesheet\" id=\"variantcss\">\n");
   print("  <link href=\"html/css/colors/blue.css?r=$version\" rel=\"stylesheet\" id=\"colorcss\">\n");
   print("  <link href=\"html/css/style.css?r=$version\" rel=\"stylesheet\">\n");
   print("  <link href=\"html/css/mobile.css?r=$version\" rel=\"stylesheet\" id=\"layoutcss\">\n");
   print("  <title>${windowTitle}</title>\n");
   print("  <meta name=\"apple-mobile-web-app-title\" content=\"${windowTitle}\">\n");
-  print("  <meta name=\"application-name\" content=\"${windowTitle}\">");
+  print("  <meta name=\"application-name\" content=\"${windowTitle}\">\n");
+  print("  <meta name=\"theme-color\" content=\"${themeColor}\">");
   [% END %]
   <link href="/material/customcss/mobile" rel="stylesheet" id="customcss">
   <link href="/material/material.webmanifest" rel="manifest">

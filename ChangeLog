@@ -5,6 +5,7 @@
    with "fullscreen"
 3. Use composer, conductor, band, etc, in window titlebar as per elsewhere.
 4. Set HTML meta theme-color to botton toolbar colour.
+5. Fix incorrectly treating LMS icon strings as Material icons.
 
 2.6.2
 -----

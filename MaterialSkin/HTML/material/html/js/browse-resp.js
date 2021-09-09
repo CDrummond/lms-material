@@ -456,6 +456,9 @@ function parseBrowseResp(data, parent, options, cacheKey, parentCommand, parentG
                     i.stdItem = STD_ITEM_TRACK;
                     i.type = i.presetParams = i.commonParams = i.menu = i.playallParams = i.addallParams = i.goAction = i.style = undefined;
                 }
+                if (undefined!=i.icon && (i.icon.startsWith('http') || i.icon.startsWith('/'))) {
+                    i.icon = undefined;
+                }
                 resp.items.push(i);
                 types.add(i.type);
             }

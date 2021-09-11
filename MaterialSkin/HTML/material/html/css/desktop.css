@@ -67,13 +67,11 @@
  height: inherit;
  display: flex;
  flex-direction: row;
- .splitter-pane {
-  height: inherit;
-  overflow-y: auto;
- }
- .splitter {
-  width: 5px;
- }
+}
+
+.lms-splitter .splitter-pane {
+ height: inherit;
+ overflow-y: auto;
 }
 
 .lms-splitter .splitter {

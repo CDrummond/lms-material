@@ -105,7 +105,7 @@ sub initPlugin {
         showAllArtists => '1',
         artistFirst => '1',
         password => '',
-        downloading => '0'
+        allowDownload => '0'
     });
 
     if (main::WEBUI) {

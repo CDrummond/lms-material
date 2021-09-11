@@ -105,7 +105,8 @@ sub initPlugin {
         showAllArtists => '1',
         artistFirst => '1',
         password => '',
-        downloading => '0'
+        downloading => '0',
+        manifestDisplay => '0'
     });
 
     if (main::WEBUI) {
@@ -1337,6 +1338,11 @@ sub _manifestHandler {
     my $shortTitle = $prefs->get('shortTitle');
     if ($shortTitle && $shortTitle ne '') {
         $manifest =~ s/\"LMS\"/\"${shortTitle}\"/g;
+    }
+
+    my $display = $prefs->get('manifestDisplay');
+    if ($display && $display == 1) {
+        $manifest =~ s/\"standalone\"/\"fullscreen\"/g;
     }
 
     $response->code(RC_OK);

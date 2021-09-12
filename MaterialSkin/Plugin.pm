@@ -212,7 +212,7 @@ sub _cliCommand {
 
     my $cmd = $request->getParam('_cmd');
 
-    if ($request->paramUndefinedOrNotOneOf($cmd, ['prefs', 'info', 'transferqueue', 'delete-favourite', 'map', 'delete-podcast',
+    if ($request->paramUndefinedOrNotOneOf($cmd, ['prefs', 'info', 'transferqueue', 'delete-favorite', 'map', 'delete-podcast',
                                                   'add-podcast', 'edit-podcast', 'podcast-url', # TODO Remove after LMS8.2 released...
                                                   'plugins', 'plugins-status', 'plugins-update', 'extras', 'delete-vlib', 'pass-isset',
                                                   'pass-check', 'browsemodes', 'geturl', 'command', 'scantypes', 'server', 'themes',
@@ -403,7 +403,7 @@ sub _cliCommand {
         return;
     }
 
-    if ($cmd eq 'delete-favourite') {
+    if ($cmd eq 'delete-favorite') {
         my $url = $request->getParam('url');
         if (!$url) {
             $request->setStatusBadParams();

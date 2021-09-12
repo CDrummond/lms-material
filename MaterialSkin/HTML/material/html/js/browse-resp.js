@@ -294,9 +294,6 @@ function parseBrowseResp(data, parent, options, cacheKey, parentCommand, parentG
                         addedDivider = true;
                     }
                     if (i.type==undefined) {
-                        if (resp.items.length==0 || resp.items[0].type!='search') {
-                            i.menu.push(EDIT_ACTION);
-                        }
                         i.menu.push(UNSUB_PODCAST_ACTION);
                         i.section=SECTION_PODCASTS;
                     }

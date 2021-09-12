@@ -98,11 +98,13 @@ var app = new Vue({
                         removeLocalStorage('lang');
                         setTranslation(undefined);
                         bus.$emit('langChanged');
+                        lmsOptions.lang = undefined;
                     }
                 } else {
                     if (!LMS_SKIN_LANGUAGES.has(lang)) {
                         lang = lang.substr(0, 2);
                     }
+                    lmsOptions.lang = lang;
                     if (getLocalStorageVal("lang", "")!=(lang+"@"+LMS_MATERIAL_REVISION)) {
                         axios.get("html/lang/"+lang+".json?r=" + LMS_MATERIAL_REVISION).then(function (resp) {
                             var trans = eval(resp.data);

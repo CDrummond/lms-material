@@ -8,6 +8,19 @@
 
 var customActions = undefined;
 
+function translate(s) {
+    let lang = undefined==lmsOptions.lang ? 'en' : lmsOptions.lang;
+    if (undefined==s['title-'+lang]) {
+        lang='en';
+    }
+    if (undefined!=s['title-'+lang]) {
+        if (lang!='en' && undefined==s['title-en']) {
+            s['title-en'] = s['title'];
+        }
+        s['title']=s['title-'+lang];
+    }
+}
+
 function initCustomActions() {
     axios.get("/material/customactions.json?r=" + LMS_MATERIAL_REVISION).then(function (resp) {
         customActions = eval(resp.data);
@@ -21,6 +34,12 @@ function getSectionActions(section, actions, lockedActions) {
     if (customActions[section]) {
         for (let i=0, sect=customActions[section], len=sect.length; i<len; ++i) {
             if ((lockedActions || !sect[i].locked) && (!sect[i].command || !sect[i].localonly || 'localhost'==location.hostname || '127.0.0.1'==location.hostname)) {
+                if (undefined!=sect[i].title) {
+                    translate(sect[i])
+                }
+                if (undefined!=sect[i].toolbar && undefined!=sect[i].toolbar.title) {
+                    translate(sect[i].toolbar);
+                }
                 actions.push(sect[i]);
             }
         }

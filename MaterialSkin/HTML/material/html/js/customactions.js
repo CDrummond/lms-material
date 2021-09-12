@@ -75,7 +75,7 @@ function performCustomAction(obj, action, player, item) {
     }
 }
 
-const ACTION_KEYS = ['ID', 'NAME', 'ARTISTID', 'ARTISTNAME', 'ALBUMID', 'ALBUMNAME', 'TRACKID', 'TRACKNAME', 'TRACKNUM', 'DISC', 'GENREID', 'GENRENAME', 'YEAR', 'COMPOSER'];
+const ACTION_KEYS = ['ID', 'NAME', 'ARTISTID', 'ARTISTNAME', 'ALBUMID', 'ALBUMNAME', 'TRACKID', 'TRACKNAME', 'TRACKNUM', 'DISC', 'GENREID', 'GENRENAME', 'YEAR', 'COMPOSER', 'LANG'];
 
 function doReplacements(string, player, item) {
     let val = ''+string;
@@ -142,6 +142,7 @@ function doReplacements(string, player, item) {
         }
     }
     val=val.replace("$HOST", window.location.hostname);
+    val=val.replace("$LANG", undefined==lmsOptions.lang ? 'en' : lmsOptions.lang);
     for (var i=0, len=ACTION_KEYS.length; i<len; ++i) {
         val = val.replace("+$"+ACTION_KEYS[i], "").replace("$"+ACTION_KEYS[i]+"+", "").replace("$"+ACTION_KEYS[i], "");
     }

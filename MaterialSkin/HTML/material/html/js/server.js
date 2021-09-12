@@ -562,26 +562,32 @@ var lmsServer = Vue.component('lms-server', {
                 this.updateFavorites();
             }.bind(this), 500);
         },
+        parseFavouritesLoop(loop, favs, changed) {
+            for (var i=0, len=loop.length; i<len; ++i) {
+                if (loop[i].url) {
+                    var url = loop[i].url;
+                    var lib = url.indexOf("libraryTracks.library=");
+                    if (lib>0) {
+                        url=url.substring(0, lib-1);
+                    }
+                    favs.add(url);
+                    if (!changed && !lmsFavorites.has(url)) {
+                       changed = true;
+                    }
+                }
+                if (loop[i].items) {
+                    this.parseFavouritesLoop(loop[i].items, favs, changed);
+                }
+            }
+        },
         updateFavorites() { // Update set of favorites URLs
-            lmsCommand("", ["material-skin", "favorites"]).then(({data}) => {
+            lmsList("", ["favorites", "items"], ["want_url:1", "feedMode:1"]).then(({data}) => {
                 logJsonMessage("RESP", data);
                 if (data && data.result) {
                     var favs = new Set();
                     var changed = false;
-                    if (data.result.favs_loop) {
-                        for (var i=0, loop=data.result.favs_loop, len=loop.length; i<len; ++i) {
-                            if (loop[i].url) {
-                                var url = loop[i].url;
-                                var lib = url.indexOf("libraryTracks.library=");
-                                if (lib>0) {
-                                    url=url.substring(0, lib-1);
-                                }
-                                favs.add(url);
-                                if (!changed && !lmsFavorites.has(url)) {
-                                   changed = true;
-                                }
-                            }
-                        }
+                    if (data.result.items) {
+                        this.parseFavouritesLoop(data.result.items, favs, changed);
                     }
                     if (changed || lmsFavorites.size!=favs.size) {
                         lmsFavorites = favs;

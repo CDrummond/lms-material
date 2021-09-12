@@ -212,7 +212,7 @@ sub _cliCommand {
 
     my $cmd = $request->getParam('_cmd');
 
-    if ($request->paramUndefinedOrNotOneOf($cmd, ['prefs', 'info', 'transferqueue', 'favorites', 'delete-favourite', 'map', 'delete-podcast',
+    if ($request->paramUndefinedOrNotOneOf($cmd, ['prefs', 'info', 'transferqueue', 'delete-favourite', 'map', 'delete-podcast',
                                                   'add-podcast', 'edit-podcast', 'podcast-url', # TODO Remove after LMS8.2 released...
                                                   'plugins', 'plugins-status', 'plugins-update', 'extras', 'delete-vlib', 'pass-isset',
                                                   'pass-check', 'browsemodes', 'geturl', 'command', 'scantypes', 'server', 'themes',
@@ -399,18 +399,6 @@ sub _cliCommand {
             }
         }
 
-        $request->setStatusDone();
-        return;
-    }
-
-    if ($cmd eq 'favorites') {
-        my $cnt = 0;
-        if (my $favsObject = Slim::Utils::Favorites->new()) {
-            foreach my $fav (@{$favsObject->all}) {
-                $request->addResultLoop("favs_loop", $cnt, "url", $fav->{url});
-                $cnt++;
-            }
-        }
         $request->setStatusDone();
         return;
     }

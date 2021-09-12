@@ -695,6 +695,7 @@ function browseItemAction(view, act, item, index, event) {
                 lmsCommand(view.playerId(), command).then(({data})=> {
                     logJsonMessage("RESP", data);
                     bus.$emit('showMessage', i18n("Added to favorites"));
+                    bus.$emit('refreshFavorites');
                 }).catch(err => {
                     logAndShowError(err, i18n("Failed to add to favorites!"), command);
                 });
@@ -713,9 +714,10 @@ function browseItemAction(view, act, item, index, event) {
                 act===REMOVE_FROM_FAV_ACTION ? i18n('Remove') : i18n("Delete")).then(res => {
             if (res) {
                 view.clearSelection();
-                var command = id.startsWith("url:") ? ["material-skin", "delete-favourite", id] : ["favorites", "delete", id];
+                var command = id.startsWith("url:") ? ["material-skin", "delete-favorite", id] : ["favorites", "delete", id];
                 lmsCommand(view.playerId(), command).then(({data}) => {
                     logJsonMessage("RESP", data);
+                    bus.$emit('refreshFavorites');
                     if (SECTION_FAVORITES==view.current.section) {
                         view.refreshList();
                     }

@@ -105,7 +105,7 @@ sub initPlugin {
         showAllArtists => '1',
         artistFirst => '1',
         password => '',
-        downloading => '0',
+        allowDownload => '0',
         manifestDisplay => '0'
     });
 
@@ -213,7 +213,7 @@ sub _cliCommand {
 
     my $cmd = $request->getParam('_cmd');
 
-    if ($request->paramUndefinedOrNotOneOf($cmd, ['prefs', 'info', 'transferqueue', 'favorites', 'delete-favourite', 'map', 'delete-podcast',
+    if ($request->paramUndefinedOrNotOneOf($cmd, ['prefs', 'info', 'transferqueue', 'delete-favorite', 'map', 'delete-podcast',
                                                   'plugins', 'plugins-status', 'plugins-update', 'extras', 'delete-vlib', 'pass-isset',
                                                   'pass-check', 'browsemodes', 'geturl', 'command', 'scantypes', 'server', 'themes',
                                                   'playericons', 'activeplayers', 'urls', 'adv-search', 'adv-search-params', 'protocols',
@@ -403,19 +403,7 @@ sub _cliCommand {
         return;
     }
 
-    if ($cmd eq 'favorites') {
-        my $cnt = 0;
-        if (my $favsObject = Slim::Utils::Favorites->new()) {
-            foreach my $fav (@{$favsObject->all}) {
-                $request->addResultLoop("favs_loop", $cnt, "url", $fav->{url});
-                $cnt++;
-            }
-        }
-        $request->setStatusDone();
-        return;
-    }
-
-    if ($cmd eq 'delete-favourite') {
+    if ($cmd eq 'delete-favorite') {
         my $url = $request->getParam('url');
         if (!$url) {
             $request->setStatusBadParams();
@@ -1320,15 +1308,15 @@ sub _manifestHandler {
 
     # Make manifest colours match platform default theme...
     if (index($ua, 'Android') != -1) {
-        $manifest =~ s/\"#424242\"/\"#212121\"/g;
+        ; # $manifest =~ s/\"#212121\"/\"#212121\"/g;
     } elsif (index($ua, 'iPad') != -1 || index($ua, 'iPhone') != -1 || index($ua, 'MobileSafari') != -1) { # || (index($ua, 'Macintosh') != -1 && index($ua, '(KHTML, like Gecko) Version') != -1)) {
-        $manifest =~ s/\"#424242\"/\"#ffffff\"/g;
+        $manifest =~ s/\"#212121\"/\"#ffffff\"/g;
     } elsif (index($ua, 'Linux') != -1) {
-        $manifest =~ s/\"#424242\"/\"#353535\"/g;
+        $manifest =~ s/\"#212121\"/\"#2d2d2d\"/g;
     } elsif (index($ua, 'Win') != -1) {
-        $manifest =~ s/\"#424242\"/\"#272625\"/g;
+        $manifest =~ s/\"#212121\"/\"#000000\"/g;
     } elsif (index($ua, 'Mac') != -1) {
-        $manifest =~ s/\"#424242\"/\"#202020\"/g;
+        $manifest =~ s/\"#212121\"/\"#353537\"/g;
     }
 
     my $title = $prefs->get('windowTitle');

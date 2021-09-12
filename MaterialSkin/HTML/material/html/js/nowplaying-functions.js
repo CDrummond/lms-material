@@ -310,7 +310,7 @@ function nowplayingMenuAction(view, item) {
                 if (data && data.result && data.result.exists==(add ? 0 : 1)) {
                     if (!add) {
                         confirm(i18n("Remove '%1' from favorites?", litem.title), i18n('Remove')).then(res => {
-                            lmsCommand(view.$store.state.player.id, ["material-skin", "delete-favourite", "url:"+litem.favUrl]).then(({data})=> {
+                            lmsCommand(view.$store.state.player.id, ["material-skin", "delete-favorite", "url:"+litem.favUrl]).then(({data})=> {
                                 logJsonMessage("RESP", data);
                                 bus.$emit('refreshFavorites');
                             }).catch(err => {

@@ -544,19 +544,19 @@ function browseAddCategories(view, item, isGenre) {
     view.layoutGrid(true);
     bus.$emit('settingsMenuActions', view.settingsMenuActions, 'browse');
 
-    if (isGenre) {
-        view.current={id:item.id, title:item.title};
-        view.currentActions = {items:[], show:true};
-        var custom = getCustomActions("genre", false);
-        if (undefined!=custom) {
-            for (var i=0, len=custom.length; i<len; ++i) {
-                custom[i].weight=100;
-                custom[i].custom=true;
-                view.currentActions.items.push(custom[i]);
-            }
+    view.currentActions = {items:[], show:false};
+    var custom = getCustomActions(isGenre ? "genre" : "year", false);
+    if (undefined!=custom) {
+        for (var i=0, len=custom.length; i<len; ++i) {
+            custom[i].weight=100;
+            custom[i].custom=true;
+            view.currentActions.items.push(custom[i]);
         }
-
         view.currentActions.items.sort(function(a, b) { return a.weight!=b.weight ? a.weight<b.weight ? -1 : 1 : titleSort(a, b) });
+        view.currentActions.show = view.currentActions.items.length>0;
+        if (view.currentActions.show) {
+            view.current={id:item.id, title:item.title};
+        }
     }
 }
 

@@ -748,7 +748,10 @@ var lmsBrowse = Vue.component("lms-browse", {
             if (act.albumRating) {
                 this.setAlbumRating();
             } else if (act.custom) {
-                doCustomAction(act, this.$store.state.player, this.current);
+                let browseCmd = doCustomAction(act, this.$store.state.player, this.current);
+                if (undefined!=browseCmd) {
+                    this.fetchItems(browseCmd, {cancache:false, id:"currentaction:"+index, title:act.title+SEPARATOR+this.current.title});
+                }
             } else if (undefined!=act.do) {
                 this.fetchItems(act.do, {cancache:false, id:"currentaction:"+index, title:act.title+SEPARATOR+this.current.title});
             } else {

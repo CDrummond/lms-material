@@ -3,6 +3,7 @@
 1. Media keys support.
 2. Remove podcast search, etc, as LMS now provides its own.
 3. Allow configuring of web-app display setting.
+4. Extend custom ations to allow invoking JSONRPC commands.
 
 2.6.3
 -----

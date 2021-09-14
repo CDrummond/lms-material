@@ -162,5 +162,18 @@ function doCustomAction(action, player, item) {
         lmsCommand("", ["material-skin", "command", "cmd:"+doReplacements(action.command, player, item)]);
     } else if (action.script) {
         eval(doReplacements(action.script, player, item));
+    } else if (action.lmscommand) {
+        lmsCommand(undefined==player ? "" : player.id, doReplacements(action.lmscommand, player, item)).catch(err => {
+            bus.$emit('showError', undefined, i18n("'%1' failed", action.title));
+        });
+    } else if (action.lmsbrowse && action.lmsbrowse.command && action.lmsbrowse.params) {
+        let cmd ={command: [], params: []};
+        for (let i=0, len=action.lmsbrowse.command.length; i<len; ++i) {
+            cmd.command.push(doReplacements(action.lmsbrowse.command[i], player, item));
+        }
+        for (let i=0, len=action.lmsbrowse.params.length; i<len; ++i) {
+            cmd.params.push(doReplacements(action.lmsbrowse.params[i], player, item));
+        }
+        return cmd;
     }
 }

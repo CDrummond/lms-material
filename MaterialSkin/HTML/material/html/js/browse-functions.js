@@ -543,6 +543,21 @@ function browseAddCategories(view, item, isGenre) {
     view.settingsMenuActions=[view.grid.use ? USE_LIST_ACTION : USE_GRID_ACTION];
     view.layoutGrid(true);
     bus.$emit('settingsMenuActions', view.settingsMenuActions, 'browse');
+
+    if (isGenre) {
+        view.current={id:item.id, title:item.title};
+        view.currentActions = {items:[], show:true};
+        var custom = getCustomActions("genre", false);
+        if (undefined!=custom) {
+            for (var i=0, len=custom.length; i<len; ++i) {
+                custom[i].weight=100;
+                custom[i].custom=true;
+                view.currentActions.items.push(custom[i]);
+            }
+        }
+
+        view.currentActions.items.sort(function(a, b) { return a.weight!=b.weight ? a.weight<b.weight ? -1 : 1 : titleSort(a, b) });
+    }
 }
 
 function browseItemAction(view, act, item, index, event) {

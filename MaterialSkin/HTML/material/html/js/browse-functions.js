@@ -80,7 +80,7 @@ function browseActions(view, item, args, count) {
             var custom = getCustomActions(undefined!=args['album_id'] ? "album" : "artist", false);
             if (undefined!=custom) {
                 for (var i=0, len=custom.length; i<len; ++i) {
-                    custom[i].weight=100;
+                    custom[i].weight=100+1;
                     custom[i].custom=true;
                     actions.push(custom[i]);
                 }
@@ -548,7 +548,7 @@ function browseAddCategories(view, item, isGenre) {
     var custom = getCustomActions(isGenre ? "genre" : "year", false);
     if (undefined!=custom) {
         for (var i=0, len=custom.length; i<len; ++i) {
-            custom[i].weight=100;
+            custom[i].weight=100+i;
             custom[i].custom=true;
             view.currentActions.items.push(custom[i]);
         }

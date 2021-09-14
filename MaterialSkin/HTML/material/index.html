@@ -133,7 +133,8 @@
   [% PERL %]
   my $version=Plugins::MaterialSkin::Plugin->pluginVersion();
   my $windowTitle=Plugins::MaterialSkin::Plugin->windowTitle();
-  print("<script>const LMS_MATERIAL_REVISION=\"$version\"; const LMS_WINDOW_TITLE=\"$windowTitle\";</script>\n");
+  my $hideSettings=Plugins::MaterialSkin::Plugin->hideSettings();
+  print("<script>const LMS_MATERIAL_REVISION=\"$version\"; const LMS_WINDOW_TITLE=\"$windowTitle\"; const LMS_SETTINGS_HIDE=\"$hideSettings\";</script>\n");
   [% END %]
   <!--JS start-->
   <script src="html/lib/axios.min.js?r=0.19.2"></script>

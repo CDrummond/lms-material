@@ -179,6 +179,36 @@ function addSliders(doc) {
     return added;
 }
 
+function hideSection(elem) {
+    let p = elem.parentElement;
+    while (undefined!=p) {
+        let classes = p.className.split(' ');
+        if (classes.includes('settingSection')) {
+            p.parentNode.removeChild(p);
+            return true;
+        }
+        p=p.parentElement;
+    }
+    return false;
+}
+
+function hideSections(doc) {
+    if (LMS_SETTINGS_HIDE.length<1) {
+        return true;
+    }
+    let sections = LMS_SETTINGS_HIDE.split(',');
+    let hidden = false;
+
+    for (let s=0, len=sections.length; s<len; ++s) {
+        let elem = doc.getElementById(sections[s]);
+        console.log(sections[s]);
+        if (undefined!=elem && hideSection(elem)) {
+            hidden = true;
+        }
+    }
+    return hidden;
+}
+
 var iframeInfo = {
   content:undefined,
   action:undefined,
@@ -199,9 +229,13 @@ function iframeActionCheck() {
                     iframeInfo.action = settingsForm.action;
                     addFsSelectButtons(content);
                     iframeInfo.addedSliders = addSliders(content);
+                    iframeInfo.sectionsHidden = hideSections(content);
                 } else if (iframeInfo.actionChecks<50) {
                     if (!iframeInfo.addedSliders) {
                         iframeInfo.addedSliders = addSliders(content);
+                    }
+                    if (!iframeInfo.sectionsHidden) {
+                        iframeInfo.sectionsHidden = hideSections(content);
                     }
                     return;
                 }
@@ -218,6 +252,7 @@ function selectChanged() {
         clearInterval(iframeInfo.actionCheckInterval);
     }
     iframeInfo.addedSliders = false;
+    iframeInfo.sectionsHidden = false;
     iframeInfo.actionChecks = 0;
     iframeInfo.actionCheckInterval = setInterval(function () {
         iframeActionCheck();

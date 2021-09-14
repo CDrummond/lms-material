@@ -184,6 +184,14 @@ sub windowTitle {
     return $title;
 }
 
+sub hideSettings {
+    my $hide = $prefs->get('hideSettings');
+    if (!$hide || $hide eq '') {
+        return '';
+    }
+    return $hide;
+}
+
 sub initCLI {
     #                                                                      |requires Client
     #                                                                      |  |is a Query

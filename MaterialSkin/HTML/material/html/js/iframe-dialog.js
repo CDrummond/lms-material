@@ -200,8 +200,7 @@ function hideSections(doc) {
     let hidden = false;
 
     for (let s=0, len=sections.length; s<len; ++s) {
-        let elem = doc.getElementById(sections[s]);
-        console.log(sections[s]);
+        let elem = doc.getElementById(sections[s].trim());
         if (undefined!=elem && hideSection(elem)) {
             hidden = true;
         }

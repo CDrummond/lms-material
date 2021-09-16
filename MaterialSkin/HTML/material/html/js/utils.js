@@ -231,6 +231,9 @@ function resolveImageUrl(image, size) {
     if (idx<0 && /^[0-9a-fA-F]+$/.test(image)) {
         image="music/"+image+"/cover"+(size ? size : LMS_IMAGE_SIZE);
     } else if (idx>0) {
+        if ((image.startsWith("plugins/") || image.startsWith("/plugins/")) && image.indexOf("/html/images/")>0) {
+            return image;
+        }
         image = image.substring(0, idx)+(size ? size : LMS_IMAGE_SIZE)+image.substring(idx);
     }
     return image.startsWith("/") ? image : ("/"+image);

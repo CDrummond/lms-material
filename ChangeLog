@@ -1,3 +1,7 @@
+2.6.4
+-----
+1. Dont add resize parameters to plugin image URLs.
+
 2.6.3
 -----
 1. Fix parsing of BBC Sounds error response.

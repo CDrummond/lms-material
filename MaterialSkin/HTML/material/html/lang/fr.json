@@ -23,7 +23,6 @@
 "Add selection to queue":"Ajouter la sélection à la liste de lecture",
 "Add to favorites":"Sauver dans les favoris",
 "Add to playlist":"Ajouter à la liste de lecture",
-"Added '%1'":"Ajouté '%1'",
 "Added to '%1'":"Ajouté à '%1'",
 "Added to favorites":"Sauvé dans les favoris",
 "Adding albums...":"Ajout d'albums...",
@@ -566,8 +565,6 @@
 "%1 Composers":"%1 compositeurs",
 "1 Conductor":"1 chef d'orchestre",
 "%1 Conductors":"%1 chefs d'orchestre",
-"1 Episode":"1 Episode",
-"%1 Episodes":"%1 Episodes",
 "1 Genre":"1 genre",
 "%1 Genres":"%1 genres",
 "1 Image":"1 image",
@@ -576,8 +573,6 @@
 "%1 Items":"%1 éléments",
 "1 Playlist":"1 liste de lecture",
 "%1 Playlists":"%1 listes de lecture",
-"1 Podcast":"1 Podcast",
-"%1 Podcasts":"%1 Podcasts",
 "1 Selected Item":"1 élément sélectionné",
 "%1 Selected Items":"%1 éléments sélectionnés",
 "1 Track":"1 morceau",
@@ -585,5 +580,11 @@
 "1 Year":"1 année",
 "%1 Years":"%1 années",
 "1 day":"1 jour",
-"%1 days":"%1 jours"
+"%1 days":"%1 jours",
+"'%1' failed":"",
+"Allow control via media keys.":"",
+"Lock screen and notifications":"",
+"Media keys and notifications":"",
+"Show playback controls on lock screen and in notification area.":"",
+"To support this feature, this app needs to fool your browser into thinking its is playing audio. This is accomplished by playing a silent audio file in a loop. Most browsers block auto-playing of audio so this cannot start until you have interacted with the app (e.g. clicked somewhere). Alternatively you can configure your browser to allow auto-play of audio for the URL you use to access this app (%1).":""
 }

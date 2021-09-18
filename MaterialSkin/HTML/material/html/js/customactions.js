@@ -8,6 +8,19 @@
 
 var customActions = undefined;
 
+function translate(s) {
+    let lang = undefined==lmsOptions.lang ? 'en' : lmsOptions.lang;
+    if (undefined==s['title-'+lang]) {
+        lang='en';
+    }
+    if (undefined!=s['title-'+lang]) {
+        if (lang!='en' && undefined==s['title-en']) {
+            s['title-en'] = s['title'];
+        }
+        s['title']=s['title-'+lang];
+    }
+}
+
 function initCustomActions() {
     axios.get("/material/customactions.json?r=" + LMS_MATERIAL_REVISION).then(function (resp) {
         customActions = eval(resp.data);
@@ -21,6 +34,12 @@ function getSectionActions(section, actions, lockedActions) {
     if (customActions[section]) {
         for (let i=0, sect=customActions[section], len=sect.length; i<len; ++i) {
             if ((lockedActions || !sect[i].locked) && (!sect[i].command || !sect[i].localonly || 'localhost'==location.hostname || '127.0.0.1'==location.hostname)) {
+                if (undefined!=sect[i].title) {
+                    translate(sect[i])
+                }
+                if (undefined!=sect[i].toolbar && undefined!=sect[i].toolbar.title) {
+                    translate(sect[i].toolbar);
+                }
                 actions.push(sect[i]);
             }
         }
@@ -56,7 +75,7 @@ function performCustomAction(obj, action, player, item) {
     }
 }
 
-const ACTION_KEYS = ['ID', 'NAME', 'ARTISTID', 'ARTISTNAME', 'ALBUMID', 'ALBUMNAME', 'TRACKID', 'TRACKNAME', 'TRACKNUM', 'DISC', 'GENREID', 'GENRENAME', 'YEAR', 'COMPOSER'];
+const ACTION_KEYS = ['ID', 'NAME', 'ARTISTID', 'ARTISTNAME', 'ALBUMID', 'ALBUMNAME', 'TRACKID', 'TRACKNAME', 'TRACKNUM', 'DISC', 'GENREID', 'GENRENAME', 'YEAR', 'COMPOSER', 'LANG'];
 
 function doReplacements(string, player, item) {
     let val = ''+string;
@@ -123,6 +142,7 @@ function doReplacements(string, player, item) {
         }
     }
     val=val.replace("$HOST", window.location.hostname);
+    val=val.replace("$LANG", undefined==lmsOptions.lang ? 'en' : lmsOptions.lang);
     for (var i=0, len=ACTION_KEYS.length; i<len; ++i) {
         val = val.replace("+$"+ACTION_KEYS[i], "").replace("$"+ACTION_KEYS[i]+"+", "").replace("$"+ACTION_KEYS[i], "");
     }
@@ -142,5 +162,18 @@ function doCustomAction(action, player, item) {
         lmsCommand("", ["material-skin", "command", "cmd:"+doReplacements(action.command, player, item)]);
     } else if (action.script) {
         eval(doReplacements(action.script, player, item));
+    } else if (action.lmscommand) {
+        lmsCommand(undefined==player ? "" : player.id, doReplacements(action.lmscommand, player, item)).catch(err => {
+            bus.$emit('showError', undefined, i18n("'%1' failed", action.title));
+        });
+    } else if (action.lmsbrowse && action.lmsbrowse.command && action.lmsbrowse.params) {
+        let cmd ={command: [], params: []};
+        for (let i=0, len=action.lmsbrowse.command.length; i<len; ++i) {
+            cmd.command.push(doReplacements(action.lmsbrowse.command[i], player, item));
+        }
+        for (let i=0, len=action.lmsbrowse.params.length; i<len; ++i) {
+            cmd.params.push(doReplacements(action.lmsbrowse.params[i], player, item));
+        }
+        return cmd;
     }
 }

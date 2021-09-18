@@ -160,3 +160,15 @@ PLUGIN_MATERIAL_SKIN_ALLOW_DOWNLOAD
 PLUGIN_MATERIAL_SKIN_ALLOW_DOWNLOAD_DESC
 	EN	Add download actions to tracks, albums, and playlists to allow users to download tracks.
 	FR	Ajouter des commandes de téléchargement aux morceaux, albums et listes de lecture pour permettre aux utilisateurs de télécharger des morceaux.
+
+PLUGIN_MATERIAL_SKIN_MANIFEST_DISPLAY
+	EN	WebApp display
+
+PLUGIN_MATERIAL_SKIN_MANIFEST_DISPLAY_DESC
+	EN	When saved as a WebApp (e.g. 'Add to homescreen') the app can be shown 'fullscreen' (appears like a normal app, but android's status and navigation bars are hidden) or 'standalone' (appears as a normal app, with status and navigation bars visible). NOTE: If you make any changes then you will need to reload the skin in your browser as browser's read this setting when the page is loaded.
+
+PLUGIN_MATERIAL_SKIN_MANIFEST_DISPLAY_STANDALONE
+	EN	Standalone
+
+PLUGIN_MATERIAL_SKIN_MANIFEST_DISPLAY_FULLSCREEN
+	EN	Fullscreen

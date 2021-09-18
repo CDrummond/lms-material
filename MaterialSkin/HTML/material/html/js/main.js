@@ -22,8 +22,7 @@ var app = new Vue({
         return { dialogs: { uisettings: false, playersettings: false, info: false, sync: false, group: false, volume: false,
                             manage: false, rndmix: false, favorite: false, rating: false, sleep: false, movequeue: false,
                             iteminfo: false, iframe: false, dstm: false, savequeue: false, icon: false, prompt:false,
-                            addtoplaylist: false, file: false, groupvolume: false, advancedsearch: false, downloadstatus:false,
-                            podcast: false, podcastsearch: false // TODO Remove after LMS8.2 released.
+                            addtoplaylist: false, file: false, groupvolume: false, advancedsearch: false, downloadstatus:false
                           } }
     },
     created() {
@@ -99,11 +98,13 @@ var app = new Vue({
                         removeLocalStorage('lang');
                         setTranslation(undefined);
                         bus.$emit('langChanged');
+                        lmsOptions.lang = undefined;
                     }
                 } else {
                     if (!LMS_SKIN_LANGUAGES.has(lang)) {
                         lang = lang.substr(0, 2);
                     }
+                    lmsOptions.lang = lang;
                     if (getLocalStorageVal("lang", "")!=(lang+"@"+LMS_MATERIAL_REVISION)) {
                         axios.get("html/lang/"+lang+".json?r=" + LMS_MATERIAL_REVISION).then(function (resp) {
                             var trans = eval(resp.data);

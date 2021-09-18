@@ -1,6 +1,15 @@
-2.6.4
+2.7.0
 -----
-1. Dont add resize parameters to plugin image URLs.
+1. Media keys support.
+2. Remove podcast search, etc, as LMS now provides its own.
+3. Allow configuring of web-app display setting.
+4. Extend custom ations to allow invoking JSONRPC commands.
+5. Add custom action support for genre and year listings.
+6. Allow hiding of LSM settings sections via 'hideSettings' within server-side
+   preference file. e.g. set "hideSettings: 'mediadirs1'" in
+   "prefs/plugin/material-skin.prefs" will cause media dirs section to be
+   hidden.
+7. Dont add resize parameters to plugin image URLs.
 
 2.6.3
 -----

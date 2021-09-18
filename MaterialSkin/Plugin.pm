@@ -105,7 +105,8 @@ sub initPlugin {
         showAllArtists => '1',
         artistFirst => '1',
         password => '',
-        allowDownload => '0'
+        allowDownload => '0',
+        manifestDisplay => '0'
     });
 
     if (main::WEBUI) {
@@ -183,6 +184,14 @@ sub windowTitle {
     return $title;
 }
 
+sub hideSettings {
+    my $hide = $prefs->get('hideSettings');
+    if (!$hide || $hide eq '') {
+        return '';
+    }
+    return $hide;
+}
+
 sub initCLI {
     #                                                                      |requires Client
     #                                                                      |  |is a Query
@@ -213,7 +222,6 @@ sub _cliCommand {
     my $cmd = $request->getParam('_cmd');
 
     if ($request->paramUndefinedOrNotOneOf($cmd, ['prefs', 'info', 'transferqueue', 'delete-favorite', 'map', 'delete-podcast',
-                                                  'add-podcast', 'edit-podcast', 'podcast-url', # TODO Remove after LMS8.2 released...
                                                   'plugins', 'plugins-status', 'plugins-update', 'extras', 'delete-vlib', 'pass-isset',
                                                   'pass-check', 'browsemodes', 'geturl', 'command', 'scantypes', 'server', 'themes',
                                                   'playericons', 'activeplayers', 'urls', 'adv-search', 'adv-search-params', 'protocols',
@@ -482,62 +490,6 @@ sub _cliCommand {
             }
         }
     }
-
-    # TODO Remove after LMS8.2 released...
-    if ($cmd eq 'add-podcast') {
-        my $name = $request->getParam('name');
-        my $url = $request->getParam('url');
-        if ($name && $url) {
-            my $podPrefs = preferences('plugin.podcast');
-            my $feeds = $podPrefs->get('feeds');
-            push @{$feeds}, { 'name' => $name, 'value' => $url };
-            $podPrefs->set(feeds => $feeds);
-            $request->setStatusDone();
-            return;
-        }
-    }
-
-    if ($cmd eq 'edit-podcast') {
-        my $pos = $request->getParam('pos');
-        my $name = $request->getParam('newname');
-        my $origName = $request->getParam('oldname');
-        my $url = $request->getParam('newurl');
-        my $origUrl = $request->getParam('oldurl');
-        if (defined $pos && $name && $origName && $url && $origUrl) {
-            my $podPrefs = preferences('plugin.podcast');
-            my $feeds = $podPrefs->get('feeds');
-            if ($pos < scalar @{$feeds}) {
-                if (@{$feeds}[$pos]->{'name'} eq $origName && @{$feeds}[$pos]->{'value'} eq $origUrl) {
-                    @{$feeds}[$pos]->{'name'}=$name;
-                    @{$feeds}[$pos]->{'value'}=$url;
-                    $podPrefs->set(feeds => $feeds);
-                    $request->setStatusDone();
-                } else {
-                    $request->setStatusBadParams();
-                }
-                return;
-            }
-        }
-    }
-
-    if ($cmd eq 'podcast-url') {
-        my $pos = $request->getParam('pos');
-        my $name = $request->getParam('name');
-        if (defined $pos && $name) {
-            my $podPrefs = preferences('plugin.podcast');
-            my $feeds = $podPrefs->get('feeds');
-            if ($pos < scalar @{$feeds}) {
-                if (@{$feeds}[$pos]->{'name'} eq $name) {
-                    $request->addResult("url", @{$feeds}[$pos]->{'value'});
-                    $request->setStatusDone();
-                } else {
-                    $request->setStatusBadParams();
-                }
-                return;
-            }
-        }
-    }
-    # ...TODO Remove after LMS8.2 released
 
     if ($cmd eq 'plugins') {
         my ($current, $active, $inactive, $hide) = Slim::Plugin::Extensions::Plugin::getCurrentPlugins();
@@ -1382,6 +1334,11 @@ sub _manifestHandler {
     my $shortTitle = $prefs->get('shortTitle');
     if ($shortTitle && $shortTitle ne '') {
         $manifest =~ s/\"LMS\"/\"${shortTitle}\"/g;
+    }
+
+    my $display = $prefs->get('manifestDisplay');
+    if ($display && $display == 1) {
+        $manifest =~ s/\"standalone\"/\"fullscreen\"/g;
     }
 
     $response->code(RC_OK);

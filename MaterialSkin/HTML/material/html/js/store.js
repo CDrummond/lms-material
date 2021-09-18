@@ -158,6 +158,10 @@ function updateUiSettings(state, val) {
         setLocalStorageVal('largeCovers', state.largeCovers);
         relayoutGrid = true;
     }
+    if (undefined!=val.mediaControls && state.mediaControls!=val.mediaControls) {
+        state.mediaControls = val.mediaControls;
+        setLocalStorageVal('mediaControls', state.mediaControls);
+    }
     if (undefined!=val.showRating && state.showRating!=val.showRating) {
         state.showRating = val.showRating;
         setLocalStorageVal('showRating', state.showRating);
@@ -292,6 +296,7 @@ const store = new Vuex.Store({
         twentyFourHour: false,
         powerButton: false,
         largeCovers: false,
+        mediaControls: false,
         downloadStatus: []
     },
     mutations: {
@@ -499,6 +504,7 @@ const store = new Vuex.Store({
             state.disabledBrowseModes = new Set(JSON.parse(getLocalStorageVal('disabledBrowseModes', '["myMusicFlopTracks", "myMusicTopTracks", "myMusicMusicFolder", "myMusicFileSystem", "myMusicArtistsComposers", "myMusicArtistsConductors", "myMusicArtistsJazzComposers", "myMusicAlbumsAudiobooks"]')));
             state.powerButton = getLocalStorageBool('powerButton', state.powerButton);
             state.largeCovers = getLocalStorageBool('largeCovers', state.largeCovers);
+            state.mediaControls = getLocalStorageBool('mediaControls', state.mediaControls);
             // Ensure theme is in settings, so that it can be use in classic skin mods...
             if (undefined==getLocalStorageVal('theme')) {
                 setLocalStorageVal('theme', state.theme);
@@ -626,7 +632,8 @@ const store = new Vuex.Store({
                                      homeButton: getLocalStorageBool('homeButton', undefined==prefs.homeButton ? state.homeButton : prefs.homeButton),
                                      showRating: getLocalStorageBool('showRating', undefined==prefs.showRating ? state.showRating : prefs.showRating),
                                      powerButton: getLocalStorageBool('powerButton', undefined==prefs.powerButton ? state.powerButton : prefs.powerButton),
-                                     largeCovers: getLocalStorageBool('largeCovers', undefined==prefs.largeCovers ? state.largeCovers : prefs.largeCovers) };
+                                     largeCovers: getLocalStorageBool('largeCovers', undefined==prefs.largeCovers ? state.largeCovers : prefs.largeCovers),
+                                     mediaControls: getLocalStorageBool('mediaControls', undefined==prefs.mediaControls ? state.mediaControls : prefs.mediaControls) };
                         if (undefined!=prefs.hidden && undefined==getLocalStorageVal('hidden', undefined)) {
                             opts.hidden=new Set(prefs.hidden);
                         }

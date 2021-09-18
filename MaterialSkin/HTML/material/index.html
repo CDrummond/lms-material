@@ -83,10 +83,6 @@
     <lms-search-dialog v-if="dialogs.search"></lms-search-dialog>
     <lms-movequeue-dialog v-if="dialogs.movequeue"></lms-movequeue-dialog>
     <lms-info-dialog v-if="dialogs.iteminfo"></lms-info-dialog>
-    <!--  TODO Remove after LMS8.2 released... -->
-    <lms-podcast-dialog v-if="dialogs.podcast"></lms-podcast-dialog>
-    <lms-podcast-search-dialog v-if="dialogs.podcastsearch"></lms-podcast-search-dialog>
-    <!-- ... TODO Remove after LMS8.2 released -->
     <lms-iframe-dialog v-if="dialogs.iframe"></lms-iframe-dialog>
     <lms-dstm-dialog v-if="dialogs.dstm"></lms-dstm-dialog>
     <lms-savequeue v-if="dialogs.savequeue"></lms-savequeue>
@@ -98,6 +94,7 @@
     <lms-downloadstatus v-if="dialogs.downloadstatus"></lms-downloadstatus>
     <lms-screensaver></lms-screensaver>
     <lms-volumeoverlay></lms-volumeoverlay>
+    <lms-mediasession></lms-mediasession>
     <div class="pswp" tabindex="-1" role="dialog" aria-hidden="true">
      <div class="pswp__bg"></div>
      <div class="pswp__scroll-wrap">
@@ -136,7 +133,8 @@
   [% PERL %]
   my $version=Plugins::MaterialSkin::Plugin->pluginVersion();
   my $windowTitle=Plugins::MaterialSkin::Plugin->windowTitle();
-  print("<script>const LMS_MATERIAL_REVISION=\"$version\"; const LMS_WINDOW_TITLE=\"$windowTitle\";</script>\n");
+  my $hideSettings=Plugins::MaterialSkin::Plugin->hideSettings();
+  print("<script>const LMS_MATERIAL_REVISION=\"$version\"; const LMS_WINDOW_TITLE=\"$windowTitle\"; const LMS_SETTINGS_HIDE=\"$hideSettings\";</script>\n");
   [% END %]
   <!--JS start-->
   <script src="html/lib/axios.min.js?r=0.19.2"></script>
@@ -173,6 +171,7 @@
   print("  <script src=\"html/js/search-field.js?r=$version\"></script>\n");
   print("  <script src=\"html/js/screensaver.js?r=$version\"></script>\n");
   print("  <script src=\"html/js/volume-overlay.js?r=$version\"></script>\n");
+  print("  <script src=\"html/js/mediasession.js?r=$version\"></script>\n");
   print("  <script src=\"html/js/i18n.js?r=$version\"></script>\n");
   print("  <script src=\"html/js/store.js?r=$version\"></script>\n");
   print("  <script src=\"html/js/main.js?r=$version\"></script>");
@@ -197,8 +196,7 @@
      }
    }
    function loadOtherFiles() {
-     // TODO Remove podcast-dialog and podcast-search-dialog after LMS8.2 released...
-     addJsToDocument("html/js/", ["browse-resp", "browse-functions", "nowplaying-functions", "prompt-dialog", "standarditems", "sync-dialog", "groupplayers-dialog", "ui-settings", "player-settings", "volume", "information", "randommix-dialog", "rating-dialog", "manage-players", "favorite-dialog", "sleep-dialog", "movequeue-dialog", "info-dialog", "iframe-dialog", "icon-dialog", "dstm-dialog", "savequeue-dialog", "addtoplaylist-dialog", "file-dialog", "groupvolume-dialog", "advancedsearch-dialog", "download", "podcast-dialog", "podcast-search-dialog"],
+     addJsToDocument("html/js/", ["browse-resp", "browse-functions", "nowplaying-functions", "prompt-dialog", "standarditems", "sync-dialog", "groupplayers-dialog", "ui-settings", "player-settings", "volume", "information", "randommix-dialog", "rating-dialog", "manage-players", "favorite-dialog", "sleep-dialog", "movequeue-dialog", "info-dialog", "iframe-dialog", "icon-dialog", "dstm-dialog", "savequeue-dialog", "addtoplaylist-dialog", "file-dialog", "groupvolume-dialog", "advancedsearch-dialog", "download"],
      [% PERL %]
      my $version=Plugins::MaterialSkin::Plugin->pluginVersion();
      print("                \"$version\", )");

@@ -581,10 +581,10 @@
 "%1 Years":"%1 Jahre",
 "1 day":"Ein Tag",
 "%1 days":"%1 Tage",
-"'%1' failed":"",
-"Allow control via media keys.":"",
-"Lock screen and notifications":"",
-"Media keys and notifications":"",
-"Show playback controls on lock screen and in notification area.":"",
-"To support this feature, this app needs to fool your browser into thinking its is playing audio. This is accomplished by playing a silent audio file in a loop. Most browsers block auto-playing of audio so this cannot start until you have interacted with the app (e.g. clicked somewhere). Alternatively you can configure your browser to allow auto-play of audio for the URL you use to access this app (%1).":""
+"'%1' failed":"'%1' fehlgeschlagen",
+"Allow control via media keys.":"Kontrolle über Multimediatasten zulassen",
+"Lock screen and notifications":"Sperrbildschirm und Benachrichtigungen",
+"Media keys and notifications":"Multimediatasten und Benachrichtigungen",
+"Show playback controls on lock screen and in notification area.":"Wiedergabetasten auf Sperrbildschirm und im Benachrichtigungsbereich anzeigen",
+"To support this feature, this app needs to fool your browser into thinking its is playing audio. This is accomplished by playing a silent audio file in a loop. Most browsers block auto-playing of audio so this cannot start until you have interacted with the app (e.g. clicked somewhere). Alternatively you can configure your browser to allow auto-play of audio for the URL you use to access this app (%1).":"Um diese Funktion nutzen zu können, muss diese App im Browser eine stumme Audiodatei in Dauerschleife wiedergeben. Die meisten Browser blockieren die automatische Wiedergabe von Audiodateien, daher funktioniert dies erst, nachdem man mit der App interagiert hat (bspw. irgendwohin geklickt hat). Alternativ kann man im Browser die automatische Wiedergabe von Audiodateien für die von dieser App (%1) benutzten URL freigeben."
 }

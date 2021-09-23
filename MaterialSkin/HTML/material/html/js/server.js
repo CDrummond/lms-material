@@ -544,13 +544,19 @@ var lmsServer = Vue.component('lms-server', {
             }
         },
         handleNotification(data) {
-            if (data.length==4) {
+            if (data.length>=4) {
                 if (data[2]=='info') {
                     bus.$emit('showMessage', data[3]);
                 } else if (data[2]=='error') {
                     bus.$emit('showError', undefined, data[3]);
                 } else if (data[2]=='alert') {
-                    showAlert(data[3]);
+                    if (data.length>4 && data[4]=='1') {
+                        showAlert(data[3], i18n('Cancel')).then(res => {
+                            lmsCommand("", ["material-skin", "send-notif", "type:alert", "msg:-"]);
+                        });
+                    } else {
+                        showAlert(data[3]);
+                    }
                 }
             }
         },

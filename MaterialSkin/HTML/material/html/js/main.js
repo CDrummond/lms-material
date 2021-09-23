@@ -8,11 +8,17 @@
 
 Vue.use(VueLazyload, {error:LMS_BLANK_COVER});
 
-function showLastNotif(text) {
+function showLastNotif(text, cancelable) {
     try {
-        showAlert(text);
+        if (cancelable) {
+            showAlert(text, i18n('Cancel')).then(res => {
+                lmsCommand("", ["material-skin", "send-notif", "type:alert", "msg:-"]);
+            });
+        } else {
+            showAlert(text);
+        }
     } catch(e) { // Not loaded yet??
-        setTimeout(function() { showLastNotif(text); }, 500);
+        setTimeout(function() { showLastNotif(text, cancelable); }, 500);
     }
 }
 
@@ -158,7 +164,7 @@ var app = new Vue({
 
         lmsCommand("", ["material-skin", "get-last-notif"]).then(({data}) => {
             if (data && data.result && data.result.last && data.result.last!='-') {
-                showLastNotif(data.result.last);
+                showLastNotif(data.result.last, data.result.cancelable);
             }
         });
 

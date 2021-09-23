@@ -10,6 +10,8 @@
    "prefs/plugin/material-skin.prefs" will cause media dirs section to be
    hidden.
 7. Dont add resize parameters to plugin image URLs.
+8. Allow alert notifications to be canceled.
+9. Add custom update notifications.
 
 2.6.3
 -----

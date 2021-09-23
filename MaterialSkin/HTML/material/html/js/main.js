@@ -161,12 +161,19 @@ var app = new Vue({
             }
         });
 
+        setTimeout(function () {
+            lmsCommand("", ["material-skin", "get-last-notif"]).then(({data}) => {
+                if (data && data.result && data.result.last && data.result.last!='-') {
+                    showLastNotif(data.result.last, data.result.cancelable);
+                }
+            });
 
-        lmsCommand("", ["material-skin", "get-last-notif"]).then(({data}) => {
-            if (data && data.result && data.result.last && data.result.last!='-') {
-                showLastNotif(data.result.last, data.result.cancelable);
-            }
-        });
+            lmsCommand("", ["material-skin", "get-update-notif"]).then(({data}) => {
+                if (data && data.result && data.result.msg) {
+                    this.$store.commit('setUpdateNotif', {msg:data.result.msg, title:data.result.title});
+                }
+            });
+        }.bind(this), 500);
 
         // Work-around 100vh behaviour in mobile chrome
         // See https://css-tricks.com/the-trick-to-viewport-units-on-mobile/

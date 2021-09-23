@@ -557,6 +557,8 @@ var lmsServer = Vue.component('lms-server', {
                     } else {
                         showAlert(data[3]);
                     }
+                } else if (data[2]=='update') {
+                    this.$store.commit('setUpdateNotif', {msg:data[3], title:data[4]});
                 }
             }
         },

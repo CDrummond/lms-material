@@ -24,6 +24,12 @@ Vue.component('lms-information-dialog', {
   </v-card-title>
   <div class="ios-vcard-text-workaround"><div class="infodetails" id="info-page">
 
+   <div v-if="updateNotif!=undefined && updateNotif.msg!=undefined">
+    <p class="about-header">{{updateNotif.title}}</p>
+    <div v-html="updateNotif.msg"></div>
+    <div class="dialog-padding"></div>
+   </div>
+
    <div v-if="server.length>0">
     <p class="about-header">{{i18n('Server')}}</p>
     <p v-if="updates.server"><b @click="showUpdateInfo" class="link-item">{{i18n('New version available')}}</b></p>
@@ -200,6 +206,9 @@ Vue.component('lms-information-dialog', {
     },
     methods: {
         scrollToPlugins() {
+            if (undefined!=this.$store.state.updateNotif && undefined!=this.$store.state.updateNotif.msg) {
+                return false;
+            }
             if (this.$store.state.updatesAvailable.has("plugins") && !this.$store.state.updatesAvailable.has("server")) {
                 var plugins = document.getElementById("info-plugins");
                 if (plugins) {
@@ -368,6 +377,9 @@ Vue.component('lms-information-dialog', {
         },
         unlockAll() {
             return this.$store.state.unlockAll
+        },
+        updateNotif() {
+            return this.$store.state.updateNotif
         }
     },
     filters: {

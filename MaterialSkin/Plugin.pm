@@ -38,8 +38,11 @@ my $log = Slim::Utils::Log->addLogCategory({
 my $prefs = preferences('plugin.material-skin');
 my $serverprefs = preferences('server');
 my $skinMgr;
+
 my $mskLastAlert = '-';
 my $mskLastAlertCancelable = 0;
+my $mskLastUpdate = '-';
+my $mskLastUpdateTitle = '-';
 
 my $MAX_ADV_SEARCH_RESULTS = 1000;
 my $DESKTOP_URL_PARSER_RE = qr{^desktop$}i;
@@ -226,7 +229,7 @@ sub _cliCommand {
                                                   'plugins', 'plugins-status', 'plugins-update', 'extras', 'delete-vlib', 'pass-isset',
                                                   'pass-check', 'browsemodes', 'geturl', 'command', 'scantypes', 'server', 'themes',
                                                   'playericons', 'activeplayers', 'urls', 'adv-search', 'adv-search-params', 'protocols',
-                                                  'send-notif', 'get-last-notif']) ) {
+                                                  'send-notif', 'get-last-notif', 'get-update-notif']) ) {
         $request->setStatusBadParams();
         return;
     }
@@ -1007,16 +1010,23 @@ sub _cliCommand {
     if ($cmd eq 'send-notif') {
         my $msg = $request->getParam('msg');
         my $type = $request->getParam('type');
-        my $cancelable = $request->getParam('cancelable');
-        if (!$msg || !$type || ($type ne 'info' && $type ne 'error' && $type ne 'alert')) {
+        if (!$msg || !$type || ($type ne 'info' && $type ne 'error' && $type ne 'alert' && $type ne 'update')) {
             $request->setStatusBadParams();
             return;
         }
-        if ($type eq 'alert') {
-            $mskLastAlert = $msg;
-            $mskLastAlertCancelable = $cancelable;
+
+        if ($type eq 'update') {
+            $mskLastUpdate = $msg;
+            $mskLastUpdateTitle = $request->getParam('title');
+            Slim::Control::Request::notifyFromArray(undef, ['material-skin', 'notification', $type, $msg, $mskLastUpdateTitle]);
+        } else {
+            my $cancelable = $request->getParam('cancelable');
+            if ($type eq 'alert') {
+                $mskLastAlert = $msg;
+                $mskLastAlertCancelable = $cancelable;
+            }
+            Slim::Control::Request::notifyFromArray(undef, ['material-skin', 'notification', $type, $msg, $cancelable]);
         }
-        Slim::Control::Request::notifyFromArray(undef, ['material-skin', 'notification', $type, $msg, $cancelable]);
         $request->setStatusDone();
         return;
     }
@@ -1024,6 +1034,13 @@ sub _cliCommand {
     if ($cmd eq 'get-last-notif') {
         $request->addResult("last", $mskLastAlert);
         $request->addResult("cancelable", $mskLastAlertCancelable);
+        $request->setStatusDone();
+        return;
+    }
+
+    if ($cmd eq 'get-update-notif') {
+        $request->addResult("msg", $mskLastUpdate);
+        $request->addResult("title", $mskLastUpdateTitle);
         $request->setStatusDone();
         return;
     }

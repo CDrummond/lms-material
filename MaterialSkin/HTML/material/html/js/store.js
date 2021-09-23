@@ -297,7 +297,8 @@ const store = new Vuex.Store({
         powerButton: false,
         largeCovers: false,
         mediaControls: false,
-        downloadStatus: []
+        downloadStatus: [],
+        updateNotif: {msg:undefined, title:undefined}
     },
     mutations: {
         setPlayers(state, players) {
@@ -784,6 +785,12 @@ const store = new Vuex.Store({
         },
         setDownloadStatus(state, val) {
             state.downloadStatus = val;
+        },
+        setUpdateNotif(state, val) {
+            state.updateNotif=val;
+            if ('-'==state.updateNotif.msg) {
+                state.updateNotif.msg=undefined;
+            }
         }
     }
 })

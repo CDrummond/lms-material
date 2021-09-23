@@ -24,9 +24,9 @@ Vue.component('lms-information-dialog', {
   </v-card-title>
   <div class="ios-vcard-text-workaround"><div class="infodetails" id="info-page">
 
-   <div v-if="updateNotif!=undefined && updateNotif.msg!=undefined">
+   <div v-show="updateNotif.msg!=undefined">
     <p class="about-header">{{updateNotif.title}}</p>
-    <div v-html="updateNotif.msg"></div>
+    <div v-html="updateNotif.msg" ref="update-notif-text" class="clickable"></div>
     <div class="dialog-padding"></div>
    </div>
 
@@ -125,6 +125,27 @@ Vue.component('lms-information-dialog', {
         }
     },
     mounted() {
+        this.$nextTick(() => { this.$nextTick(() => {
+            this.$refs['update-notif-text'].addEventListener('click', (event) => {
+                if (event.target.tagName=='A') {
+                    if (event.target.href.startsWith("msk:")) {
+                        event.preventDefault();
+                        let act = event.target.href.substring(4).replace('/', '');
+                        if (act!=undefined && act.length>0) {
+                            let customActions = getCustomActions("notifications", this.$store.state.unlockAll);
+                            if (undefined!=customActions) {
+                                for (let i=0, len=customActions.length; i<len; ++i) {
+                                    if (customActions[i].id==act) {
+                                        performCustomAction(this, customActions[i], this.$store.state.player);
+                                        break;
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            });
+        })});
         bus.$on('info.open', function(act) {
             lmsCommand("", ["material-skin", "info"]).then(({data}) => {
                 if (data && data.result && data.result.info) {
@@ -206,7 +227,7 @@ Vue.component('lms-information-dialog', {
     },
     methods: {
         scrollToPlugins() {
-            if (undefined!=this.$store.state.updateNotif && undefined!=this.$store.state.updateNotif.msg) {
+            if (undefined!=this.$store.state.updateNotif.msg) {
                 return false;
             }
             if (this.$store.state.updatesAvailable.has("plugins") && !this.$store.state.updatesAvailable.has("server")) {

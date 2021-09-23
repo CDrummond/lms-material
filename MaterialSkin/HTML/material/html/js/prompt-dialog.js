@@ -13,7 +13,7 @@ var lmsPromptDialog = Vue.component("lms-prompt-dialog", {
   <v-card-title v-if="undefined!=title">{{title}}</v-card-title>
   <v-card-text>
    <v-text-field v-if="type=='text'" single-line :label="hint" v-model="text" @keyup.enter="close(true);" ref="entry"></v-text-field>
-   <div v-else v-html="text" class="prompt-dlg" ref="prompt-dlg-text"></div>
+   <div v-else v-html="text" class="clickable" ref="prompt-dlg-text"></div>
   </v-card-text>
   <v-card-actions>
    <v-spacer></v-spacer>
@@ -43,20 +43,19 @@ var lmsPromptDialog = Vue.component("lms-prompt-dialog", {
                     this.show=false;
                     return;
                 }
-                let promptDlg = this;
                 this.$nextTick(() => { this.$nextTick(() => {
-                    this.$refs['prompt-dlg-text'].addEventListener('click', function(event) {
+                    this.$refs['prompt-dlg-text'].addEventListener('click', (event) => {
                         if (event.target.tagName=='A') {
-                            promptDlg.close(false);
+                            this.close(false);
                             if (event.target.href.startsWith("msk:")) {
                                 event.preventDefault();
                                 let act = event.target.href.substring(4).replace('/', '');
                                 if (act!=undefined && act.length>0) {
-                                    let customActions = getCustomActions("notifications", promptDlg.$store.state.unlockAll);
+                                    let customActions = getCustomActions("notifications", this.$store.state.unlockAll);
                                     if (undefined!=customActions) {
                                         for (let i=0, len=customActions.length; i<len; ++i) {
                                             if (customActions[i].id==act) {
-                                                performCustomAction(promptDlg, customActions[i], promptDlg.$store.state.player);
+                                                performCustomAction(this, customActions[i], this.$store.state.player);
                                                 break;
                                             }
                                         }

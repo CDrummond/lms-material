@@ -43,7 +43,7 @@
 }
 
 .browse-html a, .browse-text a, .np-info-text a, .np-info-text-full a, .np-info-text-desktop a, .np-info-text-full-desktop a,
-.primary--text, a.primary--text, div.primary--text, i.primary--text, label.primary--text, .lms-link, .active, .prompt-dlg a {
+.primary--text, a.primary--text, div.primary--text, i.primary--text, label.primary--text, .lms-link, .active, .clickable a {
  color:var(--active-color) !important;
 }
 

@@ -791,7 +791,7 @@ Vue.component('lms-toolbar', {
             return this.$store.state.visibleMenus.size>0
         },
         updatesAvailable() {
-            return this.$store.state.updatesAvailable.size>0 || (undefined!=this.$store.state.updateNotif && undefined!=this.$store.state.updateNotif.msg)
+            return this.$store.state.updatesAvailable.size>0 || undefined!=this.$store.state.updateNotif.msg
         },
         keyboardControl() {
             return this.$store.state.keyboardControl && !IS_MOBILE

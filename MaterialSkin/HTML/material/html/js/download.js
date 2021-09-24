@@ -157,7 +157,7 @@ Vue.component('lms-downloadstatus', {
     <v-btn flat icon v-longpress:stop="close" :title="i18n('Go back')"><v-icon>arrow_back</v-icon></v-btn>
     <v-toolbar-title>{{i18n('Downloading')}}</v-toolbar-title>
     <v-spacer></v-spacer>
-    <v-btn icon v-if="undefined!=items && items.length>1" flat @click.native="abortAll()" :title="i18n('Abort all')"><img class="svg-img" :src="'close-all' | svgIcon(darkUi)"></img></v-btn>
+    <v-btn icon v-if="undefined!=items && items.length>1" flat @click.native="abortAll()" :title="i18n('Abort all')"><img class="svg-img" :src="'close-all' | svgIcon(darkUi, coloredToolbars)"></img></v-btn>
    </v-toolbar>
   </v-card-title>
   <v-card-text style="padding-top:0px">
@@ -192,7 +192,8 @@ Vue.component('lms-downloadstatus', {
     props: [],
     data() {
         return {
-            show: false
+            show: false,
+            coloredToolbars: false
         }
     },
     mounted() {
@@ -203,6 +204,10 @@ Vue.component('lms-downloadstatus', {
             if (this.$store.state.activeDialog == 'downloadstatus') {
                 this.close();
             }
+        }.bind(this));
+        this.coloredToolbars = this.$store.state.theme.endsWith("-colored");
+        bus.$on('themeChanged', function() {
+            this.coloredToolbars = this.$store.state.theme.endsWith("-colored");
         }.bind(this));
     },
     methods: {

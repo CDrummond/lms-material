@@ -585,6 +585,8 @@
 "Allow control via media keys.":"",
 "Lock screen and notifications":"",
 "Media keys and notifications":"",
+"No notifications.":"",
+"Notifications":"",
 "Show playback controls on lock screen and in notification area.":"",
 "To support this feature, this app needs to fool your browser into thinking its is playing audio. This is accomplished by playing a silent audio file in a loop. Most browsers block auto-playing of audio so this cannot start until you have interacted with the app (e.g. clicked somewhere). Alternatively you can configure your browser to allow auto-play of audio for the URL you use to access this app (%1).":""
 }

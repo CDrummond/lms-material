@@ -8,20 +8,6 @@
 
 Vue.use(VueLazyload, {error:LMS_BLANK_COVER});
 
-function showLastNotif(text, cancelable) {
-    try {
-        if (cancelable) {
-            showAlert(text, i18n('Cancel')).then(res => {
-                lmsCommand("", ["material-skin", "send-notif", "type:alert", "msg:-"]);
-            });
-        } else {
-            showAlert(text);
-        }
-    } catch(e) { // Not loaded yet??
-        setTimeout(function() { showLastNotif(text, cancelable); }, 500);
-    }
-}
-
 var app = new Vue({
     el: '#app',
     data() {
@@ -162,17 +148,7 @@ var app = new Vue({
         });
 
         setTimeout(function () {
-            lmsCommand("", ["material-skin", "get-last-notif"]).then(({data}) => {
-                if (data && data.result && data.result.last && data.result.last!='-') {
-                    showLastNotif(data.result.last, data.result.cancelable);
-                }
-            });
-
-            lmsCommand("", ["material-skin", "get-update-notif"]).then(({data}) => {
-                if (data && data.result && data.result.msg) {
-                    this.$store.commit('setUpdateNotif', {msg:data.result.msg, title:data.result.title});
-                }
-            });
+            bus.$emit('checkNotifications');
         }.bind(this), 500);
 
         // Work-around 100vh behaviour in mobile chrome

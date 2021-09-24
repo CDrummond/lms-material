@@ -8,6 +8,20 @@
 
 const PLAYER_STATUS_TAGS = "tags:cdegiloqrstuyAABKNST";
 
+function showLastNotif(text, cancelable) {
+    try {
+        if (cancelable) {
+            showAlert(text, i18n('Cancel')).then(res => {
+                lmsCommand("", ["material-skin", "send-notif", "type:alert", "msg:-"]);
+            });
+        } else {
+            showAlert(text);
+        }
+    } catch(e) { // Not loaded yet??
+        setTimeout(function() { showLastNotif(text, cancelable); }, 500);
+    }
+}
+
 function updateNative(status) {
     if (queryParams.nativeStatus) {
         try {
@@ -45,6 +59,7 @@ setInterval(function() {
     var currentTime = (new Date()).getTime();
     if (currentTime > (lastTime + (2000*2))) {
         bus.$emit('refreshStatus');
+        bus.$emit('checkNotifications');
     }
     lastTime = currentTime;
 }, 2000);
@@ -260,6 +275,7 @@ var lmsServer = Vue.component('lms-server', {
                         this.refreshServerStatus();
                         this.scheduleNextPlayerStatusUpdate(500);
                         bus.$emit("networkStatus", lmsIsConnected);
+                        bus.$emit('checkNotifications');
                     }
                 }
             });
@@ -883,6 +899,20 @@ var lmsServer = Vue.component('lms-server', {
                 lmsCommand(player, ["playerpref", "plugin.dontstopthemusic:provider", value]).then(({data}) => {
                     bus.$emit("prefset", "plugin.dontstopthemusic:provider", value, player);
                 });
+            });
+        }.bind(this));
+
+        // Check Perl side to see if any notifications registered
+        bus.$on('checkNotifications', function() {
+            lmsCommand("", ["material-skin", "get-notifs"]).then(({data}) => {
+                if (data && data.result) {
+                    if (data.result.last) {
+                        showLastNotif(data.result.last, data.result.cancelable);
+                    }
+                    if (data.result.updatemsg) {
+                        this.$store.commit('setUpdateNotif', {msg:data.result.updatemsg, title:data.result.updatetitle});
+                    }
+                }
             });
         }.bind(this));
 

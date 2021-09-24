@@ -40,6 +40,7 @@ my $serverprefs = preferences('server');
 my $skinMgr;
 
 my %mskNotifications = ();
+$mskNotifications{'notifications'} = [];
 
 my $MAX_ADV_SEARCH_RESULTS = 1000;
 my $DESKTOP_URL_PARSER_RE = qr{^desktop$}i;
@@ -1008,20 +1009,42 @@ sub _cliCommand {
         my $msg = $request->getParam('msg');
         my $type = $request->getParam('type');
         my $title = $request->getParam('title');
-        if (!$msg || !$type || ($type ne 'info' && $type ne 'error' && $type ne 'alert' && $type ne 'update')) {
+        my $cancelable = $request->getParam('cancelable');
+        my $id = $request->getParam('id');
+        if (!$msg || !$type || ($type ne 'info' && $type ne 'error' && $type ne 'alert' && $type ne 'update' && $type ne 'notif')) {
             $request->setStatusBadParams();
             return;
         }
 
-        if ($type eq 'update') {
+        if ($type eq 'notif') {
+            if (!$id) {
+               $request->setStatusBadParams();
+               return;
+            }
+
+            # Remove any existing notif
+            my $index = 0;
+            foreach my $notif (@{$mskNotifications{'notifications'}}) {
+                if ($notif->{'id'} eq $id) {
+                    splice(@{$mskNotifications{'notifications'}}, $index, 1);
+                    last;
+                }
+                $index++;
+            }
+
+            if ($msg ne '-') {
+                # Store
+                push(@{$mskNotifications{'notifications'}}, {id => $id, msg => $msg, title => $title, cancelable => $cancelable});
+            }
+            Slim::Control::Request::notifyFromArray(undef, ['material-skin', 'notification', $type, $msg, $title, $id, $cancelable]);
+        } elsif ($type eq 'update') {
             $mskNotifications{'updatemsg'} = $msg;
             $mskNotifications{'updatetitle'} = $title;
             Slim::Control::Request::notifyFromArray(undef, ['material-skin', 'notification', $type, $msg, $title]);
         } else {
-            my $cancelable = $request->getParam('cancelable');
             if ($type eq 'alert') {
-                $mskNotifications{'last'} = $msg;
-                $mskNotifications{'cancelable'} = $cancelable;
+                $mskNotifications{'alertmsg'} = $msg;
+                $mskNotifications{'alertcancelable'} = $cancelable;
             }
             Slim::Control::Request::notifyFromArray(undef, ['material-skin', 'notification', $type, $msg, $cancelable]);
         }

@@ -12,6 +12,7 @@ var TB_PLAYER_SETTINGS = {id:"tb:playersettings", svg: "player-settings" };
 var TB_SERVER_SETTINGS = {id:"tb:serversettings", svg: "server-settings" };
 var TB_APP_SETTINGS    = {id:"tb:appsettings",    svg: "app-settings" };
 var TB_INFO            = {id:"tb:info",           icon: "info" };
+var TB_NOTIFICATIONS   = {id:"tb:notifs",         svg: "bell" };
 var TB_MANAGE_PLAYERS  = {id:"tb:manageplayers",  svg: "player-manager" };
 
 Vue.component('lms-toolbar', {
@@ -111,12 +112,12 @@ Vue.component('lms-toolbar', {
   <img v-else class="svg-img" v-bind:class="{'dimmed':coloredToolbars && !showQueue && !infoOpen && !nowPlayingExpanded}" :src="'queue_music_outline' | svgIcon(darkUi, false, true, undefined, coloredToolbars)"></img>
  </v-btn>
  <v-menu v-if="connected" class="hide-for-mini" bottom left v-model="showMainMenu">
-  <v-btn slot="activator" icon :title="trans.mainMenu"><img v-if="updatesAvailable" class="svg-update-img" :src="'update' | svgIcon(darkUi, true, true, undefined, coloredToolbars)"></img><v-icon>more_vert</v-icon></v-btn>
+  <v-btn slot="activator" icon :title="trans.mainMenu"><img v-if="updatesAvailable" class="svg-badge" :src="'update' | svgIcon(darkUi, true, true, undefined, coloredToolbars)"></img><img v-else-if="notificationsAvailable" class="svg-badge" :src="'bell' | svgIcon(darkUi, true, true, undefined, coloredToolbars)"></img><v-icon>more_vert</v-icon></v-btn>
   <v-list>
    <template v-for="(item, index) in menuItems">
     <v-divider v-if="item===DIVIDER"></v-divider>
-    <v-list-tile @click="menuAction(item.id)">
-     <v-list-tile-avatar v-if="menuIcons"><img v-if="TB_INFO.id==item.id && updatesAvailable" class="svg-img" :src="'update' | svgIcon(darkUi, true)"></img><v-icon v-else>{{item.icon}}</v-icon></v-list-tile-avatar>
+    <v-list-tile @click="menuAction(item.id)" v-if="notificationsAvailable || TB_NOTIFICATIONS.id!=item.id">
+     <v-list-tile-avatar v-if="menuIcons"><img v-if="TB_INFO.id==item.id && updatesAvailable" class="svg-img" :src="'update' | svgIcon(darkUi, true)"></img><img v-else-if="item.svg" class="svg-img" :src="item.svg | svgIcon(darkUi)"><v-icon v-else>{{item.icon}}</v-icon></v-list-tile-avatar>
      <v-list-tile-content>
       <v-list-tile-title>{{item.title}}</v-list-tile-title>
       <v-list-tile-sub-title v-if="TB_INFO.id==item.id && updatesAvailable">{{trans.updatesAvailable}}</v-list-tile-sub-title>
@@ -491,11 +492,12 @@ Vue.component('lms-toolbar', {
             TB_SERVER_SETTINGS.shortcut=shortcutStr(LMS_SERVER_SETTINGS_KEYBOARD);
             TB_INFO.title=i18n('Information');
             TB_INFO.shortcut=shortcutStr(LMS_INFORMATION_KEYBOARD);
+            TB_NOTIFICATIONS.title=i18n('Notifications');
             TB_MANAGE_PLAYERS.title=i18n('Manage players');
             TB_MANAGE_PLAYERS.shortcut=shortcutStr(LMS_MANAGEPLAYERS_KEYBOARD);
             TB_APP_SETTINGS.title=i18n('Application settings');
             TB_APP_SETTINGS.stitle=i18n('Application');
-            this.menuItems = [ TB_SETTINGS, TB_INFO ];
+            this.menuItems = [ TB_SETTINGS, TB_INFO, TB_NOTIFICATIONS ];
             this.settingsMenuItems = [ TB_APP_SETTINGS, TB_UI_SETTINGS, TB_PLAYER_SETTINGS, TB_SERVER_SETTINGS];
             this.trans = {noplayer:i18n('No Player'), nothingplaying:i18n('Nothing playing'),
                           info:i18n("Show current track information"), infoShortcut:shortcutStr(LMS_TRACK_INFO_KEYBOARD), 
@@ -536,6 +538,8 @@ Vue.component('lms-toolbar', {
                 bus.$emit('dlg.open', 'info');
             } else if (TB_MANAGE_PLAYERS.id==id) {
                 bus.$emit('dlg.open', 'manage');
+            } else if (TB_NOTIFICATIONS.id==id) {
+                bus.$emit('dlg.open', 'notifications');
             } else {
                 bus.$emit('toolbarAction', id);
             }
@@ -793,6 +797,9 @@ Vue.component('lms-toolbar', {
         updatesAvailable() {
             return this.$store.state.updatesAvailable.size>0 || undefined!=this.$store.state.updateNotif.msg
         },
+        notificationsAvailable() {
+            return this.$store.state.notifications.length>0
+        },
         keyboardControl() {
             return this.$store.state.keyboardControl && !IS_MOBILE
         },
@@ -838,8 +845,8 @@ Vue.component('lms-toolbar', {
             }
             return (isNaN(value) ? 0 : value)+"%";
         },
-        svgIcon: function (name, dark, update, toolbar, active, coloredToolbars) {
-            return "/material/svg/"+name+"?c="+(update ? toolbar ? (coloredToolbars ? "fff" : LMS_UPDATE_SVG) : LMS_UPDATE_SVG : (active ? getComputedStyle(document.documentElement).getPropertyValue("--active-color").replace("#", "") : dark || (toolbar && coloredToolbars) ? LMS_DARK_SVG : LMS_LIGHT_SVG))+"&r="+LMS_MATERIAL_REVISION;
+        svgIcon: function (name, dark, badge, toolbar, active, coloredToolbars) {
+            return "/material/svg/"+name+"?c="+(badge ? toolbar ? (coloredToolbars ? "fff" : LMS_UPDATE_SVG) : LMS_UPDATE_SVG : (active ? getComputedStyle(document.documentElement).getPropertyValue("--active-color").replace("#", "") : dark || (toolbar && coloredToolbars) ? LMS_DARK_SVG : LMS_LIGHT_SVG))+"&r="+LMS_MATERIAL_REVISION;
         },
         tooltip: function (str, shortcut, showShortcut) {
             return showShortcut ? str+SEPARATOR+shortcut : str;

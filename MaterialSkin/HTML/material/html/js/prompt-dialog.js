@@ -43,28 +43,6 @@ var lmsPromptDialog = Vue.component("lms-prompt-dialog", {
                     this.show=false;
                     return;
                 }
-                this.$nextTick(() => { this.$nextTick(() => {
-                    this.$refs['prompt-dlg-text'].addEventListener('click', (event) => {
-                        if (event.target.tagName=='A') {
-                            this.close(false);
-                            if (event.target.href.startsWith("msk:")) {
-                                event.preventDefault();
-                                let act = event.target.href.substring(4).replace('/', '');
-                                if (act!=undefined && act.length>0) {
-                                    let customActions = getCustomActions("notifications", this.$store.state.unlockAll);
-                                    if (undefined!=customActions) {
-                                        for (let i=0, len=customActions.length; i<len; ++i) {
-                                            if (customActions[i].id==act) {
-                                                performCustomAction(this, customActions[i], this.$store.state.player);
-                                                break;
-                                            }
-                                        }
-                                    }
-                                }
-                            }
-                        }
-                    });
-                })});
             }
             this.maxWidth = this.text.length>=50 || 'confirm'!=type ? 500 : 300;
             this.type = type;
@@ -80,6 +58,11 @@ var lmsPromptDialog = Vue.component("lms-prompt-dialog", {
         }.bind(this));
         bus.$on('esc', function() {
             if (this.$store.state.activeDialog == 'prompt') {
+                this.close(false);
+            }
+        }.bind(this));
+        bus.$on('notificationLinkActivated', function() {
+             if (this.$store.state.activeDialog == 'prompt') {
                 this.close(false);
             }
         }.bind(this));

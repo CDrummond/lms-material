@@ -298,7 +298,8 @@ const store = new Vuex.Store({
         largeCovers: false,
         mediaControls: false,
         downloadStatus: [],
-        updateNotif: {msg:undefined, title:undefined}
+        updateNotif: {msg:undefined, title:undefined},
+        notifications: []
     },
     mutations: {
         setPlayers(state, players) {
@@ -791,6 +792,20 @@ const store = new Vuex.Store({
             if ('-'==state.updateNotif.msg) {
                 state.updateNotif.msg=undefined;
             }
+        },
+        setNotification(state, val) {
+            for (let i=0, loop=state.notifications, len=loop.length; i<len; ++i) {
+                if (loop[i].id==val.id) {
+                    loop.splice(i, 1);
+                    break;
+                }
+            }
+            if (val.msg != '-') {
+                state.notifications.push(val);
+            }
+        },
+        setNotifications(state, val) {
+            state.notifications=val;
         }
     }
 })

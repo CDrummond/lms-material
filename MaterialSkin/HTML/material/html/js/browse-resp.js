@@ -817,7 +817,7 @@ function parseBrowseResp(data, parent, options, cacheKey, parentCommand, parentG
             for (var idx=0, loop=data.result.playlists_loop, loopLen=loop.length; idx<loopLen; ++idx) {
                 var i = loop[idx];
                 var key = removeDiactrics(i.textkey);
-                var isRemote = 1 == parseInt(i.remote);
+                var isRemote = 1 == parseInt(i.remote) || undefined!=i.extid;
                 if (undefined!=key && (resp.jumplist.length==0 || resp.jumplist[resp.jumplist.length-1].key!=key)) {
                     resp.jumplist.push({key: key, index: resp.items.length});
                 }

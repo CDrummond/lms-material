@@ -42,12 +42,14 @@ Vue.component('lms-savequeue', {
             this.name = name;
             this.currentName = ""+name;
             focusEntry(this);
-            lmsCommand("", ["playlists", 0, 10000]).then(({data})=>{
+            lmsCommand("", ["playlists", 0, 10000, PLAYLIST_TAGS]).then(({data})=>{
                 if (data && data.result && data.result.playlists_loop) {
                     var loop = data.result.playlists_loop;
                     this.existing = [];
                     for (var i=0, len=loop.length; i<len; ++i) {
-                        this.existing.push(loop[i].playlist);
+                        if (undefined==loop[i].extid) {
+                            this.existing.push(loop[i].playlist);
+                        }
                     }
                     this.existing.sort();
                 }

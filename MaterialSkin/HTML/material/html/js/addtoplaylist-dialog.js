@@ -43,15 +43,17 @@ Vue.component('lms-addtoplaylist-dialog', {
             this.itemCommands = itemCommands;
             focusEntry(this);
             var currentName = ""+this.name;
-            lmsCommand("", ["playlists", 0, 10000]).then(({data})=>{
+            lmsCommand("", ["playlists", 0, 10000, PLAYLIST_TAGS]).then(({data})=>{
                 if (data && data.result && data.result.playlists_loop) {
                     var loop = data.result.playlists_loop;
                     var nameValid = false;
                     this.existing = [];
                     for (var i=0, len=loop.length; i<len; ++i) {
-                        this.existing.push(loop[i].playlist);
-                        if (!nameValid && loop[i].playlist==currentName) {
-                            nameValid = true;
+                        if (undefined==loop[i].extid) {
+                            this.existing.push(loop[i].playlist);
+                            if (!nameValid && loop[i].playlist==currentName) {
+                                nameValid = true;
+                            }
                         }
                     }
                     this.existing.sort();

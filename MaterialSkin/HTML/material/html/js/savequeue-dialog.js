@@ -47,7 +47,7 @@ Vue.component('lms-savequeue', {
                     var loop = data.result.playlists_loop;
                     this.existing = [];
                     for (var i=0, len=loop.length; i<len; ++i) {
-                        if (undefined==loop[i].extid) {
+                        if (undefined==loop[i].extid && 1!=parseInt(loop[i].remote)) {
                             this.existing.push(loop[i].playlist);
                         }
                     }

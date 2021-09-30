@@ -49,7 +49,7 @@ Vue.component('lms-addtoplaylist-dialog', {
                     var nameValid = false;
                     this.existing = [];
                     for (var i=0, len=loop.length; i<len; ++i) {
-                        if (undefined==loop[i].extid) {
+                        if (undefined==loop[i].extid && 1!=parseInt(loop[i].remote)) {
                             this.existing.push(loop[i].playlist);
                             if (!nameValid && loop[i].playlist==currentName) {
                                 nameValid = true;

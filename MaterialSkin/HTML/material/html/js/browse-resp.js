@@ -814,23 +814,35 @@ function parseBrowseResp(data, parent, options, cacheKey, parentCommand, parentG
             }
             resp.subtitle=i18np("1 Genre", "%1 Genres", resp.items.length);
         } else if (data.result.playlists_loop) {
+            var haveEmblem = false;
             for (var idx=0, loop=data.result.playlists_loop, loopLen=loop.length; idx<loopLen; ++idx) {
                 var i = loop[idx];
                 var key = removeDiactrics(i.textkey);
                 var isRemote = 1 == parseInt(i.remote) || undefined!=i.extid;
+                var emblem = getEmblem(i.extid);
+                if (undefined!=emblem) {
+                    haveEmblem = true;
+                }
                 if (undefined!=key && (resp.jumplist.length==0 || resp.jumplist[resp.jumplist.length-1].key!=key)) {
                     resp.jumplist.push({key: key, index: resp.items.length});
                 }
                 resp.items.push({
                               id: "playlist_id:"+i.id,
                               title: i.playlist,
-                              //icon: "list",
+                              icon: undefined == emblem ? "list" : undefined,
+                              svg: undefined == emblem ? undefined : emblem.name,
                               stdItem: isRemote ? STD_ITEM_REMOTE_PLAYLIST : STD_ITEM_PLAYLIST,
                               type: "group",
                               section: SECTION_PLAYLISTS,
                               url:  i.url,
                               remotePlaylist: isRemote
                           });
+            }
+            if (!haveEmblem) {
+                // No emblems? Clear icons...
+                for (var i=0, len=resp.items.length; i<len; ++i) {
+                    resp.items[i].icon = resp.items[i].svg = undefined;
+                }
             }
             resp.subtitle=i18np("1 Playlist", "%1 Playlists", resp.items.length);
         } else if (data.result.playlisttracks_loop) {

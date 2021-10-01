@@ -14,6 +14,8 @@
  9. Add custom update notifications.
 10. Hide playlists from online services from 'Add to playlist' and 'Save play
     queue' dialogs.
+11. If have playlists from online services, then use the service's logo as an
+    icon for online playlists and a list icon for LMS playlists.
 
 2.6.3
 -----

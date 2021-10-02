@@ -16,6 +16,8 @@
     queue' dialogs.
 11. If have playlists from online services, then use the service's logo as an
     icon for online playlists and a list icon for LMS playlists.
+12. Allow info and error notifications to be client specific - so will only show
+    if Material's active player ID matches that supplied.
 
 2.6.3
 -----

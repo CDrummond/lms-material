@@ -586,9 +586,13 @@ var lmsServer = Vue.component('lms-server', {
         handleNotification(data) {
             if (data.length>=4) {
                 if (data[2]=='info') {
-                    bus.$emit('showMessage', data[3]);
+                    if (data.length<6 || undefined==data[5] || data[5].length<1 || data[5]==this.$store.state.player.id) {
+                        bus.$emit('showMessage', data[3]);
+                    }
                 } else if (data[2]=='error') {
-                    bus.$emit('showError', undefined, data[3]);
+                    if (data.length<6 || undefined==data[5] || data[5].length<1 || data[5]==this.$store.state.player.id) {
+                        bus.$emit('showError', undefined, data[3]);
+                    }
                 } else if (data[2]=='alert') {
                     if (data.length>4 && parseInt(data[4])==1) {
                         showAlert(data[3], i18n('Cancel')).then(res => {

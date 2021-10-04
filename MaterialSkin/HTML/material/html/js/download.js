@@ -69,7 +69,7 @@ function isCueTrack(filename) {
 
 function download(item, command, albumartist) {
     let lkey = item.id.startsWith("playlist_id:") ? "playlisttracks_loop" : "titles_loop";
-    let cmd = ['tracks', 0, 1000, DOWNLOAD_TAGS, 'sort:tracknum', item.id];
+    let cmd = ['tracks', 0, 1000, DOWNLOAD_TAGS, 'sort:tracknum', originalId(item.id)];
     // Only include artist_id if we have no list command, or the list command has artist_id
     // -> otherwise downloading a 'Various Artists' album from 'New Music' fails.
     if (item.artist_id && (undefined==command || getField(command, 'artist_id')>=0)) {

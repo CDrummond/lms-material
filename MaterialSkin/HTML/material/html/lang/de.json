@@ -276,11 +276,13 @@
 "No downloadable tracks.":"Keine herunterladbaren Titel",
 "No entries found":"Keine Einträge gefunden",
 "No fade":"Kein Überblenden",
+"No notifications.":"Keine Benachrichtigungen",
 "No repeat":"Kein Wiederholen",
 "No results found":"Keine Ergebnisse gefunden",
 "No shuffle":"Keine zufällige Wiedergabe",
 "None":"Nichts",
 "Nothing playing":"Keine Wiedergabe",
+"Notifications":"Benachrichtigungen",
 "Now Playing":"Aktueller Titel",
 "OK":"OK",
 "On song change":"Bei Titelwechsel",
@@ -586,7 +588,5 @@
 "1 Year":"Ein Jahr",
 "%1 Years":"%1 Jahre",
 "1 day":"Ein Tag",
-"%1 days":"%1 Tage",
-"No notifications.":"Keine Benachrichtigungen",
-"Notifications":"Benachrichtigungen"
+"%1 days":"%1 Tage"
 }

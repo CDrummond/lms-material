@@ -916,7 +916,7 @@ function browseItemAction(view, act, item, index, event) {
             }
         }
         if (aa == undefined) {
-            for (let loop=view.history, len=loop.length, i=len-1; i>0 && aa==undefined; ++i) {
+            for (let loop=view.history, len=loop.length, i=len-1; i>0 && aa==undefined; --i) {
                 let hi = loop[i].current;
                 if (undefined!=hi) {
                     if (hi.id.startsWith("artist_id:")) {

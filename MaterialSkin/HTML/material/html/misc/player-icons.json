@@ -103,6 +103,15 @@
         "SqueezePlay":{
             "svg":"apple"
         }
+    },
+    "http": {
+        "playerid":[
+             {
+                 "begins":"Alexa-",
+                 "svg":"alexa"
+             }
+        ],
+        "svg":"stream"
     }
 }
 

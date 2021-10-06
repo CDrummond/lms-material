@@ -70,12 +70,6 @@ function mapPlayerIcon(player) {
     if (undefined!=playerIcons) {
         let model = playerIcons[player.model];
         if (undefined!=model) {
-            if (undefined!=model['icon'] || undefined!=model['svg']) {
-                return model;
-            }
-            if (undefined!=model[player.modelname]) {
-                return model[player.modelname];
-            }
             if (undefined!=player.firmware && undefined!=model['firmware']) {
                 for (let i=0, len=model['firmware'].length; i<len; ++i) {
                     if (model['firmware'][i]['ends'] && ('' + player.firmware).endsWith(model['firmware'][i]['ends'])) {
@@ -89,6 +83,12 @@ function mapPlayerIcon(player) {
                         return model['playerid'][i];
                     }
                 }
+            }
+            if (undefined!=model['icon'] || undefined!=model['svg']) {
+                return model;
+            }
+            if (undefined!=model[player.modelname]) {
+                return model[player.modelname];
             }
         }
     }

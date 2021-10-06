@@ -20,6 +20,8 @@
     if Material's active player ID matches that supplied.
 13. Fix downloading playlist.
 14. Fix downloading individual tracks from playlists.
+15. Don't allow adjusting volume via mouse wheel in group volume or 'Manage
+    players' dialogs.
 
 2.6.3
 -----

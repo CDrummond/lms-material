@@ -35,7 +35,7 @@ Vue.component('lms-groupvolume', {
     <v-flex :disabled="VOL_HIDDEN==player.dvc" xs12>
      <v-layout>
       <v-btn flat icon class="vol-btn vol-left" @click="adjustVolume(player, false)"><v-icon>{{player.muted ? 'volume_off' : 'volume_down'}}</v-icon></v-btn>
-      <v-slider :readonly="VOL_STD!=player.dvc" :disabled="VOL_STD!=player.dvc" @change="volumeChanged(player)" @wheel.native="volWheel(player, $event)"  step="1" v-model="player.volume" class="vol-slider" v-bind:class="{'dimmed': !player.ison}"></v-slider>
+      <v-slider :readonly="VOL_STD!=player.dvc" :disabled="VOL_STD!=player.dvc" @change="volumeChanged(player)" step="1" v-model="player.volume" class="vol-slider" v-bind:class="{'dimmed': !player.ison}"></v-slider>
       <v-btn flat icon @click="adjustVolume(player, true)" class="vol-btn vol-right"><v-icon>{{player.muted ? 'volume_off' : 'volume_up'}}</v-icon></v-btn>
      </v-layout>
     </v-flex>
@@ -209,16 +209,6 @@ Vue.component('lms-groupvolume', {
                 player.muted = vol<0;
                 this.refreshAll();
             });
-        },
-        volWheel(player, event) {
-            if (VOL_HIDDEN==player.dvc) {
-                return;
-            }
-            if (event.deltaY<0) {
-                this.adjustVolume(player, true);
-            } else if (event.deltaY>0) {
-                this.adjustVolume(player, false);
-            }
         },
         toggleMute(player) {
             if (VOL_STD!=player.dvc || !this.show) {

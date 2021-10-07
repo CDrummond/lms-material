@@ -228,7 +228,7 @@ Vue.component('lms-ui-settings', {
     <v-list-tile>
      <v-list-tile-content @click="sortHome = !sortHome" class="switch-label">
       <v-list-tile-title>{{i18n('Sort home screen')}}</v-list-tile-title>
-      <v-list-tile-sub-title>{{i18n('Automatically sort items on the home screen. Required for iPhone due to this not supporting drag-and-drop.')}}</v-list-tile-sub-title>
+      <v-list-tile-sub-title>{{i18n('Automatically sort items on the home screen.')}}</v-list-tile-sub-title>
      </v-list-tile-content>
      <v-list-tile-action><v-switch v-model="sortHome"></v-switch></v-list-tile-action>
     </v-list-tile>

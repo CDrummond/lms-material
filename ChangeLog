@@ -24,6 +24,8 @@
     players' dialogs.
 16. Add player icon mapping for HTTP and Alexa.
 17. Remove note stating iPhone does not support drag'n'drop.
+18. With embedded iframes dont add 'javascript:' entries to 'history' - fixes
+    back button with 'Visual Statistics' plugin.
 
 2.6.3
 -----

@@ -460,6 +460,9 @@ Vue.component('lms-iframe-dialog', {
             this.loaded = true;
         }.bind(this));
         bus.$on('iframe-href', function(ref, addToHistory) {
+            if (ref.startsWith("javascript:")) {
+                return;
+            }
             if (undefined==addToHistory || addToHistory) {
                 this.history.push(this.src);
             }

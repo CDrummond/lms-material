@@ -163,12 +163,16 @@ PLUGIN_MATERIAL_SKIN_ALLOW_DOWNLOAD_DESC
 
 PLUGIN_MATERIAL_SKIN_MANIFEST_DISPLAY
 	EN	WebApp display
+	FR	Affichage de l'application Web
 
 PLUGIN_MATERIAL_SKIN_MANIFEST_DISPLAY_DESC
 	EN	When saved as a WebApp (e.g. 'Add to homescreen') the app can be shown 'fullscreen' (appears like a normal app, but android's status and navigation bars are hidden) or 'standalone' (appears as a normal app, with status and navigation bars visible). NOTE: If you make any changes then you will need to reload the skin in your browser as browser's read this setting when the page is loaded.
+	FR	Lorsque l'application est enregistrée en tant qu'application Web (via l'option « Ajouter à l'écran d'accueil » d'un navigateur) pour être utilisée comme une application Android classique, elle peut être affichée en « plein écran » (barres de statut et de navigation masquées) ou « autonome » (barres de statut et de navigation visibles). REMARQUE : Si vous modifiez ce paramètre, vous devrez recharger le skin dans votre navigateur car le navigateur lit ce paramètre lorsque la page est chargée.
 
 PLUGIN_MATERIAL_SKIN_MANIFEST_DISPLAY_STANDALONE
 	EN	Standalone
+	FR	Autonome
 
 PLUGIN_MATERIAL_SKIN_MANIFEST_DISPLAY_FULLSCREEN
 	EN	Fullscreen
+	FR	Plein écran

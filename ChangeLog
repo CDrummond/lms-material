@@ -1,6 +1,7 @@
 2.7.1
 -----
 1. Translation updates.
+2. Remove any leading slash from xxx_svg.png paths.
 
 2.7.0
 -----

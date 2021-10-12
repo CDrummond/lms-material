@@ -659,29 +659,11 @@ var lmsBrowse = Vue.component("lms-browse", {
             browseClick(this, item, index, event);
         },
         showImage(index) {
-            var browsePage = this;
-            var images = [];
-            for (var i=0; i<this.items.length; ++i) {
-                images.push({src:changeImageSizing(this.items[i].src), w:0, h:0});
+            var urls = [];
+            for (var i=0, len=this.items.length; i<len; ++i) {
+                urls.push(this.items[i].src);
             }
-            this.gallery = new PhotoSwipe(document.querySelectorAll('.pswp')[0], PhotoSwipeUI_Default, images, {index: index});
-            this.gallery.listen('gettingData', function (index, item) {
-                if (item.w < 1 || item.h < 1) {
-                    var img = new Image();
-                    img.onload = function () {
-                        item.w = this.width;
-                        item.h = this.height;
-                        browsePage.gallery.updateSize(true);
-                    };
-                    img.src = item.src;
-                }
-            });
-            this.gallery.init();
-            this.$store.commit('dialogOpen', {name:'browse-viewer', shown:true});
-            // PhotoSwipe seems to emit an 'esc' when closed, which causes us to navigate back. If we delay emitting
-            // dialogOpen.browse-viewer.false by 1/2 second the code looking for 'esc' still thinks this dialog is open, and
-            // so ignores the event. Hacky, but works.
-            this.gallery.listen('close', function() { setTimeout(function () { browsePage.$store.commit('dialogOpen', {name:'browse-viewer', shown:false}); }, 500); });
+            bus.$emit('dlg.open', 'gallery', urls, index);
         },
         search(event, item, text) {
             if (this.fetchingItem!=undefined) {

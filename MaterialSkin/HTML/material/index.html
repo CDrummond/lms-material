@@ -93,42 +93,10 @@
     <lms-advancedsearch-dialog v-if="dialogs.advancedsearch"></lms-advancedsearch-dialog>
     <lms-downloadstatus v-if="dialogs.downloadstatus"></lms-downloadstatus>
     <lms-notifications v-if="dialogs.notifications"></lms-notifications>
+    <lms-gallery v-if="dialogs.gallery"></lms-gallery>
     <lms-screensaver></lms-screensaver>
     <lms-volumeoverlay></lms-volumeoverlay>
     <lms-mediasession></lms-mediasession>
-    <div class="pswp" tabindex="-1" role="dialog" aria-hidden="true">
-     <div class="pswp__bg"></div>
-     <div class="pswp__scroll-wrap">
-      <div class="pswp__container">
-       <div class="pswp__item"></div>
-       <div class="pswp__item"></div>
-       <div class="pswp__item"></div>
-      </div>
-      <div class="pswp__ui pswp__ui--hidden">
-       <div class="pswp__top-bar">
-        <div class="pswp__counter"></div>
-        <button class="pswp__button pswp__button--close"></button>
-        <button v-if="!IS_MOBILE" class="pswp__button pswp__button--fs"></button>
-        <button v-if="!IS_MOBILE" class="pswp__button pswp__button--zoom"></button>
-        <div class="pswp__preloader">
-         <div class="pswp__preloader__icn">
-          <div class="pswp__preloader__cut">
-           <div class="pswp__preloader__donut"></div>
-          </div>
-         </div>
-        </div>
-       </div>
-       <div class="pswp__share-modal pswp__share-modal--hidden pswp__single-tap">
-        <div class="pswp__share-tooltip"></div>
-       </div>
-       <button class="pswp__button pswp__button--arrow--left"></button>
-       <button class="pswp__button pswp__button--arrow--right"></button>
-       <div class="pswp__caption">
-        <div class="pswp__caption__center"></div>
-       </div>
-      </div>
-     </div>
-    </div>
    </v-app>
   </div>
   [% PERL %]
@@ -197,7 +165,7 @@
      }
    }
    function loadOtherFiles() {
-     addJsToDocument("html/js/", ["browse-resp", "browse-functions", "nowplaying-functions", "prompt-dialog", "standarditems", "sync-dialog", "groupplayers-dialog", "ui-settings", "player-settings", "volume", "information", "randommix-dialog", "rating-dialog", "manage-players", "favorite-dialog", "sleep-dialog", "movequeue-dialog", "info-dialog", "iframe-dialog", "icon-dialog", "dstm-dialog", "savequeue-dialog", "addtoplaylist-dialog", "file-dialog", "groupvolume-dialog", "advancedsearch-dialog", "download", "notifications"],
+     addJsToDocument("html/js/", ["browse-resp", "browse-functions", "nowplaying-functions", "prompt-dialog", "standarditems", "sync-dialog", "groupplayers-dialog", "ui-settings", "player-settings", "volume", "information", "randommix-dialog", "rating-dialog", "manage-players", "favorite-dialog", "sleep-dialog", "movequeue-dialog", "info-dialog", "iframe-dialog", "icon-dialog", "dstm-dialog", "savequeue-dialog", "addtoplaylist-dialog", "file-dialog", "groupvolume-dialog", "advancedsearch-dialog", "download", "notifications", "gallery"],
      [% PERL %]
      my $version=Plugins::MaterialSkin::Plugin->pluginVersion();
      print("                \"$version\", )");

@@ -848,6 +848,7 @@ function parseBrowseResp(data, parent, options, cacheKey, parentCommand, parentG
                     resp.items[i].icon = resp.items[i].svg = undefined;
                 }
             }
+            resp.itemCustomActions = getCustomActions("playlist");
             resp.subtitle=i18np("1 Playlist", "%1 Playlists", resp.items.length);
         } else if (data.result.playlisttracks_loop) {
             var totalDuration = 0;
@@ -893,6 +894,7 @@ function parseBrowseResp(data, parent, options, cacheKey, parentCommand, parentG
                               duration: i.duration
                           });
             }
+            resp.itemCustomActions = getCustomActions("playlist-track");
             resp.subtitle=i18np("1 Track", "%1 Tracks", resp.items.length);
             resp.canDrop = !isRemote;
             if (totalDuration>0) {

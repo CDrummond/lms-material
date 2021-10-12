@@ -46,7 +46,7 @@ function getSectionActions(section, actions, lockedActions) {
     }
 }
 
-const NO_ALL_PLAYER_ACTIONS = new Set(['item', 'artist', 'album', 'track', 'queue-track', 'year', 'genre', 'settings', 'notifications']);
+const NO_ALL_PLAYER_ACTIONS = new Set(['item', 'artist', 'album', 'track', 'queue-track', 'year', 'genre', 'settings', 'notifications', 'playlist', 'playlist-track']);
 
 function getCustomActions(id, lockedActions) {
     let actions = [];
@@ -107,7 +107,7 @@ function doReplacements(string, player, item) {
             val=val.replace("$IMAGE", item.image);
         }
         if (undefined!=item.id) {
-            let id = ''+item.id;
+            let id = originalId(''+item.id);
             if (id.startsWith("artist_id:")) {
                 val=val.replace("$ARTISTID", id.split(':')[1]);
             } else if (id.startsWith("album_id:")) {

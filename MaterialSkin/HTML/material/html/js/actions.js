@@ -7,6 +7,7 @@
 'use strict';
 
 const DIVIDER                 = -1;
+const CUSTOM_ACTIONS          = -2;
 const PLAY_ACTION             = 0;
 const PLAY_ALBUM_ACTION       = 1;
 const PLAY_ALL_ACTION         = 2;
@@ -62,6 +63,7 @@ const ADV_SEARCH_ACTION       = 48;
 const SAVE_VLIB_ACTION        = 49;
 
 const DOWNLOAD_ACTION         = 50;
+
 
 var ACTIONS=[
     {cmd:"play",         icon:"play_circle_outline"},

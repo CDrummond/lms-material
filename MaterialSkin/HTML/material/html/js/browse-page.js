@@ -230,6 +230,15 @@ var lmsBrowse = Vue.component("lms-browse", {
   <v-list v-else-if="menu.item">
    <template v-for="(action, index) in menu.itemMenu">
     <v-divider v-if="DIVIDER==action"></v-divider>
+    <template v-for="(cact, cindex) in itemCustomActions" v-else-if="CUSTOM_ACTIONS==action">
+     <v-list-tile @click="itemCustomAction(cact, menu.item, menu.index)">
+      <v-list-tile-avatar v-if="menuIcons">
+       <v-icon v-if="undefined==cact.svg">{{cact.icon}}</v-icon>
+       <img v-else class="svg-img" :src="cact.svg | svgIcon(darkUi)"></img>
+      </v-list-tile-avatar>
+      <v-list-tile-title>{{cact.title}}</v-list-tile-title>
+     </v-list-tile>
+    </template>
     <v-list-tile v-else-if="action==ADD_TO_FAV_ACTION && isInFavorites(menu.item)" @click="itemAction(REMOVE_FROM_FAV_ACTION, menu.item, menu.index, $event)">
      <v-list-tile-avatar v-if="menuIcons">
       <v-icon v-if="undefined==ACTIONS[REMOVE_FROM_FAV_ACTION].svg">{{ACTIONS[REMOVE_FROM_FAV_ACTION].icon}}</v-icon>
@@ -344,6 +353,7 @@ var lmsBrowse = Vue.component("lms-browse", {
             jumplistActive: 0,
             tbarActions: [],
             settingsMenuActions: [],
+            itemCustomActions: [],
             subtitleClickable: false,
             disabled: new Set(),
             wide: false,
@@ -739,6 +749,12 @@ var lmsBrowse = Vue.component("lms-browse", {
             } else {
                 var cmd = {command:["browseonlineartist", "items"], params:["service_id:"+act.id, this.current.id, "menu:1"]};
                 this.fetchItems(cmd, {cancache:false, id:act.id, title:act.title+SEPARATOR+this.current.title, command:cmd.command, params:cmd.params});
+            }
+        },
+        itemCustomAction(act, item, index) {
+            let browseCmd = doCustomAction(act, this.$store.state.player, item);
+            if (undefined!=browseCmd) {
+                this.fetchItems(browseCmd, {cancache:false, id:"itemCustomAction:"+item.id+"-"+index, title:act.title+SEPARATOR+item.title});
             }
         },
         linkAction(item) {

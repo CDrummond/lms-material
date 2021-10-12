@@ -24,7 +24,7 @@ function removeDiactrics(key) {
 
 function parseBrowseResp(data, parent, options, cacheKey, parentCommand, parentGenre) {
     // NOTE: If add key to resp, then update addToCache in utils.js
-    var resp = {items: [], allSongsItem:undefined, baseActions:[], canUseGrid: false, jumplist:[], numAudioItems:0, canDrop:false };
+    var resp = {items: [], allSongsItem:undefined, baseActions:[], canUseGrid: false, jumplist:[], numAudioItems:0, canDrop:false, itemCustomActions:undefined };
 
     try {
     if (data && data.result) {
@@ -598,6 +598,7 @@ function parseBrowseResp(data, parent, options, cacheKey, parentCommand, parentG
             }
 
             resp.canUseGrid = lmsOptions.infoPlugin && lmsOptions.artistImages;
+            resp.itemCustomActions = getCustomActions("artist");
             for (var idx=0, loop=data.result.artists_loop, loopLen=loop.length; idx<loopLen; ++idx) {
                 var i = loop[idx];
                 var key = removeDiactrics(i.textkey);
@@ -628,6 +629,7 @@ function parseBrowseResp(data, parent, options, cacheKey, parentCommand, parentG
             }
         } else if (data.result.albums_loop) {
             resp.canUseGrid = true;
+            resp.itemCustomActions = getCustomActions("album");
             var jumpListYear = false;
             if (data.params && data.params.length>1) {
                 for (var i=3, plen=data.params[1].length; i<plen; ++i) {
@@ -713,6 +715,7 @@ function parseBrowseResp(data, parent, options, cacheKey, parentCommand, parentG
                 }
             }
 
+            resp.itemCustomActions = getCustomActions("track");
             var stdItem = allowPlayAlbum && data.result.count>1 ? STD_ITEM_ALBUM_TRACK : STD_ITEM_TRACK;
             for (var idx=0, loop=data.result.titles_loop, loopLen=loop.length; idx<loopLen; ++idx) {
                 var i = loop[idx];
@@ -812,6 +815,7 @@ function parseBrowseResp(data, parent, options, cacheKey, parentCommand, parentG
                               textkey: key
                           });
             }
+            resp.itemCustomActions = getCustomActions("genre");
             resp.subtitle=i18np("1 Genre", "%1 Genres", resp.items.length);
         } else if (data.result.playlists_loop) {
             var haveEmblem = false;
@@ -910,6 +914,7 @@ function parseBrowseResp(data, parent, options, cacheKey, parentCommand, parentG
                               textkey: key
                           });
             }
+            resp.itemCustomActions = getCustomActions("year");
             resp.subtitle=i18np("1 Year", "%1 Years", resp.items.length);
         } else if (0===data.result.count && data.result.networkerror) {
             resp.items.push({title: i18n("Failed to retrieve listing. (%1)", data.result.networkerror), type: "text"});

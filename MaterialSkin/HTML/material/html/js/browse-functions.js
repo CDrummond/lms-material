@@ -24,6 +24,7 @@ function browseAddHistory(view) {
     prev.inGenre = view.inGenre;
     prev.searchActive = view.searchActive;
     prev.canDrop = view.canDrop;
+    prev.itemCustomActions = view.itemCustomActions;
     view.prevPage = undefined;
     view.history.push(prev);
 }
@@ -76,21 +77,22 @@ function browseActions(view, item, args, count) {
             }
             actions.push({title:i18n('All songs'), icon:'music_note', do:{ command: ['tracks'], params: params}, weight:3});
         }
-        if (undefined!=args['artist_id'] || undefined!=args['album_id']) {
-            var custom = getCustomActions(undefined!=args['album_id'] ? "album" : "artist", false);
-            if (undefined!=custom) {
-                for (var i=0, len=custom.length; i<len; ++i) {
-                    custom[i].weight=100+1;
-                    custom[i].custom=true;
-                    actions.push(custom[i]);
-                }
-            }
-        }
     }
     if (undefined!=item && undefined!=item.stdItem && undefined!=STD_ITEMS[item.stdItem].actionMenu) {
+        var weight = 300;
         for (var i=0, loop=STD_ITEMS[item.stdItem].actionMenu, len=loop.length; i<len; ++i) {
-            if ((ADD_RANDOM_ALBUM_ACTION!=loop[i] || count>1) && (DOWNLOAD_ACTION!=loop[i] || (lmsOptions.allowDownload && undefined==item.emblem))) {
-                actions.push({action:loop[i], weight:300+i});
+            if (CUSTOM_ACTIONS==loop[i]) {
+                if (undefined!=view.itemCustomActions) {
+                    for (var c=0, clen=view.itemCustomActions.length; c<clen; ++c) {
+                        weight++;
+                        view.itemCustomActions[c].weight=weight;
+                        view.itemCustomActions[c].custom=true;
+                        actions.push(view.itemCustomActions[c]);
+                    }
+                }
+            } else if ((ADD_RANDOM_ALBUM_ACTION!=loop[i] || count>1) && (DOWNLOAD_ACTION!=loop[i] || (lmsOptions.allowDownload && undefined==item.emblem))) {
+                weight++;
+                actions.push({action:loop[i], weight:weight});
             }
         }
     }
@@ -214,6 +216,7 @@ function browseHandleListResponse(view, item, command, resp, prevPage) {
                 });
             }
         }
+        view.itemCustomActions = resp.itemCustomActions;
         if (item.id.startsWith(SEARCH_ID)) {
             if (view.items.length>0 && view.items[0].id.startsWith("track_id:")) {
                 view.tbarActions=[SEARCH_LIB_ACTION, PLAY_ALL_ACTION, ADD_ALL_ACTION];
@@ -548,11 +551,9 @@ function browseAddCategories(view, item, isGenre) {
     var custom = getCustomActions(isGenre ? "genre" : "year", false);
     if (undefined!=custom) {
         for (var i=0, len=custom.length; i<len; ++i) {
-            custom[i].weight=100+i;
             custom[i].custom=true;
             view.currentActions.items.push(custom[i]);
         }
-        view.currentActions.items.sort(function(a, b) { return a.weight!=b.weight ? a.weight<b.weight ? -1 : 1 : titleSort(a, b) });
         view.currentActions.show = view.currentActions.items.length>0;
         if (view.currentActions.show) {
             view.current={id:item.id, title:item.title};
@@ -1146,6 +1147,7 @@ function browseGoBack(view, refresh) {
     view.inGenre = prev.inGenre;
     view.searchActive = prev.searchActive && !searchWasActive;
     view.canDrop = prev.canDrop;
+    view.itemCustomActions = prev.itemCustomActions;
 
     if (refresh || prev.needsRefresh) {
         view.refreshList();

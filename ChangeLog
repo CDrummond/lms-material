@@ -2,6 +2,7 @@
 -----
 1. Translation updates.
 2. Remove any leading slash from xxx_svg.png paths.
+3. Add custom actions to context menus.
 
 2.7.0
 -----

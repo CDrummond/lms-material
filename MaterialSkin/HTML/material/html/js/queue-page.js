@@ -98,8 +98,8 @@ function parseResp(data, showTrackNum, index, showRatings, threeLines, infoPlugi
                               subtitle: buildSubtitle(i, threeLines),
                               image: queueItemCover(i, infoPlugin),
                               actions: undefined==i.album_id
-                                ? [PQ_PLAY_NOW_ACTION, PQ_PLAY_NEXT_ACTION, DIVIDER, REMOVE_ACTION, ADD_TO_PLAYLIST_ACTION, PQ_ZAP_ACTION, DOWNLOAD_ACTION, DIVIDER, SELECT_ACTION, PQ_COPY_ACTION, MOVE_HERE_ACTION, MORE_ACTION]
-                                : [PQ_PLAY_NOW_ACTION, PQ_PLAY_NEXT_ACTION, DIVIDER, REMOVE_ACTION, PQ_REMOVE_ALBUM_ACTION, ADD_TO_PLAYLIST_ACTION, PQ_ZAP_ACTION, DOWNLOAD_ACTION, DIVIDER, SELECT_ACTION, PQ_COPY_ACTION, MOVE_HERE_ACTION, MORE_ACTION],
+                                ? [PQ_PLAY_NOW_ACTION, PQ_PLAY_NEXT_ACTION, DIVIDER, REMOVE_ACTION, ADD_TO_PLAYLIST_ACTION, PQ_ZAP_ACTION, DOWNLOAD_ACTION, DIVIDER, SELECT_ACTION, PQ_COPY_ACTION, MOVE_HERE_ACTION, CUSTOM_ACTIONS, MORE_ACTION]
+                                : [PQ_PLAY_NOW_ACTION, PQ_PLAY_NEXT_ACTION, DIVIDER, REMOVE_ACTION, PQ_REMOVE_ALBUM_ACTION, ADD_TO_PLAYLIST_ACTION, PQ_ZAP_ACTION, DOWNLOAD_ACTION, DIVIDER, SELECT_ACTION, PQ_COPY_ACTION, MOVE_HERE_ACTION, CUSTOM_ACTIONS, MORE_ACTION],
                               duration: duration,
                               durationStr: undefined!=duration && duration>0 ? formatSeconds(duration) : undefined,
                               key: i.id+"."+index,
@@ -225,6 +225,15 @@ var lmsQueue = Vue.component("lms-queue", {
   <v-list v-if="menu.item">
    <template v-for="(action, index) in menu.item.actions">
     <v-divider v-if="DIVIDER==action"></v-divider>
+    <template v-for="(cact, cindex) in queueCustomActions" v-else-if="CUSTOM_ACTIONS==action">
+     <v-list-tile @click="itemCustomAction(cact, menu.item, menu.index)">
+      <v-list-tile-avatar v-if="menuIcons">
+       <v-icon v-if="undefined==cact.svg">{{cact.icon}}</v-icon>
+       <img v-else class="svg-img" :src="cact.svg | svgIcon(darkUi)"></img>
+      </v-list-tile-avatar>
+      <v-list-tile-title>{{cact.title}}</v-list-tile-title>
+     </v-list-tile>
+    </template>
     <v-list-tile v-else-if="action==SELECT_ACTION && menu.item.selected" @click="itemAction(UNSELECT_ACTION, menu.item, menu.index, $event)">
      <v-list-tile-avatar v-if="menuIcons">
       <v-icon>{{ACTIONS[UNSELECT_ACTION].icon}}</v-icon>
@@ -263,7 +272,8 @@ var lmsQueue = Vue.component("lms-queue", {
             dstm: false,
             dragActive: false,
             dropIndex: -1,
-            coverUrl: undefined
+            coverUrl: undefined,
+            queueCustomActions: []
         }
     },
     computed: {
@@ -319,7 +329,9 @@ var lmsQueue = Vue.component("lms-queue", {
         bus.$on('playerChanged', function() {
             this.clearSelection();
         }.bind(this));
-
+        bus.$on('customActions', function(val) {
+            this.queueCustomActions = getCustomActions("queue-track", false);
+        }.bind(this));
         bus.$on('playerStatus', function(playerStatus) {
             if (playerStatus.playlist.shuffle!=this.playerStatus.shuffle) {
                 this.playerStatus.shuffle = playerStatus.playlist.shuffle;
@@ -735,6 +747,9 @@ var lmsQueue = Vue.component("lms-queue", {
             } else if (DOWNLOAD_ACTION==act) {
                 download(item);
             }
+        },
+        itemCustomAction(act, item, index) {
+            doCustomAction(act, this.$store.state.player, item);
         },
         headerAction(act) {
             if (this.$store.state.visibleMenus.size>0 && this.settingsMenuActions.indexOf(act)<0) {

@@ -46,6 +46,8 @@ function getSectionActions(section, actions, lockedActions) {
     }
 }
 
+const NO_ALL_PLAYER_ACTIONS = new Set(['item', 'artist', 'album', 'track', 'queue-track', 'year', 'genre', 'settings', 'notifications']);
+
 function getCustomActions(id, lockedActions) {
     let actions = [];
     if (customActions) {
@@ -54,7 +56,7 @@ function getCustomActions(id, lockedActions) {
         } else if (id.endsWith('-dialog')) {
             getSectionActions(id, actions, lockedActions);
         } else {
-            if ("item"!=id && "artist"!=id && "album"!=id && "settings"!=id && 'notifications'!=id) {
+            if (!NO_ALL_PLAYER_ACTIONS.has(id)) {
                 getSectionActions('allplayers', actions, lockedActions);
             }
             getSectionActions(id, actions, lockedActions);
@@ -100,6 +102,9 @@ function doReplacements(string, player, item) {
         }
         if (undefined!=item.disc) {
             val=val.replace("$DISC", item.disc);
+        }
+        if (undefined!=item.image) {
+            val=val.replace("$IMAGE", item.image);
         }
         if (undefined!=item.id) {
             let id = ''+item.id;

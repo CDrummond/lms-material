@@ -3,6 +3,9 @@
 1. Translation updates.
 2. Remove any leading slash from xxx_svg.png paths.
 3. Add custom actions to context menus.
+4. Allow adding custom actions to queue context menu -  use "queue-track" as
+   section in JSON file.
+5. Allow replacing "$IMAGE" with item's image URL in custom actions.
 
 2.7.0
 -----

@@ -168,7 +168,11 @@ function doCustomAction(action, player, item) {
     } else if (action.script) {
         eval(doReplacements(action.script, player, item));
     } else if (action.lmscommand) {
-        lmsCommand(undefined==player ? "" : player.id, doReplacements(action.lmscommand, player, item)).catch(err => {
+        let command = [];
+        for (let i=0, len=action.lmscommand.length; i<len; ++i) {
+            command.push(doReplacements(action.lmscommand[i], player, item));
+        }
+        lmsCommand(undefined==player ? "" : player.id, command).catch(err => {
             bus.$emit('showError', undefined, i18n("'%1' failed", action.title));
         });
     } else if (action.lmsbrowse && action.lmsbrowse.command && action.lmsbrowse.params) {

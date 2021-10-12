@@ -7,6 +7,7 @@
    menus (use "queue-track", "playlist", or "playlist-track" as section in JSON
    file).
 5. Allow replacing "$IMAGE" with item's image URL in custom actions.
+6. Fix "lmscommand" custom actions.
 
 2.7.0
 -----

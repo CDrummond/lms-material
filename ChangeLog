@@ -8,6 +8,7 @@
    file).
 5. Allow replacing "$IMAGE" with item's image URL in custom actions.
 6. Fix "lmscommand" custom actions.
+7. Fix RadioNet icon mapping.
 
 2.7.0
 -----

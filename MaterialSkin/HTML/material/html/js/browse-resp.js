@@ -715,7 +715,7 @@ function parseBrowseResp(data, parent, options, cacheKey, parentCommand, parentG
                 }
             }
 
-            resp.itemCustomActions = getCustomActions("track");
+            resp.itemCustomActions = getCustomActions("album-track");
             var stdItem = allowPlayAlbum && data.result.count>1 ? STD_ITEM_ALBUM_TRACK : STD_ITEM_TRACK;
             for (var idx=0, loop=data.result.titles_loop, loopLen=loop.length; idx<loopLen; ++idx) {
                 var i = loop[idx];

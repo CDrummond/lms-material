@@ -3,9 +3,9 @@
 1. Translation updates.
 2. Remove any leading slash from xxx_svg.png paths.
 3. Add custom actions to context menus.
-4. Allow adding custom actions to queue, playlist, and playlist track's context
-   menus (use "queue-track", "playlist", or "playlist-track" as section in JSON
-   file).
+4. Allow adding custom actions to album track, queue, playlist, and playlist
+   tracks' context menus (use "album-track", "queue-track", "playlist", or
+   "playlist-track" as section in JSON file).
 5. Allow replacing "$IMAGE" with item's image URL in custom actions.
 6. Fix "lmscommand" custom actions.
 7. Fix RadioNet icon mapping.

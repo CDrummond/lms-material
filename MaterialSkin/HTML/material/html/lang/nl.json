@@ -581,12 +581,12 @@
 "%1 Years":"%1 Jaren",
 "1 day":"1 dag",
 "%1 days":"%1 dagen",
-"'%1' failed":"",
-"Allow control via media keys.":"",
-"Lock screen and notifications":"",
-"Media keys and notifications":"",
-"No notifications.":"",
-"Notifications":"",
-"Show playback controls on lock screen and in notification area.":"",
-"To support this feature, this app needs to fool your browser into thinking its is playing audio. This is accomplished by playing a silent audio file in a loop. Most browsers block auto-playing of audio so this cannot start until you have interacted with the app (e.g. clicked somewhere). Alternatively you can configure your browser to allow auto-play of audio for the URL you use to access this app (%1).":""
+"'%1' failed":"'%1' mislukt",
+"Allow control via media keys.":"Bediening via mediatoetsen toestaan.",
+"Lock screen and notifications":"Vergrendelscherm en meldingen",
+"Media keys and notifications":"Mediatoetsen en meldingen",
+"No notifications.":"Geen meldingen",
+"Notifications":"Meldingen",
+"Show playback controls on lock screen and in notification area.":"Afspeelbediening weergeven op vergrendelscherm en in systeemvak.",
+"To support this feature, this app needs to fool your browser into thinking its is playing audio. This is accomplished by playing a silent audio file in a loop. Most browsers block auto-playing of audio so this cannot start until you have interacted with the app (e.g. clicked somewhere). Alternatively you can configure your browser to allow auto-play of audio for the URL you use to access this app (%1).":"Om deze functie te ondersteunen, moet deze app je browser voor de gek houden door te denken dat er audio wordt afgespeeld. Dit wordt bereikt door een stil audiobestand continue af te spelen. De meeste browsers blokkeren het automatisch afspelen van audio, dus dit kan pas beginnen nadat er met de app is gewerkt (bijvoorbeeld ergens op geklikt). Als alternatief is het mogelijk om de browser te configureren om automatisch afspelen van audio toe te staan. Sta automatisch afspelen toe voor de URL die wordt gebruikt om toegang te krijgen tot de app (%1)."
 }

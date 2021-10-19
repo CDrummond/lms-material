@@ -82,74 +82,74 @@ const ACTION_KEYS = ['ID', 'NAME', 'ARTISTID', 'ARTISTNAME', 'ALBUMID', 'ALBUMNA
 function doReplacements(string, player, item) {
     let val = ''+string;
     if (undefined!=player) {
-        val=val.replace("$ID", player.id).replace("$NAME", player.name);
+        val=val.replaceAll("$ID", player.id).replaceAll("$NAME", player.name);
     }
     if (undefined!=item) {
         if (undefined!=item.artist_id) {
-            val=val.replace("$ARTISTID", item.artist_id);
+            val=val.replaceAll("$ARTISTID", item.artist_id);
         }
         if (undefined!=item.album_id) {
-            val=val.replace("$ALBUMID", item.album_id);
+            val=val.replaceAll("$ALBUMID", item.album_id);
         }
         if (undefined!=item.genre_id) {
-            val=val.replace("$GENREID", item.genre_id);
+            val=val.replaceAll("$GENREID", item.genre_id);
         }
         if (undefined!=item.year) {
-            val=val.replace("$YEAR", item.year);
+            val=val.replaceAll("$YEAR", item.year);
         }
         if (undefined!=item.tracknum) {
-            val=val.replace("$TRACKNUM", item.tracknum);
+            val=val.replaceAll("$TRACKNUM", item.tracknum);
         }
         if (undefined!=item.disc) {
-            val=val.replace("$DISC", item.disc);
+            val=val.replaceAll("$DISC", item.disc);
         }
         if (undefined!=item.image) {
-            val=val.replace("$IMAGE", item.image);
+            val=val.replaceAll("$IMAGE", item.image);
         }
         if (undefined!=item.id) {
             let id = originalId(''+item.id);
             if (id.startsWith("artist_id:")) {
-                val=val.replace("$ARTISTID", id.split(':')[1]);
+                val=val.replaceAll("$ARTISTID", id.split(':')[1]);
             } else if (id.startsWith("album_id:")) {
-                val=val.replace("$ALBUMID", id.split(':')[1]);
+                val=val.replaceAll("$ALBUMID", id.split(':')[1]);
             } else if (id.startsWith("genre_id:")) {
-                val=val.replace("$GENREID", id.split(':')[1]);
+                val=val.replaceAll("$GENREID", id.split(':')[1]);
             } else if (id.startsWith("year:")) {
-                val=val.replace("$YEAR", id.split(':')[1]);
+                val=val.replaceAll("$YEAR", id.split(':')[1]);
             } else if (id.indexOf(':')>0) {
-                val=val.replace("$TRACKID", id.split(':')[1]);
+                val=val.replaceAll("$TRACKID", id.split(':')[1]);
             }
         }
         if (undefined!=item.artist) {
-            val=val.replace("$ARTISTNAME", item.artist);
+            val=val.replaceAll("$ARTISTNAME", item.artist);
         }
         if (undefined!=item.album_id) {
-            val=val.replace("$ALBUMNAME", item.album);
+            val=val.replaceAll("$ALBUMNAME", item.album);
         }
         if (undefined!=item.composer) {
-            val=val.replace("$COMPOSER", item.composer);
+            val=val.replaceAll("$COMPOSER", item.composer);
         }
         if (undefined!=item.title) {
             if (undefined!=item.id) {
                 let id = ''+item.id;
                 if (id.startsWith("artist_id:")) {
-                    val=val.replace("$ARTISTNAME", item.title);
+                    val=val.replaceAll("$ARTISTNAME", item.title);
                 } else if (id.startsWith("album_id:")) {
-                    val=val.replace("$ALBUMNAME", item.title);
+                    val=val.replaceAll("$ALBUMNAME", item.title);
                 } else if (id.startsWith("genre_id:")) {
-                    val=val.replace("$GENRENAME", item.title);
+                    val=val.replaceAll("$GENRENAME", item.title);
                 } else if (!id.startsWith("year:")) {
-                    val=val.replace("$TRACKNAME", item.title);
+                    val=val.replaceAll("$TRACKNAME", item.title);
                 }
             } else {
-                val=val.replace("$TRACKNAME", item.title);
+                val=val.replaceAll("$TRACKNAME", item.title);
             }
         }
     }
-    val=val.replace("$HOST", window.location.hostname);
-    val=val.replace("$LANG", undefined==lmsOptions.lang ? 'en' : lmsOptions.lang);
+    val=val.replaceAll("$HOST", window.location.hostname);
+    val=val.replaceAll("$LANG", undefined==lmsOptions.lang ? 'en' : lmsOptions.lang);
     for (var i=0, len=ACTION_KEYS.length; i<len; ++i) {
-        val = val.replace("+$"+ACTION_KEYS[i], "").replace("$"+ACTION_KEYS[i]+"+", "").replace("$"+ACTION_KEYS[i], "");
+        val = val.replaceAll("+$"+ACTION_KEYS[i], "").replaceAll("$"+ACTION_KEYS[i]+"+", "").replaceAll("$"+ACTION_KEYS[i], "");
     }
     return val;
 }

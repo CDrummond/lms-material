@@ -100,6 +100,41 @@ function browseActions(view, item, args, count) {
     return actions;
 }
 
+function browseHandleNextWindow(view, item, command, resp, isMoreMenu) {
+    var nextWindow = item.nextWindow
+                        ? item.nextWindow
+                        : item.actions && item.actions.go && item.actions.go.nextWindow
+                            ? item.actions.go.nextWindow
+                            : undefined;
+
+    if (nextWindow) {
+        nextWindow=nextWindow.toLowerCase();
+        var message = resp.items && 1==resp.items.length && "text"==resp.items[0].type && resp.items[0].title && !msgIsEmpty(resp.items[0].title)
+                        ? resp.items[0].title : item.title;
+        bus.$emit('showMessage', message);
+        if (nextWindow=="refresh" || (isMoreMenu && nextWindow=="parent")) {
+            view.refreshList();
+        } else if (view.history.length>0 && (nextWindow=="parent" || nextWindow=="nowplaying" || (isMoreMenu && nextWindow=="grandparent"))) {
+            // If "trackinfo items" has "parent" and returns an empty list, then don't go back... Work-around for:
+            // https://forums.slimdevices.com/showthread.php?109624-Announce-Material-Skin&p=983626&viewfull=1#post983626
+            if (nextWindow!="parent" || command.command[0]!="trackinfo" || command.command[1]!="items" || !resp.items || resp.items.length>0) {
+                view.goBack(true);
+            }
+        } else if (nextWindow=="grandparent" && view.history.length>1) {
+            view.history.pop();
+            view.goBack(true);
+        }
+        if (nextWindow=="nowplaying") {
+            if (!view.$store.state.desktopLayout) {
+                view.$store.commit('setPage', 'now-playing');
+            }
+            view.goBack(true);
+        }
+        return true;
+    }
+    return false;
+}
+
 function browseHandleListResponse(view, item, command, resp, prevPage) {
     if (resp && resp.items) {
         if (0==resp.items.length && command.command.length>1 && "podcasts"==command.command[0] && ("addshow"==command.command[1] || "delshow"==command.command[1])) {
@@ -287,6 +322,10 @@ function browseHandleListResponse(view, item, command, resp, prevPage) {
             view.layoutGrid(true);
             setScrollTop(view, 0);
         });
+
+        if (view.items.length==0) {
+            browseHandleNextWindow(view, item, command, resp, false);
+        }
     }
 }
 
@@ -298,27 +337,10 @@ function browseHandleTextClickResponse(view, item, command, data, isMoreMenu) {
                             ? item.actions.go.nextWindow
                             : undefined;
 
-    if (nextWindow) {
-        nextWindow=nextWindow.toLowerCase();
-        var message = resp.items && 1==resp.items.length && "text"==resp.items[0].type && resp.items[0].title && !msgIsEmpty(resp.items[0].title)
-                        ? resp.items[0].title : item.title;
-        bus.$emit('showMessage', message);
-        if (nextWindow=="refresh" || (isMoreMenu && nextWindow=="parent")) {
-            view.refreshList();
-        } else if (view.history.length>0 && (nextWindow=="parent" || nextWindow=="nowplaying" || (isMoreMenu && nextWindow=="grandparent"))) {
-            // If "trackinfo items" has "parent" and returns an empty list, then don't go back... Work-around for:
-            // https://forums.slimdevices.com/showthread.php?109624-Announce-Material-Skin&p=983626&viewfull=1#post983626
-            if (nextWindow!="parent" || command.command[0]!="trackinfo" || command.command[1]!="items" || !resp.items || resp.items.length>0) {
-                view.goBack(true);
-            }
-        } else if (nextWindow=="grandparent" && view.history.length>1) {
-            view.history.pop();
-            view.goBack(true);
-        }
-        if (nextWindow=="nowplaying" && !view.$store.state.desktopLayout) {
-            view.$store.commit('setPage', 'now-playing');
-        }
-    } else if (command.command.length>3 && command.command[1]=="playlist" && command.command[2]=="play") {
+    if (browseHandleNextWindow(view, item, command, resp, isMoreMenu)) {
+        return;
+    }
+    if (command.command.length>3 && command.command[1]=="playlist" && command.command[2]=="play") {
         bus.$emit('showMessage', item.title);
         view.goBack(true);
     } else if (resp.items && (resp.items.length>0 || (command.command.length>1 && command.command[0]=="favorites" && command.command[1]=="items"))) {

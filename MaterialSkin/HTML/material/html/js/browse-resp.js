@@ -491,6 +491,9 @@ function parseBrowseResp(data, parent, options, cacheKey, parentCommand, parentG
                     }
                     resp.canUseGrid=false;
                 }
+                if (resp.canUseGrid && haveWithoutIcons) {
+                    resp.canUseGrid = false;
+                }
             } else if (haveWithoutIcons && haveWithIcons) {
                 var defAlbumCover = resolveImage("music/0/cover" + LMS_IMAGE_SIZE);
                 var defArtistImage = resolveImage("html/images/artists" + LMS_IMAGE_SIZE);

@@ -5,6 +5,59 @@
  * MIT license.
  */
 
+function browseMatches(text, title) {
+    if (title.startsWith(text)) {
+        return true;
+    }
+    let pos = title.indexOf(' ');
+    if (pos>0) {
+        let afterFirst=title.substring(pos+1);
+        if (afterFirst.startsWith(text)) {
+            return true;
+        }
+    }
+    return false;
+}
+
+function browseHandleKey(view, event) {
+    if (!event.ctrlKey && !event.altKey && !event.metaKey && undefined!=view.jumplist && view.jumplist.length>1 &&
+        view.$store.state.openDialogs.length<1 && view.$store.state.visibleMenus.size<1 && (view.$store.state.desktopLayout || view.$store.state.page=="browse")) {
+        let key = event.key.toUpperCase();
+        if ('#'==key) {
+            view.lastKeyPress = undefined;
+            view.jumpTo(view.jumplist[0].index);
+        } else {
+            let now = new Date().getTime();
+            if (undefined==view.lastKeyPress || (now-view.lastKeyPress.time)>1000) {
+                view.lastKeyPress = undefined;
+                for (let i=0, loop=view.jumplist, len=loop.length; i<len; ++i) {
+                    if (loop[i].key == key) {
+                        view.jumpTo(loop[i].index);
+                        view.lastKeyPress = {key:key, text:''+key, time:now, invalid:false};
+                        break;
+                    }
+                }
+            } else if (!view.lastKeyPress.invalid) { // Next key in sequence?
+                for (let i=0, loop=view.jumplist, len=loop.length; i<len; ++i) {
+                    if (loop[i].key == view.lastKeyPress.key) {
+                        view.lastKeyPress.time = now;
+                        view.lastKeyPress.text+=key;
+                        for (let j=loop[i].index, jloop=view.items, jlen=jloop.length; j<jlen && jloop[j].textkey==view.lastKeyPress.key; ++j) {
+                            let title = jloop[j].title.toUpperCase();
+                            if (browseMatches(view.lastKeyPress.text, title) || browseMatches(view.lastKeyPress.text, title.replaceAll('.', '').replaceAll('.', '(').replaceAll('.', ')').replaceAll('/', '').replaceAll('-', ''))) {
+                                view.jumpTo(j);
+                                return;
+                            }
+                        }
+                        break;
+                    }
+                }
+                view.lastKeyPress.invalid = true;
+            }
+        }
+    }
+}
+
 function browseAddHistory(view) {
     var prev = {};
     prev.items = view.items;

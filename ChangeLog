@@ -4,6 +4,7 @@
 2. When replacing strings in custom actions replace all occurances.
 3. Handle 'nextWindow' when browsing if no items are returned.
 4. Update Roboto fonts.
+5. Allow multiple characters when jumping in list via keypress.
 
 2.7.1
 -----

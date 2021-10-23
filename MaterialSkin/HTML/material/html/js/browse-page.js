@@ -87,7 +87,7 @@ var lmsBrowse = Vue.component("lms-browse", {
  <div class="lms-list bgnd-cover" id="browse-bgnd">
   <div class="noselect lms-jumplist" v-bind:class="{'bgnd-blur':drawBgndImage}" v-if="filteredJumplist.length>1">
    <template v-for="(item, index) in filteredJumplist">
-    <div @click="jumpTo(item)" v-bind:class="{'active-btn' : jumplistActive==index}">{{jumplistActive!=index && item.alt ? item.alt : (item.key==' ' || item.key=='' ? '?' : item.key)}}</div>
+    <div @click="jumpTo(item.index)" v-bind:class="{'active-btn' : jumplistActive==index}">{{jumplistActive!=index && item.alt ? item.alt : (item.key==' ' || item.key=='' ? '?' : item.key)}}</div>
    </template>
   </div>
   <div class="lms-list" id="browse-list" style="overflow:auto;" v-bind:class="{'lms-image-grid': grid.use, 'lms-image-grid-jump':grid.use && filteredJumplist.length>1, 'lms-list-jump':!grid.use && filteredJumplist.length>1,'bgnd-blur':drawBgndImage}">
@@ -411,20 +411,7 @@ var lmsBrowse = Vue.component("lms-browse", {
         if (!IS_MOBILE) {
             let browse = this;
             document.onkeyup = function(event) {
-                if (!event.ctrlKey && !event.altKey && !event.metaKey && undefined!=browse.jumplist && browse.jumplist.length>1 &&
-                    browse.$store.state.openDialogs.length<1 && browse.$store.state.visibleMenus.size<1 && (browse.$store.state.desktopLayout || browse.$store.state.page=="browse")) {
-                    let key = event.key.toUpperCase();
-                    if ('#'==key) {
-                        browse.jumpTo(browse.jumplist[0]);
-                    } else {
-                        for (let i=0, loop=browse.jumplist, len=loop.length; i<len; ++i) {
-                            if (loop[i].key == key) {
-                                browse.jumpTo(loop[i]);
-                                break;
-                            }
-                        }
-                    }
-                }
+                browseHandleKey(browse, event);
             };
         }
         this.reqId = 0;
@@ -1315,10 +1302,10 @@ var lmsBrowse = Vue.component("lms-browse", {
                 }
             });
         },
-        jumpTo(item) {
+        jumpTo(index) {
             var pos = this.grid.use
-                        ? Math.floor(item.index/this.grid.numColumns)*(this.grid.ih-(this.grid.haveSubtitle ? 0 : GRID_SINGLE_LINE_DIFF))
-                        : item.index*LMS_LIST_ELEMENT_SIZE;
+                        ? Math.floor(index/this.grid.numColumns)*(this.grid.ih-(this.grid.haveSubtitle ? 0 : GRID_SINGLE_LINE_DIFF))
+                        : index*LMS_LIST_ELEMENT_SIZE;
             setScrollTop(this, pos>0 ? pos : 0);
         },
         filterJumplist() {

@@ -44,7 +44,7 @@ function browseHandleKey(view, event) {
                         view.lastKeyPress.text+=key;
                         for (let j=loop[i].index, jloop=view.items, jlen=jloop.length; j<jlen && jloop[j].textkey==view.lastKeyPress.key; ++j) {
                             let title = jloop[j].title.toUpperCase();
-                            if (browseMatches(view.lastKeyPress.text, title) || browseMatches(view.lastKeyPress.text, title.replaceAll('.', '').replaceAll('.', '(').replaceAll('.', ')').replaceAll('/', '').replaceAll('-', ''))) {
+                            if (browseMatches(view.lastKeyPress.text, title) || browseMatches(view.lastKeyPress.text, title.replaceAll('.', '').replaceAll('(', '').replaceAll(')', '').replaceAll('/', '').replaceAll('-', '').replaceAll(',', ''))) {
                                 view.jumpTo(j);
                                 return;
                             }

@@ -1,3 +1,9 @@
+/**
+ * LMS-Material
+ *
+ * Copyright (c) 2018-2021 Craig Drummond <craig.p.drummond@gmail.com>
+ * MIT license.
+ */
 const NP_MAX_ALBUMS = 50;
 const NP_MAX_TRACKS = 50;
 const NP_SIMILAR_URL = 'http://ws.audioscrobbler.com/2.0/?api_key=5a854b839b10f8d46e630e8287c2299b&method=artist.getSimilar&autocorrect=1&format=json&limit=25&&artist=';

@@ -1,3 +1,10 @@
+/**
+ * LMS-Material
+ *
+ * Copyright (c) 2018-2021 Craig Drummond <craig.p.drummond@gmail.com>
+ * MIT license.
+ */
+
 function browseAddHistory(view) {
     var prev = {};
     prev.items = view.items;

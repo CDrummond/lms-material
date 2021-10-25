@@ -16,10 +16,10 @@ function removeDiactrics(key) {
     if (undefined!=key && key.length==1) {
         var code = key.charCodeAt(0);
         if (code>127) { // Non-ASCII...
-            return key.normalize("NFD").replace(/[\u0300-\u036f]/g, "");
+            key=key.normalize("NFD").replace(/[\u0300-\u036f]/g, "");
         }
     }
-    return key;
+    return key==" " ? "?" : key;
 }
 
 function parseBrowseResp(data, parent, options, cacheKey, parentCommand, parentGenre) {

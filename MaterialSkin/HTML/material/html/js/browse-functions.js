@@ -19,40 +19,43 @@ function browseMatches(text, title) {
     return false;
 }
 
+// lmsLastKeyPress is defined in server.js
 function browseHandleKey(view, event) {
     if (!event.ctrlKey && !event.altKey && !event.metaKey && undefined!=view.jumplist && view.jumplist.length>1 &&
         view.$store.state.openDialogs.length<1 && view.$store.state.visibleMenus.size<1 && (view.$store.state.desktopLayout || view.$store.state.page=="browse")) {
         let key = event.key.toUpperCase();
         if ('#'==key) {
-            view.lastKeyPress = undefined;
+            lmsLastKeyPress = undefined;
             view.jumpTo(view.jumplist[0].index);
         } else {
             let now = new Date().getTime();
-            if (undefined==view.lastKeyPress || (now-view.lastKeyPress.time)>1000) {
-                view.lastKeyPress = undefined;
+            if (undefined==lmsLastKeyPress || (now-lmsLastKeyPress.time)>1000) {
+                lmsLastKeyPress = undefined;
                 for (let i=0, loop=view.jumplist, len=loop.length; i<len; ++i) {
                     if (loop[i].key == key) {
                         view.jumpTo(loop[i].index);
-                        view.lastKeyPress = {key:key, text:''+key, time:now, invalid:false};
+                        lmsLastKeyPress = {key:key, text:''+key, time:now, invalid:false};
                         break;
                     }
                 }
-            } else if (!view.lastKeyPress.invalid) { // Next key in sequence?
-                for (let i=0, loop=view.jumplist, len=loop.length; i<len; ++i) {
-                    if (loop[i].key == view.lastKeyPress.key) {
-                        view.lastKeyPress.time = now;
-                        view.lastKeyPress.text+=key;
-                        for (let j=loop[i].index, jloop=view.items, jlen=jloop.length; j<jlen && jloop[j].textkey==view.lastKeyPress.key; ++j) {
-                            let title = jloop[j].title.toUpperCase();
-                            if (browseMatches(view.lastKeyPress.text, title) || browseMatches(view.lastKeyPress.text, title.replaceAll('.', '').replaceAll('(', '').replaceAll(')', '').replaceAll('/', '').replaceAll('-', '').replaceAll(',', ''))) {
-                                view.jumpTo(j);
-                                return;
+            } else { // Next key in sequence?
+                lmsLastKeyPress.time = now;
+                if (!lmsLastKeyPress.invalid) {
+                    for (let i=0, loop=view.jumplist, len=loop.length; i<len; ++i) {
+                        if (loop[i].key == lmsLastKeyPress.key) {
+                            lmsLastKeyPress.text+=key;
+                            for (let j=loop[i].index, jloop=view.items, jlen=jloop.length; j<jlen && jloop[j].textkey==lmsLastKeyPress.key; ++j) {
+                                let title = jloop[j].title.toUpperCase();
+                                if (browseMatches(lmsLastKeyPress.text, title) || browseMatches(lmsLastKeyPress.text, title.replaceAll('.', '').replaceAll('(', '').replaceAll(')', '').replaceAll('/', '').replaceAll('-', '').replaceAll(',', ''))) {
+                                    view.jumpTo(j);
+                                    return;
+                                }
                             }
+                            break;
                         }
-                        break;
                     }
+                    lmsLastKeyPress.invalid = true;
                 }
-                view.lastKeyPress.invalid = true;
             }
         }
     }

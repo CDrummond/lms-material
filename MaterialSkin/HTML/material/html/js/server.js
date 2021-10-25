@@ -185,6 +185,8 @@ async function lmsList(playerid, command, params, start, batchSize, cancache, co
     }
 }
 
+var lmsLastKeyPress = undefined;
+
 var lmsServer = Vue.component('lms-server', {
     template: `<div/>`,
     data() {
@@ -996,7 +998,11 @@ var lmsServer = Vue.component('lms-server', {
                 var command = undefined;
                 if (undefined==modifier) {
                     if (key=='space') {
-                        command=[this.isPlaying ? 'pause' : 'play']
+                        // Ignore 'space' if browse view is currently jumping to an item via text entry
+                        if (undefined==lmsLastKeyPress || ((new Date().getTime())-lmsLastKeyPress.time)>=1000) {
+                            lmsLastKeyPress = undefined;
+                            command=[this.isPlaying ? 'pause' : 'play']
+                        }
                     } else if (key=='incvol' || key=='incvolfirefox') {
                         this.adjustVolume(true);
                     } else if (key=='decvol' || key=='decvolfirefox') {

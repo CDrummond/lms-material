@@ -2,6 +2,7 @@
 -----
 1. If have entry without an icon don't allow grid usage.
 2. Don't play/pause if press 'space' whilst typing to jump to list entry.
+3. Correctly handle 'nextWindow' when browsing if no items are returned.
 
 2.7.2
 -----

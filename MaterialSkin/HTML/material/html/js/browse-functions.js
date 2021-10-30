@@ -163,7 +163,7 @@ function browseActions(view, item, args, count) {
     return actions;
 }
 
-function browseHandleNextWindow(view, item, command, resp, isMoreMenu) {
+function browseHandleNextWindow(view, item, command, resp, isMoreMenu, isBrowse) {
     var nextWindow = item.nextWindow
                         ? item.nextWindow
                         : item.actions && item.actions.go && item.actions.go.nextWindow
@@ -176,20 +176,33 @@ function browseHandleNextWindow(view, item, command, resp, isMoreMenu) {
                         ? resp.items[0].title : item.title;
         bus.$emit('showMessage', message);
         if (nextWindow=="refresh" || (isMoreMenu && nextWindow=="parent")) {
-            view.refreshList();
+            if (isBrowse) {
+                view.goBack(true);
+            } else {
+                view.refreshList();
+            }
         } else if (view.history.length>0 && (nextWindow=="parent" || nextWindow=="nowplaying" || (isMoreMenu && nextWindow=="grandparent"))) {
             // If "trackinfo items" has "parent" and returns an empty list, then don't go back... Work-around for:
             // https://forums.slimdevices.com/showthread.php?109624-Announce-Material-Skin&p=983626&viewfull=1#post983626
             if (nextWindow!="parent" || command.command[0]!="trackinfo" || command.command[1]!="items" || !resp.items || resp.items.length>0) {
+                if (isBrowse) {
+                    view.history.pop();
+                }
                 view.goBack(true);
             }
         } else if (nextWindow=="grandparent" && view.history.length>1) {
+            if (isBrowse) {
+                view.history.pop();
+            }
             view.history.pop();
             view.goBack(true);
         }
         if (nextWindow=="nowplaying") {
             if (!view.$store.state.desktopLayout) {
                 view.$store.commit('setPage', 'now-playing');
+            }
+            if (isBrowse) {
+                view.history.pop();
             }
             view.goBack(true);
         }
@@ -387,7 +400,7 @@ function browseHandleListResponse(view, item, command, resp, prevPage) {
         });
 
         if (view.items.length==0) {
-            browseHandleNextWindow(view, item, command, resp, false);
+            browseHandleNextWindow(view, item, command, resp, false, true);
         }
     }
 }

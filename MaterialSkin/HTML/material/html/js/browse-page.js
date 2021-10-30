@@ -603,8 +603,8 @@ var lmsBrowse = Vue.component("lms-browse", {
             lmsList(this.playerId(), command.command, command.params, 0, count, item.cancache, this.nextReqId()).then(({data}) => {
                 if (this.isCurrentReq(data)) {
                     var resp = parseBrowseResp(data, item, this.options, item.cancache ? cacheKey(command.command, command.params, 0, count) : undefined, this.command, this.inGenre);
-                    this.handleListResponse(item, command, resp, prevPage);
                     this.fetchingItem = undefined;
+                    this.handleListResponse(item, command, resp, prevPage);
                 }
             }).catch(err => {
                 this.fetchingItem = undefined;

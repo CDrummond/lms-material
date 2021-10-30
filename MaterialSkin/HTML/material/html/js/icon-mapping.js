@@ -153,6 +153,9 @@ function mapIcon(item, app, fallback) {
     if (mapIconType(item, app, "icon")) {
         return true;
     }
+    if (mapIconType(item, app, "menuIcon")) {
+        return true;
+    }
     if (item.image && item.image.startsWith("html/images/") && mapIconType(item, app, "image")) {
         return true;
     }

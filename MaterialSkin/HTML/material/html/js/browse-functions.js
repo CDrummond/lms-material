@@ -1566,7 +1566,7 @@ function browseMyMusicMenu(view) {
                                                  weight: c.weight ? parseFloat(c.weight) : 100,
                                                  id: MUSIC_ID_PREFIX+c.id,
                                                  type: "group",
-                                                 icon: "music_note"
+                                                 icon: undefined
                                                 };
 
                                     if (c.id == "dynamicplaylist") {
@@ -1599,8 +1599,7 @@ function browseMyMusicMenu(view) {
                                                         c.id.startsWith("artist") ? "group" :
                                                         c.id.startsWith("decade") || c.id.startsWith("year") ? "date_range" :
                                                         c.id.startsWith("playlist") ? "list" :
-                                                        c.id.startsWith("ratedmysql") ? "star" :
-                                                        "music_note";
+                                                        c.id.startsWith("ratedmysql") ? "star" : undefined;
                                         }
                                     } else if (c.icon) {
                                         if (c.icon.endsWith("/albums.png")) {
@@ -1611,6 +1610,14 @@ function browseMyMusicMenu(view) {
                                         } else if (c.icon.endsWith("/genres.png")) {
                                             item.svg = "guitar-acoustic";
                                             item.icon = undefined;
+                                        }
+                                    }
+                                    if (undefined==item.icon && undefined==item.svg) {
+                                        if (mapIcon(c)) {
+                                            item.svg = c.svg;
+                                            item.icon = c.icon;
+                                        } else {
+                                            item.icon = "music_note";
                                         }
                                     }
                                     if (getField(item, "genre_id:")>=0) {

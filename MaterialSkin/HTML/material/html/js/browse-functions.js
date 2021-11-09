@@ -921,7 +921,8 @@ function browseItemAction(view, act, item, index, event) {
         bus.$emit('dlg.open', 'rating', [item.id], item.rating);
     } else if (PLAY_ALBUM_ACTION==act) {
         if (item.filter) { // From multi-disc, so need to adjust index
-            for (var i=0, len=view.items.length; i<index; ++i) {
+            var idx = index;
+            for (var i=0, len=view.items.length; i<idx; ++i) {
                 if (view.items[i].header) {
                     index--;
                 }

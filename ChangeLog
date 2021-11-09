@@ -4,6 +4,7 @@
 2. Don't play/pause if press 'space' whilst typing to jump to list entry.
 3. Correctly handle 'nextWindow' when browsing if no items are returned.
 4. Fix icon mapping under 'My Music'
+5. Fix 'Play album starting at track' for multi-disc albums.
 
 2.7.2
 -----

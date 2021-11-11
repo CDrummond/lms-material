@@ -712,7 +712,7 @@ var lmsQueue = Vue.component("lms-queue", {
                     this.selectionDuration += itemDuration(this.items[index]);
                     item.selected = true;
                     forceItemUpdate(this, item);
-                    if (event && event.shiftKey && undefined!=this.lastSelect && index!=this.lastSelect) {
+                    if (event && (event.shiftKey || event.ctrlKey) && undefined!=this.lastSelect && index!=this.lastSelect) {
                         for (var i=this.lastSelect<index ? this.lastSelect : index, stop=this.lastSelect<index ? index : this.lastSelect, len=this.items.length; i<=stop && i<len; ++i) {
                             this.itemAction(SELECT_ACTION, this.items[i], i);
                         }

@@ -894,7 +894,7 @@ function browseItemAction(view, act, item, index, event) {
             view.selectionDuration += itemDuration(view.items[index]);
             item.selected = true;
             forceItemUpdate(view, item);
-            if (event && event.shiftKey && undefined!=view.lastSelect && index!=view.lastSelect) {
+            if (event && (event.shiftKey || event.ctrlKey) && undefined!=view.lastSelect && index!=view.lastSelect) {
                 for (var i=view.lastSelect<index ? view.lastSelect : index, stop=view.lastSelect<index ? index : view.lastSelect, len=view.items.length; i<=stop && i<len; ++i) {
                     view.itemAction(SELECT_ACTION, view.items[i], i);
                 }

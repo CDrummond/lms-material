@@ -6,6 +6,7 @@
 4. Fix icon mapping under 'My Music'
 5. Fix 'Play album starting at track' for multi-disc albums.
 6. When selecting ranges, treat Ctrl+Select the same as Shift+Select.
+7. Change 'onerror' image from radio to cover PNG.
 
 2.7.2
 -----

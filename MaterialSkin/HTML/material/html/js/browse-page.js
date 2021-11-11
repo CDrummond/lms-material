@@ -98,7 +98,7 @@ var lmsBrowse = Vue.component("lms-browse", {
       <div v-if="undefined==citem" class="image-grid-item defcursor"></div>
       <div v-else class="image-grid-item" @click="click(citem, item.rs+col, $event)" :title="citem | itemTooltip" :draggable="item.draggable && current.section!=SECTION_FAVORITES" @dragstart="dragStart(item.rs+col, $event)" @dragend="dragEnd()" v-bind:class="{'list-active': (menu.show && (item.rs+col)==menu.index) || (fetchingItem==item.id)}">
        <div v-if="selection.size>0" class="check-btn grid-btn image-grid-select-btn" @click.stop="select(citem, item.rs+col, $event)" :title="ACTIONS[citem.selected ? UNSELECT_ACTION : SELECT_ACTION].title" v-bind:class="{'check-btn-checked':citem.selected}"></div>
-       <img v-if="citem.image" :key="citem.image" :src="citem.image" onerror="this.src='html/images/radio.png'" v-bind:class="{'radio-img': SECTION_RADIO==citem.section}" class="image-grid-item-img" loading="lazy"></img>
+       <img v-if="citem.image" :key="citem.image" :src="citem.image" onerror="this.src='html/images/cover.png'" v-bind:class="{'radio-img': SECTION_RADIO==citem.section}" class="image-grid-item-img" loading="lazy"></img>
        <div class="image-grid-item-icon" v-else>
         <v-icon v-if="citem.icon" class="image-grid-item-img image-grid-item-icon">{{citem.icon}}</v-icon>
         <img v-else-if="citem.svg" class="image-grid-item-svg" :src="citem.svg | svgIcon(darkUi)" loading="lazy"></img>
@@ -126,7 +126,7 @@ var lmsBrowse = Vue.component("lms-browse", {
       <v-icon>check_box</v-icon>
      </v-list-tile-avatar>
      <v-list-tile-avatar v-else-if="item.image && (artwork || isTop)" :tile="true" v-bind:class="{'radio-image': SECTION_RADIO==item.section}" class="lms-avatar">
-      <img :key="item.image" :src="item.image" onerror="this.src='html/images/radio.png'" loading="lazy"></img>
+      <img :key="item.image" :src="item.image" onerror="this.src='html/images/cover.png'" loading="lazy"></img>
      </v-list-tile-avatar>
      <v-list-tile-avatar v-else-if="item.icon" :tile="true" class="lms-avatar">
       <v-icon>{{item.icon}}</v-icon>
@@ -178,7 +178,7 @@ var lmsBrowse = Vue.component("lms-browse", {
       <v-icon>check_box</v-icon>
      </v-list-tile-avatar>
      <v-list-tile-avatar v-else-if="item.image && (isTop || artwork)" :tile="true" v-bind:class="{'radio-image': SECTION_RADIO==item.section, 'lms-avatar-small': isTop || (current && (current.id==TOP_RADIO_ID || current.id==TOP_APPS_ID)), 'lms-avatar': current && current.id!=TOP_RADIO_ID && current.id!=TOP_APPS_ID}">
-      <img :key="item.image" v-lazy="item.image" onerror="this.src='html/images/radio.png'"></img>
+      <img :key="item.image" v-lazy="item.image" onerror="this.src='html/images/cover.png'"></img>
      </v-list-tile-avatar>
      <v-list-tile-avatar v-else-if="item.icon" :tile="true" class="lms-avatar">
       <v-icon>{{item.icon}}</v-icon>

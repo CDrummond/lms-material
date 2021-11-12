@@ -1240,7 +1240,7 @@ progress {
 .pq-current-indicator {
  position:absolute;
  top:6px !important;
- left:37px !important;
+ left:36px !important;
  width:16px !important;
  height:16px !important;
  vertical-align:middle !important;
@@ -1248,7 +1248,7 @@ progress {
 }
 
 .lms-list3 .pq-current-indicator {
- left:57px !important;
+ left:56px !important;
 }
 
 .pq-text {

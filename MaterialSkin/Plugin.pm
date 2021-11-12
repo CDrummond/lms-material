@@ -577,6 +577,7 @@ sub _cliCommand {
         if ($id) {
             Slim::Music::VirtualLibraries->unregisterLibrary($id);
             $request->setStatusDone();
+            Slim::Control::Request::notifyFromArray(undef, ['material-skin', 'notification', 'internal', 'vlib']);
             return;
         }
     }
@@ -882,7 +883,9 @@ sub _cliCommand {
 
         my ($tracks, $albums) = Plugins::MaterialSkin::Search::advancedSearch($request->client(), $params);
 
-        if (!$saveLib) {
+        if ($saveLib) {
+            Slim::Control::Request::notifyFromArray(undef, ['material-skin', 'notification', 'internal', 'vlib']);
+        } else {
             if ($tracks) {
                 $tracks = $tracks->slice(0, $MAX_ADV_SEARCH_RESULTS);
                 my $count = 0;

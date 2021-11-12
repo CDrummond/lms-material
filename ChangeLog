@@ -7,6 +7,8 @@
 5. Fix 'Play album starting at track' for multi-disc albums.
 6. When selecting ranges, treat Ctrl+Select the same as Shift+Select.
 7. Change 'onerror' image from radio to cover PNG.
+8. Refresh list of virtual libraries when one is created or deleted, via
+   MaterialSkin.
 
 2.7.2
 -----

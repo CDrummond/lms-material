@@ -607,6 +607,10 @@ var lmsServer = Vue.component('lms-server', {
                     this.$store.commit('setUpdateNotif', {msg:updateMskLinks(data[3]), title:data[4]});
                 } else if (data[2]=='notif' && data.length>6) {
                     this.$store.commit('setNotification', {msg:updateMskLinks(data[3]), title:data[4], id:data[5], cancelable:data.length>=7 && 1==parseInt(data[6])});
+                } else if (data[2]=='internal') {
+                    if (data[3]=='vlib') {
+                        bus.$emit('libraryChanged');
+                    }
                 }
             }
         },

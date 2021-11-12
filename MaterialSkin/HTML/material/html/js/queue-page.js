@@ -179,7 +179,7 @@ var lmsQueue = Vue.component("lms-queue", {
      <v-list-tile-action class="queue-action" @click.stop="itemMenu(item, index, $event)">
       <div class="menu-btn grid-btn list-btn" :title="i18n('%1 (Menu)', item.title)"></div>
      </v-list-tile-action>
-     <div class="pq-current-indicator" v-if="index==currentIndex && artwork"></div>
+     <img v-if="index==currentIndex && artwork" class="pq-current-indicator" :src="currentIcon"></img>
     </v-list-tile>
    </RecycleScroller>
    <RecycleScroller v-else-if="items.length>LMS_MAX_NON_SCROLLER_ITEMS" :items="items" :item-size="LMS_LIST_ELEMENT_SIZE" page-mode key-field="key" :buffer="LMS_SCROLLER_LIST_BUFFER">
@@ -196,7 +196,7 @@ var lmsQueue = Vue.component("lms-queue", {
      <v-list-tile-action class="queue-action" @click.stop="itemMenu(item, index, $event)">
       <div class="menu-btn grid-btn list-btn" :title="i18n('%1 (Menu)', item.title)"></div>
      </v-list-tile-action>
-     <div class="pq-current-indicator" v-if="index==currentIndex && artwork"></div>
+     <img v-if="index==currentIndex && artwork" class="pq-current-indicator" :src="currentIcon"></img>
     </v-list-tile>
    </RecycleScroller>
    <template v-else v-for="(item, index) in items">
@@ -215,7 +215,7 @@ var lmsQueue = Vue.component("lms-queue", {
      <v-list-tile-action class="queue-action" @click.stop="itemMenu(item, index, $event)">
       <div class="menu-btn grid-btn list-btn" :title="i18n('%1 (Menu)', item.title)"></div>
      </v-list-tile-action>
-     <div class="pq-current-indicator" v-if="index==currentIndex && artwork"></div>
+     <img v-if="index==currentIndex && artwork" class="pq-current-indicator" :src="currentIcon"></img>
     </v-list-tile>
    </template>
   </div>
@@ -273,7 +273,8 @@ var lmsQueue = Vue.component("lms-queue", {
             dragActive: false,
             dropIndex: -1,
             coverUrl: undefined,
-            queueCustomActions: []
+            queueCustomActions: [],
+            currentColor: '#fff'
         }
     },
     computed: {
@@ -303,6 +304,9 @@ var lmsQueue = Vue.component("lms-queue", {
         },
         drawBgndImage() {
             return this.$store.state.queueBackdrop && undefined!=this.coverUrl
+        },
+        currentIcon() {
+            return "/material/svg/pq-current?c="+this.currentColor+"&r="+LMS_MATERIAL_REVISION;
         }
     },
     created() {
@@ -406,8 +410,10 @@ var lmsQueue = Vue.component("lms-queue", {
             this.updateItems();
         }.bind(this));
 
+        this.currentColor = getComputedStyle(document.documentElement).getPropertyValue('--primary-color').substring(1);
         bus.$on('themeChanged', function() {
             this.setBgndCover();
+            this.currentColor = getComputedStyle(document.documentElement).getPropertyValue('--primary-color').substring(1);
         }.bind(this));
 
         bus.$on('langChanged', function() {

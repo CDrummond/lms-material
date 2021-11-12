@@ -9,6 +9,7 @@
 7. Change 'onerror' image from radio to cover PNG.
 8. Refresh list of virtual libraries when one is created or deleted, via
    MaterialSkin.
+9. Use SVG for play queue current indicator.
 
 2.7.2
 -----

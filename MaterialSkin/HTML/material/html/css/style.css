@@ -1239,27 +1239,16 @@ progress {
 
 .pq-current-indicator {
  position:absolute;
- top:4px !important;
- left:35px !important;
- width:20px;
- height:20px;
- line-height:16px;
- font-size:16px;
- border-radius:50%;
- text-align:center;
- font-family: "Material Icons";
- text-decoration:none;
- color:var(--primary-color);
- background-color:white;
- border:2px solid var(--primary-color);
+ top:6px !important;
+ left:37px !important;
+ width:16px !important;
+ height:16px !important;
+ vertical-align:middle !important;
+ border-radius:unset !important;
 }
 
 .lms-list3 .pq-current-indicator {
- left:54px !important;
-}
-
-.pq-current-indicator:after {
- content:"\e037";
+ left:57px !important;
 }
 
 .pq-text {

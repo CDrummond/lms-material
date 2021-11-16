@@ -424,6 +424,17 @@ div.v-subheader {
  left:4px !important;
 }
 
+.multi-disc {
+ position:absolute;
+ top:2px !important;
+ left:4px !important;
+ width:32px;
+ height:32px;
+ border-radius:50%;
+ background-color:black;
+ opacity:0.65;
+}
+
 .lms-list .image-grid-item .emblem, .np-grid-item .emblem {
  position:absolute;
  top:2px !important;

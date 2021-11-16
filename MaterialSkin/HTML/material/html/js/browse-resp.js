@@ -691,7 +691,8 @@ function parseBrowseResp(data, parent, options, cacheKey, parentCommand, parentG
                               origTitle: i.album,
                               textkey: key,
                               emblem: getEmblem(i.extid),
-                              draggable: true
+                              draggable: true,
+                              multi: undefined!=i.disccount && parseInt(i.disccount)>1
                           };
                 resp.items.push(album);
             }

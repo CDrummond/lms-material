@@ -1,3 +1,7 @@
+2.8.0
+-----
+1. Draw multi-disc icon top-left for multi-disc albums, in grid view.
+
 2.7.3
 -----
 1. If have entry without an icon don't allow grid usage.

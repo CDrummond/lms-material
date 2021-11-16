@@ -97,15 +97,14 @@ function parseResp(data, showTrackNum, index, showRatings, threeLines, infoPlugi
                               title: haveRating ? ratingString(title, i.rating) : title,
                               subtitle: buildSubtitle(i, threeLines),
                               image: queueItemCover(i, infoPlugin),
-                              actions: undefined==i.album_id
-                                ? [PQ_PLAY_NOW_ACTION, PQ_PLAY_NEXT_ACTION, DIVIDER, REMOVE_ACTION, ADD_TO_PLAYLIST_ACTION, PQ_ZAP_ACTION, DOWNLOAD_ACTION, DIVIDER, SELECT_ACTION, PQ_COPY_ACTION, MOVE_HERE_ACTION, CUSTOM_ACTIONS, MORE_ACTION]
-                                : [PQ_PLAY_NOW_ACTION, PQ_PLAY_NEXT_ACTION, DIVIDER, REMOVE_ACTION, PQ_REMOVE_ALBUM_ACTION, ADD_TO_PLAYLIST_ACTION, PQ_ZAP_ACTION, DOWNLOAD_ACTION, DIVIDER, SELECT_ACTION, PQ_COPY_ACTION, MOVE_HERE_ACTION, CUSTOM_ACTIONS, MORE_ACTION],
+                              actions: [PQ_PLAY_NOW_ACTION, PQ_PLAY_NEXT_ACTION, DIVIDER, REMOVE_ACTION, PQ_REMOVE_ALBUM_ACTION, PQ_REMOVE_DISC_ACTION, ADD_TO_PLAYLIST_ACTION, PQ_ZAP_ACTION, DOWNLOAD_ACTION, DIVIDER, SELECT_ACTION, PQ_COPY_ACTION, MOVE_HERE_ACTION, CUSTOM_ACTIONS, MORE_ACTION],
                               duration: duration,
                               durationStr: undefined!=duration && duration>0 ? formatSeconds(duration) : undefined,
                               key: i.id+"."+index,
                               album_id: i.album_id,
                               url: i.url,
-                              isLocal: i.url && i.url.startsWith("file:")
+                              isLocal: i.url && i.url.startsWith("file:"),
+                              disc: i.disc
                           });
                 index++;
             }
@@ -240,7 +239,7 @@ var lmsQueue = Vue.component("lms-queue", {
      </v-list-tile-avatar>
      <v-list-tile-title>{{ACTIONS[UNSELECT_ACTION].title}}</v-list-tile-title>
     </v-list-tile>
-    <v-list-tile v-else-if="action==PQ_COPY_ACTION ? browseSelection : action==MOVE_HERE_ACTION ? (selection.size>0 && !menu.item.selected) : action==PQ_ZAP_ACTION ? customSkipPlugin : action==DOWNLOAD_ACTION ? lmsOptions.allowDownload && menu.item.isLocal : (action!=PQ_PLAY_NEXT_ACTION || menu.index!=currentIndex)" @click="itemAction(action, menu.item, menu.index, $event)">
+    <v-list-tile v-else-if="action==PQ_REMOVE_DISC_ACTION ? undefined!=menu.item.disc && menu.item.disc>0 : PQ_REMOVE_ALBUM_ACTION ? undefined!=menu.item.album_id : action==PQ_COPY_ACTION ? browseSelection : action==MOVE_HERE_ACTION ? (selection.size>0 && !menu.item.selected) : action==PQ_ZAP_ACTION ? customSkipPlugin : action==DOWNLOAD_ACTION ? lmsOptions.allowDownload && menu.item.isLocal : (action!=PQ_PLAY_NEXT_ACTION || menu.index!=currentIndex)" @click="itemAction(action, menu.item, menu.index, $event)">
      <v-list-tile-avatar v-if="menuIcons">
       <v-icon v-if="undefined==ACTIONS[action].svg">{{ACTIONS[action].icon}}</v-icon>
       <img v-else class="svg-img" :src="ACTIONS[action].svg | svgIcon(darkUi)"></img>
@@ -697,6 +696,18 @@ var lmsQueue = Vue.component("lms-queue", {
                 bus.$emit('playerCommand', ["playlist", "delete", index]);
             } else if (PQ_REMOVE_ALBUM_ACTION==act) {
                 bus.$emit('playerCommand', ["playlistcontrol", "cmd:delete", "album_id:"+item.album_id]);
+            } else if (PQ_REMOVE_DISC_ACTION==act) {
+                var indexes = [];
+                for (var i=0, len=this.items.length; i<len; ++i) {
+                    if (this.items[i].album_id == item.album_id && this.items[i].disc == item.disc) {
+                        indexes.push(i);
+                    }
+                }
+                if (indexes.length>0) {
+                    this.clearSelection();
+                    indexes.sort(function(a, b) { return a<b ? 1 : -1; });
+                    bus.$emit('removeFromQueue', indexes);
+                }
             } else if (MORE_ACTION===act) {
                 if (item.title.indexOf("<i class=\"rstar\">")>0) { // Need to remove ratings stars...
                     let clone = JSON.parse(JSON.stringify(item));

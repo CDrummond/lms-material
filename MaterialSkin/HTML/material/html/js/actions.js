@@ -63,7 +63,7 @@ const ADV_SEARCH_ACTION       = 48;
 const SAVE_VLIB_ACTION        = 49;
 
 const DOWNLOAD_ACTION         = 50;
-
+const PQ_REMOVE_DISC_ACTION   = 51;
 
 var ACTIONS=[
     {cmd:"play",         icon:"play_circle_outline"},
@@ -123,7 +123,8 @@ var ACTIONS=[
     {cmd:"adv-search",   svg:"text-search"},
     {cmd:"save-vlib",    icon:"library_add"},
 
-    {cmd:"download",     icon:"cloud_download"}
+    {cmd:"download",     icon:"cloud_download"},
+    {cmd:"pq-rmdisc",    svg:"album-multi"}
 ];
 
 function updateActionStrings() {
@@ -187,5 +188,6 @@ function updateActionStrings() {
     ACTIONS[SAVE_VLIB_ACTION].title=i18n("Save as virtual library");
 
     ACTIONS[DOWNLOAD_ACTION].title=i18n("Download");
+    ACTIONS[PQ_REMOVE_DISC_ACTION].title=i18n("Remove disc");
 }
 

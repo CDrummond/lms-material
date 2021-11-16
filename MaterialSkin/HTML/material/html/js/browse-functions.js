@@ -1034,7 +1034,7 @@ function browseItemAction(view, act, item, index, event) {
         download(item, item.id.startsWith("album_id:") ? view.buildCommand(item) : undefined, aa);
     } else {
         // If we are acting on a multi-disc album, prompt which disc we should act on
-        if (item.multi && (PLAY_ACTION==act || ADD_ACTION==act || INSERT_ACTION==act)) {
+        if (item.multi && !view.current.id.startsWith("album_id:") && (PLAY_ACTION==act || ADD_ACTION==act || INSERT_ACTION==act)) {
             var command = view.buildCommand(item);
             lmsList(view.playerId(), command.command, command.params, 0, LMS_BATCH_SIZE, false, view.nextReqId()).then(({data}) => {
                 var resp = parseBrowseResp(data, item, view.options, undefined, view.command, view.inGenre);

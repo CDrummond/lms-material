@@ -232,7 +232,7 @@ var lmsBrowse = Vue.component("lms-browse", {
    <template v-for="(action, index) in menu.itemMenu">
     <v-divider v-if="DIVIDER==action"></v-divider>
     <template v-for="(cact, cindex) in itemCustomActions" v-else-if="CUSTOM_ACTIONS==action">
-     <v-list-tile @click="itemCustomAction(cact, menu.item, menu.index)">
+     <v-list-tile @click="itemCustomAction(cact, menu.item, menu.index)" v-if="undefined==cact.filter || (undefined!=menu.item.presetParams && undefined!=menu.item.presetParams.favorites_url && menu.item.presetParams.favorites_url.startsWith(cact.filter))">
       <v-list-tile-avatar v-if="menuIcons">
        <v-icon v-if="undefined==cact.svg">{{cact.icon}}</v-icon>
        <img v-else class="svg-img" :src="cact.svg | svgIcon(darkUi)"></img>

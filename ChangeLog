@@ -4,6 +4,7 @@
 2. Add 'Remove disc' option to play queue context menu.
 3. When adding a multi-disc album, prompt whether to add all discs or just a
    specific disc.
+4. Replace $FAVURL with item's favourite URL in custom actions.
 
 2.7.3
 -----

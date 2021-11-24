@@ -77,7 +77,7 @@ function performCustomAction(obj, action, player, item) {
     }
 }
 
-const ACTION_KEYS = ['ID', 'NAME', 'ARTISTID', 'ARTISTNAME', 'ALBUMID', 'ALBUMNAME', 'TRACKID', 'TRACKNAME', 'TRACKNUM', 'DISC', 'GENREID', 'GENRENAME', 'YEAR', 'COMPOSER', 'LANG'];
+const ACTION_KEYS = ['ID', 'NAME', 'ARTISTID', 'ARTISTNAME', 'ALBUMID', 'ALBUMNAME', 'TRACKID', 'TRACKNAME', 'TRACKNUM', 'DISC', 'GENREID', 'GENRENAME', 'YEAR', 'COMPOSER', 'LANG', 'FAVURL'];
 
 function doReplacements(string, player, item) {
     let val = ''+string;
@@ -144,6 +144,9 @@ function doReplacements(string, player, item) {
             } else {
                 val=val.replaceAll("$TRACKNAME", item.title);
             }
+        }
+        if (undefined!=item.presetParams && undefined!=item.presetParams.favorites_url) {
+            val=val.replaceAll("$FAVURL", item.presetParams.favorites_url);
         }
     }
     val=val.replaceAll("$HOST", window.location.hostname);

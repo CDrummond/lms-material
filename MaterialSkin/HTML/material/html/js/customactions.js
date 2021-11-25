@@ -77,7 +77,7 @@ function performCustomAction(obj, action, player, item) {
     }
 }
 
-const ACTION_KEYS = ['ID', 'NAME', 'ARTISTID', 'ARTISTNAME', 'ALBUMID', 'ALBUMNAME', 'TRACKID', 'TRACKNAME', 'TRACKNUM', 'DISC', 'GENREID', 'GENRENAME', 'YEAR', 'COMPOSER', 'LANG', 'FAVURL'];
+const ACTION_KEYS = ['ID', 'NAME', 'ARTISTID', 'ARTISTNAME', 'ALBUMID', 'ALBUMNAME', 'TRACKID', 'TRACKNAME', 'TRACKNUM', 'DISC', 'GENREID', 'GENRENAME', 'YEAR', 'COMPOSER', 'LANG', 'FAVURL', 'TITLE'];
 
 function doReplacements(string, player, item) {
     let val = ''+string;
@@ -123,7 +123,7 @@ function doReplacements(string, player, item) {
         if (undefined!=item.artist) {
             val=val.replaceAll("$ARTISTNAME", item.artist);
         }
-        if (undefined!=item.album_id) {
+        if (undefined!=item.album) {
             val=val.replaceAll("$ALBUMNAME", item.album);
         }
         if (undefined!=item.composer) {
@@ -140,10 +140,13 @@ function doReplacements(string, player, item) {
                     val=val.replaceAll("$GENRENAME", item.title);
                 } else if (!id.startsWith("year:")) {
                     val=val.replaceAll("$TRACKNAME", item.title);
+                } else {
+                    val=val.replaceAll("$TRACKNAME", item.title);
                 }
             } else {
                 val=val.replaceAll("$TRACKNAME", item.title);
             }
+            val=val.replaceAll("$TITLE", item.title);
         }
         if (undefined!=item.presetParams && undefined!=item.presetParams.favorites_url) {
             val=val.replaceAll("$FAVURL", item.presetParams.favorites_url);

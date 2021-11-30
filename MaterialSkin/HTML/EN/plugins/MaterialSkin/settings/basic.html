@@ -77,4 +77,11 @@
         </select>
     [% END %]
 
+    [% WRAPPER setting title="PLUGIN_MATERIAL_SKIN_COMMENT_AS_DISC_TITLE" desc="PLUGIN_MATERIAL_SKIN_COMMENT_AS_DISC_TITLE_DESC" %]
+        <select class="stdedit" name="pref_commentAsDiscTitle" id="commentAsDiscTitle">
+            <option [% IF NOT prefs.commentAsDiscTitle %]selected [% END %]value="0">[% 'NO' | getstring %]</option>
+            <option [% IF prefs.commentAsDiscTitle %]selected [% END %]value="1">[% 'YES' | getstring %]</option>
+        </select>
+    [% END %]
+
 [% PROCESS settings/footer.html %]

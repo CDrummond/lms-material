@@ -751,12 +751,13 @@ function parseBrowseResp(data, parent, options, cacheKey, parentCommand, parentG
                     }
                 }
                 if (undefined!=i.disc && !isSearchResult) {
-                    if (discs.has(i.disc)) {
-                        var entry = discs.get(i.disc);
+                    let discNum = parseInt(i.disc);
+                    if (discs.has(discNum)) {
+                        var entry = discs.get(discNum);
                         entry.total++;
                         entry.duration+=duration;
                     } else {
-                        discs.set(i.disc, {pos: resp.items.length, total:1, duration:duration});
+                        discs.set(discNum, {pos: resp.items.length, total:1, duration:duration, title:lmsOptions.commentAsDiscTitle ? i.comment : undefined});
                     }
                 }
                 totalDuration += duration>0 ? duration : 0;
@@ -799,8 +800,23 @@ function parseBrowseResp(data, parent, options, cacheKey, parentCommand, parentG
                 let d = 0;
                 for (let k of discs.keys()) {
                     let disc = discs.get(k);
-                    resp.items.splice(disc.pos+d, 0, {title: i18n("Disc %1", k)+SEPARATOR+i18np("1 Track", "%1 Tracks", disc.total)+" ("+formatSeconds(disc.duration)+")",
-                                                      id:FILTER_PREFIX+k, header:true, menu:[PLAY_ALL_ACTION, INSERT_ALL_ACTION, ADD_ALL_ACTION]});
+                    let details = i18np("1 Track", "%1 Tracks", disc.total)+" ("+formatSeconds(disc.duration)+")";
+                    let title = lmsOptions.commentAsDiscTitle ? (disc.title ? disc.title : i18n("Disc %1", k))
+                                                              : (i18n("Disc %1", k)+SEPARATOR+details);
+
+                    // If this is the 1st disc, using comment as title, it has no title but next does, then use
+                    // 'Main disc' as title - looks nicer than 'Disc 1'
+                    if (k==1 && lmsOptions.commentAsDiscTitle && undefined==disc.title) {
+                        let nextDisc = discs.get(2);
+                        if (undefined!=nextDisc && undefined!=nextDisc.title) {
+                            title = i18n('Main disc');
+                        }
+                    }
+
+                    resp.items.splice(disc.pos+d, 0,
+                                      {title: title,
+                                       subtitle: lmsOptions.commentAsDiscTitle ? details : undefined,
+                                       id:FILTER_PREFIX+k, header:true, menu:[PLAY_ALL_ACTION, INSERT_ALL_ACTION, ADD_ALL_ACTION]});
                     d++;
                 }
             }

@@ -6,6 +6,8 @@
    specific disc.
 4. Replace $FAVURL with item's favourite URL in custom actions.
 5. Allow per-app custom actions in browse.
+6. Add (server side) setting to use comment field as disc title for multi-disc
+   albums.
 
 2.7.3
 -----

@@ -108,7 +108,8 @@ sub initPlugin {
         artistFirst => '1',
         password => '',
         allowDownload => '0',
-        manifestDisplay => '0'
+        manifestDisplay => '0',
+        commentAsDiscTitle => '0'
     });
 
     if (main::WEBUI) {
@@ -243,6 +244,7 @@ sub _cliCommand {
         $request->addResult('showAllArtists', $prefs->get('showAllArtists'));
         $request->addResult('artistFirst', $prefs->get('artistFirst'));
         $request->addResult('allowDownload', $prefs->get('allowDownload'));
+        $request->addResult('commentAsDiscTitle', $prefs->get('commentAsDiscTitle'));
         $request->setStatusDone();
         return;
     }

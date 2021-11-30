@@ -176,3 +176,9 @@ PLUGIN_MATERIAL_SKIN_MANIFEST_DISPLAY_STANDALONE
 PLUGIN_MATERIAL_SKIN_MANIFEST_DISPLAY_FULLSCREEN
 	EN	Fullscreen
 	FR	Plein écran
+
+PLUGIN_MATERIAL_SKIN_COMMENT_AS_DISC_TITLE
+	EN	Use comment for disc title
+
+PLUGIN_MATERIAL_SKIN_COMMENT_AS_DISC_TITLE_DESC
+	EN	For multi-disc albums use comment from first track of each disc as disc title.

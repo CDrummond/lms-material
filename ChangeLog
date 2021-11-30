@@ -8,6 +8,7 @@
 5. Add (server side) setting to use comment field as disc title for multi-disc
    albums.
 6. Add 'Play disc starting at track' action for multi-disc albums.
+7. Remove 'more' action if is the same as 'go'
 
 2.7.3
 -----

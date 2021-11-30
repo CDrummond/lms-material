@@ -80,6 +80,19 @@ function parseBrowseResp(data, parent, options, cacheKey, parentCommand, parentG
                 if (resp.baseActions[ACTIONS[PLAY_ACTION].cmd] && resp.baseActions[ACTIONS[PLAY_ACTION].cmd].params && resp.baseActions[ACTIONS[PLAY_ACTION].cmd].params.menu) {
                     menu = resp.baseActions[ACTIONS[PLAY_ACTION].cmd].params.menu;
                 }
+
+                // Check that 'more' is different to 'go'
+                if (moreAction && resp.baseActions['go']) {
+                    let mc = resp.baseActions[ACTIONS[MORE_ACTION].cmd];
+                    let gc = resp.baseActions['go'];
+                    if (undefined!=mc.cmd && undefined!=mc.params && undefined!=mc.itemsParams &&
+                        mc.itemsParams == gc.itemsParams &&
+                        mc.cmd.length == gc.cmd.length && mc.cmd.every(function(e, idx) { return e === gc.cmd[idx]; }) &&
+                        Object.keys(mc.params).length == Object.keys(gc.params).length &&
+                           Object.keys(mc.params).every(key => gc.params.hasOwnProperty(key) && mc.params[key] === gc.params[key])) {
+                        moreAction = false;
+                    }
+                }
             }
 
             for (var idx=0, loop=data.result.item_loop, loopLen=loop.length; idx<loopLen; ++idx) {

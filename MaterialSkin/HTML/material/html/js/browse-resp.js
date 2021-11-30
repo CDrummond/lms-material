@@ -70,7 +70,6 @@ function parseBrowseResp(data, parent, options, cacheKey, parentCommand, parentG
 
             resp.canUseGrid = maybeAllowGrid && (isRadiosTop || isBmf || (data.result.window && data.result.window.windowStyle && (data.result.window.windowStyle=="icon_list" || data.result.window.windowStyle=="home_menu"))) ? true : false;
             resp.canDrop = isFavorites;
-            resp.itemCustomActions = getCustomActions(command);
 
             if (data.result.base && data.result.base.actions) {
                 resp.baseActions = data.result.base.actions;
@@ -418,10 +417,6 @@ function parseBrowseResp(data, parent, options, cacheKey, parentCommand, parentG
                         i.menu.push(ADD_TO_PLAYLIST_ACTION);
                     }
                     i.menu.push(SELECT_ACTION);
-                }
-
-                if (undefined!=resp.itemCustomActions && resp.itemCustomActions.length>0) {
-                    i.menu.push(CUSTOM_ACTIONS);
                 }
 
                 // Only show 'More' action if:

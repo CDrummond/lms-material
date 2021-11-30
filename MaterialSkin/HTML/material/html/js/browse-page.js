@@ -1313,7 +1313,7 @@ var lmsBrowse = Vue.component("lms-browse", {
             if (this.items.length<=25) {
                 return;
             }
-            if ((undefined==this.jumplist || this.jumplist.length<1)) {
+            if (IS_MOBILE && (undefined==this.jumplist || this.jumplist.length<1)) {
                 if (this.items.length <= (this.grid.allowed ? 50 : 150)) {
                     return;
                 }

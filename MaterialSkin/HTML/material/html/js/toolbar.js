@@ -48,15 +48,7 @@ Vue.component('lms-toolbar', {
      </v-list-tile-content>
       <v-list-tile-action v-if="index<10 && keyboardControl" class="menu-shortcut" v-bind:class="{'menu-shortcut-player':item.canpoweroff}">{{index|playerShortcut}}</v-list-tile-action>
       <v-list-tile-action>
-       <v-layout v-if="!IS_MOBILE && desktopLayout && showMiniLauncherButton">
-        <v-flex xs6>
-         <v-btn icon class="hide-for-mini open-mini" small :title="trans.openmini" @click.stop="openMiniPlayer(item)"><v-icon small class="open-mini">open_in_new</v-icon></v-btn>
-        </v-flex>
-        <v-flex xs6 style="margin-left:2px">
-         <v-btn icon v-if="item.canpoweroff" v-longpress:stop="togglePower" :id="index+'-power-btn'" :title="(item.id==player.id && playerStatus.ison) || item.ison ? i18n('Switch off %1', item.name) : i18n('Switch on %1', item.name)"><v-icon v-bind:class="{'dimmed': (item.id==player.id ? !playerStatus.ison : !item.ison), 'active-btn':(item.id==player.id ? playerStatus.ison : item.ison) }">power_settings_new</v-icon></v-btn>
-        </v-flex>
-       </v-layout>
-       <v-btn v-else-if="item.canpoweroff" icon style="float:right" v-longpress:stop="togglePower" :id="index+'-power-btn'" :title="(item.id==player.id && playerStatus.ison) || item.ison ? i18n('Switch off %1', item.name) : i18n('Switch on %1', item.name)"><v-icon v-bind:class="{'dimmed': (item.id==player.id ? !playerStatus.ison : !item.ison), 'active-btn':(item.id==player.id ? playerStatus.ison : item.ison) }">power_settings_new</v-icon></v-btn>
+       <v-btn v-if="item.canpoweroff" icon style="float:right" v-longpress:stop="togglePower" :id="index+'-power-btn'" :title="(item.id==player.id && playerStatus.ison) || item.ison ? i18n('Switch off %1', item.name) : i18n('Switch on %1', item.name)"><v-icon v-bind:class="{'dimmed': (item.id==player.id ? !playerStatus.ison : !item.ison), 'active-btn':(item.id==player.id ? playerStatus.ison : item.ison) }">power_settings_new</v-icon></v-btn>
       </v-list-tile-action>
     </v-list-tile>
    </template>
@@ -230,7 +222,7 @@ Vue.component('lms-toolbar', {
                  trans:{noplayer:undefined, nothingplaying:undefined, info:undefined, infoShortcut:undefined, connectionLost:undefined, showLarge:undefined,
                         showLargeShortcut:undefined, hideLarge:undefined, startPlayer:undefined, groupPlayers:undefined, standardPlayers:undefined,
                         otherServerPlayers:undefined, updatesAvailable:undefined, decVol:undefined, incVol:undefined, showVol:undefined, downloading:undefined,
-                        mainMenu: undefined, play:undefined, pause:undefined, openmini:undefined, appQuit:undefined, toggleQueue:undefined,
+                        mainMenu: undefined, play:undefined, pause:undefined, appQuit:undefined, toggleQueue:undefined,
                         toggleQueueShortcut:undefined, groupVol:undefined},
                  infoOpen: false,
                  nowPlayingExpanded: false,
@@ -505,7 +497,7 @@ Vue.component('lms-toolbar', {
                           hideLarge:i18n("Collapse now playing"), startPlayer:i18n("Start player"), connectionLost:i18n('Server connection lost!'),
                           groupPlayers:i18n("Group Players"), standardPlayers:i18n("Standard Players"), updatesAvailable:i18n('Updates available'),
                           decVol:i18n("Decrease volume"), incVol:i18n("Increase volume"), showVol:i18n("Show volume"),
-                          mainMenu: i18n("Main menu"), play:i18n("Play"), pause:i18n("Pause"), openmini:i18n('Open mini-player'),
+                          mainMenu: i18n("Main menu"), play:i18n("Play"), pause:i18n("Pause"),
                           appQuit:i18n('Quit'), toggleQueue:i18n('Toggle queue'), downloading:i18n('Downloading'),
                           toggleQueueShortcut:shortcutStr(LMS_TOGGLE_QUEUE_KEYBOARD, true), groupVol:i18n('Adjust volume of associated players')};
         },
@@ -584,18 +576,6 @@ Vue.component('lms-toolbar', {
             if (idx>=0 && idx<=this.$store.state.players.length) {
                 this.togglePlayerPower(this.$store.state.players[idx], longPress);
             }
-        },
-        openMiniPlayer(player) {
-            this.showPlayerMenu=false;
-            let height=parseInt(getComputedStyle(document.documentElement).getPropertyValue('--main-toolbar-height').replace('px', ''))+
-                       parseInt(getComputedStyle(document.documentElement).getPropertyValue('--bottom-toolbar-height').replace('px', ''));
-            let newWindow=window.open('/material/?layout=desktop&player='+player.name, player.name+" mini-player",
-                                      'width='+Math.round(620*window.devicePixelRatio)+',height='+Math.round(height*window.devicePixelRatio)+',status=no,menubar=no,toolbar=no,location=no');
-            newWindow.onload = function () {
-                let adjustedHeight=Math.round(height*newWindow.devicePixelRatio)
-                let adjust=newWindow.innerHeight-adjustedHeight;
-                newWindow.resizeTo(Math.round(620*newWindow.devicePixelRatio), newWindow.outerHeight-adjust);
-            };
         },
         volumeBtn(longPress, el) {
             if (this.$store.state.visibleMenus.size>0 || this.noPlayer || undefined==el || undefined==el.id) {

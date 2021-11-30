@@ -1,17 +1,18 @@
 2.8.0
 -----
-1. Draw multi-disc icon top-left for multi-disc albums, in grid view.
-2. Add 'Remove disc' option to play queue context menu.
-3. When adding a multi-disc album, prompt whether to add all discs or just a
-   specific disc.
-4. Replace $FAVURL with item's favourite URL in custom actions.
-5. Add (server side) setting to use comment field as disc title for multi-disc
-   albums.
-6. Add 'Play disc starting at track' action for multi-disc albums.
-7. Remove 'more' action if is the same as 'go'
-8. When showing jumplist of (e.g.) 'New Music' show same dots for active and
-   inactive, just change colour of active item.
-9. Adjust desktop default pane sizes; queue 30% min-width 400px.
+ 1. Draw multi-disc icon top-left for multi-disc albums, in grid view.
+ 2. Add 'Remove disc' option to play queue context menu.
+ 3. When adding a multi-disc album, prompt whether to add all discs or just a
+    specific disc.
+ 4. Replace $FAVURL with item's favourite URL in custom actions.
+ 5. Add (server side) setting to use comment field as disc title for multi-disc
+    albums.
+ 6. Add 'Play disc starting at track' action for multi-disc albums.
+ 7. Remove 'more' action if is the same as 'go'
+ 8. When showing jumplist of (e.g.) 'New Music' show same dots for active and
+    inactive, just change colour of active item.
+ 9. Adjust desktop default pane sizes; queue 30% min-width 400px.
+10. Remove 'Open mini-player' buttons from players menu.
 
 2.7.3
 -----

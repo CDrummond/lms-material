@@ -11,6 +11,7 @@
 7. Remove 'more' action if is the same as 'go'
 8. When showing jumplist of (e.g.) 'New Music' show same dots for active and
    inactive, just change colour of active item.
+9. Adjust desktop default pane sizes; queue 30% min-width 400px.
 
 2.7.3
 -----

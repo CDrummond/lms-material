@@ -22,7 +22,7 @@ Vue.component('lms-splitter', {
         return {
             horizontal: false,
             active: false,
-            percent: 50,
+            percent: 70,
         }
     },
     computed: {
@@ -37,7 +37,7 @@ Vue.component('lms-splitter', {
         }
     },
     created () {
-        this.percent = this.lastUpdate = getLocalStorageVal("splitter", "50");
+        this.percent = this.lastUpdate = parseInt(getLocalStorageVal("splitter", "70"));
         document.documentElement.style.setProperty('--splitter-pc', this.percent);
     },
     mounted() {

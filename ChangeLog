@@ -9,6 +9,8 @@
    albums.
 6. Add 'Play disc starting at track' action for multi-disc albums.
 7. Remove 'more' action if is the same as 'go'
+8. When showing jumplist of (e.g.) 'New Music' show same dots for active and
+   inactive, just change colour of active item.
 
 2.7.3
 -----

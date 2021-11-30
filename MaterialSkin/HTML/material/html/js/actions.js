@@ -64,6 +64,7 @@ const SAVE_VLIB_ACTION        = 49;
 
 const DOWNLOAD_ACTION         = 50;
 const PQ_REMOVE_DISC_ACTION   = 51;
+const PLAY_DISC_ACTION        = 52;
 
 var ACTIONS=[
     {cmd:"play",         icon:"play_circle_outline"},
@@ -124,7 +125,8 @@ var ACTIONS=[
     {cmd:"save-vlib",    icon:"library_add"},
 
     {cmd:"download",     icon:"cloud_download"},
-    {cmd:"pq-rmdisc",    svg:"album-multi"}
+    {cmd:"pq-rmdisc",    svg:"album-multi"},
+    {cmd:"play-disc",    svg:"album-multi"}
 ];
 
 function updateActionStrings() {
@@ -189,5 +191,6 @@ function updateActionStrings() {
 
     ACTIONS[DOWNLOAD_ACTION].title=i18n("Download");
     ACTIONS[PQ_REMOVE_DISC_ACTION].title=i18n("Remove disc");
+    ACTIONS[PLAY_DISC_ACTION].title=i18n("Play disc starting at track");
 }
 

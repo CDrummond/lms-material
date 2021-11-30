@@ -782,7 +782,7 @@ function parseBrowseResp(data, parent, options, cacheKey, parentCommand, parentG
                               filter: FILTER_PREFIX+i.disc,
                               emblem: showAlbumName ? getEmblem(i.extid) : undefined,
                               tracknum: sortTracks && undefined!=i.tracknum ? tracknum : undefined,
-                              disc: sortTracks && i.disc ? parseInt(i.disc) : undefined,
+                              disc: i.disc ? parseInt(i.disc) : undefined,
                               year: sortTracks && i.year ? parseInt(i.year) : undefined,
                               album: sortTracks || isSearchResult ? i.album : undefined,
                               artist: isSearchResult ? i.artist : undefined,

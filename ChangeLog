@@ -8,6 +8,7 @@
 5. Allow per-app custom actions in browse.
 6. Add (server side) setting to use comment field as disc title for multi-disc
    albums.
+7. Add 'Play disc starting at track' action for multi-disc albums.
 
 2.7.3
 -----

@@ -950,7 +950,7 @@ function browseItemAction(view, act, item, index, event) {
                 });
             }
         });
-    } else if (ADD_ALL_ACTION==act || INSERT_ALL_ACTION==act || PLAY_ALL_ACTION==act) {
+    } else if (ADD_ALL_ACTION==act || INSERT_ALL_ACTION==act || PLAY_ALL_ACTION==act || PLAY_DISC_ACTION==act) {
         if (view.current && item.id == view.current.id) { // Called from subtoolbar => act on all items
             if (view.allSongsItem) {
                 view.itemAction(ADD_ALL_ACTION==act ? ADD_ACTION : INSERT_ALL_ACTION==act ? INSERT_ACTION : PLAY_ACTION, view.allSongsItem);
@@ -960,21 +960,26 @@ function browseItemAction(view, act, item, index, event) {
             }
         } else { // Need to filter items...
             var itemList = [];
-            var isFilter = item.id.startsWith(FILTER_PREFIX); // MultiCD's have a 'filter' so we can play a single CD
-            var check = isFilter ? item.id : (SEARCH_ID==item.id && view.items[0].id.startsWith("track") ? "track_id" : "album_id");
+            var isFilter = item.id.startsWith(FILTER_PREFIX) || PLAY_DISC_ACTION==act; // MultiCD's have a 'filter' so we can play a single CD
+            var check = isFilter ? (PLAY_DISC_ACTION==act ? item.filter : item.id) : (SEARCH_ID==item.id && view.items[0].id.startsWith("track") ? "track_id" : "album_id");
             var list = item.allSearchResults && item.allSearchResults.length>0 ? item.allSearchResults : view.items;
+            var itemIndex = undefined;
             for (var i=0, len=list.length; i<len; ++i) {
                 if ((isFilter ? list[i].filter==check : list[i].id.startsWith(check))) {
                     if (INSERT_ALL_ACTION==act) {
                         itemList.unshift(list[i]);
                     } else {
+                        if (PLAY_DISC_ACTION == act && list[i].id == item.id) {
+                            itemIndex = itemList.length;
+                        }
                         itemList.push(list[i]);
                     }
                 } else if (itemList.length>0) {
                     break;
                 }
             }
-            view.doList(itemList, act);
+
+            view.doList(itemList, act, itemIndex);
             bus.$emit('showMessage', isFilter || item.id.endsWith("tracks") ? i18n("Adding tracks...") : i18n("Adding albums..."));
         }
     } else if (act==GOTO_ARTIST_ACTION) {
@@ -1864,8 +1869,8 @@ function browseBuildFullCommand(view, item, act) {
     return command;
 }
 
-function browseDoList(view, list, act/*, index*/) {
-    act = ADD_ALL_ACTION==act ? ADD_ACTION : PLAY_ALL_ACTION==act ? PLAY_ACTION : act;
+function browseDoList(view, list, act, index) {
+    act = ADD_ALL_ACTION==act ? ADD_ACTION : PLAY_ALL_ACTION==act || PLAY_DISC_ACTION==act ? PLAY_ACTION : act;
     // Perform an action on a list of items. If these are tracks, then we can use 1 command...
     if (list[0].id.startsWith("track_id:")) {
         var ids="";
@@ -1885,11 +1890,12 @@ function browseDoList(view, list, act/*, index*/) {
             command.command.push(ids);
         }
         if (PLAY_ACTION==act) {
+            if (undefined!=index) {
+                command.command.push("play_index:"+index);
+            }
+
             lmsCommand(view.playerId(), ["playlist", "clear"]).then(({data}) => {
                 lmsCommand(view.playerId(), command.command).then(({data}) => {
-                    /*if (undefined!=index) {
-                        bus.$emit('playerCommand', ["playlist", "index", index]);
-                    }*/
                     bus.$emit('refreshStatus');
                     logJsonMessage("RESP", data);
                     if (!view.$store.state.desktopLayout) {

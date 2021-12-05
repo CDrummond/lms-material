@@ -153,6 +153,14 @@ function updateUiSettings(state, val) {
         state.powerButton = val.powerButton;
         setLocalStorageVal('powerButton', state.powerButton);
     }
+    if (undefined!=val.synchroniseMenu && state.synchroniseMenu!=val.synchroniseMenu) {
+        state.synchroniseMenu = val.synchroniseMenu;
+        setLocalStorageVal('synchroniseMenu', state.synchroniseMenu);
+    }
+    if (undefined!=val.manageplayersMenu && state.manageplayersMenu!=val.manageplayersMenu) {
+        state.manageplayersMenu = val.manageplayersMenu;
+        setLocalStorageVal('manageplayersMenu', state.manageplayersMenu);
+    }
     if (undefined!=val.largeCovers && state.largeCovers!=val.largeCovers) {
         state.largeCovers = val.largeCovers;
         setLocalStorageVal('largeCovers', state.largeCovers);
@@ -295,6 +303,8 @@ const store = new Vuex.Store({
         lang: 'en-US',
         twentyFourHour: false,
         powerButton: false,
+        synchroniseMenu: false,
+        manageplayersMenu: true,
         largeCovers: false,
         mediaControls: false,
         downloadStatus: [],
@@ -505,6 +515,8 @@ const store = new Vuex.Store({
             state.homeButton = getLocalStorageBool('homeButton', state.homeButton);
             state.disabledBrowseModes = new Set(JSON.parse(getLocalStorageVal('disabledBrowseModes', '["myMusicFlopTracks", "myMusicTopTracks", "myMusicMusicFolder", "myMusicFileSystem", "myMusicArtistsComposers", "myMusicArtistsConductors", "myMusicArtistsJazzComposers", "myMusicAlbumsAudiobooks"]')));
             state.powerButton = getLocalStorageBool('powerButton', state.powerButton);
+            state.synchroniseMenu = getLocalStorageBool('synchroniseMenu', state.synchroniseMenu);
+            state.manageplayersMenu = getLocalStorageBool('manageplayersMenu', state.manageplayersMenu);
             state.largeCovers = getLocalStorageBool('largeCovers', state.largeCovers);
             state.mediaControls = getLocalStorageBool('mediaControls', state.mediaControls);
             // Ensure theme is in settings, so that it can be use in classic skin mods...
@@ -634,6 +646,8 @@ const store = new Vuex.Store({
                                      homeButton: getLocalStorageBool('homeButton', undefined==prefs.homeButton ? state.homeButton : prefs.homeButton),
                                      showRating: getLocalStorageBool('showRating', undefined==prefs.showRating ? state.showRating : prefs.showRating),
                                      powerButton: getLocalStorageBool('powerButton', undefined==prefs.powerButton ? state.powerButton : prefs.powerButton),
+                                     synchroniseMenu: getLocalStorageBool('synchroniseMenu', undefined==prefs.synchroniseMenu ? state.synchroniseMenu : prefs.synchroniseMenu),
+                                     manageplayersMenu: getLocalStorageBool('manageplayersMenu', undefined==prefs.manageplayersMenu ? state.manageplayersMenu : prefs.manageplayersMenu),
                                      largeCovers: getLocalStorageBool('largeCovers', undefined==prefs.largeCovers ? state.largeCovers : prefs.largeCovers),
                                      mediaControls: getLocalStorageBool('mediaControls', undefined==prefs.mediaControls ? state.mediaControls : prefs.mediaControls) };
                         if (undefined!=prefs.hidden && undefined==getLocalStorageVal('hidden', undefined)) {

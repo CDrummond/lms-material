@@ -186,6 +186,22 @@ Vue.component('lms-ui-settings', {
      <v-list-tile-action><v-switch v-model="homeButton"></v-switch></v-list-tile-action>
     </v-list-tile>
 
+    <v-list-tile>
+     <v-list-tile-content @click="synchroniseMenu = !synchroniseMenu" class="switch-label">
+      <v-list-tile-title>{{i18n('Show the synchronise menu')}}</v-list-tile-title>
+      <v-list-tile-sub-title>{{i18n('When navigating into the players menu, show the synchronise menu, to show a dialog to quickly synchronise with other players.')}}</v-list-tile-sub-title>
+     </v-list-tile-content>
+     <v-list-tile-action><v-switch v-model="synchroniseMenu"></v-switch></v-list-tile-action>
+    </v-list-tile>
+
+    <v-list-tile>
+     <v-list-tile-content @click="manageplayersMenu = !manageplayersMenu" class="switch-label">
+      <v-list-tile-title>{{i18n('Show the manage players menu')}}</v-list-tile-title>
+      <v-list-tile-sub-title>{{i18n('When navigating into the players menu, show the manage players menu, to show a dialog to manage players.')}}</v-list-tile-sub-title>
+     </v-list-tile-content>
+     <v-list-tile-action><v-switch v-model="manageplayersMenu"></v-switch></v-list-tile-action>
+    </v-list-tile>
+
     <div class="dialog-padding"></div>
     <v-header class="dialog-section-header">{{i18n('Browse')}}</v-header>
 
@@ -429,6 +445,8 @@ Vue.component('lms-ui-settings', {
             showRating: false,
             homeButton: false,
             powerButton: false,
+            synchroniseMenu: false,
+            manageplayersMenu: true,
             largeCovers: false,
             width: 500,
             mediaControls: false,
@@ -595,6 +613,8 @@ Vue.component('lms-ui-settings', {
             this.screensaver = this.$store.state.screensaver;
             this.homeButton = this.$store.state.homeButton;
             this.powerButton = this.$store.state.powerButton;
+            this.synchroniseMenu = this.$store.state.synchroniseMenu;
+            this.manageplayersMenu = this.$store.state.manageplayersMenu;
             this.largeCovers = this.$store.state.largeCovers;
             this.mediaControls = this.$store.state.mediaControls;
             var disabled=new Set(JSON.parse(getLocalStorageVal("disabledItems", JSON.stringify([TOP_CDPLAYER_ID, TOP_REMOTE_ID]))));
@@ -688,6 +708,8 @@ Vue.component('lms-ui-settings', {
                       screensaver:this.screensaver,
                       homeButton:this.homeButton,
                       powerButton:this.powerButton,
+                      synchroniseMenu:this.synchroniseMenu,
+                      manageplayersMenu:this.manageplayersMenu,
                       largeCovers:this.largeCovers,
                       showRating:this.showRating,
                       mediaControls:this.mediaControls

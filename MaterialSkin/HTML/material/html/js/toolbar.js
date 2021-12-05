@@ -14,6 +14,7 @@ var TB_APP_SETTINGS    = {id:"tb:appsettings",    svg: "app-settings" };
 var TB_INFO            = {id:"tb:info",           icon: "info" };
 var TB_NOTIFICATIONS   = {id:"tb:notifs",         svg: "bell" };
 var TB_MANAGE_PLAYERS  = {id:"tb:manageplayers",  svg: "player-manager" };
+var TB_SYNC            = {id:"tb:sync",           icon: "link" };
 
 Vue.component('lms-toolbar', {
     template: `
@@ -55,7 +56,13 @@ Vue.component('lms-toolbar', {
 
    <v-divider v-if="!noPlayer && (((players && players.length>1) || playerStatus.sleepTime || otherPlayers.length>0))" class="hide-for-mini"></v-divider>
 
-   <v-list-tile v-if="(players && players.length>1) || otherPlayers.length>0" @click="menuAction(TB_MANAGE_PLAYERS.id)" class="hide-for-mini">
+   <v-list-tile v-if="multipleStandardPlayers && synchroniseMenu" @click="bus.$emit('dlg.open', 'sync', player)" class="hide-for-mini">
+    <v-list-tile-avatar v-if="menuIcons"><v-icon>{{TB_SYNC.icon}}</v-icon></v-list-tile-avatar>
+    <v-list-tile-content><v-list-tile-title>{{TB_SYNC.title}}</v-list-tile-title></v-list-tile-content>
+    <v-list-tile-action v-if="TB_SYNC.shortcut && keyboardControl" class="menu-shortcut player-menu-shortcut">{{TB_SYNC.shortcut}}</v-list-tile-action>
+   </v-list-tile>
+
+   <v-list-tile v-if="((players && players.length>1) || otherPlayers.length>0) && manageplayersMenu" @click="menuAction(TB_MANAGE_PLAYERS.id)" class="hide-for-mini">
     <v-list-tile-avatar v-if="menuIcons"><img class="svg-img" :src="TB_MANAGE_PLAYERS.svg | svgIcon(darkUi)"></img></v-list-tile-avatar>
     <v-list-tile-content><v-list-tile-title>{{TB_MANAGE_PLAYERS.title}}</v-list-tile-title></v-list-tile-content>
     <v-list-tile-action v-if="TB_MANAGE_PLAYERS.shortcut && keyboardControl" class="menu-shortcut player-menu-shortcut">{{TB_MANAGE_PLAYERS.shortcut}}</v-list-tile-action>
@@ -487,6 +494,8 @@ Vue.component('lms-toolbar', {
             TB_NOTIFICATIONS.title=i18n('Notifications');
             TB_MANAGE_PLAYERS.title=i18n('Manage players');
             TB_MANAGE_PLAYERS.shortcut=shortcutStr(LMS_MANAGEPLAYERS_KEYBOARD);
+            TB_SYNC.title=i18n('Synchronise');
+            TB_SYNC.shortcut=shortcutStr(LMS_SYNC_KEYBOARD);
             TB_APP_SETTINGS.title=i18n('Application settings');
             TB_APP_SETTINGS.stitle=i18n('Application');
             this.menuItems = [ TB_SETTINGS, TB_INFO, TB_NOTIFICATIONS ];
@@ -810,6 +819,12 @@ Vue.component('lms-toolbar', {
         },
         downloadCount() {
             return this.$store.state.downloadStatus.length
+        },
+        synchroniseMenu() {
+            return this.$store.state.synchroniseMenu
+        },
+        manageplayersMenu() {
+            return this.$store.state.manageplayersMenu
         }
     },
     filters: {

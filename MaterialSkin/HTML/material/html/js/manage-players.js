@@ -108,7 +108,7 @@ Vue.component('lms-manage-players', {
       <v-flex xs12>
        <v-list class="pmgr-playerlist">
         <v-list-tile @dragstart.native="dragStart(index, $event)" @dragend.native="dragEnd()" @dragover.native="dragOver($event)" @drop.native="drop(index, $event)" :draggable="!player.isgroup" v-bind:class="{'highlight-drop':dropId==('pmgr-player-'+index), 'highlight-drag':dragIndex==index}" :id="'tile-pmgr-player-'+index">
-         <v-list-tile-avatar v-if="player.image && isMainPlayer(player)" :tile="true" v-bind:class="{'dimmed': !player.ison}">
+         <v-list-tile-avatar v-if="player.image && isMainPlayer(player)" :tile="true" class="pmgr-cover" v-bind:class="{'dimmed': !player.ison}">
           <img :key="player.image" v-lazy="player.image"></img>
          </v-list-tile-avatar>
          <v-list-tile-content v-if="isMainPlayer(player)">
@@ -162,7 +162,7 @@ Vue.component('lms-manage-players', {
      <v-flex xs12 v-if="0==index || player.server!=otherPlayers[index-1].server" v-bind:class="{'pmgr-other-title':players.length>0,'pmgr-title':0==players.length}" class="ellipsis">{{player.server}}</v-flex>
       <v-flex xs12 style="padding:0px;">
       <v-list style="padding:0px;">
-       <v-list-tile @click="movePlayer(player)">
+       <v-list-tile @click="movePlayer(player)" class="pmgr-other-player">
         <v-list-tile-content>
          <v-list-tile-title><v-icon v-if="player.icon.icon">{{player.icon.icon}}</v-icon><img v-else class="svg-img" :src="player.icon.svg | svgIcon(darkUi)"></img>
          {{player.name}}</v-list-tile-title>

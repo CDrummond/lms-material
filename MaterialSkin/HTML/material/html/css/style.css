@@ -1525,6 +1525,29 @@ progress {
  margin-top:-12px;
 }
 
+/* Hide current cover if window too narrow */
+@media screen and (max-width: 320px) {
+ .pmgr-cover {
+  display:none!important;
+ }
+
+ .pmgr-vol-dec-btn {
+  margin-left:0px!important;
+ }
+ .pmgr-sync .v-list__tile {
+  margin-left:0px;
+ }
+ .pmgr-sync .v-list__tile__title {
+  font-size:var(--small-font-size)!important;
+ }
+ .pmgr-member-list {
+  margin-left:8px;
+ }
+ .pmgr-other-player .v-list__tile {
+  padding:0px 16px 0px 8px!important; /* t, r, b, l */
+ }
+}
+
 .v-icon {
  text-align:center;
 }

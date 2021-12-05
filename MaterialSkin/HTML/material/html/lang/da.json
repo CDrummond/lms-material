@@ -41,6 +41,7 @@
 "Albums":"Albums",
 "All":"Alt",
 "All Artists":"Alle kunstnere",
+"All discs":"Alle CD'ere",
 "All downloads complete.":"Filhentning afsluttet",
 "All duplicates removed":"Alle dubletter er fjernet",
 "All options":"Alle indstillinger",
@@ -234,6 +235,7 @@
 "Lock screen and notifications":"Lås skærmen og beskeder",
 "Lyrics":"Sangtekster",
 "MAC Address: %1":"MAC adresse: %1",
+"Main disc":"Hoved CD",
 "Main menu":"Hovedmenu",
 "Manage players":"Administrer alle afspillere",
 "Material Skin is a HTML5 WebApp for LMS. For support, to report bugs, or ask for new features, please visit one of the following links:":"Material Skin er en HTML5 WebApp for LMS. For hjælp, for at raportere fejl eller for at spørge efter nye funktioner kan du besøge et af følgende links:",
@@ -289,6 +291,7 @@
 "Play":"Afspil",
 "Play album starting at track":"Afspil albummet startede med dette nummer",
 "Play count":"Antal afspilninger",
+"Play disc starting at track":"Afspil CD'en startende med dette nummer",
 "Play next":"Afspil som næste",
 "Play now":"Afspil nu",
 "Play selection":"Afspil udvalgte",
@@ -329,6 +332,7 @@
 "Remove album":"Fjern album",
 "Remove all selected items":"Fjern alle valgte elementer",
 "Remove all tracks from queue?":"Fjern alle numre fra køen?",
+"Remove disc":"Skub CD'en ud",
 "Remove duplicate tracks?":"Fjern dublerede numre?",
 "Remove duplicates":"Fjern dubletter",
 "Remove from favorites":"Fjern fra favoritter",
@@ -575,9 +579,5 @@
 "1 Year":"1 år",
 "%1 Years":"%1 år",
 "1 day":"1 dag",
-"%1 days":"%1 dage",
-"All discs":"",
-"Main disc":"",
-"Play disc starting at track":"",
-"Remove disc":""
+"%1 days":"%1 dage"
 }

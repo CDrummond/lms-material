@@ -13,8 +13,8 @@
     inactive, just change colour of active item.
  9. Adjust desktop default pane sizes; queue 30% min-width 400px.
 10. Remove 'Open mini-player' buttons from players menu.
-11. If screen is 320px or less, then don't shown covers in 'Manage players'
-    dialog - to gve player name more space.
+11. If screen is 320px or less, then don't show covers in 'Manage players'
+    dialog - to give player name more space.
 
 2.7.3
 -----

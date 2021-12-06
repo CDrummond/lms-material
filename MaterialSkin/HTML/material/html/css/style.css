@@ -791,6 +791,11 @@ div.v-subheader {
  font-weight:200!important;
 }
 
+.nonclick-menu-item .v-list__tile__title {
+ font-size:var(--std-font-size)!important;
+ font-weight:200!important;
+}
+
 .lms-list .browse-text {
  font-size:var(--std-font-size)!important;
  font-weight:200!important;

@@ -587,6 +587,16 @@ function parseBrowseResp(data, parent, options, cacheKey, parentCommand, parentG
                     resp.items.shift();
                     resp.subtitle=0==resp.items.length ? i18n("Empty") : i18np("1 Track", "%1 Tracks", resp.items.length);
                 } else {
+                    if (resp.allowHoverBtns && resp.items.length>1 && "spotty"==command &&
+                        resp.items[0].style=='itemplay' && resp.items[resp.items.length-1].style=='itemNoAction') {
+                        resp.actionItems = [];
+                        let idx = resp.items.length-1;
+                        while (resp.items.length>0 && resp.items[resp.items.length-1].style!='itemplay') {
+                            let itm = resp.items.pop();
+                            itm.isListItemInMenu = true;
+                            resp.actionItems.unshift(itm);
+                        }
+                    }
                     resp.subtitle=0==resp.items.length ? i18n("Empty") : i18np("1 Item", "%1 Items", resp.items.length);
                 }
             }

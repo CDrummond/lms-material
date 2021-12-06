@@ -301,17 +301,6 @@ function browseHandleListResponse(view, item, command, resp, prevPage) {
             } else if (undefined!=view.$store.state.ratingsPlugin && view.items.length>1) {
                 view.currentActions.items.push({albumRating:true, title:i18n("Set rating for all tracks"), icon:"stars", weight:99});
             }
-            view.currentActions.items.sort(function(a, b) { return a.weight!=b.weight ? a.weight<b.weight ? -1 : 1 : titleSort(a, b) });
-            // Artist from online service, but no albums? Add links to services...
-            if (listingArtistAlbums && view.items.length==0) {
-                view.items.push({id:"intro", title:i18n("No albums have been favorited for this artist. Please use the entries below to look for albums on your online services."), type:"text"});
-                for (var i=0, loop=view.currentActions.items, len=loop.length; i<len; ++i) {
-                    if (loop[i].isService) {
-                        view.items.push({id:loop[i].id ? loop[i].id : "ca"+i, title:loop[i].title, do:loop[i].do, svg:loop[i].svg, icon:loop[i].icon, currentAction:true});
-                    }
-                }
-            }
-            view.currentActions.show = view.items.length>0 && view.currentActions.items.length>0;
             if (undefined!=actParams['path'] && actParams['path'].length>0) {
                 // Check we have some localfiles, if not hide entry!
                 lmsCommand('', ['musicartistinfo', 'localfiles', 'folder:'+actParams['path']]).then(({data}) => {
@@ -326,6 +315,21 @@ function browseHandleListResponse(view, item, command, resp, prevPage) {
                 }).catch(err => {
                 });
             }
+            view.currentActions.items.sort(function(a, b) { return a.weight!=b.weight ? a.weight<b.weight ? -1 : 1 : titleSort(a, b) });
+            // Artist from online service, but no albums? Add links to services...
+            if (listingArtistAlbums && view.items.length==0) {
+                view.items.push({id:"intro", title:i18n("No albums have been favorited for this artist. Please use the entries below to look for albums on your online services."), type:"text"});
+                for (var i=0, loop=view.currentActions.items, len=loop.length; i<len; ++i) {
+                    if (loop[i].isService) {
+                        view.items.push({id:loop[i].id ? loop[i].id : "ca"+i, title:loop[i].title, do:loop[i].do, svg:loop[i].svg, icon:loop[i].icon, currentAction:true});
+                    }
+                }
+            }
+            view.currentActions.show = view.items.length>0 && view.currentActions.items.length>0;
+        } else if (undefined!=resp.actionItems && resp.actionItems.length>0) {
+            view.currentActions.items = resp.actionItems;
+            view.currentActions.isFromList = true;
+            view.currentActions.show = view.items.length>0 && view.currentActions.items.length>0;
         }
         view.itemCustomActions = resp.itemCustomActions;
         if (item.id.startsWith(SEARCH_ID)) {
@@ -430,12 +434,14 @@ function browseClick(view, item, index, event) {
     if (view.fetchingItem!=undefined || "html"==item.type) {
          return;
     }
-    if (view.menu.show) {
-        view.menu.show=false;
-        return;
-    }
-    if (view.$store.state.visibleMenus.size>0) {
-        return;
+    if (!item.isListItemInMenu) {
+        if (view.menu.show) {
+            view.menu.show=false;
+            return;
+        }
+        if (view.$store.state.visibleMenus.size>0) {
+            return;
+        }
     }
     if ("search"==item.type || "entry"==item.type) {
         if (view.grid.use || view.useRecyclerForLists) {

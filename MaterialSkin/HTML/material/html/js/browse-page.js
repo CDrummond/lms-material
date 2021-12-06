@@ -294,19 +294,26 @@ var lmsBrowse = Vue.component("lms-browse", {
   <v-list v-else-if="menu.currentActions">
    <template v-for="(item, index) in menu.currentActions">
     <v-divider v-if="DIVIDER==item.action"></v-divider>
-    <v-list-tile v-else-if="item.action==ADD_TO_FAV_ACTION && isInFavorites(current)" @click="itemAction(REMOVE_FROM_FAV_ACTION, current, undefined, $event)">
+    <v-list-tile v-else-if="!item.isListItemInMenu && item.action==ADD_TO_FAV_ACTION && isInFavorites(current)" @click="itemAction(REMOVE_FROM_FAV_ACTION, current, undefined, $event)">
      <v-list-tile-avatar v-if="menuIcons">
       <v-icon v-if="undefined==ACTIONS[REMOVE_FROM_FAV_ACTION].svg">{{ACTIONS[REMOVE_FROM_FAV_ACTION].icon}}</v-icon>
       <img v-else class="svg-img" :src="ACTIONS[REMOVE_FROM_FAV_ACTION].svg | svgIcon(darkUi)"></img>
      </v-list-tile-avatar>
      <v-list-tile-title>{{ACTIONS[REMOVE_FROM_FAV_ACTION].title}}</v-list-tile-title>
     </v-list-tile>
-    <v-list-tile v-else-if="undefined!=item.action" @click="itemAction(item.action, current, undefined, $event)">
+    <v-list-tile v-else-if="!item.isListItemInMenu && undefined!=item.action" @click="itemAction(item.action, current, undefined, $event)">
      <v-list-tile-avatar v-if="menuIcons">
       <v-icon v-if="undefined==ACTIONS[item.action].svg">{{ACTIONS[item.action].icon}}</v-icon>
       <img v-else class="svg-img" :src="ACTIONS[item.action].svg | svgIcon(darkUi)"></img>
      </v-list-tile-avatar>
      <v-list-tile-content><v-list-tile-title>{{ACTIONS[item.action].title}}</v-list-tile-title></v-list-tile-content>
+    </v-list-tile>
+    <v-list-tile v-else-if="item.isListItemInMenu && 'itemNoAction'==item.style" class="nonclick-menu-item">
+     <v-list-tile-avatar v-if="menuIcons">
+      <v-icon v-if="undefined==item.svg">{{item.icon}}</v-icon>
+      <img v-else class="svg-img" :src="item.svg | svgIcon(darkUi)"></img>
+     </v-list-tile-avatar>
+     <v-list-tile-content><v-list-tile-title>{{item.title}}</v-list-tile-title></v-list-tile-content>
     </v-list-tile>
     <v-list-tile v-else @click="currentAction(item, index)">
      <v-list-tile-avatar v-if="menuIcons">
@@ -725,7 +732,9 @@ var lmsBrowse = Vue.component("lms-browse", {
             showMenu(this, {show:true, currentActions:this.currentActions.items, x:event.clientX, y:event.clientY});
         },
         currentAction(act, index) {
-            if (act.albumRating) {
+            if (act.isListItemInMenu) {
+                this.click(act);
+            } else if (act.albumRating) {
                 this.setAlbumRating();
             } else if (act.custom) {
                 let browseCmd = doCustomAction(act, this.$store.state.player, this.current);

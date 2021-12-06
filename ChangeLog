@@ -15,6 +15,7 @@
 10. Remove 'Open mini-player' buttons from players menu.
 11. If screen is 320px or less, then don't show covers in 'Manage players'
     dialog - to give player name more space.
+12. Place Spotty's actions from end of album track list into a menu.
 
 2.7.3
 -----

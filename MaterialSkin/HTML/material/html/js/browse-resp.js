@@ -588,10 +588,12 @@ function parseBrowseResp(data, parent, options, cacheKey, parentCommand, parentG
                     resp.subtitle=0==resp.items.length ? i18n("Empty") : i18np("1 Track", "%1 Tracks", resp.items.length);
                 } else {
                     if (resp.allowHoverBtns && resp.items.length>1 && "spotty"==command &&
-                        resp.items[0].style=='itemplay' && resp.items[resp.items.length-1].style=='itemNoAction') {
+                        resp.items[0].menu.length>0 && resp.items[0].menu[0]==PLAY_ACTION &&
+                        resp.items[resp.items.length-1].style=='itemNoAction') {
                         resp.actionItems = [];
                         let idx = resp.items.length-1;
-                        while (resp.items.length>0 && resp.items[resp.items.length-1].style!='itemplay') {
+                        while (resp.items.length>0 &&
+                               !(resp.items[resp.items.length-1].menu.length>0 && resp.items[resp.items.length-1].menu[0]==PLAY_ACTION)) {
                             let itm = resp.items.pop();
                             itm.isListItemInMenu = true;
                             resp.actionItems.unshift(itm);

@@ -344,7 +344,7 @@ Vue.component('lms-manage-players', {
                                 ? this.$store.state.unlockAll
                                     ? [PMGR_SETTINGS_ACTION, player.ison ? PMGR_POWER_OFF_ACTION : PMGR_POWER_ON_ACTION, PMGR_SLEEP_ACTION, DIVIDER, PMGR_EDIT_GROUP_ACTION, PMGR_DELETE_GROUP_ACTION]
                                     : [PMGR_SETTINGS_ACTION, player.ison ? PMGR_POWER_OFF_ACTION : PMGR_POWER_ON_ACTION, PMGR_SLEEP_ACTION]
-                                : [PMGR_SYNC_ACTION, PMGR_SETTINGS_ACTION, player.ison ? PMGR_POWER_OFF_ACTION : PMGR_POWER_ON_ACTION, PMGR_SLEEP_ACTION];
+                                : [PMGR_SETTINGS_ACTION, player.ison ? PMGR_POWER_OFF_ACTION : PMGR_POWER_ON_ACTION, PMGR_SLEEP_ACTION, PMGR_SYNC_ACTION];
             this.menu.x=event.clientX;
             this.menu.y=event.clientY;
             this.menu.player=player;

@@ -72,16 +72,6 @@ Vue.component('lms-player-settings', {
     <v-list-tile v-if="dstmItems && dstmItems.length>1">
      <v-select :items="dstmItems" :label="trans.dstm" v-model="dstm" item-text="label" item-value="key"></v-select>
     </v-list-tile>
-
-    <div class="dialog-padding"></div>
-    <v-header class="dialog-section-header">{{i18n('Sleep')}} {{sleepTime | displayTime}}</v-header>
-
-    <v-list-tile class="other-setting">
-     <v-list-tile-content>
-      <v-list-tile-title><v-btn flat @click="setSleep"><v-icon class="btn-icon">hotel</v-icon>{{i18n('Set sleep timer')}}</v-btn></v-list-tile-title>
-      <v-list-tile-sub-title>{{i18n("Control when player should 'sleep'.")}}</v-list-tile-sub-title>
-     </v-list-tile-content>
-    </v-list-tile>
      
     <div class="dialog-padding" v-if="unlockAll"></div>
     <v-header class="dialog-section-header" v-if="unlockAll" id="alarms">{{i18n('Alarms')}}</v-header>
@@ -133,8 +123,20 @@ Vue.component('lms-player-settings', {
       <v-select :items="libraries" :label="i18n('Library')" v-model="library" item-text="name" item-value="id"></v-select>
      </v-list-tile>
 
-     <div class="dialog-padding" v-if="unlockAll"></div>
-     <v-header v-if="unlockAll">{{i18n('Other settings')}}</v-header>
+     <div class="dialog-padding"></div>
+     <v-header>{{i18n('Other settings')}}</v-header>
+     <v-list-tile class="other-setting">
+      <v-list-tile-content>
+       <v-list-tile-title><v-btn flat @click="setSleep"><v-icon class="btn-icon">hotel</v-icon>{{i18n('Sleep')}} {{sleepTime | displayTime}}</v-btn></v-list-tile-title>
+       <v-list-tile-sub-title>{{i18n("Control when player should 'sleep'.")}}</v-list-tile-sub-title>
+      </v-list-tile-content>
+     </v-list-tile>
+     <v-list-tile v-if="showSync" class="other-setting">
+      <v-list-tile-content>
+       <v-list-tile-title><v-btn flat @click="bus.$emit('dlg.open', 'sync', {id:playerId, isgroup:false, name:playerName})"><v-icon class="btn-icon">link</v-icon>{{i18n('Synchronise')}}</v-btn></v-list-tile-title>
+       <v-list-tile-sub-title>{{isSynced ? i18n('Currently synced with other players.') : i18n('Not currently synced with any other player.')}}</v-list-tile-sub-title>
+      </v-list-tile-content>
+     </v-list-tile>
      <v-list-tile v-if="unlockAll" class="other-setting">
       <v-list-tile-content>
        <v-list-tile-title><v-btn flat @click="showExtraSettings"><img class="svg-img btn-icon" :src="'configure'| svgIcon(darkUi)"></img>{{i18n('Extra settings')}}</v-btn></v-list-tile-title>
@@ -226,9 +228,12 @@ Vue.component('lms-player-settings', {
     data() {
         return {
             show: false,
+            playerId: undefined,
             playerName: undefined,
             playerIcon: undefined,
             playerLink: undefined,
+            isGroup: false,
+            isSynced: false,
             crossfade: undefined,
             smartCrossfade: false,
             replaygain: undefined,
@@ -290,6 +295,13 @@ Vue.component('lms-player-settings', {
         },
         homeButton() {
             return this.$store.state.homeButton
+        },
+        showSync() {
+            if (!this.isGroup && this.$store.state.players) {
+                var len = this.$store.state.players.length;
+                return len>1 && !this.$store.state.players[0].isgroup && !this.$store.state.players[1].isgroup;
+            }
+            return false;
         }
     },
     mounted() {
@@ -374,8 +386,10 @@ Vue.component('lms-player-settings', {
     methods: {
         handlePlayerStatus(playerStatus) {
             this.controlSleepTimer(playerStatus.will_sleep_in);
+            this.isSynced = playerStatus.synced;
         },
         playerSettings(player, section) {
+            bus.$emit('refreshStatus', player.id);
             this.wide = window.innerWidth >= 700 ? 2 : window.innerWidth >= (this.$store.state.largeFonts ? 410 : 370) ? 1 : 0;
             this.cancelSleepTimer();
             this.dstmItems=[];
@@ -385,6 +399,8 @@ Vue.component('lms-player-settings', {
             this.playerName = player.name;
             this.playerIcon = player.icon;
             this.playerLink = player.link;
+            this.isGroup = player.isgroup;
+            this.isSynced = false;
             this.orig = { player: {name:player.name, icon:player.icon}, dstm:"",
                           alarms: { fade:false, timeout:0, snooze:0, on:false, volume:0 },
                           library:"", crossfade:"0", smartCrossfade:false, replaygain:"" };

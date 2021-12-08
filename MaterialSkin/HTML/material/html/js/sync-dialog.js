@@ -127,7 +127,7 @@ Vue.component('lms-sync-dialog', {
             }
             if (0==commands.length) {
                 this.show=false;
-                bus.$emit('refreshStatus');
+                bus.$emit('refreshStatus', this.player.id);
                 bus.$emit('syncChanged');
             } else {
                 let command = commands.shift();

@@ -42,7 +42,7 @@ Vue.component('lms-splitter', {
     },
     mounted() {
         bus.$on('setSplitter', function(val) {
-            this.percent = this.lastUpdate = pcval;
+            this.percent = this.lastUpdate = val;
             document.documentElement.style.setProperty('--splitter-pc', this.percent);
         }.bind(this));
     },

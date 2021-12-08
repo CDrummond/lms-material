@@ -20,6 +20,8 @@
 14. Add button to control synchronisation to 'Player settings' dialog.
 15. Redesign 'Synchronisation' dialog to have a check list.
 16. Don't scroll action selector with players list in 'Trasfer queue' dialog.
+17. Allow pressing 'Toggle queue' button whilst now playing is expanded, or info
+    is being shown.
 
 2.7.3
 -----

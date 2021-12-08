@@ -99,9 +99,9 @@ Vue.component('lms-toolbar', {
  <v-btn icon :title="trans.hideLarge | tooltip(trans.showLargeShortcut,keyboardControl)" v-if="desktopLayout && nowPlayingExpanded" @click.native="expandNowPlaying(false)" class="toolbar-button hide-for-mini">
   <v-icon class="active-btn">fullscreen_exit</v-icon>
  </v-btn>
- <v-btn icon :title="trans.toggleQueue | tooltip(trans.toggleQueueShortcut,keyboardControl)" v-if="desktopLayout" @click.native="if (!infoOpen && !nowPlayingExpanded) toggleQueue()" class="toolbar-button hide-for-mini" v-bind:class="{'disabled':infoOpen || nowPlayingExpanded}">
+ <v-btn icon :title="trans.toggleQueue | tooltip(trans.toggleQueueShortcut,keyboardControl)" v-if="desktopLayout" @click.native="toggleQueue()" class="toolbar-button hide-for-mini">
   <v-icon v-if="showQueue" class="active-btn">queue_music</v-icon>
-  <img v-else class="svg-img" v-bind:class="{'dimmed':coloredToolbars && !showQueue && !infoOpen && !nowPlayingExpanded}" :src="'queue_music_outline' | svgIcon(darkUi, false, true, undefined, coloredToolbars)"></img>
+  <img v-else class="svg-img" :src="'queue_music_outline' | svgIcon(darkUi, false, true, undefined, coloredToolbars)"></img>
  </v-btn>
  <v-menu v-if="connected" class="hide-for-mini" bottom left v-model="showMainMenu">
   <v-btn slot="activator" icon :title="trans.mainMenu"><img v-if="updatesAvailable" class="svg-badge" :src="'update' | svgIcon(darkUi, true, true, undefined, coloredToolbars)"></img><img v-else-if="notificationsAvailable" class="svg-badge" :src="'bell' | svgIcon(darkUi, true, true, undefined, coloredToolbars)"></img><v-icon>more_vert</v-icon></v-btn>
@@ -734,7 +734,11 @@ Vue.component('lms-toolbar', {
             performCustomAction(this, action, this.$store.state.player);
         },
         toggleQueue() {
-            this.$store.commit('setShowQueue', !this.$store.state.showQueue);
+            let showQ = this.infoOpen || this.nowPlayingExpanded;
+            if (showQ) {
+                bus.$emit('npclose');
+            }
+            this.$store.commit('setShowQueue', showQ || !this.$store.state.showQueue);
         }
     },
     computed: {

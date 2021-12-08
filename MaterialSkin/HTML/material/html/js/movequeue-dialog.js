@@ -11,13 +11,11 @@ Vue.component('lms-movequeue-dialog', {
 <v-dialog v-model="show" v-if="show" persistent width="450" class="lms-dialog">
  <v-card>
   <v-card-text style="margin-top:-16px">
+   <v-select :items="options" v-model="option" item-text="label" item-value="key"></v-select>
    <v-container grid-list-md style="padding: 4px">
     <v-layout wrap>
      <v-flex xs12>
       <v-list class="sleep-list dialog-main-list">
-       <v-list-tile>
-        <v-select :items="options" v-model="option" item-text="label" item-value="key"></v-select>
-       </v-list-tile>
        <template v-for="(p, index) in players" v-if="p.id!=src">
         <v-list-tile @click="moveTo(p)">
          <v-list-tile-avatar :tile="true" class="lms-avatar"><v-icon v-if="p.icon.icon">{{p.icon.icon}}</v-icon><img v-else class="svg-img" :src="p.icon.svg | svgIcon(darkUi)"></img></v-list-tile-avatar>

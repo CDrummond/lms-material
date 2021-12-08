@@ -229,8 +229,13 @@ function browseHandleListResponse(view, item, command, resp, prevPage) {
         view.searchActive = item.id.startsWith(SEARCH_ID);
         view.command = command;
         view.currentBaseActions = view.baseActions;
+        let wasSearch = (item.type=="search" || item.type=="entry") && undefined!=view.enteredTerm;
+        // If this is an (e.g.) Spotty search then parent list (with search entry) will need refreshing
+        if (wasSearch && command.command.length>1 && "items"==command.command[1]) {
+            view.history[view.history.length-1].needsRefresh = true;
+        }
         view.headerTitle=item.title
-                            ? (item.type=="search" || item.type=="entry") && undefined!=view.enteredTerm
+                            ? wasSearch
                                 ? item.title+SEPARATOR+view.enteredTerm
                                 : item.title
                             : "?";

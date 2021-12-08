@@ -11,22 +11,27 @@ Vue.component('lms-sync-dialog', {
 <v-dialog v-model="show" v-if="show" persistent width="600" class="lms-dialog">
  <v-card v-if="player">
   <v-card-text>
-   <v-container grid-list-md>
+   <v-container grid-list-md style="padding: 4px">
     <v-layout wrap>
      <v-flex xs12>{{i18n("Select which players you would like to synchronise with '%1':", player.name)}}</v-flex>
      <v-flex xs12>
-      <v-select chips deletable-chips multiple :items="players" :label="i18n('Synchronise players')" v-model="chosenPlayers" item-text="label" item-value="id">
-       <v-list-tile slot="prepend-item" @click="togglePlayers()" v-if="players.length>1">
-        <v-list-tile-action><v-icon>{{selectAllIcon}}</v-icon></v-list-tile-action>
-        <v-list-tile-title>{{i18n('Select All')}}</v-list-tile-title>
-       </v-list-tile>
-       <v-divider slot="prepend-item"></v-divider>
-      </v-select>
+      <v-list class="sleep-list dialog-main-list">
+       <template v-for="(p, index) in players">
+        <v-list-tile @click="p.synced=!p.synced; numSync+=(p.synced ? 1 : -1)">
+         <v-list-tile-avatar :tile="true" class="lms-avatar"><v-icon>{{p.synced ? 'check_box' : 'check_box_outline_blank'}}</v-icon></v-list-tile-avatar>
+         <v-list-tile-title class="sleep-item">{{p.name}}</v-list-tile-title>
+        </v-list-tile>
+        <v-divider></v-divider>
+       </template>
+      </v-list>
      </v-flex>
     </v-layout>
    </v-container>
   </v-card-text>
   <v-card-actions>
+   <div style="width:12px"></div>
+   <v-btn flat v-if="numSync==players.length" icon @click.native="toggleAll(false)" :title="i18n('Unselect all')"><v-icon>filter_none</v-icon></v-btn>  
+   <v-btn flat v-else icon @click.native="toggleAll(true)" :title="i18n('Select all')"><v-icon>library_add_check</v-icon></v-btn>
    <v-spacer></v-spacer>
    <v-btn flat @click.native="close()">{{i18n('Cancel')}}</v-btn>
    <v-btn flat @click.native="sync()">{{i18n('Sync')}}</v-btn>
@@ -40,18 +45,7 @@ Vue.component('lms-sync-dialog', {
             show: false,
             player: undefined,
             players: [],
-            chosenPlayers: []
-        }
-    },
-    computed: {
-        selectAllIcon () {
-            if (this.chosenPlayers.length==this.players.length) {
-                return "check_box";
-            }
-            if (this.chosenPlayers.length>0) {
-                return "indeterminate_check_box";
-            }
-            return "check_box_outline_blank";
+            numSync:0
         }
     },
     mounted() {
@@ -60,20 +54,21 @@ Vue.component('lms-sync-dialog', {
                 return;
             }
             this.player = player;
+            this.numSync = 0;
             lmsCommand(this.player.id, ["sync", "?"]).then(({data}) => {
                 if (data && data.result && undefined!=data.result._sync) {
-                    var sync = data.result._sync.split(",");
+                    let sync = data.result._sync.split(",");
                     this.origSync = sync.length>0 && sync[0]!="-" ? new Set(sync) : new Set();
                     this.players=[];
-                    this.chosenPlayers=[];
-                    var numOtherStdPlayers = 0;
+                    let numOtherStdPlayers = 0;
                     this.$store.state.players.forEach(p => {
                         if (p.id!==this.player.id && !p.isgroup) {
-                            var play = {id:p.id, label:p.name};
+                            let synced = this.origSync.has(p.id);
+                            let play = {id:p.id, name:p.name, synced:synced};
                             this.players.push(play);
                             numOtherStdPlayers++;
-                            if (this.origSync.has(play.id)) {
-                                this.chosenPlayers.push(play.id);
+                            if (synced) {
+                                this.numSync++;
                             }
                         }
                     });
@@ -98,7 +93,11 @@ Vue.component('lms-sync-dialog', {
         },
         sync() {
             var newSync = new Set();
-            this.chosenPlayers.forEach(p => { newSync.add(p); } );
+            for (let i=0, len=this.players.length; i<len; ++i) {
+                if (this.players[i].synced) {
+                    newSync.add(this.players[i].id);
+                }
+            }
 
             // Build list of commands to execute...
             var commands = [];
@@ -137,13 +136,11 @@ Vue.component('lms-sync-dialog', {
                 });
             }
         },
-        togglePlayers() {
-            if (this.chosenPlayers.length==this.players.length) {
-                this.chosenPlayers = [];
-            } else {
-                this.chosenPlayers = [];
-                this.players.forEach(p => { this.chosenPlayers.push(p.id); } );
+        toggleAll(sel) {
+            for (let i=0, len=this.players.length; i<len; ++i) {
+                this.players[i].synced = sel;
             }
+            this.numSync = sel ? this.players.length : 0;
         },
         i18n(str, arg) {
             if (this.show) {

@@ -16,6 +16,11 @@ Vue.component('lms-sync-dialog', {
      <v-flex xs12>{{i18n("Select which players you would like to synchronise with '%1':", player.name)}}</v-flex>
      <v-flex xs12>
       <v-list class="sleep-list dialog-main-list">
+       <v-list-tile @click="toggleAll()">
+        <v-list-tile-avatar :tile="true" class="lms-avatar"><v-icon>{{selectAllIcon}}</v-icon></v-list-tile-avatar>
+        <v-list-tile-title class="sleep-item">{{i18n('Select All')}}</v-list-tile-title>
+       </v-list-tile>
+       <v-divider></v-divider>
        <template v-for="(p, index) in players">
         <v-list-tile @click="p.synced=!p.synced; numSync+=(p.synced ? 1 : -1)">
          <v-list-tile-avatar :tile="true" class="lms-avatar"><v-icon>{{p.synced ? 'check_box' : 'check_box_outline_blank'}}</v-icon></v-list-tile-avatar>
@@ -29,9 +34,7 @@ Vue.component('lms-sync-dialog', {
    </v-container>
   </v-card-text>
   <v-card-actions>
-   <div style="width:12px"></div>
-   <v-btn flat v-if="numSync==players.length" icon @click.native="toggleAll(false)" :title="i18n('Unselect all')"><v-icon>filter_none</v-icon></v-btn>  
-   <v-btn flat v-else icon @click.native="toggleAll(true)" :title="i18n('Select all')"><v-icon>library_add_check</v-icon></v-btn>
+   <p style="margin-left:10px" class="dimmed">{{i18np("1 Player", "%1 Players", numSync)}}</p>
    <v-spacer></v-spacer>
    <v-btn flat @click.native="close()">{{i18n('Cancel')}}</v-btn>
    <v-btn flat @click.native="sync()">{{i18n('Sync')}}</v-btn>
@@ -46,6 +49,17 @@ Vue.component('lms-sync-dialog', {
             player: undefined,
             players: [],
             numSync:0
+        }
+    },
+    computed: {
+        selectAllIcon () {
+            if (this.numSync==this.players.length) {
+                return "check_box";
+            }
+            if (this.numSync>0) {
+                return "indeterminate_check_box";
+            }
+            return "check_box_outline_blank";
         }
     },
     mounted() {
@@ -136,7 +150,8 @@ Vue.component('lms-sync-dialog', {
                 });
             }
         },
-        toggleAll(sel) {
+        toggleAll() {
+            let sel = this.numSync!=this.players.length;
             for (let i=0, len=this.players.length; i<len; ++i) {
                 this.players[i].synced = sel;
             }

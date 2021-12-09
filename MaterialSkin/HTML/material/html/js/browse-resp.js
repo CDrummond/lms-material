@@ -599,6 +599,20 @@ function parseBrowseResp(data, parent, options, cacheKey, parentCommand, parentG
                             resp.actionItems.unshift(itm);
                         }
                     }
+                    if (parent && parent.presetParams && parent.presetParams.favorites_url) {
+                        let parentActs = getCustomActions(command, false, parent.presetParams.favorites_url);
+                        if (undefined!=parentActs && parentActs.length>0) {
+                            if (undefined==resp.actionItems) {
+                                resp.actionItems = [];
+                            } else {
+                                resp.actionItems.push({action:DIVIDER});
+                            }
+                            for (let idx=0, len=parentActs.length; idx<len; ++idx) {
+                                parentActs[idx].custom=true;
+                                resp.actionItems.push(parentActs[idx]);
+                            }
+                        }
+                    }
                     resp.subtitle=0==resp.items.length ? i18n("Empty") : i18np("1 Item", "%1 Items", resp.items.length);
                 }
             }

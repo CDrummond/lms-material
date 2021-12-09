@@ -333,7 +333,6 @@ function browseHandleListResponse(view, item, command, resp, prevPage) {
             view.currentActions.show = view.items.length>0 && view.currentActions.items.length>0;
         } else if (undefined!=resp.actionItems && resp.actionItems.length>0) {
             view.currentActions.items = resp.actionItems;
-            view.currentActions.isFromList = true;
             view.currentActions.show = view.items.length>0 && view.currentActions.items.length>0;
         }
         view.itemCustomActions = resp.itemCustomActions;

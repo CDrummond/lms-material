@@ -30,10 +30,10 @@ function initCustomActions() {
     });
 }
 
-function getSectionActions(section, actions, lockedActions) {
+function getSectionActions(section, actions, lockedActions, filter) {
     if (customActions[section]) {
         for (let i=0, sect=customActions[section], len=sect.length; i<len; ++i) {
-            if ((lockedActions || !sect[i].locked) && (!sect[i].command || !sect[i].localonly || 'localhost'==location.hostname || '127.0.0.1'==location.hostname)) {
+            if ((lockedActions || !sect[i].locked) && (!sect[i].command || !sect[i].localonly || 'localhost'==location.hostname || '127.0.0.1'==location.hostname) && (undefined==filter || undefined==sect[i].filter || filter.startsWith(sect[i].filter))) {
                 if (undefined!=sect[i].title) {
                     translate(sect[i])
                 }
@@ -48,7 +48,7 @@ function getSectionActions(section, actions, lockedActions) {
 
 const NO_ALL_PLAYER_ACTIONS = new Set(['item', 'artist', 'album', 'track', 'queue-track', 'year', 'genre', 'settings', 'notifications', 'playlist', 'playlist-track', 'album-track']);
 
-function getCustomActions(id, lockedActions) {
+function getCustomActions(id, lockedActions, filter) {
     let actions = [];
     if (customActions) {
         if (undefined==id) {
@@ -59,7 +59,7 @@ function getCustomActions(id, lockedActions) {
             if (!NO_ALL_PLAYER_ACTIONS.has(id)) {
                 getSectionActions('allplayers', actions, lockedActions);
             }
-            getSectionActions(id, actions, lockedActions);
+            getSectionActions(id, actions, lockedActions, filter);
         }
     }
     return actions.length>0 ? actions : undefined;

@@ -505,6 +505,7 @@ Vue.component('lms-toolbar', {
             let idx = parseInt(el.firstChild.id.split("-")[0]);
             let player = this.$store.state.players[idx];
             if (longPress && !player.isgroup) {
+                this.showPlayerMenu = false;
                 bus.$emit('dlg.open', 'sync', player);
             } else {
                 this.setPlayer(player.id);

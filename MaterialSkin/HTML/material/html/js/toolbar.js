@@ -38,7 +38,7 @@ Vue.component('lms-toolbar', {
    <template v-for="(item, index) in players">
     <v-subheader v-if="index==0 && !item.isgroup && players[players.length-1].isgroup">{{trans.standardPlayers}}</v-subheader>
     <v-subheader v-else-if="index>0 && item.isgroup && !players[index-1].isgroup">{{trans.groupPlayers}}</v-subheader>
-    <v-list-tile @click="setPlayer(item.id)" v-bind:class="{'active-player':player && item.id === player.id}">
+    <v-list-tile v-longpress="setPlayerIdx" :id="index+'-tbplayer'" v-bind:class="{'active-player':player && item.id === player.id}">
      <v-list-tile-avatar>
       <v-icon v-if="item.icon.icon">{{item.icon.icon}}</v-icon><img v-else class="svg-img" :src="item.icon.svg | svgIcon(darkUi)"></img>
       <div v-if="player && item.id === player.id" class="active-player"></div>
@@ -500,6 +500,15 @@ Vue.component('lms-toolbar', {
                           mainMenu: i18n("Main menu"), play:i18n("Play"), pause:i18n("Pause"),
                           appQuit:i18n('Quit'), toggleQueue:i18n('Toggle queue'), downloading:i18n('Downloading'),
                           toggleQueueShortcut:shortcutStr(LMS_TOGGLE_QUEUE_KEYBOARD, true), groupVol:i18n('Adjust volume of associated players')};
+        },
+        setPlayerIdx(longPress, el) {
+            let idx = parseInt(el.firstChild.id.split("-")[0]);
+            let player = this.$store.state.players[idx];
+            if (longPress && !player.isgroup) {
+                bus.$emit('dlg.open', 'sync', player);
+            } else {
+                this.setPlayer(player.id);
+            }
         },
         setPlayer(id) {
             if (id != this.$store.state.player.id) {

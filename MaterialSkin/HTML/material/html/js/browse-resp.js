@@ -791,7 +791,22 @@ function parseBrowseResp(data, parent, options, cacheKey, parentCommand, parentG
                         entry.total++;
                         entry.duration+=duration;
                     } else {
-                        discs.set(discNum, {pos: resp.items.length, total:1, duration:duration, title:lmsOptions.commentAsDiscTitle ? i.comment : undefined});
+                        let title = undefined;
+                        switch(lmsOptions.commentAsDiscTitle) {
+                            case 1: // Comment is title
+                                title = i.comment;
+                                break;
+                            case 2: // Semi-colon separated, KEY=VAL
+                                let parts = i.comment.split(';');
+                                for (let idx=0, len=parts.length; idx<len; ++idx) {
+                                    if (parts[idx].startsWith('TITLE=')) {
+                                        title=parts[idx].substring(6);
+                                        break;
+                                    }
+                                }
+                                break
+                        }
+                        discs.set(discNum, {pos: resp.items.length, total:1, duration:duration, title:title});
                     }
                 }
                 totalDuration += duration>0 ? duration : 0;

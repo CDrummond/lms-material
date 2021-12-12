@@ -29,4 +29,4 @@ var lmsOptions = {newMusicLimit: 100,
                   allowDownload: IS_IOS ? false : getLocalStorageBool('allowDownload', false),
                   variousArtistsString: getLocalStorageVal('variousArtistsString', 'Various Artists'),
                   lang: undefined,
-                  commentAsDiscTitle: getLocalStorageBool('commentAsDiscTitle', false)};
+                  commentAsDiscTitle: getLocalStorageVal('commentAsDiscTitle', 0)};

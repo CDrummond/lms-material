@@ -184,3 +184,12 @@ PLUGIN_MATERIAL_SKIN_COMMENT_AS_DISC_TITLE
 PLUGIN_MATERIAL_SKIN_COMMENT_AS_DISC_TITLE_DESC
 	EN	For multi-disc albums use comment from first track of each disc as disc title.
 	FR	Pour les albums multi-disques, utiliser le commentaire du premier morceau de chaque disque comme titre de disque.
+
+PLUGIN_MATERIAL_SKIN_COMMENT_DONT_USE
+	EN	Don't use
+
+PLUGIN_MATERIAL_SKIN_COMMENT_PLAIN
+	EN	Contains only title
+
+PLUGIN_MATERIAL_SKIN_COMMENT_SEMI_SEP
+	EN	Semi-colon separated

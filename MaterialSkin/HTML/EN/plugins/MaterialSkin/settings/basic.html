@@ -78,9 +78,14 @@
     [% END %]
 
     [% WRAPPER setting title="PLUGIN_MATERIAL_SKIN_COMMENT_AS_DISC_TITLE" desc="PLUGIN_MATERIAL_SKIN_COMMENT_AS_DISC_TITLE_DESC" %]
-        <select class="stdedit" name="pref_commentAsDiscTitle" id="commentAsDiscTitle">
-            <option [% IF NOT prefs.commentAsDiscTitle %]selected [% END %]value="0">[% 'NO' | getstring %]</option>
-            <option [% IF prefs.commentAsDiscTitle %]selected [% END %]value="1">[% 'YES' | getstring %]</option>
+        <select class="stdedit" name="pref_commentAsDiscTitle" id=" commentAsDiscTitle">
+            [% FOREACH option = {
+                'PLUGIN_MATERIAL_SKIN_COMMENT_DONT_USE' => 0,
+                'PLUGIN_MATERIAL_SKIN_COMMENT_PLAIN' => 1,
+                'PLUGIN_MATERIAL_SKIN_COMMENT_SEMI_SEP' => 2
+            } %]
+            <option [% IF prefs.commentAsDiscTitle == option.value %]selected [% END %]value="[% option.value %]">[% option.key | string %]</option>
+            [%- END -%]
         </select>
     [% END %]
 

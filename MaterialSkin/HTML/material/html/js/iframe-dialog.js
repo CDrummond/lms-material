@@ -278,7 +278,9 @@ function hideClassicSkinElems(page, textCol) {
         let toHide = undefined;
         if ('player'==page) {
             toHide = new Set(['ALARM', 'PLUGIN_DSTM']);
-        } else if ('server'==page) {
+        }
+
+        if ('server'==page || 'player'==page) {
             var selector=content.getElementById("choose_setting");
             if (undefined!=selector) {
                 selector.addEventListener("change", selectChanged);

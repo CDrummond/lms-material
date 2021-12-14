@@ -45,7 +45,6 @@ var lmsPromptDialog = Vue.component("lms-file-dialog", {
                 var chosenPath = elem.value;
                 this.fetch(null);
                 if (undefined!=chosenPath) {
-                    console.log("CURRENT", chosenPath, this.isDir, types);
                     var parts = undefined;
                     var unix = true;
                     if (chosenPath.indexOf('/')>=0) {
@@ -72,7 +71,7 @@ var lmsPromptDialog = Vue.component("lms-file-dialog", {
             }
         }.bind(this));
         bus.$on('esc', function() {
-            if (this.$store.state.activeDialog == 'dirselect') {
+            if (this.$store.state.activeDialog == 'file') {
                 this.close(false);
             }
         }.bind(this));
@@ -87,7 +86,6 @@ var lmsPromptDialog = Vue.component("lms-file-dialog", {
         },
         useSelected() {
             if (undefined!=this.selected) {
-                console.log("SELECTED PATH", this.selected);
                 this.elem.value=this.selected;
                 this.close();
             }
@@ -123,7 +121,7 @@ var lmsPromptDialog = Vue.component("lms-file-dialog", {
                 } else if (this.types.length>0) {
                     params.push("filter:filetype:("+this.types.join("|")+")");
                 }
-                lmsList("", ["readdirectory"], params, 0, 500).then(({data}) => {
+                lmsList("", ["readdirectory"], params, 0, 1000).then(({data}) => {
                     var items = this.parseResp(data, item);
                     for (var i=0, len=items.length; i<len; ++i) {
                         if (items[i].name==parts[0]) {
@@ -155,7 +153,7 @@ var lmsPromptDialog = Vue.component("lms-file-dialog", {
     },
     watch: {
         'show': function(val) {
-            this.$store.commit('dialogOpen', {name:'dirselect', shown:val});
+            this.$store.commit('dialogOpen', {name:'file', shown:val});
         }
     }
 });

@@ -187,9 +187,12 @@ PLUGIN_MATERIAL_SKIN_COMMENT_AS_DISC_TITLE_DESC
 
 PLUGIN_MATERIAL_SKIN_COMMENT_DONT_USE
 	EN	Don't use
+	FR	Ne pas utiliser
 
 PLUGIN_MATERIAL_SKIN_COMMENT_PLAIN
 	EN	Contains only title
+	FR	Ne contient que le titre
 
 PLUGIN_MATERIAL_SKIN_COMMENT_SEMI_SEP
 	EN	Semi-colon separated
+	FR	Séparation par point-virgule

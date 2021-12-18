@@ -19,7 +19,7 @@
 13. Update Spotty icon mapping.
 14. Add button to control synchronisation to 'Player settings' dialog.
 15. Redesign 'Synchronisation' dialog to have a check list.
-16. Don't scroll action selector with players list in 'Trasfer queue' dialog.
+16. Don't scroll action selector with players list in 'Transfer queue' dialog.
 17. Allow pressing 'Toggle queue' button whilst now playing is expanded, or info
     is being shown.
 18. Long-press on player in players menu wil open 'Synchronisation' dialog.

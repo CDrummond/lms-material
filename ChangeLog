@@ -24,6 +24,8 @@
     is being shown.
 18. Long-press on player in players menu will open 'Synchronisation' dialog.
 19. Add sliders to player settings pages.
+20. Attempt to add album year to subtoolbar when showing album track listings in
+    Spotty.
 
 2.7.3
 -----

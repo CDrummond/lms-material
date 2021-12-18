@@ -595,6 +595,13 @@ function parseBrowseResp(data, parent, options, cacheKey, parentCommand, parentG
                         while (resp.items.length>0 &&
                                !(resp.items[resp.items.length-1].menu.length>0 && resp.items[resp.items.length-1].menu[0]==PLAY_ACTION)) {
                             let itm = resp.items.pop();
+                            if (itm.style=='itemNoAction') { // Year?
+                                let parts = itm.title.split(':');
+                                if (2==parts.length && ('Year'==parts[0] || i18n('Year')==parts[0])) {
+                                    resp.titleSuffix=' ('+parts[1].replace(/^\s+|\s+$/g, '')+')';
+                                    continue;
+                                }
+                            }
                             itm.isListItemInMenu = true;
                             resp.actionItems.unshift(itm);
                         }

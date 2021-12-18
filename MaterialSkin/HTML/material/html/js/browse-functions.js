@@ -237,7 +237,7 @@ function browseHandleListResponse(view, item, command, resp, prevPage) {
         view.headerTitle=item.title
                             ? wasSearch
                                 ? item.title+SEPARATOR+view.enteredTerm
-                                : item.title
+                                : item.title+(undefined==resp.titleSuffix ? "" : resp.titleSuffix)
                             : "?";
         var libname = view.current ? view.current.libname : undefined;
         view.current = item;

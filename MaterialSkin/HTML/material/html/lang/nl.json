@@ -576,8 +576,8 @@
 "%1 Years":"%1 Jaren",
 "1 day":"1 dag",
 "%1 days":"%1 dagen",
-"All discs":"",
-"Main disc":"",
-"Play disc starting at track":"",
-"Remove disc":""
+"All discs":"Alle schijven",
+"Main disc":"Hoofd schijf",
+"Play disc starting at track":"Speel schijf vanaf nummer",
+"Remove disc":"Verwijder schijf"
 }

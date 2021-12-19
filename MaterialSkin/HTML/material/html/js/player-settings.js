@@ -270,7 +270,6 @@ Vue.component('lms-player-settings', {
                 shuffle: undefined
             },
             wide:1,
-            playerId: undefined,
             trans:{dstm:undefined},
             libraries:[],
             library:undefined,

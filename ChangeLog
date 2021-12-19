@@ -1,6 +1,7 @@
 2.8.1
 -----
 1. Fix hidding queue.
+2. Reduce desktop splitter width to 1px.
 
 2.8.0
 -----

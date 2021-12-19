@@ -8,7 +8,6 @@
 :root {
  --bottom-toolbar-height:80px;
  --np-portrait-image-size:min(calc((var(--vh, 1vh)*100) - (var(--main-toolbar-height) + 260px)), 100vw);
- --splitter-width:3px;
  --np-icon-size:24px;
  --queue-visibility:initial;
 }
@@ -80,10 +79,8 @@
 }
 
 .lms-splitter .splitter {
- border-left:1px solid var(--background-color);
- border-right:1px solid var(--background-color);
  background-color:var(--splitter-color) !important;
- width:var(--splitter-width)!important;
+ width:1px!important;
 }
 
 .lms-splitter .splitter:before {
@@ -98,7 +95,6 @@
 
 @media (hover: hover) and (pointer: fine) {
  .lms-splitter .splitter:hover {
-  border:none;
   background-color:var(--primary-color)!important;
   cursor: ew-resize;
  }

@@ -10,6 +10,7 @@
  --np-portrait-image-size:min(calc((var(--vh, 1vh)*100) - (var(--main-toolbar-height) + 260px)), 100vw);
  --np-icon-size:24px;
  --queue-visibility:initial;
+ --queue-minwidth:400px;
 }
 
 /* For old browser's that dont support min() */
@@ -332,7 +333,7 @@
 }
 
 .right-pane {
- min-width:400px!important;
+ min-width:var(--queue-minwidth)!important;
 }
 
 .left-pane {

@@ -782,6 +782,7 @@ const store = new Vuex.Store({
                 }
                 bus.$emit('showQueue', val);
                 document.documentElement.style.setProperty('--queue-visibility', val ? 'initial' : 'collapse');
+                document.documentElement.style.setProperty('--queue-minwidth', val ? '400px' : '0px');
             }
         },
         setDownloadStatus(state, val) {

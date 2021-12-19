@@ -772,7 +772,7 @@ const store = new Vuex.Store({
         },
         setShowQueue(state, val) {
             if (val!=state.showQueue) {
-                let pc = getLocalStorageVal("splitter", undefined);
+                let pc = getLocalStorageVal('splitter', undefined);
                 state.showQueue = val;
                 setLocalStorageVal('showQueue', state.showQueue);
                 if (val && undefined!=pc) {
@@ -781,7 +781,7 @@ const store = new Vuex.Store({
                     document.documentElement.style.setProperty('--splitter-pc', 100);
                 }
                 bus.$emit('showQueue', val);
-                document.documentElement.style.setProperty('--splitter-width', val ? '3px' : '0px');
+                document.documentElement.style.setProperty('--queue-visibility', val ? 'initial' : 'collapse');
             }
         },
         setDownloadStatus(state, val) {

@@ -10,6 +10,7 @@
  --np-portrait-image-size:min(calc((var(--vh, 1vh)*100) - (var(--main-toolbar-height) + 260px)), 100vw);
  --splitter-width:3px;
  --np-icon-size:24px;
+ --queue-visibility:initial;
 }
 
 /* For old browser's that dont support min() */
@@ -22,6 +23,10 @@
    --np-portrait-image-size:calc((var(--vh, 1vh)*100) - (var(--main-toolbar-height) + 260px));
   }
  }
+}
+
+.right-pane {
+ visibility:var(--queue-visibility);
 }
 
 .lms-desktop-toolbar-pad {

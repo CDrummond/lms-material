@@ -43,12 +43,19 @@ function browseHandleKey(view, event) {
                 if (!lmsLastKeyPress.invalid) {
                     for (let i=0, loop=view.jumplist, len=loop.length; i<len; ++i) {
                         if (loop[i].key == lmsLastKeyPress.key) {
-                            lmsLastKeyPress.text+=key;
+                            let isEnter = 'ENTER'==key;
+                            if (!isEnter) {
+                                lmsLastKeyPress.text+=key;
+                            }
                             for (let j=loop[i].index, jloop=view.items, jlen=jloop.length; j<jlen && jloop[j].textkey==lmsLastKeyPress.key; ++j) {
                                 let title = jloop[j].title.toUpperCase();
                                 if (browseMatches(lmsLastKeyPress.text, title) || browseMatches(lmsLastKeyPress.text, title.replaceAll('.', '').replaceAll('(', '').replaceAll(')', '').replaceAll('/', '').replaceAll('-', '').replaceAll(',', ''))) {
-                                    view.jumpTo(j);
-                                    return;
+                                    if (isEnter) {
+                                        view.click(view.items[j], j);
+                                    } else {
+                                        view.jumpTo(j);
+                                        return;
+                                    }
                                 }
                             }
                             break;

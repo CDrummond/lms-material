@@ -2,6 +2,8 @@
 -----
 1. Fix hidding queue.
 2. Reduce desktop splitter width to 1px.
+3. When navigating lists by entering text, if press enter then 'click' on first
+   match.
 
 2.8.0
 -----

@@ -566,6 +566,9 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
             } else if (this.$store.state.openDialogs.length==1 && this.$store.state.visibleMenus.size<=0 &&
                        this.info.show && (this.$store.state.desktopLayout || this.$store.state.page=='now-playing')) {
                 this.info.show = false;
+            } else if (this.$store.state.openDialogs.length==0 && this.$store.state.visibleMenus.size<=0 &&
+                       this.largeView && this.$store.state.desktopLayout) {
+                this.largeView = false;
             }
         }.bind(this));
 

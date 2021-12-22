@@ -229,7 +229,28 @@ function browseHandleListResponse(view, item, command, resp, prevPage) {
         }
         // Only add history if view is not a search response replacing a search response...
         if ((SEARCH_ID!=item.id && ADV_SEARCH_ID!=item.id) || undefined==view.current || (SEARCH_ID!=view.current.id && ADV_SEARCH_ID!=view.current.id)) {
-            view.addHistory();
+            let addToHistory = true;
+            if (command.ismore) {
+                // If this command is a "More..." listing then remove any current "More..."
+                // from the history, and don't ad dto history.
+                // Basically dont want "My Music / Album / More / Track Info / More / More / etc...
+                if (addToHistory && view.command && view.command.ismore) {
+                    // Curent view is "More..." so dont at that to history
+                    addToHistory = false;
+                } else {
+                    for (let i=0, len=view.history.length; i<len; ++i) {
+                        if (view.history[i].command && view.history[i].command.ismore) {
+                            // Found "More..." in history stack, so remove
+                            view.history.splice(i, len-i);
+                            addToHistory = false;
+                            break;
+                        }
+                    }
+                }
+            }
+            if (addToHistory) {
+                view.addHistory();
+            }
         }
         resp.canUseGrid = resp.canUseGrid && (view.$store.state.showArtwork || resp.forceGrid);
         view.canDrop = resp.canDrop;
@@ -686,7 +707,9 @@ function browseItemAction(view, act, item, index, event) {
         if (item.isPodcast) {
             bus.$emit('dlg.open', 'iteminfo', item);
         } else {
-            view.fetchItems(view.buildCommand(item, ACTIONS[act].cmd), item);
+            let cmd = view.buildCommand(item, ACTIONS[act].cmd);
+            cmd.ismore = true;
+            view.fetchItems(cmd, item);
         }
     } else if (act===MORE_LIB_ACTION) {
         view.itemMoreMenu(item);

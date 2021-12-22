@@ -693,21 +693,21 @@ var lmsBrowse = Vue.component("lms-browse", {
         },
         itemMoreMenu(item, queueIndex, page) {
             if (undefined!=queueIndex) {
-                this.fetchItems({command: ["trackinfo", "items"], params: ["playlist_index:"+queueIndex, "menu:1", "html:1"]}, item, page);
+                this.fetchItems({command: ["trackinfo", "items"], params: ["playlist_index:"+queueIndex, "menu:1", "html:1"], ismore:true}, item, page);
             } else if (item.id) {
                 var params=[item.id, "menu:1", "html:1"];
                 if (item.id.startsWith("artist_id:")) {
-                    this.fetchItems({command: ["artistinfo", "items"], params: params}, {id:item.id, title:item.title}, page);
+                    this.fetchItems({command: ["artistinfo", "items"], params: params, ismore:true}, {id:item.id, title:item.title}, page);
                 } else if (item.id.startsWith("album_id:")) {
-                    this.fetchItems({command: ["albuminfo", "items"], params: params}, {id:item.id, title:item.title}, page);
+                    this.fetchItems({command: ["albuminfo", "items"], params: params, ismore:true}, {id:item.id, title:item.title}, page);
                 } else if (item.id.startsWith("track_id:")) {
-                    this.fetchItems({command: ["trackinfo", "items"], params: params}, item, page);
+                    this.fetchItems({command: ["trackinfo", "items"], params: params, ismore:true}, item, page);
                 } else if (item.id.startsWith("genre_id:")) {
-                    this.fetchItems({command: ["genreinfo", "items"], params: params}, item, page);
+                    this.fetchItems({command: ["genreinfo", "items"], params: params, ismore:true}, item, page);
                 } else if (item.id.startsWith("year:")) {
-                    this.fetchItems({command: ["yearinfo", "items"], params: params}, item, page);
+                    this.fetchItems({command: ["yearinfo", "items"], params: params, ismore:true}, item, page);
                 } else if (item.id.startsWith("playlist_id:")) {
-                    this.fetchItems({command: ["playlistinfo", "items"], params: params}, item, page);
+                    this.fetchItems({command: ["playlistinfo", "items"], params: params, ismore:true}, item, page);
                 }
             }
         },

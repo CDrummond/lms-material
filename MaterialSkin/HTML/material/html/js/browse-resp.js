@@ -791,7 +791,7 @@ function parseBrowseResp(data, parent, options, cacheKey, parentCommand, parentG
                         title+=" (" + i.year + ")";
                     }
                 }
-                if (undefined!=i.disc && !isSearchResult) {
+                if (undefined!=i.disc && !isSearchResult && !isAllSongs) {
                     let discNum = parseInt(i.disc);
                     if (discs.has(discNum)) {
                         var entry = discs.get(discNum);

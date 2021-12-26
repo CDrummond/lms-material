@@ -738,7 +738,7 @@ function parseBrowseResp(data, parent, options, cacheKey, parentCommand, parentG
                               textkey: key,
                               emblem: getEmblem(i.extid),
                               draggable: true,
-                              multi: undefined!=i.disccount && parseInt(i.disccount)>1
+                              multi: lmsOptions.groupdiscs && undefined!=i.disccount && parseInt(i.disccount)>1
                           };
                 resp.items.push(album);
             }
@@ -799,7 +799,7 @@ function parseBrowseResp(data, parent, options, cacheKey, parentCommand, parentG
                         entry.duration+=duration;
                     } else {
                         let title = undefined;
-                        switch(lmsOptions.commentAsDiscTitle) {
+                        switch(lmsOptions.commentAsDiscTitle && undefined!=i.comment) {
                             case 1: // Comment is title
                                 title = i.comment;
                                 break;

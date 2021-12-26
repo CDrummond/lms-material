@@ -2,6 +2,7 @@
 -----
 1. Only show multi-disc icon, and prompt for disc to use, etc., if LMS is set to
    group multi-disc albums.
+2. Add add and play actions to subtoolbar for 'All songs' listings.
 
 2.8.1
 -----

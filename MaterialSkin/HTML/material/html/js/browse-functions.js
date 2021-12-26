@@ -375,7 +375,7 @@ function browseHandleListResponse(view, item, command, resp, prevPage) {
         } else if (SECTION_PLAYLISTS==view.current.section && view.current.id.startsWith("playlist_id:")) {
             view.tbarActions=[PLAY_ACTION, ADD_ACTION];
             view.currentActions={show:true, items: browseActions(view, resp.items.length>0 ? item : undefined, {}, resp.items.length)};
-        } else if (view.allSongsItem) {
+        } else if (view.allSongsItem || ("tracks"==command.command[0] && item.id.startsWith("currentaction:"))) {
             view.tbarActions=[PLAY_ALL_ACTION, ADD_ALL_ACTION];
         } else if ("albums"==command.command[0] && command.params.find(elem => elem=="sort:random")) {
             view.tbarActions=[RELOAD_ACTION];

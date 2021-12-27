@@ -164,11 +164,6 @@ Vue.component('lms-ui-settings', {
     </v-list-tile>
     <v-divider></v-divider>
 
-    <v-list-tile v-if="hasPassword">
-     <v-text-field clearable :label="i18n('Settings password')" v-model="password" class="lms-search"></v-text-field>
-    </v-list-tile>
-    <v-divider v-if="hasPassword"></v-divider>
-
     <v-list-tile>
      <v-list-tile-content @click="powerButton = !powerButton" class="switch-label">
       <v-list-tile-title>{{i18n('Show power button')}}</v-list-tile-title>
@@ -184,6 +179,11 @@ Vue.component('lms-ui-settings', {
       <v-list-tile-sub-title>{{i18n('When navigating into lists, show a home button to quickly navigate to the main (home) screen. Otherwise navigating home can be achieved via a long-press on the back button.')}}</v-list-tile-sub-title>
      </v-list-tile-content>
      <v-list-tile-action><v-switch v-model="homeButton"></v-switch></v-list-tile-action>
+    </v-list-tile>
+
+    <v-divider v-if="hasPassword"></v-divider>
+    <v-list-tile v-if="hasPassword">
+     <v-text-field :label="i18n('Settings password')" v-model="password" class="lms-search" :append-icon="showPassword ? 'visibility_off' : 'visibility'" @click:append="() => (showPassword = !showPassword)" :type="showPassword ? 'text' : 'password'"></v-text-field>
     </v-list-tile>
 
     <div class="dialog-padding"></div>
@@ -417,6 +417,7 @@ Vue.component('lms-ui-settings', {
             showItems: [ ],
             hasPassword: false,
             password: undefined,
+            showPassword: false,
             browseModesDialog: {
                 show: false,
                 wide: false,

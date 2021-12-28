@@ -650,7 +650,7 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
             nowplayingMenuAction(this, item);
         },
         showPic() {
-            bus.$emit('dlg.open', 'gallery', [this.coverUrl], 0);
+            bus.$emit('dlg.open', 'gallery', [this.coverUrl], 0, true);
         },
         doAction(command) {
             if (this.$store.state.visibleMenus.size>0) {

@@ -5,6 +5,7 @@
 2. Add add and play actions to subtoolbar for 'All songs' listings.
 3. Don't show disc headers in 'All songs' listings.
 4. Hide settings password.
+5. Update gallery image when track changes if this is showing now playing cover.
 
 2.8.1
 -----

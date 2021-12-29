@@ -6,6 +6,7 @@
 3. Don't show disc headers in 'All songs' listings.
 4. Hide settings password.
 5. Update gallery image when track changes if this is showing now playing cover.
+6. Only show 'Play disc starting at track' if there are multiple discs.
 
 2.8.1
 -----

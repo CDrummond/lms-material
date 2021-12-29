@@ -852,6 +852,7 @@ function parseBrowseResp(data, parent, options, cacheKey, parentCommand, parentG
             if (sortTracks) {
                 resp.items.sort(yearAlbumTrackSort);
             }
+
             if (discs.size>1) {
                 let d = 0;
                 for (let k of discs.keys()) {
@@ -875,7 +876,13 @@ function parseBrowseResp(data, parent, options, cacheKey, parentCommand, parentG
                                        id:FILTER_PREFIX+k, header:true, menu:[PLAY_ALL_ACTION, INSERT_ALL_ACTION, ADD_ALL_ACTION]});
                     d++;
                 }
+            } else if (1==discs.size) {
+                // Remove item's disc value so that 'PLAY_DISC_ACTION' is not shown
+                for (var idx=0, len=resp.items.length; idx<len; ++idx) {
+                    resp.items[idx].disc = undefined;
+                }
             }
+
             resp.subtitle=i18np("1 Track", "%1 Tracks", resp.items.length-(discs.size>1 ? discs.size : 0));
             if (!(parent && parent.id && parent.id.startsWith("search:"))) {
                 resp.subtitle+=" ("+formatSeconds(totalDuration)+")";

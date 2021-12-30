@@ -156,43 +156,54 @@ PLUGIN_MATERIAL_SKIN_SHOW_ALL_ARTISTS_DESC
 PLUGIN_MATERIAL_SKIN_ALLOW_DOWNLOAD
 	EN	Allow downloading
 	FR	Autoriser le téléchargement
+	NL	Downloaden toestaan
 
 PLUGIN_MATERIAL_SKIN_ALLOW_DOWNLOAD_DESC
 	EN	Add download actions to tracks, albums, and playlists to allow users to download tracks.
 	FR	Ajouter des commandes de téléchargement aux morceaux, albums et listes de lecture pour permettre aux utilisateurs de télécharger des morceaux.
+	NL	Voeg download acties toe aan nummers, albums en afspeellijsten zodat gebruikers ze kunnen downloaden.
 
 PLUGIN_MATERIAL_SKIN_MANIFEST_DISPLAY
 	EN	WebApp display
 	FR	Affichage de l'application Web
+	NL	WebApp weergave
 
 PLUGIN_MATERIAL_SKIN_MANIFEST_DISPLAY_DESC
 	EN	When saved as a WebApp (e.g. 'Add to homescreen') the app can be shown 'fullscreen' (appears like a normal app, but android's status and navigation bars are hidden) or 'standalone' (appears as a normal app, with status and navigation bars visible). NOTE: If you make any changes then you will need to reload the skin in your browser as browser's read this setting when the page is loaded.
 	FR	Lorsque l'application est enregistrée en tant qu'application Web (via l'option "Ajouter à l'écran d'accueil" d'un navigateur) pour être utilisée comme une application Android classique, elle peut être affichée en "plein écran" (barres de statut et de navigation masquées) ou "autonome" (barres de statut et de navigation visibles). REMARQUE : Si vous modifiez ce paramètre, vous devrez recharger le skin dans votre navigateur car le navigateur lit ce paramètre lorsque la page est chargée.
+	NL	Wanneer opgeslagen als een WebApp (bijv. via 'Toevoegen aan thuisscherm') kan de app in 'Volledig scherm' modus worden weergegeven (verschijnt als een normale app, maar de status- en navigatiebalken van Android zijn verborgen) of als 'Zelfstandig' (verschijnt als een normale app, met status en navigatiebalken zichtbaar). OPMERKING: als u wijzigingen aanbrengt, moet u de skin opnieuw in uw browser laden.
 
 PLUGIN_MATERIAL_SKIN_MANIFEST_DISPLAY_STANDALONE
 	EN	Standalone
 	FR	Autonome
+	NL	Zelfstandig
 
 PLUGIN_MATERIAL_SKIN_MANIFEST_DISPLAY_FULLSCREEN
 	EN	Fullscreen
 	FR	Plein écran
+	NL	Volledig scherm
 
 PLUGIN_MATERIAL_SKIN_COMMENT_AS_DISC_TITLE
 	EN	Use comment for disc title
 	FR	Utiliser le tag "comment" (commentaire) pour le titre du disque
+	NL	Gebruik 'Comment' tag voor schijftitel
 
 PLUGIN_MATERIAL_SKIN_COMMENT_AS_DISC_TITLE_DESC
 	EN	For multi-disc albums use comment from first track of each disc as disc title.
 	FR	Pour les albums multi-disques, utiliser le commentaire du premier morceau de chaque disque comme titre de disque.
+	NL	Voor albums met meerdere schijven, gebruik Comment van eerste nummer van iedere schijf als schijftitel.
 
 PLUGIN_MATERIAL_SKIN_COMMENT_DONT_USE
 	EN	Don't use
 	FR	Ne pas utiliser
+	NL	Niet gebruiken
 
 PLUGIN_MATERIAL_SKIN_COMMENT_PLAIN
 	EN	Contains only title
 	FR	Ne contient que le titre
+	NL	Bevat alleen titel
 
 PLUGIN_MATERIAL_SKIN_COMMENT_SEMI_SEP
 	EN	Semi-colon separated
 	FR	Séparation par point-virgule
+	NL	Puntkomma gescheiden

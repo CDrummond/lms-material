@@ -39,7 +39,7 @@ This guide is on a separate github page, and is authored by Jim Gooch.
 
 ## Detailed information
 
-For more information on usage, installation, debug, etc, please refer to the [Detailed Information wiki page](https://github.com/CDrummond/lms-material/wiki/Detailed-Information)
+For more information on usage, installation, debug, etc, please refer to the [wiki pages](https://github.com/CDrummond/lms-material/wiki)
 
 ## Donations
 

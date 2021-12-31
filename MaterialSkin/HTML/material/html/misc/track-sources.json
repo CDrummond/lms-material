@@ -6,7 +6,8 @@
     "qobuz:":"Qobuz",
     "bandcamp:":"Bandcamp",
     "https://media-ssl.musicradio.com/":"Global Player (UK)",
-    "https://stream.radiofrance.fr/":"Radio France"
+    "https://stream.radiofrance.fr/":"Radio France",
+    "youtube:":"YouTube"
   },
   "includes":{
     ".radioparadise.com/":"Radio Paradise",

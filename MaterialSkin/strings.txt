@@ -94,7 +94,7 @@ PLUGIN_MATERIAL_SKIN_SHOW_CONDUCTOR_DESC
 	NL	Als het genre van een nummer overeenkomt met de bovenstaande lijst en het nummer heeft een dirigent tag, toon dit bij het afspelen en in de afspeellijst.
 
 PLUGIN_MATERIAL_SKIN_SHOW_BAND
-	DE Band anzeigen
+	DE	Band anzeigen
 	EN	Show band
 	FR	Afficher le groupe/orchestre
 	NL	Toon band

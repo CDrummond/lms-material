@@ -1,3 +1,8 @@
+2.8.3
+-----
+1. Update traslations.
+2. Add track source (Spotify, Qobuz, etc.) to technical info.
+
 2.8.2
 -----
 1. Only show multi-disc icon, and prompt for disc to use, etc., if LMS is set to
@@ -7,7 +12,6 @@
 4. Hide settings password.
 5. Update gallery image when track changes if this is showing now playing cover.
 6. Only show 'Play disc starting at track' if there are multiple discs.
-7. Add track source (Spotify, Qobuz, etc.) to technical info.
 
 2.8.1
 -----

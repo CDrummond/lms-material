@@ -12,9 +12,12 @@ function initEmblems() {
     getMiscJson(emblems, "emblems");
 }
 
-function getEmblem(extid) {
+function getEmblem(extid) { //, url) {
     if (undefined!=extid) {
         return emblems[ extid.split(':')[0] ];
     }
+    //if (undefined!=url) {
+    //    return getEmblem(url.split(':')[0]);
+    //}
     return undefined;
 }

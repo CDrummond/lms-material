@@ -442,24 +442,38 @@ function setScrollTop(view, val) {
 }
 
 function getLocalStorageBool(key, def) {
-    var val = undefined==window.localStorage ? undefined : window.localStorage.getItem(LS_PREFIX+key);
+    let val = undefined
+    try {
+        val = undefined==window.localStorage ? undefined : window.localStorage.getItem(LS_PREFIX+key);
+    } catch (e) {
+    }
     return undefined!=val ? "true" == val : def;
 }
 
 function getLocalStorageVal(key, def) {
-    var val = undefined==window.localStorage ? undefined : window.localStorage.getItem(LS_PREFIX+key);
+    let val = undefined;
+    try {
+        val = undefined==window.localStorage ? undefined : window.localStorage.getItem(LS_PREFIX+key);
+    } catch (e) {
+    }
     return undefined!=val ? val : def;
 }
 
 function setLocalStorageVal(key, val) {
-    if (undefined!=window.localStorage) {
-        window.localStorage.setItem(LS_PREFIX+key, val);
+    try {
+        if (undefined!=window.localStorage) {
+            window.localStorage.setItem(LS_PREFIX+key, val);
+        }
+    } catch (e) {
     }
 }
 
 function removeLocalStorage(key) {
-    if (undefined!=window.localStorage) {
-        window.localStorage.removeItem(LS_PREFIX+key);
+    try {
+        if (undefined!=window.localStorage) {
+            window.localStorage.removeItem(LS_PREFIX+key);
+        }
+    } catch (e) {
     }
 }
 

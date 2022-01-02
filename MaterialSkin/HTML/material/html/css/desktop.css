@@ -6,7 +6,9 @@
  */
 
 :root {
- --bottom-toolbar-height:80px;
+ --bottom-toolbar-pad:0px;
+ --bottom-toolbar-pad:0px;
+ --bottom-toolbar-height:calc(80px + ( 2 * var(--bottom-toolbar-pad) ));
  --np-portrait-image-size:min(calc((var(--vh, 1vh)*100) - (var(--main-toolbar-height) + 260px)), 100vw);
  --np-icon-size:24px;
  --queue-visibility:initial;
@@ -110,6 +112,10 @@
  min-width:600px;
 }
 
+.no-control-adjust { /* Adjust pos for iPad */
+ margin-top:calc(-2 * var(--bottom-toolbar-pad));
+}
+
 .np-details-desktop .v-list__tile__content, .np-details-desktop .v-list__tile__content .v-list__tile__sub-title,
 .np-details-desktop .v-list__tile__content .v-list__tile__title, .np-details-desktop .np-tech-desktop, .np-details-desktop .np-time-desktop, .np-controls-desktop div i,
 .np-details-desktop div.v-rating i.primary--text, .np-details-desktop div.v-rating i.accent--text {
@@ -130,7 +136,7 @@
 
 .np-controls-desktop {
  margin-left:-16px;
- margin-top:16px;
+ margin-top:calc(16px + var(--bottom-toolbar-pad));
  max-width:270px;
  float:left;
 }
@@ -165,9 +171,9 @@
 
 .np-details-desktop {
  position:fixed;
- left:calc(250px + (var(--np-icon-size) - 24px));
- bottom:20px;
- width:calc(100vw - calc(254px + (var(--np-icon-size) - 24px)));
+ left:calc(250px + var(--bottom-toolbar-pad) + (var(--np-icon-size) - 24px));
+ bottom:calc(20px + var(--bottom-toolbar-pad));
+ width:calc(100vw - calc(254px + var(--bottom-toolbar-pad) + (var(--np-icon-size) - 24px)));
  height:54px;
  padding:0px;
  background:transparent!important;
@@ -182,6 +188,10 @@
  height:54px;
  margin:0px 8px 0px 0px; /* t, r, b, l */
  padding:0px;
+}
+
+.np-details-desktop .v-list__tile__content {
+ margin-right:8px;
 }
 
 .np-details-desktop div .v-list__tile .v-list__tile__action {
@@ -220,16 +230,16 @@
 
 .np-slider-desktop {
  position:fixed;
- left:calc(250px + (var(--np-icon-size) - 24px));
- bottom:6px;
- width:calc(100vw - calc(262px + (var(--np-icon-size) - 24px)));
+ left:calc(250px + var(--bottom-toolbar-pad) + (var(--np-icon-size) - 24px));
+ bottom:calc(6px + var(--bottom-progress-adjust));
+ width:calc(100vw - calc(262px + var(--bottom-toolbar-pad) + (var(--np-icon-size) - 24px)));
  height:10px !important;
  margin:0px !important; /* v-progress-linear has margin: 1rem 0; */
 }
 
 .np-slider-desktop-sb {
- left:calc(298px + ((var(--np-icon-size) - 24px)*4))!important;
- width:calc(100vw - calc(310px + ((var(--np-icon-size) - 24px)*4)))!important;
+ left:calc(298px + var(--bottom-toolbar-pad) + ((var(--np-icon-size) - 24px)*4))!important;
+ width:calc(100vw - calc(310px + var(--bottom-toolbar-pad) + ((var(--np-icon-size) - 24px)*4)))!important;
 }
 
 .np-bar .np-playpause {

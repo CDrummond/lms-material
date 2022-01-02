@@ -7,7 +7,7 @@
 
 :root {
  --bottom-toolbar-pad:0px;
- --bottom-toolbar-pad:0px;
+ --bottom-progress-adjust:0px;
  --bottom-toolbar-height:calc(80px + ( 2 * var(--bottom-toolbar-pad) ));
  --np-portrait-image-size:min(calc((var(--vh, 1vh)*100) - (var(--main-toolbar-height) + 260px)), 100vw);
  --np-icon-size:24px;

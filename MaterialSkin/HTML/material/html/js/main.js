@@ -25,13 +25,13 @@ var app = new Vue({
             var s = document.createElement("style");
             s.innerHTML = ".v-btn:hover:before { background-color:transparent!important; }";
             document.getElementsByTagName("head")[0].appendChild(s);
-
-            if (IS_IOS) {
-                // Always add padding...
-                document.documentElement.style.setProperty('--bottom-nav-pad', '12px');
-                document.documentElement.style.setProperty('--bottom-progress-adjust', '4px');
-                document.documentElement.style.setProperty('--bottom-toolbar-pad', '4px');
-            }
+        }
+        if (IS_IOS || queryParams.addpad) {
+            // Always add padding...
+            console.log("ADD");
+            document.documentElement.style.setProperty('--bottom-nav-pad', '12px');
+            document.documentElement.style.setProperty('--bottom-progress-adjust', '4px');
+            document.documentElement.style.setProperty('--bottom-toolbar-pad', '4px');
         }
         this.autoLayout = true;
         this.$store.commit('initUiSettings');

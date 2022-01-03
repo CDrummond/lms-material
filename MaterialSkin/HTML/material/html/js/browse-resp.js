@@ -799,19 +799,21 @@ function parseBrowseResp(data, parent, options, cacheKey, parentCommand, parentG
                         entry.duration+=duration;
                     } else {
                         let title = undefined;
-                        switch(lmsOptions.commentAsDiscTitle && undefined!=i.comment) {
-                            case 1: // Comment is title
-                                title = i.comment;
-                                break;
-                            case 2: // Semi-colon separated, KEY=VAL
-                                let parts = i.comment.split(';');
-                                for (let idx=0, len=parts.length; idx<len; ++idx) {
-                                    if (parts[idx].startsWith('TITLE=')) {
-                                        title=parts[idx].substring(6);
-                                        break;
+                        if (undefined!=i.comment) {
+                            switch(lmsOptions.commentAsDiscTitle) {
+                                case 1: // Comment is title
+                                    title = i.comment;
+                                    break;
+                                case 2: // Semi-colon separated, KEY=VAL
+                                    let parts = i.comment.split(';');
+                                    for (let idx=0, len=parts.length; idx<len; ++idx) {
+                                        if (parts[idx].startsWith('TITLE=')) {
+                                            title=parts[idx].substring(6);
+                                            break;
+                                        }
                                     }
-                                }
-                                break
+                                    break
+                            }
                         }
                         discs.set(discNum, {pos: resp.items.length, total:1, duration:duration, title:title});
                     }

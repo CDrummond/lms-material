@@ -5,6 +5,7 @@
 3. Slightly alter metrics of desktop layout toolbar to help on iPad. If iPad
    is not detected, or padding required elsewhere, add "?addpadd" to URL.
 4. Catch exceptions when try to access localstorage.
+5. Fix setting disc title from comment.
 
 2.8.2
 -----

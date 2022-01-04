@@ -6,6 +6,8 @@
    is not detected, or padding required elsewhere, add "?addpadd" to URL.
 4. Catch exceptions when try to access localstorage.
 5. Fix setting disc title from comment.
+6. Move 'Stop button' config option into 'Now playing' section, as that is where
+   it applies.
 
 2.8.2
 -----

@@ -70,15 +70,6 @@ Vue.component('lms-ui-settings', {
     <v-divider></v-divider>
 
     <v-list-tile>
-     <v-list-tile-content @click="stopButton = !stopButton" class="switch-label">
-      <v-list-tile-title>{{i18n('Stop button')}}</v-list-tile-title>
-      <v-list-tile-sub-title>{{i18n('Show a stop button next to the play/pause button.')}}</v-list-tile-sub-title>
-     </v-list-tile-content>
-     <v-list-tile-action><v-switch v-model="stopButton"></v-switch></v-list-tile-action>
-    </v-list-tile>
-    <v-divider></v-divider>
-
-    <v-list-tile>
      <v-select :items="volumeSteps" :label="i18n('Volume step')" v-model="volumeStep" item-text="label" item-value="value"></v-select>
     </v-list-tile>
     <v-divider></v-divider>
@@ -271,6 +262,15 @@ Vue.component('lms-ui-settings', {
     <v-divider></v-divider>
     <v-list-tile>
      <v-select :items="skipSecondsOptions" :label="i18n('Previous/next long-press skip')" v-model="skipSeconds" item-text="label" item-value="value"></v-select>
+    </v-list-tile>
+    <v-divider></v-divider>
+
+    <v-list-tile>
+     <v-list-tile-content @click="stopButton = !stopButton" class="switch-label">
+      <v-list-tile-title>{{i18n('Stop button')}}</v-list-tile-title>
+      <v-list-tile-sub-title>{{i18n('Show a stop button next to the play/pause button.')}}</v-list-tile-sub-title>
+     </v-list-tile-content>
+     <v-list-tile-action><v-switch v-model="stopButton"></v-switch></v-list-tile-action>
     </v-list-tile>
     <v-divider></v-divider>
 

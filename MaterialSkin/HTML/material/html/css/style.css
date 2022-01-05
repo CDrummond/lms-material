@@ -1716,6 +1716,14 @@ div.v-subheader {
  max-width:90%;
 }
 
+.v-menu__content .v-list__tile {
+ cursor:pointer;
+}
+
+.v-menu__content .disabled .v-list__tile {
+ cursor:default;
+}
+
 .current-player {
  font-weight:var(--bold-weight);
 }

@@ -8,6 +8,7 @@
 5. Fix setting disc title from comment.
 6. Move 'Stop button' config option into 'Now playing' section, as that is where
    it applies.
+7. Set cursor for menu items.
 
 2.8.2
 -----

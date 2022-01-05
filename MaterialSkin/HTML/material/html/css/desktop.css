@@ -141,6 +141,10 @@
  float:left;
 }
 
+.np-controls-desktop-stop {
+ margin-top:calc(18px + var(--bottom-toolbar-pad));
+}
+
 .np-portrait-song-info {
  height:calc((var(--vh, 1vh)*100) - (var(--np-portrait-image-size) + 160px));
 }

@@ -9,6 +9,7 @@
 6. Move 'Stop button' config option into 'Now playing' section, as that is where
    it applies.
 7. Set cursor for menu items.
+8. Fix bottom toolbar button positions if stop button is shown.
 
 2.8.2
 -----

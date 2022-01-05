@@ -468,14 +468,20 @@ function nowplayingFetchTrackInfo(view) {
     if (undefined!=trk.genre) {
         html+="<tr><td>"+i18n("Genre")+"&nbsp;</td><td><obj class=\"link-item\" onclick=\"nowplayingBrowse('genre', "+trk.genre_id+",\'"+escape(trk.genre)+"\')\">"+trk.genre+"</obj></td></tr>";
     }
-    if (view.$store.state.techInfo && undefined!=trk.technicalInfo) {
-        html+="<tr><td>"+i18n("Technical")+"&nbsp;</td><td>"+trk.technicalInfo+"</td></tr>";
-    }
 
-    var source = getTrackSource(trk);
+    let source = getTrackSource(trk);
     if (undefined!=source) {
         html+="<tr><td>"+i18n("Source")+"&nbsp;</td><td>"+source+"</td></tr>";
     }
+
+    if (view.$store.state.techInfo && undefined!=trk.technicalInfo) {
+        let tech = trk.technicalInfo;
+        if (undefined!=source && tech.startsWith(source)) {
+            tech = tech.substring(source.length()+2); // Remove (e.g.) "Spotify, "
+        }
+        html+="<tr><td>"+i18n("Technical")+"&nbsp;</td><td>"+tech+"</td></tr>";
+    }
+
     if (html.length>0) {
         view.info.tabs[TRACK_TAB].sections[0].html = "<table class=\"np-html-sect\">" + html + "</table>";
     } else {

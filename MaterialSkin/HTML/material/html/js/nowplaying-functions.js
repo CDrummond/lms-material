@@ -477,7 +477,7 @@ function nowplayingFetchTrackInfo(view) {
     if (view.$store.state.techInfo && undefined!=trk.technicalInfo) {
         let tech = trk.technicalInfo;
         if (undefined!=source && tech.startsWith(source)) {
-            tech = tech.substring(source.length()+2); // Remove (e.g.) "Spotify, "
+            tech = tech.substring(source.length+2); // Remove (e.g.) "Spotify, "
         }
         html+="<tr><td>"+i18n("Technical")+"&nbsp;</td><td>"+tech+"</td></tr>";
     }

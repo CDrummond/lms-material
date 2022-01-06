@@ -10,7 +10,7 @@ PLUGIN_MATERIAL_SKIN
 	NL	Material Skin, geschikt voor mobiel gebruik.
 
 PLUGIN_MATERIAL_SKIN_GENRES_LIST_NOTE
-	DE	ANMERKUNG: Ein Sternchen (*) benutzen, um in der Genre-Liste alle Genre auszuwählen. Eine beliebige Zeichenkette, die keinem Genre entspricht (bspw. 'N/A') benutzen, um kein Genre auszuwählen.
+	DE	ANMERKUNG: Ein Sternchen (*) benutzen, um in der Genre-Liste alle Genres auszuwählen. Eine beliebige Zeichenkette, die keinem Genre entspricht (bspw. 'N/A') benutzen, um kein Genre auszuwählen.
 	EN	NOTE: In the genre lists, below, to apply to all genres use a single asterisk (*). To apply to no genres use any string (e.g. 'N/A') that does not match any of your genres.
 	FR	REMARQUE : Dans les listes de genres ci-dessous, pour cibler tous les genres, utiliser le caractère générique astérisque (*). Pour ne cibler aucun genre, saisir une chaîne de caractères qui ne correspond à aucun de vos genres (par exemple, "N/A").
 	NL	OPMERKING: Gebruik in de genrelijsten hieronder een enkele asterisk (*) om op alle genres van toepassing te zijn. Om op geen enkel genre toe te passen, gebruik een tekenreeks (bijv. 'N/A') die niet overeenkomt met een van de genres.
@@ -194,7 +194,7 @@ PLUGIN_MATERIAL_SKIN_MANIFEST_DISPLAY
 	NL	WebApp weergave
 
 PLUGIN_MATERIAL_SKIN_MANIFEST_DISPLAY_DESC
-	DE	Sofern als WebApp abgespeichert (bspw. 'Zum Startbildschirm hinzufügen') kann die Anwendung als "Vollbild" oder "Eigenständig" angezeigt werden. ANMERKUNG: Änderungen werden erst nach Neuladen des Skins im Browser wirksam.
+	DE	Sofern als WebApp abgespeichert (bspw. 'Zum Startbildschirm hinzufügen') kann die Anwendung als 'Vollbild' oder 'Eigenständig' angezeigt werden. ANMERKUNG: Änderungen werden erst nach Neuladen des Skins im Browser wirksam.
 	EN	When saved as a WebApp (e.g. 'Add to homescreen') the app can be shown 'fullscreen' (appears like a normal app, but android's status and navigation bars are hidden) or 'standalone' (appears as a normal app, with status and navigation bars visible). NOTE: If you make any changes then you will need to reload the skin in your browser as browser's read this setting when the page is loaded.
 	FR	Lorsque l'application est enregistrée en tant qu'application Web (via l'option "Ajouter à l'écran d'accueil" d'un navigateur) pour être utilisée comme une application Android classique, elle peut être affichée en "plein écran" (barres de statut et de navigation masquées) ou "autonome" (barres de statut et de navigation visibles). REMARQUE : Si vous modifiez ce paramètre, vous devrez recharger le skin dans votre navigateur car le navigateur lit ce paramètre lorsque la page est chargée.
 	NL	Wanneer opgeslagen als een WebApp (bijv. via 'Toevoegen aan thuisscherm') kan de app in 'Volledig scherm' modus worden weergegeven (verschijnt als een normale app, maar de status- en navigatiebalken van Android zijn verborgen) of als 'Zelfstandig' (verschijnt als een normale app, met status en navigatiebalken zichtbaar). OPMERKING: als u wijzigingen aanbrengt, moet u de skin opnieuw in uw browser laden.

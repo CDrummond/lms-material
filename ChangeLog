@@ -10,6 +10,7 @@
    it applies.
 7. Set cursor for menu items.
 8. Fix bottom toolbar button positions if stop button is shown.
+9. Only open sync dialog on long-press of 'Manage players' menu entry.
 
 2.8.2
 -----

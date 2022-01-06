@@ -38,7 +38,7 @@ Vue.component('lms-toolbar', {
    <template v-for="(item, index) in players">
     <v-subheader v-if="index==0 && !item.isgroup && players[players.length-1].isgroup">{{trans.standardPlayers}}</v-subheader>
     <v-subheader v-else-if="index>0 && item.isgroup && !players[index-1].isgroup">{{trans.groupPlayers}}</v-subheader>
-    <v-list-tile v-longpress="setPlayerIdx" :id="index+'-tbplayer'" v-bind:class="{'active-player':player && item.id === player.id}">
+    <v-list-tile @click="setPlayer(player.id)" v-bind:class="{'active-player':player && item.id === player.id}">
      <v-list-tile-avatar>
       <v-icon v-if="item.icon.icon">{{item.icon.icon}}</v-icon><img v-else class="svg-img" :src="item.icon.svg | svgIcon(darkUi)"></img>
       <div v-if="player && item.id === player.id" class="active-player"></div>
@@ -55,7 +55,7 @@ Vue.component('lms-toolbar', {
 
    <v-divider v-if="!noPlayer && (((players && players.length>1) || playerStatus.sleepTime || otherPlayers.length>0))" class="hide-for-mini"></v-divider>
 
-   <v-list-tile v-if="(players && players.length>1) || otherPlayers.length>0" @click="menuAction(TB_MANAGE_PLAYERS.id)" class="hide-for-mini">
+   <v-list-tile v-if="(players && players.length>1) || otherPlayers.length>0" v-longpress="managePlayers" class="hide-for-mini">
     <v-list-tile-avatar v-if="menuIcons"><img class="svg-img" :src="TB_MANAGE_PLAYERS.svg | svgIcon(darkUi)"></img></v-list-tile-avatar>
     <v-list-tile-content><v-list-tile-title>{{TB_MANAGE_PLAYERS.title}}</v-list-tile-title></v-list-tile-content>
     <v-list-tile-action v-if="TB_MANAGE_PLAYERS.shortcut && keyboardControl" class="menu-shortcut player-menu-shortcut">{{TB_MANAGE_PLAYERS.shortcut}}</v-list-tile-action>
@@ -501,19 +501,16 @@ Vue.component('lms-toolbar', {
                           appQuit:i18n('Quit'), toggleQueue:i18n('Toggle queue'), downloading:i18n('Downloading'),
                           toggleQueueShortcut:shortcutStr(LMS_TOGGLE_QUEUE_KEYBOARD, true), groupVol:i18n('Adjust volume of associated players')};
         },
-        setPlayerIdx(longPress, el) {
-            let idx = parseInt(el.firstChild.id.split("-")[0]);
-            let player = this.$store.state.players[idx];
-            if (longPress && !player.isgroup) {
-                this.showPlayerMenu = false;
-                bus.$emit('dlg.open', 'sync', player);
-            } else {
-                this.setPlayer(player.id);
-            }
-        },
         setPlayer(id) {
             if (id != this.$store.state.player.id) {
                 this.$store.commit('setPlayer', id);
+            }
+        },
+        managePlayers(longPress) {
+            if (longPress) {
+                bus.$emit('dlg.open', 'sync', this.$store.state.player);
+            } else {
+                this.menuAction(TB_MANAGE_PLAYERS.id);
             }
         },
         menuAction(id) {

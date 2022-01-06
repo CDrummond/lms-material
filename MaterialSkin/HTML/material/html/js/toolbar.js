@@ -508,6 +508,7 @@ Vue.component('lms-toolbar', {
         },
         managePlayers(longPress) {
             if (longPress) {
+                this.showPlayerMenu = false;
                 bus.$emit('dlg.open', 'sync', this.$store.state.player);
             } else {
                 this.menuAction(TB_MANAGE_PLAYERS.id);

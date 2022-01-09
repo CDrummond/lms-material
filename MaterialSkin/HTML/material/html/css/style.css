@@ -2277,7 +2277,9 @@ img[lazy='loaded'].np-image-desktop, img[lazy='loaded'].np-image-landscape, img[
 }
 
 @media (hover: none) {
- .lms-list .v-list__tile--link:hover {
+ /* Also set in main.js as above does not seem to work??? */
+ .lms-list .v-list__tile--link:hover,
+ .dialog-main-list .v-list__tile--link:hover {
   background:transparent!important;
  }
 }

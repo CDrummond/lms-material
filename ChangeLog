@@ -1,3 +1,8 @@
+2.8.4
+------
+1. Remove hover from list in 'Synchronise' dialog to work-around item being
+   selected after long-press of 'Manage players' in players menu.
+
 2.8.3
 -----
 1. Update traslations.

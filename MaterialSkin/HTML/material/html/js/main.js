@@ -23,7 +23,8 @@ var app = new Vue({
             // Disable hover effects for buttons in mobile, as these can get 'stuck'. This /should/ be automatic, but
             // is failing. Placing in "@media (hover: none)" did not seem to work. So, apply here for just mobile...
             var s = document.createElement("style");
-            s.innerHTML = ".v-btn:hover:before { background-color:transparent!important; }";
+            s.innerHTML = ".v-btn:hover:before {background-color:transparent!important;}" +
+                          ".lms-list .v-list__tile--link:hover,.dialog-main-list .v-list__tile--link:hover {background:transparent!important};";
             document.getElementsByTagName("head")[0].appendChild(s);
         }
         if (IS_IOS || queryParams.addpad) {

@@ -28,7 +28,6 @@ var app = new Vue({
         }
         if (IS_IOS || queryParams.addpad) {
             // Always add padding...
-            console.log("ADD");
             document.documentElement.style.setProperty('--bottom-nav-pad', '12px');
             document.documentElement.style.setProperty('--bottom-progress-adjust', '4px');
             document.documentElement.style.setProperty('--bottom-toolbar-pad', '4px');

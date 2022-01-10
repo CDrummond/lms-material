@@ -508,7 +508,14 @@ Vue.component('lms-toolbar', {
         },
         managePlayers(longPress) {
             if (longPress) {
-                this.showPlayerMenu = false;
+                // Leave menu open for 3/4 of a second so that it captures the
+                // click/touch end event. If we close immediately then the element
+                // that long-press was bound to no longer exists so it can't stop
+                // the event => sometimes na entry in the sync-dialog gets this
+                // and toggles its setting.
+                setTimeout(function () {
+                    this.showPlayerMenu = false;
+                }.bind(this), 750);
                 bus.$emit('dlg.open', 'sync', this.$store.state.player);
             } else {
                 this.menuAction(TB_MANAGE_PLAYERS.id);

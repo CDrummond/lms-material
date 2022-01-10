@@ -2,6 +2,8 @@
 ------
 1. Remove hover from list in 'Synchronise' dialog to work-around item being
    selected after long-press of 'Manage players' in players menu.
+2. Close players menu 3/4 of a second after long-press on 'Manage players'
+   entry.
 
 2.8.3
 -----

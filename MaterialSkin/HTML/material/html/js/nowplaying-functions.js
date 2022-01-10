@@ -294,12 +294,19 @@ function nowplayingMenuAction(view, item) {
         bus.$emit("browse", item.cmd.command, item.cmd.params, item.cmd.title, 'now-playing');
         view.close();
     } else if (NP_COPY_DETAILS_CMD==item.act) {
+        let text = undefined;
         if (undefined!=view.playerStatus.current.title && undefined!=view.playerStatus.current.artist && undefined!=view.playerStatus.current.album) {
-            copyTextToClipboard(i18n("Playing %1 by %2 from %3", view.playerStatus.current.title, view.playerStatus.current.artist, view.playerStatus.current.album));
+            text=i18n("Playing %1 by %2 from %3", view.playerStatus.current.title, view.playerStatus.current.artist, view.playerStatus.current.album);
         } else if (undefined!=view.playerStatus.current.title && undefined!=view.playerStatus.current.artist) {
-            copyTextToClipboard(i18n("Playing %1 by %2", view.playerStatus.current.title, view.playerStatus.current.artist));
+            text=i18n("Playing %1 by %2", view.playerStatus.current.title, view.playerStatus.current.artist);
         } else {
-            copyTextToClipboard(i18n("Playing %1", view.playerStatus.current.title));
+            text=i18n("Playing %1", view.playerStatus.current.title);
+        }
+        if (undefined!=text) {
+            if (view.$store.state.techInfo) {
+                text += " ("+view.playerStatus.current.technicalInfo+")";
+            }
+            copyTextToClipboard(text);
         }
     } else if (FOLLOW_LINK_ACTION==item.act) {
         openWindow(item.link);

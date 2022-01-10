@@ -4,6 +4,8 @@
    selected after long-press of 'Manage players' in players menu.
 2. Close players menu 3/4 of a second after long-press on 'Manage players'
    entry.
+3. If set to show technical info then also append this to track details when
+   using 'Copy details' action.
 
 2.8.3
 -----

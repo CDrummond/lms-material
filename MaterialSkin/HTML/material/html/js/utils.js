@@ -177,7 +177,7 @@ function formatTechInfo(item) {
         let bracket = item.type.indexOf(" (");
         let type = bracket>0 ? item.type.substring(0, bracket) : item.type;
         type = type.length<=4 ? type.toUpperCase() : type;
-        if (technical.indexOf(type)<0) {
+        if (technical.indexOf(type)<0 && (undefined==source || type!=source.replace(/ /g,''))) {
             technical.push(type);
         }
     }

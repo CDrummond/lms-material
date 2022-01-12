@@ -390,7 +390,10 @@ Vue.component('lms-iframe-dialog', {
    <v-card-title class="settings-title">
     <v-toolbar app-data class="dialog-toolbar">
      <v-btn flat icon v-longpress:stop="goBack" :title="i18n('Go back')"><v-icon>arrow_back</v-icon></v-btn>
-     <v-btn v-if="showHome && homeButton" flat icon @click="goHome" :title="i18n('Go home')"><v-icon>home</v-icon></v-btn>
+     <v-btn v-if="showHome && homeButton" flat icon @click="goHome" :title="i18n('Go home')">
+      <img v-if="showHome==IFRAME_HOME_CLOSES_DIALOGS" class="svg-img" :src="'home-outline' | svgIcon(darkUi)"></img>
+      <v-icon v-else>home</v-icon>
+     </v-btn>
      <v-toolbar-title>{{title}}</v-toolbar-title>
      <v-spacer></v-spacer>
      <v-menu bottom left v-model="showMenu" v-if="actions.length>0 || (customActions && customActions.length>0)">
@@ -510,7 +513,7 @@ Vue.component('lms-iframe-dialog', {
         },
         goHome() {
             this.close();
-            if (2==this.showHome) {
+            if (IFRAME_HOME_CLOSES_DIALOGS==this.showHome) {
                 this.$store.commit('closeAllDialogs', true);
             } else {
                 bus.$emit('browse-home');

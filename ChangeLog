@@ -9,6 +9,7 @@
 4. Add 'BBC Sounds' to sources mapping.
 5. When checking if source is already in tech info, remove spaces from source.
 6. Place source at end, not start, of tech info.
+7. Use different home icon if 'go home' just closes dialogs.
 
 2.8.3
 -----

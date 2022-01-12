@@ -720,10 +720,10 @@ Vue.component('lms-player-settings', {
             }
         },
         showExtraSettings() {
-            bus.$emit('dlg.open', 'iframe', '/material/settings/player/basic.html?player='+this.playerId, i18n('Extra player settings')+SEPARATOR+this.playerName, undefined, 2);
+            bus.$emit('dlg.open', 'iframe', '/material/settings/player/basic.html?player='+this.playerId, i18n('Extra player settings')+SEPARATOR+this.playerName, undefined, IFRAME_HOME_CLOSES_DIALOGS);
         },
         showConfig() {
-            bus.$emit('dlg.open', 'iframe', this.playerLink, i18n("Configuration")+SEPARATOR+this.playerName, undefined, 2);
+            bus.$emit('dlg.open', 'iframe', this.playerLink, i18n("Configuration")+SEPARATOR+this.playerName, undefined, IFRAME_HOME_CLOSES_DIALOGS);
         },
         doCustomAction(action, player) {
             performCustomAction(this, action, player);

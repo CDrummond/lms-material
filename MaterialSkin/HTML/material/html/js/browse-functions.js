@@ -537,7 +537,7 @@ function browseClick(view, item, index, event) {
     }
     if (item.type=="extra") {
         if (view.$store.state.player) {
-            bus.$emit('dlg.open', 'iframe', item.url+'player='+view.$store.state.player.id, item.title+SEPARATOR+view.$store.state.player.name, undefined, 1);
+            bus.$emit('dlg.open', 'iframe', item.url+'player='+view.$store.state.player.id, item.title+SEPARATOR+view.$store.state.player.name, undefined, IFRAME_HOME_NAVIGATES_BROWSE_HOME);
         } else {
             bus.$emit('showError', undefined, i18n("No Player"));
         }
@@ -571,7 +571,7 @@ function browseClick(view, item, index, event) {
         browseAddCategories(view, {id:'year:'+item.actions.go.params.year, title:item.title.split(': ')[1]}, false);
     } else if (item.weblink) {
         if (!IS_IOS) {
-            bus.$emit('dlg.open', 'iframe', item.weblink, item.title, undefined, 1);
+            bus.$emit('dlg.open', 'iframe', item.weblink, item.title, undefined, IFRAME_HOME_NAVIGATES_BROWSE_HOME);
         } else {
             window.open(item.weblink);
         }

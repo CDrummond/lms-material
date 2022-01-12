@@ -350,14 +350,14 @@ Vue.component('lms-information-dialog', {
             bus.$emit('dlg.open', 'playersettings', player, undefined, 2);
         },
         openTechInfo() {
-            bus.$emit('dlg.open', 'iframe', '/material/html/docs/index.html', i18n('LMS technical information'), undefined, 2);
+            bus.$emit('dlg.open', 'iframe', '/material/html/docs/index.html', i18n('LMS technical information'), undefined, IFRAME_HOME_CLOSES_DIALOGS);
         },
         rescan(item) {
             bus.$emit('showMessage', item.name);
             lmsCommand('', item.cmd);
         },
         showUpdateInfo() {
-            bus.$emit('dlg.open', 'iframe', '/material/updateinfo.html', i18n('Update information'), undefined, 2);
+            bus.$emit('dlg.open', 'iframe', '/material/updateinfo.html', i18n('Update information'), undefined, IFRAME_HOME_CLOSES_DIALOGS);
         }
     },
     beforeDestroy() {

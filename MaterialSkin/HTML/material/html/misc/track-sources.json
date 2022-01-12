@@ -8,7 +8,8 @@
     "https://media-ssl.musicradio.com/":"Global Player (UK)",
     "https://stream.radiofrance.fr/":"Radio France",
     "youtube:":"YouTube",
-    "pandora:":"Pandora"
+    "pandora:":"Pandora",
+    "sounds:":"BBC Sounds"
   },
   "includes":{
     ".radioparadise.com/":"Radio Paradise",

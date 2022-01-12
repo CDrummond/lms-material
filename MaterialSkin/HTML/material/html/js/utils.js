@@ -164,9 +164,6 @@ function logAndShowError(err, message, command, params, start, count) {
 function formatTechInfo(item) {
     let technical = [];
     let source = getTrackSource(item);
-    if (source) {
-        technical.push(source);
-    }
     if (item.bitrate) {
         technical.push(item.bitrate);
     }
@@ -177,9 +174,12 @@ function formatTechInfo(item) {
         let bracket = item.type.indexOf(" (");
         let type = bracket>0 ? item.type.substring(0, bracket) : item.type;
         type = type.length<=4 ? type.toUpperCase() : type;
-        if (technical.indexOf(type)<0 && (undefined==source || type!=source.replace(/ /g,''))) {
+        if (technical.indexOf(type)<0 && (undefined==source || (type!=source && type!=source.replace(/ /g,'')))) {
             technical.push(type);
         }
+    }
+    if (source) {
+        technical.push(source);
     }
     return technical.length>0 ? technical.join(", ") : undefined;
 }

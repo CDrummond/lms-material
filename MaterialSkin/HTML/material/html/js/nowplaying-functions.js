@@ -304,7 +304,7 @@ function nowplayingMenuAction(view, item) {
         }
         if (undefined!=text) {
             if (view.$store.state.techInfo) {
-                text += " ("+view.playerStatus.current.technicalInfo+")";
+                text += " ("+view.playerStatus.current.technicalInfo.replaceAll(SEPARATOR, ", ")+")";
             }
             copyTextToClipboard(text);
         }
@@ -484,7 +484,7 @@ function nowplayingFetchTrackInfo(view) {
     if (view.$store.state.techInfo && undefined!=trk.technicalInfo) {
         let tech = trk.technicalInfo;
         if (undefined!=source && tech.startsWith(source)) {
-            tech = tech.substring(source.length+2); // Remove (e.g.) "Spotify, "
+            tech = tech.substring(source.length+3); // Remove (e.g.) "Spotify <sep> "
         }
         html+="<tr><td>"+i18n("Technical")+"&nbsp;</td><td>"+tech+"</td></tr>";
     }

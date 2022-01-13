@@ -164,6 +164,9 @@ function logAndShowError(err, message, command, params, start, count) {
 function formatTechInfo(item) {
     let technical = [];
     let source = getTrackSource(item);
+    if (source) {
+        technical.push(source);
+    }
     if (item.bitrate) {
         technical.push(item.bitrate);
     }
@@ -178,10 +181,7 @@ function formatTechInfo(item) {
             technical.push(type);
         }
     }
-    if (source) {
-        technical.push(source);
-    }
-    return technical.length>0 ? technical.join(", ") : undefined;
+    return technical.length>0 ? technical.join(SEPARATOR) : undefined;
 }
 
 function formatSeconds(secs, showDays) {

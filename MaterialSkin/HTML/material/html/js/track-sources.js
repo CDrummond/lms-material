@@ -24,33 +24,33 @@ function initTrackSources() {
 function getTrackSource(track) {
     if (undefined!=track.url) {
         if (track.url.startsWith("file:") && !track.url.startsWith("tmp:")) {
-            return i18n("Local");
+            return {local:true, text:i18n("Local")};
         }
         for (const [key, value] of Object.entries(trackSources["prefix"])) {
             if (track.url.startsWith(key)) {
-                return value;
+                return {local:false, text:value};
             }
         }
         for (const [key, value] of Object.entries(lmsProtocols)) {
             if (track.url.startsWith(key+":")) {
-                return value;
+                return {local:false, text:value};
             }
         }
         if (track.url.startsWith("http:") || track.url.startsWith("https:")) {
             for (const [key, value] of Object.entries(trackSources["includes"])) {
                 if (track.url.includes(key)) {
-                    return value;
+                    return {local:false, text:value};
                 }
             }
             if (undefined!=track.album) {
                 for (const [key, value] of Object.entries(trackSources["album"])) {
                     if (track.album.includes(key)) {
-                        return value;
+                        return {local:false, text:value};
                     }
                 }
             }
         }
-        return i18n("Internet/Other");
+        return {local:false, text:i18n("Internet/Other")};
     }
     return undefined;
 }

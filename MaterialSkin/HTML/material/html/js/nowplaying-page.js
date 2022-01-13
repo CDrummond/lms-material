@@ -79,7 +79,7 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
     </v-list-tile-content>
     <v-list-tile-action>
      <div v-if="(techInfo || showRatings) && wide>0">
-      <div class="np-tech-desktop">{{techInfo && (wide>1 || (!showRatings && wide>0)) ? playerStatus.current.technicalInfo : ""}}</div>
+      <div class="np-tech-desktop">{{techInfo && (wide>1 || (!showRatings && wide>0)) ? technicalInfo : ""}}</div>
       <v-rating v-if="showRatings && wide>0" class="np-rating-desktop" small v-model="rating.value" half-increments hover clearable @click.native="setRating(true)" :readonly="undefined==ratingsPlugin"></v-rating>
      </div>
      <div v-else-if="playerStatus.playlist.count>1" class="np-tech-desktop link-item" @click="toggleTime()">{{formattedTime}}</div>
@@ -290,7 +290,7 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
      <div v-if="wide>1">
 
       <v-layout text-xs-center row wrap class="np-controls-wide">
-       <v-flex xs12 class="np-tech ellipsis" v-if="techInfo || playerStatus.playlist.count>1">{{techInfo ? playerStatus.current.technicalInfo : ""}}{{playerStatus.playlist.current | trackCount(playerStatus.playlist.count, techInfo ? SEPARATOR : undefined)}}</v-flex>
+       <v-flex xs12 class="np-tech ellipsis" v-if="techInfo || playerStatus.playlist.count>1">{{techInfo ? technicalInfo : ""}}{{playerStatus.playlist.current | trackCount(playerStatus.playlist.count, techInfo ? SEPARATOR : undefined)}}</v-flex>
        <v-flex xs12 v-if="!info.show && undefined!=playerStatus.current.time">
         <v-layout class="np-time-layout">
          <p class="np-pos" v-bind:class="{'np-pos-center': playerStatus.current.duration<=0}">{{playerStatus.current.time | displayTime}}</p>
@@ -354,7 +354,7 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
      <v-rating v-if="maxRating>5" v-model="rating.value" half-increments hover clearable @click.native="setRating(true)" :readonly="undefined==ratingsPlugin"></v-rating>
      <v-rating v-else v-model="rating.value" hover clearable @click.native="setRating(true)" :readonly="undefined==ratingsPlugin"></v-rating>
     </v-flex>
-    <v-flex xs12 class="np-tech ellipsis" v-if="techInfo || playerStatus.playlist.count>1">{{techInfo ? playerStatus.current.technicalInfo : ""}}{{playerStatus.playlist.current | trackCount(playerStatus.playlist.count, techInfo ? SEPARATOR : undefined)}}</v-flex>
+    <v-flex xs12 class="np-tech ellipsis" v-if="techInfo || playerStatus.playlist.count>1">{{techInfo ? technicalInfo : ""}}{{playerStatus.playlist.current | trackCount(playerStatus.playlist.count, techInfo ? SEPARATOR : undefined)}}</v-flex>
 
     <v-flex xs12><div class="np-portrait-thin-pad"></div></v-flex>
 
@@ -417,7 +417,7 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
                     dvc: VOL_STD,
                     current: { canseek:1, duration:0, time:undefined, title:undefined, artist:undefined, artistAndComposer: undefined,
                                album:undefined, albumName:undefined, albumLine:undefined, technicalInfo: "", pospc:0.0, tracknum:undefined,
-                               disc:0, year:0, url:undefined },
+                               disc:0, year:0, url:undefined, source: {local:true, text:undefined} },
                     playlist: { shuffle:0, repeat: 0, current:0, count:0 },
                  },
                  info: { show: false, tab:TRACK_TAB, showTabs:false, sync: true,
@@ -1073,6 +1073,13 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
         },
         techInfo() {
             return this.$store.state.techInfo
+        },
+        technicalInfo() {
+            return undefined==this.playerStatus.current.technicalInfo || this.playerStatus.current.length==0
+                ? undefined
+                : undefined==this.playerStatus.current.source || this.playerStatus.current.source.local
+                    ? this.playerStatus.current.technicalInfo
+                    : (this.playerStatus.current.source.text+SEPARATOR+this.playerStatus.current.technicalInfo);
         },
         formattedTime() {
             return this.playerStatus && this.playerStatus.current

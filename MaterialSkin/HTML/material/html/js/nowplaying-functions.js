@@ -173,7 +173,11 @@ function nowplayingOnPlayerStatus(view, playerStatus) {
     if (playerStatus.playlist.count!=view.playerStatus.playlist.count) {
         view.playerStatus.playlist.count = playerStatus.playlist.count;
     }
-    var technical = formatTechInfo(playerStatus.current);
+    var source = getTrackSource(playerStatus.current);
+    if (technical!=view.playerStatus.current.source) {
+        view.playerStatus.current.source = source;
+    }
+    var technical = formatTechInfo(playerStatus.current, source);
     if (technical!=view.playerStatus.current.technicalInfo) {
         view.playerStatus.current.technicalInfo = technical;
     }
@@ -303,8 +307,10 @@ function nowplayingMenuAction(view, item) {
             text=i18n("Playing %1", view.playerStatus.current.title);
         }
         if (undefined!=text) {
-            if (view.$store.state.techInfo) {
-                text += " ("+view.playerStatus.current.technicalInfo.replaceAll(SEPARATOR, ", ")+")";
+            if (view.$store.state.techInfo && undefined!=view.playerStatus.current.technicalInfo && 0!=view.playerStatus.current.technicalInfo.length) {
+                text += " ("+(undefined==view.playerStatus.current.source || view.playerStatus.current.source.local
+                                ? "" : (view.playerStatus.current.source.text+", "))+
+                        view.playerStatus.current.technicalInfo.replaceAll(SEPARATOR, ", ")+")";
             }
             copyTextToClipboard(text);
         }
@@ -476,17 +482,12 @@ function nowplayingFetchTrackInfo(view) {
         html+="<tr><td>"+i18n("Genre")+"&nbsp;</td><td><obj class=\"link-item\" onclick=\"nowplayingBrowse('genre', "+trk.genre_id+",\'"+escape(trk.genre)+"\')\">"+trk.genre+"</obj></td></tr>";
     }
 
-    let source = getTrackSource(trk);
-    if (undefined!=source) {
-        html+="<tr><td>"+i18n("Source")+"&nbsp;</td><td>"+source+"</td></tr>";
+    if (undefined!=trk.source) {
+        html+="<tr><td>"+i18n("Source")+"&nbsp;</td><td>"+trk.source.text+"</td></tr>";
     }
 
     if (view.$store.state.techInfo && undefined!=trk.technicalInfo) {
-        let tech = trk.technicalInfo;
-        if (undefined!=source && tech.startsWith(source)) {
-            tech = tech.substring(source.length+3); // Remove (e.g.) "Spotify <sep> "
-        }
-        html+="<tr><td>"+i18n("Technical")+"&nbsp;</td><td>"+tech+"</td></tr>";
+        html+="<tr><td>"+i18n("Technical")+"&nbsp;</td><td>"+trk.technicalInfo+"</td></tr>";
     }
 
     if (html.length>0) {

@@ -14,7 +14,12 @@
         "name":"Tidal"
     },
     "qobuz:":{
-        "name":"Qobuz"
+        "name":"Qobuz",
+        "url":{
+            "from":"qobuz://",
+            "to":"https://open.qobuz.com/track/",
+            "removeext":true
+        }
     },
     "bandcamp:":{
         "name":"Bandcamp"

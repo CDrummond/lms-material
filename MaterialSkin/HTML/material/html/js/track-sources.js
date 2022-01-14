@@ -29,7 +29,13 @@ function getTrackSource(track) {
         for (const [key, value] of Object.entries(trackSources["prefix"])) {
             if (track.url.startsWith(key)) {
                 if (undefined!=value.url) {
-                    return {local:false, text:value.name, url:track.url.replace(value.url.from, value.url.to)};
+                    let srvUrl = track.url.replace(value.url.from, value.url.to);
+                    if (value.url.removeext) {
+                        let parts = srvUrl.split('.');
+                        parts.pop();
+                        srvUrl = parts.join('.');
+                    }
+                    return {local:false, text:value.name, url:srvUrl};
                 }
                 return {local:false, text:value.name};
             }

@@ -309,8 +309,8 @@ function nowplayingMenuAction(view, item) {
         if (undefined!=text) {
             if (view.$store.state.techInfo && undefined!=view.playerStatus.current.technicalInfo && 0!=view.playerStatus.current.technicalInfo.length) {
                 text += " ("+(undefined==view.playerStatus.current.source || view.playerStatus.current.source.local
-                                ? "" : (view.playerStatus.current.source.text+", "))+
-                        view.playerStatus.current.technicalInfo.replaceAll(SEPARATOR, ", ")+")";
+                                ? "" : (view.playerStatus.current.source.text+SEPARATOR))+
+                        view.playerStatus.current.technicalInfo+")";
             }
             copyTextToClipboard(text);
         }

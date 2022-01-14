@@ -16,7 +16,7 @@
 
 2.8.3
 -----
-1. Update traslations.
+1. Update translations.
 2. Add track source (Spotify, Qobuz, etc.) to technical info.
 3. Slightly alter metrics of desktop layout toolbar to help on iPad. If iPad
    is not detected, or padding required elsewhere, add "?addpadd" to URL.

@@ -115,7 +115,7 @@ function parseResp(data, showTrackNum, index, showRatings, threeLines, infoPlugi
         // See: https://forums.slimdevices.com/showthread.php?115609-Announce-Music-Similarity-DSTM-mixer&p=1043400&viewfull=1#post1043400
         if (isInitial && resp.size>resp.items.length && resp.size<(resp.items.length+4) && resp.items.length<LMS_QUEUE_BATCH_SIZE) {
             resp.size = resp.items.length;
-            console.log('Working around LMS queue size issue, size:' + resp.size + ', items:' + resp.items.length);
+            console.error('Working around LMS queue size issue, size:' + resp.size + ', items:' + resp.items.length);
         }
     }
     return resp;

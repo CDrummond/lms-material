@@ -12,6 +12,7 @@
 7. Try to work-around LMS returning incorrect queue size.
 8. Make 'Source' entry in now-playing a link to online service's track, if
    possible.
+9. Correctly handle LMS's new British English language setting.
 
 2.8.3
 -----

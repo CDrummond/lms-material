@@ -73,8 +73,7 @@ var app = new Vue({
         initTrackSources();
         lmsCommand("", ["pref", "language", "?"]).then(({data}) => {
             if (data && data.result && data.result._p2) {
-                var lang = data.result._p2.toLowerCase();
-
+                var lang = data.result._p2.toLowerCase().replace('_', '-');
                 // Set page to LMS's language
                 axios.defaults.headers.common['Accept-Language'] = lang;
                 document.querySelector('html').setAttribute('lang', lang);

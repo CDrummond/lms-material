@@ -442,7 +442,13 @@ var app = new Vue({
                 let target = event.target || event.srcElement;
                 if (target.tagName === 'A') {
                     let href = target.getAttribute('href');
+                    let follow = target.getAttribute('follow');
                     if (undefined!=href && null!=href && href.length>10) { // 10 = http://123
+                        if (undefined!=follow) {
+                            openWindow(href);
+                            event.preventDefault();
+                            return;
+                        }
                         let text = target.text;
                         if (undefined==text || text.length<1) {
                             text = target.textContent;

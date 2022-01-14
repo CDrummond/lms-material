@@ -28,7 +28,10 @@ function getTrackSource(track) {
         }
         for (const [key, value] of Object.entries(trackSources["prefix"])) {
             if (track.url.startsWith(key)) {
-                return {local:false, text:value};
+                if (undefined!=value.url) {
+                    return {local:false, text:value.name, url:track.url.replace(value.url.from, value.url.to)};
+                }
+                return {local:false, text:value.name};
             }
         }
         for (const [key, value] of Object.entries(lmsProtocols)) {

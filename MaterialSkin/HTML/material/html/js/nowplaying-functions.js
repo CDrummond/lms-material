@@ -312,6 +312,9 @@ function nowplayingMenuAction(view, item) {
                 text += " ("+(undefined==view.playerStatus.current.source || view.playerStatus.current.source.local
                                 ? "" : (view.playerStatus.current.source.text+SEPARATOR))+
                         view.playerStatus.current.technicalInfo+")";
+                if (undefined!=view.playerStatus.current.source && undefined!=view.playerStatus.current.source.url) {
+                    text += "\n" + view.playerStatus.current.source.url;
+                }
             }
             copyTextToClipboard(text);
         }
@@ -484,7 +487,11 @@ function nowplayingFetchTrackInfo(view) {
     }
 
     if (undefined!=trk.source) {
-        html+="<tr><td>"+i18n("Source")+"&nbsp;</td><td>"+trk.source.text+"</td></tr>";
+        if (undefined!=trk.source.url) {
+            html+="<tr><td>"+i18n("Source")+"&nbsp;</td><td><a follow href=\""+trk.source.url+"\">" + trk.source.text + "</a></td></tr>";
+        } else {
+            html+="<tr><td>"+i18n("Source")+"&nbsp;</td><td>"+trk.source.text+"</td></tr>";
+        }
     }
 
     if (view.$store.state.techInfo && undefined!=trk.technicalInfo) {

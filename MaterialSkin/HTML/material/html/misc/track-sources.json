@@ -1,15 +1,43 @@
 {
   "prefix":{
-    "deezer:":"Deezer",
-    "spotify:":"Spotify",
-    "wimp:":"Tidal",
-    "qobuz:":"Qobuz",
-    "bandcamp:":"Bandcamp",
-    "https://media-ssl.musicradio.com/":"Global Player (UK)",
-    "https://stream.radiofrance.fr/":"Radio France",
-    "youtube:":"YouTube",
-    "pandora:":"Pandora",
-    "sounds:":"BBC Sounds"
+    "deezer:":{
+        "name":"Deezer"
+    },
+    "spotify:":{
+        "name":"Spotify",
+        "url":{
+            "from":"spotify://track:",
+            "to":"https://open.spotify.com/track/"
+        }
+    },
+    "wimp:":{
+        "name":"Tidal"
+    },
+    "qobuz:":{
+        "name":"Qobuz"
+    },
+    "bandcamp:":{
+        "name":"Bandcamp"
+    },
+    "https://media-ssl.musicradio.com/":{
+        "name":"Global Player (UK)"
+    },
+    "https://stream.radiofrance.fr/":{
+        "name":"Radio France"
+    },
+    "youtube:":{
+        "name":"YouTube",
+        "url":{
+            "from":"youtube://www",
+            "to":"https://www"
+        }
+    },
+    "pandora:":{
+        "name":"Pandora"
+    },
+    "sounds:":{
+        "name":"BBC Sounds"
+    }
   },
   "includes":{
     ".radioparadise.com/":"Radio Paradise",

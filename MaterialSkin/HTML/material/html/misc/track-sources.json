@@ -51,7 +51,14 @@
         "name":"Pandora"
     },
     "sounds:":{
-        "name":"BBC Sounds"
+        "name":"BBC Sounds",
+        "url":{
+            "prefix":"https://www.bbc.co.uk/programmes/",
+            "split":{
+                "on":"_",
+                "use":1
+            }
+        }
     }
   },
   "includes":{

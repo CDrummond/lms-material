@@ -56,7 +56,7 @@
             "prefix":"https://www.bbc.co.uk/programmes/",
             "split":{
                 "on":"_",
-                "use":1
+                "use":2
             }
         }
     }

@@ -1,7 +1,12 @@
 {
   "prefix":{
     "deezer:":{
-        "name":"Deezer"
+        "name":"Deezer",
+        "url":{
+            "from":"deezer://",
+            "to":"https://www.deezer.com/track/",
+            "removeext":true
+        }
     },
     "spotify:":{
         "name":"Spotify",
@@ -11,7 +16,12 @@
         }
     },
     "wimp:":{
-        "name":"Tidal"
+        "name":"Tidal",
+        "url":{
+            "from":"wimp://",
+            "to":"https://tidal.com/browse/track/",
+            "removeext":true
+        }
     },
     "qobuz:":{
         "name":"Qobuz",

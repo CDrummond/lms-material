@@ -478,7 +478,7 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
 
         bus.$on('info-swipe', function(d) {
             if (this.info.show) {
-                if ('l'==d) {
+                if ('left'==d) {
                     if (this.info.tab==2) {
                         this.info.tab=0;
                     } else {

@@ -1,3 +1,7 @@
+2.8.5
+-----
+1. Fix swipe to change info view tab.
+
 2.8.4
 ------
 1. Remove hover from list in 'Synchronise' dialog to work-around item being

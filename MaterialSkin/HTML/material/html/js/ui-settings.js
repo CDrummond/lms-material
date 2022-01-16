@@ -253,6 +253,15 @@ Vue.component('lms-ui-settings', {
     <v-divider></v-divider>
 
     <v-list-tile>
+     <v-list-tile-content @click="swipeChangeTrack = !swipeChangeTrack" class="switch-label">
+      <v-list-tile-title>{{i18n('Swipe to change track')}}</v-list-tile-title>
+      <v-list-tile-sub-title>{{i18n("Swipe left and right (on cover in mobile layout) to change track.")}}</v-list-tile-sub-title>
+     </v-list-tile-content>
+     <v-list-tile-action><v-switch v-model="swipeChangeTrack"></v-switch></v-list-tile-action>
+    </v-list-tile>
+    <v-divider></v-divider>
+
+    <v-list-tile>
      <v-list-tile-content @click="swipeVolume = !swipeVolume" class="switch-label">
       <v-list-tile-title>{{i18n('Swipe to change volume')}}</v-list-tile-title>
       <v-list-tile-sub-title>{{i18n("Swipe up and down to change current volume.")}}</v-list-tile-sub-title>
@@ -260,6 +269,7 @@ Vue.component('lms-ui-settings', {
      <v-list-tile-action><v-switch v-model="swipeVolume"></v-switch></v-list-tile-action>
     </v-list-tile>
     <v-divider></v-divider>
+
     <v-list-tile>
      <v-select :items="skipSecondsOptions" :label="i18n('Previous/next long-press skip')" v-model="skipSeconds" item-text="label" item-value="value"></v-select>
     </v-list-tile>
@@ -397,6 +407,7 @@ Vue.component('lms-ui-settings', {
             nowPlayingTrackNum:false,
             nowPlayingClock:false,
             swipeVolume:false,
+            swipeChangeTrack:false,
             keyboardControl:true,
             queueThreeLines:true,
             showArtwork:false,
@@ -580,6 +591,7 @@ Vue.component('lms-ui-settings', {
             this.nowPlayingTrackNum = this.$store.state.nowPlayingTrackNum;
             this.nowPlayingClock = this.$store.state.nowPlayingClock;
             this.swipeVolume = this.$store.state.swipeVolume;
+            this.swipeChangeTrack = this.$store.state.swipeChangeTrack;
             this.keyboardControl = this.$store.state.keyboardControl;
             this.queueThreeLines = this.$store.state.queueThreeLines;
             this.showArtwork = this.$store.state.showArtwork;
@@ -677,6 +689,7 @@ Vue.component('lms-ui-settings', {
                       nowPlayingTrackNum:this.nowPlayingTrackNum,
                       nowPlayingClock:this.nowPlayingClock,
                       swipeVolume:this.swipeVolume,
+                      swipeChangeTrack:this.swipeChangeTrack,
                       keyboardControl:this.keyboardControl,
                       showArtwork:this.showArtwork,
                       queueThreeLines:this.queueThreeLines,

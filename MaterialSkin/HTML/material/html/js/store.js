@@ -123,6 +123,10 @@ function updateUiSettings(state, val) {
         state.swipeVolume = val.swipeVolume;
         setLocalStorageVal('swipeVolume', state.swipeVolume);
     }
+    if (undefined!=val.swipeChangeTrack && state.swipeChangeTrack!=val.swipeChangeTrack) {
+        state.swipeChangeTrack = val.swipeChangeTrack;
+        setLocalStorageVal('swipeChangeTrack', state.swipeChangeTrack);
+    }
     if (undefined!=val.keyboardControl && state.keyboardControl!=val.keyboardControl) {
         state.keyboardControl = val.keyboardControl;
         setLocalStorageVal('keyboardControl', state.keyboardControl);
@@ -282,6 +286,7 @@ const store = new Vuex.Store({
         visibleMenus: new Set(),
         disabledBrowseModes: new Set(),
         swipeVolume: false,
+        swipeChangeTrack: false,
         keyboardControl: true,
         updatesAvailable: new Set(),
         queueThreeLines: true,
@@ -497,6 +502,7 @@ const store = new Vuex.Store({
             state.sortHome = getLocalStorageBool('sortHome', state.sortHome);
             state.hidden = new Set(JSON.parse(getLocalStorageVal('hidden', JSON.stringify([TOP_EXTRAS_ID]))));
             state.swipeVolume = getLocalStorageBool('swipeVolume', state.swipeVolume);
+            state.swipeChangeTrack = getLocalStorageBool('swipeChangeTrack', state.swipeChangeTrack);
             state.keyboardControl = getLocalStorageBool('keyboardControl', state.keyboardControl);
             state.queueThreeLines = getLocalStorageBool('queueThreeLines', state.queueThreeLines);
             state.showArtwork = getLocalStorageBool('showArtwork', state.showArtwork);
@@ -629,6 +635,7 @@ const store = new Vuex.Store({
                                      menuIcons: getLocalStorageBool('menuIcons', undefined==prefs.menuIcons ? state.menuIcons : prefs.menuIcons),
                                      sortHome: getLocalStorageBool('sortHome', undefined==prefs.sortHome ? state.sortHome : prefs.sortHome),
                                      swipeVolume: getLocalStorageBool('swipeVolume', undefined==prefs.swipeVolume ? state.swipeVolume : prefs.swipeVolume),
+                                     swipeChangeTrack: getLocalStorageBool('swipeChangeTrack', undefined==prefs.swipeChangeTrack ? state.swipeChangeTrack : prefs.swipeChangeTrack),
                                      keyboardControl: getLocalStorageBool('keyboardControl', undefined==prefs.keyboardControl ? state.keyboardControl : prefs.keyboardControl),
                                      queueThreeLines: getLocalStorageBool('queueThreeLines', undefined==prefs.queueThreeLines ? state.queueThreeLines : prefs.queueThreeLines),
                                      showArtwork: getLocalStorageBool('showArtwork', undefined==prefs.showArtwork ? state.showArtwork : prefs.showArtwork),

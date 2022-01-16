@@ -365,6 +365,14 @@ var app = new Vue({
                     return;
                 }
             }
+            if (this.$store.state.swipeChangeTrack && undefined!=ev.target && ev.target.className.startsWith('np-image')) {
+                if ('left'==direction) {
+                    bus.$emit('playerCommand', ['playlist', 'index', '+1']);
+                } else {
+                    bus.$emit('playerCommand', ['button', 'jump_rew']);
+                }
+                return;
+            }
             if ('left'==direction) {
                 if (this.$store.state.page=='browse') {
                     this.$store.commit('setPage', 'now-playing');

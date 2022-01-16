@@ -1,6 +1,8 @@
 2.8.5
 -----
 1. Fix swipe to change info view tab.
+2. Another attempt to work-around long-press on 'Manage players' entry causing
+   an entry in sync dialog to get checked.
 
 2.8.4
 ------

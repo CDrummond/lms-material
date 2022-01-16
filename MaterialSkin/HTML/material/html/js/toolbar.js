@@ -55,7 +55,7 @@ Vue.component('lms-toolbar', {
 
    <v-divider v-if="!noPlayer && (((players && players.length>1) || playerStatus.sleepTime || otherPlayers.length>0))" class="hide-for-mini"></v-divider>
 
-   <v-list-tile v-if="(players && players.length>1) || otherPlayers.length>0" v-longpress="managePlayers" class="hide-for-mini">
+   <v-list-tile v-if="(players && players.length>1) || otherPlayers.length>0" v-longpress="managePlayers" class="hide-for-mini noselect">
     <v-list-tile-avatar v-if="menuIcons"><img class="svg-img" :src="TB_MANAGE_PLAYERS.svg | svgIcon(darkUi)"></img></v-list-tile-avatar>
     <v-list-tile-content><v-list-tile-title>{{TB_MANAGE_PLAYERS.title}}</v-list-tile-title></v-list-tile-content>
     <v-list-tile-action v-if="TB_MANAGE_PLAYERS.shortcut && keyboardControl" class="menu-shortcut player-menu-shortcut">{{TB_MANAGE_PLAYERS.shortcut}}</v-list-tile-action>
@@ -508,15 +508,15 @@ Vue.component('lms-toolbar', {
         },
         managePlayers(longPress) {
             if (longPress) {
-                // Leave menu open for 3/4 of a second so that it captures the
+                // Leave menu open for 1/4 of a second so that it captures the
                 // click/touch end event. If we close immediately then the element
                 // that long-press was bound to no longer exists so it can't stop
                 // the event => sometimes na entry in the sync-dialog gets this
                 // and toggles its setting.
                 setTimeout(function () {
                     this.showPlayerMenu = false;
-                }.bind(this), 750);
-                bus.$emit('dlg.open', 'sync', this.$store.state.player);
+                    bus.$emit('dlg.open', 'sync', this.$store.state.player);
+                }.bind(this), 250);
             } else {
                 this.menuAction(TB_MANAGE_PLAYERS.id);
             }

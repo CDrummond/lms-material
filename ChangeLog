@@ -1,6 +1,7 @@
 2.9.0
 -----
 1. Add swipe left/right on cover to change track.
+2. Re-factor language handling.
 
 2.8.5
 -----

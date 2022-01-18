@@ -246,6 +246,15 @@ function closePrevDialog(state) {
     }
 }
 
+function updateLang(state, lang) {
+    state.lang = lang;
+    var timeStr = new Date('January 01, 1971 06:00:00').toLocaleTimeString(state.lang, { hour: 'numeric', minute: 'numeric' });
+    state.twentyFourHour = !(timeStr.endsWith("AM") || timeStr.endsWith("PM"));
+    // Set page to LMS's language
+    axios.defaults.headers.common['Accept-Language'] = lang;
+    document.querySelector('html').setAttribute('lang', lang);
+}
+
 const store = new Vuex.Store({
     state: {
         desktopLayout: false,
@@ -461,10 +470,11 @@ const store = new Vuex.Store({
         setUiSettings(state, val) {
             updateUiSettings(state, val);
         },
+        setLang(state, val) {
+            updateLang(state, val);
+        },
         initUiSettings(state) {
-            state.lang = (window.navigator.userLanguage || window.navigator.language);
-            var timeStr = new Date('January 01, 1971 06:00:00').toLocaleTimeString(state.lang, { hour: 'numeric', minute: 'numeric' });
-            state.twentyFourHour = !(timeStr.endsWith("AM") || timeStr.endsWith("PM"));
+            updateLang(state, window.navigator.userLanguage || window.navigator.language);
             state.defaultPlayer = getLocalStorageVal('defaultPlayer', state.defaultPlayer);
             state.page = getLocalStorageVal('page', state.page);
             state.theme = getLocalStorageVal('theme', state.theme);

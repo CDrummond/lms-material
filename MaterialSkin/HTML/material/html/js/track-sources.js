@@ -24,7 +24,7 @@ function initTrackSources() {
 function getTrackSource(track) {
     if (undefined!=track.url) {
         if (track.url.startsWith("file:") && !track.url.startsWith("tmp:")) {
-            return {local:true, text:i18n("Local")};
+            return {other:true, text:i18n("Local")};
         }
         for (const [key, value] of Object.entries(trackSources["prefix"])) {
             if (track.url.startsWith(key)) {
@@ -36,37 +36,37 @@ function getTrackSource(track) {
                             parts.pop();
                             srvUrl = parts.join('.');
                         }
-                        return {local:false, text:value.name, url:srvUrl};
+                        return {other:false, text:value.name, url:srvUrl};
                     } if (undefined!=value.url.prefix) {
                         let parts = track.url.split(value.url.split.on);
                         if (parts.length>value.url.split.use) {
-                            return {local:false, text:value.name, url:value.url.prefix+parts[value.url.split.use]};
+                            return {other:false, text:value.name, url:value.url.prefix+parts[value.url.split.use]};
                         }
                     }
                 }
-                return {local:false, text:value.name};
+                return {other:false, text:value.name};
             }
         }
         for (const [key, value] of Object.entries(lmsProtocols)) {
             if (track.url.startsWith(key+":")) {
-                return {local:false, text:value};
+                return {other:false, text:value};
             }
         }
         if (track.url.startsWith("http:") || track.url.startsWith("https:")) {
             for (const [key, value] of Object.entries(trackSources["includes"])) {
                 if (track.url.includes(key)) {
-                    return {local:false, text:value};
+                    return {other:false, text:value};
                 }
             }
             if (undefined!=track.album) {
                 for (const [key, value] of Object.entries(trackSources["album"])) {
                     if (track.album.includes(key)) {
-                        return {local:false, text:value};
+                        return {other:false, text:value};
                     }
                 }
             }
         }
-        return {local:false, text:i18n("Internet/Other")};
+        return {other:true, text:i18n("Internet/Other")};
     }
     return undefined;
 }

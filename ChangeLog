@@ -4,6 +4,7 @@
 2. Another attempt to work-around long-press on 'Manage players' entry causing
    an entry in sync dialog to get checked.
 3. Handle "radioparadise:" URLs when showing track source.
+4. Don't show "Internet/Other" beside tech info.
 
 2.8.4
 ------

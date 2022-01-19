@@ -1077,7 +1077,7 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
         technicalInfo() {
             return undefined==this.playerStatus.current.technicalInfo || this.playerStatus.current.length==0
                 ? undefined
-                : undefined==this.playerStatus.current.source || this.playerStatus.current.source.local
+                : undefined==this.playerStatus.current.source || this.playerStatus.current.source.other
                     ? this.playerStatus.current.technicalInfo
                     : (this.playerStatus.current.source.text+SEPARATOR+this.playerStatus.current.technicalInfo);
         },

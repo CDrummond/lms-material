@@ -1232,11 +1232,6 @@ progress {
  white-space:nowrap!important;
 }
 
-.shuffle-albums {
- border:2px solid;
- border-radius:50%;
-}
-
 .list-active {
  background-color:var(--list-active-color)!important;
 }

@@ -3,7 +3,7 @@
 #
 # Hacky script to trim modules out of Vuetify
 #
-# Copyright (c) 2020 Craig Drummond <craig.p.drummond@gmail.com>
+# Copyright (c) 2022 Craig Drummond <craig.p.drummond@gmail.com>
 # MIT license.
 #
 

@@ -177,7 +177,7 @@ function formatTechInfo(item, source) {
             technical.push(type);
         }
     }
-    return technical.length>0 ? technical.join(SEPARATOR) : undefined;
+    return technical.length>0 ? technical.join(' ') : undefined;
 }
 
 function formatSeconds(secs, showDays) {

@@ -24,7 +24,7 @@ function removeDiactrics(key) {
 
 function parseBrowseResp(data, parent, options, cacheKey, parentCommand, parentGenre) {
     // NOTE: If add key to resp, then update addToCache in utils.js
-    var resp = {items: [], allSongsItem:undefined, baseActions:[], canUseGrid: false, jumplist:[], numAudioItems:0, canDrop:false, itemCustomActions:undefined };
+    var resp = {items: [], allSongsItem:undefined, baseActions:[], canUseGrid: false, jumplist:[], numAudioItems:0, canDrop:false, itemCustomActions:undefined, refreshParent: false };
 
     try {
     if (data && data.result) {
@@ -110,6 +110,11 @@ function parseBrowseResp(data, parent, options, cacheKey, parentCommand, parentG
                         resp.actionItems.push(loop[idx]);
                     }
                 }
+            }
+
+            // This plugin action has caused a new item so we need to refresh the parent list when going back.
+            if (undefined!=data.result.refreshparent && 1==parseInt(data.result.refreshparent)) {
+                resp.refreshParent = true;
             }
 
             for (var idx=0, loop=data.result.item_loop, loopLen=loop.length; idx<loopLen; ++idx) {

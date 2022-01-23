@@ -261,6 +261,8 @@ function browseHandleListResponse(view, item, command, resp, prevPage) {
         // If this is an (e.g.) Spotty search then parent list (with search entry) will need refreshing
         if (wasSearch && command.command.length>1 && "items"==command.command[1]) {
             view.history[view.history.length-1].needsRefresh = true;
+        } else if (resp.refreshParent) {
+            view.history[view.history.length-1].needsRefresh = true;
         }
         view.headerTitle=item.title
                             ? wasSearch

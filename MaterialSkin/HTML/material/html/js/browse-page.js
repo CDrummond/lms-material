@@ -1564,7 +1564,7 @@ var lmsBrowse = Vue.component("lms-browse", {
         }.bind(this));
 
         bus.$on('refreshList', function(section) {
-            if (section==SECTION_PODCASTS || (this.current && this.current.section==section)) {
+            if (undefined==section || section==SECTION_PODCASTS || (this.current && this.current.section==section)) {
                 this.refreshList();
             }
         }.bind(this));

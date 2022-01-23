@@ -1611,6 +1611,7 @@ function browseMyMusicMenu(view) {
                         item.icon = c.icon;
                     }
                     item.params.push("menu:1");
+                    item.params.push("materialskin:1");
                     if (getField(item, "genre_id:")>=0) {
                         item['mapgenre']=true;
                     }
@@ -1700,6 +1701,7 @@ function browseMyMusicMenu(view) {
                                     if (getField(item, "genre_id:")>=0) {
                                         item['mapgenre']=true;
                                     }
+                                    item.params.push("materialskin:1");
                                     view.myMusic.push(item);
                                 }
                             }

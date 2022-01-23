@@ -2,6 +2,7 @@
 -----
 1. Add swipe left/right on cover to change track.
 2. Re-factor language handling.
+3. Allow other LMS plugins to register Javascript and dialogs.
 
 2.8.5
 -----

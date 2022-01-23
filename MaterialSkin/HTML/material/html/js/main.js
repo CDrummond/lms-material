@@ -16,7 +16,8 @@ var app = new Vue({
                             iteminfo: false, iframe: false, dstm: false, savequeue: false, icon: false, prompt:false,
                             addtoplaylist: false, file: false, groupvolume: false, advancedsearch: false, downloadstatus:false,
                             notifications: false, gallery: false, choice: false
-                          } }
+                          },
+                 loaded: false }
     },
     created() {
         if (IS_MOBILE) {
@@ -171,6 +172,7 @@ var app = new Vue({
 
         setTimeout(function () {
             bus.$emit('checkNotifications');
+            this.loaded = true;
         }.bind(this), 500);
 
         // Work-around 100vh behaviour in mobile chrome

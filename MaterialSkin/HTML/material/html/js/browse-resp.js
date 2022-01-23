@@ -95,6 +95,23 @@ function parseBrowseResp(data, parent, options, cacheKey, parentCommand, parentG
                 }
             }
 
+            if (data.result.materialskin_actions_loop) {
+                for (var idx=0, loop=data.result.materialskin_actions_loop, loopLen=loop.length; idx<loopLen; ++idx) {
+                    loop[idx].custom = true;
+                    if (loop[idx].type=='item') {
+                        if (undefined==resp.itemCustomActions) {
+                            resp.itemCustomActions = [];
+                        }
+                        resp.itemCustomActions.push(loop[idx]);
+                    } else if (loop[idx].type=='toolbar') {
+                        if (undefined==resp.actionItems) {
+                            resp.actionItems = [];
+                        }
+                        resp.actionItems.push(loop[idx]);
+                    }
+                }
+            }
+
             for (var idx=0, loop=data.result.item_loop, loopLen=loop.length; idx<loopLen; ++idx) {
                 var i = loop[idx];
                 if (!i.text || i.showBigArtwork==1) {
@@ -430,6 +447,14 @@ function parseBrowseResp(data, parent, options, cacheKey, parentCommand, parentG
                         i.menu.push(ADD_TO_PLAYLIST_ACTION);
                     }
                     i.menu.push(SELECT_ACTION);
+                }
+
+                if (undefined!=resp.itemCustomActions) {
+                    if (!addedDivider && i.menu.length>0) {
+                        i.menu.push(CUSTOM_ACTIONS);
+                        addedDivider = true;
+                    }
+                    i.menu.push(CUSTOM_ACTIONS);
                 }
 
                 // Only show 'More' action if:

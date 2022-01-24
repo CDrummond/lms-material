@@ -10,6 +10,7 @@ package Plugins::MaterialSkin::Extensions;
 
 my @otherJavascriptFiles = undef;
 my @otherDialogs = undef;
+my @otherTanslations = undef;
 
 sub addJavascript {
     my $path = shift;
@@ -33,4 +34,16 @@ sub addDialog {
 
 sub getDialogs {
     return \@otherDialogs;
+}
+
+sub addTranslation {
+    my $trans = shift;
+    if (@otherTanslations == undef) {
+        @otherTanslations = ();
+    }
+    push(@otherTanslations, $trans);
+}
+
+sub getTranslations {
+    return \@otherTanslations;
 }

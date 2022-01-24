@@ -58,7 +58,11 @@ var app = new Vue({
 
         var storedTrans = getLocalStorageVal('translation', undefined);
         if (storedTrans!=undefined) {
-            setTranslation(JSON.parse(storedTrans));
+            var lang = getLocalStorageVal('lang', undefined);
+            if (undefined!=lang) {
+                lang=lang.split('@')[0];
+            }
+            setTranslation(JSON.parse(storedTrans), lang);
         }
 
         if (IS_MOBILE) {
@@ -125,9 +129,9 @@ var app = new Vue({
                             var trans = eval(resp.data);
                             setLocalStorageVal('translation', JSON.stringify(trans));
                             setLocalStorageVal('lang', lowerLang+"@"+LMS_MATERIAL_REVISION);
-                            setTranslation(trans);
+                            setTranslation(trans, lowerLang);
                             bus.$emit('langChanged');
-                         }).catch(err => {
+                        }).catch(err => {
                             window.console.error(err);
                         });
                     }

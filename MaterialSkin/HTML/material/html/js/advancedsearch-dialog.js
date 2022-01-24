@@ -365,7 +365,7 @@ Vue.component('lms-advancedsearch-dialog', {
 
                 //parseBrowseResp looks for albums_loop before titles_loop, so must get albums first
                 if (data.result.albums_loop) {
-                    let resp = parseBrowseResp(data, undefined, { artistImages: setLocalStorageVal('artistImages', true), isSearch:true});
+                    let resp = parseBrowseResp(data, undefined, {isSearch:true});
                     data.result.albums_loop = undefined;
                     if (undefined!=resp) {
                         results.push({resp:resp, command:{cat:2}});
@@ -373,7 +373,7 @@ Vue.component('lms-advancedsearch-dialog', {
                     }
                 }
                 if (data.result.titles_loop) {
-                    let resp = parseBrowseResp(data, undefined, { artistImages: setLocalStorageVal('artistImages', true), isSearch:true});
+                    let resp = parseBrowseResp(data, undefined, {isSearch:true});
                     if (undefined!=resp) {
                         results.push({resp:resp, command:{cat:3}});
                         total+=resp.items.length;

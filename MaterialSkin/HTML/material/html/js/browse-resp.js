@@ -32,6 +32,23 @@ function parseBrowseResp(data, parent, options, cacheKey, parentCommand, parentG
         var command = data && data.params && data.params.length>1 && data.params[1] && data.params[1].length>1 ? data.params[1][0] : undefined;
         var isMusicIpMoods = command == "musicip" && data.params[1].length>0 && data.params[1][1]=="moods";
 
+        if (data.result.materialskin_actions_loop) {
+            for (var idx=0, loop=data.result.materialskin_actions_loop, loopLen=loop.length; idx<loopLen; ++idx) {
+                loop[idx].custom = true;
+                if (loop[idx].type=='item') {
+                    if (undefined==resp.itemCustomActions) {
+                        resp.itemCustomActions = [];
+                    }
+                    resp.itemCustomActions.push(loop[idx]);
+                } else if (loop[idx].type=='toolbar') {
+                    if (undefined==resp.actionItems) {
+                        resp.actionItems = [];
+                    }
+                    resp.actionItems.push(loop[idx]);
+                }
+            }
+        }
+
         if (isMusicIpMoods && data.result.item_loop) {
             for (var idx=0, loop=data.result.item_loop, loopLen=loop.length; idx<loopLen; ++idx) {
                 var i = loop[idx];
@@ -91,23 +108,6 @@ function parseBrowseResp(data, parent, options, cacheKey, parentCommand, parentG
                         Object.keys(mc.params).length == Object.keys(gc.params).length &&
                            Object.keys(mc.params).every(key => gc.params.hasOwnProperty(key) && mc.params[key] === gc.params[key])) {
                         moreAction = false;
-                    }
-                }
-            }
-
-            if (data.result.materialskin_actions_loop) {
-                for (var idx=0, loop=data.result.materialskin_actions_loop, loopLen=loop.length; idx<loopLen; ++idx) {
-                    loop[idx].custom = true;
-                    if (loop[idx].type=='item') {
-                        if (undefined==resp.itemCustomActions) {
-                            resp.itemCustomActions = [];
-                        }
-                        resp.itemCustomActions.push(loop[idx]);
-                    } else if (loop[idx].type=='toolbar') {
-                        if (undefined==resp.actionItems) {
-                            resp.actionItems = [];
-                        }
-                        resp.actionItems.push(loop[idx]);
                     }
                 }
             }

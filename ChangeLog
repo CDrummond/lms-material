@@ -1,11 +1,5 @@
 2.9.0
 -----
-1. Add swipe left/right on cover to change track.
-2. Re-factor language handling.
-3. Allow other LMS plugins to register Javascript and dialogs.
-
-2.8.5
------
 1. Fix swipe to change info view tab.
 2. Another attempt to work-around long-press on 'Manage players' entry causing
    an entry in sync dialog to get checked.
@@ -13,6 +7,10 @@
 4. Don't show 'Internet/Other' beside tech info.
 5. Use space to separate tech info.
 6. Better shuffle albums icon.
+7. Add swipe left/right on cover to change track.
+8. Re-factor language handling.
+9. Allow other LMS plugins to register Javascript and dialogs.
+
 
 2.8.4
 ------

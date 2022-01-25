@@ -25,6 +25,8 @@ use HTTP::Status qw(RC_NOT_FOUND RC_OK);
 use File::Basename;
 use File::Slurp qw(read_file);
 
+require Plugins::MaterialSkin::Extensions;
+
 if (!Slim::Web::Pages::Search->can('parseAdvancedSearchParams')) {
     require Plugins::MaterialSkin::Search;
 }

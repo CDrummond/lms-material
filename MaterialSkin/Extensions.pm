@@ -47,3 +47,5 @@ sub addTranslation {
 sub getTranslations {
     return \@otherTanslations;
 }
+
+1;

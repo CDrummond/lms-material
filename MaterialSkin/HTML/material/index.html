@@ -96,10 +96,12 @@
     <lms-notifications v-if="dialogs.notifications"></lms-notifications>
     <lms-gallery v-if="dialogs.gallery"></lms-gallery>
     [% PERL %]
-    my $other = Plugins::MaterialSkin::Extensions::getDialogs();
-    foreach my $dlg (@$other) {
-      if ($dlg && length($dlg)>1) {
-        print("<$dlg v-if=\"loaded\"></$dlg>\n");
+    my $other = Plugins::MaterialSkin::Extensions->getDialogs();
+    if ($other) {
+      foreach my $dlg (@$other) {
+        if ($dlg && length($dlg)>1) {
+          print("<$dlg v-if=\"loaded\"></$dlg>\n");
+        }
       }
     }
     [% END %]
@@ -114,16 +116,18 @@
   my $hideSettings=Plugins::MaterialSkin::Plugin->hideSettings();
   print("<script>const LMS_MATERIAL_REVISION=\"$version\"; const LMS_WINDOW_TITLE=\"$windowTitle\"; const LMS_SETTINGS_HIDE=\"$hideSettings\"; const LMS_MATERIAL_PLUGIN_TRANSLATIONS = [");
 
-  my $other = Plugins::MaterialSkin::Extensions::getTranslations();
-  my $first = 1;
-  foreach my $tr (@$other) {
-    if ($tr && length($tr)>1) {
-      if ($first != 1) {
-        print(",");
-      }
-      print("\"$tr\"");
-      $first = 0;
-    }
+  my $other = Plugins::MaterialSkin::Extensions->getTranslations();
+  if ($other) {
+    my $first = 1;
+    foreach my $tr (@$other) {
+      if ($tr && length($tr)>1) {
+        if ($first != 1) {
+          print(",");
+        }
+        print("\"$tr\"");
+        $first = 0;
+       }
+     }
   }
   print("];</script>\n");
   [% END %]
@@ -170,9 +174,11 @@
   <!--JS end-->
   [% PERL %]
   my $other = Plugins::MaterialSkin::Extensions::getJavascripts();
-  foreach my $js (@$other) {
-    if ($js && length($js)>1) {
-      print("<script src=\"material/pluginjs/$js\"></script>");
+  if ($other) {
+    foreach my $js (@$other) {
+      if ($js && length($js)>1) {
+        print("<script src=\"material/pluginjs/$js\"></script>");
+      }
     }
   }
   [% END %]

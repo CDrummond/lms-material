@@ -388,7 +388,6 @@
 "Set rating for all tracks":"Nastavit hodnocení pro všechny skladby",
 "Set sleep time for '%1'":"Nastavit čas spánku pro '%1'",
 "Set sleep time for all players":"Nastavit čas spánku pro všechny přehrávače",
-"Set sleep timer":"Nastavit časovač spánku",
 "Settings":"Nastavení",
 "Settings password":"Heslo do nastavení",
 "Should alarms repeat":"Opakovat budíky",
@@ -455,7 +454,6 @@
 "Switch to Nth player":"Přepnout na n-tý přehrávač",
 "Sync":"Synchronizovat",
 "Synchronise":"Synchronizovat",
-"Synchronise players":"Synchronizovat přehrávače",
 "Technical":"Technické",
 "The following plugins are up to date:":"Následující zásuvné moduly jsou aktuální:",
 "The following plugins have been updated:":"Následující zásuvné moduly byly aktualizovány:",
@@ -579,5 +577,11 @@
 "1 Year":"1 rok",
 "%1 Years":"%1 roků",
 "1 day":"1 den",
-"%1 days":"%1 dní"
+"%1 days":"%1 dní",
+"Not currently synchronised with any other player.":"",
+"Swipe left and right (on cover in mobile layout) to change track.":"",
+"Swipe to change track":"",
+"Synchronised with other players.":"",
+"1 Player":"",
+"%1 Players":""
 }

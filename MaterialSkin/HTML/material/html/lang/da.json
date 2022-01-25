@@ -388,7 +388,6 @@
 "Set rating for all tracks":"Angiv bedømmelse for alle numre",
 "Set sleep time for '%1'":"Indstil dvaletidspunkt for '%1'",
 "Set sleep time for all players":"Indstil dvaletidspunkt for alle afspillere",
-"Set sleep timer":"Indstil dvaletidspunkt",
 "Settings":"Indstillinger",
 "Settings password":"Kodeord til indstillinger",
 "Should alarms repeat":"Skal vækning gentages?",
@@ -455,7 +454,6 @@
 "Switch to Nth player":"Skift til den N. afspiller",
 "Sync":"Synkroniser",
 "Synchronise":"Synkroniser",
-"Synchronise players":"Synkroniser afspillere",
 "Technical":"Tekniske",
 "The following plugins are up to date:":"De følgende plugins er opdaterede:",
 "The following plugins have been updated:":"De følgende plugins er blevet opdateret:",
@@ -579,5 +577,11 @@
 "1 Year":"1 år",
 "%1 Years":"%1 år",
 "1 day":"1 dag",
-"%1 days":"%1 dage"
+"%1 days":"%1 dage",
+"Not currently synchronised with any other player.":"",
+"Swipe left and right (on cover in mobile layout) to change track.":"",
+"Swipe to change track":"",
+"Synchronised with other players.":"",
+"1 Player":"",
+"%1 Players":""
 }

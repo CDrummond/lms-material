@@ -384,7 +384,6 @@
 "Set rating for all tracks":"Установить рейтинг для всех треков",
 "Set sleep time for '%1'":"Установить время сна для '%1'",
 "Set sleep time for all players":"Установить время сна для всех плееров",
-"Set sleep timer":"Установить таймер сна",
 "Settings":"Установки",
 "Settings password":"Установки пароля",
 "Should alarms repeat":"Повторять оповещение",
@@ -451,7 +450,6 @@
 "Switch to Nth player":"Переключить в режим Nth",
 "Sync":"Синхр",
 "Synchronise":"Синхронизировать",
-"Synchronise players":"Синхронизировать проигрыватели",
 "Technical":"Техн.",
 "The following plugins are up to date:":"Плагин не требует обновлений",
 "The following plugins have been updated:":"Плагин уже обновлен",
@@ -578,6 +576,12 @@
 "%1 days":"%1 дней",
 "All discs":"",
 "Main disc":"",
+"Not currently synchronised with any other player.":"",
 "Play disc starting at track":"",
-"Remove disc":""
+"Remove disc":"",
+"Swipe left and right (on cover in mobile layout) to change track.":"",
+"Swipe to change track":"",
+"Synchronised with other players.":"",
+"1 Player":"",
+"%1 Players":""
 }

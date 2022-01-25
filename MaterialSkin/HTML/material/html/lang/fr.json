@@ -388,7 +388,6 @@
 "Set rating for all tracks":"Définir la notation pour tous les morceaux",
 "Set sleep time for '%1'":"Définir la durée de mise en veille pour '%1'",
 "Set sleep time for all players":"Définir la durée de mise en veille pour toutes les platines",
-"Set sleep timer":"Définir le délai de mise en veille",
 "Settings":"Préférences",
 "Settings password":"Mot de passe des paramètres",
 "Should alarms repeat":"Réactivation automatique (alarme périodique)",
@@ -455,7 +454,6 @@
 "Switch to Nth player":"Basculer vers la Nième platine",
 "Sync":"Syncr.",
 "Synchronise":"Synchroniser",
-"Synchronise players":"Synchroniser les platines",
 "Technical":"Technique",
 "The following plugins are up to date:":"Les plugins suivants sont à jour:",
 "The following plugins have been updated:":"Les plugins suivants ont été mis à jour:",
@@ -579,5 +577,11 @@
 "1 Year":"1 année",
 "%1 Years":"%1 années",
 "1 day":"1 jour",
-"%1 days":"%1 jours"
+"%1 days":"%1 jours",
+"Not currently synchronised with any other player.":"",
+"Swipe left and right (on cover in mobile layout) to change track.":"",
+"Swipe to change track":"",
+"Synchronised with other players.":"",
+"1 Player":"",
+"%1 Players":""
 }

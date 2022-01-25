@@ -261,6 +261,8 @@ function browseHandleListResponse(view, item, command, resp, prevPage) {
         // If this is an (e.g.) Spotty search then parent list (with search entry) will need refreshing
         if (wasSearch && command.command.length>1 && "items"==command.command[1]) {
             view.history[view.history.length-1].needsRefresh = true;
+        } else if (resp.refreshParent) {
+            view.history[view.history.length-1].needsRefresh = true;
         }
         view.headerTitle=item.title
                             ? wasSearch
@@ -361,7 +363,7 @@ function browseHandleListResponse(view, item, command, resp, prevPage) {
             view.currentActions.show = view.items.length>0 && view.currentActions.items.length>0;
         } else if (undefined!=resp.actionItems && resp.actionItems.length>0) {
             view.currentActions.items = resp.actionItems;
-            view.currentActions.show = view.items.length>0 && view.currentActions.items.length>0;
+            view.currentActions.show = view.currentActions.items.length>0;
         }
         view.itemCustomActions = resp.itemCustomActions;
         if (item.id.startsWith(SEARCH_ID)) {
@@ -1611,6 +1613,7 @@ function browseMyMusicMenu(view) {
                         item.icon = c.icon;
                     }
                     item.params.push("menu:1");
+                    item.params.push("materialskin:1");
                     if (getField(item, "genre_id:")>=0) {
                         item['mapgenre']=true;
                     }
@@ -1700,6 +1703,7 @@ function browseMyMusicMenu(view) {
                                     if (getField(item, "genre_id:")>=0) {
                                         item['mapgenre']=true;
                                     }
+                                    item.params.push("materialskin:1");
                                     view.myMusic.push(item);
                                 }
                             }

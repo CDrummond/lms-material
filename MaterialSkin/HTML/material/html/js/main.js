@@ -16,7 +16,8 @@ var app = new Vue({
                             iteminfo: false, iframe: false, dstm: false, savequeue: false, icon: false, prompt:false,
                             addtoplaylist: false, file: false, groupvolume: false, advancedsearch: false, downloadstatus:false,
                             notifications: false, gallery: false, choice: false
-                          } }
+                          },
+                 loaded: false }
     },
     created() {
         if (IS_MOBILE) {
@@ -57,7 +58,11 @@ var app = new Vue({
 
         var storedTrans = getLocalStorageVal('translation', undefined);
         if (storedTrans!=undefined) {
-            setTranslation(JSON.parse(storedTrans));
+            var lang = getLocalStorageVal('lang', undefined);
+            if (undefined!=lang) {
+                lang=lang.split('@')[0];
+            }
+            setTranslation(JSON.parse(storedTrans), lang);
         }
 
         if (IS_MOBILE) {
@@ -73,20 +78,37 @@ var app = new Vue({
         initTrackSources();
         lmsCommand("", ["pref", "language", "?"]).then(({data}) => {
             if (data && data.result && data.result._p2) {
-                var lang = data.result._p2.toLowerCase().replace('_', '-');
-                // Set page to LMS's language
-                axios.defaults.headers.common['Accept-Language'] = lang;
-                document.querySelector('html').setAttribute('lang', lang);
+                // Ensure LMS's lang is <lowercase>[-<uppercase>]
+                var lang = data.result._p2;
+                let parts = lang.split('_'); // lms uses (e.g.) en_gb, want en-GB
+                if (parts.length>1) {
+                    lang = parts[0].toLowerCase()+'-'+parts[1].toUpperCase();
+                } else {
+                    lang = lang.toLowerCase();
+                }
+
                 if (lang == 'en') {
                     // LMS is set to 'en'. Check if browser is (e.g.) 'en-gb', and if so use that as the
                     // language for Material. We only consider 'en*' here - so that LMS 'en' is not mixed
                     // with browser (e.g.) 'de'
-                    var browserLang = this.$store.state.lang.toLowerCase();
-                    if (browserLang.startsWith('en')) {
-                        lang = browserLang;
+                    var browserLang = window.navigator.userLanguage || window.navigator.language;
+                    if (undefined!=browserLang) {
+                        let parts = browserLang.split('-');
+                        if (parts.length>1) {
+                            browserLang = parts[0].toLowerCase()+'-'+parts[1].toUpperCase();
+                        } else {
+                            browserLang = browserLang.toLowerCase();
+                        }
+                        if (browserLang.startsWith('en')) {
+                            lang = browserLang;
+                        }
                     }
                 }
-                if (lang == 'en' || lang == 'en-us') {
+
+                this.$store.commit('setLang', lang);
+                if (lang == 'en' || lang == 'en-US') {
+                    // All strings are en-US by default, so remove any previous translation
+                    // from storage.
                     if (storedTrans!=undefined) {
                         removeLocalStorage('translation');
                         removeLocalStorage('lang');
@@ -95,18 +117,21 @@ var app = new Vue({
                         lmsOptions.lang = undefined;
                     }
                 } else {
-                    if (!LMS_SKIN_LANGUAGES.has(lang)) {
-                        lang = lang.substr(0, 2);
-                    }
                     lmsOptions.lang = lang;
-                    if (getLocalStorageVal("lang", "")!=(lang+"@"+LMS_MATERIAL_REVISION)) {
-                        axios.get("html/lang/"+lang+".json?r=" + LMS_MATERIAL_REVISION).then(function (resp) {
+
+                    // Get translation files - these are all lowercase
+                    let lowerLang = lang.toLowerCase();
+                    if (!LMS_SKIN_LANGUAGES.has(lowerLang)) {
+                        lowerLang = lowerLang.substr(0, 2);
+                    }
+                    if (getLocalStorageVal("lang", "")!=(lowerLang+"@"+LMS_MATERIAL_REVISION)) {
+                        axios.get("html/lang/"+lowerLang+".json?r=" + LMS_MATERIAL_REVISION).then(function (resp) {
                             var trans = eval(resp.data);
                             setLocalStorageVal('translation', JSON.stringify(trans));
-                            setLocalStorageVal('lang', lang+"@"+LMS_MATERIAL_REVISION);
-                            setTranslation(trans);
+                            setLocalStorageVal('lang', lowerLang+"@"+LMS_MATERIAL_REVISION);
+                            setTranslation(trans, lowerLang);
                             bus.$emit('langChanged');
-                         }).catch(err => {
+                        }).catch(err => {
                             window.console.error(err);
                         });
                     }
@@ -151,6 +176,7 @@ var app = new Vue({
 
         setTimeout(function () {
             bus.$emit('checkNotifications');
+            this.loaded = true;
         }.bind(this), 500);
 
         // Work-around 100vh behaviour in mobile chrome
@@ -364,6 +390,14 @@ var app = new Vue({
                 } else {
                     return;
                 }
+            }
+            if (this.$store.state.swipeChangeTrack && undefined!=ev.target && ev.target.className.startsWith('np-image')) {
+                if ('left'==direction) {
+                    bus.$emit('playerCommand', ['playlist', 'index', '+1']);
+                } else {
+                    bus.$emit('playerCommand', ['button', 'jump_rew']);
+                }
+                return;
             }
             if ('left'==direction) {
                 if (this.$store.state.page=='browse') {

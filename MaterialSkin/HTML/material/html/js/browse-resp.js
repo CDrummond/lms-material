@@ -24,13 +24,30 @@ function removeDiactrics(key) {
 
 function parseBrowseResp(data, parent, options, cacheKey, parentCommand, parentGenre) {
     // NOTE: If add key to resp, then update addToCache in utils.js
-    var resp = {items: [], allSongsItem:undefined, baseActions:[], canUseGrid: false, jumplist:[], numAudioItems:0, canDrop:false, itemCustomActions:undefined };
+    var resp = {items: [], allSongsItem:undefined, baseActions:[], canUseGrid: false, jumplist:[], numAudioItems:0, canDrop:false, itemCustomActions:undefined, refreshParent: false };
 
     try {
     if (data && data.result) {
         logJsonMessage("RESP", data);
         var command = data && data.params && data.params.length>1 && data.params[1] && data.params[1].length>1 ? data.params[1][0] : undefined;
         var isMusicIpMoods = command == "musicip" && data.params[1].length>0 && data.params[1][1]=="moods";
+
+        if (data.result.materialskin_actions_loop) {
+            for (var idx=0, loop=data.result.materialskin_actions_loop, loopLen=loop.length; idx<loopLen; ++idx) {
+                loop[idx].custom = true;
+                if (loop[idx].type=='item') {
+                    if (undefined==resp.itemCustomActions) {
+                        resp.itemCustomActions = [];
+                    }
+                    resp.itemCustomActions.push(loop[idx]);
+                } else if (loop[idx].type=='toolbar') {
+                    if (undefined==resp.actionItems) {
+                        resp.actionItems = [];
+                    }
+                    resp.actionItems.push(loop[idx]);
+                }
+            }
+        }
 
         if (isMusicIpMoods && data.result.item_loop) {
             for (var idx=0, loop=data.result.item_loop, loopLen=loop.length; idx<loopLen; ++idx) {
@@ -93,6 +110,11 @@ function parseBrowseResp(data, parent, options, cacheKey, parentCommand, parentG
                         moreAction = false;
                     }
                 }
+            }
+
+            // This plugin action has caused a new item so we need to refresh the parent list when going back.
+            if (undefined!=data.result.refreshparent && 1==parseInt(data.result.refreshparent)) {
+                resp.refreshParent = true;
             }
 
             for (var idx=0, loop=data.result.item_loop, loopLen=loop.length; idx<loopLen; ++idx) {
@@ -430,6 +452,14 @@ function parseBrowseResp(data, parent, options, cacheKey, parentCommand, parentG
                         i.menu.push(ADD_TO_PLAYLIST_ACTION);
                     }
                     i.menu.push(SELECT_ACTION);
+                }
+
+                if (undefined!=resp.itemCustomActions) {
+                    if (!addedDivider && i.menu.length>0) {
+                        i.menu.push(CUSTOM_ACTIONS);
+                        addedDivider = true;
+                    }
+                    i.menu.push(CUSTOM_ACTIONS);
                 }
 
                 // Only show 'More' action if:

@@ -25,6 +25,8 @@ use HTTP::Status qw(RC_NOT_FOUND RC_OK);
 use File::Basename;
 use File::Slurp qw(read_file);
 
+require Plugins::MaterialSkin::Extensions;
+
 if (!Slim::Web::Pages::Search->can('parseAdvancedSearchParams')) {
     require Plugins::MaterialSkin::Search;
 }
@@ -52,6 +54,7 @@ my $SVG_URL_PARSER_RE = qr{material/svg/([a-z0-9-]+)}i;
 my $CSS_URL_PARSER_RE = qr{material/customcss/([a-z0-9-]+)}i;
 my $JS_URL_PARSER_RE = qr{material/custom.js}i;
 my $OTHER_JS_URL_PARSER_RE = qr{material/customjs/([a-z0-9-]+)}i;
+my $PLUGIN_JS_URL_PARSER_RE = qr{material/pluginjs/.+}i;
 my $ICON_URL_PARSER_RE = qr{material/icon\.png}i;
 my $ACTIONS_URL_PARSER_RE = qr{material/customactions\.json}i;
 my $MAIFEST_URL_PARSER_RE = qr{material/material\.webmanifest}i;
@@ -141,6 +144,7 @@ sub initPlugin {
         Slim::Web::Pages->addRawFunction($CSS_URL_PARSER_RE, \&_customCssHandler);
         Slim::Web::Pages->addRawFunction($JS_URL_PARSER_RE, \&_customJsHandler);
         Slim::Web::Pages->addRawFunction($OTHER_JS_URL_PARSER_RE, \&_customJsHandler);
+        Slim::Web::Pages->addRawFunction($PLUGIN_JS_URL_PARSER_RE, \&_pluginJsHandler);
         Slim::Web::Pages->addRawFunction($ICON_URL_PARSER_RE, \&_iconHandler);
         Slim::Web::Pages->addRawFunction($ACTIONS_URL_PARSER_RE, \&_customActionsHandler);
         Slim::Web::Pages->addRawFunction($MAIFEST_URL_PARSER_RE, \&_manifestHandler);
@@ -1275,6 +1279,26 @@ sub _customJsHandler{
     $response->code(RC_OK);
     if (-e $filePath) {
         print("LOAD JS: " . $filePath . "\n");
+        Slim::Web::HTTP::sendStreamingFile( $httpClient, $response, 'application/javascript', $filePath, '', 'noAttachment' );
+    } else {
+        $response->content_type('application/javascript');
+        $response->header('Connection' => 'close');
+        $response->content("");
+        $httpClient->send_response($response);
+        Slim::Web::HTTP::closeHTTPSocket($httpClient);
+    }
+}
+
+sub _pluginJsHandler {
+    my ( $httpClient, $response ) = @_;
+    return unless $httpClient->connected;
+
+    my $request = $response->request;
+    my $skin = $serverprefs->get('skin');
+    my $path = substr $request->uri->path, 28; # remove /material/pluginjs/
+    my $filePath = $skinMgr->fixHttpPath($skin, $path);
+
+    if (-e $filePath) {
         Slim::Web::HTTP::sendStreamingFile( $httpClient, $response, 'application/javascript', $filePath, '', 'noAttachment' );
     } else {
         $response->content_type('application/javascript');

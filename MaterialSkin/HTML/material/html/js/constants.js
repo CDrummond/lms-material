@@ -106,6 +106,8 @@ const SIMPLE_LIB_VIEWS = "SimpleLibraryViews ";
 const GRID_SINGLE_LINE_DIFF = 20;
 const NP_INFO = 'now-playing-info';
 const NP_EXPANDED = 'now-playing-expanded';
+const PLAIN_HEADER = 2;
+const MAX_TRACKS_BEFORE_COLLAPSE = 200;
 
 const ARTIST_TYPES = ["albumartist", "trackartist", "artist", "band", "composer", "conductor"];
 var MULTI_SPLIT_REGEX = ";"

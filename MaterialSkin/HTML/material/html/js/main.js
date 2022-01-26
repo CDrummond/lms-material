@@ -164,7 +164,7 @@ var app = new Vue({
                         setLocalStorageVal(BOOL_OPTS[i], lmsOptions[BOOL_OPTS[i]]);
                     }
                 }
-                const INT_OPTS = ['respectFixedVol', 'commentAsDiscTitle'];
+                const INT_OPTS = ['respectFixedVol', 'commentAsDiscTitle', 'collapseDiscs'];
                 for (var i=0, len=INT_OPTS.length; i<len; ++i) {
                     if (undefined!=data.result[INT_OPTS[i]]) {
                         lmsOptions[INT_OPTS[i]] = parseInt(data.result[INT_OPTS[i]]);

@@ -1,16 +1,17 @@
 2.9.0
 -----
-1. Fix swipe to change info view tab.
-2. Another attempt to work-around long-press on 'Manage players' entry causing
-   an entry in sync dialog to get checked.
-3. Handle "radioparadise:" URLs when showing track source.
-4. Don't show 'Internet/Other' beside tech info.
-5. Use space to separate tech info.
-6. Better shuffle albums icon.
-7. Add swipe left/right on cover to change track.
-8. Re-factor language handling.
-9. Allow other LMS plugins to register Javascript and dialogs.
-
+ 1. Fix swipe to change info view tab.
+ 2. Another attempt to work-around long-press on 'Manage players' entry causing
+    an entry in sync dialog to get checked.
+ 3. Handle "radioparadise:" URLs when showing track source.
+ 4. Don't show 'Internet/Other' beside tech info.
+ 5. Use space to separate tech info.
+ 6. Better shuffle albums icon.
+ 7. Add swipe left/right on cover to change track.
+ 8. Re-factor language handling.
+ 9. Allow other LMS plugins to register Javascript and dialogs.
+10. Optionally collapse discs of multi-disc albums - either always collapse, or
+    when 200 or more tracks. Setting is controlled server-side.
 
 2.8.4
 ------

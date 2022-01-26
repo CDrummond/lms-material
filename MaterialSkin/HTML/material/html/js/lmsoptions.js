@@ -30,4 +30,5 @@ var lmsOptions = {newMusicLimit: 100,
                   variousArtistsString: getLocalStorageVal('variousArtistsString', 'Various Artists'),
                   lang: undefined,
                   commentAsDiscTitle: getLocalStorageVal('commentAsDiscTitle', 0),
-                  groupdiscs: getLocalStorageBool('groupdiscs', false)};
+                  groupdiscs: getLocalStorageBool('groupdiscs', false),
+                  collapseDiscs: getLocalStorageVal('collapseDiscs', 0) };

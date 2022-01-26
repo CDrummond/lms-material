@@ -11,10 +11,16 @@
         </select>
     [% END %]
 
-    [% WRAPPER settingGroup  title="PLUGIN_MATERIAL_SKIN_FIXED_VOL" desc="PLUGIN_MATERIAL_SKIN_FIXED_VOL_DESC" %]
-        <input type="radio" name="pref_respectFixedVol" value="0" [% IF prefs.pref_respectFixedVol == 0 %]checked[% END %]>[% 'PLUGIN_MATERIAL_SKIN_FIXED_VOL_NORMAL'  | getstring %]<br/>
-        <input type="radio" name="pref_respectFixedVol" value="1" [% IF prefs.pref_respectFixedVol == 1 %]checked[% END %]>[% 'PLUGIN_MATERIAL_SKIN_FIXED_VOL_SPECIAL' | getstring %]<br/>
-        <input type="radio" name="pref_respectFixedVol" value="2" [% IF prefs.pref_respectFixedVol == 2 %]checked[% END %]>[% 'PLUGIN_MATERIAL_SKIN_FIXED_VOL_HIDE'    | getstring %]<br/>
+    [% WRAPPER setting title="PLUGIN_MATERIAL_SKIN_FIXED_VOL" desc="PLUGIN_MATERIAL_SKIN_FIXED_VOL_DESC" %]
+        <select class="stdedit" name="pref_respectFixedVol" id="respectFixedVol">
+            [% FOREACH option = {
+                'PLUGIN_MATERIAL_SKIN_FIXED_VOL_A_NORMAL' => 0,
+                'PLUGIN_MATERIAL_SKIN_FIXED_VOL_B_SPECIAL' => 1,
+                'PLUGIN_MATERIAL_SKIN_FIXED_VOL_C_HIDE' => 2
+            } %]
+            <option [% IF prefs.respectFixedVol == option.value %]selected [% END %]value="[% option.value %]">[% option.key | string %]</option>
+            [%- END -%]
+        </select>
     [% END %]
 
     [% WRAPPER setting title="PLUGIN_MATERIAL_SKIN_MANIFEST_DISPLAY" desc="PLUGIN_MATERIAL_SKIN_MANIFEST_DISPLAY_DESC" %]
@@ -78,13 +84,25 @@
     [% END %]
 
     [% WRAPPER setting title="PLUGIN_MATERIAL_SKIN_COMMENT_AS_DISC_TITLE" desc="PLUGIN_MATERIAL_SKIN_COMMENT_AS_DISC_TITLE_DESC" %]
-        <select class="stdedit" name="pref_commentAsDiscTitle" id=" commentAsDiscTitle">
+        <select class="stdedit" name="pref_commentAsDiscTitle" id="commentAsDiscTitle">
             [% FOREACH option = {
-                'PLUGIN_MATERIAL_SKIN_COMMENT_DONT_USE' => 0,
-                'PLUGIN_MATERIAL_SKIN_COMMENT_PLAIN' => 1,
-                'PLUGIN_MATERIAL_SKIN_COMMENT_SEMI_SEP' => 2
+                'PLUGIN_MATERIAL_SKIN_COMMENT_A_DONT_USE' => 0,
+                'PLUGIN_MATERIAL_SKIN_COMMENT_B_PLAIN' => 1,
+                'PLUGIN_MATERIAL_SKIN_COMMENT_C_SEMI_SEP' => 2
             } %]
             <option [% IF prefs.commentAsDiscTitle == option.value %]selected [% END %]value="[% option.value %]">[% option.key | string %]</option>
+            [%- END -%]
+        </select>
+    [% END %]
+
+    [% WRAPPER setting title="PLUGIN_MATERIAL_SKIN_COLLAPSE_DISCS" desc="PLUGIN_MATERIAL_SKIN_COLLAPSE_DISCS_DESC" %]
+        <select class="stdedit" name="pref_collapseDiscs" id="collapseDiscs">
+            [% FOREACH option = {
+                'PLUGIN_MATERIAL_SKIN_COLLAPSE_DISCS_A_DONT' => 0,
+                'PLUGIN_MATERIAL_SKIN_COLLAPSE_DISCS_B_ALWAYS' => 1,
+                'PLUGIN_MATERIAL_SKIN_COLLAPSE_DISCS_C_LIMIT' => 2
+            } %]
+            <option [% IF prefs.collapseDiscs == option.value %]selected [% END %]value="[% option.value %]">[% option.key | string %]</option>
             [%- END -%]
         </select>
     [% END %]

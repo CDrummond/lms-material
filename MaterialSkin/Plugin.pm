@@ -112,7 +112,8 @@ sub initPlugin {
         password => '',
         allowDownload => '0',
         manifestDisplay => '0',
-        commentAsDiscTitle => '0'
+        commentAsDiscTitle => '0',
+        collapseDiscs => '0'
     });
 
     if (main::WEBUI) {
@@ -249,6 +250,7 @@ sub _cliCommand {
         $request->addResult('artistFirst', $prefs->get('artistFirst'));
         $request->addResult('allowDownload', $prefs->get('allowDownload'));
         $request->addResult('commentAsDiscTitle', $prefs->get('commentAsDiscTitle'));
+        $request->addResult('collapseDiscs', $prefs->get('collapseDiscs'));
         $request->setStatusDone();
         return;
     }

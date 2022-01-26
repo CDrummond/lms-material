@@ -129,23 +129,24 @@ PLUGIN_MATERIAL_SKIN_FIXED_VOL_DESC
 	FR	Comment contrôler les platines à volume fixe ?
 	NL	Hoe moet een muziekspeler met een vast volume worden geregeld? 
 
-PLUGIN_MATERIAL_SKIN_FIXED_VOL_HIDE
-	DE	Lautstärkenregler verstecken
-	EN	Hide volume control
-	FR	Masquer le contrôle du volume
-	NL	Verberg volumeregeling
 
-PLUGIN_MATERIAL_SKIN_FIXED_VOL_SPECIAL
+PLUGIN_MATERIAL_SKIN_FIXED_VOL_A_NORMAL
+	DE	Normalen Lautstärkeregler anzeigen
+	EN	Display standard volume control
+	FR	Afficher et permettre le contrôle du volume
+	NL	Toon standaard volumeregeling
+
+PLUGIN_MATERIAL_SKIN_FIXED_VOL_B_SPECIAL
 	DE	Lautstärkeregler abschalten und Laustärkelevel verstecken
 	EN	Disable volume slider, and hide volume level
 	FR	Désactiver le curseur du volume et masquer le niveau du volume
 	NL	Volumeregelaar uitschakelen en volumeniveau verbergen
 
-PLUGIN_MATERIAL_SKIN_FIXED_VOL_NORMAL
-	DE	Normalen Lautstärkeregler anzeigen
-	EN	Display standard volume control
-	FR	Afficher et permettre le contrôle du volume
-	NL	Toon standaard volumeregeling
+PLUGIN_MATERIAL_SKIN_FIXED_VOL_C_HIDE
+	DE	Lautstärkenregler verstecken
+	EN	Hide volume control
+	FR	Masquer le contrôle du volume
+	NL	Verberg volumeregeling
 
 PLUGIN_MATERIAL_SKIN_ARTIST_FIRST
 	DE	Intepreten als erstes in 'Aktueller Titel' und Warteschlange anzeigen
@@ -223,20 +224,35 @@ PLUGIN_MATERIAL_SKIN_COMMENT_AS_DISC_TITLE_DESC
 	FR	Pour les albums multi-disques, utiliser le commentaire du premier morceau de chaque disque comme titre de disque.
 	NL	Voor albums met meerdere schijven, gebruik Comment van eerste nummer van iedere schijf als schijftitel.
 
-PLUGIN_MATERIAL_SKIN_COMMENT_DONT_USE
+PLUGIN_MATERIAL_SKIN_COMMENT_A_DONT_USE
 	DE	Nicht benutzen
 	EN	Don't use
 	FR	Ne pas utiliser
 	NL	Niet gebruiken
 
-PLUGIN_MATERIAL_SKIN_COMMENT_PLAIN
+PLUGIN_MATERIAL_SKIN_COMMENT_B_PLAIN
 	DE	Enthält ausschließlich den Titel
 	EN	Contains only title
 	FR	Ne contient que le titre
 	NL	Bevat alleen titel
 
-PLUGIN_MATERIAL_SKIN_COMMENT_SEMI_SEP
+PLUGIN_MATERIAL_SKIN_COMMENT_C_SEMI_SEP
 	DE	Semikolon getrennt
 	EN	Semi-colon separated
 	FR	Séparation par point-virgule
 	NL	Puntkomma gescheiden
+
+PLUGIN_MATERIAL_SKIN_COLLAPSE_DISCS
+	EN	Collapse discs
+
+PLUGIN_MATERIAL_SKIN_COLLAPSE_DISCS_DESC
+	EN	Initially only show disc titles when LMS is set to group multi-disc albums.
+
+PLUGIN_MATERIAL_SKIN_COLLAPSE_DISCS_A_DONT
+	EN	Don't collapse
+
+PLUGIN_MATERIAL_SKIN_COLLAPSE_DISCS_B_ALWAYS
+	EN	Always collapse
+
+PLUGIN_MATERIAL_SKIN_COLLAPSE_DISCS_C_LIMIT
+	EN	Collapse when 200, or more, tracks

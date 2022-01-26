@@ -90,7 +90,7 @@ function browseAddHistory(view) {
     prev.showRatingButton = view.showRatingButton;
     prev.subtitleClickable = view.subtitleClickable;
     prev.prevPage = view.prevPage;
-    prev.allSearchResults = view.allSearchResults;
+    prev.allItems = view.allItems;
     prev.inGenre = view.inGenre;
     prev.searchActive = view.searchActive;
     prev.canDrop = view.canDrop;
@@ -492,9 +492,12 @@ function browseClick(view, item, index, event) {
         return;
     }
     if (item.header) {
-        if (item.allSearchResults && item.allSearchResults.length>0) { // Clicking on 'X Artists' / 'X Albums' / 'X Tracks' search header
+        if (item.allItems && item.allItems.length>0) { // Clicking on 'X Artists' / 'X Albums' / 'X Tracks' search header
             view.addHistory();
-            view.items = item.allSearchResults;
+            view.items = item.allItems;
+            if (PLAIN_HEADER==item.header) {
+                view.headerTitle = view.headerTitle+SEPARATOR+item.title;
+            }
             view.headerSubTitle = item.subtitle;
             view.current = item;
             view.searchActive = false;
@@ -1004,7 +1007,7 @@ function browseItemAction(view, act, item, index, event) {
             var itemList = [];
             var isFilter = item.id.startsWith(FILTER_PREFIX) || PLAY_DISC_ACTION==act; // MultiCD's have a 'filter' so we can play a single CD
             var check = isFilter ? (PLAY_DISC_ACTION==act ? item.filter : item.id) : (SEARCH_ID==item.id && view.items[0].id.startsWith("track") ? "track_id" : "album_id");
-            var list = item.allSearchResults && item.allSearchResults.length>0 ? item.allSearchResults : view.items;
+            var list = item.allItems && item.allItems.length>0 ? item.allItems : view.items;
             var itemIndex = undefined;
             for (var i=0, len=list.length; i<len; ++i) {
                 if ((isFilter ? list[i].filter==check : list[i].id.startsWith(check))) {
@@ -1088,8 +1091,7 @@ function browseItemAction(view, act, item, index, event) {
                 if (resp.items.length<=0) {
                     return;
                 }
-                var discs = [{title:i18n('All discs')+(lmsOptions.commentAsDiscTitle ? '' : (SEPARATOR+resp.subtitle)),
-                              subtitle:lmsOptions.commentAsDiscTitle ? resp.subtitle : undefined}];
+                var discs = [{title:i18n('All discs'), subtitle:resp.tracksSubtitle ? resp.tracksSubtitle : resp.subtitle}];
                 for (var i=0, loop=resp.items, len=loop.length; i<len; ++i) {
                     if (loop[i].header) {
                         discs.push(loop[i]);
@@ -1099,12 +1101,17 @@ function browseItemAction(view, act, item, index, event) {
                     if (undefined!=choice) {
                         var tracks = [];
                         for (var i=0, loop=resp.items, len=loop.length; i<len; ++i) {
-                            if (!loop[i].header && (undefined==choice.id || loop[i].filter==choice.id)) {
+                            if (loop[i].header && loop[i].allItems && loop[i].id==choice.id) {
+                                tracks = loop[i].allItems;
+                                break;
+                            } else if (!loop[i].header && (undefined==choice.id || loop[i].filter==choice.id)) {
                                 tracks.push(loop[i]);
                             }
                         }
-                        view.doList(tracks, act);
-                        bus.$emit('showMessage', i18n("Adding tracks..."));
+                        if (tracks.length>0) {
+                            view.doList(tracks, act);
+                            bus.$emit('showMessage', i18n("Adding tracks..."));
+                        }
                     }
                 });
             });
@@ -1144,7 +1151,7 @@ function browseItemMenu(view, item, index, event) {
         if (undefined!=item.stdItem) {
             // Get menu items - if view is an album or track from search then we have a different menu
             var itm = STD_ITEMS[item.stdItem];
-            showMenu(view, {show:true, item:item, itemMenu:itm.searchMenu && (view.current.libsearch || view.current.allSearchResults) ? itm.searchMenu : itm.menu, x:event.clientX, y:event.clientY, index:index});
+            showMenu(view, {show:true, item:item, itemMenu:itm.searchMenu && (view.current.libsearch || view.current.allItems) ? itm.searchMenu : itm.menu, x:event.clientX, y:event.clientY, index:index});
         } else if (TOP_MYMUSIC_ID==item.id) {
             view.showLibMenu(event, index);
         }
@@ -1271,7 +1278,7 @@ function browseGoBack(view, refresh) {
     let searchWasActive = view.searchActive;
     if (view.searchActive) {
         view.searchActive = false;
-        if (view.items.length<1 || (undefined==view.items[0].allSearchResults && SEARCH_OTHER_ID!=view.items[0].id)) {
+        if (view.items.length<1 || (undefined==view.items[0].allItems && SEARCH_OTHER_ID!=view.items[0].id)) {
             return; // Search results not being shown, so '<-' button just closes search field
         }
     }
@@ -1320,7 +1327,7 @@ function browseGoBack(view, refresh) {
     view.showRatingButton = prev.showRatingButton;
     view.subtitleClickable = prev.subtitleClickable;
     view.prevPage = prev.prevPage;
-    view.allSearchResults = prev.allSearchResults;
+    view.allItems = prev.allItems;
     view.inGenre = prev.inGenre;
     view.searchActive = prev.searchActive && !searchWasActive;
     view.canDrop = prev.canDrop;

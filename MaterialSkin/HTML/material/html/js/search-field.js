@@ -23,21 +23,21 @@ function buildSearchResp(results) {
         if (1==results[i].command.cat) {
             filter = FILTER_PREFIX+"artist";
             items.push({title: i18np("1 Artist", "%1 Artists", titleParam), id:filter, header:true,
-                        allSearchResults: all, subtitle: i18np("1 Artist", "%1 Artists", numItems)});
+                        allItems: all, subtitle: i18np("1 Artist", "%1 Artists", numItems)});
         } else if (2==results[i].command.cat) {
             filter = FILTER_PREFIX+"album";
             items.push({title: i18np("1 Album", "%1 Albums", titleParam), id:filter, header:true,
-                        allSearchResults: all, subtitle: i18np("1 Album", "%1 Albums", numItems),
+                        allItems: all, subtitle: i18np("1 Album", "%1 Albums", numItems),
                         menu:[PLAY_ALL_ACTION, INSERT_ALL_ACTION, ADD_ALL_ACTION]});
         } else if (3==results[i].command.cat) {
             filter = FILTER_PREFIX+"track";
             items.push({title: i18np("1 Track", "%1 Tracks", titleParam), id:filter, header:true,
-                        allSearchResults: all, subtitle: i18np("1 Track", "%1 Tracks", numItems),
+                        allItems: all, subtitle: i18np("1 Track", "%1 Tracks", numItems),
                         menu:[PLAY_ALL_ACTION, INSERT_ALL_ACTION, ADD_ALL_ACTION]});
         } else if (4==results[i].command.cat) {
             filter = FILTER_PREFIX+"playlist";
             items.push({title: i18np("1 Playlist", "%1 Playlists", titleParam), id:filter, header:true,
-                        allSearchResults: all, subtitle: i18np("1 Playlist", "%1 Playlists", numItems),
+                        allItems: all, subtitle: i18np("1 Playlist", "%1 Playlists", numItems),
                         menu:[PLAY_ALL_ACTION, INSERT_ALL_ACTION, ADD_ALL_ACTION]});
         } else if (5==results[i].command.cat) {
             items.push({title: i18n("Search on..."), id:"search.other", header:true});

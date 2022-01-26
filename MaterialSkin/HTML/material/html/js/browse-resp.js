@@ -886,27 +886,73 @@ function parseBrowseResp(data, parent, options, cacheKey, parentCommand, parentG
             }
 
             if (discs.size>1) {
+                resp.tracksSubtitle=i18np("1 Track", "%1 Tracks", resp.items.length)+" ("+formatSeconds(totalDuration)+")"
                 let d = 0;
-                for (let k of discs.keys()) {
-                    let disc = discs.get(k);
-                    let details = i18np("1 Track", "%1 Tracks", disc.total)+" ("+formatSeconds(disc.duration)+")";
-                    let title = lmsOptions.commentAsDiscTitle ? (disc.title ? disc.title : i18n("Disc %1", k))
-                                                              : (i18n("Disc %1", k)+SEPARATOR+details);
+                if (1==lmsOptions.collapseDiscs || (2==collapseDiscs && resp.items.length>=MAX_TRACKS_BEFORE_COLLAPSE)) {
+                    let discTracks = [];
+                    let mainItems = [];
+                    let current = undefined;
+                    let groupedTracks = {};
+                    let duration = 0;
 
-                    // If this is the 1st disc, using comment as title, it has no title but next does, then use
-                    // 'Main disc' as title - looks nicer than 'Disc 1'
-                    if (k==1 && lmsOptions.commentAsDiscTitle && undefined==disc.title) {
-                        let nextDisc = discs.get(2);
-                        if (undefined!=nextDisc && undefined!=nextDisc.title) {
-                            title = i18n('Main disc');
+                    // Split tracks out into discs
+                    for (let t=0, l2=resp.items, l2len=l2.length; t<l2len; ++t) {
+                        if (undefined==current || l2[t].disc==current) {
+                            current = l2[t].disc;
+                            duration += l2[t].duration;
+                            discTracks.push(l2[t]);
+                        } else {
+                            groupedTracks[''+current]={tracks: discTracks, duration:duration};
+
+                            discTracks = [];
+                            current = l2[t].disc;
+                            duration = l2[t].duration;
+                            discTracks.push(l2[t]);
                         }
                     }
+                    groupedTracks[''+current]={tracks: discTracks, duration:duration};
 
-                    resp.items.splice(disc.pos+d, 0,
-                                      {title: title,
-                                       subtitle: lmsOptions.commentAsDiscTitle ? details : undefined,
-                                       id:FILTER_PREFIX+k, header:true, menu:[PLAY_ALL_ACTION, INSERT_ALL_ACTION, ADD_ALL_ACTION]});
-                    d++;
+                    // Main items are now just disc titles
+                    for (let k of discs.keys()) {
+                        let disc = discs.get(k);
+
+                        // If this is the 1st disc, using comment as title, it has no title but next does, then use
+                        // 'Main disc' as title - looks nicer than 'Disc 1'
+                        if (k==1 && lmsOptions.commentAsDiscTitle && undefined==disc.title) {
+                            let nextDisc = discs.get(2);
+                            if (undefined!=nextDisc && undefined!=nextDisc.title) {
+                                title = i18n('Main disc');
+                            }
+                        }
+
+                        mainItems.push({title: lmsOptions.commentAsDiscTitle && disc.title ? disc.title : i18n("Disc %1", k),
+                                        subtitle: i18np("1 Track", "%1 Tracks", disc.total)+" ("+formatSeconds(disc.duration)+")",
+                                        allItems: groupedTracks[''+k].tracks, duration: groupedTracks[''+k].duration,
+                                        id:FILTER_PREFIX+k, header:PLAIN_HEADER, menu:[PLAY_ALL_ACTION, INSERT_ALL_ACTION, ADD_ALL_ACTION]});
+                        d++;
+                    }
+                    resp.allowHoverBtns = true;
+                    resp.items = mainItems;
+                    resp.subtitle=i18np("1 Disc", "%1 Discs", resp.items.length);
+                } else {
+                    for (let k of discs.keys()) {
+                        let disc = discs.get(k);
+
+                        // If this is the 1st disc, using comment as title, it has no title but next does, then use
+                        // 'Main disc' as title - looks nicer than 'Disc 1'
+                        if (k==1 && lmsOptions.commentAsDiscTitle && undefined==disc.title) {
+                            let nextDisc = discs.get(2);
+                            if (undefined!=nextDisc && undefined!=nextDisc.title) {
+                                title = i18n('Main disc');
+                            }
+                        }
+
+                        resp.items.splice(disc.pos+d, 0,
+                                          {title: lmsOptions.commentAsDiscTitle && disc.title ? disc.title : i18n("Disc %1", k),
+                                           subtitle: i18np("1 Track", "%1 Tracks", disc.total)+" ("+formatSeconds(disc.duration)+")",
+                                           id:FILTER_PREFIX+k, header:true, menu:[PLAY_ALL_ACTION, INSERT_ALL_ACTION, ADD_ALL_ACTION]});
+                        d++;
+                    }
                 }
             } else if (1==discs.size) {
                 // Remove item's disc value so that 'PLAY_DISC_ACTION' is not shown
@@ -915,7 +961,9 @@ function parseBrowseResp(data, parent, options, cacheKey, parentCommand, parentG
                 }
             }
 
-            resp.subtitle=i18np("1 Track", "%1 Tracks", resp.items.length-(discs.size>1 ? discs.size : 0));
+            if (undefined==resp.subtitle) {
+                resp.subtitle=i18np("1 Track", "%1 Tracks", resp.items.length-(discs.size>1 ? discs.size : 0));
+            }
             if (!(parent && parent.id && parent.id.startsWith("search:"))) {
                 resp.subtitle+=" ("+formatSeconds(totalDuration)+")";
             }

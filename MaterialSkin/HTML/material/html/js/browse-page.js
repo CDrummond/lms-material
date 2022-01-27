@@ -23,10 +23,9 @@ var lmsBrowse = Vue.component("lms-browse", {
    <v-btn v-if="current && current.section==SECTION_PLAYLISTS && current.id.startsWith('playlist_id:')" :title="trans.removeall" flat icon class="toolbar-button" @click="deleteSelectedItems(REMOVE_ACTION)"><v-icon>{{ACTIONS[REMOVE_ACTION].icon}}</v-icon></v-btn>
    <v-btn v-else-if="current && current.section==SECTION_PLAYLISTS" :title="trans.deleteall" flat icon class="toolbar-button" @click="deleteSelectedItems(DELETE_ACTION)"><v-icon>delete</v-icon></v-btn>
    <v-btn v-else-if="current && current.section==SECTION_FAVORITES" :title="trans.removeall" flat icon class="toolbar-button" @click="deleteSelectedItems(REMOVE_FROM_FAV_ACTION)"><v-icon>delete_outline</v-icon></v-btn>
-   <v-divider vertical v-if="current && (current.section==SECTION_PLAYLISTS || current.section==SECTION_FAVORITES)"></v-divider>
-   <v-btn :title="trans.addall" flat icon class="toolbar-button" @click="actionSelectedItems(ADD_ACTION)"><v-icon>add_circle_outline</v-icon></v-btn>
+   <v-btn v-if="items[0].stdItem==STD_ITEM_TRACK || items[0].stdItem==STD_ITEM_ALBUM_TRACK || items[0].saveableTrack || (items[0].header && items.length>1 && items[1].stdItem==STD_ITEM_ALBUM_TRACK)" :title="ACTIONS[ADD_TO_PLAYLIST_ACTION].title" flat icon class="toolbar-button" @click="actionSelectedItems(ADD_TO_PLAYLIST_ACTION)"><v-icon>{{ACTIONS[ADD_TO_PLAYLIST_ACTION].icon}}</v-icon></v-btn>
    <v-btn :title="trans.playall" flat icon class="toolbar-button" @click="actionSelectedItems(PLAY_ACTION)"><v-icon>play_circle_outline</v-icon></v-btn>
-   <v-btn v-if="items[0].stdItem==STD_ITEM_TRACK || items[0].stdItem==STD_ITEM_ALBUM_TRACK || (items[0].header && items.length>1 && items[1].stdItem==STD_ITEM_ALBUM_TRACK)" :title="ACTIONS[ADD_TO_PLAYLIST_ACTION].title" flat icon class="toolbar-button" @click="actionSelectedItems(ADD_TO_PLAYLIST_ACTION)"><v-icon>{{ACTIONS[ADD_TO_PLAYLIST_ACTION].icon}}</v-icon></v-btn>
+   <v-btn :title="trans.addall" flat icon class="toolbar-button" @click="actionSelectedItems(ADD_ACTION)"><v-icon>add_circle_outline</v-icon></v-btn>
    <v-divider vertical></v-divider>
    <v-btn :title="trans.invertSelect" flat icon class="toolbar-button" @click="invertSelection()"><img :src="'invert-select' | svgIcon(darkUi)"></img></v-btn>
    <v-btn :title="trans.cancel" flat icon class="toolbar-button" @click="clearSelection()"><v-icon>cancel</v-icon></v-btn>
@@ -60,7 +59,6 @@ var lmsBrowse = Vue.component("lms-browse", {
     <v-icon v-else>{{currentActions.items[0].icon}}</v-icon>
    </v-btn>
    <v-btn v-if="items.length>0 && items[0].saveableTrack" :title="ACTIONS[ADD_TO_PLAYLIST_ACTION].title" flat icon class="toolbar-button" @click.stop="headerAction(ADD_TO_PLAYLIST_ACTION, $event)"><v-icon>{{ACTIONS[ADD_TO_PLAYLIST_ACTION].icon}}</v-icon></v-btn>
-   <v-divider vertical v-if="tbarActions.length>0 && (currentActions.show || (items.length>0 && items[0].musicip) || (desktopLayout && settingsMenuActions.length>0))"></v-divider>
    <template v-for="(action, index) in tbarActions">
     <v-btn flat icon @click.stop="headerAction(action, $event)" class="toolbar-button" :title="action | tooltip(keyboardControl)" :id="'tbar'+index" v-if="action!=VLIB_ACTION || libraryName">
       <img v-if="ACTIONS[action].svg" class="svg-img" :src="ACTIONS[action].svg | svgIcon(darkUi)"></img>
@@ -78,7 +76,6 @@ var lmsBrowse = Vue.component("lms-browse", {
       <v-icon v-else>{{ACTIONS[action].icon}}</v-icon>
     </v-btn>
    </template>
-   <v-divider vertical v-if="desktopLayout && settingsMenuActions.length>0"></v-divider>
    <v-btn :title="ACTIONS[SEARCH_LIB_ACTION].title" flat icon class="toolbar-button" @click.stop="itemAction(SEARCH_LIB_ACTION, $event)"><v-icon>{{ACTIONS[SEARCH_LIB_ACTION].icon}}</v-icon></v-btn>
   </v-layout>
  </div>

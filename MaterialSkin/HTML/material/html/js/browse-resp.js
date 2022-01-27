@@ -76,7 +76,6 @@ function parseBrowseResp(data, parent, options, cacheKey, parentCommand, parentG
             var isPodcastSearch = command == "podcasts" && getIndex(data.params[1], "search:")>0;
             var isBmf = command == "browselibrary" && data.params[1].length>=5 && data.params[1].indexOf("mode:bmf")>0;
             var isCustomBrowse = command == "custombrowse" ;
-            var isMusicMix = (command == "musicsimilarity" || command == "musicip") && data.params[1].length>0 && data.params[1][1]=="mix";
             var isDynamicPlaylist = command == "dynamicplaylist";
             var haveWithIcons = false;
             var haveWithoutIcons = false;
@@ -85,6 +84,7 @@ function parseBrowseResp(data, parent, options, cacheKey, parentCommand, parentG
             var maybeAllowGrid = command!="trackstat"; // && !isFavorites; // && command!="playhistory";
             var numImages = 0;
 
+            resp.isMusicMix = (command == "musicsimilarity" || command == "musicip") && data.params[1].length>0 && data.params[1][1]=="mix";
             resp.canUseGrid = maybeAllowGrid && (isRadiosTop || isBmf || (data.result.window && data.result.window.windowStyle && (data.result.window.windowStyle=="icon_list" || data.result.window.windowStyle=="home_menu"))) ? true : false;
             resp.canDrop = isFavorites;
 
@@ -446,7 +446,7 @@ function parseBrowseResp(data, parent, options, cacheKey, parentCommand, parentG
                         i.menu.push(DIVIDER);
                         addedDivider = true;
                     }
-                    if ((isMusicMix && i.trackType && i.trackType == "local") /*||
+                    if ((resp.isMusicMix && i.trackType && i.trackType == "local") /*||
                         (!isPlaylists && !isFavorites && isAudioTrack(i) && (i.url || (i.presetParams && i.presetParams.favorites_url)))*/) {
                         i.saveableTrack = true; // Can save track list to playlist...
                         i.menu.push(ADD_TO_PLAYLIST_ACTION);
@@ -613,7 +613,7 @@ function parseBrowseResp(data, parent, options, cacheKey, parentCommand, parentG
                         resp.canUseGrid = false;
                     }
                 }
-                if (isMusicMix) {
+                if (resp.isMusicMix) {
                     resp.items.shift();
                     resp.subtitle=0==resp.items.length ? i18n("Empty") : i18np("1 Track", "%1 Tracks", resp.items.length);
                 } else {

@@ -402,6 +402,9 @@ function browseHandleListResponse(view, item, command, resp, prevPage) {
                 view.command.command.length>0 && ALLOW_ADD_ALL.has(view.command.command[0]) && (!item.id || !item.id.startsWith(TOP_ID_PREFIX))) {
                 view.tbarActions=[PLAY_ALL_ACTION, ADD_ALL_ACTION];
             }
+            if (resp.isMusicMix) {
+                view.tbarActions.unshift(RELOAD_ACTION);
+            }
         }
         if (resp.canUseGrid && !resp.forceGrid) {
             view.settingsMenuActions.unshift(view.grid.use ? USE_LIST_ACTION : USE_GRID_ACTION);

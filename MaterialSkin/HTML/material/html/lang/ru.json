@@ -578,10 +578,13 @@
 "Main disc":"",
 "Not currently synchronised with any other player.":"",
 "Play disc starting at track":"",
+"Reloading":"",
 "Remove disc":"",
 "Swipe left and right (on cover in mobile layout) to change track.":"",
 "Swipe to change track":"",
 "Synchronised with other players.":"",
+"1 Disc":"",
+"%1 Discs":"",
 "1 Player":"",
 "%1 Players":""
 }

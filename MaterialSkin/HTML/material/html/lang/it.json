@@ -459,6 +459,7 @@
 "Radio":"",
 "Regular":"",
 "Reload":"",
+"Reloading":"",
 "Remaining":"",
 "Remove album":"",
 "Remove disc":"",
@@ -581,6 +582,8 @@
 "⌘+Shift+%1":"",
 "1 Album":"",
 "1 Band":"",
+"1 Disc":"",
+"%1 Discs":"",
 "1 Player":"",
 "%1 Players":"",
 "1 Playlist":""

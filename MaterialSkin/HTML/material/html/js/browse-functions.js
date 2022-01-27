@@ -1210,6 +1210,7 @@ function browseHeaderAction(view, act, event) {
         bus.$emit('dlg.open', 'addtoplaylist', view.items);
     } else if (RELOAD_ACTION==act) {
         view.refreshList(true);
+        bus.$emit('showMessage', i18n('Reloading'));
     } else if (ADV_SEARCH_ACTION==act) {
         bus.$emit('dlg.open', 'advancedsearch', false);
     } else if (SAVE_VLIB_ACTION==act) {

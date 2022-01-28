@@ -12,6 +12,7 @@
  9. Allow other LMS plugins to register Javascript and dialogs.
 10. Optionally collapse discs of multi-disc albums - either always collapse, or
     when 200 or more tracks. Setting is controlled server-side.
+11. Fix browser-context menu for text fields in browse list.
 
 2.8.4
 ------

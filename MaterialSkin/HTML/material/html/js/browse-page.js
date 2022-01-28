@@ -171,6 +171,11 @@ var lmsBrowse = Vue.component("lms-browse", {
       <div class="menu-btn grid-btn list-btn" @click.stop="itemMenu(item, index, $event)" :title="i18n('%1 (Menu)', item.title)"></div>
      </v-list-tile-action>
     </v-list-tile>
+    <v-list-tile v-else-if="item.type=='search' || item.type=='entry'" avatar :key="item.id" class="lms-avatar lms-list-item" :id="'item'+index" v-bind:class="{'list-active': (menu.show && index==menu.index) || (fetchingItem==item.id)}">
+     <v-list-tile-content>
+      <v-text-field :autofocus="index==0 && !IS_MOBILE" single-line clearable class="lms-search" :label="item.title" v-on:keyup.enter="entry($event, item)"></v-text-field>
+     </v-list-tile-content>
+    </v-list-tile>
     <v-list-tile v-else-if="!(isTop && (disabled.has(item.id) || hidden.has(item.id)))" avatar @click="click(item, index, $event)" :key="item.id" class="lms-avatar lms-list-item" :id="'item'+index" @dragstart="dragStart(index, $event)" @dragend="dragEnd()" @dragover="dragOver(index, $event)" @drop="drop(index, $event)" :draggable="(isTop && !sortHome) || (item.draggable && (current.section!=SECTION_FAVORITES || 0==selection.size))" @contextmenu.prevent="itemMenu(item, index, $event)" v-bind:class="{'drop-target': dragActive && index==dropIndex, 'list-active': (menu.show && index==menu.index) || (fetchingItem==item.id)}">
      <v-list-tile-avatar v-if="item.selected" :tile="true" class="lms-avatar">
       <v-icon>check_box</v-icon>
@@ -188,15 +193,7 @@ var lmsBrowse = Vue.component("lms-browse", {
       <v-icon>check_box_outline_blank</v-icon>
      </v-list-tile-avatar>
 
-     <v-list-tile-content v-if="item.type=='search'">
-      <v-text-field :autofocus="index==0 && !IS_MOBILE" single-line clearable class="lms-search" :label="item.title" v-on:keyup.enter="search($event, item)"></v-text-field>
-     </v-list-tile-content>
-
-     <v-list-tile-content v-else-if="item.type=='entry'">
-      <v-text-field :autofocus="index==0 && !IS_MOBILE" single-line clearable class="lms-search" :label="item.title" v-on:keyup.enter="entry($event, item)"></v-text-field>
-     </v-list-tile-content>
-
-     <v-list-tile-content v-else>
+     <v-list-tile-content>
       <v-list-tile-title>{{item.title}}<b class="vlib-name" v-if="isTop && (item.libname || (libraryName && item.id==TOP_MYMUSIC_ID))">{{SEPARATOR+(item.libname ? item.libname : libraryName)}}</b></v-list-tile-title>
       <v-list-tile-sub-title v-html="item.subtitle" v-bind:class="{'link-item':subtitleClickable}" @click.stop="clickSubtitle(item, index, $event)"></v-list-tile-sub-title>
      </v-list-tile-content>
@@ -670,7 +667,7 @@ var lmsBrowse = Vue.component("lms-browse", {
             }
             bus.$emit('dlg.open', 'gallery', urls, index);
         },
-        search(event, item, text) {
+        entry(event, item, text) {
             if (this.fetchingItem!=undefined) {
                 return;
             }
@@ -682,14 +679,11 @@ var lmsBrowse = Vue.component("lms-browse", {
             if (isEmpty(this.enteredTerm)) {
                 return;
             }
-            this.fetchItems(this.buildCommand(item), item);
-        },
-        entry(event, item, text) {
-            if (this.fetchingItem!=undefined) {
-                return;
+            if (item.type=='search') {
+                this.fetchItems(this.buildCommand(item), item);
+            } else {
+                this.doTextClick(item);
             }
-            this.enteredTerm = undefined==event ? text : event.target._value;
-            this.doTextClick(item);
         },
         itemMoreMenu(item, queueIndex, page) {
             if (undefined!=queueIndex) {

@@ -240,10 +240,14 @@ Vue.component('lms-information-dialog', {
             lmsCommand("", ["serverstatus", 0, LMS_MAX_PLAYERS]).then(({data}) => {
                 if (data && data.result) {
                     var prevStrengths={};
+                    var prevVoltages={};
                     for (var j=0, plen=this.players.length; j<plen; ++j) {
                         var p = this.players[j];
                         if (p.sigStrength>0) {
                             prevStrengths[p.id]=p.sigStrength;
+                        }
+                        if (p.voltage>=0) {
+                            prevVoltages[p.id]=p.voltage;
                         }
                     }
                     this.players = [];
@@ -256,27 +260,41 @@ Vue.component('lms-information-dialog', {
                                          i18n("Firmware: %1", player.firmware),
                                          i18n("IP: %1", player.ip.split(':')[0]),
                                          i18n("MAC Address: %1", player.playerid),
+                                         "",
                                          "" ];
                             if (undefined!=prevStrengths[player.playerid]) {
                                 info[5]=i18n("Signal Strength: %1%", prevStrengths[player.playerid]);
                             }
-
-                            this.players.push({name: player.name, id: player.playerid, info: info, isgroup: isgroup, icon:mapPlayerIcon(player)});
-
-                            if (!isgroup) {
-                                lmsCommand(player.playerid, ["signalstrength" ,"?"]).then(({data}) => {
-                                    if (data && data.result && data.result._signalstrength>0) {
-                                        for (var j=0, plen=this.players.length; j<plen; ++j) {
-                                            var p = this.players[j];
-                                            if (p.id==data.params[0]) {
-                                                p.info[5]=i18n("Signal Strength: %1%", data.result._signalstrength);
-                                                p.sigStrength = data.result._signalstrength;
-                                            }
-                                        }
-                                    }
-                                });
+                            if (undefined!=prevVoltages[player.playerid]) {
+                                info[6]=i18n("Voltage: %1%", prevVoltages[player.playerid]);
                             }
+                            this.players.push({name: player.name, id: player.playerid, info: info, isgroup: isgroup, icon:mapPlayerIcon(player)});
                         }
+
+                        lmsCommand("", ["material-skin", "players-extra-info"]).then(({data}) => {
+                            if (data && data.result && data.result.players) {
+                                let map = {};
+                                for (var i=0, loop=data.result.players, len=loop.length; i<len; ++i) {
+                                    map[loop[i].id]={sig:loop[i].signalstrength, volt:loop[i].voltage};
+                                }
+
+                                for (var j=0, plen=this.players.length; j<plen; ++j) {
+                                    var p = this.players[j];
+                                    var info = map[p.id];
+                                    if (undefined!=info) {
+                                        if (info.sig>0) {
+                                            p.info[5]=i18n("Signal Strength: %1%", info.sig);
+                                            p.sigStrength = info.sig;
+                                        }
+                                        if (info.volt>=0) {
+                                            p.info[6]=i18n("Voltage: %1%", info.volt);
+                                            p.voltage = info.volt;
+                                        }
+                                        this.$set(this.players, j, p);
+                                    }
+                                }
+                            }
+                        });
                     }
                     this.players.sort(playerSort);
 

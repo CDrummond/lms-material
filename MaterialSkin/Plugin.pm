@@ -233,7 +233,7 @@ sub _cliCommand {
                                                   'plugins', 'plugins-status', 'plugins-update', 'extras', 'delete-vlib', 'pass-isset',
                                                   'pass-check', 'browsemodes', 'geturl', 'command', 'scantypes', 'server', 'themes',
                                                   'playericons', 'activeplayers', 'urls', 'adv-search', 'adv-search-params', 'protocols',
-                                                  'send-notif', 'get-notifs']) ) {
+                                                  'send-notif', 'get-notifs', 'players-extra-info']) ) {
         $request->setStatusBadParams();
         return;
     }
@@ -835,6 +835,7 @@ sub _cliCommand {
         for my $player (@players) {
             if ($player->power() && $player->isPlaying()) {
                 $request->addResultLoop("players", $cnt, "id", $player->id());
+                $cnt++;
             }
         }
         $request->setStatusDone();
@@ -1067,6 +1068,21 @@ sub _cliCommand {
     if ($cmd eq 'get-notifs') {
         foreach my $key (keys %mskNotifications) {
             $request->addResult($key, $mskNotifications{$key});
+        }
+        $request->setStatusDone();
+        return;
+    }
+
+    if ($cmd eq 'players-extra-info') {
+        my @players = Slim::Player::Client::clients();
+        my $cnt = 0;
+        for my $player (@players) {
+            if ($player->model ne 'group') {
+                $request->addResultLoop("players", $cnt, "id", $player->id());
+                $request->addResultLoop("players", $cnt, "signalstrength", $player->signalStrength() || 0);
+                $request->addResultLoop("players", $cnt, "voltage", $player->voltage() || -1);
+                $cnt++;
+            }
         }
         $request->setStatusDone();
         return;

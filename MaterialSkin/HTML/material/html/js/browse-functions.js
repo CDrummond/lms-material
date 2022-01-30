@@ -484,11 +484,7 @@ function browseClick(view, item, index, event) {
         if (view.grid.use || view.useRecyclerForLists) {
             promptForText(item.title, "", "").then(resp => {
                 if (resp.ok && resp.value && resp.value.length>0) {
-                    if ("search"==item.type) {
-                        view.search(undefined, item, resp.value);
-                    } else {
-                        view.entry(undefined, item, resp.value);
-                    }
+                    view.entry(undefined, item, resp.value);
                 }
             });
         }

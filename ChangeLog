@@ -14,6 +14,8 @@
     when 200 or more tracks. Setting is controlled server-side.
 11. Fix browser-context menu for text fields in browse list.
 12. Add player voltage to 'Information' dialog.
+13. Remove code to work-around LMS returning incorrect queue size. Queue is
+    still corrupt and causes flashing.
 
 2.8.4
 ------

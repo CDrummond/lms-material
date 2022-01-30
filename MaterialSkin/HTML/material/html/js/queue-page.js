@@ -77,6 +77,7 @@ function buildSubtitle(i, threeLines) {
 function parseResp(data, showTrackNum, index, showRatings, threeLines, infoPlugin) {
     logJsonMessage("RESP", data);
     let resp = { timestamp: 0, items: [], size: 0 };
+    let isInitial = 0==index;
     if (data.result) {
         resp.timestamp = data.result.playlist_timestamp;
         resp.size = data.result.playlist_tracks;
@@ -107,6 +108,20 @@ function parseResp(data, showTrackNum, index, showRatings, threeLines, infoPlugi
                               disc: i.disc
                           });
                 index++;
+            }
+        }
+        // Sometimes LMS states there are X tracks but only returns X-1, this causes the queue to break.
+        // Try to detect this, and add blank items at end ???
+        // See: https://forums.slimdevices.com/showthread.php?115609-Announce-Music-Similarity-DSTM-mixer&p=1043400&viewfull=1#post1043400
+        if (isInitial && resp.size>resp.items.length && resp.size<LMS_QUEUE_BATCH_SIZE) {
+            while (resp.items.length<resp.size) {
+                resp.items.push({
+                    id:"error."+resp.items.length,
+                    title:'',
+                    subtitle:'',
+                    image:resolveImageUrl(LMS_BLANK_COVER),
+                    key:"error."+resp.items.length
+                    });
             }
         }
     }

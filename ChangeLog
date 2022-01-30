@@ -16,6 +16,7 @@
 12. Add player voltage to 'Information' dialog.
 13. Remove code to work-around LMS returning incorrect queue size. Queue is
     still corrupt and causes flashing.
+14. If LMS returns less queue items than its size, just add blank items.
 
 2.8.4
 ------

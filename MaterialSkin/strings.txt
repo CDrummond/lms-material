@@ -244,15 +244,20 @@ PLUGIN_MATERIAL_SKIN_COMMENT_C_SEMI_SEP
 
 PLUGIN_MATERIAL_SKIN_COLLAPSE_DISCS
 	EN	Collapse discs
+	FR	Afficher d'abord les titres des disques des albums multi-disques, plutôt que les noms des morceaux
 
 PLUGIN_MATERIAL_SKIN_COLLAPSE_DISCS_DESC
 	EN	Initially only show disc titles when LMS is set to group multi-disc albums.
+	FR	Normalement, les noms de tous les morceaux s'affichent tout de suite lorsque LMS est paramétré pour regrouper les albums multi-disques.
 
 PLUGIN_MATERIAL_SKIN_COLLAPSE_DISCS_A_DONT
 	EN	Don't collapse
+	FR	Ne pas regrouper par disque
 
 PLUGIN_MATERIAL_SKIN_COLLAPSE_DISCS_B_ALWAYS
 	EN	Always collapse
+	FR	Toujours regrouper par disque
 
 PLUGIN_MATERIAL_SKIN_COLLAPSE_DISCS_C_LIMIT
 	EN	Collapse when 200, or more, tracks
+	FR	Regrouper par disque si 200 morceaux ou plus

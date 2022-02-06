@@ -99,7 +99,7 @@ function addFsSelectButton(doc, elem, isDir) {
 }
 
 function addFsSelectButtons(doc) {
-    var types=["selectFolder", "selectFile"];
+    var types=["selectFolder", "selectFile", "selectFile_.+"];
     for (var t=0; t<types.length; ++t) {
         var elems = doc.getElementsByClassName(types[t]);
         if (elems!=undefined) {

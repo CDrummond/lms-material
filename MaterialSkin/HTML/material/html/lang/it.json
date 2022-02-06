@@ -550,7 +550,7 @@
 "Use three lines (title, artist, album) to show track details.":"",
 "User guide":"",
 "Version":"",
-"Voltage: %1%":"Voltaggio: %1%",
+"Voltage: %1":"Voltaggio: %1",
 "Volume (%)":"",
 "When navigating into lists, show a home button to quickly navigate to the main (home) screen. Otherwise navigating home can be achieved via a long-press on the back button.":"",
 "When no song is playing on current player, darken screen (and show date & time) after 60 seconds.":"",

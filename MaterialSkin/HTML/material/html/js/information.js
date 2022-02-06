@@ -266,7 +266,7 @@ Vue.component('lms-information-dialog', {
                                 info[5]=i18n("Signal Strength: %1%", prevStrengths[player.playerid]);
                             }
                             if (undefined!=prevVoltages[player.playerid]) {
-                                info[6]=i18n("Voltage: %1%", prevVoltages[player.playerid]);
+                                info[6]=i18n("Voltage: %1", prevVoltages[player.playerid]);
                             }
                             this.players.push({name: player.name, id: player.playerid, info: info, isgroup: isgroup, icon:mapPlayerIcon(player)});
                         }
@@ -287,7 +287,7 @@ Vue.component('lms-information-dialog', {
                                             p.sigStrength = info.sig;
                                         }
                                         if (info.volt>=0) {
-                                            p.info[6]=i18n("Voltage: %1%", info.volt);
+                                            p.info[6]=i18n("Voltage: %1", info.volt);
                                             p.voltage = info.volt;
                                         }
                                         this.$set(this.players, j, p);

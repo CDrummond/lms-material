@@ -584,8 +584,8 @@
 "%1 Years":"%1 Jaren",
 "1 day":"1 dag",
 "%1 days":"%1 dagen",
-"Reloading":"",
-"Voltage: %1%":"",
-"1 Disc":"",
-"%1 Discs":""
+"Reloading":"Herladen",
+"Voltage: %1%":"Voltage: %1%",
+"1 Disc":"1 Disc",
+"%1 Discs":"%1 Discs"
 }

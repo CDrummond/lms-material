@@ -298,6 +298,7 @@ const store = new Vuex.Store({
         swipeChangeTrack: false,
         keyboardControl: true,
         updatesAvailable: new Set(),
+        restartRequired: false,
         queueThreeLines: true,
         showArtwork: true,
         openDialogs: [],
@@ -747,6 +748,9 @@ const store = new Vuex.Store({
         },
         setUpdatesAvailable(state, val) {
             state.updatesAvailable = val;
+        },
+        setRestartRequired(state, val) {
+            state.restartRequired = val;
         },
         setPassword(state, pass) {
             setLocalStorageVal('password', pass);

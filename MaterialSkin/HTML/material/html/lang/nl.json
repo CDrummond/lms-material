@@ -324,6 +324,7 @@
 "Rating":"Waardering",
 "Regular":"Normaal",
 "Reload":"Herladen",
+"Reloading":"Herladen",
 "Remaining":"Resterend",
 "Remaining duration of current track":"Resterende duur van huidig nummer",
 "Remote Libraries":"Externe Mediabibliotheek",
@@ -518,6 +519,7 @@
 "User guide":"Handleiding",
 "Various Artists":"Diverse artiesten",
 "Version":"Versie",
+"Voltage: %1":"Voltage: %1",
 "Volume (%)":"Volume (%)",
 "Volume gain":"Volume stap",
 "Volume step":"Volume stap",
@@ -566,6 +568,8 @@
 "%1 Composers":"%1 Componisten",
 "1 Conductor":"1 Dirigent",
 "%1 Conductors":"%1 Dirigenten",
+"1 Disc":"1 Disc",
+"%1 Discs":"%1 Discs",
 "1 Genre":"1 Genre",
 "%1 Genres":"%1 Genres",
 "1 Image":"1 Afbeelding",
@@ -584,8 +588,5 @@
 "%1 Years":"%1 Jaren",
 "1 day":"1 dag",
 "%1 days":"%1 dagen",
-"Reloading":"Herladen",
-"Voltage: %1":"Voltage: %1",
-"1 Disc":"1 Disc",
-"%1 Discs":"%1 Discs"
+"Restart required":""
 }

@@ -773,10 +773,15 @@ var lmsServer = Vue.component('lms-server', {
                 if (updates && updates.plugins && updates.plugins.length>0 && (updates.plugins.length>1 || updates.plugins[0]!=null)) {
                     avail.add("plugins");
                 }
-                this.$store.commit('setUpdatesAvailable', avail );
+                this.$store.commit('setUpdatesAvailable', avail);
             }).catch(err => {
                 logError(err);
             });
+            lmsCommand("", ["material-skin", "plugins-status"]).then(({data}) => {
+                if (data && data.result) {
+                    this.$store.commit('setRestartRequired', 1 == parseInt(data.result.needs_restart));
+                }
+            })
         },
         cancelUpdatesTimer() {
             if (undefined!==this.updatesTimer) {

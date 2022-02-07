@@ -3,6 +3,7 @@
 1. Translation updates.
 2. Remove trailing percentage sign from voltage display.
 3. Add file selector to more items.
+4. Add restart icon to main menu icon if LMS indicates server needs restart.
 
 2.9.0
 -----

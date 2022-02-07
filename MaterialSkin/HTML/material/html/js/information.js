@@ -209,7 +209,7 @@ Vue.component('lms-information-dialog', {
             if (undefined!=this.$store.state.updateNotif.msg) {
                 return false;
             }
-            if (this.$store.state.updatesAvailable.has("plugins") && !this.$store.state.updatesAvailable.has("server")) {
+            if (this.$store.state.restartRequired || (this.$store.state.updatesAvailable.has("plugins") && !this.$store.state.updatesAvailable.has("server"))) {
                 var plugins = document.getElementById("info-plugins");
                 if (plugins) {
                     setTimeout(function () {
@@ -235,6 +235,7 @@ Vue.component('lms-information-dialog', {
                     if (status!=this.pluginStatus) {
                         this.pluginStatus = status;
                     }
+                    this.$store.commit('setRestartRequired', 1 == parseInt(data.result.needs_restart));
                 }
             });
             lmsCommand("", ["serverstatus", 0, LMS_MAX_PLAYERS]).then(({data}) => {

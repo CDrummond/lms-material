@@ -104,15 +104,16 @@ Vue.component('lms-toolbar', {
   <img v-else class="svg-img" :src="'queue_music_outline' | svgIcon(darkUi, false, true, undefined, coloredToolbars)"></img>
  </v-btn>
  <v-menu v-if="connected" class="hide-for-mini" bottom left v-model="showMainMenu">
-  <v-btn slot="activator" icon :title="trans.mainMenu"><img v-if="updatesAvailable" class="svg-badge" :src="'update' | svgIcon(darkUi, true, true, undefined, coloredToolbars)"></img><img v-else-if="notificationsAvailable" class="svg-badge" :src="'bell' | svgIcon(darkUi, true, true, undefined, coloredToolbars)"></img><v-icon>more_vert</v-icon></v-btn>
+  <v-btn slot="activator" icon :title="trans.mainMenu"><img v-if="updatesAvailable" class="svg-badge" :src="'update' | svgIcon(darkUi, true, true, undefined, coloredToolbars)"></img><img v-else-if="restartRequired" class="svg-badge" :src="'restart' | svgIcon(darkUi, true, true, undefined, coloredToolbars)"><img v-else-if="notificationsAvailable" class="svg-badge" :src="'bell' | svgIcon(darkUi, true, true, undefined, coloredToolbars)"></img><v-icon>more_vert</v-icon></v-btn>
   <v-list>
    <template v-for="(item, index) in menuItems">
     <v-divider v-if="item===DIVIDER"></v-divider>
     <v-list-tile @click="menuAction(item.id)" v-if="notificationsAvailable || TB_NOTIFICATIONS.id!=item.id">
-     <v-list-tile-avatar v-if="menuIcons"><img v-if="TB_INFO.id==item.id && updatesAvailable" class="svg-img" :src="'update' | svgIcon(darkUi, true)"></img><img v-else-if="item.svg" class="svg-img" :src="item.svg | svgIcon(darkUi)"><v-icon v-else>{{item.icon}}</v-icon></v-list-tile-avatar>
+     <v-list-tile-avatar v-if="menuIcons"><img v-if="TB_INFO.id==item.id && updatesAvailable" class="svg-img" :src="'update' | svgIcon(darkUi, true)"></img><img v-else-if="TB_INFO.id==item.id && restartRequired" class="svg-img" :src="'restart' | svgIcon(darkUi, true)"><img v-else-if="item.svg" class="svg-img" :src="item.svg | svgIcon(darkUi)"><v-icon v-else>{{item.icon}}</v-icon></v-list-tile-avatar>
      <v-list-tile-content>
       <v-list-tile-title>{{item.title}}</v-list-tile-title>
       <v-list-tile-sub-title v-if="TB_INFO.id==item.id && updatesAvailable">{{trans.updatesAvailable}}</v-list-tile-sub-title>
+      <v-list-tile-sub-title v-else-if="TB_INFO.id==item.id && restartRequired">{{trans.restartRequired}}</v-list-tile-sub-title>
      </v-list-tile-content>
      <v-list-tile-action v-if="item.shortcut && keyboardControl" class="menu-shortcut">{{item.shortcut}}</v-list-tile-action>
      <v-list-tile-action v-else-if="TB_SETTINGS.id==item.id && useSettingsMenu" class="menu-subind"><v-icon>chevron_right</v-icon></v-list-tile-action>
@@ -223,7 +224,7 @@ Vue.component('lms-toolbar', {
                         showLargeShortcut:undefined, hideLarge:undefined, startPlayer:undefined, groupPlayers:undefined, standardPlayers:undefined,
                         otherServerPlayers:undefined, updatesAvailable:undefined, decVol:undefined, incVol:undefined, showVol:undefined, downloading:undefined,
                         mainMenu: undefined, play:undefined, pause:undefined, appQuit:undefined, toggleQueue:undefined,
-                        toggleQueueShortcut:undefined, groupVol:undefined},
+                        toggleQueueShortcut:undefined, groupVol:undefined, restartRequired:undefined},
                  infoOpen: false,
                  nowPlayingExpanded: false,
                  playerVolume: 0,
@@ -499,7 +500,8 @@ Vue.component('lms-toolbar', {
                           decVol:i18n("Decrease volume"), incVol:i18n("Increase volume"), showVol:i18n("Show volume"),
                           mainMenu: i18n("Main menu"), play:i18n("Play"), pause:i18n("Pause"),
                           appQuit:i18n('Quit'), toggleQueue:i18n('Toggle queue'), downloading:i18n('Downloading'),
-                          toggleQueueShortcut:shortcutStr(LMS_TOGGLE_QUEUE_KEYBOARD, true), groupVol:i18n('Adjust volume of associated players')};
+                          toggleQueueShortcut:shortcutStr(LMS_TOGGLE_QUEUE_KEYBOARD, true), groupVol:i18n('Adjust volume of associated players'),
+                          restartRequired:i18n('Restart required')};
         },
         setPlayer(id) {
             if (id != this.$store.state.player.id) {
@@ -795,6 +797,9 @@ Vue.component('lms-toolbar', {
         },
         updatesAvailable() {
             return this.$store.state.updatesAvailable.size>0 || undefined!=this.$store.state.updateNotif.msg
+        },
+        restartRequired() {
+            return this.$store.state.restartRequired
         },
         notificationsAvailable() {
             return this.$store.state.notifications.length>0

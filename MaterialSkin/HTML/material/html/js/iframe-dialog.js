@@ -98,18 +98,6 @@ function addFsSelectButton(doc, elem, isDir) {
     }
 }
 
-function addFsSelectButtons(doc) {
-    var types=["selectFolder", "selectFile", "selectFile_.+"];
-    for (var t=0; t<types.length; ++t) {
-        var elems = doc.getElementsByClassName(types[t]);
-        if (elems!=undefined) {
-            for(var i=0, len=elems.length; i<len; ++i) {
-                addFsSelectButton(doc, elems[i], 0==t);
-            }
-        }
-    }
-}
-
 function getElementsByClassName(elem, tagName, clazz){
 	var elems = (tagName == "*" && elem.all) ? elem.all : elem.getElementsByTagName(tagName);
 	var found = new Array();
@@ -120,6 +108,18 @@ function getElementsByClassName(elem, tagName, clazz){
 		}
 	}
 	return found;
+}
+
+function addFsSelectButtons(doc) {
+    var types=["selectFolder", "selectFile", "selectFile_.+"];
+    for (var t=0; t<types.length; ++t) {
+        var elems = types[t].endsWith("_.+") ? getElementsByClassName(doc, "input", types[t]) : doc.getElementsByClassName(types[t]);
+        if (elems!=undefined) {
+            for(var i=0, len=elems.length; i<len; ++i) {
+                addFsSelectButton(doc, elems[i], 0==t);
+            }
+        }
+    }
 }
 
 function addSliders(doc) {

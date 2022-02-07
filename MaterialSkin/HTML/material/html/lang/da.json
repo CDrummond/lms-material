@@ -348,6 +348,7 @@
 "Rescan":"Skan igen",
 "Restart":"Genstart",
 "Restart Logitech Media Server?":"Genstart Logitech Media Server?",
+"Restart required":"Kræver genstart",
 "Restart server":"Genstart serveren",
 "Revert":"Fortyd ændringer",
 "Revert to default":"Nulstil til standardindstillinger",
@@ -587,6 +588,5 @@
 "1 Year":"1 år",
 "%1 Years":"%1 år",
 "1 day":"1 dag",
-"%1 days":"%1 dage",
-"Restart required":""
+"%1 days":"%1 dage"
 }

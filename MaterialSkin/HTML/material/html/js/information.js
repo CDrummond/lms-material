@@ -126,6 +126,7 @@ Vue.component('lms-information-dialog', {
     },
     mounted() {
         bus.$on('info.open', function(act) {
+            this.openTime = new Date().getTime();
             lmsCommand("", ["material-skin", "info"]).then(({data}) => {
                 if (data && data.result && data.result.info) {
                     var inf = JSON.parse(data.result.info);
@@ -189,7 +190,7 @@ Vue.component('lms-information-dialog', {
                     avail.add("plugins");
                 }
                 this.$store.commit('setUpdatesAvailable', avail);
-                if (!scrolled) {
+                if (!scrolled && (new Date().getTime() - this.openTime)<1500) {
                     this.scrollToPlugins();
                 }
             }).catch(err => {

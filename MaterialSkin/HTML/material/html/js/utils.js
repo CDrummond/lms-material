@@ -172,6 +172,10 @@ function formatTechInfo(item, source) {
     if (item.type) {
         let bracket = item.type.indexOf(" (");
         let type = bracket>0 ? item.type.substring(0, bracket) : item.type;
+        // BBC Sounds as aac@48000Hz, want just aac
+        if (type.length>4 && item.samplerate && type.indexOf("@")>2 && type.indexOf("Hz")>4) {
+            type = type.split("@")[0];
+        }
         type = type.length<=4 ? type.toUpperCase() : type;
         if (technical.indexOf(type)<0 && (undefined==source || (type!=source.text && type!=source.text.replace(/ /g,'')))) {
             technical.push(type);

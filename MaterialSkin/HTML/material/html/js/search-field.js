@@ -6,7 +6,7 @@
  */
 'use strict';
 
-const SEARCH_OTHER = new Set(['BBC Sounds', 'Deezer', 'Qobuz', 'Spotty', 'Tidal', 'YouTube']);
+const SEARCH_OTHER = new Set(['bbc sounds', 'deezer', 'qobuz', 'spotty', 'tidal', 'youtube']);
 
 function buildSearchResp(results) {
     let items=[];
@@ -173,7 +173,7 @@ Vue.component('lms-search-field', {
                             let items = resp.items;
                             resp.items = [];
                             for (let i=0, len=items.length; i<len; ++i) {
-                                if (SEARCH_OTHER.has(items[i].title)) {
+                                if (SEARCH_OTHER.has(items[i].title.toLowerCase())) {
                                     resp.items.push(items[i]);
                                 }
                             }

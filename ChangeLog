@@ -7,6 +7,8 @@
 5. Only scroll information dialog if plugin status received no more than 1.5
    seconds after opening.
 6. Try not to duplicate sample rate in tech info.
+7. When checking what 'other' sources to add for search, use case-insensitive
+   name check.
 
 2.9.0
 -----

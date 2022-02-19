@@ -348,6 +348,7 @@
 "Rescan":"Analyser à nouveau",
 "Restart":"Redémarrer",
 "Restart Logitech Media Server?":"Redémarrer Logitech Media Server ?",
+"Restart required":"Redémarrage requis",
 "Restart server":"Redémarrer le serveur",
 "Revert":"Réinitialiser",
 "Revert to default":"Revenir aux paramètres par défaut",
@@ -587,6 +588,5 @@
 "1 Year":"1 année",
 "%1 Years":"%1 années",
 "1 day":"1 jour",
-"%1 days":"%1 jours",
-"Restart required":""
+"%1 days":"%1 jours"
 }

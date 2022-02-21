@@ -116,6 +116,11 @@ function mapIconType(item, app, type) {
         item.svg=lmsIcon.replace("_svg.png", ".svg").replace(/^\/+/, '');
         return true;
     }
+    if (lmsIcon.endsWith("_svg.jpg")) {
+        item.image=item.icon=undefined;
+        item.svg=lmsIcon.replace("_svg.jpg", ".svg").replace(/^\/+/, '');
+        return true;
+    }
     for (const [key, value] of Object.entries(iconMap["endsWith"])) {
         if (lmsIcon.endsWith(key) || (lmsIcon.indexOf('imageproxy')>0 && lmsIcon.endsWith(key.substring(1)+"/image.png"))) {
             let entry = undefined!=app && undefined!=value[app] ? value[app] : value;

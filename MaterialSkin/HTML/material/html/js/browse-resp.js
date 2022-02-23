@@ -84,7 +84,7 @@ function parseBrowseResp(data, parent, options, cacheKey, parentCommand, parentG
             var maybeAllowGrid = command!="trackstat"; // && !isFavorites; // && command!="playhistory";
             var numImages = 0;
 
-            resp.isMusicMix = (command == "musicsimilarity" || command == "musicip") && data.params[1].length>0 && (data.params[1][1]=="mix" || data.params[1][1]=="list");
+            resp.isMusicMix = (command == "musicsimilarity" || command == "musicip" || command == "blissmixer") && data.params[1].length>0 && (data.params[1][1]=="mix" || data.params[1][1]=="list");
             resp.canUseGrid = maybeAllowGrid && (isRadiosTop || isBmf || (data.result.window && data.result.window.windowStyle && (data.result.window.windowStyle=="icon_list" || data.result.window.windowStyle=="home_menu"))) ? true : false;
             resp.canDrop = isFavorites;
 

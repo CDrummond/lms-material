@@ -65,6 +65,7 @@
     "/rockradio.png":{"svg":"guitar-electric"},
     "/lma.png":{"svg":"bank"},
     "/accuradio.png":{"icon":"volume_up"},
+    "/accuradio.jpg":{"svg":"accuradio"},
     "/radionomy.png":{"icon":"surround_sound"},
     "/somafm.png":{"svg":"radio-fm"},
     "/skyfm.png":{"svg":"radio-station"},

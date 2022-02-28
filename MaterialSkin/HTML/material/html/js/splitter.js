@@ -7,11 +7,11 @@
 
 Vue.component('lms-splitter', {
     template: `
-  <div  class="lms-splitter" @mouseup="onUp" @mousemove="onMouseMove" @touchmove="onMove" @touchend="onUp">
+  <div class="lms-splitter" @mouseup="onUp" @mousemove="onMouseMove" @touchmove="onMove" @touchend="onUp">
     <div :style="leftPaneStyle" class="left-pane splitter-pane">
       <slot name="left-pane"></slot>
     </div>
-    <div class="splitter" :class="{active}" @mousedown="onDown" @touchstart.prevent="onDown"></div>
+    <div class="splitter" v-bind:class="{'active':active}" @mousedown="onDown" @touchstart.prevent="onDown"></div>
     <div :style="rightPaneStyle" class="right-pane splitter-pane">
       <slot name="right-pane"></slot>
     </div>
@@ -58,12 +58,16 @@ Vue.component('lms-splitter', {
             if (this.active && this.$store.state.desktopLayout && this.$store.state.showQueue) {
                 let offset = 0;
                 let target = e.currentTarget;
-                let percent = 0;
+                let pageX = e['pageX'] || e.clientX;
+                if (pageX==undefined && e.touches) {
+                    pageX = e.touches[0].pageX;
+                }
+
                 while (target) {
                     offset += target.offsetLeft;
                     target = target.offsetParent;
                 }
-                percent =  Math.floor(((e.pageX - offset) / e.currentTarget.offsetWidth)*10000)/100;
+                let percent = Math.floor(((pageX - offset) / e.currentTarget.offsetWidth)*10000)/100;
                 if (percent > this.margin && percent < (100 - this.margin)) {
                     this.percent = percent;
                     var f = Math.round(this.percent);

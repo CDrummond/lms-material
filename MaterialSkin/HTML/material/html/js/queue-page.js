@@ -287,7 +287,7 @@ var lmsQueue = Vue.component("lms-queue", {
             dropIndex: -1,
             coverUrl: undefined,
             queueCustomActions: [],
-            currentColor: '#fff'
+            currentColor: '#000'
         }
     },
     computed: {
@@ -423,10 +423,10 @@ var lmsQueue = Vue.component("lms-queue", {
             this.updateItems();
         }.bind(this));
 
-        this.currentColor = getComputedStyle(document.documentElement).getPropertyValue('--primary-color').substring(1);
+        this.setColor();
         bus.$on('themeChanged', function() {
             this.setBgndCover();
-            this.currentColor = getComputedStyle(document.documentElement).getPropertyValue('--primary-color').substring(1);
+            this.setColor();
         }.bind(this));
 
         bus.$on('langChanged', function() {
@@ -567,6 +567,13 @@ var lmsQueue = Vue.component("lms-queue", {
         }.bind(this));
     },
     methods: {
+        setColor() {
+            let primary = getComputedStyle(document.documentElement).getPropertyValue('--primary-color');
+            if (undefined==primary || !primary.startsWith('#')) {
+                primary = '#000';
+            }
+            this.currentColor = primary.substring(1);
+        },
         initItems() {
             this.trans= { ok:i18n('OK'), cancel: i18n('Cancel'), save:i18n("Save queue"), clear:i18n("Clear queue"),
                           repeatAll:i18n("Repeat queue"), repeatOne:i18n("Repeat single track"), repeatOff:i18n("No repeat"),

@@ -3,6 +3,8 @@
 1. Map JPG icons as well as PNG icons.
 2. Add icon mapping for Accuradio.
 3. Fix splitter moving on mobile browsers.
+4. If can't get primary colour, then use black as colour of current play queue
+   indicator icon.
 
 2.9.1
 -----

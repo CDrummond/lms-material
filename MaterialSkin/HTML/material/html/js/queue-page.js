@@ -162,7 +162,7 @@ var lmsQueue = Vue.component("lms-queue", {
    <v-btn :title="trans.dstm" flat icon v-else-if="(desktopLayout || wide>0) && dstm" class="toolbar-button" v-bind:class="{'disabled':noPlayer}" v-longpress="repeatClicked"><v-icon class="active-btn">all_inclusive</v-icon></v-btn>
    <v-btn :title="trans.repeatOff" flat icon v-else-if="desktopLayout || wide>0" class="toolbar-button dimmed" v-bind:class="{'disabled':noPlayer}" v-longpress="repeatClicked"><v-icon>repeat</v-icon></v-btn>
 
-   <v-btn :title="trans.shuffleAlbums" flat icon v-if="(desktopLayout || wide>0) && playerStatus.shuffle===2" class="toolbar-button" v-bind:class="{'disabled':noPlayer}" @click="bus.$emit('playerCommand', ['playlist', 'shuffle', 0])"><img class="svg-img media-icon" :src="'shuffle-albums' | svgIcon(darkUi, true)"></v-btn>
+   <v-btn :title="trans.shuffleAlbums" flat icon v-if="(desktopLayout || wide>0) && playerStatus.shuffle===2" class="toolbar-button" v-bind:class="{'disabled':noPlayer}" @click="bus.$emit('playerCommand', ['playlist', 'shuffle', 0])"><img class="svg-img media-icon" :src="'shuffle-albums' | svgIcon(darkUi, 1)"></v-btn>
    <v-btn :title="trans.shuffleAll" flat icon v-else-if="(desktopLayout || wide>0) && playerStatus.shuffle===1" class="toolbar-button" v-bind:class="{'disabled':noPlayer}" @click="bus.$emit('playerCommand', ['playlist', 'shuffle', 2])"><v-icon class="active-btn">shuffle</v-icon></v-btn>
    <v-btn :title="trans.shuffleOff" flat icon v-else-if="desktopLayout || wide>0" class="toolbar-button dimmed" v-bind:class="{'disabled':noPlayer}" @click="bus.$emit('playerCommand', ['playlist', 'shuffle', 1])"><v-icon>shuffle</v-icon></v-btn>
    <template v-if="wide>1" v-for="(action, index) in settingsMenuActions">
@@ -192,7 +192,7 @@ var lmsQueue = Vue.component("lms-queue", {
      <v-list-tile-action class="queue-action" @click.stop="itemMenu(item, index, $event)">
       <div class="menu-btn grid-btn list-btn" :title="i18n('%1 (Menu)', item.title)"></div>
      </v-list-tile-action>
-     <img v-if="index==currentIndex && artwork" class="pq-current-indicator" :src="currentIcon"></img>
+     <img v-if="index==currentIndex && artwork" class="pq-current-indicator" :src="'pq-current' | svgIcon(true, 2)"></img>
     </v-list-tile>
    </RecycleScroller>
    <RecycleScroller v-else-if="items.length>LMS_MAX_NON_SCROLLER_ITEMS" :items="items" :item-size="LMS_LIST_ELEMENT_SIZE" page-mode key-field="key" :buffer="LMS_SCROLLER_LIST_BUFFER">
@@ -209,7 +209,7 @@ var lmsQueue = Vue.component("lms-queue", {
      <v-list-tile-action class="queue-action" @click.stop="itemMenu(item, index, $event)">
       <div class="menu-btn grid-btn list-btn" :title="i18n('%1 (Menu)', item.title)"></div>
      </v-list-tile-action>
-     <img v-if="index==currentIndex && artwork" class="pq-current-indicator" :src="currentIcon"></img>
+     <img v-if="index==currentIndex && artwork" class="pq-current-indicator" :src="'pq-current' | svgIcon(true, 2)"></img>
     </v-list-tile>
    </RecycleScroller>
    <template v-else v-for="(item, index) in items">
@@ -228,7 +228,7 @@ var lmsQueue = Vue.component("lms-queue", {
      <v-list-tile-action class="queue-action" @click.stop="itemMenu(item, index, $event)">
       <div class="menu-btn grid-btn list-btn" :title="i18n('%1 (Menu)', item.title)"></div>
      </v-list-tile-action>
-     <img v-if="index==currentIndex && artwork" class="pq-current-indicator" :src="currentIcon"></img>
+     <img v-if="index==currentIndex && artwork" class="pq-current-indicator" :src="'pq-current' | svgIcon(true, 2)"></img>
     </v-list-tile>
    </template>
   </div>
@@ -286,8 +286,7 @@ var lmsQueue = Vue.component("lms-queue", {
             dragActive: false,
             dropIndex: -1,
             coverUrl: undefined,
-            queueCustomActions: [],
-            currentColor: '#000'
+            queueCustomActions: []
         }
     },
     computed: {
@@ -317,9 +316,6 @@ var lmsQueue = Vue.component("lms-queue", {
         },
         drawBgndImage() {
             return this.$store.state.queueBackdrop && undefined!=this.coverUrl
-        },
-        currentIcon() {
-            return "/material/svg/pq-current?c="+this.currentColor+"&r="+LMS_MATERIAL_REVISION;
         }
     },
     created() {
@@ -423,10 +419,9 @@ var lmsQueue = Vue.component("lms-queue", {
             this.updateItems();
         }.bind(this));
 
-        this.setColor();
         bus.$on('themeChanged', function() {
             this.setBgndCover();
-            this.setColor();
+            setTimeout(function() { this.$forceUpdate(); }.bind(this), 500);
         }.bind(this));
 
         bus.$on('langChanged', function() {
@@ -567,13 +562,6 @@ var lmsQueue = Vue.component("lms-queue", {
         }.bind(this));
     },
     methods: {
-        setColor() {
-            let primary = getComputedStyle(document.documentElement).getPropertyValue('--primary-color');
-            if (undefined==primary || !primary.startsWith('#')) {
-                primary = '#000';
-            }
-            this.currentColor = primary.substring(1);
-        },
         initItems() {
             this.trans= { ok:i18n('OK'), cancel: i18n('Cancel'), save:i18n("Save queue"), clear:i18n("Clear queue"),
                           repeatAll:i18n("Repeat queue"), repeatOne:i18n("Repeat single track"), repeatOff:i18n("No repeat"),
@@ -1196,8 +1184,11 @@ var lmsQueue = Vue.component("lms-queue", {
             }
             return i18np("1 Selected Item", "%1 Selected Items", value);
         },
-        svgIcon: function (name, dark, active) {
-            return "/material/svg/"+name+"?c="+(active ? getComputedStyle(document.documentElement).getPropertyValue("--active-color").replace("#", "") : dark ? LMS_DARK_SVG : LMS_LIGHT_SVG)+"&r="+LMS_MATERIAL_REVISION;
+        svgIcon: function (name, dark, state) {
+            return "/material/svg/"+name+"?c="+
+                (undefined==state || 0==state
+                    ? (dark ? LMS_DARK_SVG : LMS_LIGHT_SVG)
+                    : getComputedStyle(document.documentElement).getPropertyValue(1==state ? "--active-color" : "--primary-color").replace("#", ""))+"&r="+LMS_MATERIAL_REVISION;
         },
         tooltip: function (str, key, showShortcut) {
             return showShortcut ? str+SEPARATOR+shortcutStr(key) : str;

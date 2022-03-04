@@ -164,39 +164,44 @@ Vue.component('lms-information-dialog', {
                     this.plugins.details.sort(titleSort);
                 }
             });
-            this.updates.server = this.$store.state.updatesAvailable.has("server");
-            axios.get(location.protocol+'//'+location.hostname+(location.port ? ':'+location.port : '')+"/updateinfo.json?x=time"+(new Date().getTime())).then((resp) => {
-                var hadServer = this.updates.server;
-                var hadPlugins = this.plugins.names.length>0 || this.updates.names.length>0;
-                var updates = eval(resp.data);
-                this.updates.names.clear();
-                this.updates.details = [];
-                this.updates.server = updates && updates.server;
-                if (updates && updates.plugins && updates.plugins.length>0) {
-                    for (var i=0, len=updates.plugins.length; i<len; ++i) {
-                        if (updates.plugins[i]!=null) {
-                            this.updates.names.add(updates.plugins[i].name);
-                            this.updates.details.push(updates.plugins[i]);
+            if (this.$store.state.unlockAll) {
+                this.updates.server = this.$store.state.updatesAvailable.has("server");
+                axios.get(location.protocol+'//'+location.hostname+(location.port ? ':'+location.port : '')+"/updateinfo.json?x=time"+(new Date().getTime())).then((resp) => {
+                    var hadServer = this.updates.server;
+                    var hadPlugins = this.plugins.names.length>0 || this.updates.names.length>0;
+                    var updates = eval(resp.data);
+                    this.updates.names.clear();
+                    this.updates.details = [];
+                    this.updates.server = updates && updates.server;
+                    if (updates && updates.plugins && updates.plugins.length>0) {
+                        for (var i=0, len=updates.plugins.length; i<len; ++i) {
+                            if (updates.plugins[i]!=null) {
+                                this.updates.names.add(updates.plugins[i].name);
+                                this.updates.details.push(updates.plugins[i]);
+                            }
                         }
+                        this.updates.details.sort(titleSort);
+                        this.$forceUpdate();
                     }
-                    this.updates.details.sort(titleSort);
-                    this.$forceUpdate();
-                }
-                var avail = new Set();
-                if (this.updates.server) {
-                    avail.add("server");
-                }
-                if (this.updates.names.size>0) {
-                    avail.add("plugins");
-                }
-                this.$store.commit('setUpdatesAvailable', avail);
-                if (!scrolled && (new Date().getTime() - this.openTime)<1500) {
-                    this.scrollToPlugins();
-                }
-            }).catch(err => {
-                this.updates.names.clear();
-                logError(err);
-            });
+                    var avail = new Set();
+                    if (this.updates.server) {
+                        avail.add("server");
+                    }
+                    if (this.updates.names.size>0) {
+                        avail.add("plugins");
+                    }
+                    this.$store.commit('setUpdatesAvailable', avail);
+                    if (!scrolled && (new Date().getTime() - this.openTime)<1500) {
+                        this.scrollToPlugins();
+                    }
+                }).catch(err => {
+                    this.updates.names.clear();
+                    logError(err);
+                });
+            } else {
+                this.pluginStatus = 'idle';
+                this.updates={names: new Set(), details: [], server:false};
+            }
         }.bind(this));
 
         bus.$on('esc', function() {
@@ -208,6 +213,9 @@ Vue.component('lms-information-dialog', {
     methods: {
         scrollToPlugins() {
             if (undefined!=this.$store.state.updateNotif.msg) {
+                return false;
+            }
+            if (!this.$store.state.unlockAll) {
                 return false;
             }
             if (this.$store.state.restartRequired || (this.$store.state.updatesAvailable.has("plugins") && !this.$store.state.updatesAvailable.has("server"))) {
@@ -225,20 +233,22 @@ Vue.component('lms-information-dialog', {
             if (!this.show) {
                 return;
             }
-            lmsCommand("", ["material-skin", "plugins-status"]).then(({data}) => {
-                if (data && data.result) {
-                    var status='idle';
-                    if (1 == parseInt(data.result.downloading)) {
-                        status='downloading';
-                    } else if (1 == parseInt(data.result.needs_restart)) {
-                        status='needs_restart';
+            if (this.$store.state.unlockAll) {
+                lmsCommand("", ["material-skin", "plugins-status"]).then(({data}) => {
+                    if (data && data.result) {
+                        var status='idle';
+                        if (1 == parseInt(data.result.downloading)) {
+                            status='downloading';
+                        } else if (1 == parseInt(data.result.needs_restart)) {
+                            status='needs_restart';
+                        }
+                        if (status!=this.pluginStatus) {
+                            this.pluginStatus = status;
+                        }
+                        this.$store.commit('setRestartRequired', 1 == parseInt(data.result.needs_restart));
                     }
-                    if (status!=this.pluginStatus) {
-                        this.pluginStatus = status;
-                    }
-                    this.$store.commit('setRestartRequired', 1 == parseInt(data.result.needs_restart));
-                }
-            });
+                });
+            }
             lmsCommand("", ["serverstatus", 0, LMS_MAX_PLAYERS]).then(({data}) => {
                 if (data && data.result) {
                     var prevStrengths={};

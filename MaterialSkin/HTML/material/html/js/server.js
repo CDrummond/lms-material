@@ -764,6 +764,9 @@ var lmsServer = Vue.component('lms-server', {
             }
         },
         checkPluginUpdates() {
+            if (!this.$store.state.unlockAll) {
+                return;
+            }
             axios.get(location.protocol+'//'+location.hostname+(location.port ? ':'+location.port : '')+"/updateinfo.json?s=time"+(new Date().getTime())).then((resp) => {
                 var updates = eval(resp.data);
                 var avail = new Set();
@@ -821,6 +824,9 @@ var lmsServer = Vue.component('lms-server', {
         }.bind(this));
         bus.$on('reconnect', function() {
             this.reConnectToCometD();
+        }.bind(this));
+        bus.$on('lockChanged', function() {
+            this.checkPluginUpdates();
         }.bind(this));
         bus.$on('refreshStatus', function(id) {
             var player = id ? id : (this.$store.state.player ? this.$store.state.player.id : undefined);

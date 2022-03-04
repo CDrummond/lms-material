@@ -796,10 +796,10 @@ Vue.component('lms-toolbar', {
             return this.$store.state.visibleMenus.size>0
         },
         updatesAvailable() {
-            return this.$store.state.updatesAvailable.size>0 || undefined!=this.$store.state.updateNotif.msg
+            return this.$store.state.unlockAll && (this.$store.state.updatesAvailable.size>0 || undefined!=this.$store.state.updateNotif.msg)
         },
         restartRequired() {
-            return this.$store.state.restartRequired
+            return this.$store.state.unlockAll && this.$store.state.restartRequired
         },
         notificationsAvailable() {
             return this.$store.state.notifications.length>0

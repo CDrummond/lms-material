@@ -677,6 +677,12 @@ function browseAddCategories(view, item, isGenre) {
                             type: "group",
                             id: uniqueId(item.id, view.items.length)});
     }
+    view.items.push({ title: i18n("All Songs"),
+                      command: ["tracks"],
+                      params: [item.id, TRACK_TAGS+"elcy", SORT_KEY+"albumtrack"],
+                      icon: "music_note",
+                      type: "group",
+                      id: uniqueId(item.id, view.items.length)});
     view.headerTitle = item.title;
     view.headerSubTitle = i18n("Select category");
     setScrollTop(view, 0);

@@ -348,6 +348,7 @@
 "Rescan":"Opnieuw scannen",
 "Restart":"Herstarten",
 "Restart Logitech Media Server?":"Logitech Media Server herstarten?",
+"Restart required":"Herstart vereist",
 "Restart server":"Server opnieuw opstarten",
 "Revert":"Terugkeren",
 "Revert to default":"Terugkeren naar standaard",
@@ -588,5 +589,5 @@
 "%1 Years":"%1 Jaren",
 "1 day":"1 dag",
 "%1 days":"%1 dagen",
-"Restart required":"Herstart vereist"
+"All Songs":"Alle nummers"
 }

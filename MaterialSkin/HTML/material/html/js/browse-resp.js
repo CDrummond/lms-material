@@ -782,7 +782,7 @@ function parseBrowseResp(data, parent, options, cacheKey, parentCommand, parentG
             var allowPlayAlbum = (parent && parent.id && parent.id.startsWith("album_id:"));
             var isAllSongs = parent && parent.id && parent.id.startsWith("currentaction:");
             var isSearchResult = options && options.isSearch;
-            var showAlbumName = isSearchResult || isAllSongs || (parent && parent.id && parent.id.startsWith("artist_id:"));
+            var showAlbumName = isSearchResult || isAllSongs || (parent && parent.id && (parent.id.startsWith("artist_id:") || parent.id.startsWith("year") || parent.id.startsWith("genre_id:")));
             var discs = new Map();
             var sortTracks = isAllSongs && parentCommand && getAlbumSort(parentCommand, parentGenre).startsWith("year");
 

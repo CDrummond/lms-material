@@ -780,9 +780,9 @@ function parseBrowseResp(data, parent, options, cacheKey, parentCommand, parentG
         } else if (data.result.titles_loop) {
             var totalDuration=0;
             var allowPlayAlbum = (parent && parent.id && parent.id.startsWith("album_id:"));
-            var isAllSongs = parent && parent.id && parent.id.startsWith("currentaction:");
+            var isAllSongs = parent && parent.id && (parent.id.startsWith("currentaction:") || parent.id == ALL_SONGS_ID);
             var isSearchResult = options && options.isSearch;
-            var showAlbumName = isSearchResult || isAllSongs || (parent && parent.id && (parent.id.startsWith("artist_id:") || parent.id.startsWith("year") || parent.id.startsWith("genre_id:")));
+            var showAlbumName = isSearchResult || isAllSongs || (parent && parent.id && parent.id.startsWith("artist_id:"));
             var discs = new Map();
             var sortTracks = isAllSongs && parentCommand && getAlbumSort(parentCommand, parentGenre).startsWith("year");
 

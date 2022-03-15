@@ -41,6 +41,7 @@
 "Albums":"Alben",
 "All":"Alle",
 "All Artists":"Alle Interpreten",
+"All Songs":"Alle Titel",
 "All discs":"Alle CDs",
 "All downloads complete.":"Herunterladen beendet",
 "All duplicates removed":"Alle doppelten Einträge entfernt",
@@ -589,5 +590,5 @@
 "%1 Years":"%1 Jahre",
 "1 day":"Ein Tag",
 "%1 days":"%1 Tage",
-"All Songs":"Alle Titel"
+"Years":"Jahre"
 }

@@ -563,12 +563,12 @@ function browseClick(view, item, index, event) {
         bus.$emit('settingsMenuActions', view.settingsMenuActions, 'browse');
     } else if (RANDOM_MIX_ID==item.id) {
         bus.$emit('dlg.open', 'rndmix');
-    } else if (STD_ITEM_GENRE==item.stdItem && view.current && (view.current.id==GENRES_ID || getField(item, "year"))) {
+    } else if (STD_ITEM_GENRE==item.stdItem && view.current && (getField(item, "genre_id") || getField(item, "year"))) {
         browseAddCategories(view, item, true, getField(item, "year"));
     } else if (item.actions && item.actions.go && item.actions.go.params && item.actions.go.params.genre_id && item.actions.go.params.mode=='artists' && item.title.indexOf(': ')>0) {
         // Genre from 'More' menu?
         browseAddCategories(view, {id:'genre_id:'+item.actions.go.params.genre_id, title:item.title.split(': ')[1]}, true);
-    } else if (STD_ITEM_YEAR==item.stdItem && view.current && view.current.id==YEARS_ID) {
+    } else if (STD_ITEM_YEAR==item.stdItem && view.current&& (getField(item, "genre_id") || getField(item, "year"))) {
         browseAddCategories(view, item, false);
     } else if (item.actions && item.actions.go && item.actions.go.params && item.actions.go.params.year && item.actions.go.params.mode=='albums' && item.title.indexOf(': ')>0) {
         // Year from 'More' menu?
@@ -612,77 +612,112 @@ function browseAddCategories(view, item, isGenre) {
     view.addHistory();
     view.items=[];
 
-    view.items.push({ title: lmsOptions.separateArtists ? i18n("All Artists") : i18n("Artists"),
-                  command: ["artists"],
-                  params: [item.id, ARTIST_TAGS, 'include_online_only_artists:1'],
-                  svg: "artist",
-                  type: "group",
-                  id: uniqueId(item.id, view.items.length)});
-    if (lmsOptions.separateArtists) {
-          view.items.push({ title: i18n("Album Artists"),
-              command: ["artists"],
-              params: [item.id, ARTIST_TAGS, 'role_id:ALBUMARTIST', 'include_online_only_artists:1'],
-              svg: "albumartist",
-              type: "group",
-              id: uniqueId(item.id, view.items.length)});
+    let command = view.history.length<2 || !view.history[view.history.length-2].current || !view.history[view.history.length-2].current.command ? undefined : view.history[view.history.length-2].current.command[0];
+
+    // check if there is a grandparent ID we should use.
+    let alt_id = view.history.length<1 || !view.history[view.history.length-1].current ? undefined : originalId(view.history[view.history.length-1].current.id);
+    if (undefined!=alt_id && (alt_id.includes("/") || alt_id[0]==item.id[0] || alt_id.startsWith("year:"))) {
+        alt_id = undefined;
     }
-    view.items.push({ title: i18n("Albums"),
-                  command: ["albums"],
-                  params: [item.id, ALBUM_TAGS_PLACEHOLDER, SORT_KEY+ALBUM_SORT_PLACEHOLDER],
-                  menu: [],
-                  icon: "album",
-                  type: "group",
-                  id: uniqueId(item.id, view.items.length)});
-    view.items.push({ title: i18n("Random Albums"),
-                  command: ["albums"],
-                  params: [item.id, ALBUM_TAGS_PLACEHOLDER, "sort:random"],
-                  menu: [],
-                  svg: "dice-album",
-                  type: "group",
-                  id: uniqueId(item.id, view.items.length)});
-    if (!isGenre) {
-        view.items.push({ title: i18n("Genres"),
-                            command: ["genres"],
-                            params: [item.id],
-                            cancache: true,
-                            svg: "guitar-acoustic",
-                            type: "group",
-                            id: uniqueId(item.id, view.items.length)});
+
+    let cat = { title: lmsOptions.separateArtists ? i18n("All Artists") : i18n("Artists"),
+                command: ["artists"],
+                params: [item.id, ARTIST_TAGS, 'include_online_only_artists:1'],
+                svg: "artist",
+                type: "group",
+                id: uniqueId(item.id, view.items.length)};
+    if (undefined!=alt_id) { cat.params.push(alt_id); }
+    view.items.push(cat);
+    if (lmsOptions.separateArtists) {
+        cat = { title: i18n("Album Artists"),
+                command: ["artists"],
+                params: [item.id, ARTIST_TAGS, 'role_id:ALBUMARTIST', 'include_online_only_artists:1'],
+                svg: "albumartist",
+                type: "group",
+                id: uniqueId(item.id, view.items.length)};
+        if (undefined!=alt_id) { cat.params.push(alt_id); }
+        view.items.push(cat);
+    }
+    cat = { title: i18n("Albums"),
+            command: ["albums"],
+            params: [item.id, ALBUM_TAGS_PLACEHOLDER, SORT_KEY+ALBUM_SORT_PLACEHOLDER],
+            menu: [],
+            icon: "album",
+            type: "group",
+            id: uniqueId(item.id, view.items.length)};
+    if (undefined!=alt_id) { cat.params.push(alt_id); }
+    view.items.push(cat);
+    cat = { title: i18n("Random Albums"),
+            command: ["albums"],
+            params: [item.id, ALBUM_TAGS_PLACEHOLDER, "sort:random"],
+            menu: [],
+            svg: "dice-album",
+            type: "group",
+            id: uniqueId(item.id, view.items.length)};
+    if (undefined!=alt_id) { cat.params.push(alt_id); }
+    view.items.push(cat);
+    if (isGenre && (undefined==command || "years"!=command)) {
+        cat = { title: i18n("Years"),
+                command: ["years"],
+                params: [item.id],
+                icon: "date_range",
+                type: "group",
+                id: uniqueId(item.id, view.items.length)};
+        if (undefined!=alt_id) { cat.params.push(alt_id); }
+        view.items.push(cat);
+    }
+    if (!isGenre && (undefined==command || "genres"!=command)) {
+        cat = { title: i18n("Genres"),
+                 command: ["genres"],
+                 params: [item.id],
+                 svg: "guitar-acoustic",
+                 type: "group",
+                 id: uniqueId(item.id, view.items.length)};
+        if (undefined!=alt_id) { cat.params.push(alt_id); }
+        view.items.push(cat);
     }
     view.inGenre = isGenre ? item.title : 'years';
     if (isGenre ? useComposer(item.title) : lmsOptions.showComposer) {
-        view.items.push({ title: i18n("Composers"),
-                            command: ["artists"],
-                            params: ["role_id:COMPOSER", item.id, ARTIST_TAGS],
-                            cancache: true,
-                            svg: "composer",
-                            type: "group",
-                            id: uniqueId(item.id, view.items.length)});
+        cat = { title: i18n("Composers"),
+                command: ["artists"],
+                params: ["role_id:COMPOSER", item.id, ARTIST_TAGS],
+                cancache: true,
+                svg: "composer",
+                type: "group",
+                id: uniqueId(item.id, view.items.length)};
+        if (undefined!=alt_id) { cat.params.push(alt_id); }
+        view.items.push(cat);
     }
     if (isGenre ? useConductor(item.title) : lmsOptions.showConductor) {
-        view.items.push({ title: i18n("Conductors"),
-                            command: ["artists"],
-                            params: ["role_id:CONDUCTOR", item.id, ARTIST_TAGS],
-                            cancache: true,
-                            svg: "conductor",
-                            type: "group",
-                            id: uniqueId(item.id, view.items.length)});
+        cat = { title: i18n("Conductors"),
+                command: ["artists"],
+                params: ["role_id:CONDUCTOR", item.id, ARTIST_TAGS],
+                cancache: true,
+                svg: "conductor",
+                type: "group",
+                id: uniqueId(item.id, view.items.length)};
+        if (undefined!=alt_id) { cat.params.push(alt_id); }
+        view.items.push(cat);
     }
     if (isGenre ? useBand(item.title) : lmsOptions.showBand) {
-        view.items.push({ title: i18n("Bands"),
-                            command: ["artists"],
-                            params: ["role_id:BAND", item.id, ARTIST_TAGS],
-                            cancache: true,
-                            svg: "trumpet",
-                            type: "group",
-                            id: uniqueId(item.id, view.items.length)});
+        cat = { title: i18n("Bands"),
+                command: ["artists"],
+                params: ["role_id:BAND", item.id, ARTIST_TAGS],
+                cancache: true,
+                svg: "trumpet",
+                type: "group",
+                id: uniqueId(item.id, view.items.length)};
+        if (undefined!=alt_id) { cat.params.push(alt_id); }
+        view.items.push(cat);
     }
-    view.items.push({ title: i18n("All Songs"),
-                      command: ["tracks"],
-                      params: [item.id, TRACK_TAGS+"elcy", SORT_KEY+"albumtrack"],
-                      icon: "music_note",
-                      type: "group",
-                      id: ALL_SONGS_ID});
+    cat = { title: i18n("All Songs"),
+            command: ["tracks"],
+            params: [item.id, TRACK_TAGS+"elcy", SORT_KEY+"albumtrack"],
+            icon: "music_note",
+            type: "group",
+            id: ALL_SONGS_ID};
+    if (undefined!=alt_id) { cat.params.push(alt_id); }
+    view.items.push(cat);
     view.headerTitle = item.title;
     view.headerSubTitle = i18n("Select category");
     setScrollTop(view, 0);

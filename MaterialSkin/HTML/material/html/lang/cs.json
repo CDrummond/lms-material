@@ -41,6 +41,7 @@
 "Albums":"Alba",
 "All":"Vše",
 "All Artists":"Všichni interpreti",
+"All Songs":"Všechny skladby",
 "All discs":"Všechny disky",
 "All downloads complete.":"Všechna stahování jsou dokončena.",
 "All duplicates removed":"Všechny duplikáty odstraněny",
@@ -588,6 +589,6 @@
 "%1 Years":"%1 roků",
 "1 day":"1 den",
 "%1 days":"%1 dní",
-"All Songs":"Všechny skladby",
-"Restart required":""
+"Restart required":"",
+"Years":"Roky"
 }

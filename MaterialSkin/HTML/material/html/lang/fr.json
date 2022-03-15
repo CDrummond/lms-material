@@ -41,6 +41,7 @@
 "Albums":"Albums",
 "All":"Tout",
 "All Artists":"Tous les Artistes",
+"All Songs":"Tous les Morceaux",
 "All discs":"Tous les disques",
 "All downloads complete.":"Tous les téléchargements sont terminés.",
 "All duplicates removed":"Doublons supprimés",
@@ -589,5 +590,5 @@
 "%1 Years":"%1 années",
 "1 day":"1 jour",
 "%1 days":"%1 jours",
-"All Songs":"Tous les Morceaux"
+"Years":"Années"
 }

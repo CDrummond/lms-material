@@ -41,6 +41,7 @@
 "Albums":"Albums",
 "All":"Alle",
 "All Artists":"Alle artiesten",
+"All Songs":"Alle nummers",
 "All discs":"Alle discs",
 "All downloads complete.":"Alle downloads voltooid.",
 "All duplicates removed":"Alle duplicaten verwijderd",
@@ -589,5 +590,5 @@
 "%1 Years":"%1 Jaren",
 "1 day":"1 dag",
 "%1 days":"%1 dagen",
-"All Songs":"Alle nummers"
+"Years":"Jaren"
 }

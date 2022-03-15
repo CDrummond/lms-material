@@ -41,6 +41,7 @@
 "Albums":"Albums",
 "All":"Alt",
 "All Artists":"Alle kunstnere",
+"All Songs":"Alle numre",
 "All discs":"Alle CD'ere",
 "All downloads complete.":"Filhentning afsluttet",
 "All duplicates removed":"Alle dubletter er fjernet",
@@ -589,5 +590,5 @@
 "%1 Years":"%1 år",
 "1 day":"1 dag",
 "%1 days":"%1 dage",
-"All Songs":"Alle numre"
+"Years":"År"
 }

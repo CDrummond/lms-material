@@ -8,6 +8,7 @@
 
 const MORE_COMMANDS = new Set(["item_add", "item_insert", "itemplay"/*, "item_fav"*/]);
 const MIXER_APPS = new Set(["musicip", "blissmixer", "musicsimilarity"]);
+const STREAM_SCHEMAS = new Set(["http", "https", "wavin"]);
 
 function itemText(i) {
     return i.title ? i.title : i.name ? i.name : i.caption ? i.caption : i.credits ? i.credits : undefined;
@@ -289,7 +290,7 @@ function parseBrowseResp(data, parent, options, cacheKey, parentCommand, parentG
                         } else {
                             mapIcon(i);
                         }
-                        if (i.presetParams.favorites_url.startsWith("http:") || i.presetParams.favorites_url.startsWith("https:")) {
+                        if (STREAM_SCHEMAS.has(i.presetParams.favorites_url.split(":")[0])) {
                             i.isRadio = true;
                             if (!addedDivider && i.menu.length>0) {
                                 i.menu.push(DIVIDER);

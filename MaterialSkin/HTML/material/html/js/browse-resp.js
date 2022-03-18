@@ -890,7 +890,8 @@ function parseBrowseResp(data, parent, options, cacheKey, parentCommand, parentG
             if (discs.size>1) {
                 resp.tracksSubtitle=i18np("1 Track", "%1 Tracks", resp.items.length)+" ("+formatSeconds(totalDuration)+")"
                 let d = 0;
-                let collapse = 1==lmsOptions.collapseDiscs || (2==lmsOptions.collapseDiscs && resp.items.length>=MAX_TRACKS_BEFORE_COLLAPSE);
+                let collapse = (undefined==options || !options.neverColapseDiscs) && // When adding via choice dialog we never want to collapse!
+                               (1==lmsOptions.collapseDiscs || (2==lmsOptions.collapseDiscs && resp.items.length>=MAX_TRACKS_BEFORE_COLLAPSE));
                 let mainItems = [];
                 let groupedTracks = {};
 

@@ -2,13 +2,13 @@
 -----
 1. Only show updates available if settings are unlocked.
 2. Translation updates.
-3. Fix missing play/add buttons for Bliss mixes.
+3. Fix missing add/play buttons for Bliss mixes.
 4. Add 'All Songs' entry to genres and years.
 5. Add 'Years' under genre browsing.
 6. Allow to pin 'wavin:' favourites to home screen.
 7. Change 'Track' to 'Title' and 'Track#' to 'Track' in advanced search.
 8. Fix add/play all discs when Material set to always collapse.
-9. Treat as HTML if title includes "<br/>"
+9. Treat as HTML if title includes '<br/>'
 
 2.9.2
 -----

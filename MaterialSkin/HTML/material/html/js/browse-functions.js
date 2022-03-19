@@ -1127,7 +1127,9 @@ function browseItemAction(view, act, item, index, event) {
         if (item.multi && !view.current.id.startsWith("album_id:") && (PLAY_ACTION==act || ADD_ACTION==act || INSERT_ACTION==act)) {
             var command = view.buildCommand(item);
             lmsList(view.playerId(), command.command, command.params, 0, LMS_BATCH_SIZE, false, view.nextReqId()).then(({data}) => {
+                view.options.neverColapseDiscs = true;
                 var resp = parseBrowseResp(data, item, view.options, undefined, view.command, view.inGenre);
+                view.options.neverColapseDiscs = undefined;
                 if (resp.items.length<=0) {
                     return;
                 }

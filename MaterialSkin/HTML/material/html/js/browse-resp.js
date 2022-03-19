@@ -488,7 +488,7 @@ function parseBrowseResp(data, parent, options, cacheKey, parentCommand, parentG
                 } else if (isAudioTrack(i)) {
                     i.draggable = true;
                 }
-                if (i.type=="text" && i.title.startsWith("<")) {
+                if (i.type=="text" && (i.title.startsWith("<") || i.title.includes("<br/>"))) {
                     i.type="html";
                 }
 

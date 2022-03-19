@@ -8,6 +8,7 @@
 6. Allow to pin 'wavin:' favourites to home screen.
 7. Change 'Track' to 'Title' and 'Track#' to 'Track' in advanced search.
 8. Fix add/play all discs when Material set to always collapse.
+9. Treat as HTML if title includes "<br/>"
 
 2.9.2
 -----

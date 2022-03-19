@@ -19,7 +19,7 @@ Vue.component('lms-advancedsearch-dialog', {
   <v-card-text>
 
    <v-layout class="avs-section" wrap :disabled="searching">
-    <v-flex xs12 sm3><div class="avs-title">{{i18n('Track')}}</div></v-flex>
+    <v-flex xs12 sm3><div class="avs-title">{{i18n('Title')}}</div></v-flex>
     <v-flex xs12 sm4><v-select :items="textOps" v-model="params.me_titlesearch.op" item-text="label" item-value="key"></v-select></v-flex>
     <v-flex xs12 sm5><v-text-field clearable v-model="params.me_titlesearch.val" class="lms-search" ref="entry"></v-text-field></v-flex>
    </v-layout>
@@ -53,7 +53,7 @@ Vue.component('lms-advancedsearch-dialog', {
    </v-layout>
 
    <v-layout class="avs-section" wrap :disabled="searching">
-    <v-flex xs12 sm3><div class="avs-title">{{i18n('Track#')}}</div></v-flex>
+    <v-flex xs12 sm3><div class="avs-title">{{i18n('Track')}}</div></v-flex>
     <v-flex xs12 sm4><v-select :items="rangeOps" v-model="params.tracknum.op" item-text="label" item-value="key"></v-select></v-flex>
     <v-flex xs12 sm5><v-text-field clearable v-model="params.tracknum.val" class="lms-search"></v-text-field></v-flex>
    </v-layout>

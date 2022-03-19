@@ -486,7 +486,6 @@
 "Track artist":"Nummerets kunstner",
 "Track gain":"Nummer lydstyrkejustering",
 "Track is not downloadable.":"Nummeret kan ikke hentes.",
-"Track#":"Nummer#",
 "Tracks":"Numre",
 "Transfer queue":"Flyt køen",
 "Transfer queue to another player":"Flyt køen til en anden afspiller",
@@ -536,6 +535,7 @@
 "Year Mix":"År, miks",
 "Year, Album":"År, album",
 "Year, Artist, Album":"År, kunstner, album",
+"Years":"År",
 "Yes":"Ja",
 "Zap":"Fjern",
 "Zapped '%1'":"'%1' er fjernet",
@@ -589,6 +589,5 @@
 "1 Year":"1 år",
 "%1 Years":"%1 år",
 "1 day":"1 dag",
-"%1 days":"%1 dage",
-"Years":"År"
+"%1 days":"%1 dage"
 }

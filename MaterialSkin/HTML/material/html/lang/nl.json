@@ -486,7 +486,6 @@
 "Track artist":"Artiest van nummer",
 "Track gain":"Nummer normalisering",
 "Track is not downloadable.":"Nummer kan niet worden gedownload.",
-"Track#":"Nummer#",
 "Tracks":"Nummers",
 "Transfer queue":"Verplaats afspeellijst",
 "Transfer queue to another player":"Verplaats afspeellijst naar een andere muziekspeler",
@@ -536,6 +535,7 @@
 "Year Mix":"Jaar Mix",
 "Year, Album":"Jaar, Album",
 "Year, Artist, Album":"Jaar, Artiest, Album",
+"Years":"Jaren",
 "Yes":"Ja",
 "Zap":"Zap",
 "Zapped '%1'":"Gezapt '%1'",
@@ -589,6 +589,5 @@
 "1 Year":"1 Jaar",
 "%1 Years":"%1 Jaren",
 "1 day":"1 dag",
-"%1 days":"%1 dagen",
-"Years":"Jaren"
+"%1 days":"%1 dagen"
 }

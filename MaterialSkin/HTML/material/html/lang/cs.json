@@ -485,7 +485,6 @@
 "Track artist":"Interpret skladby",
 "Track gain":"Úroveň skladby",
 "Track is not downloadable.":"Skladba není stahovatelná.",
-"Track#":"Skladba č.",
 "Tracks":"Skladby",
 "Transfer queue":"Přenést frontu",
 "Transfer queue to another player":"Předat frontu jinému přehrávači",
@@ -535,6 +534,7 @@
 "Year Mix":"Mix roků vydání",
 "Year, Album":"Rok, Album",
 "Year, Artist, Album":"Rok, Intepret, Album",
+"Years":"Roky",
 "Yes":"Ano",
 "Zap":"Zahodit",
 "Zapped '%1'":"Zahozeno '%1'",
@@ -589,6 +589,5 @@
 "%1 Years":"%1 roků",
 "1 day":"1 den",
 "%1 days":"%1 dní",
-"Restart required":"",
-"Years":"Roky"
+"Restart required":""
 }

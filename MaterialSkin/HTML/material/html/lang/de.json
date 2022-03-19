@@ -486,7 +486,6 @@
 "Track artist":"Titelinterpret",
 "Track gain":"Titel-Normalisierung",
 "Track is not downloadable.":"Titel ist nicht herunterladbar",
-"Track#":"Track Nr.",
 "Tracks":"Titel",
 "Transfer queue":"Verschiebe Warteschlange",
 "Transfer queue to another player":"Verschiebe Warteschlange auf einen anderen Player",
@@ -536,6 +535,7 @@
 "Year Mix":"Jahresmix",
 "Year, Album":"Jahr, Album",
 "Year, Artist, Album":"Jahr, Interpret, Album",
+"Years":"Jahre",
 "Yes":"Ja",
 "Zap":"Zappen",
 "Zapped '%1'":"'%1' gezappt",
@@ -589,6 +589,5 @@
 "1 Year":"Ein Jahr",
 "%1 Years":"%1 Jahre",
 "1 day":"Ein Tag",
-"%1 days":"%1 Tage",
-"Years":"Jahre"
+"%1 days":"%1 Tage"
 }

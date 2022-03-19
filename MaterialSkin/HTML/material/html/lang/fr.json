@@ -486,7 +486,6 @@
 "Track artist":"Artiste du morceau",
 "Track gain":"Normalisation du volume par morceau",
 "Track is not downloadable.":"Le morceau n'est pas téléchargeable.",
-"Track#":"N° de morceau",
 "Tracks":"Morceaux",
 "Transfer queue":"Transférer la liste de lecture",
 "Transfer queue to another player":"Transférer la liste de lecture vers une autre platine",
@@ -536,6 +535,7 @@
 "Year Mix":"Mélange d'années",
 "Year, Album":"Année, Album",
 "Year, Artist, Album":"Année, Artiste, Album",
+"Years":"Années",
 "Yes":"Oui",
 "Zap":"Ignorer",
 "Zapped '%1'":"'%1' ignoré",
@@ -589,6 +589,5 @@
 "1 Year":"1 année",
 "%1 Years":"%1 années",
 "1 day":"1 jour",
-"%1 days":"%1 jours",
-"Years":"Années"
+"%1 days":"%1 jours"
 }

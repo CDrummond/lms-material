@@ -375,7 +375,11 @@ function nowplayingMenuAction(view, item) {
     } else if (view.customActions && item.act>=NP_CUSTOM) {
         let ca = item.act-NP_CUSTOM;
         if (ca>=0 && ca<view.customActions.length) {
-            performCustomAction(view, view.customActions[ca], view.$store.state.player, view.playerStatus.current);
+            let cmd = performCustomAction(view, view.customActions[ca], view.$store.state.player, view.playerStatus.current);
+            if (cmd!=undefined) {
+                bus.$emit('browse', cmd.command, cmd.params, item.title, 'now-playing');
+                bus.$emit('npclose');
+            }
         }
     }
 }

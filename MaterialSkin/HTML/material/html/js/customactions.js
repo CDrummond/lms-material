@@ -73,7 +73,7 @@ function performCustomAction(obj, action, player, item) {
             }
         });
     } else {
-        doCustomAction(action, player, item);
+        return doCustomAction(action, player, item);
     }
 }
 

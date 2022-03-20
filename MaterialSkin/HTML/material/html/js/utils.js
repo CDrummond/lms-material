@@ -16,16 +16,16 @@ const IS_IOS     = (/iPhone|iPad/i.test(navigator.userAgent) || (navigator.platf
 const IS_IPHONE  = /iPhone/i.test(navigator.userAgent) && !window.MSStream;
 const IS_APPLE   = /Mac|iPhone|iPad/i.test(navigator.userAgent);
 const RATINGS=["",         // 0
-               "<i class=\"rstar\">star_half</i>", // 0.5
-               "<i class=\"rstar\">star</i>",  // 1
-               "<i class=\"rstar\">star</i> <i class=\"rstar\">star_half</i>", // 1.5
-               "<i class=\"rstar\">star</i> <i class=\"rstar\">star</i>", // 2
-               "<i class=\"rstar\">star</i> <i class=\"rstar\">star</i> <i class=\"rstar\">star_half</i>", // 2.5
-               "<i class=\"rstar\">star</i> <i class=\"rstar\">star</i> <i class=\"rstar\">star</i>", // 3
-               "<i class=\"rstar\">star</i> <i class=\"rstar\">star</i> <i class=\"rstar\">star</i> <i class=\"rstar\">star_half</i>", // 3.5
-               "<i class=\"rstar\">star</i> <i class=\"rstar\">star</i> <i class=\"rstar\">star</i> <i class=\"rstar\">star</i>", // 4
-               "<i class=\"rstar\">star</i> <i class=\"rstar\">star</i> <i class=\"rstar\">star</i> <i class=\"rstar\">star</i> <i class=\"rstar\">star_half</i>", // 4.5
-               "<i class=\"rstar\">star</i> <i class=\"rstar\">star</i> <i class=\"rstar\">star</i> <i class=\"rstar\">star</i> <i class=\"rstar\">star</i>"]; // 5
+               "\ue839", // 0.5
+               "\ue838",  // 1
+               "\ue838\ue839", // 1.5
+               "\ue838\ue838", // 2
+               "\ue838\ue838\ue839", // 2.5
+               "\ue838\ue838\ue838", // 3
+               "\ue838\ue838\ue838\ue839", // 3.5
+               "\ue838\ue838\ue838\ue838", // 4
+               "\ue838\ue838\ue838\ue838\ue839", // 4.5
+               "\ue838\ue838\ue838\ue838\ue838"]; // 5
 
 const PASSIVE_SUPPORTED = browserSupportsPassiveScroll();
 function browserSupportsPassiveScroll() {
@@ -663,7 +663,7 @@ function ratingString(current, val) {
         }
     }
     var index=Math.ceil(val/10.0);
-    return index<=0 ? str : (str+SEPARATOR+RATINGS[index<0 ? 0 : (index>=RATINGS.length ? RATINGS.length-1 : index)]);
+    return index<=0 ? str : (str+SEPARATOR+"<i class=\"rstar\">"+RATINGS[index<0 ? 0 : (index>=RATINGS.length ? RATINGS.length-1 : index)]+"</i>");
 }
 
 function isEmpty(str) {

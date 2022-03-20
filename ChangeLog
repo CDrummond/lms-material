@@ -1,6 +1,7 @@
 2.9.4
 -----
 1. Allow 'lmsbrowse' custom actions from now-playing.
+2. Remove space between star ratings so that eliding works better.
 
 2.9.3
 -----

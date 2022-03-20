@@ -1509,6 +1509,7 @@ progress {
 }
 
 .pmgr-other-title {
+ font-weight:var(--bold-weight);
  margin-top:16px;
 }
 

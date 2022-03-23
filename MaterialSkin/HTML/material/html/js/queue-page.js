@@ -147,15 +147,12 @@ var lmsQueue = Vue.component("lms-queue", {
   </v-layout>
   <v-layout v-else>
    <div class="toolbar-nobtn-pad"></div>
-   <v-layout row wrap v-if="undefined!=remaining">
-    <v-flex xs12 class="ellipsis subtoolbar-title subtoolbar-title-single}">{{remaining}}</v-flex>
-    <v-flex xs12 class="ellipsis subtoolbar-subtitle subtext">{{trans.remaining}}</v-flex>
+   <v-layout row wrap v-longpress="durationClicked">
+    <v-flex xs12 v-if="undefined!=remaining" class="ellipsis subtoolbar-title subtoolbar-title-single}">{{remaining}}</v-flex>
+    <v-flex xs12 v-else class="ellipsis subtoolbar-title subtoolbar-title-single link-item">{{listSize | displayCount}}{{duration | displayTime(true)}}</v-flex>
+    <v-flex xs12 v-if="undefined!=remaining"class="ellipsis subtoolbar-subtitle subtext">{{trans.remaining}}</v-flex>
+    <v-flex xs12 v-else-if="listSize>0 && undefined!=playlist.name && playlist.name.length>0" class="ellipsis subtoolbar-subtitle subtext link-item">{{playlist.name}}{{playlist.modified ? ' *' : ''}}</v-flex>
    </v-layout>
-   <v-layout row wrap v-else-if="listSize>0 && undefined!=playlist.name && playlist.name.length>0" @click="showRemaining">
-    <v-flex xs12 class="ellipsis subtoolbar-title subtoolbar-title-single link-item">{{listSize | displayCount}}{{duration | displayTime(true)}}</v-flex>
-    <v-flex xs12 class="ellipsis subtoolbar-subtitle subtext link-item">{{playlist.name}}{{playlist.modified ? ' *' : ''}}</v-flex>
-   </v-layout>
-   <div class="ellipsis subtoolbar-title subtoolbar-title-single link-item" @click="showRemaining" v-else-if="listSize>0">{{listSize | displayCount}}{{duration | displayTime(true)}}</div>
    <v-spacer></v-spacer>
    <v-btn :title="trans.repeatOne" flat icon v-if="(desktopLayout || wide>0) && playerStatus.repeat===1" class="toolbar-button" v-bind:class="{'disabled':noPlayer}" v-longpress="repeatClicked"><v-icon class="active-btn">repeat_one</v-icon></img></v-btn>
    <v-btn :title="trans.repeatAll" flat icon v-else-if="(desktopLayout || wide>0) && playerStatus.repeat===2" class="toolbar-button" v-bind:class="{'disabled':noPlayer}" v-longpress="repeatClicked"><v-icon class="active-btn">repeat</v-icon></v-btn>
@@ -1137,7 +1134,16 @@ var lmsQueue = Vue.component("lms-queue", {
                 bus.$emit('playerCommand', ['playlist', 'repeat', 2]);
             }
         },
-        showRemaining() {
+        durationClicked(longPress) {
+            if (undefined!=this.remaining) {
+                this.remaining = undefined;
+                clearTimeout(this.remainingTimeout);
+                return;
+            }
+            if (longPress && this.$store.state.player && this.$store.state.players && this.$store.state.players.length>1) {
+                bus.$emit('dlg.open', 'movequeue', this.$store.state.player);
+                return;
+            }
             if (this.items.length>1 && this.items.length==this.listSize) {
                 var duration = 0;
                 var isValid = true;
@@ -1151,7 +1157,7 @@ var lmsQueue = Vue.component("lms-queue", {
                 if (isValid) {
                     duration -= currentPlayingTrackPosition;
                     this.remaining = i18np("1 Track", "%1 Tracks", this.listSize - this.currentIndex) + " (" + formatSeconds(Math.floor(duration)) +")";
-                    setTimeout(function () {
+                    this.remainingTimeout = setTimeout(function () {
                         this.remaining = undefined;
                     }.bind(this), 2000);
                 }

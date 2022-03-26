@@ -4,6 +4,7 @@
 2. Remove space between star ratings so that eliding works better.
 3. Use bold font for titles of other servers in 'Manage players' dialog.
 4. Long-press on count/duration in queue to show transfer queue dialog.
+5. Reduce frequency of status polling during playback.
 
 2.9.3
 -----

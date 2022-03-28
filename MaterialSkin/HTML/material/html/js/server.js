@@ -8,6 +8,7 @@
 
 //const PLAYER_STATUS_TAGS = "tags:cdegiloqrstuyAABEKNST";
 const PLAYER_STATUS_TAGS = "tags:cdegiloqrstuyAABKNST";
+const STATUS_UPDATE_MAX_TIME = 4000;
 
 function updateMskLinks(str) {
     // Replace href links in notificaitons with javascript so that we can intercept
@@ -122,12 +123,16 @@ function visibilityOrFocusChanged() {
     }
 }
 
-function lmsCommand(playerid, command, commandId) {
+function lmsCommand(playerid, command, commandId, timeout) {
     const URL = "/jsonrpc.js";
     var data = { id: undefined==commandId ? 0 : commandId, method: "slim.request", params: [playerid, command]};
 
     logJsonMessage("REQ", data.params);
-    return axios.post(URL, data);
+    if (undefined!=timeout) {
+        return axios.post(URL, data, { timeout: timeout});
+    } else {
+        return axios.post(URL, data);
+    }
 }
 
 async function lmsListFragment(playerid, command, params, start, fagmentSize, batchSize, commandId, accumulated) {
@@ -670,11 +675,21 @@ var lmsServer = Vue.component('lms-server', {
             });
         },
         updatePlayer(id) {
+            let now = new Date().getTime();
+            if (this.playerStatusMessages[id]!=undefined && (now-this.playerStatusMessages[id])<STATUS_UPDATE_MAX_TIME) {
+                logJsonMessage("NOT UPDATING ("+id+")");
+                return;
+            }
             logJsonMessage("UPDATING ("+id+")");
-            lmsCommand(id, ["status", "-", 1, PLAYER_STATUS_TAGS + (this.$store.state.showRating ? "R" : "")]).then(({data}) => {
+            this.playerStatusMessages[id] = now;
+            lmsCommand(id, ["status", "-", 1, PLAYER_STATUS_TAGS + (this.$store.state.showRating ? "R" : "")], undefined, STATUS_UPDATE_MAX_TIME).then(({data}) => {
+                this.playerStatusMessages[id] = undefined;
                 if (data && data.result) {
                     this.handlePlayerStatus(id, data.result, true);
                 }
+            }).catch(err => {
+                this.playerStatusMessages[id] = undefined;
+                logJsonMessage("STATUS TIMEOUT  ("+id+")");
             });
         },
         updateCurrentPlayer() {
@@ -825,6 +840,8 @@ var lmsServer = Vue.component('lms-server', {
         this.connectToCometD();
     },
     mounted: function() {
+        // Hold map of <player id> -> <time of last status message>
+        this.playerStatusMessages = {};
         this.moving=[];
         bus.$on('networkStatus', function(connected) {
             if (connected) {

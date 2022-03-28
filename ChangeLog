@@ -5,6 +5,8 @@
 3. Use bold font for titles of other servers in 'Manage players' dialog.
 4. Long-press on count/duration in queue to show transfer queue dialog.
 5. Reduce frequency of status polling during playback.
+6. Don't send a status message for a player if one is already being processed
+   by LMS.
 
 2.9.3
 -----

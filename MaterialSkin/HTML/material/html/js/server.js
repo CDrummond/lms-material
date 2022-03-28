@@ -531,16 +531,16 @@ var lmsServer = Vue.component('lms-server', {
                                                             : (undefined!=player.current.duration && player.current.duration>0)
                                                                 // Have duration
                                                                 ? undefined!=player.current.time
-                                                                    ? (player.current.duration-player.current.time)<3
+                                                                    ? (player.current.duration-player.current.time)<=3
                                                                         ? 1000 // Near end, every second
-                                                                        : (player.current.duration-player.current.time)<5
-                                                                            ? 2000 // Every 2 seconds
-                                                                            : (player.current.duration-player.current.time)<10
+                                                                        : (player.current.duration-player.current.time)<=5 || player.current.time<=6
+                                                                            ? 2000 // Every 2 seconds (5 seconds to end, or 6 from start)
+                                                                            : (player.current.duration-player.current.time)<=10
                                                                                 ? 5000 // Every 5 seconds
                                                                                 : 10000 // Every 10 seconds...
                                                                     : undefined
                                                                 // No duration, stream?
-                                                                : (undefined!=player.current.time && player.current.time<5)
+                                                                : (undefined!=player.current.time && player.current.time<=5)
                                                                     ? 2000       // For streams, poll for the first 5 seconds
                                                                     : undefined  // Stream playing for longer than 5 seconds
                                                         // Not playing

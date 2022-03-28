@@ -676,19 +676,19 @@ var lmsServer = Vue.component('lms-server', {
         },
         updatePlayer(id) {
             let now = new Date().getTime();
-            if (this.playerStatusMessages[id]!=undefined && (now-this.playerStatusMessages[id])<STATUS_UPDATE_MAX_TIME) {
+            if (this.playerStatusMessages.has(id) && (now-this.playerStatusMessages.get(id))<STATUS_UPDATE_MAX_TIME) {
                 logJsonMessage("NOT UPDATING ("+id+")");
                 return;
             }
             logJsonMessage("UPDATING ("+id+")");
-            this.playerStatusMessages[id] = now;
+            this.playerStatusMessages.set(id, now);
             lmsCommand(id, ["status", "-", 1, PLAYER_STATUS_TAGS + (this.$store.state.showRating ? "R" : "")], undefined, STATUS_UPDATE_MAX_TIME).then(({data}) => {
-                this.playerStatusMessages[id] = undefined;
+                this.playerStatusMessages.delete(id);
                 if (data && data.result) {
                     this.handlePlayerStatus(id, data.result, true);
                 }
             }).catch(err => {
-                this.playerStatusMessages[id] = undefined;
+                this.playerStatusMessages.delete(id);
                 logJsonMessage("STATUS TIMEOUT  ("+id+")");
             });
         },
@@ -841,7 +841,7 @@ var lmsServer = Vue.component('lms-server', {
     },
     mounted: function() {
         // Hold map of <player id> -> <time of last status message>
-        this.playerStatusMessages = {};
+        this.playerStatusMessages = new Map();
         this.moving=[];
         bus.$on('networkStatus', function(connected) {
             if (connected) {
@@ -941,6 +941,7 @@ var lmsServer = Vue.component('lms-server', {
             if (this.subscribeAll) {
                 for (var i=0, len=players.length; i<len; ++i) {
                     this.unsubscribe(players[i]);
+                    this.playerStatusMessages.delete(players[i]);
                 }
             }
         }.bind(this));

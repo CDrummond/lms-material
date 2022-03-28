@@ -844,6 +844,7 @@ var lmsServer = Vue.component('lms-server', {
         this.playerStatusMessages = new Map();
         this.moving=[];
         bus.$on('networkStatus', function(connected) {
+            this.playerStatusMessages.clear();
             if (connected) {
                 this.startUpdatesTimer();
             } else {
@@ -851,6 +852,7 @@ var lmsServer = Vue.component('lms-server', {
             }
         }.bind(this));
         bus.$on('reconnect', function() {
+            this.playerStatusMessages.clear();
             this.reConnectToCometD();
         }.bind(this));
         bus.$on('lockChanged', function() {

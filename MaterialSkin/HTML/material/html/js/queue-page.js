@@ -329,12 +329,15 @@ var lmsQueue = Vue.component("lms-queue", {
         this.timestamp=0;
         bus.$on('queueDisplayChanged', function() {
             this.items=[];
+            this.listSize=0;
             this.timestamp=0;
             this.updateItems();
         }.bind(this));
         bus.$on('playerChanged', function() {
             this.items=[];
+            this.listSize=0;
             this.timestamp=0;
+            this.getDuration();
         }.bind(this));
         bus.$on('playerChanged', function() {
             this.clearSelection();
@@ -353,6 +356,7 @@ var lmsQueue = Vue.component("lms-queue", {
                 this.listSize=0;
                 this.items=[];
                 this.timestamp=0;
+                this.getDuration();
             }
             this.playlist.name=playerStatus.playlist.name;
             this.playlist.modified=playerStatus.playlist.modified;

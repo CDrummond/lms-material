@@ -7,6 +7,7 @@
 5. Reduce frequency of status polling during playback.
 6. Don't send a status message for a player if one is already being processed
    by LMS.
+7. Recalculate (i.e. set to 0) queue duration when cleared.
 
 2.9.3
 -----

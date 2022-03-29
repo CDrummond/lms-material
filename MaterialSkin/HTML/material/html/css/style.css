@@ -495,6 +495,10 @@ div.v-subheader {
  width:unset!important;
 }
 
+.np-info .lms-list .v-list__tile {
+ padding:0px!important;
+}
+
 .maintoolbar-player-icon {
  position:fixed;
  top:12px;
@@ -2307,6 +2311,7 @@ img[lazy='loaded'].np-image-desktop, img[lazy='loaded'].np-image-landscape, img[
  padding-top:16px;
  font-weight:var(--bold-weight);
  text-align:left!important;
+ min-height:48px;
 }
 
 .np-html-sect {

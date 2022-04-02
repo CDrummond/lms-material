@@ -16,6 +16,7 @@ function copyPlayer(p){
 
 function updateUiSettings(state, val) {
     var browseDisplayChanged = false;
+    var queueDisplayChanged = false;
     var relayoutGrid = false;
     var themeChanged = false;
     if (undefined!=val.theme && state.theme!=val.theme) {
@@ -83,6 +84,7 @@ function updateUiSettings(state, val) {
     if (undefined!=val.queueShowTrackNum && state.queueShowTrackNum!=val.queueShowTrackNum) {
         state.queueShowTrackNum = val.queueShowTrackNum;
         setLocalStorageVal('queueShowTrackNum', state.queueShowTrackNum);
+        queueDisplayChanged = true;
     }
     if (undefined!=val.nowPlayingTrackNum && state.nowPlayingTrackNum!=val.nowPlayingTrackNum) {
         state.nowPlayingTrackNum = val.nowPlayingTrackNum;
@@ -134,7 +136,7 @@ function updateUiSettings(state, val) {
     if (undefined!=val.queueThreeLines && state.queueThreeLines!=val.queueThreeLines) {
         state.queueThreeLines = val.queueThreeLines;
         setLocalStorageVal('queueThreeLines', state.queueThreeLines);
-        bus.$emit('queueDisplayChanged');
+        queueDisplayChanged = true;
     }
     if (undefined!=val.showArtwork && state.showArtwork!=val.showArtwork) {
         state.showArtwork = val.showArtwork;
@@ -181,6 +183,9 @@ function updateUiSettings(state, val) {
     }
     lmsOptions.techInfo = state.techInfo;
     lmsOptions.infoPlugin = state.infoPlugin;
+    if (queueDisplayChanged) {
+        bus.$emit('queueDisplayChanged');
+    }
     if (browseDisplayChanged) {
         bus.$emit('browseDisplayChanged');
     } else if (relayoutGrid) {

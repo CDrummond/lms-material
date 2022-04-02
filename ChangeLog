@@ -9,6 +9,7 @@
    by LMS.
 7. Recalculate (i.e. set to 0) queue duration when cleared.
 8. Remove padding from track list in now-playing album info view.
+9. Refresh queue if show track numbers setting changed.
 
 2.9.3
 -----

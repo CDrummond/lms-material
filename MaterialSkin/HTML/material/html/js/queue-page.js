@@ -1040,11 +1040,13 @@ var lmsQueue = Vue.component("lms-queue", {
                 selection = Array.from(this.selection);
                 selection.sort(function(a, b) { return a<b ? -1 : 1; });
             } else {
-                selection.push(which);
+                selection.push(this.dragIndex);
             }
             var urls = [];
             for (var i=0, len=selection.length; i<len; ++i) {
-                urls.push(this.items[selection[i]].url);
+                if (i>=0 && i<this.items.length) {
+                    urls.push(this.items[selection[i]].url);
+                }
             }
             return urls;
         },

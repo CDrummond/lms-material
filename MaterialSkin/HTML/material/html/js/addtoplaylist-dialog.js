@@ -98,7 +98,7 @@ Vue.component('lms-addtoplaylist-dialog', {
             } else {
                 var tracks = [];
                 for (var i=0, len=this.items.length; i<len; ++i) {
-                    if (this.items[i].url) {
+                    if (undefined!=this.items[i].url && null!=this.items[i].url && "null"!=this.items[i].url) {
                         tracks.push({url:this.items[i].url});
                     } /*else if (this.items[i].presetParams && this.items[i].presetParams.favorites_url) {
                         tracks.push({url:this.items[i].presetParams.favorites_url, title:this.items[i].title});

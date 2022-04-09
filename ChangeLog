@@ -1,15 +1,16 @@
 2.9.4
 -----
-1. Allow 'lmsbrowse' custom actions from now-playing.
-2. Remove space between star ratings so that eliding works better.
-3. Use bold font for titles of other servers in 'Manage players' dialog.
-4. Long-press on count/duration in queue to show transfer queue dialog.
-5. Reduce frequency of status polling during playback.
-6. Don't send a status message for a player if one is already being processed
-   by LMS.
-7. Recalculate (i.e. set to 0) queue duration when cleared.
-8. Remove padding from track list in now-playing album info view.
-9. Refresh queue if show track numbers setting changed.
+ 1. Allow 'lmsbrowse' custom actions from now-playing.
+ 2. Remove space between star ratings so that eliding works better.
+ 3. Use bold font for titles of other servers in 'Manage players' dialog.
+ 4. Long-press on count/duration in queue to show transfer queue dialog.
+ 5. Reduce frequency of status polling during playback.
+ 6. Don't send a status message for a player if one is already being processed
+    by LMS.
+ 7. Recalculate (i.e. set to 0) queue duration when cleared.
+ 8. Remove padding from track list in now-playing album info view.
+ 9. Refresh queue if show track numbers setting changed.
+10. Check URL is not 'null' before adding to playlist.
 
 2.9.3
 -----

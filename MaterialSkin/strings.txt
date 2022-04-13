@@ -1,166 +1,193 @@
 MATERIAL_SKIN
+	CS	Material Skin
 	DE	Material-Skin
 	EN	Material Skin
 	NL	Material Skin
 
 PLUGIN_MATERIAL_SKIN
+	CS	Vzhled 'Material Skin', vhodný pro mobilní používání.
 	DE	Web-Skin im Material-Stil, für mobile Nutzung optimiert
 	EN	Material themed skin, suitable for mobile use.
 	FR	Thème 'Material Skin', adapté à une utilisation mobile.
 	NL	Material Skin, geschikt voor mobiel gebruik.
 
 PLUGIN_MATERIAL_SKIN_GENRES_LIST_NOTE
+	CS	POZNÁMKA: V níže uvedených seznamech žánrů použijte pro všechny žánry jednu hvězdičku (*). Pokud nechcete použít žádný žánr, použijte libovolný řetězec (např. 'N/A'), který neodpovídá žádnému z vašich žánrů.
 	DE	ANMERKUNG: Ein Sternchen (*) benutzen, um in der Genre-Liste alle Genres auszuwählen. Eine beliebige Zeichenkette, die keinem Genre entspricht (bspw. 'N/A') benutzen, um kein Genre auszuwählen.
 	EN	NOTE: In the genre lists, below, to apply to all genres use a single asterisk (*). To apply to no genres use any string (e.g. 'N/A') that does not match any of your genres.
 	FR	REMARQUE : Dans les listes de genres ci-dessous, pour cibler tous les genres, utiliser le caractère générique astérisque (*). Pour ne cibler aucun genre, saisir une chaîne de caractères qui ne correspond à aucun de vos genres (par exemple, "N/A").
 	NL	OPMERKING: Gebruik in de genrelijsten hieronder een enkele asterisk (*) om op alle genres van toepassing te zijn. Om op geen enkel genre toe te passen, gebruik een tekenreeks (bijv. 'N/A') die niet overeenkomt met een van de genres.
 
 PLUGIN_MATERIAL_SKIN_BAND_GENRES
+	CS	Žánry skupin
 	DE	Band-Genres
 	EN	Band genres
 	FR	Genres concernés par le tag "band" (groupe/orchestre)
 	NL	Band genres
 
 PLUGIN_MATERIAL_SKIN_BAND_GENRES_DESC
+	CS	Seznam žánrů podporujících skupinu oddělený čárkami. Při zadání jednoho z těchto žánrů budete dotázáni, zda si přejete procházet podle skupiny.
 	DE	Komma-getrennte Liste von Stilrichtungen, die Bands unterstützen. Wenn du eine dieser Stilrichtungen wählst, wirst du gefragt, ob du nach Bands durchsuchen willst.
 	EN	Comma-separated list of genres supporting band. When entering one of these genres, you will be asked if you wish to browse by band.
 	FR	Liste des genres concernés, séparés par des virgules. Lorsque vous choisirez l'un de ces genres, il vous sera demandé si vous souhaitez naviguer par groupe/orchestre.
 	NL	Komma gescheiden lijst van band genres. Indien deze genres worden geselecteerd, wordt er gevraagd of je wilt bladeren op band.
 
 PLUGIN_MATERIAL_SKIN_COMPOSER_GENRES
+	CS	Žánry skladetelů
 	DE	Komponisten-Stilrichtungen
 	EN	Composer genres
 	FR	Genres concernés par le tag "composer" (compositeur)
 	NL	Componist genres
 
 PLUGIN_MATERIAL_SKIN_COMPOSER_GENRES_DESC
+	CS	Seznam žánrů podporujících skladatele oddělený čárkami. Při zadání jednoho z těchto žánrů budete dotázáni, zda si přejete procházet podle skladatele.
 	DE	Komma-getrennte Liste von Stilrichtungen, die Komponisten unterstützen. Wenn du eine dieser Stilrichtungen wählst, wirst du gefragt, ob du nach Komponisten durchsuchen willst.
 	EN	Comma-separated list of genres supporting composers. When entering one of these genres, you will be asked if you wish to browse by composer.
 	FR	Liste des genres concernés, séparés par des virgules. Lorsque vous choisirez l'un de ces genres, il vous sera demandé si vous souhaitez naviguer par compositeur.
 	NL	Komma gescheiden lijst van componist genres. Indien deze genres worden geselecteerd, wordt er gevraagd of je wilt bladeren op componist.
 
 PLUGIN_MATERIAL_SKIN_CONDUCTOR_GENRES
+	CS	Žánry dirigentů
 	DE	Dirigenten-Stilrichtungen
 	EN	Conductor genres
 	FR	Genres concernés par le tag "conductor" (chef d'orchestre)
 	NL	Dirigent genres
 
 PLUGIN_MATERIAL_SKIN_CONDUCTOR_GENRES_DESC
+	CS	Seznam žánrů podporujících dirigenta oddělený čárkami. Při zadávání jednoho z těchto žánrů budete dotázáni, zda si přejete procházet podle dirigenta.
 	DE	Komma-getrennte Liste von Stilrichtungen, die Dirigenten unterstützen. Wenn du eine dieser Stilrichtungen wählst, wirst du gefragt, ob du nach Dirigenten durchsuchen willst.
 	EN	Comma-separated list of genres supporting conductors. When entering one of these genres, you will be asked if you wish to browse by conductor.
 	FR	Liste des genres concernés, séparés par des virgules. Lorsque vous choisirez l'un de ces genres, il vous sera demandé si vous souhaitez naviguer par chef d'orchestre.
 	NL	Komma gescheiden lijst van dirigent genres. Indien deze genres worden geselecteerd, wordt er gevraagd of je wilt bladeren op dirigent.
 
 PLUGIN_MATERIAL_SKIN_DEFAULT_COMPOSER_GENRES
+	CS	Klasika, Avantgarda, Baroko, Komorní hudba, Zpěv, Sbor, Klasický crossover, Raná hudba, Vrcholná klasika, Impresionismus, Jazz, Středověk, Minimalismus, Moderní kompozice, Opera, Orchestr, Renesance, Romantika, Symfonie, Svatební hudba, Classical, Avant-Garde, Baroque, Chamber Music, Chant, Choral, Classical Crossover, Early Music, High Classical, Impressionist, Jazz, Medieval, Minimalism, Modern Composition, Opera, Orchestral, Renaissance, Romantic, Symphony, Wedding Music
 	DE	Klassik, Avantgarde, Barok, Kammermusik, Choral, Klassik-Crossover, Hochklassik, Impressionist, Jazz, Mittelalterlich, Medieval, Minimalismus, Moderne Komposition, Oper, Orchester, Renaissance, Romantik, Symphonie, Hochzeitsmusik
 	EN	Classical, Avant-Garde, Baroque, Chamber Music, Chant, Choral, Classical Crossover, Early Music, High Classical, Impressionist, Jazz, Medieval, Minimalism, Modern Composition, Opera, Orchestral, Renaissance, Romantic, Symphony, Wedding Music
 	FR	Jazz, Musique de film, Classique, Musique concertante, Musique de chambre, Musique symphonique, Musique vocale, Opéra, Opérette, Musique de l'Antiquité, Musique du Moyen-Age, Musique de la Renaissance, Musique baroque, Musique classique, Musique romantique, Musique moderne, Musique contemporaine, Musique électronique ou concrète
 	NL	Klassiek, Avant-Garde, Barok, Kamermuziek, Zang, Koor, Klassieke Crossover, Oude muziek, Hoogklassiek, Impressionistisch, Jazz, Middeleeuws, Minimalisme, Moderne compositie, Opera, Orkest, Renaissance, Romantisch, Symfonie, Bruiloftsmuziek
 
 PLUGIN_MATERIAL_SKIN_DEFAULT_CONDUCTOR_GENRES
+	CS	Klasika, Avantgarda, Baroko, Komorní hudba, Zpěv, Sbor, Klasický crossover, Raná hudba, Vrcholná klasika, Impresionismus, Středověk, Minimalismus, Moderní kompozice, Opera, Orchestr, Renesance, Romantika, Symfonie, Svatební hudba, Classical, Avant-Garde, Baroque, Chamber Music, Chant, Choral, Classical Crossover, Early Music, High Classical, Impressionist, Medieval, Minimalism, Modern Composition, Opera, Orchestral, Renaissance, Romantic, Symphony, Wedding Music
 	DE	Klassik, Avantgarde, Barok, Kammermusik, Choral, Klassik-Crossover, Hochklassik, Impressionist, Mittelalterlich, Minimalismus, Moderne Komposition, Oper, Orchester, Renaissance, Romantik, Symphonie, Hochzeitsmusik
 	EN	Classical, Avant-Garde, Baroque, Chamber Music, Chant, Choral, Classical Crossover, Early Music, High Classical, Impressionist, Medieval, Minimalism, Modern Composition, Opera, Orchestral, Renaissance, Romantic, Symphony, Wedding Music
 	FR	Musique de film, Classique, Musique concertante, Musique de chambre, Musique symphonique, Musique vocale, Opéra, Opérette, Musique de l'Antiquité, Musique du Moyen-Age, Musique de la Renaissance, Musique baroque, Musique classique, Musique romantique, Musique moderne, Musique contemporaine, Musique électronique ou concrète
 	NL	Klassiek, Avant-Garde, Barok, Kamermuziek, Zang, Koor, Klassieke Crossover, Oude muziek, Hoogklassiek, Impressionistisch, Jazz, Middeleeuws, Minimalisme, Moderne compositie, Opera, Orkest, Renaissance, Romantisch, Symfonie, Bruiloftsmuziek
 
 PLUGIN_MATERIAL_SKIN_DEFAULT_BAND_GENRES
+	CS	N/A
 	DE	nicht verfügbar
 	EN	N/A
 	FR	N/A
 	NL	N/A
 
 PLUGIN_MATERIAL_SKIN_SHOW_COMPOSER
+	CS	Zobrazení skladatele
 	DE	Komponisten anzeigen
 	EN	Show composer
 	FR	Afficher le compositeur
 	NL	Toon componist
 
 PLUGIN_MATERIAL_SKIN_SHOW_COMPOSER_DESC
+	CS	Pokud žánr skladby odpovídá výše uvedenému seznamu a má tag skladatele, pak ho zobrazit ve frontě a v Právě hraje.
 	DE	Wenn das Genre eines Titels der Liste oben entspricht und es einen 'Composer'-Tag hat, zeige diesen in 'Aktueller Titel' und der Warteschlange.
 	EN	If a song's genre matches the list above and it has a composer tag, then show this in the queue and now-playing.
 	FR	Si le tag "genre" d'un morceau apartient à la liste ci-dessus et que le morceau a un tag "composer", afficher le compositeur dans la liste de lecture et la vue "lecture en cours".
 	NL	Als het genre van een nummer overeenkomt met de bovenstaande lijst en het nummer heeft een componist tag, toon dit bij het afspelen en in de afspeellijst.
 
 PLUGIN_MATERIAL_SKIN_SHOW_CONDUCTOR
+	CS	Zobrazení dirigenta
 	DE	Dirigenten anzeigen
 	EN	Show conductor
 	FR	Afficher le chef d'orchestre
 	NL	Toon dirigent
 
 PLUGIN_MATERIAL_SKIN_SHOW_CONDUCTOR_DESC
-	DE	Wenn das Genre eines Titels der Liste oben entspricht und es einen 'Conductor'-Tag hat, zeige diesen in 'Aktueller Titel' und der Warteschlange.	
+	CS	Pokud žánr skladby odpovídá výše uvedenému seznamu a má tag dirigenta, pak ho zobrazit ve frontě a v Právě hraje.
+	DE	Wenn das Genre eines Titels der Liste oben entspricht und es einen 'Conductor'-Tag hat, zeige diesen in 'Aktueller Titel' und der Warteschlange.
 	EN	If a song's genre matches the list above and it has a conductor tag, then show this in the queue and now-playing.
 	FR	Si le tag "genre" d'un morceau appartient à la liste ci-dessus et que le morceau a un tag "conductor", afficher le chef d'orchestre dans la liste de lecture et la vue "lecture en cours".
 	NL	Als het genre van een nummer overeenkomt met de bovenstaande lijst en het nummer heeft een dirigent tag, toon dit bij het afspelen en in de afspeellijst.
 
 PLUGIN_MATERIAL_SKIN_SHOW_BAND
+	CS	Zobrazení skupiny
 	DE	Band anzeigen
 	EN	Show band
 	FR	Afficher le groupe/orchestre
 	NL	Toon band
 
 PLUGIN_MATERIAL_SKIN_SHOW_BAND_DESC
-	DE	Wenn das Genre eines Titels der Liste oben entspricht und es einen 'Band'-Tag hat, zeige diesen in 'Aktueller Titel' und der Warteschlange.	
+	CS	Pokud žánr skladby odpovídá výše uvedenému seznamu a má tag skupiny, pak ji zobrazit ve frontě a v Právě hraje.
+	DE	Wenn das Genre eines Titels der Liste oben entspricht und es einen 'Band'-Tag hat, zeige diesen in 'Aktueller Titel' und der Warteschlange.
 	EN	If a song's genre matches the list above and it has a band tag, then show this in the queue and now-playing.
 	FR	Si le tag "genre" d'un morceau appartient à la liste ci-dessus et que le morceau a un tag "band", afficher le groupe/orchestre dans la liste de lecture et la vue "lecture en cours".
 	NL	Als het genre van een nummer overeenkomt met de bovenstaande lijst en het nummer heeft een band tag, toon dit bij het afspelen en in de afspeellijst.
-	
+
 PLUGIN_MATERIAL_SKIN_PASSWORD
+	CS	Heslo
 	DE	Passwort
 	EN	Password
 	FR	Mot de passe
 	NL	Wachtwoord
 
 PLUGIN_MATERIAL_SKIN_PASSWORD_DESC
+	CS	Nastavte heslo pro kontrolu přístupu k alarmům a nastavení serveru.
 	DE	Passwort setzen, um den Zugang zu Weckalarm und Server-Einstellungen zu schützen
 	EN	Set a password to control access to alarms and server settings.
 	FR	Définir un mot de passe pour contrôler l'accès aux alarmes et aux paramètres du serveur.
 	NL	Stel een wachtwoord in om de toegang tot wekkers en serverinstellingen te regelen.
 
 PLUGIN_MATERIAL_SKIN_FIXED_VOL
+	CS	Přehrávače s pevnou hlasitostí
 	DE	Player mit fest eingestellter Lautstärke
 	EN	Fixed volume players
 	FR	Platines à volume fixe
 	NL	Vast volume muziekspelers
 
 PLUGIN_MATERIAL_SKIN_FIXED_VOL_DESC
+	CS	Jak by se měly ovládat přehrávače s pevnou hlasitostí?
 	DE	Wie sollen Player mit fest eingestellter Lautstärke gesteuert werden?
 	EN	How should player's with a fixed volume be controlled?
 	FR	Comment contrôler les platines à volume fixe ?
-	NL	Hoe moet een muziekspeler met een vast volume worden geregeld? 
-
+	NL	Hoe moet een muziekspeler met een vast volume worden geregeld?
 
 PLUGIN_MATERIAL_SKIN_FIXED_VOL_A_NORMAL
+	CS	Zobrazit standardní ovládání hlasitosti
 	DE	Normalen Lautstärkeregler anzeigen
 	EN	Display standard volume control
 	FR	Afficher et permettre le contrôle du volume
 	NL	Toon standaard volumeregeling
 
 PLUGIN_MATERIAL_SKIN_FIXED_VOL_B_SPECIAL
+	CS	Zakázat posuvník hlasitosti a skrýt úroveň hlasitosti
 	DE	Lautstärkeregler abschalten und Laustärkelevel verstecken
 	EN	Disable volume slider, and hide volume level
 	FR	Désactiver le curseur du volume et masquer le niveau du volume
 	NL	Volumeregelaar uitschakelen en volumeniveau verbergen
 
 PLUGIN_MATERIAL_SKIN_FIXED_VOL_C_HIDE
+	CS	Skrýt ovládání hlasitosti
 	DE	Lautstärkenregler verstecken
 	EN	Hide volume control
 	FR	Masquer le contrôle du volume
 	NL	Verberg volumeregeling
 
 PLUGIN_MATERIAL_SKIN_ARTIST_FIRST
+	CS	Zobrazení umělce jako prvního v Právě htraje a ve frontě
 	DE	Intepreten als erstes in 'Aktueller Titel' und Warteschlange anzeigen
 	EN	Show artist first in now-playing and queue
 	FR	Afficher l'artiste en premier dans la vue 'lecture en cours' et la liste de lecture
 	NL	Toon artiest als eerste in 'Speelt nu' en afspeellijst
 
 PLUGIN_MATERIAL_SKIN_ARTIST_FIRST_DESC
+	CS	Pokud má skladba skladatele, dirigenta nebo skupinu a jsou nakonfigurovány tak, aby se zobrazovaly, zobrazí se umělec před nimi, jinak až za nimi.
 	DE	Wenn ein Titel Komponist, Dirigent, Orchester hat und diese per Konfiguration gezeigt werden, zeige den Interpreten vor diesen,	andernfalls danach.
 	EN	If a track has composer, conductor, or band, and these are configured to be shown, then show artist before these, otherwise show after.
 	FR	Si un morceau a un compositeur, un chef d'orchestre ou un groupe/orchestre et que ceux-ci sont configurés pour être affichés, choisir de montrer l'artiste en premier ou pas.
 	NL	Als een nummer een componist, dirigent of band tag heeft, en deze zijn geconfigureerd om te worden getoond, toon dan eerst de artiest, anders erna.
 
 PLUGIN_MATERIAL_SKIN_SHOW_ALL_ARTISTS
+	CS	Zobrazení všech umělců
 	DE	Zeige alle Interpreten
 	EN	Show all artists
 	DA	Vis alle kunstnere
@@ -169,6 +196,7 @@ PLUGIN_MATERIAL_SKIN_SHOW_ALL_ARTISTS
 	RU	Показать всех исполнителей
 
 PLUGIN_MATERIAL_SKIN_SHOW_ALL_ARTISTS_DESC
+	CS	Pokud má skladba více interpretů, autorů alb, skladatelů atd., zobrazí se všechny při procházení alb, v Právě hraje a ve frontě. V opačném případě zobrazí pouze první z nich.
 	DE	Wenn ein Titel mehrere Interpreten, Albuminterpreten, Komponisten etc. hat, zeige alle beim Durchsuchen von Alben, in 'Aktueller Titel' und der Warteschlange an. Andernfalls zeige nur den jeweils ersten an.
 	EN	If a track has multiple artists, album-artists, composers, etc. then show all when browsing albums, in now-playing and the queue. Otherwise just show the first of each.
 	DA	Hvis et nummer har flere kunstnere, albumkunstnere, komponister m.v., så vis dem alle mens der kigges på albums, hvad der afspilles nu og i køen. I modsat fald vis kun den første af hver slags.
@@ -177,87 +205,103 @@ PLUGIN_MATERIAL_SKIN_SHOW_ALL_ARTISTS_DESC
 	RU	Если в треке есть несколько исполнителей, музыкантов, композиторов и т. д., Тогда показывать все при просмотре альбомов, в «Сейчас играет» и в очереди. В противном случае просто позать первое из каждого
 
 PLUGIN_MATERIAL_SKIN_ALLOW_DOWNLOAD
+	CS	Povolení stahování
 	DE	Herunterladen erlauben
 	EN	Allow downloading
 	FR	Autoriser le téléchargement
 	NL	Downloaden toestaan
 
 PLUGIN_MATERIAL_SKIN_ALLOW_DOWNLOAD_DESC
+	CS	Přidejte akce stahování ke skladbám, albům a seznamům skladeb a umožněte uživatelům stahovat skladby.
 	DE	Füge eine Aktion zum Herunterladen von Titeln, Alben und Wiedergabelisten hinzu, um Benutzern das Herunterladen von Titeln zu ermöglichen.
 	EN	Add download actions to tracks, albums, and playlists to allow users to download tracks.
 	FR	Ajouter des commandes de téléchargement aux morceaux, albums et listes de lecture pour permettre aux utilisateurs de télécharger des morceaux.
 	NL	Voeg download acties toe aan nummers, albums en afspeellijsten zodat gebruikers ze kunnen downloaden.
 
 PLUGIN_MATERIAL_SKIN_MANIFEST_DISPLAY
+	CS	Zobrazení webové aplikace
 	DE	WebApp-Anzeige
 	EN	WebApp display
 	FR	Affichage de l'application Web
 	NL	WebApp weergave
 
 PLUGIN_MATERIAL_SKIN_MANIFEST_DISPLAY_DESC
+	CS	Když je aplikace uložena jako webová aplikace (např. 'Přidat na domovskou obrazovku'), může být zobrazena přes 'celou obrazovku' (zobrazuje se jako běžná aplikace, ale stavový a navigační řádek Androidu jsou skryté) nebo 'samostatně' (zobrazuje se jako běžná aplikace, stavový a navigační řádek jsou viditelné). POZNÁMKA: Pokud provedete jakékoli změny, budete muset skin v prohlížeči znovu načíst, protože prohlížeč toto nastavení načte při načítání stránky.
 	DE	Sofern als WebApp abgespeichert (bspw. 'Zum Startbildschirm hinzufügen') kann die Anwendung als 'Vollbild' oder 'Eigenständig' angezeigt werden. ANMERKUNG: Änderungen werden erst nach Neuladen des Skins im Browser wirksam.
 	EN	When saved as a WebApp (e.g. 'Add to homescreen') the app can be shown 'fullscreen' (appears like a normal app, but android's status and navigation bars are hidden) or 'standalone' (appears as a normal app, with status and navigation bars visible). NOTE: If you make any changes then you will need to reload the skin in your browser as browser's read this setting when the page is loaded.
 	FR	Lorsque l'application est enregistrée en tant qu'application Web (via l'option "Ajouter à l'écran d'accueil" d'un navigateur) pour être utilisée comme une application Android classique, elle peut être affichée en "plein écran" (barres de statut et de navigation masquées) ou "autonome" (barres de statut et de navigation visibles). REMARQUE : Si vous modifiez ce paramètre, vous devrez recharger le skin dans votre navigateur car le navigateur lit ce paramètre lorsque la page est chargée.
 	NL	Wanneer opgeslagen als een WebApp (bijv. via 'Toevoegen aan thuisscherm') kan de app in 'Volledig scherm' modus worden weergegeven (verschijnt als een normale app, maar de status- en navigatiebalken van Android zijn verborgen) of als 'Zelfstandig' (verschijnt als een normale app, met status en navigatiebalken zichtbaar). OPMERKING: als u wijzigingen aanbrengt, moet u de skin opnieuw in uw browser laden.
 
 PLUGIN_MATERIAL_SKIN_MANIFEST_DISPLAY_STANDALONE
+	CS	Samostatně
 	DE	Eigenständig
 	EN	Standalone
 	FR	Autonome
 	NL	Zelfstandig
 
 PLUGIN_MATERIAL_SKIN_MANIFEST_DISPLAY_FULLSCREEN
+	CS	Celá obrazovka
 	DE	Vollbild
 	EN	Fullscreen
 	FR	Plein écran
 	NL	Volledig scherm
 
 PLUGIN_MATERIAL_SKIN_COMMENT_AS_DISC_TITLE
+	CS	Použití komentáře pro název disku
 	DE	Benutze den 'Comment'-Tag für Albumtitel.
 	EN	Use comment for disc title
 	FR	Utiliser le tag "comment" (commentaire) pour le titre du disque
 	NL	Gebruik 'Comment' tag voor schijftitel
 
 PLUGIN_MATERIAL_SKIN_COMMENT_AS_DISC_TITLE_DESC
+	CS	U alb s více disky použít jako název disku komentář z první stopy každého disku.
 	DE	Benutze bei Multi-Disk-Alben den 'Comment'-Tag des jeweils ersten Titels als Albumtitel
 	EN	For multi-disc albums use comment from first track of each disc as disc title.
 	FR	Pour les albums multi-disques, utiliser le commentaire du premier morceau de chaque disque comme titre de disque.
 	NL	Voor albums met meerdere schijven, gebruik Comment van eerste nummer van iedere schijf als schijftitel.
 
 PLUGIN_MATERIAL_SKIN_COMMENT_A_DONT_USE
+	CS	Nepoužívat
 	DE	Nicht benutzen
 	EN	Don't use
 	FR	Ne pas utiliser
 	NL	Niet gebruiken
 
 PLUGIN_MATERIAL_SKIN_COMMENT_B_PLAIN
+	CS	Obsahuje pouze název
 	DE	Enthält ausschließlich den Titel
 	EN	Contains only title
 	FR	Ne contient que le titre
 	NL	Bevat alleen titel
 
 PLUGIN_MATERIAL_SKIN_COMMENT_C_SEMI_SEP
+	CS	Oddělen středníkem
 	DE	Semikolon getrennt
 	EN	Semi-colon separated
 	FR	Séparation par point-virgule
 	NL	Puntkomma gescheiden
 
 PLUGIN_MATERIAL_SKIN_COLLAPSE_DISCS
+	CS	Sbalování disků
 	EN	Collapse discs
 	FR	Afficher d'abord les titres des disques des albums multi-disques, plutôt que les noms des morceaux
 
 PLUGIN_MATERIAL_SKIN_COLLAPSE_DISCS_DESC
+	CS	Ve výchozím nastavení zobrazovat názvy disků pouze v případě, že je systém LMS nastaven na seskupování alb s více disky.
 	EN	Initially only show disc titles when LMS is set to group multi-disc albums.
 	FR	Normalement, les noms de tous les morceaux s'affichent tout de suite lorsque LMS est paramétré pour regrouper les albums multi-disques.
 
 PLUGIN_MATERIAL_SKIN_COLLAPSE_DISCS_A_DONT
+	CS	Nesbalovat
 	EN	Don't collapse
 	FR	Ne pas regrouper par disque
 
 PLUGIN_MATERIAL_SKIN_COLLAPSE_DISCS_B_ALWAYS
+	CS	Sbalovat vždy
 	EN	Always collapse
 	FR	Toujours regrouper par disque
 
 PLUGIN_MATERIAL_SKIN_COLLAPSE_DISCS_C_LIMIT
+	CS	Sbalovat, když je 200 nebo více skladeb
 	EN	Collapse when 200, or more, tracks
 	FR	Regrouper par disque si 200 morceaux ou plus

@@ -529,10 +529,6 @@ const store = new Vuex.Store({
             state.powerButton = getLocalStorageBool('powerButton', state.powerButton);
             state.largeCovers = getLocalStorageBool('largeCovers', state.largeCovers);
             state.mediaControls = getLocalStorageBool('mediaControls', state.mediaControls);
-            // Ensure theme is in settings, so that it can be use in classic skin mods...
-            if (undefined==getLocalStorageVal('theme')) {
-                setLocalStorageVal('theme', state.theme);
-            }
             setTheme(state.theme, state.color);
             if (state.fontSize!='r') {
                 setFontSize(state.fontSize);
@@ -681,9 +677,13 @@ const store = new Vuex.Store({
                         if (undefined==opts.fontSize && undefined!=opts.largerElements) {
                             opts.fontSize = opts.largerElements ? 'l' : 'r';
                         }
-                    updateUiSettings(state, opts);
+                        updateUiSettings(state, opts);
                     } catch(e) {
                     }
+                }
+                // Ensure theme is in settings, so that it can be use in classic skin mods...
+                if (undefined==getLocalStorageVal('theme')) {
+                    setLocalStorageVal('theme', state.theme);
                 }
             });
 

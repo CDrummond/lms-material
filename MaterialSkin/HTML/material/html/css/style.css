@@ -1539,12 +1539,6 @@ progress {
   margin-left:0px;
   margin-right:0px;
  }
- .pmgr-container > .layout {
-  margin:-8px!important;
- }
- .pmgr-container {
-  margin-left: -1px;
- }
 }
 
 /* Hide current cover if window too narrow */

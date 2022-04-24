@@ -12,8 +12,8 @@
  9. Refresh queue if show track numbers setting changed.
 10. Check URL is not 'null' before adding to playlist.
 11. Store 'theme' setting in local storage after reading defaults from server.
-12. Slightly alter metrics and lyout of 'Manage players' dialog if width is
-    500px or less.
+12. Remove padding between volume sliders and buttons in 'Manage players'
+    dialog if width is 500px or less.
 
 2.9.3
 -----

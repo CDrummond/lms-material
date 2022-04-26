@@ -754,6 +754,13 @@ function parseBrowseResp(data, parent, options, cacheKey, parentCommand, parentG
                 } else {
                     artist = i.artist;
                 }
+
+                if (LMS_VERSION>=80300 && undefined==i.extid && undefined==artists && undefined!=parent && undefined!=parent.title) {
+                    // If response does not have artist, then get this from parent item. This will come from
+                    // My Music -> Album Artists -> Albums, and allows album favourites to specify artist.
+                    artists = [parent.title];
+                }
+
                 var album = {
                               id: "album_id:"+i.id,
                               artist_id: i.artist_id,
@@ -770,7 +777,8 @@ function parseBrowseResp(data, parent, options, cacheKey, parentCommand, parentG
                               textkey: key,
                               emblem: getEmblem(i.extid),
                               draggable: true,
-                              multi: lmsOptions.groupdiscs && undefined!=i.disccount && parseInt(i.disccount)>1
+                              multi: lmsOptions.groupdiscs && undefined!=i.disccount && parseInt(i.disccount)>1,
+                              extid: i.extid
                           };
                 resp.items.push(album);
             }

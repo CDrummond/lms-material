@@ -111,10 +111,11 @@
    </v-app>
   </div>
   [% PERL %]
+  my $lmsVersion=Plugins::MaterialSkin::Plugin->lmsVersion();
   my $version=Plugins::MaterialSkin::Plugin->pluginVersion();
   my $windowTitle=Plugins::MaterialSkin::Plugin->windowTitle();
   my $hideSettings=Plugins::MaterialSkin::Plugin->hideSettings();
-  print("<script>const LMS_MATERIAL_REVISION=\"$version\"; const LMS_WINDOW_TITLE=\"$windowTitle\"; const LMS_SETTINGS_HIDE=\"$hideSettings\"; const LMS_MATERIAL_PLUGIN_TRANSLATIONS = [");
+  print("<script>const LMS_MATERIAL_REVISION=\"$version\"; const LMS_VERSION=$lmsVersion; const LMS_WINDOW_TITLE=\"$windowTitle\"; const LMS_SETTINGS_HIDE=\"$hideSettings\"; const LMS_MATERIAL_PLUGIN_TRANSLATIONS = [");
 
   my $other = Plugins::MaterialSkin::Extensions->getTranslations();
   if ($other) {

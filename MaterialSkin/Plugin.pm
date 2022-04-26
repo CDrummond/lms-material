@@ -184,6 +184,16 @@ sub pluginVersion {
     return $version;
 }
 
+sub lmsVersion {
+    my @parts = split /\./, $::VERSION;
+    my $ver = 0;
+    foreach my $p (@parts) {
+        $ver *= 100;
+        $ver += int($p);
+    }
+    return $ver;
+}
+
 sub windowTitle {
     my $title = $prefs->get('windowTitle');
     if (!$title || $title eq '') {

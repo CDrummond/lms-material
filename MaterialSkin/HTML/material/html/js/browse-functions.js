@@ -391,17 +391,18 @@ function browseHandleListResponse(view, item, command, resp, prevPage) {
                 }
             }
 
-            // Select track -> More -> Album:AlbumTitle -> Tracks
-            if (view.tbarActions.length==0 && view.current && ((view.current.actions && view.current.actions.play) || view.current.stdItem)) {
-                view.tbarActions=[PLAY_ACTION, ADD_ACTION];
-            }
-
             // No menu actions? If have 3..200 audio tracks, add a PlayAll/AddAll to toolbar. view will add each item individually
             // 3..200 is chosen so that we dont add these to bandcamp when it shows "Listen as podcast" and "Listen to songs" entries...
             if (view.tbarActions.length==0 && resp.numAudioItems>2 && resp.numAudioItems<=200 &&
                 view.command.command.length>0 && ALLOW_ADD_ALL.has(view.command.command[0]) && (!item.id || !item.id.startsWith(TOP_ID_PREFIX))) {
                 view.tbarActions=[PLAY_ALL_ACTION, ADD_ALL_ACTION];
             }
+
+            // Select track -> More -> Album:AlbumTitle -> Tracks
+            if (view.tbarActions.length==0 && view.current && ((view.current.actions && view.current.actions.play) || view.current.stdItem)) {
+                view.tbarActions=[PLAY_ACTION, ADD_ACTION];
+            }
+
             if (resp.isMusicMix) {
                 view.tbarActions.unshift(RELOAD_ACTION);
             }

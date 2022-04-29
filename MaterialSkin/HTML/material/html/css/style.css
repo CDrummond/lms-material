@@ -2426,3 +2426,10 @@ img[lazy='loaded'].np-image-desktop, img[lazy='loaded'].np-image-landscape, img[
 .v-autocomplete__content.v-menu__content, .v-autocomplete__content.v-menu__content .v-card, .v-menu__content .v-card {
  border-radius:4px;
 }
+
+/* Start butotn is chopped off in RadnomMix dialog if mix playing and screen is narrow */
+@media only screen and (max-width:400px) {
+ .v-dialog .v-btn {
+  min-width:32px;
+ }
+}

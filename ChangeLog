@@ -3,6 +3,7 @@
 1. For LMS 8.3 add album-artist when favouriting an album.
 2. Fix add/play all for mixes when called from custom action.
 3. Reduce dialog buttons min-width if screen is 400px or less.
+4. Always use HTML for 'textarea' values.
 
 2.9.4
 -----

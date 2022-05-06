@@ -608,8 +608,8 @@ function parseBrowseResp(data, parent, options, cacheKey, parentCommand, parentG
                     var text = replaceNewLines(data.result.window.textarea);
                     if (text.length>0) {
                         resp.items.unshift({
-                                        title: text,
-                                        type: text.startsWith("<") || text.indexOf("<br/>")>0 ? "html" : "text",
+                                        title: text.startsWith("<") ? text : ("<p>"+text+"</p>"),
+                                        type: "html",
                                         id: parent.id+".textarea"
                                        });
                         resp.canUseGrid = false;

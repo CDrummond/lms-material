@@ -608,7 +608,7 @@ function parseBrowseResp(data, parent, options, cacheKey, parentCommand, parentG
                     var text = replaceNewLines(data.result.window.textarea);
                     if (text.length>0) {
                         resp.items.unshift({
-                                        title: text.startsWith("<") ? text : ("<p>"+text+"</p>"),
+                                        title: text.startsWith("<") ? text : ("<div>"+text+"</div>"),
                                         type: "html",
                                         id: parent.id+".textarea"
                                        });

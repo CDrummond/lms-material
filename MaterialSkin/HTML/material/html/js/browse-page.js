@@ -181,8 +181,7 @@ var lmsBrowse = Vue.component("lms-browse", {
     </v-list-tile>
     <v-list-tile v-else-if="item.type=='search' || item.type=='entry'" avatar :key="item.id" class="lms-avatar lms-list-item" :id="'item'+index" v-bind:class="{'list-active': (menu.show && index==menu.index) || (fetchingItem==item.id)}">
      <v-list-tile-content>
-      <v-text-field v-if="IS_MOBILE" single-line clearable class="lms-search" v-model="item.entry" :label="item.title" v-on:keyup.enter="entry($event, item)" :append-icon="item.entry ? 'search' : ''" @click:append="entry(undefined, item, item.entry)"></v-text-field>
-      <v-text-field v-else :autofocus="index==0" single-line clearable class="lms-search" v-model="item.entry" :label="item.title" v-on:keyup.enter="entry($event, item)"></v-text-field>
+      <text-field :focus="index==0 && !IS_MOBILE" :title="item.title" @value="entry(item, $event)"></text-field>
      </v-list-tile-content>
     </v-list-tile>
     <v-list-tile v-else-if="!(isTop && (disabled.has(item.id) || hidden.has(item.id)))" avatar @click="click(item, index, $event)" :key="item.id" class="lms-avatar lms-list-item" :id="'item'+index" @dragstart="dragStart(index, $event)" @dragend="dragEnd()" @dragover="dragOver(index, $event)" @drop="drop(index, $event)" :draggable="(isTop && !sortHome) || (item.draggable && (current.section!=SECTION_FAVORITES || 0==selection.size))" @contextmenu.prevent="itemMenu(item, index, $event)" v-bind:class="{'drop-target': dragActive && index==dropIndex, 'list-active': (menu.show && index==menu.index) || (fetchingItem==item.id)}">
@@ -676,7 +675,7 @@ var lmsBrowse = Vue.component("lms-browse", {
             }
             bus.$emit('dlg.open', 'gallery', urls, index);
         },
-        entry(event, item, text) {
+        entry(item, text) {
             if (this.fetchingItem!=undefined) {
                 return;
             }

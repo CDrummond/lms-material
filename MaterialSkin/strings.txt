@@ -173,21 +173,21 @@ PLUGIN_MATERIAL_SKIN_FIXED_VOL_C_HIDE
 	NL	Verberg volumeregeling
 
 PLUGIN_MATERIAL_SKIN_ARTIST_FIRST
-	CS	Zobrazení umělce jako prvního v Právě htraje a ve frontě
+	CS	Zobrazení interpreta jako prvního v Právě hraje a ve frontě
 	DE	Intepreten als erstes in 'Aktueller Titel' und Warteschlange anzeigen
 	EN	Show artist first in now-playing and queue
 	FR	Afficher l'artiste en premier dans la vue 'lecture en cours' et la liste de lecture
 	NL	Toon artiest als eerste in 'Speelt nu' en afspeellijst
 
 PLUGIN_MATERIAL_SKIN_ARTIST_FIRST_DESC
-	CS	Pokud má skladba skladatele, dirigenta nebo skupinu a jsou nakonfigurovány tak, aby se zobrazovaly, zobrazí se umělec před nimi, jinak až za nimi.
+	CS	Pokud má skladba skladatele, dirigenta nebo skupinu a jsou nakonfigurovány tak, aby se zobrazovaly, zobrazí se interpret před nimi, jinak až za nimi.
 	DE	Wenn ein Titel Komponist, Dirigent, Orchester hat und diese per Konfiguration gezeigt werden, zeige den Interpreten vor diesen,	andernfalls danach.
 	EN	If a track has composer, conductor, or band, and these are configured to be shown, then show artist before these, otherwise show after.
 	FR	Si un morceau a un compositeur, un chef d'orchestre ou un groupe/orchestre et que ceux-ci sont configurés pour être affichés, choisir de montrer l'artiste en premier ou pas.
 	NL	Als een nummer een componist, dirigent of band tag heeft, en deze zijn geconfigureerd om te worden getoond, toon dan eerst de artiest, anders erna.
 
 PLUGIN_MATERIAL_SKIN_SHOW_ALL_ARTISTS
-	CS	Zobrazení všech umělců
+	CS	Zobrazení všech interptetů
 	DE	Zeige alle Interpreten
 	EN	Show all artists
 	DA	Vis alle kunstnere
@@ -196,7 +196,7 @@ PLUGIN_MATERIAL_SKIN_SHOW_ALL_ARTISTS
 	RU	Показать всех исполнителей
 
 PLUGIN_MATERIAL_SKIN_SHOW_ALL_ARTISTS_DESC
-	CS	Pokud má skladba více interpretů, autorů alb, skladatelů atd., zobrazí se všechny při procházení alb, v Právě hraje a ve frontě. V opačném případě zobrazí pouze první z nich.
+	CS	Pokud má skladba více interpretů, autorů alb, skladatelů atd., zobrazí se všechny při procházení alb, v Právě hraje a ve frontě. V opačném případě zobrazí pouze prvního z nich.
 	DE	Wenn ein Titel mehrere Interpreten, Albuminterpreten, Komponisten etc. hat, zeige alle beim Durchsuchen von Alben, in 'Aktueller Titel' und der Warteschlange an. Andernfalls zeige nur den jeweils ersten an.
 	EN	If a track has multiple artists, album-artists, composers, etc. then show all when browsing albums, in now-playing and the queue. Otherwise just show the first of each.
 	DA	Hvis et nummer har flere kunstnere, albumkunstnere, komponister m.v., så vis dem alle mens der kigges på albums, hvad der afspilles nu og i køen. I modsat fald vis kun den første af hver slags.

@@ -42,7 +42,7 @@
  font-weight:200;
 }
 
-.browse-html a, .browse-text a, .np-info-text a, .np-info-text-full a, .np-info-text-desktop a, .np-info-text-full-desktop a,
+.browse-html a, .np-info-text a, .np-info-text-full a, .np-info-text-desktop a, .np-info-text-full-desktop a,
 .primary--text, a.primary--text, div.primary--text, i.primary--text, label.primary--text, .lms-link, .active, .clickable a {
  color:var(--active-color) !important;
 }
@@ -786,26 +786,12 @@ div.v-subheader {
  min-width:36px !important;
 }
 
-.lms-list > .browse-text > div {
- min-height:var(--list-elem-height)!important;
- height:auto!important;
- padding-top:8px!important;
- padding-bottom:8px!important;
- font-size:var(--std-font-size)!important;
- font-weight:200!important;
-}
-
 .nonclick-menu-item .v-list__tile__title {
  font-size:var(--std-font-size)!important;
  font-weight:200!important;
 }
 
-.lms-list .browse-text {
- font-size:var(--std-font-size)!important;
- font-weight:200!important;
-}
-
-.browse-html img, .browse-text img, .np-info-text img, .np-info-text-desktop img, .np-info-text-full img, .np-info-text-full-desktop img, .inline-image {
+.browse-html img, .np-info-text img, .np-info-text-desktop img, .np-info-text-full img, .np-info-text-full-desktop img, .inline-image {
  max-width:100% !important;
  max-height:300px !important;
  margin-left:auto;
@@ -815,7 +801,7 @@ div.v-subheader {
 }
 
 /* Ensure larger bottom border for album review image */
-.browse-text img, .np-info-review img, .np-info-review img, .np-info-review img, .np-info-review img {
+.np-info-review img, .np-info-review img, .np-info-review img, .np-info-review img {
  margin-bottom:var(--std-font-size)!important;
 }
 

@@ -4,6 +4,8 @@
 2. Fix add/play all for mixes when called from custom action.
 3. Reduce dialog buttons min-width if screen is 400px or less.
 4. Always use HTML for 'textarea' values.
+5. For mobile devices add a search button at the right of search fields
+   containing text.
 
 2.9.4
 -----

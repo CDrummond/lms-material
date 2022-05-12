@@ -60,7 +60,7 @@ let seachReqId = 0;
 Vue.component('lms-search-field', {
     template: `
 <v-layout>
- <v-text-field :label="i18n('Search')" clearable v-model.lazy="term" class="lms-search lib-search" @input="textChanged($event)" @blur="stopDebounce" ref="entry"></v-text-field>
+ <v-text-field :label="i18n('Search')" single-line clearable v-model.lazy="term" class="lms-search lib-search" @input="textChanged($event)" @blur="stopDebounce" v-on:keyup.enter="searchNow" ref="entry"></v-text-field>
  <v-icon v-if="searching" class="toolbar-button pulse">search</v-icon>
  <v-btn v-else :title="ACTIONS[ADV_SEARCH_ACTION].title" flat icon class="toolbar-button" @click="advanced()"><img :src="ACTIONS[ADV_SEARCH_ACTION].svg | svgIcon(darkUi)"></img></v-btn>
 </v-layout>
@@ -98,6 +98,7 @@ Vue.component('lms-search-field', {
     },
     methods: {
         cancel() {
+            this.stopDebounce();
             if (this.searching) {
                 this.commands=[];
                 this.results=[];
@@ -194,7 +195,6 @@ Vue.component('lms-search-field', {
     },
     beforeDestroy() {
         this.cancel();
-        this.stopDebounce();
     },
     filters: {
         svgIcon: function (name, dark) {

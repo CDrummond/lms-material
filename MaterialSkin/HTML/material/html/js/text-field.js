@@ -30,11 +30,11 @@ Vue.component('text-field', {
             this.stopDebounce();
             this.debounceTimer = setTimeout(function () {
                 this.emitValue();
-            }.bind(this), 500);
+            }.bind(this), 1000);
         },
         emitValue() {
             this.stopDebounce();
-            let str = this.term.trim();
+            let str = undefined==this.term ? "" : this.term.trim();
             if (!isEmpty(str)) {
                 this.$emit('value', str);
             }

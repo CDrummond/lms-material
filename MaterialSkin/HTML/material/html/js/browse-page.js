@@ -679,7 +679,7 @@ var lmsBrowse = Vue.component("lms-browse", {
             if (this.fetchingItem!=undefined) {
                 return;
             }
-            this.enteredTerm = undefined==event ? text : event.target._value;
+            this.enteredTerm = text;
             if (undefined==this.enteredTerm) {
                 return
             }

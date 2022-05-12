@@ -184,7 +184,7 @@ function parseBrowseResp(data, parent, options, cacheKey, parentCommand, parentG
                 if (!i.type && !i.style && i.actions && i.actions.go && i.actions.go.params) {
                     for (var key in i.actions.go.params) {
                         if (i.actions.go.params[key]==TERM_PLACEHOLDER) {
-                            i.type = "entry";
+                            i.type = key=="search" ? key : "entry";
                         }
                     }
                 }

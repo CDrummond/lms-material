@@ -8,13 +8,12 @@
 
 Vue.component('text-field', {
     template: `
- <v-text-field :label="title" :autofocus="focus" v-model.lazy="term" single-line clearable class="lms-search" @input="textChanged($event)" v-on:keyup.enter="emitValue" :append-icon="mobile && term && type=='search' ? 'search' : ''" @click:append="emitValue" @blur="stopDebounce"></v-text-field>
+ <v-text-field :label="title" :autofocus="focus" v-model.lazy="term" single-line clearable class="lms-search" @input="textChanged($event)" v-on:keyup.enter="emitValue" :append-icon="IS_MOBILE && term && type=='search' ? 'search' : ''" @click:append="emitValue" @blur="stopDebounce"></v-text-field>
 `,
     props: ['title', 'focus', 'type'],
     data() {
         return {
-            term: "",
-            mobile: IS_MOBILE
+            term: ""
         }
     },
     mounted() {

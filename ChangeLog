@@ -6,8 +6,6 @@
 4. Always use HTML for 'textarea' values.
 5. For mobile devices add a search button at the right of search fields
    containing text.
-6. Make search fields in lists auto-start search 1 second after last text
-   entry.
 
 2.9.4
 -----

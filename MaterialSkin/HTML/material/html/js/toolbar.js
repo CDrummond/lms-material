@@ -25,10 +25,11 @@ Vue.component('lms-toolbar', {
 </div>
 
  <v-btn v-if="!noPlayer && powerButton" icon class="toolbar-button maintoolbar-player-power-button" v-longpress:stop="toggleCurrentPlayerPower" :title="playerStatus.ison ? i18n('Switch off %1', player.name) : i18n('Switch on %1', player.name)"><v-icon v-bind:class="{'dimmed': !playerStatus.ison, 'active-btn':playerStatus.ison}">power_settings_new</v-icon></v-btn>
+ <v-btn v-else-if="!noPlayer" icon class="toolbar-button maintoolbar-player-power-button" v-longpress:stop="menuOrSync" :title="player.name"><v-icon v-if="player.icon.icon" class="maintoolbar-player-icon" v-bind:class="{'dimmed': !playerStatus.ison}">{{player.icon.icon}}</v-icon><img v-else class="svg-img maintoolbar-player-icon" v-bind:class="{'dimmed': !playerStatus.ison}" :src="player.icon.svg | svgIcon(darkUi, false, true, undefined, coloredToolbars)"></img></v-btn>
 
  <v-menu bottom :disabled="!connected" class="ellipsis" v-model="showPlayerMenu">
   <v-toolbar-title slot="activator" v-bind:class="{'link-item': !queryParams.single || !powerButton, 'maintoolbar-title-clock':showClock}">
-   <v-icon v-if="noPlayer" class="maintoolbar-player-icon amber">warning</v-icon><v-icon v-else-if="player.icon.icon && !powerButton" class="maintoolbar-player-icon" v-bind:class="{'dimmed': !playerStatus.ison}">{{player.icon.icon}}</v-icon><img v-else-if="!powerButton" class="svg-img maintoolbar-player-icon" v-bind:class="{'dimmed': !playerStatus.ison}" :src="player.icon.svg | svgIcon(darkUi, false, true, undefined, coloredToolbars)"></img>
+   <v-icon v-if="noPlayer" class="maintoolbar-player-icon amber">warning</v-icon>
    <div class="maintoolbar-title ellipsis" v-bind:class="{'dimmed': !playerStatus.ison}">
     {{noPlayer ? trans.noplayer : player.name}}<v-icon v-if="playerStatus.sleepTime" class="player-status-icon dimmed">hotel</v-icon><v-icon v-if="playerStatus.synced" class="player-status-icon dimmed">link</v-icon></div>
    <div v-if="!desktopLayout && !noPlayer" class="maintoolbar-subtitle subtext ellipsis" v-bind:class="{'dimmed' : !playerStatus.ison}">{{undefined===songInfo ? trans.nothingplaying : (!desktopLayout && isNowPlayingPage && (!infoPlugin || !infoOpen)) ? playlist.count+playlist.duration : songInfo}}</div>
@@ -565,10 +566,23 @@ Vue.component('lms-toolbar', {
             }
             bus.$emit('expandNowPlaying', on);
         },
-        toggleCurrentPlayerPower(longPress) {
-            // If showing power button, dont react to presses for 0.5s after dialog closed. The button is very close to where
+        menuOrSync(longPress) {
+            // Dont react to presses for 0.5s after dialog closed. The button is very close to where
             // a dialogs back button is and user might accidentaly presss twice...
-            if (this.$store.state.powerButton && undefined!=this.$store.state.lastDialogClose && new Date().getTime()-this.$store.state.lastDialogClose<500) {
+            if (undefined!=this.$store.state.lastDialogClose && new Date().getTime()-this.$store.state.lastDialogClose<500) {
+                return;
+            }
+            if (longPress) {
+                this.showPlayerMenu = false;
+                bus.$emit('dlg.open', 'sync', this.$store.state.player);
+            } else {
+                this.showPlayerMenu = !this.showPlayerMenu;
+            }
+        },
+        toggleCurrentPlayerPower(longPress) {
+            // Dont react to presses for 0.5s after dialog closed. The button is very close to where
+            // a dialogs back button is and user might accidentaly presss twice...
+            if (undefined!=this.$store.state.lastDialogClose && new Date().getTime()-this.$store.state.lastDialogClose<500) {
                 return;
             }
             this.togglePlayerPower(this.$store.state.player, longPress);

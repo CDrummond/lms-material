@@ -1,3 +1,7 @@
+2.9.6
+-----
+1. Use histroy length to determine if back button should be shown, or not.
+
 2.9.5
 ------
 1. For LMS 8.3 add album-artist when favouriting an album.

@@ -34,7 +34,7 @@ var lmsBrowse = Vue.component("lms-browse", {
    <v-btn flat icon v-longpress="backBtnPressed" class="toolbar-button back-button" id="back-button" :title="trans.goBack"><v-icon>arrow_back</v-icon></v-btn>
    <lms-search-field @results="handleListResponse"></lms-search-field>
   </v-layout>
-  <v-layout v-else-if="headerTitle">
+  <v-layout v-else-if="history.length>0">
    <v-btn flat icon v-longpress="backBtnPressed" class="toolbar-button" v-bind:class="{'back-button':!homeButton || history.length<2}" id="back-button" :title="trans.goBack"><v-icon>arrow_back</v-icon></v-btn>
    <v-btn v-if="history.length>1 && homeButton" flat icon @click="homeBtnPressed()" class="toolbar-button" id="home-button" :title="trans.goHome"><v-icon>home</v-icon></v-btn>
    <v-layout row wrap @click="showHistory($event)" v-if="headerSubTitle" v-bind:class="{'pointer link-item': history.length>1}">

@@ -285,23 +285,28 @@ PLUGIN_MATERIAL_SKIN_COLLAPSE_DISCS
 	CS	Sbalování disků
 	EN	Collapse discs
 	FR	Afficher d'abord les titres des disques des albums multi-disques, plutôt que les noms des morceaux
+	NL	Toon eerst de schijftitels van albums met meerdere schijven, in plaats van de nummers
 
 PLUGIN_MATERIAL_SKIN_COLLAPSE_DISCS_DESC
 	CS	Ve výchozím nastavení zobrazovat názvy disků pouze v případě, že je systém LMS nastaven na seskupování alb s více disky.
 	EN	Initially only show disc titles when LMS is set to group multi-disc albums.
 	FR	Normalement, les noms de tous les morceaux s'affichent tout de suite lorsque LMS est paramétré pour regrouper les albums multi-disques.
-
+	NL	Wanneer LMS is ingesteld om albums met meerdere schijven te groeperen, worden standaard de namen van alle nummers onmiddellijk getoond.
+	
 PLUGIN_MATERIAL_SKIN_COLLAPSE_DISCS_A_DONT
 	CS	Nesbalovat
 	EN	Don't collapse
 	FR	Ne pas regrouper par disque
+	NL	Schijven niet samenvouwen
 
 PLUGIN_MATERIAL_SKIN_COLLAPSE_DISCS_B_ALWAYS
 	CS	Sbalovat vždy
 	EN	Always collapse
 	FR	Toujours regrouper par disque
+	NL	Schijven altijd samenvouwen
 
 PLUGIN_MATERIAL_SKIN_COLLAPSE_DISCS_C_LIMIT
 	CS	Sbalovat, když je 200 nebo více skladeb
 	EN	Collapse when 200, or more, tracks
 	FR	Regrouper par disque si 200 morceaux ou plus
+	NL	Schijven samenvouwen bij 200 of meer nummers

@@ -791,6 +791,17 @@ div.v-subheader {
  font-weight:200!important;
 }
 
+.lms-list > .browse-text > div {
+  height:auto!important;
+  font-size:var(--std-font-size)!important;
+  font-weight:200!important;
+  margin:0 -12px;
+}
+
+.lms-list > .browse-text > div:hover {
+ background-color:transparent!important;
+}
+
 .browse-html img, .np-info-text img, .np-info-text-desktop img, .np-info-text-full img, .np-info-text-full-desktop img, .inline-image {
  max-width:100% !important;
  max-height:300px !important;

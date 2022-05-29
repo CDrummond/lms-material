@@ -776,7 +776,10 @@ var lmsQueue = Vue.component("lms-queue", {
             }
         },
         itemCustomAction(act, item, index) {
-            doCustomAction(act, this.$store.state.player, item);
+            let cmd = doCustomAction(act, this.$store.state.player, item);
+            if (cmd!=undefined) {
+                bus.$emit('browse', cmd.command, cmd.params, item.title, 'queue');
+            }
         },
         headerAction(act) {
             if (this.$store.state.visibleMenus.size>0 && this.settingsMenuActions.indexOf(act)<0) {

@@ -3,6 +3,7 @@
 1. Use history length to determine if back button should be shown or not.
 2. Long-press on player's icon (in main toolbar) to show sync dialog.
 3. Allow multi-line text entries in browse view list.
+4. Allow queue custom actions to list items in browse view.
 
 2.9.5
 ------

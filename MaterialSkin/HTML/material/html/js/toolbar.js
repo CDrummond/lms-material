@@ -762,7 +762,7 @@ Vue.component('lms-toolbar', {
             }.bind(this), (next*1000)+25);
         },
         doCustomAction(action) {
-            performCustomAction(this, action, this.$store.state.player);
+            performCustomAction(action, this.$store.state.player);
         },
         toggleQueue() {
             let showQ = this.infoOpen || this.nowPlayingExpanded;

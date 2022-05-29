@@ -1008,7 +1008,7 @@ var lmsServer = Vue.component('lms-server', {
             if (undefined!=customActions) {
                 for (let i=0, len=customActions.length; i<len; ++i) {
                     if (customActions[i].id==act) {
-                        performCustomAction(this, customActions[i], this.$store.state.player);
+                        performCustomAction(customActions[i], this.$store.state.player);
                         break;
                     }
                 }

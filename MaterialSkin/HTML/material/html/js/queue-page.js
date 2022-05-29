@@ -776,7 +776,7 @@ var lmsQueue = Vue.component("lms-queue", {
             }
         },
         itemCustomAction(act, item, index) {
-            let cmd = doCustomAction(act, this.$store.state.player, item);
+            let cmd = performCustomAction(act, this.$store.state.player, item);
             if (cmd!=undefined) {
                 bus.$emit('browse', cmd.command, cmd.params, item.title, 'queue');
             }

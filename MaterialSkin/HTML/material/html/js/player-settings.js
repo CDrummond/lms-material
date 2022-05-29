@@ -726,7 +726,7 @@ Vue.component('lms-player-settings', {
             bus.$emit('dlg.open', 'iframe', this.playerLink, i18n("Configuration")+SEPARATOR+this.playerName, undefined, IFRAME_HOME_CLOSES_DIALOGS);
         },
         doCustomAction(action, player) {
-            performCustomAction(this, action, player);
+            performCustomAction(action, player);
         }
     },
     filters: {

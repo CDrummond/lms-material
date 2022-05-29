@@ -65,7 +65,7 @@ function getCustomActions(id, lockedActions, filter) {
     return actions.length>0 ? actions : undefined;
 }
 
-function performCustomAction(obj, action, player, item) {
+function performCustomAction(action, player, item) {
     if (undefined!=action.prompt) {
         confirm(action.prompt, i18n('Yes')).then(res => {
             if (res) {

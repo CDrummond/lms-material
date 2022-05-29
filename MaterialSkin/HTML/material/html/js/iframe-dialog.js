@@ -542,7 +542,7 @@ Vue.component('lms-iframe-dialog', {
             });
         },
         doCustomAction(action, player) {
-            performCustomAction(this, action, player);
+            performCustomAction(action, player);
         }
     },
     computed: {

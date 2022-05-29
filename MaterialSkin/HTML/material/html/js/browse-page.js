@@ -735,7 +735,7 @@ var lmsBrowse = Vue.component("lms-browse", {
             } else if (act.albumRating) {
                 this.setAlbumRating();
             } else if (act.custom) {
-                let browseCmd = doCustomAction(act, this.$store.state.player, this.current);
+                let browseCmd = performCustomAction(act, this.$store.state.player, this.current);
                 if (undefined!=browseCmd) {
                     this.fetchItems(browseCmd, {cancache:false, id:"currentaction:"+index, title:act.title+SEPARATOR+this.current.title});
                 }
@@ -747,7 +747,7 @@ var lmsBrowse = Vue.component("lms-browse", {
             }
         },
         itemCustomAction(act, item, index) {
-            let browseCmd = doCustomAction(act, this.$store.state.player, item);
+            let browseCmd = performCustomAction(act, this.$store.state.player, item);
             if (undefined!=browseCmd) {
                 this.fetchItems(browseCmd, {cancache:false, id:"itemCustomAction:"+item.id+"-"+index, title:act.title+SEPARATOR+item.title});
             }

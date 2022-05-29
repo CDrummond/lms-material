@@ -774,7 +774,7 @@ Vue.component('lms-manage-players', {
             this.dragIndex = undefined;
         },
         doCustomAction(action, player) {
-            performCustomAction(this, action, player);
+            performCustomAction(action, player);
         },
         updateGroup(group, player, addPlayer) {
             if (undefined!=group && group.isgroup) {

@@ -173,10 +173,12 @@ function nowplayingOnPlayerStatus(view, playerStatus) {
     if (playerStatus.playlist.count!=view.playerStatus.playlist.count) {
         view.playerStatus.playlist.count = playerStatus.playlist.count;
     }
+
     var source = getTrackSource(playerStatus.current);
-    if (technical!=view.playerStatus.current.source) {
+    if (source!=view.playerStatus.current.source) {
         view.playerStatus.current.source = source;
     }
+
     var technical = formatTechInfo(playerStatus.current, source);
     if (technical!=view.playerStatus.current.technicalInfo) {
         view.playerStatus.current.technicalInfo = technical;

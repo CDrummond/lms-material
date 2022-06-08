@@ -1,3 +1,7 @@
+2.9.7
+-----
+1. Fix track source not always showing.
+
 2.9.6
 -----
 1. Use history length to determine if back button should be shown or not.

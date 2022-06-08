@@ -8,6 +8,7 @@
 
 var B_ALBUM_SORTS=[ ];
 const ALLOW_ADD_ALL = new Set(['trackinfo', 'youtube', 'spotty', 'qobuz', 'tidal', 'wimp' /*is Tidal*/, 'deezer', 'tracks', 'musicip', 'musicsimilarity', 'blissmixer', 'bandcamp']); // Allow add-all/play-all from 'trackinfo', as Spotty's 'Top Titles' access via 'More' needs this
+const ALLOW_FAKE_ALL_SONGS_ITEM = new Set(['youtube']); // Allow using 'fake' add all item
 
 var lmsBrowse = Vue.component("lms-browse", {
     template: `

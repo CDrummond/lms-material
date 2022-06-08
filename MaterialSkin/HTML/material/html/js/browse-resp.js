@@ -514,7 +514,7 @@ function parseBrowseResp(data, parent, options, cacheKey, parentCommand, parentG
                (!types.has("text") /*&& !types.has("search") && !types.has("entry")*/ && !types.has(undefined))) {
                 resp.canUseGrid = true;
             }
-            if (playAction && resp.numAudioItems>2 && undefined==resp.allSongsItem &&
+            if (playAction && resp.numAudioItems>2 && undefined==resp.allSongsItem && ALLOW_FAKE_ALL_SONGS_ITEM.has(command) &&
                 resp.baseActions['playControl'] && resp.baseActions['playControl'].params && resp.baseActions['playControl'].params.item_id) {
                 resp.allSongsItem={id:resp.baseActions['playControl'].params.item_id, params:resp.baseActions['playControl'].params};
             }

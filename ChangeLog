@@ -1,7 +1,8 @@
 2.9.7
 -----
 1. Fix track source not always showing.
-2. Fix add/play all on Spotyu album lists.
+2. Fix add/play all on Spotty album lists.
+3. Fix disappearing text items when navigate back.
 
 2.9.6
 -----

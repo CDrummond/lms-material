@@ -5,6 +5,8 @@
 3. Fix disappearing text items when navigate back.
 4. Don't show queue, etc, menu items in main menu when now playing is expanded
    or showing track info.
+5. Don't show queue menu items in main menu when on dekstop layout and queue
+   is hidden.
 
 2.9.6
 -----

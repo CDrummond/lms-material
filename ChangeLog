@@ -3,6 +3,8 @@
 1. Fix track source not always showing.
 2. Fix add/play all on Spotty album lists.
 3. Fix disappearing text items when navigate back.
+4. Don't show queue, etc, menu items in main menu when now playing is expanded
+   or showing track info.
 
 2.9.6
 -----

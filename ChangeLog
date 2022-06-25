@@ -5,7 +5,7 @@
 3. Fix disappearing text items when navigate back.
 4. Don't show queue, etc, menu items in main menu when now playing is expanded
    or showing track info.
-5. Don't show queue menu items in main menu when on dekstop layout and queue
+5. Don't show queue menu items in main menu when on desktop layout and queue
    is hidden.
 6. Always place 'Tansfer queue', 'Scroll to current', and 'Add URL' in main
    menu.

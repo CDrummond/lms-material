@@ -7,6 +7,8 @@
    or showing track info.
 5. Don't show queue menu items in main menu when on dekstop layout and queue
    is hidden.
+6. Always place 'Tansfer queue', 'Scroll to current', and 'Add URL' in main
+   menu.
 
 2.9.6
 -----

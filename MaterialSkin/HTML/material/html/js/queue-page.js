@@ -162,12 +162,14 @@ var lmsQueue = Vue.component("lms-queue", {
    <v-btn :title="trans.shuffleAlbums" flat icon v-if="(desktopLayout || wide>0) && playerStatus.shuffle===2" class="toolbar-button" v-bind:class="{'disabled':noPlayer}" @click="bus.$emit('playerCommand', ['playlist', 'shuffle', 0])"><img class="svg-img media-icon" :src="'shuffle-albums' | svgIcon(darkUi, 1)"></v-btn>
    <v-btn :title="trans.shuffleAll" flat icon v-else-if="(desktopLayout || wide>0) && playerStatus.shuffle===1" class="toolbar-button" v-bind:class="{'disabled':noPlayer}" @click="bus.$emit('playerCommand', ['playlist', 'shuffle', 2])"><v-icon class="active-btn">shuffle</v-icon></v-btn>
    <v-btn :title="trans.shuffleOff" flat icon v-else-if="desktopLayout || wide>0" class="toolbar-button dimmed" v-bind:class="{'disabled':noPlayer}" @click="bus.$emit('playerCommand', ['playlist', 'shuffle', 1])"><v-icon>shuffle</v-icon></v-btn>
+   <!--
    <template v-if="wide>1" v-for="(action, index) in settingsMenuActions">
     <v-btn flat icon @click.stop="headerAction(action)" class="toolbar-button" :title="ACTIONS[action].title | tooltip(ACTIONS[action].key,keyboardControl,true)" :id="'tbar'+index" v-bind:class="{'disabled':(PQ_SCROLL_ACTION==action || PQ_MOVE_QUEUE_ACTION==action) && items.length<1}">
       <img v-if="ACTIONS[action].svg" class="svg-img" :src="ACTIONS[action].svg | svgIcon(darkUi)"></img>
       <v-icon v-else>{{ACTIONS[action].icon}}</v-icon>
     </v-btn>
    </template>
+   -->
    <v-btn :title="trans.save | tooltip(LMS_SAVE_QUEUE_KEYBOARD,keyboardControl)" flat icon @click="save()" class="toolbar-button" v-bind:class="{'disabled':items.length<1}"><v-icon>save</v-icon></v-btn>
    <v-btn :title="trans.clear | tooltip(LMS_CLEAR_QUEUE_KEYBOARD,keyboardControl)" flat icon @click="clear()" class="toolbar-button" v-bind:class="{'disabled':items.length<1}"><img class="svg-list-img" :src="'queue-clear' | svgIcon(darkUi)"></img></v-btn>
   </v-layout>
@@ -574,7 +576,7 @@ var lmsQueue = Vue.component("lms-queue", {
             var wide = this.scrollElement.clientWidth >= 520 ? 2 : this.scrollElement.clientWidth>=340 ? 1 : 0;
             if (wide!=this.wide) {
                 this.wide = wide;
-                bus.$emit('settingsMenuActions', this.wide>1 ? [] : this.settingsMenuActions, 'queue');
+                bus.$emit('settingsMenuActions', /*this.wide>1 ? [] :*/ this.settingsMenuActions, 'queue');
             }
         },
         handleScroll() {

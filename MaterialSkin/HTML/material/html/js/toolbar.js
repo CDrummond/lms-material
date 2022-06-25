@@ -795,7 +795,7 @@ Vue.component('lms-toolbar', {
             return this.$store.state.page == 'now-playing'
         },
         currentPage() {
-            return this.$store.state.desktopLayout ? 'queue' : this.$store.state.page
+            return this.$store.state.desktopLayout ? this.nowPlayingExpanded ? 'now-playing' : 'queue' : this.$store.state.page
         },
         noPlayer () {
             return !this.$store.state.players || this.$store.state.players.length<1

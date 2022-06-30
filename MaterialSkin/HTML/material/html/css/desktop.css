@@ -31,10 +31,6 @@
  visibility:var(--queue-visibility);
 }
 
-.lms-desktop-toolbar-pad {
- height:var(--main-toolbar-height) !important;
-}
-
 .list-details {
  margin-left:-4px !important;
 }
@@ -71,6 +67,7 @@
 }
 
 .lms-splitter {
+ padding-top:var(--main-toolbar-height) !important;
  height: inherit;
  display: flex;
  flex-direction: row;

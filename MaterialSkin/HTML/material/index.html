@@ -61,7 +61,6 @@
     <lms-currentcover></lms-currentcover>
     <lms-server></lms-server>
     <lms-toolbar></lms-toolbar>
-    <div v-show="desktopLayout" class="lms-desktop-toolbar-pad"></div>
     <lms-splitter :margin="(desktopLayout && showQueue) ? 20 : 0" class="hide-for-mini">
      <div slot="left-pane"><lms-browse v-show="desktopLayout || page=='browse'"></lms-browse></div>
      <div slot="right-pane"><lms-queue v-show="(desktopLayout && showQueue) || page=='queue'"></lms-queue></div>

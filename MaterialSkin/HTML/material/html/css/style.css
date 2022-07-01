@@ -130,6 +130,8 @@ html, .mini-player {
 }
 
 .lms-toolbar {
+ position:unset!important;/* override vue */
+ z-index:unset!important;/* override vue */
  height:var(--main-toolbar-height) !important;
  color:var(--top-toolbar-text-color) !important;
  background-color:var(--top-toolbar-color) !important;

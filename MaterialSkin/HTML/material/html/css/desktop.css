@@ -67,7 +67,6 @@
 }
 
 .lms-splitter {
- padding-top:var(--main-toolbar-height) !important;
  height: inherit;
  display: flex;
  flex-direction: row;

@@ -447,7 +447,7 @@ def updateRepoXml(repoFile, version, zipFile, sha1, pluginName=None):
 if 1==len(sys.argv):
     usage()
 version=sys.argv[1]
-if version!="test" and (len(sys.argv)<3 or "--nocheck" != sys.argv[2]):
+if (not version.startswith("test")) and (len(sys.argv)<3 or "--nocheck" != sys.argv[2]):
     checkVersion(version)
     checkVersionExists(version)
 prepare()

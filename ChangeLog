@@ -1,3 +1,7 @@
+2.9.8
+-----
+1. Adjust desktop layout code to try to fix Safari issues (#589)
+
 2.9.7
 -----
 1. Fix track source not always showing.

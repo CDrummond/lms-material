@@ -264,7 +264,7 @@ function hideClassicSkinElems(page, textCol) {
         return;
     }
     var iframe = document.getElementById("embeddedIframe");
-    if (iframe) {
+    if (iframe && iframe.contentDocument) {
         iframe.contentDocument.bus = bus;
         var content = iframe.contentDocument;
         iframeInfo.content = content;

@@ -1,3 +1,7 @@
+2.9.9
+-----
+1. Don't try to embed PDF files for Android, doesn't work.
+
 2.9.8
 -----
 1. Adjust desktop layout code to try to fix Safari issues (#589)

@@ -575,7 +575,10 @@ function browseClick(view, item, index, event) {
         // Year from 'More' menu?
         browseAddCategories(view, {id:'year:'+item.actions.go.params.year, title:item.title.split(': ')[1]}, false);
     } else if (item.weblink) {
-        if (!IS_IOS) {
+        let url = item.weblink;
+        let parts = url.split('/').pop().split('?')[0].split('.');
+        let ext = parts[parts.length-1].toLowerCase();
+        if (!IS_IOS && !IS_ANDROID && !queryParams.dontEmbed.has(ext)) {
             bus.$emit('dlg.open', 'iframe', item.weblink, item.title, undefined, IFRAME_HOME_NAVIGATES_BROWSE_HOME);
         } else {
             window.open(item.weblink);

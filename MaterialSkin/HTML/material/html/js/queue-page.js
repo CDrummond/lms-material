@@ -1128,10 +1128,10 @@ var lmsQueue = Vue.component("lms-queue", {
             var canMove = this.$store.state.players && this.$store.state.players.length>1;
             if (canMove && this.settingsMenuActions[0]!=PQ_MOVE_QUEUE_ACTION) {
                 this.settingsMenuActions.unshift(PQ_MOVE_QUEUE_ACTION);
-                bus.$emit('settingsMenuActions', this.wide>1 ? [] : this.settingsMenuActions, 'queue');
+                bus.$emit('settingsMenuActions', /*this.wide>1 ? [] :*/ this.settingsMenuActions, 'queue');
             } else if (!canMove && this.settingsMenuActions[0]==PQ_MOVE_QUEUE_ACTION) {
                 this.settingsMenuActions.splice(0, 1);
-                bus.$emit('settingsMenuActions', this.wide>1 ? [] : this.settingsMenuActions, 'queue');
+                bus.$emit('settingsMenuActions', /*this.wide>1 ? [] :*/ this.settingsMenuActions, 'queue');
             }
         },
         repeatClicked(longPress) {

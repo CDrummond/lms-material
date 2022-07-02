@@ -132,6 +132,8 @@ function parseBrowseResp(data, parent, options, cacheKey, parentCommand, parentG
                                          h: 0});
                         resp.canUseGrid = true;
                         numImages++;
+                    } else if(options.allowNoTitle) {
+                        resp.items.push(i);
                     } else {
                         data.result.count--;
                     }

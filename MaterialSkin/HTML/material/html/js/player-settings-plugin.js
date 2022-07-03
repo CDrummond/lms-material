@@ -26,7 +26,7 @@ Vue.component('lms-player-settings-plugin', {
       <template v-for="(item, index) in items">
        <v-list-tile v-if="item.slider" class="lms-list-item">
         <v-flex xs12>
-         <v-layout>
+         <v-layout style="padding-top:4px">
           <v-btn flat icon @click="decrementSlider(item)" style="margin-top: 14px;"><v-icon>remove_circle_outline</v-icon></v-btn>
           <v-slider :step="item.adjust" :min="item.min" :max="item.max" v-model="item.initial" @change="sliderChanged(item)"></v-slider>
           <v-btn flat icon @click="incrementSlider(item)" style="margin-top: 14px;"><v-icon>add_circle_outline</v-icon></v-btn>

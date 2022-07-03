@@ -41,7 +41,9 @@ Vue.component('lms-player-settings-plugin', {
        <v-list-tile v-else @click="fetch(item)" class="lms-list-item">
         <v-list-tile-avatar :tile="true" class="lms-avatar" v-if="undefined!=item.radio"><v-icon>{{1==item.radio ? "radio_button_checked" : "radio_button_unchecked"}}</v-icon></v-list-tile-avatar>
         <v-list-tile-avatar :tile="true" class="lms-avatar" v-else-if="undefined!=item.checkbox"><v-icon>{{1==item.checkbox ? "check_box" : "check_box_outline_blank"}}</v-icon></v-list-tile-avatar>
-        <v-list-tile-avatar :tile="true" class="lms-avatar" v-else-if="item.icon"><img class="svg-img" :key="item.icon" v-lazy="item.icon"></img></v-list-tile-avatar>
+        <v-list-tile-avatar :tile="true" class="lms-avatar" v-else-if="item.svg"><img class="svg-img" :src="item.svg | svgIcon(darkUi)"></img></v-list-tile-avatar>
+        <v-list-tile-avatar :tile="true" class="lms-avatar" v-else-if="item.icon"><v-icon>{{item.icon}}</v-icon></v-list-tile-avatar>
+        <v-list-tile-avatar :tile="true" class="lms-avatar" v-else-if="item.image"><img class="svg-img" :key="item.image" v-lazy="item.image"></img></v-list-tile-avatar>
         <v-list-tile-content>
          <v-list-tile-title>{{item.title}}</v-list-tile-title>
          <v-list-tile-sub-title v-if="item.subtitle">{{item.subtitle}}</v-list-tile-sub-title>
@@ -65,6 +67,9 @@ Vue.component('lms-player-settings-plugin', {
         }
     },
     computed: {
+        darkUi () {
+            return this.$store.state.darkUi
+        },
         homeButton() {
             return this.$store.state.homeButton
         }
@@ -228,9 +233,14 @@ Vue.component('lms-player-settings-plugin', {
             });
         }
      },
-     watch: {
-        'show': function(val) {
-             this.$store.commit('dialogOpen', {name:'playersettingsplugin', shown:val});
+     filters: {
+        svgIcon: function (name, dark) {
+            return "/material/svg/"+name+"?c="+(dark ? LMS_DARK_SVG : LMS_LIGHT_SVG)+"&r="+LMS_MATERIAL_REVISION;
         }
-     }
+    },
+    watch: {
+        'show': function(val) {
+            this.$store.commit('dialogOpen', {name:'playersettingsplugin', shown:val});
+        }
+    }
 })

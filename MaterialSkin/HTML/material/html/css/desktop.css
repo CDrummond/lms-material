@@ -72,6 +72,10 @@
  flex-direction: row;
 }
 
+.IS_ANDROID .lms-splitter {
+ padding-top:var(--main-toolbar-height) !important;
+}
+
 .lms-splitter .splitter-pane {
  height: inherit;
  overflow-y: auto;

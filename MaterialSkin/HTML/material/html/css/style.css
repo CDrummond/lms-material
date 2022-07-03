@@ -129,9 +129,12 @@ html, .mini-player {
  color:var(--dialog-toolbar-text-color) !important;
 }
 
-.lms-toolbar {
+.IS_NOT_ANDROID .lms-toolbar {
  position:unset!important;/* override vue */
  z-index:unset!important;/* override vue */
+}
+
+.lms-toolbar {
  height:var(--main-toolbar-height) !important;
  color:var(--top-toolbar-text-color) !important;
  background-color:var(--top-toolbar-color) !important;

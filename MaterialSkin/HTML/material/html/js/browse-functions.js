@@ -366,7 +366,8 @@ function browseHandleListResponse(view, item, command, resp, prevPage) {
                 for (var i=0, loop=view.onlineServices, len=loop.length; i<len; ++i) {
                     var emblem = getEmblem(loop[i]+':');
                     view.currentActions.items.push({title:/*!i81n*/'wimp'==loop[i] ? 'Tidal' : capitalize(loop[i]),
-                                                    weight:10, svg:emblem ? emblem.name : undefined, id:loop[i], isService:true});
+                                                    weight:10, svg:emblem ? emblem.name : undefined, id:loop[i], isService:true,
+                                                    artist_id:artist_id});
                 }
             } else if (undefined!=view.$store.state.ratingsPlugin && view.items.length>1) {
                 view.currentActions.items.push({albumRating:true, title:i18n("Set rating for all tracks"), icon:"stars", weight:99});

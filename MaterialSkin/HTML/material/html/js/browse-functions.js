@@ -299,8 +299,8 @@ function browseHandleListResponse(view, item, command, resp, prevPage) {
         let listingAlbums = view.command.command[0]=="albums";
         let listingTracks = view.command.command[0]=="tracks";
         let title = view.current.title;
-        let artist_id = listingArtistAlbums ? view.current.id : undefined;
-        let album_id = listingAlbumTracks ? view.current.id : undefined;
+        let artist_id = listingArtistAlbums ? view.current.id.split(":")[1] : undefined;
+        let album_id = listingAlbumTracks ? view.current.id.split(":")[1] : undefined;
         if (!listingArtistAlbums && listingAlbums) {
             let pos = getField(command, "artist_id");
             if (pos>=0) {
@@ -310,7 +310,7 @@ function browseHandleListResponse(view, item, command, resp, prevPage) {
                 title=parts.join(" ");
                 artist_id = command.params[pos].split(":")[1];
             }
-        } else if (!listingAlbumTracks && listingAlbums) {
+        } else if (!listingAlbumTracks && listingTracks) {
             let pos = getField(command, "album_id");
             if (pos>=0) {
                 listingAlbumTracks = true;

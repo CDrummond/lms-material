@@ -54,17 +54,22 @@ Vue.component('lms-player-settings-plugin', {
   </v-dialog>
  </div>
  `,
-     props: [],
-     data() {
-         return {
-             show: false,
-             showHome: false,
-             playerId: undefined,
-             title: undefined,
-             items: []
-         }
-     },
-     mounted() {
+    props: [],
+    data() {
+        return {
+            show: false,
+            showHome: false,
+            playerId: undefined,
+            title: undefined,
+            items: []
+        }
+    },
+    computed: {
+        homeButton() {
+            return this.$store.state.homeButton
+        }
+    },
+    mounted() {
         this.fetching=false;
         bus.$on('playersettingsplugin.open', function(playerId, playerName, plugin, showHome) {
             this.playerId=playerId;

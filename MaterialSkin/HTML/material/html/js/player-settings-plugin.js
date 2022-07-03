@@ -138,6 +138,19 @@ Vue.component('lms-player-settings-plugin', {
                 this.fetching = false;
                 var resp = parseBrowseResp(data, this.current, {allowNoTitle:true});
                 if (resp.items.length>0) {
+                    // Ensure values are ints, LMS sometimes sends as strings?
+                    for (let i=0, loop=resp.items, len=loop.length; i<len; ++i) {
+                        if (undefined!=loop[i].slider) {
+                            loop[i].initial=parseInt(loop[i].initial);
+                            loop[i].min=parseInt(loop[i].min);
+                            loop[i].max=parseInt(loop[i].max);
+                            loop[i].adjust=parseInt(loop[i].adjust);
+                        } else if (undefined!=loop[i].radio) {
+                            loop[i].radio=parseInt(loop[i].radio);
+                        } else if (undefined!=loop[i].checkbox) {
+                            loop[i].checkbox=parseInt(loop[i].checkbox);
+                        }
+                    }
                     if (isRefresh) {
                         let se = this.getScrollElement();
                         let prevPos = undefined!=se ? se.scrollTop : -1;

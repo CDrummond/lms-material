@@ -742,7 +742,7 @@ var lmsBrowse = Vue.component("lms-browse", {
             } else if (undefined!=act.do) {
                 this.fetchItems(act.do, {cancache:false, id:"currentaction:"+index, title:act.title+SEPARATOR+this.current.title});
             } else {
-                var cmd = {command:["browseonlineartist", "items"], params:["service_id:"+act.id, this.current.id, "menu:1"]};
+                var cmd = {command:["browseonlineartist", "items"], params:["service_id:"+act.id, "artist_id:"+act.artist_id, "menu:1"]};
                 this.fetchItems(cmd, {cancache:false, id:act.id, title:act.title+SEPARATOR+this.current.title, command:cmd.command, params:cmd.params});
             }
         },

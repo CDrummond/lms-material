@@ -23,14 +23,31 @@ Vue.component('lms-player-settings-plugin', {
     </v-card-title>
     <v-card-text>
      <v-list id="player-settings-plugin-list">
-      <v-list-tile v-for="(item, index) in items" @click="fetch(item)" class="lms-list-item">
-       <v-list-tile-avatar :tile="true" class="lms-avatar" v-if="undefined!=item.radio"><v-icon>{{1==item.radio ? "radio_button_checked" : "radio_button_unchecked" }}</v-icon></v-list-tile-avatar>
-       <v-list-tile-avatar :tile="true" class="lms-avatar" v-else-if="item.icon"><img class="svg-img" :key="item.icon" v-lazy="item.icon"></img></v-list-tile-avatar>
-       <v-list-tile-content>
-        <v-list-tile-title>{{item.title}}</v-list-tile-title>
-        <v-list-tile-sub-title v-if="item.subtitle">{{item.subtitle}}</v-list-tile-sub-title>
-       </v-list-tile-content> 
-      </v-list-tile>
+      <template v-for="(item, index) in items">
+       <v-list-tile v-if="item.slider" class="lms-list-item">
+        <v-flex xs12>
+         <v-layout>
+          <v-btn flat icon @click="decrementSlider(item)" style="margin-top: 14px;"><v-icon>remove</v-icon></v-btn>
+          <v-slider :step="item.adjust" :min="item.min" :max="item.max" v-model="item.initial" @change="sliderChanged(item)"></v-slider>
+          <v-btn flat icon @click="incrementSlider(item)" style="margin-top: 14px;"><v-icon>add</v-icon></v-btn>
+         </v-layout>
+        </v-flex>
+       </v-list-tile>
+       <v-list-tile v-else-if="item.type=='entry'" avatar :key="item.id" class="lms-avatar lms-list-item" :id="'item'+index">
+        <v-list-tile-content>
+         <text-field :focus="index==0 && !IS_MOBILE" :title="item.title" :type="item.type" @value="entry(item, $event)"></text-field>
+        </v-list-tile-content>
+       </v-list-tile>
+       <v-list-tile v-else @click="fetch(item)" class="lms-list-item">
+        <v-list-tile-avatar :tile="true" class="lms-avatar" v-if="undefined!=item.radio"><v-icon>{{1==item.radio ? "radio_button_checked" : "radio_button_unchecked"}}</v-icon></v-list-tile-avatar>
+        <v-list-tile-avatar :tile="true" class="lms-avatar" v-else-if="undefined!=item.checkbox"><v-icon>{{1==item.checkbox ? "check_box" : "check_box_outline_blank"}}</v-icon></v-list-tile-avatar>
+        <v-list-tile-avatar :tile="true" class="lms-avatar" v-else-if="item.icon"><img class="svg-img" :key="item.icon" v-lazy="item.icon"></img></v-list-tile-avatar>
+        <v-list-tile-content>
+         <v-list-tile-title>{{item.title}}</v-list-tile-title>
+         <v-list-tile-sub-title v-if="item.subtitle">{{item.subtitle}}</v-list-tile-sub-title>
+        </v-list-tile-content>
+       </v-list-tile>
+      </v-template>
      </v-list>
     </v-card-text>
    </v-card>
@@ -116,9 +133,7 @@ Vue.component('lms-player-settings-plugin', {
                 this.fetching = false;
                 var resp = parseBrowseResp(data, this.current, {allowNoTitle:true});
                 if (resp.items.length>0) {
-                    if (2==resp.items.length && undefined!=resp.items[0].title && undefined==resp.items[1].title) {
-                        this.handleControl(item, resp.items);
-                    } else if (isRefresh) {
+                    if (isRefresh) {
                         let se = this.getScrollElement();
                         let prevPos = undefined!=se ? se.scrollTop : -1;
                         this.items = resp.items;
@@ -140,7 +155,6 @@ Vue.component('lms-player-settings-plugin', {
                         this.title=item.title+SEPARATOR+this.playerName;
                     }
                 } else {
-
                     this.fetch(this.current, true);
                 }
             }).catch(err => {
@@ -148,29 +162,52 @@ Vue.component('lms-player-settings-plugin', {
                 logError(err, cmd.command, cmd.params, 0, LMS_PLAYER_SETTINGS_PLUGIN_MAX_ITEMS);
             });
         },
-        handleControl(clicked, items) {
-            if (1==items[1].slider) {
-                let si = items[1];
-                let slider = { step:undefined==si.step ? 1 : parseInt(si.step),
-                               min:undefined==si.min ? 0 : parseInt(si.min),
-                               max:undefined==si.max ? 100 : parseInt(si.max),
-                               value:undefined==si.value ? 0 : parseInt(si.value) };
-                promptSlider(clicked.title, slider).then(resp => {
-                    if (resp.ok) {
-                        let cmd = browseBuildCommand(this, items[1], "go", false);
-                        for (var i=0, len=cmd.params.length; i<len; ++i) {
-                            cmd.params[i]=cmd.params[i].replace(":value", ":"+resp.value);
-                        }
-                        lmsCommand(this.playerId, cmd.command.concat(cmd.params));
-                    }
-                });
-            }
-        },
         getScrollElement() {
             if (undefined==this.scrollElement) {
                 this.scrollElement = document.getElementById("player-settings-plugin-list");
             }
             return this.scrollElement;
+        },
+        sliderChanged(item) {
+            this.updateSlider(item);
+        },
+        decrementSlider(item) {
+            if (item.initial-item.adjust>=item.min) {
+                item.initial-=item.adjust;
+                this.updateSlider(item);
+            }
+        },
+        incrementSlider(item) {
+            if (item.initial+item.adjust<=item.max) {
+                item.initial+=item.adjust;
+                this.updateSlider(item);
+            }
+        },
+        updateSlider(item) {
+            let cmd = browseBuildCommand(this, item, "go", false);
+            for (var i=0, len=cmd.params.length; i<len; ++i) {
+                cmd.params[i]=cmd.params[i].replace(":value", ":"+item.initial);
+            }
+            lmsCommand(this.playerId, cmd.command.concat(cmd.params)).then(({data}) => {
+                this.fetch(this.current, true);
+            });
+        },
+        entry(item, text) {
+            let enteredTerm = text;
+            if (undefined==enteredTerm) {
+                return
+            }
+            enteredTerm=enteredTerm.trim();
+            if (isEmpty(enteredTerm)) {
+                return;
+            }
+            let cmd = browseBuildCommand(this, item, "go", false);
+            for (var i=0, len=cmd.params.length; i<len; ++i) {
+                cmd.params[i]=cmd.params[i].replace(TERM_PLACEHOLDER, enteredTerm);
+            }
+            lmsCommand(this.playerId, cmd.command.concat(cmd.params)).then(({data}) => {
+                this.fetch(this.current, true);
+            });
         }
      },
      watch: {

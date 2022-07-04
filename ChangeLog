@@ -3,6 +3,8 @@
 1. Don't try to embed PDF files for Android, doesn't work.
 2. Try to fix zooming issues with APK.
 3. Add artist, and album, extra menu items when browse via 'More'
+4. Don't show header subtitles in search results, as this mainly repeats title
+   text.
 
 2.9.8
 -----

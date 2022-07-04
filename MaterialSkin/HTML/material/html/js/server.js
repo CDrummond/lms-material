@@ -9,6 +9,7 @@
 //const PLAYER_STATUS_TAGS = "tags:cdegiloqrstuyAABEKNST";
 const PLAYER_STATUS_TAGS = "tags:cdegikloqrstuyAABKNST";
 const STATUS_UPDATE_MAX_TIME = 4000;
+const IGNORE_NOTIFS = new Set(["song", "icon"]);
 
 function updateMskLinks(str) {
     // Replace href links in notificaitons with javascript so that we can intercept
@@ -586,8 +587,9 @@ var lmsServer = Vue.component('lms-server', {
         },
         handleDisplayStatus(playerId, data) {
             logCometdMessage("DISPLAYSTATUS ("+playerId+")", data);
-            if (data.type=="showbriefly" && undefined!=data.display && undefined!=data.display.text && data.display.text.length>0) {
-                bus.$emit('showMessage', data.display.text.join("\n"));
+            if (data.type=="showbriefly" && undefined!=data.display && undefined!=data.display.text && data.display.text.length>0 &&
+                (undefined==data.display.type || !IGNORE_NOTIFS.has(data.display.type))) {
+                bus.$emit('showMessage', data.display.text.filter(Boolean).join(SEPARATOR));
             }
         },
         getPlayerPrefs() {

@@ -3,15 +3,12 @@
 1. Add player settings plugins to 'Player settings' dialog.
 2. Display 'showBriefly' messages.
 3. Show track comments in information view.
-
-2.9.9
------
-1. Don't try to embed PDF files for Android, doesn't work.
-2. Try to fix zooming issues with APK.
-3. Add artist, and album, extra menu items when browse via 'More'
-4. Don't show header subtitles in search results, as this mainly repeats title
+4. Don't try to embed PDF files for Android, doesn't work.
+5. Try to fix zooming issues with APK.
+6. Add artist, and album, extra menu items when browse via 'More'
+7. Don't show header subtitles in search results, as this mainly repeats title
    text.
-5. Colour disc headers in now-playing as per browse view.
+8. Colour disc headers in now-playing as per browse view.
 
 2.9.8
 -----

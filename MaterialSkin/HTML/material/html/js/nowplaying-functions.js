@@ -173,6 +173,9 @@ function nowplayingOnPlayerStatus(view, playerStatus) {
     if (playerStatus.playlist.count!=view.playerStatus.playlist.count) {
         view.playerStatus.playlist.count = playerStatus.playlist.count;
     }
+    if (playerStatus.current.comment!=view.playerStatus.current.comment) {
+        view.playerStatus.current.comment = playerStatus.current.comment;
+    }
 
     var source = getTrackSource(playerStatus.current);
     if (source!=view.playerStatus.current.source) {
@@ -502,6 +505,10 @@ function nowplayingFetchTrackInfo(view) {
 
     if (view.$store.state.techInfo && undefined!=trk.technicalInfo) {
         html+="<tr><td>"+i18n("Technical")+"&nbsp;</td><td>"+trk.technicalInfo+"</td></tr>";
+    }
+
+    if (undefined!=trk.comment) {
+        html+="<tr><td>"+i18n("Comment")+"&nbsp;</td><td>"+trk.comment+"</td></tr>";
     }
 
     if (html.length>0) {

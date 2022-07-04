@@ -765,7 +765,7 @@ div.v-subheader {
 
 /* Clickable artist/album in queue */
 .v-list__tile__sub-title, .v-list__tile__sub-title a {
- color:var(--icon-color);
+ color:var(--icon-color) !important;
  opacity:var(--sub-opacity) !important;
 }
 
@@ -1759,7 +1759,7 @@ div.v-subheader {
 }
 
 .browse-header .v-list__tile__sub-title {
- color:var(--active-color);
+ color:var(--active-color)!important;
 }
 
 .browse-header {

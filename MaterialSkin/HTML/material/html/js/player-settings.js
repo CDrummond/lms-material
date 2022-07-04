@@ -45,6 +45,14 @@ Vue.component('lms-player-settings', {
         <v-list-tile-avatar v-if="menuIcons"><v-icon>build</v-icon></v-list-tile-avatar>
         <v-list-tile-content><v-list-tile-title>{{i18n('Configuration')}}</v-list-tile-title></v-list-tile-content>
        </v-list-tile>
+       <v-list-tile v-for="(plugin, index) in plugins" @click="showPlugin(index)">
+        <v-list-tile-avatar v-if="menuIcons">
+         <img v-if="plugin.svg" class="svg-img" :src="plugin.svg| svgIcon(darkUi)"></img>
+         <v-icon v-else-if="plugin.icon">{{plugin.icon}}</v-icon>
+         <img v-else-if="plugin.image" class="svg-img" :key="plugin.image" v-lazy="plugin.image">
+        </v-list-tile-avatar>
+        <v-list-tile-content><v-list-tile-title>{{plugin.title}}</v-list-tile-title></v-list-tile-content>
+       </v-list-tile>
       </v-list>
      </v-menu>
     </v-toolbar>
@@ -155,6 +163,16 @@ Vue.component('lms-player-settings', {
       <v-list-tile-content>
        <v-list-tile-title><v-btn flat @click="showConfig"><v-icon class="btn-icon">build</v-icon>{{i18n('Configuration')}}</v-btn></v-list-tile-title>
        <v-list-tile-sub-title>{{i18n('Player specific configuration UI, such as piCorePlayer or SqueezeAMP.')}}</v-list-tile-sub-title>
+      </v-list-tile-content>
+     </v-list-tile>
+     <v-list-tile v-for="(plugin, index) in plugins" class="other-setting">
+      <v-list-tile-content>
+       <v-list-tile-title><v-btn flat @click="showPlugin(index)">
+       <img v-if="plugin.svg" class="svg-img btn-icon" :src="plugin.svg| svgIcon(darkUi)"></img>
+       <v-icon v-else-if="plugin.icon">{{plugin.icon}}</v-icon>
+       <img v-else-if="plugin.image" class="svg-img btn-icon" :key="plugin.image" v-lazy="plugin.image">
+        {{plugin.title}}
+       </v-list-tile-title>
       </v-list-tile-content>
      </v-list-tile>
        
@@ -274,7 +292,8 @@ Vue.component('lms-player-settings', {
             libraries:[],
             library:undefined,
             customActions:undefined,
-            showHome:false
+            showHome:false,
+            plugins:[]
         }
     },
     computed: {
@@ -355,6 +374,7 @@ Vue.component('lms-player-settings', {
                 bus.$emit('showError', undefined, i18n("No Player"));
             }
             this.showHome=showHome;
+            this.fetchPlugins();
         }.bind(this));
         bus.$on('noPlayers', function() {
             this.show=this.alarmDialog.show=false;
@@ -727,6 +747,27 @@ Vue.component('lms-player-settings', {
         },
         doCustomAction(action, player) {
             performCustomAction(action, player);
+        },
+        fetchPlugins() {
+            this.plugins=[];
+            lmsList(this.playerId, ["menu", "items"], ["direct:1"]).then(({data}) => {
+                if (data && data.result && data.result.item_loop) {
+                    logJsonMessage("RESP", data);
+                    for (var idx=0, loop=data.result.item_loop, loopLen=loop.length; idx<loopLen; ++idx) {
+                        let item = loop[idx];
+                        if (item.node=="settingsPlayer") {
+                            item.title=item.text;
+                            item.text=undefined;
+                            mapIcon(item);
+                            this.plugins.push(item);
+                        }
+                    }
+                }
+            });
+        },
+        showPlugin(idx) {
+            this.showMenu = false;
+            bus.$emit('dlg.open', 'playersettingsplugin', this.playerId, this.playerName, this.plugins[idx], this.showHome);
         }
     },
     filters: {

@@ -1,3 +1,9 @@
+2.10.0
+------
+1. Add player settings plugins to 'Player settings' dialog.
+2. Display 'showBriefly' messages.
+3. Show track comments in information view.
+
 2.9.9
 -----
 1. Don't try to embed PDF files for Android, doesn't work.

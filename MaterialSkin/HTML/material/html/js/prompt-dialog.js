@@ -12,7 +12,8 @@ var lmsPromptDialog = Vue.component("lms-prompt-dialog", {
  <v-card>
   <v-card-title v-if="undefined!=title">{{title}}</v-card-title>
   <v-card-text>
-   <v-text-field v-if="type=='text'" single-line :label="hint" v-model="text" @keyup.enter="close(true);" ref="entry"></v-text-field>
+   <v-slider v-if="type=='slider'" :step="slider.step" :min="slider.min" :max="slider.max" v-model="slider.value" thumb-label="always"></v-slider>
+   <v-text-field v-else-if="type=='text'" single-line :label="hint" v-model="text" @keyup.enter="close(true);" ref="entry"></v-text-field>
    <div v-else v-html="text" class="clickable" ref="prompt-dlg-text"></div>
   </v-card-text>
   <v-card-actions>
@@ -32,11 +33,12 @@ var lmsPromptDialog = Vue.component("lms-prompt-dialog", {
             positiveButton:undefined,
             negativeButton:undefined,
             otherButton:undefined,
-            type:'confirm'
+            type:'confirm',
+            slider:{step:1, min:0, max:100, value:0}
         }
     },
     mounted() {
-        bus.$on('prompt.open', function(type, title, text, hint, positiveButton, negativeButton, otherButton) {
+        bus.$on('prompt.open', function(type, title, text, extra, positiveButton, negativeButton, otherButton) {
             this.text = text ? text : "";
             if ('alert'==type) {
                 if (this.text=='-') {
@@ -47,7 +49,13 @@ var lmsPromptDialog = Vue.component("lms-prompt-dialog", {
             this.maxWidth = this.text.length>=50 || 'confirm'!=type ? 500 : 300;
             this.type = type;
             this.title = title;
-            this.hint = hint;
+            if ('slider'==type) {
+                this.slider = extra;
+                this.hint = undefined;
+            } else {
+                this.hint = extra;
+                this.slider = {step:1, min:0, max:100, value:0};
+            }
             this.positiveButton = undefined==positiveButton ? type=='alert' ? i18n('Close') : i18n('OK') : positiveButton;
             this.negativeButton = undefined==negativeButton ? i18n('Cancel') : negativeButton;
             this.otherButton = otherButton;
@@ -70,7 +78,11 @@ var lmsPromptDialog = Vue.component("lms-prompt-dialog", {
     methods: {
         close(resp) {
             this.show=false;
-            bus.$emit('prompt.resp', resp, this.text);
+            if ('slider'==this.type) {
+                bus.$emit('prompt.resp', resp, this.slider.value);
+            } else {
+                bus.$emit('prompt.resp', resp, this.text);
+            }
         }
     },
     watch: {
@@ -103,6 +115,15 @@ function showAlert(text, button) {
         bus.$emit('dlg.open', 'prompt', 'alert', undefined, text, undefined, button);
         bus.$once('prompt.resp', function(resp) {
             response(resp);
+        });
+    });
+}
+
+function promptSlider(title, slider, positiveButton, negativeButton) {
+    return new Promise(function(response) {
+        bus.$emit('dlg.open', 'prompt', 'slider', title, undefined, slider, positiveButton, negativeButton);
+        bus.$once('prompt.resp', function(resp, value) {
+            response({ok:resp, value:value});
         });
     });
 }

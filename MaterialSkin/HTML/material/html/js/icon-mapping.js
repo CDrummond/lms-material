@@ -171,5 +171,12 @@ function mapIcon(item, app, fallback) {
         item.icon=fallback.icon; item.svg=fallback.svg; item.image=undefined;
         return true;
     }
+    if (item.menuIcon) {
+        item.image=item.menuIcon;
+        item.icon=undefined;
+    } else if (item.icon) {
+        item.image=item.icon;
+        item.icon=undefined;
+    }
     return false;
 }

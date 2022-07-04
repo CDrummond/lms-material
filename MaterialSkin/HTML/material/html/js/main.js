@@ -140,35 +140,32 @@ var app = new Vue({
         });
 
         lmsOptions.conductorGenres = new Set(["Classical", "Avant-Garde", "Baroque", "Chamber Music", "Chant", "Choral", "Classical Crossover",
-                                              "Early Music",  "High Classical", "Impressionist", "Medieval", "Minimalism","Modern Composition",
+                                              "Early Music", "High Classical", "Impressionist", "Medieval", "Minimalism","Modern Composition",
                                               "Opera", "Orchestral", "Renaissance", "Romantic", "Symphony", "Wedding Music"]);
         lmsOptions.composerGenres = new Set([...new Set(["Jazz"]), ...lmsOptions.conductorGenres]);
 
         lmsCommand("", ["material-skin", "prefs"]).then(({data}) => {
             if (data && data.result) {
-                const GENRE_TAGS = ['composer', 'conductor', 'band'];
-                for (var t=0, len=GENRE_TAGS.length; t<len; ++t ) {
-                    if (data.result[GENRE_TAGS[t]+'genres']) {
-                        var genres = splitString(data.result[GENRE_TAGS[t]+'genres'].split("\r").join("").split("\n").join(","));
+                for (var t=0, len=SKIN_GENRE_TAGS.length; t<len; ++t ) {
+                    if (data.result[SKIN_GENRE_TAGS[t]+'genres']) {
+                        var genres = splitString(data.result[SKIN_GENRE_TAGS[t]+'genres'].split("\r").join("").split("\n").join(","));
                         if (genres.length>0) {
-                            lmsOptions[GENRE_TAGS[t]+'Genres'] = new Set(genres);
-                            logJsonMessage(GENRE_TAGS[t].toUpperCase()+"_GENRES", genres);
-                            setLocalStorageVal(GENRE_TAGS[t]+"genres", data.result[GENRE_TAGS[t]+'genres']);
+                            lmsOptions[SKIN_GENRE_TAGS[t]+'Genres'] = new Set(genres);
+                            logJsonMessage(SKIN_GENRE_TAGS[t].toUpperCase()+"_GENRES", genres);
+                            setLocalStorageVal(SKIN_GENRE_TAGS[t]+"genres", data.result[SKIN_GENRE_TAGS[t]+'genres']);
                         }
                     }
                 }
-                const BOOL_OPTS = ['showComposer', 'showConductor', 'showBand', 'showAllArtists', 'artistFirst', IS_IOS ? 'xx' : 'allowDownload'];
-                for (var i=0, len=BOOL_OPTS.length; i<len; ++i) {
-                    if (undefined!=data.result[BOOL_OPTS[i]]) {
-                        lmsOptions[BOOL_OPTS[i]] = 1 == parseInt(data.result[BOOL_OPTS[i]]);
-                        setLocalStorageVal(BOOL_OPTS[i], lmsOptions[BOOL_OPTS[i]]);
+                for (var i=0, len=SKIN_BOOL_OPTS.length; i<len; ++i) {
+                    if (undefined!=data.result[SKIN_BOOL_OPTS[i]]) {
+                        lmsOptions[SKIN_BOOL_OPTS[i]] = 1 == parseInt(data.result[SKIN_BOOL_OPTS[i]]);
+                        setLocalStorageVal(SKIN_BOOL_OPTS[i], lmsOptions[SKIN_BOOL_OPTS[i]]);
                     }
                 }
-                const INT_OPTS = ['respectFixedVol', 'commentAsDiscTitle', 'collapseDiscs'];
-                for (var i=0, len=INT_OPTS.length; i<len; ++i) {
-                    if (undefined!=data.result[INT_OPTS[i]]) {
-                        lmsOptions[INT_OPTS[i]] = parseInt(data.result[INT_OPTS[i]]);
-                        setLocalStorageVal(INT_OPTS[i], lmsOptions[INT_OPTS[i]]);
+                for (var i=0, len=SKIN_INT_OPTS.length; i<len; ++i) {
+                    if (undefined!=data.result[SKIN_INT_OPTS[i]]) {
+                        lmsOptions[SKIN_INT_OPTS[i]] = parseInt(data.result[SKIN_INT_OPTS[i]]);
+                        setLocalStorageVal(SKIN_INT_OPTS[i], lmsOptions[SKIN_INT_OPTS[i]]);
                     }
                 }
             }

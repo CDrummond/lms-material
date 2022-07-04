@@ -310,3 +310,12 @@ PLUGIN_MATERIAL_SKIN_COLLAPSE_DISCS_C_LIMIT
 	EN	Collapse when 200, or more, tracks
 	FR	Regrouper par disque si 200 morceaux ou plus
 	NL	Schijven samenvouwen bij 200 of meer nummers
+
+PLUGIN_MATERIAL_SKIN_SHOW_COMMENT
+	EN	Show comment in info view
+
+PLUGIN_MATERIAL_SKIN_SHOW_COMMENT_DESC
+	EN	Show a track's comment tag in the 'Track' section of the track information view, below the lyrics.
+
+PLUGIN_MATERIAL_SKIN_RELOAD_NOTE
+	EN	NOTE: If you change any of the settings below then you might need to refresh the web page for the changes to take effect.

@@ -23,7 +23,7 @@ sub page {
 }
 
 sub prefs {
-	return ($prefs, 'composergenres', 'conductorgenres', 'bandgenres', 'showComposer', 'showConductor', 'showBand', 'password', 'respectFixedVol', 'showAllArtists', 'artistFirst', 'allowDownload', 'manifestDisplay', 'commentAsDiscTitle', 'collapseDiscs');
+	return ($prefs, 'composergenres', 'conductorgenres', 'bandgenres', 'showComposer', 'showConductor', 'showBand', 'password', 'respectFixedVol', 'showAllArtists', 'artistFirst', 'allowDownload', 'manifestDisplay', 'commentAsDiscTitle', 'collapseDiscs', 'showComment');
 }
 
 1;

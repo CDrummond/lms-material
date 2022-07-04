@@ -7,7 +7,7 @@
 'use strict';
 
 //const PLAYER_STATUS_TAGS = "tags:cdegiloqrstuyAABEKNST";
-const PLAYER_STATUS_TAGS = "tags:cdegikloqrstuyAABKNST";
+const PLAYER_STATUS_TAGS = "tags:cdegiloqrstuyAABKNST";
 const STATUS_UPDATE_MAX_TIME = 4000;
 const IGNORE_NOTIFS = new Set(["song", "icon"]);
 
@@ -562,26 +562,38 @@ var lmsServer = Vue.component('lms-server', {
             if (data[1]=="plugin.dontstopthemusic" && data[2]=="provider") {
                 bus.$emit("prefset", data[1]+":"+data[2], data[3], playerId);
             } else if (data[1]=="plugin.material-skin") {
-                if (data[2]=="composergenres") {
-                    var genres = splitString(data[3].split("\r").join("").split("\n").join(","));
-                    if (genres.length>0) {
-                        lmsOptions.composerGenres = new Set(genres);
-                    }
-                } else if (data[2]=="conductorgenres") {
-                    var genres = splitString(data[3].split("\r").join("").split("\n").join(","));
-                    if (genres.length>0) {
-                        lmsOptions.conductorGenres = new Set(genres);
-                    }
-                } else if (data[2]=="bandgenres") {
-                    var genres = splitString(data[3].split("\r").join("").split("\n").join(","));
-                    if (genres.length>0) {
-                        lmsOptions.bandGenres = new Set(genres);
-                    }
-                } else if (data[2]=="password") {
+                if (data[2]=="password") {
                     this.$store.commit('checkPassword', data[3]);
-                } else if (undefined!=data[2] && null!=data[2] && undefined!=lmsOptions[data[2]]) {
-                    lmsOptions[data[2]] = 1 == parseInt(data[3]);
-                    setLocalStorageVal(data[2], lmsOptions[data[2]]);
+                } else {
+                    for (var t=0, len=SKIN_GENRE_TAGS.length; t<len; ++t ) {
+                        if (data[2]==(SKIN_GENRE_TAGS[t]+'genres')) {
+                            var genres = splitString(data[3].split("\r").join("").split("\n").join(","));
+                            lmsOptions[SKIN_GENRE_TAGS[t]+'Genres'] = new Set(genres);
+                            setLocalStorageVal(SKIN_GENRE_TAGS[t]+"genres", data[3]);
+                            found=true;
+                            break;
+                        }
+                    }
+                    if (!found) {
+                        for (var i=0, len=SKIN_BOOL_OPTS.length; i<len; ++i) {
+                            if (data[2]==SKIN_BOOL_OPTS[i]) {
+                                lmsOptions[SKIN_BOOL_OPTS[i]] = 1 == parseInt(data[3]);
+                                setLocalStorageVal(SKIN_BOOL_OPTS[i], lmsOptions[SKIN_BOOL_OPTS[i]]);
+                                found=true;
+                                break;
+                            }
+                        }
+                    }
+                    if (!found) {
+                        for (var i=0, len=SKIN_INT_OPTS.length; i<len; ++i) {
+                            if (data[2]==SKIN_INT_OPTS[i]) {
+                                lmsOptions[SKIN_INT_OPTS[i]] = parseInt(data[3]);
+                                setLocalStorageVal(SKIN_INT_OPTS[i], lmsOptions[SKIN_INT_OPTS[i]]);
+                                found=true;
+                                break;
+                            }
+                        }
+                    }
                 }
             }
         },
@@ -692,7 +704,10 @@ var lmsServer = Vue.component('lms-server', {
             }
             logJsonMessage("UPDATING ("+id+")");
             this.playerStatusMessages.set(id, now);
-            lmsCommand(id, ["status", "-", 1, PLAYER_STATUS_TAGS + (this.$store.state.showRating ? "R" : "")], undefined, STATUS_UPDATE_MAX_TIME).then(({data}) => {
+            let tags = PLAYER_STATUS_TAGS +
+                         (this.$store.state.showRating ? "R" : "") +
+                         (lmsOptions.showComment ? "k" : "");
+            lmsCommand(id, ["status", "-", 1, tags], undefined, STATUS_UPDATE_MAX_TIME).then(({data}) => {
                 this.playerStatusMessages.delete(id);
                 if (data && data.result) {
                     this.handlePlayerStatus(id, data.result, true);
@@ -710,8 +725,11 @@ var lmsServer = Vue.component('lms-server', {
         subscribe(id) {
             if (!this.subscribedPlayers.has(id)) {
                 logCometdDebug("Subscribe: "+id);
+                let tags = PLAYER_STATUS_TAGS +
+                         (this.$store.state.showRating ? "R" : "") +
+                         (lmsOptions.showComment ? "k" : "");
                 this.cometd.subscribe('/slim/subscribe', function(res) { },
-                    {data:{response:'/'+this.cometd.getClientId()+'/slim/playerstatus/'+id, request:[id, ["status", "-", 1, PLAYER_STATUS_TAGS + (this.$store.state.showRating ? "R" : ""), "subscribe:30"]]}});
+                    {data:{response:'/'+this.cometd.getClientId()+'/slim/playerstatus/'+id, request:[id, ["status", "-", 1, tags, "subscribe:30"]]}});
                 this.cometd.subscribe('/slim/subscribe', function(res) { },
                     {data:{response:'/'+this.cometd.getClientId()+'/slim/displaystatus/'+id, request:[id, ["displaystatus", "subscribe:showbriefly"]]}});
                 this.cometd.subscribe('/slim/subscribe',

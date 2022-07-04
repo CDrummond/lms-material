@@ -1,8 +1,15 @@
 [% PROCESS settings/header.html %]
 
+    <br/>
+    [% WRAPPER setting title="" desc="" %]
+        <div><i>[% "PLUGIN_MATERIAL_SKIN_RELOAD_NOTE" | string %]</i></div>
+    [% END %]
+    <hr class="main-sep"/><br/>
+
     [% WRAPPER setting title="PLUGIN_MATERIAL_SKIN_PASSWORD" desc="PLUGIN_MATERIAL_SKIN_PASSWORD_DESC" %]
         <input type="text"  class="stdedit" name="pref_password" id="password" size="20" value="[% prefs.password %]"></input>
     [% END %]
+    <br/>
 
     [% WRAPPER setting title="PLUGIN_MATERIAL_SKIN_ALLOW_DOWNLOAD" desc="PLUGIN_MATERIAL_SKIN_ALLOW_DOWNLOAD_DESC" %]
         <select class="stdedit" name="pref_allowDownload" id="allowDownload">
@@ -10,6 +17,7 @@
             <option [% IF prefs.allowDownload %]selected [% END %]value="1">[% 'YES' | getstring %]</option>
         </select>
     [% END %]
+    <br/>
 
     [% WRAPPER setting title="PLUGIN_MATERIAL_SKIN_FIXED_VOL" desc="PLUGIN_MATERIAL_SKIN_FIXED_VOL_DESC" %]
         <select class="stdedit" name="pref_respectFixedVol" id="respectFixedVol">
@@ -22,6 +30,7 @@
             [%- END -%]
         </select>
     [% END %]
+    <br/>
 
     [% WRAPPER setting title="PLUGIN_MATERIAL_SKIN_MANIFEST_DISPLAY" desc="PLUGIN_MATERIAL_SKIN_MANIFEST_DISPLAY_DESC" %]
         <select class="stdedit" name="pref_manifestDisplay" id="allowDownload">
@@ -76,12 +85,15 @@
             <option [% IF prefs.showAllArtists %]selected [% END %]value="1">[% 'YES' | getstring %]</option>
         </select>
     [% END %]
+    <br/>
+
     [% WRAPPER setting title="PLUGIN_MATERIAL_SKIN_ARTIST_FIRST" desc="PLUGIN_MATERIAL_SKIN_ARTIST_FIRST_DESC" %]
         <select class="stdedit" name="pref_artistFirst" id="artistFirst">
             <option [% IF NOT prefs.artistFirst %]selected [% END %]value="0">[% 'NO' | getstring %]</option>
             <option [% IF prefs.artistFirst %]selected [% END %]value="1">[% 'YES' | getstring %]</option>
         </select>
     [% END %]
+    <br/>
 
     [% WRAPPER setting title="PLUGIN_MATERIAL_SKIN_COMMENT_AS_DISC_TITLE" desc="PLUGIN_MATERIAL_SKIN_COMMENT_AS_DISC_TITLE_DESC" %]
         <select class="stdedit" name="pref_commentAsDiscTitle" id="commentAsDiscTitle">
@@ -94,6 +106,7 @@
             [%- END -%]
         </select>
     [% END %]
+    <br/>
 
     [% WRAPPER setting title="PLUGIN_MATERIAL_SKIN_COLLAPSE_DISCS" desc="PLUGIN_MATERIAL_SKIN_COLLAPSE_DISCS_DESC" %]
         <select class="stdedit" name="pref_collapseDiscs" id="collapseDiscs">
@@ -104,6 +117,14 @@
             } %]
             <option [% IF prefs.collapseDiscs == option.value %]selected [% END %]value="[% option.value %]">[% option.key | string %]</option>
             [%- END -%]
+        </select>
+    [% END %]
+    <br/>
+
+    [% WRAPPER setting title="PLUGIN_MATERIAL_SKIN_SHOW_COMMENT" desc="PLUGIN_MATERIAL_SKIN_SHOW_COMMENT_DESC" %]
+        <select class="stdedit" name="pref_showComment" id="showComment">
+            <option [% IF NOT prefs.showComment %]selected [% END %]value="0">[% 'NO' | getstring %]</option>
+            <option [% IF prefs.showComment %]selected [% END %]value="1">[% 'YES' | getstring %]</option>
         </select>
     [% END %]
 

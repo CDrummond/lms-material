@@ -22,7 +22,7 @@ Vue.component('lms-player-settings-plugin', {
      </v-toolbar>
     </v-card-title>
     <v-card-text>
-     <v-list id="player-settings-plugin-list">
+     <v-list id="player-settings-plugin-list" class="settings-list">
       <template v-for="(item, index) in items">
        <v-list-tile v-if="item.slider" class="lms-list-item">
         <v-flex xs12>

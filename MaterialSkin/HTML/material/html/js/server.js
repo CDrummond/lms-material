@@ -340,6 +340,8 @@ var lmsServer = Vue.component('lms-server', {
                 this.handleServerStatus(msg.data);
             } else if (msg.channel.indexOf('/slim/playerstatus/')>0) {
                 this.handlePlayerStatus(msg.channel.split('/').pop(), msg.data);
+            } else if (msg.channel.indexOf('/slim/displaystatus/')>0) {
+                this.handleDisplayStatus(msg.channel.split('/').pop(), msg.data);
             } else if (msg.channel.endsWith("/slim/favorites")) {
                 if (msg.data && msg.data.length>1 && msg.data[0]=="favorites" && msg.data[1]=="changed") {
                    this.handleFavoritesUpdate();
@@ -582,6 +584,12 @@ var lmsServer = Vue.component('lms-server', {
                 }
             }
         },
+        handleDisplayStatus(playerId, data) {
+            logCometdMessage("DISPLAYSTATUS ("+playerId+")", data);
+            if (data.type=="showbriefly" && undefined!=data.display && undefined!=data.display.text && data.display.text.length>0) {
+                bus.$emit('showMessage', data.display.text.join("\n"));
+            }
+        },
         getPlayerPrefs() {
             if (undefined!=this.$store.state.player) {
                 bus.$emit("prefset", "plugin.dontstopthemusic:provider", 0, this.$store.state.player.id); // reset
@@ -702,7 +710,9 @@ var lmsServer = Vue.component('lms-server', {
                 logCometdDebug("Subscribe: "+id);
                 this.cometd.subscribe('/slim/subscribe', function(res) { },
                     {data:{response:'/'+this.cometd.getClientId()+'/slim/playerstatus/'+id, request:[id, ["status", "-", 1, PLAYER_STATUS_TAGS + (this.$store.state.showRating ? "R" : ""), "subscribe:30"]]}});
-                    this.cometd.subscribe('/slim/subscribe',
+                this.cometd.subscribe('/slim/subscribe', function(res) { },
+                    {data:{response:'/'+this.cometd.getClientId()+'/slim/displaystatus/'+id, request:[id, ["displaystatus", "subscribe:showbriefly"]]}});
+                this.cometd.subscribe('/slim/subscribe',
                                     function(res) { },
                                     {data:{response:'/'+this.cometd.getClientId()+'/slim/playerprefs/'+id, request:[id, ['prefset']]}});
                 this.subscribedPlayers.add(id);
@@ -713,6 +723,10 @@ var lmsServer = Vue.component('lms-server', {
                 logCometdDebug("Unsubscribe: "+id);
                 this.cometd.subscribe('/slim/subscribe', function(res) { },
                     {data:{response:'/'+this.cometd.getClientId()+'/slim/playerstatus/'+id, request:[id, ["status", "-", 1, "subscribe:-"]]}});
+                this.cometd.subscribe('/slim/subscribe', function(res) { },
+                    {data:{response:'/'+this.cometd.getClientId()+'/slim/displaystatus/'+id, request:[id, ["displaystatus", "subscribe:"]]}});
+                this.cometd.subscribe('/slim/subscribe', function(res) { },
+                    {data:{response:'/'+this.cometd.getClientId()+'/slim/playerprefs/'+id, request:[id, []]}});
                 this.subscribedPlayers.delete(id);
             }
         },

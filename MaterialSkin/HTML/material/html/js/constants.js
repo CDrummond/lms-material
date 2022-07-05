@@ -7,6 +7,14 @@
  */
 'use strict';
 
+const SEPARATOR = " \u2022 ";
+
+const IS_MOBILE  = (/Android|webOS|iPhone|iPad|BlackBerry|Windows Phone|Opera Mini|IEMobile|Mobile/i.test(navigator.userAgent)) || ( (typeof window.orientation !== "undefined") && 'ontouchstart' in window) || (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1);
+const IS_ANDROID = /Android/i.test(navigator.userAgent);
+const IS_IOS     = (/iPhone|iPad/i.test(navigator.userAgent) || (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1)) && !window.MSStream;
+const IS_IPHONE  = /iPhone/i.test(navigator.userAgent) && !window.MSStream;
+const IS_APPLE   = /Mac|iPhone|iPad/i.test(navigator.userAgent);
+
 const LMS_BATCH_SIZE = 25000;
 const LMS_QUEUE_BATCH_SIZE = 5000;
 const LMS_MAX_NON_SCROLLER_ITEMS = 100;

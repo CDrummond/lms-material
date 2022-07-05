@@ -756,10 +756,16 @@ Vue.component('lms-player-settings', {
                     for (var idx=0, loop=data.result.item_loop, loopLen=loop.length; idx<loopLen; ++idx) {
                         let item = loop[idx];
                         if (item.node=="settingsPlayer") {
-                            item.title=item.text;
-                            item.text=undefined;
-                            mapIcon(item);
-                            this.plugins.push(item);
+                            // With Denon plugin, only want this section for players with this enabled. As a work-around for now,
+                            // the plugin will set actions.go.player to an array of enabled player IDs.
+                            // So if this is not an array (i.e. some other plugin), or this array contains playerId then use
+                            // See #583
+                            if (undefined==item.actions || undefined==item.actions.go || undefined==item.actions.go.player || !Array.isArray(item.actions.go.player) || item.actions.go.player.indexOf(this.playerId)>=0) {
+                                item.title=item.text;
+                                item.text=undefined;
+                                mapIcon(item);
+                                this.plugins.push(item);
+                            }
                         }
                     }
                 }

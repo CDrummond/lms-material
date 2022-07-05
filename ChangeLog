@@ -1,16 +1,17 @@
 2.10.0
 ------
-1. Add player settings plugins to 'Player settings' dialog.
-2. Display 'showBriefly' messages.
-3. Optionally show track comments in information view. Requires enabling in
+ 1. Add player settings plugins to 'Player settings' dialog.
+ 2. Display 'showBriefly' messages.
+ 3. Optionally show track comments in information view. Requires enabling in
    Material's server side setttings.
-4. Don't try to embed PDF files for Android, doesn't work.
-5. Try to fix zooming issues with APK.
-6. Add artist, and album, extra menu items when browse via 'More'
-7. Don't show header subtitles in search results, as this mainly repeats title
-   text.
-8. Colour disc headers in now-playing as per browse view.
-9. Simple 'Help' page.
+ 4. Don't try to embed PDF files for Android, doesn't work.
+ 5. Try to fix zooming issues with APK.
+ 6. Add artist, and album, extra menu items when browse via 'More'
+ 7. Don't show header subtitles in search results, as this mainly repeats title
+    text.
+ 8. Colour disc headers in now-playing as per browse view.
+ 9. Simple 'Help' page.
+10. If nextWindow==nowPlaying, just refresh current list do not navigate back.
 
 2.9.8
 -----

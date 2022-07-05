@@ -171,12 +171,13 @@ function browseActions(view, item, args, count) {
 }
 
 function browseHandleNextWindow(view, item, command, resp, isMoreMenu, isBrowse) {
+    // If called with isBrowse==true, then previous list will have been added to hsitory, so if
+    // we go-back we are going back to that.
     var nextWindow = item.nextWindow
                         ? item.nextWindow
                         : item.actions && item.actions.go && item.actions.go.nextWindow
                             ? item.actions.go.nextWindow
                             : undefined;
-
     if (nextWindow) {
         nextWindow=nextWindow.toLowerCase();
         var message = resp.items && 1==resp.items.length && "text"==resp.items[0].type && resp.items[0].title && !msgIsEmpty(resp.items[0].title)
@@ -188,7 +189,7 @@ function browseHandleNextWindow(view, item, command, resp, isMoreMenu, isBrowse)
             } else {
                 view.refreshList();
             }
-        } else if (view.history.length>0 && (nextWindow=="parent" || nextWindow=="nowplaying" || (isMoreMenu && nextWindow=="grandparent"))) {
+        } else if (view.history.length>0 && (nextWindow=="parent" || /*nextWindow=="nowplaying" ||*/ (isMoreMenu && nextWindow=="grandparent"))) {
             // If "trackinfo items" has "parent" and returns an empty list, then don't go back... Work-around for:
             // https://forums.slimdevices.com/showthread.php?109624-Announce-Material-Skin&p=983626&viewfull=1#post983626
             if (nextWindow!="parent" || command.command[0]!="trackinfo" || command.command[1]!="items" || !resp.items || resp.items.length>0) {
@@ -207,9 +208,6 @@ function browseHandleNextWindow(view, item, command, resp, isMoreMenu, isBrowse)
         if (nextWindow=="nowplaying") {
             if (!view.$store.state.desktopLayout) {
                 view.$store.commit('setPage', 'now-playing');
-            }
-            if (isBrowse) {
-                view.history.pop();
             }
             view.goBack(true);
         }

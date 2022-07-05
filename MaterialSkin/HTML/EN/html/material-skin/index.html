@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html>
+ <head>
+  <meta charset="utf-8" />
+  <meta http-equiv="Content-Type" content="text/html; charset=[% LOCALE %]"/>
+  <link rel="stylesheet" type="text/css" href="[% webroot %]html/font/font.css?r=49"/>
+  <link rel="stylesheet" type="text/css" href="[% webroot %]skin.css?r=MATERIAL_VERSION" />
+  <link rel="stylesheet" type="text/css" href="[% webroot %]html/css/themes/dark.css?r=MATERIAL_VERSION"/>
+  <link rel="stylesheet" type="text/css" href="[% webroot %]html/css/colors/blue.css?r=MATERIAL_VERSION"/>
+  <script src="[% webroot %]html/lib/mousetrap.min.js?r=a4098"></script>
+  <script>
+  let theme = window.localStorage.getItem("lms-material::theme");
+  if (undefined==theme) {
+    theme='dark';
+  }
+  let t = theme.split('-');
+  let variant = t.length>1 && ('colored'==t[t.length-1] || 'standard'==t[t.length-1]) ? t.pop() : 'standard';
+  let themeName = t.join('-');
+
+  if (undefined!=theme && (theme.startsWith('light') || theme.indexOf("/light/")>=0)) {
+    document.querySelector("link[href='[% webroot %]html/css/themes/dark.css?r=MATERIAL_VERSION']").href = "[% webroot %]html/css/themes/light.css?r=MATERIAL_VERSION";
+    document.querySelector("link[href='[% webroot %]html/css/classic-skin/dark.css?r=MATERIAL_VERSION']").href = "[% webroot %]html/css/classic-skin/light.css?r=MATERIAL_VERSION";
+  } else if (undefined!=themeName && themeName!='dark') {
+    if (themeName.startsWith("user:")) {
+      document.querySelector("link[href='[% webroot %]html/css/themes/dark.css?r=MATERIAL_VERSION']").href = "/material/usertheme/" + themeName.substring(5) + "?r=MATERIAL_VERSION";
+    } else {
+      document.querySelector("link[href='[% webroot %]html/css/themes/dark.css?r=MATERIAL_VERSION']").href = "[% webroot %]html/css/themes/"+themeName+".css?r=MATERIAL_VERSION";
+    }
+  }
+
+  let col = window.localStorage.getItem("lms-material::color");
+  if ('blue'!=col && undefined!=col) {
+    if (col.startsWith("user:")) {
+      document.querySelector("link[href='[% webroot %]html/css/colors/blue.css?r=MATERIAL_VERSION']").href = "/material/usercolor/" + col.substring(5) + "?r=MATERIAL_VERSION";
+    } else {
+     document.querySelector("link[href='[% webroot %]html/css/colors/blue.css?r=MATERIAL_VERSION']").href = "[% webroot %]html/css/colors/"+col+".css?r=MATERIAL_VERSION";
+    }
+  }
+  Mousetrap.bind('esc', function() { document.bus.$emit('esc') });
+  </script>
+ </head>
+ <body style="width:100%; height:100%; max-width:1000px; padding-left:8px; margin-left:auto; margin-right:auto;"">
+    <h1>Introduction</h1>
+    <p>MaterialSkin is a (hopefully) simple HTML5 WebApp for LMS, featuring 2 main layouts:
+        <ul>
+            <li>Mobile</li>
+            <li>Desktop</li>
+        </ul>
+    By default the app will attempt to use the correct layout depending on the width of your current screen. However, you may use
+    "Settings -> Interface" to override this and force the usage of one or the other.
+    <br>
+    This help page will provide some basic information that will hopefully provide some useful detail on how to use app.
+    </p>
+    <br/>
+
+    <h1>Mobile</h1>
+    <p>This layout is intended for use on mobile phones and small tablets. It contains a standard view selector at the bottom, allowing
+        the current view to change between:
+        <ul>
+            <li>Browse - allows brosing your local music collection, apps, radio, etc.</li>
+            <li>Playing - shows information (e.g.) cover about any currently playing track.</li>
+            <li>Queue - shows the list of currently queued tracks.</li>
+        </ul>
+        You can navigate between views by either touching the relevant button at the bottom of the screen, or by swiping left/right.
+        If you are already on a view and you touch its button then the following will occur:
+        <ul>
+            <li>Browse - navigate one level back, i.e. this is the same as pressing the back button.</li>
+            <li>Playing - will show artist, album, and track information if the 'Music and Artist Information' plugin is installed on your LMS system.</li>
+            <li>Queue - scroll the play queue such that the current track is now visible</li>
+        </ul>
+        In this view, if there is limited width, then some actions (e.g. to change sorting) will be placed within the main menu
+        (acessible via the three-dotted button top-right). The actions moved here will be relative to the currently displayed view.
+        Therefore, when you switch views, the items in this menu will change. e.g. When showing Browse then menu may contain
+        'Toggle view' (to change view between grid and list), but when showing Queue it may contain 'Transfer queue'.
+    </p>
+    <br/>
+
+    <h1>Desktop</h1>
+    <p>This layout is intended for devices with wide screens, such as laptops and desktop PCs. This layout displays the Browse view
+       on the left, the queue on the right, and details of the current track along the bottom. Pressing the 'Expand now playing'
+       button in the main toolbar will replace the browse and queue views with a single view showing large cover-art and track
+       details. Similarly clicking 'Showing current track information' (if the 'Music and Artist Information' plugin is installed)
+       will show a view containg artist, album, and track information.
+    </p>
+    <br/>
+
+    <h1>Long-press</h1>
+    <p>There are various long-press features within the app. These allow accessing features by pressing an element for
+        1/2 a second or more. The current long-press features are:
+        <ul>
+            <li>Browse bottom tab in mobile layout - if the app is already showing the Browse view, then a long press here navigates back home.</li>
+            <li>'Back' button in Browse view - navigate home.</li>
+            <li>'Back' button in dialog headers (such as 'Player settings' - close all dialogs.</li>
+            <li>Volume labels - mute/unmute.</li>
+            <li>Play/pause buttons - shows the 'Sleep' dialog.</li>
+            <li>'Repeat off' icon, or the DSTM (infinity) icon - show DSTM (Don't Stop the Music) options.</li>
+            <li>Duration label in queue - shows the 'Transfer queue' dialog if you have 2 or more players.</li>
+            <li>Player icon in toolbar next to player name - shows the 'Synchronise' dialog if you have 2 or more players.</li>
+            <li>'Manage players' menu entry     - shows the 'Synchronise' dialog if you have 2 or more players.</li>
+            <li>'Prev track' button - skips X seconds back, keep pressed for multiple skips. The exact skip duration is configurable.</li>
+            <li>'Next track' button - skips X seconds forward, keep pressed for multiple skips. The exact skip duration is configurable.</li>
+        </ul>
+    </p>
+    <br/>
+
+    <h1>Manage players</h1>
+    <p>If you have 2 or more players on your system, or have multiple instances of LMS, then there will be a 'Manage players' entry
+        in the menu that appears when you press on a player's name in the main toolbar. This will produce a dialog allowing you
+        to see the current state of all your players (current, track, volume, etc). This dialog will allow you to:
+        <ul>
+            <li>List standard players, and 'Group' players. 'Group' players will only be shown if you have the 'Group Players'
+                LMS plugin installed.
+            </li>
+            <li>Synchronise players. By dragging one player over another you can create a group of synchronised players.
+                To remove a player from a group, drag the player onto the main toolbar (which should be displaying
+                'Drop here to remove from group').</li>
+            <li>Create, edit, and delete 'Group' players. If you have the 'Group Players' LMS plugin installed, then you
+                can use this dialog to manage such groups. This dialog has a menu button top right, and in there will be
+                an action to create a group player.</li>
+            <li>Move player from other LMS servers. If you have multiple LMS instances on your network, then this dialog can be
+                used to move players from another LMS instance onto the current one.</li>
+            <li>Set a 'Default' player. If a player is marked as default, then it will be automatically selected when Material
+                is restarted. If the 'Default' player is not visible at start-up, another will be used, but when the 'Default'
+                player subsequently becomes visible it will be selected. To set a player as 'Default' use the menu button
+                (three dots) at the far right of a player.
+            </li>
+        </ul>
+    The currently active player is indicated by a semi-transparent highlight. If a player is the 'Default' player it will have
+    a tick next to its name. Any players with an ative sleep timer will also have a picture of a bed next to their name.
+    </p>
+    <br/>
+
+    <h1>Settings</h1>
+    <p>Due to LMS's nature, there are multiple settings dialogs.
+        <ul>
+            <li>Interface - contains settings to control the layout of MaterialSkin interface. Any changes here are stored
+                within the current browser, so are user-specfic. To allow you to set default settings, in this dialog there
+                is a menu button top right containing; 'Save as default' and 'Revert to default'. There are also Material Skin
+                settings with the Server settings category - and these settings will be shared for all users.
+            </li>
+            <li>Player - contains player specific settings, such as its name, alarms, etc. By default only a limited number
+                of settings are shown, but LMS has may settings. To access all LMS settings for a player press the 'Extra settings'
+                button near the bottom of this dialog. If your player is a piCorePlayer or SqueezeESP32 device, then this
+                dialog will also contain a button allowing you to access the web-based configuration UI of those devices.
+            </li>
+            <li>Server - contains all the LMS server settings, e.g. for installing plugins, etc.</li>
+        </ul>
+    </p>
+    <br/>
+ </body>
+</html>

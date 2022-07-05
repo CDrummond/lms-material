@@ -466,7 +466,7 @@ var lmsQueue = Vue.component("lms-queue", {
             }
         }.bind(this));
         // Press on 'queue' nav button whilst in queue scrolls to current track
-        bus.$on('nav', function(page, longPress) {
+        bus.$on('nav', function(page) {
             if ('queue'==page) {
                 this.scrollToCurrent(true);
             }

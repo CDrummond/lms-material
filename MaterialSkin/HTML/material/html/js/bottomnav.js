@@ -133,7 +133,7 @@ Vue.component('lms-bottomnav', {
             this.setPage(this.items[1].page, false);
         },
         queuePressed(longPress) {
-            this.setPage(this.items[2].page, longPress);
+            this.setPage(this.items[2].page, false);
         }
     },
     computed: {

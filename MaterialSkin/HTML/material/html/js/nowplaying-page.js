@@ -511,13 +511,9 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
         }, false);
 
         // Long-press on 'now playing' nav button whilst in now-playing shows track info
-        bus.$on('nav', function(page, longPress) {
+        bus.$on('nav', function(page) {
             if ('now-playing'==page) {
-                if (longPress) {
-                    if (this.playerStatus && undefined!=this.playerStatus.current.id) {
-                        this.trackInfo();
-                    }
-                } else if (this.$store.state.infoPlugin && this.playerStatus && this.playerStatus.current && this.playerStatus.current.artist) {
+                if (this.$store.state.infoPlugin && this.playerStatus && this.playerStatus.current && this.playerStatus.current.artist) {
                     this.largeView = false;
                     this.info.show = !this.info.show;
                 } else if (this.info.show) {

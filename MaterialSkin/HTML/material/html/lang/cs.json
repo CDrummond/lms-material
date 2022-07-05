@@ -206,6 +206,7 @@
 "Go to homescreen":"Jít na domovskou obrazovku",
 "Group Players":"Skupinové přehrávače",
 "Group members":"Členové skupiny",
+"Help":"Nápověda",
 "Historic track count":"Původní počet skladeb",
 "Home":"Domů",
 "Home screen items":"Položky domovské obrazovky",
@@ -349,6 +350,7 @@
 "Rescan":"Aktualizovat",
 "Restart":"Restartovat",
 "Restart Logitech Media Server?":"Restartovat Logitech Media Server?",
+"Restart required":"Vyžadován restart",
 "Restart server":"Restartovat server",
 "Revert":"Vrátit zpět",
 "Revert to default":"Vrátit na výchozí hodnoty",
@@ -588,6 +590,5 @@
 "1 Year":"1 rok",
 "%1 Years":"%1 roků",
 "1 day":"1 den",
-"%1 days":"%1 dní",
-"Restart required":"Vyžadován restart"
+"%1 days":"%1 dní"
 }

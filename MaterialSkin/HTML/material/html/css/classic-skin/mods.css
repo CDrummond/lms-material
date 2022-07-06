@@ -541,6 +541,7 @@ hr.main-sep {
 hr.sub-sep {
  opacity:0.2!important;
  border:0.25px solid var(--text-color)!important;
+ margin-bottom:32px;
 }
 
 /* Material Design 2 changes */
@@ -548,4 +549,8 @@ input[type="submit"], input[type="button"] {
  border-radius: 4px;
  font-weight:var(--bold-weight)!important;
  color:var(--active-color)!important;
+}
+
+.settingSection .settingGroup {
+ margin-bottom:48px!important;
 }

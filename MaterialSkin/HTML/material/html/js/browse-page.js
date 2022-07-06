@@ -1554,7 +1554,9 @@ var lmsBrowse = Vue.component("lms-browse", {
                     item.actions.go.params['year']=params;
                 }
                 var len = this.history.length;
-                this.current = {id:'XXXX', title:'?'}; // Create fake item here or else view toggle breaks?
+                if (undefined==this.current) {
+                    this.current = {id:'XXXX', title:'?'}; // Create fake item here or else view toggle breaks?
+                }
                 this.click(item);
                 if (this.history.length>len) {
                     this.prevPage = page;

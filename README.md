@@ -3,7 +3,7 @@
 Material-Skin is a HTML5/Javascript user-interface for Logitech Media server,
 suitable for mobile and desktop usage.
 
-![Now Playing](screenshots/now-playing-small.png)
+![Now Playing](screenshots/mobile-now-playing-small.png)
 
 The [Screenshots wiki page](https://github.com/CDrummond/lms-material/wiki/Screenshots)
 has more screenshots.

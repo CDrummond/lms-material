@@ -59,8 +59,8 @@ function iframeBrowseAlbum(id, name) {
     bus.$emit('iframe-close');
 }
 
-function iframeBrowseGenre(name) {
-    bus.$emit("browse", "genre", name, name);
+function iframeBrowseGenre(id, name) {
+    bus.$emit("browse", "genre", id, name);
     bus.$emit('iframe-close');
 }
 

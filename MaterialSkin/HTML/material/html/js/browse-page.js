@@ -839,7 +839,7 @@ var lmsBrowse = Vue.component("lms-browse", {
                 this.$nextTick(function () {
                     this.setBgndCover();
                     this.layoutGrid(true);
-                    setUseGrid(this.isTop || (this.current && this.current.id!=TOP_FAVORITES_ID && (this.current.id.startsWith(TOP_ID_PREFIX) || this.current.id==GENRES_ID)) ? GRID_OTHER : this.command, this.grid.use);
+                    setUseGrid(this.isTop || undefined==this.command || (this.current && this.current.id!=TOP_FAVORITES_ID && (this.current.id.startsWith(TOP_ID_PREFIX) || this.current.id==GENRES_ID)) ? GRID_OTHER : this.command, this.grid.use);
                     var af = this.grid.use ? USE_GRID_ACTION : USE_LIST_ACTION;
                     var at = this.grid.use ? USE_LIST_ACTION : USE_GRID_ACTION;
                     for (var i=0, len=this.settingsMenuActions.length; i<len; ++i) {
@@ -1534,7 +1534,7 @@ var lmsBrowse = Vue.component("lms-browse", {
             });
         }.bind(this));
 
-        bus.$on('browse', function(cmd, params, title, page) {
+        bus.$on('browse', function(cmd, params, title, page, clearHistory) {
             this.clearSelection();
             if (this.$store.state.desktopLayout) {
                 if ('now-playing'==page && this.nowPlayingExpanded) {
@@ -1543,7 +1543,9 @@ var lmsBrowse = Vue.component("lms-browse", {
             } else {
                 this.$store.commit('setPage', 'browse');
             }
-            this.goHome();
+            if (undefined==clearHistory || clearHistory) {
+                this.goHome();
+            }
             if ('genre'==cmd || 'year'==cmd) {
                 let item = {id:'click.'+cmd+'.'+params, actions: { go: { params: { mode:'genre'==cmd?'artists':'albums'}}}, title:/**/'CLICK: '+title, type:'click'};
                 if ('genre'==cmd) {
@@ -1552,6 +1554,7 @@ var lmsBrowse = Vue.component("lms-browse", {
                     item.actions.go.params['year']=params;
                 }
                 var len = this.history.length;
+                this.current = {id:'XXXX', title:'?'}; // Create fake item here or else view toggle breaks?
                 this.click(item);
                 if (this.history.length>len) {
                     this.prevPage = page;

@@ -50,22 +50,22 @@ function fixClassicSkinRefs(doc) {
 }
 
 function iframeBrowseArtist(id, name, role) {
-    bus.$emit("browse", ["albums"], ["artist_id:"+id, ARTIST_ALBUM_TAGS, SORT_KEY+ARTIST_ALBUM_SORT_PLACEHOLDER, "role_id:"+(undefined==role ? "ALBUMARTIST" : role)], name, undefined);
+    bus.$emit("browse", ["albums"], ["artist_id:"+id, ARTIST_ALBUM_TAGS, SORT_KEY+ARTIST_ALBUM_SORT_PLACEHOLDER, "role_id:"+(undefined==role ? "ALBUMARTIST" : role)], name, undefined, false);
     bus.$emit('iframe-close');
 }
 
 function iframeBrowseAlbum(id, name) {
-    bus.$emit("browse", ["tracks"], ["album_id:"+id, TRACK_TAGS, SORT_KEY+"tracknum"], name, undefined);
+    bus.$emit("browse", ["tracks"], ["album_id:"+id, TRACK_TAGS, SORT_KEY+"tracknum"], name, undefined, false);
     bus.$emit('iframe-close');
 }
 
 function iframeBrowseGenre(id, name) {
-    bus.$emit("browse", "genre", id, name);
+    bus.$emit("browse", "genre", id, name, undefined, false);
     bus.$emit('iframe-close');
 }
 
 function iframeBrowseYear(name) {
-    bus.$emit("browse", "year", name, name);
+    bus.$emit("browse", "year", name, name, undefined, false);
     bus.$emit('iframe-close');
 }
 

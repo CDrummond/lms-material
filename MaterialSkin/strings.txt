@@ -313,9 +313,12 @@ PLUGIN_MATERIAL_SKIN_COLLAPSE_DISCS_C_LIMIT
 
 PLUGIN_MATERIAL_SKIN_SHOW_COMMENT
 	EN	Show comment in info view
+	NL	Toon 'comment' tag in info weergave
 
 PLUGIN_MATERIAL_SKIN_SHOW_COMMENT_DESC
 	EN	Show a track's comment tag in the 'Track' section of the track information view, below the lyrics.
+	NL	Toon de 'comment' tag, onder de songtekst in het nummer gedeelte, op de info weergave. 
 
 PLUGIN_MATERIAL_SKIN_RELOAD_NOTE
 	EN	NOTE: If you change any of the settings below then you might need to refresh the web page for the changes to take effect.
+	NL	Belangrijk: Als je een van de onderstaande instellingen wijzigt, dien je mogelijk de webpagina te vernieuwen om de wijzigingen door te voeren.

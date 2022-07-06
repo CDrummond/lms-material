@@ -49,6 +49,41 @@ function fixClassicSkinRefs(doc) {
     }
 }
 
+function iframeBrowseArtist(id, name, role) {
+    bus.$emit("browse", ["albums"], ["artist_id:"+id, ARTIST_ALBUM_TAGS, SORT_KEY+ARTIST_ALBUM_SORT_PLACEHOLDER, "role_id:"+(undefined==role ? "ALBUMARTIST" : role)], name, undefined);
+    bus.$emit('iframe-close');
+}
+
+function iframeBrowseAlbum(id, name) {
+    bus.$emit("browse", ["tracks"], ["album_id:"+id, TRACK_TAGS, SORT_KEY+"tracknum"], name, undefined);
+    bus.$emit('iframe-close');
+}
+
+function iframeBrowseGenre(name) {
+    bus.$emit("browse", "genre", name, name);
+    bus.$emit('iframe-close');
+}
+
+function iframeBrowseYear(name) {
+    bus.$emit("browse", "year", name, name);
+    bus.$emit('iframe-close');
+}
+
+function iframeTrackInfo(id, name) {
+    bus.$emit('trackInfo', {id:"track_id:"+id, title:name});
+    bus.$emit('iframe-close');
+}
+
+function addHooks(doc) {
+    doc.lmsMaterialSkin = {
+        browseArtist:iframeBrowseArtist,
+        browseAlbum:iframeBrowseAlbum,
+        browseGenre:iframeBrowseGenre,
+        browseYear:iframeBrowseYear,
+        trackInfo:iframeTrackInfo
+    }
+}
+
 var iframeMenuOpen = false;
 function iframeClickHandler(e) {
     if (iframeMenuOpen) {
@@ -274,6 +309,7 @@ function hideClassicSkinElems(page, textCol) {
 
         fixClassicSkinRefs(content);
         remapClassicSkinIcons(content, textCol);
+        addHooks(content);
 
         let toHide = undefined;
         if ('player'==page) {
@@ -472,6 +508,9 @@ Vue.component('lms-iframe-dialog', {
                 this.history.push(this.src);
             }
             this.src = ref;
+        }.bind(this));
+        bus.$on('iframe-close', function() {
+            this.close();
         }.bind(this));
         bus.$on('noPlayers', function() {
             this.close();

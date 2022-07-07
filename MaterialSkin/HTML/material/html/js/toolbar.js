@@ -63,6 +63,13 @@ Vue.component('lms-toolbar', {
     <v-list-tile-action v-if="TB_MANAGE_PLAYERS.shortcut && keyboardControl" class="menu-shortcut player-menu-shortcut">{{TB_MANAGE_PLAYERS.shortcut}}</v-list-tile-action>
    </v-list-tile>
 
+   <template v-if="!noPlayer && customPlayerActions && customPlayerActions.length>0" v-for="(action, index) in customPlayerActions">
+    <v-list-tile @click="doCustomAction(action)" v-if="undefined==action.players || action.players.indexOf(player.id)>=0">
+     <v-list-tile-avatar v-if="menuIcons"><v-icon v-if="action.icon">{{action.icon}}</v-icon><img v-else-if="action.svg" class="svg-img" :src="action.svg | svgIcon(darkUi)"></img></v-list-tile-avatar>
+     <v-list-tile-content><v-list-tile-title>{{action.title}}</v-list-tile-title></v-list-tile-content>
+    </v-list-tile>
+   </template>
+
    <v-list-tile v-if="playerStatus.sleepTime" @click="bus.$emit('dlg.open', 'sleep', player)" class="hide-for-mini">
     <v-list-tile-avatar><v-icon>hotel</v-icon></v-list-tile-avatar>
     <v-list-tile-content>
@@ -217,6 +224,7 @@ Vue.component('lms-toolbar', {
                  settingsMenuItems: [],
                  customActions:undefined,
                  customSettingsActions:undefined,
+                 customPlayerActions:undefined,
                  showPlayerMenu: false,
                  showMainMenu: false,
                  showErrorMenu: false,
@@ -408,6 +416,7 @@ Vue.component('lms-toolbar', {
             if (undefined==this.customActions) {
                 this.customActions = getCustomActions(undefined, this.$store.state.unlockAll);
                 this.customSettingsActions = getCustomActions("settings", this.$store.state.unlockAll);
+                this.customPlayerActions = getCustomActions("players", this.$store.state.unlockAll);
             }
         }.bind(this));
         bus.$on('lockChanged', function() {

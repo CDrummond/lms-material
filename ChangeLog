@@ -12,6 +12,7 @@
  8. Colour disc headers in now-playing as per browse view.
  9. Simple 'Help' page.
 10. If nextWindow==nowPlaying, just refresh current list do not navigate back.
+11. Allow player specific actions in player's toolbar.
 
 2.9.8
 -----

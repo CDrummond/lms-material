@@ -8,24 +8,8 @@
 
 var translation=undefined;
 
-function setTranslation(trans, lang) {
+function setTranslation(trans) {
     translation = trans;
-    if (undefined!=lang && undefined!=translation) {
-        for (var i=0, len=LMS_MATERIAL_PLUGIN_TRANSLATIONS.length; i<len; ++i) {
-            axios.get("material/pluginjs/"+LMS_MATERIAL_PLUGIN_TRANSLATIONS[i]+"/"+lang+".json").then(function (resp) {
-                if (undefined!=resp && undefined!=resp.data) {
-                    var trans = eval(resp.data);
-                    if (undefined!=trans) {
-                        for (let [key, value] of Object.entries(trans)) {
-                            if (undefined==translation[key]) {
-                                translation[key] = value;
-                            }
-                        }
-                    }
-                }
-            });
-        }
-    }
 }
 
 function i18n(str, val, val2, val3) {

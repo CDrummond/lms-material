@@ -101,16 +101,6 @@
     <lms-downloadstatus v-if="dialogs.downloadstatus"></lms-downloadstatus>
     <lms-notifications v-if="dialogs.notifications"></lms-notifications>
     <lms-gallery v-if="dialogs.gallery"></lms-gallery>
-    [% PERL %]
-    my $other = Plugins::MaterialSkin::Extensions->getDialogs();
-    if ($other) {
-      foreach my $dlg (@$other) {
-        if ($dlg && length($dlg)>1) {
-          print("<$dlg v-if=\"loaded\"></$dlg>\n");
-        }
-      }
-    }
-    [% END %]
     <lms-screensaver></lms-screensaver>
     <lms-volumeoverlay></lms-volumeoverlay>
     <lms-mediasession></lms-mediasession>
@@ -121,22 +111,7 @@
   my $version=Plugins::MaterialSkin::Plugin->pluginVersion();
   my $windowTitle=Plugins::MaterialSkin::Plugin->windowTitle();
   my $hideSettings=Plugins::MaterialSkin::Plugin->hideSettings();
-  print("<script>const LMS_MATERIAL_REVISION=\"$version\"; const LMS_VERSION=$lmsVersion; const LMS_WINDOW_TITLE=\"$windowTitle\"; const LMS_SETTINGS_HIDE=\"$hideSettings\"; const LMS_MATERIAL_PLUGIN_TRANSLATIONS = [");
-
-  my $other = Plugins::MaterialSkin::Extensions->getTranslations();
-  if ($other) {
-    my $first = 1;
-    foreach my $tr (@$other) {
-      if ($tr && length($tr)>1) {
-        if ($first != 1) {
-          print(",");
-        }
-        print("\"$tr\"");
-        $first = 0;
-       }
-     }
-  }
-  print("];</script>\n");
+  print("<script>const LMS_MATERIAL_REVISION=\"$version\"; const LMS_VERSION=$lmsVersion; const LMS_WINDOW_TITLE=\"$windowTitle\"; const LMS_SETTINGS_HIDE=\"$hideSettings\";</script>\n");
   [% END %]
   <!--JS start-->
   <script src="html/lib/axios.min.js?r=0.19.2"></script>
@@ -180,16 +155,6 @@
   print("  <script src=\"html/js/main.js?r=$version\"></script>");
   [% END %]
   <!--JS end-->
-  [% PERL %]
-  my $other = Plugins::MaterialSkin::Extensions::getJavascripts();
-  if ($other) {
-    foreach my $js (@$other) {
-      if ($js && length($js)>1) {
-        print("<script src=\"material/pluginjs/$js\"></script>");
-      }
-    }
-  }
-  [% END %]
   <script src="material/custom.js"></script>
   <script type="text/javascript">
    // DEFFERED start

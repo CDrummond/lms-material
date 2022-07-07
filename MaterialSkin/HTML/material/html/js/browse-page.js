@@ -496,9 +496,6 @@ var lmsBrowse = Vue.component("lms-browse", {
                 this.tbarActions.unshift(SAVE_VLIB_ACTION);
             }
         }.bind(this));
-        bus.$on('pluginListResponse', function(item, command, resp) {
-            this.handleListResponse(item, command, resp);
-        }.bind(this));
     },
     methods: {
         initItems() {

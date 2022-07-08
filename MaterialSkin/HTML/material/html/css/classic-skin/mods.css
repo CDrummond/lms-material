@@ -546,7 +546,7 @@ hr.sub-sep {
 
 /* Material Design 2 changes */
 input[type="submit"], input[type="button"] {
- border-radius: 4px;
+ border-radius: 100px;
  font-weight:var(--bold-weight)!important;
  color:var(--active-color)!important;
 }

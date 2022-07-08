@@ -28,6 +28,8 @@
  --inactive-nav-opacity:0.5;
  --light-text-color:#edece7; /* keep in sync with LMS_DARK_SVG */
  --dark-text-color:#333;     /* keep in sync with LMS_LIGHT_SVG */
+ --light-border-color:rgba(51, 51, 51, 0.25);
+ --dark-border-color:rgba(237, 236, 231, 0.25);
  --btn-hover-color:rgba(128, 128, 128, 0.3);
  --list-hover-color:rgba(0, 0, 0, 0.04)!important;
  --list-active-color:rgba(0, 0, 0, 0.08)!important;
@@ -2395,8 +2397,16 @@ img[lazy='loaded'].np-image-desktop, img[lazy='loaded'].np-image-landscape, img[
 }
 .v-btn:not(.v-btn--icon) {
  text-transform:none!important;
- border-radius:4px;
+ border-radius:100px;
 }
+
+.v-dialog--fullscreen .v-btn:not(.v-btn--icon) {
+  border:1px solid var(--light-border-color);
+}
+.v-dialog--fullscreen .theme--dark .v-btn:not(.v-btn--icon) {
+ border:1px solid var(--dark-border-color);
+}
+
 .v-btn--active:not(.v-btn--icon):not(.lms-bottom-nav-button)::before, .v-btn:not(.v-btn--icon):not(.lms-bottom-nav-button):focus::before, .v-btn:not(.v-btn--icon):not(.lms-bottom-nav-button):hover::before {
  background-color:var(--active-color)!important;
 }

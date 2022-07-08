@@ -460,7 +460,7 @@ function parseBrowseResp(data, parent, options, cacheKey, parentCommand, parentG
                 } else if (isAudioTrack(i)) {
                     i.draggable = true;
                 }
-                if (i.type=="text" && (i.title.startsWith("<") || i.title.includes("<br/>"))) {
+                if (i.type=="text" && undefined!=i.title && (i.title.startsWith("<") || i.title.includes("<br/>"))) {
                     i.type="html";
                 }
 
@@ -760,7 +760,7 @@ function parseBrowseResp(data, parent, options, cacheKey, parentCommand, parentG
             }
         } else if (data.result.titles_loop) {
             var totalDuration=0;
-            var allowPlayAlbum = (parent && parent.id && parent.id.startsWith("album_id:"));
+            var allowPlayAlbum = parent && parent.id && parent.id.startsWith("album_id:");
             var isAllSongs = parent && parent.id && (parent.id.startsWith("currentaction:") || parent.id == ALL_SONGS_ID);
             var isSearchResult = options && options.isSearch;
             var showAlbumName = isSearchResult || isAllSongs || (parent && parent.id && parent.id.startsWith("artist_id:"));

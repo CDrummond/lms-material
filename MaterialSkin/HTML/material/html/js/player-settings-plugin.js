@@ -82,7 +82,7 @@ Vue.component('lms-player-settings-plugin', {
             this.title=plugin.title+SEPARATOR+playerName
             this.showHome=showHome;
             this.show=true;
-            this.current=[];
+            this.current={id:'pspTop'};
             this.history=[];
             this.fetch(plugin);
         }.bind(this));

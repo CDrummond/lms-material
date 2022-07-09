@@ -1874,7 +1874,7 @@ function browsePin(view, item, add, mapped) {
         } else if (item.type=='settingsPlayer') {
             view.top.splice(lastPinnedIndex+1, 0,
                             {id: item.id, title: item.title, image: item.image, icon: item.icon, svg: item.svg, isPinned: true, type:item.type,
-                             actions: item.actions, menu: [RENAME_ACTION, UNPIN_ACTION], weight:10000});
+                             actions: item.actions, players: item.players, menu: [RENAME_ACTION, UNPIN_ACTION], weight:10000});
         } else {
             var command = view.buildCommand(item, undefined, false);
             view.top.splice(lastPinnedIndex+1, 0,

@@ -411,10 +411,10 @@ function parseBrowseResp(data, parent, options, cacheKey, parentCommand, parentG
                 if (!i.id || isFavorites) {
                     if (i.params && i.params.track_id) {
                         i.id = uniqueId("track_id:"+i.params.track_id, resp.items.length); // Incase of duplicates?
-                    } else if (parent && parent.id.startsWith(TOP_ID_PREFIX)) {
+                    } else if (parent && parent.id && parent.id.startsWith(TOP_ID_PREFIX)) {
                         i.id="item_id:"+resp.items.length;
                     } else {
-                        i.id=(parent ? parent.id : "X") + "." + resp.items.length;
+                        i.id=(parent && parent.id ? parent.id : "X") + "." + resp.items.length;
                     }
                 }
 

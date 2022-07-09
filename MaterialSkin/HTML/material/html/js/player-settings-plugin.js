@@ -38,6 +38,7 @@ Vue.component('lms-player-settings-plugin', {
          <text-field :focus="index==0 && !IS_MOBILE" :title="item.title" :type="item.type" @value="entry(item, $event)"></text-field>
         </v-list-tile-content>
        </v-list-tile>
+       <v-list-tile v-else-if="item.type=='html' || item.type=='text'" class="lms-list-item browse-html" v-html="item.title"></v-list-tile>
        <v-list-tile v-else @click="fetch(item)" class="lms-list-item">
         <v-list-tile-avatar :tile="true" class="lms-avatar" v-if="undefined!=item.radio"><v-icon>{{1==item.radio ? "radio_button_checked" : "radio_button_unchecked"}}</v-icon></v-list-tile-avatar>
         <v-list-tile-avatar :tile="true" class="lms-avatar" v-else-if="undefined!=item.checkbox"><v-icon>{{1==item.checkbox ? "check_box" : "check_box_outline_blank"}}</v-icon></v-list-tile-avatar>

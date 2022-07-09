@@ -78,15 +78,21 @@ function getHiddenProp(){
 }
 
 // Attempt to detect when computer wakes from sleep.
-// Eveery 2 seconds check time, if gap is more than 4 seconds then we were probably
+// Every 2 seconds check time, if gap is more than 4 seconds then we were probably
 // asleep - so refresh status.
 var lastTime = (new Date()).getTime();
 
 setInterval(function() {
     var currentTime = (new Date()).getTime();
-    if (currentTime > (lastTime + (2000*2))) {
+    if (currentTime > (lastTime + 4000)) {
         bus.$emit('refreshStatus');
         bus.$emit('checkNotifications');
+        // Hacky work-around for #589
+        var isDesktopLayout = store.state.desktopLayout;
+        if (IS_IOS && isDesktopLayout && currentTime >= (lastTime + 15000)) {
+            bus.$emit('changeLayout', !isDesktopLayout);
+            requestAnimationFrame(() => { bus.$emit('changeLayout', isDesktopLayout); });
+        }
     }
     lastTime = currentTime;
 }, 2000);

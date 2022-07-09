@@ -76,7 +76,7 @@
 }
 
 .lms-bottom-nav-button .v-btn__content {
- height:calc(var(--bottom-toolbar-height) - 2px)
+ height:calc(var(--bottom-toolbar-height) - 2px);
  margin:0px;
  padding:0px;
 }

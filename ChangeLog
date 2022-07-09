@@ -16,6 +16,7 @@
 12. Remove plugin javascript and dialog support - not used.
 13. Make button edges fully rounded.
 14. Add border to buttons in fulscreen dialogs.
+15. Tweak tab appearance.
 
 2.9.8
 -----

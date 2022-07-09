@@ -167,11 +167,11 @@ Vue.component('lms-player-settings', {
      </v-list-tile>
      <v-list-tile v-for="(plugin, index) in plugins" class="other-setting">
       <v-list-tile-content>
-       <v-list-tile-title><v-btn flat @click="showPlugin(index)">
-       <img v-if="plugin.svg" class="svg-img btn-icon" :src="plugin.svg| svgIcon(darkUi)"></img>
-       <v-icon v-else-if="plugin.icon">{{plugin.icon}}</v-icon>
-       <img v-else-if="plugin.image" class="svg-img btn-icon" :key="plugin.image" v-lazy="plugin.image">
-        {{plugin.title}}
+       <v-list-tile-title><v-btn flat v-longpress="pluginPressed" :id="index+'-ps-plugin'">
+        <img v-if="plugin.svg" class="svg-img btn-icon" :src="plugin.svg| svgIcon(darkUi)"></img>
+        <v-icon v-else-if="plugin.icon">{{plugin.icon}}</v-icon>
+        <img v-else-if="plugin.image" class="svg-img btn-icon" :key="plugin.image" v-lazy="plugin.image">
+        {{plugin.title}}<img v-if="plugin.pinned" class="svg-img" style="padding-left:8px" :src="'pin'| svgIcon(darkUi)"></img>
        </v-list-tile-title>
       </v-list-tile-content>
      </v-list-tile>
@@ -335,7 +335,11 @@ Vue.component('lms-player-settings', {
             this.initItems();
         }.bind(this));
         this.initItems();
-
+        bus.$on('pinnedChanged', function(playerStatus) {
+            if (this.show) {
+                this.setPinned();
+            }
+        }.bind(this));
         bus.$on('playerStatus', function(playerStatus) {
             if (this.show) {
                 this.handlePlayerStatus(playerStatus);
@@ -763,17 +767,47 @@ Vue.component('lms-player-settings', {
                             if (undefined==item.actions || undefined==item.actions.go || undefined==item.actions.go.player || !Array.isArray(item.actions.go.player) || item.actions.go.player.indexOf(this.playerId)>=0) {
                                 item.title=item.text;
                                 item.text=undefined;
+                                item.pinned=false;
                                 mapIcon(item);
                                 this.plugins.push(item);
                             }
                         }
                     }
+                    this.setPinned();
                 }
             });
+        },
+        pluginPressed(longpress, el) {
+            let i = parseInt(el.id.split("-")[0]);
+            if (i>=0 && i<=this.plugins.length) {
+                if (longpress) {
+                    let item = this.plugins[i];
+                    let copy = JSON.parse(JSON.stringify(item));
+                    copy.type = "settingsPlayer";
+                    copy.players = undefined==item.actions.go || undefined==item.actions.go.player || !Array.isArray(item.actions.go.player)
+                        ? undefined : item.actions.go.player;
+                    bus.$emit("pin", copy, !this.plugins[i].pinned);
+                } else {
+                    this.showPlugin(i);
+                }
+            }
         },
         showPlugin(idx) {
             this.showMenu = false;
             bus.$emit('dlg.open', 'playersettingsplugin', this.playerId, this.playerName, this.plugins[idx], this.showHome);
+        },
+        setPinned() {
+            if (this.plugins.length<1) {
+                return;
+            }
+            let browseTop = JSON.parse(getLocalStorageVal("topItems", "[]"));
+            let ids = new Set();
+            for (let i=0, len=browseTop.length; i<len; ++i) {
+                ids.add(browseTop[i].id);
+            }
+            for (let i=0, len=this.plugins.length; i<len; ++i) {
+                this.plugins[i].pinned=ids.has(this.plugins[i].id);
+            }
         }
     },
     filters: {

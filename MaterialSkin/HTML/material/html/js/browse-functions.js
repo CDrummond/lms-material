@@ -548,9 +548,15 @@ function browseClick(view, item, index, event) {
         view.select(item, index, event);
         return;
     }
-    if (item.isPinned && undefined!=item.url && "extra"!=item.type) { // Radio
-        view.itemMenu(item, index, event);
-        return;
+    if (item.isPinned) {
+        if (undefined!=item.url && "extra"!=item.type) { // Radio
+            view.itemMenu(item, index, event);
+            return;
+        }
+        if ("settingsPlayer"==item.type) {
+            bus.$emit('dlg.open', 'playersettingsplugin', view.playerId(), view.playerName(), item, false);
+            return;
+        }
     }
     if (item.currentAction) {
         view.currentAction(item, index);
@@ -1865,6 +1871,10 @@ function browsePin(view, item, add, mapped) {
             view.top.splice(lastPinnedIndex+1, 0,
                             {id: item.id, title: item.title, icon: item.icon, svg: item.svg, url: item.url, isPinned: true, type:item.type,
                              menu: [RENAME_ACTION, UNPIN_ACTION], weight:10000});
+        } else if (item.type=='settingsPlayer') {
+            view.top.splice(lastPinnedIndex+1, 0,
+                            {id: item.id, title: item.title, image: item.image, icon: item.icon, svg: item.svg, isPinned: true, type:item.type,
+                             actions: item.actions, menu: [RENAME_ACTION, UNPIN_ACTION], weight:10000});
         } else {
             var command = view.buildCommand(item, undefined, false);
             view.top.splice(lastPinnedIndex+1, 0,
@@ -1876,6 +1886,7 @@ function browsePin(view, item, add, mapped) {
         view.updateItemPinnedState(item);
         view.saveTopList();
         bus.$emit('showMessage', i18n("Pinned '%1' to home screen.", item.title));
+        bus.$emit('pinnedChanged');
     } else if (!add && index!=-1) {
         confirm(i18n("Un-pin '%1'?", item.title), i18n('Un-pin')).then(res => {
             if (res) {
@@ -1883,6 +1894,7 @@ function browsePin(view, item, add, mapped) {
                 view.options.pinned.delete(item.id);
                 view.updateItemPinnedState(item);
                 view.saveTopList();
+                bus.$emit('pinnedChanged');
             }
         });
     }

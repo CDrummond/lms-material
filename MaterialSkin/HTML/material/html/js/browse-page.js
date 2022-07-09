@@ -586,6 +586,9 @@ var lmsBrowse = Vue.component("lms-browse", {
         playerId() {
             return this.$store.state.player ? this.$store.state.player.id : "";
         },
+        playerName() {
+            return this.$store.state.player ? this.$store.state.player.name : "";
+        },
         addHistory() {
             browseAddHistory(this);
         },
@@ -1682,6 +1685,9 @@ var lmsBrowse = Vue.component("lms-browse", {
                     browseAddToPlaylist(this, urls, this.current.id, index, this.items.length);
                 }
             }
+        }.bind(this));
+        bus.$on('pin', function(item, add) {
+            this.pin(item, add);
         }.bind(this));
     },
     filters: {

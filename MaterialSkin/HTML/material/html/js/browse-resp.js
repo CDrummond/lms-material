@@ -328,7 +328,7 @@ function parseBrowseResp(data, parent, options, cacheKey, parentCommand, parentG
                     }
                 }
 
-                if (!i.type && i.style && i.style=="itemNoAction" && (!i.actions || (!i.actions.go && !i.actions.do))) { // itemNoAction with an action? DynamicPlaylists...
+                if (!i.type && (!i.style || i.style=="itemNoAction") && (!i.actions || (!i.actions.go && !i.actions.do))) { // itemNoAction with an action? DynamicPlaylists...
                     i.type = "text";
                 }
 

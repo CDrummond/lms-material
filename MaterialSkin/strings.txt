@@ -8,7 +8,7 @@ PLUGIN_MATERIAL_SKIN
 	CS	Vzhled 'Material Skin', vhodný pro mobilní používání.
 	DE	Web-Skin im Material-Stil, für mobile Nutzung optimiert
 	EN	Material themed skin, suitable for mobile use.
-	FR	Thème 'Material Skin', adapté à une utilisation mobile.
+	FR	Thème "Material Skin", adapté à une utilisation mobile.
 	NL	Material Skin, geschikt voor mobiel gebruik.
 
 PLUGIN_MATERIAL_SKIN_GENRES_LIST_NOTE
@@ -176,7 +176,7 @@ PLUGIN_MATERIAL_SKIN_ARTIST_FIRST
 	CS	Zobrazení interpreta jako prvního v Právě hraje a ve frontě
 	DE	Intepreten als erstes in 'Aktueller Titel' und Warteschlange anzeigen
 	EN	Show artist first in now-playing and queue
-	FR	Afficher l'artiste en premier dans la vue 'lecture en cours' et la liste de lecture
+	FR	Afficher l'artiste en premier dans la vue "lecture en cours" et la liste de lecture
 	NL	Toon artiest als eerste in 'Speelt nu' en afspeellijst
 
 PLUGIN_MATERIAL_SKIN_ARTIST_FIRST_DESC
@@ -200,7 +200,7 @@ PLUGIN_MATERIAL_SKIN_SHOW_ALL_ARTISTS_DESC
 	DE	Wenn ein Titel mehrere Interpreten, Albuminterpreten, Komponisten etc. hat, zeige alle beim Durchsuchen von Alben, in 'Aktueller Titel' und der Warteschlange an. Andernfalls zeige nur den jeweils ersten an.
 	EN	If a track has multiple artists, album-artists, composers, etc. then show all when browsing albums, in now-playing and the queue. Otherwise just show the first of each.
 	DA	Hvis et nummer har flere kunstnere, albumkunstnere, komponister m.v., så vis dem alle mens der kigges på albums, hvad der afspilles nu og i køen. I modsat fald vis kun den første af hver slags.
-	FR	Si un morceau a plusieurs artistes ou artistes d'album, compositeurs, etc., choisir de les afficher tous (lors de la navigation dans les albums, dans la vue 'lecture en cours' et dans la liste de lecture) ou de n'afficher que le premier de chaque type.
+	FR	Si un morceau a plusieurs artistes ou artistes d'album, compositeurs, etc., choisir de les afficher tous (lors de la navigation dans les albums, dans la vue "lecture en cours" et dans la liste de lecture) ou de n'afficher que le premier de chaque type.
 	NL	Als een nummer meerdere artiesten, albumartiesten, componisten, etc. heeft, laat ze dan allemaal zien bij het bladeren door albums, bij het afspelen en in de afspeellijst. Laat anders gewoon de eerste van elk zien.
 	RU	Если в треке есть несколько исполнителей, музыкантов, композиторов и т. д., Тогда показывать все при просмотре альбомов, в «Сейчас играет» и в очереди. В противном случае просто позать первое из каждого
 
@@ -313,12 +313,15 @@ PLUGIN_MATERIAL_SKIN_COLLAPSE_DISCS_C_LIMIT
 
 PLUGIN_MATERIAL_SKIN_SHOW_COMMENT
 	EN	Show comment in info view
+	FR	Afficher le tag "comment" (commentaire) dans la vue "Informations"
 	NL	Toon 'comment' tag in info weergave
 
 PLUGIN_MATERIAL_SKIN_SHOW_COMMENT_DESC
 	EN	Show a track's comment tag in the 'Track' section of the track information view, below the lyrics.
+	FR	Afficher le contenu du tag "comment" (commentaire) dans la section "Morceau" de la vue "Informations", sous les paroles.
 	NL	Toon de 'comment' tag, onder de songtekst in het nummer gedeelte, op de info weergave. 
 
 PLUGIN_MATERIAL_SKIN_RELOAD_NOTE
 	EN	NOTE: If you change any of the settings below then you might need to refresh the web page for the changes to take effect.
+	FR	REMARQUE : Si vous modifiez l'un des paramètres ci-dessous, vous devrez peut-être actualiser la page Web pour que les modifications prennent effet.
 	NL	Belangrijk: Als je een van de onderstaande instellingen wijzigt, dien je mogelijk de webpagina te vernieuwen om de wijzigingen door te voeren.

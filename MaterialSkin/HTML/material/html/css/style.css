@@ -833,12 +833,17 @@ div.v-subheader {
 }
 
 /* Biographies, etc, from More > Artist information > ... */
-.lms-list > .browse-html {
+.browse-html {
  font-size:var(--std-font-size)!important;
  font-weight:200!important;
  min-height:var(--list-elem-height)!important;
  height:auto!important;
  padding:12px 16px!important;
+}
+
+.browse-text {
+ font-size:var(--std-font-size)!important;
+ font-weight:200!important;
 }
 
 .np-spacer {

@@ -20,6 +20,7 @@
 16. If using desktop layout on iOS and page is alseep for more than 15 seconds
     then when awake switch to mobile and immediately back to desktop to
     attempt to work-around issues (#589).
+17. (Hopefully) fixed disappearing items.
 
 2.9.8
 -----

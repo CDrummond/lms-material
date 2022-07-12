@@ -154,6 +154,7 @@ var lmsBrowse = Vue.component("lms-browse", {
     </v-list-tile>
    </RecycleScroller>
 
+   <v-list-tile v-else-if="items.length==1 && (items[0].type=='text' || items[0].type=='html')" class="lms-list-item browse-html" v-html="items[0].title"></v-list-tile>
    <template v-else v-for="(item, index) in items">
     <v-list-tile v-if="item.type=='text' && canClickText(item)" avatar @click="click(item, index, $event)" v-bind:class="{'error-text': item.id==='error'}" class="lms-avatar lms-list-item" @contextmenu.prevent="itemMenu(item, index, $event)">
      <v-list-tile-content>
@@ -161,7 +162,11 @@ var lmsBrowse = Vue.component("lms-browse", {
       <v-list-tile-sub-title v-html="item.subtitle"></v-list-tile-sub-title>
      </v-list-tile-content>
     </v-list-tile>
-    <v-list-tile v-else-if="item.type=='html' || item.type=='text'" class="lms-list-item browse-html" v-html="item.title"></v-list-tile>
+    <v-list-tile v-else-if="item.type=='html' || item.type=='text'" class="lms-list-item>">
+     <v-list-tile-content>
+     <v-list-tile-title class="browse-text" v-html="item.title"></v-list-tile-title>
+    </v-list-tile-content>
+   </v-list-tile>
     <v-list-tile v-else-if="item.header" class="lms-list-item" v-bind:class="{'browse-header': item.header && item.header!=PLAIN_HEADER}" @click="click(item, index, $event)">
      <v-list-tile-content>
       <v-list-tile-title>{{item.title}}</v-list-tile-title>

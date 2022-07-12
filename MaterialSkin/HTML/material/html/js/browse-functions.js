@@ -270,6 +270,9 @@ function browseHandleListResponse(view, item, command, resp, prevPage) {
         view.currentLibId = command.libraryId;
         view.pinnedItemLibName = item.libname ? item.libname : view.pinnedItemLibName;
         view.items=resp.items;
+        for (var i=0; i<view.items.length; ++i) {
+            console.log("HL", i, view.items[i].title, view.items[i].type, view.items[i].id);
+        }
         view.allSongsItem=resp.allSongsItem;
         view.jumplist=resp.jumplist;
         view.filteredJumplist = [];

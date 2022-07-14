@@ -171,7 +171,7 @@ function browseActions(view, item, args, count) {
 }
 
 function browseHandleNextWindow(view, item, command, resp, isMoreMenu, isBrowse) {
-    // If called with isBrowse==true, then previous list will have been added to hsitory, so if
+    // If called with isBrowse==true, then previous list will have been added to history, so if
     // we go-back we are going back to that.
     var nextWindow = item.nextWindow
                         ? item.nextWindow

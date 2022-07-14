@@ -54,7 +54,7 @@
   print("  <meta name=\"apple-mobile-web-app-capable\" content=\"yes\">\n");
   print("  <meta name=\"apple-mobile-web-app-status-bar-style\" content=\"black\">\n");
   print("  </head>\n");
-  # Splitter positioning was changed becasue of #589, but this change then broke zoomnig on Android APK
+  # Splitter positioning was changed because of #589, but this change then broke zooming on Android APK
   # So, set class type so that CSS can be modified to position splitter differently for Android.
   if (index($ua, 'Android') != -1) {
     print(" <body class=\"IS_ANDROID\">\n");

@@ -21,6 +21,7 @@
     then when awake switch to mobile and immediately back to desktop to
     attempt to work-around issues (#589).
 17. (Hopefully) fixed disappearing items.
+18. Show next alarm on screensaver.
 
 2.9.8
 -----

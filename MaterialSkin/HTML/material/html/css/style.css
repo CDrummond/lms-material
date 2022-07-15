@@ -1901,7 +1901,7 @@ div.v-subheader {
  z-index:10000;
 }
 
-.screesaver-time {
+.screensaver-time {
  color:white!important;
  text-align:center;
  font-weight:var(--bold-weight);
@@ -1909,7 +1909,7 @@ div.v-subheader {
  opacity:0.75;
 }
 
-.screesaver-date {
+.screensaver-date {
  color:white!important;
  text-align:center;
  font-weight:var(--std-weight);
@@ -1917,7 +1917,19 @@ div.v-subheader {
  opacity:0.55;
 }
 
-.screesaver-name {
+.screensaver-alarm {
+ color:white!important;
+ text-align:center;
+ font-weight:var(--std-weight);
+ font-size:var(--std-font-size)!important;
+ opacity:0.55;
+}
+
+.screensaver-alarm .v-icon {
+ margin-top:-4px!important;
+}
+
+.screensaver-name {
  color:white!important;
  padding-top:calc(var(--vh, 1vh)*8);
  text-align:center;
@@ -1930,31 +1942,31 @@ div.v-subheader {
 }
 
 @media screen and (max-width: 450px) {
- .screesaver-time {
+ .screensaver-time {
   font-size:64px;
  }
- .screesaver-date {
+ .screensaver-date {
   font-size:32px;
  }
 }
 
 @media screen and (max-width: 320px) {
- .screesaver-time {
+ .screensaver-time {
   font-size:48px;
  }
- .screesaver-date {
+ .screensaver-date {
   font-size:24px;
  }
- .screesaver-name {
+ .screensaver-name {
   font-size:var(--small-font-size);
  }
 }
 
 @media screen and (max-width: 200px) {
- .screesaver-time {
+ .screensaver-time {
   font-size:32px;
  }
- .screesaver-date {
+ .screensaver-date {
   font-size:16px;
  }
 }

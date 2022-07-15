@@ -15,9 +15,10 @@ Vue.component('lms-screensaver', {
     template: `
 <v-dialog v-model="show" v-if="show" scrollable fullscreen>
  <v-card class="screensaver-bgnd" v-on:mousemove="resetTimer($event)" v-on:touchstart="resetTimer($event)" id="screensaver">
-  <p class="screesaver-time ellipsis">{{time}}</p>
-  <p class="screesaver-date ellipsis">{{date}}</p>
-  <p class="screesaver-name ellipsis">{{playerName}}</p>
+  <p class="screensaver-time ellipsis">{{time}}</p>
+  <p class="screensaver-date ellipsis">{{date}}</p>
+  <p v-if="undefined!=alarm" class="screensaver-alarm ellipsis"><v-icon>alarm</v-icon> {{alarm}}</p>
+  <p class="screensaver-name ellipsis">{{playerName}}</p>
  </v-card>
 </v-dialog>
 `,
@@ -26,7 +27,8 @@ Vue.component('lms-screensaver', {
         return { enabled: false,
                  show: false,
                  date: "date",
-                 time: "time"}
+                 time: "time",
+                 alarm: undefined}
     },
     computed: {
         playerName () {
@@ -40,6 +42,7 @@ Vue.component('lms-screensaver', {
         this.control();
         this.toggleHandlers();
         this.state = 'hidden';
+        this.alarmTime = 0;
         bus.$on('screensaverDisplayChanged', function() {
             if (this.enabled != this.$store.state.screensaver) {
                 this.enabled = this.$store.state.screensaver;
@@ -54,6 +57,16 @@ Vue.component('lms-screensaver', {
             }
         }.bind(this));
         bus.$on('playerStatus', function(playerStatus) {
+            if (this.alarmTime!=playerStatus.alarm || (this.alarmTime>0 && undefined==this.alarm)) {
+                this.alarmTime = playerStatus.alarm;
+                this.alarm = undefined;
+                if (this.enabled && this.alarmTime>0) {
+                    let alarmDate = new Date(this.alarmTime*1000);
+                    let day = alarmDate.toLocaleDateString(this.$store.state.lang, { weekday: 'short', month: undefined, day: undefined, year: undefined }).replace(", ", "  ");
+                    let time = alarmDate.toLocaleTimeString(this.$store.state.lang, { hour: 'numeric', minute: 'numeric' });
+                    this.alarm = day+" "+time;
+                }
+            }
             if (playerStatus.isplaying != this.playing) {
                 // Player state changed
                 this.playing = playerStatus.isplaying;
@@ -72,14 +85,14 @@ Vue.component('lms-screensaver', {
             }
         },
         updateDateAndTime() {
-            var date = new Date();
+            let date = new Date();
             this.date = date.toLocaleDateString(this.$store.state.lang, { weekday: 'short', month: 'short', day: 'numeric', year: undefined }).replace(", ", "  ");
             this.time = date.toLocaleTimeString(this.$store.state.lang, { hour: 'numeric', minute: 'numeric' });
 
             if (undefined!==this.updateTimer) {
                 clearTimeout(this.updateTimer);
             }
-            var next = 60-date.getSeconds();
+            let next = 60-date.getSeconds();
             this.updateTimer = setTimeout(function () {
                 this.updateDateAndTime();
             }.bind(this), (next*1000)+25);

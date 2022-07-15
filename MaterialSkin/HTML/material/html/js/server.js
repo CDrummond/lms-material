@@ -500,7 +500,7 @@ var lmsServer = Vue.component('lms-server', {
                                 modified: undefined==data.playlist_modified ? false : (1==parseInt(data.playlist_modified)),
                                 current: undefined==data.playlist_cur_index ? -1 : parseInt(data.playlist_cur_index),
                                 count: undefined==data.playlist_tracks ? 0 : parseInt(data.playlist_tracks),
-                                timestamp: undefined===data.playlist_timestamp ? 0.0 : parseFloat(data.playlist_timestamp)
+                                timestamp: undefined==data.playlist_timestamp ? 0.0 : parseFloat(data.playlist_timestamp)
                               };
             if (data.playlist_loop && data.playlist_loop.length>0) {
                 player.current = data.playlist_loop[0];
@@ -527,6 +527,11 @@ var lmsServer = Vue.component('lms-server', {
 
             if (player.isgroup && data.members) {
                 player.members=data.members.split(',');
+            }
+            if (isCurrent) {
+                let nextAlarm = undefined==data.alarm_next ? 0 : parseInt(data.alarm_next);
+                let nextAlarm2 = undefined==data.alarm_next2 ? 0 : parseInt(data.alarm_next2);
+                player.alarm = nextAlarm>0 ? nextAlarm : nextAlarm2;
             }
             bus.$emit(isCurrent ? 'playerStatus' : 'otherPlayerStatus', player);
             if (isCurrent) {
@@ -713,7 +718,11 @@ var lmsServer = Vue.component('lms-server', {
             let tags = PLAYER_STATUS_TAGS +
                          (this.$store.state.showRating ? "R" : "") +
                          (lmsOptions.showComment ? "k" : "");
-            lmsCommand(id, ["status", "-", 1, tags], undefined, STATUS_UPDATE_MAX_TIME).then(({data}) => {
+            let cmd = ["status", "-", 1, tags];
+            if (this.$store.state.player && id==this.$store.state.player.id) {
+                cmd.push("menu:1");
+            }
+            lmsCommand(id, cmd, undefined, STATUS_UPDATE_MAX_TIME).then(({data}) => {
                 this.playerStatusMessages.delete(id);
                 if (data && data.result) {
                     this.handlePlayerStatus(id, data.result, true);
@@ -735,7 +744,7 @@ var lmsServer = Vue.component('lms-server', {
                          (this.$store.state.showRating ? "R" : "") +
                          (lmsOptions.showComment ? "k" : "");
                 this.cometd.subscribe('/slim/subscribe', function(res) { },
-                    {data:{response:'/'+this.cometd.getClientId()+'/slim/playerstatus/'+id, request:[id, ["status", "-", 1, tags, "subscribe:30"]]}});
+                    {data:{response:'/'+this.cometd.getClientId()+'/slim/playerstatus/'+id, request:[id, ["status", "-", 1, tags, "subscribe:30", "menu:1"]]}});
                 this.cometd.subscribe('/slim/subscribe', function(res) { },
                     {data:{response:'/'+this.cometd.getClientId()+'/slim/displaystatus/'+id, request:[id, ["displaystatus", "subscribe:showbriefly"]]}});
                 this.cometd.subscribe('/slim/subscribe',

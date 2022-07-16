@@ -1109,7 +1109,7 @@ sub _cliClientCommand {
     }
     my $cmd = $request->getParam('_cmd');
     my $client = $request->client();
-    if ($request->paramUndefinedOrNotOneOf($cmd, ['set-lib']) ) {
+    if ($request->paramUndefinedOrNotOneOf($cmd, ['set-lib', 'get-alarm']) ) {
         $request->setStatusBadParams();
         return;
     }
@@ -1119,6 +1119,19 @@ sub _cliClientCommand {
         $serverprefs->client($client)->set('libraryId', $id);
         $serverprefs->client($client)->remove('libraryId') unless $id;
         Slim::Utils::Timers::setTimer($client, Time::HiRes::time() + 0.1, sub {Slim::Schema->totals($client);});
+        $request->setStatusDone();
+        return;
+    }
+
+    if ($cmd eq 'get-alarm') {
+        my $alarmNextAlarm = Slim::Utils::Alarm->getNextAlarm($client);
+        if($alarmNextAlarm and $alarmNextAlarm->enabled()) {
+            # Get epoch seconds
+            my $alarmNext = $alarmNextAlarm->nextDue();
+            $request->addResult('alarm', $alarmNext);
+        } else {
+            $request->addResult('alarm', 0)
+        }
         $request->setStatusDone();
         return;
     }

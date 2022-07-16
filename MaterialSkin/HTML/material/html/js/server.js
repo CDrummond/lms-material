@@ -528,11 +528,6 @@ var lmsServer = Vue.component('lms-server', {
             if (player.isgroup && data.members) {
                 player.members=data.members.split(',');
             }
-            if (isCurrent) {
-                let nextAlarm = undefined==data.alarm_next ? 0 : parseInt(data.alarm_next);
-                let nextAlarm2 = undefined==data.alarm_next2 ? 0 : parseInt(data.alarm_next2);
-                player.alarm = nextAlarm>0 ? nextAlarm : nextAlarm2;
-            }
             bus.$emit(isCurrent ? 'playerStatus' : 'otherPlayerStatus', player);
             if (isCurrent) {
                 updateNative(player);
@@ -718,11 +713,7 @@ var lmsServer = Vue.component('lms-server', {
             let tags = PLAYER_STATUS_TAGS +
                          (this.$store.state.showRating ? "R" : "") +
                          (lmsOptions.showComment ? "k" : "");
-            let cmd = ["status", "-", 1, tags];
-            if (this.$store.state.player && id==this.$store.state.player.id) {
-                cmd.push("menu:1");
-            }
-            lmsCommand(id, cmd, undefined, STATUS_UPDATE_MAX_TIME).then(({data}) => {
+            lmsCommand(id, ["status", "-", 1, tags], undefined, STATUS_UPDATE_MAX_TIME).then(({data}) => {
                 this.playerStatusMessages.delete(id);
                 if (data && data.result) {
                     this.handlePlayerStatus(id, data.result, true);
@@ -744,7 +735,7 @@ var lmsServer = Vue.component('lms-server', {
                          (this.$store.state.showRating ? "R" : "") +
                          (lmsOptions.showComment ? "k" : "");
                 this.cometd.subscribe('/slim/subscribe', function(res) { },
-                    {data:{response:'/'+this.cometd.getClientId()+'/slim/playerstatus/'+id, request:[id, ["status", "-", 1, tags, "subscribe:30", "menu:1"]]}});
+                    {data:{response:'/'+this.cometd.getClientId()+'/slim/playerstatus/'+id, request:[id, ["status", "-", 1, tags, "subscribe:30"]]}});
                 this.cometd.subscribe('/slim/subscribe', function(res) { },
                     {data:{response:'/'+this.cometd.getClientId()+'/slim/displaystatus/'+id, request:[id, ["displaystatus", "subscribe:showbriefly"]]}});
                 this.cometd.subscribe('/slim/subscribe',

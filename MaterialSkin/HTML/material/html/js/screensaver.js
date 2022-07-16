@@ -57,16 +57,6 @@ Vue.component('lms-screensaver', {
             }
         }.bind(this));
         bus.$on('playerStatus', function(playerStatus) {
-            if (this.alarmTime!=playerStatus.alarm || (this.alarmTime>0 && undefined==this.alarm)) {
-                this.alarmTime = playerStatus.alarm;
-                this.alarm = undefined;
-                if (this.enabled && this.alarmTime>0) {
-                    let alarmDate = new Date(this.alarmTime*1000);
-                    let day = alarmDate.toLocaleDateString(this.$store.state.lang, { weekday: 'short', month: undefined, day: undefined, year: undefined }).replace(", ", "  ");
-                    let time = alarmDate.toLocaleTimeString(this.$store.state.lang, { hour: 'numeric', minute: 'numeric' });
-                    this.alarm = day+" "+time;
-                }
-            }
             if (playerStatus.isplaying != this.playing) {
                 // Player state changed
                 this.playing = playerStatus.isplaying;
@@ -96,6 +86,25 @@ Vue.component('lms-screensaver', {
             this.updateTimer = setTimeout(function () {
                 this.updateDateAndTime();
             }.bind(this), (next*1000)+25);
+
+            if (undefined!=this.$store.state.player) {
+                lmsCommand(this.$store.state.player.id, ["material-skin-client", "get-alarm"]).then(({data}) => {
+                    let alarmTime = 0;
+                    if (undefined!=data.result && undefined!=data.result.alarm) {
+                        alarmTime = parseInt(data.result.alarm);
+                    }
+                    this.alarm = undefined;
+                    if (this.alarmTime!=alarmTime && alarmTime>0) {
+                        this.alarmTime = alarmTime;
+                        let alarmDate = new Date(this.alarmTime*1000);
+                        let day = alarmDate.toLocaleDateString(this.$store.state.lang, { weekday: 'short', month: undefined, day: undefined, year: undefined }).replace(", ", "  ");
+                        let time = alarmDate.toLocaleTimeString(this.$store.state.lang, { hour: 'numeric', minute: 'numeric' });
+                        this.alarm = day+" "+time;
+                    }
+                });
+            } else {
+                this.alarm = undefined;
+            }
         },
         cancelAll(doFade) {
             if (undefined!==this.showTimer) {

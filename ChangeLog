@@ -15,7 +15,7 @@
 11. Allow player specific actions in player's toolbar.
 12. Remove plugin javascript and dialog support - not used.
 13. Make button edges fully rounded.
-14. Add border to buttons in fulscreen dialogs.
+14. Add border to buttons in fullscreen dialogs.
 15. Tweak tab appearance.
 16. If using desktop layout on iOS and page is asleep for more than 15 seconds
     then when awake switch to mobile and immediately back to desktop to

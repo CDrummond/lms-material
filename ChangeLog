@@ -3,7 +3,7 @@
  1. Add player settings plugins to 'Player settings' dialog.
  2. Display 'showBriefly' messages.
  3. Optionally show track comments in information view. Requires enabling in
-   Material's server side setttings.
+   Material's server side settings.
  4. Don't try to embed PDF files for Android, doesn't work.
  5. Try to fix zooming issues with APK.
  6. Add artist, and album, extra menu items when browse via 'More'
@@ -17,7 +17,7 @@
 13. Make button edges fully rounded.
 14. Add border to buttons in fulscreen dialogs.
 15. Tweak tab appearance.
-16. If using desktop layout on iOS and page is alseep for more than 15 seconds
+16. If using desktop layout on iOS and page is asleep for more than 15 seconds
     then when awake switch to mobile and immediately back to desktop to
     attempt to work-around issues (#589).
 17. (Hopefully) fixed disappearing items.

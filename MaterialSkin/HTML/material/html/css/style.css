@@ -1921,7 +1921,7 @@ div.v-subheader {
  color:white!important;
  text-align:center;
  font-weight:var(--std-weight);
- font-size:var(--std-font-size)!important;
+ font-size:var(--std-font-size);
  opacity:0.55;
 }
 
@@ -1941,7 +1941,14 @@ div.v-subheader {
  bottom:32px;
 }
 
-@media screen and (max-width: 450px) {
+@media screen and (max-height: 450px) {
+  .screensaver-name {
+   bottom:12px;
+   font-size:14px;
+  }
+ }
+
+@media screen and ( ((orientation:portrait) and (max-width: 450px)) or ((orientation:landscape) and (max-height: 450px)) ) {
  .screensaver-time {
   font-size:64px;
  }
@@ -1950,7 +1957,7 @@ div.v-subheader {
  }
 }
 
-@media screen and (max-width: 320px) {
+@media screen and ( ((orientation:portrait) and (max-width: 320px)) or ((orientation:landscape) and (max-height: 320px)) ) {
  .screensaver-time {
   font-size:48px;
  }
@@ -1962,7 +1969,7 @@ div.v-subheader {
  }
 }
 
-@media screen and (max-width: 200px) {
+@media screen and ( ((orientation:portrait) and (max-width: 200px)) or ((orientation:landscape) and (max-height: 200px)) ) {
  .screensaver-time {
   font-size:32px;
  }

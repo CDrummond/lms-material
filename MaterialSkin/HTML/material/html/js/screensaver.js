@@ -93,17 +93,21 @@ Vue.component('lms-screensaver', {
                     if (undefined!=data.result && undefined!=data.result.alarm) {
                         alarmTime = parseInt(data.result.alarm);
                     }
-                    this.alarm = undefined;
-                    if (this.alarmTime!=alarmTime && alarmTime>0) {
-                        this.alarmTime = alarmTime;
-                        let alarmDate = new Date(this.alarmTime*1000);
-                        let day = alarmDate.toLocaleDateString(this.$store.state.lang, { weekday: 'short', month: undefined, day: undefined, year: undefined }).replace(", ", "  ");
-                        let time = alarmDate.toLocaleTimeString(this.$store.state.lang, { hour: 'numeric', minute: 'numeric' });
-                        this.alarm = day+" "+time;
+                    if (alarmTime>0) {
+                        if (this.alarmTime!=alarmTime) {
+                            let alarmDate = new Date(this.alarmTime*1000);
+                            let day = alarmDate.toLocaleDateString(this.$store.state.lang, { weekday: 'short', month: undefined, day: undefined, year: undefined }).replace(", ", "  ");
+                            let time = alarmDate.toLocaleTimeString(this.$store.state.lang, { hour: 'numeric', minute: 'numeric' });
+                            this.alarm = day+" "+time;
+                        }
+                    } else {
+                        this.alarm = undefined;
                     }
+                    this.alarmTime = alarmTime;
                 });
             } else {
                 this.alarm = undefined;
+                this.alarmTime = 0;
             }
         },
         cancelAll(doFade) {

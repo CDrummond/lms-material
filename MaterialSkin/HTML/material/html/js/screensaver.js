@@ -18,6 +18,7 @@ Vue.component('lms-screensaver', {
   <p class="screensaver-time ellipsis">{{time}}</p>
   <p class="screensaver-date ellipsis">{{date}}</p>
   <p v-if="undefined!=alarm" class="screensaver-alarm ellipsis"><v-icon>alarm</v-icon> {{alarm}}</p>
+  <p v-else class="screensaver-alarm ellipsis">&nbsp;</p>
   <p class="screensaver-name ellipsis">{{playerName}}</p>
  </v-card>
 </v-dialog>
@@ -95,7 +96,7 @@ Vue.component('lms-screensaver', {
                     }
                     if (alarmTime>0) {
                         if (this.alarmTime!=alarmTime) {
-                            let alarmDate = new Date(this.alarmTime*1000);
+                            let alarmDate = new Date(alarmTime*1000);
                             let day = alarmDate.toLocaleDateString(this.$store.state.lang, { weekday: 'short', month: undefined, day: undefined, year: undefined }).replace(", ", "  ");
                             let time = alarmDate.toLocaleTimeString(this.$store.state.lang, { hour: 'numeric', minute: 'numeric' });
                             this.alarm = day+" "+time;

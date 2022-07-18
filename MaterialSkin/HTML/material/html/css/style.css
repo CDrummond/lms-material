@@ -841,9 +841,17 @@ div.v-subheader {
  padding:12px 16px!important;
 }
 
-.browse-text {
+.browse-text .v-list__tile{
+ height:unset!important;
+}
+
+.browse-text .v-list__tile__title {
  font-size:var(--std-font-size)!important;
  font-weight:200!important;
+ white-space:normal!important;
+ min-height:var(--list-elem-height)!important;
+ height:auto!important;
+ padding:12px 0px 11px 0px!important; /* t, r, b, l */
 }
 
 .np-spacer {

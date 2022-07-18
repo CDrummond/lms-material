@@ -38,9 +38,9 @@ Vue.component('lms-player-settings-plugin', {
          <text-field :focus="index==0 && !IS_MOBILE" :title="item.title" :type="item.type" @value="entry(item, $event)"></text-field>
         </v-list-tile-content>
        </v-list-tile>
-       <v-list-tile v-else-if="item.type=='html' || item.type=='text'" class="lms-list-item>">
+       <v-list-tile v-else-if="item.type=='html' || item.type=='text'" class="lms-list-item browse-text">
         <v-list-tile-content>
-         <v-list-tile-title class="browse-text" v-html="item.title"></v-list-tile-title>
+         <v-list-tile-title v-html="item.title"></v-list-tile-title>
         </v-list-tile-content>
        </v-list-tile>
        <v-list-tile v-else @click="fetch(item)" class="lms-list-item">

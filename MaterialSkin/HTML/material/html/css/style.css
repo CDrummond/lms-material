@@ -1950,22 +1950,33 @@ div.v-subheader {
 }
 
 @media screen and (max-height: 450px) {
-  .screensaver-name {
-   bottom:12px;
-   font-size:14px;
-  }
+ .screensaver-name {
+  bottom:8px;
+  font-size:14px;
  }
+}
 
-@media screen and ( ((orientation:portrait) and (max-width: 450px)) or ((orientation:landscape) and (max-height: 450px)) ) {
+@media screen and (max-height: 320px) {
+ .screensaver-name {
+  bottom:-8px;
+ }
+}
+
+@media screen and (orientation:portrait) and (max-width: 450px),
+       screen and (orientation:landscape) and (max-height: 450px) {
  .screensaver-time {
   font-size:64px;
  }
  .screensaver-date {
   font-size:32px;
  }
+ .screensaver-name {
+  font-size:18px;
+ }
 }
 
-@media screen and ( ((orientation:portrait) and (max-width: 320px)) or ((orientation:landscape) and (max-height: 320px)) ) {
+@media screen and (orientation:portrait) and (max-width: 320px),
+       screen and (orientation:landscape) and (max-height: 320px) {
  .screensaver-time {
   font-size:48px;
  }
@@ -1973,16 +1984,24 @@ div.v-subheader {
   font-size:24px;
  }
  .screensaver-name {
-  font-size:var(--small-font-size);
+  font-size:12px;
  }
 }
 
-@media screen and ( ((orientation:portrait) and (max-width: 200px)) or ((orientation:landscape) and (max-height: 200px)) ) {
+@media screen and (orientation:portrait) and (max-width: 200px),
+       screen and (orientation:landscape) and (max-height: 200px) {
  .screensaver-time {
   font-size:32px;
  }
  .screensaver-date {
   font-size:16px;
+ }
+}
+
+@media screen and (orientation:portrait) and (max-width: 160px),
+       screen and (orientation:landscape) and (max-height: 160px) {
+ .screensaver-time {
+  font-size:24px;
  }
 }
 

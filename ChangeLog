@@ -2,6 +2,7 @@
 ------
 1. Adjust screensaver text positions.
 2. Fix non-wrapping text items in lists.
+3. Fix clicking on text items when there is only 1 item in list.
 
 2.10.1
 ------

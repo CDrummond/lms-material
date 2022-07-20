@@ -154,7 +154,7 @@ var lmsBrowse = Vue.component("lms-browse", {
     </v-list-tile>
    </RecycleScroller>
 
-   <div v-else-if="items.length==1 && (items[0].type=='text' || items[0].type=='html')" class="lms-list-item browse-html" v-html="items[0].title"></div>
+   <div v-else-if="items.length==1 && items[0].type=='html'" class="lms-list-item browse-html" v-html="items[0].title"></div>
    <template v-else v-for="(item, index) in items">
     <v-list-tile v-if="item.type=='text' && canClickText(item)" avatar @click="click(item, index, $event)" v-bind:class="{'error-text': item.id==='error'}" class="lms-avatar lms-list-item" @contextmenu.prevent="itemMenu(item, index, $event)">
      <v-list-tile-content>
@@ -634,6 +634,7 @@ var lmsBrowse = Vue.component("lms-browse", {
         },
         canClickText(item) {
             return (item.style && item.style.startsWith('item') && item.style!='itemNoAction') ||
+                   undefined!=item.weblink ||
                    // Some items have style=itemNoAction, but we have an action??? DynamicPlaylists...
                    (/*!item.style &&*/ ( (item.actions && (item.actions.go || item.actions.do)) || item.nextWindow || item.params /*CustomBrowse*/));
         },

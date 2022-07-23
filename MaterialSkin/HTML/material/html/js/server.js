@@ -9,7 +9,7 @@
 //const PLAYER_STATUS_TAGS = "tags:cdegiloqrstuyAABEKNST";
 const PLAYER_STATUS_TAGS = "tags:cdegiloqrstuyAABKNST";
 const STATUS_UPDATE_MAX_TIME = 4000;
-const IGNORE_NOTIFS = new Set(["song", "icon"]);
+const IGNORE_NOTIFS = new Set(["song", "icon", "mixed"]);
 
 function updateMskLinks(str) {
     // Replace href links in notificaitons with javascript so that we can intercept

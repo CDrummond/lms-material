@@ -810,7 +810,6 @@ Vue.component('lms-ui-settings', {
                 list.push(shortcutStr(LMS_SERVER_SETTINGS_KEYBOARD)+SEPARATOR+TB_SERVER_SETTINGS.title);
             }
             list.push(shortcutStr(LMS_INFORMATION_KEYBOARD)+SEPARATOR+TB_INFO.title);
-            list.push(shortcutStr(LMS_HELP_KEYBOARD)+SEPARATOR+TB_HELP.title);
             list.push(shortcutStr(LMS_MANAGEPLAYERS_KEYBOARD)+SEPARATOR+TB_MANAGE_PLAYERS.title);
             list.push(i18n("Alt+(N)")+SEPARATOR+i18n("Switch to Nth player"));
             if (!this.$store.state.desktopLayout) {

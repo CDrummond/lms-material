@@ -435,7 +435,6 @@ Vue.component('lms-toolbar', {
             bindKey(LMS_PLAYER_SETTINGS_KEYBOARD, 'mod');
             bindKey(LMS_SERVER_SETTINGS_KEYBOARD, 'mod');
             bindKey(LMS_INFORMATION_KEYBOARD, 'mod');
-            bindKey(LMS_HELP_KEYBOARD, 'mod');
             bindKey(LMS_MANAGEPLAYERS_KEYBOARD, 'mod');
             bindKey(LMS_TOGGLE_QUEUE_KEYBOARD, 'mod+shift');
             for (var i=0; i<=9; ++i) {
@@ -449,8 +448,7 @@ Vue.component('lms-toolbar', {
                     if (this.$store.state.visibleMenus.size==1 && this.$store.state.visibleMenus.has('settings')) {
                         if (LMS_UI_SETTINGS_KEYBOARD==key || LMS_PLAYER_SETTINGS_KEYBOARD==key ||  LMS_SERVER_SETTINGS_KEYBOARD==key || LMS_INFORMATION_KEYBOARD==key) {
                             this.menuAction(LMS_UI_SETTINGS_KEYBOARD==key ? TB_UI_SETTINGS.id : LMS_PLAYER_SETTINGS_KEYBOARD==key ? TB_PLAYER_SETTINGS.id : 
-                                            LMS_SERVER_SETTINGS_KEYBOARD==key ? TB_SERVER_SETTINGS.id :
-                                            LMS_INFORMATION_KEYBOARD==key ? TB_INFO.id : TB_HELP.id);
+                                            LMS_SERVER_SETTINGS_KEYBOARD==key ? TB_SERVER_SETTINGS.id : TB_INFO.id);
                             bus.$emit('hideMenu', 'main');
                         }
                     } else if (this.$store.state.visibleMenus.size==1 && this.$store.state.visibleMenus.has('player')) {
@@ -459,12 +457,11 @@ Vue.component('lms-toolbar', {
                             bus.$emit('hideMenu', 'player');
                         }
                     } else if (this.$store.state.visibleMenus.size==0) {
-                        if (LMS_UI_SETTINGS_KEYBOARD==key || LMS_PLAYER_SETTINGS_KEYBOARD==key || LMS_SERVER_SETTINGS_KEYBOARD==key || LMS_INFORMATION_KEYBOARD==key || LMS_HELP_KEYBOARD==key ||
+                        if (LMS_UI_SETTINGS_KEYBOARD==key || LMS_PLAYER_SETTINGS_KEYBOARD==key || LMS_SERVER_SETTINGS_KEYBOARD==key || LMS_INFORMATION_KEYBOARD==key ||
                             (LMS_MANAGEPLAYERS_KEYBOARD==key && this.$store.state.players.length>1)) {
                             this.menuAction(LMS_UI_SETTINGS_KEYBOARD==key ? TB_UI_SETTINGS.id : LMS_PLAYER_SETTINGS_KEYBOARD==key ? TB_PLAYER_SETTINGS.id :
                                             LMS_SERVER_SETTINGS_KEYBOARD==key ? TB_SERVER_SETTINGS.id :
-                                            LMS_INFORMATION_KEYBOARD==key ? TB_INFO.id :
-                                            LMS_MANAGEPLAYERS_KEYBOARD==key ? TB_MANAGE_PLAYERS.id : TB_HELP.id);
+                                            LMS_INFORMATION_KEYBOARD==key ? TB_INFO.id : TB_MANAGE_PLAYERS.id);
                         }
                     }
                 } else if ('alt'==modifier && 1==key.length && !isNaN(key)) {
@@ -501,7 +498,6 @@ Vue.component('lms-toolbar', {
             TB_INFO.title=i18n('Information');
             TB_INFO.shortcut=shortcutStr(LMS_INFORMATION_KEYBOARD);
             TB_HELP.title=i18n('Help');
-            TB_HELP.shortcut=shortcutStr(LMS_HELP_KEYBOARD);
             TB_NOTIFICATIONS.title=i18n('Notifications');
             TB_MANAGE_PLAYERS.title=i18n('Manage players');
             TB_MANAGE_PLAYERS.shortcut=shortcutStr(LMS_MANAGEPLAYERS_KEYBOARD);

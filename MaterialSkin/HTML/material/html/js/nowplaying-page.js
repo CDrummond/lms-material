@@ -89,7 +89,7 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
     </v-list-tile-action>
    </v-list-tile>
   </v-list>
-  <v-progress-linear height="5" id="pos-slider" v-if="playerStatus.current.duration>0" class="np-slider np-slider-desktop" v-bind:class="{'np-slider-desktop-sb' : stopButton}" :value="playerStatus.current.pospc" v-on:click="sliderChanged($event)" @mouseover="timeTooltip.show = true" @mouseout="timeTooltip.show = false" @mousemove="moveTimeTooltip"  @touchstart.passive="timeTooltip.show = true" @touchend.passive="touchSliderEnd" @touchmove.passive="moveTimeTooltipTouch"></v-progress-linear>
+  <v-progress-linear height="5" id="pos-slider" v-if="playerStatus.current.duration>0" class="np-slider np-slider-desktop" v-bind:class="{'np-slider-desktop-sb' : stopButton}" :value="playerStatus.current.pospc" v-on:click="sliderChanged($event)" @mouseover="timeTooltip.show = true" @mouseout="timeTooltip.show = false" @mousemove="moveTimeTooltip" @touchstart.passive="touchSliderStart" @touchend.passive="touchSliderEnd" @touchmove.passive="moveTimeTooltipTouch"></v-progress-linear>
 
   <div v-if="info.show" class="np-info np-info-desktop" id="np-info">
    <v-tabs centered v-model="info.tab" v-if="info.showTabs" style="np-info-tab-cover">
@@ -294,7 +294,7 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
        <v-flex xs12 v-if="!info.show && undefined!=playerStatus.current.time">
         <v-layout class="np-time-layout">
          <p class="np-pos" v-bind:class="{'np-pos-center': playerStatus.current.duration<=0}">{{playerStatus.current.time | displayTime}}</p>
-         <v-progress-linear height="5" v-if="playerStatus.current.duration>0" id="pos-slider" class="np-slider" :value="playerStatus.current.pospc" v-on:click="sliderChanged($event)" @mouseover="timeTooltip.show = true" @mouseout="timeTooltip.show = false" @mousemove="moveTimeTooltip" @touchstart.passive="timeTooltip.show = true" @touchend.passive="touchSliderEnd" @touchmove.passive="moveTimeTooltipTouch"></v-progress-linear>
+         <v-progress-linear height="5" v-if="playerStatus.current.duration>0" id="pos-slider" class="np-slider" :value="playerStatus.current.pospc" v-on:click="sliderChanged($event)" @mouseover="timeTooltip.show = true" @mouseout="timeTooltip.show = false" @mousemove="moveTimeTooltip" @touchstart.passive="touchSliderStart" @touchend.passive="touchSliderEnd" @touchmove.passive="moveTimeTooltipTouch"></v-progress-linear>
          <p class="np-duration link-item" v-if="(showTotal || undefined==playerStatus.current.time) && playerStatus.current.duration>0" @click="toggleTime()">{{playerStatus.current.duration | displayTime}}</p>
          <p class="np-duration link-item" v-else-if="playerStatus.current.duration>0" @click="toggleTime()">-{{playerStatus.current.duration-playerStatus.current.time | displayTime}}</p>
         </v-layout>
@@ -361,7 +361,7 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
     <v-flex xs12 v-if="!info.show && undefined!=playerStatus.current.time">
      <v-layout>
       <p class="np-pos" v-bind:class="{'np-pos-center': playerStatus.current.duration<=0}">{{playerStatus.current.time | displayTime}}</p>
-      <v-progress-linear height="5" v-if="playerStatus.current.duration>0" id="pos-slider" class="np-slider" :value="playerStatus.current.pospc" v-on:click="sliderChanged($event)" @mouseover="timeTooltip.show = true" @mouseout="timeTooltip.show = false" @mousemove="moveTimeTooltip" @touchstart.passive="timeTooltip.show = true" @touchend.passive="touchSliderEnd" @touchmove.passive="moveTimeTooltipTouch"></v-progress-linear>
+      <v-progress-linear height="5" v-if="playerStatus.current.duration>0" id="pos-slider" class="np-slider" :value="playerStatus.current.pospc" v-on:click="sliderChanged($event)" @mouseover="timeTooltip.show = true" @mouseout="timeTooltip.show = false" @mousemove="moveTimeTooltip" @touchstart.passive="touchSliderStart" @touchend.passive="touchSliderEnd" @touchmove.passive="moveTimeTooltipTouch"></v-progress-linear>
       <p class="np-duration link-item" v-if="(showTotal || undefined==playerStatus.current.time) && playerStatus.current.duration>0" @click="toggleTime()">{{playerStatus.current.duration | displayTime}}</p>
       <p class="np-duration link-item" v-else-if="playerStatus.current.duration>0" @click="toggleTime()">-{{playerStatus.current.duration-playerStatus.current.time | displayTime}}</p>
      </v-layout>
@@ -667,8 +667,14 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
                 const rect = document.getElementById("pos-slider").getBoundingClientRect();
                 const evPos = isTouch ? getTouchPos(e) : {x:e.clientX, y:e.clientY};
                 let pos = evPos.x - rect.x;
-                if (isTouch && ( (evPos.x < rect.x - 16) || (evPos.x > rect.x+rect.width + 16) ||
-                                 (evPos.y < rect.y - 48) || (evPos.y > rect.y+rect.height + 48)) ) {
+                if (isTouch && ( (evPos.x < (rect.x - 8)) || (evPos.x > (rect.x+rect.width + 8)) ||
+                                 (evPos.y < (rect.y - 8)) || (evPos.y > (rect.y+rect.height + 8))) ) {
+                    return;
+                }
+                // Try to detect up-swipes on desktop layout on mobile devices, e.g. newer Android where swipe up to
+                // show navigation bar.
+                if (isTouch && this.$store.state.desktopLayout && !this.largeView && undefined!=this.touchStartPos &&
+                    (window.innerHeight-8)<=this.touchStartPos.y && this.touchStartPos.y>evPos.y && (this.touchStartPos.y-evPos.y)>4) {
                     return;
                 }
                 pos = Math.min(Math.max(0, pos), rect.width);
@@ -692,11 +698,16 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
                 this.timeTooltip.text=""+formatSeconds(Math.floor(this.playerStatus.current.duration * pos / rect.width));
             }
         },
+        touchSliderStart(e) {
+            this.timeTooltip.show = true;
+            this.touchStartPos = getTouchPos(e);
+        },
         touchSliderEnd(e) {
             if (this.timeTooltip.show) {
                 this.sliderChanged(e, true);
                 this.timeTooltip.show = false;
             }
+            this.touchStartPos = undefined;
         },
         setInfoTrack() {
             this.infoTrack={ title: this.playerStatus.current.title,

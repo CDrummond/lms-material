@@ -6,6 +6,8 @@
 4. Ignore 'mixed' 'showBriefly' messages.
 5. Remove 'Ctrl+H' shortcut for 'Help' - shortcut conflicts with macOS.
 6. Treat 'text' items with icon/image as standard items.
+7. Try to detect, and ignore, swipe ups on mobile devices in desktop to show
+   navigation bar.
 
 2.10.1
 ------

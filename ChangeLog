@@ -5,6 +5,7 @@
 3. Fix clicking on text items when there is only 1 item in list.
 4. Ignore 'mixed' 'showBriefly' messages.
 5. Remove 'Ctrl+H' shortcut for 'Help' - shortcut conflicts with macOS.
+6. Treat 'text' items with icon/image as standard items.
 
 2.10.1
 ------

@@ -474,6 +474,10 @@ function parseBrowseResp(data, parent, options, cacheKey, parentCommand, parentG
                     i.icon = undefined;
                 }
                 resp.items.push(i);
+                // If this is a "text" item with an image then treat as a standard actionable item
+                if ("text"==i.type && (undefined!=i.image || undefined!=i.icon)) {
+                    i.type="other"; // ???
+                }
                 types.add(i.type);
             }
             /* ...continuation of favourited album add/play track issue... */

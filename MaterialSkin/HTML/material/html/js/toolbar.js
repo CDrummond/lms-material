@@ -391,13 +391,13 @@ Vue.component('lms-toolbar', {
         }.bind(this));
         this.controlClock();
 
-        bus.$on('showError', function(err, msg) {
+        bus.$on('showError', function(err, msg, timeout) {
             this.snackbar = {msg: (msg ? msg : i18n("Something went wrong!")) + (err ? " (" + err+")" : ""),
-                             show: true, color: 'error' };
+                             show: true, color: 'error', timeout: undefined!=timeout && timeout>0 && timeout<=30 ? timeout*1000 : undefined};
         }.bind(this));
-        bus.$on('showMessage', function(msg) {
+        bus.$on('showMessage', function(msg, timeout) {
             if (undefined!=msg && msg.length>0 && !msgIsEmpty(msg)) {
-                this.snackbar = {msg: msg, show: true };
+                this.snackbar = {msg: msg, show: true, timeout: undefined!=timeout && timeout>0 && timeout<=30 ? timeout*1000 : undefined };
             }
         }.bind(this));
 

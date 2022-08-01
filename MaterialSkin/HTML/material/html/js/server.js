@@ -624,11 +624,11 @@ var lmsServer = Vue.component('lms-server', {
             if (data.length>=4) {
                 if (data[2]=='info') {
                     if (data.length<6 || undefined==data[5] || data[5].length<1 || data[5]==this.$store.state.player.id) {
-                        bus.$emit('showMessage', data[3]);
+                        bus.$emit('showMessage', data[3], data.length>6 ? parseInt(data[6]) : 0);
                     }
                 } else if (data[2]=='error') {
                     if (data.length<6 || undefined==data[5] || data[5].length<1 || data[5]==this.$store.state.player.id) {
-                        bus.$emit('showError', undefined, data[3]);
+                        bus.$emit('showError', undefined, data[3], data.length>6 ? parseInt(data[6]) : 0);
                     }
                 } else if (data[2]=='alert') {
                     if (data.length>4 && parseInt(data[4])==1) {

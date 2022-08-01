@@ -1032,6 +1032,7 @@ sub _cliCommand {
         my $cancelable = $request->getParam('cancelable');
         my $id = $request->getParam('id');
         my $client = $request->getParam('client');
+        my $timeout = $request->getParam('timeout');
         if (!$msg || !$type || ($type ne 'info' && $type ne 'error' && $type ne 'alert' && $type ne 'update' && $type ne 'notif')) {
             $request->setStatusBadParams();
             return;
@@ -1067,7 +1068,7 @@ sub _cliCommand {
                 $mskNotifications{'alertmsg'} = $msg;
                 $mskNotifications{'alertcancelable'} = $cancelable;
             }
-            Slim::Control::Request::notifyFromArray(undef, ['material-skin', 'notification', $type, $msg, $cancelable, $client]);
+            Slim::Control::Request::notifyFromArray(undef, ['material-skin', 'notification', $type, $msg, $cancelable, $client, $timeout]);
         }
         $request->setStatusDone();
         return;

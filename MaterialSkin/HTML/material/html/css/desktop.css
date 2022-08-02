@@ -6,9 +6,8 @@
  */
 
 :root {
- --bottom-toolbar-pad:0px;
- --bottom-progress-adjust:0px;
- --bottom-toolbar-height:calc(80px + ( 2 * var(--bottom-toolbar-pad) ));
+ --bottom-toolbar-height:64px;
+ --desktop-bottom-toolbar-height:64px;
  --np-portrait-image-size:min(calc((var(--vh, 1vh)*100) - (var(--main-toolbar-height) + 260px)), 100vw);
  --np-icon-size:24px;
  --queue-visibility:initial;
@@ -117,7 +116,7 @@
 }
 
 .no-control-adjust { /* Adjust pos for iPad */
- margin-top:calc(-2 * var(--bottom-toolbar-pad));
+ margin-top:-8px;
 }
 
 .np-details-desktop .v-list__tile__content, .np-details-desktop .v-list__tile__content .v-list__tile__sub-title,
@@ -140,27 +139,17 @@
 
 .np-controls-desktop {
  margin-left:-16px;
- margin-top:calc(16px + var(--bottom-toolbar-pad));
+ margin-top:11px;
  max-width:270px;
  float:left;
 }
 
 .np-controls-desktop-stop {
- margin-top:calc(18px + var(--bottom-toolbar-pad));
+ margin-top:13px;
 }
 
 .np-portrait-song-info {
  height:calc((var(--vh, 1vh)*100) - (var(--np-portrait-image-size) + 160px));
-}
-
-.np-image-desktop {
- object-fit:cover;
- object-position:50% 0%;
- display:block;
- margin:2px 8px 2px 4px;
- height:calc(var(--bottom-toolbar-height) - 6px) !important;
- width:calc(var(--bottom-toolbar-height) - 6px) !important;
- float:left;
 }
 
 .np-text-desktop {
@@ -179,17 +168,17 @@
 
 .np-details-desktop {
  position:fixed;
- left:calc(250px + var(--bottom-toolbar-pad) + (var(--np-icon-size) - 24px));
- bottom:calc(20px + var(--bottom-toolbar-pad));
- width:calc(100vw - calc(254px + var(--bottom-toolbar-pad) + (var(--np-icon-size) - 24px)));
+ left:170px;
+ bottom:4px;
+ width:calc(100vw - 170px);
  height:54px;
  padding:0px;
  background:transparent!important;
 }
 
 .np-details-desktop-sb {
- left:calc(298px + ((var(--np-icon-size) - 24px)*4))!important;
- width:calc(100vw - (302px + ((var(--np-icon-size) - 24px)*4)))!important;
+ left:190px;
+ width:calc(100vw - 190px);
 }
 
 .np-details-desktop div .v-list__tile {
@@ -203,7 +192,7 @@
 }
 
 .np-details-desktop div .v-list__tile .v-list__tile__action {
- min-width:unset;
+ width:170px;
  font-family:'Roboto Mono', monospace;
  font-weight: var(--std-weight);
  font-size:calc(var(--std-font-size) - 4px) !important;
@@ -212,23 +201,45 @@
  padding:0px;
 }
 
+np-details-desktop-sb div .v-list__tile .v-list__tile__action {
+ width:190px;
+}
+
+.np-details-desktop .v-list__tile__content .v-list__tile__sub-title,
+.np-details-desktop .v-list__tile__content .v-list__tile__title {
+ text-align:center !important;
+}
+
 .np-tech-desktop {
- margin-top:calc(19px - var(--std-font-size));
+ margin-top:-9px;
  display:inline-block;
  vertical-align:top;
  height:27px;
  line-height:27px;
+ max-width:170px;
+}
+
+.np-time-desktop-r {
+ margin-top:2px !important;
+}
+
+.np-tech-desktop-r {
+ margin-top:-11px !important;
 }
 
 .np-rating-desktop {
- margin-top:calc(21px - var(--std-font-size));
- display:inline-block;
- height:27px;
- margin-right:-8px
+ margin-right:-2px;
+ height:22px;
+}
+
+#np-bar .np-rating-desktop .v-icon {
+ width:14px !important;
+ height:14px !important;
+ font-size:14px !important;
 }
 
 .np-time-desktop {
- margin-top:calc(7px - var(--std-font-size));
+ margin-top:4px;
  display:inline-block;
  vertical-align:top;
  height:27px;
@@ -238,16 +249,11 @@
 
 .np-slider-desktop {
  position:fixed;
- left:calc(250px + var(--bottom-toolbar-pad) + (var(--np-icon-size) - 24px));
- bottom:calc(6px + var(--bottom-progress-adjust));
- width:calc(100vw - calc(262px + var(--bottom-toolbar-pad) + (var(--np-icon-size) - 24px)));
+ left:0px;
+ bottom:calc(var(--bottom-toolbar-height) - 11px);
+ width:100vw;
  height:10px !important;
  margin:0px !important; /* v-progress-linear has margin: 1rem 0; */
-}
-
-.np-slider-desktop-sb {
- left:calc(298px + var(--bottom-toolbar-pad) + ((var(--np-icon-size) - 24px)*4))!important;
- width:calc(100vw - calc(310px + var(--bottom-toolbar-pad) + ((var(--np-icon-size) - 24px)*4)))!important;
 }
 
 .np-bar .np-playpause {

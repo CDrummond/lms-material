@@ -67,7 +67,6 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
     <v-btn flat icon v-bind:class="{'disabled':disableNext}" v-longpress:repeat="nextButton" class="np-std-button" :title="trans.next"><v-icon large class="media-icon">skip_next</v-icon></v-btn>
    </v-flex>
   </v-layout>
-  <img :key="coverUrl" v-lazy="coverUrl" onerror="this.src='html/images/cover.png'" class="np-image-desktop" v-bind:class="{'radio-img': 0==playerStatus.current.duration}" @contextmenu.prevent="showContextMenu" @click="clickImage(event)"></img>
   <v-list two-line subheader class="np-details-desktop" v-bind:class="{'np-details-desktop-sb' : stopButton}">
    <v-list-tile style>
     <v-list-tile-content>
@@ -78,18 +77,16 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
      <v-list-tile-sub-title v-else-if="playerStatus.current.title">&#x22ef;</v-list-tile-sub-title>
     </v-list-tile-content>
     <v-list-tile-action>
-     <div v-if="(techInfo || showRatings) && wide>0">
-      <div class="np-tech-desktop">{{techInfo && (wide>1 || (!showRatings && wide>0)) ? technicalInfo : ""}}</div>
-      <v-rating v-if="showRatings && wide>0" class="np-rating-desktop" small v-model="rating.value" half-increments hover clearable @click.native="setRating(true)" :readonly="undefined==ratingsPlugin"></v-rating>
-     </div>
-     <div v-else-if="playerStatus.playlist.count>1" class="np-tech-desktop link-item" @click="toggleTime()">{{formattedTime}}</div>
-     <div v-else class="np-tech-desktop">&nbsp;</div>
-     <div v-if="((techInfo || showRatings) && wide>0) || playerStatus.playlist.count<2" class="np-time-desktop link-item" @click="toggleTime()">{{formattedTime}}{{playerStatus.playlist.current | trackCount(playerStatus.playlist.count, SEPARATOR)}}</div>
-     <div v-else class="np-time-desktop" @click="toggleTime()">{{playerStatus.playlist.current | trackCount(playerStatus.playlist.count)}}</div>
+     <div v-if="playerStatus.playlist.count<2 || !(showRatings && !techInfo)" class="np-time-desktop link-item" v-bind:class="{'np-time-desktop-r': techInfo && showRatings}" @click="toggleTime()">{{formattedTime}}</div>
+     <div v-else class="np-time-desktop link-item" v-bind:class="{'np-time-desktop-r': techInfo && showRatings}" @click="toggleTime()">{{formattedTime}}{{playerStatus.playlist.current | trackCount(playerStatus.playlist.count, SEPARATOR)}}</div>
+     <div v-if="techInfo" class="np-tech-desktop ellipsis" v-bind:class="{'np-tech-desktop-r': showRatings}">{{technicalInfo}}</div>
+     <div v-else-if="playerStatus.playlist.count>1 && !showRatings" class="np-tech-desktop">{{playerStatus.playlist.current | trackCount(playerStatus.playlist.count)}}</div>
+     <div v-else-if="!showRatings" class="np-tech-desktop">&nbsp;</div>
+     <v-rating v-if="showRatings" class="np-rating-desktop" v-model="rating.value" half-increments hover clearable @click.native="setRating(true)" :readonly="undefined==ratingsPlugin"></v-rating>
     </v-list-tile-action>
    </v-list-tile>
   </v-list>
-  <v-progress-linear height="5" id="pos-slider" v-if="playerStatus.current.duration>0" class="np-slider np-slider-desktop" v-bind:class="{'np-slider-desktop-sb' : stopButton}" :value="playerStatus.current.pospc" v-on:click="sliderChanged($event)" @mouseover="timeTooltip.show = true" @mouseout="timeTooltip.show = false" @mousemove="moveTimeTooltip" @touchstart.passive="touchSliderStart" @touchend.passive="touchSliderEnd" @touchmove.passive="moveTimeTooltipTouch"></v-progress-linear>
+  <v-progress-linear height="5" id="pos-slider" v-if="playerStatus.current.duration>0" class="np-slider np-slider-desktop" :value="playerStatus.current.pospc" v-on:click="sliderChanged($event)" @mouseover="timeTooltip.show = true" @mouseout="timeTooltip.show = false" @mousemove="moveTimeTooltip" @touchstart.passive="touchSliderStart" @touchend.passive="touchSliderEnd" @touchmove.passive="moveTimeTooltipTouch"></v-progress-linear>
 
   <div v-if="info.show" class="np-info np-info-desktop" id="np-info">
    <v-tabs centered v-model="info.tab" v-if="info.showTabs" style="np-info-tab-cover">
@@ -450,6 +447,11 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
                 };
     },
     mounted() {
+        this.hideNpBar = false;
+        this.desktopBottomHeight = getComputedStyle(document.documentElement).getPropertyValue('--desktop-bottom-toolbar-height');
+        this.mobileBottomHeight = getComputedStyle(document.documentElement).getPropertyValue('--mobile-bottom-toolbar-height');
+        this.controlDesktopNpBar();
+
         bus.$on('customActions', function(val) {
             this.customActions = getCustomActions("track", false);
         }.bind(this));
@@ -993,6 +995,14 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
         },
         toggleGrid(tab, section) {
             nowplayingToggleGrid(this, tab, section);
+        },
+        controlDesktopNpBar() {
+            let hideNpBar = this.disableBtns && this.$store.state.desktopLayout;
+            if (hideNpBar!=this.hideNpBar) {
+                this.hideNpBar = hideNpBar;
+                document.documentElement.style.setProperty('--bottom-toolbar-height',
+                    hideNpBar ? '0px' : this.$store.state.desktopLayout ? this.desktopBottomHeight : this.mobileBottomHeight);
+            }
         }
     },
     filters: {
@@ -1069,6 +1079,12 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
         },
         'menu.show': function(newVal) {
             this.$store.commit('menuVisible', {name:'nowplaying', shown:newVal});
+        },
+        'disableBtns': function(newVal) {
+            this.controlDesktopNpBar();
+        },
+        '$store.state.desktopLayout': function(newVal) {
+            this.controlDesktopNpBar();
         }
     },
     computed: {

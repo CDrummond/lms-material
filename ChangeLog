@@ -1,3 +1,8 @@
+x.y.z
+-----
+1. Re-designed bottom now-playing bar for desktop layout.
+2. Hide desktop bottom now-playing bar when no track.
+
 2.10.2
 ------
 1. Adjust screensaver text positions.

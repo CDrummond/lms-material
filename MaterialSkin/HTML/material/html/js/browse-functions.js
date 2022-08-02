@@ -388,7 +388,7 @@ function browseHandleListResponse(view, item, command, resp, prevPage) {
                 view.items.push({id:"intro", title:i18n("No albums have been favorited for this artist. Please use the entries below to look for albums on your online services."), type:"text"});
                 for (var i=0, loop=view.currentActions.items, len=loop.length; i<len; ++i) {
                     if (loop[i].isService) {
-                        view.items.push({id:loop[i].id ? loop[i].id : "ca"+i, title:loop[i].title, do:loop[i].do, svg:loop[i].svg, icon:loop[i].icon, currentAction:true});
+                        view.items.push({id:loop[i].id ? loop[i].id : "ca"+i, title:loop[i].title, do:loop[i].do, svg:loop[i].svg, icon:loop[i].icon, currentAction:true, artist_id:artist_id});
                     }
                 }
             }

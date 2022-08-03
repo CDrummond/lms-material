@@ -6,8 +6,8 @@
  */
 
 :root {
- --bottom-toolbar-height:64px;
- --desktop-bottom-toolbar-height:64px;
+ --bottom-toolbar-height:72px;
+ --desktop-bottom-toolbar-height:72px;
  --np-portrait-image-size:min(calc((var(--vh, 1vh)*100) - (var(--main-toolbar-height) + 260px)), 100vw);
  --np-icon-size:24px;
  --queue-visibility:initial;
@@ -139,7 +139,7 @@
 
 .np-controls-desktop {
  margin-left:-16px;
- margin-top:11px;
+ margin-top:15px;
  max-width:270px;
  float:left;
 }
@@ -168,27 +168,27 @@
 
 .np-details-desktop {
  position:fixed;
- left:232px;
- bottom:2px;
- width:calc(100vw - 232px);
- height:54px;
+ left:240px;
+ bottom:4px;
+ width:calc(100vw - 240px);
+ height:64px;
  padding:0px;
  background:transparent!important;
 }
 
 .np-desktop-sb .np-details-desktop {
- left:282px;
- width:calc(100vw - 282px);
+ left:290px;
+ width:calc(100vw - 290px);
 }
 
 .np-image-desktop {
  position:fixed;
  left:164px;
- bottom:0px;
+ bottom:1px;
  object-fit:contain;
  object-position:50% 50%;
- height:58px;
- width:58px;
+ height:64px;
+ width:64px;
  margin-left:auto;
  margin-right:auto;
 }
@@ -198,7 +198,6 @@
 }
 
 .np-details-desktop div .v-list__tile {
- height:54px;
  margin:0px 8px 0px 0px; /* t, r, b, l */
  padding:0px;
 }
@@ -234,9 +233,7 @@
  font-family:'Roboto Mono', monospace;
  font-weight: var(--std-weight);
  font-size:calc(var(--std-font-size) - 4px) !important;
- height:54px;
- margin:0px;
- padding:0px;
+ height:64px;
 }
 
 .np-details-desktop-sb div .v-list__tile .v-list__tile__action {
@@ -244,12 +241,8 @@
 }
 
 .np-tech-desktop {
- margin-top:-9px;
- display:inline-block;
- vertical-align:top;
- height:27px;
- line-height:27px;
- max-width:170px;
+ height:22px;
+ line-height:20px;
 }
 
 .np-time-desktop-r {
@@ -257,7 +250,7 @@
 }
 
 .np-tech-desktop-r {
- margin-top:-11px !important;
+ margin-top:-6px !important;
 }
 
 .np-rating-desktop {
@@ -272,11 +265,9 @@
 }
 
 .np-time-desktop {
- margin-top:4px;
- display:inline-block;
- vertical-align:top;
- height:27px;
- line-height:27px;
+ margin-top:5px;
+ height:20px;
+ line-height:20px;
  cursor:pointer;
 }
 

@@ -41,8 +41,8 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
   </v-list>
  </v-menu>
  
- <div v-if="desktopLayout && !largeView" class="np-bar" id="np-bar">
-  <v-layout row class="np-controls-desktop np-controls-desktop-stop" v-if="stopButton">
+ <div v-if="desktopLayout && !largeView" class="np-bar" id="np-bar" v-bind:class="{'np-desktop-sb':stopButton}">
+  <v-layout row class="np-controls-desktop" v-if="stopButton">
    <v-flex xs3>
     <v-btn flat icon v-bind:class="{'disabled':disablePrev}" v-longpress:repeat="prevButton" :title="trans.prev"><v-icon large class="media-icon">skip_previous</v-icon></v-btn>
    </v-flex>
@@ -67,7 +67,8 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
     <v-btn flat icon v-bind:class="{'disabled':disableNext}" v-longpress:repeat="nextButton" class="np-std-button" :title="trans.next"><v-icon large class="media-icon">skip_next</v-icon></v-btn>
    </v-flex>
   </v-layout>
-  <v-list two-line subheader class="np-details-desktop" v-bind:class="{'np-details-desktop-sb' : stopButton}">
+  <img v-if="!largeView && !disableBtns" :key="coverUrl" v-lazy="coverUrl" onerror="this.src='html/images/cover.png'" class="np-image-desktop" @contextmenu="showMenu" @click="clickImage(event)"></img>
+  <v-list two-line subheader class="np-details-desktop">
    <v-list-tile style>
     <v-list-tile-content>
      <v-list-tile-title v-if="playerStatus.current.title">{{title}}</v-list-tile-title>

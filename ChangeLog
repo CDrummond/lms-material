@@ -2,6 +2,7 @@
 ------
 1. Fix missing artist_id when clicking on a service list entry under an
    artist.
+2. Hide position tooltip after 2 seconds.
 
 2.10.2
 ------

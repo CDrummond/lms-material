@@ -203,11 +203,14 @@ html {
  margin:0px;
 }
 
-body {
- height:100%; 
- margin:0; 
+body{
+ touch-action:none;
+ position:fixed;
+ width:100vw;
+ height:calc(var(--vh, 1vh)*100);
+ margin:0;
  padding:0;
- background-color: var(--bottom-toolbar);
+ background-color:var(--bottom-toolbar);
 }
 
 [v-cloak] {

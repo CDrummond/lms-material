@@ -4,6 +4,7 @@
    artist.
 2. Hide position tooltip after 2 seconds.
 3. Add some CSS to prevent scrolling of 'body' in Safari.
+4. Show ratings in 'All songs' listings.
 
 2.10.2
 ------

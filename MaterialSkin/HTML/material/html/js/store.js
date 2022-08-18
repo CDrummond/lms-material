@@ -230,14 +230,19 @@ function setRatingsPlugin(state, plugins) {
         if (data && data.result && undefined!=data.result._can && 1==data.result._can) {
             state.ratingsPlugin = plugin;
             setLocalStorageVal('ratingsPlugin', state.ratingsPlugin);
-            state.maxRating = 5;
-            setLocalStorageVal('maxRating', state.maxRating);
-            lmsCommand("", ["pref", "plugin."+plugin+":rating_10scale", "?"]).then(({data}) => {
-                if (data && data.result && data.result._p2 != null) {
-                    state.maxRating = 1 == parseInt(data.result._p2) ? 10 : 5;
-                    setLocalStorageVal('maxRating', state.maxRating);
-                }
-            });
+            if (plugin=="ratingslight") {
+                state.maxRating = 10;
+                setLocalStorageVal('maxRating', state.maxRating);
+            } else {
+                state.maxRating = 5;
+                setLocalStorageVal('maxRating', state.maxRating);
+                lmsCommand("", ["pref", "plugin."+plugin+":rating_10scale", "?"]).then(({data}) => {
+                    if (data && data.result && data.result._p2 != null) {
+                        state.maxRating = 1 == parseInt(data.result._p2) ? 10 : 5;
+                        setLocalStorageVal('maxRating', state.maxRating);
+                    }
+                });
+            }
         } else if (plugins.length>0) {
             setRatingsPlugin(state, plugins);
         }

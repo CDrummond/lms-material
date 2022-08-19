@@ -8,6 +8,7 @@
 5. For mobile devices add a check button at the right of non-search text fields
    containing text.
 6. If using RatingsLight always assume max rating of 10 (so 1/2 increments).
+7. Update platform checks to also use newer navigator.userAgentData
 
 2.10.2
 ------

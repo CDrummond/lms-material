@@ -7,13 +7,24 @@
  */
 'use strict';
 
+function checkPlatform(platform) {
+   let regex = new RegExp(platform, 'i');
+   return (undefined!=navigator &&
+            ( (undefined!=navigator.userAgentData && regex.test(navigator.userAgentData.platform)) ||
+              (undefined!=navigator.platform && regex.test(navigator.platform)) ) ) ||
+          regex.test(navigator.userAgent)
+}
+
 const SEPARATOR = " \u2022 ";
 
-const IS_MOBILE  = (/Android|webOS|iPhone|iPad|BlackBerry|Windows Phone|Opera Mini|IEMobile|Mobile/i.test(navigator.userAgent)) || ( (typeof window.orientation !== "undefined") && 'ontouchstart' in window) || (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1);
-const IS_ANDROID = /Android/i.test(navigator.userAgent);
-const IS_IOS     = (/iPhone|iPad/i.test(navigator.userAgent) || (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1)) && !window.MSStream;
-const IS_IPHONE  = /iPhone/i.test(navigator.userAgent) && !window.MSStream;
-const IS_APPLE   = /Mac|iPhone|iPad/i.test(navigator.userAgent);
+const IS_MOBILE  = (undefined!=navigator && undefined!=navigator.userAgentData && navigator.userAgentData.mobile) ||
+                   checkPlatform('Android|webOS|iPhone|iPad|BlackBerry|Windows Phone|Opera Mini|IEMobile|Mobile') ||
+                   ((typeof window.orientation !== "undefined") && 'ontouchstart' in window) ||
+                   (navigator.maxTouchPoints > 1 && checkPlatform('MacIntel'));
+const IS_ANDROID = checkPlatform('Android');
+const IS_IOS     = !IS_ANDROID && !window.MSStream && (checkPlatform('iPhone|iPad') || (checkPlatform('MacIntel') && navigator.maxTouchPoints > 1));
+const IS_IPHONE  = !IS_ANDROID && !window.MSStream && checkPlatform('iPhone');
+const IS_APPLE   = !IS_ANDROID && checkPlatform('Mac|iPhone|iPad');
 
 const LMS_BATCH_SIZE = 25000;
 const LMS_QUEUE_BATCH_SIZE = 5000;

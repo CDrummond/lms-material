@@ -138,7 +138,7 @@ function browseActions(view, item, args, count) {
         }
 
         if (undefined!=args['artist_id'] && undefined==args['album_id'] && undefined!=args['count'] && args['count']>1) {
-            var params = ['sort:albumtrack', 'tags:cdrilstyE', 'artist_id:'+args['artist_id']];
+            var params = ['sort:albumtrack', 'tags:cdrilstyE' + (view.$store.state.showRating ? 'R' : ''), 'artist_id:'+args['artist_id']];
             if (undefined!=args['role_id']) {
                 params.push(args['role_id']);
             }

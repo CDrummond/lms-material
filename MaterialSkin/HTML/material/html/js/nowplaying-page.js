@@ -688,7 +688,7 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
         moveTimeTooltip(e, isTouch) {
             if (this.timeTooltip.show) {
                 if (this.playerStatus.current.duration<=1) {
-                    this.hideTimeTooltip;
+                    this.hideTimeTooltip();
                     return;
                 }
                 this.timeTooltip.x = e.x

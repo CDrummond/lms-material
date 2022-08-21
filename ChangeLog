@@ -1,3 +1,7 @@
+2.10.4
+------
+1. Fix colours in 'Help' page.
+
 2.10.3
 ------
 1. Fix missing artist_id when clicking on a service list entry under an

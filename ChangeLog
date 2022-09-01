@@ -3,6 +3,7 @@
 1. Fix colours in 'Help' page.
 2. When updating rating in now-playing only update internal state if still
    playing same track on LMS response.
+3. Use library_id in 'All songs' listing.
 
 2.10.3
 ------

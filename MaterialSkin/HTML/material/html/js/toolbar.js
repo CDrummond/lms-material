@@ -323,7 +323,7 @@ Vue.component('lms-toolbar', {
                 this.playerStatus.current.album=playerStatus.current.album;
                 this.songInfo = addPart(playerStatus.current.title, buildArtistLine(playerStatus.current, 'np', true));
                 if (!IS_MOBILE) {
-                    var title = (undefined==this.songInfo ? "" : (this.songInfo.replaceAll(SEPARATOR, " - ") + " :: ")) + LMS_WINDOW_TITLE;
+                    var title = (undefined==this.songInfo ? "" : (this.songInfo.replaceAll(SEPARATOR, " - ") + " - ")) + LMS_WINDOW_TITLE;
                     if (title!=document.title) {
                         document.title = title;
                     }

@@ -5,6 +5,7 @@
    playing same track on LMS response.
 3. Use library_id in 'All songs' listing.
 4. Add Breeze and Breeze Dark colour schemes for Linux.
+5. Change window title to use " - "
 
 2.10.3
 ------

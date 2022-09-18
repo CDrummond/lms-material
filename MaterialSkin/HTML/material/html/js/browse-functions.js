@@ -145,6 +145,10 @@ function browseActions(view, item, args, count) {
             if (undefined!=args['genre_id']) {
                 params.push(args['genre_id']);
             }
+            let libId = view.currentLibId ? view.currentLibId : view.$store.state.library ? view.$store.state.library : LMS_DEFAULT_LIBRARY;
+            if (libId) {
+                params.push("library_id:"+libId);
+            }
             actions.push({title:i18n('All songs'), icon:'music_note', do:{ command: ['tracks'], params: params}, weight:3});
         }
     }

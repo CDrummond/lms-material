@@ -690,7 +690,7 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
         moveTimeTooltip(e, isTouch) {
             if (this.timeTooltip.show) {
                 if (this.playerStatus.current.duration<=1) {
-                    this.hideTimeTooltip;
+                    this.hideTimeTooltip();
                     return;
                 }
                 this.timeTooltip.x = e.x
@@ -866,13 +866,15 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
         setRating(allowReset) {
             var val = allowReset && this.rating.value==this.rating.setting && this.rating.value<=1 ? 0 : this.rating.value;
             // this.rating.value is updated *before* this setRating click handler is called, so we can use its model value to update LMS
+            this.rating.track_id = this.playerStatus.current.id;
+            this.rating.album_id = this.playerStatus.current.album_id;
             lmsCommand(this.$store.state.player.id, [this.$store.state.ratingsPlugin, "setrating", this.playerStatus.current.id, val]).then(({data}) => {
-                if (allowReset) {
+                if (allowReset && this.rating.track_id==this.playerStatus.current.id) {
                     this.rating.value=val;
                 }
                 logJsonMessage("RESP", data);
                 bus.$emit('refreshStatus');
-                bus.$emit('ratingChanged', this.playerStatus.current.id, this.playerStatus.current.album_id);
+                bus.$emit('ratingChanged', this.rating.track_id, this.rating.album_id);
             });
         },
         doCommand(command, msg) {

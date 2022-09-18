@@ -168,6 +168,31 @@ def fixClassisSkinMods(version):
                 f.write(line)
 
 
+def fixHelpFiles(version):
+    info("...updating Help files")
+
+    base = "%s/../../" % HTML_FOLDER
+    for entry in os.listdir(base):
+        if entry != "material":
+            langTop = "%s/%s/html/material-skin/" % (base, entry)
+            if os.path.exists(langTop) and os.path.isdir(langTop):
+                for fname in os.listdir(langTop):
+                    if fname.endswith(".html"):
+                        fixedLines = []
+                        path = "%s/%s" % (langTop, fname)
+                        with open(path, "r") as f:
+                            lines=f.readlines()
+                            for line in lines:
+                                line=line.replace("?r=MATERIAL_VERSION", "?r=%s" % version)
+                                if "html/css/" in line:
+                                    line=line.replace(".css?", ".min.css?")
+                                fixedLines.append(line)
+
+                        with open(path, "w") as f:
+                            for line in fixedLines:
+                                f.write(line)
+
+
 def trim(path):
     fixedLines = []
     inTemplate = False
@@ -375,6 +400,7 @@ def minify(version):
     info("Minifying")
     fixUtils()
     fixClassisSkinMods(version)
+    fixHelpFiles(version)
     minifyJs()
     minifyCss()
     removeUnminified()

@@ -1,5 +1,0 @@
-MATERIAL_SKIN_PARTY
-	EN	Material Skin (Party)
-
-PLUGIN_MATERIAL_SKIN_PARTY
-	EN	Party mode for Material Skin - requires main Material Skin plugin to be installed.

@@ -16,7 +16,7 @@ Vue.component('lms-ui-settings', {
     <v-btn flat icon v-longpress:stop="close" :title="i18n('Go back')"><v-icon>arrow_back</v-icon></v-btn>
     <v-toolbar-title>{{width>=450 ? TB_UI_SETTINGS.title+serverName : TB_UI_SETTINGS.title}}</v-toolbar-title>
     <v-spacer></v-spacer>
-    <v-menu bottom left v-model="showMenu">
+    <v-menu bottom left v-model="showMenu" v-if="!queryParams.party">
      <v-btn icon slot="activator"><v-icon>more_vert</v-icon></v-btn>
      <v-list>
       <v-list-tile @click="saveAsDefault">

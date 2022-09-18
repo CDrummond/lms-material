@@ -2,6 +2,7 @@
 ------
 1. Re-designed bottom now-playing bar for desktop layout.
 2. Hide desktop bottom now-playing bar when no track.
+3. Add 'Party' mode where certain actions are hidden.
 
 2.10.4
 ------
@@ -11,7 +12,6 @@
 3. Use library_id in 'All songs' listing.
 4. Add Breeze and Breeze Dark colour schemes for Linux.
 5. Change window title to use " - "
->>>>>>> master
 
 2.10.3
 ------

@@ -64,7 +64,7 @@ Vue.component('lms-sync-dialog', {
     },
     mounted() {
         bus.$on('sync.open', function(player) {
-            if (player.isgroup) {
+            if (player.isgroup || queryParams.party) {
                 return;
             }
             this.player = player;

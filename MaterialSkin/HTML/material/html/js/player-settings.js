@@ -352,6 +352,9 @@ Vue.component('lms-player-settings', {
         }.bind(this));
 
         bus.$on('playersettings.open', function(player, section, showHome) {
+            if (queryParams.party) {
+                return;
+            }
             // Check if called via actions URL query. If so, need to map from mac/name to player instance
             if (typeof player === 'string' || player instanceof String) {
                 if ('-'==player) {

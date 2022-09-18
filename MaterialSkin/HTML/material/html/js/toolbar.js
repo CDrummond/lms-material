@@ -57,7 +57,7 @@ Vue.component('lms-toolbar', {
 
    <v-divider v-if="!noPlayer && (((players && players.length>1) || playerStatus.sleepTime || otherPlayers.length>0))" class="hide-for-mini"></v-divider>
 
-   <v-list-tile v-if="(players && players.length>1) || otherPlayers.length>0" v-longpress="managePlayers" class="hide-for-mini noselect">
+   <v-list-tile v-if="((players && players.length>1) || otherPlayers.length>0) && !queryParams.party" v-longpress="managePlayers" class="hide-for-mini noselect">
     <v-list-tile-avatar v-if="menuIcons"><img class="svg-img" :src="TB_MANAGE_PLAYERS.svg | svgIcon(darkUi)"></img></v-list-tile-avatar>
     <v-list-tile-content><v-list-tile-title>{{TB_MANAGE_PLAYERS.title}}</v-list-tile-title></v-list-tile-content>
     <v-list-tile-action v-if="TB_MANAGE_PLAYERS.shortcut && keyboardControl" class="menu-shortcut player-menu-shortcut">{{TB_MANAGE_PLAYERS.shortcut}}</v-list-tile-action>
@@ -85,7 +85,7 @@ Vue.component('lms-toolbar', {
  <v-btn v-show="playerStatus.synced && showVolumeSlider" icon flat class="toolbar-button hide-for-mini" id="vol-group-btn" :title="trans.groupVol" @click="bus.$emit('dlg.open', 'groupvolume', playerStatus)"><v-icon>speaker_group</v-icon></v-btn>
  <v-btn v-show="showVolumeSlider" v-bind:class="{'disabled':noPlayer}" icon flat class="toolbar-button vol-left" v-longpress:repeat="volumeBtn" @click.middle="toggleMute" @wheel="volWheel($event)" id="vol-down-btn" :title="trans.decVol"><v-icon>{{playerMuted ? 'volume_off' : 'volume_down'}}</v-icon></v-btn>
  <div v-show="showVolumeSlider">
-  <v-slider :disabled="VOL_FIXED==playerDvc || noPlayer" step="1" v-model="playerVolume" class="vol-slider vol-full-slider" @click.stop="setVolume" @click.middle="toggleMute" @wheel.native="volWheel($event)" id="vol-slider" @start="volumeSliderStart" @end="volumeSliderEnd"></v-slider>
+  <v-slider :disabled="VOL_FIXED==playerDvc || noPlayer || queryParams.party" step="1" v-model="playerVolume" class="vol-slider vol-full-slider" @click.stop="setVolume" @click.middle="toggleMute" @wheel.native="volWheel($event)" id="vol-slider" @start="volumeSliderStart" @end="volumeSliderEnd"></v-slider>
  </div>
  <v-btn v-show="showVolumeSlider" v-bind:class="{'disabled':noPlayer}" icon flat class="toolbar-button vol-right" v-longpress:repeat="volumeBtn" @click.middle="toggleMute" @wheel="volWheel($event)" id="vol-up-btn" :title="trans.incVol"><v-icon>{{playerMuted ? 'volume_off' : 'volume_up'}}</v-icon></v-btn>
  <p v-show="showVolumeSlider" class="vol-full-label link-item" v-bind:class="{'disabled':noPlayer,'dimmed':playerMuted,'pulse':!noPlayer && playerStatus.volume==0 && playerStatus.isplaying}" @click.middle="toggleMute" v-longpress="toggleMuteLabel" id="vol-label">{{playerVolume|displayVolume(playerDvc)}}</p>
@@ -196,7 +196,7 @@ Vue.component('lms-toolbar', {
     </v-list-tile-content>
     <v-list-tile-action v-if="item.shortcut && keyboardControl" class="menu-shortcut">{{item.shortcut}}</v-list-tile-action>
    </v-list-tile>
-   <v-list-tile v-else-if="TB_APP_SETTINGS.id!=item.id" @click="menuAction(item.id)" v-if="TB_UI_SETTINGS.id==item.id || (TB_PLAYER_SETTINGS.id==item.id && player) || (TB_SERVER_SETTINGS.id==item.id && unlockAll)">
+   <v-list-tile v-else-if="TB_APP_SETTINGS.id!=item.id" @click="menuAction(item.id)" v-if="TB_UI_SETTINGS.id==item.id || (TB_PLAYER_SETTINGS.id==item.id && player && !queryParams.party) || (TB_SERVER_SETTINGS.id==item.id && unlockAll)">
     <v-list-tile-avatar v-if="menuIcons"><img class="svg-img" :src="item.svg | svgIcon(darkUi)"></img></v-list-tile-avatar>
     <v-list-tile-content>
      <v-list-tile-title>{{item.stitle}}</v-list-tile-title>
@@ -581,6 +581,9 @@ Vue.component('lms-toolbar', {
             bus.$emit('expandNowPlaying', on);
         },
         menuOrSync(longPress) {
+            if (queryParams.party) {
+                return;
+            }
             // Dont react to presses for 0.5s after dialog closed. The button is very close to where
             // a dialogs back button is and user might accidentaly presss twice...
             if (undefined!=this.$store.state.lastDialogClose && new Date().getTime()-this.$store.state.lastDialogClose<500) {
@@ -594,6 +597,9 @@ Vue.component('lms-toolbar', {
             }
         },
         toggleCurrentPlayerPower(longPress) {
+            if (queryParams.party) {
+                return;
+            }
             // Dont react to presses for 0.5s after dialog closed. The button is very close to where
             // a dialogs back button is and user might accidentaly presss twice...
             if (undefined!=this.$store.state.lastDialogClose && new Date().getTime()-this.$store.state.lastDialogClose<500) {
@@ -602,6 +608,9 @@ Vue.component('lms-toolbar', {
             this.togglePlayerPower(this.$store.state.player, longPress);
         },
         togglePlayerPower(player, longPress) {
+            if (queryParams.party) {
+                return;
+            }
             if (longPress) {
                 this.showPlayerMenu = false;
                 bus.$emit('dlg.open', 'sleep', player);
@@ -617,13 +626,16 @@ Vue.component('lms-toolbar', {
             }
         },
         togglePower(longPress, el) {
+            if (queryParams.party) {
+                return;
+            }
             let idx = parseInt(el.id.split("-")[0]);
             if (idx>=0 && idx<=this.$store.state.players.length) {
                 this.togglePlayerPower(this.$store.state.players[idx], longPress);
             }
         },
         volumeBtn(longPress, el) {
-            if (this.$store.state.visibleMenus.size>0 || this.noPlayer || undefined==el || undefined==el.id) {
+            if (this.$store.state.visibleMenus.size>0 || this.noPlayer || undefined==el || undefined==el.id || queryParams.party) {
                 return;
             }
             if ("vol-up-btn"==el.id) {
@@ -641,6 +653,9 @@ Vue.component('lms-toolbar', {
             }
         },
         setVolume() {
+            if (queryParams.party) {
+                return;
+            }
             // Prevent large volume jumps
             if (this.lmsVol<=70 && this.playerVolume>=90) {
                 this.playerVolume = this.lmsVol;
@@ -649,17 +664,20 @@ Vue.component('lms-toolbar', {
             bus.$emit('playerCommand', ["mixer", "volume", this.playerVolume]);
         },
         toggleMute() {
-            if (this.noPlayer || VOL_STD!=this.playerDvc) {
+            if (this.noPlayer || VOL_STD!=this.playerDvc || queryParams.party) {
                 return;
             }
             bus.$emit('playerCommand', ['mixer', 'muting', this.playerMuted ? 0 : 1]);
         },
         toggleMuteLabel(longPress) {
-            if (longPress || this.playerMuted) {
+            if (longPress || this.playerMuted || queryParams.party) {
                 this.toggleMute();
             }
         },
         volWheel(event) {
+            if (queryParams.party) {
+                return;
+            }
             if (event.deltaY<0) {
                 bus.$emit('playerCommand', ["mixer", "volume", "+"+lmsOptions.volumeStep]);
             } else if (event.deltaY>0) {
@@ -719,10 +737,13 @@ Vue.component('lms-toolbar', {
             }
         },
         volumeSliderStart() {
+            if (queryParams.party) {
+                return;
+            }
             this.movingVolumeSlider=true;
         },
         volumeSliderEnd() {
-            if (this.$store.state.player) {
+            if (this.$store.state.player && !queryParams.party) {
                 lmsCommand(this.$store.state.player.id, ["mixer", "volume", this.playerVolume]).then(({data}) => {
                     bus.$emit('updatePlayer', this.$store.state.player.id);
                     this.movingVolumeSlider=false;
@@ -743,6 +764,9 @@ Vue.component('lms-toolbar', {
         },
         resetSendVolumeTimer() {
             this.cancelSendVolumeTimer();
+            if (queryParams.party) {
+                return;
+            }
             this.sendVolumeTimer = setTimeout(function () {
                 bus.$emit('playerCommand', ["mixer", "volume", this.playerVolume]);
             }.bind(this), LMS_VOLUME_DEBOUNCE);

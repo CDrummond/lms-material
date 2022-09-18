@@ -616,14 +616,16 @@ const store = new Vuex.Store({
                 setLocalStorageVal('customSkipPlugin', state.customSkipPlugin);
             });
 
-            var pass = getLocalStorageVal('password', '-');
-            lmsCommand("", ["material-skin", "pass-check", "pass:"+(undefined==pass || 0==pass.length? "-" : pass)]).then(({data}) => {
-                if (1==parseInt(data.result.ok)) {
-                    state.unlockAll = true;
-                    bus.$emit('lockChanged');
-                }
-            }).catch(err => {
-            });
+            if (!queryParams.party) {
+                var pass = getLocalStorageVal('password', '-');
+                lmsCommand("", ["material-skin", "pass-check", "pass:"+(undefined==pass || 0==pass.length? "-" : pass)]).then(({data}) => {
+                    if (1==parseInt(data.result.ok)) {
+                        state.unlockAll = true;
+                        bus.$emit('lockChanged');
+                    }
+                }).catch(err => {
+                });
+            }
 
             // Read defaults, stored on server
             lmsCommand("", ["pref", LMS_MATERIAL_UI_DEFAULT_PREF, "?"]).then(({data}) => {

@@ -652,7 +652,7 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
             bus.$emit('dlg.open', 'gallery', [this.coverUrl], 0, true);
         },
         doAction(command) {
-            if (this.$store.state.visibleMenus.size>0) {
+            if (this.$store.state.visibleMenus.size>0 || (queryParams.party && command.length>1 && 'shuffle'==command[1]) ) {
                 return;
             }
             bus.$emit('playerCommand', command);
@@ -843,6 +843,9 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
             }
         },
         repeatClicked(longPress) {
+            if (queryParams.party) {
+                return;
+            }
             if (this.repAltBtn.show) {
                 this.doCommand(this.repAltBtn.command, this.repAltBtn.tooltip);
             } else {

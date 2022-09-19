@@ -470,6 +470,22 @@ function browseHandleListResponse(view, item, command, resp, prevPage) {
         } else {
             view.headerSubTitle=0==view.items.length ? i18n("Empty") : i18np("1 Item", "%1 Items", view.items.length);
         }
+        if (queryParams.party) {
+            view.tbarActions=[];
+        }
+        // In party mode only want to allow to add tracks.
+        if (queryParams.party) {
+            view.tbarActions=[];
+            if (view.items.length>0 && undefined!=view.items[0].stdItem && STD_ITEM_TRACK!=view.items[0].stdItem &&
+                STD_ITEM_ALBUM_TRACK!=view.items[0].stdItem && STD_ITEM_PLAYLIST_TRACK!=view.items[0].stdItem &&
+                STD_ITEM_REMOTE_PLAYLIST_TRACK!=view.items[0].stdItem) {
+                for (let i=0, loop=view.items, len=loop.length; i<len; ++i) {
+                    loop[i].altStdItem = loop[i].stdItem;
+                    loop[i].stdItem = undefined;
+                }
+                view.hoverBtns = false;
+            }
+        }
         view.$nextTick(function () {
             view.setBgndCover();
             view.filterJumplist();
@@ -1979,7 +1995,7 @@ function browseBuildFullCommand(view, item, act) {
         } else if (item.id) {
             command.command = ["playlistcontrol", "cmd:"+(act==PLAY_ACTION ? "load" : INSERT_ACTION==act ? "insert" :ACTIONS[act].cmd)];
             if (item.id.startsWith("album_id:")  || item.id.startsWith("artist_id:")) {
-                var params = undefined!=item.stdItem ? buildStdItemCommand(item, item.id==view.current.id ? view.history.length>0 ? view.history[view.history.length-1].command : undefined : view.command).params : item.params;
+                var params = undefined!=item.stdItem || undefined!=item.altStdItem ? buildStdItemCommand(item, item.id==view.current.id ? view.history.length>0 ? view.history[view.history.length-1].command : undefined : view.command).params : item.params;
                 for (var i=0, loop = params, len=loop.length; i<len; ++i) {
                     if ( (!lmsOptions.noRoleFilter && (loop[i].startsWith("role_id:"))) ||
                          (!lmsOptions.noGenreFilter && loop[i].startsWith("genre_id:")) ||

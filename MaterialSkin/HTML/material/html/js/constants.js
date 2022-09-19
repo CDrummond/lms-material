@@ -99,6 +99,7 @@ const TOP_EXTRAS_ID = TOP_ID_PREFIX+"extra";
 const TOP_RADIO_ID = TOP_ID_PREFIX+"ra";
 const TOP_REMOTE_ID = TOP_ID_PREFIX+"rml";
 const TOP_CDPLAYER_ID = TOP_ID_PREFIX+"cdda";
+const HIDE_TOP_FOR_PARTY = new Set([TOP_EXTRAS_ID, TOP_RADIO_ID, TOP_REMOTE_ID, TOP_FAVORITES_ID]);
 const PODCASTS_ID = "apps.podcasts";
 const MUSIC_ID_PREFIX = "mm:/";
 const SEARCH_ID = MUSIC_ID_PREFIX+"lms-local-search";

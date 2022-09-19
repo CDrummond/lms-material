@@ -224,7 +224,7 @@ var lmsQueue = Vue.component("lms-queue", {
       <v-list-tile-sub-title v-if="threeLines" v-html="item.subtitle[1]"></v-list-tile-sub-title>
      </v-list-tile-content>
      <v-list-tile-action class="pq-time">{{item.durationStr}}</v-list-tile-action>
-     <v-list-title-action v-if="queryParams.party" style="width:16px"></v-list-tile-action>
+     <v-list-tile-action v-if="queryParams.party" style="width:16px"></v-list-tile-action>
      <v-list-tile-action v-else class="queue-action" @click.stop="itemMenu(item, index, $event)">
       <div class="menu-btn grid-btn list-btn" :title="i18n('%1 (Menu)', item.title)"></div>
      </v-list-tile-action>

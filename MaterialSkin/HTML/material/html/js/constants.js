@@ -25,6 +25,7 @@ const IS_ANDROID = checkPlatform('Android');
 const IS_IOS     = !IS_ANDROID && !window.MSStream && (checkPlatform('iPhone|iPad') || (checkPlatform('MacIntel') && navigator.maxTouchPoints > 1));
 const IS_IPHONE  = !IS_ANDROID && !window.MSStream && checkPlatform('iPhone');
 const IS_APPLE   = !IS_ANDROID && checkPlatform('Mac|iPhone|iPad');
+const IS_HIGH_DPI = matchMedia( "(-webkit-min-device-pixel-ratio: 2), (min-device-pixel-ratio: 2), (min-resolution: 192dpi)").matches;
 
 const LMS_BATCH_SIZE = 25000;
 const LMS_QUEUE_BATCH_SIZE = 5000;
@@ -32,9 +33,10 @@ const LMS_MAX_NON_SCROLLER_ITEMS = 100;
 const LMS_SCROLLER_LIST_BUFFER = 500; // px
 const LMS_SCROLLER_GRID_BUFFER = 750; // px
 const LMS_MAX_PLAYERS = 100;
-const LMS_IMAGE_SZ = 300
+const LMS_IMAGE_SZ = IS_HIGH_DPI ? 600 : 300;
+const LMS_CURRENT_IMAGE_SZ = IS_HIGH_DPI ? 2048 : 1024;
 const LMS_IMAGE_SIZE = "_"+LMS_IMAGE_SZ+"x"+LMS_IMAGE_SZ+"_f";
-const LMS_CURRENT_IMAGE_SIZE = "_1024x1024_f";
+const LMS_CURRENT_IMAGE_SIZE = = "_"+LMS_CURRENT_IMAGE_SZ+"x"+LMS_CURRENT_IMAGE_SZ+"_f";
 const LMS_DEFAULT_LIBRARY = "0";
 const LMS_SKIN_LANGUAGES = new Set(['cs', 'da', 'de', 'en', 'en-gb', 'fr', 'it', 'nl', 'ru']);
 const LMS_MATERIAL_UI_DEFAULT_PREF = "plugin.material-skin:defaults";

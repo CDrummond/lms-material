@@ -1503,7 +1503,7 @@ function browseBuildCommand(view, item, commandName, doReplacements) {
                 for (let i=0, loop=view.history, len=loop.length; i<len; ++i) {
                     if (undefined!=loop[i].current) {
                         let param = loop[i].current.id;
-                        if (undefined!=param && (param.startsWith("artist_id") || param.startsWith("album_id")) && !addedParams.has(param)) {
+                        if (undefined!=param && (param.startsWith("artist_id") || param.startsWith("album_id") || param.startsWith("service_id")) && !addedParams.has(param)) {
                             cmd.params.push(param);
                         }
                     }

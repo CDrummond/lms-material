@@ -7,7 +7,7 @@
 4. Add Breeze and Breeze Dark colour schemes for Linux.
 5. Change window title to use " - "
 6. Increase artwork sizes for high DPI screens.
-7. Add "artist_id" for "browseonlineartist" commands.
+7. Add "artist_id" and "service_id" for "browseonlineartist" commands.
 
 2.10.3
 ------

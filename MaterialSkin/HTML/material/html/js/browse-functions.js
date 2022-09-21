@@ -1498,9 +1498,23 @@ function browseBuildCommand(view, item, commandName, doReplacements) {
                     }
                 }
             }
+            if ("browseonlineartist"==cmd.command[0]) {
+                // Add artist/album IDs from browse path. LMS issue (https://github.com/Logitech/slimserver/issues/806)
+                for (let i=0, loop=view.history, len=loop.length; i<len; ++i) {
+                    if (undefined!=loop[i].current) {
+                        let param = loop[i].current.id;
+                        if (undefined!=param && (param.startsWith("artist_id") || param.startsWith("album_id")) && !addedParams.has(param)) {
+                            cmd.params.push(param);
+                        }
+                    }
+                }
+                if (undefined!=item.id && (item.id.startsWith("artist_id") || item.id.startsWith("album_id")) && !addedParams.has(item.id)) {
+                    cmd.params.push(item.id);
+                }
+            }
         }
 
-        // Convert local browse commands into their non-SlimBrowse equivalents, so that sort and tags can be applied
+        // Convert local browse commands into their non-SlMaterialSkin/HTML/material/html/js/constants.jsimBrowse equivalents, so that sort and tags can be applied
 
         if (cmd.command.length==2 && "browselibrary"==cmd.command[0] && "items"==cmd.command[1]) {
             var p=[];

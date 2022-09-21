@@ -1514,7 +1514,7 @@ function browseBuildCommand(view, item, commandName, doReplacements) {
             }
         }
 
-        // Convert local browse commands into their non-SlMaterialSkin/HTML/material/html/js/constants.jsimBrowse equivalents, so that sort and tags can be applied
+        // Convert local browse commands into their non-SlimBrowse equivalents, so that sort and tags can be applied
 
         if (cmd.command.length==2 && "browselibrary"==cmd.command[0] && "items"==cmd.command[1]) {
             var p=[];

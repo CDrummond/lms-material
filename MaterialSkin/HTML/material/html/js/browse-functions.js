@@ -1472,14 +1472,13 @@ function browseBuildCommand(view, item, commandName, doReplacements) {
                 });
             }
             cmd.params = [];
-            var addedParams = new Set();
+            var addedKeys = new Set();
             [command.params, item.commonParams].forEach(p => {
                 if (p) {
                     for (var key in p) {
                         if (p[key]!=undefined && p[key]!=null && (""+p[key]).length>0) {
-                            var param = key+":"+p[key];
-                            cmd.params.push(param);
-                            addedParams.add(param);
+                            cmd.params.push(key+":"+p[key]);
+                            addedKeys.add(key);
                          }
                     }
                 }
@@ -1487,29 +1486,24 @@ function browseBuildCommand(view, item, commandName, doReplacements) {
             if (command.itemsParams && item[command.itemsParams]) {
                 /*var isMore = "more" == commandName;*/
                 for(var key in item[command.itemsParams]) {
-                    if (/* !isMore || */ ("touchToPlaySingle"!=key && "touchToPlay"!=key)) {
+                    if ((/* !isMore || */ ("touchToPlaySingle"!=key && "touchToPlay"!=key)) && !addedKeys.has(key)) {
                         let val = item[command.itemsParams][key];
                         if (val!=undefined && val!=null && (""+val).length>0) {
-                            let param = key+":"+item[command.itemsParams][key];
-                            if (!addedParams.has(param)) {
-                                cmd.params.push(param);
-                            }
+                            cmd.params.push(key+":"+item[command.itemsParams][key]);
+                            addedKeys.add(key);
                         }
                     }
                 }
             }
-            if ("browseonlineartist"==cmd.command[0]) {
-                // Add artist/album IDs from browse path. LMS issue (https://github.com/Logitech/slimserver/issues/806)
-                for (let i=0, loop=view.history, len=loop.length; i<len; ++i) {
-                    if (undefined!=loop[i].current) {
-                        let param = loop[i].current.id;
-                        if (undefined!=param && (param.startsWith("artist_id") || param.startsWith("album_id") || param.startsWith("service_id")) && !addedParams.has(param)) {
-                            cmd.params.push(param);
-                        }
+            // Check params used to initially build current list, and add any missing onlineServices
+            // Releated to LMS issue https://github.com/Logitech/slimserver/issues/806
+            if (undefined!=baseActions && undefined!=baseActions.parentParams) {
+                for (let i=0, loop=baseActions.parentParams, len=loop.length; i<len; ++i) {
+                    let key = loop[i].split(":")[0];
+                    if (!addedKeys.has(key)) {
+                        cmd.params.push(loop[i]);
+                        addedKeys.add(key);
                     }
-                }
-                if (undefined!=item.id && (item.id.startsWith("artist_id") || item.id.startsWith("album_id")) && !addedParams.has(item.id)) {
-                    cmd.params.push(item.id);
                 }
             }
         }

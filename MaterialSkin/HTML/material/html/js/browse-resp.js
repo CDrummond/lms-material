@@ -620,7 +620,10 @@ function parseBrowseResp(data, parent, options, cacheKey, parentCommand, parentG
                             if (itm.style=='itemNoAction') { // Year?
                                 let parts = itm.title.split(':');
                                 if (2==parts.length && ('Year'==parts[0] || i18n('Year')==parts[0])) {
-                                    resp.titleSuffix=' ('+parts[1].replace(/^\s+|\s+$/g, '')+')';
+                                    let year = parts[1].replace(/^\s+|\s+$/g, '');
+                                    if (parent && !parent.title.includes(year)) {
+                                        resp.titleSuffix=' ('+year+')';
+                                    }
                                     continue;
                                 }
                             }

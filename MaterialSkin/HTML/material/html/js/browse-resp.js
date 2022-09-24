@@ -610,7 +610,6 @@ function parseBrowseResp(data, parent, options, cacheKey, parentCommand, parentG
                     resp.subtitle=0==resp.items.length ? i18n("Empty") : i18np("1 Track", "%1 Tracks", resp.items.length);
                 } else {
                     if ("spotty"==command && resp.items.length>0) {
-                        let isTrackListing = false;
                         if (resp.allowHoverBtns && resp.items[0].menu.length>0 && resp.items[0].menu[0]==PLAY_ACTION &&
                             resp.items[resp.items.length-1].style=='itemNoAction') {
                             resp.actionItems = [];
@@ -631,11 +630,10 @@ function parseBrowseResp(data, parent, options, cacheKey, parentCommand, parentG
                                 itm.isListItemInMenu = true;
                                 resp.actionItems.unshift(itm);
                             }
-                            isTrackListing = resp.actionItems.length>0;
                         }
 
                         let parentImage = parent ? parent.image : undefined;
-                        let tracksHaveAlbumImage = isTrackListing;
+                        let allHaveSameImageAsParent = undefined!=parentImage;
                         // Iterate items looking for year (if album), or to heck if image is same as parent
                         for (let i=0, loop=resp.items, len=loop.length; i<len; ++i) {
                             if (loop[i].type=="playlist") {
@@ -646,13 +644,13 @@ function parseBrowseResp(data, parent, options, cacheKey, parentCommand, parentG
                                         loop[i].title+=year;
                                     }
                                 }
-                            } else if (tracksHaveAlbumImage && parentImage && loop[i].image!=parentImage) {
-                                tracksHaveAlbumImage = false;
-                                break;
+                                allHaveSameImageAsParent = false;
+                            } else if (allHaveSameImageAsParent && loop[i].image!=parentImage) {
+                                allHaveSameImageAsParent = false;
                             }
                         }
                         // If each item has the same image as parent image then do not show!
-                        if (tracksHaveAlbumImage) {
+                        if (allHaveSameImageAsParent) {
                             for (let i=0, loop=resp.items, len=loop.length; i<len; ++i) {
                                 loop[i].image=undefined;
                             }

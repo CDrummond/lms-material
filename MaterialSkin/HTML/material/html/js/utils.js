@@ -1235,6 +1235,6 @@ function getYear(text) {
     let rx = /\s\([0-9][0-9][0-9][0-9]\)\s/g;
     let matches = rx.exec(text);
     if (undefined!=matches && 1==matches.length) {
-        return matches[0].substring(0, 7);
+        return matches[matches.length-1].substring(0, 7);
     }
 }

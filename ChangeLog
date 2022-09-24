@@ -3,6 +3,7 @@
 1. Re-designed bottom now-playing bar for desktop layout.
 2. Hide desktop bottom now-playing bar when no track.
 3. Add 'Party' mode where certain actions are hidden.
+4. Use SVGs where mapped into images for 'text' items.
 
 2.10.4
 ------

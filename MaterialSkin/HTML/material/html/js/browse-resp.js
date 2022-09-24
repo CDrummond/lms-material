@@ -489,7 +489,7 @@ function parseBrowseResp(data, parent, options, cacheKey, parentCommand, parentG
                 }
                 resp.items.push(i);
                 // If this is a "text" item with an image then treat as a standard actionable item
-                if ("text"==i.type && (undefined!=i.image || undefined!=i.icon)) {
+                if ("text"==i.type && (undefined!=i.image || undefined!=i.icon || undefined!=i.svg)) {
                     i.type="other"; // ???
                 }
                 types.add(i.type);

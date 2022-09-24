@@ -4,6 +4,8 @@
 2. Hide desktop bottom now-playing bar when no track.
 3. Add 'Party' mode where certain actions are hidden.
 4. Use SVGs where mapped into images for 'text' items.
+5. If a list of Spotty items all have the same image as the parent item then
+   do not show images for list.
 
 2.10.4
 ------

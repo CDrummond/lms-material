@@ -512,17 +512,17 @@ function parseBrowseResp(data, parent, options, cacheKey, parentCommand, parentG
                 // If listing a radio app's entries and all images are the same, then hide images. e.g. iHeartRadio and RadioNet
                 var image = undefined;
                 var images = 0;
-                for (var i=0, len=resp.items.length; i<len && undefined==resp.items[i].image; ++i) {
+                for (var i=0, loop=resp.items, len=loop.length; i<len && undefined==loop[i].image; ++i) {
                     if (undefined==image) {
-                        image=resp.items[i].icon ? resp.items[i].icon : resp.items[i].svg;
+                        image=loop[i].icon ? loop[i].icon : loop[i].svg;
                         images++;
-                    } else if ((resp.items[i].icon ? resp.items[i].icon : resp.items[i].svg)==image) {
+                    } else if ((loop[i].icon ? loop[i].icon : loop[i].svg)==image) {
                         images++;
                     }
                 }
                 if (images==resp.items.length && undefined!=image) {
-                    for (var i=0, len=resp.items.length; i<len; ++i) {
-                        resp.items[i].icon = resp.items[i].svg = undefined;
+                    for (var i=0, loop=resp.items, len=loop.length; i<len; ++i) {
+                        loop[i].icon = loop[i].svg = undefined;
                     }
                     resp.canUseGrid=false;
                 }
@@ -533,8 +533,8 @@ function parseBrowseResp(data, parent, options, cacheKey, parentCommand, parentG
                 var defAlbumCover = resolveImage("music/0/cover" + LMS_IMAGE_SIZE);
                 var defArtistImage = resolveImage("html/images/artists" + LMS_IMAGE_SIZE);
 
-                for (var i=0, len=resp.items.length; i<len; ++i) {
-                    var item=resp.items[i];
+                for (var i=0, loop=resp.items, len=loop.length; i<len; ++i) {
+                    var item=loop[i];
                     if (!item.image && !item.icon && !item.svg) {
                         if (item.type=="album" || (item.window && (item.window.titleStyle=="album" && item.window.menuStyle=="album") && item.actions && item.actions.go)) {
                             item.image = defAlbumCover;
@@ -626,6 +626,21 @@ function parseBrowseResp(data, parent, options, cacheKey, parentCommand, parentG
                             }
                             itm.isListItemInMenu = true;
                             resp.actionItems.unshift(itm);
+                        }
+                        // If each item has the same image as parent image then do not show!
+                        if (parent && parent.image && resp.items.length>1 && resp.items.length<300) {
+                            let same = true;
+                            for (let i=0, loop=resp.items, len=loop.length; i<len; ++i) {
+                                if (loop[i].image!=parent.image) {
+                                    same=false;
+                                    break;
+                                }
+                            }
+                            if (same) {
+                                for (let i=0, loop=resp.items, len=loop.length; i<len; ++i) {
+                                    loop[i].image=undefined;
+                                }
+                            }
                         }
                     }
                     if (parent && parent.presetParams && parent.presetParams.favorites_url) {

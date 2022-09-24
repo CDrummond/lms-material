@@ -609,40 +609,52 @@ function parseBrowseResp(data, parent, options, cacheKey, parentCommand, parentG
                     resp.items.shift();
                     resp.subtitle=0==resp.items.length ? i18n("Empty") : i18np("1 Track", "%1 Tracks", resp.items.length);
                 } else {
-                    if (resp.allowHoverBtns && resp.items.length>1 && "spotty"==command &&
-                        resp.items[0].menu.length>0 && resp.items[0].menu[0]==PLAY_ACTION &&
-                        resp.items[resp.items.length-1].style=='itemNoAction') {
-                        resp.actionItems = [];
-                        let idx = resp.items.length-1;
-                        while (resp.items.length>0 &&
-                               !(resp.items[resp.items.length-1].menu.length>0 && resp.items[resp.items.length-1].menu[0]==PLAY_ACTION)) {
-                            let itm = resp.items.pop();
-                            if (itm.style=='itemNoAction') { // Year?
-                                let parts = itm.title.split(':');
-                                if (2==parts.length && ('Year'==parts[0] || i18n('Year')==parts[0])) {
-                                    let year = parts[1].replace(/^\s+|\s+$/g, '');
-                                    if (parent && !parent.title.includes(year)) {
-                                        resp.titleSuffix=' ('+year+')';
+                    if ("spotty"==command && resp.items.length>0) {
+                        let isTrackListing = false;
+                        if (resp.allowHoverBtns && resp.items[0].menu.length>0 && resp.items[0].menu[0]==PLAY_ACTION &&
+                            resp.items[resp.items.length-1].style=='itemNoAction') {
+                            resp.actionItems = [];
+                            let idx = resp.items.length-1;
+                            while (resp.items.length>0 &&
+                                !(resp.items[resp.items.length-1].menu.length>0 && resp.items[resp.items.length-1].menu[0]==PLAY_ACTION)) {
+                                let itm = resp.items.pop();
+                                if (itm.style=='itemNoAction') { // Year?
+                                    let parts = itm.title.split(':');
+                                    if (2==parts.length && ('Year'==parts[0] || i18n('Year')==parts[0])) {
+                                        let year = parts[1].replace(/^\s+|\s+$/g, '');
+                                        if (parent && !parent.title.includes(year)) {
+                                            resp.titleSuffix=' ('+year+')';
+                                        }
+                                        continue;
                                     }
-                                    continue;
                                 }
+                                itm.isListItemInMenu = true;
+                                resp.actionItems.unshift(itm);
                             }
-                            itm.isListItemInMenu = true;
-                            resp.actionItems.unshift(itm);
+                            isTrackListing = resp.actionItems.length>0;
+                        }
+
+                        let parentImage = parent ? parent.image : undefined;
+                        let tracksHaveAlbumImage = isTrackListing;
+                        // Iterate items looking for year (if album), or to heck if image is same as parent
+                        for (let i=0, loop=resp.items, len=loop.length; i<len; ++i) {
+                            if (loop[i].type=="playlist") {
+                                if (loop[i].presetParams && loop[i].presetParams.favorites_title &&
+                                    loop[i].presetParams.favorites_url && loop[i].presetParams.favorites_url.startsWith("spotify:album:")) {
+                                    let year = getYear(loop[i].presetParams.favorites_title);
+                                    if (undefined!=year) {
+                                        loop[i].title+=year;
+                                    }
+                                }
+                            } else if (tracksHaveAlbumImage && parentImage && loop[i].image!=parentImage) {
+                                tracksHaveAlbumImage = false;
+                                break;
+                            }
                         }
                         // If each item has the same image as parent image then do not show!
-                        if (parent && parent.image && resp.items.length>1 && resp.items.length<300) {
-                            let same = true;
+                        if (tracksHaveAlbumImage) {
                             for (let i=0, loop=resp.items, len=loop.length; i<len; ++i) {
-                                if (loop[i].image!=parent.image) {
-                                    same=false;
-                                    break;
-                                }
-                            }
-                            if (same) {
-                                for (let i=0, loop=resp.items, len=loop.length; i<len; ++i) {
-                                    loop[i].image=undefined;
-                                }
+                                loop[i].image=undefined;
                             }
                         }
                     }

@@ -4,8 +4,9 @@
 2. Hide desktop bottom now-playing bar when no track.
 3. Add 'Party' mode where certain actions are hidden.
 4. Use SVGs where mapped into images for 'text' items.
-5. If a list of Spotty items all have the same image as the parent item then
-   do not show images for list.
+5. If a list of Spotty tracks all have the same image as album then do not
+   show images for list.
+6. When listing Spotty albums attempt to extract year from "favorites_title"
 
 2.10.4
 ------

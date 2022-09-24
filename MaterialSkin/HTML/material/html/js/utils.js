@@ -1231,3 +1231,10 @@ function openServerSettings(serverName, showHome) {
              {title:i18n('Restart'), text:i18n('Restart Logitech Media Server?'), icon:'refresh', cmd:['restartserver'], confirm:i18n('Restart')}], showHome);
 }
 
+function getYear(text) {
+    let rx = /\s\([0-9][0-9][0-9][0-9]\)\s/g;
+    let matches = rx.exec(text);
+    if (undefined!=matches && 1==matches.length) {
+        return matches[0].substring(0, 7);
+    }
+}

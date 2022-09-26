@@ -100,7 +100,8 @@ function parseBrowseResp(data, parent, options, cacheKey, parentCommand, parentG
                     // Releated to LMS issue https://github.com/Logitech/slimserver/issues/806
                     resp.baseActions.parentParams = [];
                     for (let p=1, loop=data.params[1], len=loop.length; p<len; ++p) { // Skip command itself!
-                        if ((""+loop[p]).includes(":") && !loop[p].startsWith("isContextMenu")) {
+                        let parts = (""+loop[p]).split(':');
+                        if (2==parts.length && parts[0].endsWith("_id")) {
                             resp.baseActions.parentParams.push(loop[p]);
                         }
                     }

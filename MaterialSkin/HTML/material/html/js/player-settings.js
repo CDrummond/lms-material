@@ -24,29 +24,29 @@ Vue.component('lms-player-settings', {
       <v-list>
        <template v-for="(action, index) in customActions">
         <v-list-tile @click="doCustomAction(action, {id:playerId, name:playerName})">
-         <v-list-tile-avatar v-if="menuIcons"><v-icon v-if="action.icon">{{action.icon}}</v-icon><img v-else-if="action.svg" class="svg-img" :src="action.svg | svgIcon(darkUi)"></img></v-list-tile-avatar>
+         <v-list-tile-avatar><v-icon v-if="action.icon">{{action.icon}}</v-icon><img v-else-if="action.svg" class="svg-img" :src="action.svg | svgIcon(darkUi)"></img></v-list-tile-avatar>
          <v-list-tile-content><v-list-tile-title>{{action.title}}</v-list-tile-title></v-list-tile-content>
         </v-list-tile>
        </template>
        <v-divider v-if="customActions && customActions.length>0"></v-divider>
        <v-list-tile @click="setSleep">
-        <v-list-tile-avatar v-if="menuIcons"><v-icon class="btn-icon">hotel</v-icon></v-list-tile-avatar>
+        <v-list-tile-avatar><v-icon class="btn-icon">hotel</v-icon></v-list-tile-avatar>
         <v-list-tile-content><v-list-tile-title>{{i18n('Sleep')}}</v-list-tile-title></v-list-tile-content>
        </v-list-tile>
        <v-list-tile v-if="showSync" @click="bus.$emit('dlg.open', 'sync', {id:playerId, isgroup:false, name:playerName})">
-        <v-list-tile-avatar v-if="menuIcons"><v-icon class="btn-icon">link</v-icon></v-list-tile-avatar>
+        <v-list-tile-avatar><v-icon class="btn-icon">link</v-icon></v-list-tile-avatar>
         <v-list-tile-content><v-list-tile-title>{{i18n('Synchronise')}}</v-list-tile-title></v-list-tile-content>
        </v-list-tile>
        <v-list-tile v-if="unlockAll" @click="showExtraSettings">
-        <v-list-tile-avatar v-if="menuIcons"><img class="svg-img" :src="'configure'| svgIcon(darkUi)"></img></v-list-tile-avatar>
+        <v-list-tile-avatar><img class="svg-img" :src="'configure'| svgIcon(darkUi)"></img></v-list-tile-avatar>
         <v-list-tile-content><v-list-tile-title>{{i18n('Extra settings')}}</v-list-tile-title></v-list-tile-content>
        </v-list-tile>
        <v-list-tile v-if="unlockAll && playerLink" @click="showConfig">
-        <v-list-tile-avatar v-if="menuIcons"><v-icon>build</v-icon></v-list-tile-avatar>
+        <v-list-tile-avatar><v-icon>build</v-icon></v-list-tile-avatar>
         <v-list-tile-content><v-list-tile-title>{{i18n('Configuration')}}</v-list-tile-title></v-list-tile-content>
        </v-list-tile>
        <v-list-tile v-for="(plugin, index) in plugins" @click="showPlugin(index)">
-        <v-list-tile-avatar v-if="menuIcons">
+        <v-list-tile-avatar>
          <img v-if="plugin.svg" class="svg-img" :src="plugin.svg| svgIcon(darkUi)"></img>
          <v-icon v-else-if="plugin.icon">{{plugin.icon}}</v-icon>
          <img v-else-if="plugin.image" class="svg-img" :key="plugin.image" v-lazy="plugin.image">
@@ -312,9 +312,6 @@ Vue.component('lms-player-settings', {
         },
         darkUi () {
             return this.$store.state.darkUi
-        },
-        menuIcons() {
-            return this.$store.state.menuIcons
         },
         twentyFourHour() {
             return this.$store.state.twentyFourHour

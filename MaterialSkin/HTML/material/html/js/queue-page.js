@@ -240,7 +240,7 @@ var lmsQueue = Vue.component("lms-queue", {
     <v-divider v-if="DIVIDER==action"></v-divider>
     <template v-for="(cact, cindex) in queueCustomActions" v-else-if="CUSTOM_ACTIONS==action">
      <v-list-tile @click="itemCustomAction(cact, menu.item, menu.index)">
-      <v-list-tile-avatar v-if="menuIcons">
+      <v-list-tile-avatar>
        <v-icon v-if="undefined==cact.svg">{{cact.icon}}</v-icon>
        <img v-else class="svg-img" :src="cact.svg | svgIcon(darkUi)"></img>
       </v-list-tile-avatar>
@@ -248,13 +248,13 @@ var lmsQueue = Vue.component("lms-queue", {
      </v-list-tile>
     </template>
     <v-list-tile v-else-if="action==SELECT_ACTION && menu.item.selected" @click="itemAction(UNSELECT_ACTION, menu.item, menu.index, $event)">
-     <v-list-tile-avatar v-if="menuIcons">
+     <v-list-tile-avatar>
       <v-icon>{{ACTIONS[UNSELECT_ACTION].icon}}</v-icon>
      </v-list-tile-avatar>
      <v-list-tile-title>{{ACTIONS[UNSELECT_ACTION].title}}</v-list-tile-title>
     </v-list-tile>
     <v-list-tile v-else-if="action==PQ_REMOVE_DISC_ACTION ? undefined!=menu.item.disc && menu.item.disc>0 : action==PQ_REMOVE_ALBUM_ACTION ? undefined!=menu.item.album_id : action==PQ_COPY_ACTION ? browseSelection : action==MOVE_HERE_ACTION ? (selection.size>0 && !menu.item.selected) : action==PQ_ZAP_ACTION ? customSkipPlugin : action==DOWNLOAD_ACTION ? lmsOptions.allowDownload && menu.item.isLocal : (action!=PQ_PLAY_NEXT_ACTION || menu.index!=currentIndex)" @click="itemAction(action, menu.item, menu.index, $event)">
-     <v-list-tile-avatar v-if="menuIcons">
+     <v-list-tile-avatar>
       <v-icon v-if="undefined==ACTIONS[action].svg">{{ACTIONS[action].icon}}</v-icon>
       <img v-else class="svg-img" :src="ACTIONS[action].svg | svgIcon(darkUi)"></img>
      </v-list-tile-avatar>
@@ -292,9 +292,6 @@ var lmsQueue = Vue.component("lms-queue", {
     computed: {
         darkUi () {
             return this.$store.state.darkUi
-        },
-        menuIcons() {
-            return this.$store.state.menuIcons
         },
         threeLines() {
             return this.$store.state.queueThreeLines
@@ -694,7 +691,7 @@ var lmsQueue = Vue.component("lms-queue", {
             }
         },
         singleClick(item, index, event) {
-            if (this.$store.state.showMenuAudio && !queryParams.party) {
+            if (!queryParams.party) {
                 this.itemMenu(item, index, event);
             }
         },

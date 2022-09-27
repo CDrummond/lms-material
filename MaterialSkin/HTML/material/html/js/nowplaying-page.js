@@ -34,7 +34,7 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
   <v-list>
    <template v-for="(item, index) in menu.items">
     <v-list-tile @click="menuAction(item)">
-     <v-list-tile-avatar v-if="menuIcons && menu.icons" :tile="true" class="lms-avatar"><v-icon v-if="item.icon">{{item.icon}}</v-icon><img v-else-if="item.svg" class="svg-img" :src="item.svg | svgIcon(darkUi)"></img></v-list-tile-avatar>
+     <v-list-tile-avatar v-if="menu.icons" :tile="true" class="lms-avatar"><v-icon v-if="item.icon">{{item.icon}}</v-icon><img v-else-if="item.svg" class="svg-img" :src="item.svg | svgIcon(darkUi)"></img></v-list-tile-avatar>
      <v-list-tile-title>{{item.title}}</v-list-tile-title>
     </v-list-tile>
    </template>
@@ -1160,9 +1160,6 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
                 return formatTrackNum(this.playerStatus.current)+SEPARATOR+this.playerStatus.current.title;
             }
             return this.playerStatus.current.title;
-        },
-        menuIcons() {
-            return this.$store.state.menuIcons
         },
         zoomInfoClass() {
             return "np-info-text-"+this.infoZoom;

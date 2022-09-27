@@ -559,7 +559,7 @@ function browseClick(view, item, index, event) {
             setScrollTop(view, 0);
         } else if (view.selection.size>0) {
             view.select(item, index, event);
-        } else if (view.$store.state.showMenuAudio) {
+        } else {
             view.itemMenu(item, index, event);
         }
         return;
@@ -587,9 +587,7 @@ function browseClick(view, item, index, event) {
         return;
     }
     if (isAudioTrack(item)) {
-        if (view.$store.state.showMenuAudio) {
-            view.itemMenu(item, index, event);
-        }
+        view.itemMenu(item, index, event);
         return;
     }
     if (isTextItem(item) && !item.id.startsWith(TOP_ID_PREFIX) && !item.id.startsWith(MUSIC_ID_PREFIX)) {
@@ -648,7 +646,7 @@ function browseClick(view, item, index, event) {
                 lmsCommand(view.playerId(), command.params ? command.command.concat(command.params) : command.command).then(({data}) => {
                     bus.$emit('showMessage', item.title);
                 });
-            } else if (view.$store.state.showMenuAudio) {
+            } else {
                 view.itemMenu(item, index, event);
             }
             return;

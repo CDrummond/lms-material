@@ -87,11 +87,11 @@ Vue.component('lms-manage-players', {
      <v-btn icon slot="activator"><v-icon>more_vert</v-icon></v-btn>
      <v-list>
       <v-list-tile @click="sleepAll">
-       <v-list-tile-avatar v-if="menuIcons"><v-icon>hotel</v-icon></v-list-tile-avatar>
+       <v-list-tile-avatar><v-icon>hotel</v-icon></v-list-tile-avatar>
        <v-list-tile-content><v-list-tile-title>{{i18n('Set sleep time for all players')}}</v-list-tile-title></v-list-tile-content>
       </v-list-tile>
       <v-list-tile @click="createGroup" v-if="manageGroups && unlockAll">
-       <v-list-tile-avatar v-if="menuIcons"><v-icon>add_circle_outline</v-icon></v-list-tile-avatar>
+       <v-list-tile-avatar><v-icon>add_circle_outline</v-icon></v-list-tile-avatar>
        <v-list-tile-content><v-list-tile-title>{{i18n("Create group player")}}</v-list-tile-title></v-list-tile-content>
       </v-list-tile>
      </v-list>
@@ -184,14 +184,14 @@ Vue.component('lms-manage-players', {
    <template v-for="(action, index) in menu.actions">
     <v-divider v-if="DIVIDER===action"></v-divider>
     <v-list-tile v-else-if="PMGR_SYNC_ACTION!=action || multipleStandardPlayers" @click="playerAction(menu.player, action.cmd)">
-     <v-list-tile-avatar v-if="menuIcons"><v-icon v-if="action.icon" v-bind:class="{'dimmed': action.dimmed, 'active-btn': action.active}">{{action.icon}}</v-icon><img v-else-if="action.svg" class="svg-img" :src="action.svg | svgIcon(darkUi)"></img></v-list-tile-avatar>
+     <v-list-tile-avatar><v-icon v-if="action.icon" v-bind:class="{'dimmed': action.dimmed, 'active-btn': action.active}">{{action.icon}}</v-icon><img v-else-if="action.svg" class="svg-img" :src="action.svg | svgIcon(darkUi)"></img></v-list-tile-avatar>
      <v-list-tile-title>{{action.title}}</v-list-tile-title>
     </v-list-tile>
    </template>
    <v-divider v-if="menu.customActions && menu.customActions.length>0"></v-divider>
    <template v-if="menu.customActions && menu.customActions.length>0" v-for="(action, index) in menu.customActions">
     <v-list-tile @click="doCustomAction(action, menu.player)">
-     <v-list-tile-avatar v-if="menuIcons"><v-icon v-if="action.icon">{{action.icon}}</v-icon><img v-else-if="action.svg" class="svg-img" :src="action.svg | svgIcon(darkUi)"></img></v-list-tile-avatar>
+     <v-list-tile-avatar><v-icon v-if="action.icon">{{action.icon}}</v-icon><img v-else-if="action.svg" class="svg-img" :src="action.svg | svgIcon(darkUi)"></img></v-list-tile-avatar>
      <v-list-tile-content><v-list-tile-title>{{action.title}}</v-list-tile-title></v-list-tile-content>
     </v-list-tile>
    </template>
@@ -823,9 +823,6 @@ Vue.component('lms-manage-players', {
                 return len>1 && !this.$store.state.players[0].isgroup && !this.$store.state.players[1].isgroup;
             }
             return false;
-        },
-        menuIcons() {
-            return this.$store.state.menuIcons
         },
         darkUi () {
             return this.$store.state.darkUi

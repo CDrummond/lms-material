@@ -8,6 +8,7 @@
 5. If a list of Spotty tracks all have the same image as album then do not
    show images for list.
 6. When listing Spotty albums attempt to extract year from "favorites_title"
+7. Remove options; menu icons, always show track menu, launch player.
 
 2.10.5
 ------

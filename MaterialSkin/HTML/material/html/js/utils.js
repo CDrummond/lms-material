@@ -821,22 +821,16 @@ const ARTIST_ALBUM_SORT_KEY = "artistAlbumSort";
 function commandAlbumSortKey(command, genre) {
     var isArtist = false;
     var isCompilation = false;
-    for (var i=0, len=command.params.length; i<len; ++i) {
-        if (command.params[i].startsWith("artist_id:")) {
-            isArtist = true;
+    [command.params, command.command].forEach(list => {
+        for (var i=0, len=list.length; i<len; ++i) {
+            let val = ""+list[i];
+            if (val.startsWith("artist_id:")) {
+                isArtist = true;
+            } else if (val=="compilation:1") {
+                isCompilation = true;
+            }
         }
-        if (command.params[i]=="compilation:1") {
-            isCompilation = true;
-        }
-    }
-    for (var i=0, len=command.command.length; i<len; ++i) {
-        if (command.command[i].startsWith("artist_id:")) {
-            isArtist = true;
-        }
-        if (command.command[i]=="compilation:1") {
-            isCompilation = true;
-        }
-    }
+    });
     var baseSort = isArtist && !isCompilation ? ARTIST_ALBUM_SORT_KEY : ALBUM_SORT_KEY;
     if (undefined!=genre && (lmsOptions.composerGenres.has(genre)) || lmsOptions.conductorGenres.has(genre) || lmsOptions.bandGenres.has(genre)) {
         return baseSort+"C";

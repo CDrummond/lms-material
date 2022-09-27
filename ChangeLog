@@ -9,6 +9,11 @@
    show images for list.
 6. When listing Spotty albums attempt to extract year from "favorites_title"
 
+2.10.5
+------
+1. When saving SlimBrowse parameters, for future list calls, only save those
+   whose key ends with "_id"
+
 2.10.4
 ------
 1. Fix colours in 'Help' page.

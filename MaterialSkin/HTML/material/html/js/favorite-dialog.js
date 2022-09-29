@@ -25,11 +25,17 @@ Vue.component('lms-favorite', {
     </v-list-tile>
    </v-list>
   </v-form>
-  <v-card-actions>
+  <v-card-actions v-if="queryParams.altBtnLayout">
+   <v-spacer></v-spacer>
+   <v-btn flat @click.native="add()" v-if="isAdd">{{i18n('Add')}}</v-btn>
+   <v-btn flat @click.native="update()" v-else>{{i18n('Update')}}</v-btn>
+   <v-btn flat @click.native="cancel()">{{i18n('Cancel')}}</v-btn>
+  </v-card-actions>
+  <v-card-actions v-else>
    <v-spacer></v-spacer>
    <v-btn flat @click.native="cancel()">{{i18n('Cancel')}}</v-btn>
-   <v-btn flat @click.native="update()" v-if="!isAdd">{{i18n('Update')}}</v-btn>
    <v-btn flat @click.native="add()" v-if="isAdd">{{i18n('Add')}}</v-btn>
+   <v-btn flat @click.native="update()" v-else>{{i18n('Update')}}</v-btn>
   </v-card-actions>
  </v-card>
 </v-dialog>

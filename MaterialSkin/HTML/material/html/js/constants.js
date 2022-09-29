@@ -26,6 +26,7 @@ const IS_IOS     = !IS_ANDROID && !window.MSStream && (checkPlatform('iPhone|iPa
 const IS_IPHONE  = !IS_ANDROID && !window.MSStream && checkPlatform('iPhone');
 const IS_APPLE   = !IS_ANDROID && checkPlatform('Mac|iPhone|iPad');
 const IS_HIGH_DPI = matchMedia( "(-webkit-min-device-pixel-ratio: 2), (min-device-pixel-ratio: 2), (min-resolution: 192dpi)").matches;
+const IS_WINDOWS  = !IS_ANDROID && !IS_APPLE && checkPlatform('Win');
 
 const LMS_BATCH_SIZE = 25000;
 const LMS_QUEUE_BATCH_SIZE = 5000;

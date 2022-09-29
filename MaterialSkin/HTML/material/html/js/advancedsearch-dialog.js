@@ -131,7 +131,24 @@ Vue.component('lms-advancedsearch-dialog', {
 
   </v-card-text>
 
-  <v-card-actions>
+  <v-card-actions v-if="queryParams.altBtnLayout">
+   <div v-if="searching" style="padding-left:8px">{{i18n('Searching...')}}</div>
+   <v-menu v-else top v-model="showMenu">
+   <v-btn icon slot="activator"><v-icon>settings</v-icon></v-btn>
+   <v-list>
+    <template v-for="(sect, index) in sections">
+     <v-list-tile @click="sect.visible=!sect.visible" v-if="stats || !sect.isstats">
+      <v-list-tile-avatar><v-icon>{{sect.visible ? 'check_box' : 'check_box_outline_blank'}}</v-icon></v-list-tile-avatar>
+      <v-list-tile-content><v-list-tile-title>{{sect.label}}</v-list-tile-title></v-list-tile-content>
+     </v-list-tile>
+    </template>
+   </v-list>
+   </v-menu>
+   <v-spacer></v-spacer>
+   <v-btn flat v-if="!searching" @click.native="search()">{{i18n('Search')}}</v-btn>
+   <v-btn flat @click.native="cancel()">{{i18n('Cancel')}}</v-btn>
+  </v-card-actions>
+  <v-card-actions v-else>
    <div v-if="searching" style="padding-left:8px">{{i18n('Searching...')}}</div>
    <v-menu v-else top v-model="showMenu">
    <v-btn icon slot="activator"><v-icon>settings</v-icon></v-btn>
@@ -146,7 +163,7 @@ Vue.component('lms-advancedsearch-dialog', {
    </v-menu>
    <v-spacer></v-spacer>
    <v-btn flat @click.native="cancel()">{{i18n('Cancel')}}</v-btn>
-   <v-btn flat v-if="!searching" @click.native="search()">{{i18n('Search')}}</v-btn
+   <v-btn flat v-if="!searching" @click.native="search()">{{i18n('Search')}}</v-btn>
   </v-card-actions>
  </v-card>
 </v-dialog>

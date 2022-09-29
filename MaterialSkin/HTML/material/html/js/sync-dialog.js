@@ -33,7 +33,13 @@ Vue.component('lms-sync-dialog', {
     </v-layout>
    </v-container>
   </v-card-text>
-  <v-card-actions>
+  <v-card-actions v-if="queryParams.altBtnLayout">
+   <p style="margin-left:10px" class="dimmed">{{i18np("1 Player", "%1 Players", numSync)}}</p>
+   <v-spacer></v-spacer>
+   <v-btn flat @click.native="sync()">{{i18n('Sync')}}</v-btn>
+   <v-btn flat @click.native="close()">{{i18n('Cancel')}}</v-btn>
+  </v-card-actions>
+  <v-card-actions v-else>
    <p style="margin-left:10px" class="dimmed">{{i18np("1 Player", "%1 Players", numSync)}}</p>
    <v-spacer></v-spacer>
    <v-btn flat @click.native="close()">{{i18n('Cancel')}}</v-btn>

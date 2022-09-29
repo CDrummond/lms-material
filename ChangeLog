@@ -9,6 +9,8 @@
    show images for list.
 6. When listing Spotty albums attempt to extract year from "favorites_title"
 7. Remove options; menu icons, always show track menu, launch player.
+8. Place 'Cancel', etc., buttons on the right for Windows, or if
+   'altBtnLayout' (or 'altBtnLayout=true') is passed as a URL parameter.
 
 2.10.5
 ------

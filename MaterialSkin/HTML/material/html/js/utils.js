@@ -46,7 +46,7 @@ function parseQueryParams() {
         queryString=queryString.substring(0, hash);
     }
     var query = queryString.split('&');
-    var resp = { actions:[], debug:new Set(), hide:new Set(), dontEmbed:new Set(), layout:undefined, player:undefined, single:false, nativeStatus:false, nativeColors:false, nativePlayer:false, nativeUiChanges:undefined, appSettings:undefined, appQuit:undefined, css:undefined, download:'browser', addpad:false, party:false };
+    var resp = { actions:[], debug:new Set(), hide:new Set(), dontEmbed:new Set(), layout:undefined, player:undefined, single:false, nativeStatus:false, nativeColors:false, nativePlayer:false, nativeUiChanges:undefined, appSettings:undefined, appQuit:undefined, css:undefined, download:'browser', addpad:false, party:false, altBtnLayout:IS_WINDOWS };
 
     for (var i = query.length - 1; i >= 0; i--) {
         var kv = query[i].split('=');
@@ -115,6 +115,8 @@ function parseQueryParams() {
             }
         } else if ("party"==kv[0]) {
             resp.party=true;
+        } else if ("altBtnLayout"==kv[0]) {
+            resp.altBtnLayout=kv.length<1 || "true"==kv[0];
         }
     }
     return resp;

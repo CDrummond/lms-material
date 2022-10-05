@@ -11,6 +11,8 @@
 7. Remove options; menu icons, always show track menu, launch player.
 8. Place 'Cancel', etc., buttons on the right for Windows, or if
    'altBtnLayout' (or 'altBtnLayout=true') is passed as a URL parameter.
+9. Disable downloadig if 'download' URL parameter is not 'native' or 'browser'
+   (default).
 
 2.10.5
 ------

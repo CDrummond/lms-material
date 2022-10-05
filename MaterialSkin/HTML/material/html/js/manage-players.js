@@ -100,7 +100,10 @@ Vue.component('lms-manage-players', {
   </v-card-title>
 
   <div class="ios-vcard-text-workaround">
-   <v-container grid-list-md class="pmgr-container" id="player-manager-list">
+   <v-container v-if="players.length<1">
+    <b>{{trans.noplayer}}</b>
+   </v-container>
+   <v-container v-else grid-list-md class="pmgr-container" id="player-manager-list">
     <v-layout row wrap>
      <div v-for="(player, index) in players" :key="player.id" style="width:100%" v-bind:class="{'pmgr-sync':!isMainPlayer(player), 'active-player':currentPlayer && currentPlayer.id === player.id}">
       <v-flex xs12 v-if="0==index && !player.isgroup && manageGroups && firstGroupIndex>=0" class="pmgr-title ellipsis">{{i18n('Standard Players')}}</v-flex>
@@ -209,7 +212,7 @@ Vue.component('lms-manage-players', {
             manageGroups: false,
             firstGroupIndex: -1,
             menu: { show:false, player:undefined, actions:[], x:0, y:0, customActions:undefined },
-            trans: { play:undefined, pause:undefined, stop:undefined, prev:undefined, next:undefined, decVol:undefined, incVol:undefined, menu:undefined, drop:undefined },
+            trans: { play:undefined, pause:undefined, stop:undefined, prev:undefined, next:undefined, decVol:undefined, incVol:undefined, menu:undefined, drop:undefined, noplayer:undefined },
             draggingSyncedPlayer: false,
             dropId: undefined,
             dragIndex: undefined
@@ -284,7 +287,6 @@ Vue.component('lms-manage-players', {
         }.bind(this));
 
         bus.$on('noPlayers', function() {
-            this.show=false;
             this.showMenu = false;
         }.bind(this));
 
@@ -297,10 +299,6 @@ Vue.component('lms-manage-players', {
                             break;
                         }
                     }
-                }
-
-                if (this.players.length<1) {
-                    this.show = false;
                 }
             }
         }.bind(this));
@@ -337,7 +335,7 @@ Vue.component('lms-manage-players', {
             PMGR_SLEEP_ACTION.title=i18n("Sleep");
             PMGR_SET_DEF_PLAYER_ACTION.title=PMGR_UNSET_DEF_PLAYER_ACTION.title=i18n("Default player");
             this.trans = { play:i18n("Play"), pause:i18n("Pause"), stop:i18n("Stop"), prev:i18n("Previous track"), next:i18n("Next track"),
-                           decVol:i18n("Decrease volume"), incVol:i18n("Increase volume"), menu:i18n("Menu") };
+                           decVol:i18n("Decrease volume"), incVol:i18n("Increase volume"), menu:i18n("Menu"), noplayer:i18n('No Player')  };
         },
         playerMenu(player, event) {
             this.menu.actions=player.isgroup

@@ -1,18 +1,20 @@
 2.11.0
 ------
-1. Re-designed bottom now-playing bar for desktop layout.
-2. Hide desktop bottom now-playing bar when no track.
-3. Add 'Party' mode where certain actions are hidden. Activate via "?party"
-   URL query parameter, or set default skin to "Material Skin (Party)"
-4. Use SVGs that have been mapped into images for 'text' items.
-5. If a list of Spotty tracks all have the same image as album then do not
-   show images for list.
-6. When listing Spotty albums attempt to extract year from "favorites_title"
-7. Remove options; menu icons, always show track menu, launch player.
-8. Place 'Cancel', etc., buttons on the right for Windows, or if
-   'altBtnLayout' (or 'altBtnLayout=true') is passed as a URL parameter.
-9. Disable downloadig if 'download' URL parameter is not 'native' or 'browser'
-   (default).
+ 1. Re-designed bottom now-playing bar for desktop layout.
+ 2. Hide desktop bottom now-playing bar when no track.
+ 3. Add 'Party' mode where certain actions are hidden. Activate via "?party"
+    URL query parameter, or set default skin to "Material Skin (Party)"
+ 4. Use SVGs that have been mapped into images for 'text' items.
+ 5. If a list of Spotty tracks all have the same image as album then do not
+    show images for list.
+ 6. When listing Spotty albums attempt to extract year from "favorites_title"
+ 7. Remove options; menu icons, always show track menu, launch player.
+ 8. Place 'Cancel', etc., buttons on the right for Windows, or if
+    'altBtnLayout' (or 'altBtnLayout=true') is passed as a URL parameter.
+ 9. Disable downloadig if 'download' URL parameter is not 'native' or 'browser'
+    (default).
+10. Don't auto-close 'Manage players' dialog if all players dissapear whilst
+    its open, just state 'No players'
 
 2.10.5
 ------

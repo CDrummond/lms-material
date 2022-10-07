@@ -151,3 +151,5 @@ const IFRAME_HOME_CLOSES_DIALOGS = 2
 const SKIN_GENRE_TAGS = ['composer', 'conductor', 'band'];
 const SKIN_BOOL_OPTS = ['showComposer', 'showConductor', 'showBand', 'showAllArtists', 'artistFirst', IS_IOS ? 'xx' : 'allowDownload', 'showComment'];
 const SKIN_INT_OPTS = ['respectFixedVol', 'commentAsDiscTitle', 'collapseDiscs'];
+
+const MSK_REV_SORT_OPT = "msk-revsort:1";

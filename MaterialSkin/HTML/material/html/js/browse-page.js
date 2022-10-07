@@ -287,13 +287,18 @@ var lmsBrowse = Vue.component("lms-browse", {
     <v-list-tile-avatar><v-icon>chevron_left</v-icon></v-list-tile-avatar>
     <v-list-tile-content><v-list-tile-title class="menutitle">{{ACTIONS[ALBUM_SORTS_ACTION].title}}</v-list-tile-title></v-list-tile-content>
    </v-list-tile>
-   <v-divider></v-divider>
+   <v-divider v-if="menu.inMainMenu"></v-divider>
    <template v-for="(item, index) in menu.albumSorts">
-    <v-list-tile @click="sortAlbums(item)">
+    <v-list-tile @click="sortAlbums(item, menu.reverseSort)">
      <v-list-tile-avatar><v-icon small>{{item.selected ? 'radio_button_checked' :'radio_button_unchecked'}}</v-icon></v-list-tile-avatar>
      <v-list-tile-content><v-list-tile-title>{{item.label}}</v-list-tile-title></v-list-tile-content>
     </v-list-tile>
    </template>
+   <v-divider v-if="undefined!=menu.reverseSort"></v-divider>
+   <v-list-tile @click="sortAlbums(undefined, !menu.reverseSort)" v-if="undefined!=menu.reverseSort">
+     <v-list-tile-avatar><v-icon small>{{menu.reverseSort ? 'check_box' :'check_box_outline_blank'}}</v-icon></v-list-tile-avatar>
+     <v-list-tile-content><v-list-tile-title>{{trans.reverse}}</v-list-tile-title></v-list-tile-content>
+    </v-list-tile>
   </v-list>
   <v-list v-else-if="menu.currentActions">
    <template v-for="(item, index) in menu.currentActions">
@@ -353,7 +358,7 @@ var lmsBrowse = Vue.component("lms-browse", {
             hoverBtns: !IS_MOBILE,
             trans: { ok:undefined, cancel: undefined, selectMultiple:undefined, addall:undefined, playall:undefined,
                      deleteall:undefined, removeall:undefined, invertSelect:undefined, choosepos:undefined, goHome:undefined, goBack:undefined,
-                     select:undefined, unselect:undefined, sources: undefined },
+                     select:undefined, unselect:undefined, sources: undefined, reverse: undefined },
             menu: { show:false, item: undefined, x:0, y:0, index:-1},
             isTop: true,
             libraryName: undefined, // Name of currently chosen library
@@ -512,7 +517,7 @@ var lmsBrowse = Vue.component("lms-browse", {
             this.trans= { ok:i18n('OK'), cancel: i18n('Cancel'), selectMultiple:i18n("Select multiple items"), addall:i18n("Add selection to queue"),
                           playall:i18n("Play selection"), deleteall:i18n("Delete all selected items"),
                           invertSelect:i18n("Invert selection"), removeall:i18n("Remove all selected items"), choosepos:i18n("Choose position"), 
-                          goHome:i18n("Go home"), goBack:i18n("Go back"), sources:i18n("Music sources") };
+                          goHome:i18n("Go home"), goBack:i18n("Go back"), sources:i18n("Music sources"), reverse:i18n("Reverse") };
 
             if (undefined==this.top || this.top.length==0) {
                 this.top = [{ command: [],
@@ -823,15 +828,33 @@ var lmsBrowse = Vue.component("lms-browse", {
                 }
             });
         },
-        sortAlbums(sort) {
-            if (!sort.selected) {
+        sortAlbums(sort, reverseSort) {
+            if (undefined==sort) {
+                var revKey = MSK_REV_SORT_OPT.split('.')[0];
+                var revPos = -1;
+                for (var i=0, len=this.command.params.length; i<len; ++i) {
+                    if (this.command.params[i].startsWith(SORT_KEY)) {
+                        sort = this.command.params[i].split(':')[1];
+                    } else if (this.command.params[i].startsWith(revKey)) {
+                        revPos = i;
+                    }
+                }
+                if (revPos>=0) {
+                    this.command.params.splice(revPos, 1);
+                }
+                if (reverseSort) {
+                    this.command.params.push(MSK_REV_SORT_OPT);
+                }
+                setAlbumSort(this.command, this.inGenre, sort, reverseSort);
+                this.refreshList(false);
+            } else if (!sort.selected) {
                 for (var i=0, len=this.command.params.length; i<len; ++i) {
                     if (this.command.params[i].startsWith(SORT_KEY)) {
                         this.command.params[i]=SORT_KEY+sort.key;
                         break;
                     }
                 }
-                setAlbumSort(this.command, this.inGenre, sort.key);
+                setAlbumSort(this.command, this.inGenre, sort.key, reverseSort);
                 this.refreshList(false);
             }
         },

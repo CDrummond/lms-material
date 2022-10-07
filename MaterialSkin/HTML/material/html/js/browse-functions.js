@@ -1289,17 +1289,20 @@ function browseHeaderAction(view, act, event) {
         view.changeLayout(true);
     } else if (ALBUM_SORTS_ACTION==act) {
         var sort="";
+        var reverseSort = false;
         for (var i=0, len=view.command.params.length; i<len; ++i) {
             if (view.command.params[i].startsWith(SORT_KEY)) {
                 sort=view.command.params[i].split(":")[1];
-                break;
+            } else if (view.command.params[i]==MSK_REV_SORT_OPT) {
+                reverseSort = true;
             }
         }
         var albumSorts=[];
         for (var i=0,len=B_ALBUM_SORTS.length; i<len; ++i) {
             albumSorts.push({key:B_ALBUM_SORTS[i].key, label:B_ALBUM_SORTS[i].label, selected:sort==B_ALBUM_SORTS[i].key});
         }
-        showMenu(view, {show:true, x:event ? event.clientX : window.innerWidth, y:event ? event.clientY :0, albumSorts:albumSorts, inMainMenu:!event});
+        showMenu(view, {show:true, x:event ? event.clientX : window.innerWidth, y:event ? event.clientY :0,
+                        albumSorts:albumSorts, reverseSort:reverseSort, inMainMenu:!event});
     } else if (VLIB_ACTION==act) {
         view.showLibMenu(event);
     } else if (undefined!=view.current.allid && (ADD_ACTION==act || PLAY_ACTION==act)) {
@@ -1972,8 +1975,8 @@ function browseReplaceCommandTerms(view, cmd, item) {
             if (item && item.swapid && cmd.params[i]==item.id) {
                 cmd.params[i]=item.swapid;
             } else {
-                cmd.params[i]=cmd.params[i].replace(SORT_KEY+ALBUM_SORT_PLACEHOLDER, SORT_KEY+albumSort)
-                                           .replace(SORT_KEY+ARTIST_ALBUM_SORT_PLACEHOLDER, SORT_KEY+albumSort)
+                cmd.params[i]=cmd.params[i].replace(SORT_KEY+ALBUM_SORT_PLACEHOLDER, SORT_KEY+albumSort.by)
+                                           .replace(SORT_KEY+ARTIST_ALBUM_SORT_PLACEHOLDER, SORT_KEY+albumSort.by)
                                            .replace(TERM_PLACEHOLDER, view.enteredTerm)
                                            .replace(ARTIST_ALBUM_TAGS_PLACEHOLDER, ARTIST_ALBUM_TAGS)
                                            .replace(ALBUM_TAGS_PLACEHOLDER, (lmsOptions.showAllArtists ? ALBUM_TAGS_ALL_ARTISTS : ALBUM_TAGS))
@@ -1984,6 +1987,9 @@ function browseReplaceCommandTerms(view, cmd, item) {
                                    (lmsOptions.serviceEmblems && ("tracks"==cmd.command[0] || "albums"==cmd.command[0]) ? "E" : "");
                 }
             }
+        }
+        if (albumSort.rev) {
+            cmd.params.push(MSK_REV_SORT_OPT);
         }
     }
     return cmd;

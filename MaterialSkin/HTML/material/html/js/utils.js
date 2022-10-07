@@ -843,12 +843,14 @@ function commandAlbumSortKey(command, genre) {
 }
 
 function getAlbumSort(command, genre) {
-    var key=commandAlbumSortKey(command, genre);
-    return getLocalStorageVal(key, ALBUM_SORT_KEY==key || (ALBUM_SORT_KEY+"C")==key ? "album" : "yearalbum");
+    var key = commandAlbumSortKey(command, genre);
+    var parts = getLocalStorageVal(key, ALBUM_SORT_KEY==key || (ALBUM_SORT_KEY+"C")==key ? "album" : "yearalbum").split(".");
+    console.log(JSON.stringify(command), JSON.stringify(parts));
+    return {by:parts[0], rev:parts.length>1};
 }
 
-function setAlbumSort(command, genre, sort) {
-    setLocalStorageVal(commandAlbumSortKey(command, genre), sort);
+function setAlbumSort(command, genre, sort, reverse) {
+    setLocalStorageVal(commandAlbumSortKey(command, genre), sort+(reverse ? ".r" : ""));
 }
 
 function forceItemUpdate(vm, item) {

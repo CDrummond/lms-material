@@ -1329,6 +1329,17 @@ function browseHeaderAction(view, act, event) {
             }
         });
     } else {
+        // If we are adding/playing/inserting from an artist's list of albums, check if we are using reverse sort
+        // if we are then we need to add each album in the list one by one...'
+        if ((PLAY_ACTION==act || ADD_ACTION==act) && STD_ITEM_ARTIST==view.current.stdItem) {
+            var reverseSort = false;
+            for (var i=0, loop=view.command.params, len=loop.length; i<len; ++i) {
+                if (loop[i]==MSK_REV_SORT_OPT) {
+                    view.itemAction(PLAY_ACTION==act ? PLAY_ALL_ACTION : ADD_ALL_ACTION, view.current);
+                    return;
+                }
+            }
+        }
         view.itemAction(act, view.current);
     }
 }

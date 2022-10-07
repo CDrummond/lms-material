@@ -813,7 +813,8 @@ function parseBrowseResp(data, parent, options, cacheKey, parentCommand, parentG
             var isSearchResult = options && options.isSearch;
             var showAlbumName = isSearchResult || isAllSongs || (parent && parent.id && parent.id.startsWith("artist_id:"));
             var discs = new Map();
-            var sortTracks = isAllSongs && parentCommand && getAlbumSort(parentCommand, parentGenre).by.startsWith("year");
+            var sort = isAllSongs && parentCommand ? getAlbumSort(parentCommand, parentGenre) : undefined;
+            var sortTracks = undefined!=sort && sort.by.startsWith("year");
 
             if (data.params[1].length>=4 && data.params[1][0]=="tracks") {
                 for (var p=0, plen=data.params[1].length; p<plen && (!allowPlayAlbum || !showAlbumName); ++p) {
@@ -912,7 +913,7 @@ function parseBrowseResp(data, parent, options, cacheKey, parentCommand, parentG
                           });
             }
             if (sortTracks) {
-                resp.items.sort(yearAlbumTrackSort);
+                resp.items.sort(sort.rev ? revYearAlbumTrackSort : yearAlbumTrackSort);
             }
 
             if (discs.size>1) {

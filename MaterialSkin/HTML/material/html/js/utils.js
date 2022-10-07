@@ -328,21 +328,13 @@ function weightSort(a, b) {
     return a.weight!=b.weight ? a.weight<b.weight ? -1 : 1 : titleSort(a, b);
 }
 
-function yearAlbumTrackSort(a, b) {
-    var va=a.year ? a.year : 0;
-    var vb=b.year ? b.year : 0;
-    if (va<vb) {
-        return -1;
-    }
-    if (va>vb) {
-        return 1;
-    }
+function albumTrackSort(a, b) {
     var s = fixedSort(a.album, b.album);
     if (s!=0) {
         return s;
     }
-    va=a.disc ? a.disc : 0;
-    vb=b.disc ? b.disc : 0;
+    var va=a.disc ? a.disc : 0;
+    var vb=b.disc ? b.disc : 0;
     if (va<vb) {
         return -1;
     }
@@ -358,6 +350,30 @@ function yearAlbumTrackSort(a, b) {
         return 1;
     }
     return 0;
+}
+
+function yearAlbumTrackSort(a, b) {
+    var va=a.year ? a.year : 0;
+    var vb=b.year ? b.year : 0;
+    if (va<vb) {
+        return -1;
+    }
+    if (va>vb) {
+        return 1;
+    }
+    return albumTrackSort(a, b);
+}
+
+function revYearAlbumTrackSort(a, b) {
+    var va=a.year ? a.year : 0;
+    var vb=b.year ? b.year : 0;
+    if (va>vb) {
+        return -1;
+    }
+    if (va<vb) {
+        return 1;
+    }
+    return albumTrackSort(a, b);
 }
 
 function itemSort(a, b) {

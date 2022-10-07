@@ -15,7 +15,7 @@
     (default).
 10. Don't auto-close 'Manage players' dialog if all players dissapear whilst
     its open, just state 'No players'
-11. Add 'Reverse' to album sorts.
+11. Add 'Descending' to album sorts.
 
 2.10.5
 ------

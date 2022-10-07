@@ -297,7 +297,7 @@ var lmsBrowse = Vue.component("lms-browse", {
    <v-divider v-if="undefined!=menu.reverseSort"></v-divider>
    <v-list-tile @click="sortAlbums(undefined, !menu.reverseSort)" v-if="undefined!=menu.reverseSort">
      <v-list-tile-avatar><v-icon small>{{menu.reverseSort ? 'check_box' :'check_box_outline_blank'}}</v-icon></v-list-tile-avatar>
-     <v-list-tile-content><v-list-tile-title>{{trans.reverse}}</v-list-tile-title></v-list-tile-content>
+     <v-list-tile-content><v-list-tile-title>{{trans.desc}}</v-list-tile-title></v-list-tile-content>
     </v-list-tile>
   </v-list>
   <v-list v-else-if="menu.currentActions">
@@ -358,7 +358,7 @@ var lmsBrowse = Vue.component("lms-browse", {
             hoverBtns: !IS_MOBILE,
             trans: { ok:undefined, cancel: undefined, selectMultiple:undefined, addall:undefined, playall:undefined,
                      deleteall:undefined, removeall:undefined, invertSelect:undefined, choosepos:undefined, goHome:undefined, goBack:undefined,
-                     select:undefined, unselect:undefined, sources: undefined, reverse: undefined },
+                     select:undefined, unselect:undefined, sources: undefined, desc: undefined },
             menu: { show:false, item: undefined, x:0, y:0, index:-1},
             isTop: true,
             libraryName: undefined, // Name of currently chosen library
@@ -517,7 +517,7 @@ var lmsBrowse = Vue.component("lms-browse", {
             this.trans= { ok:i18n('OK'), cancel: i18n('Cancel'), selectMultiple:i18n("Select multiple items"), addall:i18n("Add selection to queue"),
                           playall:i18n("Play selection"), deleteall:i18n("Delete all selected items"),
                           invertSelect:i18n("Invert selection"), removeall:i18n("Remove all selected items"), choosepos:i18n("Choose position"), 
-                          goHome:i18n("Go home"), goBack:i18n("Go back"), sources:i18n("Music sources"), reverse:i18n("Reverse") };
+                          goHome:i18n("Go home"), goBack:i18n("Go back"), sources:i18n("Music sources"), desc:i18n("Descending") };
 
             if (undefined==this.top || this.top.length==0) {
                 this.top = [{ command: [],

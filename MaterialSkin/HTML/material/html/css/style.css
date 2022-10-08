@@ -2289,6 +2289,10 @@ img[lazy='loaded'].np-image-desktop, img[lazy='loaded'].np-image-landscape, img[
  background-color:var(--pq-current-color)!important;
 }
 
+.pmgr-container .active-player {
+ border-radius:8px;
+}
+
 .active-player div.v-list {
  background-color:transparent!important;
 }

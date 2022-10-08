@@ -263,6 +263,10 @@ Vue.component('lms-manage-players', {
         this.initItems();
 
         bus.$on('esc', function() {
+            // Try to ignore 'esc' if we were dragging, as use this to stop drag
+            if (undefined!=this.dragEndTime && ((new Date().getTime()-this.dragEndTime)<=250)) {
+                return;
+            }
             if (this.showMenu) {
                 this.showMenu = false;
             } else if (this.menu.show) {
@@ -653,6 +657,7 @@ Vue.component('lms-manage-players', {
             this.draggingSyncedPlayer = which>PMGR_GROUP_MEMBER_ID_MOD || this.players[which].issyncmaster || undefined!=this.players[which].syncmaster;
         },
         dragEnd() {
+            this.dragEndTime = new Date().getTime();
             this.stopScrolling = true;
             this.dragIndex = undefined;
             this.draggingSyncedPlayer = false;

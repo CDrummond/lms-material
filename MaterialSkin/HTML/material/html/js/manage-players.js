@@ -171,7 +171,6 @@ Vue.component('lms-manage-players', {
          {{player.name}}</v-list-tile-title>
         </v-list-tile-content>
        </v-list-tile>
-       <v-divider v-if="index==otherPlayers.length-1 || otherPlayers[index+1].server==player.server" class="pmgr-divider"></v-divider>
        </v-list>
       </v-flex>
      </div>

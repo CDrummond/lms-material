@@ -17,6 +17,7 @@
     its open, just state 'No players'
 11. Add 'Descending' to album sorts.
 12. Don't close 'Manage players' on 'esc' if dragging, simply end drag.
+13. Show icons in navigation menu.
 
 2.10.5
 ------

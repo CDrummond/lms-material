@@ -269,7 +269,12 @@ var lmsBrowse = Vue.component("lms-browse", {
   <v-list v-else-if="menu.history">
    <template v-for="(item, index) in menu.history">
     <v-list-tile @click="goTo(index)">
-     <v-list-tile-title>{{item}}</v-list-tile-title>
+     <v-list-tile-avatar>
+      <v-icon v-if="undefined!=item.icon">{{item.icon}}</v-icon>
+      <img v-else-if="undefined!=item.svg" class="svg-img" :src="item.svg | svgIcon(darkUi)"></img>
+      <img v-else-if="undefined!=item.image" class="svg-img" :src="item.image"></img>
+     </v-list-tile-avatar>
+     <v-list-tile-content><v-list-tile-title>{{item.title}}</v-list-tile-title></v-list-tile-content>
     </v-list-tile>
    </template>
   </v-list>
@@ -793,10 +798,18 @@ var lmsBrowse = Vue.component("lms-browse", {
         },
         showHistory(event) {
             if (this.history.length>1) {
-                var history=[];
-                this.history.forEach(h => {
-                    history.push(h.headerTitle ? h.headerTitle : i18n("Home"));
-                });
+                let history=[];
+                for (let i=0, loop=this.history, len=loop.length; i<len; ++i) {
+                    let hi = {title:0==i ? i18n("Home") : loop[i].headerTitle};
+                    if (0==i) {
+                        hi.icon = 'home';
+                    } else if (undefined!=loop[i].current) {
+                        hi.svg = loop[i].current.svg;
+                        hi.icon = loop[i].current.icon;
+                        hi.image = loop[i].current.image;
+                    }
+                    history.push(hi);
+                }
                 showMenu(this, {show:true, x:event.clientX, y:event.clientY, history:history});
             }
         },

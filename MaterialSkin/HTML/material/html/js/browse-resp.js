@@ -96,7 +96,7 @@ function parseBrowseResp(data, parent, options, cacheKey, parentCommand, parentG
                         moreAction = false;
                     }
                 }
-                if (data.params && data.params.length>1) {
+                if (command=="browseonlineartist" && data.params && data.params.length>1) {
                     // Store parameters used in command used to create this list, incase needed elsewhere
                     // Releated to LMS issue https://github.com/Logitech/slimserver/issues/806
                     resp.baseActions.parentParams = [];
@@ -567,7 +567,7 @@ function parseBrowseResp(data, parent, options, cacheKey, parentCommand, parentG
                 var feeds=[];
                 var after=[];
                 for (var i=0, loop=resp.items, len=loop.length; i<len; ++i) {
-                    if (undefined==loop[i].type) {
+                    if (undefined==loop[i].type || "other"==loop[i].type) {
                         loop[i].index=feeds.length;
                         feeds.push(loop[i]);
                     } else {

@@ -95,7 +95,7 @@ function parseBrowseResp(data, parent, options, cacheKey, parentCommand, parentG
                         moreAction = false;
                     }
                 }
-                if (data.params && data.params.length>1) {
+                if (command=="browseonlineartist" && data.params && data.params.length>1) {
                     // Store parameters used in command used to create this list, incase needed elsewhere
                     // Releated to LMS issue https://github.com/Logitech/slimserver/issues/806
                     resp.baseActions.parentParams = [];

@@ -1,3 +1,8 @@
+2.10.6
+------
+1. Only save SlimBrowse parameters for "browseonlineartist", as doing for
+   other commands is causing breakages.
+
 2.10.5
 ------
 1. When saving SlimBrowse parameters, for future list calls, only save those

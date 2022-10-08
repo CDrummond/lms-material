@@ -805,7 +805,7 @@ var lmsBrowse = Vue.component("lms-browse", {
                         hi.icon = 'home';
                     } else if (undefined!=loop[i].current) {
                         hi.svg = loop[i].current.svg;
-                        hi.icon = loop[i].current.icon;
+                        hi.icon = undefined==loop[i].current.icon && 'search'==loop[i].current.type ? 'search' : loop[i].current.icon;
                         hi.image = loop[i].current.image;
                     }
                     history.push(hi);

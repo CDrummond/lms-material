@@ -104,7 +104,7 @@ var ACTIONS=[
     {cmd:"pq-playnow",   icon: "play_circle_outline"},
     {cmd:"pq-playnxt",   icon: "play_circle_filled"},
     {cmd:"pq-scroll",    svg:  "current-track"},
-    {cmd:"pq-addurl",    icon: "add"},
+    {cmd:"pq-addurl",    svg:  "add-stream"},
     {cmd:"pq-movequeue", icon: "swap_horiz"},
     {cmd:"pq-rmalbum",   icon: "album"},
     {cmd:"pq-zap",       icon: "flash_on"},

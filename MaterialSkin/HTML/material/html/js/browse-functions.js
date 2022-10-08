@@ -2103,12 +2103,12 @@ function browseDoList(view, list, act, index) {
                 commands.push({act:PLAY_ACTION==act ? (0==commands.length ? PLAY_ACTION : ADD_ACTION) : act, item:list[i]});
             }
         }
-        view.doCommands(commands, PLAY_ACTION==act, false, 0, 'refreshStatus');
+        browseDoCommands(view, commands, PLAY_ACTION==act, false, 0, 'refreshStatus');
     }
 }
 
 function browseDoCommands(view, commands, npAfterLast, clearSent, actionedCount, refreshSig) {
-   if (commands.length>0) {
+    if (commands.length>0) {
         if (undefined==actionedCount) {
             actionedCount = 0;
         } else {

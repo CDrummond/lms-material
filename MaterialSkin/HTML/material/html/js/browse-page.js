@@ -1152,8 +1152,8 @@ var lmsBrowse = Vue.component("lms-browse", {
         doList(list, act, index) {
             browseDoList(this, list, act, index);
         },
-        doCommands(commands, npAfterLast, clearSent, actionedCount) {
-            browseDoCommands(this, commands, npAfterLast, clearSent, actionedCount);
+        doCommands(commands, npAfterLast, clearSent, actionedCount, refreshSig) {
+            browseDoCommands(this, commands, npAfterLast, clearSent, actionedCount, refreshSig);
         },
         handleScroll() {
             this.menu.show = false;

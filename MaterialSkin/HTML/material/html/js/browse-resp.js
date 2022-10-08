@@ -563,7 +563,7 @@ function parseBrowseResp(data, parent, options, cacheKey, parentCommand, parentG
                 var feeds=[];
                 var after=[];
                 for (var i=0, loop=resp.items, len=loop.length; i<len; ++i) {
-                    if (undefined==loop[i].type) {
+                    if (undefined==loop[i].type || "other"==loop[i].type) {
                         loop[i].index=feeds.length;
                         feeds.push(loop[i]);
                     } else {

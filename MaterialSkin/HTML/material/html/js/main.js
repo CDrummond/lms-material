@@ -328,6 +328,10 @@ var app = new Vue({
             this.setLayout(layout);
         }.bind(this));
         bus.$store = this.$store;
+
+        bus.$on('setPlayer', function(id) {
+            this.$store.commit('setPlayer', id);
+        }.bind(this));
     },
     computed: {
         darkUi() {

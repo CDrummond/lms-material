@@ -628,6 +628,10 @@ function navigateBack() {
     bus.$emit('esc');
 }
 
+function setCurrentPlayer(id) {
+    bus.$emit('setPlayer', id);
+}
+
 function isVisible(elem) {
     var rect = elem.getBoundingClientRect();
     var viewHeight = Math.max(document.documentElement.clientHeight, window.innerHeight);

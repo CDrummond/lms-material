@@ -116,7 +116,7 @@ function parseQueryParams() {
         } else if ("party"==kv[0]) {
             resp.party=true;
         } else if ("altBtnLayout"==kv[0]) {
-            resp.altBtnLayout=kv.length<1 || "true"==kv[0];
+            resp.altBtnLayout=kv.length<1 || "true"==kv[1];
         }
     }
     return resp;

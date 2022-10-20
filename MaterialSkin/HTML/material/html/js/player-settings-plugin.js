@@ -104,7 +104,16 @@ Vue.component('lms-player-settings-plugin', {
         goBack(longpress) {
             if (longpress && this.showHome) {
                 this.goHome();
-            } else if (this.history.length>0) {
+            } else {
+                this.navigateBack(false);
+            }
+        },
+        goHome() {
+            this.close();
+            this.$store.commit('closeAllDialogs', true);
+        },
+        navigateBack(andRefresh) {
+            if (this.history.length>0) {
                 let prev = this.history.pop();
                 this.title=prev.title;
                 this.items=prev.items;
@@ -112,13 +121,12 @@ Vue.component('lms-player-settings-plugin', {
                 if (undefined!=this.getScrollElement()) {
                     setScrollTop(this, prev.pos>0 ? prev.pos : 0);
                 }
+                if (andRefresh) {
+                    this.fetch(this.current, true);
+                }
             } else {
                 this.close();
             }
-        },
-        goHome() {
-            this.close();
-            this.$store.commit('closeAllDialogs', true);
         },
         close() {
             this.show=false;
@@ -183,7 +191,16 @@ Vue.component('lms-player-settings-plugin', {
                         this.title=item.title+SEPARATOR+this.playerName;
                     }
                 } else {
-                    this.fetch(this.current, true);
+                    var nextWindow = item.nextWindow
+                        ? item.nextWindow
+                        : item.actions && item.actions.go && item.actions.go.nextWindow
+                            ? item.actions.go.nextWindow
+                            : undefined;
+                    if (nextWindow=="parent") {
+                        this.navigateBack(true);
+                    } else {
+                        this.fetch(this.current, true);
+                    }
                 }
             }).catch(err => {
                 this.fetching = false;

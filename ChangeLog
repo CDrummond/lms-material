@@ -1,6 +1,7 @@
 2.10.7
 ------
 1. Handle 'nextwindow:parent' for player setiings plugins.
+2. Don't send volume events when see changed volume from LMS.
 
 2.10.6
 ------

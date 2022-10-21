@@ -641,6 +641,10 @@ Vue.component('lms-toolbar', {
             }
         },
         setVolume() {
+            // Seem to get a click event after slider drag end, so if we do then dont send volume again.
+            if (undefined!=this.sliderDragEndTime && ((new Date()).getTime() - this.sliderDragEndTime)<200) {
+                return;
+            }
             // Prevent large volume jumps
             if (this.lmsVol<=70 && this.playerVolume>=90) {
                 this.playerVolume = this.lmsVol;
@@ -722,6 +726,11 @@ Vue.component('lms-toolbar', {
             this.movingVolumeSlider=true;
         },
         volumeSliderEnd() {
+            // Store time we stopped this drag. This time is then checked in setVolume, and if
+            // time diff is to short that function wont call mixer again. Basically, after drag
+            // ends we also get a click event!
+            this.sliderDragEndTime = (new Date()).getTime();
+            this.cancelSendVolumeTimer();
             if (this.$store.state.player) {
                 lmsCommand(this.$store.state.player.id, ["mixer", "volume", this.playerVolume]).then(({data}) => {
                     bus.$emit('updatePlayer', this.$store.state.player.id);
@@ -733,7 +742,6 @@ Vue.component('lms-toolbar', {
             } else {
                 this.movingVolumeSlider=false;
             }
-            this.cancelSendVolumeTimer();
         },
         cancelSendVolumeTimer() {
             if (undefined!==this.sendVolumeTimer) {
@@ -744,6 +752,7 @@ Vue.component('lms-toolbar', {
         resetSendVolumeTimer() {
             this.cancelSendVolumeTimer();
             this.sendVolumeTimer = setTimeout(function () {
+                this.sendVolumeTimer = undefined;
                 bus.$emit('playerCommand', ["mixer", "volume", this.playerVolume]);
             }.bind(this), LMS_VOLUME_DEBOUNCE);
         },
@@ -894,7 +903,7 @@ Vue.component('lms-toolbar', {
                 this.ignorePlayerVolChange = false;
                 return;
             }
-            if (!isNaN(newVal) && newVal>=0) {
+            if (!isNaN(newVal) && newVal>=0 && this.movingVolumeSlider) {
                 this.resetSendVolumeTimer();
             }
         },

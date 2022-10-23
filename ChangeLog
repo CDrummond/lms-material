@@ -20,6 +20,11 @@
 13. Show icons in navigation menu.
 14. Add custom icon for 'Add URL' action.
 
+2.10.7
+------
+1. Handle 'nextWindow:parent' for player settings plugins.
+2. Don't send volume events when see changed volume from LMS.
+
 2.10.6
 ------
 1. Only save SlimBrowse parameters for "browseonlineartist", as doing for

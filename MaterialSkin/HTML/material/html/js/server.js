@@ -1086,9 +1086,9 @@ var lmsServer = Vue.component('lms-server', {
                         this.adjustVolume(true);
                     } else if (key=='down') {
                         this.adjustVolume(false);
-                    } else if (key=='left') {
+                    } else if (key=='left' && !queryParams.party) {
                         command=['button', 'jump_rew'];
-                    } else if (key=='right') {
+                    } else if (key=='right' && !queryParams.party) {
                         command=['playlist', 'index', '+1'];
                     }
                 }

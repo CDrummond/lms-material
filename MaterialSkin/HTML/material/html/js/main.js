@@ -394,6 +394,9 @@ var app = new Vue({
                 }
             }
             if (this.$store.state.swipeChangeTrack && undefined!=ev.target && ev.target.className.startsWith('np-image')) {
+                if (queryParams.party) {
+                    return;
+                }
                 if ('left'==direction) {
                     bus.$emit('playerCommand', ['playlist', 'index', '+1']);
                 } else {

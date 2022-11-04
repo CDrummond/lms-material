@@ -159,9 +159,9 @@ var lmsQueue = Vue.component("lms-queue", {
    <v-btn :title="trans.dstm" flat icon v-else-if="(desktopLayout || wide>0) && dstm" class="toolbar-button" v-bind:class="{'disabled':noPlayer}" v-longpress="repeatClicked"><v-icon class="active-btn">all_inclusive</v-icon></v-btn>
    <v-btn :title="trans.repeatOff" flat icon v-else-if="desktopLayout || wide>0" class="toolbar-button dimmed" v-bind:class="{'disabled':noPlayer}" v-longpress="repeatClicked"><v-icon>repeat</v-icon></v-btn>
 
-   <v-btn :title="trans.shuffleAlbums" flat icon v-if="(desktopLayout || wide>0) && playerStatus.shuffle===2" class="toolbar-button" v-bind:class="{'disabled':noPlayer}" @click="if (!queryParams.party) bus.$emit('playerCommand', ['playlist', 'shuffle', 0])"><img class="svg-img media-icon" :src="'shuffle-albums' | svgIcon(darkUi, 1)"></v-btn>
-   <v-btn :title="trans.shuffleAll" flat icon v-else-if="(desktopLayout || wide>0) && playerStatus.shuffle===1" class="toolbar-button" v-bind:class="{'disabled':noPlayer}" @click="if (!queryParams.party) bus.$emit('playerCommand', ['playlist', 'shuffle', 2])"><v-icon class="active-btn">shuffle</v-icon></v-btn>
-   <v-btn :title="trans.shuffleOff" flat icon v-else-if="desktopLayout || wide>0" class="toolbar-button dimmed" v-bind:class="{'disabled':noPlayer}" @click="if (!queryParams.party) bus.$emit('playerCommand', ['playlist', 'shuffle', 1])"><v-icon>shuffle</v-icon></v-btn>
+   <v-btn :title="trans.shuffleAlbums" flat icon v-if="(desktopLayout || wide>0) && playerStatus.shuffle===2" class="toolbar-button" v-bind:class="{'disabled':noPlayer}" @click="shuffleClicked"><img class="svg-img media-icon" :src="'shuffle-albums' | svgIcon(darkUi, 1)"></v-btn>
+   <v-btn :title="trans.shuffleAll" flat icon v-else-if="(desktopLayout || wide>0) && playerStatus.shuffle===1" class="toolbar-button" v-bind:class="{'disabled':noPlayer}" @click="shuffleClicked"><v-icon class="active-btn">shuffle</v-icon></v-btn>
+   <v-btn :title="trans.shuffleOff" flat icon v-else-if="desktopLayout || wide>0" class="toolbar-button dimmed" v-bind:class="{'disabled':noPlayer}" @click="shuffleClicked"><v-icon>shuffle</v-icon></v-btn>
    <!--
    <template v-if="wide>1" v-for="(action, index) in settingsMenuActions">
     <v-btn flat icon @click.stop="headerAction(action)" class="toolbar-button" :title="ACTIONS[action].title | tooltip(ACTIONS[action].key,keyboardControl,true)" :id="'tbar'+index" v-bind:class="{'disabled':(PQ_SCROLL_ACTION==action || PQ_MOVE_QUEUE_ACTION==action) && items.length<1}">
@@ -1143,8 +1143,22 @@ var lmsQueue = Vue.component("lms-queue", {
                 bus.$emit('settingsMenuActions', /*this.wide>1 ? [] :*/ this.settingsMenuActions, 'queue');
             }
         },
+        shuffleClicked() {
+            if (this.$store.state.visibleMenus.size>0 || queryParams.party) {
+                return;
+            }
+            if (this.shuffAltBtn.show) {
+                this.doCommand(this.shuffAltBtn.command, this.shuffAltBtn.tooltip);
+            } else if (this.playerStatus.playlist.shuffle===2) {
+                bus.$emit('playerCommand', ['playlist', 'shuffle', 0]);
+            } else if (this.playerStatus.playlist.shuffle===1) {
+                bus.$emit('playerCommand', ['playlist', 'shuffle', 2]);
+            } else {
+                bus.$emit('playerCommand', ['playlist', 'shuffle', 1]);
+            }
+        },
         repeatClicked(longPress) {
-            if (queryParams.party) {
+            if (this.$store.state.visibleMenus.size>0 || queryParams.party) {
                 return;
             }
             if (longPress && this.playerStatus.repeat===0) {

@@ -325,10 +325,10 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
         <v-layout text-xs-center>
          <v-flex xs6><v-btn flat icon v-longpress:repeat="nextButton" v-bind:class="{'np-std-button': !stopButton, 'disabled':disableNext}" :title="trans.next"><v-icon large class="media-icon">skip_next</v-icon></v-btn></v-flex>
          <v-flex xs6>
-          <v-btn v-if="shuffAltBtn.show" :title="shuffAltBtn.tooltip" flat icon @click="doCommand(shuffAltBtn.command, shuffAltBtn.tooltip)" v-bind:class="{'np-std-button': !stopButton}"><v-icon v-if="shuffAltBtn.icon" class="media-icon">{{shuffAltBtn.icon}}</v-icon><img v-else :src="shuffAltBtn.image" class="btn-img"></img></v-btn>
-          <v-btn :title="trans.shuffleAlbums" flat icon v-else-if="playerStatus.playlist.shuffle===2" @click="doAction(['playlist', 'shuffle', 0])" v-bind:class="{'np-std-button': !stopButton,'disabled':noPlayer}"><img class="svg-img media-icon" :src="'shuffle-albums' | svgIcon(darkUi, true)"></img></v-btn>
-          <v-btn :title="trans.shuffleAll" flat icon v-else-if="playerStatus.playlist.shuffle===1" @click="doAction(['playlist', 'shuffle', 2])" v-bind:class="{'np-std-button': !stopButton,'disabled':noPlayer}"><v-icon class="active-btn media-icon">shuffle</v-icon></v-btn>
-          <v-btn :title="trans.shuffleOff" flat icon v-else @click="doAction(['playlist', 'shuffle', 1])" class="dimmed" v-bind:class="{'np-std-button': !stopButton,'disabled':noPlayer}"><v-icon class="media-icon">shuffle</v-icon></v-btn>
+          <v-btn v-if="shuffAltBtn.show" :title="shuffAltBtn.tooltip" flat icon @click="shuffleClicked" v-bind:class="{'np-std-button': !stopButton}"><v-icon v-if="shuffAltBtn.icon" class="media-icon">{{shuffAltBtn.icon}}</v-icon><img v-else :src="shuffAltBtn.image" class="btn-img"></img></v-btn>
+          <v-btn :title="trans.shuffleAlbums" flat icon v-else-if="playerStatus.playlist.shuffle===2" @click="shuffleClicked" v-bind:class="{'np-std-button': !stopButton,'disabled':noPlayer}"><img class="svg-img media-icon" :src="'shuffle-albums' | svgIcon(darkUi, true)"></img></v-btn>
+          <v-btn :title="trans.shuffleAll" flat icon v-else-if="playerStatus.playlist.shuffle===1" @click="shuffleClicked" v-bind:class="{'np-std-button': !stopButton,'disabled':noPlayer}"><v-icon class="active-btn media-icon">shuffle</v-icon></v-btn>
+          <v-btn :title="trans.shuffleOff" flat icon v-else @click="shuffleClicked" class="dimmed" v-bind:class="{'np-std-button': !stopButton,'disabled':noPlayer}"><v-icon class="media-icon">shuffle</v-icon></v-btn>
          </v-flex>
         </v-layout>
        </v-flex>
@@ -395,10 +395,10 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
      <v-layout text-xs-center>
       <v-flex xs6><v-btn flat icon v-longpress:repeat="nextButton" v-bind:class="{'np-std-button': !stopButton, 'disabled':disableNext}" :title="trans.next"><v-icon large class="media-icon">skip_next</v-icon></v-btn></v-flex>
       <v-flex xs6>
-       <v-btn v-if="shuffAltBtn.show" :title="shuffAltBtn.tooltip" flat icon @click="doCommand(shuffAltBtn.command, shuffAltBtn.tooltip)" v-bind:class="{'np-std-button': !stopButton}"><v-icon v-if="shuffAltBtn.icon" class="media-icon">{{shuffAltBtn.icon}}</v-icon><img v-else :src="shuffAltBtn.image" class="btn-img"></img></v-btn>
-       <v-btn :title="trans.shuffleAlbums" flat icon v-else-if="playerStatus.playlist.shuffle===2" @click="doAction(['playlist', 'shuffle', 0])" v-bind:class="{'np-std-button': !stopButton,'disabled':noPlayer}"><img class="svg-img media-icon" :src="'shuffle-albums' | svgIcon(darkUi, true)"></v-btn>
-       <v-btn :title="trans.shuffleAll" flat icon v-else-if="playerStatus.playlist.shuffle===1" @click="doAction(['playlist', 'shuffle', 2])" v-bind:class="{'np-std-button': !stopButton,'disabled':noPlayer}"><v-icon class="active-btn media-icon">shuffle</v-icon></v-btn>
-       <v-btn :title="trans.shuffleOff" flat icon v-else @click="doAction(['playlist', 'shuffle', 1])" class="dimmed" v-bind:class="{'np-std-button': !stopButton,'disabled':noPlayer}"><v-icon class="media-icon">shuffle</v-icon></v-btn>
+       <v-btn v-if="shuffAltBtn.show" :title="shuffAltBtn.tooltip" flat icon @click="shuffleClicked" v-bind:class="{'np-std-button': !stopButton}"><v-icon v-if="shuffAltBtn.icon" class="media-icon">{{shuffAltBtn.icon}}</v-icon><img v-else :src="shuffAltBtn.image" class="btn-img"></img></v-btn>
+       <v-btn :title="trans.shuffleAlbums" flat icon v-else-if="playerStatus.playlist.shuffle===2" @click="shuffleClicked" v-bind:class="{'np-std-button': !stopButton,'disabled':noPlayer}"><img class="svg-img media-icon" :src="'shuffle-albums' | svgIcon(darkUi, true)"></v-btn>
+       <v-btn :title="trans.shuffleAll" flat icon v-else-if="playerStatus.playlist.shuffle===1" @click="shuffleClicked" v-bind:class="{'np-std-button': !stopButton,'disabled':noPlayer}"><v-icon class="active-btn media-icon">shuffle</v-icon></v-btn>
+       <v-btn :title="trans.shuffleOff" flat icon v-else @click="shuffleClicked" class="dimmed" v-bind:class="{'np-std-button': !stopButton,'disabled':noPlayer}"><v-icon class="media-icon">shuffle</v-icon></v-btn>
       </v-flex>
      </v-layout>
     </v-flex>
@@ -652,7 +652,7 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
             bus.$emit('dlg.open', 'gallery', [this.coverUrl], 0, true);
         },
         doAction(command) {
-            if (this.$store.state.visibleMenus.size>0 || (queryParams.party && command.length>1 && 'shuffle'==command[1]) ) {
+            if (this.$store.state.visibleMenus.size>0) {
                 return;
             }
             bus.$emit('playerCommand', command);
@@ -819,7 +819,7 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
             }
         },
         prevButton(skip) {
-            if (this.$store.state.visibleMenus.size>0) {
+            if (this.$store.state.visibleMenus.size>0 || queryParams.party) {
                 return;
             }
             if (!this.disablePrev) {
@@ -831,7 +831,7 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
             }
         },
         nextButton(skip) {
-            if (this.$store.state.visibleMenus.size>0) {
+            if (this.$store.state.visibleMenus.size>0 || queryParams.party) {
                 return;
             }
             if (!this.disableNext) {
@@ -842,8 +842,22 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
                 }
             }
         },
+        shuffleClicked() {
+            if (this.$store.state.visibleMenus.size>0 || queryParams.party) {
+                return;
+            }
+            if (this.shuffAltBtn.show) {
+                this.doCommand(this.shuffAltBtn.command, this.shuffAltBtn.tooltip);
+            } else if (this.playerStatus.playlist.shuffle===2) {
+                this.doAction(['playlist', 'shuffle', 0]);
+            } else if (this.playerStatus.playlist.shuffle===1) {
+                this.doAction(['playlist', 'shuffle', 2]);
+            } else {
+                this.doAction(['playlist', 'shuffle', 1]);
+            }
+        },
         repeatClicked(longPress) {
-            if (queryParams.party) {
+            if (this.$store.state.visibleMenus.size>0 || queryParams.party) {
                 return;
             }
             if (this.repAltBtn.show) {
@@ -861,7 +875,7 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
             }
         },
         showSleep() {
-            if (this.$store.state.visibleMenus.size>0) {
+            if (this.$store.state.visibleMenus.size>0 || queryParams.party) {
                 return;
             }
             bus.$emit('dlg.open', 'sleep', this.$store.state.player);

@@ -49,11 +49,13 @@ function showLastNotif(text, cancelable) {
 }
 
 function updateNative(status) {
-    if (queryParams.nativeStatus) {
+    if (1==queryParams.nativeStatus) {
         try {
             NativeReceiver.updateStatus(JSON.stringify(status));
         } catch (e) {
         }
+    } else if (2==queryParams.nativeStatus) {
+        console.log("MATERIAL-STATUS "+JSON.stringify(status));
     }
 }
 

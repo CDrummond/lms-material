@@ -204,11 +204,13 @@ function defaultTheme() {
 
 function storeCurrentPlayer(player) {
     setLocalStorageVal('player', player.id);
-    if (queryParams.nativePlayer) {
+    if (1==queryParams.nativePlayer) {
         try {
             NativeReceiver.updatePlayer(player.id, player.name);
         } catch (e) {
         }
+    } else if (2==queryParams.nativePlayer) {
+        console.log("MATERIAL-PLAYER "+player.id+"/"+player.name);
     }
 }
 
@@ -721,7 +723,7 @@ const store = new Vuex.Store({
 
             state.activeDialog = state.openDialogs.length>0 ? state.openDialogs[state.openDialogs.length-1] : undefined;
 
-            if (queryParams.nativeColors) {
+            if (0!=queryParams.nativeColors) {
                 let topColorVar = "--top-toolbar-color";
                 let botColorVar = "--bottom-toolbar-color";
                 for (var i=state.openDialogs.length; i>=0; --i) {

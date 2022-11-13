@@ -460,7 +460,7 @@ Vue.component('lms-ui-settings', {
                 }
             }).catch(err => {
             });
-            if (queryParams.nativeUiChanges) {
+            if (0!=queryParams.nativeUiChanges) {
                 this.currentSettings = JSON.stringify(this.settings(true, true));
             }
             lmsCommand("", ["material-skin", "browsemodes"]).then(({data}) => {
@@ -622,12 +622,16 @@ Vue.component('lms-ui-settings', {
                 this.$store.commit('setPassword', this.password);
             }
 
-            if (queryParams.nativeUiChanges) {
+            if (0!=queryParams.nativeUiChanges) {
                 let settingsNow = JSON.stringify(this.settings(true, true));
                 if (settingsNow!=this.currentSettings) {
-                    try {
-                        NativeReceiver.updateUiSettings(settingsNow);
-                    } catch (e) {
+                    if (1==queryParams.nativeUiChange) {
+                        try {
+                            NativeReceiver.updateUiSettings(settingsNow);
+                        } catch (e) {
+                        }
+                    } else if (2==queryParams.nativeUiChange) {
+                        console.log("MATERIAL-UI " + settingsNow);
                     }
                 }
                 this.currentSettings = undefined;

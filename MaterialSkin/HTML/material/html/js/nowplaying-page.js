@@ -68,7 +68,7 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
    </v-flex>
   </v-layout>
   <img v-if="!largeView && !disableBtns" :key="coverUrl" v-lazy="coverUrl" onerror="this.src='html/images/cover.png'" class="np-image-desktop" @contextmenu="showMenu" @click="clickImage(event)"></img>
-  <v-list two-line subheader class="np-details-desktop">
+  <v-list two-line subheader class="np-details-desktop" v-if="playerStatus.playlist.count>0">
    <v-list-tile style>
     <v-list-tile-content>
      <v-list-tile-title v-if="playerStatus.current.title">{{title}}</v-list-tile-title>
@@ -414,7 +414,7 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
                     sleepTimer: false,
                     dvc: VOL_STD,
                     current: { canseek:1, duration:0, time:undefined, title:undefined, artist:undefined, artistAndComposer: undefined,
-                               album:undefined, albumName:undefined, albumLine:undefined, technicalInfo: "", pospc:0.0, tracknum:undefined,
+                               album:undefined, albumName:undefined, albumLine:undefined, technicalInfo:undefined, pospc:0.0, tracknum:undefined,
                                disc:0, year:0, url:undefined, comment:undefined, source: {local:true, text:undefined} },
                     playlist: { shuffle:0, repeat: 0, current:0, count:0 },
                  },
@@ -1141,7 +1141,7 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
         technicalInfo() {
             return undefined==this.playerStatus.current.technicalInfo || this.playerStatus.current.length==0
                 ? undefined
-                : undefined==this.playerStatus.current.source || this.playerStatus.current.source.other
+                : undefined==this.playerStatus.current.source || this.playerStatus.current.source.other || undefined==this.playerStatus.current.source.text || this.playerStatus.current.source.text.length<1
                     ? this.playerStatus.current.technicalInfo
                     : (this.playerStatus.current.source.text+SEPARATOR+this.playerStatus.current.technicalInfo);
         },

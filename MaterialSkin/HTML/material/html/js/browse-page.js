@@ -180,7 +180,7 @@ var lmsBrowse = Vue.component("lms-browse", {
       <div class="menu-btn grid-btn list-btn" @click.stop="itemMenu(item, index, $event)" :title="i18n('%1 (Menu)', item.title)"></div>
      </v-list-tile-action>
     </v-list-tile>
-    <v-list-tile v-else-if="item.type=='search' || item.type=='entry'" avatar :key="item.id" class="lms-avatar lms-list-item" :id="'item'+index" v-bind:class="{'list-active': (menu.show && index==menu.index) || (fetchingItem==item.id)}">
+    <v-list-tile v-else-if="item.type=='search' || item.type=='entry' || undefined!=item.input" avatar :key="item.id" class="lms-avatar lms-list-item" :id="'item'+index" v-bind:class="{'list-active': (menu.show && index==menu.index) || (fetchingItem==item.id)}">
      <v-list-tile-content>
       <text-field :focus="index==0 && !IS_MOBILE" :title="item.title" :type="item.type" @value="entry(item, $event)"></text-field>
      </v-list-tile-content>

@@ -1,6 +1,7 @@
 2.10.8
 ------
 1. Show input field if item has an "input" attribute.
+2. If "nextWindow" is "home" then go to home screen.
 
 2.10.7
 ------

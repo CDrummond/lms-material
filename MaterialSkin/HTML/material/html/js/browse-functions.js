@@ -214,6 +214,8 @@ function browseHandleNextWindow(view, item, command, resp, isMoreMenu, isBrowse)
                 view.$store.commit('setPage', 'now-playing');
             }
             view.goBack(true);
+        } else if (nextWindow=="home") {
+            view.goHome();
         }
         return true;
     }

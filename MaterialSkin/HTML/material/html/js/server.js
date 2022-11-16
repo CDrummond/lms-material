@@ -48,6 +48,10 @@ function showLastNotif(text, cancelable) {
     }
 }
 
+function logString(val) {
+    return undefined==val ? "" : val;
+}
+
 function updateNative(status) {
     if (1==queryParams.nativeStatus) {
         try {
@@ -55,7 +59,22 @@ function updateNative(status) {
         } catch (e) {
         }
     } else if (2==queryParams.nativeStatus) {
-        console.log("MATERIAL-STATUS "+JSON.stringify(status));
+        if (undefined==status.current) {
+            console.log("MATERIAL-STATUS");
+        } else {
+            console.log("MATERIAL-STATUS" +
+                        "\nPLAYING "+status.isplaying +
+                        "\nVOLUME "+logString(status.volume) +
+                        "\nCOUNT "+logString(status.playlist.count) +
+                        "\nSHUFFLE "+logString(status.playlist.shuffle) +
+                        "\nREPEAT "+logString(status.playlist.repeat) +
+                        "\nTITLE "+logString(status.current.title) +
+                        "\nARTIST "+logString(buildArtistLine(status.current, 'status', true)) +
+                        "\nALBUM "+logString(buildAlbumLine(status.current, 'status', true)) +
+                        "\nDURATION "+logString(status.current.duration) +
+                        "\nTIME "+logString(status.current.time) +
+                        "\nTRACKID "+logString(status.current.id));
+        }
     }
 }
 

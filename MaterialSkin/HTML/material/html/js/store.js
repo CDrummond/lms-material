@@ -210,7 +210,7 @@ function storeCurrentPlayer(player) {
         } catch (e) {
         }
     } else if (2==queryParams.nativePlayer) {
-        console.log("MATERIAL-PLAYER "+player.id+"/"+player.name);
+        console.log("MATERIAL-PLAYER\nID "+player.id+"\nNAME "+player.name);
     }
 }
 

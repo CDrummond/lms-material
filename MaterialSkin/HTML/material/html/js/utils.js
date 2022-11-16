@@ -46,7 +46,7 @@ function parseQueryParams() {
         queryString=queryString.substring(0, hash);
     }
     var query = queryString.split('&');
-    var resp = { actions:[], debug:new Set(), hide:new Set(), dontEmbed:new Set(), layout:undefined, player:undefined, single:false, nativeStatus:0, nativeColors:0, nativePlayer:0, nativeUiChanges:0, nativeTheme:0, appSettings:undefined, appQuit:undefined, css:undefined, download:'browser', addpad:false, party:false, altBtnLayout:IS_WINDOWS };
+    var resp = { actions:[], debug:new Set(), hide:new Set(), dontEmbed:new Set(), layout:undefined, player:undefined, single:false, nativeStatus:0, nativeColors:0, nativePlayer:0, nativeUiChanges:0, nativeTheme:0, nativeCover:0, appSettings:undefined, appQuit:undefined, css:undefined, download:'browser', addpad:false, party:false, altBtnLayout:IS_WINDOWS };
 
     for (var i = query.length - 1; i >= 0; i--) {
         var kv = query[i].split('=');
@@ -87,6 +87,8 @@ function parseQueryParams() {
             resp.nativeUiChanges=kv[1]=="c" ? 2 : 1;
         } else if ("nativeTheme"==kv[0]) {
             resp.nativeTheme=kv[1]=="c" ? 2 : 1;
+        } else if ("nativeCover"==kv[0]) {
+            resp.nativeCover=kv[1]=="c" ? 2 : 1;
         } else if ("hide"==kv[0]) {
             var parts = kv[1].split(",");
             for (var j=0, len=parts.length; j<len; ++j) {
@@ -548,7 +550,7 @@ function setTheme(theme, color) {
                 }
             });
         } else if (2==queryParams.nativeTheme) {
-            console.log("MATERIAL-THEME " + theme);
+            console.log("MATERIAL-THEME\nNAME " + theme);
         }
     }
     if (color!=undefined) {
@@ -642,6 +644,10 @@ function navigateBack() {
 
 function setCurrentPlayer(id) {
     bus.$emit('setPlayer', id);
+}
+
+function refreshStatus() {
+    bus.$emit('refreshStatus');
 }
 
 function isVisible(elem) {
@@ -1129,7 +1135,7 @@ function emitToolbarColors(top, bot) {
                 }
             });
         } else if (2==queryParams.nativeColors) {
-            console.log("MATERIAL-COLORS " + lastToolbarColors.top + "/" + lastToolbarColors.bot);
+            console.log("MATERIAL-COLORS\nTOP " + lastToolbarColors.top + "\nBOTTOM " + lastToolbarColors.bot);
         }
     }
 }

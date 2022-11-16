@@ -67,6 +67,14 @@ var lmsCurrentCover = Vue.component('lms-currentcover', {
             if (coverUrl!=this.coverUrl) {
                 this.coverUrl = coverUrl;
                 bus.$emit('currentCover', this.coverUrl, this.queueIndex);
+                if (1==queryParams.nativeCover) {
+                    try {
+                        NativeReceiver.coverUrl(this.coverUrl, playerStatus.current.id);
+                    } catch (e) {
+                    }
+                } else if (2==queryParams.nativeCover) {
+                    console.log("MATERIAL-COVER\nURL " + this.coverUrl + "\nTRACKID " + playerStatus.current.id);
+                }
             }
         }.bind(this));
 

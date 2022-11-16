@@ -28,7 +28,12 @@
     $theme='light';
     $themeColor='#f5f5f5';
   } elsif (index($ua, 'Linux') != -1) {
-    $theme='linux/dark/Adwaita-Dark';
+    my $query=$stash->get("url_query");
+    if (index($query, 'desktop=KDE')!=-1) {
+      $theme='linux/dark/Breeze-Dark';
+    } else {
+      $theme='linux/dark/Adwaita-Dark';
+    }
     $themeColor='#2d2d2d';
   } elsif (index($ua, 'Win') != -1) {
     $theme='windows/dark/Windows-10-Dark';

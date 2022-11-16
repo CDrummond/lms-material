@@ -19,6 +19,8 @@
 12. Don't close 'Manage players' on 'esc' if dragging, simply end drag.
 13. Show icons in navigation menu.
 14. Add custom icon for 'Add URL' action.
+15. Default to 'Breeze-dark' if 'desktop=KDE' is passed as URL query
+    parameter.
 
 2.10.7
 ------

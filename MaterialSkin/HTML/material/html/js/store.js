@@ -193,7 +193,7 @@ function defaultTheme() {
     } else if (IS_ANDROID) {
         return "darker";
     } else if (navigator.platform.indexOf("Linux") != -1) {
-        return "linux/dark/Adwaita-Dark";
+        return window.location.href.indexOf('desktop=KDE') != -1 ? "linux/dark/Breeze-Dark" : "linux/dark/Adwaita-Dark";
     } else if (navigator.platform.indexOf("Win") != -1) {
         return "windows/dark/Windows-10-Dark";
     } else if (navigator.platform.indexOf("Mac") != -1) {

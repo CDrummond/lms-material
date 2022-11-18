@@ -1182,6 +1182,8 @@ function browseItemAction(view, act, item, index, event) {
             }
         }
         download(item, item.id.startsWith("album_id:") ? view.buildCommand(item) : undefined, aa);
+    } else if (SHOW_IMAGE_ACTION==act) {
+        bus.$emit('dlg.open', 'gallery', [item.image], 0, true);
     } else {
         // If we are acting on a multi-disc album, prompt which disc we should act on
         if (item.multi && !view.current.id.startsWith("album_id:") && (PLAY_ACTION==act || ADD_ACTION==act || INSERT_ACTION==act)) {

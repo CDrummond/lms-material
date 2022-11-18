@@ -22,6 +22,7 @@
 15. Default to 'Breeze-dark' if 'desktop=KDE' is passed as URL query
     parameter.
 16. Add 'Play starting at track' action for playlists.
+17. Add 'Show image' action to browse and queue context menus.
 
 2.10.7
 ------

@@ -1149,11 +1149,9 @@ var lmsQueue = Vue.component("lms-queue", {
             if (this.$store.state.visibleMenus.size>0 || queryParams.party) {
                 return;
             }
-            if (this.shuffAltBtn.show) {
-                this.doCommand(this.shuffAltBtn.command, this.shuffAltBtn.tooltip);
-            } else if (this.playerStatus.playlist.shuffle===2) {
+            if (this.playerStatus.shuffle===2) {
                 bus.$emit('playerCommand', ['playlist', 'shuffle', 0]);
-            } else if (this.playerStatus.playlist.shuffle===1) {
+            } else if (this.playerStatus.shuffle===1) {
                 bus.$emit('playerCommand', ['playlist', 'shuffle', 2]);
             } else {
                 bus.$emit('playerCommand', ['playlist', 'shuffle', 1]);

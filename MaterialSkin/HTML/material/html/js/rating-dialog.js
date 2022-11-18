@@ -19,7 +19,13 @@ Vue.component('lms-rating-dialog', {
     </v-flex>
    </v-layout>
   </v-card-text>
-  <v-card-actions>
+  <v-card-actions v-if="queryParams.altBtnLayout">
+   <v-spacer></v-spacer>
+   <v-btn flat @click.native="apply()">{{i18n('Apply')}}</v-btn>
+   <v-btn flat @click.native="remove()">{{i18n('Remove')}}</v-btn>
+   <v-btn flat @click.native="cancel()">{{i18n('Cancel')}}</v-btn>
+  </v-card-actions>
+  <v-card-actions v-else>
    <v-spacer></v-spacer>
    <v-btn flat @click.native="cancel()">{{i18n('Cancel')}}</v-btn>
    <v-btn flat @click.native="remove()">{{i18n('Remove')}}</v-btn>

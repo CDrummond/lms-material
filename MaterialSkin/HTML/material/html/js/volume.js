@@ -59,6 +59,9 @@ Vue.component('lms-volume', {
         }.bind(this));
         
         bus.$on('volume.open', function() {
+            if (queryParams.party) {
+                return;
+            }
             if (this.show) {
                 this.close();
                 return;

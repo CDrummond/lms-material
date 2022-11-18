@@ -4,6 +4,9 @@ MATERIAL_SKIN
 	EN	Material Skin
 	NL	Material Skin
 
+MATERIALPARTY_SKIN
+	EN	Material Skin (Party)
+
 PLUGIN_MATERIAL_SKIN
 	CS	Vzhled 'Material Skin', vhodný pro mobilní používání.
 	DE	Web-Skin im Material-Stil, für mobile Nutzung optimiert

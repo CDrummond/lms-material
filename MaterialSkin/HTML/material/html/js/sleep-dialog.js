@@ -47,6 +47,9 @@ Vue.component('lms-sleep-dialog', {
     },
     mounted() {
         bus.$on('sleep.open', function(player) {
+            if (queryParams.party) {
+                return;
+            }
             this.player = player;
             this.sleepTime = undefined;
             this.show = true;

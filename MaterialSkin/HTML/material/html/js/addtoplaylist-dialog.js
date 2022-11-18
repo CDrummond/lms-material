@@ -20,7 +20,12 @@ Vue.component('lms-addtoplaylist-dialog', {
     </v-list-tile>
    </v-list>
   </v-form>
-  <v-card-actions>
+  <v-card-actions v-if="queryParams.altBtnLayout">
+   <v-spacer></v-spacer>
+   <v-btn flat @click.native="save()">{{i18n('Add')}}</v-btn>
+   <v-btn flat @click.native="cancel()">{{i18n('Cancel')}}</v-btn>
+  </v-card-actions>
+  <v-card-actions v-else>
    <v-spacer></v-spacer>
    <v-btn flat @click.native="cancel()">{{i18n('Cancel')}}</v-btn>
    <v-btn flat @click.native="save()">{{i18n('Add')}}</v-btn>

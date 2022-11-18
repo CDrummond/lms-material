@@ -46,7 +46,7 @@ function parseQueryParams() {
         queryString=queryString.substring(0, hash);
     }
     var query = queryString.split('&');
-    var resp = { actions:[], debug:new Set(), hide:new Set(), dontEmbed:new Set(), layout:undefined, player:undefined, single:false, nativeStatus:false, nativeColors:false, nativePlayer:false, nativeUiChanges:undefined, appSettings:undefined, appQuit:undefined, css:undefined, download:'browser', addpad:false };
+    var resp = { actions:[], debug:new Set(), hide:new Set(), dontEmbed:new Set(), layout:undefined, player:undefined, single:false, nativeStatus:0, nativeColors:0, nativePlayer:0, nativeUiChanges:0, nativeTheme:0, nativeCover:0, appSettings:undefined, appQuit:undefined, css:undefined, download:'browser', addpad:false, party:false, altBtnLayout:IS_WINDOWS };
 
     for (var i = query.length - 1; i >= 0; i--) {
         var kv = query[i].split('=');
@@ -78,13 +78,17 @@ function parseQueryParams() {
         } else if ("layout"==kv[0]) {
             resp.layout=kv[1];
         } else if ("nativeStatus"==kv[0]) {
-            resp.nativeStatus=true;
+            resp.nativeStatus=kv[1]=="c" ? 2 : 1;
         } else if ("nativeColors"==kv[0]) {
-            resp.nativeColors=true;
+            resp.nativeColors=kv[1]=="c" ? 2 : 1;
         } else if ("nativePlayer"==kv[0]) {
-            resp.nativePlayer=true;
+            resp.nativePlayer=kv[1]=="c" ? 2 : 1;
         } else if ("nativeUiChanges"==kv[0]) {
-            resp.nativeUiChanges=true;
+            resp.nativeUiChanges=kv[1]=="c" ? 2 : 1;
+        } else if ("nativeTheme"==kv[0]) {
+            resp.nativeTheme=kv[1]=="c" ? 2 : 1;
+        } else if ("nativeCover"==kv[0]) {
+            resp.nativeCover=kv[1]=="c" ? 2 : 1;
         } else if ("hide"==kv[0]) {
             var parts = kv[1].split(",");
             for (var j=0, len=parts.length; j<len; ++j) {
@@ -113,6 +117,10 @@ function parseQueryParams() {
             for (var j=0, len=parts.length; j<len; ++j) {
                 resp.dontEmbed.add(parts[j]);
             }
+        } else if ("party"==kv[0]) {
+            resp.party=true;
+        } else if ("altBtnLayout"==kv[0]) {
+            resp.altBtnLayout=kv.length<1 || "true"==kv[1];
         }
     }
     return resp;
@@ -324,21 +332,13 @@ function weightSort(a, b) {
     return a.weight!=b.weight ? a.weight<b.weight ? -1 : 1 : titleSort(a, b);
 }
 
-function yearAlbumTrackSort(a, b) {
-    var va=a.year ? a.year : 0;
-    var vb=b.year ? b.year : 0;
-    if (va<vb) {
-        return -1;
-    }
-    if (va>vb) {
-        return 1;
-    }
+function albumTrackSort(a, b) {
     var s = fixedSort(a.album, b.album);
     if (s!=0) {
         return s;
     }
-    va=a.disc ? a.disc : 0;
-    vb=b.disc ? b.disc : 0;
+    var va=a.disc ? a.disc : 0;
+    var vb=b.disc ? b.disc : 0;
     if (va<vb) {
         return -1;
     }
@@ -354,6 +354,30 @@ function yearAlbumTrackSort(a, b) {
         return 1;
     }
     return 0;
+}
+
+function yearAlbumTrackSort(a, b) {
+    var va=a.year ? a.year : 0;
+    var vb=b.year ? b.year : 0;
+    if (va<vb) {
+        return -1;
+    }
+    if (va>vb) {
+        return 1;
+    }
+    return albumTrackSort(a, b);
+}
+
+function revYearAlbumTrackSort(a, b) {
+    var va=a.year ? a.year : 0;
+    var vb=b.year ? b.year : 0;
+    if (va>vb) {
+        return -1;
+    }
+    if (va<vb) {
+        return 1;
+    }
+    return albumTrackSort(a, b);
 }
 
 function itemSort(a, b) {
@@ -518,6 +542,16 @@ function setTheme(theme, color) {
             changeLink("html/css/themes/" + themeName + ".css?r=" + LMS_MATERIAL_REVISION, "themecss");
         }
         changeLink("html/css/variant/" + variant + ".css?r=" + LMS_MATERIAL_REVISION, "variantcss");
+        if (1==queryParams.nativeTheme) {
+            bus.$nextTick(function () {
+                try {
+                    NativeReceiver.updateTheme(theme);
+                } catch (e) {
+                }
+            });
+        } else if (2==queryParams.nativeTheme) {
+            console.log("MATERIAL-THEME\nNAME " + theme);
+        }
     }
     if (color!=undefined) {
         if (color.startsWith("user:")) {
@@ -606,6 +640,14 @@ function decrementVolume() {
 
 function navigateBack() {
     bus.$emit('esc');
+}
+
+function setCurrentPlayer(id) {
+    bus.$emit('setPlayer', id);
+}
+
+function refreshStatus() {
+    bus.$emit('refreshStatus');
 }
 
 function isVisible(elem) {
@@ -839,12 +881,13 @@ function commandAlbumSortKey(command, genre) {
 }
 
 function getAlbumSort(command, genre) {
-    var key=commandAlbumSortKey(command, genre);
-    return getLocalStorageVal(key, ALBUM_SORT_KEY==key || (ALBUM_SORT_KEY+"C")==key ? "album" : "yearalbum");
+    var key = commandAlbumSortKey(command, genre);
+    var parts = getLocalStorageVal(key, ALBUM_SORT_KEY==key || (ALBUM_SORT_KEY+"C")==key ? "album" : "yearalbum").split(".");
+    return {by:parts[0], rev:parts.length>1};
 }
 
-function setAlbumSort(command, genre, sort) {
-    setLocalStorageVal(commandAlbumSortKey(command, genre), sort);
+function setAlbumSort(command, genre, sort, reverse) {
+    setLocalStorageVal(commandAlbumSortKey(command, genre), sort+(reverse ? ".r" : ""));
 }
 
 function forceItemUpdate(vm, item) {
@@ -1084,13 +1127,15 @@ function emitToolbarColors(top, bot) {
             tc.setAttribute('content',  b);
         }
         lastToolbarColors={top:t, bot:b};
-        if (queryParams.nativeColors) {
+        if (1==queryParams.nativeColors) {
             bus.$nextTick(function () {
                 try {
                     NativeReceiver.updateToolbarColors(lastToolbarColors.top, lastToolbarColors.bot);
                 } catch (e) {
                 }
             });
+        } else if (2==queryParams.nativeColors) {
+            console.log("MATERIAL-COLORS\nTOP " + lastToolbarColors.top + "\nBOTTOM " + lastToolbarColors.bot);
         }
     }
 }
@@ -1223,3 +1268,10 @@ function openServerSettings(serverName, showHome) {
              {title:i18n('Restart'), text:i18n('Restart Logitech Media Server?'), icon:'refresh', cmd:['restartserver'], confirm:i18n('Restart')}], showHome);
 }
 
+function getYear(text) {
+    let rx = /\s\([0-9][0-9][0-9][0-9]\)\s/g;
+    let matches = rx.exec(text);
+    if (undefined!=matches && 1==matches.length) {
+        return matches[matches.length-1].substring(0, 7);
+    }
+}

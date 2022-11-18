@@ -61,7 +61,7 @@ const STD_ITEMS=[
         menu: [PLAY_ACTION, PLAY_ALBUM_ACTION, PLAY_DISC_ACTION, INSERT_ACTION, ADD_ACTION, DIVIDER, ADD_TO_PLAYLIST_ACTION, DOWNLOAD_ACTION, RATING_ACTION, SELECT_ACTION, CUSTOM_ACTIONS, MORE_LIB_ACTION]
     },
     {
-        menu: [PLAY_ACTION, INSERT_ACTION, ADD_ACTION, DIVIDER, REMOVE_ACTION, DOWNLOAD_ACTION, SELECT_ACTION, BR_COPY_ACTION, MOVE_HERE_ACTION, CUSTOM_ACTIONS]
+        menu: [PLAY_ACTION, INSERT_ACTION, PLAY_PLAYLIST_ACTION, ADD_ACTION, DIVIDER, REMOVE_ACTION, DOWNLOAD_ACTION, SELECT_ACTION, BR_COPY_ACTION, MOVE_HERE_ACTION, CUSTOM_ACTIONS]
     },
     {
         menu: [PLAY_ACTION, INSERT_ACTION, ADD_ACTION, DIVIDER, SELECT_ACTION]
@@ -77,7 +77,8 @@ function buildStdItemCommand(item, parentCommand) {
         return command;
     }
 
-    if (undefined==item.stdItem) {
+    let stdItem = undefined == item.stdItem ? item.altStdItem : item.stdItem;
+    if (undefined==stdItem) {
         if (item.command && item.command.length>0) {
             for (var i=0, list=item.command, len=list.length; i<len; ++i) {
                 command.command.push(list[i]);
@@ -89,16 +90,16 @@ function buildStdItemCommand(item, parentCommand) {
             }
         }
     } else {
-        if (undefined==STD_ITEMS[item.stdItem].command) {
+        if (undefined==STD_ITEMS[stdItem].command) {
             return command;
         }
-        for (var i=0, list=STD_ITEMS[item.stdItem].command, len=list.length; i<len; ++i) {
+        for (var i=0, list=STD_ITEMS[stdItem].command, len=list.length; i<len; ++i) {
             command.command.push(list[i]);
         }
-        for (var i=0, list=STD_ITEMS[item.stdItem].params, len=list.length; i<len; ++i) {
+        for (var i=0, list=STD_ITEMS[stdItem].params, len=list.length; i<len; ++i) {
             command.params.push(list[i]);
         }
-        if (lmsOptions.techInfo && (STD_ITEM_ALBUM==item.stdItem || STD_ITEM_PLAYLIST==item.stdItem || STD_ITEM_REMOTE_PLAYLIST==item.stdItem)) {
+        if (lmsOptions.techInfo && (STD_ITEM_ALBUM==stdItem || STD_ITEM_PLAYLIST==stdItem || STD_ITEM_REMOTE_PLAYLIST==stdItem)) {
             for (var i=0, list=command.params, len=list.length; i<len; ++i) {
                 if (command.params[i].startsWith("tags:")) {
                     command.params[i]+="lorT";

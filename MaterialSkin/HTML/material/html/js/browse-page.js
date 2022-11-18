@@ -46,7 +46,7 @@ var lmsBrowse = Vue.component("lms-browse", {
    <div class="ellipsis subtoolbar-title subtoolbar-title-single" v-else>{{headerTitle}}</div>
    <v-spacer style="flex-grow: 10!important"></v-spacer>
    <template v-if="desktopLayout" v-for="(action, index) in settingsMenuActions">
-    <v-btn flat icon @click.stop="headerAction(action, $event)" class="toolbar-button" :title="ACTIONS[action].title" :id="'tbar'+index">
+    <v-btn v-if="!queryParams.party || !HIDE_FOR_PARTY.has(action)" icon @click.stop="headerAction(action, $event)" class="toolbar-button" :title="ACTIONS[action].title" :id="'tbar'+index">
       <img v-if="ACTIONS[action].svg" class="svg-img" :src="ACTIONS[action].svg | svgIcon(darkUi)"></img>
       <v-icon v-else>{{ACTIONS[action].icon}}</v-icon>
     </v-btn>
@@ -59,9 +59,9 @@ var lmsBrowse = Vue.component("lms-browse", {
     <img v-if="currentActions.items[0].svg" class="svg-img" :src="currentActions.items[0].svg | svgIcon(darkUi)"></img>
     <v-icon v-else>{{currentActions.items[0].icon}}</v-icon>
    </v-btn>
-   <v-btn v-if="items.length>0 && items[0].saveableTrack" :title="ACTIONS[ADD_TO_PLAYLIST_ACTION].title" flat icon class="toolbar-button" @click.stop="headerAction(ADD_TO_PLAYLIST_ACTION, $event)"><v-icon>{{ACTIONS[ADD_TO_PLAYLIST_ACTION].icon}}</v-icon></v-btn>
+   <v-btn v-if="items.length>0 && items[0].saveableTrack && !queryParams.party" :title="ACTIONS[ADD_TO_PLAYLIST_ACTION].title" flat icon class="toolbar-button" @click.stop="headerAction(ADD_TO_PLAYLIST_ACTION, $event)"><v-icon>{{ACTIONS[ADD_TO_PLAYLIST_ACTION].icon}}</v-icon></v-btn>
    <template v-for="(action, index) in tbarActions">
-    <v-btn flat icon @click.stop="headerAction(action, $event)" class="toolbar-button" :title="action | tooltip(keyboardControl)" :id="'tbar'+index" v-if="action!=VLIB_ACTION || libraryName">
+    <v-btn flat icon @click.stop="headerAction(action, $event)" class="toolbar-button" :title="action | tooltip(keyboardControl)" :id="'tbar'+index" v-if="(action!=VLIB_ACTION || libraryName) && (!queryParams.party || !HIDE_FOR_PARTY.has(action))">
       <img v-if="ACTIONS[action].svg" class="svg-img" :src="ACTIONS[action].svg | svgIcon(darkUi)"></img>
       <v-icon v-else>{{ACTIONS[action].icon}}</v-icon>
     </v-btn>
@@ -111,7 +111,7 @@ var lmsBrowse = Vue.component("lms-browse", {
         <img :src="citem.emblem | emblem()" loading="lazy"></img>
        </div>
        <div v-if="hoverBtns && selection.size==0 && (undefined!=citem.stdItem || (citem.menu && citem.menu.length>0 && (citem.menu[0]==PLAY_ACTION || citem.menu[0]==PLAY_ALL_ACTION)))" class="grid-btns">
-        <div class="play-btn grid-btn" @click.stop="itemAction(PLAY_ACTION, citem, item.rs+col, $event)" :title="ACTIONS[PLAY_ACTION].title"></div>
+        <div v-if="!queryParams.party" class="play-btn grid-btn" @click.stop="itemAction(PLAY_ACTION, citem, item.rs+col, $event)" :title="ACTIONS[PLAY_ACTION].title"></div>
         <div class="add-btn grid-btn" @click.stop="itemAction(ADD_ACTION, citem, item.rs+col, $event)" :title="ACTIONS[ADD_ACTION].title"></div>
        </div>
       </div>
@@ -143,7 +143,7 @@ var lmsBrowse = Vue.component("lms-browse", {
 
      <v-list-tile-action class="browse-action" v-if="undefined!=item.stdItem || (item.menu && item.menu.length>0)">
       <div v-if="hoverBtns && 0==selection.size && (undefined!=item.stdItem || (item.menu && (item.menu[0]==PLAY_ACTION || item.menu[0]==PLAY_ALL_ACTION)))" class="list-btns">
-       <div class="play-btn grid-btn" @click.stop="itemAction(item.header ? PLAY_ALL_ACTION : PLAY_ACTION, item, index, $event)" :title="ACTIONS[PLAY_ACTION].title"></div>
+       <div v-if="!queryParams.party" class="play-btn grid-btn" @click.stop="itemAction(item.header ? PLAY_ALL_ACTION : PLAY_ACTION, item, index, $event)" :title="ACTIONS[PLAY_ACTION].title"></div>
        <div class="add-btn grid-btn" @click.stop="itemAction(item.header ? ADD_ALL_ACTION : ADD_ACTION, item, index, $event)" :title="ACTIONS[ADD_ACTION].title"></div>
       </div>
       <div class="menu-btn grid-btn list-btn" @click.stop="itemMenu(item, index, $event)" :title="i18n('%1 (Menu)', item.title)"></div>
@@ -174,7 +174,7 @@ var lmsBrowse = Vue.component("lms-browse", {
      </v-list-tile-content>
      <v-list-tile-action class="browse-action" v-if="undefined!=item.stdItem || (item.menu && item.menu.length>0)" :title="i18n('%1 (Menu)', item.title)">
       <div v-if="hoverBtns && 0==selection.size && (undefined!=item.stdItem || (item.menu && (item.menu[0]==PLAY_ACTION || item.menu[0]==PLAY_ALL_ACTION)))" class="list-btns">
-       <div class="play-btn grid-btn" @click.stop="itemAction(PLAY_ALL_ACTION, item, index, $event)" :title="ACTIONS[PLAY_ACTION].title"></div>
+       <div v-if="!queryParams.party" class="play-btn grid-btn" @click.stop="itemAction(PLAY_ALL_ACTION, item, index, $event)" :title="ACTIONS[PLAY_ACTION].title"></div>
        <div class="add-btn grid-btn" @click.stop="itemAction(ADD_ALL_ACTION, item, index, $event)" :title="ACTIONS[ADD_ACTION].title"></div>
       </div>
       <div class="menu-btn grid-btn list-btn" @click.stop="itemMenu(item, index, $event)" :title="i18n('%1 (Menu)', item.title)"></div>
@@ -185,7 +185,7 @@ var lmsBrowse = Vue.component("lms-browse", {
       <text-field :focus="index==0 && !IS_MOBILE" :title="item.title" :type="item.type" @value="entry(item, $event)"></text-field>
      </v-list-tile-content>
     </v-list-tile>
-    <v-list-tile v-else-if="!(isTop && (disabled.has(item.id) || hidden.has(item.id)))" avatar @click="click(item, index, $event)" :key="item.id" class="lms-avatar lms-list-item" :id="'item'+index" @dragstart="dragStart(index, $event)" @dragend="dragEnd()" @dragover="dragOver(index, $event)" @drop="drop(index, $event)" :draggable="(isTop && !sortHome) || (item.draggable && (current.section!=SECTION_FAVORITES || 0==selection.size))" @contextmenu.prevent="itemMenu(item, index, $event)" v-bind:class="{'drop-target': dragActive && index==dropIndex, 'list-active': (menu.show && index==menu.index) || (fetchingItem==item.id)}">
+    <v-list-tile v-else-if="!(isTop && (disabled.has(item.id) || hidden.has(item.id)) || (queryParams.party && HIDE_TOP_FOR_PARTY.has(item.id)))" avatar @click="click(item, index, $event)" :key="item.id" class="lms-avatar lms-list-item" :id="'item'+index" @dragstart="dragStart(index, $event)" @dragend="dragEnd()" @dragover="dragOver(index, $event)" @drop="drop(index, $event)" :draggable="(isTop && !sortHome) || (item.draggable && (current.section!=SECTION_FAVORITES || 0==selection.size))" @contextmenu.prevent="itemMenu(item, index, $event)" v-bind:class="{'drop-target': dragActive && index==dropIndex, 'list-active': (menu.show && index==menu.index) || (fetchingItem==item.id)}">
      <v-list-tile-avatar v-if="item.selected" :tile="true" class="lms-avatar">
       <v-icon>check_box</v-icon>
      </v-list-tile-avatar>
@@ -209,7 +209,7 @@ var lmsBrowse = Vue.component("lms-browse", {
 
      <v-list-tile-action class="browse-action" v-if="undefined!=item.stdItem || (item.menu && item.menu.length>0) || (isTop && libraryName && item.id==TOP_MYMUSIC_ID)">
       <div v-if="hoverBtns && 0==selection.size && (undefined!=item.stdItem || (item.menu && (item.menu[0]==PLAY_ACTION || item.menu[0]==PLAY_ALL_ACTION)))" class="list-btns">
-       <div class="play-btn grid-btn" @click.stop="itemAction(PLAY_ACTION, item, index, $event)" :title="ACTIONS[PLAY_ACTION].title"></div>
+       <div v-if="!queryParams.party" class="play-btn grid-btn" @click.stop="itemAction(PLAY_ACTION, item, index, $event)" :title="ACTIONS[PLAY_ACTION].title"></div>
        <div class="add-btn grid-btn" @click.stop="itemAction(ADD_ACTION, item, index, $event)" :title="ACTIONS[ADD_ACTION].title"></div>
       </div>
       <div class="menu-btn grid-btn list-btn" @click.stop="itemMenu(item, index, $event)" :title="i18n('%1 (Menu)', item.title)"></div>
@@ -233,10 +233,17 @@ var lmsBrowse = Vue.component("lms-browse", {
   </v-list>
   <v-list v-else-if="menu.item">
    <template v-for="(action, index) in menu.itemMenu">
-    <v-divider v-if="DIVIDER==action"></v-divider>
+    <v-list-tile v-if="(action==MORE_LIB_ACTION || action==MORE_ACTION) && undefined!=menu.item.image"  @click="itemAction(SHOW_IMAGE_ACTION, menu.item, menu.index, $event)">
+     <v-list-tile-avatar>
+      <v-icon>{{ACTIONS[SHOW_IMAGE_ACTION].icon}}</v-icon>
+     </v-list-tile-avatar>
+     <v-list-tile-title>{{ACTIONS[SHOW_IMAGE_ACTION].title}}</v-list-tile-title>
+    </v-list-tile>
+    <div style="height:0px!important" v-if="queryParams.party && HIDE_FOR_PARTY.has(action)"></div>
+    <v-divider v-else-if="DIVIDER==action"></v-divider>
     <template v-for="(cact, cindex) in itemCustomActions" v-else-if="CUSTOM_ACTIONS==action">
      <v-list-tile @click="itemCustomAction(cact, menu.item, menu.index)">
-      <v-list-tile-avatar v-if="menuIcons">
+      <v-list-tile-avatar>
        <v-icon v-if="undefined==cact.svg">{{cact.icon}}</v-icon>
        <img v-else class="svg-img" :src="cact.svg | svgIcon(darkUi)"></img>
       </v-list-tile-avatar>
@@ -244,20 +251,20 @@ var lmsBrowse = Vue.component("lms-browse", {
      </v-list-tile>
     </template>
     <v-list-tile v-else-if="action==ADD_TO_FAV_ACTION && isInFavorites(menu.item)" @click="itemAction(REMOVE_FROM_FAV_ACTION, menu.item, menu.index, $event)">
-     <v-list-tile-avatar v-if="menuIcons">
+     <v-list-tile-avatar>
       <v-icon v-if="undefined==ACTIONS[REMOVE_FROM_FAV_ACTION].svg">{{ACTIONS[REMOVE_FROM_FAV_ACTION].icon}}</v-icon>
       <img v-else class="svg-img" :src="ACTIONS[REMOVE_FROM_FAV_ACTION].svg | svgIcon(darkUi)"></img>
      </v-list-tile-avatar>
      <v-list-tile-title>{{ACTIONS[REMOVE_FROM_FAV_ACTION].title}}</v-list-tile-title>
     </v-list-tile>
     <v-list-tile v-else-if="action==SELECT_ACTION && menu.item.selected" @click="itemAction(UNSELECT_ACTION, menu.item, menu.index, $event)">
-     <v-list-tile-avatar v-if="menuIcons">
+     <v-list-tile-avatar>
       <v-icon>{{ACTIONS[UNSELECT_ACTION].icon}}</v-icon>
      </v-list-tile-avatar>
      <v-list-tile-title>{{ACTIONS[UNSELECT_ACTION].title}}</v-list-tile-title>
     </v-list-tile>
     <v-list-tile v-else-if="action==BR_COPY_ACTION ? queueSelection : action==MOVE_HERE_ACTION ? (selection.size>0 && !menu.item.selected) : action==DOWNLOAD_ACTION ? lmsOptions.allowDownload && undefined==menu.item.emblem : action==PLAY_DISC_ACTION ? undefined!=menu.item.disc : (action!=RATING_ACTION || undefined!=ratingsPlugin)" @click="itemAction(action, menu.item, menu.index, $event)">
-     <v-list-tile-avatar v-if="menuIcons">
+     <v-list-tile-avatar>
       <v-icon v-if="undefined==ACTIONS[action].svg">{{ACTIONS[action].icon}}</v-icon>
       <img v-else class="svg-img" :src="ACTIONS[action].svg | svgIcon(darkUi)"></img>
      </v-list-tile-avatar>
@@ -268,7 +275,12 @@ var lmsBrowse = Vue.component("lms-browse", {
   <v-list v-else-if="menu.history">
    <template v-for="(item, index) in menu.history">
     <v-list-tile @click="goTo(index)">
-     <v-list-tile-title>{{item}}</v-list-tile-title>
+     <v-list-tile-avatar>
+      <v-icon v-if="undefined!=item.icon">{{item.icon}}</v-icon>
+      <img v-else-if="undefined!=item.svg" class="svg-img" :src="item.svg | svgIcon(darkUi)"></img>
+      <img v-else-if="undefined!=item.image" class="svg-img" :src="item.image"></img>
+     </v-list-tile-avatar>
+     <v-list-tile-content><v-list-tile-title>{{item.title}}</v-list-tile-title></v-list-tile-content>
     </v-list-tile>
    </template>
   </v-list>
@@ -286,40 +298,46 @@ var lmsBrowse = Vue.component("lms-browse", {
     <v-list-tile-avatar><v-icon>chevron_left</v-icon></v-list-tile-avatar>
     <v-list-tile-content><v-list-tile-title class="menutitle">{{ACTIONS[ALBUM_SORTS_ACTION].title}}</v-list-tile-title></v-list-tile-content>
    </v-list-tile>
-   <v-divider></v-divider>
+   <v-divider v-if="menu.inMainMenu"></v-divider>
    <template v-for="(item, index) in menu.albumSorts">
-    <v-list-tile @click="sortAlbums(item)">
+    <v-list-tile @click="sortAlbums(item, menu.reverseSort)">
      <v-list-tile-avatar><v-icon small>{{item.selected ? 'radio_button_checked' :'radio_button_unchecked'}}</v-icon></v-list-tile-avatar>
      <v-list-tile-content><v-list-tile-title>{{item.label}}</v-list-tile-title></v-list-tile-content>
     </v-list-tile>
    </template>
+   <v-divider v-if="undefined!=menu.reverseSort"></v-divider>
+   <v-list-tile @click="sortAlbums(undefined, !menu.reverseSort)" v-if="undefined!=menu.reverseSort">
+     <v-list-tile-avatar><v-icon small>{{menu.reverseSort ? 'check_box' :'check_box_outline_blank'}}</v-icon></v-list-tile-avatar>
+     <v-list-tile-content><v-list-tile-title>{{trans.desc}}</v-list-tile-title></v-list-tile-content>
+    </v-list-tile>
   </v-list>
   <v-list v-else-if="menu.currentActions">
    <template v-for="(item, index) in menu.currentActions">
-    <v-divider v-if="DIVIDER==item.action"></v-divider>
+    <div style="height:0px!important" v-if="queryParams.party && HIDE_FOR_PARTY.has(item.action)"></div>
+    <v-divider v-else-if="DIVIDER==item.action"></v-divider>
     <v-list-tile v-else-if="!item.isListItemInMenu && item.action==ADD_TO_FAV_ACTION && isInFavorites(current)" @click="itemAction(REMOVE_FROM_FAV_ACTION, current, undefined, $event)">
-     <v-list-tile-avatar v-if="menuIcons">
+     <v-list-tile-avatar>
       <v-icon v-if="undefined==ACTIONS[REMOVE_FROM_FAV_ACTION].svg">{{ACTIONS[REMOVE_FROM_FAV_ACTION].icon}}</v-icon>
       <img v-else class="svg-img" :src="ACTIONS[REMOVE_FROM_FAV_ACTION].svg | svgIcon(darkUi)"></img>
      </v-list-tile-avatar>
      <v-list-tile-title>{{ACTIONS[REMOVE_FROM_FAV_ACTION].title}}</v-list-tile-title>
     </v-list-tile>
     <v-list-tile v-else-if="!item.isListItemInMenu && undefined!=item.action" @click="itemAction(item.action, current, undefined, $event)">
-     <v-list-tile-avatar v-if="menuIcons">
+     <v-list-tile-avatar>
       <v-icon v-if="undefined==ACTIONS[item.action].svg">{{ACTIONS[item.action].icon}}</v-icon>
       <img v-else class="svg-img" :src="ACTIONS[item.action].svg | svgIcon(darkUi)"></img>
      </v-list-tile-avatar>
      <v-list-tile-content><v-list-tile-title>{{ACTIONS[item.action].title}}</v-list-tile-title></v-list-tile-content>
     </v-list-tile>
     <v-list-tile v-else-if="item.isListItemInMenu && 'itemNoAction'==item.style" class="nonclick-menu-item">
-     <v-list-tile-avatar v-if="menuIcons">
+     <v-list-tile-avatar>
       <v-icon v-if="undefined==item.svg">{{item.icon}}</v-icon>
       <img v-else class="svg-img" :src="item.svg | svgIcon(darkUi)"></img>
      </v-list-tile-avatar>
      <v-list-tile-content><v-list-tile-title>{{item.title}}</v-list-tile-title></v-list-tile-content>
     </v-list-tile>
     <v-list-tile v-else @click="currentAction(item, index)">
-     <v-list-tile-avatar v-if="menuIcons">
+     <v-list-tile-avatar>
       <v-icon v-if="undefined==item.svg">{{item.icon}}</v-icon>
       <img v-else class="svg-img" :src="item.svg | svgIcon(darkUi)"></img>
      </v-list-tile-avatar>
@@ -330,7 +348,7 @@ var lmsBrowse = Vue.component("lms-browse", {
   <v-list v-else-if="menu.linkItems">
    <template v-for="(item, index) in menu.linkItems">
     <v-list-tile @click="linkAction(item)">
-     <v-list-tile-avatar v-if="menuIcons">
+     <v-list-tile-avatar>
       <v-icon v-if="undefined==item.svg">{{item.icon}}</v-icon>
       <img v-else class="svg-img" :src="item.svg | svgIcon(darkUi)"></img>
      </v-list-tile-avatar>
@@ -351,7 +369,7 @@ var lmsBrowse = Vue.component("lms-browse", {
             hoverBtns: !IS_MOBILE,
             trans: { ok:undefined, cancel: undefined, selectMultiple:undefined, addall:undefined, playall:undefined,
                      deleteall:undefined, removeall:undefined, invertSelect:undefined, choosepos:undefined, goHome:undefined, goBack:undefined,
-                     select:undefined, unselect:undefined, sources: undefined },
+                     select:undefined, unselect:undefined, sources: undefined, desc: undefined },
             menu: { show:false, item: undefined, x:0, y:0, index:-1},
             isTop: true,
             libraryName: undefined, // Name of currently chosen library
@@ -376,9 +394,6 @@ var lmsBrowse = Vue.component("lms-browse", {
     computed: {
         darkUi() {
             return this.$store.state.darkUi
-        },
-        menuIcons() {
-            return this.$store.state.menuIcons
         },
         hidden() {
             return this.$store.state.hidden
@@ -513,7 +528,7 @@ var lmsBrowse = Vue.component("lms-browse", {
             this.trans= { ok:i18n('OK'), cancel: i18n('Cancel'), selectMultiple:i18n("Select multiple items"), addall:i18n("Add selection to queue"),
                           playall:i18n("Play selection"), deleteall:i18n("Delete all selected items"),
                           invertSelect:i18n("Invert selection"), removeall:i18n("Remove all selected items"), choosepos:i18n("Choose position"), 
-                          goHome:i18n("Go home"), goBack:i18n("Go back"), sources:i18n("Music sources") };
+                          goHome:i18n("Go home"), goBack:i18n("Go back"), sources:i18n("Music sources"), desc:i18n("Descending") };
 
             if (undefined==this.top || this.top.length==0) {
                 this.top = [{ command: [],
@@ -789,10 +804,18 @@ var lmsBrowse = Vue.component("lms-browse", {
         },
         showHistory(event) {
             if (this.history.length>1) {
-                var history=[];
-                this.history.forEach(h => {
-                    history.push(h.headerTitle ? h.headerTitle : i18n("Home"));
-                });
+                let history=[];
+                for (let i=0, loop=this.history, len=loop.length; i<len; ++i) {
+                    let hi = {title:0==i ? i18n("Home") : loop[i].headerTitle};
+                    if (0==i) {
+                        hi.icon = 'home';
+                    } else if (undefined!=loop[i].current) {
+                        hi.svg = loop[i].current.svg;
+                        hi.icon = undefined==loop[i].current.icon && 'search'==loop[i].current.type ? 'search' : loop[i].current.icon;
+                        hi.image = loop[i].current.image;
+                    }
+                    history.push(hi);
+                }
                 showMenu(this, {show:true, x:event.clientX, y:event.clientY, history:history});
             }
         },
@@ -824,15 +847,33 @@ var lmsBrowse = Vue.component("lms-browse", {
                 }
             });
         },
-        sortAlbums(sort) {
-            if (!sort.selected) {
+        sortAlbums(sort, reverseSort) {
+            if (undefined==sort) {
+                var revKey = MSK_REV_SORT_OPT.split('.')[0];
+                var revPos = -1;
+                for (var i=0, len=this.command.params.length; i<len; ++i) {
+                    if (this.command.params[i].startsWith(SORT_KEY)) {
+                        sort = this.command.params[i].split(':')[1];
+                    } else if (this.command.params[i].startsWith(revKey)) {
+                        revPos = i;
+                    }
+                }
+                if (revPos>=0) {
+                    this.command.params.splice(revPos, 1);
+                }
+                if (reverseSort) {
+                    this.command.params.push(MSK_REV_SORT_OPT);
+                }
+                setAlbumSort(this.command, this.inGenre, sort, reverseSort);
+                this.refreshList(false);
+            } else if (!sort.selected) {
                 for (var i=0, len=this.command.params.length; i<len; ++i) {
                     if (this.command.params[i].startsWith(SORT_KEY)) {
                         this.command.params[i]=SORT_KEY+sort.key;
                         break;
                     }
                 }
-                setAlbumSort(this.command, this.inGenre, sort.key);
+                setAlbumSort(this.command, this.inGenre, sort.key, reverseSort);
                 this.refreshList(false);
             }
         },
@@ -1343,6 +1384,9 @@ var lmsBrowse = Vue.component("lms-browse", {
             this.filteredJumplist = shrinkAray(this.jumplist, maxItems);
         },
         dragStart(which, ev) {
+            if (queryParams.party) {
+                return;
+            }
             bus.$emit('dragActive', true);
             ev.dataTransfer.dropEffect = 'move';
             ev.dataTransfer.setData('Text', this.items[which].title);

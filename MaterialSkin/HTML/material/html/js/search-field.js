@@ -33,7 +33,7 @@ function buildSearchResp(results) {
             filter = FILTER_PREFIX+"track";
             items.push({title: i18np("1 Track", "%1 Tracks", titleParam), id:filter, header:true, hidesub:true,
                         allItems: all, subtitle: i18np("1 Track", "%1 Tracks", numItems),
-                        menu:[PLAY_ALL_ACTION, INSERT_ALL_ACTION, ADD_ALL_ACTION]});
+                        menu:queryParams.party ? [] : [PLAY_ALL_ACTION, INSERT_ALL_ACTION, ADD_ALL_ACTION]});
         } else if (4==results[i].command.cat) {
             filter = FILTER_PREFIX+"playlist";
             items.push({title: i18np("1 Playlist", "%1 Playlists", titleParam), id:filter, header:true, hidesub:true,
@@ -62,7 +62,7 @@ Vue.component('lms-search-field', {
 <v-layout>
  <v-text-field :label="i18n('Search')" single-line clearable v-model.lazy="term" class="lms-search lib-search" @input="textChanged($event)" @blur="stopDebounce" v-on:keyup.enter="searchNow" ref="entry"></v-text-field>
  <v-icon v-if="searching" class="toolbar-button pulse">search</v-icon>
- <v-btn v-else :title="ACTIONS[ADV_SEARCH_ACTION].title" flat icon class="toolbar-button" @click="advanced()"><img :src="ACTIONS[ADV_SEARCH_ACTION].svg | svgIcon(darkUi)"></img></v-btn>
+ <v-btn v-else-if="!queryParams.party" :title="ACTIONS[ADV_SEARCH_ACTION].title" flat icon class="toolbar-button" @click="advanced()"><img :src="ACTIONS[ADV_SEARCH_ACTION].svg | svgIcon(darkUi)"></img></v-btn>
 </v-layout>
 `,
     props: [],
@@ -132,12 +132,16 @@ Vue.component('lms-search-field', {
                 this.str = str;
                 setLocalStorageVal('search', this.str);
                 this.commands=[];
-                this.commands.push({cat:1, command:["artists"], params:["tags:s", "search:"+this.str]});
-                this.commands.push({cat:2, command:["albums"], params:[(lmsOptions.showAllArtists ? ALBUM_TAGS_ALL_ARTISTS : ALBUM_TAGS)+(lmsOptions.serviceEmblems ? "E" : ""), "sort:album", "search:"+this.str]});
+                if (!queryParams.party) {
+                    this.commands.push({cat:1, command:["artists"], params:["tags:s", "search:"+this.str]});
+                    this.commands.push({cat:2, command:["albums"], params:[(lmsOptions.showAllArtists ? ALBUM_TAGS_ALL_ARTISTS : ALBUM_TAGS)+(lmsOptions.serviceEmblems ? "E" : ""), "sort:album", "search:"+this.str]});
+                }
                 this.commands.push({cat:3, command:["tracks"], params:[TRACK_TAGS+"elcy"+(this.$store.state.showRating ? "R" : "")+
                                                                                          (lmsOptions.serviceEmblems ? "E" : ""), "search:"+this.str]});
-                this.commands.push({cat:4, command:["playlists"], params:["tags:su", "search:"+this.str]});
-                this.commands.push({cat:5, command:["globalsearch", "items"], params:["menu:1", "search:"+this.str]});
+                if (!queryParams.party) {
+                    this.commands.push({cat:4, command:["playlists"], params:["tags:su", "search:"+this.str]});
+                    this.commands.push({cat:5, command:["globalsearch", "items"], params:["menu:1", "search:"+this.str]});
+                }
                 let libId = this.$store.state.library ? this.$store.state.library : LMS_DEFAULT_LIBRARY;
                 if (libId) {
                     for (let i=0, len=this.commands.length; i<len; ++i) {

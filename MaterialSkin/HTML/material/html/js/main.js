@@ -31,8 +31,6 @@ var app = new Vue({
         if (IS_IOS || queryParams.addpad) {
             // Always add padding...
             document.documentElement.style.setProperty('--bottom-nav-pad', '12px');
-            document.documentElement.style.setProperty('--bottom-progress-adjust', '4px');
-            document.documentElement.style.setProperty('--bottom-toolbar-pad', '4px');
         }
         this.autoLayout = true;
         this.$store.commit('initUiSettings');
@@ -140,6 +138,9 @@ var app = new Vue({
                                               "Opera", "Orchestral", "Renaissance", "Romantic", "Symphony", "Wedding Music"]);
         lmsOptions.composerGenres = new Set([...new Set(["Jazz"]), ...lmsOptions.conductorGenres]);
 
+        if (lmsOptions.allowDownload && queryParams.download!='browser' && queryParams.download!='native') {
+            lmsOptions.allowDownload = false;
+        }
         lmsCommand("", ["material-skin", "prefs"]).then(({data}) => {
             if (data && data.result) {
                 for (var t=0, len=SKIN_GENRE_TAGS.length; t<len; ++t ) {
@@ -163,6 +164,10 @@ var app = new Vue({
                         lmsOptions[SKIN_INT_OPTS[i]] = parseInt(data.result[SKIN_INT_OPTS[i]]);
                         setLocalStorageVal(SKIN_INT_OPTS[i], lmsOptions[SKIN_INT_OPTS[i]]);
                     }
+                }
+                if (lmsOptions.allowDownload && queryParams.download!='browser' && queryParams.download!='native') {
+                    lmsOptions.allowDownload = false;
+                    setLocalStorageVal('allowDownload', false);
                 }
             }
         });
@@ -323,6 +328,10 @@ var app = new Vue({
             this.setLayout(layout);
         }.bind(this));
         bus.$store = this.$store;
+
+        bus.$on('setPlayer', function(id) {
+            this.$store.commit('setPlayer', id);
+        }.bind(this));
     },
     computed: {
         darkUi() {
@@ -385,6 +394,9 @@ var app = new Vue({
                 }
             }
             if (this.$store.state.swipeChangeTrack && undefined!=ev.target && ev.target.className.startsWith('np-image')) {
+                if (queryParams.party) {
+                    return;
+                }
                 if ('left'==direction) {
                     bus.$emit('playerCommand', ['playlist', 'index', '+1']);
                 } else {

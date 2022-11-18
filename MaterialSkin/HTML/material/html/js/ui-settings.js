@@ -16,15 +16,15 @@ Vue.component('lms-ui-settings', {
     <v-btn flat icon v-longpress:stop="close" :title="i18n('Go back')"><v-icon>arrow_back</v-icon></v-btn>
     <v-toolbar-title>{{width>=450 ? TB_UI_SETTINGS.title+serverName : TB_UI_SETTINGS.title}}</v-toolbar-title>
     <v-spacer></v-spacer>
-    <v-menu bottom left v-model="showMenu">
+    <v-menu bottom left v-model="showMenu" v-if="!queryParams.party">
      <v-btn icon slot="activator"><v-icon>more_vert</v-icon></v-btn>
      <v-list>
       <v-list-tile @click="saveAsDefault">
-       <v-list-tile-avatar v-if="displayMenuIcons"><v-icon>save_alt</v-icon></v-list-tile-avatar>
+       <v-list-tile-avatar><v-icon>save_alt</v-icon></v-list-tile-avatar>
        <v-list-tile-content><v-list-tile-title>{{i18n('Save as default')}}</v-list-tile-title></v-list-tile-content>
       </v-list-tile>
       <v-list-tile @click="revertToDefault">
-       <v-list-tile-avatar v-if="displayMenuIcons"><v-icon>settings_backup_restore</v-icon></v-list-tile-avatar>
+       <v-list-tile-avatar><v-icon>settings_backup_restore</v-icon></v-list-tile-avatar>
        <v-list-tile-content><v-list-tile-title>{{i18n('Revert to default')}}</v-list-tile-title></v-list-tile-content>
       </v-list-tile>
      </v-list>
@@ -93,15 +93,6 @@ Vue.component('lms-ui-settings', {
     <v-divider v-if="!IS_MOBILE"></v-divider>
 
     <v-list-tile>
-     <v-list-tile-content @click="menuIcons = !menuIcons" class="switch-label">
-      <v-list-tile-title>{{i18n('Menu icons')}}</v-list-tile-title>
-      <v-list-tile-sub-title>{{i18n('Show icons next to popup menu entries.')}}</v-list-tile-sub-title>
-     </v-list-tile-content>
-     <v-list-tile-action><v-switch v-model="menuIcons"></v-switch></v-list-tile-action>
-    </v-list-tile>
-    <v-divider></v-divider>
-
-    <v-list-tile>
      <v-list-tile-content @click="screensaver = !screensaver" class="switch-label">
       <v-list-tile-title>{{i18n('Screensaver')}}</v-list-tile-title>
       <v-list-tile-sub-title>{{i18n('When no song is playing on current player, darken screen (and show date & time) after 60 seconds.')}}</v-list-tile-sub-title>
@@ -109,15 +100,6 @@ Vue.component('lms-ui-settings', {
      <v-list-tile-action><v-switch v-model="screensaver"></v-switch></v-list-tile-action>
     </v-list-tile>
     <v-divider></v-divider>
-
-    <v-list-tile v-if="showLaunchPlayer">
-     <v-list-tile-content @click="showPlayerMenuEntry = !showPlayerMenuEntry" class="switch-label">
-      <v-list-tile-title>{{i18n("Add menu option to start player")}}</v-list-tile-title>
-      <v-list-tile-sub-title>{{i18n('Add option to main menu to launch player.')}} {{i18n("(Currently only 'SB Player' is supported.)")}}</v-list-tile-sub-title>
-     </v-list-tile-content>
-     <v-list-tile-action><v-switch v-model="showPlayerMenuEntry"></v-switch></v-list-tile-action>
-    </v-list-tile>
-    <v-divider v-if="showLaunchPlayer"></v-divider>
 
     <v-list-tile>
      <v-list-tile-content @click="techInfo = !techInfo" class="switch-label">
@@ -143,15 +125,6 @@ Vue.component('lms-ui-settings', {
       <v-list-tile-sub-title>{{i18n('Display rating stars.')}}{{undefined==ratingsPlugin  ? (" "+i18n("NOTE: Changing ratings requires an additional plugin.")) : ""}}</v-list-tile-sub-title>
      </v-list-tile-content>
      <v-list-tile-action><v-switch v-model="showRating"></v-switch></v-list-tile-action>
-    </v-list-tile>
-    <v-divider></v-divider>
-
-    <v-list-tile>
-     <v-list-tile-content @click="showMenuAudio = !showMenuAudio" class="switch-label">
-      <v-list-tile-title>{{i18n('Always show menu')}}</v-list-tile-title>
-      <v-list-tile-sub-title>{{i18n('Show context menu when clicking anywhere on an audio item.')}}</v-list-tile-sub-title>
-     </v-list-tile-content>
-     <v-list-tile-action><v-switch v-model="showMenuAudio"></v-switch></v-list-tile-action>
     </v-list-tile>
     <v-divider></v-divider>
 
@@ -394,7 +367,6 @@ Vue.component('lms-ui-settings', {
             fontSize: 'r',
             fontSizes: [ ],
             letterOverlay:false,
-            showMenuAudio:true,
             sortFavorites:true,
             autoScrollQueue:true,
             stopButton:false,
@@ -421,8 +393,6 @@ Vue.component('lms-ui-settings', {
             volumeStep: 5,
             skipSecondsOptions: [ ],
             skipSeconds: 30,
-            showPlayerMenuEntry: false,
-            menuIcons: true,
             allowLayoutAdjust: window.location.href.indexOf('?layout=')<0 && window.location.href.indexOf('&layout=')<0,
             sortHome: IS_IPHONE,
             showItems: [ ],
@@ -453,9 +423,6 @@ Vue.component('lms-ui-settings', {
         },
         darkUi() {
             return this.$store.state.darkUi
-        },
-        displayMenuIcons() {
-            return this.$store.state.menuIcons
         },
         ratingsPlugin() {
             return this.$store.state.ratingsPlugin
@@ -493,7 +460,7 @@ Vue.component('lms-ui-settings', {
                 }
             }).catch(err => {
             });
-            if (queryParams.nativeUiChanges) {
+            if (0!=queryParams.nativeUiChanges) {
                 this.currentSettings = JSON.stringify(this.settings(true, true));
             }
             lmsCommand("", ["material-skin", "browsemodes"]).then(({data}) => {
@@ -598,11 +565,8 @@ Vue.component('lms-ui-settings', {
             this.letterOverlay=this.$store.state.letterOverlay;
             this.sortFavorites = this.$store.state.sortFavorites;
             this.sortHome = this.$store.state.sortHome;
-            this.showMenuAudio = this.$store.state.showMenuAudio;
             this.skipSeconds = this.$store.state.skipSeconds;
             this.volumeStep = lmsOptions.volumeStep;
-            this.showPlayerMenuEntry = this.$store.state.showPlayerMenuEntry;
-            this.menuIcons = this.$store.state.menuIcons;
             this.showRating = this.$store.state.showRating;
             this.hidden = this.$store.state.hidden;
             this.screensaver = this.$store.state.screensaver;
@@ -658,12 +622,16 @@ Vue.component('lms-ui-settings', {
                 this.$store.commit('setPassword', this.password);
             }
 
-            if (queryParams.nativeUiChanges) {
+            if (0!=queryParams.nativeUiChanges) {
                 let settingsNow = JSON.stringify(this.settings(true, true));
                 if (settingsNow!=this.currentSettings) {
-                    try {
-                        NativeReceiver.updateUiSettings(settingsNow);
-                    } catch (e) {
+                    if (1==queryParams.nativeUiChange) {
+                        try {
+                            NativeReceiver.updateUiSettings(settingsNow);
+                        } catch (e) {
+                        }
+                    } else if (2==queryParams.nativeUiChange) {
+                        console.log("MATERIAL-UI\nJSON " + settingsNow);
                     }
                 }
                 this.currentSettings = undefined;
@@ -678,7 +646,6 @@ Vue.component('lms-ui-settings', {
                       letterOverlay:this.letterOverlay,
                       sortFavorites:this.sortFavorites,
                       sortHome:this.sortHome,
-                      showMenuAudio:this.showMenuAudio,
                       stopButton:this.stopButton,
                       browseBackdrop:this.browseBackdrop,
                       queueBackdrop:this.queueBackdrop,
@@ -694,8 +661,6 @@ Vue.component('lms-ui-settings', {
                       showArtwork:this.showArtwork,
                       queueThreeLines:this.queueThreeLines,
                       volumeStep:this.volumeStep,
-                      showPlayerMenuEntry:this.showPlayerMenuEntry,
-                      menuIcons:this.menuIcons,
                       hidden:arrays ? Array.from(this.hiddenItems()) : this.hiddenItems(),
                       skipSeconds:this.skipSeconds,
                       disabledBrowseModes:arrays ? Array.from(this.disabledBrowseModes()) : this.disabledBrowseModes(),

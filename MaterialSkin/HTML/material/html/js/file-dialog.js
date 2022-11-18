@@ -19,7 +19,12 @@ var lmsPromptDialog = Vue.component("lms-file-dialog", {
     </template>
    </v-treeview>
   </v-card-text>
-  <v-card-actions>
+  <v-card-actions v-if="queryParams.altBtnLayout">
+   <v-spacer></v-spacer>
+   <v-btn flat :disabled="undefined==selected" @click.native="useSelected()">{{i18n('Use Selected')}}</v-btn>
+   <v-btn flat @click.native="close()">{{i18n('Cancel')}}</v-btn>
+  </v-card-actions>
+  <v-card-actions v-else>
    <v-spacer></v-spacer>
    <v-btn flat @click.native="close()">{{i18n('Cancel')}}</v-btn>
    <v-btn flat :disabled="undefined==selected" @click.native="useSelected()">{{i18n('Use Selected')}}</v-btn>

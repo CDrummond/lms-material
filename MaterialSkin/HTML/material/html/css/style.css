@@ -1534,7 +1534,6 @@ progress {
  font-weight:var(--bold-weight);
  width:100%;
  margin-bottom:4px;
- background-color:var(--background-color)!important;
 }
 
 .pmgr-other-title {
@@ -2287,6 +2286,10 @@ img[lazy='loaded'].np-image-desktop, img[lazy='loaded'].np-image-landscape, img[
 
 .active-player {
  background-color:var(--pq-current-color)!important;
+}
+
+.pmgr-container .active-player {
+ border-radius:8px;
 }
 
 .active-player div.v-list {

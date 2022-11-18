@@ -135,7 +135,7 @@ function buildArtistLine(i, page, plain) {
     return line;
 }
 
-function buildAlbumLine(i, page) {
+function buildAlbumLine(i, page, plain) {
     var line = undefined;
     var remoteTitle = checkRemoteTitle(i);
     if (i.album) {
@@ -143,7 +143,7 @@ function buildAlbumLine(i, page) {
         if (i.year && i.year>0) {
             album+=" (" + i.year + ")";
         }
-        if (i.album_id && !IS_MOBILE) {
+        if (i.album_id && !IS_MOBILE && !plain) {
             album="<obj class=\"link-item\" onclick=\"showAlbum(event, "+i.album_id+",\'"+escape(album)+"\', \'"+page+"\')\">" + album + "</obj>";
         }
         line=addPart(line, album);

@@ -8,6 +8,7 @@
 :root {
  --bottom-nav-pad:0px;
  --bottom-toolbar-height:calc(var(--bottom-nav-pad) + 52px);
+ --mobile-bottom-toolbar-height:calc(var(--bottom-nav-pad) + 52px);
  --np-portrait-image-size:min(calc((var(--vh, 1vh)*100) - (var(--main-toolbar-height) + var(--bottom-toolbar-height) + 210px)), 100vw);
  --nav-hover-color:var(--btn-hover-color);
 }

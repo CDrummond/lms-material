@@ -9,6 +9,7 @@
 const MORE_COMMANDS = new Set(["item_add", "item_insert", "itemplay"/*, "item_fav"*/]);
 const MIXER_APPS = new Set(["musicip", "blissmixer", "musicsimilarity"]);
 const STREAM_SCHEMAS = new Set(["http", "https", "wavin"]);
+const HIDE_APPS_FOR_PARTY = new Set(["apps.accuradio", "apps.ardaudiothek", "apps.bbcsounds", "apps.cplus", "apps.globalplayeruk", "apps.iheartradio", "apps.mixcloud", "apps.planetradio", "apps.podcasts", "apps.radiofrance", "apps.radionet", "apps.radionowplaying", "apps.radioparadise", "apps.squeezecloud", "apps.timesradio", "apps.ukradioplayer", "apps.virginradio", "apps.wefunk", "apps.phishin"]);
 
 function itemText(i) {
     return i.title ? i.title : i.name ? i.name : i.caption ? i.caption : i.credits ? i.credits : undefined;
@@ -353,6 +354,9 @@ function parseBrowseResp(data, parent, options, cacheKey, parentCommand, parentG
                     }
 
                     if (i.id) {
+                        if (queryParams.party && HIDE_APPS_FOR_PARTY.has(i.id)) {
+                            continue;
+                        }
                         if (!addedDivider && i.menu.length>0) {
                             i.menu.push(DIVIDER);
                             addedDivider = true;
@@ -486,7 +490,7 @@ function parseBrowseResp(data, parent, options, cacheKey, parentCommand, parentG
                 }
                 resp.items.push(i);
                 // If this is a "text" item with an image then treat as a standard actionable item
-                if ("text"==i.type && (undefined!=i.image || undefined!=i.icon)) {
+                if ("text"==i.type && (undefined!=i.image || undefined!=i.icon || undefined!=i.svg)) {
                     i.type="other"; // ???
                 }
                 types.add(i.type);
@@ -509,17 +513,17 @@ function parseBrowseResp(data, parent, options, cacheKey, parentCommand, parentG
                 // If listing a radio app's entries and all images are the same, then hide images. e.g. iHeartRadio and RadioNet
                 var image = undefined;
                 var images = 0;
-                for (var i=0, len=resp.items.length; i<len && undefined==resp.items[i].image; ++i) {
+                for (var i=0, loop=resp.items, len=loop.length; i<len && undefined==loop[i].image; ++i) {
                     if (undefined==image) {
-                        image=resp.items[i].icon ? resp.items[i].icon : resp.items[i].svg;
+                        image=loop[i].icon ? loop[i].icon : loop[i].svg;
                         images++;
-                    } else if ((resp.items[i].icon ? resp.items[i].icon : resp.items[i].svg)==image) {
+                    } else if ((loop[i].icon ? loop[i].icon : loop[i].svg)==image) {
                         images++;
                     }
                 }
                 if (images==resp.items.length && undefined!=image) {
-                    for (var i=0, len=resp.items.length; i<len; ++i) {
-                        resp.items[i].icon = resp.items[i].svg = undefined;
+                    for (var i=0, loop=resp.items, len=loop.length; i<len; ++i) {
+                        loop[i].icon = loop[i].svg = undefined;
                     }
                     resp.canUseGrid=false;
                 }
@@ -530,8 +534,8 @@ function parseBrowseResp(data, parent, options, cacheKey, parentCommand, parentG
                 var defAlbumCover = resolveImage("music/0/cover" + LMS_IMAGE_SIZE);
                 var defArtistImage = resolveImage("html/images/artists" + LMS_IMAGE_SIZE);
 
-                for (var i=0, len=resp.items.length; i<len; ++i) {
-                    var item=resp.items[i];
+                for (var i=0, loop=resp.items, len=loop.length; i<len; ++i) {
+                    var item=loop[i];
                     if (!item.image && !item.icon && !item.svg) {
                         if (item.type=="album" || (item.window && (item.window.titleStyle=="album" && item.window.menuStyle=="album") && item.actions && item.actions.go)) {
                             item.image = defAlbumCover;
@@ -606,23 +610,51 @@ function parseBrowseResp(data, parent, options, cacheKey, parentCommand, parentG
                     resp.items.shift();
                     resp.subtitle=0==resp.items.length ? i18n("Empty") : i18np("1 Track", "%1 Tracks", resp.items.length);
                 } else {
-                    if (resp.allowHoverBtns && resp.items.length>1 && "spotty"==command &&
-                        resp.items[0].menu.length>0 && resp.items[0].menu[0]==PLAY_ACTION &&
-                        resp.items[resp.items.length-1].style=='itemNoAction') {
-                        resp.actionItems = [];
-                        let idx = resp.items.length-1;
-                        while (resp.items.length>0 &&
-                               !(resp.items[resp.items.length-1].menu.length>0 && resp.items[resp.items.length-1].menu[0]==PLAY_ACTION)) {
-                            let itm = resp.items.pop();
-                            if (itm.style=='itemNoAction') { // Year?
-                                let parts = itm.title.split(':');
-                                if (2==parts.length && ('Year'==parts[0] || i18n('Year')==parts[0])) {
-                                    resp.titleSuffix=' ('+parts[1].replace(/^\s+|\s+$/g, '')+')';
-                                    continue;
+                    if ("spotty"==command && resp.items.length>0) {
+                        if (resp.allowHoverBtns && resp.items[0].menu.length>0 && resp.items[0].menu[0]==PLAY_ACTION &&
+                            resp.items[resp.items.length-1].style=='itemNoAction') {
+                            resp.actionItems = [];
+                            let idx = resp.items.length-1;
+                            while (resp.items.length>0 &&
+                                !(resp.items[resp.items.length-1].menu.length>0 && resp.items[resp.items.length-1].menu[0]==PLAY_ACTION)) {
+                                let itm = resp.items.pop();
+                                if (itm.style=='itemNoAction') { // Year?
+                                    let parts = itm.title.split(':');
+                                    if (2==parts.length && ('Year'==parts[0] || i18n('Year')==parts[0])) {
+                                        let year = parts[1].replace(/^\s+|\s+$/g, '');
+                                        if (parent && !parent.title.includes(year)) {
+                                            resp.titleSuffix=' ('+year+')';
+                                        }
+                                        continue;
+                                    }
                                 }
+                                itm.isListItemInMenu = true;
+                                resp.actionItems.unshift(itm);
                             }
-                            itm.isListItemInMenu = true;
-                            resp.actionItems.unshift(itm);
+                        }
+
+                        let parentImage = parent ? parent.image : undefined;
+                        let allHaveSameImageAsParent = undefined!=parentImage;
+                        // Iterate items looking for year (if album), or to heck if image is same as parent
+                        for (let i=0, loop=resp.items, len=loop.length; i<len; ++i) {
+                            if (loop[i].type=="playlist") {
+                                if (loop[i].presetParams && loop[i].presetParams.favorites_title &&
+                                    loop[i].presetParams.favorites_url && loop[i].presetParams.favorites_url.startsWith("spotify:album:")) {
+                                    let year = getYear(loop[i].presetParams.favorites_title);
+                                    if (undefined!=year) {
+                                        loop[i].title+=year;
+                                    }
+                                }
+                                allHaveSameImageAsParent = false;
+                            } else if (allHaveSameImageAsParent && loop[i].image!=parentImage) {
+                                allHaveSameImageAsParent = false;
+                            }
+                        }
+                        // If each item has the same image as parent image then do not show!
+                        if (allHaveSameImageAsParent) {
+                            for (let i=0, loop=resp.items, len=loop.length; i<len; ++i) {
+                                loop[i].image=undefined;
+                            }
                         }
                     }
                     if (parent && parent.presetParams && parent.presetParams.favorites_url) {
@@ -705,7 +737,8 @@ function parseBrowseResp(data, parent, options, cacheKey, parentCommand, parentG
                         var lower = data.params[1][i].toLowerCase();
                         if (lower.startsWith("sort:year")) {
                             jumpListYear = true;
-                            break;
+                        } else if (lower==MSK_REV_SORT_OPT) {
+                            data.result.albums_loop = data.result.albums_loop.reverse();
                         }
                     }
                 }
@@ -780,7 +813,8 @@ function parseBrowseResp(data, parent, options, cacheKey, parentCommand, parentG
             var isSearchResult = options && options.isSearch;
             var showAlbumName = isSearchResult || isAllSongs || (parent && parent.id && parent.id.startsWith("artist_id:"));
             var discs = new Map();
-            var sortTracks = isAllSongs && parentCommand && getAlbumSort(parentCommand, parentGenre).startsWith("year");
+            var sort = isAllSongs && parentCommand ? getAlbumSort(parentCommand, parentGenre) : undefined;
+            var sortTracks = undefined!=sort && sort.by.startsWith("year");
 
             if (data.params[1].length>=4 && data.params[1][0]=="tracks") {
                 for (var p=0, plen=data.params[1].length; p<plen && (!allowPlayAlbum || !showAlbumName); ++p) {
@@ -879,7 +913,7 @@ function parseBrowseResp(data, parent, options, cacheKey, parentCommand, parentG
                           });
             }
             if (sortTracks) {
-                resp.items.sort(yearAlbumTrackSort);
+                resp.items.sort(sort.rev ? revYearAlbumTrackSort : yearAlbumTrackSort);
             }
 
             if (discs.size>1) {

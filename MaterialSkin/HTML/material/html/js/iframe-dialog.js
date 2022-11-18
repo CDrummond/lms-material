@@ -437,14 +437,14 @@ Vue.component('lms-iframe-dialog', {
       <v-list>
        <template v-for="(item, index) in actions">
         <v-list-tile @click="doAction(item)">
-         <v-list-tile-avatar v-if="menuIcons"><v-icon v-if="item.icon">{{item.icon}}</v-icon></v-list-tile-avatar>
+         <v-list-tile-avatar><v-icon v-if="item.icon">{{item.icon}}</v-icon></v-list-tile-avatar>
          <v-list-tile-content><v-list-tile-title>{{item.title}}</v-list-tile-title></v-list-tile-content>
         </v-list-tile>
        </template>
        <v-divider v-if="actions.length>0 && (customActions && customActions.length>0)"></v-divider>
        <template v-if="customActions && customActions.length>0" v-for="(action, index) in customActions">
         <v-list-tile @click="doCustomAction(action, player)">
-         <v-list-tile-avatar v-if="menuIcons"><v-icon v-if="action.icon">{{action.icon}}</v-icon><img v-else-if="action.svg" class="svg-img" :src="action.svg | svgIcon(darkUi)"></img></v-list-tile-avatar>
+         <v-list-tile-avatar><v-icon v-if="action.icon">{{action.icon}}</v-icon><img v-else-if="action.svg" class="svg-img" :src="action.svg | svgIcon(darkUi)"></img></v-list-tile-avatar>
          <v-list-tile-content><v-list-tile-title>{{action.title}}</v-list-tile-title></v-list-tile-content>
         </v-list-tile>
        </template>
@@ -585,9 +585,6 @@ Vue.component('lms-iframe-dialog', {
         }
     },
     computed: {
-        menuIcons() {
-            return this.$store.state.menuIcons
-        },
         player() {
             return this.$store.state.player
         },

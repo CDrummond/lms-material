@@ -34,15 +34,15 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
   <v-list>
    <template v-for="(item, index) in menu.items">
     <v-list-tile @click="menuAction(item)">
-     <v-list-tile-avatar v-if="menuIcons && menu.icons" :tile="true" class="lms-avatar"><v-icon v-if="item.icon">{{item.icon}}</v-icon><img v-else-if="item.svg" class="svg-img" :src="item.svg | svgIcon(darkUi)"></img></v-list-tile-avatar>
+     <v-list-tile-avatar v-if="menu.icons" :tile="true" class="lms-avatar"><v-icon v-if="item.icon">{{item.icon}}</v-icon><img v-else-if="item.svg" class="svg-img" :src="item.svg | svgIcon(darkUi)"></img></v-list-tile-avatar>
      <v-list-tile-title>{{item.title}}</v-list-tile-title>
     </v-list-tile>
    </template>
   </v-list>
  </v-menu>
  
- <div v-if="desktopLayout && !largeView" class="np-bar" id="np-bar">
-  <v-layout row class="np-controls-desktop np-controls-desktop-stop" v-if="stopButton">
+ <div v-if="desktopLayout && !largeView" class="np-bar" id="np-bar" v-bind:class="{'np-desktop-sb':stopButton}">
+  <v-layout row class="np-controls-desktop" v-if="stopButton">
    <v-flex xs3>
     <v-btn flat icon v-bind:class="{'disabled':disablePrev}" v-longpress:repeat="prevButton" :title="trans.prev"><v-icon large class="media-icon">skip_previous</v-icon></v-btn>
    </v-flex>
@@ -67,8 +67,8 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
     <v-btn flat icon v-bind:class="{'disabled':disableNext}" v-longpress:repeat="nextButton" class="np-std-button" :title="trans.next"><v-icon large class="media-icon">skip_next</v-icon></v-btn>
    </v-flex>
   </v-layout>
-  <img :key="coverUrl" v-lazy="coverUrl" onerror="this.src='html/images/cover.png'" class="np-image-desktop" v-bind:class="{'radio-img': 0==playerStatus.current.duration}" @contextmenu.prevent="showContextMenu" @click="clickImage(event)"></img>
-  <v-list two-line subheader class="np-details-desktop" v-bind:class="{'np-details-desktop-sb' : stopButton}">
+  <img v-if="!largeView && !disableBtns" :key="coverUrl" v-lazy="coverUrl" onerror="this.src='html/images/cover.png'" class="np-image-desktop" @contextmenu="showMenu" @click="clickImage(event)"></img>
+  <v-list two-line subheader class="np-details-desktop" v-if="playerStatus.playlist.count>0">
    <v-list-tile style>
     <v-list-tile-content>
      <v-list-tile-title v-if="playerStatus.current.title">{{title}}</v-list-tile-title>
@@ -78,19 +78,16 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
      <v-list-tile-sub-title v-else-if="playerStatus.current.title">&#x22ef;</v-list-tile-sub-title>
     </v-list-tile-content>
     <v-list-tile-action>
-     <div v-if="(techInfo || showRatings) && wide>0">
-      <div class="np-tech-desktop">{{techInfo && (wide>1 || (!showRatings && wide>0)) ? technicalInfo : ""}}</div>
-      <v-rating v-if="showRatings && wide>0 && maxRating>5" class="np-rating-desktop" small v-model="rating.value" half-increments hover clearable @click.native="setRating(true)" :readonly="undefined==ratingsPlugin"></v-rating>
-      <v-rating v-else-if="showRatings && wide>0" class="np-rating-desktop" small v-model="rating.value" hover clearable @click.native="setRating(true)" :readonly="undefined==ratingsPlugin"></v-rating>
-     </div>
-     <div v-else-if="playerStatus.playlist.count>1" class="np-tech-desktop link-item" @click="toggleTime()">{{formattedTime}}</div>
-     <div v-else class="np-tech-desktop">&nbsp;</div>
-     <div v-if="((techInfo || showRatings) && wide>0) || playerStatus.playlist.count<2" class="np-time-desktop link-item" @click="toggleTime()">{{formattedTime}}{{playerStatus.playlist.current | trackCount(playerStatus.playlist.count, SEPARATOR)}}</div>
-     <div v-else class="np-time-desktop" @click="toggleTime()">{{playerStatus.playlist.current | trackCount(playerStatus.playlist.count)}}</div>
+     <div v-if="playerStatus.playlist.count<2 || !(showRatings && !techInfo)" class="np-time-desktop link-item" v-bind:class="{'np-time-desktop-r': techInfo && showRatings}" @click="toggleTime()">{{formattedTime}}</div>
+     <div v-else class="np-time-desktop link-item" v-bind:class="{'np-time-desktop-r': techInfo && showRatings}" @click="toggleTime()">{{formattedTime}}{{playerStatus.playlist.current | trackCount(playerStatus.playlist.count, SEPARATOR)}}</div>
+     <div v-if="techInfo" class="np-tech-desktop ellipsis" v-bind:class="{'np-tech-desktop-r': showRatings}">{{technicalInfo}}</div>
+     <div v-else-if="playerStatus.playlist.count>1 && !showRatings" class="np-tech-desktop">{{playerStatus.playlist.current | trackCount(playerStatus.playlist.count)}}</div>
+     <div v-else-if="!showRatings" class="np-tech-desktop">&nbsp;</div>
+     <v-rating v-if="showRatings" class="np-rating-desktop" v-model="rating.value" half-increments hover clearable @click.native="setRating(true)" :readonly="undefined==ratingsPlugin"></v-rating>
     </v-list-tile-action>
    </v-list-tile>
   </v-list>
-  <v-progress-linear height="5" id="pos-slider" v-if="playerStatus.current.duration>0" class="np-slider np-slider-desktop" v-bind:class="{'np-slider-desktop-sb' : stopButton}" :value="playerStatus.current.pospc" v-on:click="sliderChanged($event)" @mouseover="showTimeTooltip" @mouseout="hideTimeTooltip" @mousemove="moveTimeTooltip" @touchstart.passive="touchSliderStart" @touchend.passive="touchSliderEnd" @touchmove.passive="moveTimeTooltipTouch"></v-progress-linear>
+  <v-progress-linear height="5" id="pos-slider" v-if="playerStatus.current.duration>0" class="np-slider np-slider-desktop" :value="playerStatus.current.pospc" v-on:click="sliderChanged($event)" @mouseover="showTimeTooltip" @mouseout="hideTimeTooltip" @mousemove="moveTimeTooltip" @touchstart.passive="touchSliderStart" @touchend.passive="touchSliderEnd" @touchmove.passive="moveTimeTooltipTouch"></v-progress-linear>
 
   <div v-if="info.show" class="np-info np-info-desktop" id="np-info">
    <v-tabs centered v-model="info.tab" v-if="info.showTabs" style="np-info-tab-cover">
@@ -328,10 +325,10 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
         <v-layout text-xs-center>
          <v-flex xs6><v-btn flat icon v-longpress:repeat="nextButton" v-bind:class="{'np-std-button': !stopButton, 'disabled':disableNext}" :title="trans.next"><v-icon large class="media-icon">skip_next</v-icon></v-btn></v-flex>
          <v-flex xs6>
-          <v-btn v-if="shuffAltBtn.show" :title="shuffAltBtn.tooltip" flat icon @click="doCommand(shuffAltBtn.command, shuffAltBtn.tooltip)" v-bind:class="{'np-std-button': !stopButton}"><v-icon v-if="shuffAltBtn.icon" class="media-icon">{{shuffAltBtn.icon}}</v-icon><img v-else :src="shuffAltBtn.image" class="btn-img"></img></v-btn>
-          <v-btn :title="trans.shuffleAlbums" flat icon v-else-if="playerStatus.playlist.shuffle===2" @click="doAction(['playlist', 'shuffle', 0])" v-bind:class="{'np-std-button': !stopButton,'disabled':noPlayer}"><img class="svg-img media-icon" :src="'shuffle-albums' | svgIcon(darkUi, true)"></img></v-btn>
-          <v-btn :title="trans.shuffleAll" flat icon v-else-if="playerStatus.playlist.shuffle===1" @click="doAction(['playlist', 'shuffle', 2])" v-bind:class="{'np-std-button': !stopButton,'disabled':noPlayer}"><v-icon class="active-btn media-icon">shuffle</v-icon></v-btn>
-          <v-btn :title="trans.shuffleOff" flat icon v-else @click="doAction(['playlist', 'shuffle', 1])" class="dimmed" v-bind:class="{'np-std-button': !stopButton,'disabled':noPlayer}"><v-icon class="media-icon">shuffle</v-icon></v-btn>
+          <v-btn v-if="shuffAltBtn.show" :title="shuffAltBtn.tooltip" flat icon @click="shuffleClicked" v-bind:class="{'np-std-button': !stopButton}"><v-icon v-if="shuffAltBtn.icon" class="media-icon">{{shuffAltBtn.icon}}</v-icon><img v-else :src="shuffAltBtn.image" class="btn-img"></img></v-btn>
+          <v-btn :title="trans.shuffleAlbums" flat icon v-else-if="playerStatus.playlist.shuffle===2" @click="shuffleClicked" v-bind:class="{'np-std-button': !stopButton,'disabled':noPlayer}"><img class="svg-img media-icon" :src="'shuffle-albums' | svgIcon(darkUi, true)"></img></v-btn>
+          <v-btn :title="trans.shuffleAll" flat icon v-else-if="playerStatus.playlist.shuffle===1" @click="shuffleClicked" v-bind:class="{'np-std-button': !stopButton,'disabled':noPlayer}"><v-icon class="active-btn media-icon">shuffle</v-icon></v-btn>
+          <v-btn :title="trans.shuffleOff" flat icon v-else @click="shuffleClicked" class="dimmed" v-bind:class="{'np-std-button': !stopButton,'disabled':noPlayer}"><v-icon class="media-icon">shuffle</v-icon></v-btn>
          </v-flex>
         </v-layout>
        </v-flex>
@@ -398,10 +395,10 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
      <v-layout text-xs-center>
       <v-flex xs6><v-btn flat icon v-longpress:repeat="nextButton" v-bind:class="{'np-std-button': !stopButton, 'disabled':disableNext}" :title="trans.next"><v-icon large class="media-icon">skip_next</v-icon></v-btn></v-flex>
       <v-flex xs6>
-       <v-btn v-if="shuffAltBtn.show" :title="shuffAltBtn.tooltip" flat icon @click="doCommand(shuffAltBtn.command, shuffAltBtn.tooltip)" v-bind:class="{'np-std-button': !stopButton}"><v-icon v-if="shuffAltBtn.icon" class="media-icon">{{shuffAltBtn.icon}}</v-icon><img v-else :src="shuffAltBtn.image" class="btn-img"></img></v-btn>
-       <v-btn :title="trans.shuffleAlbums" flat icon v-else-if="playerStatus.playlist.shuffle===2" @click="doAction(['playlist', 'shuffle', 0])" v-bind:class="{'np-std-button': !stopButton,'disabled':noPlayer}"><img class="svg-img media-icon" :src="'shuffle-albums' | svgIcon(darkUi, true)"></v-btn>
-       <v-btn :title="trans.shuffleAll" flat icon v-else-if="playerStatus.playlist.shuffle===1" @click="doAction(['playlist', 'shuffle', 2])" v-bind:class="{'np-std-button': !stopButton,'disabled':noPlayer}"><v-icon class="active-btn media-icon">shuffle</v-icon></v-btn>
-       <v-btn :title="trans.shuffleOff" flat icon v-else @click="doAction(['playlist', 'shuffle', 1])" class="dimmed" v-bind:class="{'np-std-button': !stopButton,'disabled':noPlayer}"><v-icon class="media-icon">shuffle</v-icon></v-btn>
+       <v-btn v-if="shuffAltBtn.show" :title="shuffAltBtn.tooltip" flat icon @click="shuffleClicked" v-bind:class="{'np-std-button': !stopButton}"><v-icon v-if="shuffAltBtn.icon" class="media-icon">{{shuffAltBtn.icon}}</v-icon><img v-else :src="shuffAltBtn.image" class="btn-img"></img></v-btn>
+       <v-btn :title="trans.shuffleAlbums" flat icon v-else-if="playerStatus.playlist.shuffle===2" @click="shuffleClicked" v-bind:class="{'np-std-button': !stopButton,'disabled':noPlayer}"><img class="svg-img media-icon" :src="'shuffle-albums' | svgIcon(darkUi, true)"></v-btn>
+       <v-btn :title="trans.shuffleAll" flat icon v-else-if="playerStatus.playlist.shuffle===1" @click="shuffleClicked" v-bind:class="{'np-std-button': !stopButton,'disabled':noPlayer}"><v-icon class="active-btn media-icon">shuffle</v-icon></v-btn>
+       <v-btn :title="trans.shuffleOff" flat icon v-else @click="shuffleClicked" class="dimmed" v-bind:class="{'np-std-button': !stopButton,'disabled':noPlayer}"><v-icon class="media-icon">shuffle</v-icon></v-btn>
       </v-flex>
      </v-layout>
     </v-flex>
@@ -417,7 +414,7 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
                     sleepTimer: false,
                     dvc: VOL_STD,
                     current: { canseek:1, duration:0, time:undefined, title:undefined, artist:undefined, artistAndComposer: undefined,
-                               album:undefined, albumName:undefined, albumLine:undefined, technicalInfo: "", pospc:0.0, tracknum:undefined,
+                               album:undefined, albumName:undefined, albumLine:undefined, technicalInfo:undefined, pospc:0.0, tracknum:undefined,
                                disc:0, year:0, url:undefined, comment:undefined, source: {local:true, text:undefined} },
                     playlist: { shuffle:0, repeat: 0, current:0, count:0 },
                  },
@@ -451,6 +448,11 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
                 };
     },
     mounted() {
+        this.hideNpBar = false;
+        this.desktopBottomHeight = getComputedStyle(document.documentElement).getPropertyValue('--desktop-bottom-toolbar-height');
+        this.mobileBottomHeight = getComputedStyle(document.documentElement).getPropertyValue('--mobile-bottom-toolbar-height');
+        this.controlDesktopNpBar();
+
         bus.$on('customActions', function(val) {
             this.customActions = getCustomActions("track", false);
         }.bind(this));
@@ -817,7 +819,7 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
             }
         },
         prevButton(skip) {
-            if (this.$store.state.visibleMenus.size>0) {
+            if (this.$store.state.visibleMenus.size>0 || queryParams.party) {
                 return;
             }
             if (!this.disablePrev) {
@@ -829,7 +831,7 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
             }
         },
         nextButton(skip) {
-            if (this.$store.state.visibleMenus.size>0) {
+            if (this.$store.state.visibleMenus.size>0 || queryParams.party) {
                 return;
             }
             if (!this.disableNext) {
@@ -840,7 +842,24 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
                 }
             }
         },
+        shuffleClicked() {
+            if (this.$store.state.visibleMenus.size>0 || queryParams.party) {
+                return;
+            }
+            if (this.shuffAltBtn.show) {
+                this.doCommand(this.shuffAltBtn.command, this.shuffAltBtn.tooltip);
+            } else if (this.playerStatus.playlist.shuffle===2) {
+                this.doAction(['playlist', 'shuffle', 0]);
+            } else if (this.playerStatus.playlist.shuffle===1) {
+                this.doAction(['playlist', 'shuffle', 2]);
+            } else {
+                this.doAction(['playlist', 'shuffle', 1]);
+            }
+        },
         repeatClicked(longPress) {
+            if (this.$store.state.visibleMenus.size>0 || queryParams.party) {
+                return;
+            }
             if (this.repAltBtn.show) {
                 this.doCommand(this.repAltBtn.command, this.repAltBtn.tooltip);
             } else {
@@ -856,7 +875,7 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
             }
         },
         showSleep() {
-            if (this.$store.state.visibleMenus.size>0) {
+            if (this.$store.state.visibleMenus.size>0 || queryParams.party) {
                 return;
             }
             bus.$emit('dlg.open', 'sleep', this.$store.state.player);
@@ -998,6 +1017,14 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
         toggleGrid(tab, section) {
             nowplayingToggleGrid(this, tab, section);
         },
+        controlDesktopNpBar() {
+            let hideNpBar = this.disableBtns && this.$store.state.desktopLayout;
+            if (hideNpBar!=this.hideNpBar) {
+                this.hideNpBar = hideNpBar;
+                document.documentElement.style.setProperty('--bottom-toolbar-height',
+                    hideNpBar ? '0px' : this.$store.state.desktopLayout ? this.desktopBottomHeight : this.mobileBottomHeight);
+            }
+        },
         showTimeTooltip() {
             this.startTooltipTimeout();
             this.timeTooltip.show = true;
@@ -1093,6 +1120,12 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
         },
         'menu.show': function(newVal) {
             this.$store.commit('menuVisible', {name:'nowplaying', shown:newVal});
+        },
+        'disableBtns': function(newVal) {
+            this.controlDesktopNpBar();
+        },
+        '$store.state.desktopLayout': function(newVal) {
+            this.controlDesktopNpBar();
         }
     },
     computed: {
@@ -1108,7 +1141,7 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
         technicalInfo() {
             return undefined==this.playerStatus.current.technicalInfo || this.playerStatus.current.length==0
                 ? undefined
-                : undefined==this.playerStatus.current.source || this.playerStatus.current.source.other
+                : undefined==this.playerStatus.current.source || this.playerStatus.current.source.other || undefined==this.playerStatus.current.source.text || this.playerStatus.current.source.text.length<1
                     ? this.playerStatus.current.technicalInfo
                     : (this.playerStatus.current.source.text+SEPARATOR+this.playerStatus.current.technicalInfo);
         },
@@ -1141,9 +1174,6 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
                 return formatTrackNum(this.playerStatus.current)+SEPARATOR+this.playerStatus.current.title;
             }
             return this.playerStatus.current.title;
-        },
-        menuIcons() {
-            return this.$store.state.menuIcons
         },
         zoomInfoClass() {
             return "np-info-text-"+this.infoZoom;

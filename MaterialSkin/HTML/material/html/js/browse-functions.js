@@ -472,6 +472,22 @@ function browseHandleListResponse(view, item, command, resp, prevPage) {
         } else {
             view.headerSubTitle=0==view.items.length ? i18n("Empty") : i18np("1 Item", "%1 Items", view.items.length);
         }
+        if (queryParams.party) {
+            view.tbarActions=[];
+        }
+        // In party mode only want to allow to add tracks.
+        if (queryParams.party) {
+            view.tbarActions=[];
+            if (view.items.length>0 && undefined!=view.items[0].stdItem && STD_ITEM_TRACK!=view.items[0].stdItem &&
+                STD_ITEM_ALBUM_TRACK!=view.items[0].stdItem && STD_ITEM_PLAYLIST_TRACK!=view.items[0].stdItem &&
+                STD_ITEM_REMOTE_PLAYLIST_TRACK!=view.items[0].stdItem) {
+                for (let i=0, loop=view.items, len=loop.length; i<len; ++i) {
+                    loop[i].altStdItem = loop[i].stdItem;
+                    loop[i].stdItem = undefined;
+                }
+                view.hoverBtns = false;
+            }
+        }
         view.$nextTick(function () {
             view.setBgndCover();
             view.filterJumplist();
@@ -545,7 +561,7 @@ function browseClick(view, item, index, event) {
             setScrollTop(view, 0);
         } else if (view.selection.size>0) {
             view.select(item, index, event);
-        } else if (view.$store.state.showMenuAudio) {
+        } else {
             view.itemMenu(item, index, event);
         }
         return;
@@ -573,9 +589,7 @@ function browseClick(view, item, index, event) {
         return;
     }
     if (isAudioTrack(item)) {
-        if (view.$store.state.showMenuAudio) {
-            view.itemMenu(item, index, event);
-        }
+        view.itemMenu(item, index, event);
         return;
     }
     if (isTextItem(item) && !item.id.startsWith(TOP_ID_PREFIX) && !item.id.startsWith(MUSIC_ID_PREFIX)) {
@@ -634,7 +648,7 @@ function browseClick(view, item, index, event) {
                 lmsCommand(view.playerId(), command.params ? command.command.concat(command.params) : command.command).then(({data}) => {
                     bus.$emit('showMessage', item.title);
                 });
-            } else if (view.$store.state.showMenuAudio) {
+            } else {
                 view.itemMenu(item, index, event);
             }
             return;
@@ -1052,8 +1066,8 @@ function browseItemAction(view, act, item, index, event) {
         }
     } else if (RATING_ACTION==act) {
         bus.$emit('dlg.open', 'rating', [item.id], item.rating);
-    } else if (PLAY_ALBUM_ACTION==act) {
-        if (item.filter) { // From multi-disc, so need to adjust index
+    } else if (PLAY_ALBUM_ACTION==act || PLAY_PLAYLIST_ACTION==act) {
+        if (item.filter && PLAY_PLAYLIST_ACTION!=act) { // From multi-disc, so need to adjust index
             var idx = index;
             for (var i=0, len=view.items.length; i<idx; ++i) {
                 if (view.items[i].header) {
@@ -1170,6 +1184,8 @@ function browseItemAction(view, act, item, index, event) {
             }
         }
         download(item, item.id.startsWith("album_id:") ? view.buildCommand(item) : undefined, aa);
+    } else if (SHOW_IMAGE_ACTION==act) {
+        bus.$emit('dlg.open', 'gallery', [item.image], 0, true);
     } else {
         // If we are acting on a multi-disc album, prompt which disc we should act on
         if (item.multi && !view.current.id.startsWith("album_id:") && (PLAY_ACTION==act || ADD_ACTION==act || INSERT_ACTION==act)) {
@@ -1277,17 +1293,20 @@ function browseHeaderAction(view, act, event) {
         view.changeLayout(true);
     } else if (ALBUM_SORTS_ACTION==act) {
         var sort="";
+        var reverseSort = false;
         for (var i=0, len=view.command.params.length; i<len; ++i) {
             if (view.command.params[i].startsWith(SORT_KEY)) {
                 sort=view.command.params[i].split(":")[1];
-                break;
+            } else if (view.command.params[i]==MSK_REV_SORT_OPT) {
+                reverseSort = true;
             }
         }
         var albumSorts=[];
         for (var i=0,len=B_ALBUM_SORTS.length; i<len; ++i) {
             albumSorts.push({key:B_ALBUM_SORTS[i].key, label:B_ALBUM_SORTS[i].label, selected:sort==B_ALBUM_SORTS[i].key});
         }
-        showMenu(view, {show:true, x:event ? event.clientX : window.innerWidth, y:event ? event.clientY :0, albumSorts:albumSorts, inMainMenu:!event});
+        showMenu(view, {show:true, x:event ? event.clientX : window.innerWidth, y:event ? event.clientY :0,
+                        albumSorts:albumSorts, reverseSort:reverseSort, inMainMenu:!event});
     } else if (VLIB_ACTION==act) {
         view.showLibMenu(event);
     } else if (undefined!=view.current.allid && (ADD_ACTION==act || PLAY_ACTION==act)) {
@@ -1314,6 +1333,17 @@ function browseHeaderAction(view, act, event) {
             }
         });
     } else {
+        // If we are adding/playing/inserting from an artist's list of albums, check if we are using reverse sort
+        // if we are then we need to add each album in the list one by one...'
+        if ((PLAY_ACTION==act || ADD_ACTION==act) && STD_ITEM_ARTIST==view.current.stdItem) {
+            var reverseSort = false;
+            for (var i=0, loop=view.command.params, len=loop.length; i<len; ++i) {
+                if (loop[i]==MSK_REV_SORT_OPT) {
+                    view.itemAction(PLAY_ACTION==act ? PLAY_ALL_ACTION : ADD_ALL_ACTION, view.current);
+                    return;
+                }
+            }
+        }
         view.itemAction(act, view.current);
     }
 }
@@ -1960,8 +1990,8 @@ function browseReplaceCommandTerms(view, cmd, item) {
             if (item && item.swapid && cmd.params[i]==item.id) {
                 cmd.params[i]=item.swapid;
             } else {
-                cmd.params[i]=cmd.params[i].replace(SORT_KEY+ALBUM_SORT_PLACEHOLDER, SORT_KEY+albumSort)
-                                           .replace(SORT_KEY+ARTIST_ALBUM_SORT_PLACEHOLDER, SORT_KEY+albumSort)
+                cmd.params[i]=cmd.params[i].replace(SORT_KEY+ALBUM_SORT_PLACEHOLDER, SORT_KEY+albumSort.by)
+                                           .replace(SORT_KEY+ARTIST_ALBUM_SORT_PLACEHOLDER, SORT_KEY+albumSort.by)
                                            .replace(TERM_PLACEHOLDER, view.enteredTerm)
                                            .replace(ARTIST_ALBUM_TAGS_PLACEHOLDER, ARTIST_ALBUM_TAGS)
                                            .replace(ALBUM_TAGS_PLACEHOLDER, (lmsOptions.showAllArtists ? ALBUM_TAGS_ALL_ARTISTS : ALBUM_TAGS))
@@ -1972,6 +2002,9 @@ function browseReplaceCommandTerms(view, cmd, item) {
                                    (lmsOptions.serviceEmblems && ("tracks"==cmd.command[0] || "albums"==cmd.command[0]) ? "E" : "");
                 }
             }
+        }
+        if (albumSort.rev) {
+            cmd.params.push(MSK_REV_SORT_OPT);
         }
     }
     return cmd;
@@ -1989,7 +2022,7 @@ function browseBuildFullCommand(view, item, act) {
         } else if (item.id) {
             command.command = ["playlistcontrol", "cmd:"+(act==PLAY_ACTION ? "load" : INSERT_ACTION==act ? "insert" :ACTIONS[act].cmd)];
             if (item.id.startsWith("album_id:")  || item.id.startsWith("artist_id:")) {
-                var params = undefined!=item.stdItem ? buildStdItemCommand(item, item.id==view.current.id ? view.history.length>0 ? view.history[view.history.length-1].command : undefined : view.command).params : item.params;
+                var params = undefined!=item.stdItem || undefined!=item.altStdItem ? buildStdItemCommand(item, item.id==view.current.id ? view.history.length>0 ? view.history[view.history.length-1].command : undefined : view.command).params : item.params;
                 for (var i=0, loop = params, len=loop.length; i<len; ++i) {
                     if ( (!lmsOptions.noRoleFilter && (loop[i].startsWith("role_id:"))) ||
                          (!lmsOptions.noGenreFilter && loop[i].startsWith("genre_id:")) ||
@@ -2074,12 +2107,12 @@ function browseDoList(view, list, act, index) {
                 commands.push({act:PLAY_ACTION==act ? (0==commands.length ? PLAY_ACTION : ADD_ACTION) : act, item:list[i]});
             }
         }
-        view.doCommands(commands, PLAY_ACTION==act, false, 0, 'refreshStatus');
+        browseDoCommands(view, commands, PLAY_ACTION==act, false, 0, 'refreshStatus');
     }
 }
 
 function browseDoCommands(view, commands, npAfterLast, clearSent, actionedCount, refreshSig) {
-   if (commands.length>0) {
+    if (commands.length>0) {
         if (undefined==actionedCount) {
             actionedCount = 0;
         } else {

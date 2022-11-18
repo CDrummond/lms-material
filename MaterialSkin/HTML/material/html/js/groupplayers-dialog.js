@@ -51,7 +51,13 @@ Vue.component('lms-groupplayers-dialog', {
     </v-list-tile>
    </v-list>
   </v-card-text>
-  <v-card-actions>
+  <v-card-actions v-if="queryParams.altBtnLayout">
+   <v-spacer></v-spacer>
+   <v-btn flat v-if="player" @click.native="update()">{{i18n('Update')}}</v-btn>
+   <v-btn flat v-else @click.native="create()">{{i18n('Create')}}</v-btn>
+   <v-btn flat @click.native="close()">{{i18n('Cancel')}}</v-btn>
+  </v-card-actions>
+  <v-card-actions v-else>
    <v-spacer></v-spacer>
    <v-btn flat @click.native="close()">{{i18n('Cancel')}}</v-btn>
    <v-btn flat v-if="player" @click.native="update()">{{i18n('Update')}}</v-btn>

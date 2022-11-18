@@ -65,6 +65,10 @@ const SAVE_VLIB_ACTION        = 49;
 const DOWNLOAD_ACTION         = 50;
 const PQ_REMOVE_DISC_ACTION   = 51;
 const PLAY_DISC_ACTION        = 52;
+const PLAY_PLAYLIST_ACTION    = 53;
+const SHOW_IMAGE_ACTION       = 54;
+
+const HIDE_FOR_PARTY = new Set([PLAY_ACTION, PLAY_ALBUM_ACTION, PLAY_ALL_ACTION, MORE_ACTION, MORE_LIB_ACTION, RENAME_ACTION, REMOVE_ACTION, EDIT_ACTION, ADD_FAV_ACTION, DELETE_ACTION, ADD_TO_FAV_ACTION, REMOVE_FROM_FAV_ACTION, SELECT_ACTION, RATING_ACTION, ADD_FAV_FOLDER_ACTION, DELETE_FAV_FOLDER_ACTION, MOVE_FAV_TO_PARENT_ACTION, UNSUB_PODCAST_ACTION, MOVE_HERE_ACTION,  INSERT_ALL_ACTION, ADD_TO_PLAYLIST_ACTION, REMOVE_DUPES_ACTION, ADV_SEARCH_ACTION, SAVE_VLIB_ACTION, DOWNLOAD_ACTION, PLAY_DISC_ACTION, PLAY_PLAYLIST_ACTION]);
 
 var ACTIONS=[
     {cmd:"play",         icon:"play_circle_outline"},
@@ -102,7 +106,7 @@ var ACTIONS=[
     {cmd:"pq-playnow",   icon: "play_circle_outline"},
     {cmd:"pq-playnxt",   icon: "play_circle_filled"},
     {cmd:"pq-scroll",    svg:  "current-track"},
-    {cmd:"pq-addurl",    icon: "add"},
+    {cmd:"pq-addurl",    svg:  "add-stream"},
     {cmd:"pq-movequeue", icon: "swap_horiz"},
     {cmd:"pq-rmalbum",   icon: "album"},
     {cmd:"pq-zap",       icon: "flash_on"},
@@ -126,7 +130,9 @@ var ACTIONS=[
 
     {cmd:"download",     icon:"cloud_download"},
     {cmd:"pq-rmdisc",    svg:"album-multi"},
-    {cmd:"play-disc",    svg:"album-multi"}
+    {cmd:"play-disc",    svg:"album-multi"},
+    {cmd:"pl-track",     icon:"playlist_play"},
+    {cmd:"show-img",     icon:"photo"}
 ];
 
 function updateActionStrings() {
@@ -192,5 +198,7 @@ function updateActionStrings() {
     ACTIONS[DOWNLOAD_ACTION].title=i18n("Download");
     ACTIONS[PQ_REMOVE_DISC_ACTION].title=i18n("Remove disc");
     ACTIONS[PLAY_DISC_ACTION].title=i18n("Play disc starting at track");
+    ACTIONS[PLAY_PLAYLIST_ACTION].title=i18n("Play starting at track");
+    ACTIONS[SHOW_IMAGE_ACTION].title=i18n("Show image");
 }
 

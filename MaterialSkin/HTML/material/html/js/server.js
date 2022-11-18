@@ -48,11 +48,32 @@ function showLastNotif(text, cancelable) {
     }
 }
 
+function logString(val) {
+    return undefined==val ? "" : val;
+}
+
 function updateNative(status) {
-    if (queryParams.nativeStatus) {
+    if (1==queryParams.nativeStatus) {
         try {
             NativeReceiver.updateStatus(JSON.stringify(status));
         } catch (e) {
+        }
+    } else if (2==queryParams.nativeStatus) {
+        if (undefined==status.current) {
+            console.log("MATERIAL-STATUS");
+        } else {
+            console.log("MATERIAL-STATUS" +
+                        "\nPLAYING "+status.isplaying +
+                        "\nVOLUME "+logString(status.volume) +
+                        "\nCOUNT "+logString(status.playlist.count) +
+                        "\nSHUFFLE "+logString(status.playlist.shuffle) +
+                        "\nREPEAT "+logString(status.playlist.repeat) +
+                        "\nTITLE "+logString(status.current.title) +
+                        "\nARTIST "+logString(buildArtistLine(status.current, 'status', true)) +
+                        "\nALBUM "+logString(buildAlbumLine(status.current, 'status', true)) +
+                        "\nDURATION "+logString(status.current.duration) +
+                        "\nTIME "+logString(status.current.time) +
+                        "\nTRACKID "+logString(status.current.id));
         }
     }
 }
@@ -1086,9 +1107,9 @@ var lmsServer = Vue.component('lms-server', {
                         this.adjustVolume(true);
                     } else if (key=='down') {
                         this.adjustVolume(false);
-                    } else if (key=='left') {
+                    } else if (key=='left' && !queryParams.party) {
                         command=['button', 'jump_rew'];
-                    } else if (key=='right') {
+                    } else if (key=='right' && !queryParams.party) {
                         command=['playlist', 'index', '+1'];
                     }
                 }

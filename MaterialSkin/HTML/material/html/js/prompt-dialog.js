@@ -16,7 +16,13 @@ var lmsPromptDialog = Vue.component("lms-prompt-dialog", {
    <v-text-field v-else-if="type=='text'" single-line :label="hint" v-model="text" @keyup.enter="close(true);" ref="entry"></v-text-field>
    <div v-else v-html="text" class="clickable" ref="prompt-dlg-text"></div>
   </v-card-text>
-  <v-card-actions>
+  <v-card-actions v-if="queryParams.altBtnLayout">
+   <v-spacer></v-spacer>
+   <v-btn v-if="undefined!=otherButton" flat @click.native="close(2)">{{otherButton}}</v-btn>
+   <v-btn flat @click.native="close(undefined==otherButton ? true : 1)">{{positiveButton}}</v-btn>
+   <v-btn v-if="type!='alert'" flat @click.native="close(undefined==otherButton ? false : 0)">{{negativeButton}}</v-btn>
+  </v-card-actions>
+  <v-card-actions v-else>
    <v-spacer></v-spacer>
    <v-btn v-if="type!='alert'" flat @click.native="close(undefined==otherButton ? false : 0)">{{negativeButton}}</v-btn>
    <v-btn flat @click.native="close(undefined==otherButton ? true : 1)">{{positiveButton}}</v-btn>

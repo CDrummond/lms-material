@@ -1064,8 +1064,8 @@ function browseItemAction(view, act, item, index, event) {
         }
     } else if (RATING_ACTION==act) {
         bus.$emit('dlg.open', 'rating', [item.id], item.rating);
-    } else if (PLAY_ALBUM_ACTION==act) {
-        if (item.filter) { // From multi-disc, so need to adjust index
+    } else if (PLAY_ALBUM_ACTION==act || PLAY_PLAYLIST_ACTION==act) {
+        if (item.filter && PLAY_PLAYLIST_ACTION!=act) { // From multi-disc, so need to adjust index
             var idx = index;
             for (var i=0, len=view.items.length; i<idx; ++i) {
                 if (view.items[i].header) {

@@ -7,6 +7,7 @@
 "'%1' failed":"'%1' fejlede",
 "(+%1 others)":"(+%1 andre)",
 "+ %1 more":"+ %1 mere",
+"?":"?",
 "Abort":"Afbryd",
 "Abort all":"Afbryd alt",
 "Abort all downloads?":"Afbryd hentning af alle filer",
@@ -121,6 +122,7 @@
 "Delete alarm?":"Slet vækkeur?",
 "Delete all selected items":"Slet alle valgte punkter?",
 "Delete the selected items?":"Slet det valgte punkt?",
+"Descending":"Aftagende",
 "Description":"Beskrivelse",
 "Details":"Detaljer",
 "Disc %1":"Skive",
@@ -293,6 +295,7 @@
 "Play next":"Afspil som næste",
 "Play now":"Afspil nu",
 "Play selection":"Afspil udvalgte",
+"Play starting at track":"Afspil startende med nummer",
 "Play/pause":"Afspil/pause",
 "Player":"Afspiller",
 "Player not found":"Afspiller ikke fundet",
@@ -583,8 +586,5 @@
 "1 Year":"1 år",
 "%1 Years":"%1 år",
 "1 day":"1 dag",
-"%1 days":"%1 dage",
-"?":"",
-"Descending":"",
-"Play starting at track":""
+"%1 days":"%1 dage"
 }

@@ -611,12 +611,13 @@ Vue.component('lms-toolbar', {
                 this.showPlayerMenu = false;
                 bus.$emit('dlg.open', 'sleep', player);
             } else {
-                var ison = this.$store.state.player.id == player.id ? this.playerStatus.ison : player.ison;
-                lmsCommand(player.id, ["power", ison ? "0" : "1"]).then(({data}) => {
+                lmsCommand(player.id, ["power", player.ison ? "0" : "1"]).then(({data}) => {
                     bus.$emit('refreshStatus', player.id);
-                    // Status seems to take while to update, so chaeck again 1/2 second later...
+                    // Status seems to take while to update, so check again 1/2 second later...
                     setTimeout(function () {
                         bus.$emit('refreshStatus', player.id);
+                        // And after a further second?
+                        setTimeout(function () { bus.$emit('refreshStatus', player.id); }.bind(this), 1000);
                     }.bind(this), 500);
                 });
             }

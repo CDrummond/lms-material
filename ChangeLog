@@ -1,6 +1,9 @@
 3.0.1
 -----
 1. Fix shuffle buttons in queue page.
+2. Update translations.
+3. When toggle power of player check status after 1/2 second (as before) and
+   after a further 1 second.
 
 3.0.0
 -----

@@ -472,10 +472,6 @@ var lmsServer = Vue.component('lms-server', {
             } else {
                 logCometdMessage("PLAYER ("+playerId+")", data);
             }
-            // Get status message after unsubscribe!!!
-            if (!this.subscribedPlayers.has(playerId)) {
-                return;
-            }
             var isCurrent = this.$store.state.player && playerId==this.$store.state.player.id;
             var dvc = 1==parseInt(data.digital_volume_control);
             var player = { ison: undefined==data.power || 1==parseInt(data.power),
@@ -547,6 +543,7 @@ var lmsServer = Vue.component('lms-server', {
                 player.members=data.members.split(',');
             }
             bus.$emit(isCurrent ? 'playerStatus' : 'otherPlayerStatus', player);
+            this.$store.commit('updatePlayer', player);
             if (isCurrent) {
                 updateNative(player);
                 this.scheduleNextPlayerStatusUpdate(data.mode === "play"

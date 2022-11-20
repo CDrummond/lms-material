@@ -4,6 +4,8 @@
 2. Update translations.
 3. When toggle power of player check status after 1/2 second (as before) and
    after a further 1 second.
+4. Always handle player status message, even if not subscribed to player, and
+   update internal state.
 
 3.0.0
 -----

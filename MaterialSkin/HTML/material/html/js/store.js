@@ -314,6 +314,17 @@ const store = new Vuex.Store({
         notifications: []
     },
     mutations: {
+        updatePlayer(state, player) {
+            for (var i=0, len=state.players.length; i<len; ++i) {
+                if (state.players[i].id==player.id) {
+                    state.players[i].name = player.name;
+                    state.players[i].ison = player.ison;
+                    state.players[i].isgroup = player.isgroup;
+                    state.players[i].icon = player.icon;
+                    break;
+                }
+            }
+        },
         setPlayers(state, players) {
             var changed = !state.players || state.players.length!=players.length;
             if (!changed) {

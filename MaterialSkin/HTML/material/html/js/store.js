@@ -187,17 +187,40 @@ function updateUiSettings(state, val) {
 }
 
 function defaultTheme() {
+    const prefersLight = window.matchMedia && window.matchMedia('(prefers-color-scheme: light)').matches;
+
     // Keep in sync with index.html
     if (IS_IOS) {
-        return "light";
+        if (prefersLight) {
+            return "light";
+        } else {
+            return "dark";
+        }
     } else if (IS_ANDROID) {
-        return "darker";
+        if (prefersLight) {
+            return "light";
+        } else {
+            return "darker";
+        }
     } else if (navigator.platform.indexOf("Linux") != -1) {
-        return window.location.href.indexOf('desktop=KDE') != -1 ? "linux/dark/Breeze-Dark" : "linux/dark/Adwaita-Dark";
+        const kde = window.location.href.indexOf('desktop=KDE') != -1;
+        if (prefersLight) {
+            return kde ? "linux/light/Breeze" : "linux/light/Adwaita";
+        } else {
+            return kde ? "linux/dark/Breeze-Dark" : "linux/dark/Adwaita-Dark";
+        }
     } else if (navigator.platform.indexOf("Win") != -1) {
-        return "windows/dark/Windows-10-Dark";
+        if (prefersLight) {
+            return "windows/light/Windows-10";
+        } else {
+            return "windows/dark/Windows-10-Dark";
+        }
     } else if (navigator.platform.indexOf("Mac") != -1) {
-        return "mac/dark/Mojave-Dark";
+        if (prefersLight) {
+            return "mac/light/Mojave";
+        } else {
+            return "mac/dark/Mojave-Dark";
+        }
     }
     return "dark";
 }

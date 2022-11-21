@@ -271,6 +271,10 @@ var app = new Vue({
             }, 50);
         }, false);
 
+        window.matchMedia('(prefers-color-scheme: light)').addEventListener('change', () => {
+q            updateUiSettings(this.$store.state, {theme: defaultTheme()});
+        }, false);
+
         // https://stackoverflow.com/questions/43329654/android-back-button-on-a-progressive-web-thislication-closes-de-this
         window.addEventListener('load', function() {
             window.history.pushState({ noBackExitsApp: true }, '');

@@ -423,9 +423,8 @@ var lmsServer = Vue.component('lms-server', {
                                        model: i.modelname,
                                        ip: i.ip,
                                        icon: mapPlayerIcon(i),
-                                       link: ("squeezelite"==i.model && i.firmware && i.firmware.endsWith("-pCP")) ||
-                                              "squeezeesp32"==i.model
-                                                ? "http://"+i.ip.split(':')[0] : undefined
+                                       link: ("squeezelite"==i.model && i.firmware && i.firmware.endsWith("-pCP")) || "squeezeesp32"==i.model
+                                             ? "http://"+i.ip.split(':')[0] : undefined
                                       });
                         ids.add(i.playerid);
                     }
@@ -493,12 +492,16 @@ var lmsServer = Vue.component('lms-server', {
             if (isCurrent) {
                 player.isgroup = this.$store.state.player.isgroup;
                 player.icon = this.$store.state.player.icon;
+                player.link = this.$store.state.player.link;
+                player.model = this.$store.state.player.model;
                 this.isPlaying = player.isplaying;
             } else {
                 for (var i=0, len=this.$store.state.players.length; i<len; ++i) {
                     if (this.$store.state.players[i].id == playerId) {
                         player.isgroup = this.$store.state.players[i].isgroup;
                         player.icon = this.$store.state.players[i].icon;
+                        player.link = this.$store.state.players[i].link;
+                        player.model = this.$store.state.players[i].model;
                     }
                 }
             }

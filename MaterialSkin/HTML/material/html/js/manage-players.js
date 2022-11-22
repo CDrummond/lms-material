@@ -555,6 +555,7 @@ Vue.component('lms-manage-players', {
             if (!this.show) {
                 return;
             }
+            console.log("UP", player.name, player.link);
             playerMap[player.id]={name:player.name, isgroup:player.isgroup, dvc:player.dvc};
 
             player.image = undefined;

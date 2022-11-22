@@ -280,7 +280,9 @@ Vue.component('lms-information-dialog', {
                             if (undefined!=prevVoltages[player.playerid]) {
                                 info[6]=i18n("Voltage: %1", prevVoltages[player.playerid]);
                             }
-                            this.players.push({name: player.name, id: player.playerid, info: info, isgroup: isgroup, icon:mapPlayerIcon(player)});
+                            this.players.push({name: player.name, id: player.playerid, info: info, isgroup: isgroup, icon:mapPlayerIcon(player),
+                                               link: ("squeezelite"==player.model && player.firmware && player.firmware.endsWith("-pCP")) ||      "squeezeesp32"==player.model
+                                                   ? "http://"+player.ip.split(':')[0] : undefined});
                         }
 
                         lmsCommand("", ["material-skin", "players-extra-info"]).then(({data}) => {

@@ -321,6 +321,12 @@ const store = new Vuex.Store({
                     state.players[i].ison = player.ison;
                     state.players[i].isgroup = player.isgroup;
                     state.players[i].icon = player.icon;
+                    if (state.player!=undefined && player.id == state.player.id) {
+                        state.player.name = player.name;
+                        state.player.ison = player.ison;
+                        state.player.isgroup = player.isgroup;
+                        state.player.icon = player.icon;
+                    }
                     break;
                 }
             }

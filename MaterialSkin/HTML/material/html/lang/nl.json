@@ -7,6 +7,7 @@
 "'%1' failed":"'%1' mislukt",
 "(+%1 others)":"(+%1 anderen)",
 "+ %1 more":"+ %1 meer",
+"?":"?",
 "Abort":"Afbreken",
 "Abort all":"Alles afbreken",
 "Abort all downloads?":"Alle downloads afbreken?",
@@ -121,6 +122,7 @@
 "Delete alarm?":"Wekker wissen?",
 "Delete all selected items":"Verwijder alle geselecteerde items",
 "Delete the selected items?":"Verwijder alle geselecteerde items?",
+"Descending":"Aflopend",
 "Description":"Beschrijving",
 "Details":"Gegevens",
 "Disc %1":"Disc %1",
@@ -293,6 +295,7 @@
 "Play next":"Volgende afspelen",
 "Play now":"Nu afspelen",
 "Play selection":"Selectie afspelen",
+"Play starting at track":"Afspelen vanaf nummer",
 "Play/pause":"Speel/pause",
 "Player":"Muziekspeler",
 "Player not found":"Muziekspeler niet gevonden",
@@ -584,7 +587,6 @@
 "%1 Years":"%1 Jaren",
 "1 day":"1 dag",
 "%1 days":"%1 dagen",
-"?":"?",
-"Descending":"Aflopend",
-"Play starting at track":"Afspelen vanaf nummer"
+"Option+%1":"",
+"Option+(N)":""
 }

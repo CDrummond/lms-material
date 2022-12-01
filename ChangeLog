@@ -3,6 +3,7 @@
 1. Fix toggling of power when power button replaces player icon.
 2. Show ESP32 and pCP configuration button in 'Player settings' dialog when
    called from 'Information' and 'Manage players' dialogs.
+3. Rename "Alt" keyboard shortcuts to "Option" for macOS.
 
 3.0.1
 -----

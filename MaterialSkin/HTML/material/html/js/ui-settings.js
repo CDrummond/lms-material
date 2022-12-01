@@ -745,10 +745,10 @@ Vue.component('lms-ui-settings', {
             return disabledModes;
         },
         keyboardInfo() {
-            var list = [ i18n("Alt+%1", "▲")+SEPARATOR+i18n("Increase volume"),
-                         i18n("Alt+%1", "▼")+SEPARATOR+i18n("Decrease volume"),
-                         i18n("Alt+%1", "◀")+SEPARATOR+i18n("Previous track"),
-                         i18n("Alt+%1", "▶")+SEPARATOR+i18n("Next track"),
+            var list = [ (IS_APPLE ? i18n("Option+%1", "▲") : i18n("Alt+%1", "▲"))+SEPARATOR+i18n("Increase volume"),
+                         (IS_APPLE ? i18n("Option+%1", "▼") : i18n("Alt+%1", "▼"))+SEPARATOR+i18n("Decrease volume"),
+                         (IS_APPLE ? i18n("Option+%1", "◀") : i18n("Alt+%1", "◀"))+SEPARATOR+i18n("Previous track"),
+                         (IS_APPLE ? i18n("Option+%1", "▶") : i18n("Alt+%1", "▶"))+SEPARATOR+i18n("Next track"),
                          i18n("Spacebar")+SEPARATOR+i18n("Play/pause"),
                          i18n("Home")+SEPARATOR+i18n("Go to homescreen"),
                          shortcutStr("◀")+SEPARATOR+i18n("Go back"),
@@ -776,7 +776,7 @@ Vue.component('lms-ui-settings', {
             }
             list.push(shortcutStr(LMS_INFORMATION_KEYBOARD)+SEPARATOR+TB_INFO.title);
             list.push(shortcutStr(LMS_MANAGEPLAYERS_KEYBOARD)+SEPARATOR+TB_MANAGE_PLAYERS.title);
-            list.push(i18n("Alt+(N)")+SEPARATOR+i18n("Switch to Nth player"));
+            list.push((IS_APPLE ? i18n("Option+(N)") : i18n("Alt+(N)"))+SEPARATOR+i18n("Switch to Nth player"));
             if (!this.$store.state.desktopLayout) {
                 list.push("F1"+SEPARATOR+i18n("Browse"));
                 list.push("F2"+SEPARATOR+i18n("Playing"));

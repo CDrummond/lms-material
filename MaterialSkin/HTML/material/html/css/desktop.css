@@ -376,6 +376,9 @@
 .v-menu__content .toolbar-player-list-desktop .v-list__tile .menu-shortcut-player {
  min-width:54px!important;
 }
+.v-menu__content .toolbar-player-list-desktop .v-list__tile .menu-shortcut-player-apple {
+ min-width:62px!important;
+}
 .v-menu__content .toolbar-player-list-desktop .v-list__tile .player-menu-shortcut {
  min-width:80px!important;
 }

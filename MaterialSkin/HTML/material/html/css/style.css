@@ -1747,6 +1747,10 @@ div.v-subheader {
  margin-right:-9px;
 }
 
+.v-menu__content .v-list__tile .menu-shortcut-player-apple {
+ min-width:48px!important;
+}
+
 .v-menu__content {
  max-width:90%;
 }

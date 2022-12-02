@@ -48,7 +48,7 @@ Vue.component('lms-toolbar', {
      <v-list-tile-content>
       <v-list-tile-title v-bind:class="{'active-player-title':player && item.id === player.id}">{{item.name}}</v-list-tile-title>
      </v-list-tile-content>
-      <v-list-tile-action v-if="index<10 && keyboardControl" class="menu-shortcut" v-bind:class="{'menu-shortcut-player':item.canpoweroff}">{{index|playerShortcut}}</v-list-tile-action>
+      <v-list-tile-action v-if="index<10 && keyboardControl" class="menu-shortcut" v-bind:class="{'menu-shortcut-player':item.canpoweroff,'menu-shortcut-player-apple':IS_APPLE && item.canpoweroff}">{{index|playerShortcut}}</v-list-tile-action>
       <v-list-tile-action>
        <v-btn v-if="item.canpoweroff" icon style="float:right" v-longpress:stop="togglePower" :id="index+'-power-btn'" :title="(item.id==player.id && playerStatus.ison) || item.ison ? i18n('Switch off %1', item.name) : i18n('Switch on %1', item.name)"><v-icon v-bind:class="{'dimmed': (item.id==player.id ? !playerStatus.ison : !item.ison), 'active-btn':(item.id==player.id ? playerStatus.ison : item.ison) }">power_settings_new</v-icon></v-btn>
       </v-list-tile-action>
@@ -909,7 +909,7 @@ Vue.component('lms-toolbar', {
             return showShortcut ? str+SEPARATOR+shortcut : str;
         },
         playerShortcut: function(index) {
-            return i18n("Alt+%1", 9==index ? 0 : index+1);
+            return IS_APPLE ? i18n("Option+%1", 9==index ? 0 : index+1) : i18n("Alt+%1", 9==index ? 0 : index+1);
         }
     },
     watch: {

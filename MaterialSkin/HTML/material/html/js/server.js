@@ -496,13 +496,21 @@ var lmsServer = Vue.component('lms-server', {
                 player.model = this.$store.state.player.model;
                 this.isPlaying = player.isplaying;
             } else {
+                let found = false;
                 for (var i=0, len=this.$store.state.players.length; i<len; ++i) {
                     if (this.$store.state.players[i].id == playerId) {
                         player.isgroup = this.$store.state.players[i].isgroup;
                         player.icon = this.$store.state.players[i].icon;
                         player.link = this.$store.state.players[i].link;
                         player.model = this.$store.state.players[i].model;
+                        found = true;
+                        break;
                     }
+                }
+                // Ignore status for players that we don't know about. When deleting a group player in 'Manage players' we get
+                // a status message for this removed player, whcich causes it to be re-added...
+                if (!found) {
+                    return;
                 }
             }
 

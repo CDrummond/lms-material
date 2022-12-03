@@ -625,12 +625,12 @@ Vue.component('lms-ui-settings', {
             if (0!=queryParams.nativeUiChanges) {
                 let settingsNow = JSON.stringify(this.settings(true, true));
                 if (settingsNow!=this.currentSettings) {
-                    if (1==queryParams.nativeUiChange) {
+                    if (1==queryParams.nativeUiChanges) {
                         try {
                             NativeReceiver.updateUiSettings(settingsNow);
                         } catch (e) {
                         }
-                    } else if (2==queryParams.nativeUiChange) {
+                    } else if (2==queryParams.nativeUiChanges) {
                         console.log("MATERIAL-UI\nJSON " + settingsNow);
                     }
                 }

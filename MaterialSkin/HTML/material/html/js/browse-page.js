@@ -1605,7 +1605,7 @@ var lmsBrowse = Vue.component("lms-browse", {
                 }
                 var len = this.history.length;
                 if (undefined==this.current) {
-                    this.current = {id:'XXXX', title:'?'}; // Create fake item here or else view toggle breaks?
+                    this.current = {id:'XXXX', title:/**/'?'}; // Create fake item here or else view toggle breaks?
                 }
                 this.click(item);
                 if (this.history.length>len) {

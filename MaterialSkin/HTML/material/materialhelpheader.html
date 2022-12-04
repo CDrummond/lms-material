@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html>
+ <head>
+  <meta charset="utf-8" />
+  <meta http-equiv="Content-Type" content="text/html; charset=[% LOCALE %]"/>
+  <link rel="stylesheet" type="text/css" href="[% webroot %]html/font/font.css?r=49"/>
+  <link rel="stylesheet" type="text/css" href="[% webroot %]skin.css?r=MATERIAL_VERSION" />
+  <link rel="stylesheet" type="text/css" href="[% webroot %]html/css/themes/dark.css?r=MATERIAL_VERSION"/>
+  <link rel="stylesheet" type="text/css" href="[% webroot %]html/css/colors/blue.css?r=MATERIAL_VERSION"/>
+  <script src="[% webroot %]html/lib/mousetrap.min.js?r=a4098"></script>
+  <script>
+  let theme = window.localStorage.getItem("lms-material::theme");
+  if (undefined==theme) {
+    theme='dark';
+  }
+  let t = theme.split('-');
+  let variant = t.length>1 && ('colored'==t[t.length-1] || 'standard'==t[t.length-1]) ? t.pop() : 'standard';
+  let themeName = t.join('-');
+
+  if (undefined!=theme && (theme.startsWith('light') || theme.indexOf("/light/")>=0)) {
+    document.querySelector("link[href='[% webroot %]html/css/themes/dark.css?r=MATERIAL_VERSION']").href = "[% webroot %]html/css/themes/light.css?r=MATERIAL_VERSION";
+    document.querySelector("link[href='[% webroot %]html/css/classic-skin/dark.css?r=MATERIAL_VERSION']").href = "[% webroot %]html/css/classic-skin/light.css?r=MATERIAL_VERSION";
+  } else if (undefined!=themeName && themeName!='dark') {
+    if (themeName.startsWith("user:")) {
+      document.querySelector("link[href='[% webroot %]html/css/themes/dark.css?r=MATERIAL_VERSION']").href = "/material/usertheme/" + themeName.substring(5) + "?r=MATERIAL_VERSION";
+    } else {
+      document.querySelector("link[href='[% webroot %]html/css/themes/dark.css?r=MATERIAL_VERSION']").href = "[% webroot %]html/css/themes/"+themeName+".css?r=MATERIAL_VERSION";
+    }
+  }
+
+  let col = window.localStorage.getItem("lms-material::color");
+  if ('blue'!=col && undefined!=col) {
+    if (col.startsWith("user:")) {
+      document.querySelector("link[href='[% webroot %]html/css/colors/blue.css?r=MATERIAL_VERSION']").href = "/material/usercolor/" + col.substring(5) + "?r=MATERIAL_VERSION";
+    } else {
+     document.querySelector("link[href='[% webroot %]html/css/colors/blue.css?r=MATERIAL_VERSION']").href = "[% webroot %]html/css/colors/"+col+".css?r=MATERIAL_VERSION";
+    }
+  }
+  Mousetrap.bind('esc', function() { document.bus.$emit('esc') });
+  </script>
+ </head>
+ <body style="width:100%; height:100%; max-width:1000px; margin-left:auto; margin-right:auto;">
+    <div style="padding-left:8px; padding-right:8px">

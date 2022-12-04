@@ -5,7 +5,8 @@
    called from 'Information' and 'Manage players' dialogs.
 3. Rename 'Alt' keyboard shortcuts to 'Option' for macOS.
 4. Fix native UI changes callback.
-5. Make 'Help' page translateable.
+5. Split 'Help' page HTML into header, text, and footer - to make translation
+   easier.
 
 3.0.1
 -----

@@ -8,6 +8,8 @@
 5. Split 'Help' page HTML into header, text, and footer - to make translation
    easier.
 6. Fix untranslated tooltips in iframe dialogs (e.g. 'Server settings')
+7. Work-around CSS pointer detection failing by setting a CSS property via
+   javascript.
 
 3.0.1
 -----

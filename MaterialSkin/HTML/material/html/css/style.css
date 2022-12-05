@@ -462,11 +462,11 @@ div.v-subheader {
  top:4px !important;
 }
 
-@media (hover: hover) and (pointer: fine) {
- .image-grid-item:hover .emblem {
+/*@media (hover: hover) and (pointer: fine) {*/
+ .msk-is-non-touch .image-grid-item:hover .emblem {
   opacity:0.75;
  }
-}
+/*}*/
 
 .lms-list .image-grid-item .emblem img, .np-grid-item .emblem img {
  width:26px !important;
@@ -1604,11 +1604,11 @@ progress {
  cursor:pointer;
 }
 
-@media (hover: hover) and (pointer: fine) {
- .link-item:hover, .np-bar .link-item:hover {
+/*@media (hover: hover) and (pointer: fine) {*/
+ .msk-is-non-touch .link-item:hover, .msk-is-non-touch .np-bar .link-item:hover {
   color:var(--active-color)!important;
  }
-}
+/*}*/
 
 .svg-badge {
  position:absolute;
@@ -2140,11 +2140,11 @@ img[lazy='loaded'].np-image-desktop, img[lazy='loaded'].np-image-landscape, img[
  margin-right:8px;
 }
 
-@media (hover: hover) and (pointer: fine) {
- .add-btn:hover, .play-btn:hover {
+/*@media (hover: hover) and (pointer: fine) {*/
+ .msk-is-non-touch .add-btn:hover, .msk-is-non-touch .play-btn:hover {
   background-color:rgba(110, 110, 110, 0.95);
  }
-}
+/*}*/
 
 .add-btn:after {
  content:"add_circle_outline";
@@ -2348,11 +2348,18 @@ img[lazy='loaded'].np-image-desktop, img[lazy='loaded'].np-image-landscape, img[
  font-weight:var(--std-weight);
 }
 
-@media (hover: hover) and (pointer: fine) {
- .menu-btn:hover, .list-btns .add-btn:hover, .list-btns .play-btn:hover, .v-btn:hover {
+/*@media (hover: hover) and (pointer: fine) {*/
+ .msk-is-non-touch .menu-btn:hover,
+ .msk-is-non-touch .list-btns .add-btn:hover,
+ .msk-is-non-touch .list-btns .play-btn:hover,
+ .msk-is-non-touch .v-btn:hover {
   background-color:var(--btn-hover-color);
  }
- .lms-list .v-list__tile:hover, .lms-list-sub .v-list__tile:hover, .lms-list3 .v-list__tile:hover, .lms-list-sub3 .v-list__tile:hover, .v-menu__content .v-list__tile:hover {
+ .msk-is-non-touch .lms-list .v-list__tile:hover,
+ .msk-is-non-touch .lms-list-sub .v-list__tile:hover,
+ .msk-is-non-touch .lms-list3 .v-list__tile:hover,
+ .msk-is-non-touch .lms-list-sub3 .v-list__tile:hover,
+ .msk-is-non-touch .v-menu__content .v-list__tile:hover {
   background-color:var(--list-hover-color)!important;
  }
 }

@@ -27,6 +27,9 @@ var app = new Vue({
             s.innerHTML = ".v-btn:hover:before {background-color:transparent!important;}" +
                           ".lms-list .v-list__tile--link:hover,.dialog-main-list .v-list__tile--link:hover {background:transparent!important};";
             document.getElementsByTagName("head")[0].appendChild(s);
+            document.getElementsByTagName("body")[0].classList.add("msk-is-touch");
+        } else {
+            document.getElementsByTagName("body")[0].classList.add("msk-is-non-touch");
         }
         if (IS_IOS || queryParams.addpad) {
             // Always add padding...

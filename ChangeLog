@@ -7,6 +7,7 @@
 4. Fix native UI changes callback.
 5. Split 'Help' page HTML into header, text, and footer - to make translation
    easier.
+6. Fix untranslated tooltips in iframe dialogs (e.g. 'Server settings')
 
 3.0.1
 -----

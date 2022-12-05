@@ -566,7 +566,7 @@ Vue.component('lms-iframe-dialog', {
             bus.$emit('iframeClosed', this.isPlayer);
         },
         i18n(str, arg) {
-            if (this.show && this.transparent) {
+            if (this.show) {
                 return i18n(str, arg);
             } else {
                 return str;

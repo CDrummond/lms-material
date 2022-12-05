@@ -1,0 +1,94 @@
+[% PROCESS materialhelpheader.html %]
+<h1>Introduction</h1>
+<p>Material Skin est une application Web HTML5 pour LMS qui propose 2 interfaces graphiques :
+  <ul>
+    <li>Smartphone/tablette</li>
+    <li>Ordinateur</li>
+  </ul>
+Par défaut l'application tente d'utiliser l'interface adaptée à votre matériel en fonction de la largeur de votre écran. Cependant, vous pouvez utiliser
+"Préférences -> Interface" pour forcer l'utilisation de l'une ou de l'autre.
+</p>
+<p>Cette page d'aide fournit quelques détails utiles (espérons-le) sur l'utilisation de l'application.
+</p>
+<br/>
+
+<h1>Interface pour smartphone/tablette</h1>
+<p>Cette interface est destinée à être utilisée avec des téléphones ou des petites tablettes. Elle propose dans le bas de l'écran des onglets permettant de basculer entre plusieurs vues :
+  <ul>
+    <li>Bibliothèque - permet de parcourir votre collection de musique locale, vos applications, vos radios, etc.</li>
+    <li>En cours - affiche des informations (par exemple la pochette) sur le morceau en cours de lecture.</li>
+    <li>Liste de lecture - affiche la liste des morceaux actuellement en file d'attente.</li>
+  </ul>
+Vous pouvez naviguer entre les vues soit en touchant le bouton correspondant en bas de l'écran, soit en balayant l'écran vers la gauche ou la droite.
+Si vous êtes déjà sur une vue et que vous appuyez à nouveau sur son bouton, les actions suivantes se déclencheront :
+  <ul>
+    <li>Bibliothèque - remonte d'un niveau, comme si vous appuyiez sur le bouton "Retourner".</li>
+    <li>En cours - affiche des informations sur l'artiste, l'album et la piste si le plugin "Informations sur la musique et les artistes" est installé sur LMS.</li>
+    <li>Liste de lecture - déroule la file d'attente de lecture de sorte que la piste en cours soit visible.</li>
+  </ul>
+Dans cette interface, si la largeur est limitée, certaines actions (comme celles définissant l'ordre de tri par exemple) seront placées dans le menu principal (accessible via le bouton à trois points en haut à droite). Les actions déplacées dans ce menu sont relatives à la vue actuellement affichée. Par conséquent, lorsque vous changez de vue, les éléments du menu changent. Par exemple, dans la vue "Bibliothèque", le menu pourra contenir la fonction "Alterner entre les vues liste et grille". Dans la vue "Liste de lecture", il pourra contenir la fonction "Transférer la liste de lecture".
+</p>
+<br/>
+
+<h1>Interface pour ordinateur</h1>
+<p>Cette interface est destinée aux appareils dotés d'écrans larges, tels que les ordinateurs portables et les ordinateurs de bureau. Elle affiche la vue "Bibliothèque" à gauche, la vue "Liste de lecture" à droite et les détails sur le morceau en cours en bas (s'il y a des morceaux dans la liste de lecture). En appuyant sur le bouton "Accéder à la vue lecture en cours" dans la barre d'outils principale, les vues "Bibliothèque" et "Liste de lecture" seront remplacées par une vue unique affichant une grande pochette et des détails sur le morceau en cours. De même, cliquer sur "Afficher les informations du morceau en cours" (si le plugin "Informations sur la musique et les artistes" est installé) affichera une vue contenant les informations sur l'artiste, l'album et le morceau en cours (les paroles d'une chanson par exemple).
+</p>
+<br/>
+
+<h1>Appuis longs</h1>
+<p>Il existe diverses fonctionnalités d'appui long dans l'application. Celles-ci s'activent en appuyant sur un élément pendant 0,5 seconde ou plus. Les fonctionnalités disponibles actuellement via des appuis longs sont :
+  <ul>
+    <li>Onglet "Bibliothèque" dans l'interface pour smartphone/tablette - si l'application affiche déjà la vue "Bibliothèque", permet un retour à l'écran d'accueil.</li>
+    <li>Bouton "Retourner" dans la vue "Bibliothèque" - déclenche un retour à l'écran d'accueil.</li>
+    <li>Bouton "Retourner" dans les entêtes des fenêtres (telles que "Configuration de platine") - ferme les fenêtres.</li>
+    <li>Bouton ou étiquette de volume - active/désactive le son.</li>
+    <li>Bouton lecture/pause - Affiche la fenêtre "Mise en veille".</li>
+    <li>Icône de "répétition" ou DSTM - affiche les options "Don't Stop the Music".</li>
+    <li>Étiquette de durée dans la file d'attente - affiche la fenêtre "Transférer la liste de lecture", si vous avez au moins 2 platines.</li>
+    <li>Icône de platine dans la barre d'outils, à côté du nom de la platine - affiche la fenêtre "Synchroniser", si vous avez au moins 2 platines.</li>
+    <li>Élément de menu "Gérer les platines" - affiche la fenêtre "Synchroniser", si vous avez au moins 2 platines.</li>
+    <li>Bouton "Morceau précédent" - saute de X secondes en arrière. Maintenir l'appui pour effectuer plusieurs sauts. La durée exacte du saut est configurable.</li>
+    <li>Bouton "Morceau suivant" - saute de X secondes en avant. Maintenir l'appui pour effectuer plusieurs sauts. La durée exacte du saut est configurable.</li>
+    <li>Si vous avez des actions de paramètres spécifiques à des plugins ajoutées à "Configuration de platine", un appui long sur l'une d'entre elles ajoutera l'action à l'écran d'accueil.</li>
+  </ul>
+</p>
+<br/>
+
+<h1>Gérer les platines</h1>
+<p>Si vous avez au moins 2 platines, ou si vous avez plusieurs instances de LMS, une entrée "Gérer les platines" sera ajoutée au menu qui apparaît lorsque vous appuyez sur le nom de la platine dans la barre d'outils principale. Cette entrée permettra d'afficher une fenêtre précisant l'état de toutes vos platines (morceau en cours, volume, etc.) et de :
+  <ul>
+    <li>Répertorier les platines standards et les groupes de platines. Les groupes de platines ne seront affichés que si vous avez installé le plugin LMS "Lecteurs Groupés".</li>
+    <li>Synchroniser les platines. En faisant glisser une platine sur une autre, vous pouvez créer un groupe de platines synchronisées. Pour retirer une platine d'un groupe, faire glisser la platine sur la barre d'outils principale (qui devrait alors afficher "Déposer ici pour retirer du groupe").</li>
+    <li>Créer, modifier ou supprimer des groupes si vous avez installé le plugin LMS "Lecteurs Groupés". La fenêtre affiche un bouton de menu en haut à droite (icône avec trois points les uns au-dessus des autres). Dans ce menu, une option permet de créer un groupe de platines.</li>
+    <li>Déplacer une platine d'une autre instance LMS vers l'instance courante si vous avez plusieurs instances LMS sur votre réseau.</li>
+    <li>Définir une platine par défaut qui sera automatiquement sélectionnée lorsque l'application est redémarrée. Si la platine par défaut n'est pas disponible au démarrage, une autre sera utilisée. Quand la platine par défaut redeviendra accessible, elle sera sélectionnée à nouveau. Pour définir une platine par défaut, utiliser le bouton de menu placé à la droite de la platine (icône avec trois points les uns au-dessus des autres).</li>
+  </ul>
+La platine active est indiquée par un arrière-plan particulier. Si une platine par défaut est définie, elle sera identifiée par une coche à côté de son nom. Les platines mises en veille auront un dessin de lit à côté de leur nom.
+</p>
+<br/>
+
+<h1>Préférences</h1>
+<p>En raison de la nature de LMS, il existe plusieurs fenêtres de paramètres.
+  <ul>
+    <li>Interface - contient des paramètres permettant de contrôler la disposition des éléments d'interface de l'application Material Skin. Toutes les valeurs de ces paramètres sont stockées dans le navigateur actuel. Elles sont donc spécifiques à l'utilisateur. Pour vous permettre de définir vos propres paramètres par défaut, il y a un bouton de menu en haut à droite proposant les actions "Mémoriser ces réglages comme valeurs par défaut" et "Revenir aux paramètres par défaut". (Il existe également des paramètres Material Skin de type "serveur". Ces paramètres particuliers, accessibles via les réglages de LMS dédiés au plugin Material Skin, s'appliquent à tous les utilisateurs.)</li>
+    <li>Platine - contient des paramètres spécifiques à la platine active, tels que son nom, ses alarmes, etc. Par défaut, seuls quelques paramètres sont affichés, mais LMS a beaucoup d'autres réglages dédiés aux platines. Pour accéder à tous les paramètres LMS d'une platine, appuyer sur le bouton "Paramètres supplémentaires" présent en bas de la fenêtre. Si la platine est un appareil piCorePlayer ou SqueezeESP32, la fenêtre contiendra également un bouton permettant d'accéder à l'interface de configuration Web de l'appareil.</li>
+    <li>Serveur - contient tous les paramètres du serveur LMS. Cela permet, entre autres, d'installer de nouveaux plugins pour LMS.</li>
+  </ul>
+</p>
+<br/>
+
+<h1>Modes de navigation</h1>
+<p>Habituellement, avec LMS, la liste des modes de navigation accessibles (par exemple, par artiste, album, genre) est configurée par platine. C'est pourquoi, dans la section "Paramètres supplémentaires" de la fenêtre "Configuration de platine", il existe une section intitulée "Autres Modes de Navigation". Cependant, comme l'application Material Skin est conçue pour contrôler plusieurs platines, la liste des modes de navigation disponibles dans Material Skin est plutôt à configurer dans "Préférences -> Interface", via un ensemble de cases à cocher permettant de définir les catégories de niveau supérieur à afficher sur l'écran d'accueil. Parmi ces cases à cocher, l'entrée "Ma musique" est accompagnée d'un icône en forme de roue d'engrenage. Un appui sur cet icône déclenche l'apparition d'une fenêtre qui permet de choisir les modes de navigation à afficher dans Material Skin.
+</p>
+<br/>
+
+<h1>Bibliothèques virtuelles</h1>
+<p>Les bibliothèques virtuelles de LMS peuvent servir à créer des sous-bibliothèques de votre collection musicale. Par exemple, vous pourriez avoir une bibliothèque pour chaque membre de votre famille, afin que chacun ne voit que les artistes qui l'intéressent.
+</p>
+<p>Comme pour les modes de navigation, LMS définit généralement la bibliothèque active par platine. Cela se fait dans la fenêtre "Configuration de platine" de Material Skin. Ainsi, la bibliothèque restreint les pistes accessibles sur la base de certaines fonctionnalités LMS, telles que "Random mix" par exemple. A nouveau, Material Skin diffère de LMS en permettant de définir la sélection de la bibliothèque par instance de l'application, la bibliothèque restant la même quelle que soit la platine choisie. De cette façon, par exemple, un membre de la famille verra la bibliothèque de son choix, quelle que soit la platine qu'il essaie de contrôler.
+</p>
+<p>Veuillez noter que les fonctionnalités liées aux bibliothèques ne seront visibles et accessibles que lorsqu'une première bibliothèque virtuelle aura été créée : via l'enregistrement d'une "Recherche avancée" (cliquer sur l'icône de recherche sur l'écran d'accueil de Material Skin, puis cliquer sur l'icône "Recherche avancée" qui apparaît ensuite) ou via des plugins LMS tels que "Simple Library Views".
+</p>
+</div>
+[% PROCESS materialhelpfooter.html %]
+

@@ -10,6 +10,8 @@
 6. Fix untranslated tooltips in iframe dialogs (e.g. 'Server settings')
 7. Work-around CSS pointer detection failing by setting a CSS property via
    javascript.
+8. Double click on audio items (e.g. tracks and streams) in browse view to
+   play.
 
 3.0.1
 -----

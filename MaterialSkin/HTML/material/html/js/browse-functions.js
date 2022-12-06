@@ -589,7 +589,16 @@ function browseClick(view, item, index, event) {
         return;
     }
     if (isAudioTrack(item)) {
-        view.itemMenu(item, index, event);
+        if (!view.clickTimer) {
+            view.clickTimer = setTimeout(function () {
+                view.clickTimer = undefined;
+                view.itemMenu(item, index, event);
+            }.bind(view), LMS_DOUBLE_CLICK_TIMEOUT);
+        } else {
+            clearTimeout(view.clickTimer);
+            view.clickTimer = undefined;
+            browseItemAction(view, PLAY_ACTION, item, index, event);
+        }
         return;
     }
     if (isTextItem(item) && !item.id.startsWith(TOP_ID_PREFIX) && !item.id.startsWith(MUSIC_ID_PREFIX)) {

@@ -473,14 +473,15 @@ var lmsQueue = Vue.component("lms-queue", {
             this.headerAction(action);
         }.bind(this));
 
-        bus.$on('windowWidthChanged', function() {
-            this.$nextTick(function () {
-                this.updateMenu();
-            });
-        }.bind(this));
-        bus.$on('splitterChanged', function() {
-            this.updateMenu();
-        }.bind(this));
+        // Always place items in menu, so no need to update on width changes
+        //bus.$on('windowWidthChanged', function() {
+        //    this.$nextTick(function () {
+        //        this.updateMenu();
+        //    });
+        //}.bind(this));
+        //bus.$on('splitterChanged', function() {
+        //    this.updateMenu();
+        //}.bind(this));
         this.wide=5;
         this.updateMenu();
 

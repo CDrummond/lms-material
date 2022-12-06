@@ -345,26 +345,26 @@
  height:calc((var(--vh, 1vh)*100) - var(--main-toolbar-height));
 }
 
-@media screen and (max-height: 130px) /*and (hover: hover) and (pointer: fine)*/ {
- .msk-is-non-touch .hide-for-mini {
+@media screen and (max-height: 130px) {
+ .hide-for-mini {
   display:none!important;
  }
- .msk-is-non-touch .application--wrap {
+ .application--wrap {
   background-color:var(--top-toolbar-color)
  }
- .msk-is-non-touch .lms-toolbar {
+ .lms-toolbar {
   border-bottom:none;
  }
- .msk-is-non-touch .np-bar, .lms-bottom-nav {
+ .np-bar, .lms-bottom-nav {
   border-top:none;
  }
- .msk-is-non-touch .v-dialog__content .v-dialog .screensaver-bgnd {
+ .v-dialog__content .v-dialog .screensaver-bgnd {
   display:none;
  }
- .msk-is-non-touch .vol-sheet {
+ .vol-sheet {
   top:0px;
  }
- .msk-is-non-touch .vol-full-label {
+ .vol-full-label {
   margin-right:-16px;
  }
 }

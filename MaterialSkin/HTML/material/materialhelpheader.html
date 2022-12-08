@@ -19,7 +19,6 @@
 
   if (undefined!=theme && (theme.startsWith('light') || theme.indexOf("/light/")>=0)) {
     document.querySelector("link[href='[% webroot %]html/css/themes/dark.css?r=MATERIAL_VERSION']").href = "[% webroot %]html/css/themes/light.css?r=MATERIAL_VERSION";
-    document.querySelector("link[href='[% webroot %]html/css/classic-skin/dark.css?r=MATERIAL_VERSION']").href = "[% webroot %]html/css/classic-skin/light.css?r=MATERIAL_VERSION";
   } else if (undefined!=themeName && themeName!='dark') {
     if (themeName.startsWith("user:")) {
       document.querySelector("link[href='[% webroot %]html/css/themes/dark.css?r=MATERIAL_VERSION']").href = "/material/usertheme/" + themeName.substring(5) + "?r=MATERIAL_VERSION";

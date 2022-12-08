@@ -465,7 +465,6 @@ var lmsBrowse = Vue.component("lms-browse", {
             bindKey(LMS_CREATE_FAV_FOLDER_KEYBOARD, 'mod+shift');
             bindKey('pageup', undefined, true);
             bindKey('pagedown', undefined, true);
-            bindKey('left', 'mod', true);
             bus.$on('keyboard', function(key, modifier) {
                 if (this.$store.state.openDialogs.length>0 || this.$store.state.visibleMenus.size>0 || (!this.$store.state.desktopLayout && this.$store.state.page!="browse")) {
                     return;
@@ -475,8 +474,6 @@ var lmsBrowse = Vue.component("lms-browse", {
                         if ((this.history.length==0 && !this.$store.state.hidden.has(TOP_MYMUSIC_ID)) || (this.current && (this.current.id==TOP_MYMUSIC_ID || this.current.id.startsWith(SEARCH_ID)))) {
                             this.itemAction(SEARCH_LIB_ACTION);
                         }
-                    } else if ('left'==key) {
-                        this.goBack();
                     } else {
                         for (var i=0, len=this.tbarActions.length; i<len; ++i) {
                             if (ACTIONS[this.tbarActions[i]].key==key) {

@@ -2,7 +2,9 @@
 -----
 1. Remove some shortcurt information when in party mode.
 2. Hide 'Add URL' and 'Move queue' options in party mode.
-2. Fix 'Scroll to current' in party mode.
+3. Fix 'Scroll to current' in party mode.
+4. Set 'Scroll to current' short cuut to 'Ctrl+RIGHT'
+5. Remove 'Ctrl+LEFT' shortcut for 'Go back', as this already has 'Esc'
 
 3.0.2
 -----

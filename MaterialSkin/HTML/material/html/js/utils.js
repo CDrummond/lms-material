@@ -1081,6 +1081,17 @@ function bindKey(key, modifier, canRepeat) {
 }
 
 function shortcutStr(key, shift) {
+    if (key.length>1) {
+        if (key=="left") {
+            key = "◀";
+        } else if (key=="right") {
+            key = "▶";
+        } else if (key=="up") {
+            key = "▲";
+        } else if (key=="d") {
+            key = "▼";
+        }
+    }
     if (IS_APPLE) {
         return shift ? i18n("⌘+Shift+%1", key) : i18n("⌘+%1", key);
     }

@@ -748,7 +748,7 @@ Vue.component('lms-ui-settings', {
             var list = queryParams.party
                      ? [ i18n("Spacebar")+SEPARATOR+i18n("Play/pause"),
                          i18n("Home")+SEPARATOR+i18n("Go to homescreen"),
-                         shortcutStr("◀")+SEPARATOR+i18n("Go back"),
+                         i18n("Esc")+SEPARATOR+i18n("Go back"),
                          shortcutStr(ACTIONS[SEARCH_LIB_ACTION].key)+SEPARATOR+ACTIONS[SEARCH_LIB_ACTION].title,
                          shortcutStr(ACTIONS[ADD_ACTION].skey, true)+SEPARATOR+ACTIONS[ADD_ACTION].title,
                          shortcutStr(LMS_TRACK_INFO_KEYBOARD)+SEPARATOR+i18n("Show current track information")
@@ -759,7 +759,7 @@ Vue.component('lms-ui-settings', {
                          (IS_APPLE ? i18n("Option+%1", "▶") : i18n("Alt+%1", "▶"))+SEPARATOR+i18n("Next track"),
                          i18n("Spacebar")+SEPARATOR+i18n("Play/pause"),
                          i18n("Home")+SEPARATOR+i18n("Go to homescreen"),
-                         shortcutStr("◀")+SEPARATOR+i18n("Go back"),
+                         i18n("Esc")+SEPARATOR+i18n("Go back"),
                          shortcutStr(ACTIONS[SEARCH_LIB_ACTION].key)+SEPARATOR+ACTIONS[SEARCH_LIB_ACTION].title,
                          shortcutStr(ACTIONS[PLAY_ACTION].skey, true)+SEPARATOR+ACTIONS[PLAY_ACTION].title,
                          shortcutStr(ACTIONS[ADD_ACTION].skey, true)+SEPARATOR+ACTIONS[ADD_ACTION].title,

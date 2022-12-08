@@ -745,7 +745,15 @@ Vue.component('lms-ui-settings', {
             return disabledModes;
         },
         keyboardInfo() {
-            var list = [ (IS_APPLE ? i18n("Option+%1", "▲") : i18n("Alt+%1", "▲"))+SEPARATOR+i18n("Increase volume"),
+            var list = queryParams.party
+                     ? [ i18n("Spacebar")+SEPARATOR+i18n("Play/pause"),
+                         i18n("Home")+SEPARATOR+i18n("Go to homescreen"),
+                         shortcutStr("◀")+SEPARATOR+i18n("Go back"),
+                         shortcutStr(ACTIONS[SEARCH_LIB_ACTION].key)+SEPARATOR+ACTIONS[SEARCH_LIB_ACTION].title,
+                         shortcutStr(ACTIONS[ADD_ACTION].skey, true)+SEPARATOR+ACTIONS[ADD_ACTION].title,
+                         shortcutStr(LMS_TRACK_INFO_KEYBOARD)+SEPARATOR+i18n("Show current track information")
+                       ]
+                     : [ (IS_APPLE ? i18n("Option+%1", "▲") : i18n("Alt+%1", "▲"))+SEPARATOR+i18n("Increase volume"),
                          (IS_APPLE ? i18n("Option+%1", "▼") : i18n("Alt+%1", "▼"))+SEPARATOR+i18n("Decrease volume"),
                          (IS_APPLE ? i18n("Option+%1", "◀") : i18n("Alt+%1", "◀"))+SEPARATOR+i18n("Previous track"),
                          (IS_APPLE ? i18n("Option+%1", "▶") : i18n("Alt+%1", "▶"))+SEPARATOR+i18n("Next track"),
@@ -761,28 +769,36 @@ Vue.component('lms-ui-settings', {
             if (this.$store.state.desktopLayout) {
                 list.push(shortcutStr(LMS_EXPAND_NP_KEYBOARD, true)+SEPARATOR+i18n("Expand now playing"));
             }
-            list.push(shortcutStr(LMS_SAVE_QUEUE_KEYBOARD)+SEPARATOR+i18n("Save queue"));
-            list.push(shortcutStr(LMS_CLEAR_QUEUE_KEYBOARD)+SEPARATOR+i18n("Clear queue"));
-            list.push(shortcutStr(ACTIONS[PQ_MOVE_QUEUE_ACTION].key)+SEPARATOR+ACTIONS[PQ_MOVE_QUEUE_ACTION].title);
-            list.push(shortcutStr(ACTIONS[PQ_ADD_URL_ACTION].key)+SEPARATOR+ACTIONS[PQ_ADD_URL_ACTION].title);
+            if (!queryParams.party) {
+                list.push(shortcutStr(LMS_SAVE_QUEUE_KEYBOARD)+SEPARATOR+i18n("Save queue"));
+                list.push(shortcutStr(LMS_CLEAR_QUEUE_KEYBOARD)+SEPARATOR+i18n("Clear queue"));
+                list.push(shortcutStr(ACTIONS[PQ_MOVE_QUEUE_ACTION].key)+SEPARATOR+ACTIONS[PQ_MOVE_QUEUE_ACTION].title);
+                list.push(shortcutStr(ACTIONS[PQ_ADD_URL_ACTION].key)+SEPARATOR+ACTIONS[PQ_ADD_URL_ACTION].title);
+            }
             list.push(shortcutStr(ACTIONS[PQ_SCROLL_ACTION].key)+SEPARATOR+ACTIONS[PQ_SCROLL_ACTION].title);
             if (this.$store.state.desktopLayout) {
                 list.push(shortcutStr(LMS_TOGGLE_QUEUE_KEYBOARD, true)+SEPARATOR+i18n("Toggle queue"));
             }
             list.push(shortcutStr(LMS_UI_SETTINGS_KEYBOARD)+SEPARATOR+TB_UI_SETTINGS.title);
-            list.push(shortcutStr(LMS_PLAYER_SETTINGS_KEYBOARD)+SEPARATOR+TB_PLAYER_SETTINGS.title);
-            if (this.$store.state.unlockAll) {
+            if (!queryParams.party) {
+                list.push(shortcutStr(LMS_PLAYER_SETTINGS_KEYBOARD)+SEPARATOR+TB_PLAYER_SETTINGS.title);
+            }
+            if (!queryParams.party && this.$store.state.unlockAll) {
                 list.push(shortcutStr(LMS_SERVER_SETTINGS_KEYBOARD)+SEPARATOR+TB_SERVER_SETTINGS.title);
             }
             list.push(shortcutStr(LMS_INFORMATION_KEYBOARD)+SEPARATOR+TB_INFO.title);
-            list.push(shortcutStr(LMS_MANAGEPLAYERS_KEYBOARD)+SEPARATOR+TB_MANAGE_PLAYERS.title);
-            list.push((IS_APPLE ? i18n("Option+(N)") : i18n("Alt+(N)"))+SEPARATOR+i18n("Switch to Nth player"));
+            if (!queryParams.party) {
+                list.push(shortcutStr(LMS_MANAGEPLAYERS_KEYBOARD)+SEPARATOR+TB_MANAGE_PLAYERS.title);
+            }
+            if (!queryParams.single) {
+                list.push((IS_APPLE ? i18n("Option+(N)") : i18n("Alt+(N)"))+SEPARATOR+i18n("Switch to Nth player"));
+            }
             if (!this.$store.state.desktopLayout) {
                 list.push("F1"+SEPARATOR+i18n("Browse"));
                 list.push("F2"+SEPARATOR+i18n("Playing"));
                 list.push("F3"+SEPARATOR+i18n("Queue"));
             }
-            if (undefined!=this.$store.state.ratingsPlugin && this.$store.state.showRating) {
+            if (!queryParams.party && undefined!=this.$store.state.ratingsPlugin && this.$store.state.showRating) {
                 list.push(shortcutStr("(N)", true)+SEPARATOR+i18n("Set rating (0..5)"));
             }
             bus.$emit('dlg.open', 'iteminfo', { list:list });

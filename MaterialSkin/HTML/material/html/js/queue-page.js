@@ -280,7 +280,7 @@ var lmsQueue = Vue.component("lms-queue", {
             playlist: {name: undefined, modified: false},
             selection: new Set(),
             selectionDuration: 0,
-            settingsMenuActions: [PQ_MOVE_QUEUE_ACTION, PQ_SCROLL_ACTION, PQ_ADD_URL_ACTION],
+            settingsMenuActions: queryParams.party ? [PQ_SCROLL_ACTION] : [PQ_MOVE_QUEUE_ACTION, PQ_SCROLL_ACTION, PQ_ADD_URL_ACTION],
             wide: 0,
             dstm: false,
             dragActive: false,
@@ -1137,6 +1137,9 @@ var lmsQueue = Vue.component("lms-queue", {
             }
         },
         updateSettingsMenu() {
+            if (queryParams.party) {
+                return;
+            }
             var canMove = this.$store.state.players && this.$store.state.players.length>1;
             if (canMove && this.settingsMenuActions[0]!=PQ_MOVE_QUEUE_ACTION) {
                 this.settingsMenuActions.unshift(PQ_MOVE_QUEUE_ACTION);

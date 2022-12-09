@@ -753,10 +753,10 @@ Vue.component('lms-ui-settings', {
                          shortcutStr(ACTIONS[ADD_ACTION].skey, true)+SEPARATOR+ACTIONS[ADD_ACTION].title,
                          shortcutStr(LMS_TRACK_INFO_KEYBOARD)+SEPARATOR+i18n("Show current track information")
                        ]
-                     : [ (IS_APPLE ? i18n("Option+%1", "▲") : i18n("Alt+%1", "▲"))+SEPARATOR+i18n("Increase volume"),
-                         (IS_APPLE ? i18n("Option+%1", "▼") : i18n("Alt+%1", "▼"))+SEPARATOR+i18n("Decrease volume"),
-                         (IS_APPLE ? i18n("Option+%1", "◀") : i18n("Alt+%1", "◀"))+SEPARATOR+i18n("Previous track"),
-                         (IS_APPLE ? i18n("Option+%1", "▶") : i18n("Alt+%1", "▶"))+SEPARATOR+i18n("Next track"),
+                     : [ shortcutStr("up", false, true)+SEPARATOR+i18n("Increase volume"),
+                         shortcutStr("down", false, true)+SEPARATOR+i18n("Decrease volume"),
+                         shortcutStr("left", false, true)+SEPARATOR+i18n("Previous track"),
+                         shortcutStr("right", false, true)+SEPARATOR+i18n("Next track"),
                          i18n("Spacebar")+SEPARATOR+i18n("Play/pause"),
                          i18n("Home")+SEPARATOR+i18n("Go to homescreen"),
                          i18n("Esc")+SEPARATOR+i18n("Go back"),
@@ -791,7 +791,7 @@ Vue.component('lms-ui-settings', {
                 list.push(shortcutStr(LMS_MANAGEPLAYERS_KEYBOARD)+SEPARATOR+TB_MANAGE_PLAYERS.title);
             }
             if (!queryParams.single) {
-                list.push((IS_APPLE ? i18n("Option+(N)") : i18n("Alt+(N)"))+SEPARATOR+i18n("Switch to Nth player"));
+                list.push(shortcutStr("(N)", false, true)+SEPARATOR+i18n("Switch to Nth player"));
             }
             if (!this.$store.state.desktopLayout) {
                 list.push("F1"+SEPARATOR+i18n("Browse"));

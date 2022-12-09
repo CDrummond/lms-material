@@ -48,7 +48,6 @@
 "Alphabetically sort favorites, rather than server supplied order.":"Řadit oblíbené položky dle abecedy namísto pořadí poskytnutého serverem.",
 "Already in favorites":"Již v oblíbených položkách",
 "Alt+%1":"Alt+%1",
-"Alt+(N)":"Alt+(N)",
 "Always force members synchronization.":"Vždy vynutit synchronizaci členů.",
 "Always synchronize all members":"Vždy synchronizovat všechny členy",
 "Append random album to queue":"Přidat náhodné album do fronty",
@@ -585,7 +584,7 @@
 "1 day":"1 den",
 "%1 days":"%1 dní",
 "Descending":"",
+"Esc":"",
 "Option+%1":"",
-"Option+(N)":"",
 "Play starting at track":""
 }

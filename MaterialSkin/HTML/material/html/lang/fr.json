@@ -48,7 +48,6 @@
 "Alphabetically sort favorites, rather than server supplied order.":"Trier les favoris par ordre alphabétique plutôt que dans l'ordre fourni par le serveur.",
 "Already in favorites":"Déjà présent dans les favoris",
 "Alt+%1":"Alt+%1",
-"Alt+(N)":"Alt+(N)",
 "Always force members synchronization.":"Toujours forcer la synchronisation.",
 "Always synchronize all members":"Toujours synchroniser tous les membres",
 "Append random album to queue":"Ajouter un album aléatoire à la liste de lecture",
@@ -281,7 +280,6 @@
 "On song change":"Transition entre morceaux",
 "Only showing %1 items":"Afficher seulement %1 éléments",
 "Option+%1":"Option+%1",
-"Option+(N)":"Option+(N)",
 "Options":"Options",
 "Other settings":"Autres paramètres",
 "Path":"Chemin",
@@ -587,5 +585,6 @@
 "1 Year":"1 année",
 "%1 Years":"%1 années",
 "1 day":"1 jour",
-"%1 days":"%1 jours"
+"%1 days":"%1 jours",
+"Esc":""
 }

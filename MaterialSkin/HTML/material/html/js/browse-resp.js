@@ -842,10 +842,10 @@ function parseBrowseResp(data, parent, options, cacheKey, parentCommand, parentG
                         title = i.disc+"."+title;
                     }
                 }
-                if (i.trackartist && (showAlbumName || (( (i.albumartist && i.trackartist !== i.albumartist) || (!i.albumartist && i.compilation=="1"))))) {
-                     title+=SEPARATOR + i.trackartist;
-                } else if (i.artist && (showAlbumName || ( (i.albumartist && i.artist !== i.albumartist) || (!i.albumartist && i.compilation=="1")))) {
-                     title+=SEPARATOR + i.artist;
+                splitMultiples(i);
+                let others = buildArtistLine(i, "browse", false, showAlbumName ? undefined : i.albumartist);
+                if (undefined!=others) {
+                    title+=SEPARATOR + others;
                 }
                 if (showAlbumName && i.album) {
                     title+=SEPARATOR + i.album;
@@ -1047,8 +1047,11 @@ function parseBrowseResp(data, parent, options, cacheKey, parentCommand, parentG
             for (var idx=0, loop=data.result.playlisttracks_loop, loopLen=loop.length; idx<loopLen; ++idx) {
                 var i = loop[idx];
                 var title = i.title;
-                if (i.artist) {
-                    title+=SEPARATOR + i.artist;
+                splitMultiples(i);
+                let others = buildArtistLine(i, "browse", false);
+                console.log(others);
+                if (undefined!=others) {
+                    title+=SEPARATOR + others;
                 }
                 if (!title) {
                     title=i18n("Unknown");
@@ -1066,9 +1069,9 @@ function parseBrowseResp(data, parent, options, cacheKey, parentCommand, parentG
                 }
                 if (i.album) {
                     if (subtitle) {
-                        subtitle+=SEPARATOR+i.album;
+                        subtitle+=SEPARATOR+buildAlbumLine(i, "browse", false);
                     } else {
-                        subtitle=i.album;
+                        subtitle=buildAlbumLine(i, "browse", false);
                     }
                 }
                 var isRemote = undefined!=parent && parent.remotePlaylist;

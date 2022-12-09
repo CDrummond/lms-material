@@ -5,6 +5,7 @@
 3. Fix 'Scroll to current' in party mode.
 4. Set 'Scroll to current' short cuut to 'Ctrl+RIGHT'
 5. Remove 'Ctrl+LEFT' shortcut for 'Go back', as this already has 'Esc'
+6. Fix handing of playerprefs notifications.
 
 3.0.2
 -----

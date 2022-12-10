@@ -872,15 +872,15 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
                                 bus.$emit("dstm", this.$store.state.player.id, 0);
                             });
                         } else {
-                            bus.$emit('playerCommand', ['playlist', 'repeat', 1]);
+                            bus.$emit('playerCommand', ['playlist', 'repeat', 2]);
                         }
                     } else {
-                        bus.$emit('playerCommand', ['playlist', 'repeat', 1]);
+                        bus.$emit('playerCommand', ['playlist', 'repeat', 2]);
                     }
                 } else if (this.playerStatus.playlist.repeat===1) {
-                    bus.$emit('playerCommand', ['playlist', 'repeat', 2]);
-                } else if (this.playerStatus.playlist.repeat===2) {
                     bus.$emit('playerCommand', ['playlist', 'repeat', 0]);
+                } else if (this.playerStatus.playlist.repeat===2) {
+                    bus.$emit('playerCommand', ['playlist', 'repeat', 1]);
                     if (this.$store.state.dstmPlugin) {
                         lmsCommand(this.$store.state.player.id, ["material-skin-client", "get-dstm"]).then(({data}) => {
                             if (data && data.result && undefined!=data.result.provider) {

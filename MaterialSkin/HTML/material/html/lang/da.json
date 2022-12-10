@@ -154,6 +154,7 @@
 "Enable alarm functionality.":"Slå alle vækkeure til/fra",
 "Enable alarms":"Aktiver vækkeure",
 "Enable keyboard shortcuts":"Aktiver tastaturgenveje",
+"Esc":"Esc",
 "Expand now playing":"Vis kun aktuelle nummer",
 "Extra player settings":"Ekstra afspillerindstillinger",
 "Extra player settings, such as synchronization options, player specific plugin settings, etc.":"Ekstra afspillerindstillinger som fx synkronisering, afspillerspecifikke plugins, m.v.",
@@ -279,6 +280,7 @@
 "OK":"OK",
 "On song change":"Ved skift til nyt nummer",
 "Only showing %1 items":"Viser kun %1 numre",
+"Option+%1":"Indstilling+%1",
 "Options":"Indstillinger",
 "Other settings":"Andre indstillinger",
 "Path":"Sti",
@@ -584,7 +586,5 @@
 "1 Year":"1 år",
 "%1 Years":"%1 år",
 "1 day":"1 dag",
-"%1 days":"%1 dage",
-"Esc":"",
-"Option+%1":""
+"%1 days":"%1 dage"
 }

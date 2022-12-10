@@ -1080,7 +1080,7 @@ function bindKey(key, modifier, canRepeat) {
     Mousetrap.bind((undefined==modifier ? "" : (modifier+"+")) + key.toLowerCase(), canRepeat ? handleRepeatingShortcut : handleShortcut);
 }
 
-function shortcutStr(key, shift) {
+function shortcutStr(key, shift, alt) {
     if (key.length>1) {
         if (key=="left") {
             key = "◀";
@@ -1088,14 +1088,17 @@ function shortcutStr(key, shift) {
             key = "▶";
         } else if (key=="up") {
             key = "▲";
-        } else if (key=="d") {
+        } else if (key=="down") {
             key = "▼";
         }
     }
-    if (IS_APPLE) {
-        return shift ? i18n("⌘+Shift+%1", key) : i18n("⌘+%1", key);
+    if (alt) {
+        return IS_APPLE ? i18n("Option+%1", key) : i18n("Alt+%1", key);
     }
-    return shift ? i18n("Ctrl+Shift+%1", key) : i18n("Ctrl+%1", key);
+    if (shift) {
+        return IS_APPLE ? i18n("⌘+Shift+%1", key) : i18n("Ctrl+Shift+%1", key);
+    }
+    return IS_APPLE ? i18n("⌘+%1", key) : i18n("Ctrl+%1", key);
 }
 
 const PLAYLIST_EXTENSIONS = new Set(["m3u", "m3u8", "pls", "xspf", "asx", "cue"]);

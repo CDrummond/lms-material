@@ -48,7 +48,6 @@
 "Alphabetically sort favorites, rather than server supplied order.":"Sorteer favorieten alfabetisch, in tegenstelling tot volgorde van server",
 "Already in favorites":"Reeds in favorieten",
 "Alt+%1":"Alt+%1",
-"Alt+(N)":"Alt+(N)",
 "Always force members synchronization.":"Synchronisatie van leden altijd afdwingen",
 "Always synchronize all members":"Altijd alle leden synchroniseren",
 "Append random album to queue":"Voeg een willekeurig album toe aan de afspeellijst",
@@ -586,6 +585,6 @@
 "%1 Years":"%1 Jaren",
 "1 day":"1 dag",
 "%1 days":"%1 dagen",
-"Option+%1":"",
-"Option+(N)":""
+"Esc":"",
+"Option+%1":""
 }

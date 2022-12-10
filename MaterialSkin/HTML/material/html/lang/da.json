@@ -48,7 +48,6 @@
 "Alphabetically sort favorites, rather than server supplied order.":"Sorter favoritter alfabetisk i stedet for at bruge rækkefølgen angivet af serveren",
 "Already in favorites":"Er allerede en favorit",
 "Alt+%1":"Alt+%1",
-"Alt+(N)":"Alt+(N)",
 "Always force members synchronization.":"Tving altid gruppens afspillere til at synkronisere",
 "Always synchronize all members":"Synkroniser altid alle afspillere",
 "Append random album to queue":"Tilføj tilfældigt album til menuen",
@@ -586,6 +585,6 @@
 "%1 Years":"%1 år",
 "1 day":"1 dag",
 "%1 days":"%1 dage",
-"Option+%1":"",
-"Option+(N)":""
+"Esc":"",
+"Option+%1":""
 }

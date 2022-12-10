@@ -1168,8 +1168,23 @@ var lmsQueue = Vue.component("lms-queue", {
             if (this.$store.state.visibleMenus.size>0 || queryParams.party) {
                 return;
             }
-            if (longPress && this.playerStatus.repeat===0) {
-                bus.$emit('dlg.open', 'dstm');
+            if (this.playerStatus.repeat===0 && this.$store.state.dstmPlugin) {
+                if (longPress) {
+                    bus.$emit('dlg.open', 'dstm');
+                } else if (this.dstm) {
+                    lmsCommand(this.$store.state.player.id, ["material-skin-client", "save-dstm"]).then(({data}) => {
+                        bus.$emit("dstm", this.$store.state.player.id, 0);
+                        bus.$emit('playerCommand', ['playlist', 'repeat', 2]);
+                    });
+                } else {
+                    lmsCommand(this.$store.state.player.id, ["material-skin-client", "get-dstm"]).then(({data}) => {
+                        if (data && data.result && undefined!=data.result.provider) {
+                            bus.$emit("dstm", this.$store.state.player.id, data.result.provider);
+                        } else {
+                            bus.$emit('dlg.open', 'dstm');
+                        }
+                    });
+                }
             } else if (this.playerStatus.repeat===1) {
                 bus.$emit('playerCommand', ['playlist', 'repeat', 0]);
             } else if (this.playerStatus.repeat===2) {

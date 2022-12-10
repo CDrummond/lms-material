@@ -824,7 +824,6 @@ sub _cliCommand {
         my $cnt = 0;
         foreach my $key (keys %{$prefs->{prefs}}) {
             if ($key =~ /^_client:.+/) {
-                my $cpref = $prefs->get($key);
                 my $icon = $prefs->get($key)->{'icon'};
                 if ($icon) {
                     $request->addResultLoop("players", $cnt, "id", substr($key, 8));
@@ -1110,7 +1109,7 @@ sub _cliClientCommand {
     }
     my $cmd = $request->getParam('_cmd');
     my $client = $request->client();
-    if ($request->paramUndefinedOrNotOneOf($cmd, ['set-lib', 'get-alarm']) ) {
+    if ($request->paramUndefinedOrNotOneOf($cmd, ['set-lib', 'get-alarm', 'get-dstm', 'save-dstm']) ) {
         $request->setStatusBadParams();
         return;
     }
@@ -1131,8 +1130,22 @@ sub _cliClientCommand {
             my $alarmNext = $alarmNextAlarm->nextDue();
             $request->addResult('alarm', $alarmNext);
         } else {
-            $request->addResult('alarm', 0)
+            $request->addResult('alarm', 0);
         }
+        $request->setStatusDone();
+        return;
+    }
+
+    if ($cmd eq 'get-dstm') {
+        my $provider = $prefs->client($client)->get('dstm');
+        $request->addResult('provider', $provider);
+        $request->setStatusDone();
+        return;
+    }
+
+    if ($cmd eq 'save-dstm') {
+        my $provider = preferences('plugin.dontstopthemusic')->client($client)->get('provider');
+        $prefs->client($client)->set('dstm', $provider);
         $request->setStatusDone();
         return;
     }

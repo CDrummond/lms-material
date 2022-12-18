@@ -6,6 +6,8 @@
 4. Set 'Scroll to current' shortcut to 'Ctrl+RIGHT'
 5. Remove 'Ctrl+LEFT' shortcut for 'Go back', as this already has 'Esc'
 6. Fix handing of playerprefs notifications.
+7. Don't add 'track_id' to command parameters when getting geenres, etc, from
+   a 'More' listing.
 
 3.0.2
 -----

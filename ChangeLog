@@ -10,6 +10,7 @@
    a 'More' listing.
 8. Prevent context menu showing when long-press on mobile view 'Browse' nav
    button.
+9. Show navigation history even if only 1 level deep.
 
 3.0.2
 -----

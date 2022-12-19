@@ -1,16 +1,17 @@
 3.0.3
 -----
-1. Remove some shortcut information when in party mode.
-2. Hide 'Add URL' and 'Move queue' options in party mode.
-3. Fix 'Scroll to current' in party mode.
-4. Set 'Scroll to current' shortcut to 'Ctrl+RIGHT'
-5. Remove 'Ctrl+LEFT' shortcut for 'Go back', as this already has 'Esc'
-6. Fix handing of playerprefs notifications.
-7. Don't add 'track_id' to command parameters when getting geenres, etc, from
-   a 'More' listing.
-8. Prevent context menu showing when long-press on mobile view 'Browse' nav
-   button.
-9. Show navigation history even if only 1 level deep.
+ 1. Remove some shortcut information when in party mode.
+ 2. Hide 'Add URL' and 'Move queue' options in party mode.
+ 3. Fix 'Scroll to current' in party mode.
+ 4. Set 'Scroll to current' shortcut to 'Ctrl+RIGHT'
+ 5. Remove 'Ctrl+LEFT' shortcut for 'Go back', as this already has 'Esc'
+ 6. Fix handing of playerprefs notifications.
+ 7. Don't add 'track_id' to command parameters when getting geenres, etc, from
+    a 'More' listing.
+ 8. Prevent context menu showing when long-press on mobile view 'Browse' nav
+    button.
+ 9. Show navigation history even if only 1 level deep.
+10. Only allow playable radio items to be pinned to home screen.
 
 3.0.2
 -----

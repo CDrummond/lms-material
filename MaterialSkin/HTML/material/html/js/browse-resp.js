@@ -382,7 +382,7 @@ function parseBrowseResp(data, parent, options, cacheKey, parentCommand, parentG
                                 i.id = "radio:"+i.title;
                             }
                         }
-                        if (i.menu.length>0 && (i.icon || i.image) && i.type!="entry" && i.presetParams && i.presetParams.favorites_url) {
+                        if (i.menu.length>0 && i.menu[0]==PLAY_ACTION && (i.icon || i.image) && i.type!="entry" && i.presetParams && i.presetParams.favorites_url) {
                             // Only allow to pin if we can play!
                             if (!addedDivider && i.menu.length>0) {
                                 i.menu.push(DIVIDER);

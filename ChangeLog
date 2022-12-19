@@ -8,6 +8,8 @@
 6. Fix handing of playerprefs notifications.
 7. Don't add 'track_id' to command parameters when getting geenres, etc, from
    a 'More' listing.
+8. Prevent context menu showing when long-press on mobile view 'Browse' nav
+   button.
 
 3.0.2
 -----

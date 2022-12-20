@@ -15,7 +15,7 @@ Vue.component('lms-bottomnav', {
   <template v-for="(item, index) in items">
    <v-btn v-if="index==0" flat class="lms-bottom-nav-button" v-longpress:nomove="browsePressed" v-bind:class="{'active-nav': activeBtn==index, 'inactive-nav': activeBtn!=index}" id="browse-nav-btn">
     <span>{{item.text}}</span>
-    <img class="nav-svg-img" :src="activeBtn==index ? libraryActiveSvg : libraryInactiveSvg"></img>
+    <img class="nav-svg-img" :src="activeBtn==index ? libraryActiveSvg : libraryInactiveSvg" oncontextmenu="return false;"></img>
    </v-btn>
    <v-btn v-else-if="index==1" flat class="lms-bottom-nav-button" @click="npPressed" v-bind:class="{'active-nav': activeBtn==index, 'inactive-nav': activeBtn!=index}" id="browse-nav-btn">
     <span>{{item.text}}</span>

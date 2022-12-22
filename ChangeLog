@@ -6,6 +6,7 @@
 4. Change repeat button behavior; off, all, single, dstm.
 5. Show Pandora thumbs up/down buttons where ratings would be in bottom bar of
    desktop layout.
+6. Support LMS 8.4 parseURLs.
 
 3.0.3
 -----

@@ -46,7 +46,7 @@ function parseQueryParams() {
         queryString=queryString.substring(0, hash);
     }
     var query = queryString.split('&');
-    var resp = { actions:[], debug:new Set(), hide:new Set(), dontEmbed:new Set(), layout:undefined, player:undefined, single:false, nativeStatus:0, nativeColors:0, nativePlayer:0, nativeUiChanges:0, nativeTheme:0, nativeCover:0, appSettings:undefined, appQuit:undefined, css:undefined, download:'browser', addpad:false, party:false, altBtnLayout:IS_WINDOWS };
+    var resp = { actions:[], debug:new Set(), hide:new Set(), dontEmbed:new Set(), layout:undefined, player:undefined, single:false, nativeStatus:0, nativeColors:0, nativePlayer:0, nativeUiChanges:0, nativeTheme:0, nativeCover:0, appSettings:undefined, appQuit:undefined, appLaunchPlayer:undefined, css:undefined, download:'browser', addpad:false, party:false, altBtnLayout:IS_WINDOWS };
 
     for (var i = query.length - 1; i >= 0; i--) {
         var kv = query[i].split('=');
@@ -98,6 +98,8 @@ function parseQueryParams() {
             resp.appSettings=kv[1];
         } else if ("appQuit"==kv[0]) {
             resp.appQuit=kv[1];
+        } else if ("appLaunchPlayer"==kv[0]) {
+            resp.appLaunchPlayer=kv[1];
         } else if ("ios"==kv[0]) {
             document.documentElement.style.setProperty('--bottom-nav-pad', '12px');
         } else if ("theme"==kv[0]) {

@@ -84,6 +84,9 @@
         },
         "SqueezeLiteMac":{
             "svg":"apple"
+        },
+        "SqueezeLiteAndroid":{
+            "icon":"android"
         }
     },
     "squeezeplay":{

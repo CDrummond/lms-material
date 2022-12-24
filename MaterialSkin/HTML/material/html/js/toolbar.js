@@ -625,6 +625,8 @@ Vue.component('lms-toolbar', {
                         }
                     } catch (e) {
                     }
+                } else if (2==queryParams.nativePlayerPower) {
+                    console.log("MATERIAL-PLAYERPOWER\nID " + player.id+"\nIP "+player.ip+"\nSTATE "+(ison ? 0 : 1));
                 }
                 lmsCommand(player.id, ["power", ison ? "0" : "1"]).then(({data}) => {
                     bus.$emit('refreshStatus', player.id);

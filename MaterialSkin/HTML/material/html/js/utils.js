@@ -178,6 +178,9 @@ function formatTechInfo(item, source) {
     if (item.bitrate) {
         technical.push(item.bitrate);
     }
+    if (item.samplesize) {
+        technical.push(i18n("%1Bits", item.samplesize));
+    }
     if (item.samplerate) {
         technical.push((item.samplerate/1000)+"kHz");
     }

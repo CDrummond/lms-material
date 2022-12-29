@@ -6,7 +6,7 @@
  */
 'use strict';
 
-const PQ_STATUS_TAGS = IS_MOBILE ? "tags:cdegilqtuyAAKNSxx" : "tags:cdegilqtuysAAKNSxx";
+const PQ_STATUS_TAGS = IS_MOBILE ? "tags:cdegilqtuyAAIKNSxx" : "tags:cdegilqtuysAAIKNSxx";
 
 function queueItemCover(item, infoPlugin) {
     if (item.artwork_url) {

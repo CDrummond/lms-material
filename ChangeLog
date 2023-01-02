@@ -8,6 +8,8 @@
    desktop layout.
 6. Support LMS 8.4 parseURLs.
 7. Add samplesize to displayed technical info.
+8. Allow disc-title in comments to be preceeded by "TITLE=", "DISCTITLE=",
+   "TITLE:", or "DISCTITLE:" (if using semi-colon separated option).
 
 3.0.3
 -----

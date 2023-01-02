@@ -259,7 +259,7 @@ PLUGIN_MATERIAL_SKIN_COMMENT_AS_DISC_TITLE
 PLUGIN_MATERIAL_SKIN_COMMENT_AS_DISC_TITLE_DESC
 	CS	U alb s více disky použít jako název disku komentář z první stopy každého disku.
 	DE	Benutze bei Multi-Disk-Alben den 'Comment'-Tag des jeweils ersten Titels als Albumtitel
-	EN	For multi-disc albums use comment from first track of each disc as disc title.
+	EN	For multi-disc albums use comment from first track of each disc as disc title. If using "Semi-colon separated" then the disc-title needs to be preceeded by either "TITLE=", "DISCTITLE=", "TITLE:", or "DISCTITLE:" - e.g. "TITLE=Extras disc;OTHER=Some other comment info"
 	FR	Pour les albums multi-disques, utiliser le commentaire du premier morceau de chaque disque comme titre de disque.
 	NL	Voor albums met meerdere schijven, gebruik Comment van eerste nummer van iedere schijf als schijftitel.
 

@@ -870,11 +870,15 @@ function parseBrowseResp(data, parent, options, cacheKey, parentCommand, parentG
                                 case 1: // Comment is title
                                     title = i.comment;
                                     break;
-                                case 2: // Semi-colon separated, KEY=VAL
+                                case 2: // Semi-colon separated, KEY=VAL (or KEY:VAL)
                                     let parts = i.comment.split(';');
                                     for (let idx=0, len=parts.length; idx<len; ++idx) {
-                                        if (parts[idx].startsWith('TITLE=')) {
+                                        if (parts[idx].startsWith('TITLE=') || parts[idx].startsWith('TITLE:')) {
                                             title=parts[idx].substring(6);
+                                            break;
+                                        }
+                                        if (parts[idx].startsWith('DISCTITLE=') || parts[idx].startsWith('DISCTITLE:')) {
+                                            title=parts[idx].substring(10);
                                             break;
                                         }
                                     }

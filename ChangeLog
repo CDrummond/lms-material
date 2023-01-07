@@ -10,6 +10,7 @@
 7. Add samplesize to displayed technical info.
 8. Allow disc-title in comments to be preceeded by "TITLE=", "DISCTITLE=",
    "TITLE:", or "DISCTITLE:" (if using semi-colon separated option).
+9. Add handling of SVG icons from plugin's Extras pages.
 
 3.0.3
 -----

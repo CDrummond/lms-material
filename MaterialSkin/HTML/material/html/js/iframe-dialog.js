@@ -8,6 +8,7 @@
 
 function remapClassicSkinIcons(doc, col) {
     const ICONS = ["play", "add", "edit", "favorite", "favorite_remove", "delete", "delete_white", "first", "last", "up", "down", "mix", "mmix", "next", "prev", "queue"];
+    const OTHER_EXT = [".png", ".gif"];
     var imgList = doc.getElementsByTagName('img');
     if (imgList) {
         for (var i = 0, len=imgList.length; i < len; i++) {
@@ -19,6 +20,35 @@ function remapClassicSkinIcons(doc, col) {
                         imgList[i].classList.add("msk-cs-touch-img");
                     }
                     replaced = true;
+                }
+            }
+            if (!replaced) {
+                /* Try to handle plugin images from 'EXtras' pages - e.g. DynamicPlaylistCreator
+                 * src should be (e.g.):
+                 *     http://localhost:9000/material/html/images/dplc_export.gif?svg=DynamicPlaylistCreator
+                 * in plugin's HTML its just 'dplc_export.gif?svg=DynamicPlaylistCreator'
+                 */
+                for (var e = 0, elen = OTHER_EXT.length; e<elen && !replaced; ++e) {
+                    if (imgList[i].src.indexOf(OTHER_EXT[e]+"?svg=")>0) {
+                        let url = undefined;
+                        let path = imgList[i].src;
+                        let pluginPath = "";
+                        if (imgList[i].src.startsWith("http:")) {
+                            url = new URL(path);
+                            path = url.pathname;
+                            pluginPath = "plugins/"+url.search.split("=")[1]+"/html/images/";
+                        }
+                        path="/material/svg/"+pluginPath+path.replace(OTHER_EXT[e], ".svg").replace(/^\/+/, '')
+                        if (url!=undefined) {
+                            url.pathname = path;
+                            path=url.href;
+                        }
+                        imgList[i].src = path+"?c="+col;
+                        if (IS_MOBILE) {
+                            imgList[i].classList.add("msk-cs-touch-img");
+                        }
+                        replaced = true;
+                    }
                 }
             }
             /*if (!replaced) {

@@ -1256,6 +1256,9 @@ sub _svgHandler {
     if (! -e $filePath) {
         my $skin = $serverprefs->get('skin');
         my $path = substr $request->uri->path, 14; # remove /material/svg/
+        # Plugin images from 'Extra's might have '/material/html/images/' prefix
+        # if so we need to remove this
+        $path=~ s/material\/html\/images\///g;
         main::DEBUGLOG && $log->debug("Looking for: " . $path);
         $filePath = $skinMgr->fixHttpPath($skin, $path);
     }

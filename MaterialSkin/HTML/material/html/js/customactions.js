@@ -77,7 +77,7 @@ function performCustomAction(action, player, item) {
     }
 }
 
-const ACTION_KEYS = ['ID', 'NAME', 'ARTISTID', 'ARTISTNAME', 'ALBUMID', 'ALBUMNAME', 'TRACKID', 'TRACKNAME', 'TRACKNUM', 'DISC', 'GENREID', 'GENRENAME', 'YEAR', 'COMPOSER', 'LANG', 'FAVURL', 'TITLE', 'ITEMID'];
+const ACTION_KEYS = ['ID', 'NAME', 'ARTISTID', 'ARTISTNAME', 'ALBUMID', 'ALBUMNAME', 'TRACKID', 'TRACKNAME', 'TRACKNUM', 'DISC', 'GENREID', 'GENRENAME', 'YEAR', 'COMPOSER', 'CONDUCTOR', 'BAND', 'LANG', 'FAVURL', 'TITLE', 'ITEMID'];
 
 function doReplacements(string, player, item) {
     let val = ''+string;
@@ -130,6 +130,12 @@ function doReplacements(string, player, item) {
         }
         if (undefined!=item.composer) {
             val=val.replaceAll("$COMPOSER", item.composer);
+        }
+        if (undefined!=item.conductor) {
+            val=val.replaceAll("$CONDUCTOR", item.conductor);
+        }
+        if (undefined!=item.band) {
+            val=val.replaceAll("$BAND", item.band);
         }
         if (undefined!=item.title) {
             if (undefined!=item.id) {

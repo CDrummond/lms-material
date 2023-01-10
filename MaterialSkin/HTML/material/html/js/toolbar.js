@@ -620,7 +620,10 @@ Vue.component('lms-toolbar', {
                 if (1==queryParams.nativePlayerPower) {
                     try {
                         if (1==NativeReceiver.controlLocalPlayerPower(player.id, player.ip, ison ? 0 : 1)) {
-                            setTimeout(function () { bus.$emit('refreshServerStatus'); }.bind(this), 500);
+                            setTimeout(function () {
+                                bus.$emit('refreshServerStatus');
+                                setTimeout(function () { bus.$emit('refreshStatus', player.id); }.bind(this), 1000);
+                            }.bind(this), 500);
                             return;
                         }
                     } catch (e) {

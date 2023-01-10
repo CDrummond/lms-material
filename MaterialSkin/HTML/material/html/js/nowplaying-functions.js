@@ -278,7 +278,7 @@ function nowplayingShowMenu(view, event) {
             if (undefined!=view.playerStatus.current.title) {
                 view.menu.items.push({title:i18n("Copy details"), act:NP_COPY_DETAILS_CMD, icon:"content_copy"});
             }
-            if (undefined!=view.coverUrl) {
+            if (!IS_IOS && undefined!=view.coverUrl) {
                 view.menu.items.push({title:i18n("Copy image"), act:NP_COPY_IMAGE_CMD, icon:"photo_library"});
             }
             if (view.customActions && view.customActions.length>0) {

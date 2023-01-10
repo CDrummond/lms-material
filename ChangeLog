@@ -12,8 +12,6 @@
     "TITLE:", or "DISCTITLE:" (if using semi-colon separated option).
  9. Add handling of SVG icons from plugin's Extras pages.
 10. Add BAND and CONDUCTOR support to custom actions.
-11. Add 'Copy image' to context menu of image in now-playing, copies image
-    to clipboard (max size 800x800, and not for iOS)
 
 3.0.3
 -----

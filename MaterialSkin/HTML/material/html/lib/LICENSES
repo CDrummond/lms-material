@@ -3,11 +3,6 @@ axios
     URL: https://github.com/axios/axios
     License: MIT
 
-copy-image-clipboard
-    Version: 2.1.2
-    URL: https://github.com/LuanEdCosta/copy-image-clipboard
-    License: MIT
-
 cometd
     Version: 4.0.3 (modfified)
     URL: https://github.com/cometd/cometd-javascript

@@ -1207,6 +1207,44 @@ function copyTextToClipboard(text) {
     }
 }
 
+function copyImageToClipboard(url) {
+    console.log('create img');
+    var img=document.createElement('img');
+    img.src=url;
+    document.body.appendChild(img);
+    /*
+    var r = document.createRange();
+    r.setStartBefore(img);
+    r.setEndAfter(img);
+    r.selectNode(img);
+    var sel = window.getSelection();
+    sel.addRange(r);*/
+    //img.select();
+    const range = document.createRange();
+    range.selectNodeContents(img);
+    const sel = window.getSelection();
+    sel.removeAllRanges();
+    sel.addRange(range);
+    //img.setSelectionRange(0, img.value.length);
+    try {
+        console.log('copy');
+        document.execCommand('copy');
+    } catch (err) {
+    } finally {
+        document.body.removeChild(img);
+    }
+}
+
+function copyElementToClipboard(element) {
+    window.getSelection().removeAllRanges();
+    let range = document.createRange();
+    range.selectNode(typeof element === 'string' ? document.getElementById(elementName) : element);
+    window.getSelection().addRange(range);
+    console.log("COPY");v
+    document.execCommand('copy');
+    window.getSelection().removeAllRanges();
+ }
+
 function getTouchPos(ev) {
     if (undefined==ev) {
         return undefined;

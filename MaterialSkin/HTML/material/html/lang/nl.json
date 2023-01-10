@@ -154,6 +154,7 @@
 "Enable alarm functionality.":"Wekker functionaliteit aanzetten",
 "Enable alarms":"Wekkers aanzetten",
 "Enable keyboard shortcuts":"Sneltoetsen inschakelen",
+"Esc":"Esc",
 "Expand now playing":"'Speelt Nu' uitklappen",
 "Extra player settings":"Additionele muziekspeler instellingen",
 "Extra player settings, such as synchronization options, player specific plugin settings, etc.":"Additionele muziekspeler instellingen, zoals synchroniseren, muziekspeler specifieke plug-in instellingen, etc.",
@@ -279,6 +280,7 @@
 "OK":"OK",
 "On song change":"Bij veranderen van nummer",
 "Only showing %1 items":"Geeft maar %1 items weer",
+"Option+%1":"Optie+%1",
 "Options":"Opties",
 "Other settings":"Overige instellingen",
 "Path":"Pad",
@@ -585,6 +587,7 @@
 "%1 Years":"%1 Jaren",
 "1 day":"1 dag",
 "%1 days":"%1 dagen",
-"Esc":"Esc",
-"Option+%1":"Optie+%1"
+"%1Bits":"",
+"Copy image":"",
+"Failed to copy image":""
 }

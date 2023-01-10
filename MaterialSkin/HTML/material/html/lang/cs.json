@@ -583,8 +583,11 @@
 "%1 Years":"%1 roků",
 "1 day":"1 den",
 "%1 days":"%1 dní",
+"%1Bits":"",
+"Copy image":"",
 "Descending":"",
 "Esc":"",
+"Failed to copy image":"",
 "Option+%1":"",
 "Play starting at track":""
 }

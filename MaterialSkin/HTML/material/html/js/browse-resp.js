@@ -345,6 +345,10 @@ function parseBrowseResp(data, parent, options, cacheKey, parentCommand, parentG
                     i.type = "text";
                 }
 
+                if (i.parseURLs) {
+                    i.title = i.title.replace(/\b(https?:\/\/[A-Za-z0-9\-_\.\!~*'();\/?:@&=+$,]+)/, "<a href=\"$1\" target=\"_blank\">$1</a>");
+                }
+
                 if (isAppsTop && i.actions && i.actions.go && i.actions.go.params && i.actions.go.params.menu) {
                     if ("myapps" == i.actions.go.params.menu) { // mysqueezebox.com apps
                         if (i.actions.go.params.item_id) {
@@ -842,10 +846,10 @@ function parseBrowseResp(data, parent, options, cacheKey, parentCommand, parentG
                         title = i.disc+"."+title;
                     }
                 }
-                if (i.trackartist && (showAlbumName || (( (i.albumartist && i.trackartist !== i.albumartist) || (!i.albumartist && i.compilation=="1"))))) {
-                     title+=SEPARATOR + i.trackartist;
-                } else if (i.artist && (showAlbumName || ( (i.albumartist && i.artist !== i.albumartist) || (!i.albumartist && i.compilation=="1")))) {
-                     title+=SEPARATOR + i.artist;
+                splitMultiples(i);
+                let others = buildArtistLine(i, "browse", false, showAlbumName ? undefined : i.albumartist);
+                if (undefined!=others) {
+                    title+=SEPARATOR + others;
                 }
                 if (showAlbumName && i.album) {
                     title+=SEPARATOR + i.album;
@@ -866,11 +870,15 @@ function parseBrowseResp(data, parent, options, cacheKey, parentCommand, parentG
                                 case 1: // Comment is title
                                     title = i.comment;
                                     break;
-                                case 2: // Semi-colon separated, KEY=VAL
+                                case 2: // Semi-colon separated, KEY=VAL (or KEY:VAL)
                                     let parts = i.comment.split(';');
                                     for (let idx=0, len=parts.length; idx<len; ++idx) {
-                                        if (parts[idx].startsWith('TITLE=')) {
+                                        if (parts[idx].startsWith('TITLE=') || parts[idx].startsWith('TITLE:')) {
                                             title=parts[idx].substring(6);
+                                            break;
+                                        }
+                                        if (parts[idx].startsWith('DISCTITLE=') || parts[idx].startsWith('DISCTITLE:')) {
+                                            title=parts[idx].substring(10);
                                             break;
                                         }
                                     }
@@ -1047,8 +1055,11 @@ function parseBrowseResp(data, parent, options, cacheKey, parentCommand, parentG
             for (var idx=0, loop=data.result.playlisttracks_loop, loopLen=loop.length; idx<loopLen; ++idx) {
                 var i = loop[idx];
                 var title = i.title;
-                if (i.artist) {
-                    title+=SEPARATOR + i.artist;
+                splitMultiples(i);
+                let others = buildArtistLine(i, "browse", false);
+                console.log(others);
+                if (undefined!=others) {
+                    title+=SEPARATOR + others;
                 }
                 if (!title) {
                     title=i18n("Unknown");
@@ -1066,9 +1077,9 @@ function parseBrowseResp(data, parent, options, cacheKey, parentCommand, parentG
                 }
                 if (i.album) {
                     if (subtitle) {
-                        subtitle+=SEPARATOR+i.album;
+                        subtitle+=SEPARATOR+buildAlbumLine(i, "browse", false);
                     } else {
-                        subtitle=i.album;
+                        subtitle=buildAlbumLine(i, "browse", false);
                     }
                 }
                 var isRemote = undefined!=parent && parent.remotePlaylist;

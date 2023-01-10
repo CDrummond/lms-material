@@ -11,7 +11,7 @@ function showArtist(event, id, title, page) {
         return;
     }
     event.stopPropagation();
-    bus.$emit("browse", ["albums"], ["artist_id:"+id, ARTIST_ALBUM_TAGS, SORT_KEY+ARTIST_ALBUM_SORT_PLACEHOLDER], unescape(title), page);
+    bus.$emit("browse", ["albums"], ["artist_id:"+id, ARTIST_ALBUM_TAGS, SORT_KEY+ARTIST_ALBUM_SORT_PLACEHOLDER], unescape(title), page, page!="browse");
     bus.$emit('npclose');
 }
 
@@ -20,7 +20,7 @@ function showAlbumArtist(event, id, title, page) {
         return;
     }
     event.stopPropagation();
-    bus.$emit("browse", ["albums"], ["artist_id:"+id, ARTIST_ALBUM_TAGS, SORT_KEY+ARTIST_ALBUM_SORT_PLACEHOLDER, "role_id:ALBUMARTIST"], unescape(title), page);
+    bus.$emit("browse", ["albums"], ["artist_id:"+id, ARTIST_ALBUM_TAGS, SORT_KEY+ARTIST_ALBUM_SORT_PLACEHOLDER, "role_id:ALBUMARTIST"], unescape(title), page, page!="browse");
     bus.$emit('npclose');
 }
 
@@ -29,7 +29,7 @@ function showAlbum(event, album, title, page) {
         return;
     }
     event.stopPropagation();
-    bus.$emit("browse", ["tracks"], ["album_id:"+album, TRACK_TAGS, SORT_KEY+"tracknum"], unescape(title), page);
+    bus.$emit("browse", ["tracks"], ["album_id:"+album, TRACK_TAGS, SORT_KEY+"tracknum"], unescape(title), page, page!="browse");
     bus.$emit('npclose');
 }
 
@@ -38,7 +38,7 @@ function showComposer(event, id, title, page) {
         return;
     }
     event.stopPropagation();
-    bus.$emit("browse", ["albums"], ["artist_id:"+id, ARTIST_ALBUM_TAGS, SORT_KEY+ARTIST_ALBUM_SORT_PLACEHOLDER, "role_id:COMPOSER"], unescape(title), page);
+    bus.$emit("browse", ["albums"], ["artist_id:"+id, ARTIST_ALBUM_TAGS, SORT_KEY+ARTIST_ALBUM_SORT_PLACEHOLDER, "role_id:COMPOSER"], unescape(title), page, page!="browse");
     bus.$emit('npclose');
 }
 
@@ -47,7 +47,7 @@ function showConductor(event, id, title, page) {
         return;
     }
     event.stopPropagation();
-    bus.$emit("browse", ["albums"], ["artist_id:"+id, ARTIST_ALBUM_TAGS, SORT_KEY+ARTIST_ALBUM_SORT_PLACEHOLDER, "role_id:CONDUCTOR"], unescape(title), page);
+    bus.$emit("browse", ["albums"], ["artist_id:"+id, ARTIST_ALBUM_TAGS, SORT_KEY+ARTIST_ALBUM_SORT_PLACEHOLDER, "role_id:CONDUCTOR"], unescape(title), page, page!="browse");
     bus.$emit('npclose');
 }
 
@@ -56,7 +56,7 @@ function showBand(event, id, title, page) {
         return;
     }
     event.stopPropagation();
-    bus.$emit("browse", ["albums"], ["artist_id:"+id, ARTIST_ALBUM_TAGS, SORT_KEY+ARTIST_ALBUM_SORT_PLACEHOLDER, "role_id:BAND"], unescape(title), page);
+    bus.$emit("browse", ["albums"], ["artist_id:"+id, ARTIST_ALBUM_TAGS, SORT_KEY+ARTIST_ALBUM_SORT_PLACEHOLDER, "role_id:BAND"], unescape(title), page, page!="browse");
     bus.$emit('npclose');
 }
 
@@ -70,7 +70,7 @@ function addArtistLink(item, line, type, func, page, used, plain) {
         if (!IS_MOBILE && !plain && undefined!=item[type+"_ids"] && item[type+"_ids"].length==item[type+"s"].length) {
             let vals = [];
             for (let i=0, loop=item[type+"s"], len=loop.length; i<len; ++i) {
-                vals.push("<obj class=\"link-item\" onclick=\""+func+" (event, "+item[type+"_ids"][i]+",\'"+escape(loop[i])+"\', \'"+page+"\')\">" + loop[i] + "</obj>");
+                vals.push("<obj class=\"link-item\" onclick=\""+func+"(event, "+item[type+"_ids"][i]+",\'"+escape(loop[i])+"\', \'"+page+"\')\">" + loop[i] + "</obj>");
             }
             line=addPart(line, vals.join(", "));
         } else {
@@ -88,7 +88,7 @@ function addArtistLink(item, line, type, func, page, used, plain) {
                 id = item[type+"_ids"][0];
             }
             if (undefined!=id) {
-                line=addPart(line, "<obj class=\"link-item\" onclick=\""+func+" (event, "+id+",\'"+escape(val)+"\', \'"+page+"\')\">" + val + "</obj>");
+                line=addPart(line, "<obj class=\"link-item\" onclick=\""+func+"(event, "+id+",\'"+escape(val)+"\', \'"+page+"\')\">" + val + "</obj>");
             } else {
                 line=addPart(line, val);
             }
@@ -97,11 +97,14 @@ function addArtistLink(item, line, type, func, page, used, plain) {
     return line;
 }
 
-function buildArtistLine(i, page, plain) {
+function buildArtistLine(i, page, plain, existing) {
     var line = undefined;
     var used = new Set();
     var artist = i.artist ? i.artist : i.trackartist ? i.trackartist : i.albumartist;
 
+    if (undefined!=existing) {
+        used.add(existing);
+    }
     if (lmsOptions.artistFirst) {
         if (i.artist) {
             line=addArtistLink(i, line, "artist", "showArtist", page, used, plain);

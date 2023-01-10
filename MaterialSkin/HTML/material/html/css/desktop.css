@@ -258,6 +258,16 @@
  height:22px;
 }
 
+.np-thumbs-desktop {
+ margin-top:-10px;
+ height:56px;
+}
+
+.np-thumbs-desktop .v-btn {
+ margin-left:4px;
+ margin-right:0px;
+}
+
 #np-bar .np-rating-desktop .v-icon {
  width:14px !important;
  height:14px !important;

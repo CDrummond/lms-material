@@ -128,6 +128,10 @@ Vue.component('lms-toolbar', {
      <v-list-tile-action v-else-if="TB_SETTINGS.id==item.id && useSettingsMenu" class="menu-subind"><v-icon>chevron_right</v-icon></v-list-tile-action>
     </v-list-tile>
    </template>
+   <v-list-tile :href="appLaunchPlayer" v-if="undefined!=appLaunchPlayer">
+    <v-list-tile-avatar><v-icon>surround_sound</v-icon></v-list-tile-avatar>
+    <v-list-tile-title>{{trans.startPlayer}}</v-list-tile-title>
+   </v-list-tile>
    <v-divider v-if="(!desktopLayout || (!infoOpen && !nowPlayingExpanded)) && otherMenuItems[currentPage] && otherMenuItems[currentPage].length>0"></v-divider>
    <template v-if="(!desktopLayout || (!infoOpen && !nowPlayingExpanded)) && otherMenuItems[currentPage] && otherMenuItems[currentPage].length>0" v-for="(action, index) in otherMenuItems[currentPage]">
     <v-list-tile @click="bus.$emit('settingsMenuAction:'+currentPage, action)" v-bind:class="{'disabled':(PQ_SCROLL_ACTION==action || PQ_MOVE_QUEUE_ACTION==action) && playlist.count==''}">
@@ -245,6 +249,7 @@ Vue.component('lms-toolbar', {
                  date: undefined,
                  time: undefined,
                  appQuit: queryParams.appQuit,
+                 appLaunchPlayer: queryParams.appLaunchPlayer,
                  coloredToolbars: false
                }
     },
@@ -612,6 +617,20 @@ Vue.component('lms-toolbar', {
                 bus.$emit('dlg.open', 'sleep', player);
             } else {
                 let ison = this.$store.state.player.id == player.id ? this.playerStatus.ison : player.ison;
+                if (1==queryParams.nativePlayerPower) {
+                    try {
+                        if (1==NativeReceiver.controlLocalPlayerPower(player.id, player.ip, ison ? 0 : 1)) {
+                            setTimeout(function () {
+                                bus.$emit('refreshServerStatus');
+                                setTimeout(function () { bus.$emit('refreshStatus', player.id); }.bind(this), 1000);
+                            }.bind(this), 500);
+                            return;
+                        }
+                    } catch (e) {
+                    }
+                } else if (2==queryParams.nativePlayerPower) {
+                    console.log("MATERIAL-PLAYERPOWER\nID " + player.id+"\nIP "+player.ip+"\nSTATE "+(ison ? 0 : 1));
+                }
                 lmsCommand(player.id, ["power", ison ? "0" : "1"]).then(({data}) => {
                     bus.$emit('refreshStatus', player.id);
                     // Status seems to take while to update, so check again 1/2 second later...

@@ -601,6 +601,34 @@ var lmsBrowse = Vue.component("lms-browse", {
                 this.layoutGrid(true);
             }
         },
+        autoExpand() {
+            if (queryParams.expand.length>0) {
+                let idx = -1;
+                for (let i=0, loop=this.top, len=loop.length; i<len; ++i) {
+                    if (loop[i].title==queryParams.expand[0]) {
+                        queryParams.expand.shift();
+                        idx = i;
+                        break;
+                    }
+                }
+                if (idx<0) {
+                    queryParams.expand = [];
+                } else {
+                    this.autoClick(idx, 0);
+                }
+            }
+        },
+        autoClick(idx, attempt) {
+            if (attempt>=20) {
+                queryParams.expand = [];
+                return;
+            }
+            try {
+                browseClick(this, this.items[idx], idx);
+            } catch(e) {
+                setTimeout(function () { this.autoClick(idx, attempt+1); }.bind(this), 100);
+            }
+        },
         playerId() {
             return this.$store.state.player ? this.$store.state.player.id : "";
         },
@@ -1516,19 +1544,27 @@ var lmsBrowse = Vue.component("lms-browse", {
                     if (data && data.result && data.result._p2) {
                         this.updateTopList(JSON.parse(data.result._p2));
                         this.saveTopList();
+                        this.autoExpand();
                     } else {
                         lmsCommand("", ["pref", LMS_MATERIAL_DEFAULT_PINNED_PREF, "?"]).then(({data}) => {
                             if (data && data.result && data.result._p2) {
                                 this.addPinned(JSON.parse(data.result._p2));
                             }
+                            this.autoExpand();
+                        }).catch(err => {
+                            this.autoExpand();
                         });
                     }
+                }).catch(err => {
+                    this.autoExpand();
                 });
             } else {
                 this.addPinned(savedItems);
+                this.autoExpand();
             }
         } else {
             this.updateTopList(savedItems);
+            this.autoExpand();
         }
 
         this.nowPlayingExpanded = false; // Keep track so that we know when to ignore 'esc'=>goback

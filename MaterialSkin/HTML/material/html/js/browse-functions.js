@@ -19,6 +19,21 @@ function browseMatches(text, title) {
     return false;
 }
 
+function browseCheckExpand(view) {
+    // Check if user has asked us to auto-open some items
+    if (queryParams.expand.length>0) {
+        for (let i=0, loop=view.items, len=loop.length; i<len; ++i) {
+            if (loop[i].title==queryParams.expand[0]) {
+                queryParams.expand.shift();
+                view.autoClick(i, 0);
+                return;
+            }
+        }
+        // Not found? Clear expand
+        queryParams.expand=[];
+    }
+}
+
 // lmsLastKeyPress is defined in server.js
 function browseHandleKey(view, event) {
     if (!event.ctrlKey && !event.altKey && !event.metaKey && undefined!=view.jumplist && view.jumplist.length>1 &&
@@ -497,6 +512,8 @@ function browseHandleListResponse(view, item, command, resp, prevPage) {
 
         if (view.items.length==0) {
             browseHandleNextWindow(view, item, command, resp, false, true);
+        } else {
+            browseCheckExpand(view);
         }
     }
 }
@@ -633,14 +650,18 @@ function browseClick(view, item, index, event) {
         bus.$emit('dlg.open', 'rndmix');
     } else if (STD_ITEM_GENRE==item.stdItem && view.current && (getField(item, "genre_id") || getField(item, "year"))) {
         browseAddCategories(view, item, true, getField(item, "year"));
+        browseCheckExpand(view);
     } else if (item.actions && item.actions.go && item.actions.go.params && item.actions.go.params.genre_id && item.actions.go.params.mode=='artists' && item.title.indexOf(': ')>0) {
         // Genre from 'More' menu?
         browseAddCategories(view, {id:'genre_id:'+item.actions.go.params.genre_id, title:item.title.split(': ')[1]}, true);
+        browseCheckExpand(view);
     } else if (STD_ITEM_YEAR==item.stdItem && view.current&& (getField(item, "genre_id") || getField(item, "year"))) {
         browseAddCategories(view, item, false);
+        browseCheckExpand(view);
     } else if (item.actions && item.actions.go && item.actions.go.params && item.actions.go.params.year && item.actions.go.params.mode=='albums' && item.title.indexOf(': ')>0) {
         // Year from 'More' menu?
         browseAddCategories(view, {id:'year:'+item.actions.go.params.year, title:item.title.split(': ')[1]}, false);
+        browseCheckExpand(view);
     } else if (item.weblink) {
         let url = item.weblink;
         let parts = url.split('/').pop().split('?')[0].split('.');
@@ -1668,6 +1689,7 @@ function browseBuildCommand(view, item, commandName, doReplacements) {
 
 function browseMyMusicMenu(view) {
     if (view.myMusic.length>0 && !view.myMusic[0].needsUpdating) {
+        browseCheckExpand(view);
         return;
     }
     view.fetchingItem = {id:TOP_ID_PREFIX};
@@ -1769,6 +1791,7 @@ function browseMyMusicMenu(view) {
                 view.processMyMusicMenu();
                 view.myMusic[0].needsUpdating=true; // Still needs updating to get the rest of view...
                 view.fetchingItem = undefined;
+                browseCheckExpand(view);
             } else {
                 lmsList(view.playerId(), ["menu", "items"], ["direct:1"]).then(({data}) => {
                     if (data && data.result && data.result.item_loop) {
@@ -1854,15 +1877,18 @@ function browseMyMusicMenu(view) {
                         view.processMyMusicMenu();
                     }
                     view.fetchingItem = undefined;
+                    browseCheckExpand(view);
                 }).catch(err => {
                     view.fetchingItem = undefined;
                     logAndShowError(err);
+                    browseCheckExpand(view);
                 });
             }
         }
     }).catch(err => {
         view.fetchingItem = undefined;
         logAndShowError(err);
+        browseCheckExpand(view);
     });
 }
 

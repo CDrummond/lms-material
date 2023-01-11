@@ -1057,7 +1057,6 @@ function parseBrowseResp(data, parent, options, cacheKey, parentCommand, parentG
                 var title = i.title;
                 splitMultiples(i);
                 let others = buildArtistLine(i, "browse", false);
-                console.log(others);
                 if (undefined!=others) {
                     title+=SEPARATOR + others;
                 }

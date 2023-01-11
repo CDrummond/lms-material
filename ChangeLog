@@ -12,6 +12,8 @@
     "TITLE:", or "DISCTITLE:" (if using semi-colon separated option).
  9. Add handling of SVG icons from plugin's Extras pages.
 10. Add BAND and CONDUCTOR support to custom actions.
+11. Allow to auto-expand tree by passing 'expand' URL query parameter. e.g.
+    '?expand=Favourites/Rock%20Stations'
 
 3.0.3
 -----

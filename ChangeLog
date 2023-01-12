@@ -14,6 +14,8 @@
 10. Add BAND and CONDUCTOR support to custom actions.
 11. Allow to auto-expand tree by passing 'expand' URL query parameter. e.g.
     '?expand=Favourites/Rock%20Stations'
+12. Add 'Copy image' to context menu of image in now-playing, copies image
+    to clipboard (max size 800x800)
 
 3.0.3
 -----

@@ -15,6 +15,7 @@ const NP_PIC_ACT = 1;
 const NP_INFO_ACT = 2;
 const NP_BROWSE_CMD = 3;
 const NP_COPY_DETAILS_CMD = 4;
+const NP_COPY_IMAGE_CMD = 5;
 const NP_CUSTOM = 100;
 const NP_ITEM_ACT = 200;
 

@@ -278,9 +278,6 @@ function nowplayingShowMenu(view, event) {
             if (undefined!=view.playerStatus.current.title) {
                 view.menu.items.push({title:i18n("Copy details"), act:NP_COPY_DETAILS_CMD, icon:"content_copy"});
             }
-            if (undefined!=view.coverUrl) {
-                view.menu.items.push({title:i18n("Copy image"), act:NP_COPY_IMAGE_CMD, icon:"photo_library"});
-            }
             if (view.customActions && view.customActions.length>0) {
                 for (let i=0, loop=view.customActions, len=loop.length; i<len; ++i) {
                     view.menu.items.push({title:loop[i].title, act:NP_CUSTOM+i, icon:loop[i].icon, svg:loop[i].svg});
@@ -325,16 +322,6 @@ function nowplayingMenuAction(view, item) {
                 }
             }
             copyTextToClipboard(text);
-        }
-    } else if (NP_COPY_IMAGE_CMD==item.act) {
-        try {
-            let url = view.coverUrl;
-            if (url.endsWith(LMS_CURRENT_IMAGE_SIZE)) {
-                url = url.replace(LMS_CURRENT_IMAGE_SIZE, LMS_COPY_IMAGE_SIZE);
-            }
-            copyImageToClipboard(url);
-        } catch (err) {
-            bus.$emit('showError', err, i18n('Failed to copy image'));
         }
     } else if (FOLLOW_LINK_ACTION==item.act) {
         openWindow(item.link);

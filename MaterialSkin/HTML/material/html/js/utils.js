@@ -1209,34 +1209,6 @@ function copyTextToClipboard(text) {
     }
 }
 
-function copyImageToClipboard(imgSrc) {
-    let img = new Image();
-    img.src = imgSrc;
-    img.onload = function() {
-        let canvas = document.createElement('canvas');
-        canvas.width=img.width;
-        canvas.height=img.height;
-        document.body.appendChild( canvas );
-        canvas.getContext('2d').drawImage(img, 0, 0);
-        let imgTag = document.createElement('img');
-        imgTag.src = canvas.toDataURL();
-        let div = document.createElement('div');
-        div.contentEditable = true;
-        div.appendChild( imgTag );
-        document.body.appendChild( div );
-        div.focus();
-        window.getSelection().selectAllChildren( div );
-
-        try {
-            document.execCommand('copy');
-        } catch (err) {
-        } finally {
-            document.body.removeChild( div );
-            document.body.removeChild( canvas );
-        }
-    }
-}
-
 function getTouchPos(ev) {
     if (undefined==ev) {
         return undefined;

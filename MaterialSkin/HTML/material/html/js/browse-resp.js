@@ -640,7 +640,7 @@ function parseBrowseResp(data, parent, options, cacheKey, parentCommand, parentG
 
                         let parentImage = parent ? parent.image : undefined;
                         let allHaveSameImageAsParent = undefined!=parentImage;
-                        // Iterate items looking for year (if album), or to heck if image is same as parent
+                        // Iterate items looking for year (if album), or to check if image is same as parent
                         for (let i=0, loop=resp.items, len=loop.length; i<len; ++i) {
                             if (loop[i].type=="playlist") {
                                 if (loop[i].presetParams && loop[i].presetParams.favorites_title &&

@@ -60,7 +60,7 @@ let seachReqId = 0;
 Vue.component('lms-search-field', {
     template: `
 <v-layout>
- <v-text-field :label="i18n('Search')" single-line clearable v-model.lazy="term" class="lms-search lib-search" @input="textChanged($event)" @blur="stopDebounce" v-on:keyup.enter="searchNow" ref="entry"></v-text-field>
+ <v-text-field :label="i18n('Search')" single-line clearable autocorrect="off" v-model.lazy="term" class="lms-search lib-search" @input="textChanged($event)" @blur="stopDebounce" v-on:keyup.enter="searchNow" ref="entry"></v-text-field>
  <v-icon v-if="searching" class="toolbar-button pulse">search</v-icon>
  <v-btn v-else-if="!queryParams.party" :title="ACTIONS[ADV_SEARCH_ACTION].title" flat icon class="toolbar-button" @click="advanced()"><img :src="ACTIONS[ADV_SEARCH_ACTION].svg | svgIcon(darkUi)"></img></v-btn>
 </v-layout>

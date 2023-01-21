@@ -147,7 +147,7 @@ Vue.component('lms-ui-settings', {
 
     <v-divider v-if="hasPassword"></v-divider>
     <v-list-tile v-if="hasPassword">
-     <v-text-field :label="i18n('Settings password')" v-model="password" class="lms-search" :append-icon="showPassword ? 'visibility_off' : 'visibility'" @click:append="() => (showPassword = !showPassword)" :type="showPassword ? 'text' : 'password'"></v-text-field>
+     <v-text-field :label="i18n('Settings password')" clearable autocorrect="off" v-model="password" class="lms-search" :append-icon="showPassword ? 'visibility_off' : 'visibility'" @click:append="() => (showPassword = !showPassword)" :type="showPassword ? 'text' : 'password'"></v-text-field>
     </v-list-tile>
 
     <div class="dialog-padding"></div>

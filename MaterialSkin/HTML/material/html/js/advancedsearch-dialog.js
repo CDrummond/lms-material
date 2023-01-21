@@ -21,13 +21,13 @@ Vue.component('lms-advancedsearch-dialog', {
    <v-layout class="avs-section" wrap :disabled="searching">
     <v-flex xs12 sm3><div class="avs-title">{{i18n('Title')}}</div></v-flex>
     <v-flex xs12 sm4><v-select :items="textOps" v-model="params.me_titlesearch.op" item-text="label" item-value="key"></v-select></v-flex>
-    <v-flex xs12 sm5><v-text-field clearable v-model="params.me_titlesearch.val" class="lms-search" ref="entry"></v-text-field></v-flex>
+    <v-flex xs12 sm5><v-text-field clearable autocorrect="off" v-model="params.me_titlesearch.val" class="lms-search" ref="entry"></v-text-field></v-flex>
    </v-layout>
 
    <v-layout class="avs-section" wrap :disabled="searching">
     <v-flex xs12 sm3><div class="avs-title">{{i18n('Artist')}}</div></v-flex>
     <v-flex xs12 sm4><v-select :items="textOps" v-model="params.contributor_namesearch.op" item-text="label" item-value="key"></v-select></v-flex>
-    <v-flex xs12 sm5><v-text-field clearable v-model="params.contributor_namesearch.val" class="lms-search"></v-text-field></v-flex>
+    <v-flex xs12 sm5><v-text-field clearable autocorrect="off" v-model="params.contributor_namesearch.val" class="lms-search"></v-text-field></v-flex>
     <v-flex xs12 sm3></v-flex>
     <v-flex xs12 sm9>
      <v-select chips deletable-chips multiple :items="artistTypes" v-model="params.contributor_namesearch.types" item-text="label" item-value="key"></v-select>
@@ -37,43 +37,43 @@ Vue.component('lms-advancedsearch-dialog', {
    <v-layout class="avs-section" wrap :disabled="searching">
     <v-flex xs12 sm3><div class="avs-title">{{i18n('Album')}}</div></v-flex>
     <v-flex xs12 sm4><v-select :items="textOps" v-model="params.album_titlesearch.op" item-text="label" item-value="key"></v-select></v-flex>
-    <v-flex xs12 sm5><v-text-field clearable v-model="params.album_titlesearch.val" class="lms-search"></v-text-field></v-flex>
+    <v-flex xs12 sm5><v-text-field clearable autocorrect="off" v-model="params.album_titlesearch.val" class="lms-search"></v-text-field></v-flex>
    </v-layout>
   
    <v-layout class="avs-section" wrap :disabled="searching">
     <v-flex xs12 sm3><div class="avs-title">{{i18n('Genre')}}</div></v-flex>
     <v-flex xs12 sm4><v-select :items="genres" v-model="params.genre" item-text="label" item-value="key"></v-select></v-flex>
-    <v-flex xs12 sm5><v-text-field clearable v-model="params.genre_name" class="lms-search" :disabled="params.genre!=ADVS_IN_GENRE && params.genre!=ADVS_NOT_IN_GENRE"></v-text-field></v-flex>
+    <v-flex xs12 sm5><v-text-field clearable autocorrect="off" v-model="params.genre_name" class="lms-search" :disabled="params.genre!=ADVS_IN_GENRE && params.genre!=ADVS_NOT_IN_GENRE"></v-text-field></v-flex>
    </v-layout>
 
    <v-layout class="avs-section" wrap :disabled="searching">
     <v-flex xs12 sm3><div class="avs-title">{{i18n('Duration')}}</div></v-flex>
     <v-flex xs12 sm4><v-select :items="fullRangeOps" v-model="params.secs.op" item-text="label" item-value="key"></v-select></v-flex>
-    <v-flex xs12 sm5><v-text-field clearable v-model="params.secs.val" class="lms-search" :placeholder="i18n('seconds')"></v-text-field></v-flex>
+    <v-flex xs12 sm5><v-text-field clearable autocorrect="off" v-model="params.secs.val" class="lms-search" :placeholder="i18n('seconds')"></v-text-field></v-flex>
    </v-layout>
 
    <v-layout class="avs-section" wrap :disabled="searching">
     <v-flex xs12 sm3><div class="avs-title">{{i18n('Track')}}</div></v-flex>
     <v-flex xs12 sm4><v-select :items="rangeOps" v-model="params.tracknum.op" item-text="label" item-value="key"></v-select></v-flex>
-    <v-flex xs12 sm5><v-text-field clearable v-model="params.tracknum.val" class="lms-search"></v-text-field></v-flex>
+    <v-flex xs12 sm5><v-text-field clearable autocorrect="off" v-model="params.tracknum.val" class="lms-search"></v-text-field></v-flex>
    </v-layout>
 
    <v-layout class="avs-section" wrap :disabled="searching">
     <v-flex xs12 sm3><div class="avs-title">{{i18n('Year')}}</div></v-flex>
     <v-flex xs12 sm4><v-select :items="fullRangeOps" v-model="params.year.op" item-text="label" item-value="key"></v-select></v-flex>
-    <v-flex xs12 sm5><v-text-field clearable v-model="params.year.val" class="lms-search"></v-text-field></v-flex>
+    <v-flex xs12 sm5><v-text-field clearable autocorrect="off" v-model="params.year.val" class="lms-search"></v-text-field></v-flex>
    </v-layout>
 
    <v-layout class="avs-section" wrap :disabled="searching" v-show="stats && sections.stats.visible">
     <v-flex xs12 sm3><div class="avs-title">{{i18n('Play count')}}</div></v-flex>
     <v-flex xs12 sm4><v-select :items="fullRangeOps" v-model="params.persistent_playcount.op" item-text="label" item-value="key"></v-select></v-flex>
-    <v-flex xs12 sm5><v-text-field clearable v-model="params.persistent_playcount.val" class="lms-search"></v-text-field></v-flex>
+    <v-flex xs12 sm5><v-text-field clearable autocorrect="off" v-model="params.persistent_playcount.val" class="lms-search"></v-text-field></v-flex>
    </v-layout>
 
    <v-layout class="avs-section" wrap :disabled="searching" v-show="stats && sections.stats.visible">
     <v-flex xs12 sm3><div class="avs-title">{{i18n('Rating')}}</div></v-flex>
     <v-flex xs12 sm4><v-select :items="fullRangeOps" v-model="params.persistent_rating.op" item-text="label" item-value="key"></v-select></v-flex>
-    <v-flex xs12 sm5><v-text-field clearable v-model="params.persistent_rating.val" class="lms-search"></v-text-field></v-flex>
+    <v-flex xs12 sm5><v-text-field clearable autocorrect="off" v-model="params.persistent_rating.val" class="lms-search"></v-text-field></v-flex>
    </v-layout>
    
    <v-layout class="avs-section" wrap :disabled="searching" v-show="sections.tech.visible">
@@ -97,7 +97,7 @@ Vue.component('lms-advancedsearch-dialog', {
    <v-layout class="avs-section" wrap :disabled="searching" v-show="sections.file.visible">
     <v-flex xs12 sm3><div class="avs-title">{{i18n('Date modified')}}</div></v-flex>
     <v-flex xs12 sm4><v-select :items="dateOps" v-model="params.timestamp.op" item-text="label" item-value="key"></v-select></v-flex>
-    <v-flex xs12 sm5><v-text-field clearable v-model="params.timestamp.val" class="lms-search" placeholder="mm/dd/yyyy"></v-text-field></v-flex>
+    <v-flex xs12 sm5><v-text-field clearable autocorrect="off" v-model="params.timestamp.val" class="lms-search" placeholder="mm/dd/yyyy"></v-text-field></v-flex>
    </v-layout>
 
    <v-layout class="avs-section" wrap :disabled="searching" v-show="sections.file.visible">
@@ -108,25 +108,25 @@ Vue.component('lms-advancedsearch-dialog', {
    <v-layout class="avs-section" wrap :disabled="searching" v-show="sections.file.visible">
     <v-flex xs12 sm3><div class="avs-title">{{i18n('Path')}}</div></v-flex>
     <v-flex xs12 sm4><v-select :items="textOps" v-model="params.url.op" item-text="label" item-value="key"></v-select></v-flex>
-    <v-flex xs12 sm5><v-text-field clearable v-model="params.url.val" class="lms-search"></v-text-field></v-flex>
+    <v-flex xs12 sm5><v-text-field clearable autocorrect="off" v-model="params.url.val" class="lms-search"></v-text-field></v-flex>
    </v-layout>
 
   <v-layout class="avs-section" wrap :disabled="searching" v-show="sections.file.visible">
     <v-flex xs12 sm3><div class="avs-title">{{i18n('File size')}}</div></v-flex>
     <v-flex xs12 sm4><v-select :items="fullRangeOps" v-model="params.filesize.op" item-text="label" item-value="key"></v-select></v-flex>
-    <v-flex xs12 sm5><v-text-field clearable v-model="params.filesize.val" class="lms-search" :placeholder="i18n('bytes')"></v-text-field></v-flex>
+    <v-flex xs12 sm5><v-text-field clearable autocorrect="off" v-model="params.filesize.val" class="lms-search" :placeholder="i18n('bytes')"></v-text-field></v-flex>
    </v-layout>
 
    <v-layout class="avs-section" wrap :disabled="searching">
     <v-flex xs12 sm3><div class="avs-title">{{i18n('Comment')}}</div></v-flex>
     <v-flex xs12 sm4><v-select :items="textOps" v-model="params.comments_value.op" item-text="label" item-value="key"></v-select></v-flex>
-    <v-flex xs12 sm5><v-text-field clearable v-model="params.comments_value.val" class="lms-search"></v-text-field></v-flex>
+    <v-flex xs12 sm5><v-text-field clearable autocorrect="off" v-model="params.comments_value.val" class="lms-search"></v-text-field></v-flex>
    </v-layout>
 
    <v-layout class="avs-section" wrap :disabled="searching">
     <v-flex xs12 sm3><div class="avs-title">{{i18n('Lyrics')}}</div></v-flex>
     <v-flex xs12 sm4><v-select :items="textOps" v-model="params.lyrics.op" item-text="label" item-value="key"></v-select></v-flex>
-    <v-flex xs12 sm5><v-text-field clearable v-model="params.lyrics.val" class="lms-search"></v-text-field></v-flex>
+    <v-flex xs12 sm5><v-text-field clearable autocorrect="off" v-model="params.lyrics.val" class="lms-search"></v-text-field></v-flex>
    </v-layout>
 
   </v-card-text>

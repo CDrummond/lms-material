@@ -63,7 +63,7 @@ Vue.component('lms-player-settings', {
     <v-header class="dialog-section-header" v-if="unlockAll">{{i18n('General')}}</v-header>
     <v-list-tile v-if="unlockAll">
      <v-list-tile-content>
-      <v-text-field clearable :label="i18n('Name')" v-model="playerName" class="lms-search"></v-text-field>
+      <v-text-field clearable autocorrect="off" :label="i18n('Name')" v-model="playerName" class="lms-search"></v-text-field>
      </v-list-tile-content>
      <v-list-tile-action><v-btn icon flat @click="setIcon" style="margin-top:-18px"><v-icon v-if="playerIcon.icon">{{playerIcon.icon}}</v-icon><img v-else class="svg-img" :src="playerIcon.svg | svgIcon(darkUi)"></img></v-btn></v-list-tile-action>
     </v-list-tile>

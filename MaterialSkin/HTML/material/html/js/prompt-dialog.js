@@ -13,7 +13,7 @@ var lmsPromptDialog = Vue.component("lms-prompt-dialog", {
   <v-card-title v-if="undefined!=title">{{title}}</v-card-title>
   <v-card-text>
    <v-slider v-if="type=='slider'" :step="slider.step" :min="slider.min" :max="slider.max" v-model="slider.value" thumb-label="always"></v-slider>
-   <v-text-field v-else-if="type=='text'" single-line :label="hint" v-model="text" @keyup.enter="close(true);" ref="entry"></v-text-field>
+   <v-text-field v-else-if="type=='text'" single-line autocorrect="off" :label="hint" v-model="text" @keyup.enter="close(true);" ref="entry"></v-text-field>
    <div v-else v-html="text" class="clickable" ref="prompt-dlg-text"></div>
   </v-card-text>
   <v-card-actions v-if="queryParams.altBtnLayout">

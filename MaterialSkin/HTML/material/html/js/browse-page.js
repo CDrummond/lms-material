@@ -137,8 +137,8 @@ var lmsBrowse = Vue.component("lms-browse", {
      <!-- TODO: Do we have search fields with large lists?? -->
      <v-list-tile-content v-if="item.header" @click="click(item, index, $event)"><v-list-tile-title>{{item.title}}</v-list-tile-title></v-list-tile-content>
      <v-list-tile-content v-else>
-      <v-list-tile-title>{{item.title}}</v-list-tile-title>
-       <v-list-tile-sub-title v-html="item.subtitle" v-bind:class="{'link-item':subtitleClickable}" @click.stop="clickSubtitle(item, index, $event, $event)"></v-list-tile-sub-title>
+      <v-list-tile-title v-html="item.title"></v-list-tile-title>
+      <v-list-tile-sub-title v-html="item.subtitle" v-bind:class="{'link-item':subtitleClickable}" @click.stop="clickSubtitle(item, index, $event, $event)"></v-list-tile-sub-title>
      </v-list-tile-content>
 
      <v-list-tile-action class="browse-action" v-if="undefined!=item.stdItem || (item.menu && item.menu.length>0)">

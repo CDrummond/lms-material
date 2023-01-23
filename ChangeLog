@@ -7,6 +7,7 @@
 4. Use correct tags parameter to return multi-artist entries when browsing
    tracks.
 5. Strip tags when showing titles in sub-toolbar, etc.
+6. Fix slow searches caused by asking for artist role metadata.
 
 3.1.0
 -----

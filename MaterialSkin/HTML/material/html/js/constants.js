@@ -115,6 +115,7 @@ const ALBUM_TAGS = "tags:ajlqsyKS";
 const ALBUM_TAGS_ALL_ARTISTS = "tags:aajlqsyKSS";
 const ARTIST_ALBUM_TAGS = "tags:jlqsyKS";
 const TRACK_TAGS = "tags:digkstuAACIS";
+const SEARCH_TRACK_TAGS = "tags:dikstuACI";
 const PLAYLIST_TAGS = "tags:suxE";
 const PLAYLIST_TRACK_TAGS = "tags:acdgltIKS";
 const SORT_KEY = "sort:";

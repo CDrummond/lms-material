@@ -114,7 +114,7 @@ const ARTIST_TAGS = "tags:s";
 const ALBUM_TAGS = "tags:ajlqsyKS";
 const ALBUM_TAGS_ALL_ARTISTS = "tags:aajlqsyKSS";
 const ARTIST_ALBUM_TAGS = "tags:jlqsyKS";
-const TRACK_TAGS = "tags:digkstuACIS";
+const TRACK_TAGS = "tags:digkstuAACIS";
 const PLAYLIST_TAGS = "tags:suxE";
 const PLAYLIST_TRACK_TAGS = "tags:acdgltIKS";
 const SORT_KEY = "sort:";
@@ -137,7 +137,7 @@ const ARTIST_TYPES = ["albumartist", "trackartist", "artist", "band", "composer"
 var MULTI_SPLIT_REGEX = ";"
 
 // Safari on iOS and macOS does not support lookbehind. Looks like it can't even parse the line
-// so we need to tst for this in an eval. This way page loads, but MULTI_SPLIT_REGEX is not
+// so we need to test for this in an eval. This way page loads, but MULTI_SPLIT_REGEX is not
 // changed. On other engines the eval succeeds and MULTI_SPLIT_REGEX is set correctly.
 try { eval('MULTI_SPLIT_REGEX = new RegExp(/(?<!\\s),(?!\\s)/);'); } catch(e) { }
 

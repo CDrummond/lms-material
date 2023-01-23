@@ -62,19 +62,28 @@ function showBand(event, id, title, page) {
 
 function addArtistLink(item, line, type, func, page, used, plain) {
     if (lmsOptions.showAllArtists && undefined!=item[type+"s"] && item[type+"s"].length>1) {
-        let sval = item[type+"s"].join(", ");
-        if (used.has(sval)) {
+        let canUse = new Set();
+        let canUseVals = [];
+        for (let i=0, loop=item[type+"s"], len=loop.length; i<len; ++i) {
+            if (!used.has(loop[i])) {
+                canUse.add(i);
+                canUseVals.push(loop[i]);
+                used.add(loop[i])
+            }
+        }
+        if (canUseVals.length<1) {
             return line;
         }
-        used.add(sval);
         if (!IS_MOBILE && !plain && undefined!=item[type+"_ids"] && item[type+"_ids"].length==item[type+"s"].length) {
             let vals = [];
             for (let i=0, loop=item[type+"s"], len=loop.length; i<len; ++i) {
-                vals.push("<obj class=\"link-item\" onclick=\""+func+"(event, "+item[type+"_ids"][i]+",\'"+escape(loop[i])+"\', \'"+page+"\')\">" + loop[i] + "</obj>");
+                if (canUse.has(i)) {
+                    vals.push("<obj class=\"link-item\" onclick=\""+func+"(event, "+item[type+"_ids"][i]+",\'"+escape(loop[i])+"\', \'"+page+"\')\">" + loop[i] + "</obj>");
+                }
             }
             line=addPart(line, vals.join(", "));
         } else {
-            line=addPart(line, item[type+"s"].join(", "));
+            line=addPart(line, canUseVals.join(", "));
         }
     } else {
         let val = item[type];
@@ -114,14 +123,14 @@ function buildArtistLine(i, page, plain, existing) {
             line=addArtistLink(i, line, "albumartist", "showAlbumArtist", page, used, plain);
         }
     }
-
-    if (i.band && i.band!=artist && lmsOptions.showBand && useBand(i.genre)) {
+    used.add(artist);
+    if (i.band  && lmsOptions.showBand && useBand(i.genre)) {
         line=addArtistLink(i, line, "band", "showBand", page, used, plain);
     }
-    if (i.composer && i.composer!=artist && lmsOptions.showComposer && useComposer(i.genre)) {
+    if (i.composer && lmsOptions.showComposer && useComposer(i.genre)) {
         line=addArtistLink(i, line, "composer", "showComposer", page, used, plain);
     }
-    if (i.conductor && i.conductor!=artist && lmsOptions.showConductor && useConductor(i.genre)) {
+    if (i.conductor && lmsOptions.showConductor && useConductor(i.genre)) {
         line=addArtistLink(i, line, "conductor", "showConductor", page, used, plain);
     }
 

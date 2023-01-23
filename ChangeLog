@@ -2,6 +2,8 @@
 -----
 1. Fix track listing in MAI view.
 2. Fix track listing when showing more than 100 tracks.
+3. When choosng if to show composers, etc., look at all incase an artist type
+   has multiple entries.
 
 3.1.0
 -----

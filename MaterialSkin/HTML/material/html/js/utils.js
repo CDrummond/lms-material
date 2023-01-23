@@ -1299,6 +1299,6 @@ function getYear(text) {
     }
 }
 
-function stripTags(s) {
-    return s.replace(/(<([^>]+)>)/gi, "");
+function stripLinkTags(s) {
+    return !IS_MOBILE && s.indexOf("<obj")>=0 ? s.replace(/(<([^>]+)>)/gi, "") : s;
 }

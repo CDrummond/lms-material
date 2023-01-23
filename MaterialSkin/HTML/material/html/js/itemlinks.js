@@ -68,7 +68,7 @@ function addArtistLink(item, line, type, func, page, used, plain) {
             if (!used.has(loop[i])) {
                 canUse.add(i);
                 canUseVals.push(loop[i]);
-                used.add(loop[i])
+                used.add(loop[i]);
             }
         }
         if (canUseVals.length<1) {

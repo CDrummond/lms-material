@@ -1298,3 +1298,7 @@ function getYear(text) {
         return matches[matches.length-1].substring(0, 7);
     }
 }
+
+function stripTags(s) {
+    return s.replace(/(<([^>]+)>)/gi, "");
+}

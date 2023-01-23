@@ -283,8 +283,8 @@ function browseHandleListResponse(view, item, command, resp, prevPage) {
         }
         view.headerTitle=item.title
                             ? wasSearch
-                                ? item.title+SEPARATOR+view.enteredTerm
-                                : item.title+(undefined==resp.titleSuffix ? "" : resp.titleSuffix)
+                                ? stripTags(item.title)+SEPARATOR+view.enteredTerm
+                                : stripTags(item.title)+(undefined==resp.titleSuffix ? "" : resp.titleSuffix)
                             : "?";
         var libname = view.current ? view.current.libname : undefined;
         view.current = item;
@@ -567,7 +567,7 @@ function browseClick(view, item, index, event) {
             view.addHistory();
             view.items = item.allItems;
             if (PLAIN_HEADER==item.header) {
-                view.headerTitle = view.headerTitle+SEPARATOR+item.title;
+                view.headerTitle = view.headerTitle+SEPARATOR+stripTags(item.title);
             }
             view.headerSubTitle = item.subtitle;
             view.current = item;
@@ -636,7 +636,7 @@ function browseClick(view, item, index, event) {
         view.addHistory();
         view.items = view.myMusic;
         view.myMusicMenu();
-        view.headerTitle = item.title;
+        view.headerTitle = stripTags(item.title);
         view.headerSubTitle = i18n("Browse music library");
         view.current = item;
         setScrollTop(view, 0);
@@ -810,7 +810,7 @@ function browseAddCategories(view, item, isGenre) {
             id: ALL_SONGS_ID};
     if (undefined!=alt_id) { cat.params.push(alt_id); }
     view.items.push(cat);
-    view.headerTitle = item.title;
+    view.headerTitle = stripTags(item.title);
     view.headerSubTitle = i18n("Select category");
     setScrollTop(view, 0);
     view.isTop = false;

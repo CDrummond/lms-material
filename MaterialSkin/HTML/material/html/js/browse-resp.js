@@ -835,7 +835,6 @@ function parseBrowseResp(data, parent, options, cacheKey, parentCommand, parentG
             var stdItem = allowPlayAlbum && data.result.count>1 ? STD_ITEM_ALBUM_TRACK : STD_ITEM_TRACK;
             for (var idx=0, loop=data.result.titles_loop, loopLen=loop.length; idx<loopLen; ++idx) {
                 var i = loop[idx];
-
                 var title = i.title;
                 var duration = parseFloat(i.duration || 0);
                 var tracknum = undefined==i.tracknum ? 0 : parseInt(i.tracknum);
@@ -847,7 +846,22 @@ function parseBrowseResp(data, parent, options, cacheKey, parentCommand, parentG
                     }
                 }
                 splitMultiples(i);
-                let others = buildArtistLine(i, "browse", false, showAlbumName ? undefined : i.albumartist);
+
+                let artist = undefined;
+                if (!showAlbumName) {
+                    // Get artist to exclude from line. If browsing "All Artists"
+                    // then artist might actualyl be a composer, etc. For this reason
+                    // we first check parent.artists and use the first of those
+                    artist = parent && parent.artists && parent.artists.length>0
+                             ? parent.artists[0]
+                             : i.albumartist
+                                 ? i.albumartist
+                                 : i.artist
+                                     ? i.artist
+                                     : i.trackartist;
+                }
+
+                let others = buildArtistLine(i, "browse", false, artist);
                 if (undefined!=others) {
                     title+=SEPARATOR + others;
                 }

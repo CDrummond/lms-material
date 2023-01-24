@@ -2,6 +2,8 @@
 -----
 1. If browsing into a composer via "All Artists" try not to show artist
    (composer) on track line.
+2. Fix artist not showing if "Show artist first in now-playing and queue" is
+   set to "No" in Material's server side settings.
 
 3.1.1
 -----

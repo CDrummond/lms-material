@@ -122,8 +122,9 @@ function buildArtistLine(i, page, plain, existing) {
         } else if (i.albumartist) {
             line=addArtistLink(i, line, "albumartist", "showAlbumArtist", page, used, plain);
         }
+        used.add(artist);
     }
-    used.add(artist);
+
     if (i.band  && lmsOptions.showBand && useBand(i.genre)) {
         line=addArtistLink(i, line, "band", "showBand", page, used, plain);
     }

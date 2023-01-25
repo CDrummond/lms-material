@@ -4,6 +4,8 @@
    (composer) on track line.
 2. Fix artist not showing if "Show artist first in now-playing and queue" is
    set to "No" in Material's server side settings.
+3. If showing Pandora thumbs up/down then don't show technical info in desktop
+   layout bottom bar.
 
 3.1.1
 -----

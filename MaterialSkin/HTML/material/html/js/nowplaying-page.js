@@ -1156,7 +1156,10 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
             return this.$store.state.stopButton
         },
         techInfo() {
-            return this.$store.state.techInfo
+            return this.$store.state.techInfo &&
+                   ( (!this.repAltBtn.show && !this.shuffAltBtn.show) ||
+                     !this.$store.state.desktopLayout ||
+                     this.largeView )
         },
         technicalInfo() {
             return undefined==this.playerStatus.current.technicalInfo || this.playerStatus.current.length==0

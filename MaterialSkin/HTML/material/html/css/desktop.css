@@ -203,7 +203,7 @@
 }
 
 .np-details-desktop .v-list__tile__content {
- margin-right:24px;
+ margin-right:12px;
 }
 
 @media screen and (max-width: 600px) {
@@ -233,6 +233,7 @@
  font-family:'Roboto Mono', monospace;
  font-weight: var(--std-weight);
  font-size:calc(var(--std-font-size) - 4px) !important;
+ min-width:unset!important;
  height:64px;
 }
 
@@ -243,6 +244,7 @@
 .np-tech-desktop {
  height:22px;
  line-height:20px;
+ max-width:180px!important;
 }
 
 .np-time-desktop-r {

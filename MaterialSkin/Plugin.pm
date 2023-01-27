@@ -1099,6 +1099,48 @@ sub _cliCommand {
     $request->setStatusBadParams();
 }
 
+sub _sortTracks {
+    my $tracksRef = shift;
+    my $order = shift;
+    my @tracks = @$tracksRef;
+
+    # 0: Reverse
+    # 1: AlbumArtist (Album, Disc No, Track No)
+    # 2: Artist (Album, Disc No, Track No)
+    # 3: Album (Album Artist (Disc No, Track No)
+    # 4: Title (Album Artist, Album, Disc No, Track No)
+    # 5: Genre (Album Artist, Album (Disc No, Track No)
+    # 6: Year (Album Artist, Album (Disc No, Track No)
+    # 7: Rating (Album Artist, Album, Disc No, Track No)
+    # 8: Composer (Album, Disc No, Track No)
+    # 9: Conductor (Album, Disc No, Track No)
+    # 10: Band (Album, Disc No, Track No)
+    if (0==$order) {
+        @tracks = reverse(@tracks);
+    } elsif (1==$order) {
+        @tracks = sort {lc($a->album->contributor->namesort) cmp lc($b->album->contributor->namesort) || lc($a->album->namesort) cmp lc($b->album->namesort) || ($a->disc || 0) <=> ($b->disc || 0) || ($a->tracknum || 0) <=> ($b->tracknum || 0)} @tracks;
+    } elsif (2==$order) {
+        @tracks = sort {lc($a->artist->namesort) cmp lc($b->artist->namesort) || lc($a->album->namesort) cmp lc($b->album->namesort) || ($a->disc || 0) <=> ($b->disc || 0) || ($a->tracknum || 0) <=> ($b->tracknum || 0)} @tracks;
+    } elsif (3==$order) {
+        @tracks = sort {lc($a->album->namesort) cmp lc($b->album->namesort) || lc($a->album->contributor->namesort) cmp lc($b->album->contributor->namesort) || ($a->disc || 0) <=> ($b->disc || 0) || ($a->tracknum || 0) <=> ($b->tracknum || 0)} @tracks;
+    } elsif (4==$order) {
+        @tracks = sort {lc($a->titlesort) cmp lc($b->titlesort) || lc($a->album->contributor->namesort) cmp lc($b->album->contributor->namesort) || lc($a->album->namesort) cmp lc($b->album->namesort) || ($a->disc || 0) <=> ($b->disc || 0) || ($a->tracknum || 0) <=> ($b->tracknum || 0)} @tracks;
+    } elsif (5==$order) {
+        @tracks = sort {lc($a->genre->namesort) cmp lc($b->genre->namesort) || lc($a->album->contributor->namesort) cmp lc($b->album->contributor->namesort) || lc($a->album->namesort) cmp lc($b->album->namesort) || ($a->disc || 0) <=> ($b->disc || 0) || ($a->tracknum || 0) <=> ($b->tracknum || 0)} @tracks;
+    } elsif (6==$order) {
+        @tracks = sort {($a->year || 0) <=> ($b->year || 0) || lc($a->album->contributor->namesort) cmp lc($b->album->contributor->namesort) || lc($a->album->namesort) cmp lc($b->album->namesort) || ($a->disc || 0) <=> ($b->disc || 0) || ($a->tracknum || 0) <=> ($b->tracknum || 0)} @tracks;
+    } elsif (7==$order) {
+        @tracks = sort {($a->rating || 0) <=> ($b->rating || 0) || lc($a->album->contributor->namesort) cmp lc($b->album->contributor->namesort) || lc($a->album->namesort) cmp lc($b->album->namesort) || ($a->disc || 0) <=> ($b->disc || 0) || ($a->tracknum || 0) <=> ($b->tracknum || 0)} @tracks;
+    } elsif (8==$order) {
+        @tracks = sort {lc($a->composer->namesort) cmp lc($b->composer->namesort) || lc($a->album->namesort) cmp lc($b->album->namesort) || ($a->disc || 0) <=> ($b->disc || 0) || ($a->tracknum || 0) <=> ($b->tracknum || 0)} @tracks;
+    } elsif (9==$order) {
+        @tracks = sort {lc($a->conductor->namesort) cmp lc($b->conductor->namesort) || lc($a->album->namesort) cmp lc($b->album->namesort) || ($a->disc || 0) <=> ($b->disc || 0) || ($a->tracknum || 0) <=> ($b->tracknum || 0)} @tracks;
+    } elsif (10==$order) {
+        @tracks = sort {lc($a->band->namesort) cmp lc($b->band->namesort) || lc($a->album->namesort) cmp lc($b->album->namesort) || ($a->disc || 0) <=> ($b->disc || 0) || ($a->tracknum || 0) <=> ($b->tracknum || 0)} @tracks;
+    }
+    return @tracks;
+}
+
 sub _cliClientCommand {
     my $request = shift;
 
@@ -1109,7 +1151,7 @@ sub _cliClientCommand {
     }
     my $cmd = $request->getParam('_cmd');
     my $client = $request->client();
-    if ($request->paramUndefinedOrNotOneOf($cmd, ['set-lib', 'get-alarm', 'get-dstm', 'save-dstm']) ) {
+    if ($request->paramUndefinedOrNotOneOf($cmd, ['set-lib', 'get-alarm', 'get-dstm', 'save-dstm', 'sort-queue']) ) {
         $request->setStatusBadParams();
         return;
     }
@@ -1146,6 +1188,23 @@ sub _cliClientCommand {
     if ($cmd eq 'save-dstm') {
         my $provider = preferences('plugin.dontstopthemusic')->client($client)->get('provider');
         $prefs->client($client)->set('dstm', $provider);
+        $request->setStatusDone();
+        return;
+    }
+
+    if ($cmd eq 'sort-queue') {
+        my @tracks = Slim::Player::Playlist::songs($client, 0, Slim::Player::Playlist::count($client));
+        my $len = scalar(@tracks);
+        if ($len>0) {
+            Slim::Player::Playlist::stopAndClear($client);
+            #@tracks = sort {lc($a->titlesort) cmp lc($b->titlesort)} @tracks;
+            @tracks = _sortTracks(\@tracks, $request->getParam('order'));
+            my $len2 = scalar(@tracks);
+            print("\n\n" . $len . " -> " . $len2 . "\n\n");
+            Slim::Player::Playlist::addTracks($client, \@tracks, 0);
+            $client->currentPlaylistUpdateTime(Time::HiRes::time());
+            Slim::Player::Playlist::refreshPlaylist($client);
+        }
         $request->setStatusDone();
         return;
     }

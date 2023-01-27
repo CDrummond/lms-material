@@ -280,7 +280,7 @@ var lmsQueue = Vue.component("lms-queue", {
             playlist: {name: undefined, modified: false},
             selection: new Set(),
             selectionDuration: 0,
-            settingsMenuActions: queryParams.party ? [PQ_SCROLL_ACTION] : [PQ_MOVE_QUEUE_ACTION, PQ_SCROLL_ACTION, PQ_ADD_URL_ACTION],
+            settingsMenuActions: queryParams.party ? [PQ_SCROLL_ACTION] : [PQ_MOVE_QUEUE_ACTION, PQ_SCROLL_ACTION, PQ_ADD_URL_ACTION, PQ_SORT_ACTION],
             wide: 0,
             dstm: false,
             dragActive: false,
@@ -816,6 +816,29 @@ var lmsQueue = Vue.component("lms-queue", {
                     return;
                 } else if (this.items.length>=1) {
                     bus.$emit('dlg.open', 'movequeue', this.$store.state.player);
+                }
+            } else if (PQ_SORT_ACTION==act) {
+                if (this.items.length>=1) {
+                    let sorts = [
+                                  {title:i18n("Reverse"), subtitle:i18n("Reverse current order"), id:0},
+                                  {title:i18n("Album Artist"), subtitle:i18n("...then Album, Disc No, Track No"), id:1},
+                                  {title:i18n("Artist"), subtitle:i18n("...then Album, Disc No, Track No"), id:2},
+                                  {title:i18n("Album"), subtitle:i18n("...then Album Artist, Disc No, Track No"), id:3},
+                                  {title:i18n("Title"), subtitle:i18n("...then Album Artist, Album, Disc No, Track No"), id:4},
+                                  {title:i18n("Genre"), subtitle:i18n("...then Album Artist, Album, Disc No, Track No"), id:5},
+                                  {title:i18n("Year"), subtitle:i18n("...then Album Artist, Album, Disc No, Track No"), id:6},
+                                  {title:i18n("Rating"), subtitle:i18n("...then Album Artist, Album, Disc No, Track No"), id:7},
+                                  {title:i18n("Composer"), subtitle:i18n("...then Album, Disc No, Track No"), id:8},
+                                  {title:i18n("Conductor"), subtitle:i18n("...then Album, Disc No, Track No"), id:9},
+                                  {title:i18n("Band"), subtitle:i18n("...then Album, Disc No, Track No"), id:10}
+                                ];
+                    choose(ACTIONS[act].title, sorts).then(choice => {
+                        if (undefined!=choice) {
+                            lmsCommand(this.$store.state.player.id, ["material-skin-client", "sort-queue", "order:"+choice.id]).then(({data}) => {
+                                bus.$emit('refreshStatus');
+                            });
+                        }
+                    });
                 }
             }
         },

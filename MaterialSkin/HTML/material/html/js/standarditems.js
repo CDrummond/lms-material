@@ -41,7 +41,7 @@ const STD_ITEMS=[
         command: ["playlists", "tracks"],
         params: ["tags:acdeglstAKS"], // "tags:IRad"] -> Will show rating, not album???
         menu: [PLAY_ACTION, INSERT_ACTION, ADD_ACTION, DIVIDER, ADD_TO_FAV_ACTION, RENAME_ACTION, REMOVE_DUPES_ACTION, DELETE_ACTION, DOWNLOAD_ACTION, SELECT_ACTION, BR_COPY_ACTION, MORE_LIB_ACTION],
-        actionMenu: [INSERT_ACTION, DIVIDER, ADD_TO_FAV_ACTION, REMOVE_DUPES_ACTION, DOWNLOAD_ACTION, MORE_LIB_ACTION]
+        actionMenu: [INSERT_ACTION, DIVIDER, ADD_TO_FAV_ACTION, REMOVE_DUPES_ACTION, PLAYLIST_SORT_ACTION, DOWNLOAD_ACTION, MORE_LIB_ACTION]
     },
     {
         command: ["playlists", "tracks"],

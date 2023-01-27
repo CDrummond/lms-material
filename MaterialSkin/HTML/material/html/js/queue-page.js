@@ -819,26 +819,7 @@ var lmsQueue = Vue.component("lms-queue", {
                 }
             } else if (PQ_SORT_ACTION==act) {
                 if (this.items.length>=1) {
-                    let sorts = [
-                                  {title:i18n("Reverse"), subtitle:i18n("Reverse current order"), id:0},
-                                  {title:i18n("Album Artist"), subtitle:i18n("...then Album, Disc No, Track No"), id:1},
-                                  {title:i18n("Artist"), subtitle:i18n("...then Album, Disc No, Track No"), id:2},
-                                  {title:i18n("Album"), subtitle:i18n("...then Album Artist, Disc No, Track No"), id:3},
-                                  {title:i18n("Title"), subtitle:i18n("...then Album Artist, Album, Disc No, Track No"), id:4},
-                                  {title:i18n("Genre"), subtitle:i18n("...then Album Artist, Album, Disc No, Track No"), id:5},
-                                  {title:i18n("Year"), subtitle:i18n("...then Album Artist, Album, Disc No, Track No"), id:6},
-                                  {title:i18n("Rating"), subtitle:i18n("...then Album Artist, Album, Disc No, Track No"), id:7},
-                                  {title:i18n("Composer"), subtitle:i18n("...then Album, Disc No, Track No"), id:8},
-                                  {title:i18n("Conductor"), subtitle:i18n("...then Album, Disc No, Track No"), id:9},
-                                  {title:i18n("Band"), subtitle:i18n("...then Album, Disc No, Track No"), id:10}
-                                ];
-                    choose(ACTIONS[act].title, sorts).then(choice => {
-                        if (undefined!=choice) {
-                            lmsCommand(this.$store.state.player.id, ["material-skin-client", "sort-queue", "order:"+choice.id]).then(({data}) => {
-                                bus.$emit('refreshStatus');
-                            });
-                        }
-                    });
+                    sortPlaylist(this.$store.state.player.id, ACTIONS[act].title, ["material-skin-client", "sort-queue", "order:"+choice.id]);
                 }
             }
         },

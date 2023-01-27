@@ -135,8 +135,8 @@ var ACTIONS=[
     {cmd:"play-disc",    svg:"album-multi"},
     {cmd:"pl-track",     icon:"playlist_play"},
     {cmd:"show-img",     icon:"photo"},
-    {cmd:"pq-sort",      icon:"sort_by_alpha"},
-    {cmd:"playlist-sort",icon:"sort_by_alpha"},
+    {cmd:"pq-sort",      icon:"sort"},
+    {cmd:"playlist-sort",icon:"sort"},
 ];
 
 function updateActionStrings() {

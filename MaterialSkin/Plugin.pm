@@ -225,6 +225,16 @@ sub _startsWith {
     return substr($_[0], 0, length($_[1])) eq $_[1];
 }
 
+sub _namesort {
+    my $param = shift;
+    return !$param || !$param->namesort ? "" : lc($param->namesort);
+}
+
+sub _albumartistsort {
+    my $param = shift;
+    return !$param || !$param->contributor ? "" : _namesort($param->contributor);
+}
+
 sub _sortTracks {
     my $tracksRef = shift;
     my $order = shift;
@@ -244,25 +254,25 @@ sub _sortTracks {
     if (0==$order) {
         @tracks = reverse(@tracks);
     } elsif (1==$order) {
-        @tracks = sort {lc($a->album->contributor->namesort) cmp lc($b->album->contributor->namesort) || lc($a->album->namesort) cmp lc($b->album->namesort) || ($a->disc || 0) <=> ($b->disc || 0) || ($a->tracknum || 0) <=> ($b->tracknum || 0)} @tracks;
+        @tracks = sort {_albumartistsort($a->album) cmp _albumartistsort($b->album) || _namesort($a->album) cmp _namesort($b->album) || ($a->disc || 0) <=> ($b->disc || 0) || ($a->tracknum || 0) <=> ($b->tracknum || 0)} @tracks;
     } elsif (2==$order) {
-        @tracks = sort {lc($a->artist->namesort) cmp lc($b->artist->namesort) || lc($a->album->namesort) cmp lc($b->album->namesort) || ($a->disc || 0) <=> ($b->disc || 0) || ($a->tracknum || 0) <=> ($b->tracknum || 0)} @tracks;
+        @tracks = sort {_namesort($a->artist) cmp _namesort($b->artist) || _namesort($a->album) cmp _namesort($b->album) || ($a->disc || 0) <=> ($b->disc || 0) || ($a->tracknum || 0) <=> ($b->tracknum || 0)} @tracks;
     } elsif (3==$order) {
-        @tracks = sort {lc($a->album->namesort) cmp lc($b->album->namesort) || lc($a->album->contributor->namesort) cmp lc($b->album->contributor->namesort) || ($a->disc || 0) <=> ($b->disc || 0) || ($a->tracknum || 0) <=> ($b->tracknum || 0)} @tracks;
+        @tracks = sort {_namesort($a->album) cmp _namesort($b->album) || _albumartistsort($a->album) cmp _albumartistsort($b->album) || ($a->disc || 0) <=> ($b->disc || 0) || ($a->tracknum || 0) <=> ($b->tracknum || 0)} @tracks;
     } elsif (4==$order) {
-        @tracks = sort {lc($a->titlesort) cmp lc($b->titlesort) || lc($a->album->contributor->namesort) cmp lc($b->album->contributor->namesort) || lc($a->album->namesort) cmp lc($b->album->namesort) || ($a->disc || 0) <=> ($b->disc || 0) || ($a->tracknum || 0) <=> ($b->tracknum || 0)} @tracks;
+        @tracks = sort {lc($a->titlesort) cmp lc($b->titlesort) || _albumartistsort($a->album) cmp _albumartistsort($b->album) || _namesort($a->album) cmp _namesort($b->album) || ($a->disc || 0) <=> ($b->disc || 0) || ($a->tracknum || 0) <=> ($b->tracknum || 0)} @tracks;
     } elsif (5==$order) {
-        @tracks = sort {lc($a->genre->namesort) cmp lc($b->genre->namesort) || lc($a->album->contributor->namesort) cmp lc($b->album->contributor->namesort) || lc($a->album->namesort) cmp lc($b->album->namesort) || ($a->disc || 0) <=> ($b->disc || 0) || ($a->tracknum || 0) <=> ($b->tracknum || 0)} @tracks;
+        @tracks = sort {_namesort($a->genre) cmp _namesort($b->genre) || _albumartistsort($a->album) cmp _albumartistsort($b->album) || _namesort($a->album) cmp _namesort($b->album) || ($a->disc || 0) <=> ($b->disc || 0) || ($a->tracknum || 0) <=> ($b->tracknum || 0)} @tracks;
     } elsif (6==$order) {
-        @tracks = sort {($a->year || 0) <=> ($b->year || 0) || lc($a->album->contributor->namesort) cmp lc($b->album->contributor->namesort) || lc($a->album->namesort) cmp lc($b->album->namesort) || ($a->disc || 0) <=> ($b->disc || 0) || ($a->tracknum || 0) <=> ($b->tracknum || 0)} @tracks;
+        @tracks = sort {($a->year || 0) <=> ($b->year || 0) || _albumartistsort($a->album) cmp _albumartistsort($b->album) || _namesort($a->album) cmp _namesort($b->album) || ($a->disc || 0) <=> ($b->disc || 0) || ($a->tracknum || 0) <=> ($b->tracknum || 0)} @tracks;
     } elsif (7==$order) {
-        @tracks = sort {($a->rating || 0) <=> ($b->rating || 0) || lc($a->album->contributor->namesort) cmp lc($b->album->contributor->namesort) || lc($a->album->namesort) cmp lc($b->album->namesort) || ($a->disc || 0) <=> ($b->disc || 0) || ($a->tracknum || 0) <=> ($b->tracknum || 0)} @tracks;
+        @tracks = sort {($a->rating || 0) <=> ($b->rating || 0) || _albumartistsort($a->album) cmp _albumartistsort($b->album) || _namesort($a->album) cmp _namesort($b->album) || ($a->disc || 0) <=> ($b->disc || 0) || ($a->tracknum || 0) <=> ($b->tracknum || 0)} @tracks;
     } elsif (8==$order) {
-        @tracks = sort {lc($a->composer->namesort) cmp lc($b->composer->namesort) || lc($a->album->namesort) cmp lc($b->album->namesort) || ($a->disc || 0) <=> ($b->disc || 0) || ($a->tracknum || 0) <=> ($b->tracknum || 0)} @tracks;
+        @tracks = sort {_namesort($a->composer) cmp _namesort($b->composer) || _namesort($a->album) cmp _namesort($b->album) || ($a->disc || 0) <=> ($b->disc || 0) || ($a->tracknum || 0) <=> ($b->tracknum || 0)} @tracks;
     } elsif (9==$order) {
-        @tracks = sort {lc($a->conductor->namesort) cmp lc($b->conductor->namesort) || lc($a->album->namesort) cmp lc($b->album->namesort) || ($a->disc || 0) <=> ($b->disc || 0) || ($a->tracknum || 0) <=> ($b->tracknum || 0)} @tracks;
+        @tracks = sort {_namesort($a->conductor) cmp _namesort($b->conductor) || _namesort($a->album) cmp _namesort($b->album) || ($a->disc || 0) <=> ($b->disc || 0) || ($a->tracknum || 0) <=> ($b->tracknum || 0)} @tracks;
     } elsif (10==$order) {
-        @tracks = sort {lc($a->band->namesort) cmp lc($b->band->namesort) || lc($a->album->namesort) cmp lc($b->album->namesort) || ($a->disc || 0) <=> ($b->disc || 0) || ($a->tracknum || 0) <=> ($b->tracknum || 0)} @tracks;
+        @tracks = sort {_namesort($a->band) cmp _namesort($b->band) || _namesort($a->album) cmp _namesort($b->album) || ($a->disc || 0) <=> ($b->disc || 0) || ($a->tracknum || 0) <=> ($b->tracknum || 0)} @tracks;
     }
     return @tracks;
 }

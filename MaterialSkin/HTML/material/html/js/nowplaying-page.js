@@ -284,8 +284,7 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
 
      <v-layout text-xs-center v-if="showRatings">
       <v-flex xs12>
-      <v-rating v-if="maxRating>5" v-model="rating.value" half-increments hover clearable @click.native="setRating(true)" :readonly="undefined==ratingsPlugin"></v-rating>
-      <v-rating v-else v-model="rating.value" hover clearable @click.native="setRating(true)" :readonly="undefined==ratingsPlugin"></v-rating>
+      <v-rating v-model="rating.value" half-increments hover clearable @click.native="setRating(true)" :readonly="undefined==ratingsPlugin"></v-rating>
       </v-flex>
      </v-layout>
      <div v-if="wide>1">
@@ -352,8 +351,7 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
    </div>
    <v-layout text-xs-center row wrap class="np-controls" v-if="!(landscape && wide>1)">
     <v-flex xs12 v-if="showRatings && !landscape" class="np-text np-portrait-rating">
-     <v-rating v-if="maxRating>5" v-model="rating.value" half-increments hover clearable @click.native="setRating(true)" :readonly="undefined==ratingsPlugin"></v-rating>
-     <v-rating v-else v-model="rating.value" hover clearable @click.native="setRating(true)" :readonly="undefined==ratingsPlugin"></v-rating>
+     <v-rating v-model="rating.value" half-increments hover clearable @click.native="setRating(true)" :readonly="undefined==ratingsPlugin"></v-rating>
     </v-flex>
     <v-flex xs12 class="np-tech ellipsis" v-if="techInfo || playerStatus.playlist.count>1">{{techInfo ? technicalInfo : ""}}{{playerStatus.playlist.current | trackCount(playerStatus.playlist.count, techInfo ? SEPARATOR : undefined)}}</v-flex>
 

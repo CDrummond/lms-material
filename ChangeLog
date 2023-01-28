@@ -3,6 +3,8 @@
 1. Add "userInterfaceIdiom:Material" to all JSONRPC requests, so that plugins
    can identifiy the request as comming from Material.
 2. If LMS's lang is returned as "?", then assume "en"
+3. Remove non-half-increment ratings from mobile view, as these were not in
+   desktop view.
 
 3.1.2
 -----

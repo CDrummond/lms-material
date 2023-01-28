@@ -1184,7 +1184,7 @@ function browseItemAction(view, act, item, index, event) {
         });
     } else if (PLAYLIST_SORT_ACTION==act) {
         if (view.items.length>=1) {
-            sortPlaylist(undefined, ACTIONS[act].title, ["material-skin", "sort-playlist", item.id]);
+            sortPlaylist(view, undefined, ACTIONS[act].title, ["material-skin", "sort-playlist", item.id]);
         }
     } else if (BR_COPY_ACTION==act) {
         bus.$emit('queueGetSelectedUrls', index, item.id);

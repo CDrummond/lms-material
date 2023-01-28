@@ -293,7 +293,7 @@ function stripLinkTags(s) {
     return !IS_MOBILE && s.indexOf("<obj")>=0 ? s.replace(/(<([^>]+)>)/gi, "") : s;
 }
 
-function sortPlaylist(playerId, title, command) {
+function sortPlaylist(view, playerId, title, command) {
     let sorts = [
                     {title:i18n("Reverse"), subtitle:i18n("Reverse current order"), id:0},
                     {title:i18n("Album Artist"), subtitle:i18n("...then Album, Disc No, Track No"), id:1},
@@ -301,12 +301,22 @@ function sortPlaylist(playerId, title, command) {
                     {title:i18n("Album"), subtitle:i18n("...then Album Artist, Disc No, Track No"), id:3},
                     {title:i18n("Title"), subtitle:i18n("...then Album Artist, Album, Disc No, Track No"), id:4},
                     {title:i18n("Genre"), subtitle:i18n("...then Album Artist, Album, Disc No, Track No"), id:5},
-                    {title:i18n("Year"), subtitle:i18n("...then Album Artist, Album, Disc No, Track No"), id:6},
-                    {title:i18n("Rating"), subtitle:i18n("...then Album Artist, Album, Disc No, Track No"), id:7},
-                    {title:i18n("Composer"), subtitle:i18n("...then Album, Disc No, Track No"), id:8},
-                    {title:i18n("Conductor"), subtitle:i18n("...then Album, Disc No, Track No"), id:9},
-                    {title:i18n("Band"), subtitle:i18n("...then Album, Disc No, Track No"), id:10}
-                ];
+                    {title:i18n("Year"), subtitle:i18n("...then Album Artist, Album, Disc No, Track No"), id:6}
+                 ];
+
+    if (view.$store.state.showRating) {
+        sorts.push({title:i18n("Rating"), subtitle:i18n("...then Album Artist, Album, Disc No, Track No"), id:7});
+    }
+    if (lmsOptions.showComposer) {
+        sorts.push({title:i18n("Composer"), subtitle:i18n("...then Album, Disc No, Track No"), id:8});
+    }
+    if (lmsOptions.showConductor) {
+        sorts.push({title:i18n("Conductor"), subtitle:i18n("...then Album, Disc No, Track No"), id:9});
+    }
+    if (lmsOptions.showBand) {
+        sorts.push({title:i18n("Band"), subtitle:i18n("...then Album, Disc No, Track No"), id:10});
+    }
+
     choose(title, sorts).then(choice => {
         if (undefined!=choice) {
             command.push("order:"+choice.id);

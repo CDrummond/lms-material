@@ -84,6 +84,9 @@ var app = new Vue({
                     lang = lang.toLowerCase();
                 }
 
+                if (lang == '?') {
+                    lang = 'en';
+                }
                 if (lang == 'en') {
                     // LMS is set to 'en'. Check if browser is (e.g.) 'en-gb', and if so use that as the
                     // language for Material. We only consider 'en*' here - so that LMS 'en' is not mixed

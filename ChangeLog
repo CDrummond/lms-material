@@ -2,6 +2,7 @@
 -----
 1. Add "userInterfaceIdiom:Material" to all JSONRPC requests, so that plugins
    can identifiy the request as comming from Material.
+2. If LMS's lang is returned as "?", then assume "en"
 
 3.1.2
 -----

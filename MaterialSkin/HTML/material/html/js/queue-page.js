@@ -820,7 +820,7 @@ var lmsQueue = Vue.component("lms-queue", {
                 }
             } else if (PQ_SORT_ACTION==act) {
                 if (this.items.length>=1) {
-                    sortPlaylist(this, this.$store.state.player.id, ACTIONS[act].title, ["material-skin-client", "sort-queue", "order:"+choice.id]);
+                    sortPlaylist(this, this.$store.state.player.id, ACTIONS[act].title, ["material-skin-client", "sort-queue"]);
                 }
             }
         },

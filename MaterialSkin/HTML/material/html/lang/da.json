@@ -4,6 +4,7 @@
 "%1 of %2":"%1 af %2",
 "%1 seconds":"%1 sekunder",
 "%1 until sleep":"%1 indtil dvale",
+"%1Bits":"%1Bits",
 "'%1' failed":"'%1' fejlede",
 "(+%1 others)":"(+%1 andre)",
 "+ %1 more":"+ %1 mere",
@@ -586,6 +587,5 @@
 "1 Year":"1 år",
 "%1 Years":"%1 år",
 "1 day":"1 dag",
-"%1 days":"%1 dage",
-"%1Bits":""
+"%1 days":"%1 dage"
 }

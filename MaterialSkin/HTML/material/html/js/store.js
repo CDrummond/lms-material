@@ -520,7 +520,7 @@ const store = new Vuex.Store({
             state.nowPlayingClock = getLocalStorageBool('nowPlayingClock', state.nowPlayingClock);
             state.ratingsPlugin = getLocalStorageVal('ratingsPlugin', state.ratingsPlugin);
             state.maxRating = getLocalStorageBool('maxRating', state.maxRating);
-            state.showRating = getLocalStorageBool('showRating', state.showRating);
+            state.showRating = LMS_STATS_ENABLED && getLocalStorageBool('showRating', state.showRating);
             state.sortHome = getLocalStorageBool('sortHome', state.sortHome);
             state.hidden = new Set(JSON.parse(getLocalStorageVal('hidden', JSON.stringify([TOP_EXTRAS_ID]))));
             state.swipeVolume = getLocalStorageBool('swipeVolume', state.swipeVolume);
@@ -659,7 +659,7 @@ const store = new Vuex.Store({
                                      skipSeconds: parseInt(getLocalStorageVal('skipSeconds', undefined==prefs.skipSeconds ? state.skipSeconds : prefs.skipSeconds)),
                                      screensaver: getLocalStorageBool('screensaver', undefined==prefs.screensaver ? state.screensaver : prefs.screensaver),
                                      homeButton: getLocalStorageBool('homeButton', undefined==prefs.homeButton ? state.homeButton : prefs.homeButton),
-                                     showRating: getLocalStorageBool('showRating', undefined==prefs.showRating ? state.showRating : prefs.showRating),
+                                     showRating: LMS_STATS_ENABLED && getLocalStorageBool('showRating', undefined==prefs.showRating ? state.showRating : prefs.showRating),
                                      powerButton: getLocalStorageBool('powerButton', undefined==prefs.powerButton ? state.powerButton : prefs.powerButton),
                                      largeCovers: getLocalStorageBool('largeCovers', undefined==prefs.largeCovers ? state.largeCovers : prefs.largeCovers),
                                      mediaControls: getLocalStorageBool('mediaControls', undefined==prefs.mediaControls ? state.mediaControls : prefs.mediaControls) };

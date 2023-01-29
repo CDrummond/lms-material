@@ -96,6 +96,7 @@ function parseResp(data, showTrackNum, index, showRatings, threeLines, infoPlugi
                 resp.items.push({
                               id: "track_id:"+i.id,
                               title: haveRating ? ratingString(title, i.rating) : title,
+                              plaintitle: haveRating ? title : undefined,
                               subtitle: buildSubtitle(i, threeLines),
                               image: queueItemCover(i, infoPlugin),
                               actions: [PQ_PLAY_NOW_ACTION, PQ_PLAY_NEXT_ACTION, DIVIDER, REMOVE_ACTION, PQ_REMOVE_ALBUM_ACTION, PQ_REMOVE_DISC_ACTION, ADD_TO_PLAYLIST_ACTION, PQ_ZAP_ACTION, DOWNLOAD_ACTION, DIVIDER, SELECT_ACTION, PQ_COPY_ACTION, MOVE_HERE_ACTION, CUSTOM_ACTIONS, SHOW_IMAGE_ACTION, MORE_ACTION],
@@ -189,7 +190,7 @@ var lmsQueue = Vue.component("lms-queue", {
      </v-list-tile-content>
      <v-list-tile-action class="pq-time">{{item.durationStr}}</v-list-tile-action>
      <v-list-tile-action class="queue-action" @click.stop="itemMenu(item, index, $event)">
-      <div class="menu-btn grid-btn list-btn" :title="i18n('%1 (Menu)', item.title)"></div>
+      <div class="menu-btn grid-btn list-btn" :title="i18n('%1 (Menu)', undefined==item.plaintitle ? item.title : item.plaintitle)"></div>
      </v-list-tile-action>
      <img v-if="index==currentIndex && artwork" class="pq-current-indicator" :src="'pq-current' | svgIcon(true, 2)"></img>
     </v-list-tile>
@@ -206,7 +207,7 @@ var lmsQueue = Vue.component("lms-queue", {
      </v-list-tile-content>
      <v-list-tile-action class="pq-time">{{item.durationStr}}</v-list-tile-action>
      <v-list-tile-action class="queue-action" @click.stop="itemMenu(item, index, $event)">
-      <div class="menu-btn grid-btn list-btn" :title="i18n('%1 (Menu)', item.title)"></div>
+      <div class="menu-btn grid-btn list-btn" :title="i18n('%1 (Menu)', undefined==item.plaintitle ? item.title : item.plaintitle)"></div>
      </v-list-tile-action>
      <img v-if="index==currentIndex && artwork" class="pq-current-indicator" :src="'pq-current' | svgIcon(true, 2)"></img>
     </v-list-tile>
@@ -226,7 +227,7 @@ var lmsQueue = Vue.component("lms-queue", {
      <v-list-tile-action class="pq-time">{{item.durationStr}}</v-list-tile-action>
      <v-list-tile-action v-if="queryParams.party" style="width:16px"></v-list-tile-action>
      <v-list-tile-action v-else class="queue-action" @click.stop="itemMenu(item, index, $event)">
-      <div class="menu-btn grid-btn list-btn" :title="i18n('%1 (Menu)', item.title)"></div>
+      <div class="menu-btn grid-btn list-btn" :title="i18n('%1 (Menu)', undefined==item.plaintitle ? item.title : item.plaintitle)"></div>
      </v-list-tile-action>
      <img v-if="index==currentIndex && artwork" class="pq-current-indicator" :src="'pq-current' | svgIcon(true, 2)"></img>
     </v-list-tile>
@@ -728,9 +729,9 @@ var lmsQueue = Vue.component("lms-queue", {
                     bus.$emit('removeFromQueue', indexes);
                 }
             } else if (MORE_ACTION===act) {
-                if (item.title.indexOf("<i class=\"rstar\">")>0) { // Need to remove ratings stars...
+                if (undefined!=item.plaintitle) { // Need to remove ratings stars...
                     let clone = JSON.parse(JSON.stringify(item));
-                    clone.title = item.title.split(SEPARATOR+"<i class=\"rstar\">")[0];
+                    clone.title = item.plaintitle;
                     bus.$emit('trackInfo', clone, index, 'queue');
                 } else {
                     bus.$emit('trackInfo', item, index, 'queue');

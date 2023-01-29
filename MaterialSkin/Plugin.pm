@@ -1252,6 +1252,7 @@ sub _cliClientCommand {
             Slim::Player::Playlist::stopAndClear($client);
             @tracks = _sortTracks(\@tracks, $request->getParam('order'));
             Slim::Player::Playlist::addTracks($client, \@tracks, 0);
+            $client->currentPlaylistModified(1);
             $client->currentPlaylistUpdateTime(Time::HiRes::time());
             Slim::Player::Playlist::refreshPlaylist($client);
         }

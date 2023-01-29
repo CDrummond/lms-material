@@ -149,10 +149,6 @@ function originalId(id) {
     return id.split("@index:")[0];
 }
 
-function addPart(str, part) {
-    return str ? (part ? str+SEPARATOR+part : str) : part;
-}
-
 function showMenu(obj, newMenu) {
     if (obj.menu.show) {
         setTimeout(function () {
@@ -295,26 +291,34 @@ function stripLinkTags(s) {
 
 function sortPlaylist(view, playerId, title, command) {
     let sorts = [
-                    {title:i18n("Reverse"), subtitle:i18n("Reverse current order"), id:0},
-                    {title:i18n("Album Artist"), subtitle:i18n("...then Album, Disc No, Track No"), id:1},
-                    {title:i18n("Artist"), subtitle:i18n("...then Album, Disc No, Track No"), id:2},
-                    {title:i18n("Album"), subtitle:i18n("...then Album Artist, Disc No, Track No"), id:3},
-                    {title:i18n("Title"), subtitle:i18n("...then Album Artist, Album, Disc No, Track No"), id:4},
-                    {title:i18n("Genre"), subtitle:i18n("...then Album Artist, Album, Disc No, Track No"), id:5},
-                    {title:i18n("Year"), subtitle:i18n("...then Album Artist, Album, Disc No, Track No"), id:6}
+                    {id:0, title:i18n("Reverse"), subtitle:i18n("Reverse current order")},
+                    {id:1, title:i18n("Random"), subtitle:i18n("Shuffle list")},
+                    {id:2, title:i18n("Album artist"), subtitle:i18n("...then album, disc no., track no.")},
+                    {id:3, title:i18n("Artist"), subtitle:i18n("...then album, disc no., track no.")},
+                    {id:4, title:i18n("Album"), subtitle:i18n("...then album artist, disc no., track no.")},
+                    {id:5, title:i18n("Title"), subtitle:i18n("...then album artist, album, disc no., track no.")},
+                    {id:6, title:i18n("Genre"), subtitle:i18n("...then album artist, album, disc no., track no.")},
+                    {id:7, title:i18n("Year"), subtitle:i18n("...then album artist, album, disc no., track no.")}
                  ];
 
-    if (view.$store.state.showRating) {
-        sorts.push({title:i18n("Rating"), subtitle:i18n("...then Album Artist, Album, Disc No, Track No"), id:7});
-    }
     if (lmsOptions.showComposer) {
-        sorts.push({title:i18n("Composer"), subtitle:i18n("...then Album, Disc No, Track No"), id:8});
+        sorts.push({id:8, title:i18n("Composer"), subtitle:i18n("...then album, disc no., track no.")});
     }
     if (lmsOptions.showConductor) {
-        sorts.push({title:i18n("Conductor"), subtitle:i18n("...then Album, Disc No, Track No"), id:9});
+        sorts.push({id:9, title:i18n("Conductor"), subtitle:i18n("...then album, disc no., track no.")});
     }
     if (lmsOptions.showBand) {
-        sorts.push({title:i18n("Band"), subtitle:i18n("...then Album, Disc No, Track No"), id:10});
+        sorts.push({id:10, title:i18n("Band"), subtitle:i18n("...then album, disc no., track no.")});
+    }
+    sorts.push({id:11, title:i18n("Date added"), subtitle:i18n("...then album artist, album, disc no., track no.")});
+    if (LMS_STATS_ENABLED) {
+        sorts.push({id:12, title:i18n("Date last played"), subtitle:i18n("...then album artist, album, disc no., track no.")});
+    }
+    if (view.$store.state.showRating) {
+        sorts.push({id:13, title:i18n("Rating"), subtitle:i18n("...then album artist, album, disc no., track no.")});
+    }
+    if (LMS_STATS_ENABLED) {
+        sorts.push({id:14, title:i18n("Play count"), subtitle:i18n("...then album artist, album, disc no., track no.")});
     }
 
     choose(title, sorts).then(choice => {

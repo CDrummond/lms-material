@@ -697,6 +697,10 @@ function shouldAddLibraryId(command) {
     return false;
 }
 
+function addPart(str, part) {
+    return str ? (part ? str+SEPARATOR+part : str) : part;
+}
+
 function commandGridKey(command) {
     return command.command[0]+"-grid";
 }

@@ -5,8 +5,9 @@
 2. If LMS's lang is returned as "?", then assume "en"
 3. Remove non-half-increment ratings from mobile view, as these were not in
    desktop view.
-4. Fix menu tooltips for tracks showing HTML for certain tracks.
+4. Fix menu tooltips for tracks sometimes showing HTML.
 5. Hide option to show ratings if LMS is started with "--nostatistics"
+6. Be more consistent with showing track info for tracks.
 
 3.1.2
 -----

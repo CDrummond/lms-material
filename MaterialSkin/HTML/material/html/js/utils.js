@@ -1302,3 +1302,7 @@ function getYear(text) {
 function stripLinkTags(s) {
     return !IS_MOBILE && s.indexOf("<obj")>=0 ? s.replace(/(<([^>]+)>)/gi, "") : s;
 }
+
+function trackTags() {
+    return TRACK_TAGS+(lmsOptions.techInfo ? TECH_INFO_TAGS : "");
+}

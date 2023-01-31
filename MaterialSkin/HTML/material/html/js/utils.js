@@ -718,7 +718,11 @@ function ratingString(current, val) {
 }
 
 function isEmpty(str) {
-    return undefined==str || str.length<1;
+    return undefined==str || null==str || str.length<1;
+}
+
+function isNull(v) {
+    return undefined==v || null==v;
 }
 
 function msgIsEmpty(msg) {

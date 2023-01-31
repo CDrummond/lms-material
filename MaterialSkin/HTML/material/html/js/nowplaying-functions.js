@@ -716,7 +716,7 @@ function nowplayingFetchAlbumInfo(view) {
             });
         }
         if (view.infoTrack.album_id!=undefined && view.infoTrack.album_id>=0) {
-            lmsList("", ["tracks"], ["album_id:"+view.infoTrack.album_id, trackTags(), "sort:tracknum"], 0, 1000, false, view.info.tabs[ALBUM_TAB].reqId).then(({data}) => {
+            lmsList("", ["tracks"], ["album_id:"+view.infoTrack.album_id, trackTags()+(view.$store.state.showRating ? "R" : ""), "sort:tracknum"], 0, 1000, false, view.info.tabs[ALBUM_TAB].reqId).then(({data}) => {
                 logJsonMessage("RESP", data);
                 if (data && data.result && view.isCurrent(data, ALBUM_TAB)) {
                     var resp = parseBrowseResp(data);

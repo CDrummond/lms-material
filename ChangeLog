@@ -8,6 +8,7 @@
 4. Fix menu tooltips for tracks sometimes showing HTML.
 5. Hide option to show ratings if LMS is started with "--nostatistics"
 6. Be more consistent with showing track info for tracks.
+7. Show track ratings in album track list in MAI view.
 
 3.1.2
 -----

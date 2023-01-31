@@ -602,7 +602,7 @@ const store = new Vuex.Store({
             });
             // Don't Stop The Music installed?
             lmsCommand("", ["pref", "plugin.state:DontStopTheMusic", "?"]).then(({data}) => {
-                state.dstmPlugin = data && data.result && null!=data.result._p2 && "disabled"!=data.result._p2;
+                state.dstmPlugin = data && data.result && null!=data.result._p2 && "disabled"!=data.result._p2 && "?"!=data.result._p2;
                 setLocalStorageVal('dstmPlugin', state.dstmPlugin);
             }).catch(err => {
                 state.dstmPlugin = false;

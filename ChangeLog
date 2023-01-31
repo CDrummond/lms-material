@@ -10,6 +10,7 @@
 6. Be more consistent with showing track info for tracks.
 7. Show track ratings in album track list in MAI view.
 8. Ensure player settings are not null.
+9. Set DSTM as unavailable if "plugin.state:DontStopTheMusic" returns "?"
 
 3.1.2
 -----

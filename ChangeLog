@@ -9,6 +9,7 @@
 6. Show track ratings in album track list in MAI view.
 7. Ensure player settings are not null.
 8. Set DSTM as unavailable if "plugin.state:DontStopTheMusic" returns "?"
+9. In tech info show Xbit not XBits.
 
 3.1.2
 -----

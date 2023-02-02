@@ -1,15 +1,16 @@
 3.1.3
 -----
-1. If LMS's lang is returned as "?", then assume "en"
-2. Remove non-half-increment ratings from mobile view, as these were not in
-   desktop view.
-3. Fix menu tooltips for tracks sometimes showing HTML.
-4. Hide option to show ratings if LMS is started with "--nostatistics"
-5. Be more consistent with showing track info for tracks.
-6. Show track ratings in album track list in MAI view.
-7. Ensure player settings are not null.
-8. Set DSTM as unavailable if "plugin.state:DontStopTheMusic" returns "?"
-9. In tech info show Xbit not XBits.
+ 1. If LMS's lang is returned as "?", then assume "en"
+ 2. Remove non-half-increment ratings from mobile view, as these were not in
+    desktop view.
+ 3. Fix menu tooltips for tracks sometimes showing HTML.
+ 4. Hide option to show ratings if LMS is started with "--nostatistics"
+ 5. Be more consistent with showing track info for tracks.
+ 6. Show track ratings in album track list in MAI view.
+ 7. Ensure player settings are not null.
+ 8. Set DSTM as unavailable if "plugin.state:DontStopTheMusic" returns "?"
+ 9. Show Xbit not XBits in tech info.
+10. Increase max-width of desktop bottom bar tech info to 260px.
 
 3.1.2
 -----

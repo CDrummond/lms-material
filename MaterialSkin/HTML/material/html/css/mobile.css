@@ -206,12 +206,12 @@
 @media only screen and (max-width:370px) {
  .lms-toolbar > .v-toolbar__content {
   margin-left:-16px !important;
-  margin-right:-12px !important;
+  margin-right:-11px !important;
  }
 
  /* Adjust dialog toolbar, so that menu icon aligns with main menu icon */
  .dialog-toolbar > .v-toolbar__content {
-  margin-right: -12px !important;
+  margin-right: -11px !important;
  }
 
  .maintoolbar-player-icon, .maintoolbar-player-power-button {

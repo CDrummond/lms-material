@@ -594,35 +594,35 @@ Vue.component('lms-player-settings', {
             }
             this.show=false;
             this.showMenu = false;
-            if (this.dstmItems.length>1 && this.dstm!=this.orig.dstm) {
+            if (this.dstmItems.length>1 && this.dstm!=this.orig.dstm && !isNull(this.dstm)) {
                 bus.$emit("dstm", this.playerId, this.dstm);
             }
-            if (this.orig.library!=this.library) {
+            if (this.orig.library!=this.library && !isNull(this.library)) {
                 lmsCommand(this.playerId, ["material-skin-client", "set-lib", "id:"+this.library]);
             }
-            if (this.orig.crossfade!=this.crossfade) {
+            if (this.orig.crossfade!=this.crossfade && !isNull(this.crossfade)) {
                 lmsCommand(this.playerId, ["playerpref", "transitionType", this.crossfade]);
             }
-            if (this.orig.smartCrossfade!=this.smartCrossfade) {
+            if (this.orig.smartCrossfade!=this.smartCrossfade && !isNull(this.smartCrossfade)) {
                 lmsCommand(this.playerId, ["playerpref", "transitionSmart", this.smartCrossfade ? 1 : 0]);
             }
-            if (this.orig.replaygain!=this.replaygain) {
+            if (this.orig.replaygain!=this.replaygain && !isNull(this.replaygain)) {
                 lmsCommand(this.playerId, ["playerpref", "replayGainMode", this.replaygain]);
             }
-            if (this.orig.alarms.fade!=this.alarms.fade) {
+            if (this.orig.alarms.fade!=this.alarms.fade && !isNull(this.alarms.fade)) {
                 lmsCommand(this.playerId, ["playerpref", "alarmfadeseconds", this.alarms.fade ? 1 : 0]);
             }
-            if (this.orig.alarms.timeout!=this.alarms.timeout) {
+            if (this.orig.alarms.timeout!=this.alarms.timeout && !isNull(this.alarms.timeout)) {
                 lmsCommand(this.playerId, ["playerpref", "alarmTimeoutSeconds", this.alarms.timeout*60]);
             }
-            if (this.orig.alarms.snooze!=this.alarms.snooze) {
+            if (this.orig.alarms.snooze!=this.alarms.snooze && !isNull(this.alarms.snooze)) {
                 lmsCommand(this.playerId, ["playerpref", "alarmSnoozeSeconds", this.alarms.snooze*60]);
             }
-            if (this.orig.alarms.volume!=this.alarms.volume) {
+            if (this.orig.alarms.volume!=this.alarms.volume && !isNull(this.alarms.volume)) {
                 lmsCommand(this.playerId, ["playerpref", "alarmDefaultVolume", this.alarms.volume]);
             }
 
-            if (this.orig.player.name!=this.playerName) {
+            if (this.orig.player.name!=this.playerName && !isEmpty(this.playerName)) {
                 lmsCommand(this.playerId, ['name', this.playerName]).then(({data}) => {
                     bus.$emit('refreshServerStatus');
                 });

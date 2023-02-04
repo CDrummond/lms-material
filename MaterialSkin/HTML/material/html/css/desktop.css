@@ -206,7 +206,7 @@
  margin-right:12px;
 }
 
-@media screen and (max-width: 600px) {
+@media screen and (max-width: 650px) {
  .np-details-desktop {
   left:164px;
   width:calc(100vw - 164px);
@@ -220,7 +220,7 @@
  }
 }
 
-@media screen and (max-width: 420px) {
+@media screen and (max-width: 470px) {
  .np-details-desktop .v-list__tile__content {
   margin-right:8px;
  }
@@ -244,7 +244,7 @@
 .np-tech-desktop {
  height:22px;
  line-height:20px;
- max-width:180px!important;
+ max-width:260px!important;
 }
 
 .np-time-desktop-r {

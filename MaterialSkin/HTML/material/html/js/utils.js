@@ -181,7 +181,7 @@ function formatTechInfo(item, source) {
         technical.push(item.bitrate);
     }
     if (item.samplesize) {
-        technical.push(i18n("%1Bits", item.samplesize));
+        technical.push(i18n("%1bit", item.samplesize));
     }
     if (item.samplerate) {
         technical.push((item.samplerate/1000)+"kHz");
@@ -661,7 +661,11 @@ function ratingString(current, val) {
 }
 
 function isEmpty(str) {
-    return undefined==str || str.length<1;
+    return undefined==str || null==str || str.length<1;
+}
+
+function isNull(v) {
+    return undefined==v || null==v;
 }
 
 function msgIsEmpty(msg) {
@@ -1017,4 +1021,8 @@ function itemDuration(item) {
     }
     let val = parseFloat(item.duration);
     return val>0 ? val : 0;
+}
+
+function trackTags() {
+    return TRACK_TAGS+(lmsOptions.techInfo ? TECH_INFO_TAGS : "");
 }

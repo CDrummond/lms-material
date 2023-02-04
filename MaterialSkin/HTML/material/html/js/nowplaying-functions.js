@@ -269,7 +269,7 @@ function nowplayingShowMenu(view, event) {
                 view.menu.items.push({title:i18n("Go to band"), act:NP_BROWSE_CMD, cmd:{command:["albums"], params:["artist_id:"+view.playerStatus.current.band_id, ARTIST_ALBUM_TAGS, SORT_KEY+ARTIST_ALBUM_SORT_PLACEHOLDER, "role_id:BAND"], title:view.playerStatus.current.band}, svg:"trumpet"});
             }
             if (view.playerStatus.current.album_id && view.playerStatus.current.album) {
-                view.menu.items.push({title:ACTIONS[GOTO_ALBUM_ACTION].title, act:NP_BROWSE_CMD, cmd:{command:["tracks"], params:["album_id:"+view.playerStatus.current.album_id, TRACK_TAGS, SORT_KEY+"tracknum"], title:view.playerStatus.current.album}, icon:ACTIONS[GOTO_ALBUM_ACTION].icon});
+                view.menu.items.push({title:ACTIONS[GOTO_ALBUM_ACTION].title, act:NP_BROWSE_CMD, cmd:{command:["tracks"], params:["album_id:"+view.playerStatus.current.album_id, trackTags(), SORT_KEY+"tracknum"], title:view.playerStatus.current.album}, icon:ACTIONS[GOTO_ALBUM_ACTION].icon});
             }
             let act = isInFavorites(view.playerStatus.current) ? REMOVE_FROM_FAV_ACTION : ADD_TO_FAV_ACTION;
             if (undefined!=view.playerStatus.current.favUrl && undefined!=view.playerStatus.current.favIcon) {
@@ -357,7 +357,7 @@ function nowplayingMenuAction(view, item) {
             view.info.tabs[view.menu.tab].sections[0].items.length>=0 && view.menu.index<view.info.tabs[view.menu.tab].sections[0].items.length) {
             let litem = view.info.tabs[view.menu.tab].sections[0].items[view.menu.index];
             if (MORE_LIB_ACTION==act) {
-                bus.$emit("browse", ["tracks"], [litem.id, TRACK_TAGS, SORT_KEY+"tracknum"], unescape(litem.title), NP_INFO);
+                bus.$emit("browse", ["tracks"], [litem.id, trackTags(), SORT_KEY+"tracknum"], unescape(litem.title), NP_INFO);
                 view.close();
             } else if (MORE_ACTION==act) {
                 bus.$emit('trackInfo', litem, undefined, NP_INFO);
@@ -716,7 +716,7 @@ function nowplayingFetchAlbumInfo(view) {
             });
         }
         if (view.infoTrack.album_id!=undefined && view.infoTrack.album_id>=0) {
-            lmsList("", ["tracks"], ["album_id:"+view.infoTrack.album_id, TRACK_TAGS, "sort:tracknum"], 0, 1000, false, view.info.tabs[ALBUM_TAB].reqId).then(({data}) => {
+            lmsList("", ["tracks"], ["album_id:"+view.infoTrack.album_id, trackTags()+(view.$store.state.showRating ? "R" : ""), "sort:tracknum"], 0, 1000, false, view.info.tabs[ALBUM_TAB].reqId).then(({data}) => {
                 logJsonMessage("RESP", data);
                 if (data && data.result && view.isCurrent(data, ALBUM_TAB)) {
                     var resp = parseBrowseResp(data);
@@ -770,7 +770,7 @@ function nowplayingMoreClicked(view, tab, section) {
         bus.$emit("browse", ["albums"], ["artist_id:"+view.infoTrack.artist_id, ALBUM_TAGS, "sort:yearalbum"], unescape(view.infoTrack.artist), NP_INFO);
         view.info.show=false;
     } else if (ALBUM_TAB==tab && 0==section) {
-        bus.$emit("browse", ["tracks"], ["album_id:"+view.infoTrack.album_id, TRACK_TAGS, "sort:tracknum"], unescape(view.infoTrack.album), NP_INFO);
+        bus.$emit("browse", ["tracks"], ["album_id:"+view.infoTrack.album_id, trackTags(), "sort:tracknum"], unescape(view.infoTrack.album), NP_INFO);
         view.info.show=false;
     }
 }

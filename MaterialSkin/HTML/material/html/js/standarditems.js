@@ -102,7 +102,7 @@ function buildStdItemCommand(item, parentCommand) {
         if (lmsOptions.techInfo && (STD_ITEM_ALBUM==stdItem || STD_ITEM_PLAYLIST==stdItem || STD_ITEM_REMOTE_PLAYLIST==stdItem)) {
             for (var i=0, list=command.params, len=list.length; i<len; ++i) {
                 if (command.params[i].startsWith("tags:")) {
-                    command.params[i]+="lorT";
+                    command.params[i]+=TECH_INFO_TAGS;
                     break;
                 }
             }

@@ -286,7 +286,7 @@ function getYear(text) {
 }
 
 function stripLinkTags(s) {
-    return !IS_MOBILE && s.indexOf("<obj")>=0 ? s.replace(/(<([^>]+)>)/gi, "") : s;
+    return !IS_MOBILE && (""+s).indexOf("<obj")>=0 ? s.replace(/(<([^>]+)>)/gi, "") : s;
 }
 
 function sortPlaylist(view, playerId, title, command) {

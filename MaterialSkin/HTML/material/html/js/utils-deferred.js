@@ -285,10 +285,6 @@ function getYear(text) {
     }
 }
 
-function stripLinkTags(s) {
-    return !IS_MOBILE && (""+s).indexOf("<obj")>=0 ? s.replace(/(<([^>]+)>)/gi, "") : s;
-}
-
 function sortPlaylist(view, playerId, title, command) {
     let sorts = [
                     {id:0, title:i18n("Reverse"), subtitle:i18n("Reverse current order")},

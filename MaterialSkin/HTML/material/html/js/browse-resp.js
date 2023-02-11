@@ -934,6 +934,7 @@ function parseBrowseResp(data, parent, options, cacheKey, parentCommand, parentG
                               draggable: true,
                               duration: i.duration
                           });
+                resp.numAudioItems = resp.items.length;
             }
             if (sortTracks) {
                 resp.items.sort(sort.rev ? revYearAlbumTrackSort : yearAlbumTrackSort);
@@ -1113,6 +1114,7 @@ function parseBrowseResp(data, parent, options, cacheKey, parentCommand, parentG
             resp.itemCustomActions = getCustomActions("playlist-track");
             resp.subtitle=i18np("1 Track", "%1 Tracks", resp.items.length);
             resp.canDrop = !isRemote;
+            resp.numAudioItems = resp.items.length;
             if (totalDuration>0) {
                 resp.subtitle+=" ("+formatSeconds(totalDuration)+")";
             }

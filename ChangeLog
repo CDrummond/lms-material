@@ -1,6 +1,8 @@
 3.2.0
 -----
 1. Add playlist and queue sorting.
+2. Add "Add all" and "Play all" actions to toolbar for "All Songs" from Years,
+   Genres, etc.
 
 3.1.4
 -----

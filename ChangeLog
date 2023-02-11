@@ -3,6 +3,7 @@
 1. Add playlist and queue sorting.
 2. Add "Add all" and "Play all" actions to toolbar for "All Songs" from Years,
    Genres, etc.
+3. Don't remove year filter when browse Years / year / Genres, etc.
 
 3.1.4
 -----

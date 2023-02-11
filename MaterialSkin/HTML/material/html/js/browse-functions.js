@@ -709,10 +709,9 @@ function browseAddCategories(view, item, isGenre) {
 
     // check if there is a grandparent ID we should use.
     let alt_id = view.history.length<1 || !view.history[view.history.length-1].current ? undefined : originalId(view.history[view.history.length-1].current.id);
-    if (undefined!=alt_id && (alt_id.includes("/") || alt_id[0]==item.id[0] || alt_id.startsWith("year:") || alt_id.startsWith("track_id:"))) {
+    if (undefined!=alt_id && (alt_id.includes("/") || alt_id[0]==item.id[0] || /*alt_id.startsWith("year:") ||*/ alt_id.startsWith("track_id:"))) {
         alt_id = undefined;
     }
-
     let cat = { title: lmsOptions.separateArtists ? i18n("All Artists") : i18n("Artists"),
                 command: ["artists"],
                 params: [item.id, ARTIST_TAGS, 'include_online_only_artists:1'],

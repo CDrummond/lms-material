@@ -65,6 +65,8 @@ Vue.component('lms-information-dialog', {
     <template v-for="(plug, index) in updates.details"><li><object @click="pluginInfo(plug)" class="link-item">{{plug.title}} {{plug.version}}</object></li></template>
    </ul>
    <v-btn v-if="updates.details.length>0 && 'idle'==pluginStatus && unlockAll" @click="updatePlugins" flat><img class="svg-img btn-icon" :src="'update' | svgIcon(darkUi)">{{i18n('Update plugins')}}</v-btn>
+   <p v-if="updates.details.length>0 && 'idle'==pluginStatus && unlockAll" style="padding-top:16px" class="subtext cursor link-item" @click='openPluginSettings'>{{i18n("For more find-grained control over plugins please visit the 'Plugins' section of 'Server settings'")}}</p>
+
    <p v-if="'downloading'==pluginStatus"><v-icon class="pulse">cloud_download</v-icon> {{i18n('Downloading plugin updates')}}</p>
    <v-btn v-if="'needs_restart'==pluginStatus && unlockAll" @click="restartServer" flat><img class="svg-img btn-icon" :src="'restart' | svgIcon(darkUi)">{{i18n('Restart server')}}</v-btn>
    <p v-if="'downloading'!=pluginStatus && updates.details.length>0" style="padding-top:16px">{{i18n('The following plugins are up to date:')}}</p>
@@ -380,6 +382,10 @@ Vue.component('lms-information-dialog', {
         },
         openPlayerSettings(player) {
             bus.$emit('dlg.open', 'playersettings', player, undefined, 2);
+        },
+        openPluginSettings() {
+            openServerSettings(this.serverName, 0, '/material/plugins/Extensions/settings/basic.html');
+            this.close();
         },
         openTechInfo() {
             bus.$emit('dlg.open', 'iframe', '/material/html/docs/index.html', i18n('LMS technical information'), undefined, IFRAME_HOME_CLOSES_DIALOGS);

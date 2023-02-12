@@ -271,8 +271,11 @@ function removeDuplicates(playistId, items) {
     }
 }
 
-function openServerSettings(serverName, showHome) {
-    bus.$emit('dlg.open', 'iframe', '/material/settings/server/basic.html', TB_SERVER_SETTINGS.title+serverName,
+function openServerSettings(serverName, showHome, path) {
+    let pathToUse = undefined==path
+                    ? '/material/settings/server/basic.html'
+                    : path;
+    bus.$emit('dlg.open', 'iframe', pathToUse, TB_SERVER_SETTINGS.title+serverName,
             [{title:i18n('Shutdown'), text:i18n('Stop Logitech Media Server?'), icon:'power_settings_new', cmd:['stopserver'], confirm:i18n('Shutdown')},
              {title:i18n('Restart'), text:i18n('Restart Logitech Media Server?'), icon:'refresh', cmd:['restartserver'], confirm:i18n('Restart')}], showHome);
 }

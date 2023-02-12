@@ -520,24 +520,16 @@ var lmsQueue = Vue.component("lms-queue", {
             bindKey('pageup', 'alt', true);
             bindKey('pagedown', 'alt', true);
             bus.$on('keyboard', function(key, modifier) {
-                if (this.$store.state.openDialogs.length>0 || this.$store.state.visibleMenus.size>0 || (!this.$store.state.desktopLayout && this.$store.state.page!="queue")) {
+                if (this.$store.state.openDialogs.length>0 || (this.$store.state.visibleMenus.size>0 && !this.$store.state.visibleMenus.has('queue')) || (!this.$store.state.desktopLayout && this.$store.state.page!="queue")) {
                     return;
                 }
+                this.menu.show = false;
                 if ('mod'==modifier) {
                     if (LMS_SAVE_QUEUE_KEYBOARD==key) {
-                        if (this.$store.state.visibleMenus.size>0) {
-                            return;
-                        }
                         this.save();
                     } else if (LMS_CLEAR_QUEUE_KEYBOARD==key) {
-                        if (this.$store.state.visibleMenus.size>0) {
-                            return;
-                        }
                         this.clear();
                     } else if (LMS_QUEUE_ADD_URL_KEYBOARD==key || LMS_SCROLL_QUEUE_KEYBOARD==key || LMS_MOVE_QUEUE_KEYBOARD==key || LMS_SORT_QUEUE_KEYBOARD==key) {
-                        if (this.$store.state.visibleMenus.size>1 || (this.wide<=1 && this.$store.state.visibleMenus==1 && !this.$store.state.visibleMenus.has('main'))) {
-                            return;
-                        }
                         this.headerAction(LMS_QUEUE_ADD_URL_KEYBOARD==key ? PQ_ADD_URL_ACTION : LMS_SCROLL_QUEUE_KEYBOARD==key ? PQ_SCROLL_ACTION : LMS_SORT_QUEUE_KEYBOARD==key ? PQ_SORT_ACTION : PQ_MOVE_QUEUE_ACTION);
                         bus.$emit('hideMenu', 'main');
                     }

@@ -167,7 +167,7 @@ function browseActions(view, item, args, count) {
         }
     }
     if (undefined!=item && undefined!=item.stdItem && undefined!=STD_ITEMS[item.stdItem].actionMenu) {
-        var weight = 300;
+        var weight = 2000;
         for (var i=0, loop=STD_ITEMS[item.stdItem].actionMenu, len=loop.length; i<len; ++i) {
             if (CUSTOM_ACTIONS==loop[i]) {
                 if (undefined!=view.itemCustomActions) {
@@ -415,7 +415,7 @@ function browseHandleListResponse(view, item, command, resp, prevPage) {
         }
 
         if (resp.canUseGrid && !resp.forceGrid) {
-            view.currentActions.push({action:(view.grid.use ? USE_LIST_ACTION : USE_GRID_ACTION), weight:1000});
+            view.currentActions.push({action:(view.grid.use ? USE_LIST_ACTION : USE_GRID_ACTION), weight:11000});
         }
         if (view.command.command.length>0 && view.command.command[0]=="albums" && view.items.length>0) {
             var addSort=true;
@@ -429,7 +429,7 @@ function browseHandleListResponse(view, item, command, resp, prevPage) {
                 }
             }
             if (addSort) {
-                view.currentActions.push({action:ALBUM_SORTS_ACTION, weight:1001});
+                view.currentActions.push({action:ALBUM_SORTS_ACTION, weight:11001});
             }
         }
         view.currentActions.sort(function(a, b) { return a.weight!=b.weight ? a.weight<b.weight ? -1 : 1 : titleSort(a, b) });

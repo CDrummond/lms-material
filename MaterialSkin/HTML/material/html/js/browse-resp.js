@@ -634,6 +634,7 @@ function parseBrowseResp(data, parent, options, cacheKey, parentCommand, parentG
                                     }
                                 }
                                 itm.isListItemInMenu = true;
+                                itm.weight=1500-resp.actionItems.length;
                                 resp.actionItems.unshift(itm);
                             }
                         }

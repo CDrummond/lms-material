@@ -1265,9 +1265,13 @@ sub _cliClientCommand {
         if ($json) {
             my $commands = eval { from_json( $json ) };
             my $actioned = 0;
+            $request->setStatusProcessing();
             for my $command (@{$commands}) {
                 $client->execute(\@{$command});
                 $actioned++;
+                if (0==($actioned % 100)) {
+                    main::idleStreams();
+                }
             }
             $request->addResult("actioned", $actioned);
             $request->setStatusDone();

@@ -774,6 +774,7 @@ Vue.component('lms-ui-settings', {
                 list.push(shortcutStr(LMS_CLEAR_QUEUE_KEYBOARD)+SEPARATOR+i18n("Clear queue"));
                 list.push(shortcutStr(ACTIONS[PQ_MOVE_QUEUE_ACTION].key)+SEPARATOR+ACTIONS[PQ_MOVE_QUEUE_ACTION].title);
                 list.push(shortcutStr(ACTIONS[PQ_ADD_URL_ACTION].key)+SEPARATOR+ACTIONS[PQ_ADD_URL_ACTION].title);
+                list.push(shortcutStr(ACTIONS[PQ_SORT_ACTION].key)+SEPARATOR+ACTIONS[PQ_SORT_ACTION].title);
             }
             list.push(shortcutStr(ACTIONS[PQ_SCROLL_ACTION].key)+SEPARATOR+ACTIONS[PQ_SCROLL_ACTION].title);
             if (this.$store.state.desktopLayout) {

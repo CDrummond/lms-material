@@ -207,6 +207,7 @@ function updateActionStrings() {
     ACTIONS[PLAY_PLAYLIST_ACTION].title=i18n("Play starting at track");
     ACTIONS[SHOW_IMAGE_ACTION].title=i18n("Show image");
     ACTIONS[PQ_SORT_ACTION].title=i18n("Sort queue");
+    ACTIONS[PQ_SORT_ACTION].key=LMS_SORT_QUEUE_KEYBOARD;
     ACTIONS[PLAYLIST_SORT_ACTION].title=i18n("Sort tracks");
     ACTIONS[PQ_SAVE_ACTION].title=i18n("Save queue");
     ACTIONS[PQ_SAVE_ACTION].key=LMS_SAVE_QUEUE_KEYBOARD;

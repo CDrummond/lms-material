@@ -515,6 +515,7 @@ var lmsQueue = Vue.component("lms-queue", {
             bindKey(LMS_CLEAR_QUEUE_KEYBOARD, 'mod');
             bindKey(LMS_QUEUE_ADD_URL_KEYBOARD, 'mod');
             bindKey(LMS_SCROLL_QUEUE_KEYBOARD, 'mod');
+            bindKey(LMS_SORT_QUEUE_KEYBOARD, 'mod');
             bindKey(LMS_MOVE_QUEUE_KEYBOARD, 'mod');
             bindKey('pageup', 'alt', true);
             bindKey('pagedown', 'alt', true);
@@ -533,11 +534,11 @@ var lmsQueue = Vue.component("lms-queue", {
                             return;
                         }
                         this.clear();
-                    } else if (LMS_QUEUE_ADD_URL_KEYBOARD==key || LMS_SCROLL_QUEUE_KEYBOARD==key || LMS_MOVE_QUEUE_KEYBOARD==key) {
+                    } else if (LMS_QUEUE_ADD_URL_KEYBOARD==key || LMS_SCROLL_QUEUE_KEYBOARD==key || LMS_MOVE_QUEUE_KEYBOARD==key || LMS_SORT_QUEUE_KEYBOARD==key) {
                         if (this.$store.state.visibleMenus.size>1 || (this.wide<=1 && this.$store.state.visibleMenus==1 && !this.$store.state.visibleMenus.has('main'))) {
                             return;
                         }
-                        this.headerAction(LMS_QUEUE_ADD_URL_KEYBOARD==key ? PQ_ADD_URL_ACTION : LMS_SCROLL_QUEUE_KEYBOARD==key ? PQ_SCROLL_ACTION : PQ_MOVE_QUEUE_ACTION);
+                        this.headerAction(LMS_QUEUE_ADD_URL_KEYBOARD==key ? PQ_ADD_URL_ACTION : LMS_SCROLL_QUEUE_KEYBOARD==key ? PQ_SCROLL_ACTION : LMS_SORT_QUEUE_KEYBOARD==key ? PQ_SORT_ACTION : PQ_MOVE_QUEUE_ACTION);
                         bus.$emit('hideMenu', 'main');
                     }
                 } else if ('alt'==modifier || (undefined==modifier && !this.$store.state.desktopLayout && this.$store.state.page=="queue")) {

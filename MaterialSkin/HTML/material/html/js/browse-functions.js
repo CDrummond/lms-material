@@ -1312,8 +1312,8 @@ function browseItemMenu(view, item, index, event) {
     }
 }
 
-function browseHeaderAction(view, act, event) {
-    if (view.$store.state.visibleMenus.size>0 && (view.$store.state.desktopLayout)) {
+function browseHeaderAction(view, act, event, ignoreOpenMenus) {
+    if (view.$store.state.visibleMenus.size>0 && !ignoreOpenMenus) {
         return;
     }
     if (USE_LIST_ACTION==act) {

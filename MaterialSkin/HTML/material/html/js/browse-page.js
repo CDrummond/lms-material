@@ -759,7 +759,7 @@ var lmsBrowse = Vue.component("lms-browse", {
         },
         itemAction(act, item, index, event) {
             if (act==ALBUM_SORTS_ACTION || act==USE_GRID_ACTION || act==USE_LIST_ACTION) {
-                this.headerAction(act, event);
+                browseHeaderAction(this, act, event, true);
             } else {
                 browseItemAction(this, act, item, index, event);
             }
@@ -775,7 +775,7 @@ var lmsBrowse = Vue.component("lms-browse", {
         },
         currentAction(act, index, event) {
             if (undefined!=act.action) {
-                this.headerAction(act.action, event)
+                browseHeaderAction(this, act.action, event)
             } else if (act.isListItemInMenu) {
                 this.click(act);
             } else if (act.albumRating) {

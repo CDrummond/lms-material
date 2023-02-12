@@ -7,6 +7,8 @@
 4. Add text under 'Update plugins' button stating to open 'Plugins' section of
    'Server settings' for more fine-grained control.
 5. Speed up procesing list of actions by sending complete list to server.
+6. Change maximum item limit from 200 to 2000 for add/play all buttons, in the
+   case where Material needs to send commands per item.
 
 3.1.4
 -----

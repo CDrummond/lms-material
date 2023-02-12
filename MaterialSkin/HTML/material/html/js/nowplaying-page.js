@@ -200,7 +200,7 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
      <v-btn flat icon v-if="info.sync" @click="info.sync = false" :title="trans.sync"><v-icon class="active-btn">link</v-icon></v-btn>
      <v-btn flat icon v-else @click="info.sync = true" :title="trans.unsync"><v-icon class="dimmed">link_off</v-icon></v-btn>
      <div style="width:32px"></div>
-     <v-btn flat icon @click="trackInfo()" :title="trans.more"><img class="svg-img" :src="'more' | svgIcon(darkUi)"></img></v-btn>
+     <v-btn flat icon @click="trackInfo()" :title="trans.more"><v-icon>more_horiz</v-icon></v-btn>
      <v-spacer></v-spacer>
     </v-card-actions>
    </v-card>
@@ -263,7 +263,7 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
      <v-btn flat icon v-if="info.sync" @click="info.sync = false" :title="trans.sync"><v-icon class="active-btn">link</v-icon></v-btn>
      <v-btn flat icon v-else @click="info.sync = true" :title="trans.unsync"><v-icon class="dimmed">link_off</v-icon></v-btn>
      <div style="width:32px"></div>
-     <v-btn flat icon @click="trackInfo()" :title="trans.more"><img class="svg-img" :src="'more' | svgIcon(darkUi)"></img></v-btn>
+     <v-btn flat icon @click="trackInfo()" :title="trans.more"><v-icon>more_horiz</v-icon></img></v-btn>
      <v-spacer></v-spacer>
     </v-card-actions>
    </v-card>

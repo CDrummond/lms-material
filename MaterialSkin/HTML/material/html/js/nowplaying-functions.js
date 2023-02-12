@@ -244,7 +244,7 @@ function nowplayingShowMenu(view, event) {
         } else {
             view.menu.icons=true;
             view.menu.items=[{title:i18n("Show image"), icon:"photo", act:NP_PIC_ACT},
-                             {title:i18n("Show track information"), svg:"more", act:NP_INFO_ACT}];
+                             {title:i18n("Show track information"), icon:"more_horiz", act:NP_INFO_ACT}];
 
             let artist_id = view.playerStatus.current.artist_ids
                         ? view.playerStatus.current.artist_ids[0]

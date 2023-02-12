@@ -6,6 +6,7 @@
 3. Don't remove year filter when browse Years / year / Genres, etc.
 4. Add text under 'Update plugins' button stating to open 'Plugins' section of
    'Server settings' for more fine-grained control.
+5. Speed up procesing list of actions by sending complete list to server.
 
 3.1.4
 -----

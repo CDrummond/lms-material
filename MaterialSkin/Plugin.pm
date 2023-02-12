@@ -1204,7 +1204,7 @@ sub _cliClientCommand {
     }
     my $cmd = $request->getParam('_cmd');
     my $client = $request->client();
-    if ($request->paramUndefinedOrNotOneOf($cmd, ['set-lib', 'get-alarm', 'get-dstm', 'save-dstm', 'sort-queue']) ) {
+    if ($request->paramUndefinedOrNotOneOf($cmd, ['set-lib', 'get-alarm', 'get-dstm', 'save-dstm', 'sort-queue', 'command-list']) ) {
         $request->setStatusBadParams();
         return;
     }
@@ -1258,6 +1258,21 @@ sub _cliClientCommand {
         }
         $request->setStatusDone();
         return;
+    }
+
+    if ($cmd eq 'command-list') {
+        my $json = $request->getParam('commands');
+        if ($json) {
+            my $commands = eval { from_json( $json ) };
+            my $actioned = 0;
+            for my $command (@{$commands}) {
+                $client->execute(\@{$command});
+                $actioned++;
+            }
+            $request->addResult("actioned", $actioned);
+            $request->setStatusDone();
+            return;
+        }
     }
 
     $request->setStatusBadParams();

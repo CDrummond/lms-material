@@ -132,18 +132,6 @@ Vue.component('lms-toolbar', {
     <v-list-tile-avatar><v-icon>surround_sound</v-icon></v-list-tile-avatar>
     <v-list-tile-title>{{trans.startPlayer}}</v-list-tile-title>
    </v-list-tile>
-   <v-divider v-if="(!desktopLayout || (!infoOpen && !nowPlayingExpanded)) && otherMenuItems[currentPage] && otherMenuItems[currentPage].length>0"></v-divider>
-   <template v-if="(!desktopLayout || (!infoOpen && !nowPlayingExpanded)) && otherMenuItems[currentPage] && otherMenuItems[currentPage].length>0" v-for="(action, index) in otherMenuItems[currentPage]">
-    <v-list-tile @click="bus.$emit('settingsMenuAction:'+currentPage, action)" v-bind:class="{'disabled':(PQ_SCROLL_ACTION==action || PQ_MOVE_QUEUE_ACTION==action || PQ_SORT_ACTION==action) && playlist.count==''}">
-     <v-list-tile-avatar>
-      <img v-if="ACTIONS[action].svg" class="svg-img" :src="ACTIONS[action].svg | svgIcon(darkUi)"></img>
-      <v-icon v-else>{{ACTIONS[action].icon}}</v-icon>
-     </v-list-tile-avatar>
-     <v-list-tile-content><v-list-tile-title>{{ACTIONS[action].stitle ? ACTIONS[action].stitle : ACTIONS[action].title}}</v-list-tile-title></v-list-tile-content>
-     <v-list-tile-action v-if="ACTIONS[action].key && keyboardControl" class="menu-shortcut">{{shortcutStr(ACTIONS[action].key)}}</v-list-tile-action>
-     <v-list-tile-action v-else-if="ACTIONS[action].submenu" class="menu-subind"><v-icon>chevron_right</v-icon></v-list-tile-action>
-    </v-list-tile>
-   </template>
    <v-divider v-if="customActions && customActions.length>0"></v-divider>
    <template v-if="customActions && customActions.length>0" v-for="(action, index) in customActions">
     <v-list-tile @click="doCustomAction(action)">
@@ -229,7 +217,6 @@ Vue.component('lms-toolbar', {
                  showMainMenu: false,
                  showErrorMenu: false,
                  showSettingsMenu: false,
-                 otherMenuItems:{},
                  trans:{noplayer:undefined, nothingplaying:undefined, info:undefined, infoShortcut:undefined, connectionLost:undefined, showLarge:undefined,
                         showLargeShortcut:undefined, hideLarge:undefined, startPlayer:undefined, groupPlayers:undefined, standardPlayers:undefined,
                         otherServerPlayers:undefined, updatesAvailable:undefined, decVol:undefined, incVol:undefined, showVol:undefined, downloading:undefined,
@@ -264,13 +251,6 @@ Vue.component('lms-toolbar', {
         }.bind(this));
         bus.$on('windowHeightChanged', function() {
             this.height = Math.floor(window.innerHeight/50)*50;
-        }.bind(this));
-        bus.$on('settingsMenuActions', function(actions, page) {
-            this.otherMenuItems[page]=[];
-            for (var i=0, len=actions.length; i<len; ++i) {
-                this.$set(this.otherMenuItems[page], i, actions[i]);
-            }
-            this.$forceUpdate();
         }.bind(this));
 
         bus.$on('scanProgress', function(text) {

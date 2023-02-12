@@ -155,7 +155,9 @@ var lmsQueue = Vue.component("lms-queue", {
     <v-flex xs12 v-else-if="listSize>0 && undefined!=playlist.name && playlist.name.length>0" class="ellipsis subtoolbar-subtitle subtext link-item">{{playlist.name}}{{playlist.modified ? ' *' : ''}}</v-flex>
    </v-layout>
    <v-spacer></v-spacer>
+   <v-btn @click.stop="actionsMenu($event)" flat icon class="toolbar-button" :title="trans.actions" v-if="otherActions.length>0"><v-icon>more_vert</v-icon></v-btn>
    <v-btn :title="trans.repeatOne" flat icon v-if="(desktopLayout || wide>0) && playerStatus.repeat===1" class="toolbar-button" v-bind:class="{'disabled':noPlayer}" v-longpress="repeatClicked"><v-icon class="active-btn">repeat_one</v-icon></img></v-btn>
+   <v-btn :title="trans.repeatOne" flat icon v-else-if="(desktopLayout || wide>0) && playerStatus.repeat===1" class="toolbar-button" v-bind:class="{'disabled':noPlayer}" v-longpress="repeatClicked"><v-icon class="active-btn">repeat_one</v-icon></img></v-btn>
    <v-btn :title="trans.repeatAll" flat icon v-else-if="(desktopLayout || wide>0) && playerStatus.repeat===2" class="toolbar-button" v-bind:class="{'disabled':noPlayer}" v-longpress="repeatClicked"><v-icon class="active-btn">repeat</v-icon></v-btn>
    <v-btn :title="trans.dstm" flat icon v-else-if="(desktopLayout || wide>0) && dstm" class="toolbar-button" v-bind:class="{'disabled':noPlayer}" v-longpress="repeatClicked"><v-icon class="active-btn">all_inclusive</v-icon></v-btn>
    <v-btn :title="trans.repeatOff" flat icon v-else-if="desktopLayout || wide>0" class="toolbar-button dimmed" v-bind:class="{'disabled':noPlayer}" v-longpress="repeatClicked"><v-icon>repeat</v-icon></v-btn>
@@ -163,15 +165,7 @@ var lmsQueue = Vue.component("lms-queue", {
    <v-btn :title="trans.shuffleAlbums" flat icon v-if="(desktopLayout || wide>0) && playerStatus.shuffle===2" class="toolbar-button" v-bind:class="{'disabled':noPlayer}" @click="shuffleClicked"><img class="svg-img media-icon" :src="'shuffle-albums' | svgIcon(darkUi, 1)"></v-btn>
    <v-btn :title="trans.shuffleAll" flat icon v-else-if="(desktopLayout || wide>0) && playerStatus.shuffle===1" class="toolbar-button" v-bind:class="{'disabled':noPlayer}" @click="shuffleClicked"><v-icon class="active-btn">shuffle</v-icon></v-btn>
    <v-btn :title="trans.shuffleOff" flat icon v-else-if="desktopLayout || wide>0" class="toolbar-button dimmed" v-bind:class="{'disabled':noPlayer}" @click="shuffleClicked"><v-icon>shuffle</v-icon></v-btn>
-   <!--
-   <template v-if="wide>1" v-for="(action, index) in settingsMenuActions">
-    <v-btn flat icon @click.stop="headerAction(action)" class="toolbar-button" :title="ACTIONS[action].title | tooltip(ACTIONS[action].key,keyboardControl,true)" :id="'tbar'+index" v-bind:class="{'disabled':(PQ_SCROLL_ACTION==action || PQ_MOVE_QUEUE_ACTION==action) && items.length<1}">
-      <img v-if="ACTIONS[action].svg" class="svg-img" :src="ACTIONS[action].svg | svgIcon(darkUi)"></img>
-      <v-icon v-else>{{ACTIONS[action].icon}}</v-icon>
-    </v-btn>
-   </template>
-   -->
-   <v-btn :title="trans.save | tooltip(LMS_SAVE_QUEUE_KEYBOARD,keyboardControl)" flat icon @click="save()" class="toolbar-button" v-bind:class="{'disabled':items.length<1}" v-if="!queryParams.party"><v-icon>save</v-icon></v-btn>
+   <v-btn :title="ACTIONS[PQ_SAVE_ACTION].title | tooltip(LMS_SAVE_QUEUE_KEYBOARD,keyboardControl)" flat icon @click="save()" class="toolbar-button" v-bind:class="{'disabled':items.length<1}" v-if="!queryParams.party && wide>1"><v-icon>save</v-icon></v-btn>
    <v-btn :title="trans.clear | tooltip(LMS_CLEAR_QUEUE_KEYBOARD,keyboardControl)" flat icon @click="clear()" class="toolbar-button" v-bind:class="{'disabled':items.length<1}"v-if="!queryParams.party"><img class="svg-list-img" :src="'queue-clear' | svgIcon(darkUi)"></img></v-btn>
   </v-layout>
  </div>
@@ -263,6 +257,18 @@ var lmsQueue = Vue.component("lms-queue", {
     </v-list-tile>
    </template>
   </v-list>
+  <v-list v-else>
+   <template v-for="(action, index) in menu.actions">
+    <v-list-tile @click="headerAction(action)" v-bind:class="{'disabled':items.length<1 && action!=PQ_ADD_URL_ACTION}" v-if="action!=PQ_SAVE_ACTION || wide<2">
+     <v-list-tile-avatar>
+      <v-icon v-if="undefined==ACTIONS[action].svg">{{ACTIONS[action].icon}}</v-icon>
+      <img v-else class="svg-img" :src="ACTIONS[action].svg | svgIcon(darkUi)"></img>
+     </v-list-tile-avatar>
+     <v-list-tile-title>{{ACTIONS[action].title}}</v-list-tile-title>
+     <v-list-tile-action v-if="ACTIONS[action].key && keyboardControl" class="menu-shortcut">{{shortcutStr(ACTIONS[action].key)}}</v-list-tile-action>
+    </v-list-tile>
+   </template>
+  </v-list>
  </v-menu>
 </div>
 `,
@@ -274,14 +280,14 @@ var lmsQueue = Vue.component("lms-queue", {
             duration: 0.0,
             playerStatus: { shuffle:0, repeat: 0 },
             remaining: undefined,
-            trans: { ok: undefined, cancel: undefined, save:undefined, clear:undefined,
+            trans: { ok: undefined, cancel: undefined, clear:undefined,
                      repeatAll:undefined, repeatOne:undefined, repeatOff:undefined, shuffleAll:undefined, shuffleAlbums:undefined,
-                     shuffleOff:undefined, selectMultiple:undefined, removeall:undefined, invertSelect:undefined, dstm:undefined, remaining:undefined },
+                     shuffleOff:undefined, selectMultiple:undefined, removeall:undefined, invertSelect:undefined, dstm:undefined, remaining:undefined, actions:undefined },
             menu: { show:false, item: undefined, x:0, y:0, index:0},
             playlist: {name: undefined, modified: false},
             selection: new Set(),
             selectionDuration: 0,
-            settingsMenuActions: queryParams.party ? [PQ_SCROLL_ACTION] : [PQ_MOVE_QUEUE_ACTION, PQ_SCROLL_ACTION, PQ_ADD_URL_ACTION, PQ_SORT_ACTION],
+            otherActions: queryParams.party ? [PQ_SCROLL_ACTION] : [PQ_SAVE_ACTION, PQ_SCROLL_ACTION, PQ_ADD_URL_ACTION, PQ_SORT_ACTION],
             wide: 0,
             dstm: false,
             dragActive: false,
@@ -460,7 +466,7 @@ var lmsQueue = Vue.component("lms-queue", {
                      if (this.$store.state.autoScrollQueue && this.autoScrollRequired) {
                           this.scrollToCurrent();
                      }
-                     this.updateMenu();
+                     this.updateWidth();
                 });
             }
         }.bind(this));
@@ -470,21 +476,18 @@ var lmsQueue = Vue.component("lms-queue", {
                 this.scrollToCurrent(true);
             }
         }.bind(this));
-        bus.$on('settingsMenuAction:queue', function(action) {
-            this.headerAction(action);
-        }.bind(this));
 
         // Always place items in menu, so no need to update on width changes
-        //bus.$on('windowWidthChanged', function() {
-        //    this.$nextTick(function () {
-        //        this.updateMenu();
-        //    });
-        //}.bind(this));
-        //bus.$on('splitterChanged', function() {
-        //    this.updateMenu();
-        //}.bind(this));
+        bus.$on('windowWidthChanged', function() {
+            this.$nextTick(function () {
+                this.updateWidth();
+            });
+        }.bind(this));
+        bus.$on('splitterChanged', function() {
+            this.updateWidth();
+        }.bind(this));
         this.wide=5;
-        this.updateMenu();
+        this.updateWidth();
 
         bus.$on('layoutChanged', function(action) {
             let pos = this.scrollElement.scrollTop;
@@ -496,17 +499,17 @@ var lmsQueue = Vue.component("lms-queue", {
         }.bind(this));
 
         bus.$on('noPlayers', function() {
-            this.updateSettingsMenu();
+            this.updateOtherActions();
         }.bind(this));
         bus.$on('playerListChanged', function() {
-            this.updateSettingsMenu();
+            this.updateOtherActions();
         }.bind(this));
         bus.$on('prefset', function(pref, value, player) {
             if ("plugin.dontstopthemusic:provider"==pref && player==this.$store.state.player.id) {
                 this.dstm = (""+value)!="0";
             }
         }.bind(this));
-        this.updateSettingsMenu();
+        this.updateOtherActions();
         if (!IS_MOBILE) {
             bindKey(LMS_SAVE_QUEUE_KEYBOARD, 'mod');
             bindKey(LMS_CLEAR_QUEUE_KEYBOARD, 'mod');
@@ -566,17 +569,18 @@ var lmsQueue = Vue.component("lms-queue", {
     },
     methods: {
         initItems() {
-            this.trans= { ok:i18n('OK'), cancel: i18n('Cancel'), save:i18n("Save queue"), clear:i18n("Clear queue"),
+            this.trans= { ok:i18n('OK'), cancel: i18n('Cancel'), clear:i18n("Clear queue"),
                           repeatAll:i18n("Repeat queue"), repeatOne:i18n("Repeat single track"), repeatOff:i18n("No repeat"),
                           shuffleAll:i18n("Shuffle tracks"), shuffleAlbums:i18n("Shuffle albums"), shuffleOff:i18n("No shuffle"),
                           selectMultiple:i18n("Select multiple items"), removeall:i18n("Remove all selected items"), 
-                          invertSelect:i18n("Invert selection"), dstm:i18n("Don't Stop The Music"), remaining:i18n("Remaining")};
+                          invertSelect:i18n("Invert selection"), dstm:i18n("Don't Stop The Music"), remaining:i18n("Remaining"),
+                          actions:i18n("Actions")
+            };
         },
-        updateMenu() {
+        updateWidth() {
             var wide = this.scrollElement.clientWidth >= 520 ? 2 : this.scrollElement.clientWidth>=340 ? 1 : 0;
             if (wide!=this.wide) {
                 this.wide = wide;
-                bus.$emit('settingsMenuActions', /*this.wide>1 ? [] :*/ this.settingsMenuActions, 'queue');
             }
         },
         handleScroll() {
@@ -794,7 +798,7 @@ var lmsQueue = Vue.component("lms-queue", {
             }
         },
         headerAction(act) {
-            if ((this.$store.state.visibleMenus.size>0 && this.settingsMenuActions.indexOf(act)<0)) {
+            if ((this.$store.state.visibleMenus.size>0 && this.otherActions.indexOf(act)<0)) {
                 return;
             }
             if (act==PQ_SCROLL_ACTION) {
@@ -823,6 +827,9 @@ var lmsQueue = Vue.component("lms-queue", {
                     sortPlaylist(this, this.$store.state.player.id, ACTIONS[act].title, ["material-skin-client", "sort-queue"]);
                 }
             }
+        },
+        actionsMenu(event) {
+            showMenu(this, {show:true, actions:this.otherActions, x:event.clientX, y:event.clientY});
         },
         itemMenu(item, index, event) {
             showMenu(this, {show:true, item:item, index:index, x:event.clientX, y:event.clientY});
@@ -1144,17 +1151,15 @@ var lmsQueue = Vue.component("lms-queue", {
                 }
             }
         },
-        updateSettingsMenu() {
+        updateOtherActions() {
             if (queryParams.party) {
                 return;
             }
             var canMove = this.$store.state.players && this.$store.state.players.length>1;
-            if (canMove && this.settingsMenuActions[0]!=PQ_MOVE_QUEUE_ACTION) {
-                this.settingsMenuActions.unshift(PQ_MOVE_QUEUE_ACTION);
-                bus.$emit('settingsMenuActions', /*this.wide>1 ? [] :*/ this.settingsMenuActions, 'queue');
-            } else if (!canMove && this.settingsMenuActions[0]==PQ_MOVE_QUEUE_ACTION) {
-                this.settingsMenuActions.splice(0, 1);
-                bus.$emit('settingsMenuActions', /*this.wide>1 ? [] :*/ this.settingsMenuActions, 'queue');
+            if (canMove && this.otherActions[0]!=PQ_MOVE_QUEUE_ACTION) {
+                this.otherActions.unshift(PQ_MOVE_QUEUE_ACTION);
+            } else if (!canMove && this.otherActions[0]==PQ_MOVE_QUEUE_ACTION) {
+                this.otherActions.splice(0, 1);
             }
         },
         shuffleClicked() {

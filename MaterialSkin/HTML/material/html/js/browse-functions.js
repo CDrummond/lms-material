@@ -97,7 +97,6 @@ function browseAddHistory(view) {
     prev.headerTitle = view.headerTitle;
     prev.headerSubTitle = view.headerSubTitle;
     prev.tbarActions = view.tbarActions;
-    prev.settingsMenuActions = view.settingsMenuActions;
     prev.pos = view.scrollElement.scrollTop;
     prev.grid = view.grid;
     prev.hoverBtns = view.hoverBtns;
@@ -181,7 +180,7 @@ function browseActions(view, item, args, count) {
                 }
             } else if ((ADD_RANDOM_ALBUM_ACTION!=loop[i] || count>1) && (DOWNLOAD_ACTION!=loop[i] || (lmsOptions.allowDownload && undefined==item.emblem))) {
                 weight++;
-                actions.push({action:loop[i], weight:weight});
+                actions.push({action:loop[i], weight:(MORE_LIB_ACTION==loop[i] ? 5000 : weight)});
             }
         }
     }
@@ -296,7 +295,6 @@ function browseHandleListResponse(view, item, command, resp, prevPage) {
         view.filteredJumplist = [];
         view.baseActions=resp.baseActions;
         view.tbarActions=[];
-        view.settingsMenuActions=[];
         view.isTop = false;
         view.subtitleClickable = !IS_MOBILE && view.items.length>0 && undefined!=view.items[0].id && undefined!=view.items[0].artist_id && view.items[0].id.startsWith("album_id:");
         view.grid = {allowed:resp.canUseGrid,
@@ -310,7 +308,7 @@ function browseHandleListResponse(view, item, command, resp, prevPage) {
                            resp.allowHoverBtns );
 
         // Get list of actions (e.g. biography, online services) to show in subtoolbar
-        view.currentActions={show:false, items:[]};
+        view.currentActions=[];
         let listingArtistAlbums = view.current.id.startsWith("artist_id:");
         let listingAlbumTracks = view.current.id.startsWith("album_id:");
         let listingAlbums = view.command.command[0]=="albums";
@@ -378,22 +376,22 @@ function browseHandleListResponse(view, item, command, resp, prevPage) {
                     }
                 }
             }
-            view.currentActions.items = browseActions(view, resp.items.length>0 ? item : undefined, actParams, resp.items.length);
+            view.currentActions = browseActions(view, resp.items.length>0 ? item : undefined, actParams, resp.items.length);
             if (listingArtistAlbums) {
                 for (var i=0, loop=view.onlineServices, len=loop.length; i<len; ++i) {
                     var emblem = getEmblem(loop[i]+':');
-                    view.currentActions.items.push({title:/*!i81n*/'wimp'==loop[i] ? 'Tidal' : capitalize(loop[i]),
-                                                    weight:10, svg:emblem ? emblem.name : undefined, id:loop[i], isService:true,
-                                                    artist_id:artist_id});
+                    view.currentActions.push({title:/*!i81n*/'wimp'==loop[i] ? 'Tidal' : capitalize(loop[i]),
+                                              weight:10, svg:emblem ? emblem.name : undefined, id:loop[i], isService:true,
+                                              artist_id:artist_id});
                 }
             } else if (undefined!=view.$store.state.ratingsPlugin && view.items.length>1) {
-                view.currentActions.items.push({albumRating:true, title:i18n("Set rating for all tracks"), icon:"stars", weight:99});
+                view.currentActions.push({albumRating:true, title:i18n("Set rating for all tracks"), icon:"stars", weight:99});
             }
             if (undefined!=actParams['path'] && actParams['path'].length>0) {
                 // Check we have some localfiles, if not hide entry!
                 lmsCommand('', ['musicartistinfo', 'localfiles', 'folder:'+actParams['path']]).then(({data}) => {
                     if (!data || !data.result || !data.result.item_loop) {
-                        for (var i=0, loop=view.currentActions.items, len=loop.length; i<len; ++i) {
+                        for (var i=0, loop=view.currentActions, len=loop.length; i<len; ++i) {
                             if (loop[i].localfiles) {
                                 loop.splice(i, 1);
                                 break;
@@ -403,21 +401,39 @@ function browseHandleListResponse(view, item, command, resp, prevPage) {
                 }).catch(err => {
                 });
             }
-            view.currentActions.items.sort(function(a, b) { return a.weight!=b.weight ? a.weight<b.weight ? -1 : 1 : titleSort(a, b) });
             // Artist from online service, but no albums? Add links to services...
             if (listingArtistAlbums && view.items.length==0) {
                 view.items.push({id:"intro", title:i18n("No albums have been favorited for this artist. Please use the entries below to look for albums on your online services."), type:"text"});
-                for (var i=0, loop=view.currentActions.items, len=loop.length; i<len; ++i) {
+                for (var i=0, loop=view.currentActions, len=loop.length; i<len; ++i) {
                     if (loop[i].isService) {
                         view.items.push({id:loop[i].id ? loop[i].id : "ca"+i, title:loop[i].title, do:loop[i].do, svg:loop[i].svg, icon:loop[i].icon, currentAction:true, artist_id:artist_id});
                     }
                 }
             }
-            view.currentActions.show = view.items.length>0 && view.currentActions.items.length>0;
         } else if (undefined!=resp.actionItems && resp.actionItems.length>0) {
-            view.currentActions.items = resp.actionItems;
-            view.currentActions.show = view.items.length>0 && view.currentActions.items.length>0;
+            view.currentActions = resp.actionItems;
         }
+
+        if (resp.canUseGrid && !resp.forceGrid) {
+            view.currentActions.push({action:(view.grid.use ? USE_LIST_ACTION : USE_GRID_ACTION), weight:1000});
+        }
+        if (view.command.command.length>0 && view.command.command[0]=="albums" && view.items.length>0) {
+            var addSort=true;
+            for (var i=0, len=view.command.params.length; i<len; ++i) {
+                if (view.command.params[i].startsWith(SORT_KEY)) {
+                    var sort=view.command.params[i].split(":")[1];
+                    addSort=sort!="new" && sort!="random";
+                } else if (view.command.params[i].startsWith("search:")) {
+                    addSort=false;
+                    break;
+                }
+            }
+            if (addSort) {
+                view.currentActions.push({action:ALBUM_SORTS_ACTION, weight:1001});
+            }
+        }
+        view.currentActions.sort(function(a, b) { return a.weight!=b.weight ? a.weight<b.weight ? -1 : 1 : titleSort(a, b) });
+
         view.itemCustomActions = resp.itemCustomActions;
         if (item.id.startsWith(SEARCH_ID)) {
             if (view.items.length>0 && view.items[0].id.startsWith("track_id:")) {
@@ -429,7 +445,7 @@ function browseHandleListResponse(view, item, command, resp, prevPage) {
             view.tbarActions=[ADD_FAV_FOLDER_ACTION, ADD_FAV_ACTION];
         } else if (SECTION_PLAYLISTS==view.current.section && view.current.id.startsWith("playlist_id:")) {
             view.tbarActions=[PLAY_ACTION, ADD_ACTION];
-            view.currentActions={show:true, items: browseActions(view, resp.items.length>0 ? item : undefined, {}, resp.items.length)};
+            view.currentActions=browseActions(view, resp.items.length>0 ? item : undefined, {}, resp.items.length);
         } else if (view.allSongsItem || ("tracks"==command.command[0] && item.id.startsWith("currentaction:"))) {
             view.tbarActions=[PLAY_ALL_ACTION, ADD_ALL_ACTION];
         } else if ("albums"==command.command[0] && command.params.find(elem => elem=="sort:random")) {
@@ -461,25 +477,7 @@ function browseHandleListResponse(view, item, command, resp, prevPage) {
                 view.tbarActions.unshift(RELOAD_ACTION);
             }
         }
-        if (resp.canUseGrid && !resp.forceGrid) {
-            view.settingsMenuActions.unshift(view.grid.use ? USE_LIST_ACTION : USE_GRID_ACTION);
-        }
-        if (view.command.command.length>0 && view.command.command[0]=="albums" && view.items.length>0) {
-            var addSort=true;
-            for (var i=0, len=view.command.params.length; i<len; ++i) {
-                if (view.command.params[i].startsWith(SORT_KEY)) {
-                    var sort=view.command.params[i].split(":")[1];
-                    addSort=sort!="new" && sort!="random";
-                } else if (view.command.params[i].startsWith("search:")) {
-                    addSort=false;
-                    break;
-                }
-            }
-            if (addSort) {
-                view.settingsMenuActions.unshift(ALBUM_SORTS_ACTION);
-            }
-        }
-        bus.$emit('settingsMenuActions', view.settingsMenuActions, 'browse');
+
         if (resp.subtitle) {
             view.headerSubTitle=resp.subtitle;
         } else if ( (1==view.items.length && ("text"==view.items[0].type || "html"==view.items[0].type)) ||
@@ -644,9 +642,8 @@ function browseClick(view, item, index, event) {
         view.isTop = false;
         view.tbarActions=[VLIB_ACTION, SEARCH_LIB_ACTION];
         view.grid = {allowed:true, use:isSetToUseGrid(GRID_OTHER), numColumns:0, ih:GRID_MIN_HEIGHT, rows:[], few:false, haveSubtitle:true};
-        view.settingsMenuActions=[view.grid.use ? USE_LIST_ACTION : USE_GRID_ACTION];
+        view.currentActions=[{action:(view.grid.use ? USE_LIST_ACTION : USE_GRID_ACTION)}];
         view.layoutGrid(true);
-        bus.$emit('settingsMenuActions', view.settingsMenuActions, 'browse');
     } else if (RANDOM_MIX_ID==item.id) {
         bus.$emit('dlg.open', 'rndmix');
     } else if (STD_ITEM_GENRE==item.stdItem && view.current && (getField(item, "genre_id") || getField(item, "year"))) {
@@ -816,22 +813,20 @@ function browseAddCategories(view, item, isGenre) {
     view.isTop = false;
     view.jumplist = view.filteredJumplist = [];
     view.grid = {allowed:true, use:isSetToUseGrid(GRID_OTHER), numColumns:0, ih:GRID_MIN_HEIGHT, rows:[], few:false, haveSubtitle:true};
-    view.settingsMenuActions=[view.grid.use ? USE_LIST_ACTION : USE_GRID_ACTION];
+    view.currentActions=[];
     view.layoutGrid(true);
-    bus.$emit('settingsMenuActions', view.settingsMenuActions, 'browse');
 
-    view.currentActions = {items:[], show:false};
     var custom = getCustomActions(isGenre ? "genre" : "year", false);
     if (undefined!=custom) {
         for (var i=0, len=custom.length; i<len; ++i) {
             custom[i].custom=true;
-            view.currentActions.items.push(custom[i]);
+            view.currentActions.push(custom[i]);
         }
-        view.currentActions.show = view.currentActions.items.length>0;
         if (view.currentActions.show) {
             view.current={id:item.id, title:item.title};
         }
     }
+    view.currentActions.push({action:(view.grid.use ? USE_LIST_ACTION : USE_GRID_ACTION)});
 }
 
 function browseItemAction(view, act, item, index, event) {
@@ -1318,7 +1313,7 @@ function browseItemMenu(view, item, index, event) {
 }
 
 function browseHeaderAction(view, act, event) {
-    if (view.$store.state.visibleMenus.size>0 && (view.$store.state.desktopLayout || view.settingsMenuActions.indexOf(act)<0)) {
+    if (view.$store.state.visibleMenus.size>0 && (view.$store.state.desktopLayout)) {
         return;
     }
     if (USE_LIST_ACTION==act) {
@@ -1339,7 +1334,7 @@ function browseHeaderAction(view, act, event) {
         for (var i=0,len=B_ALBUM_SORTS.length; i<len; ++i) {
             albumSorts.push({key:B_ALBUM_SORTS[i].key, label:B_ALBUM_SORTS[i].label, selected:sort==B_ALBUM_SORTS[i].key});
         }
-        showMenu(view, {show:true, x:event ? event.clientX : window.innerWidth, y:event ? event.clientY :0,
+        showMenu(view, {show:true, x:event ? event.clientX : window.innerWidth, y:52,
                         albumSorts:albumSorts, reverseSort:reverseSort, inMainMenu:!event});
     } else if (VLIB_ACTION==act) {
         view.showLibMenu(event);
@@ -1404,11 +1399,10 @@ function browseGoHome(view) {
     view.headerSubTitle=null;
     view.baseActions=[];
     view.currentBaseActions=[];
-    view.currentActions={show:false, items:[]};
     view.tbarActions=[];
     view.isTop = true;
     view.grid = {allowed:true, use:isSetToUseGrid(GRID_OTHER), numColumns:0, ih:GRID_MIN_HEIGHT, rows:[], few:false, haveSubtitle:true};
-    view.settingsMenuActions=[view.grid.use ? USE_LIST_ACTION : USE_GRID_ACTION];
+    view.currentActions=[{action:(view.grid.use ? USE_LIST_ACTION : USE_GRID_ACTION)}];
     view.hoverBtns = !IS_MOBILE;
     view.command = undefined;
     view.showRatingButton = false;
@@ -1421,7 +1415,6 @@ function browseGoHome(view) {
         view.layoutGrid(true);
         setScrollTop(view, prev.pos>0 ? prev.pos : 0);
     });
-    bus.$emit('settingsMenuActions', view.settingsMenuActions, 'browse');
 }
 
 function browseGoBack(view, refresh) {
@@ -1477,7 +1470,6 @@ function browseGoBack(view, refresh) {
     view.headerTitle = prev.headerTitle;
     view.headerSubTitle = prev.headerSubTitle;
     view.tbarActions = prev.tbarActions;
-    view.settingsMenuActions = prev.settingsMenuActions;
     view.command = prev.command;
     view.showRatingButton = prev.showRatingButton;
     view.subtitleClickable = prev.subtitleClickable;
@@ -1498,7 +1490,6 @@ function browseGoBack(view, refresh) {
             setScrollTop(view, prev.pos>0 ? prev.pos : 0);
         });
     }
-    bus.$emit('settingsMenuActions', view.settingsMenuActions, 'browse');
 }
 
 function browseBuildCommand(view, item, commandName, doReplacements) {

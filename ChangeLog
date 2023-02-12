@@ -9,6 +9,8 @@
 5. Speed up processing list of actions by sending complete list to server.
 6. Change maximum item limit from 200 to 2000 for add/play all buttons, in the
    case where Material needs to send commands per item.
+7. No longer move browse, or queue, actions into main menu - use a menu button
+   in the relevant view.
 
 3.1.4
 -----

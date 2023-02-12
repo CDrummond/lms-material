@@ -45,19 +45,12 @@ var lmsBrowse = Vue.component("lms-browse", {
    <div class="ellipsis subtoolbar-title subtoolbar-title-single pointer link-item" @click="showHistory($event)" v-else-if="history.length>0">{{headerTitle}}</div>
    <div class="ellipsis subtoolbar-title subtoolbar-title-single" v-else>{{headerTitle}}</div>
    <v-spacer style="flex-grow: 10!important"></v-spacer>
-   <template v-if="desktopLayout" v-for="(action, index) in settingsMenuActions">
-    <v-btn v-if="!queryParams.party || !HIDE_FOR_PARTY.has(action)" icon @click.stop="headerAction(action, $event)" class="toolbar-button" :title="ACTIONS[action].title" :id="'tbar'+index">
-      <img v-if="ACTIONS[action].svg" class="svg-img" :src="ACTIONS[action].svg | svgIcon(darkUi)"></img>
-      <v-icon v-else>{{ACTIONS[action].icon}}</v-icon>
-    </v-btn>
-   </template>
-
-   <v-btn @click.stop="currentActionsMenu($event)" flat icon class="toolbar-button" :title="trans.plugins" id="tbar-actions" v-if="currentActions.show && currentActions.items.length>1">
-    <img class="svg-img" :src="ACTIONS[MORE_LIB_ACTION].svg | svgIcon(darkUi)"></img>
-   </v-btn>
-   <v-btn @click.stop="currentAction(currentActions.items[0], 0)" flat icon class="toolbar-button" :title="currentActions.items[0].title" id="tbar-actions" v-else-if="currentActions.show && currentActions.items.length==1">
-    <img v-if="currentActions.items[0].svg" class="svg-img" :src="currentActions.items[0].svg | svgIcon(darkUi)"></img>
-    <v-icon v-else>{{currentActions.items[0].icon}}</v-icon>
+   <v-btn @click.stop="currentActionsMenu($event)" flat icon class="toolbar-button" :title="trans.actions" id="tbar-actions" v-if="currentActions.length>1"><v-icon>more_vert</v-icon></v-btn>
+   <v-btn @click.stop="currentAction(currentActions[0], 0, $event)" flat icon class="toolbar-button" :title="undefined==currentActions[0].action ? currentActions[0].title : ACTIONS[currentActions[0].action].title" id="tbar-actions" v-else-if="currentActions.length==1">
+    <img v-if="undefined!=currentActions[0].action && ACTIONS[currentActions[0].action].svg" class="svg-img" :src="currentActions[0].svg | svgIcon(darkUi)"></img>
+    <v-icon v-else-if="undefined!=currentActions[0].action">{{ACTIONS[currentActions[0].action].icon}}</v-icon>
+    <img v-else-if="currentActions[0].svg" class="svg-img" :src="currentActions[0].svg | svgIcon(darkUi)"></img>
+    <v-icon v-else>{{currentActions[0].icon}}</v-icon>
    </v-btn>
    <v-btn v-if="items.length>0 && items[0].saveableTrack && !queryParams.party" :title="ACTIONS[ADD_TO_PLAYLIST_ACTION].title" flat icon class="toolbar-button" @click.stop="headerAction(ADD_TO_PLAYLIST_ACTION, $event)"><v-icon>{{ACTIONS[ADD_TO_PLAYLIST_ACTION].icon}}</v-icon></v-btn>
    <template v-for="(action, index) in tbarActions">
@@ -67,16 +60,15 @@ var lmsBrowse = Vue.component("lms-browse", {
     </v-btn>
    </template>
   </v-layout>
-  <v-layout v-else class="link-item">
+  <v-layout v-else>
    <div class="toolbar-nobtn-pad"></div>
-   <div @click="sourcesClicked" class="ellipsis subtoolbar-title subtoolbar-title-single pointer">{{trans.sources}}</div>
+   <div @click="sourcesClicked" class="ellipsis subtoolbar-title subtoolbar-title-single pointer link-item"">{{trans.sources}}</div>
    <v-spacer @click="itemAction(SEARCH_LIB_ACTION, $event)" class="pointer"></v-spacer>
-   <template v-if="desktopLayout" v-for="(action, index) in settingsMenuActions">
-    <v-btn flat icon @click.stop="headerAction(action, $event)" class="toolbar-button" :title="ACTIONS[action].title" :id="'tbar'+index">
-      <img v-if="ACTIONS[action].svg" class="svg-img" :src="ACTIONS[action].svg | svgIcon(darkUi)"></img>
-      <v-icon v-else>{{ACTIONS[action].icon}}</v-icon>
-    </v-btn>
-   </template>
+
+   <v-btn @click.stop="currentAction(currentActions[0], 0, $event)" flat icon class="toolbar-button" :title="undefined==currentActions[0].action ? currentActions[0].title : ACTIONS[currentActions[0].action].title" id="tbar-actions" v-if="currentActions.length==1">
+    <img v-if="undefined!=currentActions[0].action && ACTIONS[currentActions[0].action].svg" class="svg-img" :src="currentActions[0].svg | svgIcon(darkUi)"></img>
+    <v-icon v-else-if="undefined!=currentActions[0].action">{{ACTIONS[currentActions[0].action].icon}}</v-icon>
+   </v-btn>
    <v-btn :title="ACTIONS[SEARCH_LIB_ACTION].title" flat icon class="toolbar-button" @click.stop="itemAction(SEARCH_LIB_ACTION, $event)"><v-icon>{{ACTIONS[SEARCH_LIB_ACTION].icon}}</v-icon></v-btn>
   </v-layout>
  </div>
@@ -337,7 +329,7 @@ var lmsBrowse = Vue.component("lms-browse", {
      </v-list-tile-avatar>
      <v-list-tile-content><v-list-tile-title>{{item.title}}</v-list-tile-title></v-list-tile-content>
     </v-list-tile>
-    <v-list-tile v-else @click="currentAction(item, index)">
+    <v-list-tile v-else @click="currentAction(item, index, $event)">
      <v-list-tile-avatar>
       <v-icon v-if="undefined==item.svg">{{item.icon}}</v-icon>
       <img v-else class="svg-img" :src="item.svg | svgIcon(darkUi)"></img>
@@ -363,14 +355,14 @@ var lmsBrowse = Vue.component("lms-browse", {
     data() {
         return {
             current: {image: undefined},
-            currentActions: {show:false, items:[]},
+            currentActions: [],
             items: [],
             grid: {allowed:true, use:false, numColumns:0, ih:GRID_MIN_HEIGHT, rows:[], few:false, haveSubtitle:true},
             fetchingItem:undefined,
             hoverBtns: !IS_MOBILE,
             trans: { ok:undefined, cancel: undefined, selectMultiple:undefined, addall:undefined, playall:undefined,
                      deleteall:undefined, removeall:undefined, invertSelect:undefined, choosepos:undefined, goHome:undefined, goBack:undefined,
-                     select:undefined, unselect:undefined, sources: undefined, desc: undefined },
+                     select:undefined, unselect:undefined, sources: undefined, desc: undefined, actions:undefined },
             menu: { show:false, item: undefined, x:0, y:0, index:-1},
             isTop: true,
             libraryName: undefined, // Name of currently chosen library
@@ -382,7 +374,6 @@ var lmsBrowse = Vue.component("lms-browse", {
             filteredJumplist: [],
             jumplistActive: 0,
             tbarActions: [],
-            settingsMenuActions: [],
             itemCustomActions: [],
             subtitleClickable: false,
             disabled: new Set(),
@@ -454,7 +445,7 @@ var lmsBrowse = Vue.component("lms-browse", {
                       sortFavorites: this.$store.state.sortFavorites};
         this.previousScrollPos=0;
         this.grid = {allowed:true, use:isSetToUseGrid(GRID_OTHER), numColumns:0, ih:GRID_MIN_HEIGHT, rows:[], few:false, haveSubtitle:true};
-        this.settingsMenuActions=[this.grid.use ? USE_LIST_ACTION : USE_GRID_ACTION];
+        this.currentActions=[{action:(this.grid.use ? USE_LIST_ACTION : USE_GRID_ACTION)}];
         this.canDrop = true;
 
         if (!IS_MOBILE) {
@@ -526,7 +517,9 @@ var lmsBrowse = Vue.component("lms-browse", {
             this.trans= { ok:i18n('OK'), cancel: i18n('Cancel'), selectMultiple:i18n("Select multiple items"), addall:i18n("Add selection to queue"),
                           playall:i18n("Play selection"), deleteall:i18n("Delete all selected items"),
                           invertSelect:i18n("Invert selection"), removeall:i18n("Remove all selected items"), choosepos:i18n("Choose position"), 
-                          goHome:i18n("Go home"), goBack:i18n("Go back"), sources:i18n("Music sources"), desc:i18n("Descending") };
+                          goHome:i18n("Go home"), goBack:i18n("Go back"), sources:i18n("Music sources"), desc:i18n("Descending"),
+                          actions:i18n("Actions")
+            };
 
             if (undefined==this.top || this.top.length==0) {
                 this.top = [{ command: [],
@@ -765,7 +758,11 @@ var lmsBrowse = Vue.component("lms-browse", {
             }
         },
         itemAction(act, item, index, event) {
-            browseItemAction(this, act, item, index, event);
+            if (act==ALBUM_SORTS_ACTION || act==USE_GRID_ACTION || act==USE_LIST_ACTION) {
+                this.headerAction(act, event);
+            } else {
+                browseItemAction(this, act, item, index, event);
+            }
         },
         itemMoreAction(item, index) {
             this.doTextClick(item.moremenu[index], true);
@@ -774,10 +771,12 @@ var lmsBrowse = Vue.component("lms-browse", {
             browseItemMenu(this, item, index, event);
         },
         currentActionsMenu(event) {
-            showMenu(this, {show:true, currentActions:this.currentActions.items, x:event.clientX, y:event.clientY});
+            showMenu(this, {show:true, currentActions:this.currentActions, x:event.clientX, y:event.clientY});
         },
-        currentAction(act, index) {
-            if (act.isListItemInMenu) {
+        currentAction(act, index, event) {
+            if (undefined!=act.action) {
+                this.headerAction(act.action, event)
+            } else if (act.isListItemInMenu) {
                 this.click(act);
             } else if (act.albumRating) {
                 this.setAlbumRating();
@@ -915,13 +914,12 @@ var lmsBrowse = Vue.component("lms-browse", {
                     setUseGrid(this.isTop || undefined==this.command || (this.current && this.current.id!=TOP_FAVORITES_ID && (this.current.id.startsWith(TOP_ID_PREFIX) || this.current.id==GENRES_ID)) ? GRID_OTHER : this.command, this.grid.use);
                     var af = this.grid.use ? USE_GRID_ACTION : USE_LIST_ACTION;
                     var at = this.grid.use ? USE_LIST_ACTION : USE_GRID_ACTION;
-                    for (var i=0, len=this.settingsMenuActions.length; i<len; ++i) {
-                        if (this.settingsMenuActions[i] == af) {
-                            this.settingsMenuActions[i] = at;
+                    for (var i=0, loop=this.currentActions, len=loop.length; i<len; ++i) {
+                        if (loop[i].action == af) {
+                            loop[i].action = at;
                             break;
                         }
                     }
-                    bus.$emit('settingsMenuActions', this.settingsMenuActions, 'browse');
                     this.$forceUpdate();
                     // Scroll to top. Without this, on iPad with iOS12 at least, grid->list scroll becomes slugish.
                     // But if user clicks on jumplist (which would call setScrollTop) then scrolling improves???
@@ -1021,9 +1019,8 @@ var lmsBrowse = Vue.component("lms-browse", {
             if (this.current && TOP_MYMUSIC_ID==this.current.id) {
                 this.items = this.myMusic;
                 this.grid = {allowed:true, use:isSetToUseGrid(GRID_OTHER), numColumns:0, ih:GRID_MIN_HEIGHT, rows:[], few:false, haveSubtitle:true};
-                this.settingsMenuActions=[this.grid.use ? USE_LIST_ACTION : USE_GRID_ACTION];
+                this.currentActions=[{action:(this.grid.use ? USE_LIST_ACTION : USE_GRID_ACTION)}];
                 this.layoutGrid(true);
-                bus.$emit('settingsMenuActions', this.settingsMenuActions, 'browse');
             } else if (this.history.length>1 && this.history[1].current && this.history[1].current.id==TOP_MYMUSIC_ID) {
                 this.history[1].items = this.myMusic;
             }
@@ -1520,9 +1517,6 @@ var lmsBrowse = Vue.component("lms-browse", {
                 }
             }
         }.bind(this));
-        bus.$on('settingsMenuAction:browse', function(action) {
-            this.headerAction(action);
-        }.bind(this));
 
         bus.$on('langChanged', function() {
             this.initItems();
@@ -1714,10 +1708,6 @@ var lmsBrowse = Vue.component("lms-browse", {
         this.bgndElement = document.getElementById("browse-bgnd");
         this.scrollElement = document.getElementById("browse-list");
         this.scrollElement.addEventListener('scroll', this.handleScroll);
-        this.$nextTick(function () {
-            setScrollTop(this, 0);
-            bus.$emit('settingsMenuActions', this.settingsMenuActions, 'browse');
-        });
 
         bus.$on('splitterChanged', function() {
             this.layoutGrid();

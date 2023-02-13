@@ -13,6 +13,10 @@
    in the relevant view.
 8. Remove 'Settings' sub menu, and place all items into main menu.
 
+3.1.5
+-----
+1. Fix actions list incorrectly shwogin in playlist 'More' response.
+
 3.1.4
 -----
 1. Fix Years browsing on non-touch devices.

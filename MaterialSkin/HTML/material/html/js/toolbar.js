@@ -457,10 +457,11 @@ Vue.component('lms-toolbar', {
             if (queryParams.party) {
                 this.menuItems = [TB_APP_SETTINGS, TB_UI_SETTINGS, DIVIDER, TB_INFO, TB_HELP];
             } else {
-                this.menuItems = [TB_SETTINGS, TB_APP_SETTINGS, TB_UI_SETTINGS, TB_PLAYER_SETTINGS, TB_SERVER_SETTINGS, TB_CUSTOM_SETTINGS_ACTIONS, DIVIDER, TB_INFO, TB_HELP, TB_NOTIFICATIONS, TB_CUSTOM_ACTIONS];
+                this.menuItems = [TB_SETTINGS, TB_APP_SETTINGS, TB_UI_SETTINGS, TB_PLAYER_SETTINGS, TB_SERVER_SETTINGS, TB_CUSTOM_SETTINGS_ACTIONS, DIVIDER];
                 if (queryParams.appLaunchPlayer) {
                     this.menuItems.push(TB_START_PLAYER);
                 }
+                this.menuItems=this.menuItems.concat([TB_INFO, TB_HELP, TB_NOTIFICATIONS, TB_CUSTOM_ACTIONS]);
             }
             if (queryParams.appQuit) {
                 this.menuItems.push(DIVIDER);

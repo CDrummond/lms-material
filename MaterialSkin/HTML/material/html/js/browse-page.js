@@ -60,9 +60,9 @@ var lmsBrowse = Vue.component("lms-browse", {
     </v-btn>
    </template>
   </v-layout>
-  <v-layout v-else>
+  <v-layout v-else class="pointer link-item">
    <div class="toolbar-nobtn-pad"></div>
-   <div @click="sourcesClicked" class="ellipsis subtoolbar-title subtoolbar-title-single pointer link-item"">{{trans.sources}}</div>
+   <div @click="sourcesClicked" class="ellipsis subtoolbar-title subtoolbar-title-single">{{trans.sources}}</div>
    <v-spacer @click="itemAction(SEARCH_LIB_ACTION, $event)" class="pointer"></v-spacer>
 
    <v-btn @click.stop="currentAction(currentActions[0], 0, $event)" flat icon class="toolbar-button" :title="undefined==currentActions[0].action ? currentActions[0].title : ACTIONS[currentActions[0].action].title" id="tbar-actions" v-if="currentActions.length==1">

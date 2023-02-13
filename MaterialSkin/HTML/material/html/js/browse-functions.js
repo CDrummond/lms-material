@@ -123,13 +123,13 @@ function browseActions(view, item, args, count) {
                                                 ? ['musicartistinfo', 'biography', 'html:1', 'artist_id:'+args['artist_id']]
                                                 : ['musicartistinfo', 'biography', 'html:1', 'artist:'+args['artist']],
                                    params:[]},
-                              weight:0});
+                              weight:100});
                 actions.push({title:i18n('Pictures'), icon:'insert_photo',
                               do:{ command: undefined!=args['artist_id']
                                                 ? ['musicartistinfo', 'artistphotos', 'html:1', 'artist_id:'+args['artist_id']]
                                                 : ['musicartistinfo', 'artistphotos', 'html:1', 'artist:'+args['artist']],
                                    params:[]},
-                              weight:0});
+                              weight:100});
             }
             if (undefined!=args['album_id'] || (undefined!=args['album'] && (undefined!=args['artist_id'] || undefined!=args['artist']))) {
                 actions.push({title:i18n('Album review'), icon:'local_library',
@@ -139,16 +139,16 @@ function browseActions(view, item, args, count) {
                                                     ? ['musicartistinfo', 'albumreview', 'html:1', 'album:'+args['album'], 'artist_id:'+args['artist_id']]
                                                     : ['musicartistinfo', 'albumreview', 'html:1', 'album:'+args['album'], 'artist:'+args['artist']],
                                    params:[]},
-                              weight:0});
+                              weight:100});
             }
             if (undefined!=args['path'] && args['path'].length>0) {
-                actions.push({localfiles:true, title:i18n('Local files'), icon:'insert_drive_file', do:{ command:['musicartistinfo', 'localfiles', 'folder:'+args['path']], params:[]}, weight:2});
+                actions.push({localfiles:true, title:i18n('Local files'), icon:'insert_drive_file', do:{ command:['musicartistinfo', 'localfiles', 'folder:'+args['path']], params:[]}, weight:102});
             }
         }
         if (lmsOptions.youTubePlugin && undefined!=args['artist']) {
             actions.push({title:/*NoTrans*/'YouTube', svg:'youtube',
                           do:{ command: ['youtube','items'], params:['want_url:1', 'item_id:3', 'search:'+args['artist'], 'menu:youtube']},
-                          weight:10});
+                          weight:110});
         }
 
         if (undefined!=args['artist_id'] && undefined==args['album_id'] && undefined!=args['count'] && args['count']>1) {
@@ -163,11 +163,11 @@ function browseActions(view, item, args, count) {
             if (libId) {
                 params.push("library_id:"+libId);
             }
-            actions.push({title:i18n('All songs'), icon:'music_note', do:{ command: ['tracks'], params: params}, weight:3});
+            actions.push({title:i18n('All songs'), icon:'music_note', do:{ command: ['tracks'], params: params}, weight:80});
         }
     }
     if (undefined!=item && undefined!=item.stdItem && undefined!=STD_ITEMS[item.stdItem].actionMenu) {
-        var weight = 2000;
+        var weight = 200;
         for (var i=0, loop=STD_ITEMS[item.stdItem].actionMenu, len=loop.length; i<len; ++i) {
             if (CUSTOM_ACTIONS==loop[i]) {
                 if (undefined!=view.itemCustomActions) {
@@ -180,7 +180,7 @@ function browseActions(view, item, args, count) {
                 }
             } else if ((ADD_RANDOM_ALBUM_ACTION!=loop[i] || count>1) && (DOWNLOAD_ACTION!=loop[i] || (lmsOptions.allowDownload && undefined==item.emblem))) {
                 weight++;
-                actions.push({action:loop[i], weight:(MORE_LIB_ACTION==loop[i] ? 5000 : weight)});
+                actions.push({action:loop[i], weight:(MORE_LIB_ACTION==loop[i] ? 1000 : weight)});
             }
         }
     }
@@ -292,7 +292,7 @@ function browseHandleListResponse(view, item, command, resp, prevPage) {
         view.items=resp.items;
         view.allSongsItem=resp.allSongsItem;
         view.jumplist=resp.jumplist;
-        view.filteredJumplist = [];
+        view.filteredJumplist = [];99
         view.baseActions=resp.baseActions;
         view.tbarActions=[];
         view.isTop = false;
@@ -381,11 +381,11 @@ function browseHandleListResponse(view, item, command, resp, prevPage) {
                 for (var i=0, loop=view.onlineServices, len=loop.length; i<len; ++i) {
                     var emblem = getEmblem(loop[i]+':');
                     view.currentActions.push({title:/*!i81n*/'wimp'==loop[i] ? 'Tidal' : capitalize(loop[i]),
-                                              weight:10, svg:emblem ? emblem.name : undefined, id:loop[i], isService:true,
+                                              weight:110, svg:emblem ? emblem.name : undefined, id:loop[i], isService:true,
                                               artist_id:artist_id});
                 }
             } else if (undefined!=view.$store.state.ratingsPlugin && view.items.length>1) {
-                view.currentActions.push({albumRating:true, title:i18n("Set rating for all tracks"), icon:"stars", weight:99});
+                view.currentActions.push({albumRating:true, title:i18n("Set rating for all tracks"), icon:"stars", weight:101});
             }
             if (undefined!=actParams['path'] && actParams['path'].length>0) {
                 // Check we have some localfiles, if not hide entry!
@@ -415,7 +415,7 @@ function browseHandleListResponse(view, item, command, resp, prevPage) {
         }
 
         if (resp.canUseGrid && !resp.forceGrid) {
-            view.currentActions.push({action:(view.grid.use ? USE_LIST_ACTION : USE_GRID_ACTION), weight:11000});
+            view.currentActions.push({action:(view.grid.use ? USE_LIST_ACTION : USE_GRID_ACTION), weight:0});
         }
         if (view.command.command.length>0 && view.command.command[0]=="albums" && view.items.length>0) {
             var addSort=true;
@@ -429,7 +429,7 @@ function browseHandleListResponse(view, item, command, resp, prevPage) {
                 }
             }
             if (addSort) {
-                view.currentActions.push({action:ALBUM_SORTS_ACTION, weight:11001});
+                view.currentActions.push({action:ALBUM_SORTS_ACTION, weight:1});
             }
         }
         view.currentActions.sort(function(a, b) { return a.weight!=b.weight ? a.weight<b.weight ? -1 : 1 : titleSort(a, b) });

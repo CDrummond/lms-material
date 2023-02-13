@@ -259,7 +259,7 @@ var lmsQueue = Vue.component("lms-queue", {
   </v-list>
   <v-list v-else>
    <template v-for="(action, index) in menu.actions">
-    <v-list-tile @click="headerAction(action)" v-bind:class="{'disabled':items.length<1 && action!=PQ_ADD_URL_ACTION}" v-if="action!=PQ_SAVE_ACTION || wide<2">
+    <v-list-tile @click="headerAction(action)" v-bind:class="{'disabled':items.length<1 && action!=PQ_ADD_URL_ACTION}" v-if="action==PQ_SAVE_ACTION ? wide<2 : action!=PQ_MOVE_QUEUE_ACTION || showMoveAction">
      <v-list-tile-avatar>
       <v-icon v-if="undefined==ACTIONS[action].svg">{{ACTIONS[action].icon}}</v-icon>
       <img v-else class="svg-img" :src="ACTIONS[action].svg | svgIcon(darkUi)"></img>
@@ -287,7 +287,7 @@ var lmsQueue = Vue.component("lms-queue", {
             playlist: {name: undefined, modified: false},
             selection: new Set(),
             selectionDuration: 0,
-            otherActions: queryParams.party ? [PQ_SCROLL_ACTION] : [PQ_SAVE_ACTION, PQ_SCROLL_ACTION, PQ_ADD_URL_ACTION, PQ_SORT_ACTION],
+            otherActions: queryParams.party ? [PQ_SCROLL_ACTION] : [PQ_SAVE_ACTION, PQ_MOVE_QUEUE_ACTION, PQ_SCROLL_ACTION, PQ_ADD_URL_ACTION, PQ_SORT_ACTION],
             wide: 0,
             dstm: false,
             dragActive: false,
@@ -320,6 +320,12 @@ var lmsQueue = Vue.component("lms-queue", {
         },
         drawBgndImage() {
             return this.$store.state.queueBackdrop && undefined!=this.coverUrl
+        },
+        showMoveAction() {
+            if (queryParams.party) {
+                return false;
+            }
+            return !queryParams.party && this.$store.state.players && this.$store.state.players.length>1
         }
     },
     created() {
@@ -498,18 +504,11 @@ var lmsQueue = Vue.component("lms-queue", {
             }
         }.bind(this));
 
-        bus.$on('noPlayers', function() {
-            this.updateOtherActions();
-        }.bind(this));
-        bus.$on('playerListChanged', function() {
-            this.updateOtherActions();
-        }.bind(this));
         bus.$on('prefset', function(pref, value, player) {
             if ("plugin.dontstopthemusic:provider"==pref && player==this.$store.state.player.id) {
                 this.dstm = (""+value)!="0";
             }
         }.bind(this));
-        this.updateOtherActions();
         if (!IS_MOBILE) {
             bindKey(LMS_SAVE_QUEUE_KEYBOARD, 'mod');
             bindKey(LMS_CLEAR_QUEUE_KEYBOARD, 'mod');
@@ -1142,17 +1141,6 @@ var lmsQueue = Vue.component("lms-queue", {
                     this.items[this.coverTrackIndex].image=resizedUrl;
                     this.$forceUpdate();
                 }
-            }
-        },
-        updateOtherActions() {
-            if (queryParams.party) {
-                return;
-            }
-            var canMove = this.$store.state.players && this.$store.state.players.length>1;
-            if (canMove && this.otherActions[0]!=PQ_MOVE_QUEUE_ACTION) {
-                this.otherActions.unshift(PQ_MOVE_QUEUE_ACTION);
-            } else if (!canMove && this.otherActions[0]==PQ_MOVE_QUEUE_ACTION) {
-                this.otherActions.splice(0, 1);
             }
         },
         shuffleClicked() {

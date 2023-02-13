@@ -15,7 +15,7 @@ Vue.component('lms-choice-dialog', {
     <v-layout wrap>
      <v-flex xs12>{{title}}</v-flex>
      <v-flex xs12>
-      <v-list class="dialog-main-list">
+      <v-list class="sleep-list dialog-main-list">
        <template v-for="(item, index) in items">
         <v-list-tile @click="choose(item)">
          <v-list-tile-content>

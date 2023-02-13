@@ -6,15 +6,20 @@
  */
 'use strict';
 
-var TB_SETTINGS        = {id:"tb:settings",       icon: "settings" };
-var TB_UI_SETTINGS     = {id:"tb:uisettings",     svg: "ui-settings" };
-var TB_PLAYER_SETTINGS = {id:"tb:playersettings", svg: "player-settings" };
-var TB_SERVER_SETTINGS = {id:"tb:serversettings", svg: "server-settings" };
-var TB_APP_SETTINGS    = {id:"tb:appsettings",    svg: "app-settings" };
-var TB_INFO            = {id:"tb:info",           icon: "info" };
-var TB_HELP            = {id:"tb:help",           icon: "help" };
-var TB_NOTIFICATIONS   = {id:"tb:notifs",         svg: "bell" };
-var TB_MANAGE_PLAYERS  = {id:"tb:manageplayers",  svg: "player-manager" };
+var TB_SETTINGS        = {id:0,  hdr: true };
+var TB_UI_SETTINGS     = {id:1,  svg:  "ui-settings" };
+var TB_PLAYER_SETTINGS = {id:2,  svg:  "player-settings" };
+var TB_SERVER_SETTINGS = {id:3,  svg:  "server-settings" };
+var TB_APP_SETTINGS    = {id:4,  svg:  "app-settings" };
+var TB_INFO            = {id:5,  icon: "info" };
+var TB_HELP            = {id:6,  icon: "help" };
+var TB_NOTIFICATIONS   = {id:7,  svg:  "bell" };
+var TB_MANAGE_PLAYERS  = {id:8,  svg:  "player-manager" };
+var TB_APP_QUIT        = {id:9,  icon: "power_settings_new" }
+var TB_START_PLAYER    = {id:10, icon: "surround_sound" }
+
+const TB_CUSTOM_SETTINGS_ACTIONS = {id:20};
+const TB_CUSTOM_ACTIONS = {id:21};
 
 Vue.component('lms-toolbar', {
     template: `
@@ -117,33 +122,36 @@ Vue.component('lms-toolbar', {
   <v-list>
    <template v-for="(item, index) in menuItems">
     <v-divider v-if="item===DIVIDER"></v-divider>
-    <v-list-tile @click="menuAction(item.id)" v-if="notificationsAvailable || TB_NOTIFICATIONS.id!=item.id">
+    <v-subheader v-else-if="item.hdr">{{item.title}}</v-subheader>
+    <v-list-tile @click="menuAction(item.id)" v-else-if="(TB_UI_SETTINGS.id==item.id) || (TB_PLAYER_SETTINGS.id==item.id && player) || (TB_SERVER_SETTINGS.id==item.id && unlockAll) || (TB_NOTIFICATIONS.id==item.id && notificationsAvailable) || (TB_HELP.id==item.id) || (TB_INFO.id==item.id)">
      <v-list-tile-avatar><img v-if="TB_INFO.id==item.id && updatesAvailable" class="svg-img" :src="'update' | svgIcon(darkUi, true)"></img><img v-else-if="TB_INFO.id==item.id && restartRequired" class="svg-img" :src="'restart' | svgIcon(darkUi, true)"><img v-else-if="item.svg" class="svg-img" :src="item.svg | svgIcon(darkUi)"><v-icon v-else>{{item.icon}}</v-icon></v-list-tile-avatar>
      <v-list-tile-content>
-      <v-list-tile-title>{{item.title}}</v-list-tile-title>
+      <v-list-tile-title>{{item.stitle ? item.stitle : item.title}}</v-list-tile-title>
       <v-list-tile-sub-title v-if="TB_INFO.id==item.id && updatesAvailable">{{trans.updatesAvailable}}</v-list-tile-sub-title>
       <v-list-tile-sub-title v-else-if="TB_INFO.id==item.id && restartRequired">{{trans.restartRequired}}</v-list-tile-sub-title>
      </v-list-tile-content>
      <v-list-tile-action v-if="item.shortcut && keyboardControl" class="menu-shortcut">{{item.shortcut}}</v-list-tile-action>
      <v-list-tile-action v-else-if="TB_SETTINGS.id==item.id && useSettingsMenu" class="menu-subind"><v-icon>chevron_right</v-icon></v-list-tile-action>
     </v-list-tile>
-   </template>
-   <v-list-tile :href="appLaunchPlayer" v-if="undefined!=appLaunchPlayer">
-    <v-list-tile-avatar><v-icon>surround_sound</v-icon></v-list-tile-avatar>
-    <v-list-tile-title>{{trans.startPlayer}}</v-list-tile-title>
-   </v-list-tile>
-   <v-divider v-if="customActions && customActions.length>0"></v-divider>
-   <template v-if="customActions && customActions.length>0" v-for="(action, index) in customActions">
-    <v-list-tile @click="doCustomAction(action)">
-     <v-list-tile-avatar><v-icon v-if="action.icon">{{action.icon}}</v-icon><img v-else-if="action.svg" class="svg-img" :src="action.svg | svgIcon(darkUi)"></img></v-list-tile-avatar>
-     <v-list-tile-content><v-list-tile-title>{{action.title}}</v-list-tile-title></v-list-tile-content>
+    <v-list-tile :href="queryParams.appSettings" v-else-if="TB_APP_SETTINGS.id==item.id">
+     <v-list-tile-avatar><img class="svg-img" :src="TB_APP_SETTINGS.svg | svgIcon(darkUi)"></img></v-list-tile-avatar>
+     <v-list-tile-content><v-list-tile-title>{{TB_APP_SETTINGS.stitle}}</v-list-tile-title></v-list-tile-content>
     </v-list-tile>
+    <v-list-tile :href="appLaunchPlayer" v-else-if="TB_START_PLAYER.id==item.id">
+     <v-list-tile-avatar><v-icon>{{TB_START_PLAYER.icon}}</v-icon></v-list-tile-avatar>
+     <v-list-tile-title>{{TB_START_PLAYER.title}}</v-list-tile-title>
+    </v-list-tile>
+    <v-list-tile :href="appQuit" v-else-if="TB_APP_QUIT.id==item.id">
+     <v-list-tile-avatar><v-icon>{{TB_APP_QUIT.icon}}</v-icon></v-list-tile-avatar>
+     <v-list-tile-title>{{TB_APP_QUIT.title}}</v-list-tile-title>
+    </v-list-tile>
+    <template v-else-if="(TB_CUSTOM_SETTINGS_ACTIONS.id==item.id && undefined!=customSettingsActions && customSettingsActions.length>0) || (TB_CUSTOM_ACTIONS.id==item.id && undefined!=customActions && customActions.length>0)" v-for="(action, actIndex) in (TB_CUSTOM_SETTINGS_ACTIONS.id==item.id ? customSettingsActions : customActions)">
+     <v-list-tile @click="doCustomAction(action)">
+      <v-list-tile-avatar><v-icon v-if="action.icon">{{action.icon}}</v-icon><img v-else-if="action.svg" class="svg-img" :src="action.svg | svgIcon(darkUi)"></img></v-list-tile-avatar>
+      <v-list-tile-content><v-list-tile-title>{{action.title}}</v-list-tile-title></v-list-tile-content>
+     </v-list-tile>
+    </template>
    </template>
-   <v-divider v-if="undefined!=appQuit"></v-divider>
-   <v-list-tile :href="appQuit" v-if="undefined!=appQuit">
-    <v-list-tile-avatar><v-icon>power_settings_new</v-icon></v-list-tile-avatar>
-    <v-list-tile-content><v-list-tile-title>{{trans.appQuit}}</v-list-tile-title></v-list-tile-content>
-   </v-list-tile>
   </v-list>
  </v-menu>
  <v-menu v-else-if="!connected && (undefined!=queryParams.appSettings || undefined!=appQuit)" bottom left v-model="showErrorMenu">
@@ -159,8 +167,8 @@ Vue.component('lms-toolbar', {
    </v-list-tile>
    <v-divider v-if="undefined!=appQuit"></v-divider>
    <v-list-tile :href="appQuit" v-if="undefined!=appQuit">
-    <v-list-tile-avatar><v-icon>power_settings_new</v-icon></v-list-tile-avatar>
-    <v-list-tile-content><v-list-tile-title>{{trans.appQuit}}</v-list-tile-title></v-list-tile-content>
+    <v-list-tile-avatar><v-icon>{{TB_APP_QUIT.icon}}</v-icon></v-list-tile-avatar>
+    <v-list-tile-title>{{TB_APP_QUIT.title}}</v-list-tile-title>
    </v-list-tile>
   </v-list>
  </v-menu>
@@ -169,38 +177,6 @@ Vue.component('lms-toolbar', {
  </v-btn>
 </v-toolbar>
 <v-snackbar v-model="snackbar.show" :multi-line="true" :timeout="snackbar.timeout ? snackbar.timeout : 2500" :color="snackbar.color" top>{{ snackbar.msg }}</v-snackbar>
-<v-menu v-model="showSettingsMenu" :position-x="window.innerWidth" :position-y="0">
- <v-list>
-  <v-list-tile @click="showMainMenu = true">
-   <v-list-tile-avatar><v-icon>chevron_left</v-icon></v-list-tile-avatar>
-   <v-list-tile-content><v-list-tile-title class="menutitle">{{TB_SETTINGS.title}}</v-list-tile-title></v-list-tile-content>
-  </v-list-tile>
-  <v-divider></v-divider>
-  <template v-for="(item, index) in settingsMenuItems">
-   <v-list-tile :href="queryParams.appSettings" v-if="TB_APP_SETTINGS.id==item.id && queryParams.appSettings">
-    <v-list-tile-avatar><img class="svg-img" :src="item.svg | svgIcon(darkUi)"></img></v-list-tile-avatar>
-    <v-list-tile-content>
-     <v-list-tile-title>{{item.stitle}}</v-list-tile-title>
-    </v-list-tile-content>
-    <v-list-tile-action v-if="item.shortcut && keyboardControl" class="menu-shortcut">{{item.shortcut}}</v-list-tile-action>
-   </v-list-tile>
-   <v-list-tile v-else-if="TB_APP_SETTINGS.id!=item.id" @click="menuAction(item.id)" v-if="TB_UI_SETTINGS.id==item.id || (TB_PLAYER_SETTINGS.id==item.id && player && !queryParams.party) || (TB_SERVER_SETTINGS.id==item.id && unlockAll)">
-    <v-list-tile-avatar><img class="svg-img" :src="item.svg | svgIcon(darkUi)"></img></v-list-tile-avatar>
-    <v-list-tile-content>
-     <v-list-tile-title>{{item.stitle}}</v-list-tile-title>
-    </v-list-tile-content>
-    <v-list-tile-action v-if="item.shortcut && keyboardControl" class="menu-shortcut">{{item.shortcut}}</v-list-tile-action>
-   </v-list-tile>
-  </template>
-  <v-divider v-if="customSettingsActions && customSettingsActions.length>0"></v-divider>
-  <template v-if="customSettingsActions && customSettingsActions.length>0" v-for="(action, index) in customSettingsActions">
-   <v-list-tile @click="doCustomAction(action)">
-    <v-list-tile-avatar><v-icon v-if="action.icon">{{action.icon}}</v-icon><img v-else-if="action.svg" class="svg-img" :src="action.svg | svgIcon(darkUi)"></img></v-list-tile-avatar>
-    <v-list-tile-content><v-list-tile-title>{{action.title}}</v-list-tile-title></v-list-tile-content>
-   </v-list-tile>
-  </template>
- </v-list>
-</v-menu>
 </div>
     `,
     data() {
@@ -209,18 +185,16 @@ Vue.component('lms-toolbar', {
                  playerStatus: { ison: 1, isplaying: false, volume: 0, synced: false, sleepTime: undefined,
                                  current: { title:undefined, artist:undefined, album:undefined } },
                  menuItems: [],
-                 settingsMenuItems: [],
                  customActions:undefined,
                  customSettingsActions:undefined,
                  customPlayerActions:undefined,
                  showPlayerMenu: false,
                  showMainMenu: false,
                  showErrorMenu: false,
-                 showSettingsMenu: false,
                  trans:{noplayer:undefined, nothingplaying:undefined, info:undefined, infoShortcut:undefined, connectionLost:undefined, showLarge:undefined,
-                        showLargeShortcut:undefined, hideLarge:undefined, startPlayer:undefined, groupPlayers:undefined, standardPlayers:undefined,
-                        otherServerPlayers:undefined, updatesAvailable:undefined, decVol:undefined, incVol:undefined, showVol:undefined, downloading:undefined,
-                        mainMenu: undefined, play:undefined, pause:undefined, appQuit:undefined, toggleQueue:undefined,
+                        showLargeShortcut:undefined, hideLarge:undefined, groupPlayers:undefined, standardPlayers:undefined,
+                        otherServerPlayers:undefined, updatesAvailable:undefined, decVol:undefined, incVol:undefined, showVol:undefined,
+                        downloading:undefined, mainMenu: undefined, play:undefined, pause:undefined, toggleQueue:undefined,
                         toggleQueueShortcut:undefined, groupVol:undefined, restartRequired:undefined},
                  infoOpen: false,
                  nowPlayingExpanded: false,
@@ -333,10 +307,6 @@ Vue.component('lms-toolbar', {
             this.showPlayerMenu = false;
             this.showMainMenu = false;
             this.showErrorMenu = false;
-            if (this.showSettingsMenu) {
-                this.showSettingsMenu = false;
-                this.showMainMenu = true;
-            }
         }.bind(this));
         bus.$on('hideMenu', function(name) {
             if (name=='main') {
@@ -345,8 +315,6 @@ Vue.component('lms-toolbar', {
                 this.showPlayerMenu = false;
             } else if (name=='error') {
                 this.showErrorMenu = false;
-            } else if (name=='settings') {
-                this.showSettingsMenu = false;
             }
         }.bind(this));
         bus.$on('showMainMenu', function() {
@@ -484,16 +452,28 @@ Vue.component('lms-toolbar', {
             TB_MANAGE_PLAYERS.shortcut=shortcutStr(LMS_MANAGEPLAYERS_KEYBOARD);
             TB_APP_SETTINGS.title=i18n('Application settings');
             TB_APP_SETTINGS.stitle=i18n('Application');
-            this.menuItems = [ TB_SETTINGS, TB_INFO, TB_HELP, TB_NOTIFICATIONS ];
-            this.settingsMenuItems = [ TB_APP_SETTINGS, TB_UI_SETTINGS, TB_PLAYER_SETTINGS, TB_SERVER_SETTINGS];
+            TB_APP_QUIT.title=i18n('Quit');
+            TB_START_PLAYER.title=i18n('Start player');
+            if (queryParams.party) {
+                this.menuItems = [TB_APP_SETTINGS, TB_UI_SETTINGS, DIVIDER, TB_INFO, TB_HELP];
+            } else {
+                this.menuItems = [TB_SETTINGS, TB_APP_SETTINGS, TB_UI_SETTINGS, TB_PLAYER_SETTINGS, TB_SERVER_SETTINGS, TB_CUSTOM_SETTINGS_ACTIONS, DIVIDER, TB_INFO, TB_HELP, TB_NOTIFICATIONS, TB_CUSTOM_ACTIONS];
+                if (queryParams.appLaunchPlayer) {
+                    this.menuItems.push(TB_START_PLAYER);
+                }
+            }
+            if (queryParams.appQuit) {
+                this.menuItems.push(DIVIDER);
+                this.menuItems.push(TB_APP_QUIT)
+            }
             this.trans = {noplayer:i18n('No Player'), nothingplaying:i18n('Nothing playing'),
                           info:i18n("Show current track information"), infoShortcut:shortcutStr(LMS_TRACK_INFO_KEYBOARD), 
                           showLarge:i18n("Expand now playing"), showLargeShortcut:shortcutStr(LMS_EXPAND_NP_KEYBOARD, true),
-                          hideLarge:i18n("Collapse now playing"), startPlayer:i18n("Start player"), connectionLost:i18n('Server connection lost!'),
+                          hideLarge:i18n("Collapse now playing"), connectionLost:i18n('Server connection lost!'),
                           groupPlayers:i18n("Group Players"), standardPlayers:i18n("Standard Players"), updatesAvailable:i18n('Updates available'),
                           decVol:i18n("Decrease volume"), incVol:i18n("Increase volume"), showVol:i18n("Show volume"),
                           mainMenu: i18n("Main menu"), play:i18n("Play"), pause:i18n("Pause"),
-                          appQuit:i18n('Quit'), toggleQueue:i18n('Toggle queue'), downloading:i18n('Downloading'),
+                          toggleQueue:i18n('Toggle queue'), downloading:i18n('Downloading'),
                           toggleQueueShortcut:shortcutStr(LMS_TOGGLE_QUEUE_KEYBOARD, true), groupVol:i18n('Adjust volume of associated players'),
                           restartRequired:i18n('Restart required')};
         },
@@ -518,13 +498,7 @@ Vue.component('lms-toolbar', {
             }
         },
         menuAction(id) {
-            if (TB_SETTINGS.id==id) {
-                if (this.useSettingsMenu) {
-                    this.showSettingsMenu = true;
-                } else {
-                    bus.$emit('dlg.open', 'uisettings');
-                }
-            } else if (TB_UI_SETTINGS.id==id) {
+            if (TB_UI_SETTINGS.id==id) {
                 bus.$emit('dlg.open', 'uisettings');
             } else if (TB_PLAYER_SETTINGS.id==id) {
                 bus.$emit('dlg.open', 'playersettings');
@@ -881,9 +855,6 @@ Vue.component('lms-toolbar', {
         powerButton() {
             return this.$store.state.powerButton
         },
-        useSettingsMenu() {
-            return this.$store.state.player || this.$store.state.unlockAll || queryParams.appSettings || (undefined!=this.customSettingsActions && this.customSettingsActions.length>0)
-        },
         downloadCount() {
             return this.$store.state.downloadStatus.length
         }
@@ -933,9 +904,6 @@ Vue.component('lms-toolbar', {
         },
         'showErrorMenu': function(newVal) {
             this.$store.commit('menuVisible', {name:'error', shown:newVal});
-        },
-        'showSettingsMenu': function(newVal) {
-            this.$store.commit('menuVisible', {name:'settings', shown:newVal});
         }
     },
     beforeDestroy() {

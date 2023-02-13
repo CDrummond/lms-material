@@ -793,7 +793,9 @@ var lmsQueue = Vue.component("lms-queue", {
             if ((this.$store.state.visibleMenus.size>0 && this.otherActions.indexOf(act)<0)) {
                 return;
             }
-            if (act==PQ_SCROLL_ACTION) {
+            if (act==PQ_SAVE_ACTION) {
+                this.save();
+            } else if (act==PQ_SCROLL_ACTION) {
                 if (this.items.length>=1) {
                     this.scrollToCurrent(true);
                 }

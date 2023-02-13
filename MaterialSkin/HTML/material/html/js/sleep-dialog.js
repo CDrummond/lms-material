@@ -19,7 +19,7 @@ Vue.component('lms-sleep-dialog', {
       <v-list class="sleep-list dialog-main-list">
        <template v-for="(item, index) in items">
         <v-list-tile @click="setSleep(item.duration)">
-         <v-list-tile-title class="ellipsis">{{item.label}}</v-list-tile-title>
+         <v-list-tile-title>{{item.label}}</v-list-tile-title>
         </v-list-tile>
         <v-divider></v-divider>
         </template>

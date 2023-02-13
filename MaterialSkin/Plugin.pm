@@ -1269,9 +1269,7 @@ sub _cliClientCommand {
             for my $command (@{$commands}) {
                 $client->execute(\@{$command});
                 $actioned++;
-                if (0==($actioned % 100)) {
-                    main::idleStreams();
-                }
+                main::idleStreams() unless $actioned % 100;
             }
             $request->addResult("actioned", $actioned);
             $request->setStatusDone();

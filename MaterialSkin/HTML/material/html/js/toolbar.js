@@ -515,7 +515,7 @@ Vue.component('lms-toolbar', {
             } else if (TB_INFO.id==id) {
                 bus.$emit('dlg.open', 'info');
             } else if (TB_HELP.id==id) {
-                bus.$emit('dlg.open', 'iframe', '/material/html/material-skin/index.html', TB_HELP.title, undefined, IFRAME_HOME_CLOSES_DIALOGS);
+                bus.$emit('dlg.open', 'iframe', '/material/html/material-skin/index.html', TB_HELP.title, undefined, 0);
             } else if (TB_MANAGE_PLAYERS.id==id) {
                 bus.$emit('dlg.open', 'manage');
             } else if (TB_NOTIFICATIONS.id==id) {

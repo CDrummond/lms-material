@@ -19,8 +19,8 @@ Vue.component('lms-choice-dialog', {
        <template v-for="(item, index) in items">
         <v-list-tile @click="choose(item)">
          <v-list-tile-content>
-          <v-list-tile-title>{{item.title}}</v-list-tile-title>
-          <v-list-tile-sub-title v-if="item.subtitle">{{item.subtitle}}</v-list-tile-sub-title>
+          <v-list-tile-title class="ellipsis">{{item.title}}</v-list-tile-title>
+          <v-list-tile-sub-title class="ellipsis" v-if="item.subtitle">{{item.subtitle}}</v-list-tile-sub-title>
          </v-list-tile-content>
         </v-list-tile>
         <v-divider></v-divider>

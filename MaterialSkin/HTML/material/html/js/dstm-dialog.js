@@ -19,7 +19,7 @@ Vue.component('lms-dstm-dialog', {
        <template v-for="(item, index) in items">
         <v-list-tile @click="setDstm(item.key)">
          <v-list-tile-avatar><v-icon small>{{item.selected ? 'radio_button_checked' :'radio_button_unchecked'}}</v-icon></v-list-tile-avatar>
-         <v-list-tile-content>{{item.label}}</v-list-tile-content> 
+         <v-list-tile-content class="ellipsis">{{item.label}}</v-list-tile-content>
         </v-list-tile>
         <v-divider></v-divider>
        </template>

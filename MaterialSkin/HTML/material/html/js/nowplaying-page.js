@@ -78,8 +78,8 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
      <v-list-tile-sub-title v-else-if="playerStatus.current.title">&#x22ef;</v-list-tile-sub-title>
     </v-list-tile-content>
     <v-list-tile-action>
-     <div v-if="playerStatus.playlist.count<2 || !(npBarRatings && !techInfo)" class="np-time-desktop link-item" v-bind:class="{'np-time-desktop-r': techInfo && npBarRatings}" @click="toggleTime()">{{formattedTime}}</div>
-     <div v-else class="np-time-desktop link-item" v-bind:class="{'np-time-desktop-r': techInfo && npBarRatings}" @click="toggleTime()">{{formattedTime}}{{playerStatus.playlist.current | trackCount(playerStatus.playlist.count, SEPARATOR)}}</div>
+     <div v-if="playerStatus.playlist.count<2 || !(npBarRatings && !techInfo)" class="np-time-desktop" v-bind:class="{'link-item-ct':coloredToolbars,'link-item':!coloredToolbars,'np-time-desktop-r': techInfo && npBarRatings}" @click="toggleTime()">{{formattedTime}}</div>
+     <div v-else class="np-time-desktop " v-bind:class="{'np-time-desktop-r': techInfo && npBarRatings, 'link-item-ct':coloredToolbars,'link-item':!coloredToolbars}" @click="toggleTime()">{{formattedTime}}{{playerStatus.playlist.current | trackCount(playerStatus.playlist.count, SEPARATOR)}}</div>
      <div v-if="techInfo" class="np-tech-desktop ellipsis" v-bind:class="{'np-tech-desktop-r': npBarRatings}">{{technicalInfo}}</div>
      <div v-else-if="playerStatus.playlist.count>1 && !npBarRatings" class="np-tech-desktop">{{playerStatus.playlist.current | trackCount(playerStatus.playlist.count)}}</div>
      <div v-else-if="!npBarRatings" class="np-tech-desktop">&nbsp;</div>
@@ -445,7 +445,8 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
                  disablePrev:true,
                  disableNext:true,
                  dstm:false,
-                 infoZoom:10
+                 infoZoom:10,
+                 coloredToolbars: false
                 };
     },
     mounted() {
@@ -619,6 +620,10 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
                 }
             }.bind(this));
         }
+        this.coloredToolbars = this.$store.state.theme.endsWith("-colored");
+        bus.$on('themeChanged', function() {
+            this.coloredToolbars = this.$store.state.theme.endsWith("-colored");
+        }.bind(this));
     },
     methods: {
         initItems() {

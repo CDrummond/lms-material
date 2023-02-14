@@ -2142,16 +2142,44 @@ function browseDoList(view, list, act, index) {
     }
 }
 
+function browseDoCommandChunks(view, chunks, npAfterLast, refreshSig) {
+    var chunk = chunks.shift();
+    lmsCommand(view.playerId(), ["material-skin-client", "command-list", "commands:"+JSON.stringify(chunk)]).then(({data}) => {
+        logJsonMessage("RESP", data);
+        if (0==chunks.length) { // Last chunk actioned
+            if (undefined!=refreshSig) {
+                bus.$emit(refreshSig);
+                setTimeout(function () { bus.$emit(refreshSig); }.bind(view), 500);
+            }
+            if (npAfterLast && !view.$store.state.desktopLayout && data && data.result && parseInt(data.result.actioned)>0) {
+                view.$store.commit('setPage', 'now-playing');
+            }
+        } else {
+            if (undefined!=refreshSig) {
+                // If we have a signal to refresh, then allow a few ms for this to be sent before doing next chunk
+                bus.$emit(refreshSig);
+                setTimeout(function () { browseDoCommandChunks(view, chunks, npAfterLast, refreshSig); }.bind(view), 10);
+            } else {
+                browseDoCommandChunks(view, chunks, npAfterLast, refreshSig);
+            }
+        }
+    }).catch(err => {
+        logError(err, command.command);
+    });
+}
+
 function browseDoCommands(view, commands, npAfterLast, refreshSig) {
     if (commands.length<1) {
         return;
     }
-    let cmdList=[];
+    let chunks=[];
 
     if (PLAY_ACTION==commands[0].act) {
         cmdList.push(["playlist", "clear"]);
     }
 
+    let chunk=[];
+    let maxChunkSize = undefined==refreshSig ? 500 : 100;
     for (let i=0, len=commands.length; i<len; ++i) {
         let cmd = commands[i];
         // browseInsertQueue calls this function with pre-built commands, in which case cmd.act is undefined...
@@ -2163,18 +2191,17 @@ function browseDoCommands(view, commands, npAfterLast, refreshSig) {
             }
             cmd = command.command;
         }
-        cmdList.push(cmd);
-    }
-    lmsCommand(view.playerId(), ["material-skin-client", "command-list", "commands:"+JSON.stringify(cmdList)]).then(({data}) => {
-        logJsonMessage("RESP", data);
-        bus.$emit(refreshSig);
-        setTimeout(function () { bus.$emit(refreshSig); }.bind(this), 500);
-        if (npAfterLast && !view.$store.state.desktopLayout && data && data.result && parseInt(data.result.actioned)>0) {
-            view.$store.commit('setPage', 'now-playing');
+        chunk.push(cmd);
+        if (chunk.length==maxChunkSize) {
+            chunks.push(chunk);
+            chunk = [];
         }
-    }).catch(err => {
-        logError(err, command.command);
-    });
+    }
+    if (chunk.length>0) {
+        chunks.push(chunk);
+        chunk = [];
+    }
+    browseDoCommandChunks(view, chunks, npAfterLast, refreshSig);
 }
 
 function browseInsertQueueAlbums(view, indexes, queueIndex, queueSize, tracks) {

@@ -1601,7 +1601,7 @@ progress {
  border-radius:unset !important;
 }
 
-.link-item {
+.link-item, .link-item-ct {
  cursor:pointer;
 }
 
@@ -1609,6 +1609,10 @@ progress {
  .msk-is-non-touch .link-item:hover, .msk-is-non-touch .np-bar .link-item:hover {
   color:var(--active-color)!important;
  }
+ .msk-is-non-touch .link-item-ct:hover, .msk-is-non-touch .np-bar .link-item-ct:hover {
+  opacity:var(--sub-opacity)!important;
+ }
+
 /*}*/
 
 .svg-badge {

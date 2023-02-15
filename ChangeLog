@@ -14,10 +14,7 @@
  8. Remove 'Settings' sub menu, and place all items into main menu.
  9. Speed up Qobuz add/play for some lists.
 10. Fix disappearing text when using coloured toolbars.
-
-3.1.5
------
-1. Fix actions list incorrectly showing in playlist 'More' response.
+11. Fix actions list incorrectly showing in playlist 'More' response.
 
 3.1.4
 -----

@@ -584,8 +584,21 @@
 "1 day":"1 den",
 "%1 days":"%1 dní",
 "%1bit":"",
+"...then album artist, album, disc no., track no.":"",
+"...then album artist, disc no., track no.":"",
+"...then album, disc no., track no.":"",
+"Actions":"",
+"Date added":"",
+"Date last played":"",
 "Descending":"",
 "Esc":"",
+"For more find-grained control over plugins please visit the 'Plugins' section of 'Server settings'":"",
 "Option+%1":"",
-"Play starting at track":""
+"Play starting at track":"",
+"Random":"",
+"Reverse":"",
+"Reverse current order":"",
+"Shuffle list":"",
+"Sort queue":"",
+"Sort tracks":""
 }

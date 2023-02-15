@@ -587,5 +587,18 @@
 "%1 Years":"%1 Jahre",
 "1 day":"Ein Tag",
 "%1 days":"%1 Tage",
-"%1bit":""
+"%1bit":"",
+"...then album artist, album, disc no., track no.":"",
+"...then album artist, disc no., track no.":"",
+"...then album, disc no., track no.":"",
+"Actions":"",
+"Date added":"",
+"Date last played":"",
+"For more find-grained control over plugins please visit the 'Plugins' section of 'Server settings'":"",
+"Random":"",
+"Reverse":"",
+"Reverse current order":"",
+"Shuffle list":"",
+"Sort queue":"",
+"Sort tracks":""
 }

@@ -705,18 +705,18 @@ function addPart(str, part) {
     return str ? (part ? str+SEPARATOR+part : str) : part;
 }
 
-function commandGridKey(command) {
-    return command.command[0]+"-grid";
+function commandGridKey(command, gridKey) {
+    return (undefined==gridKey ? command.command[0] : gridKey)+"-grid";
 }
 
 const USE_LIST_VIEW_BY_DEFAULT=new Set(["other-grid", "favorites-grid", "podcasts-grid", "youtube-grid", "playhistory-grid"]);
 
-function isSetToUseGrid(command) {
-    var key = commandGridKey(command);
+function isSetToUseGrid(command, gridKey) {
+    var key = commandGridKey(command, gridKey);
     return getLocalStorageBool(key, !USE_LIST_VIEW_BY_DEFAULT.has(key));
 }
 
-function setUseGrid(command, use) {
+function setUseGrid(command, use, gridKey) {
     var key = commandGridKey(command)
     var defList = USE_LIST_VIEW_BY_DEFAULT.has(key);
     // Only store value if different from default

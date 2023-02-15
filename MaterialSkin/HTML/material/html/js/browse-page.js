@@ -911,7 +911,7 @@ var lmsBrowse = Vue.component("lms-browse", {
                 this.$nextTick(function () {
                     this.setBgndCover();
                     this.layoutGrid(true);
-                    setUseGrid(this.isTop || undefined==this.command || (this.current && this.current.id!=TOP_FAVORITES_ID && (this.current.id.startsWith(TOP_ID_PREFIX) || this.current.id==GENRES_ID)) ? GRID_OTHER : this.command, this.grid.use);
+                    setUseGrid(this.isTop || undefined==this.command || (this.current && this.current.id!=TOP_FAVORITES_ID && (this.current.id.startsWith(TOP_ID_PREFIX) || this.current.id==GENRES_ID)) ? GRID_OTHER : this.command, this.grid.use, this.gridKey);
                     var af = this.grid.use ? USE_GRID_ACTION : USE_LIST_ACTION;
                     var at = this.grid.use ? USE_LIST_ACTION : USE_GRID_ACTION;
                     for (var i=0, loop=this.currentActions, len=loop.length; i<len; ++i) {

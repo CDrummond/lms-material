@@ -15,6 +15,8 @@
  9. Speed up Qobuz add/play for some lists.
 10. Fix disappearing text when using coloured toolbars.
 11. Fix actions list incorrectly showing in playlist 'More' response.
+12. If SlimBrowse list is all artists or albums (ie. each item has this type)
+    then use that as the grid config key.
 
 3.1.4
 -----

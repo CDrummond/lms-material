@@ -108,6 +108,7 @@ function browseAddHistory(view) {
     prev.inGenre = view.inGenre;
     prev.searchActive = view.searchActive;
     prev.canDrop = view.canDrop;
+    prev.gridKey = view.gridKey;
     prev.itemCustomActions = view.itemCustomActions;
     view.prevPage = undefined;
     view.history.push(prev);
@@ -272,6 +273,7 @@ function browseHandleListResponse(view, item, command, resp, prevPage) {
         }
         resp.canUseGrid = resp.canUseGrid && (view.$store.state.showArtwork || resp.forceGrid);
         view.canDrop = resp.canDrop;
+        view.gridKey = resp.gridKey;
         view.searchActive = item.id.startsWith(SEARCH_ID);
         view.command = command;
         view.currentBaseActions = view.baseActions;
@@ -298,7 +300,7 @@ function browseHandleListResponse(view, item, command, resp, prevPage) {
         view.isTop = false;
         view.subtitleClickable = !IS_MOBILE && view.items.length>0 && undefined!=view.items[0].id && undefined!=view.items[0].artist_id && view.items[0].id.startsWith("album_id:");
         view.grid = {allowed:resp.canUseGrid,
-                     use: resp.canUseGrid && (resp.forceGrid || isSetToUseGrid(view.current && view.current.id.startsWith(TOP_ID_PREFIX) && view.current.id!=TOP_FAVORITES_ID ? GRID_OTHER : command)),
+                     use: resp.canUseGrid && (resp.forceGrid || isSetToUseGrid(view.current && view.current.id.startsWith(TOP_ID_PREFIX) && view.current.id!=TOP_FAVORITES_ID ? GRID_OTHER : command, view.gridKey)),
                      numColumns:0, ih:GRID_MIN_HEIGHT, rows:[], few:false, haveSubtitle:true};
         view.jumplistActive=0;
         view.prevPage = prevPage;
@@ -1410,6 +1412,7 @@ function browseGoHome(view) {
     view.subtitleClickable = false;
     view.inGenre = undefined;
     view.canDrop = true;
+    view.gridKey = undefined;
     view.$nextTick(function () {
         view.setBgndCover();
         view.filterJumplist();
@@ -1479,6 +1482,7 @@ function browseGoBack(view, refresh) {
     view.inGenre = prev.inGenre;
     view.searchActive = prev.searchActive && !searchWasActive;
     view.canDrop = prev.canDrop;
+    view.gridKey = prev.gridKey;
     view.itemCustomActions = prev.itemCustomActions;
 
     if (refresh || prev.needsRefresh) {

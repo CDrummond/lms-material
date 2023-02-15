@@ -717,7 +717,7 @@ function isSetToUseGrid(command, gridKey) {
 }
 
 function setUseGrid(command, use, gridKey) {
-    var key = commandGridKey(command)
+    var key = commandGridKey(command, gridKey)
     var defList = USE_LIST_VIEW_BY_DEFAULT.has(key);
     // Only store value if different from default
     if ((defList && !use) || (!defList && use)) {

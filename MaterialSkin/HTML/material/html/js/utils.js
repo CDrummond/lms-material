@@ -9,6 +9,7 @@
 const MY_SQUEEZEBOX_IMAGE_PROXY = "https://www.mysqueezebox.com/public/imageproxy";
 const LS_PREFIX="lms-material::";
 const LMS_LIST_CACHE_PREFIX = "cache:list:";
+const GRID_ITEM_TYPES = new Set(["artists", "albums", "link"]);
 
 const RATINGS=["",         // 0
                "\ue839", // 0.5
@@ -705,19 +706,23 @@ function addPart(str, part) {
     return str ? (part ? str+SEPARATOR+part : str) : part;
 }
 
-function commandGridKey(command, gridKey) {
-    return (undefined==gridKey ? command.command[0] : gridKey)+"-grid";
+function commandGridKey(command, item) {
+    console.log(item);
+    return command.command[0]+
+           (undefined==item || undefined==item.type || undefined!=item.stdItem || !GRID_ITEM_TYPES.has(item.type)
+               ? "" : ("-"+item.type))+
+           "-grid";
 }
 
 const USE_LIST_VIEW_BY_DEFAULT=new Set(["other-grid", "favorites-grid", "podcasts-grid", "youtube-grid", "playhistory-grid"]);
 
-function isSetToUseGrid(command, gridKey) {
-    var key = commandGridKey(command, gridKey);
+function isSetToUseGrid(command, item) {
+    var key = commandGridKey(command, item);
     return getLocalStorageBool(key, !USE_LIST_VIEW_BY_DEFAULT.has(key));
 }
 
-function setUseGrid(command, use, gridKey) {
-    var key = commandGridKey(command, gridKey)
+function setUseGrid(command, use, item) {
+    var key = commandGridKey(command, item)
     var defList = USE_LIST_VIEW_BY_DEFAULT.has(key);
     // Only store value if different from default
     if ((defList && !use) || (!defList && use)) {

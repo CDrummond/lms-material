@@ -9,7 +9,7 @@
 const MY_SQUEEZEBOX_IMAGE_PROXY = "https://www.mysqueezebox.com/public/imageproxy";
 const LS_PREFIX="lms-material::";
 const LMS_LIST_CACHE_PREFIX = "cache:list:";
-const GRID_ITEM_TYPES = new Set(["artists", "albums", "link"]);
+const GRID_ITEM_TYPES = new Set(["artists", "albums", "menu", "playlist", "playlists", "link"]);
 
 const RATINGS=["",         // 0
                "\ue839", // 0.5
@@ -707,14 +707,13 @@ function addPart(str, part) {
 }
 
 function commandGridKey(command, item) {
-    console.log(item);
     return command.command[0]+
            (undefined==item || undefined==item.type || undefined!=item.stdItem || !GRID_ITEM_TYPES.has(item.type)
                ? "" : ("-"+item.type))+
            "-grid";
 }
 
-const USE_LIST_VIEW_BY_DEFAULT=new Set(["other-grid", "favorites-grid", "podcasts-grid", "youtube-grid", "playhistory-grid"]);
+const USE_LIST_VIEW_BY_DEFAULT=new Set(["other-grid", "favorites-grid", "podcasts-grid", "youtube-grid", "playhistory-grid", "spotty-grid", "qobuz-grid", "tidal-grid", "wimp-grid"]);
 
 function isSetToUseGrid(command, item) {
     var key = commandGridKey(command, item);

@@ -194,7 +194,6 @@
 "Firmware: %1":"Firmware: %1",
 "Follow link":"Følg link",
 "Font size":"Fontstørrelse",
-"For more find-grained control over plugins please visit the 'Plugins' section of 'Server settings'":"For mere finkornet kontrol over plugins se i afsnittet 'Plugins' under 'Serverindstillinger'",
 "Fri":"Fre",
 "Friday":"Fredag",
 "General":"Generelt",
@@ -600,5 +599,6 @@
 "1 Year":"1 år",
 "%1 Years":"%1 år",
 "1 day":"1 dag",
-"%1 days":"%1 dage"
+"%1 days":"%1 dage",
+"For more fine-grained control over plugins please visit the 'Plugins' section of 'Server settings'":""
 }

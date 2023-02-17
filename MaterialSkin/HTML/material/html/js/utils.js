@@ -9,7 +9,6 @@
 const MY_SQUEEZEBOX_IMAGE_PROXY = "https://www.mysqueezebox.com/public/imageproxy";
 const LS_PREFIX="lms-material::";
 const LMS_LIST_CACHE_PREFIX = "cache:list:";
-const GRID_ITEM_TYPES = new Set(["artists", "albums", "menu", "playlist", "playlists", "link"]);
 
 const RATINGS=["",         // 0
                "\ue839", // 0.5
@@ -708,8 +707,7 @@ function addPart(str, part) {
 
 function commandGridKey(command, item) {
     return command.command[0]+
-           (undefined==item || undefined==item.type || undefined!=item.stdItem || !GRID_ITEM_TYPES.has(item.type)
-               ? "" : ("-"+item.type))+
+           (undefined==item || undefined==item.type || undefined!=item.stdItem ? "" : ("-"+item.type))+
            "-grid";
 }
 

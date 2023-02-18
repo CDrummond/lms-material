@@ -145,7 +145,6 @@
 18. Show input field if item has an "input" attribute.
 19. If "nextWindow" is "home" then go to home screen.
 
-
 2.10.7
 ------
 1. Handle 'nextWindow:parent' for player settings plugins.

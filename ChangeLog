@@ -16,6 +16,8 @@
 10. Fix disappearing text when using coloured toolbars.
 11. Fix actions list incorrectly showing in playlist 'More' response.
 12. Allow grid/list toggle setting to be stored per-item-type for apps.
+13. When updating plugins from 'Information' dialog only send name, url and
+    sha.
 
 3.1.4
 -----

@@ -350,7 +350,11 @@ Vue.component('lms-information-dialog', {
             bus.$emit('dlg.open', 'iteminfo', plugin);
         },
         updatePlugins() {
-            lmsCommand("", ["material-skin", "plugins-update", "plugins:"+JSON.stringify(this.updates.details)]).then(({data}) => {
+            let updates = [];
+            for (let i=0, loop=this.updates.details, len=loop.length; i<len; ++i) {
+                updates.push({name:loop[i].name, url:loop[i].url, sha:loop[i].sha});
+            }
+            lmsCommand("", ["material-skin", "plugins-update", "plugins:"+JSON.stringify(updates)]).then(({data}) => {
                 if (data && data.result && undefined!=data.result.updating && parseInt(data.result.updating)>0) {
                     bus.$emit('showMessage', i18n('Updating plugins.'));
                     this.update();

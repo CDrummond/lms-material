@@ -2175,7 +2175,7 @@ function browseDoCommands(view, commands, npAfterLast, refreshSig) {
     let chunks=[];
 
     if (PLAY_ACTION==commands[0].act) {
-        cmdList.push(["playlist", "clear"]);
+        commands.unshift(["playlist", "clear"]);
     }
 
     let chunk=[];

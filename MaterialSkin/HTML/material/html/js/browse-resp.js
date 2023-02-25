@@ -936,6 +936,9 @@ function parseBrowseResp(data, parent, options, cacheKey, parentCommand, parentG
                               duration: i.duration
                           });
                 resp.numAudioItems = resp.items.length;
+                if (allowPlayAlbum) {
+                    resp.allSongsItem = parent;
+                }
             }
             if (sortTracks) {
                 resp.items.sort(sort.rev ? revYearAlbumTrackSort : yearAlbumTrackSort);

@@ -134,6 +134,7 @@
 "Display covers, artist images, station logos, etc.":"Vis albumomslag, kunstnerbilleder, logoer, m.v.",
 "Display rating stars.":"Vis vurderingsstjerner",
 "Display technical info":"Vis teknisk information",
+"Do net set volume":"Indstil ikke lydstyrke",
 "Do not crossfade successive tracks from the same album.":"Lav ikke glidende overgang (crossfade) mellem numre fra samme album",
 "Do not sleep":"Gå ikke i dvale",
 "Don't Stop The Music":"Stop aldrig afspilning - Don't Stop The Music",
@@ -234,6 +235,7 @@
 "Large covers":"Store albumomslag",
 "Large font size":"Stor fontstørrelse",
 "Last scan: %1":"Sidste skanning: '%1'",
+"Leave individual player's volume.":"Undlad at ændre lydstyrken på de enkelte afspillere",
 "Library":"Bibliotek",
 "Light":"Lys",
 "Loading...":"Indlæser...",
@@ -600,7 +602,5 @@
 "1 Year":"1 år",
 "%1 Years":"%1 år",
 "1 day":"1 dag",
-"%1 days":"%1 dage",
-"Do net set volume":"",
-"Leave individual player's volume.":""
+"%1 days":"%1 dage"
 }

@@ -600,5 +600,7 @@
 "%1 Years":"%1 Jahre",
 "1 day":"Ein Tag",
 "%1 days":"%1 Tage",
-"%1bit":""
+"%1bit":"",
+"Do net set volume":"",
+"Leave individual player's volume.":""
 }

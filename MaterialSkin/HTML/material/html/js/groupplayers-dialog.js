@@ -49,6 +49,13 @@ Vue.component('lms-groupplayers-dialog', {
      </v-list-tile-content>
      <v-list-tile-action><v-switch v-model="options.greedy"></v-switch></v-list-tile-action>
     </v-list-tile>
+    <v-list-tile>
+     <v-list-tile-content @click="options.weakVolume = !options.weakVolume" class="switch-label">
+      <v-list-tile-title>{{i18n('Do net set volume')}}</v-list-tile-title>
+      <v-list-tile-sub-title>{{i18n("Leave individual player's volume.")}}</v-list-tile-sub-title>
+     </v-list-tile-content>
+     <v-list-tile-action><v-switch v-model="options.weakVolume"></v-switch></v-list-tile-action>
+    </v-list-tile>
    </v-list>
   </v-card-text>
   <v-card-actions v-if="queryParams.altBtnLayout">
@@ -72,7 +79,7 @@ Vue.component('lms-groupplayers-dialog', {
             show: false,
             player: undefined,
             name: undefined,
-            options: { powerMaster: true, powerPlay: true, greedy: false },
+            options: { powerMaster: true, powerPlay: true, greedy: false, weakVolume: false },
             players: [],
             chosenPlayers: []
         }
@@ -101,6 +108,7 @@ Vue.component('lms-groupplayers-dialog', {
                     if (data && data.result) {
                         this.options.powerMaster = 1 == parseInt(data.result.powerMaster);
                         this.options.powerPlay = 1 == parseInt(data.result.powerPlay);
+                        this.options.weakVolume = 1 == parseInt(data.result.weakVolume);
                         this.options.greedy = 1 == parseInt(data.result.greedy);
                         if (data.result.players_loop) {
                             data.result.players_loop.forEach(p => {
@@ -138,7 +146,7 @@ Vue.component('lms-groupplayers-dialog', {
             this.prevName = undefined;
             this.player = undefined;
             this.chosenPlayers = [];
-            this.options = { powerMaster: true, powerPlay: true };
+            this.options = { powerMaster: true, powerPlay: true, greedy: false, weakVolume: false };
 			this.players = [];
             this.playerIds = new Set();
             this.$store.state.players.forEach(p => {
@@ -163,7 +171,9 @@ Vue.component('lms-groupplayers-dialog', {
             var cmd = ['playergroups', 'update', 'id:'+this.player.id, "members:"+(members.length>0 ? members.join(",") : "-"),
                        'powerMaster:'+(this.options.powerMaster ? 1 : 0),
                        'powerPlay:'+(this.options.powerPlay ? 1 : 0),
-                       'greedy:'+(this.options.greedy ? 1 : 0)];
+                       'greedy:'+(this.options.greedy ? 1 : 0),
+                       'weakVolume:'+(this.options.greedy ? 1 : 0)
+                      ];
 
             if (this.prevName != name) {
                 // Change name first
@@ -189,7 +199,8 @@ Vue.component('lms-groupplayers-dialog', {
             lmsCommand("", ['playergroups', 'add', 'name:'+name, 'members:'+this.chosenPlayers.join(','),
                             'powerMaster:'+(this.options.powerMaster ? 1 : 0),
                             'powerPlay:'+(this.options.powerPlay ? 1 : 0),
-                            'greedy:'+(this.options.greedy ? 1 : 0)]).then(({data}) => {
+                            'greedy:'+(this.options.greedy ? 1 : 0)+
+                            'weakVolume:'+(this.options.weakVolume ? 1 : 0)]).then(({data}) => {
                 bus.$emit('refreshServerStatus', 1000);
                 if (data && data.result && data.result.id) {
                     lmsCommand(data.result.id, ["material-skin-group", "set-modes"]);

@@ -23,7 +23,7 @@ function grpVolSort(a, b) {
 
 Vue.component('lms-groupvolume', {
     template: `
-<v-sheet v-model="show" v-if="show" elevation="5" class="vol-sheet group-vol">
+<v-sheet v-model="show" v-if="show" elevation="5" class="vol-sheet group-vol noselect">
  <v-container grid-list-md text-xs-center id="gv-container">
   <v-layout row wrap>
    <div v-for="(player, index) in players" style="width:100%" :key="player.id" v-bind:class="{'active-player':currentPlayer && currentPlayer.id === player.id}" :id="currentPlayer && currentPlayer.id === player.id ? 'gv-active' : ('gv-'+index)">

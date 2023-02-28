@@ -8,7 +8,7 @@
 
 Vue.component('lms-volume', {
     template: `
-<v-sheet v-model="show" v-if="show" elevation="5" class="vol-sheet">
+<v-sheet v-model="show" v-if="show" elevation="5" class="vol-sheet noselect">
  <v-container grid-list-md text-xs-center>
   <v-layout row wrap>
    <v-flex xs12><p class="vol-text">{{playerVolume|displayVolume(dvc)}}</p></v-flex>

@@ -588,33 +588,31 @@ const store = new Vuex.Store({
                 setLocalStorageVal('infoPlugin', state.infoPlugin);
                 lmsOptions.infoPlugin = state.infoPlugin;
             }).catch(err => {
-                state.infoPlugin = false;
-                setLocalStorageVal('infoPlugin', state.infoPlugin);
-                lmsOptions.infoPlugin = state.infoPlugin;
             });
             // YouTube plugin installled?
             lmsCommand("", ["can", "youtube", "items", "?"]).then(({data}) => {
                 lmsOptions.youTubePlugin = data && data.result && data.result._can ? true : false;
                 setLocalStorageVal('youTubePlugin', lmsOptions.youTubePlugin);
             }).catch(err => {
-                lmsOptions.youTubePlugin = false;
-                setLocalStorageVal('youTubePlugin', lmsOptions.youTubePlugin);
             });
             // Don't Stop The Music installed?
             lmsCommand("", ["pref", "plugin.state:DontStopTheMusic", "?"]).then(({data}) => {
                 state.dstmPlugin = data && data.result && null!=data.result._p2 && "disabled"!=data.result._p2 && "?"!=data.result._p2;
                 setLocalStorageVal('dstmPlugin', state.dstmPlugin);
             }).catch(err => {
-                state.dstmPlugin = false;
-                setLocalStorageVal('dstmPlugin', state.dstmPlugin);
             });
             // CustomSkip installed?
             lmsCommand("", ["pref", "plugin.state:CustomSkip", "?"]).then(({data}) => {
                 state.customSkipPlugin = data && data.result && null!=data.result._p2 && "disabled"!=data.result._p2;
                 setLocalStorageVal('customSkipPlugin', state.customSkipPlugin);
+                if (!state.customSkipPlugin) {
+                    lmsCommand("", ["pref", "plugin.state:CustomSkip3", "?"]).then(({data}) => {
+                        state.customSkipPlugin = data && data.result && null!=data.result._p2 && "disabled"!=data.result._p2;
+                        setLocalStorageVal('customSkipPlugin', state.customSkipPlugin);
+                    }).catch(err => {
+                    });
+                }
             }).catch(err => {
-                state.customSkipPlugin = false;
-                setLocalStorageVal('customSkipPlugin', state.customSkipPlugin);
             });
 
             if (!queryParams.party) {

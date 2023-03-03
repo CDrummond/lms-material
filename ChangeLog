@@ -21,6 +21,7 @@
 14. Replace '|' with '•' on artist and album display lines in now-playing and
     queue.
 15. Add support for setting 'Group players' 'Do not set volume' option.
+16. Check for 'CustomSkip3' as well as 'CustomSkip'
 
 3.1.4
 -----

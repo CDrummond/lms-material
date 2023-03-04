@@ -857,7 +857,7 @@ function parseBrowseResp(data, parent, options, cacheKey, parentCommand, parentG
                              ? parent.artists[0]
                              : i.albumartist
                                  ? i.albumartist
-                                 : i.band && undefined!=i.compilation && 1==parseInt(i.compilation)
+                                 : undefined!=i.compilation && 1==parseInt(i.compilation)
                                      ? i.band
                                      : i.artist
                                          ? i.artist

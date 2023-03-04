@@ -857,9 +857,11 @@ function parseBrowseResp(data, parent, options, cacheKey, parentCommand, parentG
                              ? parent.artists[0]
                              : i.albumartist
                                  ? i.albumartist
-                                 : i.artist
-                                     ? i.artist
-                                     : i.trackartist;
+                                 : i.band && undefined!=i.compilation && 1==parseInt(i.compilation)
+                                     ? i.band
+                                     : i.artist
+                                         ? i.artist
+                                         : i.trackartist;
                 }
 
                 let others = buildArtistLine(i, "browse", false, artist);

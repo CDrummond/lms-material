@@ -1,3 +1,8 @@
+3.2.1
+-----
+1. When checking whether to allow add/play all buttons check first item's
+   favorites_url
+
 3.2.0
 -----
  1. Add playlist and queue sorting.

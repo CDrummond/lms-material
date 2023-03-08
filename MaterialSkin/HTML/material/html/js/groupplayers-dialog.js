@@ -51,7 +51,7 @@ Vue.component('lms-groupplayers-dialog', {
     </v-list-tile>
     <v-list-tile>
      <v-list-tile-content @click="options.weakVolume = !options.weakVolume" class="switch-label">
-      <v-list-tile-title>{{i18n('Do net set volume')}}</v-list-tile-title>
+      <v-list-tile-title>{{i18n('Do not set volume')}}</v-list-tile-title>
       <v-list-tile-sub-title>{{i18n("Leave individual player's volume.")}}</v-list-tile-sub-title>
      </v-list-tile-content>
      <v-list-tile-action><v-switch v-model="options.weakVolume"></v-switch></v-list-tile-action>

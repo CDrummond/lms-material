@@ -145,7 +145,7 @@ function buildArtistLine(i, page, plain, existing) {
         }
     }
     
-    return undefined==line ? line : line.replace('|', '\u2022');
+    return undefined==line ? line : line.replaceAll('|', '\u2022');
 }
 
 function buildAlbumLine(i, page, plain) {
@@ -163,6 +163,6 @@ function buildAlbumLine(i, page, plain) {
     } else if (remoteTitle && remoteTitle!=i.title) {
         line=addPart(line, remoteTitle);
     }
-    return undefined==line ? line : line.replace('|', '\u2022');
+    return undefined==line ? line : line.replaceAll('|', '\u2022');
 }
 

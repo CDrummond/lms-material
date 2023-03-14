@@ -203,7 +203,9 @@ function decodeShortcutEvent(e) {
     } else if (e.ctrlKey || e.metaKey) {
         s.modifier = e.shiftKey ? 'mod+shift' : 'mod';
     }
-    if (e.key.length==1) {
+    if (e.code && e.code.startsWith('Digit')) {
+        s.key = e.code.substring(5);
+    } else if (e.key.length==1) {
         s.key = e.key==' ' ? 'space' : e.key.toUpperCase();
     } else {
         let key = e.key.toLowerCase();

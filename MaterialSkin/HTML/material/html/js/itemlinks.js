@@ -144,8 +144,11 @@ function buildArtistLine(i, page, plain, existing) {
             line=addArtistLink(i, line, "albumartist", "showAlbumArtist", page, used, plain);
         }
     }
-    
-    return undefined==line ? line : line.replaceAll('|', '\u2022');
+    try {
+        return undefined==line ? line : line.replaceAll('|', '\u2022');
+    } catch (e) {
+        return line;
+    }
 }
 
 function buildAlbumLine(i, page, plain) {
@@ -163,6 +166,10 @@ function buildAlbumLine(i, page, plain) {
     } else if (remoteTitle && remoteTitle!=i.title) {
         line=addPart(line, remoteTitle);
     }
-    return undefined==line ? line : line.replaceAll('|', '\u2022');
+    try {
+        return undefined==line ? line : line.replaceAll('|', '\u2022');
+    } catch (e) {
+        return line;
+    }
 }
 

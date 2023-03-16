@@ -226,7 +226,8 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
              <img :key="item.image" v-lazy="item.image"></img>
             </v-list-tile-avatar>
             <v-list-tile-content>
-             <v-list-tile-title>{{item.title}}</v-list-tile-title>
+             <v-list-tile-title v-if="ALBUM_TAB==index" v-html="item.title"></v-list-tile-title>
+             <v-list-tile-title v-else>{{item.title}}</v-list-tile-title>
              <v-list-tile-sub-title v-html="item.subtitle"></v-list-tile-sub-title>
             </v-list-tile-content>
             <div class="emblem" v-if="item.emblem" :style="{background: item.emblem.bgnd}">

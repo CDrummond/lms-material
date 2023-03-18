@@ -147,7 +147,7 @@ function buildArtistLine(i, page, plain, existing) {
     try {
         return undefined==line ? line : line.replaceAll('|', '\u2022');
     } catch (e) {
-        return line;
+        return undefined==line ? line : line.replace(/|/g, '\u2022');
     }
 }
 
@@ -169,7 +169,7 @@ function buildAlbumLine(i, page, plain) {
     try {
         return undefined==line ? line : line.replaceAll('|', '\u2022');
     } catch (e) {
-        return line;
+        return undefined==line ? line : line.replace(/|/g, '\u2022');
     }
 }
 

@@ -1,6 +1,7 @@
 3.2.3
 -----
 1. Alter dimensions upon which now playing layout changes.
+2. If 'replaceAll()' fails try 'replace()' with a regular expression.
 
 3.2.2
 -----

@@ -1,3 +1,7 @@
+3.2.3
+-----
+1. Alter dimensions upon which now playing layout changes.
+
 3.2.2
 -----
 1. When checking for numeric shortcuts (e.g. 'Alt+1') look for 'DigitX' on

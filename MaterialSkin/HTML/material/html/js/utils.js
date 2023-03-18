@@ -598,10 +598,6 @@ function setBgndCover(elem, coverUrl) {
     }
 }
 
-function isLandscape() {
-    return window.innerWidth >= (window.innerHeight*(IS_MOBILE || IS_IOS ? 1.3 : 1.5));
-}
-
 function isVisible(elem) {
     var rect = elem.getBoundingClientRect();
     var viewHeight = Math.max(document.documentElement.clientHeight, window.innerHeight);

@@ -1029,8 +1029,9 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
             }
         },
         checkLandscape() {
-            this.landscape = isLandscape();
-            this.wide = window.innerWidth>=900 ? 2 : window.innerWidth>=650 ? 1 : 0;
+            this.landscape = window.innerWidth >= (window.innerHeight*1.2);
+            this.wide = window.innerWidth>=600 ? 2 /*: window.innerHeight>340 ? 1*/ : 0;
+            console.log(this.landscape, this.wide, window.innerWidth, window.innerHeight);
         },
         itemClicked(tab, section, index, event) {
             nowplayingItemClicked(this, tab, section, index, event);

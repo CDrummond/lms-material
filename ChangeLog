@@ -5,6 +5,8 @@
 2. Fix HTML showing for track listings in song view when using mobile layout
    on desktop.
 3. Check for errors with replaceAll.
+4. Change dimensions on which now-playing landscape layout changes.
+
 
 3.2.1
 -----

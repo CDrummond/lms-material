@@ -100,7 +100,7 @@ Vue.component('lms-manage-players', {
   </v-card-title>
 
   <div class="ios-vcard-text-workaround">
-   <v-container v-if="players.length<1">
+   <v-container v-if="players.length<1 && otherPlayers.length<1">
     <b>{{trans.noplayer}}</b>
    </v-container>
    <v-container v-else grid-list-md class="pmgr-container" id="player-manager-list">

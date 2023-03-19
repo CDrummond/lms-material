@@ -46,7 +46,7 @@ function parseQueryParams() {
         queryString=queryString.substring(0, hash);
     }
     var query = queryString.split('&');
-    var resp = { actions:[], debug:new Set(), hide:new Set(), dontEmbed:new Set(), layout:undefined, player:undefined, single:false, nativeStatus:0, nativeColors:0, nativePlayer:0, nativeUiChanges:0, nativeTheme:0, nativeCover:0, nativePlayerPower:0, appSettings:undefined, appQuit:undefined, appLaunchPlayer:undefined, css:undefined, download:'browser', addpad:false, party:false, altBtnLayout:IS_WINDOWS, expand:[] };
+    var resp = { actions:[], debug:new Set(), hide:new Set(), dontEmbed:new Set(), layout:undefined, player:undefined, single:false, nativeStatus:0, nativeColors:0, nativePlayer:0, nativeUiChanges:0, nativeTheme:0, nativeCover:0, nativePlayerPower:0, appSettings:undefined, appQuit:undefined, appLaunchPlayer:undefined, css:undefined, download:'browser', addpad:false, party:false, altBtnLayout:IS_WINDOWS, expand:[], npRatio:1.33333333 };
 
     for (var i = query.length - 1; i >= 0; i--) {
         var kv = query[i].split('=');
@@ -127,6 +127,8 @@ function parseQueryParams() {
             resp.altBtnLayout=kv.length<1 || "true"==kv[1];
         } else if ("expand"==kv[0] && kv.length>1) {
             resp.expand=decodeURIComponent(kv[1]).split("/");
+        } else if ("npRatio"==kv[0]) {
+            resp.npRatio=parseFloat(kv[1]);
         }
     }
     return resp;

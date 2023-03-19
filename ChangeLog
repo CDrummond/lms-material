@@ -5,6 +5,8 @@
 3. Add a 'replaceAll()' polyfill.
 4. Only show 'No Player' in 'Manage players' dialog if there are no players on
    this server and none seen on other servers.
+5. Add 'npRatio' URL query parameter to control width/height ratio before
+   now-playing toggles between landscape and portrait.
 
 3.2.2
 -----

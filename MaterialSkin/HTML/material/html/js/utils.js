@@ -75,33 +75,15 @@ function parseQueryParams() {
             var element = document.createElement("script");
             element.src = "/material/customjs/"+kv[1]+"?r=" + LMS_MATERIAL_REVISION;
             document.body.appendChild(element);
-        } else if ("layout"==kv[0]) {
-            resp.layout=kv[1];
-        } else if ("nativeStatus"==kv[0]) {
-            resp.nativeStatus=kv[1]=="c" ? 2 : 1;
-        } else if ("nativeColors"==kv[0]) {
-            resp.nativeColors=kv[1]=="c" ? 2 : 1;
-        } else if ("nativePlayer"==kv[0]) {
-            resp.nativePlayer=kv[1]=="c" ? 2 : 1;
-        } else if ("nativeUiChanges"==kv[0]) {
-            resp.nativeUiChanges=kv[1]=="c" ? 2 : 1;
-        } else if ("nativeTheme"==kv[0]) {
-            resp.nativeTheme=kv[1]=="c" ? 2 : 1;
-        } else if ("nativeCover"==kv[0]) {
-            resp.nativeCover=kv[1]=="c" ? 2 : 1;
-        } else if ("nativePlayerPower"==kv[0]) {
-            resp.nativePlayerPower=kv[1]=="c" ? 2 : 1;
+        } else if ("nativeStatus"==kv[0] || "nativeColors"==kv[0] || "nativePlayer"==kv[0] || "nativeUiChanges"==kv[0] || "nativeTheme"==kv[0] || "nativeCover"==kv[0] || "nativePlayerPower"==kv[0]) {
+            resp[kv[0]]=kv[1]=="c" ? 2 : 1;
         } else if ("hide"==kv[0]) {
             var parts = kv[1].split(",");
             for (var j=0, len=parts.length; j<len; ++j) {
                 resp.hide.add(parts[j]);
             }
-        } else if ("appSettings"==kv[0]) {
-            resp.appSettings=kv[1];
-        } else if ("appQuit"==kv[0]) {
-            resp.appQuit=kv[1];
-        } else if ("appLaunchPlayer"==kv[0]) {
-            resp.appLaunchPlayer=kv[1];
+        } else if ("layout"==kv[0] || "appSettings"==kv[0] || "appQuit"==kv[0] || "appLaunchPlayer"==kv[0]) {
+            resp[kv[0]]=kv[1];
         } else if ("ios"==kv[0]) {
             document.documentElement.style.setProperty('--bottom-nav-pad', '12px');
         } else if ("theme"==kv[0]) {
@@ -110,19 +92,15 @@ function parseQueryParams() {
             if (parts.length>1) {
                 setLocalStorageVal('color', parts[1]);
             }
-        } else if ("single"==kv[0]) {
-            resp.single=true;
+        } else if ("single"==kv[0] || "addpad"==kv[0] || "party"==kv[0]) {
+            resp[kv[0]]=true;
         } else if ("download"==kv[0] && kv.length>1) {
             resp.download=kv[1];
-        } else if ("addpad"==kv[0]) {
-            resp.addpad=true;
         } else if ("dontEmbed"==kv[0]) {
             var parts = kv[1].split(",");
             for (var j=0, len=parts.length; j<len; ++j) {
                 resp.dontEmbed.add(parts[j]);
             }
-        } else if ("party"==kv[0]) {
-            resp.party=true;
         } else if ("altBtnLayout"==kv[0]) {
             resp.altBtnLayout=kv.length<1 || "true"==kv[1];
         } else if ("expand"==kv[0] && kv.length>1) {

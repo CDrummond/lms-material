@@ -206,7 +206,6 @@ Vue.component('lms-toolbar', {
                  width: 100,
                  height: 300,
                  updateProgress: {show:false, text:undefined},
-                 showMiniLauncherButton: !queryParams.hide.has('mini'),
                  date: undefined,
                  time: undefined,
                  appQuit: queryParams.appQuit,

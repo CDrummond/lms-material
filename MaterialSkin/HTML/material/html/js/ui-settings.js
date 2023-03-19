@@ -406,7 +406,6 @@ Vue.component('lms-ui-settings', {
                 halfLen: 0
             },
             screensaver: false,
-            showLaunchPlayer: IS_ANDROID && !queryParams.hide.has('launchPlayer'),
             serverName: "",
             showRating: false,
             homeButton: false,

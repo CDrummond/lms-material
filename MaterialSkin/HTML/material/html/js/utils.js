@@ -84,8 +84,6 @@ function parseQueryParams() {
             }
         } else if ("layout"==kv[0] || "appSettings"==kv[0] || "appQuit"==kv[0] || "appLaunchPlayer"==kv[0]) {
             resp[kv[0]]=kv[1];
-        } else if ("ios"==kv[0]) {
-            document.documentElement.style.setProperty('--bottom-nav-pad', '12px');
         } else if ("theme"==kv[0]) {
             var parts = kv[1].split(",");
             setLocalStorageVal('theme', parts[0]);

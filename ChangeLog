@@ -7,6 +7,7 @@
    this server and none seen on other servers.
 5. Add 'npRatio' URL query parameter to control width/height ratio before
    now-playing toggles between landscape and portrait.
+6. Replace all fill and stroke colours in SVG files.
 
 3.2.2
 -----

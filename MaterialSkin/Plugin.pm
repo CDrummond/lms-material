@@ -1392,7 +1392,7 @@ sub _svgHandler {
 
     if (-e $filePath) {
         my $svg = read_file($filePath);
-        #$svg =~ s/#000/$colour/g;
+        $svg =~ s/#000/$colour/g;
         $svg =~ s/fill\s*=\s*"[#0-9a-fA-F\.]+"/fill="${colour}"/g;
         $svg =~ s/stroke\s*=\s*"[#0-9a-fA-F\.]+"/stroke="${colour}"/g;
         $response->code(RC_OK);

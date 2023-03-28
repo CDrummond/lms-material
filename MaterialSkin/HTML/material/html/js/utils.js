@@ -1007,9 +1007,7 @@ function trackTags() {
     return TRACK_TAGS+(lmsOptions.techInfo ? TECH_INFO_TAGS : "");
 }
 
-
 if (!String.prototype.replaceAll) {
-    console.log('Add polyfill');
     String.prototype.replaceAll = function(str, newStr) {
         let idx = 0;
         let len = str.length;

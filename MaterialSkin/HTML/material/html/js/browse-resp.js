@@ -68,6 +68,7 @@ function parseBrowseResp(data, parent, options, cacheKey, parentCommand, parentG
             var haveWithoutIcons = false;
             var menu = undefined;
             var types = new Set();
+            var images = new Set();
             var maybeAllowGrid = command!="trackstat"; // && !isFavorites; // && command!="playhistory";
             var numImages = 0;
 
@@ -499,6 +500,7 @@ function parseBrowseResp(data, parent, options, cacheKey, parentCommand, parentG
                     i.type="other"; // ???
                 }
                 types.add(i.type);
+                images.add(i.image ? i.image : i.icon ? i.icon : i.svg);
             }
             /* ...continuation of favourited album add/play track issue... */
             if (!isFavorites && parent && parent.section == SECTION_FAVORITES && resp.items.length>0 && resp.items[0].stdItem == STD_ITEM_TRACK) {
@@ -514,21 +516,11 @@ function parseBrowseResp(data, parent, options, cacheKey, parentCommand, parentG
                 resp.baseActions['playControl'] && resp.baseActions['playControl'].params && resp.baseActions['playControl'].params.item_id) {
                 resp.allSongsItem={id:resp.baseActions['playControl'].params.item_id, params:resp.baseActions['playControl'].params};
             }
-            if ((isRadios || (isApps && parent.id.split('.').length==2)) && resp.items.length>1 && resp.items.length<=15) {
-                // If listing a radio app's entries and all images are the same, then hide images. e.g. iHeartRadio and RadioNet
-                var image = undefined;
-                var images = 0;
-                for (var i=0, loop=resp.items, len=loop.length; i<len && undefined==loop[i].image; ++i) {
-                    if (undefined==image) {
-                        image=loop[i].icon ? loop[i].icon : loop[i].svg;
-                        images++;
-                    } else if ((loop[i].icon ? loop[i].icon : loop[i].svg)==image) {
-                        images++;
-                    }
-                }
-                if (images==resp.items.length && undefined!=image) {
+            // If listing a radio app's entries and all images are the same, then hide images. e.g. iHeartRadio and RadioNet
+            if ((!isApps || (isApps && parent.id.split('.').length==2)) && resp.items.length>1 && resp.items.length<=100) {
+                if (images.size == 1 && undefined!=images.values().next().value) {
                     for (var i=0, loop=resp.items, len=loop.length; i<len; ++i) {
-                        loop[i].icon = loop[i].svg = undefined;
+                        loop[i].image = loop[i].icon = loop[i].svg = undefined;
                     }
                     resp.canUseGrid=false;
                 }

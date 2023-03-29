@@ -23,7 +23,7 @@ function remapClassicSkinIcons(doc, col) {
                 }
             }
             if (!replaced) {
-                /* Try to handle plugin images from 'EXtras' pages - e.g. DynamicPlaylistCreator
+                /* Try to handle plugin images from 'Extras' pages - e.g. DynamicPlaylistCreator
                  * src should be (e.g.):
                  *     http://localhost:9000/material/html/images/dplc_export.gif?svg=DynamicPlaylistCreator
                  * in plugin's HTML its just 'dplc_export.gif?svg=DynamicPlaylistCreator'
@@ -43,7 +43,7 @@ function remapClassicSkinIcons(doc, col) {
                             url.pathname = path;
                             path=url.href;
                         }
-                        imgList[i].src = path+"?c="+col;
+                        imgList[i].src = path+"&c="+col;
                         if (IS_MOBILE) {
                             imgList[i].classList.add("msk-cs-touch-img");
                         }

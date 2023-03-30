@@ -1,17 +1,18 @@
 3.2.3
 -----
-1. Alter dimensions upon which now playing layout changes.
-2. If 'replaceAll()' fails try 'replace()' with a regular expression.
-3. Add a 'replaceAll()' polyfill.
-4. Only show 'No Player' in 'Manage players' dialog if there are no players on
-   this server and none seen on other servers.
-5. Add 'npRatio' URL query parameter to control width/height ratio before
-   now-playing toggles between landscape and portrait.
-6. Replace all fill and stroke colours in SVG files.
-7. Fix recolouring some plugin icons.
-8. If list uses same image for all entries then do not show (does not apply to
-   all lists).
-9. Strip HTML tags before showing toast messages.
+ 1. Alter dimensions upon which now playing layout changes.
+ 2. If 'replaceAll()' fails try 'replace()' with a regular expression.
+ 3. Add a 'replaceAll()' polyfill.
+ 4. Only show 'No Player' in 'Manage players' dialog if there are no players on
+    this server and none seen on other servers.
+ 5. Add 'npRatio' URL query parameter to control width/height ratio before
+    now-playing toggles between landscape and portrait.
+ 6. Replace all fill and stroke colours in SVG files.
+ 7. Fix recolouring some plugin icons.
+ 8. If list uses same image for all entries then do not show (does not apply to
+    all lists).
+ 9. Strip HTML tags before showing toast messages.
+10. Add 'Symphonies' to default composer and conductor genres.
 
 3.2.2
 -----

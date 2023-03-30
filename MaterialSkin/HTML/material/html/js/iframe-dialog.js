@@ -513,7 +513,7 @@ Vue.component('lms-iframe-dialog', {
             this.src = page;
             this.page = page.indexOf("player/basic.html")>0
                             ? "player"
-                            : page.indexOf("server/basic.html")>0
+                            : page.indexOf("server/basic.html")>0 || page.indexOf("plugins/Extensions/settings/basic.html")>0
                                 ? "server"
                                 : (page == '/material/html/docs/index.html') || (page.startsWith("plugins/") && (page.indexOf("?player=")>0 || page.indexOf("&player=")>0))
                                     ? "lms" // tech info, or 'extra' entry

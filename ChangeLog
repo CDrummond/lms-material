@@ -13,6 +13,8 @@
     all lists).
  9. Strip HTML tags before showing toast messages.
 10. Add 'Symphonies' to default composer and conductor genres.
+11. Ensure 'Classic' skin changes are applied to pages when loaded from
+    plugins link in 'Information' dialog.
 
 3.2.2
 -----

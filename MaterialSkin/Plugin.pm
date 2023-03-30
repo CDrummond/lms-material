@@ -1355,7 +1355,8 @@ sub _svgHandler {
 
     my $request = $response->request;
     my $dir = dirname(__FILE__);
-    my $filePath = $dir . "/HTML/material/html/images/" . basename($request->uri->path) . ".svg";
+    my $svgName = basename($request->uri->path);
+    my $filePath = $dir . "/HTML/material/html/images/" . $svgName . ".svg";
     my $colour = "#f00";
 
     if ($request->uri->can('query_param')) {
@@ -1376,7 +1377,7 @@ sub _svgHandler {
     }
 
     if (! -e $filePath) {
-        $filePath = Slim::Utils::Prefs::dir() . "/material-skin/images/" . basename($request->uri->path) . ".svg";
+        $filePath = Slim::Utils::Prefs::dir() . "/material-skin/images/" . $svgName . ".svg";
     }
 
     # Check for plugin icon...
@@ -1393,8 +1394,10 @@ sub _svgHandler {
     if (-e $filePath) {
         my $svg = read_file($filePath);
         $svg =~ s/#000/$colour/g;
-        $svg =~ s/fill\s*=\s*"[#0-9a-fA-F\.]+"/fill="${colour}"/g;
-        $svg =~ s/stroke\s*=\s*"[#0-9a-fA-F\.]+"/stroke="${colour}"/g;
+        if ($svgName ne "pq-current") {
+            $svg =~ s/fill\s*=\s*"[#0-9a-fA-F\.]+"/fill="${colour}"/g;
+            $svg =~ s/stroke\s*=\s*"[#0-9a-fA-F\.]+"/stroke="${colour}"/g;
+        }
         $response->code(RC_OK);
         $response->content_type('image/svg+xml');
         $response->header('Connection' => 'close');

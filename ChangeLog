@@ -2,6 +2,9 @@
 -----
 1. Fix missing icon for 'More' entry of now-playing menu.
 2. Ignore some clicks on now-playing page if a menu is open.
+3. Remove 'Years' option from genre listing - e.g.
+   'My Music / Genres / <genre> / Years'. Because 'years' command does not
+   support 'genre_id' filter.
 
 3.2.3
 -----

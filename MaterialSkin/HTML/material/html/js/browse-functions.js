@@ -748,6 +748,8 @@ function browseAddCategories(view, item, isGenre) {
             id: uniqueId(item.id, view.items.length)};
     if (undefined!=alt_id) { cat.params.push(alt_id); }
     view.items.push(cat);
+    /* 'years' does not accept genre filter, so this would show all years regardless
+     * of whether there was a track in that year of this genre in that year or not :(
     if (isGenre && (undefined==command || "years"!=command)) {
         cat = { title: i18n("Years"),
                 command: ["years"],
@@ -758,6 +760,7 @@ function browseAddCategories(view, item, isGenre) {
         if (undefined!=alt_id) { cat.params.push(alt_id); }
         view.items.push(cat);
     }
+    */
     if (!isGenre && (undefined==command || "genres"!=command)) {
         cat = { title: i18n("Genres"),
                  command: ["genres"],

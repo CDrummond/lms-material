@@ -5,6 +5,7 @@
 3. Remove 'Years' option from genre listing - e.g.
    'My Music / Genres / <genre> / Years'. Because 'years' command does not
    support 'genre_id' filter.
+4. Change dimensions on which now-playing landscape layout changes (again).
 
 3.2.3
 -----
@@ -32,7 +33,6 @@
    on desktop.
 3. Check for errors with replaceAll.
 4. Change dimensions on which now-playing landscape layout changes.
-
 
 3.2.1
 -----

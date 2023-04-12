@@ -6,7 +6,10 @@
  */
 'use strict';
 
-const LIBRARY_SVG = "data:image/svg+xml,%3Csvg width='24' height='24' version='1.1' viewBox='0 0 24 24' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M20,2H8A2,2 0 0,0 6,4V16A2,2 0 0,0 8,18H20A2,2 0 0,0 22,16V4A2,2 0 0,0 20,2M20,16H8V4H20M12.5,15A2.5,2.5 0 0,0 15,12.5V7H18V5H14V10.5C13.58,10.19 13.07,10 12.5,10A2.5,2.5 0 0,0 10,12.5A2.5,2.5 0 0,0 12.5,15M4,6H2V20A2,2 0 0,0 4,22H18V20H4' fill='%23000'/%3E%3C/svg%3E%0A";
+const NAV_SVGS = [
+    "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath d='M4,6H2V20A2,2 0 0,0 4,22H18V20H4M18,7H15V12.5A2.5,2.5 0 0,1 12.5,15A2.5,2.5 0 0,1 10,12.5A2.5,2.5 0 0,1 12.5,10C13.07,10 13.58,10.19 14,10.5V5H18M20,2H8A2,2 0 0,0 6,4V16A2,2 0 0,0 8,18H20A2,2 0 0,0 22,16V4A2,2 0 0,0 20,2Z' fill='%23000'/%3E%3C/svg%3E%0A",
+    "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath d='M12 3V13.55C11.41 13.21 10.73 13 10 13C7.79 13 6 14.79 6 17S7.79 21 10 21 14 19.21 14 17V7H18V3H12Z' fill='%23000'/%3E%3C/svg%3E%0A",
+    "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath d='M15,6H3V8H15V6M15,10H3V12H15V10M3,16H11V14H3V16M17,6V14.18C16.69,14.07 16.35,14 16,14A3,3 0 0,0 13,17A3,3 0 0,0 16,20A3,3 0 0,0 19,17V8H22V6H17Z' fill='%23000'/%3E%3C/svg%3E%0A"];
 
 Vue.component('lms-bottomnav', {
     template: `
@@ -15,15 +18,18 @@ Vue.component('lms-bottomnav', {
   <template v-for="(item, index) in items">
    <v-btn v-if="index==0" flat class="lms-bottom-nav-button" v-longpress:nomove="browsePressed" v-bind:class="{'active-nav': activeBtn==index, 'inactive-nav': activeBtn!=index}" id="browse-nav-btn">
     <span>{{item.text}}</span>
-    <img class="nav-svg-img" :src="activeBtn==index ? libraryActiveSvg : libraryInactiveSvg" oncontextmenu="return false;"></img>
+    <img v-if="activeBtn==index" class="nav-svg-img" :src="svgs[index]" oncontextmenu="return false;"></img>
+    <img v-else class="nav-svg-img" :src="'library-music-outline' | svgIcon(darkUi)" oncontextmenu="return false;"></img>
    </v-btn>
    <v-btn v-else-if="index==1" flat class="lms-bottom-nav-button" @click="npPressed" v-bind:class="{'active-nav': activeBtn==index, 'inactive-nav': activeBtn!=index}" id="browse-nav-btn">
     <span>{{item.text}}</span>
-    <v-icon>{{item.icon}}</v-icon>
+    <img v-if="activeBtn==index" class="nav-svg-img" :src="svgs[index]" oncontextmenu="return false;"></img>
+    <img v-else class="nav-svg-img" :src="'music-note-outline' | svgIcon(darkUi)" oncontextmenu="return false;"></img>
    </v-btn>
    <v-btn v-else flat class="lms-bottom-nav-button" v-longpress:nomove="queuePressed" v-bind:class="{'active-nav': activeBtn==index, 'inactive-nav': activeBtn!=index}" id="browse-nav-btn">
     <span>{{item.text}}</span>
-    <v-icon>{{item.icon}}</v-icon>
+    <img v-if="activeBtn==index" class="nav-svg-img" :src="svgs[index]" oncontextmenu="return false;"></img>
+    <img v-else class="nav-svg-img" :src="'queue_music_outline' | svgIcon(darkUi)" oncontextmenu="return false;"></img>
    </v-btn>
   </template>
  </v-bottom-nav>
@@ -33,8 +39,9 @@ Vue.component('lms-bottomnav', {
     data() {
         return {
             items: [],
-            libraryActiveSvg: getLocalStorageVal("lib-active-svg", undefined),
-            libraryInactiveSvg: getLocalStorageVal("lib-inactive-svg", undefined)
+            svgs: [ getLocalStorageVal("nav-svg-0", undefined),
+                    getLocalStorageVal("nav-svg-1", undefined),
+                    getLocalStorageVal("nav-svg-2", undefined)]
         }
     },
     created() {
@@ -71,9 +78,9 @@ Vue.component('lms-bottomnav', {
     methods: {
         initItems() {
             this.items = [
-                          { text: i18n('Browse'),  svg:  'library-music-outline', page: 'browse' },
-                          { text: i18n('Playing'), icon: 'music_note',            page: 'now-playing' },
-                          { text: i18n('Queue'),   icon: 'queue_music',           page: 'queue' },
+                          { text: i18n('Browse'),  page: 'browse' },
+                          { text: i18n('Playing'), page: 'now-playing' },
+                          { text: i18n('Queue'),   page: 'queue' },
                          ];
         },
         colorSvgs(count) {
@@ -104,16 +111,12 @@ Vue.component('lms-bottomnav', {
             if (getLocalStorageVal('theme', 'x').endsWith('-colored')) {
                 activeColor = inactiveColor;
             }
-            let libraryActiveSvg = LIBRARY_SVG.replace('%23000', '%23'+activeColor.replace('#', ''));
-            let libraryInactiveSvg = LIBRARY_SVG.replace('%23000', '%23'+inactiveColor.replace('#', ''))
-
-            if (libraryActiveSvg!=this.libraryActiveSvg) {
-                this.libraryActiveSvg = libraryActiveSvg;
-                setLocalStorageVal("lib-active-svg", this.libraryActiveSvg);
-            }
-            if (libraryInactiveSvg!=this.libraryInactiveSvg) {
-                this.libraryInactiveSvg = libraryInactiveSvg;
-                setLocalStorageVal("lib-inactive-svg", this.libraryInactiveSvg);
+            for (let i=0; i<3; ++i) {
+                let svg = NAV_SVGS[i].replace('%23000', '%23'+activeColor.replace('#', ''));
+                if (svg!=this.svgs[i]) {
+                    this.svgs[i] = svg;
+                    setLocalStorageVal("nav-svg-"+i, this.svgs[i]);
+                }
             }
         },
         setPage(page, longPress) {
@@ -137,6 +140,9 @@ Vue.component('lms-bottomnav', {
         }
     },
     computed: {
+        darkUi () {
+            return this.$store.state.darkUi
+        },
         activeBtn() {
             if (this.items[0].page==this.$store.state.page) {
                 return 0;
@@ -145,6 +151,11 @@ Vue.component('lms-bottomnav', {
                 return 1;
             }
             return 2;
+        }
+    },
+    filters: {
+        svgIcon: function (name, dark) {
+            return "/material/svg/"+name+"?c="+(dark ? LMS_DARK_SVG : LMS_LIGHT_SVG)+"&r="+LMS_MATERIAL_REVISION;
         }
     }
 })

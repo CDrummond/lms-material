@@ -193,8 +193,9 @@ Vue.component('lms-player-settings', {
      <v-text-field slot="activator" v-model="formattedTime" :label="i18n('Start time')" prepend-icon="access_time" readonly></v-text-field>
      <v-time-picker v-if="alarmDialog.timepicker" v-model="alarmDialog.time" full-width :format="twentyFourHour?'24hr':'ampm'">
       <v-spacer></v-spacer>
-      <v-btn flat @click="alarmDialog.timepicker = false">{{i18n('Cancel')}}</v-btn>
+      <v-btn flat v-if="!queryParams.altBtnLayout" @click="alarmDialog.timepicker = false">{{i18n('Cancel')}}</v-btn>
       <v-btn flat @click="$refs.dialog.save(alarmDialog.time)">{{i18n('OK')}}</v-btn>
+      <v-btn flat v-if="queryParams.altBtnLayout" @click="alarmDialog.timepicker = false">{{i18n('Cancel')}}</v-btn>
      </v-time-picker>
     </v-dialog>
    </v-list-tile>
@@ -240,7 +241,12 @@ Vue.component('lms-player-settings', {
    </v-list-tile>
   </v-list>
   <div class="dialog-padding"></div>
-  <v-card-actions>
+  <v-card-actions v-if="queryParams.altBtnLayout">
+   <v-spacer></v-spacer>
+   <v-btn flat @click="saveAlarm()">{{alarmDialog.id ? i18n("Save") : i18n("Create")}}</v-btn>
+   <v-btn flat @click="alarmDialog.show = false">{{i18n('Cancel')}}</v-btn>
+   </v-card-actions>
+  <v-card-actions v-else>
    <v-spacer></v-spacer>
    <v-btn flat @click="alarmDialog.show = false">{{i18n('Cancel')}}</v-btn>
    <v-btn flat @click="saveAlarm()">{{alarmDialog.id ? i18n("Save") : i18n("Create")}}</v-btn>

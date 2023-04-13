@@ -2531,35 +2531,49 @@ img[lazy='loaded'].np-image-desktop, img[lazy='loaded'].np-image-landscape, img[
 
 .m3-switch:before,
 .m3-switch:after {
- content: '';
+ vertical-align: middle!important;
+ text-align:center;
+ font-family: "Material Icons"!important;
+ font-size:18px!important;
+ line-height:1.5rem!important;
+ text-decoration:none!important;
  border-radius: 2rem;
  height: 1.5rem;
  display: block;
  position: absolute;
  top: 0;
+ content:'';
 }
 
 .m3-switch:before {
  transition: background-color 0.3s ease;
- background-color: grey;
+ background-color: #bbb;
  width: 2.75rem;
  left: 0rem;
 }
 
+.theme--dark .m3-switch:before {
+ background-color: #777;
+}
+
 .m3-switch:after {
- background-color: black;
+ background-color: #333;
  width: 1.5rem;
  transition: 0.3s ease;
  transform: scale(0.8) translateX(0);
+ content: 'close';
+ color: #edece7;
 }
 
-.m3-switch--active:before {
+.m3-switch--active:before, .theme--dark .m3-switch--active:before {
  background-color: var(--accent-color);
 }
 
 .m3-switch--active:after {
- background-color: white;
+ background-color: #edece7;
  transform: scale(0.8) translateX(1.5rem);
+ color: var(--accent-color);
+ content: 'done';
 }
 
 .m3-switch-checkbox {

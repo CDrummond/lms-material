@@ -182,9 +182,9 @@
 
 .pill {
  position: absolute;
- top: 2px;
- height: 22px;
- border-radius: 11px;
+ top: 1px;
+ height: 26px;
+ border-radius: 13px;
  width: 56px;
  opacity:0.15;
  background-color:var(--active-color);

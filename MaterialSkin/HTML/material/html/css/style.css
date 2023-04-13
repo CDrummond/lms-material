@@ -37,7 +37,7 @@
 
 .theme--dark {
  --list-hover-color:rgba(255, 255, 255, 0.04)!important;
- --list-active-color:rgba(255, 255, 255, 0.08)!important;
+/*  --list-active-color:rgba(255, 255, 255, 0.08)!important; */
  --border-color:rgba(237, 236, 231, 0.25);
  --tab-border-color:rgba(237, 236, 231, 0.1);
 }
@@ -2465,9 +2465,9 @@ img[lazy='loaded'].np-image-desktop, img[lazy='loaded'].np-image-landscape, img[
  margin-left:16px;
 }
 
-/* Material Design 2 changes */
+/* Material Design 2 / 3 changes */
 .v-dialog:not(.v-dialog--fullscreen), .vol-sheet {
- border-radius:12px;
+ border-radius:20px;
 }
 .v-snack__wrapper {
  border-radius:8px;

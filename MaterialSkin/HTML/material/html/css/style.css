@@ -2520,3 +2520,54 @@ img[lazy='loaded'].np-image-desktop, img[lazy='loaded'].np-image-landscape, img[
   min-width:32px;
  }
 }
+
+.m3-switch {
+ display: block;
+ position: relative;
+ min-height: 2rem;
+ min-width: 2.75rem;
+ margin: 0.5rem 0;
+}
+
+.m3-switch:before,
+.m3-switch:after {
+ content: '';
+ border-radius: 2rem;
+ height: 1.5rem;
+ display: block;
+ position: absolute;
+ top: 0;
+}
+
+.m3-switch:before {
+ transition: background-color 0.3s ease;
+ background-color: grey;
+ width: 2.75rem;
+ left: 0rem;
+}
+
+.m3-switch:after {
+ background-color: black;
+ width: 1.5rem;
+ transition: 0.3s ease;
+ transform: scale(0.8) translateX(0);
+}
+
+.m3-switch--active:before {
+ background-color: var(--accent-color);
+}
+
+.m3-switch--active:after {
+ background-color: white;
+ transform: scale(0.8) translateX(1.5rem);
+}
+
+.m3-switch-checkbox {
+ margin: 0;
+ position: absolute;
+ width: 2.5rem;
+ height: 1.5rem;
+ z-index: 1;
+ opacity: 0;
+ cursor: pointer;
+}

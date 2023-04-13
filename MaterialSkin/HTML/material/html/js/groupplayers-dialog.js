@@ -32,7 +32,7 @@ Vue.component('lms-groupplayers-dialog', {
       <v-list-tile-title>{{i18n('Power on/off all')}}</v-list-tile-title>
       <v-list-tile-sub-title>{{i18n("Use group player's power settings to control power of all members.")}}</v-list-tile-sub-title>
      </v-list-tile-content>
-     <v-list-tile-action><v-switch v-model="options.powerMaster"></v-switch></v-list-tile-action>
+     <v-list-tile-action><m3-switch v-model="options.powerMaster"></m3-switch></v-list-tile-action>
     </v-list-tile>
     <v-divider></v-divider>
     <v-list-tile>
@@ -40,21 +40,21 @@ Vue.component('lms-groupplayers-dialog', {
       <v-list-tile-title>{{i18n('Power on all upon play')}}</v-list-tile-title>
       <v-list-tile-sub-title>{{i18n('Power on all group members when playing to group.')}}</v-list-tile-sub-title>
      </v-list-tile-content>
-     <v-list-tile-action><v-switch v-model="options.powerPlay"></v-switch></v-list-tile-action>
+     <v-list-tile-action><m3-switch v-model="options.powerPlay"></m3-switch></v-list-tile-action>
     </v-list-tile>
     <v-list-tile>
      <v-list-tile-content @click="options.greedy = !options.greedy" class="switch-label">
       <v-list-tile-title>{{i18n('Always synchronize all members')}}</v-list-tile-title>
       <v-list-tile-sub-title>{{i18n('Always force members synchronization.')}}</v-list-tile-sub-title>
      </v-list-tile-content>
-     <v-list-tile-action><v-switch v-model="options.greedy"></v-switch></v-list-tile-action>
+     <v-list-tile-action><m3-switch v-model="options.greedy"></m3-switch></v-list-tile-action>
     </v-list-tile>
     <v-list-tile>
      <v-list-tile-content @click="options.weakVolume = !options.weakVolume" class="switch-label">
       <v-list-tile-title>{{i18n('Do not set volume')}}</v-list-tile-title>
       <v-list-tile-sub-title>{{i18n("Leave individual player's volume.")}}</v-list-tile-sub-title>
      </v-list-tile-content>
-     <v-list-tile-action><v-switch v-model="options.weakVolume"></v-switch></v-list-tile-action>
+     <v-list-tile-action><m3-switch v-model="options.weakVolume"></m3-switch></v-list-tile-action>
     </v-list-tile>
    </v-list>
   </v-card-text>

@@ -78,7 +78,7 @@ Vue.component('lms-player-settings', {
       <v-list-tile-title>{{i18n('Smart crossfade')}}</v-list-tile-title>
       <v-list-tile-sub-title>{{i18n("Do not crossfade successive tracks from the same album.")}}</v-list-tile-sub-title>
      </v-list-tile-content>
-     <v-list-tile-action><v-switch v-model="smartCrossfade"></v-switch></v-list-tile-action>
+     <v-list-tile-action><m3-switch v-model="smartCrossfade"></m3-switch></v-list-tile-action>
     </v-list-tile>
     <v-divider></v-divider>
     <v-list-tile>
@@ -96,7 +96,7 @@ Vue.component('lms-player-settings', {
        <v-list-tile-title>{{i18n('Enable alarms')}}</v-list-tile-title>
        <v-list-tile-sub-title>{{i18n('Enable alarm functionality.')}}</v-list-tile-sub-title>
       </v-list-tile-content>
-      <v-list-tile-action><v-switch v-model="alarms.on" @click.stop="toggleAllAlarms()"></v-switch></v-list-tile-action>
+      <v-list-tile-action><m3-switch v-model="alarms.on" @click.stop="toggleAllAlarms()"></m3-switch></v-list-tile-action>
      </v-list-tile>
      <v-divider v-if="showAlarms"></v-divider>
      <div class="settings-sub-pad" v-if="showAlarms"></div>
@@ -129,7 +129,7 @@ Vue.component('lms-player-settings', {
        <v-list-tile-title>{{i18n('Fade in')}}</v-list-tile-title>
        <v-list-tile-sub-title>{{i18n('Fade in alarms when starting.')}}</v-list-tile-sub-title>
       </v-list-tile-content>
-      <v-list-tile-action><v-switch v-model="alarms.fade" @click.stop="alarms.fade=!alarms.fade"></v-switch></v-list-tile-action>
+      <v-list-tile-action><m3-switch v-model="alarms.fade" @click.stop="alarms.fade=!alarms.fade"></m3-switch></v-list-tile-action>
      </v-list-tile>
 
      <div v-if="libraries.length>1" class="dialog-padding"></div>
@@ -237,7 +237,7 @@ Vue.component('lms-player-settings', {
      <v-list-tile-title>{{i18n('Repeat')}}</v-list-tile-title>
      <v-list-tile-sub-title>{{i18n('Should alarms repeat')}}</v-list-tile-sub-title>
     </v-list-tile-content>
-    <v-list-tile-action><v-switch v-model="alarmDialog.repeat"></v-switch></v-list-tile-action>
+    <v-list-tile-action><m3-switch v-model="alarmDialog.repeat"></m3-switch></v-list-tile-action>
    </v-list-tile>
   </v-list>
   <div class="dialog-padding"></div>

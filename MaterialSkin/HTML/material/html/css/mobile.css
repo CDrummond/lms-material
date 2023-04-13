@@ -180,6 +180,20 @@
  height:calc((var(--vh, 1vh)*100) - var(--main-toolbar-height));
 }
 
+.pill {
+ position: absolute;
+ top: 2px;
+ height: 22px;
+ border-radius: 11px;
+ width: 56px;
+ opacity:0.15;
+ background-color:var(--active-color);
+}
+
+.pill-ct {
+ background-color:white;
+}
+
 .inactive-nav div span, .inactive-nav div i, .inactive-nav div img {
  opacity:var(--inactive-nav-opacity);
  color:var(--bottom-toolbar-text-color) !important;

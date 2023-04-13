@@ -192,8 +192,7 @@ Vue.component('lms-downloadstatus', {
     props: [],
     data() {
         return {
-            show: false,
-            coloredToolbars: false
+            show: false
         }
     },
     mounted() {
@@ -204,10 +203,6 @@ Vue.component('lms-downloadstatus', {
             if (this.$store.state.activeDialog == 'downloadstatus') {
                 this.close();
             }
-        }.bind(this));
-        this.coloredToolbars = this.$store.state.theme.endsWith("-colored");
-        bus.$on('themeChanged', function() {
-            this.coloredToolbars = this.$store.state.theme.endsWith("-colored");
         }.bind(this));
     },
     methods: {
@@ -246,6 +241,9 @@ Vue.component('lms-downloadstatus', {
         },
         darkUi () {
             return this.$store.state.darkUi
+        },
+        coloredToolbars() {
+            return this.$store.state.coloredToolbars
         }
     },
     filters: {

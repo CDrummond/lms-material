@@ -209,8 +209,7 @@ Vue.component('lms-toolbar', {
                  date: undefined,
                  time: undefined,
                  appQuit: queryParams.appQuit,
-                 appLaunchPlayer: queryParams.appLaunchPlayer,
-                 coloredToolbars: false
+                 appLaunchPlayer: queryParams.appLaunchPlayer
                }
     },
     mounted() {
@@ -373,10 +372,6 @@ Vue.component('lms-toolbar', {
         }.bind(this));
         this.customActions = getCustomActions(undefined, this.$store.state.unlockAll);
         this.customSettingsActions = getCustomActions("settings", this.$store.state.unlockAll);
-        this.coloredToolbars = this.$store.state.theme.endsWith("-colored");
-        bus.$on('themeChanged', function() {
-            this.coloredToolbars = this.$store.state.theme.endsWith("-colored");
-        }.bind(this));
 
         if (!IS_MOBILE) {
             bindKey(LMS_UI_SETTINGS_KEYBOARD, 'mod');
@@ -857,6 +852,9 @@ Vue.component('lms-toolbar', {
         },
         downloadCount() {
             return this.$store.state.downloadStatus.length
+        },
+        coloredToolbars() {
+            return this.$store.state.coloredToolbars
         }
     },
     filters: {

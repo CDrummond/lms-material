@@ -23,6 +23,7 @@ function updateUiSettings(state, val) {
         state.theme = val.theme;
         setLocalStorageVal('theme', state.theme);
         themeChanged = true;
+        state.coloredToolbars = state.theme.endsWith("-colored");
     }
     if (undefined!=val.color && state.color!=val.color) {
         state.color = val.color;
@@ -311,7 +312,8 @@ const store = new Vuex.Store({
         mediaControls: false,
         downloadStatus: [],
         updateNotif: {msg:undefined, title:undefined},
-        notifications: []
+        notifications: [],
+        coloredToolbars: false
     },
     mutations: {
         updatePlayer(state, player) {
@@ -493,6 +495,7 @@ const store = new Vuex.Store({
             state.defaultPlayer = getLocalStorageVal('defaultPlayer', state.defaultPlayer);
             state.page = getLocalStorageVal('page', state.page);
             state.theme = getLocalStorageVal('theme', state.theme);
+            state.coloredToolbars = state.theme.endsWith("-colored");
             state.darkUi = !state.theme.startsWith('light') && state.theme.indexOf("/light/")<0;
             state.color = getLocalStorageVal('color', state.color);
             var larger = getLocalStorageBool('largerElements', getLocalStorageBool('largeFonts', undefined));

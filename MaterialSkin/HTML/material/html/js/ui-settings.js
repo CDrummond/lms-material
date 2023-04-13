@@ -433,7 +433,7 @@ Vue.component('lms-ui-settings', {
             return this.$store.state.player
         },
         usingColoredToolbars() {
-            return this.$store.state.theme.endsWith("-colored");
+            return this.$store.state.coloredToolbars
         }
     },
     mounted() {

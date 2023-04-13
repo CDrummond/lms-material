@@ -446,8 +446,7 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
                  disablePrev:true,
                  disableNext:true,
                  dstm:false,
-                 infoZoom:10,
-                 coloredToolbars: false
+                 infoZoom:10
                 };
     },
     mounted() {
@@ -621,10 +620,6 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
                 }
             }.bind(this));
         }
-        this.coloredToolbars = this.$store.state.theme.endsWith("-colored");
-        bus.$on('themeChanged', function() {
-            this.coloredToolbars = this.$store.state.theme.endsWith("-colored");
-        }.bind(this));
     },
     methods: {
         initItems() {
@@ -1228,6 +1223,9 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
         },
         drawInfoBgndImage() {
             return this.$store.state.infoBackdrop && undefined!=this.coverUrl && LMS_BLANK_COVER!=this.coverUrl
+        },
+        coloredToolbars() {
+            return this.$store.state.coloredToolbars
         }
     },
     beforeDestroy() {

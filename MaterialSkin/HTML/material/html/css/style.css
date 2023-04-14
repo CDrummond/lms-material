@@ -222,7 +222,6 @@ a {
 }
 
 .about-header {
- font-weight:var(--bold-weight);
  padding-bottom:0px;
 }
 
@@ -1532,7 +1531,6 @@ progress {
 }
 
 .pmgr-title {
- font-weight:var(--bold-weight);
  width:100%;
  margin-bottom:4px;
 }
@@ -1815,7 +1813,7 @@ div.v-subheader {
  font-size:var(--std-font-size) !important;
 }
 
-.dialog-section-header, .item-info-header {
+.dialog-section-header, .item-info-header, .about-header, .pmgr-title {
  font-size:var(--std-font-size) !important;
  font-weight:var(--bold-weight) !important;
 }

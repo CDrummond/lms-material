@@ -454,30 +454,30 @@ Vue.component('lms-toolbar', {
             TB_APP_QUIT.title=i18n('Quit');
             TB_START_PLAYER.title=i18n('Start player');
             if (queryParams.party) {
-		// I'm breaking the construction of the menu items into individual items so I can optionall NOT add the "hidden" entries. - AJF
-		this.menuItems = [TB_APP_SETTINGS];
-		if (!lmsOptions.hideToolbarMenuUI) { this.menuItems.push(TB_UI_SETTINGS) };				
-		this.menuItems.push(DIVIDER);
-		if (!lmsOptions.hideToolbarMenuInfo) { this.menuItems.push(TB_INFO) };
-		if (!lmsOptions.hideToolbarMenuHelp) { this.menuItems.push(TB_HELP) };
+				// I'm breaking the construction of the menu items into individual items so I can optionall NOT add the "hidden" entries. - AJF
+				this.menuItems = [TB_APP_SETTINGS];
+				if (!lmsOptions.hideToolbarMenuUI) { this.menuItems.push(TB_UI_SETTINGS) };				
+				this.menuItems.push(DIVIDER);
+				if (!lmsOptions.hideToolbarMenuInfo) { this.menuItems.push(TB_INFO) };
+				if (!lmsOptions.hideToolbarMenuHelp) { this.menuItems.push(TB_HELP) };
 				
             } else {
-		// I'm breaking the construction of the menu items into individual items so I can optionall NOT add the "hidden" entries. - AJF
-		this.menuItems = [TB_SETTINGS, TB_APP_SETTINGS];
-		if (!lmsOptions.hideToolbarMenuUI) { this.menuItems.push(TB_UI_SETTINGS) };				
-		if (!lmsOptions.hideToolbarMenuPlayer) { this.menuItems.push(TB_PLAYER_SETTINGS) };				
-		if (!lmsOptions.hideToolbarMenuServer) { this.menuItems.push(TB_SERVER_SETTINGS) };				
-		this.menuItems.push(TB_CUSTOM_SETTINGS_ACTIONS);
-		this.menuItems.push(DIVIDER);
+				// I'm breaking the construction of the menu items into individual items so I can optionall NOT add the "hidden" entries. - AJF
+				this.menuItems = [TB_SETTINGS, TB_APP_SETTINGS];
+				if (!lmsOptions.hideToolbarMenuUI) { this.menuItems.push(TB_UI_SETTINGS) };				
+				if (!lmsOptions.hideToolbarMenuPlayer) { this.menuItems.push(TB_PLAYER_SETTINGS) };				
+				if (!lmsOptions.hideToolbarMenuServer) { this.menuItems.push(TB_SERVER_SETTINGS) };				
+				this.menuItems.push(TB_CUSTOM_SETTINGS_ACTIONS);
+				this.menuItems.push(DIVIDER);
 				
                 if (queryParams.appLaunchPlayer) {
                     this.menuItems.push(TB_START_PLAYER);
                 }
                 // I'm breaking the construction of the menu items into individual items so I can optionall NOT add the "hidden" entries. - AJF
-		if (!lmsOptions.hideToolbarMenuInfo) { this.menuItems.push(TB_INFO) };
-		if (!lmsOptions.hideToolbarMenuHelp) { this.menuItems.push(TB_HELP) };
-		if (!lmsOptions.hideToolbarMenuNotify) { this.menuItems.push(TB_NOTIFICATIONS) };
-		this.menuItems.push(TB_CUSTOM_ACTIONS);
+				if (!lmsOptions.hideToolbarMenuInfo) { this.menuItems.push(TB_INFO) };
+				if (!lmsOptions.hideToolbarMenuHelp) { this.menuItems.push(TB_HELP) };
+				if (!lmsOptions.hideToolbarMenuNotify) { this.menuItems.push(TB_NOTIFICATIONS) };
+				this.menuItems.push(TB_CUSTOM_ACTIONS);
             }
             if (queryParams.appQuit) {
                 this.menuItems.push(DIVIDER);
@@ -768,6 +768,15 @@ Vue.component('lms-toolbar', {
                 bus.$emit('playerCommand', ["mixer", "volume", this.playerVolume]);
             }.bind(this), LMS_VOLUME_DEBOUNCE);
         },
+		
+	// Added 2023-04-14 for sliderVolumeInstant - AJF
+        SendVolumeNow() {
+            if (queryParams.party) {
+                return;
+            }
+            bus.$emit('playerCommand', ["mixer", "volume", this.playerVolume]);
+        },
+		
         controlClock() {
             if (this.$store.state.nowPlayingClock) {
                 if (undefined==this.clockTimer) {
@@ -881,7 +890,7 @@ Vue.component('lms-toolbar', {
         powerButton() {
             return this.$store.state.powerButton
         },
-        downloadCount() {
+		downloadCount() {
             return this.$store.state.downloadStatus.length
         }
     },
@@ -916,7 +925,12 @@ Vue.component('lms-toolbar', {
                 return;
             }
             if (!isNaN(newVal) && newVal>=0 && this.movingVolumeSlider) {
-                this.resetSendVolumeTimer();
+	        // Added 2023-04-14 for sliderVolumeInstant - AJF
+	        if (this.$store.state.volumeSliderInstant) {
+		    this.SendVolumeNow();
+	        } else {
+		    this.resetSendVolumeTimer();
+		}
             }
         },
         'showPlayerMenu': function(newVal) {

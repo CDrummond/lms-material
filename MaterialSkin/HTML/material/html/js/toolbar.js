@@ -454,13 +454,30 @@ Vue.component('lms-toolbar', {
             TB_APP_QUIT.title=i18n('Quit');
             TB_START_PLAYER.title=i18n('Start player');
             if (queryParams.party) {
-                this.menuItems = [TB_APP_SETTINGS, TB_UI_SETTINGS, DIVIDER, TB_INFO, TB_HELP];
+		// I'm breaking the construction of the menu items into individual items so I can optionall NOT add the "hidden" entries. - AJF
+		this.menuItems = [TB_APP_SETTINGS];
+		if (!lmsOptions.hideToolbarMenuUI) { this.menuItems.push(TB_UI_SETTINGS) };				
+		this.menuItems.push(DIVIDER);
+		if (!lmsOptions.hideToolbarMenuInfo) { this.menuItems.push(TB_INFO) };
+		if (!lmsOptions.hideToolbarMenuHelp) { this.menuItems.push(TB_HELP) };
+				
             } else {
-                this.menuItems = [TB_SETTINGS, TB_APP_SETTINGS, TB_UI_SETTINGS, TB_PLAYER_SETTINGS, TB_SERVER_SETTINGS, TB_CUSTOM_SETTINGS_ACTIONS, DIVIDER];
+		// I'm breaking the construction of the menu items into individual items so I can optionall NOT add the "hidden" entries. - AJF
+		this.menuItems = [TB_SETTINGS, TB_APP_SETTINGS];
+		if (!lmsOptions.hideToolbarMenuUI) { this.menuItems.push(TB_UI_SETTINGS) };				
+		if (!lmsOptions.hideToolbarMenuPlayer) { this.menuItems.push(TB_PLAYER_SETTINGS) };				
+		if (!lmsOptions.hideToolbarMenuServer) { this.menuItems.push(TB_SERVER_SETTINGS) };				
+		this.menuItems.push(TB_CUSTOM_SETTINGS_ACTIONS);
+		this.menuItems.push(DIVIDER);
+				
                 if (queryParams.appLaunchPlayer) {
                     this.menuItems.push(TB_START_PLAYER);
                 }
-                this.menuItems=this.menuItems.concat([TB_INFO, TB_HELP, TB_NOTIFICATIONS, TB_CUSTOM_ACTIONS]);
+                // I'm breaking the construction of the menu items into individual items so I can optionall NOT add the "hidden" entries. - AJF
+		if (!lmsOptions.hideToolbarMenuInfo) { this.menuItems.push(TB_INFO) };
+		if (!lmsOptions.hideToolbarMenuHelp) { this.menuItems.push(TB_HELP) };
+		if (!lmsOptions.hideToolbarMenuNotify) { this.menuItems.push(TB_NOTIFICATIONS) };
+		this.menuItems.push(TB_CUSTOM_ACTIONS);
             }
             if (queryParams.appQuit) {
                 this.menuItems.push(DIVIDER);
@@ -821,13 +838,22 @@ Vue.component('lms-toolbar', {
         menuVisible() {
             return this.$store.state.visibleMenus.size>0
         },
-        updatesAvailable() {
+        updatesAvailable() { // Attached to Toolbar Menu - Information (superceeds updatesAvailable)
+	    // When updatesAvailable this shows on the "..." menu as well as in the "Information" menu entry.
+	    // If we are hiding the Toolbar's Information menu, then we should lie and say there are no updates available because there will be no menu item for more information!
+	    if (lmsOptions.hideToolbarMenuInfo) return false; // We can't show this because they never see the Info menu!
             return this.$store.state.unlockAll && (this.$store.state.updatesAvailable.size>0 || undefined!=this.$store.state.updateNotif.msg)
         },
-        restartRequired() {
+        restartRequired() { // Attached to Toolbar Menu - Information
+	    // When restartRequired this shows on the "..." menu as well as in the "Information" menu entry.
+	    // If we are hiding the Toolbar's Information menu, then we should lie and say there no restart is required because there will be no menu item to help with this?
+	    if (lmsOptions.hideToolbarMenuInfo) return false; // We can't show this because they never see the Info menu!
             return this.$store.state.unlockAll && this.$store.state.restartRequired
         },
         notificationsAvailable() {
+	    // When notificationsAvailable this shows on the "..." menu as well as in the "Notifications" menu entry.
+	    // If we are hiding the Toolbar's Notifications menu, then we should lie and say there are no notifications because there will ne no menu item to view them!
+	    if (lmsOptions.hideToolbarMenuNotify) return false;  // We can't show this because they never see the Notification menu!
             return this.$store.state.notifications.length>0
         },
         keyboardControl() {

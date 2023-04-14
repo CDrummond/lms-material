@@ -324,6 +324,15 @@ sub _cliCommand {
         $request->addResult('commentAsDiscTitle', $prefs->get('commentAsDiscTitle'));
         $request->addResult('collapseDiscs', $prefs->get('collapseDiscs'));
         $request->addResult('showComment', $prefs->get('showComment'));
+
+	# Added hideToolbarMenuXXX entries (6 of them) - AJF
+        $request->addResult('hideToolbarMenuUI', $prefs->get('hideToolbarMenuUI'));
+	$request->addResult('hideToolbarMenuPlayer', $prefs->get('hideToolbarMenuPlayer'));
+	$request->addResult('hideToolbarMenuServer', $prefs->get('hideToolbarMenuServer'));
+	$request->addResult('hideToolbarMenuInfo', $prefs->get('hideToolbarMenuInfo'));
+	$request->addResult('hideToolbarMenuHelp', $prefs->get('hideToolbarMenuHelp'));
+	$request->addResult('hideToolbarMenuNotify', $prefs->get('hideToolbarMenuNotify'));
+
         $request->setStatusDone();
         return;
     }

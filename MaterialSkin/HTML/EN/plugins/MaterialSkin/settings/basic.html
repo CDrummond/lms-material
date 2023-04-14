@@ -117,4 +117,49 @@
         </select>
     [% END %]
 
+	
+    <!-- Added hideToolbarMenuXXX entries (6 of them) - AJF -->	
+    <hr style="opacity:0.4" class="sub-sep"/>
+    [% WRAPPER setting title="PLUGIN_MATERIAL_SKIN_HIDE_TOOLBAR_MENU_UI" desc="PLUGIN_MATERIAL_SKIN_HIDE_TOOLBAR_MENU_UI_DESC" %]
+        <select class="stdedit" name="pref_hideToolbarMenuUI" id="hideToolbarMenuUI">
+            <option [% IF NOT prefs.hideToolbarMenuUI %]selected [% END %]value="0">[% 'NO' | getstring %]</option>
+            <option [% IF prefs.hideToolbarMenuUI %]selected [% END %]value="1">[% 'YES' | getstring %]</option>
+        </select>
+    [% END %]
+	
+    [% WRAPPER setting title="PLUGIN_MATERIAL_SKIN_HIDE_TOOLBAR_MENU_PLAYER" desc="PLUGIN_MATERIAL_SKIN_HIDE_TOOLBAR_MENU_PLAYER_DESC" %]
+        <select class="stdedit" name="pref_hideToolbarMenuPlayer" id="hideToolbarMenuPlayer">
+            <option [% IF NOT prefs.hideToolbarMenuPlayer %]selected [% END %]value="0">[% 'NO' | getstring %]</option>
+            <option [% IF prefs.hideToolbarMenuPlayer %]selected [% END %]value="1">[% 'YES' | getstring %]</option>
+        </select>
+    [% END %]
+
+    [% WRAPPER setting title="PLUGIN_MATERIAL_SKIN_HIDE_TOOLBAR_MENU_SERVER" desc="PLUGIN_MATERIAL_SKIN_HIDE_TOOLBAR_MENU_SERVER_DESC" %]
+        <select class="stdedit" name="pref_hideToolbarMenuServer" id="hideToolbarMenuServer">
+            <option [% IF NOT prefs.hideToolbarMenuServer %]selected [% END %]value="0">[% 'NO' | getstring %]</option>
+            <option [% IF prefs.hideToolbarMenuServer %]selected [% END %]value="1">[% 'YES' | getstring %]</option>
+        </select>
+    [% END %]
+
+    [% WRAPPER setting title="PLUGIN_MATERIAL_SKIN_HIDE_TOOLBAR_MENU_INFO" desc="PLUGIN_MATERIAL_SKIN_HIDE_TOOLBAR_MENU_INFO_DESC" %]
+        <select class="stdedit" name="pref_hideToolbarMenuInfo" id="hideToolbarMenuInfo">
+            <option [% IF NOT prefs.hideToolbarMenuInfo %]selected [% END %]value="0">[% 'NO' | getstring %]</option>
+            <option [% IF prefs.hideToolbarMenuInfo %]selected [% END %]value="1">[% 'YES' | getstring %]</option>
+        </select>
+    [% END %]
+
+    [% WRAPPER setting title="PLUGIN_MATERIAL_SKIN_HIDE_TOOLBAR_MENU_HELP" desc="PLUGIN_MATERIAL_SKIN_HIDE_TOOLBAR_MENU_HELP_DESC" %]
+        <select class="stdedit" name="pref_hideToolbarMenuHelp" id="hideToolbarMenuHelp">
+            <option [% IF NOT prefs.hideToolbarMenuHelp %]selected [% END %]value="0">[% 'NO' | getstring %]</option>
+            <option [% IF prefs.hideToolbarMenuHelp %]selected [% END %]value="1">[% 'YES' | getstring %]</option>
+        </select>
+    [% END %]
+	
+    [% WRAPPER setting title="PLUGIN_MATERIAL_SKIN_HIDE_TOOLBAR_MENU_NOTIFY" desc="PLUGIN_MATERIAL_SKIN_HIDE_TOOLBAR_MENU_NOTIFY_DESC" %]
+        <select class="stdedit" name="pref_hideToolbarMenuNotify" id="hideToolbarMenuNotify">
+            <option [% IF NOT prefs.hideToolbarMenuNotify %]selected [% END %]value="0">[% 'NO' | getstring %]</option>
+            <option [% IF prefs.hideToolbarMenuNotify %]selected [% END %]value="1">[% 'YES' | getstring %]</option>
+        </select>
+    [% END %]
+	
 [% PROCESS settings/footer.html %]

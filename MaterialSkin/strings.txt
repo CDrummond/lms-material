@@ -336,3 +336,76 @@ PLUGIN_MATERIAL_SKIN_RELOAD_NOTE
 	EN	NOTE: If you change any of the settings below then you might need to refresh the web page for the changes to take effect.
 	FR	REMARQUE : Si vous modifiez l'un des paramètres ci-dessous, vous devrez peut-être actualiser la page Web pour que les modifications prennent effet.
 	NL	Belangrijk: Als je een van de onderstaande instellingen wijzigt, dien je mogelijk de webpagina te vernieuwen om de wijzigingen door te voeren.
+
+
+PLUGIN_MATERIAL_SKIN_HIDE_TOOLBAR_MENU_UI
+	DE	Schnittstellenmenü ausblenden
+	EN	Hide interface menu
+	FR	Masquer le menu de l'interface
+	NL	Verberg interfacemenu
+
+PLUGIN_MATERIAL_SKIN_HIDE_TOOLBAR_MENU_UI_DESC
+	DE	Schnittstelleneintrag im Symbolleisten-Einstellungsmenü ausblenden
+	EN	Hide interface entry on toolbar settings menu
+	FR	Masquer l'entrée d'interface dans le menu des paramètres de la barre d'outils
+	NL	Verberg interface-invoer in het instellingenmenu van de werkbalk
+
+PLUGIN_MATERIAL_SKIN_HIDE_TOOLBAR_MENU_PLAYER
+	DE	Spielermenü ausblenden
+	EN	Hide player menu
+	FR	Masquer le menu du lecteur
+	NL	Spelermenu verbergen
+
+PLUGIN_MATERIAL_SKIN_HIDE_TOOLBAR_MENU_PLAYER_DESC
+	DE	Player-Eintrag im Symbolleisten-Einstellungsmenü ausblenden
+	EN	Hide player entry on toolbar settings menu
+	FR	Masquer l'entrée du lecteur dans le menu des paramètres de la barre d'outils
+	NL	Verberg spelersinvoer in het instellingenmenu van de werkbalk
+
+PLUGIN_MATERIAL_SKIN_HIDE_TOOLBAR_MENU_SERVER
+	DE	Servermenü ausblenden
+	EN	Hide server menu
+	FR	Masquer le menu du serveur
+	NL	Verberg servermenu
+
+PLUGIN_MATERIAL_SKIN_HIDE_TOOLBAR_MENU_SERVER_DESC
+	DE	Servereintrag im Einstellungsmenü der Symbolleiste ausblenden
+	EN	Hide server entry on toolbar settings menu
+	FR	Masquer l'entrée du serveur dans le menu des paramètres de la barre d'outils
+	NL	Verberg serverinvoer in het instellingenmenu van de werkbalk
+
+PLUGIN_MATERIAL_SKIN_HIDE_TOOLBAR_MENU_INFO
+	DE	Informationsmenü ausblenden
+	EN	Hide information menu
+	FR	Masquer le menu des informations
+	NL	Informatiemenu verbergen
+
+PLUGIN_MATERIAL_SKIN_HIDE_TOOLBAR_MENU_INFO_DESC
+	DE	Informationseintrag im Symbolleisten-Einstellungsmenü ausblenden und verfügbares Update ausblenden und erforderliche Benachrichtigungen neu starten
+	EN	Hide information entry on toolbar settings menu and hide update available and restart required notifications
+	FR	Masquer l'entrée d'informations dans le menu des paramètres de la barre d'outils et masquer la mise à jour disponible et redémarrer les notifications requises
+	NL	Verberg informatie-invoer in het instellingenmenu van de werkbalk en verberg beschikbare updates en herstart vereiste meldingen
+
+PLUGIN_MATERIAL_SKIN_HIDE_TOOLBAR_MENU_HELP
+	DE	Hilfemenü ausblenden
+	EN	Hide help menu
+	FR	Masquer le menu d'aide
+	NL	Help-menu verbergen
+
+PLUGIN_MATERIAL_SKIN_HIDE_TOOLBAR_MENU_HELP_DESC
+	DE	Hilfeeintrag im Symbolleisten-Einstellungsmenü ausblenden
+	EN	Hide help entry on toolbar settings menu
+	FR	Masquer l'entrée d'aide dans le menu des paramètres de la barre d'outils
+	NL	Help-invoer verbergen in het instellingenmenu van de werkbalk
+
+PLUGIN_MATERIAL_SKIN_HIDE_TOOLBAR_MENU_NOTIFY
+	DE	Benachrichtigungsmenü ausblenden
+	EN	Hide notification menu
+	FR	Masquer le menu des notifications
+	NL	Meldingsmenu verbergen
+
+PLUGIN_MATERIAL_SKIN_HIDE_TOOLBAR_MENU_NOTIFY_DESC
+	DE	Benachrichtigungseintrag im Einstellungsmenü der Symbolleiste ausblenden und Benachrichtigungsverfügbarkeit ausblenden
+	EN	Hide notifications entry on toolbar settings menu and hide notification availability
+	FR	Masquer l'entrée des notifications dans le menu des paramètres de la barre d'outils et masquer la disponibilité des notifications
+	NL	Verberg meldingen in het instellingenmenu van de werkbalk en verberg de beschikbaarheid van meldingen

@@ -23,7 +23,9 @@ sub page {
 }
 
 sub prefs {
-	return ($prefs, 'composergenres', 'conductorgenres', 'bandgenres', 'showComposer', 'showConductor', 'showBand', 'password', 'respectFixedVol', 'showAllArtists', 'artistFirst', 'allowDownload', 'manifestDisplay', 'commentAsDiscTitle', 'collapseDiscs', 'showComment');
+	return ($prefs, 'composergenres', 'conductorgenres', 'bandgenres', 'showComposer', 'showConductor', 'showBand', 'password', 'respectFixedVol', 'showAllArtists', 'artistFirst', 'allowDownload', 'manifestDisplay', 'commentAsDiscTitle', 'collapseDiscs', 'showComment', 'hideToolbarMenuUI', 'hideToolbarMenuPlayer', 'hideToolbarMenuServer', 'hideToolbarMenuInfo', 'hideToolbarMenuHelp', 'hideToolbarMenuNotify');
+	# Added hideToolbarMenuXXX entries (6 of them) - AJF
+	
 }
 
 1;

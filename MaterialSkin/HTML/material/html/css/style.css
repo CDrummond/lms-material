@@ -2604,3 +2604,7 @@ img[lazy='loaded'].np-image-desktop, img[lazy='loaded'].np-image-landscape, img[
 .theme--dark .v-overlay:before {
  background-color:black!important;
 }
+
+.v-chip {
+ border-radius:8px!important;
+}

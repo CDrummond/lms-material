@@ -2597,7 +2597,7 @@ img[lazy='loaded'].np-image-desktop, img[lazy='loaded'].np-image-landscape, img[
  border:1px solid var(--popup-border-color)!important;
 }
 
-.v-dialog .v-sheet {
+.v-dialog .v-sheet, .np-info .v-sheet {
  border:none!important;
 }
 

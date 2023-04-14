@@ -497,7 +497,7 @@ div.v-subheader {
 }
 
 .dialog-padding {
- height:24px;
+ height:32px;
 }
 
 .np-info .lms-list {
@@ -2607,4 +2607,8 @@ img[lazy='loaded'].np-image-desktop, img[lazy='loaded'].np-image-landscape, img[
 
 .v-chip {
  border-radius:8px!important;
+}
+
+.settings-list .v-list__tile {
+  padding:0px;
 }

@@ -313,7 +313,7 @@ Vue.component('lms-ui-settings', {
     </v-list-tile>
 
     <div class="dialog-padding" v-if="infoPlugin"></div>
-    <v-header v-if="infoPlugin">{{i18n('Song Information')}}</v-header>
+    <v-header class="dialog-section-header" v-if="infoPlugin">{{i18n('Song Information')}}</v-header>
 
     <v-list-tile v-if="infoPlugin">
      <v-list-tile-content @click="infoBackdrop = !infoBackdrop" class="switch-label">

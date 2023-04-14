@@ -100,7 +100,7 @@ Vue.component('lms-player-settings', {
      </v-list-tile>
      <v-divider v-if="showAlarms"></v-divider>
      <div class="settings-sub-pad" v-if="showAlarms"></div>
-     <v-subheader class="alarm-sched-header" v-if="showAlarms">{{i18n('Scheduled alarms')}}</v-subheader>
+     <v-header class="alarm-sched-header" v-if="showAlarms">{{i18n('Scheduled alarms')}}</v-header>
      <template v-for="(item, index) in alarms.scheduled" v-if="showAlarms">
       <v-list-tile class="alarm-entry">
        <v-checkbox v-model="item.enabled" :label="item | formatAlarm(twentyFourHour)" @click.stop="toggleAlarm(item)"></v-checkbox>
@@ -109,9 +109,9 @@ Vue.component('lms-player-settings', {
       </v-list-tile>
       <v-divider v-if="(index+1 < alarms.scheduled.length)" class="alarm-divider"></v-divider>
      </template>
-     <v-btn flat @click.stop="addAlarm()" class="alarm-add" v-if="showAlarms"><v-icon class="btn-icon">alarm_add</v-icon>{{i18n("Add alarm")}}</v-btn>
+     <v-list-tile v-if="showAlarms"><v-btn flat @click.stop="addAlarm()" class="alarm-add"><v-icon class="btn-icon">alarm_add</v-icon>{{i18n("Add alarm")}}</v-btn></v-list-tile>
      <div class="settings-sub-pad" v-if="showAlarms"></div>
-     <v-subheader v-if="showAlarms">{{i18n('Alarm settings')}}</v-subheader>
+     <v-header v-if="showAlarms">{{i18n('Alarm settings')}}</v-header>
      <v-list-tile v-if="showAlarms">
       <v-text-field :label="i18n('Volume (%)')" v-model="alarms.volume" type="number"></v-text-field>
      </v-list-tile>

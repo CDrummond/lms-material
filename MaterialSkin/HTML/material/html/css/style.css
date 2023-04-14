@@ -37,7 +37,7 @@
 
 .theme--dark {
  --list-hover-color:rgba(255, 255, 255, 0.04)!important;
-/*  --list-active-color:rgba(255, 255, 255, 0.08)!important; */
+ --list-active-color:rgba(255, 255, 255, 0.08)!important;
  --border-color:rgba(237, 236, 231, 0.25);
  --tab-border-color:rgba(237, 236, 231, 0.1);
 }

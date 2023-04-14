@@ -3,6 +3,7 @@
 1. Material-3 like bottom navigation bar for mobile layout.
 2. Material-3 like switches.
 3. More rounded dialogs.
+4. Remove shadows from dialogs, volume popup, and menus.
 
 3.2.4
 -----

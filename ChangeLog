@@ -7,6 +7,7 @@
    support 'genre_id' filter.
 4. Change dimensions on which now-playing landscape layout changes (again).
 5. Fix button order in alarm dialog if usin Windows OK/Cancel layout.
+6. Display all genres in now-playing track info.
 
 3.2.3
 -----

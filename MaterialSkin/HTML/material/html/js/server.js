@@ -7,7 +7,7 @@
 'use strict';
 
 //const PLAYER_STATUS_TAGS = "tags:cdegiloqrstuyAABEIKNST";
-const PLAYER_STATUS_TAGS = "tags:cdegiloqrstuyAABIKNST";
+const PLAYER_STATUS_TAGS = "tags:cdegiloqrstuyAABGIKNST";
 const STATUS_UPDATE_MAX_TIME = 4000;
 
 function updateMskLinks(str) {

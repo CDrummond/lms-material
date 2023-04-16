@@ -158,6 +158,9 @@ function nowplayingOnPlayerStatus(view, playerStatus) {
     if (playerStatus.current.genre!=view.playerStatus.current.genre) {
         view.playerStatus.current.genre = playerStatus.current.genre;
     }
+    if (playerStatus.current.genres!=view.playerStatus.current.genres) {
+        view.playerStatus.current.genres = playerStatus.current.genres;
+    }
     if (artistAndComposer!=view.playerStatus.current.artistAndComposer) {
         view.playerStatus.current.artistAndComposer = artistAndComposer;
     }
@@ -491,7 +494,13 @@ function nowplayingFetchTrackInfo(view) {
     if (undefined!=trk.year && trk.year>0) {
         html+="<tr><td>"+i18n("Year")+"&nbsp;</td><td><obj class=\"link-item\" onclick=\"nowplayingBrowse('year', "+trk.year+")\">"+trk.year+"</obj></td></tr>";
     }
-    if (undefined!=trk.genre) {
+    if (undefined!=trk.genres) {
+        let genres = [];
+        for (let i=0, list = trk.genres.split(", "), len=list.length; i<len; ++i) {
+            genres.push("<obj class=\"link-item\" onclick=\"nowplayingBrowse('genre', '-',\'"+escape(list[i])+"\')\">"+list[i]+"</obj>");
+        }
+        html+="<tr><td>"+i18n("Genre")+"&nbsp;</td><td>" + genres.join(", ") + "</td></tr>";
+    } else if (undefined!=trk.genre) {
         html+="<tr><td>"+i18n("Genre")+"&nbsp;</td><td><obj class=\"link-item\" onclick=\"nowplayingBrowse('genre', "+trk.genre_id+",\'"+escape(trk.genre)+"\')\">"+trk.genre+"</obj></td></tr>";
     }
 

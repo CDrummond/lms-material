@@ -6,7 +6,7 @@
    'My Music / Genres / <genre> / Years'. Because 'years' command does not
    support 'genre_id' filter.
 4. Change dimensions on which now-playing landscape layout changes (again).
-5. Fix button order in alarm dialog if usin Windows OK/Cancel layout.
+5. Fix button order in alarm dialog if using Windows OK/Cancel layout.
 6. Display all genres in now-playing track info.
 7. If set to control a single player then always show volume dialog for player
    even if player is part of sync group.

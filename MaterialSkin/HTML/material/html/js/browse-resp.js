@@ -284,7 +284,7 @@ function parseBrowseResp(data, parent, options, cacheKey, parentCommand, parentG
                         } else {
                             mapIcon(i);
                         }
-                        if (STREAM_SCHEMAS.has(i.presetParams.favorites_url.split(":")[0])) {
+                        if (STREAM_SCHEMAS.has(i.presetParams.favorites_url.split(":")[0]) && !queryParams.party && !LMS_KIOSK_MODE) {
                             i.isRadio = true;
                             if (!addedDivider && i.menu.length>0) {
                                 i.menu.push(DIVIDER);
@@ -298,18 +298,18 @@ function parseBrowseResp(data, parent, options, cacheKey, parentCommand, parentG
                     } else {
                         mapIcon(i);
                     }
-                } else if (i.presetParams) {
+                } else if (i.presetParams && !queryParams.party && !LMS_KIOSK_MODE) {
                     if (i.menu.length>0) {
                         i.menu.push(DIVIDER);
                         addedDivider = true;
                     }
                     i.menu.push(ADD_TO_FAV_ACTION);
-                } else if (isDynamicPlaylist && i.params && i.params.playlistid && addedPlayAction) {
+                } else if (isDynamicPlaylist && i.params && i.params.playlistid && addedPlayAction && !queryParams.party && !LMS_KIOSK_MODE) {
                     i.presetParams = {favorites_url: "dynamicplaylist://"+i.params.playlistid};
                     i.menu.push(ADD_TO_FAV_ACTION);
                 }
 
-                if (isPlaylists && i.type=="playlist") {
+                if (isPlaylists && i.type=="playlist" && !queryParams.party && !LMS_KIOSK_MODE) {
                     if (!addedDivider && i.menu.length>0) {
                         i.menu.push(DIVIDER);
                         addedDivider = true;
@@ -363,11 +363,13 @@ function parseBrowseResp(data, parent, options, cacheKey, parentCommand, parentG
                         if (queryParams.party && (HIDE_APPS_FOR_PARTY.has(i.id) || (i.id.startsWith("myapps") && HIDE_APP_NAMES_FOR_PARTY.has(i.title)))) {
                             continue;
                         }
-                        if (!addedDivider && i.menu.length>0) {
-                            i.menu.push(DIVIDER);
-                            addedDivider = true;
+                        if (!queryParams.party && !LMS_KIOSK_MODE) {
+                            if (!addedDivider && i.menu.length>0) {
+                                i.menu.push(DIVIDER);
+                                addedDivider = true;
+                            }
+                            i.menu.push(options.pinned.has(i.id) ? UNPIN_ACTION : PIN_ACTION);
                         }
-                        i.menu.push(options.pinned.has(i.id) ? UNPIN_ACTION : PIN_ACTION);
                     }
                     mapIcon(i, command);
                 } else if (isPlaylists && i.commonParams && i.commonParams.playlist_id) {
@@ -387,17 +389,19 @@ function parseBrowseResp(data, parent, options, cacheKey, parentCommand, parentG
                                 i.id = "radio:"+i.title;
                             }
                         }
-                        if (i.menu.length>0 && i.menu[0]==PLAY_ACTION && (i.icon || i.image) && i.type!="entry" && i.presetParams && i.presetParams.favorites_url) {
-                            // Only allow to pin if we can play!
-                            if (!addedDivider && i.menu.length>0) {
-                                i.menu.push(DIVIDER);
-                                addedDivider = true;
+                        if (!queryParams.party && !LMS_KIOSK_MODE) {
+                            if (i.menu.length>0 && i.menu[0]==PLAY_ACTION && (i.icon || i.image) && i.type!="entry" && i.presetParams && i.presetParams.favorites_url) {
+                                // Only allow to pin if we can play!
+                                if (!addedDivider && i.menu.length>0) {
+                                    i.menu.push(DIVIDER);
+                                    addedDivider = true;
+                                }
+                                i.isRadio = true;
+                                i.menu.push(options.pinned.has(i.presetParams.favorites_url) ? UNPIN_ACTION : PIN_ACTION);
+                            } else if (data.params[1][0]=='radios' && i.type!='entry' && i.actions && i.actions.go && i.actions.go.params && i.actions.go.params.menu) {
+                                i.id = 'radio:'+i.actions.go.params.menu;
+                                i.menu.push(options.pinned.has(i.id) ? UNPIN_ACTION : PIN_ACTION);
                             }
-                            i.isRadio = true;
-                            i.menu.push(options.pinned.has(i.presetParams.favorites_url) ? UNPIN_ACTION : PIN_ACTION);
-                        } else if (data.params[1][0]=='radios' && i.type!='entry' && i.actions && i.actions.go && i.actions.go.params && i.actions.go.params.menu) {
-                            i.id = 'radio:'+i.actions.go.params.menu;
-                            i.menu.push(options.pinned.has(i.id) ? UNPIN_ACTION : PIN_ACTION);
                         }
                     }
                     if (isRadiosTop && i['icon-id']) {
@@ -1213,7 +1217,9 @@ function parseBrowseResp(data, parent, options, cacheKey, parentCommand, parentG
                 i.type="extra";
                 mapIcon(i, 'lms-extras', {icon:"extension", svg:undefined});
                 i.id="extras:"+i.id;
-                i.menu=[options.pinned.has(i.id) ? UNPIN_ACTION : PIN_ACTION];
+                if (!queryParams.party && !LMS_KIOSK_MODE) {
+                    i.menu=[options.pinned.has(i.id) ? UNPIN_ACTION : PIN_ACTION];
+                }
                 resp.items.push(i);
             }
             resp.items.sort(titleSort);

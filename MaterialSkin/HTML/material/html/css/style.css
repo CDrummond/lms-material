@@ -2597,6 +2597,10 @@ img[lazy='loaded'].np-image-desktop, img[lazy='loaded'].np-image-landscape, img[
  border:none!important;
 }
 
+.np-info .v-sheet {
+ background-color:unset!important;
+}
+
 .theme--dark .v-overlay:before {
  background-color:black!important;
 }

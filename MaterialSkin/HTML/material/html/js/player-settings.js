@@ -186,60 +186,62 @@ Vue.component('lms-player-settings', {
  <v-dialog v-model="alarmDialog.show" width="500" persistent>
   <v-card>
   <v-card-title>{{alarmDialog.id ? i18n("Edit alarm") : i18n("Add alarm")}}</v-card-title>
-  <v-list two-line subheader class="settings-list dialog-main-list">
-   <v-list-tile class="settings-compact-row">
-    <v-dialog ref="dialog" :close-on-content-click="false" v-model="alarmDialog.timepicker" :return-value.sync="alarmDialog.time"
-              persistent lazy full-width max-width="290px">
-     <v-text-field slot="activator" v-model="formattedTime" :label="i18n('Start time')" prepend-icon="access_time" readonly></v-text-field>
-     <v-time-picker v-if="alarmDialog.timepicker" v-model="alarmDialog.time" full-width :format="twentyFourHour?'24hr':'ampm'">
-      <v-spacer></v-spacer>
-      <v-btn flat v-if="!queryParams.altBtnLayout" @click="alarmDialog.timepicker = false">{{i18n('Cancel')}}</v-btn>
-      <v-btn flat @click="$refs.dialog.save(alarmDialog.time)">{{i18n('OK')}}</v-btn>
-      <v-btn flat v-if="queryParams.altBtnLayout" @click="alarmDialog.timepicker = false">{{i18n('Cancel')}}</v-btn>
-     </v-time-picker>
-    </v-dialog>
-   </v-list-tile>
-   <div class="dialog-padding"></div>
-   <v-subheader>{{i18n('Days')}}</v-subheader>
-   <v-list-tile class="settings-compact-row" v-if="wide>0">
-    <v-flex xs6><v-checkbox class="ellipsis" v-model="alarmDialog.dow" :label="i18n('Monday')" value="1"></v-checkbox></v-flex>
-    <v-flex xs6><v-checkbox class="ellipsis" v-model="alarmDialog.dow" :label="i18n('Tuesday')" value="2"></v-checkbox></v-flex>
-   </v-list-tile>
-   <v-list-tile class="settings-compact-row" v-if="wide>0">
-    <v-flex xs6><v-checkbox class="ellipsis" v-model="alarmDialog.dow" :label="i18n('Wednesday')" value="3"></v-checkbox></v-flex>
-    <v-flex xs6><v-checkbox class="ellipsis" v-model="alarmDialog.dow" :label="i18n('Thursday')" value="4"></v-checkbox></v-flex>
-   </v-list-tile>
-   <v-list-tile class="settings-compact-row"><v-checkbox class="ellipsis" v-model="alarmDialog.dow" :label="i18n('Friday')" value="5"></v-checkbox></v-list-tile>
-   <v-list-tile class="settings-compact-row" v-if="wide>0">
-    <v-flex xs6><v-checkbox class="ellipsis" v-model="alarmDialog.dow" :label="i18n('Saturday')" value="6"></v-checkbox></v-flex>
-    <v-flex xs6><v-checkbox class="ellipsis" v-model="alarmDialog.dow" :label="i18n('Sunday')" value="0"></v-checkbox></v-flex>
-   </v-list-tile>
-   <v-list-tile class="settings-compact-row" v-if="wide==0"><v-checkbox class="ellipsis" v-model="alarmDialog.dow" :label="i18n('Monday')" value="1"></v-checkbox></v-list-tile>
-   <v-list-tile class="settings-compact-row" v-if="wide==0"><v-checkbox class="ellipsis" v-model="alarmDialog.dow" :label="i18n('Tuesday')" value="2"></v-checkbox></v-list-tile>
-   <v-list-tile class="settings-compact-row" v-if="wide==0"><v-checkbox class="ellipsis" v-model="alarmDialog.dow" :label="i18n('Wednesday')" value="3"></v-checkbox></v-list-tile>
-   <v-list-tile class="settings-compact-row" v-if="wide==0"><v-checkbox class="ellipsis" v-model="alarmDialog.dow" :label="i18n('Thursday')" value="4"></v-checkbox></v-list-tile>
-   <v-list-tile class="settings-compact-row" v-if="wide==0"><v-checkbox class="ellipsis" v-model="alarmDialog.dow" :label="i18n('Friday')" value="5"></v-checkbox></v-list-tile>
-   <v-list-tile class="settings-compact-row" v-if="wide==0"><v-checkbox class="ellipsis" v-model="alarmDialog.dow" :label="i18n('Saturday')" value="6"></v-checkbox></v-list-tile>
-   <v-list-tile class="settings-compact-row" v-if="wide==0"><v-checkbox class="ellipsis" v-model="alarmDialog.dow" :label="i18n('Sunday')" value="0"></v-checkbox></v-list-tile>
-   <div class="dialog-padding"></div>
-   <v-subheader>{{i18n('Options')}}</v-subheader>
-   <v-list-tile>
-    <v-select :items="alarmSounds" :label="i18n('Sound')" v-model="alarmDialog.url" item-text="label" item-value="key"></v-select>
-   </v-list-tile>
+  <v-container>
+   <v-list two-line subheader class="settings-list dialog-main-list">
+    <v-list-tile class="settings-compact-row">
+     <v-dialog ref="dialog" :close-on-content-click="false" v-model="alarmDialog.timepicker" :return-value.sync="alarmDialog.time"
+               persistent lazy full-width max-width="290px">
+      <v-text-field slot="activator" v-model="formattedTime" :label="i18n('Start time')" prepend-icon="access_time" readonly></v-text-field>
+      <v-time-picker v-if="alarmDialog.timepicker" v-model="alarmDialog.time" full-width :format="twentyFourHour?'24hr':'ampm'">
+       <v-spacer></v-spacer>
+       <v-btn flat v-if="!queryParams.altBtnLayout" @click="alarmDialog.timepicker = false">{{i18n('Cancel')}}</v-btn>
+       <v-btn flat @click="$refs.dialog.save(alarmDialog.time)">{{i18n('OK')}}</v-btn>
+       <v-btn flat v-if="queryParams.altBtnLayout" @click="alarmDialog.timepicker = false">{{i18n('Cancel')}}</v-btn>
+      </v-time-picker>
+     </v-dialog>
+    </v-list-tile>
+    <div class="dialog-padding"></div>
+    <v-header>{{i18n('Days')}}</v-header>
+    <v-list-tile class="settings-compact-row" v-if="wide>0">
+     <v-flex xs6><v-checkbox class="ellipsis" v-model="alarmDialog.dow" :label="i18n('Monday')" value="1"></v-checkbox></v-flex>
+     <v-flex xs6><v-checkbox class="ellipsis" v-model="alarmDialog.dow" :label="i18n('Tuesday')" value="2"></v-checkbox></v-flex>
+    </v-list-tile>
+    <v-list-tile class="settings-compact-row" v-if="wide>0">
+     <v-flex xs6><v-checkbox class="ellipsis" v-model="alarmDialog.dow" :label="i18n('Wednesday')" value="3"></v-checkbox></v-flex>
+     <v-flex xs6><v-checkbox class="ellipsis" v-model="alarmDialog.dow" :label="i18n('Thursday')" value="4"></v-checkbox></v-flex>
+    </v-list-tile>
+    <v-list-tile class="settings-compact-row"><v-checkbox class="ellipsis" v-model="alarmDialog.dow" :label="i18n('Friday')" value="5"></v-checkbox></v-list-tile>
+    <v-list-tile class="settings-compact-row" v-if="wide>0">
+     <v-flex xs6><v-checkbox class="ellipsis" v-model="alarmDialog.dow" :label="i18n('Saturday')" value="6"></v-checkbox></v-flex>
+     <v-flex xs6><v-checkbox class="ellipsis" v-model="alarmDialog.dow" :label="i18n('Sunday')" value="0"></v-checkbox></v-flex>
+    </v-list-tile>
+    <v-list-tile class="settings-compact-row" v-if="wide==0"><v-checkbox class="ellipsis" v-model="alarmDialog.dow" :label="i18n('Monday')" value="1"></v-checkbox></v-list-tile>
+    <v-list-tile class="settings-compact-row" v-if="wide==0"><v-checkbox class="ellipsis" v-model="alarmDialog.dow" :label="i18n('Tuesday')" value="2"></v-checkbox></v-list-tile>
+    <v-list-tile class="settings-compact-row" v-if="wide==0"><v-checkbox class="ellipsis" v-model="alarmDialog.dow" :label="i18n('Wednesday')" value="3"></v-checkbox></v-list-tile>
+    <v-list-tile class="settings-compact-row" v-if="wide==0"><v-checkbox class="ellipsis" v-model="alarmDialog.dow" :label="i18n('Thursday')" value="4"></v-checkbox></v-list-tile>
+    <v-list-tile class="settings-compact-row" v-if="wide==0"><v-checkbox class="ellipsis" v-model="alarmDialog.dow" :label="i18n('Friday')" value="5"></v-checkbox></v-list-tile>
+    <v-list-tile class="settings-compact-row" v-if="wide==0"><v-checkbox class="ellipsis" v-model="alarmDialog.dow" :label="i18n('Saturday')" value="6"></v-checkbox></v-list-tile>
+    <v-list-tile class="settings-compact-row" v-if="wide==0"><v-checkbox class="ellipsis" v-model="alarmDialog.dow" :label="i18n('Sunday')" value="0"></v-checkbox></v-list-tile>
+    <div class="dialog-padding"></div>
+    <v-header>{{i18n('Options')}}</v-header>
+    <v-list-tile>
+     <v-select :items="alarmSounds" :label="i18n('Sound')" v-model="alarmDialog.url" item-text="label" item-value="key"></v-select>
+    </v-list-tile>
 
-   <!-- TODO ????
-   <v-list-tile class="settings-compact-row">
-    <v-select :items="alarmShuffeItems" :label="i18n('Shuffle')" v-model="alarmDialog.shuffle" item-text="label" item-value="key"></v-select>
-   </v-list-tile>
-   -->
-   <v-list-tile>
-    <v-list-tile-content @click="alarmDialog.repeat = !alarmDialog.repeat" class="switch-label">
-     <v-list-tile-title>{{i18n('Repeat')}}</v-list-tile-title>
-     <v-list-tile-sub-title>{{i18n('Should alarms repeat')}}</v-list-tile-sub-title>
-    </v-list-tile-content>
-    <v-list-tile-action><m3-switch v-model="alarmDialog.repeat"></m3-switch></v-list-tile-action>
-   </v-list-tile>
-  </v-list>
+    <!-- TODO ????
+    <v-list-tile class="settings-compact-row">
+     <v-select :items="alarmShuffeItems" :label="i18n('Shuffle')" v-model="alarmDialog.shuffle" item-text="label" item-value="key"></v-select>
+    </v-list-tile>
+    -->
+    <v-list-tile>
+     <v-list-tile-content @click="alarmDialog.repeat = !alarmDialog.repeat" class="switch-label">
+      <v-list-tile-title>{{i18n('Repeat')}}</v-list-tile-title>
+      <v-list-tile-sub-title>{{i18n('Should alarms repeat')}}</v-list-tile-sub-title>
+     </v-list-tile-content>
+     <v-list-tile-action><m3-switch v-model="alarmDialog.repeat"></m3-switch></v-list-tile-action>
+    </v-list-tile>
+   </v-list>
+  </v-container>
   <div class="dialog-padding"></div>
   <v-card-actions v-if="queryParams.altBtnLayout">
    <v-spacer></v-spacer>

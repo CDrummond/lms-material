@@ -428,7 +428,7 @@ Vue.component('lms-player-settings', {
         },
         playerSettings(player, section) {
             bus.$emit('refreshStatus', player.id);
-            this.wide = window.innerWidth >= 700 ? 2 : window.innerWidth >= (this.$store.state.largeFonts ? 410 : 370) ? 1 : 0;
+            this.wide = window.innerWidth >= 700 ? 2 : window.innerWidth >= (this.$store.state.largeFonts ? 400 : 350) ? 1 : 0;
             this.cancelSleepTimer();
             this.dstmItems=[];
             this.crossfade='0';

@@ -187,7 +187,7 @@ Vue.component('lms-manage-players', {
   <v-list>
    <template v-for="(action, index) in menu.actions">
     <v-divider v-if="DIVIDER===action"></v-divider>
-    <v-list-tile v-else-if="PMGR_SYNC_ACTION!=action || multipleStandardPlayers" @click="playerAction(menu.player, action.cmd)">
+    <v-list-tile v-else-if="!((LMS_KIOSK_MODE && PMGR_SETTINGS_ACTION==action) || (PMGR_SYNC_ACTION==action && !multipleStandardPlayers))" @click="playerAction(menu.player, action.cmd)">
      <v-list-tile-avatar><v-icon v-if="action.icon" v-bind:class="{'dimmed': action.dimmed, 'active-btn': action.active}">{{action.icon}}</v-icon><img v-else-if="action.svg" class="svg-img" :src="action.svg | svgIcon(darkUi)"></img></v-list-tile-avatar>
      <v-list-tile-title>{{action.title}}</v-list-tile-title>
     </v-list-tile>
@@ -352,7 +352,7 @@ Vue.component('lms-manage-players', {
             this.menu.y=event.clientY;
             this.menu.player=player;
 
-            if (!queryParams.hide.has('defplayer')) {
+            if (!queryParams.hide.has('defplayer') && !LMS_KIOSK_MODE) {
                 this.menu.actions.push(DIVIDER);
                 this.menu.actions.push(player.id == this.$store.state.defaultPlayer ? PMGR_UNSET_DEF_PLAYER_ACTION : PMGR_SET_DEF_PLAYER_ACTION);
             }

@@ -430,7 +430,7 @@ var lmsServer = Vue.component('lms-server', {
                     }
                 }
             }
-            if (!queryParams.single) {
+            if (!queryParams.single && !LMS_KIOSK_MODE) {
                 if (data.other_players_loop) {
                     for (var idx=0, len=data.other_players_loop.length; idx<len; ++idx) {
                         var i = data.other_players_loop[idx];
@@ -846,7 +846,7 @@ var lmsServer = Vue.component('lms-server', {
             }
         },
         checkPluginUpdates() {
-            if (!this.$store.state.unlockAll) {
+            if (!this.$store.state.unlockAll || LMS_KIOSK_MODE) {
                 return;
             }
             axios.get(location.protocol+'//'+location.hostname+(location.port ? ':'+location.port : '')+"/updateinfo.json?s=time"+(new Date().getTime())).then((resp) => {

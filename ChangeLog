@@ -5,6 +5,8 @@
 3. More rounded dialogs.
 4. Remove shadows from dialogs, volume popup, and menus.
 5. Less rounded chips.
+4. Add 'Kiosk' mode; hide all main menu items (except custom actions), prevent
+   adding/editing favourites or playlists.
 
 3.2.4
 -----

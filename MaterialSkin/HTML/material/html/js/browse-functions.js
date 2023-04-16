@@ -141,7 +141,7 @@ function browseActions(view, item, args, count) {
                                    params:[]},
                               weight:100});
             }
-            if (undefined!=args['path'] && args['path'].length>0) {
+            if (undefined!=args['path'] && args['path'].length>0 && !queryParams.party && !LMS_KIOSK_MODE) {
                 actions.push({localfiles:true, title:i18n('Local files'), icon:'insert_drive_file', do:{ command:['musicartistinfo', 'localfiles', 'folder:'+args['path']], params:[]}, weight:102});
             }
         }
@@ -384,10 +384,10 @@ function browseHandleListResponse(view, item, command, resp, prevPage) {
                                               weight:110, svg:emblem ? emblem.name : undefined, id:loop[i], isService:true,
                                               artist_id:artist_id});
                 }
-            } else if (undefined!=view.$store.state.ratingsPlugin && view.items.length>1) {
+            } else if (undefined!=view.$store.state.ratingsPlugin && view.items.length>1 && !queryParams.party && !LMS_KIOSK_MODE) {
                 view.currentActions.push({albumRating:true, title:i18n("Set rating for all tracks"), icon:"stars", weight:101});
             }
-            if (undefined!=actParams['path'] && actParams['path'].length>0) {
+            if (undefined!=actParams['path'] && actParams['path'].length>0 && !queryParams.party && !LMS_KIOSK_MODE) {
                 // Check we have some localfiles, if not hide entry!
                 lmsCommand('', ['musicartistinfo', 'localfiles', 'folder:'+actParams['path']]).then(({data}) => {
                     if (!data || !data.result || !data.result.item_loop) {

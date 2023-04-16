@@ -117,7 +117,8 @@
   my $windowTitle=Plugins::MaterialSkin::Plugin->windowTitle();
   my $hideSettings=Plugins::MaterialSkin::Plugin->hideSettings();
   my $statsEnabled=main::STATISTICS();
-  print("<script>const LMS_MATERIAL_REVISION=\"$version\"; const LMS_VERSION=$lmsVersion; const LMS_WINDOW_TITLE=\"$windowTitle\"; const LMS_SETTINGS_HIDE=\"$hideSettings\";const LMS_STATS_ENABLED=$statsEnabled;</script>\n");
+  my $kioskMode=Plugins::MaterialSkin::Plugin->kioskMode();
+  print("<script>const LMS_MATERIAL_REVISION=\"$version\"; const LMS_VERSION=$lmsVersion; const LMS_WINDOW_TITLE=\"$windowTitle\"; const LMS_SETTINGS_HIDE=\"$hideSettings\";const LMS_STATS_ENABLED=$statsEnabled;const  LMS_KIOSK_MODE=$kioskMode</script>\n");
   [% END %]
   <!--JS start-->
   <script src="html/lib/axios.min.js?r=0.19.2"></script>

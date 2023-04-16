@@ -208,6 +208,14 @@ sub hideSettings {
     return $hide;
 }
 
+sub kioskMode {
+    my $mode = $prefs->get('kioskMode');
+    if (!$mode || $mode eq '') {
+        return 0;
+    }
+    return int($mode);
+}
+
 sub initCLI {
     #                                                                      |requires Client
     #                                                                      |  |is a Query

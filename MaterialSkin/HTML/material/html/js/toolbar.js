@@ -131,7 +131,6 @@ Vue.component('lms-toolbar', {
       <v-list-tile-sub-title v-else-if="TB_INFO.id==item.id && restartRequired">{{trans.restartRequired}}</v-list-tile-sub-title>
      </v-list-tile-content>
      <v-list-tile-action v-if="item.shortcut && keyboardControl" class="menu-shortcut">{{item.shortcut}}</v-list-tile-action>
-     <v-list-tile-action v-else-if="TB_SETTINGS.id==item.id && useSettingsMenu" class="menu-subind"><v-icon>chevron_right</v-icon></v-list-tile-action>
     </v-list-tile>
     <v-list-tile :href="queryParams.appSettings" v-else-if="TB_APP_SETTINGS.id==item.id && undefined!=queryParams.appSettings">
      <v-list-tile-avatar><img class="svg-img" :src="TB_APP_SETTINGS.svg | svgIcon(darkUi)"></img></v-list-tile-avatar>
@@ -373,7 +372,7 @@ Vue.component('lms-toolbar', {
         this.customActions = getCustomActions(undefined, this.$store.state.unlockAll);
         this.customSettingsActions = getCustomActions("settings", this.$store.state.unlockAll);
 
-        if (!IS_MOBILE) {
+        if (!IS_MOBILE && !LMS_KIOSK_MODE) {
             bindKey(LMS_UI_SETTINGS_KEYBOARD, 'mod');
             bindKey(LMS_PLAYER_SETTINGS_KEYBOARD, 'mod');
             bindKey(LMS_SERVER_SETTINGS_KEYBOARD, 'mod');
@@ -448,18 +447,24 @@ Vue.component('lms-toolbar', {
             TB_APP_SETTINGS.stitle=i18n('Application');
             TB_APP_QUIT.title=i18n('Quit');
             TB_START_PLAYER.title=i18n('Start player');
-            if (queryParams.party) {
-                this.menuItems = [TB_APP_SETTINGS, TB_UI_SETTINGS, DIVIDER, TB_INFO, TB_HELP];
+            if (LMS_KIOSK_MODE) {
+                this.menuItems = LMS_KIOSK_MODE==2
+                                   ? [TB_SETTINGS, TB_CUSTOM_SETTINGS_ACTIONS, DIVIDER, TB_CUSTOM_ACTIONS]
+                                   : [TB_CUSTOM_SETTINGS_ACTIONS, TB_CUSTOM_ACTIONS]
             } else {
-                this.menuItems = [TB_SETTINGS, TB_APP_SETTINGS, TB_UI_SETTINGS, TB_PLAYER_SETTINGS, TB_SERVER_SETTINGS, TB_CUSTOM_SETTINGS_ACTIONS, DIVIDER];
-                if (queryParams.appLaunchPlayer) {
-                    this.menuItems.push(TB_START_PLAYER);
+                if (queryParams.party) {
+                    this.menuItems = [TB_APP_SETTINGS, TB_UI_SETTINGS, DIVIDER, TB_INFO, TB_HELP];
+                } else {
+                    this.menuItems = [TB_SETTINGS, TB_APP_SETTINGS, TB_UI_SETTINGS, TB_PLAYER_SETTINGS, TB_SERVER_SETTINGS, TB_CUSTOM_SETTINGS_ACTIONS, DIVIDER];
+                    if (queryParams.appLaunchPlayer) {
+                        this.menuItems.push(TB_START_PLAYER);
+                    }
+                    this.menuItems=this.menuItems.concat([TB_INFO, TB_HELP, TB_NOTIFICATIONS, TB_CUSTOM_ACTIONS]);
                 }
-                this.menuItems=this.menuItems.concat([TB_INFO, TB_HELP, TB_NOTIFICATIONS, TB_CUSTOM_ACTIONS]);
-            }
-            if (queryParams.appQuit) {
-                this.menuItems.push(DIVIDER);
-                this.menuItems.push(TB_APP_QUIT)
+                if (queryParams.appQuit) {
+                    this.menuItems.push(DIVIDER);
+                    this.menuItems.push(TB_APP_QUIT)
+                }
             }
             this.trans = {noplayer:i18n('No Player'), nothingplaying:i18n('Nothing playing'),
                           info:i18n("Show current track information"), infoShortcut:shortcutStr(LMS_TRACK_INFO_KEYBOARD), 

@@ -24,7 +24,7 @@ const TB_CUSTOM_ACTIONS = {id:21};
 Vue.component('lms-toolbar', {
     template: `
 <div>
-<v-toolbar fixed dense app class="lms-toolbar noselect">
+<v-toolbar fixed dense app class="lms-toolbar noselect" v-bind:class="{'lms-toolbar-no-menu':connected && !showMenuButton}">
 <div v-if="showClock" class="toolbar-clock">
  <div class="maintoolbar-title">{{time}}</div>
  <div class="maintoolbar-subtitle subtext">{{date}}</div>
@@ -117,7 +117,7 @@ Vue.component('lms-toolbar', {
   <v-icon v-if="showQueue" class="active-btn">queue_music</v-icon>
   <img v-else class="svg-img" :src="'queue_music_outline' | svgIcon(darkUi, false, true, undefined, coloredToolbars)"></img>
  </v-btn>
- <v-menu v-if="connected" class="hide-for-mini" bottom left v-model="showMainMenu">
+ <v-menu v-if="connected && showMenuButton" class="hide-for-mini" bottom left v-model="showMainMenu">
   <v-btn slot="activator" icon :title="trans.mainMenu"><img v-if="updatesAvailable" class="svg-badge" :src="'update' | svgIcon(darkUi, true, true, undefined, coloredToolbars)"></img><img v-else-if="restartRequired" class="svg-badge" :src="'restart' | svgIcon(darkUi, true, true, undefined, coloredToolbars)"><img v-else-if="notificationsAvailable" class="svg-badge" :src="'bell' | svgIcon(darkUi, true, true, undefined, coloredToolbars)"></img><v-icon>more_vert</v-icon></v-btn>
   <v-list>
    <template v-for="(item, index) in menuItems">
@@ -171,7 +171,7 @@ Vue.component('lms-toolbar', {
    </v-list-tile>
   </v-list>
  </v-menu>
- <v-btn v-else icon :title="trans.connectionLost" @click.native="bus.$emit('showError', undefined, trans.connectionLost)">
+ <v-btn v-else-if="!connected" icon :title="trans.connectionLost" @click.native="bus.$emit('showError', undefined, trans.connectionLost)">
   <v-icon class="red">error</v-icon>
  </v-btn>
 </v-toolbar>
@@ -860,6 +860,9 @@ Vue.component('lms-toolbar', {
         },
         coloredToolbars() {
             return this.$store.state.coloredToolbars
+        },
+        showMenuButton() {
+            return !LMS_KIOSK_MODE || (undefined!=this.customSettingsActions && this.customSettingsActions.length>0) || (undefined!=this.customActions && this.customActions.length>0)
         }
     },
     filters: {

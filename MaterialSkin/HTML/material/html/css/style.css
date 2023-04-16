@@ -171,6 +171,10 @@ html, .mini-player {
  margin-right:-8px !important;
 }
 
+.lms-toolbar-no-menu > .v-toolbar__content {
+ margin-right:-19px !important;
+}
+
 .v-list__tile__title, .v-select__selection, .v-select__selection--comma , .v-btn__content, html{
  font-size:var(--std-font-size);
  font-weight:var(--std-weight);

@@ -201,7 +201,6 @@ Vue.component('lms-player-settings', {
      </v-dialog>
     </v-list-tile>
     <div class="dialog-padding"></div>
-    <v-header>{{i18n('Days')}}</v-header>
     <v-list-tile class="settings-compact-row" v-if="wide>0">
      <v-flex xs6><v-checkbox class="ellipsis" v-model="alarmDialog.dow" :label="i18n('Monday')" value="1"></v-checkbox></v-flex>
      <v-flex xs6><v-checkbox class="ellipsis" v-model="alarmDialog.dow" :label="i18n('Tuesday')" value="2"></v-checkbox></v-flex>
@@ -223,7 +222,7 @@ Vue.component('lms-player-settings', {
     <v-list-tile class="settings-compact-row" v-if="wide==0"><v-checkbox class="ellipsis" v-model="alarmDialog.dow" :label="i18n('Saturday')" value="6"></v-checkbox></v-list-tile>
     <v-list-tile class="settings-compact-row" v-if="wide==0"><v-checkbox class="ellipsis" v-model="alarmDialog.dow" :label="i18n('Sunday')" value="0"></v-checkbox></v-list-tile>
     <div class="dialog-padding"></div>
-    <v-header>{{i18n('Options')}}</v-header>
+
     <v-list-tile>
      <v-select :items="alarmSounds" :label="i18n('Sound')" v-model="alarmDialog.url" item-text="label" item-value="key"></v-select>
     </v-list-tile>

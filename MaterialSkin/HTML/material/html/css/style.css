@@ -259,6 +259,10 @@ div.v-subheader {
  border-left:1px solid var(--list-item-border-color) !important;
 }
 
+.v-menu__content .theme--dark.v-divider {
+ border-top:1px solid var(--popup-divider-color) !important;
+}
+
 /* Stop horizontal scrollbar in full screen dialogs */
 .v-dialog .v-card {
  overflow-x:hidden !important;

@@ -61,7 +61,7 @@ Vue.component('lms-groupvolume', {
     mounted() {
         this.closeTimer = undefined;
         bus.$on('groupvolume.open', function(playerStatus, scrollCurrent) {
-            if (queryParams.party) {
+            if (queryParams.party || queryParams.single) {
                 return;
             }
             if (this.show) {
@@ -78,6 +78,9 @@ Vue.component('lms-groupvolume', {
                 this.players[0].volume = playerStatus.volume;
             }
             for (var p=0, len=playerStatus.syncslaves.length; p<len; ++p) {
+                if (pMap[playerStatus.syncslaves[p]]==undefined) {
+                    continue;
+                }
                 this.players.push({id: playerStatus.syncslaves[p], master:false, name:pMap[playerStatus.syncslaves[p]].name, isgroup:pMap[playerStatus.syncslaves[p]].isgroup,
                                    volume:undefined, dvc:VOL_STD, muted:false, isplaying:false});
                 if (this.$store.state.player.id==playerStatus.syncslaves[p]) {

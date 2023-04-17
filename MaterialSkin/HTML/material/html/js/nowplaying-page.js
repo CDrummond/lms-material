@@ -995,10 +995,15 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
                                 }
                             }
                             this.touch.y += steps*VOL_STEP_PX*(inc ? -1 : 1);
+			    // Added 2023-04-14 for volumeSliderInstant - AJF
+			    if (this.$store.state.volumeSliderInstant) {
+				this.SendVolumeNow();
+			    } else {
                             this.resetSendVolumeTimer();
                         }
                     }
                 }
+            }
             }
         },
         cancelSendVolumeTimer() {
@@ -1016,6 +1021,15 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
                 }
             }.bind(this), LMS_VOLUME_DEBOUNCE);
         },
+		
+	// Added 2023-04-14 for volumeSliderInstant - AJF
+	SendVolumeNow() {
+            if (this.overlayVolume!=this.lastSentVolume) {
+                bus.$emit('playerCommand', ["mixer", "volume", this.overlayVolume]);
+                this.lastSentVolume=this.overlayVolume;
+            }
+	},
+		
         adjustFont(sz) {
             this.infoZoom=sz;
             getLocalStorageVal('npInfoZoom', sz);
@@ -1032,7 +1046,7 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
             this.landscape = window.innerWidth >= (window.innerHeight*queryParams.npRatio);
             // wide=0 => controls under whole width
             // wide=2 => controls under text only
-            this.wide = window.innerWidth>=600 && ((window.innerWidth>=1800) || (window.innerWidth/2.0)>=(window.innerHeight*0.75)) ? 2 /*: window.innerHeight>340 ? 1*/ : 0;
+            this.wide = window.innerWidth>=600 && ((window,innerWidth>=1000) || (window.innerWidth/2.0)>=(window.innerHeight*0.75)) ? 2 /*: window.innerHeight>340 ? 1*/ : 0;
         },
         itemClicked(tab, section, index, event) {
             nowplayingItemClicked(this, tab, section, index, event);

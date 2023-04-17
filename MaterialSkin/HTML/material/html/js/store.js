@@ -147,6 +147,13 @@ function updateUiSettings(state, val) {
         state.powerButton = val.powerButton;
         setLocalStorageVal('powerButton', state.powerButton);
     }
+
+    // Added 2023-04-14 for volumeSliderInstant - AJF
+    if (undefined!=val.volumeSliderInstant && state.volumeSliderInstant!=val.volumeSliderInstant) {
+        state.volumeSliderInstant = val.volumeSliderInstant;
+        setLocalStorageVal('volumeSliderInstant', state.volumeSliderInstant);
+    }
+	
     if (undefined!=val.largeCovers && state.largeCovers!=val.largeCovers) {
         state.largeCovers = val.largeCovers;
         setLocalStorageVal('largeCovers', state.largeCovers);
@@ -307,6 +314,7 @@ const store = new Vuex.Store({
         lang: 'en-US',
         twentyFourHour: false,
         powerButton: false,
+	volumeSliderInstant: false, // Added 2023-04-14 for volumeSliderInstant - AJF
         largeCovers: false,
         mediaControls: false,
         downloadStatus: [],
@@ -533,6 +541,7 @@ const store = new Vuex.Store({
             state.homeButton = getLocalStorageBool('homeButton', state.homeButton);
             state.disabledBrowseModes = new Set(JSON.parse(getLocalStorageVal('disabledBrowseModes', '["myMusicFlopTracks", "myMusicTopTracks", "myMusicMusicFolder", "myMusicFileSystem", "myMusicArtistsComposers", "myMusicArtistsConductors", "myMusicArtistsJazzComposers", "myMusicAlbumsAudiobooks"]')));
             state.powerButton = getLocalStorageBool('powerButton', state.powerButton);
+	    state.volumeSliderInstant = getLocalStorageBool('volumeSliderInstant', state.volumeSliderInstant); // Added 2023-04-14 for volumeSliderInstant - AJF
             state.largeCovers = getLocalStorageBool('largeCovers', state.largeCovers);
             state.mediaControls = getLocalStorageBool('mediaControls', state.mediaControls);
             setTheme(state.theme, state.color);
@@ -659,6 +668,7 @@ const store = new Vuex.Store({
                                      homeButton: getLocalStorageBool('homeButton', undefined==prefs.homeButton ? state.homeButton : prefs.homeButton),
                                      showRating: LMS_STATS_ENABLED && getLocalStorageBool('showRating', undefined==prefs.showRating ? state.showRating : prefs.showRating),
                                      powerButton: getLocalStorageBool('powerButton', undefined==prefs.powerButton ? state.powerButton : prefs.powerButton),
+				     volumeSliderInstant: getLocalStorageBool('volumeSliderInstant', undefined==prefs.volumeSliderInstant ? state.volumeSliderInstant : prefs.volumeSliderInstant), // Added 2023-04-14 for volumeSliderInstant - AJF
                                      largeCovers: getLocalStorageBool('largeCovers', undefined==prefs.largeCovers ? state.largeCovers : prefs.largeCovers),
                                      mediaControls: getLocalStorageBool('mediaControls', undefined==prefs.mediaControls ? state.mediaControls : prefs.mediaControls) };
                         if (undefined!=prefs.hidden && undefined==getLocalStorageVal('hidden', undefined)) {

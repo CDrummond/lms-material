@@ -74,6 +74,15 @@ Vue.component('lms-ui-settings', {
     </v-list-tile>
     <v-divider></v-divider>
 
+    <v-list-tile>
+     <v-list-tile-content @click="volumeSliderInstant = !volumeSliderInstant" class="switch-label">
+      <v-list-tile-title>{{i18n('Instant slider volume')}}</v-list-tile-title>
+      <v-list-tile-sub-title>{{i18n("Change the volume as the slider is moved immediately.")}}</v-list-tile-sub-title>
+     </v-list-tile-content>
+     <v-list-tile-action><v-switch v-model="volumeSliderInstant"></v-switch></v-list-tile-action>
+    </v-list-tile>
+    <v-divider></v-divider>
+
     <v-list-tile v-if="mediaControlsSupported">
      <v-list-tile-content @click="mediaControls = !mediaControls" class="switch-label">
       <v-list-tile-title>{{IS_MOBILE ? i18n('Lock screen and notifications') : i18n('Media keys and notifications')}}</v-list-tile-title>
@@ -410,6 +419,7 @@ Vue.component('lms-ui-settings', {
             showRating: false,
             homeButton: false,
             powerButton: false,
+	    volumeSliderInstant: false, // Added 2023-04-14 for volumeSliderInstant - AJF
             largeCovers: false,
             width: 500,
             mediaControls: false,
@@ -571,6 +581,7 @@ Vue.component('lms-ui-settings', {
             this.screensaver = this.$store.state.screensaver;
             this.homeButton = this.$store.state.homeButton;
             this.powerButton = this.$store.state.powerButton;
+	    this.volumeSliderInstant = this.$store.state.volumeSliderInstant; // Added 2023-04-14 for volumeSliderInstant - AJF
             this.largeCovers = this.$store.state.largeCovers;
             this.mediaControls = this.$store.state.mediaControls;
             var disabled=new Set(JSON.parse(getLocalStorageVal("disabledItems", JSON.stringify([TOP_CDPLAYER_ID, TOP_REMOTE_ID]))));
@@ -666,6 +677,7 @@ Vue.component('lms-ui-settings', {
                       screensaver:this.screensaver,
                       homeButton:this.homeButton,
                       powerButton:this.powerButton,
+		      volumeSliderInstant:this.volumeSliderInstant, // Added 2023-04-14 for volumeSliderInstant - AJF
                       largeCovers:this.largeCovers,
                       showRating:this.showRating,
                       mediaControls:this.mediaControls

@@ -185,6 +185,12 @@ Vue.component('lms-volume', {
                 bus.$emit('playerCommand', ["mixer", "volume", this.playerVolume]);
             }.bind(this), LMS_VOLUME_DEBOUNCE);
         },
+		
+	// Added 2023-04-14 for volumeSliderInstant - AJF
+	SendVolumeNow() {
+            bus.$emit('playerCommand', ["mixer", "volume", this.playerVolume]);
+	},
+		
         cancelUpdateTimer() {
             if (undefined!==this.updateTimer) {
                 clearTimeout(this.updateTimer);
@@ -198,7 +204,12 @@ Vue.component('lms-volume', {
                 if (!this.movingVolumeSlider) {
                     this.resetCloseTimer();
                 }
+	        // Added 2023-04-14 for volumeSliderInstant - AJF
+	        if (this.$store.state.volumeSliderInstant) {
+	            this.SendVolumeNow();
+	        } else {
                 this.resetSendVolumeTimer();
+            }
             }
         },
         'show': function(val) {

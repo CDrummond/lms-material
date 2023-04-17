@@ -510,12 +510,22 @@ var lmsQueue = Vue.component("lms-queue", {
             }
         }.bind(this));
         if (!IS_MOBILE) {
-            bindKey(LMS_SAVE_QUEUE_KEYBOARD, 'mod');
-            bindKey(LMS_CLEAR_QUEUE_KEYBOARD, 'mod');
-            bindKey(LMS_QUEUE_ADD_URL_KEYBOARD, 'mod');
+            if (!queryParams.party && (!LMS_KIOSK_MODE || !HIDE_FOR_KIOSK.has(PQ_SAVE_ACTION))) {
+                bindKey(LMS_SAVE_QUEUE_KEYBOARD, 'mod');
+            }
+            if (!queryParams.party) {
+                bindKey(LMS_CLEAR_QUEUE_KEYBOARD, 'mod');
+            }
+            if (!queryParams.party && (!LMS_KIOSK_MODE || !HIDE_FOR_KIOSK.has(PQ_ADD_URL_ACTION))) {
+                bindKey(LMS_QUEUE_ADD_URL_KEYBOARD, 'mod');
+            }
             bindKey(LMS_SCROLL_QUEUE_KEYBOARD, 'mod');
-            bindKey(LMS_SORT_QUEUE_KEYBOARD, 'mod');
-            bindKey(LMS_MOVE_QUEUE_KEYBOARD, 'mod');
+            if (!queryParams.party && (!LMS_KIOSK_MODE || !HIDE_FOR_KIOSK.has(PQ_SORT_ACTION))) {
+                bindKey(LMS_SORT_QUEUE_KEYBOARD, 'mod');
+            }
+            if (!queryParams.party && (!LMS_KIOSK_MODE || !HIDE_FOR_KIOSK.has(PQ_MOVE_QUEUE_ACTION))) {
+                bindKey(LMS_MOVE_QUEUE_KEYBOARD, 'mod');
+            }
             bindKey('pageup', 'alt', true);
             bindKey('pagedown', 'alt', true);
             bus.$on('keyboard', function(key, modifier) {

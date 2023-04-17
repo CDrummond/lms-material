@@ -98,7 +98,7 @@ var lmsBrowse = Vue.component("lms-browse", {
        <div v-if="citem.image" class="image-grid-text" @click.stop="itemMenu(citem, item.rs+col, $event)">{{citem.title}}</div>
        <div v-else class="image-grid-text">{{citem.title}}</div>
        <div class="image-grid-text subtext" v-bind:class="{'link-item':subtitleClickable}" @click.stop="clickSubtitle(citem, item.rs+col, $event)">{{isTop && libraryName && citem.id==TOP_MYMUSIC_ID ? libraryName : citem.libname ? citem.libname : citem.subtitle}}</div>
-       <div class="menu-btn grid-btn image-grid-btn" v-if="undefined!=citem.stdItem || (citem.menu && citem.menu.length>0 && (!citem.isPinned || (!queryParams.party && !LMS_KIOSK_MODE))) || (isTop && libraryName && citem.id==TOP_MYMUSIC_ID)" @click.stop="itemMenu(citem, item.rs+col, $event)" :title="i18n('%1 (Menu)', stripLinkTags(citem.title))"></div>
+       <div class="menu-btn grid-btn image-grid-btn" v-if="undefined!=citem.stdItem || (citem.menu && citem.menu.length>0 && (!citem.isPinned || (!queryParams.party && (!LMS_KIOSK_MODE || !HIDE_FOR_KIOSK.has(PIN_ACTION))))) || (isTop && libraryName && citem.id==TOP_MYMUSIC_ID)" @click.stop="itemMenu(citem, item.rs+col, $event)" :title="i18n('%1 (Menu)', stripLinkTags(citem.title))"></div>
        <div class="emblem" v-if="citem.emblem" :style="{background: citem.emblem.bgnd}">
         <img :src="citem.emblem | emblem()" loading="lazy"></img>
        </div>
@@ -200,7 +200,7 @@ var lmsBrowse = Vue.component("lms-browse", {
       <v-list-tile-sub-title v-html="item.subtitle" v-bind:class="{'link-item':subtitleClickable}" @click.stop="clickSubtitle(item, index, $event)"></v-list-tile-sub-title>
      </v-list-tile-content>
 
-     <v-list-tile-action class="browse-action" v-if="undefined!=item.stdItem || (item.menu && item.menu.length>0 && (!item.isPinned || (!queryParams.party && !LMS_KIOSK_MODE))) || (isTop && libraryName && item.id==TOP_MYMUSIC_ID)">
+     <v-list-tile-action class="browse-action" v-if="undefined!=item.stdItem || (item.menu && item.menu.length>0 && (!item.isPinned || (!queryParams.party && (!LMS_KIOSK_MODE || !HIDE_FOR_KIOSK.has(PIN_ACTION))))) || (isTop && libraryName && item.id==TOP_MYMUSIC_ID)">
       <div v-if="hoverBtns && 0==selection.size && (undefined!=item.stdItem || (item.menu && (item.menu[0]==PLAY_ACTION || item.menu[0]==PLAY_ALL_ACTION)))" class="list-btns">
        <div v-if="!queryParams.party" class="play-btn grid-btn" @click.stop="itemAction(PLAY_ACTION, item, index, $event)" :title="ACTIONS[PLAY_ACTION].title"></div>
        <div class="add-btn grid-btn" @click.stop="itemAction(ADD_ACTION, item, index, $event)" :title="ACTIONS[ADD_ACTION].title"></div>
@@ -1404,7 +1404,7 @@ var lmsBrowse = Vue.component("lms-browse", {
             this.filteredJumplist = shrinkAray(this.jumplist, maxItems);
         },
         dragStart(which, ev) {
-            if (queryParams.party || LMS_KIOSK_MODE) {
+            if (queryParams.party || (LMS_KIOSK_MODE && HIDE_FOR_KIOSK.has(ADD_TO_FAV_ACTION))) {
                 return;
             }
             bus.$emit('dragActive', true);

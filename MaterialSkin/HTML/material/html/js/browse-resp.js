@@ -29,6 +29,7 @@ function removeDiactrics(key) {
 function parseBrowseResp(data, parent, options, cacheKey, parentCommand, parentGenre) {
     // NOTE: If add key to resp, then update addToCache in utils.js
     var resp = {items: [], allSongsItem:undefined, baseActions:[], canUseGrid: false, jumplist:[], numAudioItems:0, canDrop:false, itemCustomActions:undefined };
+    var allowPinning = !queryParams.party && (!LMS_KIOSK_MODE || !HIDE_FOR_KIOSK.has(PIN_ACTION));
 
     try {
     if (data && data.result) {
@@ -284,7 +285,7 @@ function parseBrowseResp(data, parent, options, cacheKey, parentCommand, parentG
                         } else {
                             mapIcon(i);
                         }
-                        if (STREAM_SCHEMAS.has(i.presetParams.favorites_url.split(":")[0]) && !queryParams.party && !LMS_KIOSK_MODE) {
+                        if (STREAM_SCHEMAS.has(i.presetParams.favorites_url.split(":")[0]) && allowPinning) {
                             i.isRadio = true;
                             if (!addedDivider && i.menu.length>0) {
                                 i.menu.push(DIVIDER);
@@ -298,18 +299,18 @@ function parseBrowseResp(data, parent, options, cacheKey, parentCommand, parentG
                     } else {
                         mapIcon(i);
                     }
-                } else if (i.presetParams && !queryParams.party && !LMS_KIOSK_MODE) {
+                } else if (i.presetParams && allowPinning) {
                     if (i.menu.length>0) {
                         i.menu.push(DIVIDER);
                         addedDivider = true;
                     }
                     i.menu.push(ADD_TO_FAV_ACTION);
-                } else if (isDynamicPlaylist && i.params && i.params.playlistid && addedPlayAction && !queryParams.party && !LMS_KIOSK_MODE) {
+                } else if (isDynamicPlaylist && i.params && i.params.playlistid && addedPlayAction && allowPinning) {
                     i.presetParams = {favorites_url: "dynamicplaylist://"+i.params.playlistid};
                     i.menu.push(ADD_TO_FAV_ACTION);
                 }
 
-                if (isPlaylists && i.type=="playlist" && !queryParams.party && !LMS_KIOSK_MODE) {
+                if (isPlaylists && i.type=="playlist" && allowPinning) {
                     if (!addedDivider && i.menu.length>0) {
                         i.menu.push(DIVIDER);
                         addedDivider = true;
@@ -363,7 +364,7 @@ function parseBrowseResp(data, parent, options, cacheKey, parentCommand, parentG
                         if (queryParams.party && (HIDE_APPS_FOR_PARTY.has(i.id) || (i.id.startsWith("myapps") && HIDE_APP_NAMES_FOR_PARTY.has(i.title)))) {
                             continue;
                         }
-                        if (!queryParams.party && !LMS_KIOSK_MODE) {
+                        if (allowPinning) {
                             if (!addedDivider && i.menu.length>0) {
                                 i.menu.push(DIVIDER);
                                 addedDivider = true;
@@ -389,7 +390,7 @@ function parseBrowseResp(data, parent, options, cacheKey, parentCommand, parentG
                                 i.id = "radio:"+i.title;
                             }
                         }
-                        if (!queryParams.party && !LMS_KIOSK_MODE) {
+                        if (allowPinning) {
                             if (i.menu.length>0 && i.menu[0]==PLAY_ACTION && (i.icon || i.image) && i.type!="entry" && i.presetParams && i.presetParams.favorites_url) {
                                 // Only allow to pin if we can play!
                                 if (!addedDivider && i.menu.length>0) {
@@ -1217,7 +1218,7 @@ function parseBrowseResp(data, parent, options, cacheKey, parentCommand, parentG
                 i.type="extra";
                 mapIcon(i, 'lms-extras', {icon:"extension", svg:undefined});
                 i.id="extras:"+i.id;
-                if (!queryParams.party && !LMS_KIOSK_MODE) {
+                if (allowPinning) {
                     i.menu=[options.pinned.has(i.id) ? UNPIN_ACTION : PIN_ACTION];
                 }
                 resp.items.push(i);

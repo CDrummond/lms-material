@@ -216,6 +216,14 @@ sub kioskMode {
     return int($mode);
 }
 
+sub hideForKiosk {
+    my $hide = $prefs->get('hideForKiosk');
+    if (!$hide) {
+        return '9, 10, 11, 12, 13, 14, 15, 16, 20, 25, 26, 27, 29, 30, 41, 42, 49, 50, 56, 57';
+    }
+    return $hide;
+}
+
 sub initCLI {
     #                                                                      |requires Client
     #                                                                      |  |is a Query

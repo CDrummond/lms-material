@@ -165,7 +165,7 @@ var lmsQueue = Vue.component("lms-queue", {
    <v-btn :title="trans.shuffleAlbums" flat icon v-if="(desktopLayout || wide>0) && playerStatus.shuffle===2" class="toolbar-button" v-bind:class="{'disabled':noPlayer}" @click="shuffleClicked"><img class="svg-img media-icon" :src="'shuffle-albums' | svgIcon(darkUi, 1)"></v-btn>
    <v-btn :title="trans.shuffleAll" flat icon v-else-if="(desktopLayout || wide>0) && playerStatus.shuffle===1" class="toolbar-button" v-bind:class="{'disabled':noPlayer}" @click="shuffleClicked"><v-icon class="active-btn">shuffle</v-icon></v-btn>
    <v-btn :title="trans.shuffleOff" flat icon v-else-if="desktopLayout || wide>0" class="toolbar-button dimmed" v-bind:class="{'disabled':noPlayer}" @click="shuffleClicked"><v-icon>shuffle</v-icon></v-btn>
-   <v-btn :title="ACTIONS[PQ_SAVE_ACTION].title | tooltip(LMS_SAVE_QUEUE_KEYBOARD,keyboardControl)" flat icon @click="save()" class="toolbar-button" v-bind:class="{'disabled':items.length<1}" v-if="!LMS_KIOSK_MODE && !queryParams.party && wide>1"><v-icon>save</v-icon></v-btn>
+   <v-btn :title="ACTIONS[PQ_SAVE_ACTION].title | tooltip(LMS_SAVE_QUEUE_KEYBOARD,keyboardControl)" flat icon @click="save()" class="toolbar-button" v-bind:class="{'disabled':items.length<1}" v-if="(!LMS_KIOSK_MODE || !HIDE_FOR_KIOSK.has(PQ_SAVE_ACTION)) && !queryParams.party && wide>1"><v-icon>save</v-icon></v-btn>
    <v-btn :title="trans.clear | tooltip(LMS_CLEAR_QUEUE_KEYBOARD,keyboardControl)" flat icon @click="clear()" class="toolbar-button" v-bind:class="{'disabled':items.length<1}"v-if="!queryParams.party"><img class="svg-list-img" :src="'queue-clear' | svgIcon(darkUi)"></img></v-btn>
   </v-layout>
  </div>
@@ -259,7 +259,7 @@ var lmsQueue = Vue.component("lms-queue", {
   </v-list>
   <v-list v-else>
    <template v-for="(action, index) in menu.actions">
-    <v-list-tile @click="headerAction(action)" v-bind:class="{'disabled':items.length<1 && action!=PQ_ADD_URL_ACTION}" v-if="action==PQ_SAVE_ACTION ? wide<2 : action!=PQ_MOVE_QUEUE_ACTION || showMoveAction">
+    <v-list-tile @click="headerAction(action)" v-bind:class="{'disabled':items.length<1 && action!=PQ_ADD_URL_ACTION}" v-if="(!LMS_KIOSK_MODE || !HIDE_FOR_KIOSK.has(action)) && (action==PQ_SAVE_ACTION ? wide<2 : action!=PQ_MOVE_QUEUE_ACTION || showMoveAction)">
      <v-list-tile-avatar>
       <v-icon v-if="undefined==ACTIONS[action].svg">{{ACTIONS[action].icon}}</v-icon>
       <img v-else class="svg-img" :src="ACTIONS[action].svg | svgIcon(darkUi)"></img>
@@ -287,7 +287,7 @@ var lmsQueue = Vue.component("lms-queue", {
             playlist: {name: undefined, modified: false},
             selection: new Set(),
             selectionDuration: 0,
-            otherActions: queryParams.party ? [PQ_SCROLL_ACTION] : LMS_KIOSK_MODE ?  [PQ_MOVE_QUEUE_ACTION, PQ_SCROLL_ACTION, PQ_ADD_URL_ACTION, PQ_SORT_ACTION] : [PQ_SAVE_ACTION, PQ_MOVE_QUEUE_ACTION, PQ_SCROLL_ACTION, PQ_ADD_URL_ACTION, PQ_SORT_ACTION],
+            otherActions: queryParams.party ? [PQ_SCROLL_ACTION] : [PQ_SAVE_ACTION, PQ_MOVE_QUEUE_ACTION, PQ_SCROLL_ACTION, PQ_ADD_URL_ACTION, PQ_SORT_ACTION],
             wide: 0,
             dstm: false,
             dragActive: false,

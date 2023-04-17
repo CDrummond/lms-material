@@ -95,7 +95,7 @@ PLUGIN_MATERIAL_SKIN_SHOW_COMPOSER_DESC
 	CS	Pokud žánr skladby odpovídá výše uvedenému seznamu a má tag skladatele, pak ho zobrazit ve frontě a v Právě hraje.
 	DE	Wenn das Genre eines Titels der Liste oben entspricht und es einen 'Composer'-Tag hat, zeige diesen in 'Aktueller Titel' und der Warteschlange.
 	EN	Show composer if a song's genre matches an entry in the list above and it has a composer tag.
-	FR	Si le tag "genre" d'un morceau apartient à la liste ci-dessus et que le morceau a un tag "composer", afficher le compositeur dans la liste de lecture et la vue "lecture en cours".
+	FR	Si le tag "composer" est renseigné, afficher le compositeur lorsque le tag "genre" du morceau correspond à un élément de la liste ci-dessus.
 	NL	Als het genre van een nummer overeenkomt met de bovenstaande lijst en het nummer heeft een componist tag, toon dit bij het afspelen en in de afspeellijst.
 
 PLUGIN_MATERIAL_SKIN_SHOW_CONDUCTOR
@@ -109,7 +109,7 @@ PLUGIN_MATERIAL_SKIN_SHOW_CONDUCTOR_DESC
 	CS	Pokud žánr skladby odpovídá výše uvedenému seznamu a má tag dirigenta, pak ho zobrazit ve frontě a v Právě hraje.
 	DE	Wenn das Genre eines Titels der Liste oben entspricht und es einen 'Conductor'-Tag hat, zeige diesen in 'Aktueller Titel' und der Warteschlange.
 	EN	Show conductor if a song's genre matches an entry in the list above and it has a conductor tag.
-	FR	Si le tag "genre" d'un morceau appartient à la liste ci-dessus et que le morceau a un tag "conductor", afficher le chef d'orchestre dans la liste de lecture et la vue "lecture en cours".
+	FR	Si le tag "conductor" est renseigné, afficher le chef d'orchestre lorsque le tag "genre" du morceau correspond à un élément de la liste ci-dessus.
 	NL	Als het genre van een nummer overeenkomt met de bovenstaande lijst en het nummer heeft een dirigent tag, toon dit bij het afspelen en in de afspeellijst.
 
 PLUGIN_MATERIAL_SKIN_SHOW_BAND
@@ -123,7 +123,7 @@ PLUGIN_MATERIAL_SKIN_SHOW_BAND_DESC
 	CS	Pokud žánr skladby odpovídá výše uvedenému seznamu a má tag skupiny, pak ji zobrazit ve frontě a v Právě hraje.
 	DE	Wenn das Genre eines Titels der Liste oben entspricht und es einen 'Band'-Tag hat, zeige diesen in 'Aktueller Titel' und der Warteschlange.
 	EN	Show band if a song's genre matches an entry in the list above and it has a band tag.
-	FR	Si le tag "genre" d'un morceau appartient à la liste ci-dessus et que le morceau a un tag "band", afficher le groupe/orchestre dans la liste de lecture et la vue "lecture en cours".
+	FR	Si le tag "band" est renseigné, afficher le groupe/orchestre lorsque le tag "genre" du morceau correspond à un élément de la liste ci-dessus.
 	NL	Als het genre van een nummer overeenkomt met de bovenstaande lijst en het nummer heeft een band tag, toon dit bij het afspelen en in de afspeellijst.
 
 PLUGIN_MATERIAL_SKIN_PASSWORD
@@ -260,7 +260,7 @@ PLUGIN_MATERIAL_SKIN_COMMENT_AS_DISC_TITLE_DESC
 	CS	U alb s více disky použít jako název disku komentář z první stopy každého disku.
 	DE	Benutze bei Multi-Disk-Alben den 'Comment'-Tag des jeweils ersten Titels als Albumtitel
 	EN	For multi-disc albums use comment from first track of each disc as disc title. If using "Semi-colon separated" then the disc-title needs to be preceeded by either "TITLE=", "DISCTITLE=", "TITLE:", or "DISCTITLE:" - e.g. "TITLE=Extras disc;OTHER=Some other comment info"
-	FR	Pour les albums multi-disques, utiliser le commentaire du premier morceau de chaque disque comme titre de disque.
+	FR	Pour les albums multi-disques, utiliser le commentaire du premier morceau de chaque disque comme titre de disque. Si vous utilisez "Séparation par point-virgule", le titre du disque doit être précédé de "TITLE=", "DISCTITLE=", "TITLE:" ou "DISCTITLE:". Par exemple : "TITLE=Disque supplémentaire;OTHER=Autres informations".
 	NL	Voor albums met meerdere schijven, gebruik Comment van eerste nummer van iedere schijf als schijftitel.
 
 PLUGIN_MATERIAL_SKIN_COMMENT_A_DONT_USE

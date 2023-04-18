@@ -776,9 +776,12 @@ function parseBrowseResp(data, parent, options, cacheKey, parentCommand, parentG
                     artist = artists.join(", ");
                 } else {
                     artist = i.artist;
+                    if (undefined!=i.artist) {
+                        artists = [i.artist];
+                    }
                 }
 
-                if (LMS_VERSION>=80300 && undefined==i.extid && undefined==artists && undefined!=parent && undefined!=parent.title) {
+                if (LMS_VERSION>=80300 && undefined==i.extid && undefined==artists && undefined!=parent && undefined!=parent.title && undefined!=parent.id && !parent.id.startsWith(MUSIC_ID_PREFIX)) {
                     // If response does not have artist, then get this from parent item. This will come from
                     // My Music -> Album Artists -> Albums, and allows album favourites to specify artist.
                     artists = [parent.title];
@@ -852,15 +855,16 @@ function parseBrowseResp(data, parent, options, cacheKey, parentCommand, parentG
                     // we first check parent.artists and use the first of those
                     artist = parent && parent.artists && parent.artists.length>0
                              ? parent.artists[0]
-                             : i.albumartist
-                                 ? i.albumartist
-                                 : undefined!=i.compilation && 1==parseInt(i.compilation)
-                                     ? i.band
-                                     : i.artist
-                                         ? i.artist
-                                         : i.trackartist;
+                             : parent && parent.stdItem==STD_ITEM_ALBUM
+                                 ? parent.subtitle
+                                 : i.albumartist
+                                    ? i.albumartist
+                                    : undefined!=i.compilation && 1==parseInt(i.compilation)
+                                        ? i.band
+                                        : i.artist
+                                            ? i.artist
+                                            : i.trackartist;
                 }
-
                 let others = buildArtistLine(i, "browse", false, artist);
                 if (undefined!=others) {
                     title+=SEPARATOR + others;

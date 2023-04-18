@@ -20,6 +20,8 @@
 6. Display all genres in now-playing track info.
 7. If set to control a single player then always show volume dialog for player
    even if player is part of sync group.
+8. Fix artist name showing in track listings if 'Show all artists' setting
+   is disabled.
 
 3.2.3
 -----

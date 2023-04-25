@@ -182,7 +182,7 @@
 
 .pill {
  position: absolute;
- top: 1px;
+ top:calc((var(--bottom-nav-pad)/2) + 1px);
  height: 26px;
  border-radius: 13px;
  width: 56px;

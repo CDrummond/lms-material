@@ -674,6 +674,11 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
         },
         sliderChanged(e, isTouch) {
             if (this.playerStatus.current.canseek && this.playerStatus.current.duration>3) {
+                // On touch devices we get a sliderChanged event from touchSliderEnd and the one from the slider
+                // So, ignore events too close together. See #672
+                if (undefined!=this.lastTimeEvent && ((new Date().getTime())-this.lastTimeEvent)<50) {
+                    return;
+                }
                 const rect = document.getElementById("pos-slider").getBoundingClientRect();
                 const evPos = isTouch ? getTouchPos(e) : {x:e.clientX, y:e.clientY};
                 let pos = evPos.x - rect.x;
@@ -689,6 +694,7 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
                 }
                 pos = Math.min(Math.max(0, pos), rect.width);
                 this.doAction(['time', Math.floor(this.playerStatus.current.duration * pos / rect.width)]);
+                this.lastTimeEvent = new Date().getTime();
             }
         },
         moveTimeTooltipTouch(e) {

@@ -12,6 +12,8 @@
    even if player is part of sync group.
 8. Fix artist name showing in track listings if 'Show all artists' setting
    is disabled.
+9. Don't send duplicate 'time' event when pressing on time slider on touch
+   devices.
 
 3.2.3
 -----

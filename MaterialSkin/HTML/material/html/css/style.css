@@ -743,6 +743,14 @@ div.v-subheader {
  margin-left:16px!important;
 }
 
+.vol-control-1 .vol-btn {
+ margin-top:10px;
+}
+
+.vol-control-1 .vol-slider {
+ margin-top:12px!important;
+}
+
 .group-vol {
  top:var(--main-toolbar-height);
 }
@@ -1491,8 +1499,8 @@ progress {
  height:32px !important;
 }
 
-.pmgr-sync .vol-control-2 .vol-left {
- margin-left:56px;
+.vol-control-2 {
+ padding-top:6px;
 }
 
 .pmgr-container .layout {
@@ -1500,7 +1508,11 @@ progress {
 }
  
 .vol-control-2 .vol-left {
- margin-left:58px!important;
+ margin-left:66px!important;
+}
+
+.vol-control-2 .vol-right {
+ margin-right:2px!important;
 }
 
 .vol-control-2 .vol-slider {
@@ -1529,6 +1541,7 @@ progress {
  text-align:center;
  vertical-align:middle;
  margin-left:0px;
+ margin-right:4px;
 }
 
 .pmgr-vol-small {

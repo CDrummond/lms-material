@@ -141,7 +141,7 @@ Vue.component('lms-manage-players', {
        </v-flex xs12>
        <v-flex xs12>
         <v-layout v-if="VOL_HIDDEN!=player.dvc">
-         <volume-control :value="player.volume" :muted="player.muted" :playing="player.isplaying" :dvc="player.dvc" :id="player.id" :layout="2" @inc="volumeUp" @dec="volumeDown" @changed="setVolume" @toggleMute="toggleMute"></volume-control>
+         <volume-control :value="player.volume" :muted="player.muted" :playing="player.isplaying" :dvc="player.dvc" :id="player.id" :layout="2" @inc="volumeUp" @dec="volumeDown" @changed="setVolume" @toggleMute="toggleMute" v-bind:class="{'dimmed':!player.ison}"></volume-control>
          <v-btn icon @click.stop="playerMenu(player, $event)" class="pmgr-btn" :title="player.name + ' - ' + trans.menu"><v-icon>more_vert</v-icon></v-btn>
         </v-layout>
         <v-layout v-else>

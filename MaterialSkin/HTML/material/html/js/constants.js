@@ -156,3 +156,5 @@ const SKIN_BOOL_OPTS = ['showComposer', 'showConductor', 'showBand', 'showAllArt
 const SKIN_INT_OPTS = ['respectFixedVol', 'commentAsDiscTitle', 'collapseDiscs'];
 
 const MSK_REV_SORT_OPT = "msk-revsort:1";
+
+const MIN_TIME_BETWEEN_VOL_UPDATES = 150;

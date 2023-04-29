@@ -141,11 +141,7 @@ Vue.component('lms-manage-players', {
        </v-flex xs12>
        <v-flex xs12>
         <v-layout v-if="VOL_HIDDEN!=player.dvc">
-         <v-btn flat icon @click="adjustVolume(player, false)" @click.middle="toggleMute(player)" class="pmgr-btn pmgr-vol-dec-btn" :title="player.name + ' - ' + trans.decVol" v-bind:class="{'dimmed': !player.ison}"><v-icon>{{player.muted ? 'volume_off' : 'volume_down'}}</v-icon></v-btn>
-         <v-slider :disabled="VOL_FIXED==player.dvc" @change="volumeChanged(player)" step="1" v-model="player.volume" class="pmgr-vol-slider" v-bind:class="{'dimmed': !player.ison}"></v-slider>
-         <v-btn flat icon @click="adjustVolume(player, true)" @click.middle="toggleMute(player)" class="pmgr-btn" :title="player.name + ' - ' + trans.incVol" v-bind:class="{'dimmed': !player.ison}"><v-icon>{{player.muted ? 'volume_off' : 'volume_up'}}</v-icon></v-btn>
-         <p v-if="VOL_STD==player.dvc" class="pmgr-vol link-item noselect" v-bind:class="{'pmgr-vol-small':!showAllButtons, 'dimmed': !player.ison || player.muted, 'pulse':player.ison && player.isplaying && 0==player.volume}" @click.middle="toggleMute(player)" v-longpress="toggleMuteLabel" :id="index+'-pmgr-label'">{{player.volume}}%</p>
-         <p v-else class="pmgr-vol" v-bind:class="{'pmgr-vol-small':!showAllButtons}"></p>
+         <volume-control :value="player.volume" :muted="player.muted" :playing="player.isplaying" :dvc="player.dvc" :id="player.id" :layout="2" @inc="volumeUp" @dec="volumeDown" @changed="setVolume" @toggleMute="toggleMute"></volume-control>
          <v-btn icon @click.stop="playerMenu(player, $event)" class="pmgr-btn" :title="player.name + ' - ' + trans.menu"><v-icon>more_vert</v-icon></v-btn>
         </v-layout>
         <v-layout v-else>
@@ -404,30 +400,52 @@ Vue.component('lms-manage-players', {
                 return str;
             }
         },
-        adjustVolume(player, inc) {
+        getPlayer(id) {
+            for (let i=0, loop=this.players, len=loop.length; i<len; ++i) {
+                if (loop[i].id==id) {
+                    return loop[i];
+                }
+            }
+            return undefined;
+        },
+        volumeUp(id) {
+            this.adjustVolume(id, true);
+        },
+        volumeDown(id) {
+            this.adjustVolume(id, false);
+        },
+        adjustVolume(id, inc) {
             if (!this.show || this.$store.state.visibleMenus.size>0) {
                 return;
             }
-            if (player.muted) {
-                this.toggleMute(player);
-            } else {
-                lmsCommand(player.id, ["mixer", "volume", (inc ? "+" : "-")+lmsOptions.volumeStep]).then(({data}) => {
-                    this.refreshAllMembers(player);
-                });
-            }
-        },
-        setVolume(player, vol) {
-            if (!this.show) {
+            let player = this.getPlayer(id);
+            if (undefined==player) {
                 return;
             }
-            lmsCommand(player.id, ["mixer", "volume", vol]).then(({data}) => {
-                player.volume = vol;
-                player.muted = vol<0;
+            lmsCommand(player.id, ["mixer", "volume", (inc ? "+" : "-")+lmsOptions.volumeStep]).then(({data}) => {
                 this.refreshAllMembers(player);
             });
         },
-        toggleMute(player) {
+        setVolume(vol, id) {
             if (!this.show) {
+                return;
+            }
+            let player = this.getPlayer(id);
+            if (undefined==player) {
+                return;
+            }
+            player.volume = vol;
+            player.muted = vol<0;
+            lmsCommand(player.id, ["mixer", "volume", vol]).then(({data}) => {
+                this.refreshAllMembers(player);
+            });
+        },
+        toggleMute(id) {
+            if (!this.show || this.$store.state.visibleMenus.size>0) {
+                return;
+            }
+            let player = this.getPlayer(id);
+            if (undefined==player) {
                 return;
             }
             lmsCommand(player.id, ['mixer', 'muting', player.muted ? 0 : 1]).then(({data}) => {
@@ -437,18 +455,6 @@ Vue.component('lms-manage-players', {
                     this.refreshAllMembers(player);
                 }.bind(this), 500);
             });
-        },
-        toggleMuteLabel(longPress, el) {
-            let idx = parseInt(el.id.split("-")[0]);
-            if (idx>=0 && idx<=this.players.length) {
-                let player = this.players[idx];
-                if (longPress || player.muted) {
-                    this.toggleMute(player);
-                }
-            }
-        },
-        volumeChanged(player) {
-            this.setVolume(player, player.volume);
         },
         togglePower(player) {
             if (!this.show) {

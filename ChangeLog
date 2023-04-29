@@ -5,8 +5,9 @@
 3. More rounded dialogs.
 4. Remove shadows from dialogs, volume popup, and menus.
 5. Less rounded chips.
-4. Add 'Kiosk' mode; hide all main menu items (except custom actions), and
+6. Add 'Kiosk' mode; hide all main menu items (except custom actions), and
    allow configuring which actions are available.
+7. Refactor volume handling to throttle volume change requests.
 
 3.2.4
 -----

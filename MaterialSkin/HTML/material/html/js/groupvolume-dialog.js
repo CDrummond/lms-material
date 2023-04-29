@@ -28,17 +28,7 @@ Vue.component('lms-groupvolume', {
   <v-layout row wrap>
    <div v-for="(player, index) in players" style="width:100%" :key="player.id" v-bind:class="{'active-player':currentPlayer && currentPlayer.id === player.id}" :id="currentPlayer && currentPlayer.id === player.id ? 'gv-active' : ('gv-'+index)">
     <v-flex :disabled="VOL_HIDDEN==player.dvc" xs12 style="height:8px"></v-flex>
-    <v-flex :disabled="VOL_HIDDEN==player.dvc" xs12 class="vol-label" v-bind:class="{'pulse':0==player.volume && player.isplaying, 'link-item':VOL_STD==player.dvc}" @click.middle="toggleMute(player)" v-longpress="toggleMuteLabel" :id="index+'-grpvol-label'">
-     {{player.name}}{{player.volume|displayVolume(player.dvc)}}
-    </v-flex>
-    <v-flex :disabled="VOL_HIDDEN==player.dvc" xs12 style="height:16px"></v-flex>
-    <v-flex :disabled="VOL_HIDDEN==player.dvc" xs12>
-     <v-layout>
-      <v-btn flat icon class="vol-btn vol-left" @click="adjustVolume(player, false)"><v-icon>{{player.muted ? 'volume_off' : 'volume_down'}}</v-icon></v-btn>
-      <v-slider :readonly="VOL_STD!=player.dvc" :disabled="VOL_STD!=player.dvc" @change="volumeChanged(player)" step="1" v-model="player.volume" class="vol-slider" v-bind:class="{'dimmed': !player.ison}"></v-slider>
-      <v-btn flat icon @click="adjustVolume(player, true)" class="vol-btn vol-right"><v-icon>{{player.muted ? 'volume_off' : 'volume_up'}}</v-icon></v-btn>
-     </v-layout>
-    </v-flex>
+    <volume-control :value="player.volume" :muted="player.muted" :playing="player.isplaying" :dvc="player.dvc" :layout="0" :name="player.name" :id="player.id" @inc="volumeUp" @dec="volumeDown" @changed="setVolume" @moving="movingSlider" @toggleMute="toggleMute"></volume-control>
     <v-flex xs12 style="height:16px"></v-flex>
    </div>
   </v-layout>
@@ -185,13 +175,34 @@ Vue.component('lms-groupvolume', {
             this.players[idx].volume = player.volume;
             this.players[idx].isplaying = player.isplaying;
         },
-        adjustVolume(player, inc) {
-            if (!this.show || this.$store.state.visibleMenus.size>0 || VOL_HIDDEN==player.dvc) {
+        volumeUp(id) {
+            this.adjustVolume(id, true)
+        },
+        volumeDown(id) {
+            this.adjustVolume(id, false)
+        },
+        movingSlider(moving) {
+            if (moving) {
+                this.cancelCloseTimer();
+            } else {
+                this.resetCloseTimer();
+            }
+        },
+        adjustVolume(id, inc) {
+            if (!this.show || this.$store.state.visibleMenus.size>0) {
+                return;
+            }
+            var idx = this.playerMap[id];
+            if (undefined==idx || idx<0 || idx>=this.players.length) {
+                return;
+            }
+            let player = this.players[idx];
+            if (VOL_HIDDEN==player.dvc) {
                 return;
             }
             this.resetCloseTimer();
             if (player.muted) {
-                this.toggleMute(player);
+                this.toggleMute(id);
             } else {
                 lmsCommand(player.id, ["mixer", "volume", (inc ? "+" : "-")+lmsOptions.volumeStep]).then(({data}) => {
                     this.refreshAll();
@@ -201,10 +212,15 @@ Vue.component('lms-groupvolume', {
         volumeChanged(player) {
             this.setVolume(player, player.volume);
         },
-        setVolume(player, vol) {
+        setVolume(vol, id) {
             if (!this.show) {
                 return;
             }
+            var idx = this.playerMap[id];
+            if (undefined==idx || idx<0 || idx>=this.players.length) {
+                return;
+            }
+            let player = this.players[idx];
             if (VOL_STD!=player.dvc) {
                 player.volume = 100;
                 return;
@@ -216,7 +232,12 @@ Vue.component('lms-groupvolume', {
                 this.refreshAll();
             });
         },
-        toggleMute(player) {
+        toggleMute(id) {
+            var idx = this.playerMap[id];
+            if (undefined==idx || idx<0 || idx>=this.players.length) {
+                return;
+            }
+            let player = this.players[idx];
             if (VOL_STD!=player.dvc || !this.show) {
                 return;
             }
@@ -228,15 +249,6 @@ Vue.component('lms-groupvolume', {
                     this.refreshAll();
                 }.bind(this), 500);
             });
-        },
-        toggleMuteLabel(longPress, el) {
-            let idx = parseInt(el.id.split("-")[0]);
-            if (idx>=0 && idx<=this.players.length) {
-                let player = this.players[idx];
-                if (VOL_STD==player.dvc && (longPress || player.muted)) {
-                    this.toggleMute(player);
-                }
-            }
         },
         cancelCloseTimer() {
             if (undefined!==this.closeTimer) {
@@ -269,10 +281,5 @@ Vue.component('lms-groupvolume', {
         currentPlayer () {
             return this.$store.state.player
         }
-    },
-    filters: {
-        displayVolume: function (value, dvc) {
-            return VOL_FIXED!=dvc ? ': ' +value+'%' : '';
-        },
     }
 })

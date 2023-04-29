@@ -655,8 +655,8 @@ div.v-subheader {
 }
 
 .vol-full-slider {
- max-width:200px!important;
- min-width:200px!important;
+ max-width:344px!important;
+ min-width:344px!important;
 }
 
 .vol-full-label {
@@ -1491,7 +1491,7 @@ progress {
  height:32px !important;
 }
 
-.pmgr-sync .pmgr-vol-dec-btn {
+.pmgr-sync .vol-control-2 .vol-left {
  margin-left:56px;
 }
 
@@ -1499,18 +1499,18 @@ progress {
  margin-bottom:-6px!important;
 }
  
-.pmgr-vol-dec-btn {
+.vol-control-2 .vol-left {
  margin-left:58px!important;
 }
 
-.pmgr-vol-slider {
+.vol-control-2 .vol-slider {
  margin-top:-10px;
  margin-left:8px;
  margin-right:8px;
  height:20px;
 }
 
-.pmgr-btn {
+.pmgr-btn, .vol-control-2 .vol-btn {
  margin:-12px 0px 0px 0px;
  width:32px;
  height:32px;
@@ -1564,7 +1564,7 @@ progress {
 }
 
 @media screen and (max-width: 500px) {
- .pmgr-vol-slider {
+ .vol-control-2 .vol-slider {
   margin-left:0px;
   margin-right:0px;
  }
@@ -1576,7 +1576,7 @@ progress {
   display:none!important;
  }
 
- .pmgr-vol-dec-btn {
+ .vol-control-2 .vol-left {
   margin-left:0px!important;
  }
  .pmgr-sync .v-list__tile {

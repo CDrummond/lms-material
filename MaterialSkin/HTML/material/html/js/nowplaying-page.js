@@ -273,7 +273,7 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
    <div v-show="overlayVolume>-1 && VOL_STD==playerStatus.dvc" id="volumeOverlay">{{overlayVolume}}%</div>
    <div v-if="landscape" v-touch:start="touchStart" v-touch:end="touchEnd" v-touch:moving="touchMoving">
     <img v-if="!info.show" :key="coverUrl" v-lazy="coverUrl" onerror="this.src='html/images/cover.png'" class="np-image-landscape" v-bind:class="{'np-image-landscape-wide': landscape && wide>1}" @contextmenu="showMenu" @click="clickImage(event)"></img>
-    <div class="np-details-landscape">
+    <div class="np-details-landscape" v-bind:class="{'np-details-landscape-wide': landscape && wide>1}">
 
      <div class="np-landscape-song-info hide-scrollbar fade-both">
       <div>

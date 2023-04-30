@@ -1215,6 +1215,42 @@ div.v-rating i.primary--text, div.v-rating i.accent--text {
  bottom:0px;
 }
 
+@media (min-aspect-ratio: 3/1) {
+ .np-image-landscape-wide {
+   width:33vw!important;
+ }
+ .np-details-landscape-wide {
+   width:67vw!important;
+ }
+ .np-controls-wide {
+   width:calc(67vw - 16px)!important;
+ }
+}
+
+@media (min-aspect-ratio: 4/1) {
+ .np-image-landscape-wide {
+   width:25vw!important;
+ }
+ .np-details-landscape-wide {
+   width:75vw!important;
+ }
+ .np-controls-wide {
+   width:calc(75vw - 16px)!important;
+ }
+}
+
+@media (min-aspect-ratio: 5/1) {
+ .np-image-landscape-wide {
+   width:20vw!important;
+ }
+ .np-details-landscape-wide {
+   width:80vw!important;
+ }
+ .np-controls-wide {
+   width:calc(80vw - 16px)!important;
+ }
+}
+
 .np-info {
  width:100vw;
  display:block;

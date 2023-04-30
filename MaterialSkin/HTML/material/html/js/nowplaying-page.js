@@ -88,7 +88,7 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
     </v-list-tile-action>
    </v-list-tile>
   </v-list>
-  <v-progress-linear height="5" id="pos-slider" v-if="playerStatus.current.duration>0" class="np-slider np-slider-desktop" :value="playerStatus.current.pospc" v-on:click="sliderChanged($event)" @mouseover="showTimeTooltip" @mouseout="hideTimeTooltip" @mousemove="moveTimeTooltip" @touchstart.passive="touchSliderStart" @touchend.passive="touchSliderEnd" @touchmove.passive="moveTimeTooltipTouch"></v-progress-linear>
+  <v-progress-linear height="5" id="pos-slider" v-if="playerStatus.current.duration>0" class="np-slider np-slider-desktop" :value="playerStatus.current.pospc" v-on:click="sliderChanged($event, false)" @mouseover="showTimeTooltip" @mouseout="hideTimeTooltip" @mousemove="moveTimeTooltip" @touchstart.passive="touchSliderStart" @touchend.passive="touchSliderEnd" @touchmove.passive="moveTimeTooltipTouch"></v-progress-linear>
 
   <div v-if="info.show" class="np-info np-info-desktop" id="np-info">
    <v-tabs centered v-model="info.tab" v-if="info.showTabs" style="np-info-tab-cover">
@@ -273,7 +273,7 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
    <div v-show="overlayVolume>-1 && VOL_STD==playerStatus.dvc" id="volumeOverlay">{{overlayVolume}}%</div>
    <div v-if="landscape" v-touch:start="touchStart" v-touch:end="touchEnd" v-touch:moving="touchMoving">
     <img v-if="!info.show" :key="coverUrl" v-lazy="coverUrl" onerror="this.src='html/images/cover.png'" class="np-image-landscape" v-bind:class="{'np-image-landscape-wide': landscape && wide>1}" @contextmenu="showMenu" @click="clickImage(event)"></img>
-    <div class="np-details-landscape">
+    <div class="np-details-landscape" v-bind:class="{'np-details-landscape-wide': landscape && wide>1}">
 
      <div class="np-landscape-song-info hide-scrollbar fade-both">
       <div>
@@ -361,7 +361,7 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
     <v-flex xs12 v-if="!info.show && undefined!=playerStatus.current.time">
      <v-layout>
       <p class="np-pos" v-bind:class="{'np-pos-center': playerStatus.current.duration<=0}">{{playerStatus.current.time | displayTime}}</p>
-      <v-progress-linear height="5" v-if="playerStatus.current.duration>0" id="pos-slider" class="np-slider" :value="playerStatus.current.pospc" v-on:click="sliderChanged($event)" @mouseover="showTimeTooltip" @mouseout="hideTimeTooltip" @mousemove="moveTimeTooltip" @touchstart.passive="touchSliderStart" @touchend.passive="touchSliderEnd" @touchmove.passive="moveTimeTooltipTouch"></v-progress-linear>
+      <v-progress-linear height="5" v-if="playerStatus.current.duration>0" id="pos-slider" class="np-slider" :value="playerStatus.current.pospc" v-on:click="sliderChanged($event, false)" @mouseover="showTimeTooltip" @mouseout="hideTimeTooltip" @mousemove="moveTimeTooltip" @touchstart.passive="touchSliderStart" @touchend.passive="touchSliderEnd" @touchmove.passive="moveTimeTooltipTouch"></v-progress-linear>
       <p class="np-duration link-item" v-if="(showTotal || undefined==playerStatus.current.time) && playerStatus.current.duration>0" @click="toggleTime()">{{playerStatus.current.duration | displayTime}}</p>
       <p class="np-duration link-item" v-else-if="playerStatus.current.duration>0" @click="toggleTime()">-{{playerStatus.current.duration-playerStatus.current.time | displayTime}}</p>
      </v-layout>
@@ -669,11 +669,6 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
         },
         sliderChanged(e, isTouch) {
             if (this.playerStatus.current.canseek && this.playerStatus.current.duration>3) {
-                // On touch devices we get a sliderChanged event from touchSliderEnd and the one from the slider
-                // So, ignore events too close together. See #672
-                if (undefined!=this.lastTimeEvent && ((new Date().getTime())-this.lastTimeEvent)<50) {
-                    return;
-                }
                 const rect = document.getElementById("pos-slider").getBoundingClientRect();
                 const evPos = isTouch ? getTouchPos(e) : {x:e.clientX, y:e.clientY};
                 let pos = evPos.x - rect.x;
@@ -688,8 +683,15 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
                     return;
                 }
                 pos = Math.min(Math.max(0, pos), rect.width);
-                this.doAction(['time', Math.floor(this.playerStatus.current.duration * pos / rect.width)]);
-                this.lastTimeEvent = new Date().getTime();
+                let val = Math.floor(this.playerStatus.current.duration * pos / rect.width);
+
+                // On touch devices we get a sliderChanged event from touchSliderEnd and the one from the slider
+                // So, ignore events too close together. See #672
+                if (undefined!=this.lastTimeEvent && this.lastTimeEvent.isTouch!=isTouch && this.lastTimeEvent.val==val && ((new Date().getTime())-this.lastTimeEvent.time)<250) {
+                    return;
+                }
+                this.doAction(['time', val]);
+                this.lastTimeEvent = {time: new Date().getTime(), val: val, isTouch: isTouch};
             }
         },
         moveTimeTooltipTouch(e) {

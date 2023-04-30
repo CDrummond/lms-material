@@ -8,6 +8,12 @@
 6. Add 'Kiosk' mode; hide all main menu items (except custom actions), and
    allow configuring which actions are available.
 7. Refactor volume handling to throttle volume change requests.
+8. Better layout of now playing when using very wide views.
+9. Refactor volume handling to throttle volume change requests.
+
+3.2.5
+-----
+1. Better duplicate 'time' fix.
 
 3.2.4
 -----

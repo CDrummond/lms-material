@@ -12,9 +12,9 @@ Vue.component('volume-control', {
  <v-flex xs12 v-if="layout==0"><p class="vol-text link-item noselect" v-bind:class="{'pulse':!noPlayer && value==0 && playing}" @click.middle="toggleMute" v-longpress="toggleMuteLabel">{{value|displayVal(dvc, name)}}</p></v-flex>
  <v-flex :disabled="VOL_HIDDEN==dvc" xs12>
   <v-layout>
-   <v-btn flat icon @wheel="wheel($event)" @click.middle="toggleMute" v-longpress:repeat="dec" class="vol-btn vol-left"><v-icon>{{muted ? 'volume_off' : 'volume_down'}}</v-icon></v-btn>
+   <v-btn flat icon @wheel="wheel($event)" @click.middle="toggleMute" v-longpress:repeat="dec" class="vol-btn vol-left" :title="decTooltip"><v-icon>{{muted ? 'volume_off' : 'volume_down'}}</v-icon></v-btn>
    <v-slider :disabled="VOL_FIXED==dvc || noPlayer || queryParams.party" step="1" v-model="value" @wheel.native="wheel($event)" @click.middle="toggleMute" class="vol-slider" @start="start" @end="end"></v-slider>
-   <v-btn flat icon @wheel="wheel($event)" @click.middle="toggleMute" v-longpress:repeat="inc" class="vol-btn vol-right"><v-icon>{{muted ? 'volume_off' : 'volume_up'}}</v-icon></v-btn>
+   <v-btn flat icon @wheel="wheel($event)" @click.middle="toggleMute" v-longpress:repeat="inc" class="vol-btn vol-right" :title="incTooltip"><v-icon>{{muted ? 'volume_off' : 'volume_up'}}</v-icon></v-btn>
    <p v-if="layout==1" class="vol-full-label" v-bind:class="{'link-item-ct':coloredToolbars,'link-item':!coloredToolbars,'disabled':noPlayer,'dimmed':muted,'pulse':!noPlayer && value==0 && playing}" @click.middle="toggleMute" v-longpress="toggleMuteLabel" id="vol-label">{{value|displayVal(dvc)}}</p>
    <p v-if="layout==2 && VOL_STD==dvc" class="pmgr-vol link-item noselect" v-bind:class="{'pulse':value==0 && playing}" @click.middle="toggleMute" v-longpress="toggleMuteLabel">{{value|displayVal(dvc)}}</p>
   </v-layout>
@@ -51,15 +51,27 @@ Vue.component('volume-control', {
             required: false
         }
     },
+    data() {
+        return {
+            trans:{ decVol:undefined, incVol:undefined }
+        }
+    },
     mounted() {
         this.moving = false;
         this.lastTime = undefined;
         this.lastEmittedValue = -1;
+        bus.$on('langChanged', function() {
+            this.initItems();
+        }.bind(this));
+        this.initItems();
     },
     beforeDestroy() {
         this.cancelTimer();
     },
     methods: {
+        initItems() {
+            this.trans = { decVol:i18n("Decrease volume"), incVol:i18n("Increase volume") };
+        },
         wheel(event) {
             if (event.deltaY<0) {
                 this.inc();
@@ -110,6 +122,12 @@ Vue.component('volume-control', {
         },
         coloredToolbars() {
             return this.$store.state.coloredToolbars
+        },
+        incTooltip() {
+            return this.trans.incVol + (undefined==this.name ? '' : (' (' + this.name + ')'))
+        },
+        decTooltip() {
+            return this.trans.decVol + (undefined==this.name ? '' : (' (' + this.name + ')'))
         }
     },
     watch: {

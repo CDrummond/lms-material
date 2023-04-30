@@ -87,9 +87,11 @@ Vue.component('volume-control', {
         },
         start() {
             this.lastEmittedValue = this.value;
+            this.moving=true;
             this.$emit('moving', true);
         },
         end() {
+            this.moving=false;
             this.$emit('moving', false);
         },
         toggleMute() {
@@ -132,7 +134,7 @@ Vue.component('volume-control', {
     },
     watch: {
         'value': function(newVal) {
-            if (newVal>=0) {
+            if (newVal>=0 && this.moving) {
                 let time = new Date().getTime();
                 if (undefined==this.lastTime || time-this.lastTime>=MIN_TIME_BETWEEN_VOL_UPDATES) {
                     this.$emit('changed', newVal, this.id);

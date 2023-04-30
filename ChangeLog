@@ -9,6 +9,10 @@
    allow configuring which actions are available.
 5. Better layout of now playing when using very wide views.
 
+3.2.5
+-----
+1. Better duplicate 'time' fix.
+
 3.2.4
 -----
 1. Fix missing icon for 'More' entry of now-playing menu.

@@ -610,10 +610,11 @@ Vue.component('lms-toolbar', {
                 bus.$emit('dlg.open', this.playerStatus.synced && !queryParams.single ? 'groupvolume' : 'volume', this.playerStatus, true);
             }
         },
-        setVolume() {
+        setVolume(val) {
             if (queryParams.party) {
                 return;
             }
+            this.playerVolume = val;
             bus.$emit('playerCommand', ["mixer", "volume", this.playerVolume]);
         },
         toggleMute() {

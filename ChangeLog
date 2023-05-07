@@ -2,6 +2,7 @@
 -----
 1. Better duplicate 'time' fix.
 2. Strip HTML tags for browse item tooltips.
+3. Handle text items (max 2 lines) when showing over 100 items in a list.
 
 3.2.4
 -----

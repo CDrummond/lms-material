@@ -844,7 +844,7 @@ div.v-subheader {
  padding:12px 16px!important;
 }
 
-.browse-text .v-list__tile{
+.browse-text .v-list__tile {
  height:unset!important;
 }
 
@@ -854,6 +854,26 @@ div.v-subheader {
  white-space:normal!important;
  min-height:var(--list-elem-height)!important;
  height:auto!important;
+ padding:12px 0px 11px 0px!important; /* t, r, b, l */
+}
+
+.browse-text-inrecycler .v-list__tile__title {
+ font-size:var(--std-font-size)!important;
+ font-weight:200!important;
+ white-space:normal!important;
+ height:var(--list-elem-height)!important;
+ padding:0px!important;
+ overflow: hidden;
+ display: -webkit-box;
+ -webkit-box-orient: vertical;
+ -webkit-line-clamp: 2;
+}
+
+.browse-text-inrecycler .v-list__tile__title:before {
+ box-sizing:initial!important;
+};
+
+.v-list__tile:has(.browse-text-inrecycler) {
  padding:12px 0px 11px 0px!important; /* t, r, b, l */
 }
 

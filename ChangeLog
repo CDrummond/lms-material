@@ -1,6 +1,7 @@
 3.2.5
 -----
 1. Better duplicate 'time' fix.
+2. Strip HTML tags for browse item tooltips.
 
 3.2.4
 -----

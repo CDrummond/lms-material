@@ -335,3 +335,7 @@ function sortPlaylist(view, playerId, title, command) {
         }
     });
 }
+
+function stipTags(str) {
+    return isEmpty(str) ? str : str.replace('<br/>', '\n').replace(/<\/?[^>]+(>|$)/g, "");
+}

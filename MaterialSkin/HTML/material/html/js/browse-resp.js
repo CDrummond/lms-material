@@ -65,6 +65,7 @@ function parseBrowseResp(data, parent, options, cacheKey, parentCommand, parentG
             var isBmf = command == "browselibrary" && data.params[1].length>=5 && data.params[1].indexOf("mode:bmf")>0;
             var isCustomBrowse = command == "custombrowse" ;
             var isDynamicPlaylist = command == "dynamicplaylist";
+            var isPresets = command == "presets";
             var haveWithIcons = false;
             var haveWithoutIcons = false;
             var menu = undefined;
@@ -476,9 +477,11 @@ function parseBrowseResp(data, parent, options, cacheKey, parentCommand, parentG
                     i.menu.push(MORE_ACTION);
                 }
 
-                var key = removeDiactrics(i.textkey);
-                if (undefined!=key && (resp.jumplist.length==0 || resp.jumplist[resp.jumplist.length-1].key!=key)) {
-                    resp.jumplist.push({key: key, index: resp.items.length});
+                if (!isFavorites && !isPresets && !isAppsTop && !isPodcastList && !isRadiosTop) {
+                    var key = removeDiactrics(i.textkey);
+                    if (undefined!=key && (resp.jumplist.length==0 || resp.jumplist[resp.jumplist.length-1].key!=key)) {
+                        resp.jumplist.push({key: key, index: resp.items.length});
+                    }
                 }
                 if (isFavorites) {
                     i.draggable = true;
@@ -589,7 +592,7 @@ function parseBrowseResp(data, parent, options, cacheKey, parentCommand, parentG
                 resp.items=before;
                 resp.items = resp.items.concat(feeds);
                 resp.items = resp.items.concat(after);
-            } else if (isFavorites) {
+            } else if (isFavorites || isPresets) {
                 resp.items.sort(options.sortFavorites ? favSort : partialFavSort);
             } else if (isRadiosTop) {
                 resp.items.sort(weightSort);

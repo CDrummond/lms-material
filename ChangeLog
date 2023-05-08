@@ -9,7 +9,6 @@
    allow configuring which actions are available.
 7. Refactor volume handling to throttle volume change requests.
 8. Better layout of now playing when using very wide views.
-9. Refactor volume handling to throttle volume change requests.
 
 3.2.5
 -----

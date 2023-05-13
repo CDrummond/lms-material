@@ -3,6 +3,8 @@
 1. Better duplicate 'time' fix.
 2. Strip HTML tags for browse item tooltips.
 3. Handle text items (max 2 lines) when showing over 100 items in a list.
+4. Only show total library duration if there are tracks in library.
+5. Only show library last update date if valid.
 
 3.2.4
 -----

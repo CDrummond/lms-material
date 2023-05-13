@@ -40,7 +40,7 @@ Vue.component('lms-information-dialog', {
    <ul>
     <template v-for="(item, index) in library"><li>{{item}}</li></template>
     <li v-if="scanning"><v-icon class="pulse">update</v-icon> {{scanInfo}}</li>
-    <li v-else>{{scanInfo}}</li>
+    <li v-else-if="undefined!=scanInfo">{{scanInfo}}</li>
    </ul>
    <v-menu bottom v-if="!scanning && unlockAll">
     <v-btn slot="activator" flat><v-icon class="btn-icon">refresh</v-icon>{{i18n('Rescan')}} <v-icon>arrow_drop_down</v-icon></v-btn>
@@ -323,9 +323,11 @@ Vue.component('lms-information-dialog', {
                     this.library=[ i18n("Total genres: %1", data.result["info total genres"]),
                                    i18n("Total artists: %1", data.result["info total artists"]),
                                    i18n("Total albums: %1", data.result["info total albums"]),
-                                   i18n("Total songs: %1", data.result["info total songs"]),
-                                   i18n("Total duration: %1", formatSeconds(data.result["info total duration"], true))];
-                    this.scanInfo=undefined!=progressInfo ? progressInfo : this.scanning ? i18n("In progress") : i18n("Last scan: %1", formatDate(data.result.lastscan));
+                                   i18n("Total songs: %1", data.result["info total songs"])];
+                    if (undefined!=data.result["info total duration"]) {
+                        this.library.push(i18n("Total duration: %1", formatSeconds(data.result["info total duration"], true)));
+                    }
+                    this.scanInfo=undefined!=progressInfo ? progressInfo : this.scanning ? i18n("In progress") : undefined==data.result.lastscan || data.result.lastscan<=0 ? undefined : i18n("Last scan: %1", formatDate(data.result.lastscan));
 
                     // Noticed a scan has started, so get server class to also poll for changes - so that icon in main toolbar is updated...
                     if (this.scanning && !wasScanning) {

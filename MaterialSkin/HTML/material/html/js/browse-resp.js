@@ -517,7 +517,7 @@ function parseBrowseResp(data, parent, options, cacheKey, parentCommand, parentG
                 resp.allSongsItem={id:resp.baseActions['playControl'].params.item_id, params:resp.baseActions['playControl'].params};
             }
             // If listing a radio app's entries and all images are the same, then hide images. e.g. iHeartRadio and RadioNet
-            if ((!isApps || (isApps && parent.id.split('.').length==2)) && resp.items.length>1 && resp.items.length<=100) {
+            if (!isFavorites && (!isApps || (isApps && parent.id.split('.').length==2)) && resp.items.length>1 && resp.items.length<=100) {
                 if (images.size == 1 && undefined!=images.values().next().value) {
                     for (var i=0, loop=resp.items, len=loop.length; i<len; ++i) {
                         loop[i].image = loop[i].icon = loop[i].svg = undefined;

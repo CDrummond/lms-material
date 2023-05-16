@@ -5,6 +5,7 @@
 3. Handle text items (max 2 lines) when showing over 100 items in a list.
 4. Only show total library duration if there are tracks in library.
 5. Only show library last update date if valid.
+6. Don't remove icons in favourites just because they are all the same.
 
 3.2.4
 -----

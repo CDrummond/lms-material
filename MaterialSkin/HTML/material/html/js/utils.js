@@ -877,6 +877,10 @@ function shortcutStr(key, shift, alt) {
             key = i18n("Down");
         } else if (key=="space") {
             return i18n("Spacebar");
+        } else if (key=="esc") {
+            return i18n("Esc");
+        } else if (key=="home") {
+            return i18n("Home");
         }
     }
     if (alt) {

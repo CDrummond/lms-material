@@ -455,8 +455,8 @@ Vue.component('lms-iframe-dialog', {
   <v-card>
    <v-card-title class="settings-title">
     <v-toolbar app-data class="dialog-toolbar">
-     <v-btn flat icon v-longpress:stop="goBack" :title="i18n('Go back')"><v-icon>arrow_back</v-icon></v-btn>
-     <v-btn v-if="showHome && homeButton" flat icon @click="goHome" :title="i18n('Go home')">
+     <v-btn flat icon v-longpress:stop="goBack" :title="ttShortcutStr(i18n('Go back'), 'esc')"><v-icon>arrow_back</v-icon></v-btn>
+     <v-btn v-if="showHome && homeButton" flat icon @click="goHome" :title="ttShortcutStr(i18n('Go home'), 'home')">
       <img v-if="showHome==IFRAME_HOME_CLOSES_DIALOGS" class="svg-img" :src="'home-outline' | svgIcon(darkUi)"></img>
       <v-icon v-else>home</v-icon>
      </v-btn>

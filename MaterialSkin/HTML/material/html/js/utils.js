@@ -893,7 +893,7 @@ function shortcutStr(key, shift, alt) {
 }
 
 function ttShortcutStr(str, key, shift, alt) {
-    return undefined==key ? str : (str+SEPARATOR+shortcutStr(key, shift, alt));
+    return undefined==key || IS_MOBILE ? str : (str+SEPARATOR+shortcutStr(key, shift, alt));
 }
 
 const PLAYLIST_EXTENSIONS = new Set(["m3u", "m3u8", "pls", "xspf", "asx", "cue"]);

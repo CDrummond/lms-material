@@ -21,7 +21,6 @@ Vue.component('m3-switch', {
     },
     methods: {
         handleClick(event) {
-            console.log('HC');
             this.$emit("input", event.target.checked);
         }
     }

@@ -876,7 +876,7 @@ function shortcutStr(key, shift, alt) {
         } else if (key=="down") {
             key = i18n("Down");
         } else if (key=="space") {
-            return i18n("Space");
+            return i18n("Spacebar");
         }
     }
     if (alt) {
@@ -889,7 +889,7 @@ function shortcutStr(key, shift, alt) {
 }
 
 function ttShortcutStr(str, key, shift, alt) {
-    return undefined==key ? str : (str+' ('+shortcutStr(key, shift, alt)+')');
+    return undefined==key ? str : (str+SEPARATOR+shortcutStr(key, shift, alt));
 }
 
 const PLAYLIST_EXTENSIONS = new Set(["m3u", "m3u8", "pls", "xspf", "asx", "cue"]);

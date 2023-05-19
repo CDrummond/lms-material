@@ -180,6 +180,9 @@ function formatTechInfo(item, source) {
 }
 
 function formatSeconds(secs, showDays) {
+    if (undefined==secs) {
+        secs = 0;
+    }
     var numSeconds = parseInt(secs, 10)
     var days       = showDays ? Math.floor(numSeconds / (3600*24)) : 0;
     var hours      = showDays ? Math.floor(numSeconds / 3600) % 24 : Math.floor(numSeconds / 3600);

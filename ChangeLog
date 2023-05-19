@@ -6,6 +6,7 @@
 4. Only show total library duration if there are tracks in library.
 5. Only show library last update date if valid.
 6. Don't remove icons in favourites just because they are all the same.
+7. Fix 'Play next' when invoked from header of multi-disc album.
 
 3.2.4
 -----

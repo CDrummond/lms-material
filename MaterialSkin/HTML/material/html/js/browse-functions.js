@@ -2095,7 +2095,7 @@ function browseBuildFullCommand(view, item, act) {
 }
 
 function browseDoList(view, list, act, index) {
-    act = ADD_ALL_ACTION==act ? ADD_ACTION : PLAY_ALL_ACTION==act || PLAY_DISC_ACTION==act ? PLAY_ACTION : act;
+    act = ADD_ALL_ACTION==act ? ADD_ACTION : PLAY_ALL_ACTION==act || PLAY_DISC_ACTION==act ? PLAY_ACTION : INSERT_ALL_ACTION==act ? INSERT_ACTION : act;
     // Perform an action on a list of items. If these are tracks, then we can use 1 command...
     if (list[0].id.startsWith("track_id:")) {
         var ids="";

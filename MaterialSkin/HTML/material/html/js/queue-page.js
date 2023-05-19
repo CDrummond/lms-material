@@ -1261,7 +1261,7 @@ var lmsQueue = Vue.component("lms-queue", {
                     : getComputedStyle(document.documentElement).getPropertyValue(1==state ? "--active-color" : "--primary-color").replace("#", ""))+"&r="+LMS_MATERIAL_REVISION;
         },
         tooltip: function (str, key, showShortcut) {
-            return showShortcut ? str+SEPARATOR+shortcutStr(key) : str;
+            return showShortcut ? ttShortcutStr(str, key) : str;
         }
     },
     watch: {

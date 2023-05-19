@@ -93,22 +93,22 @@ Vue.component('lms-toolbar', {
   <v-icon>{{playerMuted ? 'volume_off' : playerStatus.volume>0 ? 'volume_up' : 'volume_down'}}</v-icon>
   <div v-if="VOL_FIXED!=playerDvc" v-bind:class="{'disabled':noPlayer,'vol-btn-label':!desktopLayout||!showVolumeSlider,'dimmed':playerMuted}" >{{playerStatus.volume|displayVolume(playerDvc)}}</div>
  </v-btn>
- <v-btn icon :title="trans.info | tooltip(trans.infoShortcut,keyboardControl)" v-if="!desktopLayout && infoPlugin && isNowPlayingPage" @click.stop="bus.$emit('info')" class="toolbar-button hide-for-mini" id="inf" v-bind:class="{'disabled':undefined===songInfo && !infoOpen}">
+ <v-btn icon :title="trans.info | tooltip(LMS_TRACK_INFO_KEYBOARD,keyboardControl)" v-if="!desktopLayout && infoPlugin && isNowPlayingPage" @click.stop="bus.$emit('info')" class="toolbar-button hide-for-mini" id="inf" v-bind:class="{'disabled':undefined===songInfo && !infoOpen}">
   <v-icon v-bind:class="{'active-btn':infoOpen}">{{infoOpen ? 'info' : 'info_outline'}}</v-icon>
  </v-btn>
  <v-btn icon v-if="!desktopLayout && ( (isNowPlayingPage && !infoPlugin) || !isNowPlayingPage)" v-longpress="playPauseButton" @click.middle="showSleep" class="toolbar-button hide-for-mini" id="pp" :title="playerStatus.isplaying ? trans.pause : trans.play" v-bind:class="{'disabled':undefined===songInfo}">
   <v-icon>{{playerStatus.isplaying ? 'pause_circle_outline' : 'play_circle_outline'}}</v-icon>
  </v-btn>
- <v-btn icon :title="trans.info | tooltip(trans.infoShortcut,keyboardControl)" v-if="desktopLayout && infoPlugin" @click.native="emitInfo" class="toolbar-button hide-for-mini" v-bind:class="{'disabled':undefined===songInfo && !infoOpen}">
+ <v-btn icon :title="trans.info | tooltip(LMS_TRACK_INFO_KEYBOARD,keyboardControl)" v-if="desktopLayout && infoPlugin" @click.native="emitInfo" class="toolbar-button hide-for-mini" v-bind:class="{'disabled':undefined===songInfo && !infoOpen}">
   <v-icon v-bind:class="{'active-btn':infoOpen, 'dimmed':coloredToolbars && !infoOpen && undefined!==songInfo}">{{infoOpen ? 'info' : 'info_outline'}}</v-icon>
  </v-btn>
- <v-btn icon :title="trans.showLarge | tooltip(trans.showLargeShortcut,keyboardControl)" v-if="desktopLayout && !nowPlayingExpanded" @click.native="expandNowPlaying(true)" class="toolbar-button hide-for-mini">
+ <v-btn icon :title="trans.showLarge | tooltip(LMS_EXPAND_NP_KEYBOARD,keyboardControl,true)" v-if="desktopLayout && !nowPlayingExpanded" @click.native="expandNowPlaying(true)" class="toolbar-button hide-for-mini">
   <v-icon v-bind:class="{'dimmed':coloredToolbars}">fullscreen</v-icon>
  </v-btn>
- <v-btn icon :title="trans.hideLarge | tooltip(trans.showLargeShortcut,keyboardControl)" v-if="desktopLayout && nowPlayingExpanded" @click.native="expandNowPlaying(false)" class="toolbar-button hide-for-mini">
+ <v-btn icon :title="trans.hideLarge | tooltip(LMS_EXPAND_NP_KEYBOARD,keyboardControl,true)" v-if="desktopLayout && nowPlayingExpanded" @click.native="expandNowPlaying(false)" class="toolbar-button hide-for-mini">
   <v-icon class="active-btn">fullscreen_exit</v-icon>
  </v-btn>
- <v-btn icon :title="trans.toggleQueue | tooltip(trans.toggleQueueShortcut,keyboardControl)" v-if="desktopLayout" @click.native="toggleQueue()" class="toolbar-button hide-for-mini">
+ <v-btn icon :title="trans.toggleQueue | tooltip(LMS_TOGGLE_QUEUE_KEYBOARD,keyboardControl,true)" v-if="desktopLayout" @click.native="toggleQueue()" class="toolbar-button hide-for-mini">
   <v-icon v-if="showQueue" class="active-btn">queue_music</v-icon>
   <img v-else class="svg-img" :src="'queue_music_outline' | svgIcon(darkUi, false, true, undefined, coloredToolbars)"></img>
  </v-btn>
@@ -185,11 +185,10 @@ Vue.component('lms-toolbar', {
                  showPlayerMenu: false,
                  showMainMenu: false,
                  showErrorMenu: false,
-                 trans:{noplayer:undefined, nothingplaying:undefined, info:undefined, infoShortcut:undefined, connectionLost:undefined, showLarge:undefined,
-                        showLargeShortcut:undefined, hideLarge:undefined, groupPlayers:undefined, standardPlayers:undefined,
-                        otherServerPlayers:undefined, updatesAvailable:undefined, showVol:undefined,
-                        downloading:undefined, mainMenu: undefined, play:undefined, pause:undefined, toggleQueue:undefined,
-                        toggleQueueShortcut:undefined, groupVol:undefined, restartRequired:undefined},
+                 trans:{noplayer:undefined, nothingplaying:undefined, info:undefined, connectionLost:undefined, showLarge:undefined,
+                        hideLarge:undefined, groupPlayers:undefined, standardPlayers:undefined, otherServerPlayers:undefined,
+                        updatesAvailable:undefined, showVol:undefined, downloading:undefined, mainMenu: undefined, play:undefined,
+                        pause:undefined, toggleQueue:undefined, groupVol:undefined, restartRequired:undefined},
                  infoOpen: false,
                  nowPlayingExpanded: false,
                  playerVolume: 0,
@@ -460,14 +459,11 @@ Vue.component('lms-toolbar', {
                 }
             }
             this.trans = {noplayer:i18n('No Player'), nothingplaying:i18n('Nothing playing'),
-                          info:i18n("Show current track information"), infoShortcut:shortcutStr(LMS_TRACK_INFO_KEYBOARD), 
-                          showLarge:i18n("Expand now playing"), showLargeShortcut:shortcutStr(LMS_EXPAND_NP_KEYBOARD, true),
+                          info:i18n("Show current track information"), showLarge:i18n("Expand now playing"),
                           hideLarge:i18n("Collapse now playing"), connectionLost:i18n('Server connection lost!'),
                           groupPlayers:i18n("Group Players"), standardPlayers:i18n("Standard Players"), updatesAvailable:i18n('Updates available'),
-                          showVol:i18n("Show volume"),
-                          mainMenu: i18n("Main menu"), play:i18n("Play"), pause:i18n("Pause"),
-                          toggleQueue:i18n('Toggle queue'), downloading:i18n('Downloading'),
-                          toggleQueueShortcut:shortcutStr(LMS_TOGGLE_QUEUE_KEYBOARD, true), groupVol:i18n('Adjust volume of associated players'),
+                          showVol:i18n("Show volume"), mainMenu: i18n("Main menu"), play:i18n("Play"), pause:i18n("Pause"),
+                          toggleQueue:i18n('Toggle queue'), downloading:i18n('Downloading'), groupVol:i18n('Adjust volume of associated players'),
                           restartRequired:i18n('Restart required')};
         },
         setPlayer(id) {
@@ -864,8 +860,8 @@ Vue.component('lms-toolbar', {
         svgIcon: function (name, dark, badge, toolbar, active, coloredToolbars) {
             return "/material/svg/"+name+"?c="+(badge ? toolbar ? (coloredToolbars ? "fff" : LMS_UPDATE_SVG) : LMS_UPDATE_SVG : (active ? getComputedStyle(document.documentElement).getPropertyValue("--active-color").replace("#", "") : dark || (toolbar && coloredToolbars) ? LMS_DARK_SVG : LMS_LIGHT_SVG))+"&r="+LMS_MATERIAL_REVISION;
         },
-        tooltip: function (str, shortcut, showShortcut) {
-            return showShortcut ? str+SEPARATOR+shortcut : str;
+        tooltip: function (str, shortcut, showShortcut, shift) {
+            return showShortcut ? ttShortcutStr(str, shortcut, shift) : str;
         },
         playerShortcut: function(index) {
             return IS_APPLE ? i18n("Option+%1", 9==index ? 0 : index+1) : i18n("Alt+%1", 9==index ? 0 : index+1);

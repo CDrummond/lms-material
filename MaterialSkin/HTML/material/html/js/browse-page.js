@@ -1801,9 +1801,9 @@ var lmsBrowse = Vue.component("lms-browse", {
         },
         tooltip: function (act, showShortcut) {
             return showShortcut && ACTIONS[act].key
-                        ? ACTIONS[act].title+SEPARATOR+shortcutStr(ACTIONS[act].key)
+                        ? ttShortcutStr(ACTIONS[act].title, ACTIONS[act].key)
                             : showShortcut && ACTIONS[act].skey
-                                ? ACTIONS[act].title+SEPARATOR+shortcutStr(ACTIONS[act].skey, true)
+                                ? ttShortcutStr(ACTIONS[act].title, ACTIONS[act].skey, true)
                                 : ACTIONS[act].title;
         }
     },

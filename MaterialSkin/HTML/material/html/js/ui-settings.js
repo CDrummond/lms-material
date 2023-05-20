@@ -745,9 +745,9 @@ Vue.component('lms-ui-settings', {
         },
         keyboardInfo() {
             var list = queryParams.party
-                     ? [ i18n("Spacebar")+SEPARATOR+i18n("Play/pause"),
-                         i18n("Home")+SEPARATOR+i18n("Go to homescreen"),
-                         i18n("Esc")+SEPARATOR+i18n("Go back"),
+                     ? [ shortcutStr("space")+SEPARATOR+i18n("Play/pause"),
+                         shortcutStr("home")+SEPARATOR+i18n("Go to homescreen"),
+                         shortcutStr("esc")+SEPARATOR+i18n("Go back"),
                          shortcutStr(ACTIONS[SEARCH_LIB_ACTION].key)+SEPARATOR+ACTIONS[SEARCH_LIB_ACTION].title,
                          shortcutStr(ACTIONS[ADD_ACTION].skey, true)+SEPARATOR+ACTIONS[ADD_ACTION].title,
                          shortcutStr(LMS_TRACK_INFO_KEYBOARD)+SEPARATOR+i18n("Show current track information")
@@ -756,9 +756,9 @@ Vue.component('lms-ui-settings', {
                          shortcutStr("down", false, true)+SEPARATOR+i18n("Decrease volume"),
                          shortcutStr("left", false, true)+SEPARATOR+i18n("Previous track"),
                          shortcutStr("right", false, true)+SEPARATOR+i18n("Next track"),
-                         i18n("Spacebar")+SEPARATOR+i18n("Play/pause"),
-                         i18n("Home")+SEPARATOR+i18n("Go to homescreen"),
-                         i18n("Esc")+SEPARATOR+i18n("Go back"),
+                         shortcutStr("space")+SEPARATOR+i18n("Play/pause"),
+                         shortcutStr("home")+SEPARATOR+i18n("Go to homescreen"),
+                         shortcutStr("esc")+SEPARATOR+i18n("Go back"),
                          shortcutStr(ACTIONS[SEARCH_LIB_ACTION].key)+SEPARATOR+ACTIONS[SEARCH_LIB_ACTION].title,
                          shortcutStr(ACTIONS[PLAY_ACTION].skey, true)+SEPARATOR+ACTIONS[PLAY_ACTION].title,
                          shortcutStr(ACTIONS[ADD_ACTION].skey, true)+SEPARATOR+ACTIONS[ADD_ACTION].title,

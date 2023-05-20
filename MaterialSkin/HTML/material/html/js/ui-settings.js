@@ -9,7 +9,7 @@
 Vue.component('lms-ui-settings', {
     template: `
 <div>
-<v-dialog v-model="show" v-if="show" scrollable fullscreen>
+<v-dialog v-model="show" v-if="show" persistent no-click-animation scrollable fullscreen>
  <v-card>
   <v-card-title class="settings-title">
    <v-toolbar app-data class="dialog-toolbar">
@@ -525,12 +525,12 @@ Vue.component('lms-ui-settings', {
             } else if (this.$store.state.activeDialog == 'browsemodes') {
                 this.browseModesDialog.show=false;
             } else if (this.$store.state.activeDialog == 'uisettings') {
-                this.show=false;
+                this.show = false;
             }
         }.bind(this));
         bus.$on('hideMenu', function(name) {
             if (name=='uisettings') {
-                this.showMenu= false;
+                this.showMenu = false;
             }
         }.bind(this));
         bus.$on('langChanged', function() {

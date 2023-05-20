@@ -728,7 +728,6 @@ const store = new Vuex.Store({
         dialogOpen(state, val) {
             if (val.shown) {
                 state.openDialogs.push(val.name);
-                state.activedialog = val.name;
             } else if (state.openDialogs.length>0) {
                 for (var len=state.openDialogs.length, i=len-1; i>=0; --i) {
                     if (state.openDialogs[i]==val.name) {

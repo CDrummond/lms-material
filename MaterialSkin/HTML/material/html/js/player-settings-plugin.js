@@ -11,7 +11,7 @@ const LMS_PLAYER_SETTINGS_PLUGIN_MAX_ITEMS = 300;
 Vue.component('lms-player-settings-plugin', {
      template: `
  <div>
-  <v-dialog v-model="show" v-if="show" scrollable fullscreen>
+  <v-dialog v-model="show" v-if="show" persistent no-click-animation scrollable fullscreen>
    <v-card>
     <v-card-title class="settings-title">
      <v-toolbar app-data class="dialog-toolbar">

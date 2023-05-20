@@ -8,7 +8,7 @@
 
 Vue.component('lms-information-dialog', {
     template: `
-<v-dialog v-model="show" v-if="show" scrollable fullscreen>
+<v-dialog v-model="show" v-if="show" persistent no-click-animation scrollable fullscreen>
  <v-card>
   <v-card-title class="settings-title">
    <v-toolbar app class="dialog-toolbar">
@@ -204,7 +204,7 @@ Vue.component('lms-information-dialog', {
 
         bus.$on('esc', function() {
             if (this.$store.state.activeDialog == 'info') {
-                this.show=false;
+                this.show = false;
             }
         }.bind(this));
     },

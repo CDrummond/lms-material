@@ -11,6 +11,7 @@
  8. Better layout of now playing when using very wide views.
  9. If sorting of favourites is enabled, then also sort Radio / My Presets'
 10. Add some missing shortcuts in tooltips.
+11. Fix 'Esc' closing diakog and then parent dialog.
 
 3.2.5
 -----

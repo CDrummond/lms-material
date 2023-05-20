@@ -8,7 +8,7 @@
 
 Vue.component('lms-notifications', {
     template: `
-<v-dialog v-model="show" v-if="show" scrollable fullscreen>
+<v-dialog v-model="show" v-if="show" persistent no-click-animation scrollable fullscreen>
  <v-card>
   <v-card-title class="settings-title">
    <v-toolbar app-data class="dialog-toolbar">

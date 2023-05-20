@@ -868,13 +868,13 @@ function bindKey(key, modifier, canRepeat) {
 function shortcutStr(key, shift, alt) {
     if (key.length>1) {
         if (key=="left") {
-            key = "◁";
+            key = "⇦";
         } else if (key=="right") {
-            key = "▷";
+            key = "⇨";
         } else if (key=="up") {
-            key = "△";
+            key = "⇧";
         } else if (key=="down") {
-            key = "▽";
+            key = "⇩";
         } else if (key=="space") {
             return "␣"
         } else if (key=="esc") {

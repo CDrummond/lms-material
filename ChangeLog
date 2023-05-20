@@ -12,16 +12,13 @@
  9. If sorting of favourites is enabled, then also sort Radio / My Presets'
 10. Add some missing shortcuts in tooltips.
 11. Fix 'Esc' closing diakog and then parent dialog.
-
-3.2.5
------
-1. Better duplicate 'time' fix.
-2. Strip HTML tags for browse item tooltips.
-3. Handle text items (max 2 lines) when showing over 100 items in a list.
-4. Only show total library duration if there are tracks in library.
-5. Only show library last update date if valid.
-6. Don't remove icons in favourites just because they are all the same.
-7. Fix 'Play next' when invoked from header of multi-disc album.
+12. Better duplicate 'time' fix.
+13. Strip HTML tags for browse item tooltips.
+14. Handle text items (max 2 lines) when showing over 100 items in a list.
+15. Only show total library duration if there are tracks in library.
+16. Only show library last update date if valid.
+17. Don't remove icons in favourites just because they are all the same.
+18. Fix 'Play next' when invoked from header of multi-disc album.
 
 3.2.4
 -----

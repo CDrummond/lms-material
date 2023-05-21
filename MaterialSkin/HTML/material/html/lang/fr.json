@@ -118,7 +118,6 @@
 "Date added":"Date d'ajout",
 "Date last played":"Date de dernière lecture",
 "Date modified":"Date de dernière modification",
-"Days":"Jours",
 "Decrease volume":"Baisser le volume",
 "Default player":"Platine par défaut",
 "Delete":"Supprimer",
@@ -291,7 +290,6 @@
 "On song change":"Transition entre morceaux",
 "Only showing %1 items":"Afficher seulement %1 éléments",
 "Option+%1":"Option+%1",
-"Options":"Options",
 "Other settings":"Autres paramètres",
 "Path":"Chemin",
 "Pause":"Pause",
@@ -602,5 +600,9 @@
 "1 Year":"1 année",
 "%1 Years":"%1 années",
 "1 day":"1 jour",
-"%1 days":"%1 jours"
+"%1 days":"%1 jours",
+"Down":"",
+"Left":"",
+"Right":"",
+"Up":""
 }

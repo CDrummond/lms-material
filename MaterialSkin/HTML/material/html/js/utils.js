@@ -868,19 +868,19 @@ function bindKey(key, modifier, canRepeat) {
 function shortcutStr(key, shift, alt) {
     if (key.length>1) {
         if (key=="left") {
-            key = "⇦";
+            key = i18n("Left");
         } else if (key=="right") {
-            key = "⇨";
+            key = i18n("Right");
         } else if (key=="up") {
-            key = "⇧";
+            key = i18n("Up");
         } else if (key=="down") {
-            key = "⇩";
+            key = i18n("Down");
         } else if (key=="space") {
-            return "␣"
+            return i18n("Spacebar");
         } else if (key=="esc") {
             return i18n("Esc");
         } else if (key=="home") {
-            return "⌂";
+            return i18n("Home");
         }
     }
     if (alt) {

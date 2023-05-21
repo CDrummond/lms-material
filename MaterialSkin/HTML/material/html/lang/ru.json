@@ -593,16 +593,16 @@
 "Date added":"",
 "Date last played":"",
 "Do not set volume":"",
-"Down":"",
+"Down":"Вниз",
 "For more fine-grained control over plugins please visit the 'Plugins' section of 'Server settings'":"",
 "Leave individual player's volume.":"",
-"Left":"",
+"Left":"Левый",
 "Random":"",
 "Reverse":"",
 "Reverse current order":"",
-"Right":"",
+"Right":"Правый",
 "Shuffle list":"",
 "Sort queue":"",
 "Sort tracks":"",
-"Up":""
+"Up":"Вверх"
 }

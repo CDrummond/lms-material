@@ -600,9 +600,9 @@
 "%1 days":"%1 Tage",
 "%1bit":"",
 "Do not set volume":"",
-"Down":"",
+"Down":"Nach unten",
 "Leave individual player's volume.":"",
-"Left":"",
-"Right":"",
-"Up":""
+"Left":"Linker",
+"Right":"Rechter",
+"Up":"Nach oben"
 }

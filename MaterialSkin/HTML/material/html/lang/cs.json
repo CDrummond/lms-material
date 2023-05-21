@@ -590,19 +590,19 @@
 "Date last played":"",
 "Descending":"",
 "Do not set volume":"",
-"Down":"",
+"Down":"Dolů",
 "Esc":"",
 "For more fine-grained control over plugins please visit the 'Plugins' section of 'Server settings'":"",
 "Leave individual player's volume.":"",
-"Left":"",
+"Left":"Levý",
 "Option+%1":"",
 "Play starting at track":"",
 "Random":"",
 "Reverse":"",
 "Reverse current order":"",
-"Right":"",
+"Right":"Pravý",
 "Shuffle list":"",
 "Sort queue":"",
 "Sort tracks":"",
-"Up":""
+"Up":"Nahoru"
 }

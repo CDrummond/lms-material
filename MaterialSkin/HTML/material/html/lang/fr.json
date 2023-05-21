@@ -601,8 +601,8 @@
 "%1 Years":"%1 années",
 "1 day":"1 jour",
 "%1 days":"%1 jours",
-"Down":"",
-"Left":"",
-"Right":"",
-"Up":""
+"Down":"Bas",
+"Left":"Gauche",
+"Right":"Droit",
+"Up":"Haut"
 }

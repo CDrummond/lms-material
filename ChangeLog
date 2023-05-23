@@ -19,6 +19,7 @@
 16. Only show library last update date if valid.
 17. Don't remove icons in favourites just because they are all the same.
 18. Fix 'Play next' when invoked from header of multi-disc album.
+20. Add 'Removed played tracks' and 'Clear upcoming' to queue actions.
 
 3.2.4
 -----

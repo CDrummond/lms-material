@@ -287,7 +287,7 @@ var lmsQueue = Vue.component("lms-queue", {
             playlist: {name: undefined, modified: false},
             selection: new Set(),
             selectionDuration: 0,
-            otherActions: queryParams.party ? [PQ_SCROLL_ACTION] : [PQ_SAVE_ACTION, PQ_MOVE_QUEUE_ACTION, PQ_SCROLL_ACTION, PQ_ADD_URL_ACTION, PQ_SORT_ACTION],
+            otherActions: queryParams.party ? [PQ_SCROLL_ACTION] : [PQ_SAVE_ACTION, PQ_CLEAR_PLAYED_ACTION, PQ_CLEAR_UPCOMMING_ACTION, PQ_MOVE_QUEUE_ACTION, PQ_SCROLL_ACTION, PQ_ADD_URL_ACTION, PQ_SORT_ACTION],
             wide: 0,
             dstm: false,
             dragActive: false,
@@ -830,6 +830,36 @@ var lmsQueue = Vue.component("lms-queue", {
                 if (this.items.length>=1) {
                     sortPlaylist(this, this.$store.state.player.id, ACTIONS[act].title, ["material-skin-client", "sort-queue"]);
                 }
+            } else if (PQ_CLEAR_PLAYED_ACTION==act) {
+                if (this.items.length<1 || queryParams.party || this.currentIndex<1) {
+                    return;
+                }
+                confirm(i18n("Remove all played tracks from queue?"), i18n('Remove')).then(res => {
+                    if (res) {
+                        let indexes = [];
+                        for (let i=this.currentIndex-1; i>=0; --i) {
+                            indexes.push(i);
+                        }
+                        if (indexes.length>0) {
+                            bus.$emit('removeFromQueue', indexes);
+                        }
+                    }
+                });
+            } else if (PQ_CLEAR_UPCOMMING_ACTION==act) {
+                if (this.items.length<1 || queryParams.party || this.currentIndex>=this.items.length-1) {
+                    return;
+                }
+                confirm(i18n("Clear upcoming tracks from queue?"), i18n('Clear')).then(res => {
+                    if (res) {
+                        let indexes = [];
+                        for (let i=this.items.length-1; i>this.currentIndex; --i) {
+                            indexes.push(i);
+                        }
+                        if (indexes.length>0) {
+                            bus.$emit('removeFromQueue', indexes);
+                        }
+                    }
+                });
             }
         },
         actionsMenu(event) {

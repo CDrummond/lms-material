@@ -227,16 +227,6 @@ var lmsServer = Vue.component('lms-server', {
         };
     },
     methods: {
-        removeFromQueue(indexes) {
-            if (indexes.length>0) {
-                var index = indexes.shift();
-                lmsCommand(this.$store.state.player.id, ["playlist", "delete", index]).then(({data}) => {
-                    this.removeFromQueue(indexes);
-                });
-            } else {
-                this.updateCurrentPlayer();
-            }
-        },
         moveQueueItems(indexes, to, movedBefore, movedAfter) {
             if (indexes.length>0) {
                 var index = indexes.shift();
@@ -943,11 +933,6 @@ var lmsServer = Vue.component('lms-server', {
         }.bind(this));
         bus.$on('updatePlayer', function(id) {
             this.updatePlayer(id);
-        }.bind(this));
-        bus.$on('removeFromQueue', function(indexes) {
-            if (this.$store.state.player) {
-                this.removeFromQueue(indexes);
-            }
         }.bind(this));
         bus.$on('moveQueueItems', function(indexes, to) {
             if (this.$store.state.player) {

@@ -689,7 +689,9 @@ var lmsQueue = Vue.component("lms-queue", {
                             indexes.push(i);
                         }
                         if (indexes.length>0) {
-                            bus.$emit('removeFromQueue', indexes);
+                            lmsCommand(this.$store.state.player.id, ["material-skin-client", "remove-queue", "indexes:"+indexes.join(",")]).then(({data}) => {
+                                bus.$emit("updatePlayer", this.$store.state.player.id);
+                            });
                         }
                     }
                 }

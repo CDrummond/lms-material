@@ -1220,7 +1220,7 @@ sub _cliClientCommand {
     }
     my $cmd = $request->getParam('_cmd');
     my $client = $request->client();
-    if ($request->paramUndefinedOrNotOneOf($cmd, ['set-lib', 'get-alarm', 'get-dstm', 'save-dstm', 'sort-queue', 'command-list']) ) {
+    if ($request->paramUndefinedOrNotOneOf($cmd, ['set-lib', 'get-alarm', 'get-dstm', 'save-dstm', 'sort-queue', 'remove-queue']) ) {
         $request->setStatusBadParams();
         return;
     }
@@ -1268,6 +1268,21 @@ sub _cliClientCommand {
             Slim::Player::Playlist::stopAndClear($client);
             @tracks = _sortTracks(\@tracks, $request->getParam('order'));
             Slim::Player::Playlist::addTracks($client, \@tracks, 0);
+            $client->currentPlaylistModified(1);
+            $client->currentPlaylistUpdateTime(Time::HiRes::time());
+            Slim::Player::Playlist::refreshPlaylist($client);
+        }
+        $request->setStatusDone();
+        return;
+    }
+
+    if ($cmd eq 'remove-queue') {
+        my $indexes = $request->getParam('indexes');
+        if ($indexes) {
+            my @list = split(/,/, $indexes);
+            foreach my $idx (@list) {
+                Slim::Player::Playlist::removeTrack($client, $idx);
+            }
             $client->currentPlaylistModified(1);
             $client->currentPlaylistUpdateTime(Time::HiRes::time());
             Slim::Player::Playlist::refreshPlaylist($client);

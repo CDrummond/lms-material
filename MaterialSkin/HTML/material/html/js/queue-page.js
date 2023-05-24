@@ -287,7 +287,7 @@ var lmsQueue = Vue.component("lms-queue", {
             playlist: {name: undefined, modified: false},
             selection: new Set(),
             selectionDuration: 0,
-            otherActions: queryParams.party ? [PQ_SCROLL_ACTION] : [PQ_SAVE_ACTION, PQ_CLEAR_PLAYED_ACTION, PQ_CLEAR_UPCOMMING_ACTION, PQ_MOVE_QUEUE_ACTION, PQ_SCROLL_ACTION, PQ_ADD_URL_ACTION, PQ_SORT_ACTION],
+            otherActions: queryParams.party ? [PQ_SCROLL_ACTION] : [PQ_SAVE_ACTION, PQ_MOVE_QUEUE_ACTION, PQ_SCROLL_ACTION, PQ_ADD_URL_ACTION, PQ_SORT_ACTION],
             wide: 0,
             dstm: false,
             dragActive: false,
@@ -669,9 +669,29 @@ var lmsQueue = Vue.component("lms-queue", {
             if (this.items.length<1 || queryParams.party) {
                 return;
             }
-            confirm(i18n("Remove all tracks from queue?"), i18n('Clear')).then(res => {
-                if (res) {
-                    bus.$emit('playerCommand', ["playlist", "clear"]);
+
+            let choices=[{id:0, title:i18n('Remove all tracks')}]
+            if (this.currentIndex<this.items.length-1) {
+                choices.push({id:1, title:i18n('Remove upcoming tracks')});
+            }
+            if (this.currentIndex>0) {
+                choices.push({id:2, title:i18n('Remove previous tracks')});
+            }
+            choose(this.trans.clear, choices).then(choice => {
+                if (undefined!=choice) {
+                    if (0==choice.id) {
+                        bus.$emit('playerCommand', ["playlist", "clear"]);
+                    } else {
+                        let indexes = [];
+                        let start = (1==choice.index ? this.items.length : this.currentIndex)-1;
+                        let end = (1==choice.index ? this.currentIndex+1 : 0);
+                        for (let i=start; i>=end; --i) {
+                            indexes.push(i);
+                        }
+                        if (indexes.length>0) {
+                            bus.$emit('removeFromQueue', indexes);
+                        }
+                    }
                 }
             });
         },
@@ -830,36 +850,6 @@ var lmsQueue = Vue.component("lms-queue", {
                 if (this.items.length>=1) {
                     sortPlaylist(this, this.$store.state.player.id, ACTIONS[act].title, ["material-skin-client", "sort-queue"]);
                 }
-            } else if (PQ_CLEAR_PLAYED_ACTION==act) {
-                if (this.items.length<1 || queryParams.party || this.currentIndex<1) {
-                    return;
-                }
-                confirm(i18n("Remove all played tracks from queue?"), i18n('Remove')).then(res => {
-                    if (res) {
-                        let indexes = [];
-                        for (let i=this.currentIndex-1; i>=0; --i) {
-                            indexes.push(i);
-                        }
-                        if (indexes.length>0) {
-                            bus.$emit('removeFromQueue', indexes);
-                        }
-                    }
-                });
-            } else if (PQ_CLEAR_UPCOMMING_ACTION==act) {
-                if (this.items.length<1 || queryParams.party || this.currentIndex>=this.items.length-1) {
-                    return;
-                }
-                confirm(i18n("Clear upcoming tracks from queue?"), i18n('Clear')).then(res => {
-                    if (res) {
-                        let indexes = [];
-                        for (let i=this.items.length-1; i>this.currentIndex; --i) {
-                            indexes.push(i);
-                        }
-                        if (indexes.length>0) {
-                            bus.$emit('removeFromQueue', indexes);
-                        }
-                    }
-                });
             }
         },
         actionsMenu(event) {

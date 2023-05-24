@@ -524,7 +524,7 @@ div.v-subheader {
  left:24px;
 }
 
-.menutitle {
+.menutitle, .dlgtitle {
  font-size:var(--std-font-size) !important;
  font-weight:var(--bold-weight);
 }

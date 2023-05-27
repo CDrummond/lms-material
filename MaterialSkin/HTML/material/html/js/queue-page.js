@@ -694,11 +694,9 @@ var lmsQueue = Vue.component("lms-queue", {
                         let indexes = [];
                         let start = (1==choice.id ? this.items.length : this.currentIndex)-1;
                         let end = (1==choice.id ? this.currentIndex+1 : 0);
-                        console.log(start, end);
                         for (let i=start; i>=end; --i) {
                             indexes.push(i);
                         }
-                        console.log(indexes);
                         if (indexes.length>0) {
                             lmsCommand(this.$store.state.player.id, ["material-skin-client", "remove-queue", "indexes:"+indexes.join(",")]).then(({data}) => {
                                 bus.$emit("updatePlayer", this.$store.state.player.id);

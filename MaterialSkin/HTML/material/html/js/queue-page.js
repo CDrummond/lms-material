@@ -670,6 +670,15 @@ var lmsQueue = Vue.component("lms-queue", {
                 return;
             }
 
+            if (1==this.items.length) {
+                confirm(this.trans.clear+"?", i18n('Clear')).then(res => {
+                    if (res) {
+                        bus.$emit('playerCommand', ["playlist", "clear"]);
+                    }
+                });
+                return;
+            }
+
             let choices=[{id:0, title:i18n('Remove all tracks')}]
             if (this.currentIndex<this.items.length-1) {
                 choices.push({id:1, title:i18n('Remove upcoming tracks')});
@@ -677,17 +686,19 @@ var lmsQueue = Vue.component("lms-queue", {
             if (this.currentIndex>0) {
                 choices.push({id:2, title:i18n('Remove previous tracks')});
             }
-            choose(this.trans.clear, choices).then(choice => {
+            choose(this.trans.clear+"?", choices).then(choice => {
                 if (undefined!=choice) {
                     if (0==choice.id) {
                         bus.$emit('playerCommand', ["playlist", "clear"]);
                     } else {
                         let indexes = [];
-                        let start = (1==choice.index ? this.items.length : this.currentIndex)-1;
-                        let end = (1==choice.index ? this.currentIndex+1 : 0);
+                        let start = (1==choice.id ? this.items.length : this.currentIndex)-1;
+                        let end = (1==choice.id ? this.currentIndex+1 : 0);
+                        console.log(start, end);
                         for (let i=start; i>=end; --i) {
                             indexes.push(i);
                         }
+                        console.log(indexes);
                         if (indexes.length>0) {
                             lmsCommand(this.$store.state.player.id, ["material-skin-client", "remove-queue", "indexes:"+indexes.join(",")]).then(({data}) => {
                                 bus.$emit("updatePlayer", this.$store.state.player.id);

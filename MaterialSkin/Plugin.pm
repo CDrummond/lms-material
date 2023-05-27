@@ -1278,9 +1278,10 @@ sub _cliClientCommand {
 
     if ($cmd eq 'remove-queue') {
         my $indexes = $request->getParam('indexes');
-        if ($indexes) {
+        if (defined $indexes) {
             my @list = split(/,/, $indexes);
             foreach my $idx (@list) {
+                main::DEBUGLOG && $log->debug("Remove index: $idx");
                 Slim::Player::Playlist::removeTrack($client, $idx);
             }
             $client->currentPlaylistModified(1);
@@ -1497,7 +1498,6 @@ sub _customJsHandler{
 
     $response->code(RC_OK);
     if (-e $filePath) {
-        print("LOAD JS: " . $filePath . "\n");
         Slim::Web::HTTP::sendStreamingFile( $httpClient, $response, 'application/javascript', $filePath, '', 'noAttachment' );
     } else {
         $response->content_type('application/javascript');

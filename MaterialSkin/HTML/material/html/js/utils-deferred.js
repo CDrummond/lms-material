@@ -150,6 +150,9 @@ function originalId(id) {
 }
 
 function showMenu(obj, newMenu) {
+    if (undefined!=obj.dragIndex) {
+        return;
+    }
     if (obj.menu.show) {
         setTimeout(function () {
             obj.menu = newMenu;

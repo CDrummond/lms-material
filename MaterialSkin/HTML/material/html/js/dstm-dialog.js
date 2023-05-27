@@ -13,7 +13,7 @@ Vue.component('lms-dstm-dialog', {
   <v-card-text>
    <v-container grid-list-md style="padding: 4px">
     <v-layout wrap>
-     <v-flex xs12>{{i18n("Don't Stop The Music")}}</v-flex>
+     <v-flex xs12 class="dlgtitle">{{i18n("Don't Stop The Music")}}</v-flex>
      <v-flex xs12>
       <v-list class="sleep-list dialog-main-list">
        <template v-for="(item, index) in items">

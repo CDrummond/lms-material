@@ -13,7 +13,7 @@ Vue.component('lms-sync-dialog', {
   <v-card-text>
    <v-container grid-list-md style="padding: 4px">
     <v-layout wrap>
-     <v-flex xs12>{{i18n("Select which players you would like to synchronise with '%1':", player.name)}}</v-flex>
+     <v-flex xs12 class="dlgtitle">{{i18n("Select which players you would like to synchronise with '%1':", player.name)}}</v-flex>
      <v-flex xs12>
       <v-list class="sleep-list dialog-main-list">
        <v-list-tile @click="toggleAll()">

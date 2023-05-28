@@ -670,22 +670,9 @@ var lmsQueue = Vue.component("lms-queue", {
                 return;
             }
 
-            if (1==this.items.length) {
-                confirm(this.trans.clear+"?", i18n('Clear')).then(res => {
-                    if (res) {
-                        bus.$emit('playerCommand', ["playlist", "clear"]);
-                    }
-                });
-                return;
-            }
-
-            let choices=[{id:0, title:i18n('Remove all tracks')}]
-            if (this.currentIndex<this.items.length-1) {
-                choices.push({id:1, title:i18n('Remove upcoming tracks')});
-            }
-            if (this.currentIndex>0) {
-                choices.push({id:2, title:i18n('Remove previous tracks')});
-            }
+            let choices=[{id:0, title:i18n('Remove all tracks')},
+                         {id:1, title:i18n('Remove upcoming tracks'), disabled:this.currentIndex>=this.items.length-1},
+                         {id:2, title:i18n('Remove previous tracks'), disabled:this.currentIndex<=0}];
             choose(this.trans.clear+"?", choices).then(choice => {
                 if (undefined!=choice) {
                     if (0==choice.id) {

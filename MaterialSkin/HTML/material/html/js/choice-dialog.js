@@ -17,7 +17,7 @@ Vue.component('lms-choice-dialog', {
      <v-flex xs12>
       <v-list class="sleep-list dialog-main-list">
        <template v-for="(item, index) in items">
-        <v-list-tile @click="choose(item)">
+        <v-list-tile @click="choose(item)" :disabled="item.disabled" v-bind:class="{'dimmed':item.disabled}">
          <v-list-tile-content>
           <v-list-tile-title>{{item.title}}</v-list-tile-title>
           <v-list-tile-sub-title v-if="item.subtitle">{{item.subtitle}}</v-list-tile-sub-title>
@@ -63,6 +63,9 @@ Vue.component('lms-choice-dialog', {
             bus.$emit('choice.resp', undefined);
         },
         choose(item) {
+            if (item.disalbled) {
+                return;
+            }
             this.show=false;
             bus.$emit('choice.resp', item);
         },

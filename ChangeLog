@@ -21,7 +21,7 @@
 18. Fix 'Play next' when invoked from header of multi-disc album.
 20. When prompting to clear queue ask if all tracks, upcoming, or previous
     should be removed.
-21. Don't show menu if dragging an item.
+21. Disable context menu (long-press) for items on mobile devices.
 
 3.2.4
 -----

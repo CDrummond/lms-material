@@ -84,7 +84,7 @@ var lmsBrowse = Vue.component("lms-browse", {
 
    <RecycleScroller :items="grid.rows" :item-size="grid.ih - (grid.haveSubtitle || isTop || current.id.startsWith(TOP_ID_PREFIX) ? 0 : GRID_SINGLE_LINE_DIFF)" page-mode key-field="id" :buffer="LMS_SCROLLER_GRID_BUFFER" v-if="grid.use">
     <div slot-scope="{item}" :class="[grid.few?'image-grid-few':'image-grid-full-width', grid.haveSubtitle?'image-grid-with-sub':'']">
-     <div align="center" style="vertical-align: top" v-for="(citem, col) in item.items" @contextmenu.prevent="itemMenu(citem, item.rs+col, $event)">
+     <div align="center" style="vertical-align: top" v-for="(citem, col) in item.items" @contextmenu.prevent="contextMenu(citem, item.rs+col, $event)">
       <div v-if="undefined==citem" class="image-grid-item defcursor"></div>
       <div v-else class="image-grid-item" @click="click(citem, item.rs+col, $event)" :title="citem | itemTooltip" :draggable="item.draggable && current.section!=SECTION_FAVORITES" @dragstart="dragStart(item.rs+col, $event)" @dragend="dragEnd()" v-bind:class="{'list-active': (menu.show && (item.rs+col)==menu.index) || (fetchingItem==item.id)}">
        <div v-if="selection.size>0" class="check-btn grid-btn image-grid-select-btn" @click.stop="select(citem, item.rs+col, $event)" :title="ACTIONS[citem.selected ? UNSELECT_ACTION : SELECT_ACTION].title" v-bind:class="{'check-btn-checked':citem.selected}"></div>
@@ -112,7 +112,7 @@ var lmsBrowse = Vue.component("lms-browse", {
    </RecycleScroller>
 
    <RecycleScroller v-else-if="useRecyclerForLists" :items="items" :item-size="LMS_LIST_ELEMENT_SIZE" page-mode key-field="id" :buffer="LMS_SCROLLER_LIST_BUFFER">
-    <v-list-tile avatar @click="click(item, index, $event)" slot-scope="{item, index}" @dragstart="dragStart(index, $event)" @dragend="dragEnd()" @dragover="dragOver(index, $event)" @drop="drop(index, $event)" :draggable="item.draggable && (current.section!=SECTION_FAVORITES || 0==selection.size)" v-bind:class="{'browse-header' : item.header && item.header!=PLAIN_HEADER, 'list-active': (menu.show && index==menu.index) || (fetchingItem==item.id), 'drop-target':dragActive && index==dropIndex}" @contextmenu.prevent="itemMenu(item, index, $event)">
+    <v-list-tile avatar @click="click(item, index, $event)" slot-scope="{item, index}" @dragstart="dragStart(index, $event)" @dragend="dragEnd()" @dragover="dragOver(index, $event)" @drop="drop(index, $event)" :draggable="item.draggable && (current.section!=SECTION_FAVORITES || 0==selection.size)" v-bind:class="{'browse-header' : item.header && item.header!=PLAIN_HEADER, 'list-active': (menu.show && index==menu.index) || (fetchingItem==item.id), 'drop-target':dragActive && index==dropIndex}" @contextmenu.prevent="contextMenu(item, index, $event)">
      <v-list-tile-avatar v-if="item.selected" :tile="true" class="lms-avatar">
       <v-icon>check_box</v-icon>
      </v-list-tile-avatar>
@@ -151,7 +151,7 @@ var lmsBrowse = Vue.component("lms-browse", {
 
    <div v-else-if="items.length==1 && items[0].type=='html'" class="lms-list-item browse-html" v-html="items[0].title"></div>
    <template v-else v-for="(item, index) in items">
-    <v-list-tile v-if="item.type=='text' && canClickText(item)" avatar @click="click(item, index, $event)" v-bind:class="{'error-text': item.id==='error'}" class="lms-avatar lms-list-item" @contextmenu.prevent="itemMenu(item, index, $event)">
+    <v-list-tile v-if="item.type=='text' && canClickText(item)" avatar @click="click(item, index, $event)" v-bind:class="{'error-text': item.id==='error'}" class="lms-avatar lms-list-item" @contextmenu.prevent="contextMenu(item, index, $event)">
      <v-list-tile-content>
       <v-list-tile-title>{{item.title}}</v-list-tile-title>
       <v-list-tile-sub-title v-html="item.subtitle"></v-list-tile-sub-title>
@@ -180,7 +180,7 @@ var lmsBrowse = Vue.component("lms-browse", {
       <text-field :focus="index==0 && !IS_MOBILE" :title="item.title" :type="item.type" @value="entry(item, $event)"></text-field>
      </v-list-tile-content>
     </v-list-tile>
-    <v-list-tile v-else-if="!(isTop && (disabled.has(item.id) || hidden.has(item.id)) || (queryParams.party && HIDE_TOP_FOR_PARTY.has(item.id)))" avatar @click="click(item, index, $event)" :key="item.id" class="lms-avatar lms-list-item" :id="'item'+index" @dragstart="dragStart(index, $event)" @dragend="dragEnd()" @dragover="dragOver(index, $event)" @drop="drop(index, $event)" :draggable="(isTop && !sortHome) || (item.draggable && (current.section!=SECTION_FAVORITES || 0==selection.size))" @contextmenu.prevent="itemMenu(item, index, $event)" v-bind:class="{'drop-target': dragActive && index==dropIndex, 'list-active': (menu.show && index==menu.index) || (fetchingItem==item.id)}">
+    <v-list-tile v-else-if="!(isTop && (disabled.has(item.id) || hidden.has(item.id)) || (queryParams.party && HIDE_TOP_FOR_PARTY.has(item.id)))" avatar @click="click(item, index, $event)" :key="item.id" class="lms-avatar lms-list-item" :id="'item'+index" @dragstart="dragStart(index, $event)" @dragend="dragEnd()" @dragover="dragOver(index, $event)" @drop="drop(index, $event)" :draggable="(isTop && !sortHome) || (item.draggable && (current.section!=SECTION_FAVORITES || 0==selection.size))" @contextmenu.prevent="contextMenu(item, index, $event)" v-bind:class="{'drop-target': dragActive && index==dropIndex, 'list-active': (menu.show && index==menu.index) || (fetchingItem==item.id)}">
      <v-list-tile-avatar v-if="item.selected" :tile="true" class="lms-avatar">
       <v-icon>check_box</v-icon>
      </v-list-tile-avatar>
@@ -772,6 +772,11 @@ var lmsBrowse = Vue.component("lms-browse", {
         },
         itemMenu(item, index, event) {
             browseItemMenu(this, item, index, event);
+        },
+        contextMenu(item, index, event) {
+            if (!IS_MOBILE) {
+                this.itemMenu(item, index, event);
+            }
         },
         currentActionsMenu(event) {
             showMenu(this, {show:true, currentActions:this.currentActions, x:event.clientX, y:event.clientY});

@@ -9,9 +9,9 @@
     allow configuring which actions are available.
  7. Refactor volume handling to throttle volume change requests.
  8. Better layout of now playing when using very wide views.
- 9. If sorting of favourites is enabled, then also sort Radio / My Presets'
-10. Add some missing shortcuts in tooltips.
-11. Fix 'Esc' closing diakog and then parent dialog.
+ 9. If sorting of favourites is enabled, then also sort 'Radio / My Presets'
+10. Add some missing shortcut in tooltips.
+11. Fix 'Esc' closing dialog and then parent dialog.
 12. Better duplicate 'time' fix.
 13. Strip HTML tags for browse item tooltips.
 14. Handle text items (max 2 lines) when showing over 100 items in a list.

@@ -1998,7 +1998,7 @@ div.v-subheader {
  text-align:center;
  font-weight:var(--bold-weight);
  font-size:96px;
- opacity:0.75;
+ opacity:0.65;
 }
 
 .screensaver-date {
@@ -2006,7 +2006,7 @@ div.v-subheader {
  text-align:center;
  font-weight:var(--std-weight);
  font-size:48px;
- opacity:0.55;
+ opacity:0.45;
 }
 
 .screensaver-alarm {
@@ -2014,7 +2014,7 @@ div.v-subheader {
  text-align:center;
  font-weight:var(--std-weight);
  font-size:var(--std-font-size);
- opacity:0.55;
+ opacity:0.45;
 }
 
 .screensaver-alarm .v-icon {
@@ -2023,14 +2023,10 @@ div.v-subheader {
 
 .screensaver-name {
  color:white!important;
- padding-top:calc(var(--vh, 1vh)*8);
  text-align:center;
  font-weight:var(--std-weight);
  font-size:var(--std-font-size);
- opacity:0.55;
- position:fixed;
- width:100%;
- bottom:32px;
+ opacity:0.45;
 }
 
 @media screen and (max-height: 450px) {

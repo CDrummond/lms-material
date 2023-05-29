@@ -15,11 +15,13 @@ Vue.component('lms-screensaver', {
     template: `
 <v-dialog v-model="show" v-if="show" scrollable fullscreen>
  <v-card class="screensaver-bgnd" v-on:mousemove="resetTimer($event)" v-on:touchstart="resetTimer($event)" id="screensaver">
-  <p class="screensaver-time ellipsis">{{time}}</p>
-  <p class="screensaver-date ellipsis">{{date}}</p>
-  <p v-if="undefined!=alarm" class="screensaver-alarm ellipsis"><v-icon>alarm</v-icon> {{alarm}}</p>
-  <p v-else class="screensaver-alarm ellipsis">&nbsp;</p>
-  <p class="screensaver-name ellipsis">{{playerName}}</p>
+  <div :style="{ marginLeft: marginLeft + 'px', marginTop: marginTop + 'px' }" id="screensaver-contents">
+   <p class="screensaver-time ellipsis">{{time}}</p>
+   <p class="screensaver-date ellipsis">{{date}}</p>
+   <p v-if="undefined!=alarm" class="screensaver-alarm ellipsis"><v-icon>alarm</v-icon> {{alarm}}</p>
+   <p v-else class="screensaver-alarm ellipsis">&nbsp;</p>
+   <p class="screensaver-name ellipsis">{{playerName}}</p>
+  </div>
  </v-card>
 </v-dialog>
 `,
@@ -29,7 +31,10 @@ Vue.component('lms-screensaver', {
                  show: false,
                  date: "date",
                  time: "time",
-                 alarm: undefined}
+                 alarm: undefined,
+                 marginLeft: 0,
+                 marginTop: 0
+        }
     },
     computed: {
         playerName () {
@@ -120,6 +125,14 @@ Vue.component('lms-screensaver', {
                 clearTimeout(this.updateTimer);
                 this.updateTimer = undefined;
             }
+            if (undefined!==this.moveTimer) {
+                clearTimeout(this.moveTimer);
+                this.moveTimer = undefined;
+            }
+            if (undefined!==this.changePosInterval) {
+                clearInterval(this.changePosInterval);
+                this.changePosInterval = undefined;
+            }
             if (doFade && this.state=='hidding') {
                 return;
             }
@@ -170,11 +183,60 @@ Vue.component('lms-screensaver', {
                 }
             }.bind(this), 50);
         },
+        changePos(elem, newLeft, newTop) {
+            let fadeOut = true
+            var val = fadeOut  ? 1.0 : 0.0;
+            this.changePosInterval = setInterval(function () {
+                val += fadeOut ? -0.05 : 0.05;
+                elem.style.opacity = val;
+                if (fadeOut && val<=0.0) {
+                    this.marginLeft = newLeft;
+                    this.marginTop = newTop;
+                    fadeOut = false;
+                } else if (!fadeOut && val>=1.0) {
+                    var interval = this.changePosInterval;
+                    this.changePosInterval = undefined;
+                    clearInterval(interval);
+                }
+            }.bind(this), 75);
+        },
+        startDisplay() {
+            this.fade(document.getElementById('screensaver'), true);
+            let e = document.getElementById('screensaver-contents');
+            if (undefined!=e) {
+                let rect = e.getBoundingClientRect();
+                this.diffs = [window.innerWidth - rect.width, window.innerHeight - rect.height];
+                this.currentPos = this.prevPos = [0, 0];
+                this.marginLeft = this.diffs[0] * this.currentPos[0];
+                this.marginRight = this.diffs[1] * this.currentPos[1];
+                this.startMoving();
+            }
+        },
+        startMoving() {
+            this.direction = 0;
+            this.moveTimer = setInterval(function () {
+                let factors = [-1, -0.75, -0.5, -0.25, 0, 0.25, 0.5, 0.75, 1.0];
+                let newPos = [0, 0];
+                for (let i=0; i<500; ++i) {
+                    newPos=[ factors[Math.floor(Math.random() * factors.length)],
+                             factors[Math.floor(Math.random() * factors.length)] ];
+                    if ( (newPos[0]!=this.currentPos[0] || newPos[1]!=this.currentPos[1]) &&
+                         (newPos[0]!=this.prevPos[0] || newPos[1]!=this.prevPos[1]) ) {
+                        this.prevPos = this.currentPos;
+                        this.currentPos = newPos;
+                    }
+                }
+                this.changePos(document.getElementById('screensaver-contents'),
+                               (this.diffs[0] * this.currentPos[0]) + (this.currentPos[0]>0 ? -32 : this.currentPos[0]<0 ? 32 : 0),
+                               (this.diffs[1] * this.currentPos[1]) + (this.currentPos[1]>0 ? -32 : this.currentPos[1]<0 ? 32 : 0));
+            }.bind(this), 10*60*1000); // Move every Xminutes
+        },
         toggleHandlers() {
             if (this.enabled) {
                 if (!this.installedHandlers) {
                     window.addEventListener('touchstart', resetScreensaver);
                     window.addEventListener('mousedown', resetScreensaver);
+                    window.addEventListener('mousemove', resetScreensaver);
                     window.addEventListener('click', resetScreensaver);
                     window.addEventListener('wheel', resetScreensaver);
                     window.addEventListener('keydown', resetScreensaver);
@@ -183,6 +245,7 @@ Vue.component('lms-screensaver', {
             } else if (this.installedHandlers) {
                 window.removeEventListener('touchstart', resetScreensaver);
                 window.removeEventListener('mousedown', resetScreensaver);
+                window.removeEventListener('mousemove', resetScreensaver);
                 window.removeEventListener('click', resetScreensaver);
                 window.removeEventListener('wheel', resetScreensaver);
                 window.removeEventListener('keydown', resetScreensaver);
@@ -196,7 +259,7 @@ Vue.component('lms-screensaver', {
                     this.show = true;
                     this.updateDateAndTime();
                     this.$nextTick(function () {
-                        this.fade(document.getElementById('screensaver'), true);
+                        this.startDisplay();
                     });
                 }.bind(this), 60*1000);
             }

@@ -106,7 +106,8 @@ function parseResp(data, showTrackNum, index, showRatings, threeLines, infoPlugi
                               album_id: i.album_id,
                               url: i.url,
                               isLocal: i.url && i.url.startsWith("file:"),
-                              disc: i.disc
+                              disc: i.disc,
+                              artist: i.artist ? i.artist : i.trackartist ? i.trackartist : i.albumartist
                           });
                 index++;
             }
@@ -287,7 +288,7 @@ var lmsQueue = Vue.component("lms-queue", {
             playlist: {name: undefined, modified: false},
             selection: new Set(),
             selectionDuration: 0,
-            otherActions: queryParams.party ? [PQ_SCROLL_ACTION] : [PQ_SAVE_ACTION, PQ_MOVE_QUEUE_ACTION, PQ_SCROLL_ACTION, PQ_ADD_URL_ACTION, PQ_SORT_ACTION],
+            otherActions: queryParams.party ? [PQ_SCROLL_ACTION] : [PQ_SAVE_ACTION, PQ_MOVE_QUEUE_ACTION, PQ_SCROLL_ACTION, PQ_ADD_URL_ACTION, PQ_SORT_ACTION, REMOVE_DUPES_ACTION],
             wide: 0,
             dstm: false,
             dragActive: false,
@@ -407,6 +408,7 @@ var lmsQueue = Vue.component("lms-queue", {
                     if (title!=this.items[index].title || subtitle!=this.items[index].subtitle || duration!=this.items[index].duration) {
                         this.items[index].title = title;
                         this.items[index].subtitle = subtitle;
+                        this.items[index].artist = i.artist ? i.artist : i.trackartist ? i.trackartist : i.albumartist;
                         if (duration!=this.items[index].duration) {
                             this.items[index].durationStr = undefined!=duration && duration>0 ? formatSeconds(duration) : undefined;
                             this.items[index].duration = duration;
@@ -848,6 +850,28 @@ var lmsQueue = Vue.component("lms-queue", {
                 if (this.items.length>=1) {
                     sortPlaylist(this, this.$store.state.player.id, ACTIONS[act].title, ["material-skin-client", "sort-queue"]);
                 }
+            } else if (REMOVE_DUPES_ACTION==act) {
+                confirm(i18n("Remove duplicate tracks?")+addNote(i18n("This will remove tracks with the same artist and title.")), i18n('Remove')).then(res => {
+                    if (res) {
+                        let dupes=[];
+                        let tracks = new Set();
+                        for (let i=0, loop=this.items, len=loop.length; i<len; ++i) {
+                            let item = loop[i];
+                            let track = (item.plaintitle ? item.plaintitle : item.title).toLowerCase()+"-"+(item.artist ? item.artist.toLowerCase() : "");
+                            if (tracks.has(track)) {
+                                dupes.push(i);
+                            } else {
+                                tracks.add(track);
+                            }
+                        }
+                        dupes = dupes.reverse();
+                        if (dupes.length>0) {
+                            lmsCommand(this.$store.state.player.id, ["material-skin-client", "remove-queue", "indexes:"+dupes.join(",")]).then(({data}) => {
+                                bus.$emit("updatePlayer", this.$store.state.player.id);
+                            });
+                        }
+                    }
+                });
             }
         },
         actionsMenu(event) {

@@ -858,14 +858,22 @@ var lmsQueue = Vue.component("lms-queue", {
                     if (res) {
                         let dupes=[];
                         let tracks = new Set();
+                        let ids = new Set();
                         for (let i=0, loop=this.items, len=loop.length; i<len; ++i) {
                             let item = loop[i];
-                            let track = (item.plaintitle ? item.plaintitle : item.title).toLowerCase()+"-"+(item.artist ? item.artist.toLowerCase() : "");
-                            if (tracks.has(track)) {
-                                dupes.push(i);
-                            } else {
-                                tracks.add(track);
+                            let title = (item.plaintitle ? item.plaintitle : item.title);
+                            if (this.$store.state.queueShowTrackNum) {
+                                let vals = title.split(SEPARATOR);
+                                if (2==vals.length) {
+                                    title = vals[1];
+                                }
                             }
+                            let track = title.toLowerCase()+"-"+(item.artist ? item.artist.toLowerCase() : "");
+                            if (tracks.has(track) || ids.has(item.id)) {
+                                dupes.push(i);
+                            }
+                            tracks.add(track);
+                            ids.add(item.id);
                         }
                         dupes = dupes.reverse();
                         if (dupes.length>0) {

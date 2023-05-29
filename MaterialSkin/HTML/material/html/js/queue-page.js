@@ -851,6 +851,9 @@ var lmsQueue = Vue.component("lms-queue", {
                     sortPlaylist(this, this.$store.state.player.id, ACTIONS[act].title, ["material-skin-client", "sort-queue"]);
                 }
             } else if (REMOVE_DUPES_ACTION==act) {
+                if (this.items.length<2) {
+                    return;
+                }
                 confirm(i18n("Remove duplicate tracks?")+addNote(i18n("This will remove tracks with the same artist and title.")), i18n('Remove')).then(res => {
                     if (res) {
                         let dupes=[];

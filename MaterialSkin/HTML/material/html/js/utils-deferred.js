@@ -269,7 +269,7 @@ function removeDuplicates(playistId, items) {
     if (dupes.length>0) {
         bus.$emit('doAllList', dupes, ["playlists", "edit", "cmd:delete", playistId], SECTION_PLAYLISTS, i18n("All duplicates removed"));
     } else {
-        bus.$emit('showMessage', i18n('Playlist has no duplicates'));
+        bus.$emit('showMessage', i18n('No duplicates found'));
     }
 }
 

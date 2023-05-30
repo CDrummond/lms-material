@@ -880,6 +880,8 @@ var lmsQueue = Vue.component("lms-queue", {
                         }
                         if (dupes.length>0) {
                             this.removeIndexes(dupes);
+                        } else {
+                            bus.$emit('showMessage', i18n('No duplicates found'));
                         }
                     }
                 });

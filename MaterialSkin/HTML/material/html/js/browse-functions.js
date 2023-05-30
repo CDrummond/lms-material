@@ -387,7 +387,7 @@ function browseHandleListResponse(view, item, command, resp, prevPage) {
             } else if (undefined!=view.$store.state.ratingsPlugin && view.items.length>1 && !queryParams.party && !LMS_KIOSK_MODE) {
                 view.currentActions.push({albumRating:true, title:i18n("Set rating for all tracks"), icon:"stars", weight:101});
             }
-            if (undefined!=actParams['path'] && actParams['path'].length>0 && !queryParams.party && !LMS_KIOSK_MODE) {
+            if (lmsOptions.infoPlugin && undefined!=actParams['path'] && actParams['path'].length>0 && !queryParams.party && !LMS_KIOSK_MODE) {
                 // Check we have some localfiles, if not hide entry!
                 lmsCommand('', ['musicartistinfo', 'localfiles', 'folder:'+actParams['path']]).then(({data}) => {
                     if (!data || !data.result || !data.result.item_loop) {

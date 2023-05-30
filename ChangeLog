@@ -2,6 +2,7 @@
 -----
 1. Fix 'Copy browse selection here'
 2. Fix removing selected items from queue.
+3. Only check for local files if 'Music and Artist Information' is installed.
 
 3.3.0
 -----

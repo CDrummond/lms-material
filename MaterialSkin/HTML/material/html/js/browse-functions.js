@@ -2170,7 +2170,7 @@ function browseDoCommandChunks(view, chunks, npAfterLast, refreshSig) {
             }
         }
     }).catch(err => {
-        logError(err, command.command);
+        logError(err, chunk);
     });
 }
 

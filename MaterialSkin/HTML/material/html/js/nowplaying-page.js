@@ -84,7 +84,7 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
      <div v-else-if="playerStatus.playlist.count>1 && !npBarRatings" class="np-tech-desktop">{{playerStatus.playlist.current | trackCount(playerStatus.playlist.count)}}</div>
      <div v-else-if="!npBarRatings" class="np-tech-desktop">&nbsp;</div>
      <div v-if="npBarRatings && (repAltBtn.show || shuffAltBtn.show)" class="np-rating-desktop np-thumbs-desktop"><v-btn v-if="repAltBtn.show" :title="repAltBtn.tooltip" flat icon v-longpress="repeatClicked" v-bind:class="{'np-std-button': !stopButton,'disabled':noPlayer}"><v-icon v-if="repAltBtn.icon" class="media-icon">{{repAltBtn.icon}}</v-icon><img v-else :src="repAltBtn.image" class="btn-img"></img></v-btn><v-btn v-if="shuffAltBtn.show" :title="shuffAltBtn.tooltip" flat icon @click="shuffleClicked" v-bind:class="{'np-std-button': !stopButton}"><v-icon v-if="shuffAltBtn.icon" class="media-icon">{{shuffAltBtn.icon}}</v-icon><img v-else :src="shuffAltBtn.image" class="btn-img"></img></v-btn></div>
-     <v-rating v-else-if="showRatings" class="np-rating-desktop" v-model="rating.value" half-increments hover clearable @click.native="setRating(true)" :readonly="undefined==ratingsPlugin"></v-rating>
+     <v-rating v-else-if="showRatings" class="np-rating-desktop" v-bind:class="{'np-rating-desktop-t':techInfo}" v-model="rating.value" half-increments hover clearable @click.native="setRating(true)" :readonly="undefined==ratingsPlugin"></v-rating>
     </v-list-tile-action>
    </v-list-tile>
   </v-list>
@@ -1169,7 +1169,7 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
         },
         techInfo() {
             return this.$store.state.techInfo &&
-                   (!this.$store.state.desktopLayout || this.$store.state.fontSize!='l') &&
+                   ( !this.$store.state.desktopLayout || this.largeView || this.$store.state.fontSize!='l' || !this.showRatings) &&
                    ( (!this.repAltBtn.show && !this.shuffAltBtn.show) || !this.$store.state.desktopLayout || this.largeView )
         },
         technicalInfo() {

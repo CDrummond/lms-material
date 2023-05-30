@@ -260,6 +260,10 @@
  height:22px;
 }
 
+.np-rating-desktop-t {
+ margin-top:-2px;
+}
+
 .np-thumbs-desktop {
  margin-top:-10px;
  height:56px;

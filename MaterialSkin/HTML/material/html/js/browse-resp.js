@@ -858,7 +858,7 @@ function parseBrowseResp(data, parent, options, cacheKey, parentCommand, parentG
                     // we first check parent.artists and use the first of those
                     artist = parent && parent.artists && parent.artists.length>0
                              ? parent.artists[0]
-                             : parent && parent.stdItem==STD_ITEM_ALBUM
+                             : parent && parent.stdItem==STD_ITEM_ALBUM && parent.subtitle
                                  ? parent.subtitle
                                  : i.albumartist
                                     ? i.albumartist

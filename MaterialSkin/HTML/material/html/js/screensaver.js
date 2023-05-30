@@ -208,12 +208,12 @@ Vue.component('lms-screensaver', {
                 this.diffs = [window.innerWidth - rect.width, window.innerHeight - rect.height];
                 this.currentPos = this.prevPos = [0, 0];
                 this.marginLeft = this.diffs[0] * this.currentPos[0];
-                this.marginRight = this.diffs[1] * this.currentPos[1];
+                this.marginTop = this.diffs[1] * this.currentPos[1];
                 this.startMoving();
             }
         },
         startMoving() {
-            this.direction = 0;
+            clearInterval(this.moveTimer);
             this.moveTimer = setInterval(function () {
                 let factors = [-1, -0.75, -0.5, -0.25, 0, 0.25, 0.5, 0.75, 1.0];
                 let newPos = [0, 0];

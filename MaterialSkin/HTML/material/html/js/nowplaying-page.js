@@ -1169,9 +1169,8 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
         },
         techInfo() {
             return this.$store.state.techInfo &&
-                   ( (!this.repAltBtn.show && !this.shuffAltBtn.show) ||
-                     !this.$store.state.desktopLayout ||
-                     this.largeView )
+                   (!this.$store.state.desktopLayout || this.$store.state.fontSize!='l') &&
+                   ( (!this.repAltBtn.show && !this.shuffAltBtn.show) || !this.$store.state.desktopLayout || this.largeView )
         },
         technicalInfo() {
             return undefined==this.playerStatus.current.technicalInfo || this.playerStatus.current.length==0

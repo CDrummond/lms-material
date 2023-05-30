@@ -1220,7 +1220,7 @@ sub _cliClientCommand {
     }
     my $cmd = $request->getParam('_cmd');
     my $client = $request->client();
-    if ($request->paramUndefinedOrNotOneOf($cmd, ['set-lib', 'get-alarm', 'get-dstm', 'save-dstm', 'sort-queue', 'remove-queue']) ) {
+    if ($request->paramUndefinedOrNotOneOf($cmd, ['set-lib', 'get-alarm', 'get-dstm', 'save-dstm', 'sort-queue', 'remove-queue', 'command-list']) ) {
         $request->setStatusBadParams();
         return;
     }

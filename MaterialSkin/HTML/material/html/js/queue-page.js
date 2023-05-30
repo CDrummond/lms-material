@@ -687,9 +687,7 @@ var lmsQueue = Vue.component("lms-queue", {
                             indexes.push(i);
                         }
                         if (indexes.length>0) {
-                            lmsCommand(this.$store.state.player.id, ["material-skin-client", "remove-queue", "indexes:"+indexes.join(",")]).then(({data}) => {
-                                bus.$emit("updatePlayer", this.$store.state.player.id);
-                            });
+                            this.removeIndexes(indexes);
                         }
                     }
                 }
@@ -728,6 +726,12 @@ var lmsQueue = Vue.component("lms-queue", {
                 this.itemAction(PQ_PLAY_NOW_ACTION, item, index);
             }
         },
+        removeIndexes(indexes) {
+            indexes.sort(function(a, b) { return a<b ? 1 : -1; });
+            lmsCommand(this.$store.state.player.id, ["material-skin-client", "remove-queue", "indexes:"+indexes.join(",")]).then(({data}) => {
+                bus.$emit("updatePlayer", this.$store.state.player.id);
+            });
+        },
         itemAction(act, item, index, event) {
             if (queryParams.party) {
                 return;
@@ -751,8 +755,7 @@ var lmsQueue = Vue.component("lms-queue", {
                 }
                 if (indexes.length>0) {
                     this.clearSelection();
-                    indexes.sort(function(a, b) { return a<b ? 1 : -1; });
-                    bus.$emit('removeFromQueue', indexes);
+                    this.removeIndexes(indexes);
                 }
             } else if (MORE_ACTION===act) {
                 if (undefined!=item.plaintitle) { // Need to remove ratings stars...
@@ -875,11 +878,8 @@ var lmsQueue = Vue.component("lms-queue", {
                             tracks.add(track);
                             ids.add(item.id);
                         }
-                        dupes = dupes.reverse();
                         if (dupes.length>0) {
-                            lmsCommand(this.$store.state.player.id, ["material-skin-client", "remove-queue", "indexes:"+dupes.join(",")]).then(({data}) => {
-                                bus.$emit("updatePlayer", this.$store.state.player.id);
-                            });
+                            this.removeIndexes(dupes);
                         }
                     }
                 });
@@ -906,9 +906,7 @@ var lmsQueue = Vue.component("lms-queue", {
             bus.$emit('dlg.open', 'addtoplaylist', items, []);
         },
         removeSelectedItems() {
-            var selection = Array.from(this.selection);
-            selection.sort(function(a, b) { return a<b ? 1 : -1; });
-            bus.$emit('removeFromQueue', selection);
+            this.removeIndexes(Array.from(this.selection));
             this.clearSelection();
         },
         invertSelection() {

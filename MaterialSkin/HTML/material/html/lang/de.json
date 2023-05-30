@@ -310,7 +310,6 @@
 "Playing %1":"%1 wird wiedergegeben",
 "Playing %1 by %2":"%1 von %2 wird wiedergegeben",
 "Playing %1 by %2 from %3":"%1 von %2 aus %3 wird wiedergegeben",
-"Playlist has no duplicates":"Wiedergabeliste hat keine doppelten Einträge",
 "Playlist has no tracks":"Wiedergabeliste hat keine Einträge",
 "Please note, the setting here will not affect this control point. To change the library of this control point you need to use the context menu button for 'My Music', or use the 'Change library' button when browsing 'My Music'":"Bitte beachte, dass die Einstellung hier keinen Einfluss auf diesen Kontrollpunkt hat. Um die Bibliothek dieses Kontrollpunktes zu ändern, musst Du die Kontextmenü-Schaltfläche für 'Meine Musik' oder die Schaltfläche 'Bibliothek ändern' beim Durchsuchen von 'Meine Musik' verwenden.",
 "Plugins":"Plugins",
@@ -599,6 +598,7 @@
 "%1bit":"",
 "Do not set volume":"",
 "Leave individual player's volume.":"",
+"No duplicates found":"",
 "Remove all tracks":"",
 "Remove previous tracks":"",
 "Remove upcoming tracks":""

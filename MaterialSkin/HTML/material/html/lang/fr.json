@@ -313,7 +313,6 @@
 "Playing %1":"Lecture de %1",
 "Playing %1 by %2":"Lecture de %1 par %2",
 "Playing %1 by %2 from %3":"Lecture de %1 par %2 de %3",
-"Playlist has no duplicates":"La liste de lecture n'a pas de doublon",
 "Playlist has no tracks":"La liste de lecture ne contient aucun morceau",
 "Please note, the setting here will not affect this control point. To change the library of this control point you need to use the context menu button for 'My Music', or use the 'Change library' button when browsing 'My Music'":"Veuillez noter que ce réglage n'affectera pas cette interface de contrôle. Pour modifier la bibliothèque de cette interface de contrôle, vous devez utiliser le menu contextuel de 'Ma musique', ou utiliser le bouton 'Changer de bibliothèque' lorsque vous naviguez dans 'Ma musique'.",
 "Plugins":"Plugins",
@@ -599,6 +598,7 @@
 "%1 Years":"%1 années",
 "1 day":"1 jour",
 "%1 days":"%1 jours",
+"No duplicates found":"",
 "Remove all tracks":"",
 "Remove previous tracks":"",
 "Remove upcoming tracks":""

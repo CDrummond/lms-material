@@ -313,7 +313,6 @@
 "Playing %1":"Afspiller %1",
 "Playing %1 by %2":"Afspiller %1 af %2",
 "Playing %1 by %2 from %3":"Afspiller %1 af %2 fra %3",
-"Playlist has no duplicates":"Afspilningskøen har ingen dubletter",
 "Playlist has no tracks":"Afspilningskøen er tom",
 "Please note, the setting here will not affect this control point. To change the library of this control point you need to use the context menu button for 'My Music', or use the 'Change library' button when browsing 'My Music'":"Bemærk at denne indstilling ikke påvirker dette kontrolpunkt. For at ændre biblioteket til dette kontrolpunkt skal du benytte context menu knappen for 'Min muik' eller bruge 'Skift bibliotek' knappen mens du kigger på 'Min musik'",
 "Plugins":"Plugins",
@@ -599,6 +598,7 @@
 "%1 Years":"%1 år",
 "1 day":"1 dag",
 "%1 days":"%1 dage",
+"No duplicates found":"",
 "Remove all tracks":"",
 "Remove previous tracks":"",
 "Remove upcoming tracks":""

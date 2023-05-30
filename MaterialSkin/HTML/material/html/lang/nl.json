@@ -313,7 +313,6 @@
 "Playing %1":"Speelt %1",
 "Playing %1 by %2":"Speelt %1 door %2",
 "Playing %1 by %2 from %3":"Speelt %1 door %2 van %3",
-"Playlist has no duplicates":"Afspeellijst heeft geen duplicaten",
 "Playlist has no tracks":"Afspeellijst heeft geen nummers",
 "Please note, the setting here will not affect this control point. To change the library of this control point you need to use the context menu button for 'My Music', or use the 'Change library' button when browsing 'My Music'":"Let op, de instelling hier heeft geen invloed op dit bedieningspunt. Om de mediabibliotheek van dit bedieningspunt te wijzigen, gebruik dan de contextmenuknop voor 'Mijn muziek' of de knop 'Bibliotheek wijzigen' bij het bladeren door 'Mijn muziek'.",
 "Plugins":"Plug-ins",
@@ -599,6 +598,7 @@
 "%1 Years":"%1 Jaren",
 "1 day":"1 dag",
 "%1 days":"%1 dagen",
+"No duplicates found":"",
 "Remove all tracks":"",
 "Remove previous tracks":"",
 "Remove upcoming tracks":""

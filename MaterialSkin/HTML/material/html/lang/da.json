@@ -274,6 +274,7 @@
 "No Player":"Ingen afspiller",
 "No albums have been favorited for this artist. Please use the entries below to look for albums on your online services.":"Ingen favorit-albums for denne kunstner. Brug et af punkterne nedenfor for at lede efter albums på dine online tjenester.",
 "No downloadable tracks.":"Antal numre der kan hentes",
+"No duplicates found":"Ingen dubletter fundet",
 "No entries found":"Ingen elementer fundet",
 "No fade":"Ingen glidende overgang",
 "No notifications.":"Ingen beskeder.",
@@ -340,11 +341,14 @@
 "Remove '%1'?":"Fjern '%1'?",
 "Remove album":"Fjern album",
 "Remove all selected items":"Fjern alle valgte elementer",
+"Remove all tracks":"Fjern alle numre",
 "Remove disc":"Skub CD'en ud",
 "Remove duplicate tracks?":"Fjern dublerede numre?",
 "Remove duplicates":"Fjern dubletter",
 "Remove from favorites":"Fjern fra favoritter",
+"Remove previous tracks":"Fjern numre før dette",
 "Remove the selected items?":"Fjern de valgte elementer?",
+"Remove upcoming tracks":"Fjern numre efter dette",
 "Rename":"Omdøb",
 "Rename failed":"Omdøbning fejlede",
 "Repeat":"Gentagelse",
@@ -597,9 +601,5 @@
 "1 Year":"1 år",
 "%1 Years":"%1 år",
 "1 day":"1 dag",
-"%1 days":"%1 dage",
-"No duplicates found":"",
-"Remove all tracks":"",
-"Remove previous tracks":"",
-"Remove upcoming tracks":""
+"%1 days":"%1 dage"
 }

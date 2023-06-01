@@ -598,8 +598,8 @@
 "%1 Years":"%1 Jaren",
 "1 day":"1 dag",
 "%1 days":"%1 dagen",
-"No duplicates found":"",
-"Remove all tracks":"",
-"Remove previous tracks":"",
-"Remove upcoming tracks":""
+"No duplicates found":"Geen duplicaten gevonden",
+"Remove all tracks":"Verwijder alle nummers",
+"Remove previous tracks":"Verwijder eerdere nummers",
+"Remove upcoming tracks":"Verwijder aankomende nummers"
 }

@@ -663,7 +663,7 @@ Vue.component('lms-player-settings', {
             lmsCommand(this.playerId, ["playerpref", "alarmsEnabled", this.alarms.on ? 1 : 0]);
         },
         toggleAlarm(alarm) {
-             lmsCommand(this.playerId, ["alarm", "update", "enabled:"+(alarm.enabled ? 0 : 1), "id:"+alarm.id]).then(({data}) => {
+             lmsCommand(this.playerId, ["alarm", "update", "enabled:"+(alarm.enabled ? 1 : 0), "id:"+alarm.id]).then(({data}) => {
                 this.loadAlarms();
             });
         },

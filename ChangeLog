@@ -1,6 +1,7 @@
 3.3.2
 -----
 1. Fix browse view start-up when set to use grid.
+2. Fix toggling of alarms.
 
 3.3.1
 -----

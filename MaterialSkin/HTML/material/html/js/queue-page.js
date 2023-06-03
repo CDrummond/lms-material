@@ -457,7 +457,6 @@ var lmsQueue = Vue.component("lms-queue", {
             ['dragenter', 'dragover', 'dragleave', 'drop'].forEach(eventName => {
                 this.scrollElement.addEventListener(eventName, (ev) => { ev.stopPropagation(); ev.preventDefault();}, false);
             });
-            this.scrollElement.addEventListener('drop', this.droppedFileHandler, false);
         }
 
         this.setBgndCover();
@@ -641,6 +640,7 @@ var lmsQueue = Vue.component("lms-queue", {
         addFiles(files, action) {
             let file = files.shift();
             if (!file) {
+                bus.$emit('refreshStatus');
                 return;
             }
             lmsCommand(this.$store.state.player.id, ['playlist', action+'match', 'name:'+file.name, 'size:'+(file.size || 0), 'timestamp:'+Math.floor(file.lastModified/1000), 'type:'+(file.type || 'unk')]).then(({data}) => {
@@ -1199,6 +1199,8 @@ var lmsQueue = Vue.component("lms-queue", {
             } else if (ev.dataTransfer) {
                 if (undefined!=window.mskBrowseDrag) {
                     bus.$emit('browseQueueDrop', window.mskBrowseDrag, to, this.listSize);
+                } else {
+                    this.droppedFileHandler(ev);
                 }
             }
             this.dragIndex = undefined;

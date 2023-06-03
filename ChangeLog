@@ -1,3 +1,7 @@
+3.3.2
+-----
+1. Fix browse view start-up when set to use grid.
+
 3.3.1
 -----
 1. Fix 'Copy browse selection here'

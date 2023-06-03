@@ -1016,6 +1016,10 @@ function stripLinkTags(s) {
     return !IS_MOBILE && (""+s).indexOf("<obj")>=0 ? s.replace(/(<([^>]+)>)/gi, "") : s;
 }
 
+function stripTags(str) {
+    return isEmpty(str) ? str : str.replace('<br/>', '\n').replace(/<\/?[^>]+(>|$)/g, "");
+}
+
 function trackTags() {
     return TRACK_TAGS+(lmsOptions.techInfo ? TECH_INFO_TAGS : "");
 }

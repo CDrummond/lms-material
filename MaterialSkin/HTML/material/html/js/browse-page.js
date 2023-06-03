@@ -1775,9 +1775,9 @@ var lmsBrowse = Vue.component("lms-browse", {
                 return '';
             }
             if (item.title && item.subtitle) {
-                return stipTags(item.title)+"\n"+stipTags(item.subtitle);
+                return stripTags(item.title)+"\n"+stripTags(item.subtitle);
             }
-            return stipTags(item.title);
+            return stripTags(item.title);
         },
         displayTime: function (value, bracket) {
             if (!value || value<0.000000000001) {

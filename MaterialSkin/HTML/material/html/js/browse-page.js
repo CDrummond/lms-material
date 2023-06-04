@@ -1433,7 +1433,8 @@ var lmsBrowse = Vue.component("lms-browse", {
             this.dragIndex = undefined;
             this.dropIndex = -1;
             window.mskBrowseDrag = undefined;
-            bus.$emit('dragActive', false);
+            // Delay setting drag inactive so that we ignore a potential 'Esc' that cancelled drag
+            setTimeout(function () { bus.$emit('dragActive', false); }.bind(this), 250);
         },
         dragOver(index, ev) {
             if ( ((this.canDrop && undefined!=window.mskBrowseDrag) || (undefined!=window.mskQueueDrag && this.current.section==SECTION_PLAYLISTS)) &&
@@ -1571,6 +1572,9 @@ var lmsBrowse = Vue.component("lms-browse", {
             this.nowPlayingExpanded = val;
         }.bind(this));
         bus.$on('esc', function() {
+            if (this.dragActive) {
+                return;
+            }
             if (this.$store.state.visibleMenus.size>0) {
                 this.menu.show = false;
                 if (this.menu.inMainMenu) {

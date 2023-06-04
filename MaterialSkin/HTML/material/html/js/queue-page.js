@@ -1143,7 +1143,8 @@ var lmsQueue = Vue.component("lms-queue", {
             this.dragIndex = undefined;
             this.dropIndex = -1;
             window.mskQueueDrag = undefined;
-            bus.$emit('dragActive', false);
+            // Delay setting drag inactive so that we ignore a potential 'Esc' that cancelled drag
+            setTimeout(function () { bus.$emit('dragActive', false); }.bind(this), 250);
         },
         dragOver(index, ev) {
             this.dropIndex = index;

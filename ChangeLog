@@ -3,6 +3,8 @@
 1. Fix browse view start-up when set to use grid.
 2. Fix toggling of alarms.
 3. Fix dropping external files onto queue.
+4. Attempt to stop pressing 'Esc' whilst dragging causing browse view to
+   navigate back.
 
 3.3.1
 -----

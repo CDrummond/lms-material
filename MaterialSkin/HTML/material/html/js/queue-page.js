@@ -453,12 +453,6 @@ var lmsQueue = Vue.component("lms-queue", {
         this.scrollElement = document.getElementById("queue-list");
         this.scrollElement.addEventListener("scroll", this.handleScroll, PASSIVE_SUPPORTED ? { passive: true } : false);
 
-        if (!IS_MOBILE) {
-            ['dragenter', 'dragover', 'dragleave', 'drop'].forEach(eventName => {
-                this.scrollElement.addEventListener(eventName, (ev) => { ev.stopPropagation(); ev.preventDefault();}, false);
-            });
-        }
-
         this.setBgndCover();
         this.$nextTick(function () {
             setScrollTop(this, 0);

@@ -1,3 +1,7 @@
+3.3.3
+-----
+1. Fix toggling of alarms by clicking on checkbox.
+
 3.3.2
 -----
 1. Fix browse view start-up when set to use grid.

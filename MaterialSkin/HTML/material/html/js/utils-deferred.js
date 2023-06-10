@@ -292,16 +292,15 @@ function getYear(text) {
 
 function sortPlaylist(view, playerId, title, command) {
     let sorts = [
-                    {id:0, title:i18n("Reverse"), subtitle:i18n("Reverse current order")},
-                    {id:1, title:i18n("Random"), subtitle:i18n("Shuffle list")},
-                    {id:2, title:i18n("Album artist"), subtitle:i18n("...then album, disc no., track no.")},
-                    {id:3, title:i18n("Artist"), subtitle:i18n("...then album, disc no., track no.")},
-                    {id:4, title:i18n("Album"), subtitle:i18n("...then album artist, disc no., track no.")},
-                    {id:5, title:i18n("Title"), subtitle:i18n("...then album artist, album, disc no., track no.")},
-                    {id:6, title:i18n("Genre"), subtitle:i18n("...then album artist, album, disc no., track no.")},
-                    {id:7, title:i18n("Year"), subtitle:i18n("...then album artist, album, disc no., track no.")}
-                 ];
-
+        {id:0, title:i18n("Reverse"), subtitle:i18n("Reverse current order")},
+        {id:1, title:i18n("Random"), subtitle:i18n("Shuffle list")},
+        {id:2, title:i18n("Album artist"), subtitle:i18n("...then album, disc no., track no.")},
+        {id:3, title:i18n("Artist"), subtitle:i18n("...then album, disc no., track no.")},
+        {id:4, title:i18n("Album"), subtitle:i18n("...then album artist, disc no., track no.")},
+        {id:5, title:i18n("Title"), subtitle:i18n("...then album artist, album, disc no., track no.")},
+        {id:6, title:i18n("Genre"), subtitle:i18n("...then album artist, album, disc no., track no.")},
+        {id:7, title:i18n("Year"), subtitle:i18n("...then album artist, album, disc no., track no.")}
+    ];
     if (lmsOptions.showComposer) {
         sorts.push({id:8, title:i18n("Composer"), subtitle:i18n("...then album, disc no., track no.")});
     }
@@ -322,9 +321,9 @@ function sortPlaylist(view, playerId, title, command) {
         sorts.push({id:14, title:i18n("Play count"), subtitle:i18n("...then album artist, album, disc no., track no.")});
     }
 
-    choose(title, sorts).then(choice => {
+    choose(title, sorts, {key:command[1], options:[{title:title, adjust:0}, {title:title+SEPARATOR+i18n('Single field only'), adjust:100}]}).then(choice => {
         if (undefined!=choice) {
-            command.push("order:"+choice.id);
+            command.push("order:"+(choice.id+choice.adjust));
             lmsCommand(playerId, command).then(({data}) => {
                 if ("sort-queue" == command[1]) {
                     bus.$emit('refreshStatus');

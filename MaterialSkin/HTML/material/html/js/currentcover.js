@@ -8,6 +8,12 @@
 
 const DEFAULT_COVER = "music/0/cover";
 
+function shadeRgb(rgb, percent) {
+    var t = percent <0 ? 0 : 255,
+        p = percent < 0 ? percent*-1 : percent;
+    return [Math.round((t-rgb[0])*p)+rgb[0], Math.round((t-rgb[1])*p)+rgb[1], Math.round((t-rgb[2])*p)+rgb[2]];
+}
+
 var lmsCurrentCover = Vue.component('lms-currentcover', {
     template: `<div/>`,
     data() {
@@ -82,13 +88,30 @@ var lmsCurrentCover = Vue.component('lms-currentcover', {
 
                 if (this.$store.state.color==COLOR_FROM_COVER) {
                     this.fac.getColorAsync(this.coverUrl, this.facOptions).then(color => {
-                        console.log(color.hex);
-                        document.documentElement.style.setProperty('--primary-color', color.hex);
-                        document.documentElement.style.setProperty('--accent-color', color.hex);
-                        document.documentElement.style.setProperty('--pq-current-color', color.rgba.replace(",1)", ",0.2"));
-                        document.documentElement.style.setProperty('--drop-target-color', color.rgba.replace(",1)", ",0.5"));
+                        let rgbs = color.rgb.replace('rgb(', '').replace(')', '').split(',');
+                        let rgb = [parseInt(rgbs[0]), parseInt(rgbs[1]), parseInt(rgbs[2])];
+                        let rgba = [rgb[0], rgb[1], rgb[2]];
+
+                        if (color.isLight) {
+                            while ((((rgb[0]*299)+(rgb[1]*587)+(rgb[2]*114))/1000)>170) {
+                                rgb = shadeRgb(rgb, -0.1);
+                            }
+                        } else {
+                            while ((((rgb[0]*299)+(rgb[1]*587)+(rgb[2]*114))/1000)<50) {
+                                rgb = shadeRgb(rgb, 0.1);
+                            }
+                            rgba = [rgb[0], rgb[1], rgb[2]];
+                            while ((((rgba[0]*299)+(rgba[1]*587)+(rgba[2]*114))/1000)<90) {
+                                rgba = shadeRgb(rgba, 0.1);
+                            }
+                        }
+                        rgbs = "rgb("+rgb[0]+","+rgb[1]+","+rgb[2]+")";
+                        let rgbas = "rgba("+rgba[0]+","+rgba[1]+","+rgba[2];
+                        document.documentElement.style.setProperty('--primary-color', rgbs);
+                        document.documentElement.style.setProperty('--accent-color', rgbs);
+                        document.documentElement.style.setProperty('--pq-current-color', rgbas+",0.2)");
+                        document.documentElement.style.setProperty('--drop-target-color', rgbas+",0.5)");
                     }).catch(e => {
-                        console.log(e);
                     });
                 }
             }

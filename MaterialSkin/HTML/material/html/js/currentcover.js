@@ -100,6 +100,7 @@ var lmsCurrentCover = Vue.component('lms-currentcover', {
                             while (rgbBrightness(rgb)>170) {
                                 rgb = shadeRgb(rgb, -0.1);
                             }
+                            rgba = [rgb[0], rgb[1], rgb[2]];
                         } else {
                             while (rgbBrightness(rgb)<50) {
                                 rgb = shadeRgb(rgb, 0.1);
@@ -109,10 +110,12 @@ var lmsCurrentCover = Vue.component('lms-currentcover', {
                                 rgba = shadeRgb(rgba, 0.1);
                             }
                         }
-                        rgbs = "rgb("+rgb[0]+","+rgb[1]+","+rgb[2]+")";
                         let rgbas = "rgba("+rgba[0]+","+rgba[1]+","+rgba[2];
-                        document.documentElement.style.setProperty('--primary-color', rgbs);
-                        document.documentElement.style.setProperty('--accent-color', rgbs);
+                        document.documentElement.style.setProperty('--primary-color', "rgb("+rgb[0]+","+rgb[1]+","+rgb[2]+")");
+                        while (rgbBrightness(rgb)<150) {
+                            rgb = shadeRgb(rgb, 0.1);
+                        }
+                        document.documentElement.style.setProperty('--accent-color', "rgb("+rgb[0]+","+rgb[1]+","+rgb[2]+")");
                         document.documentElement.style.setProperty('--pq-current-color', rgbas+",0.2)");
                         document.documentElement.style.setProperty('--drop-target-color', rgbas+",0.5)");
                     }).catch(e => {

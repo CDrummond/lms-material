@@ -14,6 +14,10 @@ function shadeRgb(rgb, percent) {
     return [Math.round((t-rgb[0])*p)+rgb[0], Math.round((t-rgb[1])*p)+rgb[1], Math.round((t-rgb[2])*p)+rgb[2]];
 }
 
+function rgbBrightness(rgb) {
+    return (((rgb[0]*299)+(rgb[1]*587)+(rgb[2]*114))/1000);
+}
+
 var lmsCurrentCover = Vue.component('lms-currentcover', {
     template: `<div/>`,
     data() {
@@ -93,15 +97,15 @@ var lmsCurrentCover = Vue.component('lms-currentcover', {
                         let rgba = [rgb[0], rgb[1], rgb[2]];
 
                         if (color.isLight) {
-                            while ((((rgb[0]*299)+(rgb[1]*587)+(rgb[2]*114))/1000)>170) {
+                            while (rgbBrightness(rgb)>170) {
                                 rgb = shadeRgb(rgb, -0.1);
                             }
                         } else {
-                            while ((((rgb[0]*299)+(rgb[1]*587)+(rgb[2]*114))/1000)<50) {
+                            while (rgbBrightness(rgb)<50) {
                                 rgb = shadeRgb(rgb, 0.1);
                             }
                             rgba = [rgb[0], rgb[1], rgb[2]];
-                            while ((((rgba[0]*299)+(rgba[1]*587)+(rgba[2]*114))/1000)<90) {
+                            while (rgbBrightness(rgba)<90) {
                                 rgba = shadeRgb(rgba, 0.1);
                             }
                         }

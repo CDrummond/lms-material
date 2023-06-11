@@ -841,7 +841,28 @@ var lmsQueue = Vue.component("lms-queue", {
                 if (!this.$store.state.player || !this.$store.state.players || this.$store.state.players.length<2) {
                     return;
                 } else if (this.items.length>=1) {
-                    bus.$emit('dlg.open', 'movequeue', this.$store.state.player);
+                    let opts = [
+                        { val:0, title:i18n("Copy the queue to:")},
+                        { val:1, title:i18n("Move the queue to:")},
+                        { val:2, title:i18n("Swap the queue with:")}
+                    ]
+                    let players = [ ];
+                    for (let i=0, loop=this.$store.state.players, len=loop.length; i<len; ++i) {
+                        if (loop[i].id!=this.$store.state.player.id) {
+                            players.push({val:loop[i].id, title:loop[i].name, icon:loop[i].icon.icon, svg:loop[i].icon.svg});
+                        }
+                    }
+                    choose("", players, {options:opts, key:'movequeue'}).then(choice => {
+                        if (undefined==choice) {
+                            return;
+                        }
+                        lmsCommand("", ["material-skin", "transferqueue", "from:"+this.$store.state.player.id, "to:"+choice.item.val, "mode:"+(0==choice.option.val ? 'copy' : 1==choice.option.val ? 'move' : 'swap')]).then(({data}) => {
+                            this.$store.commit('setPlayer', choice.item.val);
+                            if (0==choice.option.val) {
+                                bus.$emit('showMessage', i18n("Queue copied to '%1'", choice.item.title));
+                            }
+                        });
+                    });
                 }
             } else if (PQ_SORT_ACTION==act) {
                 if (this.items.length>=1) {

@@ -292,38 +292,38 @@ function getYear(text) {
 
 function sortPlaylist(view, playerId, title, command) {
     let sorts = [
-        {id:0, title:i18n("Reverse"), subtitle:i18n("Reverse current order")},
-        {id:1, title:i18n("Random"), subtitle:i18n("Shuffle list")},
-        {id:2, title:i18n("Album artist"), subtitle:i18n("...then album, disc no., track no.")},
-        {id:3, title:i18n("Artist"), subtitle:i18n("...then album, disc no., track no.")},
-        {id:4, title:i18n("Album"), subtitle:i18n("...then album artist, disc no., track no.")},
-        {id:5, title:i18n("Title"), subtitle:i18n("...then album artist, album, disc no., track no.")},
-        {id:6, title:i18n("Genre"), subtitle:i18n("...then album artist, album, disc no., track no.")},
-        {id:7, title:i18n("Year"), subtitle:i18n("...then album artist, album, disc no., track no.")}
+        {val:0, title:i18n("Reverse"), subtitle:i18n("Reverse current order")},
+        {val:1, title:i18n("Random"), subtitle:i18n("Shuffle list")},
+        {val:2, title:i18n("Album artist"), subtitle:i18n("...then album, disc no., track no.")},
+        {val:3, title:i18n("Artist"), subtitle:i18n("...then album, disc no., track no.")},
+        {val:4, title:i18n("Album"), subtitle:i18n("...then album artist, disc no., track no.")},
+        {val:5, title:i18n("Title"), subtitle:i18n("...then album artist, album, disc no., track no.")},
+        {val:6, title:i18n("Genre"), subtitle:i18n("...then album artist, album, disc no., track no.")},
+        {val:7, title:i18n("Year"), subtitle:i18n("...then album artist, album, disc no., track no.")}
     ];
     if (lmsOptions.showComposer) {
-        sorts.push({id:8, title:i18n("Composer"), subtitle:i18n("...then album, disc no., track no.")});
+        sorts.push({val:8, title:i18n("Composer"), subtitle:i18n("...then album, disc no., track no.")});
     }
     if (lmsOptions.showConductor) {
-        sorts.push({id:9, title:i18n("Conductor"), subtitle:i18n("...then album, disc no., track no.")});
+        sorts.push({val:9, title:i18n("Conductor"), subtitle:i18n("...then album, disc no., track no.")});
     }
     if (lmsOptions.showBand) {
-        sorts.push({id:10, title:i18n("Band"), subtitle:i18n("...then album, disc no., track no.")});
+        sorts.push({val:10, title:i18n("Band"), subtitle:i18n("...then album, disc no., track no.")});
     }
-    sorts.push({id:11, title:i18n("Date added"), subtitle:i18n("...then album artist, album, disc no., track no.")});
+    sorts.push({val:11, title:i18n("Date added"), subtitle:i18n("...then album artist, album, disc no., track no.")});
     if (LMS_STATS_ENABLED) {
-        sorts.push({id:12, title:i18n("Date last played"), subtitle:i18n("...then album artist, album, disc no., track no.")});
+        sorts.push({val:12, title:i18n("Date last played"), subtitle:i18n("...then album artist, album, disc no., track no.")});
     }
     if (view.$store.state.showRating) {
-        sorts.push({id:13, title:i18n("Rating"), subtitle:i18n("...then album artist, album, disc no., track no.")});
+        sorts.push({val:13, title:i18n("Rating"), subtitle:i18n("...then album artist, album, disc no., track no.")});
     }
     if (LMS_STATS_ENABLED) {
-        sorts.push({id:14, title:i18n("Play count"), subtitle:i18n("...then album artist, album, disc no., track no.")});
+        sorts.push({val:14, title:i18n("Play count"), subtitle:i18n("...then album artist, album, disc no., track no.")});
     }
 
-    choose(title, sorts, {key:command[1], options:[{title:title, adjust:0}, {title:title+SEPARATOR+i18n('Single field only'), adjust:100}]}).then(choice => {
+    choose(title, sorts, {key:command[1], options:[{title:title, val:0}, {title:title+SEPARATOR+i18n('Single field only'), val:1}]}).then(choice => {
         if (undefined!=choice) {
-            command.push("order:"+(choice.id+choice.adjust));
+            command.push("order:"+(choice.item.val+(choice.option.val*100)));
             lmsCommand(playerId, command).then(({data}) => {
                 if ("sort-queue" == command[1]) {
                     bus.$emit('refreshStatus');

@@ -11,7 +11,7 @@ Vue.component('lms-choice-dialog', {
 <v-dialog v-model="show" v-if="show" persistent width="450" class="lms-dialog">
  <v-card>
   <v-card-text>
-   <v-select v-if="undefined!=options && options.length>1" :items="options" v-model="option" item-text="title" item-value="adjust"></v-select>
+   <v-select v-if="undefined!=options && options.length>1" :items="options" v-model="option" item-text="title" item-value="val"></v-select>
    <v-container grid-list-md style="padding: 4px">
     <v-layout wrap>
      <v-flex xs12 v-if="undefined==options || options.length<=1" class="dlgtitle">{{title}}</v-flex>
@@ -19,6 +19,7 @@ Vue.component('lms-choice-dialog', {
       <v-list class="sleep-list dialog-main-list">
        <template v-for="(item, index) in items">
         <v-list-tile @click="choose(item)" :disabled="item.disabled" v-bind:class="{'dimmed':item.disabled}">
+         <v-list-tile-avatar :tile="true" class="lms-avatar" v-if="item.icon || item.svg"><v-icon v-if="item.icon">{{item.icon}}</v-icon><img v-else class="svg-img" :src="item.svg | svgIcon(darkUi)"></img></v-list-tile-avatar>
          <v-list-tile-content>
           <v-list-tile-title>{{item.title}}</v-list-tile-title>
           <!-- todo allow options to also have sub-titles -->
@@ -29,7 +30,6 @@ Vue.component('lms-choice-dialog', {
         </template>
       </v-list>
      </v-flex>
-
     </v-layout>
    </v-container>
   </v-card-text>
@@ -55,7 +55,7 @@ Vue.component('lms-choice-dialog', {
             this.show = true;
             this.title = title;
             this.items = items;
-            this.options = undefined==extra ? [] : extra.options;
+            this.options = undefined==extra || undefined==extra.options ? [] : extra.options;
             this.key = undefined==extra ? undefined : extra.key;
             if (undefined!=this.key) {
                 this.option = parseInt(getLocalStorageVal('choice-'+this.key, 0));
@@ -73,14 +73,14 @@ Vue.component('lms-choice-dialog', {
             bus.$emit('choice.resp', undefined);
         },
         choose(item) {
-            if (item.disalbled) {
+            if (item.disabled) {
                 return;
             }
             this.show=false;
             if (undefined!=this.key) {
                 setLocalStorageVal('choice-'+this.key, this.option);
             }
-            bus.$emit('choice.resp', item, this.option);
+            bus.$emit('choice.resp', item, this.options.length<1 ? undefined : this.options[this.option]);
         },
         i18n(str, arg) {
             if (this.show) {
@@ -88,6 +88,11 @@ Vue.component('lms-choice-dialog', {
             } else {
                 return str;
             }
+        }
+    },
+    filters: {
+        svgIcon: function (name, dark) {
+            return "/material/svg/"+name+"?c="+(dark ? LMS_DARK_SVG : LMS_LIGHT_SVG)+"&r="+LMS_MATERIAL_REVISION;
         }
     },
     watch: {
@@ -100,11 +105,8 @@ Vue.component('lms-choice-dialog', {
 function choose(title, items, extra) {
     return new Promise(function(response) {
         bus.$emit('dlg.open', 'choice', title, items, extra);
-        bus.$once('choice.resp', function(resp, adjust) {
-            if (undefined!=adjust && adjust>0) {
-                resp.adjust = adjust;
-            }
-            response(resp);
+        bus.$once('choice.resp', function(resp, option) {
+            response(undefined==option ? resp : {item:resp, option:option});
         });
     });
 }

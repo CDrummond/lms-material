@@ -16,6 +16,10 @@ var lmsCurrentCover = Vue.component('lms-currentcover', {
     },
     mounted: function() {
         this.coverUrl = LMS_BLANK_COVER;
+        this.fac = new FastAverageColor();
+        this.facOptions = {
+            ignoredColor: [ [255, 255, 255, 255], [0, 0, 0, 255] ]
+        }
         bus.$on('playerStatus', function(playerStatus) {
             // Has cover changed?
             var coverUrl = this.coverUrl;
@@ -74,6 +78,18 @@ var lmsCurrentCover = Vue.component('lms-currentcover', {
                     }
                 } else if (2==queryParams.nativeCover) {
                     console.log("MATERIAL-COVER\nURL " + this.coverUrl);
+                }
+
+                if (this.$store.state.color==COLOR_FROM_COVER) {
+                    this.fac.getColorAsync(this.coverUrl, this.facOptions).then(color => {
+                        console.log(color.hex);
+                        document.documentElement.style.setProperty('--primary-color', color.hex);
+                        document.documentElement.style.setProperty('--accent-color', color.hex);
+                        document.documentElement.style.setProperty('--pq-current-color', color.rgba.replace(",1)", ",0.2"));
+                        document.documentElement.style.setProperty('--drop-target-color', color.rgba.replace(",1)", ",0.5"));
+                    }).catch(e => {
+                        console.log(e);
+                    });
                 }
             }
         }.bind(this));

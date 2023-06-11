@@ -1,0 +1,13 @@
+/**
+ * LMS-Material
+ *
+ * Copyright (c) 2018-2023 Craig Drummond <craig.p.drummond@gmail.com>
+ * MIT license.
+ */
+
+:root {
+ --pq-current-color:rgba(69,90,100,0.2);
+ --drop-target-color:rgba(69,90,100,0.5);
+ --primary-color:#455a64;
+ --accent-color:#718792;
+}

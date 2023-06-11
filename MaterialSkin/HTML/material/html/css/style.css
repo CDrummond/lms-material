@@ -2114,6 +2114,10 @@ div.v-subheader {
  margin-right:12px;
 }
 
+.color-from-cover {
+ background-image: linear-gradient(#1976d2, #f4511e);
+}
+
 .selected-color-circle {
  width:32px;
  height:32px;

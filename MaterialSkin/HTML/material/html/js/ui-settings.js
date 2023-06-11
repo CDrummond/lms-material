@@ -45,6 +45,7 @@ Vue.component('lms-ui-settings', {
       <div class="color-grid">
        <div v-for="(item, index) in colorList.colors" @click="color=item.key" :style="{'background-color':item.color}" class="color-circle" v-bind:class="{'selected-color-circle':item.key==color}"></div>
        <div v-for="(item, index) in userColors" @click="color=item.key" :style="{'background-color':item.color}" class="color-circle" v-bind:class="{'selected-color-circle':item.key==color}"></div>
+       <div  @click="color=COLOR_FROM_COVER" class="color-circle color-from-cover" v-bind:class="{'selected-color-circle':COLOR_FROM_COVER==color}"></div>
       </div>
      </v-list-tile-content>
     </v-list-tile>

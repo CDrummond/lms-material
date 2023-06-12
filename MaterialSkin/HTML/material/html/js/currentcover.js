@@ -18,6 +18,15 @@ function rgbBrightness(rgb) {
     return (((rgb[0]*299)+(rgb[1]*587)+(rgb[2]*114))/1000);
 }
 
+function rgb2Hex(rgb) {
+    let hex="#";
+    for (let i=0; i<3; ++i) {
+        let hv = rgb[i].toString(16);
+        hex += (hv.length==1 ? "0" : "") + hv;
+    }
+    return hex;
+}
+
 var lmsCurrentCover = Vue.component('lms-currentcover', {
     template: `<div/>`,
     data() {
@@ -110,12 +119,12 @@ var lmsCurrentCover = Vue.component('lms-currentcover', {
                                 rgba = shadeRgb(rgba, 0.1);
                             }
                         }
-                        let rgbas = "rgba("+rgba[0]+","+rgba[1]+","+rgba[2];
-                        document.documentElement.style.setProperty('--primary-color', "rgb("+rgb[0]+","+rgb[1]+","+rgb[2]+")");
+                        document.documentElement.style.setProperty('--primary-color', rgb2Hex(rgb));
                         while (rgbBrightness(rgb)<150) {
                             rgb = shadeRgb(rgb, 0.1);
                         }
-                        document.documentElement.style.setProperty('--accent-color', "rgb("+rgb[0]+","+rgb[1]+","+rgb[2]+")");
+                        document.documentElement.style.setProperty('--accent-color', rgb2Hex(rgb));
+                        let rgbas = "rgba("+rgba[0]+","+rgba[1]+","+rgba[2];
                         document.documentElement.style.setProperty('--pq-current-color', rgbas+",0.2)");
                         document.documentElement.style.setProperty('--drop-target-color', rgbas+",0.5)");
                     }).catch(e => {

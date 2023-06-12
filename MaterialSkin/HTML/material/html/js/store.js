@@ -256,6 +256,21 @@ function updateLang(state, lang) {
     document.querySelector('html').setAttribute('lang', lang);
 }
 
+function themeColorsChanged(state) {
+    if (0!=queryParams.nativeColors) {
+        let topColorVar = "--top-toolbar-color";
+        let botColorVar = "--bottom-toolbar-color";
+        for (var i=state.openDialogs.length; i>=0; --i) {
+            if (FULLSCREEN_DIALOGS.has(state.openDialogs[i])) {
+                topColorVar = "--dialog-toolbar-color";
+                botColorVar = "--background-color";
+                break;
+            }
+        }
+        emitToolbarColors(topColorVar, botColorVar);
+    }
+}
+
 const store = new Vuex.Store({
     state: {
         desktopLayout: false,
@@ -739,19 +754,10 @@ const store = new Vuex.Store({
             }
 
             state.activeDialog = state.openDialogs.length>0 ? state.openDialogs[state.openDialogs.length-1] : undefined;
-
-            if (0!=queryParams.nativeColors) {
-                let topColorVar = "--top-toolbar-color";
-                let botColorVar = "--bottom-toolbar-color";
-                for (var i=state.openDialogs.length; i>=0; --i) {
-                    if (FULLSCREEN_DIALOGS.has(state.openDialogs[i])) {
-                        topColorVar = "--dialog-toolbar-color";
-                        botColorVar = "--background-color";
-                        break;
-                    }
-                }
-                emitToolbarColors(topColorVar, botColorVar);
-            }
+            themeColorsChanged(state);
+        },
+        colorsChanged(state) {
+            themeColorsChanged(state);
         },
         closeAllDialogs(state, val) {
             closePrevDialog(state);

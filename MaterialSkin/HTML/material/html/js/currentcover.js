@@ -127,6 +127,7 @@ var lmsCurrentCover = Vue.component('lms-currentcover', {
                         let rgbas = "rgba("+rgba[0]+","+rgba[1]+","+rgba[2];
                         document.documentElement.style.setProperty('--pq-current-color', rgbas+",0.2)");
                         document.documentElement.style.setProperty('--drop-target-color', rgbas+",0.5)");
+                        this.$store.commit('colorsChanged');
                     }).catch(e => {
                     });
                 }

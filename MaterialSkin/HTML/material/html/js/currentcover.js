@@ -8,10 +8,12 @@
 
 const DEFAULT_COVER = "music/0/cover";
 
+var currentCover = undefined;
 var lmsCurrentCover = Vue.component('lms-currentcover', {
-    template: `<div/>`,
+    template: `<div><img crossOrigin="anonymous" id="current-cover" :src="accessUrl" style="display:none"/></div>`,
     data() {
         return {
+            accessUrl: undefined,
             colorList: { }
         };
     },
@@ -81,7 +83,11 @@ var lmsCurrentCover = Vue.component('lms-currentcover', {
                 }
 
                 if (this.$store.state.color==COLOR_FROM_COVER) {
-                    this.calculateColors();
+                    this.accessUrl = undefined==coverUrl || (!coverUrl.startsWith("http:") && !coverUrl.startsWith("https:"))
+                        ? coverUrl
+                        : "https://images1-focus-opensocial.googleusercontent.com/gadgets/proxy?container=focus&refresh=2592000&url="+encodeURIComponent(coverUrl);
+                } else {
+                    this.accessUrl = undefined;
                 }
             }
         }.bind(this));
@@ -89,6 +95,13 @@ var lmsCurrentCover = Vue.component('lms-currentcover', {
         bus.$on('getCurrentCover', function() {
             bus.$emit('currentCover', this.coverUrl, this.queueIndex);
         }.bind(this));
+
+        currentCover = this;
+        document.getElementById('current-cover').addEventListener('load', function() {
+            if (currentCover.$store.state.color==COLOR_FROM_COVER) {
+                currentCover.calculateColors();
+            }
+        });
     },
     methods: {
         calculateColors() {
@@ -108,7 +121,7 @@ var lmsCurrentCover = Vue.component('lms-currentcover', {
                     this.convertedColors.push(rgb);
                 }
             }
-            this.fac.getColorAsync(this.coverUrl).then(color => {
+            this.fac.getColorAsync(document.getElementById('current-cover')).then(color => {
                 let rgbs = color.rgb.replace('rgb(', '').replace(')', '').split(',');
                 let rgb = [parseInt(rgbs[0]), parseInt(rgbs[1]), parseInt(rgbs[2])];
 

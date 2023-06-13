@@ -153,6 +153,11 @@ function updateUiSettings(state, val) {
         setLocalStorageVal('largeCovers', state.largeCovers);
         relayoutGrid = true;
     }
+    if (undefined!=val.listPadding && state.listPadding!=val.listPadding) {
+        state.listPadding = val.listPadding;
+        setLocalStorageVal('listPadding', state.listPadding);
+        setListPadding(state.listPadding);
+    }
     if (undefined!=val.mediaControls && state.mediaControls!=val.mediaControls) {
         state.mediaControls = val.mediaControls;
         setLocalStorageVal('mediaControls', state.mediaControls);
@@ -328,7 +333,8 @@ const store = new Vuex.Store({
         downloadStatus: [],
         updateNotif: {msg:undefined, title:undefined},
         notifications: [],
-        coloredToolbars: false
+        coloredToolbars: false,
+        listPadding: 0
     },
     mutations: {
         updatePlayer(state, player) {
@@ -552,11 +558,13 @@ const store = new Vuex.Store({
             state.disabledBrowseModes = new Set(JSON.parse(getLocalStorageVal('disabledBrowseModes', '["myMusicFlopTracks", "myMusicTopTracks", "myMusicMusicFolder", "myMusicFileSystem", "myMusicArtistsComposers", "myMusicArtistsConductors", "myMusicArtistsJazzComposers", "myMusicAlbumsAudiobooks"]')));
             state.powerButton = getLocalStorageBool('powerButton', state.powerButton);
             state.largeCovers = getLocalStorageBool('largeCovers', state.largeCovers);
+            state.listPadding = parseInt(getLocalStorageVal('listPadding', state.listPadding));
             state.mediaControls = getLocalStorageBool('mediaControls', state.mediaControls);
             setTheme(state.theme, state.color);
             if (state.fontSize!='r') {
                 setFontSize(state.fontSize);
             }
+            setListPadding(state.listPadding);
             lmsOptions.techInfo = state.techInfo;
             lmsOptions.infoPlugin = state.infoPlugin;
 
@@ -678,6 +686,7 @@ const store = new Vuex.Store({
                                      showRating: LMS_STATS_ENABLED && getLocalStorageBool('showRating', undefined==prefs.showRating ? state.showRating : prefs.showRating),
                                      powerButton: getLocalStorageBool('powerButton', undefined==prefs.powerButton ? state.powerButton : prefs.powerButton),
                                      largeCovers: getLocalStorageBool('largeCovers', undefined==prefs.largeCovers ? state.largeCovers : prefs.largeCovers),
+                                     listPadding: parseInt(getLocalStorageVal('listPadding', undefined==prefs.listPadding ? state.listPadding : prefs.listPadding)),
                                      mediaControls: getLocalStorageBool('mediaControls', undefined==prefs.mediaControls ? state.mediaControls : prefs.mediaControls) };
                         if (undefined!=prefs.hidden && undefined==getLocalStorageVal('hidden', undefined)) {
                             opts.hidden=new Set(prefs.hidden);

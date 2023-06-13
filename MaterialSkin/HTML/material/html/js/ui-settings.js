@@ -73,6 +73,11 @@ Vue.component('lms-ui-settings', {
     <v-divider></v-divider>
 
     <v-list-tile>
+     <v-select :items="listPaddings" :label="i18n('Padding between items in lists')" v-model="listPadding" item-text="label" item-value="value"></v-select>
+    </v-list-tile>
+    <v-divider></v-divider>
+
+    <v-list-tile>
      <v-select :items="volumeSteps" :label="i18n('Volume step')" v-model="volumeStep" item-text="label" item-value="value"></v-select>
     </v-list-tile>
     <v-divider></v-divider>
@@ -368,7 +373,9 @@ Vue.component('lms-ui-settings', {
             userColors: [ ],
             colorToolbars: false,
             fontSize: 'r',
-            fontSizes: [ ],
+            fontSizes: [],
+            listPadding: 0,
+            listPaddings: [],
             letterOverlay:false,
             sortFavorites:true,
             autoScrollQueue:true,
@@ -549,6 +556,7 @@ Vue.component('lms-ui-settings', {
             this.colorToolbars = 'colored'==variant;
             this.color = this.$store.state.color;
             this.fontSize = this.$store.state.fontSize;
+            this.listPadding = this.$store.state.listPadding;
             this.autoScrollQueue = this.$store.state.autoScrollQueue;
             this.stopButton = this.$store.state.stopButton;
             this.browseBackdrop = this.$store.state.browseBackdrop;
@@ -609,6 +617,13 @@ Vue.component('lms-ui-settings', {
             this.fontSizes = [ { key: 'l',  label: i18n("Large") },
                                { key: 'r',  label: i18n("Regular") },
                                { key: 's',  label: i18n("Small") } ];
+            this.listPaddings = [
+                { value:0, label:i18n('None')},
+                { value:2, label:i18n('Tiny')},
+                { value:4, label:i18n('Small')},
+                { value:8, label:i18n('Medium')},
+                { value:16,label:i18n('Large')}
+                ];
         },
         close() {
             this.show=false;
@@ -644,6 +659,7 @@ Vue.component('lms-ui-settings', {
                       theme:this.theme+(this.colorToolbars ? '-colored' : ''),
                       color:this.color,
                       fontSize:this.fontSize,
+                      listPadding:this.listPadding,
                       autoScrollQueue:this.autoScrollQueue,
                       letterOverlay:this.letterOverlay,
                       sortFavorites:this.sortFavorites,

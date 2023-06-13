@@ -14,6 +14,7 @@
  --std-weight:400;
  --main-toolbar-height:48px;
  --sub-toolbar-height:48px;
+ --list-padding:0px;
  --list-elem-height:48px;
  --list-elem-3line-height:68px;
  scrollbar-color:var(--scrollbar-thumb-color) var(--scrollbar-track-color);
@@ -305,6 +306,8 @@ div.v-subheader {
 
 .lms-list-item {
  border-bottom: 1px solid var(--list-item-border-color);
+ padding-top:var(--list-padding);
+ padding-bottom:var(--list-padding);
 }
 
 /* Make action buttons in lists closer together */

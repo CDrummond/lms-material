@@ -63,7 +63,7 @@ Vue.component('lms-choice-dialog', {
             bus.$emit('choice.resp', undefined);
         },
         choose(item) {
-            if (item.disalbled) {
+            if (item.disabled) {
                 return;
             }
             this.show=false;

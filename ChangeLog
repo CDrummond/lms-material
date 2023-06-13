@@ -3,6 +3,7 @@
 1. Allow sorting playlist, and queue, on single field.
 2. Add option to change highlight colour based upon current cover.
 3. Add option to configure padding between list items.
+4. Add explicit icons for shuffle off and repeat off.
 
 3.3.3
 -----

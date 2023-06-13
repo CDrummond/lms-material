@@ -146,22 +146,7 @@ var lmsCurrentCover = Vue.component('lms-currentcover', {
                 }
             }
             this.fac.getColorAsync(document.getElementById('current-cover')).then(color => {
-                console.log(window.location.href.substring(window.location.href.indexOf('?')+1));
-                if (window.location.href.substring(window.location.href.indexOf('?')+1).includes('frompal')) {
-                    let rgbs = color.rgb.replace('rgb(', '').replace(')', '').split(',');
-                    let rgb = [parseInt(rgbs[0]), parseInt(rgbs[1]), parseInt(rgbs[2])];
-                    while (rgbBrightness(rgb)>170) {
-                        rgb = shadeRgb(rgb, -0.1);
-                    }
-                    while (rgbBrightness(rgb)<50) {
-                        rgb = shadeRgb(rgb, 0.1);
-                    }
-                    document.documentElement.style.setProperty('--primary-color', rgb2Hex(rgb));
-                    document.documentElement.style.setProperty('--accent-color', rgb2Hex(shadeRgb(rgb, 0.2)));
-                    let rgbas = "rgba("+rgb [0]+","+rgb[1]+","+rgb[2];
-                    document.documentElement.style.setProperty('--pq-current-color', rgbas+",0.2)");
-                    document.documentElement.style.setProperty('--drop-target-color', rgbas+",0.5)");
-                } else {
+                if (this.chooseFromPal) {
                     // Choose color nearest to one from our palette...
                     let chosen = 0;
                     let diff = 255*255*3;
@@ -184,6 +169,20 @@ var lmsCurrentCover = Vue.component('lms-currentcover', {
                         document.documentElement.style.setProperty('--accent-color', this.colorList.colors[chosen]['accent']);
                     }
                     let rgbas = "rgba("+this.convertedColors[chosen][0]+","+this.convertedColors[chosen][1]+","+this.convertedColors[chosen][2];
+                    document.documentElement.style.setProperty('--pq-current-color', rgbas+",0.2)");
+                    document.documentElement.style.setProperty('--drop-target-color', rgbas+",0.5)");
+                } else {
+                    let rgbs = color.rgb.replace('rgb(', '').replace(')', '').split(',');
+                    let rgb = [parseInt(rgbs[0]), parseInt(rgbs[1]), parseInt(rgbs[2])];
+                    while (rgbBrightness(rgb)>170) {
+                        rgb = shadeRgb(rgb, -0.1);
+                    }
+                    while (rgbBrightness(rgb)<50) {
+                        rgb = shadeRgb(rgb, 0.1);
+                    }
+                    document.documentElement.style.setProperty('--primary-color', rgb2Hex(rgb));
+                    document.documentElement.style.setProperty('--accent-color', rgb2Hex(shadeRgb(rgb, 0.2)));
+                    let rgbas = "rgba("+rgb [0]+","+rgb[1]+","+rgb[2];
                     document.documentElement.style.setProperty('--pq-current-color', rgbas+",0.2)");
                     document.documentElement.style.setProperty('--drop-target-color', rgbas+",0.5)");
                 }

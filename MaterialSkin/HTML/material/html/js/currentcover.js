@@ -6,7 +6,7 @@
  */
 'use strict';
 
-const DEFAULT_COVER = "music/0/cover";
+const DEFAULT_COVER = "/music/0/cover";
 
 function shadeRgb(rgb, percent) {
     var t = percent <0 ? 0 : 255,
@@ -124,6 +124,9 @@ var lmsCurrentCover = Vue.component('lms-currentcover', {
             this.fac.getColorAsync(document.getElementById('current-cover')).then(color => {
                 let rgbs = color.rgb.replace('rgb(', '').replace(')', '').split(',');
                 let rgb = [parseInt(rgbs[0]), parseInt(rgbs[1]), parseInt(rgbs[2])];
+                if (DEFAULT_COVER==this.coverUrl) {
+                    rgb = [69,90,100]; // bluegrey
+                }
                 while (rgbBrightness(rgb)>170) {
                     rgb = shadeRgb(rgb, -0.1);
                 }

@@ -4,6 +4,7 @@
 2. Add option to change highlight colour based upon current cover.
 3. Add option to configure padding between list items.
 4. Add explicit icons for shuffle off and repeat off.
+5. Don't recolour active icons, different images are used to indicate state.
 
 3.3.3
 -----

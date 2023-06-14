@@ -157,14 +157,14 @@ var lmsQueue = Vue.component("lms-queue", {
    </v-layout>
    <v-spacer></v-spacer>
    <v-btn @click.stop="actionsMenu($event)" flat icon class="toolbar-button" :title="trans.actions" v-if="otherActions.length>0"><img class="svg-img" :src="'more' | svgIcon(darkUi)"></img></v-btn>
-   <v-btn :title="trans.repeatOne" flat icon v-if="(desktopLayout || wide>0) && playerStatus.repeat===1" class="toolbar-button" v-bind:class="{'disabled':noPlayer}" v-longpress="repeatClicked"><v-icon class="active-btn">repeat_one</v-icon></img></v-btn>
-   <v-btn :title="trans.repeatOne" flat icon v-else-if="(desktopLayout || wide>0) && playerStatus.repeat===1" class="toolbar-button" v-bind:class="{'disabled':noPlayer}" v-longpress="repeatClicked"><v-icon class="active-btn">repeat_one</v-icon></img></v-btn>
-   <v-btn :title="trans.repeatAll" flat icon v-else-if="(desktopLayout || wide>0) && playerStatus.repeat===2" class="toolbar-button" v-bind:class="{'disabled':noPlayer}" v-longpress="repeatClicked"><v-icon class="active-btn">repeat</v-icon></v-btn>
-   <v-btn :title="trans.dstm" flat icon v-else-if="(desktopLayout || wide>0) && dstm" class="toolbar-button" v-bind:class="{'disabled':noPlayer}" v-longpress="repeatClicked"><v-icon class="active-btn">all_inclusive</v-icon></v-btn>
+   <v-btn :title="trans.repeatOne" flat icon v-if="(desktopLayout || wide>0) && playerStatus.repeat===1" class="toolbar-button" v-bind:class="{'disabled':noPlayer}" v-longpress="repeatClicked"><v-icon>repeat_one</v-icon></img></v-btn>
+   <v-btn :title="trans.repeatOne" flat icon v-else-if="(desktopLayout || wide>0) && playerStatus.repeat===1" class="toolbar-button" v-bind:class="{'disabled':noPlayer}" v-longpress="repeatClicked"><v-icon>repeat_one</v-icon></img></v-btn>
+   <v-btn :title="trans.repeatAll" flat icon v-else-if="(desktopLayout || wide>0) && playerStatus.repeat===2" class="toolbar-button" v-bind:class="{'disabled':noPlayer}" v-longpress="repeatClicked"><v-icon>repeat</v-icon></v-btn>
+   <v-btn :title="trans.dstm" flat icon v-else-if="(desktopLayout || wide>0) && dstm" class="toolbar-button" v-bind:class="{'disabled':noPlayer}" v-longpress="repeatClicked"><v-icon>all_inclusive</v-icon></v-btn>
    <v-btn :title="trans.repeatOff" flat icon v-else-if="desktopLayout || wide>0" class="toolbar-button dimmed" v-bind:class="{'disabled':noPlayer}" v-longpress="repeatClicked"><img class="svg-img media-icon" :src="'repeat-off' | svgIcon(darkUi)"></img></v-btn>
 
-   <v-btn :title="trans.shuffleAlbums" flat icon v-if="(desktopLayout || wide>0) && playerStatus.shuffle===2" class="toolbar-button" v-bind:class="{'disabled':noPlayer}" @click="shuffleClicked"><img class="svg-img media-icon" :src="'shuffle-albums' | svgIcon(darkUi, 1)"></v-btn>
-   <v-btn :title="trans.shuffleAll" flat icon v-else-if="(desktopLayout || wide>0) && playerStatus.shuffle===1" class="toolbar-button" v-bind:class="{'disabled':noPlayer}" @click="shuffleClicked"><v-icon class="active-btn">shuffle</v-icon></v-btn>
+   <v-btn :title="trans.shuffleAlbums" flat icon v-if="(desktopLayout || wide>0) && playerStatus.shuffle===2" class="toolbar-button" v-bind:class="{'disabled':noPlayer}" @click="shuffleClicked"><img class="svg-img media-icon" :src="'shuffle-albums' | svgIcon(darkUi)"></v-btn>
+   <v-btn :title="trans.shuffleAll" flat icon v-else-if="(desktopLayout || wide>0) && playerStatus.shuffle===1" class="toolbar-button" v-bind:class="{'disabled':noPlayer}" @click="shuffleClicked"><v-icon >shuffle</v-icon></v-btn>
    <v-btn :title="trans.shuffleOff" flat icon v-else-if="desktopLayout || wide>0" class="toolbar-button dimmed" v-bind:class="{'disabled':noPlayer}" @click="shuffleClicked"><img class="svg-img media-icon" :src="'shuffle-off' | svgIcon(darkUi)"></img></v-btn>
    <v-btn :title="ACTIONS[PQ_SAVE_ACTION].title | tooltip(LMS_SAVE_QUEUE_KEYBOARD,keyboardControl)" flat icon @click="save()" class="toolbar-button" v-bind:class="{'disabled':items.length<1}" v-if="(!LMS_KIOSK_MODE || !HIDE_FOR_KIOSK.has(PQ_SAVE_ACTION)) && !queryParams.party && wide>1"><v-icon>save</v-icon></v-btn>
    <v-btn :title="trans.clear | tooltip(LMS_CLEAR_QUEUE_KEYBOARD,keyboardControl)" flat icon @click="clear()" class="toolbar-button" v-bind:class="{'disabled':items.length<1}"v-if="!queryParams.party"><img class="svg-list-img" :src="'queue-clear' | svgIcon(darkUi)"></img></v-btn>
@@ -187,7 +187,7 @@ var lmsQueue = Vue.component("lms-queue", {
      <v-list-tile-action class="queue-action" @click.stop="itemMenu(item, index, $event)">
       <div class="menu-btn grid-btn list-btn" :title="i18n('%1 (Menu)', undefined==item.plaintitle ? item.title : item.plaintitle)"></div>
      </v-list-tile-action>
-     <img v-if="index==currentIndex && artwork" class="pq-current-indicator" :src="'pq-current' | svgIcon(true, 2)"></img>
+     <img v-if="index==currentIndex && artwork" class="pq-current-indicator" :src="'pq-current' | svgIcon(true, true)"></img>
     </v-list-tile>
    </RecycleScroller>
    <RecycleScroller v-else-if="items.length>LMS_MAX_NON_SCROLLER_ITEMS" :items="items" :item-size="LMS_LIST_ELEMENT_SIZE+listSizeAdjust" page-mode key-field="key" :buffer="LMS_SCROLLER_LIST_BUFFER">
@@ -204,7 +204,7 @@ var lmsQueue = Vue.component("lms-queue", {
      <v-list-tile-action class="queue-action" @click.stop="itemMenu(item, index, $event)">
       <div class="menu-btn grid-btn list-btn" :title="i18n('%1 (Menu)', undefined==item.plaintitle ? item.title : item.plaintitle)"></div>
      </v-list-tile-action>
-     <img v-if="index==currentIndex && artwork" class="pq-current-indicator" :src="'pq-current' | svgIcon(true, 2)"></img>
+     <img v-if="index==currentIndex && artwork" class="pq-current-indicator" :src="'pq-current' | svgIcon(true, true)"></img>
     </v-list-tile>
    </RecycleScroller>
    <template v-else v-for="(item, index) in items">
@@ -224,7 +224,7 @@ var lmsQueue = Vue.component("lms-queue", {
      <v-list-tile-action v-else class="queue-action" @click.stop="itemMenu(item, index, $event)">
       <div class="menu-btn grid-btn list-btn" :title="i18n('%1 (Menu)', undefined==item.plaintitle ? item.title : item.plaintitle)"></div>
      </v-list-tile-action>
-     <img v-if="index==currentIndex && artwork" class="pq-current-indicator" :src="'pq-current' | svgIcon(true, 2)"></img>
+     <img v-if="index==currentIndex && artwork" class="pq-current-indicator" :src="'pq-current' | svgIcon(true, true)"></img>
     </v-list-tile>
    </template>
   </div>
@@ -1336,11 +1336,11 @@ var lmsQueue = Vue.component("lms-queue", {
             }
             return i18np("1 Selected Item", "%1 Selected Items", value);
         },
-        svgIcon: function (name, dark, state) {
+        svgIcon: function (name, dark, ci) {
             return "/material/svg/"+name+"?c="+
-                (undefined==state || 0==state
+                (undefined==ci || !ci
                     ? (dark ? LMS_DARK_SVG : LMS_LIGHT_SVG)
-                    : getComputedStyle(document.documentElement).getPropertyValue(1==state ? "--active-color" : "--primary-color").replace("#", ""))+"&r="+LMS_MATERIAL_REVISION;
+                    : getComputedStyle(document.documentElement).getPropertyValue("--primary-color").replace("#", ""))+"&r="+LMS_MATERIAL_REVISION;
         },
         tooltip: function (str, key, showShortcut) {
             return showShortcut ? ttShortcutStr(str, key) : str;

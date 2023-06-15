@@ -9,7 +9,7 @@
 const DEFAULT_COVER = "/music/0/cover";
 
 function shadeRgb(rgb, percent) {
-    var t = percent <0 ? 0 : 255,
+    var t = percent < 0 ? 0 : 255,
         p = percent < 0 ? percent*-1 : percent;
     return [Math.round((t-rgb[0])*p)+rgb[0], Math.round((t-rgb[1])*p)+rgb[1], Math.round((t-rgb[2])*p)+rgb[2]];
 }
@@ -134,10 +134,22 @@ var lmsCurrentCover = Vue.component('lms-currentcover', {
                     rgb = shadeRgb(rgb, 0.1);
                 }
                 document.documentElement.style.setProperty('--primary-color', rgb2Hex(rgb));
-                document.documentElement.style.setProperty('--accent-color', rgb2Hex(shadeRgb(rgb, 0.2)));
                 let rgbas = "rgba("+rgb [0]+","+rgb[1]+","+rgb[2];
                 document.documentElement.style.setProperty('--pq-current-color', rgbas+",0.2)");
                 document.documentElement.style.setProperty('--drop-target-color', rgbas+",0.5)");
+
+                // Try to ensure accent colour has decent contrast...
+                if (this.$store.state.darkUi) {
+                    while (rgbBrightness(rgb)<145) {
+                        rgb = shadeRgb(rgb, 0.1);
+                    }
+                } else {
+                    while (rgbBrightness(rgb)>80) {
+                        rgb = shadeRgb(rgb, -0.1);
+                    }
+                }
+                document.documentElement.style.setProperty('--accent-color', rgb2Hex(rgb));
+
                 this.$store.commit('colorsChanged');
             }).catch(e => {
             });

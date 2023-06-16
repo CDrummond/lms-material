@@ -617,13 +617,6 @@ div.v-subheader {
  color:var(--sub-toolbar-text-color) !important;
 }
 
-.subtoolbar .v-btn__content i.active-btn, .np-info-card-cover div.v-btn__content i.active-btn,
-.np-controls div.v-btn__content i.active-btn, .np-controls-wide div.v-btn__content i.active-btn,
-.lms-jumplist div.active-btn, .v-menu__content i.active-btn, .pmgr-playerlist i.active-btn,
-.icon-grid i.active-btn {
- color:var(--active-color) !important;
-}
-
 .vol-text {
  width:100%;
  text-align:center;
@@ -1786,7 +1779,7 @@ div.v-subheader {
 }
 
 .disabled {
- opacity:0.25!important;
+ opacity:0.2!important;
 }
 
 .v-menu__content .v-list__tile .v-list__tile__avatar {

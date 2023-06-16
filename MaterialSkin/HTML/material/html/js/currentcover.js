@@ -149,8 +149,7 @@ var lmsCurrentCover = Vue.component('lms-currentcover', {
                     }
                 }
                 document.documentElement.style.setProperty('--accent-color', rgb2Hex(rgb));
-
-                this.$store.commit('colorsChanged');
+                emitToolbarColorsFromState(this.$store.state);
             }).catch(e => {
             });
         }

@@ -180,6 +180,13 @@ Vue.component('lms-screensaver', {
                     var interval = this.fadeInterval;
                     this.fadeInterval = undefined;
                     clearInterval(interval);
+                    if (0!=queryParams.nativeColors) {
+                        if (fadeIn) {
+                            emitToolbarColors();
+                        } else {
+                            emitToolbarColorsFromState(this.$store.state);
+                        }
+                    }
                 }
             }.bind(this), 50);
         },

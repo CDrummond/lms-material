@@ -10,6 +10,7 @@
 -----
 1. Fix toggling of alarms by clicking on checkbox.
 2. Fix toggling of continuous mode in random mix dialog.
+3. Update native top/bottom colours when screensaver fades in and out.
 
 3.3.2
 -----

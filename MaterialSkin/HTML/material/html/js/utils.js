@@ -925,14 +925,17 @@ function addNote(str) {
 }
 
 let lastToolbarColors = {top: undefined, bot:undefined};
-function emitToolbarColors(top, bot) {
-    let t = getComputedStyle(document.documentElement).getPropertyValue(top);
-    let b = getComputedStyle(document.documentElement).getPropertyValue(bot);
+function emitToolbarColors(top, bot, tries) {
+    // screen saver passes undefined for both top and bot whn its on => use black as colour.
+    let t = undefined==top ? '#000000' : getComputedStyle(document.documentElement).getPropertyValue(top);
+    let b = undefined==bot ? '#000000' : getComputedStyle(document.documentElement).getPropertyValue(bot);
     if (t!=lastToolbarColors.top || b!=lastToolbarColors.bot) {
         if (undefined==t || 0==t.length || undefined==b || 0==b.length) {
-            setTimeout(function() {
-                emitToolbarColors(top, bot);
-            }, 100);
+            if (undefiend==tries || tries<20) {
+                setTimeout(function() {
+                    emitToolbarColors(top, bot, undefiend==tries ? 1 : (tries+1));
+                }, 100);
+            }
             return;
         }
         let tc = document.querySelector('meta[name="theme-color"]');
@@ -950,6 +953,22 @@ function emitToolbarColors(top, bot) {
         } else if (2==queryParams.nativeColors) {
             console.log("MATERIAL-COLORS\nTOP " + lastToolbarColors.top + "\nBOTTOM " + lastToolbarColors.bot);
         }
+    }
+}
+
+const FULLSCREEN_DIALOGS = new Set(["uisettings", "playersettings", "info", "iframe", "manage"]);
+function emitToolbarColorsFromState(state) {
+    if (0!=queryParams.nativeColors) {
+        let topColorVar = "--top-toolbar-color";
+        let botColorVar = "--bottom-toolbar-color";
+        for (var i=state.openDialogs.length; i>=0; --i) {
+            if (FULLSCREEN_DIALOGS.has(state.openDialogs[i])) {
+                topColorVar = "--dialog-toolbar-color";
+                botColorVar = "--background-color";
+                break;
+            }
+        }
+        emitToolbarColors(topColorVar, botColorVar);
     }
 }
 

@@ -6,8 +6,6 @@
  */
 'use strict';
 
-const FULLSCREEN_DIALOGS = new Set(["uisettings", "playersettings", "info", "iframe", "manage"]);
-
 var lmsNumVisibleMenus = 0;
 
 function copyPlayer(p){
@@ -739,19 +737,7 @@ const store = new Vuex.Store({
             }
 
             state.activeDialog = state.openDialogs.length>0 ? state.openDialogs[state.openDialogs.length-1] : undefined;
-
-            if (0!=queryParams.nativeColors) {
-                let topColorVar = "--top-toolbar-color";
-                let botColorVar = "--bottom-toolbar-color";
-                for (var i=state.openDialogs.length; i>=0; --i) {
-                    if (FULLSCREEN_DIALOGS.has(state.openDialogs[i])) {
-                        topColorVar = "--dialog-toolbar-color";
-                        botColorVar = "--background-color";
-                        break;
-                    }
-                }
-                emitToolbarColors(topColorVar, botColorVar);
-            }
+            emitToolbarColorsFromState(state);
         },
         closeAllDialogs(state, val) {
             closePrevDialog(state);

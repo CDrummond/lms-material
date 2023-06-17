@@ -927,7 +927,7 @@ function emitToolbarColors(top, bot, tries) {
     let b = undefined==bot ? '#000000' : getComputedStyle(document.documentElement).getPropertyValue(bot);
     if (t!=lastToolbarColors.top || b!=lastToolbarColors.bot) {
         if (undefined==t || 0==t.length || undefined==b || 0==b.length) {
-            if (undefiend==tries || tries<20) {
+            if (undefined==tries || tries<20) {
                 setTimeout(function() {
                     emitToolbarColors(top, bot, undefiend==tries ? 1 : (tries+1));
                 }, 100);

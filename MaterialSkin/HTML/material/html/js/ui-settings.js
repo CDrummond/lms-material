@@ -619,10 +619,10 @@ Vue.component('lms-ui-settings', {
                                { key: 's',  label: i18n("Small") } ];
             this.listPaddings = [
                 { value:0, label:i18n('None')},
-                { value:2, label:i18n('Tiny')},
-                { value:4, label:i18n('Small')},
-                { value:8, label:i18n('Medium')},
-                { value:16,label:i18n('Large')}
+                { value:1, label:i18n('Tiny')},
+                { value:2, label:i18n('Small')},
+                { value:4, label:i18n('Medium')},
+                { value:8, label:i18n('Large')}
                 ];
         },
         close() {

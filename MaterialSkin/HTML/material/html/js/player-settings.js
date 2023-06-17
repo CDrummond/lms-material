@@ -92,11 +92,11 @@ Vue.component('lms-player-settings', {
     <div class="dialog-padding" v-if="unlockAll"></div>
     <v-header class="dialog-section-header" v-if="unlockAll" id="alarms">{{i18n('Alarms')}}</v-header>
      <v-list-tile v-if="unlockAll">
-      <v-list-tile-content @click="toggleAllAlarms()" class="switch-label">
+      <v-list-tile-content @click="alarms.on=!alarms.on;toggleAllAlarms()" class="switch-label">
        <v-list-tile-title>{{i18n('Enable alarms')}}</v-list-tile-title>
        <v-list-tile-sub-title>{{i18n('Enable alarm functionality.')}}</v-list-tile-sub-title>
       </v-list-tile-content>
-      <v-list-tile-action><m3-switch v-model="alarms.on" @click.stop="toggleAllAlarms()"></m3-switch></v-list-tile-action>
+      <v-list-tile-action><m3-switch v-model="alarms.on" @click="toggleAllAlarms()"></m3-switch></v-list-tile-action>
      </v-list-tile>
      <v-divider v-if="showAlarms"></v-divider>
      <div class="settings-sub-pad" v-if="showAlarms"></div>
@@ -129,7 +129,7 @@ Vue.component('lms-player-settings', {
        <v-list-tile-title>{{i18n('Fade in')}}</v-list-tile-title>
        <v-list-tile-sub-title>{{i18n('Fade in alarms when starting.')}}</v-list-tile-sub-title>
       </v-list-tile-content>
-      <v-list-tile-action><m3-switch v-model="alarms.fade" @click.stop="alarms.fade=!alarms.fade"></m3-switch></v-list-tile-action>
+      <v-list-tile-action><m3-switch v-model="alarms.fade"></m3-switch></v-list-tile-action>
      </v-list-tile>
 
      <div v-if="libraries.length>1" class="dialog-padding"></div>
@@ -660,8 +660,13 @@ Vue.component('lms-player-settings', {
            });
         },
         toggleAllAlarms() {
-            this.alarms.on = !this.alarms.on;
-            lmsCommand(this.playerId, ["playerpref", "alarmsEnabled", this.alarms.on ? 1 : 0]);
+            lmsCommand(this.playerId, ["playerpref", "alarmsEnabled", this.alarms.on ? 1 : 0]).then(({data}) => {
+                lmsCommand(this.playerId, ["playerpref", "alarmsEnabled", "?"]).then(({data}) => {
+                    if (data && data.result && undefined!=data.result._p2) {
+                        this.alarms.on=this.orig.alarms.on=1==data.result._p2;
+                    }
+                });
+            });
         },
         toggleAlarm(alarm) {
              lmsCommand(this.playerId, ["alarm", "update", "enabled:"+(alarm.origEnabled ? 0 : 1), "id:"+alarm.id]).then(({data}) => {

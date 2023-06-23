@@ -5,6 +5,8 @@
 3. Add option to configure padding between list items.
 4. Add explicit icons for shuffle off and repeat off.
 5. Don't recolour active icons, different images are used to indicate state.
+6. Switch "..." and "(...)" icons yet again, use "..." for menus as its
+   similar to other menu icon.
 
 3.3.4
 -----

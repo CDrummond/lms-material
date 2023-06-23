@@ -45,13 +45,15 @@ var lmsBrowse = Vue.component("lms-browse", {
    <div class="ellipsis subtoolbar-title subtoolbar-title-single pointer link-item" @click="showHistory($event)" v-else-if="history.length>0">{{headerTitle}}</div>
    <div class="ellipsis subtoolbar-title subtoolbar-title-single" v-else>{{headerTitle}}</div>
    <v-spacer style="flex-grow: 10!important"></v-spacer>
-   <v-btn @click.stop="currentActionsMenu($event)" flat icon class="toolbar-button" :title="trans.actions" id="tbar-actions" v-if="currentActions.length>1"><img class="svg-img" :src="'more' | svgIcon(darkUi)"></img></v-btn>
-   <v-btn @click.stop="currentAction(currentActions[0], 0, $event)" flat icon class="toolbar-button" :title="undefined==currentActions[0].action ? currentActions[0].title : ACTIONS[currentActions[0].action].title" id="tbar-actions" v-else-if="currentActions.length==1">
-    <img v-if="undefined!=currentActions[0].action && ACTIONS[currentActions[0].action].svg" class="svg-img" :src="currentActions[0].svg | svgIcon(darkUi)"></img>
-    <v-icon v-else-if="undefined!=currentActions[0].action">{{ACTIONS[currentActions[0].action].icon}}</v-icon>
-    <img v-else-if="currentActions[0].svg" class="svg-img" :src="currentActions[0].svg | svgIcon(darkUi)"></img>
-    <v-icon v-else>{{currentActions[0].icon}}</v-icon>
-   </v-btn>
+   <v-btn @click.stop="currentActionsMenu($event)" flat icon class="toolbar-button" :title="trans.actions" id="tbar-actions" v-if="currentActions.length>(tbarActions.length<2 ? 2 : 1)"><v-icon>more_horiz</v-icon></v-btn>
+   <template v-for="(action, index) in currentActions" v-if="currentActions.length==1 || tbarActions.length<2">
+    <v-btn @click.stop="currentAction(action, index, $event)" flat icon class="toolbar-button" :title="undefined==action.action ? action.title : ACTIONS[action.action].title" id="tbar-actions" v-if="index<(tbarActions.length<2 ? 2 : 1)">
+     <img v-if="undefined!=action.action && ACTIONS[action.action].svg" class="svg-img" :src="action.svg | svgIcon(darkUi)"></img>
+     <v-icon v-else-if="undefined!=action.action">{{ACTIONS[action.action].icon}}</v-icon>
+     <img v-else-if="action.svg" class="svg-img" :src="action.svg | svgIcon(darkUi)"></img>
+     <v-icon v-else>{{action.icon}}</v-icon>
+    </v-btn>
+   </template>
    <v-btn v-if="items.length>0 && items[0].saveableTrack && !queryParams.party" :title="ACTIONS[ADD_TO_PLAYLIST_ACTION].title" flat icon class="toolbar-button" @click.stop="headerAction(ADD_TO_PLAYLIST_ACTION, $event)"><v-icon>{{ACTIONS[ADD_TO_PLAYLIST_ACTION].icon}}</v-icon></v-btn>
    <template v-for="(action, index) in tbarActions">
     <v-btn flat icon @click.stop="headerAction(action, $event)" class="toolbar-button" :title="action | tooltip(keyboardControl)" :id="'tbar'+index" v-if="(action!=VLIB_ACTION || libraryName) && (!queryParams.party || !HIDE_FOR_PARTY.has(action)) && (!LMS_KIOSK_MODE || !HIDE_FOR_KIOSK.has(action))">
@@ -290,11 +292,6 @@ var lmsBrowse = Vue.component("lms-browse", {
    </template>
   </v-list>
   <v-list v-else-if="menu.albumSorts">
-   <v-list-tile @click="bus.$emit('showMainMenu')" v-if="menu.inMainMenu">
-    <v-list-tile-avatar><v-icon>chevron_left</v-icon></v-list-tile-avatar>
-    <v-list-tile-content><v-list-tile-title class="menutitle">{{ACTIONS[ALBUM_SORTS_ACTION].title}}</v-list-tile-title></v-list-tile-content>
-   </v-list-tile>
-   <v-divider v-if="menu.inMainMenu"></v-divider>
    <template v-for="(item, index) in menu.albumSorts">
     <v-list-tile @click="sortAlbums(item, menu.reverseSort)">
      <v-list-tile-avatar><v-icon small>{{item.selected ? 'radio_button_checked' :'radio_button_unchecked'}}</v-icon></v-list-tile-avatar>
@@ -309,7 +306,7 @@ var lmsBrowse = Vue.component("lms-browse", {
   </v-list>
   <v-list v-else-if="menu.currentActions">
    <template v-for="(item, index) in menu.currentActions">
-    <div style="height:0px!important" v-if="(queryParams.party && HIDE_FOR_PARTY.has(item.action)) || (LMS_KIOSK_MODE && HIDE_FOR_KIOSK.has(item.action))"></div>
+    <div style="height:0px!important" v-if="(queryParams.party && HIDE_FOR_PARTY.has(item.action)) || (LMS_KIOSK_MODE && HIDE_FOR_KIOSK.has(item.action)) || (tbarActions.length<2 && (index<(tbarActions.length<2 ? 2 : 1)))"></div>
     <v-divider v-else-if="DIVIDER==item.action"></v-divider>
     <v-list-tile v-else-if="!item.isListItemInMenu && item.action==ADD_TO_FAV_ACTION && isInFavorites(current)" @click="itemAction(REMOVE_FROM_FAV_ACTION, current, undefined, $event)">
      <v-list-tile-avatar>

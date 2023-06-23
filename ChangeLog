@@ -6,6 +6,11 @@
 4. Add explicit icons for shuffle off and repeat off.
 5. Don't recolour active icons, different images are used to indicate state.
 
+3.3.4
+-----
+1. Fix enable/disable alarms.
+2. Fix hiding of items for party mode when using grid view.
+
 3.3.3
 -----
 1. Fix toggling of alarms by clicking on checkbox.

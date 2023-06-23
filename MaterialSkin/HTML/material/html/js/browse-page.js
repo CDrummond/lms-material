@@ -1304,7 +1304,7 @@ var lmsBrowse = Vue.component("lms-browse", {
                 var items = [];
                 if (this.isTop) {
                     for (var i=0, len=this.items.length; i<len; ++i) {
-                        if (!this.disabled.has(this.items[i].id) && !this.hidden.has(this.items[i].id)) {
+                        if (!this.disabled.has(this.items[i].id) && !this.hidden.has(this.items[i].id) && (!queryParams.party || !HIDE_TOP_FOR_PARTY.has(this.items[i].id))) {
                             items.push(this.items[i]);
                         }
                     }

@@ -50,6 +50,11 @@ Vue.component('lms-choice-dialog', {
             option:0
         }
     },
+    computed: {
+        darkUi () {
+            return this.$store.state.darkUi
+        }
+    },
     mounted() {
         bus.$on('choice.open', function(title, items, extra) {
             this.show = true;

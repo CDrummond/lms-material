@@ -779,6 +779,9 @@ var lmsBrowse = Vue.component("lms-browse", {
             }
         },
         currentActionsMenu(event) {
+            if (this.$store.state.visibleMenus.size>0 && undefined!=this.menu && undefined!=this.menu.currentActions) {
+                return;
+            }
             showMenu(this, {show:true, currentActions:this.currentActions, x:event.clientX, y:event.clientY});
         },
         currentAction(act, index, event) {

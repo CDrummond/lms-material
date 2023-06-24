@@ -27,6 +27,50 @@ function rgb2Hex(rgb) {
     return hex;
 }
 
+function rgb2Hsv(rgb) {
+    let r = rgb[0],
+        g = rgb[1],
+        b = rgb[2],
+        max = Math.max(r, g, b),
+        min = Math.min(r, g, b),
+        d = max - min,
+        h,
+        s = (max === 0 ? 0 : d / max),
+        v = max / 255;
+
+    switch (max) {
+        case min: h = 0; break;
+        case r: h = (g - b) + d * (g < b ? 6: 0); h /= 6 * d; break;
+        case g: h = (b - r) + d * 2; h /= 6 * d; break;
+        case b: h = (r - g) + d * 4; h /= 6 * d; break;
+    }
+
+    return [h, s, v];
+}
+
+function hsv2Rgb(hsv) {
+    let h = hsv[0],
+        s = hsv[1],
+        v = hsv[2],
+        r,
+        g,
+        b,
+        i = Math.floor(h * 6),
+        f = h * 6 - i,
+        p = v * (1 - s),
+        q = v * (1 - f * s),
+        t = v * (1 - (1 - f) * s);
+    switch (i % 6) {
+        case 0: r = v, g = t, b = p; break;
+        case 1: r = q, g = v, b = p; break;
+        case 2: r = p, g = v, b = t; break;
+        case 3: r = p, g = q, b = v; break;
+        case 4: r = t, g = p, b = v; break;
+        case 5: r = v, g = p, b = q; break;
+    }
+    return [Math.round(r * 255), Math.round(g * 255), Math.round(b * 255)];
+}
+
 var currentCover = undefined;
 var lmsCurrentCover = Vue.component('lms-currentcover', {
     template: `<div><img crossOrigin="anonymous" id="current-cover" :src="accessUrl" style="display:none"/></div>`,
@@ -114,25 +158,28 @@ var lmsCurrentCover = Vue.component('lms-currentcover', {
 
         currentCover = this;
         document.getElementById('current-cover').addEventListener('load', function() {
-            if (currentCover.$store.state.color==COLOR_FROM_COVER) {
-                currentCover.calculateColors();
-            }
+            currentCover.calculateColors();
         });
+        bus.$on('themeChanged', function() {
+            this.calculateColors();
+        }.bind(this));
     },
     methods: {
         calculateColors() {
+            if (this.$store.state.color!=COLOR_FROM_COVER) {
+                return;
+            }
             this.fac.getColorAsync(document.getElementById('current-cover')).then(color => {
                 let rgbs = color.rgb.replace('rgb(', '').replace(')', '').split(',');
                 let rgb = [parseInt(rgbs[0]), parseInt(rgbs[1]), parseInt(rgbs[2])];
                 if (DEFAULT_COVER==this.coverUrl) {
                     rgb = [69,90,100]; // bluegrey
                 }
-                while (rgbBrightness(rgb)>170) {
-                    rgb = shadeRgb(rgb, -0.1);
-                }
-                while (rgbBrightness(rgb)<50) {
-                    rgb = shadeRgb(rgb, 0.1);
-                }
+
+                let hsv = rgb2Hsv(rgb);
+                hsv[2] = Math.max(Math.min(hsv[2], 150/255), 100/255)
+                rgb = hsv2Rgb(hsv);
+
                 document.documentElement.style.setProperty('--primary-color', rgb2Hex(rgb));
                 let rgbas = "rgba("+rgb [0]+","+rgb[1]+","+rgb[2];
                 document.documentElement.style.setProperty('--pq-current-color', rgbas+",0.2)");
@@ -140,11 +187,11 @@ var lmsCurrentCover = Vue.component('lms-currentcover', {
 
                 // Try to ensure accent colour has decent contrast...
                 if (this.$store.state.darkUi) {
-                    while (rgbBrightness(rgb)<145) {
+                    while (rgbBrightness(rgb)<125) {
                         rgb = shadeRgb(rgb, 0.1);
                     }
                 } else {
-                    while (rgbBrightness(rgb)>80) {
+                    while (rgbBrightness(rgb)>100) {
                         rgb = shadeRgb(rgb, -0.1);
                     }
                 }

@@ -906,6 +906,9 @@ var lmsQueue = Vue.component("lms-queue", {
             }
         },
         actionsMenu(event) {
+            if (this.$store.state.visibleMenus.size>0 && undefined!=this.menu && undefined!=this.menu.actions) {
+                return;
+            }
             showMenu(this, {show:true, actions:this.otherActions, x:event.clientX, y:event.clientY});
         },
         itemMenu(item, index, event) {

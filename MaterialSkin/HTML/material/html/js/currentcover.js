@@ -27,6 +27,15 @@ function rgb2Hex(rgb) {
     return hex;
 }
 
+function hex2Rgb(hx) {
+    let step = hx.length>4 ? 2 : 1;
+    let rgb=[]
+    for (let p=0; p<3; ++p) {
+        rgb.push(parseInt("0x"+hx.substr(1+(p*step), step, 16)));
+    }
+    return rgb;
+}
+
 function rgb2Hsv(rgb) {
     let r = rgb[0],
         g = rgb[1],
@@ -69,6 +78,20 @@ function hsv2Rgb(hsv) {
         case 5: r = v, g = p, b = q; break;
     }
     return [Math.round(r * 255), Math.round(g * 255), Math.round(b * 255)];
+}
+
+function rgbLuminence(rgb) {
+    let gamma = 2.4
+    let srgb = [], c = [];
+    for (let i = 0; i < 3; i++) {
+        srgb[i] = rgb[i] / 255;
+        c[i] = srgb[i] > 0.03928 ? Math.pow((srgb[i]+0.055) / 1.055, gamma) : srgb[i] / 12.92;
+    }
+    return 0.2126*c[0] + 0.7152*c[1] + 0.0722*c[2]
+}
+
+function contrastRatio(l1, l2) {
+    return (Math.max(l1, l2) + 0.05)/(Math.min(l1, l2) + 0.05);
 }
 
 var currentCover = undefined;
@@ -170,6 +193,7 @@ var lmsCurrentCover = Vue.component('lms-currentcover', {
                 return;
             }
             this.fac.getColorAsync(document.getElementById('current-cover')).then(color => {
+                let bgndLum = rgbLuminence(hex2Rgb(getComputedStyle(document.documentElement).getPropertyValue('--background-color')));
                 let rgbs = color.rgb.replace('rgb(', '').replace(')', '').split(',');
                 let rgb = [parseInt(rgbs[0]), parseInt(rgbs[1]), parseInt(rgbs[2])];
                 if (DEFAULT_COVER==this.coverUrl) {
@@ -186,15 +210,12 @@ var lmsCurrentCover = Vue.component('lms-currentcover', {
                 document.documentElement.style.setProperty('--drop-target-color', rgbas+",0.5)");
 
                 // Try to ensure accent colour has decent contrast...
-                if (this.$store.state.darkUi) {
-                    while (rgbBrightness(rgb)<125) {
-                        rgb = shadeRgb(rgb, 0.1);
-                    }
-                } else {
-                    while (rgbBrightness(rgb)>100) {
-                        rgb = shadeRgb(rgb, -0.1);
-                    }
+                let a=0;
+                while (contrastRatio(bgndLum, rgbLuminence(rgb))<3.0 && a<20) {
+                    rgb = shadeRgb(rgb, this.$store.state.darkUi ? 0.05 : -0.05);
+                    a+=1;
                 }
+
                 document.documentElement.style.setProperty('--accent-color', rgb2Hex(rgb));
                 emitToolbarColorsFromState(this.$store.state);
             }).catch(e => {

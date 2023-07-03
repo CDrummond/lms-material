@@ -15,19 +15,19 @@ Vue.component('lms-bottomnav', {
     <span>{{item.text}}</span>
     <div class="pill" v-bind:class="{'pill-ct':coloredToolbars}" v-if="activeBtn==index"></div>
     <v-icon v-if="activeBtn==index">library_music</v-icon>
-    <img v-else class="nav-svg-img" :src="'library-music-outline' | svgIcon(darkUi)" oncontextmenu="return false;"></img>
+    <img v-else class="nav-svg-img" :src="'library-music-outline' | svgIcon(darkUi|coloredToolbars)" oncontextmenu="return false;"></img>
    </v-btn>
    <v-btn v-else-if="index==1" flat class="lms-bottom-nav-button" @click="npPressed" v-bind:class="{'active-nav': activeBtn==index, 'inactive-nav': activeBtn!=index}" id="browse-nav-btn">
     <span>{{item.text}}</span>
     <div class="pill" v-bind:class="{'pill-ct':coloredToolbars}" v-if="activeBtn==index"></div>
     <v-icon v-if="activeBtn==index">music_note</v-icon>
-    <img v-else class="nav-svg-img" :src="'music-note-outline' | svgIcon(darkUi)" oncontextmenu="return false;"></img>
+    <img v-else class="nav-svg-img" :src="'music-note-outline' | svgIcon(darkUi|coloredToolbars)" oncontextmenu="return false;"></img>
    </v-btn>
    <v-btn v-else flat class="lms-bottom-nav-button" v-longpress:nomove="queuePressed" v-bind:class="{'active-nav': activeBtn==index, 'inactive-nav': activeBtn!=index}" id="browse-nav-btn">
     <span>{{item.text}}</span>
     <div class="pill" v-bind:class="{'pill-ct':coloredToolbars}" v-if="activeBtn==index"></div>
     <v-icon v-if="activeBtn==index">queue_music</v-icon>
-    <img v-else class="nav-svg-img" :src="'queue_music_outline' | svgIcon(darkUi)" oncontextmenu="return false;"></img>
+    <img v-else class="nav-svg-img" :src="'queue_music_outline' | svgIcon(darkUi|coloredToolbars)" oncontextmenu="return false;"></img>
    </v-btn>
   </template>
  </v-bottom-nav>

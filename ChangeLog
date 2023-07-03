@@ -1,3 +1,8 @@
+3.3.5
+-----
+1. Fix inactive bottom navigation icons when using coloured toolbars with a
+   light theme.
+
 3.3.4
 -----
 1. Fix enable/disable alarms.

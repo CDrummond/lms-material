@@ -58,6 +58,7 @@
     "/tidal.png":{"svg":"tidal"},
     "/deezer.png":{"svg":"deezer"},
     "/pandora.png":{"svg":"pandora"},
+    "/Pandora/html/images/icon.png":{"svg":"pandora"},
     "/cbc.png":{"svg":"cbc"},
     "/tuneinradio.png":{"svg":"tunein"},
     "/amazon.png":{"svg":"amazon"},

@@ -83,6 +83,7 @@
     "/MusicMagic/html/images/icon.png":{"svg":"magic-wand"},
     "/SugarCube/html/images/sugarcube.png":{"svg":"spicefly-sugarcube"},
     "/icon_nature_sounds.png":{"svg":"nature_sounds"},
+    "/Sounds/html/images/icon.png":{"svg":"nature_sounds"},
     "/napster.png":{"svg":"napster"},
     "/shoutcast.png":{"svg":"shoutcast"},
     "/Sprocket/html/images/icon.png":{"svg":"pocketcasts"},

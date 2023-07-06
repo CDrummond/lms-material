@@ -1586,7 +1586,7 @@ sub _manifestHandler {
 
     # Make manifest colours match platform default theme...
     if (index($ua, 'Android') != -1) {
-        ; # $manifest =~ s/\"#212121\"/\"#212121\"/g;
+        $manifest =~ s/\"#212121\"/\"#000000\"/g;
     } elsif (index($ua, 'iPad') != -1 || index($ua, 'iPhone') != -1 || index($ua, 'MobileSafari') != -1) { # || (index($ua, 'Macintosh') != -1 && index($ua, '(KHTML, like Gecko) Version') != -1)) {
         $manifest =~ s/\"#212121\"/\"#ffffff\"/g;
     } elsif (index($ua, 'Linux') != -1) {

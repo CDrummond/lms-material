@@ -617,6 +617,10 @@ div.v-subheader {
  color:var(--sub-toolbar-text-color) !important;
 }
 
+.lms-jumplist div.active {
+ color:var(--active-color) !important;
+}
+
 .vol-text {
  width:100%;
  text-align:center;

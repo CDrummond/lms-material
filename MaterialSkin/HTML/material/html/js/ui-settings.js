@@ -614,9 +614,10 @@ Vue.component('lms-ui-settings', {
                                { value: 15, label: i18n("%1 seconds", 15)},
                                { value: 30, label: i18n("%1 seconds", 30)}
                              ];
-            this.fontSizes = [ { key: 'l',  label: i18n("Large") },
+            this.fontSizes = [ { key: 's',  label: i18n("Small") },
                                { key: 'r',  label: i18n("Regular") },
-                               { key: 's',  label: i18n("Small") } ];
+                               { key: 'l',  label: i18n("Large") }
+                                ];
             this.listPaddings = [
                 { value:0, label:i18n('None')},
                 { value:1, label:i18n('Tiny')},

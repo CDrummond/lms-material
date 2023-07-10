@@ -9,6 +9,7 @@
    similar to other menu icon.
 7. When running as a WebApp, then try to interpret back button as go back.
 8. Default to 'Darker' for iOS and Android.
+9. When change font size dont also change icon size.
 
 3.3.5
 -----

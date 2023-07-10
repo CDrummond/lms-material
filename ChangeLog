@@ -8,6 +8,7 @@
 6. Switch "..." and "(...)" icons yet again, use "..." for menus as its
    similar to other menu icon.
 7. When running as a WebApp, then try to interpret back button as go back.
+8. Default to 'Darker' for iOS and Android.
 
 3.3.5
 -----

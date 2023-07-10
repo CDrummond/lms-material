@@ -193,7 +193,7 @@ function updateUiSettings(state, val) {
 function defaultTheme() {
     // Keep in sync with index.html
     if (IS_IOS) {
-        return "light";
+        return "darker";
     } else if (IS_ANDROID) {
         return "darker";
     } else if (navigator.platform.indexOf("Linux") != -1) {
@@ -203,7 +203,7 @@ function defaultTheme() {
     } else if (navigator.platform.indexOf("Mac") != -1) {
         return "mac/dark/Mojave-Dark";
     }
-    return "dark";
+    return "darker";
 }
 
 function storeCurrentPlayer(player) {

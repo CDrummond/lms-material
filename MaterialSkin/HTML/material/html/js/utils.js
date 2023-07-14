@@ -929,7 +929,7 @@ function emitToolbarColors(top, bot, tries) {
         if (undefined==t || 0==t.length || undefined==b || 0==b.length) {
             if (undefined==tries || tries<20) {
                 setTimeout(function() {
-                    emitToolbarColors(top, bot, undefiend==tries ? 1 : (tries+1));
+                    emitToolbarColors(top, bot, undefined==tries ? 1 : (tries+1));
                 }, 100);
             }
             return;

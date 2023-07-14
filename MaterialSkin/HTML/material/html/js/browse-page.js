@@ -1039,7 +1039,7 @@ var lmsBrowse = Vue.component("lms-browse", {
         updateTopList(items) {
             let updated = false;
             let extras = undefined;
-            for (let i=0; len=this.top.length && undefined==extras; ++i) {
+            for (let i=0, len=this.top.length; i<len && undefined==extras; ++i) {
                 if (this.top[i].id==TOP_EXTRAS_ID) {
                     extras = this.top[i];
                 }

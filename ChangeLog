@@ -7,7 +7,7 @@
 5. Don't recolour active icons, different images are used to indicate state.
 6. Switch "..." and "(...)" icons yet again, use "..." for menus as its
    similar to other menu icon.
-7. Try to interpret back button as go back when running as a WebApp
+7. Try to interpret back button as go back when running as a WebApp.
 8. Default to 'Darker' for iOS and Android.
 9. Don't change icon size when change font size.
 

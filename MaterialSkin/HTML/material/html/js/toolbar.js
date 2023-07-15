@@ -344,10 +344,10 @@ Vue.component('lms-toolbar', {
                 this.connected = true;
                 this.cancelDisconnectedTimer();
             } else if (this.connected && !this.disconnectedTimer) {
-                // Delay showing warning for 1.5s
+                // Delay showing warning for 5s
                 this.disconnectedTimer = setInterval(function () {
                     this.connected = false;
-                }.bind(this), 1500);
+                }.bind(this), 5000);
             }
         }.bind(this));
         bus.$on('customActions', function() {

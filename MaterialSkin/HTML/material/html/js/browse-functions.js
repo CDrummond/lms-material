@@ -1340,9 +1340,7 @@ function browseHeaderAction(view, act, event, ignoreOpenMenus) {
         for (var i=0,len=B_ALBUM_SORTS.length; i<len; ++i) {
             albumSorts.push({key:B_ALBUM_SORTS[i].key, label:B_ALBUM_SORTS[i].label, selected:sort==B_ALBUM_SORTS[i].key});
         }
-        let x = view.$store.state.visibleMenus.size>0 && view.menu && view.menu.x ? view.menu.x : event ? event.clientX : window.innerWidth,
-            y = view.$store.state.visibleMenus.size>0 && view.menu && view.menu.y ? view.menu.y : event ? event.clientY : 52;
-        showMenu(view, {show:true, x:x, y:y, albumSorts:albumSorts, reverseSort:reverseSort});
+        showMenu(view, {show:true, x:event ? event.clientX : window.innerWidth, y:event ? event.clientY : 52, albumSorts:albumSorts, reverseSort:reverseSort});
     } else if (VLIB_ACTION==act) {
         view.showLibMenu(event);
     } else if (undefined!=view.current.allid && (ADD_ACTION==act || PLAY_ACTION==act)) {

@@ -231,7 +231,7 @@ var lmsBrowse = Vue.component("lms-browse", {
   </v-list>
   <v-list v-else-if="menu.item">
    <template v-for="(action, index) in menu.itemMenu">
-    <v-list-tile v-if="(action==MORE_LIB_ACTION || action==MORE_ACTION) && undefined!=menu.item.image"  @click="itemAction(SHOW_IMAGE_ACTION, menu.item, menu.index, $event)">
+    <v-list-tile v-if="(action==MORE_LIB_ACTION || action==MORE_ACTION) && undefined!=menu.item.image" @click="menuItemAction(SHOW_IMAGE_ACTION, menu.item, menu.index, $event)">
      <v-list-tile-avatar>
       <v-icon>{{ACTIONS[SHOW_IMAGE_ACTION].icon}}</v-icon>
      </v-list-tile-avatar>
@@ -248,20 +248,20 @@ var lmsBrowse = Vue.component("lms-browse", {
       <v-list-tile-title>{{cact.title}}</v-list-tile-title>
      </v-list-tile>
     </template>
-    <v-list-tile v-else-if="action==ADD_TO_FAV_ACTION && isInFavorites(menu.item)" @click="itemAction(REMOVE_FROM_FAV_ACTION, menu.item, menu.index, $event)">
+    <v-list-tile v-else-if="action==ADD_TO_FAV_ACTION && isInFavorites(menu.item)" @click="menuItemAction(REMOVE_FROM_FAV_ACTION, menu.item, menu.index, $event)">
      <v-list-tile-avatar>
       <v-icon v-if="undefined==ACTIONS[REMOVE_FROM_FAV_ACTION].svg">{{ACTIONS[REMOVE_FROM_FAV_ACTION].icon}}</v-icon>
       <img v-else class="svg-img" :src="ACTIONS[REMOVE_FROM_FAV_ACTION].svg | svgIcon(darkUi)"></img>
      </v-list-tile-avatar>
      <v-list-tile-title>{{ACTIONS[REMOVE_FROM_FAV_ACTION].title}}</v-list-tile-title>
     </v-list-tile>
-    <v-list-tile v-else-if="action==SELECT_ACTION && menu.item.selected" @click="itemAction(UNSELECT_ACTION, menu.item, menu.index, $event)">
+    <v-list-tile v-else-if="action==SELECT_ACTION && menu.item.selected" @click="menuItemAction(UNSELECT_ACTION, menu.item, menu.index, $event)">
      <v-list-tile-avatar>
       <v-icon>{{ACTIONS[UNSELECT_ACTION].icon}}</v-icon>
      </v-list-tile-avatar>
      <v-list-tile-title>{{ACTIONS[UNSELECT_ACTION].title}}</v-list-tile-title>
     </v-list-tile>
-    <v-list-tile v-else-if="action==BR_COPY_ACTION ? queueSelection : action==MOVE_HERE_ACTION ? (selection.size>0 && !menu.item.selected) : action==DOWNLOAD_ACTION ? lmsOptions.allowDownload && undefined==menu.item.emblem : action==PLAY_DISC_ACTION ? undefined!=menu.item.disc : (action!=RATING_ACTION || undefined!=ratingsPlugin)" @click="itemAction(action, menu.item, menu.index, $event)">
+    <v-list-tile v-else-if="action==BR_COPY_ACTION ? queueSelection : action==MOVE_HERE_ACTION ? (selection.size>0 && !menu.item.selected) : action==DOWNLOAD_ACTION ? lmsOptions.allowDownload && undefined==menu.item.emblem : action==PLAY_DISC_ACTION ? undefined!=menu.item.disc : (action!=RATING_ACTION || undefined!=ratingsPlugin)" @click="menuItemAction(action, menu.item, menu.index, $event)">
      <v-list-tile-avatar>
       <v-icon v-if="undefined==ACTIONS[action].svg">{{ACTIONS[action].icon}}</v-icon>
       <img v-else class="svg-img" :src="ACTIONS[action].svg | svgIcon(darkUi)"></img>
@@ -308,14 +308,14 @@ var lmsBrowse = Vue.component("lms-browse", {
    <template v-for="(item, index) in menu.currentActions">
     <div style="height:0px!important" v-if="(queryParams.party && HIDE_FOR_PARTY.has(item.action)) || (LMS_KIOSK_MODE && HIDE_FOR_KIOSK.has(item.action)) || (tbarActions.length<2 && (index<(tbarActions.length<2 ? 2 : 1)))"></div>
     <v-divider v-else-if="DIVIDER==item.action"></v-divider>
-    <v-list-tile v-else-if="!item.isListItemInMenu && item.action==ADD_TO_FAV_ACTION && isInFavorites(current)" @click="itemAction(REMOVE_FROM_FAV_ACTION, current, undefined, $event)">
+    <v-list-tile v-else-if="!item.isListItemInMenu && item.action==ADD_TO_FAV_ACTION && isInFavorites(current)" @click="menuItemAction(REMOVE_FROM_FAV_ACTION, current, undefined, $event)">
      <v-list-tile-avatar>
       <v-icon v-if="undefined==ACTIONS[REMOVE_FROM_FAV_ACTION].svg">{{ACTIONS[REMOVE_FROM_FAV_ACTION].icon}}</v-icon>
       <img v-else class="svg-img" :src="ACTIONS[REMOVE_FROM_FAV_ACTION].svg | svgIcon(darkUi)"></img>
      </v-list-tile-avatar>
      <v-list-tile-title>{{ACTIONS[REMOVE_FROM_FAV_ACTION].title}}</v-list-tile-title>
     </v-list-tile>
-    <v-list-tile v-else-if="!item.isListItemInMenu && undefined!=item.action" @click="itemAction(item.action, current, undefined, $event)">
+    <v-list-tile v-else-if="!item.isListItemInMenu && undefined!=item.action" @click="menuItemAction(item.action, current, undefined, $event)">
      <v-list-tile-avatar>
       <v-icon v-if="undefined==ACTIONS[item.action].svg">{{ACTIONS[item.action].icon}}</v-icon>
       <img v-else class="svg-img" :src="ACTIONS[item.action].svg | svgIcon(darkUi)"></img>
@@ -766,6 +766,9 @@ var lmsBrowse = Vue.component("lms-browse", {
             } else {
                 browseItemAction(this, act, item, index, event);
             }
+        },
+        menuItemAction(act, item, index, event) {
+            this.itemAction(act, item, index, this.menu ? {clientX:this.menu.x, clientY:this.menu.y} : event);
         },
         itemMoreAction(item, index) {
             this.doTextClick(item.moremenu[index], true);

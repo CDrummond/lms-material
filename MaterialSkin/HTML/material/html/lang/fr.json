@@ -274,6 +274,7 @@
 "No Player":"Pas de platine",
 "No albums have been favorited for this artist. Please use the entries below to look for albums on your online services.":"Aucun album n'a été mis en favoris pour cet artiste. Veuillez utiliser les entrées ci-dessous pour rechercher des albums sur vos services en ligne.",
 "No downloadable tracks.":"Pas de morceau téléchargeable.",
+"No duplicates found":"Aucun doublon trouvé",
 "No entries found":"Aucun élément trouvé",
 "No fade":"Pas de fondu",
 "No notifications.":"Pas de notification.",
@@ -340,11 +341,14 @@
 "Remove '%1'?":"Retirer '%1' ?",
 "Remove album":"Enlever l'album",
 "Remove all selected items":"Supprimer tous les éléments sélectionnés",
+"Remove all tracks":"Supprimer tous les morceaux",
 "Remove disc":"Retirer le disque",
 "Remove duplicate tracks?":"Supprimer les morceaux en double ?",
 "Remove duplicates":"Supprimer les doublons",
 "Remove from favorites":"Enlever des favoris",
+"Remove previous tracks":"Supprimer les morceaux précédents",
 "Remove the selected items?":"Retirer les éléments sélectionnés ?",
+"Remove upcoming tracks":"Supprimer les morceaux suivants",
 "Rename":"Renommer",
 "Rename failed":"Échec de renommage",
 "Repeat":"Périodicité",
@@ -597,9 +601,5 @@
 "1 Year":"1 année",
 "%1 Years":"%1 années",
 "1 day":"1 jour",
-"%1 days":"%1 jours",
-"No duplicates found":"",
-"Remove all tracks":"",
-"Remove previous tracks":"",
-"Remove upcoming tracks":""
+"%1 days":"%1 jours"
 }

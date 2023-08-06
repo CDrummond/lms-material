@@ -256,6 +256,11 @@ sub _sortTracks {
     my $tracksRef = shift;
     my $order = shift;
     my @tracks = @$tracksRef;
+    my $singleField = 0;
+    if ($order>=100) {
+        $order -= 100;
+        $singleField = 1;
+    }
 
     # 0: Reverse
     # 1: Shuffle
@@ -277,31 +282,31 @@ sub _sortTracks {
     } elsif (1==$order) {
         @tracks = shuffle(shuffle(@tracks));
     } elsif (2==$order) {
-        @tracks = sort {_albumartistsort($a->album) cmp _albumartistsort($b->album) || _namesort($a->album) cmp _namesort($b->album) || ($a->disc || 0) <=> ($b->disc || 0) || ($a->tracknum || 0) <=> ($b->tracknum || 0)} @tracks;
+        @tracks = $singleField ? sort {_albumartistsort($a->album) cmp _albumartistsort($b->album)} @tracks : sort {_albumartistsort($a->album) cmp _albumartistsort($b->album) || _namesort($a->album) cmp _namesort($b->album) || ($a->disc || 0) <=> ($b->disc || 0) || ($a->tracknum || 0) <=> ($b->tracknum || 0)} @tracks;
     } elsif (3==$order) {
-        @tracks = sort {_namesort($a->artist) cmp _namesort($b->artist) || _namesort($a->album) cmp _namesort($b->album) || ($a->disc || 0) <=> ($b->disc || 0) || ($a->tracknum || 0) <=> ($b->tracknum || 0)} @tracks;
+        @tracks = $singleField ? sort {_namesort($a->artist) cmp _namesort($b->artist)} @tracks : sort {_namesort($a->artist) cmp _namesort($b->artist) || _namesort($a->album) cmp _namesort($b->album) || ($a->disc || 0) <=> ($b->disc || 0) || ($a->tracknum || 0) <=> ($b->tracknum || 0)} @tracks;
     } elsif (4==$order) {
-        @tracks = sort {_namesort($a->album) cmp _namesort($b->album) || _albumartistsort($a->album) cmp _albumartistsort($b->album) || ($a->disc || 0) <=> ($b->disc || 0) || ($a->tracknum || 0) <=> ($b->tracknum || 0)} @tracks;
+        @tracks = $singleField ? sort {_namesort($a->album) cmp _namesort($b->album)} @tracks : sort {_namesort($a->album) cmp _namesort($b->album) || _albumartistsort($a->album) cmp _albumartistsort($b->album) || ($a->disc || 0) <=> ($b->disc || 0) || ($a->tracknum || 0) <=> ($b->tracknum || 0)} @tracks;
     } elsif (5==$order) {
-        @tracks = sort {lc($a->titlesort) cmp lc($b->titlesort) || _albumartistsort($a->album) cmp _albumartistsort($b->album) || _namesort($a->album) cmp _namesort($b->album) || ($a->disc || 0) <=> ($b->disc || 0) || ($a->tracknum || 0) <=> ($b->tracknum || 0)} @tracks;
+        @tracks = $singleField ? sort {lc($a->titlesort) cmp lc($b->titlesort)} @tracks : sort {lc($a->titlesort) cmp lc($b->titlesort) || _albumartistsort($a->album) cmp _albumartistsort($b->album) || _namesort($a->album) cmp _namesort($b->album) || ($a->disc || 0) <=> ($b->disc || 0) || ($a->tracknum || 0) <=> ($b->tracknum || 0)} @tracks;
     } elsif (6==$order) {
-        @tracks = sort {_namesort($a->genre) cmp _namesort($b->genre) || _albumartistsort($a->album) cmp _albumartistsort($b->album) || _namesort($a->album) cmp _namesort($b->album) || ($a->disc || 0) <=> ($b->disc || 0) || ($a->tracknum || 0) <=> ($b->tracknum || 0)} @tracks;
+        @tracks = $singleField ? sort {_namesort($a->genre) cmp _namesort($b->genre)} @tracks : sort {_namesort($a->genre) cmp _namesort($b->genre) || _albumartistsort($a->album) cmp _albumartistsort($b->album) || _namesort($a->album) cmp _namesort($b->album) || ($a->disc || 0) <=> ($b->disc || 0) || ($a->tracknum || 0) <=> ($b->tracknum || 0)} @tracks;
     } elsif (7==$order) {
-        @tracks = sort {($a->year || 0) <=> ($b->year || 0) || _albumartistsort($a->album) cmp _albumartistsort($b->album) || _namesort($a->album) cmp _namesort($b->album) || ($a->disc || 0) <=> ($b->disc || 0) || ($a->tracknum || 0) <=> ($b->tracknum || 0)} @tracks;
+        @tracks = $singleField ? sort {($a->year || 0) <=> ($b->year || 0)} @tracks : sort {($a->year || 0) <=> ($b->year || 0) || _albumartistsort($a->album) cmp _albumartistsort($b->album) || _namesort($a->album) cmp _namesort($b->album) || ($a->disc || 0) <=> ($b->disc || 0) || ($a->tracknum || 0) <=> ($b->tracknum || 0)} @tracks;
     } elsif (8==$order) {
-        @tracks = sort {_namesort($a->composer) cmp _namesort($b->composer) || _namesort($a->album) cmp _namesort($b->album) || ($a->disc || 0) <=> ($b->disc || 0) || ($a->tracknum || 0) <=> ($b->tracknum || 0)} @tracks;
+        @tracks = $singleField ? sort {_namesort($a->composer) cmp _namesort($b->composer)} @tracks : sort {_namesort($a->composer) cmp _namesort($b->composer) || _namesort($a->album) cmp _namesort($b->album) || ($a->disc || 0) <=> ($b->disc || 0) || ($a->tracknum || 0) <=> ($b->tracknum || 0)} @tracks;
     } elsif (9==$order) {
-        @tracks = sort {_namesort($a->conductor) cmp _namesort($b->conductor) || _namesort($a->album) cmp _namesort($b->album) || ($a->disc || 0) <=> ($b->disc || 0) || ($a->tracknum || 0) <=> ($b->tracknum || 0)} @tracks;
+        @tracks = $singleField ? sort {_namesort($a->conductor) cmp _namesort($b->conductor)} @tracks : sort {_namesort($a->conductor) cmp _namesort($b->conductor) || _namesort($a->album) cmp _namesort($b->album) || ($a->disc || 0) <=> ($b->disc || 0) || ($a->tracknum || 0) <=> ($b->tracknum || 0)} @tracks;
     } elsif (10==$order) {
-        @tracks = sort {_namesort($a->band) cmp _namesort($b->band) || _namesort($a->album) cmp _namesort($b->album) || ($a->disc || 0) <=> ($b->disc || 0) || ($a->tracknum || 0) <=> ($b->tracknum || 0)} @tracks;
+        @tracks = $singleField ? sort {_namesort($a->band) cmp _namesort($b->band)} @tracks : sort {_namesort($a->band) cmp _namesort($b->band) || _namesort($a->album) cmp _namesort($b->album) || ($a->disc || 0) <=> ($b->disc || 0) || ($a->tracknum || 0) <=> ($b->tracknum || 0)} @tracks;
     } elsif (11==$order) {
-        @tracks = sort {($a->addedTime || 0) <=> ($b->addedTime || 0) || _albumartistsort($a->album) cmp _albumartistsort($b->album) || _namesort($a->album) cmp _namesort($b->album) || ($a->disc || 0) <=> ($b->disc || 0) || ($a->tracknum || 0) <=> ($b->tracknum || 0)} @tracks;
+        @tracks = $singleField ? sort {($a->addedTime || 0) <=> ($b->addedTime || 0)} @tracks : sort {($a->addedTime || 0) <=> ($b->addedTime || 0) || _albumartistsort($a->album) cmp _albumartistsort($b->album) || _namesort($a->album) cmp _namesort($b->album) || ($a->disc || 0) <=> ($b->disc || 0) || ($a->tracknum || 0) <=> ($b->tracknum || 0)} @tracks;
     } elsif (12==$order) {
-        @tracks = sort {($b->lastplayed || 0) <=> ($a->lastplayed || 0) || _albumartistsort($a->album) cmp _albumartistsort($b->album) || _namesort($a->album) cmp _namesort($b->album) || ($a->disc || 0) <=> ($b->disc || 0) || ($a->tracknum || 0) <=> ($b->tracknum || 0)} @tracks;
+        @tracks = $singleField ? sort {($b->lastplayed || 0) <=> ($a->lastplayed || 0)} @tracks : sort {($b->lastplayed || 0) <=> ($a->lastplayed || 0) || _albumartistsort($a->album) cmp _albumartistsort($b->album) || _namesort($a->album) cmp _namesort($b->album) || ($a->disc || 0) <=> ($b->disc || 0) || ($a->tracknum || 0) <=> ($b->tracknum || 0)} @tracks;
     } elsif (13==$order) {
-        @tracks = sort {($a->rating || 0) <=> ($b->rating || 0) || _albumartistsort($a->album) cmp _albumartistsort($b->album) || _namesort($a->album) cmp _namesort($b->album) || ($a->disc || 0) <=> ($b->disc || 0) || ($a->tracknum || 0) <=> ($b->tracknum || 0)} @tracks;
+        @tracks = $singleField ? sort {($a->rating || 0) <=> ($b->rating || 0)} @tracks : sort {($a->rating || 0) <=> ($b->rating || 0) || _albumartistsort($a->album) cmp _albumartistsort($b->album) || _namesort($a->album) cmp _namesort($b->album) || ($a->disc || 0) <=> ($b->disc || 0) || ($a->tracknum || 0) <=> ($b->tracknum || 0)} @tracks;
     } elsif (14==$order) {
-        @tracks = sort {($b->playcount || 0) <=> ($a->playcount || 0) || _albumartistsort($a->album) cmp _albumartistsort($b->album) || _namesort($a->album) cmp _namesort($b->album) || ($a->disc || 0) <=> ($b->disc || 0) || ($a->tracknum || 0) <=> ($b->tracknum || 0)} @tracks;
+        @tracks = $singleField ? sort {($b->playcount || 0) <=> ($a->playcount || 0)} @tracks : sort {($b->playcount || 0) <=> ($a->playcount || 0) || _albumartistsort($a->album) cmp _albumartistsort($b->album) || _namesort($a->album) cmp _namesort($b->album) || ($a->disc || 0) <=> ($b->disc || 0) || ($a->tracknum || 0) <=> ($b->tracknum || 0)} @tracks;
     }
     return @tracks;
 }
@@ -1568,6 +1573,7 @@ sub _manifestHandler {
     my $ua = $request->header('user-agent');
     my $filePath = dirname(__FILE__) . "/HTML/material/html/material.webmanifest";
     my $manifest = read_file($filePath);
+    my $query = $request->uri()->query();
 
     if (defined $request->{_headers}->{'referer'}) {
         # See if we have any query params, if so add to start_url...
@@ -1579,18 +1585,32 @@ sub _manifestHandler {
         }
     }
 
+    my $themeColor = "000000";
     # Make manifest colours match platform default theme...
-    if (index($ua, 'Android') != -1) {
-        ; # $manifest =~ s/\"#212121\"/\"#212121\"/g;
-    } elsif (index($ua, 'iPad') != -1 || index($ua, 'iPhone') != -1 || index($ua, 'MobileSafari') != -1) { # || (index($ua, 'Macintosh') != -1 && index($ua, '(KHTML, like Gecko) Version') != -1)) {
-        $manifest =~ s/\"#212121\"/\"#ffffff\"/g;
-    } elsif (index($ua, 'Linux') != -1) {
-        $manifest =~ s/\"#212121\"/\"#2d2d2d\"/g;
+    #if (index($ua, 'Android') != -1) {
+    #    $themeColor="000000";
+    #} elsif (index($ua, 'iPad') != -1 || index($ua, 'iPhone') != -1 || index($ua, 'MobileSafari') != -1) { # || (index($ua, 'Macintosh') != -1 && index($ua, '(KHTML, like Gecko) Version') != -1)) {
+    #    $themeColor="ffffff";
+    #} els
+    if (index($ua, 'Linux') != -1) {
+        $themeColor="2d2d2d";
     } elsif (index($ua, 'Win') != -1) {
-        $manifest =~ s/\"#212121\"/\"#000000\"/g;
+        $themeColor="000000";
     } elsif (index($ua, 'Mac') != -1) {
-        $manifest =~ s/\"#212121\"/\"#353537\"/g;
+        $themeColor="353537";
     }
+    # Finally check to see if a themeColor was specified in URL
+    my $start = index($query, 'themeColor=');
+    if ($start!=-1) {
+        $start += 11;
+        my $end = index($query, "&", $start);
+        if ($end!=-1) {
+            $themeColor = substr($query, $start, $end-$start);
+        } else {
+            $themeColor = substr($query, $start);
+        }
+    }
+    $manifest =~ s/\"#212121\"/\"#${themeColor}\"/g;
 
     my $title = $prefs->get('windowTitle');
     if ($title && $title ne '') {

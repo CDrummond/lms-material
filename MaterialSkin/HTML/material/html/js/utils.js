@@ -551,6 +551,10 @@ function setTheme(theme, color) {
     }
 }
 
+function setListPadding(padding) {
+    document.documentElement.style.setProperty('--list-padding', padding+'px');
+}
+
 function setLayout(useDesktop) {
     changeLink("html/css/" + (useDesktop ? "desktop" : "mobile") + ".css?r=" + LMS_MATERIAL_REVISION, "layoutcss");
     if (undefined==queryParams.css) {
@@ -817,25 +821,21 @@ function getField(item, field) {
 function setFontSize(sz) {
     let std = 16;
     let small = 14;
-    let icon = 24;
     switch(sz) {
     case 'l':
         std = 19;
         small = 18;
-        icon = 26;
         break;
     case 'r':
         break;
     case 's':
         std = 13;
         small = 11;
-        icon = 22;
         break;
     }
 
     document.documentElement.style.setProperty('--std-font-size', std+'px');
     document.documentElement.style.setProperty('--small-font-size', small+'px');
-    document.documentElement.style.setProperty('--icon-size', icon+'px');
 }
 
 var lastShortcut={key:undefined, modifier:undefined, time:undefined};
@@ -929,7 +929,7 @@ function emitToolbarColors(top, bot, tries) {
         if (undefined==t || 0==t.length || undefined==b || 0==b.length) {
             if (undefined==tries || tries<20) {
                 setTimeout(function() {
-                    emitToolbarColors(top, bot, undefiend==tries ? 1 : (tries+1));
+                    emitToolbarColors(top, bot, undefined==tries ? 1 : (tries+1));
                 }, 100);
             }
             return;

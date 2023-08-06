@@ -26,7 +26,6 @@ Si vous êtes déjà sur une vue et que vous appuyez à nouveau sur son bouton, 
     <li>En cours - affiche des informations sur l'artiste, l'album et la piste si le plugin "Informations sur la musique et les artistes" est installé sur LMS.</li>
     <li>Liste de lecture - déroule la file d'attente de lecture de sorte que la piste en cours soit visible.</li>
   </ul>
-Dans cette interface, si la largeur est limitée, certaines actions (comme celles définissant l'ordre de tri par exemple) seront placées dans le menu principal (accessible via le bouton à trois points en haut à droite). Les actions déplacées dans ce menu sont relatives à la vue actuellement affichée. Par conséquent, lorsque vous changez de vue, les éléments du menu changent. Par exemple, dans la vue "Bibliothèque", le menu pourra contenir la fonction "Alterner entre les vues liste et grille". Dans la vue "Liste de lecture", il pourra contenir la fonction "Transférer la liste de lecture".
 </p>
 <br/>
 

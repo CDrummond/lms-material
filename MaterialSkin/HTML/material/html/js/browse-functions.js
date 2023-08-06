@@ -1340,9 +1340,7 @@ function browseHeaderAction(view, act, event, ignoreOpenMenus) {
         for (var i=0,len=B_ALBUM_SORTS.length; i<len; ++i) {
             albumSorts.push({key:B_ALBUM_SORTS[i].key, label:B_ALBUM_SORTS[i].label, selected:sort==B_ALBUM_SORTS[i].key});
         }
-        showMenu(view, {show:true, x:view.currentActions.length>1 ? view.menu.x : event ? event.clientX : window.innerWidth,
-                        y:view.currentActions.length>1 ? view.menu.y : event ? event.clientY : 52,
-                        albumSorts:albumSorts, reverseSort:reverseSort, inMainMenu:!event});
+        showMenu(view, {show:true, x:event ? event.clientX : window.innerWidth, y:event ? event.clientY : 52, albumSorts:albumSorts, reverseSort:reverseSort});
     } else if (VLIB_ACTION==act) {
         view.showLibMenu(event);
     } else if (undefined!=view.current.allid && (ADD_ACTION==act || PLAY_ACTION==act)) {
@@ -1974,6 +1972,11 @@ function browsePin(view, item, add, mapped) {
                 view.top.splice(index, 1);
                 view.options.pinned.delete(item.id);
                 view.updateItemPinnedState(item);
+                if (item.id.startsWith(MUSIC_ID_PREFIX)) {
+                    for (var i=0, len=view.myMusic.length; i<len; ++i) {
+                        view.myMusic[i].menu=[view.options.pinned.has(view.myMusic[i].id) ? UNPIN_ACTION : PIN_ACTION];
+                    }
+                }
                 view.saveTopList();
                 bus.$emit('pinnedChanged');
             }

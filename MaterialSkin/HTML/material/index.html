@@ -19,16 +19,16 @@
   my $version=Plugins::MaterialSkin::Plugin->pluginVersion();
   my $windowTitle=Plugins::MaterialSkin::Plugin->windowTitle();
   my $ua=$stash->get("userAgent");
-  my $theme='dark';
+  my $query=$stash->get("url_query");
+  my $theme='darker';
   my $themeColor='#212121';
   # Keep in sync with store.js (defaultTheme)
-  if (index($ua, 'Android') != -1) {
-    $theme='darker';
-  } elsif (index($ua, 'iPad') != -1 || index($ua, 'iPhone') != -1 || index($ua, 'MobileSafari') != -1) { # || (index($ua, 'Macintosh') != -1 && index($ua, '(KHTML, like Gecko) Version') != -1)) {
-    $theme='light';
-    $themeColor='#f5f5f5';
-  } elsif (index($ua, 'Linux') != -1) {
-    my $query=$stash->get("url_query");
+  #if (index($ua, 'Android') != -1) {
+  #  $theme='darker';
+  #} elsif (index($ua, 'iPad') != -1 || index($ua, 'iPhone') != -1 || index($ua, 'MobileSafari') != -1) { # || (index($ua, 'Macintosh') != -1 && index($ua, '(KHTML, like Gecko) Version') != -1)) {
+  #  $theme='darker';
+  #} els
+  if (index($ua, 'Linux') != -1) {
     if (index($query, 'desktop=KDE')!=-1) {
       $theme='linux/dark/Breeze-Dark';
     } else {
@@ -42,7 +42,28 @@
     $theme='mac/dark/Mojave-Dark';
     $themeColor='#353537';
   }
-  print("  <link href=\"html/css/themes/${theme}.css?r=$version\" rel=\"stylesheet\" id=\"themecss\" rel=\"stylesheet\" onerror=\"setTheme('dark')\">\n");
+  # Now check to see if defaultTheme or themeColor were specified in URL
+  my $start = index($query, 'defaultTheme=');
+  if ($start!=-1) {
+    $start += 13;
+    my $end = index($query, "&", $start);
+    if ($end!=-1) {
+      $theme = substr($query, $start, $end-$start);
+    } else {
+      $theme = substr($query, $start);
+    }
+  }
+  $start = index($query, 'themeColor=');
+  if ($start!=-1) {
+    $start += 11;
+    my $end = index($query, "&", $start);
+    if ($end!=-1) {
+      $themeColor = '#' . substr($query, $start, $end-$start);
+    } else {
+      $themeColor = '#' . substr($query, $start);
+    }
+  }
+  print("  <link href=\"html/css/themes/${theme}.css?r=$version\" rel=\"stylesheet\" id=\"themecss\" rel=\"stylesheet\" onerror=\"setTheme('darker')\">\n");
   print("  <link href=\"html/css/variant/standard.css?r=$version\" rel=\"stylesheet\" id=\"variantcss\">\n");
   print("  <link href=\"html/css/colors/blue.css?r=$version\" rel=\"stylesheet\" id=\"colorcss\">\n");
   print("  <link href=\"html/css/style.css?r=$version\" rel=\"stylesheet\">\n");
@@ -52,7 +73,7 @@
   print("  <meta name=\"application-name\" content=\"${windowTitle}\">\n");
   print("  <meta name=\"theme-color\" content=\"${themeColor}\">\n");
   print("  <link href=\"/material/customcss/mobile\" rel=\"stylesheet\" id=\"customcss\">\n");
-  print("  <link href=\"/material/material.webmanifest\" rel=\"manifest\">\n");
+  print("  <link href=\"/material/material.webmanifest?themeColor=${themeColor}\" rel=\"manifest\">\n");
   print("  <link href=\"/material/icon.png\" rel=\"icon shortcut\" sizes=\"128x128\">\n");
   print("  <link href=\"/material/icon.png\" rel=\"apple-touch-icon\" sizes=\"128x128\">\n");
   print("  <meta name=\"mobile-web-app-capable\" content=\"yes\">\n");
@@ -92,7 +113,6 @@
     <lms-rating-dialog v-if="dialogs.rating"></lms-rating-dialog>
     <lms-sleep-dialog v-if="dialogs.sleep"></lms-sleep-dialog>
     <lms-search-dialog v-if="dialogs.search"></lms-search-dialog>
-    <lms-movequeue-dialog v-if="dialogs.movequeue"></lms-movequeue-dialog>
     <lms-info-dialog v-if="dialogs.iteminfo"></lms-info-dialog>
     <lms-iframe-dialog v-if="dialogs.iframe"></lms-iframe-dialog>
     <lms-dstm-dialog v-if="dialogs.dstm"></lms-dstm-dialog>
@@ -133,6 +153,7 @@
   <script src="html/lib/vue-lazyload.js?r=1.3.3"></script>
   <script src="html/lib/vue-touch-events.min.js?r=2.2.1pre1502"></script>
   <script src="html/lib/mousetrap.min.js?r=a4098"></script>
+  <script src="html/lib/fast-average-color.min.js?r=9.3.0"></script>
   [% PERL %]
   my $version=Plugins::MaterialSkin::Plugin->pluginVersion();
   print("  <script src=\"html/lib/longpress.min.js?r=$version\"></script>\n");
@@ -184,7 +205,7 @@
      }
    }
    function loadOtherFiles() {
-     addJsToDocument("html/js/", ["browse-resp", "browse-functions", "nowplaying-functions", "prompt-dialog", "choice-dialog", "standarditems", "sync-dialog", "groupplayers-dialog", "ui-settings", "player-settings", "player-settings-plugin", "volume", "information", "randommix-dialog", "rating-dialog", "manage-players", "favorite-dialog", "sleep-dialog", "movequeue-dialog", "info-dialog", "iframe-dialog", "icon-dialog", "dstm-dialog", "savequeue-dialog", "addtoplaylist-dialog", "file-dialog", "groupvolume-dialog", "advancedsearch-dialog", "download", "notifications", "gallery", "utils-deferred"],
+     addJsToDocument("html/js/", ["browse-resp", "browse-functions", "nowplaying-functions", "prompt-dialog", "choice-dialog", "standarditems", "sync-dialog", "groupplayers-dialog", "ui-settings", "player-settings", "player-settings-plugin", "volume", "information", "randommix-dialog", "rating-dialog", "manage-players", "favorite-dialog", "sleep-dialog", "info-dialog", "iframe-dialog", "icon-dialog", "dstm-dialog", "savequeue-dialog", "addtoplaylist-dialog", "file-dialog", "groupvolume-dialog", "advancedsearch-dialog", "download", "notifications", "gallery", "utils-deferred"],
      [% PERL %]
      my $version=Plugins::MaterialSkin::Plugin->pluginVersion();
      print("                \"$version\", )");

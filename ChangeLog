@@ -1,3 +1,20 @@
+3.4.0
+-----
+ 1. Allow sorting playlist, and queue, on single field.
+ 2. Add option to change highlight colour based upon current cover.
+ 3. Add option to configure padding between list items.
+ 4. Add explicit icons for shuffle off and repeat off.
+ 5. Don't recolour active icons, different images are used to indicate state.
+ 6. Switch "..." and "(...)" icons yet again, use "..." for menus as its
+    similar to other menu icon.
+ 7. Try to interpret back button as go back when running as a WebApp.
+ 8. Default to 'Darker' for iOS and Android.
+ 9. Don't change icon size when change font size.
+10. Delay showing disconnected icon for 5 seconds.
+11. Adujust Adwaita theme colours.
+12. Allow specifying themeColor and defaultTheme as URL query parameters.
+13. Fix pin/unpin start of 'My Music' menu item entries.
+
 3.3.5
 -----
 1. Fix inactive bottom navigation icons when using coloured toolbars with a

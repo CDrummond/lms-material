@@ -43,8 +43,11 @@ Vue.component('lms-ui-settings', {
      <v-list-tile-content>
       <v-list-tile-title>{{i18n('Color')}}</v-list-tile-title>
       <div class="color-grid">
-       <div v-for="(item, index) in colorList.colors" @click="color=item.key" :style="{'background-color':item.color}" class="color-circle" v-bind:class="{'selected-color-circle':item.key==color}"></div>
+       <template v-for="(item, index) in colorList.colors">
+         <div @click="color=item.key" :style="{'background-color':item.color}" class="color-circle" v-bind:class="{'selected-color-circle':item.key==color}"></div>
+       </template>
        <div v-for="(item, index) in userColors" @click="color=item.key" :style="{'background-color':item.color}" class="color-circle" v-bind:class="{'selected-color-circle':item.key==color}"></div>
+       <div  @click="color=COLOR_FROM_COVER" class="color-circle color-from-cover" v-bind:class="{'selected-color-circle':COLOR_FROM_COVER==color}"></div>
       </div>
      </v-list-tile-content>
     </v-list-tile>
@@ -66,6 +69,11 @@ Vue.component('lms-ui-settings', {
 
     <v-list-tile>
      <v-select :items="fontSizes" :label="i18n('Font size')" v-model="fontSize" item-text="label" item-value="key"></v-select>
+    </v-list-tile>
+    <v-divider></v-divider>
+
+    <v-list-tile>
+     <v-select :items="listPaddings" :label="i18n('Padding between items in lists')" v-model="listPadding" item-text="label" item-value="value"></v-select>
     </v-list-tile>
     <v-divider></v-divider>
 
@@ -365,7 +373,9 @@ Vue.component('lms-ui-settings', {
             userColors: [ ],
             colorToolbars: false,
             fontSize: 'r',
-            fontSizes: [ ],
+            fontSizes: [],
+            listPadding: 0,
+            listPaddings: [],
             letterOverlay:false,
             sortFavorites:true,
             autoScrollQueue:true,
@@ -546,6 +556,7 @@ Vue.component('lms-ui-settings', {
             this.colorToolbars = 'colored'==variant;
             this.color = this.$store.state.color;
             this.fontSize = this.$store.state.fontSize;
+            this.listPadding = this.$store.state.listPadding;
             this.autoScrollQueue = this.$store.state.autoScrollQueue;
             this.stopButton = this.$store.state.stopButton;
             this.browseBackdrop = this.$store.state.browseBackdrop;
@@ -603,9 +614,17 @@ Vue.component('lms-ui-settings', {
                                { value: 15, label: i18n("%1 seconds", 15)},
                                { value: 30, label: i18n("%1 seconds", 30)}
                              ];
-            this.fontSizes = [ { key: 'l',  label: i18n("Large") },
+            this.fontSizes = [ { key: 's',  label: i18n("Small") },
                                { key: 'r',  label: i18n("Regular") },
-                               { key: 's',  label: i18n("Small") } ];
+                               { key: 'l',  label: i18n("Large") }
+                                ];
+            this.listPaddings = [
+                { value:0, label:i18n('None')},
+                { value:1, label:i18n('Tiny')},
+                { value:2, label:i18n('Small')},
+                { value:4, label:i18n('Medium')},
+                { value:8, label:i18n('Large')}
+                ];
         },
         close() {
             this.show=false;
@@ -641,6 +660,7 @@ Vue.component('lms-ui-settings', {
                       theme:this.theme+(this.colorToolbars ? '-colored' : ''),
                       color:this.color,
                       fontSize:this.fontSize,
+                      listPadding:this.listPadding,
                       autoScrollQueue:this.autoScrollQueue,
                       letterOverlay:this.letterOverlay,
                       sortFavorites:this.sortFavorites,

@@ -6,7 +6,7 @@
  */
 'use strict';
 
-var lmsPromptDialog = Vue.component("lms-file-dialog", {
+var lmsFileDialog = Vue.component("lms-file-dialog", {
   template: `
 <v-dialog v-model="show" v-if="show" persistent max-width="600">
  <v-card>

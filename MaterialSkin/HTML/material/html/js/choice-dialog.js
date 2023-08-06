@@ -11,16 +11,19 @@ Vue.component('lms-choice-dialog', {
 <v-dialog v-model="show" v-if="show" persistent width="450" class="lms-dialog">
  <v-card>
   <v-card-text>
+   <v-select v-if="undefined!=options && options.length>1" :items="options" v-model="option" item-text="title" item-value="val"></v-select>
    <v-container grid-list-md style="padding: 4px">
     <v-layout wrap>
-     <v-flex xs12 class="dlgtitle">{{title}}</v-flex>
+     <v-flex xs12 v-if="undefined==options || options.length<=1" class="dlgtitle">{{title}}</v-flex>
      <v-flex xs12>
       <v-list class="sleep-list dialog-main-list">
        <template v-for="(item, index) in items">
         <v-list-tile @click="choose(item)" :disabled="item.disabled" v-bind:class="{'dimmed':item.disabled}">
+         <v-list-tile-avatar :tile="true" class="lms-avatar" v-if="item.icon || item.svg"><v-icon v-if="item.icon">{{item.icon}}</v-icon><img v-else class="svg-img" :src="item.svg | svgIcon(darkUi)"></img></v-list-tile-avatar>
          <v-list-tile-content>
           <v-list-tile-title>{{item.title}}</v-list-tile-title>
-          <v-list-tile-sub-title v-if="item.subtitle">{{item.subtitle}}</v-list-tile-sub-title>
+          <!-- todo allow options to also have sub-titles -->
+          <v-list-tile-sub-title v-if="(undefined==options || options.length<1 || 0==option) && item.subtitle">{{item.subtitle}}</v-list-tile-sub-title>
          </v-list-tile-content>
         </v-list-tile>
         <v-divider></v-divider>
@@ -42,14 +45,26 @@ Vue.component('lms-choice-dialog', {
         return {
             show: false,
             title: undefined,
-            items: []
+            items: [],
+            options:[],
+            option:0
+        }
+    },
+    computed: {
+        darkUi () {
+            return this.$store.state.darkUi
         }
     },
     mounted() {
-        bus.$on('choice.open', function(title, items) {
+        bus.$on('choice.open', function(title, items, extra) {
             this.show = true;
             this.title = title;
             this.items = items;
+            this.options = undefined==extra || undefined==extra.options ? [] : extra.options;
+            this.key = undefined==extra ? undefined : extra.key;
+            if (undefined!=this.key) {
+                this.option = parseInt(getLocalStorageVal('choice-'+this.key, 0));
+            }
         }.bind(this));
         bus.$on('esc', function() {
             if (this.$store.state.activeDialog == 'choice') {
@@ -67,7 +82,10 @@ Vue.component('lms-choice-dialog', {
                 return;
             }
             this.show=false;
-            bus.$emit('choice.resp', item);
+            if (undefined!=this.key) {
+                setLocalStorageVal('choice-'+this.key, this.option);
+            }
+            bus.$emit('choice.resp', item, this.options.length<1 ? undefined : this.options[this.option]);
         },
         i18n(str, arg) {
             if (this.show) {
@@ -77,6 +95,11 @@ Vue.component('lms-choice-dialog', {
             }
         }
     },
+    filters: {
+        svgIcon: function (name, dark) {
+            return "/material/svg/"+name+"?c="+(dark ? LMS_DARK_SVG : LMS_LIGHT_SVG)+"&r="+LMS_MATERIAL_REVISION;
+        }
+    },
     watch: {
         'show': function(val) {
             this.$store.commit('dialogOpen', {name:'choice', shown:val});
@@ -84,11 +107,11 @@ Vue.component('lms-choice-dialog', {
     }
 })
 
-function choose(title, items) {
+function choose(title, items, extra) {
     return new Promise(function(response) {
-        bus.$emit('dlg.open', 'choice', title, items);
-        bus.$once('choice.resp', function(resp) {
-            response(resp);
+        bus.$emit('dlg.open', 'choice', title, items, extra);
+        bus.$once('choice.resp', function(resp, option) {
+            response(undefined==option ? resp : {item:resp, option:option});
         });
     });
 }

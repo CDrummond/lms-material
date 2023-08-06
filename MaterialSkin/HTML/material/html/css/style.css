@@ -14,6 +14,7 @@
  --std-weight:400;
  --main-toolbar-height:48px;
  --sub-toolbar-height:48px;
+ --list-padding:0px;
  --list-elem-height:48px;
  --list-elem-3line-height:68px;
  scrollbar-color:var(--scrollbar-thumb-color) var(--scrollbar-track-color);
@@ -49,6 +50,7 @@
 .browse-html a, .np-info-text a, .np-info-text-full a, .np-info-text-desktop a, .np-info-text-full-desktop a,
 .primary--text, a.primary--text, div.primary--text, i.primary--text, label.primary--text, .lms-link, .active, .clickable a {
  color:var(--active-color) !important;
+ font-weight:var(--bold-weight) !important;
 }
 
 .v-slider .primary, .v-progress-linear .primary, .v-progress-circular .primary {
@@ -305,6 +307,8 @@ div.v-subheader {
 
 .lms-list-item {
  border-bottom: 1px solid var(--list-item-border-color);
+ padding-top:var(--list-padding);
+ padding-bottom:var(--list-padding);
 }
 
 /* Make action buttons in lists closer together */
@@ -613,10 +617,7 @@ div.v-subheader {
  color:var(--sub-toolbar-text-color) !important;
 }
 
-.subtoolbar .v-btn__content i.active-btn, .np-info-card-cover div.v-btn__content i.active-btn,
-.np-controls div.v-btn__content i.active-btn, .np-controls-wide div.v-btn__content i.active-btn,
-.lms-jumplist div.active-btn, .v-menu__content i.active-btn, .pmgr-playerlist i.active-btn,
-.icon-grid i.active-btn {
+.lms-jumplist div.active {
  color:var(--active-color) !important;
 }
 
@@ -1782,7 +1783,7 @@ div.v-subheader {
 }
 
 .disabled {
- opacity:0.25!important;
+ opacity:0.2!important;
 }
 
 .v-menu__content .v-list__tile .v-list__tile__avatar {
@@ -1954,7 +1955,8 @@ div.v-subheader {
 }
 
 /* Long press on buttons sometimes causes select? */
-.v-btn--icon, .v-btn__content, .v-btn__content i, .noselect, .v-slider {
+.v-btn--icon, .v-btn__content, .v-btn__content i, .noselect, .v-slider, .vol-control-0, .vol-control-1, .vol-control-2,
+.vol-control-0 p, .vol-control-1 p, .vol-control-2 p, .vol-slider, .vol-slider input {
  -webkit-touch-callout:none;
  -webkit-user-select:none;
  -khtml-user-select:none;
@@ -2112,6 +2114,10 @@ div.v-subheader {
  margin-bottom:4px;
  margin-left:2px;
  margin-right:12px;
+}
+
+.color-from-cover {
+ background-image: linear-gradient(#c62828, #1976d2, #ff8f00, #455a64);
 }
 
 .selected-color-circle {

@@ -19,6 +19,7 @@
   my $version=Plugins::MaterialSkin::Plugin->pluginVersion();
   my $windowTitle=Plugins::MaterialSkin::Plugin->windowTitle();
   my $ua=$stash->get("userAgent");
+  my $query=$stash->get("url_query");
   my $theme='darker';
   my $themeColor='#212121';
   # Keep in sync with store.js (defaultTheme)
@@ -28,7 +29,6 @@
   #  $theme='darker';
   #} els
   if (index($ua, 'Linux') != -1) {
-    my $query=$stash->get("url_query");
     if (index($query, 'desktop=KDE')!=-1) {
       $theme='linux/dark/Breeze-Dark';
     } else {
@@ -42,6 +42,27 @@
     $theme='mac/dark/Mojave-Dark';
     $themeColor='#353537';
   }
+  # Now check to see if defaultTheme or themeColor were specified in URL
+  my $start = index($query, 'defaultTheme=');
+  if ($start!=-1) {
+    $start += 13;
+    my $end = index($query, "&", $start);
+    if ($end!=-1) {
+      $theme = substr($query, $start, $end-$start);
+    } else {
+      $theme = substr($query, $start);
+    }
+  }
+  $start = index($query, 'themeColor=');
+  if ($start!=-1) {
+    $start += 11;
+    my $end = index($query, "&", $start);
+    if ($end!=-1) {
+      $themeColor = '#' . substr($query, $start, $end-$start);
+    } else {
+      $themeColor = '#' . substr($query, $start);
+    }
+  }
   print("  <link href=\"html/css/themes/${theme}.css?r=$version\" rel=\"stylesheet\" id=\"themecss\" rel=\"stylesheet\" onerror=\"setTheme('darker')\">\n");
   print("  <link href=\"html/css/variant/standard.css?r=$version\" rel=\"stylesheet\" id=\"variantcss\">\n");
   print("  <link href=\"html/css/colors/blue.css?r=$version\" rel=\"stylesheet\" id=\"colorcss\">\n");
@@ -52,7 +73,7 @@
   print("  <meta name=\"application-name\" content=\"${windowTitle}\">\n");
   print("  <meta name=\"theme-color\" content=\"${themeColor}\">\n");
   print("  <link href=\"/material/customcss/mobile\" rel=\"stylesheet\" id=\"customcss\">\n");
-  print("  <link href=\"/material/material.webmanifest\" rel=\"manifest\">\n");
+  print("  <link href=\"/material/material.webmanifest?themeColor=${themeColor}\" rel=\"manifest\">\n");
   print("  <link href=\"/material/icon.png\" rel=\"icon shortcut\" sizes=\"128x128\">\n");
   print("  <link href=\"/material/icon.png\" rel=\"apple-touch-icon\" sizes=\"128x128\">\n");
   print("  <meta name=\"mobile-web-app-capable\" content=\"yes\">\n");

@@ -1573,6 +1573,7 @@ sub _manifestHandler {
     my $ua = $request->header('user-agent');
     my $filePath = dirname(__FILE__) . "/HTML/material/html/material.webmanifest";
     my $manifest = read_file($filePath);
+    my $query = $request->uri()->query();
 
     if (defined $request->{_headers}->{'referer'}) {
         # See if we have any query params, if so add to start_url...
@@ -1584,19 +1585,32 @@ sub _manifestHandler {
         }
     }
 
+    my $themeColor = "000000";
     # Make manifest colours match platform default theme...
     #if (index($ua, 'Android') != -1) {
-    #    $manifest =~ s/\"#212121\"/\"#000000\"/g;
+    #    $themeColor="000000";
     #} elsif (index($ua, 'iPad') != -1 || index($ua, 'iPhone') != -1 || index($ua, 'MobileSafari') != -1) { # || (index($ua, 'Macintosh') != -1 && index($ua, '(KHTML, like Gecko) Version') != -1)) {
-    #    $manifest =~ s/\"#212121\"/\"#ffffff\"/g;
+    #    $themeColor="ffffff";
     #} els
     if (index($ua, 'Linux') != -1) {
-        $manifest =~ s/\"#212121\"/\"#2d2d2d\"/g;
+        $themeColor="2d2d2d";
     } elsif (index($ua, 'Win') != -1) {
-        $manifest =~ s/\"#212121\"/\"#000000\"/g;
+        $themeColor="000000";
     } elsif (index($ua, 'Mac') != -1) {
-        $manifest =~ s/\"#212121\"/\"#353537\"/g;
+        $themeColor="353537";
     }
+    # Finally check to see if a themeColor was specified in URL
+    my $start = index($query, 'themeColor=');
+    if ($start!=-1) {
+        $start += 11;
+        my $end = index($query, "&", $start);
+        if ($end!=-1) {
+            $themeColor = substr($query, $start, $end-$start);
+        } else {
+            $themeColor = substr($query, $start);
+        }
+    }
+    $manifest =~ s/\"#212121\"/\"#${themeColor}\"/g;
 
     my $title = $prefs->get('windowTitle');
     if ($title && $title ne '') {

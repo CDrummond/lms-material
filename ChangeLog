@@ -13,6 +13,7 @@
 10. Delay showing disconnected icon for 5 seconds.
 11. Adujust Adwaita theme colours.
 12. Allow specifying themeColor and defaultTheme as URL query parameters.
+13. Fix pin/unpin start of 'My Music' menu item entries.
 
 3.3.5
 -----

@@ -1972,6 +1972,11 @@ function browsePin(view, item, add, mapped) {
                 view.top.splice(index, 1);
                 view.options.pinned.delete(item.id);
                 view.updateItemPinnedState(item);
+                if (item.id.startsWith(MUSIC_ID_PREFIX)) {
+                    for (var i=0, len=view.myMusic.length; i<len; ++i) {
+                        view.myMusic[i].menu=[view.options.pinned.has(view.myMusic[i].id) ? UNPIN_ACTION : PIN_ACTION];
+                    }
+                }
                 view.saveTopList();
                 bus.$emit('pinnedChanged');
             }

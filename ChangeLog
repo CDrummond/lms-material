@@ -14,6 +14,7 @@
 11. Adujust Adwaita theme colours.
 12. Allow specifying themeColor and defaultTheme as URL query parameters.
 13. Fix pin/unpin start of 'My Music' menu item entries.
+14. Hide hover buttons in kiosk mode, if applicable.
 
 3.3.5
 -----

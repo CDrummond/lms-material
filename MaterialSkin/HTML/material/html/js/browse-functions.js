@@ -1118,7 +1118,7 @@ function browseItemAction(view, act, item, index, event) {
             logAndShowError(err, undefined, command.command);
         });
     } else if (UNSUB_PODCAST_ACTION==act) {
-        confirm(i18n("Unubscribe from '%1'?", item.title), i18n("Unsubscribe")).then(res => {
+        confirm(i18n("Unsubscribe from '%1'?", item.title), i18n("Unsubscribe")).then(res => {
             if (res) {
                 lmsCommand("", ["material-skin", "delete-podcast", "pos:"+item.index, "name:"+item.title]).then(({data}) => {
                     view.refreshList();

@@ -15,6 +15,7 @@
 12. Allow specifying themeColor and defaultTheme as URL query parameters.
 13. Fix pin/unpin start of 'My Music' menu item entries.
 14. Hide hover buttons in kiosk mode, if applicable.
+15. Use custom WebKit scrollbars for all themes.
 
 3.3.5
 -----

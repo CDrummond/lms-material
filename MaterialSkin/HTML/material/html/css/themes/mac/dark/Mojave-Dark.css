@@ -8,6 +8,7 @@
 :root {
  --active-color:var(--accent-color);
  --scrollbar-thumb-color:#5f5f5f;
+ --scrollbar-thumb-hover-color:#7f7f7f;
  --scrollbar-track-color:#313131;
  --scrollbar-corner-color:#353535;
  --background-color:#272625;
@@ -48,18 +49,6 @@
 
 .lms-toolbar .v-btn__content i.active-btn {
  color:var(--active-color) !important;
-}
-
-::-webkit-scrollbar-thumb {
- border-radius:4px;
- border-left:3px solid var(--scrollbar-track-color);
- border-right:3px solid var(--scrollbar-track-color);
-}
-
-::-webkit-scrollbar-thumb:hover {
- border-radius:5px;
- border-left:none;
- border-right:none;
 }
 
 .v-overlay--active:before {

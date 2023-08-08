@@ -592,7 +592,9 @@
 "Do not set volume":"",
 "For more fine-grained control over plugins please visit the 'Plugins' section of 'Server settings'":"",
 "Leave individual player's volume.":"",
+"Medium":"",
 "No duplicates found":"",
+"Padding between items in lists":"",
 "Random":"",
 "Remove all tracks":"",
 "Remove previous tracks":"",
@@ -600,6 +602,8 @@
 "Reverse":"",
 "Reverse current order":"",
 "Shuffle list":"",
+"Single field only":"",
 "Sort queue":"",
-"Sort tracks":""
+"Sort tracks":"",
+"Tiny":""
 }

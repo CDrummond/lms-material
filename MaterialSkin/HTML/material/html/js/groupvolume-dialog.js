@@ -52,7 +52,6 @@ Vue.component('lms-groupvolume', {
     },
     mounted() {
         this.closeTimer = undefined;
-        this.sync = getLocalStorageBool('groupVolSync', this.sync);
         bus.$on('groupvolume.open', function(playerStatus, scrollCurrent) {
             if (queryParams.party || queryParams.single) {
                 return;
@@ -61,6 +60,7 @@ Vue.component('lms-groupvolume', {
                 this.close();
                 return;
             }
+            this.sync = getLocalStorageBool('groupVolSync', this.sync);
             var pMap = {};
             for (var p=0, len=this.$store.state.players.length; p<len; ++p) {
                 pMap[this.$store.state.players[p].id]={name: this.$store.state.players[p].name, isgroup: this.$store.state.players[p].isgroup};

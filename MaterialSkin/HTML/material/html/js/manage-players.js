@@ -94,6 +94,10 @@ Vue.component('lms-manage-players', {
        <v-list-tile-avatar><v-icon>add_circle_outline</v-icon></v-list-tile-avatar>
        <v-list-tile-content><v-list-tile-title>{{i18n("Create group player")}}</v-list-tile-title></v-list-tile-content>
       </v-list-tile>
+       <v-list-tile @click="grpVolSync=!grpVolSync" v-if="haveSyncGroups">
+       <v-list-tile-avatar><v-icon>{{grpVolSync ? 'link' : 'link_off'}}</v-icon></v-list-tile-avatar>
+       <v-list-tile-title>{{grpVolSync ? i18n('Synchronize volume changes') : i18n('Change volumes independently')}}</v-list-tile-title>
+      </v-list-tile>
      </v-list>
     </v-menu>
    </v-toolbar>
@@ -212,7 +216,8 @@ Vue.component('lms-manage-players', {
             trans: { play:undefined, pause:undefined, stop:undefined, prev:undefined, next:undefined, menu:undefined, drop:undefined, noplayer:undefined },
             draggingSyncedPlayer: false,
             dropId: undefined,
-            dragIndex: undefined
+            dragIndex: undefined,
+            grpVolSync: false
         }
     },
     mounted() {
@@ -221,6 +226,7 @@ Vue.component('lms-manage-players', {
             this.players = [];
             this.show = true;
             this.openDialogs = 0;
+            this.grpVolSync = getLocalStorageBool('groupVolSync', this.grpVolSync);
 
             if (this.$store.state.players) {
                 for (let i=0, loop=this.$store.state.players, len=loop.length; i<len; ++i) {
@@ -392,6 +398,7 @@ Vue.component('lms-manage-players', {
                 clearTimeout(this.groupRefreshTimer);
                 this.groupRefreshTimer = undefined;
             }
+            setLocalStorageVal('groupVolSync', this.grpVolSync);
         },
         i18n(str) {
             if (this.show) {
@@ -414,6 +421,15 @@ Vue.component('lms-manage-players', {
         volumeDown(id) {
             this.adjustVolume(id, false);
         },
+        idList(player) {
+            let ids = [];
+            let syncmaster = player.issyncmaster ? player : this.getPlayer(player.syncmaster);
+            ids.push(syncmaster.id);
+            for (let i=0, loop=syncmaster.syncslaves, len=loop.length; i<len; ++i) {
+                ids.push(loop[i]);
+            }
+            return ids.join(",");
+        },
         adjustVolume(id, inc) {
             if (!this.show || this.$store.state.visibleMenus.size>0) {
                 return;
@@ -422,7 +438,12 @@ Vue.component('lms-manage-players', {
             if (undefined==player) {
                 return;
             }
-            lmsCommand(player.id, ["mixer", "volume", (inc ? "+" : "-")+lmsOptions.volumeStep]).then(({data}) => {
+            let syncVol = this.grpVolSync && player.syncslaves && !player.group;
+            let pid = syncVol ? "" : player.id;
+            let cmd = syncVol
+                        ? ["material-skin", "mixer", "cmd:adjust", "val:"+(inc ? "+" : "-")+lmsOptions.volumeStep, "players:"+this.idList(player)]
+                        : ["mixer", "volume", (inc ? "+" : "-")+lmsOptions.volumeStep]
+            lmsCommand(pid, cmd).then(({data}) => {
                 this.refreshAllMembers(player);
             });
         },
@@ -434,9 +455,14 @@ Vue.component('lms-manage-players', {
             if (undefined==player) {
                 return;
             }
+            let syncVol = this.grpVolSync && player.syncslaves && !player.group;
+            let pid = syncVol ? "" : player.id;
+            let cmd = syncVol
+                        ? ["material-skin", "mixer", "cmd:set", "val:"+vol, "players:"+this.idList(player)]
+                        : ["mixer", "volume", vol]
             player.volume = vol;
             player.muted = vol<0;
-            lmsCommand(player.id, ["mixer", "volume", vol]).then(({data}) => {
+            lmsCommand(pid, cmd).then(({data}) => {
                 this.refreshAllMembers(player);
             });
         },
@@ -448,7 +474,12 @@ Vue.component('lms-manage-players', {
             if (undefined==player) {
                 return;
             }
-            lmsCommand(player.id, ['mixer', 'muting', player.muted ? 0 : 1]).then(({data}) => {
+            let syncVol = this.grpVolSync && player.syncslaves && !player.group;
+            let pid = syncVol ? "" : player.id;
+            let cmd = syncVol
+                        ? ["material-skin", "mixer", "cmd:mute", "val:"+(player.muted ? 0 : 1), "players:"+this.idList(player)]
+                        : ['mixer', 'muting', player.muted ? 0 : 1];
+            lmsCommand(pid, cmd).then(({data}) => {
                 this.refreshAllMembers(player);
                 // Status seems to take while to update, so chaeck again 1/2 second later...
                 setTimeout(function () {
@@ -815,6 +846,14 @@ Vue.component('lms-manage-players', {
         }
     },
     computed: {
+        haveSyncGroups() {
+            for (let i=0, loop=this.players, len=loop.length; i<len; ++i) {
+                if (loop[i].syncslaves) {
+                    return true;
+                }
+            }
+            return false;
+        },
         currentPlayer() {
             return this.$store.state.player
         },

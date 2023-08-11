@@ -17,7 +17,7 @@
 14. Hide hover buttons in kiosk mode, if applicable.
 15. Use custom WebKit scrollbars for all themes.
 16. Remove 'Play next' when in party mode.
-17. Add 'Sync volume' toggle to group volume dialog.
+17. Add 'Sync volume' toggle to group volume and manage players dialogs.
 
 3.3.5
 -----

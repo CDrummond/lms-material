@@ -283,7 +283,7 @@ Vue.component('lms-groupvolume', {
         resetCloseTimer() {
             this.cancelCloseTimer();
             this.closeTimer = setTimeout(function () {
-                this.show = false;
+                this.close();
             }.bind(this), LMS_VOLUME_CLOSE_TIMEOUT);
         },
         cancelUpdateTimer() {

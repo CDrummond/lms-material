@@ -848,7 +848,7 @@ Vue.component('lms-manage-players', {
     computed: {
         haveSyncGroups() {
             for (let i=0, loop=this.players, len=loop.length; i<len; ++i) {
-                if (loop[i].syncslaves) {
+                if (loop[i].syncslaves && loop[i].syncslaves.length>0) {
                     return true;
                 }
             }

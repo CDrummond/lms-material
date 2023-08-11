@@ -1552,6 +1552,8 @@ progress {
 .pmgr-playerlist {
  margin-left:-12px;
  margin-right:-14px;
+ padding-top: 2px;
+ padding-bottom: 0px;
 }
 
 .pmgr-container {
@@ -1559,14 +1561,10 @@ progress {
  max-width:var(--dialog-list-max-width);
 }
 
-.pmgr-sync {
- margin-top:-14px!important;
-}
-
 .pmgr-sync .v-list__tile {
  margin-left:56px;
  margin-top:-8px!important;
- height:32px !important;
+ height:28px !important;
 }
 
 .vol-control-2 {
@@ -1574,7 +1572,7 @@ progress {
 }
 
 .pmgr-container .layout {
- margin-bottom:-6px!important;
+ margin-bottom:-8px!important;
 }
  
 .vol-control-2 .vol-left {

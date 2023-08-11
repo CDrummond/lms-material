@@ -471,8 +471,8 @@
 "Switch on %1":"Aanzetten %1",
 "Switch to Nth player":"Ga naar Nde muziekspeler",
 "Sync":"Synchroniseer",
-"Synchronise":"Synchroniseren",
-"Synchronised with other players.":"Gesynchroniseerd met andere muziekspelers",
+"Synchronize":"Synchroniseren",
+"Synchronized with other players.":"Gesynchroniseerd met andere muziekspelers",
 "Technical":"Technische",
 "The following plugins are up to date:":"De volgende plug-ins zijn actueel:",
 "The following plugins have been updated:":"De volgende plug-ins zijn bijgewerkt:",
@@ -602,8 +602,10 @@
 "%1 Years":"%1 Jaren",
 "1 day":"1 dag",
 "%1 days":"%1 dagen",
+"Change volumes independently":"",
 "Medium":"",
 "Padding between items in lists":"",
 "Single field only":"",
+"Synchronize volume changes":"",
 "Tiny":""
 }

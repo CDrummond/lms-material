@@ -451,8 +451,8 @@
 "Switch on %1":"Включить %1",
 "Switch to Nth player":"Переключить в режим Nth",
 "Sync":"Синхр",
-"Synchronise":"Синхронизировать",
-"Synchronised with other players.":"Синхронизирован с другими проигрывателями.",
+"Synchronize":"Синхронизировать",
+"Synchronized with other players.":"Синхронизирован с другими проигрывателями.",
 "Technical":"Техн.",
 "The following plugins are up to date:":"Плагин не требует обновлений",
 "The following plugins have been updated:":"Плагин уже обновлен",
@@ -587,6 +587,7 @@
 "...then album artist, disc no., track no.":"",
 "...then album, disc no., track no.":"",
 "Actions":"",
+"Change volumes independently":"",
 "Date added":"",
 "Date last played":"",
 "Do not set volume":"",
@@ -605,5 +606,6 @@
 "Single field only":"",
 "Sort queue":"",
 "Sort tracks":"",
+"Synchronize volume changes":"",
 "Tiny":""
 }

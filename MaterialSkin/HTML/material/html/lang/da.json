@@ -471,8 +471,8 @@
 "Switch on %1":"Tænd %1",
 "Switch to Nth player":"Skift til den N. afspiller",
 "Sync":"Synkroniser",
-"Synchronise":"Synkroniser",
-"Synchronised with other players.":"Synkroniserer med andre afspillere.",
+"Synchronize":"Synkroniser",
+"Synchronized with other players.":"Synkroniserer med andre afspillere.",
 "Technical":"Tekniske",
 "The following plugins are up to date:":"De følgende plugins er opdaterede:",
 "The following plugins have been updated:":"De følgende plugins er blevet opdateret:",
@@ -602,8 +602,10 @@
 "%1 Years":"%1 år",
 "1 day":"1 dag",
 "%1 days":"%1 dage",
+"Change volumes independently":"",
 "Medium":"",
 "Padding between items in lists":"",
 "Single field only":"",
+"Synchronize volume changes":"",
 "Tiny":""
 }

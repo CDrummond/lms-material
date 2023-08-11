@@ -447,8 +447,8 @@
 "Switch on %1":"Zapnout %1",
 "Switch to Nth player":"Přepnout na n-tý přehrávač",
 "Sync":"Synchronizovat",
-"Synchronise":"Synchronizování",
-"Synchronised with other players.":"Synchronizován s jinými přehrávači.",
+"Synchronize":"Synchronizování",
+"Synchronized with other players.":"Synchronizován s jinými přehrávači.",
 "Technical":"Technické",
 "The following plugins are up to date:":"Následující zásuvné moduly jsou aktuální:",
 "The following plugins have been updated:":"Následující zásuvné moduly byly aktualizovány:",
@@ -583,6 +583,7 @@
 "...then album artist, disc no., track no.":"",
 "...then album, disc no., track no.":"",
 "Actions":"",
+"Change volumes independently":"",
 "Date added":"",
 "Date last played":"",
 "Descending":"",
@@ -605,5 +606,6 @@
 "Single field only":"",
 "Sort queue":"",
 "Sort tracks":"",
+"Synchronize volume changes":"",
 "Tiny":""
 }

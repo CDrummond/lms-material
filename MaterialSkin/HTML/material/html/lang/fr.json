@@ -471,8 +471,8 @@
 "Switch on %1":"Allumer %1",
 "Switch to Nth player":"Basculer vers la Nième platine",
 "Sync":"Syncr.",
-"Synchronise":"Synchroniser",
-"Synchronised with other players.":"Synchronisée avec une autre platine",
+"Synchronize":"Synchroniser",
+"Synchronized with other players.":"Synchronisée avec une autre platine",
 "Technical":"Technique",
 "The following plugins are up to date:":"Les plugins suivants sont à jour:",
 "The following plugins have been updated:":"Les plugins suivants ont été mis à jour:",
@@ -602,8 +602,10 @@
 "%1 Years":"%1 années",
 "1 day":"1 jour",
 "%1 days":"%1 jours",
+"Change volumes independently":"",
 "Medium":"",
 "Padding between items in lists":"",
 "Single field only":"",
+"Synchronize volume changes":"",
 "Tiny":""
 }

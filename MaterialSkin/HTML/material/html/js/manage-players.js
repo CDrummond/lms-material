@@ -335,7 +335,7 @@ Vue.component('lms-manage-players', {
         initItems() {
             PMGR_EDIT_GROUP_ACTION.title=i18n("Edit");
             PMGR_DELETE_GROUP_ACTION.title=i18n("Delete");
-            PMGR_SYNC_ACTION.title=i18n("Synchronise");
+            PMGR_SYNC_ACTION.title=i18n("Synchronize");
             PMGR_SETTINGS_ACTION.title=i18n("Player settings");
             PMGR_POWER_ON_ACTION.title=i18n("Switch on");
             PMGR_POWER_OFF_ACTION.title=i18n("Switch off");

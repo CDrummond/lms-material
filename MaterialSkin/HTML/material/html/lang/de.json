@@ -464,8 +464,8 @@
 "Switch on %1":"%1 einschalten",
 "Switch to Nth player":"Gehe zum n-ten Player",
 "Sync":"Synchronisieren",
-"Synchronise":"Synchronisieren",
-"Synchronised with other players.":"Mit anderen Playern synchronisiert",
+"Synchronize":"Synchronisieren",
+"Synchronized with other players.":"Mit anderen Playern synchronisiert",
 "Technical":"Technische",
 "The following plugins are up to date:":"Die folgenden Plugins sind aktuell:",
 "The following plugins have been updated:":"Die folgenden Plugins wurden aktualisiert:",
@@ -596,6 +596,7 @@
 "1 day":"Ein Tag",
 "%1 days":"%1 Tage",
 "%1bit":"",
+"Change volumes independently":"",
 "Do not set volume":"",
 "Leave individual player's volume.":"",
 "Medium":"",
@@ -605,5 +606,6 @@
 "Remove previous tracks":"",
 "Remove upcoming tracks":"",
 "Single field only":"",
+"Synchronize volume changes":"",
 "Tiny":""
 }

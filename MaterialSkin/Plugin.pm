@@ -321,12 +321,11 @@ sub _cliCommand {
     }
 
     my $cmd = $request->getParam('_cmd');
-
     if ($request->paramUndefinedOrNotOneOf($cmd, ['prefs', 'info', 'transferqueue', 'delete-favorite', 'map', 'delete-podcast',
                                                   'plugins', 'plugins-status', 'plugins-update', 'extras', 'delete-vlib', 'pass-isset',
                                                   'pass-check', 'browsemodes', 'geturl', 'command', 'scantypes', 'server', 'themes',
                                                   'playericons', 'activeplayers', 'urls', 'adv-search', 'adv-search-params', 'protocols',
-                                                  'send-notif', 'get-notifs', 'players-extra-info', 'sort-playlist']) ) {
+                                                  'send-notif', 'get-notifs', 'players-extra-info', 'sort-playlist', 'mixer']) ) {
         $request->setStatusBadParams();
         return;
     }
@@ -1207,6 +1206,29 @@ sub _cliCommand {
 
             Slim::Schema->forceCommit;
             Slim::Schema->wipeCaches;
+        }
+        $request->setStatusDone();
+        return;
+    }
+
+    if ($cmd eq 'mixer') {
+        my $mcmd = $request->getParam('cmd');
+        my $val = $request->getParam('val');
+        my $players = $request->getParam('players');
+        if (!$mcmd || !$players) {
+            $request->setStatusBadParams();
+            return;
+        }
+        my @list = split(/,/, $players);
+        foreach my $id (@list) {
+            my $player = Slim::Player::Client::getClient($id);
+            if ($player) {
+                if ($mcmd eq 'mute') {
+                    $player->execute(['mixer', 'muting', $val]);
+                } elsif ($mcmd eq 'set' || $mcmd eq 'adjust') {
+                    $player->execute(["mixer", "volume", $val]);
+                }
+            }
         }
         $request->setStatusDone();
         return;

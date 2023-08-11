@@ -35,6 +35,7 @@ Vue.component('lms-groupvolume', {
  </v-container>
  <div class="padding"></div>
  <v-card-actions>
+  <v-btn flat icon @click="sync=!sync;resetCloseTimer()" :title="sync ? i18n('Synchronize volume changes') : i18n('Change volumes independently')"><v-icon>{{sync ? 'link' : 'link_off'}}</v-icon></v-btn>
   <v-spacer></v-spacer>
   <v-btn flat @click.native="show = false">{{i18n('Close')}}</v-btn>
  </v-card-actions>
@@ -45,11 +46,13 @@ Vue.component('lms-groupvolume', {
         return { 
                  show: false,
                  playing: false,
-                 players: []
+                 sync: false,
+                 players: [],
                }
     },
     mounted() {
         this.closeTimer = undefined;
+        this.sync = getLocalStorageBool('groupVolSync', this.sync);
         bus.$on('groupvolume.open', function(playerStatus, scrollCurrent) {
             if (queryParams.party || queryParams.single) {
                 return;
@@ -138,6 +141,7 @@ Vue.component('lms-groupvolume', {
         close() {
             this.show=false;
             this.showing=false;
+            setLocalStorageVal('groupVolSync', this.sync);
             this.cancelCloseTimer();
         },
         i18n(str) {
@@ -188,6 +192,13 @@ Vue.component('lms-groupvolume', {
                 this.resetCloseTimer();
             }
         },
+        idList() {
+            let ids = [];
+            for (let i=0, len=this.players.length; i<len; ++i) {
+                ids.push(this.players[i].id);
+            }
+            return ids.join(",");
+        },
         adjustVolume(id, inc) {
             if (!this.show || this.$store.state.visibleMenus.size>0) {
                 return;
@@ -204,13 +215,14 @@ Vue.component('lms-groupvolume', {
             if (player.muted) {
                 this.toggleMute(id);
             } else {
-                lmsCommand(player.id, ["mixer", "volume", (inc ? "+" : "-")+lmsOptions.volumeStep]).then(({data}) => {
+                let pid = this.sync ? "" : player.id;
+                let cmd = this.sync
+                            ? ["material-skin", "mixer", "cmd:adjust", "val:"+(inc ? "+" : "-")+lmsOptions.volumeStep, "players:"+this.idList()]
+                            : ["mixer", "volume", (inc ? "+" : "-")+lmsOptions.volumeStep];
+                lmsCommand(pid, cmd).then(({data}) => {
                     this.refreshAll();
                 });
             }
-        },
-        volumeChanged(player) {
-            this.setVolume(player, player.volume);
         },
         setVolume(vol, id) {
             if (!this.show) {
@@ -226,9 +238,15 @@ Vue.component('lms-groupvolume', {
                 return;
             }
             this.resetCloseTimer();
-            lmsCommand(player.id, ["mixer", "volume", vol]).then(({data}) => {
+            let pid = this.sync ? "" : player.id;
+            let cmd = this.sync
+                        ? ["material-skin", "mixer", "cmd:set", "val:"+vol, "players:"+this.idList()]
+                        : ["mixer", "volume", vol];
+            lmsCommand(pid, cmd).then(({data}) => {
                 player.volume = vol;
                 player.muted = vol<0;
+                this.refreshAll();
+            }).catch(err => {
                 this.refreshAll();
             });
         },
@@ -242,12 +260,18 @@ Vue.component('lms-groupvolume', {
                 return;
             }
             this.resetCloseTimer();
-            lmsCommand(player.id, ['mixer', 'muting', player.muted ? 0 : 1]).then(({data}) => {
+            let pid = this.sync ? "" : player.id;
+            let cmd = this.sync
+                        ? ["material-skin", "mixer", "cmd:mute", "val:"+(player.muted ? 0 : 1), "players:"+this.idList()]
+                        : ['mixer', 'muting', player.muted ? 0 : 1];
+            lmsCommand(pid, cmd).then(({data}) => {
                 this.refreshAll();
                 // Status seems to take while to update, so check again 1/2 second later...
                 setTimeout(function () {
                     this.refreshAll();
                 }.bind(this), 500);
+            }).catch(err => {
+                this.refreshAll();
             });
         },
         cancelCloseTimer() {

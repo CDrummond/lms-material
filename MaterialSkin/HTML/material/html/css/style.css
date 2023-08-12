@@ -2673,10 +2673,6 @@ img[lazy='loaded'].np-image-desktop, img[lazy='loaded'].np-image-landscape, img[
  cursor: pointer;
 }
 
-.v-menu__content, .v-dialog, .v-sheet {
- box-shadow:none!important;
-}
-
 /*.v-dialog:not(.v-dialog--fullscreen),*/ .v-menu__content .v-list, .v-sheet, .v-toast {
  background-color:var(--popup-background-color)!important;
 }

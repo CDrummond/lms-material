@@ -50,3 +50,6 @@
  color:var(--active-color) !important;
 }
 
+.v-menu__content, .v-dialog, .v-sheet {
+ box-shadow:none!important;
+}

@@ -53,3 +53,7 @@
 .v-overlay--active:before {
  opacity:0.8!important;
 }
+
+.v-menu__content, .v-dialog, .v-sheet {
+ box-shadow:none!important;
+}

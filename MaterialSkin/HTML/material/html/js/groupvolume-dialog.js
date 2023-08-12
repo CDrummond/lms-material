@@ -35,7 +35,7 @@ Vue.component('lms-groupvolume', {
  </v-container>
  <div class="padding"></div>
  <v-card-actions>
-  <v-btn flat icon @click="sync=!sync;resetCloseTimer()" :title="sync ? i18n('Synchronize volume changes') : i18n('Change volumes independently')"><v-icon>{{sync ? 'link' : 'link_off'}}</v-icon></v-btn>
+  <v-btn flat icon v-if="!haveGroupPlayer" @click="sync=!sync;resetCloseTimer()" :title="sync ? i18n('Synchronize volume changes') : i18n('Change volumes independently')"><v-icon>{{sync ? 'link' : 'link_off'}}</v-icon></v-btn>
   <v-spacer></v-spacer>
   <v-btn flat @click.native="show = false">{{i18n('Close')}}</v-btn>
  </v-card-actions>
@@ -47,6 +47,7 @@ Vue.component('lms-groupvolume', {
                  show: false,
                  playing: false,
                  sync: false,
+                 haveGroupPlayer: false,
                  players: [],
                }
     },
@@ -65,6 +66,7 @@ Vue.component('lms-groupvolume', {
             for (var p=0, len=this.$store.state.players.length; p<len; ++p) {
                 pMap[this.$store.state.players[p].id]={name: this.$store.state.players[p].name, isgroup: this.$store.state.players[p].isgroup};
             }
+            this.haveGroupPlayer = pMap[playerStatus.syncmaster].isgroup;
             this.players = [{id: playerStatus.syncmaster, master:true, name:pMap[playerStatus.syncmaster].name, isgroup:pMap[playerStatus.syncmaster].isgroup, 
                              volume:undefined, dvc:VOL_STD, muted:false}];
             if (this.$store.state.player.id==playerStatus.syncmaster) {
@@ -215,8 +217,8 @@ Vue.component('lms-groupvolume', {
             if (player.muted) {
                 this.toggleMute(id);
             } else {
-                let pid = this.sync ? "" : player.id;
-                let cmd = this.sync
+                let pid = !this.haveGroupPlayer && this.sync ? "" : player.id;
+                let cmd = !this.haveGroupPlayer && this.sync
                             ? ["material-skin", "mixer", "cmd:adjust", "val:"+(inc ? "+" : "-")+lmsOptions.volumeStep, "players:"+this.idList()]
                             : ["mixer", "volume", (inc ? "+" : "-")+lmsOptions.volumeStep];
                 lmsCommand(pid, cmd).then(({data}) => {
@@ -238,8 +240,8 @@ Vue.component('lms-groupvolume', {
                 return;
             }
             this.resetCloseTimer();
-            let pid = this.sync ? "" : player.id;
-            let cmd = this.sync
+            let pid = !this.haveGroupPlayer && this.sync ? "" : player.id;
+            let cmd = !this.haveGroupPlayer && this.sync
                         ? ["material-skin", "mixer", "cmd:set", "val:"+vol, "players:"+this.idList()]
                         : ["mixer", "volume", vol];
             lmsCommand(pid, cmd).then(({data}) => {
@@ -260,8 +262,8 @@ Vue.component('lms-groupvolume', {
                 return;
             }
             this.resetCloseTimer();
-            let pid = this.sync ? "" : player.id;
-            let cmd = this.sync
+            let pid = !this.haveGroupPlayer && this.sync ? "" : player.id;
+            let cmd = !this.haveGroupPlayer && this.sync
                         ? ["material-skin", "mixer", "cmd:mute", "val:"+(player.muted ? 0 : 1), "players:"+this.idList()]
                         : ['mixer', 'muting', player.muted ? 0 : 1];
             lmsCommand(pid, cmd).then(({data}) => {

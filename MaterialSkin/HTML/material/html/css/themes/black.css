@@ -40,6 +40,7 @@
  --popup-background-color:#1a1a1a;
  --popup-border-color:var(--list-item-border-color);
  --popup-divider-color:var(--popup-border-color);
+ --menu-dlg-shadow:0 0!important;
 }
 
 .np-info-cover {
@@ -60,8 +61,4 @@
 
 .lms-toolbar .v-btn__content i.active-btn {
  color:var(--active-color) !important;
-}
-
-.v-menu__content, .v-dialog, .v-sheet {
- box-shadow:none!important;
 }

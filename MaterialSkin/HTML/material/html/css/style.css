@@ -34,6 +34,7 @@
  --btn-hover-color:rgba(128, 128, 128, 0.3);
  --list-hover-color:rgba(0, 0, 0, 0.04)!important;
  --list-active-color:rgba(0, 0, 0, 0.08)!important;
+ --menu-dlg-shadow:0 1px 6px 1px rgba(0,0,0,.12);
 }
 
 .theme--dark {
@@ -2671,6 +2672,10 @@ img[lazy='loaded'].np-image-desktop, img[lazy='loaded'].np-image-landscape, img[
  z-index: 1;
  opacity: 0;
  cursor: pointer;
+}
+
+.v-menu__content, .v-dialog, .v-sheet {
+ box-shadow:var(--menu-dlg-shadow);
 }
 
 /*.v-dialog:not(.v-dialog--fullscreen),*/ .v-menu__content .v-list, .v-sheet, .v-toast {

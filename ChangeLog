@@ -18,8 +18,7 @@
 15. Use custom WebKit scrollbars for all themes.
 16. Remove 'Play next' when in party mode.
 17. Add 'Sync volume' toggle to group volume and manage players dialogs.
-18. Only disable menu, dialog, etc. shadows on Light, Dark, Darker, and Black
-    themes - re-enable on Linux, Mac, and Windows themes.
+18. Only disable menu, dialog, etc. shadows on Dark, Darker, and Black themes.
 
 3.3.5
 -----

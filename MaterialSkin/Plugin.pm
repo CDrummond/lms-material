@@ -1225,8 +1225,17 @@ sub _cliCommand {
             if ($player) {
                 if ($mcmd eq 'mute') {
                     $player->execute(['mixer', 'muting', $val]);
-                } elsif ($mcmd eq 'set' || $mcmd eq 'adjust') {
-                    $player->execute(["mixer", "volume", $val]);
+                } elsif ($mcmd eq 'set') {
+                    my $old = $request->getParam('old');
+                    my $pvol = $player->volume;
+                    my $volume = $old<=0 ? $val : ($pvol * $val / $old);
+                    if ($volume<0) {
+                        $volume*=-1;
+                    }
+                    if ($volume>100) {
+                        $volume = 100;
+                    }
+                    $player->execute(["mixer", "volume", $volume]);
                 }
             }
         }

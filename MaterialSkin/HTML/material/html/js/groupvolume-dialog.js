@@ -6,6 +6,8 @@
  */
 'use strict';
 
+const GRP_PLAYER_ID = "grp";
+
 function grpVolSort(a, b) {
     if (a.isgroup!=b.isgroup) {
         return a.isgroup ? -1 : 1;
@@ -35,7 +37,6 @@ Vue.component('lms-groupvolume', {
  </v-container>
  <div class="padding"></div>
  <v-card-actions>
-  <v-btn flat icon v-if="!haveGroupPlayer" @click="sync=!sync;resetCloseTimer()" :title="sync ? i18n('Synchronize volume changes') : i18n('Change volumes independently')"><v-icon>{{sync ? 'link' : 'link_off'}}</v-icon></v-btn>
   <v-spacer></v-spacer>
   <v-btn flat @click.native="show = false">{{i18n('Close')}}</v-btn>
  </v-card-actions>
@@ -47,7 +48,6 @@ Vue.component('lms-groupvolume', {
                  show: false,
                  playing: false,
                  sync: false,
-                 haveGroupPlayer: false,
                  players: [],
                }
     },
@@ -66,7 +66,6 @@ Vue.component('lms-groupvolume', {
             for (var p=0, len=this.$store.state.players.length; p<len; ++p) {
                 pMap[this.$store.state.players[p].id]={name: this.$store.state.players[p].name, isgroup: this.$store.state.players[p].isgroup};
             }
-            this.haveGroupPlayer = pMap[playerStatus.syncmaster].isgroup;
             this.players = [{id: playerStatus.syncmaster, master:true, name:pMap[playerStatus.syncmaster].name, isgroup:pMap[playerStatus.syncmaster].isgroup, 
                              volume:undefined, dvc:VOL_STD, muted:false}];
             if (this.$store.state.player.id==playerStatus.syncmaster) {
@@ -84,9 +83,15 @@ Vue.component('lms-groupvolume', {
             }
             this.players.sort(grpVolSort);
             this.playerMap={};
+            let haveGroupPlayer = pMap[playerStatus.syncmaster].isgroup;
             for (var p=0, len=this.players.length; p<len; ++p) {
-                this.playerMap[this.players[p].id]=p;
+                this.playerMap[this.players[p].id]=haveGroupPlayer ? p : (p+1);
                 this.refreshPlayer(this.players[p]);
+            }
+            if (!haveGroupPlayer) {
+                this.players.unshift({id:GRP_PLAYER_ID, master:true, name:i18n('Average'), isgroup:false,
+                    volume:50, dvc:VOL_STD, muted:false, isplaying:false});
+                this.playerMap[GRP_PLAYER_ID]=0;
             }
 
             if (scrollCurrent) {
@@ -143,7 +148,6 @@ Vue.component('lms-groupvolume', {
         close() {
             this.show=false;
             this.showing=false;
-            setLocalStorageVal('groupVolSync', this.sync);
             this.cancelCloseTimer();
         },
         i18n(str) {
@@ -154,7 +158,9 @@ Vue.component('lms-groupvolume', {
             }
         },
         refreshPlayer(player) {
-            bus.$emit('refreshStatus', player.id);
+            if (player.id!=GRP_PLAYER_ID) {
+                bus.$emit('refreshStatus', player.id);
+            }
         },
         refreshAll() {
             if (!this.show) {
@@ -180,6 +186,18 @@ Vue.component('lms-groupvolume', {
             this.players[idx].muted = player.muted;
             this.players[idx].volume = player.volume;
             this.players[idx].isplaying = player.isplaying;
+            if (GRP_PLAYER_ID==this.players[0].id) {
+                let total = 0;
+                let count = 0;
+                for (let i=1, len=this.players.length; i<len; ++i) {
+                    if (undefined!=this.players[i].volume) {
+                        total += this.players[i].volume;
+                        count++;
+                    }
+                }
+                this.players[0].volume = Math.round(total / count);
+                this.players[0].prevVol = this.players[0].volume;
+            }
         },
         volumeUp(id) {
             this.adjustVolume(id, true)
@@ -197,7 +215,9 @@ Vue.component('lms-groupvolume', {
         idList() {
             let ids = [];
             for (let i=0, len=this.players.length; i<len; ++i) {
-                ids.push(this.players[i].id);
+                if (this.players[i].id!=GRP_PLAYER_ID) {
+                    ids.push(this.players[i].id);
+                }
             }
             return ids.join(",");
         },
@@ -217,9 +237,9 @@ Vue.component('lms-groupvolume', {
             if (player.muted) {
                 this.toggleMute(id);
             } else {
-                let pid = !this.haveGroupPlayer && this.sync ? "" : player.id;
-                let cmd = !this.haveGroupPlayer && this.sync
-                            ? ["material-skin", "mixer", "cmd:adjust", "val:"+(inc ? "+" : "-")+lmsOptions.volumeStep, "players:"+this.idList()]
+                let pid = player.id==GRP_PLAYER_ID ? "" : player.id;
+                let cmd = player.id==GRP_PLAYER_ID
+                            ? ["material-skin", "mixer", "cmd:set", "val:"+(this.players[0].volume+(lmsOptions.volumeStep*(inc ? 1 : -1))), "players:"+this.idList(), "old:"+this.players[0].prevVol]
                             : ["mixer", "volume", (inc ? "+" : "-")+lmsOptions.volumeStep];
                 lmsCommand(pid, cmd).then(({data}) => {
                     this.refreshAll();
@@ -240,9 +260,9 @@ Vue.component('lms-groupvolume', {
                 return;
             }
             this.resetCloseTimer();
-            let pid = !this.haveGroupPlayer && this.sync ? "" : player.id;
-            let cmd = !this.haveGroupPlayer && this.sync
-                        ? ["material-skin", "mixer", "cmd:set", "val:"+vol, "players:"+this.idList()]
+            let pid = player.id==GRP_PLAYER_ID ? "" : player.id;
+            let cmd = player.id==GRP_PLAYER_ID
+                        ? ["material-skin", "mixer", "cmd:set", "val:"+vol, "players:"+this.idList(), "old:"+this.players[0].prevVol]
                         : ["mixer", "volume", vol];
             lmsCommand(pid, cmd).then(({data}) => {
                 player.volume = vol;
@@ -262,9 +282,9 @@ Vue.component('lms-groupvolume', {
                 return;
             }
             this.resetCloseTimer();
-            let pid = !this.haveGroupPlayer && this.sync ? "" : player.id;
-            let cmd = !this.haveGroupPlayer && this.sync
-                        ? ["material-skin", "mixer", "cmd:mute", "val:"+(player.muted ? 0 : 1), "players:"+this.idList()]
+            let pid = player.id==GRP_PLAYER_ID ? "" : player.id;
+            let cmd = player.id==GRP_PLAYER_ID
+                        ? ["material-skin", "mixer", "cmd:mute", "val:"+(player.muted ? 0 : 1), "players:"+this.idList(), "old:"+this.players[0].prevVol]
                         : ['mixer', 'muting', player.muted ? 0 : 1];
             lmsCommand(pid, cmd).then(({data}) => {
                 this.refreshAll();

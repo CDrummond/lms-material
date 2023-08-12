@@ -596,8 +596,8 @@
 "1 day":"Ein Tag",
 "%1 days":"%1 Tage",
 "%1bit":"",
-"Change volumes independently":"",
 "Do not set volume":"",
+"Group Average":"",
 "Leave individual player's volume.":"",
 "Medium":"",
 "No duplicates found":"",
@@ -606,6 +606,5 @@
 "Remove previous tracks":"",
 "Remove upcoming tracks":"",
 "Single field only":"",
-"Synchronize volume changes":"",
 "Tiny":""
 }

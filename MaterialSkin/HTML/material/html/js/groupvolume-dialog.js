@@ -89,7 +89,7 @@ Vue.component('lms-groupvolume', {
                 this.refreshPlayer(this.players[p]);
             }
             if (!haveGroupPlayer) {
-                this.players.unshift({id:GRP_PLAYER_ID, master:true, name:i18n('Average'), isgroup:false,
+                this.players.unshift({id:GRP_PLAYER_ID, master:true, name:i18n('Group Average'), isgroup:false,
                     volume:50, dvc:VOL_STD, muted:false, isplaying:false});
                 this.playerMap[GRP_PLAYER_ID]=0;
             }

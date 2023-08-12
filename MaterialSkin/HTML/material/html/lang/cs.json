@@ -583,13 +583,13 @@
 "...then album artist, disc no., track no.":"",
 "...then album, disc no., track no.":"",
 "Actions":"",
-"Change volumes independently":"",
 "Date added":"",
 "Date last played":"",
 "Descending":"",
 "Do not set volume":"",
 "Esc":"",
 "For more fine-grained control over plugins please visit the 'Plugins' section of 'Server settings'":"",
+"Group Average":"",
 "Leave individual player's volume.":"",
 "Medium":"",
 "No duplicates found":"",
@@ -606,6 +606,5 @@
 "Single field only":"",
 "Sort queue":"",
 "Sort tracks":"",
-"Synchronize volume changes":"",
 "Tiny":""
 }

@@ -468,6 +468,19 @@ input[type=checkbox]:checked:before, input[type=radio]:checked:before {
 
 ::-webkit-scrollbar-thumb {
  background:var(--scrollbar-thumb-color);
+ border-radius:4px;
+ border-left:2px solid var(--scrollbar-track-color);
+ border-right:2px solid var(--scrollbar-track-color);
+}
+
+::-webkit-scrollbar-thumb:hover {
+ background:var(--scrollbar-thumb-hover-color);
+ border-left:1px solid var(--scrollbar-track-color);
+ border-right:1px solid var(--scrollbar-track-color);
+}
+
+::-webkit-scrollbar-thumb:active {
+ background:var(--primary-color);
 }
 
 ::-webkit-scrollbar-corner {
@@ -481,6 +494,7 @@ input[type=checkbox]:checked:before, input[type=radio]:checked:before {
 ::-webkit-scrollbar-thumb:horizontal {
  min-width:64px;
 }
+
 /* Progress bars (e.g. scan) */
 img[src*="bar_small_empty.gif"] {
  border:1px solid var(--active-color);

@@ -31,7 +31,8 @@ Vue.component('lms-groupvolume', {
    <div v-for="(player, index) in players" style="width:100%" :key="player.id" v-bind:class="{'active-player':currentPlayer && currentPlayer.id === player.id,'group-vol-av':GRP_PLAYER_ID==player.id}" :id="currentPlayer && currentPlayer.id === player.id ? 'gv-active' : ('gv-'+index)">
     <v-flex :disabled="VOL_HIDDEN==player.dvc" xs12 style="height:8px"></v-flex>
     <volume-control :value="player.volume" :muted="player.muted" :playing="player.isplaying" :dvc="player.dvc" :layout="0" :name="player.name" :id="player.id" @inc="volumeUp" @dec="volumeDown" @changed="setVolume" @moving="movingSlider" @toggleMute="toggleMute"></volume-control>
-    <v-flex xs12 style="height:8px"></v-flex>
+    <v-flex xs12 style="height:32px" v-if="0==index && GRP_PLAYER_ID==player.id"></v-flex>
+    <v-flex xs12 style="height:8px" v-else></v-flex>
    </div>
   </v-layout>
  </v-container>
@@ -89,7 +90,7 @@ Vue.component('lms-groupvolume', {
                 this.refreshPlayer(this.players[p]);
             }
             if (!haveGroupPlayer) {
-                this.players.unshift({id:GRP_PLAYER_ID, master:true, name:i18n('Group Average'), isgroup:false,
+                this.players.unshift({id:GRP_PLAYER_ID, master:true, name:i18n('Average Volume'), isgroup:false,
                     volume:50, dvc:VOL_STD, muted:false, isplaying:false});
                 this.playerMap[GRP_PLAYER_ID]=0;
             }

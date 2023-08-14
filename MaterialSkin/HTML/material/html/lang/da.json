@@ -208,7 +208,6 @@
 "Go to composer":"Gå til komponist",
 "Go to conductor":"Gå til dirigent",
 "Go to homescreen":"Gå til forsiden",
-"Group Average":"Gruppens gennemsnit",
 "Group Players":"Gruppeafspillere",
 "Group members":"Gruppemedlemmer",
 "Help":"Hjælp",
@@ -606,5 +605,6 @@
 "1 Year":"1 år",
 "%1 Years":"%1 år",
 "1 day":"1 dag",
-"%1 days":"%1 dage"
+"%1 days":"%1 dage",
+"Average Volume":""
 }

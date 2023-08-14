@@ -282,10 +282,17 @@ Vue.component('lms-groupvolume', {
             if (VOL_STD!=player.dvc || !this.show) {
                 return;
             }
+            let muted = player.muted;
+            if (player.id==GRP_PLAYER_ID) {
+                muted = true;
+                for (let i=1; i<this.players.length && muted; ++i) {
+                    muted = this.players[i].muted;
+                }
+            }
             this.resetCloseTimer();
             let pid = player.id==GRP_PLAYER_ID ? "" : player.id;
             let cmd = player.id==GRP_PLAYER_ID
-                        ? ["material-skin", "mixer", "cmd:mute", "val:"+(player.muted ? 0 : 1), "players:"+this.idList(), "old:"+this.players[0].prevVol]
+                        ? ["material-skin", "mixer", "cmd:mute", "val:"+(muted ? 0 : 1), "players:"+this.idList(), "old:"+this.players[0].prevVol]
                         : ['mixer', 'muting', player.muted ? 0 : 1];
             lmsCommand(pid, cmd).then(({data}) => {
                 this.refreshAll();

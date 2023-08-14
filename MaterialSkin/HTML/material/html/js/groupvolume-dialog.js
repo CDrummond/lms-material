@@ -28,12 +28,14 @@ Vue.component('lms-groupvolume', {
 <v-sheet v-model="show" v-if="show" elevation="5" class="vol-sheet group-vol noselect">
  <v-container grid-list-md text-xs-center id="gv-container">
   <v-layout row wrap>
-   <div v-for="(player, index) in players" style="width:100%" :key="player.id" v-bind:class="{'active-player':currentPlayer && currentPlayer.id === player.id,'group-vol-av':GRP_PLAYER_ID==player.id}" :id="currentPlayer && currentPlayer.id === player.id ? 'gv-active' : ('gv-'+index)">
-    <v-flex :disabled="VOL_HIDDEN==player.dvc" xs12 style="height:8px"></v-flex>
-    <volume-control :value="player.volume" :muted="player.muted" :playing="player.isplaying" :dvc="player.dvc" :layout="0" :name="player.name" :id="player.id" @inc="volumeUp" @dec="volumeDown" @changed="setVolume" @moving="movingSlider" @toggleMute="toggleMute"></volume-control>
-    <v-flex xs12 style="height:32px" v-if="0==index && GRP_PLAYER_ID==player.id"></v-flex>
-    <v-flex xs12 style="height:8px" v-else></v-flex>
-   </div>
+   <template v-for="(player, index) in players">
+    <div style="width:100%" :key="player.id" v-bind:class="{'active-player':currentPlayer && currentPlayer.id === player.id,'group-vol-grp':GRP_PLAYER_ID==player.id || player.isgroup}" :id="currentPlayer && currentPlayer.id === player.id ? 'gv-active' : ('gv-'+index)">
+     <v-flex :disabled="VOL_HIDDEN==player.dvc" xs12 style="height:8px"></v-flex>
+     <volume-control :value="player.volume" :muted="player.muted" :playing="player.isplaying" :dvc="player.dvc" :layout="0" :name="player.name" :id="player.id" @inc="volumeUp" @dec="volumeDown" @changed="setVolume" @moving="movingSlider" @toggleMute="toggleMute"></volume-control>
+     <v-flex xs12 style="height:8px"></v-flex>
+    </div>
+    <v-flex xs12 style="height:24px" v-if="GRP_PLAYER_ID==player.id || player.isgroup"></v-flex>
+   </template>
   </v-layout>
  </v-container>
  <div class="padding"></div>

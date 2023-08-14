@@ -773,7 +773,7 @@ div.v-subheader {
  overflow-y:auto;
  max-height:calc((var(--vh, 1vh)*100) - (var(--main-toolbar-height) + 64px));
 }
-.group-vol-av {
+.group-vol-grp {
  font-weight:var(--bold-weight);
 }
 

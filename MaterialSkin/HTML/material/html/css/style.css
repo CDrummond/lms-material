@@ -2574,6 +2574,7 @@ img[lazy='loaded'].np-image-desktop, img[lazy='loaded'].np-image-landscape, img[
   max-width:calc(100vw - 8px);
  }
 }
+
 .v-btn:not(.v-btn--icon) {
  text-transform:none!important;
  border-radius:100px;

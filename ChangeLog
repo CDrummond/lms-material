@@ -19,6 +19,7 @@
 16. Remove 'Play next' when in party mode.
 17. Add 'Average' volume control to group volume dialog.
 18. Only disable menu, dialog, etc. shadows on Dark, Darker, and Black themes.
+19. Try to display group volume dialog under button.
 
 3.3.5
 -----

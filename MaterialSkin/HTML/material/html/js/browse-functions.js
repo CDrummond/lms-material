@@ -1218,6 +1218,18 @@ function browseItemAction(view, act, item, index, event) {
         download(item, item.id.startsWith("album_id:") ? view.buildCommand(item) : undefined, aa);
     } else if (SHOW_IMAGE_ACTION==act) {
         bus.$emit('dlg.open', 'gallery', [item.image], 0, true);
+    } else if (SCROLL_TO_DISC_ACTION==act) {
+        var discs = [];
+        for (var i=0, loop=view.items, len=loop.length; i<len; ++i) {
+            if (loop[i].header) {
+                discs.push(loop[i]);
+            }
+        }
+        choose(ACTIONS[act].title, discs).then(choice => {
+            if (undefined!=choice) {
+                view.jumpTo(choice.jump);
+            }
+        });
     } else {
         // If we are acting on a multi-disc album, prompt which disc we should act on
         if (item.multi && !view.current.id.startsWith("album_id:") && (PLAY_ACTION==act || ADD_ACTION==act || INSERT_ACTION==act)) {

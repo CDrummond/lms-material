@@ -93,13 +93,13 @@ Vue.component('lms-toolbar', {
   <v-icon>{{playerMuted ? 'volume_off' : playerStatus.volume>0 ? 'volume_up' : 'volume_down'}}</v-icon>
   <div v-if="VOL_FIXED!=playerDvc" v-bind:class="{'disabled':noPlayer,'vol-btn-label':!desktopLayout||!showVolumeSlider,'dimmed':playerMuted}" >{{playerStatus.volume|displayVolume(playerDvc)}}</div>
  </v-btn>
- <v-btn icon :title="trans.info | tooltip(LMS_TRACK_INFO_KEYBOARD,keyboardControl)" v-if="!desktopLayout && infoPlugin && isNowPlayingPage" @click.stop="bus.$emit('info')" class="toolbar-button hide-for-mini" id="inf" v-bind:class="{'disabled':undefined===songInfo && !infoOpen}">
+ <v-btn icon :title="trans.info | tooltip(LMS_TRACK_INFO_KEYBOARD,keyboardControl)" v-if="!desktopLayout && infoPlugin && isNowPlayingPage" @click.native="emitInfo" class="toolbar-button hide-for-mini" id="inf" v-bind:class="{'disabled':undefined===songInfo && !infoOpen}">
   <v-icon>{{infoOpen ? 'info' : 'info_outline'}}</v-icon>
  </v-btn>
  <v-btn icon v-if="!desktopLayout && ( (isNowPlayingPage && !infoPlugin) || !isNowPlayingPage)" v-longpress="playPauseButton" @click.middle="showSleep" class="toolbar-button hide-for-mini" id="pp" :title="playerStatus.isplaying ? trans.pause : trans.play" v-bind:class="{'disabled':undefined===songInfo}">
   <v-icon>{{playerStatus.isplaying ? 'pause_circle_outline' : 'play_circle_outline'}}</v-icon>
  </v-btn>
- <v-btn icon :title="trans.info | tooltip(LMS_TRACK_INFO_KEYBOARD,keyboardControl)" v-if="desktopLayout && infoPlugin" @click.native="emitInfo" class="toolbar-button hide-for-mini" v-bind:class="{'disabled':undefined===songInfo && !infoOpen}">
+ <v-btn icon :title="trans.info | tooltip(LMS_TRACK_INFO_KEYBOARD,keyboardControl)" v-if="desktopLayout" @click.native="emitInfo" class="toolbar-button hide-for-mini" v-bind:class="{'disabled':undefined===songInfo && !infoOpen}">
   <v-icon>{{infoOpen ? 'info' : 'info_outline'}}</v-icon>
  </v-btn>
  <v-btn icon :title="trans.showLarge | tooltip(LMS_EXPAND_NP_KEYBOARD,keyboardControl,true)" v-if="desktopLayout && !nowPlayingExpanded" @click.native="expandNowPlaying(true)" class="toolbar-button hide-for-mini">
@@ -260,9 +260,11 @@ Vue.component('lms-toolbar', {
             if (playerStatus.syncslaves!=this.playerStatus.syncslaves) {
                 this.playerStatus.syncslaves = playerStatus.syncslaves;
             }
-            if (playerStatus.current.title!=this.playerStatus.current.title ||
+            if (playerStatus.current.id!=this.playerStatus.current.id ||
+                playerStatus.current.title!=this.playerStatus.current.title ||
                 (playerStatus.current.artist && playerStatus.current.artist!=this.playerStatus.current.artist) ||
                 (playerStatus.current.trackartist && playerStatus.current.trackartist!=this.playerStatus.current.artist) ) {
+                this.playerStatus.current.id=playerStatus.current.id;
                 this.playerStatus.current.title=playerStatus.current.title;
                 this.playerStatus.current.artist=playerStatus.current.artist ? playerStatus.current.artist : playerStatus.current.trackartist;
                 this.playerStatus.current.album=playerStatus.current.album;
@@ -516,7 +518,13 @@ Vue.component('lms-toolbar', {
             if (this.$store.state.visibleMenus.size>0) {
                 return;
             }
-            bus.$emit('info');
+            if (this.$store.state.infoPlugin) {
+                bus.$emit('info');
+            } else if (undefined!=this.playerStatus.current && undefined!=this.playerStatus.current.id) {
+                let clone = JSON.parse(JSON.stringify(this.playerStatus.current));
+                clone.id = "track_id:"+this.playerStatus.current.id;
+                bus.$emit('trackInfo', clone, undefined, undefined);
+            }
         },
         expandNowPlaying(on) {
             if (this.$store.state.visibleMenus.size>0) {

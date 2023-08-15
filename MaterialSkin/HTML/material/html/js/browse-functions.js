@@ -568,9 +568,6 @@ function browseClick(view, item, index, event) {
         if (item.allItems && item.allItems.length>0) { // Clicking on 'X Artists' / 'X Albums' / 'X Tracks' search header
             view.addHistory();
             view.items = item.allItems;
-            if (PLAIN_HEADER==item.header) {
-                view.headerTitle = view.headerTitle+SEPARATOR+stripLinkTags(item.title);
-            }
             view.headerSubTitle = item.subtitle;
             view.current = item;
             view.searchActive = false;

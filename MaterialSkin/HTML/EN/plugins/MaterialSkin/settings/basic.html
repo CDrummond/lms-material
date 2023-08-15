@@ -98,18 +98,6 @@
         </select>
     [% END %]
 
-    [% WRAPPER setting title="PLUGIN_MATERIAL_SKIN_COLLAPSE_DISCS" desc="PLUGIN_MATERIAL_SKIN_COLLAPSE_DISCS_DESC" %]
-        <select class="stdedit" name="pref_collapseDiscs" id="collapseDiscs">
-            [% FOREACH option = {
-                'PLUGIN_MATERIAL_SKIN_COLLAPSE_DISCS_A_DONT' => 0,
-                'PLUGIN_MATERIAL_SKIN_COLLAPSE_DISCS_B_ALWAYS' => 1,
-                'PLUGIN_MATERIAL_SKIN_COLLAPSE_DISCS_C_LIMIT' => 2
-            } %]
-            <option [% IF prefs.collapseDiscs == option.value %]selected [% END %]value="[% option.value %]">[% option.key | string %]</option>
-            [%- END -%]
-        </select>
-    [% END %]
-
     [% WRAPPER setting title="PLUGIN_MATERIAL_SKIN_SHOW_COMMENT" desc="PLUGIN_MATERIAL_SKIN_SHOW_COMMENT_DESC" %]
         <select class="stdedit" name="pref_showComment" id="showComment">
             <option [% IF NOT prefs.showComment %]selected [% END %]value="0">[% 'NO' | getstring %]</option>

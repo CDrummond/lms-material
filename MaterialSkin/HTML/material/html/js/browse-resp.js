@@ -953,32 +953,7 @@ function parseBrowseResp(data, parent, options, cacheKey, parentCommand, parentG
             if (discs.size>1) {
                 resp.tracksSubtitle=i18np("1 Track", "%1 Tracks", resp.items.length)+" ("+formatSeconds(totalDuration)+")"
                 let d = 0;
-                let collapse = (undefined==options || !options.neverColapseDiscs) && // When adding via choice dialog we never want to collapse!
-                               (1==lmsOptions.collapseDiscs || (2==lmsOptions.collapseDiscs && resp.items.length>=MAX_TRACKS_BEFORE_COLLAPSE));
-                let mainItems = [];
-                let groupedTracks = {};
-
-                if (collapse) {
-                    let discTracks = [];
-                    let current = undefined;
-                    let duration = 0;
-                    // Split tracks out into discs
-                    for (let t=0, l2=resp.items, l2len=l2.length; t<l2len; ++t) {
-                        if (undefined==current || l2[t].disc==current) {
-                            current = l2[t].disc;
-                            duration += l2[t].duration;
-                            discTracks.push(l2[t]);
-                        } else {
-                            groupedTracks[''+current]={tracks: discTracks, duration:duration};
-
-                            discTracks = [];
-                            current = l2[t].disc;
-                            duration = l2[t].duration;
-                            discTracks.push(l2[t]);
-                        }
-                    }
-                    groupedTracks[''+current]={tracks: discTracks, duration:duration};
-                }
+                let jumplist = [];
 
                 for (let k of discs.keys()) {
                     let disc = discs.get(k);
@@ -993,23 +968,15 @@ function parseBrowseResp(data, parent, options, cacheKey, parentCommand, parentG
                         }
                     }
 
-                    if (collapse) {
-                        mainItems.push({title: lmsOptions.commentAsDiscTitle && title ? title : i18n("Disc %1", k),
+                    resp.items.splice(disc.pos+d, 0,
+                                        {title: lmsOptions.commentAsDiscTitle && title ? title : i18n("Disc %1", k),
                                         subtitle: i18np("1 Track", "%1 Tracks", disc.total)+" ("+formatSeconds(disc.duration)+")",
-                                        allItems: groupedTracks[''+k].tracks, duration: groupedTracks[''+k].duration,
-                                        id:FILTER_PREFIX+k, header:PLAIN_HEADER, menu:[PLAY_ALL_ACTION, INSERT_ALL_ACTION, ADD_ALL_ACTION]});
-                    } else {
-                        resp.items.splice(disc.pos+d, 0,
-                                          {title: lmsOptions.commentAsDiscTitle && title ? title : i18n("Disc %1", k),
-                                           subtitle: i18np("1 Track", "%1 Tracks", disc.total)+" ("+formatSeconds(disc.duration)+")",
-                                           id:FILTER_PREFIX+k, header:true, menu:[PLAY_ALL_ACTION, INSERT_ALL_ACTION, ADD_ALL_ACTION]});
-                    }
+                                        id:FILTER_PREFIX+k, header:true, menu:[PLAY_ALL_ACTION, INSERT_ALL_ACTION, ADD_ALL_ACTION]});
+                    jumplist.push({key: ""+k, index: disc.pos+d});
                     d++;
                 }
-                if (collapse) {
-                    resp.allowHoverBtns = true;
-                    resp.items = mainItems;
-                    resp.subtitle=i18np("1 Disc", "%1 Discs", resp.items.length);
+                if (resp.items.length>20 && (d>3 || resp.items.length>75)) {
+                    resp.jumplist = jumplist;
                 }
             } else if (1==discs.size) {
                 // Remove item's disc value so that 'PLAY_DISC_ACTION' is not shown

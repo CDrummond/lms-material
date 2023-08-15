@@ -31,5 +31,4 @@ var lmsOptions = {newMusicLimit: 100,
                   lang: undefined,
                   commentAsDiscTitle: getLocalStorageVal('commentAsDiscTitle', 0),
                   groupdiscs: getLocalStorageBool('groupdiscs', false),
-                  collapseDiscs: getLocalStorageVal('collapseDiscs', 0),
                   showComment: getLocalStorageBool('showComment', false) };

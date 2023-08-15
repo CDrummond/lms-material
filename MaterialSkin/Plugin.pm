@@ -111,7 +111,6 @@ sub initPlugin {
         allowDownload => '0',
         manifestDisplay => '0',
         commentAsDiscTitle => '0',
-        collapseDiscs => '0',
         showComment => '0'
     });
 
@@ -342,7 +341,6 @@ sub _cliCommand {
         $request->addResult('artistFirst', $prefs->get('artistFirst'));
         $request->addResult('allowDownload', $prefs->get('allowDownload'));
         $request->addResult('commentAsDiscTitle', $prefs->get('commentAsDiscTitle'));
-        $request->addResult('collapseDiscs', $prefs->get('collapseDiscs'));
         $request->addResult('showComment', $prefs->get('showComment'));
         $request->setStatusDone();
         return;

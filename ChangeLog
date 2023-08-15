@@ -21,6 +21,9 @@
 18. Only disable menu, dialog, etc. shadows on Dark, Darker, and Black themes.
 19. Try to display group volume dialog under button.
 20. In desktop layout with MAI installed '(i)' button shows track info.
+21. Remove options to collapse multi-disc albums.
+22. When showing multi-disc albums, if there are more than 3 discs or more than
+    75 tracks then show a jump list on the left allowing to jump to disc N.
 
 3.3.5
 -----

@@ -132,7 +132,6 @@ const SIMPLE_LIB_VIEWS = "SimpleLibraryViews ";
 const GRID_SINGLE_LINE_DIFF = 20;
 const NP_INFO = 'now-playing-info';
 const NP_EXPANDED = 'now-playing-expanded';
-const PLAIN_HEADER = 2;
 const MAX_TRACKS_BEFORE_COLLAPSE = 200;
 const ALL_SONGS_ID = "allsongs";
 
@@ -153,7 +152,7 @@ const IFRAME_HOME_CLOSES_DIALOGS = 2
 
 const SKIN_GENRE_TAGS = ['composer', 'conductor', 'band'];
 const SKIN_BOOL_OPTS = ['showComposer', 'showConductor', 'showBand', 'showAllArtists', 'artistFirst', IS_IOS ? 'xx' : 'allowDownload', 'showComment'];
-const SKIN_INT_OPTS = ['respectFixedVol', 'commentAsDiscTitle', 'collapseDiscs'];
+const SKIN_INT_OPTS = ['respectFixedVol', 'commentAsDiscTitle'];
 
 const MSK_REV_SORT_OPT = "msk-revsort:1";
 

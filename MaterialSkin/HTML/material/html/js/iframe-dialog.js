@@ -514,7 +514,9 @@ Vue.component('lms-iframe-dialog', {
                                 ? "server"
                                 : (page == '/material/html/docs/index.html') || (page.startsWith("plugins/") && (page.indexOf("?player=")>0 || page.indexOf("&player=")>0))
                                     ? "lms" // tech info, or 'extra' entry
-                                    : "other";
+                                    : page == '/material/html/material-skin/index.html'
+                                        ? "help"
+                                        : "other";
             this.show = true;
             this.showMenu = false;
             this.loaded = false;

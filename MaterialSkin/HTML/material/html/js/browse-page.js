@@ -306,7 +306,7 @@ var lmsBrowse = Vue.component("lms-browse", {
   </v-list>
   <v-list v-else-if="menu.currentActions">
    <template v-for="(item, index) in menu.currentActions">
-    <div style="height:0px!important" v-if="(queryParams.party && HIDE_FOR_PARTY.has(item.action)) || (LMS_KIOSK_MODE && HIDE_FOR_KIOSK.has(item.action)) || (tbarActions.length<2 && (index<(tbarActions.length<2 ? 2 : 1))) || (SCROLL_TO_DISC_ACTION==item.action && (items.length<2 || !items[0].id.startsWith(FILTER_PREFIX)))"></div>
+    <div style="height:0px!important" v-if="(queryParams.party && HIDE_FOR_PARTY.has(item.action)) || (LMS_KIOSK_MODE && HIDE_FOR_KIOSK.has(item.action)) || (tbarActions.length<2 && (index<(tbarActions.length<2 ? 2 : 1))) || (ALBUM_SORTS_ACTION==item.action && items.length<2) || (SCROLL_TO_DISC_ACTION==item.action && (items.length<2 || !items[0].id.startsWith(FILTER_PREFIX)))"></div>
     <v-divider v-else-if="DIVIDER==item.action"></v-divider>
     <v-list-tile v-else-if="!item.isListItemInMenu && item.action==ADD_TO_FAV_ACTION && isInFavorites(current)" @click="menuItemAction(REMOVE_FROM_FAV_ACTION, current, undefined, $event)">
      <v-list-tile-avatar>

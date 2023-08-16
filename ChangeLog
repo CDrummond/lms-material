@@ -24,6 +24,7 @@
 21. Remove options to collapse multi-disc albums.
 22. When showing multi-disc albums add a 'Scroll to disc' menu entry in
     actions menu.
+23. Hide 'Sort by' menu option if there is only 1 album.
 
 3.3.5
 -----

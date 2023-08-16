@@ -1349,7 +1349,7 @@ function browseHeaderAction(view, act, event, ignoreOpenMenus) {
         for (var i=0,len=B_ALBUM_SORTS.length; i<len; ++i) {
             albumSorts.push({key:B_ALBUM_SORTS[i].key, label:B_ALBUM_SORTS[i].label, selected:sort==B_ALBUM_SORTS[i].key});
         }
-        showMenu(view, {show:true, x:event ? event.clientX : window.innerWidth, y:event ? event.clientY : 52, albumSorts:albumSorts, reverseSort:reverseSort});
+        showMenu(view, {show:true, x:event ? event.clientX : window.innerWidth, y:event ? event.clientY : 52, albumSorts:albumSorts, reverseSort:reverseSort, name:'asort'});
     } else if (VLIB_ACTION==act) {
         view.showLibMenu(event);
     } else if (undefined!=view.current.allid && (ADD_ACTION==act || PLAY_ACTION==act)) {

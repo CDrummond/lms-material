@@ -1827,7 +1827,7 @@ var lmsBrowse = Vue.component("lms-browse", {
     },
     watch: {
         'menu.show': function(newVal) {
-            this.$store.commit('menuVisible', {name:'browse', shown:newVal});
+            this.$store.commit('menuVisible', {name:'browse-'+this.menu.name, shown:newVal});
         }
     },
     beforeDestroy() {

@@ -516,7 +516,7 @@ function changeLink(href, id) {
     }
 }
 
-function setTheme(theme, color) {
+function setTheme(theme, color, prevColor) {
     if (theme!=undefined) {
         let t = theme.split('-');
         let variant = t.length>1 && ('colored'==t[t.length-1] || 'standard'==t[t.length-1]) ? t.pop() : 'standard';
@@ -548,6 +548,9 @@ function setTheme(theme, color) {
         window.setTimeout(function() {
             emitToolbarColors("--top-toolbar-color", "--bottom-toolbar-color");
         }, 250);
+        if (undefined!=prevColor && prevColor==COLOR_FROM_COVER && color!=COLOR_FROM_COVER) {
+            window.location.href = window.location.href;
+        }
     }
 }
 

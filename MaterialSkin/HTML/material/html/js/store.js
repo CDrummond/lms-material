@@ -17,6 +17,7 @@ function updateUiSettings(state, val) {
     var queueDisplayChanged = false;
     var relayoutGrid = false;
     var themeChanged = false;
+    var prevColor = state.color;
     if (undefined!=val.theme && state.theme!=val.theme) {
         state.theme = val.theme;
         setLocalStorageVal('theme', state.theme);
@@ -30,7 +31,7 @@ function updateUiSettings(state, val) {
     }
     state.darkUi = !state.theme.startsWith('light') && state.theme.indexOf("/light/")<0;
     if (themeChanged) {
-        setTheme(state.theme, state.color);
+        setTheme(state.theme, state.color, prevColor);
         bus.$emit('themeChanged');
     }
     if (undefined!=val.fontSize && state.fontSize!=val.fontSize) {

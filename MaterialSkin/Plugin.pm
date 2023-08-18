@@ -109,7 +109,6 @@ sub initPlugin {
         artistFirst => '1',
         password => '',
         allowDownload => '0',
-        manifestDisplay => '0',
         commentAsDiscTitle => '0',
         showComment => '0'
     });
@@ -1648,11 +1647,6 @@ sub _manifestHandler {
     my $shortTitle = $prefs->get('shortTitle');
     if ($shortTitle && $shortTitle ne '') {
         $manifest =~ s/\"LMS\"/\"${shortTitle}\"/g;
-    }
-
-    my $display = $prefs->get('manifestDisplay');
-    if ($display && $display == 1) {
-        $manifest =~ s/\"standalone\"/\"fullscreen\"/g;
     }
 
     $response->code(RC_OK);

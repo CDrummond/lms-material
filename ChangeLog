@@ -26,6 +26,7 @@
     actions menu.
 23. Hide 'Sort by' menu option if there is only 1 album.
 24. Fix flicker when show 'Help' page.
+25. Remove WebApp standalone/fullscreen option, and default to standalone.
 
 3.3.5
 -----

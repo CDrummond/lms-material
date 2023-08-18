@@ -228,27 +228,6 @@ PLUGIN_MATERIAL_SKIN_MANIFEST_DISPLAY
 	FR	Affichage de l'application Web
 	NL	WebApp weergave
 
-PLUGIN_MATERIAL_SKIN_MANIFEST_DISPLAY_DESC
-	CS	Když je aplikace uložena jako webová aplikace (např. 'Přidat na domovskou obrazovku'), může být zobrazena přes 'celou obrazovku' (zobrazuje se jako běžná aplikace, ale stavový a navigační řádek Androidu jsou skryté) nebo 'samostatně' (zobrazuje se jako běžná aplikace, stavový a navigační řádek jsou viditelné). POZNÁMKA: Pokud provedete jakékoli změny, budete muset skin v prohlížeči znovu načíst, protože prohlížeč toto nastavení načte při načítání stránky.
-	DE	Sofern als WebApp abgespeichert (bspw. 'Zum Startbildschirm hinzufügen') kann die Anwendung als 'Vollbild' oder 'Eigenständig' angezeigt werden. ANMERKUNG: Änderungen werden erst nach Neuladen des Skins im Browser wirksam.
-	EN	When saved as a WebApp (e.g. 'Add to homescreen') the app can be shown 'fullscreen' (appears like a normal app, but android's status and navigation bars are hidden) or 'standalone' (appears as a normal app, with status and navigation bars visible). NOTE: If you make any changes then you will need to reload the skin in your browser as browsers read this setting when the page is loaded.
-	FR	Lorsque l'application est enregistrée en tant qu'application Web (via l'option "Ajouter à l'écran d'accueil" d'un navigateur) pour être utilisée comme une application Android classique, elle peut être affichée en "plein écran" (barres de statut et de navigation masquées) ou "autonome" (barres de statut et de navigation visibles). REMARQUE : Si vous modifiez ce paramètre, vous devrez recharger le skin dans votre navigateur car le navigateur lit ce paramètre lorsque la page est chargée.
-	NL	Wanneer opgeslagen als een WebApp (bijv. via 'Toevoegen aan thuisscherm') kan de app in 'Volledig scherm' modus worden weergegeven (verschijnt als een normale app, maar de status- en navigatiebalken van Android zijn verborgen) of als 'Zelfstandig' (verschijnt als een normale app, met status en navigatiebalken zichtbaar). OPMERKING: als u wijzigingen aanbrengt, moet u de skin opnieuw in uw browser laden.
-
-PLUGIN_MATERIAL_SKIN_MANIFEST_DISPLAY_STANDALONE
-	CS	Samostatně
-	DE	Eigenständig
-	EN	Standalone
-	FR	Autonome
-	NL	Zelfstandig
-
-PLUGIN_MATERIAL_SKIN_MANIFEST_DISPLAY_FULLSCREEN
-	CS	Celá obrazovka
-	DE	Vollbild
-	EN	Fullscreen
-	FR	Plein écran
-	NL	Volledig scherm
-
 PLUGIN_MATERIAL_SKIN_COMMENT_AS_DISC_TITLE
 	CS	Použití komentáře pro název disku
 	DE	Benutze den 'Comment'-Tag für Albumtitel.

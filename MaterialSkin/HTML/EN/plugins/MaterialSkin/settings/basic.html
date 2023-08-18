@@ -27,13 +27,6 @@
         </select>
     [% END %]
 
-    [% WRAPPER setting title="PLUGIN_MATERIAL_SKIN_MANIFEST_DISPLAY" desc="PLUGIN_MATERIAL_SKIN_MANIFEST_DISPLAY_DESC" %]
-        <select class="stdedit" name="pref_manifestDisplay" id="allowDownload">
-            <option [% IF NOT prefs.manifestDisplay %]selected [% END %]value="0">[% 'PLUGIN_MATERIAL_SKIN_MANIFEST_DISPLAY_STANDALONE' | getstring %]</option>
-            <option [% IF prefs.manifestDisplay %]selected [% END %]value="1">[% 'PLUGIN_MATERIAL_SKIN_MANIFEST_DISPLAY_FULLSCREEN' | getstring %]</option>
-        </select>
-    [% END %]
-
     <br/><hr class="main-sep"/>
     <div><i>[% "PLUGIN_MATERIAL_SKIN_GENRES_LIST_NOTE" | string %]</i></div>
     <hr style="opacity:0.4" class="sub-sep"/><br/>

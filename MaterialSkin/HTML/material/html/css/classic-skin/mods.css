@@ -483,6 +483,11 @@ input[type=checkbox]:checked:before, input[type=radio]:checked:before {
  background:var(--primary-color);
 }
 
+/* Looks like 'select' is always active? So can't use primary colour here :( */
+select::-webkit-scrollbar-thumb:active {
+ background:var(--scrollbar-thumb-hover-color);
+}
+
 ::-webkit-scrollbar-corner {
  background:var(--scrollbar-corner-color);
 }

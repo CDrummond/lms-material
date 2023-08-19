@@ -11,7 +11,7 @@
  8. Default to 'Darker' for iOS and Android.
  9. Don't change icon size when change font size.
 10. Delay showing disconnected icon for 5 seconds.
-11. Adujust Adwaita theme colours.
+11. Adjust Adwaita theme colours.
 12. Allow specifying themeColor and defaultTheme as URL query parameters.
 13. Fix pin/unpin start of 'My Music' menu item entries.
 14. Hide hover buttons in kiosk mode, if applicable.

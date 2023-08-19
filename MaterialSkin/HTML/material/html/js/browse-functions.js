@@ -292,7 +292,7 @@ function browseHandleListResponse(view, item, command, resp, prevPage) {
         view.items=resp.items;
         view.allSongsItem=resp.allSongsItem;
         view.jumplist=resp.jumplist;
-        view.filteredJumplist = [];99
+        view.filteredJumplist = [];
         view.baseActions=resp.baseActions;
         view.tbarActions=[];
         view.isTop = false;

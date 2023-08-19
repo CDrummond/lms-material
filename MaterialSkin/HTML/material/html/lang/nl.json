@@ -600,10 +600,10 @@
 "%1 Years":"%1 Jaren",
 "1 day":"1 dag",
 "%1 days":"%1 dagen",
-"Average Volume":"",
-"Medium":"",
-"Padding between items in lists":"",
-"Scroll to disc":"",
-"Single field only":"",
-"Tiny":""
+"Average Volume":"Gemiddeld Volume",
+"Medium":"Gemiddeld",
+"Padding between items in lists":"Opvulling tussen items in lijsten",
+"Scroll to disc":"Ga naar disc",
+"Single field only":"Alleen enkel veld",
+"Tiny":"Klein"
 }

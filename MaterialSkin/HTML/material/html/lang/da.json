@@ -73,6 +73,7 @@
 "Auto-scroll to current track":"Vis automatisk næste nummer i køen",
 "Automatic":"Automatisk",
 "Automatically sort items on the home screen.":"Sorter automatisk menupunkter for forsiden.",
+"Average Volume":"Gennemsnitlig lydstyrke",
 "Band":"Gruppe",
 "Bands":"Grupper",
 "Basic options":"Grundlæggende indstillinger",
@@ -383,6 +384,7 @@
 "Scroll play queue when current track changes.":"Hop til aktuelle nummer i køen ved skift af nummer",
 "Scroll queue to current track":"Hop hen til aktuelle nummer",
 "Scroll to current":"Hop til nuværende",
+"Scroll to disc":"Hop til album",
 "Search":"Søg",
 "Search on...":"Søg efter...",
 "Searching...":"Søger...",
@@ -603,7 +605,5 @@
 "1 Year":"1 år",
 "%1 Years":"%1 år",
 "1 day":"1 dag",
-"%1 days":"%1 dage",
-"Average Volume":"",
-"Scroll to disc":""
+"%1 days":"%1 dage"
 }

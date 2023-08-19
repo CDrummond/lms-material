@@ -1,6 +1,7 @@
 3.4.1
 -----
 1. Update translations.
+2. Fix colour of text in 'Help' files when using dark backgrounds.
 
 3.4.0
 -----

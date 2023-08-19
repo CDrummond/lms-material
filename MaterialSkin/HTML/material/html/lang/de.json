@@ -575,8 +575,6 @@
 "%1 Composers":"%1 Komponisten",
 "1 Conductor":"Ein Dirigent",
 "%1 Conductors":"%1 Dirigenten",
-"1 Disc":"Eine Disc",
-"%1 Discs":"%1 Discs",
 "1 Genre":"Eine Stilrichtung",
 "%1 Genres":"%1 Stilrichtungen",
 "1 Image":"Ein Bild",
@@ -605,6 +603,7 @@
 "Remove all tracks":"",
 "Remove previous tracks":"",
 "Remove upcoming tracks":"",
+"Scroll to disc":"",
 "Single field only":"",
 "Tiny":""
 }

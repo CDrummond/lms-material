@@ -586,8 +586,6 @@
 "%1 Composers":"%1 komponister",
 "1 Conductor":"1 dirigent",
 "%1 Conductors":"%1 dirigenter",
-"1 Disc":"1 CD'er",
-"%1 Discs":"%1 CD'ere",
 "1 Genre":"1 genre",
 "%1 Genres":"%1 genrer",
 "1 Image":"1 billede",
@@ -606,5 +604,6 @@
 "%1 Years":"%1 år",
 "1 day":"1 dag",
 "%1 days":"%1 dage",
-"Average Volume":""
+"Average Volume":"",
+"Scroll to disc":""
 }

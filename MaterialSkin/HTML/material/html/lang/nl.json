@@ -582,8 +582,6 @@
 "%1 Composers":"%1 Componisten",
 "1 Conductor":"1 Dirigent",
 "%1 Conductors":"%1 Dirigenten",
-"1 Disc":"1 Disc",
-"%1 Discs":"%1 Discs",
 "1 Genre":"1 Genre",
 "%1 Genres":"%1 Genres",
 "1 Image":"1 Afbeelding",
@@ -605,6 +603,7 @@
 "Average Volume":"",
 "Medium":"",
 "Padding between items in lists":"",
+"Scroll to disc":"",
 "Single field only":"",
 "Tiny":""
 }

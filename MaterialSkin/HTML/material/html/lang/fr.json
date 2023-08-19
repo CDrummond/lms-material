@@ -582,8 +582,6 @@
 "%1 Composers":"%1 compositeurs",
 "1 Conductor":"1 chef d'orchestre",
 "%1 Conductors":"%1 chefs d'orchestre",
-"1 Disc":"1 disque",
-"%1 Discs":"%1 disques",
 "1 Genre":"1 genre",
 "%1 Genres":"%1 genres",
 "1 Image":"1 image",
@@ -605,6 +603,7 @@
 "Average Volume":"",
 "Medium":"",
 "Padding between items in lists":"",
+"Scroll to disc":"",
 "Single field only":"",
 "Tiny":""
 }

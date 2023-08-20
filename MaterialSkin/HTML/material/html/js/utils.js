@@ -540,6 +540,12 @@ function setTheme(theme, color, prevColor) {
         }
     }
     if (color!=undefined) {
+        if (undefined!=prevColor && prevColor==COLOR_FROM_COVER && color!=COLOR_FROM_COVER) {
+            document.documentElement.style.removeProperty('--primary-color');
+            document.documentElement.style.removeProperty('--pq-current-color');
+            document.documentElement.style.removeProperty('--drop-target-color');
+            document.documentElement.style.removeProperty('--accent-color');
+        }
         if (color.startsWith("user:")) {
             changeLink("/material/usercolor/" + color.substring(5) + "?r=" + LMS_MATERIAL_REVISION, "colorcss");
         } else {
@@ -548,9 +554,6 @@ function setTheme(theme, color, prevColor) {
         window.setTimeout(function() {
             emitToolbarColors("--top-toolbar-color", "--bottom-toolbar-color");
         }, 250);
-        if (undefined!=prevColor && prevColor==COLOR_FROM_COVER && color!=COLOR_FROM_COVER) {
-            window.location.href = window.location.href;
-        }
     }
 }
 

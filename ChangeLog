@@ -4,6 +4,7 @@
 2. Fix colour of text in 'Help' files when using dark backgrounds.
 3. Don't reload page when changing from 'set colour from cover', just unset
    changed variables so that CSS resets them.
+4. Show cover art for all tracks when browsing via 'Music Folder'
 
 3.4.0
 -----

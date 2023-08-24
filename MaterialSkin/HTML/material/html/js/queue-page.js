@@ -1290,7 +1290,10 @@ var lmsQueue = Vue.component("lms-queue", {
                 return;
             }
             if (longPress && this.$store.state.player && this.$store.state.players && this.$store.state.players.length>1) {
-                bus.$emit('dlg.open', 'movequeue', this.$store.state.player);
+                if (queryParams.party || (LMS_KIOSK_MODE && HIDE_FOR_KIOSK.has(PQ_MOVE_QUEUE_ACTION))) {
+                    return;
+                }
+                this.headerAction(PQ_MOVE_QUEUE_ACTION);
                 return;
             }
             if (this.items.length>1 && this.items.length==this.listSize) {

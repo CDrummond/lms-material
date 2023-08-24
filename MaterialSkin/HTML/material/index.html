@@ -139,7 +139,16 @@
   my $statsEnabled=main::STATISTICS();
   my $kioskMode=Plugins::MaterialSkin::Plugin->kioskMode();
   my $hideForKiosk=Plugins::MaterialSkin::Plugin->hideForKiosk();
-  print("<script>const LMS_MATERIAL_REVISION=\"$version\"; const LMS_VERSION=$lmsVersion; const LMS_WINDOW_TITLE=\"$windowTitle\"; const LMS_SETTINGS_HIDE=\"$hideSettings\";const LMS_STATS_ENABLED=$statsEnabled;const LMS_KIOSK_MODE=$kioskMode;const HIDE_FOR_KIOSK = new Set([$hideForKiosk]);</script>\n");
+  my $skinLanguages=Plugins::MaterialSkin::Plugin->skinLanguages();
+  print("<script>const LMS_MATERIAL_REVISION=\"$version\";");
+  print("const LMS_VERSION=$lmsVersion;");
+  print("const LMS_WINDOW_TITLE=\"$windowTitle\";");
+  print("const LMS_SETTINGS_HIDE=\"$hideSettings\";");
+  print("const LMS_STATS_ENABLED=$statsEnabled;");
+  print("const LMS_KIOSK_MODE=$kioskMode;");
+  print("const HIDE_FOR_KIOSK=new Set([$hideForKiosk]);");
+  print("const LMS_SKIN_LANGUAGES=new Set([$skinLanguages]);");
+  print("</script>\n");
   [% END %]
   <!--JS start-->
   <script src="html/lib/axios.min.js?r=0.19.2"></script>

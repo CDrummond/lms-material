@@ -1,6 +1,7 @@
 3.4.2
 -----
 1. Fix long-press on queue duration opening queue transfer dialog.
+2. Don't hard-code list of known translations, use Perl code to build this.
 
 3.4.1
 -----

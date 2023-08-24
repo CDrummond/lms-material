@@ -39,6 +39,7 @@ my $log = Slim::Utils::Log->addLogCategory({
 my $prefs = preferences('plugin.material-skin');
 my $serverprefs = preferences('server');
 my $skinMgr;
+my $listOfTranslations = "";
 
 my %mskNotifications = ();
 $mskNotifications{'notifications'} = [];
@@ -155,6 +156,7 @@ sub initPlugin {
     }
 
     $class->initCLI();
+    $class->initTranslationList();
 }
 
 sub pluginVersion {
@@ -222,6 +224,10 @@ sub hideForKiosk {
     return $hide;
 }
 
+sub skinLanguages {
+    return $listOfTranslations;
+}
+
 sub initCLI {
     #                                                                      |requires Client
     #                                                                      |  |is a Query
@@ -234,6 +240,23 @@ sub initCLI {
 
     # Notification
     Slim::Control::Request::addDispatch(['material-skin', 'notification', '_type', '_msg'], [0, 0, 0, undef]);
+}
+
+sub initTranslationList() {
+    my $dir = dirname(__FILE__) . "/HTML/material/html/lang/";
+
+    opendir(DIR, $dir);
+    my @files = grep(/\.json$/,readdir(DIR));
+    closedir(DIR);
+
+    my @trans = ();
+    foreach my $file (@files) {
+        $file =~ s/\.[^.]+$//;
+        if ($file ne 'blank') {
+            push(@trans, "'$file'");
+        }
+    }
+    $listOfTranslations = join(',', @trans);
 }
 
 sub _startsWith {

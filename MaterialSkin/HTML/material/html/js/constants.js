@@ -39,7 +39,6 @@ const LMS_CURRENT_IMAGE_SZ = IS_HIGH_DPI ? 2048 : 1024;
 const LMS_IMAGE_SIZE = "_"+LMS_IMAGE_SZ+"x"+LMS_IMAGE_SZ+"_f";
 const LMS_CURRENT_IMAGE_SIZE = "_"+LMS_CURRENT_IMAGE_SZ+"x"+LMS_CURRENT_IMAGE_SZ+"_f";
 const LMS_DEFAULT_LIBRARY = "0";
-const LMS_SKIN_LANGUAGES = new Set(['cs', 'da', 'de', 'en', 'en-gb', 'fr', 'it', 'nl', 'ru']);
 const LMS_MATERIAL_UI_DEFAULT_PREF = "plugin.material-skin:defaults";
 const LMS_MATERIAL_DEFAULT_ITEMS_PREF = "plugin.material-skin:items";
 const LMS_MATERIAL_DEFAULT_PINNED_PREF = "plugin.material-skin:pinned";

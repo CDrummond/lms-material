@@ -40,7 +40,7 @@
  --popup-background-color:#424242;
  --popup-border-color:var(--sub-toolbar-border-color);
  --popup-divider-color:var(--scrollbar-thumb-color);
- --menu-dlg-shadow:0 0!important;
+/* --menu-dlg-shadow:0 0!important;*/
 }
 
 .np-info-cover {

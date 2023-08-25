@@ -375,6 +375,14 @@ div.v-subheader {
  border-radius:6px!important;
 }
 
+.np-grid-item img {
+ border-radius:6px!important;
+}
+
+.np-grid-sect .pq-current, .lms-image-grid .list-active, .np-grid-sect .list-active {
+ border-radius:6px!important;
+}
+
 .image-grid-item-icon {
  display:block;
  height:calc(139px + (5px * var(--image-grid-factor))) !important;
@@ -521,11 +529,14 @@ div.v-subheader {
 }
 
 .lms-list img {
- border-radius: 3px;
+ border-radius:3px;
 }
 .lms-list3 img {
- border-radius: 4px!important;
+ border-radius:4px!important;
 }
+.np-info .lms-list img {
+  border-radius:4px;
+ }
 
 .error-text {
  background-color:red;
@@ -1756,6 +1767,10 @@ div.v-subheader {
  width:calc(var(--list-elem-height) - 1px) !important;
  height:calc(var(--list-elem-height) - 1px) !important;
  margin-left:-4px;
+}
+
+.np-info .lms-avatar .v-avatar {
+ margin-left:0px!important;
 }
 
 .lms-avatar-small .v-avatar {

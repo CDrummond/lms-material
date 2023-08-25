@@ -191,6 +191,7 @@
  width:64px;
  margin-left:auto;
  margin-right:auto;
+ filter: url('#filter-radius-plain');
 }
 
 .np-desktop-sb .np-image-desktop {
@@ -337,6 +338,7 @@
  margin-left:auto;
  margin-right:auto;
  float:left;
+ filter: url('#filter-radius');
 }
 
 .np-image-landscape-wide {

@@ -371,6 +371,7 @@ div.v-subheader {
  margin-bottom:4px;
  height:calc(135px + (5px * var(--image-grid-factor))) !important;
  width:calc(135px + (5px * var(--image-grid-factor))) !important;
+ border-radius:6px!important;
 }
 
 .image-grid-item-icon {
@@ -399,6 +400,11 @@ div.v-subheader {
 .radio-img {
  object-fit:contain !important;
  object-position:50% 50% !important;
+ background:#ddd;
+}
+
+.theme--dark .radio-img {
+ background:#444;
 }
 
 .image-grid-text {
@@ -511,6 +517,13 @@ div.v-subheader {
 .lms-list .emblem img, .lms-list-jump .emblem img {
  width:18px !important;
  height:18px !important;
+}
+
+.lms-list img {
+ border-radius: 3px;
+}
+.lms-list3 img {
+ border-radius: 4px!important;
 }
 
 .error-text {
@@ -930,6 +943,7 @@ div.v-subheader {
  padding:16px;
  margin-left:auto;
  margin-right:auto;
+ filter: url('#filter-radius');
 }
 
 .np-no-meta-img {
@@ -939,6 +953,7 @@ div.v-subheader {
  padding:16px;
  margin-left:auto;
  margin-right:auto;
+ filter: url('#filter-radius');
 }
 
 .np-portrait-song-info {

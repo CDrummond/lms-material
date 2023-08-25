@@ -23,6 +23,22 @@ var currentPlayingTrackPosition = 0;
 var lmsNowPlaying = Vue.component("lms-now-playing", {
     template: `
 <div>
+ <svg style="visibility:hidden;z-index:1000;position:fixed" width="0" height="0">
+  <defs>
+   <filter id="filter-radius">
+    <feGaussianBlur in="SourceGraphic" stdDeviation="4" result="blur"/>
+    <feColorMatrix in="blur" mode="matrix" values="1 0 0 0 0  0 1 0 0 0  0 0 1 0 0  0 0 0 100 -50" result="mask"/>
+    <feComposite in="SourceGraphic" in2="mask" operator="atop"/>
+    <feDropShadow dx="2" dy="2" stdDeviation="8" flood-opacity="0.5"/>
+   </filter>
+   <filter id="filter-radius-plain">
+    <feGaussianBlur in="SourceGraphic" stdDeviation="3" result="blur"/>
+    <feColorMatrix in="blur" mode="matrix" values="1 0 0 0 0  0 1 0 0 0  0 0 1 0 0  0 0 0 100 -50" result="mask"/>
+    <feComposite in="SourceGraphic" in2="mask" operator="atop"/>
+   </filter>
+  </defs>
+ </svg>
+
  <div v-show="!desktopLayout || info.show || largeView" class="np-bgnd">
   <div v-show="info.show ? drawInfoBgndImage : drawBgndImage" class="np-bgnd bgnd-cover" id="np-bgnd">
    <div v-bind:class="{'np-bgnd bgnd-blur':(info.show ? drawInfoBgndImage : drawBgndImage)}"></div>

@@ -4,7 +4,7 @@
 2. Don't hard-code list of known translations, use Perl code to build this.
 3. Round corners of images.
 4. Menu/dialog shadows for all themes.
-5. Prepend artist name to album title (in toolbar) when listing album tracks.
+5. Append artist name to album title (in toolbar) when listing album tracks.
 
 3.4.1
 -----

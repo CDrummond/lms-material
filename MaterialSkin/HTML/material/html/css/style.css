@@ -372,15 +372,15 @@ div.v-subheader {
  margin-bottom:4px;
  height:calc(135px + (5px * var(--image-grid-factor))) !important;
  width:calc(135px + (5px * var(--image-grid-factor))) !important;
- border-radius:6px!important;
+ border-radius:8px!important;
 }
 
 .np-grid-item img {
- border-radius:6px!important;
+ border-radius:8px!important;
 }
 
 .np-grid-sect .pq-current, .lms-image-grid .list-active, .np-grid-sect .list-active {
- border-radius:6px!important;
+ border-radius:8px!important;
 }
 
 .image-grid-item-icon {
@@ -529,14 +529,14 @@ div.v-subheader {
 }
 
 .lms-list img {
- border-radius:3px;
+ border-radius:5px;
 }
 .lms-list3 img {
- border-radius:4px!important;
+ border-radius:7px!important;
 }
 .np-info .lms-list img {
-  border-radius:4px;
- }
+ border-radius:5px;
+}
 
 .error-text {
  background-color:red;

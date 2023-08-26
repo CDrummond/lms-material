@@ -528,7 +528,7 @@ div.v-subheader {
  height:18px !important;
 }
 
-.lms-list img {
+.lms-list img, .pmgr-cover img {
  border-radius:5px;
 }
 .lms-list3 img {

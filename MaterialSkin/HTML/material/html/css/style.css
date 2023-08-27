@@ -968,6 +968,10 @@ div.v-subheader {
  filter: url('#filter-radius');
 }
 
+.np-no-meta-img-square {
+ filter:none!important;
+}
+
 .np-portrait-song-info {
  display: flex;
  display: -webkit-flex;

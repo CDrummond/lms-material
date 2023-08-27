@@ -6,6 +6,8 @@
 4. Menu/dialog shadows for all themes.
 5. Append artist name to album title (in toolbar) when listing album tracks.
 6. Add custom no-cover image.
+7. Fix missing icon for 'More' menu entry when clicking on ablum/track lists
+   in now-playing info view.
 
 3.4.1
 -----

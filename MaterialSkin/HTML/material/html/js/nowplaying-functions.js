@@ -762,7 +762,7 @@ function nowplayingItemClicked(view, tab, section, index, event) {
     if (ARTIST_TAB==tab) {
         view.menu.items.push({title:i18n("Browse"), svg:'library-music-outline', act:NP_ITEM_ACT+MORE_LIB_ACTION});
     }
-    view.menu.items.push({title:ACTIONS[MORE_ACTION].title, icon:ACTIONS[MORE_ACTION].icon, act:NP_ITEM_ACT+MORE_ACTION});
+    view.menu.items.push({title:ACTIONS[MORE_ACTION].title, svg:ACTIONS[MORE_ACTION].svg, act:NP_ITEM_ACT+MORE_ACTION});
     view.menu.icons=true;
     view.menu.tab = tab;
     view.menu.section = section;

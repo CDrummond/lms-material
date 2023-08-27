@@ -6,7 +6,7 @@
  */
 'use strict';
 
-const DEFAULT_COVER = "/music/0/cover";
+const DEFAULT_COVER = "/material/html/images/nocover.png";
 
 function shadeRgb(rgb, percent) {
     var t = percent < 0 ? 0 : 255,
@@ -112,7 +112,7 @@ var lmsCurrentCover = Vue.component('lms-currentcover', {
             if (playerStatus.playlist.count == 0) {
                 this.queueIndex = undefined;
                 if (undefined===this.coverFromInfo || this.coverFromInfo || undefined==this.cover) {
-                    coverUrl=resolveImageUrl(DEFAULT_COVER, LMS_CURRENT_IMAGE_SIZE);
+                    coverUrl=DEFAULT_COVER; //resolveImageUrl(DEFAULT_COVER, LMS_CURRENT_IMAGE_SIZE);
                     this.coverFromInfo = false;
                 }
             } else {

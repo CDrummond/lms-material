@@ -717,7 +717,7 @@ function nowplayingFetchAlbumInfo(view) {
                 logJsonMessage("RESP", data);
                 if (data && data.result && view.isCurrent(data, ALBUM_TAB)) {
                     view.info.tabs[ALBUM_TAB].text=data.result.albumreview ? replaceNewLines(data.result.albumreview) : view.infoTrack.album;
-                    view.info.tabs[ALBUM_TAB].image=data.result.albumreview ? undefined : view.coverUrl;
+                    view.info.tabs[ALBUM_TAB].image=/*data.result.albumreview ? undefined :*/ view.coverUrl;
                     view.info.tabs[ALBUM_TAB].isMsg=undefined==data.result.albumreview;
                 }
             }).catch(error => {
@@ -747,7 +747,7 @@ function nowplayingFetchAlbumInfo(view) {
                undefined==view.infoTrack.album && undefined==view.infoTrack.album) {
         view.info.tabs[ALBUM_TAB].isMsg=true;
         view.info.tabs[ALBUM_TAB].text=view.infoTrack.empty ? "" : i18n("Insufficient metadata to fetch information.");
-        view.info.tabs[ALBUM_TAB].image=view.infoTrack.empty ? undefined : view.coverUrl;
+        view.info.tabs[ALBUM_TAB].image=/*view.infoTrack.empty ? undefined :*/ view.coverUrl;
         view.info.tabs[ALBUM_TAB].sections[0].items=[];
     }
 }

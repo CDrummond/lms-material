@@ -868,6 +868,7 @@ div.v-subheader {
  margin-right:auto;
  margin-bottom:8px;
  display:block;
+ border-radius:8px;
 }
 
 /* Ensure larger bottom border for album review image */

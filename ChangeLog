@@ -4,6 +4,7 @@
 2. Always show queue duration under track count.
 3. Use negative number to indicate count/time remaining for queue as per
    now-playing.
+4. Clear selections on 'Esc'
 
 3.4.2
 -----

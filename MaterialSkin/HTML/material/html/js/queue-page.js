@@ -452,6 +452,9 @@ var lmsQueue = Vue.component("lms-queue", {
 
         bus.$on('esc', function() {
             this.menu.show = false;
+            if (this.selection.size>0) {
+                this.clearSelection();
+            }
         }.bind(this));
 
         this.bgndElement = document.getElementById("queue-bgnd");

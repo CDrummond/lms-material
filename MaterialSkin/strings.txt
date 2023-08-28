@@ -34,8 +34,7 @@ PLUGIN_MATERIAL_SKIN_BAND_GENRES
 
 PLUGIN_MATERIAL_SKIN_BAND_GENRES_DESC
 	CS	Seznam žánrů podporujících skupinu oddělený čárkami. Při zadání jednoho z těchto žánrů budete dotázáni, zda si přejete procházet podle skupiny.
-	DE	Komma-getrennte Liste von Stilrichtungen, die Bands unterstützen. Wenn du eine dieser Stilrichtungen wählst, wirst du gefragt, ob du nach Bands 
-durchsuchen willst.
+	DE	Komma-getrennte Liste von Stilrichtungen, die Bands unterstützen. Wenn du eine dieser Stilrichtungen wählst, wirst du gefragt, ob du nach Bands durchsuchen willst.
 	EN	Comma-separated list of genres supporting band. When entering one of these genres, you will be asked if you wish to browse by band.
 	FR	Liste des genres concernés, séparés par des virgules. Lorsque vous choisirez l'un de ces genres, il vous sera demandé si vous souhaitez naviguer par groupe/orchestre.
 	NL	Komma gescheiden lijst van band genres. Indien deze genres worden geselecteerd, wordt er gevraagd of je wilt bladeren op band.

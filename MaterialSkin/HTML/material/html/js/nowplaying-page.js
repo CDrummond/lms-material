@@ -83,7 +83,7 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
     <v-btn flat icon v-bind:class="{'disabled':disableNext}" v-longpress:repeat="nextButton" class="np-std-button"  :title="trans.next | tooltip('right', keyboardControl)"><v-icon large class="media-icon">skip_next</v-icon></v-btn>
    </v-flex>
   </v-layout>
-  <img v-if="!largeView && !disableBtns" :key="coverUrl" v-lazy="coverUrl" onerror="this.src='html/images/cover.png'" class="np-image-desktop" @contextmenu="showMenu" @click="clickImage(event)"></img>
+  <img v-if="!largeView && !disableBtns" :key="coverUrl" v-lazy="coverUrl" onerror="this.src='html/images/cover.png'" class="np-image-desktop" v-bind:class="{'np-trans':transCvr}" @contextmenu="showMenu" @click="clickImage(event)"></img>
   <v-list two-line subheader class="np-details-desktop" v-if="playerStatus.playlist.count>0">
    <v-list-tile style>
     <v-list-tile-content>
@@ -288,7 +288,7 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
   <div v-else>
    <div v-show="overlayVolume>-1 && VOL_STD==playerStatus.dvc" id="volumeOverlay">{{overlayVolume}}%</div>
    <div v-if="landscape" v-touch:start="touchStart" v-touch:end="touchEnd" v-touch:moving="touchMoving">
-    <img v-if="!info.show" :key="coverUrl" v-lazy="coverUrl" onerror="this.src='html/images/cover.png'" class="np-image-landscape" v-bind:class="{'np-image-landscape-wide': landscape && wide>1}" @contextmenu="showMenu" @click="clickImage(event)"></img>
+    <img v-if="!info.show" :key="coverUrl" v-lazy="coverUrl" onerror="this.src='html/images/cover.png'" class="np-image-landscape" v-bind:class="{'np-image-landscape-wide': landscape && wide>1, 'np-trans':transCvr}" @contextmenu="showMenu" @click="clickImage(event)"></img>
     <div class="np-details-landscape" v-bind:class="{'np-details-landscape-wide': landscape && wide>1}">
 
      <div class="np-landscape-song-info hide-scrollbar fade-both">
@@ -357,7 +357,7 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
     </div>
    </div>
    <div v-else v-touch:start="touchStart" v-touch:end="touchEnd" v-touch:moving="touchMoving">
-    <img v-if="!info.show" :key="coverUrl" v-lazy="coverUrl" onerror="this.src='html/images/cover.png'" class="np-image" @contextmenu="showMenu" @click="clickImage(event)"></img>
+    <img v-if="!info.show" :key="coverUrl" v-lazy="coverUrl"  v-bind:class="{'np-trans':transCvr}" onerror="this.src='html/images/cover.png'" class="np-image" @contextmenu="showMenu" @click="clickImage(event)"></img>
     <div class="np-portrait-song-info hide-scrollbar fade-both">
      <div>
       <p class="np-title" v-if="playerStatus.current.title">{{title}}</p>
@@ -1254,6 +1254,9 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
         },
         keyboardControl() {
             return this.$store.state.keyboardControl && !IS_MOBILE
+        },
+        transCvr() {
+            return undefined!=this.coverUrl && this.coverUrl.endsWith(DEFAULT_COVER)
         }
     },
     beforeDestroy() {

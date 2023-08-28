@@ -1,6 +1,9 @@
 3.4.3
 -----
 1. Round corners of images in song information.
+2. Always show queue duration under track count.
+3. Use negative number to indicate count/time remaining for queue as per
+   now-playing.
 
 3.4.2
 -----

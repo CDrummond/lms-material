@@ -1607,7 +1607,11 @@ var lmsBrowse = Vue.component("lms-browse", {
             } else if ( (this.$store.state.desktopLayout ? !this.nowPlayingExpanded : this.$store.state.page=='browse') &&
                         // Can receive 'esc' 120ish milliseconds after dialog was closed with 'esc' - so filter out
                         (undefined==this.$store.state.lastDialogClose || (new Date().getTime()-this.$store.state.lastDialogClose)>250) ) {
-                this.goBack();
+                if (this.selection.size>0) {
+                    this.clearSelection();
+                } else {
+                    this.goBack();
+                }
             }
         }.bind(this));
         bus.$on('browse-home', function() {

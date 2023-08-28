@@ -149,11 +149,9 @@ var lmsQueue = Vue.component("lms-queue", {
   </v-layout>
   <v-layout v-else>
    <div class="toolbar-nobtn-pad"></div>
-   <v-layout row wrap v-longpress="durationClicked">
-    <v-flex xs12 v-if="undefined!=remaining" class="ellipsis subtoolbar-title subtoolbar-title-single}">{{remaining}}</v-flex>
-    <v-flex xs12 v-else class="ellipsis subtoolbar-title subtoolbar-title-single link-item">{{listSize | displayCount}}{{duration | displayTime(true)}}</v-flex>
-    <v-flex xs12 v-if="undefined!=remaining"class="ellipsis subtoolbar-subtitle subtext">{{trans.remaining}}</v-flex>
-    <v-flex xs12 v-else-if="listSize>0 && undefined!=playlist.name && playlist.name.length>0" class="ellipsis subtoolbar-subtitle subtext link-item">{{playlist.name}}{{playlist.modified ? ' *' : ''}}</v-flex>
+   <v-layout row wrap v-longpress="durationClicked" class="link-item">
+    <v-flex xs12 class="ellipsis subtoolbar-title">{{remaining.show ? "-" :""}}{{(remaining.show ? remaining.size : listSize) | displayCount}}</v-flex>
+    <v-flex xs12 class="ellipsis subtoolbar-subtitle subtext">{{remaining.show ? "-" :""}}{{(remaining.show ? remaining.duration : duration) | displayTime(false)}}{{name}}</v-flex>
    </v-layout>
    <v-spacer></v-spacer>
    <v-btn @click.stop="actionsMenu($event)" flat icon class="toolbar-button" :title="trans.actions" v-if="otherActions.length>0"><v-icon>more_horiz</v-icon></v-btn>
@@ -280,10 +278,10 @@ var lmsQueue = Vue.component("lms-queue", {
             listSize:0,
             duration: 0.0,
             playerStatus: { shuffle:0, repeat: 0 },
-            remaining: undefined,
+            remaining: {show:false, size:0, duration:0},
             trans: { ok: undefined, cancel: undefined, clear:undefined,
                      repeatAll:undefined, repeatOne:undefined, repeatOff:undefined, shuffleAll:undefined, shuffleAlbums:undefined,
-                     shuffleOff:undefined, selectMultiple:undefined, removeall:undefined, invertSelect:undefined, dstm:undefined, remaining:undefined, actions:undefined },
+                     shuffleOff:undefined, selectMultiple:undefined, removeall:undefined, invertSelect:undefined, dstm:undefined, actions:undefined },
             menu: { show:false, item: undefined, x:0, y:0, index:0},
             playlist: {name: undefined, modified: false},
             selection: new Set(),
@@ -330,6 +328,10 @@ var lmsQueue = Vue.component("lms-queue", {
         },
         listSizeAdjust() {
             return this.$store.state.listPadding
+        },
+        name() {
+            return this.listSize>0 && undefined!=this.playlist.name && this.playlist.name.length>0
+                    ? (" (" + this.playlist.name + (this.playlist.modified ? ' *' : '') +")") : ""
         }
     },
     created() {
@@ -450,6 +452,9 @@ var lmsQueue = Vue.component("lms-queue", {
 
         bus.$on('esc', function() {
             this.menu.show = false;
+            if (this.selection.size>0) {
+                this.clearSelection();
+            }
         }.bind(this));
 
         this.bgndElement = document.getElementById("queue-bgnd");
@@ -573,8 +578,7 @@ var lmsQueue = Vue.component("lms-queue", {
                           repeatAll:i18n("Repeat queue"), repeatOne:i18n("Repeat single track"), repeatOff:i18n("No repeat"),
                           shuffleAll:i18n("Shuffle tracks"), shuffleAlbums:i18n("Shuffle albums"), shuffleOff:i18n("No shuffle"),
                           selectMultiple:i18n("Select multiple items"), removeall:i18n("Remove all selected items"), 
-                          invertSelect:i18n("Invert selection"), dstm:i18n("Don't Stop The Music"), remaining:i18n("Remaining"),
-                          actions:i18n("Actions")
+                          invertSelect:i18n("Invert selection"), dstm:i18n("Don't Stop The Music"), actions:i18n("Actions")
             };
         },
         updateWidth() {
@@ -1284,8 +1288,8 @@ var lmsQueue = Vue.component("lms-queue", {
             }
         },
         durationClicked(longPress) {
-            if (undefined!=this.remaining) {
-                this.remaining = undefined;
+            if (this.remaining.show) {
+                this.remaining.show = false;
                 clearTimeout(this.remainingTimeout);
                 return;
             }
@@ -1297,20 +1301,21 @@ var lmsQueue = Vue.component("lms-queue", {
                 return;
             }
             if (this.items.length>1 && this.items.length==this.listSize) {
-                var duration = 0;
+                this.remaining.duration = 0;
                 var isValid = true;
                 for (var i=this.currentIndex; i<this.listSize && isValid; ++i) {
                     if (this.items[i].duration!=undefined && this.items[i].duration>0) {
-                        duration += this.items[i].duration;
+                        this.remaining.duration += this.items[i].duration;
                     } else {
                         isValid = false;
                     }
                 }
-                if (isValid) {
-                    duration -= currentPlayingTrackPosition;
-                    this.remaining = i18np("1 Track", "%1 Tracks", this.listSize - this.currentIndex) + " (" + formatSeconds(Math.floor(duration)) +")";
+                if (isValid && this.remaining.duration!=this.duration) {
+                    this.remaining.duration -= currentPlayingTrackPosition;
+                    this.remaining.size = this.listSize - this.currentIndex;
+                    this.remaining.show = true;
                     this.remainingTimeout = setTimeout(function () {
-                        this.remaining = undefined;
+                        this.remaining.show = false;
                     }.bind(this), 2000);
                 }
             }

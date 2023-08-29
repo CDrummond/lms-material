@@ -122,7 +122,10 @@ var app = new Vue({
                     // Get translation files - these are all lowercase
                     let lowerLang = lang.toLowerCase();
                     if (!LMS_SKIN_LANGUAGES.has(lowerLang)) {
-                        lowerLang = lowerLang.substr(0, 2);
+                        let mainLang = lowerLang.substr(0, 2);
+                        if (LMS_SKIN_LANGUAGES.has(mainLang)) {
+                            lowerLang = mainLang;
+                        }
                     }
                     if (getLocalStorageVal("lang", "")!=(lowerLang+"@"+LMS_MATERIAL_REVISION)) {
                         axios.get("html/lang/"+lowerLang+".json?r=" + LMS_MATERIAL_REVISION).then(function (resp) {

@@ -5,6 +5,7 @@
 3. Use negative number to indicate count/time remaining for queue as per
    now-playing.
 4. Clear selections on 'Esc'
+5. Reduce rounding of now-playing image for lower dpi screens.
 
 3.4.2
 -----

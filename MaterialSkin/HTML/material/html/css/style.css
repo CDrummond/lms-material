@@ -529,13 +529,13 @@ div.v-subheader {
 }
 
 .lms-list img, .pmgr-cover img {
- border-radius:5px;
+ border-radius:3px;
 }
 .lms-list3 img {
- border-radius:7px!important;
+ border-radius:5px!important;
 }
 .np-info .lms-list img {
- border-radius:5px;
+ border-radius:3px;
 }
 
 .error-text {

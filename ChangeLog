@@ -6,6 +6,7 @@
    now-playing.
 4. Clear selections on 'Esc'
 5. Reduce rounding of now-playing image for lower dpi screens.
+6. Slightly reduce rounding of covers in lists.
 
 3.4.2
 -----

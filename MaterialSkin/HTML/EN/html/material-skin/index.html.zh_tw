@@ -1,5 +1,5 @@
 [% PROCESS materialhelpheader.html %]
-<h1>Introduction</h1>
+<h1>簡介</h1>
 <p>MaterialSkin 是一款專為 LMS 開發的 HTML5 應用程式，主要提供以下兩種佈局：
   <ul>
     <li>移動裝置佈局</li>

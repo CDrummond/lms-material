@@ -1,0 +1,9 @@
+.lms-list img, .pmgr-cover img, .lms-list3 img, .np-info .lms-list img, .browse-html img, .np-info-text img, .np-info-text-desktop img, .np-info-text-full img,
+.np-info-text-full-desktop img, .inline-image, .np-grid-sect .pq-current, .lms-image-grid .list-active, .np-grid-sect .list-active, .browse-html img,
+.np-info-text img, .np-info-text-desktop img, .np-info-text-full img, .np-info-text-full-desktop img, .inline-image {
+ border-radius:0px!important;
+}
+
+.np-image, .np-no-meta-img, .np-image-desktop {
+ filter:none!important;
+}

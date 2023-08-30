@@ -127,6 +127,17 @@ Vue.component('lms-ui-settings', {
     </v-list-tile>
     <v-divider></v-divider>
 
+    <!-- ROUND_COVERS_UI
+    <v-list-tile>
+     <v-list-tile-content @click="roundCovers = !roundCovers" class="switch-label">
+      <v-list-tile-title>{{i18n('Round covers')}}</v-list-tile-title>
+      <v-list-tile-sub-title>{{i18n('Round the corners of cover-art, etc.')}}</v-list-tile-sub-title>
+     </v-list-tile-content>
+     <v-list-tile-action><m3-switch v-model="roundCovers"></m3-switch></v-list-tile-action>
+    </v-list-tile>
+    <v-divider></v-divider>
+    -->
+
     <v-list-tile v-if="LMS_STATS_ENABLED">
      <v-list-tile-content @click="showRating = !showRating" class="switch-label">
       <v-list-tile-title>{{i18n('Show rating')}}</v-list-tile-title>
@@ -372,6 +383,7 @@ Vue.component('lms-ui-settings', {
             colorList: { } ,
             userColors: [ ],
             colorToolbars: false,
+            roundCovers : true,
             fontSize: 'r',
             fontSizes: [],
             listPadding: 0,
@@ -555,6 +567,7 @@ Vue.component('lms-ui-settings', {
             this.theme = themeParts.join('-');
             this.colorToolbars = 'colored'==variant;
             this.color = this.$store.state.color;
+            this.roundCovers = this.$store.state.roundCovers;
             this.fontSize = this.$store.state.fontSize;
             this.listPadding = this.$store.state.listPadding;
             this.autoScrollQueue = this.$store.state.autoScrollQueue;
@@ -659,6 +672,7 @@ Vue.component('lms-ui-settings', {
             let settings = {
                       theme:this.theme+(this.colorToolbars ? '-colored' : ''),
                       color:this.color,
+                      roundCovers:this.roundCovers,
                       fontSize:this.fontSize,
                       listPadding:this.listPadding,
                       autoScrollQueue:this.autoScrollQueue,

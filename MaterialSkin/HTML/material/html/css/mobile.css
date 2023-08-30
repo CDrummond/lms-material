@@ -151,7 +151,6 @@
  margin-left:auto;
  margin-right:auto;
  float:left;
- filter: url('#filter-radius');
 }
 
 .np-image-landscape-wide {

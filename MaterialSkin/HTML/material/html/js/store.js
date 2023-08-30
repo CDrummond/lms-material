@@ -29,6 +29,13 @@ function updateUiSettings(state, val) {
         setLocalStorageVal('color', state.color);
         themeChanged = true;
     }
+    if (undefined!=val.roundCovers && state.roundCovers!=val.roundCovers) {
+        state.roundCovers = val.roundCovers;
+        setLocalStorageVal('roundCovers', state.roundCovers);
+        /* ROUND_COVERS_UI
+        setRoundCovers(state.roundCovers);
+        */
+    }
     state.darkUi = !state.theme.startsWith('light') && state.theme.indexOf("/light/")<0;
     if (themeChanged) {
         setTheme(state.theme, state.color, prevColor);
@@ -271,6 +278,7 @@ const store = new Vuex.Store({
         theme: defaultTheme(),
         color: 'blue',
         darkUi: true,
+        roundCovers: true,
         fontSize: 'r',
         letterOverlay:false,
         sortFavorites:true,
@@ -500,6 +508,7 @@ const store = new Vuex.Store({
             state.defaultPlayer = getLocalStorageVal('defaultPlayer', state.defaultPlayer);
             state.page = getLocalStorageVal('page', state.page);
             state.theme = getLocalStorageVal('theme', state.theme);
+            state.roundCovers = getLocalStorageBool('roundCovers', state.roundCovers);
             state.coloredToolbars = state.theme.endsWith("-colored");
             state.darkUi = !state.theme.startsWith('light') && state.theme.indexOf("/light/")<0;
             state.color = getLocalStorageVal('color', state.color);
@@ -545,6 +554,9 @@ const store = new Vuex.Store({
             state.listPadding = parseInt(getLocalStorageVal('listPadding', state.listPadding));
             state.mediaControls = getLocalStorageBool('mediaControls', state.mediaControls);
             setTheme(state.theme, state.color);
+            /* ROUND_COVERS_UI
+            setRoundCovers(state.roundCovers);
+            */
             if (state.fontSize!='r') {
                 setFontSize(state.fontSize);
             }
@@ -643,6 +655,7 @@ const store = new Vuex.Store({
                         var prefs = JSON.parse(data.result._p2);
                         var opts = { theme: getLocalStorageVal('theme', undefined==prefs.theme ? state.theme : prefs.theme),
                                      color: getLocalStorageVal('color', undefined==prefs.color ? state.color : prefs.color),
+                                     roundCovers: getLocalStorageBool('roundCovers', undefined==prefs.roundCovers ? state.roundCovers : prefs.roundCovers),
                                      largerElements: getLocalStorageBool('largerElements', undefined==prefs.largerElements ? state.largerElements : prefs.largerElements),
                                      fontSize: getLocalStorageVal('fontSize', undefined==prefs.fontSize ? state.fontSize : prefs.fontSize),
                                      autoScrollQueue: getLocalStorageBool('autoScrollQueue', undefined==prefs.autoScrollQueue ? state.autoScrollQueue : prefs.autoScrollQueue),

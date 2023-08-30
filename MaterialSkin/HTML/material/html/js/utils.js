@@ -105,6 +105,9 @@ function parseQueryParams() {
             resp.expand=decodeURIComponent(kv[1]).split("/");
         } else if ("npRatio"==kv[0]) {
             resp.npRatio=parseFloat(kv[1]);
+        } else if ("square"==kv[0]) {
+            console.log("SQ");
+            setRoundCovers(false);
         }
     }
     return resp;
@@ -494,6 +497,7 @@ function removeLocalStorage(key) {
 function changeLink(href, id) {
     var links = document.getElementsByTagName("link");
     if (undefined==links) {
+        console.log("ERR");
         return;
     }
     for (var i=0, len=links.length; i<len; ++i) {
@@ -514,6 +518,10 @@ function changeLink(href, id) {
             return;
         }
     }
+}
+
+function setRoundCovers(round) {
+    changeLink("html/css/covers/" + (round ? "round" : "square") + ".css?r=" + LMS_MATERIAL_REVISION, "covercss");
 }
 
 function setTheme(theme, color, prevColor) {

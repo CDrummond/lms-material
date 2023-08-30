@@ -473,7 +473,7 @@ div.v-subheader {
  left:6px !important;
  width:32px;
  height:32px;
- border-radius:50%;
+ border-radius:50%!important;
  background-color:black;
  opacity:0.65;
 }

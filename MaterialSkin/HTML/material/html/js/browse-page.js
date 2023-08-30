@@ -118,7 +118,7 @@ var lmsBrowse = Vue.component("lms-browse", {
      <v-list-tile-avatar v-if="item.selected" :tile="true" class="lms-avatar">
       <v-icon>check_box</v-icon>
      </v-list-tile-avatar>
-     <v-list-tile-avatar v-else-if="item.image && (artwork || isTop)" :tile="true" v-bind:class="{'radio-image': ECTION_RADIO==citem.section || SECTION_APPS==citem.section}" class="lms-avatar">
+     <v-list-tile-avatar v-else-if="item.image && (artwork || isTop)" :tile="true" v-bind:class="{'radio-image': SECTION_RADIO==item.section || SECTION_APPS==item.section}" class="lms-avatar">
       <img :key="item.image" :src="item.image" onerror="this.src='html/images/cover.png'" loading="lazy"></img>
      </v-list-tile-avatar>
      <v-list-tile-avatar v-else-if="item.icon" :tile="true" class="lms-avatar">
@@ -186,7 +186,7 @@ var lmsBrowse = Vue.component("lms-browse", {
      <v-list-tile-avatar v-if="item.selected" :tile="true" class="lms-avatar">
       <v-icon>check_box</v-icon>
      </v-list-tile-avatar>
-     <v-list-tile-avatar v-else-if="item.image && (isTop || artwork)" :tile="true" v-bind:class="{'radio-image': ECTION_RADIO==citem.section || SECTION_APPS==citem.section, 'lms-avatar-small': isTop || (current && (current.id==TOP_RADIO_ID || current.id==TOP_APPS_ID)), 'lms-avatar': current && current.id!=TOP_RADIO_ID && current.id!=TOP_APPS_ID}">
+     <v-list-tile-avatar v-else-if="item.image && (isTop || artwork)" :tile="true" v-bind:class="{'radio-image': SECTION_RADIO==item.section || SECTION_APPS==item.section, 'lms-avatar-small': isTop || (current && (current.id==TOP_RADIO_ID || current.id==TOP_APPS_ID)), 'lms-avatar': current && current.id!=TOP_RADIO_ID && current.id!=TOP_APPS_ID}">
       <img :key="item.image" v-lazy="item.image" onerror="this.src='html/images/cover.png'"></img>
      </v-list-tile-avatar>
      <v-list-tile-avatar v-else-if="item.icon" :tile="true" class="lms-avatar">

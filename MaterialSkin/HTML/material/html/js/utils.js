@@ -244,7 +244,7 @@ function resolveImageUrl(image, size) {
         if ((image.startsWith("plugins/") || image.startsWith("/plugins/")) && image.indexOf("/html/images/")>0) {
             return image;
         }
-        image = image.substring(0, idx)+(size ? size : LMS_IMAGE_SIZE)+image.substring(idx);
+        image = image.substring(0, idx)+(size ? size : LMS_IMAGE_SIZE);
     }
     return image.startsWith("/") ? image : ("/"+image);
 }

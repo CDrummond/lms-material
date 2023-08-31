@@ -1,16 +1,18 @@
 3.4.3
 -----
-1. Round corners of images in song information.
-2. Always show queue duration under track count.
-3. Use negative number to indicate count/time remaining for queue as per
-   now-playing.
-4. Clear selections on 'Esc'
-5. Reduce rounding of now-playing image for lower dpi screens.
-6. Slightly reduce rounding of covers in lists.
-7. Add traditional Chinese translation - thanks to jwchen119
-8. Treat images in 'Apps' as per this in 'Radio' - i.e. do not force square.
-9. Disable rounded corners via "?square" URL query parameter - to be replaced
-   by UI setting in 3.5.0
+ 1. Round corners of images in song information.
+ 2. Always show queue duration under track count.
+ 3. Use negative number to indicate count/time remaining for queue as per
+    now-playing.
+ 4. Clear selections on 'Esc'
+ 5. Reduce rounding of now-playing image for lower dpi screens.
+ 6. Slightly reduce rounding of covers in lists.
+ 7. Add traditional Chinese translation - thanks to jwchen119
+ 8. Treat images in 'Apps' as per this in 'Radio' - i.e. do not force square.
+ 9. Disable rounded corners via "?square" URL query parameter - to be replaced
+    by UI setting in 3.5.0
+10. Request JPG cover-art from LMS for now-playing, so that transparent
+    backgrounds are black.
 
 3.4.2
 -----

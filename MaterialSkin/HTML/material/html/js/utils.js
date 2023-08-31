@@ -105,8 +105,8 @@ function parseQueryParams() {
             resp.expand=decodeURIComponent(kv[1]).split("/");
         } else if ("npRatio"==kv[0]) {
             resp.npRatio=parseFloat(kv[1]);
-        } else if ("square"==kv[0]) {
-            console.log("SQ");
+        } else if ("square"==kv[0]) { // ROUND_COVERS_UI REMOVE THIS
+            resp.roundCovers = false;
             setRoundCovers(false);
         }
     }

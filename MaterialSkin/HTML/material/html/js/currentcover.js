@@ -6,8 +6,6 @@
  */
 'use strict';
 
-const DEFAULT_COVER = "/material/html/images/nocover.png";
-
 function shadeRgb(rgb, percent) {
     var t = percent < 0 ? 0 : 255,
         p = percent < 0 ? percent*-1 : percent;
@@ -103,7 +101,7 @@ var lmsCurrentCover = Vue.component('lms-currentcover', {
         };
     },
     mounted: function() {
-        this.coverUrl = LMS_BLANK_COVER;
+        this.coverUrl = DEFAULT_COVER;
         this.fac = new FastAverageColor();
         bus.$on('playerStatus', function(playerStatus) {
             // Has cover changed?

@@ -35,6 +35,7 @@
  --list-hover-color:rgba(0, 0, 0, 0.04)!important;
  --list-active-color:rgba(0, 0, 0, 0.08)!important;
  --menu-dlg-shadow:0 1px 6px 1px rgba(0,0,0,.12);
+ --image-background-color:#ddd;
 }
 
 .theme--dark {
@@ -43,6 +44,7 @@
  --border-color:rgba(237, 236, 231, 0.25);
  --tab-border-color:rgba(237, 236, 231, 0.1);
  --menu-dlg-shadow:0 1px 6px 1px rgba(0,0,0,.4)!important;
+ --image-background-color:#444;
 }
 
 .note {
@@ -400,11 +402,7 @@ div.v-subheader {
 .radio-img {
  object-fit:contain !important;
  object-position:50% 50% !important;
- background:#ddd;
-}
-
-.theme--dark .radio-img {
- background:#444;
+ background:var(--image-background-color);
 }
 
 .image-grid-text {

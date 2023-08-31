@@ -26,7 +26,7 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
  <svg style="visibility:hidden;z-index:1000;position:fixed" width="0" height="0">
   <defs>
    <filter id="filter-radius">
-    <feGaussianBlur in="SourceGraphic" :stdDeviation="window.devicePixelRatio<=1.3 ? 3 : 8" result="blur"/>
+    <feGaussianBlur in="SourceGraphic" :stdDeviation="window.devicePixelRatio<=1.3 ? 3 : 6" result="blur"/>
     <feColorMatrix v-if="window.devicePixelRatio<=1.3" in="blur" mode="matrix" values="1 0 0 0 0  0 1 0 0 0  0 0 1 0 0  0 0 0 100 -50" result="mask"/>
     <feColorMatrix v-else in="blur" mode="matrix" values="1 0 0 0 0  0 1 0 0 0  0 0 1 0 0  0 0 0 100 -75" result="mask"/>
     <feComposite in="SourceGraphic" in2="mask" operator="atop"/>

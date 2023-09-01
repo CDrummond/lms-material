@@ -357,7 +357,7 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
     </div>
    </div>
    <div v-else v-touch:start="touchStart" v-touch:end="touchEnd" v-touch:moving="touchMoving">
-    <img v-if="!info.show" :key="convertedImageUrl" v-lazy="convertedImageUrl"  v-bind:class="{'np-trans':transCvr}" onerror="this.src=DEFAULT_COVER" class="np-image" @contextmenu="showMenu" @click="clickImage(event)"></img>
+    <img v-if="!info.show" :key="convertedImageUrl" v-lazy="convertedImageUrl" v-bind:class="{'np-trans':transCvr}" onerror="this.src=DEFAULT_COVER" class="np-image" @contextmenu="showMenu" @click="clickImage(event)"></img>
     <div class="np-portrait-song-info hide-scrollbar fade-both">
      <div>
       <p class="np-title" v-if="playerStatus.current.title">{{title}}</p>
@@ -1244,10 +1244,10 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
             return !this.$store.state.player
         },
         drawBgndImage() {
-            return this.$store.state.nowPlayingBackdrop && undefined!=this.coverUrl && LMS_BLANK_COVER!=this.coverUrl && DEFAULT_COVER!=this.coverUrl
+            return this.$store.state.nowPlayingBackdrop && undefined!=this.coverUrl && LMS_BLANK_COVER!=this.coverUrl && DEFAULT_COVER!=this.coverUrl && DEFAULT_RADIO_COVER!=this.coverUrl
         },
         drawInfoBgndImage() {
-            return this.$store.state.infoBackdrop && undefined!=this.coverUrl && LMS_BLANK_COVER!=this.coverUrl && DEFAULT_COVER!=this.coverUrl
+            return this.$store.state.infoBackdrop && undefined!=this.coverUrl && LMS_BLANK_COVER!=this.coverUrl && DEFAULT_COVER!=this.coverUrl && DEFAULT_RADIO_COVER!=this.coverUrl
         },
         coloredToolbars() {
             return this.$store.state.coloredToolbars
@@ -1256,7 +1256,7 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
             return this.$store.state.keyboardControl && !IS_MOBILE
         },
         transCvr() {
-            return undefined!=this.coverUrl && this.coverUrl.endsWith(DEFAULT_COVER)
+            return undefined!=this.coverUrl && (this.coverUrl.includes(DEFAULT_COVER) || this.coverUrl.includes(LMS_BLANK_COVER) || this.coverUrl.includes(DEFAULT_RADIO_COVER))
         },
         convertedImageUrl() {
             return undefined!=this.coverUrl && this.$store.state.roundCovers && this.coverUrl.endsWith(LMS_CURRENT_IMAGE_SIZE)

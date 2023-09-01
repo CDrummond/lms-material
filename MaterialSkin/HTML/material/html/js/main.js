@@ -6,7 +6,7 @@
  */
 'use strict';
 
-Vue.use(VueLazyload, {error:LMS_BLANK_COVER});
+Vue.use(VueLazyload, {error:DEFAULT_COVER});
 
 var app = new Vue({
     el: '#app',

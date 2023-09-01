@@ -13,6 +13,8 @@
     by UI setting in 3.5.0
 10. Request JPG cover-art from LMS for now-playing, so that transparent
     backgrounds are black.
+11. Add custom default radio icon.
+12. Use material album icon for no-cover image.
 
 3.4.2
 -----

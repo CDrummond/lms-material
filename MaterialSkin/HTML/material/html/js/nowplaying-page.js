@@ -1259,8 +1259,9 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
             return undefined!=this.coverUrl && (this.coverUrl.includes(DEFAULT_COVER) || this.coverUrl.includes(LMS_BLANK_COVER) || this.coverUrl.includes(DEFAULT_RADIO_COVER))
         },
         convertedImageUrl() {
-            return undefined!=this.coverUrl && this.$store.state.roundCovers && this.coverUrl.endsWith(LMS_CURRENT_IMAGE_SIZE)
-                        ? this.coverUrl+".jpg"
+            return undefined!=this.coverUrl && this.$store.state.roundCovers && this.coverUrl.includes(LMS_CURRENT_IMAGE_SIZE+".png") &&
+                    (this.coverUrl.startsWith("/imageproxy") || this.coverUrl.startsWith("MY_SQUEEZEBOX_IMAGE_PROXY"))
+                        ? this.coverUrl.replace(LMS_CURRENT_IMAGE_SIZE+".png", LMS_CURRENT_IMAGE_SIZE+".jpg")
                         : this.coverUrl
         }
     },

@@ -659,18 +659,18 @@ var lmsBrowse = Vue.component("lms-browse", {
         isCurrentReq(data) {
             return data.id==this.reqId;
         },
-        fetchItems(command, item, prevPage, index) {
+        fetchItems(command, item, prevPage, startIndex) {
             if (this.fetchingItem!=undefined) {
                 return;
             }
 
             this.fetchingItem = item.id;
-            var count = item.limit ? item.limit : LMS_BATCH_SIZE;
-            lmsList(this.playerId(), command.command, command.params, 0, count, item.cancache, this.nextReqId()).then(({data}) => {
+            var count = item.stdItem==STD_ITEM_PLAYLIST ? LMS_PAGED_BATCH_SIZE : (item.limit ? item.limit : LMS_BATCH_SIZE);
+            lmsList(this.playerId(), command.command, command.params, undefined==startIndex ? 0 : startIndex, count, item.cancache, this.nextReqId()).then(({data}) => {
                 if (this.isCurrentReq(data)) {
                     var resp = parseBrowseResp(data, item, this.options, item.cancache ? cacheKey(command.command, command.params, 0, count) : undefined, this.command, this.inGenre);
                     this.fetchingItem = undefined;
-                    this.handleListResponse(item, command, resp, prevPage);
+                    this.handleListResponse(item, command, resp, prevPage, startIndex>0);
                 }
             }).catch(err => {
                 this.fetchingItem = undefined;
@@ -678,8 +678,8 @@ var lmsBrowse = Vue.component("lms-browse", {
                 logError(err, command.command, command.params, 0, count);
             });
         },
-        handleListResponse(item, command, resp, prevPage) {
-            browseHandleListResponse(this, item, command, resp, prevPage);
+        handleListResponse(item, command, resp, prevPage, appendItems) {
+            browseHandleListResponse(this, item, command, resp, prevPage, appendItems);
         },
         handleTextClickResponse(item, command, data, isMoreMenu) {
             browseHandleTextClickResponse(this, item, command, data, isMoreMenu);
@@ -1264,6 +1264,22 @@ var lmsBrowse = Vue.component("lms-browse", {
                             }
                         }
                     }
+
+                    if (undefined!=this.current && STD_ITEM_PLAYLIST==this.current.stdItem) {
+                        // Fetch more items?
+                        if (undefined!=this.fetchingItem || this.listSize<=this.items.length) {
+                            return;
+                        }
+                        const scrollY = this.scrollElement.scrollTop;
+                        const visible = this.scrollElement.clientHeight;
+                        const pageHeight = this.scrollElement.scrollHeight;
+                        const pad = (visible*2.5);
+                        const bottomOfPage = (visible + scrollY) >= (pageHeight-(pageHeight>pad ? pad : 300));
+
+                        if (bottomOfPage || pageHeight < visible) {
+                            this.fetchItems(this.command, this.current, undefined, this.items.length);
+                        }
+                    }
                 });
             }
         },
@@ -1744,7 +1760,7 @@ var lmsBrowse = Vue.component("lms-browse", {
 
         this.bgndElement = document.getElementById("browse-bgnd");
         this.scrollElement = document.getElementById("browse-list");
-        this.scrollElement.addEventListener('scroll', this.handleScroll);
+        this.scrollElement.addEventListener("scroll", this.handleScroll, PASSIVE_SUPPORTED ? { passive: true } : false);
 
         bus.$on('splitterChanged', function() {
             this.layoutGrid();

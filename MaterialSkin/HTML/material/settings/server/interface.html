@@ -20,7 +20,9 @@
 		<input type="hidden" name="pref_titleFormat[% loop.index %]" value="[% format %]">
 	[% END %]
 
-	<input type="hidden" name="pref_itemsPerPage" value="[% prefs.pref_itemsPerPage %]">
+	[% WRAPPER setting title="SETUP_ITEMSPERPAGE" desc="SETUP_ITEMSPERPAGE_DESC" %]
+	<input type="text" class="stdedit sliderInput_10_500" name="pref_itemsPerPage" id="itemsPerPage" value="[% prefs.pref_itemsPerPage | html %]" size="15">
+	[% END %]
 	<input type="hidden" name="pref_refreshRate" value="[% prefs.pref_refreshRate %]">
 	<input type="hidden" name="pref_thumbSize" value="[% prefs.pref_thumbSize %]">
 

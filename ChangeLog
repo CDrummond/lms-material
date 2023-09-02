@@ -2,6 +2,8 @@
 -----
 1. Fix duplicate covers in 'Manage payers' dialog.
 2. Fix custom favourite icons being replaced with default cover.
+3. Incrementally load playlist track listing, use LMS's "Items Per Page"
+   setting to control batch size.
 
 3.4.3
 -----

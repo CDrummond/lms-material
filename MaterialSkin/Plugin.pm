@@ -228,6 +228,11 @@ sub skinLanguages {
     return $listOfTranslations;
 }
 
+sub itemsPerPage {
+    my $ipp = preferences('server')->get('itemsPerPage');
+    return $ipp < 50 ? 50 : $ipp;
+}
+
 sub initCLI {
     #                                                                      |requires Client
     #                                                                      |  |is a Query

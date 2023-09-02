@@ -34,6 +34,8 @@ function parseBrowseResp(data, parent, options, cacheKey, parentCommand, parentG
     try {
     if (data && data.result) {
         logJsonMessage("RESP", data);
+        resp.listSize = data.result.count;
+
         var command = data && data.params && data.params.length>1 && data.params[1] && data.params[1].length>1 ? data.params[1][0] : undefined;
         var isMusicIpMoods = command == "musicip" && data.params[1].length>0 && data.params[1][1]=="moods";
 
@@ -1084,10 +1086,10 @@ function parseBrowseResp(data, parent, options, cacheKey, parentCommand, parentG
                           });
             }
             resp.itemCustomActions = getCustomActions("playlist-track");
-            resp.subtitle=i18np("1 Track", "%1 Tracks", resp.items.length);
+            resp.subtitle=i18np("1 Track", "%1 Tracks", resp.listSize);
             resp.canDrop = !isRemote;
             resp.numAudioItems = resp.items.length;
-            if (totalDuration>0) {
+            if (totalDuration>0 && resp.items.length==resp.listSize) {
                 resp.subtitle+=" ("+formatSeconds(totalDuration)+")";
             }
         } else if (data.result.years_loop) {

@@ -86,6 +86,7 @@ function browseHandleKey(view, event) {
 function browseAddHistory(view) {
     var prev = {};
     prev.items = view.items;
+    prev.listSize = view.listSize;
     prev.allSongsItem = view.allSongsItem;
     prev.jumplist = view.jumplist;
     prev.baseActions = view.baseActions;
@@ -236,8 +237,15 @@ function browseHandleNextWindow(view, item, command, resp, isMoreMenu, isBrowse)
     return false;
 }
 
-function browseHandleListResponse(view, item, command, resp, prevPage) {
+function browseHandleListResponse(view, item, command, resp, prevPage, appendItems) {
     if (resp && resp.items) {
+        if (appendItems) {
+            view.items.push.apply(view.items, resp.items);
+            // Following should not be required. But first 'more' fetch seems to result in
+            // list scrolling to position 0???
+            setScrollTop(view, view.scrollElement.scrollTop);
+            return;
+        }
         if (0==resp.items.length && command.command.length>1 && "podcasts"==command.command[0] && ("addshow"==command.command[1] || "delshow"==command.command[1])) {
             bus.$emit('showMessage', item.title);
             view.history[view.history.length-2].needsRefresh = true;
@@ -290,6 +298,7 @@ function browseHandleListResponse(view, item, command, resp, prevPage) {
         view.currentLibId = command.libraryId;
         view.pinnedItemLibName = item.libname ? item.libname : view.pinnedItemLibName;
         view.items=resp.items;
+        view.listSize=resp.listSize;
         view.allSongsItem=resp.allSongsItem;
         view.jumplist=resp.jumplist;
         view.filteredJumplist = [];
@@ -1470,6 +1479,7 @@ function browseGoBack(view, refresh) {
     view.selection = new Set();
     var prev = view.history.pop();
     view.items = prev.items;
+    view.listSize = prev.listSize;
     view.allSongsItem = prev.allSongsItem;
     view.jumplist = prev.jumplist;
     view.filteredJumplist = [];

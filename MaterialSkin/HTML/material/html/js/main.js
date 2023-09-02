@@ -181,10 +181,6 @@ var app = new Vue({
             }
         });
 
-        // ROUND_COVERS_UI REMOVE THIS
-        if (undefined!=queryParams.roundCovers) {
-            this.$store.state.roundCovers = queryParams.roundCovers;
-        }
         setTimeout(function () {
             bus.$emit('checkNotifications');
             this.loaded = true;

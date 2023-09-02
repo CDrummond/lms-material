@@ -32,9 +32,7 @@ function updateUiSettings(state, val) {
     if (undefined!=val.roundCovers && state.roundCovers!=val.roundCovers) {
         state.roundCovers = val.roundCovers;
         setLocalStorageVal('roundCovers', state.roundCovers);
-        /* ROUND_COVERS_UI
         setRoundCovers(state.roundCovers);
-        */
     }
     state.darkUi = !state.theme.startsWith('light') && state.theme.indexOf("/light/")<0;
     if (themeChanged) {
@@ -554,9 +552,7 @@ const store = new Vuex.Store({
             state.listPadding = parseInt(getLocalStorageVal('listPadding', state.listPadding));
             state.mediaControls = getLocalStorageBool('mediaControls', state.mediaControls);
             setTheme(state.theme, state.color);
-            /* ROUND_COVERS_UI
             setRoundCovers(state.roundCovers);
-            */
             if (state.fontSize!='r') {
                 setFontSize(state.fontSize);
             }

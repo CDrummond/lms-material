@@ -8,7 +8,10 @@
 1. Fix duplicate covers in 'Manage payers' dialog.
 2. Fix custom favourite icons being replaced with default cover.
 3. Incrementally load playlist track listing, use LMS's "Items Per Page"
-   setting to control batch size.
+   setting to control batch size. (Will be changed to Material-specific config
+   item for 3.5.0)
+4. Only allow editing (in 'Browse' view) of playlists of 250 (or less) tracks.
+5. Use custom 'no cover' image in 'Manage players' dialog.
 
 3.4.3
 -----

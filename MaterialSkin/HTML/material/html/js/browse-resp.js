@@ -1081,7 +1081,7 @@ function parseBrowseResp(data, parent, options, cacheKey, parentCommand, parentG
                               //icon: "music_note",
                               stdItem: isRemote ? STD_ITEM_REMOTE_PLAYLIST_TRACK : STD_ITEM_PLAYLIST_TRACK,
                               type: "track",
-                              draggable: resp.listSize<=MAX_PLAYLIST_EDIT_SIZE,
+                              draggable: true,
                               duration: i.duration
                           });
             }

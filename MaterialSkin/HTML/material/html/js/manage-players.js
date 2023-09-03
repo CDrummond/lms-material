@@ -586,7 +586,6 @@ Vue.component('lms-manage-players', {
 
             player.image = undefined;
             if (player.current) {
-                console.log(player.current);
                 if (player.current.artwork_url) {
                     player.image=resolveImageUrl(player.current.artwork_url);
                 }

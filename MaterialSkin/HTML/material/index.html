@@ -141,7 +141,6 @@
   my $kioskMode=Plugins::MaterialSkin::Plugin->kioskMode();
   my $hideForKiosk=Plugins::MaterialSkin::Plugin->hideForKiosk();
   my $skinLanguages=Plugins::MaterialSkin::Plugin->skinLanguages();
-  my $itemsPerPage=Plugins::MaterialSkin::Plugin->itemsPerPage();
   print("<script>const LMS_MATERIAL_REVISION=\"$version\";");
   print("const LMS_VERSION=$lmsVersion;");
   print("const LMS_WINDOW_TITLE=\"$windowTitle\";");
@@ -150,7 +149,6 @@
   print("const LMS_KIOSK_MODE=$kioskMode;");
   print("const HIDE_FOR_KIOSK=new Set([$hideForKiosk]);");
   print("const LMS_SKIN_LANGUAGES=new Set([$skinLanguages]);");
-  print("const LMS_PAGED_BATCH_SIZE=$itemsPerPage;");
   print("</script>\n");
   [% END %]
   <!--JS start-->

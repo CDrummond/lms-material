@@ -665,7 +665,7 @@ var lmsBrowse = Vue.component("lms-browse", {
             }
 
             this.fetchingItem = item.id;
-            var count = item.stdItem==STD_ITEM_PLAYLIST ? LMS_PAGED_BATCH_SIZE : (item.limit ? item.limit : LMS_BATCH_SIZE);
+            var count = item.stdItem==STD_ITEM_PLAYLIST ? lmsOptions.pagedBatchSize : (item.limit ? item.limit : LMS_BATCH_SIZE);
             lmsList(this.playerId(), command.command, command.params, undefined==startIndex ? 0 : startIndex, count, item.cancache, this.nextReqId()).then(({data}) => {
                 if (this.isCurrentReq(data)) {
                     var resp = parseBrowseResp(data, item, this.options, item.cancache ? cacheKey(command.command, command.params, 0, count) : undefined, this.command, this.inGenre);

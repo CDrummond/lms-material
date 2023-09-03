@@ -111,7 +111,8 @@ sub initPlugin {
         password => '',
         allowDownload => '0',
         commentAsDiscTitle => '0',
-        showComment => '0'
+        showComment => '0',
+        pagedBatchSize => 100
     });
 
     if (main::WEBUI) {
@@ -226,11 +227,6 @@ sub hideForKiosk {
 
 sub skinLanguages {
     return $listOfTranslations;
-}
-
-sub itemsPerPage {
-    my $ipp = preferences('server')->get('itemsPerPage');
-    return $ipp < 50 ? 50 : $ipp;
 }
 
 sub initCLI {
@@ -369,6 +365,7 @@ sub _cliCommand {
         $request->addResult('allowDownload', $prefs->get('allowDownload'));
         $request->addResult('commentAsDiscTitle', $prefs->get('commentAsDiscTitle'));
         $request->addResult('showComment', $prefs->get('showComment'));
+        $request->addResult('pagedBatchSize', $prefs->get('pagedBatchSize'));
         $request->setStatusDone();
         return;
     }

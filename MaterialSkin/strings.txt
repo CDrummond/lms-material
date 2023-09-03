@@ -321,3 +321,8 @@ PLUGIN_MATERIAL_SKIN_RELOAD_NOTE
 	NL	Belangrijk: Als je een van de onderstaande instellingen wijzigt, dien je mogelijk de webpagina te vernieuwen om de wijzigingen door te voeren.
 	ZH_TW	注意：如果您更改以下任何設定，則可能需要重新整理網頁才能使更改生效。
 
+PLUGIN_MATERIAL_SKIN_PAGED_BATCH_SIZE
+	EN	Paged batch size
+
+PLUGIN_MATERIAL_SKIN_PAGED_BATCH_SIZE_DESC
+	EN	Number of initial items to fetch (and display) when listing contents of some lists (such as playlist contents). Scrolling list will then cause another batch of items to be fetched, etc.

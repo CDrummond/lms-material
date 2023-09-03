@@ -113,7 +113,7 @@ Vue.component('lms-manage-players', {
         <v-list class="pmgr-playerlist">
          <v-list-tile @dragstart.native="dragStart(index, $event)" @dragend.native="dragEnd()" @dragover.native="dragOver($event)" @drop.native="drop(index, $event)" :draggable="!player.isgroup" v-bind:class="{'highlight-drop':dropId==('pmgr-player-'+index), 'highlight-drag':dragIndex==index}" :id="'tile-pmgr-player-'+index">
           <v-list-tile-avatar v-if="player.image && isMainPlayer(player)" :tile="true" class="pmgr-cover" v-bind:class="{'dimmed': !player.ison}">
-           <img :key="player.image" v-lazy="player.image"></img>
+           <img :key="player.image" v-lazy="player.image" v-bind:class="{'dimmed':player.image==noImage}"></img>
           </v-list-tile-avatar>
           <v-list-tile-content v-if="isMainPlayer(player)">
            <v-list-tile-title class="ellipsis cursor link-item" @click="setActive(player.id)"><obj :id="'pmgr-player-'+index"><v-icon v-if="player.icon.icon" class="pmgr-icon">{{player.icon.icon}}</v-icon><img v-else class="pmgr-icon svg-img" :src="player.icon.svg | svgIcon(darkUi)"></img>
@@ -212,11 +212,12 @@ Vue.component('lms-manage-players', {
             trans: { play:undefined, pause:undefined, stop:undefined, prev:undefined, next:undefined, menu:undefined, drop:undefined, noplayer:undefined },
             draggingSyncedPlayer: false,
             dropId: undefined,
-            dragIndex: undefined
+            dragIndex: undefined,
+            noImage: undefined
         }
     },
     mounted() {
-        this.noImage = resolveImageUrl(LMS_BLANK_COVER);
+        this.noImage = DEFAULT_COVER;
         bus.$on('manage.open', function(act) {
             this.players = [];
             this.show = true;
@@ -563,22 +564,6 @@ Vue.component('lms-manage-players', {
             }
             playerMap[player.id]={name:player.name, isgroup:player.isgroup, dvc:player.dvc};
 
-            player.image = undefined;
-            if (player.current) {
-                if (player.current.artwork_url) {
-                    player.image=resolveImageUrl(player.current.artwork_url);
-                }
-                if (undefined==player.image && player.current.coverid) {
-                    player.image=resolveImageUrl("/music/"+player.current.coverid+"/cover.jpg");
-                }
-                if (undefined==player.image) {
-                    player.image=resolveImageUrl("/music/current/cover.jpg?player=" + player.id);
-                }
-            }
-            if (undefined==player.image) {
-                player.image = this.noImage;
-            }
-
             player.playIcon = player.isplaying ? (this.$store.state.stopButton ? "pause" : "pause_circle_outline") :
                                                  (this.$store.state.stopButton ? "play_arrow" : "play_circle_outline");
             player.hasTrack = true;
@@ -597,6 +582,23 @@ Vue.component('lms-manage-players', {
             } else {
                 player.track="...";
                 player.hasTrack = false;
+            }
+
+            player.image = undefined;
+            if (player.current) {
+                console.log(player.current);
+                if (player.current.artwork_url) {
+                    player.image=resolveImageUrl(player.current.artwork_url);
+                }
+                if (undefined==player.image && player.current.coverid) {
+                    player.image=resolveImageUrl("/music/"+player.current.coverid+"/cover.jpg");
+                }
+                if (undefined==player.image && player.hasTrack) {
+                    player.image=resolveImageUrl("/music/current/cover.jpg?player=" + player.id);
+                }
+            }
+            if (undefined==player.image) {
+                player.image = this.noImage;
             }
 
             if (player.isgroup && player.members) {

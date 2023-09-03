@@ -113,7 +113,7 @@ Vue.component('lms-manage-players', {
         <v-list class="pmgr-playerlist">
          <v-list-tile @dragstart.native="dragStart(index, $event)" @dragend.native="dragEnd()" @dragover.native="dragOver($event)" @drop.native="drop(index, $event)" :draggable="!player.isgroup" v-bind:class="{'highlight-drop':dropId==('pmgr-player-'+index), 'highlight-drag':dragIndex==index}" :id="'tile-pmgr-player-'+index">
           <v-list-tile-avatar v-if="player.image && isMainPlayer(player)" :tile="true" class="pmgr-cover" v-bind:class="{'dimmed': !player.ison}">
-           <img :key="player.image" v-lazy="player.image" v-bind:class="{'dimmed':player.image==noImage}"></img>
+           <img :key="player.image" v-lazy="player.image" v-bind:class="{'dimmed':player.image==DEFAULT_COVER || player.image==DEFAULT_RADIO_COVER}"></img>
           </v-list-tile-avatar>
           <v-list-tile-content v-if="isMainPlayer(player)">
            <v-list-tile-title class="ellipsis cursor link-item" @click="setActive(player.id)"><obj :id="'pmgr-player-'+index"><v-icon v-if="player.icon.icon" class="pmgr-icon">{{player.icon.icon}}</v-icon><img v-else class="pmgr-icon svg-img" :src="player.icon.svg | svgIcon(darkUi)"></img>
@@ -213,11 +213,9 @@ Vue.component('lms-manage-players', {
             draggingSyncedPlayer: false,
             dropId: undefined,
             dragIndex: undefined,
-            noImage: undefined
         }
     },
     mounted() {
-        this.noImage = DEFAULT_COVER;
         bus.$on('manage.open', function(act) {
             this.players = [];
             this.show = true;
@@ -597,7 +595,7 @@ Vue.component('lms-manage-players', {
                 }
             }
             if (undefined==player.image) {
-                player.image = this.noImage;
+                player.image = DEFAULT_COVER;
             }
 
             if (player.isgroup && player.members) {

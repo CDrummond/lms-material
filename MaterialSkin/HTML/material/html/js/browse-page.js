@@ -959,8 +959,9 @@ var lmsBrowse = Vue.component("lms-browse", {
         refreshList(restorePosition) {
             this.clearSelection();
             var pos=undefined==restorePosition || restorePosition ? this.scrollElement.scrollTop : 0;
+            var count = this.current.stdItem==STD_ITEM_PLAYLIST ? this.items.length : LMS_BATCH_SIZE;
             this.fetchingItem = this.current.id;
-            lmsList(this.playerId(), this.command.command, this.command.params, 0, LMS_BATCH_SIZE, this.current.cancache).then(({data}) => {
+            lmsList(this.playerId(), this.command.command, this.command.params, 0, count, this.current.cancache).then(({data}) => {
                 var resp = parseBrowseResp(data, this.current, this.options, this.current.cancache ? cacheKey(this.command.command, this.command.params, 0, LMS_BATCH_SIZE) : undefined, this.command, this.inGenre);
                 this.items=resp.items;
                 this.jumplist=resp.jumplist;

@@ -2,6 +2,7 @@
 -----
 1. Remove certain actions from browse-view playlist tracks if playlist has
    more than 250 tracks.
+2. Convert all now-playing PNG covers to JPG (if rounding covers).
 
 3.4.4
 -----

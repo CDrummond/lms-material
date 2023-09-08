@@ -1323,7 +1323,12 @@ function browseItemMenu(view, item, index, event) {
         if (undefined!=item.stdItem) {
             // Get menu items - if view is an album or track from search then we have a different menu
             var itm = STD_ITEMS[item.stdItem];
-            showMenu(view, {show:true, item:item, itemMenu:itm.searchMenu && (view.current.libsearch || view.current.allItems) ? itm.searchMenu : itm.menu, x:event.clientX, y:event.clientY, index:index});
+            showMenu(view, {show:true, item:item, x:event.clientX, y:event.clientY, index:index,
+                            itemMenu:itm.searchMenu && (view.current.libsearch || view.current.allItems)
+                                ? itm.searchMenu
+                                : undefined!=itm.maxBeforeLarge && view.listSize>itm.maxBeforeLarge
+                                    ? itm.largeListMenu
+                                    : itm.menu});
         } else if (TOP_MYMUSIC_ID==item.id) {
             view.showLibMenu(event, index);
         }

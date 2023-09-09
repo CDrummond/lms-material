@@ -141,6 +141,7 @@
   my $kioskMode=Plugins::MaterialSkin::Plugin->kioskMode();
   my $hideForKiosk=Plugins::MaterialSkin::Plugin->hideForKiosk();
   my $skinLanguages=Plugins::MaterialSkin::Plugin->skinLanguages();
+  my $maxPlaylistEditSize=$lmsVersion>=80400 ? 2000 : 250;
   print("<script>const LMS_MATERIAL_REVISION=\"$version\";");
   print("const LMS_VERSION=$lmsVersion;");
   print("const LMS_WINDOW_TITLE=\"$windowTitle\";");
@@ -149,6 +150,7 @@
   print("const LMS_KIOSK_MODE=$kioskMode;");
   print("const HIDE_FOR_KIOSK=new Set([$hideForKiosk]);");
   print("const LMS_SKIN_LANGUAGES=new Set([$skinLanguages]);");
+  print("const LMS_MAX_PLAYLIST_EDIT_SIZE=$maxPlaylistEditSize;");
   print("</script>\n");
   [% END %]
   <!--JS start-->

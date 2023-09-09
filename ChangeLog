@@ -2,7 +2,7 @@
 -----
 1. Add setting to toggle rounded covers.
 2. Add 'Local artwork' entry to album track list menu.
-3. If run under LMS8.4 (or newer) allow editing playlists up to 2k tracks.
+3. If run under LMS8.4 (or newer) allow editing playlists up to 1k tracks.
 4. Only ask LMS for genre details when listing album and playlist tracks if
    set to show band, composer, or conductor.
 

@@ -98,8 +98,18 @@ function buildStdItemCommand(item, parentCommand) {
         for (var i=0, list=STD_ITEMS[stdItem].command, len=list.length; i<len; ++i) {
             command.command.push(list[i]);
         }
-        for (var i=0, list=STD_ITEMS[stdItem].params, len=list.length; i<len; ++i) {
-            command.params.push(list[i]);
+        if (undefined!=STD_ITEMS[stdItem].params) {
+            // Only need genre if showing band, composer, or conductor
+            let removeGenre = (STD_ITEM_ALBUM == stdItem || STD_ITEM_PLAYLIST==stdItem || STD_ITEM_REMOTE_PLAYLIST==stdItem) &&
+                              !lmsOptions.showBand && !lmsOptions.showComposer && !lmsOptions.showConductor;
+            for (var i=0, list=STD_ITEMS[stdItem].params, len=list.length; i<len; ++i) {
+                if (removeGenre && list[i].startsWith("tags:")) {
+                    let parts = list[i].split(':');
+                    command.params.push(parts[0]+':'+parts[1].replace(/g/g,''));
+                } else {
+                    command.params.push(list[i]);
+                }
+            }
         }
         if (lmsOptions.techInfo && (STD_ITEM_ALBUM==stdItem || STD_ITEM_PLAYLIST==stdItem || STD_ITEM_REMOTE_PLAYLIST==stdItem)) {
             for (var i=0, list=command.params, len=list.length; i<len; ++i) {

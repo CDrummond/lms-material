@@ -23,6 +23,11 @@ Vue.component('lms-favorite', {
       <v-text-field clearable autocorrect="off" :label="i18n('URL')" v-model="url" class="lms-search"></v-text-field>
      </v-list-tile-content>
     </v-list-tile>
+    <v-list-tile>
+     <v-list-tile-content>
+      <v-text-field clearable autocorrect="off" :label="i18n('Icon')" v-model="icon" class="lms-search"></v-text-field>
+     </v-list-tile-content>
+    </v-list-tile>
    </v-list>
   </v-form>
   <v-card-actions v-if="queryParams.altBtnLayout">
@@ -47,6 +52,7 @@ Vue.component('lms-favorite', {
             show: false,
             name: "",
             url: "",
+            icon: "",
             item: undefined,
             isAdd: true,
             pos: 1,
@@ -60,6 +66,7 @@ Vue.component('lms-favorite', {
                 this.playerId = this.$store.state.player ? this.$store.state.player.id : "";
                 this.name = item.title;
                 this.url = item.presetParams ? item.presetParams.favorites_url : undefined;
+                this.icon = item.presetParams ? item.presetParams.icon : undefined;
                 this.isAdd=false;
                 this.show=true;
                 focusEntry(this);
@@ -67,6 +74,7 @@ Vue.component('lms-favorite', {
                 this.playerId = this.$store.state.player ? this.$store.state.player.id : "";
                 this.name = "";
                 this.url = "";
+                this.icon = "";
                 this.isAdd=true;
                 this.show=true;
                 focusEntry(this);
@@ -88,10 +96,12 @@ Vue.component('lms-favorite', {
         update() {
             var url = this.url ? this.url.trim() : "";
             var name = this.name ? this.name.trim() : "";
+            var icon = this.icon ? this.icon.trim() : "";
             if (url.length<1 || name.length<1) {
                 return;
             }
-            if (url == (this.item.presetParams ? this.item.presetParams.favorites_url : undefined)) {
+            if ((url == (this.item.presetParams ? this.item.presetParams.favorites_url : undefined)) &&
+                (icon == (this.item.presetParams ? this.item.presetParams.icon : undefined)) )  {
                 if (name == this.item.title) {
                     return;
                 }
@@ -103,8 +113,12 @@ Vue.component('lms-favorite', {
                 lmsCommand(this.playerId, ["favorites", "delete", this.item.id]).then(({data})=> {
                     var command = ["favorites", "add", "url:"+url, "title:"+name, this.item.id];
                     if (this.item.presetParams) {
-                        if (this.item.presetParams.icon) {
-                            command.push("icon:"+this.item.presetParams.icon);
+                        if (icon) {
+                            if (icon.startsWith("http")) {
+                                command.push("icon:/imageproxy/"+encodeURIComponent(icon)+"/image.png") 
+                            } else {
+                                command.push("icon:"+icon);
+                            }
                         }
                         if (this.item.presetParams.favorites_type) {
                             command.push("type:"+this.item.presetParams.favorites_type);
@@ -120,6 +134,7 @@ Vue.component('lms-favorite', {
                     }
                     lmsCommand(this.playerId, command).then(({data})=> {
                         bus.$emit('refreshFavorites');
+                        bus.$emit('refreshList', SECTION_FAVORITES);
                     });
                 });
             }

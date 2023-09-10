@@ -112,7 +112,7 @@ sub initPlugin {
         allowDownload => '0',
         commentAsDiscTitle => '0',
         showComment => '0',
-        pagedBatchSize => lmsVersion()>=80400 ? 500 : 100
+        pagedBatchSize => lmsVersion()>=80400 ? 250 : 100
     });
 
     if (main::WEBUI) {

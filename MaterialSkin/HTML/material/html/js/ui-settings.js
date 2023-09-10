@@ -135,7 +135,7 @@ Vue.component('lms-ui-settings', {
      <v-list-tile-action><m3-switch v-model="roundCovers"></m3-switch></v-list-tile-action>
     </v-list-tile>
     <v-divider></v-divider>
-Z
+
     <v-list-tile v-if="LMS_STATS_ENABLED">
      <v-list-tile-content @click="showRating = !showRating" class="switch-label">
       <v-list-tile-title>{{i18n('Show rating')}}</v-list-tile-title>

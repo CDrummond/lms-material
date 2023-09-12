@@ -114,11 +114,7 @@ Vue.component('lms-favorite', {
                     var command = ["favorites", "add", "url:"+url, "title:"+name, this.item.id];
                     if (this.item.presetParams) {
                         if (icon) {
-                            if (icon.startsWith("http")) {
-                                command.push("icon:/imageproxy/"+encodeURIComponent(icon)+"/image.png") 
-                            } else {
-                                command.push("icon:"+icon);
-                            }
+                            command.push("icon:"+icon);
                         }
                         if (this.item.presetParams.favorites_type) {
                             command.push("type:"+this.item.presetParams.favorites_type);

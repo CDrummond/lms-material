@@ -16,11 +16,11 @@
 /* For old browser's that dont support min() */
 @supports not (width: min(10px, 5vw)) {
  :root {
-  --np-portrait-image-size:100vw;
+  --np-portrait-image-size:calc(100vw - (var(--np-image-border)*2));
  }
  @media (min-aspect-ratio: 68/100) {
   :root {
-   --np-portrait-image-size:calc((var(--vh, 1vh)*100) - (var(--main-toolbar-height) + var(--bottom-toolbar-height) + 210px));
+   --np-portrait-image-size:calc((var(--vh, 1vh)*100) - (var(--main-toolbar-height) + var(--bottom-toolbar-height) + 210px) - (var(--np-image-border)*2));
   }
  }
 }

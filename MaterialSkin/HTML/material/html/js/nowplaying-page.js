@@ -357,7 +357,7 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
     </div>
    </div>
    <div v-else v-touch:start="touchStart" v-touch:end="touchEnd" v-touch:moving="touchMoving">
-    <img v-if="!info.show" :key="convertedImageUrl" v-lazy="convertedImageUrl" v-bind:class="{'np-trans':transCvr}" onerror="this.src=DEFAULT_COVER" class="np-image" @contextmenu="showMenu" @click="clickImage(event)"></img>
+    <div v-if="!info.show" class="np-image"><div @contextmenu="showMenu" @click="clickImage(event)" class="cover"></div></div>
     <div class="np-portrait-song-info hide-scrollbar fade-both">
      <div>
       <p class="np-title" v-if="playerStatus.current.title">{{title}}</p>
@@ -568,6 +568,7 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
 
         bus.$on('currentCover', function(coverUrl) {
             this.coverUrl = undefined==coverUrl ? DEFAULT_COVER : coverUrl;
+            document.documentElement.style.setProperty('--np-background-url', "url('"+this.coverUrl+"')");
             this.setBgndCover();
         }.bind(this));
         bus.$emit('getCurrentCover');

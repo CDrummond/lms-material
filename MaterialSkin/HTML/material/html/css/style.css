@@ -36,6 +36,7 @@
  --list-active-color:rgba(0, 0, 0, 0.08)!important;
  --menu-dlg-shadow:0 1px 6px 1px rgba(0,0,0,.12);
  --image-background-color:rgba(0, 0, 0, 0.075);
+ --np-image-border:16px;
 }
 
 .theme--dark {
@@ -927,14 +928,34 @@ div.v-subheader {
 }
 
 .np-image {
- object-fit:contain;
- object-position:50% 50%;
- height:var(--np-portrait-image-size);
- width:100vw;
- padding:16px;
- margin-left:auto;
- margin-right:auto;
+  margin:auto;
+  height:var(--np-portrait-image-size);
+  display:table;
+  padding:var(--np-image-border);
 }
+
+.np-image .cover {
+ background:var(--np-background-url);
+ background-size: contain;
+ background-position: center;
+ background-repeat: no-repeat;
+ background-color:var(--image-background-color);
+ height:min(var(--np-portrait-image-size) - (var(--np-image-border)*2), 100vw - (var(--np-image-border)*2));
+ width:min(var(--np-portrait-image-size) - (var(--np-image-border)*2), 100vw - (var(--np-image-border)*2));
+ transition: background 0.2s;
+}
+
+/* For old browser's that dont support min() */
+/*
+@supports not (width: min(10px, 5vw)) {
+  .np-image .cover {
+ }
+ @media (min-aspect-ratio: 68/100) {
+  .np-image .cover {
+  }
+ }
+}
+*/
 
 .np-no-meta-img {
  object-fit:contain;

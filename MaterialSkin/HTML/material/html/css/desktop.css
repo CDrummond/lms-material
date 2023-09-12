@@ -8,7 +8,7 @@
 :root {
  --bottom-toolbar-height:72px;
  --desktop-bottom-toolbar-height:72px;
- --np-portrait-image-size:min(calc((var(--vh, 1vh)*100) - (var(--main-toolbar-height) + 260px)), 100vw);
+ --np-portrait-image-size:min(calc((var(--vh, 1vh)*100) - (var(--main-toolbar-height) + 260px) - (var(--np-image-border)*2)), 100vw - (var(--np-image-border)*2));
  --np-icon-size:24px;
  --queue-visibility:initial;
  --queue-minwidth:400px;
@@ -17,11 +17,11 @@
 /* For old browser's that dont support min() */
 @supports not (width: min(10px, 5vw)) {
  :root {
-  --np-portrait-image-size:100vw;
+  --np-portrait-image-size:calc(100vw - (var(--np-image-border)*2));
  }
  @media (min-aspect-ratio: 68/100) {
   :root {
-   --np-portrait-image-size:calc((var(--vh, 1vh)*100) - (var(--main-toolbar-height) + 260px));
+   --np-portrait-image-size:calc((var(--vh, 1vh)*100) - (var(--main-toolbar-height) + 260px) - (var(--np-image-border)*2));
   }
  }
 }

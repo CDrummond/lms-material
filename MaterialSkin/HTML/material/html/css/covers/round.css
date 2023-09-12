@@ -7,10 +7,14 @@
  border-radius:4px;
 }
 
-.np-image, .np-no-meta-img, .np-image-landscape {
- filter: url('#filter-radius');
+.np-image, .np-image .cover, .np-no-meta-img, .np-image-landscape {
+ border-radius:8px!important;
+}
+
+.np-image .cover {
+ box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;
 }
 
 .np-image-desktop {
- filter: url('#filter-radius-plain');
+ border-radius:8px!important;
 }

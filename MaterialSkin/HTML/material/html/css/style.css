@@ -939,7 +939,6 @@ div.v-subheader {
  background-size: contain;
  background-position: center;
  background-repeat: no-repeat;
- background-color:var(--image-background-color);
  height:min(var(--np-portrait-image-size) - (var(--np-image-border)*2), 100vw - (var(--np-image-border)*2));
  width:min(var(--np-portrait-image-size) - (var(--np-image-border)*2), 100vw - (var(--np-image-border)*2));
  transition: background 0.2s;

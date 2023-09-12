@@ -12,6 +12,7 @@
    more than 250 tracks.
 2. Convert all now-playing PNG covers to JPG (if rounding covers).
 3. Fix adding duplicate 'l' tag for certain queries.
+4. Semi-transparent fill for image squares.
 
 3.4.4
 -----

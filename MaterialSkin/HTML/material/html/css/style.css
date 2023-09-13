@@ -1405,7 +1405,7 @@ progress {
  vertical-align:middle !important;
 }
 
-.pq-time {
+.pq-time, .browse-time {
  font-size:var(--small-font-size);
  height:var(--list-elem-height);
  line-height:var(--list-elem-height);
@@ -1413,6 +1413,19 @@ progress {
  opacity:var(--sub-opacity);
  min-width:44px;
  margin-top:calc(19px - var(--std-font-size));
+}
+
+.browse-time {
+ margin-right:0px;
+}
+
+.np-list-time {
+ font-size:var(--small-font-size);
+ margin-right:2px;
+ opacity:var(--sub-opacity);
+ min-width:44px;
+ margin-top:calc(19px - var(--std-font-size));
+ color:var(--text-color)!important;
 }
 
 .lms-list3 .pq-time {

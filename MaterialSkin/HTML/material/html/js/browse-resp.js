@@ -839,6 +839,7 @@ function parseBrowseResp(data, parent, options, cacheKey, parentCommand, parentG
 
             resp.itemCustomActions = getCustomActions("album-track");
             var stdItem = allowPlayAlbum && data.result.count>1 ? STD_ITEM_ALBUM_TRACK : STD_ITEM_TRACK;
+            let subtitles = new Set();
             for (var idx=0, loop=data.result.titles_loop, loopLen=loop.length; idx<loopLen; ++idx) {
                 var i = loop[idx];
                 var title = i.title;
@@ -854,6 +855,7 @@ function parseBrowseResp(data, parent, options, cacheKey, parentCommand, parentG
                 splitMultiples(i);
 
                 let artist = undefined;
+                /*
                 if (!showAlbumName) {
                     // Get artist to exclude from line. If browsing "All Artists"
                     // then artist might actualyl be a composer, etc. For this reason
@@ -870,14 +872,12 @@ function parseBrowseResp(data, parent, options, cacheKey, parentCommand, parentG
                                             ? i.artist
                                             : i.trackartist;
                 }
-                let others = buildArtistLine(i, "browse", false, artist);
-                if (undefined!=others) {
-                    title+=SEPARATOR + others;
-                }
+                */
+                let subtitle = buildArtistLine(i, "browse", false, artist);
                 if (showAlbumName && i.album) {
-                    title+=SEPARATOR + i.album;
+                    subtitle=undefined==subtitle ? i.album : (subtitle + SEPARATOR + i.album);
                     if (i.year && i.year>0) {
-                        title+=" (" + i.year + ")";
+                        subtitle+=" (" + i.year + ")";
                     }
                 }
                 if (undefined!=i.disc && !isSearchResult && !isAllSongs) {
@@ -912,7 +912,7 @@ function parseBrowseResp(data, parent, options, cacheKey, parentCommand, parentG
                     }
                 }
                 totalDuration += duration>0 ? duration : 0;
-                var subtitle = duration>0 ? formatSeconds(duration) : undefined;
+                //var subtitle = duration>0 ? formatSeconds(duration) : undefined;
                 var techInfo = lmsOptions.techInfo ? formatTechInfo(i) : undefined;
                 if (techInfo) {
                     if (subtitle) {
@@ -921,10 +921,14 @@ function parseBrowseResp(data, parent, options, cacheKey, parentCommand, parentG
                         subtitle=techInfo;
                     }
                 }
+                subtitle = undefined!=i.rating ? ratingString(subtitle, i.rating) : subtitle;
+                if (undefined!=subtitle) {
+                    subtitles.add(subtitle);
+                }
                 resp.items.push({
                               id: "track_id:"+i.id,
                               title: title,
-                              subtitle: undefined!=i.rating ? ratingString(subtitle, i.rating) : subtitle,
+                              subtitle: subtitle,
                               //icon: "music_note",
                               stdItem: stdItem,
                               type: "track",
@@ -941,8 +945,10 @@ function parseBrowseResp(data, parent, options, cacheKey, parentCommand, parentG
                               artist_id: isSearchResult ? i.artist_id : undefined,
                               url: i.url,
                               draggable: true,
-                              duration: i.duration
+                              duration: i.duration,
+                              durationStr: duration>0 ? formatSeconds(duration) : undefined
                           });
+                console.log(i.title, duration>0 ? formatSeconds(duration) : undefined);
                 resp.numAudioItems = resp.items.length;
                 if (allowPlayAlbum) {
                     resp.allSongsItem = parent;
@@ -951,6 +957,13 @@ function parseBrowseResp(data, parent, options, cacheKey, parentCommand, parentG
             if (sortTracks) {
                 resp.items.sort(sort.rev ? revYearAlbumTrackSort : yearAlbumTrackSort);
             }
+            /*
+            if (1==subtitles.size && !showAlbumName) {
+                for (var idx=0, len=resp.items.length; idx<len; ++idx) {
+                    resp.items[idx].subtitle = undefined;
+                }
+            }
+            */
 
             if (discs.size>1) {
                 resp.tracksSubtitle=i18np("1 Track", "%1 Tracks", resp.items.length)+" ("+formatSeconds(totalDuration)+")"
@@ -1045,29 +1058,25 @@ function parseBrowseResp(data, parent, options, cacheKey, parentCommand, parentG
                 var i = loop[idx];
                 var title = i.title;
                 splitMultiples(i);
-                let others = buildArtistLine(i, "browse", false);
-                if (undefined!=others) {
-                    title+=SEPARATOR + others;
-                }
+                let subtitle = buildArtistLine(i, "browse", false);
                 if (!title) {
                     title=i18n("Unknown");
                 }
                 var duration = parseFloat(i.duration || 0);
                 totalDuration+=duration;
-                var subtitle = duration>0 ? formatSeconds(duration) : undefined;
+                if (i.album) {
+                    if (subtitle) {
+                        subtitle+=SEPARATOR+buildAlbumLine(i, "browse", false);
+                    } else {
+                        subtitle=buildAlbumLine(i, "browse", false);
+                    }
+                }
                 var techInfo = lmsOptions.techInfo ? formatTechInfo(i) : undefined;
                 if (techInfo) {
                     if (subtitle) {
                         subtitle+=SEPARATOR+techInfo;
                     } else {
                         subtitle=techInfo;
-                    }
-                }
-                if (i.album) {
-                    if (subtitle) {
-                        subtitle+=SEPARATOR+buildAlbumLine(i, "browse", false);
-                    } else {
-                        subtitle=buildAlbumLine(i, "browse", false);
                     }
                 }
                 var isRemote = undefined!=parent && parent.remotePlaylist;
@@ -1082,7 +1091,8 @@ function parseBrowseResp(data, parent, options, cacheKey, parentCommand, parentG
                               stdItem: isRemote ? STD_ITEM_REMOTE_PLAYLIST_TRACK : STD_ITEM_PLAYLIST_TRACK,
                               type: "track",
                               draggable: true,
-                              duration: i.duration
+                              duration: i.duration,
+                              durationStr: duration>0 ? formatSeconds(duration) : undefined
                           });
             }
             resp.itemCustomActions = getCustomActions("playlist-track");

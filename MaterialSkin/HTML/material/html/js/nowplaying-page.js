@@ -112,6 +112,7 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
              <v-list-tile-title v-else>{{item.title}}</v-list-tile-title>
              <v-list-tile-sub-title v-html="item.subtitle"></v-list-tile-sub-title>
             </v-list-tile-content>
+            <v-list-tile-action v-if="ALBUM_TAB==index && undefined!=item.durationStr" class="np-list-time">{{item.durationStr}}</v-list-tile-action>
             <div class="emblem" v-if="item.emblem" :style="{background: item.emblem.bgnd}">
              <img :src="item.emblem | emblem()" loading="lazy"></img>
             </div>
@@ -162,6 +163,7 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
               <v-list-tile-title v-else>{{item.title}}</v-list-tile-title>
               <v-list-tile-sub-title v-html="item.subtitle"></v-list-tile-sub-title>
              </v-list-tile-content>
+             <v-list-tile-action v-if="ALBUM_TAB==index && undefined!=item.durationStr" class="np-list-time">{{item.durationStr}}</v-list-tile-action>
              <div class="emblem" v-if="item.emblem" :style="{background: item.emblem.bgnd}">
               <img :src="item.emblem | emblem()" loading="lazy"></img>
              </div>
@@ -230,6 +232,7 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
              <v-list-tile-title v-else>{{item.title}}</v-list-tile-title>
              <v-list-tile-sub-title v-html="item.subtitle"></v-list-tile-sub-title>
             </v-list-tile-content>
+            <v-list-tile-action v-if="ALBUM_TAB==index && undefined!=item.durationStr" class="np-list-time">{{item.durationStr}}</v-list-tile-action>
             <div class="emblem" v-if="item.emblem" :style="{background: item.emblem.bgnd}">
              <img :src="item.emblem | emblem()" loading="lazy"></img>
             </div>

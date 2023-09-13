@@ -9,6 +9,7 @@
 6. Remove SVG filtering for now-playing covers, and use plain CSS.
 7. Don't show bitrate, samplesize, or samplerate if 0.
 8. Add callback for when accent colour changes due to cover.
+9. Try to interpret back button as go back for all browsers.
 
 3.4.5
 -----

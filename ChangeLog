@@ -7,6 +7,7 @@
    set to show band, composer, or conductor.
 5. Add ability to edit favourite icons, thanks to wizmo2
 6. Remove SVG filtering for now-playing covers, and use plain CSS.
+7. Don't show bitrate, samplesize, or samplerate if 0.
 
 3.4.5
 -----

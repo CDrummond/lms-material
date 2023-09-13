@@ -155,13 +155,13 @@ function logAndShowError(err, message, command, params, start, count) {
 
 function formatTechInfo(item, source) {
     let technical = [];
-    if (item.bitrate) {
+    if (item.bitrate && item.bitrate>0) {
         technical.push(item.bitrate);
     }
-    if (item.samplesize) {
+    if (item.samplesize && item.samplesize>0) {
         technical.push(i18n("%1bit", item.samplesize));
     }
-    if (item.samplerate) {
+    if (item.samplerate && item.samplerate>100) {
         technical.push((item.samplerate/1000)+"kHz");
     }
     if (item.type) {

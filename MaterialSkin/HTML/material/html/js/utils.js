@@ -46,7 +46,7 @@ function parseQueryParams() {
         queryString=queryString.substring(0, hash);
     }
     var query = queryString.split('&');
-    var resp = { actions:[], debug:new Set(), hide:new Set(), dontEmbed:new Set(), layout:undefined, player:undefined, single:false, nativeStatus:0, nativeColors:0, nativePlayer:0, nativeUiChanges:0, nativeTheme:0, nativeCover:0, nativePlayerPower:0, appSettings:undefined, appQuit:undefined, appLaunchPlayer:undefined, css:undefined, download:'browser', addpad:false, party:false, altBtnLayout:IS_WINDOWS, expand:[], npRatio:1.33333333 };
+    var resp = { actions:[], debug:new Set(), hide:new Set(), dontEmbed:new Set(), layout:undefined, player:undefined, single:false, nativeStatus:0, nativeColors:0, nativePlayer:0, nativeUiChanges:0, nativeTheme:0, nativeCover:0, nativePlayerPower:0, nativeAccent:0, appSettings:undefined, appQuit:undefined, appLaunchPlayer:undefined, css:undefined, download:'browser', addpad:false, party:false, altBtnLayout:IS_WINDOWS, expand:[], npRatio:1.33333333 };
 
     for (var i = query.length - 1; i >= 0; i--) {
         var kv = query[i].split('=');
@@ -75,7 +75,7 @@ function parseQueryParams() {
             var element = document.createElement("script");
             element.src = "/material/customjs/"+kv[1]+"?r=" + LMS_MATERIAL_REVISION;
             document.body.appendChild(element);
-        } else if ("nativeStatus"==kv[0] || "nativeColors"==kv[0] || "nativePlayer"==kv[0] || "nativeUiChanges"==kv[0] || "nativeTheme"==kv[0] || "nativeCover"==kv[0] || "nativePlayerPower"==kv[0]) {
+        } else if ("nativeStatus"==kv[0] || "nativeColors"==kv[0] || "nativePlayer"==kv[0] || "nativeUiChanges"==kv[0] || "nativeTheme"==kv[0] || "nativeCover"==kv[0] || "nativePlayerPower"==kv[0] || "nativeAccent"==kv[0]) {
             resp[kv[0]]=kv[1]=="c" ? 2 : 1;
         } else if ("hide"==kv[0]) {
             var parts = kv[1].split(",");

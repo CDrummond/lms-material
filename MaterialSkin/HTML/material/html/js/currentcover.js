@@ -202,7 +202,8 @@ var lmsCurrentCover = Vue.component('lms-currentcover', {
                 hsv[2] = Math.max(Math.min(hsv[2], 150/255), 100/255)
                 rgb = hsv2Rgb(hsv);
 
-                document.documentElement.style.setProperty('--primary-color', rgb2Hex(rgb));
+                let hexColor=rgb2Hex(rgb);
+                document.documentElement.style.setProperty('--primary-color', hexColor);
                 let rgbas = "rgba("+rgb [0]+","+rgb[1]+","+rgb[2];
                 document.documentElement.style.setProperty('--pq-current-color', rgbas+",0.2)");
                 document.documentElement.style.setProperty('--drop-target-color', rgbas+",0.5)");
@@ -216,6 +217,16 @@ var lmsCurrentCover = Vue.component('lms-currentcover', {
 
                 document.documentElement.style.setProperty('--accent-color', rgb2Hex(rgb));
                 emitToolbarColorsFromState(this.$store.state);
+                if (1==queryParams.nativeAccent) {
+                    bus.$nextTick(function () {
+                        try {
+                            NativeReceiver.updateAccentColor(hexColor);
+                        } catch (e) {
+                        }
+                    });
+                } else if (2==queryParams.nativeAccent) {
+                    console.log("MATERIAL-ACCENT\nVAL " + hexColor);
+                }
             }).catch(e => {
             });
         }

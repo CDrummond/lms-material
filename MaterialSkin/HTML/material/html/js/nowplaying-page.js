@@ -23,22 +23,6 @@ var currentPlayingTrackPosition = 0;
 var lmsNowPlaying = Vue.component("lms-now-playing", {
     template: `
 <div>
- <svg style="visibility:hidden;z-index:1000;position:fixed" width="0" height="0">
-  <defs>
-   <filter id="filter-radius">
-    <feGaussianBlur in="SourceGraphic" :stdDeviation="window.devicePixelRatio<=1.3 ? 3 : 6" result="blur"/>
-    <feColorMatrix in="blur" mode="matrix" values="1 0 0 0 0  0 1 0 0 0  0 0 1 0 0  0 0 0 100 -50" result="mask"/>
-    <feComposite in="SourceGraphic" in2="mask" operator="atop"/>
-    <feDropShadow dx="2" dy="2" stdDeviation="8" flood-opacity="0.5"/>
-   </filter>
-   <filter id="filter-radius-plain">
-    <feGaussianBlur in="SourceGraphic" stdDeviation="3" result="blur"/>
-    <feColorMatrix in="blur" mode="matrix" values="1 0 0 0 0  0 1 0 0 0  0 0 1 0 0  0 0 0 100 -50" result="mask"/>
-    <feComposite in="SourceGraphic" in2="mask" operator="atop"/>
-   </filter>
-  </defs>
- </svg>
-
  <div v-show="!desktopLayout || info.show || largeView" class="np-bgnd">
   <div v-show="info.show ? drawInfoBgndImage : drawBgndImage" class="np-bgnd bgnd-cover" id="np-bgnd">
    <div v-bind:class="{'np-bgnd bgnd-blur':(info.show ? drawInfoBgndImage : drawBgndImage)}"></div>
@@ -83,7 +67,7 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
     <v-btn flat icon v-bind:class="{'disabled':disableNext}" v-longpress:repeat="nextButton" class="np-std-button"  :title="trans.next | tooltip('right', keyboardControl)"><v-icon large class="media-icon">skip_next</v-icon></v-btn>
    </v-flex>
   </v-layout>
-  <img v-if="!largeView && !disableBtns" :key="convertedImageUrl" v-lazy="convertedImageUrl" onerror="this.src=DEFAULT_COVER" class="np-image-desktop" v-bind:class="{'np-trans':transCvr}" @contextmenu="showMenu" @click="clickImage(event)"></img>
+  <div v-if="!largeView && !disableBtns" class="np-image-desktop"><div @contextmenu="showMenu" @click="clickImage(event)" class="np-cover" v-bind:class="{'np-trans':transCvr}"></div></div>
   <v-list two-line subheader class="np-details-desktop" v-if="playerStatus.playlist.count>0">
    <v-list-tile style>
     <v-list-tile-content>
@@ -288,7 +272,7 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
   <div v-else>
    <div v-show="overlayVolume>-1 && VOL_STD==playerStatus.dvc" id="volumeOverlay">{{overlayVolume}}%</div>
    <div v-if="landscape" v-touch:start="touchStart" v-touch:end="touchEnd" v-touch:moving="touchMoving">
-    <img v-if="!info.show" :key="convertedImageUrl" v-lazy="convertedImageUrl" onerror="this.src=DEFAULT_COVER" class="np-image-landscape" v-bind:class="{'np-image-landscape-wide': landscape && wide>1, 'np-trans':transCvr}" @contextmenu="showMenu" @click="clickImage(event)"></img>
+    <div v-if="!info.show" class="np-image-landscape" v-bind:class="{'np-image-landscape-wide':landscape && wide>1}"><div @contextmenu="showMenu" @click="clickImage(event)" class="np-cover" v-bind:class="{'np-trans':transCvr}"></div></div>
     <div class="np-details-landscape" v-bind:class="{'np-details-landscape-wide': landscape && wide>1}">
 
      <div class="np-landscape-song-info hide-scrollbar fade-both">
@@ -357,7 +341,7 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
     </div>
    </div>
    <div v-else v-touch:start="touchStart" v-touch:end="touchEnd" v-touch:moving="touchMoving">
-    <div v-if="!info.show" class="np-image"><div @contextmenu="showMenu" @click="clickImage(event)" class="cover"></div></div>
+    <div v-if="!info.show" class="np-image"><div @contextmenu="showMenu" @click="clickImage(event)" class="np-cover" v-bind:class="{'np-trans':transCvr}"></div></div>
     <div class="np-portrait-song-info hide-scrollbar fade-both">
      <div>
       <p class="np-title" v-if="playerStatus.current.title">{{title}}</p>
@@ -1049,10 +1033,11 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
             }
         },
         checkLandscape() {
-            this.landscape = window.innerWidth >= (window.innerHeight*queryParams.npRatio);
+            this.landscape = window.innerWidth >= (window.innerHeight*queryParams.npRatio) && window.innerWidth>=450;
             // wide=0 => controls under whole width
             // wide=2 => controls under text only
-            this.wide = window.innerWidth>=600 && ((window.innerWidth>=1800) || (window.innerWidth/2.0)>=(window.innerHeight*0.75)) ? 2 /*: window.innerHeight>340 ? 1*/ : 0;
+            this.wide = window.innerWidth>=600 && window.innerWidth>=(window.innerHeight*2)
+                        ? 2 /*: window.innerHeight>340 ? 1*/ : 0;
         },
         itemClicked(tab, section, index, event) {
             nowplayingItemClicked(this, tab, section, index, event);
@@ -1258,11 +1243,6 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
         },
         transCvr() {
             return undefined!=this.coverUrl && (this.coverUrl.includes(DEFAULT_COVER) || this.coverUrl.includes(LMS_BLANK_COVER) || this.coverUrl.includes(DEFAULT_RADIO_COVER))
-        },
-        convertedImageUrl() {
-            return undefined!=this.coverUrl && this.$store.state.roundCovers && this.coverUrl.includes(LMS_CURRENT_IMAGE_SIZE+".png")
-                        ? this.coverUrl.replace(LMS_CURRENT_IMAGE_SIZE+".png", LMS_CURRENT_IMAGE_SIZE+".jpg")
-                        : this.coverUrl
         }
     },
     beforeDestroy() {

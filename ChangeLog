@@ -6,6 +6,7 @@
 4. Only ask LMS for genre details when listing album and playlist tracks if
    set to show band, composer, or conductor.
 5. Add ability to edit favourite icons, thanks to wizmo2
+6. Remove SVG filtering for now-playing covers, and use plain CSS.
 
 3.4.5
 -----

@@ -9,12 +9,17 @@
  --bottom-toolbar-height:72px;
  --desktop-bottom-toolbar-height:72px;
  --np-portrait-image-size:min(calc((var(--vh, 1vh)*100) - (var(--main-toolbar-height) + 260px) - (var(--np-image-border)*2)), 100vw - (var(--np-image-border)*2));
+ --np-image-landscape-height:calc((var(--vh, 1vh)*100) - (var(--main-toolbar-height) + 116px));
+ --np-image-landscape-size:min(var(--np-image-landscape-height) - (var(--np-image-border)*2), 50vw - (var(--np-image-border)*2));
+ --np-image-landscape-wide-height:calc((var(--vh, 1vh)*100) - var(--main-toolbar-height));
+ --np-image-landscape-wide-size:min(var(--np-image-landscape-wide-height) - (var(--np-image-border)*2), 50vw - (var(--np-image-border)*2));
  --np-icon-size:24px;
  --queue-visibility:initial;
  --queue-minwidth:400px;
 }
 
 /* For old browser's that dont support min() */
+/*
 @supports not (width: min(10px, 5vw)) {
  :root {
   --np-portrait-image-size:calc(100vw - (var(--np-image-border)*2));
@@ -25,6 +30,7 @@
   }
  }
 }
+*/
 
 .right-pane {
  visibility:var(--queue-visibility);
@@ -185,12 +191,13 @@
  position:fixed;
  left:164px;
  bottom:1px;
- object-fit:contain;
- object-position:50% 50%;
  height:64px;
  width:64px;
- margin-left:auto;
- margin-right:auto;
+}
+
+.np-image-desktop .np-cover {
+ height:64px;
+ width:64px;
 }
 
 .np-desktop-sb .np-image-desktop {
@@ -327,20 +334,6 @@
  overflow:auto;
  max-width:1000px;
  margin:auto;
-}
-
-.np-image-landscape {
- padding:16px 16px 0px 16px;
- object-fit:contain;
- height:calc((var(--vh, 1vh)*100) - (var(--main-toolbar-height) + 120px));
- width:50vw;
- margin-left:auto;
- margin-right:auto;
- float:left;
-}
-
-.np-image-landscape-wide {
- height:calc((var(--vh, 1vh)*100) - (var(--main-toolbar-height) + 16px)) !important;
 }
 
 .np-details-landscape {

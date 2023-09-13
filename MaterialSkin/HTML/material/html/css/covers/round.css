@@ -21,5 +21,5 @@
 .np-image .np-cover,
 .np-no-meta-img,
 .np-image-landscape .np-cover {
- box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;
+ box-shadow:var(--image-shadow);
 }

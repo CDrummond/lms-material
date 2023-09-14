@@ -13,7 +13,7 @@ const ALLOW_FAKE_ALL_SONGS_ITEM = new Set(['youtube', 'qobuz']); // Allow using 
 var lmsBrowse = Vue.component("lms-browse", {
     template: `
 <div id="browse-view">
- <div class="subtoolbar noselect" v-bind:class="{'list-details' : selection.size>0}" :title="selection.size>0 ? undefined : toolbarTitle">
+ <div class="subtoolbar noselect" v-bind:class="{'list-details' : selection.size>0}">
   <v-layout v-if="selection.size>0">
    <div class="toolbar-nobtn-pad"></div>
    <v-layout row wrap>
@@ -39,7 +39,7 @@ var lmsBrowse = Vue.component("lms-browse", {
    <v-btn flat icon v-longpress="backBtnPressed" class="toolbar-button" v-bind:class="{'back-button':!homeButton || history.length<2}" id="back-button" :title="trans.goBack | tooltipStr('esc', keyboardControl)"><v-icon>arrow_back</v-icon></v-btn>
    <v-btn v-if="history.length>1 && homeButton" flat icon @click="homeBtnPressed()" class="toolbar-button" id="home-button" :title="trans.goHome | tooltipStr('home', keyboardControl)"><v-icon>home</v-icon></v-btn>
    <v-layout row wrap @click="showHistory($event)" v-if="headerSubTitle" v-bind:class="{'pointer link-item': history.length>0}">
-    <v-flex xs12 class="ellipsis subtoolbar-title subtoolbar-pad">{{toolbarTitle}}</v-flex>
+    <v-flex xs12 class="ellipsis subtoolbar-title subtoolbar-pad">{{headerTitle}}</v-flex>
     <v-flex xs12 class="ellipsis subtoolbar-subtitle subtext">{{current && current.id==TOP_MYMUSIC_ID && libraryName ? libraryName : headerSubTitle}}<small v-if="current && current.id!=TOP_MYMUSIC_ID && (libraryName || pinnedItemLibName) && showLibraryName">{{SEPARATOR+(pinnedItemLibName ? pinnedItemLibName : libraryName)}}</small></v-flex>
    </v-layout>
    <div class="ellipsis subtoolbar-title subtoolbar-title-single pointer link-item" @click="showHistory($event)" v-else-if="history.length>0">{{headerTitle}}</div>
@@ -138,6 +138,7 @@ var lmsBrowse = Vue.component("lms-browse", {
       <v-list-tile-sub-title v-html="item.subtitle" v-bind:class="{'link-item':subtitleClickable}" @click.stop="clickSubtitle(item, index, $event, $event)"></v-list-tile-sub-title>
      </v-list-tile-content>
 
+     <v-list-tile-action v-if="undefined!=item.durationStr" class="browse-time">{{item.durationStr}}</v-list-tile-action>
      <v-list-tile-action class="browse-action" v-if="undefined!=item.stdItem || (item.menu && item.menu.length>0)">
       <div v-if="hoverBtns && 0==selection.size && (undefined!=item.stdItem || (item.menu && (item.menu[0]==PLAY_ACTION || item.menu[0]==PLAY_ALL_ACTION)))" class="list-btns">
        <div v-if="!queryParams.party && (!LMS_KIOSK_MODE || !HIDE_FOR_KIOSK.has(PLAY_ACTION))" class="play-btn grid-btn" @click.stop="itemAction(item.header ? PLAY_ALL_ACTION : PLAY_ACTION, item, index, $event)" :title="ACTIONS[PLAY_ACTION].title"></div>
@@ -205,6 +206,7 @@ var lmsBrowse = Vue.component("lms-browse", {
       <v-list-tile-sub-title v-html="item.subtitle" v-bind:class="{'link-item':subtitleClickable}" @click.stop="clickSubtitle(item, index, $event)"></v-list-tile-sub-title>
      </v-list-tile-content>
 
+     <v-list-tile-action v-if="undefined!=item.durationStr" class="browse-time">{{item.durationStr}}</v-list-tile-action>
      <v-list-tile-action class="browse-action" v-if="undefined!=item.stdItem || (item.menu && item.menu.length>0 && (!item.isPinned || (!queryParams.party && (!LMS_KIOSK_MODE || !HIDE_FOR_KIOSK.has(PIN_ACTION))))) || (isTop && libraryName && item.id==TOP_MYMUSIC_ID)">
       <div v-if="hoverBtns && 0==selection.size && (undefined!=item.stdItem || (item.menu && (item.menu[0]==PLAY_ACTION || item.menu[0]==PLAY_ALL_ACTION)))" class="list-btns">
        <div v-if="!queryParams.party" class="play-btn grid-btn" @click.stop="itemAction(PLAY_ACTION, item, index, $event)" :title="ACTIONS[PLAY_ACTION].title"></div>
@@ -426,21 +428,6 @@ var lmsBrowse = Vue.component("lms-browse", {
         },
         listSizeAdjust() {
             return this.$store.state.listPadding
-        },
-        toolbarTitle() {
-            if (undefined!=this.current && this.current.stdItem==STD_ITEM_ALBUM) {
-                if (undefined!=this.current.subtitle) {
-                    return this.headerTitle+SEPARATOR+this.current.subtitle;
-                }
-                for (let loop=this.history, i=loop.length-1; i>=0 && undefined!=loop[i].current; --i) {
-                    if (STD_ITEM_ALBUM==loop[i].current.stdItem && undefined!=loop[i].current.subtitle) {
-                        return this.headerTitle+SEPARATOR+loop[i].current.subtitle;
-                    } else if (STD_ITEM_ARTIST==loop[i].current.stdItem) {
-                        return this.headerTitle+SEPARATOR+loop[i].current.title;
-                    }
-                }
-            }
-            return this.headerTitle;
         }
     },
     created() {

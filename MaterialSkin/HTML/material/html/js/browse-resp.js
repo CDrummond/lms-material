@@ -904,9 +904,6 @@ function parseBrowseResp(data, parent, options, cacheKey, parentCommand, parentG
                     }
                 }
                 subtitle = undefined!=i.rating ? ratingString(subtitle, i.rating) : subtitle;
-                if (undefined!=subtitle) {
-                    subtitles.add(subtitle);
-                }
                 resp.items.push({
                               id: "track_id:"+i.id,
                               title: title,

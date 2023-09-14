@@ -973,11 +973,7 @@ function parseBrowseResp(data, parent, options, cacheKey, parentCommand, parentG
                     resp.items[idx].disc = undefined;
                 }
             }
-            resp.subtitle=(resp.items.length-(discs.size>1 ? discs.size : 0));
-            if (discs.size>1) {
-                resp.subtitle+=SEPARATOR+discs.size;
-            }
-            resp.subtitle+=SEPARATOR+formatSeconds(totalDuration);
+            resp.subtitle=(resp.items.length-(discs.size>1 ? discs.size : 0))+SEPARATOR+formatSeconds(totalDuration);
         } else if (data.result.genres_loop) {
             for (var idx=0, loop=data.result.genres_loop, loopLen=loop.length; idx<loopLen; ++idx) {
                 var i = loop[idx];

@@ -12,6 +12,7 @@
  9. Try to interpret back button as go back for all browsers.
 10. When browsing tracks place duration on right, as per queue.
 11. Fix resize issues when using tabs in now-playing information view.
+12. Slightly lower list margins in mobile layout up to 540px.
 
 3.4.5
 -----

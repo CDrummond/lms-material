@@ -533,6 +533,9 @@ Vue.component('lms-iframe-dialog', {
             if (ref.startsWith("javascript:")) {
                 return;
             }
+            if (ref.startsWith("http://") || ref.startsWith("https://")) {
+                return;
+            }
             if (undefined==addToHistory || addToHistory) {
                 this.history.push(this.src);
             }

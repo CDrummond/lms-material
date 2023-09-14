@@ -839,7 +839,7 @@ function parseBrowseResp(data, parent, options, cacheKey, parentCommand, parentG
 
             resp.itemCustomActions = getCustomActions("album-track");
             var stdItem = allowPlayAlbum && data.result.count>1 ? STD_ITEM_ALBUM_TRACK : STD_ITEM_TRACK;
-            let subtitles = new Set();
+            let artists = [];
             for (var idx=0, loop=data.result.titles_loop, loopLen=loop.length; idx<loopLen; ++idx) {
                 var i = loop[idx];
                 var title = i.title;
@@ -854,26 +854,8 @@ function parseBrowseResp(data, parent, options, cacheKey, parentCommand, parentG
                 }
                 splitMultiples(i);
 
-                let artist = undefined;
-                /*
-                if (!showAlbumName) {
-                    // Get artist to exclude from line. If browsing "All Artists"
-                    // then artist might actualyl be a composer, etc. For this reason
-                    // we first check parent.artists and use the first of those
-                    artist = parent && parent.artists && parent.artists.length>0
-                             ? parent.artists[0]
-                             : parent && parent.stdItem==STD_ITEM_ALBUM && parent.subtitle
-                                 ? parent.subtitle
-                                 : i.albumartist
-                                    ? i.albumartist
-                                    : undefined!=i.compilation && 1==parseInt(i.compilation)
-                                        ? i.band
-                                        : i.artist
-                                            ? i.artist
-                                            : i.trackartist;
-                }
-                */
-                let subtitle = buildArtistLine(i, "browse", false, artist);
+                artists.push(buildArtistLine(i, "browse", false, undefined));
+                let subtitle = undefined;
                 if (showAlbumName && i.album) {
                     subtitle=undefined==subtitle ? i.album : (subtitle + SEPARATOR + i.album);
                     if (i.year && i.year>0) {
@@ -948,22 +930,22 @@ function parseBrowseResp(data, parent, options, cacheKey, parentCommand, parentG
                               duration: i.duration,
                               durationStr: duration>0 ? formatSeconds(duration) : undefined
                           });
-                console.log(i.title, duration>0 ? formatSeconds(duration) : undefined);
                 resp.numAudioItems = resp.items.length;
                 if (allowPlayAlbum) {
                     resp.allSongsItem = parent;
                 }
             }
+            // Now add artist to subtitle if we have multiple artists...
+            if ((new Set(artists)).size>1 && resp.items.length>1) {
+                for (let i=0, loop=resp.items, len=loop.length; i<len; ++i) {
+                    if (undefined!=artists[i]) {
+                        loop[i].subtitle = undefined==loop[i].subtitle ? artists[i] : (artists[i] + SEPARATOR + loop[i].subtitle);
+                    }
+                }
+            }
             if (sortTracks) {
                 resp.items.sort(sort.rev ? revYearAlbumTrackSort : yearAlbumTrackSort);
             }
-            /*
-            if (1==subtitles.size && !showAlbumName) {
-                for (var idx=0, len=resp.items.length; idx<len; ++idx) {
-                    resp.items[idx].subtitle = undefined;
-                }
-            }
-            */
 
             if (discs.size>1) {
                 resp.tracksSubtitle=i18np("1 Track", "%1 Tracks", resp.items.length)+" ("+formatSeconds(totalDuration)+")"

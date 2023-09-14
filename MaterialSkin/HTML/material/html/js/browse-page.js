@@ -13,8 +13,7 @@ const ALLOW_FAKE_ALL_SONGS_ITEM = new Set(['youtube', 'qobuz']); // Allow using 
 var lmsBrowse = Vue.component("lms-browse", {
     template: `
 <div id="browse-view">
- <div class="subtoolbar noselect" v-bind:class="{'list-details' : selection.size>0}">
-  <v-layout v-if="selection.size>0">
+ <div class="subtoolbar noselect" v-bind:class="{'list-details' : selection.size>0}" :title="selection.size>0 ? undefined : toolbarTitle">  <v-layout v-if="selection.size>0">
    <div class="toolbar-nobtn-pad"></div>
    <v-layout row wrap>
     <v-flex xs12 class="ellipsis subtoolbar-title subtoolbar-pad">{{trans.selectMultiple}}</v-flex>
@@ -39,11 +38,11 @@ var lmsBrowse = Vue.component("lms-browse", {
    <v-btn flat icon v-longpress="backBtnPressed" class="toolbar-button" v-bind:class="{'back-button':!homeButton || history.length<2}" id="back-button" :title="trans.goBack | tooltipStr('esc', keyboardControl)"><v-icon>arrow_back</v-icon></v-btn>
    <v-btn v-if="history.length>1 && homeButton" flat icon @click="homeBtnPressed()" class="toolbar-button" id="home-button" :title="trans.goHome | tooltipStr('home', keyboardControl)"><v-icon>home</v-icon></v-btn>
    <v-layout row wrap @click="showHistory($event)" v-if="headerSubTitle" v-bind:class="{'pointer link-item': history.length>0}">
-    <v-flex xs12 class="ellipsis subtoolbar-title subtoolbar-pad">{{headerTitle}}</v-flex>
+   <v-flex xs12 class="ellipsis subtoolbar-title subtoolbar-pad">{{toolbarTitle}}</v-flex>
     <v-flex xs12 class="ellipsis subtoolbar-subtitle subtext">{{current && current.id==TOP_MYMUSIC_ID && libraryName ? libraryName : headerSubTitle}}<small v-if="current && current.id!=TOP_MYMUSIC_ID && (libraryName || pinnedItemLibName) && showLibraryName">{{SEPARATOR+(pinnedItemLibName ? pinnedItemLibName : libraryName)}}</small></v-flex>
    </v-layout>
-   <div class="ellipsis subtoolbar-title subtoolbar-title-single pointer link-item" @click="showHistory($event)" v-else-if="history.length>0">{{headerTitle}}</div>
-   <div class="ellipsis subtoolbar-title subtoolbar-title-single" v-else>{{headerTitle}}</div>
+   <div class="ellipsis subtoolbar-title subtoolbar-title-single pointer link-item" @click="showHistory($event)" v-else-if="history.length>0">{{toolbarTitle}}</div>
+   <div class="ellipsis subtoolbar-title subtoolbar-title-single" v-else>{{toolbarTitle}}</div>
    <v-spacer style="flex-grow: 10!important"></v-spacer>
    <v-btn @click.stop="currentActionsMenu($event)" flat icon class="toolbar-button" :title="trans.actions" id="tbar-actions" v-if="currentActions.length>(tbarActions.length<2 ? 2 : 1)"><v-icon>more_horiz</v-icon></v-btn>
    <template v-for="(action, index) in currentActions" v-if="currentActions.length==1 || tbarActions.length<2">
@@ -428,6 +427,21 @@ var lmsBrowse = Vue.component("lms-browse", {
         },
         listSizeAdjust() {
             return this.$store.state.listPadding
+        },
+        toolbarTitle() {
+            if (undefined!=this.current && this.current.stdItem==STD_ITEM_ALBUM) {
+                if (undefined!=this.current.subtitle) {
+                    return this.headerTitle+SEPARATOR+this.current.subtitle;
+                }
+                for (let loop=this.history, i=loop.length-1; i>=0 && undefined!=loop[i].current; --i) {
+                    if (STD_ITEM_ALBUM==loop[i].current.stdItem && undefined!=loop[i].current.subtitle) {
+                        return this.headerTitle+SEPARATOR+loop[i].current.subtitle;
+                    } else if (STD_ITEM_ARTIST==loop[i].current.stdItem) {
+                        return this.headerTitle+SEPARATOR+loop[i].current.title;
+                    }
+                }
+            }
+            return this.headerTitle;
         }
     },
     created() {

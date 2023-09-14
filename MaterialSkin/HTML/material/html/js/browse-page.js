@@ -13,7 +13,8 @@ const ALLOW_FAKE_ALL_SONGS_ITEM = new Set(['youtube', 'qobuz']); // Allow using 
 var lmsBrowse = Vue.component("lms-browse", {
     template: `
 <div id="browse-view">
- <div class="subtoolbar noselect" v-bind:class="{'list-details' : selection.size>0}" :title="selection.size>0 ? undefined : toolbarTitle">  <v-layout v-if="selection.size>0">
+ <div class="subtoolbar noselect" v-bind:class="{'list-details' : selection.size>0}">
+  <v-layout v-if="selection.size>0">
    <div class="toolbar-nobtn-pad"></div>
    <v-layout row wrap>
     <v-flex xs12 class="ellipsis subtoolbar-title subtoolbar-pad">{{trans.selectMultiple}}</v-flex>
@@ -37,12 +38,12 @@ var lmsBrowse = Vue.component("lms-browse", {
   <v-layout v-else-if="history.length>0">
    <v-btn flat icon v-longpress="backBtnPressed" class="toolbar-button" v-bind:class="{'back-button':!homeButton || history.length<2}" id="back-button" :title="trans.goBack | tooltipStr('esc', keyboardControl)"><v-icon>arrow_back</v-icon></v-btn>
    <v-btn v-if="history.length>1 && homeButton" flat icon @click="homeBtnPressed()" class="toolbar-button" id="home-button" :title="trans.goHome | tooltipStr('home', keyboardControl)"><v-icon>home</v-icon></v-btn>
-   <v-layout row wrap @click="showHistory($event)" v-if="headerSubTitle" v-bind:class="{'pointer link-item': history.length>0}">
-   <v-flex xs12 class="ellipsis subtoolbar-title subtoolbar-pad">{{toolbarTitle}}</v-flex>
-    <v-flex xs12 class="ellipsis subtoolbar-subtitle subtext">{{current && current.id==TOP_MYMUSIC_ID && libraryName ? libraryName : headerSubTitle}}<small v-if="current && current.id!=TOP_MYMUSIC_ID && (libraryName || pinnedItemLibName) && showLibraryName">{{SEPARATOR+(pinnedItemLibName ? pinnedItemLibName : libraryName)}}</small></v-flex>
+   <v-layout row wrap @click="showHistory($event)" v-if="toolbarSubTitle" v-bind:class="{'pointer link-item': history.length>0}">
+    <v-flex xs12 class="ellipsis subtoolbar-title subtoolbar-pad">{{headerTitle}}</v-flex>
+    <v-flex xs12 class="ellipsis subtoolbar-subtitle subtext">{{current && current.id==TOP_MYMUSIC_ID && libraryName ? libraryName : toolbarSubTitle}}<small v-if="current && current.id!=TOP_MYMUSIC_ID && (libraryName || pinnedItemLibName) && showLibraryName">{{SEPARATOR+(pinnedItemLibName ? pinnedItemLibName : libraryName)}}</small></v-flex>
    </v-layout>
-   <div class="ellipsis subtoolbar-title subtoolbar-title-single pointer link-item" @click="showHistory($event)" v-else-if="history.length>0">{{toolbarTitle}}</div>
-   <div class="ellipsis subtoolbar-title subtoolbar-title-single" v-else>{{toolbarTitle}}</div>
+   <div class="ellipsis subtoolbar-title subtoolbar-title-single pointer link-item" @click="showHistory($event)" v-else-if="history.length>0">{{headerTitle}}</div>
+   <div class="ellipsis subtoolbar-title subtoolbar-title-single" v-else>{{headerTitle}}</div>
    <v-spacer style="flex-grow: 10!important"></v-spacer>
    <v-btn @click.stop="currentActionsMenu($event)" flat icon class="toolbar-button" :title="trans.actions" id="tbar-actions" v-if="currentActions.length>(tbarActions.length<2 ? 2 : 1)"><v-icon>more_horiz</v-icon></v-btn>
    <template v-for="(action, index) in currentActions" v-if="currentActions.length==1 || tbarActions.length<2">
@@ -56,8 +57,8 @@ var lmsBrowse = Vue.component("lms-browse", {
    <v-btn v-if="items.length>0 && items[0].saveableTrack && !queryParams.party" :title="ACTIONS[ADD_TO_PLAYLIST_ACTION].title" flat icon class="toolbar-button" @click.stop="headerAction(ADD_TO_PLAYLIST_ACTION, $event)"><v-icon>{{ACTIONS[ADD_TO_PLAYLIST_ACTION].icon}}</v-icon></v-btn>
    <template v-for="(action, index) in tbarActions">
     <v-btn flat icon @click.stop="headerAction(action, $event)" class="toolbar-button" :title="action | tooltip(keyboardControl)" :id="'tbar'+index" v-if="(action!=VLIB_ACTION || libraryName) && (!queryParams.party || !HIDE_FOR_PARTY.has(action)) && (!LMS_KIOSK_MODE || !HIDE_FOR_KIOSK.has(action))">
-      <img v-if="ACTIONS[action].svg" class="svg-img" :src="ACTIONS[action].svg | svgIcon(darkUi)"></img>
-      <v-icon v-else>{{ACTIONS[action].icon}}</v-icon>
+     <img v-if="ACTIONS[action].svg" class="svg-img" :src="ACTIONS[action].svg | svgIcon(darkUi)"></img>
+     <v-icon v-else>{{ACTIONS[action].icon}}</v-icon>
     </v-btn>
    </template>
   </v-layout>
@@ -169,6 +170,7 @@ var lmsBrowse = Vue.component("lms-browse", {
       <v-list-tile-title>{{item.title}}</v-list-tile-title>
       <v-list-tile-sub-title v-if="item.subtitle && !item.hidesub">{{item.subtitle}}</v-list-tile-sub-title>
      </v-list-tile-content>
+     <v-list-tile-action v-if="undefined!=item.durationStr" class="browse-time">{{item.durationStr}}</v-list-tile-action>
      <v-list-tile-action class="browse-action" v-if="undefined!=item.stdItem || (item.menu && item.menu.length>0)" :title="i18n('%1 (Menu)', stripLinkTags(item.title))">
       <div v-if="hoverBtns && 0==selection.size && (undefined!=item.stdItem || (item.menu && (item.menu[0]==PLAY_ACTION || item.menu[0]==PLAY_ALL_ACTION)))" class="list-btns">
        <div v-if="!queryParams.party && (!LMS_KIOSK_MODE || !HIDE_FOR_KIOSK.has(PLAY_ACTION))" class="play-btn grid-btn" @click.stop="itemAction(PLAY_ALL_ACTION, item, index, $event)" :title="ACTIONS[PLAY_ACTION].title"></div>
@@ -428,20 +430,20 @@ var lmsBrowse = Vue.component("lms-browse", {
         listSizeAdjust() {
             return this.$store.state.listPadding
         },
-        toolbarTitle() {
+        toolbarSubTitle() {
             if (undefined!=this.current && this.current.stdItem==STD_ITEM_ALBUM) {
                 if (undefined!=this.current.subtitle) {
-                    return this.headerTitle+SEPARATOR+this.current.subtitle;
+                    return this.current.subtitle + ' (' + this.headerSubTitle + ')';
                 }
                 for (let loop=this.history, i=loop.length-1; i>=0 && undefined!=loop[i].current; --i) {
                     if (STD_ITEM_ALBUM==loop[i].current.stdItem && undefined!=loop[i].current.subtitle) {
-                        return this.headerTitle+SEPARATOR+loop[i].current.subtitle;
+                        return loop[i].current.subtitle + ' (' + this.headerSubTitle + ')';
                     } else if (STD_ITEM_ARTIST==loop[i].current.stdItem) {
-                        return this.headerTitle+SEPARATOR+loop[i].current.title;
+                        return loop[i].current.title + ' (' + this.headerSubTitle + ')';
                     }
                 }
             }
-            return this.headerTitle;
+            return this.headerSubTitle;
         }
     },
     created() {

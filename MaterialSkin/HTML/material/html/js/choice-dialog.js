@@ -23,7 +23,7 @@ Vue.component('lms-choice-dialog', {
          <v-list-tile-content>
           <v-list-tile-title>{{item.title}}</v-list-tile-title>
           <!-- todo allow options to also have sub-titles -->
-          <v-list-tile-sub-title v-if="(undefined==options || options.length<1 || 0==option) && item.subtitle">{{item.subtitle}}</v-list-tile-sub-title>
+          <v-list-tile-sub-title v-if="(undefined==options || options.length<1 || 0==option) && item.subtitle">{{item.subtitle}}{{item.durationStr ? SEPARATOR+item.durationStr : ""}}</v-list-tile-sub-title>
          </v-list-tile-content>
         </v-list-tile>
         <v-divider></v-divider>

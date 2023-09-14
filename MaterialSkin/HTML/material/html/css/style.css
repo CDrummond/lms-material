@@ -1938,7 +1938,7 @@ div.v-subheader {
  font-size:var(--std-font-size) !important;
 }
 
-.browse-header .v-list__tile__sub-title {
+.browse-header .v-list__tile__sub-title, .browse-header .browse-time {
  color:var(--active-color)!important;
 }
 

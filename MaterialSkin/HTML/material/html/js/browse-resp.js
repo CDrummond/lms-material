@@ -945,7 +945,7 @@ function parseBrowseResp(data, parent, options, cacheKey, parentCommand, parentG
             }
 
             if (discs.size>1) {
-                resp.tracksSubtitle=i18np("1 Track", "%1 Tracks", resp.items.length)+" ("+formatSeconds(totalDuration)+")"
+                resp.tracksSubtitle=i18np("1 Track", "%1 Tracks", resp.items.length)+SEPARATOR+formatSeconds(totalDuration);
                 let d = 0;
 
                 for (let k of discs.keys()) {
@@ -963,7 +963,7 @@ function parseBrowseResp(data, parent, options, cacheKey, parentCommand, parentG
 
                     resp.items.splice(disc.pos+d, 0,
                                        {title: lmsOptions.commentAsDiscTitle && title ? title : i18n("Disc %1", k), jump:disc.pos+d,
-                                        subtitle: i18np("1 Track", "%1 Tracks", disc.total)+" ("+formatSeconds(disc.duration)+")",
+                                        subtitle: i18np("1 Track", "%1 Tracks", disc.total), durationStr:formatSeconds(disc.duration),
                                         id:FILTER_PREFIX+k, header:true, menu:[PLAY_ALL_ACTION, INSERT_ALL_ACTION, ADD_ALL_ACTION]});
                     d++;
                 }
@@ -973,13 +973,11 @@ function parseBrowseResp(data, parent, options, cacheKey, parentCommand, parentG
                     resp.items[idx].disc = undefined;
                 }
             }
-
-            if (undefined==resp.subtitle) {
-                resp.subtitle=i18np("1 Track", "%1 Tracks", resp.items.length-(discs.size>1 ? discs.size : 0));
+            resp.subtitle=(resp.items.length-(discs.size>1 ? discs.size : 0));
+            if (discs.size>1) {
+                resp.subtitle+=SEPARATOR+discs.size;
             }
-            if (!(parent && parent.id && parent.id.startsWith("search:"))) {
-                resp.subtitle+=" ("+formatSeconds(totalDuration)+")";
-            }
+            resp.subtitle+=SEPARATOR+formatSeconds(totalDuration);
         } else if (data.result.genres_loop) {
             for (var idx=0, loop=data.result.genres_loop, loopLen=loop.length; idx<loopLen; ++idx) {
                 var i = loop[idx];

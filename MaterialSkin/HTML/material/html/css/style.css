@@ -1300,7 +1300,7 @@ div.v-rating i.primary--text, div.v-rating i.accent--text {
 }
 
 .np-image-landscape-wide {
-  width:var(--np-image-landscape-wide-height);
+ width:var(--np-image-landscape-wide-height);
 }
 
 .np-details-landscape-wide,
@@ -1426,6 +1426,7 @@ progress {
  min-width:44px;
  margin-top:calc(19px - var(--std-font-size));
  color:var(--text-color)!important;
+ height:42px;
 }
 
 .lms-list3 .pq-time {

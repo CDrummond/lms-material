@@ -94,7 +94,7 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
    <v-tabs centered v-model="info.tab" v-if="info.showTabs" style="np-info-tab-cover">
     <template v-for="(tab, index) in info.tabs">
      <v-tab :key="index" @contextmenu.prevent="showContextMenu">{{tab.title}}</v-tab>
-     <v-tab-item :key="index" transition="" reverse-transition=""> <!-- background image causes glitches with transitions -->
+     <v-tab-item :key="index" :transition="false" :reverse-transition="false">
       <v-card flat class="np-info-card-cover fade-both">
        <v-card-text :class="['np-info-text-desktop', zoomInfoClass, TRACK_TAB==index || tab.isMsg ? 'np-info-lyrics' : '', ALBUM_TAB==index ? 'np-info-review' : '']">
         <div v-html="tab.text"></div>
@@ -214,7 +214,7 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
    <v-tabs centered v-model="info.tab" class="np-info-tab-cover">
     <template v-for="(tab, index) in info.tabs">
      <v-tab :key="index" @contextmenu.prevent="showContextMenu">{{tab.title}}</v-tab>
-     <v-tab-item :key="index" transition="" reverse-transition=""> <!-- background image causes glitches with transitions -->
+     <v-tab-item :key="index" :transition="false" :reverse-transition="false">
       <v-card flat class="np-info-card-cover fade-both">
        <v-card-text :class="['np-info-text', zoomInfoClass, TRACK_TAB==index || tab.isMsg ? 'np-info-lyrics' : '', ALBUM_TAB==index ? 'np-info-review' : '', ALBUM_TAB==index ? 'np-info-review' : '']">
         <div v-html="tab.text"></div>

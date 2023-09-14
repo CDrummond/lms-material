@@ -11,6 +11,7 @@
  8. Add callback for when accent colour changes due to cover.
  9. Try to interpret back button as go back for all browsers.
 10. When browsing tracks place duration on right, as per queue.
+11. Fix resize issues when using tabs in now-playing information view.
 
 3.4.5
 -----

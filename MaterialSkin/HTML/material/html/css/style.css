@@ -1946,6 +1946,7 @@ div.v-subheader {
 }
 
 .queue-action {
+ padding-top:1px;
  min-width:44px !important;
 }
 

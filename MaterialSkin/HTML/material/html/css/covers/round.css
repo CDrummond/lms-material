@@ -4,14 +4,18 @@
 }
 
 .lms-list img, .pmgr-cover img, .lms-list3 img, .np-info .lms-list img {
- border-radius:4px;
+ border-radius:4px!important;
+}
+
+.np-image-desktop .np-cover {
+ border-radius:6px!important;
 }
 
 .np-image, .np-image .np-cover,
 .np-no-meta-img,
 .np-image-landscape, .np-image-landscape .np-cover,
-.np-image-desktop, .np-image-desktop .np-cover {
- border-radius:8px!important;
+.np-image-desktop {
+ border-radius:10px!important;
 }
 
 .np-cover {

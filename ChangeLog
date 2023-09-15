@@ -17,6 +17,9 @@
 14. Show artist name in subtitle of subtoolbar.
 15. Do not handle "http" or "https" links in iframe dialog, allow to be
     handled externally.
+16. Always use square aspect ratio for cover image area, whn rounding add
+    background if necessary.
+17. For landscape now-playing text uses more space depending upon cover width.
 
 3.4.5
 -----

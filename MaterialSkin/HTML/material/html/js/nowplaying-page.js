@@ -1039,7 +1039,7 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
             this.landscape = window.innerWidth >= (window.innerHeight*queryParams.npRatio) && window.innerWidth>=450;
             // wide=0 => controls under whole width
             // wide=2 => controls under text only
-            this.wide = window.innerWidth>=600 && window.innerWidth>=(window.innerHeight*2)
+            this.wide = window.innerWidth>=600 && window.innerWidth>=(window.innerHeight*1.7)
                         ? 2 /*: window.innerHeight>340 ? 1*/ : 0;
         },
         itemClicked(tab, section, index, event) {

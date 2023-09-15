@@ -31,8 +31,7 @@ var app = new Vue({
         } else {
             document.getElementsByTagName("body")[0].classList.add("msk-is-non-touch");
         }
-        if (IS_IOS || queryParams.addpad) {
-            // Always add padding...
+        if (queryParams.addpad || (IS_IOS && (window.matchMedia('(display-mode: standalone)').matches || window.matchMedia('(display-mode: fullscreen)').matches))) {
             document.documentElement.style.setProperty('--bottom-nav-pad', '12px');
         }
         this.autoLayout = true;

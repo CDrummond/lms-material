@@ -933,11 +933,21 @@ function parseBrowseResp(data, parent, options, cacheKey, parentCommand, parentG
                 }
             }
             // Now add artist to subtitle if we have multiple artists...
-            if ((new Set(artists)).size>1 && resp.items.length>1) {
+            if (resp.items.length>1 && (new Set(artists)).size>1) {
                 for (let i=0, loop=resp.items, len=loop.length; i<len; ++i) {
                     if (undefined!=artists[i]) {
                         loop[i].subtitle = undefined==loop[i].subtitle ? artists[i] : (artists[i] + SEPARATOR + loop[i].subtitle);
                     }
+                }
+            } else if (1==resp.items.length) {
+                // Only one? Check that this tracks artist line does not match parent item's artist details...
+                let albumArtist = parent && parent.artists && parent.artists.length>0
+                             ? parent.artists[0]
+                             : parent && parent.stdItem==STD_ITEM_ALBUM && parent.subtitle
+                                 ? parent.subtitle
+                                 : undefined;
+                if (artists[0]!=albumArtist) {
+                    loop[0].subtitle = undefined==loop[0].subtitle ? artists[0] : (artists[0] + SEPARATOR + loop[0].subtitle);
                 }
             }
             if (sortTracks) {

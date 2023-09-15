@@ -228,16 +228,8 @@ Vue.component('lms-toolbar', {
         }.bind(this));
 
         bus.$on('queueStatus', function(count, duration) {
-            if (count>0) {
-                this.playlist.count = i18np("1 Track", "%1 Tracks", count);
-            } else {
-                this.playlist.count = "";
-            }
-            if (duration>0) {
-                this.playlist.duration=" (" + formatSeconds(Math.floor(duration)) + ")";
-            } else {
-                this.playlist.duration="";
-            }
+            this.playlist.count = count>0 ? i18np("1 Track", "%1 Tracks", count) : "";
+            this.playlist.duration = duration>0 ? (SEPARATOR + formatSeconds(Math.floor(duration))) : "";
         }.bind(this));
 
         bus.$on('playerStatus', function(playerStatus) {

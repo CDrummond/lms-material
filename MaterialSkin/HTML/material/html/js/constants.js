@@ -17,6 +17,7 @@ function checkPlatform(platform) {
 
 const SEPARATOR = " \u2022 ";
 const MUSIC_SEPARATOR = "\uD834\uDD60 ";
+const SELECTED_SEPARATOR = "\u2611 ";
 
 const IS_MOBILE  = (undefined!=navigator && undefined!=navigator.userAgentData && navigator.userAgentData.mobile) ||
                    checkPlatform('Android|webOS|iPhone|iPad|BlackBerry|Windows Phone|Opera Mini|IEMobile|Mobile') ||

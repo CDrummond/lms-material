@@ -18,7 +18,7 @@ var lmsBrowse = Vue.component("lms-browse", {
    <div class="toolbar-nobtn-pad"></div>
    <v-layout row wrap>
     <v-flex xs12 class="ellipsis subtoolbar-title subtoolbar-pad">{{trans.selectMultiple}}</v-flex>
-    <v-flex xs12 class="ellipsis subtoolbar-subtitle subtext">{{selection.size | displaySelectionCount}}{{selectionDuration | displayTime(true)}}</v-flex>
+    <v-flex xs12 class="ellipsis subtoolbar-subtitle subtext">{{selection.size | displaySelectionCount}}{{selectionDuration | displayTime}}</v-flex>
    </v-layout>
    <v-spacer></v-spacer>
    <v-btn v-if="current && current.section==SECTION_PLAYLISTS && current.id.startsWith('playlist_id:')" :title="trans.removeall" flat icon class="toolbar-button" @click="deleteSelectedItems(REMOVE_ACTION)"><v-icon>{{ACTIONS[REMOVE_ACTION].icon}}</v-icon></v-btn>
@@ -1838,7 +1838,7 @@ var lmsBrowse = Vue.component("lms-browse", {
             }
             return stripTags(item.title);
         },
-        displayTime: function (value, bracket) {
+        displayTime: function (value) {
             if (!value || value<0.000000000001) {
                 return '';
             }
@@ -1846,16 +1846,10 @@ var lmsBrowse = Vue.component("lms-browse", {
             if (undefined==str || str.length<1) {
                 return '';
             }
-            if (bracket) {
-                return " (" + str + ")";
-            }
             return str;
         },
         displaySelectionCount: function (value) {
-            if (!value) {
-                return '';
-            }
-            return i18np("1 Selected Item", "%1 Selected Items", value);
+            return value ? value+SELECTED_SEPARATOR : '';
         },
         svgIcon: function (name, dark) {
             return "/material/svg/"+name+"?c="+(dark ? LMS_DARK_SVG : LMS_LIGHT_SVG)+"&r="+LMS_MATERIAL_REVISION;

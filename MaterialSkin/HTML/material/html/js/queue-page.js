@@ -138,7 +138,7 @@ var lmsQueue = Vue.component("lms-queue", {
    <div class="toolbar-nobtn-pad"></div>
    <v-layout row wrap>
     <v-flex xs12 class="ellipsis subtoolbar-title subtoolbar-pad">{{trans.selectMultiple}}</v-flex>
-    <v-flex xs12 class="ellipsis subtoolbar-subtitle subtext">{{selection.size | displaySelectionCount}}{{selectionDuration | displayTime(true)}}</v-flex>
+    <v-flex xs12 class="ellipsis subtoolbar-subtitle subtext">{{selection.size | displaySelectionCount}}{{selectionDuration | displayTime}}</v-flex>
    </v-layout>
    <v-spacer></v-spacer>
    <v-btn :title="trans.removeall" flat icon class="toolbar-button" @click="removeSelectedItems()"><v-icon>remove_circle_outline</v-icon></v-btn>
@@ -151,7 +151,7 @@ var lmsQueue = Vue.component("lms-queue", {
    <div class="toolbar-nobtn-pad"></div>
    <v-layout row wrap v-longpress="durationClicked" class="link-item">
     <v-flex xs12 class="ellipsis subtoolbar-title">{{remaining.show ? "-" :""}}{{(remaining.show ? remaining.size : listSize) | displayCount}}</v-flex>
-    <v-flex xs12 class="ellipsis subtoolbar-subtitle subtext">{{remaining.show ? "-" :""}}{{(remaining.show ? remaining.duration : duration) | displayTime(false)}}{{name}}</v-flex>
+    <v-flex xs12 class="ellipsis subtoolbar-subtitle subtext">{{remaining.show ? "-" :""}}{{(remaining.show ? remaining.duration : duration) | displayTime}}{{name}}</v-flex>
    </v-layout>
    <v-spacer></v-spacer>
    <v-btn @click.stop="actionsMenu($event)" flat icon class="toolbar-button" :title="trans.actions" v-if="otherActions.length>0"><v-icon>more_horiz</v-icon></v-btn>
@@ -1322,16 +1322,13 @@ var lmsQueue = Vue.component("lms-queue", {
         }
     },
     filters: {
-        displayTime: function (value, bracket) {
+        displayTime: function (value, addSep) {
             if (!value || value<0.000000000001) {
                 return '';
             }
             let str = formatSeconds(Math.floor(value));
             if (undefined==str || str.length<1) {
                 return '';
-            }
-            if (bracket) {
-                return " (" + str + ")";
             }
             return str;
         },
@@ -1342,10 +1339,7 @@ var lmsQueue = Vue.component("lms-queue", {
             return i18np("1 Track", "%1 Tracks", value);
         },
         displaySelectionCount: function (value) {
-            if (!value) {
-                return '';
-            }
-            return i18np("1 Selected Item", "%1 Selected Items", value);
+            return value ? value+SELECTED_SEPARATOR : '';
         },
         svgIcon: function (name, dark, ci) {
             return "/material/svg/"+name+"?c="+

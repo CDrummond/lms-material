@@ -116,7 +116,9 @@ function browseAddHistory(view) {
 
 function browseActions(view, item, args, count) {
     var actions=[];
-    if (undefined==args['artist'] || (args['artist']!=i18n('Various Artists') && args['artist'].toLowerCase()!='various artists')) {
+    console.log(item, args);
+    if ((undefined==item || undefined==item.id || !item.id.startsWith(MUSIC_ID_PREFIX)) && // Exclude 'Compilations'
+        (undefined==args['artist'] || (args['artist']!=i18n('Various Artists') && args['artist'].toLowerCase()!='various artists'))) {
         if (lmsOptions.infoPlugin) {
             if (undefined!=args['artist_id'] || undefined!=args['artist']) {
                 actions.push({title:i18n('Artist biography'), icon:'menu_book',

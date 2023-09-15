@@ -20,6 +20,7 @@
 16. Always use square aspect ratio for cover image area, whn rounding add
     background if necessary.
 17. For landscape now-playing text uses more space depending upon cover width.
+18. Fix biography, etc, showing in actions menu for 'Compilations' section.
 
 3.4.5
 -----

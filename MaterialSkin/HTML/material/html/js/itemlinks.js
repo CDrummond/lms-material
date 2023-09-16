@@ -122,7 +122,7 @@ function buildArtistLine(i, page, plain) {
         used.add(artist);
     }
 
-    if (i.band  && lmsOptions.showBand && useBand(i.genre)) {
+    if (i.band && lmsOptions.showBand && useBand(i.genre)) {
         line=addArtistLink(i, line, "band", "showBand", page, used, plain);
     }
     if (i.composer && lmsOptions.showComposer && useComposer(i.genre)) {
@@ -149,7 +149,7 @@ function buildArtistLine(i, page, plain) {
 }
 
 function buildArtistDetails(i, page, useBand, useComposer, useConductor) {
-    if (!useBand && !useComposer && !useConductor) {
+    if (!useComposer && !useConductor) {
         return undefined;
     }
 

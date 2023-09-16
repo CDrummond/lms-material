@@ -163,6 +163,7 @@ function nowplayingOnPlayerStatus(view, playerStatus) {
     }
     if (artistAndComposer!=view.playerStatus.current.artistAndComposer) {
         view.playerStatus.current.artistAndComposer = artistAndComposer;
+        view.playerStatus.current.artistAndComposerComplex = buildArtistDetails(playerStatus.current, 'now-playing', useBandTag, useComposerTag, useComposerTag);
     }
     if (playerStatus.playlist.shuffle!=view.playerStatus.playlist.shuffle) {
         view.playerStatus.playlist.shuffle = playerStatus.playlist.shuffle;

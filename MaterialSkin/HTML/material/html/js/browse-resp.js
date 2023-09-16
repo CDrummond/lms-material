@@ -854,7 +854,7 @@ function parseBrowseResp(data, parent, options, cacheKey, parentCommand, parentG
                 }
                 splitMultiples(i);
 
-                artists.push(buildArtistLine(i, "browse", false, undefined));
+                artists.push(buildArtistLine(i, "browse", false));
                 let subtitle = undefined;
                 if (showAlbumName && i.album) {
                     subtitle=undefined==subtitle ? i.album : (subtitle + SEPARATOR + i.album);

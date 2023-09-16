@@ -281,8 +281,8 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
      <div class="np-landscape-song-info hide-scrollbar fade-both">
       <div>
        <p class="np-title-landscape np-title" v-if="playerStatus.current.title">{{title}}</p>
-       <p class="np-text-landscape subtext" v-if="playerStatus.current.artistAndComposer" v-html="playerStatus.current.artistAndComposer"></p>
-       <p class="np-text-landscape subtext" v-if="playerStatus.current.albumLine" v-html="playerStatus.current.albumLine"></p>
+       <p class="np-text-landscape subtext" v-if="artistAndComposerLine" v-html="artistAndComposerLine"></p>
+       <p class="np-text-landscape subtext" v-if="extendedAlbumLine" v-html="extendedAlbumLine"></p>
       </div>
      </div>
 
@@ -348,8 +348,8 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
     <div class="np-portrait-song-info hide-scrollbar fade-both">
      <div>
       <p class="np-title" v-if="playerStatus.current.title">{{title}}</p>
-      <p class="np-text subtext" v-if="playerStatus.current.artistAndComposer" v-html="playerStatus.current.artistAndComposer"></p>
-      <p class="np-text subtext" v-if="playerStatus.current.albumLine" v-html="playerStatus.current.albumLine"></p>
+      <p class="np-text subtext" v-if="artistAndComposerLine" v-html="artistAndComposerLine"></p>
+      <p class="np-text subtext" v-if="extendedAlbumLine" v-html="extendedAlbumLine"></p>
      </div>
     </div>
    </div>
@@ -418,7 +418,7 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
                     isplaying: false,
                     sleepTimer: false,
                     dvc: VOL_STD,
-                    current: { canseek:1, duration:0, time:undefined, title:undefined, artist:undefined, artistAndComposer: undefined,
+                    current: { canseek:1, duration:0, time:undefined, title:undefined, artist:undefined, artistAndComposer: undefined, artistAndComposerComplex:undefined,
                                album:undefined, albumName:undefined, albumLine:undefined, technicalInfo:undefined, pospc:0.0, tracknum:undefined,
                                disc:0, year:0, url:undefined, comment:undefined, source: {local:true, text:undefined} },
                     playlist: { shuffle:0, repeat: 0, current:0, count:0 },
@@ -1246,6 +1246,12 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
         },
         transCvr() {
             return undefined!=this.coverUrl && (this.coverUrl.includes(DEFAULT_COVER) || this.coverUrl.includes(LMS_BLANK_COVER) || this.coverUrl.includes(DEFAULT_RADIO_COVER))
+        },
+        artistAndComposerLine() {
+            return undefined!=this.playerStatus.current.artistAndComposerComplex ? this.playerStatus.current.artistAndComposerComplex : this.playerStatus.current.artistAndComposer
+        },
+        extendedAlbumLine() {
+            return undefined!=this.playerStatus.current.artistAndComposerComplex ? i18n('<obj class="ext-details">From </obj> %1', this.playerStatus.current.albumLine) : this.playerStatus.current.albumLine
         }
     },
     beforeDestroy() {

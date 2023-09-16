@@ -2509,6 +2509,11 @@ div.v-subheader {
  display:none !important;
 }
 
+.ext-details {
+ opacity:var(--sub-opacity);
+ font-size:75%;
+}
+
 .np-info-text .v-list,
 .np-info-text-desktop .v-list,
 .np-info-text-full-desktop .v-list {

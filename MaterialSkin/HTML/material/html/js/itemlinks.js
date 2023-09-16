@@ -106,14 +106,11 @@ function addArtistLink(item, line, type, func, page, used, plain) {
     return line;
 }
 
-function buildArtistLine(i, page, plain, existing) {
+function buildArtistLine(i, page, plain) {
     var line = undefined;
     var used = new Set();
     var artist = i.artist ? i.artist : i.trackartist ? i.trackartist : i.albumartist;
 
-    if (undefined!=existing) {
-        used.add(existing);
-    }
     if (lmsOptions.artistFirst) {
         if (i.artist) {
             line=addArtistLink(i, line, "artist", "showArtist", page, used, plain);
@@ -149,6 +146,54 @@ function buildArtistLine(i, page, plain, existing) {
     } catch (e) {
         return undefined==line ? line : line.replace(/\|/g, '\u2022');
     }
+}
+
+function buildArtistDetails(i, page, useBand, useComposer, useConductor) {
+    if (!useBand && !useComposer && !useConductor) {
+        return undefined;
+    }
+
+    let composers = undefined;
+    if (useComposer) {
+        composers=addArtistLink(i, composers, "composer", "showComposer", page, new Set(), false);
+    }
+    let conductors = undefined;
+    if (useConductor) {
+        conductors=addArtistLink(i, conductors, "conductor", "showConductor", page, new Set(), false);
+    }
+
+    if (undefined==composers && undefined==conductors) {
+        return undefined;
+    }
+
+    let artists = undefined;
+    let used = new Set();
+    if (i.artist) {
+        artists=addArtistLink(i, artists, "artist", "showArtist", page, used, false);
+    } else if (i.trackartist) {
+        artists=addArtistLink(i, artists, "trackartist", "showArtist", page, used, false);
+    } else if (i.albumartist) {
+        artists=addArtistLink(i, artists, "albumartist", "showAlbumArtist", page, used, false);
+    }
+
+    if (useBand) {
+        artists=addArtistLink(i, artists, "band", "showBand", page, used, false);
+        if (artists) {
+            artists=artists.replace(SEPARATOR, ", ");
+        }
+    }
+
+    let details = "";
+    if (lmsOptions.artistFirst && undefined!=artists) {
+        details += i18n('<obj class="ext-details">Performed by</obj> %1', artists) + "<br/>";
+    }
+    if (undefined!=composers) {
+        details += i18n('<obj class="ext-details">Composed by</obj> %1', composers) + "<br/>";
+    }
+    if (undefined!=conductors) {
+        details += i18n('<obj class="ext-details">Conducted by</obj> %1', conductors) + "<br/>";
+    }
+    return details;
 }
 
 function buildAlbumLine(i, page, plain) {

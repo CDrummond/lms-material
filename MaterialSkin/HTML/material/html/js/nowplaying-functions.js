@@ -393,25 +393,23 @@ function nowplayingMenuAction(view, item) {
     }
 }
 
-function nowplayingArtistEntry(trk, key, role, used) {
+function nowplayingArtistEntry(trk, key, role) {
     if (undefined!=trk[key+'s'] && undefined!=trk[key+'_ids'] && trk[key+'s'].length==trk[key+'_ids'].length) {
         let html="";
         for (let i=0, len=trk[key+'s'].length; i<len; ++i) {
-            if (!used.has(trk[key+'s'][i])) {
-                used.add(trk[key+'s'][i]);
-                if (html.length>1) {
-                    html+=", ";
-                }
-                html+="<obj class=\"link-item\" onclick=\"nowplayingBrowse('"+role+"', "+trk[key+'_ids'][i]+", \'"+escape(trk[key+'s'][i])+"\')\">"+trk[key+'s'][i]+"</obj>";
+            if (html.length>1) {
+                html+=", ";
             }
+            html+="<obj class=\"link-item\" onclick=\"nowplayingBrowse('"+role+"', "+trk[key+'_ids'][i]+", \'"+escape(trk[key+'s'][i])+"\')\">"+trk[key+'s'][i]+"</obj>";
         }
         return html;
-    } else if (undefined!=trk[key] && !used.has(trk[key])) {
-        used.add(trk[key]);
+    } else if (undefined!=trk[key]) {
         if (undefined!=trk[key+'_id']) {
             return "<obj class=\"link-item\" onclick=\"nowplayingBrowse('"+role+"', "+trk[key+'_id']+", \'"+escape(trk[key])+"\')\">"+trk[key]+"</obj>";
         }
-        return trk[key];
+        if (key!="artist" && trk[key]!=trk["artist"]) {
+            return trk[key];
+        }
     }
     return "";
 }
@@ -460,34 +458,38 @@ function nowplayingFetchTrackInfo(view) {
     let useComposerTag = trk.composer && lmsOptions.showComposer && useComposer(trk.genre);
     let useConductorTag = trk.conductor && lmsOptions.showConductor && useConductor(trk.genre);
     let useBandTag = trk.band && lmsOptions.showBand && useBand(trk.genre);
-    let used = new Set();
 
     if (undefined!=trk.artist) {
-        let entry = nowplayingArtistEntry(trk, 'artist', 'ARTIST', used);
+        let entry = nowplayingArtistEntry(trk, 'artist', 'ARTIST');
         if (entry.length>1) {
             html+="<tr><td>"+i18n("Artist")+"&nbsp;</td><td>"+entry+"</td></tr>";
+        } else {
+            let entry = nowplayingArtistEntry(trk, 'trackartist', 'ARTIST');
+            if (entry.length>1) {
+                html+="<tr><td>"+i18n("Artist")+"&nbsp;</td><td>"+entry+"</td></tr>";
+            }
         }
     }
     if (undefined!=trk.albumartist) {
-        let entry = nowplayingArtistEntry(trk, 'albumartist', 'ALBUMARTIST', used);
+        let entry = nowplayingArtistEntry(trk, 'albumartist', 'ALBUMARTIST');
         if (entry.length>1) {
             html+="<tr><td>"+i18n("Album artist")+"&nbsp;</td><td>"+entry+"</td></tr>";
         }
     }
     if (useComposerTag) {
-        let entry = nowplayingArtistEntry(trk, 'composer', 'COMPOSER', used);
+        let entry = nowplayingArtistEntry(trk, 'composer', 'COMPOSER');
         if (entry.length>1) {
             html+="<tr><td>"+i18n("Composer")+"&nbsp;</td><td>"+entry+"</td></tr>";
         }
     }
     if (useConductorTag) {
-        let entry = nowplayingArtistEntry(trk, 'conductor', 'CONDUCTOR', used);
+        let entry = nowplayingArtistEntry(trk, 'conductor', 'CONDUCTOR');
         if (entry.length>1) {
             html+="<tr><td>"+i18n("Conductor")+"&nbsp;</td><td>"+entry+"</td></tr>";
         }
     }
     if (useBandTag) {
-        let entry = nowplayingArtistEntry(trk, 'band', 'BAND', used);
+        let entry = nowplayingArtistEntry(trk, 'band', 'BAND');
         if (entry.length>1) {
             html+="<tr><td>"+i18n("Band")+"&nbsp;</td><td>"+entry+"</td></tr>";
         }

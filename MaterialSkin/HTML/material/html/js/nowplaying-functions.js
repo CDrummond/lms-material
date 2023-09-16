@@ -164,6 +164,16 @@ function nowplayingOnPlayerStatus(view, playerStatus) {
     if (artistAndComposer!=view.playerStatus.current.artistAndComposer) {
         view.playerStatus.current.artistAndComposer = artistAndComposer;
         view.playerStatus.current.artistAndComposerComplex = buildArtistDetails(playerStatus.current, 'now-playing', useBandTag, useComposerTag, useConductorTag);
+        let width = 0;
+        if (undefined!=view.playerStatus.current.artistAndComposerComplex) {
+            let elem = document.getElementById("stringLenCheckElem");
+            if (undefined!=elem) {
+                elem.innerHTML = replaceBr(view.artistAndComposerLine, ", ")+", " + view.extendedAlbumLine;
+                width = elem.getBoundingClientRect().width;
+                console.log(width);
+            }
+        }
+        view.extendedDetailsWidth = width;
     }
     if (playerStatus.playlist.shuffle!=view.playerStatus.playlist.shuffle) {
         view.playerStatus.playlist.shuffle = playerStatus.playlist.shuffle;

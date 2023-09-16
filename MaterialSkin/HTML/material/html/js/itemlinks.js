@@ -149,10 +149,6 @@ function buildArtistLine(i, page, plain) {
 }
 
 function buildArtistDetails(i, page, useBand, useComposer, useConductor) {
-    if (!useComposer && !useConductor) {
-        return undefined;
-    }
-
     let composers = undefined;
     if (useComposer) {
         composers=addArtistLink(i, composers, "composer", "showComposer", page, new Set(), false);
@@ -160,10 +156,6 @@ function buildArtistDetails(i, page, useBand, useComposer, useConductor) {
     let conductors = undefined;
     if (useConductor) {
         conductors=addArtistLink(i, conductors, "conductor", "showConductor", page, new Set(), false);
-    }
-
-    if (undefined==composers && undefined==conductors) {
-        return undefined;
     }
 
     let artists = undefined;
@@ -176,6 +168,10 @@ function buildArtistDetails(i, page, useBand, useComposer, useConductor) {
         artists=addArtistLink(i, artists, "albumartist", "showAlbumArtist", page, used, false);
     }
 
+    if (undefined==composers && undefined==conductors && undefined==artists) {
+        return undefined;
+    }
+
     if (useBand) {
         artists=addArtistLink(i, artists, "band", "showBand", page, used, false);
         if (artists) {
@@ -184,16 +180,20 @@ function buildArtistDetails(i, page, useBand, useComposer, useConductor) {
     }
 
     let details = "";
-    if (lmsOptions.artistFirst && undefined!=artists) {
-        details += i18n('<obj class="ext-details">Performed by</obj> %1', artists) + "<br/>";
+    if (undefined!=artists) {
+        if (undefined!=composers || undefined!=conductors) {
+            details += i18n('<obj class="ext-details">Performed by</obj> %1', artists) + "<br/>";
+        } else {
+            details += i18n('<obj class="ext-details">By</obj> %1', artists);
+        }
     }
     if (undefined!=composers) {
-        details += i18n('<obj class="ext-details">Composed by</obj> %1', composers) + "<br/>";
+        details += i18n('<obj class="ext-details">Composed by</obj> %1', composers) + (undefined!=conductors ? "<br/>" : "");
     }
     if (undefined!=conductors) {
-        details += i18n('<obj class="ext-details">Conducted by</obj> %1', conductors) + "<br/>";
+        details += i18n('<obj class="ext-details">Conducted by</obj> %1', conductors);
     }
-    return details;
+    return details.length>0 ? details : undefined;
 }
 
 function buildAlbumLine(i, page, plain) {

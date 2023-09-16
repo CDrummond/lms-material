@@ -2514,6 +2514,10 @@ div.v-subheader {
  font-size:75%;
 }
 
+.np-bar .ext-details {
+ font-size:100%!important;
+}
+
 .np-info-text .v-list,
 .np-info-text-desktop .v-list,
 .np-info-text-full-desktop .v-list {

@@ -91,6 +91,7 @@
   [% END %]
   <div id="app" v-cloak>
    <v-app class="lms-app" :dark="darkUi" v-touch:swipe.left="swipe" v-touch:swipe.right="swipe" v-touch:start="touchStart" v-touch:end="touchEnd">
+    <div id="stringLenCheckElem" style="display:hidden; position:fixed; top:0px;"></div>
     <lms-currentcover></lms-currentcover>
     <lms-server></lms-server>
     <lms-toolbar></lms-toolbar>

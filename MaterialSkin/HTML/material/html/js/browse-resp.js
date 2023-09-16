@@ -1083,7 +1083,7 @@ function parseBrowseResp(data, parent, options, cacheKey, parentCommand, parentG
             resp.canDrop = !isRemote;
             resp.numAudioItems = resp.items.length;
             if (totalDuration>0 && resp.items.length==resp.listSize) {
-                resp.subtitle+=" ("+formatSeconds(totalDuration)+")";
+                resp.subtitle+=SEPARATOR+formatSeconds(totalDuration);
             }
         } else if (data.result.years_loop) {
             for (var idx=0, loop=data.result.years_loop, loopLen=loop.length; idx<loopLen; ++idx) {

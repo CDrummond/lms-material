@@ -25,6 +25,7 @@
 20. Only show jumplist if LMS's list response has 4 or more keys.
 21. Increase max items in jumplist.
 22. Show (very thin) scrollbar when scrolling on mobile.
+23. Add separate options for tech info in browse and now-playing.
 
 3.4.5
 -----

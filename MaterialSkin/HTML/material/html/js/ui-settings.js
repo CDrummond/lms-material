@@ -110,15 +110,6 @@ Vue.component('lms-ui-settings', {
     <v-divider></v-divider>
 
     <v-list-tile>
-     <v-list-tile-content @click="techInfo = !techInfo" class="switch-label">
-      <v-list-tile-title>{{i18n('Display technical info')}}</v-list-tile-title>
-      <v-list-tile-sub-title>{{i18n('Show file type, bitrate, etc.')}}</v-list-tile-sub-title>
-     </v-list-tile-content>
-     <v-list-tile-action><m3-switch v-model="techInfo"></m3-switch></v-list-tile-action>
-    </v-list-tile>
-    <v-divider></v-divider>
-
-    <v-list-tile>
      <v-list-tile-content @click="showArtwork = !showArtwork" class="switch-label">
       <v-list-tile-title>{{i18n('Show artwork')}}</v-list-tile-title>
       <v-list-tile-sub-title>{{i18n("Display covers, artist images, station logos, etc.")}}</v-list-tile-title>
@@ -194,6 +185,15 @@ Vue.component('lms-ui-settings', {
       <v-list-tile-sub-title>{{i18n('Use artist, or album, images as background.')}}</v-list-tile-sub-title>
      </v-list-tile-content>
      <v-list-tile-action><m3-switch v-model="browseBackdrop"></m3-switch></v-list-tile-action>
+    </v-list-tile>
+    <v-divider></v-divider>
+
+    <v-list-tile>
+    <v-list-tile-content @click="browseTechInfo = !browseTechInfo" class="switch-label">
+     <v-list-tile-title>{{i18n('Display technical info')}}</v-list-tile-title>
+     <v-list-tile-sub-title>{{i18n('Show file type, bitrate, etc.')}}</v-list-tile-sub-title>
+    </v-list-tile-content>
+     <v-list-tile-action><m3-switch v-model="browseTechInfo"></m3-switch></v-list-tile-action>
     </v-list-tile>
     <v-divider></v-divider>
 
@@ -299,6 +299,15 @@ Vue.component('lms-ui-settings', {
      </v-list-tile-content>
      <v-list-tile-action><m3-switch v-model="nowPlayingBackdrop"></m3-switch></v-list-tile-action>
     </v-list-tile>
+    <v-divider></v-divider>
+
+    <v-list-tile>
+    <v-list-tile-content @click="techInfo = !techInfo" class="switch-label">
+     <v-list-tile-title>{{i18n('Display technical info')}}</v-list-tile-title>
+     <v-list-tile-sub-title>{{i18n('Show file type, bitrate, etc.')}}</v-list-tile-sub-title>
+    </v-list-tile-content>
+     <v-list-tile-action><m3-switch v-model="techInfo"></m3-switch></v-list-tile-action>
+    </v-list-tile>
 
     <div class="dialog-padding"></div>
     <v-header class="dialog-section-header">{{i18n('Queue')}}</v-header>
@@ -403,6 +412,7 @@ Vue.component('lms-ui-settings', {
             queueBackdrop:true,
             nowPlayingBackdrop:true,
             infoBackdrop:true,
+            browseTechInfo:false,
             techInfo:false,
             queueShowTrackNum:false,
             nowPlayingTrackNum:false,
@@ -584,6 +594,7 @@ Vue.component('lms-ui-settings', {
             this.queueBackdrop = this.$store.state.queueBackdrop;
             this.nowPlayingBackdrop = this.$store.state.nowPlayingBackdrop;
             this.infoBackdrop = this.$store.state.infoBackdrop;
+            this.browseTechInfo = this.$store.state.browseTechInfo;
             this.techInfo = this.$store.state.techInfo;
             this.queueShowTrackNum = this.$store.state.queueShowTrackNum;
             this.nowPlayingTrackNum = this.$store.state.nowPlayingTrackNum;
@@ -693,6 +704,7 @@ Vue.component('lms-ui-settings', {
                       queueBackdrop:this.queueBackdrop,
                       nowPlayingBackdrop:this.nowPlayingBackdrop,
                       infoBackdrop:this.infoBackdrop,
+                      browseTechInfo:this.browseTechInfo,
                       techInfo:this.techInfo,
                       queueShowTrackNum:this.queueShowTrackNum,
                       nowPlayingTrackNum:this.nowPlayingTrackNum,

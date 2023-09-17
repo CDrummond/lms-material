@@ -78,6 +78,10 @@ function updateUiSettings(state, val) {
         state.infoBackdrop = val.infoBackdrop;
         setLocalStorageVal('infoBackdrop', state.infoBackdrop);
     }
+    if (undefined!=val.browseTechInfo && state.browseTechInfo!=val.browseTechInfo) {
+        state.browseTechInfo = val.browseTechInfo;
+        setLocalStorageVal('browseTechInfo', state.browseTechInfo);
+    }
     if (undefined!=val.techInfo && state.techInfo!=val.techInfo) {
         state.techInfo = val.techInfo;
         setLocalStorageVal('techInfo', state.techInfo);
@@ -183,7 +187,7 @@ function updateUiSettings(state, val) {
             browseDisplayChanged = true;
         }
     }
-    lmsOptions.techInfo = state.techInfo;
+    lmsOptions.techInfo = state.browseTechInfo;
     lmsOptions.infoPlugin = state.infoPlugin;
     if (queueDisplayChanged) {
         bus.$emit('queueDisplayChanged');
@@ -534,6 +538,7 @@ const store = new Vuex.Store({
             state.queueBackdrop = getLocalStorageBool('queueBackdrop', state.queueBackdrop);
             state.nowPlayingBackdrop = getLocalStorageBool('nowPlayingBackdrop', state.nowPlayingBackdrop);
             state.infoBackdrop = getLocalStorageBool('infoBackdrop', state.infoBackdrop);
+            state.browseTechInfo = getLocalStorageBool('browseTechInfo', state.browseTechInfo);
             state.techInfo = getLocalStorageBool('techInfo', state.techInfo);
             state.queueShowTrackNum = getLocalStorageBool('queueShowTrackNum', state.queueShowTrackNum);
             state.nowPlayingTrackNum = getLocalStorageBool('nowPlayingTrackNum', state.nowPlayingTrackNum);
@@ -563,7 +568,7 @@ const store = new Vuex.Store({
                 setFontSize(state.fontSize);
             }
             setListPadding(state.listPadding);
-            lmsOptions.techInfo = state.techInfo;
+            lmsOptions.techInfo = state.browseTechInfo;
             lmsOptions.infoPlugin = state.infoPlugin;
 
             // Get server prefs  for:
@@ -668,6 +673,7 @@ const store = new Vuex.Store({
                                      queueBackdrop: getLocalStorageBool('queueBackdrop', undefined==prefs.queueBackdrop ? state.queueBackdrop : prefs.queueBackdrop),
                                      nowPlayingBackdrop: getLocalStorageBool('nowPlayingBackdrop', undefined==prefs.nowPlayingBackdrop ? state.nowPlayingBackdrop : prefs.nowPlayingBackdrop),
                                      infoBackdrop: getLocalStorageBool('infoBackdrop', undefined==prefs.infoBackdrop ? state.infoBackdrop : prefs.infoBackdrop),
+                                     browseTechInfo: getLocalStorageBool('browseTechInfo', undefined==prefs.browseTechInfo ? state.browseTechInfo : prefs.browseTechInfo),
                                      techInfo: getLocalStorageBool('techInfo', undefined==prefs.techInfo ? state.techInfo : prefs.techInfo),
                                      queueShowTrackNum: getLocalStorageBool('queueShowTrackNum', undefined==prefs.queueShowTrackNum ? state.queueShowTrackNum : prefs.queueShowTrackNum),
                                      nowPlayingTrackNum: getLocalStorageBool('nowPlayingTrackNum', undefined==prefs.nowPlayingTrackNum ? state.nowPlayingTrackNum : prefs.nowPlayingTrackNum),

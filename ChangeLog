@@ -1,28 +1,27 @@
 3.5.0
 -----
  1. Add setting to toggle rounded covers.
- 2. Add 'Local artwork' entry to album track list menu.
- 3. If run under LMS8.4 (or newer) allow editing playlists up to 1k tracks.
- 4. Only ask LMS for genre details when listing album and playlist tracks if
+ 2. If run under LMS8.4 (or newer) allow editing playlists up to 1k tracks.
+ 3. Only ask LMS for genre details when listing album and playlist tracks if
     set to show band, composer, or conductor.
- 5. Add ability to edit favourite icons, thanks to wizmo2
- 6. Remove SVG filtering for now-playing covers, and use plain CSS.
- 7. Don't show bitrate, samplesize, or samplerate if 0.
- 8. Add callback for when accent colour changes due to cover.
- 9. Try to interpret back button as go back for all browsers.
-10. When browsing tracks place duration on right, as per queue.
-11. Fix resize issues when using tabs in now-playing information view.
-12. Slightly lower list margins in mobile layout up to 540px.
-13. Format disc headers similarly to tracks.
-14. Show artist name in subtitle of subtoolbar.
-15. Do not handle "http" or "https" links in iframe dialog, allow to be
+ 4. Add ability to edit favourite icons, thanks to wizmo2
+ 5. Remove SVG filtering for now-playing covers, and use plain CSS.
+ 6. Don't show bitrate, samplesize, or samplerate if 0.
+ 7. Add callback for when accent colour changes due to cover.
+ 8. Try to interpret back button as go back for all browsers.
+ 9. When browsing tracks place duration on right, as per queue.
+10. Fix resize issues when using tabs in now-playing information view.
+11. Slightly lower list margins in mobile layout up to 540px.
+12. Format disc headers similarly to tracks.
+13. Show artist name in subtitle of subtoolbar.
+14. Do not handle "http" or "https" links in iframe dialog, allow to be
     handled externally.
-16. Always use square aspect ratio for cover image area, whn rounding add
+15. Always use square aspect ratio for cover image area, whn rounding add
     background if necessary.
-17. For landscape now-playing text uses more space depending upon cover width.
-18. Fix biography, etc, showing in actions menu for 'Compilations' section.
-19. Only add bottom padding for iOS if running as web-app.
-20. In now-playing optionally show "Performed by " (etc.) prefixes for artists.
+16. For landscape now-playing text uses more space depending upon cover width.
+17. Fix biography, etc, showing in actions menu for 'Compilations' section.
+18. Only add bottom padding for iOS if running as web-app.
+19. In now-playing optionally show "Performed by " (etc.) prefixes for artists.
 
 3.4.5
 -----

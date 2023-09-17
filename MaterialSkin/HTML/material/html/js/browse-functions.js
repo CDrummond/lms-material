@@ -145,7 +145,6 @@ function browseActions(view, item, args, count) {
                               weight:100});
             }
             if (undefined!=args['path'] && args['path'].length>0 && !queryParams.party && !LMS_KIOSK_MODE) {
-                actions.push({localartwork:true, title:i18n('Local artwork'), icon:'insert_photo', do:{ command:['musicartistinfo', 'localartwork', 'folder:'+args['path']], params:[]}, weight:102});
                 actions.push({localfiles:true, title:i18n('Local files'), icon:'insert_drive_file', do:{ command:['musicartistinfo', 'localfiles', 'folder:'+args['path']], params:[]}, weight:103});
             }
         }
@@ -405,18 +404,6 @@ function browseHandleListResponse(view, item, command, resp, prevPage, appendIte
                     if (!data || !data.result || !data.result.item_loop || data.result.item_loop.length<1) {
                         for (var i=0, loop=view.currentActions, len=loop.length; i<len; ++i) {
                             if (loop[i].localfiles) {
-                                loop.splice(i, 1);
-                                break;
-                            }
-                        }
-                    }
-                }).catch(err => {
-                });
-                // Check we have some local artwork, if not hide entry!
-                lmsCommand('', ['musicartistinfo', 'localartwork', 'folder:'+actParams['path']]).then(({data}) => {
-                    if (!data || !data.result || !data.result.item_loop || data.result.item_loop.length<1) {
-                        for (var i=0, loop=view.currentActions, len=loop.length; i<len; ++i) {
-                            if (loop[i].localartwork) {
                                 loop.splice(i, 1);
                                 break;
                             }

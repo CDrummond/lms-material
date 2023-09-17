@@ -147,6 +147,9 @@
   border-left:none!important;
   border-right:none!important;
  }
+ ::-webkit-scrollbar-thumb:hover {
+  background:var(--mobile-scrollbar-thumb-color);
+ }
  ::-webkit-scrollbar-track {
   -webkit-box-shadow: none!important;
   background-color:transparent;

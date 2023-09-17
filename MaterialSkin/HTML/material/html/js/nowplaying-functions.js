@@ -163,17 +163,16 @@ function nowplayingOnPlayerStatus(view, playerStatus) {
     }
     if (artistAndComposer!=view.playerStatus.current.artistAndComposer) {
         view.playerStatus.current.artistAndComposer = artistAndComposer;
-        view.playerStatus.current.artistAndComposerComplex = buildArtistDetails(playerStatus.current, 'now-playing', useBandTag, useComposerTag, useConductorTag);
+        view.playerStatus.current.artistAndComposerWithContext = buildArtistWithContext(playerStatus.current, 'now-playing', useBandTag, useComposerTag, useConductorTag);
         let width = 0;
-        if (undefined!=view.playerStatus.current.artistAndComposerComplex) {
+        if (undefined!=view.playerStatus.current.artistAndComposerWithContext) {
             let elem = document.getElementById("stringLenCheckElem");
             if (undefined!=elem) {
-                elem.innerHTML = replaceBr(view.artistAndComposerLine, ", ")+", " + view.extendedAlbumLine;
+                elem.innerHTML = replaceBr(view.artistAndComposerLine, ", ")+", " + view.allbumWithContext;
                 width = elem.getBoundingClientRect().width;
-                console.log(width);
             }
         }
-        view.extendedDetailsWidth = width;
+        view.barInfoWithContextWidth = width;
     }
     if (playerStatus.playlist.shuffle!=view.playerStatus.playlist.shuffle) {
         view.playerStatus.playlist.shuffle = playerStatus.playlist.shuffle;

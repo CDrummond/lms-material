@@ -72,7 +72,7 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
    <v-list-tile style>
     <v-list-tile-content>
      <v-list-tile-title v-if="playerStatus.current.title">{{title}}</v-list-tile-title>
-     <v-list-tile-sub-title v-if="extendedDetails" v-html="extendedDetails"></v-list-tile-sub-title>
+     <v-list-tile-sub-title v-if="barInfoWithContext" v-html="barInfoWithContext"></v-list-tile-sub-title>
      <v-list-tile-sub-title v-else-if="playerStatus.current.artistAndComposer && playerStatus.current.albumLine"><object v-html="playerStatus.current.artistAndComposer"/>{{SEPARATOR}}<object v-html="playerStatus.current.albumLine"/></v-list-tile-sub-title>
      <v-list-tile-sub-title v-else-if="playerStatus.current.artistAndComposer" v-html="playerStatus.current.artistAndComposer"></v-list-tile-sub-title>
      <v-list-tile-sub-title v-else-if="playerStatus.current.albumLine" v-html="playerStatus.current.albumLine"></v-list-tile-sub-title>
@@ -283,7 +283,7 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
       <div>
        <p class="np-title-landscape np-title" v-if="playerStatus.current.title">{{title}}</p>
        <p class="np-text-landscape subtext" v-if="artistAndComposerLine" v-html="artistAndComposerLine"></p>
-       <p class="np-text-landscape subtext" v-if="extendedAlbumLine" v-html="extendedAlbumLine"></p>
+       <p class="np-text-landscape subtext" v-if="allbumWithContext" v-html="allbumWithContext"></p>
       </div>
      </div>
 
@@ -350,7 +350,7 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
      <div>
       <p class="np-title" v-if="playerStatus.current.title">{{title}}</p>
       <p class="np-text subtext" v-if="artistAndComposerLine" v-html="artistAndComposerLine"></p>
-      <p class="np-text subtext" v-if="extendedAlbumLine" v-html="extendedAlbumLine"></p>
+      <p class="np-text subtext" v-if="allbumWithContext" v-html="allbumWithContext"></p>
      </div>
     </div>
    </div>
@@ -419,7 +419,7 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
                     isplaying: false,
                     sleepTimer: false,
                     dvc: VOL_STD,
-                    current: { canseek:1, duration:0, time:undefined, title:undefined, artist:undefined, artistAndComposer: undefined, artistAndComposerComplex:undefined,
+                    current: { canseek:1, duration:0, time:undefined, title:undefined, artist:undefined, artistAndComposer: undefined, artistAndComposerWithContext:undefined,
                                album:undefined, albumName:undefined, albumLine:undefined, technicalInfo:undefined, pospc:0.0, tracknum:undefined,
                                disc:0, year:0, url:undefined, comment:undefined, source: {local:true, text:undefined} },
                     playlist: { shuffle:0, repeat: 0, current:0, count:0 },
@@ -440,7 +440,7 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
                  landscape: false,
                  wide: 0,
                  windowWidth: 10,
-                 extendedDetailsWidth: 10,
+                 barInfoWithContextWidth: 10,
                  largeView: false,
                  menu: { show: false, x:0, y:0, items: [], icons:false, tab:undefined, section:undefined, index:undefined },
                  rating: {value:0, setting:0},
@@ -1253,14 +1253,14 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
             return undefined!=this.coverUrl && (this.coverUrl.includes(DEFAULT_COVER) || this.coverUrl.includes(LMS_BLANK_COVER) || this.coverUrl.includes(DEFAULT_RADIO_COVER))
         },
         artistAndComposerLine() {
-            return undefined!=this.playerStatus.current.artistAndComposerComplex ? this.playerStatus.current.artistAndComposerComplex : this.playerStatus.current.artistAndComposer
+            return undefined!=this.playerStatus.current.artistAndComposerWithContext ? this.playerStatus.current.artistAndComposerWithContext : this.playerStatus.current.artistAndComposer
         },
-        extendedAlbumLine() {
-            return undefined!=this.playerStatus.current.artistAndComposerComplex ? i18n('<obj class="ext-details">From</obj> %1', this.playerStatus.current.albumLine) : this.playerStatus.current.albumLine
+        allbumWithContext() {
+            return undefined!=this.playerStatus.current.artistAndComposerWithContext ? i18n('<obj class="ext-details">From</obj> %1', this.playerStatus.current.albumLine) : this.playerStatus.current.albumLine
         },
-        extendedDetails() {
-            if (this.windowWidth-(this.stopButton ? 420 : 380)>this.extendedDetailsWidth && undefined!=this.playerStatus.current.artistAndComposerComplex && this.extendedAlbumLine) {
-                return replaceBr(this.artistAndComposerLine, ", ")+", " + this.extendedAlbumLine
+        barInfoWithContext() {
+            if (this.windowWidth-(this.stopButton ? 420 : 380)>this.barInfoWithContextWidth && undefined!=this.playerStatus.current.artistAndComposerWithContext && this.allbumWithContext) {
+                return replaceBr(this.artistAndComposerLine, ", ")+", " + this.allbumWithContext
             }
             return undefined;
         }

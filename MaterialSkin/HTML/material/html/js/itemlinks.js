@@ -148,7 +148,7 @@ function buildArtistLine(i, page, plain) {
     }
 }
 
-function buildArtistDetails(i, page, useBand, useComposer, useConductor) {
+function buildArtistWithContext(i, page, useBand, useComposer, useConductor) {
     let composers = undefined;
     if (useComposer) {
         composers=addArtistLink(i, composers, "composer", "showComposer", page, new Set(), false);

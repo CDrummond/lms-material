@@ -2573,6 +2573,12 @@ div.v-subheader {
  grid-template-columns:repeat(auto-fill, 175px);
 }
 
+@media only screen and (max-width:400px) {
+ .np-grid-sect {
+  grid-template-columns:repeat(auto-fill, 160px);
+ }
+}
+
 .np-grid-item {
  position:relative;
  width:150px;

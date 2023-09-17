@@ -23,6 +23,7 @@
 18. Only add bottom padding for iOS if running as web-app.
 19. In now-playing optionally show "Performed by " (etc.) prefixes for artists.
 20. Only show jumplist if LMS's list response has 4 or more keys.
+21. Increase max items in jumplist.
 
 3.4.5
 -----

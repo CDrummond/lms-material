@@ -275,6 +275,15 @@ Vue.component('lms-ui-settings', {
     <v-divider></v-divider>
 
     <v-list-tile>
+    <v-list-tile-content @click="nowPlayingContext = !nowPlayingContext" class="switch-label">
+     <v-list-tile-title>{{i18n('Show artist context, etc.')}}</v-list-tile-title>
+     <v-list-tile-sub-title>{{i18n("Show 'Performed by', 'From', etc. when listing track details. (.e.g Title By Artist From Album)'.")}}</v-list-tile-sub-title>
+    </v-list-tile-content>
+    <v-list-tile-action><m3-switch v-model="nowPlayingContext"></m3-switch></v-list-tile-action>
+   </v-list-tile>
+   <v-divider></v-divider>
+
+    <v-list-tile>
      <v-list-tile-content @click="nowPlayingClock = !nowPlayingClock" class="switch-label">
       <v-list-tile-title>{{i18n('Show current date and time')}}</v-list-tile-title>
       <v-list-tile-sub-title>{{i18n("Show current date and time in main toolbar if there is sufficient space.")}}</v-list-tile-sub-title>
@@ -398,6 +407,7 @@ Vue.component('lms-ui-settings', {
             queueShowTrackNum:false,
             nowPlayingTrackNum:false,
             nowPlayingClock:false,
+            nowPlayingContext:false,
             swipeVolume:false,
             swipeChangeTrack:false,
             keyboardControl:true,
@@ -578,6 +588,7 @@ Vue.component('lms-ui-settings', {
             this.queueShowTrackNum = this.$store.state.queueShowTrackNum;
             this.nowPlayingTrackNum = this.$store.state.nowPlayingTrackNum;
             this.nowPlayingClock = this.$store.state.nowPlayingClock;
+            this.nowPlayingContext = this.$store.state.nowPlayingContext;
             this.swipeVolume = this.$store.state.swipeVolume;
             this.swipeChangeTrack = this.$store.state.swipeChangeTrack;
             this.keyboardControl = this.$store.state.keyboardControl;
@@ -686,6 +697,7 @@ Vue.component('lms-ui-settings', {
                       queueShowTrackNum:this.queueShowTrackNum,
                       nowPlayingTrackNum:this.nowPlayingTrackNum,
                       nowPlayingClock:this.nowPlayingClock,
+                      nowPlayingContext:this.nowPlayingContext,
                       swipeVolume:this.swipeVolume,
                       swipeChangeTrack:this.swipeChangeTrack,
                       keyboardControl:this.keyboardControl,

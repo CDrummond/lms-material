@@ -283,7 +283,7 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
       <div>
        <p class="np-title-landscape np-title" v-if="playerStatus.current.title">{{title}}</p>
        <p class="np-text-landscape subtext" v-if="artistAndComposerLine" v-html="artistAndComposerLine"></p>
-       <p class="np-text-landscape subtext" v-if="allbumWithContext" v-html="allbumWithContext"></p>
+       <p class="np-text-landscape subtext" v-if="albumLine" v-html="albumLine"></p>
       </div>
      </div>
 
@@ -350,7 +350,7 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
      <div>
       <p class="np-title" v-if="playerStatus.current.title">{{title}}</p>
       <p class="np-text subtext" v-if="artistAndComposerLine" v-html="artistAndComposerLine"></p>
-      <p class="np-text subtext" v-if="allbumWithContext" v-html="allbumWithContext"></p>
+      <p class="np-text subtext" v-if="albumLine" v-html="albumLine"></p>
      </div>
     </div>
    </div>
@@ -1253,14 +1253,14 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
             return undefined!=this.coverUrl && (this.coverUrl.includes(DEFAULT_COVER) || this.coverUrl.includes(LMS_BLANK_COVER) || this.coverUrl.includes(DEFAULT_RADIO_COVER))
         },
         artistAndComposerLine() {
-            return undefined!=this.playerStatus.current.artistAndComposerWithContext ? this.playerStatus.current.artistAndComposerWithContext : this.playerStatus.current.artistAndComposer
+            return this.$store.state.nowPlayingContext && undefined!=this.playerStatus.current.artistAndComposerWithContext ? this.playerStatus.current.artistAndComposerWithContext : this.playerStatus.current.artistAndComposer
         },
-        allbumWithContext() {
-            return undefined!=this.playerStatus.current.artistAndComposerWithContext ? i18n('<obj class="ext-details">From</obj> %1', this.playerStatus.current.albumLine) : this.playerStatus.current.albumLine
+        albumLine() {
+            return this.$store.state.nowPlayingContext && undefined!=this.playerStatus.current.artistAndComposerWithContext ? i18n('<obj class="ext-details">From</obj> %1', this.playerStatus.current.albumLine) : this.playerStatus.current.albumLine
         },
         barInfoWithContext() {
-            if (this.windowWidth-(this.stopButton ? 420 : 380)>this.barInfoWithContextWidth && undefined!=this.playerStatus.current.artistAndComposerWithContext && this.allbumWithContext) {
-                return replaceBr(this.artistAndComposerLine, ", ")+", " + this.allbumWithContext
+            if (this.$store.state.nowPlayingContext && this.windowWidth-(this.stopButton ? 420 : 380)>this.barInfoWithContextWidth && undefined!=this.playerStatus.current.artistAndComposerWithContext && this.albumLine) {
+                return replaceBr(this.artistAndComposerLine, ", ")+", " + this.albumLine
             }
             return undefined;
         }

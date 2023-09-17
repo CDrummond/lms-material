@@ -22,7 +22,7 @@
 17. For landscape now-playing text uses more space depending upon cover width.
 18. Fix biography, etc, showing in actions menu for 'Compilations' section.
 19. Only add bottom padding for iOS if running as web-app.
-20. In now-playing show "Performed by " (etc.) prefixes for artists.
+20. In now-playing optionally show "Performed by " (etc.) prefixes for artists.
 
 3.4.5
 -----

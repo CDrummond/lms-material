@@ -96,6 +96,10 @@ function updateUiSettings(state, val) {
         setLocalStorageVal('nowPlayingClock', state.nowPlayingClock);
         bus.$emit('nowPlayingClockChanged');
     }
+    if (undefined!=val.nowPlayingContext && state.nowPlayingContext!=val.nowPlayingContext) {
+        state.nowPlayingContext = val.nowPlayingContext;
+        setLocalStorageVal('nowPlayingContext', state.nowPlayingContext);
+    }
     if (undefined!=val.volumeStep && lmsOptions.volumeStep!=val.volumeStep) {
         lmsOptions.volumeStep = val.volumeStep;
         setLocalStorageVal('volumeStep', lmsOptions.volumeStep);
@@ -294,6 +298,7 @@ const store = new Vuex.Store({
         queueShowTrackNum: true,
         nowPlayingTrackNum: false,
         nowPlayingClock: false,
+        nowPlayingContext: true,
         ratingsPlugin: undefined,
         maxRating: 5,
         showRating: false,
@@ -533,6 +538,7 @@ const store = new Vuex.Store({
             state.queueShowTrackNum = getLocalStorageBool('queueShowTrackNum', state.queueShowTrackNum);
             state.nowPlayingTrackNum = getLocalStorageBool('nowPlayingTrackNum', state.nowPlayingTrackNum);
             state.nowPlayingClock = getLocalStorageBool('nowPlayingClock', state.nowPlayingClock);
+            state.nowPlayingContext = getLocalStorageBool('nowPlayingContext', state.nowPlayingContext);
             state.ratingsPlugin = getLocalStorageVal('ratingsPlugin', state.ratingsPlugin);
             state.maxRating = getLocalStorageBool('maxRating', state.maxRating);
             state.showRating = LMS_STATS_ENABLED && getLocalStorageBool('showRating', state.showRating);
@@ -666,6 +672,7 @@ const store = new Vuex.Store({
                                      queueShowTrackNum: getLocalStorageBool('queueShowTrackNum', undefined==prefs.queueShowTrackNum ? state.queueShowTrackNum : prefs.queueShowTrackNum),
                                      nowPlayingTrackNum: getLocalStorageBool('nowPlayingTrackNum', undefined==prefs.nowPlayingTrackNum ? state.nowPlayingTrackNum : prefs.nowPlayingTrackNum),
                                      nowPlayingClock: getLocalStorageBool('nowPlayingClock', undefined==prefs.nowPlayingClock ? state.nowPlayingClock : prefs.nowPlayingClock),
+                                     nowPlayingContext: getLocalStorageBool('nowPlayingContext', undefined==prefs.nowPlayingContext ? state.nowPlayingContext : prefs.nowPlayingContext),
                                      volumeStep: parseInt(getLocalStorageVal('volumeStep', undefined==prefs.volumeStep ? lmsOptions.volumeStep : prefs.volumeStep)),
                                      sortHome: getLocalStorageBool('sortHome', undefined==prefs.sortHome ? state.sortHome : prefs.sortHome),
                                      swipeVolume: getLocalStorageBool('swipeVolume', undefined==prefs.swipeVolume ? state.swipeVolume : prefs.swipeVolume),

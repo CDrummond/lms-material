@@ -1437,20 +1437,7 @@ var lmsBrowse = Vue.component("lms-browse", {
             setScrollTop(this, pos>0 ? pos : 0);
         },
         filterJumplist() {
-            if (this.items.length<=25) {
-                return;
-            }
-            if (IS_MOBILE && (undefined==this.jumplist || this.jumplist.length<1)) {
-                if (this.items.length <= (this.grid.allowed ? 50 : 150)) {
-                    return;
-                }
-                this.jumplist = [];
-                var jump = this.items.length/10.0;
-                for (var i=0; i<10; ++i) {
-                    this.jumplist.push({key:'\u2022', index: Math.round(i*jump)});
-                }
-            }
-            if (undefined==this.jumplist || this.jumplist.length<1) {
+            if (this.items.length<=25 || this.items.length!=this.listSize || undefined==this.jumplist || this.jumplist.length<4) {
                 return;
             }
             var maxItems = Math.floor((this.scrollElement.clientHeight-(16))/20);

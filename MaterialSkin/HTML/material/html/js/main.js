@@ -61,13 +61,6 @@ var app = new Vue({
             setTranslation(JSON.parse(storedTrans));
         }
 
-        if (IS_MOBILE) {
-            try { // Fails on mobile Firefox - "addRule is not a function"
-                document.styleSheets[0].addRule("::-webkit-scrollbar", "max-height: 0px !important; max-width: 0px !important;");
-            } catch(e) {
-            }
-        }
-
         initIconMap();
         initEmblems();
         initCustomActions();

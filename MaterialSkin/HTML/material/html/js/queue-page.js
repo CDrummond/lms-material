@@ -608,6 +608,15 @@ var lmsQueue = Vue.component("lms-queue", {
                     }
                 });
             }
+            if (undefined==this.sbarTimer) {
+                document.documentElement.style.setProperty('--mobile-scrollbar-thumb-color', 'var(--scrollbar-thumb-color)');
+            } else {
+                clearTimeout(this.sbarTimer);
+            }
+            this.sbarTimer = setTimeout(function () {
+                this.sbarTimer = undefined;
+                document.documentElement.style.setProperty('--mobile-scrollbar-thumb-color', 'transparent');
+            }.bind(this), 250);
         },
         droppedFileHandler(ev) {
             if (queryParams.party) {

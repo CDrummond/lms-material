@@ -38,6 +38,7 @@
  --image-background-color:rgba(0, 0, 0, 0.075);
  --image-shadow:rgba(0, 0, 0, 0.35) 0px 5px 15px;
  --np-image-border:16px;
+ --mobile-scrollbar-thumb-color:transparent;
 }
 
 .theme--dark {
@@ -132,6 +133,24 @@
 
 ::-webkit-scrollbar-corner {
  background:var(--scrollbar-corner-color);
+}
+
+@media (hover: none), (hover: on-demand), (-moz-touch-enabled: 1), (pointer:coarse) {
+ ::-webkit-scrollbar {
+  width:2px!important;
+  background-color:transparent;
+  opacity:50%!important;
+ }
+ ::-webkit-scrollbar-thumb {
+  background:var(--mobile-scrollbar-thumb-color);
+  border-radius:2px!important;
+  border-left:none!important;
+  border-right:none!important;
+ }
+ ::-webkit-scrollbar-track {
+  -webkit-box-shadow: none!important;
+  background-color:transparent;
+ }
 }
 
 html, .mini-player {

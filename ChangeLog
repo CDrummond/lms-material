@@ -24,6 +24,7 @@
 19. In now-playing optionally show "Performed by " (etc.) prefixes for artists.
 20. Only show jumplist if LMS's list response has 4 or more keys.
 21. Increase max items in jumplist.
+22. Show (very thin) scrollbar when scrolling on mobile.
 
 3.4.5
 -----

@@ -27,6 +27,9 @@
 22. Show (very thin) scrollbar when scrolling on mobile.
 23. Add separate options for tech info in browse and now-playing.
 24. Fix position of player power button when using narrow screens.
+25. Show (track) replaygain value in browse tech info.
+26. If using LMS8.4 (or above) show current replaygain value in now-playing
+    tech info.
 
 3.4.5
 -----

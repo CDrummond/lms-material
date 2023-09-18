@@ -164,6 +164,9 @@ function formatTechInfo(item, source) {
     if (item.samplerate && item.samplerate>100) {
         technical.push((item.samplerate/1000)+"kHz");
     }
+    if (undefined!=item.replay_gain && item.replay_gain<0.0) {
+        technical.push(i18n("%1dB", item.replay_gain));
+    }
     if (item.type) {
         let bracket = item.type.indexOf(" (");
         let type = bracket>0 ? item.type.substring(0, bracket) : item.type;
@@ -176,7 +179,7 @@ function formatTechInfo(item, source) {
             technical.push(type);
         }
     }
-    return technical.length>0 ? technical.join(' ') : undefined;
+    return technical.length>0 ? technical.join(', ') : undefined;
 }
 
 function formatSeconds(secs, showDays) {

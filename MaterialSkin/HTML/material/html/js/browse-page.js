@@ -1290,15 +1290,7 @@ var lmsBrowse = Vue.component("lms-browse", {
                     }
                 });
             }
-            if (undefined==this.sbarTimer) {
-                document.documentElement.style.setProperty('--mobile-scrollbar-thumb-color', 'var(--scrollbar-thumb-color)');
-            } else {
-                clearTimeout(this.sbarTimer);
-            }
-            this.sbarTimer = setTimeout(function () {
-                this.sbarTimer = undefined;
-                document.documentElement.style.setProperty('--mobile-scrollbar-thumb-color', 'transparent');
-            }.bind(this), 250);
+            msHandleScrollEvent(this);
         },
         calcSizes(quantity, listWidth, maxItemWidth) {
             var width = GRID_MIN_WIDTH;
@@ -1771,7 +1763,7 @@ var lmsBrowse = Vue.component("lms-browse", {
         this.bgndElement = document.getElementById("browse-bgnd");
         this.scrollElement = document.getElementById("browse-list");
         this.scrollElement.addEventListener("scroll", this.handleScroll, PASSIVE_SUPPORTED ? { passive: true } : false);
-
+        msRegister(this, this.scrollElement);
         bus.$on('splitterChanged', function() {
             this.layoutGrid();
         }.bind(this));

@@ -460,6 +460,7 @@ var lmsQueue = Vue.component("lms-queue", {
         this.bgndElement = document.getElementById("queue-bgnd");
         this.scrollElement = document.getElementById("queue-list");
         this.scrollElement.addEventListener("scroll", this.handleScroll, PASSIVE_SUPPORTED ? { passive: true } : false);
+        msRegister(this, this.scrollElement);
 
         this.setBgndCover();
         this.$nextTick(function () {
@@ -608,15 +609,7 @@ var lmsQueue = Vue.component("lms-queue", {
                     }
                 });
             }
-            if (undefined==this.sbarTimer) {
-                document.documentElement.style.setProperty('--mobile-scrollbar-thumb-color', 'var(--scrollbar-thumb-color)');
-            } else {
-                clearTimeout(this.sbarTimer);
-            }
-            this.sbarTimer = setTimeout(function () {
-                this.sbarTimer = undefined;
-                document.documentElement.style.setProperty('--mobile-scrollbar-thumb-color', 'transparent');
-            }.bind(this), 250);
+            msHandleScrollEvent(this);
         },
         droppedFileHandler(ev) {
             if (queryParams.party) {

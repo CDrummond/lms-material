@@ -237,10 +237,18 @@
   padding:2px 1px 0px 7px;
  }
 
+ .maintoolbar-player-icon {
+  left:20px;
+ }
+
+ .maintoolbar-player-power-button, .maintoolbar-player-power-button:hover {
+  left:8px!important;
+ }
+
  .lms-list .v-list__tile {
   padding:0 12px !important;
  }
- 
+
  .lms-list .emblem, .lms-list-jump .emblem {
   left:35px !important;
  }

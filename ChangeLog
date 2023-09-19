@@ -31,6 +31,8 @@
 26. If using LMS8.4 (or above) show current replaygain value in now-playing
     tech info.
 27. Enable background blur for WebKit browsers (e.g. iOS).
+28. Disable background blur by using "noblur" query parameter - e.g.
+    http://SERVER:9000/material/?noblur
 
 3.4.5
 -----

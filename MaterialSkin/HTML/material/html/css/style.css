@@ -39,6 +39,7 @@
  --image-shadow:rgba(0, 0, 0, 0.35) 0px 5px 15px;
  --np-image-border:16px;
  --mobile-scrollbar-thumb-color:transparent;
+ --bgnd-filter:blur(5px);
 }
 
 .theme--dark {
@@ -1380,8 +1381,8 @@ progress {
 }
 
 .bgnd-blur {
- backdrop-filter:blur(5px);
- -webkit-backdrop-filter:blur(5px);
+ backdrop-filter:var(--bgnd-filter);
+ -webkit-backdrop-filter:var(--bgnd-filter);
  background:none!important;
 }
 

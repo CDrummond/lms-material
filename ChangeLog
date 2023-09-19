@@ -30,6 +30,7 @@
 25. Show (track) replaygain value in browse tech info.
 26. If using LMS8.4 (or above) show current replaygain value in now-playing
     tech info.
+27. Enable background blur for WebKit browsers (e.g. iOS).
 
 3.4.5
 -----

@@ -1381,6 +1381,7 @@ progress {
 
 .bgnd-blur {
  backdrop-filter:blur(5px);
+ -webkit-backdrop-filter:blur(5px);
  background:none!important;
 }
 

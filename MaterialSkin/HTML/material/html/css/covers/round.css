@@ -3,8 +3,8 @@
  border-radius:8px!important;
 }
 
-.lms-list img, .pmgr-cover img, .lms-list3 img, .np-info .lms-list img {
- border-radius:4px;
+.lms-list img:not(.image-grid-item-img), .pmgr-cover img, .lms-list3 img, .np-info .lms-list img {
+ border-radius:4px!important;
 }
 
 .np-image-desktop .np-cover {

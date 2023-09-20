@@ -2045,7 +2045,7 @@ div.v-subheader {
 
 /* Long press on buttons sometimes causes select? */
 .v-btn--icon, .v-btn__content, .v-btn__content i, .noselect, .v-slider, .vol-control-0, .vol-control-1, .vol-control-2,
-.vol-control-0 p, .vol-control-1 p, .vol-control-2 p, .vol-slider, .vol-slider input {
+.vol-control-0 p, .vol-control-1 p, .vol-control-2 p, .vol-slider, .vol-slider input, .lms-splitter, .splitter {
  -webkit-touch-callout:none;
  -webkit-user-select:none;
  -khtml-user-select:none;

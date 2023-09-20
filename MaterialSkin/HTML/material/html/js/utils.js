@@ -107,6 +107,7 @@ function parseQueryParams() {
             resp.npRatio=parseFloat(kv[1]);
         } else if ("noblur"==kv[0]) {
             document.documentElement.style.setProperty('--bgnd-filter', 'none');
+            document.documentElement.style.setProperty('--bgnd-webkit-filter', 'none');
         }
     }
     return resp;

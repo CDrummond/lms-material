@@ -214,24 +214,45 @@
 }
 
 @media screen and (max-width: 650px) {
- .np-details-desktop {
-  left:164px;
-  width:calc(100vw - 164px);
- }
- .np-desktop-sb .np-details-desktop {
-  left:214px;
-  width:calc(100vw - 214px);
- }
- .np-image-desktop {
+ .np-details-desktop .v-list__tile__action {
   display:none!important;
  }
 }
 
-@media screen and (max-width: 470px) {
- .np-details-desktop .v-list__tile__content {
-  margin-right:8px;
+@media screen and (max-width: 550px) {
+ #np-bar-prev, #np-bar-next, #np-bar-stop {
+  display:none!important;
  }
- .np-details-desktop .v-list__tile__action {
+
+ .np-bar .np-playpause {
+  margin-left:-4px!important;
+ }
+ .np-image-desktop {
+   left:74px;
+ }
+ .np-desktop-sb .np-image-desktop {
+   left:70px;
+ }
+ .np-details-desktop {
+  left:148px;
+  width:calc(100vw - 148px);
+ }
+ .np-desktop-sb .np-details-desktop {
+  left:144px;
+  width:calc(100vw - 144px);
+ }
+}
+
+@media screen and (max-width: 360px) {
+ .np-details-desktop {
+  left:76px;
+  width:calc(100vw - 76px);
+ }
+ .np-desktop-sb .np-details-desktop {
+  left:72px;
+  width:calc(100vw - 72px);
+ }
+ .np-image-desktop {
   display:none!important;
  }
 }

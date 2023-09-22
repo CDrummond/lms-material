@@ -182,18 +182,18 @@ function buildArtistWithContext(i, page, useBand, useComposer, useConductor) {
     let details = "";
     if (undefined!=artists) {
         if (undefined!=composers || undefined!=conductors) {
-            details += i18n('<obj class="ext-details">Performed by</obj> %1', artists) + "<br/>";
+            details += i18n('<obj>Performed by</obj> %1', artists) + "<br/>";
         } else {
-            details += i18n('<obj class="ext-details">By</obj> %1', artists);
+            details += i18n('<obj>By</obj> %1', artists);
         }
     }
     if (undefined!=composers) {
-        details += i18n('<obj class="ext-details">Composed by</obj> %1', composers) + (undefined!=conductors ? "<br/>" : "");
+        details += i18n('<obj>Composed by</obj> %1', composers) + (undefined!=conductors ? "<br/>" : "");
     }
     if (undefined!=conductors) {
-        details += i18n('<obj class="ext-details">Conducted by</obj> %1', conductors);
+        details += i18n('<obj>Conducted by</obj> %1', conductors);
     }
-    return details.length>0 ? details : undefined;
+    return details.length>0 ? details.replaceAll("<obj>", "<obj class=\"ext-details\">") : undefined;
 }
 
 function buildAlbumLine(i, page, plain) {

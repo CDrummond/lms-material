@@ -21,7 +21,7 @@
 16. For landscape now-playing text uses more space depending upon cover width.
 17. Fix biography, etc, showing in actions menu for 'Compilations' section.
 18. Only add bottom padding for iOS if running as web-app.
-19. In now-playing optionally show "Performed by " (etc.) prefixes for artists.
+19. In now-playing optionally show "Performed by" (etc.) prefixes for artists.
 20. Only show jumplist if LMS's list response has 4 or more keys.
 21. Increase max items in jumplist.
 22. Show (very thin) scrollbar when scrolling on mobile.
@@ -30,7 +30,8 @@
 25. Show (track) replaygain value in browse tech info.
 26. If using LMS8.4 (or above) show current replaygain value in now-playing
     tech info.
-27. Enable background blur for WebKit browsers (e.g. iOS).
+27. Enable background blur for WebKit browsers (e.g. iOS). Disabled for Linux
+    due to issues with WebKitGTK.
 28. Disable background blur by using "noblur" query parameter - e.g.
     http://SERVER:9000/material/?noblur
 29. Better collapsing of desktop bottom bar items when reducing width.

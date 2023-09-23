@@ -116,7 +116,6 @@ function browseAddHistory(view) {
 
 function browseActions(view, item, args, count) {
     var actions=[];
-    console.log(item, args);
     if ((undefined==item || undefined==item.id || !item.id.startsWith(MUSIC_ID_PREFIX)) && // Exclude 'Compilations'
         (undefined==args['artist'] || (args['artist']!=i18n('Various Artists') && args['artist'].toLowerCase()!='various artists'))) {
         if (lmsOptions.infoPlugin) {

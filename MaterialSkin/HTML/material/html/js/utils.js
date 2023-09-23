@@ -158,7 +158,7 @@ function logAndShowError(err, message, command, params, start, count) {
 
 function formatTechInfo(item, source) {
     let technical = [];
-    if (item.bitrate && item.bitrate>0) {
+    if (undefined!=item.bitrate) {
         technical.push(item.bitrate);
     }
     if (item.samplesize && item.samplesize>0) {

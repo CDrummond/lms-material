@@ -2,6 +2,7 @@
 -----
 1. Display replaygain value even if positive or zero.
 2. Only use 2 decimal places for replaygain.
+3. Fix missing bitrate from tech info.
 
 3.5.0
 -----

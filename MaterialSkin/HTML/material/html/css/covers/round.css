@@ -7,14 +7,14 @@
  border-radius:4px!important;
 }
 
-.np-image-desktop .np-cover {
+.np-bar-image .np-cover {
  border-radius:6px!important;
 }
 
 .np-image, .np-image .np-cover,
 .np-no-meta-img,
 .np-image-landscape, .np-image-landscape .np-cover,
-.np-image-desktop {
+.np-bar-image {
  border-radius:14px!important;
 }
 

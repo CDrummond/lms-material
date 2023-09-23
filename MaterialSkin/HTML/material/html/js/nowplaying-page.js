@@ -41,8 +41,8 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
   </v-list>
  </v-menu>
  
- <div v-if="desktopLayout && !largeView" class="np-bar" id="np-bar" v-bind:class="{'np-desktop-sb':stopButton}">
-  <v-layout row class="np-controls-desktop" v-if="stopButton">
+ <div v-if="desktopLayout && !largeView" class="np-bar" id="np-bar" v-bind:class="{'np-bar-sb':stopButton}">
+  <v-layout row class="np-bar-controls" v-if="stopButton">
    <v-flex xs3>
     <v-btn flat icon id="np-bar-prev" v-bind:class="{'disabled':disablePrev}" v-longpress:repeat="prevButton" :title="trans.prev | tooltip('left', keyboardControl)"><v-icon large class="media-icon">skip_previous</v-icon></v-btn>
    </v-flex>
@@ -56,7 +56,7 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
     <v-btn flat icon id="np-bar-next" v-bind:class="{'disabled':disableNext}" v-longpress:repeat="nextButton"  :title="trans.next | tooltip('right', keyboardControl)"><v-icon large class="media-icon">skip_next</v-icon></v-btn>
    </v-flex>
   </v-layout>
-  <v-layout row class="np-controls-desktop" v-else>
+  <v-layout row class="np-bar-controls" v-else>
    <v-flex xs4>
     <v-btn flat icon id="np-bar-prev" v-bind:class="{'disabled':disablePrev}" v-longpress:repeat="prevButton" class="np-std-button"  :title="trans.prev | tooltip('left', keyboardControl)"><v-icon large class="media-icon">skip_previous</v-icon></v-btn>
    </v-flex>
@@ -67,8 +67,8 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
     <v-btn flat icon id="np-bar-next" v-bind:class="{'disabled':disableNext}" v-longpress:repeat="nextButton" class="np-std-button"  :title="trans.next | tooltip('right', keyboardControl)"><v-icon large class="media-icon">skip_next</v-icon></v-btn>
    </v-flex>
   </v-layout>
-  <div v-if="!largeView && !disableBtns" class="np-image-desktop"><div @contextmenu="showMenu" @click="clickImage(event)" class="np-cover" v-bind:class="{'np-trans':transCvr}"></div></div>
-  <v-list two-line subheader class="np-details-desktop" v-if="playerStatus.playlist.count>0">
+  <div v-if="!largeView && !disableBtns" class="np-bar-image"><div @contextmenu="showMenu" @click="clickImage(event)" class="np-cover" v-bind:class="{'np-trans':transCvr}"></div></div>
+  <v-list two-line subheader class="np-bar-details" v-if="playerStatus.playlist.count>0">
    <v-list-tile style>
     <v-list-tile-content>
      <v-list-tile-title v-if="playerStatus.current.title">{{title}}</v-list-tile-title>
@@ -79,13 +79,13 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
      <v-list-tile-sub-title v-else-if="playerStatus.current.title">&#x22ef;</v-list-tile-sub-title>
     </v-list-tile-content>
     <v-list-tile-action>
-     <div v-if="playerStatus.playlist.count<2 || !(npBarRatings && !techInfo)" class="np-time-desktop" v-bind:class="{'link-item-ct':coloredToolbars,'link-item':!coloredToolbars,'np-time-desktop-r': techInfo && npBarRatings}" @click="toggleTime()">{{formattedTime}}</div>
-     <div v-else class="np-time-desktop " v-bind:class="{'np-time-desktop-r': techInfo && npBarRatings, 'link-item-ct':coloredToolbars,'link-item':!coloredToolbars}" @click="toggleTime()">{{formattedTime}}{{playerStatus.playlist.current | trackCount(playerStatus.playlist.count, SEPARATOR)}}</div>
-     <div v-if="techInfo" class="np-tech-desktop ellipsis" v-bind:class="{'np-tech-desktop-r': npBarRatings}">{{technicalInfo}}</div>
-     <div v-else-if="playerStatus.playlist.count>1 && !npBarRatings" class="np-tech-desktop">{{playerStatus.playlist.current | trackCount(playerStatus.playlist.count)}}</div>
-     <div v-else-if="!npBarRatings" class="np-tech-desktop">&nbsp;</div>
-     <div v-if="npBarRatings && (repAltBtn.show || shuffAltBtn.show)" class="np-rating-desktop np-thumbs-desktop"><v-btn v-if="repAltBtn.show" :title="repAltBtn.tooltip" flat icon v-longpress="repeatClicked" v-bind:class="{'np-std-button': !stopButton,'disabled':noPlayer}"><v-icon v-if="repAltBtn.icon" class="media-icon">{{repAltBtn.icon}}</v-icon><img v-else :src="repAltBtn.image" class="btn-img"></img></v-btn><v-btn v-if="shuffAltBtn.show" :title="shuffAltBtn.tooltip" flat icon @click="shuffleClicked" v-bind:class="{'np-std-button': !stopButton}"><v-icon v-if="shuffAltBtn.icon" class="media-icon">{{shuffAltBtn.icon}}</v-icon><img v-else :src="shuffAltBtn.image" class="btn-img"></img></v-btn></div>
-     <v-rating v-else-if="showRatings" class="np-rating-desktop" v-bind:class="{'np-rating-desktop-t':techInfo}" v-model="rating.value" half-increments hover clearable @click.native="setRating(true)" :readonly="undefined==ratingsPlugin"></v-rating>
+     <div v-if="playerStatus.playlist.count<2 || !(npBarRatings && !techInfo)" class="np-bar-time" v-bind:class="{'link-item-ct':coloredToolbars,'link-item':!coloredToolbars,'np-bar-time-r': techInfo && npBarRatings}" @click="toggleTime()">{{formattedTime}}</div>
+     <div v-else class="np-bar-time " v-bind:class="{'np-bar-time-r': techInfo && npBarRatings, 'link-item-ct':coloredToolbars,'link-item':!coloredToolbars}" @click="toggleTime()">{{formattedTime}}{{playerStatus.playlist.current | trackCount(playerStatus.playlist.count, SEPARATOR)}}</div>
+     <div v-if="techInfo" class="np-bar-tech ellipsis" v-bind:class="{'np-bar-tech-r': npBarRatings}">{{technicalInfo}}</div>
+     <div v-else-if="playerStatus.playlist.count>1 && !npBarRatings" class="np-bar-tech">{{playerStatus.playlist.current | trackCount(playerStatus.playlist.count)}}</div>
+     <div v-else-if="!npBarRatings" class="np-bar-tech">&nbsp;</div>
+     <div v-if="npBarRatings && (repAltBtn.show || shuffAltBtn.show)" class="np-bar-rating np-thumbs-desktop"><v-btn v-if="repAltBtn.show" :title="repAltBtn.tooltip" flat icon v-longpress="repeatClicked" v-bind:class="{'np-std-button': !stopButton,'disabled':noPlayer}"><v-icon v-if="repAltBtn.icon" class="media-icon">{{repAltBtn.icon}}</v-icon><img v-else :src="repAltBtn.image" class="btn-img"></img></v-btn><v-btn v-if="shuffAltBtn.show" :title="shuffAltBtn.tooltip" flat icon @click="shuffleClicked" v-bind:class="{'np-std-button': !stopButton}"><v-icon v-if="shuffAltBtn.icon" class="media-icon">{{shuffAltBtn.icon}}</v-icon><img v-else :src="shuffAltBtn.image" class="btn-img"></img></v-btn></div>
+     <v-rating v-else-if="showRatings" class="np-bar-rating" v-bind:class="{'np-bar-rating-t':techInfo}" v-model="rating.value" half-increments hover clearable @click.native="setRating(true)" :readonly="undefined==ratingsPlugin"></v-rating>
     </v-list-tile-action>
    </v-list-tile>
   </v-list>

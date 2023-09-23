@@ -1,7 +1,7 @@
 .image-grid-item-img, .np-grid-item img, .np-grid-sect .pq-current, .lms-image-grid .list-active, .np-grid-sect .list-active,
 .browse-html img, .np-info-text img, .np-info-text-desktop img, .np-info-text-full img, .np-info-text-full-desktop img, .inline-image,
 .lms-list img:not(.multi-disc), .pmgr-cover img, .lms-list3 img, .np-info .lms-list img:not(.multi-disc), .np-image, .np-image .np-cover, .np-no-meta-img,
-.np-image-landscape, .np-image-landscape .np-cover, .np-image-desktop, .np-image-desktop .np-cover {
+.np-image-landscape, .np-image-landscape .np-cover, .np-bar-image, .np-bar-image .np-cover {
  border-radius:0px!important;
 }
 

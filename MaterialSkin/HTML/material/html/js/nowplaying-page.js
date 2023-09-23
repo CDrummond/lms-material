@@ -90,6 +90,7 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
    </v-list-tile>
   </v-list>
   <v-progress-linear height="5" id="pos-slider" v-if="playerStatus.current.duration>0" class="np-slider np-slider-desktop" :value="playerStatus.current.pospc" v-on:click="sliderChanged($event, false)" @mouseover="showTimeTooltip" @mouseout="hideTimeTooltip" @mousemove="moveTimeTooltip" @touchstart.passive="touchSliderStart" @touchend.passive="touchSliderEnd" @touchmove.passive="moveTimeTooltipTouch"></v-progress-linear>
+  <v-btn flat icon v-longpress="playPauseButton" @click.middle="showSleep" id="playPauseX" :title="(playerStatus.isplaying ? trans.pause : trans.play) | tooltip('space', keyboardControl)" v-bind:class="{'disabled':disableBtns}"><v-icon large class="media-icon">{{playerStatus.isplaying ? 'pause' : 'play_arrow'}}</v-icon></v-btn>
 
   <div v-if="info.show" class="np-info np-info-desktop" id="np-info">
    <v-tabs centered v-model="info.tab" v-if="info.showTabs" style="np-info-tab-cover">

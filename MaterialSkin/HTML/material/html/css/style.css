@@ -77,6 +77,13 @@
  stroke:var(--top-toolbar-text-color)!important;
 }
 
+#playPauseX {
+ position:fixed;
+ right:0px;
+ bottom:8px;
+ visibility:hidden;
+}
+
 .np-bar .v-progress-linear .primary {
  background-color:var(--bottom-position-slider-color)!important;
  border-color:var(--bottom-position-slider-color)!important;

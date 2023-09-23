@@ -35,6 +35,8 @@
 28. Disable background blur by using "noblur" query parameter - e.g.
     http://SERVER:9000/material/?noblur
 29. Better collapsing of desktop bottom bar items when reducing width.
+30. Don't allow setting theme colour from cover on iOS, does not update iOS
+    status bar to match.
 
 3.4.5
 -----

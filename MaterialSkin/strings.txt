@@ -323,6 +323,8 @@ PLUGIN_MATERIAL_SKIN_RELOAD_NOTE
 
 PLUGIN_MATERIAL_SKIN_PAGED_BATCH_SIZE
 	EN	Paged batch size
+	NL	Batchgrootte van pagina's
 
 PLUGIN_MATERIAL_SKIN_PAGED_BATCH_SIZE_DESC
 	EN	Number of initial items to fetch (and display) when listing contents of some lists (such as playlist contents). Scrolling list will then cause another batch of items to be fetched, etc.
+	NL	Aantal initiële items dat wordt opgehaald (en getoond) bij het weergeven van de inhoud van sommige lijsten (zoals afspeellijsten). Als je door de lijst bladert, wordt er vervolgens een nieuwe reeks items opgehaald, enz.

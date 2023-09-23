@@ -167,8 +167,8 @@ function formatTechInfo(item, source) {
     if (item.samplerate && item.samplerate>100) {
         technical.push((item.samplerate/1000)+"kHz");
     }
-    if (undefined!=item.replay_gain && item.replay_gain<0.0) {
-        technical.push(i18n("%1dB", item.replay_gain));
+    if (undefined!=item.replay_gain) {
+        technical.push(i18n("%1dB", parseFloat(item.replay_gain.toFixed(3))));
     }
     if (item.type) {
         let bracket = item.type.indexOf(" (");

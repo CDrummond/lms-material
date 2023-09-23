@@ -523,7 +523,7 @@ var lmsServer = Vue.component('lms-server', {
                 player.current.time = undefined==data.time ? undefined : "stop"==data.mode ? 0 : parseFloat(data.time);
                 player.current.canseek = parseInt(data.can_seek);
                 player.current.remote_title = checkRemoteTitle(player.current);
-                player.current.replay_gain = undefined==data.replay_gain ? 0.0 : parseFloat(data.replay_gain);
+                player.current.replay_gain = data.replay_gain;
                 //player.current.emblem = getEmblem(player.current.extid, player.current.url);
 
                 // BBC iPlayer Extras streams can change duration. *But* only the duration in data seems to

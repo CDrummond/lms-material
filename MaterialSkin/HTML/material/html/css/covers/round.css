@@ -3,18 +3,17 @@
  border-radius:9px!important;
 }
 
-.lms-list img:not(.image-grid-item-img):not(.svg-list-img):not(.multi-disc), .pmgr-cover img, .lms-list3 img, .np-info .lms-list img {
+.lms-list img:not(.image-grid-item-img):not(.svg-list-img):not(.multi-disc), .pmgr-cover img, .np-info .lms-list img {
  border-radius:4px!important;
 }
 
-.np-bar-image .np-cover {
- border-radius:6px!important;
+.lms-list3 img, .np-bar-image .np-cover {
+ border-radius:5px!important;
 }
 
 .np-image, .np-image .np-cover,
 .np-no-meta-img,
-.np-image-landscape, .np-image-landscape .np-cover,
-.np-bar-image {
+.np-image-landscape, .np-image-landscape .np-cover {
  border-radius:14px!important;
 }
 

@@ -186,14 +186,14 @@
 .np-bar-image {
  position:fixed;
  left:164px;
- bottom:1px;
- height:64px;
- width:64px;
+ bottom:3px;
+ height:63px;
+ width:63px;
 }
 
 .np-bar-image .np-cover {
- height:64px;
- width:64px;
+ height:63px;
+ width:63px;
 }
 
 .np-bar-sb .np-bar-image {

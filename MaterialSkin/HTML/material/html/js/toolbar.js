@@ -102,11 +102,8 @@ Vue.component('lms-toolbar', {
  <v-btn icon :title="trans.info | tooltip(LMS_TRACK_INFO_KEYBOARD,keyboardControl)" v-if="desktopLayout" @click.native="emitInfo" class="toolbar-button hide-for-mini" v-bind:class="{'disabled':undefined===songInfo && !infoOpen}">
   <v-icon>{{infoOpen ? 'info' : 'info_outline'}}</v-icon>
  </v-btn>
- <v-btn icon :title="trans.showLarge | tooltip(LMS_EXPAND_NP_KEYBOARD,keyboardControl,true)" v-if="desktopLayout && !nowPlayingExpanded" @click.native="expandNowPlaying(true)" class="toolbar-button hide-for-mini">
-  <v-icon>fullscreen</v-icon>
- </v-btn>
- <v-btn icon :title="trans.hideLarge | tooltip(LMS_EXPAND_NP_KEYBOARD,keyboardControl,true)" v-if="desktopLayout && nowPlayingExpanded" @click.native="expandNowPlaying(false)" class="toolbar-button hide-for-mini">
-  <v-icon>fullscreen_exit</v-icon>
+ <v-btn icon :title="(nowPlayingExpanded ? trans.hideLarge : trans.showLarge) | tooltip(LMS_EXPAND_NP_KEYBOARD,keyboardControl,true)" v-if="desktopLayout" @click.native="expandNowPlaying()" class="toolbar-button hide-for-mini" v-bind:class="{'disabled':undefined===songInfo && !nowPlayingExpanded}">
+  <v-icon>{{nowPlayingExpanded ? 'fullscreen_exit' : 'fullscreen'}}</v-icon>
  </v-btn>
  <v-btn icon :title="trans.toggleQueue | tooltip(LMS_TOGGLE_QUEUE_KEYBOARD,keyboardControl,true)" v-if="desktopLayout" @click.native="toggleQueue()" class="toolbar-button hide-for-mini" v-bind:class="{'dimmed':!showQueue}">
   <v-icon v-if="showQueue">queue_music</v-icon>
@@ -518,11 +515,14 @@ Vue.component('lms-toolbar', {
                 bus.$emit('trackInfo', clone, undefined, undefined);
             }
         },
-        expandNowPlaying(on) {
+        expandNowPlaying() {
             if (this.$store.state.visibleMenus.size>0) {
                 return;
             }
-            bus.$emit('expandNowPlaying', on);
+            if (!this.nowPlayingExpanded && undefined===this.songInfo) {
+                return;
+            }
+            bus.$emit('expandNowPlaying', !this.nowPlayingExpanded);
         },
         menuOrSync(longPress) {
             if (queryParams.party) {

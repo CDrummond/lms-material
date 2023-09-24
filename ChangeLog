@@ -4,6 +4,7 @@
 2. Only use 2 decimal places for replaygain.
 3. Fix missing bitrate from tech info.
 4. Increase desktop now-playing bottom bar cover size.
+5. Don't allow to expand now-playing if nothing playing.
 
 3.5.0
 -----

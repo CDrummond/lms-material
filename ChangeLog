@@ -4,6 +4,8 @@
 2. Only use 2 decimal places for replaygain.
 3. Fix missing bitrate from tech info.
 4. Don't allow to expand now-playing if nothing playing.
+5. Treat covers in queue as per now-playing, i.e. don't clip and add
+   background if required.
 
 3.5.0
 -----

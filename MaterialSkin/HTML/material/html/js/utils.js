@@ -169,7 +169,7 @@ function formatTechInfo(item, source, isCurrent) {
     }
     if (undefined!=item.replay_gain) {
         let val = parseFloat(item.replay_gain);
-        if (!isCurrent || (val>0.000001 || val<-0.000001)) {
+        if (undefined==isCurrent || !isCurrent || (val>0.000001 || val<-0.000001)) {
             technical.push(i18n("%1dB", val.toFixed(3)));
         }
     }

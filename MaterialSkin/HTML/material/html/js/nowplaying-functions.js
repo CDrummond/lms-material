@@ -195,7 +195,7 @@ function nowplayingOnPlayerStatus(view, playerStatus) {
         view.playerStatus.current.source = source;
     }
 
-    var technical = formatTechInfo(playerStatus.current, source);
+    var technical = formatTechInfo(playerStatus.current, source, true);
     if (technical!=view.playerStatus.current.technicalInfo) {
         view.playerStatus.current.technicalInfo = technical;
     }

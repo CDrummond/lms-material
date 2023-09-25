@@ -8,6 +8,7 @@
    background if required.
 6. Use material icons for tracks note and selection count checkbox instead of
    unicode characters.
+7. Only show current track's replaygain value if it's non-zero.
 
 3.5.0
 -----

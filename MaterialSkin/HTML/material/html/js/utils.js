@@ -156,7 +156,7 @@ function logAndShowError(err, message, command, params, start, count) {
     bus.$emit('showError', err, message);
 }
 
-function formatTechInfo(item, source) {
+function formatTechInfo(item, source, isCurrent) {
     let technical = [];
     if (undefined!=item.bitrate) {
         technical.push(item.bitrate);
@@ -168,7 +168,10 @@ function formatTechInfo(item, source) {
         technical.push((item.samplerate/1000)+"kHz");
     }
     if (undefined!=item.replay_gain) {
-        technical.push(i18n("%1dB", parseFloat(item.replay_gain.toFixed(3))));
+        let val = parseFloat(item.replay_gain);
+        if (!isCurrent || (val>0.000001 || val<-0.000001)) {
+            technical.push(i18n("%1dB", val.toFixed(3)));
+        }
     }
     if (item.type) {
         let bracket = item.type.indexOf(" (");

@@ -24,7 +24,7 @@ function initTrackSources() {
 function getTrackSource(track) {
     if (undefined!=track.url) {
         if (track.url.startsWith("file:") && !track.url.startsWith("tmp:")) {
-            return {other:true, text:i18n("Local")};
+            return {other:true, text:i18n("Local"), context:true};
         }
         for (const [key, value] of Object.entries(trackSources["prefix"])) {
             if (track.url.startsWith(key)) {
@@ -36,15 +36,15 @@ function getTrackSource(track) {
                             parts.pop();
                             srvUrl = parts.join('.');
                         }
-                        return {other:false, text:value.name, url:srvUrl};
+                        return {other:false, text:value.name, url:srvUrl, context:value.context};
                     } if (undefined!=value.url.prefix) {
                         let parts = track.url.split(value.url.split.on);
                         if (parts.length>value.url.split.use) {
-                            return {other:false, text:value.name, url:value.url.prefix+parts[value.url.split.use]};
+                            return {other:false, text:value.name, url:value.url.prefix+parts[value.url.split.use], context:value.context};
                         }
                     }
                 }
-                return {other:false, text:value.name};
+                return {other:false, text:value.name, context:value.context};
             }
         }
         for (const [key, value] of Object.entries(lmsProtocols)) {

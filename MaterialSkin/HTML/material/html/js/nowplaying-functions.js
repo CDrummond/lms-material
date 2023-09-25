@@ -102,6 +102,10 @@ function nowplayingOnPlayerStatus(view, playerStatus) {
         view.rating.value = rv;
         trackChanged = true;
     }
+    var source = getTrackSource(playerStatus.current);
+    if (source!=view.playerStatus.current.source) {
+        view.playerStatus.current.source = source;
+    }
     var artistAndComposer = buildArtistLine(playerStatus.current, 'now-playing');
     var useComposerTag = playerStatus.current.composer && lmsOptions.showComposer && useComposer(playerStatus.current.genre);
     var useConductorTag = playerStatus.current.conductor && lmsOptions.showConductor && useConductor(playerStatus.current.genre);
@@ -163,7 +167,10 @@ function nowplayingOnPlayerStatus(view, playerStatus) {
     }
     if (artistAndComposer!=view.playerStatus.current.artistAndComposer) {
         view.playerStatus.current.artistAndComposer = artistAndComposer;
-        view.playerStatus.current.artistAndComposerWithContext = buildArtistWithContext(playerStatus.current, 'now-playing', useBandTag, useComposerTag, useConductorTag);
+        view.playerStatus.current.artistAndComposerWithContext = undefined==source || undefined==source.context || !source.context
+            ? undefined
+            : buildArtistWithContext(playerStatus.current, 'now-playing', useBandTag, useComposerTag, useConductorTag);
+        console.log(source, view.playerStatus.current.artistAndComposerWithContext, undefined==source || undefined==source.source || !source.source);
         let width = 0;
         if (undefined!=view.playerStatus.current.artistAndComposerWithContext) {
             let elem = document.getElementById("stringLenCheckElem");
@@ -188,11 +195,6 @@ function nowplayingOnPlayerStatus(view, playerStatus) {
     }
     if (playerStatus.current.comment!=view.playerStatus.current.comment) {
         view.playerStatus.current.comment = playerStatus.current.comment;
-    }
-
-    var source = getTrackSource(playerStatus.current);
-    if (source!=view.playerStatus.current.source) {
-        view.playerStatus.current.source = source;
     }
 
     var technical = formatTechInfo(playerStatus.current, source, true);

@@ -6,6 +6,8 @@
 4. Don't allow to expand now-playing if nothing playing.
 5. Treat covers in queue as per now-playing, i.e. don't clip and add
    background if required.
+6. Use material icons for tracks note and selection count checkbox instead of
+   unicode characters.
 
 3.5.0
 -----

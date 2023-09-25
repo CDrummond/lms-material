@@ -2241,6 +2241,18 @@ div.v-subheader {
  display: flex;
 }
 
+.mat-icon {
+ font-family: "Material Icons";
+ vertical-align: bottom;
+ margin-left:0px;
+ margin-right:2px;
+}
+
+.music-note {
+ margin-left:-2px;
+ margin-right:0px;
+}
+
 .grid-btn {
  width:32px;
  height:32px;

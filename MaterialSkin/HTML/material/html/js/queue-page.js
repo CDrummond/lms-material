@@ -138,7 +138,7 @@ var lmsQueue = Vue.component("lms-queue", {
    <div class="toolbar-nobtn-pad"></div>
    <v-layout row wrap>
     <v-flex xs12 class="ellipsis subtoolbar-title subtoolbar-pad">{{trans.selectMultiple}}</v-flex>
-    <v-flex xs12 class="ellipsis subtoolbar-subtitle subtext">{{selection.size | displaySelectionCount}}{{selectionDuration | displayTime}}</v-flex>
+    <v-flex xs12 class="ellipsis subtoolbar-subtitle subtext">{{selection.size | displaySelectionCount}}<obj class="mat-icon">check_box</obj>{{selectionDuration | displayTime}}</v-flex>
    </v-layout>
    <v-spacer></v-spacer>
    <v-btn :title="trans.removeall" flat icon class="toolbar-button" @click="removeSelectedItems()"><v-icon>remove_circle_outline</v-icon></v-btn>
@@ -1341,7 +1341,7 @@ var lmsQueue = Vue.component("lms-queue", {
             return i18np("1 Track", "%1 Tracks", value);
         },
         displaySelectionCount: function (value) {
-            return value ? value+SELECTED_SEPARATOR : '';
+            return value ? value : 0;
         },
         svgIcon: function (name, dark, ci) {
             return "/material/svg/"+name+"?c="+

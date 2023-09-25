@@ -18,7 +18,7 @@ var lmsBrowse = Vue.component("lms-browse", {
    <div class="toolbar-nobtn-pad"></div>
    <v-layout row wrap>
     <v-flex xs12 class="ellipsis subtoolbar-title subtoolbar-pad">{{trans.selectMultiple}}</v-flex>
-    <v-flex xs12 class="ellipsis subtoolbar-subtitle subtext">{{selection.size | displaySelectionCount}}{{selectionDuration | displayTime}}</v-flex>
+    <v-flex xs12 class="ellipsis subtoolbar-subtitle subtext">{{selection.size | displaySelectionCount}}<obj class="mat-icon">check_box</obj>{{selectionDuration | displayTime}}</v-flex>
    </v-layout>
    <v-spacer></v-spacer>
    <v-btn v-if="current && current.section==SECTION_PLAYLISTS && current.id.startsWith('playlist_id:')" :title="trans.removeall" flat icon class="toolbar-button" @click="deleteSelectedItems(REMOVE_ACTION)"><v-icon>{{ACTIONS[REMOVE_ACTION].icon}}</v-icon></v-btn>
@@ -40,7 +40,7 @@ var lmsBrowse = Vue.component("lms-browse", {
    <v-btn v-if="history.length>1 && homeButton" flat icon @click="homeBtnPressed()" class="toolbar-button" id="home-button" :title="trans.goHome | tooltipStr('home', keyboardControl)"><v-icon>home</v-icon></v-btn>
    <v-layout row wrap @click="showHistory($event)" v-if="toolbarSubTitle" v-bind:class="{'pointer link-item': history.length>0}">
     <v-flex xs12 class="ellipsis subtoolbar-title subtoolbar-pad">{{headerTitle}}</v-flex>
-    <v-flex xs12 class="ellipsis subtoolbar-subtitle subtext">{{current && current.id==TOP_MYMUSIC_ID && libraryName ? libraryName : toolbarSubTitle}}<small v-if="current && current.id!=TOP_MYMUSIC_ID && (libraryName || pinnedItemLibName) && showLibraryName">{{SEPARATOR+(pinnedItemLibName ? pinnedItemLibName : libraryName)}}</small></v-flex>
+    <v-flex xs12 class="ellipsis subtoolbar-subtitle subtext" v-html="toolbarSubTitle"></v-flex>
    </v-layout>
    <div class="ellipsis subtoolbar-title subtoolbar-title-single pointer link-item" @click="showHistory($event)" v-else-if="history.length>0">{{headerTitle}}</div>
    <div class="ellipsis subtoolbar-title subtoolbar-title-single" v-else>{{headerTitle}}</div>
@@ -431,19 +431,25 @@ var lmsBrowse = Vue.component("lms-browse", {
             return this.$store.state.listPadding
         },
         toolbarSubTitle() {
+            let suffix = this.current && this.current.id!=TOP_MYMUSIC_ID && (this.libraryName || this.pinnedItemLibName) && this.showLibraryName
+                ? "<small>"+(SEPARATOR+(this.pinnedItemLibName ? this.pinnedItemLibName : this.libraryName))+"</small>"
+                : "";
+            if (undefined!=this.current && this.current.id==TOP_MYMUSIC_ID && this.libraryName) {
+                return this.libraryName + suffix;
+            }
             if (undefined!=this.current && this.current.stdItem==STD_ITEM_ALBUM) {
                 if (undefined!=this.current.subtitle) {
-                    return this.current.subtitle + ' (' + this.headerSubTitle + ')';
+                    return this.current.subtitle + ' (' + this.headerSubTitle + ')' + suffix;
                 }
                 for (let loop=this.history, i=loop.length-1; i>=0 && undefined!=loop[i].current; --i) {
                     if (STD_ITEM_ALBUM==loop[i].current.stdItem && undefined!=loop[i].current.subtitle) {
-                        return loop[i].current.subtitle + ' (' + this.headerSubTitle + ')';
+                        return loop[i].current.subtitle + ' (' + this.headerSubTitle + ')' + suffix;
                     } else if (STD_ITEM_ARTIST==loop[i].current.stdItem) {
-                        return loop[i].current.title + ' (' + this.headerSubTitle + ')';
+                        return loop[i].current.title + ' (' + this.headerSubTitle + ')' + suffix;
                     }
                 }
             }
-            return this.headerSubTitle;
+            return this.headerSubTitle + suffix
         }
     },
     created() {
@@ -1837,7 +1843,7 @@ var lmsBrowse = Vue.component("lms-browse", {
             return str;
         },
         displaySelectionCount: function (value) {
-            return value ? value+SELECTED_SEPARATOR : '';
+            return value ? value : 0;
         },
         svgIcon: function (name, dark) {
             return "/material/svg/"+name+"?c="+(dark ? LMS_DARK_SVG : LMS_LIGHT_SVG)+"&r="+LMS_MATERIAL_REVISION;

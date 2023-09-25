@@ -742,8 +742,7 @@ function nowplayingFetchAlbumInfo(view) {
                 if (data && data.result && view.isCurrent(data, ALBUM_TAB)) {
                     var resp = parseBrowseResp(data);
                     view.info.tabs[ALBUM_TAB].sections[0].items = resp.items.slice(0, NP_MAX_TRACKS);
-                    let parts = resp.subtitle.split(MUSIC_SEPARATOR);
-                    view.info.tabs[ALBUM_TAB].sections[0].title = i18np("1 Track", "%1 Tracks", parseInt(parts[0]))+SEPARATOR+parts[1];
+                    view.info.tabs[ALBUM_TAB].sections[0].title = resp.plainsubtitle;
                     let count = view.info.tabs[ALBUM_TAB].sections[0].items.length;
                     // If last shown is a header, remove
                     if (view.info.tabs[ALBUM_TAB].sections[0].items[count-1].header) {

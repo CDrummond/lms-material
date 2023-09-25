@@ -11,6 +11,7 @@
 7. Only show current track's replaygain value if it's non-zero.
 8. Only show artist context (e.g. XX From YY) for local, Deezer, Spotify,
    Tidal, or Qobuz tracks.
+9. Only use mobile-scroll hack for Android and iOS.
 
 3.5.0
 -----

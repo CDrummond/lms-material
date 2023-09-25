@@ -144,27 +144,6 @@
  background:var(--scrollbar-corner-color);
 }
 
-@media (hover: none), (hover: on-demand), (-moz-touch-enabled: 1), (pointer:coarse) {
- ::-webkit-scrollbar {
-  width:2px!important;
-  background-color:transparent;
-  opacity:50%!important;
- }
- ::-webkit-scrollbar-thumb {
-  background:var(--mobile-scrollbar-thumb-color);
-  border-radius:2px!important;
-  border-left:none!important;
-  border-right:none!important;
- }
- ::-webkit-scrollbar-thumb:hover {
-  background:var(--mobile-scrollbar-thumb-color);
- }
- ::-webkit-scrollbar-track {
-  -webkit-box-shadow: none!important;
-  background-color:transparent;
- }
-}
-
 html, .mini-player {
  background-color:var(--background-color) !important;
 }

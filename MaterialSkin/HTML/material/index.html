@@ -22,13 +22,13 @@
   my $query=$stash->get("url_query");
   my $theme='darker';
   my $themeColor='212121';
+  my $mobile=0;
   # Keep in sync with store.js (defaultTheme)
-  #if (index($ua, 'Android') != -1) {
-  #  $theme='darker';
-  #} elsif (index($ua, 'iPad') != -1 || index($ua, 'iPhone') != -1 || index($ua, 'MobileSafari') != -1) { # || (index($ua, 'Macintosh') != -1 && index($ua, '(KHTML, like Gecko) Version') != -1)) {
-  #  $theme='darker';
-  #} els
-  if (index($ua, 'Linux') != -1) {
+  if (index($ua, 'Android') != -1) {
+   $mobile=1;
+  } elsif (index($ua, 'iPad') != -1 || index($ua, 'iPhone') != -1 || index($ua, 'MobileSafari') != -1) { # || (index($ua, 'Macintosh') != -1 && index($ua, '(KHTML, like Gecko) Version') != -1)) {
+   $mobile=1;
+  } elsif (index($ua, 'Linux') != -1) {
     if (index($query, 'desktop=KDE')!=-1) {
       $theme='linux/dark/Breeze-Dark';
     } else {
@@ -68,6 +68,9 @@
   print("  <link href=\"html/css/colors/blue.css?r=$version\" rel=\"stylesheet\" id=\"colorcss\">\n");
   print("  <link href=\"html/css/style.css?r=$version\" rel=\"stylesheet\">\n");
   print("  <link href=\"html/css/mobile.css?r=$version\" rel=\"stylesheet\" id=\"layoutcss\">\n");
+  if ($mobile == 1) {
+    print("  <link href=\"html/css/other/mobile-scroll.css?r=$version\" rel=\"stylesheet\" id=\"scrollcss\">\n");
+  }
   print("  <link href=\"html/css/covers/round.css?r=$version\" rel=\"stylesheet\" id=\"covercss\">\n");
   print("  <title>${windowTitle}</title>\n");
   print("  <meta name=\"apple-mobile-web-app-title\" content=\"${windowTitle}\">\n");
@@ -84,10 +87,11 @@
   # Splitter positioning was changed because of #589, but this change then broke zooming on Android APK
   # So, set class type so that CSS can be modified to position splitter differently for Android.
   if (index($ua, 'Android') != -1) {
-    print(" <body class=\"IS_ANDROID\">\n");
+    $class="IS_ANDROID ${class}";
   } else {
-    print(" <body class=\"IS_NOT_ANDROID\">\n");
+    $class="IS_NOT_ANDROID ${class}";
   }
+  print(" <body class=\"${class}\">\n");
   [% END %]
   <div id="app" v-cloak>
    <v-app class="lms-app" :dark="darkUi" v-touch:swipe.left="swipe" v-touch:swipe.right="swipe" v-touch:start="touchStart" v-touch:end="touchEnd">
@@ -143,6 +147,11 @@
   my $hideForKiosk=Plugins::MaterialSkin::Plugin->hideForKiosk();
   my $skinLanguages=Plugins::MaterialSkin::Plugin->skinLanguages();
   my $maxPlaylistEditSize=$lmsVersion>=80400 ? 1000 : 250;
+  my $mobile=0;
+  my $ua=$stash->get("userAgent");
+  if (index($ua, 'Android') != -1 || index($ua, 'iPad') != -1 || index($ua, 'iPhone') != -1 || index($ua, 'MobileSafari') != -1) {
+   $mobile=1;
+  }
   print("<script>const LMS_MATERIAL_REVISION=\"$version\";");
   print("const LMS_VERSION=$lmsVersion;");
   print("const LMS_WINDOW_TITLE=\"$windowTitle\";");
@@ -152,6 +161,7 @@
   print("const HIDE_FOR_KIOSK=new Set([$hideForKiosk]);");
   print("const LMS_SKIN_LANGUAGES=new Set([$skinLanguages]);");
   print("const LMS_MAX_PLAYLIST_EDIT_SIZE=$maxPlaylistEditSize;");
+  print("const LMS_MOBILE_SCROLL=$mobile;");
   print("</script>\n");
   [% END %]
   <!--JS start-->

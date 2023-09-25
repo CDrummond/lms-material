@@ -18,7 +18,7 @@ function msHideHandle(view) {
 }
 
 function msRegister(view, elem) {
-    if (!IS_MOBILE) {
+    if (!LMS_MOBILE_SCROLL) {
         return;
     }
     elem.addEventListener("touchstart", msShowHandle, false);
@@ -27,7 +27,7 @@ function msRegister(view, elem) {
 }
 
 function msHandleScrollEvent(view) {
-    if (!IS_MOBILE) {
+    if (!LMS_MOBILE_SCROLL) {
         return;
     }
     if (undefined==view.sbarTimer) {

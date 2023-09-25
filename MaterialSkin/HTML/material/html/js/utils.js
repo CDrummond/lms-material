@@ -170,7 +170,7 @@ function formatTechInfo(item, source, isCurrent) {
     if (undefined!=item.replay_gain) {
         let val = parseFloat(item.replay_gain);
         if (undefined==isCurrent || !isCurrent || (val>0.000001 || val<-0.000001)) {
-            technical.push(i18n("%1dB", val.toFixed(3)));
+            technical.push(i18n("%1dB", val.toFixed(2)));
         }
     }
     if (item.type) {

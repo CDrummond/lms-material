@@ -158,13 +158,15 @@ function logAndShowError(err, message, command, params, start, count) {
 
 function formatTechInfo(item, source, isCurrent) {
     let technical = [];
-    if (undefined!=item.bitrate) {
+    // Bit rate should be Xkbps, but sometimes LMS returns 0 (as num or string?)
+    // ...so only valid i fmore than 1 char
+    if (undefined!=item.bitrate && (""+item.bitrate).length>1) {
         technical.push(item.bitrate);
     }
-    if (item.samplesize && item.samplesize>0) {
+    if (item.samplesize && parseInt(item.samplesize)>0) {
         technical.push(i18n("%1bit", item.samplesize));
     }
-    if (item.samplerate && item.samplerate>100) {
+    if (item.samplerate && parseInt(item.samplerate)>100) {
         technical.push((item.samplerate/1000)+"kHz");
     }
     if (undefined!=item.replay_gain) {
@@ -176,7 +178,7 @@ function formatTechInfo(item, source, isCurrent) {
     if (item.type) {
         let bracket = item.type.indexOf(" (");
         let type = bracket>0 ? item.type.substring(0, bracket) : item.type;
-        // BBC Sounds as aac@48000Hz, want just aac
+        // BBC Sounds has aac@48000Hz, want just aac
         if (type.length>4 && item.samplerate && type.indexOf("@")>2 && type.indexOf("Hz")>4) {
             type = type.split("@")[0];
         }

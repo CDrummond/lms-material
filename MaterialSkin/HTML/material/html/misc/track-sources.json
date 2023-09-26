@@ -65,15 +65,25 @@
         }
     },
     "radioparadise:":{
-        "name":"Radio Paradise"
+        "name":"Radio Paradise",
+        "context":true
     }
   },
   "includes":{
-    ".radioparadise.com/":"Radio Paradise",
-    ".planetradio.co.uk":"Planet Radio",
-    ".bandcamp.com":"Bandcamp"
+    ".radioparadise.com/": {
+        "name":"Radio Paradise",
+        "context":true
+    },
+    ".planetradio.co.uk":{
+        "name":"Planet Radio"
+    },
+    ".bandcamp.com":{
+        "name":"Bandcamp"
+    }
   },
   "album":{
-    ".bandcamp.com":"Bandcamp"
+    ".bandcamp.com":{
+        "name":"Bandcamp"
+    }
   }
 }

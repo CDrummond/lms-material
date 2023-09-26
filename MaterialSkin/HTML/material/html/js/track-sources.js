@@ -55,13 +55,13 @@ function getTrackSource(track) {
         if (track.url.startsWith("http:") || track.url.startsWith("https:")) {
             for (const [key, value] of Object.entries(trackSources["includes"])) {
                 if (track.url.includes(key)) {
-                    return {other:false, text:value};
+                    return {other:false, text:value.name, context:value.context};
                 }
             }
             if (undefined!=track.album) {
                 for (const [key, value] of Object.entries(trackSources["album"])) {
                     if (track.album.includes(key)) {
-                        return {other:false, text:value};
+                        return {other:false, text:value.name, context:value.context};
                     }
                 }
             }

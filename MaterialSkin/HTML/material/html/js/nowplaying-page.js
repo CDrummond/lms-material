@@ -559,8 +559,8 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
 
         bus.$on('currentCover', function(coverUrl) {
             this.coverUrl = undefined==coverUrl ? DEFAULT_COVER : coverUrl;
-            if (!this.coverUrl.startsWith("http://") && !this.coverUrl.startsWith("https://")) {
-                this.coverUrl="http://"+window.location.host+"/"+this.coverUrl;
+            if (!this.coverUrl.startsWith("/") && !this.coverUrl.startsWith("http://") && !this.coverUrl.startsWith("https://")) {
+                this.coverUrl="/"+this.coverUrl;
             }
             document.documentElement.style.setProperty('--np-background-url', "url('"+this.coverUrl+"')");
             this.setBgndCover();

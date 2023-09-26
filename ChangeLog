@@ -1,7 +1,7 @@
 3.5.2
 -----
-1. For now-playing covers, if URL does not start with http:// or https:// then
-   prefix with LMS URL.
+1. For now-playing covers, if URL does not start with "/", "http://", or
+   "https://" then prefix with "/".
 
 3.5.1
 -----

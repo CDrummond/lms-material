@@ -170,7 +170,6 @@ function nowplayingOnPlayerStatus(view, playerStatus) {
         view.playerStatus.current.artistAndComposerWithContext = undefined==source || undefined==source.context || !source.context
             ? undefined
             : buildArtistWithContext(playerStatus.current, 'now-playing', useBandTag, useComposerTag, useConductorTag);
-        console.log(source, view.playerStatus.current.artistAndComposerWithContext, undefined==source || undefined==source.source || !source.source);
         let width = 0;
         if (undefined!=view.playerStatus.current.artistAndComposerWithContext) {
             let elem = document.getElementById("stringLenCheckElem");

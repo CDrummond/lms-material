@@ -170,9 +170,9 @@ function formatTechInfo(item, source, isCurrent) {
         technical.push((item.samplerate/1000)+"kHz");
     }
     if (undefined!=item.replay_gain) {
-        let val = parseFloat(item.replay_gain);
-        if (undefined==isCurrent || !isCurrent || (val>0.000001 || val<-0.000001)) {
-            technical.push(i18n("%1dB", val.toFixed(2)));
+        let val = parseFloat(item.replay_gain).toFixed(2);
+        if (undefined==isCurrent || !isCurrent || val!=0.00) {
+            technical.push(i18n("%1dB", val));
         }
     }
     if (item.type) {

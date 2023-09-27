@@ -605,13 +605,13 @@
 "1 day":"1 dag",
 "%1 days":"%1 dagen",
 "%1dB":"%1dB",
-"<obj class=\"ext-details\">From</obj> %1":"<obj class=\"ext-details\">Van</obj> %1",
+"<obj class=\"ext-details\">From</obj> %1":"<obj class=\"ext-details\">van</obj> %1",
 "<obj>Composed by</obj> %1":"<obj>Gecomponeerd door</obj> %1",
 "<obj>Conducted by</obj> %1":"<obj>Gedirigeerd door</obj> %1",
 "<obj>Performed by</obj> %1":"<obj>Uitgevoerd door</obj> %1",
 "Icon":"Icon",
 "Round covers":"Ronde hoeken albumhoezen",
 "Round the corners of cover-art, etc.":"Rond de hoeken van albumhoezen, etc.",
-"Show 'Performed by', 'From', etc. when listing track details. (e.g. Title By Artist From Album)'.":"Toon 'Uitgevoerd door', 'Van', etc. bij het tonen van nummer details. (Bijvoorbeeld Titel van Artiest van Album).",
-"Show artist context, etc.":"Toon Artiest context, etc."
+"Show 'Performed by', 'From', etc. when listing track details. (e.g. Title By Artist From Album)'.":"Toon 'Uitgevoerd door', 'van', etc. bij het afspelen van een nummer. (Bijvoorbeeld 'Titel' van 'Artiest' van 'Album').",
+"Show artist context, etc.":"Toon artiest context"
 }

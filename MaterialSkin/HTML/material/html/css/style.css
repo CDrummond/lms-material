@@ -350,13 +350,13 @@ div.v-subheader {
 .lms-image-grid {
  overflow-x:hidden !important;
  overflow-y:auto !important;
- padding: 8px 4px 8px 0px;/* t, r, b, l */
+ padding: 8px 4px 8px 4px;/* t, r, b, l */
 }
 
 .image-grid-full-width {
  width:100%;
  display:flex;
- justify-content:space-around;
+ justify-content:space-evenly;
 }
 
 .image-grid-few {

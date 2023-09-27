@@ -1,7 +1,7 @@
 3.5.2
 -----
-1. For now-playing covers, if URL does not start with "/", "http://", or
-   "https://" then prefix with "/".
+1. Revert back to "img" tags for no-playing images, resolves loadind if plugin
+   PNGs.
 
 3.5.1
 -----

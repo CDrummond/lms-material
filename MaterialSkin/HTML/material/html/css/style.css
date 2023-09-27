@@ -987,12 +987,8 @@ div.v-subheader {
 }
 
 .np-cover {
- background:var(--np-background-url);
- background-size: contain;
- background-position: center;
- background-repeat: no-repeat;
- transition: background 0.2s;
- margin:auto;
+ object-fit:contain;
+ object-position:50% 50%;
 }
 
 .np-no-meta-img {
@@ -2214,6 +2210,22 @@ div.v-subheader {
  font-size:32px !important;
  width:32px !important;
  height:32px !important;
+}
+
+
+img[lazy='loaded'].np-image {
+ opacity:0;
+ animation-name:npCoverFadeIn;
+ animation-duration:.15s;
+ animation-iteration-count:1;
+ animation-fill-mode:forwards;
+ animation-direction:normal;
+ animation-timing-function:ease-out;
+}
+
+@keyframes npCoverFadeIn {
+ 0% { opacity:0.25; }
+ 100% { opacity:1; }
 }
 
 .wrapper {

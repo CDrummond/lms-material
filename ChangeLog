@@ -4,6 +4,7 @@
    PNGs.
 2. Convert replaygain to 2 digits before comparing against 0.00
 3. Ensure no repeated textkeys (apart from years).
+4. Adjust grid view margins, thanks to Denys Lysiuk.
 
 3.5.1
 -----

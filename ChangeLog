@@ -6,6 +6,7 @@
 3. Ensure no repeated textkeys (apart from years).
 4. Adjust grid view margins, thanks to Denys Lysiuk.
 5. Get samplerate and samplesize from outer status block, if present.
+6. Reduce now-playing shadow.
 
 3.5.1
 -----

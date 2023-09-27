@@ -36,7 +36,7 @@
  --list-active-color:rgba(0, 0, 0, 0.08)!important;
  --menu-dlg-shadow:0 1px 6px 1px rgba(0,0,0,.12);
  --image-background-color:rgba(0, 0, 0, 0.075);
- --image-shadow:rgba(0, 0, 0, 0.35) 0px 5px 15px;
+ --image-shadow:rgba(0, 0, 0, 0.3) 0px 4px 10px;
  --np-image-border:16px;
  --mobile-scrollbar-thumb-color:transparent;
  --bgnd-filter:blur(5px);
@@ -50,7 +50,7 @@
  --tab-border-color:rgba(237, 236, 231, 0.1);
  --menu-dlg-shadow:0 1px 6px 1px rgba(0,0,0,.4)!important;
  --image-background-color:rgba(0, 0, 0, 0.2);
- --image-shadow:rgba(0, 0, 0, 0.5) 0px 5px 15px;
+ --image-shadow:rgba(0, 0, 0, 0.3) 0px 4px 10px;
 }
 
 .note {

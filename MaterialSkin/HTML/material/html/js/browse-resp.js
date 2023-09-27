@@ -38,6 +38,7 @@ function parseBrowseResp(data, parent, options, cacheKey, parentCommand, parentG
 
         var command = data && data.params && data.params.length>1 && data.params[1] && data.params[1].length>1 ? data.params[1][0] : undefined;
         var isMusicIpMoods = command == "musicip" && data.params[1].length>0 && data.params[1][1]=="moods";
+        var textKeys = new Set();
 
         if (isMusicIpMoods && data.result.item_loop) {
             for (var idx=0, loop=data.result.item_loop, loopLen=loop.length; idx<loopLen; ++idx) {
@@ -481,8 +482,9 @@ function parseBrowseResp(data, parent, options, cacheKey, parentCommand, parentG
 
                 if (!isFavorites && !isPresets && !isAppsTop && !isPodcastList && !isRadiosTop) {
                     var key = removeDiactrics(i.textkey);
-                    if (undefined!=key && (resp.jumplist.length==0 || resp.jumplist[resp.jumplist.length-1].key!=key)) {
+                    if (undefined!=key && (resp.jumplist.length==0 || resp.jumplist[resp.jumplist.length-1].key!=key) && !textKeys.has(key)) {
                         resp.jumplist.push({key: key, index: resp.items.length});
+                        textKeys.add(key);
                     }
                 }
                 if (isFavorites) {
@@ -710,8 +712,9 @@ function parseBrowseResp(data, parent, options, cacheKey, parentCommand, parentG
             for (var idx=0, loop=data.result.artists_loop, loopLen=loop.length; idx<loopLen; ++idx) {
                 var i = loop[idx];
                 var key = removeDiactrics(i.textkey);
-                if (undefined!=key && (resp.jumplist.length==0 || resp.jumplist[resp.jumplist.length-1].key!=key)) {
+                if (undefined!=key && (resp.jumplist.length==0 || resp.jumplist[resp.jumplist.length-1].key!=key) && !textKeys.has(key)) {
                     resp.jumplist.push({key: key, index: resp.items.length});
+                    textKeys.add(key);
                 }
                 var artist = {
                               id: "artist_id:"+i.id,
@@ -991,8 +994,9 @@ function parseBrowseResp(data, parent, options, cacheKey, parentCommand, parentG
             for (var idx=0, loop=data.result.genres_loop, loopLen=loop.length; idx<loopLen; ++idx) {
                 var i = loop[idx];
                 var key = removeDiactrics(i.textkey);
-                if (undefined!=key && (resp.jumplist.length==0 || resp.jumplist[resp.jumplist.length-1].key!=key)) {
+                if (undefined!=key && (resp.jumplist.length==0 || resp.jumplist[resp.jumplist.length-1].key!=key) && !textKeys.has(key)) {
                     resp.jumplist.push({key: key, index: resp.items.length});
+                    textKeys.add(key);
                 }
                 resp.items.push({
                               id: "genre_id:"+i.id,
@@ -1015,8 +1019,9 @@ function parseBrowseResp(data, parent, options, cacheKey, parentCommand, parentG
                 if (undefined!=emblem) {
                     haveEmblem = true;
                 }
-                if (undefined!=key && (resp.jumplist.length==0 || resp.jumplist[resp.jumplist.length-1].key!=key)) {
+                if (undefined!=key && (resp.jumplist.length==0 || resp.jumplist[resp.jumplist.length-1].key!=key) && !textKeys.has(key)) {
                     resp.jumplist.push({key: key, index: resp.items.length});
+                    textKeys.add(key);
                 }
                 resp.items.push({
                               id: "playlist_id:"+i.id,
@@ -1092,8 +1097,9 @@ function parseBrowseResp(data, parent, options, cacheKey, parentCommand, parentG
             for (var idx=0, loop=data.result.years_loop, loopLen=loop.length; idx<loopLen; ++idx) {
                 var i = loop[idx];
                 var key = i.textkey;
-                if (undefined!=key && (resp.jumplist.length==0 || resp.jumplist[resp.jumplist.length-1].key!=key)) {
+                if (undefined!=key && (resp.jumplist.length==0 || resp.jumplist[resp.jumplist.length-1].key!=key) && !textKeys.has(key)) {
                     resp.jumplist.push({key: key, index: resp.items.length});
+                    textKeys.add(key);
                 }
                 resp.items.push({
                               id: "year:"+i.year,

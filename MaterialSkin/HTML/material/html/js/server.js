@@ -531,6 +531,12 @@ var lmsServer = Vue.component('lms-server', {
                 if (data.duration) {
                     player.current.duration = parseFloat(data.duration);
                 }
+                if (undefined!=data.samplerate) {
+                    player.current.samplerate = data.samplerate;
+                }
+                if (undefined!=data.samplesize) {
+                    player.current.samplesize = data.samplesize;
+                }
                 if (undefined!=player.current.rating) {
                     player.current.rating=parseInt(player.current.rating);
                     if (player.current.rating<0) {

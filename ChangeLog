@@ -6,6 +6,7 @@
 3. Ensure no repeated textkeys (apart from years).
 4. Adjust grid view margins, thanks to Denys Lysiuk.
 5. Remove now-playing shadow.
+6. Fix showing artist first or last with context.
 
 3.5.1
 -----

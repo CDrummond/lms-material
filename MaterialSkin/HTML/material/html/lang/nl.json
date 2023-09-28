@@ -11,7 +11,7 @@
 "...then album artist, album, disc no., track no.":"...dan albumartiest, album, disc, nummer",
 "...then album artist, disc no., track no.":"... dan albumartiest, disc, nummer",
 "...then album, disc no., track no.":"...dan album, disc, nummer",
-"<obj>By</obj> %1":"<obj>Van</obj> %1",
+"<obj>By</obj> %1":"<obj>door</obj> %1",
 "Abort":"Afbreken",
 "Abort all":"Alles afbreken",
 "Abort all downloads?":"Alle downloads afbreken?",

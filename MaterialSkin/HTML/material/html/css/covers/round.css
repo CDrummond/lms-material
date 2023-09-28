@@ -20,9 +20,3 @@
 .np-cover {
  background-color:var(--image-background-color);
 }
-
-.np-image .np-cover,
-.np-no-meta-img,
-.np-image-landscape .np-cover {
- box-shadow:var(--image-shadow);
-}

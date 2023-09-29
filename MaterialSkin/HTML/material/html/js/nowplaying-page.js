@@ -42,7 +42,7 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
   </v-list>
  </v-menu>
 
- <div v-if="info.show" class="np-info" id="np-info">
+ <div v-if="info.show && (desktopLayout || page=='now-playing')" class="np-info" id="np-info">
   <v-tabs centered v-model="info.tab" v-if="info.showTabs || windowWidth<NP_MIN_WIDTH_FOR_FULL" style="np-info-tab-cover">
    <template v-for="(tab, index) in info.tabs">
     <v-tab :key="index" @contextmenu.prevent="showContextMenu">{{tab.title}}</v-tab>
@@ -1117,6 +1117,9 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
         }
     },
     computed: {
+        page() {
+            return this.$store.state.page
+        },
         infoPlugin() {
             return this.$store.state.infoPlugin
         },

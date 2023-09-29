@@ -102,7 +102,7 @@
      <div slot="left-pane"><lms-browse v-show="desktopLayout || page=='browse'"></lms-browse></div>
      <div slot="right-pane"><lms-queue v-show="(desktopLayout && showQueue) || page=='queue'"></lms-queue></div>
     </lms-splitter>
-    <lms-now-playing v-show="desktopLayout || showNpBar || page=='now-playing'"></lms-now-playing>
+    <lms-now-playing></lms-now-playing>
     <lms-bottomnav v-if="!desktopLayout"></lms-bottomnav>
     <lms-ui-settings v-if="dialogs.uisettings"></lms-ui-settings>
     <lms-player-settings v-if="dialogs.playersettings"></lms-player-settings>

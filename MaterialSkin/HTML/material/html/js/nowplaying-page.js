@@ -160,7 +160,7 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
   </v-card>
  </div>
 
- <div v-if="!info.show || (desktopLayout || (showNpBar && (info.show || page!='now-playing')))">
+ <div v-if="!info.show || (desktopLayout || (info.show || page!='now-playing'))">
  <div v-if="(desktopLayout && !largeView) || (!desktopLayout && (info.show || page!='now-playing'))" class="np-bar" id="np-bar" v-bind:class="{'np-bar-sb':stopButton, 'mobile':!desktopLayout}">
   <v-layout row class="np-bar-controls" v-if="stopButton">
    <v-flex xs3>
@@ -406,7 +406,7 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
                 };
     },
     mounted() {
-        this.hideNpBar = false;
+        this.showNpBar = undefined;
         this.desktopBarHeight = getComputedStyle(document.documentElement).getPropertyValue('--desktop-npbar-height');
         this.mobileBarHeight = getComputedStyle(document.documentElement).getPropertyValue('--mobile-npbar-height-val');
         this.controlBar();
@@ -1006,7 +1006,7 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
         },
         controlBar() {
             let showNpBar = !this.disableBtns;
-            if (showNpBar!=this.$store.state.showNpBar) {
+            if (showNpBar!=this.showNpBar) {
                 this.$store.commit('showNpBar', showNpBar);
                 document.documentElement.style.setProperty('--desktop-npbar-height', !showNpBar ? '0px' : this.desktopBarHeight);
                 document.documentElement.style.setProperty('--mobile-npbar-height', !showNpBar ? '0px' : this.mobileBarHeight);

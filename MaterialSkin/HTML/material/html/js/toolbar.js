@@ -241,8 +241,7 @@ Vue.component('lms-toolbar', {
             if (playerStatus.syncslaves!=this.playerStatus.syncslaves) {
                 this.playerStatus.syncslaves = playerStatus.syncslaves;
             }
-            this.playerStatus.count=playerStatus.playlist ? playerStatus.playlist : 0;
-
+            this.playerStatus.count=playerStatus.playlist ? playerStatus.playlist.count : 0;
             this.playerDvc = playerStatus.dvc;
             if (!this.movingVolumeSlider) {
                 this.playerMuted = playerStatus.muted;

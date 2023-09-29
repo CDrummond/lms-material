@@ -1,3 +1,9 @@
+x.y.z
+-----
+1. Unify MAI layout between desktop and mobile.
+2. Allow mobile MAI to use 3 column layout.
+3. Force MAI tabs if layout too narrow.
+
 3.5.2
 -----
 1. Revert back to "img" tags for no-playing images, resolves loadind if plugin

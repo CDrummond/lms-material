@@ -167,6 +167,14 @@
  margin-top:-2px
 }
 
+.np-info-text {
+ height:calc((var(--vh, 1vh)*100) - (var(--main-toolbar-height) + var(--sub-toolbar-height) + var(--bottom-toolbar-height) + 48px)); /* If not 48px there is a light line on some mobile devices? */
+}
+
+.np-info-text-full {
+ height:calc((var(--vh, 1vh)*100) - (var(--main-toolbar-height) + var(--bottom-toolbar-height) + 88px));
+}
+
 .no-control-adjust {
  margin-top:-14px;
 }

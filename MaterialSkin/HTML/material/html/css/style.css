@@ -55,7 +55,7 @@
  font-weight:200;
 }
 
-.browse-html a, .np-info-text a, .np-info-text-full a, .np-info-text-desktop a, .np-info-text-full-desktop a,
+.browse-html a, .np-info-text a, .np-info-text-full a,
 .primary--text, a.primary--text, div.primary--text, i.primary--text, label.primary--text, .lms-link, .active, .clickable a {
  color:var(--active-color) !important;
  font-weight:var(--bold-weight) !important;
@@ -851,7 +851,7 @@ div.v-subheader {
  font-weight:200!important;
 }
 
-.browse-html img, .np-info-text img, .np-info-text-desktop img, .np-info-text-full img, .np-info-text-full-desktop img, .inline-image {
+.browse-html img, .np-info-text img, .np-info-text-full img, .inline-image {
  max-width:100% !important;
  max-height:300px !important;
  margin-left:auto;
@@ -1325,17 +1325,27 @@ div.v-rating i.primary--text, div.v-rating i.accent--text {
 }
 
 .np-info {
+ position:fixed;
+ top:var(--main-toolbar-height);
+ left:0px;
+ height:calc((var(--vh, 1vh)*100) - (var(--main-toolbar-height) + var(--bottom-toolbar-height)));
  width:100vw;
- display:block;
- height:auto;
+ overflow:hidden;
+ backface-visibility:hidden;
+ z-index:0;
 }
 
 .np-info-text {
- height:calc((var(--vh, 1vh)*100) - (var(--main-toolbar-height) + var(--sub-toolbar-height) + var(--bottom-toolbar-height) + 48px)); /* If not 48px there is a light line on some mobile devices? */
  overflow:auto;
  max-width:1000px;
  margin-left:auto;
  margin-right:auto;
+}
+
+.np-info-text-full {
+ overflow:auto;
+ max-width:1000px;
+ margin:auto;
 }
 
 .np-info-text-15 {
@@ -2555,20 +2565,17 @@ img[lazy='loaded'].np-image {
 }
 
 .np-info-text .v-list,
-.np-info-text-desktop .v-list,
-.np-info-text-full-desktop .v-list {
+.np-info-text-full .v-list {
  background:transparent!important;
 }
 
 .np-info-text .v-list .v-avatar img,
-.np-info-text-desktop .v-list .v-avatar img,
-.np-info-text-full-desktop .v-list .v-avatar img {
+.np-info-text-full .v-list .v-avatar img {
  margin:0px!important;
 }
 
 .np-info-text .v-list__tile__action,
-.np-info-text-desktop .v-list__tile__action,
-.np-info-text-full-desktop .v-list__tile__action {
+.np-info-text-full .v-list__tile__action {
  min-width:32px;
 }
 

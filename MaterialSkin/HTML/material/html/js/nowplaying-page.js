@@ -17,6 +17,7 @@ const NP_BROWSE_CMD = 3;
 const NP_COPY_DETAILS_CMD = 4;
 const NP_CUSTOM = 100;
 const NP_ITEM_ACT = 200;
+const NP_MIN_WIDTH_FOR_FULL = 780;
 
 var currentPlayingTrackPosition = 0;
 
@@ -40,7 +41,126 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
    </template>
   </v-list>
  </v-menu>
- 
+
+ <div v-if="info.show" class="np-info" id="np-info">
+  <v-tabs centered v-model="info.tab" v-if="info.showTabs || windowWidth<NP_MIN_WIDTH_FOR_FULL" style="np-info-tab-cover">
+   <template v-for="(tab, index) in info.tabs">
+    <v-tab :key="index" @contextmenu.prevent="showContextMenu">{{tab.title}}</v-tab>
+    <v-tab-item :key="index" :transition="false" :reverse-transition="false">
+     <v-card flat class="np-info-card-cover fade-both">
+      <v-card-text :class="['np-info-text', zoomInfoClass, TRACK_TAB==index || tab.isMsg ? 'np-info-lyrics' : '', ALBUM_TAB==index ? 'np-info-review' : '']">
+       <div v-html="tab.text"></div>
+       <img v-if="undefined!=tab.image" :src="tab.image" loading="lazy" class="np-no-meta-img"></img>
+       <template v-for="(sect, sindex) in tab.sections">
+        <div class="np-sect-title" v-if="(undefined!=sect.items && sect.items.length>=sect.min) || undefined!=sect.html">{{sect.title}}<v-btn flat icon class="np-sect-toggle" v-if="undefined!=sect.grid" @click="toggleGrid(index, sindex)"><v-icon>{{ACTIONS[sect.grid ? USE_LIST_ACTION : USE_GRID_ACTION].icon}}</v-icon></v-btn></div>
+        <v-list v-if="undefined!=sect.items && !sect.grid && sect.items.length>=sect.min" class="lms-list">
+         <template v-for="(item, iindex) in sect.items">
+          <v-list-tile class="lms-list-item" v-bind:class="{'pq-current': (ALBUM_TAB==index && item.id==('track_id:'+infoTrack.track_id)) || (ARTIST_TAB==index && item.id==('album_id:'+infoTrack.album_id)), 'list-active':menu.show && index==menu.tab && sindex==menu.section && iindex==menu.index, 'browse-header' : item.header}" @click.stop="itemClicked(index, sindex, iindex, $event)">
+           <v-list-tile-avatar v-if="item.image" :tile="true" class="lms-avatar">
+            <img :key="item.image" v-lazy="item.image"></img>
+           </v-list-tile-avatar>
+           <v-list-tile-content>
+            <v-list-tile-title v-if="ALBUM_TAB==index" v-html="item.title"></v-list-tile-title>
+            <v-list-tile-title v-else>{{item.title}}</v-list-tile-title>
+            <v-list-tile-sub-title v-html="item.subtitle"></v-list-tile-sub-title>
+           </v-list-tile-content>
+           <v-list-tile-action v-if="ALBUM_TAB==index && undefined!=item.durationStr" class="np-list-time">{{item.durationStr}}</v-list-tile-action>
+           <div class="emblem" v-if="item.emblem" :style="{background: item.emblem.bgnd}">
+            <img :src="item.emblem | emblem()" loading="lazy"></img>
+           </div>
+          </v-list-tile>
+         </template>
+         <v-list-tile v-if="undefined!=sect.more" @click="moreClicked(index, sindex)"><v-list-tile-content><v-list-tile-title>{{sect.more}}</v-list-tile-title></v-list-tile-content></v-list-tile>
+        </v-list>
+        <div class="np-grid-sect" v-else-if="undefined!=sect.items && sect.grid && sect.items.length>=sect.min">
+         <template v-for="(item, iindex) in sect.items">
+          <div class="np-grid-item" v-bind:class="{'pq-current': (ALBUM_TAB==index && item.id==('track_id:'+infoTrack.track_id)) || (ARTIST_TAB==index && item.id==('album_id:'+infoTrack.album_id)), 'list-active':menu.show && index==menu.tab && sindex==menu.section && iindex==menu.index}" @click.stop="itemClicked(index, sindex, iindex, $event)">
+           <img :key="item.image" v-lazy="item.image"></img>
+           <v-list-tile-title>{{item.title}}</v-list-tile-title>
+           <v-list-tile-sub-title v-html="item.subtitle"></v-list-tile-sub-title>
+           <div class="emblem" v-if="item.emblem" :style="{background: item.emblem.bgnd}">
+            <img :src="item.emblem | emblem()" loading="lazy"></img>
+           </div>
+          </div>
+         </template>
+         <div v-if="undefined!=sect.more && undefined!=sect.items && sect.grid && sect.items.length>=sect.min" class="np-grid-more link-item" @click="moreClicked(index, sindex)">{{sect.more}}</div>
+        </div>
+        <div v-else-if="undefined!=sect.html" v-html="sect.html"></div>
+       </template>
+       <div class="np-spacer"></div>
+      </v-card-text>
+     </v-card>
+    </v-tab-item>
+   </template>
+  </v-tabs>
+  <div v-else>
+   <v-layout row>
+    <template v-for="(tab, index) in info.tabs">
+     <v-flex xs4>
+      <v-card flat class="np-info-card-cover">
+       <v-card-title @contextmenu.prevent="showContextMenu"><p>{{tab.title}}</p></v-card-title>
+       <v-card-text :class="['np-info-text-full', 'fade-both', zoomInfoClass, TRACK_TAB==index || tab.isMsg ? 'np-info-lyrics' : '', ALBUM_TAB==index ? 'np-info-review' : '']">
+        <div v-html="tab.text"></div>
+        <img v-if="undefined!=tab.image" :src="tab.image" loading="lazy" class="np-no-meta-img"></img>
+        <template v-for="(sect, sindex) in tab.sections">
+         <div class="np-sect-title" v-if="(undefined!=sect.items && sect.items.length>=sect.min) || undefined!=sect.html">{{sect.title}}<v-btn flat icon class="np-sect-toggle" v-if="undefined!=sect.grid" @click="toggleGrid(index, sindex)"><v-icon>{{ACTIONS[sect.grid ? USE_LIST_ACTION : USE_GRID_ACTION].icon}}</v-icon></v-btn></div>
+         <v-list v-if="undefined!=sect.items && !sect.grid && sect.items.length>=sect.min" class="lms-list">
+          <template v-for="(item, iindex) in sect.items">
+           <v-list-tile class="lms-list-item" v-bind:class="{'pq-current': (ALBUM_TAB==index && item.id==('track_id:'+infoTrack.track_id)) || (ARTIST_TAB==index && item.id==('album_id:'+infoTrack.album_id)), 'list-active':menu.show && index==menu.tab && sindex==menu.section && iindex==menu.index, 'browse-header' : item.header}" @click.stop="itemClicked(index, sindex, iindex, $event)">
+            <v-list-tile-avatar v-if="item.image" :tile="true" class="lms-avatar">
+             <img :key="item.image" v-lazy="item.image"></img>
+            </v-list-tile-avatar>
+            <v-list-tile-content>
+             <v-list-tile-title v-if="ALBUM_TAB==index" v-html="item.title"></v-list-tile-title>
+             <v-list-tile-title v-else>{{item.title}}</v-list-tile-title>
+             <v-list-tile-sub-title v-html="item.subtitle"></v-list-tile-sub-title>
+            </v-list-tile-content>
+            <v-list-tile-action v-if="ALBUM_TAB==index && undefined!=item.durationStr" class="np-list-time">{{item.durationStr}}</v-list-tile-action>
+            <div class="emblem" v-if="item.emblem" :style="{background: item.emblem.bgnd}">
+             <img :src="item.emblem | emblem()" loading="lazy"></img>
+            </div>
+           </v-list-tile>
+          </template>
+          <v-list-tile v-if="undefined!=sect.more" @click="moreClicked(index, sindex)"><v-list-tile-content><v-list-tile-title>{{sect.more}}</v-list-tile-title></v-list-tile-content></v-list-tile>
+         </v-list>
+         <div class="np-grid-sect" v-else-if="undefined!=sect.items && sect.grid && sect.items.length>=sect.min">
+          <template v-for="(item, iindex) in sect.items">
+           <div class="np-grid-item" v-bind:class="{'pq-current': (ALBUM_TAB==index && item.id==('track_id:'+infoTrack.track_id)) || (ARTIST_TAB==index && item.id==('album_id:'+infoTrack.album_id)), 'list-active':menu.show && index==menu.tab && sindex==menu.section && iindex==menu.index, 'browse-header' : item.header}" @click.stop="itemClicked(index, sindex, iindex, $event)">
+            <img :key="item.image" v-lazy="item.image"></img>
+            <v-list-tile-title>{{item.title}}</v-list-tile-title>
+            <v-list-tile-sub-title v-html="item.subtitle"></v-list-tile-sub-title>
+            <div class="emblem" v-if="item.emblem" :style="{background: item.emblem.bgnd}">
+             <img :src="item.emblem | emblem()" loading="lazy"></img>
+            </div>
+           </div>
+          </template>
+          <div v-if="undefined!=sect.more && undefined!=sect.items && sect.grid && sect.items.length>=sect.min" class="np-grid-more link-item" @click="moreClicked(index, sindex)">{{sect.more}}</div>
+         </div>
+         <div v-else-if="undefined!=sect.html" v-html="sect.html"></div>
+        </template>
+        <div class="np-spacer"></div>
+       </v-card-text>
+      </v-card>
+     </v-flex>
+    </template>
+   </v-layout>
+  </div>
+  <v-card class="np-info-card-cover">
+   <v-card-actions>
+    <v-spacer></v-spacer>
+    <v-btn flat icon v-if="info.showTabs && windowWidth>NP_MIN_WIDTH_FOR_FULL" @click="info.showTabs=false" :title="trans.expand"><v-icon style="margin-right:-18px">chevron_right</v-icon><v-icon style="margin-left:-18px">chevron_left</v-icon></v-btn>
+    <v-btn flat icon v-else-if="windowWidth>NP_MIN_WIDTH_FOR_FULL" @click="info.showTabs=true" :title="trans.collapse"><v-icon style="margin-right:-18px">chevron_left</v-icon><v-icon style="margin-left:-18px">chevron_right</v-icon></v-btn>
+    <div style="width:32px" v-if="windowWidth>NP_MIN_WIDTH_FOR_FULL"></div>
+    <v-btn flat icon v-if="info.sync" @click="info.sync = false" :title="trans.sync"><v-icon>link</v-icon></v-btn>
+    <v-btn flat icon v-else @click="info.sync = true" :title="trans.unsync"><v-icon class="dimmed">link_off</v-icon></v-btn>
+    <div style="width:32px"></div>
+    <v-btn flat icon @click="trackInfo()" :title="trans.more"><img class="svg-img" :src="'more' | svgIcon(darkUi)"></img></v-btn>
+    <v-spacer></v-spacer>
+   </v-card-actions>
+  </v-card>
+ </div>
+
+ <div v-if="!info.show || (desktopLayout && !largeView)">
  <div v-if="desktopLayout && !largeView" class="np-bar" id="np-bar" v-bind:class="{'np-bar-sb':stopButton}">
   <v-layout row class="np-bar-controls" v-if="stopButton">
    <v-flex xs3>
@@ -93,190 +213,10 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
   </v-list>
   <v-progress-linear height="5" id="pos-slider" v-if="playerStatus.current.duration>0" class="np-slider np-slider-desktop" :value="playerStatus.current.pospc" v-on:click="sliderChanged($event, false)" @mouseover="showTimeTooltip" @mouseout="hideTimeTooltip" @mousemove="moveTimeTooltip" @touchstart.passive="touchSliderStart" @touchend.passive="touchSliderEnd" @touchmove.passive="moveTimeTooltipTouch"></v-progress-linear>
   <v-btn flat icon v-longpress="playPauseButton" @click.middle="showSleep" id="playPauseX" :title="(playerStatus.isplaying ? trans.pause : trans.play) | tooltip('space', keyboardControl)" v-bind:class="{'disabled':disableBtns}"><v-icon large class="media-icon">{{playerStatus.isplaying ? 'pause' : 'play_arrow'}}</v-icon></v-btn>
-
-  <div v-if="info.show" class="np-info np-info-desktop" id="np-info">
-   <v-tabs centered v-model="info.tab" v-if="info.showTabs" style="np-info-tab-cover">
-    <template v-for="(tab, index) in info.tabs">
-     <v-tab :key="index" @contextmenu.prevent="showContextMenu">{{tab.title}}</v-tab>
-     <v-tab-item :key="index" :transition="false" :reverse-transition="false">
-      <v-card flat class="np-info-card-cover fade-both">
-       <v-card-text :class="['np-info-text-desktop', zoomInfoClass, TRACK_TAB==index || tab.isMsg ? 'np-info-lyrics' : '', ALBUM_TAB==index ? 'np-info-review' : '']">
-        <div v-html="tab.text"></div>
-        <img v-if="undefined!=tab.image" :src="tab.image" loading="lazy" class="np-no-meta-img"></img>
-        <template v-for="(sect, sindex) in tab.sections">
-         <div class="np-sect-title" v-if="(undefined!=sect.items && sect.items.length>=sect.min) || undefined!=sect.html">{{sect.title}}<v-btn flat icon class="np-sect-toggle" v-if="undefined!=sect.grid" @click="toggleGrid(index, sindex)"><v-icon>{{ACTIONS[sect.grid ? USE_LIST_ACTION : USE_GRID_ACTION].icon}}</v-icon></v-btn></div>
-         <v-list v-if="undefined!=sect.items && !sect.grid && sect.items.length>=sect.min" class="lms-list">
-          <template v-for="(item, iindex) in sect.items">
-           <v-list-tile class="lms-list-item" v-bind:class="{'pq-current': (ALBUM_TAB==index && item.id==('track_id:'+infoTrack.track_id)) || (ARTIST_TAB==index && item.id==('album_id:'+infoTrack.album_id)), 'list-active':menu.show && index==menu.tab && sindex==menu.section && iindex==menu.index, 'browse-header' : item.header}" @click.stop="itemClicked(index, sindex, iindex, $event)">
-            <v-list-tile-avatar v-if="item.image" :tile="true" class="lms-avatar">
-             <img :key="item.image" v-lazy="item.image"></img>
-            </v-list-tile-avatar>
-            <v-list-tile-content>
-             <v-list-tile-title v-if="ALBUM_TAB==index" v-html="item.title"></v-list-tile-title>
-             <v-list-tile-title v-else>{{item.title}}</v-list-tile-title>
-             <v-list-tile-sub-title v-html="item.subtitle"></v-list-tile-sub-title>
-            </v-list-tile-content>
-            <v-list-tile-action v-if="ALBUM_TAB==index && undefined!=item.durationStr" class="np-list-time">{{item.durationStr}}</v-list-tile-action>
-            <div class="emblem" v-if="item.emblem" :style="{background: item.emblem.bgnd}">
-             <img :src="item.emblem | emblem()" loading="lazy"></img>
-            </div>
-           </v-list-tile>
-          </template>
-          <v-list-tile v-if="undefined!=sect.more" @click="moreClicked(index, sindex)"><v-list-tile-content><v-list-tile-title>{{sect.more}}</v-list-tile-title></v-list-tile-content></v-list-tile>
-         </v-list>
-         <div class="np-grid-sect" v-else-if="undefined!=sect.items && sect.grid && sect.items.length>=sect.min">
-          <template v-for="(item, iindex) in sect.items">
-           <div class="np-grid-item" v-bind:class="{'pq-current': (ALBUM_TAB==index && item.id==('track_id:'+infoTrack.track_id)) || (ARTIST_TAB==index && item.id==('album_id:'+infoTrack.album_id)), 'list-active':menu.show && index==menu.tab && sindex==menu.section && iindex==menu.index}" @click.stop="itemClicked(index, sindex, iindex, $event)">
-            <img :key="item.image" v-lazy="item.image"></img>
-            <v-list-tile-title>{{item.title}}</v-list-tile-title>
-            <v-list-tile-sub-title v-html="item.subtitle"></v-list-tile-sub-title>
-            <div class="emblem" v-if="item.emblem" :style="{background: item.emblem.bgnd}">
-             <img :src="item.emblem | emblem()" loading="lazy"></img>
-            </div>
-           </div>
-          </template>
-          <div v-if="undefined!=sect.more && undefined!=sect.items && sect.grid && sect.items.length>=sect.min" class="np-grid-more link-item" @click="moreClicked(index, sindex)">{{sect.more}}</div>
-         </div>
-         <div v-else-if="undefined!=sect.html" v-html="sect.html"></div>
-        </template>
-        <div class="np-spacer"></div>
-       </v-card-text>
-      </v-card>
-     </v-tab-item>
-    </template>
-   </v-tabs>
-   <div v-else>
-    <v-layout row>
-     <template v-for="(tab, index) in info.tabs">
-      <v-flex xs4>
-       <v-card flat class="np-info-card-cover">
-        <v-card-title @contextmenu.prevent="showContextMenu"><p>{{tab.title}}</p></v-card-title>
-        <v-card-text :class="['np-info-text-full-desktop', 'fade-both', zoomInfoClass, TRACK_TAB==index || tab.isMsg ? 'np-info-lyrics' : '', ALBUM_TAB==index ? 'np-info-review' : '']">
-         <div v-html="tab.text"></div>
-         <img v-if="undefined!=tab.image" :src="tab.image" loading="lazy" class="np-no-meta-img"></img>
-         <template v-for="(sect, sindex) in tab.sections">
-          <div class="np-sect-title" v-if="(undefined!=sect.items && sect.items.length>=sect.min) || undefined!=sect.html">{{sect.title}}<v-btn flat icon class="np-sect-toggle" v-if="undefined!=sect.grid" @click="toggleGrid(index, sindex)"><v-icon>{{ACTIONS[sect.grid ? USE_LIST_ACTION : USE_GRID_ACTION].icon}}</v-icon></v-btn></div>
-          <v-list v-if="undefined!=sect.items && !sect.grid && sect.items.length>=sect.min" class="lms-list">
-           <template v-for="(item, iindex) in sect.items">
-            <v-list-tile class="lms-list-item" v-bind:class="{'pq-current': (ALBUM_TAB==index && item.id==('track_id:'+infoTrack.track_id)) || (ARTIST_TAB==index && item.id==('album_id:'+infoTrack.album_id)), 'list-active':menu.show && index==menu.tab && sindex==menu.section && iindex==menu.index, 'browse-header' : item.header}" @click.stop="itemClicked(index, sindex, iindex, $event)">
-             <v-list-tile-avatar v-if="item.image" :tile="true" class="lms-avatar">
-              <img :key="item.image" v-lazy="item.image"></img>
-             </v-list-tile-avatar>
-             <v-list-tile-content>
-              <v-list-tile-title v-if="ALBUM_TAB==index" v-html="item.title"></v-list-tile-title>
-              <v-list-tile-title v-else>{{item.title}}</v-list-tile-title>
-              <v-list-tile-sub-title v-html="item.subtitle"></v-list-tile-sub-title>
-             </v-list-tile-content>
-             <v-list-tile-action v-if="ALBUM_TAB==index && undefined!=item.durationStr" class="np-list-time">{{item.durationStr}}</v-list-tile-action>
-             <div class="emblem" v-if="item.emblem" :style="{background: item.emblem.bgnd}">
-              <img :src="item.emblem | emblem()" loading="lazy"></img>
-             </div>
-            </v-list-tile>
-           </template>
-           <v-list-tile v-if="undefined!=sect.more" @click="moreClicked(index, sindex)"><v-list-tile-content><v-list-tile-title>{{sect.more}}</v-list-tile-title></v-list-tile-content></v-list-tile>
-          </v-list>
-          <div class="np-grid-sect" v-else-if="undefined!=sect.items && sect.grid && sect.items.length>=sect.min">
-           <template v-for="(item, iindex) in sect.items">
-            <div class="np-grid-item" v-bind:class="{'pq-current': (ALBUM_TAB==index && item.id==('track_id:'+infoTrack.track_id)) || (ARTIST_TAB==index && item.id==('album_id:'+infoTrack.album_id)), 'list-active':menu.show && index==menu.tab && sindex==menu.section && iindex==menu.index, 'browse-header' : item.header}" @click.stop="itemClicked(index, sindex, iindex, $event)">
-             <img :key="item.image" v-lazy="item.image"></img>
-             <v-list-tile-title>{{item.title}}</v-list-tile-title>
-             <v-list-tile-sub-title v-html="item.subtitle"></v-list-tile-sub-title>
-             <div class="emblem" v-if="item.emblem" :style="{background: item.emblem.bgnd}">
-              <img :src="item.emblem | emblem()" loading="lazy"></img>
-             </div>
-            </div>
-           </template>
-           <div v-if="undefined!=sect.more && undefined!=sect.items && sect.grid && sect.items.length>=sect.min" class="np-grid-more link-item" @click="moreClicked(index, sindex)">{{sect.more}}</div>
-          </div>
-          <div v-else-if="undefined!=sect.html" v-html="sect.html"></div>
-         </template>
-         <div class="np-spacer"></div>
-        </v-card-text>
-       </v-card>
-      </v-flex>
-     </template>
-    </v-layout>
-   </div>
-   <v-card class="np-info-card-cover">
-    <v-card-actions>
-     <v-spacer></v-spacer>
-     <v-btn flat icon v-if="info.showTabs" @click="info.showTabs=false" :title="trans.expand"><v-icon style="margin-right:-18px">chevron_right</v-icon><v-icon style="margin-left:-18px">chevron_left</v-icon></v-btn>
-     <v-btn flat icon v-else @click="info.showTabs=true" :title="trans.collapse"><v-icon style="margin-right:-18px">chevron_left</v-icon><v-icon style="margin-left:-18px">chevron_right</v-icon></v-btn>
-     <div style="width:32px"></div>
-     <v-btn flat icon v-if="info.sync" @click="info.sync = false" :title="trans.sync"><v-icon>link</v-icon></v-btn>
-     <v-btn flat icon v-else @click="info.sync = true" :title="trans.unsync"><v-icon class="dimmed">link_off</v-icon></v-btn>
-     <div style="width:32px"></div>
-     <v-btn flat icon @click="trackInfo()" :title="trans.more"><img class="svg-img" :src="'more' | svgIcon(darkUi)"></img></v-btn>
-     <v-spacer></v-spacer>
-    </v-card-actions>
-   </v-card>
-  </div>
  </div>
  
  <div class="np-page" v-else id="np-page">
-  <div v-if="info.show" class="np-info" id="np-info">
-   <v-tabs centered v-model="info.tab" class="np-info-tab-cover">
-    <template v-for="(tab, index) in info.tabs">
-     <v-tab :key="index" @contextmenu.prevent="showContextMenu">{{tab.title}}</v-tab>
-     <v-tab-item :key="index" :transition="false" :reverse-transition="false">
-      <v-card flat class="np-info-card-cover fade-both">
-       <v-card-text :class="['np-info-text', zoomInfoClass, TRACK_TAB==index || tab.isMsg ? 'np-info-lyrics' : '', ALBUM_TAB==index ? 'np-info-review' : '', ALBUM_TAB==index ? 'np-info-review' : '']">
-        <div v-html="tab.text"></div>
-        <img v-if="undefined!=tab.image" :src="tab.image" loading="lazy" class="np-no-meta-img"></img>
-        <template v-for="(sect, sindex) in tab.sections">
-         <div class="np-sect-title" v-if="(undefined!=sect.items && sect.items.length>=sect.min) || undefined!=sect.html">{{sect.title}}<v-btn flat icon class="np-sect-toggle" v-if="undefined!=sect.grid" @click="toggleGrid(index, sindex)"><v-icon>{{ACTIONS[sect.grid ? USE_LIST_ACTION : USE_GRID_ACTION].icon}}</v-icon></v-btn></div>
-         <v-list v-if="undefined!=sect.items && !sect.grid && sect.items.length>=sect.min" class="lms-list">
-          <template v-for="(item, iindex) in sect.items">
-           <v-list-tile class="lms-list-item" v-bind:class="{'pq-current': (ALBUM_TAB==index && item.id==('track_id:'+infoTrack.track_id)) || (ARTIST_TAB==index && item.id==('album_id:'+infoTrack.album_id)), 'list-active':menu.show && index==menu.tab && sindex==menu.section && iindex==menu.index, 'browse-header' : item.header}" @click.stop="itemClicked(index, sindex, iindex, $event)">
-            <v-list-tile-avatar v-if="item.image" :tile="true" class="lms-avatar">
-             <img :key="item.image" v-lazy="item.image"></img>
-            </v-list-tile-avatar>
-            <v-list-tile-content>
-             <v-list-tile-title v-if="ALBUM_TAB==index" v-html="item.title"></v-list-tile-title>
-             <v-list-tile-title v-else>{{item.title}}</v-list-tile-title>
-             <v-list-tile-sub-title v-html="item.subtitle"></v-list-tile-sub-title>
-            </v-list-tile-content>
-            <v-list-tile-action v-if="ALBUM_TAB==index && undefined!=item.durationStr" class="np-list-time">{{item.durationStr}}</v-list-tile-action>
-            <div class="emblem" v-if="item.emblem" :style="{background: item.emblem.bgnd}">
-             <img :src="item.emblem | emblem()" loading="lazy"></img>
-            </div>
-           </v-list-tile>
-          </template>
-          <v-list-tile v-if="undefined!=sect.more" @click="moreClicked(index, sindex)"><v-list-tile-content><v-list-tile-title>{{sect.more}}</v-list-tile-title></v-list-tile-content></v-list-tile>
-         </v-list>
-         <div class="np-grid-sect" v-else-if="undefined!=sect.items && sect.grid && sect.items.length>=sect.min">
-          <template v-for="(item, iindex) in sect.items">
-           <div class="np-grid-item" v-bind:class="{'pq-current': (ALBUM_TAB==index && item.id==('track_id:'+infoTrack.track_id)) || (ARTIST_TAB==index && item.id==('album_id:'+infoTrack.album_id)), 'list-active':menu.show && index==menu.tab && sindex==menu.section && iindex==menu.index, 'browse-header' : item.header}" @click.stop="itemClicked(index, sindex, iindex, $event)">
-            <img :key="item.image" v-lazy="item.image"></img>
-            <v-list-tile-title>{{item.title}}</v-list-tile-title>
-            <v-list-tile-sub-title v-html="item.subtitle"></v-list-tile-sub-title>
-            <div class="emblem" v-if="item.emblem" :style="{background: item.emblem.bgnd}">
-             <img :src="item.emblem | emblem()" loading="lazy"></img>
-            </div>
-           </div>
-          </template>
-          <div v-if="undefined!=sect.more && undefined!=sect.items && sect.grid && sect.items.length>=sect.min" class="np-grid-more link-item" @click="moreClicked(index, sindex)">{{sect.more}}</div>
-         </div>
-         <div v-else-if="undefined!=sect.html" v-html="sect.html"></div>
-        </template>
-        <div class="np-spacer"></div>
-       </v-card-text>
-      </v-card>
-     </v-tab-item>
-    </template>
-   </v-tabs>
-   <v-card class="np-info-card-cover">
-    <v-card-actions>
-     <v-spacer></v-spacer>
-     <v-btn flat icon v-if="info.sync" @click="info.sync = false" :title="trans.sync"><v-icon>link</v-icon></v-btn>
-     <v-btn flat icon v-else @click="info.sync = true" :title="trans.unsync"><v-icon class="dimmed">link_off</v-icon></v-btn>
-     <div style="width:32px"></div>
-     <v-btn flat icon @click="trackInfo()" :title="trans.more"><img class="svg-img" :src="'more' | svgIcon(darkUi)"></img></v-btn>
-     <v-spacer></v-spacer>
-    </v-card-actions>
-   </v-card>
-  </div>
-  <div v-else>
+  <div>
    <div v-show="overlayVolume>-1 && VOL_STD==playerStatus.dvc" id="volumeOverlay">{{overlayVolume}}%</div>
    <div v-if="landscape" v-touch:start="touchStart" v-touch:end="touchEnd" v-touch:moving="touchMoving">
     <div v-if="!info.show" class="np-image-landscape" v-bind:class="{'np-image-landscape-wide':landscape && wide>1}">
@@ -417,6 +357,7 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
     </v-flex>
    </v-layout>
   </div>
+ </div>
  </div>
 </div>
 `,
@@ -781,7 +722,7 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
             if (!this.info.show || !this.infoTrack) {
                 return;
             }
-            if (this.$store.state.desktopLayout && !this.showTabs) {
+            if (!this.showTabs) {
                 this.fetchTrackInfo();
                 this.fetchArtistInfo();
                 this.fetchAlbumInfo();

@@ -24,7 +24,7 @@ var currentPlayingTrackPosition = 0;
 var lmsNowPlaying = Vue.component("lms-now-playing", {
     template: `
 <div>
- <div v-show="!desktopLayout || info.show || largeView" class="np-bgnd">
+<div v-show="(!desktopLayout && page=='now-playing') || (desktopLayout && (info.show || largeView))" class="np-bgnd">
   <div v-show="info.show ? drawInfoBgndImage : drawBgndImage" class="np-bgnd bgnd-cover" id="np-bgnd">
    <div v-bind:class="{'np-bgnd bgnd-blur':(info.show ? drawInfoBgndImage : drawBgndImage)}"></div>
   </div>
@@ -160,8 +160,8 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
   </v-card>
  </div>
 
- <div v-if="!info.show || (desktopLayout && !largeView)">
- <div v-if="desktopLayout && !largeView" class="np-bar" id="np-bar" v-bind:class="{'np-bar-sb':stopButton}">
+ <div v-if="!info.show || (desktopLayout || (showNpBar && (info.show || page!='now-playing')))">
+ <div v-if="(desktopLayout && !largeView) || (!desktopLayout && (info.show || page!='now-playing'))" class="np-bar" id="np-bar" v-bind:class="{'np-bar-sb':stopButton, 'mobile':!desktopLayout}">
   <v-layout row class="np-bar-controls" v-if="stopButton">
    <v-flex xs3>
     <v-btn flat icon id="np-bar-prev" v-bind:class="{'disabled':disablePrev}" v-longpress:repeat="prevButton" :title="trans.prev | tooltip('left', keyboardControl)"><v-icon large class="media-icon">skip_previous</v-icon></v-btn>
@@ -190,7 +190,8 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
   <div v-if="!largeView && !disableBtns" class="np-bar-image">
   <img :key="coverUrl" v-lazy="coverUrl" onerror="this.src=DEFAULT_COVER" @contextmenu="showMenu" @click="clickImage(event)" class="np-cover" v-bind:class="{'np-trans':transCvr}"></img>
   </div>
-  <v-list two-line subheader class="np-bar-details" v-if="playerStatus.playlist.count>0">
+  <div v-if="!desktopLayout" class="np-bar-details-mobile ellipsis">{{mobileBarText}}</div>
+  <v-list two-line subheader class="np-bar-details" v-else-if="playerStatus.playlist.count>0">
    <v-list-tile style>
     <v-list-tile-content>
      <v-list-tile-title v-if="playerStatus.current.title">{{title}}</v-list-tile-title>
@@ -211,8 +212,8 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
     </v-list-tile-action>
    </v-list-tile>
   </v-list>
-  <v-progress-linear height="5" id="pos-slider" v-if="playerStatus.current.duration>0" class="np-slider np-slider-desktop" :value="playerStatus.current.pospc" v-on:click="sliderChanged($event, false)" @mouseover="showTimeTooltip" @mouseout="hideTimeTooltip" @mousemove="moveTimeTooltip" @touchstart.passive="touchSliderStart" @touchend.passive="touchSliderEnd" @touchmove.passive="moveTimeTooltipTouch"></v-progress-linear>
-  <v-btn flat icon v-longpress="playPauseButton" @click.middle="showSleep" id="playPauseX" :title="(playerStatus.isplaying ? trans.pause : trans.play) | tooltip('space', keyboardControl)" v-bind:class="{'disabled':disableBtns}"><v-icon large class="media-icon">{{playerStatus.isplaying ? 'pause' : 'play_arrow'}}</v-icon></v-btn>
+  <v-progress-linear height="5" id="pos-slider" v-if="!desktopLayout && playerStatus.current.duration>0" class="np-slider np-bar-slider" :value="playerStatus.current.pospc"></v-progress-linear>
+  <v-progress-linear height="5" id="pos-slider" v-else-if="desktopLayout && playerStatus.current.duration>0" class="np-slider np-bar-slider" :value="playerStatus.current.pospc" v-on:click="sliderChanged($event, false)" @mouseover="showTimeTooltip" @mouseout="hideTimeTooltip" @mousemove="moveTimeTooltip" @touchstart.passive="touchSliderStart" @touchend.passive="touchSliderEnd" @touchmove.passive="moveTimeTooltipTouch"></v-progress-linear>
  </div>
  
  <div class="np-page" v-else id="np-page">
@@ -372,6 +373,7 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
                                disc:0, year:0, url:undefined, comment:undefined, source: {local:true, text:undefined} },
                     playlist: { shuffle:0, repeat: 0, current:0, count:0 },
                  },
+                 mobileBarText: undefined,
                  info: { show: false, tab:TRACK_TAB, showTabs:false, sync: true,
                          tabs: [ { title:undefined, text:undefined, reqId:0, image: undefined,
                                     sections:[ { title:undefined, items:[], min:1, more:undefined, grid:getLocalStorageBool("np-tabs-"+ARTIST_TAB+"-0-grid", false) },
@@ -405,9 +407,9 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
     },
     mounted() {
         this.hideNpBar = false;
-        this.desktopBottomHeight = getComputedStyle(document.documentElement).getPropertyValue('--desktop-bottom-toolbar-height');
-        this.mobileBottomHeight = getComputedStyle(document.documentElement).getPropertyValue('--mobile-bottom-toolbar-height');
-        this.controlDesktopNpBar();
+        this.desktopBarHeight = getComputedStyle(document.documentElement).getPropertyValue('--desktop-npbar-height');
+        this.mobileBarHeight = getComputedStyle(document.documentElement).getPropertyValue('--mobile-npbar-height-val');
+        this.controlBar();
 
         bus.$on('customActions', function(val) {
             this.customActions = getCustomActions("track", false);
@@ -1002,12 +1004,12 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
         toggleGrid(tab, section) {
             nowplayingToggleGrid(this, tab, section);
         },
-        controlDesktopNpBar() {
-            let hideNpBar = this.disableBtns && this.$store.state.desktopLayout;
-            if (hideNpBar!=this.hideNpBar) {
-                this.hideNpBar = hideNpBar;
-                document.documentElement.style.setProperty('--bottom-toolbar-height',
-                    hideNpBar ? '0px' : this.$store.state.desktopLayout ? this.desktopBottomHeight : this.mobileBottomHeight);
+        controlBar() {
+            let showNpBar = !this.disableBtns;
+            if (showNpBar!=this.$store.state.showNpBar) {
+                this.$store.commit('showNpBar', showNpBar);
+                document.documentElement.style.setProperty('--desktop-npbar-height', !showNpBar ? '0px' : this.desktopBarHeight);
+                document.documentElement.style.setProperty('--mobile-npbar-height', !showNpBar ? '0px' : this.mobileBarHeight);
             }
         },
         showTimeTooltip() {
@@ -1110,15 +1112,18 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
             this.$store.commit('menuVisible', {name:'nowplaying', shown:newVal});
         },
         'disableBtns': function(newVal) {
-            this.controlDesktopNpBar();
+            this.controlBar();
         },
         '$store.state.desktopLayout': function(newVal) {
-            this.controlDesktopNpBar();
+            this.controlBar();
         }
     },
     computed: {
+        showNpBar() {
+            return this.$store.state.showNpBar
+        },
         page() {
-            return this.$store.state.page
+            return this.$store.state.page;
         },
         infoPlugin() {
             return this.$store.state.infoPlugin
@@ -1193,7 +1198,7 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
             return this.$store.state.infoBackdrop && undefined!=this.coverUrl && LMS_BLANK_COVER!=this.coverUrl && DEFAULT_COVER!=this.coverUrl && DEFAULT_RADIO_COVER!=this.coverUrl
         },
         coloredToolbars() {
-            return this.$store.state.coloredToolbars
+            return this.$store.state.desktopLayout && this.$store.state.coloredToolbars
         },
         keyboardControl() {
             return this.$store.state.keyboardControl && !IS_MOBILE

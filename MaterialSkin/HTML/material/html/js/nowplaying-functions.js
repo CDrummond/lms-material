@@ -106,6 +106,10 @@ function nowplayingOnPlayerStatus(view, playerStatus) {
     if (source!=view.playerStatus.current.source) {
         view.playerStatus.current.source = source;
     }
+    let mobileBarText = addPart(playerStatus.current.title, buildArtistLine(playerStatus.current, 'np', true));
+    if (mobileBarText!=view.mobileBarText) {
+        view.mobileBarText = mobileBarText;
+    }
     var artistAndComposer = buildArtistLine(playerStatus.current, 'now-playing');
     var useComposerTag = playerStatus.current.composer && lmsOptions.showComposer && useComposer(playerStatus.current.genre);
     var useConductorTag = playerStatus.current.conductor && lmsOptions.showConductor && useConductor(playerStatus.current.genre);
@@ -257,8 +261,7 @@ function nowplayingShowMenu(view, event) {
                              {title:i18n("Large font size"), act:NP_FONT_ACT, val:20}];
         } else {
             view.menu.icons=true;
-            view.menu.items=[{title:i18n("Show image"), icon:"photo", act:NP_PIC_ACT},
-                             {title:i18n("Show track information"), svg:"more", act:NP_INFO_ACT}];
+            view.menu.items=[{title:i18n("Show image"), icon:"photo", act:NP_PIC_ACT}];
 
             let artist_id = view.playerStatus.current.artist_ids
                         ? view.playerStatus.current.artist_ids[0]
@@ -297,6 +300,7 @@ function nowplayingShowMenu(view, event) {
                     view.menu.items.push({title:loop[i].title, act:NP_CUSTOM+i, icon:loop[i].icon, svg:loop[i].svg});
                 }
             }
+            view.menu.items.push({title:ACTIONS[MORE_ACTION].title, svg:ACTIONS[MORE_ACTION].svg, act:NP_INFO_ACT});
         }
         view.menu.x = event.clientX;
         view.menu.y = event.clientY;

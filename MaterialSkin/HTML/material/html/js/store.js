@@ -279,6 +279,7 @@ function updateLang(state, lang) {
 const store = new Vuex.Store({
     state: {
         desktopLayout: false,
+        showNpBar: false,
         showQueue: true,
         players: null, // List of players
         player: null, // Current player (from list)
@@ -776,6 +777,9 @@ const store = new Vuex.Store({
 
             state.activeDialog = state.openDialogs.length>0 ? state.openDialogs[state.openDialogs.length-1] : undefined;
             emitToolbarColorsFromState(state);
+        },
+        showNpBar(state, val) {
+            state.showNpBar = val;
         },
         closeAllDialogs(state, val) {
             closePrevDialog(state);

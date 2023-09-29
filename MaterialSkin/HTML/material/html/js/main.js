@@ -352,6 +352,9 @@ var app = new Vue({
         },
         showQueue() {
             return this.$store.state.showQueue
+        },
+        showNpBar() {
+            return this.$store.state.showNpBar
         }
     },
     methods: {

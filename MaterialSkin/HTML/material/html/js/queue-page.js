@@ -994,18 +994,15 @@ var lmsQueue = Vue.component("lms-queue", {
                     }
                     if (isValid) {
                         this.duration = duration;
-                        bus.$emit("queueStatus", this.listSize, this.duration);
                         return;
                     }
                 }
                 // Don't have all tracks, so ask LMS for total duration... (OR isValid from above is false)
                 lmsCommand(this.$store.state.player.id, ["status", "-", 1, "tags:DD"]).then(({data}) => {
                     this.duration = data.result && data.result["playlist duration"] ? parseFloat(data.result["playlist duration"]) : 0.0;
-                    bus.$emit("queueStatus", this.listSize, this.duration);
                 });
             } else {
                 this.duration = 0.0;
-                bus.$emit("queueStatus", this.listSize, this.duration);
             }
         },
         checkCover() {

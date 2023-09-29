@@ -6,8 +6,7 @@
  */
 
 :root {
- --bottom-toolbar-height:72px;
- --desktop-bottom-toolbar-height:72px;
+  --bottom-toolbar-height:var(--desktop-npbar-height);
  --np-portrait-image-size:min(calc((var(--vh, 1vh)*100) - (var(--main-toolbar-height) + 260px) - (var(--np-image-border)*2)), 100vw - (var(--np-image-border)*2));
  --np-image-landscape-height:calc((var(--vh, 1vh)*100) - (var(--main-toolbar-height) + 116px));
  --np-image-landscape-size:min(var(--np-image-landscape-height) - (var(--np-image-border)*2), 50vw - (var(--np-image-border)*2));
@@ -112,23 +111,8 @@
  background-color:var(--primary-color)!important;
 }
 
-.np-bar {
- padding:0px 16px 0px 16px; /* t, r, b, l */
- position:fixed;
- bottom:0;
- width:100%;
- height:var(--bottom-toolbar-height) !important;
- min-width:600px;
-}
-
 .no-control-adjust { /* Adjust pos for iPad */
  margin-top:-8px;
-}
-
-.np-bar-details .v-list__tile__content, .np-bar-details .v-list__tile__content .v-list__tile__sub-title,
-.np-bar-details .v-list__tile__content .v-list__tile__title, .np-bar-details .np-bar-tech, .np-bar-details .np-bar-time, .np-bar-controls div i,
-.np-bar-details div.v-rating i.primary--text, .np-bar-details div.v-rating i.accent--text {
- color:var(--bottom-toolbar-text-color) !important;
 }
 
 .np-page {
@@ -141,13 +125,6 @@
 
 .np-bgnd {
  height:calc((var(--vh, 1vh)*100) - var(--main-toolbar-height));
-}
-
-.np-bar-controls {
- margin-left:-16px;
- margin-top:15px;
- max-width:270px;
- float:left;
 }
 
 .np-portrait-song-info {
@@ -166,6 +143,20 @@
  margin:0px 8px -4px 0px;
  height:2em;
  max-width:calc(100vw - 400px);
+}
+
+.np-bar {
+ padding:0px 16px 0px 16px; /* t, r, b, l */
+ bottom:0;
+ height:var(--bottom-toolbar-height) !important;
+ min-width:600px;
+}
+
+.np-bar-controls {
+ margin-left:-16px;
+ margin-top:15px;
+ max-width:270px;
+ float:left;
 }
 
 .np-bar-details {
@@ -219,25 +210,12 @@
  #np-bar-prev, #np-bar-next, #np-bar-stop, #playPauseA, #playPauseB {
   display:none!important;
  }
- #playPauseX {
-  visibility: visible;
- }
  .np-bar-image, .np-bar-sb .np-bar-image {
    left:1px;
  }
  .np-bar-details, .np-bar-sb .np-bar-details {
   left:76px;
   width:calc(100vw - 98px);
- }
-}
-
-@media screen and (max-width: 330px) {
- .np-bar-image {
-  display:none!important;
- }
- .np-bar-details, .np-bar-sb .np-bar-details {
-  left:4px;
-  width:calc(100vw - 22px);
  }
 }
 
@@ -299,13 +277,9 @@
  cursor:pointer;
 }
 
-.np-slider-desktop {
- position:fixed;
- left:0px;
- bottom:calc(var(--bottom-toolbar-height) - 11px);
- width:100vw;
+.np-bar-slider {
+ bottom:calc(var(--bottom-toolbar-height) - 15px);
  height:10px !important;
- margin:0px !important; /* v-progress-linear has margin: 1rem 0; */
 }
 
 .np-bar .np-playpause {

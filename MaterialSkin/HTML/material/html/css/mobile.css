@@ -8,7 +8,6 @@
 :root {
  --bottom-nav-pad:0px;
  --bottom-toolbar-height:calc(var(--bottom-nav-pad) + 52px);
- --mobile-bottom-toolbar-height:calc(var(--bottom-nav-pad) + 52px);
  --np-portrait-image-size:min(calc((var(--vh, 1vh)*100) - (var(--main-toolbar-height) + var(--bottom-toolbar-height) + 210px) - (var(--np-image-border)*2)), 100vw - (var(--np-image-border)*2));
  --np-image-landscape-height:calc((var(--vh, 1vh)*100) - (var(--main-toolbar-height) + var(--bottom-toolbar-height) + 116px));
  --np-image-landscape-size:min(var(--np-image-landscape-height) - (var(--np-image-border)*2), 50vw - (var(--np-image-border)*2));
@@ -103,7 +102,7 @@
 .lms-list {
  position:fixed;
  top:calc(var(--main-toolbar-height) + var(--sub-toolbar-height));
- height:calc((var(--vh, 1vh)*100) - (var(--main-toolbar-height) + var(--sub-toolbar-height) + var(--bottom-toolbar-height)));
+ height:calc((var(--vh, 1vh)*100) - (var(--main-toolbar-height) + var(--sub-toolbar-height) + var(--bottom-toolbar-height) + var(--mobile-npbar-height)));
  width:100vw;
  overflow:auto;
  backface-visibility:hidden;
@@ -120,13 +119,13 @@
 }
 
 .lms-jumplist {
- height:calc((var(--vh, 1vh)*100) - (var(--main-toolbar-height) + var(--sub-toolbar-height) + var(--bottom-toolbar-height)));
+ height:calc((var(--vh, 1vh)*100) - (var(--main-toolbar-height) + var(--sub-toolbar-height) + var(--bottom-toolbar-height) + var(--mobile-npbar-height)));
 }
 
 .lms-image-grid {
  position:fixed;
  top:calc(var(--main-toolbar-height) + var(--sub-toolbar-height));
- height:calc((var(--vh, 1vh)*100) - (var(--main-toolbar-height) + var(--sub-toolbar-height) + var(--bottom-toolbar-height)));
+ height:calc((var(--vh, 1vh)*100) - (var(--main-toolbar-height) + var(--sub-toolbar-height) + var(--bottom-toolbar-height) + var(--mobile-npbar-height)));
  width:100vw;
  overflow:auto;
  backface-visibility:hidden;
@@ -162,17 +161,60 @@
  padding-top:10px;
 }
 
+.np-bar {
+ height:var(--mobile-npbar-height);
+ bottom:var(--bottom-toolbar-height) !important;
+ border:none!important;
+ background-color:var(--sub-toolbar-color) !important;
+}
+
+.np-bar .v-progress-linear .primary {
+ background-color: var(--primary-color)!important;
+ border-color: var(--primary-color)!important;
+}
+
+.np-bar-image {
+ visibility:hidden;
+}
+
+.np-bar-slider {
+ bottom:calc((var(--bottom-toolbar-height) + var(--mobile-npbar-height)) - 12px);
+ width:100vw;
+ height:8px !important;
+}
+ 
+.np-bar-details-mobile {
+ position:fixed;
+ left:8px;
+ width:calc(100vw - 16px);
+ bottom:calc(var(--bottom-toolbar-height) - 1px);
+ font-size:var(--small-font-size);
+ opacity:var(--sub-opacity);
+}
+
+#np-bar-prev, #np-bar-next, #np-bar-stop, #playPauseA, #playPauseB, .np-bar-details .v-list__tile__action {
+ display:none!important;
+}
+
+.np-bar-details, .np-bar-sb .np-bar-details {
+ position:fixed;
+ left:40px;
+ bottom:32px;
+ width:calc(100vw - 68px);
+ background:transparent!important;
+}
+
 /* Adjust link/more/close buttons in now-playing page up a little */
 #np-info > .v-card > .v-card__actions > button {
  margin-top:-2px
 }
 
 .np-info-text {
- height:calc((var(--vh, 1vh)*100) - (var(--main-toolbar-height) + var(--sub-toolbar-height) + var(--bottom-toolbar-height) + 48px)); /* If not 48px there is a light line on some mobile devices? */
+ height:calc((var(--vh, 1vh)*100) - (var(--main-toolbar-height) + var(--sub-toolbar-height) + var(--bottom-toolbar-height) + var(--mobile-npbar-height) + 48px)); /* If not 48px there is a light line on some mobile devices? */
 }
 
 .np-info-text-full {
- height:calc((var(--vh, 1vh)*100) - (var(--main-toolbar-height) + var(--bottom-toolbar-height) + 88px));
+ height:calc((var(--vh, 1vh)*100) - (var(--main-toolbar-height) + var(--bottom-toolbar-height) + var(--mobile-npbar-height) + 88px));
 }
 
 .no-control-adjust {
@@ -218,15 +260,6 @@
 @media (hover: hover) and (pointer: fine) {
 .lms-footer .active-nav:hover, .lms-footer .inactive-nav:hover {
   background-color:var(--nav-hover-color)!important;
- }
-}
-
-@media only screen and (max-width:370px) {
- .maintoolbar-player-icon, .maintoolbar-player-power-button {
-  display:none!important;
- }
- .maintoolbar-title, .maintoolbar-subtitle {
-  padding-left:10px;
  }
 }
 

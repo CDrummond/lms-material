@@ -92,16 +92,16 @@ Vue.component('lms-toolbar', {
   <v-icon>{{playerMuted ? 'volume_off' : playerStatus.volume>0 ? 'volume_up' : 'volume_down'}}</v-icon>
   <div v-if="VOL_FIXED!=playerDvc" v-bind:class="{'disabled':noPlayer,'vol-btn-label':!desktopLayout||!showVolumeSlider,'dimmed':playerMuted}" >{{playerStatus.volume|displayVolume(playerDvc)}}</div>
  </v-btn>
- <v-btn icon :title="trans.info | tooltip(LMS_TRACK_INFO_KEYBOARD,keyboardControl)" v-if="!desktopLayout && infoPlugin && isNowPlayingPage" @click.native="emitInfo" class="toolbar-button hide-for-mini" id="inf" v-bind:class="{'disabled':playerStatus.count<1 && !infoOpen}">
+ <v-btn icon :title="trans.info | tooltip(LMS_TRACK_INFO_KEYBOARD,keyboardControl)" v-if="!desktopLayout && (MBAR_THICK==mobileBar || isNowPlayingPage)" @click.native="emitInfo" class="toolbar-button hide-for-mini" id="inf" v-bind:class="{'disabled':!infoPlugin || (playerStatus.count<1 && !infoOpen)}">
   <v-icon>{{infoOpen ? 'info' : 'info_outline'}}</v-icon>
  </v-btn>
- <v-btn icon v-if="!desktopLayout && ( (isNowPlayingPage && !infoPlugin) || !isNowPlayingPage)" v-longpress="playPauseButton" @click.middle="showSleep" class="toolbar-button hide-for-mini" id="pp" :title="playerStatus.isplaying ? trans.pause : trans.play" v-bind:class="{'disabled':playerStatus.count<1}">
+ <v-btn icon v-if="!desktopLayout && MBAR_THICK!=mobileBar" v-longpress="playPauseButton" @click.middle="showSleep" class="toolbar-button hide-for-mini" id="pp" :title="playerStatus.isplaying ? trans.pause : trans.play" v-bind:class="{'disabled':!infoPlugin || (playerStatus.count<1 && !infoOpen)}">
   <v-icon>{{playerStatus.isplaying ? 'pause_circle_outline' : 'play_circle_outline'}}</v-icon>
  </v-btn>
  <v-btn icon :title="trans.info | tooltip(LMS_TRACK_INFO_KEYBOARD,keyboardControl)" v-if="desktopLayout" @click.native="emitInfo" class="toolbar-button hide-for-mini" v-bind:class="{'disabled':playerStatus.count<1 && !infoOpen}">
   <v-icon>{{infoOpen ? 'info' : 'info_outline'}}</v-icon>
  </v-btn>
- <v-btn icon :title="(nowPlayingExpanded ? trans.hideLarge : trans.showLarge) | tooltip(LMS_EXPAND_NP_KEYBOARD,keyboardControl,true)" v-if="desktopLayout" @click.native="expandNowPlaying()" class="toolbar-button hide-for-mini" v-bind:class="{'disabled':playerStatus.count<1 && !nowPlayingExpanded}">
+ <v-btn icon :title="(nowPlayingExpanded ? trans.hideLarge : trans.showLarge) | tooltip(LMS_EXPAND_NP_KEYBOARD,keyboardControl,true)" v-if="desktopLayout" @click.native="expandNowPlaying()" class="toolbar-button hide-for-mini" v-bind:class="{'disabled':!infoPlugin || (playerStatus.count<1 && !nowPlayingExpanded)}">
   <v-icon>{{nowPlayingExpanded ? 'fullscreen_exit' : 'fullscreen'}}</v-icon>
  </v-btn>
  <v-btn icon :title="trans.toggleQueue | tooltip(LMS_TOGGLE_QUEUE_KEYBOARD,keyboardControl,true)" v-if="desktopLayout" @click.native="toggleQueue()" class="toolbar-button hide-for-mini" v-bind:class="{'dimmed':!showQueue}">
@@ -484,11 +484,10 @@ Vue.component('lms-toolbar', {
             }
             if (this.$store.state.infoPlugin) {
                 bus.$emit('info');
-            } /*else if (undefined!=this.playerStatus.current && undefined!=this.playerStatus.current.id) {
-                let clone = JSON.parse(JSON.stringify(this.playerStatus.current));
-                clone.id = "track_id:"+this.playerStatus.current.id;
-                bus.$emit('trackInfo', clone, undefined, undefined);
-            }*/
+                if (!this.$store.state.desktopLayout) {
+                    this.$store.commit('setPage', 'now-playing');
+                }
+            }
         },
         expandNowPlaying() {
             if (this.$store.state.visibleMenus.size>0) {
@@ -765,6 +764,9 @@ Vue.component('lms-toolbar', {
         },
         currentPage() {
             return this.$store.state.desktopLayout ? this.nowPlayingExpanded ? 'now-playing' : this.showQueue ? 'queue' : 'other' : this.$store.state.page
+        },
+        mobileBar() {
+            return this.$store.state.mobileBar
         },
         noPlayer () {
             return !this.$store.state.players || this.$store.state.players.length<1

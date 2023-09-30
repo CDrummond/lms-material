@@ -418,7 +418,7 @@
 "Settings":"Préférences",
 "Settings password":"Mot de passe des paramètres",
 "Should alarms repeat":"Réactivation automatique (alarme périodique)",
-"Show 'Performed by', 'From', etc. when listing track details. (e.g. Title By Artist From Album)'.":"Inclure 'Interprété par', 'Dans', etc. quand les détails du morceau sont affichés.",
+"Show 'Performed by', 'From', etc. when listing track details (e.g. Title By Artist From Album).":"Inclure 'Interprété par', 'Dans', etc. quand les détails du morceau sont affichés.",
 "Show a stop button next to the play/pause button.":"Afficher un bouton 'stop' à côté du bouton 'lecture/pause'.",
 "Show all information":"Afficher toutes les informations sur un même écran",
 "Show artist context, etc.":"Expliciter le contexte du morceau",

@@ -160,3 +160,7 @@ const MSK_REV_SORT_OPT = "msk-revsort:1";
 
 const MIN_TIME_BETWEEN_VOL_UPDATES = 150;
 const COLOR_FROM_COVER = 'from-cover';
+
+const MBAR_NONE = 0;
+const MBAR_THIN = 1;
+const MBAR_THICK = 2;

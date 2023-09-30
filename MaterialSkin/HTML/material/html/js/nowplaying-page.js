@@ -161,8 +161,8 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
  </div>
 
  <div v-if="!info.show || (desktopLayout || (info.show || page!='now-playing'))">
- <div v-if="(desktopLayout && !largeView) || (!desktopLayout && (info.show || page!='now-playing'))" class="np-bar" id="np-bar" v-bind:class="{'np-bar-sb':stopButton, 'mobile':!desktopLayout}">
-  <v-layout row class="np-bar-controls" v-if="stopButton">
+ <div v-if="(desktopLayout && !largeView) || (!desktopLayout && (info.show || page!='now-playing'))" class="np-bar" id="np-bar" v-bind:class="{'np-bar-sb':stopButton, 'mobile':!desktopLayout, 'np-bar-mob-thick':!desktopLayout && MBAR_THIN!=mobileBar}">
+  <v-layout row class="np-bar-controls" v-if="stopButton && desktopLayout">
    <v-flex xs3>
     <v-btn flat icon id="np-bar-prev" v-bind:class="{'disabled':disablePrev}" v-longpress:repeat="prevButton" :title="trans.prev | tooltip('left', keyboardControl)"><v-icon large class="media-icon">skip_previous</v-icon></v-btn>
    </v-flex>
@@ -190,7 +190,7 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
   <div v-if="!largeView && !disableBtns" class="np-bar-image">
   <img :key="coverUrl" v-lazy="coverUrl" onerror="this.src=DEFAULT_COVER" @contextmenu="showMenu" @click="clickImage(event)" class="np-cover" v-bind:class="{'np-trans':transCvr}"></img>
   </div>
-  <div v-if="!desktopLayout" class="np-bar-details-mobile ellipsis">{{mobileBarText}}</div>
+  <div v-if="!desktopLayout && MBAR_THIN==mobileBar" class="np-bar-details-mobile ellipsis">{{mobileBarText}}</div>
   <v-list two-line subheader class="np-bar-details" v-else-if="playerStatus.playlist.count>0">
    <v-list-tile style>
     <v-list-tile-content>
@@ -201,7 +201,7 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
      <v-list-tile-sub-title v-else-if="playerStatus.current.albumLine" v-html="playerStatus.current.albumLine"></v-list-tile-sub-title>
      <v-list-tile-sub-title v-else-if="playerStatus.current.title">&#x22ef;</v-list-tile-sub-title>
     </v-list-tile-content>
-    <v-list-tile-action>
+    <v-list-tile-action v-if="desktopLayout">
      <div v-if="playerStatus.playlist.count<2 || !(npBarRatings && !techInfo)" class="np-bar-time" v-bind:class="{'link-item-ct':coloredToolbars,'link-item':!coloredToolbars,'np-bar-time-r': techInfo && npBarRatings}" @click="toggleTime()">{{formattedTime}}</div>
      <div v-else class="np-bar-time " v-bind:class="{'np-bar-time-r': techInfo && npBarRatings, 'link-item-ct':coloredToolbars,'link-item':!coloredToolbars}" @click="toggleTime()">{{formattedTime}}{{playerStatus.playlist.current | trackCount(playerStatus.playlist.count, SEPARATOR)}}</div>
      <div v-if="techInfo" class="np-bar-tech ellipsis" v-bind:class="{'np-bar-tech-r': npBarRatings}">{{technicalInfo}}</div>
@@ -408,7 +408,8 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
     mounted() {
         this.showNpBar = undefined;
         this.desktopBarHeight = getComputedStyle(document.documentElement).getPropertyValue('--desktop-npbar-height');
-        this.mobileBarHeight = getComputedStyle(document.documentElement).getPropertyValue('--mobile-npbar-height-val');
+        this.mobileBarThinHeight = getComputedStyle(document.documentElement).getPropertyValue('--mobile-npbar-height-thin');
+        this.mobileBarThickHeight = getComputedStyle(document.documentElement).getPropertyValue('--mobile-npbar-height-thick');
         this.controlBar();
 
         bus.$on('customActions', function(val) {
@@ -1007,9 +1008,9 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
         controlBar() {
             let showNpBar = !this.disableBtns;
             if (showNpBar!=this.showNpBar) {
-                this.$store.commit('showNpBar', showNpBar);
+                let mbar = this.$store.state.mobileBar;
                 document.documentElement.style.setProperty('--desktop-npbar-height', !showNpBar ? '0px' : this.desktopBarHeight);
-                document.documentElement.style.setProperty('--mobile-npbar-height', !showNpBar ? '0px' : this.mobileBarHeight);
+                document.documentElement.style.setProperty('--mobile-npbar-height', !showNpBar || MBAR_NONE==mbar ? '0px' : (MBAR_THIN==mbar ? this.mobileBarThinHeight : this.mobileBarThickHeight));
             }
         },
         showTimeTooltip() {
@@ -1119,8 +1120,8 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
         }
     },
     computed: {
-        showNpBar() {
-            return this.$store.state.showNpBar
+        mobileBar() {
+            return this.$store.state.mobileBar
         },
         page() {
             return this.$store.state.page;

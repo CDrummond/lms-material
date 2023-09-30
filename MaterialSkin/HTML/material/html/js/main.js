@@ -350,11 +350,11 @@ var app = new Vue({
         desktopLayout() {
             return this.$store.state.desktopLayout
         },
+        mobileBar() {
+            return this.$store.state.mobileBar
+        },
         showQueue() {
             return this.$store.state.showQueue
-        },
-        showNpBar() {
-            return this.$store.state.showNpBar
         }
     },
     methods: {

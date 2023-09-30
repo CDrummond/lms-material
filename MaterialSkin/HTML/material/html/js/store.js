@@ -279,6 +279,7 @@ function updateLang(state, lang) {
 const store = new Vuex.Store({
     state: {
         desktopLayout: false,
+        mobileBar: MBAR_THIN,
         showQueue: true,
         players: null, // List of players
         player: null, // Current player (from list)

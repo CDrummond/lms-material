@@ -412,6 +412,9 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
         this.mobileBarThickHeight = getComputedStyle(document.documentElement).getPropertyValue('--mobile-npbar-height-thick');
         this.controlBar();
 
+        bus.$on('mobileBarChanged', function() {
+            this.controlBar();
+        }.bind(this));
         bus.$on('customActions', function(val) {
             this.customActions = getCustomActions("track", false);
         }.bind(this));

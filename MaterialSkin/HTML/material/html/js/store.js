@@ -32,6 +32,11 @@ function updateUiSettings(state, val) {
         setLocalStorageVal('color', state.color);
         themeChanged = true;
     }
+    if (undefined!=val.mobileBar && state.mobileBar!=val.mobileBar) {
+        state.mobileBar = val.mobileBar;
+        setLocalStorageVal('mobileBar', state.mobileBar);
+        bus.$emit('mobileBarChanged');
+    }
     if (undefined!=val.roundCovers && state.roundCovers!=val.roundCovers) {
         state.roundCovers = val.roundCovers;
         setLocalStorageVal('roundCovers', state.roundCovers);
@@ -569,6 +574,7 @@ const store = new Vuex.Store({
             state.largeCovers = getLocalStorageBool('largeCovers', state.largeCovers);
             state.listPadding = parseInt(getLocalStorageVal('listPadding', state.listPadding));
             state.mediaControls = getLocalStorageBool('mediaControls', state.mediaControls);
+            state.mobileBar = parseInt(getLocalStorageVal('mobileBar', state.mobileBar));
             setTheme(state.theme, state.color);
             setRoundCovers(state.roundCovers);
             if (state.fontSize!='r') {
@@ -700,7 +706,9 @@ const store = new Vuex.Store({
                                      powerButton: getLocalStorageBool('powerButton', undefined==prefs.powerButton ? state.powerButton : prefs.powerButton),
                                      largeCovers: getLocalStorageBool('largeCovers', undefined==prefs.largeCovers ? state.largeCovers : prefs.largeCovers),
                                      listPadding: parseInt(getLocalStorageVal('listPadding', undefined==prefs.listPadding ? state.listPadding : prefs.listPadding)),
-                                     mediaControls: getLocalStorageBool('mediaControls', undefined==prefs.mediaControls ? state.mediaControls : prefs.mediaControls) };
+                                     mediaControls: getLocalStorageBool('mediaControls', undefined==prefs.mediaControls ? state.mediaControls : prefs.mediaControls),
+                                     mobileBar: parseInt(getLocalStorageVal('mobileBar', undefined==prefs.mobileBar ? state.mobileBar : prefs.mobileBar))
+                                    };
                         if (undefined!=prefs.hidden && undefined==getLocalStorageVal('hidden', undefined)) {
                             opts.hidden=new Set(prefs.hidden);
                         }

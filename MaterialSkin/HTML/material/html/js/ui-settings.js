@@ -68,6 +68,11 @@ Vue.component('lms-ui-settings', {
     <v-divider v-if="allowLayoutAdjust"></v-divider>
 
     <v-list-tile>
+     <v-select :items="mobileBars" :label="i18n('Mobile layout now-playing bar')" v-model="mobileBar" item-text="label" item-value="key"></v-select>
+    </v-list-tile>
+    <v-divider></v-divider>
+
+    <v-list-tile>
      <v-select :items="fontSizes" :label="i18n('Font size')" v-model="fontSize" item-text="label" item-value="key"></v-select>
     </v-list-tile>
     <v-divider></v-divider>
@@ -425,6 +430,8 @@ Vue.component('lms-ui-settings', {
             showArtwork:false,
             layout: null,
             layoutItems: [],
+            mobileBar: MBAR_THIN,
+            mobileBars : [],
             volumeSteps: [ { value: 1,  label: "1%"},
                            { value: 2,  label: "2%"},
                            { value: 5,  label: "5%"},
@@ -585,6 +592,7 @@ Vue.component('lms-ui-settings', {
             this.theme = themeParts.join('-');
             this.colorToolbars = 'colored'==variant;
             this.color = this.$store.state.color;
+            this.mobileBar = this.$store.state.mobileBar;
             this.roundCovers = this.$store.state.roundCovers;
             this.fontSize = this.$store.state.fontSize;
             this.listPadding = this.$store.state.listPadding;
@@ -642,6 +650,11 @@ Vue.component('lms-ui-settings', {
                 { key:"desktop", label:i18n("Use desktop layout")},
                 { key:"mobile",  label:i18n("Use mobile layout")}
                 ];
+            this.mobileBars=[
+                { key:MBAR_NONE, label:i18n("No bar")},
+                { key:MBAR_THIN, label:i18n("Thin bar, 1 line of text")},
+                { key:MBAR_THICK, label:i18n("Thick bar with play button")}
+                ];
             this.skipSecondsOptions = [ { value: 5,  label: i18n("%1 seconds", 5) },
                                { value: 10, label: i18n("%1 seconds", 10)},
                                { value: 15, label: i18n("%1 seconds", 15)},
@@ -692,6 +705,7 @@ Vue.component('lms-ui-settings', {
             let settings = {
                       theme:this.theme+(this.colorToolbars ? '-colored' : ''),
                       color:this.color,
+                      mobileBar:this.mobileBar,
                       roundCovers:this.roundCovers,
                       fontSize:this.fontSize,
                       listPadding:this.listPadding,

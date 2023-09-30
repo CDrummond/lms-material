@@ -220,6 +220,7 @@
  bottom:calc(var(--bottom-toolbar-height) - 1px);
  font-size:var(--small-font-size);
  opacity:var(--sub-opacity);
+ text-align:center;
 }
 
 #np-bar-prev, #np-bar-next, #np-bar-stop, #playPauseA, .np-bar .np-playpause, .np-bar-details .v-list__tile__action {

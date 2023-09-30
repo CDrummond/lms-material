@@ -896,6 +896,9 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
             if (this.$store.state.visibleMenus.size>0) {
                 return;
             }
+            if (!this.desktopLayout && this.$store.state!='now-playing') {
+                return;
+            }
             if (!this.clickTimer) {
                 this.clickTimer = setTimeout(function () {
                     this.clearClickTimeout();

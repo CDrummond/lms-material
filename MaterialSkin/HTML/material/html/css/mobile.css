@@ -198,11 +198,13 @@
 }
 
 .np-bar-mob-thick .v-list__tile__title {
+ margin-top:-2px;
  line-height:32px;
 }
 
 .np-bar-mob-thick .np-bar-details {
  left:34px!important;
+ width:calc(100vw - 58px);
 }
 
 .np-bar-slider {
@@ -226,16 +228,16 @@
 
 .np-bar-mob-thick .np-playpause {
  position:fixed;
- bottom:calc(var(--bottom-toolbar-height) + 3px);
- right:1px;
+ bottom:calc(var(--bottom-toolbar-height) + 10px);
+ right:8px;
  visibility:visible!important;
- width:40px!important;
- height:40px!important;
+ width:var(--icon-size) !important;
+ height:var(--icon-size) !important;
  margin:0px!important;
 }
 
 .np-bar-mob-thick .np-playpause div i {
- font-size:38px!important;
+ font-size:var(--icon-size) !important;
 }
 
 .np-bar-details {

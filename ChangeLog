@@ -3,6 +3,8 @@ x.y.z
 1. Unify MAI layout between desktop and mobile.
 2. Allow mobile MAI to use 3 column layout.
 3. Force MAI tabs if layout too narrow.
+4. Add option to show a now-playing bar at the bottom of browse and queue
+   views in mobile layout.
 
 3.5.2
 -----

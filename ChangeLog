@@ -1,12 +1,11 @@
 3.5.2
 -----
-1. Revert back to "img" tags for no-playing images, resolves loadind if plugin
+1. Revert back to "img" tags for no-playing images, resolves loading of plugin
    PNGs.
-2. Convert replaygain to 2 digits before comparing against 0.00
-3. Ensure no repeated textkeys (apart from years).
-4. Adjust grid view margins, thanks to Denys Lysiuk.
-5. Remove now-playing shadow.
-6. Fix showing artist first or last with context.
+2. Ensure no repeated textkeys (apart from years).
+3. Adjust grid view margins, thanks to Denys Lysiuk.
+4. Remove now-playing shadow.
+5. Fix showing artist first or last with context.
 
 3.5.1
 -----

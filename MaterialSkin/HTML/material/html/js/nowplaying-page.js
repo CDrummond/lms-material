@@ -1045,12 +1045,6 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
             }
         },
         checkLandscape() {
-            if (undefined==this.haveCssMinMax) {
-                this.haveCssMinMax=parseInt(getComputedStyle(document.documentElement).getPropertyValue('--have-min-max'));
-                if (0==this.haveCssMinMax) {
-                    queryParams.npRatio = Math.max(queryParams.npRatio, 1.75);
-                }
-            }
             // wide=0 => controls under whole width
             // wide=2 => controls under text only
             this.landscape = window.innerWidth >= (window.innerHeight*queryParams.npRatio) && window.innerWidth>=450;

@@ -22,13 +22,13 @@
 @supports not (width: min(10px, 5vw)) {
  :root {
   --np-portrait-image-size:calc(100vw - (var(--np-image-border)*2));
-  --np-image-landscape-size:calc(50vw - (var(--np-image-border)*2));
+  --np-image-landscape-size:calc(50vw - ((var(--np-image-border)*2) + 64px));
   --np-image-landscape-wide-height:50vw;
   --np-image-landscape-wide-size:calc(50vw - (var(--np-image-border)*2));
  }
- @media (min-aspect-ratio: 50/100) {
+ @media (min-aspect-ratio: 75/100) {
   :root {
-   --np-portrait-image-size:calc((var(--vh, 1vh)*100) - (var(--main-toolbar-height) + 260px) - (var(--np-image-border)*6));
+   --np-portrait-image-size:calc((var(--vh, 1vh)*100) - (var(--main-toolbar-height) + 260px) - (var(--np-image-border)*2));
   }
  }
  @media (min-aspect-ratio: 200/100) {

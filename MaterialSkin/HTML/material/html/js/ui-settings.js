@@ -651,9 +651,9 @@ Vue.component('lms-ui-settings', {
                 { key:"mobile",  label:i18n("Use mobile layout")}
                 ];
             this.mobileBars=[
-                { key:MBAR_NONE, label:i18n("No bar")},
-                { key:MBAR_THIN, label:i18n("Thin bar, 1 line of text")},
-                { key:MBAR_THICK, label:i18n("Thick bar with play button")}
+                { key:MBAR_NONE, label:i18n("None")},
+                { key:MBAR_THIN, label:i18n("Thin (single line of text)")},
+                { key:MBAR_THICK, label:i18n("Thick (two lines of text)")}
                 ];
             this.skipSecondsOptions = [ { value: 5,  label: i18n("%1 seconds", 5) },
                                { value: 10, label: i18n("%1 seconds", 10)},

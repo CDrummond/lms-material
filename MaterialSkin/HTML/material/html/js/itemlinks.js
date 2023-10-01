@@ -184,23 +184,23 @@ function buildArtistWithContext(i, page, useBand, useComposer, useConductor) {
     let haveCond = undefined!=conductors;
     if (!haveComp && !haveCond) {
         if (undefined!=artists) {
-            details += i18n('<obj>By</obj> %1', artists);
+            details += i18n('<obj>by</obj> %1', artists);
         }
     } else {
         let artistFirst = lmsOptions.artistFirst && undefined!=artists;
         let artistLast = !lmsOptions.artistFirst && undefined!=artists
 
         if (artistFirst) {
-            details += i18n('<obj>Performed by</obj> %1', artists) + "<br/>";
+            details += i18n('<obj>performed by</obj> %1', artists) + "<br/>";
         }
         if (haveComp) {
-            details += i18n('<obj>Composed by</obj> %1', composers) + (haveCond || artistLast ? "<br/>" : "");
+            details += i18n('<obj>composed by</obj> %1', composers) + (haveCond || artistLast ? "<br/>" : "");
         }
         if (haveCond) {
-            details += i18n('<obj>Conducted by</obj> %1', conductors) + (artistLast ? "<br/>" : "");
+            details += i18n('<obj>conducted by</obj> %1', conductors) + (artistLast ? "<br/>" : "");
         }
         if (artistLast) {
-            details += i18n('<obj>Performed by</obj> %1', artists);
+            details += i18n('<obj>performed by</obj> %1', artists);
         }
     }
     return details.length>0 ? details.replaceAll("<obj>", "<obj class=\"ext-details\">") : undefined;

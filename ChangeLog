@@ -5,6 +5,7 @@
    players.
 3. Fix now-playing covers for old browsers (e.g. old iOS) that don't support
    CSS min()
+4. Change "Perfomed by" to "performed by", etc.
 
 3.5.2
 -----

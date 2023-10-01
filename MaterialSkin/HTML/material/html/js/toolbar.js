@@ -38,6 +38,7 @@ Vue.component('lms-toolbar', {
    <v-icon v-if="noPlayer" class="maintoolbar-player-icon amber">warning</v-icon>
    <div class="maintoolbar-title ellipsis" v-bind:class="{'dimmed': !playerStatus.ison}">
     {{noPlayer ? trans.noplayer : player.name}}<v-icon v-if="playerStatus.sleepTime" class="player-status-icon dimmed">hotel</v-icon><v-icon v-if="playerStatus.synced" class="player-status-icon dimmed">link</v-icon></div>
+   <div v-if="!desktopLayout && !noPlayer && MBAR_NONE==mobileBar" class="maintoolbar-subtitle subtext ellipsis" v-bind:class="{'dimmed' : !playerStatus.ison}">{{playerStatus.count<1 ? trans.nothingplaying : isNowPlayingPage ? queueInfo : npInfo}}</div>
   </v-toolbar-title>
        
   <v-list class="toolbar-player-list" v-bind:class="{'toolbar-player-list-desktop': !IS_MOBILE && desktopLayout}" v-if="!queryParams.single || !powerButton">
@@ -172,6 +173,8 @@ Vue.component('lms-toolbar', {
     data() {
         return { playlist: { count: "", duration: "" },
                  playerStatus: { ison: 1, isplaying: false, volume: 0, synced: false, sleepTime: undefined, count:0 },
+                 npInfo: "...",
+                 queueInfo: "...",
                  menuItems: [],
                  customActions:undefined,
                  customSettingsActions:undefined,
@@ -179,7 +182,7 @@ Vue.component('lms-toolbar', {
                  showPlayerMenu: false,
                  showMainMenu: false,
                  showErrorMenu: false,
-                 trans:{noplayer:undefined, info:undefined, connectionLost:undefined, showLarge:undefined,
+                 trans:{noplayer:undefined, nothingplaying:undefined, info:undefined, connectionLost:undefined, showLarge:undefined,
                         hideLarge:undefined, groupPlayers:undefined, standardPlayers:undefined, otherServerPlayers:undefined,
                         updatesAvailable:undefined, showVol:undefined, downloading:undefined, mainMenu: undefined, play:undefined,
                         pause:undefined, toggleQueue:undefined, groupVol:undefined, restartRequired:undefined},
@@ -221,6 +224,15 @@ Vue.component('lms-toolbar', {
             }
         }.bind(this));
 
+        bus.$on('queueStatus', function(count, duration) {
+            this.queueInfo = (count>0 ? i18np("1 Track", "%1 Tracks", count) : "") + (duration>0 ? (SEPARATOR + formatSeconds(Math.floor(duration))) : "")
+            if (isEmpty(this.queueInfo)) {
+                this.queueInfo = "...";
+            }
+        }.bind(this));
+        bus.$on('nowPlayingBrief', function(np) {
+            this.npInfo = isEmpty(np) ? "..." : np;
+        }.bind(this));
         bus.$on('playerStatus', function(playerStatus) {
             if (playerStatus.ison!=this.playerStatus.ison) {
                 this.playerStatus.ison = playerStatus.ison;
@@ -425,8 +437,8 @@ Vue.component('lms-toolbar', {
                     this.menuItems.push(TB_APP_QUIT)
                 }
             }
-            this.trans = {noplayer:i18n('No Player'), info:i18n("Show current track information"), showLarge:i18n("Expand now playing"),
-                          hideLarge:i18n("Collapse now playing"), connectionLost:i18n('Server connection lost!'),
+            this.trans = {noplayer:i18n('No Player'), nothingplaying:i18n('Nothing playing'), info:i18n("Show current track information"),
+                          showLarge:i18n("Expand now playing"), hideLarge:i18n("Collapse now playing"), connectionLost:i18n('Server connection lost!'),
                           groupPlayers:i18n("Group Players"), standardPlayers:i18n("Standard Players"), updatesAvailable:i18n('Updates available'),
                           showVol:i18n("Show volume"), mainMenu: i18n("Main menu"), play:i18n("Play"), pause:i18n("Pause"),
                           toggleQueue:i18n('Toggle queue'), downloading:i18n('Downloading'), groupVol:i18n('Adjust volume of associated players'),

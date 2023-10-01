@@ -109,6 +109,7 @@ function nowplayingOnPlayerStatus(view, playerStatus) {
     let mobileBarText = addPart(playerStatus.current.title, buildArtistLine(playerStatus.current, 'np', true));
     if (mobileBarText!=view.mobileBarText) {
         view.mobileBarText = mobileBarText;
+        bus.$emit("nowPlayingBrief", mobileBarText);
     }
     var artistAndComposer = buildArtistLine(playerStatus.current, 'now-playing');
     var useComposerTag = playerStatus.current.composer && lmsOptions.showComposer && useComposer(playerStatus.current.genre);

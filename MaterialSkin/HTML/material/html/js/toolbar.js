@@ -811,7 +811,7 @@ Vue.component('lms-toolbar', {
             return this.$store.state.showQueue
         },
         showVolumeSlider() {
-            return VOL_HIDDEN!=this.playerDvc && this.width>=(this.$store.state.desktopLayout ? (this.height>=200 ? 750 : 600) : (this.$store.state.nowPlayingClock ? 1300 : 850))
+            return VOL_HIDDEN!=this.playerDvc && this.width>=(this.$store.state.desktopLayout ? (this.height>=200 ? 750 : 600) : (this.$store.state.nowPlayingClock ? 1300 : (this.$store.state.mobileBar==MBAR_NONE ? 850 : 750)))
         },
         showUpdateProgress() {
             return (!this.$store.state.nowPlayingClock || (this.$store.state.desktopLayout ? !this.nowPlayingExpanded : (this.$store.state.page != 'now-playing'))) && this.width>=1050

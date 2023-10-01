@@ -40,6 +40,7 @@
  --mobile-scrollbar-thumb-color:transparent;
  --bgnd-filter:blur(5px);
  --bgnd-webkit-filter:blur(5px);
+ --have-min-max:1;
 }
 
 .theme--dark {
@@ -49,6 +50,12 @@
  --tab-border-color:rgba(237, 236, 231, 0.1);
  --menu-dlg-shadow:0 1px 6px 1px rgba(0,0,0,.4)!important;
  --image-background-color:rgba(0, 0, 0, 0.2);
+}
+
+@supports not (width: min(10px, 5vw)) {
+ :root {
+  --have-min-max:0;
+ }
 }
 
 .note {
@@ -987,6 +994,7 @@ div.v-subheader {
 .np-cover {
  object-fit:contain;
  object-position:50% 50%;
+ margin:auto;
 }
 
 .np-no-meta-img {

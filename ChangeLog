@@ -3,6 +3,8 @@
 1. Update translations.
 2. Dim more player details in 'Manage players' dialog for switched off
    players.
+3. Fix now-playing covers for old browsers (e.g. old iOS) that don't support
+   CSS min()
 
 3.5.2
 -----

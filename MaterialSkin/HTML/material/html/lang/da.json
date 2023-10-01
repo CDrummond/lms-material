@@ -613,5 +613,15 @@
 "1 Year":"1 år",
 "%1 Years":"%1 år",
 "1 day":"1 dag",
-"%1 days":"%1 dage"
+"%1 days":"%1 dage",
+"%1dB":"",
+"<obj class=\"ext-details\">From</obj> %1":"",
+"<obj>Composed by</obj> %1":"",
+"<obj>Conducted by</obj> %1":"",
+"<obj>Performed by</obj> %1":"",
+"Icon":"",
+"Round covers":"",
+"Round the corners of cover-art, etc.":"",
+"Show 'Performed by', 'From', etc. when listing track details (e.g. Title By Artist From Album).":"",
+"Show artist context, etc.":""
 }

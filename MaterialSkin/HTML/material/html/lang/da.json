@@ -418,7 +418,7 @@
 "Settings":"Indstillinger",
 "Settings password":"Kodeord til indstillinger",
 "Should alarms repeat":"Skal vækning gentages?",
-"Show 'Performed by', 'From', etc. when listing track details. (e.g. Title By Artist From Album)'.":"Vis 'Fremført af', 'Fra' m.v. når detaljer vises (fx ved visning af titler efter albumkunstner)'.",
+"Show 'Performed by', 'From', etc. when listing track details (e.g. Title By Artist From Album)'.":"Vis 'Fremført af', 'Fra' m.v. når detaljer vises (fx ved visning af titler efter albumkunstner)'.",
 "Show a stop button next to the play/pause button.":"Vis en stopknap ved siden af afspil/pause knappen",
 "Show all information":"Vis alt information",
 "Show artist context, etc.":"Vis kunstnerbaggrundsinformation m.v.",
@@ -622,6 +622,5 @@
 "Icon":"",
 "Round covers":"",
 "Round the corners of cover-art, etc.":"",
-"Show 'Performed by', 'From', etc. when listing track details (e.g. Title By Artist From Album).":"",
 "Show artist context, etc.":""
 }

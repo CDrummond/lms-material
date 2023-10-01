@@ -995,9 +995,9 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
             }
         },
         checkLandscape() {
-            this.landscape = window.innerWidth >= (window.innerHeight*queryParams.npRatio) && window.innerWidth>=450;
             // wide=0 => controls under whole width
             // wide=2 => controls under text only
+            this.landscape = window.innerWidth >= (window.innerHeight*queryParams.npRatio) && window.innerWidth>=450;
             this.wide = window.innerWidth>=600 && window.innerWidth>=(window.innerHeight*1.7)
                         ? 2 /*: window.innerHeight>340 ? 1*/ : 0;
             this.windowWidth = Math.floor(window.innerWidth / 25) * 25;
@@ -1217,7 +1217,7 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
             return this.$store.state.nowPlayingContext && undefined!=this.playerStatus.current.artistAndComposerWithContext ? this.playerStatus.current.artistAndComposerWithContext : this.playerStatus.current.artistAndComposer
         },
         albumLine() {
-            return this.$store.state.nowPlayingContext && undefined!=this.playerStatus.current.artistAndComposerWithContext && !isEmpty(this.playerStatus.current.albumLine) ? i18n('<obj class="ext-details">From</obj> %1', this.playerStatus.current.albumLine) : this.playerStatus.current.albumLine
+            return this.$store.state.nowPlayingContext && undefined!=this.playerStatus.current.artistAndComposerWithContext && !isEmpty(this.playerStatus.current.albumLine) ? i18n('<obj>from</obj> %1', this.playerStatus.current.albumLine).replaceAll("<obj>", "<obj class=\"ext-details\">") : this.playerStatus.current.albumLine
         },
         barInfoWithContext() {
             if (this.$store.state.nowPlayingContext && this.windowWidth-(this.stopButton ? 420 : 380)>this.barInfoWithContextWidth && undefined!=this.playerStatus.current.artistAndComposerWithContext && this.albumLine) {

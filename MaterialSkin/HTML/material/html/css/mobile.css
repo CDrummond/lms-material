@@ -28,6 +28,19 @@
  @media (min-aspect-ratio: 75/100) {
   :root {
    --np-portrait-image-size:calc((var(--vh, 1vh)*100) - (var(--main-toolbar-height) + var(--bottom-toolbar-height) + 210px) - (var(--np-image-border)*6));
+   --np-image-landscape-size:calc(50vw - ((var(--np-image-border)*2) + var(--mobile-bottom-toolbar-height)));
+  }
+ }
+ @media (min-aspect-ratio: 125/100) {
+  :root {
+    --np-portrait-image-size:calc((var(--vh, 1vh)*100) - (var(--main-toolbar-height) + var(--bottom-toolbar-height) + 210px));
+    --np-image-landscape-size:calc(50vw - ((var(--np-image-border)*2) + var(--mobile-bottom-toolbar-height)));
+  }
+ }
+ @media (min-aspect-ratio: 165/100) {
+  :root {
+    --np-portrait-image-size:calc((var(--vh, 1vh)*100) - (var(--main-toolbar-height) + var(--bottom-toolbar-height) + 210px) - (var(--np-image-border)*6));
+    --np-image-landscape-size:calc(50vw - ((var(--np-image-border)*2) + 64px + var(--mobile-bottom-toolbar-height)));
   }
  }
  @media (min-aspect-ratio: 200/100) {

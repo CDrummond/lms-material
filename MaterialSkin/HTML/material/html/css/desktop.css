@@ -31,6 +31,16 @@
    --np-portrait-image-size:calc((var(--vh, 1vh)*100) - (var(--main-toolbar-height) + 260px) - (var(--np-image-border)*2));
   }
  }
+ @media (min-aspect-ratio: 125/100) {
+  :root {
+    --np-image-landscape-size:calc(50vw - ((var(--np-image-border)*2)));
+  }
+ }
+ @media (min-aspect-ratio: 150/100) {
+  :root {
+    --np-image-landscape-size:calc(50vw - ((var(--np-image-border)*2) + 48px));
+  }
+ }
  @media (min-aspect-ratio: 200/100) {
   :root {
    --np-image-landscape-size:calc(var(--np-image-landscape-height) - (var(--np-image-border)*2));

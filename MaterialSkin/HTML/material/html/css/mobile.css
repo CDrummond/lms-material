@@ -227,14 +227,19 @@
  visibility:hidden!important;
 }
 
+.np-bar .np-playpause,
 .np-bar-mob-thick .np-playpause {
  position:fixed;
  bottom:calc(var(--bottom-toolbar-height) + 10px);
- right:8px;
- visibility:visible!important;
+ right:-50px;
  width:var(--icon-size) !important;
  height:var(--icon-size) !important;
  margin:0px!important;
+}
+
+.np-bar-mob-thick .np-playpause {
+ right:8px;
+ visibility:visible!important;
 }
 
 .np-bar-mob-thick .np-playpause div i {

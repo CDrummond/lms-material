@@ -1,3 +1,9 @@
+3.5.3
+-----
+1. Update translations.
+2. Dim more player details in 'Manage players' dialog for switched off
+   players.
+
 3.5.2
 -----
 1. Revert back to "img" tags for no-playing images, resolves loading of plugin

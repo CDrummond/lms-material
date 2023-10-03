@@ -225,15 +225,15 @@
 }
 
 @media screen and (max-width: 550px) {
- #np-bar-prev, #np-bar-next, #np-bar-stop, #playPauseA, #playPauseB {
+ #np-bar-prev, #np-bar-next, #np-bar-stop {
   display:none!important;
  }
  .np-bar-image, .np-bar-sb .np-bar-image {
-   left:1px;
+   left:90px;
  }
  .np-bar-details, .np-bar-sb .np-bar-details {
-  left:76px;
-  width:calc(100vw - 98px);
+  left:166px;
+  width:calc(100vw - 166px);
  }
 }
 

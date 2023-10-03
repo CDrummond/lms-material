@@ -5,6 +5,7 @@ x.y.z
 3. Force MAI tabs if layout too narrow.
 4. Add option to show a now-playing bar at the bottom of browse and queue
    views in mobile layout.
+5. Increase background image blur.
 
 3.5.3
 -----

@@ -42,8 +42,8 @@
  --image-background-color:rgba(0, 0, 0, 0.075);
  --np-image-border:16px;
  --mobile-scrollbar-thumb-color:transparent;
- --bgnd-filter:blur(5px);
- --bgnd-webkit-filter:blur(5px);
+ --bgnd-filter:blur(10px);
+ --bgnd-webkit-filter:blur(10px);
 }
 
 .theme--dark {
@@ -1385,6 +1385,7 @@ progress {
  background-size:cover !important;
  background-repeat:no-repeat !important;
  background-position:center top !important;
+ transition: background 0.2s!important;
 }
 
 .bgnd-blur {
@@ -2236,15 +2237,14 @@ div.v-subheader {
  height:32px !important;
 }
 
-
-img[lazy='loaded'].np-image {
- opacity:0;
+img[lazy='loaded'].np-cover {
+ opacity:1;
  animation-name:npCoverFadeIn;
- animation-duration:.15s;
- animation-iteration-count:1;
- animation-fill-mode:forwards;
- animation-direction:normal;
- animation-timing-function:ease-out;
+ animation-duration:0.15s;
+ animation-fill-mode:both;
+ -webkit-animation-name:npCoverFadeIn;
+ -webkit-animation-duration:0.15s;
+ -webkit-animation-fill-mode:both;
 }
 
 @keyframes npCoverFadeIn {

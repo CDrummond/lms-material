@@ -116,54 +116,31 @@ function nowplayingOnPlayerStatus(view, playerStatus) {
     var useConductorTag = playerStatus.current.conductor && lmsOptions.showConductor && useConductor(playerStatus.current.genre);
     var useBandTag = playerStatus.current.band && lmsOptions.showBand && useBand(playerStatus.current.genre);
 
-    if (playerStatus.current.composer!=view.playerStatus.current.composer) {
-        view.playerStatus.current.composer = playerStatus.current.composer;
+    var keys = ['composer', 'conductor', 'band'];
+    var use = [useComposerTag, useConductorTag, useBandTag];
+    var mods = ['', 's', '_ids'];
+    for (var i=0, len=keys.length; i<len; ++i) {
+        let idk = keys[i]+"_id";
+        if (use[i]) {
+            for (var j=0, jl=mods.length; j<jl; ++j) {
+                var key = keys[i]+mods[j];
+                if (playerStatus.current[key]!=view.playerStatus.current[key]) {
+                    view.playerStatus.current[key] = playerStatus.current[key];
+                }
+            }
+            let id = playerStatus.current[idk]
+                        ? playerStatus.current[idk]
+                        : playerStatus.current[idk+"s"]
+                            ? playerStatus.current[idk+"s"][0]
+                            : undefined;
+            if (id!=view.playerStatus.current[idk]) {
+                view.playerStatus.current[idk] = id;
+            }
+        } else {
+            playerStatus.current[idk] = undefined;
+        }
     }
-    if (playerStatus.current.composers!=view.playerStatus.current.composers) {
-        view.playerStatus.current.composers = playerStatus.current.composers;
-    }
-    if (playerStatus.current.conductor!=view.playerStatus.current.conductor) {
-        view.playerStatus.current.conductor = playerStatus.current.conductor;
-    }
-    if (playerStatus.current.conductors!=view.playerStatus.current.conductors) {
-        view.playerStatus.current.conductors = playerStatus.current.conductors;
-    }
-    if (playerStatus.current.band!=view.playerStatus.current.band) {
-        view.playerStatus.current.band = playerStatus.current.band;
-    }
-    if (playerStatus.current.bands!=view.playerStatus.current.bands) {
-        view.playerStatus.current.bands = playerStatus.current.bands;
-    }
-    let composer_id = useComposerTag
-                        ? playerStatus.current.composer_id
-                            ? playerStatus.current.composer_id
-                            : playerStatus.current.composer_ids
-                                ? playerStatus.current.composer_ids[0]
-                                : undefined
-                        : undefined;
-    if (composer_id!=view.playerStatus.current.composer_id) {
-        view.playerStatus.current.composer_id = composer_id;
-    }
-    let conductor_id = useConductorTag
-                        ? playerStatus.current.conductor_id
-                            ? playerStatus.current.conductor_id
-                            : playerStatus.current.conductor_ids
-                                ? playerStatus.current.conductor_ids[0]
-                                : undefined
-                        : undefined;
-    if (conductor_id!=view.playerStatus.current.conductor_id) {
-        view.playerStatus.current.conductor_id = conductor_id;
-    }
-    let band_id = useBandTag
-                        ? playerStatus.current.band_id
-                            ? playerStatus.current.band_id
-                            : playerStatus.current.band_ids
-                                ? playerStatus.current.band_ids[0]
-                                : undefined
-                        : undefined;
-    if (band_id!=view.playerStatus.current.band_id) {
-        view.playerStatus.current.band_id = band_id;
-    }
+
     if (playerStatus.current.genre!=view.playerStatus.current.genre) {
         view.playerStatus.current.genre = playerStatus.current.genre;
     }

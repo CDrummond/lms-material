@@ -447,9 +447,6 @@ function nowplayingFetchTrackInfo(view) {
 
     let html="";
     let trk = view.playerStatus.current;
-    let useComposerTag = trk.composer && lmsOptions.showComposer && useComposer(trk.genre);
-    let useConductorTag = trk.conductor && lmsOptions.showConductor && useConductor(trk.genre);
-    let useBandTag = trk.band && lmsOptions.showBand && useBand(trk.genre);
 
     if (undefined!=trk.artist) {
         let entry = nowplayingArtistEntry(trk, 'artist', 'ARTIST');
@@ -462,28 +459,16 @@ function nowplayingFetchTrackInfo(view) {
             }
         }
     }
-    if (undefined!=trk.albumartist) {
-        let entry = nowplayingArtistEntry(trk, 'albumartist', 'ALBUMARTIST');
-        if (entry.length>1) {
-            html+="<tr><td>"+i18n("Album artist")+"&nbsp;</td><td>"+entry+"</td></tr>";
-        }
-    }
-    if (useComposerTag) {
-        let entry = nowplayingArtistEntry(trk, 'composer', 'COMPOSER');
-        if (entry.length>1) {
-            html+="<tr><td>"+i18n("Composer")+"&nbsp;</td><td>"+entry+"</td></tr>";
-        }
-    }
-    if (useConductorTag) {
-        let entry = nowplayingArtistEntry(trk, 'conductor', 'CONDUCTOR');
-        if (entry.length>1) {
-            html+="<tr><td>"+i18n("Conductor")+"&nbsp;</td><td>"+entry+"</td></tr>";
-        }
-    }
-    if (useBandTag) {
-        let entry = nowplayingArtistEntry(trk, 'band', 'BAND');
-        if (entry.length>1) {
-            html+="<tr><td>"+i18n("Band")+"&nbsp;</td><td>"+entry+"</td></tr>";
+    var others = [[undefined!=trk.albumartist, 'albumartist', i18n("Album artist")],
+                  [trk.composer && lmsOptions.showComposer && useComposer(trk.genre), 'composer', i18n("Composer")],
+                  [trk.conductor && lmsOptions.showConductor && useConductor(trk.genre), 'conductor', i18n("Conductor")],
+                  [trk.band && lmsOptions.showBand && useBand(trk.genre), 'band', i18n("Band")]];
+    for (let i=0, len=others.length; i<len; ++i) {
+        if (i[0]) {
+            let entry = nowplayingArtistEntry(trk, i[1], i[1].toUpperCase());
+            if (entry.length>1) {
+                html+="<tr><td>"+i[2]+"&nbsp;</td><td>"+entry+"</td></tr>";
+            }
         }
     }
     if (undefined!=trk.year && trk.year>0) {

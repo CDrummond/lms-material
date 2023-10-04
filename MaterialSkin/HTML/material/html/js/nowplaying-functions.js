@@ -102,40 +102,38 @@ function nowplayingOnPlayerStatus(view, playerStatus) {
         view.rating.value = rv;
         trackChanged = true;
     }
-    var source = getTrackSource(playerStatus.current);
+    let source = getTrackSource(playerStatus.current);
     if (source!=view.playerStatus.current.source) {
         view.playerStatus.current.source = source;
     }
-    var artistAndComposer = buildArtistLine(playerStatus.current, 'now-playing');
-    var useComposerTag = playerStatus.current.composer && lmsOptions.showComposer && useComposer(playerStatus.current.genre);
-    var useConductorTag = playerStatus.current.conductor && lmsOptions.showConductor && useConductor(playerStatus.current.genre);
-    var useBandTag = playerStatus.current.band && lmsOptions.showBand && useBand(playerStatus.current.genre);
+    let artistAndComposer = buildArtistLine(playerStatus.current, 'now-playing');
+    let useComposerTag = playerStatus.current.composer && lmsOptions.showComposer && useComposer(playerStatus.current.genre);
+    let useConductorTag = playerStatus.current.conductor && lmsOptions.showConductor && useConductor(playerStatus.current.genre);
+    let useBandTag = playerStatus.current.band && lmsOptions.showBand && useBand(playerStatus.current.genre);
 
-    var keys = ['composer', 'conductor', 'band'];
-    var use = [useComposerTag, useConductorTag, useBandTag];
-    var mods = ['', 's', '_ids'];
-    for (var i=0, len=keys.length; i<len; ++i) {
+    let keys = ['composer', 'conductor', 'band'];
+    let use = [useComposerTag, useConductorTag, useBandTag];
+    let mods = ['', 's', '_ids'];
+    for (let i=0, len=keys.length; i<len; ++i) {
         let idk = keys[i]+"_id";
-        if (use[i]) {
-            for (var j=0, jl=mods.length; j<jl; ++j) {
-                var key = keys[i]+mods[j];
-                if (playerStatus.current[key]!=view.playerStatus.current[key]) {
-                    view.playerStatus.current[key] = playerStatus.current[key];
-                }
+        for (let j=0, jl=mods.length; j<jl; ++j) {
+            let key = keys[i]+mods[j];
+            let val = use[i] ? playerStatus.current[key] : undefined;
+            if (val!=view.playerStatus.current[key]) {
+                view.playerStatus.current[key] = val;
             }
-            let id = playerStatus.current[idk]
-                        ? playerStatus.current[idk]
-                        : playerStatus.current[idk+"s"]
-                            ? playerStatus.current[idk+"s"][0]
-                            : undefined;
-            if (id!=view.playerStatus.current[idk]) {
-                view.playerStatus.current[idk] = id;
-            }
-        } else {
-            playerStatus.current[idk] = undefined;
+        }
+        let id = use[i]
+                 ? playerStatus.current[idk]
+                    ? playerStatus.current[idk]
+                    : playerStatus.current[idk+"s"]
+                        ? playerStatus.current[idk+"s"][0]
+                        : undefined
+                 : undefined;
+        if (id!=view.playerStatus.current[idk]) {
+            view.playerStatus.current[idk] = id;
         }
     }
-
     if (playerStatus.current.genre!=view.playerStatus.current.genre) {
         view.playerStatus.current.genre = playerStatus.current.genre;
     }

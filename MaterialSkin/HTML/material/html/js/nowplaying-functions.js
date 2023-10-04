@@ -665,14 +665,15 @@ function nowplayingFetchArtistInfo(view) {
 }
 
 function nowplayingFetchAlbumInfo(view) {
-    if (view.info.tabs[ALBUM_TAB].albumartist!=view.infoTrack.albumartist || view.info.tabs[ALBUM_TAB].artist_id!=view.infoTrack.artist_id ||
-        view.info.tabs[ALBUM_TAB].album!=view.infoTrack.album ||view.info.tabs[ALBUM_TAB].album_id!=view.infoTrack.album_id) {
+    let albumartist = view.infoTrack.albumartist!=undefined ? view.infoTrack.albumartist!=undefined : view.infoTrack.artist!=undefined;
+    if (view.info.tabs[ALBUM_TAB].albumartist!=albumartist || view.info.tabs[ALBUM_TAB].artist_id!=view.infoTrack.artist_id ||
+        view.info.tabs[ALBUM_TAB].album!=view.infoTrack.album || view.info.tabs[ALBUM_TAB].album_id!=view.infoTrack.album_id) {
         view.info.tabs[ALBUM_TAB].sections[0].items=[];
         view.info.tabs[ALBUM_TAB].sections[0].more=undefined;
         view.info.tabs[ALBUM_TAB].text=i18n("Fetching...");
         view.info.tabs[ALBUM_TAB].image=undefined;
         view.info.tabs[ALBUM_TAB].isMsg=true;
-        view.info.tabs[ALBUM_TAB].albumartist=view.infoTrack.albumartist;
+        view.info.tabs[ALBUM_TAB].albumartist=albumartist;
         view.info.tabs[ALBUM_TAB].artist_id=view.infoTrack.artist_id;
         view.info.tabs[ALBUM_TAB].album=view.infoTrack.album;
         view.info.tabs[ALBUM_TAB].album_id=view.infoTrack.album_id;
@@ -690,10 +691,8 @@ function nowplayingFetchAlbumInfo(view) {
             if (view.infoTrack.artist_id!=undefined) {
                 command.push("artist_id:"+view.infoTrack.artist_id);
             }
-            if (view.infoTrack.albumartist!=undefined) {
-                command.push("artist:"+view.infoTrack.albumartist);
-            } else if (view.infoTrack.artist!=undefined) {
-                command.push("artist:"+view.infoTrack.artist);
+            if (albumartist!=undefined) {
+                command.push("artist:"+albumartist);
             }
         }
 
@@ -705,7 +704,7 @@ function nowplayingFetchAlbumInfo(view) {
                 logJsonMessage("RESP", data);
                 if (data && data.result && view.isCurrent(data, ALBUM_TAB)) {
                     view.info.tabs[ALBUM_TAB].text=data.result.albumreview ? replaceNewLines(data.result.albumreview) : view.infoTrack.album;
-                    view.info.tabs[ALBUM_TAB].image=/*data.result.albumreview ? undefined :*/ view.coverUrl;
+                    view.info.tabs[ALBUM_TAB].image=/*data.result.albumreview ? undefined :*/ "-";
                     view.info.tabs[ALBUM_TAB].isMsg=undefined==data.result.albumreview;
                 }
             }).catch(error => {

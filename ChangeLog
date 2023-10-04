@@ -16,6 +16,7 @@ x.y.z
    CSS min()
 4. Change "Perfomed by" to "performed by", etc.
 5. Fix showing multiple composers, etc, in MAI view.
+6. Fix cover URL in MAI.
 
 3.5.2
 -----

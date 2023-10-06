@@ -958,7 +958,6 @@ function parseBrowseResp(data, parent, options, cacheKey, parentCommand, parentG
             }
 
             if (discs.size>1) {
-                resp.tracksSubtitle=i18np("1 Track", "%1 Tracks", resp.items.length)+SEPARATOR+formatSeconds(totalDuration);
                 let d = 0;
 
                 for (let k of discs.keys()) {

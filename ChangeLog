@@ -5,7 +5,7 @@
    players.
 3. Fix now-playing covers for old browsers (e.g. old iOS) that don't support
    CSS min()
-4. Change "Perfomed by" to "performed by", etc.
+4. Change "Performed by" to "performed by", etc.
 5. Fix showing multiple composers, etc, in MAI view.
 6. Fix cover URL in MAI.
 7. Fix HTML appearing in disc selection dialog.

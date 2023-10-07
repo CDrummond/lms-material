@@ -1251,7 +1251,7 @@ function browseItemAction(view, act, item, index, event) {
                 if (resp.items.length<=0) {
                     return;
                 }
-                var discs = [{title:i18n('All discs'), subtitle:resp.tracksSubtitle ? resp.tracksSubtitle : resp.subtitle}];
+                var discs = [{title:i18n('All discs'), subtitle:resp.plainsubtitle ? resp.plainsubtitle : resp.subtitle}];
                 for (var i=0, loop=resp.items, len=loop.length; i<len; ++i) {
                     if (loop[i].header) {
                         discs.push(loop[i]);

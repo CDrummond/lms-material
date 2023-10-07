@@ -9,6 +9,8 @@
 5. Fix showing multiple composers, etc, in MAI view.
 6. Fix cover URL in MAI.
 7. Fix HTML appearing in disc selection dialog.
+8. If LMS indicates multi-disc but album only has 1 then don't show choice
+   dialog.
 
 3.5.2
 -----

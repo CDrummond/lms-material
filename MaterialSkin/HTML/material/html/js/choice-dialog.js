@@ -57,13 +57,16 @@ Vue.component('lms-choice-dialog', {
     },
     mounted() {
         bus.$on('choice.open', function(title, items, extra) {
-            this.show = true;
             this.title = title;
             this.items = items;
             this.options = undefined==extra || undefined==extra.options ? [] : extra.options;
             this.key = undefined==extra ? undefined : extra.key;
             if (undefined!=this.key) {
                 this.option = parseInt(getLocalStorageVal('choice-'+this.key, 0));
+            }
+            this.show = true;
+            if (1==this.items.length && (undefined==this.options || this.options.length<1)) {
+                this.choose(this.items[0]);
             }
         }.bind(this));
         bus.$on('esc', function() {

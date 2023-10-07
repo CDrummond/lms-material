@@ -665,7 +665,7 @@ function nowplayingFetchArtistInfo(view) {
 }
 
 function nowplayingFetchAlbumInfo(view) {
-    let albumartist = view.infoTrack.albumartist!=undefined ? view.infoTrack.albumartist!=undefined : view.infoTrack.artist!=undefined;
+    let albumartist = view.infoTrack.albumartist!=undefined ? view.infoTrack.albumartist : view.infoTrack.artist;
     if (view.info.tabs[ALBUM_TAB].albumartist!=albumartist || view.info.tabs[ALBUM_TAB].artist_id!=view.infoTrack.artist_id ||
         view.info.tabs[ALBUM_TAB].album!=view.infoTrack.album || view.info.tabs[ALBUM_TAB].album_id!=view.infoTrack.album_id) {
         view.info.tabs[ALBUM_TAB].sections[0].items=[];

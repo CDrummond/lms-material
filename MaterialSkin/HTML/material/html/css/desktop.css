@@ -180,7 +180,7 @@
 .np-bar-details {
  position:fixed;
  left:240px;
- bottom:4px;
+ bottom:6px;
  width:calc(100vw - 240px);
  height:64px;
  padding:0px;

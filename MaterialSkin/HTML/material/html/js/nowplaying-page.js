@@ -1265,7 +1265,7 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
         },
         barInfoWithContext() {
             if (this.$store.state.nowPlayingContext && this.windowWidth-(this.stopButton ? 420 : 380)>this.barInfoWithContextWidth && undefined!=this.playerStatus.current.artistAndComposerWithContext && this.albumLine) {
-                return replaceBr(this.artistAndComposerLine, ", ")+", " + this.albumLine
+                return replaceBr(this.artistAndComposerLine, " ")+" " + this.albumLine
             }
             return undefined;
         }

@@ -500,7 +500,7 @@
 "Thurs":"Do",
 "Thursday":"Donderdag",
 "Timeout (minutes)":"Timeout (minuten)",
-"Tiny":"Klein",
+"Tiny":"Erg klein",
 "Title":"Titel",
 "To support this feature, this app needs to fool your browser into thinking its is playing audio. This is accomplished by playing a silent audio file in a loop. Most browsers block auto-playing of audio so this cannot start until you have interacted with the app (e.g. clicked somewhere). Alternatively you can configure your browser to allow auto-play of audio for the URL you use to access this app (%1).":"Om deze functie te ondersteunen, moet deze app je browser voor de gek houden door te denken dat er audio wordt afgespeeld. Dit wordt bereikt door een stil audiobestand continue af te spelen. De meeste browsers blokkeren het automatisch afspelen van audio, dus dit kan pas beginnen nadat er met de app is gewerkt (bijvoorbeeld ergens op geklikt). Als alternatief is het mogelijk om de browser te configureren om automatisch afspelen van audio toe te staan. Sta automatisch afspelen toe voor de URL die wordt gebruikt om toegang te krijgen tot de app (%1).",
 "Toggle queue":"Afspeellijst wisselen",

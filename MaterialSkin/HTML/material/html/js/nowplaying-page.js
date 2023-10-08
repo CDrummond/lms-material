@@ -160,7 +160,7 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
   </v-card>
  </div>
 
- <div v-if="!info.show || (desktopLayout || (info.show || page!='now-playing'))">
+ <div v-if="desktopLayout || (info.show ? MBAR_NONE!=mobileBar : (page=='now-playing' || MBAR_NONE!=mobileBar))">
  <div v-if="(desktopLayout && !largeView) || (!desktopLayout && (info.show || page!='now-playing'))" class="np-bar" id="np-bar" v-bind:class="{'np-bar-sb':stopButton, 'mobile':!desktopLayout, 'np-bar-mob-thick':!desktopLayout && MBAR_THIN!=mobileBar}">
   <v-layout row class="np-bar-controls" v-if="stopButton && desktopLayout">
    <v-flex xs3>

@@ -6,6 +6,8 @@ x.y.z
 4. Add option to show a now-playing bar at the bottom of browse and queue
    views in mobile layout.
 5. Increase background image blur.
+6. Show track and album names in relevant MAI section.
+7. Remove "Artist", "Album", and "Track" headers from expanded MAI sections.
 
 3.5.4
 -----

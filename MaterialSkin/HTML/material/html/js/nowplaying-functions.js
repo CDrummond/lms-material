@@ -434,7 +434,7 @@ function nowplayingFetchTrackInfo(view) {
             lmsCommand("", command, view.info.tabs[TRACK_TAB].reqId).then(({data}) => {
                 logJsonMessage("RESP", data);
                 if (data && data.result && view.isCurrent(data, TRACK_TAB)) {
-                    view.info.tabs[TRACK_TAB].text=data.result.lyrics ? replaceNewLines(data.result.lyrics) : view.infoTrack.title;
+                    view.info.tabs[TRACK_TAB].text="<b>"+view.infoTrack.title+"</b><br/>"+(data.result.lyrics ? ("<br/>"+replaceNewLines(data.result.lyrics)) : "");
                 }
             }).catch(error => {
                 view.info.tabs[TRACK_TAB].text=i18n("Failed to retrieve information.");
@@ -694,7 +694,7 @@ function nowplayingFetchAlbumInfo(view) {
             lmsCommand("", command, view.info.tabs[ALBUM_TAB].reqId).then(({data}) => {
                 logJsonMessage("RESP", data);
                 if (data && data.result && view.isCurrent(data, ALBUM_TAB)) {
-                    view.info.tabs[ALBUM_TAB].text=data.result.albumreview ? replaceNewLines(data.result.albumreview) : view.infoTrack.album;
+                    view.info.tabs[ALBUM_TAB].text="<b>"+view.infoTrack.album+"</b><br/>"+(data.result.albumreview ? "<br/>"+replaceNewLines(data.result.albumreview) : "");
                     view.info.tabs[ALBUM_TAB].image=/*data.result.albumreview ? undefined :*/ view.coverUrl;
                     view.info.tabs[ALBUM_TAB].isMsg=undefined==data.result.albumreview;
                 }

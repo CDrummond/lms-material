@@ -45,9 +45,9 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
  <div v-if="info.show && (desktopLayout || page=='now-playing')" class="np-info" id="np-info">
   <v-tabs centered v-model="info.tab" v-if="info.showTabs || windowWidth<NP_MIN_WIDTH_FOR_FULL" style="np-info-tab-cover">
    <template v-for="(tab, index) in info.tabs">
-    <v-tab :key="index" @contextmenu.prevent="showContextMenu">{{tab.title}}</v-tab>
+    <v-tab :key="index">{{tab.title}}</v-tab>
     <v-tab-item :key="index" :transition="false" :reverse-transition="false">
-     <v-card flat class="np-info-card-cover fade-both">
+     <v-card flat class="np-info-card-cover fade-both" @contextmenu.prevent="showContextMenu">
       <v-card-text :class="['np-info-text', zoomInfoClass, TRACK_TAB==index || tab.isMsg ? 'np-info-lyrics' : '', ALBUM_TAB==index ? 'np-info-review' : '']">
        <div v-html="tab.text"></div>
        <img v-if="undefined!=tab.image" :src="tab.image" loading="lazy" class="np-no-meta-img"></img>
@@ -98,8 +98,7 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
     <template v-for="(tab, index) in info.tabs">
      <v-flex xs4>
       <v-card flat class="np-info-card-cover">
-       <v-card-title @contextmenu.prevent="showContextMenu"><p>{{tab.title}}</p></v-card-title>
-       <v-card-text :class="['np-info-text-full', 'fade-both', zoomInfoClass, TRACK_TAB==index || tab.isMsg ? 'np-info-lyrics' : '', ALBUM_TAB==index ? 'np-info-review' : '']">
+       <v-card-text :class="['np-info-text-full', 'fade-both', zoomInfoClass, TRACK_TAB==index || tab.isMsg ? 'np-info-lyrics' : '', ALBUM_TAB==index ? 'np-info-review' : '']" @contextmenu.prevent="showContextMenu">
         <div v-html="tab.text"></div>
         <img v-if="undefined!=tab.image" :src="tab.image" loading="lazy" class="np-no-meta-img"></img>
         <template v-for="(sect, sindex) in tab.sections">

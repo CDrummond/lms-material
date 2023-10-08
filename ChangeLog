@@ -13,6 +13,7 @@ x.y.z
 3.5.4
 -----
 1. Fix missing album review for streaming services.
+2. Remove commas from "performed by", etc. in desktop now-playing bar.
 
 3.5.3
 -----

@@ -136,7 +136,7 @@ Vue.component('lms-search-field', {
                     this.commands.push({cat:1, command:["artists"], params:["tags:s", "search:"+this.str]});
                     this.commands.push({cat:2, command:["albums"], params:[(lmsOptions.showAllArtists ? ALBUM_TAGS_ALL_ARTISTS : ALBUM_TAGS)+(lmsOptions.serviceEmblems ? "E" : ""), "sort:album", "search:"+this.str]});
                 }
-                this.commands.push({cat:3, command:["tracks"], params:[SEARCH_TRACK_TAGS+"elcy"+
+                this.commands.push({cat:3, command:["tracks"], params:[TRACK_TAGS+"elcy"+
                                                                        (this.$store.state.showRating ? "R" : "")+
                                                                        (lmsOptions.serviceEmblems ? "E" : "")+
                                                                        (lmsOptions.techInfo ? TECH_INFO_TAGS : ""), "search:"+this.str]});

@@ -742,6 +742,7 @@ function parseBrowseResp(data, parent, options, cacheKey, parentCommand, parentG
             resp.canUseGrid = true;
             resp.itemCustomActions = getCustomActions("album");
             var jumpListYear = false;
+            var isSearch = false;
             if (data.params && data.params.length>1) {
                 for (var i=3, plen=data.params[1].length; i<plen; ++i) {
                     if (typeof data.params[1][i] === 'string' || data.params[1][i] instanceof String) {
@@ -750,6 +751,8 @@ function parseBrowseResp(data, parent, options, cacheKey, parentCommand, parentG
                             jumpListYear = true;
                         } else if (lower==MSK_REV_SORT_OPT) {
                             data.result.albums_loop = data.result.albums_loop.reverse();
+                        } else if ((""+data.params[1][i]).startsWith("search:")) {
+                            isSearch = true;
                         }
                     }
                 }
@@ -779,14 +782,30 @@ function parseBrowseResp(data, parent, options, cacheKey, parentCommand, parentG
 
                 var artist = undefined;
                 var artists = undefined;
+                var artist_ids = undefined;
+
                 if (lmsOptions.showAllArtists && i.artists) {
                     artists = i.artists.split(MULTI_SPLIT_REGEX);
                     artist = artists.join(", ");
+                    if (undefined!=i.artist_ids) {
+                        artist_ids = i.artist_ids.split(',');
+                    }
                 } else {
                     artist = i.artist;
                     if (undefined!=i.artist) {
                         artists = [i.artist];
                     }
+                    if (undefined!=i.artist_id) {
+                        artist_ids = [i.artist_id];
+                    }
+                }
+
+                if (isSearch && !IS_MOBILE && undefined!=artist_ids && undefined!=artists && artists.length==artist_ids.length) {
+                    let entries = [];
+                    for (let a=0, al=artists.length; a<al; ++a) {
+                        entries.push("<obj class=\"link-item\" onclick=\"showAlbumArtist(event, "+artist_ids[a]+",\'"+escape(artists[a])+"\', \'browse\')\">" + artists[a] + "</obj>");
+                    }
+                    artist = entries.join(", ");
                 }
 
                 if (LMS_VERSION>=80300 && undefined==i.extid && undefined==artists && undefined!=parent && undefined!=parent.title && undefined!=parent.id && !parent.id.startsWith(MUSIC_ID_PREFIX)) {
@@ -860,9 +879,10 @@ function parseBrowseResp(data, parent, options, cacheKey, parentCommand, parentG
                 artists.push(buildArtistLine(i, "browse", false));
                 let subtitle = undefined;
                 if (showAlbumName && i.album) {
-                    subtitle=undefined==subtitle ? i.album : (subtitle + SEPARATOR + i.album);
-                    if (i.year && i.year>0) {
-                        subtitle+=" (" + i.year + ")";
+                    if (subtitle) {
+                        subtitle+=SEPARATOR+buildAlbumLine(i, "browse", false);
+                    } else {
+                        subtitle=buildAlbumLine(i, "browse", false);
                     }
                 }
                 if (undefined!=i.disc && !isSearchResult && !isAllSongs) {

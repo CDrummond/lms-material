@@ -119,7 +119,6 @@ const ALBUM_TAGS_ALL_ARTISTS = "tags:aajlqsyKSS";
 const ARTIST_ALBUM_TAGS = "tags:jlqsyKS";
 const TRACK_TAGS = "tags:digkstuAACS";
 const TECH_INFO_TAGS = "orITY";
-const SEARCH_TRACK_TAGS = "tags:dikstuAC";
 const PLAYLIST_TAGS = "tags:suxE";
 const PLAYLIST_TRACK_TAGS = "tags:acdgltIKS";
 const SORT_KEY = "sort:";

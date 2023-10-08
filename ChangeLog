@@ -8,7 +8,7 @@ x.y.z
 5. Increase background image blur.
 6. Show track and album names in relevant MAI section.
 7. Remove "Artist", "Album", and "Track" headers from expanded MAI sections.
-8. Show now-playing progress bar even for radio.
+8. Show now-playing bar progress even for radio.
 9. Make more subtitle items clickable in search results for non-touch devices.
 
 3.5.4

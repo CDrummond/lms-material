@@ -1964,7 +1964,7 @@ div.v-subheader {
  min-width:28px !important;
 }
 
-.browse-header .v-list__tile__title {
+.browse-header .v-list__tile__title, .grid-header .v-list__tile__title {
  color:var(--active-color);
  font-weight:var(--bold-weight);
  font-size:var(--std-font-size) !important;
@@ -1974,8 +1974,12 @@ div.v-subheader {
  color:var(--active-color)!important;
 }
 
-.browse-header {
+.browse-header, .grid-header {
  background-color:var(--browse-header-color);
+}
+
+.grid-header {
+  width:100%;
 }
 
 .queue-action {

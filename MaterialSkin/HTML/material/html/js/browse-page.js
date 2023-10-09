@@ -84,9 +84,16 @@ var lmsBrowse = Vue.component("lms-browse", {
   </div>
   <div class="lms-list" id="browse-list" style="overflow:auto;" v-bind:class="{'lms-image-grid': grid.use, 'lms-image-grid-jump':grid.use && filteredJumplist.length>1, 'lms-list-jump':!grid.use && filteredJumplist.length>1,'bgnd-blur':drawBgndImage}">
 
-   <RecycleScroller :items="grid.rows" :item-size="grid.ih - (grid.haveSubtitle || isTop || current.id.startsWith(TOP_ID_PREFIX) ? 0 : GRID_SINGLE_LINE_DIFF)" page-mode key-field="id" :buffer="LMS_SCROLLER_GRID_BUFFER" v-if="grid.use">
+   <RecycleScroller :items="grid.rows" :item-size="grid.multiSize ? null : (grid.ih - (grid.haveSubtitle || isTop || current.id.startsWith(TOP_ID_PREFIX) ? 0 : GRID_SINGLE_LINE_DIFF))" page-mode key-field="id" :buffer="LMS_SCROLLER_GRID_BUFFER" v-if="grid.use">
     <div slot-scope="{item}" :class="[grid.few?'image-grid-few':'image-grid-full-width', grid.haveSubtitle?'image-grid-with-sub':'']">
-     <div align="center" style="vertical-align: top" v-for="(citem, col) in item.items" @contextmenu.prevent="contextMenu(citem, item.rs+col, $event)">
+
+     <v-list-tile v-if="item.header" class="grid-header">
+      <v-list-tile-content>
+       <v-list-tile-title>{{item.item.title}}</v-list-tile-title>
+      </v-list-tile-content>
+     </v-list-tile>
+
+     <div v-else align="center" style="vertical-align: top" v-for="(citem, col) in item.items" @contextmenu.prevent="contextMenu(citem, item.rs+col, $event)">
       <div v-if="undefined==citem" class="image-grid-item defcursor"></div>
       <div v-else class="image-grid-item" @click="click(citem, item.rs+col, $event)" :title="citem | itemTooltip" :draggable="item.draggable && current.section!=SECTION_FAVORITES" @dragstart="dragStart(item.rs+col, $event)" @dragend="dragEnd()" v-bind:class="{'list-active': (menu.show && (item.rs+col)==menu.index) || (fetchingItem==item.id)}">
        <div v-if="selection.size>0" class="check-btn grid-btn image-grid-select-btn" @click.stop="select(citem, item.rs+col, $event)" :title="ACTIONS[citem.selected ? UNSELECT_ACTION : SELECT_ACTION].title" v-bind:class="{'check-btn-checked':citem.selected}"></div>
@@ -360,7 +367,7 @@ var lmsBrowse = Vue.component("lms-browse", {
             current: {image: undefined},
             currentActions: [],
             items: [],
-            grid: {allowed:true, use:false, numColumns:0, ih:GRID_MIN_HEIGHT, rows:[], few:false, haveSubtitle:true},
+            grid: {allowed:true, use:false, numColumns:0, ih:GRID_MIN_HEIGHT, rows:[], few:false, haveSubtitle:true, multiSize:false},
             fetchingItem:undefined,
             hoverBtns: !IS_MOBILE,
             trans: { ok:undefined, cancel: undefined, selectMultiple:undefined, addall:undefined, playall:undefined,
@@ -471,7 +478,7 @@ var lmsBrowse = Vue.component("lms-browse", {
         this.options={pinned: new Set(),
                       sortFavorites: this.$store.state.sortFavorites};
         this.previousScrollPos=0;
-        this.grid = {allowed:true, use:isSetToUseGrid(GRID_OTHER), numColumns:0, ih:GRID_MIN_HEIGHT, rows:[], few:false, haveSubtitle:true};
+        this.grid = {allowed:true, use:isSetToUseGrid(GRID_OTHER), numColumns:0, ih:GRID_MIN_HEIGHT, rows:[], few:false, haveSubtitle:true, multiSize:false};
         this.currentActions=[{action:(this.grid.use ? USE_LIST_ACTION : USE_GRID_ACTION)}];
         this.canDrop = true;
 
@@ -1061,7 +1068,7 @@ var lmsBrowse = Vue.component("lms-browse", {
             }
             if (this.current && TOP_MYMUSIC_ID==this.current.id) {
                 this.items = this.myMusic;
-                this.grid = {allowed:true, use:isSetToUseGrid(GRID_OTHER), numColumns:0, ih:GRID_MIN_HEIGHT, rows:[], few:false, haveSubtitle:true};
+                this.grid = {allowed:true, use:isSetToUseGrid(GRID_OTHER), numColumns:0, ih:GRID_MIN_HEIGHT, rows:[], few:false, haveSubtitle:true, multiSize:false};
                 this.currentActions=[{action:(this.grid.use ? USE_LIST_ACTION : USE_GRID_ACTION)}];
                 this.layoutGrid(true);
             } else if (this.history.length>1 && this.history[1].current && this.history[1].current.id==TOP_MYMUSIC_ID) {
@@ -1350,6 +1357,8 @@ var lmsBrowse = Vue.component("lms-browse", {
             if (force || sz.nc != this.grid.numColumns) { // Need to re-layout...
                 changed = true;
                 this.grid.rows=[];
+                this.grid.multiSize=false;
+                var height = this.grid.ih - GRID_SINGLE_LINE_DIFF;
                 var items = [];
                 if (this.isTop) {
                     for (var i=0, len=this.items.length; i<len; ++i) {
@@ -1360,15 +1369,32 @@ var lmsBrowse = Vue.component("lms-browse", {
                 } else {
                     items=this.items;
                 }
-                for (var i=0, row=0, len=items.length; i<len; i+=sz.nc, ++row) {
+                for (var i=0, row=0, len=items.length; i<len; ++row) {
                     var rowItems=[]
-                    for (var j=0; j<sz.nc; ++j) {
-                        rowItems.push((i+j)<items.length ? items[i+j] : undefined);
-                        if (!haveSubtitle && (i+j)<items.length && items[i+j].subtitle) {
-                            haveSubtitle = true;
+                    if (i<items.length && items[i].header) {
+                        this.grid.multiSize=true;
+                        this.grid.rows.push({item: items[i], header:true, size:64, r:row, id:"row.header."+i});
+                        i+=1;
+                    } else {
+                        let used = 0;
+                        for (var j=0; j<sz.nc; ++j) {
+                            if ((i+j)<items.length && items[i+j].header) {
+                                for (; j<sz.nc; ++j) {
+                                    rowItems.push(undefined);
+                                }
+                                break;
+                            } else {
+                                rowItems.push((i+j)<items.length ? items[i+j] : undefined);
+                                if (!haveSubtitle && (i+j)<items.length && items[i+j].subtitle) {
+                                    haveSubtitle = true;
+                                }
+                                used++;
+                            }
                         }
+                        // TODO: rs ???
+                        this.grid.rows.push({id:"row."+i+"."+sz.nc, items:rowItems, r:row, rs:sz.nc*row, size:this.grid.multiSize ? height: undefined});
+                        i+=used;
                     }
-                    this.grid.rows.push({id:"row."+i+"."+sz.nc, items:rowItems, r:row, rs:sz.nc*row});
                 }
                 this.grid.numColumns = sz.nc;
             } else { // Need to check if have subtitles...

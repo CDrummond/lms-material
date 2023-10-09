@@ -743,6 +743,9 @@ function parseBrowseResp(data, parent, options, cacheKey, parentCommand, parentG
             resp.itemCustomActions = getCustomActions("album");
             var jumpListYear = false;
             var isSearch = false;
+            var canGroupAlbums = true;
+            var albumGroups = canGroupAlbums ? {} : undefined;
+            var albumKeys = [];
             if (data.params && data.params.length>1) {
                 for (var i=3, plen=data.params[1].length; i<plen; ++i) {
                     if (typeof data.params[1][i] === 'string' || data.params[1][i] instanceof String) {
@@ -814,6 +817,7 @@ function parseBrowseResp(data, parent, options, cacheKey, parentCommand, parentG
                     artists = [parent.title];
                 }
 
+                var group = idx<10 ? "Album" : "EP";
                 var album = {
                               id: "album_id:"+i.id,
                               artist_id: i.artist_id,
@@ -833,11 +837,36 @@ function parseBrowseResp(data, parent, options, cacheKey, parentCommand, parentG
                               multi: lmsOptions.groupdiscs && undefined!=i.disccount && parseInt(i.disccount)>1,
                               extid: i.extid
                           };
-                resp.items.push(album);
+                if (albumGroups) {
+                    if (undefined==albumGroups[group]) {
+                        albumGroups[group]=[album];
+                        albumKeys.push(group);
+                    } else {
+                        albumGroups[group].push(album);
+                    }
+                } else {
+                    resp.items.push(album);
+                }
             }
-            resp.subtitle=i18np("1 Album", "%1 Albums", resp.items.length);
-            if (parent && parent.id && parent.id.startsWith("search:")) {
-                resp.jumplist = []; // Search results NOT sorted???
+            let numGroups = albumGroups ? albumKeys.length : 0;
+            if (numGroups>1) {
+                resp.subtitle=i18np("1 Recording", "%1 Recordings", loopLen);
+                resp.jumplist = [];
+                for (let k=0; k<numGroups; ++k) {
+                    let key = albumKeys[k];
+                    let alist = albumGroups[key];
+                    resp.items.push({title:key+" ("+alist.length+")", id:FILTER_PREFIX+key, header:true,
+                                     menu:[PLAY_ALL_ACTION, INSERT_ALL_ACTION, ADD_ALL_ACTION]});
+                    resp.items.push.apply(resp.items, alist);
+                }
+            } else {
+                resp.subtitle=i18np("1 Album", "%1 Albums", resp.items.length);
+                if (numGroups==1) {
+                    resp.items = albumGroups[albumKeys[0]];
+                }
+                if (parent && parent.id && parent.id.startsWith("search:")) {
+                    resp.jumplist = []; // Search results NOT sorted???
+                }
             }
         } else if (data.result.titles_loop) {
             var totalDuration=0;

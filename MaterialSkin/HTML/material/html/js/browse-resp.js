@@ -835,7 +835,8 @@ function parseBrowseResp(data, parent, options, cacheKey, parentCommand, parentG
                               emblem: getEmblem(i.extid),
                               draggable: true,
                               multi: lmsOptions.groupdiscs && undefined!=i.disccount && parseInt(i.disccount)>1,
-                              extid: i.extid
+                              extid: i.extid,
+                              filter: FILTER_PREFIX+group
                           };
                 if (albumGroups) {
                     if (undefined==albumGroups[group]) {

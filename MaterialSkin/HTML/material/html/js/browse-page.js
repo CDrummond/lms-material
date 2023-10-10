@@ -91,6 +91,13 @@ var lmsBrowse = Vue.component("lms-browse", {
       <v-list-tile-content>
        <v-list-tile-title>{{item.item.title}}</v-list-tile-title>
       </v-list-tile-content>
+      <v-list-tile-action class="browse-action" :title="i18n('%1 (Menu)', stripLinkTags(item.item.title))">
+       <div v-if="hoverBtns && 0==selection.size && (item.item.menu && (item.item.menu[0]==PLAY_ACTION || item.item.menu[0]==PLAY_ALL_ACTION))" class="list-btns">
+        <div v-if="!queryParams.party && (!LMS_KIOSK_MODE || !HIDE_FOR_KIOSK.has(PLAY_ACTION))" class="play-btn grid-btn" @click.stop="itemAction(PLAY_ALL_ACTION, item.item, undefined, $event)" :title="ACTIONS[PLAY_ACTION].title"></div>
+        <div v-if="!LMS_KIOSK_MODE || !HIDE_FOR_KIOSK.has(ADD_ACTION)" class="add-btn grid-btn" @click.stop="itemAction(ADD_ALL_ACTION, item.item, undefined, $event)" :title="ACTIONS[ADD_ACTION].title"></div>
+       </div>
+       <div class="menu-btn grid-btn list-btn" @click.stop="itemMenu(item.item, undefined, $event)" :title="i18n('%1 (Menu)', stripLinkTags(item.item.title))"></div>
+      </v-list-tile-action>
      </v-list-tile>
 
      <div v-else align="center" style="vertical-align: top" v-for="(citem, col) in item.items" @contextmenu.prevent="contextMenu(citem, item.rs+col, $event)">
@@ -1378,14 +1385,15 @@ var lmsBrowse = Vue.component("lms-browse", {
                     } else {
                         let used = 0;
                         for (var j=0; j<sz.nc; ++j) {
-                            if ((i+j)<items.length && items[i+j].header) {
+                            var idx = i+j;
+                            if (idx<items.length && items[idx].header) {
                                 for (; j<sz.nc; ++j) {
                                     rowItems.push(undefined);
                                 }
                                 break;
                             } else {
-                                rowItems.push((i+j)<items.length ? items[i+j] : undefined);
-                                if (!haveSubtitle && (i+j)<items.length && items[i+j].subtitle) {
+                                rowItems.push(idx<items.length ? items[idx] : undefined);
+                                if (!haveSubtitle && idx<items.length && items[idx].subtitle) {
                                     haveSubtitle = true;
                                 }
                                 used++;

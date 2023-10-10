@@ -1438,7 +1438,7 @@ var lmsBrowse = Vue.component("lms-browse", {
             if (!few && this.grid.multiSize) {
                 few = true;
                 for (let r=0, loop=this.grid.rows, len=loop.length; r<len; ++r) {
-                    if (loop[r].header && ((loop[r].item.count*sz.w)*1.20)<listWidth) {
+                    if (loop[r].header && ((loop[r].item.count*sz.w)*1.20)>=listWidth) {
                         few = false;
                         break;
                     }

@@ -1376,12 +1376,14 @@ var lmsBrowse = Vue.component("lms-browse", {
                 } else {
                     items=this.items;
                 }
+                let rs = 0;
                 for (var i=0, row=0, len=items.length; i<len; ++row) {
                     var rowItems=[]
                     if (i<items.length && items[i].header) {
                         this.grid.multiSize=true;
                         this.grid.rows.push({item: items[i], header:true, size:64, r:row, id:"row.header."+i});
                         i+=1;
+                        rs+=1;
                     } else {
                         let used = 0;
                         for (var j=0; j<sz.nc; ++j) {
@@ -1399,9 +1401,9 @@ var lmsBrowse = Vue.component("lms-browse", {
                                 used++;
                             }
                         }
-                        // TODO: rs ???
-                        this.grid.rows.push({id:"row."+i+"."+sz.nc, items:rowItems, r:row, rs:sz.nc*row, size:this.grid.multiSize ? height: undefined, numStd:used});
+                        this.grid.rows.push({id:"row."+row+"."+sz.nc, items:rowItems, r:row, rs:rs, size:this.grid.multiSize ? height: undefined, numStd:used});
                         i+=used;
+                        rs+=used;
                     }
                 }
                 this.grid.numColumns = sz.nc;

@@ -1358,7 +1358,7 @@ var lmsBrowse = Vue.component("lms-browse", {
                 changed = true;
                 this.grid.rows=[];
                 this.grid.multiSize=false;
-                var height = this.grid.ih - GRID_SINGLE_LINE_DIFF;
+                var height = sz.h - GRID_SINGLE_LINE_DIFF;
                 var items = [];
                 if (this.isTop) {
                     for (var i=0, len=this.items.length; i<len; ++i) {
@@ -1401,6 +1401,14 @@ var lmsBrowse = Vue.component("lms-browse", {
                 for (var i=0; i<this.items.length && !haveSubtitle; ++i) {
                     if (this.items[i].subtitle) {
                         haveSubtitle = true;
+                    }
+                }
+                if (this.grid.multiSize && this.grid.ih != sz.h) {
+                    let height = sz.h - GRID_SINGLE_LINE_DIFF;
+                    for (let list = this.grid.rows, i=0, len=list.length; i<len; ++i) {
+                        if (!list[i].header) {
+                            list[i].size = height;
+                        }
                     }
                 }
             }

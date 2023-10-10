@@ -22,21 +22,21 @@ function buildSearchResp(results) {
         total+=numItems;
         if (1==results[i].command.cat) {
             filter = FILTER_PREFIX+"artist";
-            items.push({title: i18np("1 Artist", "%1 Artists", titleParam), id:filter, header:true, hidesub:true,
+            items.push({title: i18n("Artists") + " ("+titleParam+")", id:filter, header:true, hidesub:true,
                         allItems: all, subtitle: i18np("1 Artist", "%1 Artists", numItems)});
         } else if (2==results[i].command.cat) {
             filter = FILTER_PREFIX+"album";
-            items.push({title: i18np("1 Album", "%1 Albums", titleParam), id:filter, header:true, hidesub:true,
+            items.push({title: i18n("Albums", titleParam) + " ("+titleParam+")", id:filter, header:true, hidesub:true,
                         allItems: all, subtitle: i18np("1 Album", "%1 Albums", numItems),
                         menu:[PLAY_ALL_ACTION, INSERT_ALL_ACTION, ADD_ALL_ACTION]});
         } else if (3==results[i].command.cat) {
             filter = FILTER_PREFIX+"track";
-            items.push({title: i18np("1 Track", "%1 Tracks", titleParam), id:filter, header:true, hidesub:true,
+            items.push({title: i18n("Tracks", titleParam) + " ("+titleParam+")", id:filter, header:true, hidesub:true,
                         allItems: all, subtitle: i18np("1 Track", "%1 Tracks", numItems),
                         menu:queryParams.party ? [] : [PLAY_ALL_ACTION, INSERT_ALL_ACTION, ADD_ALL_ACTION]});
         } else if (4==results[i].command.cat) {
             filter = FILTER_PREFIX+"playlist";
-            items.push({title: i18np("1 Playlist", "%1 Playlists", titleParam), id:filter, header:true, hidesub:true,
+            items.push({title: i18n("Playlists") + " ("+titleParam+")", id:filter, header:true, hidesub:true,
                         allItems: all, subtitle: i18np("1 Playlist", "%1 Playlists", numItems),
                         menu:[PLAY_ALL_ACTION, INSERT_ALL_ACTION, ADD_ALL_ACTION]});
         } else if (5==results[i].command.cat) {

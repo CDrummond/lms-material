@@ -11,6 +11,7 @@ const MIXER_APPS = new Set(["musicip", "blissmixer", "musicsimilarity"]);
 const STREAM_SCHEMAS = new Set(["http", "https", "wavin"]);
 const HIDE_APPS_FOR_PARTY = new Set(["apps.accuradio", "apps.ardaudiothek", "apps.bbcsounds", "apps.cplus", "apps.globalplayeruk", "apps.iheartradio", "apps.lastmix", "apps.mixcloud", "apps.planetradio", "apps.podcasts", "apps.radiofrance", "apps.radionet", "apps.radionowplaying", "apps.radioparadise", "apps.squeezecloud", "apps.timesradio", "apps.ukradioplayer", "apps.virginradio", "apps.wefunk", "apps.phishin", "apps.walkwithme"]);
 const HIDE_APP_NAMES_FOR_PARTY = new Set(["Absolute Radio UK", "AccuRadio", "BBC", "CBC", "ClassicalRadio.com", "Digitally Imported", "JAZZRADIO.com", "Live Music Archive", "ROCKRADIO.com", "RadioFeeds UK & Ireland", "RadioTunes", "Radionomy", "SHOUTcast", "SomaFM", "TuneIn Radio", "ZenRadio.com"])
+const RELEASE_TYPES = ["ALBUM", "EP", "SINGLE"];
 
 function itemText(i) {
     return i.title ? i.title : i.name ? i.name : i.caption ? i.caption : i.credits ? i.credits : undefined;
@@ -24,6 +25,40 @@ function removeDiactrics(key) {
         }
     }
     return key==" " ? "?" : key;
+}
+
+function capitaliseRelease(rel) {
+    if (rel=="ALBUM") {
+        return i18n("Albums");
+    }
+    if (rel=="EP") {
+        return i18n("EPs");
+    }
+    if (rel=="SINGLE") {
+        return i18n("Singles");
+    }
+    if (rel=="BROADCAST") {
+        return i18n("Broadcasts");
+    }
+    return rel.replace(/\w\S*/g, function(txt){return txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase();});
+}
+
+function releaseTypeSort(a, b) {
+    let va = RELEASE_TYPES.indexOf(a);
+    let vb = RELEASE_TYPES.indexOf(b);
+    if (va<0) {
+        va=RELEASE_TYPES.length;
+    }
+    if (vb<0) {
+        vb=RELEASE_TYPES.length;
+    }
+    if (va<vb) {
+        return -1;
+    }
+    if (va>vb) {
+        return 1;
+    }
+    return fixedSort(a, b);
 }
 
 function parseBrowseResp(data, parent, options, cacheKey, parentCommand, parentGenre) {
@@ -743,9 +778,7 @@ function parseBrowseResp(data, parent, options, cacheKey, parentCommand, parentG
             resp.itemCustomActions = getCustomActions("album");
             var jumpListYear = false;
             var isSearch = false;
-            var canGroupAlbums = true;
-            var albumGroups = canGroupAlbums ? {} : undefined;
-            var albumKeys = [];
+            var canGroupAlbums = false;
             if (data.params && data.params.length>1) {
                 for (var i=3, plen=data.params[1].length; i<plen; ++i) {
                     if (typeof data.params[1][i] === 'string' || data.params[1][i] instanceof String) {
@@ -756,10 +789,14 @@ function parseBrowseResp(data, parent, options, cacheKey, parentCommand, parentG
                             data.result.albums_loop = data.result.albums_loop.reverse();
                         } else if ((""+data.params[1][i]).startsWith("search:")) {
                             isSearch = true;
+                        } else if ((""+data.params[1][i]).startsWith("tags:") && data.params[1][i].indexOf("W")>0) {
+                            canGroupAlbums = true;
                         }
                     }
                 }
             }
+            var albumGroups = canGroupAlbums ? {} : undefined;
+            var albumKeys = [];
 
             for (var idx=0, loop=data.result.albums_loop, loopLen=loop.length; idx<loopLen; ++idx) {
                 var i = loop[idx];
@@ -817,7 +854,7 @@ function parseBrowseResp(data, parent, options, cacheKey, parentCommand, parentG
                     artists = [parent.title];
                 }
 
-                var group = idx<10 ? "Album" : "EP";
+                var group = undefined==i.release_type ? "ALBUM" : i.release_type;
                 var album = {
                               id: "album_id:"+i.id,
                               artist_id: i.artist_id,
@@ -853,10 +890,11 @@ function parseBrowseResp(data, parent, options, cacheKey, parentCommand, parentG
             if (numGroups>1) {
                 resp.subtitle=i18np("1 Recording", "%1 Recordings", loopLen);
                 resp.jumplist = [];
+                albumKeys.sort(releaseTypeSort);
                 for (let k=0; k<numGroups; ++k) {
                     let key = albumKeys[k];
                     let alist = albumGroups[key];
-                    resp.items.push({title:key+" ("+alist.length+")", id:FILTER_PREFIX+key, header:true,
+                    resp.items.push({title:capitaliseRelease(key)+" ("+alist.length+")", id:FILTER_PREFIX+key, header:true,
                                      menu:[PLAY_ALL_ACTION, INSERT_ALL_ACTION, ADD_ALL_ACTION]});
                     resp.items.push.apply(resp.items, alist);
                 }

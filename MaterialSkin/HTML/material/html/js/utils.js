@@ -1090,3 +1090,13 @@ if (!String.prototype.replaceAll) {
         return updated;
     };
 }
+
+function intersect(a, b) {
+    let res = new Set();
+    for (const itm of a) {
+        if (b.has(itm)) {
+            res.add(itm);
+        }
+    }
+    return res;
+}

@@ -11,7 +11,9 @@ const MIXER_APPS = new Set(["musicip", "blissmixer", "musicsimilarity"]);
 const STREAM_SCHEMAS = new Set(["http", "https", "wavin"]);
 const HIDE_APPS_FOR_PARTY = new Set(["apps.accuradio", "apps.ardaudiothek", "apps.bbcsounds", "apps.cplus", "apps.globalplayeruk", "apps.iheartradio", "apps.lastmix", "apps.mixcloud", "apps.planetradio", "apps.podcasts", "apps.radiofrance", "apps.radionet", "apps.radionowplaying", "apps.radioparadise", "apps.squeezecloud", "apps.timesradio", "apps.ukradioplayer", "apps.virginradio", "apps.wefunk", "apps.phishin", "apps.walkwithme"]);
 const HIDE_APP_NAMES_FOR_PARTY = new Set(["Absolute Radio UK", "AccuRadio", "BBC", "CBC", "ClassicalRadio.com", "Digitally Imported", "JAZZRADIO.com", "Live Music Archive", "ROCKRADIO.com", "RadioFeeds UK & Ireland", "RadioTunes", "Radionomy", "SHOUTcast", "SomaFM", "TuneIn Radio", "ZenRadio.com"])
-const RELEASE_TYPES = ["ALBUM", "EP", "SINGLE"];
+const RELEASE_TYPES = ["ALBUM", "EP", "SINGLE", "COMPILATION", "APPEARANCE"];
+const ARTIST_ROLES = new Set([1,5])
+const TRACK_ARTIST_ROLES = new Set([6])
 
 function itemText(i) {
     return i.title ? i.title : i.name ? i.name : i.caption ? i.caption : i.credits ? i.credits : undefined;
@@ -39,6 +41,12 @@ function capitaliseRelease(rel) {
     }
     if (rel=="BROADCAST") {
         return i18n("Broadcasts");
+    }
+    if (rel=="COMPILATION") {
+        return i18n("Compilations");
+    }
+    if (rel=="APPEARANCE") {
+        return i18n("Appearances");
     }
     return rel.replace(/\w\S*/g, function(txt){return txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase();});
 }
@@ -854,7 +862,18 @@ function parseBrowseResp(data, parent, options, cacheKey, parentCommand, parentG
                     artists = [parent.title];
                 }
 
-                var group = undefined==i.release_type ? "ALBUM" : i.release_type;
+                var group = "ALBUM";
+                if (undefined!=i.compilation && 1==parseInt(i.compilation)) {
+                    group = "COMPILATION";
+                } else {
+                    var roles = new Set(undefined==i.role_ids ? [] : i.role_ids.split(",").map(Number));
+                    if (intersect(ARTIST_ROLES, roles).size>0) {
+                        group = undefined==i.release_type ? "ALBUM" : i.release_type;
+                    } else if (intersect(TRACK_ARTIST_ROLES, roles).size>0) {
+                        group = "APPEARANCE";
+                    }
+                }
+
                 var album = {
                               id: "album_id:"+i.id,
                               artist_id: i.artist_id,
@@ -899,10 +918,10 @@ function parseBrowseResp(data, parent, options, cacheKey, parentCommand, parentG
                     resp.items.push.apply(resp.items, alist);
                 }
             } else {
-                resp.subtitle=i18np("1 Album", "%1 Albums", resp.items.length);
                 if (numGroups==1) {
                     resp.items = albumGroups[albumKeys[0]];
                 }
+                resp.subtitle=i18np("1 Album", "%1 Albums", resp.items.length);
                 if (parent && parent.id && parent.id.startsWith("search:")) {
                     resp.jumplist = []; // Search results NOT sorted???
                 }

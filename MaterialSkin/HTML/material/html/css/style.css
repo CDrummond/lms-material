@@ -366,6 +366,10 @@ div.v-subheader {
  padding: 8px 4px 8px 4px;/* t, r, b, l */
 }
 
+.lms-grouped-image-grid {
+ padding:0px!important;
+}
+
 .image-grid-full-width {
  width:100%;
  display:flex;

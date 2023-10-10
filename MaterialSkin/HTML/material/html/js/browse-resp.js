@@ -914,7 +914,7 @@ function parseBrowseResp(data, parent, options, cacheKey, parentCommand, parentG
                     let key = albumKeys[k];
                     let alist = albumGroups[key];
                     resp.items.push({title:capitaliseRelease(key)+" ("+alist.length+")", id:FILTER_PREFIX+key, header:true,
-                                     menu:[PLAY_ALL_ACTION, INSERT_ALL_ACTION, ADD_ALL_ACTION]});
+                                     menu:[PLAY_ALL_ACTION, INSERT_ALL_ACTION, ADD_ALL_ACTION], count:alist.length});
                     resp.items.push.apply(resp.items, alist);
                 }
             } else {

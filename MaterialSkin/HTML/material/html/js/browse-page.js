@@ -1400,7 +1400,7 @@ var lmsBrowse = Vue.component("lms-browse", {
                             }
                         }
                         // TODO: rs ???
-                        this.grid.rows.push({id:"row."+i+"."+sz.nc, items:rowItems, r:row, rs:sz.nc*row, size:this.grid.multiSize ? height: undefined});
+                        this.grid.rows.push({id:"row."+i+"."+sz.nc, items:rowItems, r:row, rs:sz.nc*row, size:this.grid.multiSize ? height: undefined, numStd:used});
                         i+=used;
                     }
                 }
@@ -1434,6 +1434,16 @@ var lmsBrowse = Vue.component("lms-browse", {
                 document.documentElement.style.setProperty('--image-grid-factor', sz.s);
             }
             var few = 1==this.grid.rows.length && (1==this.items.length || ((this.items.length*sz.w)*1.20)<listWidth);
+            // For multi, we need to check the count of each section.
+            if (!few && this.grid.multiSize) {
+                few = true;
+                for (let r=0, loop=this.grid.rows, len=loop.length; r<len; ++r) {
+                    if (loop[r].header && ((loop[r].item.count*sz.w)*1.20)<listWidth) {
+                        few = false;
+                        break;
+                    }
+                }
+            }
             if (this.grid.few != few) {
                 this.grid.few = few;
                 changed = true;

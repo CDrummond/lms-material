@@ -907,7 +907,7 @@ function parseBrowseResp(data, parent, options, cacheKey, parentCommand, parentG
             }
             let numGroups = albumGroups ? albumKeys.length : 0;
             if (numGroups>1) {
-                resp.subtitle=i18np("1 Recording", "%1 Recordings", loopLen);
+                resp.subtitle=i18np("1 Release", "%1 Releases", loopLen);
                 resp.jumplist = [];
                 albumKeys.sort(releaseTypeSort);
                 for (let k=0; k<numGroups; ++k) {

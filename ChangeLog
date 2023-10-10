@@ -1,15 +1,17 @@
 x.y.z
 -----
-1. Unify MAI layout between desktop and mobile.
-2. Allow mobile MAI to use 3 column layout.
-3. Force MAI tabs if layout too narrow.
-4. Add option to show a now-playing bar at the bottom of browse and queue
-   views in mobile layout.
-5. Increase background image blur.
-6. Show track and album names in relevant MAI section.
-7. Remove "Artist", "Album", and "Track" headers from expanded MAI sections.
-8. Show now-playing bar progress even for radio.
-9. Make more subtitle items clickable in search results for non-touch devices.
+ 1. Unify MAI layout between desktop and mobile.
+ 2. Allow mobile MAI to use 3 column layout.
+ 3. Force MAI tabs if layout too narrow.
+ 4. Add option to show a now-playing bar at the bottom of browse and queue
+    views in mobile layout.
+ 5. Increase background image blur.
+ 6. Show track and album names in relevant MAI section.
+ 7. Remove "Artist", "Album", and "Track" headers from expanded MAI sections.
+ 8. Show now-playing bar progress even for radio.
+ 9. Make more subtitle items clickable in search results for non-touch devices.
+10. Support LMS8.4 release_type.
+11. When listing artist albums separate out normal and compilation albums.
 
 3.5.4
 -----

@@ -95,7 +95,7 @@ Vue.component('lms-rating-dialog', {
                 this.show=false;
                 bus.$emit('ratingsSet', this.ids, this.value);
             } else {
-                lmsCommand(this.$store.state.player.id, [this.$store.state.ratingsPlugin, "setrating", this.toSet[0], this.value]).then(({data}) => {
+                lmsCommand(this.$store.state.player.id, [LMS_P_RP, "setrating", this.toSet[0], this.value]).then(({data}) => {
                     if (this.show) {
                         this.toSet.shift();
                         this.setRating();

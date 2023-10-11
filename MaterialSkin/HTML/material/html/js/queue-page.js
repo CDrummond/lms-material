@@ -8,14 +8,14 @@
 
 const PQ_STATUS_TAGS = IS_MOBILE ? "tags:cdegilqtuyAAIKNSxx" : "tags:cdegilqtuysAAIKNSxx";
 
-function queueItemCover(item, infoPlugin) {
+function queueItemCover(item) {
     if (item.artwork_url) {
         return resolveImageUrl(item.artwork_url);
     }
     if (undefined!=item.coverid) { // && !(""+item.coverid).startsWith("-")) {
         return "/music/"+item.coverid+"/cover"+LMS_IMAGE_SIZE;
     }
-    if (infoPlugin) {
+    if (LMS_P_MAI) {
         if (item.artist_ids) {
             return "/imageproxy/mai/artist/" + item.artist_ids[0] + "/image" + LMS_IMAGE_SIZE;
         } else if (item.artist_id) {
@@ -74,7 +74,7 @@ function buildSubtitle(i, threeLines) {
     return subtitle;
 }
 
-function parseResp(data, showTrackNum, index, showRatings, threeLines, infoPlugin) {
+function parseResp(data, showTrackNum, index, showRatings, threeLines) {
     logJsonMessage("RESP", data);
     let resp = { timestamp: 0, items: [], size: 0 };
     let isInitial = 0==index;
@@ -98,7 +98,7 @@ function parseResp(data, showTrackNum, index, showRatings, threeLines, infoPlugi
                               title: haveRating ? ratingString(title, i.rating) : title,
                               plaintitle: haveRating ? title : undefined,
                               subtitle: buildSubtitle(i, threeLines),
-                              image: queueItemCover(i, infoPlugin),
+                              image: queueItemCover(i),
                               actions: [PQ_PLAY_NOW_ACTION, PQ_PLAY_NEXT_ACTION, DIVIDER, REMOVE_ACTION, PQ_REMOVE_ALBUM_ACTION, PQ_REMOVE_DISC_ACTION, ADD_TO_PLAYLIST_ACTION, PQ_ZAP_ACTION, DOWNLOAD_ACTION, SELECT_ACTION, PQ_COPY_ACTION, MOVE_HERE_ACTION, CUSTOM_ACTIONS, SHOW_IMAGE_ACTION, MORE_ACTION],
                               duration: duration,
                               durationStr: undefined!=duration && duration>0 ? formatSeconds(duration) : undefined,
@@ -247,7 +247,7 @@ var lmsQueue = Vue.component("lms-queue", {
      </v-list-tile-avatar>
      <v-list-tile-title>{{ACTIONS[UNSELECT_ACTION].title}}</v-list-tile-title>
     </v-list-tile>
-    <v-list-tile v-else-if="action==PQ_REMOVE_DISC_ACTION ? undefined!=menu.item.disc && menu.item.disc>0 : action==PQ_REMOVE_ALBUM_ACTION ? undefined!=menu.item.album_id : action==PQ_COPY_ACTION ? browseSelection : action==MOVE_HERE_ACTION ? (selection.size>0 && !menu.item.selected) : action==PQ_ZAP_ACTION ? customSkipPlugin : action==DOWNLOAD_ACTION ? lmsOptions.allowDownload && menu.item.isLocal : (action!=PQ_PLAY_NEXT_ACTION || (menu.index!=currentIndex && menu.index!=currentIndex+1))" @click="itemAction(action, menu.item, menu.index, $event)">
+    <v-list-tile v-else-if="action==PQ_REMOVE_DISC_ACTION ? undefined!=menu.item.disc && menu.item.disc>0 : action==PQ_REMOVE_ALBUM_ACTION ? undefined!=menu.item.album_id : action==PQ_COPY_ACTION ? browseSelection : action==MOVE_HERE_ACTION ? (selection.size>0 && !menu.item.selected) : action==PQ_ZAP_ACTION ? LMS_P_CS : action==DOWNLOAD_ACTION ? lmsOptions.allowDownload && menu.item.isLocal : (action!=PQ_PLAY_NEXT_ACTION || (menu.index!=currentIndex && menu.index!=currentIndex+1))" @click="itemAction(action, menu.item, menu.index, $event)">
      <v-list-tile-avatar>
       <v-icon v-if="undefined==ACTIONS[action].svg">{{ACTIONS[action].icon}}</v-icon>
       <img v-else class="svg-img" :src="ACTIONS[action].svg | svgIcon(darkUi)"></img>
@@ -313,9 +313,6 @@ var lmsQueue = Vue.component("lms-queue", {
         },
         noPlayer() {
             return !this.$store.state.player
-        },
-        customSkipPlugin() {
-            return this.$store.state.customSkipPlugin
         },
         drawBgndImage() {
             return this.$store.state.queueBackdrop && undefined!=this.coverUrl
@@ -1028,7 +1025,7 @@ var lmsQueue = Vue.component("lms-queue", {
             var prevTimestamp = this.timestamp;
             var fetchCount = this.currentIndex > this.items.length + LMS_QUEUE_BATCH_SIZE ? this.currentIndex + 50 : LMS_QUEUE_BATCH_SIZE;
             lmsList(this.$store.state.player.id, ["status"], [PQ_STATUS_TAGS + (this.$store.state.showRating ? "R" : "")], this.items.length, fetchCount).then(({data}) => {
-                var resp = parseResp(data, this.$store.state.queueShowTrackNum, this.items.length, this.$store.state.showRating, this.$store.state.queueThreeLines, this.$store.state.infoPlugin);
+                var resp = parseResp(data, this.$store.state.queueShowTrackNum, this.items.length, this.$store.state.showRating, this.$store.state.queueThreeLines);
                 this.items.push.apply(this.items, resp.items);
                 // Check if a 'playlistTimestamp' was received whilst we were updating, if so need
                 // to update!
@@ -1067,7 +1064,7 @@ var lmsQueue = Vue.component("lms-queue", {
                 var prevTimestamp = this.timestamp;
                 lmsList(this.$store.state.player.id, ["status"], [PQ_STATUS_TAGS + (this.$store.state.showRating ? "R" : "")], 0,
                         this.items.length < LMS_QUEUE_BATCH_SIZE ? LMS_QUEUE_BATCH_SIZE : this.items.length).then(({data}) => {
-                    var resp = parseResp(data, this.$store.state.queueShowTrackNum, 0, this.$store.state.showRating, this.$store.state.queueThreeLines, this.$store.state.infoPlugin);
+                    var resp = parseResp(data, this.$store.state.queueShowTrackNum, 0, this.$store.state.showRating, this.$store.state.queueThreeLines);
                     this.items = resp.items;
                     var needUpdate = this.timestamp!==prevTimestamp && this.timestamp!==resp.timestamp;
                     this.timestamp = resp.timestamp;
@@ -1263,7 +1260,7 @@ var lmsQueue = Vue.component("lms-queue", {
                 return;
             }
             if (this.playerStatus.repeat===0) {
-                if (this.$store.state.dstmPlugin) {
+                if (LMS_P_DSTM) {
                     if (longPress) {
                         bus.$emit('dlg.open', 'dstm');
                     } else if (this.dstm) {
@@ -1280,7 +1277,7 @@ var lmsQueue = Vue.component("lms-queue", {
                 bus.$emit('playerCommand', ['playlist', 'repeat', 0]);
             } else if (this.playerStatus.repeat===2) {
                 bus.$emit('playerCommand', ['playlist', 'repeat', 1]);
-                if (this.$store.state.dstmPlugin) {
+                if (LMS_P_DSTM) {
                     lmsCommand(this.$store.state.player.id, ["material-skin-client", "get-dstm"]).then(({data}) => {
                         if (data && data.result && undefined!=data.result.provider) {
                             bus.$emit("dstm", this.$store.state.player.id, data.result.provider);

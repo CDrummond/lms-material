@@ -234,7 +234,7 @@ function resolveImageUrl(image, size) {
         if (url.hostname.startsWith("192.168.") || url.hostname.startsWith("127.") || url.hostname.endsWith(".local")) {
             return image;
         }
-        if (lmsOptions.useMySqueezeboxImageProxy) {
+        if (LMS_USE_MSB_IMG_PROXY) {
             var s=size ? size.split('x')[0].replace('_', '') : LMS_IMAGE_SZ;
             return MY_SQUEEZEBOX_IMAGE_PROXY+"?w="+s+"&h="+s+"&m=F&u="+encodeURIComponent(image);
         } else {
@@ -629,9 +629,9 @@ function ensureVisible(elem, attempt) {
 function cacheKey(command, params, start, batchSize) {
     return LMS_LIST_CACHE_PREFIX+LMS_CACHE_VERSION+":"+lmsLastScan+":"+
            (command ? command.join("-") : "") + ":" + (params ? params.join("-") : "") + 
-           (command && (command[0]=="artists" || command[0]=="albums") ? (lmsOptions.noGenreFilter ? ":1" : ":0") : "") +
-           (command && command[0]=="albums" ? (lmsOptions.noRoleFilter ? ":1" : ":0") : "") +
-           (command && command[0]=="artists" ? (lmsOptions.infoPlugin && lmsOptions.artistImages ? ":1" : ":0") : "") +
+           (command && (command[0]=="artists" || command[0]=="albums") ? (LMS_NO_GENRE_FILTER ? ":1" : ":0") : "") +
+           (command && command[0]=="albums" ? (LMS_NO_ROLE_FILTER ? ":1" : ":0") : "") +
+           (command && command[0]=="artists" ? (LMS_P_MAI && LMS_ARTIST_PICS ? ":1" : ":0") : "") +
            ":"+start+":"+batchSize;
 }
 

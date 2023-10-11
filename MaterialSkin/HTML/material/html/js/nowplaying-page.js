@@ -207,7 +207,7 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
      <div v-else-if="playerStatus.playlist.count>1 && !npBarRatings" class="np-bar-tech">{{playerStatus.playlist.current | trackCount(playerStatus.playlist.count)}}</div>
      <div v-else-if="!npBarRatings" class="np-bar-tech">&nbsp;</div>
      <div v-if="npBarRatings && (repAltBtn.show || shuffAltBtn.show)" class="np-bar-rating np-thumbs-desktop"><v-btn v-if="repAltBtn.show" :title="repAltBtn.tooltip" flat icon v-longpress="repeatClicked" v-bind:class="{'np-std-button': !stopButton,'disabled':noPlayer}"><v-icon v-if="repAltBtn.icon" class="media-icon">{{repAltBtn.icon}}</v-icon><img v-else :src="repAltBtn.image" class="btn-img"></img></v-btn><v-btn v-if="shuffAltBtn.show" :title="shuffAltBtn.tooltip" flat icon @click="shuffleClicked" v-bind:class="{'np-std-button': !stopButton}"><v-icon v-if="shuffAltBtn.icon" class="media-icon">{{shuffAltBtn.icon}}</v-icon><img v-else :src="shuffAltBtn.image" class="btn-img"></img></v-btn></div>
-     <v-rating v-else-if="showRatings" class="np-bar-rating" v-bind:class="{'np-bar-rating-t':techInfo}" v-model="rating.value" half-increments hover clearable @click.native="setRating(true)" :readonly="undefined==ratingsPlugin"></v-rating>
+     <v-rating v-else-if="showRatings" class="np-bar-rating" v-bind:class="{'np-bar-rating-t':techInfo}" v-model="rating.value" half-increments hover clearable @click.native="setRating(true)" :readonly="undefined==LMS_P_RP"></v-rating>
     </v-list-tile-action>
    </v-list-tile>
   </v-list>
@@ -234,7 +234,7 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
 
      <v-layout text-xs-center v-if="showRatings">
       <v-flex xs12>
-      <v-rating v-model="rating.value" half-increments hover clearable @click.native="setRating(true)" :readonly="undefined==ratingsPlugin"></v-rating>
+      <v-rating v-model="rating.value" half-increments hover clearable @click.native="setRating(true)" :readonly="undefined==LMS_P_RP"></v-rating>
       </v-flex>
      </v-layout>
      <div v-if="wide>1">
@@ -303,7 +303,7 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
    </div>
    <v-layout text-xs-center row wrap class="np-controls" v-if="!(landscape && wide>1)">
     <v-flex xs12 v-if="showRatings && !landscape" class="np-text np-portrait-rating">
-     <v-rating v-model="rating.value" half-increments hover clearable @click.native="setRating(true)" :readonly="undefined==ratingsPlugin"></v-rating>
+     <v-rating v-model="rating.value" half-increments hover clearable @click.native="setRating(true)" :readonly="undefined==LMS_P_RP"></v-rating>
     </v-flex>
     <v-flex xs12 class="np-tech ellipsis" v-if="techInfo || playerStatus.playlist.count>1">{{techInfo ? technicalInfo : ""}}{{playerStatus.playlist.current | trackCount(playerStatus.playlist.count, techInfo ? SEPARATOR : undefined)}}</v-flex>
 
@@ -477,7 +477,7 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
         // Long-press on 'now playing' nav button whilst in now-playing shows track info
         bus.$on('nav', function(page) {
             if ('now-playing'==page) {
-                if (this.$store.state.infoPlugin && this.playerStatus && this.playerStatus.current && this.playerStatus.current.artist) {
+                if (LMS_P_MAI && this.playerStatus && this.playerStatus.current && this.playerStatus.current.artist) {
                     this.largeView = false;
                     this.info.show = !this.info.show;
                 } else if (this.info.show) {
@@ -556,7 +556,7 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
         if (!IS_MOBILE) {
             bindKey(LMS_TRACK_INFO_KEYBOARD, 'mod');
             bindKey(LMS_EXPAND_NP_KEYBOARD, 'mod+shift');
-            if (undefined!=this.$store.state.ratingsPlugin) {
+            if (undefined!=LMS_P_RP) {
                 for (var i=0; i<=6; ++i) {
                     bindKey(''+i, 'mod+shift');
                 }
@@ -565,14 +565,14 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
                 if (this.$store.state.visibleMenus.size>0 || this.$store.state.openDialogs.length>1 || (!this.$store.state.desktopLayout && this.$store.state.page!="now-playing")) {
                     return;
                 }
-                if ('mod'==modifier && LMS_TRACK_INFO_KEYBOARD==key && this.$store.state.infoPlugin && (this.$store.state.openDialogs.length==0 || this.$store.state.openDialogs[0]=='info-dialog') && (window.innerHeight>=LMS_MIN_NP_LARGE_INFO_HEIGHT || this.info.show)) {
+                if ('mod'==modifier && LMS_TRACK_INFO_KEYBOARD==key && LMS_P_MAI && (this.$store.state.openDialogs.length==0 || this.$store.state.openDialogs[0]=='info-dialog') && (window.innerHeight>=LMS_MIN_NP_LARGE_INFO_HEIGHT || this.info.show)) {
                     this.largeView = false;
                     this.info.show = !this.info.show;
                 } else if ('mod+shift'==modifier) {
                     if (LMS_EXPAND_NP_KEYBOARD==key && this.$store.state.desktopLayout && (window.innerHeight>=LMS_MIN_NP_LARGE_INFO_HEIGHT || this.largeView)) {
                         this.info.show = false;
                         this.largeView = !this.largeView;
-                    } else if (1==key.length && !isNaN(key) && undefined!=this.$store.state.ratingsPlugin && this.$store.state.showRating) {
+                    } else if (1==key.length && !isNaN(key) && undefined!=LMS_P_RP && this.$store.state.showRating) {
                         this.rating.value = parseInt(key);
                         this.setRating();
                     }
@@ -833,7 +833,7 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
                 this.doCommand(this.repAltBtn.command, this.repAltBtn.tooltip);
             } else {
                 if (this.playerStatus.playlist.repeat===0) {
-                    if (this.$store.state.dstmPlugin) {
+                    if (LMS_P_DSTM) {
                         if (longPress) {
                             bus.$emit('dlg.open', 'dstm');
                         } else if (this.dstm) {
@@ -850,7 +850,7 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
                     bus.$emit('playerCommand', ['playlist', 'repeat', 0]);
                 } else if (this.playerStatus.playlist.repeat===2) {
                     bus.$emit('playerCommand', ['playlist', 'repeat', 1]);
-                    if (this.$store.state.dstmPlugin) {
+                    if (LMS_P_DSTM) {
                         lmsCommand(this.$store.state.player.id, ["material-skin-client", "get-dstm"]).then(({data}) => {
                             if (data && data.result && undefined!=data.result.provider) {
                                 bus.$emit("dstm", this.$store.state.player.id, data.result.provider);
@@ -871,7 +871,7 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
             // this.rating.value is updated *before* this setRating click handler is called, so we can use its model value to update LMS
             this.rating.track_id = this.playerStatus.current.id;
             this.rating.album_id = this.playerStatus.current.album_id;
-            lmsCommand(this.$store.state.player.id, [this.$store.state.ratingsPlugin, "setrating", this.playerStatus.current.id, val]).then(({data}) => {
+            lmsCommand(this.$store.state.player.id, [LMS_P_RP, "setrating", this.playerStatus.current.id, val]).then(({data}) => {
                 if (allowReset && this.rating.track_id==this.playerStatus.current.id) {
                     this.rating.value=val;
                 }
@@ -1131,9 +1131,6 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
         page() {
             return this.$store.state.page;
         },
-        infoPlugin() {
-            return this.$store.state.infoPlugin
-        },
         stopButton() {
             return this.$store.state.stopButton
         },
@@ -1161,9 +1158,6 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
         },
         darkUi() {
             return this.$store.state.darkUi
-        },
-        ratingsPlugin() {
-            return this.$store.state.ratingsPlugin
         },
         npBarRatings() {
             if (!this.playerStatus || !this.playerStatus.current) {

@@ -278,7 +278,7 @@ var lmsBrowse = Vue.component("lms-browse", {
      </v-list-tile-avatar>
      <v-list-tile-title>{{ACTIONS[UNSELECT_ACTION].title}}</v-list-tile-title>
     </v-list-tile>
-    <v-list-tile v-else-if="action==BR_COPY_ACTION ? queueSelection : action==MOVE_HERE_ACTION ? (selection.size>0 && !menu.item.selected) : action==DOWNLOAD_ACTION ? lmsOptions.allowDownload && undefined==menu.item.emblem : action==PLAY_DISC_ACTION ? undefined!=menu.item.disc : (action!=RATING_ACTION || undefined!=ratingsPlugin)" @click="menuItemAction(action, menu.item, menu.index, $event)">
+    <v-list-tile v-else-if="action==BR_COPY_ACTION ? queueSelection : action==MOVE_HERE_ACTION ? (selection.size>0 && !menu.item.selected) : action==DOWNLOAD_ACTION ? lmsOptions.allowDownload && undefined==menu.item.emblem : action==PLAY_DISC_ACTION ? undefined!=menu.item.disc : (action!=RATING_ACTION || undefined!=LMS_P_RP)" @click="menuItemAction(action, menu.item, menu.index, $event)">
      <v-list-tile-avatar>
       <v-icon v-if="undefined==ACTIONS[action].svg">{{ACTIONS[action].icon}}</v-icon>
       <img v-else class="svg-img" :src="ACTIONS[action].svg | svgIcon(darkUi)"></img>
@@ -428,9 +428,6 @@ var lmsBrowse = Vue.component("lms-browse", {
                     ( (this.current && this.current.id.startsWith(MUSIC_ID_PREFIX)) ||
                       (this.history.length>1 && this.history[1].current && this.history[1].current.id.startsWith(MUSIC_ID_PREFIX)) ||
                       (this.history.length>2 && this.history[2].current && this.history[2].current.id.startsWith(MUSIC_ID_PREFIX)) ) )
-        },
-        ratingsPlugin() {
-            return this.$store.state.ratingsPlugin
         },
         homeButton() {
             return this.$store.state.homeButton
@@ -1476,21 +1473,6 @@ var lmsBrowse = Vue.component("lms-browse", {
             });
             bus.$emit('dlg.open', 'rating', ids, Math.ceil(rating/count));
         },
-        checkFeature(command, id) {
-            lmsCommand("", command).then(({data}) => {
-                logJsonMessage("RESP", data);
-                if (data && data.result && undefined!=data.result._can) {
-                    var can = 1==data.result._can;
-                    if (can && this.disabled.has(id)) {
-                        this.disabled.delete(id);
-                        setLocalStorageVal("disabledItems", JSON.stringify(Array.from(this.disabled)));
-                    } else if (!can && !this.disabled.has(id)) {
-                        this.disabled.add(id);
-                        setLocalStorageVal("disabledItems", JSON.stringify(Array.from(this.disabled)));
-                    }
-                }
-            });
-        },
         jumpTo(index) {
             var pos = this.grid.use
                         ? Math.floor(index/this.grid.numColumns)*(this.grid.ih-(this.grid.haveSubtitle ? 0 : GRID_SINGLE_LINE_DIFF))
@@ -1634,7 +1616,12 @@ var lmsBrowse = Vue.component("lms-browse", {
             try { browsePlayerChanged(this); } catch (e) {}
         }.bind(this));
 
-        this.disabled = new Set(JSON.parse(getLocalStorageVal("disabledItems", JSON.stringify([TOP_CDPLAYER_ID, TOP_REMOTE_ID]))));
+        if (!LMS_P_RM) {
+            this.disabled.add(TOP_REMOTE_ID);
+        }
+        if (!LMS_P_CD) {
+            this.disabled.add(TOP_CDPLAYER_ID);
+        }
         var savedItems = JSON.parse(getLocalStorageVal("topItems", "[]"));
         if (savedItems.length==0) {
             savedItems = JSON.parse(getLocalStorageVal("pinned", "[]"));
@@ -1792,8 +1779,6 @@ var lmsBrowse = Vue.component("lms-browse", {
             this.$nextTick(function () {this.layoutGrid(); });
         }.bind(this));
 
-        this.checkFeature(["can", "selectRemoteLibrary", "items", "?"], TOP_REMOTE_ID);
-        this.checkFeature(["can", "cdplayer", "items", "?"], TOP_CDPLAYER_ID);
         this.onlineServices=[];
         lmsCommand("", ["browseonlineartist", "services"]).then(({data}) => {
             logJsonMessage("RESP", data);

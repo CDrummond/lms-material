@@ -196,7 +196,6 @@ function updateUiSettings(state, val) {
         }
     }
     lmsOptions.techInfo = state.browseTechInfo;
-    lmsOptions.infoPlugin = state.infoPlugin;
     if (queueDisplayChanged) {
         bus.$emit('queueDisplayChanged');
     }
@@ -240,31 +239,6 @@ function storeCurrentPlayer(player) {
     }
 }
 
-function setRatingsPlugin(state, plugins) {
-    let plugin = plugins.shift();
-    lmsCommand("", ["can", plugin, "setrating", "?"]).then(({data}) => {
-        if (data && data.result && undefined!=data.result._can && 1==data.result._can) {
-            state.ratingsPlugin = plugin;
-            setLocalStorageVal('ratingsPlugin', state.ratingsPlugin);
-            if (plugin=="ratingslight") {
-                state.maxRating = 10;
-                setLocalStorageVal('maxRating', state.maxRating);
-            } else {
-                state.maxRating = 5;
-                setLocalStorageVal('maxRating', state.maxRating);
-                lmsCommand("", ["pref", "plugin."+plugin+":rating_10scale", "?"]).then(({data}) => {
-                    if (data && data.result && data.result._p2 != null) {
-                        state.maxRating = 1 == parseInt(data.result._p2) ? 10 : 5;
-                        setLocalStorageVal('maxRating', state.maxRating);
-                    }
-                });
-            }
-        } else if (plugins.length>0) {
-            setRatingsPlugin(state, plugins);
-        }
-    });
-}
-
 function closePrevDialog(state) {
     if (state.openDialogs.length>0) {
         bus.$emit('esc');
@@ -299,9 +273,6 @@ const store = new Vuex.Store({
         sortFavorites:true,
         autoScrollQueue:true,
         library: null,
-        infoPlugin: false,
-        dstmPlugin: false,
-        customSkipPlugin: false,
         stopButton: false,
         browseBackdrop: true,
         queueBackdrop: true,
@@ -312,7 +283,6 @@ const store = new Vuex.Store({
         nowPlayingTrackNum: false,
         nowPlayingClock: false,
         nowPlayingContext: true,
-        ratingsPlugin: undefined,
         maxRating: 5,
         showRating: false,
         page:'browse',
@@ -542,9 +512,6 @@ const store = new Vuex.Store({
             state.library = getLocalStorageVal('library', state.library);
             state.sortFavorites = getLocalStorageBool('sortFavorites', state.sortFavorites);
             state.letterOverlay = getLocalStorageBool('letterOverlay', state.letterOverlay);
-            state.infoPlugin = getLocalStorageBool('infoPlugin', state.infoPlugin);
-            state.dstmPlugin = getLocalStorageBool('dstmPlugin', state.dstmPlugin);
-            state.customSkipPlugin = getLocalStorageBool('customSkipPlugin', state.customSkipPlugin);
             state.stopButton = getLocalStorageBool('stopButton', state.stopButton);
             state.browseBackdrop = getLocalStorageBool('browseBackdrop', state.browseBackdrop);
             state.queueBackdrop = getLocalStorageBool('queueBackdrop', state.queueBackdrop);
@@ -556,7 +523,6 @@ const store = new Vuex.Store({
             state.nowPlayingTrackNum = getLocalStorageBool('nowPlayingTrackNum', state.nowPlayingTrackNum);
             state.nowPlayingClock = getLocalStorageBool('nowPlayingClock', state.nowPlayingClock);
             state.nowPlayingContext = getLocalStorageBool('nowPlayingContext', state.nowPlayingContext);
-            state.ratingsPlugin = getLocalStorageVal('ratingsPlugin', state.ratingsPlugin);
             state.maxRating = getLocalStorageBool('maxRating', state.maxRating);
             state.showRating = LMS_STATS_ENABLED && getLocalStorageBool('showRating', state.showRating);
             state.sortHome = getLocalStorageBool('sortHome', state.sortHome);
@@ -582,81 +548,17 @@ const store = new Vuex.Store({
             }
             setListPadding(state.listPadding);
             lmsOptions.techInfo = state.browseTechInfo;
-            lmsOptions.infoPlugin = state.infoPlugin;
-
-            // Get server prefs  for:
-            //   All Artists + Album Artists, or just Artists?
-            //   Filer albums/tracks on genre?
-            //   Filter album/tracks on role?
-            lmsCommand("", ["serverstatus", 0, 0, "prefs:useUnifiedArtistsList,noGenreFilter,noRoleFilter,browseagelimit,useLocalImageproxy,variousArtistsString,groupdiscs"]).then(({data}) => {
-                if (data && data.result) {
-                    lmsOptions.separateArtists = 1!=parseInt(data.result.useUnifiedArtistsList);
-                    if (lmsOptions.separateArtists!=getLocalStorageBool('separateArtists', false)) {
-                        setLocalStorageVal('separateArtists', lmsOptions.separateArtists);
-                        clearListCache(true);
+            // Max rating (for trackstat)
+            if (LMS_P_RP=='trackstat') {
+                state.maxRating = 5;
+                setLocalStorageVal('maxRating', state.maxRating);
+                lmsCommand("", ["pref", "plugin."+plugin+":rating_10scale", "?"]).then(({data}) => {
+                    if (data && data.result && data.result._p2 != null) {
+                        state.maxRating = 1 == parseInt(data.result._p2) ? 10 : 5;
+                        setLocalStorageVal('maxRating', state.maxRating);
                     }
-
-                    lmsOptions.noGenreFilter = 1==parseInt(data.result.noGenreFilter);
-                    setLocalStorageVal('noGenreFilter', lmsOptions.noGenreFilter);
-                    lmsOptions.noRoleFilter = 1==parseInt(data.result.noRoleFilter);
-                    setLocalStorageVal('noRoleFilter', lmsOptions.noRoleFilter);
-                    if (undefined!=data.result.browseagelimit) {
-                        lmsOptions.newMusicLimit = parseInt(data.result.browseagelimit);
-                    }
-
-                    lmsOptions.useMySqueezeboxImageProxy = undefined==data.result.useLocalImageproxy || 0 == parseInt(data.result.useLocalImageproxy);
-                    setLocalStorageVal('useMySqueezeboxImageProxy', lmsOptions.useMySqueezeboxImageProxy);
-
-                    lmsOptions.variousArtistsString = undefined==data.result.variousArtistsString || data.result.variousArtistsString.length<1 ? 'Various Artists' : data.result.variousArtistsString;
-                    setLocalStorageVal('variousArtistsString', lmsOptions.variousArtistsString);
-
-                    lmsOptions.groupdiscs = 1 == parseInt(data.result.groupdiscs);
-                    setLocalStorageVal('groupdiscs', lmsOptions.groupdiscs);
-                }
-            });
-            // Artist images?
-            lmsCommand("", ["pref", "plugin.musicartistinfo:browseArtistPictures", "?"]).then(({data}) => {
-                lmsOptions.artistImages = data && data.result && data.result._p2 != null && 1==data.result._p2;
-                setLocalStorageVal('artistImages', lmsOptions.artistImages);
-            });
-            // Emblems?
-            lmsCommand("", ["pref", "plugin.onlinelibrary:enableServiceEmblem", "?"]).then(({data}) => {
-                lmsOptions.serviceEmblems = data && data.result && data.result._p2 != null && 1==data.result._p2;
-                setLocalStorageVal('serviceEmblems', lmsOptions.serviceEmblems);
-            });
-            // Music and Artist info plugin installled?
-            lmsCommand("", ["can", "musicartistinfo", "biography", "?"]).then(({data}) => {
-                state.infoPlugin = data && data.result && data.result._can ? true : false;
-                setLocalStorageVal('infoPlugin', state.infoPlugin);
-                lmsOptions.infoPlugin = state.infoPlugin;
-            }).catch(err => {
-            });
-            // YouTube plugin installled?
-            lmsCommand("", ["can", "youtube", "items", "?"]).then(({data}) => {
-                lmsOptions.youTubePlugin = data && data.result && data.result._can ? true : false;
-                setLocalStorageVal('youTubePlugin', lmsOptions.youTubePlugin);
-            }).catch(err => {
-            });
-            // Don't Stop The Music installed?
-            lmsCommand("", ["pref", "plugin.state:DontStopTheMusic", "?"]).then(({data}) => {
-                state.dstmPlugin = data && data.result && null!=data.result._p2 && "disabled"!=data.result._p2 && "?"!=data.result._p2;
-                setLocalStorageVal('dstmPlugin', state.dstmPlugin);
-            }).catch(err => {
-            });
-            // CustomSkip installed?
-            lmsCommand("", ["pref", "plugin.state:CustomSkip", "?"]).then(({data}) => {
-                state.customSkipPlugin = data && data.result && null!=data.result._p2 && "disabled"!=data.result._p2;
-                setLocalStorageVal('customSkipPlugin', state.customSkipPlugin);
-                if (!state.customSkipPlugin) {
-                    lmsCommand("", ["pref", "plugin.state:CustomSkip3", "?"]).then(({data}) => {
-                        state.customSkipPlugin = data && data.result && null!=data.result._p2 && "disabled"!=data.result._p2;
-                        setLocalStorageVal('customSkipPlugin', state.customSkipPlugin);
-                    }).catch(err => {
-                    });
-                }
-            }).catch(err => {
-            });
-
+                });
+            }
             if (!queryParams.party) {
                 var pass = getLocalStorageVal('password', '-');
                 lmsCommand("", ["material-skin", "pass-check", "pass:"+(undefined==pass || 0==pass.length? "-" : pass)]).then(({data}) => {
@@ -737,8 +639,6 @@ const store = new Vuex.Store({
                     setLocalStorageVal('theme', state.theme);
                 }
             });
-
-            setRatingsPlugin(state, ["trackstat", "ratingslight"]);
         },
         setLibrary(state, lib) {
             if (state.library!=lib) {

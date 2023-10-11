@@ -70,74 +70,71 @@ var app = new Vue({
         initEmblems();
         initCustomActions();
         initTrackSources();
-        lmsCommand("", ["pref", "language", "?"]).then(({data}) => {
-            if (data && data.result && data.result._p2) {
-                // Ensure LMS's lang is <lowercase>[-<uppercase>]
-                var lang = data.result._p2;
-                let parts = lang.split('_'); // lms uses (e.g.) en_gb, want en-GB
+
+        // Ensure LMS's lang is <lowercase>[-<uppercase>]
+        var lang = ""+LMS_LANG;
+        let parts = lang.split('_'); // lms uses (e.g.) en_gb, want en-GB
+        if (parts.length>1) {
+            lang = parts[0].toLowerCase()+'-'+parts[1].toUpperCase();
+        } else {
+            lang = lang.toLowerCase();
+        }
+
+        if (lang == '?') {
+            lang = 'en';
+        }
+        if (lang == 'en') {
+            // LMS is set to 'en'. Check if browser is (e.g.) 'en-gb', and if so use that as the
+            // language for Material. We only consider 'en*' here - so that LMS 'en' is not mixed
+            // with browser (e.g.) 'de'
+            var browserLang = window.navigator.userLanguage || window.navigator.language;
+            if (undefined!=browserLang) {
+                let parts = browserLang.split('-');
                 if (parts.length>1) {
-                    lang = parts[0].toLowerCase()+'-'+parts[1].toUpperCase();
+                    browserLang = parts[0].toLowerCase()+'-'+parts[1].toUpperCase();
                 } else {
-                    lang = lang.toLowerCase();
+                    browserLang = browserLang.toLowerCase();
                 }
-
-                if (lang == '?') {
-                    lang = 'en';
-                }
-                if (lang == 'en') {
-                    // LMS is set to 'en'. Check if browser is (e.g.) 'en-gb', and if so use that as the
-                    // language for Material. We only consider 'en*' here - so that LMS 'en' is not mixed
-                    // with browser (e.g.) 'de'
-                    var browserLang = window.navigator.userLanguage || window.navigator.language;
-                    if (undefined!=browserLang) {
-                        let parts = browserLang.split('-');
-                        if (parts.length>1) {
-                            browserLang = parts[0].toLowerCase()+'-'+parts[1].toUpperCase();
-                        } else {
-                            browserLang = browserLang.toLowerCase();
-                        }
-                        if (browserLang.startsWith('en')) {
-                            lang = browserLang;
-                        }
-                    }
-                }
-
-                this.$store.commit('setLang', lang);
-                if (lang == 'en' || lang == 'en-US') {
-                    // All strings are en-US by default, so remove any previous translation
-                    // from storage.
-                    if (storedTrans!=undefined) {
-                        removeLocalStorage('translation');
-                        removeLocalStorage('lang');
-                        setTranslation(undefined);
-                        bus.$emit('langChanged');
-                        lmsOptions.lang = undefined;
-                    }
-                } else {
-                    lmsOptions.lang = lang;
-
-                    // Get translation files - these are all lowercase
-                    let lowerLang = lang.toLowerCase();
-                    if (!LMS_SKIN_LANGUAGES.has(lowerLang)) {
-                        let mainLang = lowerLang.substr(0, 2);
-                        if (LMS_SKIN_LANGUAGES.has(mainLang)) {
-                            lowerLang = mainLang;
-                        }
-                    }
-                    if (getLocalStorageVal("lang", "")!=(lowerLang+"@"+LMS_MATERIAL_REVISION)) {
-                        axios.get("html/lang/"+lowerLang+".json?r=" + LMS_MATERIAL_REVISION).then(function (resp) {
-                            var trans = eval(resp.data);
-                            setLocalStorageVal('translation', JSON.stringify(trans));
-                            setLocalStorageVal('lang', lowerLang+"@"+LMS_MATERIAL_REVISION);
-                            setTranslation(trans);
-                            bus.$emit('langChanged');
-                        }).catch(err => {
-                            window.console.error(err);
-                        });
-                    }
+                if (browserLang.startsWith('en')) {
+                    lang = browserLang;
                 }
             }
-        });
+        }
+
+        this.$store.commit('setLang', lang);
+        if (lang == 'en' || lang == 'en-US') {
+            // All strings are en-US by default, so remove any previous translation
+            // from storage.
+            if (storedTrans!=undefined) {
+                removeLocalStorage('translation');
+                removeLocalStorage('lang');
+                setTranslation(undefined);
+                bus.$emit('langChanged');
+                lmsOptions.lang = undefined;
+            }
+        } else {
+            lmsOptions.lang = lang;
+
+            // Get translation files - these are all lowercase
+            let lowerLang = lang.toLowerCase();
+            if (!LMS_SKIN_LANGUAGES.has(lowerLang)) {
+                let mainLang = lowerLang.substr(0, 2);
+                if (LMS_SKIN_LANGUAGES.has(mainLang)) {
+                    lowerLang = mainLang;
+                }
+            }
+            if (getLocalStorageVal("lang", "")!=(lowerLang+"@"+LMS_MATERIAL_REVISION)) {
+                axios.get("html/lang/"+lowerLang+".json?r=" + LMS_MATERIAL_REVISION).then(function (resp) {
+                    var trans = eval(resp.data);
+                    setLocalStorageVal('translation', JSON.stringify(trans));
+                    setLocalStorageVal('lang', lowerLang+"@"+LMS_MATERIAL_REVISION);
+                    setTranslation(trans);
+                    bus.$emit('langChanged');
+                }).catch(err => {
+                    window.console.error(err);
+                });
+            }
+        }
 
         lmsOptions.conductorGenres = new Set(["Classical", "Avant-Garde", "Baroque", "Chamber Music", "Chant", "Choral", "Classical Crossover",
                                               "Early Music", "High Classical", "Impressionist", "Medieval", "Minimalism","Modern Composition",
@@ -179,7 +176,6 @@ var app = new Vue({
         });
 
         setTimeout(function () {
-            bus.$emit('checkNotifications');
             this.loaded = true;
         }.bind(this), 500);
 

@@ -135,7 +135,7 @@ Vue.component('lms-ui-settings', {
     <v-list-tile v-if="LMS_STATS_ENABLED">
      <v-list-tile-content @click="showRating = !showRating" class="switch-label">
       <v-list-tile-title>{{i18n('Show rating')}}</v-list-tile-title>
-      <v-list-tile-sub-title>{{i18n('Display rating stars.')}}{{undefined==ratingsPlugin  ? (" "+i18n("NOTE: Changing ratings requires an additional plugin.")) : ""}}</v-list-tile-sub-title>
+      <v-list-tile-sub-title>{{i18n('Display rating stars.')}}{{undefined==LMS_P_RP  ? (" "+i18n("NOTE: Changing ratings requires an additional plugin.")) : ""}}</v-list-tile-sub-title>
      </v-list-tile-content>
      <v-list-tile-action><m3-switch v-model="showRating"></m3-switch></v-list-tile-action>
     </v-list-tile>
@@ -352,10 +352,10 @@ Vue.component('lms-ui-settings', {
      <v-list-tile-action><m3-switch v-model="queueBackdrop"></m3-switch></v-list-tile-action>
     </v-list-tile>
 
-    <div class="dialog-padding" v-if="infoPlugin"></div>
-    <v-header class="dialog-section-header" v-if="infoPlugin">{{i18n('Song Information')}}</v-header>
+    <div class="dialog-padding" v-if="LMS_P_MAI"></div>
+    <v-header class="dialog-section-header" v-if="LMS_P_MAI">{{i18n('Song Information')}}</v-header>
 
-    <v-list-tile v-if="infoPlugin">
+    <v-list-tile v-if="LMS_P_MAI">
      <v-list-tile-content @click="infoBackdrop = !infoBackdrop" class="switch-label">
       <v-list-tile-title>{{i18n('Draw background')}}</v-list-tile-title>
       <v-list-tile-sub-title>{{i18n('Use cover of current track as background.')}}</v-list-tile-sub-title>
@@ -464,14 +464,8 @@ Vue.component('lms-ui-settings', {
         }
     },
     computed: {
-        infoPlugin () {
-            return this.$store.state.infoPlugin
-        },
         darkUi() {
             return this.$store.state.darkUi
-        },
-        ratingsPlugin() {
-            return this.$store.state.ratingsPlugin
         },
         unlockAll() {
             return this.$store.state.unlockAll
@@ -625,16 +619,15 @@ Vue.component('lms-ui-settings', {
             this.powerButton = this.$store.state.powerButton;
             this.largeCovers = this.$store.state.largeCovers;
             this.mediaControls = this.$store.state.mediaControls;
-            var disabled=new Set(JSON.parse(getLocalStorageVal("disabledItems", JSON.stringify([TOP_CDPLAYER_ID, TOP_REMOTE_ID]))));
             this.showItems=[{id: TOP_MYMUSIC_ID, name:i18n("My Music"), show:!this.hidden.has(TOP_MYMUSIC_ID)},
                             {id: TOP_RADIO_ID, name:i18n("Radio"), show:!this.hidden.has(TOP_RADIO_ID)},
                             {id: TOP_FAVORITES_ID, name:i18n("Favorites"), show:!this.hidden.has(TOP_FAVORITES_ID)},
                             {id: TOP_APPS_ID, name:i18n("Apps"), show:!this.hidden.has(TOP_APPS_ID)},
                             {id: TOP_EXTRAS_ID, name:i18n("Extras"), show:!this.hidden.has(TOP_EXTRAS_ID)}];
-            if (!disabled.has(TOP_CDPLAYER_ID)) {
+            if (LMS_P_CD) {
                 this.showItems.push({id: TOP_CDPLAYER_ID, name:i18n("CD Player"), show:!this.hidden.has(TOP_CDPLAYER_ID)});
             }
-            if (!disabled.has(TOP_REMOTE_ID)) {
+            if (LMS_P_RM) {
                 this.showItems.push({id: TOP_REMOTE_ID, name:i18n("Remote Libraries"), show:!this.hidden.has(TOP_REMOTE_ID)});
             }
         },
@@ -868,7 +861,7 @@ Vue.component('lms-ui-settings', {
                 list.push("F2"+SEPARATOR+i18n("Playing"));
                 list.push("F3"+SEPARATOR+i18n("Queue"));
             }
-            if (!queryParams.party && undefined!=this.$store.state.ratingsPlugin && this.$store.state.showRating) {
+            if (!queryParams.party && undefined!=LMS_P_RP && this.$store.state.showRating) {
                 list.push(shortcutStr("(N)", true)+SEPARATOR+i18n("Set rating (0..5)"));
             }
             bus.$emit('dlg.open', 'iteminfo', { list:list });

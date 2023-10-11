@@ -443,7 +443,7 @@ Vue.component('lms-player-settings', {
                           alarms: { fade:false, timeout:0, snooze:0, on:false, volume:0 },
                           library:"", crossfade:"0", smartCrossfade:false, replaygain:"" };
             this.customActions = getCustomActions(player.id, this.$store.state.unlockAll);
-            if (this.$store.state.dstmPlugin) {
+            if (LMS_P_DSTM) {
                 lmsCommand(this.playerId, ["dontstopthemusicsetting"]).then(({data}) => {
                     if (data.result && data.result.item_loop) {
                         for (let i=0, loop=data.result.item_loop, len=loop.length; i<len; ++i) {

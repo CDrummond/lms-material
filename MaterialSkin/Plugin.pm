@@ -229,6 +229,32 @@ sub skinLanguages {
     return $listOfTranslations;
 }
 
+sub readIntPref {
+    my $class = shift;
+    my $scope = shift;
+    my $key = shift;
+    my $val = shift;
+    my $prfs = $scope eq "server" ? $serverprefs : preferences($scope);
+    eval { $val = int($prfs->get($key)); };
+    return $val;
+}
+
+sub readStringPref {
+    my $class = shift;
+    my $scope = shift;
+    my $key = shift;
+    my $def = shift;
+    my $prfs = $scope eq "server" ? $serverprefs : preferences($scope);
+    my $prefval = $prfs->get($key);
+    if (!defined $prefval) {
+        return $def;
+    }
+    if ($prefval eq "") {
+        return $def;
+    }
+    return $prefval;
+}
+
 sub initCLI {
     #                                                                      |requires Client
     #                                                                      |  |is a Query

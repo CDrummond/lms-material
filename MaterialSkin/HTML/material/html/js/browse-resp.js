@@ -304,7 +304,7 @@ function parseBrowseResp(data, parent, options, cacheKey, parentCommand, parentG
                             i.icon="album";
                             i.image=undefined;
                         } else if (i.presetParams.favorites_url.startsWith("db:contributor.name")) {
-                            if (i.presetParams.icon=="html/images/artists.png" || !(lmsOptions.infoPlugin && lmsOptions.artistImages)) {
+                            if (i.presetParams.icon=="html/images/artists.png" || !(LMS_P_MAI && LMS_ARTIST_PICS)) {
                                 i.svg="artist";
                                 i.image=undefined;
                             }
@@ -750,7 +750,7 @@ function parseBrowseResp(data, parent, options, cacheKey, parentCommand, parentG
                 }
             }
 
-            resp.canUseGrid = lmsOptions.infoPlugin && lmsOptions.artistImages;
+            resp.canUseGrid = LMS_P_MAI && LMS_ARTIST_PICS;
             resp.itemCustomActions = getCustomActions("artist");
             for (var idx=0, loop=data.result.artists_loop, loopLen=loop.length; idx<loopLen; ++idx) {
                 var i = loop[idx];
@@ -762,7 +762,7 @@ function parseBrowseResp(data, parent, options, cacheKey, parentCommand, parentG
                 var artist = {
                               id: "artist_id:"+i.id,
                               title: i.artist,
-                              image: (lmsOptions.infoPlugin && lmsOptions.artistImages) ? "/imageproxy/mai/artist/" + i.id + "/image" + LMS_IMAGE_SIZE : undefined,
+                              image: (LMS_P_MAI && LMS_ARTIST_PICS) ? "/imageproxy/mai/artist/" + i.id + "/image" + LMS_IMAGE_SIZE : undefined,
                               stdItem: STD_ITEM_ARTIST,
                               type: "group",
                               textkey: key
@@ -890,7 +890,7 @@ function parseBrowseResp(data, parent, options, cacheKey, parentCommand, parentG
                               textkey: key,
                               emblem: getEmblem(i.extid),
                               draggable: true,
-                              multi: lmsOptions.groupdiscs && undefined!=i.disccount && parseInt(i.disccount)>1,
+                              multi: LMS_GROUP_DISCS && undefined!=i.disccount && parseInt(i.disccount)>1,
                               extid: i.extid,
                               filter: FILTER_PREFIX+group
                           };

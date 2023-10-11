@@ -118,7 +118,7 @@ function browseActions(view, item, args, count) {
     var actions=[];
     if ((undefined==item || undefined==item.id || !item.id.startsWith(MUSIC_ID_PREFIX)) && // Exclude 'Compilations'
         (undefined==args['artist'] || (args['artist']!=i18n('Various Artists') && args['artist'].toLowerCase()!='various artists'))) {
-        if (lmsOptions.infoPlugin) {
+        if (LMS_P_MAI) {
             if (undefined!=args['artist_id'] || undefined!=args['artist']) {
                 actions.push({title:i18n('Artist biography'), icon:'menu_book',
                               do:{ command: undefined!=args['artist_id']
@@ -147,7 +147,7 @@ function browseActions(view, item, args, count) {
                 actions.push({localfiles:true, title:i18n('Local files'), icon:'insert_drive_file', do:{ command:['musicartistinfo', 'localfiles', 'folder:'+args['path']], params:[]}, weight:103});
             }
         }
-        if (lmsOptions.youTubePlugin && undefined!=args['artist']) {
+        if (LMS_P_YT && undefined!=args['artist']) {
             actions.push({title:/*NoTrans*/'YouTube', svg:'youtube',
                           do:{ command: ['youtube','items'], params:['want_url:1', 'item_id:3', 'search:'+args['artist'], 'menu:youtube']},
                           weight:110});
@@ -394,10 +394,10 @@ function browseHandleListResponse(view, item, command, resp, prevPage, appendIte
                                               weight:110, svg:emblem ? emblem.name : undefined, id:loop[i], isService:true,
                                               artist_id:artist_id});
                 }
-            } else if (undefined!=view.$store.state.ratingsPlugin && view.items.length>1 && !queryParams.party && !LMS_KIOSK_MODE) {
+            } else if (undefined!=LMS_P_RP && view.items.length>1 && !queryParams.party && !LMS_KIOSK_MODE) {
                 view.currentActions.push({albumRating:true, title:i18n("Set rating for all tracks"), icon:"stars", weight:101});
             }
-            if (lmsOptions.infoPlugin && undefined!=actParams['path'] && actParams['path'].length>0 && !queryParams.party && !LMS_KIOSK_MODE) {
+            if (LMS_P_MAI && undefined!=actParams['path'] && actParams['path'].length>0 && !queryParams.party && !LMS_KIOSK_MODE) {
                 // Check we have some local files, if not hide entry!
                 lmsCommand('', ['musicartistinfo', 'localfiles', 'folder:'+actParams['path']]).then(({data}) => {
                     if (!data || !data.result || !data.result.item_loop || data.result.item_loop.length<1) {
@@ -719,7 +719,7 @@ function browseAddCategories(view, item, isGenre) {
     if (undefined!=alt_id && (alt_id.includes("/") || alt_id[0]==item.id[0] || /*alt_id.startsWith("year:") ||*/ alt_id.startsWith("track_id:"))) {
         alt_id = undefined;
     }
-    let cat = { title: lmsOptions.separateArtists ? i18n("All Artists") : i18n("Artists"),
+    let cat = { title: LMS_SEPARATE_ARTIST_LIST ? i18n("All Artists") : i18n("Artists"),
                 command: ["artists"],
                 params: [item.id, ARTIST_TAGS, 'include_online_only_artists:1'],
                 svg: "artist",
@@ -727,7 +727,7 @@ function browseAddCategories(view, item, isGenre) {
                 id: uniqueId(item.id, view.items.length)};
     if (undefined!=alt_id) { cat.params.push(alt_id); }
     view.items.push(cat);
-    if (lmsOptions.separateArtists) {
+    if (LMS_SEPARATE_ARTIST_LIST) {
         cat = { title: i18n("Album Artists"),
                 command: ["artists"],
                 params: [item.id, ARTIST_TAGS, 'role_id:ALBUMARTIST', 'include_online_only_artists:1'],
@@ -1053,7 +1053,7 @@ function browseItemAction(view, act, item, index, event) {
             if (1===resp.items.length && resp.items[0].id) {
                 var item = resp.items[0];
                 var command = ["playlistcontrol", "cmd:add", item.id];
-                var genrePos = lmsOptions.noGenreFilter ? -1 : getField({params:params}, "genre_id:");
+                var genrePos = LMS_NO_GENRE_FILTER ? -1 : getField({params:params}, "genre_id:");
                 if (genrePos>=0) {
                     command.push(params[genrePos]);
                 }
@@ -1857,7 +1857,7 @@ function browseMyMusicMenu(view) {
                                         item.icon = undefined;
                                     } else if (c.id == "custombrowse" || (c.menuIcon && c.menuIcon.endsWith("/custombrowse.png"))) {
                                         if (command.params.length==1 && command.params[0].startsWith("hierarchy:new")) {
-                                            item.limit=lmsOptions.newMusicLimit;
+                                            item.limit=LMS_NEW_MUSIC_LIMIT;
                                         }
                                         if (c.id.startsWith("artist")) {
                                             item.svg = "artist";
@@ -2064,7 +2064,7 @@ function browseReplaceCommandTerms(view, cmd, item) {
                                            .replace(PLAYLIST_TAGS_PLACEHOLDER, PLAYLIST_TAGS);
                 if (cmd.params[i].startsWith("tags:")) {
                     cmd.params[i]+=(view.$store.state.showRating && "tracks"==cmd.command[0] ? "R" : "")+
-                                   (lmsOptions.serviceEmblems && ("tracks"==cmd.command[0] || "albums"==cmd.command[0]) ? "E" : "");
+                                   (LMS_SRV_EMBLEM && ("tracks"==cmd.command[0] || "albums"==cmd.command[0]) ? "E" : "");
                 }
             }
         }
@@ -2089,8 +2089,8 @@ function browseBuildFullCommand(view, item, act) {
             if (item.id.startsWith("album_id:")  || item.id.startsWith("artist_id:")) {
                 var params = undefined!=item.stdItem || undefined!=item.altStdItem ? buildStdItemCommand(item, item.id==view.current.id ? view.history.length>0 ? view.history[view.history.length-1].command : undefined : view.command).params : item.params;
                 for (var i=0, loop = params, len=loop.length; i<len; ++i) {
-                    if ( (!lmsOptions.noRoleFilter && (loop[i].startsWith("role_id:"))) ||
-                         (!lmsOptions.noGenreFilter && loop[i].startsWith("genre_id:")) ||
+                    if ( (!LMS_NO_ROLE_FILTER && (loop[i].startsWith("role_id:"))) ||
+                         (!LMS_NO_GENRE_FILTER && loop[i].startsWith("genre_id:")) ||
                          loop[i].startsWith("artist_id:")) {
                         if (!item.id.startsWith("artist_id:") || !loop[i].startsWith("artist_id:")) {
                             command.command.push(loop[i]);

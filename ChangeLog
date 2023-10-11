@@ -12,6 +12,7 @@ x.y.z
  9. Make more subtitle items clickable in search results for non-touch devices.
 10. Support LMS8.4 release_type.
 11. When listing artist albums separate out normal and compilation albums.
+12. Reduce number of JSONRPC calls at start-up.
 
 3.5.4
 -----

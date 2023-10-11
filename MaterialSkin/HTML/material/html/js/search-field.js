@@ -134,11 +134,11 @@ Vue.component('lms-search-field', {
                 this.commands=[];
                 if (!queryParams.party) {
                     this.commands.push({cat:1, command:["artists"], params:["tags:s", "search:"+this.str]});
-                    this.commands.push({cat:2, command:["albums"], params:[(lmsOptions.showAllArtists ? ALBUM_TAGS_ALL_ARTISTS : ALBUM_TAGS)+(lmsOptions.serviceEmblems ? "E" : ""), "sort:album", "search:"+this.str]});
+                    this.commands.push({cat:2, command:["albums"], params:[(lmsOptions.showAllArtists ? ALBUM_TAGS_ALL_ARTISTS : ALBUM_TAGS)+(LMS_SRV_EMBLEM ? "E" : ""), "sort:album", "search:"+this.str]});
                 }
                 this.commands.push({cat:3, command:["tracks"], params:[TRACK_TAGS+"elcy"+
                                                                        (this.$store.state.showRating ? "R" : "")+
-                                                                       (lmsOptions.serviceEmblems ? "E" : "")+
+                                                                       (LMS_SRV_EMBLEM ? "E" : "")+
                                                                        (lmsOptions.techInfo ? TECH_INFO_TAGS : ""), "search:"+this.str]});
                 if (!queryParams.party) {
                     this.commands.push({cat:4, command:["playlists"], params:["tags:su", "search:"+this.str]});
@@ -174,7 +174,7 @@ Vue.component('lms-search-field', {
                 let command = this.commands.shift();
                 lmsList(5==command.cat && this.$store.state.player ? this.$store.state.player.id : "", command.command, command.params, 5==command.cat ? 1 : 0, LMS_SEARCH_LIMIT, false, seachReqId).then(({data}) => {
                     if (data.id == seachReqId && this.searching) {
-                        let resp = parseBrowseResp(data, undefined, { artistImages: setLocalStorageVal('artistImages', true), isSearch:true});
+                        let resp = parseBrowseResp(data, undefined, {isSearch:true});
                         if (5==command.cat) {
                             // Only want to show music sources...
                             let items = resp.items;

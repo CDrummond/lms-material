@@ -112,11 +112,6 @@ function updateUiSettings(state, val) {
         lmsOptions.volumeStep = val.volumeStep;
         setLocalStorageVal('volumeStep', lmsOptions.volumeStep);
     }
-    if (undefined!=val.sortHome && state.sortHome!=val.sortHome) {
-        state.sortHome = val.sortHome;
-        setLocalStorageVal('sortHome', state.sortHome);
-        browseDisplayChanged = true;
-    }
     if (undefined!=val.hidden) {
         var diff = new Set([...val.hidden].filter(x => !state.hidden.has(x)));
         var diff2 = new Set([...state.hidden].filter(x => !val.hidden.has(x)));
@@ -277,7 +272,6 @@ const store = new Vuex.Store({
         maxRating: 5,
         showRating: false,
         page:'browse',
-        sortHome: IS_IPHONE,
         hidden: new Set(),
         visibleMenus: new Set(),
         disabledBrowseModes: new Set(),
@@ -514,7 +508,6 @@ const store = new Vuex.Store({
             state.nowPlayingContext = getLocalStorageBool('nowPlayingContext', state.nowPlayingContext);
             state.maxRating = getLocalStorageBool('maxRating', state.maxRating);
             state.showRating = LMS_STATS_ENABLED && getLocalStorageBool('showRating', state.showRating);
-            state.sortHome = getLocalStorageBool('sortHome', state.sortHome);
             state.hidden = new Set(JSON.parse(getLocalStorageVal('hidden', JSON.stringify([TOP_EXTRAS_ID]))));
             state.swipeVolume = getLocalStorageBool('swipeVolume', state.swipeVolume);
             state.swipeChangeTrack = getLocalStorageBool('swipeChangeTrack', state.swipeChangeTrack);
@@ -582,7 +575,6 @@ const store = new Vuex.Store({
                                      nowPlayingClock: getLocalStorageBool('nowPlayingClock', undefined==prefs.nowPlayingClock ? state.nowPlayingClock : prefs.nowPlayingClock),
                                      nowPlayingContext: getLocalStorageBool('nowPlayingContext', undefined==prefs.nowPlayingContext ? state.nowPlayingContext : prefs.nowPlayingContext),
                                      volumeStep: parseInt(getLocalStorageVal('volumeStep', undefined==prefs.volumeStep ? lmsOptions.volumeStep : prefs.volumeStep)),
-                                     sortHome: getLocalStorageBool('sortHome', undefined==prefs.sortHome ? state.sortHome : prefs.sortHome),
                                      swipeVolume: getLocalStorageBool('swipeVolume', undefined==prefs.swipeVolume ? state.swipeVolume : prefs.swipeVolume),
                                      swipeChangeTrack: getLocalStorageBool('swipeChangeTrack', undefined==prefs.swipeChangeTrack ? state.swipeChangeTrack : prefs.swipeChangeTrack),
                                      keyboardControl: getLocalStorageBool('keyboardControl', undefined==prefs.keyboardControl ? state.keyboardControl : prefs.keyboardControl),

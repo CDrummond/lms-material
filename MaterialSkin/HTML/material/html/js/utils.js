@@ -452,15 +452,6 @@ function otherPlayerSort(a, b) {
     return 0;
 }
 
-function homeScreenSort(a, b) {
-    var at = a.id.startsWith(TOP_ID_PREFIX) ? 2 : a.id.startsWith(MUSIC_ID_PREFIX) ? 1 : 0;
-    var bt = b.id.startsWith(TOP_ID_PREFIX) ? 2 : b.id.startsWith(MUSIC_ID_PREFIX) ? 1 : 0;
-    if (at==bt) {
-        return at==0 || a.weight==b.weight ? titleSort(a, b) : a.weight<b.weight ? -1 : 1;
-    }
-    return at<bt ? -1 : 1;
-}
-
 function setScrollTop(view, val) {
     // When using RecycleScroller we need to wait for the next animation frame to scroll, so
     // just do this for all scrolls.

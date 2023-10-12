@@ -198,7 +198,7 @@ var lmsBrowse = Vue.component("lms-browse", {
       <text-field :focus="index==0 && !IS_MOBILE" :title="item.title" :type="item.type" @value="entry(item, $event)"></text-field>
      </v-list-tile-content>
     </v-list-tile>
-    <v-list-tile v-else-if="!(isTop && (disabled.has(item.id) || hidden.has(item.id)) || (queryParams.party && HIDE_TOP_FOR_PARTY.has(item.id)))" avatar @click="click(item, index, $event)" :key="item.id" class="lms-avatar lms-list-item" :id="'item'+index" @dragstart="dragStart(index, $event)" @dragend="dragEnd()" @dragover="dragOver(index, $event)" @drop="drop(index, $event)" :draggable="(isTop && !sortHome) || (item.draggable && (current.section!=SECTION_FAVORITES || 0==selection.size))" @contextmenu.prevent="contextMenu(item, index, $event)" v-bind:class="{'drop-target': dragActive && index==dropIndex, 'list-active': (menu.show && index==menu.index) || (fetchingItem==item.id)}">
+    <v-list-tile v-else-if="!(isTop && (disabled.has(item.id) || hidden.has(item.id)) || (queryParams.party && HIDE_TOP_FOR_PARTY.has(item.id)))" avatar @click="click(item, index, $event)" :key="item.id" class="lms-avatar lms-list-item" :id="'item'+index" @dragstart="dragStart(index, $event)" @dragend="dragEnd()" @dragover="dragOver(index, $event)" @drop="drop(index, $event)" :draggable="isTop || (item.draggable && (current.section!=SECTION_FAVORITES || 0==selection.size))" @contextmenu.prevent="contextMenu(item, index, $event)" v-bind:class="{'drop-target': dragActive && index==dropIndex, 'list-active': (menu.show && index==menu.index) || (fetchingItem==item.id)}">
      <v-list-tile-avatar v-if="item.selected" :tile="true" class="lms-avatar">
       <v-icon>check_box</v-icon>
      </v-list-tile-avatar>
@@ -406,9 +406,6 @@ var lmsBrowse = Vue.component("lms-browse", {
         },
         hidden() {
             return this.$store.state.hidden
-        },
-        sortHome() {
-            return this.$store.state.sortHome
         },
         keyboardControl() {
             return this.$store.state.keyboardControl && !IS_MOBILE
@@ -1118,17 +1115,11 @@ var lmsBrowse = Vue.component("lms-browse", {
                     break;
                 }
             }
-            if (this.$store.state.sortHome) {
-                this.top.sort(homeScreenSort);
-            }
             if (updated) {
                 this.saveTopList();
             }
         },
         saveTopList() {
-            if (this.$store.state.sortHome) {
-                this.top.sort(homeScreenSort);
-            }
             setLocalStorageVal("topItems", JSON.stringify(this.top));
             removeLocalStorage("pinned");
         },
@@ -1789,9 +1780,6 @@ var lmsBrowse = Vue.component("lms-browse", {
                 this.myMusic[0].needsUpdating=true;
             }
             this.options.sortFavorites=this.$store.state.sortFavorites;
-            if (this.$store.state.sortHome) {
-                this.saveTopList();
-            }
             this.goHome();
             if (this.grid.use) {
                 this.layoutGrid(true);

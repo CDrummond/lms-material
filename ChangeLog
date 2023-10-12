@@ -19,6 +19,7 @@ x.y.z
 15. Change long-press on play/pause from showing sleep dialog to stopping
     playback.
 16. Remove option to not show artwork.
+17. Remove option to sort home screen.
 
 3.5.4
 -----

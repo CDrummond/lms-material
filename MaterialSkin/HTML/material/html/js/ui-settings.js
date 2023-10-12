@@ -203,15 +203,6 @@ Vue.component('lms-ui-settings', {
     <v-divider></v-divider>
 
     <v-list-tile>
-     <v-list-tile-content @click="sortHome = !sortHome" class="switch-label">
-      <v-list-tile-title>{{i18n('Sort home screen')}}</v-list-tile-title>
-      <v-list-tile-sub-title>{{i18n('Automatically sort items on the home screen.')}}</v-list-tile-sub-title>
-     </v-list-tile-content>
-     <v-list-tile-action><m3-switch v-model="sortHome"></m3-switch></v-list-tile-action>
-    </v-list-tile>
-    <v-divider></v-divider>
-
-    <v-list-tile>
      <v-list-tile-content class="switch-label">
       <v-list-tile-title>{{i18n('Home screen items')}}</v-list-tile-title>
       <v-list-tile-sub-title>{{i18n('Check the standard items which you wish to appear on the home screen.')}}</v-list-tile-sub-title>
@@ -421,7 +412,6 @@ Vue.component('lms-ui-settings', {
             skipSecondsOptions: [ ],
             skipSeconds: 30,
             allowLayoutAdjust: window.location.href.indexOf('?layout=')<0 && window.location.href.indexOf('&layout=')<0,
-            sortHome: IS_IPHONE,
             showItems: [ ],
             hasPassword: false,
             password: undefined,
@@ -587,7 +577,6 @@ Vue.component('lms-ui-settings', {
             this.queueThreeLines = this.$store.state.queueThreeLines;
             this.letterOverlay=this.$store.state.letterOverlay;
             this.sortFavorites = this.$store.state.sortFavorites;
-            this.sortHome = this.$store.state.sortHome;
             this.skipSeconds = this.$store.state.skipSeconds;
             this.volumeStep = lmsOptions.volumeStep;
             this.showRating = this.$store.state.showRating;
@@ -683,7 +672,6 @@ Vue.component('lms-ui-settings', {
                       autoScrollQueue:this.autoScrollQueue,
                       letterOverlay:this.letterOverlay,
                       sortFavorites:this.sortFavorites,
-                      sortHome:this.sortHome,
                       browseBackdrop:this.browseBackdrop,
                       queueBackdrop:this.queueBackdrop,
                       nowPlayingBackdrop:this.nowPlayingBackdrop,

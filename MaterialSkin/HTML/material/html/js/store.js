@@ -66,10 +66,6 @@ function updateUiSettings(state, val) {
         state.autoScrollQueue = val.autoScrollQueue;
         setLocalStorageVal('autoScrollQueue', state.autoScrollQueue);
     }
-    if (undefined!=val.stopButton && state.stopButton!=val.stopButton) {
-        state.stopButton = val.stopButton;
-        setLocalStorageVal('stopButton', state.stopButton);
-    }
     if (undefined!=val.browseBackdrop && state.browseBackdrop!=val.browseBackdrop) {
         state.browseBackdrop = val.browseBackdrop;
         setLocalStorageVal('browseBackdrop', state.browseBackdrop);
@@ -273,7 +269,6 @@ const store = new Vuex.Store({
         sortFavorites:true,
         autoScrollQueue:true,
         library: null,
-        stopButton: false,
         browseBackdrop: true,
         queueBackdrop: true,
         nowPlayingBackdrop: true,
@@ -512,7 +507,6 @@ const store = new Vuex.Store({
             state.library = getLocalStorageVal('library', state.library);
             state.sortFavorites = getLocalStorageBool('sortFavorites', state.sortFavorites);
             state.letterOverlay = getLocalStorageBool('letterOverlay', state.letterOverlay);
-            state.stopButton = getLocalStorageBool('stopButton', state.stopButton);
             state.browseBackdrop = getLocalStorageBool('browseBackdrop', state.browseBackdrop);
             state.queueBackdrop = getLocalStorageBool('queueBackdrop', state.queueBackdrop);
             state.nowPlayingBackdrop = getLocalStorageBool('nowPlayingBackdrop', state.nowPlayingBackdrop);
@@ -583,7 +577,6 @@ const store = new Vuex.Store({
                                      autoScrollQueue: getLocalStorageBool('autoScrollQueue', undefined==prefs.autoScrollQueue ? state.autoScrollQueue : prefs.autoScrollQueue),
                                      letterOverlay: getLocalStorageBool('letterOverlay', undefined==prefs.letterOverlay ? state.letterOverlay : prefs.letterOverlay),
                                      sortFavorites: getLocalStorageBool('sortFavorites', undefined==prefs.sortFavorites ? state.sortFavorites : prefs.sortFavorites),
-                                     stopButton: getLocalStorageBool('stopButton', undefined==prefs.stopButton ? state.stopButton : prefs.stopButton),
                                      browseBackdrop: getLocalStorageBool('browseBackdrop', undefined==prefs.browseBackdrop ? state.browseBackdrop : prefs.browseBackdrop),
                                      queueBackdrop: getLocalStorageBool('queueBackdrop', undefined==prefs.queueBackdrop ? state.queueBackdrop : prefs.queueBackdrop),
                                      nowPlayingBackdrop: getLocalStorageBool('nowPlayingBackdrop', undefined==prefs.nowPlayingBackdrop ? state.nowPlayingBackdrop : prefs.nowPlayingBackdrop),

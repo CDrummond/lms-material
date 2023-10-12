@@ -30,8 +30,8 @@ Vue.component('lms-toolbar', {
  <div class="maintoolbar-subtitle subtext">{{date}}</div>
 </div>
 
- <v-btn v-if="!noPlayer && powerButton" icon class="toolbar-button maintoolbar-player-power-button" v-longpress:stop="toggleCurrentPlayerPower" :title="playerStatus.ison ? i18n('Switch off %1', player.name) : i18n('Switch on %1', player.name)"><v-icon v-bind:class="{'dimmed': !playerStatus.ison}">power_settings_new</v-icon></v-btn>
- <v-btn v-else-if="!noPlayer" icon class="toolbar-button maintoolbar-player-power-button" v-longpress:stop="menuOrSync" :title="player.name"><v-icon v-if="player.icon.icon" class="maintoolbar-player-icon" v-bind:class="{'dimmed': !playerStatus.ison}">{{player.icon.icon}}</v-icon><img v-else class="svg-img maintoolbar-player-icon" v-bind:class="{'dimmed': !playerStatus.ison}" :src="player.icon.svg | svgIcon(darkUi, false, true, coloredToolbars)"></img></v-btn>
+ <v-btn v-if="!noPlayer && powerButton" icon class="toolbar-button maintoolbar-player-power-button" v-longpress:stop="handlePlayerToolbarButton" :title="playerStatus.ison ? i18n('Switch off %1', player.name) : i18n('Switch on %1', player.name)"><v-icon v-bind:class="{'dimmed': !playerStatus.ison}">power_settings_new</v-icon></v-btn>
+ <v-btn v-else-if="!noPlayer" icon class="toolbar-button maintoolbar-player-power-button" v-longpress:stop="handlePlayerToolbarButton" :title="player.name"><v-icon v-if="player.icon.icon" class="maintoolbar-player-icon" v-bind:class="{'dimmed': !playerStatus.ison}">{{player.icon.icon}}</v-icon><img v-else class="svg-img maintoolbar-player-icon" v-bind:class="{'dimmed': !playerStatus.ison}" :src="player.icon.svg | svgIcon(darkUi, false, true, coloredToolbars)"></img></v-btn>
 
  <v-menu bottom :disabled="!connected" class="ellipsis" v-model="showPlayerMenu">
   <v-toolbar-title slot="activator" v-bind:class="{'link-item':!coloredToolbars && (!queryParams.single || !powerButton), 'link-item-ct': coloredToolbars && (!queryParams.single || !powerButton), 'maintoolbar-title-clock':showClock}">
@@ -510,7 +510,7 @@ Vue.component('lms-toolbar', {
             }
             bus.$emit('expandNowPlaying', !this.nowPlayingExpanded);
         },
-        menuOrSync(longPress) {
+        handlePlayerToolbarButton(longPress) {
             if (queryParams.party) {
                 return;
             }
@@ -519,23 +519,16 @@ Vue.component('lms-toolbar', {
             if (undefined!=this.$store.state.lastDialogClose && new Date().getTime()-this.$store.state.lastDialogClose<500) {
                 return;
             }
-            if (longPress) {
-                this.showPlayerMenu = false;
-                bus.$emit('dlg.open', 'sync', this.$store.state.player);
+            if (this.$store.state.powerButton) {
+                this.togglePlayerPower(this.$store.state.player, longPress);
             } else {
-                this.showPlayerMenu = !this.showPlayerMenu;
+                if (longPress) {
+                    this.showPlayerMenu = false;
+                    bus.$emit('dlg.open', 'sync', this.$store.state.player);
+                } else {
+                    this.showPlayerMenu = !this.showPlayerMenu;
+                }
             }
-        },
-        toggleCurrentPlayerPower(longPress) {
-            if (queryParams.party) {
-                return;
-            }
-            // Dont react to presses for 0.5s after dialog closed. The button is very close to where
-            // a dialogs back button is and user might accidentaly presss twice...
-            if (undefined!=this.$store.state.lastDialogClose && new Date().getTime()-this.$store.state.lastDialogClose<500) {
-                return;
-            }
-            this.togglePlayerPower(this.$store.state.player, longPress);
         },
         togglePlayerPower(player, longPress) {
             if (queryParams.party) {

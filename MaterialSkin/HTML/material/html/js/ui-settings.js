@@ -271,15 +271,6 @@ Vue.component('lms-ui-settings', {
     <v-divider></v-divider>
 
     <v-list-tile>
-     <v-list-tile-content @click="stopButton = !stopButton" class="switch-label">
-      <v-list-tile-title>{{i18n('Stop button')}}</v-list-tile-title>
-      <v-list-tile-sub-title>{{i18n('Show a stop button next to the play/pause button.')}}</v-list-tile-sub-title>
-     </v-list-tile-content>
-     <v-list-tile-action><m3-switch v-model="stopButton"></m3-switch></v-list-tile-action>
-    </v-list-tile>
-    <v-divider></v-divider>
-
-    <v-list-tile>
     <v-list-tile-content @click="nowPlayingContext = !nowPlayingContext" class="switch-label">
      <v-list-tile-title>{{i18n('Show artist context, etc.')}}</v-list-tile-title>
      <v-list-tile-sub-title>{{i18n("Show 'performed by', 'from', etc. when listing track details (e.g. Title by Artist from Album).")}}</v-list-tile-sub-title>
@@ -412,7 +403,6 @@ Vue.component('lms-ui-settings', {
             letterOverlay:false,
             sortFavorites:true,
             autoScrollQueue:true,
-            stopButton:false,
             browseBackdrop:true,
             queueBackdrop:true,
             nowPlayingBackdrop:true,
@@ -591,7 +581,6 @@ Vue.component('lms-ui-settings', {
             this.fontSize = this.$store.state.fontSize;
             this.listPadding = this.$store.state.listPadding;
             this.autoScrollQueue = this.$store.state.autoScrollQueue;
-            this.stopButton = this.$store.state.stopButton;
             this.browseBackdrop = this.$store.state.browseBackdrop;
             this.queueBackdrop = this.$store.state.queueBackdrop;
             this.nowPlayingBackdrop = this.$store.state.nowPlayingBackdrop;
@@ -706,7 +695,6 @@ Vue.component('lms-ui-settings', {
                       letterOverlay:this.letterOverlay,
                       sortFavorites:this.sortFavorites,
                       sortHome:this.sortHome,
-                      stopButton:this.stopButton,
                       browseBackdrop:this.browseBackdrop,
                       queueBackdrop:this.queueBackdrop,
                       nowPlayingBackdrop:this.nowPlayingBackdrop,

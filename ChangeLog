@@ -13,6 +13,11 @@ x.y.z
 10. Support LMS8.4 release_type.
 11. When listing artist albums separate out normal and compilation albums.
 12. Reduce number of JSONRPC calls at start-up.
+13. Fix long-press on power button / player icon not updating its assignment
+    on changing the option.
+14. Remove option for stop button.
+15. Change long-press on play/pause from showing sleep dialog to stopping
+    playback.
 
 3.5.4
 -----

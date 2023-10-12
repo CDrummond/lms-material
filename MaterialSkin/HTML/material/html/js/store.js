@@ -421,7 +421,6 @@ const store = new Vuex.Store({
             state.defaultPlayer = getLocalStorageVal('defaultPlayer', state.defaultPlayer);
             state.page = getLocalStorageVal('page', state.page);
             state.theme = getLocalStorageVal('theme', state.theme);
-            state.roundCovers = getLocalStorageBool('roundCovers', state.roundCovers);
             state.coloredToolbars = state.theme.endsWith("-colored");
             state.darkUi = !state.theme.startsWith('light') && state.theme.indexOf("/light/")<0;
             state.color = getLocalStorageVal('color', state.color);
@@ -435,36 +434,24 @@ const store = new Vuex.Store({
                 setLocalStorageVal('fontSize', fontSize);
             }
             state.fontSize = undefined==fontSize ? 'r' : fontSize;
-            state.autoScrollQueue = getLocalStorageBool('autoScrollQueue', state.autoScrollQueue);
-            state.library = getLocalStorageVal('library', state.library);
-            state.sortFavorites = getLocalStorageBool('sortFavorites', state.sortFavorites);
-            state.letterOverlay = getLocalStorageBool('letterOverlay', state.letterOverlay);
-            state.browseBackdrop = getLocalStorageBool('browseBackdrop', state.browseBackdrop);
-            state.queueBackdrop = getLocalStorageBool('queueBackdrop', state.queueBackdrop);
-            state.nowPlayingBackdrop = getLocalStorageBool('nowPlayingBackdrop', state.nowPlayingBackdrop);
-            state.infoBackdrop = getLocalStorageBool('infoBackdrop', state.infoBackdrop);
-            state.browseTechInfo = getLocalStorageBool('browseTechInfo', state.browseTechInfo);
-            state.techInfo = getLocalStorageBool('techInfo', state.techInfo);
-            state.queueShowTrackNum = getLocalStorageBool('queueShowTrackNum', state.queueShowTrackNum);
-            state.nowPlayingTrackNum = getLocalStorageBool('nowPlayingTrackNum', state.nowPlayingTrackNum);
-            state.nowPlayingClock = getLocalStorageBool('nowPlayingClock', state.nowPlayingClock);
-            state.nowPlayingContext = getLocalStorageBool('nowPlayingContext', state.nowPlayingContext);
-            state.maxRating = getLocalStorageBool('maxRating', state.maxRating);
-            state.showRating = LMS_STATS_ENABLED && getLocalStorageBool('showRating', state.showRating);
-            state.hidden = new Set(JSON.parse(getLocalStorageVal('hidden', JSON.stringify([TOP_EXTRAS_ID]))));
-            state.swipeVolume = getLocalStorageBool('swipeVolume', state.swipeVolume);
-            state.swipeChangeTrack = getLocalStorageBool('swipeChangeTrack', state.swipeChangeTrack);
-            state.keyboardControl = getLocalStorageBool('keyboardControl', state.keyboardControl);
-            state.queueThreeLines = getLocalStorageBool('queueThreeLines', state.queueThreeLines);
-            state.skipSeconds = parseInt(getLocalStorageVal('skipSeconds', state.skipSeconds));
-            state.screensaver = getLocalStorageBool('screensaver', state.screensaver);
-            state.homeButton = getLocalStorageBool('homeButton', state.homeButton);
+
+            let boolItems = ['roundCovers', 'autoScrollQueue', 'sortFavorites', 'letterOverlay', 'browseBackdrop', 'queueBackdrop',
+                             'nowPlayingBackdrop', 'infoBackdrop', 'browseTechInfo', 'techInfo', 'queueShowTrackNum', 'nowPlayingTrackNum',
+                             'nowPlayingClock', 'nowPlayingContext', 'swipeVolume', 'swipeChangeTrack', 'keyboardControl','queueThreeLines',
+                             'screensaver', 'homeButton', 'powerButton', 'largeCovers', 'mediaControls'];
+            for (let i=0, len=boolItems.length; i<len; ++i) {
+                let key = boolItems[i];
+                state[key] = getLocalStorageBool(key, state[key]);
+            }
+
             state.disabledBrowseModes = new Set(JSON.parse(getLocalStorageVal('disabledBrowseModes', '["myMusicFlopTracks", "myMusicTopTracks", "myMusicMusicFolder", "myMusicFileSystem", "myMusicArtistsComposers", "myMusicArtistsConductors", "myMusicArtistsJazzComposers", "myMusicAlbumsAudiobooks"]')));
-            state.powerButton = getLocalStorageBool('powerButton', state.powerButton);
-            state.largeCovers = getLocalStorageBool('largeCovers', state.largeCovers);
             state.listPadding = parseInt(getLocalStorageVal('listPadding', state.listPadding));
-            state.mediaControls = getLocalStorageBool('mediaControls', state.mediaControls);
+            state.hidden = new Set(JSON.parse(getLocalStorageVal('hidden', JSON.stringify([TOP_EXTRAS_ID]))));
+            state.skipSeconds = parseInt(getLocalStorageVal('skipSeconds', state.skipSeconds));
+            state.showRating = LMS_STATS_ENABLED && getLocalStorageBool('showRating', state.showRating);
             state.mobileBar = parseInt(getLocalStorageVal('mobileBar', state.mobileBar));
+            state.maxRating = parseInt(getLocalStorageVal('maxRating', state.maxRating));
+            state.library = getLocalStorageVal('library', state.library);
             setTheme(state.theme, state.color);
             setRoundCovers(state.roundCovers);
             if (state.fontSize!='r') {
@@ -501,37 +488,18 @@ const store = new Vuex.Store({
                         var prefs = JSON.parse(data.result._p2);
                         var opts = { theme: getLocalStorageVal('theme', undefined==prefs.theme ? state.theme : prefs.theme),
                                      color: getLocalStorageVal('color', undefined==prefs.color ? state.color : prefs.color),
-                                     roundCovers: getLocalStorageBool('roundCovers', undefined==prefs.roundCovers ? state.roundCovers : prefs.roundCovers),
                                      largerElements: getLocalStorageBool('largerElements', undefined==prefs.largerElements ? state.largerElements : prefs.largerElements),
                                      fontSize: getLocalStorageVal('fontSize', undefined==prefs.fontSize ? state.fontSize : prefs.fontSize),
-                                     autoScrollQueue: getLocalStorageBool('autoScrollQueue', undefined==prefs.autoScrollQueue ? state.autoScrollQueue : prefs.autoScrollQueue),
-                                     letterOverlay: getLocalStorageBool('letterOverlay', undefined==prefs.letterOverlay ? state.letterOverlay : prefs.letterOverlay),
-                                     sortFavorites: getLocalStorageBool('sortFavorites', undefined==prefs.sortFavorites ? state.sortFavorites : prefs.sortFavorites),
-                                     browseBackdrop: getLocalStorageBool('browseBackdrop', undefined==prefs.browseBackdrop ? state.browseBackdrop : prefs.browseBackdrop),
-                                     queueBackdrop: getLocalStorageBool('queueBackdrop', undefined==prefs.queueBackdrop ? state.queueBackdrop : prefs.queueBackdrop),
-                                     nowPlayingBackdrop: getLocalStorageBool('nowPlayingBackdrop', undefined==prefs.nowPlayingBackdrop ? state.nowPlayingBackdrop : prefs.nowPlayingBackdrop),
-                                     infoBackdrop: getLocalStorageBool('infoBackdrop', undefined==prefs.infoBackdrop ? state.infoBackdrop : prefs.infoBackdrop),
-                                     browseTechInfo: getLocalStorageBool('browseTechInfo', undefined==prefs.browseTechInfo ? state.browseTechInfo : prefs.browseTechInfo),
-                                     techInfo: getLocalStorageBool('techInfo', undefined==prefs.techInfo ? state.techInfo : prefs.techInfo),
-                                     queueShowTrackNum: getLocalStorageBool('queueShowTrackNum', undefined==prefs.queueShowTrackNum ? state.queueShowTrackNum : prefs.queueShowTrackNum),
-                                     nowPlayingTrackNum: getLocalStorageBool('nowPlayingTrackNum', undefined==prefs.nowPlayingTrackNum ? state.nowPlayingTrackNum : prefs.nowPlayingTrackNum),
-                                     nowPlayingClock: getLocalStorageBool('nowPlayingClock', undefined==prefs.nowPlayingClock ? state.nowPlayingClock : prefs.nowPlayingClock),
-                                     nowPlayingContext: getLocalStorageBool('nowPlayingContext', undefined==prefs.nowPlayingContext ? state.nowPlayingContext : prefs.nowPlayingContext),
                                      volumeStep: parseInt(getLocalStorageVal('volumeStep', undefined==prefs.volumeStep ? lmsOptions.volumeStep : prefs.volumeStep)),
-                                     swipeVolume: getLocalStorageBool('swipeVolume', undefined==prefs.swipeVolume ? state.swipeVolume : prefs.swipeVolume),
-                                     swipeChangeTrack: getLocalStorageBool('swipeChangeTrack', undefined==prefs.swipeChangeTrack ? state.swipeChangeTrack : prefs.swipeChangeTrack),
-                                     keyboardControl: getLocalStorageBool('keyboardControl', undefined==prefs.keyboardControl ? state.keyboardControl : prefs.keyboardControl),
-                                     queueThreeLines: getLocalStorageBool('queueThreeLines', undefined==prefs.queueThreeLines ? state.queueThreeLines : prefs.queueThreeLines),
                                      skipSeconds: parseInt(getLocalStorageVal('skipSeconds', undefined==prefs.skipSeconds ? state.skipSeconds : prefs.skipSeconds)),
-                                     screensaver: getLocalStorageBool('screensaver', undefined==prefs.screensaver ? state.screensaver : prefs.screensaver),
-                                     homeButton: getLocalStorageBool('homeButton', undefined==prefs.homeButton ? state.homeButton : prefs.homeButton),
-                                     showRating: LMS_STATS_ENABLED && getLocalStorageBool('showRating', undefined==prefs.showRating ? state.showRating : prefs.showRating),
                                      powerButton: getLocalStorageBool('powerButton', undefined==prefs.powerButton ? state.powerButton : prefs.powerButton),
-                                     largeCovers: getLocalStorageBool('largeCovers', undefined==prefs.largeCovers ? state.largeCovers : prefs.largeCovers),
                                      listPadding: parseInt(getLocalStorageVal('listPadding', undefined==prefs.listPadding ? state.listPadding : prefs.listPadding)),
-                                     mediaControls: getLocalStorageBool('mediaControls', undefined==prefs.mediaControls ? state.mediaControls : prefs.mediaControls),
                                      mobileBar: parseInt(getLocalStorageVal('mobileBar', undefined==prefs.mobileBar ? state.mobileBar : prefs.mobileBar))
                                     };
+                        for (let i=0, len=boolItems.length; i<len; ++i) {
+                            let key = boolItems[i];
+                            opts[key] = getLocalStorageBool(key, undefined==prefs[key] ? state[key] : prefs[key]);
+                        }
                         if (undefined!=prefs.hidden && undefined==getLocalStorageVal('hidden', undefined)) {
                             opts.hidden=new Set(prefs.hidden);
                         }

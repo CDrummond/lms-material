@@ -13,6 +13,17 @@ function copyPlayer(p){
 }
 
 function updateUiSettings(state, val) {
+    let stdItems = ['autoScrollQueue', 'browseBackdrop', 'queueBackdrop', 'nowPlayingBackdrop', 'infoBackdrop', 'browseTechInfo',
+                    'techInfo', 'nowPlayingTrackNum', 'nowPlayingContext', 'swipeVolume', 'swipeChangeTrack', 'keyboardControl',
+                    'skipSeconds', 'homeButton', 'powerButton', 'mediaControls', 'showRating'];
+    for (let i=0, len=stdItems.length; i<len; ++i) {
+        let key=stdItems[i];
+        if (undefined!=val[key] && state[key]!=val[key]) {
+            state[key] = val[key];
+            setLocalStorageVal(key, state[key]);
+        }
+    }
+
     var browseDisplayChanged = false;
     var queueDisplayChanged = false;
     var relayoutGrid = false;
@@ -62,51 +73,15 @@ function updateUiSettings(state, val) {
         setLocalStorageVal('letterOverlay', state.letterOverlay);
         browseDisplayChanged = true;
     }
-    if (undefined!=val.autoScrollQueue && state.autoScrollQueue!=val.autoScrollQueue) {
-        state.autoScrollQueue = val.autoScrollQueue;
-        setLocalStorageVal('autoScrollQueue', state.autoScrollQueue);
-    }
-    if (undefined!=val.browseBackdrop && state.browseBackdrop!=val.browseBackdrop) {
-        state.browseBackdrop = val.browseBackdrop;
-        setLocalStorageVal('browseBackdrop', state.browseBackdrop);
-    }
-    if (undefined!=val.queueBackdrop && state.queueBackdrop!=val.queueBackdrop) {
-        state.queueBackdrop = val.queueBackdrop;
-        setLocalStorageVal('queueBackdrop', state.queueBackdrop);
-    }
-    if (undefined!=val.nowPlayingBackdrop && state.nowPlayingBackdrop!=val.nowPlayingBackdrop) {
-        state.nowPlayingBackdrop = val.nowPlayingBackdrop;
-        setLocalStorageVal('nowPlayingBackdrop', state.nowPlayingBackdrop);
-    }
-    if (undefined!=val.infoBackdrop && state.infoBackdrop!=val.infoBackdrop) {
-        state.infoBackdrop = val.infoBackdrop;
-        setLocalStorageVal('infoBackdrop', state.infoBackdrop);
-    }
-    if (undefined!=val.browseTechInfo && state.browseTechInfo!=val.browseTechInfo) {
-        state.browseTechInfo = val.browseTechInfo;
-        setLocalStorageVal('browseTechInfo', state.browseTechInfo);
-    }
-    if (undefined!=val.techInfo && state.techInfo!=val.techInfo) {
-        state.techInfo = val.techInfo;
-        setLocalStorageVal('techInfo', state.techInfo);
-    }
     if (undefined!=val.queueShowTrackNum && state.queueShowTrackNum!=val.queueShowTrackNum) {
         state.queueShowTrackNum = val.queueShowTrackNum;
         setLocalStorageVal('queueShowTrackNum', state.queueShowTrackNum);
         queueDisplayChanged = true;
     }
-    if (undefined!=val.nowPlayingTrackNum && state.nowPlayingTrackNum!=val.nowPlayingTrackNum) {
-        state.nowPlayingTrackNum = val.nowPlayingTrackNum;
-        setLocalStorageVal('nowPlayingTrackNum', state.nowPlayingTrackNum);
-    }
     if (undefined!=val.nowPlayingClock && state.nowPlayingClock!=val.nowPlayingClock) {
         state.nowPlayingClock = val.nowPlayingClock;
         setLocalStorageVal('nowPlayingClock', state.nowPlayingClock);
         bus.$emit('nowPlayingClockChanged');
-    }
-    if (undefined!=val.nowPlayingContext && state.nowPlayingContext!=val.nowPlayingContext) {
-        state.nowPlayingContext = val.nowPlayingContext;
-        setLocalStorageVal('nowPlayingContext', state.nowPlayingContext);
     }
     if (undefined!=val.volumeStep && lmsOptions.volumeStep!=val.volumeStep) {
         lmsOptions.volumeStep = val.volumeStep;
@@ -121,39 +96,15 @@ function updateUiSettings(state, val) {
             browseDisplayChanged = true;
         }
     }
-    if (undefined!=val.swipeVolume && state.swipeVolume!=val.swipeVolume) {
-        state.swipeVolume = val.swipeVolume;
-        setLocalStorageVal('swipeVolume', state.swipeVolume);
-    }
-    if (undefined!=val.swipeChangeTrack && state.swipeChangeTrack!=val.swipeChangeTrack) {
-        state.swipeChangeTrack = val.swipeChangeTrack;
-        setLocalStorageVal('swipeChangeTrack', state.swipeChangeTrack);
-    }
-    if (undefined!=val.keyboardControl && state.keyboardControl!=val.keyboardControl) {
-        state.keyboardControl = val.keyboardControl;
-        setLocalStorageVal('keyboardControl', state.keyboardControl);
-    }
     if (undefined!=val.queueThreeLines && state.queueThreeLines!=val.queueThreeLines) {
         state.queueThreeLines = val.queueThreeLines;
         setLocalStorageVal('queueThreeLines', state.queueThreeLines);
         queueDisplayChanged = true;
     }
-    if (undefined!=val.skipSeconds && state.skipSeconds!=val.skipSeconds) {
-        state.skipSeconds = val.skipSeconds;
-        setLocalStorageVal('skipSeconds', state.skipSeconds);
-    }
     if (undefined!=val.screensaver && state.screensaver!=val.screensaver) {
         state.screensaver = val.screensaver;
         setLocalStorageVal('screensaver', state.screensaver);
         bus.$emit('screensaverDisplayChanged');
-    }
-    if (undefined!=val.homeButton && state.homeButton!=val.homeButton) {
-        state.homeButton = val.homeButton;
-        setLocalStorageVal('homeButton', state.homeButton);
-    }
-    if (undefined!=val.powerButton && state.powerButton!=val.powerButton) {
-        state.powerButton = val.powerButton;
-        setLocalStorageVal('powerButton', state.powerButton);
     }
     if (undefined!=val.largeCovers && state.largeCovers!=val.largeCovers) {
         state.largeCovers = val.largeCovers;
@@ -164,14 +115,6 @@ function updateUiSettings(state, val) {
         state.listPadding = val.listPadding;
         setLocalStorageVal('listPadding', state.listPadding);
         setListPadding(state.listPadding);
-    }
-    if (undefined!=val.mediaControls && state.mediaControls!=val.mediaControls) {
-        state.mediaControls = val.mediaControls;
-        setLocalStorageVal('mediaControls', state.mediaControls);
-    }
-    if (undefined!=val.showRating && state.showRating!=val.showRating) {
-        state.showRating = val.showRating;
-        setLocalStorageVal('showRating', state.showRating);
     }
     if (undefined!=val.disabledBrowseModes) {
         var diff = new Set([...val.disabledBrowseModes].filter(x => !state.disabledBrowseModes.has(x)));

@@ -143,10 +143,6 @@ function updateUiSettings(state, val) {
         setLocalStorageVal('queueThreeLines', state.queueThreeLines);
         queueDisplayChanged = true;
     }
-    if (undefined!=val.showArtwork && state.showArtwork!=val.showArtwork) {
-        state.showArtwork = val.showArtwork;
-        setLocalStorageVal('showArtwork', state.showArtwork);
-    }
     if (undefined!=val.skipSeconds && state.skipSeconds!=val.skipSeconds) {
         state.skipSeconds = val.skipSeconds;
         setLocalStorageVal('skipSeconds', state.skipSeconds);
@@ -291,7 +287,6 @@ const store = new Vuex.Store({
         updatesAvailable: new Set(),
         restartRequired: false,
         queueThreeLines: true,
-        showArtwork: true,
         openDialogs: [],
         activeDialog: undefined,
         unlockAll: false,
@@ -525,7 +520,6 @@ const store = new Vuex.Store({
             state.swipeChangeTrack = getLocalStorageBool('swipeChangeTrack', state.swipeChangeTrack);
             state.keyboardControl = getLocalStorageBool('keyboardControl', state.keyboardControl);
             state.queueThreeLines = getLocalStorageBool('queueThreeLines', state.queueThreeLines);
-            state.showArtwork = getLocalStorageBool('showArtwork', state.showArtwork);
             state.skipSeconds = parseInt(getLocalStorageVal('skipSeconds', state.skipSeconds));
             state.screensaver = getLocalStorageBool('screensaver', state.screensaver);
             state.homeButton = getLocalStorageBool('homeButton', state.homeButton);
@@ -593,7 +587,6 @@ const store = new Vuex.Store({
                                      swipeChangeTrack: getLocalStorageBool('swipeChangeTrack', undefined==prefs.swipeChangeTrack ? state.swipeChangeTrack : prefs.swipeChangeTrack),
                                      keyboardControl: getLocalStorageBool('keyboardControl', undefined==prefs.keyboardControl ? state.keyboardControl : prefs.keyboardControl),
                                      queueThreeLines: getLocalStorageBool('queueThreeLines', undefined==prefs.queueThreeLines ? state.queueThreeLines : prefs.queueThreeLines),
-                                     showArtwork: getLocalStorageBool('showArtwork', undefined==prefs.showArtwork ? state.showArtwork : prefs.showArtwork),
                                      skipSeconds: parseInt(getLocalStorageVal('skipSeconds', undefined==prefs.skipSeconds ? state.skipSeconds : prefs.skipSeconds)),
                                      screensaver: getLocalStorageBool('screensaver', undefined==prefs.screensaver ? state.screensaver : prefs.screensaver),
                                      homeButton: getLocalStorageBool('homeButton', undefined==prefs.homeButton ? state.homeButton : prefs.homeButton),

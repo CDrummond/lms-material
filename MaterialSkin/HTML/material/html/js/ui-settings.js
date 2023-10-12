@@ -115,15 +115,6 @@ Vue.component('lms-ui-settings', {
     <v-divider></v-divider>
 
     <v-list-tile>
-     <v-list-tile-content @click="showArtwork = !showArtwork" class="switch-label">
-      <v-list-tile-title>{{i18n('Show artwork')}}</v-list-tile-title>
-      <v-list-tile-sub-title>{{i18n("Display covers, artist images, station logos, etc.")}}</v-list-tile-title>
-     </v-list-tile-content>
-     <v-list-tile-action><m3-switch v-model="showArtwork"></m3-switch></v-list-tile-action>
-    </v-list-tile>
-    <v-divider></v-divider>
-
-    <v-list-tile>
      <v-list-tile-content @click="roundCovers = !roundCovers" class="switch-label">
       <v-list-tile-title>{{i18n('Round covers')}}</v-list-tile-title>
       <v-list-tile-sub-title>{{i18n('Round the corners of cover-art, etc.')}}</v-list-tile-sub-title>
@@ -417,7 +408,6 @@ Vue.component('lms-ui-settings', {
             swipeChangeTrack:false,
             keyboardControl:true,
             queueThreeLines:true,
-            showArtwork:false,
             layout: null,
             layoutItems: [],
             mobileBar: MBAR_THIN,
@@ -595,7 +585,6 @@ Vue.component('lms-ui-settings', {
             this.swipeChangeTrack = this.$store.state.swipeChangeTrack;
             this.keyboardControl = this.$store.state.keyboardControl;
             this.queueThreeLines = this.$store.state.queueThreeLines;
-            this.showArtwork = this.$store.state.showArtwork;
             this.letterOverlay=this.$store.state.letterOverlay;
             this.sortFavorites = this.$store.state.sortFavorites;
             this.sortHome = this.$store.state.sortHome;
@@ -708,7 +697,6 @@ Vue.component('lms-ui-settings', {
                       swipeVolume:this.swipeVolume,
                       swipeChangeTrack:this.swipeChangeTrack,
                       keyboardControl:this.keyboardControl,
-                      showArtwork:this.showArtwork,
                       queueThreeLines:this.queueThreeLines,
                       volumeStep:this.volumeStep,
                       hidden:arrays ? Array.from(this.hiddenItems()) : this.hiddenItems(),

@@ -279,7 +279,7 @@ function browseHandleListResponse(view, item, command, resp, prevPage, appendIte
                 view.addHistory();
             }
         }
-        resp.canUseGrid = resp.canUseGrid && (view.$store.state.showArtwork || resp.forceGrid);
+        resp.canUseGrid = resp.canUseGrid;
         view.canDrop = resp.canDrop;
         view.searchActive = item.id.startsWith(SEARCH_ID);
         view.command = command;

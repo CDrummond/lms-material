@@ -189,15 +189,15 @@
 
 .np-bar-image {
  position:fixed;
- left:164px;
+ left:162px;
  bottom:1px;
- height:64px;
- width:64px;
+ height:65px;
+ width:65px;
 }
 
 .np-bar-image .np-cover {
- height:64px;
- width:64px;
+ height:65px;
+ width:65px;
 }
 
 .np-bar-details div .v-list__tile {

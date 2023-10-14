@@ -109,7 +109,8 @@ sub initPlugin {
         allowDownload => '0',
         commentAsDiscTitle => '0',
         showComment => '0',
-        pagedBatchSize => lmsVersion()>=80400 ? 250 : 100
+        pagedBatchSize => lmsVersion()>=80400 ? 250 : 100,
+        compilationAll => '1'
     });
 
     if (main::WEBUI) {
@@ -389,6 +390,7 @@ sub _cliCommand {
         $request->addResult('commentAsDiscTitle', $prefs->get('commentAsDiscTitle'));
         $request->addResult('showComment', $prefs->get('showComment'));
         $request->addResult('pagedBatchSize', $prefs->get('pagedBatchSize'));
+        $request->addResult('compilationAll', $prefs->get('compilationAll'));
         $request->setStatusDone();
         return;
     }

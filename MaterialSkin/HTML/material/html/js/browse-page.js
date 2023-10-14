@@ -445,8 +445,12 @@ var lmsBrowse = Vue.component("lms-browse", {
                 return this.libraryName + suffix;
             }
             if (undefined!=this.current && this.current.stdItem==STD_ITEM_ALBUM) {
-                if (undefined!=this.current.subtitle) {
-                    return this.current.subtitle + ' (' + this.headerSubTitle + ')' + suffix;
+                let albumArtst = this.current.subtitle;
+                if (lmsOptions.compilationAll && this.current.compilation && this.items.length>0 && undefined!=this.items[0].compilationAlbumArtist) {
+                    albumArtst = this.items[0].compilationAlbumArtist;
+                }
+                if (undefined!=albumArtst) {
+                    return albumArtst + ' (' + this.headerSubTitle + ')' + suffix;
                 }
                 for (let loop=this.history, i=loop.length-1; i>=0 && undefined!=loop[i].current; --i) {
                     if (STD_ITEM_ALBUM==loop[i].current.stdItem && undefined!=loop[i].current.subtitle) {

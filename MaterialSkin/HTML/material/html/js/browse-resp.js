@@ -892,7 +892,8 @@ function parseBrowseResp(data, parent, options, cacheKey, parentCommand, parentG
                               draggable: true,
                               multi: LMS_GROUP_DISCS && undefined!=i.disccount && parseInt(i.disccount)>1,
                               extid: i.extid,
-                              filter: FILTER_PREFIX+group
+                              filter: FILTER_PREFIX+group,
+                              compilation: i.compilation
                           };
                 if (albumGroups) {
                     if (undefined==albumGroups[group]) {
@@ -949,6 +950,7 @@ function parseBrowseResp(data, parent, options, cacheKey, parentCommand, parentG
             resp.itemCustomActions = getCustomActions("album-track");
             var stdItem = allowPlayAlbum && data.result.count>1 ? STD_ITEM_ALBUM_TRACK : STD_ITEM_TRACK;
             let artists = [];
+            let compilationAlbumArtist = undefined;
             for (var idx=0, loop=data.result.titles_loop, loopLen=loop.length; idx<loopLen; ++idx) {
                 var i = loop[idx];
                 var title = i.title;
@@ -1037,6 +1039,9 @@ function parseBrowseResp(data, parent, options, cacheKey, parentCommand, parentG
                               duration: i.duration,
                               durationStr: duration>0 ? formatSeconds(duration) : undefined
                           });
+                if (lmsOptions.compilationAll && undefined==compilationAlbumArtist && i.albumartist && undefined!=i.compilation && 1==parseInt(i.compilation)) {
+                    compilationAlbumArtist = i.albumartist;
+                }
                 resp.numAudioItems = resp.items.length;
                 if (allowPlayAlbum) {
                     resp.allSongsItem = parent;
@@ -1096,6 +1101,9 @@ function parseBrowseResp(data, parent, options, cacheKey, parentCommand, parentG
             let totalDurationStr=formatSeconds(totalDuration);
             resp.subtitle=totalTracks+'<obj class="mat-icon music-note">music_note</obj>'+totalDurationStr;
             resp.plainsubtitle=i18np("1 Track", "%1 Tracks", totalTracks)+SEPARATOR+totalDurationStr;
+            if (lmsOptions.compilationAll && undefined!=compilationAlbumArtist & resp.items.length>0) {
+                resp.items[0].compilationAlbumArtist = compilationAlbumArtist;
+            }
         } else if (data.result.genres_loop) {
             for (var idx=0, loop=data.result.genres_loop, loopLen=loop.length; idx<loopLen; ++idx) {
                 var i = loop[idx];

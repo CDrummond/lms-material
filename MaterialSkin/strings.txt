@@ -330,3 +330,10 @@ PLUGIN_MATERIAL_SKIN_PAGED_BATCH_SIZE_DESC
 	EN	Number of initial items to fetch (and display) when listing contents of some lists (such as playlist contents). Scrolling list will then cause another batch of items to be fetched, etc.
 	FR	Nombre d'éléments initiaux récupérés (et affichés) lors de l'affichage de certaines listes (telles que les listes de lecture). Faire défiler la liste permettra de récupérer un nouvel ensemble d’éléments si nécessaire.
 	NL	Aantal initiële items dat wordt opgehaald (en getoond) bij het weergeven van de inhoud van sommige lijsten (zoals afspeellijsten). Als je door de lijst bladert, wordt er vervolgens een nieuwe reeks items opgehaald, enz.
+
+PLUGIN_MATERIAL_SKIN_COMPILATION_ALBUMS
+	EN	Use all tracks of compilation albums
+
+PLUGIN_MATERIAL_SKIN_COMPILATION_ALBUMS_DESC
+	EN	When browsing an artist's albums use all tracks of compilation albums, do not limit to tracks of current artist.
+

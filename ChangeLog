@@ -22,6 +22,7 @@ x.y.z
 17. Remove option to sort home screen.
 18. Show album year for playlist tracks.
 19. Slightly adjust grid metrics, to allow more columns when thin, etc.
+20. Simpler String.replaceAll polyfill.
 
 3.5.4
 -----

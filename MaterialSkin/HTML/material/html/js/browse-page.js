@@ -359,6 +359,8 @@ var lmsBrowse = Vue.component("lms-browse", {
         return {
             current: {image: undefined},
             currentActions: [],
+            headerTitle: undefined,
+            headerSubTitle: undefined,
             items: [],
             grid: {allowed:true, use:false, numColumns:0, ih:GRID_MIN_HEIGHT, rows:[], few:false, haveSubtitle:true},
             fetchingItem:undefined,

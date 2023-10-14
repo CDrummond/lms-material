@@ -950,6 +950,9 @@ function parseBrowseResp(data, parent, options, cacheKey, parentCommand, parentG
             resp.itemCustomActions = getCustomActions("album-track");
             var stdItem = allowPlayAlbum && data.result.count>1 ? STD_ITEM_ALBUM_TRACK : STD_ITEM_TRACK;
             let artists = [];
+            let numCompilationTracks = 0;
+            let compilationAlbumArtists = new Set();
+            let compilationArtists = new Set();
             let compilationAlbumArtist = undefined;
             for (var idx=0, loop=data.result.titles_loop, loopLen=loop.length; idx<loopLen; ++idx) {
                 var i = loop[idx];
@@ -1039,12 +1042,29 @@ function parseBrowseResp(data, parent, options, cacheKey, parentCommand, parentG
                               duration: i.duration,
                               durationStr: duration>0 ? formatSeconds(duration) : undefined
                           });
-                if (lmsOptions.compilationAll && undefined==compilationAlbumArtist && i.albumartist && undefined!=i.compilation && 1==parseInt(i.compilation)) {
-                    compilationAlbumArtist = i.albumartist;
+                if (lmsOptions.compilationAll && undefined!=i.compilation && 1==parseInt(i.compilation)) {
+                    numCompilationTracks++;
+                    if (undefined!=i.albumartist) {
+                        compilationAlbumArtists.add(i.albumartist);
+                    }
+                    if (undefined!=i.artist) {
+                        compilationArtists.add(i.artist);
+                    }
                 }
                 resp.numAudioItems = resp.items.length;
                 if (allowPlayAlbum) {
                     resp.allSongsItem = parent;
+                }
+            }
+            // If all tracks marked as a compilation, then see what we can (potentially) use
+            //  as the album artist for this compilation.
+            if (numCompilationTracks==resp.items.length) {
+                if (compilationAlbumArtists.size==1) {
+                    compilationAlbumArtist = compilationAlbumArtists.keys().next().value;
+                } else if (compilationArtists.size==1) {
+                    compilationAlbumArtist = compilationArtists.keys().next().value;
+                } else {
+                    compilationAlbumArtist = LMS_VA_STRING;
                 }
             }
             // Now add artist to subtitle if we have multiple artists...
@@ -1101,6 +1121,7 @@ function parseBrowseResp(data, parent, options, cacheKey, parentCommand, parentG
             let totalDurationStr=formatSeconds(totalDuration);
             resp.subtitle=totalTracks+'<obj class="mat-icon music-note">music_note</obj>'+totalDurationStr;
             resp.plainsubtitle=i18np("1 Track", "%1 Tracks", totalTracks)+SEPARATOR+totalDurationStr;
+            // set compilationAlbumArtist on first entry so that browse-view can use this
             if (lmsOptions.compilationAll && undefined!=compilationAlbumArtist & resp.items.length>0) {
                 resp.items[0].compilationAlbumArtist = compilationAlbumArtist;
             }

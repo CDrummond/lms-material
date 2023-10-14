@@ -123,7 +123,7 @@
 .lms-list {
  position:fixed;
  top:calc(var(--main-toolbar-height) + var(--sub-toolbar-height));
- height:calc((var(--vh, 1vh)*100) - (var(--main-toolbar-height) + var(--sub-toolbar-height) + var(--bottom-toolbar-height) + var(--mobile-npbar-height)));
+ height:calc((var(--vh, 1vh)*100) - (var(--main-toolbar-height) + var(--sub-toolbar-height) + var(--bottom-toolbar-height) + var(--mobile-npbar-height) - 1px));
  width:100vw;
  overflow:auto;
  backface-visibility:hidden;
@@ -140,13 +140,13 @@
 }
 
 .lms-jumplist {
- height:calc((var(--vh, 1vh)*100) - (var(--main-toolbar-height) + var(--sub-toolbar-height) + var(--bottom-toolbar-height) + var(--mobile-npbar-height)));
+ height:calc((var(--vh, 1vh)*100) - (var(--main-toolbar-height) + var(--sub-toolbar-height) + var(--bottom-toolbar-height) + var(--mobile-npbar-height) - 1px));
 }
 
 .lms-image-grid {
  position:fixed;
  top:calc(var(--main-toolbar-height) + var(--sub-toolbar-height));
- height:calc((var(--vh, 1vh)*100) - (var(--main-toolbar-height) + var(--sub-toolbar-height) + var(--bottom-toolbar-height) + var(--mobile-npbar-height)));
+ height:calc((var(--vh, 1vh)*100) - (var(--main-toolbar-height) + var(--sub-toolbar-height) + var(--bottom-toolbar-height) + var(--mobile-npbar-height) - 1px));
  width:100vw;
  overflow:auto;
  backface-visibility:hidden;

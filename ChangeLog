@@ -34,6 +34,7 @@ x.y.z
 2. Fix colour of lists in dialogs when using Black theme.
 3. Darker snackbar/toast background for Black theme.
 4. Set splitter width to zero when queue hidden.
+5. Tweak borders.
 
 3.5.4
 -----

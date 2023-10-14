@@ -63,17 +63,17 @@
 }
 
 .lms-list {
- height:calc((var(--vh, 1vh)*100) - (var(--main-toolbar-height) + var(--sub-toolbar-height) + var(--bottom-toolbar-height)));
+ height:calc((var(--vh, 1vh)*100) - (var(--main-toolbar-height) + var(--sub-toolbar-height) + var(--bottom-toolbar-height) - 1px));
  overflow:auto;
  backface-visibility:hidden;
 }
 
 .lms-jumplist {
- height:calc((var(--vh, 1vh)*100) - (var(--main-toolbar-height) + var(--sub-toolbar-height) + var(--bottom-toolbar-height)));
+ height:calc((var(--vh, 1vh)*100) - (var(--main-toolbar-height) + var(--sub-toolbar-height) + var(--bottom-toolbar-height) - 1px));
 }
 
 .lms-image-grid {
- height:calc((var(--vh, 1vh)*100) - (var(--main-toolbar-height) + var(--sub-toolbar-height) + var(--bottom-toolbar-height)));
+ height:calc((var(--vh, 1vh)*100) - (var(--main-toolbar-height) + var(--sub-toolbar-height) + var(--bottom-toolbar-height) - 1px));
  overflow:auto;
  backface-visibility:hidden;
  margin:0px;
@@ -114,7 +114,7 @@
  content: '';
  top: var(--main-toolbar-height);
  width: 12px;
- height: calc((var(--vh, 1vh)*100) - (var(--main-toolbar-height) + var(--bottom-toolbar-height)));
+ height: calc((var(--vh, 1vh)*100) - (var(--main-toolbar-height) + var(--bottom-toolbar-height) - 1px));
  margin-left:-2px;
  z-index: 4;
 }

@@ -1297,9 +1297,9 @@ var lmsBrowse = Vue.component("lms-browse", {
             }
             msHandleScrollEvent(this);
         },
-        calcSizes(quantity, listWidth, maxItemWidth) {
-            var width = GRID_MIN_WIDTH;
-            var height = GRID_MIN_HEIGHT;
+        calcSizes(quantity, listWidth, maxItemWidth, adjust) {
+            var width = GRID_MIN_WIDTH-adjust;
+            var height = GRID_MIN_HEIGHT-adjust;
             var steps = 0;
             if (0!=quantity) {
                 while (listWidth>=((width+GRID_STEP)*quantity) && (width+GRID_STEP)<=maxItemWidth) {
@@ -1338,14 +1338,24 @@ var lmsBrowse = Vue.component("lms-browse", {
             }
 
             var sz = undefined;
-            var preferredColumns = (allowLarge && listWidth>750) ? 3 : 4;
-            var maxItemWidth = Math.floor(GRID_MAX_WIDTH * (allowLarge ? 1.5 : 1.0));
+            var preferredColumns = 4;
+            var maxItemWidth = Math.floor(GRID_MAX_WIDTH * (allowLarge ? (listWidth>1200 ? 1.5 : listWidth>800 ? 1.25 : 1.0) : 1.0));
+            console.log(listWidth, maxItemWidth);
             for (var i=preferredColumns; i>=1; --i) {
-                sz = this.calcSizes(i, listWidth, maxItemWidth);
+                sz = this.calcSizes(i, listWidth, maxItemWidth, 0);
                 if (sz.mc>=i) {
                     break;
                 }
             }
+
+            if (sz.nc==1) {
+                var altsz = this.calcSizes(2, listWidth, maxItemWidth, 2*GRID_STEP);
+                console.log(sz.nc, sz.ih, altsz.nc, altsz.ih);
+                if (altsz.nc>sz.nc) {
+                    sz=altsz;
+                }
+            }
+
             if (force || sz.nc != this.grid.numColumns) { // Need to re-layout...
                 changed = true;
                 this.grid.rows=[];

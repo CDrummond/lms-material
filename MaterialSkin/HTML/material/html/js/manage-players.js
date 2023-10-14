@@ -470,6 +470,9 @@ Vue.component('lms-manage-players', {
                 return;
             }
             let player = this.players[idx];
+            if (longPress) {
+                bus.$emit('showMessage', i18n('Stop'), 500);
+            }
             lmsCommand(player.id, longPress ? ['stop'] : player.isplaying ? ['pause', '1'] : ['play']).then(({data}) => {
                 this.refreshPlayer(player, true);
             });

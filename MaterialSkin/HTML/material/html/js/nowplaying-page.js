@@ -753,6 +753,7 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
             }
             if (longPress) {
                 this.doAction(['stop']);
+                bus.$emit('showMessage', i18n('Stop'), 500);
             } else {
                 this.doAction([this.playerStatus.isplaying ? 'pause' : 'play']);
             }

@@ -236,7 +236,6 @@ const store = new Vuex.Store({
         largeCovers: false,
         mediaControls: false,
         downloadStatus: [],
-        updateNotif: {msg:undefined, title:undefined},
         notifications: [],
         coloredToolbars: false,
         listPadding: 0
@@ -643,12 +642,6 @@ const store = new Vuex.Store({
         },
         setDownloadStatus(state, val) {
             state.downloadStatus = val;
-        },
-        setUpdateNotif(state, val) {
-            state.updateNotif=val;
-            if ('-'==state.updateNotif.msg) {
-                state.updateNotif.msg=undefined;
-            }
         },
         setNotification(state, val) {
             for (let i=0, loop=state.notifications, len=loop.length; i<len; ++i) {

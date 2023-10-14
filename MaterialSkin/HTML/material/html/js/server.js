@@ -10,44 +10,6 @@
 const PLAYER_STATUS_TAGS = "tags:cdegiloqrstuyAABGIKNST";
 const STATUS_UPDATE_MAX_TIME = 4000;
 
-function updateMskLinks(str) {
-    // Replace href links in notificaitons with javascript so that we can intercept
-    // custom action IDs, or open new windows, etc.
-    let start = str.indexOf('href="');
-    if (start>0) {
-        let end = str.indexOf('"', start+6);
-        if (end>0) {
-            let sub = str.substring(start+6, end);
-            return str.substring(0, start) + 'href="javascript:handle(\'' + sub + '\')' + str.substring(end);
-        }
-    }
-    return str;
-}
-
-function handle(link) {
-    if (link.startsWith('msk:')) {
-        bus.$emit('doMskNotificationAction', link.split(':')[1]);
-    } else {
-        window.open(link);
-    }
-    // This call i sused to close the prompt dialog
-    bus.$emit('notificationLinkActivated');
-}
-
-function showLastNotif(text, cancelable) {
-    try {
-        if (cancelable) {
-            showAlert(text, i18n('Cancel')).then(res => {
-                lmsCommand("", ["material-skin", "send-notif", "type:alert", "msg:-"]);
-            });
-        } else {
-            showAlert(text);
-        }
-    } catch(e) { // Not loaded yet??
-        setTimeout(function() { showLastNotif(text, cancelable); }, 500);
-    }
-}
-
 function logString(val) {
     return undefined==val ? "" : val;
 }
@@ -106,7 +68,6 @@ setInterval(function() {
     var currentTime = (new Date()).getTime();
     if (currentTime > (lastTime + 4000)) {
         bus.$emit('refreshStatus');
-        bus.$emit('checkNotifications');
         // Hacky work-around for #589
         var isDesktopLayout = store.state.desktopLayout;
         if (IS_IOS && isDesktopLayout && currentTime >= (lastTime + 15000)) {
@@ -324,7 +285,6 @@ var lmsServer = Vue.component('lms-server', {
                         this.refreshServerStatus();
                         this.scheduleNextPlayerStatusUpdate(500);
                         bus.$emit("networkStatus", lmsIsConnected);
-                        bus.$emit('checkNotifications');
                     }
                 }
             });
@@ -651,18 +611,6 @@ var lmsServer = Vue.component('lms-server', {
                     if (data.length<6 || undefined==data[5] || data[5].length<1 || data[5]==this.$store.state.player.id) {
                         bus.$emit('showError', undefined, data[3], data.length>6 ? parseInt(data[6]) : 0);
                     }
-                } else if (data[2]=='alert') {
-                    if (data.length>4 && parseInt(data[4])==1) {
-                        showAlert(data[3], i18n('Cancel')).then(res => {
-                            lmsCommand("", ["material-skin", "send-notif", "type:alert", "msg:-"]);
-                        });
-                    } else {
-                        showAlert(updateMskLinks(data[3]));
-                    }
-                } else if (data[2]=='update') {
-                    this.$store.commit('setUpdateNotif', {msg:updateMskLinks(data[3]), title:data[4]});
-                } else if (data[2]=='notif' && data.length>6) {
-                    this.$store.commit('setNotification', {msg:updateMskLinks(data[3]), title:data[4], id:data[5], cancelable:data.length>=7 && 1==parseInt(data[6])});
                 } else if (data[2]=='internal') {
                     if (data[3]=='vlib') {
                         bus.$emit('libraryChanged');
@@ -1020,28 +968,6 @@ var lmsServer = Vue.component('lms-server', {
                 lmsCommand(player, ["playerpref", "plugin.dontstopthemusic:provider", value]).then(({data}) => {
                     bus.$emit("prefset", "plugin.dontstopthemusic:provider", value, player);
                 });
-            });
-        }.bind(this));
-
-        // Check Perl side to see if any notifications registered
-        bus.$on('checkNotifications', function() {
-            lmsCommand("", ["material-skin", "get-notifs"]).then(({data}) => {
-                if (data && data.result) {
-                    if (data.result.alertmsg) {
-                        showLastNotif(updateMskLinks(data.result.alertmsg), data.result.alertcancelable);
-                    }
-                    if (data.result.updatemsg) {
-                        this.$store.commit('setUpdateNotif', {msg:updateMskLinks(data.result.updatemsg), title:data.result.updatetitle});
-                    }
-                    if (data.result.notifications) {
-                        let notifs = [];
-                        for (let i=0, loop=data.result.notifications, len=loop.length; i<len; ++i) {
-                            loop[i].msg = updateMskLinks(loop[i].msg);
-                            notifs.push(loop[i]);
-                        }
-                        this.$store.commit('setNotifications', notifs);
-                    }
-                }
             });
         }.bind(this));
 

@@ -23,6 +23,7 @@ x.y.z
 18. Show album year for playlist tracks.
 19. Slightly adjust grid metrics, to allow more columns when thin, etc.
 20. Simpler String.replaceAll polyfill.
+21. Remove notification support added for CORE32, no longer supported.
 
 3.5.4
 -----

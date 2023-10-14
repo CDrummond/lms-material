@@ -46,7 +46,8 @@
  background-color:#000;
 }
 
-.v-dialog:not(.v-dialog--fullscreen), .v-dialog:not(.v-dialog--fullscreen) .v-sheet {
+.v-dialog:not(.v-dialog--fullscreen), .v-dialog:not(.v-dialog--fullscreen) .v-sheet,
+.v-dialog:not(.v-dialog--fullscreen) .v-list, .v-snack__wrapper {
  background-color:var(--popup-background-color)!important;
 }
 

@@ -15,6 +15,7 @@
  --np-icon-size:24px;
  --queue-visibility:initial;
  --queue-minwidth:400px;
+ --splitter-width:1px;
 }
 
 /* For old browser's that dont support min() */
@@ -105,7 +106,7 @@
 
 .lms-splitter .splitter {
  background-color:var(--splitter-color) !important;
- width:1px!important;
+ width:var(--splitter-width) !important;
 }
 
 .lms-splitter .splitter:before {

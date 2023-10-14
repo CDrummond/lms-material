@@ -25,6 +25,13 @@ x.y.z
 20. Simpler String.replaceAll polyfill.
 21. Remove notification support added for CORE32, no longer supported.
 
+3.5.5
+-----
+1. Fix subtoolbar subtitle not always updating.
+2. Fix colour of lists in dialogs when using Black theme.
+3. Darker snackbar/toast background for Black theme.
+4. Set splitter width to zero when queue hidden.
+
 3.5.4
 -----
 1. Fix missing album review for streaming services.

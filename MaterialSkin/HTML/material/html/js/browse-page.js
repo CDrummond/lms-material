@@ -1342,7 +1342,6 @@ var lmsBrowse = Vue.component("lms-browse", {
             var sz = undefined;
             var preferredColumns = 4;
             var maxItemWidth = Math.floor(GRID_MAX_WIDTH * (allowLarge ? (listWidth>1200 ? 1.5 : listWidth>800 ? 1.25 : 1.0) : 1.0));
-            console.log(listWidth, maxItemWidth);
             for (var i=preferredColumns; i>=1; --i) {
                 sz = this.calcSizes(i, listWidth, maxItemWidth, 0);
                 if (sz.mc>=i) {
@@ -1352,7 +1351,6 @@ var lmsBrowse = Vue.component("lms-browse", {
 
             if (sz.nc==1) {
                 var altsz = this.calcSizes(2, listWidth, maxItemWidth, 2*GRID_STEP);
-                console.log(sz.nc, sz.ih, altsz.nc, altsz.ih);
                 if (altsz.nc>sz.nc) {
                     sz=altsz;
                 }

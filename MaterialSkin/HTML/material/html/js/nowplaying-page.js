@@ -1067,6 +1067,7 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
                 this.hideNpBar = hideNpBar;
                 document.documentElement.style.setProperty('--bottom-toolbar-height',
                     hideNpBar ? '0px' : this.$store.state.desktopLayout ? this.desktopBottomHeight : this.mobileBottomHeight);
+                document.documentElement.style.setProperty('--npbar-border-color', hideNpBar ? 'transparent' : 'var(--bottom-toolbar-border-color)');
             }
         },
         showTimeTooltip() {

@@ -40,6 +40,7 @@
  --mobile-scrollbar-thumb-color:transparent;
  --bgnd-filter:blur(5px);
  --bgnd-webkit-filter:blur(5px);
+ --npbar-border-color:var(--bottom-toolbar-border-color);
 }
 
 .theme--dark {
@@ -146,10 +147,15 @@ html, .mini-player {
  background-color:var(--background-color) !important;
 }
 
-.np-bar, .lms-bottom-nav {
+.lms-bottom-nav {
  background-color:var(--bottom-toolbar-color) !important;
  border-top:1px solid var(--bottom-toolbar-border-color);
 }
+
+.np-bar {
+  background-color:var(--bottom-toolbar-color) !important;
+  border-top:1px solid var(--npbar-border-color)
+ }
 
 .dialog-toolbar {
  height:var(--main-toolbar-height) !important;

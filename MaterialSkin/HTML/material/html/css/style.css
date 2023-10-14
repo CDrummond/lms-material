@@ -2652,6 +2652,10 @@ img[lazy='loaded'].np-cover {
  height:200px;
 }
 
+.np-grid-item-nosub {
+  height:176px;
+}
+
 .np-grid-more {
  width:150px;
  height:150px;
@@ -2661,12 +2665,12 @@ img[lazy='loaded'].np-cover {
 }
 
 .np-grid-item .v-list__tile__title {
- margin-top:-8px;
+ margin:-8px 2px 0px 2px; /* t, r, b, l */
  text-align:center;
 }
 
 .np-grid-item .v-list__tile__sub-title {
- margin-top:-4px;
+ margin:-4px 2px 0px 2px;/* t, r, b, l */
  text-align:center;
 }
 

@@ -516,6 +516,14 @@ function nowPlayingGetArtistAlbums(view, artist_id) {
         if (data && data.result && view.isCurrent(data, ARTIST_TAB)) {
             view.info.tabs[ARTIST_TAB].sections[0].items = parseBrowseResp(data).items;
             view.info.tabs[ARTIST_TAB].sections[0].title = i18np("1 Album", "%1 Albums", data.result.count);
+            view.info.tabs[ARTIST_TAB].sections[0].haveSub = false;
+            for (i=0, loop=view.info.tabs[ARTIST_TAB].sections[0].items, len=loop.length; i<len ; ++i) {
+                if (loop[i].subtitle == view.info.tabs[ARTIST_TAB].artist) {
+                    loop[i].subtitle = undefined;
+                } else {
+                    view.info.tabs[ARTIST_TAB].sections[0].haveSub = true;
+                }
+            }
             if (data.result.count>NP_MAX_ALBUMS) {
                 view.info.tabs[ARTIST_TAB].sections[0].more=i18n("+ %1 more", data.result.count-NP_MAX_ALBUMS);
             }

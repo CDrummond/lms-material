@@ -26,6 +26,7 @@ x.y.z
 21. Remove notification support added for CORE32, no longer supported.
 22. Add (server side) option to show all compilation tracks when navigate into
     a compilation from a contributing artist.
+23. Only show artist under MAI album list if different.
 
 3.5.5
 -----

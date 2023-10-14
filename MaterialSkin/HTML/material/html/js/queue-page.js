@@ -132,9 +132,10 @@ function parseResp(data, showTrackNum, index, showRatings, threeLines) {
 
 var lmsQueue = Vue.component("lms-queue", {
   template: `
-<div> 
- <div class="subtoolbar noselect list-details">
+<div v-bind:class="{'pq-unpinned':!pinQueue}">
+ <div class="subtoolbar noselect" v-bind:class="{'list-details':pinQueue}">
   <v-layout v-if="selection.size>0">
+   <v-btn v-if="desktopLayout" :title="pinQueue ? trans.unpin : trans.pin" flat icon class="toolbar-button" @click="togglePin"><img :src="(pinQueue ? 'pin' : 'unpin') | svgIcon(darkUi)"></img></v-btn>
    <div class="toolbar-nobtn-pad"></div>
    <v-layout row wrap>
     <v-flex xs12 class="ellipsis subtoolbar-title subtoolbar-pad">{{trans.selectMultiple}}</v-flex>
@@ -148,6 +149,7 @@ var lmsQueue = Vue.component("lms-queue", {
    <v-btn :title="trans.cancel" flat icon class="toolbar-button" @click="clearSelection()"><v-icon>cancel</v-icon></v-btn>
   </v-layout>
   <v-layout v-else>
+   <v-btn v-if="desktopLayout" :title="pinQueue ? trans.unpin : trans.pin" flat icon class="toolbar-button" @click="togglePin"><img :src="(pinQueue ? 'pin' : 'unpin') | svgIcon(darkUi)"></img></v-btn>
    <div class="toolbar-nobtn-pad"></div>
    <v-layout row wrap v-longpress="durationClicked" class="link-item">
     <v-flex xs12 class="ellipsis subtoolbar-title">{{remaining.show ? "-" :""}}{{(remaining.show ? remaining.size : listSize) | displayCount}}</v-flex>
@@ -279,7 +281,7 @@ var lmsQueue = Vue.component("lms-queue", {
             duration: 0.0,
             playerStatus: { shuffle:0, repeat: 0 },
             remaining: {show:false, size:0, duration:0},
-            trans: { ok: undefined, cancel: undefined, clear:undefined,
+            trans: { ok: undefined, cancel: undefined, clear:undefined, pin:undefined, unpin:undefined,
                      repeatAll:undefined, repeatOne:undefined, repeatOff:undefined, shuffleAll:undefined, shuffleAlbums:undefined,
                      shuffleOff:undefined, selectMultiple:undefined, removeall:undefined, invertSelect:undefined, dstm:undefined, actions:undefined },
             menu: { show:false, item: undefined, x:0, y:0, index:0},
@@ -307,6 +309,9 @@ var lmsQueue = Vue.component("lms-queue", {
         },
         desktopLayout() {
             return this.$store.state.desktopLayout
+        },
+        pinQueue() {
+            return this.$store.state.pinQueue
         },
         noPlayer() {
             return !this.$store.state.player
@@ -570,6 +575,7 @@ var lmsQueue = Vue.component("lms-queue", {
     methods: {
         initItems() {
             this.trans= { ok:i18n('OK'), cancel: i18n('Cancel'), clear:i18n("Clear queue"),
+                          pin:i18n('Pin'), unpin:i18n('Unpin'),
                           repeatAll:i18n("Repeat queue"), repeatOne:i18n("Repeat single track"), repeatOff:i18n("No repeat"),
                           shuffleAll:i18n("Shuffle tracks"), shuffleAlbums:i18n("Shuffle albums"), shuffleOff:i18n("No shuffle"),
                           selectMultiple:i18n("Select multiple items"), removeall:i18n("Remove all selected items"), 
@@ -604,6 +610,9 @@ var lmsQueue = Vue.component("lms-queue", {
                 });
             }
             msHandleScrollEvent(this);
+        },
+        togglePin() {
+            this.$store.commit('setPinQueue', !this.$store.state.pinQueue);
         },
         droppedFileHandler(ev) {
             if (queryParams.party) {

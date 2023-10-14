@@ -509,6 +509,9 @@ Vue.component('lms-toolbar', {
                 return;
             }
             bus.$emit('expandNowPlaying', !this.nowPlayingExpanded);
+            if (!this.$store.state.pinQueue && this.$store.state.showQueue) {
+                this.$store.commit('setShowQueue', false);
+            }
         },
         handlePlayerToolbarButton(longPress) {
             if (queryParams.party) {
@@ -741,11 +744,15 @@ Vue.component('lms-toolbar', {
             performCustomAction(action, this.$store.state.player);
         },
         toggleQueue() {
-            let showQ = this.infoOpen || this.nowPlayingExpanded;
-            if (showQ) {
-                bus.$emit('npclose');
+            if (!this.$store.state.pinQueue) {
+                this.$store.commit('setShowQueue', !this.$store.state.showQueue);
+            } else {
+                let showQ = this.infoOpen || this.nowPlayingExpanded;
+                if (showQ) {
+                    bus.$emit('npclose');
+                }
+                this.$store.commit('setShowQueue', showQ || !this.$store.state.showQueue);
             }
-            this.$store.commit('setShowQueue', showQ || !this.$store.state.showQueue);
         }
     },
     computed: {

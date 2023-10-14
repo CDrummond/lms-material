@@ -27,6 +27,7 @@ x.y.z
 22. Add (server side) option to show all compilation tracks when navigate into
     a compilation from a contributing artist.
 23. Only show artist under MAI album list if different.
+24. In desktop layout allow queue to be pinned/unpinned.
 
 3.5.5
 -----

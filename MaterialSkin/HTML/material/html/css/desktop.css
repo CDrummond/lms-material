@@ -6,7 +6,7 @@
  */
 
 :root {
-  --bottom-toolbar-height:var(--desktop-npbar-height);
+ --bottom-toolbar-height:var(--desktop-npbar-height);
  --np-portrait-image-size:min(calc((var(--vh, 1vh)*100) - (var(--main-toolbar-height) + 260px) - (var(--np-image-border)*2)), 100vw - (var(--np-image-border)*2));
  --np-image-landscape-height:calc((var(--vh, 1vh)*100) - (var(--main-toolbar-height) + 116px));
  --np-image-landscape-size:min(var(--np-image-landscape-height) - (var(--np-image-border)*2), 50vw - (var(--np-image-border)*2));
@@ -374,3 +374,17 @@
  min-width:280px!important;
 }
 
+.pq-unpinned {
+ position:fixed;
+ right:0px;
+ top:var(--main-toolbar-height);
+ box-shadow:var(--menu-dlg-shadow);
+ z-index:100;
+ width:620px;
+}
+
+@media screen and (max-width: 620px) {
+ .pq-unpinned {
+  width:100vw;
+ }
+}

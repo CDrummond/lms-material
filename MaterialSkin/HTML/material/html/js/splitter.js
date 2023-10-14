@@ -27,10 +27,10 @@ Vue.component('lms-splitter', {
     },
     computed: {
         leftPaneStyle () {
-            return { width: this.pc + '%' }
+            return { width: (this.$store.state.pinQueue ? this.pc : 100) + '%' }
         },
         rightPaneStyle () {
-            return { width: 100-this.pc + '%' }
+            return { width: (this.$store.state.pinQueue ? 100-this.pc : 0 )+ '%' }
         },
         pc() {
             return this.$store.state.desktopLayout ? this.$store.state.showQueue ? this.percent : 100 : 0

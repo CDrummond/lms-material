@@ -185,11 +185,31 @@ function updateLang(state, lang) {
     document.querySelector('html').setAttribute('lang', lang);
 }
 
+function setQueueShown(state, val) {
+    if (val!=state.showQueue) {
+        let pc = getLocalStorageVal('splitter', undefined);
+        state.showQueue = val;
+        setLocalStorageVal('showQueue', state.showQueue);
+        if (state.pinQueue) {
+            if (val && undefined!=pc) {
+                bus.$emit('setSplitter', pc);
+            } else if (!val) {
+                document.documentElement.style.setProperty('--splitter-pc', 100);
+            }
+        }
+        bus.$emit('showQueue', val);
+        document.documentElement.style.setProperty('--queue-visibility', val ? 'initial' : 'collapse');
+        document.documentElement.style.setProperty('--queue-minwidth', val && state.pinQueue ? '400px' : '0px');
+        document.documentElement.style.setProperty('--splitter-width', val && state.pinQueue ? '1px' : '0px');
+    }
+}
+
 const store = new Vuex.Store({
     state: {
         desktopLayout: false,
         mobileBar: MBAR_THIN,
         showQueue: true,
+        pinQueue: true,
         players: null, // List of players
         player: null, // Current player (from list)
         defaultPlayer: null,
@@ -437,7 +457,7 @@ const store = new Vuex.Store({
             let boolItems = ['roundCovers', 'autoScrollQueue', 'sortFavorites', 'letterOverlay', 'browseBackdrop', 'queueBackdrop',
                              'nowPlayingBackdrop', 'infoBackdrop', 'browseTechInfo', 'techInfo', 'queueShowTrackNum', 'nowPlayingTrackNum',
                              'nowPlayingClock', 'nowPlayingContext', 'swipeVolume', 'swipeChangeTrack', 'keyboardControl','queueThreeLines',
-                             'screensaver', 'homeButton', 'powerButton', 'largeCovers', 'mediaControls'];
+                             'screensaver', 'homeButton', 'powerButton', 'largeCovers', 'mediaControls', 'showQueue', 'pinQueue'];
             for (let i=0, len=boolItems.length; i<len; ++i) {
                 let key = boolItems[i];
                 state[key] = getLocalStorageBool(key, state[key]);
@@ -626,19 +646,19 @@ const store = new Vuex.Store({
             }
         },
         setShowQueue(state, val) {
-            if (val!=state.showQueue) {
-                let pc = getLocalStorageVal('splitter', undefined);
-                state.showQueue = val;
-                setLocalStorageVal('showQueue', state.showQueue);
-                if (val && undefined!=pc) {
-                    bus.$emit('setSplitter', pc);
-                } else if (!val) {
+            setQueueShown(state, val);
+        },
+        setPinQueue(state, val) {
+            if (val!=state.pinQueue) {
+                state.pinQueue=val;
+                setLocalStorageVal('pinQueue', state.pinQueue);
+                if (state.pinQueue) {
+                    setQueueShown(state, true);
+                    document.documentElement.style.setProperty('--splitter-width', val && state.pinQueue ? '1px' : '0px');
+                } else {
                     document.documentElement.style.setProperty('--splitter-pc', 100);
                 }
-                bus.$emit('showQueue', val);
-                document.documentElement.style.setProperty('--queue-visibility', val ? 'initial' : 'collapse');
-                document.documentElement.style.setProperty('--queue-minwidth', val ? '400px' : '0px');
-                document.documentElement.style.setProperty('--splitter-width', val ? '1px' : '0px');
+                bus.$emit('layoutChanged');
             }
         },
         setDownloadStatus(state, val) {

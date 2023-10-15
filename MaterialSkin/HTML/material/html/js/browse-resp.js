@@ -1062,13 +1062,12 @@ function parseBrowseResp(data, parent, options, cacheKey, parentCommand, parentG
                         compilationArtists.add(i.artist);
                     }
                 }
-                resp.numAudioItems = resp.items.length;
-                if (allowPlayAlbum) {
-                    resp.allSongsItem = parent;
+                if (0==idx && !showAlbumName && !isEmpty(""+i.coverid)) {
+                    resp.image="/music/"+i.coverid+"/cover"+LMS_IMAGE_SIZE;
                 }
             }
             // If all tracks marked as a compilation, then see what we can (potentially) use
-            //  as the album artist for this compilation.
+            // as the album artist for this compilation.
             if (numCompilationTracks==resp.items.length) {
                 if (compilationAlbumArtists.size==1) {
                     compilationAlbumArtist = compilationAlbumArtists.keys().next().value;
@@ -1099,7 +1098,10 @@ function parseBrowseResp(data, parent, options, cacheKey, parentCommand, parentG
             if (sortTracks) {
                 resp.items.sort(sort.rev ? revYearAlbumTrackSort : yearAlbumTrackSort);
             }
-
+            resp.numAudioItems = resp.items.length;
+            if (allowPlayAlbum) {
+                resp.allSongsItem = parent;
+            }
             if (discs.size>1) {
                 let d = 0;
 

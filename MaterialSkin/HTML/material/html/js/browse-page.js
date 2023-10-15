@@ -373,6 +373,7 @@ var lmsBrowse = Vue.component("lms-browse", {
         return {
             current: {image: undefined},
             currentActions: [],
+            currentItemImage: undefined, // image set in broweResp - currently only for album track lists
             headerTitle: undefined,
             headerSubTitle: undefined,
             items: [],
@@ -432,7 +433,7 @@ var lmsBrowse = Vue.component("lms-browse", {
             return !this.isTop && this.items.length>LMS_MAX_NON_SCROLLER_ITEMS
         },
         drawBgndImage() {
-            return this.$store.state.browseBackdrop && undefined!=this.current && undefined!=this.current.image
+            return this.$store.state.browseBackdrop && ((undefined!=this.current && undefined!=this.current.image) || undefined!=this.currentItemImage);
         },
         listSizeAdjust() {
             return this.$store.state.listPadding
@@ -1454,7 +1455,11 @@ var lmsBrowse = Vue.component("lms-browse", {
             }
         },
         setBgndCover() {
-            var url = this.$store.state.browseBackdrop && this.current && this.current.image ? this.current.image : undefined;
+            var url = this.$store.state.browseBackdrop && this.current && this.current.image
+                          ? this.current.image
+                          : this.currentItemImage
+                              ? this.currentItemImage
+                              : undefined;
             if (url) {
                url=changeImageSizing(url, LMS_CURRENT_IMAGE_SIZE);
             }

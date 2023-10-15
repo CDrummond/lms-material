@@ -94,6 +94,7 @@ function browseAddHistory(view) {
     prev.currentLibId = view.currentLibId;
     prev.pinnedItemLibName = view.pinnedItemLibName;
     prev.currentBaseActions = view.currentBaseActions;
+    prev.currentItemImage = view.currentItemImage;
     prev.currentActions = view.currentActions;
     prev.headerTitle = view.headerTitle;
     prev.headerSubTitle = view.headerSubTitle;
@@ -284,6 +285,7 @@ function browseHandleListResponse(view, item, command, resp, prevPage, appendIte
         view.searchActive = item.id.startsWith(SEARCH_ID);
         view.command = command;
         view.currentBaseActions = view.baseActions;
+        view.currentItemImage = resp.image;
         let wasSearch = (item.type=="search" || item.type=="entry") && undefined!=view.enteredTerm;
         // If this is an (e.g.) Spotty search then parent list (with search entry) will need refreshing
         if (wasSearch && command.command.length>1 && "items"==command.command[1]) {
@@ -1428,6 +1430,7 @@ function browseGoHome(view) {
     view.headerSubTitle=null;
     view.baseActions=[];
     view.currentBaseActions=[];
+    view.currentItemImage=undefined;
     view.tbarActions=[];
     view.isTop = true;
     view.grid = {allowed:true, use:isSetToUseGrid(GRID_OTHER), numColumns:0, ih:GRID_MIN_HEIGHT, rows:[], few:false, haveSubtitle:true};
@@ -1494,6 +1497,7 @@ function browseGoBack(view, refresh) {
     view.baseActions = prev.baseActions;
     view.current = prev.current;
     view.currentBaseActions = prev.currentBaseActions;
+    view.currentItemImage = prev.currentItemImage;
     view.currentActions = prev.currentActions;
     view.currentLibId = prev.currentLibId;
     view.pinnedItemLibName = prev.pinnedItemLibName;

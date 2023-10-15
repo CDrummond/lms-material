@@ -384,10 +384,16 @@
  border-radius:8px;
  box-shadow:var(--menu-dlg-shadow);
  overflow: hidden;
+ animation: pqSlideIn .25s linear forwards;
 }
 
 .pq-unpinned .lms-list {
  height:calc((var(--vh, 1vh)*100) - (var(--main-toolbar-height) + var(--sub-toolbar-height) + var(--bottom-toolbar-height)));
+}
+
+@keyframes pqSlideIn {
+  from{right:-100%}
+  to{right:0px}
 }
 
 @media screen and (max-width: 620px) {

@@ -5,6 +5,8 @@
 3. Darker snackbar/toast background for Black theme.
 4. Set splitter width to zero when queue hidden.
 5. Tweak borders.
+6. Show track tech info, if enabled, for track list when click on album name
+   in now-playing.
 
 3.5.4
 -----

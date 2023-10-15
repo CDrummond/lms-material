@@ -614,8 +614,7 @@ var lmsQueue = Vue.component("lms-queue", {
             msHandleScrollEvent(this);
         },
         clickListener(event) {
-            console.log("CL");
-            if (!this.$store.state.desktopLayout || this.$store.state.pinQueue || !this.$store.state.showQueue) {
+            if (!this.$store.state.desktopLayout || this.$store.state.pinQueue || !this.$store.state.showQueue || this.$store.state.openDialogs.length>0) {
                 return;
             }
             if (!this.viewElement.contains(event.target)) {

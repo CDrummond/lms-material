@@ -212,7 +212,7 @@ function setQueuePinned(state, val) {
             setQueueShown(state, true);
             document.documentElement.style.setProperty('--splitter-width', val && state.pinQueue ? '1px' : '0px');
         } else {
-            document.documentElement.style.setProperty('--splitter-pc', 100);
+            setQueueShown(state, false);
         }
         bus.$emit('layoutChanged');
     }

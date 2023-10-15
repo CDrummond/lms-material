@@ -132,7 +132,7 @@ function parseResp(data, showTrackNum, index, showRatings, threeLines) {
 
 var lmsQueue = Vue.component("lms-queue", {
   template: `
-<div v-bind:class="{'pq-unpinned':!pinQueue}">
+<div v-bind:class="{'pq-unpinned':!pinQueue}" id="queue-view">
  <div class="subtoolbar noselect" v-bind:class="{'list-details':pinQueue}">
   <v-layout v-if="selection.size>0">
    <v-btn v-if="desktopLayout" :title="pinQueue ? trans.unpin : trans.pin" flat icon class="toolbar-button" @click="togglePin"><img :src="(pinQueue ? 'pin' : 'unpin') | svgIcon(darkUi)"></img></v-btn>
@@ -460,6 +460,8 @@ var lmsQueue = Vue.component("lms-queue", {
         this.scrollElement = document.getElementById("queue-list");
         this.scrollElement.addEventListener("scroll", this.handleScroll, PASSIVE_SUPPORTED ? { passive: true } : false);
         msRegister(this, this.scrollElement);
+        this.viewElement = document.getElementById("queue-view");
+        document.addEventListener("click", this.clickListener, PASSIVE_SUPPORTED ? { passive: true } : false);
 
         this.setBgndCover();
         this.$nextTick(function () {
@@ -610,6 +612,15 @@ var lmsQueue = Vue.component("lms-queue", {
                 });
             }
             msHandleScrollEvent(this);
+        },
+        clickListener(event) {
+            console.log("CL");
+            if (!this.$store.state.desktopLayout || this.$store.state.pinQueue || !this.$store.state.showQueue) {
+                return;
+            }
+            if (!this.viewElement.contains(event.target)) {
+                this.$store.commit('setShowQueue', false);
+            }
         },
         togglePin() {
             this.$store.commit('setPinQueue', !this.$store.state.pinQueue);

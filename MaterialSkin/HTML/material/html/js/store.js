@@ -206,7 +206,6 @@ function setQueueShown(state, val) {
 
 function setQueuePinned(state, val) {
     if (val!=state.pinQueue) {
-        console.log(val);
         state.pinQueue=val;
         setLocalStorageVal('pinQueue', state.pinQueue);
         if (state.pinQueue) {

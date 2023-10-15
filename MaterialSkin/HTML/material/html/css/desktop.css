@@ -380,6 +380,7 @@
  top:calc(var(--main-toolbar-height) - 1px);
  z-index:2;
  width:620px;
+ border:1px solid var(--border-color);
 }
 
 @media screen and (max-width: 620px) {

@@ -204,6 +204,21 @@ function setQueueShown(state, val) {
     }
 }
 
+function setQueuePinned(state, val) {
+    if (val!=state.pinQueue) {
+        console.log(val);
+        state.pinQueue=val;
+        setLocalStorageVal('pinQueue', state.pinQueue);
+        if (state.pinQueue) {
+            setQueueShown(state, true);
+            document.documentElement.style.setProperty('--splitter-width', val && state.pinQueue ? '1px' : '0px');
+        } else {
+            document.documentElement.style.setProperty('--splitter-pc', 100);
+        }
+        bus.$emit('layoutChanged');
+    }
+}
+
 const store = new Vuex.Store({
     state: {
         desktopLayout: false,
@@ -457,11 +472,13 @@ const store = new Vuex.Store({
             let boolItems = ['roundCovers', 'autoScrollQueue', 'sortFavorites', 'letterOverlay', 'browseBackdrop', 'queueBackdrop',
                              'nowPlayingBackdrop', 'infoBackdrop', 'browseTechInfo', 'techInfo', 'queueShowTrackNum', 'nowPlayingTrackNum',
                              'nowPlayingClock', 'nowPlayingContext', 'swipeVolume', 'swipeChangeTrack', 'keyboardControl','queueThreeLines',
-                             'screensaver', 'homeButton', 'powerButton', 'largeCovers', 'mediaControls', 'showQueue', 'pinQueue'];
+                             'screensaver', 'homeButton', 'powerButton', 'largeCovers', 'mediaControls'];
             for (let i=0, len=boolItems.length; i<len; ++i) {
                 let key = boolItems[i];
                 state[key] = getLocalStorageBool(key, state[key]);
             }
+            setQueuePinned(state, getLocalStorageBool('pinQueue', state.pinQueue));
+            setQueueShown(state, state.pinQueue && getLocalStorageBool('showQueue', state.showQueue));
 
             state.disabledBrowseModes = new Set(JSON.parse(getLocalStorageVal('disabledBrowseModes', '["myMusicFlopTracks", "myMusicTopTracks", "myMusicMusicFolder", "myMusicFileSystem", "myMusicArtistsComposers", "myMusicArtistsConductors", "myMusicArtistsJazzComposers", "myMusicAlbumsAudiobooks"]')));
             state.listPadding = parseInt(getLocalStorageVal('listPadding', state.listPadding));
@@ -649,17 +666,7 @@ const store = new Vuex.Store({
             setQueueShown(state, val);
         },
         setPinQueue(state, val) {
-            if (val!=state.pinQueue) {
-                state.pinQueue=val;
-                setLocalStorageVal('pinQueue', state.pinQueue);
-                if (state.pinQueue) {
-                    setQueueShown(state, true);
-                    document.documentElement.style.setProperty('--splitter-width', val && state.pinQueue ? '1px' : '0px');
-                } else {
-                    document.documentElement.style.setProperty('--splitter-pc', 100);
-                }
-                bus.$emit('layoutChanged');
-            }
+            setQueuePinned(state, val);
         },
         setDownloadStatus(state, val) {
             state.downloadStatus = val;

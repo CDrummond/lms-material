@@ -622,6 +622,9 @@ var lmsQueue = Vue.component("lms-queue", {
             }
         },
         togglePin() {
+            if (!this.$store.state.pinQueue) {
+                bus.$emit('npclose');
+            }
             this.$store.commit('setPinQueue', !this.$store.state.pinQueue);
         },
         droppedFileHandler(ev) {

@@ -68,10 +68,6 @@
  backface-visibility:hidden;
 }
 
-.pq-unpinned .lms-list {
- height:calc((var(--vh, 1vh)*100) - (var(--main-toolbar-height) + var(--sub-toolbar-height) + var(--bottom-toolbar-height)));
-}
-
 .lms-jumplist {
  height:calc((var(--vh, 1vh)*100) - (var(--main-toolbar-height) + var(--sub-toolbar-height) + var(--bottom-toolbar-height) - 1px));
 }
@@ -385,6 +381,13 @@
  z-index:2;
  width:620px;
  border:1px solid var(--sub-toolbar-border-color);
+ border-radius:8px;
+ box-shadow:var(--menu-dlg-shadow);
+ overflow: hidden;
+}
+
+.pq-unpinned .lms-list {
+ height:calc((var(--vh, 1vh)*100) - (var(--main-toolbar-height) + var(--sub-toolbar-height) + var(--bottom-toolbar-height)));
 }
 
 @media screen and (max-width: 620px) {

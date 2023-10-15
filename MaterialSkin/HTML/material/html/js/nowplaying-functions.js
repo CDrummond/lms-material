@@ -124,15 +124,16 @@ function nowplayingOnPlayerStatus(view, playerStatus) {
     let use = [useComposerTag, useConductorTag, useBandTag];
     let mods = ['', 's', '_ids'];
     for (let i=0, len=keys.length; i<len; ++i) {
+        let useRole = use[i] || undefined!=view.customActions;
         let idk = keys[i]+"_id";
         for (let j=0, jl=mods.length; j<jl; ++j) {
             let key = keys[i]+mods[j];
-            let val = use[i] ? playerStatus.current[key] : undefined;
+            let val = useRole ? playerStatus.current[key] : undefined;
             if (val!=view.playerStatus.current[key]) {
                 view.playerStatus.current[key] = val;
             }
         }
-        let id = use[i]
+        let id = useRole
                  ? playerStatus.current[idk]
                     ? playerStatus.current[idk]
                     : playerStatus.current[idk+"s"]
@@ -257,13 +258,13 @@ function nowplayingShowMenu(view, event) {
                     view.menu.items.push({title:ACTIONS[GOTO_ARTIST_ACTION].title, act:NP_BROWSE_CMD, cmd:{command:["albums"], params:["artist_id:"+albumartist_id, ARTIST_ALBUM_TAGS, SORT_KEY+ARTIST_ALBUM_SORT_PLACEHOLDER, "role_id:ALBUMARTIST"], title:view.playerStatus.current.albumartist}, svg:ACTIONS[GOTO_ARTIST_ACTION].svg});
                 }
             }
-            if (view.playerStatus.current.composer && view.playerStatus.current.composer_id && useComposer(view.playerStatus.current.genre)) {
+            if (lmsOptions.showComposer && view.playerStatus.current.composer && view.playerStatus.current.composer_id && useComposer(view.playerStatus.current.genre)) {
                 view.menu.items.push({title:i18n("Go to composer"), act:NP_BROWSE_CMD, cmd:{command:["albums"], params:["artist_id:"+view.playerStatus.current.composer_id, ARTIST_ALBUM_TAGS, SORT_KEY+ARTIST_ALBUM_SORT_PLACEHOLDER, "role_id:COMPOSER"], title:view.playerStatus.current.composer}, svg:"composer"});
             }
-            if (view.playerStatus.current.conductor && view.playerStatus.current.conductor_id && useConductor(view.playerStatus.current.genre)) {
+            if (lmsOptions.showConductor && view.playerStatus.current.conductor && view.playerStatus.current.conductor_id && useConductor(view.playerStatus.current.genre)) {
                 view.menu.items.push({title:i18n("Go to conductor"), act:NP_BROWSE_CMD, cmd:{command:["albums"], params:["artist_id:"+view.playerStatus.current.conductor_id, ARTIST_ALBUM_TAGS, SORT_KEY+ARTIST_ALBUM_SORT_PLACEHOLDER, "role_id:CONDUCTOR"], title:view.playerStatus.current.conductor}, svg:"conductor"});
             }
-            if (view.playerStatus.current.band && view.playerStatus.current.band_id && useBand(view.playerStatus.current.genre)) {
+            if (lmsOptions.showBand && view.playerStatus.current.band && view.playerStatus.current.band_id && useBand(view.playerStatus.current.genre)) {
                 view.menu.items.push({title:i18n("Go to band"), act:NP_BROWSE_CMD, cmd:{command:["albums"], params:["artist_id:"+view.playerStatus.current.band_id, ARTIST_ALBUM_TAGS, SORT_KEY+ARTIST_ALBUM_SORT_PLACEHOLDER, "role_id:BAND"], title:view.playerStatus.current.band}, svg:"trumpet"});
             }
             if (view.playerStatus.current.album_id && view.playerStatus.current.album) {

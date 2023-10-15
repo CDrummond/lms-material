@@ -346,7 +346,7 @@ function nowplayingMenuAction(view, item) {
             view.info.tabs[view.menu.tab].sections[0].items.length>=0 && view.menu.index<view.info.tabs[view.menu.tab].sections[0].items.length) {
             let litem = view.info.tabs[view.menu.tab].sections[0].items[view.menu.index];
             if (MORE_LIB_ACTION==act) {
-                bus.$emit("browse", ["tracks"], [litem.id, trackTags(), SORT_KEY+"tracknum"], unescape(litem.title), NP_INFO);
+                bus.$emit("browse", ["tracks"], [litem.id, trackTags(true), SORT_KEY+"tracknum"], unescape(litem.title), NP_INFO);
                 view.close();
             } else if (MORE_ACTION==act) {
                 bus.$emit('trackInfo', litem, undefined, NP_INFO);

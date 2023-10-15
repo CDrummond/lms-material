@@ -29,7 +29,7 @@ function showAlbum(event, album, title, page) {
         return;
     }
     event.stopPropagation();
-    bus.$emit("browse", ["tracks"], ["album_id:"+album, TRACK_TAGS+(lmsOptions.techInfo ? TECH_INFO_TAGS : ""), SORT_KEY+"tracknum"], unescape(title), page, page!="browse");
+    bus.$emit("browse", ["tracks"], ["album_id:"+album, trackTags(true), SORT_KEY+"tracknum"], unescape(title), page, page!="browse");
     bus.$emit('npclose');
 }
 

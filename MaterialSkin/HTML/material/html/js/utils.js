@@ -1071,8 +1071,8 @@ function stripTags(str) {
     return isEmpty(str) ? str : str.replace('<br/>', '\n').replace(/<\/?[^>]+(>|$)/g, "");
 }
 
-function trackTags() {
-    return TRACK_TAGS+(lmsOptions.techInfo ? TECH_INFO_TAGS : "");
+function trackTags(withCover) {
+    return TRACK_TAGS+(lmsOptions.techInfo ? TECH_INFO_TAGS : "")+(withCover ? 'c' : "");
 }
 
 if (!String.prototype.replaceAll) {

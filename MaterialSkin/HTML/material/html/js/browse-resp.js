@@ -930,9 +930,8 @@ function parseBrowseResp(data, parent, options, cacheKey, parentCommand, parentG
                               duration: i.duration,
                               durationStr: duration>0 ? formatSeconds(duration) : undefined
                           });
-                resp.numAudioItems = resp.items.length;
-                if (allowPlayAlbum) {
-                    resp.allSongsItem = parent;
+                if (0==idx && !showAlbumName && !isEmpty(""+i.coverid)) {
+                    resp.image="/music/"+i.coverid+"/cover"+LMS_IMAGE_SIZE;
                 }
             }
             // Now add artist to subtitle if we have multiple artists...
@@ -956,7 +955,10 @@ function parseBrowseResp(data, parent, options, cacheKey, parentCommand, parentG
             if (sortTracks) {
                 resp.items.sort(sort.rev ? revYearAlbumTrackSort : yearAlbumTrackSort);
             }
-
+            resp.numAudioItems = resp.items.length;
+            if (allowPlayAlbum) {
+                resp.allSongsItem = parent;
+            }
             if (discs.size>1) {
                 let d = 0;
 

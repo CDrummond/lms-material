@@ -133,7 +133,7 @@ function parseResp(data, showTrackNum, index, showRatings, threeLines) {
 var lmsQueue = Vue.component("lms-queue", {
   template: `
 <div v-bind:class="{'pq-unpinned':!pinQueue}" id="queue-view">
- <div class="subtoolbar noselect" v-bind:class="{'list-details':pinQueue}">
+ <div class="subtoolbar noselect" v-bind:class="{'list-details':pinQueue}" v-if="!desktopLayout || showQueue">
   <v-layout v-if="selection.size>0">
    <v-btn v-if="desktopLayout" :title="pinQueue ? trans.unpin : trans.pin" flat icon class="toolbar-button" @click="togglePin"><img :src="(pinQueue ? 'pin' : 'unpin') | svgIcon(darkUi)"></img></v-btn>
    <div class="toolbar-nobtn-pad"></div>
@@ -309,6 +309,9 @@ var lmsQueue = Vue.component("lms-queue", {
         },
         desktopLayout() {
             return this.$store.state.desktopLayout
+        },
+        showQueue() {
+            return this.$store.state.showQueue
         },
         pinQueue() {
             return this.$store.state.pinQueue

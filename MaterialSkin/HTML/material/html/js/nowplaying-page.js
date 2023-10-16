@@ -23,7 +23,10 @@ var currentPlayingTrackPosition = 0;
 var lmsNowPlaying = Vue.component("lms-now-playing", {
     template: `
 <div>
- <div v-show="!desktopLayout || info.show || largeView" class="np-bgnd" v-bind:class="[(info.show ? drawInfoBgndImage : drawBgndImage) ? 'np-bgnd-cover':'np-bgnd-cover-none']" id="np-bgnd"></div>
+ <div v-show="!desktopLayout || info.show || largeView" class="np-bgnd">
+  <div class="np-bgnd" v-bind:class="[(info.show ? drawInfoBgndImage : drawBgndImage) ? 'np-bgnd-cover':'np-bgnd-cover-none']" id="np-bgnd"></div>
+ </div>
+
  <v-tooltip top :position-x="timeTooltip.x" :position-y="timeTooltip.y" v-model="timeTooltip.show">{{timeTooltip.text}}</v-tooltip>
  <v-menu v-model="menu.show" :position-x="menu.x" :position-y="menu.y" absolute offset-y>
   <v-list>

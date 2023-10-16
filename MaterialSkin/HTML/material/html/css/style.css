@@ -153,9 +153,10 @@ html, .mini-player {
 }
 
 .np-bar {
-  background-color:var(--bottom-toolbar-color) !important;
-  border-top:1px solid var(--npbar-border-color)
- }
+ background-color:var(--bottom-toolbar-color) !important;
+ border-top:1px solid var(--npbar-border-color);
+ overflow:hidden!important;
+}
 
 .dialog-toolbar {
  height:var(--main-toolbar-height) !important;
@@ -2802,3 +2803,5 @@ img[lazy='loaded'].np-image {
 .settings-list .v-list__tile {
   padding:0px;
 }
+
+#

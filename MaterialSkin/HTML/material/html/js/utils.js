@@ -607,7 +607,7 @@ function setBgndCover(elem, coverUrl) {
         } else {
             elem.style.backgroundImage = "url('"+coverUrl+"')";
         }
-        elem.style.boxShadow = "inset 0 0 120vw 120vh var(--background-shadow-color)";
+        elem.style.boxShadow = "inset 100vw 100vh var(--background-shadow-color)";
     }
 }
 

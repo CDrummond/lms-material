@@ -1455,11 +1455,13 @@ var lmsBrowse = Vue.component("lms-browse", {
             }
         },
         setBgndCover() {
-            var url = this.$store.state.browseBackdrop && this.current && this.current.image
-                          ? this.current.image
-                          : this.currentItemImage
-                              ? this.currentItemImage
-                              : undefined;
+            var url = this.$store.state.browseBackdrop
+                        ? this.current && this.current.image
+                            ? this.current.image
+                            : this.currentItemImage
+                                ? this.currentItemImage
+                                : undefined
+                        : undefined;
             if (url) {
                url=changeImageSizing(url, LMS_CURRENT_IMAGE_SIZE);
             }

@@ -123,7 +123,7 @@
 .lms-list {
  position:fixed;
  top:calc(var(--main-toolbar-height) + var(--sub-toolbar-height));
- height:calc((var(--vh, 1vh)*100) - (var(--main-toolbar-height) + var(--sub-toolbar-height) + var(--bottom-toolbar-height) + var(--mobile-npbar-height) - 1px));
+ height:calc((var(--vh, 1vh)*100) - (var(--main-toolbar-height) + var(--sub-toolbar-height) + var(--bottom-toolbar-height) + var(--mobile-npbar-height)));
  width:100vw;
  overflow:auto;
  backface-visibility:hidden;
@@ -140,13 +140,13 @@
 }
 
 .lms-jumplist {
- height:calc((var(--vh, 1vh)*100) - (var(--main-toolbar-height) + var(--sub-toolbar-height) + var(--bottom-toolbar-height) + var(--mobile-npbar-height) - 1px));
+ height:calc((var(--vh, 1vh)*100) - (var(--main-toolbar-height) + var(--sub-toolbar-height) + var(--bottom-toolbar-height) + var(--mobile-npbar-height)));
 }
 
 .lms-image-grid {
  position:fixed;
  top:calc(var(--main-toolbar-height) + var(--sub-toolbar-height));
- height:calc((var(--vh, 1vh)*100) - (var(--main-toolbar-height) + var(--sub-toolbar-height) + var(--bottom-toolbar-height) + var(--mobile-npbar-height) - 1px));
+ height:calc((var(--vh, 1vh)*100) - (var(--main-toolbar-height) + var(--sub-toolbar-height) + var(--bottom-toolbar-height) + var(--mobile-npbar-height)));
  width:100vw;
  overflow:auto;
  backface-visibility:hidden;
@@ -229,11 +229,11 @@
 }
 
 .np-bar-slider {
- bottom:calc((var(--bottom-toolbar-height) + var(--mobile-npbar-height)) - 12px);
+ bottom:calc((var(--bottom-toolbar-height) + var(--mobile-npbar-height)) - 7px);
  width:100vw;
- height:8px !important;
+ height:3px !important;
 }
- 
+
 .np-bar-details-mobile {
  position:fixed;
  left:8px;

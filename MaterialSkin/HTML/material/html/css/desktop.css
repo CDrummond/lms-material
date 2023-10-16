@@ -377,7 +377,7 @@
 .pq-unpinned {
  position:fixed;
  right:0px;
- top:var(--main-toolbar-height);
+ top:calc(var(--main-toolbar-height) - 1px);
  z-index:2;
  width:620px;
  border:1px solid var(--sub-toolbar-border-color);

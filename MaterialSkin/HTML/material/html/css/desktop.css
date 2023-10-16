@@ -297,11 +297,11 @@
 }
 
 .np-info-text {
- height:calc((var(--vh, 1vh)*100) - (var(--main-toolbar-height) + var(--bottom-toolbar-height) + 103px));
+ height:calc((var(--vh, 1vh)*100) - (var(--main-toolbar-height) + var(--sub-toolbar-height) + var(--bottom-toolbar-height) + 55px));
 }
 
 .np-info-text-full {
- height:calc((var(--vh, 1vh)*100) - (var(--main-toolbar-height) + var(--bottom-toolbar-height) + 95px));
+ height:calc((var(--vh, 1vh)*100) - (var(--main-toolbar-height) + var(--bottom-toolbar-height) + 55px));
 }
 
 .np-details-landscape {

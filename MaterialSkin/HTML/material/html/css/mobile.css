@@ -285,7 +285,7 @@
 }
 
 .np-info-text-full {
- height:calc((var(--vh, 1vh)*100) - (var(--main-toolbar-height) + var(--bottom-toolbar-height) + var(--mobile-npbar-height) + 88px));
+ height:calc((var(--vh, 1vh)*100) - (var(--main-toolbar-height) + var(--bottom-toolbar-height) + var(--mobile-npbar-height) + 48px));
 }
 
 .no-control-adjust {

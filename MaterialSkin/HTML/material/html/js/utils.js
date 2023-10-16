@@ -105,9 +105,6 @@ function parseQueryParams() {
             resp.expand=decodeURIComponent(kv[1]).split("/");
         } else if ("npRatio"==kv[0]) {
             resp.npRatio=parseFloat(kv[1]);
-        } else if ("noblur"==kv[0]) {
-            document.documentElement.style.setProperty('--bgnd-filter', 'none');
-            document.documentElement.style.setProperty('--bgnd-webkit-filter', 'none');
         }
     }
     return resp;

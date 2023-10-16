@@ -67,6 +67,10 @@
  border-color:var(--primary-color)!important;
 }
 
+.v-progress-linear__bar {
+ height:unset!important;
+}
+
 .lms-toolbar .v-slider .primary {
  background-color:var(--toolbar-volume-color)!important;
  border-color:var(--toolbar-volume-color)!important;
@@ -154,8 +158,7 @@ html, .mini-player {
 
 .np-bar {
  background-color:var(--bottom-toolbar-color) !important;
- border-top:1px solid var(--npbar-border-color);
- overflow:hidden!important;
+ overflow:hidden;
 }
 
 .dialog-toolbar {
@@ -1258,8 +1261,8 @@ div.v-rating i.primary--text, div.v-rating i.accent--text {
 .np-slider {
  margin:5px 0 !important; /* v-progress-linear has margin: 1rem 0; */
  height:24px !important;
- border-top:0px solid transparent !important;
- border-bottom:5px solid transparent !important;
+ border:none !important;
+ overflow:hidden;
 }
 
 .np-slider .v-progress-linear__bar__determinate {
@@ -1373,6 +1376,20 @@ progress {
  backdrop-filter:var(--bgnd-filter);
  -webkit-backdrop-filter:var(--bgnd-webkit-filter);
  background:none!important;
+ overflow:hidden;
+}
+
+.np-bgnd-cover {
+ background-size:cover !important;
+ background-repeat:no-repeat !important;
+ background-position:center top !important;
+ filter:var(--bgnd-filter);
+ -webkit-filter:var(--bgnd-webkit-filter);
+ overflow:hidden;
+}
+
+.np-bgnd-cover-none {
+ background-image:none!important;
 }
 
 .ellipsis {
@@ -2803,5 +2820,3 @@ img[lazy='loaded'].np-image {
 .settings-list .v-list__tile {
   padding:0px;
 }
-
-#

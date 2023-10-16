@@ -14,6 +14,9 @@
     details in now-playing for use in actions.
 10. Only show "Go to composer", etc., items in now-playing context menu if
     configured to show relevant artist role.
+11. Use alternative blur for now-playing backgroud, so that works with
+    WebKitGTK.
+12. Tweak progress styling, to prevent blur issues.
 
 3.5.4
 -----

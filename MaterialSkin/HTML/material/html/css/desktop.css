@@ -64,17 +64,17 @@
 }
 
 .lms-list {
- height:calc((var(--vh, 1vh)*100) - (var(--main-toolbar-height) + var(--sub-toolbar-height) + var(--bottom-toolbar-height) - 1px));
+ height:calc((var(--vh, 1vh)*100) - (var(--main-toolbar-height) + var(--sub-toolbar-height) + var(--bottom-toolbar-height)));
  overflow:auto;
  backface-visibility:hidden;
 }
 
 .lms-jumplist {
- height:calc((var(--vh, 1vh)*100) - (var(--main-toolbar-height) + var(--sub-toolbar-height) + var(--bottom-toolbar-height) - 1px));
+ height:calc((var(--vh, 1vh)*100) - (var(--main-toolbar-height) + var(--sub-toolbar-height) + var(--bottom-toolbar-height)));
 }
 
 .lms-image-grid {
- height:calc((var(--vh, 1vh)*100) - (var(--main-toolbar-height) + var(--sub-toolbar-height) + var(--bottom-toolbar-height) - 1px));
+ height:calc((var(--vh, 1vh)*100) - (var(--main-toolbar-height) + var(--sub-toolbar-height) + var(--bottom-toolbar-height)));
  overflow:auto;
  backface-visibility:hidden;
  margin:0px;
@@ -115,7 +115,7 @@
  content: '';
  top: var(--main-toolbar-height);
  width: 12px;
- height: calc((var(--vh, 1vh)*100) - (var(--main-toolbar-height) + var(--bottom-toolbar-height) - 1px));
+ height: calc((var(--vh, 1vh)*100) - (var(--main-toolbar-height) + var(--bottom-toolbar-height)));
  margin-left:-2px;
  z-index: 4;
 }
@@ -206,13 +206,13 @@
  position:fixed;
  left:164px;
  bottom:1px;
- height:64px;
- width:64px;
+ height:65px;
+ width:65px;
 }
 
 .np-bar-image .np-cover {
- height:64px;
- width:64px;
+ height:65px;
+ width:65px;
 }
 
 .np-bar-sb .np-bar-image {
@@ -321,9 +321,9 @@
 .np-slider-desktop {
  position:fixed;
  left:0px;
- bottom:calc(var(--bottom-toolbar-height) - 11px);
+ bottom:calc(var(--bottom-toolbar-height) - 5px);
  width:100vw;
- height:10px !important;
+ height:5px !important;
  margin:0px !important; /* v-progress-linear has margin: 1rem 0; */
 }
 

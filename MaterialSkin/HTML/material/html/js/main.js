@@ -34,11 +34,6 @@ var app = new Vue({
         if (queryParams.addpad || (IS_IOS && (window.matchMedia('(display-mode: standalone)').matches || window.matchMedia('(display-mode: fullscreen)').matches))) {
             document.documentElement.style.setProperty('--bottom-nav-pad', '12px');
         }
-        if (IS_LINUX) {
-            // Background blur messes up now-playing with Epiphany (WebKitGTK). So, for now
-            // disablewebkit blur on Linux.
-            document.documentElement.style.setProperty('--bgnd-webkit-filter', 'none');
-        }
         this.autoLayout = true;
         this.$store.commit('initUiSettings');
         this.$store.commit('setShowQueue', getLocalStorageBool('showQueue', true));

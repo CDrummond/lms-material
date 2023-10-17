@@ -275,7 +275,6 @@ const store = new Vuex.Store({
         largeCovers: false,
         mediaControls: false,
         downloadStatus: [],
-        notifications: [],
         coloredToolbars: false,
         listPadding: 0
     },
@@ -675,20 +674,6 @@ const store = new Vuex.Store({
         },
         setDownloadStatus(state, val) {
             state.downloadStatus = val;
-        },
-        setNotification(state, val) {
-            for (let i=0, loop=state.notifications, len=loop.length; i<len; ++i) {
-                if (loop[i].id==val.id) {
-                    loop.splice(i, 1);
-                    break;
-                }
-            }
-            if (val.msg != '-') {
-                state.notifications.push(val);
-            }
-        },
-        setNotifications(state, val) {
-            state.notifications=val;
         },
         toggleDarkLight(state) {
             let def = defaultTheme()+(state.coloredToolbars ? "-colored" : "");

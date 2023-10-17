@@ -75,11 +75,6 @@ var lmsPromptDialog = Vue.component("lms-prompt-dialog", {
                 this.close(false);
             }
         }.bind(this));
-        bus.$on('notificationLinkActivated', function() {
-             if (this.$store.state.activeDialog == 'prompt') {
-                this.close(false);
-            }
-        }.bind(this));
     },
     methods: {
         close(resp) {

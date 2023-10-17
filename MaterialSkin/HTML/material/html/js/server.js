@@ -971,18 +971,6 @@ var lmsServer = Vue.component('lms-server', {
             });
         }.bind(this));
 
-        bus.$on('doMskNotificationAction', function(act) {
-            let customActions = getCustomActions("notifications", this.$store.state.unlockAll);
-            if (undefined!=customActions) {
-                for (let i=0, len=customActions.length; i<len; ++i) {
-                    if (customActions[i].id==act) {
-                        performCustomAction(customActions[i], this.$store.state.player);
-                        break;
-                    }
-                }
-            }
-        }.bind(this));
-
         // Add event listners for focus change, so that we can do an immediate reconect
         var prop = getHiddenProp();
         if (prop) {

@@ -46,7 +46,7 @@ function getSectionActions(section, actions, lockedActions, filter) {
     }
 }
 
-const NO_ALL_PLAYER_ACTIONS = new Set(['item', 'artist', 'album', 'track', 'queue-track', 'year', 'genre', 'settings', 'notifications', 'playlist', 'playlist-track', 'album-track']);
+const NO_ALL_PLAYER_ACTIONS = new Set(['item', 'artist', 'album', 'track', 'queue-track', 'year', 'genre', 'settings', 'playlist', 'playlist-track', 'album-track']);
 
 function getCustomActions(id, lockedActions, filter) {
     let actions = [];

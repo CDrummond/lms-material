@@ -6,17 +6,16 @@
  */
 'use strict';
 
-var TB_SETTINGS        = {id:0,  hdr: true };
-var TB_UI_SETTINGS     = {id:1,  svg:  "ui-settings" };
-var TB_PLAYER_SETTINGS = {id:2,  svg:  "player-settings" };
-var TB_SERVER_SETTINGS = {id:3,  svg:  "server-settings" };
-var TB_APP_SETTINGS    = {id:4,  svg:  "app-settings" };
-var TB_INFO            = {id:5,  icon: "info" };
-var TB_HELP            = {id:6,  icon: "help" };
-var TB_NOTIFICATIONS   = {id:7,  svg:  "bell" };
-var TB_MANAGE_PLAYERS  = {id:8,  svg:  "player-manager" };
-var TB_APP_QUIT        = {id:9,  icon: "power_settings_new" }
-var TB_START_PLAYER    = {id:10, icon: "surround_sound" }
+var TB_SETTINGS        = {id:0, hdr: true };
+var TB_UI_SETTINGS     = {id:1, svg:  "ui-settings" };
+var TB_PLAYER_SETTINGS = {id:2, svg:  "player-settings" };
+var TB_SERVER_SETTINGS = {id:3, svg:  "server-settings" };
+var TB_APP_SETTINGS    = {id:4, svg:  "app-settings" };
+var TB_INFO            = {id:5, icon: "info" };
+var TB_HELP            = {id:6, icon: "help" };
+var TB_MANAGE_PLAYERS  = {id:7, svg:  "player-manager" };
+var TB_APP_QUIT        = {id:8, icon: "power_settings_new" }
+var TB_START_PLAYER    = {id:9, icon: "surround_sound" }
 
 const TB_CUSTOM_SETTINGS_ACTIONS = {id:20};
 const TB_CUSTOM_ACTIONS = {id:21};
@@ -110,12 +109,12 @@ Vue.component('lms-toolbar', {
   <img v-else class="svg-img" :src="'queue_music_outline' | svgIcon(darkUi, false, coloredToolbars)"></img>
  </v-btn>
  <v-menu v-if="connected && showMenuButton" class="hide-for-mini" bottom left v-model="showMainMenu">
-  <v-btn slot="activator" icon :title="trans.mainMenu"><img v-if="updatesAvailable" class="svg-badge" :src="'update' | svgIcon(darkUi, true, true, coloredToolbars)"></img><img v-else-if="restartRequired" class="svg-badge" :src="'restart' | svgIcon(darkUi, true, true, coloredToolbars)"><img v-else-if="notificationsAvailable" class="svg-badge" :src="'bell' | svgIcon(darkUi, true, true, coloredToolbars)"></img><v-icon>more_vert</v-icon></v-btn>
+  <v-btn slot="activator" icon :title="trans.mainMenu"><img v-if="updatesAvailable" class="svg-badge" :src="'update' | svgIcon(darkUi, true, true, coloredToolbars)"></img><img v-else-if="restartRequired" class="svg-badge" :src="'restart' | svgIcon(darkUi, true, true, coloredToolbars)"></img><v-icon>more_vert</v-icon></v-btn>
   <v-list>
    <template v-for="(item, index) in menuItems">
     <v-divider v-if="item===DIVIDER"></v-divider>
     <v-subheader v-else-if="item.hdr">{{item.title}}</v-subheader>
-    <v-list-tile @click="menuAction(item.id)" v-else-if="(TB_UI_SETTINGS.id==item.id) || (TB_PLAYER_SETTINGS.id==item.id && player) || (TB_SERVER_SETTINGS.id==item.id && unlockAll) || (TB_NOTIFICATIONS.id==item.id && notificationsAvailable) || (TB_HELP.id==item.id) || (TB_INFO.id==item.id)">
+    <v-list-tile @click="menuAction(item.id)" v-else-if="(TB_UI_SETTINGS.id==item.id) || (TB_PLAYER_SETTINGS.id==item.id && player) || (TB_SERVER_SETTINGS.id==item.id && unlockAll) || (TB_HELP.id==item.id) || (TB_INFO.id==item.id)">
      <v-list-tile-avatar><img v-if="TB_INFO.id==item.id && updatesAvailable" class="svg-img" :src="'update' | svgIcon(darkUi, true)"></img><img v-else-if="TB_INFO.id==item.id && restartRequired" class="svg-img" :src="'restart' | svgIcon(darkUi, true)"><img v-else-if="item.svg" class="svg-img" :src="item.svg | svgIcon(darkUi)"><v-icon v-else>{{item.icon}}</v-icon></v-list-tile-avatar>
      <v-list-tile-content>
       <v-list-tile-title>{{item.stitle ? item.stitle : item.title}}</v-list-tile-title>
@@ -411,7 +410,6 @@ Vue.component('lms-toolbar', {
             TB_INFO.title=i18n('Information');
             TB_INFO.shortcut=shortcutStr(LMS_INFORMATION_KEYBOARD);
             TB_HELP.title=i18n('Help');
-            TB_NOTIFICATIONS.title=i18n('Notifications');
             TB_MANAGE_PLAYERS.title=i18n('Manage players');
             TB_MANAGE_PLAYERS.shortcut=shortcutStr(LMS_MANAGEPLAYERS_KEYBOARD);
             TB_APP_SETTINGS.title=i18n('Application settings');
@@ -430,7 +428,7 @@ Vue.component('lms-toolbar', {
                     if (queryParams.appLaunchPlayer) {
                         this.menuItems.push(TB_START_PLAYER);
                     }
-                    this.menuItems=this.menuItems.concat([TB_INFO, TB_HELP, TB_NOTIFICATIONS, TB_CUSTOM_ACTIONS]);
+                    this.menuItems=this.menuItems.concat([TB_INFO, TB_HELP, TB_CUSTOM_ACTIONS]);
                 }
                 if (queryParams.appQuit) {
                     this.menuItems.push(DIVIDER);
@@ -484,8 +482,6 @@ Vue.component('lms-toolbar', {
                 bus.$emit('dlg.open', 'iframe', '/material/html/material-skin/index.html', TB_HELP.title, undefined, 0);
             } else if (TB_MANAGE_PLAYERS.id==id) {
                 bus.$emit('dlg.open', 'manage');
-            } else if (TB_NOTIFICATIONS.id==id) {
-                bus.$emit('dlg.open', 'notifications');
             } else {
                 bus.$emit('toolbarAction', id);
             }
@@ -791,9 +787,6 @@ Vue.component('lms-toolbar', {
         },
         restartRequired() {
             return this.$store.state.unlockAll && this.$store.state.restartRequired
-        },
-        notificationsAvailable() {
-            return this.$store.state.notifications.length>0
         },
         keyboardControl() {
             return this.$store.state.keyboardControl && !IS_MOBILE

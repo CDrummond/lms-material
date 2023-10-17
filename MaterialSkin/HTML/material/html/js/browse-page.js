@@ -38,9 +38,9 @@ var lmsBrowse = Vue.component("lms-browse", {
   <v-layout v-else-if="history.length>0">
    <v-btn flat icon v-longpress="backBtnPressed" class="toolbar-button" v-bind:class="{'back-button':!homeButton || history.length<2}" id="back-button" :title="trans.goBack | tooltipStr('esc', keyboardControl)"><v-icon>arrow_back</v-icon></v-btn>
    <v-btn v-if="history.length>1 && homeButton" flat icon @click="homeBtnPressed()" class="toolbar-button" id="home-button" :title="trans.goHome | tooltipStr('home', keyboardControl)"><v-icon>home</v-icon></v-btn>
-   <v-layout row wrap @click="showHistory($event)" v-if="toolbarSubTitle" v-bind:class="{'pointer link-item': history.length>0}">
-    <v-flex xs12 class="ellipsis subtoolbar-title subtoolbar-pad">{{headerTitle}}</v-flex>
-    <v-flex xs12 class="ellipsis subtoolbar-subtitle subtext" v-html="toolbarSubTitle"></v-flex>
+   <v-layout row wrap @click="showHistory($event)" v-bind:class="{'pointer link-item': history.length>0}">
+    <v-flex xs12 class="ellipsis subtoolbar-title subtoolbar-pad" v-bind:class="{'subtoolbar-title-single':undefined==toolbarSubTitle}">{{headerTitle}}</v-flex>
+    <v-flex xs12 class="ellipsis subtoolbar-subtitle subtext" v-if="undefined!=toolbarSubTitle" v-html="toolbarSubTitle"></v-flex>
    </v-layout>
    <div class="ellipsis subtoolbar-title subtoolbar-title-single pointer link-item" @click="showHistory($event)" v-else-if="history.length>0">{{headerTitle}}</div>
    <div class="ellipsis subtoolbar-title subtoolbar-title-single" v-else>{{headerTitle}}</div>
@@ -452,7 +452,7 @@ var lmsBrowse = Vue.component("lms-browse", {
                     }
                 }
             }
-            return this.headerSubTitle + suffix
+            return this.headerSubTitle ? this.headerSubTitle + suffix : suffix.length<1 ? undefined : suffix;
         }
     },
     created() {

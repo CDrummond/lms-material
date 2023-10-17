@@ -15,6 +15,7 @@
 10. Use alternative blur for now-playing backgroud, so that works with
     WebKitGTK.
 11. Pre-cache HighDPI covers, thanks to Michael Herger.
+12. Fix display of subtoolbar sub-title on biographies and album reviews.
 
 3.5.4
 -----

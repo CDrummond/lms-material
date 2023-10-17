@@ -89,6 +89,7 @@ const GRID_MAX_WIDTH = 208; // 183
 const GRID_STEP = 5;
 const GRID_OTHER = {command:['other']};
 
+const AUTO_THEME = "auto";
 const MAX_GRID_TEXT_LEN = 80;
 const TERM_PLACEHOLDER = "__TAGGEDINPUT__";
 const ALBUM_SORT_PLACEHOLDER  = "AS";

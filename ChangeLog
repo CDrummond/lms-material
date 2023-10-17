@@ -28,6 +28,8 @@ x.y.z
     a compilation from a contributing artist.
 23. Only show artist under MAI album list if different.
 24. In desktop layout allow queue to be pinned/unpinned.
+25. Add 'Automatic' theme, switches between Light/Dark based upon browser's
+    dark mode setting.
 
 3.5.5
 -----

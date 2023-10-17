@@ -551,7 +551,7 @@ Vue.component('lms-ui-settings', {
     },
     methods: {
         readStore() {
-            let themeParts = this.$store.state.theme ? this.$store.state.theme.split('-') : ['dark'];
+            let themeParts = this.$store.state.chosenTheme ? this.$store.state.chosenTheme.split('-') : ['dark'];
             let variant = themeParts.length>1 && ('colored'==themeParts[themeParts.length-1] || 'standard'==themeParts[themeParts.length-1]) ? themeParts.pop() : 'standard';
             this.theme = themeParts.join('-');
             this.colorToolbars = 'colored'==variant;
@@ -600,6 +600,7 @@ Vue.component('lms-ui-settings', {
         },
         initItems() {
             this.themes=[
+                { key: AUTO_THEME, label:this.i18n('Automatic')},
                 { key:'light',  label:i18n('Light')},
                 { key:'dark',   label:i18n('Dark')},
                 { key:'darker', label:i18n('Darker')},

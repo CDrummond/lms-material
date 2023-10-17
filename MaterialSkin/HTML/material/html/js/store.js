@@ -29,11 +29,12 @@ function updateUiSettings(state, val) {
     var relayoutGrid = false;
     var themeChanged = false;
     var prevColor = state.color;
-    if (undefined!=val.theme && state.theme!=val.theme) {
-        state.theme = val.theme;
-        setLocalStorageVal('theme', state.theme);
+    if (undefined!=val.theme && state.chosenTheme!=val.theme) {
+        state.chosenTheme=val.theme;
+        state.coloredToolbars = state.chosenTheme.endsWith("-colored");
+        state.theme=state.chosenTheme.startsWith(AUTO_THEME) ? defaultTheme()+(state.coloredToolbars ? "-colored" : "") : state.chosenTheme;
+        setLocalStorageVal('theme', state.chosenTheme);
         themeChanged = true;
-        state.coloredToolbars = state.theme.endsWith("-colored");
     }
     if (val.color==COLOR_FROM_COVER && IS_IOS) {
         val.color='blue';
@@ -141,18 +142,21 @@ function updateUiSettings(state, val) {
     }
 }
 
-function defaultTheme() {
+function defaultTheme(standard) {
+    const prefersLight = standard ? false : (window.matchMedia && window.matchMedia('(prefers-color-scheme: light)').matches);
     // Keep in sync with index.html
     if (IS_IOS) {
-        return "darker";
+        return prefersLight ? "light" : "darker";
     } else if (IS_ANDROID) {
-        return "darker";
+        return prefersLight ? "light" : "darker";
     } else if (navigator.platform.indexOf("Linux") != -1) {
-        return window.location.href.indexOf('desktop=KDE') != -1 ? "linux/dark/Breeze-Dark" : "linux/dark/Adwaita-Dark";
+        return window.location.href.indexOf('desktop=KDE') != -1
+                    ? (prefersLight ? "linux/light/Breeze" : "linux/dark/Breeze-Dark")
+                    : (prefersLight ? "linux/light/Adwaita" : "linux/dark/Adwaita-Dark");
     } else if (navigator.platform.indexOf("Win") != -1) {
-        return "windows/dark/Windows-10-Dark";
+        return prefersLight ? "windows/light/Windows-10" : "windows/dark/Windows-10-Dark";
     } else if (navigator.platform.indexOf("Mac") != -1) {
-        return "mac/dark/Mojave-Dark";
+        return prefersLight ? "mac/light/Mojave" : "mac/dark/Mojave-Dark";
     }
     return "darker";
 }
@@ -228,7 +232,8 @@ const store = new Vuex.Store({
         player: null, // Current player (from list)
         defaultPlayer: null,
         otherPlayers: [], // Players on other servers
-        theme: defaultTheme(),
+        theme: defaultTheme(true),        // Set to dark/light if theme is "auto"
+        chosenTheme: defaultTheme(true),  // Theme as chosen by user
         color: 'blue',
         darkUi: true,
         roundCovers: true,
@@ -453,8 +458,9 @@ const store = new Vuex.Store({
             updateLang(state, window.navigator.userLanguage || window.navigator.language);
             state.defaultPlayer = getLocalStorageVal('defaultPlayer', state.defaultPlayer);
             state.page = getLocalStorageVal('page', state.page);
-            state.theme = getLocalStorageVal('theme', state.theme);
-            state.coloredToolbars = state.theme.endsWith("-colored");
+            state.chosenTheme = getLocalStorageVal('theme', state.chosenTheme);
+            state.coloredToolbars = state.chosenTheme.endsWith("-colored");
+            state.theme=state.chosenTheme.startsWith(AUTO_THEME) ? defaultTheme()+(state.coloredToolbars ? "-colored" : "") : state.chosenTheme;
             state.darkUi = !state.theme.startsWith('light') && state.theme.indexOf("/light/")<0;
             state.color = getLocalStorageVal('color', state.color);
             if (state.color==COLOR_FROM_COVER && IS_IOS) {
@@ -521,7 +527,7 @@ const store = new Vuex.Store({
                 if (data && data.result && data.result._p2) {
                     try {
                         var prefs = JSON.parse(data.result._p2);
-                        var opts = { theme: getLocalStorageVal('theme', undefined==prefs.theme ? state.theme : prefs.theme),
+                        var opts = { theme: getLocalStorageVal('theme', undefined==prefs.theme ? state.chosenTheme : prefs.theme),
                                      color: getLocalStorageVal('color', undefined==prefs.color ? state.color : prefs.color),
                                      largerElements: getLocalStorageBool('largerElements', undefined==prefs.largerElements ? state.largerElements : prefs.largerElements),
                                      fontSize: getLocalStorageVal('fontSize', undefined==prefs.fontSize ? state.fontSize : prefs.fontSize),
@@ -560,7 +566,7 @@ const store = new Vuex.Store({
                 }
                 // Ensure theme is in settings, so that it can be use in classic skin mods...
                 if (undefined==getLocalStorageVal('theme')) {
-                    setLocalStorageVal('theme', state.theme);
+                    setLocalStorageVal('theme', state.chosenTheme);
                 }
             });
         },
@@ -683,6 +689,15 @@ const store = new Vuex.Store({
         },
         setNotifications(state, val) {
             state.notifications=val;
+        },
+        toggleDarkLight(state) {
+            let def = defaultTheme()+(state.coloredToolbars ? "-colored" : "");
+            if (def!=state.theme) {
+                state.theme=def;
+                state.darkUi = !state.theme.startsWith('light') && state.theme.indexOf("/light/")<0;
+                setTheme(state.theme, state.color);
+                bus.$emit('themeChanged');
+            }
         }
     }
 })

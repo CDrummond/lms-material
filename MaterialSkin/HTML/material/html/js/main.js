@@ -293,6 +293,12 @@ var app = new Vue({
             document.attachEvent('onclick', this.clickListener);
         }
 
+        window.matchMedia('(prefers-color-scheme: light)').addEventListener('change', () => {
+            if (this.$store.state.chosenTheme.startsWith(AUTO_THEME)) {
+                this.$store.commit('toggleDarkLight');
+            }
+        }, false);
+
         bindKey('backspace');
         bus.$on('keyboard', function(key, modifier) {
             if (!modifier && 'backspace'==key) {

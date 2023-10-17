@@ -497,7 +497,14 @@ function browseHandleListResponse(view, item, command, resp, prevPage, appendIte
             view.headerSubTitle=resp.subtitle;
         } else if ( (1==view.items.length && ("text"==view.items[0].type || "html"==view.items[0].type)) ||
                     (listingArtistAlbums && 0==view.items.length) /*Artist from online service*/ ) {
-            view.headerSubTitle = undefined;
+            // Check for artist bio / album review invoked from browse toolbar
+            let parts = view.headerTitle.split(SEPARATOR);
+            if (2==parts.length) {
+                view.headerTitle = parts[0];
+                view.headerSubTitle = parts[1];
+            } else {
+                view.headerSubTitle = undefined;
+            }
         } else {
             view.headerSubTitle=0==view.items.length ? i18n("Empty") : i18np("1 Item", "%1 Items", view.items.length);
         }

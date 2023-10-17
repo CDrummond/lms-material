@@ -150,6 +150,9 @@ sub initPlugin {
         Slim::Web::Pages->addRawFunction($DOWNLOAD_PARSER_RE, \&_downloadHandler);
         # make sure scanner does pre-cache artwork in the size the skin is using in browse modesl
         Slim::Control::Request::executeRequest(undef, [ 'artworkspec', 'add', '300x300_f', 'Material Skin' ]);
+    	if ($serverprefs->get('precacheHiDPIArtwork')) {
+            Slim::Control::Request::executeRequest(undef, [ 'artworkspec', 'add', '600x600_f', 'Material Skin (HiDPI)' ]);
+        }
 
         $skinMgr = Slim::Web::HTTP::getSkinManager();
     }
@@ -397,12 +400,11 @@ sub _cliCommand {
 
     if ($cmd eq 'info') {
         my $osDetails = Slim::Utils::OSDetect::details();
-        my $serverPrefs = preferences('server');
         $request->addResult('info', '{"server":'
                                 .'[ {"label":"' . string('INFORMATION_VERSION') . '", "text":"' . $::VERSION . ' - ' . $::REVISION . ' @ ' . $::BUILDDATE . '"},'
                                 .  '{"label":"' . string('INFORMATION_HOSTNAME') . '", "text":"' . Slim::Utils::Network::hostName() . '"},'
                                 .  '{"label":"' . string('INFORMATION_SERVER_IP') . '", "text":"' . Slim::Utils::Network::serverAddr() . '"},'
-                                .  '{"label":"' . string('INFORMATION_OPERATINGSYSTEM') . '", "text":"' . $osDetails->{'osName'} . ' - ' . $serverPrefs->get('language') .
+                                .  '{"label":"' . string('INFORMATION_OPERATINGSYSTEM') . '", "text":"' . $osDetails->{'osName'} . ' - ' . $serverprefs->get('language') .
                                       ' - ' . Slim::Utils::Unicode::currentLocale() . '"},'
                                 .  '{"label":"' . string('INFORMATION_ARCHITECTURE') . '", "text":"' . ($osDetails->{'osArch'} ? $osDetails->{'osArch'} : '?') . '"},'
                                 .  '{"label":"' . string('PERL_VERSION') . '", "text":"' . $Config{'version'} . ' - ' . $Config{'archname'} . '"},'

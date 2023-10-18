@@ -135,6 +135,7 @@ var lmsQueue = Vue.component("lms-queue", {
 <div v-bind:class="{'pq-unpinned':!pinQueue}" id="queue-view">
  <div class="subtoolbar noselect" v-bind:class="{'list-details':pinQueue}" v-if="!desktopLayout || showQueue">
   <v-layout v-if="selection.size>0">
+   <lms-resizer v-if="!pinQueue" varname="pq-unpinned-width"></lms-resizer>
    <v-btn v-if="desktopLayout" :title="pinQueue ? trans.unpin : trans.pin" flat icon class="toolbar-button" @click="togglePin"><img :src="(pinQueue ? 'pin' : 'unpin') | svgIcon(darkUi)"></img></v-btn>
    <div class="toolbar-nobtn-pad"></div>
    <v-layout row wrap>
@@ -149,6 +150,7 @@ var lmsQueue = Vue.component("lms-queue", {
    <v-btn :title="trans.cancel" flat icon class="toolbar-button" @click="clearSelection()"><v-icon>cancel</v-icon></v-btn>
   </v-layout>
   <v-layout v-else>
+   <lms-resizer v-if="!pinQueue" varname="pq-unpinned-width"></lms-resizer>
    <v-btn v-if="desktopLayout" :title="pinQueue ? trans.unpin : trans.pin" flat icon class="toolbar-button" @click="togglePin"><img :src="(pinQueue ? 'pin' : 'unpin') | svgIcon(darkUi)"></img></v-btn>
    <div class="toolbar-nobtn-pad"></div>
    <v-layout row wrap v-longpress="durationClicked" class="link-item">
@@ -617,7 +619,7 @@ var lmsQueue = Vue.component("lms-queue", {
             msHandleScrollEvent(this);
         },
         clickListener(event) {
-            if (!this.$store.state.desktopLayout || this.$store.state.pinQueue || !this.$store.state.showQueue || this.$store.state.openDialogs.length>0) {
+            if (!this.$store.state.desktopLayout || this.$store.state.pinQueue || !this.$store.state.showQueue || this.$store.state.openDialogs.length>0 || resizerActive) {
                 return;
             }
             if (!this.viewElement.contains(event.target)) {

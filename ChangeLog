@@ -30,6 +30,7 @@ x.y.z
 24. In desktop layout allow queue to be pinned/unpinned.
 25. Add 'Automatic' theme, switches between Light/Dark based upon browser's
     dark mode setting.
+26. Fix keyboard shortcuts not working when MAI view open.
 
 3.5.5
 -----

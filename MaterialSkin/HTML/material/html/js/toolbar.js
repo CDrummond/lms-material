@@ -353,7 +353,7 @@ Vue.component('lms-toolbar', {
                 bindKey(''+i, 'alt');
             }
             bus.$on('keyboard', function(key, modifier) {
-                if (this.$store.state.openDialogs.length>0) {
+                if (this.$store.state.openDialogs.length>1 || (1==this.$store.state.openDialogs.length && this.$store.state.openDialogs[0]!='info-dialog')) {
                     return;
                 }
                 if ('mod'==modifier) {

@@ -384,8 +384,10 @@
  min-width:380px;
  max-width:100vw;
  width:var(--pq-unpinned-width);
- border:1px solid var(--sub-toolbar-border-color);
- border-radius:8px;
+ border-top:1px solid var(--sub-toolbar-border-color);
+ border-left:1px solid var(--sub-toolbar-border-color);
+ border-bottom:1px solid var(--sub-toolbar-border-color);
+ border-radius:8px 0  0 8px;
  box-shadow:var(--menu-dlg-shadow);
  overflow: hidden;
  animation: pqSlideIn .25s linear forwards;

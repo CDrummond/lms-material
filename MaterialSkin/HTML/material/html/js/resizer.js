@@ -37,8 +37,7 @@ Vue.component('lms-resizer', {
                 return;
             }
             this.active = resizerActive = true;
-            this.width = parseInt(getComputedStyle(document.documentElement).getPropertyValue('--'+this.varname).replace('px', ''));
-            this.origWidth = this.width;
+            this.origWidth = parseInt(getComputedStyle(document.documentElement).getPropertyValue('--'+this.varname).replace('px', ''));
             this.updated = undefined;
             this.pos = e['pageX'] || e.clientX;
             if (this.pos==undefined && e.touches) {
@@ -76,7 +75,7 @@ Vue.component('lms-resizer', {
 
             let diff = this.pos - pageX;
             if (0!=diff) {
-                let updated = this.width + diff;
+                let updated = this.origWidth + diff;
                 if (updated>=380 && updated<=1200) {
                     this.updated = updated;
                     if (!this.animationFrameReq) {

@@ -11,9 +11,10 @@ const MIXER_APPS = new Set(["musicip", "blissmixer", "musicsimilarity"]);
 const STREAM_SCHEMAS = new Set(["http", "https", "wavin"]);
 const HIDE_APPS_FOR_PARTY = new Set(["apps.accuradio", "apps.ardaudiothek", "apps.bbcsounds", "apps.cplus", "apps.globalplayeruk", "apps.iheartradio", "apps.lastmix", "apps.mixcloud", "apps.planetradio", "apps.podcasts", "apps.radiofrance", "apps.radionet", "apps.radionowplaying", "apps.radioparadise", "apps.squeezecloud", "apps.timesradio", "apps.ukradioplayer", "apps.virginradio", "apps.wefunk", "apps.phishin", "apps.walkwithme"]);
 const HIDE_APP_NAMES_FOR_PARTY = new Set(["Absolute Radio UK", "AccuRadio", "BBC", "CBC", "ClassicalRadio.com", "Digitally Imported", "JAZZRADIO.com", "Live Music Archive", "ROCKRADIO.com", "RadioFeeds UK & Ireland", "RadioTunes", "Radionomy", "SHOUTcast", "SomaFM", "TuneIn Radio", "ZenRadio.com"])
-const RELEASE_TYPES = ["ALBUM", "EP", "SINGLE", "COMPILATION", "APPEARANCE"];
+const RELEASE_TYPES = ["ALBUM", "EP", "SINGLE", "COMPILATION", "APPEARANCE", "COMPOSITION"];
 const ARTIST_ROLES = new Set([1,5])
 const TRACK_ARTIST_ROLES = new Set([6])
+const COMPOSER_ARTIST_ROLES = new Set([2])
 
 function itemText(i) {
     return i.title ? i.title : i.name ? i.name : i.caption ? i.caption : i.credits ? i.credits : undefined;
@@ -47,6 +48,9 @@ function capitaliseRelease(rel) {
     }
     if (rel=="APPEARANCE") {
         return i18n("Appearances");
+    }
+    if (rel=="COMPOSITION") {
+        return i18n("Compositions");
     }
     return rel.replace(/\w\S*/g, function(txt){return txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase();});
 }
@@ -872,6 +876,8 @@ function parseBrowseResp(data, parent, options, cacheKey, parentCommand, parentG
                         group = undefined==i.release_type ? "ALBUM" : i.release_type;
                     } else if (intersect(TRACK_ARTIST_ROLES, roles).size>0) {
                         group = "APPEARANCE";
+                    } else if (intersect(COMPOSER_ARTIST_ROLES, roles).size>0) {
+                        group = "COMPOSITION";
                     }
                 }
                 releaseTypes.add(group);

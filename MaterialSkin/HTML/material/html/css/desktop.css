@@ -403,7 +403,7 @@
 }
 
 .lms-resizer {
- width:8px;
+ width:4px;
  height:var(--sub-toolbar-height);
  margin-top:-2px;
  margin-left:-12px;

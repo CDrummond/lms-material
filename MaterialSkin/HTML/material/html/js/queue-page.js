@@ -1396,6 +1396,11 @@ var lmsQueue = Vue.component("lms-queue", {
     watch: {
         'menu.show': function(newVal) {
             this.$store.commit('menuVisible', {name:'queue', shown:newVal});
+        },
+        '$store.state.showQueue': function(shown) {
+            if (shown && this.$store.state.autoScrollQueue) {
+                this.scrollToCurrent();
+            }
         }
     },
     beforeDestroy() {

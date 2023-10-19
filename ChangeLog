@@ -31,6 +31,8 @@ x.y.z
 25. Add 'Automatic' theme, switches between Light/Dark based upon browser's
     dark mode setting.
 26. Fix keyboard shortcuts not working when MAI view open.
+27. If queue is set to auto-scroll to current then perform this action when
+    queue is unhidden.
 
 3.5.5
 -----

@@ -640,7 +640,7 @@ var lmsQueue = Vue.component("lms-queue", {
                 return;
             }
             // Ignore clicks on now-playing bar controls
-            if (this.items.length>0 && !this.nowPlayingExpanded && inRect(clickX, clickY, 0, window.innerHeight-72, 162, 72, 4)) {
+            if (this.items.length>0 && !this.nowPlayingExpanded && inRect(clickX, clickY, 0, window.innerHeight-72, window.innerWidth<=550 ? 90 : 162, 72, 4)) {
                 return;
             }
             this.$store.commit('setShowQueue', false);

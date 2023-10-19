@@ -635,12 +635,12 @@ var lmsQueue = Vue.component("lms-queue", {
             if (clickY==undefined && e.touches) {
                 clickY = e.touches[0].pageY;
             }
-            // Ignore clicks wihtin queue (and 16px around)
-            if (inRect(clickX, clickY, window.innerWidth-this.viewElement.scrollWidth, 48, window.innerWidth, window.innerHeight-(48+72), 16)) {
+            // Ignore clicks wihtin queue
+            if (inRect(clickX, clickY, window.innerWidth-this.viewElement.scrollWidth, 48, window.innerWidth, window.innerHeight-(48+72), 4)) {
                 return;
             }
             // Ignore clicks on now-playing bar
-            if (this.items.length>0 && !this.nowPlayingExpanded && inRect(clickX, clickY, 0, window.innerHeight-72, window.innerWidth, 72, 8)) {
+            if (this.items.length>0 && !this.nowPlayingExpanded && inRect(clickX, clickY, 0, window.innerHeight-72, window.innerWidth, 72, 4)) {
                 return;
             }
             this.$store.commit('setShowQueue', false);

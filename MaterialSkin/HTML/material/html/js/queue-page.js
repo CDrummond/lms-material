@@ -461,6 +461,11 @@ var lmsQueue = Vue.component("lms-queue", {
             }
         }.bind(this));
 
+        this.nowPlayingExpanded = false;
+        bus.$on('nowPlayingExpanded', function(val) {
+            this.nowPlayingExpanded = val;
+        }.bind(this));
+
         this.bgndElement = document.getElementById("queue-bgnd");
         this.scrollElement = document.getElementById("queue-list");
         this.scrollElement.addEventListener("scroll", this.handleScroll, PASSIVE_SUPPORTED ? { passive: true } : false);
@@ -618,13 +623,27 @@ var lmsQueue = Vue.component("lms-queue", {
             }
             msHandleScrollEvent(this);
         },
-        clickListener(event) {
+        clickListener(e) {
             if (!this.$store.state.desktopLayout || this.$store.state.pinQueue || !this.$store.state.showQueue || this.$store.state.openDialogs.length>0 || resizerActive) {
                 return;
             }
-            if (!this.viewElement.contains(event.target)) {
-                this.$store.commit('setShowQueue', false);
+            let clickX = e['pageX'] || e.clientX;
+            if (clickX==undefined && e.touches) {
+                clickX = e.touches[0].pageX;
             }
+            let clickY = e['pageY'] || e.clientY;
+            if (clickY==undefined && e.touches) {
+                clickY = e.touches[0].pageY;
+            }
+            // Ignore clicks wihtin queue (and 16px around)
+            if (inRect(clickX, clickY, window.innerWidth-this.viewElement.scrollWidth, 48, window.innerWidth, window.innerHeight-(48+72), 16)) {
+                return;
+            }
+            // Ignore clicks on now-playing bar
+            if (this.items.length>0 && !this.nowPlayingExpanded && inRect(clickX, clickY, 0, window.innerHeight-72, window.innerWidth, 72, 8)) {
+                return;
+            }
+            this.$store.commit('setShowQueue', false);
         },
         togglePin() {
             if (!this.$store.state.pinQueue) {

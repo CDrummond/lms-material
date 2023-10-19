@@ -334,3 +334,7 @@ function sortPlaylist(view, playerId, title, command) {
         }
     });
 }
+
+function inRect(x, y, rx, ry, rw, rh, padding) {
+    return x>=(rx-padding) && x<=(rx+rw+padding) && y>=(ry-padding) && y<=(ry+rh+padding);
+}

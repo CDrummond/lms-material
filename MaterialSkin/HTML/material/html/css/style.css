@@ -2390,6 +2390,10 @@ img[lazy='loaded'].np-cover {
  background-color:rgba(110, 110, 110, 0.65);
 }
 
+.np-menu {
+ background-color:rgba(110, 110, 110, 0.45);
+}
+
 .grid-btns .add-btn, .grid-btns .play-btn, .np-menu {
  color:var(--light-text-color);
 }

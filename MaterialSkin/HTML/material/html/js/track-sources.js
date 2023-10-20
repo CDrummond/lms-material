@@ -36,15 +36,15 @@ function getTrackSource(track) {
                             parts.pop();
                             srvUrl = parts.join('.');
                         }
-                        return {other:false, text:value.name, url:srvUrl, context:value.context};
+                        return {other:false, text:value.name, url:srvUrl, context:value.context, extid:value.extid};
                     } if (undefined!=value.url.prefix) {
                         let parts = track.url.split(value.url.split.on);
                         if (parts.length>value.url.split.use) {
-                            return {other:false, text:value.name, url:value.url.prefix+parts[value.url.split.use], context:value.context};
+                            return {other:false, text:value.name, url:value.url.prefix+parts[value.url.split.use], context:value.context, extid:value.extid};
                         }
                     }
                 }
-                return {other:false, text:value.name, context:value.context};
+                return {other:false, text:value.name, context:value.context, extid:value.extid};
             }
         }
         for (const [key, value] of Object.entries(lmsProtocols)) {
@@ -55,13 +55,13 @@ function getTrackSource(track) {
         if (track.url.startsWith("http:") || track.url.startsWith("https:")) {
             for (const [key, value] of Object.entries(trackSources["includes"])) {
                 if (track.url.includes(key)) {
-                    return {other:false, text:value.name, context:value.context};
+                    return {other:false, text:value.name, context:value.context, extid:value.extid};
                 }
             }
             if (undefined!=track.album) {
                 for (const [key, value] of Object.entries(trackSources["album"])) {
                     if (track.album.includes(key)) {
-                        return {other:false, text:value.name, context:value.context};
+                        return {other:false, text:value.name, context:value.context, extid:value.extid};
                     }
                 }
             }

@@ -7,7 +7,8 @@
             "to":"https://www.deezer.com/track/",
             "removeext":true
         },
-        "context":true
+        "context":true,
+        "extid":"deezer"
     },
     "spotify:":{
         "name":"Spotify",
@@ -15,7 +16,8 @@
             "from":"spotify://track:",
             "to":"https://open.spotify.com/track/"
         },
-        "context":true
+        "context":true,
+        "extid":"spotify"
     },
     "wimp:":{
         "name":"Tidal",
@@ -24,7 +26,8 @@
             "to":"https://tidal.com/browse/track/",
             "removeext":true
         },
-        "context":true
+        "context":true,
+        "extid":"wimp"
     },
     "qobuz:":{
         "name":"Qobuz",
@@ -33,10 +36,13 @@
             "to":"https://open.qobuz.com/track/",
             "removeext":true
         },
-        "context":true
+        "context":true,
+        "extid":"qobuz"
     },
     "bandcamp:":{
-        "name":"Bandcamp"
+        "name":"Bandcamp",
+        "context":true,
+        "extid":"bandcamp"
     },
     "https://media-ssl.musicradio.com/":{
         "name":"Global Player (UK)"
@@ -49,10 +55,12 @@
         "url":{
             "from":"youtube://www",
             "to":"https://www"
-        }
+        },
+        "extid":"youtube"
     },
     "pandora:":{
-        "name":"Pandora"
+        "name":"Pandora",
+        "extid":"pandora"
     },
     "sounds:":{
         "name":"BBC Sounds",
@@ -62,28 +70,35 @@
                 "on":"_",
                 "use":2
             }
-        }
+        },
+        "extid":"bbc"
     },
     "radioparadise:":{
         "name":"Radio Paradise",
-        "context":true
+        "context":true,
+        "extid":"radioparadise"
     }
   },
   "includes":{
     ".radioparadise.com/": {
         "name":"Radio Paradise",
-        "context":true
+        "context":true,
+        "extid":"radioparadise"
     },
     ".planetradio.co.uk":{
         "name":"Planet Radio"
     },
     ".bandcamp.com":{
-        "name":"Bandcamp"
+        "name":"Bandcamp",
+        "context":true,
+        "extid":"bandcamp"
     }
   },
   "album":{
     ".bandcamp.com":{
-        "name":"Bandcamp"
+        "name":"Bandcamp",
+        "context":true,
+        "extid":"bandcamp"
     }
   }
 }

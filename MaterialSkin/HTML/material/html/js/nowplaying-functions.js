@@ -110,7 +110,7 @@ function nowplayingOnPlayerStatus(view, playerStatus) {
     if (source!=view.playerStatus.current.source) {
         view.playerStatus.current.source = source;
     }
-    let emblem = getEmblem(playerStatus.current.extid);
+    let emblem = getEmblem(playerStatus.current.extid ? playerStatus.current.extid : source ? source.extid : undefined);
     if (emblem!=view.playerStatus.current.emblem) {
         view.playerStatus.current.emblem = emblem;
     }

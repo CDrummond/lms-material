@@ -110,6 +110,10 @@ function nowplayingOnPlayerStatus(view, playerStatus) {
     if (source!=view.playerStatus.current.source) {
         view.playerStatus.current.source = source;
     }
+    let emblem = getEmblem(playerStatus.current.extid);
+    if (emblem!=view.playerStatus.current.emblem) {
+        view.playerStatus.current.emblem = emblem;
+    }
     let mobileBarText = addPart(playerStatus.current.title, buildArtistLine(playerStatus.current, 'np', true));
     if (mobileBarText!=view.mobileBarText) {
         view.mobileBarText = mobileBarText;

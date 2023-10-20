@@ -204,6 +204,10 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
    <div v-if="landscape" v-touch:start="touchStart" v-touch:end="touchEnd" v-touch:moving="touchMoving">
     <div v-if="!info.show" class="np-image-landscape" v-bind:class="{'np-image-landscape-wide':landscape && wide>1}">
      <img :key="coverUrl" v-lazy="coverUrl" onerror="this.src=DEFAULT_COVER" @contextmenu="showMenu" @click="clickImage(event)" class="np-cover" v-bind:class="{'np-trans':transCvr}"></img>
+     <div class="np-emblem" v-if="playerStatus.current.emblem" :style="{background: playerStatus.current.emblem.bgnd}">
+      <img :src="playerStatus.current.emblem | emblem()" loading="lazy"></img>
+     </div>
+     <div class="np-menu" @click="showMenu"></div>
     </div>
     <div class="np-details-landscape" v-bind:class="{'np-details-landscape-wide': landscape && wide>1}">
 
@@ -267,6 +271,10 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
    <div v-else v-touch:start="touchStart" v-touch:end="touchEnd" v-touch:moving="touchMoving">
     <div v-if="!info.show" class="np-image">
      <img :key="coverUrl" v-lazy="coverUrl" onerror="this.src=DEFAULT_COVER" @contextmenu="showMenu" @click="clickImage(event)" class="np-cover" v-bind:class="{'np-trans':transCvr}"></img>
+     <div class="np-emblem" v-if="playerStatus.current.emblem" :style="{background: playerStatus.current.emblem.bgnd}">
+      <img :src="playerStatus.current.emblem | emblem()" loading="lazy"></img>
+     </div>
+     <div class="np-menu" @click="showMenu"></div>
     </div>
     <div class="np-portrait-song-info hide-scrollbar fade-both">
      <div>
@@ -336,7 +344,8 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
                     dvc: VOL_STD,
                     current: { canseek:1, duration:0, time:undefined, title:undefined, artist:undefined, artistAndComposer: undefined, artistAndComposerWithContext:undefined,
                                album:undefined, albumName:undefined, albumLine:undefined, technicalInfo:undefined, pospc:0.0, tracknum:undefined,
-                               disc:0, year:0, url:undefined, comment:undefined, source: {local:true, text:undefined} },
+                               disc:0, year:0, url:undefined, comment:undefined, source: {local:true, text:undefined},
+                               emblem: undefined },
                     playlist: { shuffle:0, repeat: 0, current:0, count:0 },
                  },
                  mobileBarText: undefined,

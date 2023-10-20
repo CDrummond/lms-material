@@ -6,8 +6,7 @@
  */
 'use strict';
 
-//const PLAYER_STATUS_TAGS = "tags:cdegiloqrstuyAABEIKNST";
-const PLAYER_STATUS_TAGS = "tags:cdegiloqrstuyAABGIKNST";
+const PLAYER_STATUS_TAGS = "tags:cdegiloqrstuyAABEGIKNST";
 const STATUS_UPDATE_MAX_TIME = 4000;
 
 function logString(val) {

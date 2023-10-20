@@ -537,7 +537,7 @@ div.v-subheader {
  }
 /*}*/
 
-.lms-list .image-grid-item .emblem img, .np-grid-item .emblem img {
+.lms-list .image-grid-item .emblem img, .np-grid-item .emblem img, .np-emblem img {
  width:26px !important;
  height:26px !important;
 }
@@ -971,6 +971,7 @@ div.v-subheader {
  height:var(--np-portrait-image-size);
  display:table;
  padding:var(--np-image-border);
+ position:relative;
 }
 
 .np-image .np-cover {
@@ -978,17 +979,48 @@ div.v-subheader {
  width:var(--np-portrait-image-size);
 }
 
-/* For old browser's that dont support min() */
-/*
-@supports not (width: min(10px, 5vw)) {
-  .np-image .cover {
- }
- @media (min-aspect-ratio: 68/100) {
-  .np-image .cover {
-  }
- }
+.np-emblem, .np-menu {
+ position:absolute;
+ border-radius: 50%;
+ width:32px;
+ height:32px;
 }
-*/
+
+.np-emblem {
+ padding:3px;
+ opacity:0.75;
+}
+
+.np-menu:after {
+ content:"more_vert";
+}
+
+.np-image .np-emblem, .np-image .np-menu {
+ top:calc(var(--np-image-border) + 8px);
+ right:calc(var(--np-image-border) + 8px);
+}
+
+.np-image .np-menu {
+ top:calc(var(--np-portrait-image-size) - (var(--np-image-border) + 8px));
+}
+
+.np-image-landscape .np-emblem, .np-image-landscape .np-menu {
+ top:calc(8px + ((var(--np-image-landscape-height) - var(--np-image-landscape-size))/2));
+ right:calc(8px + ((50vw - var(--np-image-landscape-size))/2));
+}
+
+.np-image-landscape .np-menu {
+ top:unset;
+ bottom:calc(8px + ((var(--np-image-landscape-height) - var(--np-image-landscape-size))/2));
+}
+
+.np-image-landscape-wide .np-emblem, .np-image-landscape-wide .np-menu {
+ left:calc(var(--np-image-landscape-wide-size) - (var(--np-image-border) + 8px));
+}
+
+.np-image-landscape-wide .np-menu {
+ top:calc(var(--np-image-landscape-wide-size) - (var(--np-image-border) + 8px)) !important;
+}
 
 .np-image-landscape {
  float:left;
@@ -997,6 +1029,7 @@ div.v-subheader {
  width:50vw;
  display:flex;
  padding:var(--np-image-border);
+ position:relative;
 }
 
 .np-image-landscape .np-cover {
@@ -2300,7 +2333,7 @@ img[lazy='loaded'].np-cover {
  margin-right:0px;
 }
 
-.grid-btn {
+.grid-btn, .np-menu {
  width:32px;
  height:32px;
  border-radius:50%;
@@ -2350,14 +2383,14 @@ img[lazy='loaded'].np-cover {
  margin: -2px -6px -2px -6px; /* Is -6px in vuetify, but list-btns messses this up? */
 }
 
-.add-btn, .play-btn {
+.add-btn, .play-btn, .np-menu {
  margin-right:2px;
  float:left;
  color:var(--text-color);
  background-color:rgba(110, 110, 110, 0.65);
 }
 
-.grid-btns .add-btn, .grid-btns .play-btn {
+.grid-btns .add-btn, .grid-btns .play-btn, .np-menu {
  color:var(--light-text-color);
 }
 
@@ -2366,7 +2399,7 @@ img[lazy='loaded'].np-cover {
 }
 
 /*@media (hover: hover) and (pointer: fine) {*/
- .msk-is-non-touch .add-btn:hover, .msk-is-non-touch .play-btn:hover {
+ .msk-is-non-touch .add-btn:hover, .msk-is-non-touch .play-btn:hover, .np-menu:hover {
   background-color:rgba(110, 110, 110, 0.95);
  }
 /*}*/

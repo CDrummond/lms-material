@@ -33,6 +33,8 @@ x.y.z
 26. Fix keyboard shortcuts not working when MAI view open.
 27. If queue is set to auto-scroll to current then perform this action when
     queue is unhidden.
+28. Show online service emblems top-right of now-playing cover.
+29. Add menu button bottom-right of now-playing cover.
 
 3.5.5
 -----

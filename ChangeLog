@@ -37,6 +37,7 @@ x.y.z
 29. Add menu button bottom-right of now-playing cover.
 30. Slightly more space for MAI.
 31. Use filled circle icons for play and pause.
+32. Only show grid menu icons on hover when using non-touch devices.
 
 3.5.5
 -----

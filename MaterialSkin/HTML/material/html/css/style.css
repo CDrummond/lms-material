@@ -2365,11 +2365,11 @@ img[lazy='loaded'].np-cover {
  content:"more_vert";
 }
 
-.image-grid-item .grid-btns, .v-list__tile .list-btns {
+.image-grid-item .grid-btns, .v-list__tile .list-btns, .msk-is-non-touch .image-grid-item .hover-btn {
  visibility: hidden;
 }
 
-.image-grid-item:hover .grid-btns, .v-list__tile:hover .list-btns {
+.image-grid-item:hover .grid-btns, .v-list__tile:hover .list-btns, .msk-is-non-touch .image-grid-item:hover .hover-btn {
  visibility: visible;
 }
 

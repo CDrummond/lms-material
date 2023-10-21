@@ -721,6 +721,9 @@ var lmsQueue = Vue.component("lms-queue", {
                 if (undefined!=choice) {
                     if (0==choice.id) {
                         bus.$emit('playerCommand', ["playlist", "clear"]);
+                        if (!this.$store.state.pinQueue) {
+                            this.$store.commit('setShowQueue', false);
+                        }
                     } else {
                         let indexes = [];
                         let start = (1==choice.id ? this.items.length : this.currentIndex)-1;

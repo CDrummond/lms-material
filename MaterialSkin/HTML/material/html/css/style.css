@@ -1172,6 +1172,9 @@ div.v-subheader {
  background:transparent!important;
 }
 
+.np-info-card-cover .v-card__actions {
+ margin-top:-6px;
+}
 .np-info-card-cover div.v-btn__content i {
  color:var(--text-color)!important;
 }

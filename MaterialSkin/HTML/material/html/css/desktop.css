@@ -403,8 +403,18 @@
 }
 
 .lms-resizer {
- width:4px;
- height:var(--sub-toolbar-height);
- margin-top:-2px;
- margin-left:-12px;
+ width:1px;
+ height:calc((var(--vh, 1vh)*100) - (var(--main-toolbar-height) + var(--bottom-toolbar-height)));
+ float:left;
+ position:absolute;
+ z-index:2;
+}
+
+.lms-resizer:before {
+ position: absolute;
+ content: '';
+ width: 12px;
+ height: calc((var(--vh, 1vh)*100) - (var(--main-toolbar-height) + var(--bottom-toolbar-height)));
+ margin-left:-2px;
+ z-index: 1;
 }

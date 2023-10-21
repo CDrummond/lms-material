@@ -232,7 +232,7 @@ function nowplayingOnPlayerStatus(view, playerStatus) {
 function nowplayingShowMenu(view, event) {
     event.preventDefault();
     view.clearClickTimeout();
-    if (view.info.show || (view.coverUrl && view.coverUrl!=LMS_BLANK_COVER && (undefined==view.touch || !view.touch.moving)) && window.innerHeight>=LMS_MIN_NP_LARGE_INFO_HEIGHT) {
+    if (view.info.show || (view.playerStatus.playlist.count>0 && window.innerHeight>=LMS_MIN_NP_LARGE_INFO_HEIGHT)) {
         view.touch = undefined;
         view.menu.show = false;
         let ontoolbar = false;

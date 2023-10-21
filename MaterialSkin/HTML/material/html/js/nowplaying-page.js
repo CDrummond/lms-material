@@ -207,7 +207,7 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
      <div class="np-emblem" v-if="playerStatus.current.emblem" :style="{background: playerStatus.current.emblem.bgnd}">
       <img :src="playerStatus.current.emblem | emblem()" loading="lazy"></img>
      </div>
-     <div class="np-menu" @click="showMenu"></div>
+     <div class="np-menu" @click="showMenu" v-if="playerStatus.playlist.count>0"></div>
     </div>
     <div class="np-details-landscape" v-bind:class="{'np-details-landscape-wide': landscape && wide>1}">
 
@@ -274,7 +274,7 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
      <div class="np-emblem" v-if="playerStatus.current.emblem" :style="{background: playerStatus.current.emblem.bgnd}">
       <img :src="playerStatus.current.emblem | emblem()" loading="lazy"></img>
      </div>
-     <div class="np-menu" @click="showMenu"></div>
+     <div class="np-menu" @click="showMenu" v-if="playerStatus.playlist.count>0"></div>
     </div>
     <div class="np-portrait-song-info hide-scrollbar fade-both">
      <div>

@@ -589,13 +589,11 @@ function fixId(id, prefix) {
 
 function setBgndCover(elem, coverUrl) {
     if (elem) {
-        elem.style.backgroundColor = "var(--background-color)";
         if (undefined==coverUrl || coverUrl.endsWith(DEFAULT_COVER) || coverUrl.endsWith("/music/undefined/cover")) {
             elem.style.backgroundImage = "url()";
         } else {
             elem.style.backgroundImage = "url('"+coverUrl+"')";
         }
-        elem.style.boxShadow = "inset 100vw 100vh var(--background-shadow-color)";
     }
 }
 

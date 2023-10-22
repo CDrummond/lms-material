@@ -5,7 +5,7 @@ x.y.z
  3. Force MAI tabs if layout too narrow.
  4. Add option to show a now-playing bar at the bottom of browse and queue
     views in mobile layout.
- 5. Increase background image blur.
+ 5. Slightly increase background image blur.
  6. Show track and album names in relevant MAI section.
  7. Remove "Artist", "Album", and "Track" headers from expanded MAI sections.
  8. Show now-playing bar progress even for radio.

@@ -1452,6 +1452,7 @@ progress {
  background-position:center top !important;
  filter:var(--bgnd-filter);
  -webkit-filter:var(--bgnd-filter);
+ box-shadow:inset 100vw 100vh var(--background-shadow-color);
  overflow:hidden;
 }
 

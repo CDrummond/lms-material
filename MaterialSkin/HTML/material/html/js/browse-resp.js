@@ -876,7 +876,7 @@ function parseBrowseResp(data, parent, options, cacheKey, parentCommand, parentG
                         group = undefined==i.release_type ? "ALBUM" : i.release_type;
                     } else if (roles.has(TRACK_ARTIST_ROLE)) {
                         group = "APPEARANCE";
-                    } else if (roles.has(COMPOSER_ARTIST_ROLES)) {
+                    } else if (roles.has(COMPOSER_ARTIST_ROLE)) {
                         group = "COMPOSITION";
                     }
                 }

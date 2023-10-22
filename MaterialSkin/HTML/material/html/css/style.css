@@ -1436,7 +1436,7 @@ progress {
  background-repeat:no-repeat !important;
  background-position:center top !important;
  box-shadow:inset 100vw 100vh var(--background-shadow-color);
- transition:background 0.2s!important;
+ transition:background 0.05s!important;
 }
 
 .bgnd-blur {

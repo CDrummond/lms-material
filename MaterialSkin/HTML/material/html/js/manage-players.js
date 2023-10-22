@@ -568,7 +568,7 @@ Vue.component('lms-manage-players', {
             }
             playerMap[player.id]={name:player.name, isgroup:player.isgroup, dvc:player.dvc};
 
-            player.playIcon = player.isplaying ? "pause_circle_outline" : "play_circle_outline";
+            player.playIcon = player.isplaying ? "pause_circle_filled" : "play_circle_filled";
             player.hasTrack = true;
             if (player.current.title) {
                 if (player.current.artist) {

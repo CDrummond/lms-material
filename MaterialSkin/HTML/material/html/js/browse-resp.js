@@ -13,8 +13,8 @@ const HIDE_APPS_FOR_PARTY = new Set(["apps.accuradio", "apps.ardaudiothek", "app
 const HIDE_APP_NAMES_FOR_PARTY = new Set(["Absolute Radio UK", "AccuRadio", "BBC", "CBC", "ClassicalRadio.com", "Digitally Imported", "JAZZRADIO.com", "Live Music Archive", "ROCKRADIO.com", "RadioFeeds UK & Ireland", "RadioTunes", "Radionomy", "SHOUTcast", "SomaFM", "TuneIn Radio", "ZenRadio.com"])
 const RELEASE_TYPES = ["ALBUM", "EP", "SINGLE", "COMPILATION", "APPEARANCE", "COMPOSITION"];
 const ARTIST_ROLES = new Set([1,5])
-const TRACK_ARTIST_ROLES = new Set([6])
-const COMPOSER_ARTIST_ROLES = new Set([2])
+const TRACK_ARTIST_ROLE = 6;
+const COMPOSER_ARTIST_ROLE = 2;
 
 function itemText(i) {
     return i.title ? i.title : i.name ? i.name : i.caption ? i.caption : i.credits ? i.credits : undefined;
@@ -874,9 +874,9 @@ function parseBrowseResp(data, parent, options, cacheKey, parentCommand, parentG
                     let roles = new Set(undefined==i.role_ids ? [] : i.role_ids.split(",").map(Number));
                     if (intersect(ARTIST_ROLES, roles).size>0) {
                         group = undefined==i.release_type ? "ALBUM" : i.release_type;
-                    } else if (intersect(TRACK_ARTIST_ROLES, roles).size>0) {
+                    } else if (roles.has(TRACK_ARTIST_ROLE)) {
                         group = "APPEARANCE";
-                    } else if (intersect(COMPOSER_ARTIST_ROLES, roles).size>0) {
+                    } else if (roles.has(COMPOSER_ARTIST_ROLES)) {
                         group = "COMPOSITION";
                     }
                 }

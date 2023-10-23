@@ -40,6 +40,7 @@ x.y.z
 32. Only show grid menu icons on hover when using non-touch devices.
 33. Rename 'Plugins' to 'Manage Plugins' in server settings section selector.
 34. Place 'Manage Plugins' as the first in the 'Plugins' section.
+35. Allow active/inactive plugins sections to be collapsed.
 
 3.5.5
 -----

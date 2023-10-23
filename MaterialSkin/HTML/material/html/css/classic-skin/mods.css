@@ -134,7 +134,7 @@ div#topGraphicMenu3 #statusMessage {
  font-size:16px !important;
  font-family:Roboto,sans-serif !important;
  text-rendering: optimizeLegibility;
- line-height: 1.5;
+ line-height: 1.25;
  -webkit-font-smoothing: antialiased;
  -moz-osx-font-smoothing: grayscale;
 }
@@ -150,6 +150,17 @@ table td {
  padding: 8px 6px 4px 0px;
  font-weight: 500;
  text-transform: none;
+}
+
+.settingSection .collapsableSection {
+ font-weight:var(--bold-weight)!important;
+ background-color:var(--pq-current-color)!important;
+ border-radius: 8px;
+}
+
+.msk-hidden-section {
+ visibility: hidden;
+ height:0px;
 }
 
 select, input {
@@ -268,7 +279,7 @@ input[type=radio]:checked:before {
  margin-top:-2px;
 }
 
-.msk-dir-btn:before, input[type=checkbox]:before, input[type=radio]:before {
+.msk-dir-btn:before, input[type=checkbox]:before, input[type=radio]:before, .msk-expander-btn:before {
  vertical-align: middle!important;
  font-family: "Material Icons"!important;
  font-size:24px!important;
@@ -281,12 +292,27 @@ input[type=radio]:checked:before {
  line-height:32px!important;
 }
 
-.msk-dir-btn {
+.msk-expander-btn:before {
+ content:"expand_more";
+ line-height:32px!important;
+}
+
+.msk-collapsed .msk-expander-btn:before {
+ content:"chevron_right";
+ line-height:32px!important;
+}
+
+.msk-dir-btn, .msk-expander-btn {
  width:32px;
  height:32px;
  border-radius:50%;
  display:inline-block;
  text-align:center;
+}
+
+.msk-expander-btn {
+ float:left;
+ pointer-events:none;
 }
 
 .msk-slider {
@@ -377,8 +403,8 @@ html, body {
  overflow: unset!important;
 }
 
-
-html, body, .stdedit, select, input[type="text"], div#topGraphicMenu3, .prefDesc, .groupDesc, .groupHead, .homeMenuSection div, td, .settingSection, .settingSection .groupHead, .settingSection .prefHead, li {
+html, body, .stdedit, select, input[type="text"], div#topGraphicMenu3, .prefDesc, .groupDesc, .groupHead, .homeMenuSection div, td, 
+.settingSection, .settingSection .groupHead, .settingSection .prefHead:not(.collapsableSection), li {
  background-color:var(--background-color) !important;
 }
 

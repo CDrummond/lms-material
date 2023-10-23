@@ -273,6 +273,62 @@ function hideSections(doc) {
     return hidden;
 }
 
+function toggleClass(elem, clz) {
+    let classes = elem.className.split(' ');
+    if (classes.includes(clz)) {
+        elem.classList.remove(clz);
+        return false;
+    } else {
+        elem.classList.add(clz);
+        return true;
+    }
+}
+
+function toggleSection(doc, elem) {
+    let panel = doc.getElementById(elem.id.replace(/_Header/, ''));
+    if (!panel) {
+        return;
+    }
+    let hasClass = toggleClass(panel, 'msk-hidden-section');
+    toggleClass(elem.parentElement, 'msk-collapsed');
+    if (hasClass) {
+        setLocalStorageVal("iframe.section."+elem.id, true);
+    } else {
+        removeLocalStorage("iframe.section."+elem.id);
+    }
+}
+
+function addExpanders(doc) {
+    let collapsables = getElementsByClassName(doc, "div", "collapsableSection");
+    let added = false;
+    if (collapsables!=null) {
+        for (let i=0, len=collapsables.length; i<len; i++) {
+            let classes = collapsables[i].className.split(' ');
+            if (classes.includes('msk-modified')) {
+                continue;
+            }
+            collapsables[i].classList.add('msk-modified');
+            let btn = doc.createElement("div");
+            btn.id="mskexpanderbtn."+collapsables[i].id;
+            btn.classList.add("msk-expander-btn");
+            collapsables[i].parentNode.insertBefore(btn, collapsables[i]);
+
+            let collapse = getLocalStorageBool("iframe.section."+collapsables[i].id, false);
+            if (collapse) {
+                toggleSection(doc, collapsables[i]);
+            }
+            collapsables[i].onclick=function(ev) {
+                let target = ev.target;
+                if (isEmpty(target.id)) {
+                    target = target.parentElement;
+                }
+                toggleSection(doc, target);
+            };
+        }
+    }
+    return added;
+}
+
 var iframeInfo = {
   content:undefined,
   action:undefined,
@@ -294,12 +350,16 @@ function iframeActionCheck() {
                     addFsSelectButtons(content);
                     iframeInfo.addedSliders = addSliders(content);
                     iframeInfo.sectionsHidden = hideSections(content);
+                    iframeInfo.addedExpanders = addExpanders(content);
                 } else if (iframeInfo.actionChecks<50) {
                     if (!iframeInfo.addedSliders) {
                         iframeInfo.addedSliders = addSliders(content);
                     }
                     if (!iframeInfo.sectionsHidden) {
                         iframeInfo.sectionsHidden = hideSections(content);
+                    }
+                    if (!iframeInfo.addedExpanders) {
+                        iframeInfo.addedExpanders = addExpanders(content);
                     }
                     return;
                 }
@@ -317,6 +377,7 @@ function selectChanged() {
     }
     iframeInfo.addedSliders = false;
     iframeInfo.sectionsHidden = false;
+    iframeInfo.addedExpanders = false;
     iframeInfo.actionChecks = 0;
     iframeInfo.actionCheckInterval = setInterval(function () {
         iframeActionCheck();

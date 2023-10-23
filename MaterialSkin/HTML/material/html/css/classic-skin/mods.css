@@ -98,6 +98,38 @@ td input { /* Fix entry/combo alignment in additional browse modes */
  padding-bottom:0px;
 }
 
+#updatePlugins td,
+#activePlugins td,
+#inactivePlugins td,
+#otherPlugins0 td,
+#otherPlugins1 td,
+#otherPlugins2 td,
+#otherPlugins3 td,
+#otherPlugins4 td,
+#otherPlugins5 td,
+#otherPlugins6 td,
+#otherPlugins7 td,
+#otherPlugins8 td,
+#otherPlugins9 td {
+ border-bottom: 1px solid var(--list-item-border-color);
+}
+
+#updatePlugins table,
+#activePlugins table,
+#inactivePlugins table,
+#otherPlugins0 table,
+#otherPlugins1 table,
+#otherPlugins2 table,
+#otherPlugins3 table,
+#otherPlugins4 table,
+#otherPlugins5 table,
+#otherPlugins6 table,
+#otherPlugins7 table,
+#otherPlugins8 table,
+#otherPlugins9 table {
+ border-spacing:0px 2px!important;
+}
+
 /* Advanced search - has been removed, but these used elsewhere?*/
 .border tbody tr td input[type=text] {
  padding-bottom:1px;

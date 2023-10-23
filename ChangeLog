@@ -42,6 +42,11 @@ x.y.z
 34. Place 'Manage Plugins' as the first in the 'Plugins' section.
 35. Allow active/inactive plugins sections to be collapsed.
 
+3.5.6
+-----
+1. Fix showing popup messages from server based settings pages.
+2. Fix toast messages being obscured.
+
 3.5.5
 -----
  1. Fix subtoolbar subtitle not always updating.

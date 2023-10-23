@@ -439,7 +439,7 @@ function hideClassicSkinElems(page, textCol) {
                     }
 
                     if (msg.length>0 && popupMsg!=msg) {
-                        bus.$emit('showMessage', msg);
+                        bus.$emit('iframe-showMessage', msg);
                     }
                 }
             }
@@ -543,6 +543,9 @@ Vue.component('lms-iframe-dialog', {
         }.bind(this));
         bus.$on('iframe-close', function() {
             this.close();
+        }.bind(this));
+        bus.$on('iframe-showMessage', function(msg) {
+            this.snackbar={show:true, msg:msg};
         }.bind(this));
         bus.$on('noPlayers', function() {
             this.close();

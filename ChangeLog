@@ -1,3 +1,7 @@
+3.5.6
+-----
+1. Fix showing popup messages from server based settings pages.
+
 3.5.5
 -----
  1. Fix subtoolbar subtitle not always updating.

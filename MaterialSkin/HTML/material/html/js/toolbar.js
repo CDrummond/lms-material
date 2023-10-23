@@ -22,7 +22,7 @@ const TB_CUSTOM_ACTIONS = {id:21};
 
 Vue.component('lms-toolbar', {
     template: `
-<div style="z-index:100"> <!-- Prevent np-cover leak -->
+<div style="z-index:2"> <!-- Prevent np-cover leak -->
 <v-toolbar fixed dense app class="lms-toolbar noselect" v-bind:class="{'lms-toolbar-no-menu':connected && !showMenuButton}">
 <div v-if="showClock" class="toolbar-clock">
  <div class="maintoolbar-title">{{time}}</div>

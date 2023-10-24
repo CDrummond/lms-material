@@ -2,6 +2,8 @@
 -----
 1. Fix showing popup messages from server based settings pages.
 2. Fix toast messages being obscured.
+3. Try harder to ensure we don't hide duplicate images when listing items in
+   favourites.
 
 3.5.5
 -----

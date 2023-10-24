@@ -344,3 +344,4 @@ PLUGIN_MATERIAL_SKIN_COMPILATION_ALBUMS_DESC
 #      first in the menu section.
 SETUP_PLUGINS
 	EN	 Manage Plugins
+	FR	 Gérer les plugins

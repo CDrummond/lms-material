@@ -530,18 +530,16 @@ Vue.component('lms-ui-settings', {
             });
             this.show = true;
         }.bind(this));
-        bus.$on('esc', function() {
+        bus.$on('closeMenu', function() {
             if (this.showMenu) {
                 this.showMenu = false;
-            } else if (this.$store.state.activeDialog == 'browsemodes') {
-                this.browseModesDialog.show=false;
-            } else if (this.$store.state.activeDialog == 'uisettings') {
-                this.show = false;
             }
         }.bind(this));
-        bus.$on('hideMenu', function(name) {
-            if (name=='uisettings') {
-                this.showMenu = false;
+        bus.$on('closeDialog', function(dlg) {
+            if (dlg == 'browsemodes') {
+                this.browseModesDialog.show=false;
+            } else if (dlg == 'uisettings') {
+                this.show = false;
             }
         }.bind(this));
         bus.$on('langChanged', function() {

@@ -305,6 +305,9 @@ var app = new Vue({
                 bus.$emit('esc');
             }
         }.bind(this));
+        bus.$on('esc', function() {
+            this.handleEsc();
+        }.bind(this));
 
         bus.$on('dlg.open', function(name, a, b, c, d, e, f, g, h) {
             if (typeof DEFERRED_LOADED != 'undefined') {
@@ -504,6 +507,27 @@ var app = new Vue({
                     }
                 }
             }
+        },
+        handleEsc() {
+            // Can receive 'esc' 120ish milliseconds after dialog was closed with 'esc' - so filter out
+            if (undefined!=this.$store.state.lastDialogClose && (new Date().getTime()-this.$store.state.lastDialogClose)<=250) {
+                return;
+            }
+            if (this.$store.state.visibleMenus.size>0) {
+                bus.$emit('closeMenu');
+                return;
+            }
+            // Hide queue if visible, unpinned, and no current dialog or current dialog is info-dialog
+            if (this.$store.state.desktopLayout && !this.$store.state.pinQueue && this.$store.state.showQueue &&
+                (undefined==this.$store.state.activeDialog || 'info-dialog'==this.$store.state.activeDialog)) {
+                this.$store.commit('setShowQueue', false);
+                return;
+            }
+            if (undefined!=this.$store.state.activeDialog) {
+                bus.$emit('closeDialog', this.$store.state.activeDialog);
+                return;
+            }
+            bus.$emit('escPressed');
         }
     },
     store,

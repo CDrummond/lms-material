@@ -396,18 +396,16 @@ Vue.component('lms-player-settings', {
                 this.sleepOpen = open;
             }
         }.bind(this));
-        bus.$on('esc', function() {
+        bus.$on('closeMenu', function() {
             if (this.showMenu) {
                 this.showMenu = false;
-            } if (this.$store.state.activeDialog == 'alarm') {
-                this.alarmDialog.show=false;
-            } else if (this.$store.state.activeDialog == 'playersettings') {
-                this.close();
             }
         }.bind(this));
-        bus.$on('hideMenu', function(name) {
-            if (name=='playersettings') {
-                this.showMenu= false;
+        bus.$on('closeDialog', function(dlg) {
+            if (dlg == 'alarm') {
+                this.alarmDialog.show=false;
+            } else if (dlg == 'playersettings') {
+                this.close();
             }
         }.bind(this));
         bus.$on('iframeClosed', function(isPlayer) {

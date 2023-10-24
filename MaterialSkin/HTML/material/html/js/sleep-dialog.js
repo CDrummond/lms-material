@@ -81,8 +81,8 @@ Vue.component('lms-sleep-dialog', {
         bus.$on('noPlayers', function() {
             this.cancel();
         }.bind(this));
-        bus.$on('esc', function() {
-            if (this.$store.state.activeDialog == 'sleep') {
+        bus.$on('closeDialog', function(dlg) {
+            if (dlg == 'sleep') {
                 this.cancel();
             }
         }.bind(this));

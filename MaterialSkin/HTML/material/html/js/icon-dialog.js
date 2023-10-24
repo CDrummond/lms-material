@@ -52,8 +52,8 @@ Vue.component('lms-icon-dialog', {
         bus.$on('noPlayers', function() {
             this.cancel();
         }.bind(this));
-        bus.$on('esc', function() {
-            if (this.$store.state.activeDialog == 'icon') {
+        bus.$on('closeDialog', function(dlg) {
+            if (dlg == 'icon') {
                 this.cancel();
             }
         }.bind(this));

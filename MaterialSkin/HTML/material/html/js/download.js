@@ -199,8 +199,8 @@ Vue.component('lms-downloadstatus', {
         bus.$on('downloadstatus.open', function() {
             this.show = true;
         }.bind(this));
-        bus.$on('esc', function() {
-            if (this.$store.state.activeDialog == 'downloadstatus') {
+        bus.$on('closeDialog', function(dlg) {
+            if (dlg == 'downloadstatus') {
                 this.close();
             }
         }.bind(this));

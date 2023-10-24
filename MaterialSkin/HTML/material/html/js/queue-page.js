@@ -453,8 +453,14 @@ var lmsQueue = Vue.component("lms-queue", {
         }.bind(this));
         this.initItems();
 
-        bus.$on('esc', function() {
+        bus.$on('closeMenu', function() {
             this.menu.show = false;
+        }.bind(this));
+
+        bus.$on('escPressed', function() {
+            if (this.dragActive) {
+                return;
+            }
             if (this.selection.size>0) {
                 this.clearSelection();
             }
@@ -554,7 +560,6 @@ var lmsQueue = Vue.component("lms-queue", {
                         this.clear();
                     } else if (LMS_QUEUE_ADD_URL_KEYBOARD==key || LMS_SCROLL_QUEUE_KEYBOARD==key || LMS_MOVE_QUEUE_KEYBOARD==key || LMS_SORT_QUEUE_KEYBOARD==key) {
                         this.headerAction(LMS_QUEUE_ADD_URL_KEYBOARD==key ? PQ_ADD_URL_ACTION : LMS_SCROLL_QUEUE_KEYBOARD==key ? PQ_SCROLL_ACTION : LMS_SORT_QUEUE_KEYBOARD==key ? PQ_SORT_ACTION : PQ_MOVE_QUEUE_ACTION);
-                        bus.$emit('hideMenu', 'main');
                     }
                 } else if ('alt'==modifier || (undefined==modifier && !this.$store.state.desktopLayout && this.$store.state.page=="queue")) {
                     if ('pageup'==key) {

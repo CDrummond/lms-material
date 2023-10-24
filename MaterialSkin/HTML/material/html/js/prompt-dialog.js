@@ -70,8 +70,8 @@ var lmsPromptDialog = Vue.component("lms-prompt-dialog", {
                 focusEntry(this);
             }
         }.bind(this));
-        bus.$on('esc', function() {
-            if (this.$store.state.activeDialog == 'prompt') {
+        bus.$on('closeDialog', function(dlg) {
+            if (dlg == 'prompt') {
                 this.close(false);
             }
         }.bind(this));

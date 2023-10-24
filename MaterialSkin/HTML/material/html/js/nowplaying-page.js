@@ -496,13 +496,20 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
         }.bind(this));
         this.initItems();
 
-        bus.$on('esc', function() {
+        bus.$on('closeMenu', function() {
             if (this.menu.show) {
                 this.menu.show = false;
-            } else if (this.$store.state.openDialogs.length==1 && this.$store.state.visibleMenus.size<=0 &&
-                       this.info.show && (this.$store.state.desktopLayout || this.$store.state.page=='now-playing')) {
+            }
+        }.bind(this));
+
+        bus.$on('closeDialog', function(dlg) {
+            if (dlg == 'info-dialog') {
                 this.info.show = false;
-            } else if (this.$store.state.openDialogs.length==0 && this.$store.state.visibleMenus.size<=0 &&
+            }
+        }.bind(this));
+
+        bus.$on('escPressed', function() {
+            if (this.$store.state.openDialogs.length==0 && this.$store.state.visibleMenus.size<=0 &&
                        this.largeView && this.$store.state.desktopLayout) {
                 this.largeView = false;
             }

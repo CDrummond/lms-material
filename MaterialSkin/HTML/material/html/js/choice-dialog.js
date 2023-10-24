@@ -69,8 +69,8 @@ Vue.component('lms-choice-dialog', {
                 this.choose(this.items[0]);
             }
         }.bind(this));
-        bus.$on('esc', function() {
-            if (this.$store.state.activeDialog == 'choice') {
+        bus.$on('closeDialog', function(dlg) {
+            if (dlg == 'choice') {
                 this.cancel();
             }
         }.bind(this));

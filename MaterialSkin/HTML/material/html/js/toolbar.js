@@ -271,24 +271,11 @@ Vue.component('lms-toolbar', {
         }.bind(this));
         this.initItems();
 
-        bus.$on('esc', function() {
+        bus.$on('closeMenu', function() {
             this.showPlayerMenu = false;
             this.showMainMenu = false;
             this.showErrorMenu = false;
         }.bind(this));
-        bus.$on('hideMenu', function(name) {
-            if (name=='main') {
-                this.showMainMenu = false;
-            } else if (name=='player') {
-                this.showPlayerMenu = false;
-            } else if (name=='error') {
-                this.showErrorMenu = false;
-            }
-        }.bind(this));
-        bus.$on('showMainMenu', function() {
-            this.showMainMenu = true;
-        }.bind(this));
-
         bus.$on('infoDialog', function(val) {
             this.infoOpen = val;
             this.initItems();
@@ -357,16 +344,17 @@ Vue.component('lms-toolbar', {
                     return;
                 }
                 if ('mod'==modifier) {
-                    if (this.$store.state.visibleMenus.size==1 && this.$store.state.visibleMenus.has('settings')) {
+                    if (this.$store.state.visibleMenus.size==1 && this.$store.state.visibleMenus.has('main')) {
                         if (LMS_UI_SETTINGS_KEYBOARD==key || LMS_PLAYER_SETTINGS_KEYBOARD==key ||  LMS_SERVER_SETTINGS_KEYBOARD==key || LMS_INFORMATION_KEYBOARD==key) {
+                            console.log("KEY");
                             this.menuAction(LMS_UI_SETTINGS_KEYBOARD==key ? TB_UI_SETTINGS.id : LMS_PLAYER_SETTINGS_KEYBOARD==key ? TB_PLAYER_SETTINGS.id : 
                                             LMS_SERVER_SETTINGS_KEYBOARD==key ? TB_SERVER_SETTINGS.id : TB_INFO.id);
-                            bus.$emit('hideMenu', 'main');
+                            this.showMainMenu = false;
                         }
                     } else if (this.$store.state.visibleMenus.size==1 && this.$store.state.visibleMenus.has('player')) {
                         if (LMS_MANAGEPLAYERS_KEYBOARD==key && this.$store.state.players.length>1) {
                             this.menuAction(TB_MANAGE_PLAYERS.id);
-                            bus.$emit('hideMenu', 'player');
+                            this.showPlayerMenu = false;
                         }
                     } else if (this.$store.state.visibleMenus.size==0) {
                         if (LMS_UI_SETTINGS_KEYBOARD==key || LMS_PLAYER_SETTINGS_KEYBOARD==key || LMS_SERVER_SETTINGS_KEYBOARD==key || LMS_INFORMATION_KEYBOARD==key ||

@@ -256,7 +256,7 @@ Vue.component('lms-manage-players', {
         }.bind(this));
         this.initItems();
 
-        bus.$on('esc', function() {
+        bus.$on('closeMenu', function() {
             // Try to ignore 'esc' if we were dragging, as use this to stop drag
             if (undefined!=this.dragEndTime && ((new Date().getTime()-this.dragEndTime)<=250)) {
                 return;
@@ -265,13 +265,14 @@ Vue.component('lms-manage-players', {
                 this.showMenu = false;
             } else if (this.menu.show) {
                 this.menu.show = false;
-            } else if (this.$store.state.activeDialog == 'manage') {
-                this.close();
             }
         }.bind(this));
-        bus.$on('hideMenu', function(name) {
-            if (name=='manage-menu') {
-                this.showMenu= false;
+        bus.$on('closeDialog', function(dlg) {
+            if (undefined!=this.dragEndTime && ((new Date().getTime()-this.dragEndTime)<=250)) {
+                return;
+            }
+            if (dlg == 'manage') {
+                this.close();
             }
         }.bind(this));
 

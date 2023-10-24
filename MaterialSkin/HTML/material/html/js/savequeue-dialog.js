@@ -63,8 +63,8 @@ Vue.component('lms-savequeue', {
         bus.$on('noPlayers', function() {
             this.show=false;
         }.bind(this));
-        bus.$on('esc', function() {
-            if (this.$store.state.activeDialog == 'savequeue') {
+        bus.$on('closeDialog', function(dlg) {
+            if (dlg == 'savequeue') {
                 this.show=false;
             }
         }.bind(this));

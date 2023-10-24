@@ -117,7 +117,7 @@ function addHooks(doc) {
 var iframeMenuOpen = false;
 function iframeClickHandler(e) {
     if (iframeMenuOpen) {
-        bus.$emit('hideMenu', 'iframe');
+        bus.$emit('iframe-hideMenu');
     }
 }
 
@@ -608,19 +608,18 @@ Vue.component('lms-iframe-dialog', {
         bus.$on('iframe-showMessage', function(msg) {
             this.snackbar={show:true, msg:msg};
         }.bind(this));
+        bus.$on('iframe-hideMenu', function() {
+            this.showMenu = false;
+        }.bind(this));
         bus.$on('noPlayers', function() {
             this.close();
         }.bind(this));
-        bus.$on('esc', function() {
-            if (this.showMenu) {
-                this.showMenu = false;
-            } else if (this.$store.state.activeDialog == 'iframe') {
-                this.close();
-            }
+        bus.$on('closeMenu', function() {
+            this.showMenu = false;
         }.bind(this));
-        bus.$on('hideMenu', function(name) {
-            if (name=='iframe') {
-                this.showMenu= false;
+        bus.$on('closeDialog', function(dlg) {
+            if (dlg == 'iframe') {
+                this.close();
             }
         }.bind(this));
         bus.$on('windowHeightChanged', function() {

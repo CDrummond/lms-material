@@ -65,8 +65,8 @@ Vue.component('lms-rating-dialog', {
         bus.$on('noPlayers', function() {
             this.show=false;
         }.bind(this));
-        bus.$on('esc', function() {
-            if (this.$store.state.activeDialog == 'rating') {
+        bus.$on('closeDialog', function(dlg) {
+            if (dlg == 'rating') {
                 this.show=false;
             }
         }.bind(this));

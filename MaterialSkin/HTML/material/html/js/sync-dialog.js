@@ -101,8 +101,8 @@ Vue.component('lms-sync-dialog', {
         bus.$on('noPlayers', function() {
             this.show=false;
         }.bind(this));
-        bus.$on('esc', function() {
-            if (this.$store.state.activeDialog == 'sync') {
+        bus.$on('closeDialog', function(dlg) {
+            if (dlg == 'sync') {
                 this.show=false;
             }
         }.bind(this));

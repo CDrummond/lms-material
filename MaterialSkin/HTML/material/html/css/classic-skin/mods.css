@@ -191,6 +191,7 @@ table td {
  font-weight:var(--bold-weight)!important;
  background-color:var(--pq-current-color)!important;
  border-radius: 8px;
+ cursor: pointer;
 }
 
 .msk-hidden-section {

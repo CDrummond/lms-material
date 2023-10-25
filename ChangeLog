@@ -43,6 +43,8 @@ x.y.z
 35. Allow active/inactive plugins sections to be collapsed.
 36. On non-touch devices replace settings help text with a "(?)" button,
     similar to "Default" skin.
+37. Re-do desktop now-playing bar logic so that track/count can be shown even
+    if also showing tech info.
 
 3.5.6
 -----

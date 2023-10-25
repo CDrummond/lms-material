@@ -104,7 +104,8 @@ function parseBrowseResp(data, parent, options, cacheKey, parentCommand, parentG
             var addAction = false;
             var insertAction = false;
             var moreAction = false;
-            var isFavorites = parent && parent.isFavFolder ? true : false;
+            var isFavorites = parent && parent.isFavFolder
+            var isFromFavorites = isFavorites || (data.params[1].length>=1 && data.params[1][0]=="favorites") ? true : false;
             var isPlaylists = parent && parent.section == SECTION_PLAYLISTS;
             var isRadios = parent && parent.section == SECTION_RADIO;
             var isRadiosTop = isRadios && parent.id == TOP_RADIO_ID;
@@ -576,7 +577,7 @@ function parseBrowseResp(data, parent, options, cacheKey, parentCommand, parentG
                 resp.allSongsItem={id:resp.baseActions['playControl'].params.item_id, params:resp.baseActions['playControl'].params};
             }
             // If listing a radio app's entries and all images are the same, then hide images. e.g. iHeartRadio and RadioNet
-            if (!isFavorites && !isBmf && (!isApps || (isApps && parent.id.split('.').length==2)) && resp.items.length>1 && resp.items.length<=100) {
+            if (!isFromFavorites && !isBmf && (!isApps || (isApps && parent.id.split('.').length==2)) && resp.items.length>1 && resp.items.length<=100) {
                 if (images.size == 1 && undefined!=images.values().next().value) {
                     for (var i=0, loop=resp.items, len=loop.length; i<len; ++i) {
                         loop[i].image = loop[i].icon = loop[i].svg = undefined;

@@ -166,7 +166,7 @@ Vue.component('lms-toolbar', {
   <v-icon class="red">error</v-icon>
  </v-btn>
 </v-toolbar>
-<v-snackbar v-model="snackbar.show" :multi-line="true" :timeout="snackbar.timeout ? snackbar.timeout : 2500" :color="snackbar.color" top>{{ snackbar.msg }}</v-snackbar>
+<v-snackbar style="z-index:3" v-model="snackbar.show" :multi-line="true" :timeout="snackbar.timeout ? snackbar.timeout : 2500" :color="snackbar.color" top>{{ snackbar.msg }}</v-snackbar>
 </div>
     `,
     data() {

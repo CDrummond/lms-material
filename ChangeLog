@@ -45,6 +45,7 @@ x.y.z
     similar to "Default" skin.
 37. Re-do desktop now-playing bar logic so that track/count can be shown even
     if also showing tech info.
+38. Allow info dialogs to be closed by cliking outside.
 
 3.5.6
 -----

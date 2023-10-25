@@ -22,5 +22,6 @@ var lmsOptions = {techInfo: getLocalStorageBool('techInfo', false),
                   commentAsDiscTitle: getLocalStorageVal('commentAsDiscTitle', 0),
                   showComment: getLocalStorageBool('showComment', false),
                   pagedBatchSize: parseInt(getLocalStorageVal('pagedBatchSize', 100)),
-                  compilationAll: getLocalStorageBool('compilationAll', true)
+                  compilationAll: getLocalStorageBool('compilationAll', true),
+                  releaseTypeOrder: undefined
                 };

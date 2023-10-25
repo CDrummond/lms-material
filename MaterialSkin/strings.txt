@@ -339,6 +339,12 @@ PLUGIN_MATERIAL_SKIN_COMPILATION_ALBUMS_DESC
 	EN	When browsing an artist's albums use all tracks of compilation albums, do not limit to tracks of current artist.
 	FR	Lors du parcours des albums d'un artiste, utiliser tous les morceaux des albums de compilation, sans se limiter aux morceaux de l'artiste actuel.
 
+PLUGIN_MATERIAL_SKIN_RELEASE_TYPE_ORDER
+	EN	Release type order
+
+PLUGIN_MATERIAL_SKIN_RELEASE_TYPE_ORDER_DESC
+	EN	Specify order to display relase types (this is a comma separated list of UPPERCASE release type names) - e.g. "ALBUM, EP, SINGLE"
+
 #NOTE: When translating SETUP_PLUGINS you *must* insert a space before your translation.
 #      This space is hidden in the UI, but causes this "Manage Plugins" entry to be the
 #      first in the menu section.

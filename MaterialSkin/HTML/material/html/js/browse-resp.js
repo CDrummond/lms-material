@@ -56,13 +56,14 @@ function capitaliseRelease(rel) {
 }
 
 function releaseTypeSort(a, b) {
-    let va = RELEASE_TYPES.indexOf(a);
-    let vb = RELEASE_TYPES.indexOf(b);
+    let list = undefined==lmsOptions.releaseTypeOrder ? RELEASE_TYPES : lmsOptions.releaseTypeOrder
+    let va = list.indexOf(a);
+    let vb = list.indexOf(b);
     if (va<0) {
-        va=RELEASE_TYPES.length;
+        va=list.length;
     }
     if (vb<0) {
-        vb=RELEASE_TYPES.length;
+        vb=list.length;
     }
     if (va<vb) {
         return -1;

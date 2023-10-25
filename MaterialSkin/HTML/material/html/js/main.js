@@ -169,7 +169,7 @@ var app = new Vue({
                 }
                 if (undefined!=data.result['releaseTypeOrder']) {
                     let arr = splitString(data.result['releaseTypeOrder'].split("\r").join("").split("\n").join(","));
-                    lmsOptions.releaseTypeOrder = arr.lenght>0 ? arr : undefined;
+                    lmsOptions.releaseTypeOrder = arr.length>0 ? arr : undefined;
                 }
             }
         });

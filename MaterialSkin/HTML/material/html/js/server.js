@@ -580,7 +580,7 @@ var lmsServer = Vue.component('lms-server', {
                     if (!found) {
                         if (data[2]=='releaseTypeOrder') {
                             let arr = splitString(data[3].split("\r").join("").split("\n").join(","));
-                            lmsOptions.releaseTypeOrder = arr.lenght>0 ? arr : undefined;
+                            lmsOptions.releaseTypeOrder = arr.length>0 ? arr : undefined;
                         }
                     }
                 }

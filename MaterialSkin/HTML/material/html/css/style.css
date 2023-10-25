@@ -2397,6 +2397,7 @@ img[lazy='loaded'].np-cover {
 
 .np-menu {
  background-color:rgba(110, 110, 110, 0.45);
+ opacity:0.5;
 }
 
 .grid-btns .add-btn, .grid-btns .play-btn, .np-menu {
@@ -2408,9 +2409,14 @@ img[lazy='loaded'].np-cover {
 }
 
 /*@media (hover: hover) and (pointer: fine) {*/
- .msk-is-non-touch .add-btn:hover, .msk-is-non-touch .play-btn:hover, .np-menu:hover {
+ .msk-is-non-touch .add-btn:hover, .msk-is-non-touch .play-btn:hover {
   background-color:rgba(110, 110, 110, 0.95);
  }
+
+.msk-is-non-touch .np-menu:hover {
+ background-color:rgba(110, 110, 110, 0.95);
+ opacity:1.0;
+}
 /*}*/
 
 .add-btn:after {

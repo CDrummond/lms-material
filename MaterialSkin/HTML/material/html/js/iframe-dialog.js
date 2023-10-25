@@ -362,6 +362,7 @@ function addHelp(doc) {
             btn.classList.add("msk-help-btn");
             title.style.float="left";
             descDivs[i].parentNode.insertBefore(btn, descDivs[i]);
+            descDivs[i].innerHTML="";
             btn.onclick=function(ev) {
                 bus.$emit('dlg.open', 'iteminfo', {list:[title.innerHTML, desc]});
             };

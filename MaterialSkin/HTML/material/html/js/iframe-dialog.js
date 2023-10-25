@@ -307,6 +307,7 @@ function addExpanders(doc) {
             if (classes.includes('msk-modified')) {
                 continue;
             }
+            added = true;
             collapsables[i].classList.add('msk-modified');
             let btn = doc.createElement("div");
             btn.id="mskexpanderbtn."+collapsables[i].id;
@@ -323,6 +324,46 @@ function addExpanders(doc) {
                     target = target.parentElement;
                 }
                 toggleSection(doc, target);
+            };
+        }
+    }
+    return added;
+}
+
+function addHelp(doc) {
+    let descDivs = getElementsByClassName(doc, "div", "hiddenDesc");
+    let added = false;
+    if (null!=descDivs) {
+        for (let i=0, len=descDivs.length; i<len; i++) {
+            let classes = descDivs[i].className.split(' ');
+            if (classes.includes('msk-modified')) {
+                continue;
+            }
+            let desc = descDivs[i].innerHTML;
+            if (isEmpty(desc)) {
+                continue;
+            }
+            let parent = descDivs[i].parentElement;
+            if (null==parent) {
+                continue;
+            }
+            classes = parent.className.split(' ');
+            if (!classes.includes('settingGroup') && !classes.includes('settingSection')) {
+                continue;
+            }
+            let titles = getElementsByClassName(parent, "div", "prefHead");
+            if (null==titles || titles.length!=1) {
+                continue;
+            }
+            let title=titles[0];
+            descDivs[i].classList.add('msk-modified');
+            added = true;
+            let btn = doc.createElement("div");
+            btn.classList.add("msk-help-btn");
+            title.style.float="left";
+            descDivs[i].parentNode.insertBefore(btn, descDivs[i]);
+            btn.onclick=function(ev) {
+                bus.$emit('dlg.open', 'iteminfo', {list:[title.innerHTML, desc]});
             };
         }
     }
@@ -351,6 +392,9 @@ function iframeActionCheck() {
                     iframeInfo.addedSliders = addSliders(content);
                     iframeInfo.sectionsHidden = hideSections(content);
                     iframeInfo.addedExpanders = addExpanders(content);
+                    if (!IS_MOBILE) {
+                        iframeInfo.addedHelp = addHelp(content);
+                    }
                 } else if (iframeInfo.actionChecks<50) {
                     if (!iframeInfo.addedSliders) {
                         iframeInfo.addedSliders = addSliders(content);
@@ -360,6 +404,9 @@ function iframeActionCheck() {
                     }
                     if (!iframeInfo.addedExpanders) {
                         iframeInfo.addedExpanders = addExpanders(content);
+                    }
+                    if (!IS_MOBILE && !iframeInfo.addedHelp) {
+                        iframeInfo.addedHelp = addHelp(content);
                     }
                     return;
                 }
@@ -378,6 +425,7 @@ function selectChanged() {
     iframeInfo.addedSliders = false;
     iframeInfo.sectionsHidden = false;
     iframeInfo.addedExpanders = false;
+    iframeInfo.addedHelp = false;
     iframeInfo.actionChecks = 0;
     iframeInfo.actionCheckInterval = setInterval(function () {
         iframeActionCheck();
@@ -398,6 +446,7 @@ function hideClassicSkinElems(page, textCol) {
             return;
         }
 
+        content.documentElement.getElementsByTagName("body")[0].classList.add(IS_MOBILE ? "msk-is-touch" : "msk-is-non-touch");
         fixClassicSkinRefs(content);
         remapClassicSkinIcons(content, textCol);
         addHooks(content);

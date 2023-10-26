@@ -48,6 +48,7 @@ x.y.z
 38. Allow info dialogs to be closed by cliking outside.
 39. If screen width is 1000px or more then use horizontal layout for server
     settings, etc. - similar to 'Default' skin.
+40. Respect LMS's role filtering when asking for artist albums.
 
 3.5.6
 -----

@@ -126,7 +126,7 @@ function buildStdItemCommand(item, parentCommand) {
             for (var i=0, len=parentCommand.params.length; i<len; ++i) {
                 if (typeof parentCommand.params[i] === 'string' || parentCommand.params[i] instanceof String) {
                     var lower = parentCommand.params[i].toLowerCase();
-                    if (lower.startsWith("role_id:") || (!LMS_NO_GENRE_FILTER && lower.startsWith("genre_id:")) || lower.startsWith("year:")) {
+                    if ((!LMS_NO_ROLE_FILTER && lower.startsWith("role_id:")) || (!LMS_NO_GENRE_FILTER && lower.startsWith("genre_id:")) || lower.startsWith("year:")) {
                         command.params.push(parentCommand.params[i]);
                     }
                 }
@@ -146,7 +146,7 @@ function buildStdItemCommand(item, parentCommand) {
             for (var i=0, len=parentCommand.params.length; i<len; ++i) {
                 if (typeof parentCommand.params[i] === 'string' || parentCommand.params[i] instanceof String) {
                     var lower = parentCommand.params[i].toLowerCase();
-                    if (lower.startsWith("role_id:") || lower.startsWith("year:")) {
+                    if ((!LMS_NO_ROLE_FILTER && lower.startsWith("role_id:")) || lower.startsWith("year:")) {
                         command.params.push(parentCommand.params[i]);
                     }
                 }

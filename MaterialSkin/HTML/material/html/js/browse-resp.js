@@ -1068,7 +1068,7 @@ function parseBrowseResp(data, parent, options, cacheKey, parentCommand, parentG
                               duration: i.duration,
                               durationStr: duration>0 ? formatSeconds(duration) : undefined
                           });
-                if (lmsOptions.compilationAll && undefined!=i.compilation && 1==parseInt(i.compilation)) {
+                if (lmsOptions.nonmainAll && undefined!=i.compilation && 1==parseInt(i.compilation)) {
                     numCompilationTracks++;
                     if (undefined!=i.albumartist) {
                         compilationAlbumArtists.add(i.albumartist);
@@ -1150,7 +1150,7 @@ function parseBrowseResp(data, parent, options, cacheKey, parentCommand, parentG
             resp.subtitle=totalTracks+'<obj class="mat-icon music-note">music_note</obj>'+totalDurationStr;
             resp.plainsubtitle=i18np("1 Track", "%1 Tracks", totalTracks)+SEPARATOR+totalDurationStr;
             // set compilationAlbumArtist on first entry so that browse-view can use this
-            if (lmsOptions.compilationAll && undefined!=compilationAlbumArtist & resp.items.length>0) {
+            if (lmsOptions.nonmainAll && undefined!=compilationAlbumArtist & resp.items.length>0) {
                 resp.items[0].compilationAlbumArtist = compilationAlbumArtist;
             }
         } else if (data.result.genres_loop) {

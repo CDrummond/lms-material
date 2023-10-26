@@ -331,13 +331,17 @@ PLUGIN_MATERIAL_SKIN_PAGED_BATCH_SIZE_DESC
 	FR	Nombre d'éléments initiaux récupérés (et affichés) lors de l'affichage de certaines listes (telles que les listes de lecture). Faire défiler la liste permettra de récupérer un nouvel ensemble d’éléments si nécessaire.
 	NL	Aantal initiële items dat wordt opgehaald (en getoond) bij het weergeven van de inhoud van sommige lijsten (zoals afspeellijsten). Als je door de lijst bladert, wordt er vervolgens een nieuwe reeks items opgehaald, enz.
 
-PLUGIN_MATERIAL_SKIN_COMPILATION_ALBUMS
-	EN	Use all tracks of compilation albums
-	FR	Prendre en compte tous les morceaux des albums de compilation
+PLUGIN_MATERIAL_SKIN_NONMAIN_ALBUMS
+	EN	Tracks on compilation/appearance albums
 
-PLUGIN_MATERIAL_SKIN_COMPILATION_ALBUMS_DESC
-	EN	When browsing an artist's albums use all tracks of compilation albums, do not limit to tracks of current artist.
-	FR	Lors du parcours des albums d'un artiste, utiliser tous les morceaux des albums de compilation, sans se limiter aux morceaux de l'artiste actuel.
+PLUGIN_MATERIAL_SKIN_NONMAIN_ALBUMS_DESC
+	EN	When browsing an artist's albums use all tracks from compilation albums, albums this artist appears on, etc., or only show tracks from the current artist.
+
+PLUGIN_MATERIAL_SKIN_NONMAIN_ALBUMS_ARTIST_TRACKS_ONLY
+	EN	Only display tracks from current artist
+
+PLUGIN_MATERIAL_SKIN_NONMAIN_ALBUMS_ALL_TRACKS
+	EN	Display all tracks of album
 
 PLUGIN_MATERIAL_SKIN_RELEASE_TYPE_ORDER
 	EN	Release type order

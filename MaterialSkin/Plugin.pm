@@ -110,7 +110,7 @@ sub initPlugin {
         commentAsDiscTitle => '0',
         showComment => '0',
         pagedBatchSize => lmsVersion()>=80400 ? 250 : 100,
-        compilationAll => '1',
+        nonmainAll => '1',
         releaseTypeOrder => ''
     });
 
@@ -394,7 +394,7 @@ sub _cliCommand {
         $request->addResult('commentAsDiscTitle', $prefs->get('commentAsDiscTitle'));
         $request->addResult('showComment', $prefs->get('showComment'));
         $request->addResult('pagedBatchSize', $prefs->get('pagedBatchSize'));
-        $request->addResult('compilationAll', $prefs->get('compilationAll'));
+        $request->addResult('nonmainAll', $prefs->get('nonmainAll'));
         $request->addResult('releaseTypeOrder', $prefs->get('releaseTypeOrder'));
         $request->setStatusDone();
         return;

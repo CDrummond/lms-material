@@ -890,7 +890,7 @@ function parseBrowseResp(data, parent, options, cacheKey, parentCommand, parentG
                               artist_ids: undefined==i.artist_ids ? undefined : i.artist_ids.split(","),
                               artists: artists,
                               title: title,
-                              subtitle: artist,
+                              subtitle: undefined==parent || parent.title!=artist ? artist : undefined,
                               image: i.artwork_url
                                         ? resolveImageUrl(i.artwork_url, LMS_IMAGE_SIZE)
                                         : ("/music/" + (i.artwork_track_id ? i.artwork_track_id : i.artwork) + "/cover" + LMS_IMAGE_SIZE),

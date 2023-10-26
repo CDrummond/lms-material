@@ -1379,6 +1379,7 @@ var lmsBrowse = Vue.component("lms-browse", {
                 let rs = 0;
                 for (var i=0, row=0, len=items.length; i<len; ++row) {
                     var rowItems=[]
+                    var rowHasSubtitle = false;
                     if (i<items.length && items[i].header) {
                         this.grid.multiSize=true;
                         this.grid.rows.push({item: items[i], header:true, size:64, r:row, id:"row.header."+i});
@@ -1395,13 +1396,17 @@ var lmsBrowse = Vue.component("lms-browse", {
                                 break;
                             } else {
                                 rowItems.push(idx<items.length ? items[idx] : undefined);
-                                if (!haveSubtitle && idx<items.length && items[idx].subtitle) {
+                                let haveSub = idx<items.length && items[idx].subtitle;
+                                if (!haveSubtitle && haveSub) {
                                     haveSubtitle = true;
+                                }
+                                if (!rowHasSubtitle && haveSub) {
+                                    rowHasSubtitle = true;
                                 }
                                 used++;
                             }
                         }
-                        this.grid.rows.push({id:"row."+row+"."+sz.nc, items:rowItems, r:row, rs:rs, size:this.grid.multiSize ? height: undefined, numStd:used});
+                        this.grid.rows.push({id:"row."+row+"."+sz.nc, items:rowItems, r:row, rs:rs, size:this.grid.multiSize ? height + (rowHasSubtitle ? GRID_SINGLE_LINE_DIFF : 0) : undefined, numStd:used});
                         i+=used;
                         rs+=used;
                     }

@@ -871,6 +871,7 @@ function parseBrowseResp(data, parent, options, cacheKey, parentCommand, parentG
 
                 let group = "ALBUM";
                 let roles = new Set(undefined==i.role_ids ? [] : i.role_ids.split(",").map(Number));
+                let nonmain = undefined; // This artist is not main artist of album
                 if (undefined!=i.compilation && 1==parseInt(i.compilation)) {
                     group = "COMPILATION";
                 } else {
@@ -878,8 +879,10 @@ function parseBrowseResp(data, parent, options, cacheKey, parentCommand, parentG
                         group = undefined==i.release_type ? "ALBUM" : i.release_type;
                     } else if (roles.has(TRACK_ARTIST_ROLE)) {
                         group = "APPEARANCE";
+                        nonmain = true;
                     } else if (roles.has(COMPOSER_ARTIST_ROLE)) {
                         group = "COMPOSITION";
+                        nonmain = true;
                     }
                 }
                 if (!resp.showCompositions && roles.has(COMPOSER_ARTIST_ROLE)) {
@@ -906,7 +909,8 @@ function parseBrowseResp(data, parent, options, cacheKey, parentCommand, parentG
                               multi: LMS_GROUP_DISCS && undefined!=i.disccount && parseInt(i.disccount)>1,
                               extid: i.extid,
                               filter: FILTER_PREFIX+group,
-                              compilation: i.compilation
+                              compilation: i.compilation,
+                              nonmain: nonmain
                           };
                 if (albumGroups) {
                     if (undefined==albumGroups[group]) {

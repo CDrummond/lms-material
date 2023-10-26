@@ -137,7 +137,7 @@ function buildStdItemCommand(item, parentCommand) {
                     var lower = parentCommand.params[i].toLowerCase();
                     if ( (!LMS_NO_ROLE_FILTER && (lower.startsWith("role_id:"))) ||
                          (!LMS_NO_GENRE_FILTER && lower.startsWith("genre_id:")) ||
-                         (lower.startsWith("artist_id:") && (!lmsOptions.compilationAll || !item.compilation))) {
+                         (lower.startsWith("artist_id:") && (!lmsOptions.compilationAll || (!item.compilation && !item.nonmain)))) {
                         command.params.push(parentCommand.params[i]);
                     }
                 }

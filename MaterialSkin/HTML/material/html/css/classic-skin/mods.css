@@ -671,3 +671,26 @@ input[type="submit"], input[type="button"] {
 .msk-is-non-touch .settingSection .prefHead:not(.collapsableSection) {
  padding: 0px 6px 0px 0px;
 }
+
+@media only screen and (min-width:1000px) {
+ .settingGroup {
+  position: relative;
+  padding-left: 278px;
+  margin-bottom: 15px;
+ }
+
+ .settingGroup .prefHead {
+  position: absolute;
+  width: 250px;
+  left: 0;
+ }
+
+ .settingGroup .prefs {
+  margin-top:-6px;
+ }
+
+ .msk-help-btn {
+  position: absolute;
+  left: 252px;
+ }
+}

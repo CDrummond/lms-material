@@ -357,7 +357,7 @@ input[type=radio]:checked:before {
  border-radius:50%;
  display:inline-block;
  text-align:center;
- opacity:0.7;
+ opacity:0.5;
  padding-top:4px;
  padding-left:4px;
  margin-bottom:-4px;
@@ -672,6 +672,14 @@ input[type="submit"], input[type="button"] {
  padding: 0px 6px 0px 0px;
 }
 
+.msk-is-non-touch table td {
+ padding-bottom:0px;
+}
+
+table td input[type=checkbox] {
+ margin-top:-2px;
+}
+
 @media only screen and (min-width:1000px) {
  .settingGroup {
   position: relative;
@@ -687,6 +695,10 @@ input[type="submit"], input[type="button"] {
 
  .settingGroup .prefs {
   margin-top:-6px;
+ }
+
+ .settingGroup .prefs:has(input[type=range]) {
+  margin-top:-11px;
  }
 
  .msk-help-btn {

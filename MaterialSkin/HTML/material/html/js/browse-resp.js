@@ -76,7 +76,7 @@ function releaseTypeSort(a, b) {
 
 function parseBrowseResp(data, parent, options, cacheKey, parentCommand, parentGenre) {
     // NOTE: If add key to resp, then update addToCache in utils.js
-    var resp = {items: [], allSongsItem:undefined, baseActions:[], canUseGrid: false, jumplist:[], numAudioItems:0, canDrop:false, itemCustomActions:undefined };
+    var resp = {items: [], allSongsItem:undefined, showCompositions:false, baseActions:[], canUseGrid: false, jumplist:[], numAudioItems:0, canDrop:false, itemCustomActions:undefined };
     var allowPinning = !queryParams.party && (!LMS_KIOSK_MODE || !HIDE_FOR_KIOSK.has(PIN_ACTION));
 
     try {
@@ -870,10 +870,10 @@ function parseBrowseResp(data, parent, options, cacheKey, parentCommand, parentG
                 }
 
                 let group = "ALBUM";
+                let roles = new Set(undefined==i.role_ids ? [] : i.role_ids.split(",").map(Number));
                 if (undefined!=i.compilation && 1==parseInt(i.compilation)) {
                     group = "COMPILATION";
                 } else {
-                    let roles = new Set(undefined==i.role_ids ? [] : i.role_ids.split(",").map(Number));
                     if (intersect(ARTIST_ROLES, roles).size>0) {
                         group = undefined==i.release_type ? "ALBUM" : i.release_type;
                     } else if (roles.has(TRACK_ARTIST_ROLE)) {
@@ -881,6 +881,9 @@ function parseBrowseResp(data, parent, options, cacheKey, parentCommand, parentG
                     } else if (roles.has(COMPOSER_ARTIST_ROLE)) {
                         group = "COMPOSITION";
                     }
+                }
+                if (!resp.showCompositions && roles.has(COMPOSER_ARTIST_ROLE)) {
+                    resp.showCompositions = true;
                 }
                 releaseTypes.add(group);
 

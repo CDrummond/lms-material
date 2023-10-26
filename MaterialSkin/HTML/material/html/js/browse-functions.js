@@ -115,7 +115,7 @@ function browseAddHistory(view) {
     view.history.push(prev);
 }
 
-function browseActions(view, item, args, count) {
+function browseActions(view, item, args, count, showCompositions) {
     var actions=[];
     if ((undefined==item || undefined==item.id || !item.id.startsWith(MUSIC_ID_PREFIX)) && // Exclude 'Compilations'
         (undefined==args['artist'] || (args['artist']!=i18n('Various Artists') && args['artist'].toLowerCase()!='various artists'))) {
@@ -167,6 +167,14 @@ function browseActions(view, item, args, count) {
                 params.push("library_id:"+libId);
             }
             actions.push({title:i18n('All songs'), icon:'music_note', do:{ command: ['tracks'], params: params}, weight:80});
+        }
+        if (undefined!=args['artist_id'] && showCompositions) {
+            var params = ['sort:albumtrack', 'tags:cdrilstyE' + (view.$store.state.showRating ? 'R' : ''), 'artist_id:'+args['artist_id'], 'role_id:COMPOSER'];
+            let libId = view.currentLibId ? view.currentLibId : view.$store.state.library ? view.$store.state.library : LMS_DEFAULT_LIBRARY;
+            if (libId) {
+                params.push("library_id:"+libId);
+            }
+            actions.push({title:i18n('Compositions'), svg:'composer', do:{ command: ['tracks'], params: params}, weight:81});
         }
     }
     if (undefined!=item && undefined!=item.stdItem && undefined!=STD_ITEMS[item.stdItem].actionMenu) {
@@ -388,7 +396,7 @@ function browseHandleListResponse(view, item, command, resp, prevPage, appendIte
                     }
                 }
             }
-            view.currentActions = browseActions(view, resp.items.length>0 ? item : undefined, actParams, resp.items.length);
+            view.currentActions = browseActions(view, resp.items.length>0 ? item : undefined, actParams, resp.items.length, resp.showCompositions);
             if (listingArtistAlbums) {
                 for (var i=0, loop=view.onlineServices, len=loop.length; i<len; ++i) {
                     var emblem = getEmblem(loop[i]+':');

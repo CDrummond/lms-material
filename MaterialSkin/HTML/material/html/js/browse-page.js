@@ -1365,7 +1365,6 @@ var lmsBrowse = Vue.component("lms-browse", {
                 changed = true;
                 this.grid.rows=[];
                 this.grid.multiSize=false;
-                var height = sz.h - GRID_SINGLE_LINE_DIFF;
                 var items = [];
                 if (this.isTop) {
                     for (var i=0, len=this.items.length; i<len; ++i) {
@@ -1406,7 +1405,7 @@ var lmsBrowse = Vue.component("lms-browse", {
                                 used++;
                             }
                         }
-                        this.grid.rows.push({id:"row."+row+"."+sz.nc, items:rowItems, r:row, rs:rs, size:this.grid.multiSize ? height + (rowHasSubtitle ? GRID_SINGLE_LINE_DIFF : 0) : undefined, numStd:used});
+                        this.grid.rows.push({id:"row."+row+"."+sz.nc, items:rowItems, r:row, rs:rs, size:this.grid.multiSize ? (rowHasSubtitle ? sz.h : (sz.h - GRID_SINGLE_LINE_DIFF)) : undefined, numStd:used, hasSub:this.grid.multiSize ? rowHasSubtitle : undefined});
                         i+=used;
                         rs+=used;
                     }
@@ -1419,10 +1418,9 @@ var lmsBrowse = Vue.component("lms-browse", {
                     }
                 }
                 if (this.grid.multiSize && this.grid.ih != sz.h) {
-                    let height = sz.h - GRID_SINGLE_LINE_DIFF;
                     for (let list = this.grid.rows, i=0, len=list.length; i<len; ++i) {
                         if (!list[i].header) {
-                            list[i].size = height;
+                            list[i].size = list[i].hasSub ? sz.h : (sz.h - GRID_SINGLE_LINE_DIFF);
                         }
                     }
                 }

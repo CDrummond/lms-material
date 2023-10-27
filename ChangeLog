@@ -58,6 +58,8 @@ x.y.z
 2. Fix toast messages being obscured.
 3. Try harder to ensure we don't hide duplicate images when listing items in
    favourites.
+4. Try to get portrait MAI covers to be rounded.
+5. Set MAI 'h1', 'h2', and 'h3' elements to standard font-size.
 
 3.5.5
 -----

@@ -578,7 +578,7 @@ function nowplayingFetchArtistInfo(view) {
                         view.info.tabs[ARTIST_TAB].count--;
                         if (0 == view.info.tabs[ARTIST_TAB].count && !view.info.tabs[ARTIST_TAB].found) {
                             view.info.tabs[ARTIST_TAB].text = view.infoTrack.artist;
-                            view.info.tabs[ARTIST_TAB].image="/imageproxy/mai/artist/" + view.infoTrack.artist_ids[0] + "/image" + LMS_CURRENT_IMAGE_SIZE;
+                            view.info.tabs[ARTIST_TAB].image="/imageproxy/mai/artist/" + view.infoTrack.artist_ids[0] + "/image" + LMS_IMAGE_SIZE;
                         } else {
                             view.info.tabs[ARTIST_TAB].isMsg=false;
                         }
@@ -616,7 +616,7 @@ function nowplayingFetchArtistInfo(view) {
                                     logJsonMessage("RESP", data);
                                     if (data && data.result && view.isCurrent(data, ARTIST_TAB)) {
                                         view.info.tabs[ARTIST_TAB].text=data.result.biography ? replaceNewLines(data.result.biography) : nowPlayingHeader(view.infoTrack.artist);
-                                        view.info.tabs[ARTIST_TAB].image=view.infoTrack.albumartist_ids==undefined ? undefined : ("/imageproxy/mai/artist/" + view.infoTrack.albumartist_ids[0] + "/image" + LMS_CURRENT_IMAGE_SIZE);
+                                        view.info.tabs[ARTIST_TAB].image=view.infoTrack.albumartist_ids==undefined ? undefined : ("/imageproxy/mai/artist/" + view.infoTrack.albumartist_ids[0] + "/image" + LMS_IMAGE_SIZE);
                                         view.info.tabs[ARTIST_TAB].isMsg=undefined==data.result.biography;
                                     }
                                 }).catch(error => {
@@ -624,8 +624,8 @@ function nowplayingFetchArtistInfo(view) {
                                 });
                             }
                         } else {
-                            view.info.tabs[ARTIST_TAB].text=data.result.biography ? replaceNewLines(data.result.biography) :  nowPlayingHeader(view.infoTrack.artist);
-                            view.info.tabs[ARTIST_TAB].image=view.infoTrack.artist_ids==undefined ? undefined : ("/imageproxy/mai/artist/" + view.infoTrack.artist_ids[0] + "/image" + LMS_CURRENT_IMAGE_SIZE);
+                            view.info.tabs[ARTIST_TAB].text=data.result.biography ? replaceNewLines(data.result.biography) : nowPlayingHeader(view.infoTrack.artist);
+                            view.info.tabs[ARTIST_TAB].image=view.infoTrack.artist_ids==undefined ? undefined : ("/imageproxy/mai/artist/" + view.infoTrack.artist_ids[0] + "/image" + LMS_IMAGE_SIZE);
                             view.info.tabs[ARTIST_TAB].isMsg=undefined==data.result.biography;
                         }
                     }

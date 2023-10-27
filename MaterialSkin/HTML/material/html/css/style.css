@@ -881,7 +881,7 @@ div.v-subheader {
 
 .browse-html img, .np-info-text img, .np-info-text-full img, .inline-image {
  max-width:100% !important;
- max-height:300px !important;
+ max-height:600px !important;
  margin-left:auto;
  margin-right:auto;
  margin-bottom:8px;
@@ -1405,6 +1405,7 @@ div.v-rating i.primary--text, div.v-rating i.accent--text {
  max-width:1000px;
  margin-left:auto;
  margin-right:auto;
+ font-size:var(--std-font-size)!important;
 }
 
 .np-info-text-full {
@@ -1413,11 +1414,14 @@ div.v-rating i.primary--text, div.v-rating i.accent--text {
  margin:auto;
 }
 
-.np-info-text-15 {
- font-size:calc(var(--std-font-size)*1.5);
+.np-info-text h1, .np-info-text h2, .np-info-text h3 {
+ font-size:var(--std-font-size)!important;
 }
-.np-info-text-20 {
- font-size:calc(var(--std-font-size)*2);
+.np-info-text-15, .np-info-text-15 h1, .np-info-text-15 h2, .np-info-text-15 h3 {
+ font-size:calc(var(--std-font-size)*1.5)!important;
+}
+.np-info-text-20, .np-info-text-20 h1, .np-info-text-20 h2, .np-info-text-20 h3 {
+ font-size:calc(var(--std-font-size)*2)!important;
 }
 
 .btn-img {

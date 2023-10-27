@@ -711,7 +711,7 @@ function nowplayingFetchAlbumInfo(view) {
             lmsCommand("", command, view.info.tabs[ALBUM_TAB].reqId).then(({data}) => {
                 logJsonMessage("RESP", data);
                 if (data && data.result && view.isCurrent(data, ALBUM_TAB)) {
-                    view.info.tabs[ALBUM_TAB].text=nowPlayingHeader(view.infoTrack.album)+(data.result.albumreview ? "<br/>"+replaceNewLines(data.result.albumreview) : "");
+                    view.info.tabs[ALBUM_TAB].text=data.result.albumreview ? replaceNewLines(data.result.albumreview) : nowPlayingHeader(view.infoTrack.album);
                     view.info.tabs[ALBUM_TAB].image=/*data.result.albumreview ? undefined :*/ view.coverUrl;
                     view.info.tabs[ALBUM_TAB].isMsg=undefined==data.result.albumreview;
                 }

@@ -14,7 +14,7 @@ Vue.component('lms-information-dialog', {
    <v-toolbar app class="dialog-toolbar">
     <v-btn flat icon v-longpress:stop="close" :title="ttShortcutStr(i18n('Go back'), 'esc')"><v-icon>arrow_back</v-icon></v-btn>
     <v-toolbar-title>
-     <div>{{(undefined==serverName ? "" : (serverName+SEPARATOR))+i18n('Information')}}</div>
+     <div>{{i18n('Information')+(undefined==serverName ? "" : (SEPARATOR+serverName))}}</div>
     </v-toolbar-title>
    </v-toolbar>
   </v-card-title>

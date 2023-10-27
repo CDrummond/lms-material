@@ -17,7 +17,7 @@ Vue.component('lms-player-settings', {
     <v-toolbar app-data class="dialog-toolbar">
      <v-btn flat icon v-longpress:stop="close" :title="ttShortcutStr(i18n('Go back'), 'esc')"><v-icon>arrow_back</v-icon></v-btn>
      <v-btn v-if="showHome && homeButton" flat icon @click="goHome" :title="ttShortcutStr(i18n('Go home'), 'home')"><v-icon>home</v-icon></v-btn>
-     <v-toolbar-title @click="openPlayerMenu" v-bind:class="{'pointer':numPlayers>1}">{{playerName+SEPARATOR+TB_PLAYER_SETTINGS.title}}</v-toolbar-title>
+     <v-toolbar-title @click="openPlayerMenu" v-bind:class="{'pointer':numPlayers>1}">{{TB_PLAYER_SETTINGS.title+SEPARATOR+playerName}}</v-toolbar-title>
      <v-spacer></v-spacer>
      <v-menu bottom left v-model="showMenu">
       <v-btn icon slot="activator"><v-icon>more_vert</v-icon></v-btn>
@@ -780,11 +780,11 @@ Vue.component('lms-player-settings', {
         },
         showExtraSettings() {
             this.showMenu = false;
-            bus.$emit('dlg.open', 'iframe', '/material/settings/player/basic.html?player='+this.playerId, this.playerName+SEPARATOR+i18n('Extra player settings'), undefined, IFRAME_HOME_CLOSES_DIALOGS, this.playerId);
+            bus.$emit('dlg.open', 'iframe', '/material/settings/player/basic.html?player='+this.playerId, i18n('Extra player settings')+SEPARATOR+this.playerName, undefined, IFRAME_HOME_CLOSES_DIALOGS, this.playerId);
         },
         showConfig() {
             this.showMenu = false;
-            bus.$emit('dlg.open', 'iframe', this.playerLink, this.playerName+SEPARATOR+i18n("Configuration"), undefined, IFRAME_HOME_CLOSES_DIALOGS);
+            bus.$emit('dlg.open', 'iframe', this.playerLink, i18n("Configuration")+SEPARATOR+this.playerName, undefined, IFRAME_HOME_CLOSES_DIALOGS);
         },
         doCustomAction(action, player) {
             performCustomAction(action, player);

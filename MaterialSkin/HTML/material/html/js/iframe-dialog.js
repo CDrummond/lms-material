@@ -753,7 +753,7 @@ Vue.component('lms-iframe-dialog', {
                 return;
             }
             let parts = this.title.split(SEPARATOR);
-            parts[0]=player.name;
+            parts[1]=player.name;
             this.title=parts.join(SEPARATOR);
             this.src = this.src.replace(this.playerId, player.id);
             this.show = true;

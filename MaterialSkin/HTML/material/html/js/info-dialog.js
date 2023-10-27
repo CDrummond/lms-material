@@ -14,7 +14,7 @@ Vue.component('lms-info-dialog', {
   <template v-for="(item, index) in details">
    <v-header v-if="item.title" class="item-info-header">{{item.title}}</v-header>
    <p v-if="item.link" class="item-info-text"><a class="lms-link" :href="item.text" target="_blank">{{item.text}}</a></p>
-   <p v-else class="item-info-text">{{item.text}}</p>
+   <p v-else class="item-info-text" v-html="item.text"></p>
    </template>
   </v-card-text>
   <v-card-actions>

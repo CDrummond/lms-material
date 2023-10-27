@@ -962,13 +962,17 @@ function parseBrowseResp(data, parent, options, cacheKey, parentCommand, parentG
             var discs = new Map();
             var sort = isAllSongs && parentCommand ? getAlbumSort(parentCommand, parentGenre) : undefined;
             var sortTracks = undefined!=sort && sort.by.startsWith("year");
+            var highlightArtist = undefined;
 
             if (data.params[1].length>=4 && data.params[1][0]=="tracks") {
                 for (var p=0, plen=data.params[1].length; p<plen && (!allowPlayAlbum || !showAlbumName); ++p) {
-                    if ((""+data.params[1][p]).startsWith("album_id:")) {
+                    let param = ""+data.params[1][p];
+                    if (param.startsWith("album_id:")) {
                         allowPlayAlbum = true;
-                    } else if ((""+data.params[1][p]).startsWith("search:")) {
+                    } else if (param.startsWith("search:")) {
                         showAlbumName = true;
+                    } else if (param.startsWith("material_skin_artist_id:")) {
+                        highlightArtist = parseInt(param.split(':')[1]);
                     }
                 }
             }
@@ -985,6 +989,7 @@ function parseBrowseResp(data, parent, options, cacheKey, parentCommand, parentG
                 var title = i.title;
                 var duration = parseFloat(i.duration || 0);
                 var tracknum = undefined==i.tracknum ? 0 : parseInt(i.tracknum);
+                let highlight = false;
                 if (tracknum>0) {
                     title = (tracknum>9 ? tracknum : ("0" + tracknum))+SEPARATOR+title;
                     //title = tracknum + ". " + title; // SlimBrowse format
@@ -993,6 +998,19 @@ function parseBrowseResp(data, parent, options, cacheKey, parentCommand, parentG
                     }
                 }
                 splitMultiples(i);
+                if (undefined!=highlightArtist) {
+                    // Check if any of the artist IDs for this track match that to highlight
+                    for (let a=0, alen=ARTIST_TYPES.length; a<alen && !highlight; ++a) {
+                        if (!highlight && undefined!=i[ARTIST_TYPES[a]+"_id"]) {
+                            highlight = highlightArtist == parseInt(i[ARTIST_TYPES[a]+"_id"]);
+                        }
+                        if (undefined!=i[ARTIST_TYPES[a]+"_ids"]) {
+                            for (let v=0, vl=i[ARTIST_TYPES[a]+"_ids"], vlen=vl.length; v<vlen && !highlight; ++v) {
+                                highlight = highlightArtist == parseInt(vl[v]);
+                            }
+                        }
+                    }
+                }
 
                 artists.push(buildArtistLine(i, "browse", false));
                 let subtitle = undefined;
@@ -1066,7 +1084,8 @@ function parseBrowseResp(data, parent, options, cacheKey, parentCommand, parentG
                               url: i.url,
                               draggable: true,
                               duration: i.duration,
-                              durationStr: duration>0 ? formatSeconds(duration) : undefined
+                              durationStr: duration>0 ? formatSeconds(duration) : undefined,
+                              highlight: highlight
                           });
                 if (lmsOptions.nonmainAll && undefined!=i.compilation && 1==parseInt(i.compilation)) {
                     numCompilationTracks++;

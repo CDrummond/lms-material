@@ -1466,16 +1466,16 @@ progress {
  white-space:nowrap!important;
 }
 
+.pq-current, .highlight {
+ background-color:var(--pq-current-color)
+}
+
 .list-active {
  background-color:var(--list-active-color)!important;
 }
 
 .list-active a:hover {
  background-color:transparent!important; /* Prevent double highlight */
-}
-
-.pq-current, .list-active {
- background-color:var(--pq-current-color)
 }
 
 .pq-current div.v-list__tile__title {

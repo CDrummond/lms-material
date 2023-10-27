@@ -46,8 +46,9 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
     <v-tab-item :key="index" :transition="false" :reverse-transition="false">
      <v-card flat class="np-info-card-cover fade-both" @contextmenu.prevent="showContextMenu">
       <v-card-text :class="['np-info-text', zoomInfoClass, TRACK_TAB==index || tab.isMsg ? 'np-info-lyrics' : '', ALBUM_TAB==index ? 'np-info-review' : '']">
+       <img v-if="undefined!=tab.image && ALBUM_TAB==index" :src="tab.image" loading="lazy" class="np-no-meta-img"></img>
        <div v-html="tab.text"></div>
-       <img v-if="undefined!=tab.image" :src="tab.image" loading="lazy" class="np-no-meta-img"></img>
+       <img v-if="undefined!=tab.image && ALBUM_TAB!=index"" :src="tab.image" loading="lazy" class="np-no-meta-img"></img>
        <template v-for="(sect, sindex) in tab.sections">
         <div class="np-sect-title" v-if="(undefined!=sect.items && sect.items.length>=sect.min) || undefined!=sect.html">{{sect.title}}<v-btn flat icon class="np-sect-toggle" v-if="undefined!=sect.grid" @click="toggleGrid(index, sindex)"><v-icon>{{ACTIONS[sect.grid ? USE_LIST_ACTION : USE_GRID_ACTION].icon}}</v-icon></v-btn></div>
         <v-list v-if="undefined!=sect.items && !sect.grid && sect.items.length>=sect.min" class="lms-list">
@@ -96,8 +97,9 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
      <v-flex xs4>
       <v-card flat class="np-info-card-cover">
        <v-card-text :class="['np-info-text-full', 'fade-both', zoomInfoClass, TRACK_TAB==index || tab.isMsg ? 'np-info-lyrics' : '', ALBUM_TAB==index ? 'np-info-review' : '']" @contextmenu.prevent="showContextMenu">
+        <img v-if="undefined!=tab.image && ALBUM_TAB==index" :src="tab.image" loading="lazy" class="np-no-meta-img"></img>
         <div v-html="tab.text"></div>
-        <img v-if="undefined!=tab.image" :src="tab.image" loading="lazy" class="np-no-meta-img"></img>
+        <img v-if="undefined!=tab.image && ALBUM_TAB!=index" :src="tab.image" loading="lazy" class="np-no-meta-img"></img>
         <template v-for="(sect, sindex) in tab.sections">
          <div class="np-sect-title" v-if="(undefined!=sect.items && sect.items.length>=sect.min) || undefined!=sect.html">{{sect.title}}<v-btn flat icon class="np-sect-toggle" v-if="undefined!=sect.grid" @click="toggleGrid(index, sindex)"><v-icon>{{ACTIONS[sect.grid ? USE_LIST_ACTION : USE_GRID_ACTION].icon}}</v-icon></v-btn></div>
          <v-list v-if="undefined!=sect.items && !sect.grid && sect.items.length>=sect.min" class="lms-list">

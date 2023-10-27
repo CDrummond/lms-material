@@ -447,7 +447,7 @@ var lmsBrowse = Vue.component("lms-browse", {
             }
             if (undefined!=this.current && this.current.stdItem==STD_ITEM_ALBUM) {
                 let albumArtst = this.current.subtitle;
-                if (lmsOptions.nonmainAll && this.current.compilation && this.items.length>0 && undefined!=this.items[0].compilationAlbumArtist) {
+                if (lmsOptions.noArtistFilter && this.current.compilation && this.items.length>0 && undefined!=this.items[0].compilationAlbumArtist) {
                     albumArtst = this.items[0].compilationAlbumArtist;
                 }
                 if (undefined!=albumArtst) {

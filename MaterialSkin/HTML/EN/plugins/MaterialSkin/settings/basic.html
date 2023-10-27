@@ -79,10 +79,10 @@
         </select>
     [% END %]
 
-    [% WRAPPER setting title="PLUGIN_MATERIAL_SKIN_NONMAIN_ALBUMS" desc="PLUGIN_MATERIAL_SKIN_NONMAIN_ALBUMS_DESC" %]
-        <select class="stdedit" name="pref_nonmainAll" id="nonmainAll">
-            <option [% IF NOT prefs.nonmainAll %]selected [% END %]value="0">[% 'PLUGIN_MATERIAL_SKIN_NONMAIN_ALBUMS_ARTIST_TRACKS_ONLY' | getstring %]</option>
-            <option [% IF prefs.nonmainAll %]selected [% END %]value="1">[% 'PLUGIN_MATERIAL_SKIN_NONMAIN_ALBUMS_ALL_TRACKS' | getstring %]</option>
+    [% WRAPPER setting title="PLUGIN_MATERIAL_SKIN_ARTIST_FILTER" desc="PLUGIN_MATERIAL_SKIN_ARTIST_FILTER_DESC" %]
+        <select class="stdedit" name="pref_noArtistFilter" id="noArtistFilter">
+            <option [% IF NOT prefs.noArtistFilter %]selected [% END %]value="0">[% 'PLUGIN_MATERIAL_SKIN_ARTIST_FILTER_ARTIST_ONLY' | getstring %]</option>
+            <option [% IF prefs.noArtistFilter %]selected [% END %]value="1">[% 'PLUGIN_MATERIAL_SKIN_ARTIST_FILTER_ALL_TRACKS' | getstring %]</option>
         </select>
     [% END %]
 

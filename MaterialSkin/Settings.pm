@@ -24,7 +24,7 @@ sub page {
 
 sub prefs {
 	return ($prefs, 'composergenres', 'conductorgenres', 'bandgenres', 'showComposer', 'showConductor', 'showBand', 'password', 'respectFixedVol',
-	        'showAllArtists', 'artistFirst', 'allowDownload', 'commentAsDiscTitle', 'showComment', 'pagedBatchSize', 'nonmainAll', 'releaseTypeOrder');
+	        'showAllArtists', 'artistFirst', 'allowDownload', 'commentAsDiscTitle', 'showComment', 'pagedBatchSize', 'noArtistFilter', 'releaseTypeOrder');
 }
 
 1;

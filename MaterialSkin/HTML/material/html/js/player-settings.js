@@ -17,7 +17,7 @@ Vue.component('lms-player-settings', {
     <v-toolbar app-data class="dialog-toolbar">
      <v-btn flat icon v-longpress:stop="close" :title="ttShortcutStr(i18n('Go back'), 'esc')"><v-icon>arrow_back</v-icon></v-btn>
      <v-btn v-if="showHome && homeButton" flat icon @click="goHome" :title="ttShortcutStr(i18n('Go home'), 'home')"><v-icon>home</v-icon></v-btn>
-     <v-toolbar-title>{{TB_PLAYER_SETTINGS.title+SEPARATOR+playerName}}</v-toolbar-title>
+     <v-toolbar-title @click="openPlayerMenu" v-bind:class="{'pointer':numPlayers>1}">{{playerName+SEPARATOR+TB_PLAYER_SETTINGS.title}}</v-toolbar-title>
      <v-spacer></v-spacer>
      <v-menu bottom left v-model="showMenu">
       <v-btn icon slot="activator"><v-icon>more_vert</v-icon></v-btn>
@@ -255,12 +255,26 @@ Vue.component('lms-player-settings', {
   </v-card>
  </v-dialog>
 
+ <v-menu v-model="playerMenu.show" :position-x="playerMenu.x" :position-y="10" style="z-index:1000">
+  <v-list>
+   <template v-for="(player, index) in players">
+    <v-list-tile @click="setPlayer(player)" :disabled="player.id==playerId" v-bind:class="{'disabled':player.id==playerId}">
+     <v-list-tile-avatar>
+      <v-icon v-if="player.icon.icon">{{player.icon.icon}}</v-icon><img v-else class="svg-img" :src="player.icon.svg | svgIcon(darkUi)"></img>
+     </v-list-tile-avatar>
+     <v-list-tile-content><v-list-tile-title>{{player.name}}</v-list-tile-title></v-list-tile-content>
+    </v-list-tile>
+   </template>
+  </v-list>
+ </v-menu>
+
 </div>
 `,
     props: [],
     data() {
         return {
             show: false,
+            playerMenu: {show:false, x:0},
             playerId: undefined,
             playerName: undefined,
             playerIcon: undefined,
@@ -332,6 +346,12 @@ Vue.component('lms-player-settings', {
                 return len>1 && !this.$store.state.players[0].isgroup && !this.$store.state.players[1].isgroup;
             }
             return false;
+        },
+        numPlayers() {
+            return this.$store.state.players ? this.$store.state.players.length : 0
+        },
+        players() {
+            return this.$store.state.players
         }
     },
     mounted() {
@@ -399,6 +419,9 @@ Vue.component('lms-player-settings', {
         bus.$on('closeMenu', function() {
             if (this.showMenu) {
                 this.showMenu = false;
+            }
+            if (this.playersMenu.show) {
+                this.playersMenu.show = false;
             }
         }.bind(this));
         bus.$on('closeDialog', function(dlg) {
@@ -533,6 +556,7 @@ Vue.component('lms-player-settings', {
             this.update(false);
             this.show=true;
             this.showMenu = false;
+            this.playerMenu = {show:false, x:0}
             if (undefined!=section) {
                 this.$nextTick(function () {
                     var elem = document.getElementById(section);
@@ -755,10 +779,12 @@ Vue.component('lms-player-settings', {
             }
         },
         showExtraSettings() {
-            bus.$emit('dlg.open', 'iframe', '/material/settings/player/basic.html?player='+this.playerId, i18n('Extra player settings')+SEPARATOR+this.playerName, undefined, IFRAME_HOME_CLOSES_DIALOGS);
+            this.showMenu = false;
+            bus.$emit('dlg.open', 'iframe', '/material/settings/player/basic.html?player='+this.playerId, this.playerName+SEPARATOR+i18n('Extra player settings'), undefined, IFRAME_HOME_CLOSES_DIALOGS, this.playerId);
         },
         showConfig() {
-            bus.$emit('dlg.open', 'iframe', this.playerLink, i18n("Configuration")+SEPARATOR+this.playerName, undefined, IFRAME_HOME_CLOSES_DIALOGS);
+            this.showMenu = false;
+            bus.$emit('dlg.open', 'iframe', this.playerLink, this.playerName+SEPARATOR+i18n("Configuration"), undefined, IFRAME_HOME_CLOSES_DIALOGS);
         },
         doCustomAction(action, player) {
             performCustomAction(action, player);
@@ -819,6 +845,15 @@ Vue.component('lms-player-settings', {
             for (let i=0, len=this.plugins.length; i<len; ++i) {
                 this.plugins[i].pinned=ids.has(this.plugins[i].id);
             }
+        },
+        openPlayerMenu(event) {
+            this.playerMenu={show:true, x:event.clientX};
+        },
+        setPlayer(player) {
+            if (player.id==this.playerId) {
+                return;
+            }
+            this.playerSettings(player);
         }
     },
     filters: {
@@ -857,6 +892,9 @@ Vue.component('lms-player-settings', {
         },
         'showMenu': function(val) {
             this.$store.commit('menuVisible', {name:'playersettings', shown:val});
+        },
+        'playerMenu.show': function(val) {
+            this.$store.commit('menuVisible', {name:'playersettings-player', shown:val});
         }
     }
 })

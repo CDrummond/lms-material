@@ -459,7 +459,7 @@ Vue.component('lms-toolbar', {
                 if (this.$store.state.unlockAll) {
                     lmsCommand("", ["material-skin", "server"]).then(({data}) => {
                         if (data && data.result) {
-                            openServerSettings(undefined==data.result.libraryname ? "" : (SEPARATOR+data.result.libraryname), 0);
+                            openServerSettings(data.result.libraryname, 0);
                         }
                     }).catch(err => {
                     });

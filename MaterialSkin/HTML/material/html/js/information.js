@@ -14,7 +14,7 @@ Vue.component('lms-information-dialog', {
    <v-toolbar app class="dialog-toolbar">
     <v-btn flat icon v-longpress:stop="close" :title="ttShortcutStr(i18n('Go back'), 'esc')"><v-icon>arrow_back</v-icon></v-btn>
     <v-toolbar-title>
-     <div>{{i18n('Information')+serverName}}</div>
+     <div>{{(undefined==serverName ? "" : (serverName+SEPARATOR))+i18n('Information')}}</div>
     </v-toolbar-title>
    </v-toolbar>
   </v-card-title>
@@ -113,7 +113,7 @@ Vue.component('lms-information-dialog', {
             pluginStatus:'idle',
             rescans: [ ],
             scanning: false,
-            serverName: ""
+            serverName: undefined
         }
     },
     mounted() {
@@ -134,7 +134,7 @@ Vue.component('lms-information-dialog', {
             });
             lmsCommand("", ["material-skin", "server"]).then(({data}) => {
                 if (data && data.result) {
-                    this.serverName=undefined==data.result.libraryname ? "" : (SEPARATOR+data.result.libraryname);
+                    this.serverName=data.result.libraryname;
                 }
             }).catch(err => {
             });

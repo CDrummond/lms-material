@@ -49,6 +49,8 @@ x.y.z
 39. If screen width is 1000px or more then use horizontal layout for server
     settings, etc. - similar to 'Default' skin.
 40. Respect LMS's role filtering when asking for artist albums.
+41. Allow switching of players in 'Player settings' and 'Extra player
+    settings' dialogs.
 
 3.5.6
 -----

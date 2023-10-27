@@ -568,7 +568,8 @@ Vue.component('lms-iframe-dialog', {
     <v-toolbar app-data class="dialog-toolbar">
      <v-btn flat icon v-longpress:stop="goBack" :title="ttShortcutStr(i18n('Go back'), 'esc')"><v-icon>arrow_back</v-icon></v-btn>
      <v-btn v-if="showHome && homeButton" flat icon @click="goHome" :title="ttShortcutStr(i18n('Go home'), 'home')"><v-icon>home</v-icon></v-btn>
-     <v-toolbar-title>{{title}}</v-toolbar-title>
+     <v-toolbar-title v-if="page=='player' && numPlayers>1" @click="openChoiceMenu" class="pointer">{{title}}</v-toolbar-title>
+     <v-toolbar-title v-else>{{title}}</v-toolbar-title>
      <v-spacer></v-spacer>
      <v-menu bottom left v-model="showMenu" v-if="actions.length>0 || (customActions && customActions.length>0)">
       <v-btn icon slot="activator"><v-icon>more_vert</v-icon></v-btn>
@@ -597,12 +598,25 @@ Vue.component('lms-iframe-dialog', {
   </v-card>
  </v-dialog>
  <v-snackbar v-model="snackbar.show" :multi-line="true" :timeout="2500" top>{{ snackbar.msg }}</v-snackbar>
+ <v-menu v-model="choiceMenu.show" :position-x="choiceMenu.x" :position-y="10" style="z-index:1000">
+  <v-list>
+   <template v-for="(player, index) in players">
+    <v-list-tile @click="setPlayer(player)" :disabled="player.id==playerId" v-bind:class="{'disabled':player.id==playerId}">
+     <v-list-tile-avatar>
+      <v-icon v-if="player.icon.icon">{{player.icon.icon}}</v-icon><img v-else class="svg-img" :src="player.icon.svg | svgIcon(darkUi)"></img>
+     </v-list-tile-avatar>
+     <v-list-tile-content><v-list-tile-title>{{player.name}}</v-list-tile-title></v-list-tile-content>
+    </v-list-tile>
+   </template>
+  </v-list>
+ </v-menu>
 </div>
 `,
     data() {
         return {
             show: false,
             showMenu: false,
+            choiceMenu: {show:false, x:0},
             title: undefined,
             src: undefined,
             page: undefined,
@@ -612,11 +626,12 @@ Vue.component('lms-iframe-dialog', {
             customActions: [],
             history: [],
             showHome:0,
-            textCol: undefined
+            textCol: undefined,
+            playerId: undefined
         }
     },
     mounted() {
-        bus.$on('iframe.open', function(page, title, actions, showHome) {
+        bus.$on('iframe.open', function(page, title, actions, showHome, playerId) {
             this.title = title;
             this.src = page;
             this.page = page.indexOf("player/basic.html")>0
@@ -630,12 +645,14 @@ Vue.component('lms-iframe-dialog', {
                                         : "other";
             this.show = true;
             this.showMenu = false;
+            this.choiceMenu = {show:false, x:0}
             this.loaded = false;
             this.actions = undefined==actions ? [] : actions;
             this.customActions = getCustomActions(this.page+"-dialog", this.$store.state.unlockAll);
             this.history = [];
             this.showHome = showHome;
             this.textCol = getComputedStyle(document.documentElement).getPropertyValue('--text-color').substring(1);
+            this.playerId = playerId;
         }.bind(this));
         bus.$on('iframe-loaded', function() {
             this.loaded = true;
@@ -727,6 +744,25 @@ Vue.component('lms-iframe-dialog', {
         },
         doCustomAction(action, player) {
             performCustomAction(action, player);
+        },
+        openChoiceMenu(event) {
+            this.choiceMenu={show:true, x:event.clientX};
+        },
+        setPlayer(player) {
+            if (player.id==this.playerId) {
+                return;
+            }
+            let parts = this.title.split(SEPARATOR);
+            parts[0]=player.name;
+            this.title=parts.join(SEPARATOR);
+            this.src = this.src.replace(this.playerId, player.id);
+            this.show = true;
+            this.showMenu = false;
+            this.choiceMenu = {show:false, x:0}
+            this.loaded = false;
+            this.history = [];
+            this.textCol = getComputedStyle(document.documentElement).getPropertyValue('--text-color').substring(1);
+            this.playerId = player.id;
         }
     },
     computed: {
@@ -738,6 +774,12 @@ Vue.component('lms-iframe-dialog', {
         },
         homeButton() {
             return this.$store.state.homeButton
+        },
+        players() {
+            return this.$store.state.players
+        },
+        numPlayers() {
+            return this.$store.state.players ? this.$store.state.players.length : 0
         }
     },
     filters: {
@@ -752,6 +794,9 @@ Vue.component('lms-iframe-dialog', {
         'showMenu': function(val) {
             iframeMenuOpen = val;
             this.$store.commit('menuVisible', {name:'iframe', shown:val});
+        },
+        'choiceMenu.show': function(val) {
+            this.$store.commit('menuVisible', {name:'iframe-choice', shown:val});
         }
     }
 })

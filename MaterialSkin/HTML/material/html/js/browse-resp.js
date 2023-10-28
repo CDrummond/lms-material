@@ -794,19 +794,26 @@ function parseBrowseResp(data, parent, options, cacheKey, parentCommand, parentG
             var isSearch = false;
             var canGroupAlbums = false;
             if (data.params && data.params.length>1) {
+                let reverse = false;
+                let isNewMusic = false;
                 for (var i=3, plen=data.params[1].length; i<plen; ++i) {
                     if (typeof data.params[1][i] === 'string' || data.params[1][i] instanceof String) {
                         var lower = data.params[1][i].toLowerCase();
                         if (lower.startsWith("sort:year")) {
                             jumpListYear = true;
+                        } else if (lower.startsWith("sort:new")) {
+                            isNewMusic = true;
                         } else if (lower==MSK_REV_SORT_OPT) {
-                            data.result.albums_loop = data.result.albums_loop.reverse();
+                            reverse = true;
                         } else if ((""+data.params[1][i]).startsWith("search:")) {
                             isSearch = true;
                         } else if ((""+data.params[1][i]).startsWith("tags:") && data.params[1][i].indexOf("W")>0) {
                             canGroupAlbums = true;
                         }
                     }
+                }
+                if (reverse && !isNewMusic) {
+                    data.result.albums_loop = data.result.albums_loop.reverse();
                 }
             }
             var albumGroups = canGroupAlbums ? {} : undefined;

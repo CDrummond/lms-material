@@ -57,6 +57,7 @@ x.y.z
 45. Center align all MAI titles.
 46. Provide a default backdrop image to use in browse view, with option to
     disable.
+47. Don't apply reverse sort to 'New Music'.
 
 3.5.6
 -----

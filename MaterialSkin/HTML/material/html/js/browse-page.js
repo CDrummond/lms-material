@@ -77,12 +77,12 @@ var lmsBrowse = Vue.component("lms-browse", {
  <v-icon class="browse-progress" v-if="fetchingItem!=undefined" color="primary">refresh</v-icon>
  <div v-show="letter" id="letterOverlay"></div>
  <div class="lms-list bgnd-cover" id="browse-bgnd">
-  <div class="noselect lms-jumplist" v-bind:class="{'bgnd-blur':drawBgndImage}" v-if="filteredJumplist.length>1">
+  <div class="noselect lms-jumplist" v-bind:class="{'bgnd-blur':drawBgndImage,'backdrop-blur':drawBackdrop}" v-if="filteredJumplist.length>1">
    <template v-for="(item, index) in filteredJumplist">
     <div @click="jumpTo(item.index)" v-bind:class="{'active' : jumplistActive==index}">{{item.key==' ' || item.key=='' ? '?' : item.key}}</div>
    </template>
   </div>
-  <div class="lms-list" id="browse-list" style="overflow:auto;" v-bind:class="{'lms-image-grid':grid.use,'lms-grouped-image-grid':grid.use && grid.multiSize,'lms-image-grid-jump':grid.use && filteredJumplist.length>1,'lms-list-jump':!grid.use && filteredJumplist.length>1,'bgnd-blur':drawBgndImage}">
+  <div class="lms-list" id="browse-list" style="overflow:auto;" v-bind:class="{'lms-image-grid':grid.use,'lms-grouped-image-grid':grid.use && grid.multiSize,'lms-image-grid-jump':grid.use && filteredJumplist.length>1,'lms-list-jump':!grid.use && filteredJumplist.length>1,'bgnd-blur':drawBgndImage,'backdrop-blur':drawBackdrop}">
 
    <RecycleScroller :items="grid.rows" :item-size="grid.multiSize ? null : (grid.ih - (grid.haveSubtitle || isTop || current.id.startsWith(TOP_ID_PREFIX) ? 0 : GRID_SINGLE_LINE_DIFF))" page-mode key-field="id" :buffer="LMS_SCROLLER_GRID_BUFFER" v-if="grid.use">
     <div slot-scope="{item}" :class="[grid.few?'image-grid-few':'image-grid-full-width', grid.haveSubtitle?'image-grid-with-sub':'']">
@@ -434,6 +434,9 @@ var lmsBrowse = Vue.component("lms-browse", {
         },
         drawBgndImage() {
             return this.$store.state.browseBackdrop && ((undefined!=this.current && undefined!=this.current.image) || undefined!=this.currentItemImage);
+        },
+        drawBackdrop() {
+            return !this.drawBgndImage && this.$store.state.browseDefBackdrop
         },
         listSizeAdjust() {
             return this.$store.state.listPadding
@@ -1465,6 +1468,9 @@ var lmsBrowse = Vue.component("lms-browse", {
                                 ? this.currentItemImage
                                 : undefined
                         : undefined;
+            if (!url && this.$store.state.browseDefBackdrop) {
+                url='html/images/backdrop.jpg';
+            }
             if (url) {
                url=changeImageSizing(url, LMS_CURRENT_IMAGE_SIZE);
             }
@@ -1804,6 +1810,9 @@ var lmsBrowse = Vue.component("lms-browse", {
             if (this.grid.use) {
                 this.layoutGrid(true);
             }
+        }.bind(this));
+        bus.$on('browseSetBgndImage', function() {
+           this.setBgndCover();
         }.bind(this));
         bus.$on('libraryChanged', function() {
             this.setLibrary();

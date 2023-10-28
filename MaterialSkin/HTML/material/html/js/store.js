@@ -13,9 +13,9 @@ function copyPlayer(p){
 }
 
 function updateUiSettings(state, val) {
-    let stdItems = ['autoScrollQueue', 'browseBackdrop', 'queueBackdrop', 'nowPlayingBackdrop', 'infoBackdrop', 'browseTechInfo',
-                    'techInfo', 'nowPlayingTrackNum', 'nowPlayingContext', 'swipeVolume', 'swipeChangeTrack', 'keyboardControl',
-                    'skipSeconds', 'homeButton', 'powerButton', 'mediaControls', 'showRating'];
+    let stdItems = ['autoScrollQueue', 'browseBackdrop', 'queueBackdrop', 'nowPlayingBackdrop', 'infoBackdrop',
+                    'browseTechInfo', 'techInfo', 'nowPlayingTrackNum', 'nowPlayingContext', 'swipeVolume', 'swipeChangeTrack',
+                    'keyboardControl', 'skipSeconds', 'homeButton', 'powerButton', 'mediaControls', 'showRating'];
     for (let i=0, len=stdItems.length; i<len; ++i) {
         let key=stdItems[i];
         if (undefined!=val[key] && state[key]!=val[key]) {
@@ -125,6 +125,11 @@ function updateUiSettings(state, val) {
             setLocalStorageVal('disabledBrowseModes', JSON.stringify(Array.from(state.disabledBrowseModes)));
             browseDisplayChanged = true;
         }
+    }
+    if (undefined!=val.browseDefBackdrop && state.browseDefBackdrop!=val.browseDefBackdrop) {
+        state.browseDefBackdrop = val.browseDefBackdrop;
+        setLocalStorageVal('browseDefBackdrop', state.browseDefBackdrop);
+        bus.$emit('browseSetBgndImage');
     }
     lmsOptions.techInfo = state.browseTechInfo;
     if (queueDisplayChanged) {
@@ -243,6 +248,7 @@ const store = new Vuex.Store({
         autoScrollQueue:true,
         library: null,
         browseBackdrop: true,
+        browseDefBackdrop: true,
         queueBackdrop: true,
         nowPlayingBackdrop: true,
         infoBackdrop: true,
@@ -473,7 +479,7 @@ const store = new Vuex.Store({
             }
             state.fontSize = undefined==fontSize ? 'r' : fontSize;
 
-            let boolItems = ['roundCovers', 'autoScrollQueue', 'sortFavorites', 'letterOverlay', 'browseBackdrop', 'queueBackdrop',
+            let boolItems = ['roundCovers', 'autoScrollQueue', 'sortFavorites', 'letterOverlay', 'browseBackdrop', 'browseDefBackdrop', 'queueBackdrop',
                              'nowPlayingBackdrop', 'infoBackdrop', 'browseTechInfo', 'techInfo', 'queueShowTrackNum', 'nowPlayingTrackNum',
                              'nowPlayingClock', 'nowPlayingContext', 'swipeVolume', 'swipeChangeTrack', 'keyboardControl','queueThreeLines',
                              'screensaver', 'homeButton', 'powerButton', 'largeCovers', 'mediaControls'];

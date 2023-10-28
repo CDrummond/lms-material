@@ -43,6 +43,7 @@
  --np-image-border:16px;
  --mobile-scrollbar-thumb-color:transparent;
  --bgnd-filter:blur(7px);
+ --backdrop-filter:blur(4px);
  --npbar-border-color:var(--bottom-toolbar-border-color);
 }
 
@@ -1453,6 +1454,13 @@ progress {
 .bgnd-blur {
  backdrop-filter:var(--bgnd-filter);
  -webkit-backdrop-filter:var(--bgnd-filter);
+ background:none!important;
+ overflow:hidden;
+}
+
+.backdrop-blur {
+ backdrop-filter:var(--backdrop-filter);
+ -webkit-backdrop-filter:var(--backdrop-filter);
  background:none!important;
  overflow:hidden;
 }

@@ -185,6 +185,15 @@ Vue.component('lms-ui-settings', {
     <v-divider></v-divider>
 
     <v-list-tile>
+     <v-list-tile-content @click="browseDefBackdrop = !browseDefBackdrop" class="switch-label">
+      <v-list-tile-title>{{i18n('Draw default backdrop')}}</v-list-tile-title>
+      <v-list-tile-sub-title>{{i18n('Use default image as background, when not using artist, or album, image.')}}</v-list-tile-sub-title>
+     </v-list-tile-content>
+     <v-list-tile-action><m3-switch v-model="browseDefBackdrop"></m3-switch></v-list-tile-action>
+    </v-list-tile>
+    <v-divider></v-divider>
+
+    <v-list-tile>
     <v-list-tile-content @click="browseTechInfo = !browseTechInfo" class="switch-label">
      <v-list-tile-title>{{i18n('Display technical info')}}</v-list-tile-title>
      <v-list-tile-sub-title>{{i18n('Show file type, bitrate, etc.')}}</v-list-tile-sub-title>
@@ -386,6 +395,7 @@ Vue.component('lms-ui-settings', {
             sortFavorites:true,
             autoScrollQueue:true,
             browseBackdrop:true,
+            browseDefBackdrop:true,
             queueBackdrop:true,
             nowPlayingBackdrop:true,
             infoBackdrop:true,
@@ -560,6 +570,7 @@ Vue.component('lms-ui-settings', {
             this.listPadding = this.$store.state.listPadding;
             this.autoScrollQueue = this.$store.state.autoScrollQueue;
             this.browseBackdrop = this.$store.state.browseBackdrop;
+            this.browseDefBackdrop = this.$store.state.browseDefBackdrop;
             this.queueBackdrop = this.$store.state.queueBackdrop;
             this.nowPlayingBackdrop = this.$store.state.nowPlayingBackdrop;
             this.infoBackdrop = this.$store.state.infoBackdrop;
@@ -672,6 +683,7 @@ Vue.component('lms-ui-settings', {
                       letterOverlay:this.letterOverlay,
                       sortFavorites:this.sortFavorites,
                       browseBackdrop:this.browseBackdrop,
+                      browseDefBackdrop:this.browseDefBackdrop,
                       queueBackdrop:this.queueBackdrop,
                       nowPlayingBackdrop:this.nowPlayingBackdrop,
                       infoBackdrop:this.infoBackdrop,

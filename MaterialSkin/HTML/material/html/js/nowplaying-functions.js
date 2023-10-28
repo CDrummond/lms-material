@@ -447,7 +447,7 @@ function nowplayingFetchTrackInfo(view) {
                     view.info.tabs[TRACK_TAB].text=data.result.lyrics ? replaceNewLines(data.result.lyrics) : undefined;
                 }
             }).catch(error => {
-                view.info.tabs[TRACK_TAB].text=i18n("Failed to retrieve information.");
+                view.info.tabs[TRACK_TAB].text=undefined;
             });
         }
     } else if (undefined==view.infoTrack.artist && undefined==view.infoTrack.title && undefined==view.infoTrack.track_id && undefined==view.infoTrack.artist_id) {
@@ -574,7 +574,7 @@ function nowplayingFetchArtistInfo(view) {
                                 } else {
                                     view.info.tabs[ARTIST_TAB].text+="<br/><br/>";
                                 }
-                                view.info.tabs[ARTIST_TAB].text+=nowPlayingHeader(data.result.artist)+"<br/>"+removeHeader(replaceNewLines(data.result.biography));
+                                view.info.tabs[ARTIST_TAB].text+=nowPlayingHeader(data.result.artist)+"<br/>"+replaceNewLines(data.result.biography);
                             }
                         }
                         view.info.tabs[ARTIST_TAB].count--;
@@ -617,22 +617,22 @@ function nowplayingFetchArtistInfo(view) {
                                 lmsCommand("", command, view.info.tabs[ARTIST_TAB].reqId).then(({data}) => {
                                     logJsonMessage("RESP", data);
                                     if (data && data.result && view.isCurrent(data, ARTIST_TAB)) {
-                                        view.info.tabs[ARTIST_TAB].text=data.result.biography ? removeHeader(replaceNewLines(data.result.biography)) : undefined;
+                                        view.info.tabs[ARTIST_TAB].text=data.result.biography ? replaceNewLines(data.result.biography) : undefined;
                                         view.info.tabs[ARTIST_TAB].image=view.infoTrack.albumartist_ids==undefined ? undefined : ("/imageproxy/mai/artist/" + view.infoTrack.albumartist_ids[0] + "/image" + LMS_IMAGE_SIZE);
                                         view.info.tabs[ARTIST_TAB].isMsg=undefined==data.result.biography;
                                     }
                                 }).catch(error => {
-                                    view.info.tabs[ARTIST_TAB].text=i18n("Failed to retrieve information.");
+                                    view.info.tabs[ARTIST_TAB].text=undefined;
                                 });
                             }
                         } else {
-                            view.info.tabs[ARTIST_TAB].text=data.result.biography ? removeHeader(replaceNewLines(data.result.biography)) : undefined;
+                            view.info.tabs[ARTIST_TAB].text=data.result.biography ? replaceNewLines(data.result.biography) : undefined;
                             view.info.tabs[ARTIST_TAB].image=view.infoTrack.artist_ids==undefined ? undefined : ("/imageproxy/mai/artist/" + view.infoTrack.artist_ids[0] + "/image" + LMS_IMAGE_SIZE);
                             view.info.tabs[ARTIST_TAB].isMsg=undefined==data.result.biography;
                         }
                     }
                 }).catch(error => {
-                    view.info.tabs[ARTIST_TAB].text=i18n("Failed to retrieve information.");
+                    view.info.tabs[ARTIST_TAB].text=undefined;
                 });
             }
         }
@@ -719,7 +719,8 @@ function nowplayingFetchAlbumInfo(view) {
                     view.info.tabs[ALBUM_TAB].isMsg=undefined==data.result.albumreview;
                 }
             }).catch(error => {
-                view.info.tabs[ALBUM_TAB].text=i18n("Failed to retrieve information.");
+                view.info.tabs[ALBUM_TAB].text=undefined;
+                view.info.tabs[ALBUM_TAB].image=/*data.result.albumreview ? undefined :*/ view.coverUrl;
             });
         }
         if (view.infoTrack.album_id!=undefined && view.infoTrack.album_id>=0) {

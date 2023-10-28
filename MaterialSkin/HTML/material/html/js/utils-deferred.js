@@ -10,24 +10,6 @@ function replaceNewLines(str) {
     return str ? str.replace(/\n/g, "<br/>").replace(/\\n/g, "<br/>") : str;
 }
 
-function removeHeader(str) {
-    if (isEmpty(str)) {
-        return str;
-    }
-    // Remove all attributes, not used
-    str = str.replace(/<([^ >]+)[^>]*>/ig,'<$1>');
-    for (let i=1; i<5; ++i) {
-        let start = str.indexOf("<h"+i+">");
-        if (start>0 & start<30) {
-            let end = str.indexOf("</h"+i+">", start+4);
-            if (end>(start+9) && end<(start+100)) {
-                return str.substring(end+5);
-            }
-        }
-    }
-    return str;
-}
-
 function openWindow(page) {
     window.open(page, '_blank');
 }

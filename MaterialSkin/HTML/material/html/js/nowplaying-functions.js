@@ -417,6 +417,7 @@ function nowplayingArtistEntry(trk, key, role) {
 function nowplayingFetchTrackInfo(view) {
     if (view.info.tabs[TRACK_TAB].artist!=view.infoTrack.artist || view.info.tabs[TRACK_TAB].songtitle!=view.infoTrack.title ||
         view.info.tabs[TRACK_TAB].track_id!=view.infoTrack.track_id || view.info.tabs[TRACK_TAB].artist_id!=view.infoTrack.artist_id) {
+        view.info.tabs[TRACK_TAB].texttitle=nowPlayingHeader(view.infoTrack.title);
         view.info.tabs[TRACK_TAB].text=i18n("Fetching...");
         view.info.tabs[TRACK_TAB].track_id=view.infoTrack.track_id;
         view.info.tabs[TRACK_TAB].artist=view.infoTrack.artist;
@@ -438,19 +439,19 @@ function nowplayingFetchTrackInfo(view) {
             }
         }
         if (3==command.length) { // No details?
-            view.info.tabs[TRACK_TAB].text=view.infoTrack.empty ? "" : i18n("Insufficient metadata to fetch information.");
+            view.info.tabs[TRACK_TAB].text=view.infoTrack.empty ? undefined : i18n("Insufficient metadata to fetch information.");
         } else {
             lmsCommand("", command, view.info.tabs[TRACK_TAB].reqId).then(({data}) => {
                 logJsonMessage("RESP", data);
                 if (data && data.result && view.isCurrent(data, TRACK_TAB)) {
-                    view.info.tabs[TRACK_TAB].text=nowPlayingHeader(view.infoTrack.title)+(data.result.lyrics ? ("<br/>"+replaceNewLines(data.result.lyrics)) : "");
+                    view.info.tabs[TRACK_TAB].text=data.result.lyrics ? replaceNewLines(data.result.lyrics) : undefined;
                 }
             }).catch(error => {
                 view.info.tabs[TRACK_TAB].text=i18n("Failed to retrieve information.");
             });
         }
     } else if (undefined==view.infoTrack.artist && undefined==view.infoTrack.title && undefined==view.infoTrack.track_id && undefined==view.infoTrack.artist_id) {
-        view.info.tabs[TRACK_TAB].text=view.infoTrack.empty ? "" : i18n("Insufficient metadata to fetch information.");
+        view.info.tabs[TRACK_TAB].text=view.infoTrack.empty ? undefined : i18n("Insufficient metadata to fetch information.");
     }
 
     let html="";
@@ -542,6 +543,7 @@ function nowplayingFetchArtistInfo(view) {
         view.info.tabs[ARTIST_TAB].sections[0].items=[];
         view.info.tabs[ARTIST_TAB].sections[0].more=undefined;
         view.info.tabs[ARTIST_TAB].sections[1].html=undefined;
+        view.info.tabs[ARTIST_TAB].texttitle=nowPlayingHeader(view.infoTrack.artist);
         view.info.tabs[ARTIST_TAB].text=i18n("Fetching...");
         view.info.tabs[ARTIST_TAB].image=undefined;
         view.info.tabs[ARTIST_TAB].isMsg=true;
@@ -567,17 +569,17 @@ function nowplayingFetchArtistInfo(view) {
                             if (data.result.artist) {
                                 view.info.tabs[ARTIST_TAB].found = true;
                                 if (view.info.tabs[ARTIST_TAB].first) {
-                                    view.info.tabs[ARTIST_TAB].text="";
+                                    view.info.tabs[ARTIST_TAB].text=undefined;
                                     view.info.tabs[ARTIST_TAB].first = false;
                                 } else {
                                     view.info.tabs[ARTIST_TAB].text+="<br/><br/>";
                                 }
-                                view.info.tabs[ARTIST_TAB].text+=nowPlayingHeader(data.result.artist)+replaceNewLines(data.result.biography);
+                                view.info.tabs[ARTIST_TAB].text+=nowPlayingHeader(data.result.artist)+"<br/>"+removeHeader(replaceNewLines(data.result.biography));
                             }
                         }
                         view.info.tabs[ARTIST_TAB].count--;
                         if (0 == view.info.tabs[ARTIST_TAB].count && !view.info.tabs[ARTIST_TAB].found) {
-                            view.info.tabs[ARTIST_TAB].text = view.infoTrack.artist;
+                            view.info.tabs[ARTIST_TAB].text = undefined;
                             view.info.tabs[ARTIST_TAB].image="/imageproxy/mai/artist/" + view.infoTrack.artist_ids[0] + "/image" + LMS_IMAGE_SIZE;
                         } else {
                             view.info.tabs[ARTIST_TAB].isMsg=false;
@@ -609,13 +611,13 @@ function nowplayingFetchArtistInfo(view) {
                                 command.push("artist:"+view.infoTrack.albumartist);
                             }
                             if (3==command.length) {
-                                view.info.tabs[ARTIST_TAB].text=nowPlayingHeader(view.infoTrack.artist);
+                                view.info.tabs[ARTIST_TAB].text=undefined;
                                 view.info.tabs[ARTIST_TAB].isMsg=true;
                             } else {
                                 lmsCommand("", command, view.info.tabs[ARTIST_TAB].reqId).then(({data}) => {
                                     logJsonMessage("RESP", data);
                                     if (data && data.result && view.isCurrent(data, ARTIST_TAB)) {
-                                        view.info.tabs[ARTIST_TAB].text=data.result.biography ? replaceNewLines(data.result.biography) : nowPlayingHeader(view.infoTrack.artist);
+                                        view.info.tabs[ARTIST_TAB].text=data.result.biography ? removeHeader(replaceNewLines(data.result.biography)) : undefined;
                                         view.info.tabs[ARTIST_TAB].image=view.infoTrack.albumartist_ids==undefined ? undefined : ("/imageproxy/mai/artist/" + view.infoTrack.albumartist_ids[0] + "/image" + LMS_IMAGE_SIZE);
                                         view.info.tabs[ARTIST_TAB].isMsg=undefined==data.result.biography;
                                     }
@@ -624,7 +626,7 @@ function nowplayingFetchArtistInfo(view) {
                                 });
                             }
                         } else {
-                            view.info.tabs[ARTIST_TAB].text=data.result.biography ? replaceNewLines(data.result.biography) : nowPlayingHeader(view.infoTrack.artist);
+                            view.info.tabs[ARTIST_TAB].text=data.result.biography ? removeHeader(replaceNewLines(data.result.biography)) : undefined;
                             view.info.tabs[ARTIST_TAB].image=view.infoTrack.artist_ids==undefined ? undefined : ("/imageproxy/mai/artist/" + view.infoTrack.artist_ids[0] + "/image" + LMS_IMAGE_SIZE);
                             view.info.tabs[ARTIST_TAB].isMsg=undefined==data.result.biography;
                         }
@@ -667,7 +669,7 @@ function nowplayingFetchArtistInfo(view) {
         }
     } else if (undefined==view.infoTrack.artist && undefined==view.infoTrack.artist_id && undefined==view.infoTrack.artist_ids) {
         view.info.tabs[ARTIST_TAB].isMsg=true;
-        view.info.tabs[ARTIST_TAB].text=view.infoTrack.empty ? "" : i18n("Insufficient metadata to fetch information.");
+        view.info.tabs[ARTIST_TAB].text=view.infoTrack.empty ? undefined : i18n("Insufficient metadata to fetch information.");
         view.info.tabs[ARTIST_TAB].sections[0].items=[];
     }
 }
@@ -678,6 +680,7 @@ function nowplayingFetchAlbumInfo(view) {
         view.info.tabs[ALBUM_TAB].album!=view.infoTrack.album || view.info.tabs[ALBUM_TAB].album_id!=view.infoTrack.album_id) {
         view.info.tabs[ALBUM_TAB].sections[0].items=[];
         view.info.tabs[ALBUM_TAB].sections[0].more=undefined;
+        view.info.tabs[ALBUM_TAB].texttitle=nowPlayingHeader(view.infoTrack.album);
         view.info.tabs[ALBUM_TAB].text=i18n("Fetching...");
         view.info.tabs[ALBUM_TAB].image=undefined;
         view.info.tabs[ALBUM_TAB].isMsg=true;
@@ -705,13 +708,13 @@ function nowplayingFetchAlbumInfo(view) {
         }
 
         if (3==command.length) { // No details?
-            view.info.tabs[ALBUM_TAB].text=view.infoTrack.empty ? "" : i18n("Insufficient metadata to fetch information.");
+            view.info.tabs[ALBUM_TAB].text=view.infoTrack.empty ? undefined : i18n("Insufficient metadata to fetch information.");
             view.info.tabs[ALBUM_TAB].image=view.infoTrack.empty ? undefined : view.coverUrl;
         } else {
             lmsCommand("", command, view.info.tabs[ALBUM_TAB].reqId).then(({data}) => {
                 logJsonMessage("RESP", data);
                 if (data && data.result && view.isCurrent(data, ALBUM_TAB)) {
-                    view.info.tabs[ALBUM_TAB].text=data.result.albumreview ? replaceNewLines(data.result.albumreview) : nowPlayingHeader(view.infoTrack.album);
+                    view.info.tabs[ALBUM_TAB].text=data.result.albumreview ? removeHeader(replaceNewLines(data.result.albumreview)) : undefined;
                     view.info.tabs[ALBUM_TAB].image=/*data.result.albumreview ? undefined :*/ view.coverUrl;
                     view.info.tabs[ALBUM_TAB].isMsg=undefined==data.result.albumreview;
                 }
@@ -741,7 +744,7 @@ function nowplayingFetchAlbumInfo(view) {
     } else if (undefined==view.infoTrack.albumartist && undefined==view.infoTrack.artist_id &&
                undefined==view.infoTrack.album && undefined==view.infoTrack.album) {
         view.info.tabs[ALBUM_TAB].isMsg=true;
-        view.info.tabs[ALBUM_TAB].text=view.infoTrack.empty ? "" : i18n("Insufficient metadata to fetch information.");
+        view.info.tabs[ALBUM_TAB].text=view.infoTrack.empty ? undefined : i18n("Insufficient metadata to fetch information.");
         view.info.tabs[ALBUM_TAB].image=/*view.infoTrack.empty ? undefined :*/ view.coverUrl;
         view.info.tabs[ALBUM_TAB].sections[0].items=[];
     }

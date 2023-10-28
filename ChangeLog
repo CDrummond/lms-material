@@ -51,7 +51,8 @@ x.y.z
 40. Respect LMS's role filtering when asking for artist albums.
 41. Allow switching of players in 'Player settings' and 'Extra player
     settings' dialogs.
-42. In MAI view show album cover before review.
+42. In MAI view show album cover and artist image before text.
+43. Strip headers from MAI text, as duplicates own headers.
 
 3.5.6
 -----

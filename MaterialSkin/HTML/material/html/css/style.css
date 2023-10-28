@@ -1146,6 +1146,11 @@ div.v-subheader {
  text-align:center;
 }
 
+.np-info-title {
+ text-align:center;
+ padding-bottom:8px;
+}
+
 .np-info-tab-cover {
  background:transparent;
 }

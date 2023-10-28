@@ -54,6 +54,7 @@ x.y.z
 42. In MAI view show album cover and artist image before text.
 43. Strip headers from MAI text, as duplicates own headers.
 44. Fix MAI view image sizes.
+45. Center align all MAI titles.
 
 3.5.6
 -----

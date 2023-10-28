@@ -136,18 +136,19 @@ function buildStdItemCommand(item, parentCommand) {
             for (var i=0, len=parentCommand.params.length; i<len; ++i) {
                 if (typeof parentCommand.params[i] === 'string' || parentCommand.params[i] instanceof String) {
                     var lower = parentCommand.params[i].toLowerCase();
-                    if (lower.startsWith("artist_id:") && lmsOptions.noArtistFilter && (item.compilation || item.nonmain)) {
-                        // Want all tracks from analbum, not just those from this artist, so don't filter on artist_id
-                        artist_id=parentCommand.params[i];
+                    if (lower.startsWith("artist_id:")) {
+                        if (lmsOptions.noArtistFilter && (item.compilation || item.nonmain)) {
+                            // Want all tracks from an album, not just those from this artist, so don't filter on artist_id
+                            command.params.push('material_skin_'+parentCommand.params[i]);
+                        } else {
+                            // Retrict to only tracks from this artist
+                            command.params.push(parentCommand.params[i]);
+                        }
                     } else if ( (!LMS_NO_ROLE_FILTER && (lower.startsWith("role_id:"))) ||
                                 (!LMS_NO_GENRE_FILTER && lower.startsWith("genre_id:")) ) {
                         command.params.push(parentCommand.params[i]);
                     }
                 }
-            }
-            if (undefined!=artist_id) {
-                // Rename artist_id parameter so that we can use it to highlight tracks...
-                command.params.push('material_skin_'+artist_id);
             }
         } else if (item.id.startsWith("genre_id:")) {
             for (var i=0, len=parentCommand.params.length; i<len; ++i) {

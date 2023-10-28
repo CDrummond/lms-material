@@ -881,20 +881,16 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
             if (this.$store.state.visibleMenus.size>0) {
                 return;
             }
-            if (!this.desktopLayout && this.$store.state!='now-playing') {
+            if (!this.desktopLayout && this.$store.state.page!='now-playing') {
                 return;
             }
             if (!this.clickTimer) {
                 this.clickTimer = setTimeout(function () {
                     this.clearClickTimeout();
-                    if (IS_IOS) {
-                        this.showMenu(event);
-                    } else {
-                        bus.$emit('expandNowPlaying', true);
-                    }
+                    bus.$emit('expandNowPlaying', true);
                 }.bind(this), LMS_DOUBLE_CLICK_TIMEOUT);
             } else {
-                this.clearClickTimeout(this.clickTimer);
+                this.clearClickTimeout();
                 this.showPic();
             }
         },

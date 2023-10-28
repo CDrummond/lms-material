@@ -53,6 +53,7 @@ x.y.z
     settings' dialogs.
 42. In MAI view show album cover and artist image before text.
 43. Strip headers from MAI text, as duplicates own headers.
+44. Fix MAI view image sizes.
 
 3.5.6
 -----

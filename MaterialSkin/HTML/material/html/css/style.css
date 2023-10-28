@@ -881,7 +881,9 @@ div.v-subheader {
 
 .browse-html img, .np-info-text img, .np-info-text-full img, .inline-image {
  max-width:100% !important;
- max-height:600px !important;
+ max-height:300px !important;
+ height:auto;
+ width:auto;
  margin-left:auto;
  margin-right:auto;
  margin-bottom:8px;
@@ -1054,7 +1056,6 @@ div.v-subheader {
 .np-no-meta-img {
  object-fit:contain;
  object-position:50% 50%;
- width:300px;
  margin-left:auto;
  margin-right:auto;
 }

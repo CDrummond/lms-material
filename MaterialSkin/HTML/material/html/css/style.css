@@ -2322,11 +2322,7 @@ div.v-subheader {
  vertical-align:middle;
  line-height:var(--std-font-size);
  padding-top:28px;
- border:3px solid #bbb;
-}
-
-.theme--dark .thumbnail-grid .none {
- border:3px solid #222;
+ border:2px solid var(--text-color);
 }
 
 .color-circle {
@@ -2362,7 +2358,7 @@ div.v-subheader {
  margin-left:2px;
  margin-right:12px;
  cursor:pointer;
- opacity:0.5;
+ opacity:0.25;
 }
 
 .selected-thumbnail {

@@ -190,8 +190,8 @@ Vue.component('lms-ui-settings', {
       <v-list-tile-sub-title>{{i18n('Select background to use when not using artist, or album, image.')}}</v-list-tile-sub-title>
       <div class="thumbnail-grid">
        <template v-for="(item, index) in backdrops">
-         <div v-if="item==''" @click="browseDefBackdrop=item" class="thumbnail none" v-bind:class="{'selected-thumbnail':item==browseDefBackdrop}">{{i18n('None')}}</div>
-         <img v-else @click="browseDefBackdrop=item" :src="'html/backdrops/'+item+'_tn.jpg'" class="thumbnail" v-bind:class="{'selected-thumbnail':item==browseDefBackdrop}"></img>
+        <div v-if="item==''" @click="browseDefBackdrop=item" class="thumbnail none" v-bind:class="{'selected-thumbnail':item==browseDefBackdrop}">{{i18n('None')}}</div>
+        <img v-else @click="browseDefBackdrop=item" :src="'html/backdrops/'+item+'_tn.jpg'" class="thumbnail" v-bind:class="{'selected-thumbnail':item==browseDefBackdrop}"></img>
        </template>
       </div>
      </v-list-tile-content>
@@ -656,15 +656,6 @@ Vue.component('lms-ui-settings', {
                 { value:4, label:i18n('Medium')},
                 { value:8, label:i18n('Large')}
                 ];
-                /*
-            this.backdrops = [
-                { key:'', label:i18n('None')},
-                { key:'001', label:i18n('Music notes')},
-                { key:'microphone', label:i18n('Vintage microphone')},
-                { key:'neonglow', label:i18n('Neon glow')},
-                { key:'neonsquares', label:i18n('Neon squares')}
-            ]
-            */
         },
         close() {
             this.show=false;

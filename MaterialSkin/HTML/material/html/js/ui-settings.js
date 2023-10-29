@@ -185,7 +185,16 @@ Vue.component('lms-ui-settings', {
     <v-divider></v-divider>
 
     <v-list-tile>
-     <v-select :items="backdrops" :label="i18n('Default background')" v-model="browseDefBackdrop" item-text="label" item-value="key"></v-select>
+     <v-list-tile-content>
+      <v-list-tile-title>{{i18n('Default background')}}</v-list-tile-title>
+      <v-list-tile-sub-title>{{i18n('Select background to use when not using artist, or album, image.')}}</v-list-tile-sub-title>
+      <div class="thumbnail-grid">
+       <template v-for="(item, index) in backdrops">
+         <div v-if="item==''" @click="browseDefBackdrop=item" class="thumbnail none" v-bind:class="{'selected-thumbnail':item==browseDefBackdrop}">{{i18n('None')}}</div>
+         <img v-else @click="browseDefBackdrop=item" :src="'html/backdrops/'+item+'_tn.jpg'" class="thumbnail" v-bind:class="{'selected-thumbnail':item==browseDefBackdrop}"></img>
+       </template>
+      </div>
+     </v-list-tile-content>
     </v-list-tile>
     <v-divider></v-divider>
 
@@ -391,7 +400,7 @@ Vue.component('lms-ui-settings', {
             sortFavorites:true,
             autoScrollQueue:true,
             browseBackdrop:true,
-            browseDefBackdrop:'musicnotes',
+            browseDefBackdrop:'001',
             backdrops: [],
             queueBackdrop:true,
             nowPlayingBackdrop:true,
@@ -535,6 +544,15 @@ Vue.component('lms-ui-settings', {
                 }
             }).catch(err => {
             });
+            lmsCommand("", ["material-skin", "backdrops"]).then(({data}) => {
+                this.backdrops = [''];
+                if (data && data.result && data.result.backdrops) {
+                    for (var i=0, list=data.result.backdrops, len=list.length; i<len; ++i) {
+                        this.backdrops.push(list[i].name);
+                    }
+                }
+            }).catch(err => {
+            });
             this.show = true;
         }.bind(this));
         bus.$on('closeMenu', function() {
@@ -638,13 +656,15 @@ Vue.component('lms-ui-settings', {
                 { value:4, label:i18n('Medium')},
                 { value:8, label:i18n('Large')}
                 ];
+                /*
             this.backdrops = [
                 { key:'', label:i18n('None')},
-                { key:'musicnotes', label:i18n('Music notes')},
+                { key:'001', label:i18n('Music notes')},
                 { key:'microphone', label:i18n('Vintage microphone')},
                 { key:'neonglow', label:i18n('Neon glow')},
                 { key:'neonsquares', label:i18n('Neon squares')}
             ]
+            */
         },
         close() {
             this.show=false;

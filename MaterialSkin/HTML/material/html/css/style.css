@@ -2295,7 +2295,7 @@ div.v-subheader {
  }
 }
 
-.color-grid, .icon-grid {
+.color-grid, .icon-grid, .thumbnail-grid {
  overflow-x:hidden !important;
  display:grid;
  grid-template-columns:repeat(auto-fit, minmax(36px, 1fr));
@@ -2313,6 +2313,22 @@ div.v-subheader {
  grid-template-columns:repeat(auto-fit, minmax(64px, 1fr));
 }
 
+.thumbnail-grid {
+ grid-template-columns:repeat(auto-fit, minmax(80px, 1fr));
+}
+
+.thumbnail-grid .none {
+ text-align:center;
+ vertical-align:middle;
+ line-height:var(--std-font-size);
+ padding-top:28px;
+ border:3px solid #bbb;
+}
+
+.theme--dark .thumbnail-grid .none {
+ border:3px solid #222;
+}
+
 .color-circle {
  width:28px;
  height:28px;
@@ -2321,6 +2337,7 @@ div.v-subheader {
  margin-bottom:4px;
  margin-left:2px;
  margin-right:12px;
+ cursor:pointer;
 }
 
 .color-from-cover {
@@ -2334,6 +2351,22 @@ div.v-subheader {
  margin-bottom:2px;
  margin-right:10px;
  border:3px solid var(--text-color);
+}
+
+.thumbnail {
+ width:75px;
+ height:75px;
+ border-radius:5px;
+ margin-top:4px;
+ margin-bottom:4px;
+ margin-left:2px;
+ margin-right:12px;
+ cursor:pointer;
+ opacity:0.5;
+}
+
+.selected-thumbnail {
+ opacity:1.0;
 }
 
 .icon-grid .v-btn {

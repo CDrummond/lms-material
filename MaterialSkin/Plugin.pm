@@ -373,7 +373,7 @@ sub _cliCommand {
     my $cmd = $request->getParam('_cmd');
     if ($request->paramUndefinedOrNotOneOf($cmd, ['prefs', 'info', 'transferqueue', 'delete-favorite', 'map', 'delete-podcast',
                                                   'plugins', 'plugins-status', 'plugins-update', 'extras', 'delete-vlib', 'pass-isset',
-                                                  'pass-check', 'browsemodes', 'geturl', 'command', 'scantypes', 'server', 'themes',
+                                                  'pass-check', 'browsemodes', 'geturl', 'command', 'scantypes', 'server', 'themes', 'backdrops',
                                                   'playericons', 'activeplayers', 'urls', 'adv-search', 'adv-search-params', 'protocols',
                                                   'players-extra-info', 'sort-playlist', 'mixer']) ) {
         $request->setStatusBadParams();
@@ -946,6 +946,29 @@ sub _cliCommand {
                         if (length($color)>=4) {
                             $request->addResultLoop("colors", $cnt, "color", $color);
                             $request->addResultLoop("colors", $cnt, "key", "user:" . $parts[0]);
+                            $cnt++;
+                        }
+                    }
+                }
+            }
+        }
+        $request->setStatusDone();
+        return;
+    }
+
+    if ($cmd eq 'backdrops') {
+        my $cnt = 0;
+        my $path = dirname(__FILE__) . "/HTML/material/html/backdrops/";
+        if (-d $path) {
+            opendir DIR, $path;
+            my @items = readdir(DIR);
+            close DIR;
+            foreach my $name (@items) {
+                if (-f $path . "/" . $name ) {
+                    $name =~ s/\.jpg//i;
+                    if (rindex($name, '_tn')==-1) {
+                        if (-f $path . "/" . $name . '_tn.jpg' ) {
+                            $request->addResultLoop("backdrops", $cnt, "name", $name);
                             $cnt++;
                         }
                     }

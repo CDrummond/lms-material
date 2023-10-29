@@ -1459,6 +1459,10 @@ progress {
  transition:background 0.05s!important;
 }
 
+.backdrop-cover {
+  background-position:right center !important;
+}
+
 .bgnd-blur {
  backdrop-filter:var(--bgnd-filter);
  -webkit-backdrop-filter:var(--bgnd-filter);

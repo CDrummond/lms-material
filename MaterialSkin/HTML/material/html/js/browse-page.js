@@ -76,7 +76,7 @@ var lmsBrowse = Vue.component("lms-browse", {
  </div>
  <v-icon class="browse-progress" v-if="fetchingItem!=undefined" color="primary">refresh</v-icon>
  <div v-show="letter" id="letterOverlay"></div>
- <div class="lms-list bgnd-cover" id="browse-bgnd">
+ <div class="lms-list bgnd-cover" v-bind:class="{'backdrop-cover':drawBackdrop}" id="browse-bgnd">
   <div class="noselect lms-jumplist" v-bind:class="{'bgnd-blur':drawBgndImage,'backdrop-blur':drawBackdrop}" v-if="filteredJumplist.length>1">
    <template v-for="(item, index) in filteredJumplist">
     <div @click="jumpTo(item.index)" v-bind:class="{'active' : jumplistActive==index}">{{item.key==' ' || item.key=='' ? '?' : item.key}}</div>

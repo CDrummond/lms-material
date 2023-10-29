@@ -248,7 +248,7 @@ const store = new Vuex.Store({
         autoScrollQueue:true,
         library: null,
         browseBackdrop: true,
-        browseDefBackdrop: '001',
+        browseDefBackdrop: '010',
         queueBackdrop: true,
         nowPlayingBackdrop: true,
         infoBackdrop: true,

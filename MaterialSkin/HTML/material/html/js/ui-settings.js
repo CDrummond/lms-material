@@ -400,7 +400,7 @@ Vue.component('lms-ui-settings', {
             sortFavorites:true,
             autoScrollQueue:true,
             browseBackdrop:true,
-            browseDefBackdrop:'001',
+            browseDefBackdrop:'010',
             backdrops: [],
             queueBackdrop:true,
             nowPlayingBackdrop:true,

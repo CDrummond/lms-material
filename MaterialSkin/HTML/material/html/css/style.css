@@ -1429,6 +1429,7 @@ div.v-rating i.primary--text, div.v-rating i.accent--text {
  margin:auto;
 }
 
+.browse-html h1, .browse-html h2, .browse-html h3,
 .np-info-text h1, .np-info-text h2, .np-info-text h3,
 .np-info-text-10 h1, .np-info-text-10 h2, .np-info-text-10 h3 {
  font-size:var(--std-font-size)!important;

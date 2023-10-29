@@ -185,11 +185,7 @@ Vue.component('lms-ui-settings', {
     <v-divider></v-divider>
 
     <v-list-tile>
-     <v-list-tile-content @click="browseDefBackdrop = !browseDefBackdrop" class="switch-label">
-      <v-list-tile-title>{{i18n('Draw default backdrop')}}</v-list-tile-title>
-      <v-list-tile-sub-title>{{i18n('Use default image as background, when not using artist, or album, image.')}}</v-list-tile-sub-title>
-     </v-list-tile-content>
-     <v-list-tile-action><m3-switch v-model="browseDefBackdrop"></m3-switch></v-list-tile-action>
+     <v-select :items="backdrops" :label="i18n('Default background')" v-model="browseDefBackdrop" item-text="label" item-value="key"></v-select>
     </v-list-tile>
     <v-divider></v-divider>
 
@@ -395,7 +391,8 @@ Vue.component('lms-ui-settings', {
             sortFavorites:true,
             autoScrollQueue:true,
             browseBackdrop:true,
-            browseDefBackdrop:true,
+            browseDefBackdrop:'musicnotes',
+            backdrops: [],
             queueBackdrop:true,
             nowPlayingBackdrop:true,
             infoBackdrop:true,
@@ -641,6 +638,13 @@ Vue.component('lms-ui-settings', {
                 { value:4, label:i18n('Medium')},
                 { value:8, label:i18n('Large')}
                 ];
+            this.backdrops = [
+                { key:'', label:i18n('None')},
+                { key:'musicnotes', label:i18n('Music notes')},
+                { key:'microphone', label:i18n('Vintage microphone')},
+                { key:'neonglow', label:i18n('Neon glow')},
+                { key:'neonsquares', label:i18n('Neon squares')}
+            ]
         },
         close() {
             this.show=false;

@@ -55,8 +55,7 @@ x.y.z
 43. Strip headers from MAI text, as duplicates own headers.
 44. Fix MAI view image sizes.
 45. Center align all MAI titles.
-46. Provide a default backdrop image to use in browse view, with option to
-    disable.
+46. Provide backdrop images to use in browse view.
 47. Don't apply reverse sort to 'New Music'.
 
 3.5.6

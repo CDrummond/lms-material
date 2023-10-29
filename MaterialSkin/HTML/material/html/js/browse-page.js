@@ -436,7 +436,7 @@ var lmsBrowse = Vue.component("lms-browse", {
             return this.$store.state.browseBackdrop && ((undefined!=this.current && undefined!=this.current.image) || undefined!=this.currentItemImage);
         },
         drawBackdrop() {
-            return !this.drawBgndImage && this.$store.state.browseDefBackdrop
+            return !this.drawBgndImage && !isEmpty(this.$store.state.browseDefBackdrop)
         },
         listSizeAdjust() {
             return this.$store.state.listPadding
@@ -1468,9 +1468,10 @@ var lmsBrowse = Vue.component("lms-browse", {
                                 ? this.currentItemImage
                                 : undefined
                         : undefined;
-            if (!url && this.$store.state.browseDefBackdrop) {
-                url='html/images/backdrop.jpg';
+            if (!url && !isEmpty(this.$store.state.browseDefBackdrop)) {
+                url='html/backdrops/' + this.$store.state.browseDefBackdrop + '.jpg';
             }
+            console.log(url, this.$store.state.browseDefBackdrop);
             if (url) {
                url=changeImageSizing(url, LMS_CURRENT_IMAGE_SIZE);
             }

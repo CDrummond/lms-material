@@ -248,7 +248,7 @@ const store = new Vuex.Store({
         autoScrollQueue:true,
         library: null,
         browseBackdrop: true,
-        browseDefBackdrop: true,
+        browseDefBackdrop: 'musicnotes',
         queueBackdrop: true,
         nowPlayingBackdrop: true,
         infoBackdrop: true,
@@ -479,7 +479,7 @@ const store = new Vuex.Store({
             }
             state.fontSize = undefined==fontSize ? 'r' : fontSize;
 
-            let boolItems = ['roundCovers', 'autoScrollQueue', 'sortFavorites', 'letterOverlay', 'browseBackdrop', 'browseDefBackdrop', 'queueBackdrop',
+            let boolItems = ['roundCovers', 'autoScrollQueue', 'sortFavorites', 'letterOverlay', 'browseBackdrop', 'queueBackdrop',
                              'nowPlayingBackdrop', 'infoBackdrop', 'browseTechInfo', 'techInfo', 'queueShowTrackNum', 'nowPlayingTrackNum',
                              'nowPlayingClock', 'nowPlayingContext', 'swipeVolume', 'swipeChangeTrack', 'keyboardControl','queueThreeLines',
                              'screensaver', 'homeButton', 'powerButton', 'largeCovers', 'mediaControls'];
@@ -498,6 +498,7 @@ const store = new Vuex.Store({
             state.mobileBar = parseInt(getLocalStorageVal('mobileBar', state.mobileBar));
             state.maxRating = parseInt(getLocalStorageVal('maxRating', state.maxRating));
             state.library = getLocalStorageVal('library', state.library);
+            state.browseDefBackdrop = getLocalStorageVal('browseDefBackdrop', state.browseDefBackdrop);
             setTheme(state.theme, state.color);
             setRoundCovers(state.roundCovers);
             if (state.fontSize!='r') {

@@ -551,6 +551,7 @@ Vue.component('lms-ui-settings', {
                         this.backdrops.push(list[i].name);
                     }
                 }
+                this.backdrops.sort();
             }).catch(err => {
             });
             this.show = true;

@@ -896,22 +896,30 @@ div.v-subheader {
  margin-bottom:var(--std-font-size)!important;
 }
 
-.text .odd {
+.text .odd,
+.browse-html .odd {
  float:right;
 }
 
-.text .even {
+.text .even,
+.browse-html .even {
  float:left;
 }
 
-.text .odd a img {
+.text .odd a img,
+.browse-html .odd a img {
  margin-left:8px;
- margin-bottom:0px
+ margin-bottom:0px;
+ max-width: 100% !important;
+ max-height: 200px !important;
 }
 
-.text .even a img {
+.text .even a img,
+.browse-html .even a img {
  margin-right:8px;
- margin-bottom:0px
+ margin-bottom:0px;
+ max-width: 100% !important;
+ max-height: 200px !important;
 }
 
 /* Biographies, etc, from More > Artist information > ... */

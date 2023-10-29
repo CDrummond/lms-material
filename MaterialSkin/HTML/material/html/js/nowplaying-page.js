@@ -47,9 +47,8 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
      <v-card flat class="np-info-card-cover fade-both" @contextmenu.prevent="showContextMenu">
       <v-card-text :class="['np-info-text', zoomInfoClass, TRACK_TAB==index || tab.isMsg ? 'np-info-lyrics' : '', ALBUM_TAB==index ? 'np-info-review' : '']">
        <div v-if="tab.texttitle && (TRACK_TAB==index || !tab.text)" v-html="tab.texttitle" class="np-info-title"></div>
-       <img v-if="tab.image && ARTIST_TAB!=index" :src="tab.image" loading="lazy" class="np-no-meta-img"></img>
-       <div v-if="tab.text" v-html="tab.text"></div>
-       <img v-if="tab.image && ARTIST_TAB==index" :src="tab.image" loading="lazy" class="np-no-meta-img"></img>
+       <img v-if="tab.image" :src="tab.image" loading="lazy" class="np-no-meta-img"></img>
+       <div v-if="tab.text" v-bind:class="{'text':ARTIST_TAB==index}" v-html="tab.text"></div>
        <template v-for="(sect, sindex) in tab.sections">
         <div class="np-sect-title" v-if="(undefined!=sect.items && sect.items.length>=sect.min) || undefined!=sect.html">{{sect.title}}<v-btn flat icon class="np-sect-toggle" v-if="undefined!=sect.grid" @click="toggleGrid(index, sindex)"><v-icon>{{ACTIONS[sect.grid ? USE_LIST_ACTION : USE_GRID_ACTION].icon}}</v-icon></v-btn></div>
         <v-list v-if="undefined!=sect.items && !sect.grid && sect.items.length>=sect.min" class="lms-list">
@@ -99,9 +98,8 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
       <v-card flat class="np-info-card-cover">
        <v-card-text :class="['np-info-text-full', 'fade-both', zoomInfoClass, TRACK_TAB==index || tab.isMsg ? 'np-info-lyrics' : '', ALBUM_TAB==index ? 'np-info-review' : '']" @contextmenu.prevent="showContextMenu">
         <div v-if="tab.texttitle && (TRACK_TAB==index || !tab.text)" v-html="tab.texttitle" class="np-info-title"></div>
-        <img v-if="tab.image && ARTIST_TAB!=index" :src="tab.image" loading="lazy" class="np-no-meta-img"></img>
-        <div v-if="tab.text" v-html="tab.text"></div>
-        <img v-if="tab.image && ARTIST_TAB==index" :src="tab.image" loading="lazy" class="np-no-meta-img"></img>
+        <img v-if="tab.image" :src="tab.image" loading="lazy" class="np-no-meta-img"></img>
+        <div v-if="tab.text" v-bind:class="{'text':ARTIST_TAB==index}" v-html="tab.text"></div>
         <template v-for="(sect, sindex) in tab.sections">
          <div class="np-sect-title" v-if="(undefined!=sect.items && sect.items.length>=sect.min) || undefined!=sect.html">{{sect.title}}<v-btn flat icon class="np-sect-toggle" v-if="undefined!=sect.grid" @click="toggleGrid(index, sindex)"><v-icon>{{ACTIONS[sect.grid ? USE_LIST_ACTION : USE_GRID_ACTION].icon}}</v-icon></v-btn></div>
          <v-list v-if="undefined!=sect.items && !sect.grid && sect.items.length>=sect.min" class="lms-list">

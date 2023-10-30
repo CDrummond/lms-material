@@ -3,7 +3,7 @@
  border-radius:9px!important;
 }
 
-.lms-list img:not(.image-grid-item-img):not(.svg-list-img):not(.multi-disc), .pmgr-cover img, .np-info .lms-list img, .sub-cover {
+.lms-list img:not(.image-grid-item-img):not(.svg-list-img):not(.multi-disc), .pmgr-cover img, .np-info .lms-list img, .sub-cover, .menu-image {
  border-radius:4px!important;
 }
 

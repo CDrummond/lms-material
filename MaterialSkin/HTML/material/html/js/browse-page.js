@@ -295,7 +295,7 @@ var lmsBrowse = Vue.component("lms-browse", {
      <v-list-tile-avatar>
       <v-icon v-if="undefined!=item.icon">{{item.icon}}</v-icon>
       <img v-else-if="undefined!=item.svg" class="svg-img" :src="item.svg | svgIcon(darkUi)"></img>
-      <img v-else-if="undefined!=item.image" class="svg-img" :src="item.image"></img>
+      <img v-else-if="undefined!=item.image" class="svg-img menu-image" :src="item.image"></img>
      </v-list-tile-avatar>
      <v-list-tile-content><v-list-tile-title>{{item.title}}</v-list-tile-title></v-list-tile-content>
     </v-list-tile>

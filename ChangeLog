@@ -1,4 +1,4 @@
-x.y.z
+4.0.0
 -----
  1. Unify MAI layout between desktop and mobile.
  2. Allow mobile MAI to use 3 column layout.

@@ -911,7 +911,7 @@ div.v-subheader {
  margin-left:8px;
  margin-bottom:0px;
  max-width: 100% !important;
- max-height: 200px !important;
+ max-height: 175px !important;
 }
 
 .text .even a img,
@@ -919,7 +919,19 @@ div.v-subheader {
  margin-right:8px;
  margin-bottom:0px;
  max-width: 100% !important;
- max-height: 200px !important;
+ max-height: 175px !important;
+}
+
+@media screen and (max-width: 480px) {
+ .text .odd a img, .browse-html .odd a img, .text .even a img, .browse-html .even a img {
+  max-height: 150px !important;
+ }
+}
+
+@media screen and (max-width: 380px) {
+ .text .odd a img, .browse-html .odd a img, .text .even a img, .browse-html .even a img {
+  max-height: 125px !important;
+ }
 }
 
 /* Biographies, etc, from More > Artist information > ... */

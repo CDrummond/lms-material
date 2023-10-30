@@ -1337,23 +1337,10 @@ var lmsBrowse = Vue.component("lms-browse", {
             var thisWidth = this.$store.state.desktopLayout ? this.pageElement.scrollWidth : window.innerWidth;
             var listWidth = thisWidth - ((/*scrollbar*/ IS_MOBILE ? 0 : 20) + (/*this.filteredJumplist.length>1 && this.items.length>10 ? */JUMP_LIST_WIDTH/* :0*/) + RIGHT_PADDING);
 
-            // Calculate what grid item size we should use...
-            var allowLarge = this.$store.state.largeCovers;
-            if (allowLarge && this.items.length<100) {
-                allowLarge = false;
-                for (var i=0, len=this.items.length; i<len; ++i) {
-                   if (this.items[i].image) {
-                       allowLarge = true;
-                       break;
-                   }
-                }
-            }
-
             var sz = undefined;
             var preferredColumns = 4;
-            var maxItemWidth = Math.floor(GRID_MAX_WIDTH * (allowLarge ? (listWidth>1200 ? 1.5 : listWidth>800 ? 1.25 : 1.0) : 1.0));
             for (var i=preferredColumns; i>=1; --i) {
-                sz = this.calcSizes(i, listWidth, maxItemWidth, 0);
+                sz = this.calcSizes(i, listWidth, GRID_MAX_WIDTH, 0);
                 if (sz.mc>=i) {
                     break;
                 }

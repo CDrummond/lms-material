@@ -107,11 +107,6 @@ function updateUiSettings(state, val) {
         setLocalStorageVal('screensaver', state.screensaver);
         bus.$emit('screensaverDisplayChanged');
     }
-    if (undefined!=val.largeCovers && state.largeCovers!=val.largeCovers) {
-        state.largeCovers = val.largeCovers;
-        setLocalStorageVal('largeCovers', state.largeCovers);
-        relayoutGrid = true;
-    }
     if (undefined!=val.listPadding && state.listPadding!=val.listPadding) {
         state.listPadding = val.listPadding;
         setLocalStorageVal('listPadding', state.listPadding);
@@ -278,7 +273,6 @@ const store = new Vuex.Store({
         lang: 'en-US',
         twentyFourHour: false,
         powerButton: false,
-        largeCovers: false,
         mediaControls: false,
         downloadStatus: [],
         coloredToolbars: false,
@@ -482,7 +476,7 @@ const store = new Vuex.Store({
             let boolItems = ['roundCovers', 'autoScrollQueue', 'sortFavorites', 'letterOverlay', 'browseBackdrop', 'queueBackdrop',
                              'nowPlayingBackdrop', 'infoBackdrop', 'browseTechInfo', 'techInfo', 'queueShowTrackNum', 'nowPlayingTrackNum',
                              'nowPlayingClock', 'nowPlayingContext', 'swipeVolume', 'swipeChangeTrack', 'keyboardControl','queueThreeLines',
-                             'screensaver', 'homeButton', 'powerButton', 'largeCovers', 'mediaControls'];
+                             'screensaver', 'homeButton', 'powerButton', 'mediaControls'];
             for (let i=0, len=boolItems.length; i<len; ++i) {
                 let key = boolItems[i];
                 state[key] = getLocalStorageBool(key, state[key]);

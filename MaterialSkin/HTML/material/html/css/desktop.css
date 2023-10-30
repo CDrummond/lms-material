@@ -59,10 +59,6 @@
  margin-left:-4px !important;
 }
 
-#browse-view .subtoolbar {
- padding:2px 1px 0px 12px;
-}
-
 .lms-list {
  height:calc((var(--vh, 1vh)*100) - (var(--main-toolbar-height) + var(--sub-toolbar-height) + var(--bottom-toolbar-height)));
  overflow:auto;

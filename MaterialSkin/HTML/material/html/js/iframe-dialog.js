@@ -758,7 +758,7 @@ Vue.component('lms-iframe-dialog', {
             this.src = this.src.replace(this.playerId, player.id);
             this.show = true;
             this.showMenu = false;
-            this.choiceMenu = {show:false, x:0}
+            this.choiceMenu = {show:false, x:this.choiceMenu.x}
             this.loaded = false;
             this.history = [];
             this.textCol = getComputedStyle(document.documentElement).getPropertyValue('--text-color').substring(1);

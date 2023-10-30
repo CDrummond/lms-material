@@ -55,6 +55,7 @@ x.y.z
 44. Provide backdrop images to use in browse view.
 45. Don't apply reverse sort to 'New Music'.
 46. Fix image position and size in biographies.
+47. Show image in browse sub-toolbar if wide enough.
 
 3.5.6
 -----

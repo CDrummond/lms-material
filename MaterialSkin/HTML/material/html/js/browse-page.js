@@ -9,6 +9,7 @@
 var B_ALBUM_SORTS=[ ];
 const ALLOW_ADD_ALL = new Set(['trackinfo', 'youtube', 'spotty', 'qobuz', 'tidal', 'wimp' /*is Tidal*/, 'deezer', 'tracks', 'musicip', 'musicsimilarity', 'blissmixer', 'bandcamp']); // Allow add-all/play-all from 'trackinfo', as Spotty's 'Top Titles' access via 'More' needs this
 const ALLOW_FAKE_ALL_SONGS_ITEM = new Set(['youtube', 'qobuz']); // Allow using 'fake' add all item
+const MIN_WIDTH_FOR_COVER = 680;
 
 var lmsBrowse = Vue.component("lms-browse", {
     template: `
@@ -38,6 +39,7 @@ var lmsBrowse = Vue.component("lms-browse", {
   <v-layout v-else-if="history.length>0">
    <v-btn flat icon v-longpress="backBtnPressed" class="toolbar-button" v-bind:class="{'back-button':!homeButton || history.length<2}" id="back-button" :title="trans.goBack | tooltipStr('esc', keyboardControl)"><v-icon>arrow_back</v-icon></v-btn>
    <v-btn v-if="history.length>1 && homeButton" flat icon @click="homeBtnPressed()" class="toolbar-button" id="home-button" :title="trans.goHome | tooltipStr('home', keyboardControl)"><v-icon>home</v-icon></v-btn>
+   <img v-if="wide && ((current && current.image) || currentItemImage)" :src="current && current.image ? current.image : currentItemImage" @click="showHistory($event)" class="sub-cover pointer"></img>
    <v-layout row wrap @click="showHistory($event)" v-bind:class="{'pointer link-item': history.length>0}">
     <v-flex xs12 class="ellipsis subtoolbar-title subtoolbar-pad" v-bind:class="{'subtoolbar-title-single':undefined==toolbarSubTitle}">{{headerTitle}}</v-flex>
     <v-flex xs12 class="ellipsis subtoolbar-subtitle subtext" v-if="undefined!=toolbarSubTitle" v-html="toolbarSubTitle"></v-flex>
@@ -1471,7 +1473,6 @@ var lmsBrowse = Vue.component("lms-browse", {
             if (!url && !isEmpty(this.$store.state.browseDefBackdrop)) {
                 url='html/backdrops/' + this.$store.state.browseDefBackdrop + '.jpg';
             }
-            console.log(url, this.$store.state.browseDefBackdrop);
             if (url) {
                url=changeImageSizing(url, LMS_CURRENT_IMAGE_SIZE);
             }
@@ -1825,6 +1826,7 @@ var lmsBrowse = Vue.component("lms-browse", {
         this.scrollElement.addEventListener("scroll", this.handleScroll, PASSIVE_SUPPORTED ? { passive: true } : false);
         msRegister(this, this.scrollElement);
         bus.$on('splitterChanged', function() {
+            this.wide = this.pageElement.scrollWidth>=MIN_WIDTH_FOR_COVER;
             this.layoutGrid();
         }.bind(this));
         bus.$on('relayoutGrid', function() {
@@ -1835,12 +1837,12 @@ var lmsBrowse = Vue.component("lms-browse", {
                 this.layoutGrid(true);
             });
         }.bind(this));
-        this.wide = window.innerWidth>=800;
+        this.wide = this.pageElement.scrollWidth>=MIN_WIDTH_FOR_COVER;
         setTimeout(function () {
-            this.wide = window.innerWidth>=800;
+            this.wide = this.pageElement.scrollWidth>=MIN_WIDTH_FOR_COVER;
         }.bind(this), 1000);
         bus.$on('windowWidthChanged', function() {
-            this.wide = window.innerWidth>=800;
+            this.wide = this.pageElement.scrollWidth>=MIN_WIDTH_FOR_COVER;
             this.layoutGrid();
         }.bind(this));
         bus.$on('themeChanged', function() {

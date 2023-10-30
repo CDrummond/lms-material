@@ -2971,3 +2971,14 @@ img[lazy='loaded'].np-cover {
 .settings-list .v-list__tile {
  padding:0px;
 }
+
+.sub-cover {
+ object-fit:cover;
+ object-position:50% 0%;
+ display:block;
+ width:calc(var(--sub-toolbar-height) - 5px);
+ height:calc(var(--sub-toolbar-height) - 5px);
+ margin-left:4px;
+ margin-right:4px;
+ background-color:var(--image-background-color);
+}

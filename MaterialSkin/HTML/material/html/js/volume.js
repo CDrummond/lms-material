@@ -67,8 +67,8 @@ Vue.component('lms-volume', {
         bus.$on('noPlayers', function() {
             this.close();
         }.bind(this));
-        bus.$on('esc', function() {
-            if (this.$store.state.activeDialog == 'volume') {
+        bus.$on('closeDialog', function(dlg) {
+            if (dlg == 'volume') {
                 this.close();
             }
         }.bind(this));

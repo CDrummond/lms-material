@@ -79,6 +79,13 @@
         </select>
     [% END %]
 
+    [% WRAPPER setting title="PLUGIN_MATERIAL_SKIN_ARTIST_FILTER" desc="PLUGIN_MATERIAL_SKIN_ARTIST_FILTER_DESC" %]
+        <select class="stdedit" name="pref_noArtistFilter" id="noArtistFilter">
+            <option [% IF NOT prefs.noArtistFilter %]selected [% END %]value="0">[% 'PLUGIN_MATERIAL_SKIN_ARTIST_FILTER_ARTIST_ONLY' | getstring %]</option>
+            <option [% IF prefs.noArtistFilter %]selected [% END %]value="1">[% 'PLUGIN_MATERIAL_SKIN_ARTIST_FILTER_ALL_TRACKS' | getstring %]</option>
+        </select>
+    [% END %]
+
     [% WRAPPER setting title="PLUGIN_MATERIAL_SKIN_COMMENT_AS_DISC_TITLE" desc="PLUGIN_MATERIAL_SKIN_COMMENT_AS_DISC_TITLE_DESC" %]
         <select class="stdedit" name="pref_commentAsDiscTitle" id="commentAsDiscTitle">
             [% FOREACH option = {
@@ -98,9 +105,12 @@
         </select>
     [% END %]
 
+    [% WRAPPER setting title="PLUGIN_MATERIAL_SKIN_RELEASE_TYPE_ORDER" desc="PLUGIN_MATERIAL_SKIN_RELEASE_TYPE_ORDER_DESC" %]
+        <textarea class="stdedit" name="pref_releaseTypeOrder" id="releaseTypeOrder" cols="45" rows="5">[% prefs.releaseTypeOrder %]</textarea>
+    [% END %]
 
-    [% WRAPPER settingGroup title="PLUGIN_MATERIAL_SKIN_PAGED_BATCH_SIZE" desc="PLUGIN_MATERIAL_SKIN_PAGED_BATCH_SIZE_DESC" %]
-    <input type="text" class="stdedit sliderInput_100_2000_1" name="pref_pagedBatchSize" id="pagedBatchSize" value="[% prefs.pagedBatchSize %]" size="5">
+    [% WRAPPER setting title="PLUGIN_MATERIAL_SKIN_PAGED_BATCH_SIZE" desc="PLUGIN_MATERIAL_SKIN_PAGED_BATCH_SIZE_DESC" %]
+        <input type="text" class="sliderInput_100_2000_1" name="pref_pagedBatchSize" id="pagedBatchSize" value="[% prefs.pagedBatchSize %]" size="5"></input>
     [% END %]
 
 [% PROCESS settings/footer.html %]

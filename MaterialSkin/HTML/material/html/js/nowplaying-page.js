@@ -17,16 +17,16 @@ const NP_BROWSE_CMD = 3;
 const NP_COPY_DETAILS_CMD = 4;
 const NP_CUSTOM = 100;
 const NP_ITEM_ACT = 200;
+const NP_MIN_WIDTH_FOR_FULL = 780;
 
 var currentPlayingTrackPosition = 0;
 
 var lmsNowPlaying = Vue.component("lms-now-playing", {
     template: `
 <div>
- <div v-show="!desktopLayout || info.show || largeView" class="np-bgnd">
+ <div v-show="(!desktopLayout && page=='now-playing') || (desktopLayout && (info.show || largeView))" class="np-bgnd">
   <div class="np-bgnd" v-bind:class="[(info.show ? drawInfoBgndImage : drawBgndImage) ? 'np-bgnd-cover':'np-bgnd-cover-none']" id="np-bgnd"></div>
  </div>
-
  <v-tooltip top :position-x="timeTooltip.x" :position-y="timeTooltip.y" v-model="timeTooltip.show">{{timeTooltip.text}}</v-tooltip>
  <v-menu v-model="menu.show" :position-x="menu.x" :position-y="menu.y" absolute offset-y>
   <v-list>
@@ -38,37 +38,144 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
    </template>
   </v-list>
  </v-menu>
- 
- <div v-if="desktopLayout && !largeView" class="np-bar" id="np-bar" v-bind:class="{'np-bar-sb':stopButton}">
-  <v-layout row class="np-bar-controls" v-if="stopButton">
-   <v-flex xs3>
-    <v-btn flat icon id="np-bar-prev" v-bind:class="{'disabled':disablePrev}" v-longpress:repeat="prevButton" :title="trans.prev | tooltip('left', keyboardControl)"><v-icon large class="media-icon">skip_previous</v-icon></v-btn>
+
+ <div v-if="info.show && (desktopLayout || page=='now-playing')" class="np-info" id="np-info">
+  <v-tabs centered v-model="info.tab" v-if="info.showTabs || windowWidth<NP_MIN_WIDTH_FOR_FULL" style="np-info-tab-cover">
+   <template v-for="(tab, index) in info.tabs">
+    <v-tab :key="index">{{tab.title}}</v-tab>
+    <v-tab-item :key="index" :transition="false" :reverse-transition="false">
+     <v-card flat class="np-info-card-cover fade-both" @contextmenu.prevent="showContextMenu">
+      <v-card-text :class="['np-info-text', zoomInfoClass, TRACK_TAB==index || tab.isMsg ? 'np-info-lyrics' : '', ALBUM_TAB==index ? 'np-info-review' : '']">
+       <div v-if="tab.texttitle && (TRACK_TAB==index || !tab.text)" v-html="tab.texttitle" class="np-info-title"></div>
+       <img v-if="tab.image" :src="tab.image" loading="lazy" class="np-no-meta-img"></img>
+       <div v-if="tab.text" v-bind:class="{'text':ARTIST_TAB==index}" v-html="tab.text"></div>
+       <template v-for="(sect, sindex) in tab.sections">
+        <div class="np-sect-title" v-if="(undefined!=sect.items && sect.items.length>=sect.min) || undefined!=sect.html">{{sect.title}}<v-btn flat icon class="np-sect-toggle" v-if="undefined!=sect.grid" @click="toggleGrid(index, sindex)"><v-icon>{{ACTIONS[sect.grid ? USE_LIST_ACTION : USE_GRID_ACTION].icon}}</v-icon></v-btn></div>
+        <v-list v-if="undefined!=sect.items && !sect.grid && sect.items.length>=sect.min" class="lms-list">
+         <template v-for="(item, iindex) in sect.items">
+          <v-list-tile class="lms-list-item" v-bind:class="{'pq-current': (ALBUM_TAB==index && item.id==('track_id:'+infoTrack.track_id)) || (ARTIST_TAB==index && item.id==('album_id:'+infoTrack.album_id)), 'list-active':menu.show && index==menu.tab && sindex==menu.section && iindex==menu.index, 'browse-header' : item.header}" @click.stop="itemClicked(index, sindex, iindex, $event)">
+           <v-list-tile-avatar v-if="item.image" :tile="true" class="lms-avatar">
+            <img :key="item.image" v-lazy="item.image"></img>
+           </v-list-tile-avatar>
+           <v-list-tile-content>
+            <v-list-tile-title v-if="ALBUM_TAB==index" v-html="item.title"></v-list-tile-title>
+            <v-list-tile-title v-else>{{item.title}}</v-list-tile-title>
+            <v-list-tile-sub-title v-html="item.subtitle"></v-list-tile-sub-title>
+           </v-list-tile-content>
+           <v-list-tile-action v-if="ALBUM_TAB==index && undefined!=item.durationStr" class="np-list-time">{{item.durationStr}}</v-list-tile-action>
+           <div class="emblem" v-if="item.emblem" :style="{background: item.emblem.bgnd}">
+            <img :src="item.emblem | emblem()" loading="lazy"></img>
+           </div>
+          </v-list-tile>
+         </template>
+         <v-list-tile v-if="undefined!=sect.more" @click="moreClicked(index, sindex)"><v-list-tile-content><v-list-tile-title>{{sect.more}}</v-list-tile-title></v-list-tile-content></v-list-tile>
+        </v-list>
+        <div class="np-grid-sect" v-else-if="undefined!=sect.items && sect.grid && sect.items.length>=sect.min">
+         <template v-for="(item, iindex) in sect.items">
+          <div class="np-grid-item" v-bind:class="{'pq-current': (ALBUM_TAB==index && item.id==('track_id:'+infoTrack.track_id)) || (ARTIST_TAB==index && item.id==('album_id:'+infoTrack.album_id)), 'list-active':menu.show && index==menu.tab && sindex==menu.section && iindex==menu.index, 'np-grid-item-nosub':ARTIST_TAB==index && !sect.haveSub}" @click.stop="itemClicked(index, sindex, iindex, $event)">
+           <img :key="item.image" v-lazy="item.image"></img>
+           <v-list-tile-title>{{item.title}}</v-list-tile-title>
+           <v-list-tile-sub-title v-html="item.subtitle"></v-list-tile-sub-title>
+           <div class="emblem" v-if="item.emblem" :style="{background: item.emblem.bgnd}">
+            <img :src="item.emblem | emblem()" loading="lazy"></img>
+           </div>
+          </div>
+         </template>
+         <div v-if="undefined!=sect.more && undefined!=sect.items && sect.grid && sect.items.length>=sect.min" class="np-grid-more link-item" @click="moreClicked(index, sindex)">{{sect.more}}</div>
+        </div>
+        <div v-else-if="undefined!=sect.html" v-html="sect.html"></div>
+       </template>
+       <div class="np-spacer"></div>
+      </v-card-text>
+     </v-card>
+    </v-tab-item>
+   </template>
+  </v-tabs>
+  <div v-else>
+   <v-layout row>
+    <template v-for="(tab, index) in info.tabs">
+     <v-flex xs4>
+      <v-card flat class="np-info-card-cover">
+       <v-card-text :class="['np-info-text-full', 'fade-both', zoomInfoClass, TRACK_TAB==index || tab.isMsg ? 'np-info-lyrics' : '', ALBUM_TAB==index ? 'np-info-review' : '']" @contextmenu.prevent="showContextMenu">
+        <div v-if="tab.texttitle && (TRACK_TAB==index || !tab.text)" v-html="tab.texttitle" class="np-info-title"></div>
+        <img v-if="tab.image" :src="tab.image" loading="lazy" class="np-no-meta-img"></img>
+        <div v-if="tab.text" v-bind:class="{'text':ARTIST_TAB==index}" v-html="tab.text"></div>
+        <template v-for="(sect, sindex) in tab.sections">
+         <div class="np-sect-title" v-if="(undefined!=sect.items && sect.items.length>=sect.min) || undefined!=sect.html">{{sect.title}}<v-btn flat icon class="np-sect-toggle" v-if="undefined!=sect.grid" @click="toggleGrid(index, sindex)"><v-icon>{{ACTIONS[sect.grid ? USE_LIST_ACTION : USE_GRID_ACTION].icon}}</v-icon></v-btn></div>
+         <v-list v-if="undefined!=sect.items && !sect.grid && sect.items.length>=sect.min" class="lms-list">
+          <template v-for="(item, iindex) in sect.items">
+           <v-list-tile class="lms-list-item" v-bind:class="{'pq-current': (ALBUM_TAB==index && item.id==('track_id:'+infoTrack.track_id)) || (ARTIST_TAB==index && item.id==('album_id:'+infoTrack.album_id)), 'list-active':menu.show && index==menu.tab && sindex==menu.section && iindex==menu.index, 'browse-header' : item.header}" @click.stop="itemClicked(index, sindex, iindex, $event)">
+            <v-list-tile-avatar v-if="item.image" :tile="true" class="lms-avatar">
+             <img :key="item.image" v-lazy="item.image"></img>
+            </v-list-tile-avatar>
+            <v-list-tile-content>
+             <v-list-tile-title v-if="ALBUM_TAB==index" v-html="item.title"></v-list-tile-title>
+             <v-list-tile-title v-else>{{item.title}}</v-list-tile-title>
+             <v-list-tile-sub-title v-html="item.subtitle"></v-list-tile-sub-title>
+            </v-list-tile-content>
+            <v-list-tile-action v-if="ALBUM_TAB==index && undefined!=item.durationStr" class="np-list-time">{{item.durationStr}}</v-list-tile-action>
+            <div class="emblem" v-if="item.emblem" :style="{background: item.emblem.bgnd}">
+             <img :src="item.emblem | emblem()" loading="lazy"></img>
+            </div>
+           </v-list-tile>
+          </template>
+          <v-list-tile v-if="undefined!=sect.more" @click="moreClicked(index, sindex)"><v-list-tile-content><v-list-tile-title>{{sect.more}}</v-list-tile-title></v-list-tile-content></v-list-tile>
+         </v-list>
+         <div class="np-grid-sect" v-else-if="undefined!=sect.items && sect.grid && sect.items.length>=sect.min">
+          <template v-for="(item, iindex) in sect.items">
+           <div class="np-grid-item" v-bind:class="{'pq-current': (ALBUM_TAB==index && item.id==('track_id:'+infoTrack.track_id)) || (ARTIST_TAB==index && item.id==('album_id:'+infoTrack.album_id)), 'list-active':menu.show && index==menu.tab && sindex==menu.section && iindex==menu.index, 'browse-header' : item.header, 'np-grid-item-nosub':ARTIST_TAB==index && !sect.haveSub}" @click.stop="itemClicked(index, sindex, iindex, $event)">
+            <img :key="item.image" v-lazy="item.image"></img>
+            <v-list-tile-title>{{item.title}}</v-list-tile-title>
+            <v-list-tile-sub-title v-html="item.subtitle"></v-list-tile-sub-title>
+            <div class="emblem" v-if="item.emblem" :style="{background: item.emblem.bgnd}">
+             <img :src="item.emblem | emblem()" loading="lazy"></img>
+            </div>
+           </div>
+          </template>
+          <div v-if="undefined!=sect.more && undefined!=sect.items && sect.grid && sect.items.length>=sect.min" class="np-grid-more link-item" @click="moreClicked(index, sindex)">{{sect.more}}</div>
+         </div>
+         <div v-else-if="undefined!=sect.html" v-html="sect.html"></div>
+        </template>
+        <div class="np-spacer"></div>
+       </v-card-text>
+      </v-card>
+     </v-flex>
+    </template>
+   </v-layout>
+  </div>
+  <v-card class="np-info-card-cover">
+   <v-card-actions>
+    <v-spacer></v-spacer>
+    <v-btn flat icon v-if="info.showTabs && windowWidth>NP_MIN_WIDTH_FOR_FULL" @click="info.showTabs=false" :title="trans.expand"><v-icon style="margin-right:-18px">chevron_right</v-icon><v-icon style="margin-left:-18px">chevron_left</v-icon></v-btn>
+    <v-btn flat icon v-else-if="windowWidth>NP_MIN_WIDTH_FOR_FULL" @click="info.showTabs=true" :title="trans.collapse"><v-icon style="margin-right:-18px">chevron_left</v-icon><v-icon style="margin-left:-18px">chevron_right</v-icon></v-btn>
+    <div style="width:32px" v-if="windowWidth>NP_MIN_WIDTH_FOR_FULL"></div>
+    <v-btn flat icon v-if="info.sync" @click="info.sync = false" :title="trans.sync"><v-icon>link</v-icon></v-btn>
+    <v-btn flat icon v-else @click="info.sync = true" :title="trans.unsync"><v-icon class="dimmed">link_off</v-icon></v-btn>
+    <div style="width:32px"></div>
+    <v-btn flat icon @click="trackInfo()" :title="trans.more"><img class="svg-img" :src="'more' | svgIcon(darkUi)"></img></v-btn>
+    <v-spacer></v-spacer>
+   </v-card-actions>
+  </v-card>
+ </div>
+
+ <div v-if="desktopLayout || (info.show ? MBAR_NONE!=mobileBar : (page=='now-playing' || MBAR_NONE!=mobileBar))">
+ <div v-if="(desktopLayout && !largeView) || (!desktopLayout && (info.show || page!='now-playing'))" class="np-bar" id="np-bar" v-bind:class="{'mobile':!desktopLayout, 'np-bar-mob-thick':!desktopLayout && MBAR_THIN!=mobileBar}">
+  <v-layout row class="np-bar-controls" v-if="desktopLayout || MBAR_NONE!=mobileBar">
+   <v-flex xs4>
+    <v-btn flat icon id="np-bar-prev" v-bind:class="{'disabled':disablePrev}" v-longpress:repeat="prevButton" class="np-std-button" :title="trans.prev | tooltip('left', keyboardControl)"><v-icon large class="media-icon">skip_previous</v-icon></v-btn>
    </v-flex>
-   <v-flex xs3>
-    <v-btn flat icon v-longpress="playPauseButton" @click.middle="showSleep" id="playPauseA" :title="(playerStatus.isplaying ? trans.pause : trans.play) | tooltip('space', keyboardControl)" v-bind:class="{'disabled':disableBtns}"><v-icon large class="media-icon">{{playerStatus.isplaying ? 'pause' : 'play_arrow'}}</v-icon></v-btn>
+   <v-flex xs4>
+    <v-btn flat icon v-longpress="playPauseButton" @click.middle="showSleep" id="playPauseB" class="np-playpause" :title="(playerStatus.isplaying ? trans.pause : trans.play) | tooltip('space', keyboardControl)" v-bind:class="{'disabled':disableBtns}"><v-icon x-large class="media-icon">{{ playerStatus.isplaying ? 'pause_circle_filled' : 'play_circle_filled'}}</v-icon></v-btn>
    </v-flex>
-   <v-flex xs3>
-    <v-btn flat icon id="np-bar-stop" @click="doAction(['stop'])" :title="trans.stop" v-bind:class="{'disabled':disableBtns}"><v-icon large class="media-icon">stop</v-icon></v-btn>
-   </v-flex>
-   <v-flex xs3>
-    <v-btn flat icon id="np-bar-next" v-bind:class="{'disabled':disableNext}" v-longpress:repeat="nextButton"  :title="trans.next | tooltip('right', keyboardControl)"><v-icon large class="media-icon">skip_next</v-icon></v-btn>
+   <v-flex xs4>
+    <v-btn flat icon id="np-bar-next" v-bind:class="{'disabled':disableNext}" v-longpress:repeat="nextButton" class="np-std-button" :title="trans.next | tooltip('right', keyboardControl)"><v-icon large class="media-icon">skip_next</v-icon></v-btn>
    </v-flex>
   </v-layout>
-  <v-layout row class="np-bar-controls" v-else>
-   <v-flex xs4>
-    <v-btn flat icon id="np-bar-prev" v-bind:class="{'disabled':disablePrev}" v-longpress:repeat="prevButton" class="np-std-button"  :title="trans.prev | tooltip('left', keyboardControl)"><v-icon large class="media-icon">skip_previous</v-icon></v-btn>
-   </v-flex>
-   <v-flex xs4>
-    <v-btn flat icon v-longpress="playPauseButton" @click.middle="showSleep" id="playPauseB" class="np-playpause" :title="(playerStatus.isplaying ? trans.pause : trans.play) | tooltip('space', keyboardControl)" v-bind:class="{'disabled':disableBtns}"><v-icon x-large class="media-icon">{{ playerStatus.isplaying ? 'pause_circle_outline' : 'play_circle_outline'}}</v-icon></v-btn>
-   </v-flex>
-   <v-flex xs4>
-    <v-btn flat icon id="np-bar-next" v-bind:class="{'disabled':disableNext}" v-longpress:repeat="nextButton" class="np-std-button"  :title="trans.next | tooltip('right', keyboardControl)"><v-icon large class="media-icon">skip_next</v-icon></v-btn>
-   </v-flex>
-  </v-layout>
-  <div v-if="!largeView && !disableBtns" class="np-bar-image">
+  <div v-if="!largeView && !disableBtns && (desktopLayout || MBAR_NONE!=mobileBar)" class="np-bar-image">
   <img :key="coverUrl" v-lazy="coverUrl" onerror="this.src=DEFAULT_COVER" @contextmenu="showMenu" @click="clickImage(event)" class="np-cover" v-bind:class="{'np-trans':transCvr}"></img>
   </div>
-  <v-list two-line subheader class="np-bar-details" v-if="playerStatus.playlist.count>0">
+  <div v-if="!desktopLayout && MBAR_THIN==mobileBar" class="np-bar-details-mobile ellipsis">{{mobileBarText}}</div>
+  <v-list two-line subheader class="np-bar-details" v-else-if="playerStatus.playlist.count>0 && (desktopLayout || MBAR_NONE!=mobileBar)">
    <v-list-tile style>
     <v-list-tile-content>
      <v-list-tile-title v-if="playerStatus.current.title">{{title}}</v-list-tile-title>
@@ -78,207 +185,31 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
      <v-list-tile-sub-title v-else-if="playerStatus.current.albumLine" v-html="playerStatus.current.albumLine"></v-list-tile-sub-title>
      <v-list-tile-sub-title v-else-if="playerStatus.current.title">&#x22ef;</v-list-tile-sub-title>
     </v-list-tile-content>
-    <v-list-tile-action>
-     <div v-if="playerStatus.playlist.count<2 || !(npBarRatings && !techInfo)" class="np-bar-time" v-bind:class="{'link-item-ct':coloredToolbars,'link-item':!coloredToolbars,'np-bar-time-r': techInfo && npBarRatings}" @click="toggleTime()">{{formattedTime}}</div>
-     <div v-else class="np-bar-time " v-bind:class="{'np-bar-time-r': techInfo && npBarRatings, 'link-item-ct':coloredToolbars,'link-item':!coloredToolbars}" @click="toggleTime()">{{formattedTime}}{{playerStatus.playlist.current | trackCount(playerStatus.playlist.count, SEPARATOR)}}</div>
+    <v-list-tile-action v-if="desktopLayout">
+     <div v-if="playerStatus.playlist.count>1 && (npBarRatings || techInfo)" class="np-bar-time " v-bind:class="{'np-bar-time-r': techInfo || npBarRatings, 'link-item-ct':coloredToolbars,'link-item':!coloredToolbars}" @click="toggleTime()">{{formattedTime}}{{playerStatus.playlist.current | trackCount(playerStatus.playlist.count, SEPARATOR)}}</div>
+     <div v-else class="np-bar-time" v-bind:class="{'link-item-ct':coloredToolbars,'link-item':!coloredToolbars,'np-bar-time-r': techInfo || npBarRatings}" @click="toggleTime()">{{formattedTime}}</div>
      <div v-if="techInfo" class="np-bar-tech ellipsis" v-bind:class="{'np-bar-tech-r': npBarRatings}">{{technicalInfo}}</div>
-     <div v-else-if="playerStatus.playlist.count>1 && !npBarRatings" class="np-bar-tech">{{playerStatus.playlist.current | trackCount(playerStatus.playlist.count)}}</div>
-     <div v-else-if="!npBarRatings" class="np-bar-tech">&nbsp;</div>
-     <div v-if="npBarRatings && (repAltBtn.show || shuffAltBtn.show)" class="np-bar-rating np-thumbs-desktop"><v-btn v-if="repAltBtn.show" :title="repAltBtn.tooltip" flat icon v-longpress="repeatClicked" v-bind:class="{'np-std-button': !stopButton,'disabled':noPlayer}"><v-icon v-if="repAltBtn.icon" class="media-icon">{{repAltBtn.icon}}</v-icon><img v-else :src="repAltBtn.image" class="btn-img"></img></v-btn><v-btn v-if="shuffAltBtn.show" :title="shuffAltBtn.tooltip" flat icon @click="shuffleClicked" v-bind:class="{'np-std-button': !stopButton}"><v-icon v-if="shuffAltBtn.icon" class="media-icon">{{shuffAltBtn.icon}}</v-icon><img v-else :src="shuffAltBtn.image" class="btn-img"></img></v-btn></div>
-     <v-rating v-else-if="showRatings" class="np-bar-rating" v-bind:class="{'np-bar-rating-t':techInfo}" v-model="rating.value" half-increments hover clearable @click.native="setRating(true)" :readonly="undefined==ratingsPlugin"></v-rating>
+     <div v-else-if="npBarRatings && (repAltBtn.show || shuffAltBtn.show)" class="np-bar-rating np-thumbs-desktop"><v-btn v-if="repAltBtn.show" :title="repAltBtn.tooltip" flat icon v-longpress="repeatClicked" class="np-std-button" v-bind:class="{'disabled':noPlayer}"><v-icon v-if="repAltBtn.icon" class="media-icon">{{repAltBtn.icon}}</v-icon><img v-else :src="repAltBtn.image" class="btn-img"></img></v-btn><v-btn v-if="shuffAltBtn.show" :title="shuffAltBtn.tooltip" flat icon @click="shuffleClicked" class="np-std-button"><v-icon v-if="shuffAltBtn.icon" class="media-icon">{{shuffAltBtn.icon}}</v-icon><img v-else :src="shuffAltBtn.image" class="btn-img"></img></v-btn></div>
+     <v-rating v-else-if="showRatings" class="np-bar-rating" v-bind:class="{'np-bar-rating-t':techInfo}" v-model="rating.value" half-increments hover clearable @click.native="setRating(true)" :readonly="undefined==LMS_P_RP"></v-rating>
+     <div v-else-if="playerStatus.playlist.count>1 " class="np-bar-tech">{{playerStatus.playlist.current | trackCount(playerStatus.playlist.count)}}</div>
+     <div v-else class="np-bar-tech">&nbsp;</div>
     </v-list-tile-action>
    </v-list-tile>
   </v-list>
-  <v-progress-linear height="5" id="pos-slider" v-if="playerStatus.current.duration>0" class="np-slider np-slider-desktop" :value="playerStatus.current.pospc" v-on:click="sliderChanged($event, false)" @mouseover="showTimeTooltip" @mouseout="hideTimeTooltip" @mousemove="moveTimeTooltip" @touchstart.passive="touchSliderStart" @touchend.passive="touchSliderEnd" @touchmove.passive="moveTimeTooltipTouch"></v-progress-linear>
-  <v-btn flat icon v-longpress="playPauseButton" @click.middle="showSleep" id="playPauseX" :title="(playerStatus.isplaying ? trans.pause : trans.play) | tooltip('space', keyboardControl)" v-bind:class="{'disabled':disableBtns}"><v-icon large class="media-icon">{{playerStatus.isplaying ? 'pause' : 'play_arrow'}}</v-icon></v-btn>
-
-  <div v-if="info.show" class="np-info np-info-desktop" id="np-info">
-   <v-tabs centered v-model="info.tab" v-if="info.showTabs" style="np-info-tab-cover">
-    <template v-for="(tab, index) in info.tabs">
-     <v-tab :key="index" @contextmenu.prevent="showContextMenu">{{tab.title}}</v-tab>
-     <v-tab-item :key="index" :transition="false" :reverse-transition="false">
-      <v-card flat class="np-info-card-cover fade-both">
-       <v-card-text :class="['np-info-text-desktop', zoomInfoClass, TRACK_TAB==index || tab.isMsg ? 'np-info-lyrics' : '', ALBUM_TAB==index ? 'np-info-review' : '']">
-        <div v-html="tab.text"></div>
-        <img v-if="undefined!=tab.image" :src="tab.image" loading="lazy" class="np-no-meta-img"></img>
-        <template v-for="(sect, sindex) in tab.sections">
-         <div class="np-sect-title" v-if="(undefined!=sect.items && sect.items.length>=sect.min) || undefined!=sect.html">{{sect.title}}<v-btn flat icon class="np-sect-toggle" v-if="undefined!=sect.grid" @click="toggleGrid(index, sindex)"><v-icon>{{ACTIONS[sect.grid ? USE_LIST_ACTION : USE_GRID_ACTION].icon}}</v-icon></v-btn></div>
-         <v-list v-if="undefined!=sect.items && !sect.grid && sect.items.length>=sect.min" class="lms-list">
-          <template v-for="(item, iindex) in sect.items">
-           <v-list-tile class="lms-list-item" v-bind:class="{'pq-current': (ALBUM_TAB==index && item.id==('track_id:'+infoTrack.track_id)) || (ARTIST_TAB==index && item.id==('album_id:'+infoTrack.album_id)), 'list-active':menu.show && index==menu.tab && sindex==menu.section && iindex==menu.index, 'browse-header' : item.header}" @click.stop="itemClicked(index, sindex, iindex, $event)">
-            <v-list-tile-avatar v-if="item.image" :tile="true" class="lms-avatar">
-             <img :key="item.image" v-lazy="item.image"></img>
-            </v-list-tile-avatar>
-            <v-list-tile-content>
-             <v-list-tile-title v-if="ALBUM_TAB==index" v-html="item.title"></v-list-tile-title>
-             <v-list-tile-title v-else>{{item.title}}</v-list-tile-title>
-             <v-list-tile-sub-title v-html="item.subtitle"></v-list-tile-sub-title>
-            </v-list-tile-content>
-            <v-list-tile-action v-if="ALBUM_TAB==index && undefined!=item.durationStr" class="np-list-time">{{item.durationStr}}</v-list-tile-action>
-            <div class="emblem" v-if="item.emblem" :style="{background: item.emblem.bgnd}">
-             <img :src="item.emblem | emblem()" loading="lazy"></img>
-            </div>
-           </v-list-tile>
-          </template>
-          <v-list-tile v-if="undefined!=sect.more" @click="moreClicked(index, sindex)"><v-list-tile-content><v-list-tile-title>{{sect.more}}</v-list-tile-title></v-list-tile-content></v-list-tile>
-         </v-list>
-         <div class="np-grid-sect" v-else-if="undefined!=sect.items && sect.grid && sect.items.length>=sect.min">
-          <template v-for="(item, iindex) in sect.items">
-           <div class="np-grid-item" v-bind:class="{'pq-current': (ALBUM_TAB==index && item.id==('track_id:'+infoTrack.track_id)) || (ARTIST_TAB==index && item.id==('album_id:'+infoTrack.album_id)), 'list-active':menu.show && index==menu.tab && sindex==menu.section && iindex==menu.index}" @click.stop="itemClicked(index, sindex, iindex, $event)">
-            <img :key="item.image" v-lazy="item.image"></img>
-            <v-list-tile-title>{{item.title}}</v-list-tile-title>
-            <v-list-tile-sub-title v-html="item.subtitle"></v-list-tile-sub-title>
-            <div class="emblem" v-if="item.emblem" :style="{background: item.emblem.bgnd}">
-             <img :src="item.emblem | emblem()" loading="lazy"></img>
-            </div>
-           </div>
-          </template>
-          <div v-if="undefined!=sect.more && undefined!=sect.items && sect.grid && sect.items.length>=sect.min" class="np-grid-more link-item" @click="moreClicked(index, sindex)">{{sect.more}}</div>
-         </div>
-         <div v-else-if="undefined!=sect.html" v-html="sect.html"></div>
-        </template>
-        <div class="np-spacer"></div>
-       </v-card-text>
-      </v-card>
-     </v-tab-item>
-    </template>
-   </v-tabs>
-   <div v-else>
-    <v-layout row>
-     <template v-for="(tab, index) in info.tabs">
-      <v-flex xs4>
-       <v-card flat class="np-info-card-cover">
-        <v-card-title @contextmenu.prevent="showContextMenu"><p>{{tab.title}}</p></v-card-title>
-        <v-card-text :class="['np-info-text-full-desktop', 'fade-both', zoomInfoClass, TRACK_TAB==index || tab.isMsg ? 'np-info-lyrics' : '', ALBUM_TAB==index ? 'np-info-review' : '']">
-         <div v-html="tab.text"></div>
-         <img v-if="undefined!=tab.image" :src="tab.image" loading="lazy" class="np-no-meta-img"></img>
-         <template v-for="(sect, sindex) in tab.sections">
-          <div class="np-sect-title" v-if="(undefined!=sect.items && sect.items.length>=sect.min) || undefined!=sect.html">{{sect.title}}<v-btn flat icon class="np-sect-toggle" v-if="undefined!=sect.grid" @click="toggleGrid(index, sindex)"><v-icon>{{ACTIONS[sect.grid ? USE_LIST_ACTION : USE_GRID_ACTION].icon}}</v-icon></v-btn></div>
-          <v-list v-if="undefined!=sect.items && !sect.grid && sect.items.length>=sect.min" class="lms-list">
-           <template v-for="(item, iindex) in sect.items">
-            <v-list-tile class="lms-list-item" v-bind:class="{'pq-current': (ALBUM_TAB==index && item.id==('track_id:'+infoTrack.track_id)) || (ARTIST_TAB==index && item.id==('album_id:'+infoTrack.album_id)), 'list-active':menu.show && index==menu.tab && sindex==menu.section && iindex==menu.index, 'browse-header' : item.header}" @click.stop="itemClicked(index, sindex, iindex, $event)">
-             <v-list-tile-avatar v-if="item.image" :tile="true" class="lms-avatar">
-              <img :key="item.image" v-lazy="item.image"></img>
-             </v-list-tile-avatar>
-             <v-list-tile-content>
-              <v-list-tile-title v-if="ALBUM_TAB==index" v-html="item.title"></v-list-tile-title>
-              <v-list-tile-title v-else>{{item.title}}</v-list-tile-title>
-              <v-list-tile-sub-title v-html="item.subtitle"></v-list-tile-sub-title>
-             </v-list-tile-content>
-             <v-list-tile-action v-if="ALBUM_TAB==index && undefined!=item.durationStr" class="np-list-time">{{item.durationStr}}</v-list-tile-action>
-             <div class="emblem" v-if="item.emblem" :style="{background: item.emblem.bgnd}">
-              <img :src="item.emblem | emblem()" loading="lazy"></img>
-             </div>
-            </v-list-tile>
-           </template>
-           <v-list-tile v-if="undefined!=sect.more" @click="moreClicked(index, sindex)"><v-list-tile-content><v-list-tile-title>{{sect.more}}</v-list-tile-title></v-list-tile-content></v-list-tile>
-          </v-list>
-          <div class="np-grid-sect" v-else-if="undefined!=sect.items && sect.grid && sect.items.length>=sect.min">
-           <template v-for="(item, iindex) in sect.items">
-            <div class="np-grid-item" v-bind:class="{'pq-current': (ALBUM_TAB==index && item.id==('track_id:'+infoTrack.track_id)) || (ARTIST_TAB==index && item.id==('album_id:'+infoTrack.album_id)), 'list-active':menu.show && index==menu.tab && sindex==menu.section && iindex==menu.index, 'browse-header' : item.header}" @click.stop="itemClicked(index, sindex, iindex, $event)">
-             <img :key="item.image" v-lazy="item.image"></img>
-             <v-list-tile-title>{{item.title}}</v-list-tile-title>
-             <v-list-tile-sub-title v-html="item.subtitle"></v-list-tile-sub-title>
-             <div class="emblem" v-if="item.emblem" :style="{background: item.emblem.bgnd}">
-              <img :src="item.emblem | emblem()" loading="lazy"></img>
-             </div>
-            </div>
-           </template>
-           <div v-if="undefined!=sect.more && undefined!=sect.items && sect.grid && sect.items.length>=sect.min" class="np-grid-more link-item" @click="moreClicked(index, sindex)">{{sect.more}}</div>
-          </div>
-          <div v-else-if="undefined!=sect.html" v-html="sect.html"></div>
-         </template>
-         <div class="np-spacer"></div>
-        </v-card-text>
-       </v-card>
-      </v-flex>
-     </template>
-    </v-layout>
-   </div>
-   <v-card class="np-info-card-cover">
-    <v-card-actions>
-     <v-spacer></v-spacer>
-     <v-btn flat icon v-if="info.showTabs" @click="info.showTabs=false" :title="trans.expand"><v-icon style="margin-right:-18px">chevron_right</v-icon><v-icon style="margin-left:-18px">chevron_left</v-icon></v-btn>
-     <v-btn flat icon v-else @click="info.showTabs=true" :title="trans.collapse"><v-icon style="margin-right:-18px">chevron_left</v-icon><v-icon style="margin-left:-18px">chevron_right</v-icon></v-btn>
-     <div style="width:32px"></div>
-     <v-btn flat icon v-if="info.sync" @click="info.sync = false" :title="trans.sync"><v-icon>link</v-icon></v-btn>
-     <v-btn flat icon v-else @click="info.sync = true" :title="trans.unsync"><v-icon class="dimmed">link_off</v-icon></v-btn>
-     <div style="width:32px"></div>
-     <v-btn flat icon @click="trackInfo()" :title="trans.more"><img class="svg-img" :src="'more' | svgIcon(darkUi)"></img></v-btn>
-     <v-spacer></v-spacer>
-    </v-card-actions>
-   </v-card>
-  </div>
+  <v-progress-linear height="5" id="pos-slider" v-if="!desktopLayout && playerStatus.playlist.count>0" :disabled="playerStatus.current.duration>0" class="np-slider np-bar-slider" :value="playerStatus.current.pospc"></v-progress-linear>
+  <v-progress-linear height="5" id="pos-slider" v-else-if="desktopLayout && playerStatus.playlist.count>0" :disabled="playerStatus.current.duration>0" class="np-slider np-bar-slider" :value="playerStatus.current.pospc" v-on:click="sliderChanged($event, false)" @mouseover="showTimeTooltip" @mouseout="hideTimeTooltip" @mousemove="moveTimeTooltip" @touchstart.passive="touchSliderStart" @touchend.passive="touchSliderEnd" @touchmove.passive="moveTimeTooltipTouch"></v-progress-linear>
  </div>
  
  <div class="np-page" v-else id="np-page">
-  <div v-if="info.show" class="np-info" id="np-info">
-   <v-tabs centered v-model="info.tab" class="np-info-tab-cover">
-    <template v-for="(tab, index) in info.tabs">
-     <v-tab :key="index" @contextmenu.prevent="showContextMenu">{{tab.title}}</v-tab>
-     <v-tab-item :key="index" :transition="false" :reverse-transition="false">
-      <v-card flat class="np-info-card-cover fade-both">
-       <v-card-text :class="['np-info-text', zoomInfoClass, TRACK_TAB==index || tab.isMsg ? 'np-info-lyrics' : '', ALBUM_TAB==index ? 'np-info-review' : '', ALBUM_TAB==index ? 'np-info-review' : '']">
-        <div v-html="tab.text"></div>
-        <img v-if="undefined!=tab.image" :src="tab.image" loading="lazy" class="np-no-meta-img"></img>
-        <template v-for="(sect, sindex) in tab.sections">
-         <div class="np-sect-title" v-if="(undefined!=sect.items && sect.items.length>=sect.min) || undefined!=sect.html">{{sect.title}}<v-btn flat icon class="np-sect-toggle" v-if="undefined!=sect.grid" @click="toggleGrid(index, sindex)"><v-icon>{{ACTIONS[sect.grid ? USE_LIST_ACTION : USE_GRID_ACTION].icon}}</v-icon></v-btn></div>
-         <v-list v-if="undefined!=sect.items && !sect.grid && sect.items.length>=sect.min" class="lms-list">
-          <template v-for="(item, iindex) in sect.items">
-           <v-list-tile class="lms-list-item" v-bind:class="{'pq-current': (ALBUM_TAB==index && item.id==('track_id:'+infoTrack.track_id)) || (ARTIST_TAB==index && item.id==('album_id:'+infoTrack.album_id)), 'list-active':menu.show && index==menu.tab && sindex==menu.section && iindex==menu.index, 'browse-header' : item.header}" @click.stop="itemClicked(index, sindex, iindex, $event)">
-            <v-list-tile-avatar v-if="item.image" :tile="true" class="lms-avatar">
-             <img :key="item.image" v-lazy="item.image"></img>
-            </v-list-tile-avatar>
-            <v-list-tile-content>
-             <v-list-tile-title v-if="ALBUM_TAB==index" v-html="item.title"></v-list-tile-title>
-             <v-list-tile-title v-else>{{item.title}}</v-list-tile-title>
-             <v-list-tile-sub-title v-html="item.subtitle"></v-list-tile-sub-title>
-            </v-list-tile-content>
-            <v-list-tile-action v-if="ALBUM_TAB==index && undefined!=item.durationStr" class="np-list-time">{{item.durationStr}}</v-list-tile-action>
-            <div class="emblem" v-if="item.emblem" :style="{background: item.emblem.bgnd}">
-             <img :src="item.emblem | emblem()" loading="lazy"></img>
-            </div>
-           </v-list-tile>
-          </template>
-          <v-list-tile v-if="undefined!=sect.more" @click="moreClicked(index, sindex)"><v-list-tile-content><v-list-tile-title>{{sect.more}}</v-list-tile-title></v-list-tile-content></v-list-tile>
-         </v-list>
-         <div class="np-grid-sect" v-else-if="undefined!=sect.items && sect.grid && sect.items.length>=sect.min">
-          <template v-for="(item, iindex) in sect.items">
-           <div class="np-grid-item" v-bind:class="{'pq-current': (ALBUM_TAB==index && item.id==('track_id:'+infoTrack.track_id)) || (ARTIST_TAB==index && item.id==('album_id:'+infoTrack.album_id)), 'list-active':menu.show && index==menu.tab && sindex==menu.section && iindex==menu.index, 'browse-header' : item.header}" @click.stop="itemClicked(index, sindex, iindex, $event)">
-            <img :key="item.image" v-lazy="item.image"></img>
-            <v-list-tile-title>{{item.title}}</v-list-tile-title>
-            <v-list-tile-sub-title v-html="item.subtitle"></v-list-tile-sub-title>
-            <div class="emblem" v-if="item.emblem" :style="{background: item.emblem.bgnd}">
-             <img :src="item.emblem | emblem()" loading="lazy"></img>
-            </div>
-           </div>
-          </template>
-          <div v-if="undefined!=sect.more && undefined!=sect.items && sect.grid && sect.items.length>=sect.min" class="np-grid-more link-item" @click="moreClicked(index, sindex)">{{sect.more}}</div>
-         </div>
-         <div v-else-if="undefined!=sect.html" v-html="sect.html"></div>
-        </template>
-        <div class="np-spacer"></div>
-       </v-card-text>
-      </v-card>
-     </v-tab-item>
-    </template>
-   </v-tabs>
-   <v-card class="np-info-card-cover">
-    <v-card-actions>
-     <v-spacer></v-spacer>
-     <v-btn flat icon v-if="info.sync" @click="info.sync = false" :title="trans.sync"><v-icon>link</v-icon></v-btn>
-     <v-btn flat icon v-else @click="info.sync = true" :title="trans.unsync"><v-icon class="dimmed">link_off</v-icon></v-btn>
-     <div style="width:32px"></div>
-     <v-btn flat icon @click="trackInfo()" :title="trans.more"><img class="svg-img" :src="'more' | svgIcon(darkUi)"></img></v-btn>
-     <v-spacer></v-spacer>
-    </v-card-actions>
-   </v-card>
-  </div>
-  <div v-else>
+  <div>
    <div v-show="overlayVolume>-1 && VOL_STD==playerStatus.dvc" id="volumeOverlay">{{overlayVolume}}%</div>
    <div v-if="landscape" v-touch:start="touchStart" v-touch:end="touchEnd" v-touch:moving="touchMoving">
     <div v-if="!info.show" class="np-image-landscape" v-bind:class="{'np-image-landscape-wide':landscape && wide>1}">
      <img :key="coverUrl" v-lazy="coverUrl" onerror="this.src=DEFAULT_COVER" @contextmenu="showMenu" @click="clickImage(event)" class="np-cover" v-bind:class="{'np-trans':transCvr}"></img>
+     <div class="np-emblem" v-if="playerStatus.current.emblem" :style="{background: playerStatus.current.emblem.bgnd}">
+      <img :src="playerStatus.current.emblem | emblem()" loading="lazy"></img>
+     </div>
+     <div class="np-menu" @click="showMenu" v-if="playerStatus.playlist.count>0"></div>
     </div>
     <div class="np-details-landscape" v-bind:class="{'np-details-landscape-wide': landscape && wide>1}">
 
@@ -292,7 +223,7 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
 
      <v-layout text-xs-center v-if="showRatings">
       <v-flex xs12>
-      <v-rating v-model="rating.value" half-increments hover clearable @click.native="setRating(true)" :readonly="undefined==ratingsPlugin"></v-rating>
+      <v-rating v-model="rating.value" half-increments hover clearable @click.native="setRating(true)" :readonly="undefined==LMS_P_RP"></v-rating>
       </v-flex>
      </v-layout>
      <div v-if="wide>1">
@@ -311,34 +242,26 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
        <v-flex xs4>
         <v-layout text-xs-center>
          <v-flex xs6>
-          <v-btn v-if="repAltBtn.show" :title="repAltBtn.tooltip" flat icon v-longpress="repeatClicked" v-bind:class="{'np-std-button': !stopButton,'disabled':noPlayer}"><v-icon v-if="repAltBtn.icon" class="media-icon">{{repAltBtn.icon}}</v-icon><img v-else :src="repAltBtn.image" class="btn-img"></img></v-btn>
-          <v-btn :title="trans.repeatOne" flat icon v-else-if="playerStatus.playlist.repeat===1" v-longpress="repeatClicked" v-bind:class="{'np-std-button': !stopButton,'disabled':noPlayer}"><v-icon class="media-icon">repeat_one</v-icon></v-btn>
-          <v-btn :title="trans.repeatAll" flat icon v-else-if="playerStatus.playlist.repeat===2" v-longpress="repeatClicked" v-bind:class="{'np-std-button': !stopButton,'disabled':noPlayer}"><v-icon class="media-icon">repeat</v-icon></v-btn>
-          <v-btn :title="trans.dstm" flat icon v-else-if="dstm" v-longpress="repeatClicked" v-bind:class="{'np-std-button': !stopButton}"><v-icon class="media-icon">all_inclusive</v-icon></v-btn>
-          <v-btn :title="trans.repeatOff" flat icon v-else v-longpress="repeatClicked" class="dimmed" v-bind:class="{'np-std-button': !stopButton,'disabled':noPlayer}"><img class="svg-img media-icon" :src="'repeat-off' | svgIcon(darkUi)"></img></v-btn>
+          <v-btn v-if="repAltBtn.show" :title="repAltBtn.tooltip" flat icon v-longpress="repeatClicked" class="np-std-button" v-bind:class="{'disabled':noPlayer}"><v-icon v-if="repAltBtn.icon" class="media-icon">{{repAltBtn.icon}}</v-icon><img v-else :src="repAltBtn.image" class="btn-img"></img></v-btn>
+          <v-btn :title="trans.repeatOne" flat icon v-else-if="playerStatus.playlist.repeat===1" v-longpress="repeatClicked" class="np-std-button" v-bind:class="{'disabled':noPlayer}"><v-icon class="media-icon">repeat_one</v-icon></v-btn>
+          <v-btn :title="trans.repeatAll" flat icon v-else-if="playerStatus.playlist.repeat===2" v-longpress="repeatClicked" class="np-std-button" v-bind:class="{'disabled':noPlayer}"><v-icon class="media-icon">repeat</v-icon></v-btn>
+          <v-btn :title="trans.dstm" flat icon v-else-if="dstm" v-longpress="repeatClicked" class="np-std-button"><v-icon class="media-icon">all_inclusive</v-icon></v-btn>
+          <v-btn :title="trans.repeatOff" flat icon v-else v-longpress="repeatClicked" class="dimmed np-std-button" v-bind:class="{'disabled':noPlayer}"><img class="svg-img media-icon" :src="'repeat-off' | svgIcon(darkUi)"></img></v-btn>
          </v-flex>
-         <v-flex xs6><v-btn flat icon v-longpress:repeat="prevButton" v-bind:class="{'np-std-button': !stopButton, 'disabled':disablePrev}"  :title="trans.prev | tooltip('left', keyboardControl)"><v-icon large class="media-icon">skip_previous</v-icon></v-btn></v-flex>
+         <v-flex xs6><v-btn flat icon v-longpress:repeat="prevButton" class="np-std-button" v-bind:class="{ 'disabled':disablePrev}" :title="trans.prev | tooltip('left', keyboardControl)"><v-icon large class="media-icon">skip_previous</v-icon></v-btn></v-flex>
         </v-layout>
        </v-flex>
        <v-flex xs4>
-        <v-layout v-if="stopButton" text-xs-center>
-         <v-flex xs6>
-          <v-btn flat icon v-longpress="playPauseButton" @click.middle="showSleep" id="playPauseC" :title="(playerStatus.isplaying ? trans.pause : trans.play) | tooltip('space', keyboardControl)" v-bind:class="{'disabled':disableBtns}"><v-icon large class="media-icon">{{playerStatus.isplaying ? 'pause' : 'play_arrow'}}</v-icon></v-btn>
-         </v-flex>
-         <v-flex xs6>
-          <v-btn flat icon @click="doAction(['stop'])" :title="trans.stop" v-bind:class="{'disabled':disableBtns}"><v-icon large class="media-icon">stop</v-icon></v-btn>
-         </v-flex>
-        </v-layout>
-        <v-btn flat icon large v-else v-longpress="playPauseButton" @click.middle="showSleep" id="playPauseD" class="np-playpause" :title="(playerStatus.isplaying ? trans.pause : trans.play) | tooltip('space', keyboardControl)" v-bind:class="{'disabled':disableBtns}"><v-icon x-large class="media-icon">{{ playerStatus.isplaying ? 'pause_circle_outline' : 'play_circle_outline'}}</v-icon></v-btn>
+        <v-btn flat icon large v-longpress="playPauseButton" @click.middle="showSleep" id="playPauseD" class="np-playpause" :title="(playerStatus.isplaying ? trans.pause : trans.play) | tooltip('space', keyboardControl)" v-bind:class="{'disabled':disableBtns}"><v-icon x-large class="media-icon">{{ playerStatus.isplaying ? 'pause_circle_filled' : 'play_circle_filled'}}</v-icon></v-btn>
        </v-flex>
        <v-flex xs4>
         <v-layout text-xs-center>
-         <v-flex xs6><v-btn flat icon v-longpress:repeat="nextButton" v-bind:class="{'np-std-button': !stopButton, 'disabled':disableNext}"  :title="trans.next | tooltip('right', keyboardControl)"><v-icon large class="media-icon">skip_next</v-icon></v-btn></v-flex>
+         <v-flex xs6><v-btn flat icon v-longpress:repeat="nextButton" class="np-std-button" v-bind:class="{ 'disabled':disableNext}" :title="trans.next | tooltip('right', keyboardControl)"><v-icon large class="media-icon">skip_next</v-icon></v-btn></v-flex>
          <v-flex xs6>
-          <v-btn v-if="shuffAltBtn.show" :title="shuffAltBtn.tooltip" flat icon @click="shuffleClicked" v-bind:class="{'np-std-button': !stopButton}"><v-icon v-if="shuffAltBtn.icon" class="media-icon">{{shuffAltBtn.icon}}</v-icon><img v-else :src="shuffAltBtn.image" class="btn-img"></img></v-btn>
-          <v-btn :title="trans.shuffleAlbums" flat icon v-else-if="playerStatus.playlist.shuffle===2" @click="shuffleClicked" v-bind:class="{'np-std-button': !stopButton,'disabled':noPlayer}"><img class="svg-img media-icon" :src="'shuffle-albums' | svgIcon(darkUi)"></img></v-btn>
-          <v-btn :title="trans.shuffleAll" flat icon v-else-if="playerStatus.playlist.shuffle===1" @click="shuffleClicked" v-bind:class="{'np-std-button': !stopButton,'disabled':noPlayer}"><v-icon class="media-icon">shuffle</v-icon></v-btn>
-          <v-btn :title="trans.shuffleOff" flat icon v-else @click="shuffleClicked" class="dimmed" v-bind:class="{'np-std-button': !stopButton,'disabled':noPlayer}"><img class="svg-img media-icon" :src="'shuffle-off' | svgIcon(darkUi)"></img></v-btn>
+          <v-btn v-if="shuffAltBtn.show" :title="shuffAltBtn.tooltip" flat icon @click="shuffleClicked" class="np-std-button"><v-icon v-if="shuffAltBtn.icon" class="media-icon">{{shuffAltBtn.icon}}</v-icon><img v-else :src="shuffAltBtn.image" class="btn-img"></img></v-btn>
+          <v-btn :title="trans.shuffleAlbums" flat icon v-else-if="playerStatus.playlist.shuffle===2" @click="shuffleClicked" class="np-std-button" v-bind:class="{'disabled':noPlayer}"><img class="svg-img media-icon" :src="'shuffle-albums' | svgIcon(darkUi)"></img></v-btn>
+          <v-btn :title="trans.shuffleAll" flat icon v-else-if="playerStatus.playlist.shuffle===1" @click="shuffleClicked" class="np-std-button" v-bind:class="{'disabled':noPlayer}"><v-icon class="media-icon">shuffle</v-icon></v-btn>
+          <v-btn :title="trans.shuffleOff" flat icon v-else @click="shuffleClicked" class="dimmed np-std-button" v-bind:class="{'disabled':noPlayer}"><img class="svg-img media-icon" :src="'shuffle-off' | svgIcon(darkUi)"></img></v-btn>
          </v-flex>
         </v-layout>
        </v-flex>
@@ -350,6 +273,10 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
    <div v-else v-touch:start="touchStart" v-touch:end="touchEnd" v-touch:moving="touchMoving">
     <div v-if="!info.show" class="np-image">
      <img :key="coverUrl" v-lazy="coverUrl" onerror="this.src=DEFAULT_COVER" @contextmenu="showMenu" @click="clickImage(event)" class="np-cover" v-bind:class="{'np-trans':transCvr}"></img>
+     <div class="np-emblem" v-if="playerStatus.current.emblem" :style="{background: playerStatus.current.emblem.bgnd}">
+      <img :src="playerStatus.current.emblem | emblem()" loading="lazy"></img>
+     </div>
+     <div class="np-menu" @click="showMenu" v-if="playerStatus.playlist.count>0"></div>
     </div>
     <div class="np-portrait-song-info hide-scrollbar fade-both">
      <div>
@@ -361,7 +288,7 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
    </div>
    <v-layout text-xs-center row wrap class="np-controls" v-if="!(landscape && wide>1)">
     <v-flex xs12 v-if="showRatings && !landscape" class="np-text np-portrait-rating">
-     <v-rating v-model="rating.value" half-increments hover clearable @click.native="setRating(true)" :readonly="undefined==ratingsPlugin"></v-rating>
+     <v-rating v-model="rating.value" half-increments hover clearable @click.native="setRating(true)" :readonly="undefined==LMS_P_RP"></v-rating>
     </v-flex>
     <v-flex xs12 class="np-tech ellipsis" v-if="techInfo || playerStatus.playlist.count>1">{{techInfo ? technicalInfo : ""}}{{playerStatus.playlist.current | trackCount(playerStatus.playlist.count, techInfo ? SEPARATOR : undefined)}}</v-flex>
 
@@ -382,39 +309,32 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
     <v-flex xs4 class="no-control-adjust">
      <v-layout text-xs-center>
       <v-flex xs6>
-       <v-btn v-if="repAltBtn.show" :title="repAltBtn.tooltip" flat icon v-longpress="repeatClicked" v-bind:class="{'np-std-button': !stopButton,'disabled':noPlayer}"><v-icon v-if="repAltBtn.icon" class="media-icon">{{repAltBtn.icon}}</v-icon><img v-else :src="repAltBtn.image" class="btn-img"></img></v-btn>
-       <v-btn :title="trans.repeatOne" flat icon v-else-if="playerStatus.playlist.repeat===1" v-longpress="repeatClicked" v-bind:class="{'np-std-button': !stopButton,'disabled':noPlayer}"><v-icon class="media-icon">repeat_one</v-icon></v-btn>
-       <v-btn :title="trans.repeatAll" flat icon v-else-if="playerStatus.playlist.repeat===2" v-longpress="repeatClicked" v-bind:class="{'np-std-button': !stopButton,'disabled':noPlayer}"><v-icon class="media-icon">repeat</v-icon></v-btn>
-       <v-btn :title="trans.dstm" flat icon v-else-if="dstm" v-longpress="repeatClicked" v-bind:class="{'np-std-button': !stopButton}"><v-icon class="media-icon">all_inclusive</v-icon></v-btn>
-       <v-btn :title="trans.repeatOff" flat icon v-else v-longpress="repeatClicked" class="dimmed" v-bind:class="{'np-std-button': !stopButton,'disabled':noPlayer}"><img class="svg-img media-icon" :src="'repeat-off' | svgIcon(darkUi)"></img></v-btn>
+       <v-btn v-if="repAltBtn.show" :title="repAltBtn.tooltip" flat icon v-longpress="repeatClicked" class="np-std-button" v-bind:class="{'disabled':noPlayer}"><v-icon v-if="repAltBtn.icon" class="media-icon">{{repAltBtn.icon}}</v-icon><img v-else :src="repAltBtn.image" class="btn-img"></img></v-btn>
+       <v-btn :title="trans.repeatOne" flat icon v-else-if="playerStatus.playlist.repeat===1" v-longpress="repeatClicked" class="np-std-button" v-bind:class="{'disabled':noPlayer}"><v-icon class="media-icon">repeat_one</v-icon></v-btn>
+       <v-btn :title="trans.repeatAll" flat icon v-else-if="playerStatus.playlist.repeat===2" v-longpress="repeatClicked" class="np-std-button" v-bind:class="{'disabled':noPlayer}"><v-icon class="media-icon">repeat</v-icon></v-btn>
+       <v-btn :title="trans.dstm" flat icon v-else-if="dstm" v-longpress="repeatClicked" class="np-std-button"><v-icon class="media-icon">all_inclusive</v-icon></v-btn>
+       <v-btn :title="trans.repeatOff" flat icon v-else v-longpress="repeatClicked" class="dimmed np-std-button" v-bind:class="{'disabled':noPlayer}"><img class="svg-img media-icon" :src="'repeat-off' | svgIcon(darkUi)"></img></v-btn>
       </v-flex>
-      <v-flex xs6><v-btn flat icon v-longpress:repeat="prevButton" v-bind:class="{'np-std-button': !stopButton, 'disabled':disablePrev}"  :title="trans.prev | tooltip('left', keyboardControl)"><v-icon large class="media-icon">skip_previous</v-icon></v-btn></v-flex>
+      <v-flex xs6><v-btn flat icon v-longpress:repeat="prevButton" class="np-std-button" v-bind:class="{ 'disabled':disablePrev}" :title="trans.prev | tooltip('left', keyboardControl)"><v-icon large class="media-icon">skip_previous</v-icon></v-btn></v-flex>
      </v-layout>
     </v-flex>
     <v-flex xs4 class="no-control-adjust">
-     <v-layout v-if="stopButton" text-xs-center>
-      <v-flex xs6>
-       <v-btn flat icon v-longpress="playPauseButton" @click.middle="showSleep" id="playPauseE" :title="(playerStatus.isplaying ? trans.pause : trans.play) | tooltip('space', keyboardControl)" v-bind:class="{'disabled':disableBtns}"><v-icon large class="media-icon">{{playerStatus.isplaying ? 'pause' : 'play_arrow'}}</v-icon></v-btn>
-      </v-flex>
-      <v-flex xs6>
-       <v-btn flat icon @click="doAction(['stop'])" :title="trans.stop" v-bind:class="{'disabled':disableBtns}"><v-icon large class="media-icon">stop</v-icon></v-btn>
-      </v-flex>
-     </v-layout>
-     <v-btn flat icon large v-else v-longpress="playPauseButton" @click.middle="showSleep" id="playPauseF" class="np-playpause" :title="(playerStatus.isplaying ? trans.pause : trans.play) | tooltip('space', keyboardControl)" v-bind:class="{'disabled':disableBtns}"><v-icon x-large class="media-icon">{{ playerStatus.isplaying ? 'pause_circle_outline' : 'play_circle_outline'}}</v-icon></v-btn>
+     <v-btn flat icon large v-longpress="playPauseButton" @click.middle="showSleep" id="playPauseF" class="np-playpause" :title="(playerStatus.isplaying ? trans.pause : trans.play) | tooltip('space', keyboardControl)" v-bind:class="{'disabled':disableBtns}"><v-icon x-large class="media-icon">{{ playerStatus.isplaying ? 'pause_circle_filled' : 'play_circle_filled'}}</v-icon></v-btn>
     </v-flex>
     <v-flex xs4 class="no-control-adjust">
      <v-layout text-xs-center>
-      <v-flex xs6><v-btn flat icon v-longpress:repeat="nextButton" v-bind:class="{'np-std-button': !stopButton, 'disabled':disableNext}"  :title="trans.next | tooltip('right', keyboardControl)"><v-icon large class="media-icon">skip_next</v-icon></v-btn></v-flex>
+      <v-flex xs6><v-btn flat icon v-longpress:repeat="nextButton" class="np-std-button" v-bind:class="{ 'disabled':disableNext}" :title="trans.next | tooltip('right', keyboardControl)"><v-icon large class="media-icon">skip_next</v-icon></v-btn></v-flex>
       <v-flex xs6>
-       <v-btn v-if="shuffAltBtn.show" :title="shuffAltBtn.tooltip" flat icon @click="shuffleClicked" v-bind:class="{'np-std-button': !stopButton}"><v-icon v-if="shuffAltBtn.icon" class="media-icon">{{shuffAltBtn.icon}}</v-icon><img v-else :src="shuffAltBtn.image" class="btn-img"></img></v-btn>
-       <v-btn :title="trans.shuffleAlbums" flat icon v-else-if="playerStatus.playlist.shuffle===2" @click="shuffleClicked" v-bind:class="{'np-std-button': !stopButton,'disabled':noPlayer}"><img class="svg-img media-icon" :src="'shuffle-albums' | svgIcon(darkUi)"></v-btn>
-       <v-btn :title="trans.shuffleAll" flat icon v-else-if="playerStatus.playlist.shuffle===1" @click="shuffleClicked" v-bind:class="{'np-std-button': !stopButton,'disabled':noPlayer}"><v-icon class="media-icon">shuffle</v-icon></v-btn>
-       <v-btn :title="trans.shuffleOff" flat icon v-else @click="shuffleClicked" class="dimmed" v-bind:class="{'np-std-button': !stopButton,'disabled':noPlayer}"><img class="svg-img media-icon" :src="'shuffle-off' | svgIcon(darkUi)"></img></v-btn>
+       <v-btn v-if="shuffAltBtn.show" :title="shuffAltBtn.tooltip" flat icon @click="shuffleClicked" class="np-std-button"><v-icon v-if="shuffAltBtn.icon" class="media-icon">{{shuffAltBtn.icon}}</v-icon><img v-else :src="shuffAltBtn.image" class="btn-img"></img></v-btn>
+       <v-btn :title="trans.shuffleAlbums" flat icon v-else-if="playerStatus.playlist.shuffle===2" @click="shuffleClicked" class="np-std-button" v-bind:class="{'disabled':noPlayer}"><img class="svg-img media-icon" :src="'shuffle-albums' | svgIcon(darkUi)"></v-btn>
+       <v-btn :title="trans.shuffleAll" flat icon v-else-if="playerStatus.playlist.shuffle===1" @click="shuffleClicked" class="np-std-button" v-bind:class="{'disabled':noPlayer}"><v-icon class="media-icon">shuffle</v-icon></v-btn>
+       <v-btn :title="trans.shuffleOff" flat icon v-else @click="shuffleClicked" class="dimmed np-std-button" v-bind:class="{'disabled':noPlayer}"><img class="svg-img media-icon" :src="'shuffle-off' | svgIcon(darkUi)"></img></v-btn>
       </v-flex>
      </v-layout>
     </v-flex>
    </v-layout>
   </div>
+ </div>
  </div>
 </div>
 `,
@@ -426,9 +346,11 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
                     dvc: VOL_STD,
                     current: { canseek:1, duration:0, time:undefined, title:undefined, artist:undefined, artistAndComposer: undefined, artistAndComposerWithContext:undefined,
                                album:undefined, albumName:undefined, albumLine:undefined, technicalInfo:undefined, pospc:0.0, tracknum:undefined,
-                               disc:0, year:0, url:undefined, comment:undefined, source: {local:true, text:undefined} },
+                               disc:0, year:0, url:undefined, comment:undefined, source: {local:true, text:undefined},
+                               emblem: undefined },
                     playlist: { shuffle:0, repeat: 0, current:0, count:0 },
                  },
+                 mobileBarText: undefined,
                  info: { show: false, tab:TRACK_TAB, showTabs:false, sync: true,
                          tabs: [ { title:undefined, text:undefined, reqId:0, image: undefined,
                                     sections:[ { title:undefined, items:[], min:1, more:undefined, grid:getLocalStorageBool("np-tabs-"+ARTIST_TAB+"-0-grid", false) },
@@ -440,7 +362,7 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
                  infoTrack: {album_id:undefined, track_id:undefined},
                  trans: { expand:undefined, collapse:undefined, sync:undefined, unsync:undefined, more:undefined, dstm:undefined,
                           repeatAll:undefined, repeatOne:undefined, repeatOff:undefined, shuffleAll:undefined, shuffleAlbums:undefined, shuffleOff:undefined,
-                          play:undefined, pause:undefined, stop:undefined, prev:undefined, next:undefined },
+                          play:undefined, pause:undefined, prev:undefined, next:undefined },
                  showTotal: true,
                  landscape: false,
                  wide: 0,
@@ -461,11 +383,15 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
                 };
     },
     mounted() {
-        this.hideNpBar = false;
-        this.desktopBottomHeight = getComputedStyle(document.documentElement).getPropertyValue('--desktop-bottom-toolbar-height');
-        this.mobileBottomHeight = getComputedStyle(document.documentElement).getPropertyValue('--mobile-bottom-toolbar-height');
-        this.controlDesktopNpBar();
+        this.showNpBar = undefined;
+        this.desktopBarHeight = getComputedStyle(document.documentElement).getPropertyValue('--desktop-npbar-height');
+        this.mobileBarThinHeight = getComputedStyle(document.documentElement).getPropertyValue('--mobile-npbar-height-thin');
+        this.mobileBarThickHeight = getComputedStyle(document.documentElement).getPropertyValue('--mobile-npbar-height-thick');
+        this.controlBar();
 
+        bus.$on('mobileBarChanged', function() {
+            this.controlBar();
+        }.bind(this));
         bus.$on('customActions', function(val) {
             this.customActions = getCustomActions("track", false);
         }.bind(this));
@@ -529,7 +455,7 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
         // Long-press on 'now playing' nav button whilst in now-playing shows track info
         bus.$on('nav', function(page) {
             if ('now-playing'==page) {
-                if (this.$store.state.infoPlugin && this.playerStatus && this.playerStatus.current && this.playerStatus.current.artist) {
+                if (LMS_P_MAI && this.playerStatus && this.playerStatus.current && this.playerStatus.current.artist) {
                     this.largeView = false;
                     this.info.show = !this.info.show;
                 } else if (this.info.show) {
@@ -572,13 +498,20 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
         }.bind(this));
         this.initItems();
 
-        bus.$on('esc', function() {
+        bus.$on('closeMenu', function() {
             if (this.menu.show) {
                 this.menu.show = false;
-            } else if (this.$store.state.openDialogs.length==1 && this.$store.state.visibleMenus.size<=0 &&
-                       this.info.show && (this.$store.state.desktopLayout || this.$store.state.page=='now-playing')) {
+            }
+        }.bind(this));
+
+        bus.$on('closeDialog', function(dlg) {
+            if (dlg == 'info-dialog') {
                 this.info.show = false;
-            } else if (this.$store.state.openDialogs.length==0 && this.$store.state.visibleMenus.size<=0 &&
+            }
+        }.bind(this));
+
+        bus.$on('escPressed', function() {
+            if (this.$store.state.openDialogs.length==0 && this.$store.state.visibleMenus.size<=0 &&
                        this.largeView && this.$store.state.desktopLayout) {
                 this.largeView = false;
             }
@@ -608,7 +541,7 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
         if (!IS_MOBILE) {
             bindKey(LMS_TRACK_INFO_KEYBOARD, 'mod');
             bindKey(LMS_EXPAND_NP_KEYBOARD, 'mod+shift');
-            if (undefined!=this.$store.state.ratingsPlugin) {
+            if (undefined!=LMS_P_RP) {
                 for (var i=0; i<=6; ++i) {
                     bindKey(''+i, 'mod+shift');
                 }
@@ -617,14 +550,14 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
                 if (this.$store.state.visibleMenus.size>0 || this.$store.state.openDialogs.length>1 || (!this.$store.state.desktopLayout && this.$store.state.page!="now-playing")) {
                     return;
                 }
-                if ('mod'==modifier && LMS_TRACK_INFO_KEYBOARD==key && this.$store.state.infoPlugin && (this.$store.state.openDialogs.length==0 || this.$store.state.openDialogs[0]=='info-dialog') && (window.innerHeight>=LMS_MIN_NP_LARGE_INFO_HEIGHT || this.info.show)) {
+                if ('mod'==modifier && LMS_TRACK_INFO_KEYBOARD==key && LMS_P_MAI && (this.$store.state.openDialogs.length==0 || this.$store.state.openDialogs[0]=='info-dialog') && (window.innerHeight>=LMS_MIN_NP_LARGE_INFO_HEIGHT || this.info.show)) {
                     this.largeView = false;
                     this.info.show = !this.info.show;
                 } else if ('mod+shift'==modifier) {
                     if (LMS_EXPAND_NP_KEYBOARD==key && this.$store.state.desktopLayout && (window.innerHeight>=LMS_MIN_NP_LARGE_INFO_HEIGHT || this.largeView)) {
                         this.info.show = false;
                         this.largeView = !this.largeView;
-                    } else if (1==key.length && !isNaN(key) && undefined!=this.$store.state.ratingsPlugin && this.$store.state.showRating) {
+                    } else if (1==key.length && !isNaN(key) && undefined!=LMS_P_RP && this.$store.state.showRating) {
                         this.rating.value = parseInt(key);
                         this.setRating();
                     }
@@ -638,7 +571,7 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
                            sync:i18n("Update information when song changes"), unsync:i18n("Don't update information when song changes"),
                            more:i18n("More"), dstm:i18n("Don't Stop The Music"), repeatAll:i18n("Repeat queue"), repeatOne:i18n("Repeat single track"),
                            repeatOff:i18n("No repeat"), shuffleAll:i18n("Shuffle tracks"), shuffleAlbums:i18n("Shuffle albums"),
-                           shuffleOff:i18n("No shuffle"), play:i18n("Play"), pause:i18n("Pause"), stop:i18n("Stop"), prev:i18n("Previous track"),
+                           shuffleOff:i18n("No shuffle"), play:i18n("Play"), pause:i18n("Pause"), prev:i18n("Previous track"),
                            next:i18n("Next track") };
             this.info.tabs[TRACK_TAB].title=i18n("Track");
             this.info.tabs[ARTIST_TAB].title=i18n("Artist");
@@ -779,7 +712,7 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
             if (!this.info.show || !this.infoTrack) {
                 return;
             }
-            if (this.$store.state.desktopLayout && !this.showTabs) {
+            if (!this.showTabs) {
                 this.fetchTrackInfo();
                 this.fetchArtistInfo();
                 this.fetchAlbumInfo();
@@ -829,12 +762,13 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
         setBgndCover() {
             setBgndCover(this.bgndElement, this.coverUrl);
         },
-        playPauseButton(showSleepMenu) {
+        playPauseButton(longPress) {
             if (this.$store.state.visibleMenus.size>0) {
                 return;
             }
-            if (showSleepMenu) {
-                bus.$emit('dlg.open', 'sleep', this.$store.state.player);
+            if (longPress) {
+                this.doAction(['stop']);
+                bus.$emit('showMessage', i18n('Stop'), 500);
             } else {
                 this.doAction([this.playerStatus.isplaying ? 'pause' : 'play']);
             }
@@ -885,7 +819,7 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
                 this.doCommand(this.repAltBtn.command, this.repAltBtn.tooltip);
             } else {
                 if (this.playerStatus.playlist.repeat===0) {
-                    if (this.$store.state.dstmPlugin) {
+                    if (LMS_P_DSTM) {
                         if (longPress) {
                             bus.$emit('dlg.open', 'dstm');
                         } else if (this.dstm) {
@@ -902,7 +836,7 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
                     bus.$emit('playerCommand', ['playlist', 'repeat', 0]);
                 } else if (this.playerStatus.playlist.repeat===2) {
                     bus.$emit('playerCommand', ['playlist', 'repeat', 1]);
-                    if (this.$store.state.dstmPlugin) {
+                    if (LMS_P_DSTM) {
                         lmsCommand(this.$store.state.player.id, ["material-skin-client", "get-dstm"]).then(({data}) => {
                             if (data && data.result && undefined!=data.result.provider) {
                                 bus.$emit("dstm", this.$store.state.player.id, data.result.provider);
@@ -923,7 +857,7 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
             // this.rating.value is updated *before* this setRating click handler is called, so we can use its model value to update LMS
             this.rating.track_id = this.playerStatus.current.id;
             this.rating.album_id = this.playerStatus.current.album_id;
-            lmsCommand(this.$store.state.player.id, [this.$store.state.ratingsPlugin, "setrating", this.playerStatus.current.id, val]).then(({data}) => {
+            lmsCommand(this.$store.state.player.id, [LMS_P_RP, "setrating", this.playerStatus.current.id, val]).then(({data}) => {
                 if (allowReset && this.rating.track_id==this.playerStatus.current.id) {
                     this.rating.value=val;
                 }
@@ -947,17 +881,16 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
             if (this.$store.state.visibleMenus.size>0) {
                 return;
             }
+            if (!this.desktopLayout && this.$store.state.page!='now-playing') {
+                return;
+            }
             if (!this.clickTimer) {
                 this.clickTimer = setTimeout(function () {
                     this.clearClickTimeout();
-                    if (IS_IOS) {
-                        this.showMenu(event);
-                    } else {
-                        bus.$emit('expandNowPlaying', true);
-                    }
+                    bus.$emit('expandNowPlaying', true);
                 }.bind(this), LMS_DOUBLE_CLICK_TIMEOUT);
             } else {
-                this.clearClickTimeout(this.clickTimer);
+                this.clearClickTimeout();
                 this.showPic();
             }
         },
@@ -1059,13 +992,13 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
         toggleGrid(tab, section) {
             nowplayingToggleGrid(this, tab, section);
         },
-        controlDesktopNpBar() {
-            let hideNpBar = this.disableBtns && this.$store.state.desktopLayout;
-            if (hideNpBar!=this.hideNpBar) {
-                this.hideNpBar = hideNpBar;
-                document.documentElement.style.setProperty('--bottom-toolbar-height',
-                    hideNpBar ? '0px' : this.$store.state.desktopLayout ? this.desktopBottomHeight : this.mobileBottomHeight);
-                document.documentElement.style.setProperty('--npbar-border-color', hideNpBar ? 'transparent' : 'var(--bottom-toolbar-border-color)');
+        controlBar() {
+            let showNpBar = !this.disableBtns;
+            if (showNpBar!=this.showNpBar) {
+                let mbar = this.$store.state.mobileBar;
+                document.documentElement.style.setProperty('--desktop-npbar-height', !showNpBar ? '0px' : this.desktopBarHeight);
+                document.documentElement.style.setProperty('--mobile-npbar-height', !showNpBar || MBAR_NONE==mbar ? '0px' : (MBAR_THIN==mbar ? this.mobileBarThinHeight : this.mobileBarThickHeight));
+                document.documentElement.style.setProperty('--npbar-border-color', !showNpBar ? 'transparent' : 'var(--bottom-toolbar-border-color)');
             }
         },
         showTimeTooltip() {
@@ -1168,18 +1101,18 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
             this.$store.commit('menuVisible', {name:'nowplaying', shown:newVal});
         },
         'disableBtns': function(newVal) {
-            this.controlDesktopNpBar();
+            this.controlBar();
         },
         '$store.state.desktopLayout': function(newVal) {
-            this.controlDesktopNpBar();
+            this.controlBar();
         }
     },
     computed: {
-        infoPlugin() {
-            return this.$store.state.infoPlugin
+        mobileBar() {
+            return this.$store.state.mobileBar
         },
-        stopButton() {
-            return this.$store.state.stopButton
+        page() {
+            return this.$store.state.page;
         },
         techInfo() {
             return this.$store.state.techInfo &&
@@ -1205,9 +1138,6 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
         },
         darkUi() {
             return this.$store.state.darkUi
-        },
-        ratingsPlugin() {
-            return this.$store.state.ratingsPlugin
         },
         npBarRatings() {
             if (!this.playerStatus || !this.playerStatus.current) {
@@ -1248,7 +1178,7 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
             return this.$store.state.infoBackdrop && undefined!=this.coverUrl && LMS_BLANK_COVER!=this.coverUrl && DEFAULT_COVER!=this.coverUrl && DEFAULT_RADIO_COVER!=this.coverUrl
         },
         coloredToolbars() {
-            return this.$store.state.coloredToolbars
+            return this.$store.state.desktopLayout && this.$store.state.coloredToolbars
         },
         keyboardControl() {
             return this.$store.state.keyboardControl && !IS_MOBILE
@@ -1263,7 +1193,7 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
             return this.$store.state.nowPlayingContext && undefined!=this.playerStatus.current.artistAndComposerWithContext && !isEmpty(this.playerStatus.current.albumLine) ? i18n('<obj>from</obj> %1', this.playerStatus.current.albumLine).replaceAll("<obj>", "<obj class=\"ext-details\">") : this.playerStatus.current.albumLine
         },
         barInfoWithContext() {
-            if (this.$store.state.nowPlayingContext && this.windowWidth-(this.stopButton ? 420 : 380)>this.barInfoWithContextWidth && undefined!=this.playerStatus.current.artistAndComposerWithContext && this.albumLine) {
+            if (this.$store.state.nowPlayingContext && this.windowWidth-380>this.barInfoWithContextWidth && undefined!=this.playerStatus.current.artistAndComposerWithContext && this.albumLine) {
                 return replaceBr(this.artistAndComposerLine, " ")+" " + this.albumLine
             }
             return undefined;

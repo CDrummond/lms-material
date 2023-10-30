@@ -1,3 +1,62 @@
+x.y.z
+-----
+ 1. Unify MAI layout between desktop and mobile.
+ 2. Allow mobile MAI to use 3 column layout.
+ 3. Force MAI tabs if layout too narrow.
+ 4. Add option to show a now-playing bar at the bottom of browse and queue
+    views in mobile layout.
+ 5. Slightly increase background image blur.
+ 6. Show track and album names in relevant MAI section.
+ 7. Remove "Artist", "Album", and "Track" headers from expanded MAI sections.
+ 8. Show now-playing bar progress even for radio.
+ 9. Make more subtitle items clickable in search results for non-touch devices.
+10. Support LMS8.4 release_type.
+11. When listing artist albums separate out normal and compilation albums.
+12. Reduce number of JSONRPC calls at start-up.
+13. Fix long-press on power button / player icon not updating its assignment
+    on changing the option.
+14. Remove option for stop button.
+15. Change long-press on play/pause from showing sleep dialog to stopping
+    playback.
+16. Remove option to not show artwork.
+17. Remove option to sort home screen.
+18. Show album year for playlist tracks.
+19. Slightly adjust grid metrics, to allow more columns when thin, etc.
+20. Simpler String.replaceAll polyfill.
+21. Remove notification support added for CORE32, no longer supported.
+22. Add (server side) option to show all compilation tracks when navigate into
+    a compilation from a contributing artist.
+23. Only show artist under MAI album list if different.
+24. In desktop layout allow queue to be pinned/unpinned.
+25. Add 'Automatic' theme, switches between Light/Dark based upon browser's
+    dark mode setting.
+26. Fix keyboard shortcuts not working when MAI view open.
+27. Show online service emblems top-right of now-playing cover.
+28. Add menu button bottom-right of now-playing cover.
+29. Slightly more space for MAI.
+30. Use filled circle icons for play and pause.
+31. Only show grid menu icons on hover when using non-touch devices.
+32. Rename 'Plugins' to 'Manage Plugins' in server settings section selector.
+33. Place 'Manage Plugins' as the first in the 'Plugins' section.
+34. Allow active/inactive plugins sections to be collapsed.
+35. On non-touch devices replace settings help text with a '(?)' button,
+    similar to 'Default' skin.
+36. Re-do desktop now-playing bar logic so that track/count can be shown even
+    if also showing tech info.
+37. Allow info dialogs to be closed by cliking outside.
+38. If screen width is 1000px or more then use horizontal layout for server
+    settings, etc. - similar to 'Default' skin.
+39. Respect LMS's role filtering when asking for artist albums.
+40. Allow switching of players in 'Player settings' and 'Extra player
+    settings' dialogs.
+41. In MAI view show album cover and artist image before text.
+42. Fix MAI view image sizes.
+43. Center align all MAI titles.
+44. Provide backdrop images to use in browse view.
+45. Don't apply reverse sort to 'New Music'.
+46. Fix image position and size in biographies.
+47. Show image in browse sub-toolbar if wide enough.
+
 3.5.6
 -----
 1. Fix showing popup messages from server based settings pages.

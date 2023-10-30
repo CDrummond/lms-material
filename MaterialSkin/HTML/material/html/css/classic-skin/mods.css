@@ -35,9 +35,11 @@ div#browsedbList {
  margin-left:-4px;
  margin-bottom:8px;
  margin-top:8px;
- font-size:16px !important;
+ font-size:18px !important;
  font-weight:500 !important;
  border-radius: 0px;
+ width:100%!important;
+ border-bottom:2px solid var(--active-color)!important;
 }
 
 #choose_setting optgroup {
@@ -46,6 +48,7 @@ div#browsedbList {
 
 #statusMessage {
  color:transparent!important;
+ width:100%!important;
 }
 
 #prefsSubmit {
@@ -98,6 +101,38 @@ td input { /* Fix entry/combo alignment in additional browse modes */
  padding-bottom:0px;
 }
 
+#updatePlugins td,
+#activePlugins td,
+#inactivePlugins td,
+#otherPlugins0 td,
+#otherPlugins1 td,
+#otherPlugins2 td,
+#otherPlugins3 td,
+#otherPlugins4 td,
+#otherPlugins5 td,
+#otherPlugins6 td,
+#otherPlugins7 td,
+#otherPlugins8 td,
+#otherPlugins9 td {
+ border-bottom: 1px solid var(--list-item-border-color);
+}
+
+#updatePlugins table,
+#activePlugins table,
+#inactivePlugins table,
+#otherPlugins0 table,
+#otherPlugins1 table,
+#otherPlugins2 table,
+#otherPlugins3 table,
+#otherPlugins4 table,
+#otherPlugins5 table,
+#otherPlugins6 table,
+#otherPlugins7 table,
+#otherPlugins8 table,
+#otherPlugins9 table {
+ border-spacing:0px 2px!important;
+}
+
 /* Advanced search - has been removed, but these used elsewhere?*/
 .border tbody tr td input[type=text] {
  padding-bottom:1px;
@@ -134,7 +169,7 @@ div#topGraphicMenu3 #statusMessage {
  font-size:16px !important;
  font-family:Roboto,sans-serif !important;
  text-rendering: optimizeLegibility;
- line-height: 1.5;
+ line-height: 1.25;
  -webkit-font-smoothing: antialiased;
  -moz-osx-font-smoothing: grayscale;
 }
@@ -150,6 +185,18 @@ table td {
  padding: 8px 6px 4px 0px;
  font-weight: 500;
  text-transform: none;
+}
+
+.settingSection .collapsableSection {
+ font-weight:var(--bold-weight)!important;
+ background-color:var(--pq-current-color)!important;
+ border-radius: 8px;
+ cursor: pointer;
+}
+
+.msk-hidden-section {
+ visibility: hidden;
+ height:0px;
 }
 
 select, input {
@@ -268,7 +315,7 @@ input[type=radio]:checked:before {
  margin-top:-2px;
 }
 
-.msk-dir-btn:before, input[type=checkbox]:before, input[type=radio]:before {
+.msk-dir-btn:before, input[type=checkbox]:before, input[type=radio]:before, .msk-expander-btn:before, .msk-help-btn:before {
  vertical-align: middle!important;
  font-family: "Material Icons"!important;
  font-size:24px!important;
@@ -281,7 +328,17 @@ input[type=radio]:checked:before {
  line-height:32px!important;
 }
 
-.msk-dir-btn {
+.msk-expander-btn:before {
+ content:"expand_more";
+ line-height:32px!important;
+}
+
+.msk-collapsed .msk-expander-btn:before {
+ content:"chevron_right";
+ line-height:32px!important;
+}
+
+.msk-dir-btn, .msk-expander-btn {
  width:32px;
  height:32px;
  border-radius:50%;
@@ -289,6 +346,33 @@ input[type=radio]:checked:before {
  text-align:center;
 }
 
+.msk-expander-btn {
+ float:left;
+ pointer-events:none;
+}
+
+.msk-help-btn {
+ width:22px;
+ height:22px;
+ border-radius:50%;
+ display:inline-block;
+ text-align:center;
+ opacity:0.5;
+ padding-top:4px;
+ padding-left:4px;
+ margin-bottom:-4px;
+ cursor:pointer;
+}
+
+.msk-help-btn:hover {
+ opacity:1;
+}
+
+.msk-help-btn:before {
+ content:"help_outline";
+ font-size:18px!important;
+ line-height:22px!important;
+}
 .msk-slider {
  margin-bottom:-8px;
  margin-right:8px;
@@ -377,8 +461,8 @@ html, body {
  overflow: unset!important;
 }
 
-
-html, body, .stdedit, select, input[type="text"], div#topGraphicMenu3, .prefDesc, .groupDesc, .groupHead, .homeMenuSection div, td, .settingSection, .settingSection .groupHead, .settingSection .prefHead, li {
+html, body, .stdedit, select, input[type="text"], div#topGraphicMenu3, .prefDesc, .groupDesc, .groupHead, .homeMenuSection div, td, 
+.settingSection, .settingSection .groupHead, .settingSection .prefHead:not(.collapsableSection), li {
  background-color:var(--background-color) !important;
 }
 
@@ -572,4 +656,67 @@ input[type="submit"], input[type="button"] {
 
 .settingSection .settingGroup {
  margin-bottom:48px!important;
+}
+
+.msk-is-non-touch .settingSection .settingGroup {
+ margin-bottom:24px!important;
+}
+
+.msk-is-non-touch .hiddenDesc {
+ visibility: hidden;
+ width:0px!important;
+ height:0px!important;
+}
+
+.msk-is-non-touch .settingSection .prefHead:not(.collapsableSection) {
+ padding: 0px 6px 0px 0px;
+}
+
+.msk-is-non-touch table td {
+ padding-bottom:0px;
+}
+
+table td input[type=checkbox] {
+ margin-top:-2px;
+}
+
+@media only screen and (min-width:1000px) {
+ .settingGroup {
+  position: relative;
+  padding-left: 278px;
+  margin-bottom: 15px;
+ }
+
+ .settingGroup .prefHead {
+  position: absolute;
+  width: 250px;
+  left: 0;
+  margin-top:11px;
+ }
+
+ .settingGroup .prefs {
+  margin-top:-2px;
+ }
+ .settingGroup .prefs:has(input[type=range]) {
+  margin-top:-5px;
+ }
+
+ .msk-help-btn {
+  position: absolute;
+  left: 252px;
+  margin-top:6px;
+ }
+}
+
+.prefs .selectFolder {
+ max-width:calc(100vw - 84px)!important;
+}
+
+#mediadirs0, #mediadirs1, #mediadirs2, #mediadirs3, #mediadirs4, #mediadirs5, #mediadirs6, #mediadirs7, #mediadirs8, #mediadirs9 {
+ max-width:calc(100vw - 232px)!important;
+}
+
+#ignoreInAudioScan0, #ignoreInAudioScan1, #ignoreInAudioScan2, #ignoreInAudioScan3, #ignoreInAudioScan4,
+#ignoreInAudioScan5, #ignoreInAudioScan6, #ignoreInAudioScan7, #ignoreInAudioScan0, #ignoreInAudioScan9 {
+ margin-top:3px!important;
 }

@@ -14,17 +14,11 @@ Vue.component('lms-information-dialog', {
    <v-toolbar app class="dialog-toolbar">
     <v-btn flat icon v-longpress:stop="close" :title="ttShortcutStr(i18n('Go back'), 'esc')"><v-icon>arrow_back</v-icon></v-btn>
     <v-toolbar-title>
-     <div>{{i18n('Information')+serverName}}</div>
+     <div>{{i18n('Information')+(undefined==serverName ? "" : (SEPARATOR+serverName))}}</div>
     </v-toolbar-title>
    </v-toolbar>
   </v-card-title>
   <div class="ios-vcard-text-workaround"><div class="infodetails" id="info-page">
-
-   <div v-show="updateNotif.msg!=undefined">
-    <p class="about-header">{{updateNotif.title}}</p>
-    <div v-html="updateNotif.msg" class="clickable"></div>
-    <div class="dialog-padding"></div>
-   </div>
 
    <div v-if="server.length>0">
     <p class="about-header">{{i18n('Server')}}</p>
@@ -61,7 +55,7 @@ Vue.component('lms-information-dialog', {
     <template v-for="(plug, index) in updates.details"><li><object @click="pluginInfo(plug)" class="link-item">{{plug.title}} {{plug.version}}</object></li></template>
    </ul>
    <v-btn v-if="updates.details.length>0 && 'idle'==pluginStatus && unlockAll" @click="updatePlugins" flat><img class="svg-img btn-icon" :src="'update' | svgIcon(darkUi)">{{i18n('Update plugins')}}</v-btn>
-   <p v-if="updates.details.length>0 && 'idle'==pluginStatus && unlockAll" style="padding-top:16px" class="subtext cursor link-item" @click='openPluginSettings'>{{i18n("For more fine-grained control over plugins please visit the 'Plugins' section of 'Server settings'")}}</p>
+   <p v-if="updates.details.length>0 && 'idle'==pluginStatus && unlockAll" style="padding-top:16px" class="subtext cursor link-item" @click='openPluginSettings'>{{i18n("For more fine-grained control over plugins please visit the 'Manage Plugins' section of 'Server settings'")}}</p>
 
    <p v-if="'downloading'==pluginStatus"><v-icon class="pulse">cloud_download</v-icon> {{i18n('Downloading plugin updates')}}</p>
    <v-btn v-if="'needs_restart'==pluginStatus && unlockAll" @click="restartServer" flat><img class="svg-img btn-icon" :src="'restart' | svgIcon(darkUi)">{{i18n('Restart server')}}</v-btn>
@@ -119,7 +113,7 @@ Vue.component('lms-information-dialog', {
             pluginStatus:'idle',
             rescans: [ ],
             scanning: false,
-            serverName: ""
+            serverName: undefined
         }
     },
     mounted() {
@@ -140,7 +134,7 @@ Vue.component('lms-information-dialog', {
             });
             lmsCommand("", ["material-skin", "server"]).then(({data}) => {
                 if (data && data.result) {
-                    this.serverName=undefined==data.result.libraryname ? "" : (SEPARATOR+data.result.libraryname);
+                    this.serverName=data.result.libraryname;
                 }
             }).catch(err => {
             });
@@ -202,17 +196,14 @@ Vue.component('lms-information-dialog', {
             }
         }.bind(this));
 
-        bus.$on('esc', function() {
-            if (this.$store.state.activeDialog == 'info') {
+        bus.$on('closeDialog', function(dlg) {
+            if (dlg == 'info') {
                 this.show = false;
             }
         }.bind(this));
     },
     methods: {
         scrollToPlugins() {
-            if (undefined!=this.$store.state.updateNotif.msg) {
-                return false;
-            }
             if (!this.$store.state.unlockAll) {
                 return false;
             }
@@ -417,9 +408,6 @@ Vue.component('lms-information-dialog', {
         },
         unlockAll() {
             return this.$store.state.unlockAll
-        },
-        updateNotif() {
-            return this.$store.state.updateNotif
         }
     },
     filters: {

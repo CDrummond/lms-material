@@ -39,7 +39,7 @@ const STD_ITEMS=[
     },
     {
         command: ["playlists", "tracks"],
-        params: ["tags:acdeglstAKS"], // "tags:IRad"] -> Will show rating, not album???
+        params: [PLAYLIST_TRACK_TAGS], // "tags:IRad"] -> Will show rating, not album???
         menu: [PLAY_ACTION, INSERT_ACTION, ADD_ACTION, DIVIDER, ADD_TO_FAV_ACTION, RENAME_ACTION, REMOVE_DUPES_ACTION, DELETE_ACTION, DOWNLOAD_ACTION, SELECT_ACTION, BR_COPY_ACTION, MORE_LIB_ACTION],
         actionMenu: [INSERT_ACTION, DIVIDER, ADD_TO_FAV_ACTION, REMOVE_DUPES_ACTION, PLAYLIST_SORT_ACTION, DOWNLOAD_ACTION, MORE_LIB_ACTION]
     },
@@ -126,18 +126,26 @@ function buildStdItemCommand(item, parentCommand) {
             for (var i=0, len=parentCommand.params.length; i<len; ++i) {
                 if (typeof parentCommand.params[i] === 'string' || parentCommand.params[i] instanceof String) {
                     var lower = parentCommand.params[i].toLowerCase();
-                    if (lower.startsWith("role_id:") || (!lmsOptions.noGenreFilter && lower.startsWith("genre_id:")) || lower.startsWith("year:")) {
+                    if ((!LMS_NO_ROLE_FILTER && lower.startsWith("role_id:")) || (!LMS_NO_GENRE_FILTER && lower.startsWith("genre_id:")) || lower.startsWith("year:")) {
                         command.params.push(parentCommand.params[i]);
                     }
                 }
             }
         } else if (item.id.startsWith("album_id:")) {
+            let artist_id = undefined;
             for (var i=0, len=parentCommand.params.length; i<len; ++i) {
                 if (typeof parentCommand.params[i] === 'string' || parentCommand.params[i] instanceof String) {
                     var lower = parentCommand.params[i].toLowerCase();
-                    if ( (!lmsOptions.noRoleFilter && (lower.startsWith("role_id:"))) ||
-                         (!lmsOptions.noGenreFilter && lower.startsWith("genre_id:")) ||
-                         lower.startsWith("artist_id:")) {
+                    if (lower.startsWith("artist_id:")) {
+                        if (lmsOptions.noArtistFilter && (item.compilation || item.nonmain)) {
+                            // Want all tracks from an album, not just those from this artist, so don't filter on artist_id
+                            command.params.push('material_skin_'+parentCommand.params[i]);
+                        } else {
+                            // Retrict to only tracks from this artist
+                            command.params.push(parentCommand.params[i]);
+                        }
+                    } else if ( (!LMS_NO_ROLE_FILTER && (lower.startsWith("role_id:"))) ||
+                                (!LMS_NO_GENRE_FILTER && lower.startsWith("genre_id:")) ) {
                         command.params.push(parentCommand.params[i]);
                     }
                 }
@@ -146,7 +154,7 @@ function buildStdItemCommand(item, parentCommand) {
             for (var i=0, len=parentCommand.params.length; i<len; ++i) {
                 if (typeof parentCommand.params[i] === 'string' || parentCommand.params[i] instanceof String) {
                     var lower = parentCommand.params[i].toLowerCase();
-                    if (lower.startsWith("role_id:") || lower.startsWith("year:")) {
+                    if ((!LMS_NO_ROLE_FILTER && lower.startsWith("role_id:")) || lower.startsWith("year:")) {
                         command.params.push(parentCommand.params[i]);
                     }
                 }

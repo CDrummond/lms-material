@@ -83,8 +83,8 @@ Vue.component('lms-favorite', {
         bus.$on('noPlayers', function() {
             this.show=false;
         }.bind(this));
-        bus.$on('esc', function() {
-            if (this.$store.state.activeDialog == 'favorite') {
+        bus.$on('closeDialog', function(dlg) {
+            if (dlg == 'favorite') {
                 this.show=false;
             }
         }.bind(this));

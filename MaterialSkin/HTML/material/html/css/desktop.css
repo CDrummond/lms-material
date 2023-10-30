@@ -6,8 +6,7 @@
  */
 
 :root {
- --bottom-toolbar-height:72px;
- --desktop-bottom-toolbar-height:72px;
+ --bottom-toolbar-height:var(--desktop-npbar-height);
  --np-portrait-image-size:min(calc((var(--vh, 1vh)*100) - (var(--main-toolbar-height) + 260px) - (var(--np-image-border)*2)), 100vw - (var(--np-image-border)*2));
  --np-image-landscape-height:calc((var(--vh, 1vh)*100) - (var(--main-toolbar-height) + 116px));
  --np-image-landscape-size:min(var(--np-image-landscape-height) - (var(--np-image-border)*2), 50vw - (var(--np-image-border)*2));
@@ -17,6 +16,7 @@
  --queue-visibility:initial;
  --queue-minwidth:400px;
  --splitter-width:1px;
+ --pq-unpinned-width:620px;
 }
 
 /* For old browser's that dont support min() */
@@ -57,10 +57,6 @@
 
 .list-details {
  margin-left:-4px !important;
-}
-
-#browse-view .subtoolbar {
- padding:2px 1px 0px 12px;
 }
 
 .lms-list {
@@ -121,7 +117,8 @@
 }
 
 /*@media (hover: hover) and (pointer: fine) {*/
- .msk-is-non-touch .lms-splitter .splitter:hover {
+ .msk-is-non-touch .lms-splitter .splitter:hover,
+ .msk-is-non-touch .lms-resizer:hover {
   background-color:var(--primary-color)!important;
   cursor: ew-resize;
  }
@@ -131,23 +128,8 @@
  background-color:var(--primary-color)!important;
 }
 
-.np-bar {
- padding:0px 16px 0px 16px; /* t, r, b, l */
- position:fixed;
- bottom:0;
- width:100%;
- height:var(--bottom-toolbar-height) !important;
- min-width:600px;
-}
-
 .no-control-adjust { /* Adjust pos for iPad */
  margin-top:-8px;
-}
-
-.np-bar-details .v-list__tile__content, .np-bar-details .v-list__tile__content .v-list__tile__sub-title,
-.np-bar-details .v-list__tile__content .v-list__tile__title, .np-bar-details .np-bar-tech, .np-bar-details .np-bar-time, .np-bar-controls div i,
-.np-bar-details div.v-rating i.primary--text, .np-bar-details div.v-rating i.accent--text {
- color:var(--bottom-toolbar-text-color) !important;
 }
 
 .np-page {
@@ -160,13 +142,6 @@
 
 .np-bgnd {
  height:calc((var(--vh, 1vh)*100) - var(--main-toolbar-height));
-}
-
-.np-bar-controls {
- margin-left:-16px;
- margin-top:15px;
- max-width:270px;
- float:left;
 }
 
 .np-portrait-song-info {
@@ -187,6 +162,20 @@
  max-width:calc(100vw - 400px);
 }
 
+.np-bar {
+ padding:0px 16px 0px 16px; /* t, r, b, l */
+ bottom:0;
+ height:var(--bottom-toolbar-height) !important;
+ min-width:600px;
+}
+
+.np-bar-controls {
+ margin-left:-16px;
+ margin-top:15px;
+ max-width:270px;
+ float:left;
+}
+
 .np-bar-details {
  position:fixed;
  left:240px;
@@ -197,14 +186,9 @@
  background:transparent!important;
 }
 
-.np-bar-sb .np-bar-details {
- left:290px;
- width:calc(100vw - 290px);
-}
-
 .np-bar-image {
  position:fixed;
- left:164px;
+ left:162px;
  bottom:1px;
  height:65px;
  width:65px;
@@ -213,10 +197,6 @@
 .np-bar-image .np-cover {
  height:65px;
  width:65px;
-}
-
-.np-bar-sb .np-bar-image {
- left:214px;
 }
 
 .np-bar-details div .v-list__tile {
@@ -235,28 +215,15 @@
 }
 
 @media screen and (max-width: 550px) {
- #np-bar-prev, #np-bar-next, #np-bar-stop, #playPauseA, #playPauseB {
+ #np-bar-prev, #np-bar-next, #np-bar-stop {
   display:none!important;
  }
- #playPauseX {
-  visibility: visible;
- }
- .np-bar-image, .np-bar-sb .np-bar-image {
-   left:1px;
- }
- .np-bar-details, .np-bar-sb .np-bar-details {
-  left:76px;
-  width:calc(100vw - 98px);
- }
-}
-
-@media screen and (max-width: 330px) {
  .np-bar-image {
-  display:none!important;
+   left:90px;
  }
- .np-bar-details, .np-bar-sb .np-bar-details {
-  left:4px;
-  width:calc(100vw - 22px);
+ .np-bar-details {
+  left:166px;
+  width:calc(100vw - 166px);
  }
 }
 
@@ -266,10 +233,6 @@
  font-size:calc(var(--std-font-size) - 4px) !important;
  min-width:unset!important;
  height:64px;
-}
-
-.np-bar-details-sb div .v-list__tile .v-list__tile__action {
- width:190px;
 }
 
 .np-bar-tech {
@@ -318,13 +281,9 @@
  cursor:pointer;
 }
 
-.np-slider-desktop {
- position:fixed;
- left:0px;
- bottom:calc(var(--bottom-toolbar-height) - 5px);
- width:100vw;
- height:5px !important;
- margin:0px !important; /* v-progress-linear has margin: 1rem 0; */
+.np-bar-slider {
+ bottom:calc(var(--bottom-toolbar-height) - 15px);
+ height:10px !important;
 }
 
 .np-bar .np-playpause {
@@ -335,29 +294,12 @@
  margin-top:3px;
 }
 
-.np-info-desktop {
- position:fixed;
- top:var(--main-toolbar-height);
- left:0px;
- height:calc((var(--vh, 1vh)*100) - (var(--main-toolbar-height) + var(--bottom-toolbar-height)));
- width:100vw;
- overflow:hidden;
- backface-visibility:hidden;
- z-index:0;
+.np-info-text {
+ height:calc((var(--vh, 1vh)*100) - (var(--main-toolbar-height) + var(--sub-toolbar-height) + var(--bottom-toolbar-height) + 41px));
 }
 
-.np-info-text-desktop {
- height:calc((var(--vh, 1vh)*100) - (var(--main-toolbar-height) + var(--bottom-toolbar-height) + 103px));
- overflow:auto;
- max-width:1000px;
- margin:auto;
-}
-
-.np-info-text-full-desktop {
- height:calc((var(--vh, 1vh)*100) - (var(--main-toolbar-height) + var(--bottom-toolbar-height) + 95px));
- overflow:auto;
- max-width:1000px;
- margin:auto;
+.np-info-text-full {
+ height:calc((var(--vh, 1vh)*100) - (var(--main-toolbar-height) + var(--bottom-toolbar-height) + 41px));
 }
 
 .np-details-landscape {
@@ -430,3 +372,45 @@
  min-width:280px!important;
 }
 
+.pq-unpinned {
+ position:fixed;
+ right:0px;
+ top:calc(var(--main-toolbar-height) - 1px);
+ z-index:2;
+ min-width:var(--queue-minwidth);
+ max-width:100vw;
+ width:var(--pq-unpinned-width);
+ border-top:1px solid var(--sub-toolbar-border-color);
+ border-left:1px solid var(--sub-toolbar-border-color);
+ border-bottom:1px solid var(--sub-toolbar-border-color);
+ border-radius:8px 0  0 8px;
+ box-shadow:var(--menu-dlg-shadow);
+ overflow: hidden;
+ animation: pqSlideIn .25s linear forwards;
+}
+
+.pq-unpinned .lms-list {
+ height:calc((var(--vh, 1vh)*100) - (var(--main-toolbar-height) + var(--sub-toolbar-height) + var(--bottom-toolbar-height)));
+}
+
+@keyframes pqSlideIn {
+ from{right:-100%}
+ to{right:0px}
+}
+
+.lms-resizer {
+ width:1px;
+ height:calc((var(--vh, 1vh)*100) - (var(--main-toolbar-height) + var(--bottom-toolbar-height)));
+ float:left;
+ position:absolute;
+ z-index:2;
+}
+
+.lms-resizer:before {
+ position: absolute;
+ content: '';
+ width: 12px;
+ height: calc((var(--vh, 1vh)*100) - (var(--main-toolbar-height) + var(--bottom-toolbar-height)));
+ margin-left:-2px;
+ z-index: 1;
+}

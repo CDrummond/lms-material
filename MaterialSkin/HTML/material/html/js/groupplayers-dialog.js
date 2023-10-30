@@ -134,8 +134,8 @@ Vue.component('lms-groupplayers-dialog', {
         bus.$on('noPlayers', function() {
             this.show=false;
         }.bind(this));
-        bus.$on('esc', function() {
-            if (this.$store.state.activeDialog == 'group') {
+        bus.$on('closeDialog', function(dlg) {
+            if (dlg == 'group') {
                 this.show=false;
             }
         }.bind(this));

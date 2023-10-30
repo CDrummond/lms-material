@@ -1,9 +1,9 @@
 .image-grid-item-img, .np-grid-item img, .np-grid-sect .pq-current, .lms-image-grid .list-active, .np-grid-sect .list-active,
-.browse-html img, .np-info-text img, .np-info-text-desktop img, .np-info-text-full img, .np-info-text-full-desktop img, .inline-image {
+#browse-list .browse-html img, .np-info-text img, .np-info-text-desktop img, .np-info-text-full img, .np-info-text-full-desktop img, .inline-image {
  border-radius:9px!important;
 }
 
-.lms-list img:not(.image-grid-item-img):not(.svg-list-img):not(.multi-disc), .pmgr-cover img, .np-info .lms-list img {
+.lms-list img:not(.image-grid-item-img):not(.svg-list-img):not(.multi-disc), .pmgr-cover img, .np-info .lms-list img, .sub-cover {
  border-radius:4px!important;
 }
 

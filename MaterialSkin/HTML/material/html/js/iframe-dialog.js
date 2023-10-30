@@ -117,7 +117,7 @@ function addHooks(doc) {
 var iframeMenuOpen = false;
 function iframeClickHandler(e) {
     if (iframeMenuOpen) {
-        bus.$emit('hideMenu', 'iframe');
+        bus.$emit('iframe-hideMenu');
     }
 }
 
@@ -273,6 +273,104 @@ function hideSections(doc) {
     return hidden;
 }
 
+function toggleClass(elem, clz) {
+    let classes = elem.className.split(' ');
+    if (classes.includes(clz)) {
+        elem.classList.remove(clz);
+        return false;
+    } else {
+        elem.classList.add(clz);
+        return true;
+    }
+}
+
+function toggleSection(doc, elem) {
+    let panel = doc.getElementById(elem.id.replace(/_Header/, ''));
+    if (!panel) {
+        return;
+    }
+    let hasClass = toggleClass(panel, 'msk-hidden-section');
+    toggleClass(elem.parentElement, 'msk-collapsed');
+    if (hasClass) {
+        setLocalStorageVal("iframe.section."+elem.id, true);
+    } else {
+        removeLocalStorage("iframe.section."+elem.id);
+    }
+}
+
+function addExpanders(doc) {
+    let collapsables = getElementsByClassName(doc, "div", "collapsableSection");
+    let added = false;
+    if (collapsables!=null) {
+        for (let i=0, len=collapsables.length; i<len; i++) {
+            let classes = collapsables[i].className.split(' ');
+            if (classes.includes('msk-modified')) {
+                continue;
+            }
+            added = true;
+            collapsables[i].classList.add('msk-modified');
+            let btn = doc.createElement("div");
+            btn.id="mskexpanderbtn."+collapsables[i].id;
+            btn.classList.add("msk-expander-btn");
+            collapsables[i].parentNode.insertBefore(btn, collapsables[i]);
+
+            let collapse = getLocalStorageBool("iframe.section."+collapsables[i].id, false);
+            if (collapse) {
+                toggleSection(doc, collapsables[i]);
+            }
+            collapsables[i].onclick=function(ev) {
+                let target = ev.target;
+                if (isEmpty(target.id)) {
+                    target = target.parentElement;
+                }
+                toggleSection(doc, target);
+            };
+        }
+    }
+    return added;
+}
+
+function addHelp(doc) {
+    let descDivs = getElementsByClassName(doc, "div", "hiddenDesc");
+    let added = false;
+    if (null!=descDivs) {
+        for (let i=0, len=descDivs.length; i<len; i++) {
+            let classes = descDivs[i].className.split(' ');
+            if (classes.includes('msk-modified')) {
+                continue;
+            }
+            let desc = descDivs[i].innerHTML;
+            if (isEmpty(desc)) {
+                continue;
+            }
+            let parent = descDivs[i].parentElement;
+            if (null==parent) {
+                continue;
+            }
+            classes = parent.className.split(' ');
+            if (!classes.includes('settingGroup') && !classes.includes('settingSection')) {
+                continue;
+            }
+            let titles = getElementsByClassName(parent, "div", "prefHead");
+            if (null==titles || titles.length!=1) {
+                continue;
+            }
+            let title=titles[0];
+            descDivs[i].classList.add('msk-modified');
+            added = true;
+            let btn = doc.createElement("div");
+            btn.classList.add("msk-help-btn");
+            title.style.float="left";
+            descDivs[i].parentNode.insertBefore(btn, descDivs[i]);
+            descDivs[i].innerHTML="";
+            btn.onclick=function(ev) {
+                bus.$emit('dlg.open', 'iteminfo', {list:[title.innerHTML, desc]});
+            };
+        }
+    }
+    return added;
+}
+
 var iframeInfo = {
   content:undefined,
   action:undefined,
@@ -294,12 +392,22 @@ function iframeActionCheck() {
                     addFsSelectButtons(content);
                     iframeInfo.addedSliders = addSliders(content);
                     iframeInfo.sectionsHidden = hideSections(content);
+                    iframeInfo.addedExpanders = addExpanders(content);
+                    if (!IS_MOBILE) {
+                        iframeInfo.addedHelp = addHelp(content);
+                    }
                 } else if (iframeInfo.actionChecks<50) {
                     if (!iframeInfo.addedSliders) {
                         iframeInfo.addedSliders = addSliders(content);
                     }
                     if (!iframeInfo.sectionsHidden) {
                         iframeInfo.sectionsHidden = hideSections(content);
+                    }
+                    if (!iframeInfo.addedExpanders) {
+                        iframeInfo.addedExpanders = addExpanders(content);
+                    }
+                    if (!IS_MOBILE && !iframeInfo.addedHelp) {
+                        iframeInfo.addedHelp = addHelp(content);
                     }
                     return;
                 }
@@ -317,6 +425,8 @@ function selectChanged() {
     }
     iframeInfo.addedSliders = false;
     iframeInfo.sectionsHidden = false;
+    iframeInfo.addedExpanders = false;
+    iframeInfo.addedHelp = false;
     iframeInfo.actionChecks = 0;
     iframeInfo.actionCheckInterval = setInterval(function () {
         iframeActionCheck();
@@ -337,6 +447,7 @@ function hideClassicSkinElems(page, textCol) {
             return;
         }
 
+        content.documentElement.getElementsByTagName("body")[0].classList.add(IS_MOBILE ? "msk-is-touch" : "msk-is-non-touch");
         fixClassicSkinRefs(content);
         remapClassicSkinIcons(content, textCol);
         addHooks(content);
@@ -457,7 +568,8 @@ Vue.component('lms-iframe-dialog', {
     <v-toolbar app-data class="dialog-toolbar">
      <v-btn flat icon v-longpress:stop="goBack" :title="ttShortcutStr(i18n('Go back'), 'esc')"><v-icon>arrow_back</v-icon></v-btn>
      <v-btn v-if="showHome && homeButton" flat icon @click="goHome" :title="ttShortcutStr(i18n('Go home'), 'home')"><v-icon>home</v-icon></v-btn>
-     <v-toolbar-title>{{title}}</v-toolbar-title>
+     <v-toolbar-title v-if="page=='player' && numPlayers>1" @click="openChoiceMenu" class="pointer">{{title}}</v-toolbar-title>
+     <v-toolbar-title v-else>{{title}}</v-toolbar-title>
      <v-spacer></v-spacer>
      <v-menu bottom left v-model="showMenu" v-if="actions.length>0 || (customActions && customActions.length>0)">
       <v-btn icon slot="activator"><v-icon>more_vert</v-icon></v-btn>
@@ -486,12 +598,25 @@ Vue.component('lms-iframe-dialog', {
   </v-card>
  </v-dialog>
  <v-snackbar v-model="snackbar.show" :multi-line="true" :timeout="2500" top>{{ snackbar.msg }}</v-snackbar>
+ <v-menu v-model="choiceMenu.show" :position-x="choiceMenu.x" :position-y="10" style="z-index:1000">
+  <v-list>
+   <template v-for="(player, index) in players">
+    <v-list-tile @click="setPlayer(player)" :disabled="player.id==playerId" v-bind:class="{'disabled':player.id==playerId}">
+     <v-list-tile-avatar>
+      <v-icon v-if="player.icon.icon">{{player.icon.icon}}</v-icon><img v-else class="svg-img" :src="player.icon.svg | svgIcon(darkUi)"></img>
+     </v-list-tile-avatar>
+     <v-list-tile-content><v-list-tile-title>{{player.name}}</v-list-tile-title></v-list-tile-content>
+    </v-list-tile>
+   </template>
+  </v-list>
+ </v-menu>
 </div>
 `,
     data() {
         return {
             show: false,
             showMenu: false,
+            choiceMenu: {show:false, x:0},
             title: undefined,
             src: undefined,
             page: undefined,
@@ -501,11 +626,12 @@ Vue.component('lms-iframe-dialog', {
             customActions: [],
             history: [],
             showHome:0,
-            textCol: undefined
+            textCol: undefined,
+            playerId: undefined
         }
     },
     mounted() {
-        bus.$on('iframe.open', function(page, title, actions, showHome) {
+        bus.$on('iframe.open', function(page, title, actions, showHome, playerId) {
             this.title = title;
             this.src = page;
             this.page = page.indexOf("player/basic.html")>0
@@ -519,12 +645,14 @@ Vue.component('lms-iframe-dialog', {
                                         : "other";
             this.show = true;
             this.showMenu = false;
+            this.choiceMenu = {show:false, x:0}
             this.loaded = false;
             this.actions = undefined==actions ? [] : actions;
             this.customActions = getCustomActions(this.page+"-dialog", this.$store.state.unlockAll);
             this.history = [];
             this.showHome = showHome;
             this.textCol = getComputedStyle(document.documentElement).getPropertyValue('--text-color').substring(1);
+            this.playerId = playerId;
         }.bind(this));
         bus.$on('iframe-loaded', function() {
             this.loaded = true;
@@ -547,19 +675,18 @@ Vue.component('lms-iframe-dialog', {
         bus.$on('iframe-showMessage', function(msg) {
             this.snackbar={show:true, msg:msg};
         }.bind(this));
+        bus.$on('iframe-hideMenu', function() {
+            this.showMenu = false;
+        }.bind(this));
         bus.$on('noPlayers', function() {
             this.close();
         }.bind(this));
-        bus.$on('esc', function() {
-            if (this.showMenu) {
-                this.showMenu = false;
-            } else if (this.$store.state.activeDialog == 'iframe') {
-                this.close();
-            }
+        bus.$on('closeMenu', function() {
+            this.showMenu = false;
         }.bind(this));
-        bus.$on('hideMenu', function(name) {
-            if (name=='iframe') {
-                this.showMenu= false;
+        bus.$on('closeDialog', function(dlg) {
+            if (dlg == 'iframe') {
+                this.close();
             }
         }.bind(this));
         bus.$on('windowHeightChanged', function() {
@@ -617,6 +744,25 @@ Vue.component('lms-iframe-dialog', {
         },
         doCustomAction(action, player) {
             performCustomAction(action, player);
+        },
+        openChoiceMenu(event) {
+            this.choiceMenu={show:true, x:event.clientX};
+        },
+        setPlayer(player) {
+            if (player.id==this.playerId) {
+                return;
+            }
+            let parts = this.title.split(SEPARATOR);
+            parts[1]=player.name;
+            this.title=parts.join(SEPARATOR);
+            this.src = this.src.replace(this.playerId, player.id);
+            this.show = true;
+            this.showMenu = false;
+            this.choiceMenu = {show:false, x:this.choiceMenu.x}
+            this.loaded = false;
+            this.history = [];
+            this.textCol = getComputedStyle(document.documentElement).getPropertyValue('--text-color').substring(1);
+            this.playerId = player.id;
         }
     },
     computed: {
@@ -628,6 +774,12 @@ Vue.component('lms-iframe-dialog', {
         },
         homeButton() {
             return this.$store.state.homeButton
+        },
+        players() {
+            return this.$store.state.players
+        },
+        numPlayers() {
+            return this.$store.state.players ? this.$store.state.players.length : 0
         }
     },
     filters: {
@@ -642,6 +794,9 @@ Vue.component('lms-iframe-dialog', {
         'showMenu': function(val) {
             iframeMenuOpen = val;
             this.$store.commit('menuVisible', {name:'iframe', shown:val});
+        },
+        'choiceMenu.show': function(val) {
+            this.$store.commit('menuVisible', {name:'iframe-choice', shown:val});
         }
     }
 })

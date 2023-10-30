@@ -95,7 +95,7 @@ function download(item, command, albumartist) {
                                     : undefined!=albumartist
                                         ? albumartist
                                         : undefined!=item.compilation && 1==parseInt(item.compilation)
-                                            ? lmsOptions.variousArtistsString
+                                            ? LMS_VA_STRING
                                             : item.artist;
                         tracks.push({id: item.id,
                             title: item.title,
@@ -199,8 +199,8 @@ Vue.component('lms-downloadstatus', {
         bus.$on('downloadstatus.open', function() {
             this.show = true;
         }.bind(this));
-        bus.$on('esc', function() {
-            if (this.$store.state.activeDialog == 'downloadstatus') {
+        bus.$on('closeDialog', function(dlg) {
+            if (dlg == 'downloadstatus') {
                 this.close();
             }
         }.bind(this));

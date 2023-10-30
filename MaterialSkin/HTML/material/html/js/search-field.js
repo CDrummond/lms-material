@@ -22,21 +22,21 @@ function buildSearchResp(results) {
         total+=numItems;
         if (1==results[i].command.cat) {
             filter = FILTER_PREFIX+"artist";
-            items.push({title: i18np("1 Artist", "%1 Artists", titleParam), id:filter, header:true, hidesub:true,
+            items.push({title: i18n("Artists") + " ("+titleParam+")", id:filter, header:true, hidesub:true,
                         allItems: all, subtitle: i18np("1 Artist", "%1 Artists", numItems)});
         } else if (2==results[i].command.cat) {
             filter = FILTER_PREFIX+"album";
-            items.push({title: i18np("1 Album", "%1 Albums", titleParam), id:filter, header:true, hidesub:true,
+            items.push({title: i18n("Albums", titleParam) + " ("+titleParam+")", id:filter, header:true, hidesub:true,
                         allItems: all, subtitle: i18np("1 Album", "%1 Albums", numItems),
                         menu:[PLAY_ALL_ACTION, INSERT_ALL_ACTION, ADD_ALL_ACTION]});
         } else if (3==results[i].command.cat) {
             filter = FILTER_PREFIX+"track";
-            items.push({title: i18np("1 Track", "%1 Tracks", titleParam), id:filter, header:true, hidesub:true,
+            items.push({title: i18n("Tracks", titleParam) + " ("+titleParam+")", id:filter, header:true, hidesub:true,
                         allItems: all, subtitle: i18np("1 Track", "%1 Tracks", numItems),
                         menu:queryParams.party ? [] : [PLAY_ALL_ACTION, INSERT_ALL_ACTION, ADD_ALL_ACTION]});
         } else if (4==results[i].command.cat) {
             filter = FILTER_PREFIX+"playlist";
-            items.push({title: i18np("1 Playlist", "%1 Playlists", titleParam), id:filter, header:true, hidesub:true,
+            items.push({title: i18n("Playlists") + " ("+titleParam+")", id:filter, header:true, hidesub:true,
                         allItems: all, subtitle: i18np("1 Playlist", "%1 Playlists", numItems),
                         menu:[PLAY_ALL_ACTION, INSERT_ALL_ACTION, ADD_ALL_ACTION]});
         } else if (5==results[i].command.cat) {
@@ -134,11 +134,11 @@ Vue.component('lms-search-field', {
                 this.commands=[];
                 if (!queryParams.party) {
                     this.commands.push({cat:1, command:["artists"], params:["tags:s", "search:"+this.str]});
-                    this.commands.push({cat:2, command:["albums"], params:[(lmsOptions.showAllArtists ? ALBUM_TAGS_ALL_ARTISTS : ALBUM_TAGS)+(lmsOptions.serviceEmblems ? "E" : ""), "sort:album", "search:"+this.str]});
+                    this.commands.push({cat:2, command:["albums"], params:[(lmsOptions.showAllArtists ? ALBUM_TAGS_ALL_ARTISTS : ALBUM_TAGS)+(LMS_SRV_EMBLEM ? "E" : ""), "sort:album", "search:"+this.str]});
                 }
-                this.commands.push({cat:3, command:["tracks"], params:[SEARCH_TRACK_TAGS+"elcy"+
+                this.commands.push({cat:3, command:["tracks"], params:[TRACK_TAGS+"elcy"+
                                                                        (this.$store.state.showRating ? "R" : "")+
-                                                                       (lmsOptions.serviceEmblems ? "E" : "")+
+                                                                       (LMS_SRV_EMBLEM ? "E" : "")+
                                                                        (lmsOptions.techInfo ? TECH_INFO_TAGS : ""), "search:"+this.str]});
                 if (!queryParams.party) {
                     this.commands.push({cat:4, command:["playlists"], params:["tags:su", "search:"+this.str]});
@@ -174,7 +174,7 @@ Vue.component('lms-search-field', {
                 let command = this.commands.shift();
                 lmsList(5==command.cat && this.$store.state.player ? this.$store.state.player.id : "", command.command, command.params, 5==command.cat ? 1 : 0, LMS_SEARCH_LIMIT, false, seachReqId).then(({data}) => {
                     if (data.id == seachReqId && this.searching) {
-                        let resp = parseBrowseResp(data, undefined, { artistImages: setLocalStorageVal('artistImages', true), isSearch:true});
+                        let resp = parseBrowseResp(data, undefined, {isSearch:true});
                         if (5==command.cat) {
                             // Only want to show music sources...
                             let items = resp.items;

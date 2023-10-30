@@ -117,8 +117,8 @@ Vue.component('lms-groupvolume', {
         bus.$on('noPlayers', function() {
             this.close();
         }.bind(this));
-        bus.$on('esc', function() {
-            if (this.$store.state.activeDialog == 'groupvolume') {
+        bus.$on('closeDialog', function(dlg) {
+            if (dlg == 'groupvolume') {
                 this.close();
             }
         }.bind(this));

@@ -89,6 +89,7 @@ const GRID_MAX_WIDTH = 208; // 183
 const GRID_STEP = 5;
 const GRID_OTHER = {command:['other']};
 
+const AUTO_THEME = "auto";
 const MAX_GRID_TEXT_LEN = 80;
 const TERM_PLACEHOLDER = "__TAGGEDINPUT__";
 const ALBUM_SORT_PLACEHOLDER  = "AS";
@@ -116,12 +117,11 @@ const RANDOM_MIX_ID = MUSIC_ID_PREFIX+"randomMix";
 const ARTIST_TAGS = "tags:s";
 const ALBUM_TAGS = "tags:ajlqsyKS";
 const ALBUM_TAGS_ALL_ARTISTS = "tags:aajlqsyKSS";
-const ARTIST_ALBUM_TAGS = "tags:jlqsyKS";
+const ARTIST_ALBUM_TAGS = "tags:aajlqswyKRSSW";
 const TRACK_TAGS = "tags:digkstuAACS";
 const TECH_INFO_TAGS = "orITY";
-const SEARCH_TRACK_TAGS = "tags:dikstuAC";
 const PLAYLIST_TAGS = "tags:suxE";
-const PLAYLIST_TRACK_TAGS = "tags:acdgltIKS";
+const PLAYLIST_TRACK_TAGS = "tags:acdeglstyAKS";
 const SORT_KEY = "sort:";
 const FILTER_PREFIX = "filter:";
 const SECTION_APPS = 1;
@@ -153,10 +153,14 @@ const IFRAME_HOME_NAVIGATES_BROWSE_HOME = 1
 const IFRAME_HOME_CLOSES_DIALOGS = 2
 
 const SKIN_GENRE_TAGS = ['composer', 'conductor', 'band'];
-const SKIN_BOOL_OPTS = ['showComposer', 'showConductor', 'showBand', 'showAllArtists', 'artistFirst', IS_IOS ? 'xx' : 'allowDownload', 'showComment'];
+const SKIN_BOOL_OPTS = ['showComposer', 'showConductor', 'showBand', 'showAllArtists', 'artistFirst', IS_IOS ? 'xx' : 'allowDownload', 'showComment', 'noArtistFilter'];
 const SKIN_INT_OPTS = ['respectFixedVol', 'commentAsDiscTitle', 'pagedBatchSize'];
 
 const MSK_REV_SORT_OPT = "msk-revsort:1";
 
 const MIN_TIME_BETWEEN_VOL_UPDATES = 150;
 const COLOR_FROM_COVER = 'from-cover';
+
+const MBAR_NONE = 0;
+const MBAR_THIN = 1;
+const MBAR_THICK = 2;

@@ -23,6 +23,26 @@
     "name":"bandcamp",
     "bgnd":"#61929c",
     "color":"#fff"
+  },
+  "bbc":{
+    "name":"bbc-sounds",
+    "bgnd":"#fd4900",
+    "color":"#fff"
+  },
+  "pandora":{
+    "name":"pandora",
+    "bgnd":"#356dfe",
+    "color":"#fff"
+  },
+  "youtube":{
+    "name":"youtube",
+    "bgnd":"#e61d23",
+    "color":"#fff"
+  },
+  "radioparadise":{
+    "name":"radioparadise",
+    "bgnd":"#963a21",
+    "color":"#fff"
   }
 }
 

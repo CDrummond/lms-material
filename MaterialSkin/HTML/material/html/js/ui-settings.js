@@ -68,6 +68,11 @@ Vue.component('lms-ui-settings', {
     <v-divider v-if="allowLayoutAdjust"></v-divider>
 
     <v-list-tile>
+     <v-select :items="mobileBars" :label="i18n('Mobile layout now-playing bar')" v-model="mobileBar" item-text="label" item-value="key"></v-select>
+    </v-list-tile>
+    <v-divider></v-divider>
+
+    <v-list-tile>
      <v-select :items="fontSizes" :label="i18n('Font size')" v-model="fontSize" item-text="label" item-value="key"></v-select>
     </v-list-tile>
     <v-divider></v-divider>
@@ -110,15 +115,6 @@ Vue.component('lms-ui-settings', {
     <v-divider></v-divider>
 
     <v-list-tile>
-     <v-list-tile-content @click="showArtwork = !showArtwork" class="switch-label">
-      <v-list-tile-title>{{i18n('Show artwork')}}</v-list-tile-title>
-      <v-list-tile-sub-title>{{i18n("Display covers, artist images, station logos, etc.")}}</v-list-tile-title>
-     </v-list-tile-content>
-     <v-list-tile-action><m3-switch v-model="showArtwork"></m3-switch></v-list-tile-action>
-    </v-list-tile>
-    <v-divider></v-divider>
-
-    <v-list-tile>
      <v-list-tile-content @click="roundCovers = !roundCovers" class="switch-label">
       <v-list-tile-title>{{i18n('Round covers')}}</v-list-tile-title>
       <v-list-tile-sub-title>{{i18n('Round the corners of cover-art, etc.')}}</v-list-tile-sub-title>
@@ -130,7 +126,7 @@ Vue.component('lms-ui-settings', {
     <v-list-tile v-if="LMS_STATS_ENABLED">
      <v-list-tile-content @click="showRating = !showRating" class="switch-label">
       <v-list-tile-title>{{i18n('Show rating')}}</v-list-tile-title>
-      <v-list-tile-sub-title>{{i18n('Display rating stars.')}}{{undefined==ratingsPlugin  ? (" "+i18n("NOTE: Changing ratings requires an additional plugin.")) : ""}}</v-list-tile-sub-title>
+      <v-list-tile-sub-title>{{i18n('Display rating stars.')}}{{undefined==LMS_P_RP  ? (" "+i18n("NOTE: Changing ratings requires an additional plugin.")) : ""}}</v-list-tile-sub-title>
      </v-list-tile-content>
      <v-list-tile-action><m3-switch v-model="showRating"></m3-switch></v-list-tile-action>
     </v-list-tile>
@@ -189,6 +185,20 @@ Vue.component('lms-ui-settings', {
     <v-divider></v-divider>
 
     <v-list-tile>
+     <v-list-tile-content>
+      <v-list-tile-title>{{i18n('Default background')}}</v-list-tile-title>
+      <v-list-tile-sub-title>{{i18n('Select background to use when not using artist, or album, image.')}}</v-list-tile-sub-title>
+      <div class="thumbnail-grid">
+       <template v-for="(item, index) in backdrops">
+        <div v-if="item==''" @click="browseDefBackdrop=item" class="thumbnail none" v-bind:class="{'selected-thumbnail':item==browseDefBackdrop}">{{i18n('None')}}</div>
+        <img v-else @click="browseDefBackdrop=item" :src="'html/backdrops/'+item+'_tn.jpg'" class="thumbnail" v-bind:class="{'selected-thumbnail':item==browseDefBackdrop}"></img>
+       </template>
+      </div>
+     </v-list-tile-content>
+    </v-list-tile>
+    <v-divider></v-divider>
+
+    <v-list-tile>
     <v-list-tile-content @click="browseTechInfo = !browseTechInfo" class="switch-label">
      <v-list-tile-title>{{i18n('Display technical info')}}</v-list-tile-title>
      <v-list-tile-sub-title>{{i18n('Show file type, bitrate, etc.')}}</v-list-tile-sub-title>
@@ -203,15 +213,6 @@ Vue.component('lms-ui-settings', {
       <v-list-tile-sub-title>{{i18n("When possible, allow the grid view to show larger covers.")}}</v-list-tile-title>
      </v-list-tile-content>
      <v-list-tile-action><m3-switch v-model="largeCovers"></m3-switch></v-list-tile-action>
-    </v-list-tile>
-    <v-divider></v-divider>
-
-    <v-list-tile>
-     <v-list-tile-content @click="sortHome = !sortHome" class="switch-label">
-      <v-list-tile-title>{{i18n('Sort home screen')}}</v-list-tile-title>
-      <v-list-tile-sub-title>{{i18n('Automatically sort items on the home screen.')}}</v-list-tile-sub-title>
-     </v-list-tile-content>
-     <v-list-tile-action><m3-switch v-model="sortHome"></m3-switch></v-list-tile-action>
     </v-list-tile>
     <v-divider></v-divider>
 
@@ -262,15 +263,6 @@ Vue.component('lms-ui-settings', {
 
     <v-list-tile>
      <v-select :items="skipSecondsOptions" :label="i18n('Previous/next long-press skip')" v-model="skipSeconds" item-text="label" item-value="value"></v-select>
-    </v-list-tile>
-    <v-divider></v-divider>
-
-    <v-list-tile>
-     <v-list-tile-content @click="stopButton = !stopButton" class="switch-label">
-      <v-list-tile-title>{{i18n('Stop button')}}</v-list-tile-title>
-      <v-list-tile-sub-title>{{i18n('Show a stop button next to the play/pause button.')}}</v-list-tile-sub-title>
-     </v-list-tile-content>
-     <v-list-tile-action><m3-switch v-model="stopButton"></m3-switch></v-list-tile-action>
     </v-list-tile>
     <v-divider></v-divider>
 
@@ -347,10 +339,10 @@ Vue.component('lms-ui-settings', {
      <v-list-tile-action><m3-switch v-model="queueBackdrop"></m3-switch></v-list-tile-action>
     </v-list-tile>
 
-    <div class="dialog-padding" v-if="infoPlugin"></div>
-    <v-header class="dialog-section-header" v-if="infoPlugin">{{i18n('Song Information')}}</v-header>
+    <div class="dialog-padding" v-if="LMS_P_MAI"></div>
+    <v-header class="dialog-section-header" v-if="LMS_P_MAI">{{i18n('Song Information')}}</v-header>
 
-    <v-list-tile v-if="infoPlugin">
+    <v-list-tile v-if="LMS_P_MAI">
      <v-list-tile-content @click="infoBackdrop = !infoBackdrop" class="switch-label">
       <v-list-tile-title>{{i18n('Draw background')}}</v-list-tile-title>
       <v-list-tile-sub-title>{{i18n('Use cover of current track as background.')}}</v-list-tile-sub-title>
@@ -407,8 +399,9 @@ Vue.component('lms-ui-settings', {
             letterOverlay:false,
             sortFavorites:true,
             autoScrollQueue:true,
-            stopButton:false,
             browseBackdrop:true,
+            browseDefBackdrop:'010',
+            backdrops: [],
             queueBackdrop:true,
             nowPlayingBackdrop:true,
             infoBackdrop:true,
@@ -422,9 +415,10 @@ Vue.component('lms-ui-settings', {
             swipeChangeTrack:false,
             keyboardControl:true,
             queueThreeLines:true,
-            showArtwork:false,
             layout: null,
             layoutItems: [],
+            mobileBar: MBAR_THIN,
+            mobileBars : [],
             volumeSteps: [ { value: 1,  label: "1%"},
                            { value: 2,  label: "2%"},
                            { value: 5,  label: "5%"},
@@ -434,7 +428,6 @@ Vue.component('lms-ui-settings', {
             skipSecondsOptions: [ ],
             skipSeconds: 30,
             allowLayoutAdjust: window.location.href.indexOf('?layout=')<0 && window.location.href.indexOf('&layout=')<0,
-            sortHome: IS_IPHONE,
             showItems: [ ],
             hasPassword: false,
             password: undefined,
@@ -457,14 +450,8 @@ Vue.component('lms-ui-settings', {
         }
     },
     computed: {
-        infoPlugin () {
-            return this.$store.state.infoPlugin
-        },
         darkUi() {
             return this.$store.state.darkUi
-        },
-        ratingsPlugin() {
-            return this.$store.state.ratingsPlugin
         },
         unlockAll() {
             return this.$store.state.unlockAll
@@ -557,20 +544,28 @@ Vue.component('lms-ui-settings', {
                 }
             }).catch(err => {
             });
+            lmsCommand("", ["material-skin", "backdrops"]).then(({data}) => {
+                this.backdrops = [''];
+                if (data && data.result && data.result.backdrops) {
+                    for (var i=0, list=data.result.backdrops, len=list.length; i<len; ++i) {
+                        this.backdrops.push(list[i].name);
+                    }
+                }
+                this.backdrops.sort();
+            }).catch(err => {
+            });
             this.show = true;
         }.bind(this));
-        bus.$on('esc', function() {
+        bus.$on('closeMenu', function() {
             if (this.showMenu) {
                 this.showMenu = false;
-            } else if (this.$store.state.activeDialog == 'browsemodes') {
-                this.browseModesDialog.show=false;
-            } else if (this.$store.state.activeDialog == 'uisettings') {
-                this.show = false;
             }
         }.bind(this));
-        bus.$on('hideMenu', function(name) {
-            if (name=='uisettings') {
-                this.showMenu = false;
+        bus.$on('closeDialog', function(dlg) {
+            if (dlg == 'browsemodes') {
+                this.browseModesDialog.show=false;
+            } else if (dlg == 'uisettings') {
+                this.show = false;
             }
         }.bind(this));
         bus.$on('langChanged', function() {
@@ -580,17 +575,18 @@ Vue.component('lms-ui-settings', {
     },
     methods: {
         readStore() {
-            let themeParts = this.$store.state.theme ? this.$store.state.theme.split('-') : ['dark'];
+            let themeParts = this.$store.state.chosenTheme ? this.$store.state.chosenTheme.split('-') : ['dark'];
             let variant = themeParts.length>1 && ('colored'==themeParts[themeParts.length-1] || 'standard'==themeParts[themeParts.length-1]) ? themeParts.pop() : 'standard';
             this.theme = themeParts.join('-');
             this.colorToolbars = 'colored'==variant;
             this.color = this.$store.state.color;
+            this.mobileBar = this.$store.state.mobileBar;
             this.roundCovers = this.$store.state.roundCovers;
             this.fontSize = this.$store.state.fontSize;
             this.listPadding = this.$store.state.listPadding;
             this.autoScrollQueue = this.$store.state.autoScrollQueue;
-            this.stopButton = this.$store.state.stopButton;
             this.browseBackdrop = this.$store.state.browseBackdrop;
+            this.browseDefBackdrop = this.$store.state.browseDefBackdrop;
             this.queueBackdrop = this.$store.state.queueBackdrop;
             this.nowPlayingBackdrop = this.$store.state.nowPlayingBackdrop;
             this.infoBackdrop = this.$store.state.infoBackdrop;
@@ -604,10 +600,8 @@ Vue.component('lms-ui-settings', {
             this.swipeChangeTrack = this.$store.state.swipeChangeTrack;
             this.keyboardControl = this.$store.state.keyboardControl;
             this.queueThreeLines = this.$store.state.queueThreeLines;
-            this.showArtwork = this.$store.state.showArtwork;
             this.letterOverlay=this.$store.state.letterOverlay;
             this.sortFavorites = this.$store.state.sortFavorites;
-            this.sortHome = this.$store.state.sortHome;
             this.skipSeconds = this.$store.state.skipSeconds;
             this.volumeStep = lmsOptions.volumeStep;
             this.showRating = this.$store.state.showRating;
@@ -617,21 +611,21 @@ Vue.component('lms-ui-settings', {
             this.powerButton = this.$store.state.powerButton;
             this.largeCovers = this.$store.state.largeCovers;
             this.mediaControls = this.$store.state.mediaControls;
-            var disabled=new Set(JSON.parse(getLocalStorageVal("disabledItems", JSON.stringify([TOP_CDPLAYER_ID, TOP_REMOTE_ID]))));
             this.showItems=[{id: TOP_MYMUSIC_ID, name:i18n("My Music"), show:!this.hidden.has(TOP_MYMUSIC_ID)},
                             {id: TOP_RADIO_ID, name:i18n("Radio"), show:!this.hidden.has(TOP_RADIO_ID)},
                             {id: TOP_FAVORITES_ID, name:i18n("Favorites"), show:!this.hidden.has(TOP_FAVORITES_ID)},
                             {id: TOP_APPS_ID, name:i18n("Apps"), show:!this.hidden.has(TOP_APPS_ID)},
                             {id: TOP_EXTRAS_ID, name:i18n("Extras"), show:!this.hidden.has(TOP_EXTRAS_ID)}];
-            if (!disabled.has(TOP_CDPLAYER_ID)) {
+            if (LMS_P_CD) {
                 this.showItems.push({id: TOP_CDPLAYER_ID, name:i18n("CD Player"), show:!this.hidden.has(TOP_CDPLAYER_ID)});
             }
-            if (!disabled.has(TOP_REMOTE_ID)) {
+            if (LMS_P_RM) {
                 this.showItems.push({id: TOP_REMOTE_ID, name:i18n("Remote Libraries"), show:!this.hidden.has(TOP_REMOTE_ID)});
             }
         },
         initItems() {
             this.themes=[
+                { key: AUTO_THEME, label:this.i18n('Automatic')},
                 { key:'light',  label:i18n('Light')},
                 { key:'dark',   label:i18n('Dark')},
                 { key:'darker', label:i18n('Darker')},
@@ -641,6 +635,11 @@ Vue.component('lms-ui-settings', {
                 { key:"auto",    label:i18n("Automatic")},
                 { key:"desktop", label:i18n("Use desktop layout")},
                 { key:"mobile",  label:i18n("Use mobile layout")}
+                ];
+            this.mobileBars=[
+                { key:MBAR_NONE, label:i18n("None")},
+                { key:MBAR_THIN, label:i18n("Thin (single line of text)")},
+                { key:MBAR_THICK, label:i18n("Thick (two lines of text)")}
                 ];
             this.skipSecondsOptions = [ { value: 5,  label: i18n("%1 seconds", 5) },
                                { value: 10, label: i18n("%1 seconds", 10)},
@@ -692,15 +691,15 @@ Vue.component('lms-ui-settings', {
             let settings = {
                       theme:this.theme+(this.colorToolbars ? '-colored' : ''),
                       color:this.color,
+                      mobileBar:this.mobileBar,
                       roundCovers:this.roundCovers,
                       fontSize:this.fontSize,
                       listPadding:this.listPadding,
                       autoScrollQueue:this.autoScrollQueue,
                       letterOverlay:this.letterOverlay,
                       sortFavorites:this.sortFavorites,
-                      sortHome:this.sortHome,
-                      stopButton:this.stopButton,
                       browseBackdrop:this.browseBackdrop,
+                      browseDefBackdrop:this.browseDefBackdrop,
                       queueBackdrop:this.queueBackdrop,
                       nowPlayingBackdrop:this.nowPlayingBackdrop,
                       infoBackdrop:this.infoBackdrop,
@@ -713,7 +712,6 @@ Vue.component('lms-ui-settings', {
                       swipeVolume:this.swipeVolume,
                       swipeChangeTrack:this.swipeChangeTrack,
                       keyboardControl:this.keyboardControl,
-                      showArtwork:this.showArtwork,
                       queueThreeLines:this.queueThreeLines,
                       volumeStep:this.volumeStep,
                       hidden:arrays ? Array.from(this.hiddenItems()) : this.hiddenItems(),
@@ -854,7 +852,7 @@ Vue.component('lms-ui-settings', {
                 list.push("F2"+SEPARATOR+i18n("Playing"));
                 list.push("F3"+SEPARATOR+i18n("Queue"));
             }
-            if (!queryParams.party && undefined!=this.$store.state.ratingsPlugin && this.$store.state.showRating) {
+            if (!queryParams.party && undefined!=LMS_P_RP && this.$store.state.showRating) {
                 list.push(shortcutStr("(N)", true)+SEPARATOR+i18n("Set rating (0..5)"));
             }
             bus.$emit('dlg.open', 'iteminfo', { list:list });

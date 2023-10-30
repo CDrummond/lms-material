@@ -127,11 +127,8 @@ Vue.component('lms-manage-players', {
           <v-list-tile-action v-if="player.playIcon && showAllButtons && isMainPlayer(player)" class="pmgr-btn pmgr-btn-control" v-bind:class="{'disabled':!player.hasTrack, 'dimmed':!player.ison}" @click="prevTrack(player)" :title="trans.prev + ' ('+player.name+')'">
            <v-btn icon><v-icon>skip_previous</v-icon></v-btn>
           </v-list-tile-action>
-          <v-list-tile-action v-if="player.playIcon && isMainPlayer(player)" class="pmgr-btn pmgr-btn-control" v-bind:class="{'disabled':!player.hasTrack, 'dimmed':!player.ison}" @click="playPause(player)" :title="(player.isplaying ? trans.pause : trans.play) + ' ('+player.name+')'">
+          <v-list-tile-action v-if="player.playIcon && isMainPlayer(player)" class="pmgr-btn pmgr-btn-control" v-bind:class="{'disabled':!player.hasTrack, 'dimmed':!player.ison}" v-longpress:stop="playPause" :id="index+'-pmgr-pp-btn'" :title="(player.isplaying ? trans.pause : trans.play) + ' ('+player.name+')'">
             <v-btn icon><v-icon>{{player.playIcon}}</v-icon></v-btn>
-          </v-list-tile-action>
-          <v-list-tile-action v-if="player.playIcon && showAllButtons && stopButton && isMainPlayer(player)" class="pmgr-btn pmgr-btn-control" @click="stop(player)" v-bind:class="{'disabled':!player.hasTrack, 'dimmed':!player.ison}" :title="trans.stop + ' ('+player.name+')'">
-           <v-btn icon><v-icon>stop</v-icon></v-btn>
           </v-list-tile-action>
           <v-list-tile-action v-if="player.playIcon && showAllButtons && isMainPlayer(player)" class="pmgr-btn pmgr-btn-control" @click="nextTrack(player)" v-bind:class="{'disabled':!player.hasTrack, 'dimmed':!player.ison}" :title="trans.next + ' ('+player.name+')'">
            <v-btn icon><v-icon>skip_next</v-icon></v-btn>
@@ -259,7 +256,7 @@ Vue.component('lms-manage-players', {
         }.bind(this));
         this.initItems();
 
-        bus.$on('esc', function() {
+        bus.$on('closeMenu', function() {
             // Try to ignore 'esc' if we were dragging, as use this to stop drag
             if (undefined!=this.dragEndTime && ((new Date().getTime()-this.dragEndTime)<=250)) {
                 return;
@@ -268,13 +265,14 @@ Vue.component('lms-manage-players', {
                 this.showMenu = false;
             } else if (this.menu.show) {
                 this.menu.show = false;
-            } else if (this.$store.state.activeDialog == 'manage') {
-                this.close();
             }
         }.bind(this));
-        bus.$on('hideMenu', function(name) {
-            if (name=='manage-menu') {
-                this.showMenu= false;
+        bus.$on('closeDialog', function(dlg) {
+            if (undefined!=this.dragEndTime && ((new Date().getTime()-this.dragEndTime)<=250)) {
+                return;
+            }
+            if (dlg == 'manage') {
+                this.close();
             }
         }.bind(this));
 
@@ -463,11 +461,20 @@ Vue.component('lms-manage-players', {
                 this.refreshPlayer(player);
             });
         },
-        playPause(player) {
-            if (!this.show || this.$store.state.visibleMenus.size>0 || !player.hasTrack) {
+        playPause(longPress, el) {
+            if (!this.show || this.$store.state.visibleMenus.size>0) {
                 return;
             }
-            lmsCommand(player.id, player.isplaying ? ['pause', '1'] : ['play']).then(({data}) => {
+            let idx = parseInt(el.id.split("-")[0]);
+            console.log(idx, this.players.length, longPress);
+            if (idx<0 || idx>this.players.length) {
+                return;
+            }
+            let player = this.players[idx];
+            if (longPress) {
+                bus.$emit('showMessage', i18n('Stop'), 500);
+            }
+            lmsCommand(player.id, longPress ? ['stop'] : player.isplaying ? ['pause', '1'] : ['play']).then(({data}) => {
                 this.refreshPlayer(player, true);
             });
         },
@@ -562,8 +569,7 @@ Vue.component('lms-manage-players', {
             }
             playerMap[player.id]={name:player.name, isgroup:player.isgroup, dvc:player.dvc};
 
-            player.playIcon = player.isplaying ? (this.$store.state.stopButton ? "pause" : "pause_circle_outline") :
-                                                 (this.$store.state.stopButton ? "play_arrow" : "play_circle_outline");
+            player.playIcon = player.isplaying ? "pause_circle_filled" : "play_circle_filled";
             player.hasTrack = true;
             if (player.current.title) {
                 if (player.current.artist) {
@@ -822,9 +828,6 @@ Vue.component('lms-manage-players', {
         },
         otherPlayers () {
             return this.$store.state.otherPlayers
-        },
-        stopButton() {
-            return this.$store.state.stopButton
         },
         multipleStandardPlayers () {
             if (this.$store.state.players) {

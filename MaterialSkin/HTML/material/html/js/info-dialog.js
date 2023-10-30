@@ -8,13 +8,13 @@
 
 Vue.component('lms-info-dialog', {
     template: `
-<v-dialog v-model="show" v-if="show" persistent scrollable width="600">
+<v-dialog v-model="show" v-if="show" scrollable width="600" style="z-index:10">
  <v-card>
   <v-card-text>
   <template v-for="(item, index) in details">
    <v-header v-if="item.title" class="item-info-header">{{item.title}}</v-header>
    <p v-if="item.link" class="item-info-text"><a class="lms-link" :href="item.text" target="_blank">{{item.text}}</a></p>
-   <p v-else class="item-info-text">{{item.text}}</p>
+   <p v-else class="item-info-text" v-html="item.text"></p>
    </template>
   </v-card-text>
   <v-card-actions>
@@ -66,8 +66,8 @@ Vue.component('lms-info-dialog', {
             }
             this.show=true
         }.bind(this));
-        bus.$on('esc', function() {
-            if (this.$store.state.activeDialog == 'iteminfo') {
+        bus.$on('closeDialog', function(dlg) {
+            if (dlg == 'iteminfo') {
                 this.show=false;
             }
         }.bind(this));

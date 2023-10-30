@@ -15,7 +15,7 @@ var app = new Vue({
                             manage: false, rndmix: false, favorite: false, rating: false, sleep: false,
                             iteminfo: false, iframe: false, dstm: false, savequeue: false, icon: false, prompt:false,
                             addtoplaylist: false, file: false, groupvolume: false, advancedsearch: false, downloadstatus:false,
-                            notifications: false, gallery: false, choice: false, playersettingsplugin: false
+                            gallery: false, choice: false, playersettingsplugin: false
                           },
                  loaded: false }
     },
@@ -65,74 +65,71 @@ var app = new Vue({
         initEmblems();
         initCustomActions();
         initTrackSources();
-        lmsCommand("", ["pref", "language", "?"]).then(({data}) => {
-            if (data && data.result && data.result._p2) {
-                // Ensure LMS's lang is <lowercase>[-<uppercase>]
-                var lang = data.result._p2;
-                let parts = lang.split('_'); // lms uses (e.g.) en_gb, want en-GB
+
+        // Ensure LMS's lang is <lowercase>[-<uppercase>]
+        var lang = ""+LMS_LANG;
+        let parts = lang.split('_'); // lms uses (e.g.) en_gb, want en-GB
+        if (parts.length>1) {
+            lang = parts[0].toLowerCase()+'-'+parts[1].toUpperCase();
+        } else {
+            lang = lang.toLowerCase();
+        }
+
+        if (lang == '?') {
+            lang = 'en';
+        }
+        if (lang == 'en') {
+            // LMS is set to 'en'. Check if browser is (e.g.) 'en-gb', and if so use that as the
+            // language for Material. We only consider 'en*' here - so that LMS 'en' is not mixed
+            // with browser (e.g.) 'de'
+            var browserLang = window.navigator.userLanguage || window.navigator.language;
+            if (undefined!=browserLang) {
+                let parts = browserLang.split('-');
                 if (parts.length>1) {
-                    lang = parts[0].toLowerCase()+'-'+parts[1].toUpperCase();
+                    browserLang = parts[0].toLowerCase()+'-'+parts[1].toUpperCase();
                 } else {
-                    lang = lang.toLowerCase();
+                    browserLang = browserLang.toLowerCase();
                 }
-
-                if (lang == '?') {
-                    lang = 'en';
-                }
-                if (lang == 'en') {
-                    // LMS is set to 'en'. Check if browser is (e.g.) 'en-gb', and if so use that as the
-                    // language for Material. We only consider 'en*' here - so that LMS 'en' is not mixed
-                    // with browser (e.g.) 'de'
-                    var browserLang = window.navigator.userLanguage || window.navigator.language;
-                    if (undefined!=browserLang) {
-                        let parts = browserLang.split('-');
-                        if (parts.length>1) {
-                            browserLang = parts[0].toLowerCase()+'-'+parts[1].toUpperCase();
-                        } else {
-                            browserLang = browserLang.toLowerCase();
-                        }
-                        if (browserLang.startsWith('en')) {
-                            lang = browserLang;
-                        }
-                    }
-                }
-
-                this.$store.commit('setLang', lang);
-                if (lang == 'en' || lang == 'en-US') {
-                    // All strings are en-US by default, so remove any previous translation
-                    // from storage.
-                    if (storedTrans!=undefined) {
-                        removeLocalStorage('translation');
-                        removeLocalStorage('lang');
-                        setTranslation(undefined);
-                        bus.$emit('langChanged');
-                        lmsOptions.lang = undefined;
-                    }
-                } else {
-                    lmsOptions.lang = lang;
-
-                    // Get translation files - these are all lowercase
-                    let lowerLang = lang.toLowerCase();
-                    if (!LMS_SKIN_LANGUAGES.has(lowerLang)) {
-                        let mainLang = lowerLang.substr(0, 2);
-                        if (LMS_SKIN_LANGUAGES.has(mainLang)) {
-                            lowerLang = mainLang;
-                        }
-                    }
-                    if (getLocalStorageVal("lang", "")!=(lowerLang+"@"+LMS_MATERIAL_REVISION)) {
-                        axios.get("html/lang/"+lowerLang+".json?r=" + LMS_MATERIAL_REVISION).then(function (resp) {
-                            var trans = eval(resp.data);
-                            setLocalStorageVal('translation', JSON.stringify(trans));
-                            setLocalStorageVal('lang', lowerLang+"@"+LMS_MATERIAL_REVISION);
-                            setTranslation(trans);
-                            bus.$emit('langChanged');
-                        }).catch(err => {
-                            window.console.error(err);
-                        });
-                    }
+                if (browserLang.startsWith('en')) {
+                    lang = browserLang;
                 }
             }
-        });
+        }
+
+        this.$store.commit('setLang', lang);
+        if (lang == 'en' || lang == 'en-US') {
+            // All strings are en-US by default, so remove any previous translation
+            // from storage.
+            if (storedTrans!=undefined) {
+                removeLocalStorage('translation');
+                removeLocalStorage('lang');
+                setTranslation(undefined);
+                bus.$emit('langChanged');
+                lmsOptions.lang = undefined;
+            }
+        } else {
+            lmsOptions.lang = lang;
+
+            // Get translation files - these are all lowercase
+            let lowerLang = lang.toLowerCase();
+            if (!LMS_SKIN_LANGUAGES.has(lowerLang)) {
+                let mainLang = lowerLang.substr(0, 2);
+                if (LMS_SKIN_LANGUAGES.has(mainLang)) {
+                    lowerLang = mainLang;
+                }
+            }
+            if (getLocalStorageVal("lang", "")!=(lowerLang+"@"+LMS_MATERIAL_REVISION)) {
+                axios.get("html/lang/"+lowerLang+".json?r=" + LMS_MATERIAL_REVISION).then(function (resp) {
+                    var trans = eval(resp.data);
+                    setLocalStorageVal('translation', JSON.stringify(trans));
+                    setLocalStorageVal('lang', lowerLang+"@"+LMS_MATERIAL_REVISION);
+                    setTranslation(trans);
+                    bus.$emit('langChanged');
+                }).catch(err => {
+                    window.console.error(err);
+                });
+            }
+        }
 
         lmsOptions.conductorGenres = new Set(["Classical", "Avant-Garde", "Baroque", "Chamber Music", "Chant", "Choral", "Classical Crossover",
                                               "Early Music", "High Classical", "Impressionist", "Medieval", "Minimalism","Modern Composition",
@@ -170,11 +167,14 @@ var app = new Vue({
                     lmsOptions.allowDownload = false;
                     setLocalStorageVal('allowDownload', false);
                 }
+                if (undefined!=data.result['releaseTypeOrder']) {
+                    let arr = splitString(data.result['releaseTypeOrder'].split("\r").join("").split("\n").join(","));
+                    lmsOptions.releaseTypeOrder = arr.length>0 ? arr : undefined;
+                }
             }
         });
 
         setTimeout(function () {
-            bus.$emit('checkNotifications');
             this.loaded = true;
         }.bind(this), 500);
 
@@ -297,11 +297,20 @@ var app = new Vue({
             document.attachEvent('onclick', this.clickListener);
         }
 
+        window.matchMedia('(prefers-color-scheme: light)').addEventListener('change', () => {
+            if (this.$store.state.chosenTheme.startsWith(AUTO_THEME)) {
+                this.$store.commit('toggleDarkLight');
+            }
+        }, false);
+
         bindKey('backspace');
         bus.$on('keyboard', function(key, modifier) {
             if (!modifier && 'backspace'==key) {
                 bus.$emit('esc');
             }
+        }.bind(this));
+        bus.$on('esc', function() {
+            this.handleEsc();
         }.bind(this));
 
         bus.$on('dlg.open', function(name, a, b, c, d, e, f, g, h) {
@@ -344,6 +353,9 @@ var app = new Vue({
         },
         desktopLayout() {
             return this.$store.state.desktopLayout
+        },
+        mobileBar() {
+            return this.$store.state.mobileBar
         },
         showQueue() {
             return this.$store.state.showQueue
@@ -499,6 +511,27 @@ var app = new Vue({
                     }
                 }
             }
+        },
+        handleEsc() {
+            // Can receive 'esc' 120ish milliseconds after dialog was closed with 'esc' - so filter out
+            if (undefined!=this.$store.state.lastDialogClose && (new Date().getTime()-this.$store.state.lastDialogClose)<=250) {
+                return;
+            }
+            if (this.$store.state.visibleMenus.size>0) {
+                bus.$emit('closeMenu');
+                return;
+            }
+            // Hide queue if visible, unpinned, and no current dialog or current dialog is info-dialog
+            if (this.$store.state.desktopLayout && !this.$store.state.pinQueue && this.$store.state.showQueue &&
+                (undefined==this.$store.state.activeDialog || 'info-dialog'==this.$store.state.activeDialog)) {
+                this.$store.commit('setShowQueue', false);
+                return;
+            }
+            if (undefined!=this.$store.state.activeDialog) {
+                bus.$emit('closeDialog', this.$store.state.activeDialog);
+                return;
+            }
+            bus.$emit('escPressed');
         }
     },
     store,

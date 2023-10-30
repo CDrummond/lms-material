@@ -316,8 +316,8 @@ Vue.component('lms-advancedsearch-dialog', {
             this.show = true;
             focusEntry(this);
         }.bind(this));
-        bus.$on('esc', function() {
-            if (this.$store.state.activeDialog == 'advancedsearch') {
+        bus.$on('closeDialog', function(dlg) {
+            if (dlg == 'advancedsearch') {
                 this.close();
             }
         }.bind(this));

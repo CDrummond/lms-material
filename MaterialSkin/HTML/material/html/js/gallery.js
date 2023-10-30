@@ -71,8 +71,8 @@ var lmsGallery = Vue.component("lms-gallery", {
             this.gallery.listen('close', function() { setTimeout(function () { galleryInst.$store.commit('dialogOpen', {name:'gallery', shown:false}); galleryInst.isNowPlaying = false; }, 500); });
             
         }.bind(this));
-        bus.$on('esc', function() {
-            if (this.$store.state.activeDialog == 'gallery') {
+        bus.$on('closeDialog', function(dlg) {
+            if (dlg == 'gallery') {
                 this.gallery.close();
             }
         }.bind(this));

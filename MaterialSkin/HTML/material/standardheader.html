@@ -17,7 +17,10 @@
 <script>
  let theme = window.localStorage.getItem("lms-material::theme");
  if (undefined==theme) {
-  theme='dark';
+   theme = 'dark';
+ } else if(theme=='auto') {
+   const prefersLight = window.matchMedia && window.matchMedia('(prefers-color-scheme: light)').matches;
+   theme = prefersLight ? 'light' : 'darker';
  }
  let t = theme.split('-');
  let variant = t.length>1 && ('colored'==t[t.length-1] || 'standard'==t[t.length-1]) ? t.pop() : 'standard';

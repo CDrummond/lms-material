@@ -159,8 +159,8 @@ Vue.component('lms-randommix', {
         bus.$on('noPlayers', function() {
             this.show=false;
         }.bind(this));
-        bus.$on('esc', function() {
-            if (this.$store.state.activeDialog == 'rndmix') {
+        bus.$on('closeDialog', function(dlg) {
+            if (dlg == 'rndmix') {
                 this.show=false;
             }
         }.bind(this));

@@ -94,8 +94,8 @@ Vue.component('lms-player-settings-plugin', {
         bus.$on('noPlayers', function() {
             this.show=false;
         }.bind(this));
-        bus.$on('esc', function() {
-            if (this.$store.state.activeDialog == 'playersettingsplugin') {
+        bus.$on('closeDialog', function(dlg) {
+            if (dlg == 'playersettingsplugin') {
                 this.close();
             }
         }.bind(this));

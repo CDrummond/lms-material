@@ -41,9 +41,6 @@ my $serverprefs = preferences('server');
 my $skinMgr;
 my $listOfTranslations = "";
 
-my %mskNotifications = ();
-$mskNotifications{'notifications'} = [];
-
 my $MAX_ADV_SEARCH_RESULTS = 1000;
 my $DESKTOP_URL_PARSER_RE = qr{^desktop$}i;
 my $MINI_URL_PARSER_RE = qr{^mini$}i;
@@ -112,7 +109,9 @@ sub initPlugin {
         allowDownload => '0',
         commentAsDiscTitle => '0',
         showComment => '0',
-        pagedBatchSize => lmsVersion()>=80400 ? 250 : 100
+        pagedBatchSize => lmsVersion()>=80400 ? 250 : 100,
+        noArtistFilter => '1',
+        releaseTypeOrder => ''
     });
 
     if (main::WEBUI) {
@@ -232,6 +231,32 @@ sub skinLanguages {
     return $listOfTranslations;
 }
 
+sub readIntPref {
+    my $class = shift;
+    my $scope = shift;
+    my $key = shift;
+    my $val = shift;
+    my $prfs = $scope eq "server" ? $serverprefs : preferences($scope);
+    eval { $val = int($prfs->get($key)); };
+    return $val;
+}
+
+sub readStringPref {
+    my $class = shift;
+    my $scope = shift;
+    my $key = shift;
+    my $def = shift;
+    my $prfs = $scope eq "server" ? $serverprefs : preferences($scope);
+    my $prefval = $prfs->get($key);
+    if (!defined $prefval) {
+        return $def;
+    }
+    if ($prefval eq "") {
+        return $def;
+    }
+    return $prefval;
+}
+
 sub initCLI {
     #                                                                      |requires Client
     #                                                                      |  |is a Query
@@ -348,9 +373,9 @@ sub _cliCommand {
     my $cmd = $request->getParam('_cmd');
     if ($request->paramUndefinedOrNotOneOf($cmd, ['prefs', 'info', 'transferqueue', 'delete-favorite', 'map', 'delete-podcast',
                                                   'plugins', 'plugins-status', 'plugins-update', 'extras', 'delete-vlib', 'pass-isset',
-                                                  'pass-check', 'browsemodes', 'geturl', 'command', 'scantypes', 'server', 'themes',
+                                                  'pass-check', 'browsemodes', 'geturl', 'command', 'scantypes', 'server', 'themes', 'backdrops',
                                                   'playericons', 'activeplayers', 'urls', 'adv-search', 'adv-search-params', 'protocols',
-                                                  'send-notif', 'get-notifs', 'players-extra-info', 'sort-playlist', 'mixer']) ) {
+                                                  'players-extra-info', 'sort-playlist', 'mixer']) ) {
         $request->setStatusBadParams();
         return;
     }
@@ -369,6 +394,8 @@ sub _cliCommand {
         $request->addResult('commentAsDiscTitle', $prefs->get('commentAsDiscTitle'));
         $request->addResult('showComment', $prefs->get('showComment'));
         $request->addResult('pagedBatchSize', $prefs->get('pagedBatchSize'));
+        $request->addResult('noArtistFilter', $prefs->get('noArtistFilter'));
+        $request->addResult('releaseTypeOrder', $prefs->get('releaseTypeOrder'));
         $request->setStatusDone();
         return;
     }
@@ -929,6 +956,29 @@ sub _cliCommand {
         return;
     }
 
+    if ($cmd eq 'backdrops') {
+        my $cnt = 0;
+        my $path = dirname(__FILE__) . "/HTML/material/html/backdrops/";
+        if (-d $path) {
+            opendir DIR, $path;
+            my @items = readdir(DIR);
+            close DIR;
+            foreach my $name (@items) {
+                if (-f $path . "/" . $name ) {
+                    $name =~ s/\.jpg//i;
+                    if (rindex($name, '_tn')==-1) {
+                        if (-f $path . "/" . $name . '_tn.jpg' ) {
+                            $request->addResultLoop("backdrops", $cnt, "name", $name);
+                            $cnt++;
+                        }
+                    }
+                }
+            }
+        }
+        $request->setStatusDone();
+        return;
+    }
+
     if ($cmd eq 'playericons') {
         my $cnt = 0;
         foreach my $key (keys %{$prefs->{prefs}}) {
@@ -1128,63 +1178,6 @@ sub _cliCommand {
                     }
                 }
             }
-        }
-        $request->setStatusDone();
-        return;
-    }
-
-    if ($cmd eq 'send-notif') {
-        my $msg = $request->getParam('msg');
-        my $type = $request->getParam('type');
-        my $title = $request->getParam('title');
-        my $cancelable = $request->getParam('cancelable');
-        my $id = $request->getParam('id');
-        my $client = $request->getParam('client');
-        my $timeout = $request->getParam('timeout');
-        if (!$msg || !$type || ($type ne 'info' && $type ne 'error' && $type ne 'alert' && $type ne 'update' && $type ne 'notif')) {
-            $request->setStatusBadParams();
-            return;
-        }
-
-        if ($type eq 'notif') {
-            if (!$id) {
-               $request->setStatusBadParams();
-               return;
-            }
-
-            # Remove any existing notif
-            my $index = 0;
-            foreach my $notif (@{$mskNotifications{'notifications'}}) {
-                if ($notif->{'id'} eq $id) {
-                    splice(@{$mskNotifications{'notifications'}}, $index, 1);
-                    last;
-                }
-                $index++;
-            }
-
-            if ($msg ne '-') {
-                # Store
-                push(@{$mskNotifications{'notifications'}}, {id => $id, msg => $msg, title => $title, cancelable => $cancelable});
-            }
-            Slim::Control::Request::notifyFromArray(undef, ['material-skin', 'notification', $type, $msg, $title, $id, $cancelable]);
-        } elsif ($type eq 'update') {
-            $mskNotifications{'updatemsg'} = $msg;
-            $mskNotifications{'updatetitle'} = $title;
-            Slim::Control::Request::notifyFromArray(undef, ['material-skin', 'notification', $type, $msg, $title]);
-        } else {
-            if ($type eq 'alert') {
-                $mskNotifications{'alertmsg'} = $msg;
-                $mskNotifications{'alertcancelable'} = $cancelable;
-            }
-            Slim::Control::Request::notifyFromArray(undef, ['material-skin', 'notification', $type, $msg, $cancelable, $client, $timeout]);
-        }
-        $request->setStatusDone();
-        return;
-    }
-
-    if ($cmd eq 'get-notifs') {
-        foreach my $key (keys %mskNotifications) {
-            $request->addResult($key, $mskNotifications{$key});
         }
         $request->setStatusDone();
         return;

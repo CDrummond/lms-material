@@ -44,7 +44,7 @@ Vue.component('lms-dstm-dialog', {
     },
     mounted() {
         bus.$on('dstm.open', function() {
-            if (this.$store.state.dstmPlugin) {
+            if (LMS_P_DSTM) {
                 lmsCommand(this.$store.state.player.id, ["dontstopthemusicsetting"]).then(({data}) => {
                     if (data.result && data.result.item_loop) {
                         this.items=[];
@@ -61,8 +61,8 @@ Vue.component('lms-dstm-dialog', {
         bus.$on('noPlayers', function() {
             this.show=false;
         }.bind(this));
-        bus.$on('esc', function() {
-            if (this.$store.state.activeDialog == 'dstm') {
+        bus.$on('closeDialog', function(dlg) {
+            if (dlg == 'dstm') {
                 this.show=false;
             }
         }.bind(this));

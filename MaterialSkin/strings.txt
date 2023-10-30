@@ -330,3 +330,34 @@ PLUGIN_MATERIAL_SKIN_PAGED_BATCH_SIZE_DESC
 	EN	Number of initial items to fetch (and display) when listing contents of some lists (such as playlist contents). Scrolling list will then cause another batch of items to be fetched, etc.
 	FR	Nombre d'éléments initiaux récupérés (et affichés) lors de l'affichage de certaines listes (telles que les listes de lecture). Faire défiler la liste permettra de récupérer un nouvel ensemble d’éléments si nécessaire.
 	NL	Aantal initiële items dat wordt opgehaald (en getoond) bij het weergeven van de inhoud van sommige lijsten (zoals afspeellijsten). Als je door de lijst bladert, wordt er vervolgens een nieuwe reeks items opgehaald, enz.
+
+PLUGIN_MATERIAL_SKIN_ARTIST_FILTER
+	EN	Filter album tracks
+	FR	Filtrer les morceaux des albums
+
+PLUGIN_MATERIAL_SKIN_ARTIST_FILTER_DESC
+	EN	When browsing an artist's albums use all tracks from compilation albums, albums this artist appears on, etc., or only show tracks from the current artist.
+	FR	Lors du parcours des albums d'un artiste (ceux dans lesquels l'artiste apparaît), pour chaque album, afficher tous les morceaux de l'album ou afficher uniquement les morceaux de l'artiste.
+
+PLUGIN_MATERIAL_SKIN_ARTIST_FILTER_ARTIST_ONLY
+	EN	Only display tracks from current artist
+	FR	Afficher uniquement les morceaux de l'artiste
+
+PLUGIN_MATERIAL_SKIN_ARTIST_FILTER_ALL_TRACKS
+	EN	Display all tracks of album
+	FR	Afficher tous les morceaux de l'album
+
+PLUGIN_MATERIAL_SKIN_RELEASE_TYPE_ORDER
+	EN	Release type order
+	FR	Ordre des types de sorties
+
+PLUGIN_MATERIAL_SKIN_RELEASE_TYPE_ORDER_DESC
+	EN	Specify order to display relase types (this is a comma separated list of UPPERCASE release type names) - e.g. "ALBUM, EP, SINGLE"
+	FR	Spécifier l'ordre d'affichage des types de sorties (par une liste de types de sorties en MAJUSCULE séparés par des virgules) - par ex. "ALBUM, EP, SINGLE"
+
+#NOTE: When translating SETUP_PLUGINS you *must* insert a space before your translation.
+#      This space is hidden in the UI, but causes this "Manage Plugins" entry to be the
+#      first in the menu section.
+SETUP_PLUGINS
+	EN	 Manage Plugins
+	FR	 Gérer les plugins

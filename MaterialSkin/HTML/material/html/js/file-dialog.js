@@ -75,8 +75,8 @@ var lmsFileDialog = Vue.component("lms-file-dialog", {
                 }
             }
         }.bind(this));
-        bus.$on('esc', function() {
-            if (this.$store.state.activeDialog == 'file') {
+        bus.$on('closeDialog', function(dlg) {
+            if (dlg == 'file') {
                 this.close(false);
             }
         }.bind(this));

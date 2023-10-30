@@ -41,10 +41,11 @@ Si vous êtes déjà sur une vue et que vous appuyez à nouveau sur son bouton, 
     <li>Bouton "Retourner" dans la vue "Bibliothèque" - déclenche un retour à l'écran d'accueil.</li>
     <li>Bouton "Retourner" dans les entêtes des fenêtres (telles que "Configuration de platine") - ferme les fenêtres.</li>
     <li>Bouton ou étiquette de volume - active/désactive le son.</li>
-    <li>Bouton lecture/pause - Affiche la fenêtre "Mise en veille".</li>
+    <li>Bouton "Lecture/Pause" - arrête la lecture en agissant comme une bouton "Stop".</li>
     <li>Icône de "répétition" ou DSTM - affiche les options "Don't Stop the Music".</li>
     <li>Étiquette de durée dans la file d'attente - affiche la fenêtre "Transférer la liste de lecture", si vous avez au moins 2 platines.</li>
     <li>Icône de platine dans la barre d'outils, à côté du nom de la platine - affiche la fenêtre "Synchroniser", si vous avez au moins 2 platines.</li>
+    <li>Icône "Alimentation" - affiche la fenêtre "Mise en veille".</li>
     <li>Élément de menu "Gérer les platines" - affiche la fenêtre "Synchroniser", si vous avez au moins 2 platines.</li>
     <li>Bouton "Morceau précédent" - saute de X secondes en arrière. Maintenir l'appui pour effectuer plusieurs sauts. La durée exacte du saut est configurable.</li>
     <li>Bouton "Morceau suivant" - saute de X secondes en avant. Maintenir l'appui pour effectuer plusieurs sauts. La durée exacte du saut est configurable.</li>

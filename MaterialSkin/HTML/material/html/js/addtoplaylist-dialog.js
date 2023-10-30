@@ -74,8 +74,8 @@ Vue.component('lms-addtoplaylist-dialog', {
         bus.$on('noPlayers', function() {
             this.show=false;
         }.bind(this));
-        bus.$on('esc', function() {
-            if (this.$store.state.activeDialog == 'addtoplaylist') {
+        bus.$on('closeDialog', function(dlg) {
+            if (dlg == 'addtoplaylist') {
                 this.show=false;
             }
         }.bind(this));

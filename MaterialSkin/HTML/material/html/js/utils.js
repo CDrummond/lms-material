@@ -231,7 +231,7 @@ function resolveImageUrl(image, size) {
         if (url.hostname.startsWith("192.168.") || url.hostname.startsWith("127.") || url.hostname.endsWith(".local")) {
             return image;
         }
-        if (lmsOptions.useMySqueezeboxImageProxy) {
+        if (LMS_USE_MSB_IMG_PROXY) {
             var s=size ? size.split('x')[0].replace('_', '') : LMS_IMAGE_SZ;
             return MY_SQUEEZEBOX_IMAGE_PROXY+"?w="+s+"&h="+s+"&m=F&u="+encodeURIComponent(image);
         } else {
@@ -449,15 +449,6 @@ function otherPlayerSort(a, b) {
     return 0;
 }
 
-function homeScreenSort(a, b) {
-    var at = a.id.startsWith(TOP_ID_PREFIX) ? 2 : a.id.startsWith(MUSIC_ID_PREFIX) ? 1 : 0;
-    var bt = b.id.startsWith(TOP_ID_PREFIX) ? 2 : b.id.startsWith(MUSIC_ID_PREFIX) ? 1 : 0;
-    if (at==bt) {
-        return at==0 || a.weight==b.weight ? titleSort(a, b) : a.weight<b.weight ? -1 : 1;
-    }
-    return at<bt ? -1 : 1;
-}
-
 function setScrollTop(view, val) {
     // When using RecycleScroller we need to wait for the next animation frame to scroll, so
     // just do this for all scrolls.
@@ -598,13 +589,11 @@ function fixId(id, prefix) {
 
 function setBgndCover(elem, coverUrl) {
     if (elem) {
-        elem.style.backgroundColor = "var(--background-color)";
         if (undefined==coverUrl || coverUrl.endsWith(DEFAULT_COVER) || coverUrl.endsWith("/music/undefined/cover")) {
             elem.style.backgroundImage = "url()";
         } else {
             elem.style.backgroundImage = "url('"+coverUrl+"')";
         }
-        elem.style.boxShadow = "inset 100vw 100vh var(--background-shadow-color)";
     }
 }
 
@@ -626,9 +615,9 @@ function ensureVisible(elem, attempt) {
 function cacheKey(command, params, start, batchSize) {
     return LMS_LIST_CACHE_PREFIX+LMS_CACHE_VERSION+":"+lmsLastScan+":"+
            (command ? command.join("-") : "") + ":" + (params ? params.join("-") : "") + 
-           (command && (command[0]=="artists" || command[0]=="albums") ? (lmsOptions.noGenreFilter ? ":1" : ":0") : "") +
-           (command && command[0]=="albums" ? (lmsOptions.noRoleFilter ? ":1" : ":0") : "") +
-           (command && command[0]=="artists" ? (lmsOptions.infoPlugin && lmsOptions.artistImages ? ":1" : ":0") : "") +
+           (command && (command[0]=="artists" || command[0]=="albums") ? (LMS_NO_GENRE_FILTER ? ":1" : ":0") : "") +
+           (command && command[0]=="albums" ? (LMS_NO_ROLE_FILTER ? ":1" : ":0") : "") +
+           (command && command[0]=="artists" ? (LMS_P_MAI && LMS_ARTIST_PICS ? ":1" : ":0") : "") +
            ":"+start+":"+batchSize;
 }
 
@@ -1074,16 +1063,16 @@ function trackTags(withCover) {
 
 if (!String.prototype.replaceAll) {
     String.prototype.replaceAll = function(str, newStr) {
-        let idx = 0;
-        let len = str.length;
-        let updated = this;
-        for (;;) {
-            idx = updated.indexOf(str, idx);
-            if (idx<0) {
-                break;
-            }
-            updated = updated.substring(0, idx) + newStr + updated.substring(idx + len);
-        }
-        return updated;
+	    return this.replace(new RegExp(str, 'g'), newStr);
     };
+}
+
+function intersect(a, b) {
+    let res = new Set();
+    for (const itm of a) {
+        if (b.has(itm)) {
+            res.add(itm);
+        }
+    }
+    return res;
 }

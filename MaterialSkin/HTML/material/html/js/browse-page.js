@@ -9,6 +9,7 @@
 var B_ALBUM_SORTS=[ ];
 const ALLOW_ADD_ALL = new Set(['trackinfo', 'youtube', 'spotty', 'qobuz', 'tidal', 'wimp' /*is Tidal*/, 'deezer', 'tracks', 'musicip', 'musicsimilarity', 'blissmixer', 'bandcamp']); // Allow add-all/play-all from 'trackinfo', as Spotty's 'Top Titles' access via 'More' needs this
 const ALLOW_FAKE_ALL_SONGS_ITEM = new Set(['youtube', 'qobuz']); // Allow using 'fake' add all item
+const MIN_WIDTH_FOR_COVER = 680;
 
 var lmsBrowse = Vue.component("lms-browse", {
     template: `
@@ -38,6 +39,7 @@ var lmsBrowse = Vue.component("lms-browse", {
   <v-layout v-else-if="history.length>0">
    <v-btn flat icon v-longpress="backBtnPressed" class="toolbar-button" v-bind:class="{'back-button':!homeButton || history.length<2}" id="back-button" :title="trans.goBack | tooltipStr('esc', keyboardControl)"><v-icon>arrow_back</v-icon></v-btn>
    <v-btn v-if="history.length>1 && homeButton" flat icon @click="homeBtnPressed()" class="toolbar-button" id="home-button" :title="trans.goHome | tooltipStr('home', keyboardControl)"><v-icon>home</v-icon></v-btn>
+   <img v-if="wide && ((current && current.image) || currentItemImage)" :src="current && current.image ? current.image : currentItemImage" @click="showHistory($event)" class="sub-cover pointer"></img>
    <v-layout row wrap @click="showHistory($event)" v-bind:class="{'pointer link-item': history.length>0}">
     <v-flex xs12 class="ellipsis subtoolbar-title subtoolbar-pad" v-bind:class="{'subtoolbar-title-single':undefined==toolbarSubTitle}">{{headerTitle}}</v-flex>
     <v-flex xs12 class="ellipsis subtoolbar-subtitle subtext" v-if="undefined!=toolbarSubTitle" v-html="toolbarSubTitle"></v-flex>
@@ -76,17 +78,31 @@ var lmsBrowse = Vue.component("lms-browse", {
  </div>
  <v-icon class="browse-progress" v-if="fetchingItem!=undefined" color="primary">refresh</v-icon>
  <div v-show="letter" id="letterOverlay"></div>
- <div class="lms-list bgnd-cover" id="browse-bgnd">
-  <div class="noselect lms-jumplist" v-bind:class="{'bgnd-blur':drawBgndImage}" v-if="filteredJumplist.length>1">
+ <div class="lms-list bgnd-cover" v-bind:class="{'backdrop-cover':drawBackdrop}" id="browse-bgnd">
+  <div class="noselect lms-jumplist" v-bind:class="{'bgnd-blur':drawBgndImage,'backdrop-blur':drawBackdrop}" v-if="filteredJumplist.length>1">
    <template v-for="(item, index) in filteredJumplist">
     <div @click="jumpTo(item.index)" v-bind:class="{'active' : jumplistActive==index}">{{item.key==' ' || item.key=='' ? '?' : item.key}}</div>
    </template>
   </div>
-  <div class="lms-list" id="browse-list" style="overflow:auto;" v-bind:class="{'lms-image-grid': grid.use, 'lms-image-grid-jump':grid.use && filteredJumplist.length>1, 'lms-list-jump':!grid.use && filteredJumplist.length>1,'bgnd-blur':drawBgndImage}">
+  <div class="lms-list" id="browse-list" style="overflow:auto;" v-bind:class="{'lms-image-grid':grid.use,'lms-grouped-image-grid':grid.use && grid.multiSize,'lms-image-grid-jump':grid.use && filteredJumplist.length>1,'lms-list-jump':!grid.use && filteredJumplist.length>1,'bgnd-blur':drawBgndImage,'backdrop-blur':drawBackdrop}">
 
-   <RecycleScroller :items="grid.rows" :item-size="grid.ih - (grid.haveSubtitle || isTop || current.id.startsWith(TOP_ID_PREFIX) ? 0 : GRID_SINGLE_LINE_DIFF)" page-mode key-field="id" :buffer="LMS_SCROLLER_GRID_BUFFER" v-if="grid.use">
+   <RecycleScroller :items="grid.rows" :item-size="grid.multiSize ? null : (grid.ih - (grid.haveSubtitle || isTop || current.id.startsWith(TOP_ID_PREFIX) ? 0 : GRID_SINGLE_LINE_DIFF))" page-mode key-field="id" :buffer="LMS_SCROLLER_GRID_BUFFER" v-if="grid.use">
     <div slot-scope="{item}" :class="[grid.few?'image-grid-few':'image-grid-full-width', grid.haveSubtitle?'image-grid-with-sub':'']">
-     <div align="center" style="vertical-align: top" v-for="(citem, col) in item.items" @contextmenu.prevent="contextMenu(citem, item.rs+col, $event)">
+
+     <v-list-tile v-if="item.header" class="grid-header">
+      <v-list-tile-content>
+       <v-list-tile-title>{{item.item.title}}</v-list-tile-title>
+      </v-list-tile-content>
+      <v-list-tile-action class="browse-action" :title="i18n('%1 (Menu)', stripLinkTags(item.item.title))">
+       <div v-if="hoverBtns && 0==selection.size && (item.item.menu && (item.item.menu[0]==PLAY_ACTION || item.item.menu[0]==PLAY_ALL_ACTION))" class="list-btns">
+        <div v-if="!queryParams.party && (!LMS_KIOSK_MODE || !HIDE_FOR_KIOSK.has(PLAY_ACTION))" class="play-btn grid-btn" @click.stop="itemAction(PLAY_ALL_ACTION, item.item, undefined, $event)" :title="ACTIONS[PLAY_ACTION].title"></div>
+        <div v-if="!LMS_KIOSK_MODE || !HIDE_FOR_KIOSK.has(ADD_ACTION)" class="add-btn grid-btn" @click.stop="itemAction(ADD_ALL_ACTION, item.item, undefined, $event)" :title="ACTIONS[ADD_ACTION].title"></div>
+       </div>
+       <div class="menu-btn grid-btn list-btn" @click.stop="itemMenu(item.item, undefined, $event)" :title="i18n('%1 (Menu)', stripLinkTags(item.item.title))"></div>
+      </v-list-tile-action>
+     </v-list-tile>
+
+     <div v-else align="center" style="vertical-align: top" v-for="(citem, col) in item.items" @contextmenu.prevent="contextMenu(citem, item.rs+col, $event)">
       <div v-if="undefined==citem" class="image-grid-item defcursor"></div>
       <div v-else class="image-grid-item" @click="click(citem, item.rs+col, $event)" :title="citem | itemTooltip" :draggable="item.draggable && current.section!=SECTION_FAVORITES" @dragstart="dragStart(item.rs+col, $event)" @dragend="dragEnd()" v-bind:class="{'list-active': (menu.show && (item.rs+col)==menu.index) || (fetchingItem==item.id)}">
        <div v-if="selection.size>0" class="check-btn grid-btn image-grid-select-btn" @click.stop="select(citem, item.rs+col, $event)" :title="ACTIONS[citem.selected ? UNSELECT_ACTION : SELECT_ACTION].title" v-bind:class="{'check-btn-checked':citem.selected}"></div>
@@ -100,7 +116,7 @@ var lmsBrowse = Vue.component("lms-browse", {
        <div v-if="citem.image" class="image-grid-text" @click.stop="itemMenu(citem, item.rs+col, $event)">{{citem.title}}</div>
        <div v-else class="image-grid-text">{{citem.title}}</div>
        <div class="image-grid-text subtext" v-bind:class="{'link-item':subtitleClickable}" @click.stop="clickSubtitle(citem, item.rs+col, $event)">{{isTop && libraryName && citem.id==TOP_MYMUSIC_ID ? libraryName : citem.libname ? citem.libname : citem.subtitle}}</div>
-       <div class="menu-btn grid-btn image-grid-btn" v-if="undefined!=citem.stdItem || (citem.menu && citem.menu.length>0 && (!citem.isPinned || (!queryParams.party && (!LMS_KIOSK_MODE || !HIDE_FOR_KIOSK.has(PIN_ACTION))))) || (isTop && libraryName && citem.id==TOP_MYMUSIC_ID)" @click.stop="itemMenu(citem, item.rs+col, $event)" :title="i18n('%1 (Menu)', stripLinkTags(citem.title))"></div>
+       <div class="menu-btn grid-btn image-grid-btn hover-btn" v-if="undefined!=citem.stdItem || (citem.menu && citem.menu.length>0 && (!citem.isPinned || (!queryParams.party && (!LMS_KIOSK_MODE || !HIDE_FOR_KIOSK.has(PIN_ACTION))))) || (isTop && libraryName && citem.id==TOP_MYMUSIC_ID)" @click.stop="itemMenu(citem, item.rs+col, $event)" :title="i18n('%1 (Menu)', stripLinkTags(citem.title))"></div>
        <div class="emblem" v-if="citem.emblem" :style="{background: citem.emblem.bgnd}">
         <img :src="citem.emblem | emblem()" loading="lazy"></img>
        </div>
@@ -114,11 +130,11 @@ var lmsBrowse = Vue.component("lms-browse", {
    </RecycleScroller>
 
    <RecycleScroller v-else-if="useRecyclerForLists" :items="items" :item-size="LMS_LIST_ELEMENT_SIZE+listSizeAdjust" page-mode key-field="id" :buffer="LMS_SCROLLER_LIST_BUFFER">
-    <v-list-tile avatar @click="click(item, index, $event)" slot-scope="{item, index}" @dragstart="dragStart(index, $event)" @dragend="dragEnd()" @dragover="dragOver(index, $event)" @drop="drop(index, $event)" :draggable="item.draggable && (current.section!=SECTION_FAVORITES || 0==selection.size)" v-bind:class="{'browse-header' : item.header, 'list-active': (menu.show && index==menu.index) || (fetchingItem==item.id), 'drop-target':dragActive && index==dropIndex}" @contextmenu.prevent="contextMenu(item, index, $event)">
+    <v-list-tile avatar @click="click(item, index, $event)" slot-scope="{item, index}" @dragstart="dragStart(index, $event)" @dragend="dragEnd()" @dragover="dragOver(index, $event)" @drop="drop(index, $event)" :draggable="item.draggable && (current.section!=SECTION_FAVORITES || 0==selection.size)" v-bind:class="{'browse-header' : item.header, 'highlight':item.highlight, 'list-active': (menu.show && index==menu.index) || (fetchingItem==item.id), 'drop-target':dragActive && index==dropIndex}" @contextmenu.prevent="contextMenu(item, index, $event)">
      <v-list-tile-avatar v-if="item.selected" :tile="true" class="lms-avatar">
       <v-icon>check_box</v-icon>
      </v-list-tile-avatar>
-     <v-list-tile-avatar v-else-if="item.image && (artwork || isTop)" :tile="true" v-bind:class="{'radio-image': SECTION_RADIO==item.section || SECTION_APPS==item.section}" class="lms-avatar">
+     <v-list-tile-avatar v-else-if="item.image" :tile="true" v-bind:class="{'radio-image': SECTION_RADIO==item.section || SECTION_APPS==item.section}" class="lms-avatar">
       <img :key="item.image" :src="item.image" onerror="this.src=DEFAULT_COVER" loading="lazy"></img>
      </v-list-tile-avatar>
      <v-list-tile-avatar v-else-if="item.icon" :tile="true" class="lms-avatar">
@@ -146,7 +162,7 @@ var lmsBrowse = Vue.component("lms-browse", {
       </div>
       <div class="menu-btn grid-btn list-btn" @click.stop="itemMenu(item, index, $event)" :title="i18n('%1 (Menu)', stripLinkTags(item.title))"></div>
      </v-list-tile-action>
-     <div class="emblem" v-if="item.emblem && artwork" :style="{background: item.emblem.bgnd}">
+     <div class="emblem" v-if="item.emblem" :style="{background: item.emblem.bgnd}">
       <img :src="item.emblem | emblem()" loading="lazy"></img>
      </div>
     </v-list-tile>
@@ -184,11 +200,11 @@ var lmsBrowse = Vue.component("lms-browse", {
       <text-field :focus="index==0 && !IS_MOBILE" :title="item.title" :type="item.type" @value="entry(item, $event)"></text-field>
      </v-list-tile-content>
     </v-list-tile>
-    <v-list-tile v-else-if="!(isTop && (disabled.has(item.id) || hidden.has(item.id)) || (queryParams.party && HIDE_TOP_FOR_PARTY.has(item.id)))" avatar @click="click(item, index, $event)" :key="item.id" class="lms-avatar lms-list-item" :id="'item'+index" @dragstart="dragStart(index, $event)" @dragend="dragEnd()" @dragover="dragOver(index, $event)" @drop="drop(index, $event)" :draggable="(isTop && !sortHome) || (item.draggable && (current.section!=SECTION_FAVORITES || 0==selection.size))" @contextmenu.prevent="contextMenu(item, index, $event)" v-bind:class="{'drop-target': dragActive && index==dropIndex, 'list-active': (menu.show && index==menu.index) || (fetchingItem==item.id)}">
+    <v-list-tile v-else-if="!(isTop && (disabled.has(item.id) || hidden.has(item.id)) || (queryParams.party && HIDE_TOP_FOR_PARTY.has(item.id)))" avatar @click="click(item, index, $event)" :key="item.id" class="lms-avatar lms-list-item" :id="'item'+index" @dragstart="dragStart(index, $event)" @dragend="dragEnd()" @dragover="dragOver(index, $event)" @drop="drop(index, $event)" :draggable="isTop || (item.draggable && (current.section!=SECTION_FAVORITES || 0==selection.size))" @contextmenu.prevent="contextMenu(item, index, $event)" v-bind:class="{'drop-target': dragActive && index==dropIndex, 'highlight':item.highlight, 'list-active': (menu.show && index==menu.index) || (fetchingItem==item.id)}">
      <v-list-tile-avatar v-if="item.selected" :tile="true" class="lms-avatar">
       <v-icon>check_box</v-icon>
      </v-list-tile-avatar>
-     <v-list-tile-avatar v-else-if="item.image && (isTop || artwork)" :tile="true" v-bind:class="{'radio-image': SECTION_RADIO==item.section || SECTION_APPS==item.section, 'lms-avatar-small': isTop || (current && (current.id==TOP_RADIO_ID || current.id==TOP_APPS_ID)), 'lms-avatar': current && current.id!=TOP_RADIO_ID && current.id!=TOP_APPS_ID}">
+     <v-list-tile-avatar v-else-if="item.image" :tile="true" v-bind:class="{'radio-image': SECTION_RADIO==item.section || SECTION_APPS==item.section, 'lms-avatar-small': isTop || (current && (current.id==TOP_RADIO_ID || current.id==TOP_APPS_ID)), 'lms-avatar': current && current.id!=TOP_RADIO_ID && current.id!=TOP_APPS_ID}">
       <img :key="item.image" v-lazy="item.image" onerror="this.src=DEFAULT_COVER"></img>
      </v-list-tile-avatar>
      <v-list-tile-avatar v-else-if="item.icon" :tile="true" class="lms-avatar">
@@ -215,7 +231,7 @@ var lmsBrowse = Vue.component("lms-browse", {
       </div>
       <div class="menu-btn grid-btn list-btn" @click.stop="itemMenu(item, index, $event)" :title="i18n('%1 (Menu)', stripLinkTags(item.title))"></div>
      </v-list-tile-action>
-     <div class="emblem" v-if="item.emblem && artwork" :style="{background: item.emblem.bgnd}">
+     <div class="emblem" v-if="item.emblem" :style="{background: item.emblem.bgnd}">
       <img :src="item.emblem | emblem()" loading="lazy"></img>
      </div>
     </v-list-tile>
@@ -264,7 +280,7 @@ var lmsBrowse = Vue.component("lms-browse", {
      </v-list-tile-avatar>
      <v-list-tile-title>{{ACTIONS[UNSELECT_ACTION].title}}</v-list-tile-title>
     </v-list-tile>
-    <v-list-tile v-else-if="action==BR_COPY_ACTION ? queueSelection : action==MOVE_HERE_ACTION ? (selection.size>0 && !menu.item.selected) : action==DOWNLOAD_ACTION ? lmsOptions.allowDownload && undefined==menu.item.emblem : action==PLAY_DISC_ACTION ? undefined!=menu.item.disc : (action!=RATING_ACTION || undefined!=ratingsPlugin)" @click="menuItemAction(action, menu.item, menu.index, $event)">
+    <v-list-tile v-else-if="action==BR_COPY_ACTION ? queueSelection : action==MOVE_HERE_ACTION ? (selection.size>0 && !menu.item.selected) : action==DOWNLOAD_ACTION ? lmsOptions.allowDownload && undefined==menu.item.emblem : action==PLAY_DISC_ACTION ? undefined!=menu.item.disc : (action!=RATING_ACTION || undefined!=LMS_P_RP)" @click="menuItemAction(action, menu.item, menu.index, $event)">
      <v-list-tile-avatar>
       <v-icon v-if="undefined==ACTIONS[action].svg">{{ACTIONS[action].icon}}</v-icon>
       <img v-else class="svg-img" :src="ACTIONS[action].svg | svgIcon(darkUi)"></img>
@@ -363,7 +379,7 @@ var lmsBrowse = Vue.component("lms-browse", {
             headerTitle: undefined,
             headerSubTitle: undefined,
             items: [],
-            grid: {allowed:true, use:false, numColumns:0, ih:GRID_MIN_HEIGHT, rows:[], few:false, haveSubtitle:true},
+            grid: {allowed:true, use:false, numColumns:0, ih:GRID_MIN_HEIGHT, rows:[], few:false, haveSubtitle:true, multiSize:false},
             fetchingItem:undefined,
             hoverBtns: !IS_MOBILE,
             trans: { ok:undefined, cancel: undefined, selectMultiple:undefined, addall:undefined, playall:undefined,
@@ -396,12 +412,6 @@ var lmsBrowse = Vue.component("lms-browse", {
         hidden() {
             return this.$store.state.hidden
         },
-        sortHome() {
-            return this.$store.state.sortHome
-        },
-        artwork() {
-            return this.$store.state.showArtwork
-        },
         keyboardControl() {
             return this.$store.state.keyboardControl && !IS_MOBILE
         },
@@ -418,9 +428,6 @@ var lmsBrowse = Vue.component("lms-browse", {
                       (this.history.length>1 && this.history[1].current && this.history[1].current.id.startsWith(MUSIC_ID_PREFIX)) ||
                       (this.history.length>2 && this.history[2].current && this.history[2].current.id.startsWith(MUSIC_ID_PREFIX)) ) )
         },
-        ratingsPlugin() {
-            return this.$store.state.ratingsPlugin
-        },
         homeButton() {
             return this.$store.state.homeButton
         },
@@ -429,6 +436,9 @@ var lmsBrowse = Vue.component("lms-browse", {
         },
         drawBgndImage() {
             return this.$store.state.browseBackdrop && ((undefined!=this.current && undefined!=this.current.image) || undefined!=this.currentItemImage);
+        },
+        drawBackdrop() {
+            return !this.drawBgndImage && !isEmpty(this.$store.state.browseDefBackdrop)
         },
         listSizeAdjust() {
             return this.$store.state.listPadding
@@ -441,8 +451,12 @@ var lmsBrowse = Vue.component("lms-browse", {
                 return this.libraryName + suffix;
             }
             if (undefined!=this.current && this.current.stdItem==STD_ITEM_ALBUM) {
-                if (undefined!=this.current.subtitle) {
-                    return this.current.subtitle + ' (' + this.headerSubTitle + ')' + suffix;
+                let albumArtst = this.current.subtitle;
+                if (lmsOptions.noArtistFilter && this.current.compilation && this.items.length>0 && undefined!=this.items[0].compilationAlbumArtist) {
+                    albumArtst = this.items[0].compilationAlbumArtist;
+                }
+                if (undefined!=albumArtst) {
+                    return albumArtst + ' (' + this.headerSubTitle + ')' + suffix;
                 }
                 for (let loop=this.history, i=loop.length-1; i>=0 && undefined!=loop[i].current; --i) {
                     if (STD_ITEM_ALBUM==loop[i].current.stdItem && undefined!=loop[i].current.subtitle) {
@@ -474,7 +488,7 @@ var lmsBrowse = Vue.component("lms-browse", {
         this.options={pinned: new Set(),
                       sortFavorites: this.$store.state.sortFavorites};
         this.previousScrollPos=0;
-        this.grid = {allowed:true, use:isSetToUseGrid(GRID_OTHER), numColumns:0, ih:GRID_MIN_HEIGHT, rows:[], few:false, haveSubtitle:true};
+        this.grid = {allowed:true, use:isSetToUseGrid(GRID_OTHER), numColumns:0, ih:GRID_MIN_HEIGHT, rows:[], few:false, haveSubtitle:true, multiSize:false};
         this.currentActions=[{action:(this.grid.use ? USE_LIST_ACTION : USE_GRID_ACTION)}];
         this.canDrop = true;
 
@@ -1064,7 +1078,7 @@ var lmsBrowse = Vue.component("lms-browse", {
             }
             if (this.current && TOP_MYMUSIC_ID==this.current.id) {
                 this.items = this.myMusic;
-                this.grid = {allowed:true, use:isSetToUseGrid(GRID_OTHER), numColumns:0, ih:GRID_MIN_HEIGHT, rows:[], few:false, haveSubtitle:true};
+                this.grid = {allowed:true, use:isSetToUseGrid(GRID_OTHER), numColumns:0, ih:GRID_MIN_HEIGHT, rows:[], few:false, haveSubtitle:true, multiSize:false};
                 this.currentActions=[{action:(this.grid.use ? USE_LIST_ACTION : USE_GRID_ACTION)}];
                 this.layoutGrid(true);
             } else if (this.history.length>1 && this.history[1].current && this.history[1].current.id==TOP_MYMUSIC_ID) {
@@ -1113,17 +1127,11 @@ var lmsBrowse = Vue.component("lms-browse", {
                     break;
                 }
             }
-            if (this.$store.state.sortHome) {
-                this.top.sort(homeScreenSort);
-            }
             if (updated) {
                 this.saveTopList();
             }
         },
         saveTopList() {
-            if (this.$store.state.sortHome) {
-                this.top.sort(homeScreenSort);
-            }
             setLocalStorageVal("topItems", JSON.stringify(this.top));
             removeLocalStorage("pinned");
         },
@@ -1301,9 +1309,9 @@ var lmsBrowse = Vue.component("lms-browse", {
             }
             msHandleScrollEvent(this);
         },
-        calcSizes(quantity, listWidth, maxItemWidth) {
-            var width = GRID_MIN_WIDTH;
-            var height = GRID_MIN_HEIGHT;
+        calcSizes(quantity, listWidth, maxItemWidth, adjust) {
+            var width = GRID_MIN_WIDTH-adjust;
+            var height = GRID_MIN_HEIGHT-adjust;
             var steps = 0;
             if (0!=quantity) {
                 while (listWidth>=((width+GRID_STEP)*quantity) && (width+GRID_STEP)<=maxItemWidth) {
@@ -1342,17 +1350,26 @@ var lmsBrowse = Vue.component("lms-browse", {
             }
 
             var sz = undefined;
-            var preferredColumns = (allowLarge && listWidth>750) ? 3 : 4;
-            var maxItemWidth = Math.floor(GRID_MAX_WIDTH * (allowLarge ? 1.5 : 1.0));
+            var preferredColumns = 4;
+            var maxItemWidth = Math.floor(GRID_MAX_WIDTH * (allowLarge ? (listWidth>1200 ? 1.5 : listWidth>800 ? 1.25 : 1.0) : 1.0));
             for (var i=preferredColumns; i>=1; --i) {
-                sz = this.calcSizes(i, listWidth, maxItemWidth);
+                sz = this.calcSizes(i, listWidth, maxItemWidth, 0);
                 if (sz.mc>=i) {
                     break;
                 }
             }
+
+            if (sz.nc==1) {
+                var altsz = this.calcSizes(2, listWidth, maxItemWidth, 2*GRID_STEP);
+                if (altsz.nc>sz.nc) {
+                    sz=altsz;
+                }
+            }
+
             if (force || sz.nc != this.grid.numColumns) { // Need to re-layout...
                 changed = true;
                 this.grid.rows=[];
+                this.grid.multiSize=false;
                 var items = [];
                 if (this.isTop) {
                     for (var i=0, len=this.items.length; i<len; ++i) {
@@ -1363,21 +1380,53 @@ var lmsBrowse = Vue.component("lms-browse", {
                 } else {
                     items=this.items;
                 }
-                for (var i=0, row=0, len=items.length; i<len; i+=sz.nc, ++row) {
+                let rs = 0;
+                for (var i=0, row=0, len=items.length; i<len; ++row) {
                     var rowItems=[]
-                    for (var j=0; j<sz.nc; ++j) {
-                        rowItems.push((i+j)<items.length ? items[i+j] : undefined);
-                        if (!haveSubtitle && (i+j)<items.length && items[i+j].subtitle) {
-                            haveSubtitle = true;
+                    var rowHasSubtitle = false;
+                    if (i<items.length && items[i].header) {
+                        this.grid.multiSize=true;
+                        this.grid.rows.push({item: items[i], header:true, size:64, r:row, id:"row.header."+i});
+                        i+=1;
+                        rs+=1;
+                    } else {
+                        let used = 0;
+                        for (var j=0; j<sz.nc; ++j) {
+                            var idx = i+j;
+                            if (idx<items.length && items[idx].header) {
+                                for (; j<sz.nc; ++j) {
+                                    rowItems.push(undefined);
+                                }
+                                break;
+                            } else {
+                                rowItems.push(idx<items.length ? items[idx] : undefined);
+                                let haveSub = idx<items.length && items[idx].subtitle;
+                                if (!haveSubtitle && haveSub) {
+                                    haveSubtitle = true;
+                                }
+                                if (!rowHasSubtitle && haveSub) {
+                                    rowHasSubtitle = true;
+                                }
+                                used++;
+                            }
                         }
+                        this.grid.rows.push({id:"row."+row+"."+sz.nc, items:rowItems, r:row, rs:rs, size:this.grid.multiSize ? (rowHasSubtitle ? sz.h : (sz.h - GRID_SINGLE_LINE_DIFF)) : undefined, numStd:used, hasSub:this.grid.multiSize ? rowHasSubtitle : undefined});
+                        i+=used;
+                        rs+=used;
                     }
-                    this.grid.rows.push({id:"row."+i+"."+sz.nc, items:rowItems, r:row, rs:sz.nc*row});
                 }
                 this.grid.numColumns = sz.nc;
             } else { // Need to check if have subtitles...
                 for (var i=0; i<this.items.length && !haveSubtitle; ++i) {
                     if (this.items[i].subtitle) {
                         haveSubtitle = true;
+                    }
+                }
+                if (this.grid.multiSize && this.grid.ih != sz.h) {
+                    for (let list = this.grid.rows, i=0, len=list.length; i<len; ++i) {
+                        if (!list[i].header) {
+                            list[i].size = list[i].hasSub ? sz.h : (sz.h - GRID_SINGLE_LINE_DIFF);
+                        }
                     }
                 }
             }
@@ -1395,6 +1444,16 @@ var lmsBrowse = Vue.component("lms-browse", {
                 document.documentElement.style.setProperty('--image-grid-factor', sz.s);
             }
             var few = 1==this.grid.rows.length && (1==this.items.length || ((this.items.length*sz.w)*1.20)<listWidth);
+            // For multi, we need to check the count of each section.
+            if (!few && this.grid.multiSize) {
+                few = true;
+                for (let r=0, loop=this.grid.rows, len=loop.length; r<len; ++r) {
+                    if (loop[r].header && ((loop[r].item.count*sz.w)*1.20)>=listWidth) {
+                        few = false;
+                        break;
+                    }
+                }
+            }
             if (this.grid.few != few) {
                 this.grid.few = few;
                 changed = true;
@@ -1411,6 +1470,9 @@ var lmsBrowse = Vue.component("lms-browse", {
                                 ? this.currentItemImage
                                 : undefined
                         : undefined;
+            if (!url && !isEmpty(this.$store.state.browseDefBackdrop)) {
+                url='html/backdrops/' + this.$store.state.browseDefBackdrop + '.jpg';
+            }
             if (url) {
                url=changeImageSizing(url, LMS_CURRENT_IMAGE_SIZE);
             }
@@ -1430,21 +1492,6 @@ var lmsBrowse = Vue.component("lms-browse", {
                 }
             });
             bus.$emit('dlg.open', 'rating', ids, Math.ceil(rating/count));
-        },
-        checkFeature(command, id) {
-            lmsCommand("", command).then(({data}) => {
-                logJsonMessage("RESP", data);
-                if (data && data.result && undefined!=data.result._can) {
-                    var can = 1==data.result._can;
-                    if (can && this.disabled.has(id)) {
-                        this.disabled.delete(id);
-                        setLocalStorageVal("disabledItems", JSON.stringify(Array.from(this.disabled)));
-                    } else if (!can && !this.disabled.has(id)) {
-                        this.disabled.add(id);
-                        setLocalStorageVal("disabledItems", JSON.stringify(Array.from(this.disabled)));
-                    }
-                }
-            });
         },
         jumpTo(index) {
             var pos = this.grid.use
@@ -1589,7 +1636,12 @@ var lmsBrowse = Vue.component("lms-browse", {
             try { browsePlayerChanged(this); } catch (e) {}
         }.bind(this));
 
-        this.disabled = new Set(JSON.parse(getLocalStorageVal("disabledItems", JSON.stringify([TOP_CDPLAYER_ID, TOP_REMOTE_ID]))));
+        if (!LMS_P_RM) {
+            this.disabled.add(TOP_REMOTE_ID);
+        }
+        if (!LMS_P_CD) {
+            this.disabled.add(TOP_CDPLAYER_ID);
+        }
         var savedItems = JSON.parse(getLocalStorageVal("topItems", "[]"));
         if (savedItems.length==0) {
             savedItems = JSON.parse(getLocalStorageVal("pinned", "[]"));
@@ -1625,21 +1677,16 @@ var lmsBrowse = Vue.component("lms-browse", {
         bus.$on('nowPlayingExpanded', function(val) {
             this.nowPlayingExpanded = val;
         }.bind(this));
-        bus.$on('esc', function() {
+
+        bus.$on('closeMenu', function() {
+            this.menu.show = false;
+        }.bind(this));
+
+        bus.$on('escPressed', function() {
             if (this.dragActive) {
                 return;
             }
-            if (this.$store.state.visibleMenus.size>0) {
-                this.menu.show = false;
-                if (this.menu.inMainMenu) {
-                    bus.$emit('showMainMenu');
-                }
-            } else if (this.$store.state.openDialogs.length>1 ||
-                       (this.$store.state.openDialogs.length==1 && (this.$store.state.desktopLayout || this.$store.state.openDialogs[0]!='info-dialog'))) {
-                ; // Ignore 'esc' when dialog open. *Ecept* if only 'dialog' is now-playing ifo-dialog in mobile
-            } else if ( (this.$store.state.desktopLayout ? !this.nowPlayingExpanded : this.$store.state.page=='browse') &&
-                        // Can receive 'esc' 120ish milliseconds after dialog was closed with 'esc' - so filter out
-                        (undefined==this.$store.state.lastDialogClose || (new Date().getTime()-this.$store.state.lastDialogClose)>250) ) {
+            if (this.$store.state.desktopLayout ? !this.nowPlayingExpanded : this.$store.state.page=='browse') {
                 if (this.selection.size>0) {
                     this.clearSelection();
                 } else {
@@ -1647,6 +1694,7 @@ var lmsBrowse = Vue.component("lms-browse", {
                 }
             }
         }.bind(this));
+
         bus.$on('browse-home', function() {
             this.goHome();
         }.bind(this));
@@ -1747,8 +1795,6 @@ var lmsBrowse = Vue.component("lms-browse", {
             this.$nextTick(function () {this.layoutGrid(); });
         }.bind(this));
 
-        this.checkFeature(["can", "selectRemoteLibrary", "items", "?"], TOP_REMOTE_ID);
-        this.checkFeature(["can", "cdplayer", "items", "?"], TOP_CDPLAYER_ID);
         this.onlineServices=[];
         lmsCommand("", ["browseonlineartist", "services"]).then(({data}) => {
             logJsonMessage("RESP", data);
@@ -1762,13 +1808,13 @@ var lmsBrowse = Vue.component("lms-browse", {
                 this.myMusic[0].needsUpdating=true;
             }
             this.options.sortFavorites=this.$store.state.sortFavorites;
-            if (this.$store.state.sortHome) {
-                this.saveTopList();
-            }
             this.goHome();
             if (this.grid.use) {
                 this.layoutGrid(true);
             }
+        }.bind(this));
+        bus.$on('browseSetBgndImage', function() {
+           this.setBgndCover();
         }.bind(this));
         bus.$on('libraryChanged', function() {
             this.setLibrary();
@@ -1780,6 +1826,7 @@ var lmsBrowse = Vue.component("lms-browse", {
         this.scrollElement.addEventListener("scroll", this.handleScroll, PASSIVE_SUPPORTED ? { passive: true } : false);
         msRegister(this, this.scrollElement);
         bus.$on('splitterChanged', function() {
+            this.wide = this.pageElement.scrollWidth>=MIN_WIDTH_FOR_COVER;
             this.layoutGrid();
         }.bind(this));
         bus.$on('relayoutGrid', function() {
@@ -1790,12 +1837,12 @@ var lmsBrowse = Vue.component("lms-browse", {
                 this.layoutGrid(true);
             });
         }.bind(this));
-        this.wide = window.innerWidth>=800;
+        this.wide = this.pageElement.scrollWidth>=MIN_WIDTH_FOR_COVER;
         setTimeout(function () {
-            this.wide = window.innerWidth>=800;
+            this.wide = this.pageElement.scrollWidth>=MIN_WIDTH_FOR_COVER;
         }.bind(this), 1000);
         bus.$on('windowWidthChanged', function() {
-            this.wide = window.innerWidth>=800;
+            this.wide = this.pageElement.scrollWidth>=MIN_WIDTH_FOR_COVER;
             this.layoutGrid();
         }.bind(this));
         bus.$on('themeChanged', function() {

@@ -53,6 +53,7 @@ Vue.component('lms-sleep-dialog', {
             this.player = player;
             this.sleepTime = undefined;
             this.show = true;
+            this.shownAt = new Date().getTime();
             if (undefined!=this.player) {
                 lmsCommand(this.player.id, ["sleep", "?"]).then(({data}) => {
                     if (data && data.result && data.result._sleep) {
@@ -80,8 +81,8 @@ Vue.component('lms-sleep-dialog', {
         bus.$on('noPlayers', function() {
             this.cancel();
         }.bind(this));
-        bus.$on('esc', function() {
-            if (this.$store.state.activeDialog == 'sleep') {
+        bus.$on('closeDialog', function(dlg) {
+            if (dlg == 'sleep') {
                 this.cancel();
             }
         }.bind(this));
@@ -104,6 +105,10 @@ Vue.component('lms-sleep-dialog', {
             this.cancelTimer();
         },
         setSleep(duration) {
+            // Work-around for long-press clicks falling through...
+            if ((new Date().getTime()-this.shownAt)<250) {
+                return;
+            }
             if (undefined==this.player) {
                 this.$store.state.players.forEach(p => {
                     if (!p.isgroup) {

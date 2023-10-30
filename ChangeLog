@@ -31,33 +31,30 @@ x.y.z
 25. Add 'Automatic' theme, switches between Light/Dark based upon browser's
     dark mode setting.
 26. Fix keyboard shortcuts not working when MAI view open.
-27. If queue is set to auto-scroll to current then perform this action when
-    queue is unhidden.
-28. Show online service emblems top-right of now-playing cover.
-29. Add menu button bottom-right of now-playing cover.
-30. Slightly more space for MAI.
-31. Use filled circle icons for play and pause.
-32. Only show grid menu icons on hover when using non-touch devices.
-33. Rename 'Plugins' to 'Manage Plugins' in server settings section selector.
-34. Place 'Manage Plugins' as the first in the 'Plugins' section.
-35. Allow active/inactive plugins sections to be collapsed.
-36. On non-touch devices replace settings help text with a "(?)" button,
+27. Show online service emblems top-right of now-playing cover.
+28. Add menu button bottom-right of now-playing cover.
+29. Slightly more space for MAI.
+30. Use filled circle icons for play and pause.
+31. Only show grid menu icons on hover when using non-touch devices.
+32. Rename 'Plugins' to 'Manage Plugins' in server settings section selector.
+33. Place 'Manage Plugins' as the first in the 'Plugins' section.
+34. Allow active/inactive plugins sections to be collapsed.
+35. On non-touch devices replace settings help text with a '(?)' button,
     similar to 'Default' skin.
-37. Re-do desktop now-playing bar logic so that track/count can be shown even
+36. Re-do desktop now-playing bar logic so that track/count can be shown even
     if also showing tech info.
-38. Allow info dialogs to be closed by cliking outside.
-39. If screen width is 1000px or more then use horizontal layout for server
+37. Allow info dialogs to be closed by cliking outside.
+38. If screen width is 1000px or more then use horizontal layout for server
     settings, etc. - similar to 'Default' skin.
-40. Respect LMS's role filtering when asking for artist albums.
-41. Allow switching of players in 'Player settings' and 'Extra player
+39. Respect LMS's role filtering when asking for artist albums.
+40. Allow switching of players in 'Player settings' and 'Extra player
     settings' dialogs.
-42. In MAI view show album cover and artist image before text.
-43. Strip headers from MAI text, as duplicates own headers.
-44. Fix MAI view image sizes.
-45. Center align all MAI titles.
-46. Provide backdrop images to use in browse view.
-47. Don't apply reverse sort to 'New Music'.
-48. Fix image position and size in biographies.
+41. In MAI view show album cover and artist image before text.
+42. Fix MAI view image sizes.
+43. Center align all MAI titles.
+44. Provide backdrop images to use in browse view.
+45. Don't apply reverse sort to 'New Music'.
+46. Fix image position and size in biographies.
 
 3.5.6
 -----

@@ -487,16 +487,17 @@ const store = new Vuex.Store({
                 let key = boolItems[i];
                 state[key] = getLocalStorageBool(key, state[key]);
             }
+            let intItems = ['listPadding', 'skipSeconds', 'mobileBar', 'maxRating'];
+            for (let i=0, len=intItems.length; i<len; ++i) {
+                let key = intItems[i];
+                state[key] = parseInt(getLocalStorageVal(key, state[key]));
+            }
             setQueuePinned(state, getLocalStorageBool('pinQueue', state.pinQueue));
             setQueueShown(state, state.pinQueue && getLocalStorageBool('showQueue', state.showQueue));
 
             state.disabledBrowseModes = new Set(JSON.parse(getLocalStorageVal('disabledBrowseModes', '["myMusicFlopTracks", "myMusicTopTracks", "myMusicMusicFolder", "myMusicFileSystem", "myMusicArtistsComposers", "myMusicArtistsConductors", "myMusicArtistsJazzComposers", "myMusicAlbumsAudiobooks"]')));
-            state.listPadding = parseInt(getLocalStorageVal('listPadding', state.listPadding));
             state.hidden = new Set(JSON.parse(getLocalStorageVal('hidden', JSON.stringify([TOP_EXTRAS_ID]))));
-            state.skipSeconds = parseInt(getLocalStorageVal('skipSeconds', state.skipSeconds));
             state.showRating = LMS_STATS_ENABLED && getLocalStorageBool('showRating', state.showRating);
-            state.mobileBar = parseInt(getLocalStorageVal('mobileBar', state.mobileBar));
-            state.maxRating = parseInt(getLocalStorageVal('maxRating', state.maxRating));
             state.library = getLocalStorageVal('library', state.library);
             state.browseDefBackdrop = getLocalStorageVal('browseDefBackdrop', state.browseDefBackdrop);
             setTheme(state.theme, state.color);
@@ -535,17 +536,17 @@ const store = new Vuex.Store({
                         var prefs = JSON.parse(data.result._p2);
                         var opts = { theme: getLocalStorageVal('theme', undefined==prefs.theme ? state.chosenTheme : prefs.theme),
                                      color: getLocalStorageVal('color', undefined==prefs.color ? state.color : prefs.color),
+                                     browseDefBackdrop: getLocalStorageVal('browseDefBackdrop', undefined==prefs.browseDefBackdrop ? state.browseDefBackdrop : prefs.browseDefBackdrop),
                                      largerElements: getLocalStorageBool('largerElements', undefined==prefs.largerElements ? state.largerElements : prefs.largerElements),
-                                     fontSize: getLocalStorageVal('fontSize', undefined==prefs.fontSize ? state.fontSize : prefs.fontSize),
-                                     volumeStep: parseInt(getLocalStorageVal('volumeStep', undefined==prefs.volumeStep ? lmsOptions.volumeStep : prefs.volumeStep)),
-                                     skipSeconds: parseInt(getLocalStorageVal('skipSeconds', undefined==prefs.skipSeconds ? state.skipSeconds : prefs.skipSeconds)),
-                                     powerButton: getLocalStorageBool('powerButton', undefined==prefs.powerButton ? state.powerButton : prefs.powerButton),
-                                     listPadding: parseInt(getLocalStorageVal('listPadding', undefined==prefs.listPadding ? state.listPadding : prefs.listPadding)),
-                                     mobileBar: parseInt(getLocalStorageVal('mobileBar', undefined==prefs.mobileBar ? state.mobileBar : prefs.mobileBar))
+                                     fontSize: getLocalStorageVal('fontSize', undefined==prefs.fontSize ? state.fontSize : prefs.fontSize)
                                     };
                         for (let i=0, len=boolItems.length; i<len; ++i) {
                             let key = boolItems[i];
                             opts[key] = getLocalStorageBool(key, undefined==prefs[key] ? state[key] : prefs[key]);
+                        }
+                        for (let i=0, len=intItems.length; i<len; ++i) {
+                            let key = intItems[i];
+                            opts[key] = parseInt(getLocalStorageVal(key, undefined==prefs[key] ? state[key] : prefs[key]));
                         }
                         if (undefined!=prefs.hidden && undefined==getLocalStorageVal('hidden', undefined)) {
                             opts.hidden=new Set(prefs.hidden);

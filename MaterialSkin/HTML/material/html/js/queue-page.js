@@ -82,7 +82,7 @@ function parseResp(data, showTrackNum, index, showRatings, queueStyle, lastInCur
                 let isAlbumHeader = QUEUE_ALBUM==queueStyle &&
                                      ( undefined==prevItem ||
                                        (i.album_id!=prevItem.album_id) ||
-                                       (undefined==i.album_id && ( (undefined!=i.cover && i.cover!=prevItem.cover)) ) );
+                                       (undefined==i.album_id && ( (undefined!=cover && cover!=prevItem.image)) ) );
                 let artistAlbumLines = queueStyle!=QUEUE_ALBUM || isAlbumHeader ? buildArtistAlbumLines(i, queueStyle) : undefined;
                 resp.items.push({
                               id: "track_id:"+i.id,

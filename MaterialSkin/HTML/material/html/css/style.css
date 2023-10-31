@@ -21,6 +21,8 @@
  --list-padding:0px;
  --list-elem-height:48px;
  --list-elem-3line-height:68px;
+ --pq-album-header:64px;
+ --pq-album-track:40px;
  scrollbar-color:var(--scrollbar-thumb-color) var(--scrollbar-track-color);
  --image-grid-factor:0;
  --dialog-list-max-width:1000px;
@@ -356,6 +358,45 @@ div.v-subheader {
 
 .lms-list3 .v-list__tile {
  height:calc(var(--list-elem-3line-height) - 1px) !important;
+}
+
+.lms-list-album .pq-albumstyle,
+.lms-list-album .pq-albumstyle .v-list__tile {
+ height:calc(var(--pq-album-header) - 1px) !important;
+}
+
+.lms-list-album .pq-track,
+.lms-list-album .pq-track .v-list__tile {
+ height:calc(var(--pq-album-track) - 1px) !important;
+}
+
+.lms-list-album .pq-current-indicator {
+ top:unset!important;
+ bottom:calc((var(--pq-album-track) - 16px)/2);
+}
+
+.lms-list-album .pq-track .pq-time {
+ margin-top:unset!important;
+ margin-bottom:-1px!important;
+}
+
+.lms-list-album .pq-albumstyle:not(.pq-track) .pq-time {
+ margin-top:unset!important;
+ margin-bottom:-24px!important;
+}
+
+.lms-list-album .pq-albumstyle:not(.pq-track) .queue-action {
+ padding-top:22px!important;
+}
+
+.lms-list-album .pq-albumstyle:not(.pq-track) .queue-action {
+ padding-top:22px!important;
+}
+
+.lms-list-album .lms-avatar .v-avatar {
+ width:calc(var(--pq-album-header) - 7px) !important;
+ height:calc(var(--pq-album-header) - 7px) !important;
+ margin-left:-10px!important;
 }
 
 .lms-list-item {
@@ -1520,6 +1561,15 @@ progress {
 
 .pq-current, .highlight {
  background-color:var(--pq-current-color)
+}
+
+.pq-pulse {
+ animation: pulseAnim 1s;
+}
+
+@keyframes pulseAnim {
+ 0% { opacity:0.25; }
+ 100% { opacity:1; }
 }
 
 .list-active {

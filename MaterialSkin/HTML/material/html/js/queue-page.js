@@ -78,17 +78,18 @@ function parseResp(data, showTrackNum, index, showRatings, queueStyle, lastInCur
                 let duration = undefined==i.duration ? undefined : parseFloat(i.duration);
                 let haveRating = QUEUE_ALBUM!=queueStyle && showRatings && undefined!=i.rating;
                 let prevItem = 0==idx ? lastInCurrent : resp.items[idx-1];
+                let cover = queueItemCover(i);
                 let isAlbumHeader = QUEUE_ALBUM==queueStyle &&
-                                     (undefined==prevItem ||
-                                     (i.album_id!=prevItem.album_id) ||
-                                     (undefined==i.album_id && undefined!=i.artwork_url && i.artwork_url!=prevItem.artwork_url));
+                                     ( undefined==prevItem ||
+                                       (i.album_id!=prevItem.album_id) ||
+                                       (undefined==i.album_id && ( (undefined!=i.cover && i.cover!=prevItem.cover)) ) );
                 let artistAlbumLines = queueStyle!=QUEUE_ALBUM || isAlbumHeader ? buildArtistAlbumLines(i, queueStyle) : undefined;
                 resp.items.push({
                               id: "track_id:"+i.id,
                               title: haveRating ? ratingString(title, i.rating) : title,
                               plaintitle: haveRating ? title : undefined,
                               artistAlbum: artistAlbumLines,
-                              image: QUEUE_ALBUM!=queueStyle || isAlbumHeader ? queueItemCover(i) : undefined,
+                              image: QUEUE_ALBUM!=queueStyle || isAlbumHeader ? cover : undefined,
                               actions: [PQ_PLAY_NOW_ACTION, PQ_PLAY_NEXT_ACTION, DIVIDER, REMOVE_ACTION, PQ_REMOVE_ALBUM_ACTION, PQ_REMOVE_DISC_ACTION, ADD_TO_PLAYLIST_ACTION, PQ_ZAP_ACTION, DOWNLOAD_ACTION, SELECT_ACTION, PQ_COPY_ACTION, MOVE_HERE_ACTION, CUSTOM_ACTIONS, SHOW_IMAGE_ACTION, MORE_ACTION],
                               duration: duration,
                               durationStr: undefined!=duration && duration>0 ? formatSeconds(duration) : undefined,

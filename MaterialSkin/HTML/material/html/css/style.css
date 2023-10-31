@@ -47,6 +47,7 @@
  --bgnd-filter:blur(7px);
  --backdrop-filter:blur(4px);
  --npbar-border-color:var(--bottom-toolbar-border-color);
+ --album-separator-color:rgba(0, 0, 0, 0.2);
 }
 
 .theme--dark {
@@ -56,6 +57,7 @@
  --tab-border-color:rgba(237, 236, 231, 0.1);
  --menu-dlg-shadow:0 1px 6px 1px rgba(0,0,0,.4)!important;
  --image-background-color:rgba(0, 0, 0, 0.2);
+ --album-separator-color:rgba(255, 255, 255, 0.2);
 }
 
 .note {
@@ -1592,7 +1594,7 @@ progress {
  font-weight:var(--bold-weight);
  padding-top:3px;
  padding-bottom:3px;
- border-bottom:1px solid var(--text-color);
+ border-bottom:1px solid var(--album-separator-color);
 }
 
 .pq-first-track {

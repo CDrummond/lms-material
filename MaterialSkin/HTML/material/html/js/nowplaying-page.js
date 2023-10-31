@@ -49,7 +49,7 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
        <div v-if="TRACK_TAB==index && tab.texttitle" v-html="tab.texttitle" class="np-info-title"></div>
        <img v-if="tab.image" :src="tab.image" loading="lazy" class="np-no-meta-img"></img>
        <div v-if="tab.text" v-bind:class="{'text':ARTIST_TAB==index}" v-html="tab.text"></div>
-       <div v-else if="TRACK_TAB!=index && !tab.text && tab.texttitle" v-html="tab.texttitle" class="np-info-title"></div>
+       <div v-else-if="TRACK_TAB!=index && !tab.text && tab.texttitle" v-html="tab.texttitle" class="np-info-title"></div>
        <template v-for="(sect, sindex) in tab.sections">
         <div class="np-sect-title" v-if="(undefined!=sect.items && sect.items.length>=sect.min) || undefined!=sect.html">{{sect.title}}<v-btn flat icon class="np-sect-toggle" v-if="undefined!=sect.grid" @click="toggleGrid(index, sindex)"><v-icon>{{ACTIONS[sect.grid ? USE_LIST_ACTION : USE_GRID_ACTION].icon}}</v-icon></v-btn></div>
         <v-list v-if="undefined!=sect.items && !sect.grid && sect.items.length>=sect.min" class="lms-list">
@@ -101,7 +101,7 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
         <div v-if="TRACK_TAB==index && tab.texttitle" v-html="tab.texttitle" class="np-info-title"></div>
         <img v-if="tab.image" :src="tab.image" loading="lazy" class="np-no-meta-img"></img>
         <div v-if="tab.text" v-bind:class="{'text':ARTIST_TAB==index}" v-html="tab.text"></div>
-        <div v-else if="TRACK_TAB!=index && !tab.text && tab.texttitle" v-html="tab.texttitle" class="np-info-title"></div>
+        <div v-else-if="TRACK_TAB!=index && !tab.text && tab.texttitle" v-html="tab.texttitle" class="np-info-title"></div>
         <template v-for="(sect, sindex) in tab.sections">
          <div class="np-sect-title" v-if="(undefined!=sect.items && sect.items.length>=sect.min) || undefined!=sect.html">{{sect.title}}<v-btn flat icon class="np-sect-toggle" v-if="undefined!=sect.grid" @click="toggleGrid(index, sindex)"><v-icon>{{ACTIONS[sect.grid ? USE_LIST_ACTION : USE_GRID_ACTION].icon}}</v-icon></v-btn></div>
          <v-list v-if="undefined!=sect.items && !sect.grid && sect.items.length>=sect.min" class="lms-list">

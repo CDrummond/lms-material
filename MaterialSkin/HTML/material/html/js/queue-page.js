@@ -189,7 +189,7 @@ var lmsQueue = Vue.component("lms-queue", {
       <img v-else-if="item.artistAlbum" :key="item.image" :src="item.image" onerror="this.src=DEFAULT_COVER" loading="lazy" v-bind:class="{'dimmed':item.image==DEFAULT_COVER || item.image==DEFAULT_RADIO_COVER}" class="radio-img"></img>
      </v-list-tile-avatar>
      <v-list-tile-content>
-      <v-list-tile-title style="font-weight:bold" v-if="item.artistAlbum" v-html="item.artistAlbum"></v-list-tile-title>
+      <v-list-tile-title style="font-weight:var(--bold-weight)" v-if="item.artistAlbum" v-html="item.artistAlbum"></v-list-tile-title>
       <v-list-tile-title v-html="item.title"></v-list-tile-title>
      </v-list-tile-content>
      <v-list-tile-action class="pq-time">{{item.durationStr}}</v-list-tile-action>

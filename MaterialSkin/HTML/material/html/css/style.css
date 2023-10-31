@@ -1586,12 +1586,13 @@ progress {
 
 .pq-album-header {
  position:fixed;
- top:7px;
- left:0px;
- padding-left:72px;
- padding-right:4px;
- width:100%;
+ top:0px;
+ left:72px;
+ width:calc(100% - 76px);
  font-weight:var(--bold-weight);
+ padding-top:3px;
+ padding-bottom:3px;
+ border-bottom:1px solid var(--text-color);
 }
 
 .pq-first-track {

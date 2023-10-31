@@ -373,8 +373,8 @@
   left:50px !important;
  }
  .pq-album-header {
-  padding-left:68px;
-  padding-right:4px;
+  left:68px;
+  width:calc(100% - 72px);
  }
  .pq-albumstyle img {
   margin-left:6px;

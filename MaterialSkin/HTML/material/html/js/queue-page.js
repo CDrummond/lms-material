@@ -136,6 +136,7 @@ var lmsQueue = Vue.component("lms-queue", {
   <v-layout v-if="selection.size>0">
    <v-btn v-if="desktopLayout" :title="pinQueue ? trans.unpin : trans.pin" flat icon class="toolbar-button" @click="togglePin"><img :src="(pinQueue ? 'pin' : 'unpin') | svgIcon(darkUi)"></img></v-btn>
    <div class="toolbar-nobtn-pad"></div>
+   <div v-if="desktopLayout && pinQueue" style="width:2px"></div>
    <v-layout row wrap>
     <v-flex xs12 class="ellipsis subtoolbar-title subtoolbar-pad">{{trans.selectMultiple}}</v-flex>
     <v-flex xs12 class="ellipsis subtoolbar-subtitle subtext">{{selection.size | displaySelectionCount}}<obj class="mat-icon">check_box</obj>{{selectionDuration | displayTime}}</v-flex>
@@ -150,6 +151,7 @@ var lmsQueue = Vue.component("lms-queue", {
   <v-layout v-else>
    <v-btn v-if="desktopLayout" :title="pinQueue ? trans.unpin : trans.pin" flat icon class="toolbar-button" @click="togglePin"><img :src="(pinQueue ? 'pin' : 'unpin') | svgIcon(darkUi)"></img></v-btn>
    <div class="toolbar-nobtn-pad"></div>
+   <div v-if="desktopLayout && pinQueue" style="width:2px"></div>
    <v-layout row wrap v-longpress="durationClicked" class="link-item">
     <v-flex xs12 class="ellipsis subtoolbar-title" v-bind:class="{'subtoolbar-title-single':undefined==duration || duration<=0}">{{remaining.show ? "-" :""}}{{(remaining.show ? remaining.size : listSize) | displayCount}}</v-flex>
     <v-flex xs12 v-if="undefined!=duration && duration>0" class="ellipsis subtoolbar-subtitle subtext">{{remaining.show ? "-" :""}}{{(remaining.show ? remaining.duration : duration) | displayTime}}{{name}}</v-flex>

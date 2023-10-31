@@ -472,6 +472,7 @@
 "Stop":"Stopp",
 "Stop Logitech Media Server?":"Logitech Media Server herunterfahren?",
 "Store current library with pinned item?":"Aktuelle Bibliothek mit gepinntem Element speichern?",
+"Style":"Stil",
 "Sun":"Son",
 "Sunday":"Sonntag",
 "Swap the queue with:":"Tausche Warteschlange mit:",
@@ -511,6 +512,8 @@
 "Total genres: %1":"Gesamtanzahl Stilrichtungen: %1",
 "Total songs: %1":"Gesamtanzahl Titel: %1",
 "Track":"Track",
+"Track (three lines)":"Titel (drei Zeilen)",
+"Track (two lines)":"Titel (zwei Zeilen)",
 "Track artist":"Titelinterpret",
 "Track gain":"Titel-Normalisierung",
 "Track is not downloadable.":"Titel ist nicht herunterladbar",
@@ -620,8 +623,5 @@
 "1 Year":"Ein Jahr",
 "%1 Years":"%1 Jahre",
 "1 day":"Ein Tag",
-"%1 days":"%1 Tage",
-"Style":"",
-"Track (three lines)":"",
-"Track (two lines)":""
+"%1 days":"%1 Tage"
 }

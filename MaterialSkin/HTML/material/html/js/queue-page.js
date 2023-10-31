@@ -353,8 +353,7 @@ var lmsQueue = Vue.component("lms-queue", {
             this.items=[];
             this.listSize=0;
             this.timestamp=0;
-            this.$forceUpdate();
-            setTimeout(function() { this.updateItems(); }.bind(this), 500);
+            this.updateItems();
         }.bind(this));
         bus.$on('playerChanged', function() {
             this.items=[];

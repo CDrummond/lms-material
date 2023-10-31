@@ -1584,6 +1584,20 @@ progress {
  font-weight:var(--bold-weight);
 }
 
+.pq-album-header {
+ position:fixed;
+ top:7px;
+ left:0px;
+ padding-left:72px;
+ padding-right:4px;
+ width:100%;
+ font-weight:var(--bold-weight);
+}
+
+.pq-first-track {
+ padding-top:24px;
+}
+
 .pq-current-indicator {
  position:absolute;
  top:6px !important;

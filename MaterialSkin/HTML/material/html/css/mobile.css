@@ -372,6 +372,13 @@
  .lms-list3 .pq-current-indicator {
   left:50px !important;
  }
+ .pq-album-header {
+  padding-left:68px;
+  padding-right:4px;
+ }
+ .pq-albumstyle img {
+  margin-left:6px;
+ }
 }
 
 .lms-splitter .splitter {

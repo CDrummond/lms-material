@@ -970,6 +970,7 @@ function parseBrowseResp(data, parent, options, cacheKey, parentCommand, parentG
             var sort = isAllSongs && parentCommand ? getAlbumSort(parentCommand, parentGenre) : undefined;
             var sortTracks = undefined!=sort && sort.by.startsWith("year");
             var highlightArtist = undefined;
+            let highlighted = 0;
 
             if (data.params[1].length>=4 && data.params[1][0]=="tracks") {
                 for (var p=0, plen=data.params[1].length; p<plen && (!allowPlayAlbum || !showAlbumName); ++p) {
@@ -1094,6 +1095,9 @@ function parseBrowseResp(data, parent, options, cacheKey, parentCommand, parentG
                               durationStr: duration>0 ? formatSeconds(duration) : undefined,
                               highlight: highlight
                           });
+                if (highlight) {
+                    highlighted++;
+                }
                 if (lmsOptions.noArtistFilter && undefined!=i.compilation && 1==parseInt(i.compilation)) {
                     numCompilationTracks++;
                     if (undefined!=i.albumartist) {
@@ -1134,6 +1138,12 @@ function parseBrowseResp(data, parent, options, cacheKey, parentCommand, parentG
                                  : undefined;
                 if (artists[0]!=albumArtist) {
                     loop[0].subtitle = undefined==loop[0].subtitle ? artists[0] : (artists[0] + SEPARATOR + loop[0].subtitle);
+                }
+            }
+            // Don't hightlight all tracks! Happens with VA albums...
+            if (highlighted>0 && highlighted==resp.items.length) {
+                for (let i=0, loop=resp.items, len=loop.length; i<len; ++i) {
+                    loop[i].highlight = false;
                 }
             }
             if (sortTracks) {

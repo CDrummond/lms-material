@@ -99,7 +99,11 @@ function parseResp(data, showTrackNum, index, showRatings, queueStyle, lastInCur
                               isLocal: i.url && i.url.startsWith("file:"),
                               disc: i.disc,
                               artist: i.artist ? i.artist : i.trackartist ? i.trackartist : i.albumartist,
-                              size: QUEUE_ALBUM==queueStyle ? isAlbumHeader ? LMS_ALBUM_QUEUE_HEADER : LMS_ALBUM_QUEUE_TRACK : undefined
+                              size: QUEUE_ALBUM==queueStyle
+                                      ? isAlbumHeader
+                                          ? LMS_ALBUM_QUEUE_HEADER : LMS_ALBUM_QUEUE_TRACK
+                                      : QUEUE_TRACK_2LINES==queueStyle
+                                          ? LMS_LIST_ELEMENT_SIZE : LMS_LIST_3LINE_ELEMENT_SIZE
                           });
                 index++;
             }

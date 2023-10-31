@@ -472,6 +472,7 @@
 "Stop":"Arrêter",
 "Stop Logitech Media Server?":"Arrêter Logitech Media Server ?",
 "Store current library with pinned item?":"Mémoriser la bibliothèque actuelle avec l'élément ajouté ?",
+"Style":"Style",
 "Sun":"Di",
 "Sunday":"Dimanche",
 "Swap the queue with:":"Échanger la liste de lecture",
@@ -511,6 +512,8 @@
 "Total genres: %1":"Nombre de genres : %1",
 "Total songs: %1":"Nombre de morceaux : %1",
 "Track":"Morceau",
+"Track (three lines)":"Morceau (trois lignes)",
+"Track (two lines)":"Morceau (deux lignes)",
 "Track artist":"Artiste du morceau",
 "Track gain":"Normalisation du volume par morceau",
 "Track is not downloadable.":"Le morceau n'est pas téléchargeable.",
@@ -620,8 +623,5 @@
 "1 Year":"1 année",
 "%1 Years":"%1 années",
 "1 day":"1 jour",
-"%1 days":"%1 jours",
-"Style":"",
-"Track (three lines)":"",
-"Track (two lines)":""
+"%1 days":"%1 jours"
 }

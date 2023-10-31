@@ -97,9 +97,9 @@ function updateUiSettings(state, val) {
             browseDisplayChanged = true;
         }
     }
-    if (undefined!=val.queueThreeLines && state.queueThreeLines!=val.queueThreeLines) {
-        state.queueThreeLines = val.queueThreeLines;
-        setLocalStorageVal('queueThreeLines', state.queueThreeLines);
+    if (undefined!=val.queueStyle && state.queueStyle!=val.queueStyle) {
+        state.queueStyle = val.queueStyle;
+        setLocalStorageVal('queueStyle', state.queueStyle);
         queueDisplayChanged = true;
     }
     if (undefined!=val.screensaver && state.screensaver!=val.screensaver) {
@@ -263,7 +263,7 @@ const store = new Vuex.Store({
         keyboardControl: true,
         updatesAvailable: new Set(),
         restartRequired: false,
-        queueThreeLines: true,
+        queueStyle: QUEUE_TRACK_3LINES,
         openDialogs: [],
         activeDialog: undefined,
         unlockAll: false,
@@ -475,13 +475,13 @@ const store = new Vuex.Store({
 
             let boolItems = ['roundCovers', 'autoScrollQueue', 'sortFavorites', 'letterOverlay', 'browseBackdrop', 'queueBackdrop',
                              'nowPlayingBackdrop', 'infoBackdrop', 'browseTechInfo', 'techInfo', 'queueShowTrackNum', 'nowPlayingTrackNum',
-                             'nowPlayingClock', 'nowPlayingContext', 'swipeVolume', 'swipeChangeTrack', 'keyboardControl','queueThreeLines',
+                             'nowPlayingClock', 'nowPlayingContext', 'swipeVolume', 'swipeChangeTrack', 'keyboardControl',
                              'screensaver', 'homeButton', 'powerButton', 'mediaControls'];
             for (let i=0, len=boolItems.length; i<len; ++i) {
                 let key = boolItems[i];
                 state[key] = getLocalStorageBool(key, state[key]);
             }
-            let intItems = ['listPadding', 'skipSeconds', 'mobileBar', 'maxRating'];
+            let intItems = ['listPadding', 'skipSeconds', 'mobileBar', 'maxRating', 'queueStyle'];
             for (let i=0, len=intItems.length; i<len; ++i) {
                 let key = intItems[i];
                 state[key] = parseInt(getLocalStorageVal(key, state[key]));

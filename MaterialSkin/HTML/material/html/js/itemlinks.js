@@ -60,6 +60,10 @@ function showBand(event, id, title, page) {
     bus.$emit('npclose');
 }
 
+function buildLink(func, id, str, page) {
+    return "<obj class=\"link-item\" onclick=\""+func+"(event, "+id+",\'"+escape(str)+"\', \'"+page+"\')\">" + str + "</obj>";
+}
+
 function addArtistLink(item, line, type, func, page, used, plain) {
     if (lmsOptions.showAllArtists && undefined!=item[type+"s"] && item[type+"s"].length>1) {
         let canUse = new Set();
@@ -78,7 +82,7 @@ function addArtistLink(item, line, type, func, page, used, plain) {
             let vals = [];
             for (let i=0, loop=item[type+"s"], len=loop.length; i<len; ++i) {
                 if (canUse.has(i)) {
-                    vals.push("<obj class=\"link-item\" onclick=\""+func+"(event, "+item[type+"_ids"][i]+",\'"+escape(loop[i])+"\', \'"+page+"\')\">" + loop[i] + "</obj>");
+                    vals.push(buildLink(func, item[type+"_ids"][i], loop[i], page));
                 }
             }
             line=addPart(line, vals.join(", "));
@@ -97,7 +101,7 @@ function addArtistLink(item, line, type, func, page, used, plain) {
                 id = item[type+"_ids"][0];
             }
             if (undefined!=id) {
-                line=addPart(line, "<obj class=\"link-item\" onclick=\""+func+"(event, "+id+",\'"+escape(val)+"\', \'"+page+"\')\">" + val + "</obj>");
+                line=addPart(line, buildLink(func, id, val, page));
             } else {
                 line=addPart(line, val);
             }

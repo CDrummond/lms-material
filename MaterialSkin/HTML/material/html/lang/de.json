@@ -497,7 +497,6 @@
 "This will remove the 'virtual library', but will not delete the actual music files contained within.":"Die Musiksammlungsansicht wird entfernt, die darin enthaltenen Musikdateien aber nicht gelöscht.",
 "This will remove the folder, and any favorites contained within.":"Der Ordner und alle darin enthaltenen Favoriten werden entfernt.",
 "This will remove tracks with the same artist and title.":"Einträge mit demselben Interpreten und Titel entfernen",
-"Three lines":"Drei Zeilen",
 "Thurs":"Don",
 "Thursday":"Donnerstag",
 "Timeout (minutes)":"Timeout (Minuten)",
@@ -546,7 +545,6 @@
 "Use desktop layout":"Desktop-Darstellung verwenden",
 "Use group player's power settings to control power of all members.":"Die Einschalteinstellungen der Gerätegruppe verwenden, um Mitglieder zu steuern",
 "Use mobile layout":"Mobile Darstellung verwenden",
-"Use three lines (title, artist, album) to show track details.":"Verwende drei Zeilen (Titel, Interpret, Album) zur Anzeige der Titelinformationen",
 "User guide":"Anleitung",
 "Various Artists":"Diverse Interpreten",
 "Version":"Version",
@@ -622,5 +620,8 @@
 "1 Year":"Ein Jahr",
 "%1 Years":"%1 Jahre",
 "1 day":"Ein Tag",
-"%1 days":"%1 Tage"
+"%1 days":"%1 Tage",
+"Style":"",
+"Track (three lines)":"",
+"Track (two lines)":""
 }

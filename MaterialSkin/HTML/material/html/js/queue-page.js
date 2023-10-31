@@ -78,18 +78,19 @@ function parseResp(data, showTrackNum, index, showRatings, queueStyle, lastInCur
                 let duration = undefined==i.duration ? undefined : parseFloat(i.duration);
                 let haveRating = QUEUE_ALBUM!=queueStyle && showRatings && undefined!=i.rating;
                 let prevItem = 0==idx ? lastInCurrent : resp.items[idx-1];
-                let cover = queueItemCover(i);
+                let image = queueItemCover(i);
                 let isAlbumHeader = QUEUE_ALBUM==queueStyle &&
                                      ( undefined==prevItem ||
                                        (i.album_id!=prevItem.album_id) ||
-                                       (undefined==i.album_id && ( (undefined!=cover && cover!=prevItem.image)) ) );
+                                       (undefined==i.album_id && ( (undefined!=image && image!=prevItem.image) ||
+                                                                   (i.album!=prevItem.album) ) ) );
                 let artistAlbumLines = queueStyle!=QUEUE_ALBUM || isAlbumHeader ? buildArtistAlbumLines(i, queueStyle) : undefined;
                 resp.items.push({
                               id: "track_id:"+i.id,
                               title: haveRating ? ratingString(title, i.rating) : title,
                               plaintitle: haveRating ? title : undefined,
                               artistAlbum: artistAlbumLines,
-                              image: cover,
+                              image: image,
                               actions: [PQ_PLAY_NOW_ACTION, PQ_PLAY_NEXT_ACTION, DIVIDER, REMOVE_ACTION, PQ_REMOVE_ALBUM_ACTION, PQ_REMOVE_DISC_ACTION, ADD_TO_PLAYLIST_ACTION, PQ_ZAP_ACTION, DOWNLOAD_ACTION, SELECT_ACTION, PQ_COPY_ACTION, MOVE_HERE_ACTION, CUSTOM_ACTIONS, SHOW_IMAGE_ACTION, MORE_ACTION],
                               duration: duration,
                               durationStr: undefined!=duration && duration>0 ? formatSeconds(duration) : undefined,
@@ -99,6 +100,7 @@ function parseResp(data, showTrackNum, index, showRatings, queueStyle, lastInCur
                               isLocal: i.url && i.url.startsWith("file:"),
                               disc: i.disc,
                               artist: i.artist ? i.artist : i.trackartist ? i.trackartist : i.albumartist,
+                              album: QUEUE_ALBUM==queueStyle ? i.album : undefined,
                               size: QUEUE_ALBUM==queueStyle
                                       ? isAlbumHeader
                                           ? LMS_ALBUM_QUEUE_HEADER : LMS_ALBUM_QUEUE_TRACK

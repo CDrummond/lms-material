@@ -59,6 +59,7 @@
 48. Remove option for larger covers, and instead allow (slightly) larger
     covers by default.
 49. Add 'Album' style queue option.
+50. Don't show menu button for tracks in queue or browse views.
 
 3.5.6
 -----

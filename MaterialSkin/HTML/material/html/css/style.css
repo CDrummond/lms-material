@@ -387,10 +387,6 @@ div.v-subheader {
  margin-bottom:-36px!important;
 }
 
-.lms-list-album .pq-albumstyle:not(.pq-track) .queue-action {
- padding-top:37px!important;
-}
-
 .lms-list-album .lms-avatar .v-avatar {
  width:calc(var(--pq-album-header) - 7px) !important;
  height:calc(var(--pq-album-header) - 7px) !important;
@@ -1628,12 +1624,14 @@ progress {
  font-size:var(--small-font-size);
  height:var(--list-elem-height);
  line-height:var(--list-elem-height);
- margin-right:-16px;
  opacity:var(--sub-opacity);
  min-width:44px;
  margin-top:calc(19px - var(--std-font-size));
 }
 
+.pq-time {
+ margin-right:-8px;
+}
 .browse-time {
  margin-right:0px;
 }
@@ -2167,11 +2165,6 @@ div.v-subheader {
 
 .grid-header {
   width:100%;
-}
-
-.queue-action {
- padding-top:1px;
- min-width:44px !important;
 }
 
 .v-card__title, .v-dialog .v-card .v-card__text, .v-snack__content {

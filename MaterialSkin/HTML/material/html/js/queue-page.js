@@ -186,9 +186,6 @@ var lmsQueue = Vue.component("lms-queue", {
       <v-list-tile-sub-title v-html="item.artistAlbum[1]"></v-list-tile-sub-title>
      </v-list-tile-content>
      <v-list-tile-action class="pq-time">{{item.durationStr}}</v-list-tile-action>
-     <v-list-tile-action class="queue-action" @click.stop="itemMenu(item, index, $event)">
-      <div class="menu-btn grid-btn list-btn" :title="i18n('%1 (Menu)', undefined==item.plaintitle ? item.title : item.plaintitle)"></div>
-     </v-list-tile-action>
      <img v-if="index==currentIndex" class="pq-current-indicator" :src="'pq-current' | svgIcon(true, true)"></img>
     </v-list-tile>
    </RecycleScroller>
@@ -203,9 +200,6 @@ var lmsQueue = Vue.component("lms-queue", {
       <v-list-tile-title v-html="item.title"></v-list-tile-title>
      </v-list-tile-content>
      <v-list-tile-action class="pq-time">{{item.durationStr}}</v-list-tile-action>
-     <v-list-tile-action class="queue-action" @click.stop="itemMenu(item, index, $event)">
-      <div class="menu-btn grid-btn list-btn" :title="i18n('%1 (Menu)', undefined==item.plaintitle ? item.title : item.plaintitle)"></div>
-     </v-list-tile-action>
      <img v-if="index==currentIndex" class="pq-current-indicator" :src="'pq-current' | svgIcon(true, true)"></img>
     </v-list-tile>
    </RecycleScroller>
@@ -220,9 +214,6 @@ var lmsQueue = Vue.component("lms-queue", {
       <v-list-tile-sub-title v-html="item.artistAlbum"></v-list-tile-sub-title>
      </v-list-tile-content>
      <v-list-tile-action class="pq-time">{{item.durationStr}}</v-list-tile-action>
-     <v-list-tile-action class="queue-action" @click.stop="itemMenu(item, index, $event)">
-      <div class="menu-btn grid-btn list-btn" :title="i18n('%1 (Menu)', undefined==item.plaintitle ? item.title : item.plaintitle)"></div>
-     </v-list-tile-action>
      <img v-if="index==currentIndex" class="pq-current-indicator" :src="'pq-current' | svgIcon(true, true)"></img>
     </v-list-tile>
    </RecycleScroller>

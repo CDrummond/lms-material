@@ -171,8 +171,8 @@ var lmsQueue = Vue.component("lms-queue", {
    <v-btn :title="trans.clear | tooltip(LMS_CLEAR_QUEUE_KEYBOARD,keyboardControl)" flat icon @click="clear()" class="toolbar-button" v-bind:class="{'disabled':items.length<1}"v-if="!queryParams.party"><img class="svg-list-img" :src="'queue-clear' | svgIcon(darkUi)"></img></v-btn>
   </v-layout>
  </div>
- <div class="lms-list bgnd-cover" id="queue-bgnd">
- <div class="lms-list" id="queue-list" v-bind:class="{'lms-list3':threeLines,'lms-list-album':albumStyle,'bgnd-blur':drawBgndImage}" @drop.stop="drop(-1, $event)">
+ <div class="lms-list bgnd-cover" v-bind:class="{'backdrop-cover':drawBackdrop}" id="queue-bgnd">
+ <div class="lms-list" id="queue-list" v-bind:class="{'lms-list3':threeLines,'lms-list-album':albumStyle,'bgnd-blur':drawBgndImage,'backdrop-blur':drawBackdrop}" @drop.stop="drop(-1, $event)">
   <div v-if="items.length<1"></div> <!-- RecycleScroller does not like it if 0 items? -->
   <RecycleScroller v-else-if="threeLines" :items="items" :item-size="LMS_LIST_3LINE_ELEMENT_SIZE+listSizeAdjust" page-mode key-field="key" :buffer="LMS_SCROLLER_LIST_BUFFER">
     <v-list-tile avatar v-bind:class="{'pq-current': index==currentIndex, 'pq-pulse':index==currentIndex && pulseCurrent, 'list-active': menu.show && index==menu.index, 'drop-target': dragActive && index==dropIndex}" @dragstart="dragStart(index, $event)" @dragend="dragEnd()" @dragover="dragOver(index, $event)" @drop.stop="drop(index, $event)" draggable @click.prevent.stop="click(item, index, $event)" slot-scope="{item, index}" key-field="key" @contextmenu.prevent="contextMenu(item, index, $event)">
@@ -316,6 +316,9 @@ var lmsQueue = Vue.component("lms-queue", {
         drawBgndImage() {
             return this.$store.state.queueBackdrop && undefined!=this.coverUrl
         },
+        drawBackdrop() {
+            return !this.drawBgndImage && !isEmpty(this.$store.state.queueDefBackdrop)
+        },
         showMoveAction() {
             if (queryParams.party) {
                 return false;
@@ -348,6 +351,9 @@ var lmsQueue = Vue.component("lms-queue", {
             this.timestamp=0;
             this.updateItems();
         }.bind(this));
+        bus.$on('queueSetBgndImage', function() {
+            this.setBgndCover();
+         }.bind(this));
         bus.$on('playerChanged', function() {
             this.items=[];
             this.listSize=0;
@@ -1279,7 +1285,11 @@ var lmsQueue = Vue.component("lms-queue", {
             this.dragIndex = undefined;
         },
         setBgndCover() {
-            setBgndCover(this.bgndElement, this.$store.state.queueBackdrop ? this.coverUrl : undefined);
+            var url = this.$store.state.queueBackdrop ? this.coverUrl : undefined;
+            if (!url && !isEmpty(this.$store.state.queueDefBackdrop)) {
+                url=changeImageSizing('html/backdrops/' + this.$store.state.queueDefBackdrop + '.jpg', LMS_CURRENT_IMAGE_SIZE);
+            }
+            setBgndCover(this.bgndElement, url);
             // Check for cover changes in radio streams...
             if (this.coverUrl && undefined!=this.coverTrackIndex && this.coverTrackIndex>=0 && this.coverTrackIndex<this.items.length) {
                 var resizedUrl = changeImageSizing(this.coverUrl, LMS_IMAGE_SIZE);

@@ -126,6 +126,11 @@ function updateUiSettings(state, val) {
         setLocalStorageVal('browseDefBackdrop', state.browseDefBackdrop);
         bus.$emit('browseSetBgndImage');
     }
+    if (undefined!=val.queueDefBackdrop && state.queueDefBackdrop!=val.queueDefBackdrop) {
+        state.queueDefBackdrop = val.queueDefBackdrop;
+        setLocalStorageVal('queueDefBackdrop', state.queueDefBackdrop);
+        bus.$emit('queueSetBgndImage');
+    }
     lmsOptions.techInfo = state.browseTechInfo;
     if (queueDisplayChanged) {
         bus.$emit('queueDisplayChanged');
@@ -245,6 +250,7 @@ const store = new Vuex.Store({
         browseBackdrop: true,
         browseDefBackdrop: '010',
         queueBackdrop: true,
+        queueDefBackdrop: '012',
         nowPlayingBackdrop: true,
         infoBackdrop: true,
         techInfo: false,
@@ -494,6 +500,7 @@ const store = new Vuex.Store({
             state.showRating = LMS_STATS_ENABLED && getLocalStorageBool('showRating', state.showRating);
             state.library = getLocalStorageVal('library', state.library);
             state.browseDefBackdrop = getLocalStorageVal('browseDefBackdrop', state.browseDefBackdrop);
+            state.queueDefBackdrop = getLocalStorageVal('queueDefBackdrop', state.queueDefBackdrop);
             setTheme(state.theme, state.color);
             setRoundCovers(state.roundCovers);
             if (state.fontSize!='r') {
@@ -531,6 +538,7 @@ const store = new Vuex.Store({
                         var opts = { theme: getLocalStorageVal('theme', undefined==prefs.theme ? state.chosenTheme : prefs.theme),
                                      color: getLocalStorageVal('color', undefined==prefs.color ? state.color : prefs.color),
                                      browseDefBackdrop: getLocalStorageVal('browseDefBackdrop', undefined==prefs.browseDefBackdrop ? state.browseDefBackdrop : prefs.browseDefBackdrop),
+                                     queueDefBackdrop: getLocalStorageVal('queueDefBackdrop', undefined==prefs.queueDefBackdrop ? state.queueDefBackdrop : prefs.queueDefBackdrop),
                                      largerElements: getLocalStorageBool('largerElements', undefined==prefs.largerElements ? state.largerElements : prefs.largerElements),
                                      fontSize: getLocalStorageVal('fontSize', undefined==prefs.fontSize ? state.fontSize : prefs.fontSize)
                                     };

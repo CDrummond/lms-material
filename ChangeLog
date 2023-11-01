@@ -52,7 +52,7 @@
 41. In MAI view show album cover and artist image before text.
 42. Fix MAI view image sizes.
 43. Center align all MAI titles.
-44. Provide backdrop images to use in browse view.
+44. Provide backdrop images to use in browse and queue views.
 45. Don't apply reverse sort to 'New Music'.
 46. Fix image position and size in biographies.
 47. Show image in browse sub-toolbar if wide enough.

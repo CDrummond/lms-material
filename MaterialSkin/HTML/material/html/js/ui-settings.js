@@ -325,6 +325,20 @@ Vue.component('lms-ui-settings', {
      </v-list-tile-content>
      <v-list-tile-action><m3-switch v-model="queueBackdrop"></m3-switch></v-list-tile-action>
     </v-list-tile>
+    <v-divider></v-divider>
+
+    <v-list-tile>
+     <v-list-tile-content>
+      <v-list-tile-title>{{i18n('Default background')}}</v-list-tile-title>
+      <v-list-tile-sub-title>{{i18n('Select background to use when not using artist, or album, image.')}}</v-list-tile-sub-title>
+      <div class="thumbnail-grid">
+       <template v-for="(item, index) in backdrops">
+        <div v-if="item==''" @click="queueDefBackdrop=item" class="thumbnail none" v-bind:class="{'selected-thumbnail':item==queueDefBackdrop}">{{i18n('None')}}</div>
+        <img v-else @click="queueDefBackdrop=item" :src="'html/backdrops/'+item+'_tn.jpg'" class="thumbnail" v-bind:class="{'selected-thumbnail':item==queueDefBackdrop}"></img>
+       </template>
+      </div>
+     </v-list-tile-content>
+    </v-list-tile>
 
     <div class="dialog-padding" v-if="LMS_P_MAI"></div>
     <v-header class="dialog-section-header" v-if="LMS_P_MAI">{{i18n('Song Information')}}</v-header>
@@ -390,6 +404,7 @@ Vue.component('lms-ui-settings', {
             browseDefBackdrop:'010',
             backdrops: [],
             queueBackdrop:true,
+            queueDefBackdrop:'012',
             nowPlayingBackdrop:true,
             infoBackdrop:true,
             browseTechInfo:false,
@@ -575,6 +590,7 @@ Vue.component('lms-ui-settings', {
             this.browseBackdrop = this.$store.state.browseBackdrop;
             this.browseDefBackdrop = this.$store.state.browseDefBackdrop;
             this.queueBackdrop = this.$store.state.queueBackdrop;
+            this.queueDefBackdrop = this.$store.state.queueDefBackdrop;
             this.nowPlayingBackdrop = this.$store.state.nowPlayingBackdrop;
             this.infoBackdrop = this.$store.state.infoBackdrop;
             this.browseTechInfo = this.$store.state.browseTechInfo;
@@ -692,6 +708,7 @@ Vue.component('lms-ui-settings', {
                       browseBackdrop:this.browseBackdrop,
                       browseDefBackdrop:this.browseDefBackdrop,
                       queueBackdrop:this.queueBackdrop,
+                      queueDefBackdrop:this.queueDefBackdrop,
                       nowPlayingBackdrop:this.nowPlayingBackdrop,
                       infoBackdrop:this.infoBackdrop,
                       browseTechInfo:this.browseTechInfo,

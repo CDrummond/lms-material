@@ -1347,7 +1347,7 @@ var lmsBrowse = Vue.component("lms-browse", {
             }
 
             if (sz.nc==1) {
-                var altsz = this.calcSizes(2, listWidth, maxItemWidth, 2*GRID_STEP);
+                var altsz = this.calcSizes(2, listWidth, GRID_MAX_WIDTH, 2*GRID_STEP);
                 if (altsz.nc>sz.nc) {
                     sz=altsz;
                 }

@@ -72,9 +72,12 @@ function parseResp(data, showTrackNum, index, showRatings, queueStyle, lastInCur
                 if (showTrackNum && i.tracknum>0) {
                     title = formatTrackNum(i)+SEPARATOR+title;
                 }
-                if (QUEUE_ALBUM==queueStyle && undefined!=i.albumartist && undefined!=i.artist && i.artist!=i.albumartist) {
-                    title+=SEPARATOR+(IS_MOBILE || undefined==i.artist_id ? i.artist : buildLink('showArtist', i.artist_id, i.artist, 'queue'));
+                let artist = undefined!=i.trackartist && undefined!=i.trackartist_id ? i.trackartist : i.artist;
+                if (QUEUE_ALBUM==queueStyle && undefined!=i.albumartist && undefined!=artist && i.artist!=artist) {
+                    let id = undefined!=i.trackartist_id ? i.trackartist_id : i.artist_id;
+                    title+=SEPARATOR+(IS_MOBILE || undefined==id ? artist : buildLink('showArtist', id, artist, 'queue', 'subtext'));
                 }
+                console.log(title);
                 let duration = undefined==i.duration ? undefined : parseFloat(i.duration);
                 let haveRating = QUEUE_ALBUM!=queueStyle && showRatings && undefined!=i.rating;
                 let prevItem = 0==idx ? lastInCurrent : resp.items[idx-1];
@@ -404,6 +407,13 @@ var lmsQueue = Vue.component("lms-queue", {
                     var title = i.title;
                     if (this.$store.state.queueShowTrackNum && i.tracknum>0) {
                         title = formatTrackNum(i)+SEPARATOR+title;
+                    }
+                    if (this.albumStyle) {
+                        let artist = undefined!=i.trackartist && undefined!=i.trackartist_id ? i.trackartist : i.artist;
+                        if (undefined!=i.albumartist && undefined!=artist && i.artist!=artist) {
+                            let id = undefined!=i.trackartist_id ? i.trackartist_id : i.artist_id;
+                            title+=SEPARATOR+(IS_MOBILE || undefined==id ? artist : buildLink('showArtist', id, artist, 'queue', 'subtext'));
+                        }
                     }
                     if (this.$store.state.showRating && undefined!=i.rating) {
                         title = ratingString(title, i.rating);

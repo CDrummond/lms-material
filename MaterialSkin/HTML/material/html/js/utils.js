@@ -652,7 +652,7 @@ function ratingString(current, val) {
         }
     }
     var index=Math.ceil(val/10.0);
-    return index<=0 ? str : (str+SEPARATOR+"<i class=\"rstar\">"+RATINGS[index<0 ? 0 : (index>=RATINGS.length ? RATINGS.length-1 : index)]+"</i>");
+    return index<=0 ? str : ((isEmpty(str) ? "" : (str+SEPARATOR))+"<i class=\"rstar\">"+RATINGS[index<0 ? 0 : (index>=RATINGS.length ? RATINGS.length-1 : index)]+"</i>");
 }
 
 function isEmpty(str) {

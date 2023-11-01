@@ -1304,9 +1304,12 @@ function browseItemAction(view, act, item, index, event) {
             logJsonMessage("RESP", data);
             bus.$emit('refreshStatus');
             view.clearSelection();
-            if (!view.$store.state.desktopLayout) {
+            console.log("XXXX");
+            if (!view.$store.state.desktopLayout || !view.$store.state.showQueue) {
                 if (act===PLAY_ACTION) {
-                    view.$store.commit('setPage', 'now-playing');
+                    if (!view.$store.state.desktopLayout) {
+                        view.$store.commit('setPage', 'now-playing');
+                    }
                 } else if (act===ADD_ACTION) {
                     bus.$emit('showMessage', i18n("Appended '%1' to the play queue", undefined==item.title ? view.headerTitle : item.title));
                 } else if (act===INSERT_ACTION) {

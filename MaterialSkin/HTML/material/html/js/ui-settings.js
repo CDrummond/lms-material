@@ -78,11 +78,6 @@ Vue.component('lms-ui-settings', {
     <v-divider></v-divider>
 
     <v-list-tile>
-     <v-select :items="listPaddings" :label="i18n('Padding between items in lists')" v-model="listPadding" item-text="label" item-value="value"></v-select>
-    </v-list-tile>
-    <v-divider></v-divider>
-
-    <v-list-tile>
      <v-select :items="volumeSteps" :label="i18n('Volume step')" v-model="volumeStep" item-text="label" item-value="value"></v-select>
     </v-list-tile>
     <v-divider></v-divider>
@@ -376,8 +371,6 @@ Vue.component('lms-ui-settings', {
             roundCovers : true,
             fontSize: 'r',
             fontSizes: [],
-            listPadding: 0,
-            listPaddings: [],
             letterOverlay:false,
             sortFavorites:true,
             autoScrollQueue:true,
@@ -554,7 +547,6 @@ Vue.component('lms-ui-settings', {
             this.mobileBar = this.$store.state.mobileBar;
             this.roundCovers = this.$store.state.roundCovers;
             this.fontSize = this.$store.state.fontSize;
-            this.listPadding = this.$store.state.listPadding;
             this.autoScrollQueue = this.$store.state.autoScrollQueue;
             this.browseBackdrop = this.$store.state.browseBackdrop;
             this.queueBackdrop = this.$store.state.queueBackdrop;
@@ -625,13 +617,6 @@ Vue.component('lms-ui-settings', {
                                { key: 'r',  label: i18n("Regular") },
                                { key: 'l',  label: i18n("Large") }
                                 ];
-            this.listPaddings = [
-                { value:0, label:i18n('None')},
-                { value:1, label:i18n('Tiny')},
-                { value:2, label:i18n('Small')},
-                { value:4, label:i18n('Medium')},
-                { value:8, label:i18n('Large')}
-                ];
         },
         close() {
             this.show=false;
@@ -669,7 +654,6 @@ Vue.component('lms-ui-settings', {
                       mobileBar:this.mobileBar,
                       roundCovers:this.roundCovers,
                       fontSize:this.fontSize,
-                      listPadding:this.listPadding,
                       autoScrollQueue:this.autoScrollQueue,
                       letterOverlay:this.letterOverlay,
                       sortFavorites:this.sortFavorites,

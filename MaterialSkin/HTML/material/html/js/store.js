@@ -107,11 +107,6 @@ function updateUiSettings(state, val) {
         setLocalStorageVal('screensaver', state.screensaver);
         bus.$emit('screensaverDisplayChanged');
     }
-    if (undefined!=val.listPadding && state.listPadding!=val.listPadding) {
-        state.listPadding = val.listPadding;
-        setLocalStorageVal('listPadding', state.listPadding);
-        setListPadding(state.listPadding);
-    }
     if (undefined!=val.disabledBrowseModes) {
         var diff = new Set([...val.disabledBrowseModes].filter(x => !state.disabledBrowseModes.has(x)));
         var diff2 = new Set([...state.disabledBrowseModes].filter(x => !val.disabledBrowseModes.has(x)));
@@ -275,8 +270,7 @@ const store = new Vuex.Store({
         powerButton: false,
         mediaControls: false,
         downloadStatus: [],
-        coloredToolbars: false,
-        listPadding: 0
+        coloredToolbars: false
     },
     mutations: {
         updatePlayer(state, player) {
@@ -481,7 +475,7 @@ const store = new Vuex.Store({
                 let key = boolItems[i];
                 state[key] = getLocalStorageBool(key, state[key]);
             }
-            let intItems = ['listPadding', 'skipSeconds', 'mobileBar', 'maxRating', 'queueStyle'];
+            let intItems = ['skipSeconds', 'mobileBar', 'maxRating', 'queueStyle'];
             for (let i=0, len=intItems.length; i<len; ++i) {
                 let key = intItems[i];
                 state[key] = parseInt(getLocalStorageVal(key, state[key]));
@@ -498,7 +492,6 @@ const store = new Vuex.Store({
             if (state.fontSize!='r') {
                 setFontSize(state.fontSize);
             }
-            setListPadding(state.listPadding);
             lmsOptions.techInfo = state.browseTechInfo;
             // Max rating (for trackstat)
             if (LMS_P_RP=='trackstat') {

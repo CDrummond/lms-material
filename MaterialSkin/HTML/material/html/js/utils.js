@@ -567,10 +567,6 @@ function setTheme(theme, color, prevColor) {
     }
 }
 
-function setListPadding(padding) {
-    document.documentElement.style.setProperty('--list-padding', padding+'px');
-}
-
 function setLayout(useDesktop) {
     changeLink("html/css/" + (useDesktop ? "desktop" : "mobile") + ".css?r=" + LMS_MATERIAL_REVISION, "layoutcss");
     if (undefined==queryParams.css) {

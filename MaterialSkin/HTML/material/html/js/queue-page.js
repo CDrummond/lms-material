@@ -177,7 +177,7 @@ var lmsQueue = Vue.component("lms-queue", {
  <div class="lms-list bgnd-cover" v-bind:class="{'queue-backdrop-cover':drawBackdrop}" id="queue-bgnd">
  <div class="lms-list" id="queue-list" v-bind:class="{'lms-list3':threeLines,'lms-list-album':albumStyle,'bgnd-blur':drawBgndImage,'backdrop-blur':drawBackdrop}" @drop.stop="drop(-1, $event)">
   <div v-if="items.length<1"></div> <!-- RecycleScroller does not like it if 0 items? -->
-  <RecycleScroller v-else-if="threeLines" :items="items" :item-size="LMS_LIST_3LINE_ELEMENT_SIZE+listSizeAdjust" page-mode key-field="key" :buffer="LMS_SCROLLER_LIST_BUFFER">
+  <RecycleScroller v-else-if="threeLines" :items="items" :item-size="LMS_LIST_3LINE_ELEMENT_SIZE" page-mode key-field="key" :buffer="LMS_SCROLLER_LIST_BUFFER">
     <v-list-tile avatar v-bind:class="{'pq-current': index==currentIndex, 'pq-pulse':index==currentIndex && pulseCurrent, 'list-active': menu.show && index==menu.index, 'drop-target': dragActive && index==dropIndex}" @dragstart="dragStart(index, $event)" @dragend="dragEnd()" @dragover="dragOver(index, $event)" @drop.stop="drop(index, $event)" draggable @click.prevent.stop="click(item, index, $event)" slot-scope="{item, index}" key-field="key" @contextmenu.prevent="contextMenu(item, index, $event)">
      <v-list-tile-avatar :tile="true" v-bind:class="{'radio-image': 0==item.duration}" class="lms-avatar">
       <v-icon v-if="item.selected">check_box</v-icon>
@@ -206,7 +206,7 @@ var lmsQueue = Vue.component("lms-queue", {
      <img v-if="index==currentIndex" class="pq-current-indicator" :src="'pq-current' | svgIcon(true, true)"></img>
     </v-list-tile>
    </RecycleScroller>
-   <RecycleScroller v-else :items="items" :item-size="LMS_LIST_ELEMENT_SIZE+listSizeAdjust" page-mode key-field="key" :buffer="LMS_SCROLLER_LIST_BUFFER">
+   <RecycleScroller v-else :items="items" :item-size="LMS_LIST_ELEMENT_SIZE" page-mode key-field="key" :buffer="LMS_SCROLLER_LIST_BUFFER">
     <v-list-tile avatar v-bind:class="{'pq-current':index==currentIndex, 'pq-pulse':index==currentIndex && pulseCurrent, 'list-active': menu.show && index==menu.index, 'drop-target': dragActive && index==dropIndex}" @dragstart="dragStart(index, $event)" @dragend="dragEnd()" @dragover="dragOver(index, $event)" @drop.stop="drop(index, $event)" draggable @click="click(item, index, $event)" slot-scope="{item, index}" key-field="key" @contextmenu.prevent="contextMenu(item, index, $event)">
      <v-list-tile-avatar :tile="true" v-bind:class="{'radio-image': 0==item.duration}" class="lms-avatar">
       <v-icon v-if="item.selected">check_box</v-icon>
@@ -327,9 +327,6 @@ var lmsQueue = Vue.component("lms-queue", {
                 return false;
             }
             return !queryParams.party && this.$store.state.players && this.$store.state.players.length>1
-        },
-        listSizeAdjust() {
-            return this.$store.state.listPadding
         },
         name() {
             return this.listSize>0 && undefined!=this.playlist.name && this.playlist.name.length>0

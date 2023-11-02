@@ -18,9 +18,8 @@
  --mobile-npbar-height:0px;
  --mobile-npbar-height-thin:22px;
  --mobile-npbar-height-thick:48px;
- --list-padding:0px;
- --list-elem-height:48px;
- --list-elem-3line-height:68px;
+ --list-elem-height:50px;
+ --list-elem-3line-height:70px;
  --pq-album-header:68px;
  --pq-album-track:34px;
  scrollbar-color:var(--scrollbar-thumb-color) var(--scrollbar-track-color);
@@ -245,7 +244,7 @@ html, .mini-player {
 }
 
 .lms-list .v-list__tile__sub-title {
- margin-top:-2px;
+ margin-top:-4px;
 }
 
 .v-text-field, .v-select__slot .v-label, .v-input .v-label {
@@ -395,8 +394,6 @@ div.v-subheader {
 
 .lms-list-item {
  border-bottom: 1px solid var(--list-item-border-color);
- padding-top:var(--list-padding);
- padding-bottom:var(--list-padding);
 }
 
 /* Make action buttons in lists closer together */
@@ -2009,8 +2006,8 @@ div.v-subheader {
 }
 
 .lms-avatar .v-avatar {
- width:calc(var(--list-elem-height) - 1px) !important;
- height:calc(var(--list-elem-height) - 1px) !important;
+ width:calc(var(--list-elem-height) - 3px) !important;
+ height:calc(var(--list-elem-height) - 3px) !important;
  margin-left:-4px;
 }
 
@@ -2025,8 +2022,8 @@ div.v-subheader {
 }
 
 .lms-list3 .lms-avatar .v-avatar, .lms-list3 .v-list__tile__avatar {
- width:calc(var(--list-elem-3line-height) - 1px) !important;
- height:calc(var(--list-elem-3line-height) - 1px) !important;
+ width:calc(var(--list-elem-3line-height) - 3px) !important;
+ height:calc(var(--list-elem-3line-height) - 3px) !important;
  margin-left:-4px;
  margin-right:4px;
  min-width: 74px;

@@ -74,7 +74,7 @@ function parseResp(data, showTrackNum, index, showRatings, queueStyle, lastInCur
                     title = formatTrackNum(i)+SEPARATOR+title;
                 }
                 let artist = undefined!=i.trackartist && undefined!=i.trackartist_id ? i.trackartist : i.artist;
-                if (QUEUE_ALBUM==queueStyle && undefined!=i.albumartist && undefined!=artist && i.artist!=artist) {
+                if (QUEUE_ALBUM==queueStyle && undefined!=i.albumartist && undefined!=artist && i.albumartist!=artist) {
                     let id = undefined!=i.trackartist_id ? i.trackartist_id : i.artist_id;
                     title+=SEPARATOR+(IS_MOBILE || undefined==id ? '<obj class="subtext">'+artist+'</obj>' : buildLink('showArtist', id, artist, 'queue', clz));
                 }
@@ -407,7 +407,7 @@ var lmsQueue = Vue.component("lms-queue", {
                     }
                     if (this.albumStyle) {
                         let artist = undefined!=i.trackartist && undefined!=i.trackartist_id ? i.trackartist : i.artist;
-                        if (undefined!=i.albumartist && undefined!=artist && i.artist!=artist) {
+                        if (undefined!=i.albumartist && undefined!=artist && i.albumartist!=artist) {
                             let id = undefined!=i.trackartist_id ? i.trackartist_id : i.artist_id;
                             title+=SEPARATOR+(IS_MOBILE || undefined==id ? '<obj class="subtext">'+artist+'</obj>' : buildLink('showArtist', id, artist, 'queue', 'subtext'));
                         }

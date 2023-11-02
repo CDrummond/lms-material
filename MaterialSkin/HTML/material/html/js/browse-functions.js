@@ -1304,7 +1304,6 @@ function browseItemAction(view, act, item, index, event) {
             logJsonMessage("RESP", data);
             bus.$emit('refreshStatus');
             view.clearSelection();
-            console.log("XXXX");
             if (!view.$store.state.desktopLayout || !view.$store.state.showQueue) {
                 if (act===PLAY_ACTION) {
                     if (!view.$store.state.desktopLayout) {

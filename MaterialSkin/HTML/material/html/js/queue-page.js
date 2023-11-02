@@ -67,6 +67,7 @@ function parseResp(data, showTrackNum, index, showRatings, queueStyle, lastInCur
         if (data.result.playlist_loop) {
             for (var idx=0, loop=data.result.playlist_loop, loopLen=loop.length; idx<loopLen; ++idx) {
                 let i = loop[idx];
+                let clz = QUEUE_ALBUM==queueStyle ? 'subtext' : undefined;
                 splitMultiples(i);
                 let title = i.title;
                 if (showTrackNum && i.tracknum>0) {
@@ -75,9 +76,8 @@ function parseResp(data, showTrackNum, index, showRatings, queueStyle, lastInCur
                 let artist = undefined!=i.trackartist && undefined!=i.trackartist_id ? i.trackartist : i.artist;
                 if (QUEUE_ALBUM==queueStyle && undefined!=i.albumartist && undefined!=artist && i.artist!=artist) {
                     let id = undefined!=i.trackartist_id ? i.trackartist_id : i.artist_id;
-                    title+=SEPARATOR+(IS_MOBILE || undefined==id ? artist : buildLink('showArtist', id, artist, 'queue', 'subtext'));
+                    title+=SEPARATOR+(IS_MOBILE || undefined==id ? '<obj class="subtext">'+artist+'</obj>' : buildLink('showArtist', id, artist, 'queue', clz));
                 }
-                console.log(title);
                 let duration = undefined==i.duration ? undefined : parseFloat(i.duration);
                 let haveRating = QUEUE_ALBUM!=queueStyle && showRatings && undefined!=i.rating;
                 let prevItem = 0==idx ? lastInCurrent : resp.items[idx-1];
@@ -90,7 +90,7 @@ function parseResp(data, showTrackNum, index, showRatings, queueStyle, lastInCur
                 let artistAlbumLines = queueStyle!=QUEUE_ALBUM || isAlbumHeader ? buildArtistAlbumLines(i, queueStyle) : undefined;
                 resp.items.push({
                               id: "track_id:"+i.id,
-                              title: haveRating ? ratingString(title, i.rating) : title,
+                              title: haveRating ? ratingString(title, i.rating, clz) : title,
                               plaintitle: haveRating ? title : undefined,
                               artistAlbum: artistAlbumLines,
                               image: image,
@@ -412,11 +412,11 @@ var lmsQueue = Vue.component("lms-queue", {
                         let artist = undefined!=i.trackartist && undefined!=i.trackartist_id ? i.trackartist : i.artist;
                         if (undefined!=i.albumartist && undefined!=artist && i.artist!=artist) {
                             let id = undefined!=i.trackartist_id ? i.trackartist_id : i.artist_id;
-                            title+=SEPARATOR+(IS_MOBILE || undefined==id ? artist : buildLink('showArtist', id, artist, 'queue', 'subtext'));
+                            title+=SEPARATOR+(IS_MOBILE || undefined==id ? '<obj class="subtext">'+artist+'</obj>' : buildLink('showArtist', id, artist, 'queue', 'subtext'));
                         }
                     }
                     if (this.$store.state.showRating && undefined!=i.rating) {
-                        title = ratingString(title, i.rating);
+                        title = ratingString(title, i.rating, this.albumStyle ? 'subtext' : undefined);
                     }
                     var artistAlbum = undefined!=this.items[index].artistAlbum ? buildArtistAlbumLines(i, this.$store.state.queueStyle) : undefined;
                     // ?? var remoteTitle = checkRemoteTitle(i);

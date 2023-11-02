@@ -641,18 +641,19 @@ function clearListCache(force) {
     });
 }
 
-function ratingString(current, val) {
-    var str = "";
+function ratingString(current, val, clz) {
+    let str = "";
+    let clzStr = "<i class=\"rstar" + (undefined==clz ? "" : (" "+clz))+"\">";
     if (current) {
-        var prev=current.indexOf("<i class=\"rstar\">");
+        let prev=current.indexOf(clzStr);
         if (prev>-1) {
             str = current.substring(0, prev);
         } else {
             str += current;
         }
     }
-    var index=Math.ceil(val/10.0);
-    return index<=0 ? str : ((isEmpty(str) ? "" : (str+SEPARATOR))+"<i class=\"rstar\">"+RATINGS[index<0 ? 0 : (index>=RATINGS.length ? RATINGS.length-1 : index)]+"</i>");
+    let index=Math.ceil(val/10.0);
+    return index<=0 ? str : ((isEmpty(str) ? "" : (str+SEPARATOR))+clzStr+RATINGS[index<0 ? 0 : (index>=RATINGS.length ? RATINGS.length-1 : index)]+"</i>");
 }
 
 function isEmpty(str) {

@@ -1033,11 +1033,12 @@ var lmsBrowse = Vue.component("lms-browse", {
         backBtnPressed(longPress) {
             if (this.$store.state.visibleMenus.size<1) {
                 this.backBtnPressTime = new Date().getTime(); // See sourcesClicked
-                if (longPress) {
+                if (longPress || (undefined!=this.lastBackBtnPress && (this.backBtnPressTime-this.lastBackBtnPress)<=LMS_DOUBLE_CLICK_TIMEOUT)) {
                     this.goHome();
                 } else {
                     this.goBack();
                 }
+                this.lastBackBtnPress = this.backBtnPressTime;
             }
         },
         goBack(refresh) {

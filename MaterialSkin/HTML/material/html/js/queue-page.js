@@ -174,7 +174,7 @@ var lmsQueue = Vue.component("lms-queue", {
    <v-btn :title="trans.clear | tooltip(LMS_CLEAR_QUEUE_KEYBOARD,keyboardControl)" flat icon @click="clear()" class="toolbar-button" v-bind:class="{'disabled':items.length<1}"v-if="!queryParams.party"><img class="svg-list-img" :src="'queue-clear' | svgIcon(darkUi)"></img></v-btn>
   </v-layout>
  </div>
- <div class="lms-list bgnd-cover" v-bind:class="{'backdrop-cover':drawBackdrop}" id="queue-bgnd">
+ <div class="lms-list bgnd-cover" v-bind:class="{'queue-backdrop-cover':drawBackdrop}" id="queue-bgnd">
  <div class="lms-list" id="queue-list" v-bind:class="{'lms-list3':threeLines,'lms-list-album':albumStyle,'bgnd-blur':drawBgndImage,'backdrop-blur':drawBackdrop}" @drop.stop="drop(-1, $event)">
   <div v-if="items.length<1"></div> <!-- RecycleScroller does not like it if 0 items? -->
   <RecycleScroller v-else-if="threeLines" :items="items" :item-size="LMS_LIST_3LINE_ELEMENT_SIZE+listSizeAdjust" page-mode key-field="key" :buffer="LMS_SCROLLER_LIST_BUFFER">
@@ -320,7 +320,7 @@ var lmsQueue = Vue.component("lms-queue", {
             return this.$store.state.queueBackdrop && undefined!=this.coverUrl
         },
         drawBackdrop() {
-            return !this.drawBgndImage && !isEmpty(this.$store.state.queueDefBackdrop)
+            return !this.drawBgndImage && this.$store.state.queueBackdrop && this.$store.state.useDefaultBackdrops
         },
         showMoveAction() {
             if (queryParams.party) {
@@ -354,9 +354,9 @@ var lmsQueue = Vue.component("lms-queue", {
             this.timestamp=0;
             this.updateItems();
         }.bind(this));
-        bus.$on('queueSetBgndImage', function() {
+        bus.$on('setBgndCover', function() {
             this.setBgndCover();
-         }.bind(this));
+        }.bind(this));
         bus.$on('playerChanged', function() {
             this.items=[];
             this.listSize=0;
@@ -1295,9 +1295,9 @@ var lmsQueue = Vue.component("lms-queue", {
             this.dragIndex = undefined;
         },
         setBgndCover() {
-            var url = this.$store.state.queueBackdrop ? this.coverUrl : undefined;
-            if (!url && !isEmpty(this.$store.state.queueDefBackdrop)) {
-                url=changeImageSizing('html/backdrops/' + this.$store.state.queueDefBackdrop + '.jpg', LMS_CURRENT_IMAGE_SIZE);
+            var url = this.coverUrl;
+            if (!url && this.drawBackdrop) {
+                url='html/backdrops/queue.jpg';
             }
             setBgndCover(this.bgndElement, url);
             // Check for cover changes in radio streams...

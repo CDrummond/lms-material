@@ -78,7 +78,7 @@ var lmsBrowse = Vue.component("lms-browse", {
  </div>
  <v-icon class="browse-progress" v-if="fetchingItem!=undefined" color="primary">refresh</v-icon>
  <div v-show="letter" id="letterOverlay"></div>
- <div class="lms-list bgnd-cover" v-bind:class="{'backdrop-cover':drawBackdrop}" id="browse-bgnd">
+ <div class="lms-list bgnd-cover" v-bind:class="{'browse-backdrop-cover':drawBackdrop}" id="browse-bgnd">
   <div class="noselect lms-jumplist" v-bind:class="{'bgnd-blur':drawBgndImage,'backdrop-blur':drawBackdrop}" v-if="filteredJumplist.length>1">
    <template v-for="(item, index) in filteredJumplist">
     <div @click="jumpTo(item.index)" v-bind:class="{'active' : jumplistActive==index}">{{item.key==' ' || item.key=='' ? '?' : item.key}}</div>
@@ -438,7 +438,7 @@ var lmsBrowse = Vue.component("lms-browse", {
             return this.$store.state.browseBackdrop && ((undefined!=this.current && undefined!=this.current.image) || undefined!=this.currentItemImage);
         },
         drawBackdrop() {
-            return !this.drawBgndImage && !isEmpty(this.$store.state.browseDefBackdrop)
+            return !this.drawBgndImage && this.$store.state.browseBackdrop && this.$store.state.useDefaultBackdrops
         },
         listSizeAdjust() {
             return this.$store.state.listPadding
@@ -1457,11 +1457,10 @@ var lmsBrowse = Vue.component("lms-browse", {
                                 ? this.currentItemImage
                                 : undefined
                         : undefined;
-            if (!url && !isEmpty(this.$store.state.browseDefBackdrop)) {
-                url='html/backdrops/' + this.$store.state.browseDefBackdrop + '.jpg';
-            }
             if (url) {
-               url=changeImageSizing(url, LMS_CURRENT_IMAGE_SIZE);
+                url=changeImageSizing(url, LMS_CURRENT_IMAGE_SIZE);
+            } else if (this.drawBackdrop) {
+                url='html/backdrops/browse.jpg';
             }
             setBgndCover(this.bgndElement, url);
         },
@@ -1800,7 +1799,7 @@ var lmsBrowse = Vue.component("lms-browse", {
                 this.layoutGrid(true);
             }
         }.bind(this));
-        bus.$on('browseSetBgndImage', function() {
+        bus.$on('setBgndCover', function() {
            this.setBgndCover();
         }.bind(this));
         bus.$on('libraryChanged', function() {

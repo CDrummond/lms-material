@@ -123,6 +123,15 @@ Vue.component('lms-ui-settings', {
     </v-list-tile>
     <v-divider></v-divider>
 
+    <v-list-tile>
+     <v-list-tile-content @click="useDefaultBackdrops = !useDefaultBackdrops" class="switch-label">
+      <v-list-tile-title>{{i18n('Use default backgrounds')}}</v-list-tile-title>
+      <v-list-tile-sub-title>{{i18n('If background images have been enabled (see options below), then use a default image if there is no current image.')}}</v-list-tile-sub-title>
+     </v-list-tile-content>
+     <v-list-tile-action><m3-switch v-model="useDefaultBackdrops"></m3-switch></v-list-tile-action>
+    </v-list-tile>
+    <v-divider></v-divider>
+
     <v-list-tile v-if="LMS_STATS_ENABLED">
      <v-list-tile-content @click="showRating = !showRating" class="switch-label">
       <v-list-tile-title>{{i18n('Show rating')}}</v-list-tile-title>
@@ -181,20 +190,6 @@ Vue.component('lms-ui-settings', {
       <v-list-tile-sub-title>{{i18n('Use artist, or album, images as background.')}}</v-list-tile-sub-title>
      </v-list-tile-content>
      <v-list-tile-action><m3-switch v-model="browseBackdrop"></m3-switch></v-list-tile-action>
-    </v-list-tile>
-    <v-divider></v-divider>
-
-    <v-list-tile>
-     <v-list-tile-content>
-      <v-list-tile-title>{{i18n('Default background')}}</v-list-tile-title>
-      <v-list-tile-sub-title>{{i18n('Select background to use when not using artist, or album, image.')}}</v-list-tile-sub-title>
-      <div class="thumbnail-grid">
-       <template v-for="(item, index) in backdrops">
-        <div v-if="item==''" @click="browseDefBackdrop=item" class="thumbnail none" v-bind:class="{'selected-thumbnail':item==browseDefBackdrop}">{{i18n('None')}}</div>
-        <img v-else @click="browseDefBackdrop=item" :src="'html/backdrops/'+item+'_tn.jpg'" class="thumbnail" v-bind:class="{'selected-thumbnail':item==browseDefBackdrop}"></img>
-       </template>
-      </div>
-     </v-list-tile-content>
     </v-list-tile>
     <v-divider></v-divider>
 
@@ -325,20 +320,6 @@ Vue.component('lms-ui-settings', {
      </v-list-tile-content>
      <v-list-tile-action><m3-switch v-model="queueBackdrop"></m3-switch></v-list-tile-action>
     </v-list-tile>
-    <v-divider></v-divider>
-
-    <v-list-tile>
-     <v-list-tile-content>
-      <v-list-tile-title>{{i18n('Default background')}}</v-list-tile-title>
-      <v-list-tile-sub-title>{{i18n('Select background to use when not using artist, or album, image.')}}</v-list-tile-sub-title>
-      <div class="thumbnail-grid">
-       <template v-for="(item, index) in backdrops">
-        <div v-if="item==''" @click="queueDefBackdrop=item" class="thumbnail none" v-bind:class="{'selected-thumbnail':item==queueDefBackdrop}">{{i18n('None')}}</div>
-        <img v-else @click="queueDefBackdrop=item" :src="'html/backdrops/'+item+'_tn.jpg'" class="thumbnail" v-bind:class="{'selected-thumbnail':item==queueDefBackdrop}"></img>
-       </template>
-      </div>
-     </v-list-tile-content>
-    </v-list-tile>
 
     <div class="dialog-padding" v-if="LMS_P_MAI"></div>
     <v-header class="dialog-section-header" v-if="LMS_P_MAI">{{i18n('Song Information')}}</v-header>
@@ -401,12 +382,10 @@ Vue.component('lms-ui-settings', {
             sortFavorites:true,
             autoScrollQueue:true,
             browseBackdrop:true,
-            browseDefBackdrop:'010',
-            backdrops: [],
             queueBackdrop:true,
-            queueDefBackdrop:'012',
             nowPlayingBackdrop:true,
             infoBackdrop:true,
+            useDefaultBackdrops:true,
             browseTechInfo:false,
             techInfo:false,
             queueShowTrackNum:false,
@@ -546,16 +525,6 @@ Vue.component('lms-ui-settings', {
                 }
             }).catch(err => {
             });
-            lmsCommand("", ["material-skin", "backdrops"]).then(({data}) => {
-                this.backdrops = [''];
-                if (data && data.result && data.result.backdrops) {
-                    for (var i=0, list=data.result.backdrops, len=list.length; i<len; ++i) {
-                        this.backdrops.push(list[i].name);
-                    }
-                }
-                this.backdrops.sort();
-            }).catch(err => {
-            });
             this.show = true;
         }.bind(this));
         bus.$on('closeMenu', function() {
@@ -588,11 +557,10 @@ Vue.component('lms-ui-settings', {
             this.listPadding = this.$store.state.listPadding;
             this.autoScrollQueue = this.$store.state.autoScrollQueue;
             this.browseBackdrop = this.$store.state.browseBackdrop;
-            this.browseDefBackdrop = this.$store.state.browseDefBackdrop;
             this.queueBackdrop = this.$store.state.queueBackdrop;
-            this.queueDefBackdrop = this.$store.state.queueDefBackdrop;
             this.nowPlayingBackdrop = this.$store.state.nowPlayingBackdrop;
             this.infoBackdrop = this.$store.state.infoBackdrop;
+            this.useDefaultBackdrops = this.$store.state.useDefaultBackdrops;
             this.browseTechInfo = this.$store.state.browseTechInfo;
             this.techInfo = this.$store.state.techInfo;
             this.queueShowTrackNum = this.$store.state.queueShowTrackNum;
@@ -706,11 +674,10 @@ Vue.component('lms-ui-settings', {
                       letterOverlay:this.letterOverlay,
                       sortFavorites:this.sortFavorites,
                       browseBackdrop:this.browseBackdrop,
-                      browseDefBackdrop:this.browseDefBackdrop,
                       queueBackdrop:this.queueBackdrop,
-                      queueDefBackdrop:this.queueDefBackdrop,
                       nowPlayingBackdrop:this.nowPlayingBackdrop,
                       infoBackdrop:this.infoBackdrop,
+                      useDefaultBackdrops:this.useDefaultBackdrops,
                       browseTechInfo:this.browseTechInfo,
                       techInfo:this.techInfo,
                       queueShowTrackNum:this.queueShowTrackNum,

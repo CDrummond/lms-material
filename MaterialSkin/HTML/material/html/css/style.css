@@ -1515,8 +1515,12 @@ progress {
  transition:background 0.05s!important;
 }
 
-.backdrop-cover {
-  background-position:right center !important;
+.browse-backdrop-cover {
+ background-position:right center !important;
+}
+
+.queue-backdrop-cover {
+ background-position:left center !important;
 }
 
 .bgnd-blur {
@@ -1530,6 +1534,12 @@ progress {
  backdrop-filter:var(--backdrop-filter);
  -webkit-backdrop-filter:var(--backdrop-filter);
  background:none!important;
+ overflow:hidden;
+}
+
+.np-backdrop-blur {
+ backdrop-filter:var(--backdrop-filter);
+ -webkit-backdrop-filter:var(--backdrop-filter);
  overflow:hidden;
 }
 

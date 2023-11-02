@@ -25,7 +25,7 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
     template: `
 <div>
  <div v-show="(!desktopLayout && page=='now-playing') || (desktopLayout && (info.show || largeView))" class="np-bgnd">
-  <div class="np-bgnd" v-bind:class="[(info.show ? drawInfoBgndImage : drawBgndImage) ? 'np-bgnd-cover':'np-bgnd-cover-none']" id="np-bgnd"></div>
+  <div class="np-bgnd" v-bind:class="[(info.show ? drawInfoBgndImage||drawInfoBackdrop : drawBgndImage||drawBackdrop) ? 'np-bgnd-cover':'np-bgnd-cover-none', (info.show ? drawInfoBackdrop : drawBackdrop) ? 'np-backdrop-blur':'']" id="np-bgnd"></div>
  </div>
  <v-tooltip top :position-x="timeTooltip.x" :position-y="timeTooltip.y" v-model="timeTooltip.show">{{timeTooltip.text}}</v-tooltip>
  <v-menu v-model="menu.show" :position-x="menu.x" :position-y="menu.y" absolute offset-y>
@@ -494,7 +494,9 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
             this.setBgndCover();
         }.bind(this));
         bus.$emit('getCurrentCover');
-
+        bus.$on('setBgndCover', function() {
+            this.setBgndCover();
+        }.bind(this));
         bus.$on('langChanged', function() {
             this.initItems();
         }.bind(this));
@@ -762,7 +764,11 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
             setLocalStorageVal("showTotal", this.showTotal);
         },
         setBgndCover() {
-            setBgndCover(this.bgndElement, this.coverUrl);
+            var url = this.coverUrl;
+            if ((!url || url==DEFAULT_COVER) && (this.drawBackdrop || this.drawInfoBackdrop)) {
+                url='html/backdrops/nowplaying.jpg';
+            }
+            setBgndCover(this.bgndElement, url);
         },
         playPauseButton(longPress) {
             if (this.$store.state.visibleMenus.size>0) {
@@ -1176,8 +1182,14 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
         drawBgndImage() {
             return this.$store.state.nowPlayingBackdrop && undefined!=this.coverUrl && LMS_BLANK_COVER!=this.coverUrl && DEFAULT_COVER!=this.coverUrl && DEFAULT_RADIO_COVER!=this.coverUrl
         },
+        drawBackdrop() {
+            return !this.drawBgndImage && this.$store.state.nowPlayingBackdrop && this.$store.state.useDefaultBackdrops
+        },
         drawInfoBgndImage() {
             return this.$store.state.infoBackdrop && undefined!=this.coverUrl && LMS_BLANK_COVER!=this.coverUrl && DEFAULT_COVER!=this.coverUrl && DEFAULT_RADIO_COVER!=this.coverUrl
+        },
+        drawInfoBackdrop() {
+            return !this.drawInfoBgndImage && this.$store.state.infoBackdrop && this.$store.state.useDefaultBackdrops
         },
         coloredToolbars() {
             return this.$store.state.desktopLayout && this.$store.state.coloredToolbars

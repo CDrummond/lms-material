@@ -334,26 +334,32 @@ PLUGIN_MATERIAL_SKIN_PAGED_BATCH_SIZE_DESC
 PLUGIN_MATERIAL_SKIN_ARTIST_FILTER
 	EN	Filter album tracks
 	FR	Filtrer les morceaux des albums
+	NL	Filter nummers van album
 
 PLUGIN_MATERIAL_SKIN_ARTIST_FILTER_DESC
 	EN	When browsing an artist's albums use all tracks from compilation albums, albums this artist appears on, etc., or only show tracks from the current artist.
 	FR	Lors du parcours des albums d'un artiste (ceux dans lesquels l'artiste apparaît), pour chaque album, afficher tous les morceaux de l'album ou afficher uniquement les morceaux de l'artiste.
+	NL	Wanneer je door de albums van een artiest bladert, geef dan voor elk album alle nummers in het album weer, of geef alleen de nummers van de huidige artiest weer.
 
 PLUGIN_MATERIAL_SKIN_ARTIST_FILTER_ARTIST_ONLY
 	EN	Only display tracks from current artist
 	FR	Afficher uniquement les morceaux de l'artiste
+	NL	Toon alleen nummers van de huidige artiest
 
 PLUGIN_MATERIAL_SKIN_ARTIST_FILTER_ALL_TRACKS
 	EN	Display all tracks of album
 	FR	Afficher tous les morceaux de l'album
+	NL	Toon alle nummers van het album
 
 PLUGIN_MATERIAL_SKIN_RELEASE_TYPE_ORDER
 	EN	Release type order
 	FR	Ordre des types de sorties
+	NL	Releasetype volgorde
 
 PLUGIN_MATERIAL_SKIN_RELEASE_TYPE_ORDER_DESC
 	EN	Specify order to display relase types (this is a comma separated list of UPPERCASE release type names) - e.g. "ALBUM, EP, SINGLE"
 	FR	Spécifier l'ordre d'affichage des types de sorties (par une liste de types de sorties en MAJUSCULE séparés par des virgules) - par ex. "ALBUM, EP, SINGLE"
+	NL	Bepaal de volgorde hoe releasetypes worden getoond (dit is een door komma's gescheiden lijst van releasetypes met HOOFDLETTERS) - bijv. "ALBUM, EP, SINGLE"
 
 #NOTE: When translating SETUP_PLUGINS you *must* insert a space before your translation.
 #      This space is hidden in the UI, but causes this "Manage Plugins" entry to be the
@@ -361,3 +367,4 @@ PLUGIN_MATERIAL_SKIN_RELEASE_TYPE_ORDER_DESC
 SETUP_PLUGINS
 	EN	 Manage Plugins
 	FR	 Gérer les plugins
+	NL	 Beheer Plug-ins

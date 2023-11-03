@@ -637,9 +637,9 @@ function clearListCache(force) {
     });
 }
 
-function ratingString(current, val, clz) {
+function ratingString(current, val) {
     let str = "";
-    let clzStr = "<i class=\"rstar" + (undefined==clz ? "" : (" "+clz))+"\">";
+    let clzStr = "<i class=\"rstar\">";
     if (current) {
         let prev=current.indexOf(clzStr);
         if (prev>-1) {

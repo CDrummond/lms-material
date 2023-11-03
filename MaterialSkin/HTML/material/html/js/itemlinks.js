@@ -60,8 +60,8 @@ function showBand(event, id, title, page) {
     bus.$emit('npclose');
 }
 
-function buildLink(func, id, str, page, clz) {
-    return "<obj class=\"link-item" + (undefined==clz ? "" : (" "+clz))+"\" onclick=\""+func+"(event, "+id+",\'"+escape(str)+"\', \'"+page+"\')\">" + str + "</obj>";
+function buildLink(func, id, str, page) {
+    return "<obj class=\"link-item\" onclick=\""+func+"(event, "+id+",\'"+escape(str)+"\', \'"+page+"\')\">" + str + "</obj>";
 }
 
 function addArtistLink(item, line, type, func, page, used, plain) {

@@ -73,13 +73,18 @@ function parseResp(data, showTrackNum, index, showRatings, queueStyle, lastInCur
                 if (showTrackNum && i.tracknum>0) {
                     title = formatTrackNum(i)+SEPARATOR+title;
                 }
+                let addedClass = false;
+                let haveRating = showRatings && undefined!=i.rating;
                 let artist = undefined!=i.trackartist && undefined!=i.trackartist_id ? i.trackartist : i.artist;
                 if (QUEUE_ALBUM==queueStyle && undefined!=i.albumartist && undefined!=artist && i.albumartist!=artist) {
                     let id = undefined!=i.trackartist_id ? i.trackartist_id : i.artist_id;
-                    title+=SEPARATOR+(IS_MOBILE || undefined==id ? '<obj class="subtext">'+artist+'</obj>' : buildLink('showArtist', id, artist, 'queue', clz));
+                    title+='<obj class="subtext">'+SEPARATOR+(IS_MOBILE || undefined==id ? artist : buildLink('showArtist', id, artist, 'queue'));
+                    addedClass = true;
+                }
+                if (haveRating) {
+                    title += (QUEUE_ALBUM==queueStyle && !addedClass ? '<obj class="subtext">' : '') + SEPARATOR+ratingString(undefined, i.rating, clz) + (QUEUE_ALBUM==queueStyle ? '</obj> ': '');
                 }
                 let duration = undefined==i.duration ? undefined : parseFloat(i.duration);
-                let haveRating = QUEUE_ALBUM!=queueStyle && showRatings && undefined!=i.rating;
                 let prevItem = 0==idx ? lastInCurrent : resp.items[idx-1];
                 let image = queueItemCover(i);
                 let isAlbumHeader = QUEUE_ALBUM==queueStyle &&
@@ -90,7 +95,7 @@ function parseResp(data, showTrackNum, index, showRatings, queueStyle, lastInCur
                 let artistAlbumLines = queueStyle!=QUEUE_ALBUM || isAlbumHeader ? buildArtistAlbumLines(i, queueStyle) : undefined;
                 resp.items.push({
                               id: "track_id:"+i.id,
-                              title: haveRating ? ratingString(title, i.rating, clz) : title,
+                              title: title,
                               plaintitle: haveRating ? title : undefined,
                               artistAlbum: artistAlbumLines,
                               image: image,
@@ -405,15 +410,17 @@ var lmsQueue = Vue.component("lms-queue", {
                     if (this.$store.state.queueShowTrackNum && i.tracknum>0) {
                         title = formatTrackNum(i)+SEPARATOR+title;
                     }
+                    let addedClass = false;
                     if (this.albumStyle) {
                         let artist = undefined!=i.trackartist && undefined!=i.trackartist_id ? i.trackartist : i.artist;
                         if (undefined!=i.albumartist && undefined!=artist && i.albumartist!=artist) {
                             let id = undefined!=i.trackartist_id ? i.trackartist_id : i.artist_id;
-                            title+=SEPARATOR+(IS_MOBILE || undefined==id ? '<obj class="subtext">'+artist+'</obj>' : buildLink('showArtist', id, artist, 'queue', 'subtext'));
+                            title+='<obj class="subtext">'+SEPARATOR+(IS_MOBILE || undefined==id ? artist : buildLink('showArtist', id, artist, 'queue'));
+                            addedClass = true;
                         }
                     }
                     if (this.$store.state.showRating && undefined!=i.rating) {
-                        title = ratingString(title, i.rating, this.albumStyle ? 'subtext' : undefined);
+                        title += (this.albumStyle && !addedClass ? '<obj class="subtext">' : '') + SEPARATOR+ratingString(undefined, i.rating) + (this.albumStyle ? '</obj> ': '');
                     }
                     var artistAlbum = undefined!=this.items[index].artistAlbum ? buildArtistAlbumLines(i, this.$store.state.queueStyle) : undefined;
                     // ?? var remoteTitle = checkRemoteTitle(i);
@@ -428,7 +435,6 @@ var lmsQueue = Vue.component("lms-queue", {
                             this.items[index].duration = duration;
                             this.getDuration();
                         }
-
                         this.$forceUpdate();
                     }
                 }

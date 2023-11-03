@@ -325,41 +325,49 @@ PLUGIN_MATERIAL_SKIN_PAGED_BATCH_SIZE
 	EN	Paged batch size
 	FR	Pagination des listes
 	NL	Batchgrootte van pagina's
+	DE	Größe des Seiteninhalts
 
 PLUGIN_MATERIAL_SKIN_PAGED_BATCH_SIZE_DESC
 	EN	Number of initial items to fetch (and display) when listing contents of some lists (such as playlist contents). Scrolling list will then cause another batch of items to be fetched, etc.
 	FR	Nombre d'éléments initiaux récupérés (et affichés) lors de l'affichage de certaines listes (telles que les listes de lecture). Faire défiler la liste permettra de récupérer un nouvel ensemble d’éléments si nécessaire.
 	NL	Aantal initiële items dat wordt opgehaald (en getoond) bij het weergeven van de inhoud van sommige lijsten (zoals afspeellijsten). Als je door de lijst bladert, wordt er vervolgens een nieuwe reeks items opgehaald, enz.
+	DE	Anzahl der anfänglichen Elemente, die beim Auflisten des Inhalts einiger Listen (wie beispielsweise der Inhalte einer Wiedergabeliste) abgerufen und angezeigt werden sollen. Durch das Scrollen in der Liste werden dann weitere Elemente abgerufen, usw.
 
 PLUGIN_MATERIAL_SKIN_ARTIST_FILTER
 	EN	Filter album tracks
 	FR	Filtrer les morceaux des albums
 	NL	Filter nummers van album
+	DE	Albumtitel filtern
 
 PLUGIN_MATERIAL_SKIN_ARTIST_FILTER_DESC
 	EN	When browsing an artist's albums use all tracks from compilation albums, albums this artist appears on, etc., or only show tracks from the current artist.
 	FR	Lors du parcours des albums d'un artiste (ceux dans lesquels l'artiste apparaît), pour chaque album, afficher tous les morceaux de l'album ou afficher uniquement les morceaux de l'artiste.
 	NL	Wanneer je door de albums van een artiest bladert, geef dan voor elk album alle nummers in het album weer, of geef alleen de nummers van de huidige artiest weer.
+	DE	Beim Durchsuchen der Alben eines Interpreten werden sämtliche Titel aus Kompilationen, Alben etc. auf denen dieser Interpret erscheint mit angezeigt, oder lediglich die Titel des aktuellen Interpreten.
 
 PLUGIN_MATERIAL_SKIN_ARTIST_FILTER_ARTIST_ONLY
 	EN	Only display tracks from current artist
 	FR	Afficher uniquement les morceaux de l'artiste
 	NL	Toon alleen nummers van de huidige artiest
+	DE	Nur Titel des aktuellen Interpreten anzeigen
 
 PLUGIN_MATERIAL_SKIN_ARTIST_FILTER_ALL_TRACKS
 	EN	Display all tracks of album
 	FR	Afficher tous les morceaux de l'album
 	NL	Toon alle nummers van het album
+	DE	Sämtlichte Titel des Albums anzeigen
 
 PLUGIN_MATERIAL_SKIN_RELEASE_TYPE_ORDER
 	EN	Release type order
 	FR	Ordre des types de sorties
 	NL	Releasetype volgorde
+	DE	Reihenfolge der Veröffentlichungsarten
 
 PLUGIN_MATERIAL_SKIN_RELEASE_TYPE_ORDER_DESC
 	EN	Specify order to display relase types (this is a comma separated list of UPPERCASE release type names) - e.g. "ALBUM, EP, SINGLE"
 	FR	Spécifier l'ordre d'affichage des types de sorties (par une liste de types de sorties en MAJUSCULE séparés par des virgules) - par ex. "ALBUM, EP, SINGLE"
 	NL	Bepaal de volgorde hoe releasetypes worden getoond (dit is een door komma's gescheiden lijst van releasetypes met HOOFDLETTERS) - bijv. "ALBUM, EP, SINGLE"
+	DE	Geben Sie die Reihenfolge an, in der die Veröffentlichungsarten angezeigt werden sollen (dies ist eine durch Kommas getrennte Liste von Veröffentlichungsarten in GROSSBUCHSTABEN) - z.B. "ALBUM, EP, SINGLE".
 
 #NOTE: When translating SETUP_PLUGINS you *must* insert a space before your translation.
 #      This space is hidden in the UI, but causes this "Manage Plugins" entry to be the
@@ -368,3 +376,4 @@ SETUP_PLUGINS
 	EN	 Manage Plugins
 	FR	 Gérer les plugins
 	NL	 Beheer Plug-ins
+	DE	 Plugins verwalten

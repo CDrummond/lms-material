@@ -374,13 +374,13 @@
  }
  .pq-album-header {
   left:68px;
-  width:calc(100% - 68px);
+  width:calc(100% - 66px);
  }
  .pq-albumstyle img {
-  margin-left:6px;
+  margin-left:2px;
  }
  .pq-time {
-  margin-right:-4px;
+  margin-right:-6px;
  }
 }
 

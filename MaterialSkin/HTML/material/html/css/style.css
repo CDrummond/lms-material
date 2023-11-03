@@ -233,7 +233,7 @@ html, .mini-player {
  margin-right:-19px !important;
 }
 
-.v-list__tile__title, .v-select__selection, .v-select__selection--comma , .v-btn__content, html{
+.v-list__tile__title, .v-select__selection, .v-select__selection--comma, .v-btn__content, html, .pq-albumstyle .v-list__tile {
  font-size:var(--std-font-size);
  font-weight:var(--std-weight);
 }

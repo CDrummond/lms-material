@@ -894,7 +894,7 @@ function parseBrowseResp(data, parent, options, cacheKey, parentCommand, parentG
                     group = "COMPILATION";
                 } else {
                     if (intersect(ARTIST_ROLES, roles).size>0) {
-                        group = undefined==i.release_type ? "ALBUM" : i.release_type;
+                        group = undefined==i.release_type ? "ALBUM" : i.release_type.toUpperCase();
                     } else if (roles.has(TRACK_ARTIST_ROLE)) {
                         group = "APPEARANCE";
                         nonmain = true;

@@ -45,7 +45,7 @@
  --mobile-scrollbar-thumb-color:transparent;
  --bgnd-filter:blur(7px);
  --backdrop-filter:blur(4px);
- --toolbar-filter:blur(25px);
+ --toolbar-filter:blur(15px);
  --npbar-border-color:var(--bottom-toolbar-border-color);
  --album-separator-color:rgba(0, 0, 0, 0.2);
  --subtoolbar-image-url:url();
@@ -1520,9 +1520,7 @@ progress {
 
 .subtoolbar-cover {
   background-color:var(--background-color);
-  background-size:cover !important;
-  background-repeat:no-repeat !important;
-  background-position:center center !important;
+  background-size:100% 100% !important;
   box-shadow:inset 100vw 100vh var(--subtoolbar-shadow-color);
   background:var(--subtoolbar-image-url);
 }

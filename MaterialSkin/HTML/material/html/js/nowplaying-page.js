@@ -990,6 +990,7 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
             this.wide = window.innerWidth>=600 && window.innerWidth>=(window.innerHeight*1.7)
                         ? 2 /*: window.innerHeight>340 ? 1*/ : 0;
             this.windowWidth = Math.floor(window.innerWidth / 25) * 25;
+            bus.$emit('nowPlayingWide', this.wide);
         },
         itemClicked(tab, section, index, event) {
             nowplayingItemClicked(this, tab, section, index, event);

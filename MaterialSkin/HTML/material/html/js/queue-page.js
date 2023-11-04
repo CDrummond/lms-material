@@ -138,7 +138,7 @@ function parseResp(data, showTrackNum, index, showRatings, queueStyle, lastInCur
 
 var lmsQueue = Vue.component("lms-queue", {
   template: `
-<div v-bind:class="{'pq-unpinned':!pinQueue, 'pq-unpinned-np':nowPlayingExpanded&&!pinQueue}" id="queue-view">
+<div :class="[!pinQueue ? nowPlayingExpanded ? 'pq-unpinned-np'+nowPlayingWide : 'pq-unpinned' : '']" id="queue-view">
 <lms-resizer v-if="!pinQueue" varname="pq-unpinned-width"></lms-resizer>
  <div class="subtoolbar noselect" v-bind:class="{'list-details':pinQueue}" v-if="!desktopLayout || showQueue">
   <v-layout v-if="selection.size>0">
@@ -294,7 +294,8 @@ var lmsQueue = Vue.component("lms-queue", {
             dropIndex: -1,
             coverUrl: undefined,
             queueCustomActions: [],
-            nowPlayingExpanded: false
+            nowPlayingExpanded: false,
+            nowPlayingWide:0
         }
     },
     computed: {
@@ -483,7 +484,9 @@ var lmsQueue = Vue.component("lms-queue", {
         bus.$on('nowPlayingExpanded', function(val) {
             this.nowPlayingExpanded = val;
         }.bind(this));
-
+        bus.$on('nowPlayingWide', function(val) {
+            this.nowPlayingWide = val;
+        }.bind(this));
         this.bgndElement = document.getElementById("queue-bgnd");
         this.scrollElement = document.getElementById("queue-list");
         this.scrollElement.addEventListener("scroll", this.handleScroll, PASSIVE_SUPPORTED ? { passive: true } : false);

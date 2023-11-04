@@ -378,7 +378,7 @@
  min-width:280px!important;
 }
 
-.pq-unpinned {
+.pq-unpinned, .pq-unpinned-np0, .pq-unpinned-np2 {
  position:fixed;
  right:0px;
  top:calc(var(--main-toolbar-height) - 1px);
@@ -399,9 +399,14 @@
  height:calc((var(--vh, 1vh)*100) - (var(--main-toolbar-height) + var(--sub-toolbar-height) + var(--bottom-toolbar-height) + 1px));
 }
 
-.pq-unpinned-np .lms-list {
-  height:calc((var(--vh, 1vh)*100) - (var(--main-toolbar-height) + var(--sub-toolbar-height) + var(--bottom-toolbar-height) + 11px));
+.pq-unpinned-np2 .lms-list {
+ height:calc((var(--vh, 1vh)*100) - (var(--main-toolbar-height) + var(--sub-toolbar-height) + var(--bottom-toolbar-height) + 2px));
 }
+
+.pq-unpinned-np0 .lms-list {
+ height:calc((var(--vh, 1vh)*100) - (var(--main-toolbar-height) + var(--sub-toolbar-height) + var(--bottom-toolbar-height) + 12px));
+}
+
 @keyframes pqSlideIn {
  from{right:-100%}
  to{right:0px}

@@ -138,7 +138,7 @@ function parseResp(data, showTrackNum, index, showRatings, queueStyle, lastInCur
 
 var lmsQueue = Vue.component("lms-queue", {
   template: `
-<div v-bind:class="{'pq-unpinned':!pinQueue}" id="queue-view">
+<div v-bind:class="{'pq-unpinned':!pinQueue, 'pq-unpinned-np':nowPlayingExpanded&&!pinQueue}" id="queue-view">
 <lms-resizer v-if="!pinQueue" varname="pq-unpinned-width"></lms-resizer>
  <div class="subtoolbar noselect" v-bind:class="{'list-details':pinQueue}" v-if="!desktopLayout || showQueue">
   <v-layout v-if="selection.size>0">
@@ -293,7 +293,8 @@ var lmsQueue = Vue.component("lms-queue", {
             dragActive: false,
             dropIndex: -1,
             coverUrl: undefined,
-            queueCustomActions: []
+            queueCustomActions: [],
+            nowPlayingExpanded: false
         }
     },
     computed: {

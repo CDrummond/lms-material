@@ -82,6 +82,7 @@ Vue.component('lms-resizer', {
                         this.animationFrameReq = window.requestAnimationFrame(() => {
                             document.documentElement.style.setProperty('--'+this.varname, this.updated+"px");
                             this.animationFrameReq = undefined;
+                            bus.$emit('resizerChanged');
                         });
                     }
                 }

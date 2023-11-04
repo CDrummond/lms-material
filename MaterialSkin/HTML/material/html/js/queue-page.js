@@ -524,6 +524,9 @@ var lmsQueue = Vue.component("lms-queue", {
         bus.$on('splitterChanged', function() {
             this.updateWidth();
         }.bind(this));
+        bus.$on('resizerChanged', function() {
+            this.updateWidth();
+        }.bind(this));
         this.wide=5;
         this.updateWidth();
 
@@ -667,6 +670,7 @@ var lmsQueue = Vue.component("lms-queue", {
                 bus.$emit('npclose');
             }
             this.$store.commit('setPinQueue', !this.$store.state.pinQueue);
+            this.updateWidth();
         },
         droppedFileHandler(ev) {
             if (queryParams.party) {

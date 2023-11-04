@@ -258,7 +258,7 @@
  left:8px;
  width:calc(100vw - 16px);
  bottom:calc(var(--bottom-toolbar-height) - 1px);
- font-size:var(--small-font-size);
+ font-size:14px; /*var(--small-font-size);*/
  opacity:var(--sub-opacity);
  text-align:center;
 }

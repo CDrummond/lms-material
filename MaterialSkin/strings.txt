@@ -364,10 +364,10 @@ PLUGIN_MATERIAL_SKIN_RELEASE_TYPE_ORDER
 	DE	Reihenfolge der Veröffentlichungsarten
 
 PLUGIN_MATERIAL_SKIN_RELEASE_TYPE_ORDER_DESC
-	EN	Specify order to display relase types (this is a comma separated list of UPPERCASE release type names) - e.g. "ALBUM, EP, SINGLE"
-	FR	Spécifier l'ordre d'affichage des types de sorties (par une liste de types de sorties en MAJUSCULE séparés par des virgules) - par ex. "ALBUM, EP, SINGLE"
-	NL	Bepaal de volgorde hoe releasetypes worden getoond (dit is een door komma's gescheiden lijst van releasetypes met HOOFDLETTERS) - bijv. "ALBUM, EP, SINGLE"
-	DE	Geben Sie die Reihenfolge an, in der die Veröffentlichungsarten angezeigt werden sollen (dies ist eine durch Kommas getrennte Liste von Veröffentlichungsarten in GROSSBUCHSTABEN) - z.B. "ALBUM, EP, SINGLE".
+	EN	Specify order to display relase types (this is a comma separated list of release type names) - e.g. "Album, EP, Single"
+	FR	Spécifier l'ordre d'affichage des types de sorties (par une liste de types de sorties en séparés par des virgules) - par ex. "Album, EP, Single"
+	NL	Bepaal de volgorde hoe releasetypes worden getoond (dit is een door komma's gescheiden lijst van releasetypes) - bijv. "Album, EP, Single"
+	DE	Geben Sie die Reihenfolge an, in der die Veröffentlichungsarten angezeigt werden sollen (dies ist eine durch Kommas getrennte Liste von Veröffentlichungsarten) - z.B. "Album, EP, Single".
 
 #NOTE: When translating SETUP_PLUGINS you *must* insert a space before your translation.
 #      This space is hidden in the UI, but causes this "Manage Plugins" entry to be the

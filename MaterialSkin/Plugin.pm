@@ -395,7 +395,7 @@ sub _cliCommand {
         $request->addResult('showComment', $prefs->get('showComment'));
         $request->addResult('pagedBatchSize', $prefs->get('pagedBatchSize'));
         $request->addResult('noArtistFilter', $prefs->get('noArtistFilter'));
-        $request->addResult('releaseTypeOrder', $prefs->get('releaseTypeOrder'));
+        $request->addResult('releaseTypeOrder', uc($prefs->get('releaseTypeOrder')));
         $request->setStatusDone();
         return;
     }

@@ -51,12 +51,19 @@
  }
 }
 
-#queue-view .subtoolbar {
+.subtoolbar {
  position:fixed;
  top:var(--main-toolbar-height);
  width:100vw;
  z-index:1;
  float:left;
+}
+
+.subtoolbar-cover {
+ position:fixed;
+ top:var(--main-toolbar-height);
+ width:100vw;
+ height:calc(var(--sub-toolbar-height)*2) !important;
 }
 
 .lms-footer {

@@ -1950,6 +1950,10 @@ var lmsBrowse = Vue.component("lms-browse", {
     watch: {
         'menu.show': function(newVal) {
             this.$store.commit('menuVisible', {name:'browse-'+this.menu.name, shown:newVal});
+        },
+        '$store.state.pinQueue': function() {
+            this.wide = this.pageElement.scrollWidth>=MIN_WIDTH_FOR_COVER;
+            this.layoutGrid();
         }
     },
     beforeDestroy() {

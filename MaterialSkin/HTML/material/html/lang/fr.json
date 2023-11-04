@@ -128,7 +128,6 @@
 "Date last played":"Date de dernière lecture",
 "Date modified":"Date de dernière modification",
 "Decrease volume":"Baisser le volume",
-"Default background":"Arrière-plan par défaut",
 "Default player":"Platine par défaut",
 "Delete":"Supprimer",
 "Delete %1":"Supprimer %1",
@@ -257,7 +256,6 @@
 "Material Skin is a HTML5 WebApp for LMS. For support, to report bugs, or ask for new features, please visit one of the following links:":"Material Skin est une application Web HTML5 pour LMS. Pour obtenir de l'aide, signaler des bugs ou demander de nouvelles fonctionnalités, veuillez visiter l'un des liens suivants :",
 "Material Skin is developed purely for fun, and no donations are required. However, if you wish to make a donation, please use the button below:":"Material Skin est développé uniquement pour le plaisir, aucun don n'est requis. Toutefois, si vous souhaitez faire un don, veuillez utiliser le bouton ci-dessous :",
 "Media keys and notifications":"Touches multimédias et notifications",
-"Medium":"Moyen(ne)",
 "Medium font size":"Police de taille moyenne",
 "Menu":"Menu",
 "Mix Type":"Type de mélange",
@@ -300,7 +298,6 @@
 "Only showing %1 items":"Afficher seulement %1 éléments",
 "Option+%1":"Option+%1",
 "Other settings":"Autres paramètres",
-"Padding between items in lists":"Espacement entre les éléments des listes",
 "Path":"Chemin",
 "Pause":"Pause",
 "Pictures":"Images",
@@ -400,7 +397,6 @@
 "Searching...":"Recherche en cours...",
 "Select":"Sélectionner",
 "Select All":"Tout sélectionner",
-"Select background to use when not using artist, or album, image.":"Sélectionner l'arrière-plan à utiliser lorsqu'il n'est pas généré à partir d'images des artistes ou des albums.",
 "Select category":"Sélectionner la catégorie",
 "Select file":"Sélectionner le fichier",
 "Select folder":"Sélectionner le dossier",
@@ -501,7 +497,6 @@
 "Thurs":"Je",
 "Thursday":"Jeudi",
 "Timeout (minutes)":"Durée (minutes)",
-"Tiny":"Minuscule",
 "Title":"Titre",
 "To support this feature, this app needs to fool your browser into thinking its is playing audio. This is accomplished by playing a silent audio file in a loop. Most browsers block auto-playing of audio so this cannot start until you have interacted with the app (e.g. clicked somewhere). Alternatively you can configure your browser to allow auto-play of audio for the URL you use to access this app (%1).":"Pour prendre en charge cette fonctionnalité, l'application doit faire croire au navigateur qu'elle lit de l'audio. À ce titre, elle joue un fichier audio silencieux en boucle. La plupart des navigateurs bloquent la lecture automatique de l'audio. Dans ce cas, la lecture ne démarrera pas tant que vous n'aurez pas interagi avec l'application (par exemple, en cliquant quelque part). Vous pouvez aussi configurer votre navigateur pour autoriser la lecture automatique de l'audio pour l'URL que vous utilisez pour accéder à cette application (%1).",
 "Toggle queue":"Afficher ou pas la liste de lecture",
@@ -623,5 +618,7 @@
 "1 Year":"1 année",
 "%1 Years":"%1 années",
 "1 day":"1 jour",
-"%1 days":"%1 jours"
+"%1 days":"%1 jours",
+"If background images have been enabled (see options below), then use a default image if there is no current image.":"",
+"Use default backgrounds":""
 }

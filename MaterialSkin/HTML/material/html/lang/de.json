@@ -128,7 +128,6 @@
 "Date last played":"Zuletzt wiedergeben am",
 "Date modified":"Geändert am",
 "Decrease volume":"Lautstärke verringern",
-"Default background":"Standard Hintergrund",
 "Default player":"Standard-Player",
 "Delete":"Löschen",
 "Delete %1":"Lösche %1",
@@ -257,7 +256,6 @@
 "Material Skin is a HTML5 WebApp for LMS. For support, to report bugs, or ask for new features, please visit one of the following links:":"Material Skin ist eine HTML5 Web-Anwendung für den Logitech Media Server. Für Hilfe, Fehlerberichte oder Funktionsvorschläge besuche einen der folgenden Links:",
 "Material Skin is developed purely for fun, and no donations are required. However, if you wish to make a donation, please use the button below:":"Material Skin wird aus Spaß an der Sache entwickelt, Spenden werden nicht erwartet. Falls Du die Entwicklung dennoch mit einer Spende unterstützen willst, verwende diesen Knopf:",
 "Media keys and notifications":"Multimediatasten und Benachrichtigungen",
-"Medium":"Mittel",
 "Medium font size":"Mittlere Schriftgröße",
 "Menu":"Menü",
 "Mix Type":"Mixtyp",
@@ -300,7 +298,6 @@
 "Only showing %1 items":"Nur %1 Einträge anzeigen",
 "Option+%1":"Option+%1",
 "Other settings":"Weitere Einstellungen",
-"Padding between items in lists":"Abstände zwischen den Elementen in Listen",
 "Path":"Pfad",
 "Pause":"Pause",
 "Pictures":"Bilder",
@@ -400,7 +397,6 @@
 "Searching...":"Suche...",
 "Select":"Auswählen",
 "Select All":"Alle auswählen",
-"Select background to use when not using artist, or album, image.":"Hintergrund auswählen welcher angezeigt wird, wenn weder Künstler noch Albumcover genutzt werden",
 "Select category":"Kategorie auswählen",
 "Select file":"Datei auswählen",
 "Select folder":"Verzeichnis auswählen",
@@ -501,7 +497,6 @@
 "Thurs":"Don",
 "Thursday":"Donnerstag",
 "Timeout (minutes)":"Timeout (Minuten)",
-"Tiny":"Winzig",
 "Title":"Titel",
 "To support this feature, this app needs to fool your browser into thinking its is playing audio. This is accomplished by playing a silent audio file in a loop. Most browsers block auto-playing of audio so this cannot start until you have interacted with the app (e.g. clicked somewhere). Alternatively you can configure your browser to allow auto-play of audio for the URL you use to access this app (%1).":"Um diese Funktion nutzen zu können, muss diese App im Browser eine stumme Audiodatei in Dauerschleife wiedergeben. Die meisten Browser blockieren die automatische Wiedergabe von Audiodateien, daher funktioniert dies erst, nachdem man mit der App interagiert hat (bspw. irgendwohin geklickt hat). Alternativ kann man im Browser die automatische Wiedergabe von Audiodateien für die von dieser App (%1) benutzten URL freigeben.",
 "Toggle queue":"Warteschlange umschalten",
@@ -623,5 +618,7 @@
 "1 Year":"Ein Jahr",
 "%1 Years":"%1 Jahre",
 "1 day":"Ein Tag",
-"%1 days":"%1 Tage"
+"%1 days":"%1 Tage",
+"If background images have been enabled (see options below), then use a default image if there is no current image.":"",
+"Use default backgrounds":""
 }

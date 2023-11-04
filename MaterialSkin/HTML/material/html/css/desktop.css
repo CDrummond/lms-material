@@ -396,7 +396,7 @@
 }
 
 .pq-unpinned .lms-list {
- height:calc((var(--vh, 1vh)*100) - (var(--main-toolbar-height) + var(--sub-toolbar-height) + var(--bottom-toolbar-height)));
+ height:calc((var(--vh, 1vh)*100) - (var(--main-toolbar-height) + var(--sub-toolbar-height) + var(--bottom-toolbar-height) + 1px));
 }
 
 @keyframes pqSlideIn {

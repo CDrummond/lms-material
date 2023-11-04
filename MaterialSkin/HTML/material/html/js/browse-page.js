@@ -495,6 +495,7 @@ var lmsBrowse = Vue.component("lms-browse", {
                         return loop[i].current.title;
                     }
                 }
+                return "&nbsp;";
             }
             return this.headerSubTitle
         },

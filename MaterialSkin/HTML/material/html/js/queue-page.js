@@ -640,7 +640,8 @@ var lmsQueue = Vue.component("lms-queue", {
             msHandleScrollEvent(this);
         },
         clickListener(e) {
-            if (!this.$store.state.desktopLayout || this.$store.state.pinQueue || !this.$store.state.showQueue || this.$store.state.openDialogs.length>0 || resizerActive) {
+            if (!this.$store.state.desktopLayout || this.$store.state.pinQueue || !this.$store.state.showQueue || resizerActive ||
+                (this.$store.state.openDialogs.length>0 && ('info-dialog'!=this.$store.state.openDialogs[0] || this.$store.state.openDialogs.length>1))) {
                 return;
             }
             let clickX = e['pageX'] || e.clientX;

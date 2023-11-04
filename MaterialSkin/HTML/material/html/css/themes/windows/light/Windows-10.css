@@ -13,6 +13,7 @@
  --scrollbar-corner-color:#f0f0f0;
  --background-color:#fff;
  --background-shadow-color:rgba(255, 255, 255, 0.9);
+ --subtoolbar-shadow-color:rgba(255, 255, 255, 0.75);
  --background-fade-start:rgba(255, 255, 255, 0);
  --background-fade-end:rgba(255, 255, 255, 1);
  --dialog-toolbar-color:#fff;

@@ -13,8 +13,9 @@ const MIN_WIDTH_FOR_COVER = 680;
 
 var lmsBrowse = Vue.component("lms-browse", {
     template: `
-<div id="browse-view">
- <div class="subtoolbar noselect" v-bind:class="{'list-details' : selection.size>0}">
+<div id="browse-view" v-bind:class="{'detailed-sub':showDetailedSubtoolbar}">
+ <div class="noselect" v-bind:class="{'list-details' : selection.size>0, 'subtoolbar-cover':showDetailedSubtoolbar}">
+ <div class="subtoolbar" v-bind:class="{'toolbar-blur':showDetailedSubtoolbar}">
   <v-layout v-if="selection.size>0">
    <div class="toolbar-nobtn-pad"></div>
    <v-layout row wrap>
@@ -40,12 +41,18 @@ var lmsBrowse = Vue.component("lms-browse", {
    <v-btn flat icon v-longpress="backBtnPressed" class="toolbar-button" v-bind:class="{'back-button':!homeButton || history.length<2}" id="back-button" :title="trans.goBack | tooltipStr('esc', keyboardControl)"><v-icon>arrow_back</v-icon></v-btn>
    <v-btn v-if="history.length>1 && homeButton" flat icon @click="homeBtnPressed()" class="toolbar-button" id="home-button" :title="trans.goHome | tooltipStr('home', keyboardControl)"><v-icon>home</v-icon></v-btn>
    <img v-if="wide && ((current && current.image) || currentItemImage)" :src="current && current.image ? current.image : currentItemImage" @click="showHistory($event)" class="sub-cover pointer"></img>
-   <v-layout row wrap @click="showHistory($event)" v-bind:class="{'pointer link-item': history.length>0}">
+   <v-layout row wrap v-if="showDetailedSubtoolbar">
+   <v-layout @click="showHistory($event)" class="link-item row wrap">
+    <v-flex xs12 class="ellipsis subtoolbar-title subtoolbar-pad" v-bind:class="{'subtoolbar-title-single':undefined==toolbarSubTitle}">{{headerTitle}}</v-flex>
+    <v-flex xs12 class="ellipsis subtoolbar-subtitle subtext" v-html="detailedSubTop"></v-flex>
+    </v-layout>
+    <v-flex xs12 class="ellipsis subtoolbar-subtitle subtext">&nbsp;</v-flex>
+    <v-flex xs12 class="ellipsis subtoolbar-subtitle subtext" v-html="detailedSubBot"></v-flex>
+   </v-layout>
+   <v-layout row wrap v-else @click="showHistory($event)" v-bind:class="{'pointer link-item': history.length>0}">
     <v-flex xs12 class="ellipsis subtoolbar-title subtoolbar-pad" v-bind:class="{'subtoolbar-title-single':undefined==toolbarSubTitle}">{{headerTitle}}</v-flex>
     <v-flex xs12 class="ellipsis subtoolbar-subtitle subtext" v-if="undefined!=toolbarSubTitle" v-html="toolbarSubTitle"></v-flex>
    </v-layout>
-   <div class="ellipsis subtoolbar-title subtoolbar-title-single pointer link-item" @click="showHistory($event)" v-else-if="history.length>0">{{headerTitle}}</div>
-   <div class="ellipsis subtoolbar-title subtoolbar-title-single" v-else>{{headerTitle}}</div>
    <v-spacer style="flex-grow: 10!important"></v-spacer>
    <v-btn @click.stop="currentActionsMenu($event)" flat icon class="toolbar-button" :title="trans.actions" id="tbar-actions" v-if="currentActions.length>(tbarActions.length<2 ? 2 : 1)"><v-icon>more_horiz</v-icon></v-btn>
    <template v-for="(action, index) in currentActions" v-if="currentActions.length==1 || tbarActions.length<2">
@@ -75,6 +82,7 @@ var lmsBrowse = Vue.component("lms-browse", {
    </v-btn>
    <v-btn :title="SEARCH_LIB_ACTION | tooltip(keyboardControl)" flat icon class="toolbar-button" @click.stop="itemAction(SEARCH_LIB_ACTION, $event)"><v-icon>{{ACTIONS[SEARCH_LIB_ACTION].icon}}</v-icon></v-btn>
   </v-layout>
+ </div>
  </div>
  <v-icon class="browse-progress" v-if="fetchingItem!=undefined" color="primary">refresh</v-icon>
  <div v-show="letter" id="letterOverlay"></div>
@@ -464,6 +472,39 @@ var lmsBrowse = Vue.component("lms-browse", {
                 }
             }
             return this.headerSubTitle ? this.headerSubTitle + suffix : suffix.length<1 ? undefined : suffix;
+        },
+        showDetailedSubtoolbar() {
+            return this.wide && this.current && (this.current.image || this.currentItemImage) && (this.current.stdItem==STD_ITEM_ARTIST || this.current.stdItem==STD_ITEM_ALBUM)
+        },
+        detailedSubTop() {
+            if (this.current.stdItem==STD_ITEM_ARTIST) {
+                return this.detailedSubInfo;
+            }
+            if (this.current.stdItem==STD_ITEM_ALBUM) {
+                let albumArtst = this.current.subtitle;
+                if (lmsOptions.noArtistFilter && this.current.compilation && this.items.length>0 && undefined!=this.items[0].compilationAlbumArtist) {
+                    albumArtst = this.items[0].compilationAlbumArtist;
+                }
+                if (undefined!=albumArtst) {
+                    return albumArtst;
+                }
+                for (let loop=this.history, i=loop.length-1; i>=0 && undefined!=loop[i].current; --i) {
+                    if (STD_ITEM_ALBUM==loop[i].current.stdItem && undefined!=loop[i].current.subtitle) {
+                        return loop[i].current.subtitle;
+                    } else if (STD_ITEM_ARTIST==loop[i].current.stdItem) {
+                        return loop[i].current.title;
+                    }
+                }
+            }
+            return this.headerSubTitle
+        },
+        detailedSubBot() {
+            if (this.current.stdItem==STD_ITEM_ARTIST) {
+                return this.headerSubTitle
+            }
+            if (this.current.stdItem==STD_ITEM_ALBUM) {
+                return this.detailedSubInfo;
+            }
         }
     },
     created() {
@@ -1457,8 +1498,12 @@ var lmsBrowse = Vue.component("lms-browse", {
                         : undefined;
             if (url) {
                 url=changeImageSizing(url, LMS_CURRENT_IMAGE_SIZE);
-            } else if (this.drawBackdrop) {
-                url='html/backdrops/browse.jpg';
+                document.documentElement.style.setProperty('--subtoolbar-image-url', 'url(' + url + ')');
+            } else {
+                document.documentElement.style.setProperty('--subtoolbar-image-url', 'url()');
+                if (this.drawBackdrop) {
+                    url='html/backdrops/browse.jpg';
+                }
             }
             setBgndCover(this.bgndElement, url);
         },

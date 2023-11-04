@@ -51,7 +51,7 @@
  }
 }
 
-.subtoolbar {
+#queue-view .subtoolbar {
  position:fixed;
  top:var(--main-toolbar-height);
  width:100vw;
@@ -151,6 +151,18 @@
  overflow:auto;
  backface-visibility:hidden;
  margin:0px;
+}
+
+.detailed-sub .lms-list,
+.detailed-sub .lms-image-grid {
+ top:calc(var(--main-toolbar-height) + (var(--sub-toolbar-height)*2))!important;
+ height:calc((var(--vh, 1vh)*100) - (var(--main-toolbar-height) + (var(--sub-toolbar-height)*2) + var(--bottom-toolbar-height) + var(--mobile-npbar-height)))!important;
+}
+
+.detailed-sub .lms-list,
+.detailed-sub .lms-image-grid,
+.detailed-sub .lms-jumplist {
+ height:calc((var(--vh, 1vh)*100) - (var(--main-toolbar-height) + (var(--sub-toolbar-height)*2) + var(--bottom-toolbar-height) + var(--mobile-npbar-height)))!important;
 }
 
 .browse-progress {

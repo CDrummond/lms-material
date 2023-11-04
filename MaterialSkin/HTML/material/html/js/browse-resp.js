@@ -793,6 +793,8 @@ function parseBrowseResp(data, parent, options, cacheKey, parentCommand, parentG
             var jumpListYear = false;
             var isSearch = false;
             var canGroupAlbums = false;
+            var firstYear = 65535;
+            var lastYear = 0;
             if (data.params && data.params.length>1) {
                 let reverse = false;
                 let isNewMusic = false;
@@ -833,6 +835,12 @@ function parseBrowseResp(data, parent, options, cacheKey, parentCommand, parentG
                 let title = i.album;
                 if (i.year && i.year>0) {
                     title+=" (" + i.year + ")";
+                    if (i.year<firstYear) {
+                        firstYear = i.year;
+                    }
+                    if (i.year>lastYear) {
+                        lastYear = i.year;
+                    }
                 }
                 let key = jumpListYear ? (""+i.year) : removeDiactrics(i.textkey);
                 if (jumpListYear && key.length>2) {
@@ -958,6 +966,13 @@ function parseBrowseResp(data, parent, options, cacheKey, parentCommand, parentG
                 }
                 if (parent && parent.id && parent.id.startsWith("search:")) {
                     resp.jumplist = []; // Search results NOT sorted???
+                }
+            }
+            if (lastYear>0) {
+                if (lastYear==firstYear) {
+                    resp.years=""+lastYear;
+                } else {
+                    resp.years=firstYear+" - " + lastYear;
                 }
             }
         } else if (data.result.titles_loop) {

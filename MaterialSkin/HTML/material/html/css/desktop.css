@@ -76,6 +76,12 @@
  margin:0px;
 }
 
+.detailed-sub .lms-list,
+.detailed-sub .lms-image-grid,
+.detailed-sub .lms-jumplist {
+ height:calc((var(--vh, 1vh)*100) - (var(--main-toolbar-height) + (var(--sub-toolbar-height)*2) + var(--bottom-toolbar-height)))!important;
+}
+
 .lms-image-grid-jump, .lms-list-jump {
  margin-left:var(--jump-list-width);
 }

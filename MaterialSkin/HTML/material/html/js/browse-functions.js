@@ -98,6 +98,7 @@ function browseAddHistory(view) {
     prev.currentActions = view.currentActions;
     prev.headerTitle = view.headerTitle;
     prev.headerSubTitle = view.headerSubTitle;
+    prev.detailedSubInfo = view.detailedSubInfo;
     prev.tbarActions = view.tbarActions;
     prev.pos = view.scrollElement.scrollTop;
     prev.grid = view.grid;
@@ -516,6 +517,7 @@ function browseHandleListResponse(view, item, command, resp, prevPage, appendIte
         } else {
             view.headerSubTitle=0==view.items.length ? i18n("Empty") : i18np("1 Item", "%1 Items", view.items.length);
         }
+        view.detailedSubInfo=resp.plainsubtitle ? resp.plainsubtitle : resp.years ? resp.years : "&nbsp;";
         if (queryParams.party) {
             view.tbarActions=[];
         }
@@ -1520,6 +1522,7 @@ function browseGoBack(view, refresh) {
     view.pinnedItemLibName = prev.pinnedItemLibName;
     view.headerTitle = prev.headerTitle;
     view.headerSubTitle = prev.headerSubTitle;
+    view.detailedSubInfo = prev.detailedSubInfo;
     view.tbarActions = prev.tbarActions;
     view.command = prev.command;
     view.showRatingButton = prev.showRatingButton;

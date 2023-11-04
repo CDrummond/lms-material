@@ -795,6 +795,7 @@ function parseBrowseResp(data, parent, options, cacheKey, parentCommand, parentG
             var canGroupAlbums = false;
             var firstYear = 65535;
             var lastYear = 0;
+            var reqArtistId = undefined;
             if (data.params && data.params.length>1) {
                 let reverse = false;
                 let isNewMusic = false;
@@ -807,10 +808,12 @@ function parseBrowseResp(data, parent, options, cacheKey, parentCommand, parentG
                             isNewMusic = true;
                         } else if (lower==MSK_REV_SORT_OPT) {
                             reverse = true;
-                        } else if ((""+data.params[1][i]).startsWith("search:")) {
+                        } else if (lower.startsWith("search:")) {
                             isSearch = true;
-                        } else if ((""+data.params[1][i]).startsWith("tags:") && data.params[1][i].indexOf("W")>0) {
+                        } else if (lower.startsWith("tags:") && data.params[1][i].indexOf("W")>0) {
                             canGroupAlbums = true;
+                        } else if (lower.startsWith("artist_id:")) {
+                            reqArtistId = lower.split(':')[1];
                         }
                     }
                 }
@@ -937,6 +940,9 @@ function parseBrowseResp(data, parent, options, cacheKey, parentCommand, parentG
                 } else {
                     resp.items.push(album);
                 }
+            }
+            if (undefined!=reqArtistId && LMS_P_MAI && LMS_ARTIST_PICS) {
+                resp.image= "/imageproxy/mai/artist/" + reqArtistId + "/image" + LMS_IMAGE_SIZE;
             }
             let numGroups = albumGroups ? albumKeys.length : 0;
             if (numGroups>1) {

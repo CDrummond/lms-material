@@ -1043,7 +1043,7 @@ div.v-subheader {
 
 .np-emblem {
  padding:3px;
- opacity:0.75;
+ opacity:0.7;
 }
 
 .np-menu:after {
@@ -2570,7 +2570,7 @@ img[lazy='loaded'].np-cover {
 
 .np-menu {
  background-color:rgba(110, 110, 110, 0.45);
- opacity:0.5;
+ opacity:0.7;
 }
 
 .grid-btns .add-btn, .grid-btns .play-btn, .np-menu {

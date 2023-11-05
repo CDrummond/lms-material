@@ -929,11 +929,6 @@ div.v-subheader {
  display:block;
 }
 
-/* Ensure larger bottom border for album review image */
-.np-info-review img, .np-info-review img, .np-info-review img, .np-info-review img {
- margin-bottom:var(--std-font-size)!important;
-}
-
 .text .odd,
 .browse-html .odd {
  float:right;

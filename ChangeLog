@@ -6,6 +6,7 @@
 4. Increase now-playing cover menu button opacity.
 5. Revert to previous String.replaceAll polyfill, fixes rendering issues.
 6. Fix text position when using thick mobile now-playing bar on iOS.
+7. Fix 'undefined' appearing in 'Artist' MAI section.
 
 4.0.0
 -----

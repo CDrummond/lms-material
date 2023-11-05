@@ -579,13 +579,13 @@ function nowplayingFetchArtistInfo(view) {
                         if (data.result && data.result.biography) {
                             if (data.result.artist) {
                                 view.info.tabs[ARTIST_TAB].found = true;
+                                let text = replaceNewLines(data.result.biography);
                                 if (view.info.tabs[ARTIST_TAB].first) {
-                                    view.info.tabs[ARTIST_TAB].text=undefined;
+                                    view.info.tabs[ARTIST_TAB].text = text;
                                     view.info.tabs[ARTIST_TAB].first = false;
                                 } else {
-                                    view.info.tabs[ARTIST_TAB].text+="<br/><br/>";
+                                    view.info.tabs[ARTIST_TAB].text+="<br/><br/>" + text;
                                 }
-                                view.info.tabs[ARTIST_TAB].text+=nowPlayingHeader(data.result.artist)+"<br/>"+replaceNewLines(data.result.biography);
                             }
                         }
                         view.info.tabs[ARTIST_TAB].count--;

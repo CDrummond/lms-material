@@ -236,7 +236,7 @@ Vue.component('lms-screensaver', {
                 this.changePos(document.getElementById('screensaver-contents'),
                                (this.diffs[0] * this.currentPos[0]) + (this.currentPos[0]>0 ? -32 : this.currentPos[0]<0 ? 32 : 0),
                                (this.diffs[1] * this.currentPos[1]) + (this.currentPos[1]>0 ? -32 : this.currentPos[1]<0 ? 32 : 0));
-            }.bind(this), 10*60*1000); // Move every Xminutes
+            }.bind(this), 5*60*1000); // Move every Xminutes
         },
         toggleHandlers() {
             if (this.enabled) {

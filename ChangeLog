@@ -2,6 +2,7 @@
 -----
 1. Fix highlighting jumplist letter when jumping/scrolling lists.
 2. Re-add placing song info into window title.
+3. Move screensaver text every 5 minutes.
 
 4.0.0
 -----

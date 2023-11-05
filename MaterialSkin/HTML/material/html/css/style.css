@@ -1432,6 +1432,11 @@ div.v-rating i.primary--text, div.v-rating i.accent--text {
  width:var(--np-image-landscape-wide-height);
 }
 
+.np-landscape-rating {
+ width:50vw;
+}
+
+.np-landscape-rating-wide,
 .np-details-landscape-wide,
 .np-details-landscape-wide .np-landscape-song-info,
 .np-details-landscape-wide .np-portrait-song-info div,

@@ -8,6 +8,7 @@
 6. Fix text position when using thick mobile now-playing bar on iOS.
 7. Fix 'undefined' appearing in 'Artist' MAI section.
 8. Remember active MAI tab.
+9. Fix landscape now-playing ratings position.
 
 4.0.0
 -----

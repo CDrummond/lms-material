@@ -223,7 +223,7 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
       </div>
      </div>
 
-     <v-layout text-xs-center v-if="showRatings">
+     <v-layout text-xs-center v-if="showRatings" class="np-landscape-rating" v-bind:class="{'np-landscape-rating-wide':wide>1}">
       <v-flex xs12>
       <v-rating v-model="rating.value" half-increments hover clearable @click.native="setRating(true)" :readonly="undefined==LMS_P_RP"></v-rating>
       </v-flex>

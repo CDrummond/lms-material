@@ -294,6 +294,10 @@
  background:transparent!important;
 }
 
+.np-bar-mob-thick .np-bar-details {
+ bottom:calc(var(--bottom-nav-pad) + 32px);
+}
+
 /* Adjust link/more/close buttons in now-playing page up a little */
 #np-info > .v-card > .v-card__actions > button {
  margin-top:-2px

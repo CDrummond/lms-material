@@ -1,6 +1,7 @@
 4.0.1
 -----
 1. Fix highlighting jumplist letter when jumping/scrolling lists.
+2. Re-add placing song info into window title.
 
 4.0.0
 -----

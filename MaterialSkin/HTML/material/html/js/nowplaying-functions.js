@@ -12,6 +12,13 @@ function  nowPlayingHeader(s) {
     return isEmpty(s) ? "" : ("<b>"+s+"</b><br/>");
 }
 
+function nowplayingSetWindowTitle(view) {
+    var title = (undefined==view.mobileBarText ? "" : (view.mobileBarText.replaceAll(SEPARATOR, " - ") + " - ")) + LMS_WINDOW_TITLE;
+    if (title!=document.title) {
+        document.title = title;
+    }
+}
+
 function nowplayingOnPlayerStatus(view, playerStatus) {
     let playStateChanged = false;
     let trackChanged = false;
@@ -194,6 +201,9 @@ function nowplayingOnPlayerStatus(view, playerStatus) {
     if (trackChanged && view.info.sync) {
         view.setInfoTrack();
         view.showInfo();
+        if (!IS_MOBILE) {
+            nowplayingSetWindowTitle(view);
+        }
     }
 
     if (playStateChanged) {

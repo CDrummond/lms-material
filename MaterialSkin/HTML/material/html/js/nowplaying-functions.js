@@ -517,11 +517,12 @@ function nowplayingFetchTrackInfo(view) {
 }
 
 function nowPlayingGetArtistAlbums(view, artist_id) {
-    lmsList("", ["albums"], ["artist_id:"+artist_id, ALBUM_TAGS, "sort:yearalbum"], 0, NP_MAX_ALBUMS, false, view.info.tabs[ARTIST_TAB].reqId).then(({data}) => {
+    lmsList("", ["albums"], ["artist_id:"+artist_id, ARTIST_ALBUM_TAGS, "sort:yearalbum"], 0, NP_MAX_ALBUMS, false, view.info.tabs[ARTIST_TAB].reqId).then(({data}) => {
         logJsonMessage("RESP", data);
         if (data && data.result && view.isCurrent(data, ARTIST_TAB)) {
-            view.info.tabs[ARTIST_TAB].sections[0].items = parseBrowseResp(data).items;
-            view.info.tabs[ARTIST_TAB].sections[0].title = i18np("1 Album", "%1 Albums", data.result.count);
+            let resp = parseBrowseResp(data);
+            view.info.tabs[ARTIST_TAB].sections[0].items = resp.items;
+            view.info.tabs[ARTIST_TAB].sections[0].title = resp.subtitle;
             view.info.tabs[ARTIST_TAB].sections[0].haveSub = false;
             for (i=0, loop=view.info.tabs[ARTIST_TAB].sections[0].items, len=loop.length; i<len ; ++i) {
                 if (loop[i].subtitle == view.info.tabs[ARTIST_TAB].artist) {

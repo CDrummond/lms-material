@@ -1300,7 +1300,7 @@ var lmsBrowse = Vue.component("lms-browse", {
                         var subMod = this.grid.haveSubtitle ? 0 : GRID_SINGLE_LINE_DIFF;
                         var index = this.grid.use                                // Add 50 to take into account text size
                                         ? Math.floor((this.scrollElement.scrollTop+(50-subMod)) / (this.grid.ih-subMod))*this.grid.numColumns
-                                        : Math.floor(this.scrollElement.scrollTop / LMS_LIST_ELEMENT_SIZE);
+                                        : Math.floor((this.scrollElement.scrollTop+5) / LMS_LIST_ELEMENT_SIZE);
                         if (this.$store.state.letterOverlay) {
                             if (index>=0 && index<this.items.length) {
                                 var letter = this.items[index].textkey;

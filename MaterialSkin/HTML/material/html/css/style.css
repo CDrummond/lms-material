@@ -1639,6 +1639,10 @@ progress {
  left:56px !important;
 }
 
+.lms-list-album .pq-current-indicator {
+ left:46px !important;
+}
+
 .pq-text {
  padding-left:4px;
  padding-top:12px; /* TODO:This should not be required! */

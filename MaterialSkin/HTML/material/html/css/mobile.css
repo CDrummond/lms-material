@@ -391,6 +391,9 @@
  .lms-list3 .pq-current-indicator {
   left:50px !important;
  }
+ .lms-list-album .pq-current-indicator {
+  left:41px !important;
+ }
  .pq-album-header {
   left:68px;
   width:calc(100% - 66px);

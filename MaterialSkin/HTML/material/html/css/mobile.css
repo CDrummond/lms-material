@@ -417,6 +417,10 @@
   height:185px;
  }
 
+ .np-grid-item-nosub {
+  height:162px;
+ }
+
  .np-grid-more {
   width:135px;
   height:135px;
@@ -431,7 +435,11 @@
 
  .np-grid-item {
   width:120px;
-  height:170px;
+  height:162px;
+ }
+
+ .np-grid-item-nosub {
+  height:146px;
  }
 
  .np-grid-more {

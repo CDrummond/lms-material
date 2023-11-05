@@ -2894,11 +2894,12 @@ img[lazy='loaded'].np-cover {
 .np-grid-item {
  position:relative;
  width:150px;
- height:200px;
+ height:190px;
+ margin-bottom:8px;
 }
 
 .np-grid-item-nosub {
-  height:176px;
+ height:176px;
 }
 
 .np-grid-more {

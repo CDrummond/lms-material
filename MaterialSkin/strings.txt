@@ -365,7 +365,7 @@ PLUGIN_MATERIAL_SKIN_RELEASE_TYPE_ORDER
 
 PLUGIN_MATERIAL_SKIN_RELEASE_TYPE_ORDER_DESC
 	EN	Specify order to display relase types (this is a comma separated list of release type names) - e.g. "Album, EP, Single"
-	FR	Spécifier l'ordre d'affichage des types de sorties (par une liste de types de sorties en séparés par des virgules) - par ex. "Album, EP, Single"
+	FR	Spécifier l'ordre d'affichage des types de sorties (par une liste de types de sorties séparés par des virgules) - par ex. "Album, EP, Single"
 	NL	Bepaal de volgorde hoe releasetypes worden getoond (dit is een door komma's gescheiden lijst van releasetypes) - bijv. "Album, EP, Single"
 	DE	Geben Sie die Reihenfolge an, in der die Veröffentlichungsarten angezeigt werden sollen (dies ist eine durch Kommas getrennte Liste von Veröffentlichungsarten) - z.B. "Album, EP, Single".
 

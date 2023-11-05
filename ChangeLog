@@ -1,14 +1,15 @@
 4.0.1
 -----
-1. Fix highlighting jumplist letter when jumping/scrolling lists.
-2. Re-add placing song info into window title.
-3. Move screensaver text every 5 minutes.
-4. Increase now-playing cover menu button opacity.
-5. Revert to previous String.replaceAll polyfill, fixes rendering issues.
-6. Fix text position when using thick mobile now-playing bar on iOS.
-7. Fix 'undefined' appearing in 'Artist' MAI section.
-8. Remember active MAI tab.
-9. Fix landscape now-playing ratings position.
+ 1. Fix highlighting jumplist letter when jumping/scrolling lists.
+ 2. Re-add placing song info into window title.
+ 3. Move screensaver text every 5 minutes.
+ 4. Increase now-playing cover menu button opacity.
+ 5. Revert to previous String.replaceAll polyfill, fixes rendering issues.
+ 6. Fix text position when using thick mobile now-playing bar on iOS.
+ 7. Fix 'undefined' appearing in 'Artist' MAI section.
+ 8. Remember active MAI tab.
+ 9. Fix landscape now-playing ratings position.
+10. Fix ratings display logic in desktop now-playing bar.
 
 4.0.0
 -----

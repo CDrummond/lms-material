@@ -1060,7 +1060,17 @@ function trackTags(withCover) {
 
 if (!String.prototype.replaceAll) {
     String.prototype.replaceAll = function(str, newStr) {
-	    return this.replace(new RegExp(str, 'g'), newStr);
+        let idx = 0;
+        let len = str.length;
+        let updated = this;
+        for (;;) {
+            idx = updated.indexOf(str, idx);
+            if (idx<0) {
+                break;
+            }
+            updated = updated.substring(0, idx) + newStr + updated.substring(idx + len);
+        }
+        return updated;
     };
 }
 

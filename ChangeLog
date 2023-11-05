@@ -4,6 +4,7 @@
 2. Re-add placing song info into window title.
 3. Move screensaver text every 5 minutes.
 4. Increase now-playing cover menu button opacity.
+5. Revert to previous String.replaceAll polyfill, fixes rendering issues.
 
 4.0.0
 -----

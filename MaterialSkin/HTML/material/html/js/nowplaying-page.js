@@ -40,7 +40,7 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
  </v-menu>
 
  <div v-if="info.show && (desktopLayout || page=='now-playing')" class="np-info" id="np-info">
-  <v-tabs centered v-model="info.tab" v-if="info.showTabs || windowWidth<NP_MIN_WIDTH_FOR_FULL" style="np-info-tab-cover">
+  <v-tabs centered v-model="info.tab" v-if="info.showTabs || windowWidth<NP_MIN_WIDTH_FOR_FULL" style="np-info-tab-cover" @change="tabChanged">
    <template v-for="(tab, index) in info.tabs">
     <v-tab :key="index">{{tab.title}}</v-tab>
     <v-tab-item :key="index" :transition="false" :reverse-transition="false">
@@ -353,13 +353,13 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
                     playlist: { shuffle:0, repeat: 0, current:0, count:0 },
                  },
                  mobileBarText: undefined,
-                 info: { show: false, tab:TRACK_TAB, showTabs:false, sync: true,
-                         tabs: [ { title:undefined, text:undefined, reqId:0, image: undefined,
+                 info: { show: false, tab:parseInt(getLocalStorageVal("nptab", TRACK_TAB)), showTabs:false, sync: true,
+                         tabs: [ { value:ARTIST_TAB, title:undefined, text:undefined, reqId:0, image: undefined,
                                     sections:[ { title:undefined, items:[], min:1, more:undefined, grid:getLocalStorageBool("np-tabs-"+ARTIST_TAB+"-0-grid", false) },
                                                { title:undefined, html:undefined } ] },
-                                 { title:undefined, text:undefined, reqId:0, image: undefined,
+                                 { value:ALBUM_TAB, title:undefined, text:undefined, reqId:0, image: undefined,
                                     sections:[ { title:undefined, items:[], min:2, more:undefined } ] },
-                                 { title:undefined, text:undefined, reqId:0, image: undefined,
+                                 { value: TRACK_TAB, title:undefined, text:undefined, reqId:0, image: undefined,
                                    sections:[ { title:undefined, html:undefined } ] } ] },
                  infoTrack: {album_id:undefined, track_id:undefined},
                  trans: { expand:undefined, collapse:undefined, sync:undefined, unsync:undefined, more:undefined, dstm:undefined,
@@ -1029,6 +1029,9 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
                 clearTimeout(this.timeTooltip.timeout);
                 this.timeTooltip.timeout = undefined;
             }
+        },
+        tabChanged(tab) {
+            setLocalStorageVal("nptab", tab);
         }
     },
     filters: {

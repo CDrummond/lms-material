@@ -121,6 +121,7 @@ const ALBUM_TAGS = "tags:ajlqsyKS";
 const ALBUM_TAGS_ALL_ARTISTS = "tags:aajlqsyKSS";
 const ARTIST_ALBUM_TAGS = "tags:aajlqswyKRSSW";
 const TRACK_TAGS = "tags:digkstuAACS";
+const SEARCH_TRACK_TAGS = LMS_VERSION>=80400 ? TRACK_TAGS : "tags:dikstuAC";
 const TECH_INFO_TAGS = "orITY";
 const PLAYLIST_TAGS = "tags:suxE";
 const PLAYLIST_TRACK_TAGS = "tags:acdeglstyAKS";

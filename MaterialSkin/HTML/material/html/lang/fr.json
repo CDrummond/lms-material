@@ -226,6 +226,7 @@
 "Homepage":"Écran d'accueil",
 "IP: %1":"IP : %1",
 "Icon":"Icône",
+"If background images have been enabled (see options below), then use a default image if there is no current image.":"Lorsque l'arrière-plan doit être généré à partir d'images des artistes ou des albums (voir les options ci-dessous) et qu'aucune image n'est disponible, utiliser une image par défaut.",
 "If you store the library when pinning then this library will always be used, regardless of changing the library in 'My Music'. If you elect not to store the library, then changing the library under 'My Music' will effect the items displayed within this pinned item.":"Si vous associez la bibliothèque en cours à l'élément ajouté à l'écran d'accueil, cette bibliothèque restera utilisée pour l'élément ajouté, même si vous changez ensuite la bibliothèque dans 'Ma Musique'. Si vous choisissez de ne pas associer la bibliothèque, un changement de bibliothèque dans 'Ma Musique' impactera les éléments affichés dans l'élément ajouté.",
 "In progress":"En cours",
 "Increase volume":"Augmenter le volume",
@@ -540,6 +541,7 @@
 "Use artist, or album, images as background.":"Utiliser des images des artistes ou des albums comme arrière-plan.",
 "Use chosen color for toolbars.":"Utiliser la couleur choisie pour les barres d'outils.",
 "Use cover of current track as background.":"Utiliser la pochette du morceau en cours comme arrière-plan.",
+"Use default backgrounds":"Utiliser les arrière-plans par défaut",
 "Use desktop layout":"Utiliser la disposition pour ordinateur de bureau",
 "Use group player's power settings to control power of all members.":"Utiliser le bouton d'alimentation du groupe pour allumer/éteindre tous ses membres.",
 "Use mobile layout":"Utiliser la disposition pour smartphone/tablette",
@@ -618,7 +620,5 @@
 "1 Year":"1 année",
 "%1 Years":"%1 années",
 "1 day":"1 jour",
-"%1 days":"%1 jours",
-"If background images have been enabled (see options below), then use a default image if there is no current image.":"",
-"Use default backgrounds":""
+"%1 days":"%1 jours"
 }

@@ -1519,10 +1519,10 @@ progress {
 }
 
 .subtoolbar-cover {
-  background-color:var(--background-color);
-  background-size:100% 100% !important;
-  box-shadow:inset 100vw 100vh var(--subtoolbar-shadow-color);
-  background:var(--subtoolbar-image-url);
+ background-color:var(--background-color);
+ background-size:100% 100% !important;
+ box-shadow:inset 100vw 100vh var(--subtoolbar-shadow-color);
+ background:var(--subtoolbar-image-url);
 }
 .browse-backdrop-cover {
  background-position:right center !important;

@@ -13,7 +13,8 @@
 11. Fix issues where TrackStat is installed but RatingsLight is not.
 12. Respect setting to not draw queue background.
 13. Fix playing 'Various Artist' albums.
-14. Reduce track info requested when searching if LMS is older than 8.4
+14. Don't request genre when searching.
+15. Don't request artist_ids when searching on mobile, as don't create links.
 
 4.0.0
 -----

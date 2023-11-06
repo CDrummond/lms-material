@@ -10,6 +10,7 @@
  8. Remember active MAI tab.
  9. Fix landscape now-playing ratings position.
 10. Fix ratings display logic in desktop now-playing bar.
+11. Fix issues where TrackStat is installed but RatingsLight is not.
 
 4.0.0
 -----

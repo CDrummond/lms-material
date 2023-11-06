@@ -1307,7 +1307,7 @@ var lmsQueue = Vue.component("lms-queue", {
             this.dragIndex = undefined;
         },
         setBgndCover() {
-            var url = this.coverUrl;
+            var url = this.$store.state.queueBackdrop ? this.coverUrl : undefined;
             if (!url && this.drawBackdrop) {
                 url='html/backdrops/queue.jpg';
             }

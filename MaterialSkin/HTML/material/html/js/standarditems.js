@@ -132,7 +132,8 @@ function buildStdItemCommand(item, parentCommand) {
                 }
             }
         } else if (item.id.startsWith("album_id:")) {
-            let artist_id = undefined;
+            let roleIdPos = undefined;
+            let artistIdRemoved = false;
             for (var i=0, len=parentCommand.params.length; i<len; ++i) {
                 if (typeof parentCommand.params[i] === 'string' || parentCommand.params[i] instanceof String) {
                     var lower = parentCommand.params[i].toLowerCase();
@@ -140,15 +141,22 @@ function buildStdItemCommand(item, parentCommand) {
                         if (lmsOptions.noArtistFilter && (item.compilation || item.nonmain)) {
                             // Want all tracks from an album, not just those from this artist, so don't filter on artist_id
                             command.params.push('material_skin_'+parentCommand.params[i]);
+                            artistIdRemoved = true;
                         } else {
                             // Retrict to only tracks from this artist
                             command.params.push(parentCommand.params[i]);
                         }
-                    } else if ( (!LMS_NO_ROLE_FILTER && (lower.startsWith("role_id:"))) ||
-                                (!LMS_NO_GENRE_FILTER && lower.startsWith("genre_id:")) ) {
+                    } else if (!LMS_NO_ROLE_FILTER && lower.startsWith("role_id:")) {
+                        roleIdPos = command.params.length;
+                        command.params.push(parentCommand.params[i]);
+                    } else if (!LMS_NO_GENRE_FILTER && lower.startsWith("genre_id:")) {
                         command.params.push(parentCommand.params[i]);
                     }
                 }
+            }
+            // If we're not supplying artist_id then can't supply role_id
+            if (artistIdRemoved && undefined!=roleIdPos) {
+                command.params.splice(roleIdPos, 1);
             }
         } else if (item.id.startsWith("genre_id:")) {
             for (var i=0, len=parentCommand.params.length; i<len; ++i) {

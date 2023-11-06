@@ -12,6 +12,7 @@
 10. Fix ratings display logic in desktop now-playing bar.
 11. Fix issues where TrackStat is installed but RatingsLight is not.
 12. Respect setting to not draw queue background.
+13. Fix playing 'Various Artist' albums.
 
 4.0.0
 -----

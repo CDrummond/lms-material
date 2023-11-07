@@ -4,6 +4,7 @@
 2. Add jumplist support when showing multiple release types.
 3. Don't highlight active jumplist item.
 4. Remove option for letter overlay whilst scrolling.
+5. Fix reading some LMS prefs where LMS returns '?'.
 
 4.0.1
 -----

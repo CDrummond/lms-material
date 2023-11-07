@@ -237,7 +237,14 @@ sub readIntPref {
     my $key = shift;
     my $val = shift;
     my $prfs = $scope eq "server" ? $serverprefs : preferences($scope);
-    eval { $val = int($prfs->get($key)); };
+    my $prefval = $prfs->get($key);
+    if (!defined $prefval) {
+        return $val;
+    }
+    if ($prefval eq '?') {
+        return $val;
+    }
+    eval { $val = int($prefval); };
     return $val;
 }
 

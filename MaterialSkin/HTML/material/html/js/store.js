@@ -69,11 +69,6 @@ function updateUiSettings(state, val) {
         setLocalStorageVal('sortFavorites', state.sortFavorites);
         browseDisplayChanged = true;
     }
-    if (undefined!=val.letterOverlay && state.letterOverlay!=val.letterOverlay) {
-        state.letterOverlay = val.letterOverlay;
-        setLocalStorageVal('letterOverlay', state.letterOverlay);
-        browseDisplayChanged = true;
-    }
     if (undefined!=val.queueShowTrackNum && state.queueShowTrackNum!=val.queueShowTrackNum) {
         state.queueShowTrackNum = val.queueShowTrackNum;
         setLocalStorageVal('queueShowTrackNum', state.queueShowTrackNum);
@@ -233,7 +228,6 @@ const store = new Vuex.Store({
         darkUi: true,
         roundCovers: true,
         fontSize: 'r',
-        letterOverlay:false,
         sortFavorites:true,
         autoScrollQueue:true,
         library: null,
@@ -467,7 +461,7 @@ const store = new Vuex.Store({
             }
             state.fontSize = undefined==fontSize ? 'r' : fontSize;
 
-            let boolItems = ['roundCovers', 'autoScrollQueue', 'sortFavorites', 'letterOverlay', 'browseBackdrop', 'queueBackdrop', 'nowPlayingBackdrop',
+            let boolItems = ['roundCovers', 'autoScrollQueue', 'sortFavorites', 'browseBackdrop', 'queueBackdrop', 'nowPlayingBackdrop',
                              'infoBackdrop', 'useDefaultBackdrops', 'browseTechInfo', 'techInfo', 'queueShowTrackNum', 'nowPlayingTrackNum',
                              'nowPlayingClock', 'nowPlayingContext', 'swipeVolume', 'swipeChangeTrack', 'keyboardControl', 'screensaver', 'homeButton',
                              'powerButton', 'mediaControls'];

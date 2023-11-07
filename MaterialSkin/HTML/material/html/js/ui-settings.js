@@ -162,15 +162,6 @@ Vue.component('lms-ui-settings', {
     <v-header class="dialog-section-header">{{i18n('Browse')}}</v-header>
 
     <v-list-tile>
-     <v-list-tile-content @click="letterOverlay = !letterOverlay" class="switch-label">
-      <v-list-tile-title>{{i18n('Draw letter overlay')}}</v-list-tile-title>
-      <v-list-tile-sub-title>{{i18n('Draw large letter when scrolling certain lists (e.g. local artists, albums, etc.)')}}</v-list-tile-sub-title>
-     </v-list-tile-content>
-     <v-list-tile-action><m3-switch v-model="letterOverlay"></m3-switch></v-list-tile-action>
-    </v-list-tile>
-    <v-divider></v-divider>
-
-    <v-list-tile>
      <v-list-tile-content @click="sortFavorites = !sortFavorites" class="switch-label">
       <v-list-tile-title>{{i18n('Sort favorites list')}}</v-list-tile-title>
       <v-list-tile-sub-title>{{i18n('Alphabetically sort favorites, rather than server supplied order.')}} {{i18n('NOTE: Folders are always sorted, this setting only affects playable items.')}}</v-list-tile-sub-title>
@@ -371,7 +362,6 @@ Vue.component('lms-ui-settings', {
             roundCovers : true,
             fontSize: 'r',
             fontSizes: [],
-            letterOverlay:false,
             sortFavorites:true,
             autoScrollQueue:true,
             browseBackdrop:true,
@@ -563,7 +553,6 @@ Vue.component('lms-ui-settings', {
             this.swipeChangeTrack = this.$store.state.swipeChangeTrack;
             this.keyboardControl = this.$store.state.keyboardControl;
             this.queueStyle = this.$store.state.queueStyle;
-            this.letterOverlay=this.$store.state.letterOverlay;
             this.sortFavorites = this.$store.state.sortFavorites;
             this.skipSeconds = this.$store.state.skipSeconds;
             this.volumeStep = lmsOptions.volumeStep;
@@ -655,7 +644,6 @@ Vue.component('lms-ui-settings', {
                       roundCovers:this.roundCovers,
                       fontSize:this.fontSize,
                       autoScrollQueue:this.autoScrollQueue,
-                      letterOverlay:this.letterOverlay,
                       sortFavorites:this.sortFavorites,
                       browseBackdrop:this.browseBackdrop,
                       queueBackdrop:this.queueBackdrop,

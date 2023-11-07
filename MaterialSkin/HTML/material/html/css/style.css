@@ -713,10 +713,6 @@ div.v-subheader {
  color:var(--sub-toolbar-text-color) !important;
 }
 
-.lms-jumplist div.active {
- color:var(--active-color) !important;
-}
-
 .vol-text {
  width:100%;
  text-align:center;
@@ -2228,7 +2224,7 @@ div.v-subheader {
  color:var(--dlg-icon-color);
 }
 
-#letterOverlay, #volumeOverlay, #keyboardVolumeOverlay {
+#volumeOverlay, #keyboardVolumeOverlay {
  z-index:2;
  position:fixed;
  left:0;

@@ -1,7 +1,9 @@
 4.0.2
 -----
 1. Respect LMS's setting to not group by release type.
-2. Add jump list support when showing multiple release types.
+2. Add jumplist support when showing multiple release types.
+3. Don't highlight active jumplist item.
+4. Remove option for letter overlay whilst scrolling.
 
 4.0.1
 -----

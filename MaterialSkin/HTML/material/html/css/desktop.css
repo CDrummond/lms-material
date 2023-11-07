@@ -309,10 +309,6 @@
  padding-top:10px;
 }
 
-#letterOverlay {
- width:calc(1vw * var(--splitter-pc)) !important;
-}
-
 .ios-vcard-text-workaround {
  top:var(--main-toolbar-height);
  height:calc((var(--vh, 1vh)*100) - var(--main-toolbar-height));

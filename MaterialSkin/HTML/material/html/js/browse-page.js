@@ -85,11 +85,10 @@ var lmsBrowse = Vue.component("lms-browse", {
  </div>
  </div>
  <v-icon class="browse-progress" v-if="fetchingItem!=undefined" color="primary">refresh</v-icon>
- <div v-show="letter" id="letterOverlay"></div>
  <div class="lms-list bgnd-cover" v-bind:class="{'browse-backdrop-cover':drawBackdrop}" id="browse-bgnd">
   <div class="noselect lms-jumplist" v-bind:class="{'bgnd-blur':drawBgndImage,'backdrop-blur':drawBackdrop}" v-if="filteredJumplist.length>1">
    <template v-for="(item, index) in filteredJumplist">
-    <div @click="jumpTo(item.index)" v-bind:class="{'active' : jumplistActive==index, 'odd-jl':undefined!=item.sect && 0!=(item.sect%2)}">{{item.key==' ' || item.key=='' ? '?' : item.key}}</div>
+    <div @click="jumpTo(item.index)" v-bind:class="{'odd-jl':undefined!=item.sect && 0!=(item.sect%2)}">{{item.key==' ' || item.key=='' ? '?' : item.key}}</div>
    </template>
   </div>
   <div class="lms-list" id="browse-list" style="overflow:auto;" v-bind:class="{'lms-image-grid':grid.use,'lms-grouped-image-grid':grid.use && grid.multiSize,'lms-image-grid-jump':grid.use && filteredJumplist.length>1,'lms-list-jump':!grid.use && filteredJumplist.length>1,'bgnd-blur':drawBgndImage,'backdrop-blur':drawBackdrop}">
@@ -402,7 +401,6 @@ var lmsBrowse = Vue.component("lms-browse", {
             section: undefined,
             letter: undefined,
             filteredJumplist: [],
-            jumplistActive: 0,
             tbarActions: [],
             itemCustomActions: [],
             subtitleClickable: false,
@@ -1293,57 +1291,6 @@ var lmsBrowse = Vue.component("lms-browse", {
             if (undefined==this.scrollAnim) {
                 this.scrollAnim = requestAnimationFrame(() => {
                     this.scrollAnim = undefined;
-                    if (undefined!=this.filteredJumplist && this.filteredJumplist.length>1) {
-                        if (undefined!==this.letterTimeout) {
-                            clearTimeout(this.letterTimeout);
-                        }
-                        var subMod = this.grid.haveSubtitle ? 0 : GRID_SINGLE_LINE_DIFF;
-                        var index = 0;
-
-                        if (this.grid.use && this.items.length>0 && this.items[0].header) {
-                            let top = this.scrollElement.scrollTop+(50-subMod);
-                            let pos = 0;
-                            for (let r = 0, loop=this.grid.rows, len=loop.length; r<len; ++r) {
-                                pos += loop[r].size;
-                                index = loop[r].rs;
-                                if (pos>top) {
-                                    break;
-                                }
-                            }
-                        } else {
-                            index = this.grid.use                                // Add 50 to take into account text size
-                                        ? Math.floor((this.scrollElement.scrollTop+(50-subMod)) / (this.grid.ih-subMod))*this.grid.numColumns
-                                        : Math.floor((this.scrollElement.scrollTop+5) / LMS_LIST_ELEMENT_SIZE);
-                        }
-                        if (this.$store.state.letterOverlay) {
-                            if (index>=0 && index<this.items.length) {
-                                var letter = this.items[index].textkey;
-                                if (this.letter!=letter) {
-                                    this.letter = letter;
-                                    this.letterOverlay.innerHTML = letter;
-                                }
-                                this.letterTimeout = setTimeout(function () {
-                                    this.letter = undefined;
-                                }.bind(this), 500);
-                            } else {
-                                this.letter = undefined;
-                            }
-                            this.letterTimeout = setTimeout(function () {
-                                this.letter = undefined;
-                            }.bind(this), 500);
-                        } else {
-                            this.letter = undefined;
-                        }
-                        this.jumplistActive = 0;
-                        for (var i=0, len=this.filteredJumplist.length; i<len; ++i) {
-                            if (this.filteredJumplist[i].index<=index) {
-                                this.jumplistActive = i;
-                            } else {
-                                break;
-                            }
-                        }
-                    }
-
                     if (undefined!=this.current && STD_ITEM_PLAYLIST==this.current.stdItem) {
                         // Fetch more items?
                         if (undefined!=this.fetchingItem || this.listSize<=this.items.length) {
@@ -1900,7 +1847,6 @@ var lmsBrowse = Vue.component("lms-browse", {
             this.setBgndCover();
         }.bind(this));
         this.setBgndCover();
-        this.letterOverlay=document.getElementById("letterOverlay");
         bus.$on('browseQueueDrop', function(browseIndex, queueIndex, queueSize) {
             if ((browseIndex>=0 && browseIndex<this.items.length) || (-1==browseIndex && this.selection.size>0)) {
                 browseInsertQueue(this, browseIndex, queueIndex, queueSize);

@@ -766,7 +766,7 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
         setBgndCover() {
             var url = this.coverUrl;
             if ((!url || url==DEFAULT_COVER) && (this.drawBackdrop || this.drawInfoBackdrop)) {
-                url='html/backdrops/nowplaying.jpg';
+                url='material/backdrops/nowplaying.jpg';
             }
             setBgndCover(this.bgndElement, url);
         },

@@ -1464,7 +1464,7 @@ var lmsBrowse = Vue.component("lms-browse", {
             } else {
                 document.documentElement.style.setProperty('--subtoolbar-image-url', 'url()');
                 if (this.drawBackdrop) {
-                    url='html/backdrops/browse.jpg';
+                    url='material/backdrops/browse.jpg';
                 }
             }
             setBgndCover(this.bgndElement, url);

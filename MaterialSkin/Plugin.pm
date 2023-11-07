@@ -57,6 +57,7 @@ my $MAIFEST_URL_PARSER_RE = qr{material/material\.webmanifest}i;
 my $USER_THEME_URL_PARSER_RE = qr{material/usertheme/.+}i;
 my $USER_COLOR_URL_PARSER_RE = qr{material/usercolor/.+}i;
 my $DOWNLOAD_PARSER_RE = qr{material/download/.+}i;
+my $BACKDROP_URL_PARSER_RE = qr{material/backdrops/.+}i;
 
 my $DEFAULT_COMPOSER_GENRES = string('PLUGIN_MATERIAL_SKIN_DEFAULT_COMPOSER_GENRES');
 my $DEFAULT_CONDUCTOR_GENRES = string('PLUGIN_MATERIAL_SKIN_DEFAULT_CONDUCTOR_GENRES');
@@ -149,6 +150,7 @@ sub initPlugin {
         Slim::Web::Pages->addRawFunction($USER_THEME_URL_PARSER_RE, \&_userThemeHandler);
         Slim::Web::Pages->addRawFunction($USER_COLOR_URL_PARSER_RE, \&_userColorHandler);
         Slim::Web::Pages->addRawFunction($DOWNLOAD_PARSER_RE, \&_downloadHandler);
+        Slim::Web::Pages->addRawFunction($BACKDROP_URL_PARSER_RE, \&_backdropHandler);
         # make sure scanner does pre-cache artwork in the size the skin is using in browse modesl
         Slim::Control::Request::executeRequest(undef, [ 'artworkspec', 'add', '300x300_f', 'Material Skin' ]);
     	if ($serverprefs->get('precacheHiDPIArtwork')) {
@@ -1743,6 +1745,20 @@ sub _downloadHandler {
         $httpClient->send_response($response);
         Slim::Web::HTTP::closeHTTPSocket($httpClient);
     }
+}
+
+sub _backdropHandler {
+    my ( $httpClient, $response ) = @_;
+    return unless $httpClient->connected;
+
+    my $request = $response->request;
+    my $fileName = basename($request->uri->path);
+    my $filePath = Slim::Utils::Prefs::dir() . "/material-skin/backdrops/" . $fileName;
+    if (! -e $filePath) {
+        $filePath = dirname(__FILE__) . "/HTML/material/html/backdrops/" . $fileName;
+    }
+    $response->code(RC_OK);
+    Slim::Web::HTTP::sendStreamingFile( $httpClient, $response, "image/jpeg", $filePath, '', 'noAttachment' );
 }
 
 1;

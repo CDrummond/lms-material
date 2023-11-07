@@ -1309,7 +1309,7 @@ var lmsQueue = Vue.component("lms-queue", {
         setBgndCover() {
             var url = this.$store.state.queueBackdrop ? this.coverUrl : undefined;
             if (!url && this.drawBackdrop) {
-                url='html/backdrops/queue.jpg';
+                url='material/backdrops/queue.jpg';
             }
             setBgndCover(this.bgndElement, url);
             // Check for cover changes in radio streams...

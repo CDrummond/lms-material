@@ -738,7 +738,7 @@ function browseAddCategories(view, item, isGenre) {
     if (undefined!=alt_id && (alt_id.includes("/") || alt_id[0]==item.id[0] || /*alt_id.startsWith("year:") ||*/ alt_id.startsWith("track_id:"))) {
         alt_id = undefined;
     }
-    let cat = { title: LMS_SEPARATE_ARTIST_LIST ? i18n("All Artists") : i18n("Artists"),
+    let cat = { title: lmsOptions.separateArtistsList ? i18n("All Artists") : i18n("Artists"),
                 command: ["artists"],
                 params: [item.id, ARTIST_TAGS, 'include_online_only_artists:1'],
                 svg: "artist",
@@ -746,7 +746,7 @@ function browseAddCategories(view, item, isGenre) {
                 id: uniqueId(item.id, view.items.length)};
     if (undefined!=alt_id) { cat.params.push(alt_id); }
     view.items.push(cat);
-    if (LMS_SEPARATE_ARTIST_LIST) {
+    if (lmsOptions.separateArtistsList) {
         cat = { title: i18n("Album Artists"),
                 command: ["artists"],
                 params: [item.id, ARTIST_TAGS, 'role_id:ALBUMARTIST', 'include_online_only_artists:1'],

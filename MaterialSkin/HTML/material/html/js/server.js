@@ -599,11 +599,14 @@ var lmsServer = Vue.component('lms-server', {
             }
         },
         handleServerPrefs(data) {
-            if (data.length<4 || data[0]!="prefset") {
+            if (data.length<4 || data[0]!="prefset" || data[1]!="server") {
                 return;
             }
-            if (data[1]=="server" && data[2]=="useUnifiedArtistsList") {
+            if (data[2]=="useUnifiedArtistsList") {
+                lmsOptions.separateArtistsList=0==parseInt(data[3]);
                 bus.$emit("prefset", data[1]+":"+data[2], data[3]);
+            } else if (data[2]=="groupArtistAlbumsByReleaseType") {
+                lmsOptions.groupByReleaseType=1==parseInt(data[3]);
             }
         },
         handleNotification(data) {

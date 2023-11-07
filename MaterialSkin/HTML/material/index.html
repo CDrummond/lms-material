@@ -163,7 +163,8 @@
   my $artistPics=$mai && Plugins::MaterialSkin::Plugin->readIntPref('plugin.musicartistinfo', 'browseArtistPictures', 1);
   my $srvEmblem=$mai && Plugins::MaterialSkin::Plugin->readIntPref('plugin.onlinelibrary', 'enableServiceEmblem', 1);
 
-  my $separateArtistsList=Plugins::MaterialSkin::Plugin->readIntPref('server', 'useUnifiedArtistsList', 0) ? 0 : 1;
+  my $separateArtistsList=Plugins::MaterialSkin::Plugin->readIntPref('server', 'useUnifiedArtistsList', 0) ? "false" : "true";
+  my $groupArtistAlbumsByReleaseType=Plugins::MaterialSkin::Plugin->readIntPref('server', 'groupArtistAlbumsByReleaseType', 0) ? "true" : "false";
   my $noGenreFilter=Plugins::MaterialSkin::Plugin->readIntPref('server', 'noGenreFilter', 0);
   my $noRoleFilter=Plugins::MaterialSkin::Plugin->readIntPref('server', 'noRoleFilter', 0);
   my $browseagelimit=Plugins::MaterialSkin::Plugin->readIntPref('server', 'browseagelimit', 100);
@@ -195,7 +196,6 @@
   print("const LMS_P_DSTM=$dstm;");
   print("const LMS_ARTIST_PICS=$artistPics;");
   print("const LMS_SRV_EMBLEM=$srvEmblem;");
-  print("const LMS_SEPARATE_ARTIST_LIST=$separateArtistsList;");
   print("const LMS_NO_GENRE_FILTER=$noGenreFilter;");
   print("const LMS_NO_ROLE_FILTER=$noRoleFilter;");
   print("const LMS_NEW_MUSIC_LIMIT=$browseagelimit;");
@@ -203,6 +203,8 @@
   print("const LMS_GROUP_DISCS=$groupdiscs;");
   print("const LMS_VA_STRING=\"$variousArtistsString\";");
   print("const LMS_LANG=\"$lang\";");
+  print("const LMS_DEF_SEPARATE_ARTISTS=$separateArtistsList;");
+  print("const LMS_DEF_GROUP_BY_RELEASE_TYPE=$groupArtistAlbumsByReleaseType;");
   print("</script>\n");
   [% END %]
   <!--JS start-->

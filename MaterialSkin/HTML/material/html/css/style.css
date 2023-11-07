@@ -3097,3 +3097,7 @@ img[lazy='loaded'].np-cover {
  width:calc((var(--sub-toolbar-height)*2) - 5px);
  height:calc((var(--sub-toolbar-height)*2) - 5px);
 }
+
+.odd-jl {
+ background-color:var(--browse-header-color);
+}

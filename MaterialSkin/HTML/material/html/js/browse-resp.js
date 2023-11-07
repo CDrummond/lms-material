@@ -951,11 +951,21 @@ function parseBrowseResp(data, parent, options, cacheKey, parentCommand, parentG
                 resp.subtitle=i18np("1 Release", "%1 Releases", loopLen);
                 resp.jumplist = [];
                 albumKeys.sort(releaseTypeSort);
+                let sectionStart=0;
                 for (let k=0; k<numGroups; ++k) {
                     let key = albumKeys[k];
                     let alist = albumGroups[key];
                     resp.items.push({title:capitaliseRelease(key)+" ("+alist.length+")", id:FILTER_PREFIX+key, header:true,
                                      menu:[PLAY_ALL_ACTION, INSERT_ALL_ACTION, ADD_ALL_ACTION], count:alist.length});
+                    // Create jump list
+                    let start = resp.items.length;
+                    let jl=[];
+                    for (let a=0, alen=alist.length; a<alen; ++a) {
+                        if (undefined!=alist[a].textkey && (jl.length==0 || jl[jl.length-1].key!=alist[a].key)) {
+                            jl.push({key: alist[a].textkey, index: resp.items.length});
+                            resp.jumplist.push({key: alist[a].textkey, index:start+a, sect:k});
+                        }
+                    }
                     resp.items.push.apply(resp.items, alist);
                 }
             } else {

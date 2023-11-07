@@ -1,6 +1,7 @@
 4.0.2
 -----
 1. Respect LMS's setting to not group by release type.
+2. Add jump list support when showing multiple release types.
 
 4.0.1
 -----

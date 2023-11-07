@@ -89,7 +89,7 @@ var lmsBrowse = Vue.component("lms-browse", {
  <div class="lms-list bgnd-cover" v-bind:class="{'browse-backdrop-cover':drawBackdrop}" id="browse-bgnd">
   <div class="noselect lms-jumplist" v-bind:class="{'bgnd-blur':drawBgndImage,'backdrop-blur':drawBackdrop}" v-if="filteredJumplist.length>1">
    <template v-for="(item, index) in filteredJumplist">
-    <div @click="jumpTo(item.index)" v-bind:class="{'active' : jumplistActive==index}">{{item.key==' ' || item.key=='' ? '?' : item.key}}</div>
+    <div @click="jumpTo(item.index)" v-bind:class="{'active' : jumplistActive==index, 'odd-jl':undefined!=item.sect && 0!=(item.sect%2)}">{{item.key==' ' || item.key=='' ? '?' : item.key}}</div>
    </template>
   </div>
   <div class="lms-list" id="browse-list" style="overflow:auto;" v-bind:class="{'lms-image-grid':grid.use,'lms-grouped-image-grid':grid.use && grid.multiSize,'lms-image-grid-jump':grid.use && filteredJumplist.length>1,'lms-list-jump':!grid.use && filteredJumplist.length>1,'bgnd-blur':drawBgndImage,'backdrop-blur':drawBackdrop}">
@@ -1298,9 +1298,23 @@ var lmsBrowse = Vue.component("lms-browse", {
                             clearTimeout(this.letterTimeout);
                         }
                         var subMod = this.grid.haveSubtitle ? 0 : GRID_SINGLE_LINE_DIFF;
-                        var index = this.grid.use                                // Add 50 to take into account text size
+                        var index = 0;
+
+                        if (this.grid.use && this.items.length>0 && this.items[0].header) {
+                            let top = this.scrollElement.scrollTop+(50-subMod);
+                            let pos = 0;
+                            for (let r = 0, loop=this.grid.rows, len=loop.length; r<len; ++r) {
+                                pos += loop[r].size;
+                                index = loop[r].rs;
+                                if (pos>top) {
+                                    break;
+                                }
+                            }
+                        } else {
+                            index = this.grid.use                                // Add 50 to take into account text size
                                         ? Math.floor((this.scrollElement.scrollTop+(50-subMod)) / (this.grid.ih-subMod))*this.grid.numColumns
                                         : Math.floor((this.scrollElement.scrollTop+5) / LMS_LIST_ELEMENT_SIZE);
+                        }
                         if (this.$store.state.letterOverlay) {
                             if (index>=0 && index<this.items.length) {
                                 var letter = this.items[index].textkey;
@@ -1413,7 +1427,7 @@ var lmsBrowse = Vue.component("lms-browse", {
                     var rowHasSubtitle = false;
                     if (i<items.length && items[i].header) {
                         this.grid.multiSize=true;
-                        this.grid.rows.push({item: items[i], header:true, size:64, r:row, id:"row.header."+i});
+                        this.grid.rows.push({item: items[i], header:true, size:64, r:row, id:"row.header."+i, rs:rs});
                         i+=1;
                         rs+=1;
                     } else {
@@ -1524,13 +1538,20 @@ var lmsBrowse = Vue.component("lms-browse", {
             bus.$emit('dlg.open', 'rating', ids, Math.ceil(rating/count));
         },
         jumpTo(index) {
-            var pos = this.grid.use
+            let pos = 0;
+            if (this.grid.use && this.items.length>0 && this.items[0].header) {
+                for (let r=0, loop=this.grid.rows, len=loop.length; r<len && loop[r].rs<index; ++r) {
+                    pos += loop[r].size;
+                }
+            } else {
+                pos = this.grid.use
                         ? Math.floor(index/this.grid.numColumns)*(this.grid.ih-(this.grid.haveSubtitle ? 0 : GRID_SINGLE_LINE_DIFF))
                         : index*LMS_LIST_ELEMENT_SIZE;
+            }
             setScrollTop(this, pos>0 ? pos : 0);
         },
         filterJumplist() {
-            if (this.items.length<=25 || this.items.length!=this.listSize || undefined==this.jumplist || this.jumplist.length<4) {
+            if (this.items.length<=(this.items.length>0 && this.items[0].header ? 50 : 25) || this.items.length!=this.listSize || undefined==this.jumplist || this.jumplist.length<4) {
                 return;
             }
             var maxItems = Math.floor((this.scrollElement.clientHeight-(16))/17);

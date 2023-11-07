@@ -73,7 +73,7 @@ PLUGIN_MATERIAL_SKIN_CONDUCTOR_GENRES_DESC
 	ZH_TW	以逗號來將支援的指揮家音樂風格作分隔，當輸入其中一種音樂風格時，系統會詢問您是否希望按指揮家瀏覽。
 
 PLUGIN_MATERIAL_SKIN_DEFAULT_COMPOSER_GENRES
-	CS	Klasika, Avantgarda, Baroko, Komorní hudba, Zpěv, Sbor, Klasický crossover, Raná hudba, Vrcholná klasika, Impresionismus, Jazz, Středověk, Minimalismus, Moderní kompozice, Opera, Orchestr, Renesance, Romantika, Symfonie, Svatební hudba, Classical, Avant-Garde, Baroque, Chamber Music, Chant, Choral, Classical Crossover, Early Music, High Classical, Impressionist, Jazz, Medieval, Minimalism, Modern Composition, Opera, Orchestral, Renaissance, Romantic, Symphony, Wedding Music
+	CS	Klasika, Avantgarda, Baroko, Komorní hudba, Zpěv, Sbor, Klasický crossover, Raná hudba, Vrcholná klasika, Impresionismus, Jazz, Středověk, Minimalismus, Moderní kompozice, Opera, Orchestr, Renesance, Romantika, Symfonie, Svatební hudba, Classical, Avant-Garde, Baroque, Chamber Music, Chant, Choral, Classical Crossover, Early Music, High Classical, Impressionist, Jazz, Medieval, Minimalism, Modern Composition, Opera, Orchestral, Renaissance, Romantic, Symphony, Wedding Music, Symphonies
 	DE	Klassik, Avantgarde, Barok, Kammermusik, Choral, Klassik-Crossover, Hochklassik, Impressionist, Jazz, Mittelalterlich, Medieval, Minimalismus, Moderne Komposition, Oper, Orchester, Renaissance, Romantik, Symphonie, Hochzeitsmusik
 	EN	Classical, Avant-Garde, Baroque, Chamber Music, Chant, Choral, Classical Crossover, Early Music, High Classical, Impressionist, Jazz, Medieval, Minimalism, Modern Composition, Opera, Orchestral, Renaissance, Romantic, Symphony, Wedding Music, Symphonies
 	FR	Jazz, Musique de film, Classique, Musique concertante, Musique de chambre, Musique symphonique, Musique vocale, Opéra, Opérette, Musique de l'Antiquité, Musique du Moyen-Age, Musique de la Renaissance, Musique baroque, Musique classique, Musique romantique, Musique moderne, Musique contemporaine, Musique électronique ou concrète
@@ -81,7 +81,7 @@ PLUGIN_MATERIAL_SKIN_DEFAULT_COMPOSER_GENRES
 	ZH_TW	古典、前衛、巴洛克、室內樂、聖歌、合唱、古典跨界、早期音樂、高級古典、印象派、爵士樂、中世紀、極簡主義、現代作曲、歌劇、管弦樂、文藝復興、浪漫主義、交響樂、婚禮音樂、交響樂
 
 PLUGIN_MATERIAL_SKIN_DEFAULT_CONDUCTOR_GENRES
-	CS	Klasika, Avantgarda, Baroko, Komorní hudba, Zpěv, Sbor, Klasický crossover, Raná hudba, Vrcholná klasika, Impresionismus, Středověk, Minimalismus, Moderní kompozice, Opera, Orchestr, Renesance, Romantika, Symfonie, Svatební hudba, Classical, Avant-Garde, Baroque, Chamber Music, Chant, Choral, Classical Crossover, Early Music, High Classical, Impressionist, Medieval, Minimalism, Modern Composition, Opera, Orchestral, Renaissance, Romantic, Symphony, Wedding Music
+	CS	Klasika, Avantgarda, Baroko, Komorní hudba, Zpěv, Sbor, Klasický crossover, Raná hudba, Vrcholná klasika, Impresionismus, Středověk, Minimalismus, Moderní kompozice, Opera, Orchestr, Renesance, Romantika, Symfonie, Svatební hudba, Classical, Avant-Garde, Baroque, Chamber Music, Chant, Choral, Classical Crossover, Early Music, High Classical, Impressionist, Medieval, Minimalism, Modern Composition, Opera, Orchestral, Renaissance, Romantic, Symphony, Wedding Music, Symphonies
 	DE	Klassik, Avantgarde, Barok, Kammermusik, Choral, Klassik-Crossover, Hochklassik, Impressionist, Mittelalterlich, Minimalismus, Moderne Komposition, Oper, Orchester, Renaissance, Romantik, Symphonie, Hochzeitsmusik
 	EN	Classical, Avant-Garde, Baroque, Chamber Music, Chant, Choral, Classical Crossover, Early Music, High Classical, Impressionist, Medieval, Minimalism, Modern Composition, Opera, Orchestral, Renaissance, Romantic, Symphony, Wedding Music, Symphonies
 	FR	Musique de film, Classique, Musique concertante, Musique de chambre, Musique symphonique, Musique vocale, Opéra, Opérette, Musique de l'Antiquité, Musique du Moyen-Age, Musique de la Renaissance, Musique baroque, Musique classique, Musique romantique, Musique moderne, Musique contemporaine, Musique électronique ou concrète
@@ -105,7 +105,7 @@ PLUGIN_MATERIAL_SKIN_SHOW_COMPOSER
 	ZH_TW	顯示作曲家
 
 PLUGIN_MATERIAL_SKIN_SHOW_COMPOSER_DESC
-	CS	Pokud žánr skladby odpovídá výše uvedenému seznamu a má tag skladatele, pak ho zobrazit ve frontě a v Právě hraje.
+	CS	Zobrazit skladatele, pokud se žánr skladby shoduje s položkou ve výše uvedeném seznamu a skladba má tag skladatele.
 	DE	Wenn das Genre eines Titels der Liste oben entspricht und es einen 'Composer'-Tag hat, zeige diesen in 'Aktueller Titel' und der Warteschlange.
 	EN	Show composer if a song's genre matches an entry in the list above and it has a composer tag.
 	FR	Si le tag "composer" est renseigné, afficher le compositeur lorsque le tag "genre" du morceau correspond à un élément de la liste ci-dessus.
@@ -121,7 +121,7 @@ PLUGIN_MATERIAL_SKIN_SHOW_CONDUCTOR
 	ZH_TW	顯示指揮家
 
 PLUGIN_MATERIAL_SKIN_SHOW_CONDUCTOR_DESC
-	CS	Pokud žánr skladby odpovídá výše uvedenému seznamu a má tag dirigenta, pak ho zobrazit ve frontě a v Právě hraje.
+	CS	Zobrazit dirigenta, pokud se žánr skladby shoduje s položkou ve výše uvedeném seznamu a skladba má tag dirigenta.
 	DE	Wenn das Genre eines Titels der Liste oben entspricht und es einen 'Conductor'-Tag hat, zeige diesen in 'Aktueller Titel' und der Warteschlange.
 	EN	Show conductor if a song's genre matches an entry in the list above and it has a conductor tag.
 	FR	Si le tag "conductor" est renseigné, afficher le chef d'orchestre lorsque le tag "genre" du morceau correspond à un élément de la liste ci-dessus.
@@ -137,7 +137,7 @@ PLUGIN_MATERIAL_SKIN_SHOW_BAND
 	ZH_TW	顯示樂團
 
 PLUGIN_MATERIAL_SKIN_SHOW_BAND_DESC
-	CS	Pokud žánr skladby odpovídá výše uvedenému seznamu a má tag skupiny, pak ji zobrazit ve frontě a v Právě hraje.
+	CS	Zobrazit skupinu, pokud se žánr skladby shoduje s položkou ve výše uvedeném seznamu a skladba má tag skupiny.
 	DE	Wenn das Genre eines Titels der Liste oben entspricht und es einen 'Band'-Tag hat, zeige diesen in 'Aktueller Titel' und der Warteschlange.
 	EN	Show band if a song's genre matches an entry in the list above and it has a band tag.
 	FR	Si le tag "band" est renseigné, afficher le groupe/orchestre lorsque le tag "genre" du morceau correspond à un élément de la liste ci-dessus.
@@ -269,7 +269,7 @@ PLUGIN_MATERIAL_SKIN_COMMENT_AS_DISC_TITLE
 	ZH_TW	使用標籤"評論"來註記光碟標題
 
 PLUGIN_MATERIAL_SKIN_COMMENT_AS_DISC_TITLE_DESC
-	CS	U alb s více disky použít jako název disku komentář z první stopy každého disku.
+	CS	U alb s více disky použít jako název disku komentář z první stopy každého disku. Pokud používáte "Oddělen středníkem", pak musí názvu disku předcházet buď "TITLE=", "DISCTITLE=", "TITLE:" nebo "DISCTITLE:" - např. "TITLE=Disk s doplňky;OTHER=Další informace".
 	DE	Benutze bei Multi-Disk-Alben den 'Comment'-Tag des jeweils ersten Titels als Albumtitel
 	EN	For multi-disc albums use comment from first track of each disc as disc title. If using "Semi-colon separated" then the disc-title needs to be preceeded by either "TITLE=", "DISCTITLE=", "TITLE:", or "DISCTITLE:" - e.g. "TITLE=Extras disc;OTHER=Some other comment info"
 	FR	Pour les albums multi-disques, utiliser le commentaire du premier morceau de chaque disque comme titre de disque. Si vous utilisez "Séparation par point-virgule", le titre du disque doit être précédé de "TITLE=", "DISCTITLE=", "TITLE:" ou "DISCTITLE:". Par exemple : "TITLE=Disque supplémentaire;OTHER=Autres informations".
@@ -301,6 +301,7 @@ PLUGIN_MATERIAL_SKIN_COMMENT_C_SEMI_SEP
 	ZH_TW	以分號分隔
 
 PLUGIN_MATERIAL_SKIN_SHOW_COMMENT
+	CS	Zobrazení komentáře v zobrazení informací
 	DE	Zeige den 'comment' tag in der Informationsansicht
 	EN	Show comment in info view
 	FR	Afficher le tag "comment" (commentaire) dans la vue "Informations"
@@ -308,13 +309,15 @@ PLUGIN_MATERIAL_SKIN_SHOW_COMMENT
 	ZH_TW	在資訊瀏覽中顯示評論
 
 PLUGIN_MATERIAL_SKIN_SHOW_COMMENT_DESC
+	CS	Zobrazit tag komentáře skladby v části "Skladba" v zobrazení informací o skladbě, pod textem skladby.
 	DE	Zeige den 'comment' tag in der 'Track'-Sektion der Track-Informationsansicht.
 	EN	Show a track's comment tag in the 'Track' section of the track information view, below the lyrics.
 	FR	Afficher le contenu du tag "comment" (commentaire) dans la section "Morceau" de la vue "Informations", sous les paroles.
-	NL	Toon de 'comment' tag, onder de songtekst in het nummer gedeelte, op de info weergave. 
+	NL	Toon de 'comment' tag, onder de songtekst in het nummer gedeelte, op de info weergave.
 	ZH_TW	在瀏覽曲目資訊中的"曲目"部分中歌詞下方顯示曲目的評論標籤。
 
 PLUGIN_MATERIAL_SKIN_RELOAD_NOTE
+	CS	POZNÁMKA: Pokud změníte některé z níže uvedených nastavení, může být nutné obnovit webovou stránku, aby se změny projevily.
 	DE	HINWEIS: Wenn irgend welche Einstellungen geändert werden, ist es vielleicht notwendig, die Web-Seite zu aktualisieren.
 	EN	NOTE: If you change any of the settings below then you might need to refresh the web page for the changes to take effect.
 	FR	REMARQUE : Si vous modifiez l'un des paramètres ci-dessous, vous devrez peut-être actualiser la page Web pour que les modifications prennent effet.
@@ -322,49 +325,57 @@ PLUGIN_MATERIAL_SKIN_RELOAD_NOTE
 	ZH_TW	注意：如果您更改以下任何設定，則可能需要重新整理網頁才能使更改生效。
 
 PLUGIN_MATERIAL_SKIN_PAGED_BATCH_SIZE
+	CS	Velikost dávky stránkování
 	EN	Paged batch size
 	FR	Pagination des listes
 	NL	Batchgrootte van pagina's
 	DE	Größe des Seiteninhalts
 
 PLUGIN_MATERIAL_SKIN_PAGED_BATCH_SIZE_DESC
+	CS	Počet počátečních položek, které se načtou (a zobrazí) při výpisu obsahu některých seznamů (například obsahu seznamu skladeb). Posouvání seznamu pak způsobí načtení další dávky položek atd.
 	EN	Number of initial items to fetch (and display) when listing contents of some lists (such as playlist contents). Scrolling list will then cause another batch of items to be fetched, etc.
 	FR	Nombre d'éléments initiaux récupérés (et affichés) lors de l'affichage de certaines listes (telles que les listes de lecture). Faire défiler la liste permettra de récupérer un nouvel ensemble d’éléments si nécessaire.
 	NL	Aantal initiële items dat wordt opgehaald (en getoond) bij het weergeven van de inhoud van sommige lijsten (zoals afspeellijsten). Als je door de lijst bladert, wordt er vervolgens een nieuwe reeks items opgehaald, enz.
 	DE	Anzahl der anfänglichen Elemente, die beim Auflisten des Inhalts einiger Listen (wie beispielsweise der Inhalte einer Wiedergabeliste) abgerufen und angezeigt werden sollen. Durch das Scrollen in der Liste werden dann weitere Elemente abgerufen, usw.
 
 PLUGIN_MATERIAL_SKIN_ARTIST_FILTER
+	CS	Filtrování skladeb alba
 	EN	Filter album tracks
 	FR	Filtrer les morceaux des albums
 	NL	Filter nummers van album
 	DE	Albumtitel filtern
 
 PLUGIN_MATERIAL_SKIN_ARTIST_FILTER_DESC
+	CS	Při procházení alb interpreta můžete použít všechny skladby ze sbírkových alb, alb, na kterých se tento interpret objevuje, atd., nebo zobrazit pouze skladby aktuálního interpreta.
 	EN	When browsing an artist's albums use all tracks from compilation albums, albums this artist appears on, etc., or only show tracks from the current artist.
 	FR	Lors du parcours des albums d'un artiste (ceux dans lesquels l'artiste apparaît), pour chaque album, afficher tous les morceaux de l'album ou afficher uniquement les morceaux de l'artiste.
 	NL	Wanneer je door de albums van een artiest bladert, geef dan voor elk album alle nummers in het album weer, of geef alleen de nummers van de huidige artiest weer.
 	DE	Beim Durchsuchen der Alben eines Interpreten werden sämtliche Titel aus Kompilationen, Alben etc. auf denen dieser Interpret erscheint mit angezeigt, oder lediglich die Titel des aktuellen Interpreten.
 
 PLUGIN_MATERIAL_SKIN_ARTIST_FILTER_ARTIST_ONLY
+	CS	Zobrazit pouze skladby aktuálního interpreta
 	EN	Only display tracks from current artist
 	FR	Afficher uniquement les morceaux de l'artiste
 	NL	Toon alleen nummers van de huidige artiest
 	DE	Nur Titel des aktuellen Interpreten anzeigen
 
 PLUGIN_MATERIAL_SKIN_ARTIST_FILTER_ALL_TRACKS
+	CS	Zobrazit všechny skladby alba
 	EN	Display all tracks of album
 	FR	Afficher tous les morceaux de l'album
 	NL	Toon alle nummers van het album
 	DE	Sämtlichte Titel des Albums anzeigen
 
 PLUGIN_MATERIAL_SKIN_RELEASE_TYPE_ORDER
+	CS	Pořadí typu vydání
 	EN	Release type order
 	FR	Ordre des types de sorties
 	NL	Releasetype volgorde
 	DE	Reihenfolge der Veröffentlichungsarten
 
 PLUGIN_MATERIAL_SKIN_RELEASE_TYPE_ORDER_DESC
-	EN	Specify order to display relase types (this is a comma separated list of release type names) - e.g. "Album, EP, Single"
+	CS	Zadejte pořadí, v jakém se mají zobrazovat typy vydání (jedná se o seznam názvů typů vydání oddělený čárkou) - např. "Album, EP, Single".
+	EN	Specify order to display release types (this is a comma separated list of release type names) - e.g. "Album, EP, Single"
 	FR	Spécifier l'ordre d'affichage des types de sorties (par une liste de types de sorties séparés par des virgules) - par ex. "Album, EP, Single"
 	NL	Bepaal de volgorde hoe releasetypes worden getoond (dit is een door komma's gescheiden lijst van releasetypes) - bijv. "Album, EP, Single"
 	DE	Geben Sie die Reihenfolge an, in der die Veröffentlichungsarten angezeigt werden sollen (dies ist eine durch Kommas getrennte Liste von Veröffentlichungsarten) - z.B. "Album, EP, Single".
@@ -373,6 +384,7 @@ PLUGIN_MATERIAL_SKIN_RELEASE_TYPE_ORDER_DESC
 #      This space is hidden in the UI, but causes this "Manage Plugins" entry to be the
 #      first in the menu section.
 SETUP_PLUGINS
+	CS	 Správa zásuvných modulů
 	EN	 Manage Plugins
 	FR	 Gérer les plugins
 	NL	 Beheer Plug-ins

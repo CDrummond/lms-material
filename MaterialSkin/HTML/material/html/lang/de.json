@@ -226,6 +226,7 @@
 "Homepage":"Startseite",
 "IP: %1":"IP: %1",
 "Icon":"Icon",
+"If background images have been enabled (see options below), then use a default image if there is no current image.":"Wenn Hintergrundbilder aktiviert wurden (siehe Optionen unten), wird ein Standardbild verwendet, wenn kein aktuelles Bild vorhanden ist.",
 "If you store the library when pinning then this library will always be used, regardless of changing the library in 'My Music'. If you elect not to store the library, then changing the library under 'My Music' will effect the items displayed within this pinned item.":"Wenn Du die Bibliothek angepinnt speicherst, wird diese Bibliothek immer verwendet, unabhängig davon, ob Du die Bibliothek in 'Meine Musik' änderst. Wenn Du die Bibliothek nicht speicherst, wirkt sich eine Änderung der Bibliothek unter 'Meine Musik' auf die gepinnten Elemente aus.",
 "In progress":"In Bearbeitung",
 "Increase volume":"Lautstärke erhöhen",
@@ -541,6 +542,7 @@
 "Use chosen color for toolbars.":"Benutze gewählte Farbe für Werkzeugleisten",
 "Use cover of current track as background.":"Bild des aktuellen Titels als Hintergrund verwenden",
 "Use desktop layout":"Desktop-Darstellung verwenden",
+"Use default backgrounds":"Standardhintergründe verwenden",
 "Use group player's power settings to control power of all members.":"Die Einschalteinstellungen der Gerätegruppe verwenden, um Mitglieder zu steuern",
 "Use mobile layout":"Mobile Darstellung verwenden",
 "User guide":"Anleitung",
@@ -618,7 +620,5 @@
 "1 Year":"Ein Jahr",
 "%1 Years":"%1 Jahre",
 "1 day":"Ein Tag",
-"%1 days":"%1 Tage",
-"If background images have been enabled (see options below), then use a default image if there is no current image.":"",
-"Use default backgrounds":""
+"%1 days":"%1 Tage"
 }

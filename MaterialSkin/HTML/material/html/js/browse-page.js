@@ -88,7 +88,7 @@ var lmsBrowse = Vue.component("lms-browse", {
  <div class="lms-list bgnd-cover" v-bind:class="{'browse-backdrop-cover':drawBackdrop}" id="browse-bgnd">
   <div class="noselect lms-jumplist" v-bind:class="{'bgnd-blur':drawBgndImage,'backdrop-blur':drawBackdrop}" v-if="filteredJumplist.length>1">
    <template v-for="(item, index) in filteredJumplist">
-    <div @click="jumpTo(item.index)" v-bind:class="{'jl-divider':undefined!=item.sect && index>0 && item.sect!=items[index-1].sect}">{{item.key==' ' || item.key=='' ? '?' : item.key}}</div>
+    <div @click="jumpTo(item.index)" v-bind:class="{'jl-divider':undefined!=item.sect && index>0 && item.sect!=filteredJumplist[index-1].sect}">{{item.key==' ' || item.key=='' ? '?' : item.key}}</div>
    </template>
   </div>
   <div class="lms-list" id="browse-list" style="overflow:auto;" v-bind:class="{'lms-image-grid':grid.use,'lms-grouped-image-grid':grid.use && grid.multiSize,'lms-image-grid-jump':grid.use && filteredJumplist.length>1,'lms-list-jump':!grid.use && filteredJumplist.length>1,'bgnd-blur':drawBgndImage,'backdrop-blur':drawBackdrop}">
@@ -1487,7 +1487,7 @@ var lmsBrowse = Vue.component("lms-browse", {
         jumpTo(index) {
             let pos = 0;
             if (this.grid.use && this.items.length>0 && this.items[0].header) {
-                for (let r=0, loop=this.grid.rows, len=loop.length; r<len && loop[r].rs<index; ++r) {
+                for (let r=0, loop=this.grid.rows, len=loop.length-1; r<len && loop[r+1].rs<=index; ++r) {
                     pos += loop[r].size;
                 }
             } else {
@@ -1498,7 +1498,7 @@ var lmsBrowse = Vue.component("lms-browse", {
             setScrollTop(this, pos>0 ? pos : 0);
         },
         filterJumplist() {
-            if (this.items.length<=(this.items.length>0 && this.items[0].header ? 50 : 25) || this.items.length!=this.listSize || undefined==this.jumplist || this.jumplist.length<4) {
+            if (this.items.length<=25 || this.items.length!=this.listSize || undefined==this.jumplist || this.jumplist.length<4) {
                 return;
             }
             var maxItems = Math.floor((this.scrollElement.clientHeight-(16))/17);

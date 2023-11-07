@@ -2190,7 +2190,7 @@ div.v-subheader {
  color:var(--active-color)!important;
 }
 
-.browse-header, .grid-header {
+.browse-header, .grid-header, .jl-divider {
  background-color:var(--browse-header-color);
 }
 
@@ -3092,8 +3092,4 @@ img[lazy='loaded'].np-cover {
 .detailed-sub .sub-cover {
  width:calc((var(--sub-toolbar-height)*2) - 5px);
  height:calc((var(--sub-toolbar-height)*2) - 5px);
-}
-
-.jl-divider {
- border-top:1px solid var(--list-item-border-color);
 }

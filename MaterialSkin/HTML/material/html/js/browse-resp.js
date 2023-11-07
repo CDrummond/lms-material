@@ -968,6 +968,7 @@ function parseBrowseResp(data, parent, options, cacheKey, parentCommand, parentG
                     }
                     resp.items.push.apply(resp.items, alist);
                 }
+                resp.listSize = resp.items.length;
             } else {
                 if (numGroups==1) {
                     resp.items = albumGroups[albumKeys[0]];

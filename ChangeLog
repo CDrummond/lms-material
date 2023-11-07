@@ -5,6 +5,7 @@
 3. Don't highlight active jumplist item.
 4. Remove option for letter overlay whilst scrolling.
 5. Fix reading some LMS prefs where LMS returns '?'.
+6. Only request artist_ids when searching if LMS 8.4 or newer.
 
 4.0.1
 -----

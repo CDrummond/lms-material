@@ -164,7 +164,7 @@
   my $srvEmblem=Plugins::MaterialSkin::Plugin->readIntPref('plugin.onlinelibrary', 'enableServiceEmblem', 1);
 
   my $separateArtistsList=Plugins::MaterialSkin::Plugin->readIntPref('server', 'useUnifiedArtistsList', 0) ? "false" : "true";
-  my $groupArtistAlbumsByReleaseType=Plugins::MaterialSkin::Plugin->readIntPref('server', 'groupArtistAlbumsByReleaseType', 0) ? "true" : "false";
+  my $groupArtistAlbumsByReleaseType=Plugins::MaterialSkin::Plugin->readIntPref('server', 'groupArtistAlbumsByReleaseType', 1) ? "true" : "false";
   my $noGenreFilter=Plugins::MaterialSkin::Plugin->readIntPref('server', 'noGenreFilter', 0);
   my $noRoleFilter=Plugins::MaterialSkin::Plugin->readIntPref('server', 'noRoleFilter', 0);
   my $browseagelimit=Plugins::MaterialSkin::Plugin->readIntPref('server', 'browseagelimit', 100);

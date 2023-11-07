@@ -88,7 +88,7 @@ var lmsBrowse = Vue.component("lms-browse", {
  <div class="lms-list bgnd-cover" v-bind:class="{'browse-backdrop-cover':drawBackdrop}" id="browse-bgnd">
   <div class="noselect lms-jumplist" v-bind:class="{'bgnd-blur':drawBgndImage,'backdrop-blur':drawBackdrop}" v-if="filteredJumplist.length>1">
    <template v-for="(item, index) in filteredJumplist">
-    <div @click="jumpTo(item.index)" v-bind:class="{'odd-jl':undefined!=item.sect && 0!=(item.sect%2)}">{{item.key==' ' || item.key=='' ? '?' : item.key}}</div>
+    <div @click="jumpTo(item.index)" v-bind:class="{'jl-divider':undefined!=item.sect && index>0 && item.sect!=items[index-1].sect}">{{item.key==' ' || item.key=='' ? '?' : item.key}}</div>
    </template>
   </div>
   <div class="lms-list" id="browse-list" style="overflow:auto;" v-bind:class="{'lms-image-grid':grid.use,'lms-grouped-image-grid':grid.use && grid.multiSize,'lms-image-grid-jump':grid.use && filteredJumplist.length>1,'lms-list-jump':!grid.use && filteredJumplist.length>1,'bgnd-blur':drawBgndImage,'backdrop-blur':drawBackdrop}">

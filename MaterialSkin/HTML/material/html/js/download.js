@@ -153,7 +153,7 @@ Vue.component('lms-downloadstatus', {
 <v-dialog v-model="show" v-if="show" persistent no-click-animation scrollable fullscreen>
  <v-card>
   <v-card-title class="settings-title">
-   <v-toolbar app-data class="dialog-toolbar">
+   <v-toolbar app-data class="dialog-toolbar" @mousedown="mouseDown" id="download-toolbar">
     <v-btn flat icon v-longpress:stop="close" :title="ttShortcutStr(i18n('Go back'), 'esc')"><v-icon>arrow_back</v-icon></v-btn>
     <v-toolbar-title>{{i18n('Downloading')}}</v-toolbar-title>
     <v-spacer></v-spacer>
@@ -233,6 +233,9 @@ Vue.component('lms-downloadstatus', {
             } else {
                 return str;
             }
+        },
+        mouseDown(ev) {
+            toolbarMouseDown(ev);
         }
     },
     computed: {

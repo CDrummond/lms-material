@@ -11,7 +11,7 @@ Vue.component('lms-information-dialog', {
 <v-dialog v-model="show" v-if="show" persistent no-click-animation scrollable fullscreen>
  <v-card>
   <v-card-title class="settings-title">
-   <v-toolbar app class="dialog-toolbar">
+   <v-toolbar app class="dialog-toolbar" @mousedown="mouseDown" id="information-toolbar">
     <v-btn flat icon v-longpress:stop="close" :title="ttShortcutStr(i18n('Go back'), 'esc')"><v-icon>arrow_back</v-icon></v-btn>
     <v-toolbar-title>
      <div>{{i18n('Information')+(undefined==serverName ? "" : (SEPARATOR+serverName))}}</div>
@@ -388,6 +388,9 @@ Vue.component('lms-information-dialog', {
         },
         showUpdateInfo() {
             bus.$emit('dlg.open', 'iframe', '/material/updateinfo.html', i18n('Update information'), undefined, IFRAME_HOME_CLOSES_DIALOGS);
+        },
+        mouseDown(ev) {
+            toolbarMouseDown(ev);
         }
     },
     beforeDestroy() {

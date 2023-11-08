@@ -565,7 +565,7 @@ Vue.component('lms-iframe-dialog', {
  <v-dialog v-model="show" v-if="show" persistent no-click-animation scrollable fullscreen>
   <v-card>
    <v-card-title class="settings-title">
-    <v-toolbar app-data class="dialog-toolbar">
+    <v-toolbar app-data class="dialog-toolbar" @mousedown="mouseDown" id="iframe-toolbar">
      <v-btn flat icon v-longpress:stop="goBack" :title="ttShortcutStr(i18n('Go back'), 'esc')"><v-icon>arrow_back</v-icon></v-btn>
      <v-btn v-if="showHome && homeButton" flat icon @click="goHome" :title="ttShortcutStr(i18n('Go home'), 'home')"><v-icon>home</v-icon></v-btn>
      <v-toolbar-title v-if="page=='player' && numPlayers>1" @click="openChoiceMenu" class="pointer">{{title}}</v-toolbar-title>
@@ -763,6 +763,9 @@ Vue.component('lms-iframe-dialog', {
             this.history = [];
             this.textCol = getComputedStyle(document.documentElement).getPropertyValue('--text-color').substring(1);
             this.playerId = player.id;
+        },
+        mouseDown(ev) {
+            toolbarMouseDown(ev);
         }
     },
     computed: {

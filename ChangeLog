@@ -9,6 +9,7 @@
 7. Allow user-supplie dbackdrops, by placing into
    prefs/material-skin/backdrops
 8. Query LMS for release type names.
+9. Fix play button showing in mobile layout when no tracks in queue.
 
 4.0.1
 -----

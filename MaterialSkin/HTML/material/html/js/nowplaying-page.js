@@ -392,7 +392,7 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
         this.controlBar();
 
         bus.$on('mobileBarChanged', function() {
-            this.controlBar();
+            this.controlBar(true);
         }.bind(this));
         bus.$on('customActions', function(val) {
             this.customActions = getCustomActions("track", false);
@@ -1001,9 +1001,9 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
         toggleGrid(tab, section) {
             nowplayingToggleGrid(this, tab, section);
         },
-        controlBar() {
+        controlBar(force) {
             let showNpBar = !this.disableBtns;
-            if (showNpBar!=this.showNpBar) {
+            if (showNpBar!=this.showNpBar || force) {
                 let mbar = this.$store.state.mobileBar;
                 document.documentElement.style.setProperty('--desktop-npbar-height', !showNpBar ? '0px' : this.desktopBarHeight);
                 document.documentElement.style.setProperty('--mobile-npbar-height', !showNpBar || MBAR_NONE==mbar ? '0px' : (MBAR_THIN==mbar ? this.mobileBarThinHeight : this.mobileBarThickHeight));
@@ -1116,7 +1116,7 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
             this.controlBar();
         },
         '$store.state.desktopLayout': function(newVal) {
-            this.controlBar();
+            this.controlBar(true);
         }
     },
     computed: {

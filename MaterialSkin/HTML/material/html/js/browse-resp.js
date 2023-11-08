@@ -952,7 +952,7 @@ function parseBrowseResp(data, parent, options, cacheKey, parentCommand, parentG
                     let start = resp.items.length;
                     let jl=[];
                     for (let a=0, alen=alist.length; a<alen; ++a) {
-                        if (undefined!=alist[a].textkey && (jl.length==0 || jl[jl.length-1].key!=alist[a].key)) {
+                        if (undefined!=alist[a].textkey && (jl.length==0 || jl[jl.length-1].key!=alist[a].textkey)) {
                             jl.push({key: alist[a].textkey, index: resp.items.length});
                             resp.jumplist.push({key: alist[a].textkey, index:start+a, sect:k});
                         }

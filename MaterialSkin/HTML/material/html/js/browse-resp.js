@@ -841,7 +841,7 @@ function parseBrowseResp(data, parent, options, cacheKey, parentCommand, parentG
                     key="'"+key.slice(-2);
                 }
                 if (undefined!=key && (resp.jumplist.length==0 || resp.jumplist[resp.jumplist.length-1].key!=key)) {
-                    resp.jumplist.push({key: key, index: resp.items.length});
+                    resp.jumplist.push({key: key, index: idx});
                 }
 
                 let artist = undefined;

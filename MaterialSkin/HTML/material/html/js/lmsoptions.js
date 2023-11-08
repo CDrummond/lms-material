@@ -25,5 +25,6 @@ var lmsOptions = {techInfo: getLocalStorageBool('techInfo', false),
                   noArtistFilter: getLocalStorageBool('noArtistFilter', true),
                   separateArtistsList: LMS_DEF_SEPARATE_ARTISTS,
                   groupByReleaseType: LMS_DEF_GROUP_BY_RELEASE_TYPE,
-                  releaseTypeOrder: undefined
+                  releaseTypeOrder: undefined,
+                  releaseTypes: {}
                 };

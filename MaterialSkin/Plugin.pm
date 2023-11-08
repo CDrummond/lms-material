@@ -384,7 +384,7 @@ sub _cliCommand {
                                                   'plugins', 'plugins-status', 'plugins-update', 'extras', 'delete-vlib', 'pass-isset',
                                                   'pass-check', 'browsemodes', 'geturl', 'command', 'scantypes', 'server', 'themes', 'backdrops',
                                                   'playericons', 'activeplayers', 'urls', 'adv-search', 'adv-search-params', 'protocols',
-                                                  'players-extra-info', 'sort-playlist', 'mixer']) ) {
+                                                  'players-extra-info', 'sort-playlist', 'mixer', 'release-types']) ) {
         $request->setStatusBadParams();
         return;
     }
@@ -965,29 +965,6 @@ sub _cliCommand {
         return;
     }
 
-    if ($cmd eq 'backdrops') {
-        my $cnt = 0;
-        my $path = dirname(__FILE__) . "/HTML/material/html/backdrops/";
-        if (-d $path) {
-            opendir DIR, $path;
-            my @items = readdir(DIR);
-            close DIR;
-            foreach my $name (@items) {
-                if (-f $path . "/" . $name ) {
-                    $name =~ s/\.jpg//i;
-                    if (rindex($name, '_tn')==-1) {
-                        if (-f $path . "/" . $name . '_tn.jpg' ) {
-                            $request->addResultLoop("backdrops", $cnt, "name", $name);
-                            $cnt++;
-                        }
-                    }
-                }
-            }
-        }
-        $request->setStatusDone();
-        return;
-    }
-
     if ($cmd eq 'playericons') {
         my $cnt = 0;
         foreach my $key (keys %{$prefs->{prefs}}) {
@@ -1263,6 +1240,21 @@ sub _cliCommand {
                     }
                     $player->execute(["mixer", "volume", $volume]);
                 }
+            }
+        }
+        $request->setStatusDone();
+        return;
+    }
+
+    if ($cmd eq 'release-types') {
+        my $relTypes = Slim::Schema::Album->releaseTypes();
+        my $cnt = 0;
+        foreach my $rt (@{$relTypes}) {
+            my $name = Slim::Schema::Album->releaseTypeName($rt);
+            if ($name) {
+                $request->addResultLoop("rt_loop", $cnt, "type", $rt);
+                $request->addResultLoop("rt_loop", $cnt, "name", $name);
+                $cnt++;
             }
         }
         $request->setStatusDone();

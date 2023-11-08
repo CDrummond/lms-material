@@ -31,17 +31,8 @@ function removeDiactrics(key) {
 }
 
 function capitaliseRelease(rel) {
-    if (rel=="ALBUM") {
-        return i18n("Albums");
-    }
-    if (rel=="EP") {
-        return i18n("EPs");
-    }
-    if (rel=="SINGLE") {
-        return i18n("Singles");
-    }
-    if (rel=="BROADCAST") {
-        return i18n("Broadcasts");
+    if (undefined!=lmsOptions.releaseTypes[rel]) {
+        return lmsOptions.releaseTypes[rel];
     }
     if (rel=="COMPILATION") {
         return i18n("Compilations");

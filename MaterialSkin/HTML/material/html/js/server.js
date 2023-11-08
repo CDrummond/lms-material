@@ -305,6 +305,7 @@ var lmsServer = Vue.component('lms-server', {
                                     function(res) { },
                                     {data:{response:'/'+this.cometd.getClientId()+'/slim/material-skin', request:['material-skin', ['notification']]}});
                     this.updateFavorites();
+                    this.updateReleaseTypes();
                 }
             });
         },
@@ -355,6 +356,7 @@ var lmsServer = Vue.component('lms-server', {
                 this.scheduleNextServerStatus(0);
                 this.scanInProgress = false;
                 bus.$emit('refreshList', SECTION_NEWMUSIC);
+                this.updateReleaseTypes();
             }
 
             if (data.players_loop) {
@@ -607,6 +609,8 @@ var lmsServer = Vue.component('lms-server', {
                 bus.$emit("prefset", data[1]+":"+data[2], data[3]);
             } else if (data[2]=="groupArtistAlbumsByReleaseType") {
                 lmsOptions.groupByReleaseType=1==parseInt(data[3]);
+            } else if (data[2]=="language") {
+                this.updateReleaseTypes();
             }
         },
         handleNotification(data) {
@@ -625,6 +629,18 @@ var lmsServer = Vue.component('lms-server', {
                     }
                 }
             }
+        },
+        updateReleaseTypes() {
+            lmsCommand("", ["material-skin", "release-types"]).then(({data}) => {
+                logJsonMessage("RESP", data);
+                if (data && data.result && data.result.rt_loop) {
+                    lmsOptions.releaseTypes={};
+                    for (let i=0, loop=data.result.rt_loop, len=loop.length; i<len; ++i) {
+                        lmsOptions.releaseTypes[loop[i].type]=loop[i].name;
+                    }
+                }
+            }).catch(err => {
+            });
         },
         handleFavoritesUpdate() {
             logCometdDebug("FAVORITES");

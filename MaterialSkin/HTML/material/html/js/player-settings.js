@@ -14,7 +14,7 @@ Vue.component('lms-player-settings', {
  <v-dialog v-model="show" v-if="show" persistent no-click-animation scrollable fullscreen>
   <v-card>
    <v-card-title class="settings-title">
-    <v-toolbar app-data class="dialog-toolbar">
+    <v-toolbar app-data class="dialog-toolbar" @mousedown="mouseDown" id="playersettings-toolbar">
      <v-btn flat icon v-longpress:stop="close" :title="ttShortcutStr(i18n('Go back'), 'esc')"><v-icon>arrow_back</v-icon></v-btn>
      <v-btn v-if="showHome && homeButton" flat icon @click="goHome" :title="ttShortcutStr(i18n('Go home'), 'home')"><v-icon>home</v-icon></v-btn>
      <v-toolbar-title @click="openPlayerMenu" v-bind:class="{'pointer':numPlayers>1}">{{TB_PLAYER_SETTINGS.title+SEPARATOR+playerName}}</v-toolbar-title>
@@ -854,6 +854,9 @@ Vue.component('lms-player-settings', {
                 return;
             }
             this.playerSettings(player);
+        },
+        mouseDown(ev) {
+            toolbarMouseDown(ev);
         }
     },
     filters: {

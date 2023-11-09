@@ -23,7 +23,7 @@ const TB_CUSTOM_ACTIONS = {id:21};
 Vue.component('lms-toolbar', {
     template: `
 <div style="z-index:2"> <!-- Prevent np-cover leak -->
-<v-toolbar fixed dense app class="lms-toolbar noselect" v-bind:class="{'lms-toolbar-no-menu':connected && !showMenuButton}">
+<v-toolbar fixed dense app class="lms-toolbar noselect" v-bind:class="{'lms-toolbar-no-menu':connected && !showMenuButton}" @mousedown="mouseDown" id="main-toolbar">
 <div v-if="showClock" class="toolbar-clock">
  <div class="maintoolbar-title">{{time}}</div>
  <div class="maintoolbar-subtitle subtext">{{date}}</div>
@@ -737,6 +737,9 @@ Vue.component('lms-toolbar', {
                 }
                 this.$store.commit('setShowQueue', showQ || !this.$store.state.showQueue);
             }
+        },
+        mouseDown(ev) {
+            toolbarMouseDown(ev);
         }
     },
     computed: {

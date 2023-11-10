@@ -32,7 +32,7 @@ function removeDiactrics(key) {
 
 function capitaliseRelease(rel) {
     if (undefined!=lmsOptions.releaseTypes[rel]) {
-        return lmsOptions.releaseTypes[rel];
+        return lmsOptions.releaseTypes[rel][1];
     }
     if (rel=="COMPILATION") {
         return i18n("Compilations");
@@ -965,10 +965,9 @@ function parseBrowseResp(data, parent, options, cacheKey, parentCommand, parentG
                     resp.items = albumGroups[albumKeys[0]];
                 }
                 let releaseType = 1==releaseTypes.size ? releaseTypes.keys().next().value : undefined;
-                if (releaseType=="EP") {
-                    resp.subtitle=i18np("1 EP", "%1 EPs", resp.items.length);
-                } else  if (releaseType=="SINGLE") {
-                    resp.subtitle=i18np("1 Single", "%1 Singles", resp.items.length);
+                let lmsTrans = lmsOptions.releaseTypes[releaseType]
+                if (undefined!=lmsTrans) {
+                    resp.subtitle=resp.items.length + " " + (lmsTrans[1==resp.items.length ? 0 : 1]);
                 } else if (releaseType=="COMPILATION") {
                     resp.subtitle=i18np("1 Compilation", "%1 Compilations", resp.items.length);
                 } else {

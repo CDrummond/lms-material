@@ -636,7 +636,7 @@ var lmsServer = Vue.component('lms-server', {
                 if (data && data.result && data.result.rt_loop) {
                     lmsOptions.releaseTypes={};
                     for (let i=0, loop=data.result.rt_loop, len=loop.length; i<len; ++i) {
-                        lmsOptions.releaseTypes[loop[i].type]=loop[i].name;
+                        lmsOptions.releaseTypes[loop[i].type]=[loop[i].singular, loop[i].plural];
                     }
                 }
             }).catch(err => {

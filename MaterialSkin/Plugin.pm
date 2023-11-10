@@ -370,6 +370,21 @@ sub _sortTracks {
     return @tracks;
 }
 
+sub _releaseTypeName {
+    my ($self, $releaseType, $suffix) = @_;
+
+    my $nameToken = uc($releaseType);
+    $nameToken =~ s/[^a-z_0-9]/_/ig;
+
+    my $name;
+    foreach ('RELEASE_TYPE_' . $nameToken . $suffix, 'RELEASE_TYPE_CUSTOM_' . $nameToken, $nameToken . $suffix) {
+        $name = string($_) if Slim::Utils::Strings::stringExists($_);
+        last if $name;
+    }
+
+    return $name || $releaseType;
+}
+
 sub _cliCommand {
     my $request = shift;
 
@@ -1250,10 +1265,12 @@ sub _cliCommand {
         my $relTypes = Slim::Schema::Album->releaseTypes();
         my $cnt = 0;
         foreach my $rt (@{$relTypes}) {
-            my $name = Slim::Schema::Album->releaseTypeName($rt);
-            if ($name) {
+            my $singular = _releaseTypeName($rt, '');
+            my $plural = _releaseTypeName($rt, 'S');
+            if ($singular && $plural) {
                 $request->addResultLoop("rt_loop", $cnt, "type", $rt);
-                $request->addResultLoop("rt_loop", $cnt, "name", $name);
+                $request->addResultLoop("rt_loop", $cnt, "singular", $singular);
+                $request->addResultLoop("rt_loop", $cnt, "plural", $plural);
                 $cnt++;
             }
         }

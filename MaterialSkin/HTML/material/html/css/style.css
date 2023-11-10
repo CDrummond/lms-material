@@ -49,6 +49,7 @@
  --npbar-border-color:var(--bottom-toolbar-border-color);
  --album-separator-color:rgba(0, 0, 0, 0.2);
  --subtoolbar-image-url:url();
+ --window-controls-space:0px;
 }
 
 .theme--dark {
@@ -1971,7 +1972,7 @@ progress {
  text-align:center;
 }
 
-.v-icon:not(.image-grid-item-icon):not(.media-icon):not(.browse-progress):not(.player-status-icon), .svg-list-img, .svg-img, .radio-image .svg-img {
+.v-icon:not(.image-grid-item-icon):not(.media-icon):not(.browse-progress):not(.player-status-icon):not(.wc-icn), .svg-list-img, .svg-img, .radio-image .svg-img {
  width:var(--icon-size) !important;
  height:var(--icon-size) !important;
  font-size:var(--icon-size) !important;
@@ -3092,4 +3093,27 @@ img[lazy='loaded'].np-cover {
 .detailed-sub .sub-cover {
  width:calc((var(--sub-toolbar-height)*2) - 5px);
  height:calc((var(--sub-toolbar-height)*2) - 5px);
+}
+
+.wc {
+ max-width:84px;
+ min-width:84px;
+ padding-left:4px;
+}
+
+.wc-btn {
+ width:24px!important;
+ height:24px!important;
+}
+
+.wc-icn {
+ width:18px!important;
+ height:18px!important;
+ font-size:18px!important;
+ vertical-align:middle !important;
+ border-radius:unset !important;
+}
+
+.wc-close:hover {
+ background-color:#a60000!important;
 }

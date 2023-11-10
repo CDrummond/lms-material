@@ -29,6 +29,7 @@ Vue.component('lms-ui-settings', {
       </v-list-tile>
      </v-list>
     </v-menu>
+    <lms-windowcontrols v-if="queryParams.nativeWindowControls>0"></lms-windowcontrols>
    </v-toolbar>
   </v-card-title>
   <v-card-text>

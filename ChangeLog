@@ -16,6 +16,7 @@
 13. Add native callbacks for titlebar and window control buttons, mainly for
     use in next version of Melodeon.
 14. When using album style highlight all tracks of current album.
+15. Clear queue selection when activate certain menu items.
 
 4.0.1
 -----

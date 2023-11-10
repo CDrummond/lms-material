@@ -810,14 +810,18 @@ var lmsQueue = Vue.component("lms-queue", {
                 return;
             }
             if (PQ_PLAY_NOW_ACTION===act) {
+                this.clearSelection();
                 bus.$emit('playerCommand', ["playlist", "index", index]);
             } else if (PQ_PLAY_NEXT_ACTION===act) {
                 if (index!==this.currentIndex) {
+                    this.clearSelection();
                     bus.$emit('playerCommand', ["playlist", "move", index, index>this.currentIndex ? this.currentIndex+1 : this.currentIndex]);
                 }
             } else if (REMOVE_ACTION===act) {
+                this.clearSelection();
                 bus.$emit('playerCommand', ["playlist", "delete", index]);
             } else if (PQ_REMOVE_ALBUM_ACTION==act) {
+                this.clearSelection();
                 bus.$emit('playerCommand', ["playlistcontrol", "cmd:delete", "album_id:"+item.album_id]);
             } else if (PQ_REMOVE_DISC_ACTION==act) {
                 var indexes = [];
@@ -841,6 +845,7 @@ var lmsQueue = Vue.component("lms-queue", {
                 if (!this.$store.state.desktopLayout) {
                     this.$store.commit('setPage', 'browse');
                 }
+                this.clearSelection();
             } else if (SELECT_ACTION===act) {
                 if (!this.selection.has(index)) {
                     if (0==this.selection.size) {
@@ -876,14 +881,18 @@ var lmsQueue = Vue.component("lms-queue", {
                     this.clearSelection();
                 }
             } else if (PQ_ZAP_ACTION==act) {
+                this.clearSelection();
                 lmsCommand(this.$store.state.player.id, ["playlist", "zap", index]).then(({data}) => {
                     bus.$emit('showMessage', i18n("Zapped '%1'", item.title));
                 });
             } else if (ADD_TO_PLAYLIST_ACTION==act) {
+                this.clearSelection();
                 bus.$emit('dlg.open', 'addtoplaylist', [item], []);
             } else if (PQ_COPY_ACTION==act) {
+                this.clearSelection();
                 bus.$emit('browseQueueDrop', -1, index, this.listSize);
             } else if (DOWNLOAD_ACTION==act) {
+                this.clearSelection();
                 download(item);
             } else if (SHOW_IMAGE_ACTION==act) {
                 bus.$emit('dlg.open', 'gallery', [item.image], 0, true);

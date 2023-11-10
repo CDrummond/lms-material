@@ -159,7 +159,7 @@ Vue.component('volume-control', {
     },
     filters: {
         displayVal: function (value, dvc, name) {
-            return VOL_FIXED==dvc ? '' : ((undefined!=name ? name+': ' : '') + value+'%');
+            return VOL_FIXED==dvc ? '' : ((undefined!=name ? name+': ' : '') + (isNaN(value) ? 0 : value)+'%');
         },
         tooltip: function (str, key, showShortcut) {
             return showShortcut && undefined!=key? ttShortcutStr(str, key, false, true) : str;

@@ -12,6 +12,7 @@
  9. Fix play button showing in mobile layout when no tracks in queue.
 10. Remove link to user guide, its out of date.
 11. Adjust volume with arrow keys, if control has focus.
+12. 'Pulse' now-playing cover menu button if cover clicked.
 
 4.0.1
 -----

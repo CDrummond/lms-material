@@ -2692,7 +2692,7 @@ img[lazy='loaded'].np-cover {
   opacity:0.05;
  }
  50% {
-  opacity:0.95;
+  opacity:1;
  }
  100% {
   opacity:0.05;

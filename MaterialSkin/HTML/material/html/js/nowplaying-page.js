@@ -211,7 +211,7 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
      <div class="np-emblem" v-if="playerStatus.current.emblem" :style="{background: playerStatus.current.emblem.bgnd}">
       <img :src="playerStatus.current.emblem | emblem()" loading="lazy"></img>
      </div>
-     <div class="np-menu" @click="showMenu" v-if="playerStatus.playlist.count>0"></div>
+     <div class="np-menu" @click="showMenu" v-if="playerStatus.playlist.count>0" v-bind:class="{'pulse':pulseTimer}"></div>
     </div>
     <div class="np-details-landscape" v-bind:class="{'np-details-landscape-wide': landscape && wide>1}">
 
@@ -278,7 +278,7 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
      <div class="np-emblem" v-if="playerStatus.current.emblem" :style="{background: playerStatus.current.emblem.bgnd}">
       <img :src="playerStatus.current.emblem | emblem()" loading="lazy"></img>
      </div>
-     <div class="np-menu" @click="showMenu" v-if="playerStatus.playlist.count>0"></div>
+     <div class="np-menu" @click="showMenu" v-if="playerStatus.playlist.count>0" v-bind:class="{'pq-pulse':pulseTimer}"></div>
     </div>
     <div class="np-portrait-song-info hide-scrollbar fade-both">
      <div>
@@ -381,7 +381,8 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
                  disablePrev:true,
                  disableNext:true,
                  dstm:false,
-                 infoZoom:10
+                 infoZoom:10,
+                 pulseTimer:undefined
                 };
     },
     mounted() {
@@ -891,6 +892,11 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
             }
             if (!this.desktopLayout && this.$store.state.page!='now-playing') {
                 return;
+            }
+            if (!this.pulseTimer) {
+                this.pulseTimer = setTimeout(function () {
+                    this.pulseTimer = undefined;
+                }.bind(this), 1500);
             }
             if (!this.clickTimer) {
                 this.clickTimer = setTimeout(function () {

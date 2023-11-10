@@ -11,6 +11,7 @@
  8. Query LMS for release type names.
  9. Fix play button showing in mobile layout when no tracks in queue.
 10. Remove link to user guide, its out of date.
+11. Adjust volume with arrow keys, if control has focus.
 
 4.0.1
 -----

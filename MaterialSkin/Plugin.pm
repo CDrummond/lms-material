@@ -371,17 +371,15 @@ sub _sortTracks {
 }
 
 sub _releaseTypeName {
-    my ($self, $releaseType, $suffix) = @_;
+    my ($releaseType, $suffix) = @_;
 
     my $nameToken = uc($releaseType);
     $nameToken =~ s/[^a-z_0-9]/_/ig;
-
     my $name;
     foreach ('RELEASE_TYPE_' . $nameToken . $suffix, 'RELEASE_TYPE_CUSTOM_' . $nameToken, $nameToken . $suffix) {
         $name = string($_) if Slim::Utils::Strings::stringExists($_);
         last if $name;
     }
-
     return $name || $releaseType;
 }
 

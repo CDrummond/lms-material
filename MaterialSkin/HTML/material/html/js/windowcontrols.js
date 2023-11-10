@@ -23,15 +23,15 @@ Vue.component('lms-windowcontrols', {
     },
     methods: {
         sendButton(btn) {
-            if (1==queryParams.nativeWindowControls) {
+            if (1==queryParams.nativeTitlebar) {
                 bus.$nextTick(function () {
                     try {
                         NativeReceiver.windowControlPressed(btn);
                     } catch (e) {
                     }
                 });
-            } else if (2==queryParams.nativeWindowControls) {
-                console.log("MATERIAL-WINDOWCONTROLS\nNAME " + btn);
+            } else if (2==queryParams.nativeTitlebar) {
+                console.log("MATERIAL-TITLEBAR\nNAME " + btn);
             }
         }
     }

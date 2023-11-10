@@ -165,7 +165,7 @@ Vue.component('lms-toolbar', {
  <v-btn v-else-if="!connected" icon :title="trans.connectionLost" @click.native="bus.$emit('showError', undefined, trans.connectionLost)">
   <v-icon class="red">error</v-icon>
  </v-btn>
- <lms-windowcontrols v-if="queryParams.nativeWindowControls>0"></lms-windowcontrols>
+ <lms-windowcontrols v-if="queryParams.nativeTitlebar>0"></lms-windowcontrols>
 </v-toolbar>
 <v-snackbar style="z-index:3" v-model="snackbar.show" :multi-line="true" :timeout="snackbar.timeout ? snackbar.timeout : 2500" :color="snackbar.color" top>{{ snackbar.msg }}</v-snackbar>
 </div>

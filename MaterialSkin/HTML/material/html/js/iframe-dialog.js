@@ -589,7 +589,7 @@ Vue.component('lms-iframe-dialog', {
        </template>
       </v-list>
      </v-menu>
-     <lms-windowcontrols v-if="queryParams.nativeWindowControls>0"></lms-windowcontrols>
+     <lms-windowcontrols v-if="queryParams.nativeTitlebar>0"></lms-windowcontrols>
     </v-toolbar>
    </v-card-title>
    <v-card-text class="embedded-page">

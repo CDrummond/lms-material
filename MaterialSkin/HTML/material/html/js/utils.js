@@ -557,6 +557,7 @@ function setTheme(theme, color, prevColor) {
         if (undefined!=prevColor && prevColor==COLOR_FROM_COVER && color!=COLOR_FROM_COVER) {
             document.documentElement.style.removeProperty('--primary-color');
             document.documentElement.style.removeProperty('--pq-current-color');
+            document.documentElement.style.removeProperty('--pq-current-album-color');
             document.documentElement.style.removeProperty('--drop-target-color');
             document.documentElement.style.removeProperty('--accent-color');
         }

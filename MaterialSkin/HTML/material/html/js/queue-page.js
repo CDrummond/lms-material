@@ -92,6 +92,7 @@ function parseResp(data, showTrackNum, index, showRatings, queueStyle, lastInCur
                                        (i.album_id!=prevItem.album_id) ||
                                        (undefined==i.album_id && ( (undefined!=image && image!=prevItem.image) ||
                                                                    (i.album!=prevItem.album) ) ) );
+                let grpKey = isAlbumHeader || undefined==prevItem ? index+resp.items.length : prevItem.grpKey;
                 let artistAlbumLines = queueStyle!=QUEUE_ALBUM || isAlbumHeader ? buildArtistAlbumLines(i, queueStyle) : undefined;
                 resp.items.push({
                               id: "track_id:"+i.id,
@@ -113,7 +114,8 @@ function parseResp(data, showTrackNum, index, showRatings, queueStyle, lastInCur
                                       ? isAlbumHeader
                                           ? LMS_ALBUM_QUEUE_HEADER : LMS_ALBUM_QUEUE_TRACK
                                       : QUEUE_TRACK_2LINES==queueStyle
-                                          ? LMS_LIST_ELEMENT_SIZE : LMS_LIST_3LINE_ELEMENT_SIZE
+                                          ? LMS_LIST_ELEMENT_SIZE : LMS_LIST_3LINE_ELEMENT_SIZE,
+                              grpKey:grpKey
                           });
                 index++;
             }
@@ -198,7 +200,7 @@ var lmsQueue = Vue.component("lms-queue", {
     </v-list-tile>
    </RecycleScroller>
    <RecycleScroller v-else-if="albumStyle" :items="items" :item-size="null" page-mode key-field="key" :buffer="LMS_SCROLLER_LIST_BUFFER">
-    <v-list-tile avatar class="pq-albumstyle" v-bind:class="{'pq-track':!item.artistAlbum, 'pq-current': index==currentIndex && !item.artistAlbum, 'pq-current-first-track': index==currentIndex && item.artistAlbum, 'pq-pulse':index==currentIndex && pulseCurrent, 'list-active': menu.show && index==menu.index, 'drop-target': dragActive && index==dropIndex}" @dragstart="dragStart(index, $event)" @dragend="dragEnd()" @dragover="dragOver(index, $event)" @drop.stop="drop(index, $event)" draggable @click.prevent.stop="click(item, index, $event)" slot-scope="{item, index}" key-field="key" @contextmenu.prevent="contextMenu(item, index, $event)">
+    <v-list-tile avatar class="pq-albumstyle" v-bind:class="{'pq-track':!item.artistAlbum, 'pq-current-album':index!=currentIndex && item.grpKey==items[currentIndex].grpKey, 'pq-current': index==currentIndex && !item.artistAlbum, 'pq-current-first-track': index==currentIndex && item.artistAlbum, 'pq-pulse':index==currentIndex && pulseCurrent, 'list-active': menu.show && index==menu.index, 'drop-target': dragActive && index==dropIndex}" @dragstart="dragStart(index, $event)" @dragend="dragEnd()" @dragover="dragOver(index, $event)" @drop.stop="drop(index, $event)" draggable @click.prevent.stop="click(item, index, $event)" slot-scope="{item, index}" key-field="key" @contextmenu.prevent="contextMenu(item, index, $event)">
      <v-list-tile-avatar :tile="true" v-bind:class="{'radio-image': 0==item.duration}" class="lms-avatar">
       <v-icon v-if="item.selected">check_box</v-icon>
       <img v-else-if="item.artistAlbum" :key="item.image" :src="item.image" onerror="this.src=DEFAULT_COVER" loading="lazy" v-bind:class="{'dimmed':item.image==DEFAULT_COVER || item.image==DEFAULT_RADIO_COVER}" class="radio-img"></img>

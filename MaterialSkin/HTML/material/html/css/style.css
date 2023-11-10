@@ -1580,8 +1580,12 @@ progress {
  background:var(--pq-current-color)
 }
 
+.pq-current-album {
+ background:var(--pq-current-album-color);
+}
+
 .pq-current-first-track {
- background: linear-gradient(transparent 50%, var(--pq-current-color) 50%);
+ background: linear-gradient(var(--pq-current-album-color) 50%, var(--pq-current-color) 50%);
 }
 
 .pq-pulse {

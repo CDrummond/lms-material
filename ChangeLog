@@ -15,6 +15,7 @@
 12. 'Pulse' now-playing cover menu button if cover clicked.
 13. Add native callbacks for titlebar and window control buttons, mainly for
     use in next version of Melodeon.
+14. When using album style highlight all tracks of current album.
 
 4.0.1
 -----

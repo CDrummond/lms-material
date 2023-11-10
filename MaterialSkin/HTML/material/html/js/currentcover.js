@@ -205,7 +205,8 @@ var lmsCurrentCover = Vue.component('lms-currentcover', {
                 let hexColor=rgb2Hex(rgb);
                 document.documentElement.style.setProperty('--primary-color', hexColor);
                 let rgbas = "rgba("+rgb [0]+","+rgb[1]+","+rgb[2];
-                document.documentElement.style.setProperty('--pq-current-color', rgbas+",0.2)");
+                document.documentElement.style.setProperty('--pq-current-color', rgbas+",0.25)");
+                document.documentElement.style.setProperty('--pq-current-album-color', rgbas+",0.15)");
                 document.documentElement.style.setProperty('--drop-target-color', rgbas+",0.5)");
 
                 // Try to ensure accent colour has decent contrast...

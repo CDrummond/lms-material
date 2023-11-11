@@ -13,7 +13,7 @@
 10. Remove link to user guide, its out of date.
 11. Adjust volume with arrow keys, if control has focus.
 12. 'Pulse' now-playing cover menu button if cover clicked.
-13. Add native callbacks for titlebar and window control buttons, mainly for
+13. Add native callback for titlebar and window control buttons, mainly for
     use in next version of Melodeon.
 14. When using album style highlight all tracks of current album.
 15. Clear queue selection when activate certain menu items.

@@ -17,6 +17,8 @@
     use in next version of Melodeon.
 14. When using album style highlight all tracks of current album.
 15. Clear queue selection when activate certain menu items.
+16. Re-add menu buttons for tracks in browse and queue views, can't use 'Move
+    selection here' etc. actions without this.
 
 4.0.1
 -----

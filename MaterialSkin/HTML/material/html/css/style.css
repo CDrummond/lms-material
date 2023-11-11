@@ -1621,8 +1621,10 @@ progress {
  border-bottom:1px solid var(--album-separator-color);
 }
 
-.pq-first-track {
- padding-top:24px;
+.pq-first-track,
+.pq-first-track-menu,
+.pq-first-track-check {
+ padding-top:24px!important;
  margin-bottom:-11px;
 }
 
@@ -1657,13 +1659,11 @@ progress {
  height:var(--list-elem-height);
  line-height:var(--list-elem-height);
  opacity:var(--sub-opacity);
+ margin-right:-16px;
  min-width:44px;
  margin-top:calc(19px - var(--std-font-size));
 }
 
-.pq-time {
- margin-right:-8px;
-}
 .browse-time {
  margin-right:0px;
 }
@@ -2201,6 +2201,11 @@ div.v-subheader {
 
 .grid-header {
   width:100%;
+}
+
+.queue-action {
+ padding-top:1px;
+ min-width:44px !important;
 }
 
 .v-card__title, .v-dialog .v-card .v-card__text, .v-snack__content {

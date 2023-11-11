@@ -196,13 +196,16 @@ var lmsQueue = Vue.component("lms-queue", {
       <v-list-tile-sub-title v-html="item.artistAlbum[1]"></v-list-tile-sub-title>
      </v-list-tile-content>
      <v-list-tile-action class="pq-time">{{item.durationStr}}</v-list-tile-action>
+     <v-list-tile-action class="queue-action" @click.stop="itemMenu(item, index, $event)">
+      <div class="menu-btn grid-btn list-btn" :title="i18n('%1 (Menu)', undefined==item.plaintitle ? item.title : item.plaintitle)"></div>
+     </v-list-tile-action>
      <img v-if="index==currentIndex" class="pq-current-indicator" :src="'pq-current' | svgIcon(true, true)"></img>
     </v-list-tile>
    </RecycleScroller>
    <RecycleScroller v-else-if="albumStyle" :items="items" :item-size="null" page-mode key-field="key" :buffer="LMS_SCROLLER_LIST_BUFFER">
     <v-list-tile avatar class="pq-albumstyle" v-bind:class="{'pq-track':!item.artistAlbum, 'pq-current-album':index!=currentIndex && item.grpKey==items[currentIndex].grpKey, 'pq-current': index==currentIndex && !item.artistAlbum, 'pq-current-first-track': index==currentIndex && item.artistAlbum, 'pq-pulse':index==currentIndex && pulseCurrent, 'list-active': menu.show && index==menu.index, 'drop-target': dragActive && index==dropIndex}" @dragstart="dragStart(index, $event)" @dragend="dragEnd()" @dragover="dragOver(index, $event)" @drop.stop="drop(index, $event)" draggable @click.prevent.stop="click(item, index, $event)" slot-scope="{item, index}" key-field="key" @contextmenu.prevent="contextMenu(item, index, $event)">
      <v-list-tile-avatar :tile="true" v-bind:class="{'radio-image': 0==item.duration}" class="lms-avatar">
-      <v-icon v-if="item.selected">check_box</v-icon>
+      <v-icon v-if="item.selected" v-bind:class="{'pq-first-track-check':item.artistAlbum}">check_box</v-icon>
       <img v-else-if="item.artistAlbum" :key="item.image" :src="item.image" onerror="this.src=DEFAULT_COVER" loading="lazy" v-bind:class="{'dimmed':item.image==DEFAULT_COVER || item.image==DEFAULT_RADIO_COVER}" class="radio-img"></img>
      </v-list-tile-avatar>
      <div class="pq-album-header ellipsis" v-if="item.artistAlbum" v-html="item.artistAlbum"></div>
@@ -210,6 +213,9 @@ var lmsQueue = Vue.component("lms-queue", {
       <v-list-tile-title v-html="item.title"></v-list-tile-title>
      </v-list-tile-content>
      <v-list-tile-action class="pq-time">{{item.durationStr}}</v-list-tile-action>
+     <v-list-tile-action class="queue-action" v-bind:class="{'pq-first-track-menu':item.artistAlbum}" @click.stop="itemMenu(item, index, $event)">
+      <div class="menu-btn grid-btn list-btn" :title="i18n('%1 (Menu)', undefined==item.plaintitle ? item.title : item.plaintitle)"></div>
+     </v-list-tile-action>
      <img v-if="index==currentIndex" class="pq-current-indicator" :src="'pq-current' | svgIcon(true, true)"></img>
     </v-list-tile>
    </RecycleScroller>
@@ -224,6 +230,9 @@ var lmsQueue = Vue.component("lms-queue", {
       <v-list-tile-sub-title v-html="item.artistAlbum"></v-list-tile-sub-title>
      </v-list-tile-content>
      <v-list-tile-action class="pq-time">{{item.durationStr}}</v-list-tile-action>
+     <v-list-tile-action class="queue-action" @click.stop="itemMenu(item, index, $event)">
+      <div class="menu-btn grid-btn list-btn" :title="i18n('%1 (Menu)', undefined==item.plaintitle ? item.title : item.plaintitle)"></div>
+     </v-list-tile-action>
      <img v-if="index==currentIndex" class="pq-current-indicator" :src="'pq-current' | svgIcon(true, true)"></img>
     </v-list-tile>
    </RecycleScroller>

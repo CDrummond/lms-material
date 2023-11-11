@@ -524,7 +524,13 @@ function hideClassicSkinElems(page, textCol) {
                                 if (undefined!=doBtn) {
                                     confirm(msg, doBtn).then(res => {
                                         if (res) {
-                                            if (href.startsWith("https://") || (href.startsWith("http://") && !href.startsWith('http://'+window.location.hostname+':'+window.location.port+'/'))) {
+                                            if (restartWarning) {
+                                                lmsCommand("", ["restartserver"]).then(({}) => {
+                                                    bus.$emit('iframe-showMessage', i18n('Server is being restarted.'));
+                                                }).catch(err => {
+                                                    bus.$emit('iframe-showMessage', i18n('Server is being restarted.'));
+                                                });
+                                            } else if (href.startsWith("https://") || (href.startsWith("http://") && !href.startsWith('http://'+window.location.hostname+':'+window.location.port+'/'))) {
                                                 openWindow(href);
                                             } else {
                                                 bus.$emit('iframe-href', href, false);

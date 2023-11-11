@@ -395,7 +395,7 @@ sub _cliCommand {
     my $cmd = $request->getParam('_cmd');
     if ($request->paramUndefinedOrNotOneOf($cmd, ['prefs', 'info', 'transferqueue', 'delete-favorite', 'map', 'delete-podcast',
                                                   'plugins', 'plugins-status', 'plugins-update', 'extras', 'delete-vlib', 'pass-isset',
-                                                  'pass-check', 'browsemodes', 'geturl', 'command', 'scantypes', 'server', 'themes', 'backdrops',
+                                                  'pass-check', 'browsemodes', 'geturl', 'command', 'scantypes', 'server', 'themes',
                                                   'playericons', 'activeplayers', 'urls', 'adv-search', 'adv-search-params', 'protocols',
                                                   'players-extra-info', 'sort-playlist', 'mixer', 'release-types']) ) {
         $request->setStatusBadParams();
@@ -1260,16 +1260,19 @@ sub _cliCommand {
     }
 
     if ($cmd eq 'release-types') {
-        my $relTypes = Slim::Schema::Album->releaseTypes();
-        my $cnt = 0;
-        foreach my $rt (@{$relTypes}) {
-            my $singular = _releaseTypeName($rt, '');
-            my $plural = _releaseTypeName($rt, 'S');
-            if ($singular && $plural) {
-                $request->addResultLoop("rt_loop", $cnt, "type", $rt);
-                $request->addResultLoop("rt_loop", $cnt, "singular", $singular);
-                $request->addResultLoop("rt_loop", $cnt, "plural", $plural);
-                $cnt++;
+        my @ver = split(/\./, $::VERSION);
+        if (int($ver[0])>=8 && int($ver[0])>=4) {
+            my $relTypes = Slim::Schema::Album->releaseTypes();
+            my $cnt = 0;
+            foreach my $rt (@{$relTypes}) {
+                my $singular = _releaseTypeName($rt, '');
+                my $plural = _releaseTypeName($rt, 'S');
+                if ($singular && $plural) {
+                    $request->addResultLoop("rt_loop", $cnt, "type", $rt);
+                    $request->addResultLoop("rt_loop", $cnt, "singular", $singular);
+                    $request->addResultLoop("rt_loop", $cnt, "plural", $plural);
+                    $cnt++;
+                }
             }
         }
         $request->setStatusDone();

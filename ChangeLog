@@ -3,6 +3,7 @@
 1. Fix restating LMS from 'Server settings' page.
 2. Improve/fix album style queue for radio streams.
 3. Don't group by release type if LMS is set to ignore this.
+4. Only call 'Slim::Schema::Album->releaseTypes' for LMS 8.4 or newer.
 
 4.0.2
 -----

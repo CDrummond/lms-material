@@ -379,13 +379,3 @@ PLUGIN_MATERIAL_SKIN_RELEASE_TYPE_ORDER_DESC
 	FR	Spécifier l'ordre d'affichage des types de sorties (par une liste de types de sorties séparés par des virgules) - par ex. "Album, EP, Single"
 	NL	Bepaal de volgorde hoe releasetypes worden getoond (dit is een door komma's gescheiden lijst van releasetypes) - bijv. "Album, EP, Single"
 	DE	Geben Sie die Reihenfolge an, in der die Veröffentlichungsarten angezeigt werden sollen (dies ist eine durch Kommas getrennte Liste von Veröffentlichungsarten) - z.B. "Album, EP, Single".
-
-#NOTE: When translating SETUP_PLUGINS you *must* insert a space before your translation.
-#      This space is hidden in the UI, but causes this "Manage Plugins" entry to be the
-#      first in the menu section.
-SETUP_PLUGINS
-	CS	 Správa zásuvných modulů
-	EN	 Manage Plugins
-	FR	 Gérer les plugins
-	NL	 Beheer Plug-ins
-	DE	 Plugins verwalten

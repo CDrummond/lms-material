@@ -31,12 +31,16 @@ function queueItemCover(item) {
 
 var lmsQueueSelectionActive = false;
 function buildArtistAlbumLines(i, queueStyle) {
-    var artistAlbum = undefined;
+    let artistAlbum = undefined;
+    let artistIsRemoteTitle = false;
     if (QUEUE_ALBUM==queueStyle) {
         let str = i.albumartist ? i.albumartist : i.artist ? i.artist : i.trackartist;
         let id = i.albumartist ? i.albumartist_id : i.artist_id ? i.artist_id : i.trackartist_id;
-        if (IS_MOBILE || undefined==id) {
-            artistAlbum = i.albumartist ? i.albumartist : i.artist ? i.artist : i.trackartist;
+        if (!str && i.remote) {
+            artistAlbum = i.remote_title ? i.remote_title : i.title;
+            artistIsRemoteTitle = true;
+        } else if (IS_MOBILE || undefined==id) {
+            artistAlbum = str;
         } else {
             artistAlbum = buildLink(i.albumartist ? 'showAlbumArtist' : 'showArtist', id, str, 'queue');
         }
@@ -48,10 +52,12 @@ function buildArtistAlbumLines(i, queueStyle) {
         lines.push(artistAlbum);
         artistAlbum = undefined;
     }
-    artistAlbum = addPart(artistAlbum, buildAlbumLine(i, 'queue'));
-    if (QUEUE_TRACK_3LINES==queueStyle) {
-        lines.push(artistAlbum);
-        return lines;
+    if (QUEUE_ALBUM!=queueStyle || !artistIsRemoteTitle) {
+        artistAlbum = addPart(artistAlbum, buildAlbumLine(i, 'queue'));
+        if (QUEUE_TRACK_3LINES==queueStyle) {
+            lines.push(artistAlbum);
+            return lines;
+        }
     }
     return artistAlbum;
 }
@@ -441,7 +447,9 @@ var lmsQueue = Vue.component("lms-queue", {
 
                     if (title!=this.items[index].title || artistAlbum!=this.items[index].artistAlbum || duration!=this.items[index].duration) {
                         this.items[index].title = title;
-                        this.items[index].artistAlbum = artistAlbum;
+                        if (undefined!=artistAlbum) {
+                            this.items[index].artistAlbum = artistAlbum;
+                        }
                         this.items[index].artist = i.artist ? i.artist : i.trackartist ? i.trackartist : i.albumartist;
                         if (duration!=this.items[index].duration) {
                             this.items[index].durationStr = undefined!=duration && duration>0 ? formatSeconds(duration) : undefined;

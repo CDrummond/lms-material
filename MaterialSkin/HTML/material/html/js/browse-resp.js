@@ -30,9 +30,14 @@ function removeDiactrics(key) {
     return key==" " ? "?" : key;
 }
 
-function capitaliseRelease(rel) {
+function releaseTypeHeader(rel) {
     if (undefined!=lmsOptions.releaseTypes[rel]) {
         return lmsOptions.releaseTypes[rel][1];
+    }
+    // Keep ALBUM translation for pre LMS8.4 installs
+    // ...as even for these we split out albums and compilations, etc.
+    if (rel=="ALBUM") {
+        return i18n("Albums");
     }
     if (rel=="COMPILATION") {
         return i18n("Compilations");
@@ -946,7 +951,7 @@ function parseBrowseResp(data, parent, options, cacheKey, parentCommand, parentG
                 for (let k=0; k<numGroups; ++k) {
                     let key = albumKeys[k];
                     let alist = albumGroups[key];
-                    resp.items.push({title:capitaliseRelease(key)+" ("+alist.length+")", id:FILTER_PREFIX+key, header:true,
+                    resp.items.push({title:releaseTypeHeader(key)+" ("+alist.length+")", id:FILTER_PREFIX+key, header:true,
                                      menu:[PLAY_ALL_ACTION, INSERT_ALL_ACTION, ADD_ALL_ACTION], count:alist.length});
                     // Create jump list
                     let start = resp.items.length;

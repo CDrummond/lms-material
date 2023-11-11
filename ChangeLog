@@ -21,6 +21,7 @@
     selected.
 17. Remove hack to place 'Manage plugins' first in list, as LMS 8.4 now has a
     proper fix for this.
+18. Fix browse toolbar if have selection.
 
 4.0.1
 -----

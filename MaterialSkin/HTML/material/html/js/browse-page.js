@@ -14,7 +14,7 @@ const MIN_WIDTH_FOR_COVER = 680;
 var lmsBrowse = Vue.component("lms-browse", {
     template: `
 <div id="browse-view" v-bind:class="{'detailed-sub':showDetailedSubtoolbar}">
- <div class="noselect" v-bind:class="{'list-details' : selection.size>0, 'subtoolbar-cover':showDetailedSubtoolbar}">
+ <div class="noselect" v-bind:class="{'subtoolbar-cover':showDetailedSubtoolbar}">
  <div class="subtoolbar" v-bind:class="{'toolbar-blur':showDetailedSubtoolbar}">
   <v-layout v-if="selection.size>0">
    <div class="toolbar-nobtn-pad"></div>

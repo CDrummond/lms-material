@@ -95,7 +95,8 @@ function parseResp(data, showTrackNum, index, showRatings, queueStyle, lastInCur
                 let image = queueItemCover(i);
                 let isAlbumHeader = QUEUE_ALBUM==queueStyle &&
                                      ( undefined==prevItem ||
-                                       (i.album_id!=prevItem.album_id) ||
+                                       i.album_id!=prevItem.album_id ||
+                                       i.disc!=prevItem.disc ||
                                        (undefined==i.album_id && ( (undefined!=image && image!=prevItem.image) ||
                                                                    (i.album!=prevItem.album) ) ) );
                 let grpKey = isAlbumHeader || undefined==prevItem ? index+resp.items.length : prevItem.grpKey;
@@ -111,6 +112,7 @@ function parseResp(data, showTrackNum, index, showRatings, queueStyle, lastInCur
                               durationStr: undefined!=duration && duration>0 ? formatSeconds(duration) : undefined,
                               key: i.id+"."+index,
                               album_id: i.album_id,
+                              disc: i.disc,
                               url: i.url,
                               isLocal: i.url && i.url.startsWith("file:"),
                               disc: i.disc,

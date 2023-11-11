@@ -1664,6 +1664,10 @@ progress {
  margin-top:calc(19px - var(--std-font-size));
 }
 
+.pq-time-ns {
+ margin-right:-8px;
+}
+
 .browse-time {
  margin-right:0px;
 }

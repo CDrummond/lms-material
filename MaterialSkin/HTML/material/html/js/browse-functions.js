@@ -1263,6 +1263,7 @@ function browseItemAction(view, act, item, index, event) {
         // If we are acting on a multi-disc album, prompt which disc we should act on
         if (item.multi && !view.current.id.startsWith("album_id:") && (PLAY_ACTION==act || ADD_ACTION==act || INSERT_ACTION==act)) {
             var command = view.buildCommand(item);
+            view.clearSelection();
             lmsList(view.playerId(), command.command, command.params, 0, LMS_BATCH_SIZE, false, view.nextReqId()).then(({data}) => {
                 view.options.neverColapseDiscs = true;
                 var resp = parseBrowseResp(data, item, view.options, undefined, view.command, view.inGenre);
@@ -1270,7 +1271,7 @@ function browseItemAction(view, act, item, index, event) {
                 if (resp.items.length<=0) {
                     return;
                 }
-                var discs = [{title:i18n('All discs'), subtitle:resp.plainsubtitle ? resp.plainsubtitle : resp.subtitle}];
+                var discs = [{title:i18n('All discs'), subtitle:resp.plainsubtitle ? resp.plainsubtitle : resp.subtitle, id:"ALL_DISCS"}];
                 for (var i=0, loop=resp.items, len=loop.length; i<len; ++i) {
                     if (loop[i].header) {
                         discs.push(loop[i]);
@@ -1278,6 +1279,27 @@ function browseItemAction(view, act, item, index, event) {
                 }
                 choose(ACTIONS[act].title, discs).then(choice => {
                     if (undefined!=choice) {
+                        if (choice.id==discs[0].id) {
+                            command = browseBuildFullCommand(view, item, act);
+                            lmsCommand(view.playerId(), command.command).then(({data}) => {
+                                logJsonMessage("RESP", data);
+                                bus.$emit('refreshStatus');
+                                if (!view.$store.state.desktopLayout || !view.$store.state.showQueue) {
+                                    if (act===PLAY_ACTION) {
+                                        if (!view.$store.state.desktopLayout) {
+                                            view.$store.commit('setPage', 'now-playing');
+                                        }
+                                    } else if (act===ADD_ACTION) {
+                                        bus.$emit('showMessage', i18n("Appended '%1' to the play queue", undefined==item.title ? view.headerTitle : item.title));
+                                    } else if (act===INSERT_ACTION) {
+                                        bus.$emit('showMessage', i18n("Inserted '%1' into the play queue", undefined==item.title ? view.headerTitle : item.title));
+                                    }
+                                }
+                            }).catch(err => {
+                                logAndShowError(err, undefined, command.command);
+                            });
+                            return;
+                        }
                         var tracks = [];
                         for (var i=0, loop=resp.items, len=loop.length; i<len; ++i) {
                             if (loop[i].header && loop[i].allItems && loop[i].id==choice.id) {

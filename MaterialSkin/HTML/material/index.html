@@ -164,6 +164,7 @@
   my $srvEmblem=Plugins::MaterialSkin::Plugin->readIntPref('plugin.onlinelibrary', 'enableServiceEmblem', 1);
 
   my $separateArtistsList=Plugins::MaterialSkin::Plugin->readIntPref('server', 'useUnifiedArtistsList', 0) ? "false" : "true";
+  my $supportReleaseTypes=Plugins::MaterialSkin::Plugin->readIntPref('server', 'ignoreReleaseTypes', 0) ? "false" : "true";
   my $groupArtistAlbumsByReleaseType=Plugins::MaterialSkin::Plugin->readIntPref('server', 'groupArtistAlbumsByReleaseType', 1) ? "true" : "false";
   my $noGenreFilter=Plugins::MaterialSkin::Plugin->readIntPref('server', 'noGenreFilter', 0);
   my $noRoleFilter=Plugins::MaterialSkin::Plugin->readIntPref('server', 'noRoleFilter', 0);
@@ -204,6 +205,7 @@
   print("const LMS_VA_STRING=\"$variousArtistsString\";");
   print("const LMS_LANG=\"$lang\";");
   print("const LMS_DEF_SEPARATE_ARTISTS=$separateArtistsList;");
+  print("const LMS_DEF_SUPPORT_RELEASE_TYPES=$supportReleaseTypes;");
   print("const LMS_DEF_GROUP_BY_RELEASE_TYPE=$groupArtistAlbumsByReleaseType;");
   print("</script>\n");
   [% END %]

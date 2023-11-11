@@ -2,6 +2,7 @@
 -----
 1. Fix restating LMS from 'Server settings' page.
 2. Improve/fix album style queue for radio streams.
+3. Don't group by release type if LMS is set to ignore this.
 
 4.0.2
 -----

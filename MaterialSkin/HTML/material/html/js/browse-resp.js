@@ -817,7 +817,7 @@ function parseBrowseResp(data, parent, options, cacheKey, parentCommand, parentG
                     data.result.albums_loop = data.result.albums_loop.reverse();
                 }
             }
-            var albumGroups = canGroupAlbums && lmsOptions.groupByReleaseType ? {} : undefined;
+            var albumGroups = canGroupAlbums && lmsOptions.supportReleaseTypes && lmsOptions.groupByReleaseType ? {} : undefined;
             var albumKeys = [];
             var releaseTypes = new Set();
 

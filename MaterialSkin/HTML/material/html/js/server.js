@@ -609,6 +609,8 @@ var lmsServer = Vue.component('lms-server', {
                 bus.$emit("prefset", data[1]+":"+data[2], data[3]);
             } else if (data[2]=="groupArtistAlbumsByReleaseType") {
                 lmsOptions.groupByReleaseType=1==parseInt(data[3]);
+            } else if (data[2]=="ignoreReleaseTypes") {
+                lmsOptions.supportReleaseTypes=1!=parseInt(data[3]);
             } else if (data[2]=="language") {
                 this.updateReleaseTypes();
             }

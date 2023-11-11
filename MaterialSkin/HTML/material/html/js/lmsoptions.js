@@ -24,6 +24,7 @@ var lmsOptions = {techInfo: getLocalStorageBool('techInfo', false),
                   pagedBatchSize: parseInt(getLocalStorageVal('pagedBatchSize', 100)),
                   noArtistFilter: getLocalStorageBool('noArtistFilter', true),
                   separateArtistsList: LMS_DEF_SEPARATE_ARTISTS,
+                  supportReleaseTypes: LMS_DEF_SUPPORT_RELEASE_TYPES,
                   groupByReleaseType: LMS_DEF_GROUP_BY_RELEASE_TYPE,
                   releaseTypeOrder: undefined,
                   releaseTypes: {}

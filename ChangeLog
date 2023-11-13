@@ -8,6 +8,7 @@
 6. In album style queue, group albums by disc number.
 7. Fix missing add/play hover buttons on tracks in browse view.
 8. Fix swipe to change track.
+9. Set default queue transfer method to 'Move'
 
 4.0.2
 -----

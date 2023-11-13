@@ -959,7 +959,7 @@ var lmsQueue = Vue.component("lms-queue", {
                             players.push({val:loop[i].id, title:loop[i].name, icon:loop[i].icon.icon, svg:loop[i].icon.svg});
                         }
                     }
-                    choose("", players, {options:opts, key:'movequeue'}).then(choice => {
+                    choose("", players, {options:opts, key:'movequeue', def:1}).then(choice => {
                         if (undefined==choice) {
                             return;
                         }

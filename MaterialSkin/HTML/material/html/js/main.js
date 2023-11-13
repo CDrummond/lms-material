@@ -408,7 +408,7 @@ var app = new Vue({
                     return;
                 }
             }
-            if (this.$store.state.swipeChangeTrack && undefined!=ev.target && ev.target.className.startsWith('np-image')) {
+            if (this.$store.state.swipeChangeTrack && undefined!=ev.target && ev.target.className.startsWith('np-cover')) {
                 if (queryParams.party) {
                     return;
                 }

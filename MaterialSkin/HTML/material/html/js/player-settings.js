@@ -55,7 +55,7 @@ Vue.component('lms-player-settings', {
        </v-list-tile>
       </v-list>
      </v-menu>
-     <lms-windowcontrols v-if="queryParams.nativeTitlebar>0"></lms-windowcontrols>
+     <lms-windowcontrols v-if="queryParams.nativeTitlebar"></lms-windowcontrols>
     </v-toolbar>
    </v-card-title>
 

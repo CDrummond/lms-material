@@ -158,7 +158,7 @@ Vue.component('lms-downloadstatus', {
     <v-toolbar-title>{{i18n('Downloading')}}</v-toolbar-title>
     <v-spacer></v-spacer>
     <v-btn icon v-if="undefined!=items && items.length>1" flat @click.native="abortAll()" :title="i18n('Abort all')"><img class="svg-img" :src="'close-all' | svgIcon(darkUi, coloredToolbars)"></img></v-btn>
-    <lms-windowcontrols v-if="queryParams.nativeTitlebar>0"></lms-windowcontrols>
+    <lms-windowcontrols v-if="queryParams.nativeTitlebar"></lms-windowcontrols>
    </v-toolbar>
   </v-card-title>
   <v-card-text style="padding-top:0px">

@@ -16,7 +16,7 @@ Vue.component('lms-information-dialog', {
     <v-toolbar-title>
      <div>{{i18n('Information')+(undefined==serverName ? "" : (SEPARATOR+serverName))}}</div>
     </v-toolbar-title>
-    <v-spacer></v-spacer><lms-windowcontrols v-if="queryParams.nativeTitlebar>0"></lms-windowcontrols>
+    <v-spacer></v-spacer><lms-windowcontrols v-if="queryParams.nativeTitlebar"></lms-windowcontrols>
    </v-toolbar>
   </v-card-title>
   <div class="ios-vcard-text-workaround"><div class="infodetails" id="info-page">

@@ -1260,8 +1260,7 @@ sub _cliCommand {
     }
 
     if ($cmd eq 'release-types') {
-        my @ver = split(/\./, $::VERSION);
-        if (int($ver[0])>=8 && int($ver[0])>=4) {
+        if (Slim::Utils::Versions->compareVersions($::VERSION, '8.4') >= 0) {
             my $relTypes = Slim::Schema::Album->releaseTypes();
             my $cnt = 0;
             foreach my $rt (@{$relTypes}) {

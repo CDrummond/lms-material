@@ -297,11 +297,15 @@ var app = new Vue({
             document.attachEvent('onclick', this.clickListener);
         }
 
-        window.matchMedia('(prefers-color-scheme: light)').addEventListener('change', () => {
-            if (this.$store.state.chosenTheme.startsWith(AUTO_THEME)) {
-                this.$store.commit('toggleDarkLight');
-            }
-        }, false);
+        try {
+            window.matchMedia('(prefers-color-scheme: light)').addEventListener('change', () => {
+                if (this.$store.state.chosenTheme.startsWith(AUTO_THEME)) {
+                    this.$store.commit('toggleDarkLight');
+                }
+            }, false);
+        } catch (e) {
+            // Old WebKit on iOS?
+        }
 
         bindKey('backspace');
         bus.$on('keyboard', function(key, modifier) {

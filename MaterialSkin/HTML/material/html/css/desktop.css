@@ -427,11 +427,11 @@
 }
 
 @media only screen and (max-width:380px) {
-  .np-bar-image {
-    visibility:hidden;
-  }
-  .np-bar-details {
-   left:90px;
-   width:calc(100vw - 90px);
-  }
+ .np-bar-image {
+   visibility:hidden;
+ }
+ .np-bar-details {
+  left:90px;
+  width:calc(100vw - 90px);
+ }
 }

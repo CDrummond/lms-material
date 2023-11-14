@@ -115,7 +115,6 @@ function parseResp(data, showTrackNum, index, showRatings, queueStyle, lastInCur
                               disc: i.disc,
                               url: i.url,
                               isLocal: i.url && i.url.startsWith("file:"),
-                              disc: i.disc,
                               artist: i.artist ? i.artist : i.trackartist ? i.trackartist : i.albumartist,
                               album: QUEUE_ALBUM==queueStyle ? i.album : undefined,
                               size: QUEUE_ALBUM==queueStyle

@@ -10,6 +10,7 @@
  8. Fix swipe to change track.
  9. Set default queue transfer method to 'Move'.
 10. Fix toggle queue icon when using coloured toolbars.
+11. Hide toolbar elements if insufficient width.
 
 4.0.2
 -----

@@ -461,3 +461,12 @@
   right:calc(var(--window-controls-space) + 36px);
  }
 }
+
+@media only screen and (max-width:290px) {
+ .maintoolbar-player-power-button, .maintoolbar-player-icon {
+  visibility: hidden;
+ }
+ .maintoolbar-title, .maintoolbar-subtitle {
+  padding-left:12px;
+ }
+}

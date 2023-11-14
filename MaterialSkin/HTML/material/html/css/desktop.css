@@ -416,3 +416,22 @@
  margin-left:-2px;
  z-index: 1;
 }
+
+@media only screen and (max-width:420px) {
+ .maintoolbar-player-power-button, .maintoolbar-player-icon {
+  visibility:hidden;
+ }
+ .maintoolbar-title, .maintoolbar-subtitle {
+  padding-left:12px;
+ }
+}
+
+@media only screen and (max-width:380px) {
+  .np-bar-image {
+    visibility:hidden;
+  }
+  .np-bar-details {
+   left:90px;
+   width:calc(100vw - 90px);
+  }
+}

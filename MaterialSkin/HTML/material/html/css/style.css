@@ -630,7 +630,6 @@ div.v-subheader {
  padding-left:58px;
  font-size:var(--std-font-size) !important;
  font-weight:var(--bold-weight);
- min-width:160px;
 }
 
 .maintoolbar-title-clock {

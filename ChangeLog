@@ -11,6 +11,7 @@
  9. Set default queue transfer method to 'Move'.
 10. Fix toggle queue icon when using coloured toolbars.
 11. Hide toolbar elements if insufficient width.
+12. Fix breakage on older iOS.
 
 4.0.2
 -----

@@ -1,14 +1,15 @@
 4.0.3
 -----
-1. Fix restating LMS from 'Server settings' page.
-2. Improve/fix album style queue for radio streams.
-3. Don't group by release type if LMS is set to ignore this.
-4. Only call 'Slim::Schema::Album->releaseTypes' for LMS 8.4 or newer.
-5. When adding/playing all discs of multi-disc set use album_id.
-6. In album style queue, group albums by disc number.
-7. Fix missing add/play hover buttons on tracks in browse view.
-8. Fix swipe to change track.
-9. Set default queue transfer method to 'Move'
+ 1. Fix restating LMS from 'Server settings' page.
+ 2. Improve/fix album style queue for radio streams.
+ 3. Don't group by release type if LMS is set to ignore this.
+ 4. Only call 'Slim::Schema::Album->releaseTypes' for LMS 8.4 or newer.
+ 5. When adding/playing all discs of multi-disc set use album_id.
+ 6. In album style queue, group albums by disc number.
+ 7. Fix missing add/play hover buttons on tracks in browse view.
+ 8. Fix swipe to change track.
+ 9. Set default queue transfer method to 'Move'.
+10. Fix toggle queue icon when using coloured toolbars.
 
 4.0.2
 -----

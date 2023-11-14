@@ -106,7 +106,7 @@ Vue.component('lms-toolbar', {
  </v-btn>
  <v-btn icon :title="trans.toggleQueue | tooltip(LMS_TOGGLE_QUEUE_KEYBOARD,keyboardControl,true)" v-if="desktopLayout" @click.native.stop="toggleQueue()" class="toolbar-button hide-for-mini">
   <v-icon v-if="showQueue">queue_music</v-icon>
-  <img v-else class="svg-img" :src="'queue_music_outline' | svgIcon(darkUi, false, coloredToolbars)"></img>
+  <img v-else class="svg-img" :src="'queue_music_outline' | svgIcon(darkUi, false, true, coloredToolbars)"></img>
  </v-btn>
  <v-menu v-if="connected && showMenuButton" class="hide-for-mini" bottom left v-model="showMainMenu">
   <v-btn slot="activator" icon :title="trans.mainMenu"><img v-if="updatesAvailable" class="svg-badge" :src="'update' | svgIcon(darkUi, true, true, coloredToolbars)"></img><img v-else-if="restartRequired" class="svg-badge" :src="'restart' | svgIcon(darkUi, true, true, coloredToolbars)"></img><v-icon>more_vert</v-icon></v-btn>

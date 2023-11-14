@@ -296,11 +296,6 @@ Vue.component('lms-ui-settings', {
     <v-divider></v-divider>
 
     <v-list-tile>
-     <v-select :items="queueStyles" :label="i18n('Style')" v-model="queueStyle" item-text="label" item-value="key"></v-select>
-    </v-list-tile>
-    <v-divider></v-divider>
-
-    <v-list-tile>
      <v-list-tile-content @click="queueBackdrop = !queueBackdrop" class="switch-label">
       <v-list-tile-title>{{i18n('Draw background')}}</v-list-tile-title>
       <v-list-tile-sub-title>{{i18n('Use cover of current track as background.')}}</v-list-tile-sub-title>
@@ -379,8 +374,6 @@ Vue.component('lms-ui-settings', {
             swipeVolume:false,
             swipeChangeTrack:false,
             keyboardControl:true,
-            queueStyle:QUEUE_TRACK_3LINES,
-            queueStyles: [],
             layout: null,
             layoutItems: [],
             mobileBar: MBAR_THIN,
@@ -553,7 +546,6 @@ Vue.component('lms-ui-settings', {
             this.swipeVolume = this.$store.state.swipeVolume;
             this.swipeChangeTrack = this.$store.state.swipeChangeTrack;
             this.keyboardControl = this.$store.state.keyboardControl;
-            this.queueStyle = this.$store.state.queueStyle;
             this.sortFavorites = this.$store.state.sortFavorites;
             this.skipSeconds = this.$store.state.skipSeconds;
             this.volumeStep = lmsOptions.volumeStep;
@@ -587,11 +579,6 @@ Vue.component('lms-ui-settings', {
                 { key:"auto",    label:i18n("Automatic")},
                 { key:"desktop", label:i18n("Use desktop layout")},
                 { key:"mobile",  label:i18n("Use mobile layout")}
-                ];
-            this.queueStyles=[
-                { key:QUEUE_TRACK_2LINES, label:i18n("Track (two lines)")},
-                { key:QUEUE_TRACK_3LINES, label:i18n("Track (three lines)")},
-                { key:QUEUE_ALBUM, label:i18n("Album")}
                 ];
             this.mobileBars=[
                 { key:MBAR_NONE, label:i18n("None")},
@@ -660,7 +647,6 @@ Vue.component('lms-ui-settings', {
                       swipeVolume:this.swipeVolume,
                       swipeChangeTrack:this.swipeChangeTrack,
                       keyboardControl:this.keyboardControl,
-                      queueStyle:this.queueStyle,
                       volumeStep:this.volumeStep,
                       hidden:arrays ? Array.from(this.hiddenItems()) : this.hiddenItems(),
                       skipSeconds:this.skipSeconds,

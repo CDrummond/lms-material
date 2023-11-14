@@ -8,10 +8,6 @@
 
 const PQ_STATUS_TAGS = IS_MOBILE ? "tags:cdegilqtuyAAIKNSxx" : "tags:cdegilqtuysAAIKNSxx";
 
-const QUEUE_TRACK_2LINES = 0;
-const QUEUE_TRACK_3LINES = 1;
-const QUEUE_ALBUM = 2;
-
 function queueItemCover(item) {
     if (item.artwork_url) {
         return resolveImageUrl(item.artwork_url);
@@ -30,10 +26,10 @@ function queueItemCover(item) {
 }
 
 var lmsQueueSelectionActive = false;
-function buildArtistAlbumLines(i, queueStyle) {
+function buildArtistAlbumLines(i, queueAlbumStyle) {
     let artistAlbum = undefined;
     let artistIsRemoteTitle = false;
-    if (QUEUE_ALBUM==queueStyle) {
+    if (queueAlbumStyle) {
         let str = i.albumartist ? i.albumartist : i.artist ? i.artist : i.trackartist;
         let id = i.albumartist ? i.albumartist_id : i.artist_id ? i.artist_id : i.trackartist_id;
         if (!str && i.remote) {
@@ -48,13 +44,11 @@ function buildArtistAlbumLines(i, queueStyle) {
         artistAlbum = buildArtistLine(i, 'queue');
     }
     var lines = [];
-    if (QUEUE_TRACK_3LINES==queueStyle) {
-        lines.push(artistAlbum);
-        artistAlbum = undefined;
-    }
-    if (QUEUE_ALBUM!=queueStyle || !artistIsRemoteTitle) {
+    lines.push(artistAlbum);
+    artistAlbum = undefined;
+    if (!queueAlbumStyle || !artistIsRemoteTitle) {
         artistAlbum = addPart(artistAlbum, buildAlbumLine(i, 'queue'));
-        if (QUEUE_TRACK_3LINES==queueStyle) {
+        if (!queueAlbumStyle) {
             lines.push(artistAlbum);
             return lines;
         }
@@ -62,7 +56,7 @@ function buildArtistAlbumLines(i, queueStyle) {
     return artistAlbum;
 }
 
-function parseResp(data, showTrackNum, index, showRatings, queueStyle, lastInCurrent) {
+function parseResp(data, showTrackNum, index, showRatings, queueAlbumStyle, lastInCurrent) {
     logJsonMessage("RESP", data);
     let resp = { timestamp: 0, items: [], size: 0 };
     let isInitial = 0==index;
@@ -73,7 +67,7 @@ function parseResp(data, showTrackNum, index, showRatings, queueStyle, lastInCur
         if (data.result.playlist_loop) {
             for (var idx=0, loop=data.result.playlist_loop, loopLen=loop.length; idx<loopLen; ++idx) {
                 let i = loop[idx];
-                let clz = QUEUE_ALBUM==queueStyle ? 'subtext' : undefined;
+                let clz = queueAlbumStyle ? 'subtext' : undefined;
                 splitMultiples(i);
                 let title = i.title;
                 if (showTrackNum && i.tracknum>0) {
@@ -82,25 +76,25 @@ function parseResp(data, showTrackNum, index, showRatings, queueStyle, lastInCur
                 let addedClass = false;
                 let haveRating = showRatings && undefined!=i.rating;
                 let artist = undefined!=i.trackartist && undefined!=i.trackartist_id ? i.trackartist : i.artist;
-                if (QUEUE_ALBUM==queueStyle && undefined!=i.albumartist && undefined!=artist && i.albumartist!=artist) {
+                if (queueAlbumStyle && undefined!=i.albumartist && undefined!=artist && i.albumartist!=artist) {
                     let id = undefined!=i.trackartist_id ? i.trackartist_id : i.artist_id;
                     title+='<obj class="subtext">'+SEPARATOR+(IS_MOBILE || undefined==id ? artist : buildLink('showArtist', id, artist, 'queue'));
                     addedClass = true;
                 }
                 if (haveRating) {
-                    title += (QUEUE_ALBUM==queueStyle && !addedClass ? '<obj class="subtext">' : '') + SEPARATOR+ratingString(undefined, i.rating, clz) + (QUEUE_ALBUM==queueStyle ? '</obj> ': '');
+                    title += (queueAlbumStyle && !addedClass ? '<obj class="subtext">' : '') + SEPARATOR+ratingString(undefined, i.rating, clz) + (queueAlbumStyle ? '</obj> ': '');
                 }
                 let duration = undefined==i.duration ? undefined : parseFloat(i.duration);
                 let prevItem = 0==idx ? lastInCurrent : resp.items[idx-1];
                 let image = queueItemCover(i);
-                let isAlbumHeader = QUEUE_ALBUM==queueStyle &&
+                let isAlbumHeader = queueAlbumStyle &&
                                      ( undefined==prevItem ||
                                        i.album_id!=prevItem.album_id ||
                                        i.disc!=prevItem.disc ||
                                        (undefined==i.album_id && ( (undefined!=image && image!=prevItem.image) ||
                                                                    (i.album!=prevItem.album) ) ) );
                 let grpKey = isAlbumHeader || undefined==prevItem ? index+resp.items.length : prevItem.grpKey;
-                let artistAlbumLines = queueStyle!=QUEUE_ALBUM || isAlbumHeader ? buildArtistAlbumLines(i, queueStyle) : undefined;
+                let artistAlbumLines = !queueAlbumStyle || isAlbumHeader ? buildArtistAlbumLines(i, queueAlbumStyle) : undefined;
                 resp.items.push({
                               id: "track_id:"+i.id,
                               title: title,
@@ -116,12 +110,10 @@ function parseResp(data, showTrackNum, index, showRatings, queueStyle, lastInCur
                               url: i.url,
                               isLocal: i.url && i.url.startsWith("file:"),
                               artist: i.artist ? i.artist : i.trackartist ? i.trackartist : i.albumartist,
-                              album: QUEUE_ALBUM==queueStyle ? i.album : undefined,
-                              size: QUEUE_ALBUM==queueStyle
-                                      ? isAlbumHeader
-                                          ? LMS_ALBUM_QUEUE_HEADER : LMS_ALBUM_QUEUE_TRACK
-                                      : QUEUE_TRACK_2LINES==queueStyle
-                                          ? LMS_LIST_ELEMENT_SIZE : LMS_LIST_3LINE_ELEMENT_SIZE,
+                              album: queueAlbumStyle ? i.album : undefined,
+                              size: queueAlbumStyle
+                                      ? isAlbumHeader ? LMS_ALBUM_QUEUE_HEADER : LMS_ALBUM_QUEUE_TRACK
+                                      : undefined,
                               grpKey:grpKey
                           });
                 index++;
@@ -189,9 +181,26 @@ var lmsQueue = Vue.component("lms-queue", {
   </v-layout>
  </div>
  <div class="lms-list bgnd-cover" v-bind:class="{'queue-backdrop-cover':drawBackdrop}" id="queue-bgnd">
- <div class="lms-list" id="queue-list" v-bind:class="{'lms-list3':threeLines,'lms-list-album':albumStyle,'bgnd-blur':drawBgndImage,'backdrop-blur':drawBackdrop}" @drop.stop="drop(-1, $event)">
+ <div class="lms-list" id="queue-list" v-bind:class="{'lms-list3':!albumStyle,'lms-list-album':albumStyle,'bgnd-blur':drawBgndImage,'backdrop-blur':drawBackdrop}" @drop.stop="drop(-1, $event)">
   <div v-if="items.length<1"></div> <!-- RecycleScroller does not like it if 0 items? -->
-  <RecycleScroller v-else-if="threeLines" :items="items" :item-size="LMS_LIST_3LINE_ELEMENT_SIZE" page-mode key-field="key" :buffer="LMS_SCROLLER_LIST_BUFFER">
+  <RecycleScroller v-if="albumStyle" :items="items" :item-size="null" page-mode key-field="key" :buffer="LMS_SCROLLER_LIST_BUFFER">
+  <v-list-tile avatar class="pq-albumstyle" v-bind:class="{'pq-track':!item.artistAlbum, 'pq-current-album':index!=currentIndex && item.grpKey==items[currentIndex].grpKey, 'pq-current': index==currentIndex && !item.artistAlbum, 'pq-current-first-track': index==currentIndex && item.artistAlbum, 'pq-pulse':index==currentIndex && pulseCurrent, 'list-active': menu.show && index==menu.index, 'drop-target': dragActive && index==dropIndex}" @dragstart="dragStart(index, $event)" @dragend="dragEnd()" @dragover="dragOver(index, $event)" @drop.stop="drop(index, $event)" draggable @click.prevent.stop="click(item, index, $event)" slot-scope="{item, index}" key-field="key" @contextmenu.prevent="contextMenu(item, index, $event)">
+   <v-list-tile-avatar :tile="true" v-bind:class="{'radio-image': 0==item.duration}" class="lms-avatar">
+    <v-icon v-if="item.selected" v-bind:class="{'pq-first-track-check':item.artistAlbum}">check_box</v-icon>
+    <img v-else-if="item.artistAlbum" :key="item.image" :src="item.image" onerror="this.src=DEFAULT_COVER" loading="lazy" v-bind:class="{'dimmed':item.image==DEFAULT_COVER || item.image==DEFAULT_RADIO_COVER}" class="radio-img"></img>
+   </v-list-tile-avatar>
+   <div class="pq-album-header ellipsis" v-if="item.artistAlbum" v-html="item.artistAlbum"></div>
+   <v-list-tile-content v-bind:class="{'pq-first-track':item.artistAlbum}">
+    <v-list-tile-title v-html="item.title"></v-list-tile-title>
+   </v-list-tile-content>
+   <v-list-tile-action class="pq-time" v-bind:class="{'pq-time-ns':selection.size==0}">{{item.durationStr}}</v-list-tile-action>
+   <v-list-tile-action class="queue-action" v-if="selection.size>0" v-bind:class="{'pq-first-track-menu':item.artistAlbum}" @click.stop="itemMenu(item, index, $event)">
+    <div class="menu-btn grid-btn list-btn" :title="i18n('%1 (Menu)', undefined==item.plaintitle ? item.title : item.plaintitle)"></div>
+   </v-list-tile-action>
+   <img v-if="index==currentIndex" class="pq-current-indicator" :src="'pq-current' | svgIcon(true, true)"></img>
+  </v-list-tile>
+ </RecycleScroller>
+  <RecycleScroller v-else :items="items" :item-size="LMS_LIST_3LINE_ELEMENT_SIZE" page-mode key-field="key" :buffer="LMS_SCROLLER_LIST_BUFFER">
     <v-list-tile avatar v-bind:class="{'pq-current': index==currentIndex, 'pq-pulse':index==currentIndex && pulseCurrent, 'list-active': menu.show && index==menu.index, 'drop-target': dragActive && index==dropIndex}" @dragstart="dragStart(index, $event)" @dragend="dragEnd()" @dragover="dragOver(index, $event)" @drop.stop="drop(index, $event)" draggable @click.prevent.stop="click(item, index, $event)" slot-scope="{item, index}" key-field="key" @contextmenu.prevent="contextMenu(item, index, $event)">
      <v-list-tile-avatar :tile="true" v-bind:class="{'radio-image': 0==item.duration}" class="lms-avatar">
       <v-icon v-if="item.selected">check_box</v-icon>
@@ -201,40 +210,6 @@ var lmsQueue = Vue.component("lms-queue", {
       <v-list-tile-title v-html="item.title"></v-list-tile-title>
       <v-list-tile-sub-title v-html="item.artistAlbum[0]"></v-list-tile-sub-title>
       <v-list-tile-sub-title v-html="item.artistAlbum[1]"></v-list-tile-sub-title>
-     </v-list-tile-content>
-     <v-list-tile-action class="pq-time" v-bind:class="{'pq-time-ns':selection.size==0}">{{item.durationStr}}</v-list-tile-action>
-     <v-list-tile-action class="queue-action" v-if="selection.size>0" @click.stop="itemMenu(item, index, $event)">
-      <div class="menu-btn grid-btn list-btn" :title="i18n('%1 (Menu)', undefined==item.plaintitle ? item.title : item.plaintitle)"></div>
-     </v-list-tile-action>
-     <img v-if="index==currentIndex" class="pq-current-indicator" :src="'pq-current' | svgIcon(true, true)"></img>
-    </v-list-tile>
-   </RecycleScroller>
-   <RecycleScroller v-else-if="albumStyle" :items="items" :item-size="null" page-mode key-field="key" :buffer="LMS_SCROLLER_LIST_BUFFER">
-    <v-list-tile avatar class="pq-albumstyle" v-bind:class="{'pq-track':!item.artistAlbum, 'pq-current-album':index!=currentIndex && item.grpKey==items[currentIndex].grpKey, 'pq-current': index==currentIndex && !item.artistAlbum, 'pq-current-first-track': index==currentIndex && item.artistAlbum, 'pq-pulse':index==currentIndex && pulseCurrent, 'list-active': menu.show && index==menu.index, 'drop-target': dragActive && index==dropIndex}" @dragstart="dragStart(index, $event)" @dragend="dragEnd()" @dragover="dragOver(index, $event)" @drop.stop="drop(index, $event)" draggable @click.prevent.stop="click(item, index, $event)" slot-scope="{item, index}" key-field="key" @contextmenu.prevent="contextMenu(item, index, $event)">
-     <v-list-tile-avatar :tile="true" v-bind:class="{'radio-image': 0==item.duration}" class="lms-avatar">
-      <v-icon v-if="item.selected" v-bind:class="{'pq-first-track-check':item.artistAlbum}">check_box</v-icon>
-      <img v-else-if="item.artistAlbum" :key="item.image" :src="item.image" onerror="this.src=DEFAULT_COVER" loading="lazy" v-bind:class="{'dimmed':item.image==DEFAULT_COVER || item.image==DEFAULT_RADIO_COVER}" class="radio-img"></img>
-     </v-list-tile-avatar>
-     <div class="pq-album-header ellipsis" v-if="item.artistAlbum" v-html="item.artistAlbum"></div>
-     <v-list-tile-content v-bind:class="{'pq-first-track':item.artistAlbum}">
-      <v-list-tile-title v-html="item.title"></v-list-tile-title>
-     </v-list-tile-content>
-     <v-list-tile-action class="pq-time" v-bind:class="{'pq-time-ns':selection.size==0}">{{item.durationStr}}</v-list-tile-action>
-     <v-list-tile-action class="queue-action" v-if="selection.size>0" v-bind:class="{'pq-first-track-menu':item.artistAlbum}" @click.stop="itemMenu(item, index, $event)">
-      <div class="menu-btn grid-btn list-btn" :title="i18n('%1 (Menu)', undefined==item.plaintitle ? item.title : item.plaintitle)"></div>
-     </v-list-tile-action>
-     <img v-if="index==currentIndex" class="pq-current-indicator" :src="'pq-current' | svgIcon(true, true)"></img>
-    </v-list-tile>
-   </RecycleScroller>
-   <RecycleScroller v-else :items="items" :item-size="LMS_LIST_ELEMENT_SIZE" page-mode key-field="key" :buffer="LMS_SCROLLER_LIST_BUFFER">
-    <v-list-tile avatar v-bind:class="{'pq-current':index==currentIndex, 'pq-pulse':index==currentIndex && pulseCurrent, 'list-active': menu.show && index==menu.index, 'drop-target': dragActive && index==dropIndex}" @dragstart="dragStart(index, $event)" @dragend="dragEnd()" @dragover="dragOver(index, $event)" @drop.stop="drop(index, $event)" draggable @click="click(item, index, $event)" slot-scope="{item, index}" key-field="key" @contextmenu.prevent="contextMenu(item, index, $event)">
-     <v-list-tile-avatar :tile="true" v-bind:class="{'radio-image': 0==item.duration}" class="lms-avatar">
-      <v-icon v-if="item.selected">check_box</v-icon>
-      <img v-else :key="item.image" :src="item.image" onerror="this.src=DEFAULT_COVER" loading="lazy" v-bind:class="{'dimmed':item.image==DEFAULT_COVER || item.image==DEFAULT_RADIO_COVER}" class="radio-img"></img>
-     </v-list-tile-avatar>
-     <v-list-tile-content>
-      <v-list-tile-title v-html="item.title"></v-list-tile-title>
-      <v-list-tile-sub-title v-html="item.artistAlbum"></v-list-tile-sub-title>
      </v-list-tile-content>
      <v-list-tile-action class="pq-time" v-bind:class="{'pq-time-ns':selection.size==0}">{{item.durationStr}}</v-list-tile-action>
      <v-list-tile-action class="queue-action" v-if="selection.size>0" @click.stop="itemMenu(item, index, $event)">
@@ -305,7 +280,7 @@ var lmsQueue = Vue.component("lms-queue", {
             playlist: {name: undefined, modified: false},
             selection: new Set(),
             selectionDuration: 0,
-            otherActions: queryParams.party ? [PQ_SCROLL_ACTION] : [PQ_SAVE_ACTION, PQ_MOVE_QUEUE_ACTION, PQ_SCROLL_ACTION, PQ_ADD_URL_ACTION, PQ_SORT_ACTION, REMOVE_DUPES_ACTION],
+            otherActions: queryParams.party ? [PQ_SCROLL_ACTION] : [PQ_SAVE_ACTION, PQ_MOVE_QUEUE_ACTION, PQ_SCROLL_ACTION, PQ_ADD_URL_ACTION, PQ_SORT_ACTION, REMOVE_DUPES_ACTION, PQ_TOGGLE_VIEW_ACTION],
             wide: 0,
             dstm: false,
             dragActive: false,
@@ -320,11 +295,8 @@ var lmsQueue = Vue.component("lms-queue", {
         darkUi () {
             return this.$store.state.darkUi
         },
-        threeLines() {
-            return QUEUE_TRACK_3LINES==this.$store.state.queueStyle
-        },
         albumStyle() {
-            return QUEUE_ALBUM==this.$store.state.queueStyle
+            return this.$store.state.queueAlbumStyle
         },
         keyboardControl() {
             return this.$store.state.keyboardControl && !IS_MOBILE
@@ -442,7 +414,7 @@ var lmsQueue = Vue.component("lms-queue", {
                     if (this.$store.state.showRating && undefined!=i.rating) {
                         title += (this.albumStyle && !addedClass ? '<obj class="subtext">' : '') + SEPARATOR+ratingString(undefined, i.rating) + (this.albumStyle ? '</obj> ': '');
                     }
-                    var artistAlbum = undefined!=this.items[index].artistAlbum ? buildArtistAlbumLines(i, this.$store.state.queueStyle) : undefined;
+                    var artistAlbum = undefined!=this.items[index].artistAlbum ? buildArtistAlbumLines(i, this.$store.state.queueAlbumStyle) : undefined;
                     // ?? var remoteTitle = checkRemoteTitle(i);
                     var duration = undefined==i.duration ? undefined : parseFloat(i.duration);
 
@@ -1006,6 +978,8 @@ var lmsQueue = Vue.component("lms-queue", {
                         }
                     }
                 });
+            } else if (PQ_TOGGLE_VIEW_ACTION==act) {
+                this.$store.commit('setQueueAlbumStyle', !this.$store.state.queueAlbumStyle);
             }
         },
         actionsMenu(event) {
@@ -1125,7 +1099,7 @@ var lmsQueue = Vue.component("lms-queue", {
             var prevTimestamp = this.timestamp;
             var fetchCount = this.currentIndex > this.items.length + LMS_QUEUE_BATCH_SIZE ? this.currentIndex + 50 : LMS_QUEUE_BATCH_SIZE;
             lmsList(this.$store.state.player.id, ["status"], [PQ_STATUS_TAGS + (this.$store.state.showRating ? "R" : "")], this.items.length, fetchCount).then(({data}) => {
-                var resp = parseResp(data, this.$store.state.queueShowTrackNum, this.items.length, this.$store.state.showRating, this.$store.state.queueStyle,
+                var resp = parseResp(data, this.$store.state.queueShowTrackNum, this.items.length, this.$store.state.showRating, this.$store.state.queueAlbumStyle,
                                      this.items.length>0 ? this.items[this.items.length-1] : undefined);
                 this.items.push.apply(this.items, resp.items);
                 // Check if a 'playlistTimestamp' was received whilst we were updating, if so need
@@ -1165,7 +1139,7 @@ var lmsQueue = Vue.component("lms-queue", {
                 var prevTimestamp = this.timestamp;
                 lmsList(this.$store.state.player.id, ["status"], [PQ_STATUS_TAGS + (this.$store.state.showRating ? "R" : "")], 0,
                         this.items.length < LMS_QUEUE_BATCH_SIZE ? LMS_QUEUE_BATCH_SIZE : this.items.length).then(({data}) => {
-                    var resp = parseResp(data, this.$store.state.queueShowTrackNum, 0, this.$store.state.showRating, this.$store.state.queueStyle);
+                    var resp = parseResp(data, this.$store.state.queueShowTrackNum, 0, this.$store.state.showRating, this.$store.state.queueAlbumStyle);
                     this.items = resp.items;
                     var needUpdate = this.timestamp!==prevTimestamp && this.timestamp!==resp.timestamp;
                     this.timestamp = resp.timestamp;
@@ -1217,12 +1191,12 @@ var lmsQueue = Vue.component("lms-queue", {
                     if (scroll) {
                         let pos = 0;
                         if (this.currentIndex>3) {
-                            if (QUEUE_ALBUM==this.$store.state.queueStyle) {
+                            if (this.$store.state.queueAlbumStyle) {
                                 for (let i=0, loop=this.items, stop=this.currentIndex-3; i<stop; ++i) {
                                     pos += loop[i].size;
                                 }
                             } else {
-                                pos = (this.currentIndex-3)*(QUEUE_TRACK_3LINES==this.$store.state.queueStyle ? LMS_LIST_3LINE_ELEMENT_SIZE : LMS_LIST_ELEMENT_SIZE);
+                                pos = (this.currentIndex-3)*(QUEUE_TRACK_3LINES==this.$store.state.queueAlbumStyle ? LMS_LIST_3LINE_ELEMENT_SIZE : LMS_LIST_ELEMENT_SIZE);
                             }
                         }
                         setScrollTop(this, pos>0 ? pos : 0);

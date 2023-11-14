@@ -92,11 +92,6 @@ function updateUiSettings(state, val) {
             browseDisplayChanged = true;
         }
     }
-    if (undefined!=val.queueStyle && state.queueStyle!=val.queueStyle) {
-        state.queueStyle = val.queueStyle;
-        setLocalStorageVal('queueStyle', state.queueStyle);
-        queueDisplayChanged = true;
-    }
     if (undefined!=val.screensaver && state.screensaver!=val.screensaver) {
         state.screensaver = val.screensaver;
         setLocalStorageVal('screensaver', state.screensaver);
@@ -252,7 +247,7 @@ const store = new Vuex.Store({
         keyboardControl: true,
         updatesAvailable: new Set(),
         restartRequired: false,
-        queueStyle: QUEUE_TRACK_3LINES,
+        queueAlbumStyle: false,
         openDialogs: [],
         activeDialog: undefined,
         unlockAll: false,
@@ -464,12 +459,12 @@ const store = new Vuex.Store({
             let boolItems = ['roundCovers', 'autoScrollQueue', 'sortFavorites', 'browseBackdrop', 'queueBackdrop', 'nowPlayingBackdrop',
                              'infoBackdrop', 'useDefaultBackdrops', 'browseTechInfo', 'techInfo', 'queueShowTrackNum', 'nowPlayingTrackNum',
                              'nowPlayingClock', 'nowPlayingContext', 'swipeVolume', 'swipeChangeTrack', 'keyboardControl', 'screensaver', 'homeButton',
-                             'powerButton', 'mediaControls'];
+                             'powerButton', 'mediaControls', 'queueAlbumStyle'];
             for (let i=0, len=boolItems.length; i<len; ++i) {
                 let key = boolItems[i];
                 state[key] = getLocalStorageBool(key, state[key]);
             }
-            let intItems = ['skipSeconds', 'mobileBar', 'maxRating', 'queueStyle'];
+            let intItems = ['skipSeconds', 'mobileBar', 'maxRating'];
             for (let i=0, len=intItems.length; i<len; ++i) {
                 let key = intItems[i];
                 state[key] = parseInt(getLocalStorageVal(key, state[key]));
@@ -670,6 +665,11 @@ const store = new Vuex.Store({
                 setTheme(state.theme, state.color);
                 bus.$emit('themeChanged');
             }
+        },
+        setQueueAlbumStyle(state, val) {
+            state.queueAlbumStyle = val;
+            setLocalStorageVal('queueAlbumStyle', state.queueAlbumStyle);
+            bus.$emit('queueDisplayChanged');
         }
     }
 })

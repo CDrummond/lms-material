@@ -206,7 +206,7 @@ var lmsQueue = Vue.component("lms-queue", {
       <v-icon v-if="item.selected">check_box</v-icon>
       <img v-else :key="item.image" :src="item.image" onerror="this.src=DEFAULT_COVER" loading="lazy" v-bind:class="{'dimmed':item.image==DEFAULT_COVER || item.image==DEFAULT_RADIO_COVER}" class="radio-img"></img>
      </v-list-tile-avatar>
-     <v-list-tile-content>
+     <v-list-tile-content v-if="undefined==item.size"> <!-- hacky work-around for view refresh when change album/track style -->
       <v-list-tile-title v-html="item.title"></v-list-tile-title>
       <v-list-tile-sub-title v-if="threeLines" v-html="item.artistAlbum[0]"></v-list-tile-sub-title>
       <v-list-tile-sub-title v-else v-html="item.artistAlbum[0]+SEPARATOR+item.artistAlbum[1]"></v-list-tile-sub-title>

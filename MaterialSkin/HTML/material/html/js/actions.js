@@ -143,7 +143,7 @@ var ACTIONS=[
     {cmd:"playlist-sort",icon:"sort"},
     {cmd:"pq-save",      icon:"save"},
     {cmd:"disc-scroll",  svg:"arrow-circle"},
-    {cmd:"pq-style",     icon:"visibility"}
+    {cmd:"pq-style",     icon:"album"}
 ];
 
 function updateActionStrings() {

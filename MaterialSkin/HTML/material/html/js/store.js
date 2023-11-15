@@ -111,6 +111,13 @@ function updateUiSettings(state, val) {
         setLocalStorageVal('useDefaultBackdrops', state.useDefaultBackdrops);
         bus.$emit('setBgndCover');
     }
+    if (undefined!=val.queueThreeLines && state.queueThreeLines!=val.queueThreeLines) {
+        state.queueThreeLines = val.queueThreeLines;
+        setLocalStorageVal('queueThreeLines', state.queueThreeLines);
+        if (!state.queueAlbumStyle) {
+            queueDisplayChanged = true;
+        }
+    }
     lmsOptions.techInfo = state.browseTechInfo;
     if (queueDisplayChanged) {
         bus.$emit('queueDisplayChanged');
@@ -248,6 +255,7 @@ const store = new Vuex.Store({
         updatesAvailable: new Set(),
         restartRequired: false,
         queueAlbumStyle: false,
+        queueThreeLines: true,
         openDialogs: [],
         activeDialog: undefined,
         unlockAll: false,
@@ -459,7 +467,7 @@ const store = new Vuex.Store({
             let boolItems = ['roundCovers', 'autoScrollQueue', 'sortFavorites', 'browseBackdrop', 'queueBackdrop', 'nowPlayingBackdrop',
                              'infoBackdrop', 'useDefaultBackdrops', 'browseTechInfo', 'techInfo', 'queueShowTrackNum', 'nowPlayingTrackNum',
                              'nowPlayingClock', 'nowPlayingContext', 'swipeVolume', 'swipeChangeTrack', 'keyboardControl', 'screensaver', 'homeButton',
-                             'powerButton', 'mediaControls', 'queueAlbumStyle'];
+                             'powerButton', 'mediaControls', 'queueAlbumStyle', 'queueThreeLines'];
             for (let i=0, len=boolItems.length; i<len; ++i) {
                 let key = boolItems[i];
                 state[key] = getLocalStorageBool(key, state[key]);

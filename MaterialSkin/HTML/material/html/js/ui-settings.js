@@ -296,6 +296,14 @@ Vue.component('lms-ui-settings', {
     <v-divider></v-divider>
 
     <v-list-tile>
+     <v-list-tile-content @click="queueThreeLines = !queueThreeLines" class="switch-label">
+      <v-list-tile-title>{{i18n('Three lines for track view')}}</v-list-tile-title>
+      <v-list-tile-sub-title>{{i18n("Use three lines (title, artist, album) to show track details.")}}</v-list-tile-sub-title>
+     </v-list-tile-content>
+     <v-list-tile-action><m3-switch v-model="queueThreeLines"></m3-switch></v-list-tile-action>
+    </v-list-tile>
+
+    <v-list-tile>
      <v-list-tile-content @click="queueBackdrop = !queueBackdrop" class="switch-label">
       <v-list-tile-title>{{i18n('Draw background')}}</v-list-tile-title>
       <v-list-tile-sub-title>{{i18n('Use cover of current track as background.')}}</v-list-tile-sub-title>
@@ -361,6 +369,7 @@ Vue.component('lms-ui-settings', {
             sortFavorites:true,
             autoScrollQueue:true,
             browseBackdrop:true,
+            queueThreeLines:true,
             queueBackdrop:true,
             nowPlayingBackdrop:true,
             infoBackdrop:true,
@@ -534,6 +543,7 @@ Vue.component('lms-ui-settings', {
             this.autoScrollQueue = this.$store.state.autoScrollQueue;
             this.browseBackdrop = this.$store.state.browseBackdrop;
             this.queueBackdrop = this.$store.state.queueBackdrop;
+            this.queueThreeLines = this.$store.state.queueThreeLines;
             this.nowPlayingBackdrop = this.$store.state.nowPlayingBackdrop;
             this.infoBackdrop = this.$store.state.infoBackdrop;
             this.useDefaultBackdrops = this.$store.state.useDefaultBackdrops;
@@ -635,6 +645,7 @@ Vue.component('lms-ui-settings', {
                       sortFavorites:this.sortFavorites,
                       browseBackdrop:this.browseBackdrop,
                       queueBackdrop:this.queueBackdrop,
+                      queueThreeLines:this.queueThreeLines,
                       nowPlayingBackdrop:this.nowPlayingBackdrop,
                       infoBackdrop:this.infoBackdrop,
                       useDefaultBackdrops:this.useDefaultBackdrops,

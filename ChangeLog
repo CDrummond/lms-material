@@ -1,3 +1,7 @@
+4.0.4
+-----
+1. In album style, embolden current track title even if first track in album.
+
 4.0.3
 -----
  1. Fix restating LMS from 'Server settings' page.

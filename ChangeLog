@@ -2,6 +2,8 @@
 -----
 1. Move track/album view selection into queue menu.
 2. Add left/right padding to lists if showing detailed sub-toolbar.
+3. Add left/right padding to MAI biography and review shown in browse view if
+   also showing detailed sub-toolbar.
 
 4.0.4
 ------

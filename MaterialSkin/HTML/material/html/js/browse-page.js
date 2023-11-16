@@ -473,7 +473,8 @@ var lmsBrowse = Vue.component("lms-browse", {
             return this.headerSubTitle ? this.headerSubTitle + suffix : suffix.length<1 ? undefined : suffix;
         },
         showDetailedSubtoolbar() {
-            return this.wide>0 && this.current && (this.current.image || this.currentItemImage) && (this.current.stdItem==STD_ITEM_ARTIST || this.current.stdItem==STD_ITEM_ALBUM)
+            return this.wide>0 && this.current && (this.current.image || this.currentItemImage) &&
+                   (this.current.stdItem==STD_ITEM_ARTIST || this.current.stdItem==STD_ITEM_ALBUM || this.current.stdItem==STD_ITEM_MAI)
         },
         detailedSubTop() {
             if (this.current.stdItem==STD_ITEM_ARTIST) {
@@ -879,7 +880,8 @@ var lmsBrowse = Vue.component("lms-browse", {
                     this.fetchItems(browseCmd, {cancache:false, id:"currentaction:"+index, title:act.title+SEPARATOR+this.current.title});
                 }
             } else if (undefined!=act.do) {
-                this.fetchItems(act.do, {cancache:false, id:"currentaction:"+index, title:act.title+SEPARATOR+this.current.title});
+                this.fetchItems(act.do, {cancache:false, id:"currentaction:"+index, title:act.title+SEPARATOR+this.current.title,
+                                         image:act.stdItem ? this.current.image ? this.current.image : this.currentItemImage : undefined, stdItem:act.stdItem});
             } else {
                 var cmd = {command:["browseonlineartist", "items"], params:["service_id:"+act.id, "artist_id:"+act.artist_id, "menu:1"]};
                 this.fetchItems(cmd, {cancache:false, id:act.id, title:act.title+SEPARATOR+this.current.title, command:cmd.command, params:cmd.params});

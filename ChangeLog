@@ -9,6 +9,7 @@
 ------
 1. In album style, embolden current track title even if first track in album.
 2. Fix warning when changing queue view to/from album style.
+3. Fix hover buttons overlapping time when listing playlist tracks.
 
 4.0.3
 -----

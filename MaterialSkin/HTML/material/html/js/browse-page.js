@@ -164,8 +164,8 @@ var lmsBrowse = Vue.component("lms-browse", {
      </v-list-tile-content>
 
      <v-list-tile-action v-if="undefined!=item.durationStr" class="browse-time">{{item.durationStr}}</v-list-tile-action>
-     <v-list-tile-action class="browse-action" v-if="undefined!=item.stdItem || (item.menu && item.menu.length>0)">
-      <div v-if="!item.durationStr || selection.size>0" class="menu-btn grid-btn list-btn" @click.stop="itemMenu(item, index, $event)" :title="i18n('%1 (Menu)', stripLinkTags(item.title))"></div>
+     <v-list-tile-action class="browse-action" v-if="(!item.durationStr || selection.size>0) && (undefined!=item.stdItem || (item.menu && item.menu.length>0))">
+      <div class="menu-btn grid-btn list-btn" @click.stop="itemMenu(item, index, $event)" :title="i18n('%1 (Menu)', stripLinkTags(item.title))"></div>
      </v-list-tile-action>
      <div v-if="hoverBtns && 0==selection.size && (undefined!=item.stdItem || (item.menu && (item.menu[0]==PLAY_ACTION || item.menu[0]==PLAY_ALL_ACTION)))" class="list-btns">
       <div v-if="!queryParams.party && (!LMS_KIOSK_MODE || !HIDE_FOR_KIOSK.has(PLAY_ACTION))" class="play-btn grid-btn" @click.stop="itemAction(item.header ? PLAY_ALL_ACTION : PLAY_ACTION, item, index, $event)" :title="ACTIONS[PLAY_ACTION].title"></div>

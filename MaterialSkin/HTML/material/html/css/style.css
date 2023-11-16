@@ -3145,3 +3145,14 @@ img[lazy='loaded'].np-cover {
 .wc-close:hover {
  background-color:#a60000!important;
 }
+
+.mai-button, .mai-button:hover {
+ position:absolute;
+ bottom:5px;
+ right:-4px;
+}
+
+.mai-button .v-btn__content {
+ font-weight:var(--std-weight) !important;
+ color:var(--sub-toolbar-text-color) !important;
+}

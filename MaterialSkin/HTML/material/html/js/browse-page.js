@@ -43,9 +43,9 @@ var lmsBrowse = Vue.component("lms-browse", {
    <v-btn v-if="history.length>1 && homeButton" flat icon @click="homeBtnPressed()" class="toolbar-button" id="home-button" :title="trans.goHome | tooltipStr('home', keyboardControl)"><v-icon>home</v-icon></v-btn>
    <img v-if="wide>0 && ((current && current.image) || currentItemImage)" :src="current && current.image ? current.image : currentItemImage" @click="showHistory($event)" class="sub-cover pointer"></img>
    <v-layout row wrap v-if="showDetailedSubtoolbar">
-   <v-layout @click="showHistory($event)" class="link-item row wrap">
-    <v-flex xs12 class="ellipsis subtoolbar-title subtoolbar-pad" v-bind:class="{'subtoolbar-title-single':undefined==toolbarSubTitle}">{{headerTitle}}</v-flex>
-    <v-flex xs12 class="ellipsis subtoolbar-subtitle subtext" v-html="detailedSubTop"></v-flex>
+    <v-layout @click="showHistory($event)" class="link-item row wrap">
+     <v-flex xs12 class="ellipsis subtoolbar-title subtoolbar-pad" v-bind:class="{'subtoolbar-title-single':undefined==toolbarSubTitle}">{{headerTitle}}</v-flex>
+     <v-flex xs12 class="ellipsis subtoolbar-subtitle subtext" v-html="detailedSubTop"></v-flex>
     </v-layout>
     <v-flex xs12 class="ellipsis subtoolbar-subtitle subtext">&nbsp;</v-flex>
     <v-flex xs12 class="ellipsis subtoolbar-subtitle subtext" v-html="detailedSubBot"></v-flex>
@@ -71,6 +71,7 @@ var lmsBrowse = Vue.component("lms-browse", {
      <v-icon v-else>{{ACTIONS[action].icon}}</v-icon>
     </v-btn>
    </template>
+   <v-btn flat v-if="showDetailedSubtoolbar && current.stdItem!=STD_ITEM_MAI" class="mai-button" @click="doMai"><v-icon>{{current.stdItem==STD_ITEM_ALBUM ? 'local_library' : 'menu_book'}}</v-icon>&nbsp;{{current.stdItem==STD_ITEM_ALBUM ? i18n('Album review') : i18n('Artist biography')}}</v-btn>
   </v-layout>
   <v-layout v-else class="pointer link-item">
    <div class="toolbar-nobtn-pad"></div>
@@ -333,7 +334,7 @@ var lmsBrowse = Vue.component("lms-browse", {
   </v-list>
   <v-list v-else-if="menu.currentActions">
    <template v-for="(item, index) in menu.currentActions">
-    <div style="height:0px!important" v-if="(queryParams.party && HIDE_FOR_PARTY.has(item.action)) || (LMS_KIOSK_MODE && HIDE_FOR_KIOSK.has(item.action)) || (tbarActions.length<2 && (index<(tbarActions.length<2 ? 2 : 1))) || (ALBUM_SORTS_ACTION==item.action && items.length<2) || (SCROLL_TO_DISC_ACTION==item.action && (items.length<2 || !items[0].id.startsWith(FILTER_PREFIX)))"></div>
+    <div style="height:0px!important" v-if="(queryParams.party && HIDE_FOR_PARTY.has(item.action)) || (LMS_KIOSK_MODE && HIDE_FOR_KIOSK.has(item.action)) || (tbarActions.length<2 && (index<(tbarActions.length<2 ? 2 : 1))) || (ALBUM_SORTS_ACTION==item.action && items.length<2) || (SCROLL_TO_DISC_ACTION==item.action && (items.length<2 || !items[0].id.startsWith(FILTER_PREFIX))) || (item.stdItem==STD_ITEM_MAI && wide>0)"></div>
     <v-divider v-else-if="DIVIDER==item.action"></v-divider>
     <v-list-tile v-else-if="!item.isListItemInMenu && item.action==ADD_TO_FAV_ACTION && isInFavorites(current)" @click="menuItemAction(REMOVE_FROM_FAV_ACTION, current, undefined, $event)">
      <v-list-tile-avatar>
@@ -866,6 +867,14 @@ var lmsBrowse = Vue.component("lms-browse", {
                 return;
             }
             showMenu(this, {show:true, currentActions:this.currentActions, x:event.clientX, y:event.clientY});
+        },
+        doMai() {
+            for (let i=0, len=this.currentActions.length; i<len; ++i) {
+                if (this.currentActions[i].stdItem==STD_ITEM_MAI) {
+                    this.currentAction(this.currentActions[i]);
+                    return;
+                }
+            }
         },
         currentAction(act, index, event) {
             if (undefined!=act.action) {

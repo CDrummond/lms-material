@@ -400,6 +400,10 @@ div.v-subheader {
  border-bottom: 1px solid var(--list-item-border-color);
 }
 
+.browse-html {
+ border-bottom: none!important;
+}
+
 .detailed-sub .vue-recycle-scroller__item-view a,
 .detailed-sub .lms-list-item a,
 .indent-list .browse-html {

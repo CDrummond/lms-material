@@ -10,10 +10,11 @@ var B_ALBUM_SORTS=[ ];
 const ALLOW_ADD_ALL = new Set(['trackinfo', 'youtube', 'spotty', 'qobuz', 'tidal', 'wimp' /*is Tidal*/, 'deezer', 'tracks', 'musicip', 'musicsimilarity', 'blissmixer', 'bandcamp']); // Allow add-all/play-all from 'trackinfo', as Spotty's 'Top Titles' access via 'More' needs this
 const ALLOW_FAKE_ALL_SONGS_ITEM = new Set(['youtube', 'qobuz']); // Allow using 'fake' add all item
 const MIN_WIDTH_FOR_COVER = 680;
+const MIN_WIDTH_FOR_COVER_INDENT = 1000;
 
 var lmsBrowse = Vue.component("lms-browse", {
     template: `
-<div id="browse-view" v-bind:class="{'detailed-sub':showDetailedSubtoolbar}">
+<div id="browse-view" v-bind:class="{'detailed-sub':showDetailedSubtoolbar, 'indent-list':showDetailedSubtoolbar && wide>1}">
  <div class="noselect" v-bind:class="{'subtoolbar-cover':showDetailedSubtoolbar}">
  <div class="subtoolbar" v-bind:class="{'toolbar-blur':showDetailedSubtoolbar}">
   <v-layout v-if="selection.size>0">
@@ -40,7 +41,7 @@ var lmsBrowse = Vue.component("lms-browse", {
   <v-layout v-else-if="history.length>0">
    <v-btn flat icon v-longpress="backBtnPressed" class="toolbar-button" v-bind:class="{'back-button':!homeButton || history.length<2}" id="back-button" :title="trans.goBack | tooltipStr('esc', keyboardControl)"><v-icon>arrow_back</v-icon></v-btn>
    <v-btn v-if="history.length>1 && homeButton" flat icon @click="homeBtnPressed()" class="toolbar-button" id="home-button" :title="trans.goHome | tooltipStr('home', keyboardControl)"><v-icon>home</v-icon></v-btn>
-   <img v-if="wide && ((current && current.image) || currentItemImage)" :src="current && current.image ? current.image : currentItemImage" @click="showHistory($event)" class="sub-cover pointer"></img>
+   <img v-if="wide>0 && ((current && current.image) || currentItemImage)" :src="current && current.image ? current.image : currentItemImage" @click="showHistory($event)" class="sub-cover pointer"></img>
    <v-layout row wrap v-if="showDetailedSubtoolbar">
    <v-layout @click="showHistory($event)" class="link-item row wrap">
     <v-flex xs12 class="ellipsis subtoolbar-title subtoolbar-pad" v-bind:class="{'subtoolbar-title-single':undefined==toolbarSubTitle}">{{headerTitle}}</v-flex>
@@ -85,7 +86,7 @@ var lmsBrowse = Vue.component("lms-browse", {
  </div>
  </div>
  <v-icon class="browse-progress" v-if="fetchingItem!=undefined" color="primary">refresh</v-icon>
- <div class="lms-list bgnd-cover" v-bind:class="{'browse-backdrop-cover':drawBackdrop}" id="browse-bgnd">
+ <div class="lms-list bgnd-cover" v-bind:class="{'browse-backdrop-cover':drawBackdrop, 'album-track-list':current && current.stdItem==STD_ITEM_ALBUM}" id="browse-bgnd">
   <div class="noselect lms-jumplist" v-bind:class="{'bgnd-blur':drawBgndImage,'backdrop-blur':drawBackdrop}" v-if="filteredJumplist.length>1">
    <template v-for="(item, index) in filteredJumplist">
     <div @click="jumpTo(item.index)" v-bind:class="{'jl-divider':undefined!=item.sect && index>0 && item.sect!=filteredJumplist[index-1].sect}">{{item.key==' ' || item.key=='' ? '?' : item.key}}</div>
@@ -405,7 +406,7 @@ var lmsBrowse = Vue.component("lms-browse", {
             itemCustomActions: [],
             subtitleClickable: false,
             disabled: new Set(),
-            wide: false,
+            wide: 0,
             searchActive: false,
             dragActive: false,
             dropIndex: -1
@@ -472,7 +473,7 @@ var lmsBrowse = Vue.component("lms-browse", {
             return this.headerSubTitle ? this.headerSubTitle + suffix : suffix.length<1 ? undefined : suffix;
         },
         showDetailedSubtoolbar() {
-            return this.wide && this.current && (this.current.image || this.currentItemImage) && (this.current.stdItem==STD_ITEM_ARTIST || this.current.stdItem==STD_ITEM_ALBUM)
+            return this.wide>0 && this.current && (this.current.image || this.currentItemImage) && (this.current.stdItem==STD_ITEM_ARTIST || this.current.stdItem==STD_ITEM_ALBUM)
         },
         detailedSubTop() {
             if (this.current.stdItem==STD_ITEM_ARTIST) {
@@ -1610,6 +1611,13 @@ var lmsBrowse = Vue.component("lms-browse", {
                 }
             }
             this.dragIndex = undefined;
+        },
+        setWide() {
+            this.wide = this.pageElement.scrollWidth>=MIN_WIDTH_FOR_COVER_INDENT
+                        ? 2
+                        : this.pageElement.scrollWidth>=MIN_WIDTH_FOR_COVER
+                            ? 1
+                            : 0;
         }
     },
     mounted() {
@@ -1824,7 +1832,7 @@ var lmsBrowse = Vue.component("lms-browse", {
         this.scrollElement.addEventListener("scroll", this.handleScroll, PASSIVE_SUPPORTED ? { passive: true } : false);
         msRegister(this, this.scrollElement);
         bus.$on('splitterChanged', function() {
-            this.wide = this.pageElement.scrollWidth>=MIN_WIDTH_FOR_COVER;
+            this.setWide();
             this.layoutGrid();
         }.bind(this));
         bus.$on('relayoutGrid', function() {
@@ -1835,12 +1843,12 @@ var lmsBrowse = Vue.component("lms-browse", {
                 this.layoutGrid(true);
             });
         }.bind(this));
-        this.wide = this.pageElement.scrollWidth>=MIN_WIDTH_FOR_COVER;
+        this.setWide();
         setTimeout(function () {
-            this.wide = this.pageElement.scrollWidth>=MIN_WIDTH_FOR_COVER;
+            this.setWide();
         }.bind(this), 1000);
         bus.$on('windowWidthChanged', function() {
-            this.wide = this.pageElement.scrollWidth>=MIN_WIDTH_FOR_COVER;
+            this.setWide();
             this.layoutGrid();
         }.bind(this));
         bus.$on('themeChanged', function() {
@@ -1920,7 +1928,7 @@ var lmsBrowse = Vue.component("lms-browse", {
             this.$store.commit('menuVisible', {name:'browse-'+this.menu.name, shown:newVal});
         },
         '$store.state.pinQueue': function() {
-            this.wide = this.pageElement.scrollWidth>=MIN_WIDTH_FOR_COVER;
+            this.setWide();
             this.layoutGrid();
         }
     },

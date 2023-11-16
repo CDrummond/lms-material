@@ -65,7 +65,7 @@
  backface-visibility:hidden;
 }
 
-.lms-jumplist {
+.lms-jumplist, .browse-context {
  height:calc((var(--vh, 1vh)*100) - (var(--main-toolbar-height) + var(--sub-toolbar-height) + var(--bottom-toolbar-height)));
 }
 
@@ -78,7 +78,8 @@
 
 .detailed-sub .lms-list,
 .detailed-sub .lms-image-grid,
-.detailed-sub .lms-jumplist {
+.detailed-sub .lms-jumplist,
+.detailed-sub .browse-context {
  height:calc((var(--vh, 1vh)*100) - (var(--main-toolbar-height) + (var(--sub-toolbar-height)*2) + var(--bottom-toolbar-height)))!important;
 }
 

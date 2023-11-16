@@ -1,6 +1,7 @@
 4.1.0
 -----
 1. Move track/album view selection into queue menu.
+2. Add left/right padding to lists if showing detailed sub-toolbar.
 
 4.0.4
 ------

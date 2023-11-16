@@ -15,7 +15,7 @@ function copyPlayer(p){
 function updateUiSettings(state, val) {
     let stdItems = ['autoScrollQueue', 'browseBackdrop', 'queueBackdrop', 'nowPlayingBackdrop', 'infoBackdrop',
                     'browseTechInfo', 'techInfo', 'nowPlayingTrackNum', 'nowPlayingContext', 'swipeVolume', 'swipeChangeTrack',
-                    'keyboardControl', 'skipSeconds', 'homeButton', 'powerButton', 'mediaControls', 'showRating'];
+                    'keyboardControl', 'skipSeconds', '', 'powerButton', 'mediaControls', 'showRating'];
     for (let i=0, len=stdItems.length; i<len; ++i) {
         let key=stdItems[i];
         if (undefined!=val[key] && state[key]!=val[key]) {
@@ -43,6 +43,12 @@ function updateUiSettings(state, val) {
         state.color = val.color;
         setLocalStorageVal('color', state.color);
         themeChanged = true;
+    }
+    if (undefined!=val.homeButton && state.homeButton!=val.homeButton) {
+        console.log(val.homeButton);
+        state.homeButton = val.homeButton;
+        setLocalStorageVal('homeButton', state.homeButton);
+        document.documentElement.style.setProperty('--home-button-size', state.homeButton ? '42px' : '0px');
     }
     if (undefined!=val.mobileBar && state.mobileBar!=val.mobileBar) {
         state.mobileBar = val.mobileBar;
@@ -476,6 +482,9 @@ const store = new Vuex.Store({
             for (let i=0, len=intItems.length; i<len; ++i) {
                 let key = intItems[i];
                 state[key] = parseInt(getLocalStorageVal(key, state[key]));
+            }
+            if (state.homeButton) {
+                document.documentElement.style.setProperty('--home-button-size', '42px');
             }
             setQueuePinned(state, getLocalStorageBool('pinQueue', state.pinQueue));
             setQueueShown(state, state.pinQueue && getLocalStorageBool('showQueue', state.showQueue));

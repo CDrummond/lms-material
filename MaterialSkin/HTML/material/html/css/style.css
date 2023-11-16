@@ -50,6 +50,7 @@
  --album-separator-color:rgba(0, 0, 0, 0.2);
  --subtoolbar-image-url:url();
  --window-controls-space:0px;
+ --home-button-size:0px;
 }
 
 .theme--dark {
@@ -395,8 +396,19 @@ div.v-subheader {
  margin-left:-10px!important;
 }
 
-.lms-list-item {
+.vue-recycle-scroller__item-view, .lms-list-item {
  border-bottom: 1px solid var(--list-item-border-color);
+}
+
+.detailed-sub .vue-recycle-scroller__item-view a,
+.detailed-sub .lms-list-item a {
+ padding-left:calc(69px + var(--home-button-size));
+}
+
+.indent-list .vue-recycle-scroller__item-view a,
+.indent-list .lms-list-item a {
+ padding-left:calc(171px + var(--home-button-size));
+ padding-right:calc(171px + var(--home-button-size));
 }
 
 /* Make action buttons in lists closer together */
@@ -436,10 +448,6 @@ div.v-subheader {
 
 .lms-image-grid .vue-recycle-scroller__item-view {
  border-bottom: 0px;
-}
-
-.vue-recycle-scroller__item-view, .lms-list-item {
- border-bottom: 1px solid var(--list-item-border-color);
 }
 
 .image-grid-item-img {
@@ -2566,6 +2574,10 @@ img[lazy='loaded'].np-cover {
  position:absolute;
  top:8px !important;
  right:50px !important;
+}
+
+.indent-list .list-btns {
+ right:calc(211px + var(--home-button-size))!important;
 }
 
 .lms-list .v-list__tile__action .v-btn--icon {

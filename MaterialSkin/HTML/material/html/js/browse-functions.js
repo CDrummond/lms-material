@@ -96,6 +96,7 @@ function browseAddHistory(view) {
     prev.currentBaseActions = view.currentBaseActions;
     prev.currentItemImage = view.currentItemImage;
     prev.currentActions = view.currentActions;
+    prev.contextAction = view.contextAction;
     prev.headerTitle = view.headerTitle;
     prev.headerSubTitle = view.headerSubTitle;
     prev.detailedSubInfo = view.detailedSubInfo;
@@ -117,17 +118,19 @@ function browseAddHistory(view) {
 }
 
 function browseActions(view, item, args, count, showCompositions) {
-    var actions=[];
+    let actions = [];
+    let context = undefined;
     if ((undefined==item || undefined==item.id || !item.id.startsWith(MUSIC_ID_PREFIX)) && // Exclude 'Compilations'
         (undefined==args['artist'] || (args['artist']!=i18n('Various Artists') && args['artist']!=LMS_VA_STRING && args['artist'].toLowerCase()!='various artists'))) {
         if (LMS_P_MAI) {
             if (undefined!=args['artist_id'] || undefined!=args['artist']) {
-                actions.push({title:i18n('Artist biography'), icon:'menu_book',
+                actions.push({title:i18n('Artist biography'), icon:'menu_book', context:true,
                               do:{ command: undefined!=args['artist_id']
                                                 ? ['musicartistinfo', 'biography', 'html:1', 'artist_id:'+args['artist_id']]
                                                 : ['musicartistinfo', 'biography', 'html:1', 'artist:'+args['artist']],
                                    params:[]},
                               weight:100});
+                context = actions[actions.length-1];
                 actions.push({title:i18n('Pictures'), icon:'insert_photo',
                               do:{ command: undefined!=args['artist_id']
                                                 ? ['musicartistinfo', 'artistphotos', 'html:1', 'artist_id:'+args['artist_id']]
@@ -136,7 +139,7 @@ function browseActions(view, item, args, count, showCompositions) {
                               weight:100});
             }
             if (undefined!=args['album_id'] || (undefined!=args['album'] && (undefined!=args['artist_id'] || undefined!=args['artist']))) {
-                actions.push({title:i18n('Album review'), icon:'local_library',
+                actions.push({title:i18n('Album review'), icon:'local_library', context:true,
                               do:{ command: undefined!=args['album_id']
                                                 ? ['musicartistinfo', 'albumreview', 'html:1', 'album_id:'+args['album_id']]
                                                 : undefined!=args['artist_id']
@@ -144,6 +147,7 @@ function browseActions(view, item, args, count, showCompositions) {
                                                     : ['musicartistinfo', 'albumreview', 'html:1', 'album:'+args['album'], 'artist:'+args['artist']],
                                    params:[]},
                               weight:100});
+                context = actions[actions.length-1];
             }
             if (undefined!=args['path'] && args['path'].length>0 && !queryParams.party && !LMS_KIOSK_MODE) {
                 actions.push({localfiles:true, title:i18n('Local files'), icon:'insert_drive_file', do:{ command:['musicartistinfo', 'localfiles', 'folder:'+args['path']], params:[]}, weight:103});
@@ -197,7 +201,7 @@ function browseActions(view, item, args, count, showCompositions) {
         }
     }
 
-    return actions;
+    return [actions, context];
 }
 
 function browseHandleNextWindow(view, item, command, resp, isMoreMenu, isBrowse) {
@@ -397,7 +401,9 @@ function browseHandleListResponse(view, item, command, resp, prevPage, appendIte
                     }
                 }
             }
-            view.currentActions = browseActions(view, resp.items.length>0 ? item : undefined, actParams, resp.items.length, resp.showCompositions);
+            let viewActions = browseActions(view, resp.items.length>0 ? item : undefined, actParams, resp.items.length, resp.showCompositions);
+            view.currentActions = viewActions[0];
+            view.contextAction = viewActions[1];
             if (listingArtistAlbums) {
                 for (var i=0, loop=view.onlineServices, len=loop.length; i<len; ++i) {
                     var emblem = getEmblem(loop[i]+':');
@@ -466,7 +472,7 @@ function browseHandleListResponse(view, item, command, resp, prevPage, appendIte
             view.tbarActions=[ADD_FAV_FOLDER_ACTION, ADD_FAV_ACTION];
         } else if (SECTION_PLAYLISTS==view.current.section && view.current.id.startsWith("playlist_id:") && view.items.length>0 && undefined!=view.items[0].stdItem) {
             view.tbarActions=[PLAY_ACTION, ADD_ACTION];
-            view.currentActions=browseActions(view, resp.items.length>0 ? item : undefined, {}, resp.items.length);
+            view.currentActions=browseActions(view, resp.items.length>0 ? item : undefined, {}, resp.items.length)[0];
         } else if (view.allSongsItem || ("tracks"==command.command[0] && item.id.startsWith("currentaction:"))) {
             view.tbarActions=[PLAY_ALL_ACTION, ADD_ALL_ACTION];
         } else if ("albums"==command.command[0] && command.params.find(elem => elem=="sort:random")) {
@@ -1540,6 +1546,7 @@ function browseGoBack(view, refresh) {
     view.currentBaseActions = prev.currentBaseActions;
     view.currentItemImage = prev.currentItemImage;
     view.currentActions = prev.currentActions;
+    view.contextAction = prev.contextAction;
     view.currentLibId = prev.currentLibId;
     view.pinnedItemLibName = prev.pinnedItemLibName;
     view.headerTitle = prev.headerTitle;

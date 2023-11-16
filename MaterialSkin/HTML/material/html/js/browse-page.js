@@ -334,8 +334,7 @@ var lmsBrowse = Vue.component("lms-browse", {
   </v-list>
   <v-list v-else-if="menu.currentActions">
    <template v-for="(item, index) in menu.currentActions">
-    <div style="height:0px!important" v-if="(queryParams.party && HIDE_FOR_PARTY.has(item.action)) || (LMS_KIOSK_MODE && HIDE_FOR_KIOSK.has(item.action)) || (tbarActions.length<2 && (index<(tbarActions.length<2 ? 2 : 1))) || (ALBUM_SORTS_ACTION==item.action && items.length<2) || (SCROLL_TO_DISC_ACTION==item.action && (items.length<2 || !items[0].id.startsWith(FILTER_PREFIX))) || (item.stdItem==STD_ITEM_MAI && wide>0)"></div>
-    <v-divider v-else-if="DIVIDER==item.action"></v-divider>
+    <v-divider v-if="DIVIDER==item.action"></v-divider>
     <v-list-tile v-else-if="!item.isListItemInMenu && item.action==ADD_TO_FAV_ACTION && isInFavorites(current)" @click="menuItemAction(REMOVE_FROM_FAV_ACTION, current, undefined, $event)">
      <v-list-tile-avatar>
       <v-icon v-if="undefined==ACTIONS[REMOVE_FROM_FAV_ACTION].svg">{{ACTIONS[REMOVE_FROM_FAV_ACTION].icon}}</v-icon>
@@ -866,12 +865,25 @@ var lmsBrowse = Vue.component("lms-browse", {
             if (this.$store.state.visibleMenus.size>0 && undefined!=this.menu && undefined!=this.menu.currentActions) {
                 return;
             }
-            showMenu(this, {show:true, currentActions:this.currentActions, x:event.clientX, y:event.clientY});
+            let actions = [];
+            for (let i=0, loop=this.currentActions, len=loop.length; i<len; ++i) {
+                if ( (queryParams.party && HIDE_FOR_PARTY.has(loop[i].action)) ||
+                     (LMS_KIOSK_MODE && HIDE_FOR_KIOSK.has(loop[i].action)) ||
+                     (this.tbarActions.length<2 && (i<(this.tbarActions.length<2 ? 2 : 1))) ||
+                     (ALBUM_SORTS_ACTION==loop[i].action && this.items.length<2) ||
+                     (SCROLL_TO_DISC_ACTION==loop[i].action && (this.items.length<2 || !this.items[0].id.startsWith(FILTER_PREFIX))) ||
+                     (loop[i].stdItem==STD_ITEM_MAI && this.wide>0) ||
+                     (loop[i].action==DIVIDER && (0==actions.length || actions[actions.length-1].action==DIVIDER)) ) {
+                    continue;
+                }
+                actions.push(loop[i]);
+            }
+            showMenu(this, {show:true, currentActions:actions, x:event.clientX, y:event.clientY});
         },
         doMai() {
-            for (let i=0, len=this.currentActions.length; i<len; ++i) {
-                if (this.currentActions[i].stdItem==STD_ITEM_MAI) {
-                    this.currentAction(this.currentActions[i]);
+            for (let i=0, loop=this.currentActions, len=loop.length; i<len; ++i) {
+                if (loop[i].stdItem==STD_ITEM_MAI) {
+                    this.currentAction(loop[i]);
                     return;
                 }
             }

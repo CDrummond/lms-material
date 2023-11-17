@@ -9,6 +9,7 @@
 5. Reduce desktop now-playing bar height based upon width.
 6. Hide expand/collapse button from desktop toolbar if not wide enough, and
    place collapse button over cover.
+7. Swipe to hide/show unpinned queue in desktop layout.
 
 4.0.4
 ------

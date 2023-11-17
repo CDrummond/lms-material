@@ -1050,11 +1050,15 @@ div.v-subheader {
  width:var(--np-portrait-image-size);
 }
 
-.np-emblem, .np-menu {
+.np-emblem, .np-menu, .np-close {
  position:absolute;
  border-radius: 50%;
  width:32px;
  height:32px;
+}
+
+.np-close {
+ visibility:hidden;
 }
 
 .np-emblem {
@@ -2545,7 +2549,7 @@ img[lazy='loaded'].np-cover {
  margin-right:0px;
 }
 
-.grid-btn, .np-menu {
+.grid-btn, .np-menu, .np-close {
  width:32px;
  height:32px;
  border-radius:50%;
@@ -2603,7 +2607,7 @@ img[lazy='loaded'].np-cover {
  background-color:rgba(110, 110, 110, 0.65);
 }
 
-.np-menu {
+.np-men, .np-close {
  background-color:rgba(110, 110, 110, 0.45);
  opacity:0.7;
 }
@@ -2621,7 +2625,8 @@ img[lazy='loaded'].np-cover {
   background-color:rgba(110, 110, 110, 0.95);
  }
 
-.msk-is-non-touch .np-menu:hover {
+.msk-is-non-touch .np-menu:hover,
+.msk-is-non-touch .np-close:hover {
  background-color:rgba(110, 110, 110, 0.95);
  opacity:1.0;
 }

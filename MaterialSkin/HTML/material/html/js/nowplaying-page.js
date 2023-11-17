@@ -279,6 +279,7 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
       <img :src="playerStatus.current.emblem | emblem()" loading="lazy"></img>
      </div>
      <div class="np-menu" @click="showMenu" v-if="playerStatus.playlist.count>0" v-bind:class="{'pq-pulse':pulseTimer}"></div>
+     <div class="np-close" @click="largeView=false" v-bind:class="{'pulse':pulseTimer}"></div>
     </div>
     <div class="np-portrait-song-info hide-scrollbar fade-both">
      <div>

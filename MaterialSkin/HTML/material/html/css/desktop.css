@@ -243,8 +243,8 @@
  :root {
   --bottom-toolbar-height:var(--desktop-npbar-height-thin);
  }
- #np-bar-prev, #np-bar-next, #np-bar-stop, #playPauseA, .np-bar-details .v-list__tile__action {
-  visibility:hidden!important;
+ #np-bar-prev, #np-bar-next, #np-bar-stop, #playPauseA, .np-bar-details .v-list__tile__action, #np-expand, #pq-pin-1, #pq-pin-2 {
+  display:none!important;
  }
  .np-bar-image {
   visibility:visible;
@@ -283,6 +283,14 @@
   bottom:calc(var(--desktop-npbar-height-thin) - 7px);
   width:100vw;
   height:3px!important;
+ }
+ .np-close {
+  visibility:visible;
+  bottom:calc(var(--np-image-border) + 16px);
+  left:calc(var(--np-image-border) + 8px);
+ }
+ .np-close:after {
+  content:"fullscreen_exit";
  }
 }
 

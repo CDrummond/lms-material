@@ -20,11 +20,11 @@ var lmsPromptDialog = Vue.component("lms-prompt-dialog", {
    <v-spacer></v-spacer>
    <v-btn v-if="undefined!=otherButton" flat @click.native="close(2)">{{otherButton}}</v-btn>
    <v-btn flat @click.native="close(undefined==otherButton ? true : 1)">{{positiveButton}}</v-btn>
-   <v-btn v-if="type!='alert'" flat @click.native="close(undefined==otherButton ? false : 0)">{{negativeButton}}</v-btn>
+   <v-btn flat @click.native="close(undefined==otherButton ? false : 0)">{{negativeButton}}</v-btn>
   </v-card-actions>
   <v-card-actions v-else>
    <v-spacer></v-spacer>
-   <v-btn v-if="type!='alert'" flat @click.native="close(undefined==otherButton ? false : 0)">{{negativeButton}}</v-btn>
+   <v-btn flat @click.native="close(undefined==otherButton ? false : 0)">{{negativeButton}}</v-btn>
    <v-btn flat @click.native="close(undefined==otherButton ? true : 1)">{{positiveButton}}</v-btn>
    <v-btn v-if="undefined!=otherButton" flat @click.native="close(2)">{{otherButton}}</v-btn>
   </v-card-actions>
@@ -46,12 +46,6 @@ var lmsPromptDialog = Vue.component("lms-prompt-dialog", {
     mounted() {
         bus.$on('prompt.open', function(type, title, text, extra, positiveButton, negativeButton, otherButton) {
             this.text = text ? text : "";
-            if ('alert'==type) {
-                if (this.text=='-') {
-                    this.show=false;
-                    return;
-                }
-            }
             this.maxWidth = this.text.length>=50 || 'confirm'!=type ? 500 : 300;
             this.type = type;
             this.title = title;
@@ -62,7 +56,7 @@ var lmsPromptDialog = Vue.component("lms-prompt-dialog", {
                 this.hint = extra;
                 this.slider = {step:1, min:0, max:100, value:0};
             }
-            this.positiveButton = undefined==positiveButton ? type=='alert' ? i18n('Close') : i18n('OK') : positiveButton;
+            this.positiveButton = undefined==positiveButton ? i18n('OK') : positiveButton;
             this.negativeButton = undefined==negativeButton ? i18n('Cancel') : negativeButton;
             this.otherButton = otherButton;
             this.show = true;
@@ -107,15 +101,6 @@ function promptForText(title, hint, text, positiveButton, negativeButton) {
         bus.$emit('dlg.open', 'prompt', 'text', title, text, hint, positiveButton, negativeButton);
         bus.$once('prompt.resp', function(resp, value, hint) {
             response({ok:resp, value:value.trim()});
-        });
-    });
-}
-
-function showAlert(text, button) {
-    return new Promise(function(response) {
-        bus.$emit('dlg.open', 'prompt', 'alert', undefined, text, undefined, button);
-        bus.$once('prompt.resp', function(resp) {
-            response(resp);
         });
     });
 }

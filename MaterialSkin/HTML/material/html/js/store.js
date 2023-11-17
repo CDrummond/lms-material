@@ -45,7 +45,6 @@ function updateUiSettings(state, val) {
         themeChanged = true;
     }
     if (undefined!=val.homeButton && state.homeButton!=val.homeButton) {
-        console.log(val.homeButton);
         state.homeButton = val.homeButton;
         setLocalStorageVal('homeButton', state.homeButton);
         document.documentElement.style.setProperty('--home-button-size', state.homeButton ? '42px' : '0px');

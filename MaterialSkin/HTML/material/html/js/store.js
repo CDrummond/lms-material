@@ -201,7 +201,7 @@ function setQueueShown(state, val) {
         }
         bus.$emit('showQueue', val);
         document.documentElement.style.setProperty('--queue-visibility', val ? 'initial' : 'collapse');
-        document.documentElement.style.setProperty('--queue-minwidth', val && state.pinQueue ? '400px' : '0px');
+        document.documentElement.style.setProperty('--queue-minwidth', val && state.pinQueue ? '275px' : '0px');
         document.documentElement.style.setProperty('--splitter-width', val && state.pinQueue ? '1px' : '0px');
     }
 }

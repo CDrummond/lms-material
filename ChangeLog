@@ -4,6 +4,9 @@
 2. Add left/right padding to lists if showing detailed sub-toolbar.
 3. Add left/right padding to MAI biography and review shown in browse view if
    also showing detailed sub-toolbar.
+4. Change to mobile-style cover/details/button layout for desktop now-playing
+   bar based upon width.
+5. Reduce desktop now-playing bar height based upon width.
 
 4.0.4
 ------

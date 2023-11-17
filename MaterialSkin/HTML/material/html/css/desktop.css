@@ -226,11 +226,63 @@
   display:none!important;
  }
  .np-bar-image {
-   left:90px;
+  left:1px;
  }
  .np-bar-details {
-  left:166px;
-  width:calc(100vw - 166px);
+  left:72px;
+  width:calc(100vw - 146px);
+ }
+ .np-bar .np-playpause {
+  position:fixed;
+  bottom:6px;
+  right:8px!important;
+ }
+}
+
+@media screen and (max-width: 410px) {
+ :root {
+  --bottom-toolbar-height:var(--desktop-npbar-height-thin);
+ }
+ #np-bar-prev, #np-bar-next, #np-bar-stop, #playPauseA, .np-bar-details .v-list__tile__action {
+  visibility:hidden!important;
+ }
+ .np-bar-image {
+  visibility:visible;
+  position:fixed;
+  left:1px;
+  bottom:1px;
+  height:44px;
+  width:44px;
+ }
+ .np-bar-image .np-cover {
+  height:44px;
+  width:44px;
+ }
+ .np-bar .np-playpause {
+  position:fixed;
+  margin-top:none!important;
+  bottom:10px;
+  right:8px!important;
+  visibility:visible!important;
+  width:var(--icon-size)!important;
+  height:var(--icon-size)!important;
+ }
+ .np-bar .np-playpause div i {
+  font-size:var(--icon-size)!important;
+ }
+ .np-bar-details {
+  left:50px;
+  bottom:-4px;
+  width:calc(100vw - 90px);
+ }
+ .np-bar-details .v-list__tile__title {
+  margin-top:-2px;
+  line-height:32px;
+ }
+ .np-bar .np-slider {
+  bottom:calc(var(--desktop-npbar-height-thin) - 7px);
+  width:100vw;
+  height:3px!important;
  }
 }
 
@@ -424,15 +476,5 @@
  }
  .maintoolbar-title, .maintoolbar-subtitle {
   padding-left:12px;
- }
-}
-
-@media only screen and (max-width:380px) {
- .np-bar-image {
-   visibility:hidden;
- }
- .np-bar-details {
-  left:90px;
-  width:calc(100vw - 90px);
  }
 }

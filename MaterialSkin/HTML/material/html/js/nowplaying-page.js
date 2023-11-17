@@ -388,6 +388,7 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
     mounted() {
         this.showNpBar = undefined;
         this.desktopBarHeight = getComputedStyle(document.documentElement).getPropertyValue('--desktop-npbar-height');
+        this.desktopBarThinHeight = getComputedStyle(document.documentElement).getPropertyValue('--desktop-npbar-height-thin');
         this.mobileBarThinHeight = getComputedStyle(document.documentElement).getPropertyValue('--mobile-npbar-height-thin');
         this.mobileBarThickHeight = getComputedStyle(document.documentElement).getPropertyValue('--mobile-npbar-height-thick');
         this.controlBar();
@@ -1012,6 +1013,7 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
             if (showNpBar!=this.showNpBar || force) {
                 let mbar = this.$store.state.mobileBar;
                 document.documentElement.style.setProperty('--desktop-npbar-height', !showNpBar ? '0px' : this.desktopBarHeight);
+                document.documentElement.style.setProperty('--desktop-npbar-height-thin', !showNpBar ? '0px' : this.desktopBarThinHeight);
                 document.documentElement.style.setProperty('--mobile-npbar-height', !showNpBar || MBAR_NONE==mbar ? '0px' : (MBAR_THIN==mbar ? this.mobileBarThinHeight : this.mobileBarThickHeight));
                 document.documentElement.style.setProperty('--npbar-border-color', !showNpBar ? 'transparent' : 'var(--bottom-toolbar-border-color)');
             }

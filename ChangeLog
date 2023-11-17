@@ -10,6 +10,7 @@
 6. Hide expand/collapse button from desktop toolbar if not wide enough, and
    place collapse button over cover.
 7. Swipe to hide/show unpinned queue in desktop layout.
+8. Only allow queue to be pinned if window width is 670px or more.
 
 4.0.4
 ------

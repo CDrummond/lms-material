@@ -1070,13 +1070,14 @@ div.v-subheader {
  content:"more_vert";
 }
 
-.np-image .np-emblem, .np-image .np-menu {
- top:calc(var(--np-image-border) + 8px);
+.np-image .np-emblem {
  right:calc(var(--np-image-border) + 8px);
+ top:calc(var(--np-image-border) + 8px);
 }
 
 .np-image .np-menu {
- top:calc(var(--np-portrait-image-size) - (var(--np-image-border) + 8px));
+ right:calc(var(--np-image-border) + 8px);
+ bottom:calc(var(--np-image-border) + 16px);
 }
 
 .np-image-landscape .np-emblem, .np-image-landscape .np-menu {

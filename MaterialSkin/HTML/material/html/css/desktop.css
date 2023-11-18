@@ -239,7 +239,7 @@
  }
 }
 
-@media screen and (max-width: 410px) {
+@media screen and (max-width: 420px) {
  :root {
   --bottom-toolbar-height:var(--desktop-npbar-height-thin);
  }
@@ -456,6 +456,22 @@
  height:calc((var(--vh, 1vh)*100) - (var(--main-toolbar-height) + var(--sub-toolbar-height) + var(--bottom-toolbar-height) + 12px));
 }
 
+@media screen and (max-width: 550px) {
+ .pq-unpinned-np2 .lms-list,
+ .pq-unpinned-np0 .lms-list {
+  height:calc((var(--vh, 1vh)*100) - (var(--main-toolbar-height) + var(--sub-toolbar-height) + 2px))!important;
+ }
+}
+
+@media screen and (max-width: 450px) {
+ .pq-unpinned .lms-list {
+  height:calc((var(--vh, 1vh)*100) - (var(--main-toolbar-height) + var(--sub-toolbar-height) + var(--bottom-toolbar-height) + 2px));
+ }
+ .pq-unpinned, .pq-unpinned-np0, .pq-unpinned-np2 {
+  box-shadow:none!important;
+ }
+}
+
 @keyframes pqSlideIn {
  from{right:-100%}
  to{right:0px}
@@ -478,7 +494,7 @@
  z-index: 1;
 }
 
-@media only screen and (max-width:420px) {
+@media only screen and (max-width:430px) {
  .maintoolbar-player-power-button, .maintoolbar-player-icon {
   visibility:hidden;
  }

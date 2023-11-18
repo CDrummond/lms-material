@@ -142,7 +142,7 @@
 }
 
 .lms-list-jump, .lms-image-grid-jump {
- width:calc(100vw - (var(--jump-list-width) + var(--browse-context-width)))!important;
+ width:calc(100vw - var(--jump-list-width))!important;
  left:var(--jump-list-width);
 }
 

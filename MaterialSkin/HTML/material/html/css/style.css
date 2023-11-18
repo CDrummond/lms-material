@@ -3170,3 +3170,9 @@ img[lazy='loaded'].np-cover {
  font-weight:var(--std-weight) !important;
  color:var(--sub-toolbar-text-color) !important;
 }
+
+.np-playback {
+  max-width:750px;
+  margin-left:auto;
+  margin-right:auto;
+}

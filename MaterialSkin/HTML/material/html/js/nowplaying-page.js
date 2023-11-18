@@ -241,32 +241,36 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
         </v-layout>
        </v-flex>
        <v-flex xs12 v-else-if="!info.show"><div style="height:31px"></div></v-flex>
-       <v-flex xs4>
-        <v-layout text-xs-center>
-         <v-flex xs6>
-          <v-btn v-if="repAltBtn.show" :title="repAltBtn.tooltip" flat icon v-longpress="repeatClicked" class="np-std-button" v-bind:class="{'disabled':noPlayer}"><v-icon v-if="repAltBtn.icon" class="media-icon">{{repAltBtn.icon}}</v-icon><img v-else :src="repAltBtn.image" class="btn-img"></img></v-btn>
-          <v-btn :title="trans.repeatOne" flat icon v-else-if="playerStatus.playlist.repeat===1" v-longpress="repeatClicked" class="np-std-button" v-bind:class="{'disabled':noPlayer}"><v-icon class="media-icon">repeat_one</v-icon></v-btn>
-          <v-btn :title="trans.repeatAll" flat icon v-else-if="playerStatus.playlist.repeat===2" v-longpress="repeatClicked" class="np-std-button" v-bind:class="{'disabled':noPlayer}"><v-icon class="media-icon">repeat</v-icon></v-btn>
-          <v-btn :title="trans.dstm" flat icon v-else-if="dstm" v-longpress="repeatClicked" class="np-std-button"><v-icon class="media-icon">all_inclusive</v-icon></v-btn>
-          <v-btn :title="trans.repeatOff" flat icon v-else v-longpress="repeatClicked" class="dimmed np-std-button" v-bind:class="{'disabled':noPlayer}"><img class="svg-img media-icon" :src="'repeat-off' | svgIcon(darkUi)"></img></v-btn>
+       <v-flex xs12>
+        <v-layout text-xs-center class="np-playback">
+         <v-flex xs4>
+          <v-layout text-xs-center>
+           <v-flex xs6>
+            <v-btn v-if="repAltBtn.show" :title="repAltBtn.tooltip" flat icon v-longpress="repeatClicked" class="np-std-button" v-bind:class="{'disabled':noPlayer}"><v-icon v-if="repAltBtn.icon" class="media-icon">{{repAltBtn.icon}}</v-icon><img v-else :src="repAltBtn.image" class="btn-img"></img></v-btn>
+            <v-btn :title="trans.repeatOne" flat icon v-else-if="playerStatus.playlist.repeat===1" v-longpress="repeatClicked" class="np-std-button" v-bind:class="{'disabled':noPlayer}"><v-icon class="media-icon">repeat_one</v-icon></v-btn>
+            <v-btn :title="trans.repeatAll" flat icon v-else-if="playerStatus.playlist.repeat===2" v-longpress="repeatClicked" class="np-std-button" v-bind:class="{'disabled':noPlayer}"><v-icon class="media-icon">repeat</v-icon></v-btn>
+             <v-btn :title="trans.dstm" flat icon v-else-if="dstm" v-longpress="repeatClicked" class="np-std-button"><v-icon class="media-icon">all_inclusive</v-icon></v-btn>
+            <v-btn :title="trans.repeatOff" flat icon v-else v-longpress="repeatClicked" class="dimmed np-std-button" v-bind:class="{'disabled':noPlayer}"><img class="svg-img media-icon" :src="'repeat-off' | svgIcon(darkUi)"></img></v-btn>
+           </v-flex>
+           <v-flex xs6><v-btn flat icon v-longpress:repeat="prevButton" class="np-std-button" v-bind:class="{ 'disabled':disablePrev}" :title="trans.prev | tooltip('left', keyboardControl)"><v-icon large class="media-icon">skip_previous</v-icon></v-btn></v-flex>
+          </v-layout>
          </v-flex>
-         <v-flex xs6><v-btn flat icon v-longpress:repeat="prevButton" class="np-std-button" v-bind:class="{ 'disabled':disablePrev}" :title="trans.prev | tooltip('left', keyboardControl)"><v-icon large class="media-icon">skip_previous</v-icon></v-btn></v-flex>
-        </v-layout>
-       </v-flex>
-       <v-flex xs4>
-        <v-btn flat icon large v-longpress="playPauseButton" @click.middle="showSleep" id="playPauseD" class="np-playpause" :title="(playerStatus.isplaying ? trans.pause : trans.play) | tooltip('space', keyboardControl)" v-bind:class="{'disabled':disableBtns}"><v-icon x-large class="media-icon">{{ playerStatus.isplaying ? 'pause_circle_filled' : 'play_circle_filled'}}</v-icon></v-btn>
-       </v-flex>
-       <v-flex xs4>
-        <v-layout text-xs-center>
-         <v-flex xs6><v-btn flat icon v-longpress:repeat="nextButton" class="np-std-button" v-bind:class="{ 'disabled':disableNext}" :title="trans.next | tooltip('right', keyboardControl)"><v-icon large class="media-icon">skip_next</v-icon></v-btn></v-flex>
-         <v-flex xs6>
-          <v-btn v-if="shuffAltBtn.show" :title="shuffAltBtn.tooltip" flat icon @click="shuffleClicked" class="np-std-button"><v-icon v-if="shuffAltBtn.icon" class="media-icon">{{shuffAltBtn.icon}}</v-icon><img v-else :src="shuffAltBtn.image" class="btn-img"></img></v-btn>
-          <v-btn :title="trans.shuffleAlbums" flat icon v-else-if="playerStatus.playlist.shuffle===2" @click="shuffleClicked" class="np-std-button" v-bind:class="{'disabled':noPlayer}"><img class="svg-img media-icon" :src="'shuffle-albums' | svgIcon(darkUi)"></img></v-btn>
-          <v-btn :title="trans.shuffleAll" flat icon v-else-if="playerStatus.playlist.shuffle===1" @click="shuffleClicked" class="np-std-button" v-bind:class="{'disabled':noPlayer}"><v-icon class="media-icon">shuffle</v-icon></v-btn>
-          <v-btn :title="trans.shuffleOff" flat icon v-else @click="shuffleClicked" class="dimmed np-std-button" v-bind:class="{'disabled':noPlayer}"><img class="svg-img media-icon" :src="'shuffle-off' | svgIcon(darkUi)"></img></v-btn>
+         <v-flex xs4>
+          <v-btn flat icon large v-longpress="playPauseButton" @click.middle="showSleep" id="playPauseD" class="np-playpause" :title="(playerStatus.isplaying ? trans.pause : trans.play) | tooltip('space', keyboardControl)" v-bind:class="{'disabled':disableBtns}"><v-icon x-large class="media-icon">{{ playerStatus.isplaying ? 'pause_circle_filled' : 'play_circle_filled'}}</v-icon></v-btn>
          </v-flex>
-        </v-layout>
-       </v-flex>
+          <v-flex xs4>
+          <v-layout text-xs-center>
+            <v-flex xs6><v-btn flat icon v-longpress:repeat="nextButton" class="np-std-button" v-bind:class="{ 'disabled':disableNext}" :title="trans.next | tooltip('right', keyboardControl)"><v-icon large class="media-icon">skip_next</v-icon></v-btn></v-flex>
+           <v-flex xs6>
+            <v-btn v-if="shuffAltBtn.show" :title="shuffAltBtn.tooltip" flat icon @click="shuffleClicked" class="np-std-button"><v-icon v-if="shuffAltBtn.icon" class="media-icon">{{shuffAltBtn.icon}}</v-icon><img v-else :src="shuffAltBtn.image" class="btn-img"></img></v-btn>
+            <v-btn :title="trans.shuffleAlbums" flat icon v-else-if="playerStatus.playlist.shuffle===2" @click="shuffleClicked" class="np-std-button" v-bind:class="{'disabled':noPlayer}"><img class="svg-img media-icon" :src="'shuffle-albums' | svgIcon(darkUi)"></img></v-btn>
+            <v-btn :title="trans.shuffleAll" flat icon v-else-if="playerStatus.playlist.shuffle===1" @click="shuffleClicked" class="np-std-button" v-bind:class="{'disabled':noPlayer}"><v-icon class="media-icon">shuffle</v-icon></v-btn>
+            <v-btn :title="trans.shuffleOff" flat icon v-else @click="shuffleClicked" class="dimmed np-std-button" v-bind:class="{'disabled':noPlayer}"><img class="svg-img media-icon" :src="'shuffle-off' | svgIcon(darkUi)"></img></v-btn>
+           </v-flex>
+          </v-layout>
+         </v-flex>
+        <v-layout>
+       <v-flex>
       </v-layout>
 
      </div>
@@ -309,32 +313,36 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
 
     <v-flex xs12><div class="np-portrait-thin-pad"></div></v-flex>
 
-    <v-flex xs4 class="no-control-adjust">
-     <v-layout text-xs-center>
-      <v-flex xs6>
-       <v-btn v-if="repAltBtn.show" :title="repAltBtn.tooltip" flat icon v-longpress="repeatClicked" class="np-std-button" v-bind:class="{'disabled':noPlayer}"><v-icon v-if="repAltBtn.icon" class="media-icon">{{repAltBtn.icon}}</v-icon><img v-else :src="repAltBtn.image" class="btn-img"></img></v-btn>
-       <v-btn :title="trans.repeatOne" flat icon v-else-if="playerStatus.playlist.repeat===1" v-longpress="repeatClicked" class="np-std-button" v-bind:class="{'disabled':noPlayer}"><v-icon class="media-icon">repeat_one</v-icon></v-btn>
-       <v-btn :title="trans.repeatAll" flat icon v-else-if="playerStatus.playlist.repeat===2" v-longpress="repeatClicked" class="np-std-button" v-bind:class="{'disabled':noPlayer}"><v-icon class="media-icon">repeat</v-icon></v-btn>
-       <v-btn :title="trans.dstm" flat icon v-else-if="dstm" v-longpress="repeatClicked" class="np-std-button"><v-icon class="media-icon">all_inclusive</v-icon></v-btn>
-       <v-btn :title="trans.repeatOff" flat icon v-else v-longpress="repeatClicked" class="dimmed np-std-button" v-bind:class="{'disabled':noPlayer}"><img class="svg-img media-icon" :src="'repeat-off' | svgIcon(darkUi)"></img></v-btn>
+    <v-flex xs12>
+     <v-layout text-xs-center class="np-playback">
+      <v-flex xs4 class="no-control-adjust">
+       <v-layout text-xs-center>
+        <v-flex xs6>
+         <v-btn v-if="repAltBtn.show" :title="repAltBtn.tooltip" flat icon v-longpress="repeatClicked" class="np-std-button" v-bind:class="{'disabled':noPlayer}"><v-icon v-if="repAltBtn.icon" class="media-icon">{{repAltBtn.icon}}</v-icon><img v-else :src="repAltBtn.image" class="btn-img"></img></v-btn>
+         <v-btn :title="trans.repeatOne" flat icon v-else-if="playerStatus.playlist.repeat===1" v-longpress="repeatClicked" class="np-std-button" v-bind:class="{'disabled':noPlayer}"><v-icon class="media-icon">repeat_one</v-icon></v-btn>
+         <v-btn :title="trans.repeatAll" flat icon v-else-if="playerStatus.playlist.repeat===2" v-longpress="repeatClicked" class="np-std-button" v-bind:class="{'disabled':noPlayer}"><v-icon class="media-icon">repeat</v-icon></v-btn>
+         <v-btn :title="trans.dstm" flat icon v-else-if="dstm" v-longpress="repeatClicked" class="np-std-button"><v-icon class="media-icon">all_inclusive</v-icon></v-btn>
+         <v-btn :title="trans.repeatOff" flat icon v-else v-longpress="repeatClicked" class="dimmed np-std-button" v-bind:class="{'disabled':noPlayer}"><img class="svg-img media-icon" :src="'repeat-off' | svgIcon(darkUi)"></img></v-btn>
+        </v-flex>
+        <v-flex xs6><v-btn flat icon v-longpress:repeat="prevButton" class="np-std-button" v-bind:class="{ 'disabled':disablePrev}" :title="trans.prev | tooltip('left', keyboardControl)"><v-icon large class="media-icon">skip_previous</v-icon></v-btn></v-flex>
+       </v-layout>
       </v-flex>
-      <v-flex xs6><v-btn flat icon v-longpress:repeat="prevButton" class="np-std-button" v-bind:class="{ 'disabled':disablePrev}" :title="trans.prev | tooltip('left', keyboardControl)"><v-icon large class="media-icon">skip_previous</v-icon></v-btn></v-flex>
-     </v-layout>
-    </v-flex>
-    <v-flex xs4 class="no-control-adjust">
-     <v-btn flat icon large v-longpress="playPauseButton" @click.middle="showSleep" id="playPauseF" class="np-playpause" :title="(playerStatus.isplaying ? trans.pause : trans.play) | tooltip('space', keyboardControl)" v-bind:class="{'disabled':disableBtns}"><v-icon x-large class="media-icon">{{ playerStatus.isplaying ? 'pause_circle_filled' : 'play_circle_filled'}}</v-icon></v-btn>
-    </v-flex>
-    <v-flex xs4 class="no-control-adjust">
-     <v-layout text-xs-center>
-      <v-flex xs6><v-btn flat icon v-longpress:repeat="nextButton" class="np-std-button" v-bind:class="{ 'disabled':disableNext}" :title="trans.next | tooltip('right', keyboardControl)"><v-icon large class="media-icon">skip_next</v-icon></v-btn></v-flex>
-      <v-flex xs6>
-       <v-btn v-if="shuffAltBtn.show" :title="shuffAltBtn.tooltip" flat icon @click="shuffleClicked" class="np-std-button"><v-icon v-if="shuffAltBtn.icon" class="media-icon">{{shuffAltBtn.icon}}</v-icon><img v-else :src="shuffAltBtn.image" class="btn-img"></img></v-btn>
-       <v-btn :title="trans.shuffleAlbums" flat icon v-else-if="playerStatus.playlist.shuffle===2" @click="shuffleClicked" class="np-std-button" v-bind:class="{'disabled':noPlayer}"><img class="svg-img media-icon" :src="'shuffle-albums' | svgIcon(darkUi)"></v-btn>
-       <v-btn :title="trans.shuffleAll" flat icon v-else-if="playerStatus.playlist.shuffle===1" @click="shuffleClicked" class="np-std-button" v-bind:class="{'disabled':noPlayer}"><v-icon class="media-icon">shuffle</v-icon></v-btn>
-       <v-btn :title="trans.shuffleOff" flat icon v-else @click="shuffleClicked" class="dimmed np-std-button" v-bind:class="{'disabled':noPlayer}"><img class="svg-img media-icon" :src="'shuffle-off' | svgIcon(darkUi)"></img></v-btn>
+      <v-flex xs4 class="no-control-adjust">
+       <v-btn flat icon large v-longpress="playPauseButton" @click.middle="showSleep" id="playPauseF" class="np-playpause" :title="(playerStatus.isplaying ? trans.pause : trans.play) | tooltip('space', keyboardControl)" v-bind:class="{'disabled':disableBtns}"><v-icon x-large class="media-icon">{{ playerStatus.isplaying ? 'pause_circle_filled' : 'play_circle_filled'}}</v-icon></v-btn>
       </v-flex>
-     </v-layout>
-    </v-flex>
+      <v-flex xs4 class="no-control-adjust">
+       <v-layout text-xs-center>
+         <v-flex xs6><v-btn flat icon v-longpress:repeat="nextButton" class="np-std-button" v-bind:class="{ 'disabled':disableNext}" :title="trans.next | tooltip('right', keyboardControl)"><v-icon large class="media-icon">skip_next</v-icon></v-btn></v-flex>
+        <v-flex xs6>
+         <v-btn v-if="shuffAltBtn.show" :title="shuffAltBtn.tooltip" flat icon @click="shuffleClicked" class="np-std-button"><v-icon v-if="shuffAltBtn.icon" class="media-icon">{{shuffAltBtn.icon}}</v-icon><img v-else :src="shuffAltBtn.image" class="btn-img"></img></v-btn>
+         <v-btn :title="trans.shuffleAlbums" flat icon v-else-if="playerStatus.playlist.shuffle===2" @click="shuffleClicked" class="np-std-button" v-bind:class="{'disabled':noPlayer}"><img class="svg-img media-icon" :src="'shuffle-albums' | svgIcon(darkUi)"></v-btn>
+         <v-btn :title="trans.shuffleAll" flat icon v-else-if="playerStatus.playlist.shuffle===1" @click="shuffleClicked" class="np-std-button" v-bind:class="{'disabled':noPlayer}"><v-icon class="media-icon">shuffle</v-icon></v-btn>
+         <v-btn :title="trans.shuffleOff" flat icon v-else @click="shuffleClicked" class="dimmed np-std-button" v-bind:class="{'disabled':noPlayer}"><img class="svg-img media-icon" :src="'shuffle-off' | svgIcon(darkUi)"></img></v-btn>
+        </v-flex>
+       </v-layout>
+      </v-flex>
+     <v-layout>
+    <v-flex>
    </v-layout>
   </div>
  </div>

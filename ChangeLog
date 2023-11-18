@@ -1,17 +1,19 @@
 4.1.0
 -----
-1. Move track/album view selection into queue menu.
-2. Add left/right padding to lists if showing detailed sub-toolbar.
-3. Add left/right padding to MAI biography and review shown in browse view if
-   also showing detailed sub-toolbar.
-4. Change to mobile-style cover/details/button layout for desktop now-playing
-   bar based upon width.
-5. Reduce desktop now-playing bar height based upon width.
-6. Hide expand/collapse button from desktop toolbar if not wide enough, and
-   place collapse button over cover.
-7. Swipe to hide/show unpinned queue in desktop layout.
-8. Only allow queue to be pinned if window width is 670px or more.
-9. Move now-playing cover emblem and buttons closer to edges.
+ 1. Move track/album view selection into queue menu.
+ 2. Add left/right padding to lists if showing detailed sub-toolbar.
+ 3. Add left/right padding to MAI biography and review shown in browse view if
+    also showing detailed sub-toolbar.
+ 4. Change to mobile-style cover/details/button layout for desktop now-playing
+    bar based upon width.
+ 5. Reduce desktop now-playing bar height based upon width.
+ 6. Hide expand/collapse button from desktop toolbar if not wide enough, and
+    place collapse button over cover.
+ 7. Swipe to hide/show unpinned queue in desktop layout.
+ 8. Only allow queue to be pinned if window width is 670px or more.
+ 9. Move now-playing cover emblem and buttons closer to edges.
+10. Set maximim width for now-playing plaback controls so that are not too
+    spread out.
 
 4.0.4
 ------

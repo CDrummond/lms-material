@@ -3,7 +3,7 @@
 1. In album style, embolden current track title even if first track in album.
 2. Fix warning when changing queue view to/from album style.
 3. Fix hover buttons overlapping time when listing playlist tracks.
-4. Only show player menu when cliking title of 'Player settings' if there are
+4. Only show player menu when clicking title of 'Player settings' if there are
    multiple players.
 5. Improve swipe sensitivity.
 6. Fix some clipping on mobile thick now-playing bar.

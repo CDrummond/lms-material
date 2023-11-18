@@ -412,6 +412,14 @@ div.v-subheader {
  padding-left:calc(69px + var(--home-button-size)) !important;
 }
 
+.detailed-sub .lms-list-item a .v-avatar {
+ margin-left:2px;
+}
+
+.indent-list .lms-list-item a .v-avatar {
+ margin-left:-2px;
+}
+
 .indent-list .vue-recycle-scroller__item-view a,
 .indent-list .lms-list-item a,
 .indent-list .browse-html {

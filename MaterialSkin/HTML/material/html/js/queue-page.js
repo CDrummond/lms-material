@@ -45,7 +45,9 @@ function buildArtistAlbumLines(i, queueAlbumStyle) {
     }
     var lines = [];
     lines.push(artistAlbum);
-    artistAlbum = undefined;
+    if (!queueAlbumStyle) {
+        artistAlbum = undefined;
+    }
     if (!queueAlbumStyle || !artistIsRemoteTitle) {
         artistAlbum = addPart(artistAlbum, buildAlbumLine(i, 'queue'));
         if (!queueAlbumStyle) {

@@ -71,7 +71,7 @@ var lmsBrowse = Vue.component("lms-browse", {
      <v-icon v-else>{{ACTIONS[action].icon}}</v-icon>
     </v-btn>
    </template>
-   <v-btn flat v-if="LMS_P_MAI && showDetailedSubtoolbar && current.stdItem!=STD_ITEM_MAI" class="mai-button" @click="doMai"><v-icon>{{current.stdItem==STD_ITEM_ALBUM ? 'local_library' : 'menu_book'}}</v-icon>&nbsp;{{current.stdItem==STD_ITEM_ALBUM ? i18n('Album review') : i18n('Artist biography')}}</v-btn>
+   <v-btn flat v-if="LMS_P_MAI && showDetailedSubtoolbar && current.stdItem!=STD_ITEM_MAI && current.stdItem!=STD_ITEM_ALL_TRACKS" class="mai-button" @click="doMai"><v-icon>{{current.stdItem==STD_ITEM_ALBUM ? 'local_library' : 'menu_book'}}</v-icon>&nbsp;{{current.stdItem==STD_ITEM_ALBUM ? i18n('Album review') : i18n('Artist biography')}}</v-btn>
   </v-layout>
   <v-layout v-else class="pointer link-item">
    <div class="toolbar-nobtn-pad"></div>
@@ -454,7 +454,7 @@ var lmsBrowse = Vue.component("lms-browse", {
             if (undefined!=this.current && this.current.id==TOP_MYMUSIC_ID && this.libraryName) {
                 return this.libraryName + suffix;
             }
-            if (undefined!=this.current && this.current.stdItem==STD_ITEM_ALBUM) {
+            if (undefined!=this.current && (this.current.stdItem==STD_ITEM_ALBUM || this.current.stdItem==STD_ITEM_ALL_TRACKS)) {
                 let albumArtst = this.current.subtitle;
                 if (lmsOptions.noArtistFilter && this.current.compilation && this.items.length>0 && undefined!=this.items[0].compilationAlbumArtist) {
                     albumArtst = this.items[0].compilationAlbumArtist;
@@ -474,13 +474,13 @@ var lmsBrowse = Vue.component("lms-browse", {
         },
         showDetailedSubtoolbar() {
             return this.wide>0 && this.current && (this.current.image || this.currentItemImage) &&
-                   (this.current.stdItem==STD_ITEM_ARTIST || this.current.stdItem==STD_ITEM_ALBUM || this.current.stdItem==STD_ITEM_MAI)
+                   (this.current.stdItem==STD_ITEM_ARTIST || this.current.stdItem==STD_ITEM_ALBUM || this.current.stdItem==STD_ITEM_MAI || this.current.stdItem==STD_ITEM_ALL_TRACKS)
         },
         detailedSubTop() {
             if (this.current.stdItem==STD_ITEM_ARTIST) {
                 return this.detailedSubInfo;
             }
-            if (this.current.stdItem==STD_ITEM_ALBUM) {
+            if (this.current.stdItem==STD_ITEM_ALBUM || this.current.stdItem==STD_ITEM_ALL_TRACKS) {
                 let albumArtst = this.current.subtitle;
                 if (lmsOptions.noArtistFilter && this.current.compilation && this.items.length>0 && undefined!=this.items[0].compilationAlbumArtist) {
                     albumArtst = this.items[0].compilationAlbumArtist;
@@ -503,7 +503,7 @@ var lmsBrowse = Vue.component("lms-browse", {
             if (this.current.stdItem==STD_ITEM_ARTIST) {
                 return this.headerSubTitle
             }
-            if (this.current.stdItem==STD_ITEM_ALBUM) {
+            if (this.current.stdItem==STD_ITEM_ALBUM || this.current.stdItem==STD_ITEM_ALL_TRACKS) {
                 return this.detailedSubInfo;
             }
         }
@@ -901,7 +901,8 @@ var lmsBrowse = Vue.component("lms-browse", {
                     this.fetchItems(browseCmd, {cancache:false, id:"currentaction:"+index, title:act.title+SEPARATOR+this.current.title});
                 }
             } else if (undefined!=act.do) {
-                this.fetchItems(act.do, {cancache:false, id:"currentaction:"+index, title:act.title+SEPARATOR+this.current.title,
+                this.fetchItems(act.do, {cancache:false, id:"currentaction:"+index,
+                                         title:act.title+(act.stdItem==STD_ITEM_ALL_TRACKS ? "" : (SEPARATOR+this.current.title)),
                                          image:act.stdItem ? this.current.image ? this.current.image : this.currentItemImage : undefined, stdItem:act.stdItem});
             } else {
                 var cmd = {command:["browseonlineartist", "items"], params:["service_id:"+act.id, "artist_id:"+act.artist_id, "menu:1"]};

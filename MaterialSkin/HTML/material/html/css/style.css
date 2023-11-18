@@ -419,6 +419,8 @@ div.v-subheader {
  padding-right:calc(171px + var(--home-button-size)) !important;
 }
 
+.browse-html a,
+.detailed-sub .browse-html a,
 .indent-list .browse-html a {
  padding-left:0px!important;
  padding-right:0px!important;

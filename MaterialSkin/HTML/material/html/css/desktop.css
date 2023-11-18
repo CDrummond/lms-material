@@ -286,8 +286,8 @@
  }
  .np-close {
   visibility:visible;
-  bottom:calc(var(--np-image-border) + 16px);
-  left:calc(var(--np-image-border) + 8px);
+  bottom:calc(var(--np-image-border) + var(--np-image-btn-pad) + 8px);
+  left:calc(var(--np-image-border) + var(--np-image-btn-pad));
  }
  .np-close:after {
   content:"fullscreen_exit";

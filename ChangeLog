@@ -11,6 +11,7 @@
    place collapse button over cover.
 7. Swipe to hide/show unpinned queue in desktop layout.
 8. Only allow queue to be pinned if window width is 670px or more.
+9. Move now-playing cover emblem and buttons closer to edges.
 
 4.0.4
 ------

@@ -15,7 +15,7 @@ function copyPlayer(p){
 function updateUiSettings(state, val) {
     let stdItems = ['autoScrollQueue', 'browseBackdrop', 'queueBackdrop', 'nowPlayingBackdrop', 'infoBackdrop',
                     'browseTechInfo', 'techInfo', 'nowPlayingTrackNum', 'nowPlayingContext', 'swipeVolume', 'swipeChangeTrack',
-                    'keyboardControl', 'skipSeconds', '', 'powerButton', 'mediaControls', 'showRating'];
+                    'keyboardControl', 'skipSeconds', 'powerButton', 'mediaControls', 'showRating'];
     for (let i=0, len=stdItems.length; i<len; ++i) {
         let key=stdItems[i];
         if (undefined!=val[key] && state[key]!=val[key]) {

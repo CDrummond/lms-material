@@ -276,8 +276,8 @@
   width:calc(100vw - 90px);
  }
  .np-bar-details .v-list__tile__title {
-  margin-top:-2px;
-  line-height:32px;
+  margin-top:-1px;
+  line-height:30px;
  }
  .np-bar .np-slider {
   bottom:calc(var(--desktop-npbar-height-thin) - 7px);

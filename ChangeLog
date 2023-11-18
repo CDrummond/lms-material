@@ -5,6 +5,7 @@
 3. Fix hover buttons overlapping time when listing playlist tracks.
 4. Only show player menu when cliking title of 'Player settings' if there are
    multiple players.
+5. Improve swipe sensitivity.
 
 4.0.3
 -----

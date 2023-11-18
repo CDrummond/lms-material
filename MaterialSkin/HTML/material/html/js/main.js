@@ -373,7 +373,7 @@ var app = new Vue({
         touchEnd(ev) {
             if (undefined!=this.touch) {
                 let end = getTouchPos(ev);
-                this.touchValid = Math.abs(this.touch.x-end.x)>75 && Math.abs(this.touch.y-end.y)<50;
+                this.touchValid = Math.abs(this.touch.x-end.x)>30 && Math.abs(this.touch.y-end.y)<50;
                 if (this.touchValid && this.$store.state.page=='now-playing') {
                     // Ignore swipes on position slider...
                     var elem = document.getElementById("pos-slider");

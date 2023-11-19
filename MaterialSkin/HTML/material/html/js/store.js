@@ -485,7 +485,7 @@ const store = new Vuex.Store({
             if (state.homeButton) {
                 document.documentElement.style.setProperty('--home-button-size', '42px');
             }
-            setQueuePinned(state, getLocalStorageBool('pinQueue', state.pinQueue));
+            setQueuePinned(state, window.innerWidth>=MIN_PQ_PIN_WIDTH && getLocalStorageBool('pinQueue', state.pinQueue));
             setQueueShown(state, state.pinQueue && getLocalStorageBool('showQueue', state.showQueue));
 
             state.disabledBrowseModes = new Set(JSON.parse(getLocalStorageVal('disabledBrowseModes', '["myMusicFlopTracks", "myMusicTopTracks", "myMusicMusicFolder", "myMusicFileSystem", "myMusicArtistsComposers", "myMusicArtistsConductors", "myMusicArtistsJazzComposers", "myMusicAlbumsAudiobooks"]')));

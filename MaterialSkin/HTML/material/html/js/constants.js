@@ -167,3 +167,6 @@ const COLOR_FROM_COVER = 'from-cover';
 const MBAR_NONE = 0;
 const MBAR_THIN = 1;
 const MBAR_THICK = 2;
+
+const MIN_PQ_PIN_WIDTH = 670;
+const MIN_PQ_RESIZE_WIDTH = 475;

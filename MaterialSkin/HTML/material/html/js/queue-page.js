@@ -622,7 +622,7 @@ var lmsQueue = Vue.component("lms-queue", {
             if (wide!=this.wide) {
                 this.wide = wide;
             }
-            this.windowWide = window.innerWidth>=670 ? 2 : window.innerWidth>=475 ? 1 : 0;
+            this.windowWide = window.innerWidth>=MIN_PQ_PIN_WIDTH ? 2 : window.innerWidth>=MIN_PQ_RESIZE_WIDTH ? 1 : 0;
         },
         handleScroll() {
             this.menu.show = false;

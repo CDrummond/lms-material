@@ -142,10 +142,10 @@ function parseResp(data, showTrackNum, index, showRatings, queueAlbumStyle, last
 var lmsQueue = Vue.component("lms-queue", {
   template: `
 <div :class="[!pinQueue ? nowPlayingExpanded ? 'pq-unpinned-np'+nowPlayingWide : 'pq-unpinned' : '']" id="queue-view">
-<lms-resizer v-if="!pinQueue" varname="pq-unpinned-width"></lms-resizer>
+<lms-resizer v-if="!pinQueue && windowWide>0" varname="pq-unpinned-width"></lms-resizer>
  <div class="subtoolbar noselect" v-bind:class="{'list-details':pinQueue}" v-if="!desktopLayout || showQueue">
   <v-layout v-if="selection.size>0">
-   <v-btn v-if="desktopLayout && windowWide" :title="pinQueue ? trans.unpin : trans.pin" flat icon class="toolbar-button" @click="togglePin" id="pq-pin-1"><img :src="(pinQueue ? 'pin' : 'unpin') | svgIcon(darkUi)"></img></v-btn>
+   <v-btn v-if="desktopLayout && windowWide>1" :title="pinQueue ? trans.unpin : trans.pin" flat icon class="toolbar-button" @click="togglePin" id="pq-pin-1"><img :src="(pinQueue ? 'pin' : 'unpin') | svgIcon(darkUi)"></img></v-btn>
    <div class="toolbar-nobtn-pad"></div>
    <div v-if="desktopLayout && pinQueue" style="width:2px"></div>
    <v-layout row wrap>
@@ -160,7 +160,7 @@ var lmsQueue = Vue.component("lms-queue", {
    <v-btn :title="trans.cancel" flat icon class="toolbar-button" @click="clearSelection()"><v-icon>cancel</v-icon></v-btn>
   </v-layout>
   <v-layout v-else>
-   <v-btn v-if="desktopLayout && windowWide" :title="pinQueue ? trans.unpin : trans.pin" flat icon class="toolbar-button" @click="togglePin" id="pq-pin-2"><img :src="(pinQueue ? 'pin' : 'unpin') | svgIcon(darkUi)"></img></v-btn>
+   <v-btn v-if="desktopLayout && windowWide>1" :title="pinQueue ? trans.unpin : trans.pin" flat icon class="toolbar-button" @click="togglePin" id="pq-pin-2"><img :src="(pinQueue ? 'pin' : 'unpin') | svgIcon(darkUi)"></img></v-btn>
    <div class="toolbar-nobtn-pad"></div>
    <div v-if="desktopLayout && pinQueue" style="width:2px"></div>
    <v-layout row wrap v-longpress="durationClicked" class="link-item">
@@ -293,7 +293,7 @@ var lmsQueue = Vue.component("lms-queue", {
             queueCustomActions: [],
             nowPlayingExpanded: false,
             nowPlayingWide:0,
-            windowWide:true
+            windowWide:2
         }
     },
     computed: {
@@ -316,7 +316,7 @@ var lmsQueue = Vue.component("lms-queue", {
             return this.$store.state.showQueue
         },
         pinQueue() {
-            return this.$store.state.pinQueue && this.windowWide
+            return this.$store.state.pinQueue && this.windowWide>1
         },
         noPlayer() {
             return !this.$store.state.player
@@ -622,7 +622,7 @@ var lmsQueue = Vue.component("lms-queue", {
             if (wide!=this.wide) {
                 this.wide = wide;
             }
-            this.windowWide = window.innerWidth>=670;
+            this.windowWide = window.innerWidth>=670 ? 2 : window.innerWidth>=475 ? 1 : 0;
         },
         handleScroll() {
             this.menu.show = false;
@@ -648,7 +648,7 @@ var lmsQueue = Vue.component("lms-queue", {
             msHandleScrollEvent(this);
         },
         clickListener(e) {
-            if (!this.$store.state.desktopLayout || (this.$store.state.pinQueue && this.windowWide) || !this.$store.state.showQueue || resizerActive ||
+            if (!this.$store.state.desktopLayout || (this.$store.state.pinQueue && this.windowWide>1) || !this.$store.state.showQueue || resizerActive ||
                 (this.$store.state.openDialogs.length>0 && ('info-dialog'!=this.$store.state.openDialogs[0] || this.$store.state.openDialogs.length>1))) {
                 return;
             }
@@ -748,7 +748,7 @@ var lmsQueue = Vue.component("lms-queue", {
                 if (undefined!=choice) {
                     if (0==choice.id) {
                         bus.$emit('playerCommand', ["playlist", "clear"]);
-                        if (!(this.$store.state.pinQueue && this.windowWide)) {
+                        if (!(this.$store.state.pinQueue && this.windowWide>1)) {
                             this.$store.commit('setShowQueue', false);
                         }
                     } else {

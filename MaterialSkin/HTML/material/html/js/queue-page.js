@@ -660,7 +660,12 @@ var lmsQueue = Vue.component("lms-queue", {
             if (clickY==undefined && e.touches) {
                 clickY = e.touches[0].pageY;
             }
-            // Ignore clicks wihtin queue
+            // Ignore clicks within main toolbar - unless on (i) or empty space
+            if (inRect(clickX, clickY, 0, 0, window.innerWidth, 48, 2) &&
+                (!e.target || (e.target.className!="v-toolbar__content" && e.target.id!="info-btn" && e.target.id!="info-icon"))) {
+                return;
+            }
+            // Ignore clicks within queue
             if (inRect(clickX, clickY, window.innerWidth-this.viewElement.scrollWidth, 48, window.innerWidth, window.innerHeight-(48+72), 4)) {
                 return;
             }

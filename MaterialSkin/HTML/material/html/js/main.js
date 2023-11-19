@@ -399,7 +399,8 @@ var app = new Vue({
                     // Info dialog is open. If not on now-playing, can still swipe to change main nav.
                     // ...if in now-playing, then use to change info tab.
                     if ('info-dialog'==this.$store.state.openDialogs[0]) {
-                        if (this.$store.state.page=='now-playing') {
+                        if (this.$store.state.page=='now-playing' ||
+                           (this.$store.state.desktopLayout && !this.$store.state.showQueue && (!this.$store.state.pinQueue || window.innerWidth<MIN_PQ_PIN_WIDTH))) {
                             bus.$emit('info-swipe', direction);
                             return;
                         }

@@ -122,7 +122,7 @@ function browseActions(view, item, args, count, showCompositions) {
         (undefined==args['artist'] || (args['artist']!=i18n('Various Artists') && args['artist']!=LMS_VA_STRING && args['artist'].toLowerCase()!='various artists'))) {
         if (LMS_P_MAI) {
             if (undefined!=args['artist_id'] || undefined!=args['artist']) {
-                actions.push({title:i18n('Artist biography'), icon:'menu_book',
+                actions.push({title:i18n('Artist biography'), icon:'menu_book', stdItem:STD_ITEM_MAI,
                               do:{ command: undefined!=args['artist_id']
                                                 ? ['musicartistinfo', 'biography', 'html:1', 'artist_id:'+args['artist_id']]
                                                 : ['musicartistinfo', 'biography', 'html:1', 'artist:'+args['artist']],
@@ -136,7 +136,7 @@ function browseActions(view, item, args, count, showCompositions) {
                               weight:100});
             }
             if (undefined!=args['album_id'] || (undefined!=args['album'] && (undefined!=args['artist_id'] || undefined!=args['artist']))) {
-                actions.push({title:i18n('Album review'), icon:'local_library',
+                actions.push({title:i18n('Album review'), icon:'local_library', stdItem:STD_ITEM_MAI,
                               do:{ command: undefined!=args['album_id']
                                                 ? ['musicartistinfo', 'albumreview', 'html:1', 'album_id:'+args['album_id']]
                                                 : undefined!=args['artist_id']
@@ -167,7 +167,7 @@ function browseActions(view, item, args, count, showCompositions) {
             if (libId) {
                 params.push("library_id:"+libId);
             }
-            actions.push({title:i18n('All songs'), icon:'music_note', do:{ command: ['tracks'], params: params}, weight:80});
+            actions.push({title:i18n('All songs'), icon:'music_note', do:{ command: ['tracks'], params: params}, weight:80, stdItem:STD_ITEM_ALL_TRACKS});
         }
         if (undefined!=args['artist_id'] && showCompositions) {
             var params = ['sort:albumtrack', 'tags:cdrilstyE' + (view.$store.state.showRating ? 'R' : ''), 'artist_id:'+args['artist_id'], 'role_id:COMPOSER'];
@@ -175,7 +175,7 @@ function browseActions(view, item, args, count, showCompositions) {
             if (libId) {
                 params.push("library_id:"+libId);
             }
-            actions.push({title:i18n('Compositions'), svg:'composer', do:{ command: ['tracks'], params: params}, weight:81});
+            actions.push({title:i18n('Compositions'), svg:'composer', do:{ command: ['tracks'], params: params}, weight:81, stdItem:STD_ITEM_ALL_TRACKS});
         }
     }
     if (undefined!=item && undefined!=item.stdItem && undefined!=STD_ITEMS[item.stdItem].actionMenu) {
@@ -471,7 +471,7 @@ function browseHandleListResponse(view, item, command, resp, prevPage, appendIte
             view.tbarActions=[PLAY_ALL_ACTION, ADD_ALL_ACTION];
         } else if ("albums"==command.command[0] && command.params.find(elem => elem=="sort:random")) {
             view.tbarActions=[RELOAD_ACTION];
-        } else if (view.items.length>0 && (!(view.current && view.current.isPodcast) || addAndPlayAllActions(command))) {
+        } else if (view.items.length>0 && view.items[0].type!="html" && (!(view.current && view.current.isPodcast) || addAndPlayAllActions(command))) {
             if (view.current && view.current.menu) {
                 for (var i=0, len=view.current.menu.length; i<len; ++i) {
                     if (view.current.menu[i]==ADD_ACTION || view.current.menu[i]==PLAY_ACTION) {

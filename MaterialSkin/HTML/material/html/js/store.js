@@ -15,7 +15,7 @@ function copyPlayer(p){
 function updateUiSettings(state, val) {
     let stdItems = ['autoScrollQueue', 'browseBackdrop', 'queueBackdrop', 'nowPlayingBackdrop', 'infoBackdrop',
                     'browseTechInfo', 'techInfo', 'nowPlayingTrackNum', 'nowPlayingContext', 'swipeVolume', 'swipeChangeTrack',
-                    'keyboardControl', 'skipSeconds', 'homeButton', 'powerButton', 'mediaControls', 'showRating'];
+                    'keyboardControl', 'skipSeconds', 'powerButton', 'mediaControls', 'showRating'];
     for (let i=0, len=stdItems.length; i<len; ++i) {
         let key=stdItems[i];
         if (undefined!=val[key] && state[key]!=val[key]) {
@@ -43,6 +43,11 @@ function updateUiSettings(state, val) {
         state.color = val.color;
         setLocalStorageVal('color', state.color);
         themeChanged = true;
+    }
+    if (undefined!=val.homeButton && state.homeButton!=val.homeButton) {
+        state.homeButton = val.homeButton;
+        setLocalStorageVal('homeButton', state.homeButton);
+        document.documentElement.style.setProperty('--home-button-size', state.homeButton ? '42px' : '0px');
     }
     if (undefined!=val.mobileBar && state.mobileBar!=val.mobileBar) {
         state.mobileBar = val.mobileBar;
@@ -92,11 +97,6 @@ function updateUiSettings(state, val) {
             browseDisplayChanged = true;
         }
     }
-    if (undefined!=val.queueStyle && state.queueStyle!=val.queueStyle) {
-        state.queueStyle = val.queueStyle;
-        setLocalStorageVal('queueStyle', state.queueStyle);
-        queueDisplayChanged = true;
-    }
     if (undefined!=val.screensaver && state.screensaver!=val.screensaver) {
         state.screensaver = val.screensaver;
         setLocalStorageVal('screensaver', state.screensaver);
@@ -115,6 +115,13 @@ function updateUiSettings(state, val) {
         state.useDefaultBackdrops = val.useDefaultBackdrops;
         setLocalStorageVal('useDefaultBackdrops', state.useDefaultBackdrops);
         bus.$emit('setBgndCover');
+    }
+    if (undefined!=val.queueThreeLines && state.queueThreeLines!=val.queueThreeLines) {
+        state.queueThreeLines = val.queueThreeLines;
+        setLocalStorageVal('queueThreeLines', state.queueThreeLines);
+        if (!state.queueAlbumStyle) {
+            queueDisplayChanged = true;
+        }
     }
     lmsOptions.techInfo = state.browseTechInfo;
     if (queueDisplayChanged) {
@@ -193,7 +200,7 @@ function setQueueShown(state, val) {
         }
         bus.$emit('showQueue', val);
         document.documentElement.style.setProperty('--queue-visibility', val ? 'initial' : 'collapse');
-        document.documentElement.style.setProperty('--queue-minwidth', val && state.pinQueue ? '400px' : '0px');
+        document.documentElement.style.setProperty('--queue-minwidth', val && state.pinQueue ? '275px' : '0px');
         document.documentElement.style.setProperty('--splitter-width', val && state.pinQueue ? '1px' : '0px');
     }
 }
@@ -252,7 +259,8 @@ const store = new Vuex.Store({
         keyboardControl: true,
         updatesAvailable: new Set(),
         restartRequired: false,
-        queueStyle: QUEUE_TRACK_3LINES,
+        queueAlbumStyle: false,
+        queueThreeLines: true,
         openDialogs: [],
         activeDialog: undefined,
         unlockAll: false,
@@ -464,17 +472,20 @@ const store = new Vuex.Store({
             let boolItems = ['roundCovers', 'autoScrollQueue', 'sortFavorites', 'browseBackdrop', 'queueBackdrop', 'nowPlayingBackdrop',
                              'infoBackdrop', 'useDefaultBackdrops', 'browseTechInfo', 'techInfo', 'queueShowTrackNum', 'nowPlayingTrackNum',
                              'nowPlayingClock', 'nowPlayingContext', 'swipeVolume', 'swipeChangeTrack', 'keyboardControl', 'screensaver', 'homeButton',
-                             'powerButton', 'mediaControls'];
+                             'powerButton', 'mediaControls', 'queueAlbumStyle', 'queueThreeLines'];
             for (let i=0, len=boolItems.length; i<len; ++i) {
                 let key = boolItems[i];
                 state[key] = getLocalStorageBool(key, state[key]);
             }
-            let intItems = ['skipSeconds', 'mobileBar', 'maxRating', 'queueStyle'];
+            let intItems = ['skipSeconds', 'mobileBar', 'maxRating'];
             for (let i=0, len=intItems.length; i<len; ++i) {
                 let key = intItems[i];
                 state[key] = parseInt(getLocalStorageVal(key, state[key]));
             }
-            setQueuePinned(state, getLocalStorageBool('pinQueue', state.pinQueue));
+            if (state.homeButton) {
+                document.documentElement.style.setProperty('--home-button-size', '42px');
+            }
+            setQueuePinned(state, window.innerWidth>=MIN_PQ_PIN_WIDTH && getLocalStorageBool('pinQueue', state.pinQueue));
             setQueueShown(state, state.pinQueue && getLocalStorageBool('showQueue', state.showQueue));
 
             state.disabledBrowseModes = new Set(JSON.parse(getLocalStorageVal('disabledBrowseModes', '["myMusicFlopTracks", "myMusicTopTracks", "myMusicMusicFolder", "myMusicFileSystem", "myMusicArtistsComposers", "myMusicArtistsConductors", "myMusicArtistsJazzComposers", "myMusicAlbumsAudiobooks"]')));
@@ -670,6 +681,11 @@ const store = new Vuex.Store({
                 setTheme(state.theme, state.color);
                 bus.$emit('themeChanged');
             }
+        },
+        setQueueAlbumStyle(state, val) {
+            state.queueAlbumStyle = val;
+            setLocalStorageVal('queueAlbumStyle', state.queueAlbumStyle);
+            bus.$emit('queueDisplayChanged');
         }
     }
 })

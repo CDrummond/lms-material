@@ -70,7 +70,8 @@ const SHOW_IMAGE_ACTION       = 54;
 const PQ_SORT_ACTION          = 55;
 const PLAYLIST_SORT_ACTION    = 56;
 const PQ_SAVE_ACTION          = 57;
-const SCROLL_TO_DISC_ACTION        = 58;
+const SCROLL_TO_DISC_ACTION   = 58;
+const PQ_TOGGLE_VIEW_ACTION   = 59;
 
 
 const HIDE_FOR_PARTY = new Set([PLAY_ACTION, PLAY_ALBUM_ACTION, PLAY_ALL_ACTION, INSERT_ACTION, MORE_ACTION, MORE_LIB_ACTION, RENAME_ACTION, REMOVE_ACTION, EDIT_ACTION, ADD_FAV_ACTION, DELETE_ACTION, ADD_TO_FAV_ACTION, REMOVE_FROM_FAV_ACTION, SELECT_ACTION, RATING_ACTION, ADD_FAV_FOLDER_ACTION, DELETE_FAV_FOLDER_ACTION, MOVE_FAV_TO_PARENT_ACTION, UNSUB_PODCAST_ACTION, MOVE_HERE_ACTION, INSERT_ALL_ACTION, ADD_TO_PLAYLIST_ACTION, REMOVE_DUPES_ACTION, ADV_SEARCH_ACTION, SAVE_VLIB_ACTION, DOWNLOAD_ACTION, PLAY_DISC_ACTION, PLAY_PLAYLIST_ACTION, PQ_SORT_ACTION, PLAYLIST_SORT_ACTION, PQ_SAVE_ACTION]);
@@ -141,7 +142,8 @@ var ACTIONS=[
     {cmd:"pq-sort",      icon:"sort"},
     {cmd:"playlist-sort",icon:"sort"},
     {cmd:"pq-save",      icon:"save"},
-    {cmd:"disc-scroll",  svg:"arrow-circle"}
+    {cmd:"disc-scroll",  svg:"arrow-circle"},
+    {cmd:"pq-style",     icon:"album"}
 ];
 
 function updateActionStrings() {
@@ -215,5 +217,6 @@ function updateActionStrings() {
     ACTIONS[PQ_SAVE_ACTION].title=i18n("Save queue");
     ACTIONS[PQ_SAVE_ACTION].key=LMS_SAVE_QUEUE_KEYBOARD;
     ACTIONS[SCROLL_TO_DISC_ACTION].title=i18n('Scroll to disc');
+    ACTIONS[PQ_TOGGLE_VIEW_ACTION].title=i18n("Toggle view");
 }
 

@@ -296,9 +296,12 @@ Vue.component('lms-ui-settings', {
     <v-divider></v-divider>
 
     <v-list-tile>
-     <v-select :items="queueStyles" :label="i18n('Style')" v-model="queueStyle" item-text="label" item-value="key"></v-select>
+     <v-list-tile-content @click="queueThreeLines = !queueThreeLines" class="switch-label">
+      <v-list-tile-title>{{i18n('Three lines for track view')}}</v-list-tile-title>
+      <v-list-tile-sub-title>{{i18n("Use three lines (title, artist, album) to show track details.")}}</v-list-tile-sub-title>
+     </v-list-tile-content>
+     <v-list-tile-action><m3-switch v-model="queueThreeLines"></m3-switch></v-list-tile-action>
     </v-list-tile>
-    <v-divider></v-divider>
 
     <v-list-tile>
      <v-list-tile-content @click="queueBackdrop = !queueBackdrop" class="switch-label">
@@ -366,6 +369,7 @@ Vue.component('lms-ui-settings', {
             sortFavorites:true,
             autoScrollQueue:true,
             browseBackdrop:true,
+            queueThreeLines:true,
             queueBackdrop:true,
             nowPlayingBackdrop:true,
             infoBackdrop:true,
@@ -379,8 +383,6 @@ Vue.component('lms-ui-settings', {
             swipeVolume:false,
             swipeChangeTrack:false,
             keyboardControl:true,
-            queueStyle:QUEUE_TRACK_3LINES,
-            queueStyles: [],
             layout: null,
             layoutItems: [],
             mobileBar: MBAR_THIN,
@@ -541,6 +543,7 @@ Vue.component('lms-ui-settings', {
             this.autoScrollQueue = this.$store.state.autoScrollQueue;
             this.browseBackdrop = this.$store.state.browseBackdrop;
             this.queueBackdrop = this.$store.state.queueBackdrop;
+            this.queueThreeLines = this.$store.state.queueThreeLines;
             this.nowPlayingBackdrop = this.$store.state.nowPlayingBackdrop;
             this.infoBackdrop = this.$store.state.infoBackdrop;
             this.useDefaultBackdrops = this.$store.state.useDefaultBackdrops;
@@ -553,7 +556,6 @@ Vue.component('lms-ui-settings', {
             this.swipeVolume = this.$store.state.swipeVolume;
             this.swipeChangeTrack = this.$store.state.swipeChangeTrack;
             this.keyboardControl = this.$store.state.keyboardControl;
-            this.queueStyle = this.$store.state.queueStyle;
             this.sortFavorites = this.$store.state.sortFavorites;
             this.skipSeconds = this.$store.state.skipSeconds;
             this.volumeStep = lmsOptions.volumeStep;
@@ -587,11 +589,6 @@ Vue.component('lms-ui-settings', {
                 { key:"auto",    label:i18n("Automatic")},
                 { key:"desktop", label:i18n("Use desktop layout")},
                 { key:"mobile",  label:i18n("Use mobile layout")}
-                ];
-            this.queueStyles=[
-                { key:QUEUE_TRACK_2LINES, label:i18n("Track (two lines)")},
-                { key:QUEUE_TRACK_3LINES, label:i18n("Track (three lines)")},
-                { key:QUEUE_ALBUM, label:i18n("Album")}
                 ];
             this.mobileBars=[
                 { key:MBAR_NONE, label:i18n("None")},
@@ -648,6 +645,7 @@ Vue.component('lms-ui-settings', {
                       sortFavorites:this.sortFavorites,
                       browseBackdrop:this.browseBackdrop,
                       queueBackdrop:this.queueBackdrop,
+                      queueThreeLines:this.queueThreeLines,
                       nowPlayingBackdrop:this.nowPlayingBackdrop,
                       infoBackdrop:this.infoBackdrop,
                       useDefaultBackdrops:this.useDefaultBackdrops,
@@ -660,7 +658,6 @@ Vue.component('lms-ui-settings', {
                       swipeVolume:this.swipeVolume,
                       swipeChangeTrack:this.swipeChangeTrack,
                       keyboardControl:this.keyboardControl,
-                      queueStyle:this.queueStyle,
                       volumeStep:this.volumeStep,
                       hidden:arrays ? Array.from(this.hiddenItems()) : this.hiddenItems(),
                       skipSeconds:this.skipSeconds,
@@ -805,7 +802,7 @@ Vue.component('lms-ui-settings', {
             bus.$emit('dlg.open', 'iteminfo', { list:list });
         },
         mediaControlsInfo() {
-            showAlert(i18n('To support this feature, this app needs to fool your browser into thinking its is playing audio. This is accomplished by playing a silent audio file in a loop. Most browsers block auto-playing of audio so this cannot start until you have interacted with the app (e.g. clicked somewhere). Alternatively you can configure your browser to allow auto-play of audio for the URL you use to access this app (%1).', window.location.hostname+':'+window.location.port));
+            bus.$emit('dlg.open', 'iteminfo', { list:[i18n('To support this feature, this app needs to fool your browser into thinking its is playing audio. This is accomplished by playing a silent audio file in a loop. Most browsers block auto-playing of audio so this cannot start until you have interacted with the app (e.g. clicked somewhere). Alternatively you can configure your browser to allow auto-play of audio for the URL you use to access this app (%1).', window.location.hostname+':'+window.location.port)]});
         },
         i18n(str) {
             if (this.show) {

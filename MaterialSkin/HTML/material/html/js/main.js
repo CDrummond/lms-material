@@ -391,7 +391,7 @@ var app = new Vue({
             }
         },
         swipe(direction, ev) {
-            if (this.$store.state.visibleMenus.size>0 || this.$store.state.desktopLayout) {
+            if (this.$store.state.visibleMenus.size>0) {
                 return;
             }
             if (this.$store.state.openDialogs.length>0) {
@@ -421,21 +421,27 @@ var app = new Vue({
                 }
                 return;
             }
-            if ('left'==direction) {
-                if (this.$store.state.page=='browse') {
-                    this.$store.commit('setPage', 'now-playing');
-                } else if (this.$store.state.page=='now-playing') {
-                    this.$store.commit('setPage', 'queue');
-                } else if (this.$store.state.page=='queue') {
-                    this.$store.commit('setPage', 'browse');
+            if (this.$store.state.desktopLayout) {
+                if (!this.$store.state.pinQueue) {
+                    this.$store.commit('setShowQueue', 'left'==direction);
                 }
-            } else if ('right'==direction) {
-                if (this.$store.state.page=='browse') {
-                    this.$store.commit('setPage', 'queue');
-                } else if (this.$store.state.page=='now-playing') {
-                    this.$store.commit('setPage', 'browse');
-                } else if (this.$store.state.page=='queue') {
-                    this.$store.commit('setPage', 'now-playing');
+            } else {
+                if ('left'==direction) {
+                    if (this.$store.state.page=='browse') {
+                        this.$store.commit('setPage', 'now-playing');
+                    } else if (this.$store.state.page=='now-playing') {
+                        this.$store.commit('setPage', 'queue');
+                    } else if (this.$store.state.page=='queue') {
+                        this.$store.commit('setPage', 'browse');
+                    }
+                } else if ('right'==direction) {
+                    if (this.$store.state.page=='browse') {
+                        this.$store.commit('setPage', 'queue');
+                    } else if (this.$store.state.page=='now-playing') {
+                        this.$store.commit('setPage', 'browse');
+                    } else if (this.$store.state.page=='queue') {
+                        this.$store.commit('setPage', 'now-playing');
+                    }
                 }
             }
         },

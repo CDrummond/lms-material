@@ -230,7 +230,10 @@
  }
  .np-bar-details {
   left:72px;
-  width:calc(100vw - 146px);
+  width:calc(100vw - 136px);
+ }
+ .np-bar-details div .v-list__tile {
+  margin:0px!important;
  }
  .np-bar .np-playpause {
   position:fixed;
@@ -273,7 +276,7 @@
  .np-bar-details {
   left:50px;
   bottom:-4px;
-  width:calc(100vw - 90px);
+  width:calc(100vw - 75px);
  }
  .np-bar-details .v-list__tile__title {
   margin-top:-1px;

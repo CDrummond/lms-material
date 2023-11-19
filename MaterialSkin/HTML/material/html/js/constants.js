@@ -169,4 +169,4 @@ const MBAR_THIN = 1;
 const MBAR_THICK = 2;
 
 const MIN_PQ_PIN_WIDTH = 670;
-const MIN_PQ_RESIZE_WIDTH = 475;
+const MIN_PQ_RESIZE_WIDTH = 450;

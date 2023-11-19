@@ -2626,7 +2626,7 @@ img[lazy='loaded'].np-cover {
  opacity:0.7;
 }
 
-.grid-btns .add-btn, .grid-btns .play-btn, .np-menu {
+.grid-btns .add-btn, .grid-btns .play-btn, .np-menu, .np-close {
  color:var(--light-text-color);
 }
 

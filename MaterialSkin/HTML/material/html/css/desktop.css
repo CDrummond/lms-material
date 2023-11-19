@@ -469,6 +469,8 @@
  }
  .pq-unpinned, .pq-unpinned-np0, .pq-unpinned-np2 {
   box-shadow:none!important;
+  border-radius:0px!important;
+  border-left:none!important;
  }
 }
 

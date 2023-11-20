@@ -408,31 +408,44 @@ div.v-subheader {
 
 .detailed-sub .vue-recycle-scroller__item-view a,
 .detailed-sub .lms-list-item a,
+.indent-both .browse-html,
 .indent-list .browse-html {
- padding-left:calc(69px + var(--home-button-size)) !important;
+ padding-left:calc(71px + var(--home-button-size)) !important;
 }
 
 .detailed-sub .lms-list-item a .v-avatar {
  margin-left:2px;
 }
 
+.indent-both .lms-list-item a .v-avatar,
 .indent-list .lms-list-item a .v-avatar {
  margin-left:-2px;
+}
+
+.indent-both .vue-recycle-scroller__item-view a,
+.indent-both .lms-list-item a,
+.indent-both .browse-html {
+ padding-left:calc(171px + var(--home-button-size)) !important;
+ padding-right:calc(171px + var(--home-button-size)) !important;
 }
 
 .indent-list .vue-recycle-scroller__item-view a,
 .indent-list .lms-list-item a,
 .indent-list .browse-html {
  padding-left:calc(171px + var(--home-button-size)) !important;
- padding-right:calc(171px + var(--home-button-size)) !important;
 }
 
 .browse-html a,
 .detailed-sub .browse-html a,
-.indent-list .browse-html a {
+.indent-both .browse-html a {
  padding-left:0px!important;
  padding-right:0px!important;
 }
+
+.indent-list .browse-html a {
+ padding-left:0px!important;
+}
+
 
 /* Make action buttons in lists closer together */
 .list__tile__action {
@@ -2604,7 +2617,7 @@ img[lazy='loaded'].np-cover {
  right:50px !important;
 }
 
-.indent-list .list-btns {
+.indent-both .list-btns {
  right:calc(211px + var(--home-button-size))!important;
 }
 

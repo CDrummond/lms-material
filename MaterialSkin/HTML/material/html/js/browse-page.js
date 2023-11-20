@@ -10,11 +10,12 @@ var B_ALBUM_SORTS=[ ];
 const ALLOW_ADD_ALL = new Set(['trackinfo', 'youtube', 'spotty', 'qobuz', 'tidal', 'wimp' /*is Tidal*/, 'deezer', 'tracks', 'musicip', 'musicsimilarity', 'blissmixer', 'bandcamp']); // Allow add-all/play-all from 'trackinfo', as Spotty's 'Top Titles' access via 'More' needs this
 const ALLOW_FAKE_ALL_SONGS_ITEM = new Set(['youtube', 'qobuz']); // Allow using 'fake' add all item
 const MIN_WIDTH_FOR_COVER = 680;
-const MIN_WIDTH_FOR_COVER_INDENT = 1000;
+const MIN_WIDTH_FOR_COVER_INDENT = 840;
+const MIN_WIDTH_FOR_BOTH_INDENT = 1000;
 
 var lmsBrowse = Vue.component("lms-browse", {
     template: `
-<div id="browse-view" v-bind:class="{'detailed-sub':showDetailedSubtoolbar, 'indent-list':showDetailedSubtoolbar && wide>1}">
+<div id="browse-view" v-bind:class="{'detailed-sub':showDetailedSubtoolbar, 'indent-both':showDetailedSubtoolbar && wide>2, 'indent-list':showDetailedSubtoolbar && wide==2}">
  <div class="noselect" v-bind:class="{'subtoolbar-cover':showDetailedSubtoolbar}">
  <div class="subtoolbar" v-bind:class="{'toolbar-blur':showDetailedSubtoolbar}">
   <v-layout v-if="selection.size>0">
@@ -1637,11 +1638,13 @@ var lmsBrowse = Vue.component("lms-browse", {
             this.dragIndex = undefined;
         },
         setWide() {
-            this.wide = this.pageElement.scrollWidth>=MIN_WIDTH_FOR_COVER_INDENT
-                        ? 2
-                        : this.pageElement.scrollWidth>=MIN_WIDTH_FOR_COVER
-                            ? 1
-                            : 0;
+            this.wide = this.pageElement.scrollWidth>=MIN_WIDTH_FOR_BOTH_INDENT
+                        ? 3
+                        :this.pageElement.scrollWidth>=MIN_WIDTH_FOR_COVER_INDENT
+                            ? 2
+                            : this.pageElement.scrollWidth>=MIN_WIDTH_FOR_COVER
+                                ? 1
+                                : 0;
         }
     },
     mounted() {

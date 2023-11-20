@@ -242,11 +242,11 @@
  }
 }
 
-@media screen and (max-width: 420px) {
+@media screen and (max-width: 480px) {
  :root {
   --bottom-toolbar-height:var(--desktop-npbar-height-thin);
  }
- #np-bar-prev, #np-bar-next, #np-bar-stop, #playPauseA, .np-bar-details .v-list__tile__action, #np-expand, #pq-pin-1, #pq-pin-2 {
+ #np-bar-prev, #np-bar-next, #np-bar-stop, #playPauseA, .np-bar-details .v-list__tile__action {
   display:none!important;
  }
  .np-bar-image {
@@ -286,6 +286,12 @@
   bottom:calc(var(--desktop-npbar-height-thin) - 7px);
   width:100vw;
   height:3px!important;
+ }
+}
+
+@media screen and (max-width: 420px) {
+ #np-expand, #pq-pin-1, #pq-pin-2 {
+  display:none!important;
  }
  .np-close {
   visibility:visible;

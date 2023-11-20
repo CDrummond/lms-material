@@ -185,7 +185,7 @@ var lmsQueue = Vue.component("lms-queue", {
  <div class="lms-list bgnd-cover" v-bind:class="{'queue-backdrop-cover':drawBackdrop}" id="queue-bgnd">
  <div class="lms-list" id="queue-list" v-bind:class="{'lms-list3':!albumStyle && threeLines,'lms-list-album':albumStyle,'bgnd-blur':drawBgndImage,'backdrop-blur':drawBackdrop}" @drop.stop="drop(-1, $event)">
   <div v-if="items.length<1"></div> <!-- RecycleScroller does not like it if 0 items? -->
-  <RecycleScroller v-if="albumStyle" :items="items" :item-size="null" page-mode key-field="key" :buffer="LMS_SCROLLER_LIST_BUFFER">
+  <RecycleScroller v-else-if="albumStyle" :items="items" :item-size="null" page-mode key-field="key" :buffer="LMS_SCROLLER_LIST_BUFFER">
   <v-list-tile avatar class="pq-albumstyle" v-bind:class="{'pq-track':!item.artistAlbum, 'pq-current-album':index!=currentIndex && currentIndex<items.length && item.grpKey==items[currentIndex].grpKey, 'pq-current': index==currentIndex, 'pq-current-first-track': index==currentIndex && item.artistAlbum, 'pq-pulse':index==currentIndex && pulseCurrent, 'list-active': menu.show && index==menu.index, 'drop-target': dragActive && index==dropIndex}" @dragstart="dragStart(index, $event)" @dragend="dragEnd()" @dragover="dragOver(index, $event)" @drop.stop="drop(index, $event)" draggable @click.prevent.stop="click(item, index, $event)" slot-scope="{item, index}" key-field="key" @contextmenu.prevent="contextMenu(item, index, $event)">
    <v-list-tile-avatar :tile="true" v-bind:class="{'radio-image': 0==item.duration}" class="lms-avatar">
     <v-icon v-if="item.selected" v-bind:class="{'pq-first-track-check':item.artistAlbum}">check_box</v-icon>

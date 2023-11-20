@@ -289,8 +289,8 @@
  }
 }
 
-@media screen and (max-width: 420px) {
- #np-expand, #pq-pin-1, #pq-pin-2 {
+@media screen and (max-width: 430px) {
+ #np-expand {
   display:none!important;
  }
  .np-close {
@@ -300,6 +300,15 @@
  }
  .np-close:after {
   content:"fullscreen_exit";
+ }
+}
+
+@media only screen and (max-width:405px) {
+ .maintoolbar-player-power-button, .maintoolbar-player-icon, #pq-pin-1, #pq-pin-2 {
+  display:none!important;
+ }
+ .maintoolbar-title, .maintoolbar-subtitle {
+  padding-left:12px;
  }
 }
 
@@ -504,13 +513,4 @@
  height: calc((var(--vh, 1vh)*100) - (var(--main-toolbar-height) + var(--bottom-toolbar-height)));
  margin-left:-2px;
  z-index: 1;
-}
-
-@media only screen and (max-width:430px) {
- .maintoolbar-player-power-button, .maintoolbar-player-icon {
-  visibility:hidden;
- }
- .maintoolbar-title, .maintoolbar-subtitle {
-  padding-left:12px;
- }
 }

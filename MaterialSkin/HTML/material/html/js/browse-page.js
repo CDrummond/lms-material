@@ -72,7 +72,7 @@ var lmsBrowse = Vue.component("lms-browse", {
      <v-icon v-else>{{ACTIONS[action].icon}}</v-icon>
     </v-btn>
    </template>
-   <v-btn flat v-if="LMS_P_MAI && showDetailedSubtoolbar && current.stdItem!=STD_ITEM_MAI && current.stdItem!=STD_ITEM_ALL_TRACKS" class="mai-button" @click="doMai"><v-icon>{{current.stdItem==STD_ITEM_ALBUM ? 'local_library' : 'menu_book'}}</v-icon>&nbsp;{{current.stdItem==STD_ITEM_ALBUM ? i18n('Album review') : i18n('Artist biography')}}</v-btn>
+   <v-btn flat v-if="showMaiButton" class="mai-button" @click="doMai"><v-icon>{{current.stdItem==STD_ITEM_ALBUM ? 'local_library' : 'menu_book'}}</v-icon>&nbsp;{{current.stdItem==STD_ITEM_ALBUM ? i18n('Album review') : i18n('Artist biography')}}</v-btn>
   </v-layout>
   <v-layout v-else class="pointer link-item">
    <div class="toolbar-nobtn-pad"></div>
@@ -507,6 +507,22 @@ var lmsBrowse = Vue.component("lms-browse", {
             if (this.current.stdItem==STD_ITEM_ALBUM || this.current.stdItem==STD_ITEM_ALL_TRACKS) {
                 return this.detailedSubInfo;
             }
+        },
+        showMaiButton() {
+            if (LMS_P_MAI && this.showDetailedSubtoolbar && this.stdItem!=STD_ITEM_MAI && this.current.stdItem!=STD_ITEM_ALL_TRACKS) {
+                if (this.current.stdItem==STD_ITEM_ARTIST) {
+                    // 'Various Artists' will not have biography entry in its menu. So, if
+                    // this item is not found then we don't show toolbar button...
+                    for (let i=0, loop=this.currentActions, len=loop.length; i<len; ++i) {
+                        if (loop[i].stdItem==STD_ITEM_MAI) {
+                            return true;
+                        }
+                    }
+                    return false;
+                }
+                return true;
+            }
+            return false;
         }
     },
     created() {

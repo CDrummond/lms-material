@@ -329,6 +329,12 @@
  width: 56px;
  opacity:0.15;
  background-color:var(--active-color);
+ animation: pillAnim .15s linear forwards;
+}
+
+@keyframes pillAnim {
+ from{width:24px;}
+ to{width:56px}
 }
 
 .pill-ct {

@@ -15,6 +15,7 @@
 10. Set maximum width for now-playing playback controls so that are not too
     spread out.
 11. Only allow editing a favourite if it has 'presetParams'
+12. Animate mobile navigation 'pill'.
 
 4.0.4
 ------

@@ -297,7 +297,7 @@ function nowplayingShowMenu(view, event) {
                 }
             }
             if (view.$store.state.desktopLayout) {
-                view.menu.items.push({title:i18n("Collapse now playing"), icon:'fullscreen_exit', act:NP_COLLAPSE_ACT});
+                view.menu.items.push({title:view.trans.collapseNp, icon:'fullscreen_exit', act:NP_COLLAPSE_ACT});
             }
             view.menu.items.push({title:ACTIONS[MORE_ACTION].title, svg:ACTIONS[MORE_ACTION].svg, act:NP_INFO_ACT});
         }

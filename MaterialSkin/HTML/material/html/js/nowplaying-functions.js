@@ -296,6 +296,9 @@ function nowplayingShowMenu(view, event) {
                     view.menu.items.push({title:loop[i].title, act:NP_CUSTOM+i, icon:loop[i].icon, svg:loop[i].svg});
                 }
             }
+            if (view.$store.state.desktopLayout) {
+                view.menu.items.push({title:i18n("Collapse now playing"), icon:'fullscreen_exit', act:NP_COLLAPSE_ACT});
+            }
             view.menu.items.push({title:ACTIONS[MORE_ACTION].title, svg:ACTIONS[MORE_ACTION].svg, act:NP_INFO_ACT});
         }
         view.menu.x = event.clientX;
@@ -342,6 +345,8 @@ function nowplayingMenuAction(view, item) {
     } else if (SEARCH_TEXT_ACTION==item.act) {
         bus.$emit('browse-search', item.text, NP_INFO);
         view.close();
+    } else if (NP_COLLAPSE_ACT==item.act) {
+        view.largeView=false;
     } else if (item.act>=NP_ITEM_ACT) {
         let act = item.act - NP_ITEM_ACT;
         if (ADD_TO_FAV_ACTION==act || REMOVE_FROM_FAV_ACTION==act) {

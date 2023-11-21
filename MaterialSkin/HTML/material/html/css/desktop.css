@@ -152,7 +152,7 @@
 }
 
 .np-portrait-song-info {
- height:calc((var(--vh, 1vh)*100) - (var(--np-portrait-image-size) + 160px));
+ height:calc((var(--vh, 1vh)*100) - (var(--np-portrait-image-size) + (var(--thin-portrait-adjust) * 3) + (var(--np-image-border) * 2) + 140px));
 }
 
 .np-text-desktop {

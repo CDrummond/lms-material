@@ -72,6 +72,7 @@ const PLAYLIST_SORT_ACTION    = 56;
 const PQ_SAVE_ACTION          = 57;
 const SCROLL_TO_DISC_ACTION   = 58;
 const PQ_TOGGLE_VIEW_ACTION   = 59;
+const TRACK_SORTS_ACTION      = 60;
 
 
 const HIDE_FOR_PARTY = new Set([PLAY_ACTION, PLAY_ALBUM_ACTION, PLAY_ALL_ACTION, INSERT_ACTION, MORE_ACTION, MORE_LIB_ACTION, RENAME_ACTION, REMOVE_ACTION, EDIT_ACTION, ADD_FAV_ACTION, DELETE_ACTION, ADD_TO_FAV_ACTION, REMOVE_FROM_FAV_ACTION, SELECT_ACTION, RATING_ACTION, ADD_FAV_FOLDER_ACTION, DELETE_FAV_FOLDER_ACTION, MOVE_FAV_TO_PARENT_ACTION, UNSUB_PODCAST_ACTION, MOVE_HERE_ACTION, INSERT_ALL_ACTION, ADD_TO_PLAYLIST_ACTION, REMOVE_DUPES_ACTION, ADV_SEARCH_ACTION, SAVE_VLIB_ACTION, DOWNLOAD_ACTION, PLAY_DISC_ACTION, PLAY_PLAYLIST_ACTION, PQ_SORT_ACTION, PLAYLIST_SORT_ACTION, PQ_SAVE_ACTION]);
@@ -101,7 +102,7 @@ var ACTIONS=[
     {cmd:"search-lib",   icon:"search"},
     {cmd:"use-grid",     icon:"grid_on"},
     {cmd:"use-list",     icon:"grid_off"},
-    {cmd:"albsort",      icon:"sort_by_alpha", submenu:true},
+    {cmd:"albsort",      icon:"sort_by_alpha"},
     {cmd:"add-favdir",   icon:"create_new_folder"},
     {cmd:"del-favdir",   icon:"delete_outline"},
     {cmd:"move-fav-parent", svg:"folder-up"},
@@ -143,7 +144,8 @@ var ACTIONS=[
     {cmd:"playlist-sort",icon:"sort"},
     {cmd:"pq-save",      icon:"save"},
     {cmd:"disc-scroll",  svg:"arrow-circle"},
-    {cmd:"pq-style",     icon:"album"}
+    {cmd:"pq-style",     icon:"album"},
+    {cmd:"trksort",      icon:"sort_by_alpha"}
 ];
 
 function updateActionStrings() {
@@ -172,7 +174,7 @@ function updateActionStrings() {
     ACTIONS[SEARCH_LIB_ACTION].title=i18n("Search");
     ACTIONS[SEARCH_LIB_ACTION].key=LMS_SEARCH_KEYBOARD;
     ACTIONS[USE_GRID_ACTION].title=ACTIONS[USE_LIST_ACTION].title=i18n("Toggle view");
-    ACTIONS[ALBUM_SORTS_ACTION].title=i18n("Sort by");
+    ACTIONS[ALBUM_SORTS_ACTION].title=ACTIONS[TRACK_SORTS_ACTION].title=i18n("Sort by");
     ACTIONS[ADD_FAV_FOLDER_ACTION].title=i18n("Create folder");
     ACTIONS[ADD_FAV_FOLDER_ACTION].skey=LMS_CREATE_FAV_FOLDER_KEYBOARD;
     ACTIONS[MOVE_FAV_TO_PARENT_ACTION].title=i18n("Move to parent folder");

@@ -340,54 +340,6 @@ function weightSort(a, b) {
     return a.weight!=b.weight ? a.weight<b.weight ? -1 : 1 : titleSort(a, b);
 }
 
-function albumTrackSort(a, b) {
-    var s = fixedSort(a.album, b.album);
-    if (s!=0) {
-        return s;
-    }
-    var va=a.disc ? a.disc : 0;
-    var vb=b.disc ? b.disc : 0;
-    if (va<vb) {
-        return -1;
-    }
-    if (va>vb) {
-        return 1;
-    }
-    va=a.tracknum ? a.tracknum : 0;
-    vb=b.tracknum ? b.tracknum : 0;
-    if (va<vb) {
-        return -1;
-    }
-    if (va>vb) {
-        return 1;
-    }
-    return 0;
-}
-
-function yearAlbumTrackSort(a, b) {
-    var va=a.year ? a.year : 0;
-    var vb=b.year ? b.year : 0;
-    if (va<vb) {
-        return -1;
-    }
-    if (va>vb) {
-        return 1;
-    }
-    return albumTrackSort(a, b);
-}
-
-function revYearAlbumTrackSort(a, b) {
-    var va=a.year ? a.year : 0;
-    var vb=b.year ? b.year : 0;
-    if (va>vb) {
-        return -1;
-    }
-    if (va<vb) {
-        return 1;
-    }
-    return albumTrackSort(a, b);
-}
-
 function itemSort(a, b) {
     var at = "group"==a.type ? 0 : "track"==a.type ? ("music_note"==a.icon ? 1 : 2) : 3;
     var bt = "group"==b.type ? 0 : "track"==b.type ? ("music_note"==b.icon ? 1 : 2) : 3;
@@ -724,39 +676,6 @@ function setUseGrid(command, use, item) {
     } else {
         setLocalStorageVal(key, use);
     }
-}
-
-const ALBUM_SORT_KEY = "albumSort";
-const ARTIST_ALBUM_SORT_KEY = "artistAlbumSort";
-
-function commandAlbumSortKey(command, genre) {
-    var isArtist = false;
-    var isCompilation = false;
-    [command.params, command.command].forEach(list => {
-        for (var i=0, len=list.length; i<len; ++i) {
-            let val = ""+list[i];
-            if (val.startsWith("artist_id:")) {
-                isArtist = true;
-            } else if (val=="compilation:1") {
-                isCompilation = true;
-            }
-        }
-    });
-    var baseSort = isArtist && !isCompilation ? ARTIST_ALBUM_SORT_KEY : ALBUM_SORT_KEY;
-    if (undefined!=genre && (lmsOptions.composerGenres.has(genre)) || lmsOptions.conductorGenres.has(genre) || lmsOptions.bandGenres.has(genre)) {
-        return baseSort+"C";
-    }
-    return baseSort;
-}
-
-function getAlbumSort(command, genre) {
-    var key = commandAlbumSortKey(command, genre);
-    var parts = getLocalStorageVal(key, ALBUM_SORT_KEY==key || (ALBUM_SORT_KEY+"C")==key ? "album" : "yearalbum").split(".");
-    return {by:parts[0], rev:parts.length>1};
-}
-
-function setAlbumSort(command, genre, sort, reverse) {
-    setLocalStorageVal(commandAlbumSortKey(command, genre), sort+(reverse ? ".r" : ""));
 }
 
 function forceItemUpdate(vm, item) {

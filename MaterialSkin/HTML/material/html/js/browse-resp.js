@@ -999,11 +999,10 @@ function parseBrowseResp(data, parent, options, cacheKey, parentCommand, parentG
             var isSearchResult = options && options.isSearch;
             var showAlbumName = isSearchResult || isAllSongs || (parent && parent.id && parent.id.startsWith("artist_id:"));
             var discs = new Map();
-            var sort = isAllSongs && parentCommand ? getAlbumSort(parentCommand, parentGenre) : undefined;
-            var sortTracks = undefined!=sort && sort.by.startsWith("year");
+            var sortTracks = isAllSongs;
             var highlightArtist = undefined;
             let highlighted = 0;
-
+            let reverse = false;
             if (data.params[1].length>=4 && data.params[1][0]=="tracks") {
                 for (var p=0, plen=data.params[1].length; p<plen && (!allowPlayAlbum || !showAlbumName); ++p) {
                     let param = ""+data.params[1][p];
@@ -1013,6 +1012,10 @@ function parseBrowseResp(data, parent, options, cacheKey, parentCommand, parentG
                         showAlbumName = true;
                     } else if (param.startsWith("material_skin_artist_id:")) {
                         highlightArtist = parseInt(param.split(':')[1]);
+                    } else if (param==MSK_REV_SORT_OPT) {
+                        reverse = true;
+                    } else if (isAllSongs && param.startsWith(SORT_KEY) && param!=(SORT_KEY+"yearalbumtrack")) {
+                        sortTracks = false;
                     }
                 }
             }
@@ -1024,6 +1027,7 @@ function parseBrowseResp(data, parent, options, cacheKey, parentCommand, parentG
             let compilationAlbumArtists = new Set();
             let compilationArtists = new Set();
             let compilationAlbumArtist = undefined;
+
             for (var idx=0, loop=data.result.titles_loop, loopLen=loop.length; idx<loopLen; ++idx) {
                 var i = loop[idx];
                 var title = i.title;
@@ -1178,9 +1182,13 @@ function parseBrowseResp(data, parent, options, cacheKey, parentCommand, parentG
                     loop[i].highlight = false;
                 }
             }
+
             if (sortTracks) {
-                resp.items.sort(sort.rev ? revYearAlbumTrackSort : yearAlbumTrackSort);
+                resp.items.sort(reverse ? revYearAlbumTrackSort : yearAlbumTrackSort);
+            } else if (reverse) {
+                resp.items = resp.items.reverse();
             }
+
             resp.numAudioItems = resp.items.length;
             if (allowPlayAlbum) {
                 resp.allSongsItem = parent;

@@ -156,7 +156,7 @@ function browseActions(view, item, args, count, showCompositions) {
         }
 
         if (undefined!=args['artist_id'] && undefined==args['album_id'] && undefined!=args['count'] && args['count']>1) {
-            var params = ['sort:albumtrack', 'tags:cdrilstyE' + (view.$store.state.showRating ? 'R' : ''), 'artist_id:'+args['artist_id']];
+            var params = [SORT_KEY+TRACK_SORT_PLACEHOLDER, 'tags:cdrilstyE' + (view.$store.state.showRating ? 'R' : ''), 'artist_id:'+args['artist_id']];
             if (undefined!=args['role_id']) {
                 params.push(args['role_id']);
             }
@@ -170,7 +170,7 @@ function browseActions(view, item, args, count, showCompositions) {
             actions.push({title:i18n('All songs'), icon:'music_note', do:{ command: ['tracks'], params: params}, weight:80, stdItem:STD_ITEM_ALL_TRACKS});
         }
         if (undefined!=args['artist_id'] && showCompositions) {
-            var params = ['sort:albumtrack', 'tags:cdrilstyE' + (view.$store.state.showRating ? 'R' : ''), 'artist_id:'+args['artist_id'], 'role_id:COMPOSER'];
+            var params = [SORT_KEY+TRACK_SORT_PLACEHOLDER, 'tags:cdrilstyE' + (view.$store.state.showRating ? 'R' : ''), 'artist_id:'+args['artist_id'], 'role_id:COMPOSER'];
             let libId = view.currentLibId ? view.currentLibId : view.$store.state.library ? view.$store.state.library : LMS_DEFAULT_LIBRARY;
             if (libId) {
                 params.push("library_id:"+libId);
@@ -305,7 +305,7 @@ function browseHandleListResponse(view, item, command, resp, prevPage, appendIte
                                 ? stripLinkTags(item.title)+SEPARATOR+view.enteredTerm
                                 : stripLinkTags(item.title)+(undefined==resp.titleSuffix ? "" : resp.titleSuffix)
                             : "?";
-        var libname = view.current ? view.current.libname : undefined;
+        //var libname = view.current ? view.current.libname : undefined;
         view.current = item;
         view.currentLibId = command.libraryId;
         view.pinnedItemLibName = item.libname ? item.libname : view.pinnedItemLibName;
@@ -452,6 +452,8 @@ function browseHandleListResponse(view, item, command, resp, prevPage, appendIte
             if (addSort) {
                 view.currentActions.push({action:ALBUM_SORTS_ACTION, weight:1});
             }
+        } else if (view.current.stdItem==STD_ITEM_ALL_TRACKS && view.command.command.length>0 && view.command.command[0]=="tracks" && view.items.length>0) {
+            view.currentActions.push({action:TRACK_SORTS_ACTION, weight:1});
         }
         view.currentActions.sort(function(a, b) { return a.weight!=b.weight ? a.weight<b.weight ? -1 : 1 : titleSort(a, b) });
 
@@ -833,7 +835,7 @@ function browseAddCategories(view, item, isGenre) {
     }
     cat = { title: i18n("All Songs"),
             command: ["tracks"],
-            params: [item.id, trackTags()+"elcy", SORT_KEY+"albumtrack"],
+            params: [item.id, trackTags()+"elcy", SORT_KEY+TRACK_SORT_PLACEHOLDER],
             icon: "music_note",
             type: "group",
             id: ALL_SONGS_ID};
@@ -1393,21 +1395,15 @@ function browseHeaderAction(view, act, event, ignoreOpenMenus) {
         view.changeLayout(false);
     } else if (USE_GRID_ACTION==act) {
         view.changeLayout(true);
-    } else if (ALBUM_SORTS_ACTION==act) {
-        var sort="";
-        var reverseSort = false;
-        for (var i=0, len=view.command.params.length; i<len; ++i) {
-            if (view.command.params[i].startsWith(SORT_KEY)) {
-                sort=view.command.params[i].split(":")[1];
-            } else if (view.command.params[i]==MSK_REV_SORT_OPT) {
-                reverseSort = true;
-            }
+    } else if (ALBUM_SORTS_ACTION==act || TRACK_SORTS_ACTION==act) {
+        var sort=ALBUM_SORTS_ACTION==act ? getAlbumSort(view.command, view.inGenre) : getTrackSort();
+        var menuItems=[];
+        var sorts=ALBUM_SORTS_ACTION==act ? B_ALBUM_SORTS : B_TRACK_SORTS;
+        for (var i=0,len=sorts.length; i<len; ++i) {
+            menuItems.push({key:sorts[i].key, label:sorts[i].label, selected:sort.by==sorts[i].key});
         }
-        var albumSorts=[];
-        for (var i=0,len=B_ALBUM_SORTS.length; i<len; ++i) {
-            albumSorts.push({key:B_ALBUM_SORTS[i].key, label:B_ALBUM_SORTS[i].label, selected:sort==B_ALBUM_SORTS[i].key});
-        }
-        showMenu(view, {show:true, x:event ? event.clientX : window.innerWidth, y:event ? event.clientY : 52, albumSorts:albumSorts, reverseSort:reverseSort, name:'asort'});
+        showMenu(view, {show:true, x:event ? event.clientX : window.innerWidth, y:event ? event.clientY : 52, sortItems:menuItems, reverseSort:sort.rev,
+                        isAlbums:ALBUM_SORTS_ACTION==act, name:'sort'});
     } else if (VLIB_ACTION==act) {
         view.showLibMenu(event);
     } else if (undefined!=view.current.allid && (ADD_ACTION==act || PLAY_ACTION==act)) {
@@ -2096,14 +2092,25 @@ function browseReplaceCommandTerms(view, cmd, item) {
 
     // Replace sort, search terms, and fix tags (ratings and online emblems)
     if (cmd.params.length>0) {
-        var albumSort=getAlbumSort(cmd, view.inGenre);
         for (var i=0, len=cmd.params.length; i<len; ++i) {
             if (item && item.swapid && cmd.params[i]==item.id) {
                 cmd.params[i]=item.swapid;
+            } else if (cmd.params[i].startsWith(SORT_KEY+TRACK_SORT_PLACEHOLDER)) {
+                var sort=getTrackSort();
+                cmd.params[i]=cmd.params[i].replace(SORT_KEY+TRACK_SORT_PLACEHOLDER, SORT_KEY+sort.by);
+                if (sort.rev) {
+                    cmd.params.push(MSK_REV_SORT_OPT);
+                }
+            } else if (cmd.params[i].startsWith(SORT_KEY+ALBUM_SORT_PLACEHOLDER) ||
+                       cmd.params[i].startsWith(SORT_KEY+ARTIST_ALBUM_SORT_PLACEHOLDER)) {
+                var sort=getAlbumSort(cmd, view.inGenre);
+                cmd.params[i]=cmd.params[i].replace(SORT_KEY+ALBUM_SORT_PLACEHOLDER, SORT_KEY+sort.by)
+                                           .replace(SORT_KEY+ARTIST_ALBUM_SORT_PLACEHOLDER, SORT_KEY+sort.by);
+                if (sort.rev) {
+                    cmd.params.push(MSK_REV_SORT_OPT);
+                }
             } else {
-                cmd.params[i]=cmd.params[i].replace(SORT_KEY+ALBUM_SORT_PLACEHOLDER, SORT_KEY+albumSort.by)
-                                           .replace(SORT_KEY+ARTIST_ALBUM_SORT_PLACEHOLDER, SORT_KEY+albumSort.by)
-                                           .replace(TERM_PLACEHOLDER, view.enteredTerm)
+                cmd.params[i]=cmd.params[i].replace(TERM_PLACEHOLDER, view.enteredTerm)
                                            .replace(ARTIST_ALBUM_TAGS_PLACEHOLDER, ARTIST_ALBUM_TAGS)
                                            .replace(ALBUM_TAGS_PLACEHOLDER, (lmsOptions.showAllArtists ? ALBUM_TAGS_ALL_ARTISTS : ALBUM_TAGS))
                                            .replace(ARTIST_TAGS_PLACEHOLDER, ARTIST_TAGS)
@@ -2113,9 +2120,6 @@ function browseReplaceCommandTerms(view, cmd, item) {
                                    (LMS_SRV_EMBLEM && ("tracks"==cmd.command[0] || "albums"==cmd.command[0]) ? "E" : "");
                 }
             }
-        }
-        if (albumSort.rev) {
-            cmd.params.push(MSK_REV_SORT_OPT);
         }
     }
     return cmd;

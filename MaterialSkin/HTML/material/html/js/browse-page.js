@@ -7,6 +7,7 @@
 'use strict';
 
 var B_ALBUM_SORTS=[ ];
+var B_TRACK_SORTS=[ ];
 const ALLOW_ADD_ALL = new Set(['trackinfo', 'youtube', 'spotty', 'qobuz', 'tidal', 'wimp' /*is Tidal*/, 'deezer', 'tracks', 'musicip', 'musicsimilarity', 'blissmixer', 'bandcamp']); // Allow add-all/play-all from 'trackinfo', as Spotty's 'Top Titles' access via 'More' needs this
 const ALLOW_FAKE_ALL_SONGS_ITEM = new Set(['youtube', 'qobuz']); // Allow using 'fake' add all item
 const MIN_WIDTH_FOR_COVER = 600;
@@ -321,15 +322,15 @@ var lmsBrowse = Vue.component("lms-browse", {
     </v-list-tile>
    </template>
   </v-list>
-  <v-list v-else-if="menu.albumSorts">
-   <template v-for="(item, index) in menu.albumSorts">
-    <v-list-tile @click="sortAlbums(item, menu.reverseSort)">
+  <v-list v-else-if="menu.sortItems">
+   <template v-for="(item, index) in menu.sortItems">
+    <v-list-tile @click="sortItems(item, menu.reverseSort, menu.isAlbums)">
      <v-list-tile-avatar><v-icon small>{{item.selected ? 'radio_button_checked' :'radio_button_unchecked'}}</v-icon></v-list-tile-avatar>
      <v-list-tile-content><v-list-tile-title>{{item.label}}</v-list-tile-title></v-list-tile-content>
     </v-list-tile>
    </template>
    <v-divider v-if="undefined!=menu.reverseSort"></v-divider>
-   <v-list-tile @click="sortAlbums(undefined, !menu.reverseSort)" v-if="undefined!=menu.reverseSort">
+   <v-list-tile @click="sortItems(undefined, !menu.reverseSort, menu.isAlbums)" v-if="undefined!=menu.reverseSort">
      <v-list-tile-avatar><v-icon small>{{menu.reverseSort ? 'check_box' :'check_box_outline_blank'}}</v-icon></v-list-tile-avatar>
      <v-list-tile-content><v-list-tile-title>{{trans.desc}}</v-list-tile-title></v-list-tile-content>
     </v-list-tile>
@@ -615,6 +616,11 @@ var lmsBrowse = Vue.component("lms-browse", {
                             { key:"artflow",         label:i18n("Artist, Year, Album")},
                             { key:"yearalbum",       label:i18n("Year, Album")},
                             { key:"yearartistalbum", label:i18n("Year, Artist, Album")} ];
+            B_TRACK_SORTS=[ { key:"title",           label:i18n("Title")},
+                            { key:"tracknum",        label:i18n("Track number")},
+                            { key:"albumtrack",      label:i18n("Album, track number")},
+                            { key:"yearalbumtrack",  label:i18n("Year, Album, track number")} ];
+
             this.trans= { ok:i18n('OK'), cancel: i18n('Cancel'), selectMultiple:i18n("Select multiple items"), addall:i18n("Add selection to queue"),
                           playall:i18n("Play selection"), deleteall:i18n("Delete all selected items"),
                           invertSelect:i18n("Invert selection"), removeall:i18n("Remove all selected items"), choosepos:i18n("Choose position"), 
@@ -859,7 +865,7 @@ var lmsBrowse = Vue.component("lms-browse", {
             }
         },
         itemAction(act, item, index, event) {
-            if (act==ALBUM_SORTS_ACTION || act==USE_GRID_ACTION || act==USE_LIST_ACTION) {
+            if (act==ALBUM_SORTS_ACTION || act==TRACK_SORTS_ACTION || act==USE_GRID_ACTION || act==USE_LIST_ACTION) {
                 browseHeaderAction(this, act, event, true);
             } else {
                 browseItemAction(this, act, item, index, event);
@@ -888,7 +894,7 @@ var lmsBrowse = Vue.component("lms-browse", {
                 if ( (queryParams.party && HIDE_FOR_PARTY.has(loop[i].action)) ||
                      (LMS_KIOSK_MODE && HIDE_FOR_KIOSK.has(loop[i].action)) ||
                      (this.tbarActions.length<2 && (i<(this.tbarActions.length<2 ? 2 : 1))) ||
-                     (ALBUM_SORTS_ACTION==loop[i].action && this.items.length<2) ||
+                     ((ALBUM_SORTS_ACTION==loop[i].action || TRACK_SORTS_ACTION==loop[i].action) && this.items.length<2) ||
                      (SCROLL_TO_DISC_ACTION==loop[i].action && (this.items.length<2 || !this.items[0].id.startsWith(FILTER_PREFIX))) ||
                      (loop[i].stdItem==STD_ITEM_MAI && this.wide>0) ||
                      (loop[i].action==DIVIDER && (0==actions.length || actions[actions.length-1].action==DIVIDER)) ) {
@@ -919,9 +925,10 @@ var lmsBrowse = Vue.component("lms-browse", {
                     this.fetchItems(browseCmd, {cancache:false, id:"currentaction:"+index, title:act.title+SEPARATOR+this.current.title});
                 }
             } else if (undefined!=act.do) {
-                this.fetchItems(act.do, {cancache:false, id:"currentaction:"+index,
-                                         title:act.title+(act.stdItem==STD_ITEM_ALL_TRACKS ? "" : (SEPARATOR+this.current.title)),
-                                         image:act.stdItem ? this.current.image ? this.current.image : this.currentItemImage : undefined, stdItem:act.stdItem});
+                this.fetchItems(act.stdItem==STD_ITEM_ALL_TRACKS ? browseReplaceCommandTerms(this, act.do, this.current) : act.do, 
+                                {cancache:false, id:"currentaction:"+index,
+                                 title:act.title+(act.stdItem==STD_ITEM_ALL_TRACKS ? "" : (SEPARATOR+this.current.title)),
+                                 image:act.stdItem ? this.current.image ? this.current.image : this.currentItemImage : undefined, stdItem:act.stdItem});
             } else {
                 var cmd = {command:["browseonlineartist", "items"], params:["service_id:"+act.id, "artist_id:"+act.artist_id, "menu:1"]};
                 this.fetchItems(cmd, {cancache:false, id:act.id, title:act.title+SEPARATOR+this.current.title, command:cmd.command, params:cmd.params});
@@ -1007,7 +1014,7 @@ var lmsBrowse = Vue.component("lms-browse", {
                 }
             });
         },
-        sortAlbums(sort, reverseSort) {
+        sortItems(sort, reverseSort, isAlbums) {
             if (undefined==sort) {
                 var revKey = MSK_REV_SORT_OPT.split('.')[0];
                 var revPos = -1;
@@ -1024,7 +1031,12 @@ var lmsBrowse = Vue.component("lms-browse", {
                 if (reverseSort) {
                     this.command.params.push(MSK_REV_SORT_OPT);
                 }
-                setAlbumSort(this.command, this.inGenre, sort, reverseSort);
+                if (isAlbums) {
+                    setAlbumSort(this.command, this.inGenre, sort.key, reverseSort);
+                } else {
+                    setTrackSort(getTrackSort().by, reverseSort);
+                }
+
                 this.refreshList(false);
             } else if (!sort.selected) {
                 for (var i=0, len=this.command.params.length; i<len; ++i) {
@@ -1033,7 +1045,11 @@ var lmsBrowse = Vue.component("lms-browse", {
                         break;
                     }
                 }
-                setAlbumSort(this.command, this.inGenre, sort.key, reverseSort);
+                if (isAlbums) {
+                    setAlbumSort(this.command, this.inGenre, sort.key, reverseSort);
+                } else {
+                    setTrackSort(sort.key, reverseSort);
+                }
                 this.refreshList(false);
             }
         },

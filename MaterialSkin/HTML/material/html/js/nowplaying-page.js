@@ -449,6 +449,11 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
                 }
             }
         }.bind(this));
+        bus.$on('swipeDown', function() {
+            if (this.largeView && this.$store.state.desktopLayout) {
+                this.largeView=false;
+            }
+        }.bind(this));
         var npView = this;
         this.sizeCheckDelay = 0; // How many resize events have we seen before size checked?
         window.addEventListener('resize', () => {

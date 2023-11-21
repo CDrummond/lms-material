@@ -372,20 +372,25 @@ var app = new Vue({
         touchEnd(ev) {
             if (undefined!=this.touch) {
                 let end = getTouchPos(ev);
-                let touchValid = Math.abs(this.touch.x-end.x)>50 && Math.abs(this.touch.y-end.y)<100;
-                if (touchValid && this.$store.state.page=='now-playing') {
+                let diffX = Math.abs(this.touch.x-end.x);
+                let diffY = Math.abs(this.touch.y-end.y);
+                let horizValid = diffX>diffY && diffX>50 && diffY<100;
+                let vertValid = diffX<diffY && diffX<100 && diffY>50;
+                if (horizValid && this.$store.state.page=='now-playing') {
                     // Ignore swipes on position slider...
                     var elem = document.getElementById("pos-slider");
                     if (elem) {
                         var rect = elem.getBoundingClientRect();
                         if ((rect.x-16)<=this.touch.x && (rect.x+rect.width+16)>=this.touch.x &&
                             (rect.y-32)<=this.touch.y && (rect.y+rect.height+32)>=this.touch.y) {
-                            touchValid = false;
+                            horizValid = false;
                         }
                     }
                 }
-                if (touchValid) {
+                if (horizValid) {
                     this.swipe(end.x>this.touch.x ? 'right' : 'left', ev);
+                } else if (vertValid) {
+                    this.swipe(end.y>this.touch.y ? 'down' : 'up', ev);
                 }
                 this.touch = undefined;
             }
@@ -423,7 +428,11 @@ var app = new Vue({
                 return;
             }
             if (this.$store.state.desktopLayout) {
-                if (!this.$store.state.pinQueue) {
+                if ('up'==direction) {
+                    // Skip
+                } else if ('down'==direction) {
+                    bus.$emit('swipeDown');
+                } else if (!this.$store.state.pinQueue) {
                     this.$store.commit('setShowQueue', 'left'==direction);
                 }
             } else {

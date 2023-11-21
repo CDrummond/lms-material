@@ -2596,7 +2596,7 @@ img[lazy='loaded'].np-cover {
 .grid-btns {
  position:absolute;
  top:2px !important;
- right:2px !important;
+ right:-4px !important;
 }
 
 .menu-btn:after {

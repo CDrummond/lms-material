@@ -440,7 +440,7 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
                     } else {
                         this.info.tab++;
                     }
-                } else {
+                } else if ('right'==d) {
                     if (this.info.tab==0) {
                         this.info.tab=2;
                     } else {

@@ -1307,7 +1307,7 @@ div.v-subheader {
  position:fixed;
  width:100vw;
  left:0px;
- top:var(--np-portrait-image-size);
+ top:calc(var(--main-toolbar-height) + var(--np-portrait-image-size) - 16px);
  text-shadow: 2px 2px 5px var(--text-shadow-color);
  margin:0px!important
 }

@@ -2035,7 +2035,7 @@ progress {
  text-align:center;
 }
 
-.v-icon:not(.image-grid-item-icon):not(.media-icon):not(.browse-progress):not(.player-status-icon):not(.wc-icn), .svg-list-img, .svg-img, .radio-image .svg-img {
+.v-icon:not(.image-grid-item-icon):not(.media-icon):not(.browse-progress):not(.player-status-icon):not(.wc-icn):not(.playing-badge), .svg-list-img, .svg-img, .radio-image .svg-img {
  width:var(--icon-size) !important;
  height:var(--icon-size) !important;
  font-size:var(--icon-size) !important;
@@ -2064,6 +2064,17 @@ progress {
  width:16px !important;
  height:16px !important;
  vertical-align:middle;
+}
+
+.playing-badge {
+ position:absolute;
+ bottom:10px;
+ left:-10px;
+ width:20px !important;
+ height:20px !important;
+ font-size:20px!important;
+ vertical-align:middle;
+ opacity:0.5;
 }
 
 div.v-subheader {

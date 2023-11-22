@@ -45,7 +45,7 @@ Vue.component('lms-toolbar', {
     <v-subheader v-if="index==0 && !item.isgroup && players[players.length-1].isgroup">{{trans.standardPlayers}}</v-subheader>
     <v-subheader v-else-if="index>0 && item.isgroup && !players[index-1].isgroup">{{trans.groupPlayers}}</v-subheader>
     <v-list-tile @click="setPlayer(item.id)" v-bind:class="{'active-player':player && item.id === player.id}">
-     <v-list-tile-avatar>
+     <v-list-tile-avatar v-bind:class="{'pulse':item.isplaying}">
       <v-icon v-if="item.icon.icon">{{item.icon.icon}}</v-icon><img v-else class="svg-img" :src="item.icon.svg | svgIcon(darkUi)"></img>
       <div v-if="player && item.id === player.id" class="active-player"></div>
      </v-list-tile-avatar>
@@ -725,6 +725,22 @@ Vue.component('lms-toolbar', {
                 this.updateClock();
             }.bind(this), (next*1000)+25);
         },
+        startStatusTimer() {
+            // Have player menu open, so poll LMS server for updates in case another player starts or stops playback
+            if (undefined==this.statusTimer) {
+                this.statusTimer = setInterval(function () {
+                    if (this.$store.state.players && this.$store.state.players.length>1) {
+                        bus.$emit('refreshServerStatus');
+                    }
+                }.bind(this), 2500);
+            }
+        },
+        cancelStatusTimer() {
+            if (undefined!==this.statusTimer) {
+                clearInterval(this.statusTimer);
+                this.statusTimer = undefined;
+            }
+        },
         doCustomAction(action) {
             performCustomAction(action, this.$store.state.player);
         },
@@ -853,6 +869,9 @@ Vue.component('lms-toolbar', {
             this.$store.commit('menuVisible', {name:'player', shown:newVal});
             if (newVal) {
                 bus.$emit('refreshServerStatus');
+                this.startStatusTimer();
+            } else {
+                this.cancelStatusTimer();
             }
         },
         'showMainMenu': function(newVal) {
@@ -866,5 +885,6 @@ Vue.component('lms-toolbar', {
         this.cancelSleepTimer();
         this.cancelDisconnectedTimer();
         this.cancelClockTimer();
+        this.cancelStatusTimer();
     }
 })

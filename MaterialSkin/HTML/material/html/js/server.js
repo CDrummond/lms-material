@@ -370,6 +370,7 @@ var lmsServer = Vue.component('lms-server', {
                                        name: i.name,
                                        canpoweroff: 1==parseInt(i.canpoweroff),
                                        ison: undefined==i.power || 1==parseInt(i.power),
+                                       isplaying: undefined!=i.isplaying && 1==parseInt(i.isplaying),
                                        isgroup: 'group'===i.model,
                                        model: i.modelname,
                                        ip: i.ip,

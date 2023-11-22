@@ -297,7 +297,11 @@ function nowplayingShowMenu(view, event) {
                 }
             }
             if (view.$store.state.desktopLayout) {
-                view.menu.items.push({title:view.trans.collapseNp, icon:'fullscreen_exit', act:NP_COLLAPSE_ACT});
+                if (view.largeView) {
+                    view.menu.items.push({title:view.trans.collapseNp, icon:'fullscreen_exit', act:NP_TOGGLE_ACT});
+                } else {
+                    view.menu.items.push({title:view.trans.expandNp, icon:'fullscreen', act:NP_TOGGLE_ACT});
+                }
             }
             view.menu.items.push({title:ACTIONS[MORE_ACTION].title, svg:ACTIONS[MORE_ACTION].svg, act:NP_INFO_ACT});
         }
@@ -345,8 +349,8 @@ function nowplayingMenuAction(view, item) {
     } else if (SEARCH_TEXT_ACTION==item.act) {
         bus.$emit('browse-search', item.text, NP_INFO);
         view.close();
-    } else if (NP_COLLAPSE_ACT==item.act) {
-        view.largeView=false;
+    } else if (NP_TOGGLE_ACT==item.act) {
+        view.largeView=!view.largeView;
     } else if (item.act>=NP_ITEM_ACT) {
         let act = item.act - NP_ITEM_ACT;
         if (ADD_TO_FAV_ACTION==act || REMOVE_FROM_FAV_ACTION==act) {

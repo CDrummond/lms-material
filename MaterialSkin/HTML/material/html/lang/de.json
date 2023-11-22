@@ -489,6 +489,7 @@
 "This will remove the 'virtual library', but will not delete the actual music files contained within.":"Die Musiksammlungsansicht wird entfernt, die darin enthaltenen Musikdateien aber nicht gelöscht.",
 "This will remove the folder, and any favorites contained within.":"Der Ordner und alle darin enthaltenen Favoriten werden entfernt.",
 "This will remove tracks with the same artist and title.":"Einträge mit demselben Interpreten und Titel entfernen",
+"Three lines for track view":"Drei Zeilen für die Titelansicht",
 "Thurs":"Don",
 "Thursday":"Donnerstag",
 "Timeout (minutes)":"Timeout (Minuten)",
@@ -608,6 +609,5 @@
 "1 Year":"Ein Jahr",
 "%1 Years":"%1 Jahre",
 "1 day":"Ein Tag",
-"%1 days":"%1 Tage",
-"Three lines for track view":"Drei Zeilen für die Titelansicht"
+"%1 days":"%1 Tage"
 }

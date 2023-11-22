@@ -45,7 +45,6 @@
 "Album Mix":"Mélange d'albums",
 "Album artist":"Artiste de l'album",
 "Album gain":"Normalisation du volume par album",
-"Album review":"Revues d'album",
 "Albums":"Albums",
 "All":"Tout",
 "All Artists":"Tous les Artistes",
@@ -72,7 +71,6 @@
 "Apps":"Applications",
 "Artist":"Artiste",
 "Artist Mix":"Mélange d'artistes",
-"Artist biography":"Biographie d'artiste",
 "Artist, Album":"Artiste, Album",
 "Artist, Year, Album":"Artiste, Année, Album",
 "Artists":"Artistes",
@@ -83,6 +81,7 @@
 "Band":"Groupe/orchestre",
 "Bands":"Groupes/Orchestres",
 "Basic options":"Options de base",
+"Biography":"Biographie",
 "Bitrate":"Débit binaire",
 "Black":"Noir",
 "Browse":"Bibliothèque",
@@ -370,6 +369,7 @@
 "Revert":"Réinitialiser",
 "Revert to default":"Revenir aux paramètres par défaut",
 "Revert to default settings?":"Revenir aux paramètres par défaut ?",
+"Review":"Revues",
 "Round covers":"Pochettes arrondies",
 "Round the corners of cover-art, etc.":"Arrondir les coins des pochettes, etc.",
 "Sample rate":"Taux d'échantillonnage",
@@ -609,5 +609,8 @@
 "1 Year":"1 année",
 "%1 Years":"%1 années",
 "1 day":"1 jour",
-"%1 days":"%1 jours"
+"%1 days":"%1 jours",
+"Album, track number":"",
+"Track number":"",
+"Year, Album, track number":""
 }

@@ -45,7 +45,6 @@
 "Album Mix":"Mix alb",
 "Album artist":"Interpret alba",
 "Album gain":"Úroveň alba",
-"Album review":"Recenze alba",
 "Albums":"Alba",
 "All":"Vše",
 "All Artists":"Všichni interpreti",
@@ -72,7 +71,6 @@
 "Apps":"Aplikace",
 "Artist":"Interpret",
 "Artist Mix":"Mix intepretů",
-"Artist biography":"Životopis intepreta",
 "Artist, Album":"Intepret, Album",
 "Artist, Year, Album":"Intepret, Rok, Album",
 "Artists":"Intepreti",
@@ -370,6 +368,7 @@
 "Revert":"Vrátit zpět",
 "Revert to default":"Vrátit na výchozí hodnoty",
 "Revert to default settings?":"Vrátit nastavení na výchozí hodnoty?",
+"Review":"Recenze",
 "Round covers":"Zaoblení alb",
 "Round the corners of cover-art, etc.":"Zaoblit rohy obálky alb apod.",
 "Sample rate":"Vzorkovací frekvence",
@@ -609,5 +608,9 @@
 "%1 Years":"%1 roků",
 "1 day":"1 den",
 "%1 days":"%1 dní",
-"Three lines for track view":""
+"Album, track number":"",
+"Biography":"",
+"Three lines for track view":"",
+"Track number":"",
+"Year, Album, track number":""
 }

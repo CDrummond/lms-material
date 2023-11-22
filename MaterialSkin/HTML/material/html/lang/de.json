@@ -45,7 +45,6 @@
 "Album Mix":"Albummix",
 "Album artist":"Albuminterpret",
 "Album gain":"Album-Normalisierung",
-"Album review":"Albumkritik",
 "Albums":"Alben",
 "All":"Alle",
 "All Artists":"Alle Interpreten",
@@ -72,7 +71,6 @@
 "Apps":"Anwendungen",
 "Artist":"Interpret",
 "Artist Mix":"Interpretenmix",
-"Artist biography":"Biographie des Interpreten",
 "Artist, Album":"Interpret, Album",
 "Artist, Year, Album":"Interpret, Jahr, Album",
 "Artists":"Interpreten",
@@ -83,6 +81,7 @@
 "Band":"Gruppe",
 "Bands":"Gruppen",
 "Basic options":"Grundeinstellungen",
+"Biography":"Biographie",
 "Bitrate":"Bitrate",
 "Black":"Schwarz",
 "Browse":"Durchsuchen",
@@ -609,5 +608,9 @@
 "1 Year":"Ein Jahr",
 "%1 Years":"%1 Jahre",
 "1 day":"Ein Tag",
-"%1 days":"%1 Tage"
+"%1 days":"%1 Tage",
+"Album, track number":"",
+"Review":"",
+"Track number":"",
+"Year, Album, track number":""
 }

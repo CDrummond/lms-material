@@ -45,7 +45,6 @@
 "Album Mix":"Album Mix",
 "Album artist":"Albumartiest",
 "Album gain":"Album normalisering",
-"Album review":"Album recensies",
 "Albums":"Albums",
 "All":"Alle",
 "All Artists":"Alle artiesten",
@@ -72,7 +71,6 @@
 "Apps":"Toepassingen",
 "Artist":"Artiest",
 "Artist Mix":"Artiest Mix",
-"Artist biography":"Artiest biografie",
 "Artist, Album":"Artiest, Album",
 "Artist, Year, Album":"Artiest, Jaar, Album",
 "Artists":"Artiesten",
@@ -83,6 +81,7 @@
 "Band":"Band",
 "Bands":"Band",
 "Basic options":"Standaard opties",
+"Biography":"Biografie",
 "Bitrate":"Bitsnelheid",
 "Black":"Zwart",
 "Browse":"Bladeren",
@@ -370,6 +369,7 @@
 "Revert":"Terugkeren",
 "Revert to default":"Terugkeren naar standaard",
 "Revert to default settings?":"Terugkeren naar standaard instellingen?",
+"Review":"Recensies",
 "Round covers":"Ronde hoeken albumhoezen",
 "Round the corners of cover-art, etc.":"Rond de hoeken van albumhoezen, etc.",
 "Sample rate":"Samplefrequentie",
@@ -609,5 +609,8 @@
 "%1 Years":"%1 Jaren",
 "1 day":"1 dag",
 "%1 days":"%1 dagen",
-"Three lines for track view":""
+"Album, track number":"",
+"Three lines for track view":"",
+"Track number":"",
+"Year, Album, track number":""
 }

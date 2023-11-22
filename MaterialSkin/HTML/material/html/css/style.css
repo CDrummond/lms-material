@@ -1303,23 +1303,35 @@ div.v-subheader {
  font-size:250%;
 }
 
-.np-portrait-rating {
- position:fixed;
- width:100vw;
- left:0px;
- top:calc(var(--main-toolbar-height) + var(--np-portrait-image-size) - 16px);
+.np-rating {
+ position:absolute;
+ width:calc(var(--np-portrait-image-size) - 48px - (2*var(--np-image-border)));
+ left:calc(24px + (var(--np-image-border) * 2));
+ bottom:29px;
  text-shadow: 2px 2px 5px var(--text-shadow-color);
- margin:0px!important
+ margin:0px!important;
 }
 
-.np-portrait-rating .v-rating {
+.np-image-landscape .np-rating {
+ left:calc(96px + var(--np-image-border));
+ width:calc(50vw - ( 2 * (96px + var(--np-image-border))));
+ bottom:20px;
+}
+
+.np-image-landscape-wide .np-rating {
+ left:calc(24px + (2*var(--np-image-border)));
+ width:calc(var(--np-image-landscape-wide-size) - ( 2 * (24px + var(--np-image-border))));
+ bottom:6px;
+}
+
+.np-rating .v-rating {
  background-color:rgba(255, 255, 255, 0.5);
  display:inline-block;
  border-radius:8px;
  padding:0px 4px 2px 4px;
 }
 
-.theme--dark .np-portrait-rating .v-rating {
+.theme--dark .np-rating .v-rating {
  background-color:rgba(32, 32, 32, 0.5);
 }
 
@@ -1477,11 +1489,6 @@ div.v-rating i.primary--text, div.v-rating i.accent--text {
  width:var(--np-image-landscape-wide-height);
 }
 
-.np-landscape-rating {
- width:50vw;
-}
-
-.np-landscape-rating-wide,
 .np-details-landscape-wide,
 .np-details-landscape-wide .np-landscape-song-info,
 .np-details-landscape-wide .np-portrait-song-info div,

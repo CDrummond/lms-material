@@ -213,6 +213,11 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
       <img :src="playerStatus.current.emblem | emblem()" loading="lazy"></img>
      </div>
      <div class="np-menu" :title="trans.menu" @click="showMenu" v-if="playerStatus.playlist.count>0" v-bind:class="{'pulse':pulseTimer}"></div>
+     <v-layout text-xs-center v-if="showRatings" class="np-rating">
+      <v-flex xs12>
+       <v-rating v-model="rating.value" half-increments hover clearable @click.native="setRating(true)" :readonly="undefined==LMS_P_RP"></v-rating>
+      </v-flex>
+     </v-layout>
     </div>
     <div class="np-details-landscape" v-bind:class="{'np-details-landscape-wide': landscape && wide>1}">
 
@@ -223,12 +228,6 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
        <p class="np-text-landscape subtext" v-if="albumLine" v-html="albumLine"></p>
       </div>
      </div>
-
-     <v-layout text-xs-center v-if="showRatings" class="np-landscape-rating" v-bind:class="{'np-landscape-rating-wide':wide>1}">
-      <v-flex xs12>
-      <v-rating v-model="rating.value" half-increments hover clearable @click.native="setRating(true)" :readonly="undefined==LMS_P_RP"></v-rating>
-      </v-flex>
-     </v-layout>
      <div v-if="wide>1">
 
       <v-layout text-xs-center row wrap class="np-controls-wide">
@@ -285,6 +284,11 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
      </div>
      <div class="np-menu" :title="trans.menu" @click="showMenu" v-if="playerStatus.playlist.count>0" v-bind:class="{'pq-pulse':pulseTimer}"></div>
      <div class="np-close" :title="trans.collapseNp" @click="largeView=false" v-bind:class="{'pulse':pulseTimer}"></div>
+     <v-layout text-xs-center v-if="showRatings" class="np-rating">
+      <v-flex xs12>
+       <v-rating v-model="rating.value" half-increments hover clearable @click.native="setRating(true)" :readonly="undefined==LMS_P_RP"></v-rating>
+      </v-flex>
+     </v-layout>
     </div>
     <div class="np-portrait-song-info hide-scrollbar fade-both">
      <div>
@@ -295,9 +299,6 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
     </div>
    </div>
    <v-layout text-xs-center row wrap class="np-controls" v-if="!(landscape && wide>1)">
-    <v-flex xs12 v-if="showRatings && !landscape" class="np-text np-portrait-rating">
-     <v-rating v-model="rating.value" half-increments hover clearable @click.native="setRating(true)" :readonly="undefined==LMS_P_RP"></v-rating>
-    </v-flex>
     <v-flex xs12 class="np-tech ellipsis" v-if="techInfo || playerStatus.playlist.count>1">{{techInfo ? technicalInfo : ""}}{{playerStatus.playlist.current | trackCount(playerStatus.playlist.count, techInfo ? SEPARATOR : undefined)}}</v-flex>
 
     <v-flex xs12><div class="np-portrait-thin-pad"></div></v-flex>

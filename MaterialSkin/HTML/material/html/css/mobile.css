@@ -212,7 +212,7 @@
 .mobile .np-bar-details .v-list__tile__content, .mobile .np-bar-details .v-list__tile__content .v-list__tile__sub-title,
 .mobile .np-bar-details .v-list__tile__content .v-list__tile__title, .mobile .np-bar-details .np-bar-tech, .np-bar-details .np-bar-time, .mobile .np-bar-controls div i,
 .mobile .np-bar-details div.v-rating i.primary--text, .mobile .np-bar-details div.v-rating i.accent--text {
-  color:var(--sub-toolbar-text-color) !important;
+ color:var(--sub-toolbar-text-color) !important;
 }
 
 .np-bar .v-progress-linear .primary {

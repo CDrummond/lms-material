@@ -18,7 +18,7 @@
 12. Animate mobile navigation 'pill'.
 13. Add sort options to 'All songs' and 'Compositions'
 14. Swipe to change volume on cover only.
-15. Always place now-playing rating stars over image.
+15. Always place now-playing rating stars with text.
 16. Draw play arrow next to icon in players menu for players which are playing.
 17. If 'Appearance', or 'Composition', is single release type for an artist,
     then use that as the heading.

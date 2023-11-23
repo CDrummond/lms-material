@@ -1303,38 +1303,6 @@ div.v-subheader {
  font-size:250%;
 }
 
-.np-rating {
- position:absolute;
- width:calc(var(--np-portrait-image-size) - 48px - (2*var(--np-image-border)));
- left:calc(24px + (var(--np-image-border) * 2));
- bottom:29px;
- text-shadow: 2px 2px 5px var(--text-shadow-color);
- margin:0px!important;
-}
-
-.np-image-landscape .np-rating {
- left:calc(96px + var(--np-image-border));
- width:calc(50vw - ( 2 * (96px + var(--np-image-border))));
- bottom:20px;
-}
-
-.np-image-landscape-wide .np-rating {
- left:calc(24px + (2*var(--np-image-border)));
- width:calc(var(--np-image-landscape-wide-size) - ( 2 * (24px + var(--np-image-border))));
- bottom:6px;
-}
-
-.np-rating .v-rating {
- background-color:rgba(255, 255, 255, 0.5);
- display:inline-block;
- border-radius:8px;
- padding:0px 4px 2px 4px;
-}
-
-.theme--dark .np-rating .v-rating {
- background-color:rgba(32, 32, 32, 0.5);
-}
-
 div.v-rating i.primary--text, div.v-rating i.accent--text {
  color:var(--text-color) !important;
 }
@@ -1374,8 +1342,8 @@ div.v-rating i.primary--text, div.v-rating i.accent--text {
 
 @media only screen and (max-height:700px) {
  .np-title-landscape {
-   font-size:250% !important;
-  }
+  font-size:250% !important;
+ }
  .np-text-landscape {
   font-size:200% !important;
  }
@@ -1489,17 +1457,20 @@ div.v-rating i.primary--text, div.v-rating i.accent--text {
  width:var(--np-image-landscape-wide-height);
 }
 
-.np-details-landscape-wide,
+.np-details-landscape-wide {
+ width:calc(100vw - (var(--np-image-landscape-wide-height) + var(--np-image-border))) !important;
+}
+
 .np-details-landscape-wide .np-landscape-song-info,
 .np-details-landscape-wide .np-portrait-song-info div,
 .np-details-landscape-wide .np-landscape-song-info div {
- width:calc(100vw - (var(--np-image-landscape-wide-height) + var(--np-image-border)));
+ width:100%;
 }
 
 .np-controls-wide {
  font-weight:var(--std-weight);
  padding:8px;
- margin-left:8px;
+ margin-left:0px;
  margin-right:8px;
  width:calc(100vw - (var(--np-image-landscape-wide-height) + var(--np-image-border)));
  position:absolute;
@@ -2041,6 +2012,15 @@ progress {
  font-size:var(--icon-size) !important;
  vertical-align:middle !important;
  border-radius:unset !important;
+}
+
+@media (min-aspect-ratio: 8/17) {
+ #np-page .np-portrait-song-info .v-rating .v-icon {
+  width:var(--small-font-size) !important;
+  height:var(--small-font-size) !important;
+  font-weight:var(--std-weight) !important;
+  font-size:var(--small-font-size) !important;
+ }
 }
 
 .link-item, .link-item-ct {

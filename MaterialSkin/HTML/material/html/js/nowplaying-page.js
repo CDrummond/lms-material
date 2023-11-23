@@ -213,11 +213,6 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
       <img :src="playerStatus.current.emblem | emblem()" loading="lazy"></img>
      </div>
      <div class="np-menu" :title="trans.menu" @click="showMenu" v-if="playerStatus.playlist.count>0" v-bind:class="{'pulse':pulseTimer}"></div>
-     <v-layout text-xs-center v-if="showRatings" class="np-rating">
-      <v-flex xs12>
-       <v-rating v-model="rating.value" half-increments hover clearable @click.native="setRating(true)" :readonly="undefined==LMS_P_RP"></v-rating>
-      </v-flex>
-     </v-layout>
     </div>
     <div class="np-details-landscape" v-bind:class="{'np-details-landscape-wide': landscape && wide>1}">
 
@@ -226,6 +221,7 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
        <p class="np-title-landscape np-title" v-if="playerStatus.current.title">{{title}}</p>
        <p class="np-text-landscape subtext" v-if="artistAndComposerLine" v-html="artistAndComposerLine"></p>
        <p class="np-text-landscape subtext" v-if="albumLine" v-html="albumLine"></p>
+       <v-rating v-if="showRatings" class="np-text-landscape subtext" v-model="rating.value" half-increments hover clearable @click.native="setRating(true)" :readonly="undefined==LMS_P_RP"></v-rating>
       </div>
      </div>
      <div v-if="wide>1">
@@ -284,17 +280,13 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
      </div>
      <div class="np-menu" :title="trans.menu" @click="showMenu" v-if="playerStatus.playlist.count>0" v-bind:class="{'pq-pulse':pulseTimer}"></div>
      <div class="np-close" :title="trans.collapseNp" @click="largeView=false" v-bind:class="{'pulse':pulseTimer}"></div>
-     <v-layout text-xs-center v-if="showRatings" class="np-rating">
-      <v-flex xs12>
-       <v-rating v-model="rating.value" half-increments hover clearable @click.native="setRating(true)" :readonly="undefined==LMS_P_RP"></v-rating>
-      </v-flex>
-     </v-layout>
     </div>
     <div class="np-portrait-song-info hide-scrollbar fade-both">
      <div>
       <p class="np-title" v-if="playerStatus.current.title">{{title}}</p>
       <p class="np-text subtext" v-if="artistAndComposerLine" v-html="artistAndComposerLine"></p>
       <p class="np-text subtext" v-if="albumLine" v-html="albumLine"></p>
+      <v-rating v-if="showRatings" class="np-text subtext" v-model="rating.value" half-increments hover clearable @click.native="setRating(true)" :readonly="undefined==LMS_P_RP"></v-rating>
      </div>
     </div>
    </div>

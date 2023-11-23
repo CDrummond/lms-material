@@ -146,7 +146,7 @@
  left:var(--jump-list-width);
 }
 
-.lms-jumplist, .browse-context {
+.lms-jumplist {
  height:calc((var(--vh, 1vh)*100) - (var(--main-toolbar-height) + var(--sub-toolbar-height) + var(--bottom-toolbar-height) + var(--mobile-npbar-height)));
 }
 
@@ -161,8 +161,7 @@
 }
 
 .detailed-sub .lms-list,
-.detailed-sub .lms-image-grid,
-.detailed-sub .browse-context {
+.detailed-sub .lms-image-grid {
  top:calc(var(--main-toolbar-height) + (var(--sub-toolbar-height)*2))!important;
  height:calc((var(--vh, 1vh)*100) - (var(--main-toolbar-height) + (var(--sub-toolbar-height)*2) + var(--bottom-toolbar-height) + var(--mobile-npbar-height)))!important;
 }

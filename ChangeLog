@@ -21,7 +21,7 @@
 15. Always place now-playing rating stars over image.
 16. Draw play arrow next to icon in players menu for players which are playing.
 17. If 'Appearance', or 'Composition', is single release type for an artist,
-    then use that as its heading.
+    then use that as the heading.
 
 4.0.4
 ------

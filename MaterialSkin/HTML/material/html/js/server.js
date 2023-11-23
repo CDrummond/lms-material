@@ -6,7 +6,7 @@
  */
 'use strict';
 
-const PLAYER_STATUS_TAGS = "tags:cdegiloqrstuyAABEGIKNST";
+const PLAYER_STATUS_TAGS = "tags:cdegiloqrstuyAABGIKNST" + (LMS_SRV_EMBLEM ? "E" : "");
 const STATUS_UPDATE_MAX_TIME = 4000;
 
 function logString(val) {

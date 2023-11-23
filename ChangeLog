@@ -22,6 +22,8 @@
 16. Draw play arrow next to icon in players menu for players which are playing.
 17. If 'Appearance', or 'Composition', is single release type for an artist,
     then use that as the heading.
+18. Only request extid (for emblems) in status request if emblems enabled in
+    LMS.
 
 4.0.4
 ------

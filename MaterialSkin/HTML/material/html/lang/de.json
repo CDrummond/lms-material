@@ -45,6 +45,7 @@
 "Album Mix":"Albummix",
 "Album artist":"Albuminterpret",
 "Album gain":"Album-Normalisierung",
+"Album, track number":"Album, Titelnummer",
 "Albums":"Alben",
 "All":"Alle",
 "All Artists":"Alle Interpreten",
@@ -369,6 +370,7 @@
 "Revert":"Zurücksetzen",
 "Revert to default":"Standardeinstellungen wiederherstellen",
 "Revert to default settings?":"Standardeinstellungen wiederherstellen?",
+"Review":"Rezension",
 "Round covers":"Cover abrunden",
 "Round the corners of cover-art, etc.":"Ecken von Covern etc. abrunden",
 "Sample rate":"Samplerate",
@@ -505,6 +507,7 @@
 "Track artist":"Titelinterpret",
 "Track gain":"Titel-Normalisierung",
 "Track is not downloadable.":"Titel ist nicht herunterladbar",
+"Track number":"Titelnummer",
 "Tracks":"Titel",
 "Transfer queue":"Verschiebe Warteschlange",
 "Transfer queue to another player":"Verschiebe Warteschlange auf einen anderen Player",
@@ -553,6 +556,7 @@
 "Year":"Jahr",
 "Year Mix":"Jahresmix",
 "Year, Album":"Jahr, Album",
+"Year, Album, track number":"Jahr, Album, Titelnummer",
 "Year, Artist, Album":"Jahr, Interpret, Album",
 "Years":"Jahre",
 "Yes":"Ja",
@@ -608,9 +612,5 @@
 "1 Year":"Ein Jahr",
 "%1 Years":"%1 Jahre",
 "1 day":"Ein Tag",
-"%1 days":"%1 Tage",
-"Album, track number":"",
-"Review":"",
-"Track number":"",
-"Year, Album, track number":""
+"%1 days":"%1 Tage"
 }

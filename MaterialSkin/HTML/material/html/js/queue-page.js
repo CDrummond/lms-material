@@ -848,7 +848,11 @@ var lmsQueue = Vue.component("lms-queue", {
                 } else {
                     bus.$emit('trackInfo', item, index, 'queue');
                 }
-                if (!this.$store.state.desktopLayout) {
+                if (this.$store.state.desktopLayout) {
+                    if (!this.$store.state.pinQueue) {
+                        this.$store.commit('setShowQueue', false);
+                    }
+                } else {
                     this.$store.commit('setPage', 'browse');
                 }
                 this.clearSelection();

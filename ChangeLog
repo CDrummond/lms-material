@@ -24,6 +24,8 @@
     then use that as the heading.
 18. Only request extid (for emblems) in status request if emblems enabled in
     LMS.
+19. If BlissMixer is installed, then add 'Radio' button to artist and album
+    action menus.
 
 4.0.4
 ------

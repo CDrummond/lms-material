@@ -3181,13 +3181,17 @@ img[lazy='loaded'].np-cover {
  background-color:#dd4751!important;
 }
 
-.mai-button, .mai-button:hover {
+.browse-context {
  position:absolute;
  bottom:5px;
  right:-4px;
 }
 
-.mai-button .v-btn__content {
+.context-button {
+  margin-left:0px;
+}
+
+.context-button .v-btn__content {
  font-weight:var(--std-weight) !important;
  color:var(--sub-toolbar-text-color) !important;
 }

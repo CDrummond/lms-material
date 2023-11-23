@@ -133,7 +133,7 @@ function browseActions(view, item, args, count, showCompositions) {
                                                 ? ['musicartistinfo', 'artistphotos', 'html:1', 'artist_id:'+args['artist_id']]
                                                 : ['musicartistinfo', 'artistphotos', 'html:1', 'artist:'+args['artist']],
                                    params:[]},
-                              weight:100});
+                              weight:105});
             }
             if (undefined!=args['album_id'] || (undefined!=args['album'] && (undefined!=args['artist_id'] || undefined!=args['artist']))) {
                 actions.push({title:i18n('Review'), icon:'local_library', stdItem:STD_ITEM_MAI,
@@ -148,6 +148,11 @@ function browseActions(view, item, args, count, showCompositions) {
             if (undefined!=args['path'] && args['path'].length>0 && !queryParams.party && !LMS_KIOSK_MODE) {
                 actions.push({localfiles:true, title:i18n('Local files'), icon:'insert_drive_file', do:{ command:['musicartistinfo', 'localfiles', 'folder:'+args['path']], params:[]}, weight:103});
             }
+        }
+        if (LMS_P_BMIX && (undefined!=args['artist_id'] || undefined!=args['album_id'])) {
+            actions.push({title:i18n('Radio'), icon:'radio', stdItem:STD_ITEM_MIX,
+                          do:{ command:["blissmixer", "mix"],
+                               params:["menu:1", "useContextMenu:1", undefined!=args['album_id'] ? "album_id:"+args['album_id'] : "artist_id:"+args['artist_id']]}, weight:101});
         }
         if (LMS_P_YT && undefined!=args['artist']) {
             actions.push({title:/*NoTrans*/'YouTube', svg:'youtube',
@@ -406,7 +411,7 @@ function browseHandleListResponse(view, item, command, resp, prevPage, appendIte
                                               artist_id:artist_id});
                 }
             } else if (undefined!=LMS_P_RP && view.items.length>1 && !queryParams.party && !LMS_KIOSK_MODE) {
-                view.currentActions.push({albumRating:true, title:i18n("Set rating for all tracks"), icon:"stars", weight:101});
+                view.currentActions.push({albumRating:true, title:i18n("Set rating for all tracks"), icon:"stars", weight:102});
             }
             if (LMS_P_MAI && undefined!=actParams['path'] && actParams['path'].length>0 && !queryParams.party && !LMS_KIOSK_MODE) {
                 // Check we have some local files, if not hide entry!
@@ -504,22 +509,24 @@ function browseHandleListResponse(view, item, command, resp, prevPage, appendIte
             }
         }
 
-        if (resp.subtitle) {
-            view.headerSubTitle=resp.subtitle;
-        } else if ( (1==view.items.length && ("text"==view.items[0].type || "html"==view.items[0].type)) ||
-                    (listingArtistAlbums && 0==view.items.length) /*Artist from online service*/ ) {
+        view.detailedSubInfo=resp.plainsubtitle ? resp.plainsubtitle : resp.years ? resp.years : "&nbsp;";
+        if ( (view.current && (view.current.stdItem==STD_ITEM_MAI || view.current.stdItem==STD_ITEM_MIX)) ||
+             (1==view.items.length && ("text"==view.items[0].type || "html"==view.items[0].type)) ||
+             (listingArtistAlbums && 0==view.items.length) /*Artist from online service*/ ) {
             // Check for artist bio / album review invoked from browse toolbar
             let parts = view.headerTitle.split(SEPARATOR);
             if (2==parts.length) {
                 view.headerTitle = parts[0];
                 view.headerSubTitle = parts[1];
+                view.detailedSubInfo = resp.subtitle;
             } else {
                 view.headerSubTitle = undefined;
             }
+        } else if (resp.subtitle) {
+            view.headerSubTitle=resp.subtitle
         } else {
             view.headerSubTitle=0==view.items.length ? i18n("Empty") : i18np("1 Item", "%1 Items", view.items.length);
         }
-        view.detailedSubInfo=resp.plainsubtitle ? resp.plainsubtitle : resp.years ? resp.years : "&nbsp;";
         if (queryParams.party) {
             view.tbarActions=[];
         }

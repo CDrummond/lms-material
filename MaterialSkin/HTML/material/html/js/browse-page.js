@@ -73,7 +73,10 @@ var lmsBrowse = Vue.component("lms-browse", {
      <v-icon v-else>{{ACTIONS[action].icon}}</v-icon>
     </v-btn>
    </template>
-   <v-btn flat v-if="showMaiButton" class="mai-button" @click="doMai"><v-icon>{{current.stdItem==STD_ITEM_ALBUM ? 'local_library' : 'menu_book'}}</v-icon>&nbsp;{{current.stdItem==STD_ITEM_ALBUM ? i18n('Review') : i18n('Biography')}}</v-btn>
+   <div class="browse-context">
+    <v-btn flat v-if="showMixButton" class="context-button" @click="doContext(STD_ITEM_MIX)"><v-icon>{{'radio'}}</v-icon>&nbsp;{{i18n('Radio')}}</v-btn>
+    <v-btn flat v-if="showMaiButton" class="context-button" @click="doContext(STD_ITEM_MAI)"><v-icon>{{current.stdItem==STD_ITEM_ALBUM ? 'local_library' : 'menu_book'}}</v-icon>&nbsp;{{current.stdItem==STD_ITEM_ALBUM ? i18n('Review') : i18n('Biography')}}</v-btn>
+   </div>
   </v-layout>
   <v-layout v-else class="pointer link-item">
    <div class="toolbar-nobtn-pad"></div>
@@ -388,6 +391,7 @@ var lmsBrowse = Vue.component("lms-browse", {
             currentItemImage: undefined, // image set in broweResp - currently only for album track lists
             headerTitle: undefined,
             headerSubTitle: undefined,
+            detailedSubInfo: undefined,
             items: [],
             grid: {allowed:true, use:false, numColumns:0, ih:GRID_MIN_HEIGHT, rows:[], few:false, haveSubtitle:true, multiSize:false},
             fetchingItem:undefined,
@@ -476,13 +480,13 @@ var lmsBrowse = Vue.component("lms-browse", {
         },
         showDetailedSubtoolbar() {
             return this.wide>0 && this.current && (this.current.image || this.currentItemImage) &&
-                   (this.current.stdItem==STD_ITEM_ARTIST || this.current.stdItem==STD_ITEM_ALBUM || this.current.stdItem==STD_ITEM_MAI || this.current.stdItem==STD_ITEM_ALL_TRACKS)
+                   (this.current.stdItem==STD_ITEM_ARTIST || this.current.stdItem==STD_ITEM_ALBUM || this.current.stdItem==STD_ITEM_MAI || this.current.stdItem==STD_ITEM_MIX || this.current.stdItem==STD_ITEM_ALL_TRACKS)
         },
         detailedSubTop() {
             if (this.current.stdItem==STD_ITEM_ARTIST) {
                 return this.detailedSubInfo;
             }
-            if (this.current.stdItem==STD_ITEM_ALBUM || this.current.stdItem==STD_ITEM_ALL_TRACKS) {
+            if (this.current.stdItem==STD_ITEM_ALBUM || this.current.stdItem==STD_ITEM_ALL_TRACKS || this.current.stdItem==STD_ITEM_MIX) {
                 let albumArtst = this.current.subtitle;
                 if (lmsOptions.noArtistFilter && this.current.compilation && this.items.length>0 && undefined!=this.items[0].compilationAlbumArtist) {
                     albumArtst = this.items[0].compilationAlbumArtist;
@@ -505,12 +509,12 @@ var lmsBrowse = Vue.component("lms-browse", {
             if (this.current.stdItem==STD_ITEM_ARTIST) {
                 return this.headerSubTitle
             }
-            if (this.current.stdItem==STD_ITEM_ALBUM || this.current.stdItem==STD_ITEM_ALL_TRACKS) {
+            if (this.current.stdItem==STD_ITEM_ALBUM || this.current.stdItem==STD_ITEM_MIX || this.current.stdItem==STD_ITEM_ALL_TRACKS) {
                 return this.detailedSubInfo;
             }
         },
         showMaiButton() {
-            if (LMS_P_MAI && this.showDetailedSubtoolbar && this.current.stdItem!=STD_ITEM_MAI && this.current.stdItem!=STD_ITEM_ALL_TRACKS) {
+            if (LMS_P_MAI && this.showDetailedSubtoolbar && this.current.stdItem!=STD_ITEM_MAI && this.current.stdItem!=STD_ITEM_MIX && this.current.stdItem!=STD_ITEM_ALL_TRACKS) {
                 if (this.current.stdItem==STD_ITEM_ARTIST) {
                     // 'Various Artists' will not have biography entry in its menu. So, if
                     // this item is not found then we don't show toolbar button...
@@ -522,6 +526,16 @@ var lmsBrowse = Vue.component("lms-browse", {
                     return false;
                 }
                 return true;
+            }
+            return false;
+        },
+        showMixButton() {
+            if (LMS_P_BMIX && this.showDetailedSubtoolbar && (this.current.stdItem==STD_ITEM_ARTIST || (this.current.stdItem==STD_ITEM_ALBUM))) {
+                for (let i=0, loop=this.currentActions, len=loop.length; i<len; ++i) {
+                    if (loop[i].stdItem==STD_ITEM_MIX) {
+                        return true;
+                    }
+                }
             }
             return false;
         }
@@ -895,7 +909,7 @@ var lmsBrowse = Vue.component("lms-browse", {
                      (this.tbarActions.length<2 && (i<(this.tbarActions.length<2 ? 2 : 1))) ||
                      ((ALBUM_SORTS_ACTION==loop[i].action || TRACK_SORTS_ACTION==loop[i].action) && this.items.length<2) ||
                      (SCROLL_TO_DISC_ACTION==loop[i].action && (this.items.length<2 || !this.items[0].id.startsWith(FILTER_PREFIX))) ||
-                     (loop[i].stdItem==STD_ITEM_MAI && this.wide>0) ||
+                     ((loop[i].stdItem==STD_ITEM_MAI || loop[i].stdItem==STD_ITEM_MIX) && this.wide>0) ||
                      (loop[i].action==DIVIDER && (0==actions.length || actions[actions.length-1].action==DIVIDER)) ) {
                     continue;
                 }
@@ -903,9 +917,9 @@ var lmsBrowse = Vue.component("lms-browse", {
             }
             showMenu(this, {show:true, currentActions:actions, x:event.clientX, y:event.clientY});
         },
-        doMai() {
+        doContext(type) {
             for (let i=0, loop=this.currentActions, len=loop.length; i<len; ++i) {
-                if (loop[i].stdItem==STD_ITEM_MAI) {
+                if (loop[i].stdItem==type) {
                     this.currentAction(loop[i]);
                     return;
                 }
@@ -1093,7 +1107,8 @@ var lmsBrowse = Vue.component("lms-browse", {
                 this.filteredJumplist = [];
                 this.layoutGrid(true);
                 if (resp.subtitle) {
-                    this.headerSubTitle=resp.subtitle;
+                    this.headerSubTitle = resp.subtitle;
+                    this.detailedSubInfo = resp.subtitle;
                 } else {
                     this.headerSubTitle=0==this.items.length ? i18n("Empty") : i18np("1 Item", "%1 Items", this.items.length);
                 }

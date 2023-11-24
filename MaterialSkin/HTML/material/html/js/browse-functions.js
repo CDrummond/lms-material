@@ -443,6 +443,9 @@ function browseHandleListResponse(view, item, command, resp, prevPage, appendIte
         if (resp.canUseGrid && !resp.forceGrid) {
             view.currentActions.push({action:(view.grid.use ? USE_LIST_ACTION : USE_GRID_ACTION), weight:0});
         }
+        if (resp.isMusicMix || (("albums"==command.command[0] && view.items.length>0 && command.params.find(elem => elem=="sort:random")))) {
+            view.currentActions.push({action:RELOAD_ACTION, weight:1});
+        }
         if (view.command.command.length>0 && view.command.command[0]=="albums" && view.items.length>0) {
             var addSort=true;
             for (var i=0, len=view.command.params.length; i<len; ++i) {
@@ -476,8 +479,6 @@ function browseHandleListResponse(view, item, command, resp, prevPage, appendIte
             view.currentActions=browseActions(view, resp.items.length>0 ? item : undefined, {}, resp.items.length);
         } else if (view.allSongsItem || ("tracks"==command.command[0] && item.id.startsWith("currentaction:"))) {
             view.tbarActions=[PLAY_ALL_ACTION, ADD_ALL_ACTION];
-        } else if ("albums"==command.command[0] && command.params.find(elem => elem=="sort:random")) {
-            view.tbarActions=[RELOAD_ACTION];
         } else if (view.items.length>0 && view.items[0].type!="html" && (!(view.current && view.current.isPodcast) || addAndPlayAllActions(command))) {
             if (view.current && view.current.menu) {
                 for (var i=0, len=view.current.menu.length; i<len; ++i) {
@@ -494,18 +495,14 @@ function browseHandleListResponse(view, item, command, resp, prevPage, appendIte
 
             if (view.tbarActions.length==0 && (trackLimit==0 || (resp.numAudioItems>2 && resp.numAudioItems<=trackLimit)) &&
                 (!item.id || !item.id.startsWith(TOP_ID_PREFIX)) &&
-                ((view.command.command.length>0 && ALLOW_ADD_ALL.has(view.command.command[0])) || (resp.items[0].presetParams && resp.items[0].presetParams.favorites_url && ALLOW_ADD_ALL.has(resp.items[0].presetParams.favorites_url.split(':')[0])))
-            ) {
+                ((view.command.command.length>0 && ALLOW_ADD_ALL.has(view.command.command[0])) ||
+                 (resp.items[0].presetParams && resp.items[0].presetParams.favorites_url && ALLOW_ADD_ALL.has(resp.items[0].presetParams.favorites_url.split(':')[0]))) ) {
                 view.tbarActions=[PLAY_ALL_ACTION, ADD_ALL_ACTION];
             }
 
             // Select track -> More -> Album:AlbumTitle -> Tracks
             if (view.tbarActions.length==0 && view.current && ((view.current.actions && view.current.actions.play) || view.current.stdItem)) {
                 view.tbarActions=[PLAY_ACTION, ADD_ACTION];
-            }
-
-            if (resp.isMusicMix) {
-                view.tbarActions.unshift(RELOAD_ACTION);
             }
         }
 

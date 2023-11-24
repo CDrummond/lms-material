@@ -202,6 +202,7 @@ function setQueueShown(state, val) {
         document.documentElement.style.setProperty('--queue-visibility', val ? 'initial' : 'collapse');
         document.documentElement.style.setProperty('--queue-minwidth', val && state.pinQueue ? '275px' : '0px');
         document.documentElement.style.setProperty('--splitter-width', val && state.pinQueue ? '1px' : '0px');
+        document.documentElement.style.setProperty('--splitter-hidden', val && state.pinQueue ? '0' : '100');
     }
 }
 
@@ -212,6 +213,7 @@ function setQueuePinned(state, val) {
         if (state.pinQueue) {
             setQueueShown(state, true);
             document.documentElement.style.setProperty('--splitter-width', val && state.pinQueue ? '1px' : '0px');
+            document.documentElement.style.setProperty('--splitter-hidden', val && state.pinQueue ? '0' : '100');
         } else {
             setQueueShown(state, false);
         }

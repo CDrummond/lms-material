@@ -16,6 +16,7 @@
  --queue-visibility:initial;
  --queue-minwidth:400px;
  --splitter-width:1px;
+ --splitter-hidden:0;
  --pq-unpinned-width:620px;
 }
 
@@ -89,7 +90,14 @@
 .browse-progress {
  position:fixed;
  top:calc(var(--main-toolbar-height) + ((((var(--vh, 1vh)*100) - (var(--main-toolbar-height) + var(--bottom-toolbar-height)))/2) - 32px));
- left:calc(((100vw * (var(--splitter-pc)/100))/2) - 32px);
+ left:max(calc((0.5vw * var(--splitter-pc)) - 32px), calc((0.5vw * var(--splitter-hidden)) - 32px));
+}
+
+/* For old browsers that dont support min() */
+@supports not (width: min(10px, 5vw)) {
+ .browse-progress {
+  left:calc((0.5vw * var(--splitter-pc)) - 32px);
+ }
 }
 
 .lms-splitter {

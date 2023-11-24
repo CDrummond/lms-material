@@ -12,7 +12,7 @@
  7. Swipe to hide/show unpinned queue in desktop layout.
  8. Only allow queue to be pinned if window width is 670px or more.
  9. Move now-playing cover emblem and buttons closer to edges.
-10. Set maximum width for now-playing playback controls so that are not too
+10. Set maximum width for now-playing playback controls so that they are not too
     spread out.
 11. Only allow editing a favourite if it has 'presetParams'
 12. Animate mobile navigation 'pill'.

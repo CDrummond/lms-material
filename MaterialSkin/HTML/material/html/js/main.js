@@ -374,8 +374,8 @@ var app = new Vue({
                 let end = getTouchPos(ev);
                 let diffX = Math.abs(this.touch.x-end.x);
                 let diffY = Math.abs(this.touch.y-end.y);
-                let horizValid = diffX>diffY && diffX>50 && diffY<100;
-                let vertValid = diffX<diffY && diffX<100 && diffY>50;
+                let horizValid = diffX>diffY && diffX>60 && diffY<40;
+                let vertValid = diffX<diffY && diffX<40 && diffY>60;
                 if (horizValid && this.$store.state.page=='now-playing') {
                     // Ignore swipes on position slider...
                     var elem = document.getElementById("pos-slider");
@@ -416,14 +416,16 @@ var app = new Vue({
                     return;
                 }
             }
-            if (this.$store.state.swipeChangeTrack && undefined!=ev.target && ev.target.className.startsWith('np-cover')) {
+            if (undefined!=ev.target && ev.target.className.startsWith('np-cover')) {
                 if (queryParams.party) {
                     return;
                 }
-                if ('left'==direction) {
-                    bus.$emit('playerCommand', ['playlist', 'index', '+1']);
-                } else {
-                    bus.$emit('playerCommand', ['button', 'jump_rew']);
+                if (this.$store.state.swipeChangeTrack) {
+                    if ('left'==direction) {
+                        bus.$emit('playerCommand', ['playlist', 'index', '+1']);
+                    } else if ('right'==direction) {
+                        bus.$emit('playerCommand', ['button', 'jump_rew']);
+                    }
                 }
                 return;
             }

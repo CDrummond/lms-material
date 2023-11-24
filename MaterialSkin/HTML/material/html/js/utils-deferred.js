@@ -184,6 +184,8 @@ function addAndPlayAllActions(cmd) {
             }
         }
         return false;
+    } else if (cmd.command[0]=="trackinfo" || cmd.command[0]=="albuminfo" || cmd.command[0]=="artistinfo") {
+        return false;
     }
 
     return true;

@@ -326,7 +326,6 @@ function browseHandleListResponse(view, item, command, resp, prevPage, appendIte
         view.grid = {allowed:resp.canUseGrid,
                      use: resp.canUseGrid && (resp.forceGrid || isSetToUseGrid(view.current && view.current.id.startsWith(TOP_ID_PREFIX) && view.current.id!=TOP_FAVORITES_ID ? GRID_OTHER : command, view.current)),
                      numColumns:0, ih:GRID_MIN_HEIGHT, rows:[], few:false, haveSubtitle:true};
-        console.log(resp.canUseGrid);
         view.jumplistActive=0;
         view.prevPage = prevPage;
         view.hoverBtns = !IS_MOBILE && view.items.length>0 &&

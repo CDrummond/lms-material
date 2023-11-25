@@ -256,14 +256,10 @@ Vue.component('lms-toolbar', {
             }
             this.playerStatus.count=playerStatus.playlist ? playerStatus.playlist.count : 0;
             this.playerDvc = playerStatus.dvc;
-            if (!this.movingVolumeSlider) {
-                this.playerMuted = playerStatus.muted;
-                var vol = playerStatus.volume;
-                if (vol != this.playerVolume) {
-                    // Ignore changes to 'playerVolume' when switching players...
-                    this.ignorePlayerVolChange = this.$store.state.player.id != this.playerId;
-                    this.playerVolume = vol;
-                }
+            this.playerMuted = playerStatus.muted;
+            var vol = playerStatus.volume;
+            if (vol != this.playerVolume) {
+                this.playerVolume = vol;
             }
             this.playerId = ""+this.$store.state.player.id
         }.bind(this));
@@ -658,46 +654,6 @@ Vue.component('lms-toolbar', {
                 this.disconnectedTimer = undefined;
             }
         },
-        volumeSliderStart() {
-            if (queryParams.party) {
-                return;
-            }
-            this.movingVolumeSlider=true;
-        },
-        volumeSliderEnd() {
-            // Store time we stopped this drag. This time is then checked in setVolume, and if
-            // time diff is to short that function wont call mixer again. Basically, after drag
-            // ends we also get a click event!
-            this.sliderDragEndTime = (new Date()).getTime();
-            this.cancelSendVolumeTimer();
-            if (this.$store.state.player && !queryParams.party) {
-                lmsCommand(this.$store.state.player.id, ["mixer", "volume", this.playerVolume]).then(({data}) => {
-                    bus.$emit('updatePlayer', this.$store.state.player.id);
-                    this.movingVolumeSlider=false;
-                }).catch(err => {
-                    bus.$emit('updatePlayer', this.$store.state.player.id);
-                    this.movingVolumeSlider=false;
-                });
-            } else {
-                this.movingVolumeSlider=false;
-            }
-        },
-        cancelSendVolumeTimer() {
-            if (undefined!==this.sendVolumeTimer) {
-                clearTimeout(this.sendVolumeTimer);
-                this.sendVolumeTimer = undefined;
-            }
-        },
-        resetSendVolumeTimer() {
-            this.cancelSendVolumeTimer();
-            if (queryParams.party) {
-                return;
-            }
-            this.sendVolumeTimer = setTimeout(function () {
-                this.sendVolumeTimer = undefined;
-                bus.$emit('playerCommand', ["mixer", "volume", this.playerVolume]);
-            }.bind(this), LMS_VOLUME_DEBOUNCE);
-        },
         controlClock() {
             if (this.$store.state.nowPlayingClock) {
                 if (undefined==this.clockTimer) {
@@ -856,16 +812,6 @@ Vue.component('lms-toolbar', {
         }
     },
     watch: {
-        'playerVolume': function(newVal) {
-            // Ignore changes to 'playerVolume' when switching players...
-            if (this.ignorePlayerVolChange) {
-                this.ignorePlayerVolChange = false;
-                return;
-            }
-            if (!isNaN(newVal) && newVal>=0 && this.movingVolumeSlider) {
-                this.resetSendVolumeTimer();
-            }
-        },
         'showPlayerMenu': function(newVal) {
             this.$store.commit('menuVisible', {name:'player', shown:newVal});
             if (newVal) {

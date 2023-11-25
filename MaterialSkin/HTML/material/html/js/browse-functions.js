@@ -863,11 +863,12 @@ function browseAddCategories(view, item, isGenre) {
             custom[i].custom=true;
             view.currentActions.push(custom[i]);
         }
-        if (view.currentActions.show) {
-            view.current={id:item.id, title:item.title};
-        }
     }
+    view.current = item;
     view.currentActions.push({action:(view.grid.use ? USE_LIST_ACTION : USE_GRID_ACTION)});
+    if (isGenre && lmsOptions.genreImages) {
+        view.setBgndCover();
+    }
 }
 
 function browseItemAction(view, act, item, index, event) {

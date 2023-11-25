@@ -105,6 +105,13 @@
         </select>
     [% END %]
 
+    [% WRAPPER setting title="PLUGIN_MATERIAL_SKIN_GENRE_IMAGES" desc="PLUGIN_MATERIAL_SKIN_GENRE_IMAGES_DESC" %]
+    <select class="stdedit" name="pref_genreImages" id="genreImages">
+        <option [% IF NOT prefs.genreImages %]selected [% END %]value="0">[% 'NO' | getstring %]</option>
+        <option [% IF prefs.genreImages %]selected [% END %]value="1">[% 'YES' | getstring %]</option>
+    </select>
+    [% END %]
+
     [% WRAPPER setting title="PLUGIN_MATERIAL_SKIN_RELEASE_TYPE_ORDER" desc="PLUGIN_MATERIAL_SKIN_RELEASE_TYPE_ORDER_DESC" %]
         <textarea class="stdedit" name="pref_releaseTypeOrder" id="releaseTypeOrder" cols="45" rows="5">[% prefs.releaseTypeOrder %]</textarea>
     [% END %]

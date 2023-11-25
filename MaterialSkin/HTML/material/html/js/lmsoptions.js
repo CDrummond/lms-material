@@ -27,5 +27,6 @@ var lmsOptions = {techInfo: getLocalStorageBool('techInfo', false),
                   supportReleaseTypes: LMS_DEF_SUPPORT_RELEASE_TYPES,
                   groupByReleaseType: LMS_DEF_GROUP_BY_RELEASE_TYPE,
                   releaseTypeOrder: undefined,
-                  releaseTypes: {}
+                  releaseTypes: {},
+                  genreImages: getLocalStorageBool('genreImages', false)
                 };

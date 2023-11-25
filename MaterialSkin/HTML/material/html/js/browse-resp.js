@@ -1241,15 +1241,18 @@ function parseBrowseResp(data, parent, options, cacheKey, parentCommand, parentG
                     resp.jumplist.push({key: key, index: resp.items.length});
                     textKeys.add(key);
                 }
+                let genre = i.genre.toLowerCase().replace(/[^0-9a-z]/gi, '');
                 resp.items.push({
                               id: "genre_id:"+i.id,
                               title: i.genre,
                               //icon: "label",
+                              image: lmsOptions.genreImages ? "material/genres/" + genre : undefined,
                               stdItem: STD_ITEM_GENRE,
                               type: "group",
                               textkey: key
                           });
             }
+            resp.canUseGrid = lmsOptions.genreImages;
             resp.itemCustomActions = getCustomActions("genre");
             resp.subtitle=i18np("1 Genre", "%1 Genres", resp.items.length);
         } else if (data.result.playlists_loop) {

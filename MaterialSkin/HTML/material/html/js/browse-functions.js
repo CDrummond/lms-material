@@ -445,6 +445,9 @@ function browseHandleListResponse(view, item, command, resp, prevPage, appendIte
         }
         if (resp.isMusicMix || (("albums"==command.command[0] && view.items.length>0 && command.params.find(elem => elem=="sort:random")))) {
             view.currentActions.push({action:RELOAD_ACTION, weight:1});
+            if (resp.isMusicMix && !queryParams.party) {
+                view.currentActions.push({action:ADD_TO_PLAYLIST_ACTION, weight:1});
+            }
         }
         if (view.command.command.length>0 && view.command.command[0]=="albums" && view.items.length>0) {
             var addSort=true;

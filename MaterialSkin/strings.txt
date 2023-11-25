@@ -382,6 +382,8 @@ PLUGIN_MATERIAL_SKIN_RELEASE_TYPE_ORDER_DESC
 
 PLUGIN_MATERIAL_SKIN_GENRE_IMAGES
 	EN	Genre images
+	FR	Images des genres
 
 PLUGIN_MATERIAL_SKIN_GENRE_IMAGES_DESC
 	EN	Display images when listing genres. This requires creating 600x600 JPEG images within a "material-skin/genres" sub-folder of your LMS's preferences folder. Genre images should all be lowercase letters or numbers, with all other characters removed. e.g. "R&B" is "rb.jpg", "Folk/Rock" is "folkrock.jpg"
+	FR	Afficher des images dans la liste des genres. Cela nécessite de créer des images JPEG 600x600 dans un sous-dossier "material-skin/genres" du dossier des préférences de LMS. Les noms des fichiers doivent être constitués uniquement de lettres minuscules ou de chiffres. Par exemple : "R&B" devient "rb.jpg", "Folk/Rock" devient "folkrock.jpg".

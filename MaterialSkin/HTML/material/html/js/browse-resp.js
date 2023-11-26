@@ -1032,10 +1032,13 @@ function parseBrowseResp(data, parent, options, cacheKey, parentCommand, parentG
             resp.itemCustomActions = getCustomActions("album-track");
             var stdItem = allowPlayAlbum && data.result.count>1 ? STD_ITEM_ALBUM_TRACK : STD_ITEM_TRACK;
             let artists = [];
+            let artistsWithContext = [];
             let numCompilationTracks = 0;
             let compilationAlbumArtists = new Set();
             let compilationArtists = new Set();
             let compilationAlbumArtist = undefined;
+            let extraSubs = [];
+            let showContext = getLocalStorageBool('showContext', true);
 
             for (var idx=0, loop=data.result.titles_loop, loopLen=loop.length; idx<loopLen; ++idx) {
                 var i = loop[idx];
@@ -1066,12 +1069,15 @@ function parseBrowseResp(data, parent, options, cacheKey, parentCommand, parentG
                 }
 
                 artists.push(buildArtistLine(i, "browse", false));
+                if (showContext) {
+                    artistsWithContext.push(replaceBr(buildArtistWithContext(i, "browse", false), " "));
+                }
                 let subtitle = undefined;
+                let subtitleContext = undefined;
                 if (showAlbumName && i.album) {
-                    if (subtitle) {
-                        subtitle+=SEPARATOR+buildAlbumLine(i, "browse", false);
-                    } else {
-                        subtitle=buildAlbumLine(i, "browse", false);
+                    subtitle=buildAlbumLine(i, "browse", false);
+                    if (showContext) {
+                        subtitleContext=i18n('<obj>from</obj> %1', buildAlbumLine(i, "browse", false)).replaceAll("<obj>", "<obj class=\"ext-details\">");
                     }
                 }
                 if (undefined!=i.disc && !isSearchResult && !isAllSongs) {
@@ -1107,19 +1113,25 @@ function parseBrowseResp(data, parent, options, cacheKey, parentCommand, parentG
                 }
                 totalDuration += duration>0 ? duration : 0;
                 //var subtitle = duration>0 ? formatSeconds(duration) : undefined;
-                var techInfo = lmsOptions.techInfo ? formatTechInfo(i) : undefined;
+                let extraSub = undefined;
+                let techInfo = lmsOptions.techInfo ? formatTechInfo(i) : undefined;
                 if (techInfo) {
-                    if (subtitle) {
-                        subtitle+=SEPARATOR+techInfo;
+                    extraSub=techInfo;
+                }
+                let rs = undefined!=i.rating ? ratingString(subtitle, i.rating) : undefined;
+                if (rs) {
+                    if (extraSub) {
+                        extraSub+=SEPARATOR+rs;
                     } else {
-                        subtitle=techInfo;
+                        extraSub=rs;
                     }
                 }
-                subtitle = undefined!=i.rating ? ratingString(subtitle, i.rating) : subtitle;
+                extraSubs.push(extraSub);
                 resp.items.push({
                               id: "track_id:"+i.id,
                               title: title,
                               subtitle: subtitle,
+                              subtitleContext: subtitleContext,
                               //icon: "music_note",
                               stdItem: stdItem,
                               type: "track",
@@ -1188,6 +1200,9 @@ function parseBrowseResp(data, parent, options, cacheKey, parentCommand, parentG
                     for (let i=0, loop=resp.items, len=loop.length; i<len; ++i) {
                         if (undefined!=artists[i]) {
                             loop[i].subtitle = undefined==loop[i].subtitle ? artists[i] : (artists[i] + SEPARATOR + loop[i].subtitle);
+                            if (showContext) {
+                                loop[i].subtitleContext = undefined==loop[i].subtitleContext ? artistsWithContext[i] : (artistsWithContext[i] + " " + loop[i].subtitleContext);
+                            }
                         }
                     }
                 }
@@ -1195,6 +1210,17 @@ function parseBrowseResp(data, parent, options, cacheKey, parentCommand, parentG
                 // Only one? Check that this tracks artist line does not match parent item's artist details...
                 if (stripLinkTags(artists[0])!=albumArtist) {
                     loop[0].subtitle = undefined==loop[0].subtitle ? artists[0] : (artists[0] + SEPARATOR + loop[0].subtitle);
+                    if (showContext) {
+                        loop[0].subtitleContext = undefined==loop[0].subtitleContext ? artistsWithContext[0] : (artistsWithContext[0] + " " + loop[0].subtitleContext);
+                    }
+                }
+            }
+            for (let i=0, loop=resp.items, len=loop.length; i<len; ++i) {
+                if (undefined!=extraSubs[i]) {
+                    loop[i].subtitle = undefined==loop[i].subtitle ? extraSubs[i] : (loop[i].subtitle + SEPARATOR + extraSubs[i]);
+                    if (showContext) {
+                        loop[i].subtitleContext = undefined==loop[i].subtitleContext ? extraSubs[i] : (loop[i].subtitleContext + SEPARATOR + extraSubs[i]);
+                    }
                 }
             }
             // Don't hightlight all tracks! Happens with VA albums...
@@ -1313,11 +1339,13 @@ function parseBrowseResp(data, parent, options, cacheKey, parentCommand, parentG
             resp.subtitle=i18np("1 Playlist", "%1 Playlists", resp.items.length);
         } else if (data.result.playlisttracks_loop) {
             var totalDuration = 0;
+            let showContext = getLocalStorageBool('showContext', true);
             for (var idx=0, loop=data.result.playlisttracks_loop, loopLen=loop.length; idx<loopLen; ++idx) {
                 var i = loop[idx];
                 var title = i.title;
                 splitMultiples(i);
                 let subtitle = buildArtistLine(i, "browse", false);
+                let subtitleContext = showContext ? replaceBr(buildArtistWithContext(i, "browse", false), " ") : undefined;
                 if (!title) {
                     title=i18n("Unknown");
                 }
@@ -1326,8 +1354,14 @@ function parseBrowseResp(data, parent, options, cacheKey, parentCommand, parentG
                 if (i.album) {
                     if (subtitle) {
                         subtitle+=SEPARATOR+buildAlbumLine(i, "browse", false);
+                        if (showContext) {
+                            subtitleContext+=" "+i18n('<obj>from</obj> %1', buildAlbumLine(i, "browse", false)).replaceAll("<obj>", "<obj class=\"ext-details\">");
+                        }
                     } else {
                         subtitle=buildAlbumLine(i, "browse", false);
+                        if (showContext) {
+                            subtitleContext=i18n('<obj>from</obj> %1', buildAlbumLine(i, "browse", false)).replaceAll("<obj>", "<obj class=\"ext-details\">");
+                        }
                     }
                 }
                 var techInfo = lmsOptions.techInfo ? formatTechInfo(i) : undefined;
@@ -1337,12 +1371,16 @@ function parseBrowseResp(data, parent, options, cacheKey, parentCommand, parentG
                     } else {
                         subtitle=techInfo;
                     }
+                    if (subtitleContext) {
+                        subtitleContext+=SEPARATOR+techInfo;
+                    }
                 }
                 var isRemote = undefined!=parent && parent.remotePlaylist;
                 resp.items.push({
                               id: uniqueId("track_id:"+i.id, resp.items.length),
                               title: title,
                               subtitle: subtitle,
+                              subtitleContext: subtitleContext,
                               image: i.artwork_url
                                         ? resolveImageUrl(i.artwork_url, LMS_IMAGE_SIZE)
                                         : ("/music/" + (""==i.coverid || undefined==i.coverid ? "0" : i.coverid) + "/cover" +LMS_IMAGE_SIZE),

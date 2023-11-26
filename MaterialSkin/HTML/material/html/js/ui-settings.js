@@ -128,6 +128,15 @@ Vue.component('lms-ui-settings', {
     </v-list-tile>
     <v-divider></v-divider>
 
+    <v-list-tile>
+    <v-list-tile-content @click="showContext = !showContext" class="switch-label">
+     <v-list-tile-title>{{i18n('Show artist context, etc.')}}</v-list-tile-title>
+     <v-list-tile-sub-title>{{i18n("Show 'performed by', 'from', etc. when listing track details (e.g. Title by Artist from Album).")}}</v-list-tile-sub-title>
+    </v-list-tile-content>
+    <v-list-tile-action><m3-switch v-model="showContext"></m3-switch></v-list-tile-action>
+   </v-list-tile>
+   <v-divider></v-divider>
+
     <v-list-tile v-if="LMS_STATS_ENABLED">
      <v-list-tile-content @click="showRating = !showRating" class="switch-label">
       <v-list-tile-title>{{i18n('Show rating')}}</v-list-tile-title>
@@ -238,15 +247,6 @@ Vue.component('lms-ui-settings', {
      <v-select :items="skipSecondsOptions" :label="i18n('Previous/next long-press skip')" v-model="skipSeconds" item-text="label" item-value="value"></v-select>
     </v-list-tile>
     <v-divider></v-divider>
-
-    <v-list-tile>
-    <v-list-tile-content @click="nowPlayingContext = !nowPlayingContext" class="switch-label">
-     <v-list-tile-title>{{i18n('Show artist context, etc.')}}</v-list-tile-title>
-     <v-list-tile-sub-title>{{i18n("Show 'performed by', 'from', etc. when listing track details (e.g. Title by Artist from Album).")}}</v-list-tile-sub-title>
-    </v-list-tile-content>
-    <v-list-tile-action><m3-switch v-model="nowPlayingContext"></m3-switch></v-list-tile-action>
-   </v-list-tile>
-   <v-divider></v-divider>
 
     <v-list-tile>
      <v-list-tile-content @click="nowPlayingClock = !nowPlayingClock" class="switch-label">
@@ -379,7 +379,7 @@ Vue.component('lms-ui-settings', {
             queueShowTrackNum:false,
             nowPlayingTrackNum:false,
             nowPlayingClock:false,
-            nowPlayingContext:false,
+            showContext:false,
             swipeVolume:false,
             swipeChangeTrack:false,
             keyboardControl:true,
@@ -552,7 +552,7 @@ Vue.component('lms-ui-settings', {
             this.queueShowTrackNum = this.$store.state.queueShowTrackNum;
             this.nowPlayingTrackNum = this.$store.state.nowPlayingTrackNum;
             this.nowPlayingClock = this.$store.state.nowPlayingClock;
-            this.nowPlayingContext = this.$store.state.nowPlayingContext;
+            this.showContext = this.$store.state.showContext;
             this.swipeVolume = this.$store.state.swipeVolume;
             this.swipeChangeTrack = this.$store.state.swipeChangeTrack;
             this.keyboardControl = this.$store.state.keyboardControl;
@@ -654,7 +654,7 @@ Vue.component('lms-ui-settings', {
                       queueShowTrackNum:this.queueShowTrackNum,
                       nowPlayingTrackNum:this.nowPlayingTrackNum,
                       nowPlayingClock:this.nowPlayingClock,
-                      nowPlayingContext:this.nowPlayingContext,
+                      showContext:this.showContext,
                       swipeVolume:this.swipeVolume,
                       swipeChangeTrack:this.swipeChangeTrack,
                       keyboardControl:this.keyboardControl,

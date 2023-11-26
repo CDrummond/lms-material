@@ -28,6 +28,7 @@
     action menus.
 20. Add support for displaying genre images.
 21. Fix multi-disc headers when have more than 100 items.
+22. Optionally show 'by', 'from', context in browse and queue.
 
 4.0.4
 -----

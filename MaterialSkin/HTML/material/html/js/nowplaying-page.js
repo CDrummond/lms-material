@@ -1226,13 +1226,13 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
             return undefined!=this.coverUrl && (this.coverUrl.includes(DEFAULT_COVER) || this.coverUrl.includes(LMS_BLANK_COVER) || this.coverUrl.includes(DEFAULT_RADIO_COVER))
         },
         artistAndComposerLine() {
-            return this.$store.state.nowPlayingContext && undefined!=this.playerStatus.current.artistAndComposerWithContext ? this.playerStatus.current.artistAndComposerWithContext : this.playerStatus.current.artistAndComposer
+            return this.$store.state.showContext && undefined!=this.playerStatus.current.artistAndComposerWithContext ? this.playerStatus.current.artistAndComposerWithContext : this.playerStatus.current.artistAndComposer
         },
         albumLine() {
-            return this.$store.state.nowPlayingContext && undefined!=this.playerStatus.current.artistAndComposerWithContext && !isEmpty(this.playerStatus.current.albumLine) ? i18n('<obj>from</obj> %1', this.playerStatus.current.albumLine).replaceAll("<obj>", "<obj class=\"ext-details\">") : this.playerStatus.current.albumLine
+            return this.$store.state.showContext && undefined!=this.playerStatus.current.artistAndComposerWithContext && !isEmpty(this.playerStatus.current.albumLine) ? i18n('<obj>from</obj> %1', this.playerStatus.current.albumLine).replaceAll("<obj>", "<obj class=\"ext-details\">") : this.playerStatus.current.albumLine
         },
         barInfoWithContext() {
-            if (this.$store.state.nowPlayingContext && this.windowWidth-380>this.barInfoWithContextWidth && undefined!=this.playerStatus.current.artistAndComposerWithContext && this.albumLine) {
+            if (this.$store.state.showContext && this.windowWidth-380>this.barInfoWithContextWidth && undefined!=this.playerStatus.current.artistAndComposerWithContext && this.albumLine) {
                 return replaceBr(this.artistAndComposerLine, " ")+" " + this.albumLine
             }
             return undefined;

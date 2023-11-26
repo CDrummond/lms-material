@@ -14,7 +14,7 @@ function copyPlayer(p){
 
 function updateUiSettings(state, val) {
     let stdItems = ['autoScrollQueue', 'browseBackdrop', 'queueBackdrop', 'nowPlayingBackdrop', 'infoBackdrop',
-                    'browseTechInfo', 'techInfo', 'nowPlayingTrackNum', 'nowPlayingContext', 'swipeVolume', 'swipeChangeTrack',
+                    'browseTechInfo', 'techInfo', 'nowPlayingTrackNum', 'showContext', 'swipeVolume', 'swipeChangeTrack',
                     'keyboardControl', 'skipSeconds', 'powerButton', 'mediaControls', 'showRating'];
     for (let i=0, len=stdItems.length; i<len; ++i) {
         let key=stdItems[i];
@@ -249,7 +249,7 @@ const store = new Vuex.Store({
         queueShowTrackNum: true,
         nowPlayingTrackNum: false,
         nowPlayingClock: false,
-        nowPlayingContext: true,
+        showContext: true,
         maxRating: 5,
         showRating: false,
         page:'browse',
@@ -476,7 +476,7 @@ const store = new Vuex.Store({
 
             let boolItems = ['roundCovers', 'autoScrollQueue', 'sortFavorites', 'browseBackdrop', 'queueBackdrop', 'nowPlayingBackdrop',
                              'infoBackdrop', 'useDefaultBackdrops', 'browseTechInfo', 'techInfo', 'queueShowTrackNum', 'nowPlayingTrackNum',
-                             'nowPlayingClock', 'nowPlayingContext', 'swipeVolume', 'swipeChangeTrack', 'keyboardControl', 'screensaver', 'homeButton',
+                             'nowPlayingClock', 'showContext', 'swipeVolume', 'swipeChangeTrack', 'keyboardControl', 'screensaver', 'homeButton',
                              'powerButton', 'mediaControls', 'queueAlbumStyle', 'queueThreeLines'];
             for (let i=0, len=boolItems.length; i<len; ++i) {
                 let key = boolItems[i];

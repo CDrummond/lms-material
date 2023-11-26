@@ -681,20 +681,23 @@ var lmsBrowse = Vue.component("lms-browse", {
                               icon: "extension",
                               type: "group",
                               weight: 5,
-                              id: TOP_EXTRAS_ID },
-                            { command: ["cdplayer", "items"],
-                              params: ["menu:1"],
-                              svg: "cd-player",
-                              type: "group",
-                              weight: 6,
-                              id: TOP_CDPLAYER_ID },
-                            { command: ["selectRemoteLibrary", "items"],
-                              params: ["menu:selectRemoteLibrary", "menu:1"],
-                              icon: "cloud",
-                              type: "group",
-                              weight: 7,
-                              id: TOP_REMOTE_ID }
-                           ];
+                              id: TOP_EXTRAS_ID }];
+                if (LMS_P_CD) {
+                    top.push({  command: ["cdplayer", "items"],
+                                params: ["menu:1"],
+                                svg: "cd-player",
+                                type: "group",
+                                weight: 6,
+                                id: TOP_CDPLAYER_ID });
+                }
+                if (LMS_P_RM) {
+                    top.push({  command: ["selectRemoteLibrary", "items"],
+                                params: ["menu:selectRemoteLibrary", "menu:1"],
+                                icon: "cloud",
+                                type: "group",
+                                weight: 7,
+                                id: TOP_REMOTE_ID });
+                }
             }
             for (var i=0, len=this.top.length; i<len; ++i) {
                 this.top[i].title= this.top[i].id==TOP_MYMUSIC_ID
@@ -1721,12 +1724,6 @@ var lmsBrowse = Vue.component("lms-browse", {
             try { browsePlayerChanged(this); } catch (e) {}
         }.bind(this));
 
-        if (!LMS_P_RM) {
-            this.disabled.add(TOP_REMOTE_ID);
-        }
-        if (!LMS_P_CD) {
-            this.disabled.add(TOP_CDPLAYER_ID);
-        }
         var savedItems = JSON.parse(getLocalStorageVal("topItems", "[]"));
         if (savedItems.length==0) {
             savedItems = JSON.parse(getLocalStorageVal("pinned", "[]"));

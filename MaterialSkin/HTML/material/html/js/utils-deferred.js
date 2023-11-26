@@ -431,10 +431,15 @@ function revYearAlbumTrackSort(a, b) {
     return albumTrackSort(a, b);
 }
 
+function removeTrackNum(s) {
+    let parts = s.split(SEPARATOR);
+    return 2==parts.length ? parts[1] : s;
+}
+
 function artistTitleSort(a, b) {
     let s = fixedSort(a.artist, b.artist);
     if (s!=0) {
         return s;
     }
-    return titleSort(a, b);
+    return fixedSort(removeTrackNum(a.title), removeTrackNum(b.title));
 }

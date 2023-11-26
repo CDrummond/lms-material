@@ -1007,7 +1007,7 @@ function parseBrowseResp(data, parent, options, cacheKey, parentCommand, parentG
             var highlightArtist = undefined;
             let highlighted = 0;
             let reverse = false;
-            let isCompositions = true;
+            let isCompositions = false;
             let parentArtist = undefined;
             if (data.params[1].length>=4 && data.params[1][0]=="tracks") {
                 for (var p=0, plen=data.params[1].length; p<plen && (!allowPlayAlbum || !showAlbumName); ++p) {
@@ -1029,7 +1029,6 @@ function parseBrowseResp(data, parent, options, cacheKey, parentCommand, parentG
                     }
                 }
             }
-
             resp.itemCustomActions = getCustomActions("album-track");
             var stdItem = allowPlayAlbum && data.result.count>1 ? STD_ITEM_ALBUM_TRACK : STD_ITEM_TRACK;
             let artists = [];
@@ -1132,7 +1131,7 @@ function parseBrowseResp(data, parent, options, cacheKey, parentCommand, parentG
                               disc: i.disc ? parseInt(i.disc) : undefined,
                               year: sortTracks && i.year ? parseInt(i.year) : undefined,
                               album: sortTracks || isSearchResult ? i.album : undefined,
-                              artist: isSearchResult ? i.artist : undefined,
+                              artist: isSearchResult || 2==sortTracks ? i.artist : undefined,
                               album_id: isSearchResult ? i.album_id : undefined,
                               artist_id: isSearchResult ? i.artist_id : undefined,
                               url: i.url,
@@ -1144,6 +1143,7 @@ function parseBrowseResp(data, parent, options, cacheKey, parentCommand, parentG
                 if (highlight) {
                     highlighted++;
                 }
+
                 if (lmsOptions.noArtistFilter && undefined!=i.compilation && 1==parseInt(i.compilation)) {
                     numCompilationTracks++;
                     if (undefined!=i.albumartist) {
@@ -1179,7 +1179,7 @@ function parseBrowseResp(data, parent, options, cacheKey, parentCommand, parentG
 
             if (resp.items.length>1) {
                 let showArtists = (new Set(artists)).size>1;
-                if (!showArtists && isCompositions) {
+                if (!showArtists && isCompositions && undefined!=albumArtist) {
                     for (let i=0, loop=resp.items, len=loop.length; i<len && !showArtists; ++i) {
                         showArtists = stripLinkTags(artists[i])!=albumArtist;
                     }
@@ -1191,7 +1191,7 @@ function parseBrowseResp(data, parent, options, cacheKey, parentCommand, parentG
                         }
                     }
                 }
-            } else if (1==resp.items.length) {
+            } else if (1==resp.items.length && undefined!=albumArtist) {
                 // Only one? Check that this tracks artist line does not match parent item's artist details...
                 if (stripLinkTags(artists[0])!=albumArtist) {
                     loop[0].subtitle = undefined==loop[0].subtitle ? artists[0] : (artists[0] + SEPARATOR + loop[0].subtitle);

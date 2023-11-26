@@ -1003,7 +1003,7 @@ function parseBrowseResp(data, parent, options, cacheKey, parentCommand, parentG
             var isSearchResult = options && options.isSearch;
             var showAlbumName = isSearchResult || isAllSongs || (parent && parent.id && parent.id.startsWith("artist_id:"));
             var discs = new Map();
-            var sortTracks = isAllSongs;
+            var sortTracks = 0;
             var highlightArtist = undefined;
             let highlighted = 0;
             let reverse = false;
@@ -1020,8 +1020,8 @@ function parseBrowseResp(data, parent, options, cacheKey, parentCommand, parentG
                         highlightArtist = parseInt(param.split(':')[1]);
                     } else if (param==MSK_REV_SORT_OPT) {
                         reverse = true;
-                    } else if (isAllSongs && param.startsWith(SORT_KEY) && param!=(SORT_KEY+"yearalbumtrack")) {
-                        sortTracks = false;
+                    } else if (param.startsWith(SORT_KEY)) {
+                        sortTracks = param==(SORT_KEY+"yearalbumtrack") ? 1 : param==(SORT_KEY+"artisttitle") ? 2 : 0;
                     } else if (param=="role_id:COMPOSER") {
                         isCompositions = true;
                     } else if (param.startsWith("mskartist:")) {
@@ -1204,8 +1204,13 @@ function parseBrowseResp(data, parent, options, cacheKey, parentCommand, parentG
                 }
             }
 
-            if (sortTracks) {
+            if (sortTracks==1) {
                 resp.items.sort(reverse ? revYearAlbumTrackSort : yearAlbumTrackSort);
+            } else if (sortTracks==2) {
+                resp.items.sort(artistTitleSort);
+                if (reverse) {
+                    resp.items = resp.items.reverse();
+                }
             } else if (reverse) {
                 resp.items = resp.items.reverse();
             }

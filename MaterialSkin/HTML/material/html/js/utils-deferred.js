@@ -430,3 +430,11 @@ function revYearAlbumTrackSort(a, b) {
     }
     return albumTrackSort(a, b);
 }
+
+function artistTitleSort(a, b) {
+    let s = fixedSort(a.artist, b.artist);
+    if (s!=0) {
+        return s;
+    }
+    return titleSort(a, b);
+}

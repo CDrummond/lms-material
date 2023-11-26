@@ -45,7 +45,7 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
    <template v-for="(tab, index) in info.tabs">
     <v-tab :key="index">{{tab.title}}</v-tab>
     <v-tab-item :key="index" :transition="false" :reverse-transition="false">
-     <v-card flat class="np-info-card-cover fade-both" @contextmenu.prevent="showContextMenu">
+     <v-card flat class="np-info-card-cover fade-both" @contextmenu.prevent="nowPlayingContextMenu">
       <v-card-text :class="['np-info-text', zoomInfoClass, TRACK_TAB==index || tab.isMsg ? 'np-info-lyrics' : '', ALBUM_TAB==index ? 'np-info-review' : '']">
        <div v-if="TRACK_TAB==index && tab.texttitle" v-html="tab.texttitle" class="np-info-title"></div>
        <img v-if="tab.image" :src="tab.image" loading="lazy" class="np-no-meta-img"></img>
@@ -98,7 +98,7 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
     <template v-for="(tab, index) in info.tabs">
      <v-flex xs4>
       <v-card flat class="np-info-card-cover">
-       <v-card-text :class="['np-info-text-full', 'fade-both', zoomInfoClass, TRACK_TAB==index || tab.isMsg ? 'np-info-lyrics' : '', ALBUM_TAB==index ? 'np-info-review' : '']" @contextmenu.prevent="showContextMenu">
+       <v-card-text :class="['np-info-text-full', 'fade-both', zoomInfoClass, TRACK_TAB==index || tab.isMsg ? 'np-info-lyrics' : '', ALBUM_TAB==index ? 'np-info-review' : '']" @contextmenu.prevent="nowPlayingContextMenu">
         <div v-if="TRACK_TAB==index && tab.texttitle" v-html="tab.texttitle" class="np-info-title"></div>
         <img v-if="tab.image" :src="tab.image" loading="lazy" class="np-no-meta-img"></img>
         <div v-if="tab.text" v-bind:class="{'text':ARTIST_TAB==index}" v-html="tab.text"></div>
@@ -595,7 +595,7 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
             this.info.tabs[ALBUM_TAB].sections[0].title=i18n("Tracks");
             this.info.tabs[TRACK_TAB].sections[0].title=i18n("Details");
         },
-        showContextMenu(event) {
+        nowPlayingContextMenu(event) {
             if (this.$store.state.visibleMenus.size<1) {
                 this.showMenu(event);
             } else {
@@ -1226,13 +1226,13 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
             return undefined!=this.coverUrl && (this.coverUrl.includes(DEFAULT_COVER) || this.coverUrl.includes(LMS_BLANK_COVER) || this.coverUrl.includes(DEFAULT_RADIO_COVER))
         },
         artistAndComposerLine() {
-            return this.$store.state.showContext && undefined!=this.playerStatus.current.artistAndComposerWithContext ? this.playerStatus.current.artistAndComposerWithContext : this.playerStatus.current.artistAndComposer
+            return this.$store.state.nowPlayingContext && undefined!=this.playerStatus.current.artistAndComposerWithContext ? this.playerStatus.current.artistAndComposerWithContext : this.playerStatus.current.artistAndComposer
         },
         albumLine() {
-            return this.$store.state.showContext && undefined!=this.playerStatus.current.artistAndComposerWithContext && !isEmpty(this.playerStatus.current.albumLine) ? i18n('<obj>from</obj> %1', this.playerStatus.current.albumLine).replaceAll("<obj>", "<obj class=\"ext-details\">") : this.playerStatus.current.albumLine
+            return this.$store.state.nowPlayingContext && undefined!=this.playerStatus.current.artistAndComposerWithContext && !isEmpty(this.playerStatus.current.albumLine) ? i18n('<obj>from</obj> %1', this.playerStatus.current.albumLine).replaceAll("<obj>", "<obj class=\"ext-details\">") : this.playerStatus.current.albumLine
         },
         barInfoWithContext() {
-            if (this.$store.state.showContext && this.windowWidth-380>this.barInfoWithContextWidth && undefined!=this.playerStatus.current.artistAndComposerWithContext && this.albumLine) {
+            if (this.$store.state.nowPlayingContext && this.windowWidth-380>this.barInfoWithContextWidth && undefined!=this.playerStatus.current.artistAndComposerWithContext && this.albumLine) {
                 return replaceBr(this.artistAndComposerLine, " ")+" " + this.albumLine
             }
             return undefined;

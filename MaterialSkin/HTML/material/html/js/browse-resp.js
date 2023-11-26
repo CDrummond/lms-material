@@ -1038,7 +1038,7 @@ function parseBrowseResp(data, parent, options, cacheKey, parentCommand, parentG
             let compilationArtists = new Set();
             let compilationAlbumArtist = undefined;
             let extraSubs = [];
-            let showContext = getLocalStorageBool('showContext', true);
+            let browseContext = getLocalStorageBool('browseContext', false);
 
             for (var idx=0, loop=data.result.titles_loop, loopLen=loop.length; idx<loopLen; ++idx) {
                 var i = loop[idx];
@@ -1069,14 +1069,14 @@ function parseBrowseResp(data, parent, options, cacheKey, parentCommand, parentG
                 }
 
                 artists.push(buildArtistLine(i, "browse", false));
-                if (showContext) {
+                if (browseContext) {
                     artistsWithContext.push(replaceBr(buildArtistWithContext(i, "browse", false), " "));
                 }
                 let subtitle = undefined;
                 let subtitleContext = undefined;
                 if (showAlbumName && i.album) {
                     subtitle=buildAlbumLine(i, "browse", false);
-                    if (showContext) {
+                    if (browseContext) {
                         subtitleContext=i18n('<obj>from</obj> %1', buildAlbumLine(i, "browse", false)).replaceAll("<obj>", "<obj class=\"ext-details\">");
                     }
                 }
@@ -1200,7 +1200,7 @@ function parseBrowseResp(data, parent, options, cacheKey, parentCommand, parentG
                     for (let i=0, loop=resp.items, len=loop.length; i<len; ++i) {
                         if (undefined!=artists[i]) {
                             loop[i].subtitle = undefined==loop[i].subtitle ? artists[i] : (artists[i] + SEPARATOR + loop[i].subtitle);
-                            if (showContext) {
+                            if (browseContext) {
                                 loop[i].subtitleContext = undefined==loop[i].subtitleContext ? artistsWithContext[i] : (artistsWithContext[i] + " " + loop[i].subtitleContext);
                             }
                         }
@@ -1210,7 +1210,7 @@ function parseBrowseResp(data, parent, options, cacheKey, parentCommand, parentG
                 // Only one? Check that this tracks artist line does not match parent item's artist details...
                 if (stripLinkTags(artists[0])!=albumArtist) {
                     loop[0].subtitle = undefined==loop[0].subtitle ? artists[0] : (artists[0] + SEPARATOR + loop[0].subtitle);
-                    if (showContext) {
+                    if (browseContext) {
                         loop[0].subtitleContext = undefined==loop[0].subtitleContext ? artistsWithContext[0] : (artistsWithContext[0] + " " + loop[0].subtitleContext);
                     }
                 }
@@ -1218,7 +1218,7 @@ function parseBrowseResp(data, parent, options, cacheKey, parentCommand, parentG
             for (let i=0, loop=resp.items, len=loop.length; i<len; ++i) {
                 if (undefined!=extraSubs[i]) {
                     loop[i].subtitle = undefined==loop[i].subtitle ? extraSubs[i] : (loop[i].subtitle + SEPARATOR + extraSubs[i]);
-                    if (showContext) {
+                    if (browseContext) {
                         loop[i].subtitleContext = undefined==loop[i].subtitleContext ? extraSubs[i] : (loop[i].subtitleContext + SEPARATOR + extraSubs[i]);
                     }
                 }
@@ -1339,13 +1339,13 @@ function parseBrowseResp(data, parent, options, cacheKey, parentCommand, parentG
             resp.subtitle=i18np("1 Playlist", "%1 Playlists", resp.items.length);
         } else if (data.result.playlisttracks_loop) {
             var totalDuration = 0;
-            let showContext = getLocalStorageBool('showContext', true);
+            let browseContext = getLocalStorageBool('browseContext', false);
             for (var idx=0, loop=data.result.playlisttracks_loop, loopLen=loop.length; idx<loopLen; ++idx) {
                 var i = loop[idx];
                 var title = i.title;
                 splitMultiples(i);
                 let subtitle = buildArtistLine(i, "browse", false);
-                let subtitleContext = showContext ? replaceBr(buildArtistWithContext(i, "browse", false), " ") : undefined;
+                let subtitleContext = browseContext ? replaceBr(buildArtistWithContext(i, "browse", false), " ") : undefined;
                 if (!title) {
                     title=i18n("Unknown");
                 }
@@ -1354,12 +1354,12 @@ function parseBrowseResp(data, parent, options, cacheKey, parentCommand, parentG
                 if (i.album) {
                     if (subtitle) {
                         subtitle+=SEPARATOR+buildAlbumLine(i, "browse", false);
-                        if (showContext) {
+                        if (browseContext) {
                             subtitleContext+=" "+i18n('<obj>from</obj> %1', buildAlbumLine(i, "browse", false)).replaceAll("<obj>", "<obj class=\"ext-details\">");
                         }
                     } else {
                         subtitle=buildAlbumLine(i, "browse", false);
-                        if (showContext) {
+                        if (browseContext) {
                             subtitleContext=i18n('<obj>from</obj> %1', buildAlbumLine(i, "browse", false)).replaceAll("<obj>", "<obj class=\"ext-details\">");
                         }
                     }

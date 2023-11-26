@@ -14,8 +14,9 @@ function copyPlayer(p){
 
 function updateUiSettings(state, val) {
     let stdItems = ['autoScrollQueue', 'browseBackdrop', 'queueBackdrop', 'nowPlayingBackdrop', 'infoBackdrop',
-                    'browseTechInfo', 'techInfo', 'nowPlayingTrackNum', 'showContext', 'swipeVolume', 'swipeChangeTrack',
-                    'keyboardControl', 'skipSeconds', 'powerButton', 'mediaControls', 'showRating'];
+                    'browseTechInfo', 'techInfo', 'nowPlayingTrackNum', 'swipeVolume', 'swipeChangeTrack',
+                    'keyboardControl', 'skipSeconds', 'powerButton', 'mediaControls', 'showRating', 'browseContext',
+                    'nowPlayingContext', 'queueContext'];
     for (let i=0, len=stdItems.length; i<len; ++i) {
         let key=stdItems[i];
         if (undefined!=val[key] && state[key]!=val[key]) {
@@ -249,7 +250,9 @@ const store = new Vuex.Store({
         queueShowTrackNum: true,
         nowPlayingTrackNum: false,
         nowPlayingClock: false,
-        showContext: true,
+        browseContext: false,
+        nowPlayingContext: true,
+        queueContext: false,
         maxRating: 5,
         showRating: false,
         page:'browse',
@@ -476,8 +479,9 @@ const store = new Vuex.Store({
 
             let boolItems = ['roundCovers', 'autoScrollQueue', 'sortFavorites', 'browseBackdrop', 'queueBackdrop', 'nowPlayingBackdrop',
                              'infoBackdrop', 'useDefaultBackdrops', 'browseTechInfo', 'techInfo', 'queueShowTrackNum', 'nowPlayingTrackNum',
-                             'nowPlayingClock', 'showContext', 'swipeVolume', 'swipeChangeTrack', 'keyboardControl', 'screensaver', 'homeButton',
-                             'powerButton', 'mediaControls', 'queueAlbumStyle', 'queueThreeLines'];
+                             'nowPlayingClock', 'swipeVolume', 'swipeChangeTrack', 'keyboardControl', 'screensaver', 'homeButton',
+                             'powerButton', 'mediaControls', 'queueAlbumStyle', 'queueThreeLines', 'browseContext', 'nowPlayingContext',
+                             'queueContext'];
             for (let i=0, len=boolItems.length; i<len; ++i) {
                 let key = boolItems[i];
                 state[key] = getLocalStorageBool(key, state[key]);

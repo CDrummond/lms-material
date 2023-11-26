@@ -28,7 +28,7 @@ function queueItemCover(item) {
 }
 
 var lmsQueueSelectionActive = false;
-function buildArtistAlbumLines(i, queueAlbumStyle, showContext) {
+function buildArtistAlbumLines(i, queueAlbumStyle, queueContext) {
     let artistAlbum = undefined;
     let artistAlbumContext = undefined;
     let artistIsRemoteTitle = false;
@@ -45,12 +45,12 @@ function buildArtistAlbumLines(i, queueAlbumStyle, showContext) {
         }
     } else {
         artistAlbum = buildArtistLine(i, 'queue');
-        artistAlbumContext = showContext ? buildArtistWithContext(i, 'queue') : undefined;
+        artistAlbumContext = queueContext ? buildArtistWithContext(i, 'queue') : undefined;
     }
     var lines = [];
     var linesContext = [];
     lines.push(artistAlbum);
-    if (showContext) {
+    if (queueContext) {
         linesContext.push(artistAlbumContext);
     }
     if (!queueAlbumStyle) {
@@ -59,13 +59,13 @@ function buildArtistAlbumLines(i, queueAlbumStyle, showContext) {
     }
     if (!queueAlbumStyle || !artistIsRemoteTitle) {
         artistAlbum = addPart(artistAlbum, buildAlbumLine(i, 'queue'));
-        if (showContext) {
+        if (queueContext) {
             let al = i18n('<obj>from</obj> %1', buildAlbumLine(i, "queue")).replaceAll("<obj>", "<obj class=\"ext-details\">");
             artistAlbumContext = undefined == artistAlbumContext ? al : (artistAlbumContext + " " + al);
         }
         if (!queueAlbumStyle) {
             lines.push(artistAlbum);
-            if (showContext) {
+            if (queueContext) {
                 linesContext.push(artistAlbumContext);
             }
             return lines.concat(linesContext);
@@ -74,7 +74,7 @@ function buildArtistAlbumLines(i, queueAlbumStyle, showContext) {
     return artistAlbum;
 }
 
-function parseResp(data, showTrackNum, index, showRatings, queueAlbumStyle, showContext, lastInCurrent) {
+function parseResp(data, showTrackNum, index, showRatings, queueAlbumStyle, queueContext, lastInCurrent) {
     logJsonMessage("RESP", data);
     let resp = { timestamp: 0, items: [], size: 0 };
     let isInitial = 0==index;
@@ -112,7 +112,7 @@ function parseResp(data, showTrackNum, index, showRatings, queueAlbumStyle, show
                                        (undefined==i.album_id && ( (undefined!=image && image!=prevItem.image) ||
                                                                    (i.album!=prevItem.album) ) ) );
                 let grpKey = isAlbumHeader || undefined==prevItem ? index+resp.items.length : prevItem.grpKey;
-                let artistAlbumLines = !queueAlbumStyle || isAlbumHeader ? buildArtistAlbumLines(i, queueAlbumStyle, showContext && !isAlbumHeader) : undefined;
+                let artistAlbumLines = !queueAlbumStyle || isAlbumHeader ? buildArtistAlbumLines(i, queueAlbumStyle, queueContext && !isAlbumHeader) : undefined;
                 resp.items.push({
                               id: "track_id:"+i.id,
                               title: title,
@@ -226,11 +226,11 @@ var lmsQueue = Vue.component("lms-queue", {
      </v-list-tile-avatar>
      <v-list-tile-content v-if="undefined==item.size"> <!-- hacky work-around for view refresh when change album/track style -->
       <v-list-tile-title v-html="item.title"></v-list-tile-title>
-      <v-list-tile-sub-title v-if="threeLines && showContext" v-html="item.artistAlbum[2]"></v-list-tile-sub-title>
+      <v-list-tile-sub-title v-if="threeLines && queueContext" v-html="item.artistAlbum[2]"></v-list-tile-sub-title>
       <v-list-tile-sub-title v-else-if="threeLines" v-html="item.artistAlbum[0]"></v-list-tile-sub-title>
-      <v-list-tile-sub-title v-else-if="showContext" v-html="item.artistAlbum[2]+' '+item.artistAlbum[3]"></v-list-tile-sub-title>
+      <v-list-tile-sub-title v-else-if="queueContext" v-html="item.artistAlbum[2]+' '+item.artistAlbum[3]"></v-list-tile-sub-title>
       <v-list-tile-sub-title v-else v-html="item.artistAlbum[0]+SEPARATOR+item.artistAlbum[1]"></v-list-tile-sub-title>
-      <v-list-tile-sub-title v-if="threeLines && showContext" v-html="item.artistAlbum[3]"></v-list-tile-sub-title>
+      <v-list-tile-sub-title v-if="threeLines && queueContext" v-html="item.artistAlbum[3]"></v-list-tile-sub-title>
       <v-list-tile-sub-title v-else-if="threeLines" v-html="item.artistAlbum[1]"></v-list-tile-sub-title>
      </v-list-tile-content>
      <v-list-tile-action class="pq-time" v-bind:class="{'pq-time-ns':selection.size==0}">{{item.durationStr}}</v-list-tile-action>
@@ -325,8 +325,8 @@ var lmsQueue = Vue.component("lms-queue", {
         threeLines() {
             return this.$store.state.queueThreeLines
         },
-        showContext() {
-            return this.$store.state.showContext && this.wide>2
+        queueContext() {
+            return this.$store.state.queueContext && this.wide>2
         },
         keyboardControl() {
             return this.$store.state.keyboardControl && !IS_MOBILE
@@ -444,7 +444,7 @@ var lmsQueue = Vue.component("lms-queue", {
                     if (this.$store.state.showRating && undefined!=i.rating) {
                         title += (this.albumStyle && !addedClass ? '<obj class="subtext">' : '') + SEPARATOR+ratingString(undefined, i.rating) + (this.albumStyle ? '</obj> ': '');
                     }
-                    var artistAlbum = undefined!=this.items[index].artistAlbum ? buildArtistAlbumLines(i, this.$store.state.queueAlbumStyle, this.$store.state.showContext) : undefined;
+                    var artistAlbum = undefined!=this.items[index].artistAlbum ? buildArtistAlbumLines(i, this.$store.state.queueAlbumStyle, this.$store.state.queueContext) : undefined;
                     // ?? var remoteTitle = checkRemoteTitle(i);
                     var duration = undefined==i.duration ? undefined : parseFloat(i.duration);
 
@@ -1140,7 +1140,7 @@ var lmsQueue = Vue.component("lms-queue", {
             var fetchCount = this.currentIndex > this.items.length + LMS_QUEUE_BATCH_SIZE ? this.currentIndex + 50 : LMS_QUEUE_BATCH_SIZE;
             lmsList(this.$store.state.player.id, ["status"], [PQ_STATUS_TAGS + (this.$store.state.showRating ? "R" : "")], this.items.length, fetchCount).then(({data}) => {
                 var resp = parseResp(data, this.$store.state.queueShowTrackNum, this.items.length, this.$store.state.showRating, this.$store.state.queueAlbumStyle,
-                                     this.$store.state.showContext, this.items.length>0 ? this.items[this.items.length-1] : undefined);
+                                     this.$store.state.queueContext, this.items.length>0 ? this.items[this.items.length-1] : undefined);
                 this.items.push.apply(this.items, resp.items);
                 // Check if a 'playlistTimestamp' was received whilst we were updating, if so need
                 // to update!
@@ -1179,7 +1179,7 @@ var lmsQueue = Vue.component("lms-queue", {
                 var prevTimestamp = this.timestamp;
                 lmsList(this.$store.state.player.id, ["status"], [PQ_STATUS_TAGS + (this.$store.state.showRating ? "R" : "")], 0,
                         this.items.length < LMS_QUEUE_BATCH_SIZE ? LMS_QUEUE_BATCH_SIZE : this.items.length).then(({data}) => {
-                    var resp = parseResp(data, this.$store.state.queueShowTrackNum, 0, this.$store.state.showRating, this.$store.state.queueAlbumStyle, this.$store.state.showContext);
+                    var resp = parseResp(data, this.$store.state.queueShowTrackNum, 0, this.$store.state.showRating, this.$store.state.queueAlbumStyle, this.$store.state.queueContext);
                     this.items = resp.items;
                     var needUpdate = this.timestamp!==prevTimestamp && this.timestamp!==resp.timestamp;
                     this.timestamp = resp.timestamp;

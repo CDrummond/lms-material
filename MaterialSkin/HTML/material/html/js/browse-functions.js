@@ -161,7 +161,7 @@ function browseActions(view, item, args, count, showCompositions) {
         }
 
         if (undefined!=args['artist_id'] && undefined==args['album_id'] && undefined!=args['count'] && args['count']>1) {
-            var params = [SORT_KEY+TRACK_SORT_PLACEHOLDER, 'tags:cdrilstyE' + (view.$store.state.showRating ? 'R' : ''), 'artist_id:'+args['artist_id']];
+            var params = [SORT_KEY+TRACK_SORT_PLACEHOLDER, 'tags:cdrilsty', 'artist_id:'+args['artist_id']];
             if (undefined!=args['role_id']) {
                 params.push(args['role_id']);
             }
@@ -175,7 +175,7 @@ function browseActions(view, item, args, count, showCompositions) {
             actions.push({title:i18n('All songs'), icon:'music_note', do:{ command: ['tracks'], params: params}, weight:80, stdItem:STD_ITEM_ALL_TRACKS});
         }
         if (undefined!=args['artist_id'] && showCompositions) {
-            var params = [SORT_KEY+TRACK_SORT_PLACEHOLDER, 'tags:cdrilstyE' + (view.$store.state.showRating ? 'R' : ''), 'artist_id:'+args['artist_id'], 'role_id:COMPOSER'];
+            var params = [SORT_KEY+TRACK_SORT_PLACEHOLDER, PLAYLIST_TRACK_TAGS, 'artist_id:'+args['artist_id'], 'role_id:COMPOSER', 'mskartist:'+args['artist']];
             let libId = view.currentLibId ? view.currentLibId : view.$store.state.library ? view.$store.state.library : LMS_DEFAULT_LIBRARY;
             if (libId) {
                 params.push("library_id:"+libId);

@@ -1007,6 +1007,8 @@ function parseBrowseResp(data, parent, options, cacheKey, parentCommand, parentG
             var highlightArtist = undefined;
             let highlighted = 0;
             let reverse = false;
+            let isCompositions = true;
+            let parentArtist = undefined;
             if (data.params[1].length>=4 && data.params[1][0]=="tracks") {
                 for (var p=0, plen=data.params[1].length; p<plen && (!allowPlayAlbum || !showAlbumName); ++p) {
                     let param = ""+data.params[1][p];
@@ -1020,6 +1022,10 @@ function parseBrowseResp(data, parent, options, cacheKey, parentCommand, parentG
                         reverse = true;
                     } else if (isAllSongs && param.startsWith(SORT_KEY) && param!=(SORT_KEY+"yearalbumtrack")) {
                         sortTracks = false;
+                    } else if (param=="role_id:COMPOSER") {
+                        isCompositions = true;
+                    } else if (param.startsWith("mskartist:")) {
+                        parentArtist = param.split(':')[1];
                     }
                 }
             }
@@ -1162,21 +1168,32 @@ function parseBrowseResp(data, parent, options, cacheKey, parentCommand, parentG
                     compilationAlbumArtist = LMS_VA_STRING;
                 }
             }
-            // Now add artist to subtitle if we have multiple artists...
-            if (resp.items.length>1 && (new Set(artists)).size>1) {
-                for (let i=0, loop=resp.items, len=loop.length; i<len; ++i) {
-                    if (undefined!=artists[i]) {
-                        loop[i].subtitle = undefined==loop[i].subtitle ? artists[i] : (artists[i] + SEPARATOR + loop[i].subtitle);
+            // Now add artist to subtitle if we have multiple artists, or we are showing compositions...
+            let albumArtist = parentArtist
+                                ? parentArtist
+                                : parent && parent.artists && parent.artists.length>0
+                                    ? parent.artists[0]
+                                    : parent && parent.stdItem==STD_ITEM_ALBUM && parent.subtitle
+                                         ? parent.subtitle
+                                         : undefined;
+
+            if (resp.items.length>1) {
+                let showArtists = (new Set(artists)).size>1;
+                if (!showArtists && isCompositions) {
+                    for (let i=0, loop=resp.items, len=loop.length; i<len && !showArtists; ++i) {
+                        showArtists = stripLinkTags(artists[i])!=albumArtist;
+                    }
+                }
+                if (showArtists) {
+                    for (let i=0, loop=resp.items, len=loop.length; i<len; ++i) {
+                        if (undefined!=artists[i]) {
+                            loop[i].subtitle = undefined==loop[i].subtitle ? artists[i] : (artists[i] + SEPARATOR + loop[i].subtitle);
+                        }
                     }
                 }
             } else if (1==resp.items.length) {
                 // Only one? Check that this tracks artist line does not match parent item's artist details...
-                let albumArtist = parent && parent.artists && parent.artists.length>0
-                             ? parent.artists[0]
-                             : parent && parent.stdItem==STD_ITEM_ALBUM && parent.subtitle
-                                 ? parent.subtitle
-                                 : undefined;
-                if (artists[0]!=albumArtist) {
+                if (stripLinkTags(artists[0])!=albumArtist) {
                     loop[0].subtitle = undefined==loop[0].subtitle ? artists[0] : (artists[0] + SEPARATOR + loop[0].subtitle);
                 }
             }

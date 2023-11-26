@@ -640,7 +640,7 @@ var lmsQueue = Vue.component("lms-queue", {
             };
         },
         updateWidth() {
-            var wide = this.scrollElement.clientWidth>=800 ? 3 : this.scrollElement.clientWidth>=420 ? 2 : this.scrollElement.clientWidth>=340 ? 1 : 0;
+            var wide = this.scrollElement.clientWidth>=550 ? 3 : this.scrollElement.clientWidth>=420 ? 2 : this.scrollElement.clientWidth>=340 ? 1 : 0;
             if (wide!=this.wide) {
                 this.wide = wide;
             }

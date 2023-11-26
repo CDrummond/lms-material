@@ -1111,7 +1111,7 @@ var lmsBrowse = Vue.component("lms-browse", {
                 this.layoutGrid(true);
                 if (resp.subtitle) {
                     this.headerSubTitle = resp.subtitle;
-                    this.detailedSubInfo = resp.subtitle;
+                    this.detailedSubInfo = resp.plainsubtitle ? resp.plainsubtitle : resp.years ? resp.years : "&nbsp;";
                 } else {
                     this.headerSubTitle=0==this.items.length ? i18n("Empty") : i18np("1 Item", "%1 Items", this.items.length);
                 }

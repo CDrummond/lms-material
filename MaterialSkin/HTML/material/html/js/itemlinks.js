@@ -15,15 +15,6 @@ function showArtist(event, id, title, page) {
     bus.$emit('npclose');
 }
 
-function showAlbumArtist(event, id, title, page) {
-    if (lmsNumVisibleMenus>0 || ('queue'==page && lmsQueueSelectionActive)) { // lmsNumVisibleMenus defined in store.js
-        return;
-    }
-    event.stopPropagation();
-    bus.$emit("browse", ["albums"], ["artist_id:"+id, ARTIST_ALBUM_TAGS, SORT_KEY+ARTIST_ALBUM_SORT_PLACEHOLDER, "role_id:ALBUMARTIST"], unescape(title), page, page!="browse");
-    bus.$emit('npclose');
-}
-
 function showAlbum(event, album, title, page) {
     if (lmsNumVisibleMenus>0 || ('queue'==page && lmsQueueSelectionActive)) { // lmsNumVisibleMenus defined in store.js
         return;
@@ -33,31 +24,29 @@ function showAlbum(event, album, title, page) {
     bus.$emit('npclose');
 }
 
-function showComposer(event, id, title, page) {
+function showArtistRole(event, id, title, page, role) {
     if (lmsNumVisibleMenus>0 || ('queue'==page && lmsQueueSelectionActive)) { // lmsNumVisibleMenus defined in store.js
         return;
     }
     event.stopPropagation();
-    bus.$emit("browse", ["albums"], ["artist_id:"+id, ARTIST_ALBUM_TAGS, SORT_KEY+ARTIST_ALBUM_SORT_PLACEHOLDER, "role_id:COMPOSER"], unescape(title), page, page!="browse");
+    bus.$emit("browse", ["albums"], ["artist_id:"+id, ARTIST_ALBUM_TAGS, SORT_KEY+ARTIST_ALBUM_SORT_PLACEHOLDER, "role_id:"+role], unescape(title), page, page!="browse");
     bus.$emit('npclose');
+}
+
+function showAlbumArtist(event, id, title, page) {
+    showArtistRole(event, id, title, page, "ALBUMARTIST");
+}
+
+function showComposer(event, id, title, page) {
+    showArtistRole(event, id, title, page, "COMPOSER");
 }
 
 function showConductor(event, id, title, page) {
-    if (lmsNumVisibleMenus>0 || ('queue'==page && lmsQueueSelectionActive)) { // lmsNumVisibleMenus defined in store.js
-        return;
-    }
-    event.stopPropagation();
-    bus.$emit("browse", ["albums"], ["artist_id:"+id, ARTIST_ALBUM_TAGS, SORT_KEY+ARTIST_ALBUM_SORT_PLACEHOLDER, "role_id:CONDUCTOR"], unescape(title), page, page!="browse");
-    bus.$emit('npclose');
+    showArtistRole(event, id, title, page, "CONDUCTOR");
 }
 
 function showBand(event, id, title, page) {
-    if (lmsNumVisibleMenus>0 || ('queue'==page && lmsQueueSelectionActive)) { // lmsNumVisibleMenus defined in store.js
-        return;
-    }
-    event.stopPropagation();
-    bus.$emit("browse", ["albums"], ["artist_id:"+id, ARTIST_ALBUM_TAGS, SORT_KEY+ARTIST_ALBUM_SORT_PLACEHOLDER, "role_id:BAND"], unescape(title), page, page!="browse");
-    bus.$emit('npclose');
+    showArtistRole(event, id, title, page, "BAND");
 }
 
 function buildLink(func, id, str, page) {

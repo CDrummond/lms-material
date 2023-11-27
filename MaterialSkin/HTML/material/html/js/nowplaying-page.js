@@ -542,6 +542,9 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
         bus.$on('npclose', function() {
             this.close();
         }.bind(this));
+        bus.$on('linkClicked', function() {
+            this.close();
+        }.bind(this));
 
         bus.$on('prefset', function(pref, value, player) {
             if ("plugin.dontstopthemusic:provider"==pref && player==this.$store.state.player.id) {

@@ -120,4 +120,11 @@
         <input type="text" class="sliderInput_100_2000_1" name="pref_pagedBatchSize" id="pagedBatchSize" value="[% prefs.pagedBatchSize %]" size="5"></input>
     [% END %]
 
+    [% WRAPPER setting title="PLUGIN_MATERIAL_SKIN_TOUCH_LINKS" desc="PLUGIN_MATERIAL_SKIN_TOUCH_LINKS_DESC" %]
+    <select class="stdedit" name="pref_touchLinks" id="touchLinks">
+        <option [% IF NOT prefs.touchLinks %]selected [% END %]value="0">[% 'NO' | getstring %]</option>
+        <option [% IF prefs.touchLinks %]selected [% END %]value="1">[% 'YES' | getstring %]</option>
+    </select>
+    [% END %]
+
 [% PROCESS settings/footer.html %]

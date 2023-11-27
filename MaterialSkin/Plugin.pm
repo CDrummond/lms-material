@@ -114,7 +114,8 @@ sub initPlugin {
         pagedBatchSize => lmsVersion()>=80400 ? 250 : 100,
         noArtistFilter => '1',
         releaseTypeOrder => '',
-        genreImages => '0'
+        genreImages => '0',
+        touchLinks => '0'
     });
 
     if (main::WEBUI) {
@@ -422,6 +423,7 @@ sub _cliCommand {
         $request->addResult('noArtistFilter', $prefs->get('noArtistFilter'));
         $request->addResult('releaseTypeOrder', uc($prefs->get('releaseTypeOrder')));
         $request->addResult('genreImages', $prefs->get('genreImages'));
+        $request->addResult('touchLinks', $prefs->get('touchLinks'));
         $request->setStatusDone();
         return;
     }

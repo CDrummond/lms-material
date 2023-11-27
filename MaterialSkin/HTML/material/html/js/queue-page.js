@@ -6,7 +6,7 @@
  */
 'use strict';
 
-const PQ_STATUS_TAGS = IS_MOBILE ? "tags:cdegilqtuyAAIKNSxx" : "tags:cdegilqtuysAAIKNSxx";
+const PQ_STATUS_TAGS = "tags:cdegilqtuyAAIKNSxx";
 const PQ_REQUIRE_AT_LEAST_1_ITEM = new Set([PQ_SAVE_ACTION, PQ_MOVE_QUEUE_ACTION, PQ_SCROLL_ACTION, PQ_SORT_ACTION, REMOVE_DUPES_ACTION]);
 const PQ_REQUIRE_MULTIPLE_ITEMS = new Set([PQ_SCROLL_ACTION, PQ_SORT_ACTION, REMOVE_DUPES_ACTION]);
 
@@ -38,7 +38,7 @@ function buildArtistAlbumLines(i, queueAlbumStyle, queueContext) {
         if (!str && i.remote) {
             artistAlbum = i.remote_title ? i.remote_title : i.title;
             artistIsRemoteTitle = true;
-        } else if (IS_MOBILE || undefined==id) {
+        } else if ((IS_MOBILE && !lmsOptions.touchLinks) || undefined==id) {
             artistAlbum = str;
         } else {
             artistAlbum = buildLink(i.albumartist ? 'showAlbumArtist' : 'showArtist', id, str, 'queue');
@@ -96,7 +96,7 @@ function parseResp(data, showTrackNum, index, showRatings, queueAlbumStyle, queu
                 let artist = undefined!=i.trackartist && undefined!=i.trackartist_id ? i.trackartist : i.artist;
                 if (queueAlbumStyle && undefined!=i.albumartist && undefined!=artist && i.albumartist!=artist) {
                     let id = undefined!=i.trackartist_id ? i.trackartist_id : i.artist_id;
-                    title+='<obj class="subtext">'+SEPARATOR+(IS_MOBILE || undefined==id ? artist : buildLink('showArtist', id, artist, 'queue'));
+                    title+='<obj class="subtext">'+SEPARATOR+((IS_MOBILE && !lmsOptions.touchLinks) || undefined==id ? artist : buildLink('showArtist', id, artist, 'queue'));
                     addedClass = true;
                 }
                 if (haveRating) {
@@ -499,6 +499,12 @@ var lmsQueue = Vue.component("lms-queue", {
             }
             if (this.selection.size>0) {
                 this.clearSelection();
+            }
+        }.bind(this));
+
+        bus.$on('linkClicked', function() {
+            if (this.desktopLayout && this.windowWide<1 && !this.$store.state.pinQueue && this.$store.state.showQueue) {
+                this.$store.commit('setShowQueue', false);
             }
         }.bind(this));
 
@@ -1138,7 +1144,7 @@ var lmsQueue = Vue.component("lms-queue", {
             this.fetchingItems = true;
             var prevTimestamp = this.timestamp;
             var fetchCount = this.currentIndex > this.items.length + LMS_QUEUE_BATCH_SIZE ? this.currentIndex + 50 : LMS_QUEUE_BATCH_SIZE;
-            lmsList(this.$store.state.player.id, ["status"], [PQ_STATUS_TAGS + (this.$store.state.showRating ? "R" : "")], this.items.length, fetchCount).then(({data}) => {
+            lmsList(this.$store.state.player.id, ["status"], [PQ_STATUS_TAGS + ((!IS_MOBILE || lmsOptions.touchLinks) ? "s" : "") + (this.$store.state.showRating ? "R" : "")], this.items.length, fetchCount).then(({data}) => {
                 var resp = parseResp(data, this.$store.state.queueShowTrackNum, this.items.length, this.$store.state.showRating, this.$store.state.queueAlbumStyle,
                                      this.$store.state.queueContext, this.items.length>0 ? this.items[this.items.length-1] : undefined);
                 this.items.push.apply(this.items, resp.items);

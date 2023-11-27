@@ -873,7 +873,7 @@ function parseBrowseResp(data, parent, options, cacheKey, parentCommand, parentG
                     }
                 }
 
-                if (isSearch && !IS_MOBILE && undefined!=artist_ids && undefined!=artists && artists.length==artist_ids.length) {
+                if (isSearch && (!IS_MOBILE || lmsOptions.touchLinks) && undefined!=artist_ids && undefined!=artists && artists.length==artist_ids.length) {
                     let entries = [];
                     for (let a=0, al=artists.length; a<al; ++a) {
                         entries.push("<obj class=\"link-item\" onclick=\"showAlbumArtist(event, "+artist_ids[a]+",\'"+escape(artists[a])+"\', \'browse\')\">" + artists[a] + "</obj>");

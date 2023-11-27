@@ -12,7 +12,7 @@ function showArtist(event, id, title, page) {
     }
     event.stopPropagation();
     bus.$emit("browse", ["albums"], ["artist_id:"+id, ARTIST_ALBUM_TAGS, SORT_KEY+ARTIST_ALBUM_SORT_PLACEHOLDER], unescape(title), page, page!="browse");
-    bus.$emit('npclose');
+    bus.$emit('linkClicked');
 }
 
 function showAlbum(event, album, title, page) {
@@ -21,7 +21,7 @@ function showAlbum(event, album, title, page) {
     }
     event.stopPropagation();
     bus.$emit("browse", ["tracks"], ["album_id:"+album, trackTags(true), SORT_KEY+"tracknum"], unescape(title), page, page!="browse");
-    bus.$emit('npclose');
+    bus.$emit('linkClicked');
 }
 
 function showArtistRole(event, id, title, page, role) {
@@ -30,7 +30,7 @@ function showArtistRole(event, id, title, page, role) {
     }
     event.stopPropagation();
     bus.$emit("browse", ["albums"], ["artist_id:"+id, ARTIST_ALBUM_TAGS, SORT_KEY+ARTIST_ALBUM_SORT_PLACEHOLDER, "role_id:"+role], unescape(title), page, page!="browse");
-    bus.$emit('npclose');
+    bus.$emit('linkClicked');
 }
 
 function showAlbumArtist(event, id, title, page) {
@@ -67,7 +67,7 @@ function addArtistLink(item, line, type, func, page, used, plain) {
         if (canUseVals.length<1) {
             return line;
         }
-        if (!IS_MOBILE && !plain && undefined!=item[type+"_ids"] && item[type+"_ids"].length==item[type+"s"].length) {
+        if ((!IS_MOBILE || lmsOptions.touchLinks) && !plain && undefined!=item[type+"_ids"] && item[type+"_ids"].length==item[type+"s"].length) {
             let vals = [];
             for (let i=0, loop=item[type+"s"], len=loop.length; i<len; ++i) {
                 if (canUse.has(i)) {
@@ -85,8 +85,8 @@ function addArtistLink(item, line, type, func, page, used, plain) {
                 return line;
             }
             used.add(val);
-            let id = IS_MOBILE || plain ? undefined : item[type+"_id"];
-            if (undefined==id && !plain && !IS_MOBILE && undefined!=item[type+"_ids"]) {
+            let id = (IS_MOBILE && !lmsOptions.touchLinks) || plain ? undefined : item[type+"_id"];
+            if (undefined==id && !plain && (!IS_MOBILE || lmsOptions.touchLinks) && undefined!=item[type+"_ids"]) {
                 id = item[type+"_ids"][0];
             }
             if (undefined!=id) {
@@ -207,7 +207,7 @@ function buildAlbumLine(i, page, plain) {
         if (i.year && i.year>0) {
             album+=" (" + i.year + ")";
         }
-        if (i.album_id && !IS_MOBILE && !plain) {
+        if (i.album_id && (!IS_MOBILE || lmsOptions.touchLinks) && !plain) {
             album="<obj class=\"link-item\" onclick=\"showAlbum(event, "+i.album_id+",\'"+escape(album)+"\', \'"+page+"\')\">" + album + "</obj>";
         }
         line=addPart(line, album);

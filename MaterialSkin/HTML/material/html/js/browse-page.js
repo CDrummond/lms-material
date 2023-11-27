@@ -973,9 +973,9 @@ var lmsBrowse = Vue.component("lms-browse", {
                 this.select(item, index, event);
                 return;
             }
-            if (IS_MOBILE && this.grid.use) {
+            if ((IS_MOBILE && !lmsOptions.touchLinks) && this.grid.use) {
                 this.itemMenu(item, index, event);
-            } else if (!IS_MOBILE && this.subtitleClickable && item.id && item.artist_id && item.id.startsWith("album_id:")) {
+            } else if ((!IS_MOBILE || lmsOptions.touchLinks) && this.subtitleClickable && item.id && item.artist_id && item.id.startsWith("album_id:")) {
                 if (undefined!=item.artist_ids && item.artist_ids.length>1) {
                     var entries = [];
                     for (var i=0, len=item.artist_ids.length; i<len; ++i) {

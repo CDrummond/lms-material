@@ -483,8 +483,8 @@ var lmsBrowse = Vue.component("lms-browse", {
             return this.headerSubTitle ? this.headerSubTitle + suffix : suffix.length<1 ? undefined : suffix;
         },
         showDetailedSubtoolbar() {
-            return this.wide>0 && this.current && (this.current.image || this.currentItemImage) &&
-                   (this.current.stdItem==STD_ITEM_ARTIST || this.current.stdItem==STD_ITEM_ALBUM || this.current.stdItem==STD_ITEM_MAI || this.current.stdItem==STD_ITEM_MIX || this.current.stdItem==STD_ITEM_ALL_TRACKS)
+            return this.wide>0 && this.current && (this.current.image || this.currentItemImage) && undefined!=this.current.stdItem &&
+                   (this.current.stdItem==STD_ITEM_ARTIST || this.current.stdItem==STD_ITEM_ALBUM || this.current.stdItem>=STD_ITEM_MAI)
         },
         detailedSubTop() {
             if (this.current.stdItem==STD_ITEM_ARTIST) {
@@ -534,7 +534,7 @@ var lmsBrowse = Vue.component("lms-browse", {
             return false;
         },
         showMixButton() {
-            if (LMS_P_BMIX && this.showDetailedSubtoolbar && (this.current.stdItem==STD_ITEM_ARTIST || (this.current.stdItem==STD_ITEM_ALBUM))) {
+            if (LMS_P_BMIX && this.showDetailedSubtoolbar && (this.current.stdItem==STD_ITEM_ARTIST || this.current.stdItem==STD_ITEM_ALBUM)) {
                 for (let i=0, loop=this.currentActions, len=loop.length; i<len; ++i) {
                     if (loop[i].stdItem==STD_ITEM_MIX) {
                         return true;

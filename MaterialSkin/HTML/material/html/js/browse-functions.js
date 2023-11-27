@@ -462,7 +462,7 @@ function browseHandleListResponse(view, item, command, resp, prevPage, appendIte
             if (addSort) {
                 view.currentActions.push({action:ALBUM_SORTS_ACTION, weight:1});
             }
-        } else if (view.current.stdItem==STD_ITEM_ALL_TRACKS && view.command.command.length>0 && view.command.command[0]=="tracks" && view.items.length>0) {
+        } else if ((view.current.stdItem==STD_ITEM_ALL_TRACKS || view.current.stdItem==STD_ITEM_COMPOSITION_TRACKS) && view.command.command.length>0 && view.command.command[0]=="tracks" && view.items.length>0) {
             view.currentActions.push({action:TRACK_SORTS_ACTION, weight:1});
         }
         view.currentActions.sort(function(a, b) { return a.weight!=b.weight ? a.weight<b.weight ? -1 : 1 : titleSort(a, b) });

@@ -344,7 +344,6 @@ PLUGIN_MATERIAL_SKIN_ARTIST_FILTER
 	EN	Filter album tracks
 	FR	Filtrer les morceaux des albums
 	NL	Filter nummers van album
-	DE	Albumtitel filtern
 
 PLUGIN_MATERIAL_SKIN_ARTIST_FILTER_DESC
 	CS	Při procházení alb interpreta můžete použít všechny skladby ze sbírkových alb, alb, na kterých se tento interpret objevuje, atd., nebo zobrazit pouze skladby aktuálního interpreta.
@@ -359,15 +358,14 @@ PLUGIN_MATERIAL_SKIN_ARTIST_FILTER_ARTIST_ONLY
 	EN	Only display tracks from current artist
 	FR	Afficher uniquement les morceaux de l'artiste
 	NL	Toon alleen nummers van de huidige artiest
-	DE	Nur Titel des aktuellen Interpreten anzeigen
 
 PLUGIN_MATERIAL_SKIN_ARTIST_FILTER_ALL_TRACKS
 	CS	Zobrazit všechny skladby alba
-	DE	Alle Titel des Albums anzeigen
+	DE	Sämtlichte Titel des Albums anzeigen
 	EN	Display all tracks of album
 	FR	Afficher tous les morceaux de l'album
 	NL	Toon alle nummers van het album
-	DE	Sämtlichte Titel des Albums anzeigen
+
 
 PLUGIN_MATERIAL_SKIN_RELEASE_TYPE_ORDER
 	CS	Pořadí typu vydání

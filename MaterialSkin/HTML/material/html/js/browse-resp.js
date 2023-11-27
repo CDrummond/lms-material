@@ -997,20 +997,22 @@ function parseBrowseResp(data, parent, options, cacheKey, parentCommand, parentG
                 }
             }
         } else if (data.result.titles_loop) {
-            var totalDuration=0;
-            var allowPlayAlbum = parent && parent.id && parent.id.startsWith("album_id:");
-            var isAllSongs = parent && parent.id && (parent.id.startsWith("currentaction:") || parent.id == ALL_SONGS_ID);
-            var isSearchResult = options && options.isSearch;
-            var showAlbumName = isSearchResult || isAllSongs || (parent && parent.id && parent.id.startsWith("artist_id:"));
-            var discs = new Map();
-            var sortTracks = 0;
-            var highlightArtist = undefined;
+            let totalDuration=0;
+            let allowPlayAlbum = parent && parent.id && parent.id.startsWith("album_id:");
+            let isAllSongs = parent && parent.id && (parent.id.startsWith("currentaction:") || parent.id == ALL_SONGS_ID);
+            let isSearchResult = options && options.isSearch;
+            let showAlbumName = isSearchResult || isAllSongs || (parent && parent.id && parent.id.startsWith("artist_id:"));
+            let discs = new Map();
+            let sort = undefined;
+            let sortTracks = 0;
+            let highlightArtist = undefined;
             let highlighted = 0;
             let reverse = false;
             let isCompositions = false;
             let parentArtist = undefined;
+            let showTrackNumbers = true;
             if (data.params[1].length>=4 && data.params[1][0]=="tracks") {
-                for (var p=0, plen=data.params[1].length; p<plen && (!allowPlayAlbum || !showAlbumName); ++p) {
+                for (let p=0, plen=data.params[1].length; p<plen && (!allowPlayAlbum || !showAlbumName); ++p) {
                     let param = ""+data.params[1][p];
                     if (param.startsWith("album_id:")) {
                         allowPlayAlbum = true;
@@ -1021,7 +1023,8 @@ function parseBrowseResp(data, parent, options, cacheKey, parentCommand, parentG
                     } else if (param==MSK_REV_SORT_OPT) {
                         reverse = true;
                     } else if (param.startsWith(SORT_KEY)) {
-                        sortTracks = param==(SORT_KEY+"yearalbumtrack") ? 1 : param==(SORT_KEY+"artisttitle") ? 2 : 0;
+                        sort = param.split(':')[1]
+                        sortTracks = sort=="yearalbumtrack" ? 1 : sort=="artisttitle" ? 2 : 0;
                     } else if (param=="role_id:COMPOSER") {
                         isCompositions = true;
                     } else if (param.startsWith("material_skin_artist:")) {
@@ -1029,8 +1032,11 @@ function parseBrowseResp(data, parent, options, cacheKey, parentCommand, parentG
                     }
                 }
             }
+            if (undefined!=sort && (isAllSongs || isCompositions) && ("title"==sort || "artisttitle"==sort)) {
+                showTrackNumbers = false;
+            }
             resp.itemCustomActions = getCustomActions("album-track");
-            var stdItem = allowPlayAlbum && data.result.count>1 ? STD_ITEM_ALBUM_TRACK : STD_ITEM_TRACK;
+            let stdItem = allowPlayAlbum && data.result.count>1 ? STD_ITEM_ALBUM_TRACK : STD_ITEM_TRACK;
             let artists = [];
             let artistsWithContext = [];
             let numCompilationTracks = 0;
@@ -1040,13 +1046,13 @@ function parseBrowseResp(data, parent, options, cacheKey, parentCommand, parentG
             let extraSubs = [];
             let browseContext = getLocalStorageBool('browseContext', false);
 
-            for (var idx=0, loop=data.result.titles_loop, loopLen=loop.length; idx<loopLen; ++idx) {
-                var i = loop[idx];
-                var title = i.title;
-                var duration = parseFloat(i.duration || 0);
-                var tracknum = undefined==i.tracknum ? 0 : parseInt(i.tracknum);
+            for (let idx=0, loop=data.result.titles_loop, loopLen=loop.length; idx<loopLen; ++idx) {
+                let i = loop[idx];
+                let title = i.title;
+                let duration = parseFloat(i.duration || 0);
+                let tracknum = undefined==i.tracknum ? 0 : parseInt(i.tracknum);
                 let highlight = false;
-                if (tracknum>0) {
+                if (tracknum>0 && showTrackNumbers) {
                     title = (tracknum>9 ? tracknum : ("0" + tracknum))+SEPARATOR+title;
                     //title = tracknum + ". " + title; // SlimBrowse format
                     if (isSearchResult && undefined!=i.disc) {

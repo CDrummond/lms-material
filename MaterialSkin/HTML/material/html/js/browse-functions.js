@@ -180,7 +180,7 @@ function browseActions(view, item, args, count, showCompositions) {
             if (libId) {
                 params.push("library_id:"+libId);
             }
-            actions.push({title:i18n('Compositions'), svg:'composer', do:{ command: ['tracks'], params: params}, weight:81, stdItem:STD_ITEM_ALL_TRACKS});
+            actions.push({title:i18n('Compositions'), svg:'composer', do:{ command: ['tracks'], params: params}, weight:81, stdItem:STD_ITEM_COMPOSITION_TRACKS});
         }
     }
     if (undefined!=item && undefined!=item.stdItem && undefined!=STD_ITEMS[item.stdItem].actionMenu) {
@@ -1404,7 +1404,7 @@ function browseHeaderAction(view, act, event, ignoreOpenMenus) {
     } else if (USE_GRID_ACTION==act) {
         view.changeLayout(true);
     } else if (ALBUM_SORTS_ACTION==act || TRACK_SORTS_ACTION==act) {
-        var sort=ALBUM_SORTS_ACTION==act ? getAlbumSort(view.command, view.inGenre) : getTrackSort();
+        var sort=ALBUM_SORTS_ACTION==act ? getAlbumSort(view.command, view.inGenre) : getTrackSort(view.current.stdItem);
         var menuItems=[];
         var sorts=ALBUM_SORTS_ACTION==act ? B_ALBUM_SORTS : B_TRACK_SORTS;
         for (var i=0,len=sorts.length; i<len; ++i) {
@@ -2104,7 +2104,7 @@ function browseReplaceCommandTerms(view, cmd, item) {
             if (item && item.swapid && cmd.params[i]==item.id) {
                 cmd.params[i]=item.swapid;
             } else if (cmd.params[i].startsWith(SORT_KEY+TRACK_SORT_PLACEHOLDER)) {
-                var sort=getTrackSort();
+                var sort=getTrackSort(view.current.stdItem);
                 cmd.params[i]=cmd.params[i].replace(SORT_KEY+TRACK_SORT_PLACEHOLDER, SORT_KEY+sort.by);
                 if (sort.rev) {
                     cmd.params.push(MSK_REV_SORT_OPT);

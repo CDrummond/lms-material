@@ -374,13 +374,13 @@ function setAlbumSort(command, genre, sort, reverse) {
     setLocalStorageVal(commandAlbumSortKey(command, genre), sort+(reverse ? ".r" : ""));
 }
 
-function getTrackSort() {
-    var parts = getLocalStorageVal("trackSort", "yearalbumtrack").split(".");
+function getTrackSort(stdItem) {
+    var parts = getLocalStorageVal(stdItem==STD_ITEM_COMPOSITION_TRACKS ? "compositionTrackSort" : "trackSort", "yearalbumtrack").split(".");
     return {by:parts[0], rev:parts.length>1};
 }
 
-function setTrackSort(sort, reverse) {
-    setLocalStorageVal("trackSort", sort+(reverse ? ".r" : ""));
+function setTrackSort(sort, reverse, stdItem) {
+    setLocalStorageVal(stdItem==STD_ITEM_COMPOSITION_TRACKS ? "compositionTrackSort" : "trackSort", sort+(reverse ? ".r" : ""));
 }
 
 function albumTrackSort(a, b) {

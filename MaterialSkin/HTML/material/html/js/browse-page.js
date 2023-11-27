@@ -464,7 +464,7 @@ var lmsBrowse = Vue.component("lms-browse", {
             if (undefined!=this.current && this.current.id==TOP_MYMUSIC_ID && this.libraryName) {
                 return this.libraryName + suffix;
             }
-            if (undefined!=this.current && (this.current.stdItem==STD_ITEM_ALBUM || this.current.stdItem==STD_ITEM_ALL_TRACKS)) {
+            if (undefined!=this.current && (this.current.stdItem==STD_ITEM_ALBUM || this.current.stdItem==STD_ITEM_ALL_TRACKS || this.current.stdItem==STD_ITEM_COMPOSITION_TRACKS)) {
                 let albumArtst = this.current.subtitle;
                 if (lmsOptions.noArtistFilter && this.current.compilation && this.items.length>0 && undefined!=this.items[0].compilationAlbumArtist) {
                     albumArtst = this.items[0].compilationAlbumArtist;
@@ -490,7 +490,7 @@ var lmsBrowse = Vue.component("lms-browse", {
             if (this.current.stdItem==STD_ITEM_ARTIST) {
                 return this.detailedSubInfo;
             }
-            if (this.current.stdItem==STD_ITEM_ALBUM || this.current.stdItem==STD_ITEM_ALL_TRACKS || this.current.stdItem==STD_ITEM_MIX) {
+            if (this.current.stdItem==STD_ITEM_ALBUM || this.current.stdItem==STD_ITEM_ALL_TRACKS || this.current.stdItem==STD_ITEM_COMPOSITION_TRACKS || this.current.stdItem==STD_ITEM_MIX) {
                 let albumArtst = this.current.subtitle;
                 if (lmsOptions.noArtistFilter && this.current.compilation && this.items.length>0 && undefined!=this.items[0].compilationAlbumArtist) {
                     albumArtst = this.items[0].compilationAlbumArtist;
@@ -513,12 +513,12 @@ var lmsBrowse = Vue.component("lms-browse", {
             if (this.current.stdItem==STD_ITEM_ARTIST) {
                 return this.headerSubTitle
             }
-            if (this.current.stdItem==STD_ITEM_ALBUM || this.current.stdItem==STD_ITEM_MIX || this.current.stdItem==STD_ITEM_ALL_TRACKS) {
+            if (this.current.stdItem==STD_ITEM_ALBUM || this.current.stdItem==STD_ITEM_MIX || this.current.stdItem==STD_ITEM_ALL_TRACKS || this.current.stdItem==STD_ITEM_COMPOSITION_TRACKS) {
                 return this.detailedSubInfo;
             }
         },
         showMaiButton() {
-            if (LMS_P_MAI && this.showDetailedSubtoolbar && this.current.stdItem!=STD_ITEM_MAI && this.current.stdItem!=STD_ITEM_MIX && this.current.stdItem!=STD_ITEM_ALL_TRACKS) {
+            if (LMS_P_MAI && this.showDetailedSubtoolbar && (undefined==this.current.stdItem || this.current.stdItem<STD_ITEM_MAI)) {
                 if (this.current.stdItem==STD_ITEM_ARTIST) {
                     // 'Various Artists' will not have biography entry in its menu. So, if
                     // this item is not found then we don't show toolbar button...
@@ -946,9 +946,9 @@ var lmsBrowse = Vue.component("lms-browse", {
                     this.fetchItems(browseCmd, {cancache:false, id:"currentaction:"+index, title:act.title+SEPARATOR+this.current.title});
                 }
             } else if (undefined!=act.do) {
-                this.fetchItems(act.stdItem==STD_ITEM_ALL_TRACKS ? browseReplaceCommandTerms(this, act.do, this.current) : act.do, 
+                this.fetchItems(act.stdItem==STD_ITEM_ALL_TRACKS || act.stdItem==STD_ITEM_COMPOSITION_TRACKS ? browseReplaceCommandTerms(this, act.do, this.current) : act.do, 
                                 {cancache:false, id:"currentaction:"+index,
-                                 title:act.title+(act.stdItem==STD_ITEM_ALL_TRACKS ? "" : (SEPARATOR+this.current.title)),
+                                 title:act.title+(act.stdItem==STD_ITEM_ALL_TRACKS || act.stdItem==STD_ITEM_COMPOSITION_TRACKS ? "" : (SEPARATOR+this.current.title)),
                                  image:act.stdItem ? this.current.image ? this.current.image : this.currentItemImage : undefined, stdItem:act.stdItem});
             } else {
                 var cmd = {command:["browseonlineartist", "items"], params:["service_id:"+act.id, "artist_id:"+act.artist_id, "menu:1"]};
@@ -1055,7 +1055,7 @@ var lmsBrowse = Vue.component("lms-browse", {
                 if (isAlbums) {
                     setAlbumSort(this.command, this.inGenre, sort.key, reverseSort);
                 } else {
-                    setTrackSort(getTrackSort().by, reverseSort);
+                    setTrackSort(getTrackSort(this.current.stdItem).by, reverseSort, this.current.stdItem);
                 }
 
                 this.refreshList(false);
@@ -1069,7 +1069,7 @@ var lmsBrowse = Vue.component("lms-browse", {
                 if (isAlbums) {
                     setAlbumSort(this.command, this.inGenre, sort.key, reverseSort);
                 } else {
-                    setTrackSort(sort.key, reverseSort);
+                    setTrackSort(sort.key, reverseSort, this.current.stdItem);
                 }
                 this.refreshList(false);
             }

@@ -121,7 +121,16 @@ function browseActions(view, item, args, count, showCompositions) {
     if ((undefined==item || undefined==item.id || !item.id.startsWith(MUSIC_ID_PREFIX)) && // Exclude 'Compilations'
         (undefined==args['artist'] || (args['artist']!=i18n('Various Artists') && args['artist']!=LMS_VA_STRING && args['artist'].toLowerCase()!='various artists'))) {
         if (LMS_P_MAI) {
-            if (undefined!=args['artist_id'] || undefined!=args['artist']) {
+            if (undefined!=args['album_id'] || (undefined!=args['album'] && (undefined!=args['artist_id'] || undefined!=args['artist']))) {
+                actions.push({title:i18n('Review'), icon:'local_library', stdItem:STD_ITEM_MAI,
+                              do:{ command: undefined!=args['album_id']
+                                                ? ['musicartistinfo', 'albumreview', 'html:1', 'album_id:'+args['album_id']]
+                                                : undefined!=args['artist_id']
+                                                    ? ['musicartistinfo', 'albumreview', 'html:1', 'album:'+args['album'], 'artist_id:'+args['artist_id']]
+                                                    : ['musicartistinfo', 'albumreview', 'html:1', 'album:'+args['album'], 'artist:'+args['artist']],
+                                   params:[]},
+                              weight:100});
+            } else if (undefined!=args['artist_id'] || undefined!=args['artist']) {
                 actions.push({title:i18n('Biography'), icon:'menu_book', stdItem:STD_ITEM_MAI,
                               do:{ command: undefined!=args['artist_id']
                                                 ? ['musicartistinfo', 'biography', 'html:1', 'artist_id:'+args['artist_id']]
@@ -134,16 +143,6 @@ function browseActions(view, item, args, count, showCompositions) {
                                                 : ['musicartistinfo', 'artistphotos', 'html:1', 'artist:'+args['artist']],
                                    params:[]},
                               weight:105});
-            }
-            if (undefined!=args['album_id'] || (undefined!=args['album'] && (undefined!=args['artist_id'] || undefined!=args['artist']))) {
-                actions.push({title:i18n('Review'), icon:'local_library', stdItem:STD_ITEM_MAI,
-                              do:{ command: undefined!=args['album_id']
-                                                ? ['musicartistinfo', 'albumreview', 'html:1', 'album_id:'+args['album_id']]
-                                                : undefined!=args['artist_id']
-                                                    ? ['musicartistinfo', 'albumreview', 'html:1', 'album:'+args['album'], 'artist_id:'+args['artist_id']]
-                                                    : ['musicartistinfo', 'albumreview', 'html:1', 'album:'+args['album'], 'artist:'+args['artist']],
-                                   params:[]},
-                              weight:100});
             }
             if (undefined!=args['path'] && args['path'].length>0 && !queryParams.party && !LMS_KIOSK_MODE) {
                 actions.push({localfiles:true, title:i18n('Local files'), icon:'insert_drive_file', do:{ command:['musicartistinfo', 'localfiles', 'folder:'+args['path']], params:[]}, weight:103});

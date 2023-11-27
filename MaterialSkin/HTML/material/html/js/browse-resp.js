@@ -1011,6 +1011,8 @@ function parseBrowseResp(data, parent, options, cacheKey, parentCommand, parentG
             let isCompositions = false;
             let parentArtist = undefined;
             let showTrackNumbers = true;
+            let grouping = 0;
+
             if (data.params[1].length>=4 && data.params[1][0]=="tracks") {
                 for (let p=0, plen=data.params[1].length; p<plen && (!allowPlayAlbum || !showAlbumName); ++p) {
                     let param = ""+data.params[1][p];
@@ -1035,6 +1037,11 @@ function parseBrowseResp(data, parent, options, cacheKey, parentCommand, parentG
             if (undefined!=sort && (isAllSongs || isCompositions) && ("title"==sort || "artisttitle"==sort)) {
                 showTrackNumbers = false;
             }
+            // Should we group tracks?
+            if (isAllSongs || isCompositions) {
+                grouping = ("albumtrack"==sort || "yearalbumtrack"==sort) ? 1 : "title"==sort ? 2 : "artisttitle"==sort ? 3 : 0;
+            }
+
             resp.itemCustomActions = getCustomActions("album-track");
             let stdItem = allowPlayAlbum && data.result.count>1 ? STD_ITEM_ALBUM_TRACK : STD_ITEM_TRACK;
             let artists = [];
@@ -1147,9 +1154,9 @@ function parseBrowseResp(data, parent, options, cacheKey, parentCommand, parentG
                               emblem: showAlbumName ? getEmblem(i.extid) : undefined,
                               tracknum: sortTracks && undefined!=i.tracknum ? tracknum : undefined,
                               disc: i.disc ? parseInt(i.disc) : undefined,
-                              year: sortTracks && i.year ? parseInt(i.year) : undefined,
-                              album: sortTracks || isSearchResult ? i.album : undefined,
-                              artist: isSearchResult || 2==sortTracks ? i.artist : undefined,
+                              year: (sortTracks || 1==grouping) && i.year ? parseInt(i.year) : undefined,
+                              album: sortTracks || isSearchResult || 1==grouping ? i.album : undefined,
+                              artist: isSearchResult || 2==sortTracks || 3==grouping ? i.artist : undefined,
                               album_id: isSearchResult ? i.album_id : undefined,
                               artist_id: isSearchResult ? i.artist_id : undefined,
                               url: i.url,
@@ -1186,6 +1193,54 @@ function parseBrowseResp(data, parent, options, cacheKey, parentCommand, parentG
                     compilationAlbumArtist = LMS_VA_STRING;
                 }
             }
+
+            if (sortTracks==1) {
+                resp.items.sort(reverse ? revYearAlbumTrackSort : yearAlbumTrackSort);
+            } else if (sortTracks==2) {
+                resp.items.sort(artistTitleSort);
+                if (reverse) {
+                    resp.items = resp.items.reverse();
+                }
+            } else if (reverse) {
+                resp.items = resp.items.reverse();
+            }
+
+            let groups=[];
+            if (grouping>0 && resp.items.length>1) {
+                let field = 1==grouping ? 'album' : 2==grouping ? 'title' : 'artist';
+                groups=[[0, resp.items[0][field] + (1==grouping && resp.items[0].year ? " ("+resp.items[0].year+")" : "")]];
+                for (let i=1, loop=resp.items, len=loop.length; i<len; ++i) {
+                    if (loop[i-1][field]!=loop[i][field]) {
+                        groups.push([i, loop[i][field] + (1==grouping && loop[i].year ? " ("+loop[i].year+")" : "")]);
+                    }
+                }
+                if (groups.length>1 && ((groups.length*100)/resp.items.length)<=25) {
+                    for (let i=0, len=groups.length; i<len; ++i) {
+                        let count = 0;
+                        let duration = 0;
+                        for (let j=groups[i][0]+i, jl=resp.items, jlen=jl.length; j<jlen; ++j) {
+                            if ((i+1)<len && j>=groups[i+1][0]+i) {
+                                break;
+                            }
+                            count++;
+                            duration+=jl[j].duration;
+                            jl[j].filter=FILTER_PREFIX+i;
+                        }
+                        resp.items.splice(groups[i][0]+i, 0,
+                                          {title: groups[i][1], id:FILTER_PREFIX+i, header:true,
+                                           subtitle: i18np("1 Track", "%1 Tracks", count), durationStr:formatSeconds(duration),
+                                           menu:[PLAY_ALL_ACTION, INSERT_ALL_ACTION, ADD_ALL_ACTION]});
+                    }
+                    if (1==grouping) { // Grouped into albumns, so remove from subtitle
+                        for (let i=0, loop=resp.items, len=loop.length; i<len; ++i) {
+                            if (!loop[i].header) {
+                                loop[i].subtitle = loop[i].subtitleContext = undefined;
+                            }
+                        }
+                    }
+                }
+            }
+
             // Now add artist to subtitle if we have multiple artists, or we are showing compositions...
             let albumArtist = parentArtist
                                 ? parentArtist
@@ -1199,16 +1254,24 @@ function parseBrowseResp(data, parent, options, cacheKey, parentCommand, parentG
                 let showArtists = (new Set(artists)).size>1;
                 if (!showArtists && isCompositions && undefined!=albumArtist) {
                     for (let i=0, loop=resp.items, len=loop.length; i<len && !showArtists; ++i) {
-                        showArtists = stripLinkTags(artists[i])!=albumArtist;
+                        if (!loop[i].header) {
+                            showArtists = stripLinkTags(artists[i])!=albumArtist;
+                        }
                     }
                 }
                 if (showArtists) {
-                    for (let i=0, loop=resp.items, len=loop.length; i<len; ++i) {
-                        if (undefined!=artists[i]) {
-                            loop[i].subtitle = undefined==loop[i].subtitle ? artists[i] : (artists[i] + SEPARATOR + loop[i].subtitle);
-                            if (browseContext) {
-                                loop[i].subtitleContext = undefined==loop[i].subtitleContext ? artistsWithContext[i] : (artistsWithContext[i] + " " + loop[i].subtitleContext);
+                    let lastHeader = 0;
+                    for (let i=0, j=0, loop=resp.items, len=loop.length; i<len; ++i) {
+                        if (loop[i].header) {
+                            lastHeader = i;
+                        } else {
+                            if (undefined!=artists[j] && (3!=grouping || stripLinkTags(artists[j])!=loop[lastHeader].title)) {
+                                loop[i].subtitle = undefined==loop[i].subtitle ? artists[j] : (artists[j] + SEPARATOR + loop[i].subtitle);
+                                if (browseContext) {
+                                    loop[i].subtitleContext = undefined==loop[i].subtitleContext ? artistsWithContext[j] : (artistsWithContext[j] + " " + loop[i].subtitleContext);
+                                }
                             }
+                            j++;
                         }
                     }
                 }
@@ -1221,37 +1284,31 @@ function parseBrowseResp(data, parent, options, cacheKey, parentCommand, parentG
                     }
                 }
             }
-            for (let i=0, loop=resp.items, len=loop.length; i<len; ++i) {
-                if (undefined!=extraSubs[i]) {
-                    loop[i].subtitle = undefined==loop[i].subtitle ? extraSubs[i] : (loop[i].subtitle + SEPARATOR + extraSubs[i]);
-                    if (browseContext) {
-                        loop[i].subtitleContext = undefined==loop[i].subtitleContext ? extraSubs[i] : (loop[i].subtitleContext + SEPARATOR + extraSubs[i]);
+            for (let i=0, j=0, loop=resp.items, len=loop.length; i<len; ++i) {
+                if (!loop[i].header) {
+                    if (undefined!=extraSubs[j]) {
+                        loop[i].subtitle = undefined==loop[i].subtitle ? extraSubs[j] : (loop[i].subtitle + SEPARATOR + extraSubs[j]);
+                        if (browseContext) {
+                            loop[i].subtitleContext = undefined==loop[i].subtitleContext ? extraSubs[j] : (loop[i].subtitleContext + SEPARATOR + extraSubs[j]);
+                        }
                     }
+                    j++;
                 }
             }
             // Don't hightlight all tracks! Happens with VA albums...
             if (highlighted>0 && highlighted==resp.items.length) {
                 for (let i=0, loop=resp.items, len=loop.length; i<len; ++i) {
-                    loop[i].highlight = false;
+                    if (!loop[i].header) {
+                        loop[i].highlight = false;
+                    }
                 }
-            }
-
-            if (sortTracks==1) {
-                resp.items.sort(reverse ? revYearAlbumTrackSort : yearAlbumTrackSort);
-            } else if (sortTracks==2) {
-                resp.items.sort(artistTitleSort);
-                if (reverse) {
-                    resp.items = resp.items.reverse();
-                }
-            } else if (reverse) {
-                resp.items = resp.items.reverse();
             }
 
             resp.numAudioItems = resp.items.length;
             if (allowPlayAlbum) {
                 resp.allSongsItem = parent;
             }
-            if (discs.size>1) {
+            if (grouping==0 && discs.size>1) {
                 let d = 0;
 
                 for (let k of discs.keys()) {
@@ -1279,7 +1336,7 @@ function parseBrowseResp(data, parent, options, cacheKey, parentCommand, parentG
                     resp.items[idx].disc = undefined;
                 }
             }
-            let totalTracks=resp.items.length-(discs.size>1 ? discs.size : 0);
+            let totalTracks=resp.items.length-(groups.length>1 ? groups.length : 0)+(discs.size>1 ? discs.size : 0);
             let totalDurationStr=formatSeconds(totalDuration);
             resp.subtitle=totalTracks+'<obj class="mat-icon music-note">music_note</obj>'+totalDurationStr;
             resp.plainsubtitle=i18np("1 Track", "%1 Tracks", totalTracks)+SEPARATOR+totalDurationStr;

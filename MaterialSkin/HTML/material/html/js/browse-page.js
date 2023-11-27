@@ -683,7 +683,7 @@ var lmsBrowse = Vue.component("lms-browse", {
                               weight: 5,
                               id: TOP_EXTRAS_ID }];
                 if (LMS_P_CD) {
-                    top.push({  command: ["cdplayer", "items"],
+                    this.top.push({  command: ["cdplayer", "items"],
                                 params: ["menu:1"],
                                 svg: "cd-player",
                                 type: "group",
@@ -691,7 +691,7 @@ var lmsBrowse = Vue.component("lms-browse", {
                                 id: TOP_CDPLAYER_ID });
                 }
                 if (LMS_P_RM) {
-                    top.push({  command: ["selectRemoteLibrary", "items"],
+                    this.top.push({  command: ["selectRemoteLibrary", "items"],
                                 params: ["menu:selectRemoteLibrary", "menu:1"],
                                 icon: "cloud",
                                 type: "group",

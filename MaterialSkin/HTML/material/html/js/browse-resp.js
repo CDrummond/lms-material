@@ -1024,7 +1024,7 @@ function parseBrowseResp(data, parent, options, cacheKey, parentCommand, parentG
                         sortTracks = param==(SORT_KEY+"yearalbumtrack") ? 1 : param==(SORT_KEY+"artisttitle") ? 2 : 0;
                     } else if (param=="role_id:COMPOSER") {
                         isCompositions = true;
-                    } else if (param.startsWith("mskartist:")) {
+                    } else if (param.startsWith("material_skin_artist:")) {
                         parentArtist = param.split(':')[1];
                     }
                 }

@@ -1086,7 +1086,7 @@ function parseBrowseResp(data, parent, options, cacheKey, parentCommand, parentG
                         subtitleContext=i18n('<obj>from</obj> %1', buildAlbumLine(i, "browse", false)).replaceAll("<obj>", "<obj class=\"ext-details\">");
                     }
                 }
-                if (undefined!=i.disc && !isSearchResult && !isAllSongs) {
+                if (undefined!=i.disc && !isSearchResult && !isAllSongs && !isCompositions) {
                     let discNum = parseInt(i.disc);
                     if (discs.has(discNum)) {
                         var entry = discs.get(discNum);

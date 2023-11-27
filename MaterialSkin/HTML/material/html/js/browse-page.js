@@ -917,7 +917,7 @@ var lmsBrowse = Vue.component("lms-browse", {
                      (this.tbarActions.length<2 && (i<(this.tbarActions.length<2 ? 2 : 1))) ||
                      ((ALBUM_SORTS_ACTION==loop[i].action || TRACK_SORTS_ACTION==loop[i].action) && this.items.length<2) ||
                      (SCROLL_TO_DISC_ACTION==loop[i].action && (this.items.length<2 || !this.items[0].id.startsWith(FILTER_PREFIX))) ||
-                     ((loop[i].stdItem==STD_ITEM_MAI || loop[i].stdItem==STD_ITEM_MIX) && this.wide>0) ||
+                     ((loop[i].stdItem==STD_ITEM_MAI || loop[i].stdItem==STD_ITEM_MIX) && this.showDetailedSubtoolbar) ||
                      (loop[i].action==DIVIDER && (0==actions.length || actions[actions.length-1].action==DIVIDER)) ) {
                     continue;
                 }

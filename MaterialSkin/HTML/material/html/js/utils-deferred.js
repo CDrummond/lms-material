@@ -443,3 +443,15 @@ function artistTitleSort(a, b) {
     }
     return fixedSort(removeTrackNum(a.title), removeTrackNum(b.title));
 }
+
+function yearTitleSort(a, b) {
+    var va=a.year ? a.year : 0;
+    var vb=b.year ? b.year : 0;
+    if (va<vb) {
+        return -1;
+    }
+    if (va>vb) {
+        return 1;
+    }
+    return titleSort(a, b);
+}

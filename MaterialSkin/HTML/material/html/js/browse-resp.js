@@ -1026,7 +1026,7 @@ function parseBrowseResp(data, parent, options, cacheKey, parentCommand, parentG
                         reverse = true;
                     } else if (param.startsWith(SORT_KEY)) {
                         sort = param.split(':')[1]
-                        sortTracks = sort=="yearalbumtrack" ? 1 : sort=="artisttitle" ? 2 : 0;
+                        sortTracks = sort=="yearalbumtrack" ? 1 : sort=="artisttitle" ? 2 : sort=="yeartitle" ? 3 : 0;
                     } else if (param=="role_id:COMPOSER") {
                         isCompositions = true;
                     } else if (param.startsWith("material_skin_artist:")) {
@@ -1034,7 +1034,7 @@ function parseBrowseResp(data, parent, options, cacheKey, parentCommand, parentG
                     }
                 }
             }
-            if (undefined!=sort && (isAllSongs || isCompositions) && ("title"==sort || "artisttitle"==sort)) {
+            if (undefined!=sort && (isAllSongs || isCompositions) && ("title"==sort || "artisttitle"==sort || "yeartitle"==sort)) {
                 showTrackNumbers = false;
             }
             // Should we group tracks?
@@ -1196,8 +1196,8 @@ function parseBrowseResp(data, parent, options, cacheKey, parentCommand, parentG
 
             if (sortTracks==1) {
                 resp.items.sort(reverse ? revYearAlbumTrackSort : yearAlbumTrackSort);
-            } else if (sortTracks==2) {
-                resp.items.sort(artistTitleSort);
+            } else if (sortTracks==2 || sortTracks==3) {
+                resp.items.sort(sortTracks==2 ? artistTitleSort : yearTitleSort);
                 if (reverse) {
                     resp.items = resp.items.reverse();
                 }

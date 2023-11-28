@@ -1242,7 +1242,7 @@ var lmsQueue = Vue.component("lms-queue", {
                                     pos += loop[i].size;
                                 }
                             } else {
-                                pos = (this.currentIndex-3)*(QUEUE_TRACK_3LINES==this.$store.state.queueAlbumStyle ? LMS_LIST_3LINE_ELEMENT_SIZE : LMS_LIST_ELEMENT_SIZE);
+                                pos = (this.currentIndex-3)*(this.$store.state.queueThreeLines ? LMS_LIST_3LINE_ELEMENT_SIZE : LMS_LIST_ELEMENT_SIZE);
                             }
                         }
                         setScrollTop(this, pos>0 ? pos : 0);

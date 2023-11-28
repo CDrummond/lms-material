@@ -1144,11 +1144,12 @@ function parseBrowseResp(data, parent, options, cacheKey, parentCommand, parentG
                 extraSubs.push(extraSub);
                 if (i.genre || i.genres) {
                     let loop = i.genres ? i.genres : [i.genre];
+                    let ids = i.genre_ids ? i.genre_ids : [i.genre_id];
                     for (let g=0, glen=loop.length; g<glen; ++g) {
                         if (!genres.has(loop[g])) {
                             genres.add(loop[g]);
                             if ((!IS_MOBILE || lmsOptions.touchLinks)) {
-                                genreList.push("<obj class=\"link-item\" onclick=\"showGenre(event, "+i.genre_ids[g]+",\'"+escape(loop[g])+"\', \'browse\')\">" + loop[g] + "</obj>");
+                                genreList.push("<obj class=\"link-item\" onclick=\"showGenre(event, "+ids[g]+",\'"+escape(loop[g])+"\', \'browse\')\">" + loop[g] + "</obj>");
                             } else {
                                 genreList.push(loop[g]);
                             }
@@ -1432,7 +1433,7 @@ function parseBrowseResp(data, parent, options, cacheKey, parentCommand, parentG
             for (var idx=0, loop=data.result.playlisttracks_loop, loopLen=loop.length; idx<loopLen; ++idx) {
                 var i = loop[idx];
                 var title = i.title;
-                splitMultiples(i);
+                splitMultiples(i, true);
                 let subtitle = buildArtistLine(i, "browse", false);
                 let subtitleContext = browseContext ? replaceBr(buildArtistWithContext(i, "browse", false), " ") : undefined;
                 if (!title) {

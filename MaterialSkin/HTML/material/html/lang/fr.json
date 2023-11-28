@@ -74,6 +74,7 @@
 "Artist Mix":"Mélange d'artistes",
 "Artist, Album":"Artiste, Album",
 "Artist, Year, Album":"Artiste, Année, Album",
+"Artist, title":"Artiste, Titre",
 "Artists":"Artistes",
 "Audio":"Audio",
 "Auto-scroll to current track":"Aller automatiquement au morceau en cours",
@@ -616,6 +617,5 @@
 "1 Year":"1 année",
 "%1 Years":"%1 années",
 "1 day":"1 jour",
-"%1 days":"%1 jours",
-"Artist, title":""
+"%1 days":"%1 jours"
 }

@@ -394,7 +394,9 @@ PLUGIN_MATERIAL_SKIN_GENRE_IMAGES_DESC
 PLUGIN_MATERIAL_SKIN_TOUCH_LINKS
 	DE	Elementverknüpfungen auf Touch-Geräten
 	EN	Item links on touch devices
+	FR	Hyperliens sur les écrans tactiles
 
 PLUGIN_MATERIAL_SKIN_TOUCH_LINKS_DESC
 	DE	Erweitern Sie Textbausteine wie Künstler, Album, Komponist usw. zu klickbaren Links auf Touch-Geräten (z. B. Mobiltelefonen).
 	EN	Make artist, album, composer, etc. text items clickable links on touch devices (e.g. mobile phones).
+	FR	Créer des liens hypertextes sur les éléments de type artiste, album, compositeur, etc. sur les appareils tactiles (smartphones ou tablettes). 

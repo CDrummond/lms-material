@@ -1081,7 +1081,7 @@ function browseItemAction(view, act, item, index, event) {
         params.push(SORT_KEY+"random");
         lmsList(view.playerId(), ["albums"], params, 0, 1).then(({data}) => {
             var resp = parseBrowseResp(data, view.current, view.options);
-            if (1===resp.items.length && resp.items[0].id) {
+            if (resp.items.length>0 && resp.items[0].id) {
                 var item = resp.items[0];
                 var command = ["playlistcontrol", "cmd:add", item.id];
                 var genrePos = LMS_NO_GENRE_FILTER ? -1 : getField({params:params}, "genre_id:");

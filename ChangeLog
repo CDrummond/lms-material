@@ -32,6 +32,7 @@
 23. Add server-side option to make artist, etc, items clickable on touch
     devices as is for non-touch devices.
 24. Show genres in detailed album toolbar.
+25. Fix 'Append random album to queue'.
 
 4.0.4
 -----

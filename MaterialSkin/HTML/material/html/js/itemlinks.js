@@ -6,31 +6,25 @@
  */
 'use strict';
 
-function showArtist(event, id, title, page) {
+function browseItem(event, cmd, params,title, page) {
     if (lmsNumVisibleMenus>0 || ('queue'==page && lmsQueueSelectionActive)) { // lmsNumVisibleMenus defined in store.js
         return;
     }
     event.stopPropagation();
-    bus.$emit("browse", ["albums"], ["artist_id:"+id, ARTIST_ALBUM_TAGS, SORT_KEY+ARTIST_ALBUM_SORT_PLACEHOLDER], unescape(title), page, page!="browse");
+    bus.$emit("browse", cmd, params, unescape(title), page, page!="browse");
     bus.$emit('linkClicked');
+}
+
+function showArtist(event, id, title, page) {
+    browseItem(event, ["albums"], ["artist_id:"+id, ARTIST_ALBUM_TAGS, SORT_KEY+ARTIST_ALBUM_SORT_PLACEHOLDER], unescape(title), page);
 }
 
 function showAlbum(event, album, title, page) {
-    if (lmsNumVisibleMenus>0 || ('queue'==page && lmsQueueSelectionActive)) { // lmsNumVisibleMenus defined in store.js
-        return;
-    }
-    event.stopPropagation();
-    bus.$emit("browse", ["tracks"], ["album_id:"+album, trackTags(true), SORT_KEY+"tracknum"], unescape(title), page, page!="browse");
-    bus.$emit('linkClicked');
+    browseItem(event, ["tracks"], ["album_id:"+album, trackTags(true), SORT_KEY+"tracknum"], unescape(title), page);
 }
 
 function showArtistRole(event, id, title, page, role) {
-    if (lmsNumVisibleMenus>0 || ('queue'==page && lmsQueueSelectionActive)) { // lmsNumVisibleMenus defined in store.js
-        return;
-    }
-    event.stopPropagation();
-    bus.$emit("browse", ["albums"], ["artist_id:"+id, ARTIST_ALBUM_TAGS, SORT_KEY+ARTIST_ALBUM_SORT_PLACEHOLDER, "role_id:"+role], unescape(title), page, page!="browse");
-    bus.$emit('linkClicked');
+    browseItem(event, ["albums"], ["artist_id:"+id, ARTIST_ALBUM_TAGS, SORT_KEY+ARTIST_ALBUM_SORT_PLACEHOLDER, "role_id:"+role], unescape(title), page);
 }
 
 function showAlbumArtist(event, id, title, page) {
@@ -47,6 +41,10 @@ function showConductor(event, id, title, page) {
 
 function showBand(event, id, title, page) {
     showArtistRole(event, id, title, page, "BAND");
+}
+
+function showGenre(event, id, title, page) {
+    browseItem(event, ["genre"], ["genre_id:"+id], unescape(title), page);
 }
 
 function buildLink(func, id, str, page) {

@@ -99,6 +99,7 @@ function browseAddHistory(view) {
     prev.headerTitle = view.headerTitle;
     prev.headerSubTitle = view.headerSubTitle;
     prev.detailedSubInfo = view.detailedSubInfo;
+    prev.detailedSubExtra = view.detailedSubExtra;
     prev.tbarActions = view.tbarActions;
     prev.pos = view.scrollElement.scrollTop;
     prev.grid = view.grid;
@@ -509,6 +510,7 @@ function browseHandleListResponse(view, item, command, resp, prevPage, appendIte
         }
 
         view.detailedSubInfo=resp.plainsubtitle ? resp.plainsubtitle : resp.years ? resp.years : "&nbsp;";
+        view.detailedSubExtra=resp.extraDetails;
         if ( (view.current && (view.current.stdItem==STD_ITEM_MAI || view.current.stdItem==STD_ITEM_MIX)) ||
              (1==view.items.length && ("text"==view.items[0].type || "html"==view.items[0].type)) ||
              (listingArtistAlbums && 0==view.items.length) /*Artist from online service*/ ) {
@@ -688,7 +690,7 @@ function browseClick(view, item, index, event) {
         browseCheckExpand(view);
     } else if (item.actions && item.actions.go && item.actions.go.params && item.actions.go.params.genre_id && item.actions.go.params.mode=='artists' && item.title.indexOf(': ')>0) {
         // Genre from 'More' menu?
-        browseAddCategories(view, {id:'genre_id:'+item.actions.go.params.genre_id, title:item.title.split(': ')[1]}, true);
+        browseAddCategories(view, {id:'genre_id:'+item.actions.go.params.genre_id, title:item.title.split(': ')[1], image:item.image}, true);
         browseCheckExpand(view);
     } else if (STD_ITEM_YEAR==item.stdItem && view.current&& (getField(item, "genre_id") || getField(item, "year"))) {
         browseAddCategories(view, item, false);
@@ -865,6 +867,7 @@ function browseAddCategories(view, item, isGenre) {
     }
     view.current = item;
     view.currentActions.push({action:(view.grid.use ? USE_LIST_ACTION : USE_GRID_ACTION)});
+    view.currentItemImage = item.image;
     if (isGenre && lmsOptions.genreImages) {
         view.setBgndCover();
     }
@@ -1548,6 +1551,7 @@ function browseGoBack(view, refresh) {
     view.headerTitle = prev.headerTitle;
     view.headerSubTitle = prev.headerSubTitle;
     view.detailedSubInfo = prev.detailedSubInfo;
+    view.detailedSubExtra = prev.detailedSubExtra;
     view.tbarActions = prev.tbarActions;
     view.command = prev.command;
     view.showRatingButton = prev.showRatingButton;

@@ -938,20 +938,21 @@ function useBand(genre) {
     return useArtistTagType(genre, lmsOptions.bandGenres);
 }
 
-function splitMultiples(item) {
-    for (var i=0, len=ARTIST_TYPES.length; i<len; ++i) {
-        let idsKey = ARTIST_TYPES[i]+"_ids";
+function splitMultiples(item, withGenre) {
+    let types=withGenre ? ["genre"].concat(ARTIST_TYPES) : ARTIST_TYPES;
+    for (var i=0, len=types.length; i<len; ++i) {
+        let idsKey = types[i]+"_ids";
         let ids = undefined!=item[idsKey] ? (""+item[idsKey]).split(",") : undefined;
 
         if (undefined!=ids) {
             item[idsKey] = ids;
-
-            let strings = undefined!=item[ARTIST_TYPES[i]] ? item[ARTIST_TYPES[i]].split(MULTI_SPLIT_REGEX) : undefined;
+            let typeKey = types[i]=="genre" ? "genres" : types[i];
+            let strings = undefined!=item[typeKey] ? item[typeKey].split(MULTI_SPLIT_REGEX) : undefined;
             if (undefined!=strings && ids.length>0 && ids.length==strings.length) {
-                item[ARTIST_TYPES[i]+"_id"]=ids[0];
-                item[ARTIST_TYPES[i]] = strings[0];
-                if (lmsOptions.showAllArtists) {
-                    item[ARTIST_TYPES[i]+"s"] = strings;
+                item[types[i]+"_id"]=ids[0];
+                item[types[i]] = strings[0];
+                if (lmsOptions.showAllArtists || types[i]=="genre") {
+                    item[types[i]+"s"] = strings;
                 }
             }
         }

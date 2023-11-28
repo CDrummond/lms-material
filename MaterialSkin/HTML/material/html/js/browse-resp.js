@@ -1012,6 +1012,8 @@ function parseBrowseResp(data, parent, options, cacheKey, parentCommand, parentG
             let parentArtist = undefined;
             let showTrackNumbers = true;
             let grouping = 0;
+            let genres=new Set();
+            let genreList=[];
 
             if (data.params[1].length>=4 && data.params[1][0]=="tracks") {
                 for (let p=0, plen=data.params[1].length; p<plen && (!allowPlayAlbum || !showAlbumName); ++p) {
@@ -1066,7 +1068,7 @@ function parseBrowseResp(data, parent, options, cacheKey, parentCommand, parentG
                         title = i.disc+"."+title;
                     }
                 }
-                splitMultiples(i);
+                splitMultiples(i, true);
                 if (undefined!=highlightArtist) {
                     // Check if any of the artist IDs for this track match that to highlight
                     for (let a=0, alen=ARTIST_TYPES.length; a<alen && !highlight; ++a) {
@@ -1140,6 +1142,20 @@ function parseBrowseResp(data, parent, options, cacheKey, parentCommand, parentG
                     }
                 }
                 extraSubs.push(extraSub);
+                if (i.genre || i.genres) {
+                    let loop = i.genres ? i.genres : [i.genre];
+                    for (let g=0, glen=loop.length; g<glen; ++g) {
+                        if (!genres.has(loop[g])) {
+                            genres.add(loop[g]);
+                            if ((!IS_MOBILE || lmsOptions.touchLinks)) {
+                                genreList.push("<obj class=\"link-item\" onclick=\"showGenre(event, "+i.genre_ids[g]+",\'"+escape(loop[g])+"\', \'browse\')\">" + loop[g] + "</obj>");
+                            } else {
+                                genreList.push(loop[g]);
+                            }
+                        }
+                    }
+                }
+
                 resp.items.push({
                               id: "track_id:"+i.id,
                               title: title,
@@ -1340,9 +1356,19 @@ function parseBrowseResp(data, parent, options, cacheKey, parentCommand, parentG
             let totalDurationStr=formatSeconds(totalDuration);
             resp.subtitle=totalTracks+'<obj class="mat-icon music-note">music_note</obj>'+totalDurationStr;
             resp.plainsubtitle=i18np("1 Track", "%1 Tracks", totalTracks)+SEPARATOR+totalDurationStr;
+            if (genreList.length>0) {
+                resp.extraDetails=genreList.join(SEPARATOR);
+            }
             // set compilationAlbumArtist on first entry so that browse-view can use this
             if (lmsOptions.noArtistFilter && undefined!=compilationAlbumArtist & resp.items.length>0) {
                 resp.items[0].compilationAlbumArtist = compilationAlbumArtist;
+            }
+            let extra = [];
+            if (genres.length>0) {
+
+            }
+            if (lmsOptions.techInfo) {
+
             }
         } else if (data.result.genres_loop) {
             for (var idx=0, loop=data.result.genres_loop, loopLen=loop.length; idx<loopLen; ++idx) {

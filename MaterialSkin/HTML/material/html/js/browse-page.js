@@ -49,7 +49,8 @@ var lmsBrowse = Vue.component("lms-browse", {
      <v-flex xs12 class="ellipsis subtoolbar-title subtoolbar-pad" v-bind:class="{'subtoolbar-title-single':undefined==toolbarSubTitle}">{{headerTitle}}</v-flex>
      <v-flex xs12 class="ellipsis subtoolbar-subtitle subtext" v-html="detailedSubTop"></v-flex>
     </v-layout>
-    <v-flex xs12 class="ellipsis subtoolbar-subtitle subtext">&nbsp;</v-flex>
+    <v-flex xs12 v-if="detailedSubExtra" class="ellipsis subtoolbar-subtitle subtext" v-html="detailedSubExtra"></v-flex>
+    <v-flex xs12 v-else class="ellipsis subtoolbar-subtitle subtext">&nbsp;</v-flex>
     <v-flex xs12 class="ellipsis subtoolbar-subtitle subtext" v-html="detailedSubBot"></v-flex>
    </v-layout>
    <v-layout row wrap v-else @click="showHistory($event)" v-bind:class="{'pointer link-item': history.length>0}">
@@ -396,6 +397,7 @@ var lmsBrowse = Vue.component("lms-browse", {
             headerTitle: undefined,
             headerSubTitle: undefined,
             detailedSubInfo: undefined,
+            detailedSubExtra: undefined,
             items: [],
             grid: {allowed:true, use:false, numColumns:0, ih:GRID_MIN_HEIGHT, rows:[], few:false, haveSubtitle:true, multiSize:false},
             fetchingItem:undefined,
@@ -1823,7 +1825,11 @@ var lmsBrowse = Vue.component("lms-browse", {
                 this.goHome();
             }
             if ('genre'==cmd || 'year'==cmd) {
-                let item = {id:'click.'+cmd+'.'+params, actions: { go: { params: { mode:'genre'==cmd?'artists':'albums'}}}, title:/**/'CLICK: '+title, type:'click'};
+                let item = {id:'click.'+cmd+'.'+params,
+                            actions: { go: { params: { mode:'genre'==cmd?'artists':'albums'}}},
+                            title:/**/'CLICK: '+title,
+                            type:'click',
+                            image: 'genre'==cmd && lmsOptions.genreImages ? "material/genres/" + title.toLowerCase().replace(/[^0-9a-z]/gi, '') : undefined};
                 if ('genre'==cmd) {
                     item.actions.go.params['genre_id']=params;
                 } else {

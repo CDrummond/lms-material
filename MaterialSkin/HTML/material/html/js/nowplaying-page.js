@@ -166,6 +166,9 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
     <div style="width:32px" v-if="windowWidth>NP_MIN_WIDTH_FOR_FULL"></div>
     <v-btn flat icon v-if="info.sync" @click="info.sync = false" :title="trans.sync"><v-icon>link</v-icon></v-btn>
     <v-btn flat icon v-else @click="info.sync = true" :title="trans.unsync"><v-icon class="dimmed">link_off</v-icon></v-btn>
+    <div style="width:32px" v-if="info.tabs[TRACK_TAB].lines && (!info.showTabs || info.tab==TRACK_TAB)"></div>
+    <v-btn flat icon v-if="info.tabs[TRACK_TAB].lines && (!info.showTabs || info.tab==TRACK_TAB) && info.tabs[TRACK_TAB].sync" @click.stop="toggleLyricSync" :title="trans.syncLyrics"><img class="svg-img" :src="'lyrics-follow' | svgIcon(darkUi)"></img></v-btn>
+    <v-btn flat icon v-else-if="info.tabs[TRACK_TAB].lines && (!info.showTabs || info.tab==TRACK_TAB)" @click.stop="toggleLyricSync" :title="trans.unsyncLyrics"><img class="svg-img dimmed" :src="'lyrics' | svgIcon(darkUi)"></img></v-btn>
     <div style="width:32px"></div>
     <v-btn flat icon @click="trackInfo()" :title="trans.more"><img class="svg-img" :src="'more' | svgIcon(darkUi)"></img></v-btn>
     <v-spacer></v-spacer>
@@ -374,12 +377,13 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
                                               { title:undefined, html:undefined } ] },
                                  { value:ALBUM_TAB, title:undefined, text:undefined, reqId:0, image: undefined,
                                    sections:[ { title:undefined, items:[], min:2, more:undefined } ] },
-                                 { value: TRACK_TAB, title:undefined, text:undefined, lines:undefined, reqId:0, image: undefined,
+                                 { value: TRACK_TAB, title:undefined, text:undefined, lines:undefined, sync:false, reqId:0, image: undefined,
                                    sections:[ { title:undefined, html:undefined } ] } ] },
                  infoTrack: {album_id:undefined, track_id:undefined},
                  trans: { expand:undefined, collapse:undefined, sync:undefined, unsync:undefined, more:undefined, dstm:undefined,
                           repeatAll:undefined, repeatOne:undefined, repeatOff:undefined, shuffleAll:undefined, shuffleAlbums:undefined, shuffleOff:undefined,
-                          play:undefined, pause:undefined, prev:undefined, next:undefined, collapseNp:undefined, expandNp:undefined, menu:undefined },
+                          play:undefined, pause:undefined, prev:undefined, next:undefined, collapseNp:undefined, expandNp:undefined, menu:undefined,
+                          syncLyrics: undefined, unsyncLyrics:undefined },
                  showTotal: true,
                  landscape: false,
                  wide: 0,
@@ -407,6 +411,7 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
         this.mobileBarThinHeight = getComputedStyle(document.documentElement).getPropertyValue('--mobile-npbar-height-thin');
         this.mobileBarThickHeight = getComputedStyle(document.documentElement).getPropertyValue('--mobile-npbar-height-thick');
         this.controlBar();
+        this.info.tabs[TRACK_TAB].sync=getLocalStorageBool("npSyncLyrics", false);
 
         bus.$on('mobileBarChanged', function() {
             this.controlBar(true);
@@ -601,7 +606,8 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
                            more:i18n("More"), dstm:i18n("Don't Stop The Music"), repeatAll:i18n("Repeat queue"), repeatOne:i18n("Repeat single track"),
                            repeatOff:i18n("No repeat"), shuffleAll:i18n("Shuffle tracks"), shuffleAlbums:i18n("Shuffle albums"),
                            shuffleOff:i18n("No shuffle"), play:i18n("Play"), pause:i18n("Pause"), prev:i18n("Previous track"),
-                           next:i18n("Next track"), collapseNp:i18n("Collapse now playing"), expandNp:i18n("Expand now playing"), menu:i18n("Menu") };
+                           next:i18n("Next track"), collapseNp:i18n("Collapse now playing"), expandNp:i18n("Expand now playing"), menu:i18n("Menu"),
+                           syncLyrics:i18n("Auto-scroll lyrics"), unsyncLyrics:i18n("Don't auto-scroll lyrics") };
             this.info.tabs[TRACK_TAB].title=i18n("Track");
             this.info.tabs[ARTIST_TAB].title=i18n("Artist");
             this.info.tabs[ALBUM_TAB].title=i18n("Album");
@@ -639,7 +645,10 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
             if (pc!=this.playerStatus.current.pospc) {
                 this.playerStatus.current.pospc = pc;
             }
-            if (this.info.tabs[TRACK_TAB].lines) {
+            this.updateLyricsPosition();
+        },
+        updateLyricsPosition() {
+            if (this.info.tabs[TRACK_TAB].lines && this.info.tabs[TRACK_TAB].sync && this.playerStatus.current && undefined!=this.playerStatus.current.time) {
                 let pos = undefined;
                 for (let i=0, loop=this.info.tabs[TRACK_TAB].lines, len=loop.length; i<len; ++i) {
                     if (loop[i].time<=this.playerStatus.current.time) {
@@ -1095,6 +1104,11 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
         },
         tabChanged(tab) {
             setLocalStorageVal("nptab", tab);
+        },
+        toggleLyricSync() {
+            this.info.tabs[TRACK_TAB].sync=!this.info.tabs[TRACK_TAB].sync;
+            setLocalStorageVal("npSyncLyrics", this.info.tabs[TRACK_TAB].sync);
+            this.updateLyricsPosition();
         }
     },
     filters: {

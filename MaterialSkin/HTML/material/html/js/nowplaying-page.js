@@ -46,10 +46,15 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
     <v-tab :key="index">{{tab.title}}</v-tab>
     <v-tab-item :key="index" :transition="false" :reverse-transition="false">
      <v-card flat class="np-info-card-cover fade-both" @contextmenu.prevent="nowPlayingContextMenu">
-      <v-card-text :class="['np-info-text', zoomInfoClass, TRACK_TAB==index || tab.isMsg ? 'np-info-lyrics' : '', ALBUM_TAB==index ? 'np-info-review' : '']">
+      <v-card-text :class="['np-info-text', zoomInfoClass, TRACK_TAB==index || tab.isMsg ? 'np-info-lyrics' : '', ALBUM_TAB==index ? 'np-info-review' : '']" :id="'np-tab'+index">
        <div v-if="TRACK_TAB==index && tab.texttitle" v-html="tab.texttitle" class="np-info-title"></div>
        <img v-if="tab.image" :src="tab.image" loading="lazy" class="np-no-meta-img"></img>
-       <div v-if="tab.text" v-bind:class="{'text':ARTIST_TAB==index}" v-html="tab.text"></div>
+       <div v-if="TRACK_TAB==index && tab.lines">
+        <template v-for="(line, lindex) in tab.lines">
+         <obj :id="'np-lyrics-'+lindex" v-bind:class="{'lyrics-current-line':undefined!=playerStatus.current.time && playerStatus.current.time>line.time && playerStatus.current.time<((lindex+1)<tab.lines.length ? tab.lines[lindex+1].time : 86400)}">{{line.text}}</obj></br/>
+        </template>
+       </div>
+       <div v-else-if="tab.text" v-bind:class="{'text':ARTIST_TAB==index}" v-html="tab.text"></div>
        <div v-else-if="TRACK_TAB!=index && !tab.text && tab.texttitle" v-html="tab.texttitle" class="np-info-title"></div>
        <template v-for="(sect, sindex) in tab.sections">
         <div class="np-sect-title" v-if="(undefined!=sect.items && sect.items.length>=sect.min) || undefined!=sect.html">{{sect.title}}<v-btn flat icon class="np-sect-toggle" v-if="undefined!=sect.grid" @click="toggleGrid(index, sindex)"><v-icon>{{ACTIONS[sect.grid ? USE_LIST_ACTION : USE_GRID_ACTION].icon}}</v-icon></v-btn></div>
@@ -99,10 +104,15 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
     <template v-for="(tab, index) in info.tabs">
      <v-flex xs4>
       <v-card flat class="np-info-card-cover">
-       <v-card-text :class="['np-info-text-full', 'fade-both', zoomInfoClass, TRACK_TAB==index || tab.isMsg ? 'np-info-lyrics' : '', ALBUM_TAB==index ? 'np-info-review' : '']" @contextmenu.prevent="nowPlayingContextMenu">
+       <v-card-text :class="['np-info-text-full', 'fade-both', zoomInfoClass, TRACK_TAB==index || tab.isMsg ? 'np-info-lyrics' : '', ALBUM_TAB==index ? 'np-info-review' : '']" @contextmenu.prevent="nowPlayingContextMenu"  :id="'np-tab'+index">
         <div v-if="TRACK_TAB==index && tab.texttitle" v-html="tab.texttitle" class="np-info-title"></div>
         <img v-if="tab.image" :src="tab.image" loading="lazy" class="np-no-meta-img"></img>
-        <div v-if="tab.text" v-bind:class="{'text':ARTIST_TAB==index}" v-html="tab.text"></div>
+        <div v-if="TRACK_TAB==index && tab.lines">
+         <template v-for="(line, lindex) in tab.lines">
+          <obj :id="'np-lyrics-'+lindex" v-bind:class="{'lyrics-current-line':undefined!=playerStatus.current.time && playerStatus.current.time>line.time && playerStatus.current.time<((lindex+1)<tab.lines.length ? tab.lines[lindex+1].time : 86400)}">{{line.text}}</obj></br/>
+         </template>
+        </div>
+        <div v-else-if="tab.text" v-bind:class="{'text':ARTIST_TAB==index}" v-html="tab.text"></div>
         <div v-else-if="TRACK_TAB!=index && !tab.text && tab.texttitle" v-html="tab.texttitle" class="np-info-title"></div>
         <template v-for="(sect, sindex) in tab.sections">
          <div class="np-sect-title" v-if="(undefined!=sect.items && sect.items.length>=sect.min) || undefined!=sect.html">{{sect.title}}<v-btn flat icon class="np-sect-toggle" v-if="undefined!=sect.grid" @click="toggleGrid(index, sindex)"><v-icon>{{ACTIONS[sect.grid ? USE_LIST_ACTION : USE_GRID_ACTION].icon}}</v-icon></v-btn></div>
@@ -360,11 +370,11 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
                  mobileBarText: undefined,
                  info: { show: false, tab:parseInt(getLocalStorageVal("nptab", TRACK_TAB)), showTabs:false, sync: true,
                          tabs: [ { value:ARTIST_TAB, title:undefined, text:undefined, reqId:0, image: undefined,
-                                    sections:[ { title:undefined, items:[], min:1, more:undefined, grid:getLocalStorageBool("np-tabs-"+ARTIST_TAB+"-0-grid", false) },
-                                               { title:undefined, html:undefined } ] },
+                                   sections:[ { title:undefined, items:[], min:1, more:undefined, grid:getLocalStorageBool("np-tabs-"+ARTIST_TAB+"-0-grid", false) },
+                                              { title:undefined, html:undefined } ] },
                                  { value:ALBUM_TAB, title:undefined, text:undefined, reqId:0, image: undefined,
-                                    sections:[ { title:undefined, items:[], min:2, more:undefined } ] },
-                                 { value: TRACK_TAB, title:undefined, text:undefined, reqId:0, image: undefined,
+                                   sections:[ { title:undefined, items:[], min:2, more:undefined } ] },
+                                 { value: TRACK_TAB, title:undefined, text:undefined, lines:undefined, reqId:0, image: undefined,
                                    sections:[ { title:undefined, html:undefined } ] } ] },
                  infoTrack: {album_id:undefined, track_id:undefined},
                  trans: { expand:undefined, collapse:undefined, sync:undefined, unsync:undefined, more:undefined, dstm:undefined,
@@ -628,6 +638,33 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
 
             if (pc!=this.playerStatus.current.pospc) {
                 this.playerStatus.current.pospc = pc;
+            }
+            if (this.info.tabs[TRACK_TAB].lines) {
+                let pos = undefined;
+                for (let i=0, loop=this.info.tabs[TRACK_TAB].lines, len=loop.length; i<len; ++i) {
+                    if (loop[i].time<=this.playerStatus.current.time) {
+                        pos = i;
+                    } else {
+                        break;
+                    }
+                }
+                if (pos!=undefined) {
+                    pos = Math.max(0, pos-7);
+                    if (pos!=this.info.tabs[TRACK_TAB].pos) {
+                        this.info.tabs[TRACK_TAB].pos=pos;
+                        if (0==pos) {
+                            let elem = document.getElementById("np-tab"+TRACK_TAB);
+                            if (elem) {
+                                setScrollTop(elem, 0);
+                            }
+                        } else {
+                            let elem = document.getElementById("np-lyrics-"+pos);
+                            if (undefined!=elem) {
+                                ensureVisible(elem, 0);
+                            }
+                        }
+                    }
+                }
             }
         },
         sliderChanged(e, isTouch) {

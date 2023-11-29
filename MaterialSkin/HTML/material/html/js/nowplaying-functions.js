@@ -12,6 +12,41 @@ function  nowPlayingHeader(s) {
     return isEmpty(s) ? "" : ("<b>"+s+"</b><br/>");
 }
 
+function formatLyrics(s) {
+    let lines = s.split("<br/>")
+    if (lines.length>2) {
+        let timed = [];
+        let prevSeconds = 0;
+        for (let i=0, len=lines.length; i<len; ++i) {
+            let line = lines[i];
+            if (!line.startsWith("[")) {
+                return {data:s, timed:false};
+            }
+            let end = line.indexOf(']');
+            if (end<5 || end>12) {
+                return {data:s, timed:false};
+            }
+            let time=line.substring(1, end).split(':');
+            let rest=line.substring(end+1).trim();
+            let mod = 1;
+            let seconds = 0;
+            for (let t=time.length-1; t>=0; t--) {
+                seconds+=mod*parseInt(time[t]);
+                mod*=60;
+            }
+            if (seconds<0 || seconds<prevSeconds) {
+                return {data:s, timed:false};
+            }
+            timed.push({time:seconds, text:rest});
+            prevSeconds = seconds;
+        }
+        if (timed.length>0) {
+            return {data:timed, timed:true};
+        }
+    }
+    return {data:s, timed:false};
+}
+
 function nowplayingSetWindowTitle(view) {
     var title = (undefined==view.mobileBarText ? "" : (view.mobileBarText.replaceAll(SEPARATOR, " - ") + " - ")) + LMS_WINDOW_TITLE;
     if (title!=document.title) {
@@ -438,11 +473,13 @@ function nowplayingFetchTrackInfo(view) {
         view.info.tabs[TRACK_TAB].track_id!=view.infoTrack.track_id || view.info.tabs[TRACK_TAB].artist_id!=view.infoTrack.artist_id) {
         view.info.tabs[TRACK_TAB].texttitle=nowPlayingHeader(view.infoTrack.title);
         view.info.tabs[TRACK_TAB].text=i18n("Fetching...");
+        view.info.tabs[TRACK_TAB].lines=undefined;
         view.info.tabs[TRACK_TAB].track_id=view.infoTrack.track_id;
         view.info.tabs[TRACK_TAB].artist=view.infoTrack.artist;
         view.info.tabs[TRACK_TAB].artist_id=view.infoTrack.artist_id;
         view.info.tabs[TRACK_TAB].songtitle=view.infoTrack.title;
         view.info.tabs[TRACK_TAB].reqId++;
+        view.info.tabs[TRACK_TAB].pos=0;
         if (view.info.tabs[TRACK_TAB].reqId>65535) {
             view.info.tabs[TRACK_TAB].reqId = 0;
         }
@@ -463,7 +500,9 @@ function nowplayingFetchTrackInfo(view) {
             lmsCommand("", command, view.info.tabs[TRACK_TAB].reqId).then(({data}) => {
                 logJsonMessage("RESP", data);
                 if (data && data.result && view.isCurrent(data, TRACK_TAB)) {
-                    view.info.tabs[TRACK_TAB].text=data.result.lyrics ? replaceNewLines(data.result.lyrics) : undefined;
+                    let parsed = data.result.lyrics ? formatLyrics(replaceNewLines(data.result.lyrics)) : undefined;
+                    view.info.tabs[TRACK_TAB].text=undefined==parsed || parsed.timed ? undefined : parsed.data;
+                    view.info.tabs[TRACK_TAB].lines=parsed && parsed.timed ? parsed.data : undefined;
                 }
             }).catch(error => {
                 view.info.tabs[TRACK_TAB].text=undefined;

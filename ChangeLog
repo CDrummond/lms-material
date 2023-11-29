@@ -33,6 +33,7 @@
     devices as is for non-touch devices.
 24. Show genres in detailed album toolbar.
 25. Fix 'Append random album to queue'.
+26. Parse synced lyrics, highlight current line, and scroll view with song.
 
 4.0.4
 -----

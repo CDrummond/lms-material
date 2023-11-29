@@ -3205,3 +3205,8 @@ img[lazy='loaded'].np-cover {
  margin-left:auto;
  margin-right:auto;
 }
+
+.lyrics-current-line {
+ font-weight:var(--bold-weight)!important;
+ color:var(--active-color);
+}

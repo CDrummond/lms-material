@@ -14,19 +14,27 @@ function  nowPlayingHeader(s) {
 
 function formatLyrics(s) {
     let lines = s.split("<br/>")
-    if (lines.length>2) {
+    if (lines.length>0) {
         let timed = [];
         let prevSeconds = 0;
         for (let i=0, len=lines.length; i<len; ++i) {
             let line = lines[i];
             if (!line.startsWith("[")) {
-                return {data:s, timed:false};
+                if (line.trim().length>0) {
+                    return {data:s, timed:false};
+                }
+                // Skip blank lines?
+                continue;
             }
             let end = line.indexOf(']');
-            if (end<5 || end>12) {
+            if (end<2) {
                 return {data:s, timed:false};
             }
             let time=line.substring(1, end).split(':');
+            if (time[0] < '0' || time[0] > '9') {
+                // Skip meta-data
+                continue;
+            }
             let rest=line.substring(end+1).trim();
             let mod = 1;
             let seconds = 0;

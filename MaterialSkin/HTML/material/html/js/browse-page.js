@@ -1215,7 +1215,12 @@ var lmsBrowse = Vue.component("lms-browse", {
                     extras = this.top[i];
                 }
             }
-            this.top=items;
+            this.top=[];
+            for (let i=0, len=items.length; i<len; ++i) {
+                if (((items[i].id!=TOP_CDPLAYER_ID || LMS_P_CD)) && (items[i].id!=TOP_REMOTE_ID || LMS_P_RM)) {
+                    this.top.push(items[i]);
+                }
+            }
             this.initItems();
             let hasExtras = false;
             for (var i=0, len=this.top.length; i<len; ++i) {

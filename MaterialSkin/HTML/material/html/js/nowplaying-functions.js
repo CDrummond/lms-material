@@ -84,6 +84,7 @@ function nowplayingOnPlayerStatus(view, playerStatus) {
         view.playerStatus.current.time = playerStatus.current.time;
         view.playerStatus.current.updated = new Date();
         view.playerStatus.current.origTime = playerStatus.current.time;
+        currentPlayingTrackPosition = playerStatus.current.time;
     }
     view.setPosition();
     if (playerStatus.current.id!=view.playerStatus.current.id) {

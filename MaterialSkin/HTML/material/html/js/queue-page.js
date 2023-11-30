@@ -1428,7 +1428,7 @@ var lmsQueue = Vue.component("lms-queue", {
                 this.headerAction(PQ_MOVE_QUEUE_ACTION);
                 return;
             }
-            if (this.items.length>1 && this.items.length==this.listSize) {
+            if (this.items.length>0 && this.items.length==this.listSize) {
                 this.remaining.duration = 0;
                 var isValid = true;
                 for (var i=this.currentIndex; i<this.listSize && isValid; ++i) {
@@ -1438,8 +1438,8 @@ var lmsQueue = Vue.component("lms-queue", {
                         isValid = false;
                     }
                 }
+                this.remaining.duration -= currentPlayingTrackPosition;
                 if (isValid && this.remaining.duration!=this.duration) {
-                    this.remaining.duration -= currentPlayingTrackPosition;
                     this.remaining.size = this.listSize - this.currentIndex;
                     this.remaining.show = true;
                     this.remainingTimeout = setTimeout(function () {

@@ -1295,9 +1295,9 @@ function parseBrowseResp(data, parent, options, cacheKey, parentCommand, parentG
             } else if (1==resp.items.length && undefined!=albumArtist) {
                 // Only one? Check that this tracks artist line does not match parent item's artist details...
                 if (stripLinkTags(artists[0])!=albumArtist) {
-                    loop[0].subtitle = undefined==loop[0].subtitle ? artists[0] : (artists[0] + SEPARATOR + loop[0].subtitle);
+                    resp.items[0].subtitle = undefined==resp.items[0].subtitle ? artists[0] : (artists[0] + SEPARATOR + resp.items[0].subtitle);
                     if (browseContext) {
-                        loop[0].subtitleContext = undefined==loop[0].subtitleContext ? artistsWithContext[0] : (artistsWithContext[0] + " " + loop[0].subtitleContext);
+                        resp.items[0].subtitleContext = undefined==resp.items[0].subtitleContext ? artistsWithContext[0] : (artistsWithContext[0] + " " + resp.items[0].subtitleContext);
                     }
                 }
             }

@@ -127,7 +127,7 @@ function nowplayingOnPlayerStatus(view, playerStatus) {
     let albumartist_ids = playerStatus.current.albumartist_ids ? playerStatus.current.albumartist_ids : playerStatus.current.band_ids;
     let albumartists = playerStatus.current.albumartists ? playerStatus.current.albumartists : playerStatus.current.bands;
     if (albumartist!=view.playerStatus.current.albumartist ||
-        albumartists!=view.playerStatus.current.albumartists || 
+        albumartists!=view.playerStatus.current.albumartists ||
         albumartist_ids!=view.playerStatus.current.albumartist_ids) {
         view.playerStatus.current.albumartist = albumartist;
         view.playerStatus.current.albumartists = albumartists;
@@ -491,7 +491,7 @@ function nowplayingFetchTrackInfo(view) {
         if (view.info.tabs[TRACK_TAB].reqId>65535) {
             view.info.tabs[TRACK_TAB].reqId = 0;
         }
-        let command = ["musicartistinfo", "lyrics", "html:1"];
+        let command = ["musicartistinfo", "lyrics", "html:1", "timestamps:1"];
         if (view.infoTrack.track_id!=undefined && !(""+view.infoTrack.track_id).startsWith("-")) {
             command.push("track_id:"+view.infoTrack.track_id);
         } else {

@@ -1632,7 +1632,7 @@ function parseBrowseResp(data, parent, options, cacheKey, parentCommand, parentG
     }
 
     } catch(e) {
-        resp.items.push({title:i18n("ERROR: List processing failed")+"\n"+e, type: 'text', id:'error'});
+        resp.items.push({title:i18n("ERROR: List processing failed")+"\n"+e+"\n"+e.stack, type: 'text', id:'error'});
         logError(e);
     }
 

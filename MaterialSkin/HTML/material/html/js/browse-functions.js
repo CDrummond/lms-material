@@ -365,6 +365,7 @@ function browseHandleListResponse(view, item, command, resp, prevPage, appendIte
                 }
             }
         }
+        var canAddAlbumSort=true;
         if ((listingArtistAlbums && listingAlbums) || (listingAlbumTracks && listingTracks)) {
             var actParams = new Map();
             actParams[view.current.id.split(':')[0]]=view.current.id.split(':')[1];
@@ -430,6 +431,7 @@ function browseHandleListResponse(view, item, command, resp, prevPage, appendIte
             // Artist from online service, but no albums? Add links to services...
             if (listingArtistAlbums && view.items.length==0) {
                 view.items.push({id:"intro", title:i18n("No albums have been favorited for this artist. Please use the entries below to look for albums on your online services."), type:"text"});
+                canAddAlbumSort = false;
                 for (var i=0, loop=view.currentActions, len=loop.length; i<len; ++i) {
                     if (loop[i].isService) {
                         view.items.push({id:loop[i].id ? loop[i].id : "ca"+i, title:loop[i].title, do:loop[i].do, svg:loop[i].svg, icon:loop[i].icon, currentAction:true, artist_id:artist_id});
@@ -449,18 +451,17 @@ function browseHandleListResponse(view, item, command, resp, prevPage, appendIte
                 view.currentActions.push({action:ADD_TO_PLAYLIST_ACTION, weight:1});
             }
         }
-        if (view.command.command.length>0 && view.command.command[0]=="albums" && view.items.length>0) {
-            var addSort=true;
+        if (canAddAlbumSort && view.command.command.length>0 && view.command.command[0]=="albums" && view.items.length>0) {
             for (var i=0, len=view.command.params.length; i<len; ++i) {
                 if (view.command.params[i].startsWith(SORT_KEY)) {
                     var sort=view.command.params[i].split(":")[1];
                     addSort=sort!="new" && sort!="random";
                 } else if (view.command.params[i].startsWith("search:")) {
-                    addSort=false;
+                    canAddAlbumSort=false;
                     break;
                 }
             }
-            if (addSort) {
+            if (canAddAlbumSort) {
                 view.currentActions.push({action:ALBUM_SORTS_ACTION, weight:1});
             }
         } else if ((view.current.stdItem==STD_ITEM_ALL_TRACKS || view.current.stdItem==STD_ITEM_COMPOSITION_TRACKS) && view.command.command.length>0 && view.command.command[0]=="tracks" && view.items.length>0) {

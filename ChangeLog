@@ -35,6 +35,7 @@
 25. Fix 'Append random album to queue'.
 26. Parse synced lyrics, highlight current line, and scroll view with song.
 27. Mark browse text items, and MAI view, as selectable.
+28. Only offer album sort option if there are albums shown.
 
 4.0.4
 -----

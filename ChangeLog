@@ -34,6 +34,7 @@
 24. Show genres in detailed album toolbar.
 25. Fix 'Append random album to queue'.
 26. Parse synced lyrics, highlight current line, and scroll view with song.
+27. Mark browse text items, and MAI view, as selectable.
 
 4.0.4
 -----

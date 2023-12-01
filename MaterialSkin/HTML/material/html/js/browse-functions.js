@@ -746,7 +746,7 @@ function browseAddCategories(view, item, isGenre) {
 
     // check if there is a grandparent ID we should use.
     let alt_id = view.history.length<1 || !view.history[view.history.length-1].current ? undefined : originalId(view.history[view.history.length-1].current.id);
-    if (undefined!=alt_id && (alt_id.includes("/") || alt_id[0]==item.id[0] || /*alt_id.startsWith("year:") ||*/ alt_id.startsWith("track_id:"))) {
+    if (undefined!=alt_id && (alt_id.includes("/") || alt_id[0]==item.id[0] || /*alt_id.startsWith("year:") ||*/ alt_id.startsWith("artist_id:") || alt_id.startsWith("album_id:") || alt_id.startsWith("track_id:"))) {
         alt_id = undefined;
     }
     let cat = { title: lmsOptions.separateArtistsList ? i18n("All Artists") : i18n("Artists"),

@@ -6,7 +6,7 @@
  */
 'use strict';
 
-function browseItem(event, cmd, params,title, page) {
+function browseItem(event, cmd, params, title, page) {
     if (lmsNumVisibleMenus>0 || ('queue'==page && lmsQueueSelectionActive)) { // lmsNumVisibleMenus defined in store.js
         return;
     }
@@ -44,7 +44,8 @@ function showBand(event, id, title, page) {
 }
 
 function showGenre(event, id, title, page) {
-    browseItem(event, ["genre"], ["genre_id:"+id], unescape(title), page);
+    // Just 'id' here no 'genre_id:' prefix!
+    browseItem(event, ["genre"], id, unescape(title), page);
 }
 
 function buildLink(func, id, str, page) {

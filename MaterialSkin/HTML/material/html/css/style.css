@@ -1417,6 +1417,11 @@ div.v-rating i.primary--text, div.v-rating i.accent--text {
  height:5px;
 }
 
+.np-page .np-slider .v-progress-linear__background,
+.np-page .np-slider .v-progress-linear__bar__determinate {
+ border-radius:4px;
+}
+
 .np-time-layout {
  height:15px;
 }

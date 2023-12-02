@@ -442,13 +442,15 @@ function browseHandleListResponse(view, item, command, resp, prevPage, appendIte
             view.currentActions = resp.actionItems;
         }
         if (listingArtistAlbums) {
+            let index = getField(command, "genre_id:");
+            let id = index<0 ? undefined : command.params[index].split(':')[1];
             // Get genres for artist...
             let genreReqArtist=view.current.id;
-            lmsList('', ['genres'], [view.current.id], 0, 25, false, view.nextReqId()).then(({data}) => {
+            lmsList('', ['genres'], [view.current.id].concat(undefined==id ? [] : [command.params[index]]), 0, 25, false, view.nextReqId()).then(({data}) => {
                 if (data.result && data.result.genres_loop && view.isCurrentReq(data) && genreReqArtist==view.current.id) {
                     let genreList = [];
                     for (let g=0, loop=data.result.genres_loop, len=loop.length; g<len; ++g) {
-                        if ((!IS_MOBILE || lmsOptions.touchLinks)) {
+                        if (undefined==id && (!IS_MOBILE || lmsOptions.touchLinks)) {
                             genreList.push("<obj class=\"link-item\" onclick=\"showGenre(event, "+loop[g].id+",\'"+escape(loop[g].genre)+"\', \'browse\')\">" + loop[g].genre + "</obj>");
                         } else {
                             genreList.push(loop[g].genre);

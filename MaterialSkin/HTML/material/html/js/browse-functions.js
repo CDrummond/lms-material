@@ -457,7 +457,6 @@ function browseHandleListResponse(view, item, command, resp, prevPage, appendIte
                     view.detailedSubExtra=genreList.join(SEPARATOR);
                 }
             }).catch(err => {
-                console.log(err);
             });
         }
         if (resp.canUseGrid && !resp.forceGrid) {

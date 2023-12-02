@@ -441,7 +441,25 @@ function browseHandleListResponse(view, item, command, resp, prevPage, appendIte
         } else if (undefined!=resp.actionItems && resp.actionItems.length>0) {
             view.currentActions = resp.actionItems;
         }
-
+        if (listingArtistAlbums) {
+            // Get genres for artist...
+            let genreReqArtist=view.current.id;
+            lmsList('', ['genres'], [view.current.id], 0, 25, false, view.nextReqId()).then(({data}) => {
+                if (data.result && data.result.genres_loop && view.isCurrentReq(data) && genreReqArtist==view.current.id) {
+                    let genreList = [];
+                    for (let g=0, loop=data.result.genres_loop, len=loop.length; g<len; ++g) {
+                        if ((!IS_MOBILE || lmsOptions.touchLinks)) {
+                            genreList.push("<obj class=\"link-item\" onclick=\"showGenre(event, "+loop[g].id+",\'"+escape(loop[g].genre)+"\', \'browse\')\">" + loop[g].genre + "</obj>");
+                        } else {
+                            genreList.push(loop[g].genre);
+                        }
+                    }
+                    view.detailedSubExtra=genreList.join(SEPARATOR);
+                }
+            }).catch(err => {
+                console.log(err);
+            });
+        }
         if (resp.canUseGrid && !resp.forceGrid) {
             view.currentActions.push({action:(view.grid.use ? USE_LIST_ACTION : USE_GRID_ACTION), weight:0});
         }

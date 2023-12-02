@@ -31,7 +31,7 @@
 22. Optionally show 'by', 'from', context in browse and queue.
 23. Add server-side option to make artist, etc, items clickable on touch
     devices as is for non-touch devices.
-24. Show genres in detailed album toolbar.
+24. Show genres in detailed artist and album toolbars.
 25. Fix 'Append random album to queue'.
 26. Parse synced lyrics, highlight current line, and scroll view with song.
 27. Mark browse text items, and MAI view, as selectable.

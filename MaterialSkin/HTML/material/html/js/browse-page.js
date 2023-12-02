@@ -453,8 +453,24 @@ var lmsBrowse = Vue.component("lms-browse", {
         useRecyclerForLists() {
             return !this.isTop && this.items.length>LMS_MAX_NON_SCROLLER_ITEMS
         },
+        bgndUrl() {
+            let url = this.$store.state.browseBackdrop
+                        ? this.current && this.current.image
+                            ? this.current.image
+                            : this.currentItemImage
+                                ? this.currentItemImage
+                                : undefined
+                        : undefined;
+            if (this.$store.state.browseBackdrop && undefined==url && this.history.length>0) {
+                let prev = this.history[this.history.length-1]
+                if (i18n("Select category")==prev.headerSubTitle) {
+                    url = prev.current && prev.current.image ? prev.current.image : prev.currentItemImage;
+                }
+            }
+            return url;
+        },
         drawBgndImage() {
-            return this.$store.state.browseBackdrop && ((undefined!=this.current && undefined!=this.current.image) || undefined!=this.currentItemImage);
+            return this.$store.state.browseBackdrop && undefined!=this.bgndUrl
         },
         drawBackdrop() {
             return !this.drawBgndImage && this.$store.state.browseBackdrop && this.$store.state.useDefaultBackdrops
@@ -1540,13 +1556,7 @@ var lmsBrowse = Vue.component("lms-browse", {
             }
         },
         setBgndCover() {
-            var url = this.$store.state.browseBackdrop
-                        ? this.current && this.current.image
-                            ? this.current.image
-                            : this.currentItemImage
-                                ? this.currentItemImage
-                                : undefined
-                        : undefined;
+            var url = this.bgndUrl;
             if (url) {
                 url=changeImageSizing(url, LMS_CURRENT_IMAGE_SIZE);
                 document.documentElement.style.setProperty('--subtoolbar-image-url', 'url(' + url + ')');

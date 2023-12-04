@@ -90,9 +90,9 @@
     "/napster.png":{"svg":"napster"},
     "/shoutcast.png":{"svg":"shoutcast"},
     "/Sprocket/html/images/icon.png":{"svg":"pocketcasts"},
-    "plugins/InfoBrowser/html/images/icon.png":{"icon":"info"},
+    "/InfoBrowser/html/images/icon.png":{"icon":"info"},
     "html/images/cover.png":{"icon":"album"},
-    "plugins/InguzEQ/inguz.png":{"icon":"equalizer"},
+    "/InguzEQ/inguz.png":{"icon":"equalizer"},
     "PLUGIN_MULTILIBRARY":{"icon":"library_music"},
     "PLUGIN_SQLPLAYLIST":{"icon":"list"},
     "PLUGIN_PLAYLISTGENERATOR":{"icon":"list"},
@@ -104,7 +104,7 @@
     "/zenradio.png":{"svg":"radio"},
     "/ZenRadio/html/icon.png":{"svg":"radio"},
     "/Podcast/html/images/podcastindex.png":{"icon":"new_releases"},
-    "/plugins/RadioTunes/html/icon.png":{"svg":"radio"}
+    "/RadioTunes/html/icon.png":{"svg":"radio"}
   },
   "indexOf":{
     "www.jazzfm.com":{"svg":"saxophone"},

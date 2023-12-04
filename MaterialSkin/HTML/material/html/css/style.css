@@ -69,6 +69,16 @@
  font-weight:200;
 }
 
+.browse-title {
+ padding-right:16px;
+ display:inline-block!important;
+ flex:unset!important
+}
+
+.browse-title div:first-of-type {
+ padding-bottom:1px!important;
+}
+
 .browse-html a, .np-info-text a, .np-info-text-full a,
 .primary--text, a.primary--text, div.primary--text, i.primary--text, label.primary--text, .lms-link, .active, .clickable a {
  color:var(--active-color) !important;

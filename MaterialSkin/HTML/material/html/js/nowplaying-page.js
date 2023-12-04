@@ -224,7 +224,7 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
    <div v-if="landscape" v-touch:start="touchStart" v-touch:end="touchEnd" v-touch:moving="touchMoving">
     <div v-if="!info.show" class="np-image-landscape" v-bind:class="{'np-image-landscape-wide':landscape && wide>1}">
      <img :key="coverUrl" v-lazy="coverUrl" onerror="this.src=DEFAULT_COVER" @contextmenu="showMenu" @click="clickImage(event)" class="np-cover" v-touch:start="touchStart" v-touch:end="touchEnd" v-touch:moving="touchMoving" v-bind:class="{'np-trans':transCvr}"></img>
-     <div class="np-emblem" v-if="playerStatus.current.emblem" :style="{background: playerStatus.current.emblem.bgnd}">
+     <div class="np-emblem" v-if="playerStatus.current.emblem" @click="emblemClicked" :style="{background: playerStatus.current.emblem.bgnd}">
       <img :src="playerStatus.current.emblem | emblem()" loading="lazy"></img>
      </div>
      <div class="np-menu" :title="trans.menu" @click="showMenu" v-if="playerStatus.playlist.count>0" v-bind:class="{'pulse':pulseTimer}"></div>
@@ -290,7 +290,7 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
    <div v-else>
     <div v-if="!info.show" class="np-image">
      <img :key="coverUrl" v-lazy="coverUrl" onerror="this.src=DEFAULT_COVER" @contextmenu="showMenu" @click="clickImage(event)" v-touch:start="touchStart" v-touch:end="touchEnd" v-touch:moving="touchMoving" class="np-cover" v-bind:class="{'np-trans':transCvr}"></img>
-     <div class="np-emblem" v-if="playerStatus.current.emblem" :style="{background: playerStatus.current.emblem.bgnd}">
+     <div class="np-emblem" v-if="playerStatus.current.emblem" @click="emblemClicked" :style="{background: playerStatus.current.emblem.bgnd}">
       <img :src="playerStatus.current.emblem | emblem()" loading="lazy"></img>
      </div>
      <div class="np-menu" :title="trans.menu" @click="showMenu" v-if="playerStatus.playlist.count>0" v-bind:class="{'pq-pulse':pulseTimer}"></div>
@@ -625,6 +625,11 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
         },
         showMenu(event) {
             nowplayingShowMenu(this, event);
+        },
+        emblemClicked() {
+            if (this.playerStatus.current.source && this.playerStatus.current.source.url) {
+                openWindow(this.playerStatus.current.source.url);
+            }
         },
         menuAction(item) {
             nowplayingMenuAction(this, item);

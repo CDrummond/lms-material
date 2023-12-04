@@ -37,6 +37,7 @@
 27. Mark browse text items, and MAI view, as selectable.
 28. Only offer album sort option if there are albums shown.
 29. Allow showing queue time reamining even if only 1 track.
+30. Open source URL when clicking on emblem in now-playing.
 
 4.0.4
 -----

@@ -2668,6 +2668,10 @@ img[lazy='loaded'].np-cover {
   background-color:rgba(110, 110, 110, 0.95);
  }
 
+ .msk-is-non-touch .np-emblem:hover {
+  opacity:1.0;
+ }
+
 .msk-is-non-touch .np-menu:hover,
 .msk-is-non-touch .np-close:hover {
  background-color:rgba(110, 110, 110, 0.95);

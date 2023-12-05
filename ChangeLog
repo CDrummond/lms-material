@@ -45,6 +45,7 @@
     artist.
 35. When clicking on album subtitle only show menu if more than 1 artist that
     is not the current artist.
+36. If don't have track_id then send URL when requesting lyrics.
 
 4.0.4
 -----

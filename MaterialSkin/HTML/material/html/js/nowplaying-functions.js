@@ -479,7 +479,8 @@ function nowplayingArtistEntry(trk, key, role) {
 
 function nowplayingFetchTrackInfo(view) {
     if (view.info.tabs[TRACK_TAB].artist!=view.infoTrack.artist || view.info.tabs[TRACK_TAB].songtitle!=view.infoTrack.title ||
-        view.info.tabs[TRACK_TAB].track_id!=view.infoTrack.track_id || view.info.tabs[TRACK_TAB].artist_id!=view.infoTrack.artist_id) {
+        view.info.tabs[TRACK_TAB].track_id!=view.infoTrack.track_id || view.info.tabs[TRACK_TAB].artist_id!=view.infoTrack.artist_id ||
+        view.info.tabs[TRACK_TAB].url!=view.infoTrack.url) {
         view.info.tabs[TRACK_TAB].texttitle=nowPlayingHeader(view.infoTrack.title);
         view.info.tabs[TRACK_TAB].text=i18n("Fetching...");
         view.info.tabs[TRACK_TAB].lines=undefined;
@@ -496,6 +497,9 @@ function nowplayingFetchTrackInfo(view) {
         if (view.infoTrack.track_id!=undefined && !(""+view.infoTrack.track_id).startsWith("-")) {
             command.push("track_id:"+view.infoTrack.track_id);
         } else {
+            if (view.infoTrack.url!=undefined) {
+                command.push("url:"+view.infoTrack.url);
+            }
             if (view.infoTrack.title!=undefined) {
                 command.push("title:"+view.infoTrack.title);
             }

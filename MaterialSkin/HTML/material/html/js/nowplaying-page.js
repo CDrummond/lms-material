@@ -747,7 +747,9 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
                              artist_ids: this.playerStatus.current.artist_ids,
                              albumartist: this.playerStatus.current.albumartist,
                              albumartist_ids: this.playerStatus.current.albumartist_ids,
-                             album: this.playerStatus.current.albumName, album_id: this.playerStatus.current.album_id };
+                             album: this.playerStatus.current.albumName,
+                             album_id: this.playerStatus.current.album_id,
+                             url: this.playerStatus.current.url };
             this.infoTrack.empty=undefined==this.infoTrack.title &&
                                  undefined==this.infoTrack.track_id &&
                                  undefined==this.infoTrack.artist &&
@@ -755,7 +757,8 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
                                  undefined==this.infoTrack.artist_ids &&
                                  undefined==this.infoTrack.albumartist &&
                                  undefined==this.infoTrack.albumartist_ids &&
-                                 undefined==this.infoTrack.album;
+                                 undefined==this.infoTrack.album &&
+                                 undefined==this.infoTrack.url;
         },
         trackInfo() {
             if (undefined==this.playerStatus.current.id) {

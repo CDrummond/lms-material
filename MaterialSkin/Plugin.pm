@@ -116,7 +116,7 @@ sub initPlugin {
         releaseTypeOrder => '',
         genreImages => '0',
         touchLinks => '0',
-        yearInSub => '0'
+        yearInSub => '1'
     });
 
     if (main::WEBUI) {

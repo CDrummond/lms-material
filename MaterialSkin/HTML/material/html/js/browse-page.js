@@ -1000,16 +1000,26 @@ var lmsBrowse = Vue.component("lms-browse", {
             } else if ((!IS_MOBILE || lmsOptions.touchLinks) && this.subtitleClickable && item.id && item.artist_id && item.id.startsWith("album_id:")) {
                 if (item.subIsYear) {
                     bus.$emit("browse", "year", item.subtitle, item.subtitle, "browse");
-                } else if (undefined!=item.artist_ids && item.artist_ids.length>1) {
+                    return;
+                }
+                let id = "artist_id:"+item.artist_id;
+                if (undefined!=item.artist_ids && item.artist_ids.length>1) {
                     var entries = [];
                     for (var i=0, len=item.artist_ids.length; i<len; ++i) {
-                        entries.push({id:"artist_id:"+item.artist_ids[i], title:item.artists[i], stdItem:STD_ITEM_ARTIST});
+                        id = "artist_id:"+item.artist_ids[i];
+                        if (id!=this.current.id) {
+                            entries.push({id:id, title:item.artists[i], stdItem:STD_ITEM_ARTIST});
+                        }
                     }
-                    showMenu(this, {show:true, x:event.clientX, y:event.clientY, item:{moremenu:entries}});
-                } else {
-                    this.fetchItems(this.replaceCommandTerms({command:["albums"], params:["artist_id:"+item.artist_id, ARTIST_ALBUM_TAGS, SORT_KEY+ARTIST_ALBUM_SORT_PLACEHOLDER]}),
-                                    {cancache:false, id:"artist_id:"+item.artist_id, title:item.subtitle, stdItem:STD_ITEM_ARTIST});
+                    if (entries.length>1) {
+                        showMenu(this, {show:true, x:event.clientX, y:event.clientY, item:{moremenu:entries}});
+                        return;
+                    } else {
+                        id = entries[0].id;
+                    }
                 }
+                this.fetchItems(this.replaceCommandTerms({command:["albums"], params:[id, ARTIST_ALBUM_TAGS, SORT_KEY+ARTIST_ALBUM_SORT_PLACEHOLDER]}),
+                                {cancache:false, id:"artist_id:"+item.artist_id, title:item.subtitle, stdItem:STD_ITEM_ARTIST});
             } else {
                 this.click(item, index, event);
             }

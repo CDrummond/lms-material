@@ -127,4 +127,11 @@
     </select>
     [% END %]
 
+    [% WRAPPER setting title="PLUGIN_MATERIAL_SKIN_YEAR_IN_SUB" desc="PLUGIN_MATERIAL_SKIN_YEAR_IN_SUB_DESC" %]
+    <select class="stdedit" name="pref_yearInSub" id="yearInSub">
+        <option [% IF NOT prefs.yearInSub %]selected [% END %]value="0">[% 'NO' | getstring %]</option>
+        <option [% IF prefs.yearInSub %]selected [% END %]value="1">[% 'YES' | getstring %]</option>
+    </select>
+    [% END %]
+
 [% PROCESS settings/footer.html %]

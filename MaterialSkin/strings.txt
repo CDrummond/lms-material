@@ -400,3 +400,9 @@ PLUGIN_MATERIAL_SKIN_TOUCH_LINKS_DESC
 	DE	Erweitern Sie Textbausteine wie Künstler, Album, Komponist usw. zu klickbaren Links auf Touch-Geräten (z. B. Mobiltelefonen).
 	EN	Make artist, album, composer, etc. text items clickable links on touch devices (e.g. mobile phones).
 	FR	Créer des liens hypertextes sur les éléments de type artiste, album, compositeur, etc. sur les appareils tactiles (smartphones ou tablettes). 
+
+PLUGIN_MATERIAL_SKIN_YEAR_IN_SUB
+	EN	Show year in album subtitle
+
+PLUGIN_MATERIAL_SKIN_YEAR_IN_SUB_DESC
+	EN	When browsing albums show year in the subtitle, unless also showing artist (in which case year is shown, in brackets, after album name)

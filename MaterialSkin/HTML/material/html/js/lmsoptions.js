@@ -29,5 +29,6 @@ var lmsOptions = {techInfo: getLocalStorageBool('techInfo', false),
                   releaseTypeOrder: undefined,
                   releaseTypes: {},
                   genreImages: getLocalStorageBool('genreImages', false),
-                  touchLinks: getLocalStorageBool('touchLinks', false)
+                  touchLinks: getLocalStorageBool('touchLinks', false),
+                  yearInSub: getLocalStorageBool('yearInSub', false)
                 };

@@ -115,7 +115,8 @@ sub initPlugin {
         noArtistFilter => '1',
         releaseTypeOrder => '',
         genreImages => '0',
-        touchLinks => '0'
+        touchLinks => '0',
+        yearInSub => '0'
     });
 
     if (main::WEBUI) {
@@ -424,6 +425,7 @@ sub _cliCommand {
         $request->addResult('releaseTypeOrder', uc($prefs->get('releaseTypeOrder')));
         $request->addResult('genreImages', $prefs->get('genreImages'));
         $request->addResult('touchLinks', $prefs->get('touchLinks'));
+        $request->addResult('yearInSub', $prefs->get('yearInSub'));
         $request->setStatusDone();
         return;
     }

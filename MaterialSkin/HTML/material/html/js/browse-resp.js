@@ -917,9 +917,9 @@ function parseBrowseResp(data, parent, options, cacheKey, parentCommand, parentG
                               artist_id: i.artist_id,
                               artist_ids: undefined==i.artist_ids ? undefined : i.artist_ids.split(","),
                               artists: artists,
-                              title: showArtist ? title : i.album,
-                              subtitle: showArtist ? artist : showYear ? ""+i.year : undefined,
-                              subIsYear: !showArtist && showYear,
+                              title: showArtist || !lmsOptions.yearInSub ? title : i.album,
+                              subtitle: showArtist ? artist : showYear && lmsOptions.yearInSub ? ""+i.year : undefined,
+                              subIsYear: lmsOptions.yearInSub && !showArtist && showYear,
                               image: i.artwork_url
                                         ? resolveImageUrl(i.artwork_url, LMS_IMAGE_SIZE)
                                         : ("/music/" + (i.artwork_track_id ? i.artwork_track_id : i.artwork) + "/cover" + LMS_IMAGE_SIZE),

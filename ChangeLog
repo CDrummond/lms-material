@@ -41,7 +41,8 @@
 31. Add icon mapping for LMS8.4 new plugins.
 32. Don't hide duplicate icons if top of radio or apps listing.
 33. Restrict browse toolbar title active area to that of text.
-34. Use album year as subtitle, unless showing artist.
+34. Add server-side option to show album year in subtitle, unless showing
+    artist.
 35. When clicking on album subtitle only show menu if more than 1 artist that
     is not the current artist.
 

@@ -487,6 +487,7 @@ function nowplayingFetchTrackInfo(view) {
         view.info.tabs[TRACK_TAB].track_id=view.infoTrack.track_id;
         view.info.tabs[TRACK_TAB].artist=view.infoTrack.artist;
         view.info.tabs[TRACK_TAB].artist_id=view.infoTrack.artist_id;
+        view.info.tabs[TRACK_TAB].url=view.infoTrack.url;
         view.info.tabs[TRACK_TAB].songtitle=view.infoTrack.title;
         view.info.tabs[TRACK_TAB].reqId++;
         view.info.tabs[TRACK_TAB].pos=0;

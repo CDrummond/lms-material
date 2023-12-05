@@ -46,7 +46,7 @@ var lmsBrowse = Vue.component("lms-browse", {
    <img v-if="wide>0 && ((current && current.image) || currentItemImage)" :src="current && current.image ? current.image : currentItemImage" @click="showHistory($event)" class="sub-cover pointer"></img>
    <v-layout row wrap v-if="showDetailedSubtoolbar">
     <v-layout @click="showHistory($event)" class="link-item row wrap browse-title">
-     <v-flex xs12 class="ellipsis subtoolbar-title subtoolbar-pad" v-bind:class="{'subtoolbar-title-single':undefined==toolbarSubTitle}">{{headerTitle}}</v-flex>
+     <v-flex xs12 class="ellipsis subtoolbar-title subtoolbar-pad" v-bind:class="{'subtoolbar-title-single':undefined==toolbarSubTitle}">{{toolbarTitle}}</v-flex>
      <v-flex xs12 class="ellipsis subtoolbar-subtitle subtext" v-html="detailedSubTop"></v-flex>
     </v-layout>
     <v-flex xs12 v-if="detailedSubExtra" class="ellipsis subtoolbar-subtitle subtext" v-html="detailedSubExtra"></v-flex>
@@ -54,7 +54,7 @@ var lmsBrowse = Vue.component("lms-browse", {
     <v-flex xs12 class="ellipsis subtoolbar-subtitle subtext" v-html="detailedSubBot"></v-flex>
    </v-layout>
    <v-layout row wrap v-else @click="showHistory($event)" class="browse-title" v-bind:class="{'pointer link-item': history.length>0}">
-    <v-flex xs12 class="ellipsis subtoolbar-title subtoolbar-pad" v-bind:class="{'subtoolbar-title-single':undefined==toolbarSubTitle}">{{headerTitle}}</v-flex>
+    <v-flex xs12 class="ellipsis subtoolbar-title subtoolbar-pad" v-bind:class="{'subtoolbar-title-single':undefined==toolbarSubTitle}">{{toolbarTitle}}</v-flex>
     <v-flex xs12 class="ellipsis subtoolbar-subtitle subtext" v-if="undefined!=toolbarSubTitle" v-html="toolbarSubTitle"></v-flex>
    </v-layout>
    <v-spacer style="flex-grow: 10!important"></v-spacer>
@@ -475,6 +475,9 @@ var lmsBrowse = Vue.component("lms-browse", {
         drawBackdrop() {
             return !this.drawBgndImage && this.$store.state.browseBackdrop && this.$store.state.useDefaultBackdrops
         },
+        toolbarTitle() {
+            return this.headerTitle + (this.current && this.current.stdItem==STD_ITEM_ALBUM && this.current.subIsYear ? " (" + this.current.subtitle + ")" : "");
+        },
         toolbarSubTitle() {
             let suffix = this.current && this.current.id!=TOP_MYMUSIC_ID && (this.libraryName || this.pinnedItemLibName) && this.showLibraryName
                 ? "<small>"+(SEPARATOR+(this.pinnedItemLibName ? this.pinnedItemLibName : this.libraryName))+"</small>"
@@ -483,7 +486,7 @@ var lmsBrowse = Vue.component("lms-browse", {
                 return this.libraryName + suffix;
             }
             if (undefined!=this.current && (this.current.stdItem==STD_ITEM_ALBUM || this.current.stdItem==STD_ITEM_ALL_TRACKS || this.current.stdItem==STD_ITEM_COMPOSITION_TRACKS)) {
-                let albumArtst = this.current.subtitle;
+                let albumArtst = this.current.subIsYear ? undefined : this.current.subtitle;
                 if (lmsOptions.noArtistFilter && this.current.compilation && this.items.length>0 && undefined!=this.items[0].compilationAlbumArtist) {
                     albumArtst = this.items[0].compilationAlbumArtist;
                 }
@@ -509,7 +512,7 @@ var lmsBrowse = Vue.component("lms-browse", {
                 return this.detailedSubInfo;
             }
             if (this.current.stdItem==STD_ITEM_ALBUM || this.current.stdItem==STD_ITEM_ALL_TRACKS || this.current.stdItem==STD_ITEM_COMPOSITION_TRACKS || this.current.stdItem==STD_ITEM_MIX) {
-                let albumArtst = this.current.subtitle;
+                let albumArtst = this.current.subIsYear ? undefined : this.current.subtitle;
                 if (lmsOptions.noArtistFilter && this.current.compilation && this.items.length>0 && undefined!=this.items[0].compilationAlbumArtist) {
                     albumArtst = this.items[0].compilationAlbumArtist;
                 }
@@ -995,7 +998,9 @@ var lmsBrowse = Vue.component("lms-browse", {
             if ((IS_MOBILE && !lmsOptions.touchLinks) && this.grid.use) {
                 this.itemMenu(item, index, event);
             } else if ((!IS_MOBILE || lmsOptions.touchLinks) && this.subtitleClickable && item.id && item.artist_id && item.id.startsWith("album_id:")) {
-                if (undefined!=item.artist_ids && item.artist_ids.length>1) {
+                if (item.subIsYear) {
+                    bus.$emit("browse", "year", item.subtitle, item.subtitle, "browse");
+                } else if (undefined!=item.artist_ids && item.artist_ids.length>1) {
                     var entries = [];
                     for (var i=0, len=item.artist_ids.length; i<len; ++i) {
                         entries.push({id:"artist_id:"+item.artist_ids[i], title:item.artists[i], stdItem:STD_ITEM_ARTIST});
@@ -1013,7 +1018,7 @@ var lmsBrowse = Vue.component("lms-browse", {
             if (this.history.length>0) {
                 let history=[];
                 for (let i=0, loop=this.history, len=loop.length; i<len; ++i) {
-                    let hi = {title:0==i ? i18n("Home") : loop[i].headerTitle};
+                    let hi = {title:0==i ? i18n("Home") : (loop[i].headerTitle + (loop[i].current && loop[i].current.stdItem==STD_ITEM_ALBUM && loop[i].current.subIsYear ? " (" + loop[i].current.subtitle + ")" : "") )};
                     if (0==i) {
                         hi.icon = 'home';
                     } else if (undefined!=loop[i].current) {

@@ -836,7 +836,8 @@ function parseBrowseResp(data, parent, options, cacheKey, parentCommand, parentG
                 */
 
                 let title = i.album;
-                if (i.year && i.year>0) {
+                let showYear = i.year && i.year>0;
+                if (showYear) {
                     title+=" (" + i.year + ")";
                     if (i.year<firstYear) {
                         firstYear = i.year;
@@ -910,13 +911,15 @@ function parseBrowseResp(data, parent, options, cacheKey, parentCommand, parentG
                 }
                 releaseTypes.add(group);
 
+                let showArtist = undefined==parent || parent.title!=artist;
                 let album = {
                               id: "album_id:"+i.id,
                               artist_id: i.artist_id,
                               artist_ids: undefined==i.artist_ids ? undefined : i.artist_ids.split(","),
                               artists: artists,
-                              title: title,
-                              subtitle: undefined==parent || parent.title!=artist ? artist : undefined,
+                              title: showArtist ? title : i.album,
+                              subtitle: showArtist ? artist : showYear ? ""+i.year : undefined,
+                              subIsYear: !showArtist && showYear,
                               image: i.artwork_url
                                         ? resolveImageUrl(i.artwork_url, LMS_IMAGE_SIZE)
                                         : ("/music/" + (i.artwork_track_id ? i.artwork_track_id : i.artwork) + "/cover" + LMS_IMAGE_SIZE),

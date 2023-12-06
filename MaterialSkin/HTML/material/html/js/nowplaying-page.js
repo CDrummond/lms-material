@@ -16,6 +16,10 @@ const NP_INFO_ACT = 2;
 const NP_BROWSE_CMD = 3;
 const NP_COPY_DETAILS_CMD = 4;
 const NP_TOGGLE_ACT = 5;
+const NP_SHOW_IN_TABS_ACT = 6;
+const NP_SYNC_ACT = 7;
+const NP_LYRICS_SCROLL_ACT = 8;
+const NP_LYRICS_HIGHLIGHT_ACT = 9;
 const NP_CUSTOM = 100;
 const NP_ITEM_ACT = 200;
 const NP_MIN_WIDTH_FOR_FULL = 780;
@@ -33,7 +37,8 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
   <v-list>
    <template v-for="(item, index) in menu.items">
     <v-list-tile @click="menuAction(item)">
-     <v-list-tile-avatar v-if="menu.icons" :tile="true" class="lms-avatar"><v-icon v-if="item.icon">{{item.icon}}</v-icon><img v-else-if="item.svg" class="svg-img" :src="item.svg | svgIcon(darkUi)"></img></v-list-tile-avatar>
+     <v-list-tile-avatar v-if="undefined!=item.checked"><v-icon>{{item.checked ? 'check_box' : 'check_box_outline_blank'}}</v-icon></v-list-tile-avatar>
+     <v-list-tile-avatar v-else-if="menu.icons" :tile="true" class="lms-avatar"><v-icon v-if="item.icon">{{item.icon}}</v-icon><img v-else-if="item.svg" class="svg-img" :src="item.svg | svgIcon(darkUi)"></img></v-list-tile-avatar>
      <v-list-tile-title>{{item.title}}</v-list-tile-title>
     </v-list-tile>
    </template>
@@ -41,17 +46,18 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
  </v-menu>
 
  <div v-if="info.show && (desktopLayout || page=='now-playing')" class="np-info" id="np-info">
+  <v-btn fab small flat top right absolute class="np-menu-fab" @click="showConfigMenu"><v-icon>settings</v-icon></v-btn>
   <v-tabs centered v-model="info.tab" v-if="info.showTabs || windowWidth<NP_MIN_WIDTH_FOR_FULL" style="np-info-tab-cover" @change="tabChanged">
    <template v-for="(tab, index) in info.tabs">
     <v-tab :key="index">{{tab.title}}</v-tab>
     <v-tab-item :key="index" :transition="false" :reverse-transition="false">
-     <v-card flat class="np-info-card-cover selectable fade-both" @contextmenu.prevent="nowPlayingContextMenu">
+     <v-card flat class="np-info-card-cover selectable" @contextmenu.prevent="nowPlayingContextMenu">
       <v-card-text :class="['np-info-text', zoomInfoClass, TRACK_TAB==index || tab.isMsg ? 'np-info-lyrics' : '', ALBUM_TAB==index ? 'np-info-review' : '']" :id="'np-tab'+index">
        <div v-if="TRACK_TAB==index && tab.texttitle" v-html="tab.texttitle" class="np-info-title"></div>
        <img v-if="tab.image" :src="tab.image" loading="lazy" class="np-no-meta-img"></img>
        <div v-if="TRACK_TAB==index && tab.lines">
         <template v-for="(line, lindex) in tab.lines">
-         <obj :id="'np-lyrics-'+lindex" v-bind:class="{'lyrics-current-line':undefined!=playerStatus.current.time && playerStatus.current.time>line.time && playerStatus.current.time<((lindex+1)<tab.lines.length ? tab.lines[lindex+1].time : 86400)}">{{line.text}}</obj></br/>
+         <obj :id="'np-lyrics-'+lindex" v-bind:class="{'lyrics-current-line':tab.highlight && undefined!=playerStatus.current.time && playerStatus.current.time>line.time && playerStatus.current.time<((lindex+1)<tab.lines.length ? tab.lines[lindex+1].time : 86400)}">{{line.text}}</obj></br/>
         </template>
        </div>
        <div v-else-if="tab.text" v-bind:class="{'text':ARTIST_TAB==index}" v-html="tab.text"></div>
@@ -104,12 +110,12 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
     <template v-for="(tab, index) in info.tabs">
      <v-flex xs4>
       <v-card flat class="np-info-card-cover selectable">
-       <v-card-text :class="['np-info-text-full', 'fade-both', zoomInfoClass, TRACK_TAB==index || tab.isMsg ? 'np-info-lyrics' : '', ALBUM_TAB==index ? 'np-info-review' : '']" @contextmenu.prevent="nowPlayingContextMenu"  :id="'np-tab'+index">
+       <v-card-text :class="['np-info-text-full', zoomInfoClass, TRACK_TAB==index || tab.isMsg ? 'np-info-lyrics' : '', ALBUM_TAB==index ? 'np-info-review' : '']" @contextmenu.prevent="nowPlayingContextMenu"  :id="'np-tab'+index">
         <div v-if="TRACK_TAB==index && tab.texttitle" v-html="tab.texttitle" class="np-info-title"></div>
         <img v-if="tab.image" :src="tab.image" loading="lazy" class="np-no-meta-img"></img>
         <div v-if="TRACK_TAB==index && tab.lines">
          <template v-for="(line, lindex) in tab.lines">
-          <obj :id="'np-lyrics-'+lindex" v-bind:class="{'lyrics-current-line':undefined!=playerStatus.current.time && playerStatus.current.time>line.time && playerStatus.current.time<((lindex+1)<tab.lines.length ? tab.lines[lindex+1].time : 86400)}">{{line.text}}</obj></br/>
+          <obj :id="'np-lyrics-'+lindex" v-bind:class="{'lyrics-current-line':tab.highlight && undefined!=playerStatus.current.time && playerStatus.current.time>line.time && playerStatus.current.time<((lindex+1)<tab.lines.length ? tab.lines[lindex+1].time : 86400)}">{{line.text}}</obj></br/>
          </template>
         </div>
         <div v-else-if="tab.text" v-bind:class="{'text':ARTIST_TAB==index}" v-html="tab.text"></div>
@@ -158,22 +164,6 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
     </template>
    </v-layout>
   </div>
-  <v-card class="np-info-card-cover">
-   <v-card-actions>
-    <v-spacer></v-spacer>
-    <v-btn flat icon v-if="info.showTabs && windowWidth>NP_MIN_WIDTH_FOR_FULL" @click="info.showTabs=false" :title="trans.expand"><v-icon style="margin-right:-18px">chevron_right</v-icon><v-icon style="margin-left:-18px">chevron_left</v-icon></v-btn>
-    <v-btn flat icon v-else-if="windowWidth>NP_MIN_WIDTH_FOR_FULL" @click="info.showTabs=true" :title="trans.collapse"><v-icon style="margin-right:-18px">chevron_left</v-icon><v-icon style="margin-left:-18px">chevron_right</v-icon></v-btn>
-    <div style="width:32px" v-if="windowWidth>NP_MIN_WIDTH_FOR_FULL"></div>
-    <v-btn flat icon v-if="info.sync" @click="info.sync = false" :title="trans.sync"><v-icon>link</v-icon></v-btn>
-    <v-btn flat icon v-else @click="info.sync = true" :title="trans.unsync"><v-icon class="dimmed">link_off</v-icon></v-btn>
-    <div style="width:32px" v-if="info.tabs[TRACK_TAB].lines && (!info.showTabs || info.tab==TRACK_TAB)"></div>
-    <v-btn flat icon v-if="info.tabs[TRACK_TAB].lines && (!info.showTabs || info.tab==TRACK_TAB) && info.tabs[TRACK_TAB].sync" @click.stop="toggleLyricSync" :title="trans.syncLyrics"><img class="svg-img" :src="'lyrics-follow' | svgIcon(darkUi)"></img></v-btn>
-    <v-btn flat icon v-else-if="info.tabs[TRACK_TAB].lines && (!info.showTabs || info.tab==TRACK_TAB)" @click.stop="toggleLyricSync" :title="trans.unsyncLyrics"><img class="svg-img dimmed" :src="'lyrics' | svgIcon(darkUi)"></img></v-btn>
-    <div style="width:32px"></div>
-    <v-btn flat icon @click="trackInfo()" :title="trans.more"><img class="svg-img" :src="'more' | svgIcon(darkUi)"></img></v-btn>
-    <v-spacer></v-spacer>
-   </v-card-actions>
-  </v-card>
  </div>
 
  <div v-if="desktopLayout || (info.show ? MBAR_NONE!=mobileBar : (page=='now-playing' || MBAR_NONE!=mobileBar))">
@@ -231,7 +221,7 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
     </div>
     <div class="np-details-landscape" v-bind:class="{'np-details-landscape-wide': landscape && wide>1}">
 
-     <div class="np-landscape-song-info hide-scrollbar fade-both">
+     <div class="np-landscape-song-info hide-scrollbar">
       <div>
        <p class="np-title-landscape np-title" v-if="playerStatus.current.title">{{title}}</p>
        <p class="np-text-landscape subtext" v-if="artistAndComposerLine" v-html="artistAndComposerLine"></p>
@@ -296,7 +286,7 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
      <div class="np-menu" :title="trans.menu" @click="showMenu" v-if="playerStatus.playlist.count>0" v-bind:class="{'pq-pulse':pulseTimer}"></div>
      <div class="np-close" :title="trans.collapseNp" @click="largeView=false" v-bind:class="{'pulse':pulseTimer}"></div>
     </div>
-    <div class="np-portrait-song-info hide-scrollbar fade-both">
+    <div class="np-portrait-song-info hide-scrollbar">
      <div>
       <p class="np-title" v-if="playerStatus.current.title">{{title}}</p>
       <p class="np-text subtext" v-if="artistAndComposerLine" v-html="artistAndComposerLine"></p>
@@ -377,13 +367,12 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
                                               { title:undefined, html:undefined } ] },
                                  { value:ALBUM_TAB, title:undefined, text:undefined, reqId:0, image: undefined,
                                    sections:[ { title:undefined, items:[], min:2, more:undefined } ] },
-                                 { value: TRACK_TAB, title:undefined, text:undefined, lines:undefined, sync:false, reqId:0, image: undefined,
+                                 { value: TRACK_TAB, title:undefined, text:undefined, lines:undefined, scroll:false, highlight:false, reqId:0, image: undefined,
                                    sections:[ { title:undefined, html:undefined } ] } ] },
                  infoTrack: {album_id:undefined, track_id:undefined},
                  trans: { expand:undefined, collapse:undefined, sync:undefined, unsync:undefined, more:undefined, dstm:undefined,
                           repeatAll:undefined, repeatOne:undefined, repeatOff:undefined, shuffleAll:undefined, shuffleAlbums:undefined, shuffleOff:undefined,
-                          play:undefined, pause:undefined, prev:undefined, next:undefined, collapseNp:undefined, expandNp:undefined, menu:undefined,
-                          syncLyrics: undefined, unsyncLyrics:undefined },
+                          play:undefined, pause:undefined, prev:undefined, next:undefined, collapseNp:undefined, expandNp:undefined, menu:undefined },
                  showTotal: true,
                  landscape: false,
                  wide: 0,
@@ -411,7 +400,8 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
         this.mobileBarThinHeight = getComputedStyle(document.documentElement).getPropertyValue('--mobile-npbar-height-thin');
         this.mobileBarThickHeight = getComputedStyle(document.documentElement).getPropertyValue('--mobile-npbar-height-thick');
         this.controlBar();
-        this.info.tabs[TRACK_TAB].sync=getLocalStorageBool("npSyncLyrics", false);
+        this.info.tabs[TRACK_TAB].scroll=getLocalStorageBool("npScrollLyrics", false);
+        this.info.tabs[TRACK_TAB].highlight=getLocalStorageBool("npHighlightLyrics", false);
 
         bus.$on('mobileBarChanged', function() {
             this.controlBar(true);
@@ -601,13 +591,10 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
     },
     methods: {
         initItems() {
-            this.trans = { expand:i18n("Show all information"), collapse:i18n("Show information in tabs"),
-                           sync:i18n("Update information when song changes"), unsync:i18n("Don't update information when song changes"),
-                           more:i18n("More"), dstm:i18n("Don't Stop The Music"), repeatAll:i18n("Repeat queue"), repeatOne:i18n("Repeat single track"),
+            this.trans = { dstm:i18n("Don't Stop The Music"), repeatAll:i18n("Repeat queue"), repeatOne:i18n("Repeat single track"),
                            repeatOff:i18n("No repeat"), shuffleAll:i18n("Shuffle tracks"), shuffleAlbums:i18n("Shuffle albums"),
                            shuffleOff:i18n("No shuffle"), play:i18n("Play"), pause:i18n("Pause"), prev:i18n("Previous track"),
-                           next:i18n("Next track"), collapseNp:i18n("Collapse now playing"), expandNp:i18n("Expand now playing"), menu:i18n("Menu"),
-                           syncLyrics:i18n("Auto-scroll lyrics"), unsyncLyrics:i18n("Don't auto-scroll lyrics") };
+                           next:i18n("Next track"), collapseNp:i18n("Collapse now playing"), expandNp:i18n("Expand now playing"), menu:i18n("Menu") };
             this.info.tabs[TRACK_TAB].title=i18n("Track");
             this.info.tabs[ARTIST_TAB].title=i18n("Artist");
             this.info.tabs[ALBUM_TAB].title=i18n("Album");
@@ -653,7 +640,7 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
             this.updateLyricsPosition();
         },
         updateLyricsPosition() {
-            if (this.info.tabs[TRACK_TAB].lines && this.info.tabs[TRACK_TAB].sync && this.playerStatus.current && undefined!=this.playerStatus.current.time) {
+            if (this.info.tabs[TRACK_TAB].lines && this.info.tabs[TRACK_TAB].scroll && this.playerStatus.current && undefined!=this.playerStatus.current.time) {
                 let pos = undefined;
                 for (let i=0, loop=this.info.tabs[TRACK_TAB].lines, len=loop.length; i<len; ++i) {
                     if (loop[i].time<=this.playerStatus.current.time) {
@@ -1113,10 +1100,8 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
         tabChanged(tab) {
             setLocalStorageVal("nptab", tab);
         },
-        toggleLyricSync() {
-            this.info.tabs[TRACK_TAB].sync=!this.info.tabs[TRACK_TAB].sync;
-            setLocalStorageVal("npSyncLyrics", this.info.tabs[TRACK_TAB].sync);
-            this.updateLyricsPosition();
+        showConfigMenu(event) {
+            nowPlayingConfigMenu(this, event);
         }
     },
     filters: {

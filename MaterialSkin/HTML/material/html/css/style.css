@@ -1093,6 +1093,12 @@ div.v-subheader {
  width:var(--np-portrait-image-size);
 }
 
+.np-menu-fab {
+ top:4px!important;
+ right:8px!important;
+ opacity:0.25;
+}
+
 .np-emblem, .np-menu, .np-close {
  position:absolute;
  border-radius: 50%;
@@ -1293,13 +1299,6 @@ div.v-subheader {
 
 .np-info-card-cover, .np-info .theme--light.v-tabs__bar, .np-info .theme--dark.v-tabs__bar {
  background:transparent!important;
-}
-
-.np-info-card-cover .v-card__actions {
- margin-top:-6px;
-}
-.np-info-card-cover div.v-btn__content i {
- color:var(--text-color)!important;
 }
 
 .np-title {
@@ -2685,6 +2684,10 @@ img[lazy='loaded'].np-cover {
 .msk-is-non-touch .np-menu:hover,
 .msk-is-non-touch .np-close:hover {
  background-color:rgba(110, 110, 110, 0.95);
+ opacity:1.0;
+}
+
+.msk-is-non-touch .np-menu-fab:hover {
  opacity:1.0;
 }
 /*}*/

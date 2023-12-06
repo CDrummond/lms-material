@@ -395,6 +395,17 @@ function nowplayingMenuAction(view, item) {
         view.close();
     } else if (NP_TOGGLE_ACT==item.act) {
         view.largeView=!view.largeView;
+    }  else if (NP_SHOW_IN_TABS_ACT==item.act) {
+        view.info.showTabs = !view.info.showTabs;
+    } else if (NP_SYNC_ACT==item.act) {
+        view.info.sync = !view.info.sync;
+    } else if (NP_LYRICS_SCROLL_ACT==item.act) {
+        view.info.tabs[TRACK_TAB].scroll = !view.info.tabs[TRACK_TAB].scroll;
+        setLocalStorageVal("npScrollLyrics", view.info.tabs[TRACK_TAB].scroll);
+        view.updateLyricsPosition();
+    } else if (NP_LYRICS_HIGHLIGHT_ACT==item.act) {
+        view.info.tabs[TRACK_TAB].highlight = !view.info.tabs[TRACK_TAB].highlight;
+        setLocalStorageVal("npHighlightLyrics", view.info.tabs[TRACK_TAB].highlight);
     } else if (item.act>=NP_ITEM_ACT) {
         let act = item.act - NP_ITEM_ACT;
         if (ADD_TO_FAV_ACTION==act || REMOVE_FROM_FAV_ACTION==act) {
@@ -902,4 +913,26 @@ function nowplayingBrowse(cat, param, title) {
         bus.$emit("browse", cmd, params, unescape(title), NP_INFO);
         bus.$emit('npclose');
     }
+}
+
+function nowPlayingConfigMenu(view, event) {
+    event.preventDefault();
+    view.clearClickTimeout();
+    view.touch = undefined;
+    view.menu.show = false;
+    view.menu.icons = false;
+    view.menu.items = [];
+    if (view.windowWidth>NP_MIN_WIDTH_FOR_FULL) {
+        view.menu.items.push({title:i18n("Show in tabs"), act:NP_SHOW_IN_TABS_ACT, checked:view.info.showTabs});
+    }
+    view.menu.items.push({title:i18n("Update on song change"), act:NP_SYNC_ACT, checked:view.info.sync});
+    if (view.info.tabs[TRACK_TAB].lines && (!view.info.showTabs || view.info.tab==TRACK_TAB)) {
+        view.menu.items.push({title:i18n("Auto-scroll lyrics"), act:NP_LYRICS_SCROLL_ACT, checked:view.info.tabs[TRACK_TAB].scroll});
+        view.menu.items.push({title:i18n("Highlight current lyric line"), act:NP_LYRICS_HIGHLIGHT_ACT, checked:view.info.tabs[TRACK_TAB].highlight});
+    }
+    view.menu.x = event.clientX;
+    view.menu.y = event.clientY;
+    view.$nextTick(() => {
+        view.menu.show = true;
+    });
 }

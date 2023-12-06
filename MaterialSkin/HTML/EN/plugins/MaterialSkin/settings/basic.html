@@ -5,26 +5,23 @@
     <hr class="main-sep"/><br/>
 
     [% WRAPPER setting title="PLUGIN_MATERIAL_SKIN_PASSWORD" desc="PLUGIN_MATERIAL_SKIN_PASSWORD_DESC" %]
-        <input type="text"  class="stdedit" name="pref_password" id="password" size="20" value="[% prefs.password %]"></input>
+    <input type="text"  class="stdedit" name="pref_password" id="password" size="20" value="[% prefs.password %]"></input>
     [% END %]
 
     [% WRAPPER setting title="PLUGIN_MATERIAL_SKIN_ALLOW_DOWNLOAD" desc="PLUGIN_MATERIAL_SKIN_ALLOW_DOWNLOAD_DESC" %]
-        <select class="stdedit" name="pref_allowDownload" id="allowDownload">
-            <option [% IF NOT prefs.allowDownload %]selected [% END %]value="0">[% 'NO' | getstring %]</option>
-            <option [% IF prefs.allowDownload %]selected [% END %]value="1">[% 'YES' | getstring %]</option>
-        </select>
+    <input type="checkbox" name="pref_allowDownload" id="pref_allowDownload" [% IF prefs.pref_allowDownload %] checked [% END %] value="1" />
     [% END %]
 
     [% WRAPPER setting title="PLUGIN_MATERIAL_SKIN_FIXED_VOL" desc="PLUGIN_MATERIAL_SKIN_FIXED_VOL_DESC" %]
-        <select class="stdedit" name="pref_respectFixedVol" id="respectFixedVol">
-            [% FOREACH option = {
-                'PLUGIN_MATERIAL_SKIN_FIXED_VOL_A_NORMAL' => 0,
-                'PLUGIN_MATERIAL_SKIN_FIXED_VOL_B_SPECIAL' => 1,
-                'PLUGIN_MATERIAL_SKIN_FIXED_VOL_C_HIDE' => 2
-            } %]
-            <option [% IF prefs.respectFixedVol == option.value %]selected [% END %]value="[% option.value %]">[% option.key | string %]</option>
-            [%- END -%]
-        </select>
+    <select class="stdedit" name="pref_respectFixedVol" id="respectFixedVol">
+        [% FOREACH option = {
+            'PLUGIN_MATERIAL_SKIN_FIXED_VOL_A_NORMAL' => 0,
+            'PLUGIN_MATERIAL_SKIN_FIXED_VOL_B_SPECIAL' => 1,
+            'PLUGIN_MATERIAL_SKIN_FIXED_VOL_C_HIDE' => 2
+        } %]
+        <option [% IF prefs.respectFixedVol == option.value %]selected [% END %]value="[% option.value %]">[% option.key | string %]</option>
+        [%- END -%]
+    </select>
     [% END %]
 
     <br/><hr class="main-sep"/>
@@ -32,106 +29,79 @@
     <hr style="opacity:0.4" class="sub-sep"/><br/>
 
     [% WRAPPER setting title="PLUGIN_MATERIAL_SKIN_COMPOSER_GENRES" desc="PLUGIN_MATERIAL_SKIN_COMPOSER_GENRES_DESC" %]
-        <textarea class="stdedit" name="pref_composergenres" id="composergenres" cols="45" rows="5">[% prefs.composergenres %]</textarea>
+    <textarea class="stdedit" name="pref_composergenres" id="composergenres" cols="45" rows="5">[% prefs.composergenres %]</textarea>
     [% END %]
     [% WRAPPER setting title="PLUGIN_MATERIAL_SKIN_SHOW_COMPOSER" desc="PLUGIN_MATERIAL_SKIN_SHOW_COMPOSER_DESC" %]
-        <select class="stdedit" name="pref_showComposer" id="showComposer">
-            <option [% IF NOT prefs.showComposer %]selected [% END %]value="0">[% 'NO' | getstring %]</option>
-            <option [% IF prefs.showComposer %]selected [% END %]value="1">[% 'YES' | getstring %]</option>
-        </select>
+    <input type="checkbox" name="pref_showComposer" id="pref_showComposer" [% IF prefs.pref_showComposer %] checked [% END %] value="1" />
     [% END %]
     <hr style="opacity:0.4" class="sub-sep"/>
 
 
     [% WRAPPER setting title="PLUGIN_MATERIAL_SKIN_CONDUCTOR_GENRES" desc="PLUGIN_MATERIAL_SKIN_CONDUCTOR_GENRES_DESC" %]
-        <textarea class="stdedit" name="pref_conductorgenres" id="conductorgenres" cols="45" rows="5">[% prefs.conductorgenres %]</textarea>
+    <textarea class="stdedit" name="pref_conductorgenres" id="conductorgenres" cols="45" rows="5">[% prefs.conductorgenres %]</textarea>
     [% END %]
     [% WRAPPER setting title="PLUGIN_MATERIAL_SKIN_SHOW_CONDUCTOR" desc="PLUGIN_MATERIAL_SKIN_SHOW_CONDUCTOR_DESC" %]
-        <select class="stdedit" name="pref_showConductor" id="showConductor">
-            <option [% IF NOT prefs.showConductor %]selected [% END %]value="0">[% 'NO' | getstring %]</option>
-            <option [% IF prefs.showConductor %]selected [% END %]value="1">[% 'YES' | getstring %]</option>
-        </select>
+    <input type="checkbox" name="pref_showConductor" id="pref_showConductor" [% IF prefs.pref_showConductor %] checked [% END %] value="1" />
     [% END %]
     <hr style="opacity:0.4" class="sub-sep"/>
 
     [% WRAPPER setting title="PLUGIN_MATERIAL_SKIN_BAND_GENRES" desc="PLUGIN_MATERIAL_SKIN_BAND_GENRES_DESC" %]
-        <textarea class="stdedit" name="pref_bandgenres" id="bandgenres" cols="45" rows="5">[% prefs.bandgenres %]</textarea>
+    <textarea class="stdedit" name="pref_bandgenres" id="bandgenres" cols="45" rows="5">[% prefs.bandgenres %]</textarea>
     [% END %]
     [% WRAPPER setting title="PLUGIN_MATERIAL_SKIN_SHOW_BAND" desc="PLUGIN_MATERIAL_SKIN_SHOW_BAND_DESC" %]
-        <select class="stdedit" name="pref_showBand" id="showBand">
-            <option [% IF NOT prefs.showBand %]selected [% END %]value="0">[% 'NO' | getstring %]</option>
-            <option [% IF prefs.showBand %]selected [% END %]value="1">[% 'YES' | getstring %]</option>
-        </select>
+    <input type="checkbox" name="pref_showBand" id="pref_showBand" [% IF prefs.pref_showBand %] checked [% END %] value="1" />
     [% END %]
 
     <hr style="opacity:0.4" class="sub-sep"/>
     [% WRAPPER setting title="PLUGIN_MATERIAL_SKIN_SHOW_ALL_ARTISTS" desc="PLUGIN_MATERIAL_SKIN_SHOW_ALL_ARTISTS_DESC" %]
-        <select class="stdedit" name="pref_showAllArtists" id="showAllArtists">
-            <option [% IF NOT prefs.showAllArtists %]selected [% END %]value="0">[% 'NO' | getstring %]</option>
-            <option [% IF prefs.showAllArtists %]selected [% END %]value="1">[% 'YES' | getstring %]</option>
-        </select>
+    <input type="checkbox" name="pref_showAllArtists" id="pref_showAllArtists" [% IF prefs.pref_showAllArtists %] checked [% END %] value="1" />
     [% END %]
 
     [% WRAPPER setting title="PLUGIN_MATERIAL_SKIN_ARTIST_FIRST" desc="PLUGIN_MATERIAL_SKIN_ARTIST_FIRST_DESC" %]
-        <select class="stdedit" name="pref_artistFirst" id="artistFirst">
-            <option [% IF NOT prefs.artistFirst %]selected [% END %]value="0">[% 'NO' | getstring %]</option>
-            <option [% IF prefs.artistFirst %]selected [% END %]value="1">[% 'YES' | getstring %]</option>
-        </select>
+    <input type="checkbox" name="pref_artistFirst" id="pref_artistFirst" [% IF prefs.pref_artistFirst %] checked [% END %] value="1" />
     [% END %]
 
     [% WRAPPER setting title="PLUGIN_MATERIAL_SKIN_ARTIST_FILTER" desc="PLUGIN_MATERIAL_SKIN_ARTIST_FILTER_DESC" %]
-        <select class="stdedit" name="pref_noArtistFilter" id="noArtistFilter">
-            <option [% IF NOT prefs.noArtistFilter %]selected [% END %]value="0">[% 'PLUGIN_MATERIAL_SKIN_ARTIST_FILTER_ARTIST_ONLY' | getstring %]</option>
-            <option [% IF prefs.noArtistFilter %]selected [% END %]value="1">[% 'PLUGIN_MATERIAL_SKIN_ARTIST_FILTER_ALL_TRACKS' | getstring %]</option>
-        </select>
-    [% END %]
-
-    [% WRAPPER setting title="PLUGIN_MATERIAL_SKIN_COMMENT_AS_DISC_TITLE" desc="PLUGIN_MATERIAL_SKIN_COMMENT_AS_DISC_TITLE_DESC" %]
-        <select class="stdedit" name="pref_commentAsDiscTitle" id="commentAsDiscTitle">
-            [% FOREACH option = {
-                'PLUGIN_MATERIAL_SKIN_COMMENT_A_DONT_USE' => 0,
-                'PLUGIN_MATERIAL_SKIN_COMMENT_B_PLAIN' => 1,
-                'PLUGIN_MATERIAL_SKIN_COMMENT_C_SEMI_SEP' => 2
-            } %]
-            <option [% IF prefs.commentAsDiscTitle == option.value %]selected [% END %]value="[% option.value %]">[% option.key | string %]</option>
-            [%- END -%]
-        </select>
-    [% END %]
-
-    [% WRAPPER setting title="PLUGIN_MATERIAL_SKIN_SHOW_COMMENT" desc="PLUGIN_MATERIAL_SKIN_SHOW_COMMENT_DESC" %]
-        <select class="stdedit" name="pref_showComment" id="showComment">
-            <option [% IF NOT prefs.showComment %]selected [% END %]value="0">[% 'NO' | getstring %]</option>
-            <option [% IF prefs.showComment %]selected [% END %]value="1">[% 'YES' | getstring %]</option>
-        </select>
-    [% END %]
-
-    [% WRAPPER setting title="PLUGIN_MATERIAL_SKIN_GENRE_IMAGES" desc="PLUGIN_MATERIAL_SKIN_GENRE_IMAGES_DESC" %]
-    <select class="stdedit" name="pref_genreImages" id="genreImages">
-        <option [% IF NOT prefs.genreImages %]selected [% END %]value="0">[% 'NO' | getstring %]</option>
-        <option [% IF prefs.genreImages %]selected [% END %]value="1">[% 'YES' | getstring %]</option>
-    </select>
-    [% END %]
-
-    [% WRAPPER setting title="PLUGIN_MATERIAL_SKIN_RELEASE_TYPE_ORDER" desc="PLUGIN_MATERIAL_SKIN_RELEASE_TYPE_ORDER_DESC" %]
-        <textarea class="stdedit" name="pref_releaseTypeOrder" id="releaseTypeOrder" cols="45" rows="5">[% prefs.releaseTypeOrder %]</textarea>
-    [% END %]
-
-    [% WRAPPER setting title="PLUGIN_MATERIAL_SKIN_PAGED_BATCH_SIZE" desc="PLUGIN_MATERIAL_SKIN_PAGED_BATCH_SIZE_DESC" %]
-        <input type="text" class="sliderInput_100_2000_1" name="pref_pagedBatchSize" id="pagedBatchSize" value="[% prefs.pagedBatchSize %]" size="5"></input>
-    [% END %]
-
-    [% WRAPPER setting title="PLUGIN_MATERIAL_SKIN_TOUCH_LINKS" desc="PLUGIN_MATERIAL_SKIN_TOUCH_LINKS_DESC" %]
-    <select class="stdedit" name="pref_touchLinks" id="touchLinks">
-        <option [% IF NOT prefs.touchLinks %]selected [% END %]value="0">[% 'NO' | getstring %]</option>
-        <option [% IF prefs.touchLinks %]selected [% END %]value="1">[% 'YES' | getstring %]</option>
+    <select class="stdedit" name="pref_noArtistFilter" id="noArtistFilter">
+        <option [% IF NOT prefs.noArtistFilter %]selected [% END %]value="0">[% 'PLUGIN_MATERIAL_SKIN_ARTIST_FILTER_ARTIST_ONLY' | getstring %]</option>
+        <option [% IF prefs.noArtistFilter %]selected [% END %]value="1">[% 'PLUGIN_MATERIAL_SKIN_ARTIST_FILTER_ALL_TRACKS' | getstring %]</option>
     </select>
     [% END %]
 
     [% WRAPPER setting title="PLUGIN_MATERIAL_SKIN_YEAR_IN_SUB" desc="PLUGIN_MATERIAL_SKIN_YEAR_IN_SUB_DESC" %]
-    <select class="stdedit" name="pref_yearInSub" id="yearInSub">
-        <option [% IF NOT prefs.yearInSub %]selected [% END %]value="0">[% 'NO' | getstring %]</option>
-        <option [% IF prefs.yearInSub %]selected [% END %]value="1">[% 'YES' | getstring %]</option>
+    <input type="checkbox" name="pref_yearInSub" id="pref_yearInSub" [% IF prefs.pref_yearInSub %] checked [% END %] value="1" />
+    [% END %]
+
+    [% WRAPPER setting title="PLUGIN_MATERIAL_SKIN_COMMENT_AS_DISC_TITLE" desc="PLUGIN_MATERIAL_SKIN_COMMENT_AS_DISC_TITLE_DESC" %]
+    <select class="stdedit" name="pref_commentAsDiscTitle" id="commentAsDiscTitle">
+        [% FOREACH option = {
+            'PLUGIN_MATERIAL_SKIN_COMMENT_A_DONT_USE' => 0,
+            'PLUGIN_MATERIAL_SKIN_COMMENT_B_PLAIN' => 1,
+            'PLUGIN_MATERIAL_SKIN_COMMENT_C_SEMI_SEP' => 2
+        } %]
+        <option [% IF prefs.commentAsDiscTitle == option.value %]selected [% END %]value="[% option.value %]">[% option.key | string %]</option>
+        [%- END -%]
     </select>
+    [% END %]
+
+    [% WRAPPER setting title="PLUGIN_MATERIAL_SKIN_SHOW_COMMENT" desc="PLUGIN_MATERIAL_SKIN_SHOW_COMMENT_DESC" %]
+    <input type="checkbox" name="pref_showComment" id="pref_showComment" [% IF prefs.pref_showComment %] checked [% END %] value="1" />
+    [% END %]
+
+    [% WRAPPER setting title="PLUGIN_MATERIAL_SKIN_GENRE_IMAGES" desc="PLUGIN_MATERIAL_SKIN_GENRE_IMAGES_DESC" %]
+    <input type="checkbox" name="pref_genreImages" id="pref_genreImages" [% IF prefs.pref_genreImages %] checked [% END %] value="1" />
+    [% END %]
+
+    [% WRAPPER setting title="PLUGIN_MATERIAL_SKIN_RELEASE_TYPE_ORDER" desc="PLUGIN_MATERIAL_SKIN_RELEASE_TYPE_ORDER_DESC" %]
+    <textarea class="stdedit" name="pref_releaseTypeOrder" id="releaseTypeOrder" cols="45" rows="5">[% prefs.releaseTypeOrder %]</textarea>
+    [% END %]
+
+    [% WRAPPER setting title="PLUGIN_MATERIAL_SKIN_PAGED_BATCH_SIZE" desc="PLUGIN_MATERIAL_SKIN_PAGED_BATCH_SIZE_DESC" %]
+    <input type="text" class="sliderInput_100_2000_1" name="pref_pagedBatchSize" id="pagedBatchSize" value="[% prefs.pagedBatchSize %]" size="5"></input>
+    [% END %]
+
+    [% WRAPPER setting title="PLUGIN_MATERIAL_SKIN_TOUCH_LINKS" desc="PLUGIN_MATERIAL_SKIN_TOUCH_LINKS_DESC" %]
+    <input type="checkbox" name="pref_touchLinks" id="pref_touchLinks" [% IF prefs.pref_touchLinks %] checked [% END %] value="1" />
     [% END %]
 
 [% PROCESS settings/footer.html %]

@@ -100,6 +100,10 @@
     <input type="text" class="sliderInput_100_2000_1" name="pref_pagedBatchSize" id="pagedBatchSize" value="[% prefs.pagedBatchSize %]" size="5"></input>
     [% END %]
 
+    [% WRAPPER setting title="PLUGIN_MATERIAL_SKIN_PLAY_SHUFFLE" desc="PLUGIN_MATERIAL_SKIN_PLAY_SHUFFLE_DESC" %]
+    <input type="checkbox" name="pref_playShuffle" id="pref_playShuffle" [% IF prefs.pref_playShuffle %] checked [% END %] value="1" />
+    [% END %]
+
     [% WRAPPER setting title="PLUGIN_MATERIAL_SKIN_TOUCH_LINKS" desc="PLUGIN_MATERIAL_SKIN_TOUCH_LINKS_DESC" %]
     <input type="checkbox" name="pref_touchLinks" id="pref_touchLinks" [% IF prefs.pref_touchLinks %] checked [% END %] value="1" />
     [% END %]

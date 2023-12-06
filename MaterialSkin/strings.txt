@@ -406,3 +406,9 @@ PLUGIN_MATERIAL_SKIN_YEAR_IN_SUB
 
 PLUGIN_MATERIAL_SKIN_YEAR_IN_SUB_DESC
 	EN	When browsing albums show year in the subtitle, unless also showing artist (in which case year is shown, in brackets, after album name)
+
+PLUGIN_MATERIAL_SKIN_PLAY_SHUFFLE
+	EN	Play shuffled action
+
+PLUGIN_MATERIAL_SKIN_PLAY_SHUFFLE_DESC
+	EN	Add action to start albums, or playlists, in shuffled mode. When enabled player will be set to shuffle tracks before playing via 'Play shuffled' action, and shuffle will be disabled when playing via the 'Play now' action. Please note that shuffle mode is not reverted after queue is cleared, etc.

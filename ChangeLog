@@ -47,6 +47,7 @@
     is not the current artist.
 36. If don't have track_id then send URL when requesting lyrics.
 37. Replace 'Yes/No' options with checkboxes in server side settings.
+38. Add server-side option to enable a 'Play shuffled' action.
 
 4.0.4
 -----

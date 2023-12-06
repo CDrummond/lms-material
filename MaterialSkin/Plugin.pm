@@ -116,7 +116,8 @@ sub initPlugin {
         releaseTypeOrder => '',
         genreImages => '0',
         touchLinks => '0',
-        yearInSub => '1'
+        yearInSub => '1',
+        playShuffle => '0'
     });
 
     if (main::WEBUI) {
@@ -426,6 +427,7 @@ sub _cliCommand {
         $request->addResult('genreImages', $prefs->get('genreImages'));
         $request->addResult('touchLinks', $prefs->get('touchLinks'));
         $request->addResult('yearInSub', $prefs->get('yearInSub'));
+        $request->addResult('playShuffle', $prefs->get('playShuffle'));
         $request->setStatusDone();
         return;
     }

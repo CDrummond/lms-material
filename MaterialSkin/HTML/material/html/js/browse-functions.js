@@ -1290,6 +1290,10 @@ function browseItemAction(view, act, item, index, event) {
                 view.jumpTo(choice.jump);
             }
         });
+    } else if (lmsOptions.playShuffle && (PLAY_ACTION==act || PLAY_SHUFFLE_ACTION==act)) {
+        lmsCommand(view.playerId(), ['playlist', 'shuffle', PLAY_ACTION==act ? 0 : 1]).then(({data}) => {
+            browsePerformAction(view, item, PLAY_ACTION);
+        });
     } else {
         // If we are acting on a multi-disc album, prompt which disc we should act on
         if (item.multi && !view.current.id.startsWith("album_id:") && (PLAY_ACTION==act || ADD_ACTION==act || INSERT_ACTION==act)) {
@@ -1350,30 +1354,34 @@ function browseItemAction(view, act, item, index, event) {
             return;
         }
 
-        var command = browseBuildFullCommand(view, item, act);
-        if (command.command.length===0) {
-            bus.$emit('showError', undefined, i18n("Don't know how to handle this!"));
-            return;
-        }
-        lmsCommand(view.playerId(), command.command).then(({data}) => {
-            logJsonMessage("RESP", data);
-            bus.$emit('refreshStatus');
-            view.clearSelection();
-            if (!view.$store.state.desktopLayout || !view.$store.state.showQueue) {
-                if (act===PLAY_ACTION) {
-                    if (!view.$store.state.desktopLayout) {
-                        view.$store.commit('setPage', 'now-playing');
-                    }
-                } else if (act===ADD_ACTION) {
-                    bus.$emit('showMessage', i18n("Appended '%1' to the play queue", undefined==item.title ? view.headerTitle : item.title));
-                } else if (act===INSERT_ACTION) {
-                    bus.$emit('showMessage', i18n("Inserted '%1' into the play queue", undefined==item.title ? view.headerTitle : item.title));
-                }
-            }
-        }).catch(err => {
-            logAndShowError(err, undefined, command.command);
-        });
+        browsePerformAction(view, item, act);
     }
+}
+
+function browsePerformAction(view, item, act) {
+    var command = browseBuildFullCommand(view, item, act);
+    if (command.command.length===0) {
+        bus.$emit('showError', undefined, i18n("Don't know how to handle this!"));
+        return;
+    }
+    lmsCommand(view.playerId(), command.command).then(({data}) => {
+        logJsonMessage("RESP", data);
+        bus.$emit('refreshStatus');
+        view.clearSelection();
+        if (!view.$store.state.desktopLayout || !view.$store.state.showQueue) {
+            if (act===PLAY_ACTION) {
+                if (!view.$store.state.desktopLayout) {
+                    view.$store.commit('setPage', 'now-playing');
+                }
+            } else if (act===ADD_ACTION) {
+                bus.$emit('showMessage', i18n("Appended '%1' to the play queue", undefined==item.title ? view.headerTitle : item.title));
+            } else if (act===INSERT_ACTION) {
+                bus.$emit('showMessage', i18n("Inserted '%1' into the play queue", undefined==item.title ? view.headerTitle : item.title));
+            }
+        }
+    }).catch(err => {
+        logAndShowError(err, undefined, command.command);
+    });
 }
 
 function browseItemMenu(view, item, index, event) {

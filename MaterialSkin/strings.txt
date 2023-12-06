@@ -397,12 +397,13 @@ PLUGIN_MATERIAL_SKIN_TOUCH_LINKS
 	DE	Elementverknüpfungen auf Touch-Geräten
 	EN	Item links on touch devices
 	FR	Hyperliens sur les écrans tactiles
-	NL	Hyperlinks op muziekspelers met een touchscreen
+	NL	Hyperlinks op apparaten met een touchscreen
 
 PLUGIN_MATERIAL_SKIN_TOUCH_LINKS_DESC
 	DE	Erweitern Sie Textbausteine wie Künstler, Album, Komponist usw. zu klickbaren Links auf Touch-Geräten (z. B. Mobiltelefonen).
 	EN	Make artist, album, composer, etc. text items clickable links on touch devices (e.g. mobile phones).
 	FR	Créer des liens hypertextes sur les éléments de type artiste, album, compositeur, etc. sur les appareils tactiles (smartphones ou tablettes). 
+	NL	Maak artiesten, albums, componisten, etc. items waar je op kan klikken op apparaten met een touchscreen (bijv. tablets en mobiele telefoons).
 
 PLUGIN_MATERIAL_SKIN_YEAR_IN_SUB
 	EN	Show year in album subtitle
@@ -410,7 +411,7 @@ PLUGIN_MATERIAL_SKIN_YEAR_IN_SUB
 
 PLUGIN_MATERIAL_SKIN_YEAR_IN_SUB_DESC
 	EN	When browsing albums show year in the subtitle, unless also showing artist (in which case year is shown, in brackets, after album name)
-	NL	Bij het bladeren door albums wordt het jaar onder het album weergegeven, behalve als artiest ook wordt weergegeven. Dan wordt het jaar achter het album weergegeven.  
+	NL	Bij het bladeren door albums wordt het jaar onder het album weergegeven, behalve als artiest ook wordt weergegeven. Dan wordt het jaar achter het album weergegeven.
 
 PLUGIN_MATERIAL_SKIN_PLAY_SHUFFLE
 	EN	Play shuffled action
@@ -418,4 +419,4 @@ PLUGIN_MATERIAL_SKIN_PLAY_SHUFFLE
 
 PLUGIN_MATERIAL_SKIN_PLAY_SHUFFLE_DESC
 	EN	Add action to start albums, or playlists, in shuffled mode. When this is enabled and 'Play shuffled' is used, the player will be set to 'shuffle tracks' before the items are played. Likewise, if this is enabled and 'Play now' is used, then shuffle will be disabled before the items are played. Please note that the player's shuffle mode is not reverted after queue is cleared, etc.
-	NL	Voeg actie toe om albums of afspeellijsten in shuffle modus af te spelen. Houd er rekening mee dat de shuffle modus niet wordt teruggezet als de afspeellijst leeg is. 
+	NL	Voeg actie toe om albums of afspeellijsten in shuffle modus af te spelen. Wanneer dit is ingeschakeld en 'Shuffle modus' wordt gebruikt, wordt de speler ingesteld op shuffle voordat de nummers worden afgespeeld. Als dit is ingeschakeld en 'Speel Nu' wordt gebruikt, wordt shuffle uitgeschakeld voordat de nummers worden afgespeeld. Houd er rekening mee dat de shuffle modus niet wordt teruggezet als de afspeellijst leeg is. 

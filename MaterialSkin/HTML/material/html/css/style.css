@@ -663,10 +663,18 @@ div.v-subheader {
  position:unset!important;
  top:unset!important;
  width:unset!important;
+ margin:0px -2px 0px -2px;
+ padding:0px 2px 0px 2px;
 }
 
 .np-info .lms-list .v-list__tile {
  padding:0px!important;
+}
+
+.np-info .lms-list-item {
+ margin:0px -2px 0px -2px;
+ padding:0px 2px 0px 2px;
+ border-radius: 2px;
 }
 
 .maintoolbar-player-icon {

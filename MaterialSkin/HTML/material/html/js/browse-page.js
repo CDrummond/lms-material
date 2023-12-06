@@ -655,11 +655,11 @@ var lmsBrowse = Vue.component("lms-browse", {
                             { key:"yearalbum",       label:i18n("Year, Album")},
                             { key:"yearartistalbum", label:i18n("Year, Artist, Album")} ];
             B_TRACK_SORTS=[ { key:"title",           label:i18n("Title")},
-                            { key:"tracknum",        label:i18n("Track number")},
-                            { key:"albumtrack",      label:i18n("Album, track number")},
-                            { key:"yearalbumtrack",  label:i18n("Year, Album, track number")},
-                            { key:"artisttitle",     label:i18n("Artist, title")},
-                            { key:"yeartitle",       label:i18n("Year, title")} ];
+                            { key:"tracknum",        label:i18n("Track Number")},
+                            { key:"albumtrack",      label:i18n("Album, Track Number")},
+                            { key:"yearalbumtrack",  label:i18n("Year, Album, Track Number")},
+                            { key:"artisttitle",     label:i18n("Artist, Title")},
+                            { key:"yeartitle",       label:i18n("Year, Title")} ];
 
             this.trans= { ok:i18n('OK'), cancel: i18n('Cancel'), selectMultiple:i18n("Select multiple items"), addall:i18n("Add selection to queue"),
                           playall:i18n("Play selection"), deleteall:i18n("Delete all selected items"),

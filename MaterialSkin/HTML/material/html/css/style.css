@@ -1311,7 +1311,7 @@ div.v-subheader {
 
 .np-title {
  padding-top:4px;
- font-size:125%;
+ font-size:225%;
  font-weight:var(--bold-weight);
  letter-spacing:.02em;
 }
@@ -1319,6 +1319,7 @@ div.v-subheader {
 .np-text {
  margin:0px 8px 0px 8px;
  text-align:center;
+ font-size:200%;
 }
 
 .np-title-landscape {
@@ -1333,6 +1334,43 @@ div.v-rating i.primary--text, div.v-rating i.accent--text {
  color:var(--text-color) !important;
 }
 
+@media only screen and (max-height:1000px) {
+ .np-text:not(.np-text-landscape) {
+  font-size:175% !important;
+ }
+ .np-title:not(.np-title-landscape) {
+  font-size:200% !important;
+ }
+}
+
+@media only screen and (max-height:900px) {
+ .np-text:not(.np-text-landscape) {
+  font-size:150% !important;
+ }
+ .np-title:not(.np-title-landscape) {
+  font-size:175% !important;
+ }
+}
+
+@media only screen and (max-height:800px) {
+ .np-text:not(.np-text-landscape) {
+  font-size:125% !important;
+ }
+ .np-title:not(.np-title-landscape) {
+  font-size:150% !important;
+ }
+}
+
+@media only screen and (max-height:700px) {
+ .np-text:not(.np-text-landscape) {
+  font-size:100% !important;
+ }
+ .np-title:not(.np-title-landscape) {
+  font-size:125% !important;
+ }
+}
+ 
+/*
 @media only screen and (min-height:750px) and (min-width:750px) {
  .np-duration, .np-pos, .np-tech {
   font-size:100% !important;
@@ -1340,22 +1378,23 @@ div.v-rating i.primary--text, div.v-rating i.accent--text {
  .np-text:not(.np-text-landscape) {
   font-size:110%;
  }
- .np-title:not(.np-text-landscape) {
+ .np-title:not(.np-title-landscape) {
   font-size:135%;
  }
 }
 
-@media (max-aspect-ratio: 1) and (min-height:750px) {
+@media (min-height:750px) {
  .np-text:not(.np-text-landscape) {
   font-size:100%;
  }
- .np-title:not(.np-text-landscape) {
+ .np-title:not(.np-title-landscape) {
   font-size:135%;
  }
  :root {
   --thin-portrait-adjust:16px;
  }
 }
+*/
 
 @media only screen and (max-height:800px) {
  .np-title-landscape {
@@ -2045,6 +2084,7 @@ progress {
  border-radius:unset !important;
 }
 
+/*
 @media (min-aspect-ratio: 8/17) {
  #np-page .np-portrait-song-info .v-rating .v-icon {
   width:var(--small-font-size) !important;
@@ -2053,6 +2093,7 @@ progress {
   font-size:var(--small-font-size) !important;
  }
 }
+*/
 
 .link-item, .link-item-ct {
  cursor:pointer;

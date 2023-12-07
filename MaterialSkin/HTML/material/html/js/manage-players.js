@@ -467,7 +467,6 @@ Vue.component('lms-manage-players', {
                 return;
             }
             let idx = parseInt(el.id.split("-")[0]);
-            console.log(idx, this.players.length, longPress);
             if (idx<0 || idx>this.players.length) {
                 return;
             }

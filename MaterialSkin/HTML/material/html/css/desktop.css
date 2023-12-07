@@ -271,19 +271,19 @@
  .np-bar .np-playpause {
   position:fixed;
   margin-top:none!important;
-  bottom:10px;
-  right:8px!important;
+  bottom:6px;
+  right:6px!important;
   visibility:visible!important;
-  width:var(--icon-size)!important;
-  height:var(--icon-size)!important;
+  width:32px!important;
+  height:32px!important;
  }
  .np-bar .np-playpause div i {
-  font-size:var(--icon-size)!important;
+  font-size:32px!important;
  }
  .np-bar-details {
   left:50px;
   bottom:-4px;
-  width:calc(100vw - 75px);
+  width:calc(100vw - 78px);
  }
  .np-bar-details .v-list__tile__title {
   margin-top:-1px;

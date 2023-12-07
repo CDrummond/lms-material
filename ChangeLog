@@ -54,6 +54,7 @@
 42. Remove MAI font size setting, as was not applied to lists, etc.
 43. Long-press on 'Playing' mobile nav button, when on now-playing page, shows
     sleep dialog.
+44. Increase toolbar background blur.
 
 4.0.4
 -----

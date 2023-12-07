@@ -49,6 +49,7 @@
 37. Replace 'Yes/No' options with checkboxes in server side settings.
 38. Add server-side option to enable a 'Play shuffled' action.
 39. Move info-view settings actions into button top-right.
+40. Slightly tweak portrait now-playing.
 
 4.0.4
 -----

@@ -1345,7 +1345,7 @@ div.v-rating i.primary--text, div.v-rating i.accent--text {
  }
 }
 
-@media (max-aspect-ratio: 4/7) and (min-height:750px) {
+@media (max-aspect-ratio: 1) and (min-height:750px) {
  .np-text:not(.np-text-landscape) {
   font-size:100%;
  }

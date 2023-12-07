@@ -10,7 +10,6 @@ const ARTIST_TAB = 0;
 const ALBUM_TAB = 1;
 const TRACK_TAB = 2;
 
-const NP_FONT_ACT = 0;
 const NP_PIC_ACT = 1;
 const NP_INFO_ACT = 2;
 const NP_BROWSE_CMD = 3;
@@ -36,10 +35,8 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
  <v-menu v-model="menu.show" :position-x="menu.x" :position-y="menu.y" absolute offset-y>
   <v-list>
    <template v-for="(item, index) in menu.items">
-    <v-divider v-if="item===DIVIDER"></v-divider>
-    <v-list-tile v-else @click="menuAction(item)">
+    <v-list-tile @click="menuAction(item)">
      <v-list-tile-avatar v-if="undefined!=item.check"><v-icon>{{item.check ? 'check_box' : 'check_box_outline_blank'}}</v-icon></v-list-tile-avatar>
-     <v-list-tile-avatar v-else-if="undefined!=item.radio"><v-icon>{{item.radio ? 'radio_button_checked' : 'radio_button_unchecked'}}</v-icon></v-list-tile-avatar>
      <v-list-tile-avatar v-else-if="menu.icons" :tile="true" class="lms-avatar"><v-icon v-if="item.icon">{{item.icon}}</v-icon><img v-else-if="item.svg" class="svg-img" :src="item.svg | svgIcon(darkUi)"></img></v-list-tile-avatar>
      <v-list-tile-title>{{item.title}}</v-list-tile-title>
     </v-list-tile>
@@ -54,7 +51,7 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
     <v-tab :key="index">{{tab.title}}</v-tab>
     <v-tab-item :key="index" :transition="false" :reverse-transition="false">
      <v-card flat class="np-info-card-cover selectable">
-      <v-card-text :class="['np-info-text', zoomInfoClass, TRACK_TAB==index || tab.isMsg ? 'np-info-lyrics' : '', ALBUM_TAB==index ? 'np-info-review' : '']" :id="'np-tab'+index">
+      <v-card-text :class="['np-info-text', TRACK_TAB==index || tab.isMsg ? 'np-info-lyrics' : '', ALBUM_TAB==index ? 'np-info-review' : '']" :id="'np-tab'+index">
        <div v-if="TRACK_TAB==index && tab.texttitle" v-html="tab.texttitle" class="np-info-title"></div>
        <img v-if="tab.image" :src="tab.image" loading="lazy" class="np-no-meta-img"></img>
        <div v-if="TRACK_TAB==index && tab.lines">
@@ -112,7 +109,7 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
     <template v-for="(tab, index) in info.tabs">
      <v-flex xs4>
       <v-card flat class="np-info-card-cover selectable">
-       <v-card-text :class="['np-info-text-full', zoomInfoClass, TRACK_TAB==index || tab.isMsg ? 'np-info-lyrics' : '', ALBUM_TAB==index ? 'np-info-review' : '']" :id="'np-tab'+index">
+       <v-card-text :class="['np-info-text-full', TRACK_TAB==index || tab.isMsg ? 'np-info-lyrics' : '', ALBUM_TAB==index ? 'np-info-review' : '']" :id="'np-tab'+index">
         <div v-if="TRACK_TAB==index && tab.texttitle" v-html="tab.texttitle" class="np-info-title"></div>
         <img v-if="tab.image" :src="tab.image" loading="lazy" class="np-no-meta-img"></img>
         <div v-if="TRACK_TAB==index && tab.lines">
@@ -391,7 +388,6 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
                  disablePrev:true,
                  disableNext:true,
                  dstm:false,
-                 infoZoom:10,
                  pulseTimer:undefined
                 };
     },
@@ -411,10 +407,6 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
         bus.$on('customActions', function(val) {
             this.customActions = getCustomActions("track", false);
         }.bind(this));
-        this.infoZoom = parseInt(getLocalStorageVal('npInfoZoom', 10));
-        if (this.infoZoom<10 | this.infoZoom>20) {
-            this.infoZoom = 10;
-        }
 
         this.info.showTabs=getLocalStorageBool("showTabs", false);
         bus.$on('expandNowPlaying', function(val) {
@@ -1032,10 +1024,6 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
                 }
             }.bind(this), LMS_VOLUME_DEBOUNCE);
         },
-        adjustFont(sz) {
-            this.infoZoom=sz;
-            setLocalStorageVal('npInfoZoom', sz);
-        },
         checkWindowSize() {
             this.checkLandscape();
             this.sizeCheckDelay = 0;
@@ -1238,9 +1226,6 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
                 return formatTrackNum(this.playerStatus.current)+SEPARATOR+this.playerStatus.current.title;
             }
             return this.playerStatus.current.title;
-        },
-        zoomInfoClass() {
-            return "np-info-text-"+this.infoZoom;
         },
         desktopLayout() {
             return this.$store.state.desktopLayout

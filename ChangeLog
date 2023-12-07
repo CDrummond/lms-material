@@ -51,6 +51,7 @@
 39. Move info-view settings actions into button top-right.
 40. Slightly tweak now-playing.
 41. Fix HTML code sometimes being displayed when click 'More' on queue item.
+42. Remove MAI font size setting, as was not applied to lists, etc.
 
 4.0.4
 -----

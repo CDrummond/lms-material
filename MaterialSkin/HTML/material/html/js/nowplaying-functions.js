@@ -352,9 +352,7 @@ function nowplayingShowMenu(view, event) {
 }
 
 function nowplayingMenuAction(view, item) {
-    if (NP_FONT_ACT==item.act) {
-        view.adjustFont(item.val);
-    } else if (NP_PIC_ACT==item.act) {
+    if (NP_PIC_ACT==item.act) {
         view.showPic();
     } else if (NP_INFO_ACT==item.act) {
         view.trackInfo();
@@ -924,10 +922,6 @@ function nowPlayingConfigMenu(view, event) {
         view.menu.items.push({title:i18n("Auto-scroll lyrics"), act:NP_LYRICS_SCROLL_ACT, check:view.info.tabs[TRACK_TAB].scroll});
         view.menu.items.push({title:i18n("Highlight current lyric line"), act:NP_LYRICS_HIGHLIGHT_ACT, check:view.info.tabs[TRACK_TAB].highlight});
     }
-    view.menu.items.push(DIVIDER);
-    view.menu.items.push({title:i18n("Standard font size"), act:NP_FONT_ACT, val:10, radio:view.infoZoom<=10});
-    view.menu.items.push({title:i18n("Medium font size"), act:NP_FONT_ACT, val:15, radio:view.infoZoom>10 && view.infoZoom<20});
-    view.menu.items.push({title:i18n("Large font size"), act:NP_FONT_ACT, val:20, radio:view.infoZoom>=20});
 
     view.menu.x = event.clientX;
     view.menu.y = event.clientY;

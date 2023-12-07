@@ -220,7 +220,7 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
     </div>
     <div class="np-details-landscape" v-bind:class="{'np-details-landscape-wide': landscape && wide>1}">
 
-     <div class="np-landscape-song-info hide-scrollbar">
+     <div class="np-landscape-song-info hide-scrollbar fade-both">
       <div>
        <p class="np-title-landscape np-title" v-if="playerStatus.current.title">{{title}}</p>
        <p class="np-text-landscape subtext" v-if="artistAndComposerLine" v-html="artistAndComposerLine"></p>
@@ -285,7 +285,7 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
      <div class="np-menu" :title="trans.menu" @click="showMenu" v-if="playerStatus.playlist.count>0" v-bind:class="{'pq-pulse':pulseTimer}"></div>
      <div class="np-close" :title="trans.collapseNp" @click="largeView=false" v-bind:class="{'pulse':pulseTimer}"></div>
     </div>
-    <div class="np-portrait-song-info hide-scrollbar">
+    <div class="np-portrait-song-info hide-scrollbar fade-both">
      <div>
       <p class="np-title" v-if="playerStatus.current.title">{{title}}</p>
       <p class="np-text subtext" v-if="artistAndComposerLine" v-html="artistAndComposerLine"></p>

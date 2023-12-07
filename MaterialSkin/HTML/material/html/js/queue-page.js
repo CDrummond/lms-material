@@ -91,12 +91,14 @@ function parseResp(data, showTrackNum, index, showRatings, queueAlbumStyle, queu
                 if (showTrackNum && i.tracknum>0) {
                     title = formatTrackNum(i)+SEPARATOR+title;
                 }
+                let plaintitle = title;
                 let addedClass = false;
                 let haveRating = showRatings && undefined!=i.rating;
                 let artist = undefined!=i.trackartist && undefined!=i.trackartist_id ? i.trackartist : i.artist;
                 if (queueAlbumStyle && undefined!=i.albumartist && undefined!=artist && i.albumartist!=artist) {
                     let id = undefined!=i.trackartist_id ? i.trackartist_id : i.artist_id;
                     title+='<obj class="subtext">'+SEPARATOR+((IS_MOBILE && !lmsOptions.touchLinks) || undefined==id ? artist : buildLink('showArtist', id, artist, 'queue'));
+                    plaintitle+=SEPARATOR+artist;
                     addedClass = true;
                 }
                 if (haveRating) {
@@ -116,7 +118,7 @@ function parseResp(data, showTrackNum, index, showRatings, queueAlbumStyle, queu
                 resp.items.push({
                               id: "track_id:"+i.id,
                               title: title,
-                              plaintitle: haveRating ? title : undefined,
+                              plaintitle: haveRating || title.length!=plaintitle.length ? plaintitle : undefined,
                               artistAlbum: artistAlbumLines,
                               image: image,
                               actions: [PQ_PLAY_NOW_ACTION, PQ_PLAY_NEXT_ACTION, DIVIDER, REMOVE_ACTION, PQ_REMOVE_ALBUM_ACTION, PQ_REMOVE_DISC_ACTION, ADD_TO_PLAYLIST_ACTION, PQ_ZAP_ACTION, DOWNLOAD_ACTION, SELECT_ACTION, PQ_COPY_ACTION, MOVE_HERE_ACTION, CUSTOM_ACTIONS, SHOW_IMAGE_ACTION, MORE_ACTION],

@@ -294,61 +294,55 @@ function nowplayingShowMenu(view, event) {
             let val = parseInt(getComputedStyle(document.documentElement).getPropertyValue("--bottom-toolbar-height").replace("px", ""));
             ontoolbar=event.clientY>(window.innerHeight-val);
         }
-        if (view.info.show && !ontoolbar) {
-            view.menu.icons=false;
-            view.menu.items=[{title:i18n("Standard font size"), act:NP_FONT_ACT, val:10},
-                             {title:i18n("Medium font size"), act:NP_FONT_ACT, val:15},
-                             {title:i18n("Large font size"), act:NP_FONT_ACT, val:20}];
-        } else {
-            view.menu.icons=true;
-            view.menu.items=[{title:i18n("Show image"), icon:"photo", act:NP_PIC_ACT}];
 
-            let artist_id = view.playerStatus.current.artist_ids
-                        ? view.playerStatus.current.artist_ids[0]
-                        : view.playerStatus.current.artist_id;
-            if (artist_id && view.playerStatus.current.artist && view.playerStatus.current.artist!="?") {
-                view.menu.items.push({title:ACTIONS[GOTO_ARTIST_ACTION].title, act:NP_BROWSE_CMD, cmd:{command:["albums"], params:["artist_id:"+artist_id, ARTIST_ALBUM_TAGS, SORT_KEY+ARTIST_ALBUM_SORT_PLACEHOLDER], title:view.playerStatus.current.artist}, svg:ACTIONS[GOTO_ARTIST_ACTION].svg});
-            } else {
-                let albumartist_id = view.playerStatus.current.albumartist_ids
-                            ? view.playerStatus.current.albumartist_ids[0]
-                            : view.playerStatus.current.albumartist_id;
-                if (albumartist_id && view.playerStatus.current.albumartist && view.playerStatus.current.albumartist!="?") {
-                    view.menu.items.push({title:ACTIONS[GOTO_ARTIST_ACTION].title, act:NP_BROWSE_CMD, cmd:{command:["albums"], params:["artist_id:"+albumartist_id, ARTIST_ALBUM_TAGS, SORT_KEY+ARTIST_ALBUM_SORT_PLACEHOLDER, "role_id:ALBUMARTIST"], title:view.playerStatus.current.albumartist}, svg:ACTIONS[GOTO_ARTIST_ACTION].svg});
-                }
+        view.menu.icons=true;
+        view.menu.items=[{title:i18n("Show image"), icon:"photo", act:NP_PIC_ACT}];
+
+        let artist_id = view.playerStatus.current.artist_ids
+                    ? view.playerStatus.current.artist_ids[0]
+                    : view.playerStatus.current.artist_id;
+        if (artist_id && view.playerStatus.current.artist && view.playerStatus.current.artist!="?") {
+            view.menu.items.push({title:ACTIONS[GOTO_ARTIST_ACTION].title, act:NP_BROWSE_CMD, cmd:{command:["albums"], params:["artist_id:"+artist_id, ARTIST_ALBUM_TAGS, SORT_KEY+ARTIST_ALBUM_SORT_PLACEHOLDER], title:view.playerStatus.current.artist}, svg:ACTIONS[GOTO_ARTIST_ACTION].svg});
+        } else {
+            let albumartist_id = view.playerStatus.current.albumartist_ids
+                        ? view.playerStatus.current.albumartist_ids[0]
+                        : view.playerStatus.current.albumartist_id;
+            if (albumartist_id && view.playerStatus.current.albumartist && view.playerStatus.current.albumartist!="?") {
+                view.menu.items.push({title:ACTIONS[GOTO_ARTIST_ACTION].title, act:NP_BROWSE_CMD, cmd:{command:["albums"], params:["artist_id:"+albumartist_id, ARTIST_ALBUM_TAGS, SORT_KEY+ARTIST_ALBUM_SORT_PLACEHOLDER, "role_id:ALBUMARTIST"], title:view.playerStatus.current.albumartist}, svg:ACTIONS[GOTO_ARTIST_ACTION].svg});
             }
-            if (lmsOptions.showComposer && view.playerStatus.current.composer && view.playerStatus.current.composer_id && useComposer(view.playerStatus.current.genre)) {
-                view.menu.items.push({title:i18n("Go to composer"), act:NP_BROWSE_CMD, cmd:{command:["albums"], params:["artist_id:"+view.playerStatus.current.composer_id, ARTIST_ALBUM_TAGS, SORT_KEY+ARTIST_ALBUM_SORT_PLACEHOLDER, "role_id:COMPOSER"], title:view.playerStatus.current.composer}, svg:"composer"});
-            }
-            if (lmsOptions.showConductor && view.playerStatus.current.conductor && view.playerStatus.current.conductor_id && useConductor(view.playerStatus.current.genre)) {
-                view.menu.items.push({title:i18n("Go to conductor"), act:NP_BROWSE_CMD, cmd:{command:["albums"], params:["artist_id:"+view.playerStatus.current.conductor_id, ARTIST_ALBUM_TAGS, SORT_KEY+ARTIST_ALBUM_SORT_PLACEHOLDER, "role_id:CONDUCTOR"], title:view.playerStatus.current.conductor}, svg:"conductor"});
-            }
-            if (lmsOptions.showBand && view.playerStatus.current.band && view.playerStatus.current.band_id && useBand(view.playerStatus.current.genre)) {
-                view.menu.items.push({title:i18n("Go to band"), act:NP_BROWSE_CMD, cmd:{command:["albums"], params:["artist_id:"+view.playerStatus.current.band_id, ARTIST_ALBUM_TAGS, SORT_KEY+ARTIST_ALBUM_SORT_PLACEHOLDER, "role_id:BAND"], title:view.playerStatus.current.band}, svg:"trumpet"});
-            }
-            if (view.playerStatus.current.album_id && view.playerStatus.current.album) {
-                view.menu.items.push({title:ACTIONS[GOTO_ALBUM_ACTION].title, act:NP_BROWSE_CMD, cmd:{command:["tracks"], params:["album_id:"+view.playerStatus.current.album_id, trackTags(), SORT_KEY+"tracknum"], title:view.playerStatus.current.album}, icon:ACTIONS[GOTO_ALBUM_ACTION].icon});
-            }
-            let act = isInFavorites(view.playerStatus.current) ? REMOVE_FROM_FAV_ACTION : ADD_TO_FAV_ACTION;
-            if (undefined!=view.playerStatus.current.favUrl && undefined!=view.playerStatus.current.favIcon) {
-                view.menu.items.push({title:ACTIONS[act].title, act:NP_ITEM_ACT+act, svg:ACTIONS[act].svg});
-            }
-            if (undefined!=view.playerStatus.current.title) {
-                view.menu.items.push({title:i18n("Copy details"), act:NP_COPY_DETAILS_CMD, icon:"content_copy"});
-            }
-            if (view.customActions && view.customActions.length>0) {
-                for (let i=0, loop=view.customActions, len=loop.length; i<len; ++i) {
-                    view.menu.items.push({title:loop[i].title, act:NP_CUSTOM+i, icon:loop[i].icon, svg:loop[i].svg});
-                }
-            }
-            if (view.$store.state.desktopLayout) {
-                if (view.largeView) {
-                    view.menu.items.push({title:view.trans.collapseNp, icon:'fullscreen_exit', act:NP_TOGGLE_ACT});
-                } else {
-                    view.menu.items.push({title:view.trans.expandNp, icon:'fullscreen', act:NP_TOGGLE_ACT});
-                }
-            }
-            view.menu.items.push({title:ACTIONS[MORE_ACTION].title, svg:ACTIONS[MORE_ACTION].svg, act:NP_INFO_ACT});
         }
+        if (lmsOptions.showComposer && view.playerStatus.current.composer && view.playerStatus.current.composer_id && useComposer(view.playerStatus.current.genre)) {
+            view.menu.items.push({title:i18n("Go to composer"), act:NP_BROWSE_CMD, cmd:{command:["albums"], params:["artist_id:"+view.playerStatus.current.composer_id, ARTIST_ALBUM_TAGS, SORT_KEY+ARTIST_ALBUM_SORT_PLACEHOLDER, "role_id:COMPOSER"], title:view.playerStatus.current.composer}, svg:"composer"});
+        }
+        if (lmsOptions.showConductor && view.playerStatus.current.conductor && view.playerStatus.current.conductor_id && useConductor(view.playerStatus.current.genre)) {
+            view.menu.items.push({title:i18n("Go to conductor"), act:NP_BROWSE_CMD, cmd:{command:["albums"], params:["artist_id:"+view.playerStatus.current.conductor_id, ARTIST_ALBUM_TAGS, SORT_KEY+ARTIST_ALBUM_SORT_PLACEHOLDER, "role_id:CONDUCTOR"], title:view.playerStatus.current.conductor}, svg:"conductor"});
+        }
+        if (lmsOptions.showBand && view.playerStatus.current.band && view.playerStatus.current.band_id && useBand(view.playerStatus.current.genre)) {
+            view.menu.items.push({title:i18n("Go to band"), act:NP_BROWSE_CMD, cmd:{command:["albums"], params:["artist_id:"+view.playerStatus.current.band_id, ARTIST_ALBUM_TAGS, SORT_KEY+ARTIST_ALBUM_SORT_PLACEHOLDER, "role_id:BAND"], title:view.playerStatus.current.band}, svg:"trumpet"});
+        }
+        if (view.playerStatus.current.album_id && view.playerStatus.current.album) {
+            view.menu.items.push({title:ACTIONS[GOTO_ALBUM_ACTION].title, act:NP_BROWSE_CMD, cmd:{command:["tracks"], params:["album_id:"+view.playerStatus.current.album_id, trackTags(), SORT_KEY+"tracknum"], title:view.playerStatus.current.album}, icon:ACTIONS[GOTO_ALBUM_ACTION].icon});
+        }
+        let act = isInFavorites(view.playerStatus.current) ? REMOVE_FROM_FAV_ACTION : ADD_TO_FAV_ACTION;
+        if (undefined!=view.playerStatus.current.favUrl && undefined!=view.playerStatus.current.favIcon) {
+            view.menu.items.push({title:ACTIONS[act].title, act:NP_ITEM_ACT+act, svg:ACTIONS[act].svg});
+        }
+        if (undefined!=view.playerStatus.current.title) {
+            view.menu.items.push({title:i18n("Copy details"), act:NP_COPY_DETAILS_CMD, icon:"content_copy"});
+        }
+        if (view.customActions && view.customActions.length>0) {
+            for (let i=0, loop=view.customActions, len=loop.length; i<len; ++i) {
+                view.menu.items.push({title:loop[i].title, act:NP_CUSTOM+i, icon:loop[i].icon, svg:loop[i].svg});
+            }
+        }
+        if (view.$store.state.desktopLayout) {
+            if (view.largeView) {
+                view.menu.items.push({title:view.trans.collapseNp, icon:'fullscreen_exit', act:NP_TOGGLE_ACT});
+            } else {
+                view.menu.items.push({title:view.trans.expandNp, icon:'fullscreen', act:NP_TOGGLE_ACT});
+            }
+        }
+        view.menu.items.push({title:ACTIONS[MORE_ACTION].title, svg:ACTIONS[MORE_ACTION].svg, act:NP_INFO_ACT});
         view.menu.x = event.clientX;
         view.menu.y = event.clientY;
         view.$nextTick(() => {
@@ -923,13 +917,18 @@ function nowPlayingConfigMenu(view, event) {
     view.menu.icons = false;
     view.menu.items = [];
     if (view.windowWidth>NP_MIN_WIDTH_FOR_FULL) {
-        view.menu.items.push({title:i18n("Show in tabs"), act:NP_SHOW_IN_TABS_ACT, checked:view.info.showTabs});
+        view.menu.items.push({title:i18n("Show in tabs"), act:NP_SHOW_IN_TABS_ACT, check:view.info.showTabs});
     }
-    view.menu.items.push({title:i18n("Update on song change"), act:NP_SYNC_ACT, checked:view.info.sync});
+    view.menu.items.push({title:i18n("Update on song change"), act:NP_SYNC_ACT, check:view.info.sync});
     if (view.info.tabs[TRACK_TAB].lines && (!view.info.showTabs || view.info.tab==TRACK_TAB)) {
-        view.menu.items.push({title:i18n("Auto-scroll lyrics"), act:NP_LYRICS_SCROLL_ACT, checked:view.info.tabs[TRACK_TAB].scroll});
-        view.menu.items.push({title:i18n("Highlight current lyric line"), act:NP_LYRICS_HIGHLIGHT_ACT, checked:view.info.tabs[TRACK_TAB].highlight});
+        view.menu.items.push({title:i18n("Auto-scroll lyrics"), act:NP_LYRICS_SCROLL_ACT, check:view.info.tabs[TRACK_TAB].scroll});
+        view.menu.items.push({title:i18n("Highlight current lyric line"), act:NP_LYRICS_HIGHLIGHT_ACT, check:view.info.tabs[TRACK_TAB].highlight});
     }
+    view.menu.items.push(DIVIDER);
+    view.menu.items.push({title:i18n("Standard font size"), act:NP_FONT_ACT, val:10, radio:view.infoZoom<=10});
+    view.menu.items.push({title:i18n("Medium font size"), act:NP_FONT_ACT, val:15, radio:view.infoZoom>10 && view.infoZoom<20});
+    view.menu.items.push({title:i18n("Large font size"), act:NP_FONT_ACT, val:20, radio:view.infoZoom>=20});
+
     view.menu.x = event.clientX;
     view.menu.y = event.clientY;
     view.$nextTick(() => {

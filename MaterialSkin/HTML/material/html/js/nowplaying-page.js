@@ -36,8 +36,10 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
  <v-menu v-model="menu.show" :position-x="menu.x" :position-y="menu.y" absolute offset-y>
   <v-list>
    <template v-for="(item, index) in menu.items">
-    <v-list-tile @click="menuAction(item)">
-     <v-list-tile-avatar v-if="undefined!=item.checked"><v-icon>{{item.checked ? 'check_box' : 'check_box_outline_blank'}}</v-icon></v-list-tile-avatar>
+    <v-divider v-if="item===DIVIDER"></v-divider>
+    <v-list-tile v-else @click="menuAction(item)">
+     <v-list-tile-avatar v-if="undefined!=item.check"><v-icon>{{item.check ? 'check_box' : 'check_box_outline_blank'}}</v-icon></v-list-tile-avatar>
+     <v-list-tile-avatar v-else-if="undefined!=item.radio"><v-icon>{{item.radio ? 'radio_button_checked' : 'radio_button_unchecked'}}</v-icon></v-list-tile-avatar>
      <v-list-tile-avatar v-else-if="menu.icons" :tile="true" class="lms-avatar"><v-icon v-if="item.icon">{{item.icon}}</v-icon><img v-else-if="item.svg" class="svg-img" :src="item.svg | svgIcon(darkUi)"></img></v-list-tile-avatar>
      <v-list-tile-title>{{item.title}}</v-list-tile-title>
     </v-list-tile>
@@ -51,7 +53,7 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
    <template v-for="(tab, index) in info.tabs">
     <v-tab :key="index">{{tab.title}}</v-tab>
     <v-tab-item :key="index" :transition="false" :reverse-transition="false">
-     <v-card flat class="np-info-card-cover selectable" @contextmenu.prevent="nowPlayingContextMenu">
+     <v-card flat class="np-info-card-cover selectable">
       <v-card-text :class="['np-info-text', zoomInfoClass, TRACK_TAB==index || tab.isMsg ? 'np-info-lyrics' : '', ALBUM_TAB==index ? 'np-info-review' : '']" :id="'np-tab'+index">
        <div v-if="TRACK_TAB==index && tab.texttitle" v-html="tab.texttitle" class="np-info-title"></div>
        <img v-if="tab.image" :src="tab.image" loading="lazy" class="np-no-meta-img"></img>
@@ -110,7 +112,7 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
     <template v-for="(tab, index) in info.tabs">
      <v-flex xs4>
       <v-card flat class="np-info-card-cover selectable">
-       <v-card-text :class="['np-info-text-full', zoomInfoClass, TRACK_TAB==index || tab.isMsg ? 'np-info-lyrics' : '', ALBUM_TAB==index ? 'np-info-review' : '']" @contextmenu.prevent="nowPlayingContextMenu"  :id="'np-tab'+index">
+       <v-card-text :class="['np-info-text-full', zoomInfoClass, TRACK_TAB==index || tab.isMsg ? 'np-info-lyrics' : '', ALBUM_TAB==index ? 'np-info-review' : '']" :id="'np-tab'+index">
         <div v-if="TRACK_TAB==index && tab.texttitle" v-html="tab.texttitle" class="np-info-title"></div>
         <img v-if="tab.image" :src="tab.image" loading="lazy" class="np-no-meta-img"></img>
         <div v-if="TRACK_TAB==index && tab.lines">
@@ -603,13 +605,6 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
             this.info.tabs[ALBUM_TAB].sections[0].title=i18n("Tracks");
             this.info.tabs[TRACK_TAB].sections[0].title=i18n("Details");
         },
-        nowPlayingContextMenu(event) {
-            if (this.$store.state.visibleMenus.size<1) {
-                this.showMenu(event);
-            } else {
-                event.preventDefault();
-            }
-        },
         showMenu(event) {
             nowplayingShowMenu(this, event);
         },
@@ -1039,7 +1034,7 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
         },
         adjustFont(sz) {
             this.infoZoom=sz;
-            getLocalStorageVal('npInfoZoom', sz);
+            setLocalStorageVal('npInfoZoom', sz);
         },
         checkWindowSize() {
             this.checkLandscape();

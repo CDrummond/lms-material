@@ -73,6 +73,7 @@
     "/skyfm.png":{"svg":"radio-station"},
     "/classicalradio.png":{"svg":"music-clef-treble"},
     "/ClassicalRadio/html/icon.png":{"svg":"music-clef-treble"},
+    "/Classical/html/images/icon.png":{"svg":"music-clef-treble"},
     "/absolute.png":{"icon":"music_note"},
     "/difm.png":{"svg":"piano"},
     "/DIfm/html/icon.png":{"svg":"piano"},
@@ -88,6 +89,7 @@
     "/icon_nature_sounds.png":{"svg":"nature_sounds"},
     "/Sounds/html/images/icon.png":{"svg":"nature_sounds"},
     "/napster.png":{"svg":"napster"},
+    "/RhapsodyDirect/html/images/icon.png":{"svg":"napster"},
     "/shoutcast.png":{"svg":"shoutcast"},
     "/Sprocket/html/images/icon.png":{"svg":"pocketcasts"},
     "/InfoBrowser/html/images/icon.png":{"icon":"info"},
@@ -104,7 +106,8 @@
     "/zenradio.png":{"svg":"radio"},
     "/ZenRadio/html/icon.png":{"svg":"radio"},
     "/Podcast/html/images/podcastindex.png":{"icon":"new_releases"},
-    "/RadioTunes/html/icon.png":{"svg":"radio"}
+    "/RadioTunes/html/icon.png":{"svg":"radio"},
+    "/LMA/html/images/icon.png":{"icon":"archive"}
   },
   "indexOf":{
     "www.jazzfm.com":{"svg":"saxophone"},

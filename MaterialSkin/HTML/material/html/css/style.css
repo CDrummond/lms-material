@@ -1624,7 +1624,7 @@ progress {
 }
 
 .pq-current, .highlight {
- background:var(--pq-current-color)
+ background:var(--pq-current-color);
 }
 
 .pq-current-album {
@@ -3212,6 +3212,8 @@ div.v-subheader {
 }
 
 .lyrics-current-line {
- font-weight:var(--bold-weight)!important;
- color:var(--active-color);
+ width:100%;
+ background:var(--pq-current-color);
+ display:inline-block;
+ border-radius:4px;
 }

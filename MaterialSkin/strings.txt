@@ -407,16 +407,20 @@ PLUGIN_MATERIAL_SKIN_TOUCH_LINKS_DESC
 
 PLUGIN_MATERIAL_SKIN_YEAR_IN_SUB
 	EN	Show year in album subtitle
+	FR	Afficher l'année sous l'album
 	NL	Toon jaar onder het album
 
 PLUGIN_MATERIAL_SKIN_YEAR_IN_SUB_DESC
 	EN	When browsing albums show year in the subtitle, unless also showing artist (in which case year is shown, in brackets, after album name)
+	FR	Lors du parcours des albums, afficher l'année sous le nom de l'album si l'emplacement n'est pas déjà occupé par le nom de l'artiste (auquel cas l'année est affichée, entre parenthèses, après le nom de l'album).
 	NL	Bij het bladeren door albums wordt het jaar onder het album weergegeven, behalve als artiest ook wordt weergegeven. Dan wordt het jaar achter het album weergegeven.
 
 PLUGIN_MATERIAL_SKIN_PLAY_SHUFFLE
 	EN	Play shuffled action
+	FR	Action "Mélanger et jouer"
 	NL	Shuffle modus toevoegen
 
 PLUGIN_MATERIAL_SKIN_PLAY_SHUFFLE_DESC
 	EN	Add action to start albums, or playlists, in shuffled mode. When this is enabled and 'Play shuffled' is used, the player will be set to 'shuffle tracks' before the items are played. Likewise, if this is enabled and 'Play now' is used, then shuffle will be disabled before the items are played. Please note that the player's shuffle mode is not reverted after queue is cleared, etc.
+	FR	Ajouter une action "Mélanger et jouer" pour lire les albums ou les listes de lecture en mode aléatoire. Lorsque cette action est activée et utilisée, la platine sera configurée pour "mélanger les morceaux" avant leur lecture. Par ailleurs, si cette action est activée et que "Jouer maintenant" est utilisé, la lecture aléatoire sera désactivée avant la lecture. Veuillez noter que le mode aléatoire de la platine n'est pas rétabli une fois la liste de lecture effacée, etc.
 	NL	Voeg actie toe om albums of afspeellijsten in shuffle modus af te spelen. Wanneer dit is ingeschakeld en 'Shuffle modus' wordt gebruikt, wordt de speler ingesteld op shuffle voordat de nummers worden afgespeeld. Als dit is ingeschakeld en 'Speel Nu' wordt gebruikt, wordt shuffle uitgeschakeld voordat de nummers worden afgespeeld. Houd er rekening mee dat de shuffle modus niet wordt teruggezet als de afspeellijst leeg is. 

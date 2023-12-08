@@ -22,8 +22,8 @@ Par défaut l'application tente d'utiliser l'interface adaptée à votre matéri
 Vous pouvez naviguer entre les vues soit en touchant le bouton correspondant en bas de l'écran, soit en balayant l'écran vers la gauche ou la droite.
 Si vous êtes déjà sur une vue et que vous appuyez à nouveau sur son bouton, les actions suivantes se déclencheront :
   <ul>
-    <li>Bibliothèque - remonte d'un niveau, comme si vous appuyiez sur le bouton "Retourner".</li>
-    <li>En cours - affiche des informations sur l'artiste, l'album et la piste si le plugin "Informations sur la musique et les artistes" est installé sur LMS.</li>
+    <li>Bibliothèque - remonte d'un niveau, comme si vous appuyiez sur le bouton "Retourner". Un appui long permet de revenir à l'accueil.</li>
+    <li>En cours - affiche des informations sur l'artiste, l'album et la piste si le plugin "Informations sur la musique et les artistes" est installé sur LMS. Un appui long affiche la fenêtre de mise en veille.</li>
     <li>Liste de lecture - déroule la file d'attente de lecture de sorte que la piste en cours soit visible.</li>
   </ul>
 </p>
@@ -37,7 +37,8 @@ Si vous êtes déjà sur une vue et que vous appuyez à nouveau sur son bouton, 
 <h1>Appuis longs</h1>
 <p>Il existe diverses fonctionnalités d'appui long dans l'application. Celles-ci s'activent en appuyant sur un élément pendant 0,5 seconde ou plus. Les fonctionnalités disponibles actuellement via des appuis longs sont :
   <ul>
-    <li>Onglet "Bibliothèque" dans l'interface pour smartphone/tablette - si l'application affiche déjà la vue "Bibliothèque", permet un retour à l'écran d'accueil.</li>
+    <li>Onglet "Bibliothèque" dans l'interface pour smartphone/tablette - si la vue "Bibliothèque" est déjà affichée, permet un retour à l'écran d'accueil.</li>
+    <li>Onglet "En cours" dans l'interface pour smartphone/tablette - si la vue "En cours" est déjà affichée, affiche la fenêtre de mise en veille.</li>
     <li>Bouton "Retourner" dans la vue "Bibliothèque" - déclenche un retour à l'écran d'accueil.</li>
     <li>Bouton "Retourner" dans les entêtes des fenêtres (telles que "Configuration de platine") - ferme les fenêtres.</li>
     <li>Bouton ou étiquette de volume - active/désactive le son.</li>

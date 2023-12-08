@@ -431,7 +431,7 @@ var app = new Vue({
             }
             if (this.$store.state.desktopLayout) {
                 if ('up'==direction) {
-                    // Skip
+                    bus.$emit('swipeUp');
                 } else if ('down'==direction) {
                     bus.$emit('swipeDown');
                 } else if (!this.$store.state.pinQueue) {

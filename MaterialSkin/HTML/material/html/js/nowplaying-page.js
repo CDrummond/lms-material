@@ -443,6 +443,11 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
                 }
             }
         }.bind(this));
+        bus.$on('swipeUp', function() {
+            if (this.largeView && this.$store.state.desktopLayout) {
+                bus.$emit('info');
+            }
+        }.bind(this));
         bus.$on('swipeDown', function() {
             if (this.largeView && this.$store.state.desktopLayout) {
                 this.largeView=false;

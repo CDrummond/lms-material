@@ -53,7 +53,7 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
      <v-card flat class="np-info-card-cover selectable">
       <v-card-text :class="['np-info-text', TRACK_TAB==index || tab.isMsg ? 'np-info-lyrics' : '', ALBUM_TAB==index ? 'np-info-review' : '']" :id="'np-tab'+index">
        <div v-if="TRACK_TAB==index && tab.texttitle" v-html="tab.texttitle" class="np-info-title"></div>
-       <img v-if="tab.image" :src="tab.image" loading="lazy" class="np-no-meta-img"></img>
+       <img v-if="tab.image" :src="tab.image" loading="lazy" class="np-mai-img"></img>
        <div v-if="TRACK_TAB==index && tab.lines">
         <template v-for="(line, lindex) in tab.lines">
          <obj :id="'np-lyrics-'+lindex" v-bind:class="{'lyrics-current-line':tab.highlight && undefined!=playerStatus.current.time && playerStatus.current.time>line.time && playerStatus.current.time<((lindex+1)<tab.lines.length ? tab.lines[lindex+1].time : 86400)}">{{line.text}}</obj></br/>
@@ -111,7 +111,7 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
       <v-card flat class="np-info-card-cover selectable">
        <v-card-text :class="['np-info-text-full', TRACK_TAB==index || tab.isMsg ? 'np-info-lyrics' : '', ALBUM_TAB==index ? 'np-info-review' : '']" :id="'np-tab'+index">
         <div v-if="TRACK_TAB==index && tab.texttitle" v-html="tab.texttitle" class="np-info-title"></div>
-        <img v-if="tab.image" :src="tab.image" loading="lazy" class="np-no-meta-img"></img>
+        <img v-if="tab.image" :src="tab.image" loading="lazy" class="np-mai-img"></img>
         <div v-if="TRACK_TAB==index && tab.lines">
          <template v-for="(line, lindex) in tab.lines">
           <obj :id="'np-lyrics-'+lindex" v-bind:class="{'lyrics-current-line':tab.highlight && undefined!=playerStatus.current.time && playerStatus.current.time>line.time && playerStatus.current.time<((lindex+1)<tab.lines.length ? tab.lines[lindex+1].time : 86400)}">{{line.text}}</obj></br/>
@@ -426,7 +426,7 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
             }
         }.bind(this));
 
-        bus.$on('info-swipe', function(d) {
+        bus.$on('info-swipe', function(d, ev) {
             if (this.info.show) {
                 if ('left'==d) {
                     if (this.info.tab==2) {
@@ -440,11 +440,13 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
                     } else {
                         this.info.tab--;
                     }
+                } else if ('down'==d && this.info.show && undefined!=ev && undefined!=ev.target && 'np-mai-img'==ev.target.className) {
+                    bus.$emit('info');
                 }
             }
         }.bind(this));
         bus.$on('swipeUp', function() {
-            if (this.largeView && this.$store.state.desktopLayout) {
+            if ((this.largeView || !this.$store.state.desktopLayout) && !this.info.show) {
                 bus.$emit('info');
             }
         }.bind(this));

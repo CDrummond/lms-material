@@ -406,7 +406,7 @@ var app = new Vue({
                     if ('info-dialog'==this.$store.state.openDialogs[0]) {
                         if (this.$store.state.page=='now-playing' ||
                            (this.$store.state.desktopLayout && !this.$store.state.showQueue && (!this.$store.state.pinQueue || window.innerWidth<MIN_PQ_PIN_WIDTH))) {
-                            bus.$emit('info-swipe', direction);
+                            bus.$emit('info-swipe', direction, ev);
                             return;
                         }
                     } else {
@@ -453,6 +453,12 @@ var app = new Vue({
                         this.$store.commit('setPage', 'browse');
                     } else if (this.$store.state.page=='queue') {
                         this.$store.commit('setPage', 'now-playing');
+                    }
+                } else if (this.$store.state.page=='now-playing') {
+                    if ('up'==direction) {
+                        bus.$emit('swipeUp');
+                    } else if ('down'==direction) {
+                        bus.$emit('swipeDown');
                     }
                 }
             }

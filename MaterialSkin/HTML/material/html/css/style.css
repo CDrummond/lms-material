@@ -1208,7 +1208,7 @@ div.v-subheader {
 }
 
 .hide-scrollbar::-webkit-scrollbar {
-  display: none;
+ display: none;
 }
 
 .fade-both {
@@ -2551,21 +2551,6 @@ div.v-subheader {
  font-size:32px !important;
  width:32px !important;
  height:32px !important;
-}
-
-img[lazy='loaded'].np-cover {
- opacity:1;
- animation-name:npCoverFadeIn;
- animation-duration:0.15s;
- animation-fill-mode:both;
- -webkit-animation-name:npCoverFadeIn;
- -webkit-animation-duration:0.15s;
- -webkit-animation-fill-mode:both;
-}
-
-@keyframes npCoverFadeIn {
- 0% { opacity:0.25; }
- 100% { opacity:1; }
 }
 
 .wrapper {

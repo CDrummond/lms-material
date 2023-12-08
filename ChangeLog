@@ -55,6 +55,7 @@
 43. Long-press on 'Playing' mobile nav button, when on now-playing page, shows
     sleep dialog.
 44. Increase toolbar background blur.
+45. Remove fade in of now-playing cover change.
 
 4.0.4
 -----

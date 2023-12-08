@@ -160,6 +160,7 @@ function browseActions(view, item, args, count, showCompositions) {
                           weight:110});
         }
 
+
         if (undefined!=args['artist_id'] && undefined==args['album_id'] && undefined!=args['count'] && args['count']>1) {
             var params = [SORT_KEY+TRACK_SORT_PLACEHOLDER, PLAYLIST_TRACK_TAGS, 'artist_id:'+args['artist_id']];
             if (undefined!=args['role_id']) {

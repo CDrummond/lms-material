@@ -13,6 +13,7 @@ function copyPlayer(p){
 }
 
 function updateUiSettings(state, val) {
+    var queueDisplayChanged = false;
     let stdItems = ['autoScrollQueue', 'browseBackdrop', 'queueBackdrop', 'nowPlayingBackdrop', 'infoBackdrop',
                     'browseTechInfo', 'techInfo', 'nowPlayingTrackNum', 'swipeVolume', 'swipeChangeTrack',
                     'keyboardControl', 'skipSeconds', 'powerButton', 'mediaControls', 'showRating', 'browseContext',
@@ -22,11 +23,13 @@ function updateUiSettings(state, val) {
         if (undefined!=val[key] && state[key]!=val[key]) {
             state[key] = val[key];
             setLocalStorageVal(key, state[key]);
+            if ('queueContext'==key) {
+                queueDisplayChanged = true;
+            }
         }
     }
 
     var browseDisplayChanged = false;
-    var queueDisplayChanged = false;
     var relayoutGrid = false;
     var themeChanged = false;
     var prevColor = state.color;

@@ -3213,6 +3213,7 @@ div.v-subheader {
 
 .lyrics-current-line {
  width:100%;
+ font-weight:var(--bold-weight) !important;
  background:var(--pq-current-color);
  display:inline-block;
  border-radius:4px;

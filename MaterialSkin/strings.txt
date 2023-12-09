@@ -406,21 +406,25 @@ PLUGIN_MATERIAL_SKIN_TOUCH_LINKS_DESC
 	NL	Maak artiesten, albums, componisten, etc. items waar je op kan klikken op apparaten met een touchscreen (bijv. tablets en mobiele telefoons).
 
 PLUGIN_MATERIAL_SKIN_YEAR_IN_SUB
+	DE	Jahr im Albumuntertitel anzeigen
 	EN	Show year in album subtitle
 	FR	Afficher l'année sous l'album
 	NL	Toon jaar onder het album
 
 PLUGIN_MATERIAL_SKIN_YEAR_IN_SUB_DESC
+	DE	Beim Durchsuchen von Alben wird das Jahr im Untertitel angezeigt, es sei denn, es wird auch der Interpret angezeigt (in diesem Fall wird das Jahr in Klammern nach dem Albumnamen angezeigt)
 	EN	When browsing albums show year in the subtitle, unless also showing artist (in which case year is shown, in brackets, after album name)
 	FR	Lors du parcours des albums, afficher l'année sous le nom de l'album si l'emplacement n'est pas déjà occupé par le nom de l'artiste (auquel cas l'année est affichée, entre parenthèses, après le nom de l'album).
 	NL	Bij het bladeren door albums wordt het jaar onder het album weergegeven, behalve als artiest ook wordt weergegeven. Dan wordt het jaar achter het album weergegeven.
 
 PLUGIN_MATERIAL_SKIN_PLAY_SHUFFLE
+	DE	Zufallswiedergabe
 	EN	Play shuffled action
 	FR	Action "Mélanger et jouer"
 	NL	Shuffle modus toevoegen
 
 PLUGIN_MATERIAL_SKIN_PLAY_SHUFFLE_DESC
+	DE	Alben oder Wiedergabelisten werden zufällig wiedergegeben. Wenn diese Funktion aktiviert ist und "Zufällig abspielen" verwendet wird, wird der Player auf "Zufällige Wiedergabe" eingestellt, bevor die Elemente abgespielt werden. Wenn diese Option aktiviert ist und "Jetzt abspielen" verwendet wird, wird die Zufallswiedergabe vor der Wiedergabe der Elemente deaktiviert. Bitte beachten Sie, dass der Zufallswiedergabemodus des Players nicht wiederhergestellt wird, wenn die Warteschlange gelöscht wird usw.
 	EN	Add action to start albums, or playlists, in shuffled mode. When this is enabled and 'Play shuffled' is used, the player will be set to 'shuffle tracks' before the items are played. Likewise, if this is enabled and 'Play now' is used, then shuffle will be disabled before the items are played. Please note that the player's shuffle mode is not reverted after queue is cleared, etc.
 	FR	Ajouter une action "Mélanger et jouer" pour lire les albums ou les listes de lecture en mode aléatoire. Lorsque cette action est activée et utilisée, la platine sera configurée pour "mélanger les morceaux" avant leur lecture. Par ailleurs, si cette action est activée et que "Jouer maintenant" est utilisé, la lecture aléatoire sera désactivée avant la lecture. Veuillez noter que le mode aléatoire de la platine n'est pas rétabli une fois la liste de lecture effacée, etc.
 	NL	Voeg actie toe om albums of afspeellijsten in shuffle modus af te spelen. Wanneer dit is ingeschakeld en 'Shuffle modus' wordt gebruikt, wordt de speler ingesteld op shuffle voordat de nummers worden afgespeeld. Als dit is ingeschakeld en 'Speel Nu' wordt gebruikt, wordt shuffle uitgeschakeld voordat de nummers worden afgespeeld. Houd er rekening mee dat de shuffle modus niet wordt teruggezet als de afspeellijst leeg is. 

@@ -771,6 +771,10 @@ div.v-subheader {
  margin-top:calc(12px - var(--small-font-size)) !important;
 }
 
+.bsub-extra {
+ max-width:calc(100vw - 395px)!important;
+}
+
 .subtoolbar, .subtoolbar .v-btn__content i {
  color:var(--sub-toolbar-text-color) !important;
 }

@@ -437,7 +437,7 @@ function removeTrackNum(s) {
 }
 
 function artistTitleSort(a, b) {
-    let s = fixedSort(a.artist, b.artist);
+    let s = fixedSort(a.trackartist ? a.trackartist : a.artist, b.trackartist ? b.trackartist : b.artist);
     if (s!=0) {
         return s;
     }

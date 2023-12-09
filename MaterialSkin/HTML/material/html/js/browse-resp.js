@@ -1148,13 +1148,15 @@ function parseBrowseResp(data, parent, options, cacheKey, parentCommand, parentG
                 if (i.genre || i.genres) {
                     let loop = i.genres ? i.genres : [i.genre];
                     let ids = i.genre_ids ? i.genre_ids : [i.genre_id];
-                    for (let g=0, glen=loop.length; g<glen; ++g) {
-                        if (!genres.has(loop[g])) {
-                            genres.add(loop[g]);
-                            if ((!IS_MOBILE || lmsOptions.touchLinks)) {
-                                genreList.push("<obj class=\"link-item\" onclick=\"showGenre(event, "+ids[g]+",\'"+escape(loop[g])+"\', \'browse\')\">" + loop[g] + "</obj>");
-                            } else {
-                                genreList.push(loop[g]);
+                    if (ids.length==loop.length) {
+                        for (let g=0, glen=loop.length; g<glen; ++g) {
+                            if (!genres.has(loop[g])) {
+                                genres.add(loop[g]);
+                                if ((!IS_MOBILE || lmsOptions.touchLinks)) {
+                                    genreList.push("<obj class=\"link-item\" onclick=\"showGenre(event, "+ids[g]+",\'"+escape(loop[g])+"\', \'browse\')\">" + loop[g] + "</obj>");
+                                } else {
+                                    genreList.push(loop[g]);
+                                }
                             }
                         }
                     }

@@ -942,12 +942,12 @@ function splitMultiples(item, withGenre) {
     let types=withGenre ? ["genre"].concat(ARTIST_TYPES) : ARTIST_TYPES;
     for (var i=0, len=types.length; i<len; ++i) {
         let idsKey = types[i]+"_ids";
-        let ids = undefined!=item[idsKey] ? (""+item[idsKey]).split(",") : undefined;
-
+        let ids = undefined!=item[idsKey] ? (""+item[idsKey]).split(",").map(function(itm) { return itm.trim() }) : undefined;
         if (undefined!=ids) {
             item[idsKey] = ids;
-            let typeKey = types[i]=="genre" ? "genres" : types[i];
-            let strings = undefined!=item[typeKey] ? item[typeKey].split(MULTI_SPLIT_REGEX) : undefined;
+            let isGenre = types[i]=="genre";
+            let typeKey = isGenre ? "genres" : types[i];
+            let strings = undefined!=item[typeKey] ? item[typeKey].split(isGenre ? "," : MULTI_SPLIT_REGEX).map(function(itm) { return itm.trim() }) : undefined;
             if (undefined!=strings && ids.length>0 && ids.length==strings.length) {
                 item[types[i]+"_id"]=ids[0];
                 item[types[i]] = strings[0];

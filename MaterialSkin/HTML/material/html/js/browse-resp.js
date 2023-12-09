@@ -1369,13 +1369,6 @@ function parseBrowseResp(data, parent, options, cacheKey, parentCommand, parentG
             if (lmsOptions.noArtistFilter && undefined!=compilationAlbumArtist & resp.items.length>0) {
                 resp.items[0].compilationAlbumArtist = compilationAlbumArtist;
             }
-            let extra = [];
-            if (genres.length>0) {
-
-            }
-            if (lmsOptions.techInfo) {
-
-            }
         } else if (data.result.genres_loop) {
             for (var idx=0, loop=data.result.genres_loop, loopLen=loop.length; idx<loopLen; ++idx) {
                 var i = loop[idx];

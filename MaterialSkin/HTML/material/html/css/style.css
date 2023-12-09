@@ -1644,6 +1644,7 @@ progress {
 
 .pq-pulse {
  animation: pulseAnim 1s;
+ will-change: opacity;
 }
 
 @keyframes pulseAnim {
@@ -2368,6 +2369,7 @@ div.v-subheader {
  opacity:0.0;
  animation:pulse 2s infinite;
  animation-delay:2s;
+ will-change: opacity;
 }
 
 .dialog-main-list {
@@ -2765,6 +2767,7 @@ div.v-subheader {
 
 .pulse {
  animation:pulse 2s infinite;
+ will-change: opacity;
 }
 
 @keyframes pulse {

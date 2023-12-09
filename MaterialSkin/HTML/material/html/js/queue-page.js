@@ -830,7 +830,7 @@ var lmsQueue = Vue.component("lms-queue", {
         },
         doubleClick(item, index, event) {
             if (!queryParams.party) {
-                this.itemAction(PQ_PLAY_NOW_ACTION, item, index);
+                this.itemAction(PQ_PLAY_NOW_ACTION, item, index, event);
             }
         },
         removeIndexes(indexes) {
@@ -880,6 +880,7 @@ var lmsQueue = Vue.component("lms-queue", {
                     if (!this.$store.state.pinQueue) {
                         this.$store.commit('setShowQueue', false);
                     }
+                    bus.$emit('closeNowPlaying');
                 } else {
                     this.$store.commit('setPage', 'browse');
                 }

@@ -409,6 +409,12 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
         }.bind(this));
 
         this.info.showTabs=getLocalStorageBool("showTabs", false);
+        bus.$on('closeNowPlaying', function() {
+            if (this.info.show) {
+                bus.$emit('info');
+            }
+            this.largeView = false;
+        }.bind(this));
         bus.$on('expandNowPlaying', function(val) {
             if (window.innerHeight>=LMS_MIN_NP_LARGE_INFO_HEIGHT) {
                 if (val) {

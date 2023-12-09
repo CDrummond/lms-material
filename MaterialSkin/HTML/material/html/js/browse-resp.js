@@ -1260,6 +1260,8 @@ function parseBrowseResp(data, parent, options, cacheKey, parentCommand, parentG
                             }
                         }
                     }
+                } else {
+                    groups = [];
                 }
             }
 

@@ -101,13 +101,13 @@ function addArtistLink(item, line, type, func, page, used, plain) {
 function buildArtistLine(i, page, plain) {
     var line = undefined;
     var used = new Set();
-    var artist = i.artist ? i.artist : i.trackartist ? i.trackartist : i.albumartist;
+    var artist = i.trackartist ? i.trackartist : i.artist ? i.artist : i.albumartist;
 
     if (lmsOptions.artistFirst) {
-        if (i.artist) {
-            line=addArtistLink(i, line, "artist", "showArtist", page, used, plain);
-        } else if (i.trackartist) {
+        if (i.trackartist) {
             line=addArtistLink(i, line, "trackartist", "showArtist", page, used, plain);
+        } else if (i.artist) {
+            line=addArtistLink(i, line, "artist", "showArtist", page, used, plain);
         } else if (i.albumartist) {
             line=addArtistLink(i, line, "albumartist", "showAlbumArtist", page, used, plain);
         }
@@ -125,10 +125,10 @@ function buildArtistLine(i, page, plain) {
     }
 
     if (!lmsOptions.artistFirst) {
-        if (i.artist) {
-            line=addArtistLink(i, line, "artist", "showArtist", page, used, plain);
-        } else if (i.trackartist) {
+        if (i.trackartist) {
             line=addArtistLink(i, line, "trackartist", "showArtist", page, used, plain);
+        } else if (i.artist) {
+            line=addArtistLink(i, line, "artist", "showArtist", page, used, plain);
         } else if (i.albumartist) {
             line=addArtistLink(i, line, "albumartist", "showAlbumArtist", page, used, plain);
         }
@@ -152,10 +152,10 @@ function buildArtistWithContext(i, page, useBand, useComposer, useConductor) {
 
     let artists = undefined;
     let used = new Set();
-    if (i.artist) {
-        artists=addArtistLink(i, artists, "artist", "showArtist", page, used, false);
-    } else if (i.trackartist) {
+    if (i.trackartist) {
         artists=addArtistLink(i, artists, "trackartist", "showArtist", page, used, false);
+    } else if (i.artist) {
+        artists=addArtistLink(i, artists, "artist", "showArtist", page, used, false);
     } else if (i.albumartist) {
         artists=addArtistLink(i, artists, "albumartist", "showAlbumArtist", page, used, false);
     }

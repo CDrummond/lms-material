@@ -58,6 +58,7 @@
 45. Remove fade in of now-playing cover change.
 46. Swipe up from now-playing text to show MAI.
 47. Swipe down on MAI artist/album image to close MAI.
+48. When showing artist use trackartist in preference to artist.
 
 4.0.4
 -----

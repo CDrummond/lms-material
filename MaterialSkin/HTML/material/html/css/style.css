@@ -1538,11 +1538,14 @@ div.v-rating i.primary--text, div.v-rating i.accent--text {
 }
 
 .browse-html h1, .browse-html h2, .browse-html h3,
-.np-info-text h1, .np-info-text h2, .np-info-text h3 {
+.np-info-text h1, .np-info-text h2, .np-info-text h3,
+.np-info-text-full h1, .np-info-text-full h2, .np-info-text-full h3
+ {
  font-size:var(--std-font-size)!important;
 }
 
-.np-info-text h1:first-of-type, .np-info-text h2:first-of-type, .np-info-text h3:first-of-type {
+.np-info-text h1:first-of-type, .np-info-text h2:first-of-type, .np-info-text h3:first-of-type,
+.np-info-text-full h1:first-of-type, .np-info-text-full h2:first-of-type, .np-info-text-full h3:first-of-type {
  text-align: center;
  padding-bottom:8px;
 }

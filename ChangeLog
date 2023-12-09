@@ -59,6 +59,7 @@
 46. Swipe up from now-playing text to show MAI.
 47. Swipe down on MAI artist/album image to close MAI.
 48. When showing artist use trackartist in preference to artist.
+49. Use header styles for MAI in columns as per tabs.
 
 4.0.4
 -----

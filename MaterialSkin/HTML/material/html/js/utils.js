@@ -423,7 +423,7 @@ function setScrollTop(view, val) {
 function getLocalStorageBool(key, def) {
     let val = undefined
     try {
-        val = undefined==window.localStorage ? undefined : window.localStorage.getItem(LS_PREFIX+key);
+        val = undefined==window.localStorage ? (window.materialSkinStorage ? window.materialSkinStorage[key] : undefined) : window.localStorage.getItem(LS_PREFIX+key);
     } catch (e) {
     }
     return undefined!=val ? "true" == val : def;
@@ -432,7 +432,7 @@ function getLocalStorageBool(key, def) {
 function getLocalStorageVal(key, def) {
     let val = undefined;
     try {
-        val = undefined==window.localStorage ? undefined : window.localStorage.getItem(LS_PREFIX+key);
+        val = undefined==window.localStorage ? (window.materialSkinStorage ? window.materialSkinStorage[key] : undefined) : window.localStorage.getItem(LS_PREFIX+key);
     } catch (e) {
     }
     return undefined!=val ? val : def;
@@ -442,9 +442,14 @@ function setLocalStorageVal(key, val) {
     try {
         if (undefined!=window.localStorage) {
             window.localStorage.setItem(LS_PREFIX+key, val);
+            return;
         }
     } catch (e) {
     }
+    if (undefined==window.materialSkinStorage) {
+        window.materialSkinStorage = {};
+    }
+    window.materialSkinStorage[key]=val;
 }
 
 function removeLocalStorage(key) {
@@ -453,6 +458,9 @@ function removeLocalStorage(key) {
             window.localStorage.removeItem(LS_PREFIX+key);
         }
     } catch (e) {
+    }
+    if (undefined!=window.materialSkinStorage) {
+        delete window.materialSkinStorage[key];
     }
 }
 

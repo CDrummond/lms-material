@@ -669,7 +669,7 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
 
                     this.info.tabs[TRACK_TAB].pos=pos;
                     if (0==pos && tab) {
-                        setScrollTop(tab, 0);
+                        setElemScrollTop(tab, 0);
                     } else {
                         let adjust = tab ? tab.offsetHeight>700 ? 5 : tab.offsetHeight>350 ? 3 : 2 : 2;
                         let elem = document.getElementById("np-lyrics-"+(pos-(adjust<pos ? adjust : 0)));

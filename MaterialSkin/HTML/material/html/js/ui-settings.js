@@ -273,6 +273,7 @@ Vue.component('lms-ui-settings', {
      </v-list-tile-content>
      <v-list-tile-action><m3-switch v-model="techInfo"></m3-switch></v-list-tile-action>
     </v-list-tile>
+    <v-divider></v-divider>
 
     <v-list-tile>
      <v-list-tile-content @click="nowPlayingContext = !nowPlayingContext" class="switch-label">
@@ -311,6 +312,7 @@ Vue.component('lms-ui-settings', {
      </v-list-tile-content>
      <v-list-tile-action><m3-switch v-model="queueThreeLines"></m3-switch></v-list-tile-action>
     </v-list-tile>
+    <v-divider></v-divider>
 
     <v-list-tile>
      <v-list-tile-content @click="queueBackdrop = !queueBackdrop" class="switch-label">
@@ -319,6 +321,7 @@ Vue.component('lms-ui-settings', {
      </v-list-tile-content>
      <v-list-tile-action><m3-switch v-model="queueBackdrop"></m3-switch></v-list-tile-action>
     </v-list-tile>
+    <v-divider></v-divider>
 
     <v-list-tile>
      <v-list-tile-content @click="queueContext = !queueContext" class="switch-label">
@@ -327,7 +330,6 @@ Vue.component('lms-ui-settings', {
      </v-list-tile-content>
     <v-list-tile-action><m3-switch v-model="queueContext"></m3-switch></v-list-tile-action>
     </v-list-tile>
-    <v-divider></v-divider>
 
     <div class="dialog-padding" v-if="LMS_P_MAI"></div>
     <v-header class="dialog-section-header" v-if="LMS_P_MAI">{{i18n('Song Information')}}</v-header>

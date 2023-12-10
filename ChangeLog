@@ -36,7 +36,7 @@
 26. Parse synced lyrics, highlight current line, and scroll view with song.
 27. Mark browse text items, and MAI view, as selectable.
 28. Only offer album sort option if there are albums shown.
-29. Allow showing queue time reamining even if only 1 track.
+29. Allow showing queue time remaining even if only 1 track.
 30. Open source URL when clicking on emblem in now-playing.
 31. Add icon mapping for LMS8.4 new plugins.
 32. Don't hide duplicate icons in top level of radio or apps listing.
@@ -48,7 +48,7 @@
 36. If don't have track_id then send URL when requesting lyrics.
 37. Replace 'Yes/No' options with checkboxes in server side settings.
 38. Add server-side option to enable a 'Play shuffled' action.
-39. Move info-view settings actions into button top-right.
+39. Move MAI view settings actions into button top-right.
 40. Slightly tweak now-playing.
 41. Fix HTML code sometimes being displayed when click 'More' on queue item.
 42. Remove MAI font size setting, as was not applied to lists, etc.
@@ -60,7 +60,7 @@
 47. Swipe down on MAI artist/album image to close MAI.
 48. When showing artist use trackartist in preference to artist.
 49. Use header styles for MAI in columns as per tabs.
-50. Touching thick now-playing bar in mobile view switche to playing tab.
+50. Touching thick now-playing bar in mobile view switches to playing tab.
 
 4.0.4
 -----

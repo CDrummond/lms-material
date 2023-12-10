@@ -1634,6 +1634,9 @@ progress {
  background:var(--pq-current-color);
 }
 
+.pq-current {
+  border-radius:4px;
+}
 .pq-current-album {
  background:var(--pq-current-album-color);
 }
@@ -3227,5 +3230,4 @@ div.v-subheader {
  background:var(--pq-current-color);
  display:inline-block;
  border-radius:4px;
- border:1px solid var(--active-color);
 }

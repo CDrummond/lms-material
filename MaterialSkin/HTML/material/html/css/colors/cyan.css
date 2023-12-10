@@ -6,8 +6,8 @@
  */
 
 :root {
- --pq-current-color:rgba(0,151,167,0.25);
- --pq-current-album-color:rgba(0,151,167,0.075);
+ --pq-current-color:rgba(0,151,167,0.35);
+ --pq-current-album-color:rgba(0,151,167,0.125);
  --drop-target-color:rgba(0,151,167,0.5);
  --primary-color:#0097a7;
  --accent-color:#56c8d8;

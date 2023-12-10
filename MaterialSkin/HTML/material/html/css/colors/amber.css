@@ -1,4 +1,4 @@
-    /**
+/**
  * LMS-Material
  *
  * Copyright (c) 2018-2023 Craig Drummond <craig.p.drummond@gmail.com>
@@ -6,9 +6,9 @@
  */
 
 :root {
- --pq-current-color:rgba(255,143,0,0.25);
- --pq-current-album-color:rgba(255,143,0,0.075);
- --drop-target-color:rgba(255,143,0,0.5);
- --primary-color:#ff8f00;
- --accent-color:#ffc046;
+ --pq-current-color:rgba(25,118,210,0.35);
+ --pq-current-album-color:rgba(25,118,210,0.125);
+ --drop-target-color:rgba(25,118,210,0.5);
+ --primary-color:#1976d2;
+ --accent-color:#82b1ff;
 }

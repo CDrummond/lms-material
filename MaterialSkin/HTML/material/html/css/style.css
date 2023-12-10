@@ -53,6 +53,9 @@
  --subtoolbar-image-url:url();
  --window-controls-space:0px;
  --home-button-size:0px;
+ --pq-current-color:rgba(var(--highlight-rgb),0.35);
+ --pq-current-album-color:rgba(var(--highlight-rgb),0.125);
+ --drop-target-color:rgba(var(--highlight-rgb),0.5);
 }
 
 .theme--dark {

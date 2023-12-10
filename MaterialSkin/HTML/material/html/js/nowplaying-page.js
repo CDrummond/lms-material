@@ -980,7 +980,9 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
         barClicked(ev) {
             if (IS_MOBILE && ev && ev.target && ev.target.className && !ev.target.className.includes('v-icon')) {
                 if (!this.desktopLayout) {
-                    if (MBAR_THICK==this.$store.state.mobileBar) {
+                    let touch = getTouchPos(ev);
+                    let x = undefined==touch ? ev.x : touch.x;
+                    if (MBAR_THICK==this.$store.state.mobileBar && x<(window.innerWidth-50)) {
                         this.$store.commit('setPage', 'now-playing');
                     }
                 } else if (window.innerWidth<550 && (ev.x<(window.innerWidth-(window.innerWidth>420 ? 90 : 60)))) {

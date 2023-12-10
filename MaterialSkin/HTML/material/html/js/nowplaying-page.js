@@ -642,7 +642,7 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
             this.updateLyricsPosition();
         },
         updateLyricsPosition() {
-            if (this.info.tabs[TRACK_TAB].lines && this.info.tabs[TRACK_TAB].scroll && this.playerStatus.current && undefined!=this.playerStatus.current.time) {
+            if (this.info.show && this.info.tabs[TRACK_TAB].lines && this.info.tabs[TRACK_TAB].scroll && this.playerStatus.current && undefined!=this.playerStatus.current.time) {
                 let pos = undefined;
                 for (let i=0, loop=this.info.tabs[TRACK_TAB].lines, len=loop.length; i<len; ++i) {
                     if (loop[i].time<=this.playerStatus.current.time) {
@@ -652,19 +652,29 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
                     }
                 }
                 if (pos!=undefined) {
-                    pos = Math.max(0, pos-7);
-                    if (pos!=this.info.tabs[TRACK_TAB].pos) {
-                        this.info.tabs[TRACK_TAB].pos=pos;
-                        if (0==pos) {
-                            let elem = document.getElementById("np-tab"+TRACK_TAB);
-                            if (elem) {
-                                setScrollTop(elem, 0);
-                            }
-                        } else {
-                            let elem = document.getElementById("np-lyrics-"+pos);
-                            if (undefined!=elem) {
-                                ensureVisible(elem, 0);
-                            }
+                    if (pos==this.info.tabs[TRACK_TAB].pos) {
+                        return;
+                    }
+                    let tab = document.getElementById("np-tab"+TRACK_TAB);
+                    if (tab) {
+                        if (tab.offsetHeight>600) {
+                            pos = Math.max(0, pos-7);
+                        } else if (tab.offsetHeight>300) {
+                            pos = Math.max(0, pos-4);
+                        }
+                    }
+                    if (pos==this.info.tabs[TRACK_TAB].pos) {
+                        return;
+                    }
+
+                    this.info.tabs[TRACK_TAB].pos=pos;
+                    if (0==pos && tab) {
+                        setScrollTop(tab, 0);
+                    } else {
+                        let adjust = tab ? tab.offsetHeight>700 ? 5 : tab.offsetHeight>350 ? 3 : 2 : 2;
+                        let elem = document.getElementById("np-lyrics-"+(pos-(adjust<pos ? adjust : 0)));
+                        if (undefined!=elem) {
+                            ensureVisible(elem, 0, {block: "center"});
                         }
                     }
                 }
@@ -778,8 +788,10 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
                 this.fetchTrackInfo();
                 this.fetchArtistInfo();
                 this.fetchAlbumInfo();
+                this.updateLyricsPosition();
             } else if (TRACK_TAB==this.info.tab) {
                 this.fetchTrackInfo();
+                this.updateLyricsPosition();
             } else if (ARTIST_TAB==this.info.tab) {
                 this.fetchArtistInfo();
             } else {

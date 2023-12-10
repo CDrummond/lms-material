@@ -520,6 +520,9 @@ function nowplayingFetchTrackInfo(view) {
                     let parsed = data.result.lyrics ? formatLyrics(replaceNewLines(data.result.lyrics)) : undefined;
                     view.info.tabs[TRACK_TAB].text=undefined==parsed || parsed.timed ? undefined : parsed.data;
                     view.info.tabs[TRACK_TAB].lines=parsed && parsed.timed ? parsed.data : undefined;
+                    if (view.info.tabs[TRACK_TAB].lines && view.info.tabs[TRACK_TAB].lines.length>3) {
+                        setTimeout(function () { view.updateLyricsPosition(); }.bind(view), 100);
+                    }
                 }
             }).catch(error => {
                 view.info.tabs[TRACK_TAB].text=undefined;

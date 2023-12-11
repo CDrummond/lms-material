@@ -85,7 +85,6 @@
 .browse-html a, .np-info-text a, .np-info-text-full a,
 .primary--text, a.primary--text, div.primary--text, i.primary--text, label.primary--text, .lms-link, .active, .clickable a {
  color:var(--active-color) !important;
- font-weight:var(--bold-weight) !important;
 }
 
 .v-slider .primary, .v-progress-linear .primary, .v-progress-circular .primary {
@@ -2291,6 +2290,7 @@ div.v-subheader {
 .dialog-section-header, .item-info-header, .about-header, .pmgr-title {
  font-size:var(--std-font-size) !important;
  font-weight:var(--bold-weight) !important;
+ color:var(--active-color) !important;
 }
 
 .item-info-text {

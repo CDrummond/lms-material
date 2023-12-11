@@ -950,20 +950,41 @@ function useBand(genre) {
     return useArtistTagType(genre, lmsOptions.bandGenres);
 }
 
+function splitIntArray(val) {
+    return undefined==val || Array.isArray(val) ? val : (""+val).split(",").map(function(itm) { return itm.trim() }).map(Number);
+}
+
+function splitStringArray(val, isGenre) {
+    return undefined==val || Array.isArray(val) ? val : (""+val).split(isGenre ? "," : MULTI_SPLIT_REGEX).map(function(itm) { return itm.trim() });
+}
+
+function splitMultiple(item, typeKey, idsKey, isGenre) {
+    let ids = splitIntArray(item[idsKey]);
+    let strings = undefined;
+    if (undefined!=ids) {
+        let vals = splitStringArray(item[typeKey], isGenre);
+        if (undefined!=vals && ids.length>0 && ids.length==vals.length) {
+            strings = vals;
+        }
+    }
+    return [ids, strings];
+}
+
 function splitMultiples(item, withGenre) {
     let types=withGenre ? ["genre"].concat(ARTIST_TYPES) : ARTIST_TYPES;
     for (var i=0, len=types.length; i<len; ++i) {
+        let isGenre = types[i]=="genre";
+        let typeKey = undefined!=item[types[i]+"s"] ? types[i]+"s" : types[i];
         let idsKey = types[i]+"_ids";
-        let ids = undefined!=item[idsKey] ? (""+item[idsKey]).split(",").map(function(itm) { return itm.trim() }) : undefined;
+        let vals = splitMultiple(item, typeKey, idsKey, isGenre);
+        let ids = vals[0];
+        let strings = vals[1];
         if (undefined!=ids) {
             item[idsKey] = ids;
-            let isGenre = types[i]=="genre";
-            let typeKey = isGenre ? "genres" : types[i];
-            let strings = undefined!=item[typeKey] ? item[typeKey].split(isGenre ? "," : MULTI_SPLIT_REGEX).map(function(itm) { return itm.trim() }) : undefined;
-            if (undefined!=strings && ids.length>0 && ids.length==strings.length) {
+            if (undefined!=strings) {
                 item[types[i]+"_id"]=ids[0];
                 item[types[i]] = strings[0];
-                if (lmsOptions.showAllArtists || types[i]=="genre") {
+                if (lmsOptions.showAllArtists || isGenre) {
                     item[types[i]+"s"] = strings;
                 }
             }

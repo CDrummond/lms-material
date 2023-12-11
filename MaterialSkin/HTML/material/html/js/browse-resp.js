@@ -858,13 +858,18 @@ function parseBrowseResp(data, parent, options, cacheKey, parentCommand, parentG
                 let artists = undefined;
                 let artist_ids = undefined;
 
-                if (lmsOptions.showAllArtists && i.artists) {
-                    artists = i.artists.split(MULTI_SPLIT_REGEX);
-                    artist = artists.join(", ");
-                    if (undefined!=i.artist_ids) {
-                        artist_ids = i.artist_ids.split(',');
+                if (lmsOptions.showAllArtists && i.artists && i.artist_ids) {
+                    let vals = splitMultiple(i, "artists", "artist_ids", false);
+                    let ids = vals[0];
+                    let names = vals[1];
+                    if (undefined!=names && names.length>1 && undefined!=ids && ids.length==names.length) {
+                        artist_ids = ids;
+                        artists = names;
+                        artist = names.join(", ");
                     }
-                } else {
+                }
+
+                if (undefined==artist) {
                     artist = i.artist;
                     if (undefined!=i.artist) {
                         artists = [i.artist];
@@ -891,7 +896,7 @@ function parseBrowseResp(data, parent, options, cacheKey, parentCommand, parentG
                 let group = "ALBUM";
                 let nonmain = undefined; // This artist is not main artist of album
                 if (lmsOptions.groupByReleaseType) {
-                    let roles = new Set(undefined==i.role_ids ? [] : i.role_ids.split(",").map(Number));
+                    let roles = new Set(undefined==i.role_ids ? [] : splitIntArray(i.role_ids));
                     if (undefined!=i.compilation && 1==parseInt(i.compilation)) {
                         group = "COMPILATION";
                     } else {
@@ -915,7 +920,7 @@ function parseBrowseResp(data, parent, options, cacheKey, parentCommand, parentG
                 let album = {
                               id: "album_id:"+i.id,
                               artist_id: i.artist_id,
-                              artist_ids: undefined==i.artist_ids ? undefined : i.artist_ids.split(","),
+                              artist_ids: splitIntArray(i.artist_ids),
                               artists: artists,
                               title: showArtist || !lmsOptions.yearInSub ? title : i.album,
                               subtitle: showArtist ? artist : showYear && lmsOptions.yearInSub ? ""+i.year : undefined,

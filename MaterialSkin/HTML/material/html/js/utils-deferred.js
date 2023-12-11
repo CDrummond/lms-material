@@ -441,17 +441,25 @@ function artistTitleSort(a, b) {
     if (s!=0) {
         return s;
     }
-    return fixedSort(removeTrackNum(a.title), removeTrackNum(b.title));
+    s = fixedSort(removeTrackNum(a.title), removeTrackNum(b.title));
+    if (s!=0) {
+        return s;
+    }
+    return albumTrackSort(a, b);
 }
 
 function yearTitleSort(a, b) {
-    var va=a.year ? a.year : 0;
-    var vb=b.year ? b.year : 0;
+    let va=a.year ? a.year : 0;
+    let vb=b.year ? b.year : 0;
     if (va<vb) {
         return -1;
     }
     if (va>vb) {
         return 1;
     }
-    return titleSort(a, b);
+    let s = fixedSort(removeTrackNum(a.title), removeTrackNum(b.title));
+    if (s!=0) {
+        return s;
+    }
+    return albumTrackSort(a, b);
 }

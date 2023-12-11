@@ -666,9 +666,9 @@ function nowplayingFetchArtistInfo(view) {
                     }
                 });
             }
-        } else {
+        } else if (undefined!=view.infoTrack.artist_id || undefined!=view.infoTrack.artist) {
             let command = ["musicartistinfo", "biography", "html:1"];
-            if (view.infoTrack.artist_id!=undefined) {
+            if (undefined!=view.infoTrack.artist_id) {
                 command.push("artist_id:"+view.infoTrack.artist_id);
             } else {
                 command.push("artist:"+view.infoTrack.artist);
@@ -714,6 +714,8 @@ function nowplayingFetchArtistInfo(view) {
                     view.info.tabs[ARTIST_TAB].text=undefined;
                 });
             }
+        } else {
+            view.info.tabs[ARTIST_TAB].text=undefined;
         }
 
         if (view.infoTrack.artist_id!=undefined && view.infoTrack.artist_id>=0) {

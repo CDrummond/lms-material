@@ -2290,6 +2290,10 @@ div.v-subheader {
  margin-top:0px;
 }
 
+.pq-albumstyle .queue-action {
+ margin-right:-14px;
+}
+
 .v-card__title, .v-dialog .v-card .v-card__text, .v-snack__content {
  font-size:var(--std-font-size) !important;
 }

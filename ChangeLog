@@ -63,6 +63,7 @@
 50. Touching thick now-playing bar in mobile view switches to playing tab.
 51. If can't access local storage then store config values as part of window.
 52. Add colour to section headers to make them standout more.
+53. In edit favourites dialog remove any LMS supplied library ID.
 
 4.0.4
 -----

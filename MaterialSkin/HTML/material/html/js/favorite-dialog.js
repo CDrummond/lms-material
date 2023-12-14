@@ -66,6 +66,12 @@ Vue.component('lms-favorite', {
                 this.playerId = this.$store.state.player ? this.$store.state.player.id : "";
                 this.name = item.title;
                 this.url = item.presetParams ? item.presetParams.favorites_url : undefined;
+                if (this.url) {
+                    var lib = this.url.indexOf("libraryTracks.library=");
+                    if (lib>0) {
+                        this.url=this.url.substring(0, lib-1);
+                    }
+                }
                 this.icon = item.presetParams ? item.presetParams.icon : undefined;
                 this.isAdd=false;
                 this.show=true;

@@ -414,6 +414,9 @@
  .np-menu-fab {
   right:5px!important;
  }
+ .queue-action {
+  margin-right:-14px;
+ }
 }
 
 .lms-splitter .splitter {

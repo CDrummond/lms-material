@@ -2256,6 +2256,7 @@ div.v-subheader {
 
 .browse-action {
  min-width:28px !important;
+ margin-right:-10px;
 }
 
 .browse-header .v-list__tile__title, .grid-header .v-list__tile__title {

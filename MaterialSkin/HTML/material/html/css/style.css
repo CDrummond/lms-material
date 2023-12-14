@@ -1721,17 +1721,13 @@ progress {
  height:var(--list-elem-height);
  line-height:var(--list-elem-height);
  opacity:var(--sub-opacity);
- margin-right:-16px;
+ margin-right:-24px;
  min-width:44px;
  margin-top:calc(19px - var(--std-font-size));
 }
 
-.pq-time-ns {
- margin-right:-8px;
-}
-
 .browse-time {
- margin-right:0px;
+ margin-right:-8px;
 }
 
 .np-list-time {
@@ -2283,6 +2279,7 @@ div.v-subheader {
 .queue-action {
  padding-top:1px;
  min-width:44px !important;
+ margin-right:-12px;
 }
 
 .v-card__title, .v-dialog .v-card .v-card__text, .v-snack__content {
@@ -2598,7 +2595,16 @@ div.v-subheader {
 }
 
 .menu-btn {
+ opacity:var(--sub-opacity);
+ font-size:18px!important;
+ line-height:18px!important;
+ padding-top:7px;
+}
+
+.msk-is-non-touch .menu-btn {
  font-size:var(--icon-size)!important;
+ line-height:var(--icon-size)!important;
+ padding-top:4px;
 }
 
 .list-btn {
@@ -2615,18 +2621,23 @@ div.v-subheader {
  content:"more_vert";
 }
 
-.image-grid-item .grid-btns, .v-list__tile .list-btns, .msk-is-non-touch .image-grid-item .hover-btn {
+.image-grid-item .grid-btns, .v-list__tile .list-btns, .msk-is-non-touch .image-grid-item .hover-btn, .msk-is-non-touch .v-list__tile .hover-btn {
  visibility: hidden;
 }
 
-.image-grid-item:hover .grid-btns, .v-list__tile:hover .list-btns, .msk-is-non-touch .image-grid-item:hover .hover-btn {
+.image-grid-item:hover .grid-btns, .v-list__tile:hover .list-btns, .msk-is-non-touch .image-grid-item:hover .hover-btn, .msk-is-non-touch .v-list__tile:hover .hover-btn {
  visibility: visible;
+ opacity:1.0;
 }
 
 .list-btns {
  position:absolute;
  top:8px !important;
  right:50px !important;
+}
+
+.track-btns {
+ padding-right:24px;
 }
 
 .indent-both .list-btns {

@@ -2601,12 +2601,6 @@ div.v-subheader {
  padding-top:7px;
 }
 
-.msk-is-non-touch .menu-btn {
- font-size:var(--icon-size)!important;
- line-height:var(--icon-size)!important;
- padding-top:4px;
-}
-
 .list-btn {
  margin-right:-4px;
 }
@@ -2627,13 +2621,12 @@ div.v-subheader {
 
 .image-grid-item:hover .grid-btns, .v-list__tile:hover .list-btns, .msk-is-non-touch .image-grid-item:hover .hover-btn, .msk-is-non-touch .v-list__tile:hover .hover-btn {
  visibility: visible;
- opacity:1.0;
 }
 
 .list-btns {
  position:absolute;
  top:8px !important;
- right:50px !important;
+ right:42px !important;
 }
 
 .track-btns {
@@ -2641,7 +2634,7 @@ div.v-subheader {
 }
 
 .indent-both .list-btns {
- right:calc(211px + var(--home-button-size))!important;
+ right:calc(203px + var(--home-button-size))!important;
 }
 
 .indent-both .lms-image-grid .list-btns {

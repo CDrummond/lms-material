@@ -67,6 +67,7 @@
 54. Re-add menu buttons for playable items, but (for touch devices) reduce size
     and make semi-transparent.
 55. For non-touch devices only show menu buttons when hover over item.
+56. Clicking on header in grid view shows menu, as per list view.
 
 4.0.4
 -----

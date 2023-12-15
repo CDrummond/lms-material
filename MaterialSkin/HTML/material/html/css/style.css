@@ -603,9 +603,9 @@ div.v-subheader {
 .multi-disc {
  position:absolute;
  top:2px !important;
- left:6px !important;
- width:32px;
- height:32px;
+ left:4px !important;
+ width:calc(var(--small-icon-size) + 6px);
+ height:calc(var(--small-icon-size) + 6px);
  border-radius:50%!important;
  background-color:black;
  opacity:0.65;

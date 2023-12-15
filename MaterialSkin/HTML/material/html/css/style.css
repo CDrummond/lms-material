@@ -1440,14 +1440,18 @@ div.v-rating i.primary--text, div.v-rating i.accent--text {
 }
 
 .np-slider {
- margin:5px 0 !important; /* v-progress-linear has margin: 1rem 0; */
- height:24px !important;
+ margin:0px !important; /* v-progress-linear has margin: 1rem 0; */
+ height:5px !important;
  border:none !important;
  overflow:hidden;
 }
 
 .np-slider .v-progress-linear__bar__determinate {
  height:5px;
+}
+
+.np-page .np-slider {
+ margin-top:5px!important;
 }
 
 .np-page .np-slider .v-progress-linear__background,

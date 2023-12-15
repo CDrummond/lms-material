@@ -290,9 +290,10 @@
   line-height:30px;
  }
  .np-bar .np-slider {
-  bottom:calc(var(--desktop-npbar-height-thin) - 7px);
+  bottom:calc(var(--desktop-npbar-height-thin) - 2px);
   width:100vw;
   height:3px!important;
+  background-color:var(--bottom-toolbar-color) !important;
  }
 }
 
@@ -366,8 +367,9 @@
 }
 
 .np-bar-slider {
- bottom:calc(var(--bottom-toolbar-height) - 15px);
- height:10px !important;
+ bottom:calc(var(--bottom-toolbar-height) - 5px);
+ height:5px !important;
+ background-color:var(--bottom-toolbar-color) !important;
 }
 
 .np-bar .np-playpause {

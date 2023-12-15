@@ -2062,7 +2062,6 @@ progress {
  .msk-is-non-touch .link-item-ct:hover, .msk-is-non-touch .np-bar .link-item-ct:hover {
   opacity:var(--sub-opacity)!important;
  }
-
 /*}*/
 
 .svg-badge {
@@ -2926,7 +2925,7 @@ div.v-subheader {
  .msk-is-non-touch .v-menu__content .v-list__tile:hover {
   background-color:var(--list-hover-color)!important;
  }
-}
+/*}*/
 
 @media (hover: none) {
  /* Also set in main.js as above does not seem to work??? */

@@ -80,7 +80,7 @@ function parseQueryParams() {
             document.body.appendChild(element);
         } else if ("nativeStatus"==kv[0] || "nativeColors"==kv[0] || "nativePlayer"==kv[0] || "nativeUiChanges"==kv[0] || "nativeTheme"==kv[0] ||
                    "nativeCover"==kv[0] || "nativePlayerPower"==kv[0] || "nativeAccent"==kv[0] || "nativeTitlebar"==kv[0]) {
-            resp[kv[0]]=kv[1]=="c" ? 2 : 1;
+            resp[kv[0]]=kv[1]=="w" ? 3 : kv[1]=="c" ? 2 : 1;
         } else if ("hide"==kv[0]) {
             var parts = kv[1].split(",");
             for (var j=0, len=parts.length; j<len; ++j) {
@@ -155,6 +155,17 @@ function logError(err, command, params, start, count) {
 function logAndShowError(err, message, command, params, start, count) {
     logError(err, command, params, start, count);
     bus.$emit('showError', err, message);
+}
+
+function emitNative(msg, dest) {
+    if (2==dest) {
+        console.log(msg);
+    } else if (3==dest) {
+	try {
+            window.webkit.messageHandlers.mskNative.postMessage(msg);
+        } catch (e) {
+        }
+    }
 }
 
 function formatTechInfo(item, source, isCurrent) {
@@ -513,8 +524,8 @@ function setTheme(theme, color, prevColor) {
                 } catch (e) {
                 }
             });
-        } else if (2==queryParams.nativeTheme) {
-            console.log("MATERIAL-THEME\nNAME " + theme);
+        } else if (queryParams.nativeTheme>0) {
+            emitNative("MATERIAL-THEME\nNAME " + theme, queryParams.nativeTheme);
         }
     }
     if (color!=undefined) {
@@ -893,8 +904,8 @@ function emitToolbarColors(top, bot, tries) {
                 } catch (e) {
                 }
             });
-        } else if (2==queryParams.nativeColors) {
-            console.log("MATERIAL-COLORS\nTOP " + lastToolbarColors.top + "\nBOTTOM " + lastToolbarColors.bot);
+        } else if (queryParams.nativeColors>0) {
+            emitNative("MATERIAL-COLORS\nTOP " + lastToolbarColors.top + "\nBOTTOM " + lastToolbarColors.bot, queryParams.nativeColors);
         }
     }
 }
@@ -1053,7 +1064,7 @@ function toolbarMouseDown(ev) {
     lastTbMouseDown = now;
     if (1==queryParams.nativeTitlebar) {
         try { NativeReceiver.titlebarPressed(toggleMax); } catch (e) { }
-    } else if (2==queryParams.nativeTitlebar) {
-        console.log("MATERIAL-TITLEBAR\nNAME " + (toggleMax ? "max" : "move"));
+    } else if (queryParams.nativeTitlebar>0) {
+        emitNative("MATERIAL-TITLEBAR\nNAME " + (toggleMax ? "max" : "move"), queryParams.nativeTitlebar);
     }
 }

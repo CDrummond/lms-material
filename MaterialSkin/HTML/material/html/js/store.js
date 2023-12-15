@@ -169,8 +169,8 @@ function storeCurrentPlayer(player) {
             NativeReceiver.updatePlayer(player.id, player.name);
         } catch (e) {
         }
-    } else if (2==queryParams.nativePlayer) {
-        console.log("MATERIAL-PLAYER\nID "+player.id+"\nNAME "+player.name);
+    } else if (queryParams.nativePlayer>0) {
+        emitNative("MATERIAL-PLAYER\nID "+player.id+"\nNAME "+player.name, queryParams.nativePlayer);
     }
 }
 

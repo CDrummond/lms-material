@@ -30,8 +30,8 @@ Vue.component('lms-windowcontrols', {
                     } catch (e) {
                     }
                 });
-            } else if (2==queryParams.nativeTitlebar) {
-                console.log("MATERIAL-TITLEBAR\nNAME " + btn);
+            } else if (queryParams.nativeTitlebar>0) {
+                emitNative("MATERIAL-TITLEBAR\nNAME " + btn, queryParams.nativeTitlebar);
             }
         }
     }

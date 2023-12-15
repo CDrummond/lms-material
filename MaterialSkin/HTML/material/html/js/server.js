@@ -19,22 +19,22 @@ function updateNative(status) {
             NativeReceiver.updateStatus(JSON.stringify(status));
         } catch (e) {
         }
-    } else if (2==queryParams.nativeStatus) {
+    } else if (queryParams.nativeStatus>0) {
         if (undefined==status.current) {
-            console.log("MATERIAL-STATUS");
+            emitNative("MATERIAL-STATUS", queryParams.nativeStatus);
         } else {
-            console.log("MATERIAL-STATUS" +
-                        "\nPLAYING "+status.isplaying +
-                        "\nVOLUME "+logString(status.volume) +
-                        "\nCOUNT "+logString(status.playlist.count) +
-                        "\nSHUFFLE "+logString(status.playlist.shuffle) +
-                        "\nREPEAT "+logString(status.playlist.repeat) +
-                        "\nTITLE "+logString(status.current.title) +
-                        "\nARTIST "+logString(buildArtistLine(status.current, 'status', true)) +
-                        "\nALBUM "+logString(buildAlbumLine(status.current, 'status', true)) +
-                        "\nDURATION "+logString(status.current.duration) +
-                        "\nTIME "+logString(status.current.time) +
-                        "\nTRACKID "+logString(status.current.id));
+            emitNative("MATERIAL-STATUS" +
+                       "\nPLAYING "+status.isplaying +
+                       "\nVOLUME "+logString(status.volume) +
+                       "\nCOUNT "+logString(status.playlist.count) +
+                       "\nSHUFFLE "+logString(status.playlist.shuffle) +
+                       "\nREPEAT "+logString(status.playlist.repeat) +
+                       "\nTITLE "+logString(status.current.title) +
+                       "\nARTIST "+logString(buildArtistLine(status.current, 'status', true)) +
+                       "\nALBUM "+logString(buildAlbumLine(status.current, 'status', true)) +
+                       "\nDURATION "+logString(status.current.duration) +
+                       "\nTIME "+logString(status.current.time) +
+                       "\nTRACKID "+logString(status.current.id), queryParams.nativeStatus);
         }
     }
 }

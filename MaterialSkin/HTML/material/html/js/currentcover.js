@@ -159,8 +159,8 @@ var lmsCurrentCover = Vue.component('lms-currentcover', {
                         NativeReceiver.coverUrl(this.coverUrl);
                     } catch (e) {
                     }
-                } else if (2==queryParams.nativeCover) {
-                    console.log("MATERIAL-COVER\nURL " + this.coverUrl);
+                } else if (queryParams.nativeCover>0) {
+                    emitNative("MATERIAL-COVER\nURL " + this.coverUrl, queryParams.nativeCover);
                 }
 
                 if (this.$store.state.color==COLOR_FROM_COVER) {
@@ -222,8 +222,8 @@ var lmsCurrentCover = Vue.component('lms-currentcover', {
                         } catch (e) {
                         }
                     });
-                } else if (2==queryParams.nativeAccent) {
-                    console.log("MATERIAL-ACCENT\nVAL " + hexColor);
+                } else if (queryParams.nativeAccent>0) {
+                    emitNative("MATERIAL-ACCENT\nVAL " + hexColor, queryParams.nativeAccent);
                 }
             }).catch(e => {
             });

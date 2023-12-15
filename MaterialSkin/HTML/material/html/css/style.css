@@ -634,8 +634,8 @@ div.v-subheader {
 /*}*/
 
 .lms-list .emblem img, .np-grid-item .emblem img, .np-emblem img {
-  width:var(--small-icon-size) !important;
-  height:var(--small-icon-size) !important;
+ width:var(--small-icon-size) !important;
+ height:var(--small-icon-size) !important;
 }
 
 .lms-list .emblem, .lms-list-jump .emblem {
@@ -2670,6 +2670,9 @@ div.v-subheader {
  float:left;
  color:var(--text-color);
  background-color:rgba(110, 110, 110, 0.65);
+ font-size:calc(var(--small-icon-size) + 4px);
+ line-height:calc(var(--small-icon-size) + 4px);
+ padding:1px;
 }
 .play-btn {
  margin-right:2px;

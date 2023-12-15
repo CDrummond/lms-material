@@ -384,8 +384,12 @@ Vue.component('lms-information-dialog', {
             bus.$emit('dlg.open', 'iframe', '/material/html/docs/index.html', i18n('LMS technical information'), undefined, IFRAME_HOME_CLOSES_DIALOGS);
         },
         rescan(item) {
-            bus.$emit('showMessage', item.name);
-            lmsCommand('', item.cmd);
+            let now = new Date().getTime();
+            if (undefined==this.lastScanTime || (now-this.lastScanTime)>3000) {
+                this.lastScanTime = now;
+                bus.$emit('showMessage', item.name);
+                lmsCommand('', item.cmd);
+            }
         },
         showUpdateInfo() {
             bus.$emit('dlg.open', 'iframe', '/material/updateinfo.html', i18n('Update information'), undefined, IFRAME_HOME_CLOSES_DIALOGS);

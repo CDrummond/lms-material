@@ -45,7 +45,7 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
  </v-menu>
 
  <div v-if="info.show && (desktopLayout || page=='now-playing')" class="np-info" id="np-info">
-  <v-btn fab small flat top right absolute class="np-menu-fab" @click="showConfigMenu"><v-icon>settings</v-icon></v-btn>
+  <v-btn fab small flat top right absolute class="np-menu-fab" @click="showConfigMenu"><v-icon class="np-menu-icn">settings</v-icon></v-btn>
   <v-tabs centered v-model="info.tab" v-if="info.showTabs || windowWidth<NP_MIN_WIDTH_FOR_FULL" style="np-info-tab-cover" @change="tabChanged">
    <template v-for="(tab, index) in info.tabs">
     <v-tab :key="index">{{tab.title}}</v-tab>

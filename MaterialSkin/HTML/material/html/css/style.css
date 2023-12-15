@@ -1123,6 +1123,10 @@ div.v-subheader {
  opacity:0.25;
 }
 
+.np-menu-fab .v-icon {
+ font-size:var(--small-icon-size);
+}
+
 .np-close {
  visibility:hidden;
 }
@@ -2039,7 +2043,7 @@ progress {
  text-align:center;
 }
 
-.v-icon:not(.image-grid-item-icon):not(.media-icon):not(.browse-progress):not(.player-status-icon):not(.wc-icn):not(.playing-badge), .svg-list-img, .svg-img, .radio-image .svg-img {
+.v-icon:not(.image-grid-item-icon):not(.media-icon):not(.browse-progress):not(.player-status-icon):not(.wc-icn):not(.playing-badge):not(.np-menu-icn), .svg-list-img, .svg-img, .radio-image .svg-img {
  width:var(--icon-size) !important;
  height:var(--icon-size) !important;
  font-size:var(--icon-size) !important;

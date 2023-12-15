@@ -67,8 +67,8 @@
  --menu-dlg-shadow:0 1px 6px 1px rgba(0,0,0,.4)!important;
  --image-background-color:rgba(0, 0, 0, 0.2);
  --album-separator-color:rgba(255, 255, 255, 0.2);
- --pq-current-color:rgba(var(--highlight-rgb),0.35);
- --pq-current-album-color:rgba(var(--highlight-rgb),0.125);
+ --pq-current-color:rgba(var(--highlight-rgb),0.25);
+ --pq-current-album-color:rgba(var(--highlight-rgb),0.1);
 }
 
 .note {

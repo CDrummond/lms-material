@@ -595,6 +595,10 @@ div.v-subheader {
  position:absolute;
  top:2px !important;
  left:4px !important;
+ width:calc(var(--icon-size) + 6px) !important;
+ height:calc(var(--icon-size) + 6px) !important;
+ font-size:var(--icon-size) !important;
+ line-height:var(--icon-size) !important;
 }
 
 .multi-disc {

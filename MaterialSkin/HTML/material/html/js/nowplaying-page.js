@@ -398,8 +398,8 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
         this.mobileBarThinHeight = getComputedStyle(document.documentElement).getPropertyValue('--mobile-npbar-height-thin');
         this.mobileBarThickHeight = getComputedStyle(document.documentElement).getPropertyValue('--mobile-npbar-height-thick');
         this.controlBar();
-        this.info.tabs[TRACK_TAB].scroll=getLocalStorageBool("npScrollLyrics", false);
-        this.info.tabs[TRACK_TAB].highlight=getLocalStorageBool("npHighlightLyrics", false);
+        this.info.tabs[TRACK_TAB].scroll=getLocalStorageBool("npScrollLyrics", true);
+        this.info.tabs[TRACK_TAB].highlight=getLocalStorageBool("npHighlightLyrics", true);
 
         bus.$on('mobileBarChanged', function() {
             this.controlBar(true);

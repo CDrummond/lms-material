@@ -2,6 +2,8 @@
 -----
 1. Highlight and scroll timed lyrics by default.
 2. If swiping up in desktop layout ignore if in bottom 100px.
+3. Remove navigating to stream service URL when clicking on emblem in
+   now-playing.
 
 4.1.0
 -----

@@ -387,6 +387,9 @@ var app = new Vue({
                         }
                     }
                 }
+                if (vertValid && this.$store.state.desktopLayout && (window.innerHeight-this.touch.y)<100) {
+                    vertValid = false;
+                }
                 if (horizValid) {
                     this.swipe(end.x>this.touch.x ? 'right' : 'left', ev);
                 } else if (vertValid) {

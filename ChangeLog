@@ -1,6 +1,7 @@
 4.1.1
 -----
 1. Highlight and scroll timed lyrics by default.
+2. If swiping up in desktop layout ignore if in bottom 100px.
 
 4.1.0
 -----

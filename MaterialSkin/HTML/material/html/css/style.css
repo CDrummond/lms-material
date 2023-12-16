@@ -2674,12 +2674,19 @@ div.v-subheader {
  float:left;
  color:var(--text-color);
  background-color:rgba(110, 110, 110, 0.65);
- font-size:calc(var(--small-icon-size) + 4px);
- line-height:calc(var(--small-icon-size) + 4px);
- padding:1px;
+ font-size:calc(var(--small-icon-size) + 2px);
+ line-height:calc(var(--small-icon-size) + 1px);
+ border:2.5px solid var(--light-text-color);
+ padding-top:0px;
 }
+
 .play-btn {
- margin-right:2px;
+ margin-right:6px;
+}
+
+.list-btns .play-btn, .list-btns .add-btn {
+ background-color:transparent;
+ border:2.5px solid var(--text-color);
 }
 
 .np-menu, .np-close {
@@ -2694,12 +2701,12 @@ div.v-subheader {
 }
 
 .list-btns .play-btn {
- margin-right:4px;
+ margin-right:8px;
 }
 
 /*@media (hover: hover) and (pointer: fine) {*/
 .msk-is-non-touch .add-btn:hover, .msk-is-non-touch .play-btn:hover {
- background-color:rgba(110, 110, 110, 0.95);
+ background-color:rgb(110, 110, 110);
 }
 
 .msk-is-non-touch .np-emblem:hover {
@@ -2708,7 +2715,7 @@ div.v-subheader {
 
 .msk-is-non-touch .np-menu:hover,
 .msk-is-non-touch .np-close:hover {
- background-color:rgba(110, 110, 110, 0.95);
+ background-color:rgba(110, 110, 110);
  opacity:1.0;
 }
 
@@ -2718,11 +2725,11 @@ div.v-subheader {
 /*}*/
 
 .add-btn:after {
- content:"add_circle_outline";
+ content:"add";
 }
 
 .play-btn:after {
- content:"play_circle_outline";
+ content:"play_arrow";
 }
 
 .check-btn {

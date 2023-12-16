@@ -48,12 +48,6 @@
  background-color:#000;
 }
 
-@media (hover: hover) and (pointer: fine) {
- .list-btns .add-btn, .list-btns .play-btn {
-  background-color:var(--background-color)!important;
- }
-}
-
 .lms-toolbar .v-btn__content i.active-btn {
  color:var(--active-color) !important;
 }

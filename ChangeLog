@@ -4,6 +4,8 @@
 2. If swiping up in desktop layout ignore if in bottom 100px.
 3. Remove navigating to stream service URL when clicking on emblem in
    now-playing.
+4. If using colour from cover for highlight, then use blue for server
+   settings, etc.
 
 4.1.0
 -----

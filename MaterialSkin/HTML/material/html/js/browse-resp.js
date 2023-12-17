@@ -276,6 +276,9 @@ function parseBrowseResp(data, parent, options, cacheKey, parentCommand, parentG
                             i.menu.push(INSERT_ACTION);
                             addedPlayAction = true;
                         }
+                        if (addedPlayAction && lmsOptions.playShuffle) {
+                            i.menu.push(PLAY_SHUFFLE_ACTION);
+                        }
                         if (addAction) {
                             i.menu.push(ADD_ACTION);
                             addedPlayAction = true;

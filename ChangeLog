@@ -9,6 +9,7 @@
 6. Fix clicking on BBS Sounds emblem for live streams.
 7. Show search icon on search fields even for non-touch devices.
 8. Only apply larger left indent and right indent if queue is not pinned.
+9. If enabled, add 'Play shuffled' to context menus.
 
 4.1.0
 -----

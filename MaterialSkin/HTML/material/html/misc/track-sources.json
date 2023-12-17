@@ -62,6 +62,17 @@
         "name":"Pandora",
         "extid":"pandora"
     },
+    "sounds://_LIVE": {
+        "name":"BBC Sounds",
+        "url":{
+            "prefix":"https://www.bbc.co.uk/sounds/play/live:",
+            "split":{
+                "on":"_LIVE_",
+                "use":1
+            }
+        },
+        "extid":"bbc"
+    },
     "sounds:":{
         "name":"BBC Sounds",
         "url":{

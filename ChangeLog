@@ -1,15 +1,16 @@
 4.1.1
 -----
-1. Highlight and scroll timed lyrics by default.
-2. If swiping up in desktop layout ignore if in bottom 100px.
-3. If using colour from cover for highlight, then use blue for server
-   settings, etc.
-4. Fix text alignment in grid headers.
-5. Fix hover button positions in lists.
-6. Fix clicking on BBS Sounds emblem for live streams.
-7. Show search icon on search fields even for non-touch devices.
-8. Only apply larger left indent and right indent if queue is not pinned.
-9. If enabled, add 'Play shuffled' to context menus.
+ 1. Highlight and scroll timed lyrics by default.
+ 2. If swiping up in desktop layout ignore if in bottom 100px.
+ 3. If using colour from cover for highlight, then use blue for server
+    settings, etc.
+ 4. Fix text alignment in grid headers.
+ 5. Fix hover button positions in lists.
+ 6. Fix clicking on BBS Sounds emblem for live streams.
+ 7. Show search icon on search fields even for non-touch devices.
+ 8. Only apply larger left indent and right indent if queue is not pinned.
+ 9. If enabled, add 'Play shuffled' to context menus.
+10. Attempt to detect iOS when manifest is asked for and server iOS icon.
 
 4.1.0
 -----

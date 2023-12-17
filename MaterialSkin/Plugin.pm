@@ -1675,6 +1675,11 @@ sub _manifestHandler {
     } elsif (index($ua, 'Mac') != -1) {
         $themeColor="353537";
     }
+
+    if (index($ua, 'iPad') != -1 || index($ua, 'iPhone') != -1 || index($ua, 'MobileSafari') != -1 || (index($ua, 'Macintosh') != -1 && index($ua, '(KHTML, like Gecko) Version') != -1)) {
+        $manifest =~ s/icon\.png/icon-ios\.png/g;
+    }
+
     # Finally check to see if a themeColor was specified in URL
     my $start = index($query, 'themeColor=');
     if ($start!=-1) {

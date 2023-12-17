@@ -2,12 +2,10 @@
 -----
 1. Highlight and scroll timed lyrics by default.
 2. If swiping up in desktop layout ignore if in bottom 100px.
-3. Remove navigating to stream service URL when clicking on emblem in
-   now-playing.
-4. If using colour from cover for highlight, then use blue for server
+3. If using colour from cover for highlight, then use blue for server
    settings, etc.
-5. Fix text alignment in grid headers.
-6. Fix hover button positions in lists.
+4. Fix text alignment in grid headers.
+5. Fix hover button positions in lists.
 
 4.1.0
 -----

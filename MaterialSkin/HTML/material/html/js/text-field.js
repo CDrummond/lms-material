@@ -8,7 +8,7 @@
 
 Vue.component('text-field', {
     template: `
- <v-text-field :label="title" :autofocus="focus" v-model.lazy="term" single-line clearable autocorrect="off" class="lms-search" @input="textChanged($event)" v-on:keyup.enter="emitValue" :append-icon="IS_MOBILE && undefined!=term && term.length>0 ? (type=='search' ? 'search' : 'check') : ''" @click:append="emitValue" @blur="stopDebounce"></v-text-field>
+ <v-text-field :label="title" :autofocus="focus" v-model.lazy="term" single-line clearable autocorrect="off" class="lms-search" @input="textChanged($event)" v-on:keyup.enter="emitValue" :append-icon="undefined!=term && term.length>0 ? (type=='search' ? 'search' : 'check') : ''" @click:append="emitValue" @blur="stopDebounce"></v-text-field>
 `,
     props: {
         title:String,

@@ -32,6 +32,7 @@
  --thin-portrait-adjust:0px; /* Spread things out for tall and thin phones - S20/iphoneX */
  --fade-size:16px;
  --jump-list-width:32px; /* must match that in browse-page.js */
+ --jump-list-adjust:32px;
  --inactive-nav-opacity:0.5;
  --light-text-color:#edece7; /* keep in sync with LMS_DARK_SVG */
  --dark-text-color:#333;     /* keep in sync with LMS_LIGHT_SVG */
@@ -424,7 +425,7 @@ div.v-subheader {
 .detailed-sub .lms-list-item a,
 .indent-both .browse-html,
 .indent-list .browse-html {
- padding-left:calc(71px + var(--home-button-size)) !important;
+ padding-left:calc(71px + var(--home-button-size) - var(--jump-list-adjust)) !important;
 }
 
 .detailed-sub .lms-image-grid .vue-recycle-scroller__item-view a {
@@ -443,14 +444,14 @@ div.v-subheader {
 .indent-both .vue-recycle-scroller__item-view a,
 .indent-both .lms-list-item a,
 .indent-both .browse-html {
- padding-left:calc(171px + var(--home-button-size)) !important;
+ padding-left:calc(171px + var(--home-button-size) - var(--jump-list-adjust)) !important;
  padding-right:calc(171px + var(--home-button-size)) !important;
 }
 
 .indent-list .vue-recycle-scroller__item-view a,
 .indent-list .lms-list-item a,
 .indent-list .browse-html {
- padding-left:calc(171px + var(--home-button-size)) !important;
+ padding-left:calc(171px + var(--home-button-size) - var(--jump-list-adjust)) !important;
 }
 
 .browse-html a,
@@ -658,11 +659,11 @@ div.v-subheader {
 }
 
 .detailed-sub .lms-list .emblem, .detailed-sub .lms-list-jump .emblem {
- left:calc(96px + var(--home-button-size));
+ left:calc(96px + var(--home-button-size)) - var(--jump-list-adjust);
 }
 .indent-list .lms-list .emblem, .indent-list .lms-list-jump .emblem,
 .indent-both .lms-list .emblem, .indent-both .lms-list-jump .emblem {
- left:calc(192px + var(--home-button-size));
+ left:calc(192px + var(--home-button-size) - var(--jump-list-adjust));
 }
 
 .error-text {

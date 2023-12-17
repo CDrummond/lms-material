@@ -13,6 +13,7 @@ const ALLOW_FAKE_ALL_SONGS_ITEM = new Set(['youtube', 'qobuz']); // Allow using 
 const MIN_WIDTH_FOR_COVER = 600;
 const MIN_WIDTH_FOR_COVER_INDENT = 800;
 const MIN_WIDTH_FOR_BOTH_INDENT = 1000;
+const JUMP_LIST_WIDTH = 32;
 
 var lmsBrowse = Vue.component("lms-browse", {
     template: `
@@ -1452,7 +1453,6 @@ var lmsBrowse = Vue.component("lms-browse", {
                 return;
             }
 
-            const JUMP_LIST_WIDTH = 32;
             const RIGHT_PADDING = 4;
             var changed = false;
             var haveSubtitle = false;
@@ -1613,11 +1613,15 @@ var lmsBrowse = Vue.component("lms-browse", {
             setScrollTop(this, pos>0 ? pos : 0);
         },
         filterJumplist() {
-            if (this.items.length<=25 || this.items.length!=this.listSize || undefined==this.jumplist || this.jumplist.length<4) {
-                return;
+            let prev = getComputedStyle(document.body).getPropertyValue('--jump-list-adjust');
+            if (this.items.length>25 && this.items.length==this.listSize && undefined!=this.jumplist && this.jumplist.length>=4) {
+                let maxItems = Math.floor((this.scrollElement.clientHeight-(16))/17);
+                this.filteredJumplist = shrinkAray(this.jumplist, maxItems);
             }
-            var maxItems = Math.floor((this.scrollElement.clientHeight-(16))/17);
-            this.filteredJumplist = shrinkAray(this.jumplist, maxItems);
+            let now = (undefined!=this.jumplist && undefined!=this.filteredJumplist && this.filteredJumplist.length>1 ? JUMP_LIST_WIDTH : 0)+'px';
+            if (prev!=now) {
+                document.documentElement.style.setProperty('--jump-list-adjust', now);
+            }
         },
         dragStart(which, ev) {
             if (queryParams.party || (LMS_KIOSK_MODE && HIDE_FOR_KIOSK.has(ADD_TO_FAV_ACTION))) {

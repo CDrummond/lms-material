@@ -384,7 +384,8 @@
   left:8px!important;
  }
 
- .lms-list .v-list__tile {
+ .lms-list .v-list__tile,
+ .detailed-sub .lms-image-grid .vue-recycle-scroller__item-view a {
   padding:0 12px !important;
  }
 

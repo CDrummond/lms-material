@@ -427,6 +427,10 @@ div.v-subheader {
  padding-left:calc(71px + var(--home-button-size)) !important;
 }
 
+.detailed-sub .lms-image-grid .vue-recycle-scroller__item-view a {
+ padding:0 16px !important;
+}
+
 .detailed-sub .lms-list-item a .v-avatar {
  margin-left:2px;
 }
@@ -2650,11 +2654,11 @@ div.v-subheader {
 .list-btns {
  position:absolute;
  top:13px !important;
- right:24px !important;
+ right:60px !important;
 }
 
 .track-btns {
- padding-right:32px;
+ padding-right:36px;
 }
 
 .indent-both .list-btns {
@@ -2662,7 +2666,7 @@ div.v-subheader {
 }
 
 .indent-both .lms-image-grid .list-btns {
- right:50px !important;
+ right:24px !important;
 }
 
 .lms-list .v-list__tile__action .v-btn--icon {

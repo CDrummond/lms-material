@@ -6,6 +6,8 @@
    now-playing.
 4. If using colour from cover for highlight, then use blue for server
    settings, etc.
+5. Fix text alignment in grid headers.
+6. Fix hover button positions in lists.
 
 4.1.0
 -----

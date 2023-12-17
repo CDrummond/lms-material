@@ -2658,12 +2658,8 @@ div.v-subheader {
  right:60px !important;
 }
 
-.track-btns {
- padding-right:36px;
-}
-
 .indent-both .list-btns {
- right:calc(180px + var(--home-button-size))!important;
+ right:calc(220px + var(--home-button-size))!important;
 }
 
 .indent-both .lms-image-grid .list-btns {

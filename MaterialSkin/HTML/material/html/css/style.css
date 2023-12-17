@@ -1169,11 +1169,11 @@ div.v-subheader {
 }
 
 .np-image-landscape-wide .np-emblem, .np-image-landscape-wide .np-menu {
- left:calc(var(--np-image-landscape-wide-size) - (var(--np-image-border) + var(--np-image-btn-pad)));
+ left:calc(var(--np-image-landscape-wide-size) - ((var(--np-image-border)/2) + var(--np-image-btn-pad)));
 }
 
 .np-image-landscape-wide .np-menu {
- top:calc(var(--np-image-landscape-wide-size) - (var(--np-image-border) + var(--np-image-btn-pad))) !important;
+ top:calc(var(--np-image-landscape-wide-size) - ((var(--np-image-border)/2) + var(--np-image-btn-pad))) !important;
 }
 
 .np-image-landscape {

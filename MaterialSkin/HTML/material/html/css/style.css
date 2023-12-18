@@ -2653,6 +2653,10 @@ div.v-subheader {
  line-height:var(--small-icon-size)!important;
 }
 
+.pq-albumstyle .menu-btn {
+ padding-top:4px;
+}
+
 .list-btn {
  margin-right:-4px;
 }

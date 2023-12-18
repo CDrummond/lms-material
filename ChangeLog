@@ -15,6 +15,7 @@
 11. Increase min-widths required for track list indentation.
 12. Fix 'Play shuffled' for multi-disc albums.
 13. Add 'Play shuffled' to section headers.
+14. Fix total track count for multi-disc albums.
 
 4.1.0
 -----

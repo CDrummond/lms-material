@@ -10,7 +10,8 @@
  7. Show search icon on search fields even for non-touch devices.
  8. Only apply larger left indent and right indent if queue is not pinned.
  9. If enabled, add 'Play shuffled' to context menus.
-10. Attempt to detect iOS when manifest is asked for and serve iOS icon.
+10. Attempt to detect iOS when manifest is asked for and serve iOS icon, and
+    change start URL to have '?addpad'
 11. Increase min-widths required for track list indentation.
 
 4.1.0

@@ -609,8 +609,8 @@ div.v-subheader {
  position:absolute;
  top:2px !important;
  left:4px !important;
- width:calc(var(--small-icon-size) + 6px);
- height:calc(var(--small-icon-size) + 6px);
+ width:calc(var(--small-icon-size) + 8px);
+ height:calc(var(--small-icon-size) + 8px);
  border-radius:50%!important;
  background-color:black;
  opacity:var(--sub-opacity);
@@ -621,10 +621,10 @@ div.v-subheader {
  top:2px !important;
  right:4px !important;
  left:auto!important; /* required to negate lms-list .emblem left */
- width:calc(var(--small-icon-size) + 6px) !important;
- height:calc(var(--small-icon-size) + 6px) !important;
+ width:calc(var(--small-icon-size) + 8px) !important;
+ height:calc(var(--small-icon-size) + 8px) !important;
  border-radius:50% !important;
- padding:3px;
+ padding:2px;
  opacity:var(--sub-opacity);
 }
 
@@ -633,7 +633,8 @@ div.v-subheader {
 }
 
 .np-grid-item .emblem {
- top:4px !important;
+ top:1px !important;
+ right:1px !important;
 }
 
 /*@media (hover: hover) and (pointer: fine) {*/
@@ -642,24 +643,29 @@ div.v-subheader {
  }
 /*}*/
 
-.lms-list .emblem img, .np-grid-item .emblem img, .np-emblem img {
+.lms-list .emblem img {
  width:var(--small-icon-size) !important;
  height:var(--small-icon-size) !important;
+}
+
+.np-grid-item .emblem img, .np-emblem img, .lms-image-grid .emblem img {
+ width:calc(var(--small-icon-size) + 4px)!important;
+ height:calc(var(--small-icon-size) + 4px)!important;
 }
 
 .lms-list .emblem, .lms-list-jump .emblem {
  position:absolute;
  top:1px !important;
- left:35px;
- width:calc(var(--small-icon-size) + 6px) !important;
- height:calc(var(--small-icon-size) + 6px) !important;
+ left:39px;
+ width:calc(var(--small-icon-size) + 2px) !important;
+ height:calc(var(--small-icon-size) + 2px) !important;
  border-radius:50% !important;
- padding:3px;
+ padding:1px;
  opacity:var(--sub-opacity);
 }
 
 .np-info .lms-list .emblem {
- left:23px;
+ left:26px;
 }
 
 .detailed-sub .lms-list .emblem, .detailed-sub .lms-list-jump .emblem {
@@ -1144,7 +1150,6 @@ div.v-subheader {
 }
 
 .np-emblem {
- padding:3px!important;
  opacity:var(--sub-opacity);
 }
 
@@ -2620,6 +2625,9 @@ div.v-subheader {
  padding-top:4px;
 }
 
+.np-emblem {
+ padding-top:2px;
+}
 .np-emblem, .np-menu, .np-close {
  position:absolute;
 }
@@ -2676,13 +2684,13 @@ div.v-subheader {
  float:left;
  color:var(--text-color);
  background-color:#eee;
- font-size:calc(var(--small-icon-size) + 1px);
- line-height:calc(var(--small-icon-size) + 1px);
+ font-size:calc(var(--small-icon-size) - 1px);
+ line-height:calc(var(--small-icon-size) - 1px);
  border:2.5px solid var(--light-text-color);
  padding:0px;
  opacity:0.6;
- width:calc(var(--small-icon-size) + 6px);
- height:calc(var(--small-icon-size) + 6px);
+ width:calc(var(--small-icon-size) + 3px);
+ height:calc(var(--small-icon-size) + 3px);
 }
 
 .theme--light .grid-btns .add-btn, .theme--light  .grid-btns .play-btn {

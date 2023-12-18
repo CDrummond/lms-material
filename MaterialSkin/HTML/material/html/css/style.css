@@ -1148,10 +1148,6 @@ div.v-subheader {
  opacity:var(--sub-opacity);
 }
 
-.np-menu:after {
- content:"more_vert";
-}
-
 .np-image .np-emblem {
  right:calc(var(--np-image-border) + var(--np-image-btn-pad));
  top:calc(var(--np-image-border) + var(--np-image-btn-pad));
@@ -2613,15 +2609,15 @@ div.v-subheader {
 }
 
 .grid-btn, .np-emblem, .np-menu, .np-close {
- width:calc(var(--small-icon-size) + 6px);
- height:calc(var(--small-icon-size) + 6px);
+ width:calc(var(--small-icon-size) + 8px);
+ height:calc(var(--small-icon-size) + 8px);
  font-size:var(--small-icon-size);
  line-height:var(--small-icon-size);
  border-radius:50%;
  text-align:center;
  font-family: "Material Icons";
  text-decoration:none;
- padding-top:3px;
+ padding-top:4px;
 }
 
 .np-emblem, .np-menu, .np-close {
@@ -2644,6 +2640,7 @@ div.v-subheader {
  right:-4px !important;
 }
 
+.np-menu:after,
 .menu-btn:after {
  content:"more_vert";
 }
@@ -2679,11 +2676,13 @@ div.v-subheader {
  float:left;
  color:var(--text-color);
  background-color:#eee;
- font-size:calc(var(--small-icon-size) + 2px);
- line-height:calc(var(--small-icon-size) + 2px);
+ font-size:calc(var(--small-icon-size) + 1px);
+ line-height:calc(var(--small-icon-size) + 1px);
  border:2.5px solid var(--light-text-color);
- padding-top:0px;
+ padding:0px;
  opacity:0.6;
+ width:calc(var(--small-icon-size) + 6px);
+ height:calc(var(--small-icon-size) + 6px);
 }
 
 .theme--light .grid-btns .add-btn, .theme--light  .grid-btns .play-btn {

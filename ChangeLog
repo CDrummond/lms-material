@@ -11,6 +11,7 @@
  8. Only apply larger left indent and right indent if queue is not pinned.
  9. If enabled, add 'Play shuffled' to context menus.
 10. Attempt to detect iOS when manifest is asked for and serve iOS icon.
+11. Increase min-widths required for track list indentation.
 
 4.1.0
 -----

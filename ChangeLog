@@ -13,6 +13,7 @@
 10. Attempt to detect iOS when manifest is asked for and serve iOS icon, and
     change start URL to have '?addpad'
 11. Increase min-widths required for track list indentation.
+12. Fix 'Play shuffled' for multi-disc albums.
 
 4.1.0
 -----

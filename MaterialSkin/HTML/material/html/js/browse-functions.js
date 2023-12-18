@@ -1295,13 +1295,9 @@ function browseItemAction(view, act, item, index, event) {
                 view.jumpTo(choice.jump);
             }
         });
-    } else if (lmsOptions.playShuffle && (PLAY_ACTION==act || PLAY_SHUFFLE_ACTION==act)) {
-        lmsCommand(view.playerId(), ['playlist', 'shuffle', PLAY_ACTION==act ? 0 : 1]).then(({data}) => {
-            browsePerformAction(view, item, PLAY_ACTION);
-        });
     } else {
         // If we are acting on a multi-disc album, prompt which disc we should act on
-        if (item.multi && !view.current.id.startsWith("album_id:") && (PLAY_ACTION==act || ADD_ACTION==act || INSERT_ACTION==act)) {
+        if (item.multi && !view.current.id.startsWith("album_id:") && (PLAY_ACTION==act || ADD_ACTION==act || INSERT_ACTION==act || PLAY_SHUFFLE_ACTION==act)) {
             var command = view.buildCommand(item);
             view.clearSelection();
             lmsList(view.playerId(), command.command, command.params, 0, LMS_BATCH_SIZE, false, view.nextReqId()).then(({data}) => {
@@ -1320,24 +1316,13 @@ function browseItemAction(view, act, item, index, event) {
                 choose(ACTIONS[act].title, discs).then(choice => {
                     if (undefined!=choice) {
                         if (choice.id==discs[0].id) {
-                            command = browseBuildFullCommand(view, item, act);
-                            lmsCommand(view.playerId(), command.command).then(({data}) => {
-                                logJsonMessage("RESP", data);
-                                bus.$emit('refreshStatus');
-                                if (!view.$store.state.desktopLayout || !view.$store.state.showQueue) {
-                                    if (act===PLAY_ACTION) {
-                                        if (!view.$store.state.desktopLayout) {
-                                            view.$store.commit('setPage', 'now-playing');
-                                        }
-                                    } else if (act===ADD_ACTION) {
-                                        bus.$emit('showMessage', i18n("Appended '%1' to the play queue", undefined==item.title ? view.headerTitle : item.title));
-                                    } else if (act===INSERT_ACTION) {
-                                        bus.$emit('showMessage', i18n("Inserted '%1' into the play queue", undefined==item.title ? view.headerTitle : item.title));
-                                    }
-                                }
-                            }).catch(err => {
-                                logAndShowError(err, undefined, command.command);
-                            });
+                            if (lmsOptions.playShuffle && (PLAY_ACTION==act || PLAY_SHUFFLE_ACTION==act)) {
+                                lmsCommand(view.playerId(), ['playlist', 'shuffle', PLAY_ACTION==act ? 0 : 1]).then(({data}) => {
+                                    browsePerformAction(view, item, PLAY_ACTION);
+                                });
+                            } else {
+                                browsePerformAction(view, item, act);
+                            }
                             return;
                         }
                         var tracks = [];
@@ -1350,8 +1335,14 @@ function browseItemAction(view, act, item, index, event) {
                             }
                         }
                         if (tracks.length>0) {
-                            view.doList(tracks, act);
                             bus.$emit('showMessage', i18n("Adding tracks..."));
+                            if (lmsOptions.playShuffle && (PLAY_ACTION==act || PLAY_SHUFFLE_ACTION==act)) {
+                                lmsCommand(view.playerId(), ['playlist', 'shuffle', PLAY_ACTION==act ? 0 : 1]).then(({data}) => {
+                                    view.doList(tracks, act);
+                                });
+                            } else {
+                                view.doList(tracks, act);
+                            }
                         }
                     }
                 });
@@ -1359,7 +1350,13 @@ function browseItemAction(view, act, item, index, event) {
             return;
         }
 
-        browsePerformAction(view, item, act);
+        if (lmsOptions.playShuffle && (PLAY_ACTION==act || PLAY_SHUFFLE_ACTION==act)) {
+            lmsCommand(view.playerId(), ['playlist', 'shuffle', PLAY_ACTION==act ? 0 : 1]).then(({data}) => {
+                browsePerformAction(view, item, PLAY_ACTION);
+            });
+        } else {
+            browsePerformAction(view, item, act);
+        }
     }
 }
 

@@ -2623,17 +2623,19 @@ div.v-subheader {
  text-align:center;
  font-family: "Material Icons";
  text-decoration:none;
- padding-top:4px;
+ padding-top:3px;
 }
-
-.grid-btn:not(.check-btn):not(.add-btn):not(.play-btn) {
- padding-top:6px;
+.np-menu, .np-close {
+ padding-top:4px;
 }
 .np-emblem {
  padding-top:2px;
 }
 .np-emblem, .np-menu, .np-close {
  position:absolute;
+}
+.menu-btn {
+ padding-top:6px;
 }
 
 .menu-btn {

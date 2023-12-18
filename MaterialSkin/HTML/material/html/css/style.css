@@ -2303,7 +2303,7 @@ div.v-subheader {
 .grid-header .list-btns,
 .indent-both .grid-header .list-btns,
 .indent-right .grid-header .list-btns {
- right:32px !important;
+ right:40px !important;
 }
 
 .grid-header .menu-btn {
@@ -2683,19 +2683,19 @@ div.v-subheader {
 .list-btns {
  position:absolute;
  top:13px !important;
- right:60px !important;
+ right:68px !important;
 }
 
 .indent-both .list-btns {
- right:calc(220px + var(--home-button-size))!important;
+ right:calc(228px + var(--home-button-size))!important;
 }
 
 .indent-right .list-btns {
- right:calc(120px + var(--home-button-size))!important;
+ right:calc(128px + var(--home-button-size))!important;
 }
 
 .indent-both .lms-image-grid .list-btns {
- right:24px !important;
+ right:32px !important;
 }
 
 .lms-list .v-list__tile__action .v-btn--icon {

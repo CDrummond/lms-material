@@ -2299,6 +2299,16 @@ div.v-subheader {
  width:100%;
 }
 
+.grid-header .list-btns,
+.indent-both .grid-header .list-btns,
+.indent-right .grid-header .list-btns {
+ right:32px !important;
+}
+
+.grid-header .menu-btn {
+ padding-top:3px;
+}
+
 .queue-action {
  min-width:44px !important;
  margin-right:-12px;
@@ -2634,11 +2644,9 @@ div.v-subheader {
 .np-emblem, .np-menu, .np-close {
  position:absolute;
 }
-.menu-btn {
- padding-top:6px;
-}
 
 .menu-btn {
+ padding-top:6px;
  opacity:var(--sub-opacity);
  font-size:var(--small-icon-size)!important;
  line-height:var(--small-icon-size)!important;
@@ -2863,10 +2871,10 @@ div.v-subheader {
 }
 
 .file-dialog-select-list {
-  padding: 0px 16px 16px 16px;
-  height:600px;
-  max-height:calc((var(--vh, 1vh)*100) - 170px);
-  overflow:auto;
+ padding: 0px 16px 16px 16px;
+ height:600px;
+ max-height:calc((var(--vh, 1vh)*100) - 170px);
+ overflow:auto;
 }
 
 .file-dialog-select-list .v-treeview-node__label {

@@ -424,7 +424,7 @@ div.v-subheader {
 .detailed-sub .vue-recycle-scroller__item-view a,
 .detailed-sub .lms-list-item a,
 .indent-both .browse-html,
-.indent-list .browse-html {
+.indent-right .browse-html {
  padding-left:calc(71px + var(--home-button-size) - var(--jump-list-adjust)) !important;
 }
 
@@ -437,8 +437,14 @@ div.v-subheader {
 }
 
 .indent-both .lms-list-item a .v-avatar,
-.indent-list .lms-list-item a .v-avatar {
+.indent-right .lms-list-item a .v-avatar {
  margin-left:-2px;
+}
+
+.indent-right .vue-recycle-scroller__item-view a,
+.indent-right .lms-list-item a,
+.indent-right .browse-html {
+ padding-right:calc(71px + var(--home-button-size)) !important;
 }
 
 .indent-both .vue-recycle-scroller__item-view a,
@@ -448,12 +454,6 @@ div.v-subheader {
  padding-right:calc(171px + var(--home-button-size)) !important;
 }
 
-.indent-list .vue-recycle-scroller__item-view a,
-.indent-list .lms-list-item a,
-.indent-list .browse-html {
- padding-left:calc(171px + var(--home-button-size) - var(--jump-list-adjust)) !important;
-}
-
 .browse-html a,
 .detailed-sub .browse-html a,
 .indent-both .browse-html a {
@@ -461,7 +461,7 @@ div.v-subheader {
  padding-right:0px!important;
 }
 
-.indent-list .browse-html a {
+.indent-right .browse-html a {
  padding-left:0px!important;
 }
 
@@ -665,7 +665,7 @@ div.v-subheader {
 .detailed-sub .lms-list .emblem, .detailed-sub .lms-list-jump .emblem {
  left:calc(96px + var(--home-button-size)) - var(--jump-list-adjust);
 }
-.indent-list .lms-list .emblem, .indent-list .lms-list-jump .emblem,
+.indent-right .lms-list .emblem, .indent-right .lms-list-jump .emblem,
 .indent-both .lms-list .emblem, .indent-both .lms-list-jump .emblem {
  left:calc(192px + var(--home-button-size) - var(--jump-list-adjust));
 }

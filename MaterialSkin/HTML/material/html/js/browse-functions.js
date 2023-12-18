@@ -1190,10 +1190,10 @@ function browseItemAction(view, act, item, index, event) {
                 });
             }
         });
-    } else if (ADD_ALL_ACTION==act || INSERT_ALL_ACTION==act || PLAY_ALL_ACTION==act || PLAY_DISC_ACTION==act) {
+    } else if (ADD_ALL_ACTION==act || INSERT_ALL_ACTION==act || PLAY_ALL_ACTION==act || PLAY_DISC_ACTION==act || PLAY_SHUFFLE_ALL_ACTION==act) {
         if (view.current && item.id == view.current.id) { // Called from subtoolbar => act on all items
             if (view.allSongsItem) {
-                view.itemAction(ADD_ALL_ACTION==act ? ADD_ACTION : INSERT_ALL_ACTION==act ? INSERT_ACTION : PLAY_ACTION, view.allSongsItem);
+                view.itemAction(ADD_ALL_ACTION==act ? ADD_ACTION : INSERT_ALL_ACTION==act ? INSERT_ACTION : PLAY_SHUFFLE_ALL_ACTION==act ? PLAY_SHUFFLE_ACTION : PLAY_ACTION, view.allSongsItem);
             } else {
                 view.doList(view.items, act);
                 bus.$emit('showMessage', i18n("Adding tracks..."));
@@ -1335,14 +1335,8 @@ function browseItemAction(view, act, item, index, event) {
                             }
                         }
                         if (tracks.length>0) {
+                            view.doList(tracks, act);
                             bus.$emit('showMessage', i18n("Adding tracks..."));
-                            if (lmsOptions.playShuffle && (PLAY_ACTION==act || PLAY_SHUFFLE_ACTION==act)) {
-                                lmsCommand(view.playerId(), ['playlist', 'shuffle', PLAY_ACTION==act ? 0 : 1]).then(({data}) => {
-                                    view.doList(tracks, act);
-                                });
-                            } else {
-                                view.doList(tracks, act);
-                            }
                         }
                     }
                 });
@@ -2217,7 +2211,18 @@ function browseBuildFullCommand(view, item, act) {
 }
 
 function browseDoList(view, list, act, index) {
-    act = ADD_ALL_ACTION==act ? ADD_ACTION : PLAY_ALL_ACTION==act || PLAY_DISC_ACTION==act ? PLAY_ACTION : INSERT_ALL_ACTION==act ? INSERT_ACTION : act;
+    let setMode = lmsOptions.playShuffle ? PLAY_ALL_ACTION==act || PLAY_ACTION ? 0 : PLAY_SHUFFLE_ACTION==act || PLAY_SHUFFLE_ALL_ACTION==act ? 1 : undefined : undefined;
+    if (undefined==setMode) {
+        browseDoListAction(view, list, act, index);
+    } else {
+        lmsCommand(view.playerId(), ['playlist', 'shuffle', setMode]).then(({data}) => {
+            browseDoListAction(view, list, act, index);
+        });
+    }
+}
+
+function browseDoListAction(view, list, act, index) {
+    act = ADD_ALL_ACTION==act ? ADD_ACTION : PLAY_ALL_ACTION==act || PLAY_DISC_ACTION==act || PLAY_SHUFFLE_ACTION==act || PLAY_SHUFFLE_ALL_ACTION==act ? PLAY_ACTION : INSERT_ALL_ACTION==act ? INSERT_ACTION : act;
     // Perform an action on a list of items. If these are tracks, then we can use 1 command...
     if (list[0].id.startsWith("track_id:")) {
         var ids="";

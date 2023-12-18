@@ -966,7 +966,7 @@ function parseBrowseResp(data, parent, options, cacheKey, parentCommand, parentG
                     let key = albumKeys[k];
                     let alist = albumGroups[key];
                     resp.items.push({title:releaseTypeHeader(key)+" ("+alist.length+")", id:FILTER_PREFIX+key, header:true,
-                                     menu:[PLAY_ALL_ACTION, INSERT_ALL_ACTION, ADD_ALL_ACTION], count:alist.length});
+                                     menu:[PLAY_ALL_ACTION, INSERT_ALL_ACTION, PLAY_SHUFFLE_ALL_ACTION, ADD_ALL_ACTION], count:alist.length});
                     // Create jump list
                     let start = resp.items.length;
                     let jl=[];
@@ -1259,7 +1259,7 @@ function parseBrowseResp(data, parent, options, cacheKey, parentCommand, parentG
                         resp.items.splice(groups[i][0]+i, 0,
                                           {title: groups[i][1], id:FILTER_PREFIX+i, header:true,
                                            subtitle: i18np("1 Track", "%1 Tracks", count), durationStr:formatSeconds(duration),
-                                           menu:[PLAY_ALL_ACTION, INSERT_ALL_ACTION, ADD_ALL_ACTION]});
+                                           menu:[PLAY_ALL_ACTION, INSERT_ALL_ACTION, PLAY_SHUFFLE_ALL_ACTION, ADD_ALL_ACTION]});
                     }
                     if (1==grouping) { // Grouped into albumns, so remove from subtitle
                         for (let i=0, loop=resp.items, len=loop.length; i<len; ++i) {
@@ -1359,7 +1359,7 @@ function parseBrowseResp(data, parent, options, cacheKey, parentCommand, parentG
                     resp.items.splice(disc.pos+d, 0,
                                        {title: lmsOptions.commentAsDiscTitle && title ? title : i18n("Disc %1", k), jump:disc.pos+d,
                                         subtitle: i18np("1 Track", "%1 Tracks", disc.total), durationStr:formatSeconds(disc.duration),
-                                        id:FILTER_PREFIX+k, header:true, menu:[PLAY_ALL_ACTION, INSERT_ALL_ACTION, ADD_ALL_ACTION]});
+                                        id:FILTER_PREFIX+k, header:true, menu:[PLAY_ALL_ACTION, INSERT_ALL_ACTION, PLAY_SHUFFLE_ALL_ACTION, ADD_ALL_ACTION]});
                     d++;
                 }
             } else if (1==discs.size) {

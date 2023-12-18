@@ -19,7 +19,7 @@
 16. Fix 'All songs' listings.
 17. On iOS monitor fullscreen/standalone changes to determine when to add
     bottom nav padding.
-18. Add 'Maskable' web-app icon.
+18. Add 'maskable' web-app icon.
 
 4.1.0
 -----

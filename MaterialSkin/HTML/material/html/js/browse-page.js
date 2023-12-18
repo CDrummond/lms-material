@@ -174,7 +174,7 @@ var lmsBrowse = Vue.component("lms-browse", {
      </v-list-tile-content>
 
      <v-list-tile-action v-if="undefined!=item.durationStr" class="browse-time">{{item.durationStr}}</v-list-tile-action>
-     <v-list-tile-action class="browse-action" v-if="(!item.durationStr || selection.size>0) && (undefined!=item.stdItem || (item.menu && item.menu.length>0))">
+     <v-list-tile-action class="browse-action" v-if="undefined!=item.stdItem || (item.menu && item.menu.length>0)">
       <div class="menu-btn grid-btn list-btn hover-btn" @click.stop="itemMenu(item, index, $event)" :title="i18n('%1 (Menu)', stripLinkTags(item.title))"></div>
      </v-list-tile-action>
      <div v-if="hoverBtns && 0==selection.size && (undefined!=item.stdItem || (item.menu && (item.menu[0]==PLAY_ACTION || item.menu[0]==PLAY_ALL_ACTION)))" class="list-btns">
@@ -206,7 +206,7 @@ var lmsBrowse = Vue.component("lms-browse", {
       <v-list-tile-sub-title v-if="item.subtitle && !item.hidesub">{{item.subtitle}}</v-list-tile-sub-title>
      </v-list-tile-content>
      <v-list-tile-action v-if="undefined!=item.durationStr" class="browse-time">{{item.durationStr}}</v-list-tile-action>
-     <v-list-tile-action class="browse-action" v-if="(!item.durationStr || selection.size>0) && (undefined!=item.stdItem || (item.menu && item.menu.length>0))" :title="i18n('%1 (Menu)', stripLinkTags(item.title))">
+     <v-list-tile-action class="browse-action" v-if="undefined!=item.stdItem || (item.menu && item.menu.length>0)" :title="i18n('%1 (Menu)', stripLinkTags(item.title))">
       <div class="menu-btn grid-btn list-btn hover-btn" @click.stop="itemMenu(item, index, $event)" :title="i18n('%1 (Menu)', stripLinkTags(item.title))"></div>
      </v-list-tile-action>
      <div v-if="hoverBtns && 0==selection.size && (undefined!=item.stdItem || (item.menu && (item.menu[0]==PLAY_ACTION || item.menu[0]==PLAY_ALL_ACTION)))" class="list-btns">

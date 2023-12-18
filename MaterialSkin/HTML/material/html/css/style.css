@@ -1692,7 +1692,7 @@ progress {
  position:fixed;
  top:0px;
  left:72px;
- width:calc(100% - 72px);
+ width:calc(100% - 76px);
  font-weight:var(--bold-weight);
  padding-top:7px;
  padding-bottom:3px;

@@ -2653,8 +2653,14 @@ div.v-subheader {
  line-height:var(--small-icon-size)!important;
 }
 
+#browse-view .lms-list .menu-btn,
+.lms-list3 .menu-btn,
 .pq-albumstyle .menu-btn {
  padding-top:4px;
+}
+
+#browse-view .lms-image-grid .menu-btn {
+ padding-top:6px;
 }
 
 .list-btn {

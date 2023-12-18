@@ -9,7 +9,7 @@
 Vue.use(VueLazyload, {error:DEFAULT_COVER});
 
 let prevBottomNavPad = 0;
-function setIOSPad() {
+function setBottomNavPad() {
     let val = queryParams.addpad || window.matchMedia('(display-mode: standalone)').matches || window.matchMedia('(display-mode: fullscreen)').matches ? 12 : 0;
     if (val!=prevBottomNavPad) {
         document.documentElement.style.setProperty('--bottom-nav-pad', val+'px');
@@ -41,7 +41,7 @@ var app = new Vue({
             document.getElementsByTagName("body")[0].classList.add("msk-is-non-touch");
         }
         if (queryParams.addpad || IS_IOS) {
-            setIOSPad();
+            setBottomNavPad();
         }
         this.autoLayout = true;
         this.$store.commit('initUiSettings');
@@ -318,14 +318,14 @@ var app = new Vue({
         if (IS_IOS && !queryParams.addpad) {
             try {
                 window.matchMedia('(display-mode: fullscreen)').addEventListener('change', () => {
-                    setIOSPad();
+                    setBottomNavPad();
                 }, false);
             } catch (e) {
                 // Old WebKit on iOS?
             }
             try {
                 window.matchMedia('(display-mode: standalone)').addEventListener('change', () => {
-                    setIOSPad();
+                    setBottomNavPad();
                 }, false);
             } catch (e) {
                 // Old WebKit on iOS?

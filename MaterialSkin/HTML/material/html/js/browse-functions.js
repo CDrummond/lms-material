@@ -464,10 +464,14 @@ function browseHandleListResponse(view, item, command, resp, prevPage, appendIte
         if (resp.canUseGrid && !resp.forceGrid) {
             view.currentActions.push({action:(view.grid.use ? USE_LIST_ACTION : USE_GRID_ACTION), weight:0});
         }
+        if (undefined==item.stdItem && undefined!=item.menu && item.menu[0]==PLAY_ACTION && lmsOptions.playShuffle && view.items.length>1) {
+            view.currentActions.push({action:INSERT_ACTION, weight:2});
+            view.currentActions.push({action:PLAY_SHUFFLE_ACTION, weight:3});
+        }
         if (resp.isMusicMix || (("albums"==command.command[0] && view.items.length>0 && command.params.find(elem => elem=="sort:random")))) {
             view.currentActions.push({action:RELOAD_ACTION, weight:1});
             if (resp.isMusicMix && !queryParams.party) {
-                view.currentActions.push({action:ADD_TO_PLAYLIST_ACTION, weight:1});
+                view.currentActions.push({action:ADD_TO_PLAYLIST_ACTION, weight:10});
             }
         }
         if (canAddAlbumSort && view.command.command.length>0 && view.command.command[0]=="albums" && view.items.length>0) {
@@ -484,7 +488,7 @@ function browseHandleListResponse(view, item, command, resp, prevPage, appendIte
                 view.currentActions.push({action:ALBUM_SORTS_ACTION, weight:1});
             }
         } else if ((view.current.stdItem==STD_ITEM_ALL_TRACKS || view.current.stdItem==STD_ITEM_COMPOSITION_TRACKS) && view.command.command.length>0 && view.command.command[0]=="tracks" && view.items.length>0) {
-            view.currentActions.push({action:TRACK_SORTS_ACTION, weight:1});
+            view.currentActions.push({action:TRACK_SORTS_ACTION, weight:10});
         }
         view.currentActions.sort(function(a, b) { return a.weight!=b.weight ? a.weight<b.weight ? -1 : 1 : titleSort(a, b) });
 

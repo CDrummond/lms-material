@@ -434,7 +434,14 @@ function selectChanged() {
     iframeActionCheck();
 }
 
-function hideClassicSkinElems(page, textCol) {
+function copyVar(iframe, name) {
+    let v = getComputedStyle(document.documentElement).getPropertyValue(name);
+    if (undefined!=v) {
+        iframe.contentWindow.document.documentElement.style.setProperty(name, v);
+    }
+}
+
+function applyModifications(page, textCol) {
     if (!page) {
         return;
     }
@@ -447,6 +454,9 @@ function hideClassicSkinElems(page, textCol) {
             return;
         }
 
+        copyVar(iframe, '--primary-color');
+        copyVar(iframe, '--accent-color');
+        copyVar(iframe, '--pq-current-color');
         content.documentElement.getElementsByTagName("body")[0].classList.add(IS_MOBILE ? "msk-is-touch" : "msk-is-non-touch");
         fixClassicSkinRefs(content);
         remapClassicSkinIcons(content, textCol);
@@ -600,7 +610,7 @@ Vue.component('lms-iframe-dialog', {
    </v-card-title>
    <v-card-text class="embedded-page">
     <div v-if="!loaded" style="width:100%;padding-top:64px;display:flex;justify-content:center;font-size:18px">{{i18n('Loading...')}}</div>
-    <iframe id="embeddedIframe" v-on:load="hideClassicSkinElems(page, textCol)" :src="src" frameborder="0" v-bind:class="{'iframe-text':'other'==page}"></iframe>
+    <iframe id="embeddedIframe" v-on:load="applyModifications(page, textCol)" :src="src" frameborder="0" v-bind:class="{'iframe-text':'other'==page}"></iframe>
    </v-card-text>
   </v-card>
  </v-dialog>

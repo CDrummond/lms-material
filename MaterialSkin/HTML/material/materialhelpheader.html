@@ -35,6 +35,9 @@
     if (col.startsWith("user:")) {
       document.querySelector("link[href='[% webroot %]html/css/colors/blue.css?r=MATERIAL_VERSION']").href = "/material/usercolor/" + col.substring(5) + "?r=MATERIAL_VERSION";
     } else {
+     if (col=='from-cover') {
+      col='bluegrey';
+     }
      document.querySelector("link[href='[% webroot %]html/css/colors/blue.css?r=MATERIAL_VERSION']").href = "[% webroot %]html/css/colors/"+col+".css?r=MATERIAL_VERSION";
     }
   }

@@ -1065,7 +1065,6 @@ function parseBrowseResp(data, parent, options, cacheKey, parentCommand, parentG
             let compilationAlbumArtist = undefined;
             let extraSubs = [];
             let browseContext = getLocalStorageBool('browseContext', false);
-
             for (let idx=0, loop=data.result.titles_loop, loopLen=loop.length; idx<loopLen; ++idx) {
                 let i = loop[idx];
                 let title = i.title;
@@ -1186,15 +1185,17 @@ function parseBrowseResp(data, parent, options, cacheKey, parentCommand, parentG
                               disc: i.disc ? parseInt(i.disc) : undefined,
                               year: (sortTracks || 1==grouping) && i.year ? parseInt(i.year) : undefined,
                               album: sortTracks || isSearchResult || 1==grouping ? i.album : undefined,
-                              artist: isSearchResult || 2==sortTracks || 3==grouping ? i.artist : undefined,
+                              artist: isSearchResult || 2==sortTracks || 3==grouping ? getArtist(i) : undefined,
                               album_id: isSearchResult ? i.album_id : undefined,
                               artist_id: isSearchResult ? i.artist_id : undefined,
                               url: i.url,
                               draggable: true,
                               duration: i.duration,
                               durationStr: duration>0 ? formatSeconds(duration) : undefined,
-                              highlight: highlight
+                              highlight: highlight,
+                              idx: idx
                           });
+
                 if (highlight) {
                     highlighted++;
                 }
@@ -1293,17 +1294,17 @@ function parseBrowseResp(data, parent, options, cacheKey, parentCommand, parentG
                 }
                 if (showArtists) {
                     let lastHeader = 0;
-                    for (let i=0, j=0, loop=resp.items, len=loop.length; i<len; ++i) {
-                        if (loop[i].header) {
+                    for (let i=0, loop=resp.items, len=loop.length; i<len; ++i) {
+                        let item = loop[i];
+                        if (item.header) {
                             lastHeader = i;
                         } else {
-                            if (undefined!=artists[j] && (3!=grouping || stripLinkTags(artists[j])!=loop[lastHeader].title)) {
-                                loop[i].subtitle = undefined==loop[i].subtitle ? artists[j] : (artists[j] + SEPARATOR + loop[i].subtitle);
+                            if (undefined!=artists[item.idx] && (3!=grouping || stripLinkTags(artists[item.idx])!=loop[lastHeader].title)) {
+                                item.subtitle = undefined==item.subtitle ? artists[item.idx] : (artists[item.idx] + SEPARATOR + item.subtitle);
                                 if (browseContext) {
-                                    loop[i].subtitleContext = undefined==loop[i].subtitleContext ? artistsWithContext[j] : (artistsWithContext[j] + " " + loop[i].subtitleContext);
+                                    item.subtitleContext = undefined==item.subtitleContext ? artistsWithContext[item.idx] : (artistsWithContext[item.idx] + " " + item.subtitleContext);
                                 }
                             }
-                            j++;
                         }
                     }
                 }
@@ -1316,15 +1317,15 @@ function parseBrowseResp(data, parent, options, cacheKey, parentCommand, parentG
                     }
                 }
             }
-            for (let i=0, j=0, loop=resp.items, len=loop.length; i<len; ++i) {
-                if (!loop[i].header) {
-                    if (undefined!=extraSubs[j]) {
-                        loop[i].subtitle = undefined==loop[i].subtitle ? extraSubs[j] : (loop[i].subtitle + SEPARATOR + extraSubs[j]);
+            for (let i=0, loop=resp.items, len=loop.length; i<len; ++i) {
+                let item = loop[i];
+                if (!item.header) {
+                    if (undefined!=extraSubs[item.idx]) {
+                        item.subtitle = undefined==item.subtitle ? extraSubs[item.idx] : (item.subtitle + SEPARATOR + extraSubs[item.idx]);
                         if (browseContext) {
-                            loop[i].subtitleContext = undefined==loop[i].subtitleContext ? extraSubs[j] : (loop[i].subtitleContext + SEPARATOR + extraSubs[j]);
+                            item.subtitleContext = undefined==item.subtitleContext ? extraSubs[item.idx] : (item.subtitleContext + SEPARATOR + extraSubs[item.idx]);
                         }
                     }
-                    j++;
                 }
             }
             // Don't hightlight all tracks! Happens with VA albums...

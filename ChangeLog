@@ -18,6 +18,7 @@
 14. Fix total track count for multi-disc albums.
 15. Copy accent colour, etc. into 'Server settings' iframe.
 16. Add sort action to 'All songs' when navigate from 'Years' or 'Genres'
+17. Fix 'All songs' listings.
 
 4.1.0
 -----

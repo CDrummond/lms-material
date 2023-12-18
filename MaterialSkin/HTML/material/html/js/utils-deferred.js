@@ -383,6 +383,28 @@ function setTrackSort(sort, reverse, stdItem) {
     setLocalStorageVal(stdItem==STD_ITEM_COMPOSITION_TRACKS ? "compositionTrackSort" : "trackSort", sort+(reverse ? ".r" : ""));
 }
 
+function getArtist(i) {
+    if (i.artist) {
+        return i.artist;
+    }
+    if (i.trackartist) {
+        return i.trackartist;
+    }
+    if (i.albumartist) {
+        return i.albumartist;
+    }
+    if (i.band) {
+        return i.band;
+    }
+    if (i.composer) {
+        return i.composer;
+    }
+    if (i.conductor) {
+        return i.conductor;
+    }
+    return undefined;
+}
+
 function albumTrackSort(a, b) {
     var s = fixedSort(a.album, b.album);
     if (s!=0) {
@@ -437,7 +459,7 @@ function removeTrackNum(s) {
 }
 
 function artistTitleSort(a, b) {
-    let s = fixedSort(a.trackartist ? a.trackartist : a.artist, b.trackartist ? b.trackartist : b.artist);
+    let s = fixedSort(getArtist(a), getArtist(b));
     if (s!=0) {
         return s;
     }

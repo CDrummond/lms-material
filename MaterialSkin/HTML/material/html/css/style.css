@@ -2626,7 +2626,7 @@ div.v-subheader {
  padding-top:4px;
 }
 
-.grid-btn {
+.grid-btn:not(.check-btn):not(.add-btn):not(.play-btn) {
  padding-top:6px;
 }
 .np-emblem {

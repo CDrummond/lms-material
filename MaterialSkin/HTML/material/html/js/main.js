@@ -8,6 +8,15 @@
 
 Vue.use(VueLazyload, {error:DEFAULT_COVER});
 
+let prevBottomNavPad = 0;
+function setIOSPad() {
+    let val = queryParams.addpad || window.matchMedia('(display-mode: standalone)').matches || window.matchMedia('(display-mode: fullscreen)').matches ? 12 : 0;
+    if (val!=prevBottomNavPad) {
+        document.documentElement.style.setProperty('--bottom-nav-pad', val+'px');
+        prevBottomNavPad = val;
+    }
+}
+
 var app = new Vue({
     el: '#app',
     data() {
@@ -31,8 +40,8 @@ var app = new Vue({
         } else {
             document.getElementsByTagName("body")[0].classList.add("msk-is-non-touch");
         }
-        if (queryParams.addpad || (IS_IOS && (window.matchMedia('(display-mode: standalone)').matches || window.matchMedia('(display-mode: fullscreen)').matches))) {
-            document.documentElement.style.setProperty('--bottom-nav-pad', '12px');
+        if (queryParams.addpad || IS_IOS) {
+            setIOSPad();
         }
         this.autoLayout = true;
         this.$store.commit('initUiSettings');
@@ -306,6 +315,22 @@ var app = new Vue({
         } catch (e) {
             // Old WebKit on iOS?
         }
+        if (IS_IOS && !queryParams.addpad) {
+            try {
+                window.matchMedia('(display-mode: fullscreen)').addEventListener('change', () => {
+                    setIOSPad();
+                }, false);
+            } catch (e) {
+                // Old WebKit on iOS?
+            }
+            try {
+                window.matchMedia('(display-mode: standalone)').addEventListener('change', () => {
+                    setIOSPad();
+                }, false);
+            } catch (e) {
+                // Old WebKit on iOS?
+            }
+        }
 
         bindKey('backspace');
         bus.$on('keyboard', function(key, modifier) {
@@ -570,4 +595,3 @@ var app = new Vue({
     store,
     lmsServer
 })
-

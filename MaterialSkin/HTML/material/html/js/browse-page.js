@@ -18,8 +18,8 @@ const JUMP_LIST_WIDTH = 32;
 var lmsBrowse = Vue.component("lms-browse", {
     template: `
 <div id="browse-view" v-bind:class="{'detailed-sub':showDetailedSubtoolbar, 'indent-both':showDetailedSubtoolbar && wide>2 && desktopLayout && !pinQueue, 'indent-list':showDetailedSubtoolbar && wide==2 && desktopLayout && !pinQueue}">
- <div class="noselect" v-bind:class="{'subtoolbar-cover':showDetailedSubtoolbar}">
- <div class="subtoolbar" v-bind:class="{'toolbar-blur':showDetailedSubtoolbar}">
+ <div class="noselect" v-bind:class="{'subtoolbar-cover':showDetailedSubtoolbar && drawBgndImage}">
+ <div class="subtoolbar" v-bind:class="{'toolbar-blur':showDetailedSubtoolbar && drawBgndImage}">
   <v-layout v-if="selection.size>0">
    <div class="toolbar-nobtn-pad"></div>
    <v-layout row wrap>

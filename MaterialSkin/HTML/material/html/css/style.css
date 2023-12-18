@@ -2675,6 +2675,10 @@ div.v-subheader {
  right:calc(220px + var(--home-button-size))!important;
 }
 
+.indent-right .list-btns {
+ right:calc(120px + var(--home-button-size))!important;
+}
+
 .indent-both .lms-image-grid .list-btns {
  right:24px !important;
 }

@@ -1599,6 +1599,7 @@ sub _iconHandler {
     my $icon = "icon.png";
     my $iconPath = '';
     if (index($ua, 'iPad') != -1 || index($ua, 'iPhone') != -1 || index($ua, 'MobileSafari') != -1 ||
+        index($ua, 'SafariViewService') != -1 ||
        # Detect iPadOS??? https://forums.developer.apple.com/thread/119186
        (index($ua, 'Macintosh') != -1 && index($ua, '(KHTML, like Gecko) Version') != -1)) {
         $icon ="icon-ios.png";
@@ -1650,7 +1651,7 @@ sub _manifestHandler {
     my $filePath = dirname(__FILE__) . "/HTML/material/html/material.webmanifest";
     my $manifest = read_file($filePath);
     my $query = $request->uri()->query();
-    my $iOS = index($ua, 'iPad') != -1 || index($ua, 'iPhone') != -1 || index($ua, 'MobileSafari') != -1 || (index($ua, 'Macintosh') != -1 && index($ua, '(KHTML, like Gecko) Version') != -1);
+    my $iOS = index($ua, 'iPad') != -1 || index($ua, 'iPhone') != -1 || index($ua, 'SafariViewService') != -1 || index($ua, 'MobileSafari') != -1 || (index($ua, 'Macintosh') != -1 && index($ua, '(KHTML, like Gecko) Version') != -1);
     my $urlChanged = 0;
 
     if (defined $request->{_headers}->{'referer'}) {

@@ -19,8 +19,11 @@ function setBottomNavPad() {
 
 let prevWindowArea={l:0, r:0};
 function setWindowArea() {
-    let rect = window.navigator.windowControlsOverlay.getTitlebarAreaRect();
-    if (undefined===rect) {
+    let rect = undefined;
+    try {
+        rect = window.navigator.windowControlsOverlay.getTitlebarAreaRect();
+    } catch (e) {}
+    if (undefined==rect) {
         return;
     }
     let left = rect.y;
@@ -33,6 +36,13 @@ function setWindowArea() {
         document.documentElement.style.setProperty('--window-area-left', left+'px');
         document.documentElement.style.setProperty('--window-area-right', right+'px');
         document.documentElement.style.setProperty('--window-controls-space', right+'px');
+    }
+}
+
+function initWindowArea(attempts) {
+    setWindowArea();
+    if (prevWindowArea.r>250 && attempts<20) {
+        setTimeout(function() {initWindowArea(attempts+1)}, 250);
     }
 }
 
@@ -63,7 +73,7 @@ var app = new Vue({
             setBottomNavPad();
         }
         if (undefined!=window.navigator && undefined!=window.navigator.windowControlsOverlay) {
-            setWindowArea();
+            initWindowArea(0);
         }
         this.autoLayout = true;
         this.$store.commit('initUiSettings');

@@ -24,6 +24,7 @@ Vue.component('lms-toolbar', {
     template: `
 <div style="z-index:2"> <!-- Prevent np-cover leak -->
 <v-toolbar fixed dense app class="lms-toolbar noselect" v-bind:class="{'lms-toolbar-no-menu':connected && !showMenuButton}" @mousedown="mouseDown" id="main-toolbar">
+<div class="drag-area-left"></div>
 <div v-if="showClock" class="toolbar-clock">
  <div class="maintoolbar-title">{{time}}</div>
  <div class="maintoolbar-subtitle subtext">{{date}}</div>
@@ -83,7 +84,7 @@ Vue.component('lms-toolbar', {
    </v-list-tile>
   </v-list>
  </v-menu>
- <v-spacer></v-spacer>
+ <v-spacer class="drag-area"></v-spacer>
  <div v-if="updateProgress.show && showUpdateProgress && downloadCount<=0" class="ellipsis subtext">{{updateProgress.text}}</div>
  <v-btn v-if="downloadCount>0" icon flat @click="bus.$emit('dlg.open', 'downloadstatus')" :title="trans.downloading"><v-icon class="pulse">cloud_download</v-icon></v-btn>
  <v-btn v-else-if="updateProgress.show" icon flat @click="bus.$emit('showMessage', updateProgress.text)" :title="updateProgress.text"><v-icon class="pulse">update</v-icon></v-btn>
@@ -166,6 +167,7 @@ Vue.component('lms-toolbar', {
  <v-btn v-else-if="!connected" icon :title="trans.connectionLost" @click.native="bus.$emit('showError', undefined, trans.connectionLost)">
   <v-icon class="red">error</v-icon>
  </v-btn>
+ <div class="drag-area-right"></div>
  <lms-windowcontrols v-if="queryParams.nativeTitlebar"></lms-windowcontrols>
 </v-toolbar>
 <v-snackbar style="z-index:3" v-model="snackbar.show" :multi-line="true" :timeout="snackbar.timeout ? snackbar.timeout : 2500" :color="snackbar.color" top>{{ snackbar.msg }}</v-snackbar>

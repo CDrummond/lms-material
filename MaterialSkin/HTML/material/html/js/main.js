@@ -17,6 +17,25 @@ function setBottomNavPad() {
     }
 }
 
+let prevWindowArea={l:0, r:0};
+function setWindowArea() {
+    let rect = window.navigator.windowControlsOverlay.getTitlebarAreaRect();
+    if (undefined===rect) {
+        return;
+    }
+    let left = rect.y;
+    let right = rect.width<=0 ? 0 : ((window.innerWidth - (left+rect.width)) - 12);
+    if (left<0 || right<0) {
+        return;
+    }
+    if (left!=prevWindowArea.l || right!=prevWindowArea.r) {
+        prevWindowArea={l:left, r:right};
+        document.documentElement.style.setProperty('--window-area-left', left+'px');
+        document.documentElement.style.setProperty('--window-area-right', right+'px');
+        document.documentElement.style.setProperty('--window-controls-space', right+'px');
+    }
+}
+
 var app = new Vue({
     el: '#app',
     data() {
@@ -42,6 +61,9 @@ var app = new Vue({
         }
         if (queryParams.addpad || IS_IOS) {
             setBottomNavPad();
+        }
+        if (undefined!=window.navigator && undefined!=window.navigator.windowControlsOverlay) {
+            setWindowArea();
         }
         this.autoLayout = true;
         this.$store.commit('initUiSettings');
@@ -326,6 +348,15 @@ var app = new Vue({
             try {
                 window.matchMedia('(display-mode: standalone)').addEventListener('change', () => {
                     setBottomNavPad();
+                }, false);
+            } catch (e) {
+                // Old WebKit on iOS?
+            }
+        }
+        if (undefined!=window.navigator && undefined!=window.navigator.windowControlsOverlay) {
+            try {
+                window.matchMedia('(display-mode: window-controls-overlay)').addEventListener('change', () => {
+                    setWindowArea();
                 }, false);
             } catch (e) {
                 // Old WebKit on iOS?

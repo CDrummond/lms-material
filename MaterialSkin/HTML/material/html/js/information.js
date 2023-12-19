@@ -12,11 +12,13 @@ Vue.component('lms-information-dialog', {
  <v-card>
   <v-card-title class="settings-title">
    <v-toolbar app class="dialog-toolbar" @mousedown="mouseDown" id="information-toolbar">
+    <div class="drag-area-left"></div>
     <v-btn flat icon v-longpress:stop="close" :title="ttShortcutStr(i18n('Go back'), 'esc')"><v-icon>arrow_back</v-icon></v-btn>
     <v-toolbar-title>
      <div>{{i18n('Information')+(undefined==serverName ? "" : (SEPARATOR+serverName))}}</div>
     </v-toolbar-title>
-    <v-spacer></v-spacer><lms-windowcontrols v-if="queryParams.nativeTitlebar"></lms-windowcontrols>
+    <v-spacer class="drag-area"></v-spacer>
+    <lms-windowcontrols v-if="queryParams.nativeTitlebar"></lms-windowcontrols>
    </v-toolbar>
   </v-card-title>
   <div class="ios-vcard-text-workaround"><div class="infodetails" id="info-page">

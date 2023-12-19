@@ -15,11 +15,12 @@ Vue.component('lms-player-settings', {
   <v-card>
    <v-card-title class="settings-title">
     <v-toolbar app-data class="dialog-toolbar" @mousedown="mouseDown" id="playersettings-toolbar">
+     <div class="drag-area-left"></div>
      <v-btn flat icon v-longpress:stop="close" :title="ttShortcutStr(i18n('Go back'), 'esc')"><v-icon>arrow_back</v-icon></v-btn>
      <v-btn v-if="showHome && homeButton" flat icon @click="goHome" :title="ttShortcutStr(i18n('Go home'), 'home')"><v-icon>home</v-icon></v-btn>
      <v-toolbar-title v-if="numPlayers>1" @click="openPlayerMenu" class="pointer">{{TB_PLAYER_SETTINGS.title+SEPARATOR+playerName}}</v-toolbar-title>
      <v-toolbar-title v-else>{{TB_PLAYER_SETTINGS.title+SEPARATOR+playerName}}</v-toolbar-title>
-     <v-spacer></v-spacer>
+     <v-spacer class="drag-area"></v-spacer>
      <v-menu bottom left v-model="showMenu">
       <v-btn icon slot="activator"><v-icon>more_vert</v-icon></v-btn>
       <v-list>
@@ -56,6 +57,7 @@ Vue.component('lms-player-settings', {
        </v-list-tile>
       </v-list>
      </v-menu>
+     <div class="drag-area-right"></div>
      <lms-windowcontrols v-if="queryParams.nativeTitlebar"></lms-windowcontrols>
     </v-toolbar>
    </v-card-title>

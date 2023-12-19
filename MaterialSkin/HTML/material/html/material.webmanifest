@@ -1,10 +1,11 @@
 {
-  "name": "LMS Mobile UI",
+  "name": "LMS",
   "short_name": "LMS",
   "description": "A mobile-friendly Material-style interface for controlling Squeezebox-compatible network music players.",
   "theme_color": "#212121",
   "background_color": "#212121",
   "display": "standalone",
+  "display_override": ["window-controls-overlay"],
   "scope": "/material",
   "start_url": "/material",
   "icons": [

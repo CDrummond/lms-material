@@ -52,11 +52,13 @@
  --npbar-border-color:var(--bottom-toolbar-border-color);
  --album-separator-color:rgba(0, 0, 0, 0.2);
  --subtoolbar-image-url:url();
- --window-controls-space:0px;
  --home-button-size:0px;
  --pq-current-color:rgba(var(--highlight-rgb),0.2);
  --pq-current-album-color:rgba(var(--highlight-rgb),0.075);
  --drop-target-color:rgba(var(--highlight-rgb),0.5);
+ --window-controls-space:0px;
+ --window-area-left:0px;
+ --window-area-right:0px;
 }
 
 .theme--dark {
@@ -97,6 +99,18 @@
 
 .v-progress-linear__bar {
  height:unset!important;
+}
+
+.drag-area, .drag-area-left, .drag-area-right {
+ -webkit-app-region: drag;
+ app-region: drag;
+ height:100%;
+}
+.drag-area-left {
+ width:var(--window-area-left)!important;
+}
+.drag-area-right {
+ width:var(--window-area-right)!important;
 }
 
 .lms-toolbar .v-slider .primary {
@@ -247,7 +261,7 @@ html, .mini-player {
 .lms-toolbar > .v-toolbar__content, .dialog-toolbar > .v-toolbar__content {
  height:var(--main-toolbar-height) !important;
  margin-left:-10px !important;
- margin-right:-8px !important;
+ margin-right:-18px !important;
 }
 
 .lms-toolbar-no-menu > .v-toolbar__content {

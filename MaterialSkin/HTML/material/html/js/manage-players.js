@@ -79,10 +79,11 @@ Vue.component('lms-manage-players', {
  <v-card>
   <v-card-title class="settings-title">
    <v-toolbar app-data class="dialog-toolbar" @drop.native="drop(-1, $event)" @dragover.native="dragOver($event)" @mousedown="mouseDown" id="manageplayers-toolbar">
+    <div v-if="!draggingSyncedPlayer" class="drag-area-left"></div>
     <v-btn flat v-if="!draggingSyncedPlayer" icon v-longpress:stop="close" :title="ttShortcutStr(i18n('Go back'), 'esc')"><v-icon>arrow_back</v-icon></v-btn>
     <v-toolbar-title class="ellipsis" style="width:100%; text-align:center" v-if="draggingSyncedPlayer">{{i18n('Drop here to remove from group')}}</v-toolbar-title>
     <v-toolbar-title class="ellipsis" v-else>{{TB_MANAGE_PLAYERS.title}}</v-toolbar-title>
-    <v-spacer v-if="!draggingSyncedPlayer"></v-spacer>
+    <v-spacer v-if="!draggingSyncedPlayer" class="drag-area"></v-spacer>
     <v-menu v-if="!draggingSyncedPlayer" bottom left v-model="showMenu">
      <v-btn icon slot="activator"><v-icon>more_vert</v-icon></v-btn>
      <v-list>
@@ -96,6 +97,7 @@ Vue.component('lms-manage-players', {
       </v-list-tile>
      </v-list>
     </v-menu>
+    <div class="drag-area-right"></div>
     <lms-windowcontrols v-if="queryParams.nativeTitlebar"></lms-windowcontrols>
    </v-toolbar>
   </v-card-title>

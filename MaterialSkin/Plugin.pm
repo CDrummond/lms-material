@@ -1598,8 +1598,7 @@ sub _iconHandler {
         
     my $icon = "icon.png";
     my $iconPath = '';
-    if (index($ua, 'iPad') != -1 || index($ua, 'iPhone') != -1 || index($ua, 'MobileSafari') != -1 ||
-        index($ua, 'SafariViewService') != -1 ||
+    if (index($ua, 'iPad') != -1 || index($ua, 'iPhone') != -1 || index($ua, 'MobileSafari') != -1 || index($ua, 'SafariViewService') != -1 ||
        # Detect iPadOS??? https://forums.developer.apple.com/thread/119186
        (index($ua, 'Macintosh') != -1 && index($ua, '(KHTML, like Gecko) Version') != -1)) {
         $icon ="icon-ios.png";

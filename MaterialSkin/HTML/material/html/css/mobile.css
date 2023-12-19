@@ -364,7 +364,7 @@
 @media only screen and (max-width:540px) {
  .lms-toolbar > .v-toolbar__content {
   margin-left:-16px !important;
-  margin-right:-11px !important;
+  margin-right:-23px !important;
  }
 
  /* Adjust dialog toolbar, so that menu icon aligns with main menu icon */

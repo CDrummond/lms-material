@@ -206,6 +206,9 @@ Vue.component('lms-toolbar', {
                }
     },
     mounted() {
+        if (queryParams.nativeTitlebar) {
+            document.documentElement.style.setProperty('--drag-area-height', '0px');
+        }
         setTimeout(function () {
             this.width = Math.floor(window.innerWidth/50)*50;
             this.height = Math.floor(window.innerHeight/50)*50;

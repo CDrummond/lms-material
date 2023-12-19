@@ -57,6 +57,7 @@
  --pq-current-album-color:rgba(var(--highlight-rgb),0.075);
  --drop-target-color:rgba(var(--highlight-rgb),0.5);
  --window-controls-space:0px;
+ --drag-area-height:100%;
  --window-area-left:0px;
  --window-area-right:0px;
 }
@@ -104,7 +105,7 @@
 .drag-area, .drag-area-left, .drag-area-right {
  -webkit-app-region: drag;
  app-region: drag;
- height:100%;
+ height:var(--drag-area-height);
 }
 .drag-area-left {
  width:var(--window-area-left)!important;
@@ -3285,9 +3286,10 @@ div.v-subheader {
 }
 
 .wc {
- max-width:84px;
- min-width:84px;
+ max-width:92px;
+ min-width:92px;
  padding-left:4px;
+ padding-right:8px;
 }
 
 .wc-btn {

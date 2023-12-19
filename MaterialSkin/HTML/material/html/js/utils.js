@@ -894,7 +894,7 @@ function emitToolbarColors(top, bot, tries) {
         }
         let tc = document.querySelector('meta[name="theme-color"]');
         if (tc!=null) {
-            tc.setAttribute('content',  b);
+            tc.setAttribute('content',  t);
         }
         lastToolbarColors={top:t, bot:b};
         if (1==queryParams.nativeColors) {
@@ -912,7 +912,7 @@ function emitToolbarColors(top, bot, tries) {
 
 const FULLSCREEN_DIALOGS = new Set(["uisettings", "playersettings", "info", "iframe", "manage"]);
 function emitToolbarColorsFromState(state) {
-    if (0!=queryParams.nativeColors) {
+    if (0!=queryParams.nativeColors || COLOR_FROM_COVER==state.color) {
         let topColorVar = "--top-toolbar-color";
         let botColorVar = "--bottom-toolbar-color";
         for (var i=state.openDialogs.length; i>=0; --i) {

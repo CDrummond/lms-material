@@ -20,6 +20,7 @@
 17. On iOS monitor fullscreen/standalone changes to determine when to add
     bottom nav padding.
 18. Add 'maskable' web-app icon.
+19. Re-enable setting theme colour from cover on iOS.
 
 4.1.0
 -----

@@ -8,8 +8,7 @@
  6. Show search icon on search fields even for non-touch devices.
  7. Only apply larger left indent and right indent if queue is not pinned.
  8. If enabled, add 'Play shuffled' to context menus.
- 9. Attempt to detect iOS when manifest is asked for and serve iOS icon, and
-    change start URL to have '?addpad'
+ 9. Attempt to detect iOS when manifest is asked for and serve iOS icon,.
 10. Increase min-widths required for track list indentation.
 11. Fix 'Play shuffled' for multi-disc albums.
 12. Add 'Play shuffled' to section headers.
@@ -17,8 +16,7 @@
 14. Copy accent colour, etc. into 'Server settings' iframe.
 15. Add sort action to 'All songs' when navigate from 'Years' or 'Genres'.
 16. Fix 'All songs' listings.
-17. On iOS monitor fullscreen/standalone changes to determine when to add
-    bottom nav padding.
+17. Always add padding tp bottom navbar when run under iOS.
 18. Add 'maskable' web-app icon.
 19. Re-enable setting theme colour from cover on iOS.
 20. Add support for window controls overlay.

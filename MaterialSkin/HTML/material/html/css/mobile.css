@@ -228,13 +228,13 @@
  position:fixed;
  left:1px;
  bottom:calc(var(--bottom-toolbar-height) + 1px);
- height:44px;
- width:44px;
+ height:43px;
+ width:43px;
 }
 
 .np-bar-mob-thick .np-bar-image .np-cover {
- height:44px;
- width:44px;
+ height:43px;
+ width:43px;
 }
 
 .np-bar-mob-thick .v-list__tile__title {

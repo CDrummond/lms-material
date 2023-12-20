@@ -204,13 +204,13 @@
  position:fixed;
  left:162px;
  bottom:1px;
- height:65px;
- width:65px;
+ height:64px;
+ width:64px;
 }
 
 .np-bar-image .np-cover {
- height:65px;
- width:65px;
+ height:64px;
+ width:64px;
 }
 
 .np-bar-details div .v-list__tile {
@@ -261,12 +261,12 @@
   position:fixed;
   left:1px;
   bottom:1px;
-  height:44px;
-  width:44px;
+  height:43px;
+  width:43px;
  }
  .np-bar-image .np-cover {
-  height:44px;
-  width:44px;
+  height:43px;
+  width:43px;
  }
  .np-bar .np-playpause {
   position:fixed;

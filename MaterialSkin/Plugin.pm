@@ -1619,7 +1619,6 @@ sub _manifestHandler {
     my $manifest = read_file($filePath);
     my $query = $request->uri()->query();
     my $iOS = index($ua, 'iPad') != -1 || index($ua, 'iPhone') != -1 || index($ua, 'SafariViewService') != -1 || index($ua, 'MobileSafari') != -1 || (index($ua, 'Macintosh') != -1 && index($ua, '(KHTML, like Gecko) Version') != -1);
-    my $urlChanged = 0;
 
     if (defined $request->{_headers}->{'referer'}) {
         # See if we have any query params, if so add to start_url...
@@ -1628,14 +1627,10 @@ sub _manifestHandler {
         if ($queryPos !=-1) {
             my $query = substr($referer, $queryPos);
             $manifest =~ s/\"start_url\": \"\/material\"/\"start_url\": \"\/material\/$query\"/g;
-            $urlChanged = 1;
         }
     }
 
     if ($iOS) {
-        if (!$urlChanged) {
-            $manifest =~ s/\"start_url\": \"\/material\"/\"start_url\": \"\/material\/?addpad\"/g;
-        }
         $manifest =~ s/icon\.png/icon-ios\.png/g;
     }
 

@@ -51,7 +51,6 @@ my $SVG_URL_PARSER_RE = qr{material/svg/([a-z0-9-]+)}i;
 my $CSS_URL_PARSER_RE = qr{material/customcss/([a-z0-9-]+)}i;
 my $JS_URL_PARSER_RE = qr{material/custom.js}i;
 my $OTHER_JS_URL_PARSER_RE = qr{material/customjs/([a-z0-9-]+)}i;
-my $ICON_URL_PARSER_RE = qr{material/icon\.png}i;
 my $ACTIONS_URL_PARSER_RE = qr{material/customactions\.json}i;
 my $MAIFEST_URL_PARSER_RE = qr{material/material\.webmanifest}i;
 my $USER_THEME_URL_PARSER_RE = qr{material/usertheme/.+}i;
@@ -149,7 +148,6 @@ sub initPlugin {
         Slim::Web::Pages->addRawFunction($CSS_URL_PARSER_RE, \&_customCssHandler);
         Slim::Web::Pages->addRawFunction($JS_URL_PARSER_RE, \&_customJsHandler);
         Slim::Web::Pages->addRawFunction($OTHER_JS_URL_PARSER_RE, \&_customJsHandler);
-        Slim::Web::Pages->addRawFunction($ICON_URL_PARSER_RE, \&_iconHandler);
         Slim::Web::Pages->addRawFunction($ACTIONS_URL_PARSER_RE, \&_customActionsHandler);
         Slim::Web::Pages->addRawFunction($MAIFEST_URL_PARSER_RE, \&_manifestHandler);
         Slim::Web::Pages->addRawFunction($USER_THEME_URL_PARSER_RE, \&_userThemeHandler);
@@ -1589,36 +1587,6 @@ sub _customJsHandler{
     }
 }
 
-sub _iconHandler {
-    my ( $httpClient, $response ) = @_;
-    return unless $httpClient->connected;
-
-    my $request = $response->request;
-    my $ua = $request->header('user-agent');
-        
-    my $icon = "icon.png";
-    my $iconPath = '';
-    if (index($ua, 'iPad') != -1 || index($ua, 'iPhone') != -1 || index($ua, 'MobileSafari') != -1 || index($ua, 'SafariViewService') != -1 ||
-       # Detect iPadOS??? https://forums.developer.apple.com/thread/119186
-       (index($ua, 'Macintosh') != -1 && index($ua, '(KHTML, like Gecko) Version') != -1)) {
-        $icon ="icon-ios.png";
-        
-        my $prefPath = $prefs->get('iosIcon');
-        if ($prefPath && $prefPath ne '') {
-            $iconPath = $prefPath;
-        }
-    } else {
-        my $prefPath = $prefs->get('icon');
-        if ($prefPath && $prefPath ne '') {
-            $iconPath = $prefPath;
-        }
-    }
-
-    my $filePath = $iconPath ne '' ? $iconPath : dirname(__FILE__) . "/HTML/material/html/images/" . $icon;
-    $response->code(RC_OK);
-    Slim::Web::HTTP::sendStreamingFile( $httpClient, $response, "image/png", $filePath, '', 'noAttachment' );
-}
-
 sub _customActionsHandler {
     my ( $httpClient, $response ) = @_;
     return unless $httpClient->connected;
@@ -1664,8 +1632,11 @@ sub _manifestHandler {
         }
     }
 
-    if ($iOS && !$urlChanged) {
-        $manifest =~ s/\"start_url\": \"\/material\"/\"start_url\": \"\/material\/?addpad\"/g;
+    if ($iOS) {
+        if (!$urlChanged) {
+            $manifest =~ s/\"start_url\": \"\/material\"/\"start_url\": \"\/material\/?addpad\"/g;
+        }
+        $manifest =~ s/icon\.png/icon-ios\.png/g;
     }
 
     my $themeColor = "000000";

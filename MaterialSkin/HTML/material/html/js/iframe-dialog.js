@@ -745,6 +745,9 @@ Vue.component('lms-iframe-dialog', {
             this.history=[];
             iframeInfo.content=undefined;
             bus.$emit('iframeClosed', this.isPlayer);
+            if (this.page=='server') {
+                bus.$emit('checkForUpdates');
+            }
         },
         i18n(str, arg) {
             if (this.show) {

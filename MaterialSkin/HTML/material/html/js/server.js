@@ -880,6 +880,9 @@ var lmsServer = Vue.component('lms-server', {
         bus.$on('lockChanged', function() {
             this.checkPluginUpdates();
         }.bind(this));
+        bus.$on('checkForUpdates', function() {
+            this.checkPluginUpdates();
+        }.bind(this));
         bus.$on('refreshStatus', function(id) {
             var player = id ? id : (this.$store.state.player ? this.$store.state.player.id : undefined);
             if (player) {

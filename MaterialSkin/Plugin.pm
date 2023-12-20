@@ -1664,11 +1664,8 @@ sub _manifestHandler {
         }
     }
 
-    if ($iOS) {
-        if (!$urlChanged) {
-            $manifest =~ s/\"start_url\": \"\/material\"/\"start_url\": \"\/material\/?addpad\"/g;
-        }
-        $manifest =~ s/icon\.png/icon-ios\.png/g;
+    if ($iOS && !$urlChanged) {
+        $manifest =~ s/\"start_url\": \"\/material\"/\"start_url\": \"\/material\/?addpad\"/g;
     }
 
     my $themeColor = "000000";

@@ -1698,11 +1698,11 @@ sub _manifestHandler {
 
     my $title = $prefs->get('windowTitle');
     if ($title && $title ne '') {
-        $manifest =~ s/\"LMS Mobile UI\"/\"${title}\"/g;
+        $manifest =~ s/\"name\": \".+\"/\"text\": \"${title}\"/g;
     }
     my $shortTitle = $prefs->get('shortTitle');
     if ($shortTitle && $shortTitle ne '') {
-        $manifest =~ s/\"LMS\"/\"${shortTitle}\"/g;
+        $manifest =~ s/\"short_name\": \".+\"/\"text\": \"${shortTitle}\"/g;
     }
 
     $response->code(RC_OK);

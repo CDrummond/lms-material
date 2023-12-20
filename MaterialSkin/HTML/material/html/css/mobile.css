@@ -243,7 +243,7 @@
 }
 
 .np-bar-slider {
- bottom:calc((var(--bottom-toolbar-height) + var(--mobile-npbar-height)) - 2px);
+ bottom:calc((var(--bottom-toolbar-height) + var(--mobile-npbar-height)) - 3.5px);
  width:100vw;
  height:3px !important;
  background-color:var(--sub-toolbar-color) !important;

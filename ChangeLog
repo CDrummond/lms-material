@@ -20,6 +20,7 @@
 18. Add 'maskable' web-app icon.
 19. Re-enable setting theme colour from cover on iOS.
 20. Add support for window controls overlay.
+21. Work-around 'glowing' progressbar with some zoom levels.
 
 4.1.0
 -----

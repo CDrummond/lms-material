@@ -591,7 +591,7 @@ div.v-subheader {
 }
 
 .image-grid-with-sub .image-grid-btn, .image-grid-with-sub .image-grid-btn:hover {
- bottom:33px !important;
+ bottom:31px !important;
 }
 
 .grid-no-subtitle {
@@ -2672,10 +2672,6 @@ div.v-subheader {
 .lms-list3 .menu-btn,
 .pq-albumstyle .menu-btn {
  padding-top:4px;
-}
-
-#browse-view .lms-image-grid .menu-btn {
- padding-top:6px;
 }
 
 .list-btn {

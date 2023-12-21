@@ -489,7 +489,7 @@ const store = new Vuex.Store({
                 let key = boolItems[i];
                 state[key] = getLocalStorageBool(key, state[key]);
             }
-            let intItems = ['skipSeconds', 'mobileBar', 'maxRating'];
+            let intItems = ['skipSeconds', 'mobileBar', 'maxRating', 'volumeStep'];
             for (let i=0, len=intItems.length; i<len; ++i) {
                 let key = intItems[i];
                 state[key] = parseInt(getLocalStorageVal(key, state[key]));

@@ -100,7 +100,7 @@ function parseResp(data, showTrackNum, index, showRatings, queueAlbumStyle, queu
                 let addedClass = false;
                 let haveRating = showRatings && undefined!=i.rating;
                 if (queueAlbumStyle) {
-                    let artist = undefined!=i.trackartist && undefined!=i.trackartist_id ? i.trackartist : i.artist;
+                    let artist = i.albumartist ? i.albumartist : i.artist ? i.artist : i.trackartist;
                     let extra = buildArtistLine(i, 'queue', false, artist);
                     if (!isEmpty(extra)) {
                         title+='<obj class="subtext">'+SEPARATOR+extra;
@@ -444,7 +444,7 @@ var lmsQueue = Vue.component("lms-queue", {
                     }
                     let addedClass = false;
                     if (this.albumStyle) {
-                        let artist = undefined!=i.trackartist && undefined!=i.trackartist_id ? i.trackartist : i.artist;
+                        let artist = i.albumartist ? i.albumartist : i.artist ? i.artist : i.trackartist;
                         let extra = buildArtistLine(i, 'queue', false, artist);
                         if (!isEmpty(extra)) {
                             title+='<obj class="subtext">'+SEPARATOR+extra;

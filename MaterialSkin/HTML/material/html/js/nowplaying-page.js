@@ -452,12 +452,15 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
             }
         }.bind(this));
         bus.$on('swipeUp', function() {
+            if (this.$store.state.desktopLayout && !this.$store.state.pinQueue && this.$store.state.showQueue) {
+                return;
+            }
             if ((this.largeView || !this.$store.state.desktopLayout) && !this.info.show) {
                 bus.$emit('info');
             }
         }.bind(this));
         bus.$on('swipeDown', function() {
-            if (this.largeView && this.$store.state.desktopLayout) {
+            if (this.largeView && this.$store.state.desktopLayout && (this.$store.state.pinQueue || !this.$store.state.showQueue)) {
                 this.largeView=false;
             }
         }.bind(this));

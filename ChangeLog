@@ -23,6 +23,7 @@
 21. Check for updates each time 'Server settings' is closed.
 22. Check for 'safe-area-inset-bottom' on iOS to determine if padding should
     be added.
+23. Ignore some swipes when un-pinned queue is shown.
 
 4.1.0
 -----

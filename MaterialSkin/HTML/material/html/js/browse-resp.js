@@ -11,10 +11,12 @@ const MIXER_APPS = new Set(["musicip", "blissmixer", "musicsimilarity"]);
 const STREAM_SCHEMAS = new Set(["http", "https", "wavin"]);
 const HIDE_APPS_FOR_PARTY = new Set(["apps.accuradio", "apps.ardaudiothek", "apps.bbcsounds", "apps.cplus", "apps.globalplayeruk", "apps.iheartradio", "apps.lastmix", "apps.mixcloud", "apps.planetradio", "apps.podcasts", "apps.radiofrance", "apps.radionet", "apps.radionowplaying", "apps.radioparadise", "apps.squeezecloud", "apps.timesradio", "apps.ukradioplayer", "apps.virginradio", "apps.wefunk", "apps.phishin", "apps.walkwithme"]);
 const HIDE_APP_NAMES_FOR_PARTY = new Set(["Absolute Radio UK", "AccuRadio", "BBC", "CBC", "ClassicalRadio.com", "Digitally Imported", "JAZZRADIO.com", "Live Music Archive", "ROCKRADIO.com", "RadioFeeds UK & Ireland", "RadioTunes", "Radionomy", "SHOUTcast", "SomaFM", "TuneIn Radio", "ZenRadio.com"])
-const RELEASE_TYPES = ["ALBUM", "EP", "SINGLE", "BOXSET", "BESTOF", "COMPILATION", "APPEARANCE", "COMPOSITION"];
+const RELEASE_TYPES = ["ALBUM", "EP", "SINGLE", "BOXSET", "BESTOF", "COMPILATION", "APPEARANCE", "APPEARANCE_BAND", "APPEARANCE_CONDUCTOR", "COMPOSITION"];
 const ARTIST_ROLES = new Set([1,5])
 const TRACK_ARTIST_ROLE = 6;
 const COMPOSER_ARTIST_ROLE = 2;
+const CONDUCTOR_ARTIST_ROLE = 3;
+const BAND_ARTIST_ROLE = 4;
 
 function itemText(i) {
     return i.title ? i.title : i.name ? i.name : i.caption ? i.caption : i.credits ? i.credits : undefined;
@@ -30,6 +32,20 @@ function removeDiactrics(key) {
     return key==" " ? "?" : key;
 }
 
+function appearanceSuffix(rel) {
+    let type = undefined!=lmsOptions.releaseAppearances[rel] ? lmsOptions.releaseAppearances[rel] : undefined;
+    if (type) {
+        return " (" + type + ")";
+    }
+    if ("APPEARANCE_BAND"==rel) {
+        return " (Band/Orchestra)";
+    }
+    if ("APPEARANCE_CONDUCTOR"==rel) {
+        return " (Conductor)";
+    }
+    return "";
+}
+
 function releaseTypeHeader(rel) {
     if (undefined!=lmsOptions.releaseTypes[rel]) {
         return lmsOptions.releaseTypes[rel][1];
@@ -42,8 +58,8 @@ function releaseTypeHeader(rel) {
     if (rel=="COMPILATION") {
         return i18n("Compilations");
     }
-    if (rel=="APPEARANCE") {
-        return i18n("Appearances");
+    if (rel.startsWith("APPEARANCE")) {
+        return i18n("Appearances")+appearanceSuffix(rel);
     }
     if (rel=="COMPOSITION") {
         return i18n("Compositions");
@@ -908,6 +924,12 @@ function parseBrowseResp(data, parent, options, cacheKey, parentCommand, parentG
                         } else if (roles.has(TRACK_ARTIST_ROLE)) {
                             group = "APPEARANCE";
                             nonmain = true;
+                        } else if (roles.has(CONDUCTOR_ARTIST_ROLE)) {
+                            group = "APPEARANCE_CONDUCTOR";
+                            nonmain = true;
+                        } else if (roles.has(BAND_ARTIST_ROLE)) {
+                            group = "APPEARANCE_BAND";
+                            nonmain = true;
                         } else if (roles.has(COMPOSER_ARTIST_ROLE)) {
                             group = "COMPOSITION";
                             nonmain = true;
@@ -989,8 +1011,8 @@ function parseBrowseResp(data, parent, options, cacheKey, parentCommand, parentG
                     resp.subtitle=resp.items.length + " " + (lmsTrans[1==resp.items.length ? 0 : 1]);
                 } else if (releaseType=="COMPILATION") {
                     resp.subtitle=i18np("1 Compilation", "%1 Compilations", resp.items.length);
-                } else if (releaseType=="APPEARANCE") {
-                    resp.subtitle=i18np("1 Appearance", "%1 Appearances", resp.items.length);
+                } else if (releaseType.startsWith("APPEARANCE")) {
+                    resp.subtitle=i18np("1 Appearance", "%1 Appearances", resp.items.length)+appearanceSuffix(releaseType);
                 } else if (releaseType=="COMPOSITION") {
                     resp.subtitle=i18np("1 Composition", "%1 Compositions", resp.items.length);
                 } else {

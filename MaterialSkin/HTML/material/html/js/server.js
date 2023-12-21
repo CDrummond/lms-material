@@ -645,10 +645,18 @@ var lmsServer = Vue.component('lms-server', {
         updateReleaseTypes() {
             lmsCommand("", ["material-skin", "release-types"]).then(({data}) => {
                 logJsonMessage("RESP", data);
-                if (data && data.result && data.result.rt_loop) {
-                    lmsOptions.releaseTypes={};
-                    for (let i=0, loop=data.result.rt_loop, len=loop.length; i<len; ++i) {
-                        lmsOptions.releaseTypes[loop[i].type]=[loop[i].singular, loop[i].plural];
+                if (data && data.result) {
+                    if (data.result.rt_loop) {
+                        lmsOptions.releaseTypes={};
+                        for (let i=0, loop=data.result.rt_loop, len=loop.length; i<len; ++i) {
+                            lmsOptions.releaseTypes[loop[i].type]=[loop[i].singular, loop[i].plural];
+                        }
+                    }
+                    if (data.result.app_loop) {
+                        lmsOptions.releaseAppearances={};
+                        for (let i=0, loop=data.result.app_loop, len=loop.length; i<len; ++i) {
+                            lmsOptions.releaseAppearances[loop[i].type]=loop[i].val;
+                        }
                     }
                 }
             }).catch(err => {

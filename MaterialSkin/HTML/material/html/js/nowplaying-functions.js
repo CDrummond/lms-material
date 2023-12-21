@@ -641,7 +641,7 @@ function nowplayingFetchArtistInfo(view) {
             view.info.tabs[ARTIST_TAB].found = false;
             view.info.tabs[ARTIST_TAB].count = ids.length;
             for (let i=0, len=ids.length; i<len; ++i) {
-                lmsCommand("", ["musicartistinfo", "biography", "artist_id:"+ids[i].trim(), "html:1"], view.info.tabs[ARTIST_TAB].reqId).then(({data}) => {
+                lmsCommand("", ["musicartistinfo", "biography", "artist_id:"+ids[i], "html:1"], view.info.tabs[ARTIST_TAB].reqId).then(({data}) => {
                     logJsonMessage("RESP", data);
                     if (data && view.isCurrent(data, ARTIST_TAB)) {
                         if (data.result && data.result.biography) {

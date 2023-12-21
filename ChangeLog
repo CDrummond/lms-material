@@ -24,6 +24,7 @@
 22. Check for 'safe-area-inset-bottom' on iOS to determine if padding should
     be added.
 23. Ignore some swipes when un-pinned queue is shown.
+24. Fix retrieving biogrpahy for tracks with multiple artists.
 
 4.1.0
 -----

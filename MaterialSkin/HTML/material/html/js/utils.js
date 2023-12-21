@@ -10,6 +10,7 @@ const MY_SQUEEZEBOX_IMAGE_PROXY = "https://www.mysqueezebox.com/public/imageprox
 const LS_PREFIX="lms-material::";
 const LMS_LIST_CACHE_PREFIX = "cache:list:";
 
+const RATINGS_START = "<i class=\"rstar\">";
 const RATINGS=["",         // 0
                "\ue839", // 0.5
                "\ue838",  // 1
@@ -619,7 +620,7 @@ function clearListCache(force) {
 
 function ratingString(current, val) {
     let str = "";
-    let clzStr = "<i class=\"rstar\">";
+    let clzStr = RATINGS_START;
     if (current) {
         let prev=current.indexOf(clzStr);
         if (prev>-1) {
@@ -1012,7 +1013,7 @@ function itemDuration(item) {
 }
 
 function stripLinkTags(s) {
-    return !IS_MOBILE && (""+s).indexOf("<obj")>=0 ? s.replace(/(<([^>]+)>)/gi, "") : s;
+    return (!IS_MOBILE || lmsOptions.touchLinks) && (""+s).indexOf("<obj")>=0 ? s.replace(/(<([^>]+)>)/gi, "") : s;
 }
 
 function replaceBr(str, rep) {

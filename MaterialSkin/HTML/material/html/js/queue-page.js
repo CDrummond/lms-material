@@ -10,6 +10,12 @@ const PQ_STATUS_TAGS = "tags:cdegilqtuyAAIKNSxx";
 const PQ_REQUIRE_AT_LEAST_1_ITEM = new Set([PQ_SAVE_ACTION, PQ_MOVE_QUEUE_ACTION, PQ_SCROLL_ACTION, PQ_SORT_ACTION, REMOVE_DUPES_ACTION]);
 const PQ_REQUIRE_MULTIPLE_ITEMS = new Set([PQ_SCROLL_ACTION, PQ_SORT_ACTION, REMOVE_DUPES_ACTION]);
 
+function queueMakePlain(str) {
+    let rating = str.indexOf(SEPARATOR+RATINGS_START);
+    let plain = stripLinkTags(rating>0 ? str.substring(0, rating) : str).trim();
+    return plain.length==str.length ? undefined : plain;
+}
+
 function queueItemCover(item) {
     if (item.artwork_url) {
         return resolveImageUrl(item.artwork_url);
@@ -91,18 +97,20 @@ function parseResp(data, showTrackNum, index, showRatings, queueAlbumStyle, queu
                 if (showTrackNum && i.tracknum>0) {
                     title = formatTrackNum(i)+SEPARATOR+title;
                 }
-                let plaintitle = title;
                 let addedClass = false;
                 let haveRating = showRatings && undefined!=i.rating;
-                let artist = undefined!=i.trackartist && undefined!=i.trackartist_id ? i.trackartist : i.artist;
-                if (queueAlbumStyle && undefined!=i.albumartist && undefined!=artist && i.albumartist!=artist) {
-                    let id = undefined!=i.trackartist_id ? i.trackartist_id : i.artist_id;
-                    title+='<obj class="subtext">'+SEPARATOR+((IS_MOBILE && !lmsOptions.touchLinks) || undefined==id ? artist : buildLink('showArtist', id, artist, 'queue'));
-                    plaintitle+=SEPARATOR+artist;
-                    addedClass = true;
+                if (queueAlbumStyle) {
+                    let artist = undefined!=i.trackartist && undefined!=i.trackartist_id ? i.trackartist : i.artist;
+                    let extra = buildArtistLine(i, 'queue', false, artist);
+                    if (!isEmpty(extra)) {
+                        title+='<obj class="subtext">'+SEPARATOR+extra;
+                        addedClass = true;
+                    }
                 }
                 if (haveRating) {
-                    title += (queueAlbumStyle && !addedClass ? '<obj class="subtext">' : '') + SEPARATOR+ratingString(undefined, i.rating, clz) + (queueAlbumStyle ? '</obj> ': '');
+                    title += (queueAlbumStyle && !addedClass ? '<obj class="subtext">' : '') + SEPARATOR+ratingString(undefined, i.rating, clz) + (queueAlbumStyle ? '</obj>': '');
+                } else if (addedClass) {
+                    title+='</obj>';
                 }
                 let duration = undefined==i.duration ? undefined : parseFloat(i.duration);
                 let prevItem = 0==idx ? lastInCurrent : resp.items[idx-1];
@@ -118,7 +126,7 @@ function parseResp(data, showTrackNum, index, showRatings, queueAlbumStyle, queu
                 resp.items.push({
                               id: "track_id:"+i.id,
                               title: title,
-                              plaintitle: haveRating || title.length!=plaintitle.length ? plaintitle : undefined,
+                              tooltip: i.title,
                               artistAlbum: artistAlbumLines,
                               image: image,
                               actions: [PQ_PLAY_NOW_ACTION, PQ_PLAY_NEXT_ACTION, DIVIDER, REMOVE_ACTION, PQ_REMOVE_ALBUM_ACTION, PQ_REMOVE_DISC_ACTION, ADD_TO_PLAYLIST_ACTION, PQ_ZAP_ACTION, DOWNLOAD_ACTION, SELECT_ACTION, PQ_COPY_ACTION, MOVE_HERE_ACTION, CUSTOM_ACTIONS, SHOW_IMAGE_ACTION, MORE_ACTION],
@@ -215,7 +223,7 @@ var lmsQueue = Vue.component("lms-queue", {
    </v-list-tile-content>
    <v-list-tile-action class="pq-time">{{item.durationStr}}</v-list-tile-action>
    <v-list-tile-action class="queue-action" v-bind:class="{'pq-first-track-menu':item.artistAlbum}" @click.stop="itemMenu(item, index, $event)">
-    <div class="grid-btn list-btn hover-btn menu-btn" :title="i18n('%1 (Menu)', undefined==item.plaintitle ? item.title : item.plaintitle)"></div>
+    <div class="grid-btn list-btn hover-btn menu-btn" :title="i18n('%1 (Menu)', item.tooltip)"></div>
    </v-list-tile-action>
    <img v-if="index==currentIndex" class="pq-current-indicator" :src="'pq-current' | svgIcon(true, true)"></img>
   </v-list-tile>
@@ -237,7 +245,7 @@ var lmsQueue = Vue.component("lms-queue", {
      </v-list-tile-content>
      <v-list-tile-action class="pq-time">{{item.durationStr}}</v-list-tile-action>
      <v-list-tile-action class="queue-action" @click.stop="itemMenu(item, index, $event)">
-      <div class="grid-btn list-btn hover-btn menu-btn" :title="i18n('%1 (Menu)', undefined==item.plaintitle ? item.title : item.plaintitle)"></div>
+      <div class="grid-btn list-btn hover-btn menu-btn" :title="i18n('%1 (Menu)', item.tooltip)"></div>
      </v-list-tile-action>
      <img v-if="index==currentIndex" class="pq-current-indicator" :src="'pq-current' | svgIcon(true, true)"></img>
     </v-list-tile>
@@ -437,14 +445,16 @@ var lmsQueue = Vue.component("lms-queue", {
                     let addedClass = false;
                     if (this.albumStyle) {
                         let artist = undefined!=i.trackartist && undefined!=i.trackartist_id ? i.trackartist : i.artist;
-                        if (undefined!=i.albumartist && undefined!=artist && i.albumartist!=artist) {
-                            let id = undefined!=i.trackartist_id ? i.trackartist_id : i.artist_id;
-                            title+='<obj class="subtext">'+SEPARATOR+(IS_MOBILE || undefined==id ? artist : buildLink('showArtist', id, artist, 'queue'));
+                        let extra = buildArtistLine(i, 'queue', false, artist);
+                        if (!isEmpty(extra)) {
+                            title+='<obj class="subtext">'+SEPARATOR+extra;
                             addedClass = true;
                         }
                     }
                     if (this.$store.state.showRating && undefined!=i.rating) {
-                        title += (this.albumStyle && !addedClass ? '<obj class="subtext">' : '') + SEPARATOR+ratingString(undefined, i.rating) + (this.albumStyle ? '</obj> ': '');
+                        title += (this.albumStyle && !addedClass ? '<obj class="subtext">' : '') + SEPARATOR+ratingString(undefined, i.rating) + (this.albumStyle ? '</obj>': '');
+                    } else if (addedClass) {
+                        title+='</obj>';
                     }
                     var artistAlbum = undefined!=this.items[index].artistAlbum ? buildArtistAlbumLines(i, this.$store.state.queueAlbumStyle, this.$store.state.queueContext) : undefined;
                     // ?? var remoteTitle = checkRemoteTitle(i);
@@ -452,6 +462,7 @@ var lmsQueue = Vue.component("lms-queue", {
 
                     if (title!=this.items[index].title || artistAlbum!=this.items[index].artistAlbum || duration!=this.items[index].duration) {
                         this.items[index].title = title;
+                        this.items[index].tooltip = i.title;
                         if (undefined!=artistAlbum) {
                             this.items[index].artistAlbum = artistAlbum;
                         }
@@ -869,13 +880,9 @@ var lmsQueue = Vue.component("lms-queue", {
                     this.removeIndexes(indexes);
                 }
             } else if (MORE_ACTION===act) {
-                if (undefined!=item.plaintitle) { // Need to remove ratings stars...
-                    let clone = JSON.parse(JSON.stringify(item));
-                    clone.title = item.plaintitle;
-                    bus.$emit('trackInfo', clone, index, 'queue');
-                } else {
-                    bus.$emit('trackInfo', item, index, 'queue');
-                }
+                let clone = JSON.parse(JSON.stringify(item));
+                clone.title = queueMakePlain(item.title);
+                bus.$emit('trackInfo', clone, index, 'queue');
                 if (this.$store.state.desktopLayout) {
                     if (!this.$store.state.pinQueue) {
                         this.$store.commit('setShowQueue', false);
@@ -1006,7 +1013,7 @@ var lmsQueue = Vue.component("lms-queue", {
                         let ids = new Set();
                         for (let i=0, loop=this.items, len=loop.length; i<len; ++i) {
                             let item = loop[i];
-                            let title = (item.plaintitle ? item.plaintitle : item.title);
+                            let title = queueMakePlain(item.title);
                             if (this.$store.state.queueShowTrackNum) {
                                 let vals = title.split(SEPARATOR);
                                 if (2==vals.length) {

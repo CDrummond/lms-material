@@ -98,11 +98,14 @@ function addArtistLink(item, line, type, func, page, used, plain) {
     return line;
 }
 
-function buildArtistLine(i, page, plain) {
+function buildArtistLine(i, page, plain, existing) {
     var line = undefined;
     var used = new Set();
     var artist = i.trackartist ? i.trackartist : i.artist ? i.artist : i.albumartist;
 
+    if (undefined!=existing) {
+        used.add(existing);
+    }
     if (lmsOptions.artistFirst) {
         if (i.trackartist) {
             line=addArtistLink(i, line, "trackartist", "showArtist", page, used, plain);

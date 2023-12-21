@@ -15,7 +15,7 @@
 13. Copy accent colour, etc. into 'Server settings' iframe.
 14. Add sort action to 'All songs' when navigate from 'Years' or 'Genres'.
 15. Fix 'All songs' listings.
-16. Add 'maskable' web-app icon.
+16. Add 'mask-able' web-app icon.
 17. Re-enable setting theme colour from cover on iOS.
 18. Add support for window controls overlay.
 19. Work-around 'glowing' progressbar with some zoom levels.
@@ -23,7 +23,7 @@
 21. Check for 'safe-area-inset-bottom' on iOS to determine if padding should
     be added.
 22. Ignore some swipes when un-pinned queue is shown.
-23. Fix retrieving biogrpahy for tracks with multiple artists.
+23. Fix retrieving biography for tracks with multiple artists.
 
 4.1.0
 -----

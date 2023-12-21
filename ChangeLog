@@ -2,6 +2,8 @@
 -----
 1. Fix grid menu button hover highlight.
 2. Fix showing extra artists in album style queue.
+3. For LMS8.4+ no need to poll for updates, LMS now signals this in its status
+   message.
 
 4.1.1
 -----

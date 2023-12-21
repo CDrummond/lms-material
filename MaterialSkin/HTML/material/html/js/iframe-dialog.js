@@ -746,7 +746,11 @@ Vue.component('lms-iframe-dialog', {
             iframeInfo.content=undefined;
             bus.$emit('iframeClosed', this.isPlayer);
             if (this.page=='server') {
-                bus.$emit('checkForUpdates');
+                if (LMS_VERSION>=80400) {
+                    bus.$emit('refreshServerStatus');
+                } else {
+                    bus.$emit('checkForUpdates');
+                }
             }
         },
         i18n(str, arg) {

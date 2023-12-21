@@ -340,7 +340,16 @@ var lmsServer = Vue.component('lms-server', {
                 lmsLastScan = data.lastscan;
                 clearListCache();
             }
-
+            if (LMS_VERSION>=80400) {
+                var avail = new Set();
+                if ((undefined!=data.newversion && parseInt(data.newversion)>0)) {
+                    avail.add("server");
+                }
+                if (!isEmpty(data.newplugins)) {
+                    avail.add("plugins");
+                }
+                this.$store.commit('setUpdatesAvailable', avail);
+            }
             if (undefined!=data.rescan && 1==parseInt(data.rescan)) {
                 let total = undefined!=data.progresstotal ? parseInt(data.progresstotal) : undefined;
                 let done = undefined!=data.progressdone ? parseInt(data.progressdone) : undefined;
@@ -811,7 +820,11 @@ var lmsServer = Vue.component('lms-server', {
                 this.moveTimer = undefined;
             }
         },
-        checkPluginUpdates() {
+        checkForUpdates() {
+            if (LMS_VERSION>=80400) {
+                // Update flag sent in status message
+                return;
+            }
             if (!this.$store.state.unlockAll || LMS_KIOSK_MODE) {
                 return;
             }
@@ -842,12 +855,14 @@ var lmsServer = Vue.component('lms-server', {
         },
         startUpdatesTimer() {
             this.cancelUpdatesTimer();
-            setTimeout(function () {
-                this.checkPluginUpdates();
-                this.updatesTimer = setInterval(function () {
-                    this.checkPluginUpdates();
-                }.bind(this), 1000 * 60 * 30); // Check every 1/2 hour
-            }.bind(this), 500);
+            if (LMS_VERSION<80400) {
+                setTimeout(function () {
+                    this.checkForUpdates();
+                    this.updatesTimer = setInterval(function () {
+                        this.checkForUpdates();
+                    }.bind(this), 1000 * 60 * 30); // Check every 1/2 hour
+                }.bind(this), 500);
+            }
         },
         adjustVolume(inc) {
             if (this.$store.state.player) {
@@ -878,10 +893,10 @@ var lmsServer = Vue.component('lms-server', {
             this.reConnectToCometD();
         }.bind(this));
         bus.$on('lockChanged', function() {
-            this.checkPluginUpdates();
+            this.checkForUpdates();
         }.bind(this));
         bus.$on('checkForUpdates', function() {
-            this.checkPluginUpdates();
+            this.checkForUpdates();
         }.bind(this));
         bus.$on('refreshStatus', function(id) {
             var player = id ? id : (this.$store.state.player ? this.$store.state.player.id : undefined);

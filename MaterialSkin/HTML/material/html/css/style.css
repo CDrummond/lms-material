@@ -262,7 +262,7 @@ html, .mini-player {
 .lms-toolbar > .v-toolbar__content, .dialog-toolbar > .v-toolbar__content {
  height:var(--main-toolbar-height) !important;
  margin-left:-10px !important;
- margin-right:-18px !important;
+ margin-right:-20px !important;
 }
 
 .lms-toolbar-no-menu > .v-toolbar__content {

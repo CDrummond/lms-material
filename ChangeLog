@@ -6,6 +6,8 @@
    message.
 4. If screen height is 520px or less then un-pinned queue will be full height
    over now-playing.
+5. Add 'Appearances (Band/Orchestra)' and 'Appearances (Conductor)' where
+   appropriate.
 
 4.1.1
 -----

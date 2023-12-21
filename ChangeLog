@@ -7,24 +7,23 @@
  5. Fix clicking on BBC Sounds emblem for live streams.
  6. Show search icon on search fields even for non-touch devices.
  7. Only apply larger left indent and right indent if queue is not pinned.
- 8. If enabled, add 'Play shuffled' to context menus.
- 9. Increase min-widths required for track list indentation.
-10. Fix 'Play shuffled' for multi-disc albums.
-11. Add 'Play shuffled' to section headers.
+ 8. Increase min-widths required for track list indentation.
+ 9. Add 'Play shuffled' to context menus.
+10. Add 'Play shuffled' to section headers.
+11. Fix 'Play shuffled' for multi-disc albums.
 12. Fix total track count for multi-disc albums.
 13. Copy accent colour, etc. into 'Server settings' iframe.
 14. Add sort action to 'All songs' when navigate from 'Years' or 'Genres'.
 15. Fix 'All songs' listings.
-16. Always add padding tp bottom navbar when run under iOS.
-17. Add 'maskable' web-app icon.
-18. Re-enable setting theme colour from cover on iOS.
-19. Add support for window controls overlay.
-20. Work-around 'glowing' progressbar with some zoom levels.
-21. Check for updates each time 'Server settings' is closed.
-22. Check for 'safe-area-inset-bottom' on iOS to determine if padding should
+16. Add 'maskable' web-app icon.
+17. Re-enable setting theme colour from cover on iOS.
+18. Add support for window controls overlay.
+19. Work-around 'glowing' progressbar with some zoom levels.
+20. Check for updates each time 'Server settings' is closed.
+21. Check for 'safe-area-inset-bottom' on iOS to determine if padding should
     be added.
-23. Ignore some swipes when un-pinned queue is shown.
-24. Fix retrieving biogrpahy for tracks with multiple artists.
+22. Ignore some swipes when un-pinned queue is shown.
+23. Fix retrieving biogrpahy for tracks with multiple artists.
 
 4.1.0
 -----

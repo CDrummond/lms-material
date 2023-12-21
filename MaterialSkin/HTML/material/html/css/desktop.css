@@ -472,7 +472,7 @@
 }
 
 .pq-unpinned .lms-list {
- height:calc((var(--vh, 1vh)*100) - (var(--main-toolbar-height) + var(--sub-toolbar-height) + var(--bottom-toolbar-height) + 1px));
+ height:calc((var(--vh, 1vh)*100) - (var(--main-toolbar-height) + var(--sub-toolbar-height) + var(--bottom-toolbar-height)));
 }
 
 .pq-unpinned-np2 .lms-list {
@@ -484,6 +484,13 @@
 }
 
 @media screen and (max-width: 550px) {
+ .pq-unpinned-np2 .lms-list,
+ .pq-unpinned-np0 .lms-list {
+  height:calc((var(--vh, 1vh)*100) - (var(--main-toolbar-height) + var(--sub-toolbar-height) + 2px))!important;
+ }
+}
+
+@media screen and (max-height: 520px) {
  .pq-unpinned-np2 .lms-list,
  .pq-unpinned-np0 .lms-list {
   height:calc((var(--vh, 1vh)*100) - (var(--main-toolbar-height) + var(--sub-toolbar-height) + 2px))!important;

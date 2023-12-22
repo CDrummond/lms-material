@@ -182,7 +182,7 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
   <img :key="coverUrl" :src="coverUrl" loading="lazy" onerror="this.src=DEFAULT_COVER" @contextmenu="showMenu" @click="clickImage(event)" class="np-cover" v-bind:class="{'np-trans':transCvr}"></img>
   </div>
   <div v-if="!desktopLayout && MBAR_THIN==mobileBar" class="np-bar-details-mobile ellipsis">{{mobileBarText}}</div>
-  <v-list two-line subheader class="np-bar-details" v-else-if="playerStatus.playlist.count>0 && (desktopLayout || MBAR_NONE!=mobileBar)">
+  <v-list two-line subheader class="np-bar-details noselect" v-else-if="playerStatus.playlist.count>0 && (desktopLayout || MBAR_NONE!=mobileBar)">
    <v-list-tile style>
     <v-list-tile-content>
      <v-list-tile-title v-if="playerStatus.current.title">{{title}}</v-list-tile-title>

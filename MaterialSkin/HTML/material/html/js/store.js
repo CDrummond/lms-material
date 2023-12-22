@@ -40,9 +40,6 @@ function updateUiSettings(state, val) {
         setLocalStorageVal('theme', state.chosenTheme);
         themeChanged = true;
     }
-    if (val.color==COLOR_FROM_COVER && IS_IOS) {
-        val.color='blue';
-    }
     if (undefined!=val.color && state.color!=val.color) {
         state.color = val.color;
         setLocalStorageVal('color', state.color);
@@ -469,9 +466,6 @@ const store = new Vuex.Store({
             state.theme=state.chosenTheme.startsWith(AUTO_THEME) ? defaultTheme()+(state.coloredToolbars ? "-colored" : "") : state.chosenTheme;
             state.darkUi = !state.theme.startsWith('light') && state.theme.indexOf("/light/")<0;
             state.color = getLocalStorageVal('color', state.color);
-            if (state.color==COLOR_FROM_COVER && IS_IOS) {
-                state.color='blue';
-            }
             var larger = getLocalStorageBool('largerElements', getLocalStorageBool('largeFonts', undefined));
             var fontSize = getLocalStorageVal('fontSize', undefined);
             if (undefined==fontSize && undefined!=larger) {

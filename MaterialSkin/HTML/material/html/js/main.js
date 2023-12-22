@@ -443,6 +443,11 @@ var app = new Vue({
             if (this.$store.state.visibleMenus.size>0) {
                 return;
             }
+            if (undefined!=ev.target && ev.target &&
+                 ( (('up'==direction || 'down'==direction) && (ev.target.scrollHeight>ev.target.clientHeight)) ||
+                   (('left'==direction || 'right'==direction) && (ev.target.scrollWidth>ev.target.clientWidth)) ) ) {
+                return;
+            }
             if (this.$store.state.openDialogs.length>0) {
                 if (this.$store.state.openDialogs.length==1) {
                     // Info dialog is open. If not on now-playing, can still swipe to change main nav.

@@ -10,6 +10,7 @@
    appropriate.
 6. Ignore swipes if target is scrollable in swiped axis.
 7. Fix forcing iOS to blue highlight if 'from cover' is selected.
+8. If swiping up ignore if in bottom 100px for both layouts.
 
 4.1.1
 -----

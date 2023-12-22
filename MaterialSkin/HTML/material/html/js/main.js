@@ -428,7 +428,7 @@ var app = new Vue({
                         }
                     }
                 }
-                if (vertValid && this.$store.state.desktopLayout && (window.innerHeight-this.touch.y)<100) {
+                if (vertValid && (window.innerHeight-this.touch.y)<100) {
                     vertValid = false;
                 }
                 if (horizValid) {

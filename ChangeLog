@@ -1,17 +1,19 @@
 4.1.2
 -----
-1. Fix grid menu button hover highlight.
-2. Fix showing extra artists in album style queue.
-3. For LMS8.4+ no need to poll for updates, LMS now signals this in its status
-   message.
-4. If screen height is 520px or less then un-pinned queue will be full height
-   over now-playing.
-5. Add 'Appearances (Band/Orchestra)' and 'Appearances (Conductor)' where
-   appropriate.
-6. Ignore swipes if target is scrollable in swiped axis.
-7. Fix forcing iOS to blue highlight if 'from cover' is selected.
-8. If swiping up ignore if in bottom 100px for both layouts.
-9. Prevent text-selection on now-playing bar.
+ 1. Fix grid menu button hover highlight.
+ 2. Fix showing extra artists in album style queue.
+ 3. For LMS8.4+ no need to poll for updates, LMS now signals this in its status
+    message.
+ 4. If screen height is 520px or less then un-pinned queue will be full height
+    over now-playing.
+ 5. Add 'Appearances (Band/Orchestra)' and 'Appearances (Conductor)' where
+    appropriate.
+ 6. Ignore swipes if target is scrollable in swiped axis.
+ 7. Fix forcing iOS to blue highlight if 'from cover' is selected.
+ 8. If swiping up ignore if in bottom 100px for both layouts.
+ 9. Prevent text-selection on now-playing bar.
+10. Catch, and ignore, any content parsing errors when getting similar artists
+    list.
 
 4.1.1
 -----

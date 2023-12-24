@@ -840,15 +840,16 @@ sub _cliCommand {
                                 ? $response->decoded_content
                                 : $response->content;
 
-                    if ( ($response->headers->content_type =~ /xml/) || ($format && $format eq 'xml')) {
-                        require XML::Simple;
-                        $request->addResult("content", XML::Simple::XMLin($content));
-                    } elsif ( ($response->headers->content_type =~ /json/) || ($format && $format eq 'json') ) {
-                        $request->addResult("content", from_json($content));
-                    } else {
-                        $request->addResult("content", $content);
-                    }
-
+                    eval {
+                        if ( ($response->headers->content_type =~ /xml/) || ($format && $format eq 'xml')) {
+                            require XML::Simple;
+                            $request->addResult("content", XML::Simple::XMLin($content));
+                        } elsif ( ($response->headers->content_type =~ /json/) || ($format && $format eq 'json') ) {
+                            $request->addResult("content", from_json($content));
+                        } else {
+                            $request->addResult("content", $content);
+                        }
+                    };
                     $request->setStatusDone();
                 },
                 sub {

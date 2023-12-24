@@ -851,6 +851,10 @@ sub _cliCommand {
                         }
                     };
                     $request->setStatusDone();
+                    if ( $@ ) {
+                        my $error = "$@";
+                        main::DEBUGLOG && $log->debug("Failed to parser response of URL: $error");
+                    }
                 },
                 sub {
                     my $response = shift;

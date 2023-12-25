@@ -18,7 +18,7 @@ function setWindowArea() {
         return;
     }
     let left = rect.y;
-    let right = rect.width<=0 ? 0 : ((window.innerWidth - (left+rect.width)) - 12);
+    let right = rect.width<=0 ? 0 : ((window.innerWidth - (left+rect.width)) - 4);
     if (left<0 || right<0) {
         return;
     }

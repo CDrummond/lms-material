@@ -18,7 +18,7 @@ function setWindowArea() {
         return;
     }
     let left = rect.y;
-    let right = rect.width<=0 ? 0 : ((window.innerWidth - (left+rect.width)) - 4);
+    let right = rect.width<=0 ? 0 : ((window.innerWidth - (left+rect.width)) - 10);
     if (left<0 || right<0) {
         return;
     }
@@ -27,13 +27,6 @@ function setWindowArea() {
         document.documentElement.style.setProperty('--window-area-left', left+'px');
         document.documentElement.style.setProperty('--window-area-right', right+'px');
         document.documentElement.style.setProperty('--window-controls-space', right+'px');
-    }
-}
-
-function initWindowArea(attempts) {
-    setWindowArea();
-    if (prevWindowArea.r>250 && attempts<20) {
-        setTimeout(function() {initWindowArea(attempts+1)}, 250);
     }
 }
 
@@ -62,9 +55,6 @@ var app = new Vue({
         }
         if (queryParams.addpad || IS_IOS) {
             document.documentElement.style.setProperty('--bottom-nav-pad', '12px');
-        }
-        if (undefined!=window.navigator && undefined!=window.navigator.windowControlsOverlay) {
-            initWindowArea(0);
         }
         this.autoLayout = true;
         this.$store.commit('initUiSettings');
@@ -343,6 +333,13 @@ var app = new Vue({
                 window.matchMedia('(display-mode: window-controls-overlay)').addEventListener('change', () => {
                     setWindowArea();
                 }, false);
+            } catch (e) {
+                // Old WebKit on iOS?
+            }
+            try {
+            navigator.windowControlsOverlay.addEventListener("geometrychange", (event) => {
+                setWindowArea();
+              });
             } catch (e) {
                 // Old WebKit on iOS?
             }

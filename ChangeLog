@@ -3,6 +3,7 @@
 1. Update some dependencies (Axios, Vue, Vuex).
 2. Fix clipping of menu button highlight when installed as a chrome webapp and
    using window controls.
+3. Listen for 'geometrychange' with window controls to correctly set spacing.
 
 4.1.2
 -----

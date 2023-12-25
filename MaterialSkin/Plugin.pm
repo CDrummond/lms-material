@@ -1641,10 +1641,6 @@ sub _manifestHandler {
         }
     }
 
-    if ($iOS) {
-        $manifest =~ s/icon\.png/icon-ios\.png/g;
-    }
-
     my $themeColor = "000000";
     # Make manifest colours match platform default theme...
     #if (index($ua, 'Android') != -1) {

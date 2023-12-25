@@ -4,6 +4,8 @@
 2. Fix clipping of menu button highlight when installed as a chrome webapp and
    using window controls.
 3. Listen for 'geometrychange' with window controls to correctly set spacing.
+4. Use squre icon, with curved corners, for all as now supply a maskable icon
+   for Android, etc.
 
 4.1.2
 -----

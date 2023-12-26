@@ -6,6 +6,8 @@
 3. Listen for 'geometrychange' with window controls to correctly set spacing.
 4. Use squre icon, with curved corners, for all as now supply a maskable icon
    for Android, etc.
+5. Prevent weird animation when close player select menu from 'Player settings'
+   dialog.
 
 4.1.2
 -----

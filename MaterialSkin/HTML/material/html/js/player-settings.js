@@ -558,9 +558,9 @@ Vue.component('lms-player-settings', {
                 }
             });
             this.update(false);
-            this.show=true;
+            this.show = true;
             this.showMenu = false;
-            this.playerMenu = {show:false, x:0}
+            this.playerMenu = {show:false, x:this.playerMenu.x}
             if (undefined!=section) {
                 this.$nextTick(function () {
                     var elem = document.getElementById(section);

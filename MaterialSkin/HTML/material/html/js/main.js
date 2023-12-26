@@ -325,24 +325,18 @@ var app = new Vue({
                     this.$store.commit('toggleDarkLight');
                 }
             }, false);
-        } catch (e) {
-            // Old WebKit on iOS?
-        }
+        } catch (e) { }
         if (undefined!=window.navigator && undefined!=window.navigator.windowControlsOverlay) {
             try {
                 window.matchMedia('(display-mode: window-controls-overlay)').addEventListener('change', () => {
                     setWindowArea();
                 }, false);
-            } catch (e) {
-                // Old WebKit on iOS?
-            }
+            } catch (e) { }
             try {
-            navigator.windowControlsOverlay.addEventListener("geometrychange", (event) => {
-                setWindowArea();
-              });
-            } catch (e) {
-                // Old WebKit on iOS?
-            }
+                navigator.windowControlsOverlay.addEventListener("geometrychange", (event) => {
+                    setWindowArea();
+                }, false);
+            } catch (e) { }
         }
 
         bindKey('backspace');

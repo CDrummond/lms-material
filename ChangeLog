@@ -8,6 +8,7 @@
    for Android, etc.
 5. Prevent weird animation when close player select menu from 'Player settings'
    dialog.
+6. Darken separators, and menu/dialog background, for 'Black' theme.
 
 4.1.2
 -----

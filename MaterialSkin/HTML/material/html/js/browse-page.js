@@ -1640,8 +1640,12 @@ var lmsBrowse = Vue.component("lms-browse", {
             ev.dataTransfer.dropEffect = 'move';
             ev.dataTransfer.setData('Text', this.items[which].title);
             window.mskBrowseDrag=which;
-            if (!this.grid.use) {
-                ev.dataTransfer.setDragImage(ev.target.nodeName=='IMG' ? ev.srcElement.parentNode.parentNode.parentNode : ev.srcElement, 0, 0);
+            if (this.grid.use) {
+                this.dragElem = undefined;
+            } else {
+                this.dragElem = ev.target.nodeName=='IMG' ? ev.srcElement.parentNode.parentNode.parentNode : ev.srcElement;
+                setListElemClass(this.dragElem, 'dragging', true);
+                ev.dataTransfer.setDragImage(this.dragElem, 0, 0);
             }
             this.dragIndex = which;
             this.stopScrolling = false;
@@ -1650,6 +1654,8 @@ var lmsBrowse = Vue.component("lms-browse", {
             }
         },
         dragEnd() {
+            setListElemClass(this.dragElem, 'dragging', false);
+            this.dragElem = undefined;
             this.stopScrolling = true;
             this.dragIndex = undefined;
             this.dropIndex = -1;

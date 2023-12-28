@@ -74,6 +74,11 @@
  --pq-current-album-color:rgba(var(--highlight-rgb),0.1);
 }
 
+.dragging {
+ background:none!important;
+ background-color:var(--background-color)!important;
+}
+
 .note {
  font-weight:200;
 }

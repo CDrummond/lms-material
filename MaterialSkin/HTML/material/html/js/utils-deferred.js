@@ -485,3 +485,17 @@ function yearTitleSort(a, b) {
     }
     return albumTrackSort(a, b);
 }
+
+function setListElemClass(child, clz, add) {
+    let elem = child;
+    while (elem && elem.role!='listitem') {
+        elem = elem.parentNode;
+    }
+    if (elem && elem.role=='listitem') {
+        if (add) {
+            elem.classList.add(clz);
+        } else {
+            elem.classList.remove(clz);
+        }
+    }
+}

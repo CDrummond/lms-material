@@ -1291,7 +1291,9 @@ var lmsQueue = Vue.component("lms-queue", {
             bus.$emit('dragActive', true);
             ev.dataTransfer.dropEffect = 'move';
             ev.dataTransfer.setData('Text', this.items[which].title);
-            ev.dataTransfer.setDragImage(ev.target.nodeName=='IMG' ? ev.srcElement.parentNode.parentNode.parentNode : ev.srcElement, 0, 0);
+            this.dragElem = ev.target.nodeName=='IMG' ? ev.srcElement.parentNode.parentNode.parentNode : ev.srcElement;
+            setListElemClass(this.dragElem, 'dragging', true);
+            ev.dataTransfer.setDragImage(this.dragElem, 0, 0);
             this.dragIndex = which;
             this.stopScrolling = false;
             if (this.selection.size>0 && !this.selection.has(which)) {
@@ -1316,6 +1318,8 @@ var lmsQueue = Vue.component("lms-queue", {
             return urls;
         },
         dragEnd() {
+            setListElemClass(this.dragElem, 'dragging', false);
+            this.dragElem = undefined;
             this.stopScrolling = true;
             this.dragIndex = undefined;
             this.dropIndex = -1;

@@ -150,7 +150,7 @@ var lmsBrowse = Vue.component("lms-browse", {
       <v-icon>check_box</v-icon>
      </v-list-tile-avatar>
      <v-list-tile-avatar v-else-if="item.image" :tile="true" v-bind:class="{'radio-image': SECTION_RADIO==item.section || SECTION_APPS==item.section}" class="lms-avatar">
-      <img :key="item.image" :src="item.image" onerror="this.src=DEFAULT_COVER" loading="lazy"></img>
+      <img :key="item.image" :src="item.image" onerror="this.src=DEFAULT_COVER" class="allow-drag" loading="lazy"></img>
      </v-list-tile-avatar>
      <v-list-tile-avatar v-else-if="item.icon" :tile="true" class="lms-avatar">
       <v-icon>{{item.icon}}</v-icon>
@@ -224,7 +224,7 @@ var lmsBrowse = Vue.component("lms-browse", {
       <v-icon>check_box</v-icon>
      </v-list-tile-avatar>
      <v-list-tile-avatar v-else-if="item.image" :tile="true" v-bind:class="{'radio-image': SECTION_RADIO==item.section || SECTION_APPS==item.section, 'lms-avatar-small': isTop || (current && (current.id==TOP_RADIO_ID || current.id==TOP_APPS_ID)), 'lms-avatar': current && current.id!=TOP_RADIO_ID && current.id!=TOP_APPS_ID}">
-      <img :key="item.image" v-lazy="item.image" onerror="this.src=DEFAULT_COVER"></img>
+      <img :key="item.image" v-lazy="item.image" class="allow-drag" onerror="this.src=DEFAULT_COVER"></img>
      </v-list-tile-avatar>
      <v-list-tile-avatar v-else-if="item.icon" :tile="true" class="lms-avatar">
       <v-icon>{{item.icon}}</v-icon>

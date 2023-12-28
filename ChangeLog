@@ -12,6 +12,7 @@
 7. If list has selected items then always show menu when click right most
    64px.
 8. Fix cases where drag can start in browse view.
+9. Fix mobile drag'n'drop when touching on image.
 
 4.1.2
 -----

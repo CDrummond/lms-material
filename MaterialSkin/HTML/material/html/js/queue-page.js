@@ -215,7 +215,7 @@ var lmsQueue = Vue.component("lms-queue", {
   <v-list-tile avatar class="pq-albumstyle" v-bind:class="{'pq-track':!item.artistAlbum, 'pq-current-album':index!=currentIndex && currentIndex<items.length && item.grpKey==items[currentIndex].grpKey, 'pq-current': index==currentIndex, 'pq-current-first-track': index==currentIndex && item.artistAlbum, 'pq-pulse':index==currentIndex && pulseCurrent, 'list-active': menu.show && index==menu.index, 'drop-target': dragActive && index==dropIndex}" @dragstart="dragStart(index, $event)" @dragend="dragEnd()" @dragover="dragOver(index, $event)" @drop.stop="drop(index, $event)" draggable @click.prevent.stop="click(item, index, $event)" slot-scope="{item, index}" key-field="key" @contextmenu.prevent="contextMenu(item, index, $event)">
    <v-list-tile-avatar :tile="true" v-bind:class="{'radio-image': 0==item.duration}" class="lms-avatar">
     <v-icon v-if="item.selected" v-bind:class="{'pq-first-track-check':item.artistAlbum}">check_box</v-icon>
-    <img v-else-if="item.artistAlbum" :key="item.image" :src="item.image" onerror="this.src=DEFAULT_COVER" loading="lazy" v-bind:class="{'dimmed':item.image==DEFAULT_COVER || item.image==DEFAULT_RADIO_COVER}" class="radio-img"></img>
+    <img v-else-if="item.artistAlbum" :key="item.image" :src="item.image" onerror="this.src=DEFAULT_COVER" loading="lazy" v-bind:class="{'dimmed':item.image==DEFAULT_COVER || item.image==DEFAULT_RADIO_COVER}" class="radio-img allow-drag"></img>
    </v-list-tile-avatar>
    <div class="pq-album-header ellipsis" v-if="item.artistAlbum" v-html="item.artistAlbum"></div>
    <v-list-tile-content v-bind:class="{'pq-first-track':item.artistAlbum}">
@@ -232,7 +232,7 @@ var lmsQueue = Vue.component("lms-queue", {
     <v-list-tile avatar v-bind:class="{'pq-current': index==currentIndex, 'pq-pulse':index==currentIndex && pulseCurrent, 'list-active': menu.show && index==menu.index, 'drop-target': dragActive && index==dropIndex}" @dragstart="dragStart(index, $event)" @dragend="dragEnd()" @dragover="dragOver(index, $event)" @drop.stop="drop(index, $event)" draggable @click.prevent.stop="click(item, index, $event)" slot-scope="{item, index}" key-field="key" @contextmenu.prevent="contextMenu(item, index, $event)">
      <v-list-tile-avatar :tile="true" v-bind:class="{'radio-image': 0==item.duration}" class="lms-avatar">
       <v-icon v-if="item.selected">check_box</v-icon>
-      <img v-else :key="item.image" :src="item.image" onerror="this.src=DEFAULT_COVER" loading="lazy" v-bind:class="{'dimmed':item.image==DEFAULT_COVER || item.image==DEFAULT_RADIO_COVER}" class="radio-img"></img>
+      <img v-else :key="item.image" :src="item.image" onerror="this.src=DEFAULT_COVER" loading="lazy" v-bind:class="{'dimmed':item.image==DEFAULT_COVER || item.image==DEFAULT_RADIO_COVER}" class="radio-img allow-drag"></img>
      </v-list-tile-avatar>
      <v-list-tile-content v-if="undefined==item.size"> <!-- hacky work-around for view refresh when change album/track style -->
       <v-list-tile-title v-html="item.title"></v-list-tile-title>

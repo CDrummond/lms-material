@@ -558,6 +558,11 @@ div.v-subheader {
  background:var(--image-background-color);
 }
 
+.allow-drag {
+ touch-action: none;
+ pointer-events: none;
+}
+
 .image-grid-text {
  text-align:center;
  white-space:nowrap;

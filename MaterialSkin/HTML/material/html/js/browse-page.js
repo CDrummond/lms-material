@@ -1633,6 +1633,9 @@ var lmsBrowse = Vue.component("lms-browse", {
             if (!this.$store.state.desktopLayout && this.items[0].stdItem==STD_ITEM_PLAYLIST_TRACK && this.listSize>LMS_MAX_PLAYLIST_EDIT_SIZE) {
                 return;
             }
+            if ((!this.$store.state.desktopLayout || !this.$store.state.showQueue) && (!this.canDrop || this.grid.use)) {
+                return;
+            }
             bus.$emit('dragActive', true);
             ev.dataTransfer.dropEffect = 'move';
             ev.dataTransfer.setData('Text', this.items[which].title);

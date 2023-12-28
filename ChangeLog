@@ -11,6 +11,7 @@
 6. Darken separators, and menu/dialog background, for 'Black' theme.
 7. If list has selected items then always show menu when click right most
    64px.
+8. Fix cases where drag can start in browse view.
 
 4.1.2
 -----

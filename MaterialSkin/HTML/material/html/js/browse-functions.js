@@ -646,7 +646,16 @@ function browseClick(view, item, index, event) {
         return;
     }
     if (view.selection.size>0) {
-        view.select(item, index, event);
+        let clickX = event['pageX'] || event.clientX;
+        if (clickX==undefined && event.touches) {
+            clickX = event.touches[0].pageX;
+        }
+        let listRight = view.scrollElement.getBoundingClientRect().right;
+        if (clickX>(listRight-64)) {
+            view.itemMenu(item, index, event);
+        } else {
+            view.select(item, index, event);
+        }
         return;
     }
     if (item.isPinned) {

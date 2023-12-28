@@ -812,8 +812,20 @@ var lmsQueue = Vue.component("lms-queue", {
             });
         },
         click(item, index, event) {
+            if (queryParams.party) {
+                return;
+            }
             if (this.selection.size>0) {
-                this.select(item, index, event);
+                let clickX = event['pageX'] || event.clientX;
+                if (clickX==undefined && event.touches) {
+                    clickX = event.touches[0].pageX;
+                }
+                let listRight = this.scrollElement.getBoundingClientRect().right;
+                if (clickX>(listRight-64)) {
+                    this.itemMenu(item, index, event);
+                } else {
+                    this.select(item, index, event);
+                }
                 return;
             }
             if (this.menu.show) {

@@ -12,8 +12,10 @@ const PQ_REQUIRE_MULTIPLE_ITEMS = new Set([PQ_SCROLL_ACTION, PQ_SORT_ACTION, REM
 
 function queueMakePlain(str) {
     let rating = str.indexOf(SEPARATOR+RATINGS_START);
-    let plain = stripLinkTags(rating>0 ? str.substring(0, rating) : str).trim();
-    return plain.length==str.length ? undefined : plain;
+    let noRating = stripLinkTags(rating>0 ? str.substring(0, rating) : str);
+    let trackNum = noRating.indexOf(SEPARATOR);
+    let plain = (trackNum>0 ? noRating.substring(trackNum+SEPARATOR.length) : noRating).trim();
+    return plain;
 }
 
 function queueItemCover(item) {

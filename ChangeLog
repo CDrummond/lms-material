@@ -18,8 +18,8 @@
 12. Fix stripping ratings, track num, etc, from queue titles for use
     elsewhere.
 13. Don't adjust ratring star size via CSS zoom, as it breaks setting value.
-14. Check for updates every 30minutes in Material's server side code, and send
-    notification if required.
+14. For pre 8.4 LMS check for updates every 1hr in Material's server side code,
+    and send notification if required.
 15. Check for updates 30 seconds after initial connect to LMS.
 
 4.1.2

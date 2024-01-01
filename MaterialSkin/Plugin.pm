@@ -166,7 +166,9 @@ sub initPlugin {
 
     $class->initCLI();
     $class->initTranslationList();
-    Slim::Utils::Timers::setTimer(undef, Time::HiRes::time() + 15, \&_checkUpdates);
+    if (Slim::Utils::Versions->compareVersions($::VERSION, '8.4') < 0) {
+        Slim::Utils::Timers::setTimer(undef, Time::HiRes::time() + 15, \&_checkUpdates);
+    }
 }
 
 sub pluginVersion {
@@ -1581,10 +1583,12 @@ sub _checkUpdates {
 
     $request->callbackParameters(\&_checkUpdateStatus, [ $request ]);
     $request->execute();
-    # Schedule next check...
-    my $delay = 60 * 30;
-    main::DEBUGLOG && $log->debug("Next automatic update check in ${delay} seconds");
-    Slim::Utils::Timers::setTimer(undef, Time::HiRes::time() + $delay, \&_checkUpdates);
+    if (Slim::Utils::Versions->compareVersions($::VERSION, '8.4') < 0) {
+        # Schedule next check...
+        my $delay = 60 * 60;
+        main::DEBUGLOG && $log->debug("Next automatic update check in ${delay} seconds");
+        Slim::Utils::Timers::setTimer(undef, Time::HiRes::time() + $delay, \&_checkUpdates);
+    }
 }
 
 sub _customCssHandler {

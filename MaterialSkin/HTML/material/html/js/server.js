@@ -626,6 +626,7 @@ var lmsServer = Vue.component('lms-server', {
             }
         },
         handleNotification(data) {
+            logJsonMessage("NOTIFICATION", data);
             if (data.length>=4) {
                 if (data[2]=='info') {
                     if (data.length<6 || undefined==data[5] || data[5].length<1 || data[5]==this.$store.state.player.id) {
@@ -639,6 +640,16 @@ var lmsServer = Vue.component('lms-server', {
                     if (data[3]=='vlib') {
                         bus.$emit('libraryChanged');
                     }
+                } else if (data[2]=='updateinfo' && data.length>=6) {
+                    let avail = new Set();
+                    if (1==parseInt(data[3])) {
+                        avail.add("server");
+                    }
+                    if (1==parseInt(data[4])) {
+                        avail.add("plugins");
+                    }
+                    this.$store.commit('setUpdatesAvailable', avail);
+                    this.$store.commit('setRestartRequired', 1==parseInt(data[5]));
                 }
             }
         },
@@ -828,49 +839,11 @@ var lmsServer = Vue.component('lms-server', {
                 this.moveTimer = undefined;
             }
         },
-        checkForUpdates() {
-            if (LMS_VERSION>=80400) {
-                // Update flag sent in status message
-                return;
-            }
+        checkForUpdates(delay) {
             if (!this.$store.state.unlockAll || LMS_KIOSK_MODE) {
                 return;
             }
-            axios.get(location.protocol+'//'+location.hostname+(location.port ? ':'+location.port : '')+"/updateinfo.json?s=time"+(new Date().getTime())).then((resp) => {
-                var updates = eval(resp.data);
-                var avail = new Set();
-                if (updates && updates.server) {
-                    avail.add("server");
-                }
-                if (updates && updates.plugins && updates.plugins.length>0 && (updates.plugins.length>1 || updates.plugins[0]!=null)) {
-                    avail.add("plugins");
-                }
-                this.$store.commit('setUpdatesAvailable', avail);
-            }).catch(err => {
-                logError(err);
-            });
-            lmsCommand("", ["material-skin", "plugins-status"]).then(({data}) => {
-                if (data && data.result) {
-                    this.$store.commit('setRestartRequired', 1 == parseInt(data.result.needs_restart));
-                }
-            })
-        },
-        cancelUpdatesTimer() {
-            if (undefined!==this.updatesTimer) {
-                clearInterval(this.updatesTimer);
-                this.updatesTimer = undefined;
-            }
-        },
-        startUpdatesTimer() {
-            this.cancelUpdatesTimer();
-            if (LMS_VERSION<80400) {
-                setTimeout(function () {
-                    this.checkForUpdates();
-                    this.updatesTimer = setInterval(function () {
-                        this.checkForUpdates();
-                    }.bind(this), 1000 * 60 * 30); // Check every 1/2 hour
-                }.bind(this), 500);
-            }
+            lmsCommand("", ["material-skin", "check-for-updates", "delay:"+(undefined==delay ? 30 : delay)]);
         },
         adjustVolume(inc) {
             if (this.$store.state.player) {
@@ -891,9 +864,7 @@ var lmsServer = Vue.component('lms-server', {
         bus.$on('networkStatus', function(connected) {
             this.playerStatusMessages.clear();
             if (connected) {
-                this.startUpdatesTimer();
-            } else {
-                this.cancelUpdatesTimer();
+                this.checkForUpdates();
             }
         }.bind(this));
         bus.$on('reconnect', function() {
@@ -904,7 +875,7 @@ var lmsServer = Vue.component('lms-server', {
             this.checkForUpdates();
         }.bind(this));
         bus.$on('checkForUpdates', function() {
-            this.checkForUpdates();
+            this.checkForUpdates(2);
         }.bind(this));
         bus.$on('refreshStatus', function(id) {
             var player = id ? id : (this.$store.state.player ? this.$store.state.player.id : undefined);
@@ -1090,7 +1061,6 @@ var lmsServer = Vue.component('lms-server', {
         this.cancelServerStatusTimer();
         this.cancelFavoritesTimer();
         this.cancelMoveTimer();
-        this.cancelUpdatesTimer();
     },
     watch: {
         '$store.state.player': function (newVal) {

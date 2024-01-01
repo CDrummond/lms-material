@@ -166,6 +166,7 @@ sub initPlugin {
 
     $class->initCLI();
     $class->initTranslationList();
+    Slim::Utils::Timers::setTimer(undef, Time::HiRes::time() + 15, \&_checkUpdates);
 }
 
 sub pluginVersion {
@@ -401,7 +402,7 @@ sub _cliCommand {
                                                   'plugins', 'plugins-status', 'plugins-update', 'extras', 'delete-vlib', 'pass-isset',
                                                   'pass-check', 'browsemodes', 'geturl', 'command', 'scantypes', 'server', 'themes',
                                                   'playericons', 'activeplayers', 'urls', 'adv-search', 'adv-search-params', 'protocols',
-                                                  'players-extra-info', 'sort-playlist', 'mixer', 'release-types']) ) {
+                                                  'players-extra-info', 'sort-playlist', 'mixer', 'release-types', 'check-for-updates']) ) {
         $request->setStatusBadParams();
         return;
     }
@@ -1296,6 +1297,16 @@ sub _cliCommand {
         $request->setStatusDone();
         return;
     }
+    if ($cmd eq 'check-for-updates') {
+        my $delay = $request->getParam('delay');
+        if ($delay>=0) {
+            main::DEBUGLOG && $log->debug("Updates request received, will check in ${delay} seconds");
+            Slim::Utils::Timers::killTimers(undef, \&_checkUpdates);
+            Slim::Utils::Timers::setTimer(undef, Time::HiRes::time() + $delay, \&_checkUpdates);
+        }
+        $request->setStatusDone();
+        return;
+    }
 
     $request->setStatusBadParams();
 }
@@ -1529,6 +1540,51 @@ sub _svgHandler {
     }
     $httpClient->send_response($response);
     Slim::Web::HTTP::closeHTTPSocket($httpClient);
+}
+
+sub _checkUpdateStatus {
+    my ($request) = @_;
+    main::DEBUGLOG && $log->debug("Got updates response");
+
+    my $params = {};
+    my $serverUpdate = $::newVersion;
+    my $pluginsUpdate = 0;
+    my $needRestart = Slim::Utils::PluginManager->needsRestart;
+
+    my $newPlugins = $request->getResult('updates') || {};
+    my $newPluginInfo = $request && [ map { $_->{info} } grep { $_ } values %$newPlugins ];
+
+    if ($params->{installerFile}) {
+        $serverUpdate = 1;
+    } elsif (!defined $serverUpdate) {
+        $serverUpdate = 0;
+    }
+    if ($newPluginInfo && scalar(@{$newPluginInfo})>0) {
+        $pluginsUpdate = 1;
+    }
+    main::DEBUGLOG && $log->debug("Updates - server:${serverUpdate} plugins:${pluginsUpdate} needRestart:${needRestart}");
+    Slim::Control::Request::notifyFromArray(undef, ['material-skin', 'notification', 'updateinfo', $serverUpdate, $pluginsUpdate, $needRestart]);
+}
+
+sub _checkUpdates {
+    main::DEBUGLOG && $log->debug("Check for updates");
+    Slim::Utils::Timers::killTimers(undef, \&_checkUpdates);
+
+    my ($current) = Slim::Plugin::Extensions::Plugin::getCurrentPlugins();
+    my $request = Slim::Control::Request->new(undef, ['appsquery']);
+
+    $request->addParam(args => {
+        type    => 'plugin',
+        details => 1,
+        current => $current,
+    });
+
+    $request->callbackParameters(\&_checkUpdateStatus, [ $request ]);
+    $request->execute();
+    # Schedule next check...
+    my $delay = 60 * 30;
+    main::DEBUGLOG && $log->debug("Next automatic update check in ${delay} seconds");
+    Slim::Utils::Timers::setTimer(undef, Time::HiRes::time() + $delay, \&_checkUpdates);
 }
 
 sub _customCssHandler {

@@ -1585,7 +1585,7 @@ sub _checkUpdates {
     $request->execute();
     if (Slim::Utils::Versions->compareVersions($::VERSION, '8.4') < 0) {
         # Schedule next check (use LMS's setting, or every 2hrs if not set)...
-        my $serverprefs->get('checkVersionInterval') || (24*60*60);
+        my $delay = $serverprefs->get('checkVersionInterval') || (24*60*60);
         main::DEBUGLOG && $log->debug("Next automatic update check in ${delay} seconds");
         Slim::Utils::Timers::setTimer(undef, Time::HiRes::time() + $delay, \&_checkUpdates);
     }

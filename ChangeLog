@@ -17,6 +17,7 @@
 11. Don't hide queue if click elsewhere whilst one of its menus is open.
 12. Fix stripping ratings, track num, etc, from queue titles for use
     elsewhere.
+13. Don't adjust ratring star size via CSS zoom, as it breaks setting value.
 
 4.1.2
 -----

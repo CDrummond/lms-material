@@ -1366,6 +1366,12 @@ div.v-subheader {
  font-size:250%;
 }
 
+#np-page .np-landscape-song-info .v-rating .v-icon {
+ width:32px!important;
+ height:32px!important;
+ font-size:32px!important;
+}
+
 div.v-rating i.primary--text, div.v-rating i.accent--text {
  color:var(--text-color) !important;
 }
@@ -1386,8 +1392,10 @@ div.v-rating i.primary--text, div.v-rating i.accent--text {
  .np-title:not(.np-title-landscape) {
   font-size:135% !important;
  }
- .np-portrait-song-info .v-rating {
-  zoom:0.75;
+ #np-page .np-portrait-song-info .v-rating .v-icon {
+  width:18px!important;
+  height:18px!important;
+  font-size:18px!important;
  }
 }
 
@@ -1397,6 +1405,11 @@ div.v-rating i.primary--text, div.v-rating i.accent--text {
  }
  .np-text-landscape {
   font-size:225% !important;
+ }
+ #np-page .np-landscape-song-info .v-rating .v-icon {
+  width:28px!important;
+  height:28px!important;
+  font-size:28px!important;
  }
 }
 
@@ -1410,6 +1423,11 @@ div.v-rating i.primary--text, div.v-rating i.accent--text {
  .np-landscape-song-info div p {
   margin:10px 0px!important;
   padding:0px!important;
+ }
+ #np-page .np-landscape-song-info .v-rating .v-icon {
+  width:22px!important;
+  height:22px!important;
+  font-size:22px!important;
  }
 }
 
@@ -1437,8 +1455,10 @@ div.v-rating i.primary--text, div.v-rating i.accent--text {
   margin:3px 0px!important;
   padding:0px!important;
  }
- .np-landscape-song-info .v-rating {
-  zoom:0.75;
+ #np-page .np-landscape-song-info .v-rating .v-icon {
+  width:18px!important;
+  height:18px!important;
+  font-size:18px!important;
  }
 }
 
@@ -1449,8 +1469,10 @@ div.v-rating i.primary--text, div.v-rating i.accent--text {
  .np-text-landscape {
   font-size:100% !important;
  }
- .np-landscape-song-info .v-rating {
-  zoom:0.65;
+ #np-page .np-landscape-song-info .v-rating .v-icon {
+  width:16px!important;
+  height:16px!important;
+  font-size:16px!important;
  }
 }
 
@@ -1461,8 +1483,10 @@ div.v-rating i.primary--text, div.v-rating i.accent--text {
  .np-text-landscape {
   font-size:75% !important;
  }
- .np-landscape-song-info .v-rating {
-  zoom:0.5;
+ #np-page .np-landscape-song-info .v-rating .v-icon {
+  width:12px!important;
+  height:12px!important;
+  font-size:12px!important;
  }
 }
 

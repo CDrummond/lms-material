@@ -843,7 +843,17 @@ var lmsServer = Vue.component('lms-server', {
             if (!this.$store.state.unlockAll || LMS_KIOSK_MODE) {
                 return;
             }
-            lmsCommand("", ["material-skin", "check-for-updates", "delay:"+(undefined==delay ? 30 : delay)]);
+            if (undefined==delay && LMS_VERSION>=80400) {
+                // At start, for LMS 8.4+, only need to check 'needs restart' status, as LMS
+                // will signal updates in its status message
+                lmsCommand("", ["material-skin", "plugins-status"]).then(({data}) => {
+                    if (data && data.result) {
+                        this.$store.commit('setRestartRequired', 1 == parseInt(data.result.needs_restart));
+                    }
+                });
+            } else {
+                lmsCommand("", ["material-skin", "check-for-updates", "delay:"+(undefined==delay ? 30 : delay)]);
+            }
         },
         adjustVolume(inc) {
             if (this.$store.state.player) {
@@ -870,9 +880,6 @@ var lmsServer = Vue.component('lms-server', {
         bus.$on('reconnect', function() {
             this.playerStatusMessages.clear();
             this.reConnectToCometD();
-        }.bind(this));
-        bus.$on('lockChanged', function() {
-            this.checkForUpdates();
         }.bind(this));
         bus.$on('checkForUpdates', function() {
             this.checkForUpdates(2);

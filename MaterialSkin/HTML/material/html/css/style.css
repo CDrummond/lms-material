@@ -2352,7 +2352,7 @@ div.v-subheader {
 .grid-header .list-btns,
 .indent-both .grid-header .list-btns,
 .indent-right .grid-header .list-btns {
- right:40px !important;
+ right:38px !important;
 }
 
 .grid-header .menu-btn {
@@ -2734,14 +2734,24 @@ div.v-subheader {
 .list-btns {
  position:absolute;
  top:13px !important;
+ right:28px !important;
+}
+
+.list-btns-track {
  right:68px !important;
 }
 
 .indent-both .list-btns {
- right:calc(228px + var(--home-button-size))!important;
+ right:calc(188px + var(--home-button-size))!important;
 }
+.indent-both .list-btns-track {
+  right:calc(228px + var(--home-button-size))!important;
+ }
 
 .indent-right .list-btns {
+ right:calc(88px + var(--home-button-size))!important;
+}
+.indent-right .list-btns-track {
  right:calc(128px + var(--home-button-size))!important;
 }
 

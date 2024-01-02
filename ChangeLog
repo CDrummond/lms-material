@@ -20,6 +20,8 @@
 13. Don't adjust ratring star size via CSS zoom, as it breaks setting value.
 14. Improve update checking.
 15. Allow add/play all for trackstat.
+16. If list does not have duation then move add/play hover buttons closer to
+    menu button.
 
 4.1.2
 -----

@@ -168,8 +168,7 @@ function addAndPlayAllActions(cmd) {
             }
         }
         return false;
-    } else if (cmd.command[0]=="artists" || cmd.command[0]=="genres" || cmd.command[0]=="years" || cmd.command[0]=="playlists" ||
-               cmd.command[0]=="musicfolder" || cmd.command[0]=="trackstat") {
+    } else if (cmd.command[0]=="artists" || cmd.command[0]=="genres" || cmd.command[0]=="years" || cmd.command[0]=="playlists" || cmd.command[0]=="musicfolder") {
         return false;
     } else if (cmd.command[0]=="browselibrary" && cmd.command[1]=="items") { // Browse filesystem and top/flop tracks
         for (var i=0, len=cmd.params.length; i<len; ++i) {

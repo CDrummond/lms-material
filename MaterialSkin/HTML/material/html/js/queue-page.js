@@ -398,8 +398,6 @@ var lmsQueue = Vue.component("lms-queue", {
             this.listSize=0;
             this.timestamp=0;
             this.getDuration();
-        }.bind(this));
-        bus.$on('playerChanged', function() {
             this.clearSelection();
         }.bind(this));
         bus.$on('customActions', function(val) {

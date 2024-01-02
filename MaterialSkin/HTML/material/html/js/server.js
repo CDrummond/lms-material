@@ -1071,8 +1071,7 @@ var lmsServer = Vue.component('lms-server', {
     },
     watch: {
         '$store.state.player': function (newVal) {
-            bus.$emit("playerChanged");
-            this.playerChanged()
+            this.playerChanged();
         }
     }
 });

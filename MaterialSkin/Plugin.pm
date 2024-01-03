@@ -1553,17 +1553,16 @@ sub _checkUpdateStatus {
     my $pluginsUpdate = 0;
     my $needRestart = Slim::Utils::PluginManager->needsRestart;
 
-    my $newPlugins = $request->getResult('updates') || {};
-    my $newPluginInfo = $request && [ map { $_->{info} } grep { $_ } values %$newPlugins ];
+    if (my $newPlugins = Slim::Utils::PluginManager->message) {
+        $pluginsUpdate = 1;
+    }
 
     if ($params->{installerFile}) {
         $serverUpdate = 1;
     } elsif (!defined $serverUpdate) {
         $serverUpdate = 0;
     }
-    if ($newPluginInfo && scalar(@{$newPluginInfo})>0) {
-        $pluginsUpdate = 1;
-    }
+
     main::DEBUGLOG && $log->debug("Updates - server:${serverUpdate} plugins:${pluginsUpdate} needRestart:${needRestart}");
     Slim::Control::Request::notifyFromArray(undef, ['material-skin', 'notification', 'updateinfo', $serverUpdate, $pluginsUpdate, $needRestart]);
 }

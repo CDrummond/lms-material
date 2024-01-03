@@ -349,6 +349,7 @@ var lmsServer = Vue.component('lms-server', {
                     avail.add("plugins");
                 }
                 this.$store.commit('setUpdatesAvailable', avail);
+                this.$store.commit('setRestartRequired', undefined!=data.needsrestart && parseInt(data.needsrestart)>0);
             }
             if (undefined!=data.rescan && 1==parseInt(data.rescan)) {
                 let total = undefined!=data.progresstotal ? parseInt(data.progresstotal) : undefined;
@@ -469,7 +470,7 @@ var lmsServer = Vue.component('lms-server', {
                     }
                 }
                 // Ignore status for players that we don't know about. When deleting a group player in 'Manage players' we get
-                // a status message for this removed player, whcich causes it to be re-added...
+                // a status message for this removed player, which causes it to be re-added...
                 if (!found) {
                     return;
                 }
@@ -782,6 +783,12 @@ var lmsServer = Vue.component('lms-server', {
             this.getPlayerPrefs();
         },
         refreshServerStatus() {
+            // Check its been at least 100ms since last serverstatus message, don't want to thrash server...
+            let now = (new Date()).getTime();
+            if (undefined!=this.lastServerStatusTime && (now-this.lastServerStatusTime)<100) {
+                return;
+            }
+            this.lastServerStatusTime = now;
             lmsCommand("", ["serverstatus", 0, LMS_MAX_PLAYERS]).then(({data}) => {
                 if (data && data.result) {
                     this.handleServerStatus(data.result);
@@ -839,20 +846,14 @@ var lmsServer = Vue.component('lms-server', {
                 this.moveTimer = undefined;
             }
         },
-        checkForUpdates(delay) {
-            if (!this.$store.state.unlockAll || LMS_KIOSK_MODE) {
+        checkForUpdates(isStartup) {
+            if (!this.$store.state.unlockAll || LMS_KIOSK_MODE || (isStartup && LMS_VERSION>=80400)) {
                 return;
             }
-            if (undefined==delay && LMS_VERSION>=80400) {
-                // At start, for LMS 8.4+, only need to check 'needs restart' status, as LMS
-                // will signal updates in its status message
-                lmsCommand("", ["material-skin", "plugins-status"]).then(({data}) => {
-                    if (data && data.result) {
-                        this.$store.commit('setRestartRequired', 1 == parseInt(data.result.needs_restart));
-                    }
-                });
+            if (LMS_VERSION>=80400) {
+                bus.$emit('refreshServerStatus', 2000);
             } else {
-                lmsCommand("", ["material-skin", "check-for-updates", "delay:"+(undefined==delay ? 30 : delay)]);
+                lmsCommand("", ["material-skin", "check-for-updates", "delay:"+(isStartup ? 30 : 2)]);
             }
         },
         adjustVolume(inc) {
@@ -874,7 +875,7 @@ var lmsServer = Vue.component('lms-server', {
         bus.$on('networkStatus', function(connected) {
             this.playerStatusMessages.clear();
             if (connected) {
-                this.checkForUpdates();
+                this.checkForUpdates(true);
             }
         }.bind(this));
         bus.$on('reconnect', function() {
@@ -882,7 +883,7 @@ var lmsServer = Vue.component('lms-server', {
             this.reConnectToCometD();
         }.bind(this));
         bus.$on('checkForUpdates', function() {
-            this.checkForUpdates(2);
+            this.checkForUpdates(false);
         }.bind(this));
         bus.$on('refreshStatus', function(id) {
             var player = id ? id : (this.$store.state.player ? this.$store.state.player.id : undefined);
@@ -892,7 +893,7 @@ var lmsServer = Vue.component('lms-server', {
         }.bind(this));
         bus.$on('refreshServerStatus', function(delay) {
             this.refreshServerStatus();
-            if (undefined!=delay && delay>50 && delay<10000) {
+            if (undefined!=delay && delay>=100 && delay<=10000) {
                 setTimeout(function () {
                     this.refreshServerStatus();
                 }.bind(this), delay);

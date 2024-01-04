@@ -170,7 +170,6 @@ Vue.component('lms-toolbar', {
  <div class="drag-area-right"></div>
  <lms-windowcontrols v-if="queryParams.nativeTitlebar"></lms-windowcontrols>
 </v-toolbar>
-<v-snackbar style="z-index:3" v-model="snackbar.show" :multi-line="true" :timeout="snackbar.timeout ? snackbar.timeout : 2500" :color="snackbar.color" top>{{ snackbar.msg }}</v-snackbar>
 </div>
     `,
     data() {
@@ -194,7 +193,6 @@ Vue.component('lms-toolbar', {
                  playerVolume: 0,
                  playerMuted: false,
                  playerDvc: VOL_STD,
-                 snackbar:{ show: false, msg: undefined},
                  connected: true,
                  width: 100,
                  height: 300,
@@ -296,16 +294,6 @@ Vue.component('lms-toolbar', {
             this.controlClock();
         }.bind(this));
         this.controlClock();
-
-        bus.$on('showError', function(err, msg, timeout) {
-            this.snackbar = {msg: (msg ? stripLinkTags(msg) : i18n("Something went wrong!")) + (err ? " (" + err+")" : ""),
-                             show: true, color: 'error', timeout: undefined!=timeout && timeout>0 && timeout<=30 ? timeout*1000 : undefined};
-        }.bind(this));
-        bus.$on('showMessage', function(msg, timeout) {
-            if (undefined!=msg && msg.length>0 && !msgIsEmpty(msg)) {
-                this.snackbar = {msg: stripLinkTags(msg), show: true, timeout: undefined!=timeout && timeout>0 && timeout<=30 ? timeout*1000 : undefined };
-            }
-        }.bind(this));
 
         bus.$on('networkStatus', function(connected) {
             if (connected) {

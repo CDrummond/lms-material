@@ -536,9 +536,9 @@ function applyModifications(page, textCol) {
                                         if (res) {
                                             if (restartWarning) {
                                                 lmsCommand("", ["restartserver"]).then(({}) => {
-                                                    bus.$emit('iframe-showMessage', i18n('Server is being restarted.'));
+                                                    bus.$emit('showMessage', i18n('Server is being restarted.'));
                                                 }).catch(err => {
-                                                    bus.$emit('iframe-showMessage', i18n('Server is being restarted.'));
+                                                    bus.$emit('showMessage', i18n('Server is being restarted.'));
                                                 });
                                             } else if (href.startsWith("https://") || (href.startsWith("http://") && !href.startsWith('http://'+window.location.hostname+':'+window.location.port+'/'))) {
                                                 openWindow(href);
@@ -566,7 +566,7 @@ function applyModifications(page, textCol) {
                     }
 
                     if (msg.length>0 && popupMsg!=msg) {
-                        bus.$emit('iframe-showMessage', msg);
+                        bus.$emit('showMessage', msg);
                     }
                 }
             }
@@ -616,7 +616,6 @@ Vue.component('lms-iframe-dialog', {
    </v-card-text>
   </v-card>
  </v-dialog>
- <v-snackbar v-model="snackbar.show" :multi-line="true" :timeout="2500" top>{{ snackbar.msg }}</v-snackbar>
  <v-menu v-model="choiceMenu.show" :position-x="choiceMenu.x" :position-y="10" style="z-index:1000">
   <v-list>
    <template v-for="(player, index) in players">
@@ -639,7 +638,6 @@ Vue.component('lms-iframe-dialog', {
             title: undefined,
             src: undefined,
             page: undefined,
-            snackbar:{show:false, msg:undefined},
             loaded:false,
             actions: [],
             customActions: [],
@@ -690,9 +688,6 @@ Vue.component('lms-iframe-dialog', {
         }.bind(this));
         bus.$on('iframe-close', function() {
             this.close();
-        }.bind(this));
-        bus.$on('iframe-showMessage', function(msg) {
-            this.snackbar={show:true, msg:msg};
         }.bind(this));
         bus.$on('iframe-hideMenu', function() {
             this.showMenu = false;

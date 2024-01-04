@@ -22,6 +22,8 @@
 15. Allow add/play all for trackstat.
 16. If list does not have duration then move add/play hover buttons closer to
     menu button.
+17. Move 'snackbar' to top-level, so that messages are seen even if dialogs
+    open.
 
 4.1.2
 -----

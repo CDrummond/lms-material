@@ -39,7 +39,9 @@ var app = new Vue({
                             addtoplaylist: false, file: false, groupvolume: false, advancedsearch: false, downloadstatus:false,
                             gallery: false, choice: false, playersettingsplugin: false
                           },
-                 loaded: false }
+                 loaded: false,
+                 snackbar:{ show: false, msg: undefined}
+                }
     },
     created() {
         if (IS_MOBILE) {
@@ -375,6 +377,16 @@ var app = new Vue({
 
         bus.$on('setPlayer', function(id) {
             this.$store.commit('setPlayer', id);
+        }.bind(this));
+
+        bus.$on('showError', function(err, msg, timeout) {
+            this.snackbar = {msg: (msg ? stripLinkTags(msg) : i18n("Something went wrong!")) + (err ? " (" + err+")" : ""),
+                             show: true, color: 'error', timeout: undefined!=timeout && timeout>0 && timeout<=30 ? timeout*1000 : undefined};
+        }.bind(this));
+        bus.$on('showMessage', function(msg, timeout) {
+            if (undefined!=msg && msg.length>0 && !msgIsEmpty(msg)) {
+                this.snackbar = {msg: stripLinkTags(msg), show: true, timeout: undefined!=timeout && timeout>0 && timeout<=30 ? timeout*1000 : undefined };
+            }
         }.bind(this));
     },
     computed: {

@@ -24,6 +24,8 @@
     menu button.
 17. Move 'snackbar' to top-level, so that messages are seen even if dialogs
     open.
+18. Use SVG icons for add/play hover buttons, as pure CSS sometimes has
+    alignment issues.
 
 4.1.2
 -----

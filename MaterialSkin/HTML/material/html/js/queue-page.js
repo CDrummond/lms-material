@@ -1497,10 +1497,10 @@ var lmsQueue = Vue.component("lms-queue", {
             return value ? value : 0;
         },
         svgIcon: function (name, dark, ci) {
-            return "/material/svg/"+name+"?c="+
-                (undefined==ci || !ci
-                    ? (dark ? LMS_DARK_SVG : LMS_LIGHT_SVG)
-                    : getComputedStyle(document.documentElement).getPropertyValue("--primary-color").replace("#", ""))+"&r="+LMS_MATERIAL_REVISION;
+            if (undefined==ci || !ci) {
+                return "/material/svg/"+name+"?c="+(dark ? LMS_DARK_SVG : LMS_LIGHT_SVG)    +"&r="+LMS_MATERIAL_REVISION;
+            }
+            return "/material/svg/"+name+"?c="+getComputedStyle(document.documentElement).getPropertyValue("--primary-color").replace("#", "")+"&c2="+LMS_DARK_SVG+"&r="+LMS_MATERIAL_REVISION;
         },
         tooltip: function (str, key, showShortcut) {
             return showShortcut ? ttShortcutStr(str, key) : str;

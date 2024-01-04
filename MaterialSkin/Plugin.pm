@@ -1493,9 +1493,11 @@ sub _svgHandler {
     my $svgName = basename($request->uri->path);
     my $filePath = $dir . "/HTML/material/html/images/" . $svgName . ".svg";
     my $colour = "#f00";
+    my $colour2 = "";
 
     if ($request->uri->can('query_param')) {
         $colour = "#" . $request->uri->query_param('c');
+        $colour2 = "#" . $request->uri->query_param('c2');
     } else { # Manually extract "c=colour" query parameter...
         my $uri = $request->uri->as_string;
         my $start = index($uri, "c=");
@@ -1507,6 +1509,17 @@ sub _svgHandler {
                 $colour = "#" . substr($uri, $start, $end-$start);
             } else {
                 $colour = "#" . substr($uri, $start);
+            }
+        }
+
+        $start = index($uri, "c2=");
+        if ($start > 0) {
+            $start += 2;
+            my $end = index($uri, "&", $start);
+            if ($end > $start) {
+                $colour2 = "#" . substr($uri, $start, $end-$start);
+            } else {
+                $colour2 = "#" . substr($uri, $start);
             }
         }
     }
@@ -1529,7 +1542,9 @@ sub _svgHandler {
     if (-e $filePath) {
         my $svg = read_file($filePath);
         $svg =~ s/#000/$colour/g;
-        if ($svgName ne "pq-current") {
+        if ($colour2 ne "") {
+            $svg =~ s/#fff/$colour2/g;
+        } else {
             $svg =~ s/fill\s*=\s*"[#0-9a-fA-F\.]+"/fill="${colour}"/g;
             $svg =~ s/stroke\s*=\s*"[#0-9a-fA-F\.]+"/stroke="${colour}"/g;
         }

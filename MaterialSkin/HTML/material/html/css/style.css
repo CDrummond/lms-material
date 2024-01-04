@@ -2766,31 +2766,14 @@ div.v-subheader {
 .add-btn, .play-btn {
  margin-right:8px;
  float:left;
- color:var(--text-color);
- background-color:#eee;
- font-size:calc(var(--small-icon-size) - 1px);
- line-height:calc(var(--small-icon-size) - 1px);
- border:2.5px solid var(--light-text-color);
  padding:0px;
  opacity:0.6;
  width:calc(var(--small-icon-size) + 3px);
  height:calc(var(--small-icon-size) + 3px);
 }
 
-.theme--light .grid-btns .add-btn, .theme--light  .grid-btns .play-btn {
-  background-color:#333;
-}
-
-.theme--dark .add-btn, .theme--dark .play-btn {
- background-color:#333;
-}
-
 .play-btn {
  margin-right:6px;
-}
-
-.list-btns .play-btn, .list-btns .add-btn {
- border:2.5px solid var(--text-color);
 }
 
 .np-menu, .np-close {
@@ -2798,10 +2781,6 @@ div.v-subheader {
  color:var(--text-color);
  background-color:rgba(110, 110, 110, 0.45);
  opacity:0.7;
-}
-
-.grid-btns .add-btn, .grid-btns .play-btn, .np-menu, .np-close {
- color:var(--light-text-color);
 }
 
 .list-btns .play-btn {
@@ -2824,14 +2803,6 @@ div.v-subheader {
  opacity:1.0;
 }
 /*}*/
-
-.add-btn:after {
- content:"add";
-}
-
-.play-btn:after {
- content:"play_arrow";
-}
 
 .check-btn {
  color:white;

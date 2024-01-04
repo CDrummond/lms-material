@@ -4,8 +4,8 @@
  2. Fix clipping of menu button highlight when installed as a chrome webapp and
     using window controls.
  3. Listen for 'geometrychange' with window controls to correctly set spacing.
- 4. Use squre icon, with curved corners, for all as now supply a maskable icon
-    for Android, etc.
+ 4. Use square icon, with curved corners, for all as now supply a mask-able
+    icon for Android, etc.
  5. Prevent weird animation when close player select menu from 'Player settings'
     dialog.
  6. Darken separators, and menu/dialog background, for 'Black' theme.
@@ -13,11 +13,11 @@
     64px.
  8. Fix cases where drag can start in browse view.
  9. Fix mobile drag'n'drop when touching on image.
-10. Fix white background dusing drag'n'drop on some systems.
+10. Fix white background using drag'n'drop on some systems.
 11. Don't hide queue if click elsewhere whilst one of its menus is open.
 12. Fix stripping ratings, track num, etc, from queue titles for use
     elsewhere.
-13. Don't adjust ratring star size via CSS zoom, as it breaks setting value.
+13. Don't adjust rating star size via CSS zoom, as it breaks setting value.
 14. Improve update checking.
 15. Allow add/play all for trackstat.
 16. If list does not have duration then move add/play hover buttons closer to

@@ -166,7 +166,7 @@ sub initPlugin {
 
     $class->initCLI();
     $class->initTranslationList();
-    if (Slim::Utils::Versions->compareVersions($::VERSION, '8.4') < 0) {
+    if (Slim::Utils::Versions->compareVersions($::VERSION, '8.4.0') < 0) {
         Slim::Utils::Timers::setTimer(undef, Time::HiRes::time() + 15, \&_checkUpdates);
     }
 }
@@ -1276,7 +1276,7 @@ sub _cliCommand {
     }
 
     if ($cmd eq 'release-types') {
-        if (Slim::Utils::Versions->compareVersions($::VERSION, '8.4') >= 0) {
+        if (Slim::Utils::Versions->compareVersions($::VERSION, '8.4.0') >= 0) {
             my $relTypes = Slim::Schema::Album->releaseTypes();
             my $cnt = 0;
             foreach my $rt (@{$relTypes}) {
@@ -1582,7 +1582,7 @@ sub _checkUpdates {
 
     $request->callbackParameters(\&_checkUpdateStatus, [ $request ]);
     $request->execute();
-    if (Slim::Utils::Versions->compareVersions($::VERSION, '8.4') < 0) {
+    if (Slim::Utils::Versions->compareVersions($::VERSION, '8.4.0') < 0) {
         # Schedule next check (use LMS's setting, or every 2hrs if not set)...
         my $delay = $serverprefs->get('checkVersionInterval') || (24*60*60);
         main::DEBUGLOG && $log->debug("Next automatic update check in ${delay} seconds");

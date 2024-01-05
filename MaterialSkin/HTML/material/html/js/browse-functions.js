@@ -464,7 +464,8 @@ function browseHandleListResponse(view, item, command, resp, prevPage, appendIte
         if (resp.canUseGrid && !resp.forceGrid) {
             view.currentActions.push({action:(view.grid.use ? USE_LIST_ACTION : USE_GRID_ACTION), weight:0});
         }
-        if (undefined==item.stdItem && undefined!=item.menu && item.menu[0]==PLAY_ACTION && lmsOptions.playShuffle && view.items.length>1) {
+        let itemHasPlayAction=undefined!=item.menu && item.menu[0]==PLAY_ACTION;
+        if (undefined==item.stdItem && itemHasPlayAction && lmsOptions.playShuffle && view.items.length>1) {
             view.currentActions.push({action:INSERT_ACTION, weight:2});
             view.currentActions.push({action:PLAY_SHUFFLE_ACTION, weight:3});
         }
@@ -506,7 +507,7 @@ function browseHandleListResponse(view, item, command, resp, prevPage, appendIte
             view.currentActions=browseActions(view, resp.items.length>0 ? item : undefined, {}, resp.items.length);
         } else if (view.allSongsItem || ("tracks"==command.command[0] && item.id.startsWith("currentaction:"))) {
             view.tbarActions=[PLAY_ALL_ACTION, ADD_ALL_ACTION];
-        } else if (view.items.length>0 && view.items[0].type!="html" && !(view.current && view.current.isPodcast) && addAndPlayAllActions(command)) {
+        } else if (view.items.length>0 && view.items[0].type!="html" && !(view.current && view.current.isPodcast) && (itemHasPlayAction || addAndPlayAllActions(command))) {
             if (view.current && view.current.menu) {
                 for (var i=0, len=view.current.menu.length; i<len; ++i) {
                     if (view.current.menu[i]==ADD_ACTION || view.current.menu[i]==PLAY_ACTION) {

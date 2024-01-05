@@ -687,7 +687,9 @@ function parseBrowseResp(data, parent, options, cacheKey, parentCommand, parentG
                     resp.items.shift();
                     resp.subtitle=0==resp.items.length ? i18n("Empty") : i18np("1 Track", "%1 Tracks", resp.items.length);
                 } else {
-                    if ("spotty"==command && resp.items.length>0) {
+                    if (resp.items.length>0 &&
+                        ( ("spotty"==command) ||
+                           ("trackinfo"==command && getIndex(data.params[1], "url:spotify://track:")>0))) {
                         if (resp.allowHoverBtns && resp.items[0].menu.length>0 && resp.items[0].menu[0]==PLAY_ACTION &&
                             resp.items[resp.items.length-1].style=='itemNoAction') {
                             resp.actionItems = [];

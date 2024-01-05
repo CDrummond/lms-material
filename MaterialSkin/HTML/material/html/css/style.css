@@ -2768,12 +2768,12 @@ div.v-subheader {
  float:left;
  padding:0px;
  opacity:0.6;
- width:calc(var(--small-icon-size) + 3px);
- height:calc(var(--small-icon-size) + 3px);
+ width:var(--icon-size);
+ height:var(--icon-size);
 }
 
 .play-btn {
- margin-right:6px;
+ margin-right:4px;
 }
 
 .np-menu, .np-close {

@@ -1667,9 +1667,6 @@ var lmsBrowse = Vue.component("lms-browse", {
             if (this.items[0].stdItem==STD_ITEM_PLAYLIST_TRACK && this.listSize>LMS_MAX_PLAYLIST_EDIT_SIZE) {
                 return;
             }
-            if (undefined==this.current) {
-                return;
-            }
             if ( ((this.canDrop && undefined!=window.mskBrowseDrag) || (undefined!=window.mskQueueDrag && this.current.section==SECTION_PLAYLISTS)) &&
                (!this.current || !this.current.isFavFolder || !this.options.sortFavorites || this.items[index].isFavFolder)) {
                 this.dropIndex = index;

@@ -647,7 +647,7 @@ function nowplayingFetchArtistInfo(view) {
                         if (data.result && data.result.biography) {
                             if (data.result.artist) {
                                 view.info.tabs[ARTIST_TAB].found = true;
-                                let text = replaceNewLines(data.result.biography);
+                                let text = replaceNewLines(data.result.biography).replaceAll('data-src="http', 'src="http');
                                 if (view.info.tabs[ARTIST_TAB].first) {
                                     view.info.tabs[ARTIST_TAB].text = text;
                                     view.info.tabs[ARTIST_TAB].first = false;
@@ -696,7 +696,7 @@ function nowplayingFetchArtistInfo(view) {
                                 lmsCommand("", command, view.info.tabs[ARTIST_TAB].reqId).then(({data}) => {
                                     logJsonMessage("RESP", data);
                                     if (data && data.result && view.isCurrent(data, ARTIST_TAB)) {
-                                        view.info.tabs[ARTIST_TAB].text=data.result.biography ? replaceNewLines(data.result.biography) : undefined;
+                                        view.info.tabs[ARTIST_TAB].text=data.result.biography ? replaceNewLines(data.result.biography).replaceAll('data-src="http', 'src="http') : undefined;
                                         view.info.tabs[ARTIST_TAB].image=view.infoTrack.albumartist_ids==undefined ? undefined : ("/imageproxy/mai/artist/" + view.infoTrack.albumartist_ids[0] + "/image" + LMS_IMAGE_SIZE);
                                         view.info.tabs[ARTIST_TAB].isMsg=undefined==data.result.biography;
                                     }
@@ -705,7 +705,7 @@ function nowplayingFetchArtistInfo(view) {
                                 });
                             }
                         } else {
-                            view.info.tabs[ARTIST_TAB].text=data.result.biography ? replaceNewLines(data.result.biography) : undefined;
+                            view.info.tabs[ARTIST_TAB].text=data.result.biography ? replaceNewLines(data.result.biography).replaceAll('data-src="http', 'src="http') : undefined;
                             view.info.tabs[ARTIST_TAB].image=view.infoTrack.artist_ids==undefined ? undefined : ("/imageproxy/mai/artist/" + view.infoTrack.artist_ids[0] + "/image" + LMS_IMAGE_SIZE);
                             view.info.tabs[ARTIST_TAB].isMsg=undefined==data.result.biography;
                         }
@@ -795,7 +795,7 @@ function nowplayingFetchAlbumInfo(view) {
             lmsCommand("", command, view.info.tabs[ALBUM_TAB].reqId).then(({data}) => {
                 logJsonMessage("RESP", data);
                 if (data && data.result && view.isCurrent(data, ALBUM_TAB)) {
-                    view.info.tabs[ALBUM_TAB].text=data.result.albumreview ? replaceNewLines(data.result.albumreview) : undefined;
+                    view.info.tabs[ALBUM_TAB].text=data.result.albumreview ? replaceNewLines(data.result.albumreview).replaceAll('data-src="http', 'src="http') : undefined;
                     view.info.tabs[ALBUM_TAB].image=/*data.result.albumreview ? undefined :*/ view.coverUrl;
                     view.info.tabs[ALBUM_TAB].isMsg=undefined==data.result.albumreview;
                 }

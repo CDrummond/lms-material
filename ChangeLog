@@ -8,6 +8,7 @@
 6. Try to detect Spotify track list even when called from 'trackinfo'
 7. Change 'Biography' and 'Review' button labels to 'Information', as MAI's
    album info is more info than review.
+8. Remove all tracks from queue via long-press on clear button.
 
 4.1.3
 -----

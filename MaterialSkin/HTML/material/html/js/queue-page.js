@@ -207,7 +207,7 @@ var lmsQueue = Vue.component("lms-queue", {
    <v-btn :title="trans.shuffleAll" flat icon v-else-if="(desktopLayout || wide>0) && playerStatus.shuffle===1" class="toolbar-button" v-bind:class="{'disabled':noPlayer}" @click="shuffleClicked"><v-icon >shuffle</v-icon></v-btn>
    <v-btn :title="trans.shuffleOff" flat icon v-else-if="desktopLayout || wide>0" class="toolbar-button dimmed" v-bind:class="{'disabled':noPlayer}" @click="shuffleClicked"><img class="svg-img media-icon" :src="'shuffle-off' | svgIcon(darkUi)"></img></v-btn>
    <v-btn :title="ACTIONS[PQ_SAVE_ACTION].title | tooltip(LMS_SAVE_QUEUE_KEYBOARD,keyboardControl)" flat icon @click="save()" class="toolbar-button" v-bind:class="{'disabled':items.length<1}" v-if="(!LMS_KIOSK_MODE || !HIDE_FOR_KIOSK.has(PQ_SAVE_ACTION)) && !queryParams.party && wide>1"><v-icon>save</v-icon></v-btn>
-   <v-btn :title="trans.clear | tooltip(LMS_CLEAR_QUEUE_KEYBOARD,keyboardControl)" flat icon @click="clear()" class="toolbar-button" v-bind:class="{'disabled':items.length<1}"v-if="!queryParams.party"><img class="svg-list-img" :src="'queue-clear' | svgIcon(darkUi)"></img></v-btn>
+   <v-btn :title="trans.clear | tooltip(LMS_CLEAR_QUEUE_KEYBOARD,keyboardControl)" flat icon v-longpress="clear" class="toolbar-button" v-bind:class="{'disabled':items.length<1}"v-if="!queryParams.party"><img class="svg-list-img" :src="'queue-clear' | svgIcon(darkUi)"></img></v-btn>
   </v-layout>
  </div>
  <div class="lms-list bgnd-cover" v-bind:class="{'queue-backdrop-cover':drawBackdrop}" id="queue-bgnd">
@@ -783,11 +783,14 @@ var lmsQueue = Vue.component("lms-queue", {
             }
             bus.$emit('dlg.open', 'savequeue', ""+(undefined==this.playlist.name ? "" : this.playlist.name));
         },
-        clear() {
+        clear(longPress) {
             if (this.items.length<1 || queryParams.party) {
                 return;
             }
-
+            if (longPress) {
+                bus.$emit('playerCommand', ["playlist", "clear"]);
+                return;
+            }
             let choices=[{id:0, title:i18n('Remove all tracks')},
                          {id:1, title:i18n('Remove upcoming tracks'), disabled:this.currentIndex>=this.items.length-1},
                          {id:2, title:i18n('Remove previous tracks'), disabled:this.currentIndex<=0}];

@@ -1493,7 +1493,7 @@ sub _svgHandler {
     my $svgName = basename($request->uri->path);
     my $filePath = $dir . "/HTML/material/html/images/" . $svgName . ".svg";
     my $colour = "#f00";
-    my $colour2 = "";
+    my $colour2 = "#";
 
     if ($request->uri->can('query_param')) {
         $colour = "#" . $request->uri->query_param('c');
@@ -1542,7 +1542,7 @@ sub _svgHandler {
     if (-e $filePath) {
         my $svg = read_file($filePath);
         $svg =~ s/#000/$colour/g;
-        if ($colour2 ne "") {
+        if (length($colour2)>3) {
             $svg =~ s/#fff/$colour2/g;
         } else {
             $svg =~ s/fill\s*=\s*"[#0-9a-fA-F\.]+"/fill="${colour}"/g;

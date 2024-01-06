@@ -9,6 +9,7 @@
 7. Change 'Biography' and 'Review' button labels to 'Information', as MAI's
    album info is more info than review.
 8. Remove all tracks from queue via long-press on clear button.
+9. Fix missing service logos.
 
 4.1.3
 -----

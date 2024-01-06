@@ -84,7 +84,6 @@
 "Band":"Gruppe",
 "Bands":"Gruppen",
 "Basic options":"Grundeinstellungen",
-"Biography":"Biographie",
 "Bitrate":"Bitrate",
 "Black":"Schwarz",
 "Browse":"Durchsuchen",
@@ -371,7 +370,6 @@
 "Revert":"Zurücksetzen",
 "Revert to default":"Standardeinstellungen wiederherstellen",
 "Revert to default settings?":"Standardeinstellungen wiederherstellen?",
-"Review":"Rezension",
 "Round covers":"Cover abrunden",
 "Round the corners of cover-art, etc.":"Ecken von Covern etc. abrunden",
 "Sample rate":"Samplerate",
@@ -616,5 +614,6 @@
 "1 Year":"1 Jahr",
 "%1 Years":"%1 Jahre",
 "1 day":"1 Tag",
-"%1 days":"%1 Tage"
+"%1 days":"%1 Tage",
+"Create Mix":"Mix Erstellen"
 }

@@ -84,7 +84,6 @@
 "Band":"Band",
 "Bands":"Band",
 "Basic options":"Standaard opties",
-"Biography":"Biografie",
 "Bitrate":"Bitsnelheid",
 "Black":"Zwart",
 "Browse":"Bladeren",
@@ -371,7 +370,6 @@
 "Revert":"Terugkeren",
 "Revert to default":"Terugkeren naar standaard",
 "Revert to default settings?":"Terugkeren naar standaard instellingen?",
-"Review":"Recensies",
 "Round covers":"Ronde hoeken albumhoezen",
 "Round the corners of cover-art, etc.":"Rond de hoeken van albumhoezen, etc.",
 "Sample rate":"Samplefrequentie",
@@ -616,5 +614,6 @@
 "1 Year":"1 Jaar",
 "%1 Years":"%1 Jaren",
 "1 day":"1 dag",
-"%1 days":"%1 dagen"
+"%1 days":"%1 dagen",
+"Create Mix":"Mix Maken"
 }

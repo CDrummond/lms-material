@@ -1,15 +1,16 @@
 4.1.4
 -----
-1. Fix drag'n'drop of home screen items.
-2. Sharper add/play hover icons.
-3. Work-around MAI missing images.
-4. Fix some SVG icons not showing.
-5. Fix add/play actions not showing for some lists.
-6. Try to detect Spotify track list even when called from 'trackinfo'
-7. Change 'Biography' and 'Review' button labels to 'Information', as MAI's
-   album info is more info than review.
-8. Remove all tracks from queue via long-press on clear button.
-9. Fix missing service logos.
+ 1. Fix drag'n'drop of home screen items.
+ 2. Sharper add/play hover icons.
+ 3. Work-around MAI missing images.
+ 4. Fix some SVG icons not showing.
+ 5. Fix add/play actions not showing for some lists.
+ 6. Try to detect Spotify track list even when called from 'trackinfo'
+ 7. Change 'Biography' and 'Review' button labels to 'Information', as MAI's
+    album info is more info than review.
+ 8. Remove all tracks from queue via long-press on clear button.
+ 9. Fix missing service logos.
+10. Rename 'Radio' buttons to 'Create Mix'.
 
 4.1.3
 -----

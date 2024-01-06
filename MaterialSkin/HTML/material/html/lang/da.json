@@ -84,7 +84,6 @@
 "Band":"Gruppe",
 "Bands":"Grupper",
 "Basic options":"Grundlæggende indstillinger",
-"Biography":"Biografi",
 "Bitrate":"Bithastighed",
 "Black":"Sort",
 "Browse":"Musik",
@@ -371,7 +370,6 @@
 "Revert":"Fortyd ændringer",
 "Revert to default":"Nulstil til standardindstillinger",
 "Revert to default settings?":"Nulstil til standardindstillinger?",
-"Review":"Anmeldelse",
 "Round covers":"Runde hjørner",
 "Round the corners of cover-art, etc.":"Afrund hjørner af albumomslag m.v.",
 "Sample rate":"Samplingsfrekvens",
@@ -616,5 +614,6 @@
 "1 Year":"1 år",
 "%1 Years":"%1 år",
 "1 day":"1 dag",
-"%1 days":"%1 dage"
+"%1 days":"%1 dage",
+"Create Mix":"Opret Miks"
 }

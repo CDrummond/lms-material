@@ -6,6 +6,8 @@
 4. Fix some SVG icons not showing.
 5. Fix add/play actions not showing for some lists.
 6. Try to detect Spotify track list even when called from 'trackinfo'
+7. Change 'Biography' and 'Review' button labels to 'Information', as MAI's
+   album info is more info than review.
 
 4.1.3
 -----

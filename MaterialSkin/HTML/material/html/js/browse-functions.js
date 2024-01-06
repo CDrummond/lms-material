@@ -123,7 +123,7 @@ function browseActions(view, item, args, count, showCompositions) {
         (undefined==args['artist'] || (args['artist']!=i18n('Various Artists') && args['artist']!=LMS_VA_STRING && args['artist'].toLowerCase()!='various artists'))) {
         if (LMS_P_MAI) {
             if (undefined!=args['album_id'] || (undefined!=args['album'] && (undefined!=args['artist_id'] || undefined!=args['artist']))) {
-                actions.push({title:i18n('Review'), icon:'local_library', stdItem:STD_ITEM_MAI,
+                actions.push({title:i18n('Information'), icon:'info_outline', stdItem:STD_ITEM_MAI,
                               do:{ command: undefined!=args['album_id']
                                                 ? ['musicartistinfo', 'albumreview', 'html:1', 'album_id:'+args['album_id']]
                                                 : undefined!=args['artist_id']
@@ -132,7 +132,7 @@ function browseActions(view, item, args, count, showCompositions) {
                                    params:[]},
                               weight:100});
             } else if (undefined!=args['artist_id'] || undefined!=args['artist']) {
-                actions.push({title:i18n('Biography'), icon:'menu_book', stdItem:STD_ITEM_MAI,
+                actions.push({title:i18n('Information'), icon:'info_outline', stdItem:STD_ITEM_MAI,
                               do:{ command: undefined!=args['artist_id']
                                                 ? ['musicartistinfo', 'biography', 'html:1', 'artist_id:'+args['artist_id']]
                                                 : ['musicartistinfo', 'biography', 'html:1', 'artist:'+args['artist']],

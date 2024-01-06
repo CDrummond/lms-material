@@ -75,8 +75,8 @@ var lmsBrowse = Vue.component("lms-browse", {
     </v-btn>
    </template>
    <div class="browse-context">
-    <v-btn flat v-if="showMixButton" class="context-button" @click="doContext(STD_ITEM_MIX)"><v-icon>{{'radio'}}</v-icon>&nbsp;{{i18n('Radio')}}</v-btn>
-    <v-btn flat v-if="showMaiButton" class="context-button" @click="doContext(STD_ITEM_MAI)"><v-icon>{{current.stdItem==STD_ITEM_ALBUM ? 'local_library' : 'menu_book'}}</v-icon>&nbsp;{{current.stdItem==STD_ITEM_ALBUM ? i18n('Review') : i18n('Biography')}}</v-btn>
+    <v-btn flat v-if="showMixButton" class="context-button" @click="doContext(STD_ITEM_MIX)"><v-icon>radio</v-icon>&nbsp;{{i18n('Radio')}}</v-btn>
+    <v-btn flat v-if="showMaiButton" class="context-button" @click="doContext(STD_ITEM_MAI)"><v-icon>info_outline</v-icon>&nbsp;{{i18n('Information')}}</v-btn>
    </div>
   </v-layout>
   <v-layout v-else class="pointer link-item">

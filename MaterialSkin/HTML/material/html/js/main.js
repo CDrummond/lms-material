@@ -585,9 +585,12 @@ var app = new Vue({
                             text = target.textContent;
                         }
                         if (undefined!=text && text.length>0) {
+                            /*
                             let menu = [{title:ACTIONS[FOLLOW_LINK_ACTION].title, icon:ACTIONS[FOLLOW_LINK_ACTION].icon, act:FOLLOW_LINK_ACTION, link:href},
                                         {title:ACTIONS[SEARCH_TEXT_ACTION].title+SEPARATOR+text, icon:ACTIONS[SEARCH_TEXT_ACTION].icon, act:SEARCH_TEXT_ACTION, text:text}]
                             bus.$emit('showLinkMenu.'+page, event.clientX, event.clientY, menu);
+                            */
+                            openWindow(href);
                             event.preventDefault();
                         }
                     }

@@ -13,6 +13,7 @@
 10. Rename 'Radio' buttons to 'Create Mix'.
 11. Add 'Similar artists' list to end of MAI artist information in browse
     view.
+12. Follow links by default, don't show menu.
 
 4.1.3
 -----

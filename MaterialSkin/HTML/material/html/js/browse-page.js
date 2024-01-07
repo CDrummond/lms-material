@@ -956,6 +956,9 @@ var lmsBrowse = Vue.component("lms-browse", {
             for (let i=0, loop=this.currentActions, len=loop.length; i<len; ++i) {
                 if (loop[i].stdItem==type) {
                     this.currentAction(loop[i]);
+                    if (STD_ITEM_MAI==type && loop[i].do.command[1]=="biography") {
+                        browseFetchExtra(this, this.current);
+                    }
                     return;
                 }
             }

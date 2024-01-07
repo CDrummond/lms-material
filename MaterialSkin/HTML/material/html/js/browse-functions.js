@@ -316,6 +316,10 @@ function browseHandleListResponse(view, item, command, resp, prevPage, appendIte
         view.currentLibId = command.libraryId;
         view.pinnedItemLibName = item.libname ? item.libname : view.pinnedItemLibName;
         view.items=resp.items;
+        if (undefined!=view.extra) {
+            browseAddExtra(view, view.extra);
+            view.extra = undefined;
+        }
         view.listSize=resp.listSize;
         view.allSongsItem=resp.allSongsItem;
         view.jumplist=resp.jumplist;
@@ -2430,6 +2434,46 @@ function browseAddToPlaylist(view, urls, playlist, pos, plen) {
     }
 
     browseDoCommands(view, commands, false, undefined!=pos && undefined!=plen ? 'refreshPlaylist' : undefined);
+}
+
+function browseAddExtra(view, html) {
+    if (view.items.length==1 && view.items[0].type=='html') {
+        view.items[0].title+="<br/><br/>"+html;
+    } else if (1==view.items.length==1) {
+        view.items[0].title=html;
+    } else if (0==view.items.length) {
+        view.items=[{ title: html, type: "html", id: item.id+".extra" }];
+    }
+}
+
+function browseFetchExtra(view, item) {
+    view.extra = undefined;
+    lmsCommand("", ["material-skin", "geturl", "url:"+NP_SIMILAR_URL+encodeURIComponent(item.title), "format:json"]).then(({data}) => {
+        if (data && data.result && data.result.content) {
+            logJsonMessage("RESP", data);
+            let body = data.result.content;
+            let html = undefined;
+            if (body.similarartists && body.similarartists.artist && body.similarartists.artist.length>0) {
+                for (let i=0, loop=body.similarartists.artist, len=loop.length; i<len; ++i) {
+                    if (undefined==html) {
+                        html="<p><b>" + i18n("Similar artists") + "</b><br/><br/>";
+                    } else {
+                        html+=", ";
+                    }
+                    html+="<obj class=\"link-item\" onclick=\"nowplayingSearch(\'"+escape(loop[i].name)+"\')\">" + loop[i].name + "</obj>";
+                }
+                html+="</p>";
+            }
+            if (undefined!=html) {
+                let extra = [ { title: html, type: "html", id: item.id+".extra" } ];
+                if (undefined==view.fetchingItem) { // Have bio response alreadty so can append
+                    browseAddExtra(view, html);
+                } else {
+                    view.extra = extra;
+                }
+            }
+        }
+    });
 }
 
 const DEFERRED_LOADED = true;

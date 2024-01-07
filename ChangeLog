@@ -11,6 +11,8 @@
  8. Remove all tracks from queue via long-press on clear button.
  9. Fix missing service logos.
 10. Rename 'Radio' buttons to 'Create Mix'.
+11. Add 'Similar artists' list to end of MAI artist information in browse
+    view.
 
 4.1.3
 -----

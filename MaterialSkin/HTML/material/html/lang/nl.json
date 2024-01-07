@@ -110,11 +110,13 @@
 "Configuration":"Configuratie",
 "Continuous":"Continu",
 "Control when player should 'sleep'.":"Bepaal wanneer de muziekspeler moet 'slapen'",
+"Copy":"Kopieer",
 "Copy browse selection here":"Kopieer de browse selectie hier",
 "Copy details":"Kopieer gegevens",
 "Copy queue selection here":"Kopieer de afspeellijst selectie hier",
 "Copy the queue to:":"Kopieer de afspeellijst naar",
 "Create":"Aanmaken",
+"Create Mix":"Mix Maken",
 "Create folder":"Map aanmaken",
 "Create group player":"Aanmaken Groep muziekspelers",
 "Creator":"Producent",
@@ -614,6 +616,5 @@
 "1 Year":"1 Jaar",
 "%1 Years":"%1 Jaren",
 "1 day":"1 dag",
-"%1 days":"%1 dagen",
-"Create Mix":"Mix Maken"
+"%1 days":"%1 dagen"
 }

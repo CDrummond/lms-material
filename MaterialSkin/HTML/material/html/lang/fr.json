@@ -110,11 +110,13 @@
 "Configuration":"Configuration",
 "Continuous":"Continu",
 "Control when player should 'sleep'.":"Contrôler quand le lecteur doit être mis en veille.",
+"Copy":"Copier",
 "Copy browse selection here":"Copier la sélection de navigation ici",
 "Copy details":"Copier les détails",
 "Copy queue selection here":"Copier la sélection de liste de lecture ici",
 "Copy the queue to:":"Copier la liste de lecture vers :",
 "Create":"Créer",
+"Create Mix":"Créer un Mix",
 "Create folder":"Créer un dossier",
 "Create group player":"Créer un groupe de platines",
 "Creator":"Créateur",
@@ -614,6 +616,5 @@
 "1 Year":"1 année",
 "%1 Years":"%1 années",
 "1 day":"1 jour",
-"%1 days":"%1 jours",
-"Create Mix":"Créer un Mix"
+"%1 days":"%1 jours"
 }

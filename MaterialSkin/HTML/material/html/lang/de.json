@@ -110,11 +110,13 @@
 "Configuration":"Konfiguration",
 "Continuous":"Kontinuierlich",
 "Control when player should 'sleep'.":"Steuere, wann der Player 'einschlafen' soll",
+"Copy":"Kopieren",
 "Copy browse selection here":"Suchauswahl hierher kopieren",
 "Copy details":"Details kopieren",
 "Copy queue selection here":"Auswahl der Warteschlange hierher kopieren",
 "Copy the queue to:":"Kopiere Warteschlange nach:",
 "Create":"Erstellen",
+"Create Mix":"Mix Erstellen",
 "Create folder":"Ordner erstellen",
 "Create group player":"Erstelle Gerätegruppe",
 "Creator":"Ersteller",
@@ -614,6 +616,5 @@
 "1 Year":"1 Jahr",
 "%1 Years":"%1 Jahre",
 "1 day":"1 Tag",
-"%1 days":"%1 Tage",
-"Create Mix":"Mix Erstellen"
+"%1 days":"%1 Tage"
 }

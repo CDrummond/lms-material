@@ -110,11 +110,13 @@
 "Configuration":"Konfiguration",
 "Continuous":"Vedvarende",
 "Control when player should 'sleep'.":"Vælg hvornår afspilleren skal gå 'i dvale'",
+"Copy":"Kopier",
 "Copy browse selection here":"Kopier viste numre hertil",
 "Copy details":"Kopier detaljer",
 "Copy queue selection here":"Kopier afspilningskøen hertil",
 "Copy the queue to:":"Kopier afspilningskøen til",
 "Create":"Opret",
+"Create Mix":"Opret Miks",
 "Create folder":"Opret folder",
 "Create group player":"Opret gruppeafspiller",
 "Creator":"Lavet af",
@@ -614,6 +616,5 @@
 "1 Year":"1 år",
 "%1 Years":"%1 år",
 "1 day":"1 dag",
-"%1 days":"%1 dage",
-"Create Mix":"Opret Miks"
+"%1 days":"%1 dage"
 }

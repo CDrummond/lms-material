@@ -160,6 +160,30 @@ function showMenu(obj, newMenu) {
     }
 }
 
+function viewHandleSelectedText(view, event) {
+    let sel = window.getSelection();
+    if (undefined==sel) {
+        return;
+    }
+    let text = ""+sel;
+    if (isEmpty(text)) {
+        return;
+    }
+    view.touch = undefined;
+    view.menu.show = false;
+    view.menu.items = [COPY_ACTION, SEARCH_TEXT_ACTION];
+    view.menu.selection = text;
+    let touch = getTouchPos(event);
+    if (undefined!=touch) {
+        view.menu.x = touch.x;
+        view.menu.y = touch.y;
+    } else {
+        view.menu.x = event.clientX;
+        view.menu.y = event.clientY;
+    }
+    setTimeout(function () { view.menu.show = true; }.bind(view), 10);
+}
+
 function addAndPlayAllActions(cmd) {
     if (cmd.command[0]=="albums") {
         for (var i=0, len=cmd.params.length; i<len; ++i) {

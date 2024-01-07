@@ -19,6 +19,8 @@ const NP_SHOW_IN_TABS_ACT = 6;
 const NP_SYNC_ACT = 7;
 const NP_LYRICS_SCROLL_ACT = 8;
 const NP_LYRICS_HIGHLIGHT_ACT = 9;
+const NP_COPY_ACT = 10;
+const NP_SEARCH_ACT = 11;
 const NP_CUSTOM = 100;
 const NP_ITEM_ACT = 200;
 const NP_MIN_WIDTH_FOR_FULL = 780;
@@ -35,7 +37,11 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
  <v-menu v-model="menu.show" :position-x="menu.x" :position-y="menu.y" absolute offset-y>
   <v-list>
    <template v-for="(item, index) in menu.items">
-    <v-list-tile @click="menuAction(item)">
+    <v-list-tile @click="menuStdAction(item)" v-if="undefined==item.title">
+     <v-list-tile-avatar :tile="true" class="lms-avatar"><v-icon v-if="ACTIONS[item].icon">{{ACTIONS[item].icon}}</v-icon><img v-else-if="ACTIONS[item].svg" class="svg-img" :src="ACTIONS[item].svg | svgIcon(darkUi)"></img></v-list-tile-avatar>
+     <v-list-tile-title>{{ACTIONS[item].title}}</v-list-tile-title>
+    </v-list-tile>
+    <v-list-tile v-else @click="menuAction(item)">
      <v-list-tile-avatar v-if="undefined!=item.check"><v-icon>{{item.check ? 'check_box' : 'check_box_outline_blank'}}</v-icon></v-list-tile-avatar>
      <v-list-tile-avatar v-else-if="menu.icons" :tile="true" class="lms-avatar"><v-icon v-if="item.icon">{{item.icon}}</v-icon><img v-else-if="item.svg" class="svg-img" :src="item.svg | svgIcon(darkUi)"></img></v-list-tile-avatar>
      <v-list-tile-title>{{item.title}}</v-list-tile-title>
@@ -50,7 +56,7 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
    <template v-for="(tab, index) in info.tabs">
     <v-tab :key="index">{{tab.title}}</v-tab>
     <v-tab-item :key="index" :transition="false" :reverse-transition="false">
-     <v-card flat class="np-info-card-cover selectable">
+     <v-card flat class="np-info-card-cover selectable" @touchend.prevent="tabTextEnd" @mouseup.prevent="tabTextEnd" @contextmenu="event.preventDefault()">
       <v-card-text :class="['np-info-text', TRACK_TAB==index || tab.isMsg ? 'np-info-lyrics' : '', ALBUM_TAB==index ? 'np-info-review' : '']" :id="'np-tab'+index">
        <div v-if="TRACK_TAB==index && tab.texttitle" v-html="tab.texttitle" class="np-info-title" v-bind:class="{'lyrics-current-line':tab.highlight && undefined!=playerStatus.current.time && tab.lines && tab.lines[0].time>playerStatus.current.time}"></div>
        <img v-if="tab.image" :src="tab.image" loading="lazy" class="np-mai-img"></img>
@@ -108,7 +114,7 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
    <v-layout row>
     <template v-for="(tab, index) in info.tabs">
      <v-flex xs4>
-      <v-card flat class="np-info-card-cover selectable">
+      <v-card flat class="np-info-card-cover selectable" @touchend.prevent="tabTextEnd" @mouseup.prevent="tabTextEnd" @contextmenu="event.preventDefault()">
        <v-card-text :class="['np-info-text-full', TRACK_TAB==index || tab.isMsg ? 'np-info-lyrics' : '', ALBUM_TAB==index ? 'np-info-review' : '']" :id="'np-tab'+index">
         <div v-if="TRACK_TAB==index && tab.texttitle" v-html="tab.texttitle" class="np-info-title" v-bind:class="{'lyrics-current-line':tab.highlight && undefined!=playerStatus.current.time && tab.lines && tab.lines[0].time>playerStatus.current.time}"></div>
         <img v-if="tab.image" :src="tab.image" loading="lazy" class="np-mai-img"></img>
@@ -626,6 +632,9 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
         menuAction(item) {
             nowplayingMenuAction(this, item);
         },
+        menuStdAction(item) {
+            nowplayingMenuStdAction(this, item);
+        },
         showPic() {
             bus.$emit('dlg.open', 'gallery', [this.coverUrl], 0, true);
         },
@@ -1123,6 +1132,10 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
         },
         showConfigMenu(event) {
             nowPlayingConfigMenu(this, event);
+        },
+        tabTextEnd(event) {
+            this.clearClickTimeout();
+            viewHandleSelectedText(this, event);
         }
     },
     filters: {
@@ -1202,6 +1215,9 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
         },
         'menu.show': function(newVal) {
             this.$store.commit('menuVisible', {name:'nowplaying', shown:newVal});
+            if (!newVal) {
+                this.menu.selection = undefined;
+            }
         },
         'disableBtns': function(newVal) {
             this.controlBar();

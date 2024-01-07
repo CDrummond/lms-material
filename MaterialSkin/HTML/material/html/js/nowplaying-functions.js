@@ -459,6 +459,15 @@ function nowplayingMenuAction(view, item) {
     }
 }
 
+function nowplayingMenuStdAction(view, item) {
+    if (COPY_ACTION==item) {
+        copyTextToClipboard(view.menu.selection);
+    } else if (SEARCH_TEXT_ACTION==item) {
+        bus.$emit('browse-search', unescape(view.menu.selection), NP_INFO);
+        bus.$emit('npclose');
+    }
+}
+
 function nowplayingArtistEntry(trk, key, role) {
     if (undefined!=trk[key+'s'] && undefined!=trk[key+'_ids'] && trk[key+'s'].length==trk[key+'_ids'].length) {
         let html="";
@@ -873,7 +882,7 @@ function nowplayingSearch(str) {
     if (bus.$store.state.visibleMenus.size>0) {
         return;
     }
-    bus.$emit('browse-search', unescape(str), NP_INFO);
+    bus.$emit('browse-search', str, NP_INFO);
     bus.$emit('npclose');
 }
 

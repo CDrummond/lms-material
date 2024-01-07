@@ -165,7 +165,7 @@ var lmsBrowse = Vue.component("lms-browse", {
       <v-list-tile-sub-title v-if="item.subtitle && !item.hidesub">{{item.subtitle}}</v-list-tile-sub-title>
      </v-list-tile-content>
      <v-list-tile-content v-else-if="item.type=='html' || item.type=='text'" class="browse-text-inrecycler">
-      <v-list-tile-title v-html="item.title"></v-list-tile-title>
+      <v-list-tile-title v-html="item.title" @touchend.prevent="textSelectEnd" @mouseup.prevent="textSelectEnd" @contextmenu="event.preventDefault()"></v-list-tile-title>
      </v-list-tile-content>
      <v-list-tile-content v-else>
       <v-list-tile-title v-html="item.title"></v-list-tile-title>
@@ -187,7 +187,7 @@ var lmsBrowse = Vue.component("lms-browse", {
     </v-list-tile>
    </RecycleScroller>
 
-   <div v-else-if="items.length==1 && items[0].type=='html'" class="lms-list-item browse-html" v-html="items[0].title"></div>
+   <div v-else-if="items.length==1 && items[0].type=='html'" class="lms-list-item browse-html" v-html="items[0].title" @touchend.prevent="textSelectEnd" @mouseup.prevent="textSelectEnd" @contextmenu="event.preventDefault()"></div>
    <template v-else v-for="(item, index) in items">
     <v-list-tile v-if="item.type=='text' && canClickText(item)" avatar @click="click(item, index, $event)" v-bind:class="{'error-text': item.id==='error'}" class="lms-avatar lms-list-item" @contextmenu.prevent="contextMenu(item, index, $event)">
      <v-list-tile-content>
@@ -197,7 +197,7 @@ var lmsBrowse = Vue.component("lms-browse", {
     </v-list-tile>
     <v-list-tile v-else-if="item.type=='html' || item.type=='text'" class="lms-list-item browse-text">
      <v-list-tile-content>
-     <v-list-tile-title v-html="item.title"></v-list-tile-title>
+     <v-list-tile-title v-html="item.title" @touchend.prevent="textSelectEnd" @mouseup.prevent="textSelectEnd" @contextmenu="event.preventDefault()"></v-list-tile-title>
     </v-list-tile-content>
    </v-list-tile>
     <v-list-tile v-else-if="item.header" class="lms-list-item" v-bind:class="{'browse-header': item.header}" @click="click(item, index, $event)">
@@ -387,6 +387,13 @@ var lmsBrowse = Vue.component("lms-browse", {
     </v-list-tile>
    </template>
   </v-list>
+  <v-list v-else-if="menu.items">
+   <template v-for="(item, index) in menu.items">
+   <v-list-tile @click="menuItemAction(item)" v-if="undefined==item.title">
+    <v-list-tile-avatar :tile="true" class="lms-avatar"><v-icon v-if="ACTIONS[item].icon">{{ACTIONS[item].icon}}</v-icon><img v-else-if="ACTIONS[item].svg" class="svg-img" :src="ACTIONS[item].svg | svgIcon(darkUi)"></img></v-list-tile-avatar>
+    <v-list-tile-title>{{ACTIONS[item].title}}</v-list-tile-title>
+   </v-list-tile>
+   </template>
  </v-menu>
 </div>
       `,
@@ -1753,6 +1760,9 @@ var lmsBrowse = Vue.component("lms-browse", {
                             : this.pageElement.scrollWidth>=MIN_WIDTH_FOR_COVER
                                 ? 1
                                 : 0;
+        },
+        textSelectEnd(event) {
+            viewHandleSelectedText(this, event);
         }
     },
     mounted() {
@@ -2062,6 +2072,9 @@ var lmsBrowse = Vue.component("lms-browse", {
     watch: {
         'menu.show': function(newVal) {
             this.$store.commit('menuVisible', {name:'browse-'+this.menu.name, shown:newVal});
+            if (!newVal) {
+                this.menu.selection = undefined;
+            }
         },
         '$store.state.pinQueue': function() {
             this.setWide();

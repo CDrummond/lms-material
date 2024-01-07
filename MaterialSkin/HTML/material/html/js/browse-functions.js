@@ -916,7 +916,7 @@ function browseAddCategories(view, item, isGenre) {
 function browseItemAction(view, act, item, index, event) {
     if (act==SEARCH_TEXT_ACTION) {
         bus.$emit('browse-search', view.menu.selection);
-    } else if (COPY_ACTION==item) {
+    } else if (act==COPY_ACTION) {
         copyTextToClipboard(view.menu.selection);
     } else if (act==SEARCH_LIB_ACTION) {
         if (view.$store.state.visibleMenus.size<1) {

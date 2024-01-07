@@ -311,15 +311,17 @@ function browseHandleListResponse(view, item, command, resp, prevPage, appendIte
                                 ? stripLinkTags(item.title)+SEPARATOR+view.enteredTerm
                                 : stripLinkTags(item.title)+(undefined==resp.titleSuffix ? "" : resp.titleSuffix)
                             : "?";
+        view.items=resp.items;
+        if (undefined!=view.extra) {
+            if (view.extra.id==view.current.id && undefined!=view.extra.html) {
+                browseAddExtra(view, view.extra.html);
+            }
+            view.extra = undefined;
+        }
         //var libname = view.current ? view.current.libname : undefined;
         view.current = item;
         view.currentLibId = command.libraryId;
         view.pinnedItemLibName = item.libname ? item.libname : view.pinnedItemLibName;
-        view.items=resp.items;
-        if (undefined!=view.extra) {
-            browseAddExtra(view, view.extra);
-            view.extra = undefined;
-        }
         view.listSize=resp.listSize;
         view.allSongsItem=resp.allSongsItem;
         view.jumplist=resp.jumplist;
@@ -2469,7 +2471,7 @@ function browseFetchExtra(view, item) {
                 if (undefined==view.fetchingItem) { // Have bio response alreadty so can append
                     browseAddExtra(view, html);
                 } else {
-                    view.extra = extra;
+                    view.extra = {id:view.current.id, html:extra};
                 }
             }
         }

@@ -882,7 +882,7 @@ function nowplayingSearch(str) {
     if (bus.$store.state.visibleMenus.size>0) {
         return;
     }
-    bus.$emit('browse-search', str, NP_INFO);
+    bus.$emit('browse-search', unescape(str), NP_INFO);
     bus.$emit('npclose');
 }
 

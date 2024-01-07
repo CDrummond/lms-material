@@ -2,19 +2,18 @@
 -----
  1. Fix drag'n'drop of home screen items.
  2. Sharper add/play hover icons.
- 3. Work-around MAI missing images.
- 4. Fix some SVG icons not showing.
- 5. Fix add/play actions not showing for some lists.
- 6. Try to detect Spotify track list even when called from 'trackinfo'
- 7. Change 'Biography' and 'Review' button labels to 'Information', as MAI's
+ 3. Fix some SVG icons not showing.
+ 4. Fix add/play actions not showing for some lists.
+ 5. Try to detect Spotify track list even when called from 'trackinfo'
+ 6. Change 'Biography' and 'Review' button labels to 'Information', as MAI's
     album info is more info than review.
- 8. Remove all tracks from queue via long-press on clear button.
- 9. Fix missing service logos.
-10. Rename 'Radio' buttons to 'Create Mix'.
-11. Add 'Similar artists' list to end of MAI artist information in browse
+ 7. Remove all tracks from queue via long-press on clear button.
+ 8. Fix missing service logos.
+ 9. Rename 'Radio' buttons to 'Create Mix'.
+10. Add 'Similar artists' list to end of MAI artist information in browse
     view.
-12. Follow links by default, don't show menu.
-13. Attempt to intercept text selection menu in MAI browse, and allow to copy
+11. Follow links by default, don't show menu.
+12. Attempt to intercept text selection menu in MAI browse, and allow to copy
     or search.
 
 4.1.3

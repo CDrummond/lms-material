@@ -2141,13 +2141,13 @@ progress {
 
 .playing-badge {
  position:absolute;
- bottom:10px;
- left:-10px;
- width:20px !important;
- height:20px !important;
- font-size:20px!important;
+ bottom:12px;
+ left:-8px;
+ width:16px !important;
+ height:16px !important;
+ font-size:16px!important;
  vertical-align:middle;
- opacity:0.5;
+ opacity:0.4;
 }
 
 div.v-subheader {

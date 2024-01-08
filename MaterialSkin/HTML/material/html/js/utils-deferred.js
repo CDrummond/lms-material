@@ -160,13 +160,27 @@ function showMenu(obj, newMenu) {
     }
 }
 
+function handleClickOnHref(event) {
+    if (IS_MOBILE) {
+        let target = event.target || event.srcElement;
+        if (target.tagName === 'A') {
+            let href = target.getAttribute('href');
+            if (undefined!=href && null!=href && href.length>10) {
+                openWindow(href);
+                event.preventDefault();
+            }
+        }
+    }
+}
 function viewHandleSelectedText(view, event) {
     let sel = window.getSelection();
     if (undefined==sel) {
+        handleClickOnHref(event);
         return;
     }
     let text = ""+sel;
     if (isEmpty(text)) {
+        handleClickOnHref(event);
         return;
     }
     view.touch = undefined;

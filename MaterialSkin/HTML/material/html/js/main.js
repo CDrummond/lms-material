@@ -573,8 +573,9 @@ var app = new Vue({
                 let target = event.target || event.srcElement;
                 if (target.tagName === 'A') {
                     let href = target.getAttribute('href');
-                    let follow = target.getAttribute('follow');
+                    //let follow = target.getAttribute('follow');
                     if (undefined!=href && null!=href && href.length>10) { // 10 = http://123
+                        /*
                         if (undefined!=follow) {
                             openWindow(href);
                             event.preventDefault();
@@ -585,14 +586,13 @@ var app = new Vue({
                             text = target.textContent;
                         }
                         if (undefined!=text && text.length>0) {
-                            /*
                             let menu = [{title:ACTIONS[FOLLOW_LINK_ACTION].title, icon:ACTIONS[FOLLOW_LINK_ACTION].icon, act:FOLLOW_LINK_ACTION, link:href},
                                         {title:ACTIONS[SEARCH_TEXT_ACTION].title+SEPARATOR+text, icon:ACTIONS[SEARCH_TEXT_ACTION].icon, act:SEARCH_TEXT_ACTION, text:text}]
                             bus.$emit('showLinkMenu.'+page, event.clientX, event.clientY, menu);
-                            */
-                            openWindow(href);
-                            event.preventDefault();
                         }
+                        */
+                        openWindow(href);
+                        event.preventDefault();
                     }
                 }
             }

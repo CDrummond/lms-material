@@ -3,6 +3,7 @@
 1. Reduce size of playing indicator in players menu.
 2. Fix clicking on MAI links for touch devices.
 3. Rename 'Radio' buttons to 'Create Mix' in menu as well as toolbar.
+4. Only show 'Create Mix' button if view is 800px or more wide.
 
 4.1.4
 -----

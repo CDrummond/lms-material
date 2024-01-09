@@ -150,7 +150,7 @@ function browseActions(view, item, args, count, showCompositions) {
             }
         }
         if (LMS_P_BMIX && (undefined!=args['artist_id'] || undefined!=args['album_id'])) {
-            actions.push({title:i18n('Radio'), icon:'radio', stdItem:STD_ITEM_MIX,
+            actions.push({title:i18n('Create Mix'), svg:'dice-multiple', stdItem:STD_ITEM_MIX,
                           do:{ command:["blissmixer", "mix"],
                                params:["menu:1", "useContextMenu:1", undefined!=args['album_id'] ? "album_id:"+args['album_id'] : "artist_id:"+args['artist_id']]}, weight:101});
         }

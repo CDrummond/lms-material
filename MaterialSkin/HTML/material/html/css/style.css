@@ -3323,11 +3323,16 @@ div.v-subheader {
 .browse-context {
  position:absolute;
  bottom:5px;
- right:-4px;
+ right:0px;
 }
 
 .context-button {
  margin-left:0px;
+ padding:0 10px;
+}
+
+.context-button:not(:last-of-type) {
+ margin-right:-6px;
 }
 
 .context-button .v-btn__content {

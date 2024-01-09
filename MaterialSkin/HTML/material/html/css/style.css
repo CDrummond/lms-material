@@ -826,10 +826,6 @@ div.v-subheader {
  margin-top:calc(12px - var(--small-font-size)) !important;
 }
 
-.bsub-extra {
- max-width:calc(100vw - 395px)!important;
-}
-
 .subtoolbar, .subtoolbar .v-btn__content i {
  color:var(--sub-toolbar-text-color) !important;
 }
@@ -3320,10 +3316,8 @@ div.v-subheader {
  background-color:#dd4751!important;
 }
 
-.browse-context {
- position:absolute;
- bottom:5px;
- right:0px;
+.browse-commands {
+ border-spacing:0px !important;
 }
 
 .context-button {
@@ -3332,7 +3326,7 @@ div.v-subheader {
 }
 
 .context-button:not(:last-of-type) {
- margin-right:-6px;
+ margin-right:0px;
 }
 
 .context-button .v-btn__content {

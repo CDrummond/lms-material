@@ -51,7 +51,7 @@ var lmsBrowse = Vue.component("lms-browse", {
      <v-flex xs12 class="ellipsis subtoolbar-title subtoolbar-pad" v-bind:class="{'subtoolbar-title-single':undefined==toolbarSubTitle}">{{toolbarTitle}}</v-flex>
      <v-flex xs12 class="ellipsis subtoolbar-subtitle subtext" v-html="detailedSubTop"></v-flex>
     </v-layout>
-    <v-flex xs12 v-if="detailedSubExtra" class="ellipsis subtoolbar-subtitle subtext bsub-extra" v-html="detailedSubExtra"></v-flex>
+    <v-flex xs12 v-if="detailedSubExtra" class="ellipsis subtoolbar-subtitle subtext" v-html="detailedSubExtra"></v-flex>
     <v-flex xs12 v-else class="ellipsis subtoolbar-subtitle subtext">&nbsp;</v-flex>
     <v-flex xs12 class="ellipsis subtoolbar-subtitle subtext" v-html="detailedSubBot"></v-flex>
    </v-layout>
@@ -60,25 +60,29 @@ var lmsBrowse = Vue.component("lms-browse", {
     <v-flex xs12 class="ellipsis subtoolbar-subtitle subtext" v-if="undefined!=toolbarSubTitle" v-html="toolbarSubTitle"></v-flex>
    </v-layout>
    <v-spacer style="flex-grow: 10!important"></v-spacer>
-   <v-btn @click.stop="currentActionsMenu($event)" flat icon class="toolbar-button" :title="trans.actions" id="tbar-actions" v-if="currentActions.length>(tbarActions.length<2 ? 2 : 1)"><v-icon>more_horiz</v-icon></v-btn>
-   <template v-for="(action, index) in currentActions" v-if="currentActions.length==1 || tbarActions.length<2">
-    <v-btn @click.stop="currentAction(action, index, $event)" flat icon class="toolbar-button" :title="undefined==action.action ? action.title : ACTIONS[action.action].title" :id="'tbar-actions'+index" v-if="index<(tbarActions.length<2 ? 2 : 1)">
-     <img v-if="undefined!=action.action && ACTIONS[action.action].svg" class="svg-img" :src="ACTIONS[action.action].svg | svgIcon(darkUi)"></img>
-     <v-icon v-else-if="undefined!=action.action">{{ACTIONS[action.action].icon}}</v-icon>
-     <img v-else-if="action.svg" class="svg-img" :src="action.svg | svgIcon(darkUi)"></img>
-     <v-icon v-else>{{action.icon}}</v-icon>
-    </v-btn>
-   </template>
-   <template v-for="(action, index) in tbarActions">
-    <v-btn flat icon @click.stop="headerAction(action, $event)" class="toolbar-button" :title="action | tooltip(keyboardControl)" :id="'tbar'+index" v-if="(action!=VLIB_ACTION || libraryName) && (!queryParams.party || !HIDE_FOR_PARTY.has(action)) && (!LMS_KIOSK_MODE || !HIDE_FOR_KIOSK.has(action)) && (PLAY_SHUFFLE_ACTION!=action || lmsOptions.playShuffle)">
-     <img v-if="ACTIONS[action].svg" class="svg-img" :src="ACTIONS[action].svg | svgIcon(darkUi)"></img>
-     <v-icon v-else>{{ACTIONS[action].icon}}</v-icon>
-    </v-btn>
-   </template>
-   <div class="browse-context">
-    <v-btn flat v-if="showMixButton" class="context-button" @click="doContext(STD_ITEM_MIX)"><img class="svg-img" :src="'dice-multiple' | svgIcon(darkUi)"></img>&nbsp;{{i18n('Create Mix')}}</v-btn>
-    <v-btn flat v-if="showMaiButton" class="context-button" @click="doContext(STD_ITEM_MAI)"><v-icon v-if="current.stdItem==STD_ITEM_ALBUM">album</v-icon><img v-else class="svg-img" :src="'artist' | svgIcon(darkUi)"></img>&nbsp;{{i18n('Information')}}</v-btn>
-   </div>
+   <table class="browse-commands">
+    <tr align="right">
+     <v-btn @click.stop="currentActionsMenu($event)" flat icon class="toolbar-button" :title="trans.actions" id="tbar-actions" v-if="currentActions.length>(tbarActions.length<2 ? 2 : 1)"><v-icon>more_horiz</v-icon></v-btn>
+     <template v-for="(action, index) in currentActions" v-if="currentActions.length==1 || tbarActions.length<2">
+      <v-btn @click.stop="currentAction(action, index, $event)" flat icon class="toolbar-button" :title="undefined==action.action ? action.title : ACTIONS[action.action].title" :id="'tbar-actions'+index" v-if="index<(tbarActions.length<2 ? 2 : 1)">
+       <img v-if="undefined!=action.action && ACTIONS[action.action].svg" class="svg-img" :src="ACTIONS[action.action].svg | svgIcon(darkUi)"></img>
+       <v-icon v-else-if="undefined!=action.action">{{ACTIONS[action.action].icon}}</v-icon>
+       <img v-else-if="action.svg" class="svg-img" :src="action.svg | svgIcon(darkUi)"></img>
+       <v-icon v-else>{{action.icon}}</v-icon>
+      </v-btn>
+     </template>
+     <template v-for="(action, index) in tbarActions">
+      <v-btn flat icon @click.stop="headerAction(action, $event)" class="toolbar-button" :title="action | tooltip(keyboardControl)" :id="'tbar'+index" v-if="(action!=VLIB_ACTION || libraryName) && (!queryParams.party || !HIDE_FOR_PARTY.has(action)) && (!LMS_KIOSK_MODE || !HIDE_FOR_KIOSK.has(action)) && (PLAY_SHUFFLE_ACTION!=action || lmsOptions.playShuffle)">
+       <img v-if="ACTIONS[action].svg" class="svg-img" :src="ACTIONS[action].svg | svgIcon(darkUi)"></img>
+       <v-icon v-else>{{ACTIONS[action].icon}}</v-icon>
+      </v-btn>
+     </template>
+    </tr>
+    <tr v-if="showMixButton || showMaiButton" align="right">
+     <v-btn flat v-if="showMixButton" class="context-button" @click="doContext(STD_ITEM_MIX)"><img class="svg-img" :src="'dice-multiple' | svgIcon(darkUi)"></img>&nbsp;{{i18n('Create Mix')}}</v-btn>
+     <v-btn flat v-if="showMaiButton" class="context-button" @click="doContext(STD_ITEM_MAI)"><v-icon v-if="current.stdItem==STD_ITEM_ALBUM">album</v-icon><img v-else class="svg-img" :src="'artist' | svgIcon(darkUi)"></img>&nbsp;{{i18n('Information')}}</v-btn>
+    </tr>
+   </table>
   </v-layout>
   <v-layout v-else class="pointer link-item">
    <div class="toolbar-nobtn-pad"></div>

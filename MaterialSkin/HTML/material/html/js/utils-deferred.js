@@ -173,6 +173,9 @@ function handleClickOnHref(event) {
     }
 }
 function viewHandleSelectedText(view, event) {
+    if (view.menu.show) {
+        return;
+    }
     let sel = window.getSelection();
     if (undefined==sel) {
         handleClickOnHref(event);
@@ -196,6 +199,18 @@ function viewHandleSelectedText(view, event) {
         view.menu.y = event.clientY;
     }
     setTimeout(function () { view.menu.show = true; }.bind(view), 10);
+}
+
+function clearTextSelection() {
+    if (window.getSelection) {
+        if (window.getSelection().empty) {
+            window.getSelection().empty();
+        } else if (window.getSelection().removeAllRanges) {
+            window.getSelection().removeAllRanges();
+        }
+    } else if (document.selection) {
+         document.selection.empty();
+    }
 }
 
 function addAndPlayAllActions(cmd) {

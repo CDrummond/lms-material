@@ -1217,6 +1217,7 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
             this.$store.commit('menuVisible', {name:'nowplaying', shown:newVal});
             if (!newVal) {
                 this.menu.selection = undefined;
+                clearTextSelection();
             }
         },
         'disableBtns': function(newVal) {

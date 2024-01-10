@@ -2081,6 +2081,7 @@ var lmsBrowse = Vue.component("lms-browse", {
             this.$store.commit('menuVisible', {name:'browse-'+this.menu.name, shown:newVal});
             if (!newVal) {
                 this.menu.selection = undefined;
+                clearTextSelection();
             }
         },
         '$store.state.pinQueue': function() {

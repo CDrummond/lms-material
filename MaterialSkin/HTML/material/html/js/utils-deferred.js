@@ -174,6 +174,7 @@ function handleClickOnHref(event) {
 }
 function viewHandleSelectedText(view, event) {
     if (view.menu.show) {
+        view.menu.show = false;
         return;
     }
     let sel = window.getSelection();

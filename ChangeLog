@@ -8,6 +8,7 @@
 6. Try to avoid scenario of browse "..." toolbar menu only having 1 item.
 7. Remove sort options from 'Random Albums' and 'New Music'.
 8. Clear text selection if close menu.
+9. Force word-break if required in MAI view.
 
 4.1.4
 -----

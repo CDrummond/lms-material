@@ -10,6 +10,7 @@
  8. Clear text selection if close menu.
  9. Force word-break if required in MAI view.
 10. Fix wrong menu showing when select bio/review text in browse view.
+11. Show artist and album names at top of respective MAI view.
 
 4.1.4
 -----

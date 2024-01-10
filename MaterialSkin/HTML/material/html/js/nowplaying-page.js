@@ -59,6 +59,7 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
      <v-card flat class="np-info-card-cover selectable" @touchend.prevent="tabTextEnd" @mouseup.prevent="tabTextEnd" @contextmenu="event.preventDefault()">
       <v-card-text :class="['np-info-text', TRACK_TAB==index || tab.isMsg ? 'np-info-lyrics' : '', ALBUM_TAB==index ? 'np-info-review' : '']" :id="'np-tab'+index">
        <div v-if="TRACK_TAB==index && tab.texttitle" v-html="tab.texttitle" class="np-info-title" v-bind:class="{'lyrics-current-line':tab.highlight && undefined!=playerStatus.current.time && tab.lines && tab.lines[0].time>playerStatus.current.time}"></div>
+       <div v-else-if="TRACK_TAB!=index && tab.texttitle" v-html="tab.texttitle" class="np-info-title"></div>
        <img v-if="tab.image" :src="tab.image" loading="lazy" class="np-mai-img"></img>
        <div v-if="TRACK_TAB==index && tab.lines">
         <template v-for="(line, lindex) in tab.lines">
@@ -66,7 +67,6 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
         </template>
        </div>
        <div v-else-if="tab.text" v-bind:class="{'text':TRACK_TAB!=index}" v-html="tab.text"></div>
-       <div v-else-if="TRACK_TAB!=index && !tab.text && tab.texttitle" v-html="tab.texttitle" class="np-info-title"></div>
        <template v-for="(sect, sindex) in tab.sections">
         <div class="np-sect-title" v-if="(undefined!=sect.items && sect.items.length>=sect.min) || undefined!=sect.html">{{sect.title}}<v-btn flat icon class="np-sect-toggle" v-if="undefined!=sect.grid" @click="toggleGrid(index, sindex)"><v-icon>{{ACTIONS[sect.grid ? USE_LIST_ACTION : USE_GRID_ACTION].icon}}</v-icon></v-btn></div>
         <v-list v-if="undefined!=sect.items && !sect.grid && sect.items.length>=sect.min" class="lms-list">
@@ -117,6 +117,7 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
       <v-card flat class="np-info-card-cover selectable" @touchend.prevent="tabTextEnd" @mouseup.prevent="tabTextEnd" @contextmenu="event.preventDefault()">
        <v-card-text :class="['np-info-text-full', TRACK_TAB==index || tab.isMsg ? 'np-info-lyrics' : '', ALBUM_TAB==index ? 'np-info-review' : '']" :id="'np-tab'+index">
         <div v-if="TRACK_TAB==index && tab.texttitle" v-html="tab.texttitle" class="np-info-title" v-bind:class="{'lyrics-current-line':tab.highlight && undefined!=playerStatus.current.time && tab.lines && tab.lines[0].time>playerStatus.current.time}"></div>
+        <div v-else-if="TRACK_TAB!=index && tab.texttitle" v-html="tab.texttitle" class="np-info-title"></div>
         <img v-if="tab.image" :src="tab.image" loading="lazy" class="np-mai-img"></img>
         <div v-if="TRACK_TAB==index && tab.lines">
          <template v-for="(line, lindex) in tab.lines">
@@ -124,7 +125,6 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
          </template>
         </div>
         <div v-else-if="tab.text" v-bind:class="{'text':TRACK_TAB!=index}" v-html="tab.text"></div>
-        <div v-else-if="TRACK_TAB!=index && !tab.text && tab.texttitle" v-html="tab.texttitle" class="np-info-title"></div>
         <template v-for="(sect, sindex) in tab.sections">
          <div class="np-sect-title" v-if="(undefined!=sect.items && sect.items.length>=sect.min) || undefined!=sect.html">{{sect.title}}<v-btn flat icon class="np-sect-toggle" v-if="undefined!=sect.grid" @click="toggleGrid(index, sindex)"><v-icon>{{ACTIONS[sect.grid ? USE_LIST_ACTION : USE_GRID_ACTION].icon}}</v-icon></v-btn></div>
          <v-list v-if="undefined!=sect.items && !sect.grid && sect.items.length>=sect.min" class="lms-list">

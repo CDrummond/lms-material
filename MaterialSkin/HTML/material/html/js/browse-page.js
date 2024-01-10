@@ -62,9 +62,9 @@ var lmsBrowse = Vue.component("lms-browse", {
    <v-spacer style="flex-grow: 10!important"></v-spacer>
    <table class="browse-commands">
     <tr align="right">
-     <v-btn @click.stop="currentActionsMenu($event)" flat icon class="toolbar-button" :title="trans.actions" id="tbar-actions" v-if="currentActions.length>(tbarActions.length<2 ? 2 : 1)"><v-icon>more_horiz</v-icon></v-btn>
-     <template v-for="(action, index) in currentActions" v-if="currentActions.length==1 || tbarActions.length<2">
-      <v-btn @click.stop="currentAction(action, index, $event)" flat icon class="toolbar-button" :title="undefined==action.action ? action.title : ACTIONS[action.action].title" :id="'tbar-actions'+index" v-if="index<(tbarActions.length<2 ? 2 : 1)">
+     <v-btn @click.stop="currentActionsMenu($event)" flat icon class="toolbar-button" :title="trans.actions" id="tbar-actions" v-if="currentActions.length>(tbarActions.length<1 ? 3 : tbarActions.length<2 ? 2 : 1)"><v-icon>more_horiz</v-icon></v-btn>
+     <template v-for="(action, index) in currentActions" v-else>
+      <v-btn @click.stop="currentAction(action, index, $event)" flat icon class="toolbar-button" :title="undefined==action.action ? action.title : ACTIONS[action.action].title" :id="'tbar-actions'+index" v-if="index<(tbarActions.length<1 ? 3 : tbarActions.length<2 ? 2 : 1)">
        <img v-if="undefined!=action.action && ACTIONS[action.action].svg" class="svg-img" :src="ACTIONS[action.action].svg | svgIcon(darkUi)"></img>
        <v-icon v-else-if="undefined!=action.action">{{ACTIONS[action.action].icon}}</v-icon>
        <img v-else-if="action.svg" class="svg-img" :src="action.svg | svgIcon(darkUi)"></img>

@@ -579,7 +579,7 @@ function browseHandleListResponse(view, item, command, resp, prevPage, appendIte
             view.setBgndCover();
             view.filterJumplist();
             view.layoutGrid(true);
-            setScrollTop(view, 0);
+            browseSetScroll(view);
         });
 
         if (view.items.length==0) {
@@ -609,6 +609,15 @@ function browseHandleTextClickResponse(view, item, command, data, isMoreMenu) {
     } else if (command && command.command && command.command[0]=='globalsearch') {
         bus.$emit('showMessage', i18n('No results found'));
     }
+}
+
+function browseSetScroll(view) {
+    if (view.next!=undefined && undefined!=view.current && view.next.id==view.current.id) {
+        setScrollTop(view, view.next.pos);
+    } else {
+        setScrollTop(view, 0);
+    }
+    view.next = undefined;
 }
 
 function browseClick(view, item, index, event) {
@@ -644,7 +653,7 @@ function browseClick(view, item, index, event) {
             if (item.menu && item.menu.length>0 && item.menu[0]==PLAY_ALL_ACTION) {
                 view.tbarActions=[PLAY_ALL_ACTION, ADD_ALL_ACTION];
             }
-            setScrollTop(view, 0);
+            browseSetScroll(view);
         } else if (view.selection.size>0) {
             view.select(item, index, event);
         } else {
@@ -717,7 +726,7 @@ function browseClick(view, item, index, event) {
         view.headerTitle = stripLinkTags(item.title);
         view.headerSubTitle = i18n("Browse music library");
         view.current = item;
-        setScrollTop(view, 0);
+        browseSetScroll(view);
         view.isTop = false;
         view.tbarActions=[VLIB_ACTION, SEARCH_LIB_ACTION];
         view.grid = {allowed:true, use:isSetToUseGrid(GRID_OTHER), numColumns:0, ih:GRID_MIN_HEIGHT, rows:[], few:false, haveSubtitle:true};
@@ -891,7 +900,7 @@ function browseAddCategories(view, item, isGenre) {
     view.items.push(cat);
     view.headerTitle = stripLinkTags(item.title);
     view.headerSubTitle = i18n("Select category");
-    setScrollTop(view, 0);
+    browseSetScroll(view);
     view.isTop = false;
     view.jumplist = view.filteredJumplist = [];
     view.grid = {allowed:true, use:isSetToUseGrid(GRID_OTHER), numColumns:0, ih:GRID_MIN_HEIGHT, rows:[], few:false, haveSubtitle:true};
@@ -1507,6 +1516,7 @@ function browseGoHome(view) {
         view.nextReqId();
         view.fetchingItem = undefined;
     }
+    view.next = undefined;
     view.selection = new Set();
     var prev = view.history.length>0 ? view.history[0].pos : 0;
     view.items = view.top;
@@ -1571,10 +1581,13 @@ function browseGoBack(view, refresh) {
             view.$nextTick(function () { view.$nextTick(function () { view.$store.commit('setPage', NP_INFO==nextPage || NP_EXPANDED==nextPage ? 'now-playing' : nextPage); }); });
         //}
     }
+    let next = undefined==view.current ? undefined : {id:view.current.id, pos:view.scrollElement.scrollTop};
     if (view.history.length<2) {
         view.goHome();
+        view.next = next;
         return;
     }
+    view.next = next;
     view.selection = new Set();
     var prev = view.history.pop();
     view.items = prev.items;

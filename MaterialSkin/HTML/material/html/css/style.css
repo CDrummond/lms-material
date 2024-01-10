@@ -1087,7 +1087,8 @@ div.v-subheader {
 /* Biographies, etc, from More > Artist information > ... */
 .browse-html {
  font-size:var(--std-font-size)!important;
- font-weight:200!important;
+ font-weight:var(--std-font-size);
+ line-height: 1.5;
  min-height:var(--list-elem-height)!important;
  height:auto!important;
  padding:12px 16px!important;

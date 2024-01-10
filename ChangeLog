@@ -6,6 +6,7 @@
 4. Only show 'Create Mix' button if view is 800px or more wide.
 5. If navigate back into previous list then try to restore position.
 6. Try to avoid scenario of browse "..." toolbar menu only having 1 item.
+7. Remove sort options from 'Random Albums' and 'New Music'.
 
 4.1.4
 -----

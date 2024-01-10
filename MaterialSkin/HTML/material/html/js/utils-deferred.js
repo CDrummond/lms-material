@@ -189,6 +189,8 @@ function viewHandleSelectedText(view, event) {
     view.touch = undefined;
     view.menu.show = false;
     view.menu.items = [COPY_ACTION, SEARCH_TEXT_ACTION];
+    view.menu.name = "selection";
+    console.log(view.menu);
     view.menu.selection = text;
     let touch = getTouchPos(event);
     if (undefined!=touch) {

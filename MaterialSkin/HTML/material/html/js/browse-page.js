@@ -348,6 +348,14 @@ var lmsBrowse = Vue.component("lms-browse", {
      <v-list-tile-content><v-list-tile-title>{{trans.desc}}</v-list-tile-title></v-list-tile-content>
     </v-list-tile>
   </v-list>
+  <v-list v-else-if="menu.items">
+   <template v-for="(item, index) in menu.items">
+    <v-list-tile @click="menuItemAction(item)" v-if="undefined==item.title">
+     <v-list-tile-avatar :tile="true" class="lms-avatar"><v-icon v-if="ACTIONS[item].icon">{{ACTIONS[item].icon}}</v-icon><img v-else-if="ACTIONS[item].svg" class="svg-img" :src="ACTIONS[item].svg | svgIcon(darkUi)"></img></v-list-tile-avatar>
+     <v-list-tile-title>{{ACTIONS[item].title}}</v-list-tile-title>
+    </v-list-tile>
+   </template>
+  </v-list>
   <v-list v-else-if="menu.currentActions">
    <template v-for="(item, index) in menu.currentActions">
     <v-divider v-if="DIVIDER==item.action"></v-divider>
@@ -392,13 +400,6 @@ var lmsBrowse = Vue.component("lms-browse", {
     </v-list-tile>
    </template>
   </v-list>
-  <v-list v-else-if="menu.items">
-   <template v-for="(item, index) in menu.items">
-   <v-list-tile @click="menuItemAction(item)" v-if="undefined==item.title">
-    <v-list-tile-avatar :tile="true" class="lms-avatar"><v-icon v-if="ACTIONS[item].icon">{{ACTIONS[item].icon}}</v-icon><img v-else-if="ACTIONS[item].svg" class="svg-img" :src="ACTIONS[item].svg | svgIcon(darkUi)"></img></v-list-tile-avatar>
-    <v-list-tile-title>{{ACTIONS[item].title}}</v-list-tile-title>
-   </v-list-tile>
-   </template>
  </v-menu>
 </div>
       `,

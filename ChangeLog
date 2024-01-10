@@ -1,14 +1,15 @@
 4.1.5
 -----
-1. Reduce size of playing indicator in players menu.
-2. Fix clicking on MAI links for touch devices.
-3. Rename 'Radio' buttons to 'Create Mix' in menu as well as toolbar.
-4. Only show 'Create Mix' button if view is 800px or more wide.
-5. If navigate back into previous list then try to restore position.
-6. Try to avoid scenario of browse "..." toolbar menu only having 1 item.
-7. Remove sort options from 'Random Albums' and 'New Music'.
-8. Clear text selection if close menu.
-9. Force word-break if required in MAI view.
+ 1. Reduce size of playing indicator in players menu.
+ 2. Fix clicking on MAI links for touch devices.
+ 3. Rename 'Radio' buttons to 'Create Mix' in menu as well as toolbar.
+ 4. Only show 'Create Mix' button if view is 800px or more wide.
+ 5. If navigate back into previous list then try to restore position.
+ 6. Try to avoid scenario of browse "..." toolbar menu only having 1 item.
+ 7. Remove sort options from 'Random Albums' and 'New Music'.
+ 8. Clear text selection if close menu.
+ 9. Force word-break if required in MAI view.
+10. Fix wrong menu showing when select bio/review text in browse view.
 
 4.1.4
 -----

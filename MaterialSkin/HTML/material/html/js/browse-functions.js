@@ -2460,7 +2460,7 @@ function browseAddExtra(view, html) {
     } else if (1==view.items.length==1) {
         view.items[0].title=html;
     } else if (0==view.items.length) {
-        view.items=[{ title: html, type: "html", id: item.id+".extra" }];
+        view.items=[{ title: html, type: "html", id: (undefined==view.current ? "xxx" : view.current.id)+".extra" }];
     }
 }
 

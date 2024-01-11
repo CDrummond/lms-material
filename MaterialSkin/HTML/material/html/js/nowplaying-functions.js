@@ -744,15 +744,11 @@ function nowplayingFetchArtistInfo(view) {
                     logJsonMessage("RESP", data);
                     let body = data.result.content;
                     if (body.similarartists && body.similarartists.artist && body.similarartists.artist.length>0) {
+                        let items=[];
                         for (let i=0, loop=body.similarartists.artist, len=loop.length; i<len; ++i) {
-                            if (undefined==view.info.tabs[ARTIST_TAB].sections[1].html) {
-                                view.info.tabs[ARTIST_TAB].sections[1].html="<p class=\"np-html-sect\">";
-                            } else {
-                                view.info.tabs[ARTIST_TAB].sections[1].html+=", ";
-                            }
-                            view.info.tabs[ARTIST_TAB].sections[1].html+="<obj class=\"link-item\" onclick=\"nowplayingSearch(\'"+escape(loop[i].name)+"\')\">" + loop[i].name + "</obj>";
+                            items.push("<obj class=\"link-item\" onclick=\"nowplayingSearch(\'"+escape(loop[i].name)+"\')\">" + loop[i].name + "</obj>");
                         }
-                        view.info.tabs[ARTIST_TAB].sections[1].html+="</p>";
+                        view.info.tabs[ARTIST_TAB].sections[1].html="<p class=\"np-html-sect\">"+items.join(SEPARATOR)+"</p>";
                     }
                 }
             });

@@ -2481,15 +2481,11 @@ function browseFetchExtra(view, fetchArtists) {
             logJsonMessage("RESP", data);
             let body = data.result.content;
             if (body.similarartists && body.similarartists.artist && body.similarartists.artist.length>0) {
+                let items = [];
                 for (let i=0, loop=body.similarartists.artist, len=loop.length; i<len; ++i) {
-                    if (undefined==html) {
-                        html="<p><b>" + i18n("Similar artists") + "</b><br/><br/>";
-                    } else {
-                        html+=", ";
-                    }
-                    html+="<obj class=\"link-item\" onclick=\"nowplayingSearch(\'"+escape(loop[i].name)+"\')\">" + loop[i].name + "</obj>";
+                    items.push("<obj class=\"link-item\" onclick=\"nowplayingSearch(\'"+escape(loop[i].name)+"\')\">" + loop[i].name + "</obj>");
                 }
-                html+="</p>";
+                html="<br/><p><b>" + i18n("Similar artists") + "</b><br/><br/>"+items.join(SEPARATOR)+"</p>";
             }
         }
 

@@ -16,7 +16,7 @@ Vue.component('volume-control', {
    <v-slider :disabled="VOL_FIXED==dvc || noPlayer || queryParams.party" step="1" v-model="value" @wheel.native="wheel($event)" @click.middle="toggleMute" class="vol-slider" @start="start" @end="end" @change="changed"></v-slider>
    <v-btn flat icon @wheel="wheel($event)" @click.middle="toggleMute" v-longpress:repeat="inc" class="vol-btn vol-right" :title="incTooltip | tooltip('up', displayKeyboardShortcut)"><v-icon>{{muted ? 'volume_off' : 'volume_up'}}</v-icon></v-btn>
    <p v-if="layout==1" class="vol-full-label" v-bind:class="{'link-item-ct':coloredToolbars,'link-item':!coloredToolbars,'disabled':noPlayer,'dimmed':muted,'pulse':!noPlayer && value==0 && playing}" @click.middle="toggleMute" v-longpress="toggleMuteLabel" id="vol-label">{{value|displayVal(dvc)}}</p>
-   <p v-if="layout==2 && VOL_STD==dvc" class="pmgr-vol link-item noselect" v-bind:class="{'pulse':value==0 && playing}" @click.middle="toggleMute" v-longpress="toggleMuteLabel">{{value|displayVal(dvc)}}</p>
+   <p v-else-if="layout==2 && VOL_STD==dvc" class="pmgr-vol link-item noselect" v-bind:class="{'pulse':value==0 && playing}" @click.middle="toggleMute" v-longpress="toggleMuteLabel">{{value|displayVal(dvc)}}</p>
   </v-layout>
  </v-flex>
 </v-layout>

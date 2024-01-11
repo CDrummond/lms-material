@@ -748,7 +748,7 @@ function nowplayingFetchArtistInfo(view) {
                         for (let i=0, loop=body.similarartists.artist, len=loop.length; i<len; ++i) {
                             items.push("<obj class=\"link-item\" onclick=\"nowplayingSearch(\'"+escape(loop[i].name)+"\')\">" + loop[i].name + "</obj>");
                         }
-                        view.info.tabs[ARTIST_TAB].sections[1].html="<p class=\"np-html-sect\">"+items.join(SEPARATOR)+"</p>";
+                        view.info.tabs[ARTIST_TAB].sections[1].html="<p class=\"np-html-sect\">"+items.join(SEPARATOR_HTML)+"</p>";
                     }
                 }
             });

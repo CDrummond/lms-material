@@ -1398,7 +1398,7 @@ function parseBrowseResp(data, parent, options, cacheKey, parentCommand, parentG
             resp.subtitle=totalTracks+'<obj class="mat-icon music-note">music_note</obj>'+totalDurationStr;
             resp.plainsubtitle=i18np("1 Track", "%1 Tracks", totalTracks)+SEPARATOR+totalDurationStr;
             if (genreList.length>0) {
-                resp.extraDetails=genreList.join(SEPARATOR);
+                resp.extraDetails=genreList.join(SEPARATOR_HTML);
             }
             // set compilationAlbumArtist on first entry so that browse-view can use this
             if (lmsOptions.noArtistFilter && undefined!=compilationAlbumArtist & resp.items.length>0) {

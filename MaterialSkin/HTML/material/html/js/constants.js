@@ -16,6 +16,7 @@ function checkPlatform(platform) {
 }
 
 const SEPARATOR = " \u2022 ";
+const SEPARATOR_HTML = "&nbsp;\u2022 ";
 
 const IS_MOBILE  = (undefined!=navigator && undefined!=navigator.userAgentData && navigator.userAgentData.mobile) ||
                    checkPlatform('Android|webOS|iPhone|iPad|BlackBerry|Windows Phone|Opera Mini|IEMobile|Mobile') ||

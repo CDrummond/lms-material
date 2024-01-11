@@ -462,7 +462,7 @@ function browseHandleListResponse(view, item, command, resp, prevPage, appendIte
                             genreList.push(loop[g].genre);
                         }
                     }
-                    view.detailedSubExtra=genreList.join(SEPARATOR);
+                    view.detailedSubExtra=genreList.join(SEPARATOR_HTML);
                 }
             }).catch(err => {
             });
@@ -2485,7 +2485,7 @@ function browseFetchExtra(view, fetchArtists) {
                 for (let i=0, loop=body.similarartists.artist, len=loop.length; i<len; ++i) {
                     items.push("<obj class=\"link-item\" onclick=\"nowplayingSearch(\'"+escape(loop[i].name)+"\')\">" + loop[i].name + "</obj>");
                 }
-                html="<br/><p><b>" + i18n("Similar artists") + "</b><br/><br/>"+items.join(SEPARATOR)+"</p>";
+                html="<br/><p><b>" + i18n("Similar artists") + "</b><br/><br/>"+items.join(SEPARATOR_HTML)+"</p>";
             }
         }
 

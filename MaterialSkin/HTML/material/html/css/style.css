@@ -870,7 +870,7 @@ div.v-subheader {
 }
 
 .vol-full-label {
- padding-top:16px;
+ padding-top:12px;
  min-width:3em!important;
  text-align:left;
  font-size:var(--std-font-size) !important;
@@ -954,11 +954,13 @@ div.v-subheader {
 }
 
 .vol-control-1 .vol-btn {
- margin-top:10px;
+ margin-top:6px;
 }
-
 .vol-control-1 .vol-slider {
- margin-top:12px!important;
+ margin-top:8px!important;
+}
+.vol-control-1 .layout {
+ height:var(--main-toolbar-height);
 }
 
 .group-vol {

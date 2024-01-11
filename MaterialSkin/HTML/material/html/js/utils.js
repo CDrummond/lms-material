@@ -479,7 +479,6 @@ function removeLocalStorage(key) {
 function changeLink(href, id) {
     var links = document.getElementsByTagName("link");
     if (undefined==links) {
-        console.log("ERR");
         return;
     }
     for (var i=0, len=links.length; i<len; ++i) {

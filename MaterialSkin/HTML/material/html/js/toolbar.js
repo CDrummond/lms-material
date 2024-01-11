@@ -337,7 +337,6 @@ Vue.component('lms-toolbar', {
                 if ('mod'==modifier) {
                     if (this.$store.state.visibleMenus.size==1 && this.$store.state.visibleMenus.has('main')) {
                         if (LMS_UI_SETTINGS_KEYBOARD==key || LMS_PLAYER_SETTINGS_KEYBOARD==key ||  LMS_SERVER_SETTINGS_KEYBOARD==key || LMS_INFORMATION_KEYBOARD==key) {
-                            console.log("KEY");
                             this.menuAction(LMS_UI_SETTINGS_KEYBOARD==key ? TB_UI_SETTINGS.id : LMS_PLAYER_SETTINGS_KEYBOARD==key ? TB_PLAYER_SETTINGS.id : 
                                             LMS_SERVER_SETTINGS_KEYBOARD==key ? TB_SERVER_SETTINGS.id : TB_INFO.id);
                             this.showMainMenu = false;

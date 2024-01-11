@@ -969,9 +969,6 @@ var lmsBrowse = Vue.component("lms-browse", {
             for (let i=0, loop=this.currentActions, len=loop.length; i<len; ++i) {
                 if (loop[i].stdItem==type) {
                     this.currentAction(loop[i]);
-                    if (STD_ITEM_MAI==type && loop[i].do.command[1]=="biography") {
-                        browseFetchExtra(this, this.current);
-                    }
                     return;
                 }
             }
@@ -993,6 +990,9 @@ var lmsBrowse = Vue.component("lms-browse", {
                                 {cancache:false, id:"currentaction:"+index,
                                  title:act.title+(act.stdItem==STD_ITEM_ALL_TRACKS || act.stdItem==STD_ITEM_COMPOSITION_TRACKS ? "" : (SEPARATOR+this.current.title)),
                                  image:act.stdItem ? this.current.image ? this.current.image : this.currentItemImage : undefined, stdItem:act.stdItem});
+                if (STD_ITEM_MAI==act.stdItem) {
+                    browseFetchExtra(this, act.do.command[1]=="biography");
+                }
             } else {
                 var cmd = {command:["browseonlineartist", "items"], params:["service_id:"+act.id, "artist_id:"+act.artist_id, "menu:1"]};
                 this.fetchItems(cmd, {cancache:false, id:act.id, title:act.title+SEPARATOR+this.current.title, command:cmd.command, params:cmd.params});

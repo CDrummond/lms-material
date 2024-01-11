@@ -11,6 +11,8 @@
  9. Force word-break if required in MAI view.
 10. Fix wrong menu showing when select bio/review text in browse view.
 11. Show artist and album names at top of respective MAI view.
+12. Add genres to end of MAI artist, and album, information in browse
+    view.
 
 4.1.4
 -----

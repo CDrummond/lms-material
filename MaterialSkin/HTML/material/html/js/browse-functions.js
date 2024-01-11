@@ -2464,13 +2464,22 @@ function browseAddExtra(view, html) {
     }
 }
 
-function browseFetchExtra(view, item) {
+function browseFetchExtra(view, fetchArtists) {
+    let item = view.current;
+    let sub = view.detailedSubExtra;
     view.extra = undefined;
+    if (!fetchArtists) {
+        if (sub!=undefined) {
+            let html = "<p><b>" + i18n("Genres") + "</b><br/><br/>" + sub;
+            view.extra = { html:html, id: item.id };
+        }
+        return;
+    }
     lmsCommand("", ["material-skin", "geturl", "url:"+NP_SIMILAR_URL+encodeURIComponent(item.title), "format:json"]).then(({data}) => {
+        let html = undefined;
         if (data && data.result && data.result.content) {
             logJsonMessage("RESP", data);
             let body = data.result.content;
-            let html = undefined;
             if (body.similarartists && body.similarartists.artist && body.similarartists.artist.length>0) {
                 for (let i=0, loop=body.similarartists.artist, len=loop.length; i<len; ++i) {
                     if (undefined==html) {
@@ -2482,13 +2491,26 @@ function browseFetchExtra(view, item) {
                 }
                 html+="</p>";
             }
-            if (undefined!=html) {
-                let extra = [ { title: html, type: "html", id: item.id+".extra" } ];
-                if (undefined==view.fetchingItem) { // Have bio response alreadty so can append
-                    browseAddExtra(view, html);
-                } else {
-                    view.extra = {id:view.current.id, html:extra};
-                }
+        }
+
+        if (sub!=undefined) {
+            html = undefined==html ? "" : (html+"<br/>");
+            html += "<p><b>" + i18n("Genres") + "</b><br/><br/>" + sub;
+        }
+        if (undefined!=html) {
+            if (undefined==view.fetchingItem) { // Have response already so can append
+                browseAddExtra(view, html);
+            } else {
+                view.extra = { html:html, id: item.id };
+            }
+        }
+    }).catch(err => {
+        if (sub!=undefined) {
+            let html = "<p><b>" + i18n("Genres") + "</b><br/><br/>" + sub;
+            if (undefined==view.fetchingItem) { // Have response alreadty so can append
+                browseAddExtra(view, html);
+            } else {
+                view.extra = { html:html, id: item.id };
             }
         }
     });

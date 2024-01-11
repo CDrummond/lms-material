@@ -21,3 +21,7 @@
 body {
  pointer-events:none!important;
 }
+
+.np-close, .np-menu {
+ visibility:hidden;
+}

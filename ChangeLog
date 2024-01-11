@@ -1,3 +1,7 @@
+4.1.6
+-----
+1. Hide menu and close buttons on now-playing screen if using "np-only" URL.
+
 4.1.5
 -----
  1. Reduce size of playing indicator in players menu.

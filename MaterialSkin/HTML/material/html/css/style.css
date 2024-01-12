@@ -1313,6 +1313,19 @@ div.v-subheader {
  height:38px !important;
 }
 
+@media only screen and (max-width:360px) {
+.np-std-button {
+  margin:7px 0px 7px 0px;
+ }
+}
+@media only screen and (max-width:240px) {
+.np-std-button {
+  margin:10px 0px 10px 0px;
+  width:32px !important;
+  height:32px !important;
+ }
+}
+
 .np-info-lyrics {
  text-align:center;
 }

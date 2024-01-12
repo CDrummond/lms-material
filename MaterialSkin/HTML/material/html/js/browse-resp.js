@@ -486,6 +486,7 @@ function parseBrowseResp(data, parent, options, cacheKey, parentCommand, parentG
                         mapIcon(i);
                     }
                 } else if (isBmf) {
+                    i.bmf = true;
                     i.icon = i.type=="playlist"
                         ? i.actions && i.actions.play && i.actions.play.params && i.actions.play.params.folder_id
                             ? "folder"

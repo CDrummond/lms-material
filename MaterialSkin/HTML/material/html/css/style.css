@@ -1721,8 +1721,12 @@ progress {
  white-space:nowrap!important;
 }
 
-.pq-current, .highlight {
+.pq-current {
  background:var(--pq-current-color);
+}
+
+.highlight {
+ background:var(--pq-current-color)!important;;
 }
 
 .pq-current {

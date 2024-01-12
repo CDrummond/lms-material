@@ -36,7 +36,7 @@ function browseCheckExpand(view) {
 
 // lmsLastKeyPress is defined in server.js
 function browseHandleKey(view, event) {
-    if (!event.ctrlKey && !event.altKey && !event.metaKey && undefined!=view.jumplist && view.jumplist.length>1 &&
+    if (0==view.searchActive && !event.ctrlKey && !event.altKey && !event.metaKey && undefined!=view.jumplist && view.jumplist.length>1 &&
         view.$store.state.openDialogs.length<1 && view.$store.state.visibleMenus.size<1 && (view.$store.state.desktopLayout || view.$store.state.page=="browse")) {
         let key = event.key.toUpperCase();
         if ('#'==key) {
@@ -297,7 +297,7 @@ function browseHandleListResponse(view, item, command, resp, prevPage, appendIte
         }
         resp.canUseGrid = resp.canUseGrid;
         view.canDrop = resp.canDrop;
-        view.searchActive = item.id.startsWith(SEARCH_ID);
+        view.searchActive = item.id.startsWith(SEARCH_ID) ? 1 : 0;
         view.command = command;
         view.currentBaseActions = view.baseActions;
         view.currentItemImage = resp.image;
@@ -467,15 +467,19 @@ function browseHandleListResponse(view, item, command, resp, prevPage, appendIte
             }).catch(err => {
             });
         }
+        let isRandom = resp.isMusicMix || (("albums"==command.command[0] && view.items.length>0 && command.params.find(elem => elem=="sort:random")));
         if (resp.canUseGrid && !resp.forceGrid) {
             view.currentActions.push({action:(view.grid.use ? USE_LIST_ACTION : USE_GRID_ACTION), weight:0});
+        }
+        if (!isRandom && view.items.length>1 && (view.items[1].bmf || (new Set([STD_ITEM_ALBUM, STD_ITEM_ARTIST, STD_ITEM_PLAYLIST]).has(view.items[1].stdItem)))) {
+            view.currentActions.push({action:SEARCH_LIST_ACTION, weight:1});
         }
         let itemHasPlayAction=undefined!=item.menu && item.menu[0]==PLAY_ACTION;
         if (undefined==item.stdItem && itemHasPlayAction && lmsOptions.playShuffle && view.items.length>1) {
             view.currentActions.push({action:INSERT_ACTION, weight:2});
             view.currentActions.push({action:PLAY_SHUFFLE_ACTION, weight:3});
         }
-        if (resp.isMusicMix || (("albums"==command.command[0] && view.items.length>0 && command.params.find(elem => elem=="sort:random")))) {
+        if (isRandom) {
             view.currentActions.push({action:RELOAD_ACTION, weight:1});
             if (resp.isMusicMix && !queryParams.party) {
                 view.currentActions.push({action:ADD_TO_PLAYLIST_ACTION, weight:10});
@@ -648,7 +652,7 @@ function browseClick(view, item, index, event) {
             view.items = item.allItems;
             view.headerSubTitle = item.subtitle;
             view.current = item;
-            view.searchActive = false;
+            view.searchActive = 0;
             if (item.menu && item.menu.length>0 && item.menu[0]==PLAY_ALL_ACTION) {
                 view.tbarActions=[PLAY_ALL_ACTION, ADD_ALL_ACTION];
             }
@@ -922,14 +926,16 @@ function browseAddCategories(view, item, isGenre) {
 }
 
 function browseItemAction(view, act, item, index, event) {
-    if (act==SEARCH_TEXT_ACTION) {
+    if (act==SEARCH_LIST_ACTION) {
+        view.searchActive=2;
+    } else if (act==SEARCH_TEXT_ACTION) {
         bus.$emit('browse-search', view.menu.selection);
     } else if (act==COPY_ACTION) {
         copyTextToClipboard(view.menu.selection);
     } else if (act==SEARCH_LIB_ACTION) {
         if (view.$store.state.visibleMenus.size<1) {
             setLocalStorageVal('search', '');
-            view.searchActive = true;
+            view.searchActive = 1;
         }
     } else if (act===MORE_ACTION) {
         if (item.isPodcast) {
@@ -1490,6 +1496,8 @@ function browseHeaderAction(view, act, event, ignoreOpenMenus) {
                 });
             }
         });
+    } else if (SEARCH_LIST_ACTION==act) {
+        view.searchActive = 2;
     } else {
         // If we are adding/playing/inserting from an artist's list of albums, check if we are using reverse sort
         // if we are then we need to add each album in the list one by one...'
@@ -1507,7 +1515,7 @@ function browseHeaderAction(view, act, event, ignoreOpenMenus) {
 }
 
 function browseGoHome(view) {
-    view.searchActive = false;
+    view.searchActive = 0;
     if (view.history.length==0) {
         return;
     }
@@ -1556,8 +1564,9 @@ function browseGoBack(view, refresh) {
     }
     let searchWasActive = view.searchActive;
     if (view.searchActive) {
-        view.searchActive = false;
-        if (view.items.length<1 || (undefined==view.items[0].allItems && SEARCH_OTHER_ID!=view.items[0].id)) {
+        let val = view.searchActive;
+        view.searchActive = 0;
+        if (2==val || (1==val && (view.items.length<1 || (undefined==view.items[0].allItems && SEARCH_OTHER_ID!=view.items[0].id)))) {
             return; // Search results not being shown, so '<-' button just closes search field
         }
     }
@@ -1614,7 +1623,7 @@ function browseGoBack(view, refresh) {
     view.prevPage = prev.prevPage;
     view.allItems = prev.allItems;
     view.inGenre = prev.inGenre;
-    view.searchActive = prev.searchActive && !searchWasActive;
+    view.searchActive = 1==prev.searchActive && !searchWasActive ? prev.view.searchActive : 0;
     view.canDrop = prev.canDrop;
     view.itemCustomActions = prev.itemCustomActions;
 

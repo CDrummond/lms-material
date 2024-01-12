@@ -4,6 +4,7 @@
 2. Work-around volume control moving in desktop layout when toggle MAI button.
 3. Better handling of now-playing button sizes for very narrow screen widths.
 4. Tweak now-playing button pulse.
+5. Fix track list indents.
 
 4.1.5
 -----

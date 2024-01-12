@@ -2757,18 +2757,18 @@ div.v-subheader {
  right:68px !important;
 }
 
-.indent-both .list-btns {
- right:calc(188px + var(--home-button-size))!important;
-}
-.indent-both .list-btns-track {
-  right:calc(228px + var(--home-button-size))!important;
- }
-
 .indent-right .list-btns {
  right:calc(88px + var(--home-button-size))!important;
 }
 .indent-right .list-btns-track {
  right:calc(128px + var(--home-button-size))!important;
+}
+
+.indent-both .list-btns {
+ right:calc(188px + var(--home-button-size))!important;
+}
+.indent-both .list-btns-track {
+ right:calc(228px + var(--home-button-size))!important;
 }
 
 .indent-both .lms-image-grid .list-btns {

@@ -222,7 +222,7 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
      <div class="np-emblem" v-if="playerStatus.current.emblem" @click="emblemClicked" :style="{background: playerStatus.current.emblem.bgnd}">
       <img :src="playerStatus.current.emblem | emblem()" loading="lazy"></img>
      </div>
-     <div class="np-menu" :title="trans.menu" @click="showMenu" v-if="playerStatus.playlist.count>0" v-bind:class="{'pulse':pulseTimer}"></div>
+     <div class="np-menu" :title="trans.menu" @click="showMenu" v-if="playerStatus.playlist.count>0" v-bind:class="{'np-pulse':pulseTimer}"></div>
     </div>
     <div class="np-details-landscape" v-bind:class="{'np-details-landscape-wide': landscape && wide>1}">
 
@@ -288,8 +288,8 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
      <div class="np-emblem" v-if="playerStatus.current.emblem" @click="emblemClicked" :style="{background: playerStatus.current.emblem.bgnd}">
       <img :src="playerStatus.current.emblem | emblem()" loading="lazy"></img>
      </div>
-     <div class="np-menu" :title="trans.menu" @click="showMenu" v-if="playerStatus.playlist.count>0" v-bind:class="{'pq-pulse':pulseTimer}"></div>
-     <div class="np-close" :title="trans.collapseNp" @click="largeView=false" v-bind:class="{'pulse':pulseTimer}"></div>
+     <div class="np-menu" :title="trans.menu" @click="showMenu" v-if="playerStatus.playlist.count>0" v-bind:class="{'np-pulse':pulseTimer}"></div>
+     <div class="np-close" :title="trans.collapseNp" @click="largeView=false" v-bind:class="{'np-pulse':pulseTimer}"></div>
     </div>
     <div class="np-portrait-song-info hide-scrollbar fade-both">
      <div>
@@ -977,7 +977,7 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
             if (!this.pulseTimer) {
                 this.pulseTimer = setTimeout(function () {
                     this.pulseTimer = undefined;
-                }.bind(this), 1500);
+                }.bind(this), 1000);
             }
             if (!this.clickTimer) {
                 this.clickTimer = setTimeout(function () {

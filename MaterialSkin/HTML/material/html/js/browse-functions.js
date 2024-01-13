@@ -36,7 +36,7 @@ function browseCheckExpand(view) {
 
 // lmsLastKeyPress is defined in server.js
 function browseHandleKey(view, event) {
-    if (0==view.searchActive && !event.ctrlKey && !event.altKey && !event.metaKey && undefined!=view.jumplist && view.jumplist.length>1 &&
+    if (event.target.tagName.toLowerCase() !== 'input' && !event.ctrlKey && !event.altKey && !event.metaKey && undefined!=view.jumplist && view.jumplist.length>1 &&
         view.$store.state.openDialogs.length<1 && view.$store.state.visibleMenus.size<1 && (view.$store.state.desktopLayout || view.$store.state.page=="browse")) {
         let key = event.key.toUpperCase();
         if ('#'==key) {

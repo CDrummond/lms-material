@@ -1725,8 +1725,17 @@ progress {
  background:var(--pq-current-color);
 }
 
-.highlight {
- background:var(--pq-current-color)!important;;
+.highlight, .highlight .v-list__tile__title, .highlight .v-list__tile__sub-title {
+ font-weight:var(--bold-weight)!important;
+}
+
+.lms-list .highlight {
+ background:var(--pq-current-color)!important;
+}
+
+.highlight .v-list__tile {
+ border-bottom:1px solid var(--text-color);
+ margin-bottom:-1px;
 }
 
 .pq-current {

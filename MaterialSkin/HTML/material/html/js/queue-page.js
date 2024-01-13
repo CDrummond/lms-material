@@ -8,7 +8,7 @@
 
 const PQ_STATUS_TAGS = "tags:cdegilqtuyAAIKNSxx";
 const PQ_REQUIRE_AT_LEAST_1_ITEM = new Set([PQ_SAVE_ACTION, PQ_MOVE_QUEUE_ACTION, PQ_SCROLL_ACTION, PQ_SORT_ACTION, REMOVE_DUPES_ACTION]);
-const PQ_REQUIRE_MULTIPLE_ITEMS = new Set([PQ_SCROLL_ACTION, PQ_SORT_ACTION, REMOVE_DUPES_ACTION]);
+const PQ_REQUIRE_MULTIPLE_ITEMS = new Set([PQ_SCROLL_ACTION, SEARCH_LIST_ACTION, PQ_SORT_ACTION, REMOVE_DUPES_ACTION]);
 
 function queueMakePlain(str) {
     let rating = str.indexOf(SEPARATOR+RATINGS_START);
@@ -187,6 +187,10 @@ var lmsQueue = Vue.component("lms-queue", {
    <v-btn :title="trans.invertSelect" flat icon class="toolbar-button" @click="invertSelection()"><img :src="'invert-select' | svgIcon(darkUi)"></img></v-btn>
    <v-btn :title="trans.cancel" flat icon class="toolbar-button" @click="clearSelection()"><v-icon>cancel</v-icon></v-btn>
   </v-layout>
+  <v-layout v-else-if="searchActive">
+  <v-btn flat icon @click="searchActive=false" class="toolbar-button back-button" :title="trans.goBack"><v-icon>arrow_back</v-icon></v-btn>
+   <lms-search-list @scrollTo="highlightItem" :view="this"></lms-search-list>
+  </v-layout>
   <v-layout v-else>
    <v-btn v-if="desktopLayout && windowWide>1" :title="pinQueue ? trans.unpin : trans.pin" flat icon class="toolbar-button" @click="togglePin" id="pq-pin-2"><img :src="(pinQueue ? 'pin' : 'unpin') | svgIcon(darkUi)"></img></v-btn>
    <div class="toolbar-nobtn-pad"></div>
@@ -214,7 +218,7 @@ var lmsQueue = Vue.component("lms-queue", {
  <div class="lms-list" id="queue-list" v-bind:class="{'lms-list3':!albumStyle && threeLines,'lms-list-album':albumStyle,'bgnd-blur':drawBgndImage,'backdrop-blur':drawBackdrop}" @drop.stop="drop(-1, $event)">
   <div v-if="items.length<1"></div> <!-- RecycleScroller does not like it if 0 items? -->
   <RecycleScroller v-else-if="albumStyle" :items="items" :item-size="null" page-mode key-field="key" :buffer="LMS_SCROLLER_LIST_BUFFER">
-  <v-list-tile avatar class="pq-albumstyle" v-bind:class="{'pq-track':!item.artistAlbum, 'pq-current-album':index!=currentIndex && currentIndex<items.length && item.grpKey==items[currentIndex].grpKey, 'pq-current': index==currentIndex, 'pq-current-first-track': index==currentIndex && item.artistAlbum, 'pq-pulse':index==currentIndex && pulseCurrent, 'list-active': menu.show && index==menu.index, 'drop-target': dragActive && index==dropIndex}" @dragstart="dragStart(index, $event)" @dragend="dragEnd()" @dragover="dragOver(index, $event)" @drop.stop="drop(index, $event)" draggable @click.prevent.stop="click(item, index, $event)" slot-scope="{item, index}" key-field="key" @contextmenu.prevent="contextMenu(item, index, $event)">
+  <v-list-tile avatar class="pq-albumstyle" v-bind:class="{'pq-track':!item.artistAlbum, 'pq-current-album':index!=currentIndex && currentIndex<items.length && item.grpKey==items[currentIndex].grpKey, 'pq-current': index==currentIndex, 'pq-current-first-track': index==currentIndex && item.artistAlbum, 'pq-pulse':index==currentIndex && pulseCurrent, 'list-active': menu.show && index==menu.index, 'drop-target': dragActive && index==dropIndex, 'highlight':index==highlightIndex}" @dragstart="dragStart(index, $event)" @dragend="dragEnd()" @dragover="dragOver(index, $event)" @drop.stop="drop(index, $event)" draggable @click.prevent.stop="click(item, index, $event)" slot-scope="{item, index}" key-field="key" @contextmenu.prevent="contextMenu(item, index, $event)">
    <v-list-tile-avatar :tile="true" v-bind:class="{'radio-image': 0==item.duration}" class="lms-avatar">
     <v-icon v-if="item.selected" v-bind:class="{'pq-first-track-check':item.artistAlbum}">check_box</v-icon>
     <img v-else-if="item.artistAlbum" :key="item.image" :src="item.image" onerror="this.src=DEFAULT_COVER" loading="lazy" v-bind:class="{'dimmed':item.image==DEFAULT_COVER || item.image==DEFAULT_RADIO_COVER}" class="radio-img allow-drag"></img>
@@ -231,7 +235,7 @@ var lmsQueue = Vue.component("lms-queue", {
   </v-list-tile>
  </RecycleScroller>
   <RecycleScroller v-else :items="items" :item-size="threeLines ? LMS_LIST_3LINE_ELEMENT_SIZE : LMS_LIST_ELEMENT_SIZE"  page-mode key-field="key" :buffer="LMS_SCROLLER_LIST_BUFFER">
-    <v-list-tile avatar v-bind:class="{'pq-current': index==currentIndex, 'pq-pulse':index==currentIndex && pulseCurrent, 'list-active': menu.show && index==menu.index, 'drop-target': dragActive && index==dropIndex}" @dragstart="dragStart(index, $event)" @dragend="dragEnd()" @dragover="dragOver(index, $event)" @drop.stop="drop(index, $event)" draggable @click.prevent.stop="click(item, index, $event)" slot-scope="{item, index}" key-field="key" @contextmenu.prevent="contextMenu(item, index, $event)">
+    <v-list-tile avatar v-bind:class="{'pq-current': index==currentIndex, 'pq-pulse':index==currentIndex && pulseCurrent, 'list-active': menu.show && index==menu.index, 'drop-target': dragActive && index==dropIndex, 'highlight':index==highlightIndex}" @dragstart="dragStart(index, $event)" @dragend="dragEnd()" @dragover="dragOver(index, $event)" @drop.stop="drop(index, $event)" draggable @click.prevent.stop="click(item, index, $event)" slot-scope="{item, index}" key-field="key" @contextmenu.prevent="contextMenu(item, index, $event)">
      <v-list-tile-avatar :tile="true" v-bind:class="{'radio-image': 0==item.duration}" class="lms-avatar">
       <v-icon v-if="item.selected">check_box</v-icon>
       <img v-else :key="item.image" :src="item.image" onerror="this.src=DEFAULT_COVER" loading="lazy" v-bind:class="{'dimmed':item.image==DEFAULT_COVER || item.image==DEFAULT_RADIO_COVER}" class="radio-img allow-drag"></img>
@@ -308,18 +312,20 @@ var lmsQueue = Vue.component("lms-queue", {
             duration: 0.0,
             playerStatus: { shuffle:0, repeat: 0 },
             remaining: {show:false, size:0, duration:0},
-            trans: { ok: undefined, cancel: undefined, clear:undefined, pin:undefined, unpin:undefined,
+            trans: { ok: undefined, cancel: undefined, clear:undefined, pin:undefined, unpin:undefined, goBack:undefined,
                      repeatAll:undefined, repeatOne:undefined, repeatOff:undefined, shuffleAll:undefined, shuffleAlbums:undefined,
                      shuffleOff:undefined, selectMultiple:undefined, removeall:undefined, invertSelect:undefined, dstm:undefined, actions:undefined },
             menu: { show:false, item: undefined, x:0, y:0, index:0},
             playlist: {name: undefined, modified: false},
             selection: new Set(),
             selectionDuration: 0,
-            otherActions: queryParams.party ? [PQ_SCROLL_ACTION] : [PQ_SAVE_ACTION, PQ_MOVE_QUEUE_ACTION, PQ_SCROLL_ACTION, PQ_ADD_URL_ACTION, PQ_SORT_ACTION, REMOVE_DUPES_ACTION, PQ_TOGGLE_VIEW_ACTION],
+            otherActions: queryParams.party ? [PQ_SCROLL_ACTION, SEARCH_LIST_ACTION] : [PQ_SAVE_ACTION, PQ_MOVE_QUEUE_ACTION, PQ_SCROLL_ACTION, SEARCH_LIST_ACTION, PQ_ADD_URL_ACTION, PQ_SORT_ACTION, REMOVE_DUPES_ACTION, PQ_TOGGLE_VIEW_ACTION],
             wide: 0,
             dstm: false,
             dragActive: false,
             dropIndex: -1,
+            highlightIndex: -1,
+            searchActive: false,
             coverUrl: undefined,
             queueCustomActions: [],
             nowPlayingExpanded: false,
@@ -651,7 +657,7 @@ var lmsQueue = Vue.component("lms-queue", {
     methods: {
         initItems() {
             this.trans= { ok:i18n('OK'), cancel: i18n('Cancel'), clear:i18n("Clear queue"),
-                          pin:i18n('Pin'), unpin:i18n('Unpin'),
+                          pin:i18n('Pin'), unpin:i18n('Unpin'), goBack:i18n("Go back"),
                           repeatAll:i18n("Repeat queue"), repeatOne:i18n("Repeat single track"), repeatOff:i18n("No repeat"),
                           shuffleAll:i18n("Shuffle tracks"), shuffleAlbums:i18n("Shuffle albums"), shuffleOff:i18n("No shuffle"),
                           selectMultiple:i18n("Select multiple items"), removeall:i18n("Remove all selected items"), 
@@ -1052,6 +1058,8 @@ var lmsQueue = Vue.component("lms-queue", {
                 });
             } else if (PQ_TOGGLE_VIEW_ACTION==act) {
                 this.$store.commit('setQueueAlbumStyle', !this.$store.state.queueAlbumStyle);
+            } else if (SEARCH_LIST_ACTION==act) {
+                this.searchActive = true;
             }
         },
         actionsMenu(event) {
@@ -1257,18 +1265,21 @@ var lmsQueue = Vue.component("lms-queue", {
                 return;
             }
             this.autoScrollRequired = false;
-            var scroll = this.items.length>5 && this.currentIndex>=0;
+            this.scrollToIndex(pulse, this.currentIndex);
+        },
+        scrollToIndex(pulse, index) {
+            var scroll = this.items.length>5 && index>=0;
             if (scroll || (pulse && this.items.length>0)) {
-                if (this.currentIndex<this.items.length) {
+                if (index<this.items.length) {
                     if (scroll) {
                         let pos = 0;
-                        if (this.currentIndex>3) {
+                        if (index>3) {
                             if (this.$store.state.queueAlbumStyle) {
-                                for (let i=0, loop=this.items, stop=this.currentIndex-3; i<stop; ++i) {
+                                for (let i=0, loop=this.items, stop=index-3; i<stop; ++i) {
                                     pos += loop[i].size;
                                 }
                             } else {
-                                pos = (this.currentIndex-3)*(this.$store.state.queueThreeLines ? LMS_LIST_3LINE_ELEMENT_SIZE : LMS_LIST_ELEMENT_SIZE);
+                                pos = (index-3)*(this.$store.state.queueThreeLines ? LMS_LIST_3LINE_ELEMENT_SIZE : LMS_LIST_ELEMENT_SIZE);
                             }
                         }
                         setScrollTop(this, pos>0 ? pos : 0);
@@ -1287,6 +1298,10 @@ var lmsQueue = Vue.component("lms-queue", {
                     this.fetchItems();
                 }
             }
+        },
+        highlightItem(index) {
+            this.highlightIndex = index;
+            this.scrollToIndex(false, index);
         },
         dragStart(which, ev) {
             if (queryParams.party) {
@@ -1516,6 +1531,14 @@ var lmsQueue = Vue.component("lms-queue", {
         '$store.state.showQueue': function(shown) {
             if (shown && this.$store.state.autoScrollQueue) {
                 this.scrollToCurrent();
+            }
+        },
+        'fetchingItems': function(newVal) {
+            this.searchActive = false;
+        },
+        'searchActive': function(newVal) {
+            if (!newVal) {
+                this.highlightIndex = -1;
             }
         }
     },

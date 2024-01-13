@@ -6,6 +6,21 @@
  */
 'use strict';
 
+function searchListHasStr(a, b) {
+    if (undefined==a) {
+        return false;
+    }
+    if (Array.isArray(a)) {
+        for (let i=0, len=a.length; i<len; ++i) {
+            if (a[i].toLowerCase().indexOf(b)>=0) {
+                return true;
+            }
+        }
+        return false;
+    }
+    return a.toLowerCase().indexOf(b)>=0;
+}
+
 Vue.component('lms-search-list', {
     template: `
 <v-layout>
@@ -74,9 +89,11 @@ Vue.component('lms-search-list', {
             if (!isEmpty(str)) {
                 str = str.toLowerCase();
                 let len = this.view.items.length;
-                let start = -1==this.currentIndex ? backwards ? len-1 : 0 : (backwards ? (this.currentIndex-1) : (this.currentIndex+1));
+                let start = -1==this.currentIndex || this.currentIndex>=this.view.items.length ? backwards ? len-1 : 0 : (backwards ? (this.currentIndex-1) : (this.currentIndex+1));
                 for (let idx = start; backwards ? idx>=0 : idx<len; idx+=(backwards ? -1 : 1)) {
-                    if (this.view.items[idx].title.toLowerCase().indexOf(str)>=0 || (this.view.items[idx].subtitle && this.view.items[idx].subtitle.toLowerCase().indexOf(str)>=0)) {
+                    if (searchListHasStr(this.view.items[idx].title, str) || 
+                        searchListHasStr(this.view.items[idx].subtitle, str) ||
+                        searchListHasStr(this.view.items[idx].artistAlbum, str)) {
                         this.currentIndex = idx;
                         this.$emit('scrollTo', idx);
                         return;

@@ -12,13 +12,13 @@ function searchListHasStr(a, b) {
     }
     if (Array.isArray(a)) {
         for (let i=0, len=a.length; i<len; ++i) {
-            if (a[i].toLowerCase().indexOf(b)>=0) {
+            if (stripTags(a[i]).toLowerCase().indexOf(b)>=0) {
                 return true;
             }
         }
         return false;
     }
-    return a.toLowerCase().indexOf(b)>=0;
+    return stripTags(a).toLowerCase().indexOf(b)>=0;
 }
 
 Vue.component('lms-search-list', {

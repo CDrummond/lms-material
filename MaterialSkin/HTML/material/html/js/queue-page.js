@@ -1260,7 +1260,9 @@ var lmsQueue = Vue.component("lms-queue", {
             }
         },
         scrollToCurrent(pulse) {
-            if (!this.$store.state.desktopLayout && this.$store.state.page!='queue') {
+            if (this.searchActive ||
+                (!this.$store.state.desktopLayout && this.$store.state.page!='queue') ||
+                (this.$store.state.desktopLayout && !this.$store.state.showQueue)) {
                 this.autoScrollRequired = true;
                 return;
             }
@@ -1539,6 +1541,9 @@ var lmsQueue = Vue.component("lms-queue", {
         'searchActive': function(newVal) {
             if (!newVal) {
                 this.highlightIndex = -1;
+                if (this.$store.state.autoScrollQueue && this.autoScrollRequired) {
+                    this.scrollToCurrent();
+               }
             }
         }
     },

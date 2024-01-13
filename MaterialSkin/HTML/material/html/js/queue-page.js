@@ -1059,7 +1059,9 @@ var lmsQueue = Vue.component("lms-queue", {
             } else if (PQ_TOGGLE_VIEW_ACTION==act) {
                 this.$store.commit('setQueueAlbumStyle', !this.$store.state.queueAlbumStyle);
             } else if (SEARCH_LIST_ACTION==act) {
-                this.searchActive = true;
+                if (this.items.length>0) {
+                    this.searchActive = true;
+                }
             }
         },
         actionsMenu(event) {

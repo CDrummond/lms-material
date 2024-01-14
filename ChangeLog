@@ -8,6 +8,8 @@
 6. Better handling of now-playing button sizes for very narrow screen widths.
 7. Fix track list indents.
 8. Always use light text for now-playing menu and close icons.
+9. Fix blank area showing at bottom of screen when using now-playing bar on
+   mobile layout with keyboard shown.
 
 4.1.5
 -----

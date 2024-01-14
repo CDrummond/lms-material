@@ -210,7 +210,7 @@ var app = new Vue({
         let lastWinWidth = window.innerWidth;
         let timeout = undefined;
         let lmsApp = this;
-        this.bottomBar = {height: undefined, shown:true, desktop:this.$store.state.desktopLayout};
+        this.bottomBar = {height: undefined, shown:true, desktop:this.$store.state.desktopLayout, npThin:undefined, npThick:undefined};
         document.documentElement.style.setProperty('--vh', `${vh}px`);
         window.addEventListener('resize', () => {
             if (timeout) {
@@ -242,6 +242,8 @@ var app = new Vue({
                 if (IS_MOBILE) {
                     if (undefined==lmsApp.bottomBar.height || lmsApp.desktop!=lmsApp.$store.state.desktopLayout) {
                         lmsApp.bottomBar.height = getComputedStyle(document.documentElement).getPropertyValue('--bottom-toolbar-height');
+                        lmsApp.bottomBar.npThin = getComputedStyle(document.documentElement).getPropertyValue('--mobile-npbar-height-thin');
+                        lmsApp.bottomBar.npThick = getComputedStyle(document.documentElement).getPropertyValue('--mobile-npbar-height-thick');
                         lmsApp.desktop=lmsApp.$store.state.desktopLayout;
                     }
                     var keyboardShown = 0==widthChange && heightChange>100;
@@ -253,6 +255,7 @@ var app = new Vue({
                         if (elem) {
                             elem.style.display = keyboardShown ? 'none' : 'block';
                             document.documentElement.style.setProperty('--bottom-toolbar-height', keyboardShown ? '0px' : lmsApp.bottomBar.height);
+                            document.documentElement.style.setProperty('--mobile-npbar-height', keyboardShown || MBAR_NONE==lmsApp.$store.state.mobileBar ? '0px' : (MBAR_THIN==lmsApp.$store.state.mobileBar ? lmsApp.bottomBar.npThin : lmsApp.bottomBar.npThick));
                             lmsApp.bottomBar.shown = !keyboardShown;
                         }
                     }

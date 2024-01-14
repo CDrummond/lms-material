@@ -1182,7 +1182,7 @@ div.v-subheader {
 }
 
 .np-skip {
- background-color:rgba(0, 0, 0, 0.35);
+ background-color:rgba(0, 0, 0, 0.4);
 }
 .np-skip .np-std-button {
  color:var(--light-text-color);

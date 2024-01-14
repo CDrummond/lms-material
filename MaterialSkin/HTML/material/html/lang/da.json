@@ -329,7 +329,6 @@
 "Power on all upon play":"Tænd alle ved start af afspilning",
 "Power on/off all":"Tænd/sluk alle",
 "Previous track":"Forrige nummer",
-"Previous/next long-press skip":"Ved langt tryk på forrige/næste skal der springes frem/tilbage som angivet her",
 "Queue":"Afspilningskø",
 "Queue copied to '%1'":"Køren er kopieret til '%1'",
 "Quit":"Afslut",
@@ -616,5 +615,7 @@
 "1 Year":"1 år",
 "%1 Years":"%1 år",
 "1 day":"1 dag",
-"%1 days":"%1 dage"
+"%1 days":"%1 dage",
+"Not Found":"",
+"Skip back/forward":""
 }

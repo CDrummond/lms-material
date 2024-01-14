@@ -329,7 +329,6 @@
 "Power on all upon play":"Alle Geräte bei Wiedergabe einschalten",
 "Power on/off all":"Alle Geräte ein-/ausschalten",
 "Previous track":"Vorheriger Titel",
-"Previous/next long-press skip":"Vorheriger/Nächster Titel gedrückt halten",
 "Queue":"Warteschlange",
 "Queue copied to '%1'":"Warteschlange nach '%1' kopiert",
 "Quit":"Beenden",
@@ -616,5 +615,7 @@
 "1 Year":"1 Jahr",
 "%1 Years":"%1 Jahre",
 "1 day":"1 Tag",
-"%1 days":"%1 Tage"
+"%1 days":"%1 Tage",
+"Not Found":"",
+"Skip back/forward":""
 }

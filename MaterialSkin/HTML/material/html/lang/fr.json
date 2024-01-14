@@ -329,7 +329,6 @@
 "Power on all upon play":"Allumer tout à la lecture",
 "Power on/off all":"Allumer/Éteindre tout",
 "Previous track":"Morceau précédent",
-"Previous/next long-press skip":"Saut par pression longue sur Précédent/Suivant",
 "Queue":"Liste de lecture",
 "Queue copied to '%1'":"Liste de lecture copiée sur '%1'",
 "Quit":"Quitter",
@@ -616,5 +615,7 @@
 "1 Year":"1 année",
 "%1 Years":"%1 années",
 "1 day":"1 jour",
-"%1 days":"%1 jours"
+"%1 days":"%1 jours",
+"Not Found":"",
+"Skip back/forward":""
 }

@@ -329,7 +329,6 @@
 "Power on all upon play":"Allen aanzetten bij afspelen",
 "Power on/off all":"Allen aan/uitzetten",
 "Previous track":"Vorige nummer",
-"Previous/next long-press skip":"Vorige/volgende lang-drukken overslaan",
 "Queue":"Afspeellijst",
 "Queue copied to '%1'":"Afspeellijst gekopieerd naar",
 "Quit":"Afsluiten",
@@ -616,5 +615,7 @@
 "1 Year":"1 Jaar",
 "%1 Years":"%1 Jaren",
 "1 day":"1 dag",
-"%1 days":"%1 dagen"
+"%1 days":"%1 dagen",
+"Not Found":"",
+"Skip back/forward":""
 }

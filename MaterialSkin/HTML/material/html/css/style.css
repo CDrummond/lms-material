@@ -2794,7 +2794,7 @@ div.v-subheader {
 
 .np-menu, .np-close {
  float:left;
- color:var(--text-color);
+ color:var(--light-text-color);
  background-color:rgba(110, 110, 110, 0.45);
  opacity:0.7;
 }

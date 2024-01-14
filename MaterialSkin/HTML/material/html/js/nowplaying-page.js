@@ -1040,7 +1040,7 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
             clearTimeout(this.showSkipTimer);
             this.showSkipTimer = setTimeout(function () {
                 this.clearShowSkipTimeout();
-            }.bind(this), 5*1000);
+            }.bind(this), 3*1000);
         },
         clearShowSkipTimeout() {
             if (this.showSkipTimer) {

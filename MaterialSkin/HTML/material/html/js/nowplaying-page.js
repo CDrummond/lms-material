@@ -85,6 +85,10 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
            <div class="emblem" v-if="item.emblem" :style="{background: item.emblem.bgnd}">
             <img :src="item.emblem | emblem()" loading="lazy"></img>
            </div>
+           <div class="np-skip" v-if="showSkipTimer" @click="clearShowSkipTimeout">
+            <v-btn icon outline @click.stop="skipBack" class="np-std-button" v-bind:class="{'disabled':disableBtns}"><img class="svg-img" :src="'rewind-'+skipSeconds | svgIcon(true)"></img></v-btn>
+            <v-btn icon outline @click.stop="skipForward" class="np-std-button" v-bind:class="{'disabled':disableBtns}"><img class="svg-img" :src="'fast-forward-'+skipSeconds | svgIcon(true)"></img></v-btn>
+           </div>
           </v-list-tile>
          </template>
          <v-list-tile v-if="undefined!=sect.more" @click="moreClicked(index, sindex)"><v-list-tile-content><v-list-tile-title>{{sect.more}}</v-list-tile-title></v-list-tile-content></v-list-tile>
@@ -223,6 +227,10 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
       <img :src="playerStatus.current.emblem | emblem()" loading="lazy"></img>
      </div>
      <div class="np-menu" :title="trans.menu" @click="showMenu" v-if="playerStatus.playlist.count>0" v-bind:class="{'np-pulse':pulseTimer}"></div>
+     <div class="np-skip" v-if="showSkipTimer" @click="clearShowSkipTimeout">
+      <v-btn icon outline @click.stop="skipBack" class="np-std-button" v-bind:class="{'disabled':disableBtns}"><img class="svg-img" :src="'rewind-'+skipSeconds | svgIcon(true)"></img></v-btn>
+      <v-btn icon outline @click.stop="skipForward" class="np-std-button" v-bind:class="{'disabled':disableBtns}"><img class="svg-img" :src="'fast-forward-'+skipSeconds | svgIcon(true)"></img></v-btn>
+     </div>
     </div>
     <div class="np-details-landscape" v-bind:class="{'np-details-landscape-wide': landscape && wide>1}">
 
@@ -255,7 +263,7 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
             <v-btn v-if="repAltBtn.show" :title="repAltBtn.tooltip" flat icon v-longpress="repeatClicked" class="np-std-button" v-bind:class="{'disabled':noPlayer}"><v-icon v-if="repAltBtn.icon" class="media-icon">{{repAltBtn.icon}}</v-icon><img v-else :src="repAltBtn.image" class="btn-img"></img></v-btn>
             <v-btn :title="trans.repeatOne" flat icon v-else-if="playerStatus.playlist.repeat===1" v-longpress="repeatClicked" class="np-std-button" v-bind:class="{'disabled':noPlayer}"><v-icon class="media-icon">repeat_one</v-icon></v-btn>
             <v-btn :title="trans.repeatAll" flat icon v-else-if="playerStatus.playlist.repeat===2" v-longpress="repeatClicked" class="np-std-button" v-bind:class="{'disabled':noPlayer}"><v-icon class="media-icon">repeat</v-icon></v-btn>
-             <v-btn :title="trans.dstm" flat icon v-else-if="dstm" v-longpress="repeatClicked" class="np-std-button"><v-icon class="media-icon">all_inclusive</v-icon></v-btn>
+            <v-btn :title="trans.dstm" flat icon v-else-if="dstm" v-longpress="repeatClicked" class="np-std-button"><v-icon class="media-icon">all_inclusive</v-icon></v-btn>
             <v-btn :title="trans.repeatOff" flat icon v-else v-longpress="repeatClicked" class="dimmed np-std-button" v-bind:class="{'disabled':noPlayer}"><img class="svg-img media-icon" :src="'repeat-off' | svgIcon(darkUi)"></img></v-btn>
            </v-flex>
            <v-flex xs6><v-btn flat icon v-longpress:repeat="prevButton" class="np-std-button" v-bind:class="{ 'disabled':disablePrev}" :title="trans.prev | tooltip('left', keyboardControl)"><v-icon large class="media-icon">skip_previous</v-icon></v-btn></v-flex>
@@ -290,6 +298,10 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
      </div>
      <div class="np-menu" :title="trans.menu" @click="showMenu" v-if="playerStatus.playlist.count>0" v-bind:class="{'np-pulse':pulseTimer}"></div>
      <div class="np-close" :title="trans.collapseNp" @click="largeView=false" v-bind:class="{'np-pulse':pulseTimer}"></div>
+     <div class="np-skip" v-if="showSkipTimer" @click="clearShowSkipTimeout">
+      <v-btn icon outline @click.stop="skipBack" class="np-std-button" v-bind:class="{'disabled':disableBtns}"><img class="svg-img" :src="'rewind-'+skipSeconds | svgIcon(true)"></img></v-btn>
+      <v-btn icon outline @click.stop="skipForward" class="np-std-button" v-bind:class="{'disabled':disableBtns}"><img class="svg-img" :src="'fast-forward-'+skipSeconds | svgIcon(true)"></img></v-btn>
+     </div>
     </div>
     <div class="np-portrait-song-info hide-scrollbar fade-both">
      <div>
@@ -394,7 +406,8 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
                  disablePrev:true,
                  disableNext:true,
                  dstm:false,
-                 pulseTimer:undefined
+                 pulseTimer:undefined,
+                 showSkipTimer:undefined
                 };
     },
     mounted() {
@@ -887,6 +900,14 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
                 }
             }
         },
+        skipBack() {
+            this.resetShowSkipTimeout();
+            this.prevButton(true);
+        },
+        skipForward() {
+            this.resetShowSkipTimeout();
+            this.nextButton(true);
+        },
         shuffleClicked() {
             if (this.$store.state.visibleMenus.size>0 || queryParams.party) {
                 return;
@@ -982,7 +1003,11 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
             if (!this.clickTimer) {
                 this.clickTimer = setTimeout(function () {
                     this.clearClickTimeout();
-                    bus.$emit('expandNowPlaying', true);
+                    if (this.$store.state.desktopLayout && !this.largeView) {
+                        bus.$emit('expandNowPlaying', true);
+                    } else {
+                        this.resetShowSkipTimeout();
+                    }
                 }.bind(this), LMS_DOUBLE_CLICK_TIMEOUT);
             } else {
                 this.clearClickTimeout();
@@ -1006,6 +1031,18 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
             if (this.clickTimer) {
                 clearTimeout(this.clickTimer);
                 this.clickTimer = undefined;
+            }
+        },
+        resetShowSkipTimeout() {
+            clearTimeout(this.showSkipTimer);
+            this.showSkipTimer = setTimeout(function () {
+                this.clearShowSkipTimeout();
+            }.bind(this), 5*1000);
+        },
+        clearShowSkipTimeout() {
+            if (this.showSkipTimer) {
+                clearTimeout(this.showSkipTimer);
+                this.showSkipTimer = undefined;
             }
         },
         touchStart(event) {
@@ -1320,6 +1357,9 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
                 return replaceBr(this.artistAndComposerLine, " ")+" " + this.albumLine
             }
             return undefined;
+        },
+        skipSeconds() {
+            return this.$store.state.skipSeconds
         }
     },
     beforeDestroy() {

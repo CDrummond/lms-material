@@ -226,7 +226,7 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
      <div class="np-emblem" v-if="playerStatus.current.emblem" @click="emblemClicked" :style="{background: playerStatus.current.emblem.bgnd}">
       <img :src="playerStatus.current.emblem | emblem()" loading="lazy"></img>
      </div>
-     <div class="np-menu" :title="trans.menu" @click="showMenu" v-if="playerStatus.playlist.count>0" v-bind:class="{'np-pulse':pulseTimer}"></div>
+     <div class="np-menu" :title="trans.menu" @click="showMenu" v-if="playerStatus.playlist.count>0"></div>
      <div class="np-skip" v-if="showSkipTimer" @click="clearShowSkipTimeout">
       <v-btn icon outline @click.stop="skipBack" class="np-std-button" v-bind:class="{'disabled':disableBtns}"><img class="svg-img" :src="'rewind-'+skipSeconds | svgIcon(true)"></img></v-btn>
       <v-btn icon outline @click.stop="skipForward" class="np-std-button" v-bind:class="{'disabled':disableBtns}"><img class="svg-img" :src="'fast-forward-'+skipSeconds | svgIcon(true)"></img></v-btn>
@@ -296,8 +296,8 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
      <div class="np-emblem" v-if="playerStatus.current.emblem" @click="emblemClicked" :style="{background: playerStatus.current.emblem.bgnd}">
       <img :src="playerStatus.current.emblem | emblem()" loading="lazy"></img>
      </div>
-     <div class="np-menu" :title="trans.menu" @click="showMenu" v-if="playerStatus.playlist.count>0" v-bind:class="{'np-pulse':pulseTimer}"></div>
-     <div class="np-close" :title="trans.collapseNp" @click="largeView=false" v-bind:class="{'np-pulse':pulseTimer}"></div>
+     <div class="np-menu" :title="trans.menu" @click="showMenu" v-if="playerStatus.playlist.count>0"></div>
+     <div class="np-close" :title="trans.collapseNp" @click="largeView=false"></div>
      <div class="np-skip" v-if="showSkipTimer" @click="clearShowSkipTimeout">
       <v-btn icon outline @click.stop="skipBack" class="np-std-button" v-bind:class="{'disabled':disableBtns}"><img class="svg-img" :src="'rewind-'+skipSeconds | svgIcon(true)"></img></v-btn>
       <v-btn icon outline @click.stop="skipForward" class="np-std-button" v-bind:class="{'disabled':disableBtns}"><img class="svg-img" :src="'fast-forward-'+skipSeconds | svgIcon(true)"></img></v-btn>
@@ -406,7 +406,6 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
                  disablePrev:true,
                  disableNext:true,
                  dstm:false,
-                 pulseTimer:undefined,
                  showSkipTimer:undefined
                 };
     },
@@ -994,11 +993,6 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
             }
             if (!this.desktopLayout && this.$store.state.page!='now-playing') {
                 return;
-            }
-            if (!this.pulseTimer) {
-                this.pulseTimer = setTimeout(function () {
-                    this.pulseTimer = undefined;
-                }.bind(this), 1000);
             }
             if (!this.clickTimer) {
                 this.clickTimer = setTimeout(function () {

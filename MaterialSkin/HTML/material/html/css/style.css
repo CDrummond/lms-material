@@ -2959,11 +2959,6 @@ div.v-subheader {
  caret-color:var(--active-color)!important;
 }
 
-.np-pulse {
- animation:pulse 1s 1;
- will-change: opacity;
-}
-
 .pulse {
  animation:pulse 2s infinite;
  will-change: opacity;

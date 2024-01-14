@@ -1005,7 +1005,7 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
                     this.clearClickTimeout();
                     if (this.$store.state.desktopLayout && !this.largeView) {
                         bus.$emit('expandNowPlaying', true);
-                    } else {
+                    } else if (this.playerStatus.playlist.count>0) {
                         this.resetShowSkipTimeout();
                     }
                 }.bind(this), LMS_DOUBLE_CLICK_TIMEOUT);

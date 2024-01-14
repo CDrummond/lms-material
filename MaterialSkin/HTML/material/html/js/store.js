@@ -29,7 +29,7 @@ function updateUiSettings(state, val) {
             }
         }
     }
-    if (VALID_SKIP_SECONDS.has(state.skipSeconds)) {
+    if (!VALID_SKIP_SECONDS.has(state.skipSeconds)) {
         state.skipSeconds = 30;
     }
 
@@ -492,7 +492,7 @@ const store = new Vuex.Store({
                 let key = intItems[i];
                 state[key] = parseInt(getLocalStorageVal(key, state[key]));
             }
-            if (VALID_SKIP_SECONDS.has(state.skipSeconds)) {
+            if (!VALID_SKIP_SECONDS.has(state.skipSeconds)) {
                 state.skipSeconds = 30;
             }
             if (state.homeButton) {

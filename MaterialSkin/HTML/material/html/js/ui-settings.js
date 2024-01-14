@@ -246,7 +246,7 @@ Vue.component('lms-ui-settings', {
     <v-divider></v-divider>
 
     <v-list-tile>
-     <v-select :items="skipSecondsOptions" :label="i18n('Previous/next long-press skip')" v-model="skipSeconds" item-text="label" item-value="value"></v-select>
+     <v-select :items="skipSecondsOptions" :label="i18n('Skip back/forward')" v-model="skipSeconds" item-text="label" item-value="value"></v-select>
     </v-list-tile>
     <v-divider></v-divider>
 

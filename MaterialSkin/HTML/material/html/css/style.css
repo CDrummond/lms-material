@@ -1185,7 +1185,6 @@ div.v-subheader {
  background-color:rgba(128, 128, 128, 0.75);
 }
 .np-skip .np-std-button {
- margin:16px;
  color:var(--light-text-color);
  background:#333!important;
  border:2px solid var(--light-text-color)!important;
@@ -1195,18 +1194,11 @@ div.v-subheader {
  background:#333!important;
  border:2px solid white!important;
 }
-.np-skip .np-std-button:last-of-type {
- float:right;
+.np-skip td {
+ text-align: center;
+ width:33%;
 }
-.np-image .np-skip .np-std-button{
- margin-top:calc((var(--np-portrait-image-size)/2) - 8px);
-}
-.np-image-landscape .np-skip .np-std-button{
- margin-top:calc((var(--np-image-landscape-size)/2) - 8px);
-}
-.np-image-landscape-wide .np-skip .np-std-button{
- margin-top:calc((var(--np-image-landscape-wide-size)/2) - 8px);
-}
+
 .np-image .np-skip {
  left:var(--np-image-border);
  top:var(--np-image-border);

@@ -85,10 +85,13 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
            <div class="emblem" v-if="item.emblem" :style="{background: item.emblem.bgnd}">
             <img :src="item.emblem | emblem()" loading="lazy"></img>
            </div>
-           <div class="np-skip" v-if="showSkipTimer" @click="clearShowSkipTimeout">
-            <v-btn icon outline @click.stop="skipBack" class="np-std-button" v-bind:class="{'disabled':disableBtns}"><img class="svg-img" :src="'rewind-'+skipSeconds | svgIcon(true)"></img></v-btn>
-            <v-btn icon outline @click.stop="skipForward" class="np-std-button" v-bind:class="{'disabled':disableBtns}"><img class="svg-img" :src="'fast-forward-'+skipSeconds | svgIcon(true)"></img></v-btn>
-           </div>
+           <table class="np-skip" v-if="showSkipTimer" @click="clearShowSkipTimeout">
+            <tr>
+             <td><v-btn icon outline @click.stop="skipBack" class="np-std-button" v-bind:class="{'disabled':disableBtns}"><img class="svg-img" :src="'rewind-'+skipSeconds | svgIcon(true)"></img></v-btn></td>
+             <td/>
+             <td><v-btn icon outline @click.stop="skipForward" class="np-std-button" v-bind:class="{'disabled':disableBtns}"><img class="svg-img" :src="'fast-forward-'+skipSeconds | svgIcon(true)"></img></v-btn></td>
+            </tr>
+           </table>
           </v-list-tile>
          </template>
          <v-list-tile v-if="undefined!=sect.more" @click="moreClicked(index, sindex)"><v-list-tile-content><v-list-tile-title>{{sect.more}}</v-list-tile-title></v-list-tile-content></v-list-tile>
@@ -227,10 +230,13 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
       <img :src="playerStatus.current.emblem | emblem()" loading="lazy"></img>
      </div>
      <div class="np-menu" :title="trans.menu" @click="showMenu" v-if="playerStatus.playlist.count>0"></div>
-     <div class="np-skip" v-if="showSkipTimer" @click="clearShowSkipTimeout">
-      <v-btn icon outline @click.stop="skipBack" class="np-std-button" v-bind:class="{'disabled':disableBtns}"><img class="svg-img" :src="'rewind-'+skipSeconds | svgIcon(true)"></img></v-btn>
-      <v-btn icon outline @click.stop="skipForward" class="np-std-button" v-bind:class="{'disabled':disableBtns}"><img class="svg-img" :src="'fast-forward-'+skipSeconds | svgIcon(true)"></img></v-btn>
-     </div>
+     <table class="np-skip" v-if="showSkipTimer" @click="clearShowSkipTimeout">
+      <tr>
+       <td><v-btn icon outline @click.stop="skipBack" class="np-std-button" v-bind:class="{'disabled':disableBtns}"><img class="svg-img" :src="'rewind-'+skipSeconds | svgIcon(true)"></img></v-btn></td>
+       <td/>
+       <td><v-btn icon outline @click.stop="skipForward" class="np-std-button" v-bind:class="{'disabled':disableBtns}"><img class="svg-img" :src="'fast-forward-'+skipSeconds | svgIcon(true)"></img></v-btn></td>
+      </tr>
+     </table>
     </div>
     <div class="np-details-landscape" v-bind:class="{'np-details-landscape-wide': landscape && wide>1}">
 
@@ -298,10 +304,13 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
      </div>
      <div class="np-menu" :title="trans.menu" @click="showMenu" v-if="playerStatus.playlist.count>0"></div>
      <div class="np-close" :title="trans.collapseNp" @click="largeView=false"></div>
-     <div class="np-skip" v-if="showSkipTimer" @click="clearShowSkipTimeout">
-      <v-btn icon outline @click.stop="skipBack" class="np-std-button" v-bind:class="{'disabled':disableBtns}"><img class="svg-img" :src="'rewind-'+skipSeconds | svgIcon(true)"></img></v-btn>
-      <v-btn icon outline @click.stop="skipForward" class="np-std-button" v-bind:class="{'disabled':disableBtns}"><img class="svg-img" :src="'fast-forward-'+skipSeconds | svgIcon(true)"></img></v-btn>
-     </div>
+     <table class="np-skip" v-if="showSkipTimer" @click="clearShowSkipTimeout">
+      <tr>
+       <td><v-btn icon outline @click.stop="skipBack" class="np-std-button" v-bind:class="{'disabled':disableBtns}"><img class="svg-img" :src="'rewind-'+skipSeconds | svgIcon(true)"></img></v-btn></td>
+       <td/>
+       <td><v-btn icon outline @click.stop="skipForward" class="np-std-button" v-bind:class="{'disabled':disableBtns}"><img class="svg-img" :src="'fast-forward-'+skipSeconds | svgIcon(true)"></img></v-btn></td>
+      </tr>
+     </table>
     </div>
     <div class="np-portrait-song-info hide-scrollbar fade-both">
      <div>

@@ -50,6 +50,7 @@ Si vous êtes déjà sur une vue et que vous appuyez à nouveau sur son bouton, 
     <li>Élément de menu "Gérer les platines" - affiche la fenêtre "Synchroniser", si vous avez au moins 2 platines.</li>
     <li>Bouton "Morceau précédent" - saute de X secondes en arrière. Maintenir l'appui pour effectuer plusieurs sauts. La durée exacte du saut est configurable.</li>
     <li>Bouton "Morceau suivant" - saute de X secondes en avant. Maintenir l'appui pour effectuer plusieurs sauts. La durée exacte du saut est configurable.</li>
+    <li>Bouton "Effacer la liste de lecture" - efface directement toute la liste de lecture, sans demander de confirmation.</li>
     <li>Si vous avez des actions de paramètres spécifiques à des plugins ajoutées à "Configuration de platine", un appui long sur l'une d'entre elles ajoutera l'action à l'écran d'accueil.</li>
   </ul>
 </p>

@@ -6,6 +6,7 @@
  */
 'use strict';
 
+const VALID_SKIP_SECONDS = new Set([5, 10, 15, 30]);
 var lmsNumVisibleMenus = 0;
 
 function copyPlayer(p){
@@ -27,6 +28,9 @@ function updateUiSettings(state, val) {
                 queueDisplayChanged = true;
             }
         }
+    }
+    if (!VALID_SKIP_SECONDS.has(state.skipSeconds)) {
+        state.skipSeconds = 30;
     }
 
     var browseDisplayChanged = false;
@@ -487,6 +491,9 @@ const store = new Vuex.Store({
             for (let i=0, len=intItems.length; i<len; ++i) {
                 let key = intItems[i];
                 state[key] = parseInt(getLocalStorageVal(key, state[key]));
+            }
+            if (!VALID_SKIP_SECONDS.has(state.skipSeconds)) {
+                state.skipSeconds = 30;
             }
             if (state.homeButton) {
                 document.documentElement.style.setProperty('--home-button-size', '42px');

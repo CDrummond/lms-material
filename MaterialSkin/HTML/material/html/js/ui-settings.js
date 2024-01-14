@@ -246,7 +246,7 @@ Vue.component('lms-ui-settings', {
     <v-divider></v-divider>
 
     <v-list-tile>
-     <v-select :items="skipSecondsOptions" :label="i18n('Previous/next long-press skip')" v-model="skipSeconds" item-text="label" item-value="value"></v-select>
+     <v-select :items="skipSecondsOptions" :label="i18n('Skip back/forward')" v-model="skipSeconds" item-text="label" item-value="value"></v-select>
     </v-list-tile>
     <v-divider></v-divider>
 
@@ -621,15 +621,17 @@ Vue.component('lms-ui-settings', {
                 { key:MBAR_THIN, label:i18n("Thin (single line of text)")},
                 { key:MBAR_THICK, label:i18n("Thick (two lines of text)")}
                 ];
-            this.skipSecondsOptions = [ { value: 5,  label: i18n("%1 seconds", 5) },
-                               { value: 10, label: i18n("%1 seconds", 10)},
-                               { value: 15, label: i18n("%1 seconds", 15)},
-                               { value: 30, label: i18n("%1 seconds", 30)}
-                             ];
-            this.fontSizes = [ { key: 's',  label: i18n("Small") },
-                               { key: 'r',  label: i18n("Regular") },
-                               { key: 'l',  label: i18n("Large") }
-                                ];
+            this.skipSecondsOptions = [
+                { value: 5,  label: i18n("%1 seconds", 5) },
+                { value: 10, label: i18n("%1 seconds", 10)},
+                { value: 15, label: i18n("%1 seconds", 15)},
+                { value: 30, label: i18n("%1 seconds", 30)}
+                ];
+            this.fontSizes = [
+                { key: 's',  label: i18n("Small") },
+                { key: 'r',  label: i18n("Regular") },
+                { key: 'l',  label: i18n("Large") }
+                ];
         },
         close() {
             this.show=false;

@@ -1181,6 +1181,42 @@ div.v-subheader {
  opacity:var(--sub-opacity);
 }
 
+.np-skip {
+ background-color:rgba(128, 128, 128, 0.75);
+}
+.np-skip .np-std-button {
+ color:var(--light-text-color);
+ background:#333!important;
+ border:2px solid var(--light-text-color)!important;
+}
+.msk-is-non-touch .np-skip .np-std-button:hover {
+ color:white;
+ background:#333!important;
+ border:2px solid white!important;
+}
+.np-skip td {
+ text-align: center;
+ width:33%;
+}
+
+.np-image .np-skip {
+ left:var(--np-image-border);
+ top:var(--np-image-border);
+ height:var(--np-portrait-image-size);
+ width:var(--np-portrait-image-size);
+}
+.np-image-landscape .np-skip {
+ left:calc((50vw - var(--np-image-landscape-size))/2);
+ top:calc((var(--np-image-landscape-height) - var(--np-image-landscape-size))/2);
+ height:var(--np-image-landscape-size);
+ width:var(--np-image-landscape-size);
+}
+.np-image-landscape-wide .np-skip {
+ left:var(--np-image-border);
+ top:var(--np-image-border);
+ height:var(--np-image-landscape-wide-size);
+ width:var(--np-image-landscape-wide-size);
+}
 .np-image .np-emblem {
  right:calc(var(--np-image-border) + var(--np-image-btn-pad));
  top:calc(var(--np-image-border) + var(--np-image-btn-pad));
@@ -1721,8 +1757,21 @@ progress {
  white-space:nowrap!important;
 }
 
-.pq-current, .highlight {
+.pq-current {
  background:var(--pq-current-color);
+}
+
+.highlight, .highlight .v-list__tile__title, .highlight .v-list__tile__sub-title {
+ font-weight:var(--bold-weight)!important;
+}
+
+.lms-list .highlight {
+ background:var(--pq-current-color)!important;
+}
+
+.highlight .v-list__tile {
+ border-bottom:1px solid var(--text-color);
+ margin-bottom:-1px;
 }
 
 .pq-current {
@@ -2707,7 +2756,7 @@ div.v-subheader {
 .np-emblem {
  padding-top:2px;
 }
-.np-emblem, .np-menu, .np-close {
+.np-emblem, .np-menu, .np-close, .np-skip {
  position:absolute;
 }
 
@@ -2900,11 +2949,6 @@ div.v-subheader {
 .save-queue-dialog .error--text {
  color:var(--active-color)!important;
  caret-color:var(--active-color)!important;
-}
-
-.np-pulse {
- animation:pulse 1s 1;
- will-change: opacity;
 }
 
 .pulse {

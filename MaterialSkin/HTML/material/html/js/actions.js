@@ -136,7 +136,7 @@ var ACTIONS=[
     {cmd:"refresh",      icon:"refresh"},
     {cmd:"copy-here",    icon:"content_copy"},
     {cmd:"copy-here",    icon:"content_copy"},
-    {cmd:"adv-search",   svg:"text-search"},
+    {cmd:"adv-search",   svg:"database-search"},
     {cmd:"save-vlib",    icon:"library_add"},
 
     {cmd:"download",     icon:"cloud_download"},
@@ -154,7 +154,7 @@ var ACTIONS=[
     {cmd:"ps-all",       svg:"play-shuffle"},
 
     {cmd:"copy",         icon:"content_copy"},
-    {cmd:"search-list",  icon:"search"}
+    {cmd:"search-list",  svg:"text-search"}
 ];
 
 function updateActionStrings() {

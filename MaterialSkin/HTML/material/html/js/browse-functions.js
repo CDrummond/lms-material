@@ -2484,15 +2484,14 @@ function browseFetchExtra(view, fetchArtists) {
         }
         return;
     }
-    lmsCommand("", ["material-skin", "geturl", "url:"+NP_SIMILAR_URL+encodeURIComponent(item.title), "format:json"]).then(({data}) => {
+    lmsCommand("", ["material-skin", "similar", "artist:"+item.title]).then(({data}) => {
         let html = undefined;
-        if (data && data.result && data.result.content) {
+        if (data && data.result && data.result.similar_loop) {
             logJsonMessage("RESP", data);
-            let body = data.result.content;
-            if (body.similarartists && body.similarartists.artist && body.similarartists.artist.length>0) {
+            if (data.result.similar_loop.length>0) {
                 let items = [];
-                for (let i=0, loop=body.similarartists.artist, len=loop.length; i<len; ++i) {
-                    items.push("<obj class=\"link-item\" onclick=\"nowplayingSearch(\'"+escape(loop[i].name)+"\')\">" + loop[i].name + "</obj>");
+                for (let i=0, loop=data.result.similar_loop, len=loop.length; i<len; ++i) {
+                    items.push("<obj class=\"link-item\" onclick=\"nowplayingSearch(\'"+escape(loop[i].artist)+"\')\">" + loop[i].artist + "</obj>");
                 }
                 html="<br/><p><b>" + i18n("Similar artists") + "</b><br/><br/>"+items.join(SEPARATOR_HTML)+"</p>";
             }

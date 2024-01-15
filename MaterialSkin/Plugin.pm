@@ -25,6 +25,7 @@ use HTTP::Status qw(RC_NOT_FOUND RC_OK);
 use File::Basename;
 use File::Slurp qw(read_file);
 use List::Util qw(shuffle);
+use File::Spec::Functions qw(catdir);
 
 if (!Slim::Web::Pages::Search->can('parseAdvancedSearchParams')) {
     require Plugins::MaterialSkin::Search;
@@ -41,6 +42,8 @@ my $serverprefs = preferences('server');
 my $skinMgr;
 my $listOfTranslations = "";
 
+my $LASTFM_API_KEY = '5a854b839b10f8d46e630e8287c2299b';
+my $MAX_CACHE_AGE = 90*24*60*60; # 90 days
 my $MAX_ADV_SEARCH_RESULTS = 1000;
 my $DESKTOP_URL_PARSER_RE = qr{^desktop$}i;
 my $MINI_URL_PARSER_RE = qr{^mini$}i;
@@ -404,7 +407,7 @@ sub _cliCommand {
                                                   'plugins', 'plugins-status', 'plugins-update', 'extras', 'delete-vlib', 'pass-isset',
                                                   'pass-check', 'browsemodes', 'geturl', 'command', 'scantypes', 'server', 'themes',
                                                   'playericons', 'activeplayers', 'urls', 'adv-search', 'adv-search-params', 'protocols',
-                                                  'players-extra-info', 'sort-playlist', 'mixer', 'release-types', 'check-for-updates']) ) {
+                                                  'players-extra-info', 'sort-playlist', 'mixer', 'release-types', 'check-for-updates', 'similar']) ) {
         $request->setStatusBadParams();
         return;
     }
@@ -1310,7 +1313,121 @@ sub _cliCommand {
         return;
     }
 
+    if ($cmd eq 'similar') {
+        my $artist = $request->getParam('artist');
+        if ($artist) {
+            my $prefsDir = catdir(Slim::Utils::Prefs::dir(), 'material-skin', 'similar-artists');
+            my $cacheDir = catdir($serverprefs->get('cachedir'), 'material-skin', 'similar-artists');
+            my $key = lc($artist);
+            my $ignoreAge = 0;
+            $key =~ s/[\/\\\:\.\(\)\{\}\[\]]//g;
+            main::DEBUGLOG && $log->debug("Get similar artists: $artist");
+            $request->setStatusProcessing();
+
+            # See if we can read existing version first...
+            my $filePath = $prefsDir . "/" . ${key} . ".json";
+            if (-e $filePath) {
+                # Found in user's prefs folder, so ignore age checking - file is always valid
+                $ignoreAge = 1;
+            } else {
+                # Not in prefs, look in cache
+                $filePath = $cacheDir . "/" . ${key} . ".json";
+            }
+            my $fileContent;
+            if (-e $filePath) {
+                # Found existing, use that....
+                $fileContent = read_file($filePath);
+                main::DEBUGLOG && $log->debug("Reading ${filePath}");
+                if (_handleSimilarArtists($request, $fileContent, 0, $key, $cacheDir, $ignoreAge)!=0) {
+                    $request->setStatusDone();
+                    return;
+                }
+                # ...to old? Call LastFM...
+            }
+
+            my $ua = Slim::Utils::Misc::userAgentString();
+            $ua =~ s{iTunes/4.7.1}{Mozilla/5.0};
+            my %headers = ( 'User-Agent' => $ua );
+            $artist = URI::Escape::uri_escape_utf8($artist);
+            my $url = "http://ws.audioscrobbler.com/2.0/?api_key=${LASTFM_API_KEY}&method=artist.getSimilar&autocorrect=1&format=json&limit=25&&artist=${artist}";
+
+            Slim::Networking::SimpleAsyncHTTP->new(
+                sub {
+                    main::DEBUGLOG && $log->debug("Fetched similar artists");
+                    my $response = shift;
+                    _handleSimilarArtists($request, $response->content, 1, $key, $cacheDir, $ignoreAge);
+                    $request->setStatusDone();
+                    if ( $@ ) {
+                        my $error = "$@";
+                        main::DEBUGLOG && $log->debug("Failed to parser response of similar artists: $error");
+                    }
+                },
+                sub {
+                    my $response = shift;
+                    my $error  = $response->error;
+                    main::DEBUGLOG && $log->debug("Failed to fetch similar artists: $error");
+
+                    # Failed to call LastFM, so use cached version even if expired
+                    if (-e $filePath) {
+                        main::DEBUGLOG && $log->debug("Reading ${filePath}");
+                        _handleSimilarArtists($request, $fileContent, 0, $key, $cacheDir, 1);
+                    }
+
+                    $request->setStatusDone();
+                }, {
+                timeout => 15
+                }
+                )->get($url, %headers);
+            return;
+        }
+    }
     $request->setStatusBadParams();
+}
+
+sub _handleSimilarArtists {
+    my $request = shift;
+    my $content = shift;
+    my $save = shift;
+    my $key = shift;
+    my $cacheDir = shift;
+    my $ignoreAge = shift;
+    my $decoded = eval { from_json( $content ) };
+    my @artists = ();
+    my $cnt = 0;
+    my $now = time();
+    if ($decoded->{'similarartists'}) {
+        if ($decoded->{'time'}) {
+            if ($ignoreAge==1 || ($now - $decoded->{'time'})<$MAX_CACHE_AGE) {
+                foreach my $artist (@{$decoded->{'similarartists'}}) {
+                    push(@artists, $artist);
+                    $request->addResultLoop("similar_loop", $cnt, "artist", $artist);
+                    $cnt+=1;
+                }
+                return 1; # Even if empty don't make HTTP call
+            }
+        } elsif ($decoded->{'similarartists'}->{'artist'}) {
+            foreach my $artist (@{$decoded->{'similarartists'}->{'artist'}}) {
+                if ($artist->{'name'}) {
+                    if ($save ==1) {
+                        push(@artists, $artist->{'name'});
+                    }
+                    $request->addResultLoop("similar_loop", $cnt, "artist", $artist->{'name'});
+                    $cnt+=1;
+                }
+            }
+        }
+    }
+
+    if ($save==1) {
+        my $filePath = $cacheDir . "/" . ${key} . ".json";
+        mkdir $cacheDir if ! -d $cacheDir;
+        if (open(my $fh, '>', $filePath)) {
+            my $data = {'time' => $now, 'similarartists' => \@artists};
+            print $fh encode_json($data);
+            close($fh);
+        }
+    }
+    return $cnt;
 }
 
 sub _cliClientCommand {

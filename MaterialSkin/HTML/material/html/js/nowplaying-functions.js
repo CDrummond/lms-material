@@ -6,7 +6,6 @@
  */
 const NP_MAX_ALBUMS = 50;
 const NP_MAX_TRACKS = 50;
-const NP_SIMILAR_URL = 'http://ws.audioscrobbler.com/2.0/?api_key=5a854b839b10f8d46e630e8287c2299b&method=artist.getSimilar&autocorrect=1&format=json&limit=25&&artist=';
 
 function  nowPlayingHeader(s) {
     return isEmpty(s) ? "" : ("<b>"+s+"</b><br/>");
@@ -741,14 +740,13 @@ function nowplayingFetchArtistInfo(view) {
         }
 
         if (view.info.tabs[ARTIST_TAB].albumartist || view.info.tabs[ARTIST_TAB].artist) {
-            lmsCommand("", ["material-skin", "geturl", "url:"+NP_SIMILAR_URL+encodeURIComponent(view.info.tabs[ARTIST_TAB].artist ? view.info.tabs[ARTIST_TAB].artist : view.info.tabs[ARTIST_TAB].albumartist), "format:json"], view.info.tabs[ARTIST_TAB].reqId).then(({data}) => {
-                if (data && data.result && data.result.content) {
+            lmsCommand("", ["material-skin", "similar", "artist:"+(view.info.tabs[ARTIST_TAB].artist ? view.info.tabs[ARTIST_TAB].artist : view.info.tabs[ARTIST_TAB].albumartist)], view.info.tabs[ARTIST_TAB].reqId).then(({data}) => {
+                if (data && data.result && data.result.similar_loop) {
                     logJsonMessage("RESP", data);
-                    let body = data.result.content;
-                    if (body.similarartists && body.similarartists.artist && body.similarartists.artist.length>0) {
+                    if (data.result.similar_loop.length>0) {
                         let items=[];
-                        for (let i=0, loop=body.similarartists.artist, len=loop.length; i<len; ++i) {
-                            items.push("<obj class=\"link-item\" onclick=\"nowplayingSearch(\'"+escape(loop[i].name)+"\')\">" + loop[i].name + "</obj>");
+                        for (let i=0, loop=data.result.similar_loop, len=loop.length; i<len; ++i) {
+                            items.push("<obj class=\"link-item\" onclick=\"nowplayingSearch(\'"+escape(loop[i].artist)+"\')\">" + loop[i].artist + "</obj>");
                         }
                         view.info.tabs[ARTIST_TAB].sections[1].html="<p class=\"np-html-sect\">"+items.join(SEPARATOR_HTML)+"</p>";
                     }

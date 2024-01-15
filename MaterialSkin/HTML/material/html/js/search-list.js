@@ -26,14 +26,19 @@ Vue.component('lms-search-list', {
 <v-layout>
  <div v-if="notFoundTimer" style="padding-top:12px; width:100%">{{i18n("Not Found")}}</div>
  <v-text-field v-else :label="ACTIONS[SEARCH_LIST_ACTION].title" single-line clearable autocorrect="off" v-model.lazy="term" class="lms-search lib-search" @input="textChanged($event)" @blur="stopDebounce" v-on:keyup.enter="searchNow(false)" ref="entry"></v-text-field>
- <v-btn flat icon :disabled="notFoundTimer || empty" class="toolbar-button" @click="searchNow(true)"><v-icon>arrow_upward</v-icon></v-btn>
- <v-btn flat icon :disabled="notFoundTimer || empty" style="margin-left:-12px!important" class="toolbar-button" @click="searchNow(false)"><v-icon>arrow_downward</v-icon></v-btn>
+ <v-btn flat v-if="msearch && !empty" icon :title="i18n('Search library')" :disabled="notFoundTimer || empty" class="toolbar-button" @click="searchMusic"><img class="svg-img" :src="'search-library' | svgIcon(darkUi)"></img></v-btn>
+ <v-btn flat icon :title="i18n('Previous match')" :disabled="notFoundTimer || empty" class="toolbar-button" @click="searchNow(true)"><v-icon>arrow_upward</v-icon></v-btn>
+ <v-btn flat icon :title="i18n('Next match')" :disabled="notFoundTimer || empty" style="margin-left:-12px!important" class="toolbar-button" @click="searchNow(false)"><v-icon>arrow_downward</v-icon></v-btn>
 </v-layout>
 `,
     props: {
         view: {
             type: Object,
             required: true
+        },
+        msearch: {
+            type: Boolean,
+            required: false
         }
     },
     data() {
@@ -48,6 +53,11 @@ Vue.component('lms-search-list', {
         },
         empty() {
             return null==this.term || undefined==this.term || isEmpty(this.term.trim())
+        }
+    },
+    filters: {
+        svgIcon: function (name, dark) {
+            return "/material/svg/"+name+"?c="+(dark ? LMS_DARK_SVG : LMS_LIGHT_SVG)+"&r="+LMS_MATERIAL_REVISION;
         }
     },
     mounted() {
@@ -105,6 +115,9 @@ Vue.component('lms-search-list', {
                 }.bind(this), 1000);
                 this.currentIndex = -1;
             }
+        },
+        searchMusic() {
+            bus.$emit('browse-search', this.term.trim().replace(/\s+/g, " "));
         },
         i18n(str) {
             return i18n(str);

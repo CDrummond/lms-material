@@ -41,7 +41,7 @@ var lmsBrowse = Vue.component("lms-browse", {
   <v-layout v-else-if="searchActive">
    <v-btn flat icon v-longpress="backBtnPressed" class="toolbar-button back-button" id="back-button" :title="trans.goBack"><v-icon>arrow_back</v-icon></v-btn>
    <lms-search-field v-if="searchActive==1" @results="handleListResponse"></lms-search-field>
-   <lms-search-list v-else @scrollTo="highlightItem" :view="this"></lms-search-list>
+   <lms-search-list v-else @scrollTo="highlightItem" :view="this" :msearch="true"></lms-search-list>
   </v-layout>
   <v-layout v-else-if="history.length>0">
    <v-btn flat icon v-longpress="backBtnPressed" class="toolbar-button" v-bind:class="{'back-button':!homeButton || history.length<2}" id="back-button" :title="trans.goBack | tooltipStr('esc', keyboardControl)"><v-icon>arrow_back</v-icon></v-btn>

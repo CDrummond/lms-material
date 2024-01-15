@@ -447,6 +447,8 @@ function nowplayingMenuAction(view, item) {
                 });
             }
         }
+    } else if (NP_SET_SKIP_ACT==item.act) {
+        view.$store.commit('setSkipSeconds', item.value);
     } else if (view.customActions && item.act>=NP_CUSTOM) {
         let ca = item.act-NP_CUSTOM;
         if (ca>=0 && ca<view.customActions.length) {
@@ -931,6 +933,24 @@ function nowPlayingConfigMenu(view, event) {
     if (view.info.tabs[TRACK_TAB].lines && (!view.info.showTabs || view.info.tab==TRACK_TAB)) {
         view.menu.items.push({title:i18n("Auto-scroll lyrics"), act:NP_LYRICS_SCROLL_ACT, check:view.info.tabs[TRACK_TAB].scroll});
         view.menu.items.push({title:i18n("Highlight current lyric line"), act:NP_LYRICS_HIGHLIGHT_ACT, check:view.info.tabs[TRACK_TAB].highlight});
+    }
+
+    view.menu.x = event.clientX;
+    view.menu.y = event.clientY;
+    view.$nextTick(() => {
+        view.menu.show = true;
+    });
+}
+
+function nowPlayingSkipConfig(view, event) {
+    view.clearClickTimeout();
+    view.touch = undefined;
+    view.menu.show = false;
+    view.menu.icons = false;
+    view.menu.items = [ ];
+    let skips = [5, 10, 15, 30];
+    for (let s=0, len=skips.length; s<len; ++s) {
+        view.menu.items.push({title:i18n("%1 seconds", skips[s]), radio:skips[s]==view.$store.state.skipSeconds, act:NP_SET_SKIP_ACT, value:skips[s]});
     }
 
     view.menu.x = event.clientX;

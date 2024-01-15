@@ -21,6 +21,7 @@ const NP_LYRICS_SCROLL_ACT = 8;
 const NP_LYRICS_HIGHLIGHT_ACT = 9;
 const NP_COPY_ACT = 10;
 const NP_SEARCH_ACT = 11;
+const NP_SET_SKIP_ACT = 12;
 const NP_CUSTOM = 100;
 const NP_ITEM_ACT = 200;
 const NP_MIN_WIDTH_FOR_FULL = 780;
@@ -43,6 +44,7 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
     </v-list-tile>
     <v-list-tile v-else @click="menuAction(item)">
      <v-list-tile-avatar v-if="undefined!=item.check"><v-icon>{{item.check ? 'check_box' : 'check_box_outline_blank'}}</v-icon></v-list-tile-avatar>
+     <v-list-tile-avatar v-if="undefined!=item.radio"><v-icon>{{item.radio ? 'radio_button_checked' : 'radio_button_unchecked'}}</v-icon></v-list-tile-avatar>
      <v-list-tile-avatar v-else-if="menu.icons" :tile="true" class="lms-avatar"><v-icon v-if="item.icon">{{item.icon}}</v-icon><img v-else-if="item.svg" class="svg-img" :src="item.svg | svgIcon(darkUi)"></img></v-list-tile-avatar>
      <v-list-tile-title>{{item.title}}</v-list-tile-title>
     </v-list-tile>
@@ -85,10 +87,10 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
            <div class="emblem" v-if="item.emblem" :style="{background: item.emblem.bgnd}">
             <img :src="item.emblem | emblem()" loading="lazy"></img>
            </div>
-           <table class="np-skip" v-if="showSkipTimer" @click="clearShowSkipTimeout">
+           <table class="np-skip" v-if="showSkip">
             <tr>
              <td><v-btn icon outline @click.stop="skipBack" class="np-std-button" v-bind:class="{'disabled':disableBtns}"><img class="svg-img" :src="'rewind-'+skipSeconds | svgIcon(true)"></img></v-btn></td>
-             <td/>
+             <td><v-btn icon outline @click.stop="skipConfig" class="np-std-button np-skip-cfg" v-bind:class="{'disabled':disableBtns}"><v-icon class="np-skip-cfg-icn">settings</v-icon></v-btn></td>
              <td><v-btn icon outline @click.stop="skipForward" class="np-std-button" v-bind:class="{'disabled':disableBtns}"><img class="svg-img" :src="'fast-forward-'+skipSeconds | svgIcon(true)"></img></v-btn></td>
             </tr>
            </table>
@@ -230,10 +232,10 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
       <img :src="playerStatus.current.emblem | emblem()" loading="lazy"></img>
      </div>
      <div class="np-menu" :title="trans.menu" @click="showMenu" v-if="playerStatus.playlist.count>0"></div>
-     <table class="np-skip" v-if="showSkipTimer" @click="clearShowSkipTimeout">
+     <table class="np-skip" v-if="showSkip">
       <tr>
        <td><v-btn icon outline @click.stop="skipBack" class="np-std-button" v-bind:class="{'disabled':disableBtns}"><img class="svg-img" :src="'rewind-'+skipSeconds | svgIcon(true)"></img></v-btn></td>
-       <td/>
+       <td><v-btn icon outline @click.stop="skipConfig" class="np-std-button np-skip-cfg" v-bind:class="{'disabled':disableBtns}"><v-icon class="np-skip-cfg-icn">settings</v-icon></v-btn></td>
        <td><v-btn icon outline @click.stop="skipForward" class="np-std-button" v-bind:class="{'disabled':disableBtns}"><img class="svg-img" :src="'fast-forward-'+skipSeconds | svgIcon(true)"></img></v-btn></td>
       </tr>
      </table>
@@ -304,10 +306,10 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
      </div>
      <div class="np-menu" :title="trans.menu" @click="showMenu" v-if="playerStatus.playlist.count>0"></div>
      <div class="np-close" :title="trans.collapseNp" @click="largeView=false"></div>
-     <table class="np-skip" v-if="showSkipTimer" @click="clearShowSkipTimeout">
+     <table class="np-skip" v-if="showSkip">
       <tr>
        <td><v-btn icon outline @click.stop="skipBack" class="np-std-button" v-bind:class="{'disabled':disableBtns}"><img class="svg-img" :src="'rewind-'+skipSeconds | svgIcon(true)"></img></v-btn></td>
-       <td/>
+       <td><v-btn icon outline @click.stop="skipConfig" class="np-std-button np-skip-cfg" v-bind:class="{'disabled':disableBtns}"><v-icon class="np-skip-cfg-icn">settings</v-icon></v-btn></td>
        <td><v-btn icon outline @click.stop="skipForward" class="np-std-button" v-bind:class="{'disabled':disableBtns}"><img class="svg-img" :src="'fast-forward-'+skipSeconds | svgIcon(true)"></img></v-btn></td>
       </tr>
      </table>
@@ -415,6 +417,7 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
                  disablePrev:true,
                  disableNext:true,
                  dstm:false,
+                 showSkip: false,
                  showSkipTimer:undefined
                 };
     },
@@ -916,6 +919,9 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
             this.resetShowSkipTimeout();
             this.nextButton(true);
         },
+        skipConfig(event) {
+            nowPlayingSkipConfig(this, event);
+        },
         shuffleClicked() {
             if (this.$store.state.visibleMenus.size>0 || queryParams.party) {
                 return;
@@ -1036,7 +1042,12 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
                 this.clickTimer = undefined;
             }
         },
+        stopShowSkipTimeout() {
+            clearTimeout(this.showSkipTimer);
+            this.showSkipTimer=undefined;
+        },
         resetShowSkipTimeout() {
+            this.showSkip = true;
             clearTimeout(this.showSkipTimer);
             this.showSkipTimer = setTimeout(function () {
                 this.clearShowSkipTimeout();
@@ -1046,6 +1057,7 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
             if (this.showSkipTimer) {
                 clearTimeout(this.showSkipTimer);
                 this.showSkipTimer = undefined;
+                this.showSkip = false;
             }
         },
         touchStart(event) {
@@ -1255,9 +1267,12 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
         },
         'menu.show': function(newVal) {
             this.$store.commit('menuVisible', {name:'nowplaying', shown:newVal});
-            if (!newVal) {
+            if (newVal) {
+                this.stopShowSkipTimeout();
+            } else {
                 this.menu.selection = undefined;
                 clearTextSelection();
+                this.resetShowSkipTimeout();
             }
         },
         'disableBtns': function(newVal) {

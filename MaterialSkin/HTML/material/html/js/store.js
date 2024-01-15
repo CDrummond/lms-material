@@ -699,6 +699,10 @@ const store = new Vuex.Store({
             state.queueAlbumStyle = val;
             setLocalStorageVal('queueAlbumStyle', state.queueAlbumStyle);
             bus.$emit('queueDisplayChanged');
+        },
+        setSkipSeconds(state, val) {
+            state.skipSeconds = val;
+            setLocalStorageVal('skipSeconds', state.skipSeconds);
         }
     }
 })

@@ -6,7 +6,7 @@
  */
 'use strict';
 
-const VALID_SKIP_SECONDS = new Set([5, 10, 15, 30]);
+const VALID_SKIP_SECONDS = new Set(SKIP_SECONDS_VALS);
 var lmsNumVisibleMenus = 0;
 
 function copyPlayer(p){

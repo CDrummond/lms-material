@@ -948,9 +948,8 @@ function nowPlayingSkipConfig(view, event) {
     view.menu.show = false;
     view.menu.icons = false;
     view.menu.items = [ ];
-    let skips = [5, 10, 15, 30];
-    for (let s=0, len=skips.length; s<len; ++s) {
-        view.menu.items.push({title:i18n("%1 seconds", skips[s]), radio:skips[s]==view.$store.state.skipSeconds, act:NP_SET_SKIP_ACT, value:skips[s]});
+    for (let s=0, len=SKIP_SECONDS_VALS.length; s<len; ++s) {
+        view.menu.items.push({title:i18n("%1 seconds", SKIP_SECONDS_VALS[s]), radio:SKIP_SECONDS_VALS[s]==view.$store.state.skipSeconds, act:NP_SET_SKIP_ACT, value:SKIP_SECONDS_VALS[s]});
     }
 
     view.menu.x = event.clientX;

@@ -617,16 +617,14 @@ Vue.component('lms-ui-settings', {
                 { key:"mobile",  label:i18n("Use mobile layout")}
                 ];
             this.mobileBars=[
-                { key:MBAR_NONE, label:i18n("None")},
-                { key:MBAR_THIN, label:i18n("Thin (single line of text)")},
+                { key:MBAR_NONE,  label:i18n("None")},
+                { key:MBAR_THIN,  label:i18n("Thin (single line of text)")},
                 { key:MBAR_THICK, label:i18n("Thick (two lines of text)")}
                 ];
-            this.skipSecondsOptions = [
-                { value: 5,  label: i18n("%1 seconds", 5) },
-                { value: 10, label: i18n("%1 seconds", 10)},
-                { value: 15, label: i18n("%1 seconds", 15)},
-                { value: 30, label: i18n("%1 seconds", 30)}
-                ];
+            this.skipSecondsOptions = [ ];
+            for (let s=0, len=SKIP_SECONDS_VALS.length; s<len; ++s) {
+                this.skipSecondsOptions.push({ value: SKIP_SECONDS_VALS[s],  label: i18n("%1 seconds", SKIP_SECONDS_VALS[s]) });
+            }
             this.fontSizes = [
                 { key: 's',  label: i18n("Small") },
                 { key: 'r',  label: i18n("Regular") },

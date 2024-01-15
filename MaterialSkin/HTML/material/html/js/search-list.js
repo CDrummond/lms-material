@@ -25,7 +25,7 @@ Vue.component('lms-search-list', {
     template: `
 <v-layout>
  <v-text-field :label="ACTIONS[SEARCH_LIST_ACTION].title" :error="notFoundTimer" single-line clearable autocorrect="off" v-model.lazy="term" class="lms-search lib-search" @input="textChanged($event)" @blur="stopDebounce" v-on:keyup.enter="searchNow(false)" ref="entry"></v-text-field>
- <v-btn flat v-if="msearch && !empty" icon :title="i18n('Search library')" :disabled="notFoundTimer || empty" class="toolbar-button" @click="searchMusic"><img class="svg-img" :src="'search-library' | svgIcon(darkUi)"></img></v-btn>
+ <v-btn flat v-if="msearch && !empty" icon :title="i18n('Search library')" :disabled="notFoundTimer || empty" style="margin-right:-12px!important" class="toolbar-button" @click="searchMusic"><img class="svg-img" :src="'search-library' | svgIcon(darkUi)"></img></v-btn>
  <v-btn flat icon :title="i18n('Previous match')" :disabled="notFoundTimer || empty" class="toolbar-button" @click="searchNow(true)"><v-icon>arrow_upward</v-icon></v-btn>
  <v-btn flat icon :title="i18n('Next match')" :disabled="notFoundTimer || empty" style="margin-left:-12px!important" class="toolbar-button" @click="searchNow(false)"><v-icon>arrow_downward</v-icon></v-btn>
 </v-layout>

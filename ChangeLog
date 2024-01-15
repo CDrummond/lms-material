@@ -2,7 +2,7 @@
 -----
 1. Add ability to search for items in some lists.
 2. Show skip buttons over cover-art when clicked.
-3. Remove now-playing pulse, as cliking covef shows skip buttons.
+3. Remove now-playing pulse, as clicking cover shows skip buttons.
 4. Hide menu and close buttons on now-playing screen if using "np-only" URL.
 5. Work-around volume control moving in desktop layout when toggle MAI button.
 6. Better handling of now-playing button sizes for very narrow screen widths.

@@ -1,7 +1,7 @@
 4.2.0
 -----
- 1. Add ability to search for items in some lists.
- 2. Show skip buttons over cover-art when clicked.
+ 1. Add ability to search for items in lists (browse and queue).
+ 2. Show skip buttons over now-playing cover-art when clicked.
  3. Remove now-playing pulse, as clicking cover shows skip buttons.
  4. Hide menu and close buttons on now-playing screen if using "np-only" URL.
  5. Work-around volume control moving in desktop layout when toggle MAI button.
@@ -12,7 +12,7 @@
     mobile layout with keyboard shown.
 10. Cache similar-artists response to 'Cache/material-skin/similar-artists/'
 11. Add some album related actions to sub-toolbar of album review.
-12. Remove add/play acitons form toolbar when navigating into genre from genre
+12. Remove add/play actions from toolbar when navigating into genre from genre
     link.
 13. If 10 or less items in a 'choice' dialog then allow using numeric keys as
     shortcut.

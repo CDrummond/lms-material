@@ -6,19 +6,36 @@
  */
 'use strict';
 
+function searchListFlatten(item) {
+    if (Array.isArray(item)) {
+        let vals = [];
+        for (let i=0, len=item.length; i<len; ++i) {
+            vals.push(stripTags(""+item[i]).toLowerCase());
+        }
+        return vals.join(" ");
+    }
+    return stripTags(""+item).toLowerCase();
+}
+
 function searchListHasStr(a, b) {
     if (undefined==a) {
         return false;
     }
-    if (Array.isArray(a)) {
-        for (let i=0, len=a.length; i<len; ++i) {
-            if (stripTags(""+a[i]).toLowerCase().indexOf(b)>=0) {
-                return true;
-            }
+    if (undefined==a.string_search_cache) {
+        let strings = [];
+        if (undefined!=a.title) {
+            strings.push(searchListFlatten(a.title));
         }
-        return false;
+        if (undefined!=a.subtitle) {
+            strings.push(searchListFlatten(a.subtitle));
+        }
+        if (undefined!=a.artistAlbum) {
+            strings.push(searchListFlatten(a.artistAlbum));
+        }
+        a.string_search_cache = strings.join(" ");
+        console.log(a.string_search_cache);
     }
-    return stripTags(""+a).toLowerCase().indexOf(b)>=0;
+    return a.string_search_cache.indexOf(b)>=0;
 }
 
 Vue.component('lms-search-list', {
@@ -91,10 +108,8 @@ Vue.component('lms-search-list', {
             }.bind(this), 500);
         },
         searchFor(str, start, backwards) {
-            for (let idx = start, len=this.view.items.length; backwards ? idx>=0 : idx<len; idx+=(backwards ? -1 : 1)) {
-                if (searchListHasStr(this.view.items[idx].title, str) || 
-                    searchListHasStr(this.view.items[idx].subtitle, str) ||
-                    searchListHasStr(this.view.items[idx].artistAlbum, str)) {
+            for (let idx = start, loop=this.view.items, len=loop.length; backwards ? idx>=0 : idx<len; idx+=(backwards ? -1 : 1)) {
+                if (searchListHasStr(this.view.items[idx], str)) {
                     this.currentIndex = idx;
                     this.$emit('scrollTo', idx);
                     this.lastSearch = str;
@@ -138,6 +153,11 @@ Vue.component('lms-search-list', {
     },
     beforeDestroy() {
         this.cancel();
+        for (let idx = 0, loop=this.view.items, len=loop.length; idx<len; idx++) {
+            if (undefined!=loop[idx].string_search_cache) {
+                delete loop[idx].string_search_cache;
+            }
+        }
     }
 })
 

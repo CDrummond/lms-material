@@ -1788,7 +1788,7 @@ progress {
 }
 
 .pq-current {
-  border-radius:4px;
+ border-radius:4px;
 }
 .pq-current-album {
  background:var(--pq-current-album-color);

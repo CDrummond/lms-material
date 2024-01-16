@@ -471,7 +471,7 @@ function browseHandleListResponse(view, item, command, resp, prevPage, appendIte
         if (resp.canUseGrid && !resp.forceGrid) {
             view.currentActions.push({action:(view.grid.use ? USE_LIST_ACTION : USE_GRID_ACTION), weight:0});
         }
-        if (!isRandom && !item.id.startsWith(TOP_ID_PREFIX) && view.items.length>0) { //} && view.items.length>1 && (view.items[1].bmf || (new Set([STD_ITEM_ALBUM, STD_ITEM_ARTIST, STD_ITEM_PLAYLIST]).has(view.items[1].stdItem)))) {
+        if (view.current.stdItem!=STD_ITEM_MAI && !isRandom && !item.id.startsWith(TOP_ID_PREFIX) && view.items.length>0) { //} && view.items.length>1 && (view.items[1].bmf || (new Set([STD_ITEM_ALBUM, STD_ITEM_ARTIST, STD_ITEM_PLAYLIST]).has(view.items[1].stdItem)))) {
             view.currentActions.push({action:SEARCH_LIST_ACTION, weight:1});
         }
         let itemHasPlayAction=undefined!=item.menu && item.menu[0]==PLAY_ACTION;

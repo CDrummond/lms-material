@@ -12,6 +12,8 @@
     mobile layout with keyboard shown.
 10. Cache similar-artists response to 'Cache/material-skin/similar-artists/'
 11. Add some album related actions to sub-toolbar of album review.
+12. Remove add/play acitons form toolbar when navigating into genre from genre
+    link.
 
 4.1.5
 -----

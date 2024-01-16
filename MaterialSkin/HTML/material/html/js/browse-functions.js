@@ -928,6 +928,7 @@ function browseAddCategories(view, item, isGenre) {
     view.jumplist = view.filteredJumplist = [];
     view.grid = {allowed:true, use:isSetToUseGrid(GRID_OTHER), numColumns:0, ih:GRID_MIN_HEIGHT, rows:[], few:false, haveSubtitle:true};
     view.currentActions=[];
+    view.tbarActions=[];
     view.layoutGrid(true);
 
     var custom = getCustomActions(isGenre ? "genre" : "year", false);

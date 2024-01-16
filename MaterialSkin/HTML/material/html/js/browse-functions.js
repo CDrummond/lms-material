@@ -523,7 +523,17 @@ function browseHandleListResponse(view, item, command, resp, prevPage, appendIte
             view.tbarActions=[ADD_FAV_FOLDER_ACTION, ADD_FAV_ACTION];
         } else if (SECTION_PLAYLISTS==view.current.section && view.current.id.startsWith("playlist_id:") && view.items.length>0 && undefined!=view.items[0].stdItem) {
             view.tbarActions=[PLAY_ACTION, ADD_ACTION];
-            view.currentActions=browseActions(view, resp.items.length>0 ? item : undefined, {}, resp.items.length);
+        } else if (view.current.stdItem==STD_ITEM_MAI && view.history.length>0 && view.history[view.history.length-1].current.stdItem==STD_ITEM_ALBUM) {
+            view.tbarActions=[PLAY_ACTION, ADD_ACTION];
+            // We are showing album review, copy some of the album's actions into this view's actions...
+            view.currentActions=[];
+            let foundPlay = false;
+            for (let a=0, loop=view.history[view.history.length-1].currentActions, len=loop.length; a<len; ++a) {
+                if (foundPlay || loop[a].action==INSERT_ACTION) {
+                    foundPlay = true;
+                    view.currentActions.push(loop[a]);
+                }
+            }
         } else if (view.allSongsItem || ("tracks"==command.command[0] && item.id.startsWith("currentaction:"))) {
             view.tbarActions=[PLAY_ALL_ACTION, ADD_ALL_ACTION];
         } else if (view.items.length>0 && view.items[0].type!="html" && !(view.current && view.current.isPodcast) && (itemHasPlayAction || addAndPlayAllActions(command))) {
@@ -1468,12 +1478,13 @@ function browseHeaderAction(view, act, event, ignoreOpenMenus) {
     if (view.$store.state.visibleMenus.size>0 && !ignoreOpenMenus) {
         return;
     }
+    let item = view.current.stdItem==STD_ITEM_MAI ? view.history[view.history.length-1].current : view.current;
     if (USE_LIST_ACTION==act) {
         view.changeLayout(false);
     } else if (USE_GRID_ACTION==act) {
         view.changeLayout(true);
     } else if (ALBUM_SORTS_ACTION==act || TRACK_SORTS_ACTION==act) {
-        var sort=ALBUM_SORTS_ACTION==act ? getAlbumSort(view.command, view.inGenre) : getTrackSort(view.current.stdItem);
+        var sort=ALBUM_SORTS_ACTION==act ? getAlbumSort(view.command, view.inGenre) : getTrackSort(item.stdItem);
         var menuItems=[];
         var sorts=ALBUM_SORTS_ACTION==act ? B_ALBUM_SORTS : B_TRACK_SORTS;
         for (var i=0,len=sorts.length; i<len; ++i) {
@@ -1483,8 +1494,8 @@ function browseHeaderAction(view, act, event, ignoreOpenMenus) {
                         isAlbums:ALBUM_SORTS_ACTION==act, name:'sort'});
     } else if (VLIB_ACTION==act) {
         view.showLibMenu(event);
-    } else if (undefined!=view.current.allid && (ADD_ACTION==act || PLAY_ACTION==act)) {
-        view.itemAction(act, {swapid:view.current.allid, id:view.items[0].id, title:view.current.title,
+    } else if (undefined!=item.allid && (ADD_ACTION==act || PLAY_ACTION==act)) {
+        view.itemAction(act, {swapid:item.allid, id:view.items[0].id, title:item.title,
                               goAction:view.items[0].goAction, params:view.items[0].params, section:view.items[0].section});
     } else if (ADD_TO_PLAYLIST_ACTION==act) {
         bus.$emit('dlg.open', 'addtoplaylist', view.items);
@@ -1511,16 +1522,16 @@ function browseHeaderAction(view, act, event, ignoreOpenMenus) {
     } else {
         // If we are adding/playing/inserting from an artist's list of albums, check if we are using reverse sort
         // if we are then we need to add each album in the list one by one...'
-        if ((PLAY_ACTION==act || ADD_ACTION==act) && STD_ITEM_ARTIST==view.current.stdItem) {
+        if ((PLAY_ACTION==act || ADD_ACTION==act) && STD_ITEM_ARTIST==item.stdItem) {
             var reverseSort = false;
             for (var i=0, loop=view.command.params, len=loop.length; i<len; ++i) {
                 if (loop[i]==MSK_REV_SORT_OPT) {
-                    view.itemAction(PLAY_ACTION==act ? PLAY_ALL_ACTION : ADD_ALL_ACTION, view.current);
+                    view.itemAction(PLAY_ACTION==act ? PLAY_ALL_ACTION : ADD_ALL_ACTION, item);
                     return;
                 }
             }
         }
-        view.itemAction(act, view.current);
+        view.itemAction(act, item);
     }
 }
 

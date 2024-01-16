@@ -936,7 +936,8 @@ var lmsBrowse = Vue.component("lms-browse", {
             }
         },
         menuItemAction(act, item, index, event) {
-            this.itemAction(act, item, index, this.menu ? {clientX:this.menu.x, clientY:this.menu.y} : event);
+            let itm = item.id==this.current.id && item.stdItem==STD_ITEM_MAI ? this.history[this.history.length-1].current : item;
+            this.itemAction(act, itm, index, this.menu ? {clientX:this.menu.x, clientY:this.menu.y} : event);
         },
         itemMoreAction(item, index) {
             this.doTextClick(item.moremenu[index], true);
@@ -978,6 +979,7 @@ var lmsBrowse = Vue.component("lms-browse", {
             }
         },
         currentAction(act, index, event) {
+            let item = this.current.stdItem==STD_ITEM_MAI ? this.history[this.history.length-1].current : this.current;
             if (undefined!=act.action) {
                 browseHeaderAction(this, act.action, event)
             } else if (act.isListItemInMenu) {
@@ -985,21 +987,21 @@ var lmsBrowse = Vue.component("lms-browse", {
             } else if (act.albumRating) {
                 this.setAlbumRating();
             } else if (act.custom) {
-                let browseCmd = performCustomAction(act, this.$store.state.player, this.current);
+                let browseCmd = performCustomAction(act, this.$store.state.player, item);
                 if (undefined!=browseCmd) {
-                    this.fetchItems(browseCmd, {cancache:false, id:"currentaction:"+index, title:act.title+SEPARATOR+this.current.title});
+                    this.fetchItems(browseCmd, {cancache:false, id:"currentaction:"+index, title:act.title+SEPARATOR+item.title});
                 }
             } else if (undefined!=act.do) {
-                this.fetchItems(act.stdItem==STD_ITEM_ALL_TRACKS || act.stdItem==STD_ITEM_COMPOSITION_TRACKS ? browseReplaceCommandTerms(this, act.do, this.current) : act.do, 
+                this.fetchItems(act.stdItem==STD_ITEM_ALL_TRACKS || act.stdItem==STD_ITEM_COMPOSITION_TRACKS ? browseReplaceCommandTerms(this, act.do, item) : act.do, 
                                 {cancache:false, id:"currentaction:"+index,
-                                 title:act.title+(act.stdItem==STD_ITEM_ALL_TRACKS || act.stdItem==STD_ITEM_COMPOSITION_TRACKS ? "" : (SEPARATOR+this.current.title)),
+                                 title:act.title+(act.stdItem==STD_ITEM_ALL_TRACKS || act.stdItem==STD_ITEM_COMPOSITION_TRACKS ? "" : (SEPARATOR+item.title)),
                                  image:act.stdItem ? this.current.image ? this.current.image : this.currentItemImage : undefined, stdItem:act.stdItem});
                 if (STD_ITEM_MAI==act.stdItem) {
                     browseFetchExtra(this, act.do.command[1]=="biography");
                 }
             } else {
                 var cmd = {command:["browseonlineartist", "items"], params:["service_id:"+act.id, "artist_id:"+act.artist_id, "menu:1"]};
-                this.fetchItems(cmd, {cancache:false, id:act.id, title:act.title+SEPARATOR+this.current.title, command:cmd.command, params:cmd.params});
+                this.fetchItems(cmd, {cancache:false, id:act.id, title:act.title+SEPARATOR+item.title, command:cmd.command, params:cmd.params});
             }
         },
         itemCustomAction(act, item, index) {

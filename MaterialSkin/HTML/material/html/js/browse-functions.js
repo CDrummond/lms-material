@@ -471,7 +471,7 @@ function browseHandleListResponse(view, item, command, resp, prevPage, appendIte
         if (resp.canUseGrid && !resp.forceGrid) {
             view.currentActions.push({action:(view.grid.use ? USE_LIST_ACTION : USE_GRID_ACTION), weight:0});
         }
-        if (!isRandom && !item.id.startsWith(TOP_ID_PREFIX)) { //} && view.items.length>1 && (view.items[1].bmf || (new Set([STD_ITEM_ALBUM, STD_ITEM_ARTIST, STD_ITEM_PLAYLIST]).has(view.items[1].stdItem)))) {
+        if (!isRandom && !item.id.startsWith(TOP_ID_PREFIX) && view.items.length>0) { //} && view.items.length>1 && (view.items[1].bmf || (new Set([STD_ITEM_ALBUM, STD_ITEM_ARTIST, STD_ITEM_PLAYLIST]).has(view.items[1].stdItem)))) {
             view.currentActions.push({action:SEARCH_LIST_ACTION, weight:1});
         }
         let itemHasPlayAction=undefined!=item.menu && item.menu[0]==PLAY_ACTION;
@@ -504,7 +504,6 @@ function browseHandleListResponse(view, item, command, resp, prevPage, appendIte
 
         // Ensure there is a divider before 'Play next'
         for (let a=0, loop=view.currentActions, len=loop.length; a<len; ++a) {
-            console.log(a, loop[a]);
             if (loop[a].action==INSERT_ACTION) {
                 if (a>0 && loop[a-1].action!=DIVIDER) {
                     loop.splice(a, 0, {action:DIVIDER});

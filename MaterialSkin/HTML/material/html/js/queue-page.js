@@ -1320,7 +1320,9 @@ var lmsQueue = Vue.component("lms-queue", {
         },
         highlightItem(index) {
             this.highlightIndex = index;
-            this.scrollToIndex(false, index);
+            if (index>=0 && index<this.items.length) {
+                this.scrollToIndex(false, index);
+            }
         },
         dragStart(which, ev) {
             if (queryParams.party) {

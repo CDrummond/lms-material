@@ -1639,7 +1639,9 @@ var lmsBrowse = Vue.component("lms-browse", {
         },
         highlightItem(index) {
             this.highlightIndex = index;
-            this.jumpTo(index);
+            if (index>=0 && index<this.items.length) {
+                this.jumpTo(index);
+            }
         },
         filterJumplist() {
             let prev = getComputedStyle(document.body).getPropertyValue('--jump-list-adjust');

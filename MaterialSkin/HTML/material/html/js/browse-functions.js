@@ -471,7 +471,7 @@ function browseHandleListResponse(view, item, command, resp, prevPage, appendIte
         if (resp.canUseGrid && !resp.forceGrid) {
             view.currentActions.push({action:(view.grid.use ? USE_LIST_ACTION : USE_GRID_ACTION), weight:0});
         }
-        if (view.current.stdItem!=STD_ITEM_MAI && !isRandom && !item.id.startsWith(TOP_ID_PREFIX) && view.items.length>0) { //} && view.items.length>1 && (view.items[1].bmf || (new Set([STD_ITEM_ALBUM, STD_ITEM_ARTIST, STD_ITEM_PLAYLIST]).has(view.items[1].stdItem)))) {
+        if (view.current.stdItem!=STD_ITEM_MAI && !item.id.startsWith(TOP_ID_PREFIX) && view.items.length>0) { //} && view.items.length>1 && (view.items[1].bmf || (new Set([STD_ITEM_ALBUM, STD_ITEM_ARTIST, STD_ITEM_PLAYLIST]).has(view.items[1].stdItem)))) {
             view.currentActions.push({action:SEARCH_LIST_ACTION, weight:1});
         }
         let itemHasPlayAction=undefined!=item.menu && item.menu[0]==PLAY_ACTION;
@@ -501,7 +501,6 @@ function browseHandleListResponse(view, item, command, resp, prevPage, appendIte
             view.currentActions.push({action:TRACK_SORTS_ACTION, weight:10});
         }
         view.currentActions.sort(function(a, b) { return a.weight!=b.weight ? a.weight<b.weight ? -1 : 1 : titleSort(a, b) });
-
         // Ensure there is a divider before 'Play next'
         for (let a=0, loop=view.currentActions, len=loop.length; a<len; ++a) {
             if (loop[a].action==INSERT_ACTION) {

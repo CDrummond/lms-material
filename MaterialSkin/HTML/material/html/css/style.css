@@ -2355,6 +2355,10 @@ div.v-subheader {
  font-size:var(--std-font-size);
 }
 
+.v-menu__content .v-list__tile .menu-shortcut-large {
+ min-width:80px!important;
+}
+
 .v-menu__content .v-list__tile .player-menu-shortcut {
  min-width:68px!important;
 }

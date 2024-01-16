@@ -612,7 +612,7 @@ var app = new Vue({
             // Hide queue if visible, unpinned, and no current dialog or current dialog is info-dialog
             if (this.$store.state.desktopLayout && !this.$store.state.pinQueue && this.$store.state.showQueue &&
                 (undefined==this.$store.state.activeDialog || 'info-dialog'==this.$store.state.activeDialog)) {
-                this.$store.commit('setShowQueue', false);
+                bus.$emit('closeQueue');
                 return;
             }
             if (undefined!=this.$store.state.activeDialog) {

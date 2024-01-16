@@ -295,8 +295,9 @@ var lmsQueue = Vue.component("lms-queue", {
       <v-icon v-else-if="undefined==ACTIONS[action].svg">{{ACTIONS[action].icon}}</v-icon>
       <img v-else class="svg-img" :src="ACTIONS[action].svg | svgIcon(darkUi)"></img>
      </v-list-tile-avatar>
-     <v-list-tile-title>{{ACTIONS[action].title}}</v-list-tile-title>
-     <v-list-tile-action v-if="ACTIONS[action].key && keyboardControl" class="menu-shortcut">{{shortcutStr(ACTIONS[action].key)}}</v-list-tile-action>
+     <v-list-tile-title v-if="keyboardControl" style="padding-right:24px">{{ACTIONS[action].title}}</v-list-tile-title>
+     <v-list-tile-title v-else>{{ACTIONS[action].title}}</v-list-tile-title>
+     <v-list-tile-action v-if="ACTIONS[action].key && keyboardControl" class="menu-shortcut-large">{{shortcutStr(ACTIONS[action].key, action==SEARCH_LIST_ACTION)}}</v-list-tile-action>
     </v-list-tile>
    </template>
   </v-list>
@@ -390,6 +391,13 @@ var lmsQueue = Vue.component("lms-queue", {
         this.listSize=0;
         this.items=[];
         this.timestamp=0;
+        bus.$on('closeQueue', function() {
+            if (this.searchActive) {
+                this.searchActive = false;
+            } else {
+                this.$store.commit('setShowQueue', false);
+            }
+        }.bind(this));
         bus.$on('queueDisplayChanged', function() {
             this.items=[];
             this.listSize=0;
@@ -614,6 +622,7 @@ var lmsQueue = Vue.component("lms-queue", {
             }
             bindKey('pageup', 'alt', true);
             bindKey('pagedown', 'alt', true);
+            bindKey(LMS_SEARCH_KEYBOARD, 'mod+shift');
             bus.$on('keyboard', function(key, modifier) {
                 if (this.$store.state.openDialogs.length>0 || (this.$store.state.visibleMenus.size>0 && !this.$store.state.visibleMenus.has('queue')) || (!this.$store.state.desktopLayout && this.$store.state.page!="queue")) {
                     return;
@@ -632,6 +641,12 @@ var lmsQueue = Vue.component("lms-queue", {
                         this.scrollElement.scrollBy(0, -1*this.scrollElement.clientHeight);
                     } else if ('pagedown'==key) {
                         this.scrollElement.scrollBy(0, this.scrollElement.clientHeight);
+                    }
+                } else if ('mod+shift'==modifier) {
+                    if (LMS_SEARCH_KEYBOARD==key) {
+                        if (this.$store.state.desktopLayout ? this.$store.state.showQueue : this.$store.state.page=="queue") {
+                            this.headerAction(SEARCH_LIST_ACTION);
+                        }
                     }
                 }
             }.bind(this));

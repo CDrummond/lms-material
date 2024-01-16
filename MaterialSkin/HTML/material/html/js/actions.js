@@ -232,7 +232,7 @@ function updateActionStrings() {
     ACTIONS[PQ_TOGGLE_VIEW_ACTION].title=i18n("Toggle view");
 
     ACTIONS[COPY_ACTION].title=i18n("Copy");
-    ACTIONS[SEARCH_LIST_ACTION].title=i18n("Search");
-    ACTIONS[SEARCH_LIST_ACTION].skey=LMS_SEARCH_KEYBOARD;
+    ACTIONS[SEARCH_LIST_ACTION].title=i18n("Search within list");
+    ACTIONS[SEARCH_LIST_ACTION].key=LMS_SEARCH_KEYBOARD;
 }
 

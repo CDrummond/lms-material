@@ -19,6 +19,7 @@ Vue.component('lms-choice-dialog', {
       <v-list class="sleep-list dialog-main-list">
        <template v-for="(item, index) in items">
         <v-list-tile @click="choose(item)" :disabled="item.disabled" v-bind:class="{'dimmed':item.disabled}">
+         <div :tile="true" v-if="boundKeys" class="choice-key">{{9==index ? 0 : index+1}}</div>
          <v-list-tile-avatar :tile="true" class="lms-avatar" v-if="item.icon || item.svg"><v-icon v-if="item.icon">{{item.icon}}</v-icon><img v-else class="svg-img" :src="item.svg | svgIcon(darkUi)"></img></v-list-tile-avatar>
          <v-list-tile-content>
           <v-list-tile-title>{{item.title}}</v-list-tile-title>
@@ -47,7 +48,8 @@ Vue.component('lms-choice-dialog', {
             title: undefined,
             items: [],
             options:[],
-            option:0
+            option:0,
+            boundKeys: false
         }
     },
     computed: {
@@ -57,6 +59,7 @@ Vue.component('lms-choice-dialog', {
     },
     mounted() {
         bus.$on('choice.open', function(title, items, extra) {
+            this.boundKeys = false;
             this.title = title;
             this.items = items;
             this.options = undefined==extra || undefined==extra.options ? [] : extra.options;
@@ -67,6 +70,8 @@ Vue.component('lms-choice-dialog', {
             this.show = true;
             if (1==this.items.length && (undefined==this.options || this.options.length<1)) {
                 this.choose(this.items[0]);
+            } else {
+                bindNumeric(this);
             }
         }.bind(this));
         bus.$on('closeDialog', function(dlg) {
@@ -74,10 +79,12 @@ Vue.component('lms-choice-dialog', {
                 this.cancel();
             }
         }.bind(this));
+        handleNumeric(this, this.choose);
     },
     methods: {
         cancel() {
             this.show=false;
+            unbindNumeric(this);
             bus.$emit('choice.resp', undefined);
         },
         choose(item) {
@@ -89,6 +96,7 @@ Vue.component('lms-choice-dialog', {
                 setLocalStorageVal('choice-'+this.key, this.option);
             }
             bus.$emit('choice.resp', item, this.options.length<1 ? undefined : this.options[this.option]);
+            unbindNumeric(this);
         },
         i18n(str, arg) {
             if (this.show) {

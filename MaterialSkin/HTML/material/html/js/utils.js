@@ -823,6 +823,10 @@ function bindKey(key, modifier, canRepeat) {
     Mousetrap.bind((undefined==modifier ? "" : (modifier+"+")) + key.toLowerCase(), canRepeat ? handleRepeatingShortcut : handleShortcut);
 }
 
+function unbindKey(key, modifier) {
+    Mousetrap.unbind((undefined==modifier ? "" : (modifier+"+")) + key.toLowerCase());
+}
+
 function shortcutStr(key, shift, alt) {
     if (key.length>1) {
         if (key=="left") {

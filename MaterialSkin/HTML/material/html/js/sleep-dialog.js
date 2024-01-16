@@ -19,6 +19,7 @@ Vue.component('lms-sleep-dialog', {
       <v-list class="sleep-list dialog-main-list">
        <template v-for="(item, index) in items">
         <v-list-tile @click="setSleep(item.duration)">
+         <div :tile="true" v-if="boundKeys" class="choice-key">{{9==index ? 0 : index+1}}</div>
          <v-list-tile-title>{{item.label}}</v-list-tile-title>
         </v-list-tile>
         <v-divider></v-divider>
@@ -50,6 +51,8 @@ Vue.component('lms-sleep-dialog', {
             if (queryParams.party) {
                 return;
             }
+            this.boundKeys = false;
+            bindNumeric(this);
             this.player = player;
             this.sleepTime = undefined;
             this.show = true;
@@ -86,6 +89,7 @@ Vue.component('lms-sleep-dialog', {
                 this.cancel();
             }
         }.bind(this));
+        handleNumeric(this, this.setSleep, 'duration');
     },
     methods: {
         initItems() {
@@ -103,6 +107,7 @@ Vue.component('lms-sleep-dialog', {
         cancel() {
             this.show=false;
             this.cancelTimer();
+            unbindNumeric(this);
         },
         setSleep(duration) {
             // Work-around for long-press clicks falling through...

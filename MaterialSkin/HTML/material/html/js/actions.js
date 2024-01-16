@@ -181,7 +181,7 @@ function updateActionStrings() {
     ACTIONS[SELECT_ACTION].title=i18n("Select");
     ACTIONS[UNSELECT_ACTION].title=i18n("Un-select");
     ACTIONS[RATING_ACTION].title=i18n("Set rating");
-    ACTIONS[SEARCH_LIB_ACTION].title=i18n("Search");
+    ACTIONS[SEARCH_LIB_ACTION].title=i18n("Search library");
     ACTIONS[SEARCH_LIB_ACTION].key=LMS_SEARCH_KEYBOARD;
     ACTIONS[USE_GRID_ACTION].title=ACTIONS[USE_LIST_ACTION].title=i18n("Toggle view");
     ACTIONS[ALBUM_SORTS_ACTION].title=ACTIONS[TRACK_SORTS_ACTION].title=i18n("Sort by");
@@ -211,7 +211,7 @@ function updateActionStrings() {
     ACTIONS[ADD_TO_PLAYLIST_ACTION].title=i18n("Add to playlist");
     ACTIONS[REMOVE_DUPES_ACTION].title=i18n("Remove duplicates");
     ACTIONS[FOLLOW_LINK_ACTION].title=i18n("Follow link");
-    ACTIONS[SEARCH_TEXT_ACTION].title=i18n("Search");
+    ACTIONS[SEARCH_TEXT_ACTION].title=ACTIONS[SEARCH_LIB_ACTION].title
     ACTIONS[RELOAD_ACTION].title=i18n("Reload");
     ACTIONS[BR_COPY_ACTION].title=i18n("Copy queue selection here");
     ACTIONS[PQ_COPY_ACTION].title=i18n("Copy browse selection here");

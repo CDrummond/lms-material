@@ -16,6 +16,8 @@
     link.
 13. If 10 or less items in a 'choice' dialog then allow using numeric keys as
     shortcut.
+14. Clicking on scan status in 'Information' dialog will open server settings
+    at 'Server status' page.
 
 4.1.5
 -----

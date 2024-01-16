@@ -1479,7 +1479,7 @@ function browseHeaderAction(view, act, event, ignoreOpenMenus) {
     if (view.$store.state.visibleMenus.size>0 && !ignoreOpenMenus) {
         return;
     }
-    let item = view.current.stdItem==STD_ITEM_MAI ? view.history[view.history.length-1].current : view.current;
+    let item = undefined!=view.current && view.current.stdItem==STD_ITEM_MAI ? view.history[view.history.length-1].current : view.current;
     if (USE_LIST_ACTION==act) {
         view.changeLayout(false);
     } else if (USE_GRID_ACTION==act) {

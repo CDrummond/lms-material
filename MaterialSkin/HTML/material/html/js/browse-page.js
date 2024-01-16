@@ -936,7 +936,7 @@ var lmsBrowse = Vue.component("lms-browse", {
             }
         },
         menuItemAction(act, item, index, event) {
-            let itm = item.id==this.current.id && item.stdItem==STD_ITEM_MAI ? this.history[this.history.length-1].current : item;
+            let itm = undefined!=this.current && item.id==this.current.id && item.stdItem==STD_ITEM_MAI ? this.history[this.history.length-1].current : item;
             this.itemAction(act, itm, index, this.menu ? {clientX:this.menu.x, clientY:this.menu.y} : event);
         },
         itemMoreAction(item, index) {
@@ -979,7 +979,7 @@ var lmsBrowse = Vue.component("lms-browse", {
             }
         },
         currentAction(act, index, event) {
-            let item = this.current.stdItem==STD_ITEM_MAI ? this.history[this.history.length-1].current : this.current;
+            let item = undefined!=this.current && this.current.stdItem==STD_ITEM_MAI ? this.history[this.history.length-1].current : this.current;
             if (undefined!=act.action) {
                 browseHeaderAction(this, act.action, event)
             } else if (act.isListItemInMenu) {

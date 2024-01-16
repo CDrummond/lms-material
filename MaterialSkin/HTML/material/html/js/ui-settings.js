@@ -775,7 +775,7 @@ Vue.component('lms-ui-settings', {
                          shortcutStr("home")+SEPARATOR+i18n("Go to homescreen"),
                          shortcutStr("esc")+SEPARATOR+i18n("Go back"),
                          shortcutStr(ACTIONS[SEARCH_LIB_ACTION].key)+SEPARATOR+ACTIONS[SEARCH_LIB_ACTION].title + " / " + ACTIONS[SEARCH_LIST_ACTION].title,
-                         shortcutStr(ACTIONS[SEARCH_LIST_ACTION].key, true)+SEPARATOR+ACTIONS[SEARCH_LIST_ACTION].title+" "+this.i18n("(Queue)"),
+                         shortcutStr(ACTIONS[SEARCH_LIST_ACTION].key, true)+SEPARATOR+ACTIONS[SEARCH_LIST_ACTION].title+" ("+this.i18n("Queue")+")",
                          shortcutStr(ACTIONS[ADD_ACTION].skey, true)+SEPARATOR+ACTIONS[ADD_ACTION].title,
                          shortcutStr(LMS_TRACK_INFO_KEYBOARD)+SEPARATOR+i18n("Show current track information")
                        ]
@@ -787,7 +787,7 @@ Vue.component('lms-ui-settings', {
                          shortcutStr("home")+SEPARATOR+i18n("Go to homescreen"),
                          shortcutStr("esc")+SEPARATOR+i18n("Go back"),
                          shortcutStr(ACTIONS[SEARCH_LIB_ACTION].key)+SEPARATOR+ACTIONS[SEARCH_LIB_ACTION].title + " / " + ACTIONS[SEARCH_LIST_ACTION].title,
-                         shortcutStr(ACTIONS[SEARCH_LIST_ACTION].key, true)+SEPARATOR+ACTIONS[SEARCH_LIST_ACTION].title+" "+this.i18n("(Queue)"),
+                         shortcutStr(ACTIONS[SEARCH_LIST_ACTION].key, true)+SEPARATOR+ACTIONS[SEARCH_LIST_ACTION].title+" ("+this.i18n("Queue")+")",
                          shortcutStr(ACTIONS[PLAY_ACTION].skey, true)+SEPARATOR+ACTIONS[PLAY_ACTION].title,
                          shortcutStr(ACTIONS[ADD_ACTION].skey, true)+SEPARATOR+ACTIONS[ADD_ACTION].title,
                          shortcutStr(LMS_ADD_ITEM_ACTION_KEYBOARD, true)+SEPARATOR+i18n("Add favorite or podcast"),

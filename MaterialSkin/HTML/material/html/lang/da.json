@@ -616,6 +616,10 @@
 "%1 Years":"%1 år",
 "1 day":"1 dag",
 "%1 days":"%1 dage",
-"Not Found":"",
+"Next match":"",
+"Not found":"",
+"Previous match":"",
+"Search library":"",
+"Search within list":"",
 "Skip back/forward":""
 }

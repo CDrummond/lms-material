@@ -530,6 +530,7 @@ div.v-subheader {
  object-position:50% 0%;
  display:block;
  margin-bottom:4px;
+ padding-top:2px;
  height:calc(135px + (5px * var(--image-grid-factor))) !important;
  width:calc(135px + (5px * var(--image-grid-factor))) !important;
 }
@@ -622,7 +623,7 @@ div.v-subheader {
 
 .image-grid-select-btn, .image-grid-select-btn:hover {
  position:absolute;
- top:2px !important;
+ top:4px !important;
  left:4px !important;
  width:calc(var(--icon-size) + 6px) !important;
  height:calc(var(--icon-size) + 6px) !important;
@@ -632,7 +633,7 @@ div.v-subheader {
 
 .multi-disc {
  position:absolute;
- top:2px !important;
+ top:4px !important;
  left:4px !important;
  width:calc(var(--small-icon-size) + 8px);
  height:calc(var(--small-icon-size) + 8px);
@@ -643,7 +644,7 @@ div.v-subheader {
 
 .lms-list .image-grid-item .emblem, .np-grid-item .emblem {
  position:absolute;
- top:2px !important;
+ top:4px !important;
  right:4px !important;
  left:auto!important; /* required to negate lms-list .emblem left */
  width:calc(var(--small-icon-size) + 8px) !important;
@@ -1780,12 +1781,10 @@ progress {
 }
 
 .lms-list .highlight {
- background:var(--pq-current-color)!important;
-}
-
-.highlight .v-list__tile {
- border-bottom:1px solid var(--text-color);
- margin-bottom:-1px;
+ -webkit-box-shadow:inset 0px 0px 0px 2px var(--active-color)!important;
+ -moz-box-shadow:inset 0px 0px 0px 2px var(--active-color)!important;
+ box-shadow:inset 0px 0px 0px 2px var(--active-color)!important;
+ border-radius: 6px;
 }
 
 .pq-current {
@@ -2793,7 +2792,7 @@ div.v-subheader {
 
 .grid-btns {
  position:absolute;
- top:2px !important;
+ top:4px !important;
  right:-4px !important;
 }
 

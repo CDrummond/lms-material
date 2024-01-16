@@ -61,6 +61,7 @@ Vue.component('lms-search-list', {
     },
     mounted() {
         this.term = "";
+        this.lastSearch = undefined;
         this.commands = [];
         this.searching = false;
         this.currentIndex = -1;
@@ -89,6 +90,19 @@ Vue.component('lms-search-list', {
                 this.searchNow(false);
             }.bind(this), 500);
         },
+        searchFor(str, start, backwards) {
+            for (let idx = start, len=this.view.items.length; backwards ? idx>=0 : idx<len; idx+=(backwards ? -1 : 1)) {
+                if (searchListHasStr(this.view.items[idx].title, str) || 
+                    searchListHasStr(this.view.items[idx].subtitle, str) ||
+                    searchListHasStr(this.view.items[idx].artistAlbum, str)) {
+                    this.currentIndex = idx;
+                    this.$emit('scrollTo', idx);
+                    this.lastSearch = str;
+                    return true;
+                }
+            }
+            return false;
+        },
         searchNow(backwards) {
             this.cancel();
             if (undefined==this.term) {
@@ -99,12 +113,12 @@ Vue.component('lms-search-list', {
                 str = str.toLowerCase();
                 let len = this.view.items.length;
                 let start = -1==this.currentIndex || this.currentIndex>=this.view.items.length ? backwards ? len-1 : 0 : (backwards ? (this.currentIndex-1) : (this.currentIndex+1));
-                for (let idx = start; backwards ? idx>=0 : idx<len; idx+=(backwards ? -1 : 1)) {
-                    if (searchListHasStr(this.view.items[idx].title, str) || 
-                        searchListHasStr(this.view.items[idx].subtitle, str) ||
-                        searchListHasStr(this.view.items[idx].artistAlbum, str)) {
-                        this.currentIndex = idx;
-                        this.$emit('scrollTo', idx);
+                if (this.searchFor(str, start, backwards)) {
+                    return;
+                }
+                if (str!=this.lastSearch) {
+                    this.lastSearch = str;
+                    if (this.searchFor(str, 0, false)) {
                         return;
                     }
                 }

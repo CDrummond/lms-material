@@ -1644,7 +1644,7 @@ function browseGoBack(view, refresh) {
     view.prevPage = prev.prevPage;
     view.allItems = prev.allItems;
     view.inGenre = prev.inGenre;
-    view.searchActive = 1==prev.searchActive && !searchWasActive ? prev.view.searchActive : 0;
+    view.searchActive = 1==prev.searchActive && !searchWasActive ? prev.searchActive : 0;
     view.canDrop = prev.canDrop;
     view.itemCustomActions = prev.itemCustomActions;
 

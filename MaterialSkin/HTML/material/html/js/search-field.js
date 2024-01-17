@@ -6,7 +6,7 @@
  */
 'use strict';
 
-const SEARCH_OTHER = new Set(['bbc sounds', 'deezer', 'qobuz', 'spotty', 'tidal', 'youtube']);
+const SEARCH_OTHER = new Set(["band's campout", 'bbc sounds', 'deezer', 'qobuz', 'spotty', 'tidal', 'youtube']);
 
 function buildSearchResp(results) {
     let items=[];

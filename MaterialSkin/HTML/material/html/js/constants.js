@@ -93,6 +93,7 @@ const GRID_MAX_WIDTH = 233; // 183
 const GRID_STEP = 5;
 const GRID_OTHER = {command:['other']};
 
+const LMS_TRACK_SORTS = new Set(["title", "tracknum", "albumtrack"]);
 const AUTO_THEME = "auto";
 const MAX_GRID_TEXT_LEN = 80;
 const TERM_PLACEHOLDER = "__TAGGEDINPUT__";
@@ -129,6 +130,7 @@ const TECH_INFO_TAGS = "orITY";
 const PLAYLIST_TAGS = "tags:suxE";
 const PLAYLIST_TRACK_TAGS = "tags:acdeilstyAGKPS";
 const SORT_KEY = "sort:";
+const MSK_SORT_KEY = "msk-sort:";
 const FILTER_PREFIX = "filter:";
 const SECTION_APPS = 1;
 const SECTION_FAVORITES = 2;

@@ -18,6 +18,8 @@
     shortcut.
 14. Clicking on scan status in 'Information' dialog will open server settings
     at 'Server status' page.
+15. Ensure album and track sorts are valid.
+16. Place custom track sorts into separate tag, so as to not confuse LMS.
 
 4.1.5
 -----

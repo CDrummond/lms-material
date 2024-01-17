@@ -418,10 +418,18 @@ function commandAlbumSortKey(command, genre) {
     return baseSort;
 }
 
+const VALID_ALBUM_SORTS = new Set(["album", "artistalbum", "artflow", "yearalbum", "yearartistalbum"]);
+const VALID_TRACK_SORTS = new Set(["title", "tracknum", "albumtrack", "yearalbumtrack", "artisttitle", "yeartitle"]);
+
 function getAlbumSort(command, genre) {
-    var key = commandAlbumSortKey(command, genre);
-    var parts = getLocalStorageVal(key, ALBUM_SORT_KEY==key || (ALBUM_SORT_KEY+"C")==key ? "album" : "yearalbum").split(".");
-    return {by:parts[0], rev:parts.length>1};
+    let key = commandAlbumSortKey(command, genre);
+    let def = ALBUM_SORT_KEY==key || (ALBUM_SORT_KEY+"C")==key ? "album" : "yearalbum";
+    let parts = getLocalStorageVal(key, def).split(".");
+    let val = {by:parts[0], rev:parts.length>1};
+    if (!VALID_ALBUM_SORTS.has(val.by)) {
+        val.by = def;
+    }
+    return val;
 }
 
 function setAlbumSort(command, genre, sort, reverse) {
@@ -429,8 +437,14 @@ function setAlbumSort(command, genre, sort, reverse) {
 }
 
 function getTrackSort(stdItem) {
-    var parts = getLocalStorageVal(stdItem==STD_ITEM_COMPOSITION_TRACKS ? "compositionTrackSort" : "trackSort", "yearalbumtrack").split(".");
-    return {by:parts[0], rev:parts.length>1};
+    let key = stdItem==STD_ITEM_COMPOSITION_TRACKS ? "compositionTrackSort" : "trackSort";
+    let def = "yearalbumtrack";
+    let parts = getLocalStorageVal(key, def).split(".");
+    let val = {by:parts[0], rev:parts.length>1};
+    if (!VALID_TRACK_SORTS.has(val.by)) {
+        val.by = def;
+    }
+    return val;
 }
 
 function setTrackSort(sort, reverse, stdItem) {

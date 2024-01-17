@@ -2193,7 +2193,7 @@ function browseReplaceCommandTerms(view, cmd, item) {
                 cmd.params[i]=item.swapid;
             } else if (cmd.params[i].startsWith(SORT_KEY+TRACK_SORT_PLACEHOLDER)) {
                 var sort=getTrackSort(view.current.stdItem);
-                cmd.params[i]=cmd.params[i].replace(SORT_KEY+TRACK_SORT_PLACEHOLDER, SORT_KEY+sort.by);
+                cmd.params[i]=cmd.params[i].replace(SORT_KEY+TRACK_SORT_PLACEHOLDER, (LMS_TRACK_SORTS.has(sort.by) ? SORT_KEY : MSK_SORT_KEY)+sort.by);
                 if (sort.rev) {
                     cmd.params.push(MSK_REV_SORT_OPT);
                 }

@@ -1040,6 +1040,7 @@ function parseBrowseResp(data, parent, options, cacheKey, parentCommand, parentG
             let showAlbumName = isSearchResult || isAllSongs || (parent && parent.id && parent.id.startsWith("artist_id:"));
             let discs = new Map();
             let sort = undefined;
+            let msksort = undefined;
             let sortTracks = 0;
             let highlightArtist = undefined;
             let highlighted = 0;
@@ -1063,14 +1064,19 @@ function parseBrowseResp(data, parent, options, cacheKey, parentCommand, parentG
                     } else if (param==MSK_REV_SORT_OPT) {
                         reverse = true;
                     } else if (param.startsWith(SORT_KEY)) {
-                        sort = param.split(':')[1]
-                        sortTracks = sort=="yearalbumtrack" ? 1 : sort=="artisttitle" ? 2 : sort=="yeartitle" ? 3 : 0;
+                        sort = param.split(':')[1];
+                    } else if (param.startsWith(MSK_SORT_KEY)) {
+                        msksort = param.split(':')[1];
+                        sortTracks = msksort=="yearalbumtrack" ? 1 : msksort=="artisttitle" ? 2 : msksort=="yeartitle" ? 3 : 0;
                     } else if (param=="role_id:COMPOSER") {
                         isCompositions = true;
                     } else if (param.startsWith("material_skin_artist:")) {
                         parentArtist = param.split(':')[1];
                     }
                 }
+            }
+            if (undefined!=msksort) {
+                sort=msksort;
             }
             if (undefined!=sort && (isAllSongs || isCompositions) && ("title"==sort || "artisttitle"==sort || "yeartitle"==sort)) {
                 showTrackNumbers = false;

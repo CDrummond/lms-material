@@ -63,9 +63,9 @@ var lmsBrowse = Vue.component("lms-browse", {
    <v-spacer style="flex-grow: 10!important"></v-spacer>
    <table class="browse-commands">
     <tr align="right">
-     <v-btn @click.stop="currentActionsMenu($event)" flat icon class="toolbar-button" :title="trans.actions" id="tbar-actions" v-if="currentActions.length>0 && (tbarActions.length>2 || (currentActions.length > (3-tbarActions.length)))"><v-icon>more_horiz</v-icon></v-btn>
-     <template v-for="(action, index) in currentActions">
-      <v-btn @click.stop="currentAction(action, index, $event)" flat icon class="toolbar-button" :title="undefined==action.action ? action.title : ACTIONS[action.action].title" :id="'tbar-actions'+index" v-if="index<(3 - (tbarActions.length + (currentActions.length>3 ? 1 : 0)))">
+     <v-btn @click.stop="currentActionsMenu($event)" flat icon class="toolbar-button" :title="trans.actions" id="tbar-actions" v-if="currentActions.length>0 && numCurrentActionsInToolbar<currentActions.length"><v-icon>more_horiz</v-icon></v-btn>
+     <template v-for="(action, index) in currentActions" v-if="numCurrentActionsInToolbar>0">
+      <v-btn @click.stop="currentAction(action, index, $event)" flat icon class="toolbar-button" :title="undefined==action.action ? action.title : ACTIONS[action.action].title" :id="'tbar-actions'+index" v-if="index<numCurrentActionsInToolbar">
        <img v-if="undefined!=action.action && ACTIONS[action.action].svg" class="svg-img" :src="ACTIONS[action.action].svg | svgIcon(darkUi)"></img>
        <v-icon v-else-if="undefined!=action.action">{{ACTIONS[action.action].icon}}</v-icon>
        <img v-else-if="action.svg" class="svg-img" :src="action.svg | svgIcon(darkUi)"></img>
@@ -441,6 +441,16 @@ var lmsBrowse = Vue.component("lms-browse", {
         }
     },
     computed: {
+        numCurrentActionsInToolbar() {
+            if (this.tbarActions.length<3 && this.currentActions.length>0) {
+                let slots = 3 - this.tbarActions.length;
+                if (this.currentActions.length>slots) {
+                    return slots - 1;
+                }
+                return this.currentActions.length;
+            }
+            return 0;
+        },
         darkUi() {
             return this.$store.state.darkUi
         },

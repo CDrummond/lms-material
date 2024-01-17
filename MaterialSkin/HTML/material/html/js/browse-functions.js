@@ -467,7 +467,6 @@ function browseHandleListResponse(view, item, command, resp, prevPage, appendIte
             }).catch(err => {
             });
         }
-        let isRandom = resp.isMusicMix || (("albums"==command.command[0] && view.items.length>0 && command.params.find(elem => elem=="sort:random")));
         if (resp.canUseGrid && !resp.forceGrid) {
             view.currentActions.push({action:(view.grid.use ? USE_LIST_ACTION : USE_GRID_ACTION), weight:0});
         }
@@ -479,7 +478,7 @@ function browseHandleListResponse(view, item, command, resp, prevPage, appendIte
             view.currentActions.push({action:INSERT_ACTION, weight:2});
             view.currentActions.push({action:PLAY_SHUFFLE_ACTION, weight:3});
         }
-        if (isRandom) {
+        if (resp.isMusicMix || (("albums"==command.command[0] && view.items.length>0 && command.params.find(elem => elem=="sort:random")))) {
             view.currentActions.push({action:RELOAD_ACTION, weight:1});
             if (resp.isMusicMix && !queryParams.party) {
                 view.currentActions.push({action:ADD_TO_PLAYLIST_ACTION, weight:10});

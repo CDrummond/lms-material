@@ -148,7 +148,7 @@ Vue.component('lms-search-list', {
             }
         },
         searchMusic() {
-            bus.$emit('browse-search', this.term.trim().replace(/\s+/g, " "));
+            bus.$emit('browse-search', undefined==this.term ? "" : this.term.trim().replace(/\s+/g, " "));
         },
         i18n(str) {
             return i18n(str);

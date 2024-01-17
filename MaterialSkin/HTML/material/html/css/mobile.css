@@ -368,6 +368,10 @@
   margin-right:-23px !important;
  }
 
+.settings-title {
+ margin:0px -12px 0px -6px!important;
+}
+
  /* Adjust dialog toolbar, so that menu icon aligns with main menu icon */
  .dialog-toolbar > .v-toolbar__content {
   margin-right: -11px !important;

@@ -86,6 +86,11 @@
     },
     "radioparadise:":{
         "name":"Radio Paradise",
+        "url":{
+            "useextid": true,
+            "from":"radioparadise:",
+            "to":"https://radioparadise.com/music/song/"
+        },
         "context":true,
         "extid":"radioparadise"
     }

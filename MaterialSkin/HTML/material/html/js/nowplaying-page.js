@@ -38,7 +38,9 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
  <v-menu v-model="menu.show" :position-x="menu.x" :position-y="menu.y" absolute offset-y>
   <v-list>
    <template v-for="(item, index) in menu.items">
-    <v-list-tile @click="menuStdAction(item)" v-if="undefined==item.title">
+    <v-divider v-if="item.divider"></v-divider>
+    <v-subheader v-else-if="item.header" style="padding-top:16px">{{item.title}}</v-subheader>
+    <v-list-tile v-else-if="undefined==item.title" @click="menuStdAction(item)" >
      <v-list-tile-avatar :tile="true" class="lms-avatar"><v-icon v-if="ACTIONS[item].icon">{{ACTIONS[item].icon}}</v-icon><img v-else-if="ACTIONS[item].svg" class="svg-img" :src="ACTIONS[item].svg | svgIcon(darkUi)"></img></v-list-tile-avatar>
      <v-list-tile-title>{{ACTIONS[item].title}}</v-list-tile-title>
     </v-list-tile>
@@ -228,7 +230,7 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
      <table class="np-skip" v-if="showSkip">
       <tr>
        <td><v-btn icon outline @click.stop="skipBack" class="np-std-button" v-bind:class="{'disabled':disableBtns}"><img class="svg-img" :src="'rewind-'+skipSeconds | svgIcon(true)"></img></v-btn></td>
-       <td><v-btn icon outline @click.stop="skipConfig" class="np-std-button np-skip-cfg" v-bind:class="{'disabled':disableBtns}"><v-icon class="np-skip-cfg-icn">settings</v-icon></v-btn></td>
+       </td>
        <td><v-btn icon outline @click.stop="skipForward" class="np-std-button" v-bind:class="{'disabled':disableBtns}"><img class="svg-img" :src="'fast-forward-'+skipSeconds | svgIcon(true)"></img></v-btn></td>
       </tr>
      </table>
@@ -302,7 +304,7 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
      <table class="np-skip" v-if="showSkip">
       <tr>
        <td><v-btn icon outline @click.stop="skipBack" class="np-std-button" v-bind:class="{'disabled':disableBtns}"><img class="svg-img" :src="'rewind-'+skipSeconds | svgIcon(true)"></img></v-btn></td>
-       <td><v-btn icon outline @click.stop="skipConfig" class="np-std-button np-skip-cfg" v-bind:class="{'disabled':disableBtns}"><v-icon class="np-skip-cfg-icn">settings</v-icon></v-btn></td>
+       </td>
        <td><v-btn icon outline @click.stop="skipForward" class="np-std-button" v-bind:class="{'disabled':disableBtns}"><img class="svg-img" :src="'fast-forward-'+skipSeconds | svgIcon(true)"></img></v-btn></td>
       </tr>
      </table>
@@ -911,9 +913,6 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
         skipForward() {
             this.resetShowSkipTimeout();
             this.nextButton(true);
-        },
-        skipConfig(event) {
-            nowPlayingSkipConfig(this, event);
         },
         shuffleClicked() {
             if (this.$store.state.visibleMenus.size>0 || queryParams.party) {

@@ -1182,20 +1182,6 @@ div.v-subheader {
  opacity:var(--sub-opacity);
 }
 
-.np-skip-cfg {
- width:24px !important;
- height:24px !important;
-}
-
-.np-skip-cfg-icn {
- width:16px !important;
- height:16px !important;
- font-size:16px !important;
- vertical-align:middle !important;
- border-radius:unset !important;
- color:var(--light-text-color)!important;
-}
-
 .np-skip .np-std-button, .np-skip-elevate {
  color:var(--light-text-color);
  background:#333!important;
@@ -1215,7 +1201,7 @@ div.v-subheader {
 .np-skip-elevate {
  padding-top:2px!important;
  z-index:2;
- opacity:0.35!important;
+ opacity:0.7!important;
 }
 
 .msk-is-non-touch .np-skip-elevate:hover {
@@ -1371,19 +1357,19 @@ div.v-subheader {
  font-size:52px !important;
 }
 
-.np-std-button:not(.np-skip-cfg) {
+.np-std-button {
  margin:7px;
  width:38px !important;
  height:38px !important;
 }
 
 @media only screen and (max-width:360px) {
- .np-std-button:not(.np-skip-cfg) {
+ .np-std-button {
   margin:7px 0px 7px 0px;
  }
 }
 @media only screen and (max-width:240px) {
- .np-std-button:not(.np-skip-cfg) {
+ .np-std-button {
   margin:10px 0px 10px 0px;
   width:32px !important;
   height:32px !important;
@@ -2200,7 +2186,7 @@ progress {
  text-align:center;
 }
 
-.v-icon:not(.image-grid-item-icon):not(.media-icon):not(.browse-progress):not(.player-status-icon):not(.wc-icn):not(.playing-badge):not(.np-menu-icn):not(.np-skip-cfg-icn), .svg-list-img, .svg-img, .radio-image .svg-img {
+.v-icon:not(.image-grid-item-icon):not(.media-icon):not(.browse-progress):not(.player-status-icon):not(.wc-icn):not(.playing-badge):not(.np-menu-icn), .svg-list-img, .svg-img, .radio-image .svg-img {
  width:var(--icon-size) !important;
  height:var(--icon-size) !important;
  font-size:var(--icon-size) !important;

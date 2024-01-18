@@ -1196,15 +1196,13 @@ div.v-subheader {
  color:var(--light-text-color)!important;
 }
 
-.np-skip {
- background-color:rgba(0, 0, 0, 0.4);
-}
-.np-skip .np-std-button {
+.np-skip .np-std-button, .np-skip-elevate {
  color:var(--light-text-color);
  background:#333!important;
  border:2px solid var(--light-text-color)!important;
 }
-.msk-is-non-touch .np-skip .np-std-button:hover {
+.msk-is-non-touch .np-skip .np-std-button:hover,
+.msk-is-non-touch .np-skip-elevate:hover {
  color:white;
  background:#333!important;
  border:2px solid white!important;
@@ -1214,8 +1212,18 @@ div.v-subheader {
  width:33%;
 }
 
+.np-skip-elevate {
+ padding-top:2px!important;
+ z-index:2;
+ opacity:0.35!important;
+}
+
+.msk-is-non-touch .np-skip-elevate:hover {
+ opacity:1.0!important;
+}
+
 .np-image .np-skip {
- left:var(--np-image-border);
+ left:var((100vw - var(--np-portrait-image-size))/2.0);
  top:var(--np-image-border);
  height:var(--np-portrait-image-size);
  width:var(--np-portrait-image-size);
@@ -1282,6 +1290,11 @@ div.v-subheader {
 .np-image-landscape-wide .np-cover {
  height:var(--np-image-landscape-wide-size);
  width:var(--np-image-landscape-wide-size);
+}
+
+.np-cover-dim {
+ opacity:0.5;
+ filter: blur(2px);
 }
 
 .np-cover {

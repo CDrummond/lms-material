@@ -13,8 +13,7 @@
 
 .np-image, .np-image .np-cover,
 .np-no-meta-img,
-.np-image-landscape, .np-image-landscape .np-cover,
-.np-skip {
+.np-image-landscape, .np-image-landscape .np-cover {
  border-radius:14px!important;
 }
 

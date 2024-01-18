@@ -87,13 +87,6 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
            <div class="emblem" v-if="item.emblem" :style="{background: item.emblem.bgnd}">
             <img :src="item.emblem | emblem()" loading="lazy"></img>
            </div>
-           <table class="np-skip" v-if="showSkip">
-            <tr>
-             <td><v-btn icon outline @click.stop="skipBack" class="np-std-button" v-bind:class="{'disabled':disableBtns}"><img class="svg-img" :src="'rewind-'+skipSeconds | svgIcon(true)"></img></v-btn></td>
-             <td><v-btn icon outline @click.stop="skipConfig" class="np-std-button np-skip-cfg" v-bind:class="{'disabled':disableBtns}"><v-icon class="np-skip-cfg-icn">settings</v-icon></v-btn></td>
-             <td><v-btn icon outline @click.stop="skipForward" class="np-std-button" v-bind:class="{'disabled':disableBtns}"><img class="svg-img" :src="'fast-forward-'+skipSeconds | svgIcon(true)"></img></v-btn></td>
-            </tr>
-           </table>
           </v-list-tile>
          </template>
          <v-list-tile v-if="undefined!=sect.more" @click="moreClicked(index, sindex)"><v-list-tile-content><v-list-tile-title>{{sect.more}}</v-list-tile-title></v-list-tile-content></v-list-tile>
@@ -227,11 +220,11 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
    <div v-show="overlayVolume>-1 && VOL_STD==playerStatus.dvc" id="volumeOverlay">{{overlayVolume}}%</div>
    <div v-if="landscape" v-touch:start="touchStart" v-touch:end="touchEnd" v-touch:moving="touchMoving">
     <div v-if="!info.show" class="np-image-landscape" v-bind:class="{'np-image-landscape-wide':landscape && wide>1}">
-     <img :key="coverUrl" :src="coverUrl" loading="lazy" onerror="this.src=DEFAULT_COVER" @contextmenu="showMenu" @click="clickImage(event)" class="np-cover" v-touch:start="touchStart" v-touch:end="touchEnd" v-touch:moving="touchMoving" v-bind:class="{'np-trans':transCvr}"></img>
-     <div class="np-emblem" v-if="playerStatus.current.emblem" @click="emblemClicked" :style="{background: playerStatus.current.emblem.bgnd}">
+     <img :key="coverUrl" :src="coverUrl" loading="lazy" onerror="this.src=DEFAULT_COVER" @contextmenu="showMenu" @click="clickImage(event)" class="np-cover" v-touch:start="touchStart" v-touch:end="touchEnd" v-touch:moving="touchMoving" v-bind:class="{'np-trans':transCvr, 'np-cover-dim':showSkip}"></img>
+     <div class="np-emblem" v-if="playerStatus.current.emblem" @click="emblemClicked" :style="{background:playerStatus.current.emblem.bgnd}" v-bind:class="{'np-cover-dim':showSkip}">
       <img :src="playerStatus.current.emblem | emblem()" loading="lazy"></img>
      </div>
-     <div class="np-menu" :title="trans.menu" @click="showMenu" v-if="playerStatus.playlist.count>0"></div>
+     <div class="np-menu" :title="trans.menu" @click="showMenu" v-if="playerStatus.playlist.count>0" v-bind:class="{'np-skip-elevate':showSkip}"></div>
      <table class="np-skip" v-if="showSkip">
       <tr>
        <td><v-btn icon outline @click.stop="skipBack" class="np-std-button" v-bind:class="{'disabled':disableBtns}"><img class="svg-img" :src="'rewind-'+skipSeconds | svgIcon(true)"></img></v-btn></td>
@@ -300,12 +293,12 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
    </div>
    <div v-else>
     <div v-if="!info.show" class="np-image">
-     <img :key="coverUrl" :src="coverUrl" loading="lazy" onerror="this.src=DEFAULT_COVER" @contextmenu="showMenu" @click="clickImage(event)" v-touch:start="touchStart" v-touch:end="touchEnd" v-touch:moving="touchMoving" class="np-cover" v-bind:class="{'np-trans':transCvr}"></img>
-     <div class="np-emblem" v-if="playerStatus.current.emblem" @click="emblemClicked" :style="{background: playerStatus.current.emblem.bgnd}">
+     <img :key="coverUrl" :src="coverUrl" loading="lazy" onerror="this.src=DEFAULT_COVER" @contextmenu="showMenu" @click="clickImage(event)" v-touch:start="touchStart" v-touch:end="touchEnd" v-touch:moving="touchMoving" class="np-cover" v-bind:class="{'np-trans':transCvr, 'np-cover-dim':showSkip}"></img>
+     <div class="np-emblem" v-if="playerStatus.current.emblem" @click="emblemClicked" :style="{background: playerStatus.current.emblem.bgnd}" v-bind:class="{'np-cover-dim':showSkip}">
       <img :src="playerStatus.current.emblem | emblem()" loading="lazy"></img>
      </div>
-     <div class="np-menu" :title="trans.menu" @click="showMenu" v-if="playerStatus.playlist.count>0"></div>
-     <div class="np-close" :title="trans.collapseNp" @click="largeView=false"></div>
+     <div class="np-menu" :title="trans.menu" @click="showMenu" v-if="playerStatus.playlist.count>0" v-bind:class="{'np-skip-elevate':showSkip}"></div>
+     <div class="np-close" :title="trans.collapseNp" @click="largeView=false" v-bind:class="{'np-skip-elevate':showSkip}"></div>
      <table class="np-skip" v-if="showSkip">
       <tr>
        <td><v-btn icon outline @click.stop="skipBack" class="np-std-button" v-bind:class="{'disabled':disableBtns}"><img class="svg-img" :src="'rewind-'+skipSeconds | svgIcon(true)"></img></v-btn></td>
@@ -417,7 +410,7 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
                  disablePrev:true,
                  disableNext:true,
                  dstm:false,
-                 showSkip: false,
+                 showSkip:false,
                  showSkipTimer:undefined
                 };
     },
@@ -1272,7 +1265,9 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
             } else {
                 this.menu.selection = undefined;
                 clearTextSelection();
-                this.resetShowSkipTimeout();
+                if (this.showSkip) {
+                    this.resetShowSkipTimeout();
+                }
             }
         },
         'disableBtns': function(newVal) {
@@ -1384,5 +1379,6 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
         this.stopPositionInterval();
         this.clearClickTimeout();
         this.cancelTooltipTimeout();
+        this.clearShowSkipTimeout();
     }
 });

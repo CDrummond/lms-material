@@ -29,6 +29,7 @@
     unsync player.
 21. Fix new server version notification, parameter from LMS is a string not a
     flag.
+22. Disable "(i)" button if MAI not installed, not the expand/collapse button.
 
 4.1.5
 -----

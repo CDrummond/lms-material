@@ -222,12 +222,12 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
    <div v-show="overlayVolume>-1 && VOL_STD==playerStatus.dvc" id="volumeOverlay">{{overlayVolume}}%</div>
    <div v-if="landscape" v-touch:start="touchStart" v-touch:end="touchEnd" v-touch:moving="touchMoving">
     <div v-if="!info.show" class="np-image-landscape" v-bind:class="{'np-image-landscape-wide':landscape && wide>1}">
-     <img :key="coverUrl" :src="coverUrl" loading="lazy" onerror="this.src=DEFAULT_COVER" @contextmenu="showMenu" @click="clickImage(event)" class="np-cover" v-touch:start="touchStart" v-touch:end="touchEnd" v-touch:moving="touchMoving" v-bind:class="{'np-trans':transCvr, 'np-cover-dim':showSkip}"></img>
-     <div class="np-emblem" v-if="playerStatus.current.emblem" @click="emblemClicked" :style="{background:playerStatus.current.emblem.bgnd}" v-bind:class="{'np-cover-dim':showSkip}">
+     <img :key="coverUrl" :src="coverUrl" loading="lazy" onerror="this.src=DEFAULT_COVER" @contextmenu="showMenu" @click="clickImage(event)" class="np-cover" v-touch:start="touchStart" v-touch:end="touchEnd" v-touch:moving="touchMoving" v-bind:class="{'np-trans':transCvr, 'np-cover-dim':showOverlay}"></img>
+     <div class="np-emblem" v-if="playerStatus.current.emblem" @click="emblemClicked" :style="{background:playerStatus.current.emblem.bgnd}" v-bind:class="{'np-cover-dim':showOverlay}">
       <img :src="playerStatus.current.emblem | emblem()" loading="lazy"></img>
      </div>
-     <div class="np-menu" :title="trans.menu" @click="showMenu" v-if="playerStatus.playlist.count>0" v-bind:class="{'np-skip-elevate':showSkip}"></div>
-     <table class="np-skip" v-if="showSkip">
+     <div class="np-menu" :title="trans.menu" @click="showMenu" v-if="showOverlay && playerStatus.playlist.count>0" v-bind:class="{'np-skip-elevate':showOverlay}"></div>
+     <table class="np-skip" v-if="showOverlay">
       <tr>
        <td><v-btn icon outline @click.stop="skipBack" class="np-std-button" v-bind:class="{'disabled':disableBtns}"><img class="svg-img" :src="'rewind-'+skipSeconds | svgIcon(true)"></img></v-btn></td>
        </td>
@@ -295,13 +295,13 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
    </div>
    <div v-else>
     <div v-if="!info.show" class="np-image">
-     <img :key="coverUrl" :src="coverUrl" loading="lazy" onerror="this.src=DEFAULT_COVER" @contextmenu="showMenu" @click="clickImage(event)" v-touch:start="touchStart" v-touch:end="touchEnd" v-touch:moving="touchMoving" class="np-cover" v-bind:class="{'np-trans':transCvr, 'np-cover-dim':showSkip}"></img>
-     <div class="np-emblem" v-if="playerStatus.current.emblem" @click="emblemClicked" :style="{background: playerStatus.current.emblem.bgnd}" v-bind:class="{'np-cover-dim':showSkip}">
+     <img :key="coverUrl" :src="coverUrl" loading="lazy" onerror="this.src=DEFAULT_COVER" @contextmenu="showMenu" @click="clickImage(event)" v-touch:start="touchStart" v-touch:end="touchEnd" v-touch:moving="touchMoving" class="np-cover" v-bind:class="{'np-trans':transCvr, 'np-cover-dim':showOverlay}"></img>
+     <div class="np-emblem" v-if="playerStatus.current.emblem" @click="emblemClicked" :style="{background: playerStatus.current.emblem.bgnd}" v-bind:class="{'np-cover-dim':showOverlay}">
       <img :src="playerStatus.current.emblem | emblem()" loading="lazy"></img>
      </div>
-     <div class="np-menu" :title="trans.menu" @click="showMenu" v-if="playerStatus.playlist.count>0" v-bind:class="{'np-skip-elevate':showSkip}"></div>
-     <div class="np-close" :title="trans.collapseNp" @click="largeView=false" v-bind:class="{'np-skip-elevate':showSkip}"></div>
-     <table class="np-skip" v-if="showSkip">
+     <div class="np-menu" :title="trans.menu" @click="showMenu" v-if="showOverlay && playerStatus.playlist.count>0" v-bind:class="{'np-skip-elevate':showOverlay}"></div>
+     <div class="np-close" :title="trans.collapseNp" @click="largeView=false" v-if="showOverlay" v-bind:class="{'np-skip-elevate':showOverlay}"></div>
+     <table class="np-skip" v-if="showOverlay">
       <tr>
        <td><v-btn icon outline @click.stop="skipBack" class="np-std-button" v-bind:class="{'disabled':disableBtns}"><img class="svg-img" :src="'rewind-'+skipSeconds | svgIcon(true)"></img></v-btn></td>
        </td>
@@ -412,8 +412,8 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
                  disablePrev:true,
                  disableNext:true,
                  dstm:false,
-                 showSkip:false,
-                 showSkipTimer:undefined
+                 showOverlay:false,
+                 showOverlayTimer:undefined
                 };
     },
     mounted() {
@@ -907,11 +907,11 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
             }
         },
         skipBack() {
-            this.resetShowSkipTimeout();
+            this.resetShowOverlayTimeout();
             this.prevButton(true);
         },
         skipForward() {
-            this.resetShowSkipTimeout();
+            this.resetShowOverlayTimeout();
             this.nextButton(true);
         },
         shuffleClicked() {
@@ -1007,7 +1007,7 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
                     if (this.$store.state.desktopLayout && !this.largeView) {
                         bus.$emit('expandNowPlaying', true);
                     } else if (this.playerStatus.playlist.count>0) {
-                        this.resetShowSkipTimeout();
+                        this.resetShowOverlayTimeout();
                     }
                 }.bind(this), LMS_DOUBLE_CLICK_TIMEOUT);
             } else {
@@ -1034,22 +1034,22 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
                 this.clickTimer = undefined;
             }
         },
-        stopShowSkipTimeout() {
-            clearTimeout(this.showSkipTimer);
-            this.showSkipTimer=undefined;
+        stopShowOverlayTimeout() {
+            clearTimeout(this.showOverlayTimer);
+            this.showOverlayTimer=undefined;
         },
-        resetShowSkipTimeout() {
-            this.showSkip = true;
-            clearTimeout(this.showSkipTimer);
-            this.showSkipTimer = setTimeout(function () {
-                this.clearShowSkipTimeout();
+        resetShowOverlayTimeout() {
+            this.showOverlay = true;
+            clearTimeout(this.showOverlayTimer);
+            this.showOverlayTimer = setTimeout(function () {
+                this.clearShowOverlayTimeout();
             }.bind(this), 3*1000);
         },
-        clearShowSkipTimeout() {
-            if (this.showSkipTimer) {
-                clearTimeout(this.showSkipTimer);
-                this.showSkipTimer = undefined;
-                this.showSkip = false;
+        clearShowOverlayTimeout() {
+            if (this.showOverlayTimer) {
+                clearTimeout(this.showOverlayTimer);
+                this.showOverlayTimer = undefined;
+                this.showOverlay = false;
             }
         },
         touchStart(event) {
@@ -1260,12 +1260,12 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
         'menu.show': function(newVal) {
             this.$store.commit('menuVisible', {name:'nowplaying', shown:newVal});
             if (newVal) {
-                this.stopShowSkipTimeout();
+                this.stopShowOverlayTimeout();
             } else {
                 this.menu.selection = undefined;
                 clearTextSelection();
-                if (this.showSkip) {
-                    this.resetShowSkipTimeout();
+                if (this.showOverlay) {
+                    this.resetShowOverlayTimeout();
                 }
             }
         },
@@ -1378,6 +1378,6 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
         this.stopPositionInterval();
         this.clearClickTimeout();
         this.cancelTooltipTimeout();
-        this.clearShowSkipTimeout();
+        this.clearShowOverlayTimeout();
     }
 });

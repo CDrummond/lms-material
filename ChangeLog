@@ -1,8 +1,8 @@
 4.2.0
 -----
  1. Add ability to search for items in lists (browse and queue).
- 2. Show skip buttons over now-playing cover-art when clicked.
- 3. Remove now-playing pulse, as clicking cover shows skip buttons.
+ 2. Click on no-playnig cover-art to show skip, menu, and close buttons.
+ 3. Remove now-playing pulse, as clicking cover shows buttons.
  4. Hide menu and close buttons on now-playing screen if using "np-only" URL.
  5. Work-around volume control moving in desktop layout when toggle MAI button.
  6. Better handling of now-playing button sizes for very narrow screen widths.

@@ -342,7 +342,7 @@ function nowplayingShowMenu(view, event) {
                 view.menu.items.push({title:view.trans.expandNp, icon:'fullscreen', act:NP_TOGGLE_ACT});
             }
         }
-        if (view.showSkip) {
+        if (view.showOverlay) {
             view.menu.items.push({divider:true});
             view.menu.items.push({title:i18n('Skip back/forward'), header:true});
             for (let s=0, len=SKIP_SECONDS_VALS.length; s<len; ++s) {

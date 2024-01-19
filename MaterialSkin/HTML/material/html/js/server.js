@@ -342,7 +342,7 @@ var lmsServer = Vue.component('lms-server', {
             }
             if (LMS_VERSION>=80400) {
                 var avail = new Set();
-                if (undefined!=data.newversion && parseInt(data.newversion)>0) {
+                if (!isEmpty(data.newversion)) {
                     avail.add("server");
                 }
                 if (!isEmpty(data.newplugins)) {

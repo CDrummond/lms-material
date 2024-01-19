@@ -27,6 +27,8 @@
     dialog.
 20. In 'Manage players' dialog, clicking on 'link' symbol will prompt to
     unsync player.
+21. Fix new server version notification, parameter from LMS is a string not a
+    flag.
 
 4.1.5
 -----

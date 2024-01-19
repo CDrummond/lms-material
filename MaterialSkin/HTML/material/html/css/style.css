@@ -2051,6 +2051,10 @@ progress {
  left:0px;
 }
 
+.pmgr-sync-player {
+ margin-left:-56px;
+}
+
 .pmgr-card-text {
  padding:16px 32px 16px 32px; /* add padding as not using v-card-text due to issues on older iOS?? */
  width:100%;

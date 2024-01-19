@@ -115,7 +115,10 @@ Vue.component('lms-manage-players', {
        <v-flex xs12>
         <v-list class="pmgr-playerlist">
          <v-list-tile @dragstart.native="dragStart(index, $event)" @dragend.native="dragEnd()" @dragover.native="dragOver($event)" @drop.native="drop(index, $event)" :draggable="!player.isgroup" v-bind:class="{'highlight-drop':dropId==('pmgr-player-'+index), 'highlight-drag':dragIndex==index}" :id="'tile-pmgr-player-'+index">
-          <v-list-tile-avatar v-if="player.image && isMainPlayer(player)" :tile="true" class="pmgr-cover" v-bind:class="{'dimmed': !player.ison}">
+          <v-list-tile-avatar v-if="!isMainPlayer(player)" class="pmgr-sync-player" @click="unsync(player, index)" v-bind:class="{'dimmed': !player.ison}">
+           <v-icon class="link-item">link</v-icon>
+          </v-list-tile-avatar>
+          <v-list-tile-avatar v-else-if="player.image" :tile="true" class="pmgr-cover" v-bind:class="{'dimmed': !player.ison}">
            <img :key="player.image" v-lazy="player.image" v-bind:class="{'dimmed':player.image==DEFAULT_COVER || player.image==DEFAULT_RADIO_COVER}"></img>
           </v-list-tile-avatar>
           <v-list-tile-content v-if="isMainPlayer(player)" v-bind:class="{'dimmed': !player.ison}">
@@ -740,20 +743,24 @@ Vue.component('lms-manage-players', {
         drop(to, ev) {
             this.stopScrolling = true;
             ev.preventDefault();
-            if (this.dragIndex!=undefined && to!=this.dragIndex && to<PMGR_GROUP_MEMBER_ID_MOD) {
-                if (this.dragIndex>=PMGR_GROUP_MEMBER_ID_MOD) {
+            this.modifyPlayer(this.dragIndex, to);
+            this.dragIndex = undefined;
+        },
+        modifyPlayer(index, to) {
+            if (index!=undefined && to!=index && to<PMGR_GROUP_MEMBER_ID_MOD) {
+                if (index>=PMGR_GROUP_MEMBER_ID_MOD) {
                     // Dragging a group member out of group
                     if (-1==to) {
-                        let grp = Math.floor(this.dragIndex/PMGR_GROUP_MEMBER_ID_MOD);
-                        let member = this.dragIndex-(grp*PMGR_GROUP_MEMBER_ID_MOD);
+                        let grp = Math.floor(index/PMGR_GROUP_MEMBER_ID_MOD);
+                        let member = index-(grp*PMGR_GROUP_MEMBER_ID_MOD);
                         grp--; // We add 1 before multiplying by PMGR_GROUP_MEMBER_ID_MOD
                         if (grp>=0 && member>=0 && grp<=this.players.length && this.players[grp].isgroup && this.players[grp].members && member<this.players[grp].members.length) {
                             this.updateGroup(this.players[grp], this.players[grp].members[member], false);
                         }
                     }
                 } else {
-                    let playerId = this.players[this.dragIndex].id;
-                    let from = this.players[this.dragIndex].syncmaster;
+                    let playerId = this.players[index].id;
+                    let from = this.players[index].syncmaster;
                     if (-1==to) {
                         // Remove player
                         let group = undefined;
@@ -776,7 +783,7 @@ Vue.component('lms-manage-players', {
                         } else {
                             let dest = target.syncmaster ? target.syncmaster : target.id;
                             if (dest!=from) {
-                                lmsCommand(dest, ["sync", this.players[this.dragIndex].id]).then(({data}) => {
+                                lmsCommand(dest, ["sync", this.players[index].id]).then(({data}) => {
                                     bus.$emit('refreshStatus', playerId);
                                     if (undefined!=from) {
                                         bus.$emit('refreshStatus', from);
@@ -788,7 +795,13 @@ Vue.component('lms-manage-players', {
                     }
                 }
             }
-            this.dragIndex = undefined;
+        },
+        unsync(player, index) {
+            confirm(i18n("Remove '%1' from syncrhonization group?", player.name), i18n('Unsync')).then(res => {
+                if (res) {
+                    this.modifyPlayer(index, -1);
+                }
+            });
         },
         doCustomAction(action, player) {
             performCustomAction(action, player);

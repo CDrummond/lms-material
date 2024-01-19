@@ -797,7 +797,7 @@ Vue.component('lms-manage-players', {
             }
         },
         unsync(player, index) {
-            confirm(i18n("Remove '%1' from syncrhonization group?", player.name), i18n('Unsync')).then(res => {
+            confirm(i18n("Remove '%1' from synchronization group?", player.name), i18n('Unsync')).then(res => {
                 if (res) {
                     this.modifyPlayer(index, -1);
                 }

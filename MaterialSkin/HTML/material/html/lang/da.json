@@ -619,7 +619,9 @@
 "Next match":"",
 "Not found":"",
 "Previous match":"",
+"Remove '%1' from synchronization group?":"",
 "Search library":"",
 "Search within list":"",
-"Skip back/forward":""
+"Skip back/forward":"",
+"Unsync":""
 }

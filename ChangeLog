@@ -21,6 +21,8 @@
 15. Ensure album and track sorts are valid.
 16. Place custom track sorts into separate tag, so as to not confuse LMS.
 17. Add Bandcamp to list of search providers.
+18. Clicking on RadioParadise logo on now-playing cover should open browser at
+    song details on RadioParadise website.
 
 4.1.5
 -----

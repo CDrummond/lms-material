@@ -1280,7 +1280,19 @@ div.v-subheader {
 
 .np-cover-dim {
  opacity:0.5;
- filter: blur(2px);
+ filter: blur(5px);
+}
+
+@media only screen and ( ((orientation:portrait) and (max-width:600px)) or ((orientation:landscape) and (max-height:600px))) {
+ .np-cover-dim {
+  filter: blur(4px);
+ }
+}
+
+@media only screen and ( ((orientation:portrait) and (max-width:450px)) or ((orientation:landscape) and (max-height:450px))) {
+ .np-cover-dim {
+  filter: blur(3px);
+ }
 }
 
 .np-cover {

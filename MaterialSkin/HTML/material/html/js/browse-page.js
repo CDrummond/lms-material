@@ -52,7 +52,7 @@ var lmsBrowse = Vue.component("lms-browse", {
      <v-flex xs12 class="ellipsis subtoolbar-title subtoolbar-pad" v-bind:class="{'subtoolbar-title-single':undefined==toolbarSubTitle}">{{toolbarTitle}}</v-flex>
      <v-flex xs12 class="ellipsis subtoolbar-subtitle subtext" v-html="detailedSubTop"></v-flex>
     </v-layout>
-    <v-flex xs12 v-if="detailedSubExtra" class="ellipsis subtoolbar-subtitle subtext" v-html="detailedSubExtra"></v-flex>
+    <v-flex xs12 v-if="detailedSubExtra" class="ellipsis subtoolbar-subtitle subtext" v-html="detailedSubExtra[0]"></v-flex>
     <v-flex xs12 v-else class="ellipsis subtoolbar-subtitle subtext">&nbsp;</v-flex>
     <v-flex xs12 class="ellipsis subtoolbar-subtitle subtext" v-html="detailedSubBot"></v-flex>
    </v-layout>
@@ -171,7 +171,7 @@ var lmsBrowse = Vue.component("lms-browse", {
       <v-list-tile-sub-title v-if="item.subtitle && !item.hidesub">{{item.subtitle}}</v-list-tile-sub-title>
      </v-list-tile-content>
      <v-list-tile-content v-else-if="item.type=='html' || item.type=='text'" class="browse-text-inrecycler">
-      <v-list-tile-title v-html="item.title" @touchend.prevent="textSelectEnd" @mouseup.prevent="textSelectEnd" @contextmenu="event.preventDefault()"></v-list-tile-title>
+      <v-list-tile-title v-html="item.title" @touchend="textSelectEnd" @mouseup="textSelectEnd" @contextmenu="event.preventDefault()"></v-list-tile-title>
      </v-list-tile-content>
      <v-list-tile-content v-else>
       <v-list-tile-title v-html="item.title"></v-list-tile-title>
@@ -193,7 +193,7 @@ var lmsBrowse = Vue.component("lms-browse", {
     </v-list-tile>
    </RecycleScroller>
 
-   <div v-else-if="items.length==1 && items[0].type=='html'" class="lms-list-item browse-html" v-html="items[0].title" @touchend.prevent="textSelectEnd" @mouseup.prevent="textSelectEnd" @contextmenu="event.preventDefault()"></div>
+   <div v-else-if="items.length==1 && items[0].type=='html'" class="lms-list-item browse-html" v-html="items[0].title" @touchend="textSelectEnd" @mouseup="textSelectEnd" @contextmenu="event.preventDefault()"></div>
    <template v-else v-for="(item, index) in items">
     <v-list-tile v-if="item.type=='text' && canClickText(item)" avatar @click="click(item, index, $event)" v-bind:class="{'error-text': item.id==='error'}" class="lms-avatar lms-list-item" @contextmenu.prevent="contextMenu(item, index, $event)">
      <v-list-tile-content>
@@ -203,7 +203,7 @@ var lmsBrowse = Vue.component("lms-browse", {
     </v-list-tile>
     <v-list-tile v-else-if="item.type=='html' || item.type=='text'" class="lms-list-item browse-text">
      <v-list-tile-content>
-     <v-list-tile-title v-html="item.title" @touchend.prevent="textSelectEnd" @mouseup.prevent="textSelectEnd" @contextmenu="event.preventDefault()"></v-list-tile-title>
+     <v-list-tile-title v-html="item.title" @touchend="textSelectEnd" @mouseup="textSelectEnd" @contextmenu="event.preventDefault()"></v-list-tile-title>
     </v-list-tile-content>
    </v-list-tile>
     <v-list-tile v-else-if="item.header" class="lms-list-item" v-bind:class="{'browse-header': item.header}" @click="click(item, index, $event)">

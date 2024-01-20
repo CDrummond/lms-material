@@ -455,14 +455,17 @@ function browseHandleListResponse(view, item, command, resp, prevPage, appendIte
             lmsList('', ['genres'], [view.current.id].concat(index<0 ? [] : [command.params[index]]), 0, 25, false, view.nextReqId()).then(({data}) => {
                 if (data.result && data.result.genres_loop && view.isCurrentReq(data) && genreReqArtist==view.current.id) {
                     let genreList = [];
+                    let genreListPlain = [];
                     for (let g=0, loop=data.result.genres_loop, len=loop.length; g<len; ++g) {
-                        if ((!IS_MOBILE || lmsOptions.touchLinks)) {
-                            genreList.push("<obj class=\"link-item\" onclick=\"showGenre(event, "+loop[g].id+",\'"+escape(loop[g].genre)+"\', \'browse\')\">" + loop[g].genre + "</obj>");
-                        } else {
-                            genreList.push(loop[g].genre);
+                        genreList.push("<obj class=\"link-item\" onclick=\"showGenre(event, "+loop[g].id+",\'"+escape(loop[g].genre)+"\', \'browse\')\">" + loop[g].genre + "</obj>");
+                        if (IS_MOBILE) {
+                            genreListPlain.push(loop[g].genre);
                         }
                     }
-                    view.detailedSubExtra=genreList.join(SEPARATOR_HTML);
+                    view.detailedSubExtra=[(IS_MOBILE ? genreListPlain : genreList).join(SEPARATOR_HTML)];
+                    if (IS_MOBILE) {
+                        view.detailedSubExtra.push(genreList.join(SEPARATOR_HTML));
+                    }
                 }
             }).catch(err => {
             });
@@ -562,7 +565,7 @@ function browseHandleListResponse(view, item, command, resp, prevPage, appendIte
         }
 
         view.detailedSubInfo=resp.plainsubtitle ? resp.plainsubtitle : resp.years ? resp.years : "&nbsp;";
-        view.detailedSubExtra=resp.extraDetails;
+        view.detailedSubExtra=resp.extraDetails ? [resp.extraDetails] : undefined;
         if ( (view.current && (view.current.stdItem==STD_ITEM_MAI || view.current.stdItem==STD_ITEM_MIX)) ||
              (1==view.items.length && ("text"==view.items[0].type || "html"==view.items[0].type)) ||
              (listingArtistAlbums && 0==view.items.length) /*Artist from online service*/ ) {
@@ -2495,7 +2498,7 @@ function browseAddExtra(view, html) {
 
 function browseFetchExtra(view, fetchArtists) {
     let item = view.current;
-    let sub = view.detailedSubExtra;
+    let sub = view.detailedSubExtra[view.detailedSubExtra.length-1];
     view.extra = undefined;
     if (!fetchArtists) {
         if (sub!=undefined) {

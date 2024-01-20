@@ -6,7 +6,7 @@
  */
 'use strict';
 
-const PLAYER_STATUS_TAGS = "tags:cdegiloqrstuyAABGIKNST" + (LMS_SRV_EMBLEM ? "E" : "");
+const PLAYER_STATUS_TAGS = "tags:cdegilopqrstuyAABGIKNPST" + (LMS_SRV_EMBLEM ? "E" : "");
 const STATUS_UPDATE_MAX_TIME = 4000;
 
 function logString(val) {
@@ -491,7 +491,7 @@ var lmsServer = Vue.component('lms-server', {
                               };
             if (data.playlist_loop && data.playlist_loop.length>0) {
                 player.current = data.playlist_loop[0];
-                splitMultiples(player.current);
+                splitMultiples(player.current, true);
                 player.current.time = undefined==data.time ? undefined : "stop"==data.mode ? 0 : parseFloat(data.time);
                 player.current.canseek = parseInt(data.can_seek);
                 player.current.remote_title = checkRemoteTitle(player.current);

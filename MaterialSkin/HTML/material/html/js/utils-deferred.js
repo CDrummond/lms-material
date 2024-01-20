@@ -172,7 +172,15 @@ function handleClickOnHref(event) {
         }
     }
 }
+
+let lastSelectedTextEvent=undefined;
 function viewHandleSelectedText(view, event) {
+    let now = new Date().getTime();
+    if (undefined!=lastSelectedTextEvent && (now-lastSelectedTextEvent)<75) {
+        lastSelectedTextEvent = now;
+        return;
+    }
+    lastSelectedTextEvent = now;
     if (view.menu.show) {
         view.menu.show = false;
         return;
@@ -187,6 +195,7 @@ function viewHandleSelectedText(view, event) {
         handleClickOnHref(event);
         return;
     }
+    event.preventDefault();
     view.touch = undefined;
     view.menu.show = false;
     view.menu.items = [COPY_ACTION, SEARCH_TEXT_ACTION];

@@ -14,7 +14,7 @@ Vue.component('lms-ui-settings', {
   <v-card-title class="settings-title">
    <v-toolbar app-data class="dialog-toolbar" @mousedown="mouseDown" id="uisettings-toolbar">
     <div class="drag-area-left"></div>
-    <v-btn flat icon v-longpress:stop="close" :title="ttShortcutStr(i18n('Go back'), 'esc')"><v-icon>arrow_back</v-icon></v-btn>
+    <v-btn flat icon @click="close" :title="ttShortcutStr(i18n('Go back'), 'esc')"><v-icon>arrow_back</v-icon></v-btn>
     <v-toolbar-title>{{width>=450 ? TB_UI_SETTINGS.title+serverName : TB_UI_SETTINGS.title}}</v-toolbar-title>
     <v-spacer class="drag-area"></v-spacer>
     <v-menu bottom left v-model="showMenu" v-if="!queryParams.party">
@@ -551,7 +551,7 @@ Vue.component('lms-ui-settings', {
             if (dlg == 'browsemodes') {
                 this.browseModesDialog.show=false;
             } else if (dlg == 'uisettings') {
-                this.show = false;
+                this.close();
             }
         }.bind(this));
         bus.$on('langChanged', function() {

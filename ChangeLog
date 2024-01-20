@@ -32,6 +32,8 @@
 22. Disable "(i)" button if MAI not installed, not the expand/collapse button.
 23. Fix similar artist and genre links on mobile devices.
 24. Different settings for skip backward and skip forward.
+25. Save interface settings even if dialog closed bty system back button or
+    'Esc' key.
 
 4.1.5
 -----

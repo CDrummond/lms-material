@@ -21,7 +21,6 @@ const NP_LYRICS_SCROLL_ACT = 8;
 const NP_LYRICS_HIGHLIGHT_ACT = 9;
 const NP_COPY_ACT = 10;
 const NP_SEARCH_ACT = 11;
-const NP_SET_SKIP_ACT = 12;
 const NP_CUSTOM = 100;
 const NP_ITEM_ACT = 200;
 const NP_MIN_WIDTH_FOR_FULL = 780;
@@ -229,9 +228,9 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
      <div class="np-menu" :title="trans.menu" @click="showMenu" v-if="showOverlay && playerStatus.playlist.count>0" v-bind:class="{'np-skip-elevate':showOverlay}"></div>
      <table class="np-skip" v-if="showOverlay">
       <tr>
-       <td><v-btn icon outline @click.stop="skipBack" class="np-std-button" v-bind:class="{'disabled':disableBtns}"><img class="svg-img" :src="'rewind-'+skipSeconds | svgIcon(true)"></img></v-btn></td>
+       <td><v-btn icon outline @click.stop="skipBack" class="np-std-button" v-bind:class="{'disabled':disableBtns}"><img class="svg-img" :src="'rewind-'+skipBSeconds | svgIcon(true)"></img></v-btn></td>
        </td>
-       <td><v-btn icon outline @click.stop="skipForward" class="np-std-button" v-bind:class="{'disabled':disableBtns}"><img class="svg-img" :src="'fast-forward-'+skipSeconds | svgIcon(true)"></img></v-btn></td>
+       <td><v-btn icon outline @click.stop="skipForward" class="np-std-button" v-bind:class="{'disabled':disableBtns}"><img class="svg-img" :src="'fast-forward-'+skipFSeconds | svgIcon(true)"></img></v-btn></td>
       </tr>
      </table>
     </div>
@@ -303,9 +302,9 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
      <div class="np-close" :title="trans.collapseNp" @click="largeView=false" v-if="showOverlay" v-bind:class="{'np-skip-elevate':showOverlay}"></div>
      <table class="np-skip" v-if="showOverlay">
       <tr>
-       <td><v-btn icon outline @click.stop="skipBack" class="np-std-button" v-bind:class="{'disabled':disableBtns}"><img class="svg-img" :src="'rewind-'+skipSeconds | svgIcon(true)"></img></v-btn></td>
+       <td><v-btn icon outline @click.stop="skipBack" class="np-std-button" v-bind:class="{'disabled':disableBtns}"><img class="svg-img" :src="'rewind-'+skipBSeconds | svgIcon(true)"></img></v-btn></td>
        </td>
-       <td><v-btn icon outline @click.stop="skipForward" class="np-std-button" v-bind:class="{'disabled':disableBtns}"><img class="svg-img" :src="'fast-forward-'+skipSeconds | svgIcon(true)"></img></v-btn></td>
+       <td><v-btn icon outline @click.stop="skipForward" class="np-std-button" v-bind:class="{'disabled':disableBtns}"><img class="svg-img" :src="'fast-forward-'+skipFSeconds | svgIcon(true)"></img></v-btn></td>
       </tr>
      </table>
     </div>
@@ -887,8 +886,8 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
                 return;
             }
             if (!this.disablePrev) {
-                if (skip && this.playerStatus.current.time>=this.$store.state.skipSeconds) {
-                    this.doAction(['time', this.playerStatus.current.time-this.$store.state.skipSeconds]);
+                if (skip && this.playerStatus.current.time>=this.$store.state.skipBSeconds) {
+                    this.doAction(['time', this.playerStatus.current.time-this.$store.state.skipBSeconds]);
                 } else {
                     this.doAction(['button', 'jump_rew']);
                 }
@@ -899,8 +898,8 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
                 return;
             }
             if (!this.disableNext) {
-                if (skip && (this.playerStatus.current.time+this.$store.state.skipSeconds)<this.playerStatus.current.duration) {
-                    this.doAction(['time', this.playerStatus.current.time+this.$store.state.skipSeconds]);
+                if (skip && (this.playerStatus.current.time+this.$store.state.skipFSeconds)<this.playerStatus.current.duration) {
+                    this.doAction(['time', this.playerStatus.current.time+this.$store.state.skipFSeconds]);
                 } else {
                     this.doAction(['playlist', 'index', '+1']);
                 }
@@ -1370,8 +1369,11 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
             }
             return undefined;
         },
-        skipSeconds() {
-            return this.$store.state.skipSeconds
+        skipBSeconds() {
+            return this.$store.state.skipBSeconds
+        },
+        skipFSeconds() {
+            return this.$store.state.skipFSeconds
         }
     },
     beforeDestroy() {

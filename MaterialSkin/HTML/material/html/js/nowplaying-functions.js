@@ -348,14 +348,6 @@ function nowplayingShowMenu(view, event) {
                 view.menu.items.push({title:view.trans.expandNp, icon:'fullscreen', act:NP_TOGGLE_ACT});
             }
         }
-        if (view.showOverlay) {
-            view.menu.items.push({divider:true});
-            view.menu.items.push({title:i18n('Skip back/forward'), header:true});
-            for (let s=0, len=SKIP_SECONDS_VALS.length; s<len; ++s) {
-                view.menu.items.push({title:i18n("%1 seconds", SKIP_SECONDS_VALS[s]), radio:SKIP_SECONDS_VALS[s]==view.$store.state.skipSeconds, act:NP_SET_SKIP_ACT, value:SKIP_SECONDS_VALS[s]});
-            }
-            view.menu.items.push({divider:true});
-        }
         view.menu.items.push({title:ACTIONS[MORE_ACTION].title, svg:ACTIONS[MORE_ACTION].svg, act:NP_INFO_ACT});
         view.menu.x = event.clientX;
         view.menu.y = event.clientY;
@@ -461,8 +453,6 @@ function nowplayingMenuAction(view, item) {
                 });
             }
         }
-    } else if (NP_SET_SKIP_ACT==item.act) {
-        view.$store.commit('setSkipSeconds', item.value);
     } else if (view.customActions && item.act>=NP_CUSTOM) {
         let ca = item.act-NP_CUSTOM;
         if (ca>=0 && ca<view.customActions.length) {

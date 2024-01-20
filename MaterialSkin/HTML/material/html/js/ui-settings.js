@@ -246,7 +246,11 @@ Vue.component('lms-ui-settings', {
     <v-divider></v-divider>
 
     <v-list-tile>
-     <v-select :items="skipSecondsOptions" :label="i18n('Skip back/forward')" v-model="skipSeconds" item-text="label" item-value="value"></v-select>
+     <v-select :items="skipSecondsOptions" :label="i18n('Skip backward')" v-model="skipBSeconds" item-text="label" item-value="value"></v-select>
+    </v-list-tile>
+    <v-divider></v-divider>
+    <v-list-tile>
+     <v-select :items="skipSecondsOptions" :label="i18n('Skip forward')" v-model="skipFSeconds" item-text="label" item-value="value"></v-select>
     </v-list-tile>
     <v-divider></v-divider>
 
@@ -418,7 +422,8 @@ Vue.component('lms-ui-settings', {
                          ],
             volumeStep: 5,
             skipSecondsOptions: [ ],
-            skipSeconds: 30,
+            skipBSeconds: 10,
+            skipFSeconds: 30,
             allowLayoutAdjust: window.location.href.indexOf('?layout=')<0 && window.location.href.indexOf('&layout=')<0,
             showItems: [ ],
             hasPassword: false,
@@ -583,7 +588,8 @@ Vue.component('lms-ui-settings', {
             this.swipeChangeTrack = this.$store.state.swipeChangeTrack;
             this.keyboardControl = this.$store.state.keyboardControl;
             this.sortFavorites = this.$store.state.sortFavorites;
-            this.skipSeconds = this.$store.state.skipSeconds;
+            this.skipBSeconds = this.$store.state.skipBSeconds;
+            this.skipFSeconds = this.$store.state.skipFSeconds;
             this.volumeStep = lmsOptions.volumeStep;
             this.showRating = this.$store.state.showRating;
             this.hidden = this.$store.state.hidden;
@@ -688,7 +694,8 @@ Vue.component('lms-ui-settings', {
                       keyboardControl:this.keyboardControl,
                       volumeStep:this.volumeStep,
                       hidden:arrays ? Array.from(this.hiddenItems()) : this.hiddenItems(),
-                      skipSeconds:this.skipSeconds,
+                      skipBSeconds:this.skipBSeconds,
+                      skipFSeconds:this.skipFSeconds,
                       disabledBrowseModes:arrays ? Array.from(this.disabledBrowseModes()) : this.disabledBrowseModes(),
                       screensaver:this.screensaver,
                       homeButton:this.homeButton,

@@ -17,8 +17,8 @@ function updateUiSettings(state, val) {
     var queueDisplayChanged = false;
     let stdItems = ['autoScrollQueue', 'browseBackdrop', 'queueBackdrop', 'nowPlayingBackdrop', 'infoBackdrop',
                     'browseTechInfo', 'techInfo', 'nowPlayingTrackNum', 'swipeVolume', 'swipeChangeTrack',
-                    'keyboardControl', 'skipSeconds', 'powerButton', 'mediaControls', 'showRating', 'browseContext',
-                    'nowPlayingContext', 'queueContext'];
+                    'keyboardControl', 'skipBSeconds', 'skipFSeconds', 'powerButton', 'mediaControls', 'showRating',
+                    'browseContext', 'nowPlayingContext', 'queueContext'];
     for (let i=0, len=stdItems.length; i<len; ++i) {
         let key=stdItems[i];
         if (undefined!=val[key] && state[key]!=val[key]) {
@@ -29,8 +29,11 @@ function updateUiSettings(state, val) {
             }
         }
     }
-    if (!VALID_SKIP_SECONDS.has(state.skipSeconds)) {
-        state.skipSeconds = 30;
+    if (!VALID_SKIP_SECONDS.has(state.skipBSeconds)) {
+        state.skipBSeconds = 10;
+    }
+    if (!VALID_SKIP_SECONDS.has(state.skipFSeconds)) {
+        state.skipFSeconds = 30;
     }
 
     var browseDisplayChanged = false;
@@ -273,7 +276,8 @@ const store = new Vuex.Store({
         openDialogs: [],
         activeDialog: undefined,
         unlockAll: false,
-        skipSeconds: 30,
+        skipBSeconds: 10,
+        skipFSeconds: 30,
         screensaver: false,
         homeButton: false,
         lang: 'en-US',
@@ -487,13 +491,16 @@ const store = new Vuex.Store({
                 let key = boolItems[i];
                 state[key] = getLocalStorageBool(key, state[key]);
             }
-            let intItems = ['skipSeconds', 'mobileBar', 'maxRating', 'volumeStep'];
+            let intItems = ['skipBSeconds', 'skipFSeconds', 'mobileBar', 'maxRating', 'volumeStep'];
             for (let i=0, len=intItems.length; i<len; ++i) {
                 let key = intItems[i];
                 state[key] = parseInt(getLocalStorageVal(key, state[key]));
             }
-            if (!VALID_SKIP_SECONDS.has(state.skipSeconds)) {
-                state.skipSeconds = 30;
+            if (!VALID_SKIP_SECONDS.has(state.skipBSeconds)) {
+                state.skipBSeconds = 10;
+            }
+            if (!VALID_SKIP_SECONDS.has(state.skipFSeconds)) {
+                state.skipFSeconds = 30;
             }
             if (state.homeButton) {
                 document.documentElement.style.setProperty('--home-button-size', '42px');
@@ -699,10 +706,6 @@ const store = new Vuex.Store({
             state.queueAlbumStyle = val;
             setLocalStorageVal('queueAlbumStyle', state.queueAlbumStyle);
             bus.$emit('queueDisplayChanged');
-        },
-        setSkipSeconds(state, val) {
-            state.skipSeconds = val;
-            setLocalStorageVal('skipSeconds', state.skipSeconds);
         }
     }
 })

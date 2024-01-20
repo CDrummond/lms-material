@@ -31,6 +31,7 @@
     flag.
 22. Disable "(i)" button if MAI not installed, not the expand/collapse button.
 23. Fix similar artist and genre links on mobile devices.
+24. Different settings for skip backward and skip forward.
 
 4.1.5
 -----

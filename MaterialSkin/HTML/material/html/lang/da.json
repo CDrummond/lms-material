@@ -622,6 +622,7 @@
 "Remove '%1' from synchronization group?":"",
 "Search library":"",
 "Search within list":"",
-"Skip back/forward":"",
+"Skip backward":"",
+"Skip forward":"",
 "Unsync":""
 }

@@ -60,6 +60,14 @@
  --drag-area-height:100%;
  --window-area-left:0px;
  --window-area-right:0px;
+ --bottom-nav-pad:max(calc(env(safe-area-inset-bottom) - 22px), 0px);
+}
+
+/* For old browsers that dont support min() */
+@supports not (width: min(10px, 5vw)) {
+ :root {
+  --bottom-nav-pad:0px;
+ }
 }
 
 .theme--dark {

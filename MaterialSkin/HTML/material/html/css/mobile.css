@@ -6,7 +6,6 @@
  */
 
 :root {
- --bottom-nav-pad:max(calc(env(safe-area-inset-bottom) - 22px), 0px);
  --bottom-toolbar-height:calc(var(--bottom-nav-pad) + 52px);
  --np-portrait-image-size:min(calc((var(--vh, 1vh)*100) - (var(--main-toolbar-height) + var(--bottom-toolbar-height) + 210px) - (var(--np-image-border)*2)), 100vw - (var(--np-image-border)*2), calc(var(--vh, 1vh)*50));
  --np-image-landscape-height:calc((var(--vh, 1vh)*100) - (var(--main-toolbar-height) + var(--bottom-toolbar-height) + 116px));
@@ -19,7 +18,6 @@
 /* For old browsers that dont support min() */
 @supports not (width: min(10px, 5vw)) {
  :root {
-  --bottom-nav-pad:0px;
   --np-portrait-image-size:calc(100vw - ((var(--np-image-border)*2) + var(--mobile-bottom-toolbar-height) + 22px));
   --np-image-landscape-size:calc(50vw - ((var(--np-image-border)*2) + 64px + var(--mobile-bottom-toolbar-height)));
   --np-image-landscape-wide-height:50vw;

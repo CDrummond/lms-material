@@ -8,9 +8,9 @@
 :root {
  --bottom-toolbar-height:var(--desktop-npbar-height);
  --np-portrait-image-size:min(calc((var(--vh, 1vh)*100) - (var(--main-toolbar-height) + 260px) - (var(--np-image-border)*2)), 100vw - (var(--np-image-border)*2), calc(var(--vh, 1vh)*50));
- --np-image-landscape-height:calc((var(--vh, 1vh)*100) - (var(--main-toolbar-height) + 116px));
+ --np-image-landscape-height:calc((var(--vh, 1vh)*100) - (var(--main-toolbar-height) + 116px + var(--bottom-nav-pad)));
  --np-image-landscape-size:min(var(--np-image-landscape-height) - (var(--np-image-border)*2), 50vw - (var(--np-image-border)*2));
- --np-image-landscape-wide-height:min(calc((var(--vh, 1vh)*100) - var(--main-toolbar-height)), 50vw);
+ --np-image-landscape-wide-height:min(calc((var(--vh, 1vh)*100) - (var(--main-toolbar-height) + var(--bottom-nav-pad))), 50vw - var(--bottom-nav-pad));
  --np-image-landscape-wide-size:min(var(--np-image-landscape-wide-height) - (var(--np-image-border)*2), 50vw - (var(--np-image-border)*2));
  --np-icon-size:24px;
  --queue-visibility:initial;
@@ -159,7 +159,7 @@
 }
 
 .np-portrait-song-info {
- height:calc((var(--vh, 1vh)*100) - (var(--np-portrait-image-size) + (var(--thin-portrait-adjust) * 3) + (var(--np-image-border) * 2) + 140px));
+ height:calc((var(--vh, 1vh)*100) - (var(--np-portrait-image-size) + (var(--thin-portrait-adjust) * 3) + var(--bottom-nav-pad) + (var(--np-image-border) * 2) + 140px));
 }
 
 .np-text-desktop {
@@ -529,4 +529,8 @@
  height: calc((var(--vh, 1vh)*100) - (var(--main-toolbar-height) + var(--bottom-toolbar-height)));
  margin-left:-2px;
  z-index: 1;
+}
+
+.np-controls {
+ bottom:calc(var(--thin-portrait-adjust) + var(--bottom-nav-pad));
 }

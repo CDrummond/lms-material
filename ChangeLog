@@ -37,6 +37,7 @@
 26. Fix Composers, Conductors, and Bands not showing in MAI track info.
 27. Fix artist name and album cover not showing when click on "Browse",
     "Go to album", or "+N more" links in now-playing/MAI.
+28. Move expanded now-playing controls a bit higher if iOS home-bar detected.
 
 4.1.5
 -----

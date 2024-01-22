@@ -566,10 +566,10 @@ function nowplayingFetchTrackInfo(view) {
                   [trk.conductor && lmsOptions.showConductor && useConductor(trk.genre), 'conductor', i18n("Conductor")],
                   [trk.band && lmsOptions.showBand && useBand(trk.genre), 'band', i18n("Band")]];
     for (let i=0, len=others.length; i<len; ++i) {
-        if (i[0]) {
-            let entry = nowplayingArtistEntry(trk, i[1], i[1].toUpperCase());
+        if (others[i][0]) {
+            let entry = nowplayingArtistEntry(trk, others[i][1], others[i][1].toUpperCase());
             if (entry.length>1) {
-                html+="<tr><td>"+i[2]+"&nbsp;</td><td>"+entry+"</td></tr>";
+                html+="<tr><td>"+others[i][2]+"&nbsp;</td><td>"+entry+"</td></tr>";
             }
         }
     }

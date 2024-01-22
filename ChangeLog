@@ -1,7 +1,7 @@
 4.2.0
 -----
  1. Add ability to search for items in lists (browse and queue).
- 2. Click on no-playnig cover-art to show skip, menu, and close buttons.
+ 2. Click on now-playing cover-art to show skip, menu, and close buttons.
  3. Remove now-playing pulse, as clicking cover shows buttons.
  4. Hide menu and close buttons on now-playing screen if using "np-only" URL.
  5. Work-around volume control moving in desktop layout when toggle MAI button.
@@ -32,7 +32,7 @@
 22. Disable "(i)" button if MAI not installed, not the expand/collapse button.
 23. Fix similar artist and genre links on mobile devices.
 24. Different settings for skip backward and skip forward.
-25. Save interface settings even if dialog closed bty system back button or
+25. Save interface settings even if dialog closed by system back button or
     'Esc' key.
 26. Fix Composers, Conductors, and Bands not showing in MAI track info.
 27. Fix artist name and album cover not showing when click on "Browse",

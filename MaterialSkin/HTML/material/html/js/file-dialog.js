@@ -44,6 +44,7 @@ var lmsFileDialog = Vue.component("lms-file-dialog", {
         bus.$on('file.open', function(elem, isDir, types) {
             if (undefined!=elem) {
                 this.show = true;
+                dialogPosition();
                 this.elem = elem;
                 this.isDir = isDir;
                 this.types = types;

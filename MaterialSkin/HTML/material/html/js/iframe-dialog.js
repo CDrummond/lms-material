@@ -116,6 +116,7 @@ function addHooks(doc) {
 
 var iframeMenuOpen = false;
 function iframeClickHandler(e) {
+    storeClickOrTouchPos(e);
     if (iframeMenuOpen) {
         bus.$emit('iframe-hideMenu');
     }

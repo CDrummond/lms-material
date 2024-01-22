@@ -487,10 +487,11 @@ Vue.component('lms-toolbar', {
                 this.$store.commit('setShowQueue', false);
             }
         },
-        handlePlayerToolbarButton(longPress) {
+        handlePlayerToolbarButton(longPress, el, event) {
             if (queryParams.party) {
                 return;
             }
+            storeClickOrTouchPos(event);
             // Dont react to presses for 0.5s after dialog closed. The button is very close to where
             // a dialogs back button is and user might accidentaly presss twice...
             if (undefined!=this.$store.state.lastDialogClose && new Date().getTime()-this.$store.state.lastDialogClose<500) {
@@ -541,7 +542,8 @@ Vue.component('lms-toolbar', {
                 });
             }
         },
-        togglePower(longPress, el) {
+        togglePower(longPress, el, event) {
+            storeClickOrTouchPos(event);
             if (queryParams.party) {
                 return;
             }

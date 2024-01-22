@@ -20,11 +20,11 @@ Vue.component('lms-ui-settings', {
     <v-menu bottom left v-model="showMenu" v-if="!queryParams.party">
      <v-btn icon slot="activator"><v-icon>more_vert</v-icon></v-btn>
      <v-list>
-      <v-list-tile @click="saveAsDefault">
+      <v-list-tile @click="saveAsDefault($event)">
        <v-list-tile-avatar><v-icon>save_alt</v-icon></v-list-tile-avatar>
        <v-list-tile-content><v-list-tile-title>{{i18n('Save as default')}}</v-list-tile-title></v-list-tile-content>
       </v-list-tile>
-      <v-list-tile @click="revertToDefault">
+      <v-list-tile @click="revertToDefault($event)">
        <v-list-tile-avatar><v-icon>settings_backup_restore</v-icon></v-list-tile-avatar>
        <v-list-tile-content><v-list-tile-title>{{i18n('Revert to default')}}</v-list-tile-title></v-list-tile-content>
       </v-list-tile>
@@ -88,7 +88,7 @@ Vue.component('lms-ui-settings', {
     <v-list-tile v-if="mediaControlsSupported">
      <v-list-tile-content @click="mediaControls = !mediaControls" class="switch-label">
       <v-list-tile-title>{{IS_MOBILE ? i18n('Lock screen and notifications') : i18n('Media keys and notifications')}}</v-list-tile-title>
-      <v-list-tile-sub-title>{{IS_MOBILE ? i18n('Show playback controls on lock screen and in notification area.') : i18n('Allow control via media keys.')}} <v-btn flat icon style="margin-top:4px;height:18px;width:18px; opacity:var(--sub-opacity)" @click.stop="mediaControlsInfo"><v-icon small>help_outline</v-icon></v-btn</v-list-tile-sub-title>
+      <v-list-tile-sub-title>{{IS_MOBILE ? i18n('Show playback controls on lock screen and in notification area.') : i18n('Allow control via media keys.')}} <v-btn flat icon style="margin-top:4px;height:18px;width:18px; opacity:var(--sub-opacity)" @click.stop="mediaControlsInfo($event)"><v-icon small>help_outline</v-icon></v-btn</v-list-tile-sub-title>
      </v-list-tile-content>
      <v-list-tile-action><m3-switch v-model="mediaControls"></m3-switch></v-list-tile-action>
     </v-list-tile>
@@ -97,7 +97,7 @@ Vue.component('lms-ui-settings', {
     <v-list-tile v-if="!IS_MOBILE">
      <v-list-tile-content @click="keyboardControl = !keyboardControl" class="switch-label">
       <v-list-tile-title>{{i18n('Keyboard shortcuts')}}</v-list-tile-title>
-      <v-list-tile-sub-title>{{i18n("Enable keyboard shortcuts")}} <v-btn flat icon style="margin-top:4px;height:18px;width:18px; opacity:var(--sub-opacity)" @click.stop="keyboardInfo"><v-icon small>help_outline</v-icon></v-btn</v-list-tile-sub-title>
+      <v-list-tile-sub-title>{{i18n("Enable keyboard shortcuts")}} <v-btn flat icon style="margin-top:4px;height:18px;width:18px; opacity:var(--sub-opacity)" @click.stop="keyboardInfo($event)"><v-icon small>help_outline</v-icon></v-btn</v-list-tile-sub-title>
      </v-list-tile-content>
      <v-list-tile-action><m3-switch v-model="keyboardControl"></m3-switch></v-list-tile-action>
     </v-list-tile>
@@ -210,7 +210,7 @@ Vue.component('lms-ui-settings', {
     <template v-for="(item, index) in showItems">
      <div style="display:flex">
       <v-checkbox v-model="item.show" :label="item.name" class="settings-list-checkbox"></v-checkbox>
-      <v-btn v-if="item.id==TOP_MYMUSIC_ID" @click.stop="showBrowseModesDialog" flat icon class="settings-list-checkbox-action"><v-icon>settings</v-icon></v-btn>
+      <v-btn v-if="item.id==TOP_MYMUSIC_ID" @click.stop="showBrowseModesDialog($event)" flat icon class="settings-list-checkbox-action"><v-icon>settings</v-icon></v-btn>
      </div>
     </template>
     <div class="dialog-padding"></div>
@@ -715,7 +715,8 @@ Vue.component('lms-ui-settings', {
             }
             return settings;
         },
-        saveAsDefault() {
+        saveAsDefault(event) {
+            storeClickOrTouchPos(event);
             confirm(i18n("Save the current settings as default for new users?")+
                          (this.allowLayoutAdjust ? addNote(i18n("NOTE:'Application layout' is not saved, as this is a per-device setting.")) : ""),
                     i18n('Set Defaults')).then(res => {
@@ -727,7 +728,8 @@ Vue.component('lms-ui-settings', {
                 }
             });
         },
-        revertToDefault() {
+        revertToDefault(event) {
+            storeClickOrTouchPos(event);
             confirm(i18n("Revert to default settings?"), i18n('Revert')).then(res => {
                 if (res) {
                     lmsCommand("", ["pref", LMS_MATERIAL_UI_DEFAULT_PREF, "?"]).then(({data}) => {
@@ -776,7 +778,8 @@ Vue.component('lms-ui-settings', {
             }
             return disabledModes;
         },
-        keyboardInfo() {
+        keyboardInfo(event) {
+            storeClickOrTouchPos(event);
             var list = queryParams.party
                      ? [ shortcutStr("space")+SEPARATOR+i18n("Play/pause"),
                          shortcutStr("home")+SEPARATOR+i18n("Go to homescreen"),
@@ -838,7 +841,8 @@ Vue.component('lms-ui-settings', {
             }
             bus.$emit('dlg.open', 'iteminfo', { list:list });
         },
-        mediaControlsInfo() {
+        mediaControlsInfo(event) {
+            storeClickOrTouchPos(event);
             bus.$emit('dlg.open', 'iteminfo', { list:[i18n('To support this feature, this app needs to fool your browser into thinking its is playing audio. This is accomplished by playing a silent audio file in a loop. Most browsers block auto-playing of audio so this cannot start until you have interacted with the app (e.g. clicked somewhere). Alternatively you can configure your browser to allow auto-play of audio for the URL you use to access this app (%1).', window.location.hostname+':'+window.location.port)]});
         },
         i18n(str) {
@@ -848,9 +852,11 @@ Vue.component('lms-ui-settings', {
                 return str;
             }
         },
-        showBrowseModesDialog() {
+        showBrowseModesDialog(event) {
+            storeClickOrTouchPos(event);
             this.browseModesDialog.wide = window.innerWidth >= 700;
             this.browseModesDialog.show=true;
+            dialogPosition();
         },
         mouseDown(ev) {
             toolbarMouseDown(ev);

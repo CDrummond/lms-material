@@ -60,6 +60,7 @@ Vue.component('lms-rating-dialog', {
                 this.value = undefined==current ? 3 : (current/20.0);
                 this.toSet = undefined;
                 this.show = true;
+                dialogPosition();
             }
         }.bind(this));
         bus.$on('noPlayers', function() {

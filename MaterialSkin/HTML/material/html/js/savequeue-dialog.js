@@ -47,6 +47,7 @@ Vue.component('lms-savequeue', {
             this.name = name;
             this.currentName = ""+name;
             focusEntry(this);
+            dialogPosition();
             lmsCommand("", ["playlists", 0, 10000, PLAYLIST_TAGS]).then(({data})=>{
                 if (data && data.result && data.result.playlists_loop) {
                     var loop = data.result.playlists_loop;

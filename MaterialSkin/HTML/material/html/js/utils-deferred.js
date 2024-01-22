@@ -613,3 +613,60 @@ function handleNumeric(dlg, func, itemKey) {
         }
     }.bind(dlg));
 }
+
+let mskinLastClickOrTouch = undefined;
+function storeClickOrTouchPos(event) {
+    if (event) {
+        let touch = getTouchPos(event);
+        mskinLastClickOrTouch={ time:new Date().getTime(),
+                                x:touch ? touch.x : undefined==event.x ? event.clientX : event.x,
+                                y:touch ? touch.y : undefined==event.y ? event.clientY : event.y };
+    }
+}
+
+function resetDialogPos() {
+    document.documentElement.style.setProperty('--dialog-top', 'unset');
+    document.documentElement.style.setProperty('--dialog-left', 'unset');
+}
+
+function dialogPosition() {
+    if ((window.innerHeight>768 && window.innerWidth>1024) || (window.innerWidth>768 && window.innerHeight>1024)) {
+        resetDialogPos();
+        document.documentElement.style.setProperty('--dialog-opacity', '0');
+
+        setTimeout(function () {
+            try{
+                if (undefined!=mskinLastClickOrTouch && new Date().getTime()-mskinLastClickOrTouch.time<150 && undefined!=mskinLastClickOrTouch.x) {
+                    let elems = document.getElementsByClassName('v-dialog');
+                    if (undefined!=elems) {
+                        for (let e=0, len=elems.length; e<len; ++e) {
+                            let elem = elems[e];
+                            if (!elem.classList.contains("v-dialog--fullscreen")) {
+                                let w = elem.offsetWidth;
+                                let h = elem.offsetHeight;
+                                let top = mskinLastClickOrTouch.y - (h/2.0);
+                                let left = mskinLastClickOrTouch.x - (w/2.0);
+                                if (left<32) {
+                                    left = 32;
+                                } else if (left+w+32 > window.innerWidth) {
+                                    left = window.innerWidth - (w + 32);
+                                }
+                                if (top<32) {
+                                    top = 32;
+                                } else if (top+h+32 > window.innerHeight) {
+                                    top = window.innerHeight - (h + 32);
+                                }
+                                document.documentElement.style.setProperty('--dialog-top', top+'px');
+                                document.documentElement.style.setProperty('--dialog-left', left+'px');
+                                break;
+                            }
+                        }
+                    }
+                }
+            } catch(e) {
+            }
+            mskinLastClickOrTouch = undefined;
+            document.documentElement.style.setProperty('--dialog-opacity', '1.0');
+        }, 2);
+    }
+}

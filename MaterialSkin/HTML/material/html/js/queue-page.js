@@ -264,7 +264,7 @@ var lmsQueue = Vue.component("lms-queue", {
    <template v-for="(action, index) in menu.item.actions">
     <v-divider v-if="DIVIDER==action"></v-divider>
     <template v-for="(cact, cindex) in queueCustomActions" v-else-if="CUSTOM_ACTIONS==action">
-     <v-list-tile @click="itemCustomAction(cact, menu.item, menu.index)">
+     <v-list-tile @click="itemCustomAction(cact, menu.item, menu.index, $event)">
       <v-list-tile-avatar>
        <v-icon v-if="undefined==cact.svg">{{cact.icon}}</v-icon>
        <img v-else class="svg-img" :src="cact.svg | svgIcon(darkUi)"></img>
@@ -289,7 +289,7 @@ var lmsQueue = Vue.component("lms-queue", {
   </v-list>
   <v-list v-else>
    <template v-for="(action, index) in menu.actions">
-    <v-list-tile @click="headerAction(action)" v-bind:class="{'disabled':(items.length<1 && PQ_REQUIRE_AT_LEAST_1_ITEM.has(action)) || (items.length<2 && PQ_REQUIRE_MULTIPLE_ITEMS.has(action))}" v-if="(!LMS_KIOSK_MODE || !HIDE_FOR_KIOSK.has(action)) && (action==PQ_SAVE_ACTION ? wide<2 : action!=PQ_MOVE_QUEUE_ACTION || showMoveAction)">
+    <v-list-tile @click="headerAction(action, $event)" v-bind:class="{'disabled':(items.length<1 && PQ_REQUIRE_AT_LEAST_1_ITEM.has(action)) || (items.length<2 && PQ_REQUIRE_MULTIPLE_ITEMS.has(action))}" v-if="(!LMS_KIOSK_MODE || !HIDE_FOR_KIOSK.has(action)) && (action==PQ_SAVE_ACTION ? wide<2 : action!=PQ_MOVE_QUEUE_ACTION || showMoveAction)">
      <v-list-tile-avatar>
       <v-icon v-if="action==PQ_TOGGLE_VIEW_ACTION && albumStyle">music_note</v-icon>
       <v-icon v-else-if="undefined==ACTIONS[action].svg">{{ACTIONS[action].icon}}</v-icon>
@@ -837,6 +837,7 @@ var lmsQueue = Vue.component("lms-queue", {
             });
         },
         click(item, index, event) {
+            storeClickOrTouchPos(event);
             if (queryParams.party) {
                 return;
             }
@@ -888,6 +889,7 @@ var lmsQueue = Vue.component("lms-queue", {
             });
         },
         itemAction(act, item, index, event) {
+            storeClickOrTouchPos(event);
             if (queryParams.party) {
                 return;
             }
@@ -981,16 +983,18 @@ var lmsQueue = Vue.component("lms-queue", {
                 bus.$emit('dlg.open', 'gallery', [item.image], 0, true);
             }
         },
-        itemCustomAction(act, item, index) {
+        itemCustomAction(act, item, index, event) {
+            storeClickOrTouchPos(event);
             let cmd = performCustomAction(act, this.$store.state.player, item);
             if (cmd!=undefined) {
                 bus.$emit('browse', cmd.command, cmd.params, item.title, 'queue');
             }
         },
-        headerAction(act) {
+        headerAction(act, event) {
             if ((this.$store.state.visibleMenus.size>0 && this.otherActions.indexOf(act)<0)) {
                 return;
             }
+            storeClickOrTouchPos(event);
             if (act==PQ_SAVE_ACTION) {
                 this.save();
             } else if (act==PQ_SCROLL_ACTION) {

@@ -57,6 +57,7 @@ Vue.component('lms-sleep-dialog', {
             this.sleepTime = undefined;
             this.show = true;
             this.shownAt = new Date().getTime();
+            dialogPosition();
             if (undefined!=this.player) {
                 lmsCommand(this.player.id, ["sleep", "?"]).then(({data}) => {
                     if (data && data.result && data.result._sleep) {

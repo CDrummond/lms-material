@@ -320,8 +320,10 @@ var app = new Vue({
 
         if (document.addEventListener) {
             document.addEventListener('click', this.clickListener);
+            document.addEventListener('touchend', this.touchListener);
         } else if (document.attachEvent) {
             document.attachEvent('onclick', this.clickListener);
+            document.addEventListener('touchend', this.touchListener);
         }
 
         try {
@@ -560,6 +562,7 @@ var app = new Vue({
             this.$store.commit('setDesktopLayout', undefined==forceDesktop ? window.innerWidth>=LMS_MIN_DESKTOP_WIDTH : forceDesktop);
         },
         clickListener(event) {
+            storeClickOrTouchPos(event);
             if (this.$store.state.openDialogs.length>1) {
                 return;
             }
@@ -599,6 +602,9 @@ var app = new Vue({
                     }
                 }
             }
+        },
+        touchListener(event) {
+            storeClickOrTouchPos(event);
         },
         handleEsc() {
             // Can receive 'esc' 120ish milliseconds after dialog was closed with 'esc' - so filter out

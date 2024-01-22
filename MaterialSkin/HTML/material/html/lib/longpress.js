@@ -45,9 +45,9 @@ Vue.directive('longpress', {
                         el.longpress.started = false;
                         // Run function
                         if (undefined==el.longpress.binding.value.method) {
-                            el.longpress.binding.value(true, el);
+                            el.longpress.binding.value(true, el, e);
                         } else {
-                            el.longpress.binding.value.method(binding.value.item, true, el);
+                            el.longpress.binding.value.method(binding.value.item, true, el, e);
                         }
                     }, 500)
                 } else {
@@ -57,9 +57,9 @@ Vue.directive('longpress', {
                         // Run function
                         if (!el.longpress.moved) {
                             if (undefined==el.longpress.binding.value.method) {
-                                el.longpress.binding.value(true, el);
+                                el.longpress.binding.value(true, el, e);
                             } else {
-                                el.longpress.binding.value.method(binding.value.item, true, el);
+                                el.longpress.binding.value.method(binding.value.item, true, el, e);
                             }
                         }
                     }, 500)
@@ -75,9 +75,9 @@ Vue.directive('longpress', {
             }
             if (el.longpress.started && !el.longpress.timedout && !el.longpress.moved) {
                 if (undefined==el.longpress.binding.value.method) {
-                    el.longpress.binding.value(false, el);
+                    el.longpress.binding.value(false, el, e);
                 } else {
-                    el.longpress.binding.value.method(binding.value.item, false, el);
+                    el.longpress.binding.value.method(binding.value.item, false, el, e);
                 }
                 el.longpress.started = false;
             }

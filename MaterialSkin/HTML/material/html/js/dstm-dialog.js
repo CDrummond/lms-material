@@ -58,6 +58,7 @@ Vue.component('lms-dstm-dialog', {
                         }
                         bindNumeric(this);
                         this.show=true;
+                        dialogPosition();
                     }
                 });
             }

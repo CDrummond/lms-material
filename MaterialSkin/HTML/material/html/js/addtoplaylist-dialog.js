@@ -47,6 +47,7 @@ Vue.component('lms-addtoplaylist-dialog', {
             this.items = items;
             this.itemCommands = itemCommands;
             focusEntry(this);
+            dialogPosition();
             var currentName = ""+this.name;
             lmsCommand("", ["playlists", 0, 10000, PLAYLIST_TAGS]).then(({data})=>{
                 if (data && data.result && data.result.playlists_loop) {

@@ -629,8 +629,10 @@ const store = new Vuex.Store({
                     }
                 }
             }
-
             state.activeDialog = state.openDialogs.length>0 ? state.openDialogs[state.openDialogs.length-1] : undefined;
+            if (0==state.openDialogs.length) {
+                resetDialogPos();
+            }
             emitToolbarColorsFromState(state);
         },
         closeAllDialogs(state, val) {

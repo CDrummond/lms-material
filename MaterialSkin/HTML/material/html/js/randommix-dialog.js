@@ -135,6 +135,7 @@ Vue.component('lms-randommix', {
                                 }
                             });
                             this.show=true;
+                            dialogPosition();
                         }
                     });
                 });

@@ -63,6 +63,7 @@ var lmsPromptDialog = Vue.component("lms-prompt-dialog", {
             if ('text'==type) {
                 focusEntry(this);
             }
+            dialogPosition();
         }.bind(this));
         bus.$on('closeDialog', function(dlg) {
             if (dlg == 'prompt') {

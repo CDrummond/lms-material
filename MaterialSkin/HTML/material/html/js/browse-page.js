@@ -1902,7 +1902,7 @@ var lmsBrowse = Vue.component("lms-browse", {
             });
         }.bind(this));
 
-        bus.$on('browse', function(cmd, params, title, page, clearHistory) {
+        bus.$on('browse', function(cmd, params, title, page, clearHistory, subtitle) {
             this.clearSelection();
             if (this.$store.state.desktopLayout) {
                 if ('now-playing'==page && this.nowPlayingExpanded) {
@@ -1934,7 +1934,7 @@ var lmsBrowse = Vue.component("lms-browse", {
                     this.prevPage = page;
                 }
             } else {
-                this.fetchItems(this.replaceCommandTerms({command:cmd, params:params}), {cancache:false, id:params[0], title:title, stdItem:params[0].startsWith("artist_id:") ? STD_ITEM_ARTIST : STD_ITEM_ALBUM}, page);
+                this.fetchItems(this.replaceCommandTerms({command:cmd, params:params}), {cancache:false, id:params[0], title:title, subtitle:subtitle, stdItem:params[0].startsWith("artist_id:") ? STD_ITEM_ARTIST : STD_ITEM_ALBUM}, page);
             }
         }.bind(this));
 

@@ -39,6 +39,8 @@
     'Go to album', or '+N more' links in now-playing/MAI.
 28. Move expanded now-playing controls a bit higher if iOS home-bar detected.
 29. Add Simplified Chinese translation, thanks to 刘 少林 (Shaolin Liu)
+30. Add a button to server-side settings to reset genre lists to default
+    values, translated into current language.
 
 4.1.5
 -----

@@ -484,3 +484,9 @@ PLUGIN_MATERIAL_SKIN_PLAY_SHUFFLE_DESC
 	FR	Ajouter une action "Mélanger et jouer" pour lire les albums ou les listes de lecture en mode aléatoire. Lorsque cette action est activée et utilisée, la platine sera configurée pour "mélanger les morceaux" avant leur lecture. Par ailleurs, si cette action est activée et que "Jouer maintenant" est utilisé, la lecture aléatoire sera désactivée avant la lecture. Veuillez noter que le mode aléatoire de la platine n'est pas rétabli une fois la liste de lecture effacée, etc.
 	NL	Voeg actie toe om albums of afspeellijsten in shuffle modus af te spelen. Wanneer dit is ingeschakeld en 'Shuffle modus' wordt gebruikt, wordt de speler ingesteld op shuffle voordat de nummers worden afgespeeld. Als dit is ingeschakeld en 'Speel Nu' wordt gebruikt, wordt shuffle uitgeschakeld voordat de nummers worden afgespeeld. Houd er rekening mee dat de shuffle modus niet wordt teruggezet als de afspeellijst leeg is. 
 	ZH_CN	添加专辑或播放列表并开启随机播放模式。启用此功能并使用“随机播放”时，播放器将在播放项目之前设置为“随机播放曲目”。同样，如果启用此选项并使用“立即播放”，则在播放项目之前禁用随机播放。请注意，播放队列被清除后，播放器的随机播放模式不会恢复。
+
+PLUGIN_MATERIAL_SKIN_LOAD_DEFAULT_GENRES_DESC
+	EN	These genre lists are saved in your settings file, and will not automatically be updated should you change language. You may use the "Set Genres To Default" button (below) to reset each list to the default values, translated into the current language.
+
+PLUGIN_MATERIAL_SKIN_LOAD_DEFAULT_GENRES
+	EN	Set Genres To Default

@@ -942,9 +942,7 @@ function browseAddCategories(view, item, isGenre) {
     view.current = item;
     view.currentActions.push({action:(view.grid.use ? USE_LIST_ACTION : USE_GRID_ACTION)});
     view.currentItemImage = item.image;
-    if (isGenre && lmsOptions.genreImages) {
-        view.setBgndCover();
-    }
+    view.setBgndCover();
 }
 
 function browseItemAction(view, act, item, index, event) {

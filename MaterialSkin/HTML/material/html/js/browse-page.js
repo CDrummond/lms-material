@@ -1617,7 +1617,10 @@ var lmsBrowse = Vue.component("lms-browse", {
                     url='material/backdrops/browse.jpg';
                 }
             }
-            setBgndCover(this.bgndElement, url);
+            if (url!=this.currentBgndUrl) {
+                this.currentBgndUrl = url;
+                setBgndCover(this.bgndElement, url);
+            }
         },
         setAlbumRating() {
             var ids = [];

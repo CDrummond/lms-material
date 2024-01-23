@@ -41,6 +41,8 @@
 29. Add Simplified Chinese translation, thanks to 刘 少林 (Shaolin Liu)
 30. Add a button to server-side settings to reset genre lists to default
     values, translated into current language.
+31. Fix handling of 'Esc'/back-button when info-page is open in mobile layout
+    but now-playing is not current view.
 
 4.1.5
 -----

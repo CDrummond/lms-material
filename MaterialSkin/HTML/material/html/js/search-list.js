@@ -81,7 +81,12 @@ Vue.component('lms-search-list', {
         this.commands = [];
         this.searching = false;
         this.currentIndex = -1;
-        focusEntry(this);
+        // On mobile devices delay focus in case invoked from menu
+        if (IS_MOBILE) {
+            setTimeout(function() { focusEntry(this) }.bind(this), 150);
+        } else {
+            focusEntry(this);
+        }
     },
     methods: {
         cancel() {
@@ -143,7 +148,6 @@ Vue.component('lms-search-list', {
                 }
                 this.notFoundTimer = setTimeout(function () {
                     this.notFoundTimer = undefined;
-                    focusEntry(this);
                 }.bind(this), 1000);
             }
         },

@@ -1,9 +1,9 @@
 4.2.0
 -----
  1. Add ability to search for items in lists (browse and queue).
- 2. Click on no-playnig cover-art to show skip, menu, and close buttons.
+ 2. Click on now-playing cover-art to show skip, menu, and close buttons.
  3. Remove now-playing pulse, as clicking cover shows buttons.
- 4. Hide menu and close buttons on now-playing screen if using "np-only" URL.
+ 4. Hide menu and close buttons on now-playing screen if using 'np-only' URL.
  5. Work-around volume control moving in desktop layout when toggle MAI button.
  6. Better handling of now-playing button sizes for very narrow screen widths.
  7. Fix track list indents.
@@ -29,15 +29,20 @@
     unsync player.
 21. Fix new server version notification, parameter from LMS is a string not a
     flag.
-22. Disable "(i)" button if MAI not installed, not the expand/collapse button.
+22. Disable '(i)' button if MAI not installed, not the expand/collapse button.
 23. Fix similar artist and genre links on mobile devices.
 24. Different settings for skip backward and skip forward.
-25. Save interface settings even if dialog closed bty system back button or
+25. Save interface settings even if dialog closed by system back button or
     'Esc' key.
 26. Fix Composers, Conductors, and Bands not showing in MAI track info.
-27. Fix artist name and album cover not showing when click on "Browse",
-    "Go to album", or "+N more" links in now-playing/MAI.
+27. Fix artist name and album cover not showing when click on 'Browse',
+    'Go to album', or '+N more' links in now-playing/MAI.
 28. Move expanded now-playing controls a bit higher if iOS home-bar detected.
+29. Add Simplified Chinese translation, thanks to 刘 少林 (Shaolin Liu)
+30. Add a button to server-side settings to reset genre lists to default
+    values, translated into current language.
+31. Fix handling of 'Esc'/back-button when info-page is open in mobile layout
+    but now-playing is not current view.
 
 4.1.5
 -----

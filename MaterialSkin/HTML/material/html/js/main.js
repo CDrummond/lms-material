@@ -622,8 +622,10 @@ var app = new Vue({
                 return;
             }
             if (undefined!=this.$store.state.activeDialog) {
-                bus.$emit('closeDialog', this.$store.state.activeDialog);
-                return;
+                if (this.$store.state.activeDialog!='info-dialog' || this.$store.state.desktopLayout || this.$store.state.page=='now-playing') {
+                    bus.$emit('closeDialog', this.$store.state.activeDialog);
+                    return;
+                }
             }
             bus.$emit('escPressed');
         }

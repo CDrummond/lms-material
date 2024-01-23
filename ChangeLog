@@ -43,6 +43,8 @@
     values, translated into current language.
 31. Fix handling of 'Esc'/back-button when info-page is open in mobile layout
     but now-playing is not current view.
+32. For trackinfo, etc., commands check if (up to) first 15 items have a play
+    command and if so allow add/play all actions.
 
 4.1.5
 -----

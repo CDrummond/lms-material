@@ -547,11 +547,9 @@ function browseHandleListResponse(view, item, command, resp, prevPage, appendIte
                 }
             }
 
-            // No menu actions? If have 3..200 audio tracks, add a PlayAll/AddAll to toolbar. view will add each item individually
-            // 3..200 is chosen so that we dont add these to bandcamp when it shows "Listen as podcast" and "Listen to songs" entries...
+            // No menu actions? If have 1..2000 audio tracks, add a PlayAll/AddAll to toolbar. view will add each item individually
             let trackLimit = resp.items.length>0 && (""+resp.items[0].id).startsWith("track_id:") ? 0 : 2000;
-
-            if (view.tbarActions.length==0 && (trackLimit==0 || (resp.numAudioItems>2 && resp.numAudioItems<=trackLimit)) &&
+            if (view.tbarActions.length==0 && (trackLimit==0 || (resp.numAudioItems>0 && resp.numAudioItems<=trackLimit)) &&
                 (!item.id || !item.id.startsWith(TOP_ID_PREFIX)) &&
                 ((view.command.command.length>0 && ALLOW_ADD_ALL.has(view.command.command[0])) ||
                  (resp.items[0].presetParams && resp.items[0].presetParams.favorites_url && ALLOW_ADD_ALL.has(resp.items[0].presetParams.favorites_url.split(':')[0]))) ) {

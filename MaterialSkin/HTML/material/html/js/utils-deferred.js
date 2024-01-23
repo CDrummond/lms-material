@@ -224,7 +224,7 @@ function clearTextSelection() {
     }
 }
 
-function addAndPlayAllActions(cmd) {
+function addAndPlayAllActions(cmd, items) {
     if (cmd.command[0]=="albums") {
         for (var i=0, len=cmd.params.length; i<len; ++i) {
             if (cmd.params[i].startsWith("artist_id:") || cmd.params[i].startsWith("genre_id:") || cmd.params[i].startsWith("search:")) {
@@ -248,6 +248,15 @@ function addAndPlayAllActions(cmd) {
         }
         return false;
     } else if (cmd.command[0]=="trackinfo" || cmd.command[0]=="albuminfo" || cmd.command[0]=="artistinfo") {
+        // For *info commands if first 15 items have play action assume can add add/play all
+        if (undefined!=items && items.length>0) {
+            for (let i=0, len=items.length; i<15 && i<len; ++i) {
+                if (undefined==items[i].menu || items[i].menu.length<1 || items[i].menu[0]!=PLAY_ACTION) {
+                    return false;
+                }
+            }
+            return true;
+        }
         return false;
     }
 

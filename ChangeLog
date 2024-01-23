@@ -38,6 +38,7 @@
 27. Fix artist name and album cover not showing when click on 'Browse',
     'Go to album', or '+N more' links in now-playing/MAI.
 28. Move expanded now-playing controls a bit higher if iOS home-bar detected.
+29. Add Simplified Chinese translation, thanks to 刘 少林
 
 4.1.5
 -----

@@ -4,9 +4,11 @@ MATERIAL_SKIN
 	EN	Material Skin
 	NL	Material Skin
 	ZH_TW	Material Skin
+	ZH_CN	Material主题
 
 MATERIALPARTY_SKIN
 	EN	Material Skin (Party)
+	ZH_CN	Material主题 (Party)
 
 PLUGIN_MATERIAL_SKIN
 	CS	Vzhled 'Material Skin', vhodný pro mobilní používání.
@@ -15,6 +17,7 @@ PLUGIN_MATERIAL_SKIN
 	FR	Thème "Material Skin", adapté à une utilisation mobile.
 	NL	Material Skin, geschikt voor mobiel gebruik.
 	ZH_TW	Material 風格的外觀套件，更適合行動裝置使用。
+	ZH_CN	Material 主题皮肤，适合移动设备使用。
 
 PLUGIN_MATERIAL_SKIN_GENRES_LIST_NOTE
 	CS	POZNÁMKA: V níže uvedených seznamech žánrů použijte pro všechny žánry jednu hvězdičku (*). Pokud nechcete použít žádný žánr, použijte libovolný řetězec (např. 'N/A'), který neodpovídá žádnému z vašich žánrů.
@@ -23,6 +26,7 @@ PLUGIN_MATERIAL_SKIN_GENRES_LIST_NOTE
 	FR	REMARQUE : Dans les listes de genres ci-dessous, pour cibler tous les genres, utiliser le caractère générique astérisque (*). Pour ne cibler aucun genre, saisir une chaîne de caractères qui ne correspond à aucun de vos genres (par exemple, "N/A").
 	NL	OPMERKING: Gebruik in de genrelijsten hieronder een enkele asterisk (*) om op alle genres van toepassing te zijn. Om op geen enkel genre toe te passen, gebruik een tekenreeks (bijv. 'N/A') die niet overeenkomt met een van de genres.
 	ZH_TW	注意：在下面的音樂風格列表中，如要應用所有音樂風格，請使用星號 (*)。要應用於任何音樂風格，請使用與您的任何音樂風格都不匹配的任何字串（例如"N/A"）。
+	ZH_CN	注意：在下列流派列表中，如要应用于所有流派，请使用星号(*)。要应用于未知流派，请使用与您的所有流派均不匹配的任意字符（例如"N/A"）。
 
 PLUGIN_MATERIAL_SKIN_BAND_GENRES
 	CS	Žánry skupin
@@ -31,6 +35,7 @@ PLUGIN_MATERIAL_SKIN_BAND_GENRES
 	FR	Genres concernés par le tag "band" (groupe/orchestre)
 	NL	Band genres
 	ZH_TW	樂團音樂風格
+	ZH_CN	乐团流派
 
 PLUGIN_MATERIAL_SKIN_BAND_GENRES_DESC
 	CS	Seznam žánrů podporujících skupinu oddělený čárkami. Při zadání jednoho z těchto žánrů budete dotázáni, zda si přejete procházet podle skupiny.
@@ -39,6 +44,7 @@ PLUGIN_MATERIAL_SKIN_BAND_GENRES_DESC
 	FR	Liste des genres concernés, séparés par des virgules. Lorsque vous choisirez l'un de ces genres, il vous sera demandé si vous souhaitez naviguer par groupe/orchestre.
 	NL	Komma gescheiden lijst van band genres. Indien deze genres worden geselecteerd, wordt er gevraagd of je wilt bladeren op band.
 	ZH_TW	以逗號來將支援的樂團音樂風格作分隔，當輸入其中一種音樂風格時，系統會詢問您是否希望按樂團瀏覽。
+	ZH_CN	支持乐团流派列表，以逗号分隔。当进入其中一种流派时，系统会询问您是否希望按乐团浏览。
 
 PLUGIN_MATERIAL_SKIN_COMPOSER_GENRES
 	CS	Žánry skladetelů
@@ -47,6 +53,7 @@ PLUGIN_MATERIAL_SKIN_COMPOSER_GENRES
 	FR	Genres concernés par le tag "composer" (compositeur)
 	NL	Componist genres
 	ZH_TW	作曲家音樂風格
+	ZH_CN	作曲家流派
 
 PLUGIN_MATERIAL_SKIN_COMPOSER_GENRES_DESC
 	CS	Seznam žánrů podporujících skladatele oddělený čárkami. Při zadání jednoho z těchto žánrů budete dotázáni, zda si přejete procházet podle skladatele.
@@ -55,6 +62,7 @@ PLUGIN_MATERIAL_SKIN_COMPOSER_GENRES_DESC
 	FR	Liste des genres concernés, séparés par des virgules. Lorsque vous choisirez l'un de ces genres, il vous sera demandé si vous souhaitez naviguer par compositeur.
 	NL	Komma gescheiden lijst van componist genres. Indien deze genres worden geselecteerd, wordt er gevraagd of je wilt bladeren op componist.
 	ZH_TW	以逗號來將支援的作曲家音樂風格作分隔，當輸入其中一種音樂風格時，系統會詢問您是否希望按作曲家瀏覽。
+	ZH_CN	支持作曲家流派列表，以逗号分隔。当进入其中一种流派时，系统会询问您是否希望按作曲家浏览。
 
 PLUGIN_MATERIAL_SKIN_CONDUCTOR_GENRES
 	CS	Žánry dirigentů
@@ -63,6 +71,7 @@ PLUGIN_MATERIAL_SKIN_CONDUCTOR_GENRES
 	FR	Genres concernés par le tag "conductor" (chef d'orchestre)
 	NL	Dirigent genres
 	ZH_TW	指揮家音樂風格
+	ZH_CN	指挥家流派
 
 PLUGIN_MATERIAL_SKIN_CONDUCTOR_GENRES_DESC
 	CS	Seznam žánrů podporujících dirigenta oddělený čárkami. Při zadávání jednoho z těchto žánrů budete dotázáni, zda si přejete procházet podle dirigenta.
@@ -71,6 +80,7 @@ PLUGIN_MATERIAL_SKIN_CONDUCTOR_GENRES_DESC
 	FR	Liste des genres concernés, séparés par des virgules. Lorsque vous choisirez l'un de ces genres, il vous sera demandé si vous souhaitez naviguer par chef d'orchestre.
 	NL	Komma gescheiden lijst van dirigent genres. Indien deze genres worden geselecteerd, wordt er gevraagd of je wilt bladeren op dirigent.
 	ZH_TW	以逗號來將支援的指揮家音樂風格作分隔，當輸入其中一種音樂風格時，系統會詢問您是否希望按指揮家瀏覽。
+	ZH_CN	支持指挥家流派列表，以逗号分隔。当进入其中一种流派时，系统会询问您是否希望按指挥家浏览。
 
 PLUGIN_MATERIAL_SKIN_DEFAULT_COMPOSER_GENRES
 	CS	Klasika, Avantgarda, Baroko, Komorní hudba, Zpěv, Sbor, Klasický crossover, Raná hudba, Vrcholná klasika, Impresionismus, Jazz, Středověk, Minimalismus, Moderní kompozice, Opera, Orchestr, Renesance, Romantika, Symfonie, Svatební hudba, Classical, Avant-Garde, Baroque, Chamber Music, Chant, Choral, Classical Crossover, Early Music, High Classical, Impressionist, Jazz, Medieval, Minimalism, Modern Composition, Opera, Orchestral, Renaissance, Romantic, Symphony, Wedding Music, Symphonies
@@ -79,6 +89,7 @@ PLUGIN_MATERIAL_SKIN_DEFAULT_COMPOSER_GENRES
 	FR	Jazz, Musique de film, Classique, Musique concertante, Musique de chambre, Musique symphonique, Musique vocale, Opéra, Opérette, Musique de l'Antiquité, Musique du Moyen-Age, Musique de la Renaissance, Musique baroque, Musique classique, Musique romantique, Musique moderne, Musique contemporaine, Musique électronique ou concrète
 	NL	Klassiek, Avant-Garde, Barok, Kamermuziek, Zang, Koor, Klassieke Crossover, Oude muziek, Hoogklassiek, Impressionistisch, Jazz, Middeleeuws, Minimalisme, Moderne compositie, Opera, Orkest, Renaissance, Romantisch, Symfonie, Bruiloftsmuziek
 	ZH_TW	古典、前衛、巴洛克、室內樂、聖歌、合唱、古典跨界、早期音樂、高級古典、印象派、爵士樂、中世紀、極簡主義、現代作曲、歌劇、管弦樂、文藝復興、浪漫主義、交響樂、婚禮音樂、交響樂
+	ZH_CN	古典、前卫、巴洛克、室内乐、圣歌、合唱、古典跨界、早期音乐、高级古典、印象派、爵士乐、中世纪、极简主义、现代作曲、歌剧、管弦乐、文艺复兴、浪漫主义、交响乐、婚礼音乐、交响乐
 
 PLUGIN_MATERIAL_SKIN_DEFAULT_CONDUCTOR_GENRES
 	CS	Klasika, Avantgarda, Baroko, Komorní hudba, Zpěv, Sbor, Klasický crossover, Raná hudba, Vrcholná klasika, Impresionismus, Středověk, Minimalismus, Moderní kompozice, Opera, Orchestr, Renesance, Romantika, Symfonie, Svatební hudba, Classical, Avant-Garde, Baroque, Chamber Music, Chant, Choral, Classical Crossover, Early Music, High Classical, Impressionist, Medieval, Minimalism, Modern Composition, Opera, Orchestral, Renaissance, Romantic, Symphony, Wedding Music, Symphonies
@@ -87,6 +98,7 @@ PLUGIN_MATERIAL_SKIN_DEFAULT_CONDUCTOR_GENRES
 	FR	Musique de film, Classique, Musique concertante, Musique de chambre, Musique symphonique, Musique vocale, Opéra, Opérette, Musique de l'Antiquité, Musique du Moyen-Age, Musique de la Renaissance, Musique baroque, Musique classique, Musique romantique, Musique moderne, Musique contemporaine, Musique électronique ou concrète
 	NL	Klassiek, Avant-Garde, Barok, Kamermuziek, Zang, Koor, Klassieke Crossover, Oude muziek, Hoogklassiek, Impressionistisch, Jazz, Middeleeuws, Minimalisme, Moderne compositie, Opera, Orkest, Renaissance, Romantisch, Symfonie, Bruiloftsmuziek
 	ZH_TW	古典、前衛、巴洛克、室內樂、聖歌、合唱、古典跨界、早期音樂、高級古典、印象派、中世紀、極簡主義、現代作曲、歌劇、管弦樂、文藝復興、浪漫、交響樂、婚禮音樂、交響樂
+	ZH_CN	古典、前卫、巴洛克、室内乐、圣歌、合唱、古典跨界、早期音乐、高级古典、印象派、中世纪、极简主义、现代作曲、歌剧、管弦乐、文艺复兴、浪漫、交响乐、婚礼音乐、交响乐
 
 PLUGIN_MATERIAL_SKIN_DEFAULT_BAND_GENRES
 	CS	N/A
@@ -95,6 +107,7 @@ PLUGIN_MATERIAL_SKIN_DEFAULT_BAND_GENRES
 	FR	N/A
 	NL	N/A
 	ZH_TW	N/A
+	ZH_CN	N/A
 
 PLUGIN_MATERIAL_SKIN_SHOW_COMPOSER
 	CS	Zobrazení skladatele
@@ -103,6 +116,7 @@ PLUGIN_MATERIAL_SKIN_SHOW_COMPOSER
 	FR	Afficher le compositeur
 	NL	Toon componist
 	ZH_TW	顯示作曲家
+	ZH_CN	显示作曲家
 
 PLUGIN_MATERIAL_SKIN_SHOW_COMPOSER_DESC
 	CS	Zobrazit skladatele, pokud se žánr skladby shoduje s položkou ve výše uvedeném seznamu a skladba má tag skladatele.
@@ -111,6 +125,7 @@ PLUGIN_MATERIAL_SKIN_SHOW_COMPOSER_DESC
 	FR	Si le tag "composer" est renseigné, afficher le compositeur lorsque le tag "genre" du morceau correspond à un élément de la liste ci-dessus.
 	NL	Als het genre van een nummer overeenkomt met de bovenstaande lijst en het nummer heeft een componist tag, toon dit bij het afspelen en in de afspeellijst.
 	ZH_TW	如果歌曲的音樂風格與上面列表中的項目匹配並且具有作曲家標籤，則顯示作曲家。
+	ZH_CN	如果曲目的流派与上面列表中的项目匹配并具有作曲家标识，则显示作曲家。
 
 PLUGIN_MATERIAL_SKIN_SHOW_CONDUCTOR
 	CS	Zobrazení dirigenta
@@ -119,6 +134,7 @@ PLUGIN_MATERIAL_SKIN_SHOW_CONDUCTOR
 	FR	Afficher le chef d'orchestre
 	NL	Toon dirigent
 	ZH_TW	顯示指揮家
+	ZH_CN	显示指挥家
 
 PLUGIN_MATERIAL_SKIN_SHOW_CONDUCTOR_DESC
 	CS	Zobrazit dirigenta, pokud se žánr skladby shoduje s položkou ve výše uvedeném seznamu a skladba má tag dirigenta.
@@ -127,6 +143,7 @@ PLUGIN_MATERIAL_SKIN_SHOW_CONDUCTOR_DESC
 	FR	Si le tag "conductor" est renseigné, afficher le chef d'orchestre lorsque le tag "genre" du morceau correspond à un élément de la liste ci-dessus.
 	NL	Als het genre van een nummer overeenkomt met de bovenstaande lijst en het nummer heeft een dirigent tag, toon dit bij het afspelen en in de afspeellijst.
 	ZH_TW	如果歌曲的音樂風格與上面列表中的項目匹配並且具有指揮家標籤，則顯示指揮家。
+	ZH_CN	如果曲目的流派与上面列表中的项目匹配并具有指挥家标识，则显示指挥家。
 
 PLUGIN_MATERIAL_SKIN_SHOW_BAND
 	CS	Zobrazení skupiny
@@ -135,6 +152,7 @@ PLUGIN_MATERIAL_SKIN_SHOW_BAND
 	FR	Afficher le groupe/orchestre
 	NL	Toon band
 	ZH_TW	顯示樂團
+	ZH_CN	显示乐团
 
 PLUGIN_MATERIAL_SKIN_SHOW_BAND_DESC
 	CS	Zobrazit skupinu, pokud se žánr skladby shoduje s položkou ve výše uvedeném seznamu a skladba má tag skupiny.
@@ -143,6 +161,7 @@ PLUGIN_MATERIAL_SKIN_SHOW_BAND_DESC
 	FR	Si le tag "band" est renseigné, afficher le groupe/orchestre lorsque le tag "genre" du morceau correspond à un élément de la liste ci-dessus.
 	NL	Als het genre van een nummer overeenkomt met de bovenstaande lijst en het nummer heeft een band tag, toon dit bij het afspelen en in de afspeellijst.
 	ZH_TW	如果歌曲的音樂風格與上面列表中的項目匹配並且具有樂團標籤，則顯示樂團。
+	ZH_CN	如果曲目的流派与上面列表中的项目匹配并具有乐团标识，则显示乐团。
 
 PLUGIN_MATERIAL_SKIN_PASSWORD
 	CS	Heslo
@@ -151,6 +170,7 @@ PLUGIN_MATERIAL_SKIN_PASSWORD
 	FR	Mot de passe
 	NL	Wachtwoord
 	ZH_TW	密碼
+	ZH_CN	密码
 
 PLUGIN_MATERIAL_SKIN_PASSWORD_DESC
 	CS	Nastavte heslo pro kontrolu přístupu k alarmům a nastavení serveru.
@@ -159,6 +179,7 @@ PLUGIN_MATERIAL_SKIN_PASSWORD_DESC
 	FR	Définir un mot de passe pour contrôler l'accès aux alarmes et aux paramètres du serveur.
 	NL	Stel een wachtwoord in om de toegang tot wekkers en serverinstellingen te regelen.
 	ZH_TW	設定密碼來控制鬧鐘或是調整伺服器設定。
+	ZH_CN	设置密码以控制对闹钟和服务器设置的访问。
 
 PLUGIN_MATERIAL_SKIN_FIXED_VOL
 	CS	Přehrávače s pevnou hlasitostí
@@ -167,6 +188,7 @@ PLUGIN_MATERIAL_SKIN_FIXED_VOL
 	FR	Platines à volume fixe
 	NL	Vast volume muziekspelers
 	ZH_TW	固定音量播放器
+	ZH_CN	固定音量播放器
 
 PLUGIN_MATERIAL_SKIN_FIXED_VOL_DESC
 	CS	Jak by se měly ovládat přehrávače s pevnou hlasitostí?
@@ -175,6 +197,7 @@ PLUGIN_MATERIAL_SKIN_FIXED_VOL_DESC
 	FR	Comment contrôler les platines à volume fixe ?
 	NL	Hoe moet een muziekspeler met een vast volume worden geregeld?
 	ZH_TW	該如何控制固定音量的播放器？
+	ZH_CN	如何控制固定音量的播放器？
 
 PLUGIN_MATERIAL_SKIN_FIXED_VOL_A_NORMAL
 	CS	Zobrazit standardní ovládání hlasitosti
@@ -183,6 +206,7 @@ PLUGIN_MATERIAL_SKIN_FIXED_VOL_A_NORMAL
 	FR	Afficher et permettre le contrôle du volume
 	NL	Toon standaard volumeregeling
 	ZH_TW	顯示標準音量
+	ZH_CN	显示标准音量控制
 
 PLUGIN_MATERIAL_SKIN_FIXED_VOL_B_SPECIAL
 	CS	Zakázat posuvník hlasitosti a skrýt úroveň hlasitosti
@@ -191,6 +215,7 @@ PLUGIN_MATERIAL_SKIN_FIXED_VOL_B_SPECIAL
 	FR	Désactiver le curseur du volume et masquer le niveau du volume
 	NL	Volumeregelaar uitschakelen en volumeniveau verbergen
 	ZH_TW	關閉音量調節欄且將音量隱藏
+	ZH_CN	关闭音量调节栏，隐藏音量
 
 PLUGIN_MATERIAL_SKIN_FIXED_VOL_C_HIDE
 	CS	Skrýt ovládání hlasitosti
@@ -199,6 +224,7 @@ PLUGIN_MATERIAL_SKIN_FIXED_VOL_C_HIDE
 	FR	Masquer le contrôle du volume
 	NL	Verberg volumeregeling
 	ZH_TW	隱藏音量控制
+	ZH_CN	隐藏音量控制
 
 PLUGIN_MATERIAL_SKIN_ARTIST_FIRST
 	CS	Zobrazení interpreta jako prvního v Právě hraje a ve frontě
@@ -207,6 +233,7 @@ PLUGIN_MATERIAL_SKIN_ARTIST_FIRST
 	FR	Afficher l'artiste en premier dans la vue "lecture en cours" et la liste de lecture
 	NL	Toon artiest als eerste in 'Speelt nu' en afspeellijst
 	ZH_TW	在目前播放和佇列中首先顯示演出者
+	ZH_CN	在正在播放和队列中优先显示艺术家
 
 PLUGIN_MATERIAL_SKIN_ARTIST_FIRST_DESC
 	CS	Pokud má skladba skladatele, dirigenta nebo skupinu a jsou nakonfigurovány tak, aby se zobrazovaly, zobrazí se interpret před nimi, jinak až za nimi.
@@ -215,6 +242,7 @@ PLUGIN_MATERIAL_SKIN_ARTIST_FIRST_DESC
 	FR	Si un morceau a un compositeur, un chef d'orchestre ou un groupe/orchestre et que ceux-ci sont configurés pour être affichés, choisir de montrer l'artiste en premier ou pas.
 	NL	Als een nummer een componist, dirigent of band tag heeft, en deze zijn geconfigureerd om te worden getoond, toon dan eerst de artiest, anders erna.
 	ZH_TW	如果曲目有作曲家、指揮家或樂團，並且都被設定為顯示，則在這些之前顯示演出者，否則在之後顯示。
+	ZH_CN	如果曲目有作曲家、指挥家或乐团标签，并且这些都设置为显示，则在这些之前显示艺术家，否则在之后显示。
 
 PLUGIN_MATERIAL_SKIN_SHOW_ALL_ARTISTS
 	CS	Zobrazení všech interptetů
@@ -225,6 +253,7 @@ PLUGIN_MATERIAL_SKIN_SHOW_ALL_ARTISTS
 	NL	Toon alle artiesten
 	RU	Показать всех исполнителей
 	ZH_TW	顯示所有演出者
+	ZH_CN	显示所有艺术家
 
 PLUGIN_MATERIAL_SKIN_SHOW_ALL_ARTISTS_DESC
 	CS	Pokud má skladba více interpretů, autorů alb, skladatelů atd., zobrazí se všechny při procházení alb, v Právě hraje a ve frontě. V opačném případě zobrazí pouze prvního z nich.
@@ -235,6 +264,7 @@ PLUGIN_MATERIAL_SKIN_SHOW_ALL_ARTISTS_DESC
 	NL	Als een nummer meerdere artiesten, albumartiesten, componisten, etc. heeft, laat ze dan allemaal zien bij het bladeren door albums, bij het afspelen en in de afspeellijst. Laat anders gewoon de eerste van elk zien.
 	RU	Если в треке есть несколько исполнителей, музыкантов, композиторов и т. д., Тогда показывать все при просмотре альбомов, в «Сейчас играет» и в очереди. В противном случае просто позать первое из каждого
 	ZH_TW	如果一首曲目有多個演出者、專輯演出者、作曲家等，則在瀏覽專輯、目前播放和佇列時顯示所有演出者。 否則只顯示每首曲目的第一位演出者。
+	ZH_CN	如果一首曲目有多个艺术家、专辑艺术家、作曲家等，则在浏览专辑、当前播放和队列时显示所有艺术家。否则只显示每首曲目的第一位艺术家
 
 PLUGIN_MATERIAL_SKIN_ALLOW_DOWNLOAD
 	CS	Povolení stahování
@@ -243,6 +273,7 @@ PLUGIN_MATERIAL_SKIN_ALLOW_DOWNLOAD
 	FR	Autoriser le téléchargement
 	NL	Downloaden toestaan
 	ZH_TW	允許下載
+	ZH_CN	允许下载
 
 PLUGIN_MATERIAL_SKIN_ALLOW_DOWNLOAD_DESC
 	CS	Přidejte akce stahování ke skladbám, albům a seznamům skladeb a umožněte uživatelům stahovat skladby.
@@ -251,6 +282,7 @@ PLUGIN_MATERIAL_SKIN_ALLOW_DOWNLOAD_DESC
 	FR	Ajouter des commandes de téléchargement aux morceaux, albums et listes de lecture pour permettre aux utilisateurs de télécharger des morceaux.
 	NL	Voeg download acties toe aan nummers, albums en afspeellijsten zodat gebruikers ze kunnen downloaden.
 	ZH_TW	在曲目、專輯和播放清單新增下載動作，以允許用戶下載曲目。
+	ZH_CN	为曲目、专辑和播放列表添加下载动作，允许用户下载。
 
 PLUGIN_MATERIAL_SKIN_MANIFEST_DISPLAY
 	CS	Zobrazení webové aplikace
@@ -259,6 +291,7 @@ PLUGIN_MATERIAL_SKIN_MANIFEST_DISPLAY
 	FR	Affichage de l'application Web
 	NL	WebApp weergave
 	ZH_TW	網頁程式顯示
+	ZH_CN	WebAPP显示
 
 PLUGIN_MATERIAL_SKIN_COMMENT_AS_DISC_TITLE
 	CS	Použití komentáře pro název disku
@@ -267,6 +300,7 @@ PLUGIN_MATERIAL_SKIN_COMMENT_AS_DISC_TITLE
 	FR	Utiliser le tag "comment" (commentaire) pour le titre du disque
 	NL	Gebruik 'Comment' tag voor schijftitel
 	ZH_TW	使用標籤"評論"來註記光碟標題
+	ZH_CN	使用“注释”标签作为光盘标题
 
 PLUGIN_MATERIAL_SKIN_COMMENT_AS_DISC_TITLE_DESC
 	CS	U alb s více disky použít jako název disku komentář z první stopy každého disku. Pokud používáte "Oddělen středníkem", pak musí názvu disku předcházet buď "TITLE=", "DISCTITLE=", "TITLE:" nebo "DISCTITLE:" - např. "TITLE=Disk s doplňky;OTHER=Další informace".
@@ -275,6 +309,7 @@ PLUGIN_MATERIAL_SKIN_COMMENT_AS_DISC_TITLE_DESC
 	FR	Pour les albums multi-disques, utiliser le commentaire du premier morceau de chaque disque comme titre de disque. Si vous utilisez "Séparation par point-virgule", le titre du disque doit être précédé de "TITLE=", "DISCTITLE=", "TITLE:" ou "DISCTITLE:". Par exemple : "TITLE=Disque supplémentaire;OTHER=Autres informations".
 	NL	Voor albums met meerdere schijven, gebruik Comment van eerste nummer van iedere schijf als schijftitel.
 	ZH_TW	對於多張光碟合輯，使用每張光碟的第一首曲目評論作為光碟標題。如果使用"分號分隔"選項，則光碟標題前面需要帶有"TITLE="、"DISCTITLE="、"TITLE:"或"DISCTITLE:" - 例如 "TITLE=額外光碟；OTHER=其他評論資訊"
+	ZH_CN	对于多光盘专辑，使用每张光盘第一首曲目的“注释”标签作为光盘标题。如果使用“分号分隔”选项，则光盘标题前面需要带有“TITLE=”、“DISCTITLE=”、“TITLE:”或“DISCTITLE:” - 例如 “TITLE=额外光盘；OTHER=其它注释信息”
 
 PLUGIN_MATERIAL_SKIN_COMMENT_A_DONT_USE
 	CS	Nepoužívat
@@ -283,6 +318,7 @@ PLUGIN_MATERIAL_SKIN_COMMENT_A_DONT_USE
 	FR	Ne pas utiliser
 	NL	Niet gebruiken
 	ZH_TW	不要使用
+	ZH_CN	不要使用
 
 PLUGIN_MATERIAL_SKIN_COMMENT_B_PLAIN
 	CS	Obsahuje pouze název
@@ -291,6 +327,7 @@ PLUGIN_MATERIAL_SKIN_COMMENT_B_PLAIN
 	FR	Ne contient que le titre
 	NL	Bevat alleen titel
 	ZH_TW	僅包含標題
+	ZH_CN	仅包含标题
 
 PLUGIN_MATERIAL_SKIN_COMMENT_C_SEMI_SEP
 	CS	Oddělen středníkem
@@ -299,6 +336,7 @@ PLUGIN_MATERIAL_SKIN_COMMENT_C_SEMI_SEP
 	FR	Séparation par point-virgule
 	NL	Puntkomma gescheiden
 	ZH_TW	以分號分隔
+	ZH_CN	分号分隔
 
 PLUGIN_MATERIAL_SKIN_SHOW_COMMENT
 	CS	Zobrazení komentáře v zobrazení informací
@@ -307,6 +345,7 @@ PLUGIN_MATERIAL_SKIN_SHOW_COMMENT
 	FR	Afficher le tag "comment" (commentaire) dans la vue "Informations"
 	NL	Toon 'comment' tag in info weergave
 	ZH_TW	在資訊瀏覽中顯示評論
+	ZH_CN	在信息页显示“注释”标签
 
 PLUGIN_MATERIAL_SKIN_SHOW_COMMENT_DESC
 	CS	Zobrazit tag komentáře skladby v části "Skladba" v zobrazení informací o skladbě, pod textem skladby.
@@ -315,6 +354,7 @@ PLUGIN_MATERIAL_SKIN_SHOW_COMMENT_DESC
 	FR	Afficher le contenu du tag "comment" (commentaire) dans la section "Morceau" de la vue "Informations", sous les paroles.
 	NL	Toon de 'comment' tag, onder de songtekst in het nummer gedeelte, op de info weergave.
 	ZH_TW	在瀏覽曲目資訊中的"曲目"部分中歌詞下方顯示曲目的評論標籤。
+	ZH_CN	在曲目信息页的“曲目”部分中的歌词下方显示曲目“注释”标签
 
 PLUGIN_MATERIAL_SKIN_RELOAD_NOTE
 	CS	POZNÁMKA: Pokud změníte některé z níže uvedených nastavení, může být nutné obnovit webovou stránku, aby se změny projevily.
@@ -323,6 +363,7 @@ PLUGIN_MATERIAL_SKIN_RELOAD_NOTE
 	FR	REMARQUE : Si vous modifiez l'un des paramètres ci-dessous, vous devrez peut-être actualiser la page Web pour que les modifications prennent effet.
 	NL	Belangrijk: Als je een van de onderstaande instellingen wijzigt, dien je mogelijk de webpagina te vernieuwen om de wijzigingen door te voeren.
 	ZH_TW	注意：如果您更改以下任何設定，則可能需要重新整理網頁才能使更改生效。
+	ZH_CN	注意：如果您更改以下任何设置，则可能需要刷新网页才能使更改生效。
 
 PLUGIN_MATERIAL_SKIN_PAGED_BATCH_SIZE
 	CS	Velikost dávky stránkování
@@ -330,6 +371,7 @@ PLUGIN_MATERIAL_SKIN_PAGED_BATCH_SIZE
 	EN	Paged batch size
 	FR	Pagination des listes
 	NL	Batchgrootte van pagina's
+	ZH_CN	每页显示数量
 
 PLUGIN_MATERIAL_SKIN_PAGED_BATCH_SIZE_DESC
 	CS	Počet počátečních položek, které se načtou (a zobrazí) při výpisu obsahu některých seznamů (například obsahu seznamu skladeb). Posouvání seznamu pak způsobí načtení další dávky položek atd.
@@ -337,6 +379,7 @@ PLUGIN_MATERIAL_SKIN_PAGED_BATCH_SIZE_DESC
 	EN	Number of initial items to fetch (and display) when listing contents of some lists (such as playlist contents). Scrolling list will then cause another batch of items to be fetched, etc.
 	FR	Nombre d'éléments initiaux récupérés (et affichés) lors de l'affichage de certaines listes (telles que les listes de lecture). Faire défiler la liste permettra de récupérer un nouvel ensemble d’éléments si nécessaire.
 	NL	Aantal initiële items dat wordt opgehaald (en getoond) bij het weergeven van de inhoud van sommige lijsten (zoals afspeellijsten). Als je door de lijst bladert, wordt er vervolgens een nieuwe reeks items opgehaald, enz.
+	ZH_CN	列出某些列表的内容（例如播放列表）时要获取（和显示）的初始项目数。滚动列表将导致获取另一批项目，等等。
 
 PLUGIN_MATERIAL_SKIN_ARTIST_FILTER
 	CS	Filtrování skladeb alba
@@ -344,6 +387,7 @@ PLUGIN_MATERIAL_SKIN_ARTIST_FILTER
 	EN	Filter album tracks
 	FR	Filtrer les morceaux des albums
 	NL	Filter nummers van album
+	ZH_CN	过滤专辑曲目
 
 PLUGIN_MATERIAL_SKIN_ARTIST_FILTER_DESC
 	CS	Při procházení alb interpreta můžete použít všechny skladby ze sbírkových alb, alb, na kterých se tento interpret objevuje, atd., nebo zobrazit pouze skladby aktuálního interpreta.
@@ -351,6 +395,7 @@ PLUGIN_MATERIAL_SKIN_ARTIST_FILTER_DESC
 	EN	When browsing an artist's albums use all tracks from compilation albums, albums this artist appears on, etc., or only show tracks from the current artist.
 	FR	Lors du parcours des albums d'un artiste (ceux dans lesquels l'artiste apparaît), pour chaque album, afficher tous les morceaux de l'album ou afficher uniquement les morceaux de l'artiste.
 	NL	Wanneer je door de albums van een artiest bladert, geef dan voor elk album alle nummers in het album weer, of geef alleen de nummers van de huidige artiest weer.
+	ZH_CN	浏览艺术家专辑时，列出与该艺术家相关专辑中的所有曲目，或仅显示当前艺术家的相关曲目。
 
 PLUGIN_MATERIAL_SKIN_ARTIST_FILTER_ARTIST_ONLY
 	CS	Zobrazit pouze skladby aktuálního interpreta
@@ -358,6 +403,7 @@ PLUGIN_MATERIAL_SKIN_ARTIST_FILTER_ARTIST_ONLY
 	EN	Only display tracks from current artist
 	FR	Afficher uniquement les morceaux de l'artiste
 	NL	Toon alleen nummers van de huidige artiest
+	ZH_CN	仅显示当前艺术家的曲目
 
 PLUGIN_MATERIAL_SKIN_ARTIST_FILTER_ALL_TRACKS
 	CS	Zobrazit všechny skladby alba
@@ -365,7 +411,7 @@ PLUGIN_MATERIAL_SKIN_ARTIST_FILTER_ALL_TRACKS
 	EN	Display all tracks of album
 	FR	Afficher tous les morceaux de l'album
 	NL	Toon alle nummers van het album
-
+	ZH_CN	显示专辑所有曲目
 
 PLUGIN_MATERIAL_SKIN_RELEASE_TYPE_ORDER
 	CS	Pořadí typu vydání
@@ -373,6 +419,7 @@ PLUGIN_MATERIAL_SKIN_RELEASE_TYPE_ORDER
 	EN	Release type order
 	FR	Ordre des types de sorties
 	NL	Releasetype volgorde
+	ZH_CN	发布类型顺序
 
 PLUGIN_MATERIAL_SKIN_RELEASE_TYPE_ORDER_DESC
 	CS	Zadejte pořadí, v jakém se mají zobrazovat typy vydání (jedná se o seznam názvů typů vydání oddělený čárkou) - např. "Album, EP, Single".
@@ -380,51 +427,60 @@ PLUGIN_MATERIAL_SKIN_RELEASE_TYPE_ORDER_DESC
 	EN	Specify order to display release types (this is a comma separated list of release type names) - e.g. "Album, EP, Single"
 	FR	Spécifier l'ordre d'affichage des types de sorties (par une liste de types de sorties séparés par des virgules) - par ex. "Album, EP, Single"
 	NL	Bepaal de volgorde hoe releasetypes worden getoond (dit is een door komma's gescheiden lijst van releasetypes) - bijv. "Album, EP, Single."
+	ZH_CN	指定显示发布类型的顺序（以逗号分隔的发布类型名称列表） - 例如 “专辑、EP、单曲”
 
 PLUGIN_MATERIAL_SKIN_GENRE_IMAGES
 	DE	Bilder zum Genre
 	EN	Genre images
 	FR	Images des genres
 	NL	Genre afbeeldingen
+	ZH_CN	流派图像
 
 PLUGIN_MATERIAL_SKIN_GENRE_IMAGES_DESC
 	DE	Anzeige von Bildern bei der Auflistung von Genres. Dazu müssen 600x600 JPEG-Bilder in einem Unterordner "material-skin/genres" im Einstellungsordner Ihres LMS erstellt werden. Genre-Bilder sollten alle Kleinbuchstaben oder Zahlen sein ([a-z0-9]), wobei alle anderen Zeichen entfernt werden. z.B. "R&B" ist "rb.jpg", "Folk/Rock" ist "folkrock.jpg".
 	EN	Display images when listing genres. This requires creating 600x600 JPEG images within a "material-skin/genres" sub-folder of your LMS's preferences folder. Genre images should all be lowercase letters or numbers, with all other characters removed. e.g. "R&B" is "rb.jpg", "Folk/Rock" is "folkrock.jpg"
 	FR	Afficher des images dans la liste des genres. Cela nécessite de créer des images JPEG 600x600 dans un sous-dossier "material-skin/genres" du dossier des préférences de LMS. Les noms des fichiers doivent être constitués uniquement de lettres minuscules ou de chiffres. Par exemple : "R&B" devient "rb.jpg", "Folk/Rock" devient "folkrock.jpg".
 	NL	Toon afbeeldingen bij het weergeven van genres. Dit vereist JPEG afbeeldingen van 600x600 pixels in de submap 'material-skin/genres' van de voorkeurenmap van jouw LMS. Genre afbeeldingen dienen allemaal uit kleine letters of cijfers te bestaan ​​en mogen geen andere tekens bevatten. Bijv. "R&B" is "rb.jpg", "Folk/Rock" is "folkrock.jpg".
+	ZH_CN	列出流派时显示图像。这需要在LMS Preferences文件夹的“material-skin/genres”子文件夹中创建 600x600 分辨率的JPEG图像。流派图像应全部为小写字母或数字，并删除所有其它类型字符。例如 “R&B”为“rb.jpg”，“folk/rock”为“folkrock.jpg”。
 
 PLUGIN_MATERIAL_SKIN_TOUCH_LINKS
 	DE	Elementverknüpfungen auf Touch-Geräten
 	EN	Item links on touch devices
 	FR	Hyperliens sur les écrans tactiles
 	NL	Hyperlinks op apparaten met een touchscreen
+	ZH_CN	触摸设备上的项目链接
 
 PLUGIN_MATERIAL_SKIN_TOUCH_LINKS_DESC
 	DE	Erweitern Sie Textbausteine wie Künstler, Album, Komponist usw. zu klickbaren Links auf Touch-Geräten (z. B. Mobiltelefonen).
 	EN	Make artist, album, composer, etc. text items clickable links on touch devices (e.g. mobile phones).
 	FR	Créer des liens hypertextes sur les éléments de type artiste, album, compositeur, etc. sur les appareils tactiles (smartphones ou tablettes). 
 	NL	Maak artiesten, albums, componisten, etc. items waar je op kan klikken op apparaten met een touchscreen (bijv. tablets en mobiele telefoons).
+	ZH_CN	将艺术家、专辑、作曲家等文本项在触摸设备（例如手机）上转换成可点击的链接。
 
 PLUGIN_MATERIAL_SKIN_YEAR_IN_SUB
 	DE	Jahr im Albumuntertitel anzeigen
 	EN	Show year in album subtitle
 	FR	Afficher l'année sous l'album
 	NL	Toon jaar onder het album
+	ZH_CN	在专辑副标题中显示年份
 
 PLUGIN_MATERIAL_SKIN_YEAR_IN_SUB_DESC
 	DE	Beim Durchsuchen von Alben wird das Jahr im Untertitel angezeigt, es sei denn, es wird auch der Interpret angezeigt (in diesem Fall wird das Jahr in Klammern nach dem Albumnamen angezeigt)
 	EN	When browsing albums show year in the subtitle, unless also showing artist (in which case year is shown, in brackets, after album name)
 	FR	Lors du parcours des albums, afficher l'année sous le nom de l'album si l'emplacement n'est pas déjà occupé par le nom de l'artiste (auquel cas l'année est affichée, entre parenthèses, après le nom de l'album).
 	NL	Bij het bladeren door albums wordt het jaar onder het album weergegeven, behalve als artiest ook wordt weergegeven. Dan wordt het jaar achter het album weergegeven.
+	ZH_CN	浏览专辑时，在副标题中显示年份，除非还显示艺术家（在这种情况下，年份显示在专辑名称后面的括号中）
 
 PLUGIN_MATERIAL_SKIN_PLAY_SHUFFLE
 	DE	Zufallswiedergabe
 	EN	Play shuffled action
 	FR	Action "Mélanger et jouer"
 	NL	Shuffle modus toevoegen
+	ZH_CN	随机播放动作
 
 PLUGIN_MATERIAL_SKIN_PLAY_SHUFFLE_DESC
 	DE	Alben oder Wiedergabelisten werden zufällig wiedergegeben. Wenn diese Funktion aktiviert ist und "Zufällig abspielen" verwendet wird, wird der Player auf "Zufällige Wiedergabe" eingestellt, bevor die Elemente abgespielt werden. Wenn diese Option aktiviert ist und "Jetzt abspielen" verwendet wird, wird die Zufallswiedergabe vor der Wiedergabe der Elemente deaktiviert. Bitte beachten Sie, dass der Zufallswiedergabemodus des Players nicht wiederhergestellt wird, wenn die Warteschlange gelöscht wird usw.
 	EN	Add action to start albums, or playlists, in shuffled mode. When this is enabled and 'Play shuffled' is used, the player will be set to 'shuffle tracks' before the items are played. Likewise, if this is enabled and 'Play now' is used, then shuffle will be disabled before the items are played. Please note that the player's shuffle mode is not reverted after queue is cleared, etc.
 	FR	Ajouter une action "Mélanger et jouer" pour lire les albums ou les listes de lecture en mode aléatoire. Lorsque cette action est activée et utilisée, la platine sera configurée pour "mélanger les morceaux" avant leur lecture. Par ailleurs, si cette action est activée et que "Jouer maintenant" est utilisé, la lecture aléatoire sera désactivée avant la lecture. Veuillez noter que le mode aléatoire de la platine n'est pas rétabli une fois la liste de lecture effacée, etc.
 	NL	Voeg actie toe om albums of afspeellijsten in shuffle modus af te spelen. Wanneer dit is ingeschakeld en 'Shuffle modus' wordt gebruikt, wordt de speler ingesteld op shuffle voordat de nummers worden afgespeeld. Als dit is ingeschakeld en 'Speel Nu' wordt gebruikt, wordt shuffle uitgeschakeld voordat de nummers worden afgespeeld. Houd er rekening mee dat de shuffle modus niet wordt teruggezet als de afspeellijst leeg is. 
+	ZH_CN	添加专辑或播放列表并开启随机播放模式。启用此功能并使用“随机播放”时，播放器将在播放项目之前设置为“随机播放曲目”。同样，如果启用此选项并使用“立即播放”，则在播放项目之前禁用随机播放。请注意，播放队列被清除后，播放器的随机播放模式不会恢复。

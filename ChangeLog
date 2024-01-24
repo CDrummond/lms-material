@@ -1,3 +1,7 @@
+4.2.1
+-----
+1. Adjust unpinned queue metrics when used on mobile.
+
 4.2.0
 -----
  1. Add ability to search for items in lists (browse and queue).

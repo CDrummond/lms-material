@@ -483,23 +483,16 @@
  height:calc((var(--vh, 1vh)*100) - (var(--main-toolbar-height) + var(--sub-toolbar-height) + var(--bottom-toolbar-height) + 12px));
 }
 
-@media screen and (max-width: 550px) {
+@media screen and (max-width: 550px), (max-height: 520px) {
  .pq-unpinned-np2 .lms-list,
  .pq-unpinned-np0 .lms-list {
   height:calc((var(--vh, 1vh)*100) - (var(--main-toolbar-height) + var(--sub-toolbar-height) + 2px))!important;
  }
 }
 
-@media screen and (max-height: 520px) {
- .pq-unpinned-np2 .lms-list,
- .pq-unpinned-np0 .lms-list {
-  height:calc((var(--vh, 1vh)*100) - (var(--main-toolbar-height) + var(--sub-toolbar-height) + 2px))!important;
- }
-}
-
-@media screen and (max-width: 450px) {
+@media screen and (max-width: 480px) {
  .pq-unpinned .lms-list {
-  height:calc((var(--vh, 1vh)*100) - (var(--main-toolbar-height) + var(--sub-toolbar-height) + var(--bottom-toolbar-height) + 2px));
+  height:calc((var(--vh, 1vh)*100) - (var(--main-toolbar-height) + var(--sub-toolbar-height) + var(--bottom-toolbar-height)));
  }
  .pq-unpinned, .pq-unpinned-np0, .pq-unpinned-np2 {
   box-shadow:none!important;

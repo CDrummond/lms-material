@@ -624,6 +624,7 @@ function handleNumeric(dlg, func, itemKey) {
 }
 
 let mskinLastClickOrTouch = undefined;
+let mskinDialogWindowResize = false;
 function storeClickOrTouchPos(event, menu) {
     if (event) {
         let now = new Date().getTime();
@@ -645,38 +646,51 @@ function dialogPosition() {
         document.documentElement.style.setProperty('--dialog-opacity', '0');
 
         setTimeout(function () {
-            try{
+            try {
                 if (undefined!=mskinLastClickOrTouch && new Date().getTime()-mskinLastClickOrTouch.time<150 && undefined!=mskinLastClickOrTouch.x) {
-                    let elems = document.getElementsByClassName('v-dialog');
-                    if (undefined!=elems) {
-                        for (let e=0, len=elems.length; e<len; ++e) {
-                            let elem = elems[e];
-                            if (!elem.classList.contains("v-dialog--fullscreen")) {
-                                let w = elem.offsetWidth;
-                                let h = elem.offsetHeight;
-                                let top = mskinLastClickOrTouch.y - (h/2.0);
-                                let left = mskinLastClickOrTouch.x - (w/2.0);
-                                if (left<32) {
-                                    left = 32;
-                                } else if (left+w+32 > window.innerWidth) {
-                                    left = window.innerWidth - (w + 32);
-                                }
-                                if (top<32) {
-                                    top = 32;
-                                } else if (top+h+32 > window.innerHeight) {
-                                    top = window.innerHeight - (h + 32);
-                                }
-                                document.documentElement.style.setProperty('--dialog-top', top+'px');
-                                document.documentElement.style.setProperty('--dialog-left', left+'px');
-                                break;
-                            }
-                        }
-                    }
+                    setDialogPos();
                 }
             } catch(e) {
             }
-            mskinLastClickOrTouch = undefined;
             document.documentElement.style.setProperty('--dialog-opacity', '1.0');
         }, 2);
+    }
+}
+
+function setDialogPos() {
+    let elems = document.getElementsByClassName('v-dialog');
+    if (undefined!=elems) {
+        for (let e=0, len=elems.length; e<len; ++e) {
+            let elem = elems[e];
+            if (!elem.classList.contains("v-dialog--fullscreen")) {
+                let w = elem.offsetWidth;
+                let h = elem.offsetHeight;
+                let top = mskinLastClickOrTouch.y - (h/2.0);
+                let left = mskinLastClickOrTouch.x - (w/2.0);
+                if (left<32) {
+                    left = 32;
+                } else if (left+w+32 > window.innerWidth) {
+                    left = window.innerWidth - (w + 32);
+                }
+                if (top<32) {
+                    top = 32;
+                } else if (top+h+32 > window.innerHeight) {
+                    top = window.innerHeight - (h + 32);
+                }
+                document.documentElement.style.setProperty('--dialog-top', top+'px');
+                document.documentElement.style.setProperty('--dialog-left', left+'px');
+
+                if (!mskinDialogWindowResize) {
+                    mskinDialogWindowResize=true;
+                    window.addEventListener('resize', setDialogPos);
+                }
+                return;
+            }
+        }
+    }
+    
+    if (mskinDialogWindowResize) {
+        mskinDialogWindowResize = false;
+        window.removeEventListener('resize', setDialogPos);
     }
 }

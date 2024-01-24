@@ -2044,7 +2044,7 @@ progress {
  padding:var(--std-font-size);
 }
 
-@media only screen and ( ((orientation:portrait) and (min-width:769px) and (min-height:1025px)) or ((orientation:landscape) and (min-height:769px) and (min-width:1025px))) {
+@media screen and (orientation:portrait) and (min-width:769px) and (min-height:1025px), (orientation:landscape) and (min-height:769px) and (min-width:1025px) {
  .v-dialog:not(.v-dialog--fullscreen)  {
   position:absolute;
   top:var(--dialog-top);

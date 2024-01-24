@@ -883,7 +883,7 @@ var lmsBrowse = Vue.component("lms-browse", {
             }
         },
         click(item, index, event) {
-            storeClickOrTouchPos(event);
+            storeClickOrTouchPos(event, this.menu);
             browseClick(this, item, index, event);
         },
         showImage(index) {
@@ -940,7 +940,7 @@ var lmsBrowse = Vue.component("lms-browse", {
             }
         },
         itemAction(act, item, index, event) {
-            storeClickOrTouchPos(event);
+            storeClickOrTouchPos(event, this.menu);
             if (act==ALBUM_SORTS_ACTION || act==TRACK_SORTS_ACTION || act==USE_GRID_ACTION || act==USE_LIST_ACTION) {
                 browseHeaderAction(this, act, event, true);
             } else {
@@ -948,7 +948,7 @@ var lmsBrowse = Vue.component("lms-browse", {
             }
         },
         menuItemAction(act, item, index, event) {
-            storeClickOrTouchPos(event);
+            storeClickOrTouchPos(event, this.menu);
             let itm = undefined!=this.current && item.id==this.current.id && item.stdItem==STD_ITEM_MAI ? this.history[this.history.length-1].current : item;
             this.itemAction(act, itm, index, this.menu ? {clientX:this.menu.x, clientY:this.menu.y} : event);
         },
@@ -992,7 +992,7 @@ var lmsBrowse = Vue.component("lms-browse", {
             }
         },
         currentAction(act, index, event) {
-            storeClickOrTouchPos(event);
+            storeClickOrTouchPos(event, this.menu);
             let item = undefined!=this.current && this.current.stdItem==STD_ITEM_MAI ? this.history[this.history.length-1].current : this.current;
             if (undefined!=act.action) {
                 browseHeaderAction(this, act.action, event)
@@ -1032,7 +1032,7 @@ var lmsBrowse = Vue.component("lms-browse", {
             }
         },
         clickSubtitle(item, index, event) {
-            storeClickOrTouchPos(event);
+            storeClickOrTouchPos(event, this.menu);
             if (this.selection.size>0) {
                 this.select(item, index, event);
                 return;
@@ -1151,7 +1151,7 @@ var lmsBrowse = Vue.component("lms-browse", {
             }
         },
         headerAction(act, event) {
-            storeClickOrTouchPos(event);
+            storeClickOrTouchPos(event, this.menu);
             browseHeaderAction(this, act, event);
         },
         changeLayout(useGrid) {
@@ -1410,7 +1410,7 @@ var lmsBrowse = Vue.component("lms-browse", {
             }
         },
         deleteSelectedItems(act, event) {
-            storeClickOrTouchPos(event);
+            storeClickOrTouchPos(event, this.menu);
             var selection = Array.from(this.selection);
             if (1==selection.size) {
                 this.itemAction(act, this.items[selection[0]], selection[0]);
@@ -1434,7 +1434,7 @@ var lmsBrowse = Vue.component("lms-browse", {
             }
         },
         actionSelectedItems(act, event) {
-            storeClickOrTouchPos(event);
+            storeClickOrTouchPos(event, this.menu);
             var selection = Array.from(this.selection);
             var itemList = [];
             selection.sort(function(a, b) { return a<b ? -1 : 1; });
@@ -2116,6 +2116,7 @@ var lmsBrowse = Vue.component("lms-browse", {
             if (!newVal) {
                 this.menu.selection = undefined;
                 clearTextSelection();
+                this.menu.closed = new Date().getTime();
             }
         },
         '$store.state.pinQueue': function() {

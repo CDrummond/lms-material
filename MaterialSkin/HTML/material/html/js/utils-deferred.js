@@ -624,12 +624,13 @@ function handleNumeric(dlg, func, itemKey) {
 }
 
 let mskinLastClickOrTouch = undefined;
-function storeClickOrTouchPos(event) {
+function storeClickOrTouchPos(event, menu) {
     if (event) {
-        let touch = getTouchPos(event);
-        mskinLastClickOrTouch={ time:new Date().getTime(),
-                                x:touch ? touch.x : undefined==event.x ? event.clientX : event.x,
-                                y:touch ? touch.y : undefined==event.y ? event.clientY : event.y };
+        let now = new Date().getTime();
+        let pos = undefined!=menu && (menu.show || (undefined!=menu.closed && now-menu.closed<100)) ? {x:menu.x, y:menu.y} : getTouchPos(event);
+        mskinLastClickOrTouch={ time:now,
+                                x:pos ? pos.x : undefined==event.x ? event.clientX : event.x,
+                                y:pos ? pos.y : undefined==event.y ? event.clientY : event.y };
     }
 }
 

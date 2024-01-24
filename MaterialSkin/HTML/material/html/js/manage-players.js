@@ -359,15 +359,15 @@ Vue.component('lms-manage-players', {
             this.menu.show = true;
         },
         createGroup(event) {
-            storeClickOrTouchPos(event);
+            storeClickOrTouchPos(event, this.menu);
             bus.$emit('dlg.open', 'group', 'create');
         },
         sleepAll(event) {
-            storeClickOrTouchPos(event);
+            storeClickOrTouchPos(event, this.menu);
             bus.$emit('dlg.open', 'sleep');
         },
         playerAction(player, cmd, event) {
-            storeClickOrTouchPos(event);
+            storeClickOrTouchPos(event, this.menu);
             if (PMGR_EDIT_GROUP_ACTION.cmd==cmd) {
                 bus.$emit('dlg.open', 'group', 'edit', player);
             } else if (PMGR_DELETE_GROUP_ACTION.cmd==cmd) {
@@ -877,6 +877,9 @@ Vue.component('lms-manage-players', {
         },
         'menu.show': function(val) {
             this.$store.commit('menuVisible', {name:'manage', shown:val});
+            if (!val) {
+                this.menu.closed = new Date().getTime();
+            }
         },
         'showMenu': function(val) {
             this.$store.commit('menuVisible', {name:'manage-menu', shown:val});

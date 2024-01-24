@@ -837,7 +837,7 @@ var lmsQueue = Vue.component("lms-queue", {
             });
         },
         click(item, index, event) {
-            storeClickOrTouchPos(event);
+            storeClickOrTouchPos(event, this.menu);
             if (queryParams.party) {
                 return;
             }
@@ -889,7 +889,7 @@ var lmsQueue = Vue.component("lms-queue", {
             });
         },
         itemAction(act, item, index, event) {
-            storeClickOrTouchPos(event);
+            storeClickOrTouchPos(event, this.menu);
             if (queryParams.party) {
                 return;
             }
@@ -984,7 +984,7 @@ var lmsQueue = Vue.component("lms-queue", {
             }
         },
         itemCustomAction(act, item, index, event) {
-            storeClickOrTouchPos(event);
+            storeClickOrTouchPos(event, this.menu);
             let cmd = performCustomAction(act, this.$store.state.player, item);
             if (cmd!=undefined) {
                 bus.$emit('browse', cmd.command, cmd.params, item.title, 'queue');
@@ -994,7 +994,7 @@ var lmsQueue = Vue.component("lms-queue", {
             if ((this.$store.state.visibleMenus.size>0 && this.otherActions.indexOf(act)<0)) {
                 return;
             }
-            storeClickOrTouchPos(event);
+            storeClickOrTouchPos(event, this.menu);
             if (act==PQ_SAVE_ACTION) {
                 this.save();
             } else if (act==PQ_SCROLL_ACTION) {
@@ -1552,6 +1552,9 @@ var lmsQueue = Vue.component("lms-queue", {
     watch: {
         'menu.show': function(newVal) {
             this.$store.commit('menuVisible', {name:'queue', shown:newVal});
+            if (!newVal) {
+                this.menu.closed = new Date().getTime();
+            }
         },
         '$store.state.showQueue': function(shown) {
             if (shown && this.$store.state.autoScrollQueue) {

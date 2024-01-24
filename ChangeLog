@@ -1,6 +1,7 @@
 4.2.1
 -----
 1. Adjust unpinned queue metrics when used on mobile.
+2. Fix now-playing updates due to use of extid in track sources.
 
 4.2.0
 -----

@@ -654,6 +654,8 @@ function dialogPosition(dlg) {
             try {
                 if (undefined!=mskinLastClickOrTouch && new Date().getTime()-mskinLastClickOrTouch.time<150 && undefined!=mskinLastClickOrTouch.x) {
                     setDialogPos();
+                } else {
+                    resetDialogPos();
                 }
             } catch(e) {
             }

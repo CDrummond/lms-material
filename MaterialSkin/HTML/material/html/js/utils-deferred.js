@@ -658,6 +658,7 @@ function dialogPosition() {
 }
 
 function setDialogPos() {
+    const MARGIN = 32;
     let elems = document.getElementsByClassName('v-dialog');
     if (undefined!=elems) {
         for (let e=0, len=elems.length; e<len; ++e) {
@@ -667,15 +668,15 @@ function setDialogPos() {
                 let h = elem.offsetHeight;
                 let top = mskinLastClickOrTouch.y - (h/2.0);
                 let left = mskinLastClickOrTouch.x - (w/2.0);
-                if (left<32) {
-                    left = 32;
-                } else if (left+w+32 > window.innerWidth) {
-                    left = window.innerWidth - (w + 32);
+                if (left<MARGIN) {
+                    left = MARGIN;
+                } else if (left+w+MARGIN > window.innerWidth) {
+                    left = window.innerWidth - (w + MARGIN);
                 }
-                if (top<32) {
-                    top = 32;
-                } else if (top+h+32 > window.innerHeight) {
-                    top = window.innerHeight - (h + 32);
+                if (top<MARGIN) {
+                    top = MARGIN;
+                } else if (top+h+MARGIN > window.innerHeight) {
+                    top = window.innerHeight - (h + MARGIN);
                 }
                 document.documentElement.style.setProperty('--dialog-top', top+'px');
                 document.documentElement.style.setProperty('--dialog-left', left+'px');

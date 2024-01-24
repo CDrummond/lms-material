@@ -593,7 +593,7 @@ Vue.component('lms-iframe-dialog', {
       <v-btn icon slot="activator"><v-icon>more_vert</v-icon></v-btn>
       <v-list>
        <template v-for="(item, index) in actions">
-        <v-list-tile @click="doAction(item)">
+        <v-list-tile @click="doAction(item, $event)">
          <v-list-tile-avatar><v-icon v-if="item.icon">{{item.icon}}</v-icon></v-list-tile-avatar>
          <v-list-tile-content><v-list-tile-title>{{item.title}}</v-list-tile-title></v-list-tile-content>
         </v-list-tile>
@@ -756,7 +756,8 @@ Vue.component('lms-iframe-dialog', {
                 return str;
             }
         },
-        doAction(act) {
+        doAction(act, event) {
+            storeClickOrTouchPos(event);
             confirm(act.text, act.confirm).then(res => {
                 if (res) {
                     lmsCommand("server"==this.page ? "" : this.$store.state.player.id, act.cmd);

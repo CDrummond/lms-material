@@ -18,7 +18,7 @@ function updateUiSettings(state, val) {
     let stdItems = ['autoScrollQueue', 'browseBackdrop', 'queueBackdrop', 'nowPlayingBackdrop', 'infoBackdrop',
                     'browseTechInfo', 'techInfo', 'nowPlayingTrackNum', 'swipeVolume', 'swipeChangeTrack',
                     'keyboardControl', 'skipBSeconds', 'skipFSeconds', 'powerButton', 'mediaControls', 'showRating',
-                    'browseContext', 'nowPlayingContext', 'queueContext'];
+                    'browseContext', 'nowPlayingContext', 'queueContext', 'moveDialogs'];
     for (let i=0, len=stdItems.length; i<len; ++i) {
         let key=stdItems[i];
         if (undefined!=val[key] && state[key]!=val[key]) {
@@ -285,7 +285,8 @@ const store = new Vuex.Store({
         powerButton: false,
         mediaControls: false,
         downloadStatus: [],
-        coloredToolbars: false
+        coloredToolbars: false,
+        moveDialogs: false
     },
     mutations: {
         updatePlayer(state, player) {
@@ -486,7 +487,7 @@ const store = new Vuex.Store({
                              'infoBackdrop', 'useDefaultBackdrops', 'browseTechInfo', 'techInfo', 'queueShowTrackNum', 'nowPlayingTrackNum',
                              'nowPlayingClock', 'swipeVolume', 'swipeChangeTrack', 'keyboardControl', 'screensaver', 'homeButton',
                              'powerButton', 'mediaControls', 'queueAlbumStyle', 'queueThreeLines', 'browseContext', 'nowPlayingContext',
-                             'queueContext'];
+                             'queueContext', 'moveDialogs'];
             for (let i=0, len=boolItems.length; i<len; ++i) {
                 let key = boolItems[i];
                 state[key] = getLocalStorageBool(key, state[key]);

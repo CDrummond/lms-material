@@ -73,7 +73,7 @@ Vue.component('lms-choice-dialog', {
             } else {
                 bindNumeric(this);
             }
-            dialogPosition();
+            dialogPosition(this);
         }.bind(this));
         bus.$on('closeDialog', function(dlg) {
             if (dlg == 'choice') {

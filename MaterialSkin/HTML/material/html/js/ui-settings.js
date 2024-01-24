@@ -156,6 +156,15 @@ Vue.component('lms-ui-settings', {
      <v-list-tile-action><m3-switch v-model="homeButton"></m3-switch></v-list-tile-action>
     </v-list-tile>
 
+    <v-divider v-if="showMoveDialogs"></v-divider>
+    <v-list-tile v-if="showMoveDialogs">
+     <v-list-tile-content @click="moveDialogs = !moveDialogs" class="switch-label">
+      <v-list-tile-title>{{i18n('Reposition dialogs')}}</v-list-tile-title>
+      <v-list-tile-sub-title>{{i18n('Attempt to move dialogs closer to the click/touch action that caused them to open. (Only affects displays larger than %1x%2)', 1024, 768)}}</v-list-tile-sub-title>
+     </v-list-tile-content>
+     <v-list-tile-action><m3-switch v-model="moveDialogs"></m3-switch></v-list-tile-action>
+    </v-list-tile>
+
     <v-divider v-if="hasPassword"></v-divider>
     <v-list-tile v-if="hasPassword">
      <v-text-field :label="i18n('Settings password')" clearable autocorrect="off" v-model="password" class="lms-search" :append-icon="showPassword ? 'visibility_off' : 'visibility'" @click:append="() => (showPassword = !showPassword)" :type="showPassword ? 'text' : 'password'"></v-text-field>
@@ -442,7 +451,9 @@ Vue.component('lms-ui-settings', {
             powerButton: false,
             width: 500,
             mediaControls: false,
-            mediaControlsSupported: !queryParams.hide.has('mediaControls') && ('mediaSession' in navigator)
+            mediaControlsSupported: !queryParams.hide.has('mediaControls') && ('mediaSession' in navigator),
+            moveDialogs: false,
+            showMoveDialogs: false
         }
     },
     computed: {
@@ -469,6 +480,7 @@ Vue.component('lms-ui-settings', {
         }.bind(this));
         bus.$on('uisettings.open', function(act) {
             this.showMenu = false;
+            this.showMoveDialogs = (window.innerHeight>768 && window.innerWidth>1024) || (window.innerWidth>768 && window.innerHeight>1024);
             this.readStore();
             this.password = getLocalStorageVal('password', '');
             if (this.allowLayoutAdjust) {
@@ -597,6 +609,7 @@ Vue.component('lms-ui-settings', {
             this.homeButton = this.$store.state.homeButton;
             this.powerButton = this.$store.state.powerButton;
             this.mediaControls = this.$store.state.mediaControls;
+            this.moveDialogs = this.$store.state.moveDialogs;
             this.showItems=[{id: TOP_MYMUSIC_ID, name:i18n("My Music"), show:!this.hidden.has(TOP_MYMUSIC_ID)},
                             {id: TOP_RADIO_ID, name:i18n("Radio"), show:!this.hidden.has(TOP_RADIO_ID)},
                             {id: TOP_FAVORITES_ID, name:i18n("Favorites"), show:!this.hidden.has(TOP_FAVORITES_ID)},
@@ -701,7 +714,8 @@ Vue.component('lms-ui-settings', {
                       homeButton:this.homeButton,
                       powerButton:this.powerButton,
                       showRating:this.showRating,
-                      mediaControls:this.mediaControls
+                      mediaControls:this.mediaControls,
+                      moveDialogs:this.moveDialogs
                   };
              if (withSorts) {
                 for (var key in window.localStorage) {
@@ -845,9 +859,9 @@ Vue.component('lms-ui-settings', {
             storeClickOrTouchPos(event);
             bus.$emit('dlg.open', 'iteminfo', { list:[i18n('To support this feature, this app needs to fool your browser into thinking its is playing audio. This is accomplished by playing a silent audio file in a loop. Most browsers block auto-playing of audio so this cannot start until you have interacted with the app (e.g. clicked somewhere). Alternatively you can configure your browser to allow auto-play of audio for the URL you use to access this app (%1).', window.location.hostname+':'+window.location.port)]});
         },
-        i18n(str) {
+        i18n(str, a1, a2) {
             if (this.show) {
-                return i18n(str);
+                return i18n(str, a1, a2);
             } else {
                 return str;
             }
@@ -856,7 +870,7 @@ Vue.component('lms-ui-settings', {
             storeClickOrTouchPos(event);
             this.browseModesDialog.wide = window.innerWidth >= 700;
             this.browseModesDialog.show=true;
-            dialogPosition();
+            dialogPosition(this);
         },
         mouseDown(ev) {
             toolbarMouseDown(ev);

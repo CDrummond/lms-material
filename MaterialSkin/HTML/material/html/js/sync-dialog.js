@@ -94,7 +94,7 @@ Vue.component('lms-sync-dialog', {
                     });
                     if (numOtherStdPlayers>0) {
                         this.show = true;
-                        dialogPosition();
+                        dialogPosition(this);
                     }
                 }
             });

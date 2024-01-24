@@ -123,14 +123,14 @@ Vue.component('lms-groupplayers-dialog', {
                         }
                         this.show = true;
                         focusEntry(this);
-                        dialogPosition();
+                        dialogPosition(this);
                     }
                 });
             } else if ('create'==mode) {
                 this.setDefaults();
                 this.show = true;
                 focusEntry(this);
-                dialogPosition();
+                dialogPosition(this);
             }
         }.bind(this));
         bus.$on('noPlayers', function() {

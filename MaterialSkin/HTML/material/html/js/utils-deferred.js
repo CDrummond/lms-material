@@ -636,13 +636,18 @@ function storeClickOrTouchPos(event, menu) {
 }
 
 function resetDialogPos() {
-    document.documentElement.style.setProperty('--dialog-top', 'unset');
-    document.documentElement.style.setProperty('--dialog-left', 'unset');
+    if ('unset'!=getComputedStyle(document.documentElement).getPropertyValue('--dialog-top')) {
+        document.documentElement.style.setProperty('--dialog-top', 'unset');
+        document.documentElement.style.setProperty('--dialog-left', 'unset');
+    }
 }
 
-function dialogPosition() {
+function dialogPosition(dlg) {
+    resetDialogPos();
+    if (dlg && !dlg.$store.state.moveDialogs) {
+        return;
+    }
     if ((window.innerHeight>768 && window.innerWidth>1024) || (window.innerWidth>768 && window.innerHeight>1024)) {
-        resetDialogPos();
         document.documentElement.style.setProperty('--dialog-opacity', '0');
 
         setTimeout(function () {
@@ -689,7 +694,7 @@ function setDialogPos() {
             }
         }
     }
-    
+
     if (mskinDialogWindowResize) {
         mskinDialogWindowResize = false;
         window.removeEventListener('resize', setDialogPos);

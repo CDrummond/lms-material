@@ -48,7 +48,6 @@ Vue.component('lms-icon-dialog', {
             this.player = player;
             this.show = true;
             getMiscJson(this.items, "player-icons-list", this);
-            dialogPosition(this);
         }.bind(this));
         bus.$on('noPlayers', function() {
             this.cancel();

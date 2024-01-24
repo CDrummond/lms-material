@@ -642,9 +642,9 @@ function resetDialogPos() {
     }
 }
 
-function dialogPosition(dlg) {
+function dialogPosition(state) {
     resetDialogPos();
-    if (dlg && !dlg.$store.state.moveDialogs) {
+    if (state && !state.moveDialogs) {
         return;
     }
     if ((window.innerHeight>768 && window.innerWidth>1024) || (window.innerWidth>768 && window.innerHeight>1024)) {

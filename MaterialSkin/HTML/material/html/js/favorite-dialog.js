@@ -76,7 +76,6 @@ Vue.component('lms-favorite', {
                 this.isAdd=false;
                 this.show=true;
                 focusEntry(this);
-                dialogPosition(this);
             } else if ('add'==mode) {
                 this.playerId = this.$store.state.player ? this.$store.state.player.id : "";
                 this.name = "";
@@ -85,7 +84,6 @@ Vue.component('lms-favorite', {
                 this.isAdd=true;
                 this.show=true;
                 focusEntry(this);
-                dialogPosition(this);
             }
         }.bind(this));
         bus.$on('noPlayers', function() {

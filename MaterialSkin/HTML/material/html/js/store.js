@@ -621,12 +621,16 @@ const store = new Vuex.Store({
         dialogOpen(state, val) {
             if (val.shown) {
                 state.openDialogs.push(val.name);
-            } else if (state.openDialogs.length>0) {
-                for (var len=state.openDialogs.length, i=len-1; i>=0; --i) {
-                    if (state.openDialogs[i]==val.name) {
-                        state.openDialogs.splice(i, 1);
-                        state.lastDialogClose = new Date().getTime();
-                        break;
+                dialogPosition(state);
+            } else {
+                resetDialogPos();
+                if (state.openDialogs.length>0) {
+                    for (var len=state.openDialogs.length, i=len-1; i>=0; --i) {
+                        if (state.openDialogs[i]==val.name) {
+                            state.openDialogs.splice(i, 1);
+                            state.lastDialogClose = new Date().getTime();
+                            break;
+                        }
                     }
                 }
             }

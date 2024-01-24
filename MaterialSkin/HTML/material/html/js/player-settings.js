@@ -703,13 +703,11 @@ Vue.component('lms-player-settings', {
             storeClickOrTouchPos(event);
             this.alarmDialog = { show: true, id: undefined, time: "00:00", dow:["1", "2", "3", "4", "5"], repeat: false,
                                  url: 'CURRENT_PLAYLIST', shuffle: this.alarmShuffeItems[0].key };
-            dialogPosition(this);
         },
         editAlarm(alarm, event) {
             storeClickOrTouchPos(event);
             this.alarmDialog = { show: true, id: alarm.id, time: formatTime(alarm.time, true), dow: alarm.dow.split(","),
                                  repeat: alarm.repeat, url: alarm.url, enabled: alarm.enabled };
-            dialogPosition(this);
         },
         saveAlarm() {
             var parts = this.alarmDialog.time.split(":");

@@ -870,7 +870,6 @@ Vue.component('lms-ui-settings', {
             storeClickOrTouchPos(event);
             this.browseModesDialog.wide = window.innerWidth >= 700;
             this.browseModesDialog.show=true;
-            dialogPosition(this);
         },
         mouseDown(ev) {
             toolbarMouseDown(ev);

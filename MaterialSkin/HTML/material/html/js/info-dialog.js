@@ -65,7 +65,6 @@ Vue.component('lms-info-dialog', {
                 }
             }
             this.show=true;
-            dialogPosition(this);
         }.bind(this));
         bus.$on('closeDialog', function(dlg) {
             if (dlg == 'iteminfo') {

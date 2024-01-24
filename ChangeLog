@@ -1,6 +1,8 @@
 4.3.0
 -----
 1. Add option to move dialogs closer to click/touch position.
+2. If using unpinned queue without background image then have a
+   semi-transparent background that blurs items below.
 
 4.2.0
 -----

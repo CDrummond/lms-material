@@ -1745,6 +1745,15 @@ progress {
  background-position:left center !important;
 }
 
+.frosted {
+ background-color:rgba(255, 255, 255, 0.65);
+ backdrop-filter: blur(15px);
+}
+
+.theme--dark .frosted {
+ background-color:rgba(32, 32, 32, 0.75);
+}
+
 .toolbar-blur {
  backdrop-filter:var(--toolbar-filter);
  -webkit-backdrop-filter:var(--toolbar-filter);

@@ -2,6 +2,7 @@
 -----
 1. Adjust unpinned queue metrics when used on mobile.
 2. Fix now-playing updates due to use of extid in track sources.
+3. Always request extid for player status, as showing logo/emblems regardless.
 
 4.2.0
 -----

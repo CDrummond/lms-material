@@ -360,7 +360,7 @@
  }
 }
 
-@media only screen and (max-width:540px) {
+@media (max-width:540px) {
  .lms-toolbar > .v-toolbar__content {
   margin-left:-16px !important;
   margin-right:-23px !important;
@@ -428,7 +428,7 @@
  max-width:0px!important;
 }
 
-@media only screen and (max-width:375px) {
+@media (max-width:375px) {
 .np-grid-sect {
   grid-template-columns:repeat(auto-fill, 150px);
  }
@@ -449,7 +449,7 @@
  }
 }
 
-@media only screen and (max-width:340px) {
+@media (max-width:340px) {
 .np-grid-sect {
   grid-template-columns:repeat(auto-fill, 135px);
  }
@@ -470,13 +470,13 @@
  }
 }
 
-@media only screen and (min-width:750px) {
+@media (min-width:750px) {
  .group-vol {
   right:calc(var(--window-controls-space) + 36px);
  }
 }
 
-@media only screen and (max-width:290px) {
+@media (max-width:290px) {
  .maintoolbar-player-power-button, .maintoolbar-player-icon {
   visibility: hidden;
  }

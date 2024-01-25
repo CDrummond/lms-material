@@ -940,7 +940,7 @@ div.v-subheader {
  color:var(--text-color);
 }
 
-@media only screen and (max-width:500px) {
+@media (max-width:500px) {
 .vol-sheet {
   max-width:100vw;
  }
@@ -995,7 +995,7 @@ div.v-subheader {
  min-width:300px;
 }
 
-@media screen and (max-width: 375px) {
+@media (max-width: 375px) {
 .toolbar-player-list {
   min-width:calc(100vw - 75px);
  }
@@ -1016,7 +1016,7 @@ div.v-subheader {
 }
 
 /* Stop vuetify changing padding when width changes */
-@media only screen and (max-width:959px) {
+@media (max-width:959px) {
  .v-toolbar__content,
  .v-toolbar__extension {
    padding:0 24px;
@@ -1083,13 +1083,13 @@ div.v-subheader {
  max-height: 175px !important;
 }
 
-@media screen and (max-width: 480px) {
+@media (max-width: 480px) {
  .text .odd a img, .browse-html .odd a img, .text .even a img, .browse-html .even a img {
   max-height: 150px !important;
  }
 }
 
-@media screen and (max-width: 380px) {
+@media (max-width: 380px) {
  .text .odd a img, .browse-html .odd a img, .text .even a img, .browse-html .even a img {
   max-height: 125px !important;
  }
@@ -1291,13 +1291,13 @@ div.v-subheader {
  filter: blur(5px);
 }
 
-@media only screen and ( ((orientation:portrait) and (max-width:600px)) or ((orientation:landscape) and (max-height:600px))) {
+@media ((orientation:portrait) and (max-width:600px)), ((orientation:landscape) and (max-height:600px)) {
  .np-cover-dim {
   filter: blur(4px);
  }
 }
 
-@media only screen and ( ((orientation:portrait) and (max-width:450px)) or ((orientation:landscape) and (max-height:450px))) {
+@media ((orientation:portrait) and (max-width:450px)), ((orientation:landscape) and (max-height:450px)) {
  .np-cover-dim {
   filter: blur(3px);
  }
@@ -1383,12 +1383,12 @@ div.v-subheader {
  height:38px !important;
 }
 
-@media only screen and (max-width:360px) {
+@media (max-width:360px) {
  .np-std-button {
   margin:7px 0px 7px 0px;
  }
 }
-@media only screen and (max-width:240px) {
+@media (max-width:240px) {
  .np-std-button {
   margin:10px 0px 10px 0px;
   width:32px !important;
@@ -1462,7 +1462,7 @@ div.v-rating i.primary--text, div.v-rating i.accent--text {
  color:var(--text-color) !important;
 }
 
-@media only screen and (max-height:1100px) {
+@media (max-height:1100px) {
  .np-text:not(.np-text-landscape) {
   font-size:125% !important;
  }
@@ -1471,7 +1471,7 @@ div.v-rating i.primary--text, div.v-rating i.accent--text {
  }
 }
 
-@media only screen and (max-height:850px) {
+@media (max-height:850px) {
  .np-text:not(.np-text-landscape) {
   font-size:100% !important;
  }
@@ -1485,7 +1485,7 @@ div.v-rating i.primary--text, div.v-rating i.accent--text {
  }
 }
 
-@media only screen and (max-height:800px) {
+@media (max-height:800px) {
  .np-title-landscape {
   font-size:275% !important;
  }
@@ -1499,7 +1499,7 @@ div.v-rating i.primary--text, div.v-rating i.accent--text {
  }
 }
 
-@media only screen and (max-height:700px) {
+@media (max-height:700px) {
  .np-title-landscape {
   font-size:250% !important;
  }
@@ -1517,7 +1517,7 @@ div.v-rating i.primary--text, div.v-rating i.accent--text {
  }
 }
 
-@media only screen and (max-height:600px) {
+@media (max-height:600px) {
  .np-title-landscape {
   font-size:225% !important;
  }
@@ -1530,7 +1530,7 @@ div.v-rating i.primary--text, div.v-rating i.accent--text {
  }
 }
 
-@media only screen and (max-height:500px) {
+@media (max-height:500px) {
  .np-title-landscape {
   font-size:175% !important;
  }
@@ -1548,7 +1548,7 @@ div.v-rating i.primary--text, div.v-rating i.accent--text {
  }
 }
 
-@media only screen and (max-height:400px) {
+@media (max-height:400px) {
  .np-title-landscape {
   font-size:150% !important;
  }
@@ -1562,7 +1562,7 @@ div.v-rating i.primary--text, div.v-rating i.accent--text {
  }
 }
 
-@media only screen and (max-height:300px) {
+@media (max-height:300px) {
  .np-title-landscape {
    font-size:100% !important;
   }
@@ -2176,7 +2176,7 @@ progress {
  margin-top:-6px;
 }
 
-@media screen and (max-width: 500px) {
+@media (max-width: 500px) {
  .vol-control-2 .vol-slider {
   margin-left:0px;
   margin-right:0px;
@@ -2184,7 +2184,7 @@ progress {
 }
 
 /* Hide current cover if window too narrow */
-@media screen and (max-width: 320px) {
+@media (max-width: 320px) {
  .pmgr-cover {
   display:none!important;
  }
@@ -2333,7 +2333,7 @@ div.v-subheader {
  cursor:pointer;
 }
 
-@media screen and (max-width: 289px) {
+@media (max-width: 289px) {
  #home-button{display:none;}
 }
 
@@ -2626,21 +2626,20 @@ div.v-subheader {
  opacity:0.45;
 }
 
-@media screen and (max-height: 450px) {
+@media (max-height: 450px) {
  .screensaver-name {
   bottom:8px;
   font-size:14px;
  }
 }
 
-@media screen and (max-height: 320px) {
+@media (max-height: 320px) {
  .screensaver-name {
   bottom:-8px;
  }
 }
 
-@media screen and (orientation:portrait) and (max-width: 450px),
-       screen and (orientation:landscape) and (max-height: 450px) {
+@media (orientation:portrait) and (max-width: 450px), (orientation:landscape) and (max-height: 450px) {
  .screensaver-time {
   font-size:64px;
  }
@@ -2652,8 +2651,7 @@ div.v-subheader {
  }
 }
 
-@media screen and (orientation:portrait) and (max-width: 320px),
-       screen and (orientation:landscape) and (max-height: 320px) {
+@media (orientation:portrait) and (max-width: 320px), (orientation:landscape) and (max-height: 320px) {
  .screensaver-time {
   font-size:48px;
  }
@@ -2665,8 +2663,7 @@ div.v-subheader {
  }
 }
 
-@media screen and (orientation:portrait) and (max-width: 200px),
-       screen and (orientation:landscape) and (max-height: 200px) {
+@media (orientation:portrait) and (max-width: 200px), (orientation:landscape) and (max-height: 200px) {
  .screensaver-time {
   font-size:32px;
  }
@@ -2675,8 +2672,7 @@ div.v-subheader {
  }
 }
 
-@media screen and (orientation:portrait) and (max-width: 160px),
-       screen and (orientation:landscape) and (max-height: 160px) {
+@media (orientation:portrait) and (max-width: 160px), (orientation:landscape) and (max-height: 160px) {
  .screensaver-time {
   font-size:24px;
  }
@@ -3085,7 +3081,7 @@ div.v-subheader {
  padding-top:8px;
 }
 
-@media only screen and (min-width:600px) {
+@media (min-width:600px) {
  .avs-title {
   text-align:right;
  }
@@ -3193,7 +3189,7 @@ div.v-subheader {
  grid-template-columns:repeat(auto-fill, 175px);
 }
 
-@media only screen and (max-width:400px) {
+@media (max-width:400px) {
  .np-grid-sect {
   grid-template-columns:repeat(auto-fill, 160px);
  }
@@ -3244,7 +3240,7 @@ div.v-subheader {
  right:4px;
  top:calc(var(--main-toolbar-height) - 4px);
 }
-@media only screen and (max-width:500px) {
+@media (max-width:500px) {
 .vol-sheet {
   max-width:calc(100vw - 8px);
  }
@@ -3282,7 +3278,7 @@ div.v-subheader {
 }
 
 /* Start butotn is chopped off in RadnomMix dialog if mix playing and screen is narrow */
-@media only screen and (max-width:400px) {
+@media (max-width:400px) {
  .v-dialog .v-btn {
   min-width:32px;
  }

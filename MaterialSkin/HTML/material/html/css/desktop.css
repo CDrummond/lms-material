@@ -222,13 +222,13 @@
  margin-right:12px;
 }
 
-@media screen and (max-width: 650px) {
+@media (max-width: 650px) {
  .np-bar-details .v-list__tile__action {
   display:none!important;
  }
 }
 
-@media screen and (max-width: 550px) {
+@media (max-width: 550px) {
  #np-bar-prev, #np-bar-next, #np-bar-stop {
   display:none!important;
  }
@@ -249,7 +249,7 @@
  }
 }
 
-@media screen and ( ((orientation:portrait) and (max-width: 480px)) or ((orientation:landscape) and (max-height: 480px)) ) {
+@media (orientation:portrait) and (max-width: 480px), (orientation:landscape) and (max-height: 480px) {
  :root {
   --bottom-toolbar-height:var(--desktop-npbar-height-thin);
  }
@@ -297,7 +297,7 @@
  }
 }
 
-@media screen and (max-width: 430px) {
+@media (max-width: 430px) {
  #np-expand {
   display:none!important;
  }
@@ -311,7 +311,7 @@
  }
 }
 
-@media only screen and (max-width:405px) {
+@media (max-width:405px) {
  .maintoolbar-player-power-button, .maintoolbar-player-icon, #pq-pin-1, #pq-pin-2 {
   display:none!important;
  }
@@ -402,7 +402,7 @@
  height:calc((var(--vh, 1vh)*100) - var(--main-toolbar-height));
 }
 
-@media screen and (max-height: 130px) {
+@media (max-height: 130px) {
  .hide-for-mini {
   display:none!important;
  }
@@ -426,7 +426,7 @@
  }
 }
 
-@media only screen and (min-width:750px) {
+@media (min-width:750px) {
  .group-vol {
   right:calc(var(--window-controls-space) + 132px);
  }
@@ -483,14 +483,14 @@
  height:calc((var(--vh, 1vh)*100) - (var(--main-toolbar-height) + var(--sub-toolbar-height) + var(--bottom-toolbar-height) + 12px));
 }
 
-@media screen and (max-width: 550px), (max-height: 520px) {
+@media (max-width: 550px), (max-height: 520px) {
  .pq-unpinned-np2 .lms-list,
  .pq-unpinned-np0 .lms-list {
   height:calc((var(--vh, 1vh)*100) - (var(--main-toolbar-height) + var(--sub-toolbar-height) + 2px))!important;
  }
 }
 
-@media screen and (max-width: 480px) {
+@media (max-width: 480px) {
  .pq-unpinned .lms-list {
   height:calc((var(--vh, 1vh)*100) - (var(--main-toolbar-height) + var(--sub-toolbar-height) + var(--bottom-toolbar-height)));
  }

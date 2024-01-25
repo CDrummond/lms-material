@@ -249,7 +249,7 @@
  }
 }
 
-@media (orientation:portrait) and (max-width: 480px), (orientation:landscape) and (max-height: 480px) {
+@media (orientation:portrait) and (max-width: 480px), (orientation:landscape) and (max-height: 119px) {
  :root {
   --bottom-toolbar-height:var(--desktop-npbar-height-thin);
  }

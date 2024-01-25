@@ -32,7 +32,7 @@ function getTrackSource(track) {
                     if (undefined!=value.url.from) {
                         let param = value.url.useextid ? track.extid : track.url;
                         let srvUrl = param ? param.replace(value.url.from, value.url.to) : undefined;
-                        if (value.url.removeext) {
+                        if (srvUrl && value.url.removeext) {
                             let parts = srvUrl.split('.');
                             parts.pop();
                             srvUrl = parts.join('.');

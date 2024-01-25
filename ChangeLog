@@ -1,3 +1,7 @@
+4.2.2
+-----
+1. Fix hiding un-pinned queue when click on link and window is narrow.
+
 4.2.1
 -----
 1. Adjust unpinned queue metrics when used on mobile.

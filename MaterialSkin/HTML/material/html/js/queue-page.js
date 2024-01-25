@@ -530,7 +530,7 @@ var lmsQueue = Vue.component("lms-queue", {
         }.bind(this));
 
         bus.$on('linkClicked', function() {
-            if (this.desktopLayout && this.windowWide<1 && !this.$store.state.pinQueue && this.$store.state.showQueue) {
+            if (this.$store.state.desktopLayout && this.windowWide<2 && !this.$store.state.pinQueue && this.$store.state.showQueue) {
                 this.$store.commit('setShowQueue', false);
             }
         }.bind(this));

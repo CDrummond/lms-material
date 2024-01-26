@@ -2,6 +2,7 @@
 -----
 1. Fix hiding un-pinned queue when click on link and window is narrow.
 2. Adjust now-playing bar size settings to allow for mini-player use-case.
+3. Better handling of volume dialog for mini-player use-case.
 
 4.2.1
 -----

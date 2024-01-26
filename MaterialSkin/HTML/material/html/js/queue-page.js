@@ -668,6 +668,9 @@ var lmsQueue = Vue.component("lms-queue", {
                 this.clearSelection();
             }
         }.bind(this));
+        bus.$on('queueDialogClosed', function() {
+            this.resetCloseTimer();
+        }.bind(this));
     },
     methods: {
         initItems() {
@@ -691,6 +694,7 @@ var lmsQueue = Vue.component("lms-queue", {
             if (undefined==this.scrollAnim) {
                 this.scrollAnim = requestAnimationFrame(() => {
                     this.scrollAnim = undefined;
+                    this.resetCloseTimer();
 
                     // Fetch more items?
                     if (this.fetchingItems || this.listSize<=this.items.length) {
@@ -730,6 +734,7 @@ var lmsQueue = Vue.component("lms-queue", {
             }
             // Ignore clicks within queue
             if (inRect(clickX, clickY, window.innerWidth-this.viewElement.scrollWidth, 48, window.innerWidth, window.innerHeight-(48+72), 4)) {
+                this.resetCloseTimer();
                 return;
             }
             // Ignore clicks on now-playing bar controls
@@ -802,6 +807,7 @@ var lmsQueue = Vue.component("lms-queue", {
             if (this.items.length<1 || queryParams.party) {
                 return;
             }
+            this.cancelCloseTimer();
             bus.$emit('dlg.open', 'savequeue', ""+(undefined==this.playlist.name ? "" : this.playlist.name));
         },
         clear(longPress) {
@@ -815,8 +821,10 @@ var lmsQueue = Vue.component("lms-queue", {
             let choices=[{id:0, title:i18n('Remove all tracks')},
                          {id:1, title:i18n('Remove upcoming tracks'), disabled:this.currentIndex>=this.items.length-1},
                          {id:2, title:i18n('Remove previous tracks'), disabled:this.currentIndex<=0}];
+            this.cancelCloseTimer(true);
             choose(this.trans.clear+"?", choices).then(choice => {
                 if (undefined!=choice) {
+                    this.resetCloseTimer();
                     if (0==choice.id) {
                         bus.$emit('playerCommand', ["playlist", "clear"]);
                         if (!(this.$store.state.pinQueue && this.windowWide>1)) {
@@ -936,6 +944,7 @@ var lmsQueue = Vue.component("lms-queue", {
                     if (0==this.selection.size) {
                         bus.$emit('queueSelection', true);
                         lmsQueueSelectionActive = true;
+                        this.cancelCloseTimer();
                     }
                     this.selection.add(index);
                     this.selectionDuration += itemDuration(this.items[index]);
@@ -972,7 +981,8 @@ var lmsQueue = Vue.component("lms-queue", {
                 });
             } else if (ADD_TO_PLAYLIST_ACTION==act) {
                 this.clearSelection();
-                bus.$emit('dlg.open', 'addtoplaylist', [item], []);
+                this.cancelCloseTimer(true);
+                bus.$emit('dlg.open', 'addtoplaylist', [item], [], 'queueDialogClosed');
             } else if (PQ_COPY_ACTION==act) {
                 this.clearSelection();
                 bus.$emit('browseQueueDrop', -1, index, this.listSize);
@@ -980,7 +990,8 @@ var lmsQueue = Vue.component("lms-queue", {
                 this.clearSelection();
                 download(item);
             } else if (SHOW_IMAGE_ACTION==act) {
-                bus.$emit('dlg.open', 'gallery', [item.image], 0, true);
+                this.cancelCloseTimer(true);
+                bus.$emit('dlg.open', 'gallery', [item.image], 0, true, 'queueDialogClosed');
             }
         },
         itemCustomAction(act, item, index, event) {
@@ -1005,7 +1016,9 @@ var lmsQueue = Vue.component("lms-queue", {
                 return;
             }
             if (act==PQ_ADD_URL_ACTION) {
+                this.cancelCloseTimer(true);
                 promptForText(ACTIONS[PQ_ADD_URL_ACTION].title, i18n("URL"), undefined, i18n("Add")).then(resp => {
+                    this.resetCloseTimer();
                     if (resp.ok && resp.value && resp.value.length>0) {
                         lmsCommand(this.$store.state.player.id, ["playlist", this.items.length==0 ? "play" : "add", resp.value]).then(({data}) => {
                             bus.$emit('refreshStatus');
@@ -1027,7 +1040,9 @@ var lmsQueue = Vue.component("lms-queue", {
                             players.push({val:loop[i].id, title:loop[i].name, icon:loop[i].icon.icon, svg:loop[i].icon.svg});
                         }
                     }
+                    this.cancelCloseTimer(true);
                     choose("", players, {options:opts, key:'movequeue', def:1}).then(choice => {
+                        this.resetCloseTimer();
                         if (undefined==choice) {
                             return;
                         }
@@ -1047,7 +1062,9 @@ var lmsQueue = Vue.component("lms-queue", {
                 if (this.items.length<2) {
                     return;
                 }
+                this.cancelCloseTimer(true);
                 confirm(i18n("Remove duplicate tracks?")+addNote(i18n("This will remove tracks with the same artist and title.")), i18n('Remove')).then(res => {
+                    this.resetCloseTimer();
                     if (res) {
                         let dupes=[];
                         let tracks = new Set();
@@ -1144,6 +1161,7 @@ var lmsQueue = Vue.component("lms-queue", {
             this.selectionDuration = 0;
             lmsQueueSelectionActive = false;
             bus.$emit('queueSelection', false);
+            this.resetCloseTimer();
         },
         select(item, index, event) {
             if (this.selection.size>0) {
@@ -1517,7 +1535,27 @@ var lmsQueue = Vue.component("lms-queue", {
                     }.bind(this), 2000);
                 }
             }
-        }
+        },
+        cancelCloseTimer(dialogOpen) {
+            this.dialogOpen = dialogOpen;
+            if (undefined!==this.closeTimer) {
+                console.log("CANCEL CLOSE", dialogOpen);
+                clearTimeout(this.closeTimer);
+                this.closeTimer = undefined;
+            }
+        },
+        resetCloseTimer() {
+            this.cancelCloseTimer();
+            if (!this.$store.state.pinQueue && this.$store.state.showQueue) {
+                console.log("RESET CLOSE");
+                this.closeTimer = setTimeout(function () {
+                    if (!this.$store.state.pinQueue && this.$store.state.showQueue && this.windowWide>1) {
+                        this.$store.commit('setShowQueue', false);
+                    }
+                    this.closeTimer = undefined;
+                }.bind(this), LMS_QUEUE_CLOSE_TIMEOUT);
+            }
+        },
     },
     filters: {
         displayTime: function (value, addSep) {
@@ -1552,20 +1590,33 @@ var lmsQueue = Vue.component("lms-queue", {
     watch: {
         'menu.show': function(newVal) {
             this.$store.commit('menuVisible', {name:'queue', shown:newVal});
-            if (!newVal) {
+            if (newVal) {
+                this.cancelCloseTimer();
+            } else {
                 this.menu.closed = new Date().getTime();
+                if (!this.dialogOpen) {
+                    this.resetCloseTimer();
+                }
             }
         },
         '$store.state.showQueue': function(shown) {
-            if (shown && this.$store.state.autoScrollQueue) {
-                this.scrollToCurrent();
+            if (shown) {
+                if (this.$store.state.autoScrollQueue) {
+                    this.scrollToCurrent();
+                }
+                this.resetCloseTimer();
+            } else {
+                this.cancelCloseTimer();
             }
         },
         'fetchingItems': function(newVal) {
             this.searchActive = false;
         },
         'searchActive': function(newVal) {
-            if (!newVal) {
+            if (newVal) {
+                this.cancelCloseTimer();
+            } else {
+                this.resetCloseTimer();
                 this.highlightIndex = -1;
                 if (this.$store.state.autoScrollQueue && this.autoScrollRequired) {
                     this.scrollToCurrent();

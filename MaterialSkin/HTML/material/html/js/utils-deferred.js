@@ -395,7 +395,13 @@ function sortPlaylist(view, playerId, title, command) {
         sorts.push({val:14, title:i18n("Play count"), subtitle:i18n("...then album artist, album, disc no., track no.")});
     }
 
+    if (undefined!=view.cancelCloseTimer) {
+        view.cancelCloseTimer(true);
+    }
     choose(title, sorts, {key:command[1], options:[{title:title, val:0}, {title:title+SEPARATOR+i18n('Single field only'), val:1}]}).then(choice => {
+        if (undefined!=view.resetCloseTimer) {
+            view.resetCloseTimer();
+        }
         if (undefined!=choice) {
             command.push("order:"+(choice.item.val+(choice.option.val*100)));
             lmsCommand(playerId, command).then(({data}) => {

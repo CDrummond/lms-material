@@ -616,13 +616,13 @@
 "%1 Years":"%1 Jaren",
 "1 day":"1 dag",
 "%1 days":"%1 dagen",
-"Next match":"",
-"Not found":"",
-"Previous match":"",
-"Remove '%1' from synchronization group?":"",
-"Search library":"",
-"Search within list":"",
-"Skip backward":"",
-"Skip forward":"",
-"Unsync":""
+"Next match":"Volgende match",
+"Not found":"Niet gevonden",
+"Previous match":"Vorige match",
+"Remove '%1' from synchronization group?":"Verwijder '%1' van synchronisatie groep?",
+"Search library":"Zoeken in bibliotheek",
+"Search within list":"Zoeken in lijst",
+"Skip backward":"Achteruit skippen",
+"Skip forward":"Vooruit skippen",
+"Unsync":"Synchroniseren stoppen"
 }

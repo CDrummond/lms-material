@@ -249,7 +249,7 @@
  }
 }
 
-@media (orientation:portrait) and (max-width: 480px), (orientation:landscape) and (max-height: 480px) {
+@media (orientation:portrait) and (max-width: 480px), (orientation:landscape) and (max-height: 119px) {
  :root {
   --bottom-toolbar-height:var(--desktop-npbar-height-thin);
  }
@@ -418,11 +418,21 @@
  .v-dialog__content .v-dialog .screensaver-bgnd {
   display:none;
  }
- .vol-sheet {
-  top:0px;
- }
  .vol-full-label {
   margin-right:-16px;
+ }
+}
+
+@media (max-height: 210px) {
+ .vol-sheet {
+  top:0px;
+  max-height:calc((var(--vh, 1vh)*100));
+ }
+}
+
+@media (max-height: 160px) {
+ .vol-sheet .container {
+  padding:8px!important;
  }
 }
 

@@ -6,6 +6,12 @@
 3. Remove MySqueezebox.com related code, as service is shutdown.
 4. Add option to auto-close unpinned queue after 30 seconds.
 
+4.2.2
+-----
+1. Fix hiding un-pinned queue when click on link and window is narrow.
+2. Adjust now-playing bar size settings to allow for mini-player use-case.
+3. Better handling of volume dialog for mini-player use-case.
+
 4.2.1
 -----
 1. Adjust unpinned queue metrics when used on mobile.

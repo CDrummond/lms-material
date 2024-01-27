@@ -15,7 +15,8 @@
  <body>
   <script>
    var query = window.location.href.indexOf('?');
-   window.location.href = window.location.href.replace(/\/mini/i, '/').replace(/\.html/i, '') + (query>0 ? "&" : "?")+"layout=mini";
+   // Explicit 'mini' mode no longer supported so redirect to desktop, kept for compatability
+   window.location.href = window.location.href.replace(/\/mini/i, '/').replace(/\.html/i, '') + (query>0 ? "&" : "?")+"layout=desktop";
   </script>
  </body>
 </html>

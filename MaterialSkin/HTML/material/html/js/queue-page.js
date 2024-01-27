@@ -846,6 +846,7 @@ var lmsQueue = Vue.component("lms-queue", {
         },
         click(item, index, event) {
             storeClickOrTouchPos(event, this.menu);
+            this.resetCloseTimer();
             if (queryParams.party) {
                 return;
             }

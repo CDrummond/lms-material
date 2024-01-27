@@ -350,7 +350,7 @@ Vue.component('lms-ui-settings', {
     <v-list-tile>
      <v-list-tile-content @click="autoCloseQueue = !autoCloseQueue" class="switch-label">
       <v-list-tile-title>{{i18n('Auto-close')}}</v-list-tile-title>
-      <v-list-tile-sub-title>{{i18n("Automatically close queue, in desktop layout and not pinned, 30 seconds after last interaction.")}}</v-list-tile-sub-title>
+      <v-list-tile-sub-title>{{i18n("Automatically close queue, in desktop layout and not pinned, a few seconds after last interaction.")}}</v-list-tile-sub-title>
      </v-list-tile-content>
     <v-list-tile-action><m3-switch v-model="autoCloseQueue"></m3-switch></v-list-tile-action>
     </v-list-tile>

@@ -345,6 +345,15 @@ Vue.component('lms-ui-settings', {
      </v-list-tile-content>
     <v-list-tile-action><m3-switch v-model="queueContext"></m3-switch></v-list-tile-action>
     </v-list-tile>
+    <v-divider></v-divider>
+
+    <v-list-tile>
+     <v-list-tile-content @click="autoCloseQueue = !autoCloseQueue" class="switch-label">
+      <v-list-tile-title>{{i18n('Auto-close')}}</v-list-tile-title>
+      <v-list-tile-sub-title>{{i18n("Automatically close queue, in desktop layout and not pinned, 30 seconds after last interaction.")}}</v-list-tile-sub-title>
+     </v-list-tile-content>
+    <v-list-tile-action><m3-switch v-model="autoCloseQueue"></m3-switch></v-list-tile-action>
+    </v-list-tile>
 
     <div class="dialog-padding" v-if="LMS_P_MAI"></div>
     <v-header class="dialog-section-header" v-if="LMS_P_MAI">{{i18n('Song Information')}}</v-header>
@@ -453,7 +462,8 @@ Vue.component('lms-ui-settings', {
             mediaControls: false,
             mediaControlsSupported: !queryParams.hide.has('mediaControls') && ('mediaSession' in navigator),
             moveDialogs: false,
-            showMoveDialogs: false
+            showMoveDialogs: false,
+            autoCloseQueue: false
         }
     },
     computed: {
@@ -610,6 +620,7 @@ Vue.component('lms-ui-settings', {
             this.powerButton = this.$store.state.powerButton;
             this.mediaControls = this.$store.state.mediaControls;
             this.moveDialogs = this.$store.state.moveDialogs;
+            this.autoCloseQueue = this.$store.state.autoCloseQueue;
             this.showItems=[{id: TOP_MYMUSIC_ID, name:i18n("My Music"), show:!this.hidden.has(TOP_MYMUSIC_ID)},
                             {id: TOP_RADIO_ID, name:i18n("Radio"), show:!this.hidden.has(TOP_RADIO_ID)},
                             {id: TOP_FAVORITES_ID, name:i18n("Favorites"), show:!this.hidden.has(TOP_FAVORITES_ID)},
@@ -715,7 +726,8 @@ Vue.component('lms-ui-settings', {
                       powerButton:this.powerButton,
                       showRating:this.showRating,
                       mediaControls:this.mediaControls,
-                      moveDialogs:this.moveDialogs
+                      moveDialogs:this.moveDialogs,
+                      autoCloseQueue:this.autoCloseQueue
                   };
              if (withSorts) {
                 for (var key in window.localStorage) {

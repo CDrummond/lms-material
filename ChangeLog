@@ -4,6 +4,7 @@
 2. If using unpinned queue without background image then have a
    semi-transparent background that blurs items below.
 3. Remove MySqueezebox.com related code, as service is shutdown.
+4. Add option to auto-close unpinned queue after 30 seconds.
 
 4.2.1
 -----

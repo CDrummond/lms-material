@@ -1540,17 +1540,15 @@ var lmsQueue = Vue.component("lms-queue", {
         cancelCloseTimer(dialogOpen) {
             this.dialogOpen = dialogOpen;
             if (undefined!==this.closeTimer) {
-                console.log("CANCEL CLOSE", dialogOpen);
                 clearTimeout(this.closeTimer);
                 this.closeTimer = undefined;
             }
         },
         resetCloseTimer() {
             this.cancelCloseTimer();
-            if (!this.$store.state.pinQueue && this.$store.state.showQueue) {
-                console.log("RESET CLOSE");
+            if (this.$store.state.desktopLayout && !this.$store.state.pinQueue && this.$store.state.showQueue && this.$store.state.autoCloseQueue) {
                 this.closeTimer = setTimeout(function () {
-                    if (!this.$store.state.pinQueue && this.$store.state.showQueue && this.windowWide>1) {
+                    if (this.$store.state.desktopLayout && !this.$store.state.pinQueue && this.$store.state.showQueue && this.$store.state.autoCloseQueue) {
                         this.$store.commit('setShowQueue', false);
                     }
                     this.closeTimer = undefined;

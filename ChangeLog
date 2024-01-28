@@ -10,6 +10,8 @@
    sub-toolbar (if space) and when hovering.
 7. Add 'Play next' action to detailed sub-toolbar (if space) and when
    hovering.
+8. In MAI track details always show composer, conductor, band if tags exist,
+   regardless of whether these are used for now-playing, etc. or not.
 
 4.2.2
 -----

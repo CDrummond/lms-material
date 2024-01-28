@@ -516,16 +516,16 @@ function browseHandleListResponse(view, item, command, resp, prevPage, appendIte
         view.itemCustomActions = resp.itemCustomActions;
         if (item.id.startsWith(SEARCH_ID)) {
             if (view.items.length>0 && view.items[0].id.startsWith("track_id:")) {
-                view.tbarActions=[SEARCH_LIB_ACTION, ADD_ALL_ACTION, PLAY_ALL_ACTION];
+                view.tbarActions=[SEARCH_LIB_ACTION, PLAY_ALL_ACTION, ADD_ALL_ACTION];
             } else {
                 view.tbarActions=[SEARCH_LIB_ACTION];
             }
         } else if (SECTION_FAVORITES==view.current.section && view.current.isFavFolder) {
             view.tbarActions=[ADD_FAV_FOLDER_ACTION, ADD_FAV_ACTION];
         } else if (SECTION_PLAYLISTS==view.current.section && view.current.id.startsWith("playlist_id:") && view.items.length>0 && undefined!=view.items[0].stdItem) {
-            view.tbarActions=[ADD_ACTION, PLAY_ACTION];
+            view.tbarActions=[PLAY_ACTION, ADD_ACTION];
         } else if (view.current.stdItem==STD_ITEM_MAI && view.history.length>0 && view.history[view.history.length-1].current.stdItem==STD_ITEM_ALBUM) {
-            view.tbarActions=[ADD_ACTION, PLAY_ACTION];
+            view.tbarActions=[PLAY_ACTION, ADD_ACTION];
             // We are showing album review, copy some of the album's actions into this view's actions...
             view.currentActions=[];
             let foundPlay = false;
@@ -536,12 +536,12 @@ function browseHandleListResponse(view, item, command, resp, prevPage, appendIte
                 }
             }
         } else if (view.allSongsItem || ("tracks"==command.command[0] && item.id.startsWith("currentaction:"))) {
-            view.tbarActions=[ADD_ALL_ACTION, PLAY_ALL_ACTION];
+            view.tbarActions=[PLAY_ALL_ACTION, ADD_ALL_ACTION];
         } else if (view.items.length>0 && view.items[0].type!="html" && !(view.current && view.current.isPodcast) && (itemHasPlayAction || addAndPlayAllActions(command, view.items))) {
             if (view.current && view.current.menu) {
                 for (var i=0, len=view.current.menu.length; i<len; ++i) {
                     if (view.current.menu[i]==ADD_ACTION || view.current.menu[i]==PLAY_ACTION) {
-                        view.tbarActions=[ADD_ACTION, PLAY_ACTION];
+                        view.tbarActions=[PLAY_ACTION, ADD_ACTION];
                         break;
                     }
                 }
@@ -553,12 +553,12 @@ function browseHandleListResponse(view, item, command, resp, prevPage, appendIte
                 (!item.id || !item.id.startsWith(TOP_ID_PREFIX)) &&
                 ((view.command.command.length>0 && ALLOW_ADD_ALL.has(view.command.command[0])) ||
                  (resp.items[0].presetParams && resp.items[0].presetParams.favorites_url && ALLOW_ADD_ALL.has(resp.items[0].presetParams.favorites_url.split(':')[0]))) ) {
-                view.tbarActions=[ADD_ALL_ACTION, PLAY_ALL_ACTION];
+                view.tbarActions=[PLAY_ALL_ACTION, ADD_ALL_ACTION];
             }
 
             // Select track -> More -> Album:AlbumTitle -> Tracks
             if (view.tbarActions.length==0 && view.current && ((view.current.actions && view.current.actions.play) || view.current.stdItem)) {
-                view.tbarActions=[ADD_ACTION, PLAY_ACTION];
+                view.tbarActions=[PLAY_ACTION, ADD_ACTION];
             }
         }
 
@@ -673,7 +673,7 @@ function browseClick(view, item, index, event) {
             view.current = item;
             view.searchActive = 0;
             if (item.menu && item.menu.length>0 && item.menu[0]==PLAY_ALL_ACTION) {
-                view.tbarActions=[ADD_ALL_ACTION, PLAY_ALL_ACTION];
+                view.tbarActions=[PLAY_ALL_ACTION, ADD_ALL_ACTION];
             }
             browseSetScroll(view);
         } else if (view.selection.size>0) {

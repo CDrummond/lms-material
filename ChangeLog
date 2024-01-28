@@ -5,9 +5,11 @@
    semi-transparent background that blurs items below.
 3. Remove MySqueezebox.com related code, as service is shutdown.
 4. Add option to auto-close unpinned queue after 30 seconds.
-5. Change order of add/play buttons to be "(+) (>)"
+5. Change order of add/play buttons to be '(+) (>)'
 6. If play shuffled option is enabled, then show play shuffle icon in detailed
-   sub-toolbar and when hovering.
+   sub-toolbar (if space) and when hovering.
+7. Add 'Play next' action to detailed sub-toolbar (if space) and when
+   hovering.
 
 4.2.2
 -----

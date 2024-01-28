@@ -2883,7 +2883,7 @@ div.v-subheader {
  margin: -2px -6px -2px -6px; /* Is -6px in vuetify, but list-btns messses this up? */
 }
 
-.add-btn, .play-btn {
+.other-btn, .main-btn {
  margin-right:8px;
  float:left;
  padding:0px;
@@ -2892,7 +2892,7 @@ div.v-subheader {
  height:var(--icon-size);
 }
 
-.play-btn {
+.other-btn {
  margin-right:4px;
 }
 
@@ -2903,12 +2903,12 @@ div.v-subheader {
  opacity:0.7;
 }
 
-.list-btns .play-btn {
+.list-btns .other-btn {
  margin-right:8px;
 }
 
 /*@media (hover: hover) and (pointer: fine) {*/
-.msk-is-non-touch .add-btn:hover, .msk-is-non-touch .play-btn:hover,
+.msk-is-non-touch .other-btn:hover, .msk-is-non-touch .main-btn:hover,
 .msk-is-non-touch .np-emblem:hover {
  opacity:1.0;
 }

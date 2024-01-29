@@ -3,6 +3,8 @@
 1. Fix hiding un-pinned queue when click on link and window is narrow.
 2. Adjust now-playing bar size settings to allow for mini-player use-case.
 3. Better handling of volume dialog for mini-player use-case.
+4. Prevent default event handling (e.g. context menu) for some items that
+   long-press has been added to.
 
 4.2.1
 -----

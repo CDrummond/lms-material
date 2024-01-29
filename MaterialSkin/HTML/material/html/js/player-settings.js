@@ -171,7 +171,7 @@ Vue.component('lms-player-settings', {
      </v-list-tile>
      <v-list-tile v-for="(plugin, index) in plugins" class="other-setting">
       <v-list-tile-content>
-       <v-list-tile-title><v-btn flat v-longpress="pluginPressed" :id="index+'-ps-plugin'">
+       <v-list-tile-title><v-btn flat v-longpress.prevent.stop="pluginPressed" :id="index+'-ps-plugin'">
         <img v-if="plugin.svg" class="svg-img btn-icon" :src="plugin.svg| svgIcon(darkUi)"></img>
         <v-icon v-else-if="plugin.icon">{{plugin.icon}}</v-icon>
         <img v-else-if="plugin.image" class="svg-img btn-icon" :key="plugin.image" v-lazy="plugin.image">

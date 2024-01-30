@@ -487,6 +487,8 @@ PLUGIN_MATERIAL_SKIN_PLAY_SHUFFLE_DESC
 
 PLUGIN_MATERIAL_SKIN_LOAD_DEFAULT_GENRES_DESC
 	EN	These genre lists are saved in your settings file, and will not automatically be updated should you change language. You may use the "Set Genres To Default" button (below) to reset each list to the default values, translated into the current language.
+	ZH_CN	这些流派列表保存在您的设置文件中，且不会随着您更改语言自动更新。您可以使用“将流派设为默认值”按钮（如下）将每个列表重置为默认值（翻译成当前语言）。
 
 PLUGIN_MATERIAL_SKIN_LOAD_DEFAULT_GENRES
 	EN	Set Genres To Default
+	ZH_CN	将流派设为默认值

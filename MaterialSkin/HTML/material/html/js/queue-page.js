@@ -195,23 +195,23 @@ var lmsQueue = Vue.component("lms-queue", {
    <v-btn v-if="desktopLayout && windowWide>1" :title="pinQueue ? trans.unpin : trans.pin" flat icon class="toolbar-button" @click="togglePin" id="pq-pin-2"><img :src="(pinQueue ? 'pin' : 'unpin') | svgIcon(darkUi)"></img></v-btn>
    <div class="toolbar-nobtn-pad"></div>
    <div v-if="desktopLayout && pinQueue" style="width:2px"></div>
-   <v-layout row wrap v-longpress.prevent.stop="durationClicked" class="link-item">
+   <v-layout row wrap v-longpress="durationClicked" class="link-item">
     <v-flex xs12 class="ellipsis subtoolbar-title" v-bind:class="{'subtoolbar-title-single':undefined==duration || duration<=0}">{{remaining.show ? "-" :""}}{{(remaining.show ? remaining.size : listSize) | displayCount}}</v-flex>
     <v-flex xs12 v-if="undefined!=duration && duration>0" class="ellipsis subtoolbar-subtitle subtext">{{remaining.show ? "-" :""}}{{(remaining.show ? remaining.duration : duration) | displayTime}}{{name}}</v-flex>
    </v-layout>
    <v-spacer></v-spacer>
    <v-btn @click.stop="actionsMenu($event)" flat icon class="toolbar-button" :title="trans.actions" v-if="otherActions.length>0"><v-icon>more_horiz</v-icon></v-btn>
-   <v-btn :title="trans.repeatOne" flat icon v-if="(desktopLayout || wide>0) && playerStatus.repeat===1" class="toolbar-button" v-bind:class="{'disabled':noPlayer}" v-longpress.prevent.stop="repeatClicked"><v-icon>repeat_one</v-icon></img></v-btn>
-   <v-btn :title="trans.repeatOne" flat icon v-else-if="(desktopLayout || wide>0) && playerStatus.repeat===1" class="toolbar-button" v-bind:class="{'disabled':noPlayer}" v-longpress.prevent.stop="repeatClicked"><v-icon>repeat_one</v-icon></img></v-btn>
-   <v-btn :title="trans.repeatAll" flat icon v-else-if="(desktopLayout || wide>0) && playerStatus.repeat===2" class="toolbar-button" v-bind:class="{'disabled':noPlayer}" v-longpress.prevent.stop="repeatClicked"><v-icon>repeat</v-icon></v-btn>
-   <v-btn :title="trans.dstm" flat icon v-else-if="(desktopLayout || wide>0) && dstm" class="toolbar-button" v-bind:class="{'disabled':noPlayer}" v-longpress.prevent.stop="repeatClicked"><v-icon>all_inclusive</v-icon></v-btn>
-   <v-btn :title="trans.repeatOff" flat icon v-else-if="desktopLayout || wide>0" class="toolbar-button dimmed" v-bind:class="{'disabled':noPlayer}" v-longpress.prevent.stop="repeatClicked"><img class="svg-img media-icon" :src="'repeat-off' | svgIcon(darkUi)"></img></v-btn>
+   <v-btn :title="trans.repeatOne" flat icon v-if="(desktopLayout || wide>0) && playerStatus.repeat===1" class="toolbar-button" v-bind:class="{'disabled':noPlayer}" v-longpress="repeatClicked"><v-icon>repeat_one</v-icon></img></v-btn>
+   <v-btn :title="trans.repeatOne" flat icon v-else-if="(desktopLayout || wide>0) && playerStatus.repeat===1" class="toolbar-button" v-bind:class="{'disabled':noPlayer}" v-longpress="repeatClicked"><v-icon>repeat_one</v-icon></img></v-btn>
+   <v-btn :title="trans.repeatAll" flat icon v-else-if="(desktopLayout || wide>0) && playerStatus.repeat===2" class="toolbar-button" v-bind:class="{'disabled':noPlayer}" v-longpress="repeatClicked"><v-icon>repeat</v-icon></v-btn>
+   <v-btn :title="trans.dstm" flat icon v-else-if="(desktopLayout || wide>0) && dstm" class="toolbar-button" v-bind:class="{'disabled':noPlayer}" v-longpress="repeatClicked"><v-icon>all_inclusive</v-icon></v-btn>
+   <v-btn :title="trans.repeatOff" flat icon v-else-if="desktopLayout || wide>0" class="toolbar-button dimmed" v-bind:class="{'disabled':noPlayer}" v-longpress="repeatClicked"><img class="svg-img media-icon" :src="'repeat-off' | svgIcon(darkUi)"></img></v-btn>
 
    <v-btn :title="trans.shuffleAlbums" flat icon v-if="(desktopLayout || wide>0) && playerStatus.shuffle===2" class="toolbar-button" v-bind:class="{'disabled':noPlayer}" @click="shuffleClicked"><img class="svg-img media-icon" :src="'shuffle-albums' | svgIcon(darkUi)"></v-btn>
    <v-btn :title="trans.shuffleAll" flat icon v-else-if="(desktopLayout || wide>0) && playerStatus.shuffle===1" class="toolbar-button" v-bind:class="{'disabled':noPlayer}" @click="shuffleClicked"><v-icon >shuffle</v-icon></v-btn>
    <v-btn :title="trans.shuffleOff" flat icon v-else-if="desktopLayout || wide>0" class="toolbar-button dimmed" v-bind:class="{'disabled':noPlayer}" @click="shuffleClicked"><img class="svg-img media-icon" :src="'shuffle-off' | svgIcon(darkUi)"></img></v-btn>
    <v-btn :title="ACTIONS[PQ_SAVE_ACTION].title | tooltip(LMS_SAVE_QUEUE_KEYBOARD,keyboardControl)" flat icon @click="save()" class="toolbar-button" v-bind:class="{'disabled':items.length<1}" v-if="(!LMS_KIOSK_MODE || !HIDE_FOR_KIOSK.has(PQ_SAVE_ACTION)) && !queryParams.party && wide>1"><v-icon>save</v-icon></v-btn>
-   <v-btn :title="trans.clear | tooltip(LMS_CLEAR_QUEUE_KEYBOARD,keyboardControl)" flat icon v-longpress.prevent.stop="clear" class="toolbar-button" v-bind:class="{'disabled':items.length<1}"v-if="!queryParams.party"><img class="svg-list-img" :src="'queue-clear' | svgIcon(darkUi)"></img></v-btn>
+   <v-btn :title="trans.clear | tooltip(LMS_CLEAR_QUEUE_KEYBOARD,keyboardControl)" flat icon v-longpress="clear" class="toolbar-button" v-bind:class="{'disabled':items.length<1}"v-if="!queryParams.party"><img class="svg-list-img" :src="'queue-clear' | svgIcon(darkUi)"></img></v-btn>
   </v-layout>
  </div>
  <div class="lms-list bgnd-cover" v-bind:class="{'queue-backdrop-cover':drawBackdrop}" id="queue-bgnd">

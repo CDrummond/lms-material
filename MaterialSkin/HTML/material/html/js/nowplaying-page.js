@@ -1126,7 +1126,7 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
             // wide=0 => controls under whole width
             // wide=2 => controls under text only
             this.landscape = window.innerWidth >= (window.innerHeight*queryParams.npRatio) && window.innerWidth>=450;
-            this.wide = window.innerWidth>=600 && window.innerWidth>=(window.innerHeight*1.7)
+            this.wide = window.innerWidth>=600 && window.innerWidth>=(window.innerHeight*(this.$store.state.desktopLayout ? 1.7 : 1.35))
                         ? 2 /*: window.innerHeight>340 ? 1*/ : 0;
             this.windowWidth = Math.floor(window.innerWidth / 25) * 25;
             bus.$emit('nowPlayingWide', this.wide);

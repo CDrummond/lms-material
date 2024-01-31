@@ -5,6 +5,7 @@
 3. Better handling of volume dialog for mini-player use-case.
 4. Add empty context menu handler for buttons that have long-press action and
    use SVG icons.
+5. Alter now-playing cover rounding based upon size.
 
 4.2.1
 -----

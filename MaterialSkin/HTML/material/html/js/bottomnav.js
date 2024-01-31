@@ -11,7 +11,7 @@ Vue.component('lms-bottomnav', {
 <v-footer class="lms-footer" id="nav-bar">
  <v-bottom-nav class="lms-bottom-nav" :active="activeBtn">
   <template v-for="(item, index) in items">
-   <v-btn flat class="lms-bottom-nav-button" v-longpress:nomove="btnPressed" v-bind:class="{'active-nav': activeBtn==index, 'inactive-nav': activeBtn!=index}" :id="'navbtn-'+index">
+   <v-btn flat class="lms-bottom-nav-button" v-longpress:nomove="btnPressed" @contextmenu.prevent="" v-bind:class="{'active-nav': activeBtn==index, 'inactive-nav': activeBtn!=index}" :id="'navbtn-'+index">
     <span>{{item.text}}</span>
     <div class="pill" v-bind:class="{'pill-ct':coloredToolbars}" v-if="activeBtn==index"></div>
     <v-icon v-if="activeBtn==index">{{item.active}}</v-icon>

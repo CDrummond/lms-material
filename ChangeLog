@@ -22,6 +22,7 @@
 4. Add empty context menu handler for buttons that have long-press action and
    use SVG icons.
 5. Alter now-playing cover rounding based upon size.
+6. Fix add/play hover buttons for large track lists.
 
 4.2.1
 -----

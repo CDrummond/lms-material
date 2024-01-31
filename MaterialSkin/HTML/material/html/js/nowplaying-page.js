@@ -1125,9 +1125,17 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
         checkLandscape() {
             // wide=0 => controls under whole width
             // wide=2 => controls under text only
+            if (undefined==this.navPad) {
+                let val = parseInt(window.getComputedStyle(document.documentElement).getPropertyValue('--sab').replace('px', ''));
+                this.navPad = undefined==val || isNaN(val) ? 0 : val;
+            }
+            let maxImgHeight = window.innerHeight - (this.$store.state.desktopLayout ? 50 : (this.navPad + 102));
+            let maxImgWidth = (window.innerWidth/2.0)-32;
             this.landscape = window.innerWidth >= (window.innerHeight*queryParams.npRatio) && window.innerWidth>=450;
-            this.wide = window.innerWidth>=600 && window.innerWidth>=(window.innerHeight*(this.$store.state.desktopLayout ? 1.7 : 1.35))
-                        ? 2 /*: window.innerHeight>340 ? 1*/ : 0;
+            this.wide = window.innerWidth>=600 &&
+                        window.innerWidth>=(window.innerHeight*1.25) &&
+                        maxImgWidth>=maxImgHeight
+                            ? 2 /*: window.innerHeight>340 ? 1*/ : 0;
             this.windowWidth = Math.floor(window.innerWidth / 25) * 25;
             bus.$emit('nowPlayingWide', this.wide);
         },

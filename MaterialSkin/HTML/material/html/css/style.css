@@ -60,7 +60,8 @@
  --drag-area-height:100%;
  --window-area-left:0px;
  --window-area-right:0px;
- --bottom-nav-pad:max(calc(env(safe-area-inset-bottom) - 22px), 0px);
+ --sab: env(safe-area-inset-bottom);
+ --bottom-nav-pad:max(calc(var(--sab) - 22px), 0px);
  --dialog-opacity:1.0;
 }
 
@@ -1224,8 +1225,8 @@ div.v-subheader {
  width:var(--np-portrait-image-size);
 }
 .np-image-landscape .np-skip {
- left:calc((50vw - var(--np-image-landscape-size))/2);
- top:calc((var(--np-image-landscape-height) - var(--np-image-landscape-size))/2);
+ left:var(--np-image-border);
+ top:var(--np-image-border);
  height:var(--np-image-landscape-size);
  width:var(--np-image-landscape-size);
 }
@@ -1246,13 +1247,11 @@ div.v-subheader {
 }
 
 .np-image-landscape .np-emblem, .np-image-landscape .np-menu {
- top:calc(var(--np-image-btn-pad) + ((var(--np-image-landscape-height) - var(--np-image-landscape-size))/2));
- right:calc(var(--np-image-btn-pad) + ((50vw - var(--np-image-landscape-size))/2));
+ left:calc(var(--np-image-landscape-size) - ((var(--np-image-border)/2) + (var(--np-image-btn-pad)*2)));
 }
 
 .np-image-landscape .np-menu {
- top:unset;
- bottom:calc(var(--np-image-btn-pad) + ((var(--np-image-landscape-height) - var(--np-image-landscape-size))/2));
+ top:calc(var(--np-image-landscape-size) - ((var(--np-image-border)/2) + (var(--np-image-btn-pad)*2))) !important;
 }
 
 .np-image-landscape-wide .np-emblem, .np-image-landscape-wide .np-menu {
@@ -1650,14 +1649,25 @@ div.v-rating i.primary--text, div.v-rating i.accent--text {
  bottom:var(--thin-portrait-adjust);
 }
 
+.np-image-landscape {
+ width:var(--np-image-landscape-height);
+}
+
 .np-image-landscape-wide {
  width:var(--np-image-landscape-wide-height);
+}
+
+.np-details-landscape {
+ width:calc(100vw - (var(--np-image-landscape-height) + var(--np-image-border))) !important;
 }
 
 .np-details-landscape-wide {
  width:calc(100vw - (var(--np-image-landscape-wide-height) + var(--np-image-border))) !important;
 }
 
+.np-details-landscape .np-landscape-song-info,
+.np-details-landscape .np-portrait-song-info div,
+.np-details-landscape .np-landscape-song-info div,
 .np-details-landscape-wide .np-landscape-song-info,
 .np-details-landscape-wide .np-portrait-song-info div,
 .np-details-landscape-wide .np-landscape-song-info div {

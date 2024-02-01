@@ -1111,7 +1111,7 @@ var lmsBrowse = Vue.component("lms-browse", {
                 var revKey = MSK_REV_SORT_OPT.split('.')[0];
                 var revPos = -1;
                 for (var i=0, len=this.command.params.length; i<len; ++i) {
-                    if (this.command.params[i].startsWith(SORT_KEY)) {
+                    if (this.command.params[i].startsWith(SORT_KEY) || (!isAlbums && this.command.params[i].startsWith(MSK_SORT_KEY))) {
                         sort = this.command.params[i].split(':')[1];
                     } else if (this.command.params[i].startsWith(revKey)) {
                         revPos = i;
@@ -1128,12 +1128,11 @@ var lmsBrowse = Vue.component("lms-browse", {
                 } else {
                     setTrackSort(getTrackSort(this.current.stdItem).by, reverseSort, this.current.stdItem);
                 }
-
                 this.refreshList(false);
             } else if (!sort.selected) {
                 for (var i=0, len=this.command.params.length; i<len; ++i) {
-                    if (this.command.params[i].startsWith(SORT_KEY)) {
-                        this.command.params[i]=SORT_KEY+sort.key;
+                    if (this.command.params[i].startsWith(SORT_KEY) || (!isAlbums && this.command.params[i].startsWith(MSK_SORT_KEY))) {
+                        this.command.params[i]=(isAlbums || LMS_TRACK_SORTS.has(sort.key) ? SORT_KEY : MSK_SORT_KEY)+sort.key;
                         break;
                     }
                 }

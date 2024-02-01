@@ -24,9 +24,7 @@ sub page {
 }
 
 sub prefs {
-    return ($prefs, 'composergenres', 'conductorgenres', 'bandgenres', 'showComposer', 'showConductor', 'showBand', 'password', 'respectFixedVol',
-            'showAllArtists', 'artistFirst', 'allowDownload', 'commentAsDiscTitle', 'showComment', 'pagedBatchSize', 'noArtistFilter',
-            'releaseTypeOrder', 'genreImages', 'touchLinks', 'yearInSub', 'playShuffle');
+    return ($prefs, qw(composergenres conductorgenres bandgenres showComposer showConductor showBand password respectFixedVol showAllArtists artistFirst allowDownload commentAsDiscTitle showComment pagedBatchSize noArtistFilter releaseTypeOrder genreImages touchLinks yearInSub playShuffle));
 }
 
 sub handler {

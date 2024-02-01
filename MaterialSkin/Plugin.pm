@@ -103,24 +103,30 @@ sub initPlugin {
         composergenres => $DEFAULT_COMPOSER_GENRES,
         conductorgenres => $DEFAULT_CONDUCTOR_GENRES,
         bandgenres => $DEFAULT_BAND_GENRES,
-        showComposer => '1',
-        showConductor => '0',
-        showBand => '0',
-        respectFixedVol => '1',
-        showAllArtists => '1',
-        artistFirst => '1',
+        showComposer => 1,
+        showConductor => 0,
+        showBand => 0,
+        respectFixedVol => 1,
+        showAllArtists => 1,
+        artistFirst => 1,
         password => '',
-        allowDownload => '0',
-        commentAsDiscTitle => '0',
-        showComment => '0',
+        allowDownload => 0,
+        commentAsDiscTitle => 0,
+        showComment => 0,
         pagedBatchSize => lmsVersion()>=80400 ? 250 : 100,
-        noArtistFilter => '1',
+        noArtistFilter => 1,
         releaseTypeOrder => '',
-        genreImages => '0',
-        touchLinks => '0',
-        yearInSub => '1',
-        playShuffle => '0'
+        genreImages => 0,
+        touchLinks => 0,
+        yearInSub => 1,
+        playShuffle => 0
     });
+
+    $prefs->setChange(sub { $prefs->set($_[0], 0) unless defined $_[1]; }, 'showComposer');
+    $prefs->setChange(sub { $prefs->set($_[0], 0) unless defined $_[1]; }, 'showAllArtists');
+    $prefs->setChange(sub { $prefs->set($_[0], 0) unless defined $_[1]; }, 'artistFirst');
+    $prefs->setChange(sub { $prefs->set($_[0], 0) unless defined $_[1]; }, 'noArtistFilter');
+    $prefs->setChange(sub { $prefs->set($_[0], 0) unless defined $_[1]; }, 'yearInSub');
 
     if (main::WEBUI) {
         require Plugins::MaterialSkin::Settings;

@@ -7,6 +7,7 @@
    use SVG icons.
 5. Alter now-playing cover rounding based upon size.
 6. Fix add/play hover buttons for large track lists.
+7. Fix certain server side bool options being reset when disabled.
 
 4.2.1
 -----

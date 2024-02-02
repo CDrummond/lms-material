@@ -25,6 +25,9 @@
    use SVG icons.
 5. Alter now-playing cover rounding based upon size.
 6. Fix add/play hover buttons for large track lists.
+7. Fix certain server side bool options being reset when disabled.
+8. Fix 'All songs' and 'Compositon' sorts.
+9. Fix missing playlist actions.
 
 4.2.1
 -----

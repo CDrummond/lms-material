@@ -1261,6 +1261,7 @@ function parseBrowseResp(data, parent, options, cacheKey, parentCommand, parentG
             let groups=[];
             if (grouping>0 && resp.items.length>1) {
                 let field = 1==grouping ? 'album' : 2==grouping ? 'title' : 'artist';
+                // Groups is array of "<start index>, <title>"
                 groups=[[0, resp.items[0][field] + (1==grouping && resp.items[0].year ? " ("+resp.items[0].year+")" : "")]];
                 for (let i=1, loop=resp.items, len=loop.length; i<len; ++i) {
                     if (loop[i-1][field]!=loop[i][field]) {
@@ -1271,6 +1272,7 @@ function parseBrowseResp(data, parent, options, cacheKey, parentCommand, parentG
                     for (let i=0, len=groups.length; i<len; ++i) {
                         let count = 0;
                         let duration = 0;
+                        // We add 'i' below so as to skip inserted headers!
                         for (let j=groups[i][0]+i, jl=resp.items, jlen=jl.length; j<jlen; ++j) {
                             if ((i+1)<len && j>=groups[i+1][0]+i) {
                                 break;

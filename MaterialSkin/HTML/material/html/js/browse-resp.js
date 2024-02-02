@@ -1212,7 +1212,7 @@ function parseBrowseResp(data, parent, options, cacheKey, parentCommand, parentG
                               artist_id: isSearchResult ? i.artist_id : undefined,
                               url: i.url,
                               draggable: true,
-                              duration: i.duration,
+                              duration: duration>0 ? duration : undefined,
                               durationStr: duration>0 ? formatSeconds(duration) : undefined,
                               highlight: highlight,
                               idx: idx

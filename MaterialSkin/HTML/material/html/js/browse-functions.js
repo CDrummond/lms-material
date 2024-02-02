@@ -503,16 +503,6 @@ function browseHandleListResponse(view, item, command, resp, prevPage, appendIte
             view.currentActions.push({action:TRACK_SORTS_ACTION, weight:10});
         }
         view.currentActions.sort(function(a, b) { return a.weight!=b.weight ? a.weight<b.weight ? -1 : 1 : titleSort(a, b) });
-        // Ensure there is a divider before 'Play next'
-        for (let a=0, loop=view.currentActions, len=loop.length; a<len; ++a) {
-            if (loop[a].action==INSERT_ACTION) {
-                if (a>0 && loop[a-1].action!=DIVIDER) {
-                    loop.splice(a, 0, {action:DIVIDER});
-                }
-                break;
-            }
-        }
-
         view.itemCustomActions = resp.itemCustomActions;
         if (item.id.startsWith(SEARCH_ID)) {
             if (view.items.length>0 && view.items[0].id.startsWith("track_id:")) {
@@ -524,6 +514,8 @@ function browseHandleListResponse(view, item, command, resp, prevPage, appendIte
             view.tbarActions=[ADD_FAV_FOLDER_ACTION, ADD_FAV_ACTION];
         } else if (SECTION_PLAYLISTS==view.current.section && view.current.id.startsWith("playlist_id:") && view.items.length>0 && undefined!=view.items[0].stdItem) {
             view.tbarActions=[PLAY_ACTION, ADD_ACTION];
+            view.currentActions=browseActions(view, resp.items.length>0 ? item : undefined, {}, resp.items.length);
+            view.currentActions.unshift({action:SEARCH_LIST_ACTION, weight:1});
         } else if (view.current.stdItem==STD_ITEM_MAI && view.history.length>0 && view.history[view.history.length-1].current.stdItem==STD_ITEM_ALBUM) {
             view.tbarActions=[PLAY_ACTION, ADD_ACTION];
             // We are showing album review, copy some of the album's actions into this view's actions...
@@ -559,6 +551,16 @@ function browseHandleListResponse(view, item, command, resp, prevPage, appendIte
             // Select track -> More -> Album:AlbumTitle -> Tracks
             if (view.tbarActions.length==0 && view.current && ((view.current.actions && view.current.actions.play) || view.current.stdItem)) {
                 view.tbarActions=[PLAY_ACTION, ADD_ACTION];
+            }
+        }
+
+        // Ensure there is a divider before 'Play next'
+        for (let a=0, loop=view.currentActions, len=loop.length; a<len; ++a) {
+            if (loop[a].action==INSERT_ACTION) {
+                if (a>0 && loop[a-1].action!=DIVIDER) {
+                    loop.splice(a, 0, {action:DIVIDER});
+                }
+                break;
             }
         }
 

@@ -15,6 +15,8 @@
  9. Alter ratio for when now-playing landscape is treated as 'wide'.
 10. For landscape now-playing always place cover on left, and have details
     fill remaining space - even if controls span view.
+11. If queue is not pinned then clickin on track count in now-playing bar will
+    toggle queue in desktop layout.
 
 4.2.2
 -----

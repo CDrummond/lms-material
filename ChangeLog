@@ -12,7 +12,7 @@
     hovering.
  8. In MAI track details always show composer, conductor, band if tags exist,
     regardless of whether these are used for now-playing, etc. or not.
- 9. Alter ratio for when now-playing landscape is treated as "wide".
+ 9. Alter ratio for when now-playing landscape is treated as 'wide'.
 10. For landscape now-playing always place cover on left, and have details
     fill remaining space - even if controls span view.
 

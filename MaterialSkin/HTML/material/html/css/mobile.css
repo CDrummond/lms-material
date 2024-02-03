@@ -8,10 +8,11 @@
 :root {
  --bottom-toolbar-height:calc(var(--bottom-nav-pad) + 52px);
  --np-portrait-image-size:min(calc((var(--vh, 1vh)*100) - (var(--main-toolbar-height) + var(--bottom-toolbar-height) + 210px) - (var(--np-image-border)*2)), 100vw - (var(--np-image-border)*2), calc(var(--vh, 1vh)*50));
- --np-image-landscape-height:calc((var(--vh, 1vh)*100) - (var(--main-toolbar-height) + var(--bottom-toolbar-height) + 116px));
+ --np-image-landscape-height:min(50vw, calc((var(--vh, 1vh)*100) - (var(--main-toolbar-height) + var(--bottom-toolbar-height) + 116px)));
  --np-image-landscape-size:min(var(--np-image-landscape-height) - (var(--np-image-border)*2), 50vw - (var(--np-image-border)*2));
  --np-image-landscape-wide-height:min(calc((var(--vh, 1vh)*100) - (var(--main-toolbar-height) + var(--bottom-toolbar-height))), 50vw);
  --np-image-landscape-wide-size:min(var(--np-image-landscape-wide-height) - (var(--np-image-border)*2), 50vw - (var(--np-image-border)*2));
+ --np-landscape-item-height:calc((var(--vh, 1vh)*100) - (var(--main-toolbar-height) + var(--bottom-toolbar-height) + 118px));
  --nav-hover-color:var(--btn-hover-color);
 }
 
@@ -192,7 +193,6 @@
 }
 
 .np-details-landscape {
- height:calc((var(--vh, 1vh)*100) - (var(--main-toolbar-height) + var(--bottom-toolbar-height) + 118px));
  width:50vw;
  display:flex;
  justify-content:center;

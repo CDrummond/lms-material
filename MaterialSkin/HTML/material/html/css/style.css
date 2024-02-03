@@ -45,6 +45,7 @@
  --image-background-color:rgba(0, 0, 0, 0.075);
  --np-image-border:16px;
  --np-image-btn-pad:2px;
+ --np-landscape-top-pad:calc((var(--np-landscape-item-height) - var(--np-image-landscape-size))/2);
  --mobile-scrollbar-thumb-color:transparent;
  --bgnd-filter:blur(7px);
  --backdrop-filter:blur(4px);
@@ -1226,7 +1227,7 @@ div.v-subheader {
 }
 .np-image-landscape .np-skip {
  left:var(--np-image-border);
- top:var(--np-image-border);
+ top:calc(var(--np-image-border) + var(--np-landscape-top-pad) - 16px);
  height:var(--np-image-landscape-size);
  width:var(--np-image-landscape-size);
 }
@@ -1251,7 +1252,11 @@ div.v-subheader {
 }
 
 .np-image-landscape .np-menu {
- top:calc(var(--np-image-landscape-size) - ((var(--np-image-border)/2) + (var(--np-image-btn-pad)*2))) !important;
+ top:calc(var(--np-landscape-top-pad) + (var(--np-image-landscape-size) - (var(--np-image-btn-pad) + var(--small-icon-size) + 6px))) !important;
+}
+
+.np-image-landscape .np-emblem {
+ top:calc(var(--np-image-btn-pad) + var(--np-landscape-top-pad)) !important;
 }
 
 .np-image-landscape-wide .np-emblem, .np-image-landscape-wide .np-menu {
@@ -1262,11 +1267,13 @@ div.v-subheader {
  top:calc(var(--np-image-landscape-wide-size) - ((var(--np-image-border)/2) + (var(--np-image-btn-pad)*2))) !important;
 }
 
+.np-image-landscape, .np-details-landscape {
+ height:var(--np-landscape-item-height);
+}
+
 .np-image-landscape {
  float:left;
  margin:auto;
- height:var(--np-image-landscape-height);
- width:50vw;
  display:flex;
  padding:var(--np-image-border);
  position:relative;
@@ -1345,8 +1352,6 @@ div.v-subheader {
  display: -webkit-flex;
  width:100%;
  height:100%;
- padding-left:16px;
- padding-right:16px;
 }
 
 .np-portrait-song-info div, .np-landscape-song-info div {

@@ -61,17 +61,18 @@ Vue.component('lms-savequeue', {
             });
         }.bind(this));
         bus.$on('noPlayers', function() {
-            this.show=false;
+            this.cancel();
         }.bind(this));
         bus.$on('closeDialog', function(dlg) {
             if (dlg == 'savequeue') {
-                this.show=false;
+                this.cancel();
             }
         }.bind(this));
     },
     methods: {
         cancel() {
             this.show=false;
+            bus.$emit('queueDialogClosed');
         },
         save() {
             // For some reason 'this.name' is not updated if the combo has focus when the

@@ -175,25 +175,21 @@ function nowplayingOnPlayerStatus(view, playerStatus) {
     let useBandTag = playerStatus.current.band && lmsOptions.showBand && useBand(playerStatus.current.genre);
 
     let keys = ['composer', 'conductor', 'band'];
-    let use = [useComposerTag, useConductorTag, useBandTag];
     let mods = ['', 's', '_ids'];
     for (let i=0, len=keys.length; i<len; ++i) {
-        let useRole = use[i] || undefined!=view.customActions;
         let idk = keys[i]+"_id";
         for (let j=0, jl=mods.length; j<jl; ++j) {
             let key = keys[i]+mods[j];
-            let val = useRole ? playerStatus.current[key] : undefined;
+            let val = playerStatus.current[key];
             if (val!=view.playerStatus.current[key]) {
                 view.playerStatus.current[key] = val;
             }
         }
-        let id = useRole
-                 ? playerStatus.current[idk]
+        let id = playerStatus.current[idk]
                     ? playerStatus.current[idk]
                     : playerStatus.current[idk+"s"]
                         ? playerStatus.current[idk+"s"][0]
-                        : undefined
-                 : undefined;
+                        : undefined;
         if (id!=view.playerStatus.current[idk]) {
             view.playerStatus.current[idk] = id;
         }
@@ -563,9 +559,9 @@ function nowplayingFetchTrackInfo(view) {
         }
     }
     let others = [[undefined!=trk.albumartist, 'albumartist', i18n("Album artist")],
-                  [trk.composer && lmsOptions.showComposer && useComposer(trk.genre), 'composer', i18n("Composer")],
-                  [trk.conductor && lmsOptions.showConductor && useConductor(trk.genre), 'conductor', i18n("Conductor")],
-                  [trk.band && lmsOptions.showBand && useBand(trk.genre), 'band', i18n("Band")]];
+                  [trk.composer, 'composer', i18n("Composer")],
+                  [trk.conductor, 'conductor', i18n("Conductor")],
+                  [trk.band, 'band', i18n("Band")]];
     for (let i=0, len=others.length; i<len; ++i) {
         if (others[i][0]) {
             let entry = nowplayingArtistEntry(trk, others[i][1], others[i][1].toUpperCase());

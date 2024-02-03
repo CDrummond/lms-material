@@ -10,7 +10,6 @@ const MORE_COMMANDS = new Set(["item_add", "item_insert", "itemplay"/*, "item_fa
 const MIXER_APPS = new Set(["musicip", "blissmixer", "musicsimilarity"]);
 const STREAM_SCHEMAS = new Set(["http", "https", "wavin"]);
 const HIDE_APPS_FOR_PARTY = new Set(["apps.accuradio", "apps.ardaudiothek", "apps.bbcsounds", "apps.cplus", "apps.globalplayeruk", "apps.iheartradio", "apps.lastmix", "apps.mixcloud", "apps.planetradio", "apps.podcasts", "apps.radiofrance", "apps.radionet", "apps.radionowplaying", "apps.radioparadise", "apps.squeezecloud", "apps.timesradio", "apps.ukradioplayer", "apps.virginradio", "apps.wefunk", "apps.phishin", "apps.walkwithme"]);
-const HIDE_APP_NAMES_FOR_PARTY = new Set(["Absolute Radio UK", "AccuRadio", "BBC", "CBC", "ClassicalRadio.com", "Digitally Imported", "JAZZRADIO.com", "Live Music Archive", "ROCKRADIO.com", "RadioFeeds UK & Ireland", "RadioTunes", "Radionomy", "SHOUTcast", "SomaFM", "TuneIn Radio", "ZenRadio.com"])
 const RELEASE_TYPES = ["ALBUM", "EP", "SINGLE", "BOXSET", "BESTOF", "COMPILATION", "APPEARANCE", "APPEARANCE_BAND", "APPEARANCE_CONDUCTOR", "COMPOSITION"];
 const ARTIST_ROLES = new Set([1,5])
 const TRACK_ARTIST_ROLE = 6;
@@ -424,25 +423,17 @@ function parseBrowseResp(data, parent, options, cacheKey, parentCommand, parentG
                 }
 
                 if (isAppsTop && i.actions && i.actions.go && i.actions.go.params && i.actions.go.params.menu) {
-                    if ("myapps" == i.actions.go.params.menu) { // mysqueezebox.com apps
-                        if (i.actions.go.params.item_id) {
-                            i.id = fixId(i.actions.go.params.item_id, "myapps");
-                        }
-                    } else {
-                        i.id = "apps."+i.actions.go.params.menu;
-                    }
+                    i.id = "apps."+i.actions.go.params.menu;
 
-                    if (i.id) {
-                        if (queryParams.party && (HIDE_APPS_FOR_PARTY.has(i.id) || (i.id.startsWith("myapps") && HIDE_APP_NAMES_FOR_PARTY.has(i.title)))) {
-                            continue;
+                    if (queryParams.party && HIDE_APPS_FOR_PARTY.has(i.id)) {
+                        continue;
+                    }
+                    if (allowPinning) {
+                        if (!addedDivider && i.menu.length>0) {
+                            i.menu.push(DIVIDER);
+                            addedDivider = true;
                         }
-                        if (allowPinning) {
-                            if (!addedDivider && i.menu.length>0) {
-                                i.menu.push(DIVIDER);
-                                addedDivider = true;
-                            }
-                            i.menu.push(options.pinned.has(i.id) ? UNPIN_ACTION : PIN_ACTION);
-                        }
+                        i.menu.push(options.pinned.has(i.id) ? UNPIN_ACTION : PIN_ACTION);
                     }
                     mapIcon(i, command);
                 } else if (isPlaylists && i.commonParams && i.commonParams.playlist_id) {

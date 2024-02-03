@@ -18,7 +18,7 @@ function updateUiSettings(state, val) {
     let stdItems = ['autoScrollQueue', 'browseBackdrop', 'queueBackdrop', 'nowPlayingBackdrop', 'infoBackdrop',
                     'browseTechInfo', 'techInfo', 'nowPlayingTrackNum', 'swipeVolume', 'swipeChangeTrack',
                     'keyboardControl', 'skipBSeconds', 'skipFSeconds', 'powerButton', 'mediaControls', 'showRating',
-                    'browseContext', 'nowPlayingContext', 'queueContext'];
+                    'browseContext', 'nowPlayingContext', 'queueContext', 'moveDialogs', 'autoCloseQueue'];
     for (let i=0, len=stdItems.length; i<len; ++i) {
         let key=stdItems[i];
         if (undefined!=val[key] && state[key]!=val[key]) {
@@ -285,7 +285,9 @@ const store = new Vuex.Store({
         powerButton: false,
         mediaControls: false,
         downloadStatus: [],
-        coloredToolbars: false
+        coloredToolbars: false,
+        moveDialogs: false,
+        autoCloseQueue: false
     },
     mutations: {
         updatePlayer(state, player) {
@@ -486,7 +488,7 @@ const store = new Vuex.Store({
                              'infoBackdrop', 'useDefaultBackdrops', 'browseTechInfo', 'techInfo', 'queueShowTrackNum', 'nowPlayingTrackNum',
                              'nowPlayingClock', 'swipeVolume', 'swipeChangeTrack', 'keyboardControl', 'screensaver', 'homeButton',
                              'powerButton', 'mediaControls', 'queueAlbumStyle', 'queueThreeLines', 'browseContext', 'nowPlayingContext',
-                             'queueContext'];
+                             'queueContext', 'moveDialogs', 'autoCloseQueue'];
             for (let i=0, len=boolItems.length; i<len; ++i) {
                 let key = boolItems[i];
                 state[key] = getLocalStorageBool(key, state[key]);
@@ -620,17 +622,23 @@ const store = new Vuex.Store({
         dialogOpen(state, val) {
             if (val.shown) {
                 state.openDialogs.push(val.name);
-            } else if (state.openDialogs.length>0) {
-                for (var len=state.openDialogs.length, i=len-1; i>=0; --i) {
-                    if (state.openDialogs[i]==val.name) {
-                        state.openDialogs.splice(i, 1);
-                        state.lastDialogClose = new Date().getTime();
-                        break;
+                dialogPosition(state);
+            } else {
+                resetDialogPos();
+                if (state.openDialogs.length>0) {
+                    for (var len=state.openDialogs.length, i=len-1; i>=0; --i) {
+                        if (state.openDialogs[i]==val.name) {
+                            state.openDialogs.splice(i, 1);
+                            state.lastDialogClose = new Date().getTime();
+                            break;
+                        }
                     }
                 }
             }
-
             state.activeDialog = state.openDialogs.length>0 ? state.openDialogs[state.openDialogs.length-1] : undefined;
+            if (0==state.openDialogs.length) {
+                resetDialogPos();
+            }
             emitToolbarColorsFromState(state);
         },
         closeAllDialogs(state, val) {

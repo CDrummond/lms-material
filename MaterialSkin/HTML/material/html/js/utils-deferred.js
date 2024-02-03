@@ -395,7 +395,13 @@ function sortPlaylist(view, playerId, title, command) {
         sorts.push({val:14, title:i18n("Play count"), subtitle:i18n("...then album artist, album, disc no., track no.")});
     }
 
+    if (undefined!=view.cancelCloseTimer) {
+        view.cancelCloseTimer(true);
+    }
     choose(title, sorts, {key:command[1], options:[{title:title, val:0}, {title:title+SEPARATOR+i18n('Single field only'), val:1}]}).then(choice => {
+        if (undefined!=view.resetCloseTimer) {
+            view.resetCloseTimer();
+        }
         if (undefined!=choice) {
             command.push("order:"+(choice.item.val+(choice.option.val*100)));
             lmsCommand(playerId, command).then(({data}) => {
@@ -621,4 +627,84 @@ function handleNumeric(dlg, func, itemKey) {
             }
         }
     }.bind(dlg));
+}
+
+let mskinLastClickOrTouch = undefined;
+let mskinDialogWindowResize = false;
+function storeClickOrTouchPos(event, menu) {
+    if (event) {
+        let now = new Date().getTime();
+        let pos = undefined!=menu && (menu.show || (undefined!=menu.closed && now-menu.closed<100)) ? {x:menu.x, y:menu.y} : getTouchPos(event);
+        mskinLastClickOrTouch={ time:now,
+                                x:pos ? pos.x : undefined==event.x ? event.clientX : event.x,
+                                y:pos ? pos.y : undefined==event.y ? event.clientY : event.y };
+    }
+}
+
+function resetDialogPos() {
+    if ('unset'!=getComputedStyle(document.documentElement).getPropertyValue('--dialog-top')) {
+        document.documentElement.style.setProperty('--dialog-top', 'unset');
+        document.documentElement.style.setProperty('--dialog-left', 'unset');
+    }
+}
+
+function dialogPosition(state) {
+    resetDialogPos();
+    if (state && !state.moveDialogs) {
+        return;
+    }
+    if ((window.innerHeight>768 && window.innerWidth>1024) || (window.innerWidth>768 && window.innerHeight>1024)) {
+        document.documentElement.style.setProperty('--dialog-opacity', '0');
+
+        setTimeout(function () {
+            try {
+                if (undefined!=mskinLastClickOrTouch && new Date().getTime()-mskinLastClickOrTouch.time<150 && undefined!=mskinLastClickOrTouch.x) {
+                    setDialogPos();
+                } else {
+                    resetDialogPos();
+                }
+            } catch(e) {
+            }
+            document.documentElement.style.setProperty('--dialog-opacity', '1.0');
+        }, 2);
+    }
+}
+
+function setDialogPos() {
+    const MARGIN = 32;
+    let elems = document.getElementsByClassName('v-dialog');
+    if (undefined!=elems) {
+        for (let e=0, len=elems.length; e<len; ++e) {
+            let elem = elems[e];
+            if (!elem.classList.contains("v-dialog--fullscreen")) {
+                let w = elem.offsetWidth;
+                let h = elem.offsetHeight;
+                let top = mskinLastClickOrTouch.y - (h/2.0);
+                let left = mskinLastClickOrTouch.x - (w/2.0);
+                if (left<MARGIN) {
+                    left = MARGIN;
+                } else if (left+w+MARGIN > window.innerWidth) {
+                    left = window.innerWidth - (w + MARGIN);
+                }
+                if (top<MARGIN) {
+                    top = MARGIN;
+                } else if (top+h+MARGIN > window.innerHeight) {
+                    top = window.innerHeight - (h + MARGIN);
+                }
+                document.documentElement.style.setProperty('--dialog-top', top+'px');
+                document.documentElement.style.setProperty('--dialog-left', left+'px');
+
+                if (!mskinDialogWindowResize) {
+                    mskinDialogWindowResize=true;
+                    window.addEventListener('resize', setDialogPos);
+                }
+                return;
+            }
+        }
+    }
+
+    if (mskinDialogWindowResize) {
+        mskinDialogWindowResize = false;
+        window.removeEventListener('resize', setDialogPos);
+    }
 }

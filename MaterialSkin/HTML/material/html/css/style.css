@@ -60,7 +60,9 @@
  --drag-area-height:100%;
  --window-area-left:0px;
  --window-area-right:0px;
- --bottom-nav-pad:max(calc(env(safe-area-inset-bottom) - 22px), 0px);
+ --sab: env(safe-area-inset-bottom);
+ --bottom-nav-pad:max(calc(var(--sab) - 22px), 0px);
+ --dialog-opacity:1.0;
 }
 
 /* For old browsers that dont support min() */
@@ -1223,8 +1225,8 @@ div.v-subheader {
  width:var(--np-portrait-image-size);
 }
 .np-image-landscape .np-skip {
- left:calc((50vw - var(--np-image-landscape-size))/2);
- top:calc((var(--np-image-landscape-height) - var(--np-image-landscape-size))/2);
+ left:var(--np-image-border);
+ top:var(--np-image-border);
  height:var(--np-image-landscape-size);
  width:var(--np-image-landscape-size);
 }
@@ -1245,13 +1247,11 @@ div.v-subheader {
 }
 
 .np-image-landscape .np-emblem, .np-image-landscape .np-menu {
- top:calc(var(--np-image-btn-pad) + ((var(--np-image-landscape-height) - var(--np-image-landscape-size))/2));
- right:calc(var(--np-image-btn-pad) + ((50vw - var(--np-image-landscape-size))/2));
+ left:calc(var(--np-image-landscape-size) - ((var(--np-image-border)/2) + (var(--np-image-btn-pad)*2)));
 }
 
 .np-image-landscape .np-menu {
- top:unset;
- bottom:calc(var(--np-image-btn-pad) + ((var(--np-image-landscape-height) - var(--np-image-landscape-size))/2));
+ top:calc(var(--np-image-landscape-size) - ((var(--np-image-border)/2) + (var(--np-image-btn-pad)*2))) !important;
 }
 
 .np-image-landscape-wide .np-emblem, .np-image-landscape-wide .np-menu {
@@ -1649,14 +1649,25 @@ div.v-rating i.primary--text, div.v-rating i.accent--text {
  bottom:var(--thin-portrait-adjust);
 }
 
+.np-image-landscape {
+ width:var(--np-image-landscape-height);
+}
+
 .np-image-landscape-wide {
  width:var(--np-image-landscape-wide-height);
+}
+
+.np-details-landscape {
+ width:calc(100vw - (var(--np-image-landscape-height) + var(--np-image-border))) !important;
 }
 
 .np-details-landscape-wide {
  width:calc(100vw - (var(--np-image-landscape-wide-height) + var(--np-image-border))) !important;
 }
 
+.np-details-landscape .np-landscape-song-info,
+.np-details-landscape .np-portrait-song-info div,
+.np-details-landscape .np-landscape-song-info div,
 .np-details-landscape-wide .np-landscape-song-info,
 .np-details-landscape-wide .np-portrait-song-info div,
 .np-details-landscape-wide .np-landscape-song-info div {
@@ -1742,6 +1753,15 @@ progress {
 
 .queue-backdrop-cover {
  background-position:left center !important;
+}
+
+.frosted {
+ background-color:rgba(255, 255, 255, 0.65);
+ backdrop-filter: blur(15px);
+}
+
+.theme--dark .frosted {
+ background-color:rgba(32, 32, 32, 0.75);
 }
 
 .toolbar-blur {
@@ -2032,6 +2052,15 @@ progress {
 
 .lms-dialog {
  padding:var(--std-font-size);
+}
+
+@media screen and (orientation:portrait) and (min-width:769px) and (min-height:1025px), (orientation:landscape) and (min-height:769px) and (min-width:1025px) {
+ .v-dialog:not(.v-dialog--fullscreen)  {
+  position:absolute;
+  top:var(--dialog-top);
+  left:var(--dialog-left);
+  opacity:var(--dialog-opacity);
+ }
 }
 
 /* DSTM dialog gets 2 scrollbars? Seens vuetify sets max-height to 90%, setting to 95% works-around this double scrollbar */
@@ -2864,7 +2893,7 @@ div.v-subheader {
  margin: -2px -6px -2px -6px; /* Is -6px in vuetify, but list-btns messses this up? */
 }
 
-.add-btn, .play-btn {
+.other-btn, .main-btn {
  margin-right:8px;
  float:left;
  padding:0px;
@@ -2873,7 +2902,7 @@ div.v-subheader {
  height:var(--icon-size);
 }
 
-.play-btn {
+.other-btn {
  margin-right:4px;
 }
 
@@ -2884,12 +2913,12 @@ div.v-subheader {
  opacity:0.7;
 }
 
-.list-btns .play-btn {
+.list-btns .other-btn {
  margin-right:8px;
 }
 
 /*@media (hover: hover) and (pointer: fine) {*/
-.msk-is-non-touch .add-btn:hover, .msk-is-non-touch .play-btn:hover,
+.msk-is-non-touch .other-btn:hover, .msk-is-non-touch .main-btn:hover,
 .msk-is-non-touch .np-emblem:hover {
  opacity:1.0;
 }

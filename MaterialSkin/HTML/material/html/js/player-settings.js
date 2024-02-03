@@ -31,7 +31,7 @@ Vue.component('lms-player-settings', {
         </v-list-tile>
        </template>
        <v-divider v-if="customActions && customActions.length>0"></v-divider>
-       <v-list-tile @click="setSleep">
+       <v-list-tile @click="setSleep($event)">
         <v-list-tile-avatar><v-icon class="btn-icon">hotel</v-icon></v-list-tile-avatar>
         <v-list-tile-content><v-list-tile-title>{{i18n('Sleep')}}</v-list-tile-title></v-list-tile-content>
        </v-list-tile>
@@ -69,7 +69,7 @@ Vue.component('lms-player-settings', {
      <v-list-tile-content>
       <v-text-field clearable autocorrect="off" :label="i18n('Name')" v-model="playerName" class="lms-search"></v-text-field>
      </v-list-tile-content>
-     <v-list-tile-action><v-btn icon flat @click="setIcon" style="margin-top:-18px"><v-icon v-if="playerIcon.icon">{{playerIcon.icon}}</v-icon><img v-else class="svg-img" :src="playerIcon.svg | svgIcon(darkUi)"></img></v-btn></v-list-tile-action>
+     <v-list-tile-action><v-btn icon flat @click="setIcon($event)" style="margin-top:-18px"><v-icon v-if="playerIcon.icon">{{playerIcon.icon}}</v-icon><img v-else class="svg-img" :src="playerIcon.svg | svgIcon(darkUi)"></img></v-btn></v-list-tile-action>
     </v-list-tile>
     <div class="dialog-padding" v-if="unlockAll"></div>
     <v-header class="dialog-section-header">{{i18n('Audio')}}</v-header>
@@ -108,12 +108,12 @@ Vue.component('lms-player-settings', {
      <template v-for="(item, index) in alarms.scheduled" v-if="showAlarms">
       <v-list-tile class="alarm-entry">
        <v-checkbox v-model="item.enabled" :label="item | formatAlarm(twentyFourHour)" @click.stop="toggleAlarm(item)"></v-checkbox>
-       <v-btn flat icon @click.stop="editAlarm(item)" class="toolbar-button"><v-icon>edit</v-icon></v-btn>
-       <v-btn flat icon @click.stop="deleteAlarm(item)" class="toolbar-button"><v-icon>delete</v-icon></v-btn>
+       <v-btn flat icon @click.stop="editAlarm(item, $event)" class="toolbar-button"><v-icon>edit</v-icon></v-btn>
+       <v-btn flat icon @click.stop="deleteAlarm(item, $event)" class="toolbar-button"><v-icon>delete</v-icon></v-btn>
       </v-list-tile>
       <v-divider v-if="(index+1 < alarms.scheduled.length)" class="alarm-divider"></v-divider>
      </template>
-     <v-list-tile v-if="showAlarms"><v-btn flat @click.stop="addAlarm()" class="alarm-add"><v-icon class="btn-icon">alarm_add</v-icon>{{i18n("Add alarm")}}</v-btn></v-list-tile>
+     <v-list-tile v-if="showAlarms"><v-btn flat @click.stop="addAlarm($event)" class="alarm-add"><v-icon class="btn-icon">alarm_add</v-icon>{{i18n("Add alarm")}}</v-btn></v-list-tile>
      <div class="settings-sub-pad" v-if="showAlarms"></div>
      <v-header v-if="showAlarms">{{i18n('Alarm settings')}}</v-header>
      <v-list-tile v-if="showAlarms">
@@ -147,13 +147,13 @@ Vue.component('lms-player-settings', {
      <v-header>{{i18n('Other settings')}}</v-header>
      <v-list-tile class="other-setting">
       <v-list-tile-content>
-       <v-list-tile-title><v-btn flat @click="setSleep"><v-icon class="btn-icon">hotel</v-icon>{{i18n('Sleep')}} {{sleepTime | displayTime}}</v-btn></v-list-tile-title>
+       <v-list-tile-title><v-btn flat @click="setSleep($event)"><v-icon class="btn-icon">hotel</v-icon>{{i18n('Sleep')}} {{sleepTime | displayTime}}</v-btn></v-list-tile-title>
        <v-list-tile-sub-title>{{i18n("Control when player should 'sleep'.")}}</v-list-tile-sub-title>
       </v-list-tile-content>
      </v-list-tile>
      <v-list-tile v-if="showSync" class="other-setting">
       <v-list-tile-content>
-       <v-list-tile-title><v-btn flat @click="bus.$emit('dlg.open', 'sync', {id:playerId, isgroup:false, name:playerName})"><v-icon class="btn-icon">link</v-icon>{{i18n('Synchronize')}}</v-btn></v-list-tile-title>
+       <v-list-tile-title><v-btn flat @click="this.showMenu = false; bus.$emit('dlg.open', 'sync', {id:playerId, isgroup:false, name:playerName})"><v-icon class="btn-icon">link</v-icon>{{i18n('Synchronize')}}</v-btn></v-list-tile-title>
        <v-list-tile-sub-title>{{isSynced ? i18n('Synchronized with other players.') : i18n('Not currently synchronised with any other player.')}}</v-list-tile-sub-title>
       </v-list-tile-content>
      </v-list-tile>
@@ -699,11 +699,13 @@ Vue.component('lms-player-settings', {
                 this.loadAlarms();
             });
         },
-        addAlarm() {
+        addAlarm(event) {
+            storeClickOrTouchPos(event);
             this.alarmDialog = { show: true, id: undefined, time: "00:00", dow:["1", "2", "3", "4", "5"], repeat: false,
                                  url: 'CURRENT_PLAYLIST', shuffle: this.alarmShuffeItems[0].key };
         },
-        editAlarm(alarm) {
+        editAlarm(alarm, event) {
+            storeClickOrTouchPos(event);
             this.alarmDialog = { show: true, id: alarm.id, time: formatTime(alarm.time, true), dow: alarm.dow.split(","),
                                  repeat: alarm.repeat, url: alarm.url, enabled: alarm.enabled };
         },
@@ -730,7 +732,8 @@ Vue.component('lms-player-settings', {
             });
             this.alarmDialog.show = false;
         },
-        deleteAlarm(alarm) {
+        deleteAlarm(alarm, event) {
+            storeClickOrTouchPos(event);
             confirm(i18n("Delete alarm?"), i18n('Delete')).then(res => {
                 if (res) {
                     lmsCommand(this.playerId, ["alarm", "delete", "id:"+alarm.id]).then(({data}) => {
@@ -746,10 +749,13 @@ Vue.component('lms-player-settings', {
                 return str;
             }
         },
-        setSleep(duration) {
+        setSleep(event) {
+            this.showMenu = false;
+            storeClickOrTouchPos(event);
             bus.$emit('dlg.open', 'sleep', {id: this.playerId, name: this.playerName});
         },
-        setIcon() {
+        setIcon(event) {
+            storeClickOrTouchPos(event);
             bus.$emit('dlg.open', 'icon', {id: this.playerId, name: this.playerName, icon:this.playerIcon});
         },
         cancelSleepTimer() {

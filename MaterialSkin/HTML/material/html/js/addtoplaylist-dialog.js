@@ -42,10 +42,11 @@ Vue.component('lms-addtoplaylist-dialog', {
         }
     },
     mounted() {
-        bus.$on('addtoplaylist.open', function(items, itemCommands) {
+        bus.$on('addtoplaylist.open', function(items, itemCommands, closeSignal) {
             this.show = true;
             this.items = items;
             this.itemCommands = itemCommands;
+            this.closeSignal = closeSignal;
             focusEntry(this);
             var currentName = ""+this.name;
             lmsCommand("", ["playlists", 0, 10000, PLAYLIST_TAGS]).then(({data})=>{
@@ -72,21 +73,27 @@ Vue.component('lms-addtoplaylist-dialog', {
             });
         }.bind(this));
         bus.$on('noPlayers', function() {
-            this.show=false;
+            this.close();
         }.bind(this));
         bus.$on('closeDialog', function(dlg) {
             if (dlg == 'addtoplaylist') {
-                this.show=false;
+                this.close();
             }
         }.bind(this));
     },
     methods: {
+        close() {
+            if (undefined!=closeSignal) {
+                bus.$emit(closeSignal);
+            }
+            this.show=false;
+        },
         cancel() {
             // For some reason 'this.name' is not updated if the combo has focus when the
             // button is pressed. Work-around this by getting the element's value...
             var elem = document.getElementById('addtoplaylist-name');
             this.name = elem && elem.value ? elem.value.trim() : "";
-            this.show=false;
+            this.close();
         },
         save() {
             // For some reason 'this.name' is not updated if the combo has focus when the
@@ -96,7 +103,7 @@ Vue.component('lms-addtoplaylist-dialog', {
             if (this.name.length<1) {
                 return;
             }
-            this.show=false;
+            this.close();
 
             if (1==this.items.length && this.items[0].id.startsWith("album_id:")) {
                 this.saveAlbumToPlaylist(this.name, this.items[0].id);

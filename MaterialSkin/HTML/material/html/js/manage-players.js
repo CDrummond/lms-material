@@ -87,11 +87,11 @@ Vue.component('lms-manage-players', {
     <v-menu v-if="!draggingSyncedPlayer" bottom left v-model="showMenu">
      <v-btn icon slot="activator"><v-icon>more_vert</v-icon></v-btn>
      <v-list>
-      <v-list-tile @click="sleepAll">
+      <v-list-tile @click="sleepAll($event)">
        <v-list-tile-avatar><v-icon>hotel</v-icon></v-list-tile-avatar>
        <v-list-tile-content><v-list-tile-title>{{i18n('Set sleep time for all players')}}</v-list-tile-title></v-list-tile-content>
       </v-list-tile>
-      <v-list-tile @click="createGroup" v-if="manageGroups && unlockAll">
+      <v-list-tile @click="createGroup($event)" v-if="manageGroups && unlockAll">
        <v-list-tile-avatar><v-icon>add_circle_outline</v-icon></v-list-tile-avatar>
        <v-list-tile-content><v-list-tile-title>{{i18n("Create group player")}}</v-list-tile-title></v-list-tile-content>
       </v-list-tile>
@@ -186,7 +186,7 @@ Vue.component('lms-manage-players', {
   <v-list>
    <template v-for="(action, index) in menu.actions">
     <v-divider v-if="DIVIDER===action"></v-divider>
-    <v-list-tile v-else-if="!((LMS_KIOSK_MODE && PMGR_SETTINGS_ACTION==action) || (PMGR_SYNC_ACTION==action && !multipleStandardPlayers))" @click="playerAction(menu.player, action.cmd)">
+    <v-list-tile v-else-if="!((LMS_KIOSK_MODE && PMGR_SETTINGS_ACTION==action) || (PMGR_SYNC_ACTION==action && !multipleStandardPlayers))" @click="playerAction(menu.player, action.cmd, $event)">
      <v-list-tile-avatar><v-icon v-if="action.icon" v-bind:class="{'dimmed': action.dimmed, 'active-btn': action.active}">{{action.icon}}</v-icon><img v-else-if="action.svg" class="svg-img" :src="action.svg | svgIcon(darkUi)"></img></v-list-tile-avatar>
      <v-list-tile-title>{{action.title}}</v-list-tile-title>
     </v-list-tile>
@@ -358,13 +358,16 @@ Vue.component('lms-manage-players', {
             this.menu.customActions = getCustomActions(player.id, this.$store.state.unlockAll);
             this.menu.show = true;
         },
-        createGroup() {
+        createGroup(event) {
+            storeClickOrTouchPos(event, this.menu);
             bus.$emit('dlg.open', 'group', 'create');
         },
-        sleepAll() {
+        sleepAll(event) {
+            storeClickOrTouchPos(event, this.menu);
             bus.$emit('dlg.open', 'sleep');
         },
-        playerAction(player, cmd) {
+        playerAction(player, cmd, event) {
+            storeClickOrTouchPos(event, this.menu);
             if (PMGR_EDIT_GROUP_ACTION.cmd==cmd) {
                 bus.$emit('dlg.open', 'group', 'edit', player);
             } else if (PMGR_DELETE_GROUP_ACTION.cmd==cmd) {
@@ -874,6 +877,9 @@ Vue.component('lms-manage-players', {
         },
         'menu.show': function(val) {
             this.$store.commit('menuVisible', {name:'manage', shown:val});
+            if (!val) {
+                this.menu.closed = new Date().getTime();
+            }
         },
         'showMenu': function(val) {
             this.$store.commit('menuVisible', {name:'manage-menu', shown:val});

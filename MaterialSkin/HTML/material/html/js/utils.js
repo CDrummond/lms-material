@@ -6,7 +6,6 @@
  */
 'use strict';
 
-const MY_SQUEEZEBOX_IMAGE_PROXY = "https://www.mysqueezebox.com/public/imageproxy";
 const LS_PREFIX="lms-material::";
 const LMS_LIST_CACHE_PREFIX = "cache:list:";
 
@@ -247,12 +246,7 @@ function resolveImageUrl(image, size) {
         if (url.hostname.startsWith("192.168.") || url.hostname.startsWith("127.") || url.hostname.endsWith(".local")) {
             return image;
         }
-        if (LMS_USE_MSB_IMG_PROXY) {
-            var s=size ? size.split('x')[0].replace('_', '') : LMS_IMAGE_SZ;
-            return MY_SQUEEZEBOX_IMAGE_PROXY+"?w="+s+"&h="+s+"&m=F&u="+encodeURIComponent(image);
-        } else {
-            return '/imageproxy/' + encodeURIComponent(image) + '/image' + (size ? size : LMS_IMAGE_SIZE);
-        }
+        return '/imageproxy/' + encodeURIComponent(image) + '/image' + (size ? size : LMS_IMAGE_SIZE);
     }
 
     if (image=="html/images/cover.png") {
@@ -288,15 +282,6 @@ function resolveImage(icon, image, size) {
 
 function changeImageSizing(path, newSize) {
     if (undefined!=path) {
-        if (path.startsWith(MY_SQUEEZEBOX_IMAGE_PROXY)) {
-            var url = path.split("u=")[1];
-            if (newSize) {
-                var s=newSize.split('x')[0].replace('_', '');
-                return MY_SQUEEZEBOX_IMAGE_PROXY+"?w="+s+"&h="+s+"&m=F&u="+url;
-            }
-            return MY_SQUEEZEBOX_IMAGE_PROXY+"?u="+url;
-        }
-
         var specs = [LMS_IMAGE_SIZE, LMS_CURRENT_IMAGE_SIZE, "_50x50_o"];
         for (var s=0, len=specs.length; s<len; ++s) {
             if (path.endsWith(specs[s]+".png")) {

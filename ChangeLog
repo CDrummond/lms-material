@@ -21,6 +21,7 @@
 13. Fix handling of server-size bool options - LMS sends 'on' not '1'
 14. If very wide then show short text next to play, add, insert, and shuffle
     actions in sub-toolbar.
+15. Group all albums lists int releases.
 
 4.2.2
 -----

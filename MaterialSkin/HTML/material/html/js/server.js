@@ -614,6 +614,7 @@ var lmsServer = Vue.component('lms-server', {
                 lmsOptions.groupByReleaseType=1==parseInt(data[3]);
             } else if (data[2]=="ignoreReleaseTypes") {
                 lmsOptions.supportReleaseTypes=1!=parseInt(data[3]);
+                updateActionStrings();
             } else if (data[2]=="language") {
                 this.updateReleaseTypes();
             }

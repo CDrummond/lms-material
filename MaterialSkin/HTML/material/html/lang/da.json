@@ -624,5 +624,11 @@
 "1 Year":"1 år",
 "%1 Years":"%1 år",
 "1 day":"1 dag",
-"%1 days":"%1 dage"
+"%1 days":"%1 dage",
+"Append":"",
+"Auto-close":"",
+"Automatically close queue, in desktop layout and not pinned, a few seconds after last interaction.":"",
+"Next":"",
+"On larger displays, attempt to move dialogs closer to the associated item.":"",
+"Reposition dialogs":""
 }

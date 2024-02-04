@@ -160,7 +160,7 @@ Vue.component('lms-ui-settings', {
     <v-list-tile v-if="showMoveDialogs">
      <v-list-tile-content @click="moveDialogs = !moveDialogs" class="switch-label">
       <v-list-tile-title>{{i18n('Reposition dialogs')}}</v-list-tile-title>
-      <v-list-tile-sub-title>{{i18n('On larger displays, attempt to move dialogs closer to the click/touch that caused them to open.')}}</v-list-tile-sub-title>
+      <v-list-tile-sub-title>{{i18n('On larger displays, attempt to move dialogs closer to the associated item.')}}</v-list-tile-sub-title>
      </v-list-tile-content>
      <v-list-tile-action><m3-switch v-model="moveDialogs"></m3-switch></v-list-tile-action>
     </v-list-tile>

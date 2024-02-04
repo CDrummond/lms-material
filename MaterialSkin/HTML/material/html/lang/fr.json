@@ -347,6 +347,7 @@
 "Remote Libraries":"Bibliothèques distantes",
 "Remove":"Enlever",
 "Remove '%1' from favorites?":"Enlever '%1' des favoris ?",
+"Remove '%1' from synchronization group?":"Retirer '%1' du groupe de synchronisation ?",
 "Remove '%1'?":"Retirer '%1' ?",
 "Remove album":"Enlever l'album",
 "Remove all selected items":"Supprimer tous les éléments sélectionnés",
@@ -355,7 +356,6 @@
 "Remove duplicate tracks?":"Supprimer les morceaux en double ?",
 "Remove duplicates":"Supprimer les doublons",
 "Remove from favorites":"Enlever des favoris",
-"Remove '%1' from synchronization group?":"Retirer '%1' du groupe de synchronisation ?",
 "Remove previous tracks":"Supprimer les morceaux précédents",
 "Remove the selected items?":"Retirer les éléments sélectionnés ?",
 "Remove upcoming tracks":"Supprimer les morceaux suivants",
@@ -624,5 +624,11 @@
 "1 Year":"1 année",
 "%1 Years":"%1 années",
 "1 day":"1 jour",
-"%1 days":"%1 jours"
+"%1 days":"%1 jours",
+"Append":"",
+"Auto-close":"",
+"Automatically close queue, in desktop layout and not pinned, a few seconds after last interaction.":"",
+"Next":"",
+"On larger displays, attempt to move dialogs closer to the associated item.":"",
+"Reposition dialogs":""
 }

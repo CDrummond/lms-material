@@ -1000,7 +1000,7 @@ function parseBrowseResp(data, parent, options, cacheKey, parentCommand, parentG
                     resp.items = albumGroups[albumKeys[0]];
                 }
                 let releaseType = 1==releaseTypes.size ? releaseTypes.keys().next().value : undefined;
-                let lmsTrans = lmsOptions.releaseTypes[releaseType]
+                let lmsTrans = releaseType ? lmsOptions.releaseTypes[releaseType] : undefined;
                 if (undefined!=lmsTrans) {
                     resp.subtitle=resp.items.length + " " + (lmsTrans[1==resp.items.length ? 0 : 1]);
                 } else if (releaseType=="COMPILATION") {

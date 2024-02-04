@@ -20,7 +20,7 @@
 12. Fix hover play-next/shuffled grid icons for light themes.
 13. Fix handling of server-size bool options - LMS sends 'on' not '1'
 14. If very wide then show short text next to play, add, insert, and shuffle
-    actions in detailed sub-toolbar.
+    actions in sub-toolbar.
 
 4.2.2
 -----

@@ -671,13 +671,17 @@ var lmsQueue = Vue.component("lms-queue", {
         bus.$on('queueDialogClosed', function() {
             this.resetCloseTimer();
         }.bind(this));
+        bus.$on('releaseSupportChanged', function() {
+            this.initItems();
+        }.bind(this));
     },
     methods: {
         initItems() {
             this.trans= { ok:i18n('OK'), cancel: i18n('Cancel'), clear:i18n("Clear queue"),
                           pin:i18n('Pin'), unpin:i18n('Unpin'), goBack:i18n("Go back"),
                           repeatAll:i18n("Repeat queue"), repeatOne:i18n("Repeat single track"), repeatOff:i18n("No repeat"),
-                          shuffleAll:i18n("Shuffle tracks"), shuffleAlbums:i18n("Shuffle albums"), shuffleOff:i18n("No shuffle"),
+                          shuffleAll:i18n("Shuffle tracks"), shuffleOff:i18n("No shuffle"),
+                          shuffleAlbums:lmsOptions.supportReleaseTypes ? i18n("Shuffle releases") : i18n("Shuffle albums"),
                           selectMultiple:i18n("Select multiple items"), removeall:i18n("Remove all selected items"), 
                           invertSelect:i18n("Invert selection"), dstm:i18n("Don't Stop The Music"), actions:i18n("Actions")
             };

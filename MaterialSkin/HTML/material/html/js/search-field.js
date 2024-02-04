@@ -28,7 +28,7 @@ function buildSearchResp(results) {
             filter = FILTER_PREFIX+"album";
             items.push({title: (lmsOptions.supportReleaseTypes ? i18n("Releases") : i18n("Albums")) + " ("+titleParam+")",
                         id:filter, header:true, hidesub:true,
-                        allItems: all, subtitle: i18np("1 Album", "%1 Albums", numItems),
+                        allItems: all, subtitle:lmsOptions.supportReleaseTypes ? i18np("1 Release", "%1 Releases", numItems) : i18np("1 Album", "%1 Albums", numItems),
                         menu:[PLAY_ALL_ACTION, INSERT_ALL_ACTION, ADD_ALL_ACTION]});
         } else if (3==results[i].command.cat) {
             filter = FILTER_PREFIX+"track";

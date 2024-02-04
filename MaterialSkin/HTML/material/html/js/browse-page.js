@@ -695,21 +695,29 @@ var lmsBrowse = Vue.component("lms-browse", {
                 this.tbarActions.unshift(SAVE_VLIB_ACTION);
             }
         }.bind(this));
+        bus.$on('releaseSupportChanged', function() {
+            this.updateSortStrings();
+        }.bind(this));
     },
     methods: {
+        updateSortStrings() {
+            B_ALBUM_SORTS=[
+                { key:"album",           label:lmsOptions.supportReleaseTypes ? i18n("Release") : i18n("Album")},
+                { key:"artistalbum",     label:lmsOptions.supportReleaseTypes ? i18n("Artist, Release") : i18n("Artist, Album")},
+                { key:"artflow",         label:lmsOptions.supportReleaseTypes ? i18n("Artist, Year, Release") : i18n("Artist, Year, Album")},
+                { key:"yearalbum",       label:lmsOptions.supportReleaseTypes ? i18n("Year, Release") : i18n("Year, Album")},
+                { key:"yearartistalbum", label:lmsOptions.supportReleaseTypes ? i18n("Year, Artist, Release") : i18n("Year, Artist, Album")} ];
+            B_TRACK_SORTS=[
+                { key:"title",           label:i18n("Title")},
+                { key:"tracknum",        label:i18n("Track Number")},
+                { key:"albumtrack",      label:lmsOptions.supportReleaseTypes ? i18n("Release, Track Number") : i18n("Album, Track Number")},
+                { key:"yearalbumtrack",  label:lmsOptions.supportReleaseTypes ? i18n("Year, Release, Track Number") : i18n("Year, Album, Track Number")},
+                { key:"artisttitle",     label:i18n("Artist, Title")},
+                { key:"yeartitle",       label:i18n("Year, Title")} ];
+        },
         initItems() {
             updateActionStrings();
-            B_ALBUM_SORTS=[ { key:"album",           label:i18n("Album")},
-                            { key:"artistalbum",     label:i18n("Artist, Album")},
-                            { key:"artflow",         label:i18n("Artist, Year, Album")},
-                            { key:"yearalbum",       label:i18n("Year, Album")},
-                            { key:"yearartistalbum", label:i18n("Year, Artist, Album")} ];
-            B_TRACK_SORTS=[ { key:"title",           label:i18n("Title")},
-                            { key:"tracknum",        label:i18n("Track Number")},
-                            { key:"albumtrack",      label:i18n("Album, Track Number")},
-                            { key:"yearalbumtrack",  label:i18n("Year, Album, Track Number")},
-                            { key:"artisttitle",     label:i18n("Artist, Title")},
-                            { key:"yeartitle",       label:i18n("Year, Title")} ];
+            this.updateSortStrings();
 
             this.trans= { ok:i18n('OK'), cancel: i18n('Cancel'), selectMultiple:i18n("Select multiple items"), addall:i18n("Add selection to queue"),
                           playall:i18n("Play selection"), deleteall:i18n("Delete all selected items"),

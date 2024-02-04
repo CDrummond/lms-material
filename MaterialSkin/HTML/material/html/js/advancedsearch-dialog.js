@@ -35,7 +35,7 @@ Vue.component('lms-advancedsearch-dialog', {
    </v-layout>
 
    <v-layout class="avs-section" wrap :disabled="searching">
-    <v-flex xs12 sm3><div class="avs-title">{{i18n('Album')}}</div></v-flex>
+    <v-flex xs12 sm3><div class="avs-title">{{lmsOptions.supportReleaseTypes ? i18n('Release') : i18n('Album')}}</div></v-flex>
     <v-flex xs12 sm4><v-select :items="textOps" v-model="params.album_titlesearch.op" item-text="label" item-value="key"></v-select></v-flex>
     <v-flex xs12 sm5><v-text-field clearable autocorrect="off" v-model="params.album_titlesearch.val" class="lms-search"></v-text-field></v-flex>
    </v-layout>

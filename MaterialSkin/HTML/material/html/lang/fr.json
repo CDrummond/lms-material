@@ -625,8 +625,12 @@
 "%1 Years":"%1 années",
 "1 day":"1 jour",
 "%1 days":"%1 jours",
+"...then album artist, release, disc no., track no.":"",
+"...then release, disc no., track no.":"",
 "Append":"",
 "Append random release to queue":"",
+"Artist, Release":"",
+"Artist, Year, Release":"",
 "Auto-close":"",
 "Automatically close queue, in desktop layout and not pinned, a few seconds after last interaction.":"",
 "Go to release":"",
@@ -634,7 +638,13 @@
 "On larger displays, attempt to move dialogs closer to the associated item.":"",
 "Play release starting at track":"",
 "Random Releases":"",
+"Release":"",
+"Release, Track Number":"",
 "Releases":"",
 "Remove release":"",
-"Reposition dialogs":""
+"Reposition dialogs":"",
+"Shuffle releases":"",
+"Year, Artist, Release":"",
+"Year, Release":"",
+"Year, Release, Track Number":""
 }

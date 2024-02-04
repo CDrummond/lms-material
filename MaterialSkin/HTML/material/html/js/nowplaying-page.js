@@ -624,17 +624,21 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
                 }
             }.bind(this));
         }
+        bus.$on('releaseSupportChanged', function() {
+            this.initItems();
+        }.bind(this));
     },
     methods: {
         initItems() {
             this.trans = { dstm:i18n("Don't Stop The Music"), repeatAll:i18n("Repeat queue"), repeatOne:i18n("Repeat single track"),
-                           repeatOff:i18n("No repeat"), shuffleAll:i18n("Shuffle tracks"), shuffleAlbums:i18n("Shuffle albums"),
+                           repeatOff:i18n("No repeat"), shuffleAll:i18n("Shuffle tracks"),
+                           shuffleAlbums:lmsOptions.supportReleaseTypes ? i18n("Shuffle releases") : i18n("Shuffle albums"),
                            shuffleOff:i18n("No shuffle"), play:i18n("Play"), pause:i18n("Pause"), prev:i18n("Previous track"),
                            next:i18n("Next track"), collapseNp:i18n("Collapse now playing"), expandNp:i18n("Expand now playing"), menu:i18n("Menu") };
             this.info.tabs[TRACK_TAB].title=i18n("Track");
             this.info.tabs[ARTIST_TAB].title=i18n("Artist");
-            this.info.tabs[ALBUM_TAB].title=i18n("Album");
-            this.info.tabs[ARTIST_TAB].sections[0].title=i18n("Albums");
+            this.info.tabs[ALBUM_TAB].title=lmsOptions.supportReleaseTypes ? i18n('Release') : i18n("Album");
+            this.info.tabs[ARTIST_TAB].sections[0].title=lmsOptions.supportReleaseTypes ? i18n("Releases") : i18n("Albums");
             this.info.tabs[ARTIST_TAB].sections[1].title=i18n("Similar artists");
             this.info.tabs[ALBUM_TAB].sections[0].title=i18n("Tracks");
             this.info.tabs[TRACK_TAB].sections[0].title=i18n("Details");

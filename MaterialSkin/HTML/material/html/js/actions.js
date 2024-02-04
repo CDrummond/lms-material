@@ -159,13 +159,17 @@ var ACTIONS=[
 
 function updateActionStrings() {
     ACTIONS[PLAY_ACTION].title=ACTIONS[PLAY_ALL_ACTION].title=i18n("Play now");
+    ACTIONS[PLAY_ACTION].short=ACTIONS[PLAY_ALL_ACTION].short=i18n("Play");
     ACTIONS[PLAY_ACTION].skey=ACTIONS[PLAY_ALL_ACTION].key=LMS_PLAY_KEYBOARD;
     ACTIONS[PLAY_ALBUM_ACTION].title=i18n("Play album starting at track");
     ACTIONS[PLAY_SHUFFLE_ACTION].title=ACTIONS[PLAY_SHUFFLE_ALL_ACTION].title=i18n("Play shuffled");
+    ACTIONS[PLAY_SHUFFLE_ACTION].short=ACTIONS[PLAY_SHUFFLE_ALL_ACTION].short=i18n("Shuffle");
     ACTIONS[ADD_ACTION].title=ACTIONS[ADD_ALL_ACTION].title=i18n("Append to queue");
+    ACTIONS[ADD_ACTION].short=ACTIONS[ADD_ALL_ACTION].short=i18n("Append");
     ACTIONS[ADD_ACTION].skey=ACTIONS[ADD_ALL_ACTION].key=LMS_APPEND_KEYBOARD;
     ACTIONS[ADD_RANDOM_ALBUM_ACTION].title=i18n("Append random album to queue");
     ACTIONS[INSERT_ACTION].title=ACTIONS[INSERT_ALL_ACTION].title=i18n("Play next");
+    ACTIONS[INSERT_ACTION].short=ACTIONS[INSERT_ALL_ACTION].short=i18n("Next");
     ACTIONS[MORE_ACTION].title=i18n("More");
     ACTIONS[MORE_LIB_ACTION].title=i18n("More");
     ACTIONS[RENAME_ACTION].title=i18n("Rename");

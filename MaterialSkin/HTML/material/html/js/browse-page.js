@@ -16,6 +16,8 @@ const MIN_WIDTH_FOR_COVER_INDENT = 1000;
 const MIN_WIDTH_FOR_BOTH_INDENT = 1300;
 const JUMP_LIST_WIDTH = 32;
 
+const SUB_TEXT_WIDE = 4;
+
 var lmsBrowse = Vue.component("lms-browse", {
     template: `
 <div id="browse-view" v-bind:class="{'detailed-sub':showDetailedSubtoolbar, 'indent-both':showDetailedSubtoolbar && wide>3 && (!desktopLayout || !pinQueue), 'indent-right':showDetailedSubtoolbar && wide==3 && (!desktopLayout || !pinQueue)}">
@@ -73,15 +75,16 @@ var lmsBrowse = Vue.component("lms-browse", {
       </v-btn>
      </template>
      <template v-for="(action, index) in tbarActions">
-      <v-btn flat icon v-if="showDetailedSubtoolbar && wide>=2 && (action==PLAY_ACTION || action==PLAY_ALL_ACTION)" @click.stop="headerAction(action==PLAY_ACTION ? INSERT_ACTION : INSERT_ALL_ACTION, $event)" class="toolbar-button" :title="INSERT_ACTION | tooltip(keyboardControl)" :id="'tbarb'+index">
-       <img class="svg-img" :src="ACTIONS[INSERT_ACTION].svg | svgIcon(darkUi)"></img>
+      <v-btn flat :icon="wide<SUB_TEXT_WIDE" v-if="showDetailedSubtoolbar && wide>=2 && (action==PLAY_ACTION || action==PLAY_ALL_ACTION) && !allowShuffle(current)" @click.stop="headerAction(action==PLAY_ACTION ? INSERT_ACTION : INSERT_ALL_ACTION, $event)" v-bind:class="{'context-button':wide>=SUB_TEXT_WIDE, 'toolbar-button':wide<SUB_TEXT_WIDE}" :title="INSERT_ACTION | tooltip(keyboardControl)" :id="'tbarb'+index">
+       <img class="svg-img" :src="ACTIONS[INSERT_ACTION].svg | svgIcon(darkUi)"></img><obj v-if="wide>=SUB_TEXT_WIDE">&nbsp;{{ACTIONS[INSERT_ACTION].short}}</obj>
       </v-btn>
-      <v-btn flat icon v-if="showDetailedSubtoolbar && wide>=2 && (action==PLAY_ACTION || action==PLAY_ALL_ACTION) && allowShuffle(current)" @click.stop="headerAction(action==PLAY_ACTION ? PLAY_SHUFFLE_ACTION : PLAY_SHUFFLE_ALL_ACTION, $event)" class="toolbar-button" :title="PLAY_SHUFFLE_ACTION | tooltip(keyboardControl)" :id="'tbara'+index">
-       <img class="svg-img" :src="ACTIONS[PLAY_SHUFFLE_ACTION].svg | svgIcon(darkUi)"></img>
+      <v-btn flat :icon="wide<SUB_TEXT_WIDE" v-if="showDetailedSubtoolbar && wide>=2 && (action==PLAY_ACTION || action==PLAY_ALL_ACTION) && allowShuffle(current)" @click.stop="headerAction(action==PLAY_ACTION ? PLAY_SHUFFLE_ACTION : PLAY_SHUFFLE_ALL_ACTION, $event)" v-bind:class="{'context-button':wide>=SUB_TEXT_WIDE, 'toolbar-button':wide<SUB_TEXT_WIDE}" :title="PLAY_SHUFFLE_ACTION | tooltip(keyboardControl)" :id="'tbara'+index">
+       <img class="svg-img" :src="ACTIONS[PLAY_SHUFFLE_ACTION].svg | svgIcon(darkUi)"></img><obj v-if="wide>=SUB_TEXT_WIDE">&nbsp;{{ACTIONS[PLAY_SHUFFLE_ACTION].short}}</obj>
       </v-btn>
-      <v-btn flat icon @click.stop="headerAction(action, $event)" class="toolbar-button" :title="action | tooltip(keyboardControl)" :id="'tbar'+index" v-if="(action!=VLIB_ACTION || libraryName) && (!queryParams.party || !HIDE_FOR_PARTY.has(action)) && (!LMS_KIOSK_MODE || !HIDE_FOR_KIOSK.has(action))">
+      <v-btn flat :icon="wide<SUB_TEXT_WIDE || !ACTIONS[action].short" @click.stop="headerAction(action, $event)" v-bind:class="{'context-button':wide>=SUB_TEXT_WIDE && undefined!=ACTIONS[action].short, 'toolbar-button':wide<SUB_TEXT_WIDE || !ACTIONS[action].short}" :title="action | tooltip(keyboardControl)" :id="'tbar'+index" v-if="(action!=VLIB_ACTION || libraryName) && (!queryParams.party || !HIDE_FOR_PARTY.has(action)) && (!LMS_KIOSK_MODE || !HIDE_FOR_KIOSK.has(action))">
        <img v-if="ACTIONS[action].svg" class="svg-img" :src="ACTIONS[action].svg | svgIcon(darkUi)"></img>
        <v-icon v-else>{{ACTIONS[action].icon}}</v-icon>
+       <obj v-if="wide>=SUB_TEXT_WIDE && ACTIONS[action].short">&nbsp;{{ACTIONS[action].short}}</obj>
       </v-btn>
      </template>
     </tr>
@@ -988,7 +991,7 @@ var lmsBrowse = Vue.component("lms-browse", {
                 if ( (queryParams.party && HIDE_FOR_PARTY.has(loop[i].action)) ||
                      (LMS_KIOSK_MODE && HIDE_FOR_KIOSK.has(loop[i].action)) ||
                      (PLAY_SHUFFLE_ACTION==loop[i].action && (!lmsOptions.playShuffle || (this.wide>=2 && this.showDetailedSubtoolbar))) ||
-                     (INSERT_ACTION==loop[i].action && this.wide>=2 && this.showDetailedSubtoolbar) ||
+                     (INSERT_ACTION==loop[i].action && this.wide>=2 && this.showDetailedSubtoolbar && !lmsOptions.playShuffle) ||
                      (this.tbarActions.length<2 && (i<(this.tbarActions.length<2 ? 2 : 1))) ||
                      ((ALBUM_SORTS_ACTION==loop[i].action || TRACK_SORTS_ACTION==loop[i].action) && this.items.length<2) ||
                      (SCROLL_TO_DISC_ACTION==loop[i].action && (this.items.length<2 || !this.items[0].id.startsWith(FILTER_PREFIX))) ||

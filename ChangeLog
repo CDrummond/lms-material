@@ -8,8 +8,8 @@
  5. Change order of add/play buttons to be '(+) (>)'
  6. If play shuffled option is enabled, then show play shuffle icon in detailed
     sub-toolbar (if space) and when hovering.
- 7. Add 'Play next' action to detailed sub-toolbar (if space) and when
-    hovering.
+ 7. Add 'Play next' action to detailed sub-toolbar (if space, and play shuffle
+    disabled) and when hovering.
  8. In MAI track details always show composer, conductor, band if tags exist,
     regardless of whether these are used for now-playing, etc. or not.
  9. Alter ratio for when now-playing landscape is treated as 'wide'.
@@ -19,6 +19,8 @@
     toggle queue in desktop layout.
 12. Fix hover play-next/shuffled grid icons for light themes.
 13. Fix handling of server-size bool options - LMS sends 'on' not '1'
+14. If very wide then show short text next to play, add, insert, and shuffle
+    actions in detailed sub-toolbar.
 
 4.2.2
 -----

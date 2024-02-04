@@ -26,7 +26,7 @@ function buildSearchResp(results) {
                         allItems: all, subtitle: i18np("1 Artist", "%1 Artists", numItems)});
         } else if (2==results[i].command.cat) {
             filter = FILTER_PREFIX+"album";
-            items.push({title: i18n("Albums", titleParam) + " ("+titleParam+")", id:filter, header:true, hidesub:true,
+            items.push({title: i18n("Releases", titleParam) + " ("+titleParam+")", id:filter, header:true, hidesub:true,
                         allItems: all, subtitle: i18np("1 Album", "%1 Albums", numItems),
                         menu:[PLAY_ALL_ACTION, INSERT_ALL_ACTION, ADD_ALL_ACTION]});
         } else if (3==results[i].command.cat) {
@@ -134,7 +134,7 @@ Vue.component('lms-search-field', {
                 this.commands=[];
                 if (!queryParams.party) {
                     this.commands.push({cat:1, command:["artists"], params:["tags:s", "search:"+this.str]});
-                    this.commands.push({cat:2, command:["albums"], params:[(lmsOptions.showAllArtists ? ALBUM_TAGS_ALL_ARTISTS : ALBUM_TAGS)+(LMS_SRV_EMBLEM ? "E" : ""), "sort:album", "search:"+this.str]});
+                    this.commands.push({cat:2, command:["albums"], params:[(lmsOptions.showAllArtists ? ALBUM_TAGS_ALL_ARTISTS : ALBUM_TAGS).replace("W", "")+(LMS_SRV_EMBLEM ? "E" : ""), "sort:album", "search:"+this.str]});
                 }
                 this.commands.push({cat:3, command:["tracks"], params:[SEARCH_TRACK_TAGS+"elcy"+
                                                                        (this.$store.state.showRating ? "R" : "")+

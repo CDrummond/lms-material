@@ -839,7 +839,7 @@ function browseAddCategories(view, item, isGenre) {
         if (undefined!=alt_id) { cat.params.push(alt_id); }
         view.items.push(cat);
     }
-    cat = { title: i18n("Albums"),
+    cat = { title: i18n("Releases"),
             command: ["albums"],
             params: [item.id, ALBUM_TAGS_PLACEHOLDER, SORT_KEY+ALBUM_SORT_PLACEHOLDER],
             menu: [],
@@ -848,7 +848,7 @@ function browseAddCategories(view, item, isGenre) {
             id: uniqueId(item.id, view.items.length)};
     if (undefined!=alt_id) { cat.params.push(alt_id); }
     view.items.push(cat);
-    cat = { title: i18n("Random Albums"),
+    cat = { title: i18n("Random Releases"),
             command: ["albums"],
             params: [item.id, ALBUM_TAGS_PLACEHOLDER, "sort:random"],
             menu: [],
@@ -1895,6 +1895,7 @@ function browseMyMusicMenu(view) {
                     } else if (c.id.startsWith("myMusicAlbums")) {
                         item.icon = "album";
                         item.cancache = true;
+                        item.title = i18n("Releases");
                     } else if (c.id.startsWith("myMusicGenres")) {
                         item.svg = "guitar-acoustic";
                         item.icon = undefined;

@@ -839,7 +839,7 @@ function browseAddCategories(view, item, isGenre) {
         if (undefined!=alt_id) { cat.params.push(alt_id); }
         view.items.push(cat);
     }
-    cat = { title: lmsOptions.supportReleaseTypes && lmsOptions.groupByReleaseType ? i18n("Releases") : i18n("Albums"),
+    cat = { title: lmsOptions.supportReleaseTypes ? i18n("Releases") : i18n("Albums"),
             command: ["albums"],
             params: [item.id, ALBUM_TAGS_PLACEHOLDER, SORT_KEY+ALBUM_SORT_PLACEHOLDER],
             menu: [],
@@ -848,7 +848,7 @@ function browseAddCategories(view, item, isGenre) {
             id: uniqueId(item.id, view.items.length)};
     if (undefined!=alt_id) { cat.params.push(alt_id); }
     view.items.push(cat);
-    cat = { title: lmsOptions.supportReleaseTypes && lmsOptions.groupByReleaseType ? i18n("Random Releases") : i18n("Random Albums"),
+    cat = { title: lmsOptions.supportReleaseTypes ? i18n("Random Releases") : i18n("Random Albums"),
             command: ["albums"],
             params: [item.id, ALBUM_TAGS_PLACEHOLDER, "sort:random"],
             menu: [],
@@ -1895,7 +1895,7 @@ function browseMyMusicMenu(view) {
                     } else if (c.id.startsWith("myMusicAlbums")) {
                         item.icon = "album";
                         item.cancache = true;
-                        if (lmsOptions.supportReleaseTypes && lmsOptions.groupByReleaseType) {
+                        if (lmsOptions.supportReleaseTypes) {
                             item.title = i18n("Releases");
                         }
                     } else if (c.id.startsWith("myMusicGenres")) {
@@ -1920,7 +1920,7 @@ function browseMyMusicMenu(view) {
                     } else if (c.id == "myMusicRandomAlbums") {
                         item.svg = "dice-album";
                         item.icon = undefined;
-                        if (lmsOptions.supportReleaseTypes && lmsOptions.groupByReleaseType) {
+                        if (lmsOptions.supportReleaseTypes) {
                             item.title = i18n("Random Releases");
                         }
                     } else if (c.id.startsWith("myMusicTopTracks")) {

@@ -26,7 +26,8 @@ function buildSearchResp(results) {
                         allItems: all, subtitle: i18np("1 Artist", "%1 Artists", numItems)});
         } else if (2==results[i].command.cat) {
             filter = FILTER_PREFIX+"album";
-            items.push({title: i18n("Releases", titleParam) + " ("+titleParam+")", id:filter, header:true, hidesub:true,
+            items.push({title: (lmsOptions.supportReleaseTypes && lmsOptions.groupByReleaseType ? i18n("Releases") : i18n("Albums")) + " ("+titleParam+")",
+                        id:filter, header:true, hidesub:true,
                         allItems: all, subtitle: i18np("1 Album", "%1 Albums", numItems),
                         menu:[PLAY_ALL_ACTION, INSERT_ALL_ACTION, ADD_ALL_ACTION]});
         } else if (3==results[i].command.cat) {

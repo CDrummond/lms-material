@@ -161,13 +161,13 @@ function updateActionStrings() {
     ACTIONS[PLAY_ACTION].title=ACTIONS[PLAY_ALL_ACTION].title=i18n("Play now");
     ACTIONS[PLAY_ACTION].short=ACTIONS[PLAY_ALL_ACTION].short=i18n("Play");
     ACTIONS[PLAY_ACTION].skey=ACTIONS[PLAY_ALL_ACTION].key=LMS_PLAY_KEYBOARD;
-    ACTIONS[PLAY_ALBUM_ACTION].title=i18n("Play album starting at track");
+    ACTIONS[PLAY_ALBUM_ACTION].title=lmsOptions.supportReleaseTypes && lmsOptions.groupByReleaseType ? i18n("Play release starting at track") : i18n("Play album starting at track");
     ACTIONS[PLAY_SHUFFLE_ACTION].title=ACTIONS[PLAY_SHUFFLE_ALL_ACTION].title=i18n("Play shuffled");
     ACTIONS[PLAY_SHUFFLE_ACTION].short=ACTIONS[PLAY_SHUFFLE_ALL_ACTION].short=i18n("Shuffle");
     ACTIONS[ADD_ACTION].title=ACTIONS[ADD_ALL_ACTION].title=i18n("Append to queue");
     ACTIONS[ADD_ACTION].short=ACTIONS[ADD_ALL_ACTION].short=i18n("Append");
     ACTIONS[ADD_ACTION].skey=ACTIONS[ADD_ALL_ACTION].key=LMS_APPEND_KEYBOARD;
-    ACTIONS[ADD_RANDOM_ALBUM_ACTION].title=i18n("Append random album to queue");
+    ACTIONS[ADD_RANDOM_ALBUM_ACTION].title=lmsOptions.supportReleaseTypes && lmsOptions.groupByReleaseType ? i18n("Append random release to queue") : i18n("Append random album to queue");
     ACTIONS[INSERT_ACTION].title=ACTIONS[INSERT_ALL_ACTION].title=i18n("Play next");
     ACTIONS[INSERT_ACTION].short=ACTIONS[INSERT_ALL_ACTION].short=i18n("Next");
     ACTIONS[MORE_ACTION].title=i18n("More");
@@ -207,11 +207,11 @@ function updateActionStrings() {
     ACTIONS[PQ_MOVE_QUEUE_ACTION].title=i18n("Transfer queue to another player");
     ACTIONS[PQ_MOVE_QUEUE_ACTION].stitle=i18n("Transfer queue");
     ACTIONS[PQ_MOVE_QUEUE_ACTION].key=LMS_MOVE_QUEUE_KEYBOARD;
-    ACTIONS[PQ_REMOVE_ALBUM_ACTION].title=i18n("Remove album");
+    ACTIONS[PQ_REMOVE_ALBUM_ACTION].title=lmsOptions.supportReleaseTypes && lmsOptions.groupByReleaseType ? i18n("Remove release") : i18n("Remove album");
     ACTIONS[PQ_ZAP_ACTION].title=i18n("Zap");
 
     ACTIONS[GOTO_ARTIST_ACTION].title=i18n("Go to artist");
-    ACTIONS[GOTO_ALBUM_ACTION].title=i18n("Go to album");
+    ACTIONS[GOTO_ALBUM_ACTION].title=lmsOptions.supportReleaseTypes && lmsOptions.groupByReleaseType ? i18n("Go to release") : i18n("Go to album");
     ACTIONS[ADD_TO_PLAYLIST_ACTION].title=i18n("Add to playlist");
     ACTIONS[REMOVE_DUPES_ACTION].title=i18n("Remove duplicates");
     ACTIONS[FOLLOW_LINK_ACTION].title=i18n("Follow link");
@@ -239,4 +239,3 @@ function updateActionStrings() {
     ACTIONS[SEARCH_LIST_ACTION].title=i18n("Search within list");
     ACTIONS[SEARCH_LIST_ACTION].key=LMS_SEARCH_KEYBOARD;
 }
-

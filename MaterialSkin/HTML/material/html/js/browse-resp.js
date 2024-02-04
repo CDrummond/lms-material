@@ -1009,8 +1009,10 @@ function parseBrowseResp(data, parent, options, cacheKey, parentCommand, parentG
                     resp.subtitle=i18np("1 Appearance", "%1 Appearances", resp.items.length)+appearanceSuffix(releaseType);
                 } else if (releaseType=="COMPOSITION") {
                     resp.subtitle=i18np("1 Composition", "%1 Compositions", resp.items.length);
-                } else {
+                } else if (lmsOptions.supportReleaseTypes && lmsOptions.groupByReleaseType) {
                     resp.subtitle=i18np("1 Release", "%1 Releases", resp.items.length);
+                } else {
+                    resp.subtitle=i18np("1 Album", "%1 Albums", resp.items.length);
                 }
                 if (parent && parent.id && parent.id.startsWith("search:")) {
                     resp.jumplist = []; // Search results NOT sorted???

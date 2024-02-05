@@ -198,7 +198,17 @@ function browseActions(view, item, args, count, showCompositions) {
                 }
             } else if ((ADD_RANDOM_ALBUM_ACTION!=loop[i] || count>1) && (DOWNLOAD_ACTION!=loop[i] || (lmsOptions.allowDownload && undefined==item.emblem))) {
                 weight++;
-                actions.push({action:loop[i], weight:(MORE_LIB_ACTION==loop[i] ? 1000 : weight)});
+                actions.push({action:loop[i], weight:ALBUM_SORTS_ACTION==loop[i] || TRACK_SORTS_ACTION==loop[i]
+                                                ? 2
+                                                : INSERT_ACTION==loop[i]
+                                                    ? 3
+                                                    : PLAY_SHUFFLE_ACTION==loop[i]
+                                                        ? 4
+                                                        : ADD_RANDOM_ALBUM_ACTION==loop[i]
+                                                            ? 5
+                                                            : MORE_LIB_ACTION==loop[i]
+                                                                ? 1000
+                                                                : weight});
             }
         }
     }
@@ -478,8 +488,8 @@ function browseHandleListResponse(view, item, command, resp, prevPage, appendIte
         }
         let itemHasPlayAction=undefined!=item.menu && item.menu[0]==PLAY_ACTION;
         if (undefined==item.stdItem && itemHasPlayAction && lmsOptions.playShuffle && view.items.length>1) {
-            view.currentActions.push({action:INSERT_ACTION, weight:2});
-            view.currentActions.push({action:PLAY_SHUFFLE_ACTION, weight:3});
+            view.currentActions.push({action:INSERT_ACTION, weight:3});
+            view.currentActions.push({action:PLAY_SHUFFLE_ACTION, weight:4});
         }
         if (resp.isMusicMix || (("albums"==command.command[0] && view.items.length>0 && command.params.find(elem => elem=="sort:random")))) {
             view.currentActions.push({action:RELOAD_ACTION, weight:1});
@@ -497,7 +507,7 @@ function browseHandleListResponse(view, item, command, resp, prevPage, appendIte
                 }
             }
             if (canAddAlbumSort) {
-                view.currentActions.push({action:ALBUM_SORTS_ACTION, weight:1});
+                view.currentActions.push({action:ALBUM_SORTS_ACTION, weight:2});
             }
         } else if ((view.current.stdItem==STD_ITEM_ALL_TRACKS || view.current.stdItem==STD_ITEM_COMPOSITION_TRACKS || view.current.id==ALL_SONGS_ID) && view.command.command.length>0 && view.command.command[0]=="tracks" && view.items.length>0) {
             view.currentActions.push({action:TRACK_SORTS_ACTION, weight:10});
@@ -516,6 +526,7 @@ function browseHandleListResponse(view, item, command, resp, prevPage, appendIte
             view.tbarActions=[ADD_ACTION, PLAY_ACTION];
             view.currentActions=browseActions(view, resp.items.length>0 ? item : undefined, {}, resp.items.length);
             view.currentActions.unshift({action:SEARCH_LIST_ACTION, weight:1});
+            view.currentActions.sort(function(a, b) { return a.weight!=b.weight ? a.weight<b.weight ? -1 : 1 : titleSort(a, b) });
         } else if (view.current.stdItem==STD_ITEM_MAI && view.history.length>0 && view.history[view.history.length-1].current.stdItem==STD_ITEM_ALBUM) {
             view.tbarActions=[ADD_ACTION, PLAY_ACTION];
             // We are showing album review, copy some of the album's actions into this view's actions...
@@ -559,6 +570,16 @@ function browseHandleListResponse(view, item, command, resp, prevPage, appendIte
             if (loop[a].action==INSERT_ACTION) {
                 if (a>0 && loop[a-1].action!=DIVIDER) {
                     loop.splice(a, 0, {action:DIVIDER});
+                }
+                break;
+            }
+        }
+        // Ensure divider after last 'play' action, if it is not last in list
+        let playActions = new Set([INSERT_ACTION, PLAY_SHUFFLE_ACTION, ADD_RANDOM_ALBUM_ACTION]);
+        for (let a=0, loop=view.currentActions, len=loop.length; a<len; ++a) {
+            if (a+1<len && playActions.has(loop[a].action) && !playActions.has(loop[a+1].action)) {
+                if (loop[a+1].action!=DIVIDER) {
+                    loop.splice(a+1, 0, {action:DIVIDER});
                 }
                 break;
             }

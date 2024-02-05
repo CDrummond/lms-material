@@ -111,7 +111,7 @@ var lmsBrowse = Vue.component("lms-browse", {
  <div class="lms-list bgnd-cover" v-bind:class="{'browse-backdrop-cover':drawBackdrop, 'album-track-list':current && current.stdItem==STD_ITEM_ALBUM}" id="browse-bgnd">
   <div class="noselect lms-jumplist" v-bind:class="{'bgnd-blur':drawBgndImage,'backdrop-blur':drawBackdrop}" v-if="filteredJumplist.length>1">
    <template v-for="(item, index) in filteredJumplist">
-    <div @click="jumpTo(item.index)" v-bind:class="{'jl-divider':undefined!=item.sect && index>0 && item.sect!=filteredJumplist[index-1].sect}">{{item.key==' ' || item.key=='' ? '?' : item.key}}</div>
+    <div @click="jumpTo(item.index)" v-bind:class="{'jl-divider':item.key==SECTION_JUMP}">{{item.key==' ' || item.key=='' ? '?' : item.key}}</div>
    </template>
   </div>
   <div class="lms-list" id="browse-list" style="overflow:auto;" v-bind:class="{'lms-image-grid':grid.use,'lms-grouped-image-grid':grid.use && grid.multiSize,'lms-image-grid-jump':grid.use && filteredJumplist.length>1,'lms-list-jump':!grid.use && filteredJumplist.length>1,'bgnd-blur':drawBgndImage,'backdrop-blur':drawBackdrop}">
@@ -1695,7 +1695,7 @@ var lmsBrowse = Vue.component("lms-browse", {
             let prev = getComputedStyle(document.body).getPropertyValue('--jump-list-adjust');
             if (this.items.length>25 && this.items.length==this.listSize && undefined!=this.jumplist && this.jumplist.length>=4) {
                 let maxItems = Math.floor((this.scrollElement.clientHeight-(16))/17);
-                this.filteredJumplist = shrinkAray(this.jumplist, maxItems);
+                this.filteredJumplist = shrinkJumplist(this.jumplist, maxItems);
             }
             let now = (undefined!=this.jumplist && undefined!=this.filteredJumplist && this.filteredJumplist.length>1 ? JUMP_LIST_WIDTH : 0)+'px';
             if (prev!=now) {

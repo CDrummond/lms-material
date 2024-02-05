@@ -72,18 +72,42 @@ function isTextItem(item) {
               (!item.command || (item.command[0]!="browsejive" && (item.command.length<2 || item.command[1]!="browsejive")))));
 }
 
-function shrinkAray(array, limit) {
+function shrinkJumplist(array, limit) {
     if (array.length<=limit) {
         return array;
     }
+    let arr = array;
+    let hdrs = [];
+    if (array[0].key==SECTION_JUMP) {
+        arr = [];
+        for (let i=0, len=array.length; i<len; ++i) {
+            if (array[i].key==SECTION_JUMP) {
+                hdrs.push(array[i]);
+            } else {
+                arr.push(array[i]);
+            }
+        }
+        limit -= hdrs.length;
+    }
     var res = [];
     var i = 0;
-    var scale = array.length / limit;
+    var scale = arr.length / limit;
     while (i < limit) {
-        res.push(array[Math.round(i * scale)]);
+        res.push(arr[Math.round(i * scale)]);
         i++;
     }
-    res[res.length-1]=array[array.length-1];
+    res[res.length-1]=arr[arr.length-1];
+    if (hdrs.length>0) {
+        let len = res.length;
+        let h = 0;
+        let hlen = hdrs.length;
+        for (let i=0; i<len && h<hlen; ++i) {
+            if (res[i].index>hdrs[h].index) {
+                res.splice(i, 0, hdrs[h]);
+                h++;
+            }
+        }
+    }
     return res;
 }
 

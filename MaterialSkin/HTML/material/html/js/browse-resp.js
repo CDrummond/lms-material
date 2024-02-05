@@ -986,6 +986,7 @@ function parseBrowseResp(data, parent, options, cacheKey, parentCommand, parentG
                     // Create jump list
                     let start = resp.items.length;
                     let jl=[];
+                    resp.jumplist.push({key:SECTION_JUMP, index:start-1, sect:k*1000});
                     for (let a=0, alen=alist.length; a<alen; ++a) {
                         if (undefined!=alist[a].textkey && (jl.length==0 || jl[jl.length-1].key!=alist[a].textkey)) {
                             jl.push({key: alist[a].textkey, index: resp.items.length});

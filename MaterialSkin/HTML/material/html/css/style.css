@@ -2480,8 +2480,13 @@ div.v-subheader {
  color:var(--active-color)!important;
 }
 
-.browse-header, .grid-header, .jl-divider {
+.browse-header, .grid-header {
  background-color:var(--browse-header-color);
+}
+
+.jl-divider {
+ color:var(--active-color);
+ opacity:0.5;
 }
 
 .grid-header {

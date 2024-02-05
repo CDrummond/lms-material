@@ -86,7 +86,7 @@ Vue.component('lms-randommix', {
             this.playerId = this.$store.state.player.id;
             lmsCommand(this.playerId, ["randomplayisactive"]).then(({data}) => {
                 this.mixes=[{key:"tracks", label:i18n("Song Mix")},
-                            {key:"albums", label:i18n("Album Mix")},
+                            {key:"albums", label:lmsOptions.supportReleaseTypes ? i18n("Release Mix") : i18n("Album Mix")},
                             {key:"contributors", label:i18n("Artist Mix")},
                             {key:"year", label:i18n("Year Mix")}];
                 if (data && data.result && data.result._randomplayisactive) {

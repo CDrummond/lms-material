@@ -1895,7 +1895,7 @@ function browseMyMusicMenu(view) {
                     } else if (c.id.startsWith("myMusicAlbums")) {
                         item.icon = "album";
                         item.cancache = true;
-                        if (lmsOptions.supportReleaseTypes) {
+                        if (lmsOptions.supportReleaseTypes && c.id=="myMusicAlbums") {
                             item.title = i18n("Releases");
                         }
                     } else if (c.id.startsWith("myMusicGenres")) {

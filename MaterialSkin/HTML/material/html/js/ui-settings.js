@@ -513,6 +513,13 @@ Vue.component('lms-ui-settings', {
                     this.browseModesDialog.modes=data.result.modes_loop;
                     for (var idx=0, loop=this.browseModesDialog.modes, loopLen=loop.length; idx<loopLen; ++idx) {
                         loop[idx].enabled=!this.$store.state.disabledBrowseModes.has(loop[idx].id);
+                        if (lmsOptions.supportReleaseTypes) {
+                            if (loop[idx].id=="myMusicAlbums") {
+                                loop[idx].text=i18n("Releases");
+                            } else if (loop[idx].id=="myMusicRandomAlbums") {
+                                loop[idx].text=i18n("Random Releases");
+                            }
+                        }
                     }
                     this.browseModesDialog.modes.sort(function(a, b) { return a.weight!=b.weight ? a.weight<b.weight ? -1 : 1 : 0});
                     this.browseModesDialog.halfLen=Math.ceil(this.browseModesDialog.modes.length/2);

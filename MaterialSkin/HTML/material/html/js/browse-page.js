@@ -119,7 +119,7 @@ var lmsBrowse = Vue.component("lms-browse", {
    <RecycleScroller :items="grid.rows" :item-size="grid.multiSize ? null : (grid.ih - (grid.haveSubtitle || isTop || current.id.startsWith(TOP_ID_PREFIX) ? 0 : GRID_SINGLE_LINE_DIFF))" page-mode key-field="id" :buffer="LMS_SCROLLER_GRID_BUFFER" v-if="grid.use">
     <div slot-scope="{item}" :class="[grid.few?'image-grid-few':'image-grid-full-width', grid.haveSubtitle?'image-grid-with-sub':'']">
 
-     <v-list-tile v-if="item.header && item.item" class="grid-header" @click.stop="itemMenu(item.item, undefined, $event)">
+     <v-list-tile v-if="item.header && item.item" class="grid-header" @click.stop="itemMenu(item.item, undefined, $event)" v-bind:class="{'highlight':highlightIndex==(item.rs)}">
       <v-list-tile-content>
        <v-list-tile-title>{{item.item.title}}</v-list-tile-title>
       </v-list-tile-content>
@@ -221,7 +221,7 @@ var lmsBrowse = Vue.component("lms-browse", {
      <v-list-tile-title v-html="item.title" @touchend="textSelectEnd" @mouseup="textSelectEnd" @contextmenu="event.preventDefault()"></v-list-tile-title>
     </v-list-tile-content>
    </v-list-tile>
-    <v-list-tile v-else-if="item.header" class="lms-list-item" v-bind:class="{'browse-header': item.header}" @click="click(item, index, $event)">
+    <v-list-tile v-else-if="item.header" class="lms-list-item" v-bind:class="{'browse-header':item.header,'highlight':highlightIndex==index}" @click="click(item, index, $event)">
      <v-list-tile-content>
       <v-list-tile-title>{{item.title}}</v-list-tile-title>
       <v-list-tile-sub-title v-if="item.subtitle && !item.hidesub">{{item.subtitle}}</v-list-tile-sub-title>

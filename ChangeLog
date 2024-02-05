@@ -24,6 +24,7 @@
 15. Group all albums lists int releases.
 16. Use 'Releases' instead of 'Albums'.
 17. Fix 'Reload' action in 'Random albums/releases' within genre.
+18. Highlight section headers if match during 'Search within list'.
 
 4.2.2
 -----

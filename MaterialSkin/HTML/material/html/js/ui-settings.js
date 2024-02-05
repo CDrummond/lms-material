@@ -185,7 +185,7 @@ Vue.component('lms-ui-settings', {
     <v-list-tile>
      <v-list-tile-content @click="browseBackdrop = !browseBackdrop" class="switch-label">
       <v-list-tile-title>{{i18n('Draw background')}}</v-list-tile-title>
-      <v-list-tile-sub-title>{{i18n('Use artist, or album, images as background.')}}</v-list-tile-sub-title>
+      <v-list-tile-sub-title>{{i18n('Use artist or cover images as background.')}}</v-list-tile-sub-title>
      </v-list-tile-content>
      <v-list-tile-action><m3-switch v-model="browseBackdrop"></m3-switch></v-list-tile-action>
     </v-list-tile>
@@ -230,7 +230,7 @@ Vue.component('lms-ui-settings', {
     <v-list-tile>
      <v-list-tile-content @click="nowPlayingTrackNum = !nowPlayingTrackNum" class="switch-label">
       <v-list-tile-title>{{i18n('Show track number')}}</v-list-tile-title>
-      <v-list-tile-sub-title>{{i18n("Show track's album number next to title.")}}</v-list-tile-sub-title>
+      <v-list-tile-sub-title>{{i18n("Show track number next to title.")}}</v-list-tile-sub-title>
      </v-list-tile-content>
      <v-list-tile-action><m3-switch v-model="nowPlayingTrackNum"></m3-switch></v-list-tile-action>
     </v-list-tile>
@@ -314,7 +314,7 @@ Vue.component('lms-ui-settings', {
     <v-list-tile>
      <v-list-tile-content @click="queueShowTrackNum = !queueShowTrackNum" class="switch-label">
       <v-list-tile-title>{{i18n('Show track number')}}</v-list-tile-title>
-      <v-list-tile-sub-title>{{i18n("Show track's album number next to title.")}}</v-list-tile-sub-title>
+      <v-list-tile-sub-title>{{i18n("Show track number next to title.")}}</v-list-tile-sub-title>
      </v-list-tile-content>
      <v-list-tile-action><m3-switch v-model="queueShowTrackNum"></m3-switch></v-list-tile-action>
     </v-list-tile>
@@ -323,7 +323,7 @@ Vue.component('lms-ui-settings', {
     <v-list-tile>
      <v-list-tile-content @click="queueThreeLines = !queueThreeLines" class="switch-label">
       <v-list-tile-title>{{i18n('Three lines for track view')}}</v-list-tile-title>
-      <v-list-tile-sub-title>{{i18n("Use three lines (title, artist, album) to show track details.")}}</v-list-tile-sub-title>
+      <v-list-tile-sub-title>{{lmsOptions.supportReleaseTypes ? i18n("Use three lines (title, artist, release) to show track details.") : i18n("Use three lines (title, artist, album) to show track details.")}}</v-list-tile-sub-title>
      </v-list-tile-content>
      <v-list-tile-action><m3-switch v-model="queueThreeLines"></m3-switch></v-list-tile-action>
     </v-list-tile>

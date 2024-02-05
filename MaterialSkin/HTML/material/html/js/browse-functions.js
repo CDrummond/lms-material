@@ -488,7 +488,7 @@ function browseHandleListResponse(view, item, command, resp, prevPage, appendIte
             }
         }
         if (canAddAlbumSort && view.command.command.length>0 && view.command.command[0]=="albums" && view.items.length>0) {
-            for (var i=0, len=view.command.params.length && canAddAlbumSort; i<len; ++i) {
+            for (var i=0, len=view.command.params.length; i<len && canAddAlbumSort; ++i) {
                 if (view.command.params[i].startsWith(SORT_KEY)) {
                     var sort=view.command.params[i].split(":")[1];
                     canAddAlbumSort=sort!="new" && sort!="random";

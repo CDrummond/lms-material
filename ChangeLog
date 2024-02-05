@@ -23,6 +23,7 @@
     actions in sub-toolbar.
 15. Group all albums lists int releases.
 16. Use 'Releases' instead of 'Albums'.
+17. Fix 'Reload' action in 'Random albums/releases' within genre.
 
 4.2.2
 -----

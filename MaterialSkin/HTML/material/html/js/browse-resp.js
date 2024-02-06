@@ -66,6 +66,27 @@ function releaseTypeHeader(rel) {
     return rel.replace(/\w\S*/g, function(txt){return txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase();});
 }
 
+function releaseTypeIcon(rel) {
+    /*
+    if (rel=="ALBUM") {
+        return {icon:"album"};
+    }
+    if (rel=="EP") {
+        return {icon:"album"};
+    }
+    */
+    if (rel=="SINGLE") {
+        return {icon:"music_note"};
+    }
+    if (rel=="COMPILATION") {
+        return {svg:"album-multi"};
+    }
+    if (rel=="COMPOSITION") {
+        return {svg:"composer"};
+    }
+    return {icon:"album"};
+}
+
 function releaseTypeSort(a, b) {
     let list = undefined==lmsOptions.releaseTypeOrder ? RELEASE_TYPES : lmsOptions.releaseTypeOrder
     let va = list.indexOf(a);
@@ -986,7 +1007,7 @@ function parseBrowseResp(data, parent, options, cacheKey, parentCommand, parentG
                     // Create jump list
                     let start = resp.items.length;
                     let jl=[];
-                    resp.jumplist.push({key:SECTION_JUMP, index:start-1, sect:k*1000});
+                    resp.jumplist.push({key:SECTION_JUMP, index:start-1, sect:k*1000, header:true, icon:releaseTypeIcon(key)});
                     for (let a=0, alen=alist.length; a<alen; ++a) {
                         if (undefined!=alist[a].textkey && (jl.length==0 || jl[jl.length-1].key!=alist[a].textkey)) {
                             jl.push({key: alist[a].textkey, index: resp.items.length});

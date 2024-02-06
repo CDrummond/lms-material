@@ -111,7 +111,11 @@ var lmsBrowse = Vue.component("lms-browse", {
  <div class="lms-list bgnd-cover" v-bind:class="{'browse-backdrop-cover':drawBackdrop, 'album-track-list':current && current.stdItem==STD_ITEM_ALBUM}" id="browse-bgnd">
   <div class="noselect lms-jumplist" v-bind:class="{'bgnd-blur':drawBgndImage,'backdrop-blur':drawBackdrop}" v-if="filteredJumplist.length>1">
    <template v-for="(item, index) in filteredJumplist">
-    <div v-if="item.key==SECTION_JUMP" @click="jumpTo(item.index)" class="jl-divider" :title="items[item.index].title">{{item.key}}</div>
+    <div v-if="item.icon" @click="jumpTo(item.index)" class="jl-divider" :title="items[item.index].title">
+     <img v-if="item.icon.svg" :src="item.icon.svg | svgIcon(darkUi)" loading="lazy"></img>
+     <v-icon v-else class="jl-icon">{{item.icon.icon}}</v-icon>
+    </div>
+    <div v-else-if="item.key==SECTION_JUMP" @click="jumpTo(item.index)" class="jl-divider" :title="items[item.index].title">{{item.key}}</div>
     <div v-else @click="jumpTo(item.index)" v-bind:class="{'jl-divider':item.key==SECTION_JUMP}">{{item.key==' ' || item.key=='' ? '?' : item.key}}</div>
    </template>
   </div>

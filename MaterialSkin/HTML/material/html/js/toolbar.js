@@ -561,7 +561,7 @@ Vue.component('lms-toolbar', {
             } else if (longPress && VOL_FIXED!=this.playerDvc) {
                 bus.$emit('playerCommand', ['mixer', 'muting', 1]);
             } else {
-                bus.$emit('dlg.open', this.playerStatus.synced && !queryParams.single ? 'groupvolume' : 'volume', this.playerStatus, true);
+                bus.$emit('dlg.open', window.innerHeight>=250 && this.playerStatus.synced && !queryParams.single ? 'groupvolume' : 'volume', this.playerStatus, true);
             }
         },
         setVolume(val) {

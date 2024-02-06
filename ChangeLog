@@ -27,6 +27,7 @@
 18. Highlight section headers if match during 'Search within list'.
 19. Re-order some '...' menu entries.
 20. Add entries for section headers into jumplist.
+21. When using 'mini-player' don't show group volume dialog.
 
 4.2.2
 -----

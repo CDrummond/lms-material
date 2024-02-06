@@ -17,7 +17,7 @@ function checkPlatform(platform) {
 
 const SEPARATOR = " \u2022 ";
 const SEPARATOR_HTML = "&nbsp;\u2022 ";
-const SECTION_JUMP = "\u25ac";
+const SECTION_JUMP = "\u2b24";
 
 const IS_MOBILE  = (undefined!=navigator && undefined!=navigator.userAgentData && navigator.userAgentData.mobile) ||
                    checkPlatform('Android|webOS|iPhone|iPad|BlackBerry|Windows Phone|Opera Mini|IEMobile|Mobile') ||
@@ -48,7 +48,7 @@ const LMS_MATERIAL_DEFAULT_ITEMS_PREF = "plugin.material-skin:items";
 const LMS_MATERIAL_DEFAULT_PINNED_PREF = "plugin.material-skin:pinned";
 const LMS_VOLUME_CLOSE_TIMEOUT = 10000;
 const LMS_QUEUE_CLOSE_TIMEOUT = 15*1000;
-const LMS_CACHE_VERSION = 12;
+const LMS_CACHE_VERSION = 0;
 const LMS_LIST_ELEMENT_SIZE = 50;
 const LMS_LIST_3LINE_ELEMENT_SIZE = 70;
 const LMS_ALBUM_QUEUE_HEADER = 68;

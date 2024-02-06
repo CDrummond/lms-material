@@ -2485,8 +2485,8 @@ div.v-subheader {
 }
 
 .jl-divider {
+ font-size:65%;
  color:var(--active-color);
- opacity:0.5;
 }
 
 .grid-header {

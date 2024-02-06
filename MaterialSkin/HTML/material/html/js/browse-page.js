@@ -1699,7 +1699,7 @@ var lmsBrowse = Vue.component("lms-browse", {
         filterJumplist() {
             let prev = getComputedStyle(document.body).getPropertyValue('--jump-list-adjust');
             if (this.items.length>25 && this.items.length==this.listSize && undefined!=this.jumplist && this.jumplist.length>=4) {
-                let maxItems = Math.floor((this.scrollElement.clientHeight-(16))/17);
+                let maxItems = Math.floor((this.scrollElement.clientHeight-(16))/20);
                 this.filteredJumplist = shrinkJumplist(this.jumplist, maxItems);
             }
             let now = (undefined!=this.jumplist && undefined!=this.filteredJumplist && this.filteredJumplist.length>1 ? JUMP_LIST_WIDTH : 0)+'px';

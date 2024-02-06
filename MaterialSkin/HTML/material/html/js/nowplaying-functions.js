@@ -79,6 +79,16 @@ function nowplayingOnPlayerStatus(view, playerStatus) {
     if (playerStatus.current.url!=view.playerStatus.current.url) {
         view.playerStatus.current.url = playerStatus.current.url;
     }
+    if (playerStatus.current.live_edge!=view.playerStatus.current.liveEdge) {
+        view.playerStatus.current.liveEdge = playerStatus.current.live_edge;
+
+        let pc = view.playerStatus.current && undefined!=view.playerStatus.current.duration &&
+        view.playerStatus.current.duration>0 ? 100*Math.floor(view.playerStatus.current.liveEdge*1000/view.playerStatus.current.duration)/1000 : 100.0;
+
+        if (pc!=view.playerStatus.current.bufpc) {
+            view.playerStatus.current.bufpc = pc;
+        }
+    }
     if (playerStatus.current.time!=view.playerStatus.current.time || playStateChanged) {
         view.playerStatus.current.time = playerStatus.current.time;
         view.playerStatus.current.updated = new Date();

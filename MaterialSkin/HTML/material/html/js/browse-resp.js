@@ -71,10 +71,10 @@ function releaseTypeIcon(rel) {
     if (rel=="ALBUM") {
         return {icon:"album"};
     }
-    if (rel=="EP") {
-        return {icon:"album"};
-    }
     */
+    if (rel=="EP") {
+        return {svg:"music"};
+    }
     if (rel=="SINGLE") {
         return {icon:"music_note"};
     }
@@ -83,6 +83,15 @@ function releaseTypeIcon(rel) {
     }
     if (rel=="COMPOSITION") {
         return {svg:"composer"};
+    }
+    if (rel=="LIVE" || rel=="BOOTLEG") {
+        return {svg:"mic"};
+    }
+    if (rel=="BOXSET") {
+        return {svg:"library-music-outline"};
+    }
+    if (rel=="BESTOF") {
+        return {icon:"stars"};
     }
     return {icon:"album"};
 }

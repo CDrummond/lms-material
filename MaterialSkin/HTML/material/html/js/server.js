@@ -485,7 +485,7 @@ var lmsServer = Vue.component('lms-server', {
                 player.current = data.playlist_loop[0];
                 splitMultiples(player.current, true);
                 player.current.time = undefined==data.time ? undefined : "stop"==data.mode ? 0 : parseFloat(data.time);
-                player.current.live_edge = data.remoteMeta && data.remoteMeta.live_edge ? parseFloat(data.remoteMeta.live_edge) : 0;
+                player.current.live_edge = data.remoteMeta && data.remoteMeta.live_edge ? parseFloat(data.remoteMeta.live_edge) : undefined;
                 player.current.canseek = parseInt(data.can_seek);
                 player.current.remote_title = checkRemoteTitle(player.current);
                 player.current.replay_gain = data.replay_gain;

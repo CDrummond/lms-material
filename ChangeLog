@@ -29,6 +29,8 @@
 20. Add jumplist entries for section headers.
 21. When using 'mini-player' don't show group volume dialog.
 22. Rename 'Music sources' to 'Media sources'.
+23. Add support for LMS8.4 'live edge' when playing live streams - currently
+    BBC Sounds only.
 
 4.2.2
 -----

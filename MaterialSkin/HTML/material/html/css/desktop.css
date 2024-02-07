@@ -370,7 +370,11 @@
 .np-bar-slider {
  bottom:calc(var(--bottom-toolbar-height) - 5.5px);
  height:5px !important;
- background-color: rgba(var(--highlight-rgb), 0.3)!important;
+ background-color:var(--pbar-bgnd)!important;
+}
+
+.np-bar-colored {
+ background-color:var(--pbar-colored-bgnd)!important;
 }
 
 .np-bar .np-playpause {

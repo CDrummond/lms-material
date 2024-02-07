@@ -213,11 +213,6 @@
  color:var(--sub-toolbar-text-color) !important;
 }
 
-.np-bar .v-progress-linear .primary {
- background-color: var(--primary-color)!important;
- border-color: var(--primary-color)!important;
-}
-
 .np-bar-image {
  visibility:hidden;
 }

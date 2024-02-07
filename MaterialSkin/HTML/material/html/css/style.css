@@ -156,11 +156,6 @@
  color:var(--bottom-toolbar-text-color) !important;
 }
 
-.np-bar .v-progress-linear .primary {
- background-color:var(--bottom-position-slider-color)!important;
- border-color:var(--bottom-position-slider-color)!important;
-}
-
 .no-liveedge .v-progress-linear .v-progress-linear__background {
  background-color:transparent!important;
 }

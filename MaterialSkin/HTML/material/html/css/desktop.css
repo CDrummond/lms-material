@@ -294,7 +294,6 @@
   bottom:calc(var(--desktop-npbar-height-thin) - 3.5px);
   width:100vw;
   height:3px!important;
-  background-color:var(--bottom-toolbar-color) !important;
  }
 }
 

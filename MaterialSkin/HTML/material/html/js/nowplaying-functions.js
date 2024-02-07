@@ -87,15 +87,6 @@ function nowplayingOnPlayerStatus(view, playerStatus) {
     }
     if (playerStatus.current.live_edge!=view.playerStatus.current.liveEdge) {
         view.playerStatus.current.liveEdge = playerStatus.current.live_edge;
-
-        let pc = Math.min(
-                    view.playerStatus.current && undefined!=view.playerStatus.current.duration && view.playerStatus.current.liveEdge && view.playerStatus.current.duration>0
-                        ? 100*Math.floor((view.playerStatus.current.liveEdge+view.playerStatus.current.time)*1000/view.playerStatus.current.duration)/1000 : 100.0,
-                    100.0);
-
-        if (pc!=view.playerStatus.current.bufpc) {
-            view.playerStatus.current.bufpc = pc;
-        }
     }
     view.setPosition();
     if (playerStatus.current.id!=view.playerStatus.current.id) {

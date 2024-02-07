@@ -672,11 +672,22 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
             bus.$emit('playerCommand', command);
         },
         setPosition() {
-            var pc = this.playerStatus.current && undefined!=this.playerStatus.current.time && undefined!=this.playerStatus.current.duration &&
+            let haveTime = this.playerStatus.current && undefined!=this.playerStatus.current.time && undefined!=this.playerStatus.current.duration;
+            let pc = haveTime &&
                      this.playerStatus.current.duration>0 ? 100*Math.floor(this.playerStatus.current.time*1000/this.playerStatus.current.duration)/1000 : 0.0;
 
             if (pc!=this.playerStatus.current.pospc) {
                 this.playerStatus.current.pospc = pc;
+            }
+
+            pc = Math.min(
+                    haveTime && undefined!=this.playerStatus.current.liveEdge && this.playerStatus.current.duration>0
+                        ? 100*Math.floor((this.playerStatus.current.liveEdge+this.playerStatus.current.time)*1000/this.playerStatus.current.duration)/1000
+                        : 100.0,
+                    100.0);
+
+            if (pc!=this.playerStatus.current.bufpc) {
+                this.playerStatus.current.bufpc = pc;
             }
             this.updateLyricsPosition();
         },

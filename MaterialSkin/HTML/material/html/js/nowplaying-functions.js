@@ -85,7 +85,9 @@ function nowplayingOnPlayerStatus(view, playerStatus) {
         view.playerStatus.current.origTime = playerStatus.current.time;
         currentPlayingTrackPosition = playerStatus.current.time;
     }
+    let liveEdgeChanged=false;
     if (playerStatus.current.live_edge!=view.playerStatus.current.liveEdge) {
+        liveEdgeChanged = undefined==playerStatus.current.live_edge || undefined==view.playerStatus.current.liveEdge;
         view.playerStatus.current.liveEdge = playerStatus.current.live_edge;
     }
     view.setPosition();
@@ -257,11 +259,17 @@ function nowplayingOnPlayerStatus(view, playerStatus) {
     if (playStateChanged) {
         if (view.playerStatus.isplaying) {
             view.startPositionInterval();
+            view.stopLiveEdgeInterval();
         } else {
             view.stopPositionInterval();
+            view.startLiveEdgeInterval();
         }
-    } else if (view.playerStatus.isplaying && trackChanged) {
-        view.startPositionInterval();
+    } else {
+        if (view.playerStatus.isplaying && trackChanged) {
+            view.startPositionInterval();
+        } else if (liveEdgeChanged) {
+            view.startLiveEdgeInterval();
+        }
     }
     // 'volume' is NOT reactive, as only want to update when overlay is shown!
     view.volume = playerStatus.volume<0 ? -1*playerStatus.volume : playerStatus.volume;

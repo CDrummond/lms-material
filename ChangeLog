@@ -31,6 +31,8 @@
 22. Rename 'Music sources' to 'Media sources'.
 23. Add support for LMS8.4 'live edge' when playing live streams - currently
     BBC Sounds only.
+24. Only use 100vh work-around if running within a mobile browser (i.e. not
+    installed to homescreen).
 
 4.2.2
 -----

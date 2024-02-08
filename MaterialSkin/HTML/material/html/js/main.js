@@ -204,29 +204,34 @@ var app = new Vue({
 
         // Work-around 100vh behaviour in mobile chrome
         // See https://css-tricks.com/the-trick-to-viewport-units-on-mobile/
-        let vh = window.innerHeight * 0.01;
+        let vh = window.innerHeight / 100.0;
         let lastWinHeight = window.innerHeight;
         let lastReportedHeight = lastWinHeight;
         let lastWinWidth = window.innerWidth;
-        let timeout = undefined;
         let lmsApp = this;
         this.bottomBar = {height: undefined, shown:true, desktop:this.$store.state.desktopLayout, npThin:undefined, npThick:undefined};
-        document.documentElement.style.setProperty('--vh', `${vh}px`);
+
+        // Only need to do 100vh work-around when running within mobile browsers, not when installled to homescreen.
+        let appMode = !IS_MOBILE ||
+                      window.matchMedia('(display-mode: standalone)').matches ||
+                      window.matchMedia('(display-mode: fullscreen)').matches ||
+                      (("standalone" in window.navigator) && window.navigator.standalone);
+        if (!appMode) {
+            document.documentElement.style.setProperty('--vh', `${vh}px`);
+        }
         window.addEventListener('resize', () => {
-            if (timeout) {
-                clearTimeout(timeout);
-            }
-            timeout = setTimeout(function () {
+            window.requestAnimationFrame(function () {
                 let heightChange = 0;
                 let widthChange = 0;
                 // Only update if changed
-                if (Math.abs(lastWinHeight-window.innerHeight)!=0) {
-                    let vh = window.innerHeight * 0.01;
-                    document.documentElement.style.setProperty('--vh', `${vh}px`);
+                if (lastWinHeight!=window.innerHeight) {
+                    if (!appMode) {
+                        let vh = window.innerHeight / 100.0;
+                        document.documentElement.style.setProperty('--vh', `${vh}px`);
+                    }
                     heightChange = lastWinHeight - window.innerHeight;
                     lastWinHeight = window.innerHeight;
                 }
-                timeout = undefined;
                 if (Math.abs(lastWinWidth-window.innerWidth)>=3) {
                     widthChange = lastWinWidth - window.innerWidth;
                     lastWinWidth = window.innerWidth;
@@ -296,7 +301,7 @@ var app = new Vue({
                         }
                     }
                 }
-            }, 50);
+            });
         }, false);
 
         // https://stackoverflow.com/questions/43329654/android-back-button-on-a-progressive-web-thislication-closes-de-this

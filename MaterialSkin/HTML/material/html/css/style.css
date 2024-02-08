@@ -66,6 +66,9 @@
  --dialog-opacity:1.0;
  --pbar-bgnd:rgba(32, 32, 32, 0.15);
  --pbar-colored-bgnd:rgba(220, 220, 220, 0.3);
+ --1vh:1vh;
+ --50vh:50vh;
+ --100vh:100vh;
 }
 
 /* For old browsers that dont support min() */
@@ -319,7 +322,7 @@ body {
  touch-action:none;
  position:fixed;
  width:100vw;
- height:calc(var(--vh, 1vh)*100);
+ height:var(--100vh);
  margin:0;
  padding:0;
  background-color:var(--bottom-toolbar-color);
@@ -932,7 +935,7 @@ div.v-subheader {
  right:0px;
  width:100vw;
  max-width:450px;
- max-height:calc((var(--vh, 1vh)*100) - var(--main-toolbar-height));
+ max-height:calc(var(--100vh) - var(--main-toolbar-height));
  z-index:2;
  background-color:var(--background-color) !important;
 }
@@ -978,14 +981,14 @@ div.v-subheader {
 }
 .group-vol .container {
  overflow-y:auto;
- max-height:calc((var(--vh, 1vh)*100) - (var(--main-toolbar-height) + 64px));
+ max-height:calc(var(--100vh) - (var(--main-toolbar-height) + 64px));
 }
 .group-vol-grp {
  font-weight:var(--bold-weight);
 }
 
 .v-menu__content {
- max-height:calc((var(--vh, 1vh)*100) - var(--std-font-size));
+ max-height:calc(var(--100vh) - var(--std-font-size));
  white-space:nowrap;
  overflow:hidden;
  text-overflow:ellipsis;
@@ -1156,7 +1159,7 @@ div.v-subheader {
  position:fixed;
  top:var(--main-toolbar-height);
  width:100vw;
- height:calc((var(--vh, 1vh)*100) - (var(--main-toolbar-height) + var(--bottom-toolbar-height)));
+ height:calc(var(--100vh) - (var(--main-toolbar-height) + var(--bottom-toolbar-height)));
  background-color:var(--background-color);
 }
 
@@ -1331,7 +1334,7 @@ div.v-subheader {
  position:fixed;
  top:calc(var(--np-portrait-image-size) + (var(--np-image-border) * 2) + 32px);
  width:100vw;
- height:calc((var(--vh, 1vh)*100) - (var(--np-portrait-image-size) + 187px + (var(--thin-portrait-adjust) * 3) + (var(--np-image-border) * 2)));
+ height:calc(var(--100vh) - (var(--np-portrait-image-size) + 187px + (var(--thin-portrait-adjust) * 3) + (var(--np-image-border) * 2)));
  padding-left:16px;
  padding-right:16px;
 }
@@ -1693,7 +1696,7 @@ div.v-rating i.primary--text, div.v-rating i.accent--text {
  position:fixed;
  top:var(--main-toolbar-height);
  left:0px;
- height:calc((var(--vh, 1vh)*100) - (var(--main-toolbar-height) + var(--bottom-toolbar-height)));
+ height:calc(var(--100vh) - (var(--main-toolbar-height) + var(--bottom-toolbar-height)));
  width:100vw;
  overflow:hidden;
  backface-visibility:hidden;
@@ -2566,7 +2569,7 @@ div.v-subheader {
  pointer-events:none;
  opacity:0.5;
  text-shadow: 0px 0px 8px var(--text-shadow-color);
- top:calc(var(--main-toolbar-height) + ((((var(--vh, 1vh)*100) - (var(--main-toolbar-height) + var(--sub-toolbar-height) + var(--bottom-toolbar-height)))/2) - 60px));
+ top:calc(var(--main-toolbar-height) + (((var(--100vh) - (var(--main-toolbar-height) + var(--sub-toolbar-height) + var(--bottom-toolbar-height)))/2) - 60px));
  width:100%;
 }
 
@@ -2583,7 +2586,7 @@ div.v-subheader {
  top:48px;
  left:0px;
  width:100vw;
- height:calc((var(--vh, 1vh)*100) - 48px);
+ height:calc(var(--100vh) - 48px);
  border:none;
  margin:0px;
  padding:0px;
@@ -3061,7 +3064,7 @@ div.v-subheader {
 .file-dialog-select-list {
  padding: 0px 16px 16px 16px;
  height:600px;
- max-height:calc((var(--vh, 1vh)*100) - 170px);
+ max-height:calc(var(--100vh) - 170px);
  overflow:auto;
 }
 

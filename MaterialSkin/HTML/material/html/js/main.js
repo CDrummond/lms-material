@@ -30,6 +30,14 @@ function setWindowArea() {
     }
 }
 
+function setVh() {
+    let vh1 = window.innerHeight / 100.0;
+    let vh50 = window.innerHeight / 2.0;
+    document.documentElement.style.setProperty('--1vh', `${vh1}px`);
+    document.documentElement.style.setProperty('--50vh', `${vh50}px`);
+    document.documentElement.style.setProperty('--100vh', `${window.innerHeight}px`);
+}
+
 var app = new Vue({
     el: '#app',
     data() {
@@ -204,7 +212,6 @@ var app = new Vue({
 
         // Work-around 100vh behaviour in mobile chrome
         // See https://css-tricks.com/the-trick-to-viewport-units-on-mobile/
-        let vh = window.innerHeight / 100.0;
         let lastWinHeight = window.innerHeight;
         let lastReportedHeight = lastWinHeight;
         let lastWinWidth = window.innerWidth;
@@ -217,7 +224,7 @@ var app = new Vue({
                       window.matchMedia('(display-mode: fullscreen)').matches ||
                       (("standalone" in window.navigator) && window.navigator.standalone);
         if (!appMode) {
-            document.documentElement.style.setProperty('--vh', `${vh}px`);
+            setVh();
         }
         window.addEventListener('resize', () => {
             window.requestAnimationFrame(function () {
@@ -226,8 +233,7 @@ var app = new Vue({
                 // Only update if changed
                 if (lastWinHeight!=window.innerHeight) {
                     if (!appMode) {
-                        let vh = window.innerHeight / 100.0;
-                        document.documentElement.style.setProperty('--vh', `${vh}px`);
+                        setVh();
                     }
                     heightChange = lastWinHeight - window.innerHeight;
                     lastWinHeight = window.innerHeight;

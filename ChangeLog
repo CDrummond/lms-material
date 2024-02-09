@@ -33,6 +33,7 @@
     BBC Sounds only.
 24. Only use 100vh work-around if running within a mobile browser (i.e. not
     installed to homescreen).
+25. Fix custom scrollbars under chromium browsers.
 
 4.2.2
 -----

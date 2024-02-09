@@ -468,7 +468,7 @@ function parseBrowseResp(data, parent, options, cacheKey, parentCommand, parentG
                     mapIcon(i, command);
                 } else if (isPlaylists && i.commonParams && i.commonParams.playlist_id) {
                     i.id = "playlist_id:"+i.commonParams.playlist_id;
-                } else if (isRadios) {
+                } else if (isRadios || isApps) {
                     if (i.type!="search") {
                         if (!i.id) {
                             if (i.params && i.params.item_id) {

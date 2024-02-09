@@ -2169,6 +2169,9 @@ function browsePin(view, item, add, mapped) {
                 }
                 view.saveTopList();
                 bus.$emit('pinnedChanged');
+                if (view.grid.use) {
+                    view.layoutGrid(true);
+                }
             }
         });
     }

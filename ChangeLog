@@ -38,6 +38,7 @@
     scrollbars.
 27. Only open MAI view if MAI installed.
 28. Allow pinning items from apps.
+29. Re-layout grid when un-pinning home screen items.
 
 4.2.2
 -----

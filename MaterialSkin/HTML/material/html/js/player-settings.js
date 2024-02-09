@@ -363,7 +363,7 @@ Vue.component('lms-player-settings', {
             this.initItems();
         }.bind(this));
         this.initItems();
-        bus.$on('pinnedChanged', function(playerStatus) {
+        bus.$on('pinnedChanged', function() {
             if (this.show) {
                 this.setPinned();
             }

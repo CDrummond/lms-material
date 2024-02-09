@@ -41,7 +41,7 @@
  --popup-background-color:#353537;
  --popup-border-color:var(--sub-toolbar-border-color);
  --popup-divider-color:var(--scrollbar-thumb-color);
-);
+ scrollbar-color:var(--scrollbar-thumb-color) var(--scrollbar-track-color);
 }
 
 .np-info-cover {

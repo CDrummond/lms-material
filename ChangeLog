@@ -34,6 +34,8 @@
 24. Only use 100vh work-around if running within a mobile browser (i.e. not
     installed to homescreen).
 25. Fix custom scrollbars under chromium browsers.
+26. For 'Windows 10' and 'Mojave' dark/light themes set chromium to use native
+    scrollbars.
 
 4.2.2
 -----

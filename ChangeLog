@@ -36,6 +36,7 @@
 25. Fix custom scrollbars under chromium browsers.
 26. For 'Windows 10' and 'Mojave' dark/light themes set chromium to use native
     scrollbars.
+27. Only open MAI view if MAI installed.
 
 4.2.2
 -----

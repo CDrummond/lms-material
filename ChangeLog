@@ -32,7 +32,7 @@
 23. Add support for LMS8.4 'live edge' when playing live streams - currently
     BBC Sounds only.
 24. Only use 100vh work-around if running within a mobile browser (i.e. not
-    installed to homescreen).
+    installed to home screen).
 25. Fix custom scrollbars under chromium browsers.
 26. For 'Windows 10' and 'Mojave' dark/light themes set chromium to use native
     scrollbars.

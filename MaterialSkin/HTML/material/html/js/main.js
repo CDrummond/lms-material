@@ -217,7 +217,7 @@ var app = new Vue({
                       window.matchMedia('(display-mode: fullscreen)').matches ||
                       (("standalone" in window.navigator) && window.navigator.standalone);
         if (!appMode) {
-            document.documentElement.style.setProperty('--vh', `${vhwindow.innerHeight * 0.01}px`);
+            document.documentElement.style.setProperty('--vh', `${window.innerHeight * 0.01}px`);
         }
         window.addEventListener('resize', () => {
             if (timeout) {
@@ -229,7 +229,7 @@ var app = new Vue({
                 // Only update if changed
                 if (lastWinHeight!=window.innerHeight) {
                     if (!appMode) {
-                        document.documentElement.style.setProperty('--vh', `${vhwindow.innerHeight * 0.01}px`);
+                        document.documentElement.style.setProperty('--vh', `${window.innerHeight * 0.01}px`);
                     }
                     heightChange = lastWinHeight - window.innerHeight;
                     lastWinHeight = window.innerHeight;

@@ -30,14 +30,6 @@ function setWindowArea() {
     }
 }
 
-function setVh() {
-    let vh1 = window.innerHeight / 100.0;
-    let vh50 = window.innerHeight / 2.0;
-    document.documentElement.style.setProperty('--1vh', `${vh1}px`);
-    document.documentElement.style.setProperty('--50vh', `${vh50}px`);
-    document.documentElement.style.setProperty('--100vh', `${window.innerHeight}px`);
-}
-
 var app = new Vue({
     el: '#app',
     data() {
@@ -215,6 +207,7 @@ var app = new Vue({
         let lastWinHeight = window.innerHeight;
         let lastReportedHeight = lastWinHeight;
         let lastWinWidth = window.innerWidth;
+        let timeout = undefined;
         let lmsApp = this;
         this.bottomBar = {height: undefined, shown:true, desktop:this.$store.state.desktopLayout, npThin:undefined, npThick:undefined};
 
@@ -224,16 +217,19 @@ var app = new Vue({
                       window.matchMedia('(display-mode: fullscreen)').matches ||
                       (("standalone" in window.navigator) && window.navigator.standalone);
         if (!appMode) {
-            setVh();
+            document.documentElement.style.setProperty('--vh', `${vhwindow.innerHeight * 0.01}px`);
         }
         window.addEventListener('resize', () => {
-            window.requestAnimationFrame(function () {
+            if (timeout) {
+                clearTimeout(timeout);
+            }
+            timeout = setTimeout(function () {
                 let heightChange = 0;
                 let widthChange = 0;
                 // Only update if changed
                 if (lastWinHeight!=window.innerHeight) {
                     if (!appMode) {
-                        setVh();
+                        document.documentElement.style.setProperty('--vh', `${vhwindow.innerHeight * 0.01}px`);
                     }
                     heightChange = lastWinHeight - window.innerHeight;
                     lastWinHeight = window.innerHeight;
@@ -307,7 +303,7 @@ var app = new Vue({
                         }
                     }
                 }
-            });
+            }, 50);
         }, false);
 
         // https://stackoverflow.com/questions/43329654/android-back-button-on-a-progressive-web-thislication-closes-de-this

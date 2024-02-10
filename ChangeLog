@@ -1,3 +1,7 @@
+4.3.1
+-----
+1. Fix view height issues when rotating.
+
 4.3.0
 -----
  1. Add option to move dialogs closer to click/touch position.

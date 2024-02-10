@@ -65,9 +65,8 @@
  --dialog-opacity:1.0;
  --pbar-bgnd:rgba(32, 32, 32, 0.15);
  --pbar-colored-bgnd:rgba(220, 220, 220, 0.3);
- --1vh:1vh;
- --50vh:50vh;
- --100vh:100vh;
+ --50vh:calc(var(--vh, 1vh)*50);
+ --100vh:calc(var(--vh, 1vh)*100);
 }
 
 /* For old browsers that dont support min() */

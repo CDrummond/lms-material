@@ -73,7 +73,7 @@ function releaseTypeIcon(rel) {
     }
     */
     if (rel=="EP") {
-        return {svg:"music"};
+        return {svg:"music-circle"};
     }
     if (rel=="SINGLE") {
         return {icon:"music_note"};

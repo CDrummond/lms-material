@@ -1,6 +1,7 @@
 4.3.1
 -----
 1. Fix view height issues when rotating.
+2. Fix closing of 'Add to playlist' dialog.
 
 4.3.0
 -----

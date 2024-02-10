@@ -83,8 +83,8 @@ Vue.component('lms-addtoplaylist-dialog', {
     },
     methods: {
         close() {
-            if (undefined!=closeSignal) {
-                bus.$emit(closeSignal);
+            if (undefined!=this.closeSignal) {
+                bus.$emit(this.closeSignal);
             }
             this.show=false;
         },

@@ -1008,6 +1008,7 @@ function parseBrowseResp(data, parent, options, cacheKey, parentCommand, parentG
                 resp.subtitle=i18np("1 Release", "%1 Releases", loopLen);
                 resp.jumplist = [];
                 albumKeys.sort(releaseTypeSort);
+                let headerOnly = true;
                 for (let k=0; k<numGroups; ++k) {
                     let key = albumKeys[k];
                     let alist = albumGroups[key];
@@ -1021,10 +1022,12 @@ function parseBrowseResp(data, parent, options, cacheKey, parentCommand, parentG
                         if (undefined!=alist[a].textkey && (jl.length==0 || jl[jl.length-1].key!=alist[a].textkey)) {
                             jl.push({key: alist[a].textkey, index: resp.items.length});
                             resp.jumplist.push({key: alist[a].textkey, index:start+a, sect:k});
+                            headerOnly = false;
                         }
                     }
                     resp.items.push.apply(resp.items, alist);
                 }
+                resp.jumplist.headerOnly = headerOnly;
                 resp.listSize = resp.items.length;
             } else {
                 if (numGroups==1) {

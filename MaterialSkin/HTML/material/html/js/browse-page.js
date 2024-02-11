@@ -109,7 +109,7 @@ var lmsBrowse = Vue.component("lms-browse", {
  </div>
  <v-icon class="browse-progress" v-if="fetchingItem!=undefined" color="primary">refresh</v-icon>
  <div class="lms-list bgnd-cover" v-bind:class="{'browse-backdrop-cover':drawBackdrop, 'album-track-list':current && current.stdItem==STD_ITEM_ALBUM}" id="browse-bgnd">
-  <div class="noselect lms-jumplist" v-bind:class="{'bgnd-blur':drawBgndImage,'backdrop-blur':drawBackdrop}" v-if="filteredJumplist.length>1">
+  <div class="noselect lms-jumplist" v-bind:class="{'bgnd-blur':drawBgndImage,'backdrop-blur':drawBackdrop, 'lms-jumplist-h':filteredJumplist[0].header}" v-bind:style="{'max-height':(filteredJumplist.length*50)+'px'}" v-if="filteredJumplist.length>1">
    <template v-for="(item, index) in filteredJumplist">
     <div v-if="item.icon" @click="jumpTo(item.index)" class="jl-divider" :title="items[item.index].title">
      <img v-if="item.icon.svg" :src="item.icon.svg | svgIcon(darkUi)" loading="lazy"></img>
@@ -1698,9 +1698,13 @@ var lmsBrowse = Vue.component("lms-browse", {
         },
         filterJumplist() {
             let prev = getComputedStyle(document.body).getPropertyValue('--jump-list-adjust');
-            if (this.items.length>25 && this.items.length==this.listSize && undefined!=this.jumplist && this.jumplist.length>=4) {
-                let maxItems = Math.floor((this.scrollElement.clientHeight-(16))/20);
-                this.filteredJumplist = shrinkJumplist(this.jumplist, maxItems);
+            if (this.items.length>25 && this.items.length==this.listSize && undefined!=this.jumplist && this.jumplist.length>1) {
+                if (this.jumplist.headerOnly && this.items.length>(this.jumplist.length*5)) {
+                    this.filteredJumplist = this.jumplist;
+                } else if (!this.jumplist.headerOnly && this.jumplist.length>=4) {
+                    let maxItems = Math.floor((this.scrollElement.clientHeight-(16))/20);
+                    this.filteredJumplist = shrinkJumplist(this.jumplist, maxItems);
+                }
             }
             let now = (undefined!=this.jumplist && undefined!=this.filteredJumplist && this.filteredJumplist.length>1 ? JUMP_LIST_WIDTH : 0)+'px';
             if (prev!=now) {

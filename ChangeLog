@@ -1,6 +1,9 @@
 4.3.2
 -----
 1. Revert back to '1' for enabled bool server side items.
+2. If jumplist only contains headers (e.g. as in 'New Music') then show if
+   there are at least 5 times the number of items as there are jumplist
+   entries.
 
 4.3.1
 -----

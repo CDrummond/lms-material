@@ -78,6 +78,8 @@ my @ADV_SEARCH_OTHER = ('content_type', 'contributor_namesearch.active1', 'contr
 
 my %IGNORE_PROTOCOLS = map { $_ => 1 } ('mms', 'file', 'tmp', 'http', 'https', 'spdr', 'icy', 'teststream', 'db', 'playlist');
 
+my @BOOL_OPTS = ('allowDownload', 'playShuffle', 'touchLinks', 'showAllArtists', 'artistFirst', 'yearInSub', 'showComment', 'genreImages', 'showComposer', 'showConductor', 'showBand');
+
 sub initPlugin {
     my $class = shift;
 
@@ -97,6 +99,15 @@ sub initPlugin {
         $prefs->set('bandgenres', $DEFAULT_BAND_GENRES) if $bandgenres eq '';
     } else {
         $prefs->set('bandgenres', $DEFAULT_BAND_GENRES);
+    }
+
+    # 4.2.2 I changedd bool opts to be 'on', revert this to '1'/'0'
+    foreach my $p (@BOOL_OPTS) {
+        if (my $v = $prefs->get($p)) {
+            if ($v eq 'on') {
+                $prefs->set($p, '1');
+            }
+        }
     }
 
     $prefs->init({

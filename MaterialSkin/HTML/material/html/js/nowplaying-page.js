@@ -57,7 +57,7 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
   <v-btn fab small flat top right absolute class="np-menu-fab" @click="showConfigMenu"><v-icon class="np-menu-icn">settings</v-icon></v-btn>
   <v-tabs centered v-model="info.tab" v-if="info.showTabs || windowWidth<NP_MIN_WIDTH_FOR_FULL" style="np-info-tab-cover" @change="tabChanged">
    <template v-for="(tab, index) in info.tabs">
-    <v-tab :key="index">{{tab.title}}</v-tab>
+    <v-tab :key="index">{{tab.ctitle && playerStatus.current.maiComposer ? tab.ctitle: tab.title}}</v-tab>
     <v-tab-item :key="index" :transition="false" :reverse-transition="false">
      <v-card flat class="np-info-card-cover selectable" @touchend="tabTextEnd" @mouseup="tabTextEnd" @contextmenu="event.preventDefault()">
       <v-card-text :class="['np-info-text', TRACK_TAB==index || tab.isMsg ? 'np-info-lyrics' : '', ALBUM_TAB==index ? 'np-info-review' : '']" :id="'np-tab'+index">
@@ -379,17 +379,17 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
                     current: { canseek:1, duration:0, time:undefined, title:undefined, liveEdge:undefined, artist:undefined, artistAndComposer: undefined, artistAndComposerWithContext:undefined,
                                album:undefined, albumName:undefined, albumLine:undefined, technicalInfo:undefined, pospc:0.0, bufpc:100.0, tracknum:undefined,
                                disc:0, year:0, url:undefined, comment:undefined, source: {local:true, text:undefined},
-                               emblem: undefined },
+                               emblem: undefined, maiComposer:undefined },
                     playlist: { shuffle:0, repeat: 0, current:0, count:0 },
                  },
                  mobileBarText: undefined,
                  info: { show: false, tab:parseInt(getLocalStorageVal("nptab", TRACK_TAB)), showTabs:false, sync: true,
-                         tabs: [ { value:ARTIST_TAB, title:undefined, text:undefined, reqId:0, image: undefined,
+                         tabs: [ { value:ARTIST_TAB, title:undefined, ctitle:undefined, text:undefined, reqId:0, image: undefined,
                                    sections:[ { title:undefined, items:[], min:1, more:undefined, grid:getLocalStorageBool("np-tabs-"+ARTIST_TAB+"-0-grid", false) },
                                               { title:undefined, html:undefined } ] },
-                                 { value:ALBUM_TAB, title:undefined, text:undefined, reqId:0, image: undefined,
+                                 { value:ALBUM_TAB, title:undefined, ctitle:undefined, text:undefined, reqId:0, image: undefined,
                                    sections:[ { title:undefined, items:[], min:2, more:undefined } ] },
-                                 { value: TRACK_TAB, title:undefined, text:undefined, lines:undefined, scroll:false, highlight:false, reqId:0, image: undefined,
+                                 { value: TRACK_TAB, title:undefined, ctitle:undefined, text:undefined, lines:undefined, scroll:false, highlight:false, reqId:0, image: undefined,
                                    sections:[ { title:undefined, html:undefined } ] } ] },
                  infoTrack: {album_id:undefined, track_id:undefined},
                  trans: { expand:undefined, collapse:undefined, sync:undefined, unsync:undefined, more:undefined, dstm:undefined,
@@ -640,6 +640,7 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
                            next:i18n("Next track"), collapseNp:i18n("Collapse now playing"), expandNp:i18n("Expand now playing"), menu:i18n("Menu") };
             this.info.tabs[TRACK_TAB].title=i18n("Track");
             this.info.tabs[ARTIST_TAB].title=i18n("Artist");
+            this.info.tabs[ARTIST_TAB].ctitle=i18n("Composer");
             this.info.tabs[ALBUM_TAB].title=lmsOptions.supportReleaseTypes ? i18n('Release') : i18n("Album");
             this.info.tabs[ARTIST_TAB].sections[0].title=lmsOptions.supportReleaseTypes ? i18n("Releases") : i18n("Albums");
             this.info.tabs[ARTIST_TAB].sections[1].title=i18n("Similar artists");
@@ -800,6 +801,12 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
                                 ? this.playerStatus.current.artist_ids[0]
                                 : this.playerStatus.current.artist_id,
                              artist_ids: this.playerStatus.current.artist_ids,
+                             maiComposer: this.playerStatus.current.maiComposer,
+                             composer: this.playerStatus.current.composer,
+                             composer_id: this.playerStatus.current.composer_ids
+                                ? this.playerStatus.current.composer_ids[0]
+                                : this.playerStatus.current.composer_id,
+                             composer_ids: this.playerStatus.current.composer_ids,
                              albumartist: this.playerStatus.current.albumartist,
                              albumartist_ids: this.playerStatus.current.albumartist_ids,
                              album: this.playerStatus.current.albumName,
@@ -810,6 +817,9 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
                                  undefined==this.infoTrack.artist &&
                                  undefined==this.infoTrack.artist_id &&
                                  undefined==this.infoTrack.artist_ids &&
+                                 undefined==this.infoTrack.composer &&
+                                 undefined==this.infoTrack.composer_id &&
+                                 undefined==this.infoTrack.composer_ids &&
                                  undefined==this.infoTrack.albumartist &&
                                  undefined==this.infoTrack.albumartist_ids &&
                                  undefined==this.infoTrack.album &&

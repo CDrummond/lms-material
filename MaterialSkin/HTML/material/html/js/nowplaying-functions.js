@@ -248,6 +248,11 @@ function nowplayingOnPlayerStatus(view, playerStatus) {
         view.playerStatus.current.technicalInfo = technical;
     }
 
+    let maiComposer = lmsOptions.maiComposer && view.playerStatus.current.composer && undefined!=view.playerStatus.current.composer_id && useComposer(view.playerStatus.current.genre);
+    if (maiComposer!=view.playerStatus.current.maiComposer) {
+        view.playerStatus.current.maiComposer = maiComposer;
+    }
+
     if (trackChanged && view.info.sync) {
         view.setInfoTrack();
         view.showInfo();
@@ -642,25 +647,29 @@ function nowPlayingGetArtistAlbums(view, artist_id) {
 }
 
 function nowplayingFetchArtistInfo(view) {
-    if (view.info.tabs[ARTIST_TAB].artist!=view.infoTrack.artist || view.info.tabs[ARTIST_TAB].artist_id!=view.infoTrack.artist_id ||
-        (undefined!=view.info.tabs[ARTIST_TAB].artist_ids && undefined!=view.infoTrack.artist_ids && view.info.tabs[ARTIST_TAB].artist_ids.length!=view.infoTrack.artist_ids.length)) {
+    let maiComposer = view.infoTrack.maiComposer;
+    let artist = maiComposer ? view.infoTrack.composer : view.infoTrack.artist;
+    let artist_id = maiComposer ? view.infoTrack.composer_id : view.infoTrack.artist_id;
+    let artist_ids = maiComposer ? view.infoTrack.composer_ids : view.infoTrack.artist_ids;
+    if (view.info.tabs[ARTIST_TAB].artist!=artist || view.info.tabs[ARTIST_TAB].artist_id!=artist_id ||
+        (undefined!=view.info.tabs[ARTIST_TAB].artist_ids && undefined!=artist_ids && view.info.tabs[ARTIST_TAB].artist_ids.length!=artist_ids.length)) {
         view.info.tabs[ARTIST_TAB].sections[0].items=[];
         view.info.tabs[ARTIST_TAB].sections[0].more=undefined;
         view.info.tabs[ARTIST_TAB].sections[1].html=undefined;
-        view.info.tabs[ARTIST_TAB].texttitle=nowPlayingHeader(view.infoTrack.artist);
+        view.info.tabs[ARTIST_TAB].texttitle=nowPlayingHeader(artist);
         view.info.tabs[ARTIST_TAB].text=i18n("Fetching...");
         view.info.tabs[ARTIST_TAB].image=undefined;
         view.info.tabs[ARTIST_TAB].isMsg=true;
-        view.info.tabs[ARTIST_TAB].artist=view.infoTrack.artist;
-        view.info.tabs[ARTIST_TAB].artist_id=view.infoTrack.artist_id;
-        view.info.tabs[ARTIST_TAB].artist_ids=view.infoTrack.artist_ids;
+        view.info.tabs[ARTIST_TAB].artist=artist;
+        view.info.tabs[ARTIST_TAB].artist_id=artist_id;
+        view.info.tabs[ARTIST_TAB].artist_ids=artist_ids;
         view.info.tabs[ARTIST_TAB].albumartist=view.infoTrack.albumartist;
         view.info.tabs[ARTIST_TAB].albumartist_ids=view.infoTrack.albumartist_ids;
         view.info.tabs[ARTIST_TAB].reqId++;
         if (view.info.tabs[ARTIST_TAB].reqId>65535) {
             view.info.tabs[ARTIST_TAB].reqId = 0;
         }
-        let ids = view.infoTrack.artist_ids;
+        let ids = artist_ids;
         if (undefined!=ids && ids.length>1) {
             view.info.tabs[ARTIST_TAB].first = true;
             view.info.tabs[ARTIST_TAB].found = false;
@@ -684,19 +693,19 @@ function nowplayingFetchArtistInfo(view) {
                         view.info.tabs[ARTIST_TAB].count--;
                         if (0 == view.info.tabs[ARTIST_TAB].count && !view.info.tabs[ARTIST_TAB].found) {
                             view.info.tabs[ARTIST_TAB].text = undefined;
-                            view.info.tabs[ARTIST_TAB].image="/imageproxy/mai/artist/" + view.infoTrack.artist_ids[0] + "/image" + LMS_IMAGE_SIZE;
+                            view.info.tabs[ARTIST_TAB].image="/imageproxy/mai/artist/" + artist_ids[0] + "/image" + LMS_IMAGE_SIZE;
                         } else {
                             view.info.tabs[ARTIST_TAB].isMsg=false;
                         }
                     }
                 });
             }
-        } else if (undefined!=view.infoTrack.artist_id || undefined!=view.infoTrack.artist) {
+        } else if (undefined!=artist_id || undefined!=artist) {
             let command = ["musicartistinfo", "biography", "html:1"];
-            if (undefined!=view.infoTrack.artist_id) {
-                command.push("artist_id:"+view.infoTrack.artist_id);
+            if (undefined!=artist_id) {
+                command.push("artist_id:"+artist_id);
             } else {
-                command.push("artist:"+view.infoTrack.artist);
+                command.push("artist:"+artist);
             }
             if (3==command.length) { // No details?
                 view.info.tabs[ARTIST_TAB].text=undefined;
@@ -705,7 +714,8 @@ function nowplayingFetchArtistInfo(view) {
                     logJsonMessage("RESP", data);
                     if (data && data.result && view.isCurrent(data, ARTIST_TAB) && (data.result.biography || data.result.error)) {
                         // If failed with artist, try albumartist (if view is within artist)
-                        if (undefined==data.result.biography && view.info.tabs[ARTIST_TAB].albumartist &&
+                        if (undefined==data.result.biography && !maiComposer &&
+                            view.info.tabs[ARTIST_TAB].albumartist &&
                             view.info.tabs[ARTIST_TAB].artist!=view.info.tabs[ARTIST_TAB].albumartist &&
                             view.info.tabs[ARTIST_TAB].artist.indexOf(view.info.tabs[ARTIST_TAB].albumartist)>=0) {
                             let command = ["musicartistinfo", "biography", "html:1"];
@@ -731,7 +741,7 @@ function nowplayingFetchArtistInfo(view) {
                             }
                         } else {
                             view.info.tabs[ARTIST_TAB].text=data.result.biography ? replaceNewLines(data.result.biography) : undefined;
-                            view.info.tabs[ARTIST_TAB].image=view.infoTrack.artist_ids==undefined ? undefined : ("/imageproxy/mai/artist/" + view.infoTrack.artist_ids[0] + "/image" + LMS_IMAGE_SIZE);
+                            view.info.tabs[ARTIST_TAB].image=artist_ids==undefined ? undefined : ("/imageproxy/mai/artist/" + artist_ids[0] + "/image" + LMS_IMAGE_SIZE);
                             view.info.tabs[ARTIST_TAB].isMsg=undefined==data.result.biography;
                         }
                     }
@@ -743,8 +753,8 @@ function nowplayingFetchArtistInfo(view) {
             view.info.tabs[ARTIST_TAB].text=undefined;
         }
 
-        if (view.infoTrack.artist_id!=undefined && view.infoTrack.artist_id>=0) {
-            nowPlayingGetArtistAlbums(view, view.infoTrack.artist_id);
+        if (artist_id!=undefined && artist_id>=0) {
+            nowPlayingGetArtistAlbums(view, artist_id);
         } else if (view.info.tabs[ARTIST_TAB].albumartist || view.info.tabs[ARTIST_TAB].artist) {
             lmsCommand("", ["material-skin", "map", "artist:"+(view.info.tabs[ARTIST_TAB].albumartist ? view.info.tabs[ARTIST_TAB].albumartist : view.info.tabs[ARTIST_TAB].artist)], view.info.tabs[ARTIST_TAB].reqId).then(({data}) => {
                 if (data && data.result && data.result.artist_id && view.isCurrent(data, ARTIST_TAB)) {
@@ -768,7 +778,7 @@ function nowplayingFetchArtistInfo(view) {
                 }
             });
         }
-    } else if (undefined==view.infoTrack.artist && undefined==view.infoTrack.artist_id && undefined==view.infoTrack.artist_ids) {
+    } else if (undefined==artist && undefined==artist_id && undefined==artist_ids) {
         view.info.tabs[ARTIST_TAB].isMsg=true;
         view.info.tabs[ARTIST_TAB].text=undefined;
         view.info.tabs[ARTIST_TAB].sections[0].items=[];

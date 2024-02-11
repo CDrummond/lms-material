@@ -127,6 +127,13 @@ PLUGIN_MATERIAL_SKIN_SHOW_COMPOSER_DESC
 	ZH_TW	如果歌曲的音樂風格與上面列表中的項目匹配並且具有作曲家標籤，則顯示作曲家。
 	ZH_CN	如果曲目的流派与上面列表中的项目匹配并具有作曲家标识，则显示作曲家。
 
+PLUGIN_MATERIAL_SKIN_USE_COMPOSER_MAI
+	EN	Display composer in 'Information' view
+
+PLUGIN_MATERIAL_SKIN_USE_COMPOSER_MAI_DESC
+	EN	For suitable tracks show composer, and not artist, information in the 'Information' view.
+
+
 PLUGIN_MATERIAL_SKIN_SHOW_CONDUCTOR
 	CS	Zobrazení dirigenta
 	DE	Dirigenten anzeigen

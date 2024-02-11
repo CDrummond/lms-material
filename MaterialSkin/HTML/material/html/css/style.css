@@ -580,7 +580,7 @@ div.v-subheader {
  background:var(--image-background-color);
 }
 
-.allow-drag {
+.allow-drag, .svg-img, .svg-list-img {
  touch-action: none;
  pointer-events: none;
 }

@@ -48,7 +48,7 @@ var lmsBrowse = Vue.component("lms-browse", {
   <v-layout v-else-if="history.length>0">
    <v-btn flat icon v-longpress="backBtnPressed" class="toolbar-button" v-bind:class="{'back-button':!homeButton || history.length<2}" id="back-button" :title="trans.goBack | tooltipStr('esc', keyboardControl)"><v-icon>arrow_back</v-icon></v-btn>
    <v-btn v-if="history.length>1 && homeButton" flat icon @click="homeBtnPressed()" class="toolbar-button" id="home-button" :title="trans.goHome | tooltipStr('home', keyboardControl)"><v-icon>home</v-icon></v-btn>
-   <img v-if="wide>0 && ((current && current.image) || currentItemImage)" :src="current && current.image ? current.image : currentItemImage" @click="showHistory($event)" class="sub-cover pointer"></img>
+   <img v-if="wide>0 && currentImage" :src="current && currentImage" @click="showHistory($event)" class="sub-cover pointer"></img>
    <v-layout row wrap v-if="showDetailedSubtoolbar">
     <v-layout @click="showHistory($event)" class="link-item row wrap browse-title">
      <v-flex xs12 class="ellipsis subtoolbar-title subtoolbar-pad" v-bind:class="{'subtoolbar-title-single':undefined==toolbarSubTitle}">{{toolbarTitle}}</v-flex>
@@ -503,13 +503,29 @@ var lmsBrowse = Vue.component("lms-browse", {
         useRecyclerForLists() {
             return !this.isTop && this.items.length>LMS_MAX_NON_SCROLLER_ITEMS
         },
+        currentImage() {
+            if (this.current) {
+                if (this.current.image) {
+                    return this.current.image;
+                }
+                if (this.currentItemImage) {
+                    return this.currentItemImage;
+                }
+                if (this.current.stdItem==STD_ITEM_ONLINE_ARTIST_CATEGORY && this.history.length>0) {
+                    let prev = this.history[this.history.length-1];
+                    if (prev.current.image) {
+                        return prev.current.image;
+                    }
+                    if (prev.currentItemImage) {
+                        return prev.currentItemImage;
+                    }
+                }
+            }
+            return undefined
+        },
         bgndUrl() {
             let url = this.$store.state.browseBackdrop
-                        ? this.current && this.current.image
-                            ? this.current.image
-                            : this.currentItemImage
-                                ? this.currentItemImage
-                                : undefined
+                        ? this.currentImage
                         : undefined;
             if (this.$store.state.browseBackdrop && undefined==url && this.history.length>0) {
                 let prev = this.history[this.history.length-1]
@@ -554,8 +570,10 @@ var lmsBrowse = Vue.component("lms-browse", {
             return this.headerSubTitle ? this.headerSubTitle + suffix : suffix.length<1 ? undefined : suffix;
         },
         showDetailedSubtoolbar() {
-            return this.wide>0 && this.current && (this.current.image || this.currentItemImage) && undefined!=this.current.stdItem &&
-                   (this.current.stdItem==STD_ITEM_ARTIST || this.current.stdItem==STD_ITEM_ALBUM || this.current.stdItem>=STD_ITEM_MAI)
+            return this.wide>0 && this.current && undefined!=this.current.stdItem && (this.currentImage || this.current.stdItem==STD_ITEM_ONLINE_ARTIST_CATEGORY) &&
+                   (this.current.stdItem==STD_ITEM_ARTIST || this.current.stdItem==STD_ITEM_ALBUM ||
+                    this.current.stdItem==STD_ITEM_ONLINE_ARTIST || this.current.stdItem==STD_ITEM_ONLINE_ALBUM || this.current.stdItem==STD_ITEM_ONLINE_ARTIST_CATEGORY ||
+                    this.current.stdItem>=STD_ITEM_MAI)
         },
         detailedSubTop() {
             if (this.current.stdItem==STD_ITEM_ARTIST) {
@@ -1042,7 +1060,7 @@ var lmsBrowse = Vue.component("lms-browse", {
                 this.fetchItems(act.stdItem==STD_ITEM_ALL_TRACKS || act.stdItem==STD_ITEM_COMPOSITION_TRACKS ? browseReplaceCommandTerms(this, act.do, item) : act.do, 
                                 {cancache:false, id:"currentaction:"+index,
                                  title:act.title+(act.stdItem==STD_ITEM_ALL_TRACKS || act.stdItem==STD_ITEM_COMPOSITION_TRACKS ? "" : (SEPARATOR+item.title)),
-                                 image:act.stdItem ? this.current.image ? this.current.image : this.currentItemImage : undefined, stdItem:act.stdItem});
+                                 image:act.stdItem ? this.currentImage : undefined, stdItem:act.stdItem});
                 if (STD_ITEM_MAI==act.stdItem) {
                     browseFetchExtra(this, act.do.command[1]=="biography");
                 }

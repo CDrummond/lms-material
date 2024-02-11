@@ -166,6 +166,7 @@ function parseBrowseResp(data, parent, options, cacheKey, parentCommand, parentG
             var images = new Set();
             var maybeAllowGrid = command!="trackstat"; // && !isFavorites; // && command!="playhistory";
             var numImages = 0;
+            var numTracks = 0;
 
             resp.isMusicMix = MIXER_APPS.has(command) && data.params[1].length>0 && (data.params[1][1]=="mix" || data.params[1][1]=="list");
             resp.canUseGrid = maybeAllowGrid && (isRadiosTop || isBmf || (data.result.window && data.result.window.windowStyle && (data.result.window.windowStyle=="icon_list" || data.result.window.windowStyle=="home_menu"))) ? true : false;
@@ -587,6 +588,19 @@ function parseBrowseResp(data, parent, options, cacheKey, parentCommand, parentG
                     i.type="html";
                 }
 
+                // Check for online artist, album, or tracks
+                if (i.presetParams && i.presetParams.favorites_url) {
+                    if (i.presetParams.favorites_url.startsWith("spotify:artist:")) {
+                        i.stdItem = STD_ITEM_ONLINE_ARTIST;
+                    } else if (i.presetParams.favorites_url.startsWith("spotify:album:")) {
+                        i.stdItem = STD_ITEM_ONLINE_ALBUM;
+                    } else if (i.presetParams.favorites_url.startsWith("spotify:track:")) {
+                        numTracks++;
+                    }
+                } else if (parent && parent.stdItem==STD_ITEM_ONLINE_ARTIST) {
+                    i.stdItem = STD_ITEM_ONLINE_ARTIST_CATEGORY;
+                }
+
                 /* Play/add of a track from a favourited album adds all tracks :( this section works-around this... */
                 if (!isFavorites && parent && parent.section == SECTION_FAVORITES && i.commonParams && i.commonParams.track_id) {
                     i.id = "track_id:"+i.commonParams.track_id;
@@ -715,7 +729,6 @@ function parseBrowseResp(data, parent, options, cacheKey, parentCommand, parentG
                         if (resp.allowHoverBtns && resp.items[0].menu.length>0 && resp.items[0].menu[0]==PLAY_ACTION &&
                             resp.items[resp.items.length-1].style=='itemNoAction') {
                             resp.actionItems = [];
-                            let idx = resp.items.length-1;
                             while (resp.items.length>0 &&
                                 !(resp.items[resp.items.length-1].menu.length>0 && resp.items[resp.items.length-1].menu[0]==PLAY_ACTION)) {
                                 let itm = resp.items.pop();
@@ -773,7 +786,27 @@ function parseBrowseResp(data, parent, options, cacheKey, parentCommand, parentG
                             }
                         }
                     }
-                    resp.subtitle=0==resp.items.length ? i18n("Empty") : i18np("1 Item", "%1 Items", resp.items.length);
+                    if (0==resp.items.length) {
+                        resp.subtitle=i18n("Empty");
+                    } else if (parent && parent.stdItem==STD_ITEM_ONLINE_ARTIST) {
+                        resp.subtitle=i18np("1 Category", "%1 Categories", resp.items.length);
+                    } else if (numTracks==resp.items.length) {
+                        resp.subtitle=i18np("1 Track", "%1 Tracks", resp.items.length);
+                        // Check if all tracks have same subtitle, and if so remove
+                        if (numTracks>1 && numTracks<500) {
+                            let subs = new Set();
+                            for (var i=0, loop=resp.items, len=loop.length; i<len; ++i) {
+                                subs.add(loop[i].subtitle);
+                            }
+                            if (subs.size==1) {
+                                for (var i=0, loop=resp.items, len=loop.length; i<len; ++i) {
+                                    loop[i].subtitle=undefined;
+                                }
+                            }
+                        }
+                    } else {
+                        resp.subtitle=i18np("1 Item", "%1 Items", resp.items.length);
+                    }
                 }
             }
         } else if (data.result.artists_loop) {

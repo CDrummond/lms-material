@@ -6,6 +6,8 @@
    entries.
 3. Fix queue backdrop if desktop layout, pinned, and not using background
    images.
+4. Trap contextmenu event in longpress handler, as opposed to using an empty
+   handler.
 
 4.3.1
 -----

@@ -84,8 +84,11 @@ function releaseTypeIcon(rel) {
     if (rel=="COMPOSITION") {
         return {svg:"composer"};
     }
-    if (rel=="LIVE" || rel=="BOOTLEG") {
-        return {svg:"mic"};
+    if (rel=="LIVE") {
+        return {icon:"mic"};
+    }
+    if (rel=="BOOTLEG") {
+        return {icon:"settings_voice"};
     }
     if (rel=="BOXSET") {
         return {svg:"library-music-outline"};

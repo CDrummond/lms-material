@@ -96,6 +96,9 @@ function releaseTypeIcon(rel) {
     if (rel=="BESTOF") {
         return {icon:"stars"};
     }
+    if (rel=="BROADCAST") {
+        return {svg:"radio-tower"};
+    }
     return {icon:"album"};
 }
 

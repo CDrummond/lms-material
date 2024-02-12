@@ -109,8 +109,8 @@ function shrinkJumplist(array, limit) {
                 h++;
             }
         }
-        if (lastH<hlen-1) {
-            res.push(hdrs[hlen-1]);
+        for (h=lastH+1; h<hlen; ++h) {
+            res.push(hdrs[h]);
         }
     }
     return res;

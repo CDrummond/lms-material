@@ -36,6 +36,7 @@
     "/favorites.png":{"icon":"favorite"},
     "/alarm.png":{"icon":"alarm"},
     "/plugin.png":{"icon":"extension"},
+    "/mix.png":{"svg":"dice-multiple"},
     "/playlistadd.png":{"icon":"playlist_add"},
     "/playlistclear.png":{"svg":"queue-clear"},
     "/playlistedit.png":{"icon":"edit"},

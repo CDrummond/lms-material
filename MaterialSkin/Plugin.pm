@@ -101,7 +101,7 @@ sub initPlugin {
         $prefs->set('bandgenres', $DEFAULT_BAND_GENRES);
     }
 
-    # 4.2.2 I changedd bool opts to be 'on', revert this to '1'/'0'
+    # 4.2.2 changed bool opts to be 'on', revert this to '1'/'0'
     foreach my $p (@BOOL_OPTS) {
         if (my $v = $prefs->get($p)) {
             if ($v eq 'on') {

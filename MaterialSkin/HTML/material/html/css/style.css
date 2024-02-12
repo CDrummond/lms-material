@@ -2352,12 +2352,6 @@ div.v-subheader {
  padding:4px 0px 4px 0px; /* t, r, b, l */
  margin:0px !important;
  width:var(--jump-list-width);
- float:left;
- display:grid;
- grid-template-rows:repeat(auto-fit, minmax(1em, 1fr));
- grid-gap:0px;
- overflow-y:hidden !important;
- font-size:var(--small-font-size);
  border:none;
  background-color:var(--sub-toolbar-color);
 }
@@ -2370,7 +2364,18 @@ div.v-subheader {
  top:calc(var(--main-toolbar-height) + (var(--sub-toolbar-height)*2));
 }
 
-.lms-jumplist div {
+.lms-jumplist .jl-inner {
+ float:left;
+ display:grid;
+ grid-template-rows:repeat(auto-fit, minmax(1em, 1fr));
+ grid-gap:0px;
+ overflow-y:hidden !important;
+ font-size:var(--small-font-size);
+ height:100%;
+ width:100%;
+}
+
+.lms-jumplist .jl-inner div {
  width:100%;
  display: flex;
  justify-content: center;

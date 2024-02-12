@@ -109,15 +109,17 @@ var lmsBrowse = Vue.component("lms-browse", {
  </div>
  <v-icon class="browse-progress" v-if="fetchingItem!=undefined" color="primary">refresh</v-icon>
  <div class="lms-list bgnd-cover" v-bind:class="{'browse-backdrop-cover':drawBackdrop, 'album-track-list':current && current.stdItem==STD_ITEM_ALBUM}" id="browse-bgnd">
-  <div class="noselect lms-jumplist" v-bind:class="{'bgnd-blur':drawBgndImage,'backdrop-blur':drawBackdrop, 'lms-jumplist-h':filteredJumplist[0].header}" v-bind:style="{'max-height':(filteredJumplist.length*50)+'px'}" v-if="filteredJumplist.length>1">
-   <template v-for="(item, index) in filteredJumplist">
-    <div v-if="item.icon" @click="jumpTo(item.index)" class="jl-divider" :title="items[item.index].title">
-     <img v-if="item.icon.svg" :src="item.icon.svg | svgIcon(darkUi)" loading="lazy"></img>
-     <v-icon v-else class="jl-icon">{{item.icon.icon}}</v-icon>
-    </div>
-    <div v-else-if="item.key==SECTION_JUMP" @click="jumpTo(item.index)" class="jl-divider" :title="items[item.index].title">{{item.key}}</div>
-    <div v-else @click="jumpTo(item.index)" v-bind:class="{'jl-divider':item.key==SECTION_JUMP}">{{item.key==' ' || item.key=='' ? '?' : item.key}}</div>
-   </template>
+  <div class="noselect lms-jumplist" v-bind:class="{'bgnd-blur':drawBgndImage,'backdrop-blur':drawBackdrop, 'lms-jumplist-h':filteredJumplist[0].header}" v-if="filteredJumplist.length>1">
+   <div class="jl-inner" v-bind:style="{'max-height':(filteredJumplist.length*50)+'px'}">
+    <template v-for="(item, index) in filteredJumplist">
+     <div v-if="item.icon" @click="jumpTo(item.index)" class="jl-divider" :title="items[item.index].title">
+      <img v-if="item.icon.svg" :src="item.icon.svg | svgIcon(darkUi)" loading="lazy"></img>
+      <v-icon v-else class="jl-icon">{{item.icon.icon}}</v-icon>
+     </div>
+     <div v-else-if="item.key==SECTION_JUMP" @click="jumpTo(item.index)" class="jl-divider" :title="items[item.index].title">{{item.key}}</div>
+     <div v-else @click="jumpTo(item.index)" v-bind:class="{'jl-divider':item.key==SECTION_JUMP}">{{item.key==' ' || item.key=='' ? '?' : item.key}}</div>
+    </template>
+   </div>
   </div>
   <div class="lms-list" id="browse-list" style="overflow:auto;" v-bind:class="{'lms-image-grid':grid.use,'lms-grouped-image-grid':grid.use && grid.multiSize,'lms-image-grid-jump':grid.use && filteredJumplist.length>1,'lms-list-jump':!grid.use && filteredJumplist.length>1,'bgnd-blur':drawBgndImage,'backdrop-blur':drawBackdrop}">
 

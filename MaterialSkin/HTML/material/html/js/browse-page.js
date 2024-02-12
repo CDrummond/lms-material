@@ -1222,6 +1222,7 @@ var lmsBrowse = Vue.component("lms-browse", {
             lmsList(this.playerId(), this.command.command, this.command.params, 0, count, this.current.cancache).then(({data}) => {
                 var resp = parseBrowseResp(data, this.current, this.options, this.current.cancache ? cacheKey(this.command.command, this.command.params, 0, LMS_BATCH_SIZE) : undefined, this.command, this.inGenre);
                 this.items=resp.items;
+                this.listSize=resp.listSize;
                 this.jumplist=resp.jumplist;
                 this.filteredJumplist = [];
                 this.layoutGrid(true);

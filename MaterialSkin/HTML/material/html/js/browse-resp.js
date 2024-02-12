@@ -1045,7 +1045,7 @@ function parseBrowseResp(data, parent, options, cacheKey, parentCommand, parentG
                     resp.subtitle=resp.items.length + " " + (lmsTrans[1==resp.items.length ? 0 : 1]);
                 } else if (releaseType=="COMPILATION") {
                     resp.subtitle=i18np("1 Compilation", "%1 Compilations", resp.items.length);
-                } else if (releaseType.startsWith("APPEARANCE")) {
+                } else if (releaseType && releaseType.startsWith("APPEARANCE")) {
                     resp.subtitle=i18np("1 Appearance", "%1 Appearances", resp.items.length)+appearanceSuffix(releaseType);
                 } else if (releaseType=="COMPOSITION") {
                     resp.subtitle=i18np("1 Composition", "%1 Compositions", resp.items.length);

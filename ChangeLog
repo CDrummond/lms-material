@@ -10,6 +10,8 @@
    handler.
 5. Fix erroneously splitting of genre string.
 6. Fix 'Live'/'Bootleg' release type option.
+7. Only group all releases by type if LMS's 'groupArtistAlbumsByReleaseType'
+   setting is set to 2
 
 4.3.1
 -----

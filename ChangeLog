@@ -8,6 +8,7 @@
    images.
 4. Trap contextmenu event in longpress handler, as opposed to using an empty
    handler.
+5. Fix erroneously splitting of genre string.
 
 4.3.1
 -----

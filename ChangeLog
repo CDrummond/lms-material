@@ -12,6 +12,7 @@
 6. Fix 'Live'/'Bootleg' release type option.
 7. Only group all releases by type if LMS's 'groupArtistAlbumsByReleaseType'
    setting is set to 2
+8. Add icon for ZenRadio.
 
 4.3.1
 -----

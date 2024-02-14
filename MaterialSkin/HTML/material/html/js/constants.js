@@ -96,6 +96,7 @@ const GRID_STEP = 5;
 const GRID_OTHER = {command:['other']};
 
 const LMS_TRACK_SORTS = new Set(["title", "tracknum", "albumtrack"]);
+const DONT_GROUP_RELEASE_TYPES = "material-skin-dgrt:1"
 const AUTO_THEME = "auto";
 const MAX_GRID_TEXT_LEN = 80;
 const TERM_PLACEHOLDER = "__TAGGEDINPUT__";

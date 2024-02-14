@@ -841,10 +841,11 @@ function parseBrowseResp(data, parent, options, cacheKey, parentCommand, parentG
             resp.itemCustomActions = getCustomActions("album");
             var jumpListYear = false;
             var isSearch = false;
-            var canGroupAlbums = false;
+            var haveReleaseType = false;
             var firstYear = 65535;
             var lastYear = 0;
             var reqArtistId = undefined;
+            var groupReleases = true; // Prevent actually grouping ino releases even if we have releaseType
             if (data.params && data.params.length>1) {
                 let reverse = false;
                 let isNewMusic = false;
@@ -860,9 +861,11 @@ function parseBrowseResp(data, parent, options, cacheKey, parentCommand, parentG
                         } else if (lower.startsWith("search:")) {
                             isSearch = true;
                         } else if (lower.startsWith("tags:") && data.params[1][i].indexOf("W")>0) {
-                            canGroupAlbums = true;
+                            haveReleaseType = true;
                         } else if (lower.startsWith("artist_id:")) {
                             reqArtistId = lower.split(':')[1];
+                        } else if (lower == DONT_GROUP_RELEASE_TYPES) {
+                            groupReleases = false;
                         }
                     }
                 }
@@ -870,7 +873,7 @@ function parseBrowseResp(data, parent, options, cacheKey, parentCommand, parentG
                     data.result.albums_loop = data.result.albums_loop.reverse();
                 }
             }
-            var albumGroups = canGroupAlbums && lmsOptions.supportReleaseTypes && lmsOptions.groupByReleaseType>0 ? {} : undefined;
+            var albumGroups = groupReleases && haveReleaseType && lmsOptions.supportReleaseTypes && lmsOptions.groupByReleaseType>0 ? {} : undefined;
             var albumKeys = [];
             var releaseTypes = new Set();
 
@@ -941,7 +944,6 @@ function parseBrowseResp(data, parent, options, cacheKey, parentCommand, parentG
                     // My Music -> Album Artists -> Albums, and allows album favourites to specify artist.
                     artists = [parent.title];
                 }
-
                 let group = "ALBUM";
                 let nonmain = undefined; // This artist is not main artist of album
                 if (lmsOptions.groupByReleaseType>0) {

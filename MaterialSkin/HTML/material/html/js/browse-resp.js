@@ -91,7 +91,7 @@ function releaseTypeIcon(rel) {
         return {icon:"settings_voice"};
     }
     if (rel=="BOXSET") {
-        return {svg:"library-music-outline"};
+        return {svg:"package"};
     }
     if (rel=="BESTOF") {
         return {icon:"stars"};

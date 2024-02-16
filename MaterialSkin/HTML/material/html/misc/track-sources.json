@@ -29,6 +29,16 @@
         "context":true,
         "extid":"wimp"
     },
+    "tidal:":{
+        "name":"Tidal",
+        "url":{
+            "from":"tidal://",
+            "to":"https://tidal.com/browse/track/",
+            "removeext":true
+        },
+        "context":true,
+        "extid":"tidal"
+    },
     "qobuz:":{
         "name":"Qobuz",
         "url":{
@@ -61,6 +71,10 @@
     "pandora:":{
         "name":"Pandora",
         "extid":"pandora"
+    },
+    "pyrrha:":{
+        "name":"Pandora",
+        "extid":"pyrrha"
     },
     "sounds://_LIVE": {
         "name":"BBC Sounds",

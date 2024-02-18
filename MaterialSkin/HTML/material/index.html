@@ -166,7 +166,7 @@
 
   my $separateArtistsList=Plugins::MaterialSkin::Plugin->readIntPref('server', 'useUnifiedArtistsList', 0) ? "false" : "true";
   my $supportReleaseTypes=Plugins::MaterialSkin::Plugin->readIntPref('server', 'ignoreReleaseTypes', 0) ? "false" : "true";
-  my $groupArtistAlbumsByReleaseType=Plugins::MaterialSkin::Plugin->readIntPref('server', 'groupArtistAlbumsByReleaseType', 1) ? "true" : "false";
+  my $groupArtistAlbumsByReleaseType=Plugins::MaterialSkin::Plugin->readIntPref('server', 'groupArtistAlbumsByReleaseType', 1);
   my $noGenreFilter=Plugins::MaterialSkin::Plugin->readIntPref('server', 'noGenreFilter', 0);
   my $noRoleFilter=Plugins::MaterialSkin::Plugin->readIntPref('server', 'noRoleFilter', 0);
   my $browseagelimit=Plugins::MaterialSkin::Plugin->readIntPref('server', 'browseagelimit', 100);

@@ -2218,6 +2218,7 @@ function browseReplaceCommandTerms(view, cmd, item) {
 
     // Replace sort, search terms, and fix tags (ratings and online emblems)
     if (cmd.params.length>0) {
+        let isNonArtistAlbumList = false;
         for (var i=0, len=cmd.params.length; i<len; ++i) {
             if (item && item.swapid && cmd.params[i]==item.id) {
                 cmd.params[i]=item.swapid;
@@ -2235,10 +2236,12 @@ function browseReplaceCommandTerms(view, cmd, item) {
                 if (sort.rev) {
                     cmd.params.push(MSK_REV_SORT_OPT);
                 }
+            } else if (cmd.params[i].startsWith(ALBUM_TAGS_PLACEHOLDER)) {
+                cmd.params[i]=cmd.params[i].replace(ALBUM_TAGS_PLACEHOLDER, (lmsOptions.showAllArtists ? ALBUM_TAGS_ALL_ARTISTS : ALBUM_TAGS)+(lmsOptions.groupByReleaseType>0 ? 'W' : ''));
+                isNonArtistAlbumList = true;
             } else {
                 cmd.params[i]=cmd.params[i].replace(TERM_PLACEHOLDER, view.enteredTerm)
                                            .replace(ARTIST_ALBUM_TAGS_PLACEHOLDER, ARTIST_ALBUM_TAGS)
-                                           .replace(ALBUM_TAGS_PLACEHOLDER, (lmsOptions.showAllArtists ? ALBUM_TAGS_ALL_ARTISTS : ALBUM_TAGS))
                                            .replace(ARTIST_TAGS_PLACEHOLDER, ARTIST_TAGS)
                                            .replace(PLAYLIST_TAGS_PLACEHOLDER, PLAYLIST_TAGS);
                 if (cmd.params[i].startsWith("tags:")) {
@@ -2250,6 +2253,11 @@ function browseReplaceCommandTerms(view, cmd, item) {
                     }
                 }
             }
+        }
+        // For non-artist albums, where LMS is set to group releases only for artists, we still want release
+        // type so that header can say X Release(s) if there is a mixture. Otherwise it'd say X Album(s)
+        if (lmsOptions.groupByReleaseType==1 && isNonArtistAlbumList) {
+            cmd.params.push(DONT_GROUP_RELEASE_TYPES)
         }
     }
     return cmd;

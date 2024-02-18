@@ -101,11 +101,16 @@ function shrinkJumplist(array, limit) {
         let len = res.length;
         let h = 0;
         let hlen = hdrs.length;
+        let lastH = 0;
         for (let i=0; i<len && h<hlen; ++i) {
             if (res[i].index>hdrs[h].index) {
                 res.splice(i, 0, hdrs[h]);
+                lastH=h;
                 h++;
             }
+        }
+        for (h=lastH+1; h<hlen; ++h) {
+            res.push(hdrs[h]);
         }
     }
     return res;

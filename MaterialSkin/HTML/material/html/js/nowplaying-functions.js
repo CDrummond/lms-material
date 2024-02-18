@@ -589,10 +589,10 @@ function nowplayingFetchTrackInfo(view) {
     if (undefined!=trk.year && trk.year>0) {
         html+="<tr><td>"+i18n("Year")+"&nbsp;</td><td><obj class=\"link-item\" onclick=\"nowplayingBrowse('year', "+trk.year+")\">"+trk.year+"</obj></td></tr>";
     }
-    if (undefined!=trk.genres) {
+    if (undefined!=trk.genres && Array.isArray(trk.genres)) {
         let genres = [];
         for (let i=0, list = trk.genres, len=list.length; i<len; ++i) {
-            let id = trk.genre_ids ?  trk.genre_ids[i] : "'-'";
+            let id = trk.genre_ids ? trk.genre_ids[i] : "'-'";
             genres.push("<obj class=\"link-item\" onclick=\"nowplayingBrowse('genre', "+id+",\'"+escape(list[i])+"\')\">"+list[i]+"</obj>");
         }
         html+="<tr><td>"+i18n("Genre")+"&nbsp;</td><td>" + genres.join(", ") + "</td></tr>";
@@ -886,7 +886,7 @@ function nowplayingItemClicked(view, tab, section, index, event) {
 
 function nowplayingMoreClicked(view, tab, section) {
     if (ARTIST_TAB==tab && 0==section) {
-        bus.$emit("browse", ["albums"], ["artist_id:"+view.infoTrack.artist_id, ALBUM_TAGS, SORT_KEY+"yearalbum"], unescape(view.infoTrack.artist), NP_INFO);
+        bus.$emit("browse", ["albums"], ["artist_id:"+view.infoTrack.artist_id, ARTIST_ALBUM_TAGS, SORT_KEY+"yearalbum"], unescape(view.infoTrack.artist), NP_INFO);
         view.info.show=false;
     } else if (ALBUM_TAB==tab && 0==section) {
         bus.$emit("browse", ["tracks"], ["album_id:"+view.infoTrack.album_id, trackTags(true), SORT_KEY+"tracknum"], unescape(view.infoTrack.album), NP_INFO,

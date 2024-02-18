@@ -962,6 +962,9 @@ function splitMultiple(item, typeKey, idsKey, isGenre) {
     let ids = splitIntArray(item[idsKey]);
     let strings = undefined;
     if (undefined!=ids) {
+        if (1==ids.length && undefined!=item[typeKey]) {
+            return [ids, [item[typeKey]]]
+        }
         let vals = splitStringArray(item[typeKey], isGenre);
         if (undefined!=vals && ids.length>0 && ids.length==vals.length) {
             strings = vals;

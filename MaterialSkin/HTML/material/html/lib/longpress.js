@@ -101,6 +101,10 @@ Vue.directive('longpress', {
             }
         }
 
+        el.longpress.context = (e) => {
+            try { e.preventDefault(); } catch(e) { }
+            try { e.stopPropagation();} catch(e) { }
+        }
         el.addEventListener("touchstart", el.longpress.start, { passive: true });
         el.addEventListener("touchend", el.longpress.cancel);
         el.addEventListener("touchcancel", el.longpress.cancel);
@@ -110,6 +114,7 @@ Vue.directive('longpress', {
         el.addEventListener("mousedown", el.longpress.start);
         el.addEventListener("click", el.longpress.cancel);
         el.addEventListener("mouseout", el.longpress.cancel);
+        el.addEventListener("contextmenu", el.longpress.context);
     },
     unbind: function (el) {
         if (undefined!=el.longpress.pressTimer) {
@@ -125,5 +130,6 @@ Vue.directive('longpress', {
         el.removeEventListener("mousedown", el.longpress.start);
         el.removeEventListener("click", el.longpress.cancel);
         el.removeEventListener("mouseout", el.longpress.cancel);
+        el.removeEventListener("contextmenu", el.longpress.context);
     }
 })

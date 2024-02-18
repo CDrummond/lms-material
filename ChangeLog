@@ -4,6 +4,8 @@
    listings.
 2. Add server-side option to show composer, and not artist, for composer
    genres in MAI.
+3. In desktop layout with un-pinned queue add a show/hide queue button in
+   bottom bar (if queue contains more than 1 track).
 
 4.3.2
 -----

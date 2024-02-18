@@ -184,6 +184,12 @@
  min-width:600px;
 }
 
+.np-bar-queue {
+ margin-top:-8px!important;
+ height:28px;
+ width:28px;
+}
+
 .np-bar-controls {
  margin-left:-16px;
  margin-top:15px;

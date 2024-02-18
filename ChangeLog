@@ -1,6 +1,7 @@
 4.4.0
 -----
-1. Use detailed subtoolbar for some (e.g Spotty) artist and album listings.
+1. Use detailed subtoolbar for some online (e.g Spotty) artist and album
+   listings.
 2. Add server-side option to show composer, and not artist, for composer
    genres in MAI.
 

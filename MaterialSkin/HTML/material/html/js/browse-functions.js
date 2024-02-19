@@ -2241,13 +2241,13 @@ function browseReplaceCommandTerms(view, cmd, item) {
                                            .replace(ARTIST_ALBUM_TAGS_PLACEHOLDER, ARTIST_ALBUM_TAGS)
                                            .replace(ARTIST_TAGS_PLACEHOLDER, ARTIST_TAGS)
                                            .replace(PLAYLIST_TAGS_PLACEHOLDER, PLAYLIST_TAGS);
-                if (cmd.params[i].startsWith("tags:")) {
-                    if (view.$store.state.showRating && "tracks"==cmd.command[0] && cmd.params[i].indexOf("R")<0) {
-                        cmd.params[i]+="R";
-                    }
-                    if (LMS_SRV_EMBLEM && ("tracks"==cmd.command[0] || "albums"==cmd.command[0]) && cmd.params[i].indexOf("E")<0) {
-                        cmd.params[i]+="E";
-                    }
+            }
+            if (cmd.params[i].startsWith("tags:")) {
+                if (view.$store.state.showRating && "tracks"==cmd.command[0] && cmd.params[i].indexOf("R")<0) {
+                    cmd.params[i]+="R";
+                }
+                if (LMS_SRV_EMBLEM && ("tracks"==cmd.command[0] || "albums"==cmd.command[0]) && cmd.params[i].indexOf("E")<0) {
+                    cmd.params[i]+="E";
                 }
             }
         }

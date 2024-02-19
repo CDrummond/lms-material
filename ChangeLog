@@ -7,6 +7,14 @@
 3. In desktop layout with un-pinned queue add a show/hide queue button in
    bottom bar (if queue contains more than 1 track).
 
+4.3.3
+-----
+1. When showing now-playing context menu reset favIcon and favUrl so that these
+   are updated with current track.
+2. Only show ratings actions if configured to show ratings.
+3. Fix requesting extid (for emblems) and ratings in browse commands.
+4. Tweak Tidal emblem.
+
 4.3.2
 -----
 1. Revert back to '1' for enabled bool server side items.

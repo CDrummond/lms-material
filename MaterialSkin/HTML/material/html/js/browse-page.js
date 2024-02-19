@@ -332,7 +332,7 @@ var lmsBrowse = Vue.component("lms-browse", {
      </v-list-tile-avatar>
      <v-list-tile-title>{{ACTIONS[UNSELECT_ACTION].title}}</v-list-tile-title>
     </v-list-tile>
-    <v-list-tile v-else-if="action==BR_COPY_ACTION ? queueSelection : action==MOVE_HERE_ACTION ? (selection.size>0 && !menu.item.selected) : action==DOWNLOAD_ACTION ? lmsOptions.allowDownload && undefined==menu.item.emblem : action==PLAY_DISC_ACTION ? undefined!=menu.item.disc : (action!=RATING_ACTION || undefined!=LMS_P_RP)" @click="menuItemAction(action, menu.item, menu.index, $event)">
+    <v-list-tile v-else-if="action==BR_COPY_ACTION ? queueSelection : action==MOVE_HERE_ACTION ? (selection.size>0 && !menu.item.selected) : action==DOWNLOAD_ACTION ? lmsOptions.allowDownload && undefined==menu.item.emblem : action==PLAY_DISC_ACTION ? undefined!=menu.item.disc : (action!=RATING_ACTION || showRating)" @click="menuItemAction(action, menu.item, menu.index, $event)">
      <v-list-tile-avatar>
       <v-icon v-if="undefined==ACTIONS[action].svg">{{ACTIONS[action].icon}}</v-icon>
       <img v-else class="svg-img" :src="ACTIONS[action].svg | svgIcon(darkUi)"></img>
@@ -636,6 +636,9 @@ var lmsBrowse = Vue.component("lms-browse", {
         },
         pinQueue() {
             return this.$store.state.pinQueue
+        },
+        showRating() {
+            return undefined!=LMS_P_RP && this.$store.state.showRating
         }
     },
     created() {

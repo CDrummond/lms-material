@@ -342,6 +342,8 @@ function nowplayingShowMenu(view, event) {
             view.menu.items.push({title:ACTIONS[GOTO_ALBUM_ACTION].title, act:NP_BROWSE_CMD, cmd:{command:["tracks"], params:["album_id:"+view.playerStatus.current.album_id, trackTags(true), SORT_KEY+"tracknum"], title:view.playerStatus.current.album,
                                   subtitle:view.playerStatus.current.albumartist ? view.playerStatus.current.albumartist : view.playerStatus.current.artist}, icon:ACTIONS[GOTO_ALBUM_ACTION].icon});
         }
+        view.playerStatus.current.favIcon = undefined;
+        view.playerStatus.current.favUrl = undefined;
         let act = isInFavorites(view.playerStatus.current) ? REMOVE_FROM_FAV_ACTION : ADD_TO_FAV_ACTION;
         if (undefined!=view.playerStatus.current.favUrl && undefined!=view.playerStatus.current.favIcon) {
             view.menu.items.push({title:ACTIONS[act].title, act:NP_ITEM_ACT+act, svg:ACTIONS[act].svg});

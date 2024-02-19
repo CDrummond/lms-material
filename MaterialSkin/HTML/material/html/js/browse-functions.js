@@ -105,7 +105,6 @@ function browseAddHistory(view) {
     prev.grid = view.grid;
     prev.hoverBtns = view.hoverBtns;
     prev.command = view.command;
-    prev.showRatingButton = view.showRatingButton;
     prev.subtitleClickable = view.subtitleClickable;
     prev.prevPage = view.prevPage;
     prev.allItems = view.allItems;
@@ -428,7 +427,7 @@ function browseHandleListResponse(view, item, command, resp, prevPage, appendIte
                                               weight:110, svg:emblem ? emblem.name : undefined, id:loop[i], isService:true,
                                               artist_id:artist_id});
                 }
-            } else if (undefined!=LMS_P_RP && view.items.length>1 && !queryParams.party && !LMS_KIOSK_MODE) {
+            } else if (undefined!=LMS_P_RP && view.$store.state.showRating && view.items.length>1 && !queryParams.party && !LMS_KIOSK_MODE) {
                 view.currentActions.push({albumRating:true, title:i18n("Set rating for all tracks"), icon:"stars", weight:102});
             }
             if (LMS_P_MAI && undefined!=actParams['path'] && actParams['path'].length>0 && !queryParams.party && !LMS_KIOSK_MODE) {
@@ -1586,7 +1585,6 @@ function browseGoHome(view) {
     view.currentActions=[{action:(view.grid.use ? USE_LIST_ACTION : USE_GRID_ACTION)}];
     view.hoverBtns = !IS_MOBILE;
     view.command = undefined;
-    view.showRatingButton = false;
     view.subtitleClickable = false;
     view.inGenre = undefined;
     view.canDrop = true;
@@ -1660,7 +1658,6 @@ function browseGoBack(view, refresh) {
     view.detailedSubExtra = prev.detailedSubExtra;
     view.tbarActions = prev.tbarActions;
     view.command = prev.command;
-    view.showRatingButton = prev.showRatingButton;
     view.subtitleClickable = prev.subtitleClickable;
     view.prevPage = prev.prevPage;
     view.allItems = prev.allItems;
@@ -2244,13 +2241,13 @@ function browseReplaceCommandTerms(view, cmd, item) {
                                            .replace(ARTIST_ALBUM_TAGS_PLACEHOLDER, ARTIST_ALBUM_TAGS)
                                            .replace(ARTIST_TAGS_PLACEHOLDER, ARTIST_TAGS)
                                            .replace(PLAYLIST_TAGS_PLACEHOLDER, PLAYLIST_TAGS);
-                if (cmd.params[i].startsWith("tags:")) {
-                    if (view.$store.state.showRating && "tracks"==cmd.command[0] && cmd.params[i].indexOf("R")<0) {
-                        cmd.params[i]+="R";
-                    }
-                    if (LMS_SRV_EMBLEM && ("tracks"==cmd.command[0] || "albums"==cmd.command[0]) && cmd.params[i].indexOf("E")<0) {
-                        cmd.params[i]+="E";
-                    }
+            }
+            if (cmd.params[i].startsWith("tags:")) {
+                if (view.$store.state.showRating && "tracks"==cmd.command[0] && cmd.params[i].indexOf("R")<0) {
+                    cmd.params[i]+="R";
+                }
+                if (LMS_SRV_EMBLEM && ("tracks"==cmd.command[0] || "albums"==cmd.command[0]) && cmd.params[i].indexOf("E")<0) {
+                    cmd.params[i]+="E";
                 }
             }
         }

@@ -13,6 +13,7 @@ function initEmblems() {
 }
 
 function getEmblem(extid) { //, url) {
+    extid="tidal"
     if (undefined!=extid) {
         return emblems[ extid.split(':')[0] ];
     }

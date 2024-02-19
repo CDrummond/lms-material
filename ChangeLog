@@ -4,6 +4,7 @@
    are updated with current track.
 2. Only show ratings actions if configured to show ratings.
 3. Fix requesting extid (for emblems) and ratings in browse commands.
+4. Tweak Tidal emblem.
 
 4.3.2
 -----

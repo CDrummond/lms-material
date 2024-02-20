@@ -12,7 +12,7 @@ MATERIALPARTY_SKIN
 
 PLUGIN_MATERIAL_SKIN
 	CS	Vzhled 'Material Skin', vhodný pro mobilní používání.
-	DE	Web-Skin im Material-Stil, für mobile Nutzung optimiert
+	DE	Web-Skin im Material-Stil, für mobile Nutzung optimiert.
 	EN	Material themed skin, suitable for mobile use.
 	FR	Thème "Material Skin", adapté à une utilisation mobile.
 	NL	Material Skin, geschikt voor mobiel gebruik.
@@ -120,7 +120,7 @@ PLUGIN_MATERIAL_SKIN_SHOW_COMPOSER
 
 PLUGIN_MATERIAL_SKIN_SHOW_COMPOSER_DESC
 	CS	Zobrazit skladatele, pokud se žánr skladby shoduje s položkou ve výše uvedeném seznamu a skladba má tag skladatele.
-	DE	Wenn das Genre eines Titels der Liste oben entspricht und es einen 'Composer'-Tag hat, zeige diesen in 'Aktueller Titel' und der Warteschlange.
+	DE	Wenn das Genre eines Titels der Liste oben entspricht und er einen 'Composer'-Tag hat, zeige diesen in 'Aktueller Titel' und der Warteschlange.
 	EN	Show composer if a song's genre matches an entry in the list above and it has a composer tag.
 	FR	Si le tag "composer" est renseigné, afficher le compositeur lorsque le tag "genre" du morceau correspond à un élément de la liste ci-dessus.
 	NL	Als het genre van een nummer overeenkomt met de bovenstaande lijst en het nummer heeft een componist tag, toon dit bij het afspelen en in de afspeellijst.
@@ -138,7 +138,7 @@ PLUGIN_MATERIAL_SKIN_SHOW_CONDUCTOR
 
 PLUGIN_MATERIAL_SKIN_SHOW_CONDUCTOR_DESC
 	CS	Zobrazit dirigenta, pokud se žánr skladby shoduje s položkou ve výše uvedeném seznamu a skladba má tag dirigenta.
-	DE	Wenn das Genre eines Titels der Liste oben entspricht und es einen 'Conductor'-Tag hat, zeige diesen in 'Aktueller Titel' und der Warteschlange.
+	DE	Wenn das Genre eines Titels der Liste oben entspricht und er einen 'Conductor'-Tag hat, zeige diesen in 'Aktueller Titel' und der Warteschlange.
 	EN	Show conductor if a song's genre matches an entry in the list above and it has a conductor tag.
 	FR	Si le tag "conductor" est renseigné, afficher le chef d'orchestre lorsque le tag "genre" du morceau correspond à un élément de la liste ci-dessus.
 	NL	Als het genre van een nummer overeenkomt met de bovenstaande lijst en het nummer heeft een dirigent tag, toon dit bij het afspelen en in de afspeellijst.
@@ -156,7 +156,7 @@ PLUGIN_MATERIAL_SKIN_SHOW_BAND
 
 PLUGIN_MATERIAL_SKIN_SHOW_BAND_DESC
 	CS	Zobrazit skupinu, pokud se žánr skladby shoduje s položkou ve výše uvedeném seznamu a skladba má tag skupiny.
-	DE	Wenn das Genre eines Titels der Liste oben entspricht und es einen 'Band'-Tag hat, zeige diesen in 'Aktueller Titel' und der Warteschlange.
+	DE	Wenn das Genre eines Titels der Liste oben entspricht und er einen 'Band'-Tag hat, zeige diesen in 'Aktueller Titel' und der Warteschlange.
 	EN	Show band if a song's genre matches an entry in the list above and it has a band tag.
 	FR	Si le tag "band" est renseigné, afficher le groupe/orchestre lorsque le tag "genre" du morceau correspond à un élément de la liste ci-dessus.
 	NL	Als het genre van een nummer overeenkomt met de bovenstaande lijst en het nummer heeft een band tag, toon dit bij het afspelen en in de afspeellijst.
@@ -174,7 +174,7 @@ PLUGIN_MATERIAL_SKIN_PASSWORD
 
 PLUGIN_MATERIAL_SKIN_PASSWORD_DESC
 	CS	Nastavte heslo pro kontrolu přístupu k alarmům a nastavení serveru.
-	DE	Passwort setzen, um den Zugang zu Weckalarm und Server-Einstellungen zu schützen
+	DE	Passwort für den Zugang zu Weckalarm und Server-Einstellungen setzen.
 	EN	Set a password to control access to alarms and server settings.
 	FR	Définir un mot de passe pour contrôler l'accès aux alarmes et aux paramètres du serveur.
 	NL	Stel een wachtwoord in om de toegang tot wekkers en serverinstellingen te regelen.
@@ -219,7 +219,7 @@ PLUGIN_MATERIAL_SKIN_FIXED_VOL_B_SPECIAL
 
 PLUGIN_MATERIAL_SKIN_FIXED_VOL_C_HIDE
 	CS	Skrýt ovládání hlasitosti
-	DE	Lautstärkenregler verstecken
+	DE	Lautstärkeregler verstecken
 	EN	Hide volume control
 	FR	Masquer le contrôle du volume
 	NL	Verberg volumeregeling
@@ -237,7 +237,7 @@ PLUGIN_MATERIAL_SKIN_ARTIST_FIRST
 
 PLUGIN_MATERIAL_SKIN_ARTIST_FIRST_DESC
 	CS	Pokud má skladba skladatele, dirigenta nebo skupinu a jsou nakonfigurovány tak, aby se zobrazovaly, zobrazí se interpret před nimi, jinak až za nimi.
-	DE	Wenn ein Titel Komponist, Dirigent, Orchester hat und diese per Konfiguration gezeigt werden, zeige den Interpreten vor diesen,	andernfalls danach.
+	DE	Wenn ein Titel Komponist, Dirigent, Orchester hat und diese angezeigt werden sollen, zeige den Interpreten vor diesen, andernfalls danach.
 	EN	If a track has composer, conductor, or band, and these are configured to be shown, then show artist before these, otherwise show after.
 	FR	Si un morceau a un compositeur, un chef d'orchestre ou un groupe/orchestre et que ceux-ci sont configurés pour être affichés, choisir de montrer l'artiste en premier ou pas.
 	NL	Als een nummer een componist, dirigent of band tag heeft, en deze zijn geconfigureerd om te worden getoond, toon dan eerst de artiest, anders erna.
@@ -277,7 +277,7 @@ PLUGIN_MATERIAL_SKIN_ALLOW_DOWNLOAD
 
 PLUGIN_MATERIAL_SKIN_ALLOW_DOWNLOAD_DESC
 	CS	Přidejte akce stahování ke skladbám, albům a seznamům skladeb a umožněte uživatelům stahovat skladby.
-	DE	Füge eine Aktion zum Herunterladen von Titeln, Alben und Wiedergabelisten hinzu, um Benutzern das Herunterladen von Titeln zu ermöglichen.
+	DE	Füge eine Aktion zum Herunterladen von Titeln, Alben oder Wiedergabelisten hinzu, die Nutzern das Herunterladen von Titeln ermöglicht.
 	EN	Add download actions to tracks, albums, and playlists to allow users to download tracks.
 	FR	Ajouter des commandes de téléchargement aux morceaux, albums et listes de lecture pour permettre aux utilisateurs de télécharger des morceaux.
 	NL	Voeg download acties toe aan nummers, albums en afspeellijsten zodat gebruikers ze kunnen downloaden.
@@ -358,7 +358,7 @@ PLUGIN_MATERIAL_SKIN_SHOW_COMMENT_DESC
 
 PLUGIN_MATERIAL_SKIN_RELOAD_NOTE
 	CS	POZNÁMKA: Pokud změníte některé z níže uvedených nastavení, může být nutné obnovit webovou stránku, aby se změny projevily.
-	DE	HINWEIS: Wenn irgend welche Einstellungen geändert werden, ist es vielleicht notwendig, die Web-Seite zu aktualisieren.
+	DE	HINWEIS: Nach einer Änderung der Einstellungen kann eine Aktualisierung der Web-Seite nötig sein, um die Änderungen zu zeigen.
 	EN	NOTE: If you change any of the settings below then you might need to refresh the web page for the changes to take effect.
 	FR	REMARQUE : Si vous modifiez l'un des paramètres ci-dessous, vous devrez peut-être actualiser la page Web pour que les modifications prennent effet.
 	NL	Belangrijk: Als je een van de onderstaande instellingen wijzigt, dien je mogelijk de webpagina te vernieuwen om de wijzigingen door te voeren.
@@ -391,7 +391,7 @@ PLUGIN_MATERIAL_SKIN_ARTIST_FILTER
 
 PLUGIN_MATERIAL_SKIN_ARTIST_FILTER_DESC
 	CS	Při procházení alb interpreta můžete použít všechny skladby ze sbírkových alb, alb, na kterých se tento interpret objevuje, atd., nebo zobrazit pouze skladby aktuálního interpreta.
-	DE	Beim Durchsuchen der Alben eines Interpreten werden sämtliche Titel aus Kompilationen, Alben etc. auf denen dieser Interpret erscheint mit angezeigt, oder lediglich die Titel des aktuellen Interpreten.
+	DE	Zeige beim Durchsuchen der Alben eines Interpreten die Titel auf Kompilationen, Alben etc. mit seiner Beteiligung oder alle Titel auf diesen Kompilationen, Alben etc.
 	EN	When browsing an artist's albums use all tracks from compilation albums, albums this artist appears on, etc., or only show tracks from the current artist.
 	FR	Lors du parcours des albums d'un artiste (ceux dans lesquels l'artiste apparaît), pour chaque album, afficher tous les morceaux de l'album ou afficher uniquement les morceaux de l'artiste.
 	NL	Wanneer je door de albums van een artiest bladert, geef dan voor elk album alle nummers in het album weer, of geef alleen de nummers van de huidige artiest weer.
@@ -399,7 +399,7 @@ PLUGIN_MATERIAL_SKIN_ARTIST_FILTER_DESC
 
 PLUGIN_MATERIAL_SKIN_ARTIST_FILTER_ARTIST_ONLY
 	CS	Zobrazit pouze skladby aktuálního interpreta
-	DE	Nur Titel des aktuellen Interpreten anzeigen
+	DE	Nur Titel mit Beteiligung des Interpreten anzeigen
 	EN	Only display tracks from current artist
 	FR	Afficher uniquement les morceaux de l'artiste
 	NL	Toon alleen nummers van de huidige artiest
@@ -407,7 +407,7 @@ PLUGIN_MATERIAL_SKIN_ARTIST_FILTER_ARTIST_ONLY
 
 PLUGIN_MATERIAL_SKIN_ARTIST_FILTER_ALL_TRACKS
 	CS	Zobrazit všechny skladby alba
-	DE	Sämtlichte Titel des Albums anzeigen
+	DE	Alle Titel des Albums anzeigen
 	EN	Display all tracks of album
 	FR	Afficher tous les morceaux de l'album
 	NL	Toon alle nummers van het album

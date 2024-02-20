@@ -144,7 +144,7 @@ function parseResp(data, showTrackNum, index, showRatings, queueAlbumStyle, queu
                                       ? isAlbumHeader ? LMS_ALBUM_QUEUE_HEADER : LMS_ALBUM_QUEUE_TRACK
                                       : undefined,
                               grpKey:grpKey,
-                              rating: !queueAlbumStyle && haveRating ? i.rating/10.0 : undefined
+                              rating: !queueAlbumStyle && haveRating ? Math.ceil(i.rating/10.0)/2.0 : undefined
                           });
                 index++;
             }
@@ -253,7 +253,7 @@ var lmsQueue = Vue.component("lms-queue", {
      <v-list-tile-action class="queue-action" @click.stop="itemMenu(item, index, $event)">
       <div class="grid-btn list-btn hover-btn menu-btn" :title="i18n('%1 (Menu)', item.tooltip)"></div>
      </v-list-tile-action>
-     <v-rating v-if="undefined!=item.rating" class="pq-rating" v-bind:class="{'pq-rating-3':threeLines}"v-model="item.rating" half-increments readonly></v-rating>
+     <v-rating v-if="undefined!=item.rating" class="pq-rating" v-bind:class="{'pq-rating-3':threeLines}" v-model="item.rating" half-increments readonly></v-rating>
      <img v-if="index==currentIndex" class="pq-current-indicator" :src="'pq-current' | svgIcon(true, true)"></img>
     </v-list-tile>
    </RecycleScroller>
@@ -454,6 +454,7 @@ var lmsQueue = Vue.component("lms-queue", {
                 if (undefined!=index && index>=0 && index<this.items.length) {
                     var i = playerStatus.current;
                     var title = i.title;
+                    var rating = this.$store.state.showRating && undefined!=i.rating ? Math.ceil(i.rating/10.0)/2.0 : undefined;
                     if (this.$store.state.queueShowTrackNum && i.tracknum>0) {
                         title = formatTrackNum(i)+SEPARATOR+title;
                     }
@@ -475,9 +476,10 @@ var lmsQueue = Vue.component("lms-queue", {
                     // ?? var remoteTitle = checkRemoteTitle(i);
                     var duration = undefined==i.duration ? undefined : parseFloat(i.duration);
 
-                    if (title!=this.items[index].title || artistAlbum!=this.items[index].artistAlbum || duration!=this.items[index].duration) {
+                    if (title!=this.items[index].title || artistAlbum!=this.items[index].artistAlbum || duration!=this.items[index].duration || rating!=this.items[index].rating) {
                         this.items[index].title = title;
                         this.items[index].tooltip = i.title;
+                        this.items[index].rating = rating;
                         if (undefined!=artistAlbum) {
                             this.items[index].artistAlbum = artistAlbum;
                         }

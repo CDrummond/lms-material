@@ -1926,6 +1926,27 @@ progress {
  margin-top:calc(19px - var(--std-font-size));
 }
 
+.pq-time-r {
+ min-width:58px;
+}
+.pq-rating {
+ position:fixed;
+ opacity:var(--sub-opacity);
+ right:19px;
+ bottom:-4px;
+}
+
+.pq-rating-3 {
+ bottom:5px;
+}
+
+#queue-view .pq-rating .v-icon {
+ width:12px !important;
+ height:12px !important;
+ font-size:12px !important;
+ padding:0px!important;
+}
+
 .browse-time {
  margin-right:-12px;
 }

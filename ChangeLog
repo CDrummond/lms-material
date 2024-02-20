@@ -6,6 +6,7 @@
    genres in MAI.
 3. In desktop layout with un-pinned queue add a show/hide queue button in
    bottom bar (if queue contains more than 1 track).
+4. For track style queue, show ratings on right underneath track time.
 
 4.3.3
 -----

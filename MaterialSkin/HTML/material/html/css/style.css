@@ -1927,7 +1927,7 @@ div.v-rating i.primary--text, div.v-rating i.accent--text {
 }
 
 .pq-time-r {
- min-width:60px;
+ min-width:62px;
 }
 .pq-rating {
  position:fixed;
@@ -1945,7 +1945,7 @@ div.v-rating i.primary--text, div.v-rating i.accent--text {
  height:14px !important;
  font-size:14px !important;
  padding:0px!important;
- margin-left:-2px!important;
+ margin-left:-1.5px!important;
 }
 
 .browse-time {
@@ -2319,11 +2319,12 @@ div.v-subheader {
 }
 
 .rstar {
- font-size:var(--small-font-size);
+ font-size:14px!important;
  font-family:'Material Icons';
  font-weight:normal;
  font-style:normal;
  vertical-align:bottom;
+ letter-spacing:-1.5px;
 }
 
 .pointer {

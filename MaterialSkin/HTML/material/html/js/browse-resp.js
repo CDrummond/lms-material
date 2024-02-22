@@ -1209,7 +1209,7 @@ function parseBrowseResp(data, parent, options, cacheKey, parentCommand, parentG
                 if (techInfo) {
                     extraSub=techInfo;
                 }
-                let rs = undefined!=i.rating ? ratingString(extraSub, i.rating) : undefined;
+                let rs = undefined!=i.rating ? ratingString(undefined, i.rating) : undefined;
                 if (rs) {
                     if (extraSub) {
                         extraSub+=SEPARATOR+rs;

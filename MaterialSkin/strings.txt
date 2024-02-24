@@ -493,6 +493,7 @@ PLUGIN_MATERIAL_SKIN_LOAD_DEFAULT_GENRES_DESC
 
 PLUGIN_MATERIAL_SKIN_LOAD_DEFAULT_GENRES
 	EN	Set Genres To Default
+	DE	Genres auf Standard setzen
 	FR	Restaurer les genres par défaut
 	NL	Herstel standaard genres
 	ZH_CN	将流派设为默认值

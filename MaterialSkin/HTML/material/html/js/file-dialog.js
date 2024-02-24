@@ -163,7 +163,7 @@ var lmsFileDialog = Vue.component("lms-file-dialog", {
                 });
             }
         },
-        async fetch(item) {
+        fetch(item) {
             var params = [undefined==item ? "folder:/" : ("folder:"+item.id)];
             if (this.isDir) {
                 params.push("filter:foldersonly");

@@ -486,14 +486,15 @@ PLUGIN_MATERIAL_SKIN_PLAY_SHUFFLE_DESC
 	ZH_CN	添加专辑或播放列表并开启随机播放模式。启用此功能并使用“随机播放”时，播放器将在播放项目之前设置为“随机播放曲目”。同样，如果启用此选项并使用“立即播放”，则在播放项目之前禁用随机播放。请注意，播放队列被清除后，播放器的随机播放模式不会恢复。
 
 PLUGIN_MATERIAL_SKIN_LOAD_DEFAULT_GENRES_DESC
+	DE	Diese Genre-Listen werden in der Konfigurationsdatei gesichert und nicht automatisch aktualisiert, sollte die Sprache gewechselt werden. Die Funktion 'Genres auf Default setzen' setzt jede Liste zurück.
 	EN	These genre lists are saved in your settings file, and will not automatically be updated should you change language. You may use the "Set Genres To Default" button (below) to reset each list to the default values, translated into the current language.
 	FR	Ces listes de genres sont enregistrées dans votre fichier de paramètres et ne seront pas automatiquement mises à jour si vous changez de langue. Vous pouvez utiliser le bouton "Restaurer les genres par défaut" (ci-dessous) pour réinitialiser chaque liste aux valeurs par défaut, traduites dans la langue actuelle.
 	NL	Deze genres worden opgeslagen in jouw instellingen en worden niet automatisch bijgewerkt als je van taal verandert. Je kan de knop "Herstel standaard genres" (hieronder) gebruiken om elke lijst terug te zetten naar de standaardwaarden, vertaald in de huidige taal.
 	ZH_CN	这些流派列表保存在您的设置文件中，且不会随着您更改语言自动更新。您可以使用“将流派设为默认值”按钮（如下）将每个列表重置为默认值（翻译成当前语言）。
 
 PLUGIN_MATERIAL_SKIN_LOAD_DEFAULT_GENRES
+	DE	Genres auf Default setzen
 	EN	Set Genres To Default
-	DE	Genres auf Standard setzen
 	FR	Restaurer les genres par défaut
 	NL	Herstel standaard genres
 	ZH_CN	将流派设为默认值

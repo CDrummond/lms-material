@@ -47,32 +47,20 @@ var lmsFileDialog = Vue.component("lms-file-dialog", {
                 this.elem = elem;
                 this.isDir = isDir;
                 this.types = types;
-                var chosenPath = elem.value;
-                this.fetch(null);
-                if (undefined!=chosenPath) {
-                    var parts = undefined;
-                    var unix = true;
-                    if (chosenPath.indexOf('/')>=0) {
-                        parts = chosenPath.split('/');
-                    } else if (chosenPath.indexOf('\\')>=0) {
-                        parts = chosenPath.split('\\');
-                        unix = false;
-                    }
-                    if (undefined!=parts && parts.length>0) {
-                        var usable = [];
-                        for (var i=0, len=parts.length; i<len; ++i) {
-                            if (parts[i]!="") {
-                                usable.push(parts[i]);
-                            }
-                        }
-                        if (usable.length>0) {
-                            if (unix) {
-                                usable.unshift("/");
-                            }
-                            this.expand(chosenPath, usable, unix);
-                        }
-                    }
+                // Could call this.fetch(undefined), then this.expand(elem.value) - as LMS is single threaded
+                // but clearer to do in step...
+                var params = ["folder:/"];
+                if (this.isDir) {
+                    params.push("filter:foldersonly");
+                } else if (this.types.length>0) {
+                    params.push("filter:filetype:("+this.types.join("|")+")");
                 }
+                lmsList("", ["readdirectory"], params, 0, 500).then(({data}) => {
+                    this.parseResp(data, undefined);
+                    this.expandChosen(elem.value);
+                }).catch(err => {
+                    bus.$emit('showError', i18n('Failed to get folder listing'));
+                });
             }
         }.bind(this));
         bus.$on('closeDialog', function(dlg) {
@@ -95,7 +83,33 @@ var lmsFileDialog = Vue.component("lms-file-dialog", {
                 this.close();
             }
         },
-        parseResp(data, item) {
+        expandChosen(chosenPath) {
+            if (undefined!=chosenPath) {
+                var parts = undefined;
+                var unix = true;
+                if (chosenPath.indexOf('/')>=0) {
+                    parts = chosenPath.split('/');
+                } else if (chosenPath.indexOf('\\')>=0) {
+                    parts = chosenPath.split('\\');
+                    unix = false;
+                }
+                if (undefined!=parts && parts.length>0) {
+                    var usable = [];
+                    for (var i=0, len=parts.length; i<len; ++i) {
+                        if (parts[i]!="") {
+                            usable.push(parts[i]);
+                        }
+                    }
+                    if (usable.length>0) {
+                        if (unix) {
+                            usable.unshift("/");
+                        }
+                        this.expand(chosenPath, usable, unix);
+                    }
+                }
+            }
+        },
+        parseResp(data, item, unix) {
             var items = [];
             if (undefined!=data.result.fsitems_loop) {
                 for (var i=0, loop=data.result.fsitems_loop, len=loop.length; i<len; ++i) {
@@ -106,6 +120,18 @@ var lmsFileDialog = Vue.component("lms-file-dialog", {
                     }
                 }
             }
+
+            // If we have no 'root' item see if we can use one of the root items from the initial fetch
+            // (well rather the first list call in file.open (above))
+            if (undefined==item && !unix && this.items.length>0 && items.length>0) {
+                for (let i=0, loop=this.items, len=loop.length; i<len; ++i) {
+                    if (items[0].id.startsWith(loop[i].id)) {
+                        item = loop[i];
+                        break;
+                    }
+                }
+            }
+
             if (undefined==item) {
                 this.items = items;
             } else {
@@ -127,7 +153,7 @@ var lmsFileDialog = Vue.component("lms-file-dialog", {
                     params.push("filter:filetype:("+this.types.join("|")+")");
                 }
                 lmsList("", ["readdirectory"], params, 0, 1000).then(({data}) => {
-                    var items = this.parseResp(data, item);
+                    var items = this.parseResp(data, item, unix);
                     for (var i=0, len=items.length; i<len; ++i) {
                         if (items[i].name==parts[0]) {
                             this.expand(chosenPath, parts, unix, path, items[i]);
@@ -137,7 +163,7 @@ var lmsFileDialog = Vue.component("lms-file-dialog", {
                 });
             }
         },
-        async fetch(item) {
+        fetch(item) {
             var params = [undefined==item ? "folder:/" : ("folder:"+item.id)];
             if (this.isDir) {
                 params.push("filter:foldersonly");

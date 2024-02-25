@@ -15,6 +15,9 @@
 2. Only show ratings actions if configured to show ratings.
 3. Fix requesting extid (for emblems) and ratings in browse commands.
 4. Tweak Tidal emblem.
+5. Fix duplicated tech info in browse view when also showing ratings.
+6. Update translations.
+7. Fix listing all drive selectors in file/folder dialog for Windows.
 
 4.3.2
 -----

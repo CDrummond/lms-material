@@ -542,8 +542,7 @@ div.v-subheader {
 }
 
 .image-grid-item-img {
- object-fit:cover;
- object-position:50% 0%;
+ object-fit:contain;
  display:block;
  margin-bottom:4px;
  padding-top:2px;
@@ -626,8 +625,7 @@ div.v-subheader {
 }
 
 .v-avatar img {
- object-fit:cover;
- object-position:50% 0%;
+ object-fit:contain;
 }
 
 .radio-image img {

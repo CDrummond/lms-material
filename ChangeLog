@@ -1,3 +1,7 @@
+4.3.4
+-----
+1. Try not to crop radio station logos in favourites.
+
 4.3.3
 -----
 1. When showing now-playing context menu reset favIcon and favUrl so that these

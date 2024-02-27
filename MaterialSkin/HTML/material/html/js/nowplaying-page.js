@@ -21,6 +21,7 @@ const NP_LYRICS_SCROLL_ACT = 8;
 const NP_LYRICS_HIGHLIGHT_ACT = 9;
 const NP_COPY_ACT = 10;
 const NP_SEARCH_ACT = 11;
+const NP_ZOOM_ACT = 12;
 const NP_CUSTOM = 100;
 const NP_ITEM_ACT = 200;
 const NP_MIN_WIDTH_FOR_FULL = 780;
@@ -416,6 +417,8 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
                 };
     },
     mounted() {
+        this.zoom = parseFloat(getLocalStorageVal("npInfoZoom", 1.0));
+        this.setZoom(this.zoom);
         this.showNpBar = undefined;
         this.desktopBarHeight = getComputedStyle(document.documentElement).getPropertyValue('--desktop-npbar-height');
         this.desktopBarThinHeight = getComputedStyle(document.documentElement).getPropertyValue('--desktop-npbar-height-thin');
@@ -1241,6 +1244,15 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
         tabTextEnd(event) {
             this.clearClickTimeout();
             viewHandleSelectedText(this, event);
+        },
+        setZoom(zoom) {
+            if (undefined==zoom || zoom<1.0 || zoom>2.0) {
+                this.zoom = 1.0;
+            } else {
+                this.zoom = zoom;
+            }
+            document.documentElement.style.setProperty('--np-zoom', this.zoom);
+            document.documentElement.style.setProperty('--np-zoom-list', Math.min(this.zoom, 1.4));
         }
     },
     filters: {

@@ -419,6 +419,11 @@ function nowplayingMenuAction(view, item) {
     } else if (NP_LYRICS_HIGHLIGHT_ACT==item.act) {
         view.info.tabs[TRACK_TAB].highlight = !view.info.tabs[TRACK_TAB].highlight;
         setLocalStorageVal("npHighlightLyrics", view.info.tabs[TRACK_TAB].highlight);
+    } else if (NP_ZOOM_ACT==item.act) {
+        if (!item.checked) {
+            setLocalStorageVal("npInfoZoom", item.value);
+            view.setZoom(item.value);
+        }
     } else if (item.act>=NP_ITEM_ACT) {
         let act = item.act - NP_ITEM_ACT;
         if (ADD_TO_FAV_ACTION==act || REMOVE_FROM_FAV_ACTION==act) {
@@ -959,6 +964,12 @@ function nowPlayingConfigMenu(view, event) {
     if (view.info.tabs[TRACK_TAB].lines && (!view.info.showTabs || view.info.tab==TRACK_TAB)) {
         view.menu.items.push({title:i18n("Auto-scroll lyrics"), act:NP_LYRICS_SCROLL_ACT, check:view.info.tabs[TRACK_TAB].scroll});
         view.menu.items.push({title:i18n("Highlight current lyric line"), act:NP_LYRICS_HIGHLIGHT_ACT, check:view.info.tabs[TRACK_TAB].highlight});
+    }
+    view.menu.items.push({divider:true});
+    view.menu.items.push({title:i18n("Zoom"), header:true});
+    var values = [1.0, 1.25, 1.5, 1.75, 2.0];
+    for (let i=0, len=values.length; i<len; ++i) {
+        view.menu.items.push({title:(values[i]*100)+"%", act:NP_ZOOM_ACT, radio:view.zoom==values[i], value:values[i]});
     }
 
     view.menu.x = event.clientX;

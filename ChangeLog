@@ -8,6 +8,11 @@
    bottom bar (if queue contains more than 1 track).
 4. For track style queue, show ratings on right underneath track time.
 
+4.3.4
+-----
+1. Try not to crop radio station logos in favourites.
+2. Fix missing icons from 'Extras' plugins if Material is set as default skin.
+
 4.3.3
 -----
 1. When showing now-playing context menu reset favIcon and favUrl so that these

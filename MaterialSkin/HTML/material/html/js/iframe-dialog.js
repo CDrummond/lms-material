@@ -36,7 +36,7 @@ function remapClassicSkinIcons(doc, col) {
                         if (imgList[i].src.startsWith("http:")) {
                             url = new URL(path);
                             path = url.pathname;
-                            pluginPath = "plugins/"+url.search.split("=")[1]+"/html/images/";
+                            pluginPath = "plugins/"+url.search.split("=")[1]+(path.startsWith("/html/images/") ? "/" : "/html/images/");
                         }
                         path="/material/svg/"+pluginPath+path.replace(OTHER_EXT[e], ".svg").replace(/^\/+/, '')
                         if (url!=undefined) {

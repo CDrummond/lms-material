@@ -1,6 +1,7 @@
 4.3.4
 -----
 1. Try not to crop radio station logos in favourites.
+2. Fix missing icons from 'Extras' plugins if Material is set as default skin.
 
 4.3.3
 -----

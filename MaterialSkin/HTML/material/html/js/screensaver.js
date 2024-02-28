@@ -66,6 +66,7 @@ Vue.component('lms-screensaver', {
             if (playerStatus.isplaying != this.playing) {
                 // Player state changed
                 this.playing = playerStatus.isplaying;
+                this.updateAlarm(playerStatus);
                 this.control();
             }
         }.bind(this));
@@ -93,28 +94,43 @@ Vue.component('lms-screensaver', {
                 this.updateDateAndTime();
             }.bind(this), (next*1000)+25);
 
-            if (undefined!=this.$store.state.player) {
-                lmsCommand(this.$store.state.player.id, ["material-skin-client", "get-alarm"]).then(({data}) => {
-                    let alarmTime = 0;
-                    if (undefined!=data.result && undefined!=data.result.alarm) {
-                        alarmTime = parseInt(data.result.alarm);
-                    }
-                    if (alarmTime>0) {
-                        if (this.alarmTime!=alarmTime) {
-                            let alarmDate = new Date(alarmTime*1000);
-                            let day = alarmDate.toLocaleDateString(this.$store.state.lang, { weekday: 'short', month: undefined, day: undefined, year: undefined }).replace(", ", "  ");
-                            let time = alarmDate.toLocaleTimeString(this.$store.state.lang, { hour: 'numeric', minute: 'numeric' });
-                            this.alarm = day+" "+time;
+            if (LMS_VERSION<80500) {
+                if (undefined!=this.$store.state.player) {
+                    lmsCommand(this.$store.state.player.id, ["material-skin-client", "get-alarm"]).then(({data}) => {
+                        let alarmTime = 0;
+                        if (undefined!=data.result && undefined!=data.result.alarm) {
+                            alarmTime = parseInt(data.result.alarm);
                         }
-                    } else {
-                        this.alarm = undefined;
-                    }
-                    this.alarmTime = alarmTime;
-                });
-            } else {
-                this.alarm = undefined;
-                this.alarmTime = 0;
+                        if (alarmTime>0) {
+                            if (this.alarmTime!=alarmTime) {
+                                let alarmDate = new Date(alarmTime*1000);
+                                let day = alarmDate.toLocaleDateString(this.$store.state.lang, { weekday: 'short', month: undefined, day: undefined, year: undefined }).replace(", ", "  ");
+                                let time = alarmDate.toLocaleTimeString(this.$store.state.lang, { hour: 'numeric', minute: 'numeric' });
+                                this.alarm = day+" "+time;
+                            }
+                        } else {
+                            this.alarm = undefined;
+                        }
+                        this.alarmTime = alarmTime;
+                    });
+                } else {
+                    this.alarm = undefined;
+                    this.alarmTime = 0;
+                }
             }
+        },
+        updateAlarm(status) {
+            if (this.alarmTime!=status.alarm) {
+                if (undefined==status.alarm) {
+                    this.alarm = undefined;
+                } else {
+                    let alarmDate = new Date(status.alarm*1000);
+                    let day = alarmDate.toLocaleDateString(this.$store.state.lang, { weekday: 'short', month: undefined, day: undefined, year: undefined }).replace(", ", "  ");
+                    let time = alarmDate.toLocaleTimeString(this.$store.state.lang, { hour: 'numeric', minute: 'numeric' });
+                    this.alarm = day+" "+time;
+                }
+            }
+            this.alarmTime!=status.alarm;
         },
         cancelAll(doFade) {
             if (undefined!==this.showTimer) {

@@ -82,6 +82,12 @@ Vue.component('lms-toolbar', {
      <v-list-tile-title>{{playerStatus.sleepTime | displayTime}}</v-list-tile-title>
     </v-list-tile-content>
    </v-list-tile>
+   <v-list-tile v-if="playerStatus.alarmStr" @click="bus.$emit('dlg.open', 'playersettings')" class="hide-for-mini">
+    <v-list-tile-avatar><v-icon>alarm_on</v-icon></v-list-tile-avatar>
+    <v-list-tile-content>
+     <v-list-tile-title>{{playerStatus.alarmStr}}</v-list-tile-title>
+    </v-list-tile-content>
+   </v-list-tile>
   </v-list>
  </v-menu>
  <v-spacer class="drag-area"></v-spacer>
@@ -174,7 +180,7 @@ Vue.component('lms-toolbar', {
     `,
     data() {
         return { playlist: { count: "", duration: "" },
-                 playerStatus: { ison: 1, isplaying: false, volume: 0, synced: false, sleepTime: undefined, count:0 },
+                 playerStatus: { ison: 1, isplaying: false, volume: 0, synced: false, sleepTime: undefined, count:0, alarm: undefined, alarmStr: undefined },
                  npInfo: "...",
                  queueInfo: "...",
                  menuItems: [],
@@ -264,7 +270,18 @@ Vue.component('lms-toolbar', {
             if (vol != this.playerVolume) {
                 this.playerVolume = vol;
             }
-            this.playerId = ""+this.$store.state.player.id
+            this.playerId = ""+this.$store.state.player.id;
+            if (this.playerStatus.alarm!=playerStatus.alarm) {
+                if (undefined==playerStatus.alarm) {
+                    this.playerStatus.alarmStr = undefined;
+                } else {
+                    let alarmDate = new Date(playerStatus.alarm*1000);
+                    let day = alarmDate.toLocaleDateString(this.$store.state.lang, { weekday: 'short', month: undefined, day: undefined, year: undefined }).replace(", ", "  ");
+                    let time = alarmDate.toLocaleTimeString(this.$store.state.lang, { hour: 'numeric', minute: 'numeric' });
+                    this.playerStatus.alarmStr = day+" "+time;
+                }
+            }
+            this.playerStatus.alarm!=playerStatus.alarm;
         }.bind(this));
         
         bus.$on('langChanged', function() {

@@ -8,6 +8,8 @@
    bottom bar (if queue contains more than 1 track).
 4. For track style queue, show ratings on right underneath track time.
 5. Re-add zooming to MAI view.
+6. Get next alarm from status message (requires LMS8.5) and show in player
+   menu.
 
 4.3.4
 -----

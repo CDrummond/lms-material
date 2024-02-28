@@ -69,6 +69,15 @@ Vue.component('lms-groupvolume', {
             for (var p=0, len=this.$store.state.players.length; p<len; ++p) {
                 pMap[this.$store.state.players[p].id]={name: this.$store.state.players[p].name, isgroup: this.$store.state.players[p].isgroup};
             }
+
+            // Save any existing volume entries, and use these as default values below...
+            let playerVolMap = {}
+            if (this.players.length>0) {
+                for (let i=0, loop=this.players, len=loop.length; i<len; ++i) {
+                    playerVolMap[loop[i].id]=loop[i].volume;
+                }
+            }
+
             this.players = [{id: playerStatus.syncmaster, master:true, name:pMap[playerStatus.syncmaster].name, isgroup:pMap[playerStatus.syncmaster].isgroup, 
                              volume:undefined, dvc:VOL_STD, muted:false}];
             if (this.$store.state.player.id==playerStatus.syncmaster) {
@@ -79,7 +88,7 @@ Vue.component('lms-groupvolume', {
                     continue;
                 }
                 this.players.push({id: playerStatus.syncslaves[p], master:false, name:pMap[playerStatus.syncslaves[p]].name, isgroup:pMap[playerStatus.syncslaves[p]].isgroup,
-                                   volume:undefined, dvc:VOL_STD, muted:false, isplaying:false});
+                                   volume:playerVolMap[playerStatus.syncslaves[p]], dvc:VOL_STD, muted:false, isplaying:false});
                 if (this.$store.state.player.id==playerStatus.syncslaves[p]) {
                     this.players[this.players.length-1].volume = playerStatus.volume;
                 }
@@ -93,9 +102,10 @@ Vue.component('lms-groupvolume', {
             }
             if (!haveGroupPlayer) {
                 this.players.unshift({id:GRP_PLAYER_ID, master:true, name:i18n('Average Volume'), isgroup:false,
-                    volume:50, dvc:VOL_STD, muted:false, isplaying:false});
+                                      volume:playerVolMap[GRP_PLAYER_ID], dvc:VOL_STD, muted:false, isplaying:false});
                 this.playerMap[GRP_PLAYER_ID]=0;
             }
+            this.setAverage();
 
             if (scrollCurrent) {
                 // Scroll current player's volume into view
@@ -189,6 +199,9 @@ Vue.component('lms-groupvolume', {
             this.players[idx].muted = player.muted;
             this.players[idx].volume = player.volume;
             this.players[idx].isplaying = player.isplaying;
+            this.setAverage();
+        },
+        setAverage() {
             if (GRP_PLAYER_ID==this.players[0].id) {
                 let total = 0;
                 let count = 0;

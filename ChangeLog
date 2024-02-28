@@ -10,6 +10,8 @@
 5. Re-add zooming to MAI view.
 6. Get next alarm from status message (requires LMS8.5) and show in player
    menu, toolbar, and in 'Manage players' dialog.
+7. When re-show group volume dialog use any previous volumes as defaults, to
+   improve initial display.
 
 4.3.4
 -----

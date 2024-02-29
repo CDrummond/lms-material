@@ -3,6 +3,8 @@
 1. Try not to crop radio station logos in favourites.
 2. Fix missing icons from 'Extras' plugins if Material is set as default skin.
 3. Tweak queue toolbar layout.
+4. Always restore queue pinned and shown state as per settings, regardless of
+   window size.
 
 4.3.3
 -----

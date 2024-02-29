@@ -422,7 +422,7 @@ function browseHandleListResponse(view, item, command, resp, prevPage, appendIte
             view.currentActions = browseActions(view, resp.items.length>0 ? item : undefined, actParams, resp.items.length, resp.showCompositions);
             if (listingArtistAlbums) {
                 for (var i=0, loop=view.onlineServices, len=loop.length; i<len; ++i) {
-                    var emblem = getEmblem(loop[i]+':');
+                    var emblem = getEmblem(loop[i].toLowerCase()+':');
                     view.currentActions.push({title:/*!i81n*/'wimp'==loop[i] ? 'Tidal' : capitalize(loop[i]),
                                               weight:110, svg:emblem ? emblem.name : undefined, id:loop[i], isService:true,
                                               artist_id:artist_id});

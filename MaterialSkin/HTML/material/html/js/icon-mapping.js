@@ -202,7 +202,7 @@ function releaseTypeIcon(rel) {
             return {svg:"release-live"};
         }
         if (rel=="BOOTLEG") {
-            return {svg:"release-booleg"};
+            return {svg:"release-bootleg"};
         }
         if (rel=="BOXSET") {
             return {svg:"release-boxset"};

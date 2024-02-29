@@ -66,42 +66,6 @@ function releaseTypeHeader(rel) {
     return rel.replace(/\w\S*/g, function(txt){return txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase();});
 }
 
-function releaseTypeIcon(rel) {
-    /*
-    if (rel=="ALBUM") {
-        return {icon:"album"};
-    }
-    */
-    if (rel=="EP") {
-        return {svg:"music-circle"};
-    }
-    if (rel=="SINGLE") {
-        return {icon:"music_note"};
-    }
-    if (rel=="COMPILATION") {
-        return {svg:"album-multi"};
-    }
-    if (rel=="COMPOSITION") {
-        return {svg:"composer"};
-    }
-    if (rel=="LIVE") {
-        return {icon:"mic"};
-    }
-    if (rel=="BOOTLEG") {
-        return {icon:"settings_voice"};
-    }
-    if (rel=="BOXSET") {
-        return {svg:"package"};
-    }
-    if (rel=="BESTOF") {
-        return {icon:"stars"};
-    }
-    if (rel=="BROADCAST") {
-        return {svg:"radio-tower"};
-    }
-    return {icon:"album"};
-}
-
 function releaseTypeSort(a, b) {
     let list = undefined==lmsOptions.releaseTypeOrder ? RELEASE_TYPES : lmsOptions.releaseTypeOrder
     let va = list.indexOf(a);

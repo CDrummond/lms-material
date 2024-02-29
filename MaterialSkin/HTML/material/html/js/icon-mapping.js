@@ -187,7 +187,7 @@ function releaseTypeIcon(rel) {
             return {icon:"album"};
         }
         if (rel=="EP") {
-            return {svg:"music-circle"};
+            return {svg:"release-ep"};
         }
         if (rel=="SINGLE") {
             return {svg:"release-single"};

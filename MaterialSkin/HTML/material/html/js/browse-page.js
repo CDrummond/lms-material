@@ -1727,7 +1727,7 @@ var lmsBrowse = Vue.component("lms-browse", {
                     this.filteredJumplist = this.jumplist;
                 } else if (!this.jumplist.headerOnly && this.jumplist.length>=4) {
                     let maxItems = Math.floor((this.scrollElement.clientHeight-(16))/20);
-                    this.filteredJumplist = shrinkJumplist(this.jumplist, maxItems);
+                    this.filteredJumplist = shrinkJumplist(this.jumplist, maxItems, this.items.length);
                 }
             }
             let now = (undefined!=this.jumplist && undefined!=this.filteredJumplist && this.filteredJumplist.length>1 ? JUMP_LIST_WIDTH : 0)+'px';

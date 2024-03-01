@@ -194,8 +194,8 @@ function updateLang(state, lang) {
     document.querySelector('html').setAttribute('lang', lang);
 }
 
-function setQueueShown(state, val) {
-    if (val!=state.showQueue) {
+function setQueueShown(state, val, force) {
+    if (val!=state.showQueue || force) {
         let pc = getLocalStorageVal('splitter', undefined);
         state.showQueue = val;
         setLocalStorageVal('showQueue', state.showQueue);
@@ -214,8 +214,8 @@ function setQueueShown(state, val) {
     }
 }
 
-function setQueuePinned(state, val) {
-    if (val!=state.pinQueue) {
+function setQueuePinned(state, val, force) {
+    if (val!=state.pinQueue || force) {
         state.pinQueue=val;
         setLocalStorageVal('pinQueue', state.pinQueue);
         if (state.pinQueue) {
@@ -507,8 +507,8 @@ const store = new Vuex.Store({
             if (state.homeButton) {
                 document.documentElement.style.setProperty('--home-button-size', '42px');
             }
-            setQueuePinned(state, window.innerWidth>=MIN_PQ_PIN_WIDTH && getLocalStorageBool('pinQueue', state.pinQueue));
-            setQueueShown(state, state.pinQueue && getLocalStorageBool('showQueue', state.showQueue));
+            setQueuePinned(state, getLocalStorageBool('pinQueue', state.pinQueue), true);
+            setQueueShown(state, getLocalStorageBool('showQueue', state.showQueue), true);
 
             state.disabledBrowseModes = new Set(JSON.parse(getLocalStorageVal('disabledBrowseModes', '["myMusicFlopTracks", "myMusicTopTracks", "myMusicMusicFolder", "myMusicFileSystem", "myMusicArtistsComposers", "myMusicArtistsConductors", "myMusicArtistsJazzComposers", "myMusicAlbumsAudiobooks"]')));
             state.hidden = new Set(JSON.parse(getLocalStorageVal('hidden', JSON.stringify([TOP_EXTRAS_ID]))));

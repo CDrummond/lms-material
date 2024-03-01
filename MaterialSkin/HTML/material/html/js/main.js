@@ -392,6 +392,9 @@ var app = new Vue({
         }.bind(this));
 
         bus.$on('showError', function(err, msg, timeout) {
+            if (undefined==msg && undefined!=err && (''+err).contains('AxiosError')) {
+                return;
+            }
             this.snackbar = {msg: (msg ? stripLinkTags(msg) : i18n("Something went wrong!")) + (err ? " (" + err+")" : ""),
                              show: true, color: 'error', timeout: undefined!=timeout && timeout>0 && timeout<=30 ? timeout*1000 : undefined};
         }.bind(this));

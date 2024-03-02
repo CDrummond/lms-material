@@ -802,7 +802,7 @@ Vue.component('lms-toolbar', {
             return showShortcut ? ttShortcutStr(str, shortcut, shift) : str;
         },
         playerShortcut: function(index) {
-            return IS_APPLE ? i18n("⌥+%1", 9==index ? 0 : index+1) : i18n("Alt+%1", 9==index ? 0 : index+1);
+            return IS_APPLE ? ("⌥+"+(9==index ? 0 : index+1)) : i18n("Alt+%1", 9==index ? 0 : index+1);
         }
     },
     watch: {

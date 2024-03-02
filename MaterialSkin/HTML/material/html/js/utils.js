@@ -831,7 +831,7 @@ function shortcutStr(key, shift, alt) {
         }
     }
     if (alt) {
-        return IS_APPLE ? i18n("Option+%1", key) : i18n("Alt+%1", key);
+        return IS_APPLE ? i18n("⌥+%1", key) : i18n("Alt+%1", key);
     }
     if (shift) {
         return IS_APPLE ? i18n("⌘+Shift+%1", key) : i18n("Ctrl+Shift+%1", key);

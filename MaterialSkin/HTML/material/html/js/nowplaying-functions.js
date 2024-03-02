@@ -340,7 +340,7 @@ function nowplayingShowMenu(view, event) {
         }
         if (view.playerStatus.current.album_id && view.playerStatus.current.album) {
             view.menu.items.push({title:ACTIONS[GOTO_ALBUM_ACTION].title, act:NP_BROWSE_CMD, cmd:{command:["tracks"], params:["album_id:"+view.playerStatus.current.album_id, trackTags(true), SORT_KEY+"tracknum"], title:view.playerStatus.current.album,
-                                  subtitle:view.playerStatus.current.albumartist ? view.playerStatus.current.albumartist : view.playerStatus.current.artist}, icon:ACTIONS[GOTO_ALBUM_ACTION].icon});
+                                  subtitle:view.playerStatus.current.albumartist ? view.playerStatus.current.albumartist : view.playerStatus.current.artist}, icon:ACTIONS[GOTO_ALBUM_ACTION].icon, svg:ACTIONS[GOTO_ALBUM_ACTION].svg});
         }
         view.playerStatus.current.favIcon = undefined;
         view.playerStatus.current.favUrl = undefined;

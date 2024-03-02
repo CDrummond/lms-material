@@ -37,7 +37,7 @@ Vue.component('lms-toolbar', {
   <v-toolbar-title slot="activator" v-bind:class="{'link-item':!coloredToolbars && (!queryParams.single || !powerButton), 'link-item-ct': coloredToolbars && (!queryParams.single || !powerButton), 'maintoolbar-title-clock':showClock}">
    <v-icon v-if="noPlayer" class="maintoolbar-player-icon amber">warning</v-icon>
    <div class="maintoolbar-title ellipsis" v-bind:class="{'dimmed': !playerStatus.ison}">
-    {{noPlayer ? trans.noplayer : player.name}}<v-icon v-if="playerStatus.sleepTime" class="player-status-icon dimmed">hotel</v-icon><v-icon v-if="playerStatus.alarmStr" class="player-status-icon dimmed">alarm_on</v-icon><v-icon v-if="playerStatus.synced" class="player-status-icon dimmed">link</v-icon></div>
+    {{noPlayer ? trans.noplayer : player.name}}<v-icon v-if="playerStatus.sleepTime" class="player-status-icon dimmed">hotel</v-icon><v-icon v-if="playerStatus.alarmStr" class="player-status-icon dimmed">alarm</v-icon><v-icon v-if="playerStatus.synced" class="player-status-icon dimmed">link</v-icon></div>
    <div v-if="!desktopLayout && !noPlayer && MBAR_NONE==mobileBar" class="maintoolbar-subtitle subtext ellipsis" v-bind:class="{'dimmed' : !playerStatus.ison}">{{playerStatus.count<1 ? trans.nothingplaying : isNowPlayingPage ? queueInfo : npInfo}}</div>
   </v-toolbar-title>
        
@@ -83,7 +83,7 @@ Vue.component('lms-toolbar', {
     </v-list-tile-content>
    </v-list-tile>
    <v-list-tile v-if="playerStatus.alarmStr" @click="bus.$emit('dlg.open', 'playersettings')" class="hide-for-mini">
-    <v-list-tile-avatar><v-icon>alarm_on</v-icon></v-list-tile-avatar>
+    <v-list-tile-avatar><v-icon>alarm</v-icon></v-list-tile-avatar>
     <v-list-tile-content>
      <v-list-tile-title>{{playerStatus.alarmStr}}</v-list-tile-title>
     </v-list-tile-content>

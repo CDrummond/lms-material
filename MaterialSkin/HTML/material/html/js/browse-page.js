@@ -144,7 +144,7 @@ var lmsBrowse = Vue.component("lms-browse", {
      <div v-else align="center" style="vertical-align: top" v-for="(citem, col) in item.items" @contextmenu.prevent="contextMenu(citem, item.rs+col, $event)">
       <div v-if="undefined==citem" class="image-grid-item defcursor"></div>
       <div v-else class="image-grid-item" @click="click(citem, item.rs+col, $event)" :title="citem | itemTooltip" :draggable="item.draggable && current.section!=SECTION_FAVORITES" @dragstart="dragStart(item.rs+col, $event)" @dragend="dragEnd()" v-bind:class="{'highlight':highlightIndex==(item.rs+col), 'list-active': (menu.show && (item.rs+col)==menu.index) || (fetchingItem==item.id)}">
-       <div v-if="selection.size>0" class="check-btn grid-btn image-grid-select-btn" @click.stop="select(citem, item.rs+col, $event)" :title="ACTIONS[citem.selected ? UNSELECT_ACTION : SELECT_ACTION].title" v-bind:class="{'check-btn-checked':citem.selected}"></div>
+       <div v-if="selection.size>0 && browseCanSelect(citem)" class="check-btn grid-btn image-grid-select-btn" @click.stop="select(citem, item.rs+col, $event)" :title="ACTIONS[citem.selected ? UNSELECT_ACTION : SELECT_ACTION].title" v-bind:class="{'check-btn-checked':citem.selected}"></div>
        <img v-else-if="citem.multi" class="multi-disc" :src="'album-multi' | svgIcon(true)" loading="lazy"></img>
        <img v-if="citem.image" :key="citem.image" :src="citem.image" onerror="this.src=DEFAULT_COVER" v-bind:class="{'radio-img': SECTION_RADIO==citem.section || SECTION_APPS==citem.section || citem.isRadio}" class="image-grid-item-img" loading="lazy"></img>
        <div class="image-grid-item-icon" v-else>
@@ -262,7 +262,7 @@ var lmsBrowse = Vue.component("lms-browse", {
      <v-list-tile-avatar v-else-if="item.svg" :tile="true" class="lms-avatar">
       <img class="svg-list-img" :src="item.svg | svgIcon(darkUi)"></img>
      </v-list-tile-avatar>
-     <v-list-tile-avatar v-else-if="selection.size>0" :tile="true" class="lms-avatar">
+     <v-list-tile-avatar v-else-if="selection.size>0 && browseCanSelect(item.stdItem)" :tile="true" class="lms-avatar">
       <v-icon>check_box_outline_blank</v-icon>
      </v-list-tile-avatar>
 
@@ -1409,13 +1409,14 @@ var lmsBrowse = Vue.component("lms-browse", {
             this.selection = new Set();
             this.selectionDuration = 0;
             for (var i=0, len=this.items.length; i<len; ++i) {
-                if (!this.items[i].header) {
-                    if (this.items[i].selected) {
-                        this.items[i].selected = false;
+                let item = this.items[i];
+                if (!item.header && browseCanSelect(item)) {
+                    if (item.selected) {
+                        item.selected = false;
                     } else {
                         this.selection.add(i);
-                        this.items[i].selected = true;
-                        this.selectionDuration += itemDuration(this.items[i]);
+                        item.selected = true;
+                        this.selectionDuration += itemDuration(item);
                     }
                 }
             }

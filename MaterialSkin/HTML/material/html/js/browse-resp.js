@@ -514,18 +514,34 @@ function parseBrowseResp(data, parent, options, cacheKey, parentCommand, parentG
                     i.type = "audio";
                 }
 
-                if (addedPlayAction) {
+                let isOnlineTrack = false;
+                // Check for online artist, album, or tracks
+                if (i.presetParams && i.presetParams.favorites_url) {
+                    if (i.presetParams.favorites_url.startsWith("spotify:artist:")) {
+                        i.stdItem = STD_ITEM_ONLINE_ARTIST;
+                    } else if (i.presetParams.favorites_url.startsWith("spotify:album:")) {
+                        i.stdItem = STD_ITEM_ONLINE_ALBUM;
+                    } else if (i.presetParams.favorites_url.startsWith("spotify:track:")) {
+                        numTracks++;
+                        isOnlineTrack = true;
+                    }
+                } else if (parent && parent.stdItem==STD_ITEM_ONLINE_ARTIST) {
+                    i.stdItem = STD_ITEM_ONLINE_ARTIST_CATEGORY;
+                }
+
+                if (addedPlayAction || isOnlineTrack) {
                     if (!addedDivider) {
                         i.menu.push(DIVIDER);
                         addedDivider = true;
                     }
-                    if ((resp.isMusicMix && i.trackType && i.trackType == "local") /*||
+                    if ((resp.isMusicMix && i.trackType && i.trackType == "local") || isOnlineTrack /*||
                         (!isPlaylists && !isFavorites && isAudioTrack(i) && (i.url || (i.presetParams && i.presetParams.favorites_url)))*/) {
                         i.saveableTrack = true; // Can save track list to playlist...
                         i.menu.push(ADD_TO_PLAYLIST_ACTION);
                     }
                     i.menu.push(SELECT_ACTION);
                 }
+
 
                 // Only show 'More' action if:
                 //    'more' is in baseActions and item has item_id
@@ -556,19 +572,6 @@ function parseBrowseResp(data, parent, options, cacheKey, parentCommand, parentG
                 }
                 if (i.type=="text" && undefined!=i.title && (i.title.startsWith("<") || i.title.includes("<br/>"))) {
                     i.type="html";
-                }
-
-                // Check for online artist, album, or tracks
-                if (i.presetParams && i.presetParams.favorites_url) {
-                    if (i.presetParams.favorites_url.startsWith("spotify:artist:")) {
-                        i.stdItem = STD_ITEM_ONLINE_ARTIST;
-                    } else if (i.presetParams.favorites_url.startsWith("spotify:album:")) {
-                        i.stdItem = STD_ITEM_ONLINE_ALBUM;
-                    } else if (i.presetParams.favorites_url.startsWith("spotify:track:")) {
-                        numTracks++;
-                    }
-                } else if (parent && parent.stdItem==STD_ITEM_ONLINE_ARTIST) {
-                    i.stdItem = STD_ITEM_ONLINE_ARTIST_CATEGORY;
                 }
 
                 /* Play/add of a track from a favourited album adds all tracks :( this section works-around this... */

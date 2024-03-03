@@ -5,6 +5,10 @@
  * MIT license.
  */
 
+function browseCanSelect(item) {
+    return undefined!=item.stdItem || (item.menu && item.menu.length>0);
+}
+
 function browseMatches(text, title) {
     if (title.startsWith(text)) {
         return true;
@@ -1201,6 +1205,9 @@ function browseItemAction(view, act, item, index, event) {
         });
     } else if (SELECT_ACTION===act) {
         if (!view.selection.has(index)) {
+            if (!browseCanSelect(view.items[index])) {
+                return;
+            }
             if (0==view.selection.size) {
                 bus.$emit('browseSelection', true);
             }

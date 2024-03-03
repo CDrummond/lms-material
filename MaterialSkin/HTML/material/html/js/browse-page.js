@@ -262,7 +262,7 @@ var lmsBrowse = Vue.component("lms-browse", {
      <v-list-tile-avatar v-else-if="item.svg" :tile="true" class="lms-avatar">
       <img class="svg-list-img" :src="item.svg | svgIcon(darkUi)"></img>
      </v-list-tile-avatar>
-     <v-list-tile-avatar v-else-if="selection.size>0 && browseCanSelect(item.stdItem)" :tile="true" class="lms-avatar">
+     <v-list-tile-avatar v-else-if="selection.size>0 && browseCanSelect(item)" :tile="true" class="lms-avatar">
       <v-icon>check_box_outline_blank</v-icon>
      </v-list-tile-avatar>
 

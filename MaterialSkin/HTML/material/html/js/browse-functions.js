@@ -6,7 +6,7 @@
  */
 
 function browseCanSelect(item) {
-    return undefined!=item.stdItem || (item.menu && item.menu.length>0);
+    return undefined!=item && (undefined!=item.stdItem || (item.menu && item.menu.length>0));
 }
 
 function browseMatches(text, title) {

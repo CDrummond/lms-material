@@ -521,7 +521,9 @@ function parseBrowseResp(data, parent, options, cacheKey, parentCommand, parentG
                         i.stdItem = STD_ITEM_ONLINE_ARTIST;
                     } else if (i.presetParams.favorites_url.startsWith("spotify:album:")) {
                         i.stdItem = STD_ITEM_ONLINE_ALBUM;
-                    } else if (i.presetParams.favorites_url.startsWith("spotify:track:")) {
+                    } else if (i.presetParams.favorites_url.startsWith("spotify:track:") ||
+                               /*i.presetParams.favorites_url.startsWith("youtube://") || YouTube only shows URL if saved to playlist? */
+                               ( i.presetParams.favorites_url.startsWith("https:") && i.presetParams.favorites_type=="audio" && command=="bandcamp")) {
                         numTracks++;
                         isOnlineTrack = true;
                     }

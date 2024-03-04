@@ -14,10 +14,9 @@
     improve initial display.
  8. Add release-type specific icons.
  9. When shrinking jumplist remove keys with fewest items.
-10. Update Axios library to 1.6.7
-11. Allow adding Bandcamp, Deezer, Qobuz, Spotify, and Tidal tracks to
+10. Allow adding Bandcamp, Deezer, Qobuz, Spotify, and Tidal tracks to
     playlists.
-12. Update Deezer icon.
+11. Update Deezer icon.
 
 4.3.4
 -----

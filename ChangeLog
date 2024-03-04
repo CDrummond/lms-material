@@ -26,6 +26,7 @@
 3. Tweak queue toolbar layout.
 4. Always restore queue pinned and shown state as per settings, regardless of
    window size.
+5. Update Axios to 1.6.7
 
 4.3.3
 -----

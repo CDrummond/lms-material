@@ -876,7 +876,7 @@ function browseAddCategories(view, item, isGenre) {
             command: ["albums"],
             params: [item.id, ALBUM_TAGS_PLACEHOLDER, "sort:random"],
             menu: [],
-            svg: "dice-album",
+            svg: lmsOptions.supportReleaseTypes ? "dice-release" : "dice-album",
             type: "group",
             id: uniqueId(item.id, view.items.length)};
     if (undefined!=alt_id) { cat.params.push(alt_id); }
@@ -1951,7 +1951,7 @@ function browseMyMusicMenu(view) {
                     } else if (c.id.startsWith("myMusicFileSystem")) {
                         item.icon = "computer";
                     } else if (c.id == "myMusicRandomAlbums") {
-                        item.svg = "dice-album";
+                        item.svg = lmsOptions.supportReleaseTypes ? "dice-release" : "dice-album";
                         item.icon = undefined;
                         if (lmsOptions.supportReleaseTypes) {
                             item.title = i18n("Random Releases");

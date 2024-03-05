@@ -168,6 +168,7 @@ function updateActionStrings() {
     ACTIONS[ADD_ACTION].short=ACTIONS[ADD_ALL_ACTION].short=i18n("Append");
     ACTIONS[ADD_ACTION].skey=ACTIONS[ADD_ALL_ACTION].key=LMS_APPEND_KEYBOARD;
     ACTIONS[ADD_RANDOM_ALBUM_ACTION].title=lmsOptions.supportReleaseTypes ? i18n("Append random release to queue") : i18n("Append random album to queue");
+    ACTIONS[ADD_RANDOM_ALBUM_ACTION].svg = lmsOptions.supportReleaseTypes ? 'dice-release' : 'dice-album';
     ACTIONS[INSERT_ACTION].title=ACTIONS[INSERT_ALL_ACTION].title=i18n("Play next");
     ACTIONS[INSERT_ACTION].short=ACTIONS[INSERT_ALL_ACTION].short=i18n("Next");
     ACTIONS[MORE_ACTION].title=i18n("More");

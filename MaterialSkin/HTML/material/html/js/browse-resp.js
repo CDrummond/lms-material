@@ -767,8 +767,6 @@ function parseBrowseResp(data, parent, options, cacheKey, parentCommand, parentG
                     }
                     if (0==resp.items.length) {
                         resp.subtitle=i18n("Empty");
-                    } else if (parent && parent.stdItem==STD_ITEM_ONLINE_ARTIST) {
-                        resp.subtitle=i18np("1 Category", "%1 Categories", resp.items.length);
                     } else if (numTracks==resp.items.length) {
                         resp.subtitle=i18np("1 Track", "%1 Tracks", resp.items.length);
                         // Check if all tracks have same subtitle, and if so remove

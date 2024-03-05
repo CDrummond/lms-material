@@ -2243,6 +2243,13 @@ function browseReplaceCommandTerms(view, cmd, item) {
             } else if (cmd.params[i].startsWith(SORT_KEY+ALBUM_SORT_PLACEHOLDER) ||
                        cmd.params[i].startsWith(SORT_KEY+ARTIST_ALBUM_SORT_PLACEHOLDER)) {
                 var sort=getAlbumSort(cmd, view.inGenre);
+                // Remove "sort:album" from "playlistcontrol" - LMS fails on this.
+                if ('album'==sort.by && 'playlistcontrol'==cmd.command[0]) {
+                    cmd.params.splice(i, 1);
+                    len-=1;
+                    --i;
+                    continue;
+                }
                 cmd.params[i]=cmd.params[i].replace(SORT_KEY+ALBUM_SORT_PLACEHOLDER, SORT_KEY+sort.by)
                                            .replace(SORT_KEY+ARTIST_ALBUM_SORT_PLACEHOLDER, SORT_KEY+sort.by);
                 if (sort.rev) {

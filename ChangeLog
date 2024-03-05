@@ -17,6 +17,8 @@
 10. Allow adding Bandcamp, Deezer, Qobuz, Spotify, and Tidal tracks to
     playlists.
 11. Update Deezer icon.
+12. Don't pass "sort:album" when adding an artist's albums to queue, as LMS
+    errors on this (and "album" is the default sort anyway).
 
 4.3.4
 -----

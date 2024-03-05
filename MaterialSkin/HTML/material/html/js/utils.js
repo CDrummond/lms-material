@@ -761,6 +761,11 @@ function getField(item, field) {
     return getIndex(item.params, field);
 }
 
+function getParamVal(item, field, defVal) {
+    let idx = getIndex(item.params, field);
+    return -1==idx ? defVal : item.params[idx].split(':')[1]
+}
+
 function setFontSize(sz) {
     let std = 16;
     let small = 14;

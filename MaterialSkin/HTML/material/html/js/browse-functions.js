@@ -5,6 +5,10 @@
  * MIT license.
  */
 
+function browseCanSelect(item) {
+    return undefined!=item && (undefined!=item.stdItem || (item.menu && item.menu.length>0));
+}
+
 function browseMatches(text, title) {
     if (title.startsWith(text)) {
         return true;
@@ -1201,6 +1205,9 @@ function browseItemAction(view, act, item, index, event) {
         });
     } else if (SELECT_ACTION===act) {
         if (!view.selection.has(index)) {
+            if (!browseCanSelect(view.items[index])) {
+                return;
+            }
             if (0==view.selection.size) {
                 bus.$emit('browseSelection', true);
             }
@@ -1911,10 +1918,18 @@ function browseMyMusicMenu(view) {
                         item.icon = "local_library";
                         item.cancache = true;
                     } else if (c.id.startsWith("myMusicAlbums")) {
-                        item.icon = "album";
                         item.cancache = true;
-                        if (lmsOptions.supportReleaseTypes && c.id=="myMusicAlbums") {
-                            item.title = i18n("Releases");
+                        if (c.id=="myMusicAlbums") {
+                            item.icon = "album";
+                            if (lmsOptions.supportReleaseTypes) {
+                                item.title = i18n("Releases");
+                                item.icon = undefined;
+                                item.svg = "release"
+                            }
+                        } else {
+                            let icon = releaseTypeIcon(getParamVal(command, "release_type", "ALBUM"));
+                            item.icon = icon.icon;
+                            item.svg = icon.svg;
                         }
                     } else if (c.id.startsWith("myMusicGenres")) {
                         item.svg = "guitar-acoustic";

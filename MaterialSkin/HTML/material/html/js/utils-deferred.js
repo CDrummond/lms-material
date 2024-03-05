@@ -72,46 +72,31 @@ function isTextItem(item) {
               (!item.command || (item.command[0]!="browsejive" && (item.command.length<2 || item.command[1]!="browsejive")))));
 }
 
-function shrinkJumplist(array, limit) {
+function shrinkJumplist(array, limit, totalItems) {
     if (array.length<=limit) {
         return array;
     }
-    let arr = array;
-    let hdrs = [];
-    if (array[0].key==SECTION_JUMP) {
-        arr = [];
-        for (let i=0, len=array.length; i<len; ++i) {
-            if (array[i].key==SECTION_JUMP) {
-                hdrs.push(array[i]);
-            } else {
-                arr.push(array[i]);
-            }
+
+    let remove = array.length - limit;
+    // Calculate weight for each entry
+    let items = [];
+    for (let i=0, len=array.length; i<len; ++i) {
+        if (array[i].key==SECTION_JUMP || 0==i) {
+            items.push({weight:-25000, pos:i, item:array[i]});
+        } else {
+            items.push({weight:-1*((i+1<len ? array[i+1].index : totalItems)-array[i].index), pos:i, item:array[i]});
         }
-        limit -= hdrs.length;
     }
-    var res = [];
-    var i = 0;
-    var scale = arr.length / limit;
-    while (i < limit) {
-        res.push(arr[Math.round(i * scale)]);
-        i++;
-    }
-    res[res.length-1]=arr[arr.length-1];
-    if (hdrs.length>0) {
-        let len = res.length;
-        let h = 0;
-        let hlen = hdrs.length;
-        let lastH = 0;
-        for (let i=0; i<len && h<hlen; ++i) {
-            if (res[i].index>hdrs[h].index) {
-                res.splice(i, 0, hdrs[h]);
-                lastH=h;
-                h++;
-            }
-        }
-        for (h=lastH+1; h<hlen; ++h) {
-            res.push(hdrs[h]);
-        }
+    // Sort by weight, so keys with feweset entries are at end
+    items.sort(function(a, b) { return a.weight!=b.weight ? a.weight<b.weight ? -1 : 1 : a.index<b.index ? -1 : 1 });
+    // Trim last few items so we get to correct size
+    items.splice(array.length-(1+remove), remove);
+    // Re-sort into original order
+    items.sort(function(a, b) { return a.pos<b.pos ? -1 : 1})
+    // Recreate list
+    let res = [];
+    for (let i=0, len=items.length; i<len; ++i) {
+        res.push(array[items[i].pos]);
     }
     return res;
 }

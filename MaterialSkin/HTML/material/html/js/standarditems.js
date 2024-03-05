@@ -21,6 +21,9 @@ const STD_ITEM_MIX = 101;
 const STD_ITEM_MAI = 200;
 const STD_ITEM_ALL_TRACKS = 201;
 const STD_ITEM_COMPOSITION_TRACKS = 202;
+const STD_ITEM_ONLINE_ARTIST = 300;
+const STD_ITEM_ONLINE_ALBUM = 301;
+const STD_ITEM_ONLINE_ARTIST_CATEGORY = 302;
 
 const STD_ITEMS=[
     {
@@ -95,6 +98,8 @@ function buildStdItemCommand(item, parentCommand) {
                 command.params.push(list[i]);
             }
         }
+    } else if (stdItem>=STD_ITEM_ONLINE_ARTIST) {
+        return command;
     } else {
         if (undefined==STD_ITEMS[stdItem].command) {
             return command;

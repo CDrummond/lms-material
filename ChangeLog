@@ -1,3 +1,23 @@
+4.4.0
+-----
+ 1. Use detailed subtoolbar for some online (e.g Spotty) artist and album
+    listings.
+ 2. Add server-side option to show composer, and not artist, for composer
+    genres in MAI.
+ 3. In desktop layout with un-pinned queue add a show/hide queue button in
+    bottom bar (if queue contains more than 1 track).
+ 4. For track style queue, show ratings on right underneath track time.
+ 5. Re-add zooming to MAI view.
+ 6. Get next alarm from status message (requires LMS8.5) and show in player
+    menu, toolbar, and in 'Manage players' dialog.
+ 7. When re-show group volume dialog use any previous volumes as defaults, to
+    improve initial display.
+ 8. Add release-type specific icons.
+ 9. When shrinking jumplist remove keys with fewest items.
+10. Allow adding Bandcamp, Deezer, Qobuz, Spotify, and Tidal tracks to
+    playlists.
+11. Update Deezer icon.
+
 4.3.4
 -----
 1. Try not to crop radio station logos in favourites.

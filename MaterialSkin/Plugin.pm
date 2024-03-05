@@ -78,7 +78,7 @@ my @ADV_SEARCH_OTHER = ('content_type', 'contributor_namesearch.active1', 'contr
 
 my %IGNORE_PROTOCOLS = map { $_ => 1 } ('mms', 'file', 'tmp', 'http', 'https', 'spdr', 'icy', 'teststream', 'db', 'playlist');
 
-my @BOOL_OPTS = ('allowDownload', 'playShuffle', 'touchLinks', 'showAllArtists', 'artistFirst', 'yearInSub', 'showComment', 'genreImages', 'showComposer', 'showConductor', 'showBand');
+my @BOOL_OPTS = ('allowDownload', 'playShuffle', 'touchLinks', 'showAllArtists', 'artistFirst', 'yearInSub', 'showComment', 'genreImages', 'maiComposer', 'showComposer', 'showConductor', 'showBand');
 
 sub initPlugin {
     my $class = shift;
@@ -114,6 +114,7 @@ sub initPlugin {
         composergenres => $DEFAULT_COMPOSER_GENRES,
         conductorgenres => $DEFAULT_CONDUCTOR_GENRES,
         bandgenres => $DEFAULT_BAND_GENRES,
+        maiComposer => 0,
         showComposer => 1,
         showConductor => 0,
         showBand => 0,
@@ -433,6 +434,7 @@ sub _cliCommand {
         $request->addResult('composergenres', $prefs->get('composergenres'));
         $request->addResult('conductorgenres', $prefs->get('conductorgenres'));
         $request->addResult('bandgenres', $prefs->get('bandgenres'));
+        $request->addResult('maiComposer', $prefs->get('maiComposer'));
         $request->addResult('showComposer', $prefs->get('showComposer'));
         $request->addResult('showConductor', $prefs->get('showConductor'));
         $request->addResult('showBand', $prefs->get('showBand'));

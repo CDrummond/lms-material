@@ -21,6 +21,7 @@ const NP_LYRICS_SCROLL_ACT = 8;
 const NP_LYRICS_HIGHLIGHT_ACT = 9;
 const NP_COPY_ACT = 10;
 const NP_SEARCH_ACT = 11;
+const NP_ZOOM_ACT = 12;
 const NP_CUSTOM = 100;
 const NP_ITEM_ACT = 200;
 const NP_MIN_WIDTH_FOR_FULL = 780;
@@ -57,7 +58,7 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
   <v-btn fab small flat top right absolute class="np-menu-fab" @click="showConfigMenu"><v-icon class="np-menu-icn">settings</v-icon></v-btn>
   <v-tabs centered v-model="info.tab" v-if="info.showTabs || windowWidth<NP_MIN_WIDTH_FOR_FULL" style="np-info-tab-cover" @change="tabChanged">
    <template v-for="(tab, index) in info.tabs">
-    <v-tab :key="index">{{tab.title}}</v-tab>
+    <v-tab :key="index">{{tab.ctitle && playerStatus.current.maiComposer ? tab.ctitle: tab.title}}</v-tab>
     <v-tab-item :key="index" :transition="false" :reverse-transition="false">
      <v-card flat class="np-info-card-cover selectable" @touchend="tabTextEnd" @mouseup="tabTextEnd" @contextmenu="event.preventDefault()">
       <v-card-text :class="['np-info-text', TRACK_TAB==index || tab.isMsg ? 'np-info-lyrics' : '', ALBUM_TAB==index ? 'np-info-review' : '']" :id="'np-tab'+index">
@@ -207,7 +208,7 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
      <div v-if="techInfo" class="np-bar-tech ellipsis">{{technicalInfo}}</div>
      <div v-else-if="npBarRatings && (repAltBtn.show || shuffAltBtn.show)" class="np-bar-rating np-thumbs-desktop"><v-btn v-if="repAltBtn.show" :title="repAltBtn.tooltip" flat icon v-longpress="repeatClicked" class="np-std-button" v-bind:class="{'disabled':noPlayer}"><v-icon v-if="repAltBtn.icon" class="media-icon">{{repAltBtn.icon}}</v-icon><img v-else :src="repAltBtn.image" class="btn-img"></img></v-btn><v-btn v-if="shuffAltBtn.show" :title="shuffAltBtn.tooltip" flat icon @click="shuffleClicked" class="np-std-button"><v-icon v-if="shuffAltBtn.icon" class="media-icon">{{shuffAltBtn.icon}}</v-icon><img v-else :src="shuffAltBtn.image" class="btn-img"></img></v-btn></div>
      <v-rating v-else-if="showRatings" class="np-bar-rating" v-model="rating.value" half-increments hover clearable @click.native="setRating(true)" :readonly="undefined==LMS_P_RP"></v-rating>
-     <div v-else-if="playerStatus.playlist.count>1" class="np-bar-tech" v-bind:class="{'link-item':totalTogglesQueue && !coloredToolbars, 'link-item-ct':totalTogglesQueue && coloredToolbars}" @click.stop="trackCountClicked">{{playerStatus.playlist.current | trackCount(playerStatus.playlist.count)}}</div>
+     <div v-else-if="playerStatus.playlist.count>1" class="np-bar-tech" v-bind:class="{'link-item':totalTogglesQueue && !coloredToolbars, 'link-item-ct':totalTogglesQueue && coloredToolbars}" @click.stop="trackCountClicked">{{playerStatus.playlist.current | trackCount(playerStatus.playlist.count)}} <v-btn class="np-bar-queue" flat icon v-if="!pinQueue"><v-icon v-if="showQueue">queue_music</v-icon><img v-else class="svg-img" :src="'queue_music_outline' | svgIcon(darkUi, false, true, coloredToolbars)"></img></v-btn></div>
      <div v-else class="np-bar-tech">&nbsp;</div>
     </v-list-tile-action>
    </v-list-tile>
@@ -379,17 +380,17 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
                     current: { canseek:1, duration:0, time:undefined, title:undefined, liveEdge:undefined, artist:undefined, artistAndComposer: undefined, artistAndComposerWithContext:undefined,
                                album:undefined, albumName:undefined, albumLine:undefined, technicalInfo:undefined, pospc:0.0, bufpc:100.0, tracknum:undefined,
                                disc:0, year:0, url:undefined, comment:undefined, source: {local:true, text:undefined},
-                               emblem: undefined },
+                               emblem: undefined, maiComposer:undefined },
                     playlist: { shuffle:0, repeat: 0, current:0, count:0 },
                  },
                  mobileBarText: undefined,
                  info: { show: false, tab:parseInt(getLocalStorageVal("nptab", TRACK_TAB)), showTabs:false, sync: true,
-                         tabs: [ { value:ARTIST_TAB, title:undefined, text:undefined, reqId:0, image: undefined,
+                         tabs: [ { value:ARTIST_TAB, title:undefined, ctitle:undefined, text:undefined, reqId:0, image: undefined,
                                    sections:[ { title:undefined, items:[], min:1, more:undefined, grid:getLocalStorageBool("np-tabs-"+ARTIST_TAB+"-0-grid", false) },
                                               { title:undefined, html:undefined } ] },
-                                 { value:ALBUM_TAB, title:undefined, text:undefined, reqId:0, image: undefined,
+                                 { value:ALBUM_TAB, title:undefined, ctitle:undefined, text:undefined, reqId:0, image: undefined,
                                    sections:[ { title:undefined, items:[], min:2, more:undefined } ] },
-                                 { value: TRACK_TAB, title:undefined, text:undefined, lines:undefined, scroll:false, highlight:false, reqId:0, image: undefined,
+                                 { value: TRACK_TAB, title:undefined, ctitle:undefined, text:undefined, lines:undefined, scroll:false, highlight:false, reqId:0, image: undefined,
                                    sections:[ { title:undefined, html:undefined } ] } ] },
                  infoTrack: {album_id:undefined, track_id:undefined},
                  trans: { expand:undefined, collapse:undefined, sync:undefined, unsync:undefined, more:undefined, dstm:undefined,
@@ -416,6 +417,8 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
                 };
     },
     mounted() {
+        this.zoom = parseFloat(getLocalStorageVal("npInfoZoom", 1.0));
+        this.setZoom(this.zoom);
         this.showNpBar = undefined;
         this.desktopBarHeight = getComputedStyle(document.documentElement).getPropertyValue('--desktop-npbar-height');
         this.desktopBarThinHeight = getComputedStyle(document.documentElement).getPropertyValue('--desktop-npbar-height-thin');
@@ -640,6 +643,7 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
                            next:i18n("Next track"), collapseNp:i18n("Collapse now playing"), expandNp:i18n("Expand now playing"), menu:i18n("Menu") };
             this.info.tabs[TRACK_TAB].title=i18n("Track");
             this.info.tabs[ARTIST_TAB].title=i18n("Artist");
+            this.info.tabs[ARTIST_TAB].ctitle=i18n("Composer");
             this.info.tabs[ALBUM_TAB].title=lmsOptions.supportReleaseTypes ? i18n('Release') : i18n("Album");
             this.info.tabs[ARTIST_TAB].sections[0].title=lmsOptions.supportReleaseTypes ? i18n("Releases") : i18n("Albums");
             this.info.tabs[ARTIST_TAB].sections[1].title=i18n("Similar artists");
@@ -800,6 +804,12 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
                                 ? this.playerStatus.current.artist_ids[0]
                                 : this.playerStatus.current.artist_id,
                              artist_ids: this.playerStatus.current.artist_ids,
+                             maiComposer: this.playerStatus.current.maiComposer,
+                             composer: this.playerStatus.current.composer,
+                             composer_id: this.playerStatus.current.composer_ids
+                                ? this.playerStatus.current.composer_ids[0]
+                                : this.playerStatus.current.composer_id,
+                             composer_ids: this.playerStatus.current.composer_ids,
                              albumartist: this.playerStatus.current.albumartist,
                              albumartist_ids: this.playerStatus.current.albumartist_ids,
                              album: this.playerStatus.current.albumName,
@@ -810,6 +820,9 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
                                  undefined==this.infoTrack.artist &&
                                  undefined==this.infoTrack.artist_id &&
                                  undefined==this.infoTrack.artist_ids &&
+                                 undefined==this.infoTrack.composer &&
+                                 undefined==this.infoTrack.composer_id &&
+                                 undefined==this.infoTrack.composer_ids &&
                                  undefined==this.infoTrack.albumartist &&
                                  undefined==this.infoTrack.albumartist_ids &&
                                  undefined==this.infoTrack.album &&
@@ -1231,6 +1244,15 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
         tabTextEnd(event) {
             this.clearClickTimeout();
             viewHandleSelectedText(this, event);
+        },
+        setZoom(zoom) {
+            if (undefined==zoom || zoom<1.0 || zoom>2.0) {
+                this.zoom = 1.0;
+            } else {
+                this.zoom = zoom;
+            }
+            document.documentElement.style.setProperty('--np-zoom', this.zoom);
+            document.documentElement.style.setProperty('--np-zoom-list', Math.min(this.zoom, 1.4));
         }
     },
     filters: {
@@ -1387,6 +1409,12 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
         },
         totalTogglesQueue() {
             return this.$store.state.desktopLayout && !this.$store.state.pinQueue
+        },
+        pinQueue() {
+            return this.$store.state.pinQueue
+        },
+        showQueue() {
+            return this.$store.state.showQueue
         },
         noPlayer() {
             return !this.$store.state.player

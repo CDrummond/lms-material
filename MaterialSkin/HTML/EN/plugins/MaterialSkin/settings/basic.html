@@ -91,6 +91,9 @@
     [% WRAPPER setting title="PLUGIN_MATERIAL_SKIN_SHOW_COMPOSER" desc="PLUGIN_MATERIAL_SKIN_SHOW_COMPOSER_DESC" %]
     <input type="checkbox" name="pref_showComposer" id="pref_showComposer" [% IF prefs.pref_showComposer %] checked [% END %] value="1"/>
     [% END %]
+    [% WRAPPER setting title="PLUGIN_MATERIAL_SKIN_USE_COMPOSER_MAI" desc="PLUGIN_MATERIAL_SKIN_USE_COMPOSER_MAI_DESC" %]
+    <input type="checkbox" name="pref_maiComposer" id="pref_maiComposer" [% IF prefs.maiComposer %] checked [% END %] value="1"/>
+    [% END %]
     <hr style="opacity:0.4" class="sub-sep"/>
 
 

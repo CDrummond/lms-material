@@ -48,7 +48,7 @@ var lmsBrowse = Vue.component("lms-browse", {
   <v-layout v-else-if="history.length>0">
    <v-btn flat icon v-longpress="backBtnPressed" class="toolbar-button" v-bind:class="{'back-button':!homeButton || history.length<2}" id="back-button" :title="trans.goBack | tooltipStr('esc', keyboardControl)"><v-icon>arrow_back</v-icon></v-btn>
    <v-btn v-if="history.length>1 && homeButton" flat icon @click="homeBtnPressed()" class="toolbar-button" id="home-button" :title="trans.goHome | tooltipStr('home', keyboardControl)"><v-icon>home</v-icon></v-btn>
-   <img v-if="wide>0 && ((current && current.image) || currentItemImage)" :src="current && current.image ? current.image : currentItemImage" @click="showHistory($event)" class="sub-cover pointer"></img>
+   <img v-if="wide>0 && currentImage" :src="current && currentImage" @click="showHistory($event)" class="sub-cover pointer"></img>
    <v-layout row wrap v-if="showDetailedSubtoolbar">
     <v-layout @click="showHistory($event)" class="link-item row wrap browse-title">
      <v-flex xs12 class="ellipsis subtoolbar-title subtoolbar-pad" v-bind:class="{'subtoolbar-title-single':undefined==toolbarSubTitle}">{{toolbarTitle}}</v-flex>
@@ -144,7 +144,7 @@ var lmsBrowse = Vue.component("lms-browse", {
      <div v-else align="center" style="vertical-align: top" v-for="(citem, col) in item.items" @contextmenu.prevent="contextMenu(citem, item.rs+col, $event)">
       <div v-if="undefined==citem" class="image-grid-item defcursor"></div>
       <div v-else class="image-grid-item" @click="click(citem, item.rs+col, $event)" :title="citem | itemTooltip" :draggable="item.draggable && current.section!=SECTION_FAVORITES" @dragstart="dragStart(item.rs+col, $event)" @dragend="dragEnd()" v-bind:class="{'highlight':highlightIndex==(item.rs+col), 'list-active': (menu.show && (item.rs+col)==menu.index) || (fetchingItem==item.id)}">
-       <div v-if="selection.size>0" class="check-btn grid-btn image-grid-select-btn" @click.stop="select(citem, item.rs+col, $event)" :title="ACTIONS[citem.selected ? UNSELECT_ACTION : SELECT_ACTION].title" v-bind:class="{'check-btn-checked':citem.selected}"></div>
+       <div v-if="selection.size>0 && browseCanSelect(citem)" class="check-btn grid-btn image-grid-select-btn" @click.stop="select(citem, item.rs+col, $event)" :title="ACTIONS[citem.selected ? UNSELECT_ACTION : SELECT_ACTION].title" v-bind:class="{'check-btn-checked':citem.selected}"></div>
        <img v-else-if="citem.multi" class="multi-disc" :src="'album-multi' | svgIcon(true)" loading="lazy"></img>
        <img v-if="citem.image" :key="citem.image" :src="citem.image" onerror="this.src=DEFAULT_COVER" v-bind:class="{'radio-img': SECTION_RADIO==citem.section || SECTION_APPS==citem.section || citem.isRadio}" class="image-grid-item-img" loading="lazy"></img>
        <div class="image-grid-item-icon" v-else>
@@ -262,7 +262,7 @@ var lmsBrowse = Vue.component("lms-browse", {
      <v-list-tile-avatar v-else-if="item.svg" :tile="true" class="lms-avatar">
       <img class="svg-list-img" :src="item.svg | svgIcon(darkUi)"></img>
      </v-list-tile-avatar>
-     <v-list-tile-avatar v-else-if="selection.size>0" :tile="true" class="lms-avatar">
+     <v-list-tile-avatar v-else-if="selection.size>0 && browseCanSelect(item)" :tile="true" class="lms-avatar">
       <v-icon>check_box_outline_blank</v-icon>
      </v-list-tile-avatar>
 
@@ -505,13 +505,29 @@ var lmsBrowse = Vue.component("lms-browse", {
         useRecyclerForLists() {
             return !this.isTop && this.items.length>LMS_MAX_NON_SCROLLER_ITEMS
         },
+        currentImage() {
+            if (this.current) {
+                if (this.current.image) {
+                    return this.current.image;
+                }
+                if (this.currentItemImage) {
+                    return this.currentItemImage;
+                }
+                if (this.current.stdItem==STD_ITEM_ONLINE_ARTIST_CATEGORY && this.history.length>0) {
+                    let prev = this.history[this.history.length-1];
+                    if (prev.current.image) {
+                        return prev.current.image;
+                    }
+                    if (prev.currentItemImage) {
+                        return prev.currentItemImage;
+                    }
+                }
+            }
+            return undefined
+        },
         bgndUrl() {
             let url = this.$store.state.browseBackdrop
-                        ? this.current && this.current.image
-                            ? this.current.image
-                            : this.currentItemImage
-                                ? this.currentItemImage
-                                : undefined
+                        ? this.currentImage
                         : undefined;
             if (this.$store.state.browseBackdrop && undefined==url && this.history.length>0) {
                 let prev = this.history[this.history.length-1]
@@ -556,8 +572,10 @@ var lmsBrowse = Vue.component("lms-browse", {
             return this.headerSubTitle ? this.headerSubTitle + suffix : suffix.length<1 ? undefined : suffix;
         },
         showDetailedSubtoolbar() {
-            return this.wide>0 && this.current && (this.current.image || this.currentItemImage) && undefined!=this.current.stdItem &&
-                   (this.current.stdItem==STD_ITEM_ARTIST || this.current.stdItem==STD_ITEM_ALBUM || this.current.stdItem>=STD_ITEM_MAI)
+            return this.wide>0 && this.current && undefined!=this.current.stdItem && (this.currentImage || this.current.stdItem==STD_ITEM_ONLINE_ARTIST_CATEGORY) &&
+                   (this.current.stdItem==STD_ITEM_ARTIST || this.current.stdItem==STD_ITEM_ALBUM ||
+                    this.current.stdItem==STD_ITEM_ONLINE_ARTIST || this.current.stdItem==STD_ITEM_ONLINE_ALBUM || this.current.stdItem==STD_ITEM_ONLINE_ARTIST_CATEGORY ||
+                    this.current.stdItem>=STD_ITEM_MAI)
         },
         detailedSubTop() {
             if (this.current.stdItem==STD_ITEM_ARTIST) {
@@ -1047,7 +1065,7 @@ var lmsBrowse = Vue.component("lms-browse", {
                 this.fetchItems(act.stdItem==STD_ITEM_ALL_TRACKS || act.stdItem==STD_ITEM_COMPOSITION_TRACKS ? browseReplaceCommandTerms(this, act.do, item) : act.do, 
                                 {cancache:false, id:"currentaction:"+index,
                                  title:act.title+(act.stdItem==STD_ITEM_ALL_TRACKS || act.stdItem==STD_ITEM_COMPOSITION_TRACKS ? "" : (SEPARATOR+item.title)),
-                                 image:act.stdItem ? this.current.image ? this.current.image : this.currentItemImage : undefined, stdItem:act.stdItem});
+                                 image:act.stdItem ? this.currentImage : undefined, stdItem:act.stdItem});
                 if (STD_ITEM_MAI==act.stdItem) {
                     browseFetchExtra(this, act.do.command[1]=="biography");
                 }
@@ -1391,13 +1409,14 @@ var lmsBrowse = Vue.component("lms-browse", {
             this.selection = new Set();
             this.selectionDuration = 0;
             for (var i=0, len=this.items.length; i<len; ++i) {
-                if (!this.items[i].header) {
-                    if (this.items[i].selected) {
-                        this.items[i].selected = false;
+                let item = this.items[i];
+                if (!item.header && browseCanSelect(item)) {
+                    if (item.selected) {
+                        item.selected = false;
                     } else {
                         this.selection.add(i);
-                        this.items[i].selected = true;
-                        this.selectionDuration += itemDuration(this.items[i]);
+                        item.selected = true;
+                        this.selectionDuration += itemDuration(item);
                     }
                 }
             }
@@ -1709,7 +1728,7 @@ var lmsBrowse = Vue.component("lms-browse", {
                     this.filteredJumplist = this.jumplist;
                 } else if (!this.jumplist.headerOnly && this.jumplist.length>=4) {
                     let maxItems = Math.floor((this.scrollElement.clientHeight-(16))/20);
-                    this.filteredJumplist = shrinkJumplist(this.jumplist, maxItems);
+                    this.filteredJumplist = shrinkJumplist(this.jumplist, maxItems, this.items.length);
                 }
             }
             let now = (undefined!=this.jumplist && undefined!=this.filteredJumplist && this.filteredJumplist.length>1 ? JUMP_LIST_WIDTH : 0)+'px';

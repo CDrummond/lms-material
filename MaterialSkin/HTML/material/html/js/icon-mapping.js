@@ -180,3 +180,39 @@ function mapIcon(item, app, fallback) {
     }
     return false;
 }
+
+function releaseTypeIcon(rel) {
+    if (rel!=undefined) {
+        if (rel=="ALBUM") {
+            return {icon:"album"};
+        }
+        if (rel=="EP") {
+            return {svg:"release-ep"};
+        }
+        if (rel=="SINGLE") {
+            return {svg:"release-single"};
+        }
+        if (rel=="COMPILATION") {
+            return {svg:"album-multi"};
+        }
+        if (rel=="COMPOSITION") {
+            return {svg:"release-composition"};
+        }
+        if (rel=="LIVE") {
+            return {svg:"release-live"};
+        }
+        if (rel=="BOOTLEG") {
+            return {svg:"release-bootleg"};
+        }
+        if (rel=="BOXSET") {
+            return {svg:"release-boxset"};
+        }
+        if (rel=="BESTOF") {
+            return {svg:"release-bestof"};
+        }
+        if (rel=="BROADCAST") {
+            return {svg:"release-broadcast"};
+        }
+    }
+    return {svg:"release"};
+}

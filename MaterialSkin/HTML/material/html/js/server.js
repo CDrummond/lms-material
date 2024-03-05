@@ -440,9 +440,9 @@ var lmsServer = Vue.component('lms-server', {
                            syncmaster: data.sync_master,
                            syncslaves: data.sync_slaves ? data.sync_slaves.split(",") : [],
                            id: playerId,
-                           name: data.player_name
+                           name: data.player_name,
+                           alarm: undefined!=data.alarm_next2 ? parseInt(data.alarm_next2) : undefined
                          };
-
             if (isCurrent) {
                 player.isgroup = this.$store.state.player.isgroup;
                 player.icon = this.$store.state.player.icon;
@@ -720,7 +720,7 @@ var lmsServer = Vue.component('lms-server', {
             let tags = PLAYER_STATUS_TAGS +
                          (this.$store.state.showRating ? "R" : "") +
                          (lmsOptions.showComment ? "k" : "");
-            lmsCommand(id, ["status", "-", 1, tags], undefined, STATUS_UPDATE_MAX_TIME).then(({data}) => {
+            lmsCommand(id, ["status", "-", 1, tags, 'alarmData:1'], undefined, STATUS_UPDATE_MAX_TIME).then(({data}) => {
                 this.playerStatusMessages.delete(id);
                 if (data && data.result) {
                     this.handlePlayerStatus(id, data.result, true);
@@ -742,7 +742,7 @@ var lmsServer = Vue.component('lms-server', {
                          (this.$store.state.showRating ? "R" : "") +
                          (lmsOptions.showComment ? "k" : "");
                 this.cometd.subscribe('/slim/subscribe', function(res) { },
-                    {data:{response:'/'+this.cometd.getClientId()+'/slim/playerstatus/'+id, request:[id, ["status", "-", 1, tags, "subscribe:30"]]}});
+                    {data:{response:'/'+this.cometd.getClientId()+'/slim/playerstatus/'+id, request:[id, ["status", "-", 1, tags, "subscribe:30", 'alarmData:1']]}});
                 this.cometd.subscribe('/slim/subscribe',
                                     function(res) { },
                                     {data:{response:'/'+this.cometd.getClientId()+'/slim/playerprefs/'+id, request:[id, ['prefset']]}});
@@ -971,7 +971,7 @@ var lmsServer = Vue.component('lms-server', {
 
         // Set DSTM. If player is synced, then set for all others in sync group...
         bus.$on('dstm', function(player, value) {
-            lmsCommand(player, ["status", "-", 1, PLAYER_STATUS_TAGS + (this.$store.state.showRating ? "R" : "")]).then(({data}) => {
+            lmsCommand(player, ["status", "-", 1, PLAYER_STATUS_TAGS + (this.$store.state.showRating ? "R" : ""), 'alarmData:1']).then(({data}) => {
                 if (data && data.result) {
                     if (data.result.sync_master && data.result.sync_master!=player) {
                         lmsCommand(data.result.sync_master, ["playerpref", "plugin.dontstopthemusic:provider", value]).then(({data}) => {

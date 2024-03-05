@@ -93,26 +93,25 @@ function parseResp(data, showTrackNum, index, showRatings, queueAlbumStyle, queu
         if (data.result.playlist_loop) {
             for (var idx=0, loop=data.result.playlist_loop, loopLen=loop.length; idx<loopLen; ++idx) {
                 let i = loop[idx];
-                let clz = queueAlbumStyle ? 'subtext' : undefined;
                 splitMultiples(i);
                 let title = i.title;
                 if (showTrackNum && i.tracknum>0) {
                     title = formatTrackNum(i)+SEPARATOR+title;
                 }
-                let addedClass = false;
                 let haveRating = showRatings && undefined!=i.rating;
                 if (queueAlbumStyle) {
                     let artist = i.albumartist ? i.albumartist : i.artist ? i.artist : i.trackartist;
                     let extra = buildArtistLine(i, 'queue', false, artist);
+                    let addedClass = false;
                     if (!isEmpty(extra)) {
-                        title+='<obj class="subtext">'+SEPARATOR+extra;
                         addedClass = true;
+                        title+='<obj class="subtext">'+SEPARATOR+extra;
                     }
-                }
-                if (haveRating) {
-                    title += (queueAlbumStyle && !addedClass ? '<obj class="subtext">' : '') + SEPARATOR+ratingString(undefined, i.rating, clz) + (queueAlbumStyle ? '</obj>': '');
-                } else if (addedClass) {
-                    title+='</obj>';
+                    if (haveRating) {
+                        title += (!addedClass ? '<obj class="subtext">' : '') + SEPARATOR+ratingString(undefined, i.rating) + '</obj>';
+                    } else if (addedClass) {
+                        title+='</obj>';
+                    }
                 }
                 let duration = undefined==i.duration ? undefined : parseFloat(i.duration);
                 let prevItem = 0==idx ? lastInCurrent : resp.items[idx-1];
@@ -144,7 +143,8 @@ function parseResp(data, showTrackNum, index, showRatings, queueAlbumStyle, queu
                               size: queueAlbumStyle
                                       ? isAlbumHeader ? LMS_ALBUM_QUEUE_HEADER : LMS_ALBUM_QUEUE_TRACK
                                       : undefined,
-                              grpKey:grpKey
+                              grpKey:grpKey,
+                              rating: !queueAlbumStyle && haveRating ? Math.ceil(i.rating/10.0)/2.0 : undefined
                           });
                 index++;
             }
@@ -251,10 +251,11 @@ var lmsQueue = Vue.component("lms-queue", {
       <v-list-tile-sub-title v-if="threeLines && queueContext" v-html="item.artistAlbum[3]"></v-list-tile-sub-title>
       <v-list-tile-sub-title v-else-if="threeLines" v-html="item.artistAlbum[1]"></v-list-tile-sub-title>
      </v-list-tile-content>
-     <v-list-tile-action class="pq-time">{{item.durationStr}}</v-list-tile-action>
+     <v-list-tile-action class="pq-time" v-bind:class="{'pq-time-r':undefined!=item.rating}">{{item.durationStr}}</v-list-tile-action>
      <v-list-tile-action class="queue-action" @click.stop="itemMenu(item, index, $event)">
       <div class="grid-btn list-btn hover-btn menu-btn" :title="i18n('%1 (Menu)', item.tooltip)"></div>
      </v-list-tile-action>
+     <v-rating v-if="undefined!=item.rating" class="pq-rating" v-bind:class="{'pq-rating-3':threeLines}" v-model="item.rating" half-increments readonly></v-rating>
      <img v-if="index==currentIndex" class="pq-current-indicator" :src="'pq-current' | svgIcon(true, true)"></img>
     </v-list-tile>
    </RecycleScroller>
@@ -455,30 +456,32 @@ var lmsQueue = Vue.component("lms-queue", {
                 if (undefined!=index && index>=0 && index<this.items.length) {
                     var i = playerStatus.current;
                     var title = i.title;
+                    var rating = this.$store.state.showRating && undefined!=i.rating ? Math.ceil(i.rating/10.0)/2.0 : undefined;
                     if (this.$store.state.queueShowTrackNum && i.tracknum>0) {
                         title = formatTrackNum(i)+SEPARATOR+title;
                     }
-                    let addedClass = false;
                     if (this.albumStyle) {
                         let artist = i.albumartist ? i.albumartist : i.artist ? i.artist : i.trackartist;
                         let extra = buildArtistLine(i, 'queue', false, artist);
+                        let addedClass = false;
                         if (!isEmpty(extra)) {
-                            title+='<obj class="subtext">'+SEPARATOR+extra;
                             addedClass = true;
+                            title+='<obj class="subtext">'+SEPARATOR+extra+'</obj>';
                         }
-                    }
-                    if (this.$store.state.showRating && undefined!=i.rating) {
-                        title += (this.albumStyle && !addedClass ? '<obj class="subtext">' : '') + SEPARATOR+ratingString(undefined, i.rating) + (this.albumStyle ? '</obj>': '');
-                    } else if (addedClass) {
-                        title+='</obj>';
+                        if (this.$store.state.showRating && undefined!=i.rating) {
+                            title += (!addedClass ? '<obj class="subtext">' : '') + SEPARATOR+ratingString(undefined, i.rating) + '</obj>';
+                        } else if (addedClass) {
+                            title+='</obj>';
+                        }
                     }
                     var artistAlbum = undefined!=this.items[index].artistAlbum ? buildArtistAlbumLines(i, this.$store.state.queueAlbumStyle, this.$store.state.queueContext) : undefined;
                     // ?? var remoteTitle = checkRemoteTitle(i);
                     var duration = undefined==i.duration ? undefined : parseFloat(i.duration);
 
-                    if (title!=this.items[index].title || artistAlbum!=this.items[index].artistAlbum || duration!=this.items[index].duration) {
+                    if (title!=this.items[index].title || artistAlbum!=this.items[index].artistAlbum || duration!=this.items[index].duration || rating!=this.items[index].rating) {
                         this.items[index].title = title;
                         this.items[index].tooltip = i.title;
+                        this.items[index].rating = rating;
                         if (undefined!=artistAlbum) {
                             this.items[index].artistAlbum = artistAlbum;
                         }

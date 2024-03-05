@@ -238,4 +238,15 @@ function updateActionStrings() {
     ACTIONS[COPY_ACTION].title=i18n("Copy");
     ACTIONS[SEARCH_LIST_ACTION].title=i18n("Search within list");
     ACTIONS[SEARCH_LIST_ACTION].key=LMS_SEARCH_KEYBOARD;
+
+    let albumActs = [GOTO_ALBUM_ACTION, PLAY_ALBUM_ACTION, PQ_REMOVE_ALBUM_ACTION, PQ_TOGGLE_VIEW_ACTION];
+    for (let i=0, len=albumActs.length; i<len; ++i) {
+        if (lmsOptions.supportReleaseTypes) {
+            ACTIONS[albumActs[i]].icon=undefined;
+            ACTIONS[albumActs[i]].svg="release";
+        } else {
+            ACTIONS[albumActs[i]].icon="album";
+            ACTIONS[albumActs[i]].svg=undefined;
+        }
+    }
 }

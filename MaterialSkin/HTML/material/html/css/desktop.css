@@ -185,7 +185,7 @@
 }
 
 .np-bar-queue {
- margin-top:-8px!important;
+ margin:-8px -6px -6px -3px!important;
  height:28px;
  width:28px;
 }
@@ -396,7 +396,7 @@
 }
 
 .np-bar .v-btn {
- margin:-6px -6px -6px -3px;
+ margin-top:3px;
 }
 
 .np-info-text {

@@ -2244,7 +2244,7 @@ function browseReplaceCommandTerms(view, cmd, item) {
                        cmd.params[i].startsWith(SORT_KEY+ARTIST_ALBUM_SORT_PLACEHOLDER)) {
                 var sort=getAlbumSort(cmd, view.inGenre);
                 // Remove "sort:album" from "playlistcontrol" - LMS fails on this.
-                if ('album'==sort.by && 'playlistcontrol'==cmd.command[0]) {
+                if (LMS_VERSION<80500 && 'album'==sort.by && 'playlistcontrol'==cmd.command[0]) {
                     cmd.params.splice(i, 1);
                     len-=1;
                     --i;

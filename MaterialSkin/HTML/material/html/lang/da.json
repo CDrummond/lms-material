@@ -594,6 +594,7 @@
 "Yes":"Ja",
 "Zap":"Fjern",
 "Zapped '%1'":"'%1' er fjernet",
+"Zoom":"Zoom",
 "after":"efter",
 "any":"alle",
 "any genre":"alle genrer",
@@ -648,6 +649,5 @@
 "1 Year":"1 år",
 "%1 Years":"%1 år",
 "1 day":"1 dag",
-"%1 days":"%1 dage",
-"Zoom":""
+"%1 days":"%1 dage"
 }

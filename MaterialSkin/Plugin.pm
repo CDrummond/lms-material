@@ -1628,8 +1628,18 @@ sub _svgHandler {
     my $dir = dirname(__FILE__);
     my $svgName = basename($request->uri->path);
     my $filePath = $dir . "/HTML/material/html/images/" . $svgName . ".svg";
+    my $altFilePath = Slim::Utils::Prefs::dir() . "/material-skin/images/" . $svgName . ".svg";
     my $colour = "#f00";
     my $colour2 = "#";
+
+    # If this is for a release type then fallback to release.svg if it does not exist
+    if (rindex($svgName, "release-")==0 && (! -e $filePath) && (! -e $altFilePath)) {
+        $filePath = $dir . "/HTML/material/html/images/release.svg";
+    }
+    # If desired path does not exist check alt location
+    if (! -e $filePath) {
+        $filePath = $altFilePath;
+    }
 
     if ($request->uri->can('query_param')) {
         $colour = "#" . $request->uri->query_param('c');
@@ -1658,10 +1668,6 @@ sub _svgHandler {
                 $colour2 = "#" . substr($uri, $start);
             }
         }
-    }
-
-    if (! -e $filePath) {
-        $filePath = Slim::Utils::Prefs::dir() . "/material-skin/images/" . $svgName . ".svg";
     }
 
     # Check for plugin icon...

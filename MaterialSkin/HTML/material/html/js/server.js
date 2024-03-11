@@ -619,6 +619,8 @@ var lmsServer = Vue.component('lms-server', {
                 bus.$emit('releaseSupportChanged');
             } else if (data[2]=="language") {
                 this.updateReleaseTypes();
+            } else if (data[2]=="timeFormat") {
+                lmsOptions.time12hr=data[3].includes("%I");
             }
         },
         handleNotification(data) {

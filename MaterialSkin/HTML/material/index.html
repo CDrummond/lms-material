@@ -174,6 +174,7 @@
   my $groupdiscs=Plugins::MaterialSkin::Plugin->readIntPref('server', 'groupdiscs', 0);
   my $variousArtistsString=Plugins::MaterialSkin::Plugin->readStringPref('server', 'variousArtistsString', 'Various Artists');
   my $lang=Plugins::MaterialSkin::Plugin->readStringPref('server', 'language', 'en');
+  my $h12=index(Plugins::MaterialSkin::Plugin->readStringPref('server', 'timeFormat', '%H.%M'), '%I')>0 ? "true" : "false";
 
   my $ua=$stash->get("userAgent");
   if (index($ua, 'Android') != -1 || index($ua, 'iPad') != -1 || index($ua, 'iPhone') != -1 || index($ua, 'MobileSafari') != -1) {
@@ -209,6 +210,7 @@
   print("const LMS_DEF_SEPARATE_ARTISTS=$separateArtistsList;");
   print("const LMS_DEF_SUPPORT_RELEASE_TYPES=$supportReleaseTypes;");
   print("const LMS_DEF_GROUP_BY_RELEASE_TYPE=$groupArtistAlbumsByReleaseType;");
+  print("const LMS_DEF_12HR=$h12;");
   print("</script>\n");
   [% END %]
   <!--JS start-->

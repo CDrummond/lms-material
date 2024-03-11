@@ -594,6 +594,7 @@
 "Yes":"Oui",
 "Zap":"Ignorer",
 "Zapped '%1'":"'%1' ignoré",
+"Zoom":"Zoom",
 "after":"après",
 "any":"toutes les valeurs",
 "any genre":"tous les genres",
@@ -648,6 +649,5 @@
 "1 Year":"1 année",
 "%1 Years":"%1 années",
 "1 day":"1 jour",
-"%1 days":"%1 jours",
-"Zoom":""
+"%1 days":"%1 jours"
 }

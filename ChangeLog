@@ -19,7 +19,8 @@
 11. Update Deezer icon.
 12. Don't pass "sort:album" when adding an artist's albums to queue, as LMS
     errors on this (and "album" is the default sort anyway).
-13. Use LMS's time format to determine if 12 or 24hr times should be used.
+13. Remove mysqueezebox.com icon mapping.
+14. Use LMS's time format to determine if 12 or 24hr times should be used.
 
 4.3.4
 -----

@@ -49,7 +49,7 @@ function parseQueryParams() {
     var resp = { actions:[], debug:new Set(), hide:new Set(), dontEmbed:new Set(), layout:undefined, player:undefined, single:false,
         css:undefined, download:'browser', addpad:false, party:false, expand:[], npRatio:1.33333333,
         nativeStatus:0, nativeColors:0, nativePlayer:0, nativeUiChanges:0, nativeTheme:0, nativeCover:0, nativePlayerPower:0, nativeAccent:0,
-        nativeTitlebar:0, appSettings:undefined, appQuit:undefined, appLaunchPlayer:undefined, altBtnLayout:IS_WINDOWS};
+        nativeTitlebar:0, appSettings:undefined, appQuit:undefined, appLaunchPlayer:undefined, altBtnLayout:IS_WINDOWS, h12: undefined};
 
     for (var i = query.length - 1; i >= 0; i--) {
         var kv = query[i].split('=');
@@ -94,8 +94,8 @@ function parseQueryParams() {
             if (parts.length>1) {
                 setLocalStorageVal('color', parts[1]);
             }
-        } else if ("single"==kv[0] || "addpad"==kv[0] || "party"==kv[0]) {
-            resp[kv[0]]=true;
+        } else if ("single"==kv[0] || "addpad"==kv[0] || "party"==kv[0] || "altBtnLayout"==kv[0] || "h12"==kv[0]) {
+            resp[kv[0]]=kv.length<2 || "true"==kv[1];
         } else if ("download"==kv[0] && kv.length>1) {
             resp.download=kv[1];
         } else if ("dontEmbed"==kv[0]) {
@@ -103,8 +103,6 @@ function parseQueryParams() {
             for (var j=0, len=parts.length; j<len; ++j) {
                 resp.dontEmbed.add(parts[j]);
             }
-        } else if ("altBtnLayout"==kv[0]) {
-            resp.altBtnLayout=kv.length<1 || "true"==kv[1];
         } else if ("expand"==kv[0] && kv.length>1) {
             resp.expand=decodeURIComponent(kv[1]).split("/");
         } else if ("npRatio"==kv[0]) {
@@ -1064,4 +1062,12 @@ function toolbarMouseDown(ev) {
     } else if (queryParams.nativeTitlebar>0) {
         emitNative("MATERIAL-TITLEBAR\nNAME " + (toggleMax ? "max" : "move"), queryParams.nativeTitlebar);
     }
+}
+
+function timeStr(date, lang) {
+    return date.toLocaleTimeString(lang, { hour: 'numeric', minute: 'numeric', hour12:queryParams.h12 });
+}
+
+function dateStr(date, lang) {
+    return date.toLocaleDateString(lang, { weekday: 'short', month: 'short', day: 'numeric', year: undefined }).replace(", ", "  ");
 }

@@ -19,6 +19,7 @@
 11. Update Deezer icon.
 12. Don't pass "sort:album" when adding an artist's albums to queue, as LMS
     errors on this (and "album" is the default sort anyway).
+13. If 'h12' is passed in URL then force 12hr clock for displays.
 
 4.3.4
 -----

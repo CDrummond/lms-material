@@ -276,9 +276,7 @@ Vue.component('lms-toolbar', {
                     this.playerStatus.alarmStr = undefined;
                 } else {
                     let alarmDate = new Date(playerStatus.alarm*1000);
-                    let day = alarmDate.toLocaleDateString(this.$store.state.lang, { weekday: 'short', month: undefined, day: undefined, year: undefined }).replace(", ", "  ");
-                    let time = alarmDate.toLocaleTimeString(this.$store.state.lang, { hour: 'numeric', minute: 'numeric' });
-                    this.playerStatus.alarmStr = day+" "+time;
+                    this.playerStatus.alarmStr = dateStr(alarmDate, this.$store.state.lang)+" "+timeStr(alarmDate, this.$store.state.lang);
                 }
             }
             this.playerStatus.alarm!=playerStatus.alarm;
@@ -682,9 +680,8 @@ Vue.component('lms-toolbar', {
         },
         updateClock() {
             var date = new Date();
-            this.date = date.toLocaleDateString(this.$store.state.lang, { weekday: 'short', month: 'short', day: 'numeric', year: undefined }).replace(", ", "  ");
-            this.time = date.toLocaleTimeString(this.$store.state.lang, { hour: 'numeric', minute: 'numeric' });
-
+            this.date = dateStr(date, this.$store.state.lang);
+            this.time = timeStr(date, this.$store.state.lang);
             if (undefined!==this.clockTimer) {
                 clearTimeout(this.clockTimer);
             }

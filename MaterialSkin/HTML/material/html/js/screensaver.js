@@ -83,8 +83,8 @@ Vue.component('lms-screensaver', {
         },
         updateDateAndTime() {
             let date = new Date();
-            this.date = date.toLocaleDateString(this.$store.state.lang, { weekday: 'short', month: 'short', day: 'numeric', year: undefined }).replace(", ", "  ");
-            this.time = date.toLocaleTimeString(this.$store.state.lang, { hour: 'numeric', minute: 'numeric' });
+            this.date = dateStr(date, this.$store.state.lang);
+            this.time = timeStr(date, this.$store.state.lang);
 
             if (undefined!==this.updateTimer) {
                 clearTimeout(this.updateTimer);
@@ -104,9 +104,7 @@ Vue.component('lms-screensaver', {
                         if (alarmTime>0) {
                             if (this.alarmTime!=alarmTime) {
                                 let alarmDate = new Date(alarmTime*1000);
-                                let day = alarmDate.toLocaleDateString(this.$store.state.lang, { weekday: 'short', month: undefined, day: undefined, year: undefined }).replace(", ", "  ");
-                                let time = alarmDate.toLocaleTimeString(this.$store.state.lang, { hour: 'numeric', minute: 'numeric' });
-                                this.alarm = day+" "+time;
+                                this.alarm = dateStr(alarmDate, this.$store.state.lang)+" "+timeStr(alarmDate, this.$store.state.lang);
                             }
                         } else {
                             this.alarm = undefined;
@@ -125,9 +123,7 @@ Vue.component('lms-screensaver', {
                     this.alarm = undefined;
                 } else {
                     let alarmDate = new Date(status.alarm*1000);
-                    let day = alarmDate.toLocaleDateString(this.$store.state.lang, { weekday: 'short', month: undefined, day: undefined, year: undefined }).replace(", ", "  ");
-                    let time = alarmDate.toLocaleTimeString(this.$store.state.lang, { hour: 'numeric', minute: 'numeric' });
-                    this.alarm = day+" "+time;
+                    this.alarm = dateStr(alarmDate, this.$store.state.lang)+" "+timeStr(alarmDate, this.$store.state.lang);
                 }
             }
             this.alarmTime!=status.alarm;

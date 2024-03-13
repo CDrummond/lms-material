@@ -208,12 +208,12 @@
 }
 
 .np-bar-image { 
-  position:fixed;
-  left:162px;
-  bottom:1px;
-  height:64px;
-  width:64px;
-  cursor: pointer;
+ position:fixed;
+ left:162px;
+ bottom:1px;
+ height:64px;
+ width:64px;
+ cursor: pointer;
 }
 
 .np-bar-image .np-cover {

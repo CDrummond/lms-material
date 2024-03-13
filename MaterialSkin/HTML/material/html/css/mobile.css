@@ -230,6 +230,7 @@
 .np-bar-mob-thick .np-bar-image .np-cover {
  height:43px;
  width:43px;
+ cursor:unset;
 }
 
 .np-bar-mob-thick .v-list__tile__title {

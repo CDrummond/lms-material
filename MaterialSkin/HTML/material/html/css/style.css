@@ -121,6 +121,10 @@
  color:var(--active-color) !important;
 }
 
+.v-slider input {
+ cursor:pointer;
+}
+
 .v-slider .primary, .v-progress-linear .primary, .v-progress-circular .primary {
  background-color:var(--primary-color)!important;
  border-color:var(--primary-color)!important;
@@ -1187,6 +1191,7 @@ div.v-subheader {
  display:table;
  padding:var(--np-image-border);
  position:relative;
+ cursor: pointer;
 }
 
 .np-image .np-cover {
@@ -1333,6 +1338,7 @@ div.v-subheader {
  object-fit:contain;
  object-position:50% 50%;
  margin:auto;
+ cursor:pointer;
 }
 
 .np-mai-img {
@@ -1614,6 +1620,7 @@ div.v-rating i.primary--text, div.v-rating i.accent--text {
  border:none !important;
  overflow:hidden;
  background-color:var(--pbar-bgnd)!important;
+ cursor: pointer;
 }
 
 .np-slider .v-progress-linear__bar__determinate {

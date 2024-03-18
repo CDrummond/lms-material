@@ -306,15 +306,17 @@ var app = new Vue({
             }, 50);
         }, false);
 
-        // https://stackoverflow.com/questions/43329654/android-back-button-on-a-progressive-web-thislication-closes-de-this
-        window.addEventListener('load', function() {
-            window.history.pushState({ }, '');
-        }, false);
-        window.addEventListener('popstate', function(event) {
-            window.history.pushState({ }, '');
-            bus.$emit('esc');
-            event.preventDefault();
-        }, false);
+        if (!queryParams.dontTrapBack) {
+            // https://stackoverflow.com/questions/43329654/android-back-button-on-a-progressive-web-thislication-closes-de-this
+            window.addEventListener('load', function() {
+                window.history.pushState({ }, '');
+            }, false);
+            window.addEventListener('popstate', function(event) {
+                window.history.pushState({ }, '');
+                bus.$emit('esc');
+                event.preventDefault();
+            }, false);
+        }
 
         // https://github.com/timruffles/mobile-drag-drop/issues/77
         window.addEventListener( 'touchmove', function() {});

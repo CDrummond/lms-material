@@ -1,3 +1,8 @@
+4.4.1
+-----
+1. Add 'dontTrapBack' URL query parameter. When passed Material will not
+   intercept brower's back button.
+
 4.4.0
 -----
  1. Use detailed subtoolbar for some online (e.g Spotty) artist and album

@@ -130,11 +130,12 @@ PLUGIN_MATERIAL_SKIN_SHOW_COMPOSER_DESC
 PLUGIN_MATERIAL_SKIN_USE_COMPOSER_MAI
 	EN	Display composer in 'Information' view
 	FR	Afficher le compositeur dans la vue "Informations"
+	NL	Toon componist in 'Informatie' weergave
 
 PLUGIN_MATERIAL_SKIN_USE_COMPOSER_MAI_DESC
 	EN	For suitable tracks show composer, and not artist, information in the 'Information' view.
 	FR	Selon le genre du morceau, afficher le compositeur plutôt que l'artiste  dans la vue "Informations".
-
+	NL	Afhankelijk van het genre van het nummer, wordt de componist in plaats van de artiest getoond in de "Informatie" weergave.
 
 PLUGIN_MATERIAL_SKIN_SHOW_CONDUCTOR
 	CS	Zobrazení dirigenta

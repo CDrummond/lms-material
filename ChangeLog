@@ -2,6 +2,7 @@
 -----
 1. Add 'dontTrapBack' URL query parameter. When passed Material will not
    intercept brower's back button.
+2. Don't hide mobile bottom now-playing bar when keyboard shown.
 
 4.4.0
 -----

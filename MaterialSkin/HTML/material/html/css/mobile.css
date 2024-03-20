@@ -289,7 +289,7 @@
 .np-bar-mob-thick .np-bar-details {
  left:34px!important;
  width:calc(100vw - 58px);
- bottom:calc(var(--bottom-nav-pad) + 32px);
+ bottom:calc(var(--bottom-toolbar-height) - 20px);
 }
 
 /* Adjust link/more/close buttons in now-playing page up a little */

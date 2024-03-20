@@ -209,7 +209,7 @@ var app = new Vue({
         let lastWinWidth = window.innerWidth;
         let timeout = undefined;
         let lmsApp = this;
-        this.bottomBar = {height: undefined, shown:true, desktop:this.$store.state.desktopLayout, npThin:undefined, npThick:undefined};
+        this.bottomBar = {height: undefined, shown:true};
 
         // Only need to do 100vh work-around when running within mobile browsers, not when installled to homescreen.
         let appMode = !IS_MOBILE ||
@@ -247,22 +247,15 @@ var app = new Vue({
 
                 // Check entries are visible
                 if (IS_MOBILE) {
-                    if (undefined==lmsApp.bottomBar.height || lmsApp.desktop!=lmsApp.$store.state.desktopLayout) {
+                    if (undefined==lmsApp.bottomBar.height) {
                         lmsApp.bottomBar.height = getComputedStyle(document.documentElement).getPropertyValue('--bottom-toolbar-height');
-                        lmsApp.bottomBar.npThin = getComputedStyle(document.documentElement).getPropertyValue('--mobile-npbar-height-thin');
-                        lmsApp.bottomBar.npThick = getComputedStyle(document.documentElement).getPropertyValue('--mobile-npbar-height-thick');
-                        lmsApp.desktop=lmsApp.$store.state.desktopLayout;
                     }
                     var keyboardShown = 0==widthChange && heightChange>100;
                     if (keyboardShown == lmsApp.bottomBar.shown) {
-                        var elem = document.getElementById('np-bar');
-                        if (!elem) {
-                            elem = document.getElementById('nav-bar');
-                        }
+                        var elem = document.getElementById('nav-bar');
                         if (elem) {
                             elem.style.display = keyboardShown ? 'none' : 'block';
                             document.documentElement.style.setProperty('--bottom-toolbar-height', keyboardShown ? '0px' : lmsApp.bottomBar.height);
-                            document.documentElement.style.setProperty('--mobile-npbar-height', keyboardShown || MBAR_NONE==lmsApp.$store.state.mobileBar ? '0px' : (MBAR_THIN==lmsApp.$store.state.mobileBar ? lmsApp.bottomBar.npThin : lmsApp.bottomBar.npThick));
                             lmsApp.bottomBar.shown = !keyboardShown;
                         }
                     }
@@ -571,7 +564,7 @@ var app = new Vue({
             this.$store.commit('setDesktopLayout', undefined==forceDesktop ? window.innerWidth>=LMS_MIN_DESKTOP_WIDTH : forceDesktop);
         },
         clickListener(event) {
-            storeClickOrTouchPos(event);
+            try { storeClickOrTouchPos(event); } catch (e) { }
             if (this.$store.state.openDialogs.length>1) {
                 return;
             }

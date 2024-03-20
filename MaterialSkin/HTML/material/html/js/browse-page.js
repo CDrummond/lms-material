@@ -645,7 +645,7 @@ var lmsBrowse = Vue.component("lms-browse", {
         if (!IS_MOBILE) {
             let browse = this;
             document.onkeyup = function(event) {
-                browseHandleKey(browse, event);
+                try { browseHandleKey(browse, event); } catch(e) { }
             };
         }
         this.reqId = 0;

@@ -827,31 +827,34 @@ var lmsQueue = Vue.component("lms-queue", {
                 bus.$emit('playerCommand', ["playlist", "clear"]);
                 return;
             }
-            let choices=[{id:0, title:i18n('Remove all tracks')},
-                         {id:1, title:i18n('Remove upcoming tracks'), disabled:this.currentIndex>=this.items.length-1},
-                         {id:2, title:i18n('Remove previous tracks'), disabled:this.currentIndex<=0}];
-            this.cancelCloseTimer(true);
-            choose(this.trans.clear+"?", choices).then(choice => {
-                if (undefined!=choice) {
-                    this.resetCloseTimer();
-                    if (0==choice.id) {
-                        bus.$emit('playerCommand', ["playlist", "clear"]);
-                        if (!(this.$store.state.pinQueue && this.windowWide>1)) {
-                            this.$store.commit('setShowQueue', false);
-                        }
-                    } else {
-                        let indexes = [];
-                        let start = (1==choice.id ? this.items.length : this.currentIndex)-1;
-                        let end = (1==choice.id ? this.currentIndex+1 : 0);
-                        for (let i=start; i>=end; --i) {
-                            indexes.push(i);
-                        }
-                        if (indexes.length>0) {
-                            this.removeIndexes(indexes);
+            // Delay showing dialog by 5ms to prevent initial 'pulse' effect on mobile
+            setTimeout(function () {
+                let choices=[{id:0, title:i18n('Remove all tracks')},
+                            {id:1, title:i18n('Remove upcoming tracks'), disabled:this.currentIndex>=this.items.length-1},
+                            {id:2, title:i18n('Remove previous tracks'), disabled:this.currentIndex<=0}];
+                this.cancelCloseTimer(true);
+                choose(this.trans.clear+"?", choices).then(choice => {
+                    if (undefined!=choice) {
+                        this.resetCloseTimer();
+                        if (0==choice.id) {
+                            bus.$emit('playerCommand', ["playlist", "clear"]);
+                            if (!(this.$store.state.pinQueue && this.windowWide>1)) {
+                                this.$store.commit('setShowQueue', false);
+                            }
+                        } else {
+                            let indexes = [];
+                            let start = (1==choice.id ? this.items.length : this.currentIndex)-1;
+                            let end = (1==choice.id ? this.currentIndex+1 : 0);
+                            for (let i=start; i>=end; --i) {
+                                indexes.push(i);
+                            }
+                            if (indexes.length>0) {
+                                this.removeIndexes(indexes);
+                            }
                         }
                     }
-                }
-            });
+                });
+            }.bind(this), 5);
         },
         click(item, index, event) {
             storeClickOrTouchPos(event, this.menu);

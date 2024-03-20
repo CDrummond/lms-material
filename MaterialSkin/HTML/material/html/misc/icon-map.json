@@ -83,6 +83,7 @@
     "/subsonic.png":{"svg":"sub"},
     "/tidal.png":{"svg":"tidal"},
     "/youtube.png":{"svg":"youtube"},
+    "/deezer.png":{"svg":"deezer"},
 
     "PLUGIN_MULTILIBRARY":{"icon":"library_music"},
     "PLUGIN_SQLPLAYLIST":{"icon":"list"},

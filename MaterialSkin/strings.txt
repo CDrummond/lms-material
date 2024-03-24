@@ -324,15 +324,6 @@ PLUGIN_MATERIAL_SKIN_ALLOW_DOWNLOAD_DESC
 	ZH_TW	在曲目、專輯和播放清單新增下載動作，以允許用戶下載曲目。
 	ZH_CN	为曲目、专辑和播放列表添加下载动作，允许用户下载。
 
-PLUGIN_MATERIAL_SKIN_MANIFEST_DISPLAY
-	CS	Zobrazení webové aplikace
-	DE	WebApp-Anzeige
-	EN	WebApp display
-	FR	Affichage de l'application Web
-	NL	WebApp weergave
-	ZH_TW	網頁程式顯示
-	ZH_CN	WebAPP显示
-
 PLUGIN_MATERIAL_SKIN_COMMENT_AS_DISC_TITLE
 	CS	Použití komentáře pro název disku
 	DE	Benutze den 'Comment'-Tag für Albumtitel.

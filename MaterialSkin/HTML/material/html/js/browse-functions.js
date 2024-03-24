@@ -940,7 +940,7 @@ function browseAddCategories(view, item, isGenre) {
     }
     cat = { title: i18n("All Songs"),
             command: ["tracks"],
-            params: [item.id, trackTags()+"elcy", SORT_KEY+TRACK_SORT_PLACEHOLDER],
+            params: [item.id, trackTags(true)+"ely", SORT_KEY+TRACK_SORT_PLACEHOLDER],
             icon: "music_note",
             type: "group",
             id: ALL_SONGS_ID};
@@ -1306,7 +1306,7 @@ function browseItemAction(view, act, item, index, event) {
     } else if (act==GOTO_ARTIST_ACTION) {
         view.fetchItems(view.replaceCommandTerms({command:["albums"], params:["artist_id:"+item.artist_id, ARTIST_ALBUM_TAGS, SORT_KEY+ARTIST_ALBUM_SORT_PLACEHOLDER]}), {cancache:false, id:"artist_id:"+item.artist_id, title:item.id.startsWith("album_id:") ? item.subtitle : item.artist, stdItem:STD_ITEM_ARTIST});
     } else if (act==GOTO_ALBUM_ACTION) {
-        view.fetchItems({command:["tracks"], params:["album_id:"+item.album_id, trackTags(), SORT_KEY+"tracknum"]}, {cancache:false, id:"album_id:"+item.album_id, title:item.album, stdItem:STD_ITEM_ALBUM});
+        view.fetchItems({command:["tracks"], params:["album_id:"+item.album_id, trackTags(true), SORT_KEY+"tracknum"]}, {cancache:false, id:"album_id:"+item.album_id, title:item.album, stdItem:STD_ITEM_ALBUM});
     } else if (ADD_TO_PLAYLIST_ACTION==act) {
         bus.$emit('dlg.open', 'addtoplaylist', [item], [browseBuildCommand(view, item)]);
     } else if (REMOVE_DUPES_ACTION==act) {
@@ -1815,7 +1815,9 @@ function browseBuildCommand(view, item, commandName, doReplacements) {
             if (canReplace && c.length==1 && mode) {
                 if (mode=="tracks") {
                     if (!hasTags) {
-                        p.push(trackTags());
+                        // If view.current.id starts with "track_id:" then we are in a 'More' menu, therefore
+                        // want cover id of tracks...
+                        p.push(trackTags(undefined!=view.current && view.current.id.startsWith("track_id:")));
                     }
                     if (!hasSort) {
                         p.push(SORT_KEY+"tracknum");

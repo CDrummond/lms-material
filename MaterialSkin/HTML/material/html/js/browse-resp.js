@@ -1279,7 +1279,7 @@ function parseBrowseResp(data, parent, options, cacheKey, parentCommand, parentG
                         compilationArtists.add(i.artist);
                     }
                 }
-                if (0==idx && !showAlbumName && !isEmpty(""+i.coverid)) {
+                if (0==idx && !showAlbumName && i.coverid!=undefined && !isEmpty(""+i.coverid)) {
                     resp.image="/music/"+i.coverid+"/cover"+LMS_IMAGE_SIZE;
                 }
             }

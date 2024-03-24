@@ -278,8 +278,8 @@ Vue.component('lms-toolbar', {
                     let alarmDate = new Date(playerStatus.alarm*1000);
                     this.playerStatus.alarmStr = dateStr(alarmDate, this.$store.state.lang)+" "+timeStr(alarmDate, this.$store.state.lang);
                 }
+                this.playerStatus.alarm=playerStatus.alarm;
             }
-            this.playerStatus.alarm!=playerStatus.alarm;
         }.bind(this));
         
         bus.$on('langChanged', function() {

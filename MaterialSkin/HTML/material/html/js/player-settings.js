@@ -669,6 +669,10 @@ Vue.component('lms-player-settings', {
                 setLocalStorageVal("playerIdIconMap", JSON.stringify(playerIdIconMap));
             }
 
+            // Update current player
+            if (this.playerId==this.$store.state.player.id) {
+                bus.$emit("updatePlayer", this.$store.state.player.id);
+            }
             this.playerIconUpdate = undefined;
             this.playerId = undefined;
         },

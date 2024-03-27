@@ -82,7 +82,7 @@ Vue.component('lms-toolbar', {
      <v-list-tile-title>{{playerStatus.sleepTime | displayTime}}</v-list-tile-title>
     </v-list-tile-content>
    </v-list-tile>
-   <v-list-tile v-if="playerStatus.alarmStr" @click="bus.$emit('dlg.open', 'playersettings')" class="hide-for-mini">
+   <v-list-tile v-if="playerStatus.alarmStr" @click="bus.$emit('dlg.open', 'playersettings', undefined, 'alarms')" class="hide-for-mini">
     <v-list-tile-avatar><v-icon>alarm</v-icon></v-list-tile-avatar>
     <v-list-tile-content>
      <v-list-tile-title>{{playerStatus.alarmStr}}</v-list-tile-title>

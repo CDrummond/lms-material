@@ -6,7 +6,9 @@
 3. Fix Deezer icon mapping.
 4. Fix album cover in sub-toolbr when navigating into an album from 'More'
 5. Only show alarm details in toolbar/menu if active player has an alarm.
-6. Fix text alignment of text list items in browse view when 100 or more
+6. When open player settings via alarm entry in player's menu then scroll
+   alarms section into view.
+7. Fix text alignment of text list items in browse view when 100 or more
    items.
 
 4.4.0

@@ -66,6 +66,7 @@ Vue.component('lms-information-dialog', {
    <ul>
     <template v-for="(plug, index) in plugins.details"><li v-if="'downloading'==pluginStatus || !updates.names.has(plug.name)"><object class="link-item" @click="pluginInfo(plug)">{{plug.title}} {{plug.version}}</object></li></template>
    </ul>
+   <v-btn v-if="unlockAll" @click="openPluginSettings" flat><v-icon class="btn-icon">extension</v-icon>{{i18n('Manage plugins')}}</v-btn>
    <div class="dialog-padding"></div>
 
    <p class="about-header">{{i18n('Players')}}</p>

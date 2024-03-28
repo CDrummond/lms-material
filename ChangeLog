@@ -10,6 +10,7 @@
    alarms section into view.
 7. Fix text alignment of text list items in browse view when 100 or more
    items.
+8. Add 'Manage plugins' button to 'Information' dialog.
 
 4.4.0
 -----

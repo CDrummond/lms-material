@@ -166,7 +166,7 @@ function parseBrowseResp(data, parent, options, cacheKey, parentCommand, parentG
                 }
                 if (command=="browseonlineartist" && data.params && data.params.length>1) {
                     // Store parameters used in command used to create this list, incase needed elsewhere
-                    // Releated to LMS issue https://github.com/Logitech/slimserver/issues/806
+                    // Releated to LMS issue https://github.com/LMS-Community/slimserver/issues/806
                     resp.baseActions.parentParams = [];
                     for (let p=1, loop=data.params[1], len=loop.length; p<len; ++p) { // Skip command itself!
                         let parts = (""+loop[p]).split(':');

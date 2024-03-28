@@ -1,6 +1,6 @@
-# Material skin for SlimServer (Logitech Media Server)
+# Material skin for LMS (Lyrion Music Server)
 
-Material-Skin is a HTML5/Javascript user-interface for Logitech Media server,
+Material-Skin is a HTML5/Javascript user-interface for Lyrion Music Server,
 suitable for mobile and desktop usage.
 
 ![Now Playing](screenshots/mobile-now-playing-small.png)

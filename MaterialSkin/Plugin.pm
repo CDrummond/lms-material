@@ -228,7 +228,7 @@ sub lmsVersion {
 sub windowTitle {
     my $title = $prefs->get('windowTitle');
     if (!$title || $title eq '') {
-        return 'Logitech Media Server';
+        return 'Lyrion Music Server';
     }
     return $title;
 }

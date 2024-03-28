@@ -1746,7 +1746,7 @@ function browseBuildCommand(view, item, commandName, doReplacements) {
                 }
             }
             // Check params used to initially build current list, and add any missing onlineServices
-            // Releated to LMS issue https://github.com/Logitech/slimserver/issues/806
+            // Releated to LMS issue https://github.com/LMS-Community/slimserver/issues/806
             if (undefined!=baseActions && undefined!=baseActions.parentParams) {
                 for (let i=0, loop=baseActions.parentParams, len=loop.length; i<len; ++i) {
                     let key = loop[i].split(":")[0];

@@ -366,8 +366,8 @@ function openServerSettings(serverName, showHome, path) {
                     ? '/material/settings/server/basic.html'
                     : path;
     bus.$emit('dlg.open', 'iframe', pathToUse, TB_SERVER_SETTINGS.title+(serverName ? SEPARATOR+serverName : ""),
-            [{title:i18n('Shutdown'), text:i18n('Stop Logitech Media Server?'), icon:'power_settings_new', cmd:['stopserver'], confirm:i18n('Shutdown')},
-             {title:i18n('Restart'), text:i18n('Restart Logitech Media Server?'), icon:'refresh', cmd:['restartserver'], confirm:i18n('Restart')}], showHome);
+            [{title:i18n('Shutdown'), text:i18n('Stop Lyrion Music Server?'), icon:'power_settings_new', cmd:['stopserver'], confirm:i18n('Shutdown')},
+             {title:i18n('Restart'), text:i18n('Restart Lyrion Music Server?'), icon:'refresh', cmd:['restartserver'], confirm:i18n('Restart')}], showHome);
 }
 
 function getYear(text) {

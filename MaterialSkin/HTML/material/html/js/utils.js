@@ -95,7 +95,7 @@ function parseQueryParams() {
                 setLocalStorageVal('color', parts[1]);
             }
         } else if ("single"==kv[0] || "addpad"==kv[0] || "party"==kv[0] || "altBtnLayout"==kv[0] || "dontTrapBack"==kv[0]) {
-            resp[kv[0]]=kv.length<2 || "true"==kv[1];
+            resp[kv[0]]=kv.length<2 || "true"==kv[1] || "1"==kv[1];
         } else if ("download"==kv[0] && kv.length>1) {
             resp.download=kv[1];
         } else if ("dontEmbed"==kv[0]) {

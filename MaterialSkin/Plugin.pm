@@ -228,7 +228,10 @@ sub lmsVersion {
 sub windowTitle {
     my $title = $prefs->get('windowTitle');
     if (!$title || $title eq '') {
-        return 'Lyrion Music Server';
+        if (Slim::Utils::Versions->compareVersions($::VERSION, '9.0.0') >= 0) {
+            return 'Lyrion Music Server';
+        }
+        return 'Logitech Media Server';
     }
     return $title;
 }

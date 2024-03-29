@@ -11,7 +11,7 @@
  7. Fix text alignment of text list items in browse view when 100 or more
     items.
  8. Add 'Manage plugins' button to 'Information' dialog.
- 9. Refer to LMS as 'Lyrion Music Server'
+ 9. Refer to LMS as 'Lyrion Music Server' for LMS 9.0 onwards.
 10. Revert 'Media sources' to 'Music sources', to match new LMS name.
 11. Fix 'single' URL query parameter.
 

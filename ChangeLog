@@ -1,7 +1,7 @@
 4.4.1
 -----
  1. Add 'dontTrapBack' URL query parameter. When passed Material will not
-    intercept brower's back button.
+    intercept browser's back button.
  2. Don't hide mobile bottom now-playing bar when keyboard shown.
  3. Fix Deezer icon mapping.
  4. Fix album cover in sub-toolbr when navigating into an album from 'More'

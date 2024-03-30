@@ -125,8 +125,8 @@ Vue.component('lms-screensaver', {
                     let alarmDate = new Date(status.alarm*1000);
                     this.alarm = dateStr(alarmDate, this.$store.state.lang)+" "+timeStr(alarmDate, this.$store.state.lang);
                 }
+                this.alarmTime=status.alarm;
             }
-            this.alarmTime!=status.alarm;
         },
         cancelAll(doFade) {
             if (undefined!==this.showTimer) {

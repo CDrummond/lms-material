@@ -2513,8 +2513,8 @@ div.v-subheader {
  margin-right:-8px;
 }
 
-.browse-header .v-list__tile__title, .grid-header .v-list__tile__title {
- color:var(--active-color);
+.browse-header .v-list__tile__title, .grid-header .v-list__tile__title, .browse-header .v-avatar--tile .v-icon, .grid-header .v-avatar--tile .v-icon {
+ color:var(--active-color) !important;
  font-weight:var(--bold-weight);
  font-size:var(--std-font-size) !important;
 }

@@ -22,26 +22,28 @@ function buildSearchResp(results) {
         total+=numItems;
         if (1==results[i].command.cat) {
             filter = FILTER_PREFIX+"artist";
-            items.push({title: i18n("Artists") + " ("+titleParam+")", id:filter, header:true, hidesub:true,
+            items.push({title: i18n("Artists") + " ("+titleParam+")", id:filter, header:true, hidesub:true, svg:"artist",
                         allItems: all, subtitle: i18np("1 Artist", "%1 Artists", numItems)});
         } else if (2==results[i].command.cat) {
             filter = FILTER_PREFIX+"album";
             items.push({title: (lmsOptions.supportReleaseTypes ? i18n("Releases") : i18n("Albums")) + " ("+titleParam+")",
-                        id:filter, header:true, hidesub:true,
+                        id:filter, header:true, hidesub:true, svg: lmsOptions.supportReleaseTypes ? "release" : undefined,
+                        icon: lmsOptions.supportReleaseTypes ? undefined : "album",
                         allItems: all, subtitle:lmsOptions.supportReleaseTypes ? i18np("1 Release", "%1 Releases", numItems) : i18np("1 Album", "%1 Albums", numItems),
                         menu:[PLAY_ALL_ACTION, INSERT_ALL_ACTION, ADD_ALL_ACTION]});
         } else if (3==results[i].command.cat) {
             filter = FILTER_PREFIX+"track";
             items.push({title: i18n("Tracks", titleParam) + " ("+titleParam+")", id:filter, header:true, hidesub:true,
                         allItems: all, subtitle: i18np("1 Track", "%1 Tracks", numItems),
+                        icon: "music_note",
                         menu:queryParams.party ? [] : [PLAY_ALL_ACTION, INSERT_ALL_ACTION, ADD_ALL_ACTION]});
         } else if (4==results[i].command.cat) {
             filter = FILTER_PREFIX+"playlist";
-            items.push({title: i18n("Playlists") + " ("+titleParam+")", id:filter, header:true, hidesub:true,
+            items.push({title: i18n("Playlists") + " ("+titleParam+")", id:filter, header:true, hidesub:true, icon:"list",
                         allItems: all, subtitle: i18np("1 Playlist", "%1 Playlists", numItems),
                         menu:[PLAY_ALL_ACTION, INSERT_ALL_ACTION, ADD_ALL_ACTION]});
         } else if (5==results[i].command.cat) {
-            items.push({title: i18n("Search on..."), id:"search.other", header:true});
+            items.push({title: i18n("Search on..."), id:"search.other", header:true, icon:"search"});
         }
         for (let idx=0, loop=results[i].resp.items; idx<numItems; ++idx) {
             let itm = loop[idx];

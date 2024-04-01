@@ -127,6 +127,12 @@ var lmsBrowse = Vue.component("lms-browse", {
     <div slot-scope="{item}" :class="[grid.few?'image-grid-few':'image-grid-full-width', grid.haveSubtitle?'image-grid-with-sub':'']">
 
      <v-list-tile v-if="item.header && item.item" class="grid-header" @click.stop="itemMenu(item.item, undefined, $event)" v-bind:class="{'highlight':highlightIndex==(item.rs)}">
+      <v-list-tile-avatar v-if="item.item.icon" :tile="true" class="lms-avatar">
+       <v-icon>{{item.item.icon}}</v-icon>
+      </v-list-tile-avatar>
+      <v-list-tile-avatar v-else-if="item.item.svg" :tile="true" class="lms-avatar">
+       <img class="svg-list-img" :src="item.item.svg | svgIcon(darkUi, undefined, true)" loading="lazy"></img>
+      </v-list-tile-avatar>
       <v-list-tile-content>
        <v-list-tile-title>{{item.item.title}}</v-list-tile-title>
       </v-list-tile-content>
@@ -182,7 +188,7 @@ var lmsBrowse = Vue.component("lms-browse", {
       <v-icon>{{item.icon}}</v-icon>
      </v-list-tile-avatar>
      <v-list-tile-avatar v-else-if="item.svg" :tile="true" class="lms-avatar">
-       <img class="svg-list-img" :src="item.svg | svgIcon(darkUi)" loading="lazy"></img>
+      <img class="svg-list-img" :src="item.svg | svgIcon(darkUi, undefined, item.header)" loading="lazy"></img>
      </v-list-tile-avatar>
 
      <!-- TODO: Do we have search fields with large lists?? -->
@@ -229,6 +235,12 @@ var lmsBrowse = Vue.component("lms-browse", {
     </v-list-tile-content>
    </v-list-tile>
     <v-list-tile v-else-if="item.header" class="lms-list-item" v-bind:class="{'browse-header':item.header,'highlight':highlightIndex==index}" @click="click(item, index, $event)">
+     <v-list-tile-avatar v-if="item.icon" :tile="true" class="lms-avatar">
+      <v-icon>{{item.icon}}</v-icon>
+     </v-list-tile-avatar>
+     <v-list-tile-avatar v-else-if="item.svg" :tile="true" class="lms-avatar">
+      <img class="svg-list-img" :src="item.svg | svgIcon(darkUi, undefined, true)" loading="lazy"></img>
+     </v-list-tile-avatar>
      <v-list-tile-content>
       <v-list-tile-title>{{item.title}}</v-list-tile-title>
       <v-list-tile-sub-title v-if="item.subtitle && !item.hidesub">{{item.subtitle}}</v-list-tile-sub-title>
@@ -2158,9 +2170,12 @@ var lmsBrowse = Vue.component("lms-browse", {
         displaySelectionCount: function (value) {
             return value ? value : 0;
         },
-        svgIcon: function (name, dark, hoverInGrid) {
+        svgIcon: function (name, dark, hoverInGrid, header) {
             if (undefined!=hoverInGrid) {
                 return "/material/svg/"+name+"?c="+(dark||hoverInGrid ? LMS_DARK_SVG : LMS_LIGHT_SVG)+"&c2="+(dark||hoverInGrid ? "333" : "eee")+"&r="+LMS_MATERIAL_REVISION;
+            }
+            if (undefined!=header) {
+                return "/material/svg/"+name+"?c="+getComputedStyle(document.documentElement).getPropertyValue("--active-color").replace("#", "")+"&r="+LMS_MATERIAL_REVISION;
             }
             return "/material/svg/"+name+"?c="+(dark ? LMS_DARK_SVG : LMS_LIGHT_SVG)+"&r="+LMS_MATERIAL_REVISION;
         },

@@ -1024,12 +1024,15 @@ function parseBrowseResp(data, parent, options, cacheKey, parentCommand, parentG
                 for (let k=0; k<numGroups; ++k) {
                     let key = albumKeys[k];
                     let alist = albumGroups[key];
+                    let icon = releaseTypeIcon(key);
+                    console.log(releaseTypeHeader(key), icon.svg, icon.icon);
                     resp.items.push({title:releaseTypeHeader(key)+" ("+alist.length+")", id:FILTER_PREFIX+key, header:true,
+                                     svg: icon.svg, icon: icon.icon,
                                      menu:[PLAY_ALL_ACTION, INSERT_ALL_ACTION, PLAY_SHUFFLE_ALL_ACTION, ADD_ALL_ACTION], count:alist.length});
                     // Create jump list
                     let start = resp.items.length;
                     let jl=[];
-                    resp.jumplist.push({key:SECTION_JUMP, index:start-1, sect:k*1000, header:true, icon:releaseTypeIcon(key)});
+                    resp.jumplist.push({key:SECTION_JUMP, index:start-1, sect:k*1000, header:true, icon});
                     for (let a=0, alen=alist.length; a<alen; ++a) {
                         if (undefined!=alist[a].textkey && (jl.length==0 || jl[jl.length-1].key!=alist[a].textkey)) {
                             jl.push({key: alist[a].textkey, index: resp.items.length});

@@ -1117,6 +1117,9 @@ function parseBrowseResp(data, parent, options, cacheKey, parentCommand, parentG
                     }
                 }
             }
+            if (0==sortTracks && "title"==sort) {
+                sortTracks = 4;
+            }
             if (undefined!=msksort) {
                 sort=msksort;
             }
@@ -1300,8 +1303,8 @@ function parseBrowseResp(data, parent, options, cacheKey, parentCommand, parentG
 
             if (sortTracks==1) {
                 resp.items.sort(reverse ? revYearAlbumTrackSort : yearAlbumTrackSort);
-            } else if (sortTracks==2 || sortTracks==3) {
-                resp.items.sort(sortTracks==2 ? artistTitleSort : yearTitleSort);
+            } else if (sortTracks>=2 && sortTracks<=4) {
+                resp.items.sort(sortTracks==2 ? artistTitleSort : sortTracks==3 ? yearTitleSort : titleArtistSort);
                 if (reverse) {
                     resp.items = resp.items.reverse();
                 }

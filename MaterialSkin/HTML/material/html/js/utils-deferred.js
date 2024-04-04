@@ -588,6 +588,18 @@ function artistTitleSort(a, b) {
     return albumTrackSort(a, b);
 }
 
+function titleArtistSort(a, b) {
+    let s = fixedSort(removeTrackNum(a.title), removeTrackNum(b.title));
+    if (s!=0) {
+        return s;
+    }
+    s = fixedSort(getArtist(a), getArtist(b));
+    if (s!=0) {
+        return s;
+    }
+    return albumTrackSort(a, b);
+}
+
 function yearTitleSort(a, b) {
     let va=a.year ? a.year : 0;
     let vb=b.year ? b.year : 0;
@@ -598,6 +610,10 @@ function yearTitleSort(a, b) {
         return 1;
     }
     let s = fixedSort(removeTrackNum(a.title), removeTrackNum(b.title));
+    if (s!=0) {
+        return s;
+    }
+    s = fixedSort(getArtist(a), getArtist(b));
     if (s!=0) {
         return s;
     }

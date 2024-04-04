@@ -1617,24 +1617,19 @@ function browseGoBack(view, refresh) {
             return; // Search results not being shown, so '<-' button just closes search field
         }
     }
-    if (view.prevPage && !view.$store.state.desktopLayout) {
+    if (view.prevPage) {
         var nextPage = ""+view.prevPage;
-        //if (NP_INFO==nextPage || NP_EXPANDED==nextPage) {
-        //    view.$nextTick(function () {
-        //        view.$nextTick(function () {
-        //            //if (!view.$store.state.desktopLayout) {
-        //                view.$store.commit('setPage', 'now-playing');
-        //            //}
-        //            if (NP_INFO==nextPage) {
-        //                bus.$emit('info');
-        //            } else {
-        //                bus.$emit('expandNowPlaying', true);
-        //            }
-        //        });
-        //    });
-        //} else { // if (!view.$store.state.desktopLayout) {
+        if (view.$store.state.desktopLayout) {
+            if (NP_INFO==nextPage || NP_EXPANDED==nextPage) {
+                if (NP_INFO==nextPage) {
+                    bus.$emit('info');
+                } else {
+                    bus.$emit('expandNowPlaying', true);
+                }
+            }
+        } else {
             view.$nextTick(function () { view.$nextTick(function () { view.$store.commit('setPage', NP_INFO==nextPage || NP_EXPANDED==nextPage ? 'now-playing' : nextPage); }); });
-        //}
+        }
     }
     let next = undefined==view.current ? undefined : {id:view.current.id, pos:view.scrollElement.scrollTop};
     if (view.history.length<2) {

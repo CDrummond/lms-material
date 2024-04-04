@@ -1,6 +1,8 @@
 4.4.2
 -----
 1. Add icons to release type and search headers.
+2. On desktop layout if click on link in now-playing or MAI that shows browse
+   view, then 'Go back' will go back to now-playing or MAI.
 
 4.4.1
 -----

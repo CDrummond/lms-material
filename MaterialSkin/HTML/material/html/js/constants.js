@@ -56,6 +56,7 @@ const LMS_ALBUM_QUEUE_TRACK = 34;
 const LMS_BLANK_COVER = "/music/0/cover";
 const DEFAULT_RADIO_COVER = "/material/html/images/noradio.png";
 const DEFAULT_COVER = "/material/html/images/nocover.png";
+const RANDOMPLAY_COVER = "/material/html/images/randomplay.png";
 const LMS_DOUBLE_CLICK_TIMEOUT = 300;
 const LMS_VOLUME_DEBOUNCE = 250;
 const LMS_DARK_SVG = "edece7";

@@ -253,6 +253,9 @@ function resolveImageUrl(image, size) {
     if (image=="html/images/radio.png") {
         return DEFAULT_RADIO_COVER;
     }
+    if (image=="plugins/RandomPlay/html/images/icon.png") {
+        return RANDOMPLAY_COVER;
+    }
     var idx = image.lastIndexOf(".png");
     if (idx < 0) {
         idx = image.lastIndexOf(".jpg");

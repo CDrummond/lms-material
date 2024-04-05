@@ -1959,6 +1959,9 @@ function browseMyMusicMenu(view) {
                     } else if (c.id.startsWith("myMusicFlopTracks")) {
                         item.icon = "arrow_downward";
                         item.limit = 200;
+                    } else if (c.id.startsWith("myMusicWorks")) {
+                        item.svg = "release-work";
+                        item.icon = undefined;
                     } else if (c.icon) {
                         if (c.icon.endsWith("/albums.png")) {
                             item.icon = "album";

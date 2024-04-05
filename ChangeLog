@@ -3,8 +3,9 @@
 1. Add icons to release type and search headers.
 2. On desktop layout if click on link in now-playing or MAI that shows browse
    view, then 'Go back' will go back to now-playing or MAI.
-3. If sorting tracks by "title" then sub-sort by artist.
+3. If sorting tracks by 'title' then sub-sort by artist.
 4. Add material style image for random play in queue.
+5. Add icon for Lyrion 9.0.0 'Works' category.
 
 4.4.1
 -----

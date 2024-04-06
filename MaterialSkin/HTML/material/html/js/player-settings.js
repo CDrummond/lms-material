@@ -231,11 +231,9 @@ Vue.component('lms-player-settings', {
      <v-select :items="alarmSounds" :label="i18n('Sound')" v-model="alarmDialog.url" item-text="label" item-value="key"></v-select>
     </v-list-tile>
 
-    <!-- TODO ????
     <v-list-tile class="settings-compact-row">
-     <v-select :items="alarmShuffeItems" :label="i18n('Shuffle')" v-model="alarmDialog.shuffle" item-text="label" item-value="key"></v-select>
+     <v-select :items="alarmShuffeItems" :label="i18n('Shuffle')" v-model="alarmDialog.shufflemode" item-text="label" item-value="key"></v-select>
     </v-list-tile>
-    -->
     <v-list-tile>
      <v-list-tile-content @click="alarmDialog.repeat = !alarmDialog.repeat" class="switch-label">
       <v-list-tile-title>{{i18n('Repeat')}}</v-list-tile-title>
@@ -310,7 +308,7 @@ Vue.component('lms-player-settings', {
                 dow: [],
                 repeat: false,
                 url: undefined,
-                shuffle: undefined
+                shufflemode: undefined
             },
             wide:1,
             trans:{dstm:undefined},
@@ -684,6 +682,7 @@ Vue.component('lms-player-settings', {
                         i.enabled = 1 == i.enabled;
                         i.origEnabled = 1 == i.enabled;
                         i.repeat = 1 == i.repeat;
+                        i.shufflemode = undefined==i.shufflemode ? 0 : parseInt(i.shufflemode);
                         this.alarms.scheduled.push(i);
                     });
                 }
@@ -706,12 +705,12 @@ Vue.component('lms-player-settings', {
         addAlarm(event) {
             storeClickOrTouchPos(event);
             this.alarmDialog = { show: true, id: undefined, time: "00:00", dow:["1", "2", "3", "4", "5"], repeat: false,
-                                 url: 'CURRENT_PLAYLIST', shuffle: this.alarmShuffeItems[0].key };
+                                 url: 'CURRENT_PLAYLIST', shufflemode: this.alarmShuffeItems[0].key };
         },
         editAlarm(alarm, event) {
             storeClickOrTouchPos(event);
             this.alarmDialog = { show: true, id: alarm.id, time: formatTime(alarm.time, true), dow: alarm.dow.split(","),
-                                 repeat: alarm.repeat, url: alarm.url, enabled: alarm.enabled };
+                                 repeat: alarm.repeat, url: alarm.url, shufflemode: alarm.shufflemode, enabled: alarm.enabled };
         },
         saveAlarm() {
             var parts = this.alarmDialog.time.split(":");
@@ -728,9 +727,9 @@ Vue.component('lms-player-settings', {
 
             cmd.push("time:"+time);
             cmd.push("dow:"+this.alarmDialog.dow.join(","));
-            cmd.push("url:"+this.alarmDialog.url); // TODO CHECK!!!
+            cmd.push("url:"+this.alarmDialog.url);
             cmd.push("repeat:"+(this.alarmDialog.repeat ? 1 : 0));
-            // TODO: shuffle???
+            cmd.push("shufflemode:"+this.alarmDialog.shufflemode);
             lmsCommand(this.playerId, cmd).then(({data}) => {
                 this.loadAlarms();
             });

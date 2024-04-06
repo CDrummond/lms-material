@@ -373,6 +373,8 @@ function parseBrowseResp(data, parent, options, cacheKey, parentCommand, parentG
                     } else if (i['icon-id']=="html/images/favorites.png") {
                         i.icon="favorite";
                         i.image=undefined;
+                    } else if (isWorks) {
+                        i.image=i.icon=undefined;
                     } else {
                         mapIcon(i);
                     }

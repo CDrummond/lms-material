@@ -152,6 +152,12 @@ function mapIcon(item, app, fallback) {
     if (undefined==iconMap) {
         return false;
     }
+    if (undefined!=item.presetParams && undefined!=item.presetParams.favorites_url && item.presetParams.favorites_url.startsWith("db:work.title") && undefined==item.presetParams.icon) {
+        item.icon=undefined;
+        item.image=undefined;
+        item.svg="release-work";
+        return true;
+    }
     if (mapIconType(item, app, "icon-id")) {
         return true;
     }

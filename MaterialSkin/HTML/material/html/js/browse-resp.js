@@ -126,6 +126,7 @@ function parseBrowseResp(data, parent, options, cacheKey, parentCommand, parentG
             var isPodcastList = parent && parent.id == "apps.podcasts" && command == "podcasts" && 5==data.params[1].length && "items" == data.params[1][1] && "menu:podcasts"==data.params[1][4];
             var isPodcastSearch = command == "podcasts" && getIndex(data.params[1], "search:")>0;
             var isBmf = command == "browselibrary" && data.params[1].length>=5 && data.params[1].indexOf("mode:bmf")>0;
+            var isWorks = command == "browselibrary" && data.params[1].length>=5 && data.params[1].indexOf("mode:works")>0;
             var isCustomBrowse = command == "custombrowse" ;
             var isDynamicPlaylist = command == "dynamicplaylist";
             var isPresets = command == "presets";
@@ -134,7 +135,7 @@ function parseBrowseResp(data, parent, options, cacheKey, parentCommand, parentG
             var menu = undefined;
             var types = new Set();
             var images = new Set();
-            var maybeAllowGrid = command!="trackstat"; // && !isFavorites; // && command!="playhistory";
+            var maybeAllowGrid = command!="trackstat" && !isWorks; // && !isFavorites; // && command!="playhistory";
             var numImages = 0;
             var numTracks = 0;
 
@@ -338,6 +339,10 @@ function parseBrowseResp(data, parent, options, cacheKey, parentCommand, parentG
                             i.image=undefined;
                         } else if (i.presetParams.favorites_url.startsWith("db:year.id") && i.presetParams.icon=="html/images/years.png") {
                             i.icon="date_range";
+                            i.image=undefined;
+                        } else if (i.presetParams.favorites_url.startsWith("db:work.title") && undefined==i.presetParams.icon) {
+                            i.icon=undefined;
+                            i.svg="release-work";
                             i.image=undefined;
                         } else if (i.presetParams.favorites_url.startsWith("file://") && i.presetParams.icon=="html/images/playlists.png") {
                             i.icon="list";

@@ -1960,7 +1960,7 @@ function browseMyMusicMenu(view) {
                         item.icon = "arrow_downward";
                         item.limit = 200;
                     } else if (c.id.startsWith("myMusicWorks")) {
-                        item.svg = "release-work";
+                        item.svg = "classical-work";
                         item.icon = undefined;
                     } else if (c.icon) {
                         if (c.icon.endsWith("/albums.png")) {

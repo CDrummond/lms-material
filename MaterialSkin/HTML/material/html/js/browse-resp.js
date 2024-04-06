@@ -1689,16 +1689,21 @@ function parseBrowseResp(data, parent, options, cacheKey, parentCommand, parentG
         } else if (data.result.works_loop) {
             for (var idx=0, loop=data.result.works_loop, loopLen=loop.length; idx<loopLen; ++idx) {
                 var i = loop[idx];
+                var key = removeDiactrics(i.textkey);
+                if (undefined!=key && (resp.jumplist.length==0 || resp.jumplist[resp.jumplist.length-1].key!=key) && !textKeys.has(key)) {
+                    resp.jumplist.push({key: key, index: resp.items.length});
+                    textKeys.add(key);
+                }
                 resp.items.push({
                     title: i.composer,
                     subtitle: i.work,
                     composer_id: i.composer_id,
                     id: "work_id:"+i.work_id,
                     type: "group",
-                    stdItem: STD_ITEM_WORK
+                    stdItem: STD_ITEM_WORK,
+                    textkey: key
                 });
             }
-            resp.items.sort(titleSort);
             resp.subtitle=0==resp.items.length ? i18n("Empty") : i18np("1 Work", "%1 Works", resp.items.length);
             resp.canUseGrid=false;
         }

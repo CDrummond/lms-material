@@ -32,17 +32,25 @@ function buildSearchResp(results) {
                         allItems: all, subtitle:lmsOptions.supportReleaseTypes ? i18np("1 Release", "%1 Releases", numItems) : i18np("1 Album", "%1 Albums", numItems),
                         menu:[PLAY_ALL_ACTION, INSERT_ALL_ACTION, ADD_ALL_ACTION]});
         } else if (3==results[i].command.cat) {
+            if (numItems>0) {
+                filter = FILTER_PREFIX+"work";
+                items.push({title: i18n("Works") + " ("+titleParam+")",
+                            id:filter, header:true, hidesub:true, svg: "classical-work",
+                            allItems: all, subtitle:i18np("1 Work", "%1 Works", numItems),
+                            menu:[PLAY_ALL_ACTION, INSERT_ALL_ACTION, ADD_ALL_ACTION]});
+            }
+        } else if (4==results[i].command.cat) {
             filter = FILTER_PREFIX+"track";
             items.push({title: i18n("Tracks", titleParam) + " ("+titleParam+")", id:filter, header:true, hidesub:true,
                         allItems: all, subtitle: i18np("1 Track", "%1 Tracks", numItems),
                         icon: "music_note",
                         menu:queryParams.party ? [] : [PLAY_ALL_ACTION, INSERT_ALL_ACTION, ADD_ALL_ACTION]});
-        } else if (4==results[i].command.cat) {
+        } else if (5==results[i].command.cat) {
             filter = FILTER_PREFIX+"playlist";
             items.push({title: i18n("Playlists") + " ("+titleParam+")", id:filter, header:true, hidesub:true, icon:"list",
                         allItems: all, subtitle: i18np("1 Playlist", "%1 Playlists", numItems),
                         menu:[PLAY_ALL_ACTION, INSERT_ALL_ACTION, ADD_ALL_ACTION]});
-        } else if (5==results[i].command.cat) {
+        } else if (6==results[i].command.cat) {
             items.push({title: i18n("Search on..."), id:"search.other", header:true, icon:"search"});
         }
         for (let idx=0, loop=results[i].resp.items; idx<numItems; ++idx) {
@@ -138,14 +146,15 @@ Vue.component('lms-search-field', {
                 if (!queryParams.party) {
                     this.commands.push({cat:1, command:["artists"], params:["tags:s", "search:"+this.str]});
                     this.commands.push({cat:2, command:["albums"], params:[(lmsOptions.showAllArtists ? ALBUM_TAGS_ALL_ARTISTS : ALBUM_TAGS).replace("W", "")+(LMS_SRV_EMBLEM ? "E" : ""), "sort:album", "search:"+this.str]});
+                    this.commands.push({cat:3, command:["works"], params:["search:"+this.str]});
                 }
-                this.commands.push({cat:3, command:["tracks"], params:[SEARCH_TRACK_TAGS+"elcy"+
+                this.commands.push({cat:4, command:["tracks"], params:[SEARCH_TRACK_TAGS+"elcy"+
                                                                        (this.$store.state.showRating ? "R" : "")+
                                                                        (LMS_SRV_EMBLEM ? "E" : "")+
                                                                        (lmsOptions.techInfo ? TECH_INFO_TAGS : ""), "search:"+this.str]});
                 if (!queryParams.party) {
-                    this.commands.push({cat:4, command:["playlists"], params:["tags:su", "search:"+this.str]});
-                    this.commands.push({cat:5, command:["globalsearch", "items"], params:["menu:1", "search:"+this.str]});
+                    this.commands.push({cat:5, command:["playlists"], params:["tags:su", "search:"+this.str]});
+                    this.commands.push({cat:6, command:["globalsearch", "items"], params:["menu:1", "search:"+this.str]});
                 }
                 let libId = this.$store.state.library ? this.$store.state.library : LMS_DEFAULT_LIBRARY;
                 if (libId) {
@@ -175,7 +184,7 @@ Vue.component('lms-search-field', {
                 this.searching=false;
             } else {
                 let command = this.commands.shift();
-                lmsList(5==command.cat && this.$store.state.player ? this.$store.state.player.id : "", command.command, command.params, 5==command.cat ? 1 : 0, LMS_SEARCH_LIMIT, false, seachReqId).then(({data}) => {
+                lmsList(6==command.cat && this.$store.state.player ? this.$store.state.player.id : "", command.command, command.params, 5==command.cat ? 1 : 0, LMS_SEARCH_LIMIT, false, seachReqId).then(({data}) => {
                     if (data.id == seachReqId && this.searching) {
                         let resp = parseBrowseResp(data, undefined, {isSearch:true});
                         if (5==command.cat) {

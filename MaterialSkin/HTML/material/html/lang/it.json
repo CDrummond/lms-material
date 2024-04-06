@@ -608,6 +608,7 @@
 "When no song is playing on current player, darken screen (and show date & time) after 60 seconds.":"",
 "With":"",
 "Without":"",
+"Works":"",
 "Year":"",
 "Year, Album, Track Number":"",
 "Year, Artist, Release":"",
@@ -650,5 +651,7 @@
 "%1 Players":"",
 "1 Playlist":"",
 "1 Release":"",
-"%1 Releases":""
+"%1 Releases":"",
+"1 Work":"",
+"%1 Works":""
 }

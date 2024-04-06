@@ -637,6 +637,7 @@
 "Use artist or cover images as background.":"",
 "Use default backgrounds":"",
 "Use three lines (title, artist, release) to show track details.":"",
+"Works":"",
 "Year, Album, Track Number":"",
 "Year, Artist, Release":"",
 "Year, Release":"",
@@ -650,5 +651,7 @@
 "1 Composition":"",
 "%1 Compositions":"",
 "1 Release":"",
-"%1 Releases":""
+"%1 Releases":"",
+"1 Work":"",
+"%1 Works":""
 }

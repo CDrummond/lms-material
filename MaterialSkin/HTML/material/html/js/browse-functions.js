@@ -431,6 +431,17 @@ function browseHandleListResponse(view, item, command, resp, prevPage, appendIte
                                               weight:110, svg:emblem ? emblem.name : undefined, id:loop[i], isService:true,
                                               artist_id:artist_id});
                 }
+                lmsList('', ['works'], [view.current.id], 0, 1, false, view.nextReqId()).then(({data}) => {
+                    if (data && data.result && data.result.works_loop && data.result.works_loop.length>0) {
+                        for (var loop=view.currentActions, i=loop.length-1; i>=0; --i) {
+                            if (loop[i].stdItem==STD_ITEM_ALL_TRACKS || loop[i].stdItem==STD_ITEM_COMPOSITION_TRACKS) {
+                                loop.splice(i+1, 0, {title:i18n('Works'), svg:'classical-work', do:{ command: ['works'], params:[view.current.id]}, weight:82});
+                                break;
+                            }
+                        }
+                    }
+                }).catch(err => {
+                });
             } else if (undefined!=LMS_P_RP && view.$store.state.showRating && view.items.length>1 && !queryParams.party && !LMS_KIOSK_MODE) {
                 view.currentActions.push({albumRating:true, title:i18n("Set rating for all tracks"), icon:"stars", weight:102});
             }

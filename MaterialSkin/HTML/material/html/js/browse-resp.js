@@ -282,7 +282,7 @@ function parseBrowseResp(data, parent, options, cacheKey, parentCommand, parentG
                     }
                     */
                     if ((i.params && hasPlayableId(i.params)) || (i.commonParams && hasPlayableId(i.commonParams)) ||
-                        (i.actions && i.actions.add && i.actions.add.params && hasPlayableId(i.actions.add.params)) || isCustomBrowse) {
+                        (i.actions && i.actions.add && i.actions.add.params && hasPlayableId(i.actions.add.params)) || isCustomBrowse || isWorks) {
                         if (playAction) {
                             i.menu.push(PLAY_ACTION);
                             addedPlayAction = true;

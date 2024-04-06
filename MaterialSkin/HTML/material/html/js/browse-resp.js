@@ -126,7 +126,6 @@ function parseBrowseResp(data, parent, options, cacheKey, parentCommand, parentG
             var isPodcastList = parent && parent.id == "apps.podcasts" && command == "podcasts" && 5==data.params[1].length && "items" == data.params[1][1] && "menu:podcasts"==data.params[1][4];
             var isPodcastSearch = command == "podcasts" && getIndex(data.params[1], "search:")>0;
             var isBmf = command == "browselibrary" && data.params[1].length>=5 && data.params[1].indexOf("mode:bmf")>0;
-            var isWorks = command == "browselibrary" && data.params[1].length>=5 && data.params[1].indexOf("mode:works")>0;
             var isCustomBrowse = command == "custombrowse" ;
             var isDynamicPlaylist = command == "dynamicplaylist";
             var isPresets = command == "presets";
@@ -135,7 +134,7 @@ function parseBrowseResp(data, parent, options, cacheKey, parentCommand, parentG
             var menu = undefined;
             var types = new Set();
             var images = new Set();
-            var maybeAllowGrid = command!="trackstat" && !isWorks; // && !isFavorites; // && command!="playhistory";
+            var maybeAllowGrid = command!="trackstat"; // && !isFavorites; // && command!="playhistory";
             var numImages = 0;
             var numTracks = 0;
 
@@ -282,7 +281,7 @@ function parseBrowseResp(data, parent, options, cacheKey, parentCommand, parentG
                     }
                     */
                     if ((i.params && hasPlayableId(i.params)) || (i.commonParams && hasPlayableId(i.commonParams)) ||
-                        (i.actions && i.actions.add && i.actions.add.params && hasPlayableId(i.actions.add.params)) || isCustomBrowse || isWorks) {
+                        (i.actions && i.actions.add && i.actions.add.params && hasPlayableId(i.actions.add.params)) || isCustomBrowse) {
                         if (playAction) {
                             i.menu.push(PLAY_ACTION);
                             addedPlayAction = true;
@@ -373,8 +372,6 @@ function parseBrowseResp(data, parent, options, cacheKey, parentCommand, parentG
                     } else if (i['icon-id']=="html/images/favorites.png") {
                         i.icon="favorite";
                         i.image=undefined;
-                    } else if (isWorks) {
-                        i.image=i.icon=undefined;
                     } else {
                         mapIcon(i);
                     }
@@ -1033,7 +1030,6 @@ function parseBrowseResp(data, parent, options, cacheKey, parentCommand, parentG
                     let key = albumKeys[k];
                     let alist = albumGroups[key];
                     let icon = releaseTypeIcon(key);
-                    console.log(releaseTypeHeader(key), icon.svg, icon.icon);
                     resp.items.push({title:releaseTypeHeader(key)+" ("+alist.length+")", id:FILTER_PREFIX+key, header:true,
                                      svg: icon.svg, icon: icon.icon,
                                      menu:[PLAY_ALL_ACTION, INSERT_ALL_ACTION, PLAY_SHUFFLE_ALL_ACTION, ADD_ALL_ACTION], count:alist.length});
@@ -1690,6 +1686,21 @@ function parseBrowseResp(data, parent, options, cacheKey, parentCommand, parentG
             resp.items.sort(titleSort);
             resp.subtitle=0==resp.items.length ? i18n("Empty") : i18np("1 Item", "%1 Items", resp.items.length);
             resp.canUseGrid=true;
+        } else if (data.result.works_loop) {
+            for (var idx=0, loop=data.result.works_loop, loopLen=loop.length; idx<loopLen; ++idx) {
+                var i = loop[idx];
+                resp.items.push({
+                    title: i.composer,
+                    subtitle: i.work,
+                    composer_id: i.composer_id,
+                    id: "work_id:"+i.work_id,
+                    type: "group",
+                    stdItem: STD_ITEM_WORK
+                });
+            }
+            resp.items.sort(titleSort);
+            resp.subtitle=0==resp.items.length ? i18n("Empty") : i18np("1 Work", "%1 Works", resp.items.length);
+            resp.canUseGrid=false;
         }
 
         if (data.result.count>LMS_BATCH_SIZE) {

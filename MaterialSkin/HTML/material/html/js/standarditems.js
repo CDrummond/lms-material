@@ -17,6 +17,7 @@ const STD_ITEM_ALBUM_TRACK = 7;
 const STD_ITEM_PLAYLIST_TRACK = 8;
 const STD_ITEM_REMOTE_PLAYLIST_TRACK = 9;
 const STD_ITEM_MUSICIP_MOOD = 10;
+const STD_ITEM_WORK = 11;
 const STD_ITEM_MIX = 101;
 const STD_ITEM_MAI = 200;
 const STD_ITEM_ALL_TRACKS = 201;
@@ -77,6 +78,11 @@ const STD_ITEMS=[
     },
     {
         menu: [PLAY_ACTION, INSERT_ACTION, ADD_ACTION, DIVIDER, ADD_TO_FAV_ACTION]
+    },
+    {
+        command: ["albums"],
+        params: [ALBUM_TAGS_PLACEHOLDER, SORT_KEY+ALBUM_SORT_PLACEHOLDER],
+        menu: [PLAY_ACTION, INSERT_ACTION, ADD_ACTION, ADD_RANDOM_ALBUM_ACTION, DIVIDER, ADD_TO_FAV_ACTION, SELECT_ACTION/*, CUSTOM_ACTIONS, MORE_LIB_ACTION*/]
     }
 ];
 
@@ -178,6 +184,8 @@ function buildStdItemCommand(item, parentCommand) {
                     }
                 }
             }
+        } else if (item.id.startsWith("work_id:")) {
+            command.params.push("composer_id:"+item.composer_id);
         }
     }
     return command;

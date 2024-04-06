@@ -1771,13 +1771,11 @@ function browseBuildCommand(view, item, commandName, doReplacements) {
                     mode = params[i].split(":")[1];
                     if (mode.startsWith("myMusicArtists")) {
                         mode="artists";
-                    } else if (mode.startsWith("myMusicAlbums") || mode=="randomalbums") {
-                        mode="albums";
-                    } else if (mode=="vaalbums") {
+                    } else if (mode.startsWith("myMusicAlbums") || mode=="randomalbums" || mode=="vaalbums") {
                         mode="albums";
                     } else if (mode=="years") {
                         p.push("hasAlbums:1");
-                    } else if (mode!="artists" && mode!="albums" && mode!="genres" && mode!="tracks" && mode!="playlists") {
+                    } else if (mode!="artists" && mode!="albums" && mode!="genres" && mode!="tracks" && mode!="playlists" && mode!="works") {
                         canReplace = false;
                         break;
                     }

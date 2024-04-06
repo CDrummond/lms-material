@@ -2305,6 +2305,8 @@ function browseBuildFullCommand(view, item, act) {
                         if (loop[i].startsWith("artist_id:") && !item.id.startsWith("album_id:")) {
                             command.params.push(SORT_KEY+ARTIST_ALBUM_SORT_PLACEHOLDER);
                         }
+                    } else if (loop[i].startsWith("work_id:")) {
+                        command.params.push(loop[i]);
                     }
                 }
             } else if (item.id.startsWith("genre_id:")) {

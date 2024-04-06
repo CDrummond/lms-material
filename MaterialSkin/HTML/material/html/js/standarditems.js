@@ -160,6 +160,8 @@ function buildStdItemCommand(item, parentCommand) {
                         command.params.push(parentCommand.params[i]);
                     } else if (!LMS_NO_GENRE_FILTER && lower.startsWith("genre_id:")) {
                         command.params.push(parentCommand.params[i]);
+                    } else if (lower.startsWith("work_id:")) {
+                        command.params.push(parentCommand.params[i]);
                     }
                 }
             }

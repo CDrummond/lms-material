@@ -1,6 +1,6 @@
 [% PROCESS materialhelpheader.html %]
 <h1>Introduction</h1>
-<p>MaterialSkin is a (hopefully) simple HTML5 WebApp for LMS, featuring 2 main layouts:
+<p>MaterialSkin is a (hopefully) simple HTML5 WebApp for Lyrion, featuring 2 main layouts:
   <ul>
     <li>Mobile</li>
     <li>Desktop</li>
@@ -26,7 +26,7 @@ If you are already on a view and you touch its button then the following will oc
   <ul>
     <li>Browse - navigate one level back, i.e. this is the same as pressing the back button. Long-press will navigate 'Home'.</li>
     <li>Playing - will show artist, album, and track information if the 'Music and Artist Information' plugin is installed on your
-    LMS system. Long-press will show 'Sleep' dialog.</li>
+    Lyrion system. Long-press will show 'Sleep' dialog.</li>
     <li>Queue - scroll the play queue such that the current track is now visible.</li>
   </ul>
 </p>
@@ -67,17 +67,17 @@ more. The current long-press features are:
 <br/>
 
 <h1>Manage players</h1>
-<p>If you have 2 or more players on your system, or have multiple instances of LMS, then there will be a 'Manage players' entry in
+<p>If you have 2 or more players on your system, or have multiple instances of Lyrion, then there will be a 'Manage players' entry in
 the menu that appears when you press on a player's name in the main toolbar. This will produce a dialog allowing you to see the
 current state of all your players (current track, volume, etc). This dialog will allow you to:
   <ul>
-    <li>List standard players, and 'Group' players. 'Group' players will only be shown if you have the 'Group Players' LMS plugin
+    <li>List standard players, and 'Group' players. 'Group' players will only be shown if you have the 'Group Players' Lyrion plugin
     installed.</li>
     <li>Synchronise players. By dragging one player over another you can create a group of synchronised players. To remove a player
     from a group, drag the player onto the main toolbar (which should be displaying 'Drop here to remove from group').</li>
-    <li>If you have the 'Group Players' LMS plugin installed, then you can use this dialog to create, edit, and delete such groups.
+    <li>If you have the 'Group Players' Lyrion plugin installed, then you can use this dialog to create, edit, and delete such groups.
     This dialog has a menu button top right, and in there will be an action to create a group player.</li>
-    <li>If you have multiple LMS instances on your network, then this dialog can be used to move players from another LMS instance
+    <li>If you have multiple Lyrion instances on your network, then this dialog can be used to move players from another Lyrion instance
     onto the current one.</li>
     <li>Set a 'Default' player. If a player is marked as default, then it will be automatically selected when Material is restarted.
     If the 'Default' player is not visible at start-up, another will be used, but when the 'Default' player subsequently becomes
@@ -89,23 +89,23 @@ next to its name. Any players with an active sleep timer will also have a pictur
 <br/>
 
 <h1>Settings</h1>
-<p>Due to LMS's nature, there are multiple settings dialogs.
+<p>Due to Lyrion's nature, there are multiple settings dialogs.
   <ul>
     <li>Interface - contains settings to control the layout of the Material Skin interface. Any changes here are stored within the
     current browser, so are user-specific. To allow you to set default settings, in this dialog there is a menu button top right
     containing; 'Save as default' and 'Revert to default'. There are also Material Skin settings with the Server settings category -
     these settings will be shared for all users.</li>
     <li>Player - contains player specific settings, such as its name, alarms, etc. By default only a limited number of settings are
-    shown, but LMS has may settings. To access all LMS settings for a player press the 'Extra settings' button near the bottom of
+    shown, but Lyrion has may settings. To access all Lyrion settings for a player press the 'Extra settings' button near the bottom of
     this dialog. If your player is a piCorePlayer or SqueezeESP32 device, then this dialog will also contain a button allowing you
     to access the web-based configuration UI of those devices.</li>
-    <li>Server - contains all the LMS server settings, e.g. for installing plugins, etc.</li>
+    <li>Server - contains all the Lyrion server settings, e.g. for installing plugins, etc.</li>
   </ul>
 </p>
 <br/>
 
 <h1>Browse modes</h1>
-<p>Usually with LMS the list of browse modes (e.g. Artists, Albums, Genres) is configured per-player. This is why in the 'Extra
+<p>Usually with Lyrion the list of browse modes (e.g. Artists, Albums, Genres) is configured per-player. This is why in the 'Extra
 settings' section of 'Player settings' there is a section named 'Additional Browse Modes.' However, as this app is designed to
 control multiple players, the list of browse modes available for this app is not configured there but in 'Settings -> Interface'.
 In that dialog you will see a set of checkboxes to configure which top-level categories are shown on the 'Home' screen. The 'My
@@ -115,12 +115,12 @@ will be shown with this app.
 <br/>
 
 <h1>Virtual libraries</h1>
-<p>Virtual libraries in LMS are a way of creating sub-libraries of your music collection. e.g. you could have a library for each
+<p>Virtual libraries in Lyrion are a way of creating sub-libraries of your music collection. e.g. you could have a library for each
 member of your family, so they only see the artists, etc., that they care about.
 </p>
-<p>As per 'Browse modes' LMS usually sets the active library per-player. And with this app you can set a library for a player in
-the 'Player settings' dialog. If so, then that library would restrict the tracks that some LMS features (such as 'Random mix') would
-use. However, this app differs again from standard LMS by allowing the library selection to be set for this instance of the app, and
+<p>As per 'Browse modes' Lyrion usually sets the active library per-player. And with this app you can set a library for a player in
+the 'Player settings' dialog. If so, then that library would restrict the tracks that some Lyrion features (such as 'Random mix') would
+use. However, this app differs again from standard Lyrion by allowing the library selection to be set for this instance of the app, and
 would be the same no matter which player you chose. So, for example, a family member would see their desired library no matter which
 player they were currently trying to control.
 </p>

@@ -1,4 +1,5 @@
 {
+"Composer Albums":"Композитор Альбомы",
 "Create Mix":"Плей-лист под настроение",
 "Manage plugins":"Подключаемые модули",
 "Use three lines (title, artist, album) to show track details.":"Используйте три строки (название, исполнитель, альбом), чтобы показать детали трека.",
@@ -630,6 +631,8 @@
 "%1 Compilations":"",
 "1 Composer":"",
 "%1 Composers":"",
+"1 Composer Album":"",
+"%1 Composer Albums":"",
 "1 Composition":"",
 "%1 Compositions":"",
 "1 Conductor":"",

@@ -61,7 +61,7 @@ function releaseTypeHeader(rel) {
         return i18n("Appearances")+appearanceSuffix(rel);
     }
     if (rel=="COMPOSITION") {
-        return i18n("Compositions");
+        return i18n("Composer Albums");
     }
     return rel.replace(/\w\S*/g, function(txt){return txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase();});
 }
@@ -1061,7 +1061,7 @@ function parseBrowseResp(data, parent, options, cacheKey, parentCommand, parentG
                 } else if (releaseType && releaseType.startsWith("APPEARANCE")) {
                     resp.subtitle=i18np("1 Appearance", "%1 Appearances", resp.items.length)+appearanceSuffix(releaseType);
                 } else if (releaseType=="COMPOSITION") {
-                    resp.subtitle=i18np("1 Composition", "%1 Compositions", resp.items.length);
+                    resp.subtitle=i18np("1 Composer Album", "%1 Composer Albums", resp.items.length);
                 } else if (lmsOptions.supportReleaseTypes) {
                     resp.subtitle=i18np("1 Release", "%1 Releases", resp.items.length);
                 } else {
@@ -1454,7 +1454,9 @@ function parseBrowseResp(data, parent, options, cacheKey, parentCommand, parentG
             let totalTracks=resp.items.length-((groups.length>1 ? groups.length : 0)+(discs.size>1 ? discs.size : 0));
             let totalDurationStr=formatSeconds(totalDuration);
             resp.subtitle=totalTracks+'<obj class="mat-icon music-note">music_note</obj>'+totalDurationStr;
-            resp.plainsubtitle=i18np("1 Track", "%1 Tracks", totalTracks)+SEPARATOR+totalDurationStr;
+            resp.plainsubtitle=(isCompositions
+                                ? i18np("1 Composition", "%1 Compositions", totalTracks)
+                                : i18np("1 Track", "%1 Tracks", totalTracks))+SEPARATOR+totalDurationStr;
             if (genreList.length>0) {
                 resp.extraDetails=genreList.join(SEPARATOR_HTML);
             }

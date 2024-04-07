@@ -111,6 +111,7 @@
 "Comment":"注释",
 "Compilations":"合辑",
 "Composer":"作曲家",
+"Composer Albums":"作曲 专辑",
 "Composers":"作曲家",
 "Compositions":"作曲",
 "Conductor":"指挥家",
@@ -652,6 +653,8 @@
 "Manage plugins":"",
 "Works":"",
 "Zoom":"",
+"1 Composer Album":"",
+"%1 Composer Albums":"",
 "1 Work":"",
 "%1 Works":""
 }

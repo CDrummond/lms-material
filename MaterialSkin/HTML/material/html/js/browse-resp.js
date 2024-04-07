@@ -1690,20 +1690,28 @@ function parseBrowseResp(data, parent, options, cacheKey, parentCommand, parentG
             var isArtistWorks = undefined==parent || undefined==parent.id || !parent.id.startsWith(MUSIC_ID_PREFIX);
             for (var idx=0, loop=data.result.works_loop, loopLen=loop.length; idx<loopLen; ++idx) {
                 var i = loop[idx];
-                var key = removeDiactrics(i.textkey);
+                var key = isArtistWorks ? undefined : removeDiactrics(i.textkey);
                 if (undefined!=key && (resp.jumplist.length==0 || resp.jumplist[resp.jumplist.length-1].key!=key) && !textKeys.has(key)) {
                     resp.jumplist.push({key: key, index: resp.items.length});
                     textKeys.add(key);
                 }
                 resp.items.push({
                     title: isArtistWorks ? i.work : i.composer,
-                    subtitle: isArtistWorks ? i.composer : i.work,
+                    subtitle: isArtistWorks
+                         ? (undefined==parent || (parent.title!=i.composer && parent.subtitle!=i.composer))
+                             ? i.composer
+                             : undefined
+                         : i.work,
+                    composer: i.composer,
                     composer_id: i.composer_id,
                     id: "work_id:"+i.work_id,
                     type: "group",
                     stdItem: STD_ITEM_WORK,
                     textkey: key
                 });
+            }
+            if (isArtistWorks) {
+                resp.items.sort(titleSort);
             }
             resp.subtitle=0==resp.items.length ? i18n("Empty") : i18np("1 Work", "%1 Works", resp.items.length);
             resp.canUseGrid=false;

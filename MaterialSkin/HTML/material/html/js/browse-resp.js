@@ -1341,7 +1341,7 @@ function parseBrowseResp(data, parent, options, cacheKey, parentCommand, parentG
                         }
                         resp.items.splice(groups[i][0]+i, 0,
                                           {title: groups[i][1], id:FILTER_PREFIX+i, header:true,
-                                           subtitle: i18np("1 Track", "%1 Tracks", count), durationStr:formatSeconds(duration),
+                                           subtitle: isCompositions ? i18np("1 Composition", "%1 Compositions", count) : i18np("1 Track", "%1 Tracks", count), durationStr:formatSeconds(duration),
                                            menu:[PLAY_ALL_ACTION, INSERT_ALL_ACTION, PLAY_SHUFFLE_ALL_ACTION, ADD_ALL_ACTION]});
                     }
                     if (1==grouping) { // Grouped into albumns, so remove from subtitle
@@ -1441,7 +1441,7 @@ function parseBrowseResp(data, parent, options, cacheKey, parentCommand, parentG
 
                     resp.items.splice(disc.pos+d, 0,
                                        {title: lmsOptions.commentAsDiscTitle && title ? title : i18n("Disc %1", k), jump:disc.pos+d,
-                                        subtitle: i18np("1 Track", "%1 Tracks", disc.total), durationStr:formatSeconds(disc.duration),
+                                        subtitle: isCompositions ? i18np("1 Composition", "%1 Compositions", disc.total) : i18np("1 Track", "%1 Tracks", disc.total), durationStr:formatSeconds(disc.duration),
                                         id:FILTER_PREFIX+k, header:true, menu:[PLAY_ALL_ACTION, INSERT_ALL_ACTION, PLAY_SHUFFLE_ALL_ACTION, ADD_ALL_ACTION]});
                     d++;
                 }
@@ -1454,9 +1454,7 @@ function parseBrowseResp(data, parent, options, cacheKey, parentCommand, parentG
             let totalTracks=resp.items.length-((groups.length>1 ? groups.length : 0)+(discs.size>1 ? discs.size : 0));
             let totalDurationStr=formatSeconds(totalDuration);
             resp.subtitle=totalTracks+'<obj class="mat-icon music-note">music_note</obj>'+totalDurationStr;
-            resp.plainsubtitle=(isCompositions
-                                ? i18np("1 Composition", "%1 Compositions", totalTracks)
-                                : i18np("1 Track", "%1 Tracks", totalTracks))+SEPARATOR+totalDurationStr;
+            resp.plainsubtitle=(isCompositions ? i18np("1 Composition", "%1 Compositions", totalTracks) : i18np("1 Track", "%1 Tracks", totalTracks))+SEPARATOR+totalDurationStr;
             if (genreList.length>0) {
                 resp.extraDetails=genreList.join(SEPARATOR_HTML);
             }

@@ -2531,8 +2531,6 @@ div.v-subheader {
 
 .jl-divider {
  font-size:65%;
- background-color:var(--pq-current-color);
- border-radius: 4px;
  min-height:22px;
  max-height:32px;
 }

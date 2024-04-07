@@ -590,8 +590,11 @@ var lmsBrowse = Vue.component("lms-browse", {
                     this.current.stdItem>=STD_ITEM_MAI)
         },
         detailedSubTop() {
-            if (this.current.stdItem==STD_ITEM_ARTIST || this.current.stdItem==STD_ITEM_WORK) {
+            if (this.current.stdItem==STD_ITEM_ARTIST) {
                 return this.detailedSubInfo;
+            }
+            if (this.current.stdItem==STD_ITEM_WORK) {
+                return this.current.subtitle;
             }
             if (this.current.stdItem==STD_ITEM_ALBUM || this.current.stdItem==STD_ITEM_ALL_TRACKS || this.current.stdItem==STD_ITEM_COMPOSITION_TRACKS || this.current.stdItem==STD_ITEM_MIX || this.current.stdItem==STD_ITEM_WORK || this.current.stdItem==STD_ITEM_CLASSICAL_WORKS) {
                 let albumArtst = this.current.subIsYear ? undefined : this.current.subtitle;

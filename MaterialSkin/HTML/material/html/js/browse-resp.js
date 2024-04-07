@@ -988,6 +988,7 @@ function parseBrowseResp(data, parent, options, cacheKey, parentCommand, parentG
                               artist_ids: splitIntArray(i.artist_ids),
                               artists: artists,
                               work_id: i.work_id,
+                              grouping: undefined!=i.grouping && i.grouping.length>0 ? i.grouping : undefined,
                               title: showArtist || !lmsOptions.yearInSub ? title : i.album,
                               subtitle: showArtist ? artist : showYear && lmsOptions.yearInSub ? ""+i.year : undefined,
                               subIsYear: lmsOptions.yearInSub && !showArtist && showYear,

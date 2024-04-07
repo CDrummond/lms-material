@@ -176,6 +176,9 @@ function buildStdItemCommand(item, parentCommand) {
             if (artistIdRemoved && undefined!=roleIdPos) {
                 command.params.splice(roleIdPos, 1);
             }
+            if (undefined!=item.grouping) {
+                command.params.push("grouping:"+i.grouping);
+            }
         } else if (item.id.startsWith("genre_id:")) {
             for (var i=0, len=parentCommand.params.length; i<len; ++i) {
                 if (typeof parentCommand.params[i] === 'string' || parentCommand.params[i] instanceof String) {

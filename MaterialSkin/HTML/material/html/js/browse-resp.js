@@ -1689,6 +1689,7 @@ function parseBrowseResp(data, parent, options, cacheKey, parentCommand, parentG
             resp.subtitle=0==resp.items.length ? i18n("Empty") : i18np("1 Item", "%1 Items", resp.items.length);
             resp.canUseGrid=true;
         } else if (data.result.works_loop) {
+            var isArtistWorks = undefined==parent || undefined==parent.id || !parent.id.startsWith(MUSIC_ID_PREFIX);
             for (var idx=0, loop=data.result.works_loop, loopLen=loop.length; idx<loopLen; ++idx) {
                 var i = loop[idx];
                 var key = removeDiactrics(i.textkey);
@@ -1697,8 +1698,8 @@ function parseBrowseResp(data, parent, options, cacheKey, parentCommand, parentG
                     textKeys.add(key);
                 }
                 resp.items.push({
-                    title: i.composer,
-                    subtitle: i.work,
+                    title: isArtistWorks ? i.work : i.composer,
+                    subtitle: isArtistWorks ? i.composer : i.work,
                     composer_id: i.composer_id,
                     id: "work_id:"+i.work_id,
                     type: "group",

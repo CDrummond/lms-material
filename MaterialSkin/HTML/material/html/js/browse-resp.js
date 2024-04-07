@@ -981,7 +981,7 @@ function parseBrowseResp(data, parent, options, cacheKey, parentCommand, parentG
                 }
                 releaseTypes.add(group);
 
-                let showArtist = undefined==parent || parent.title!=artist;
+                let showArtist = undefined==parent || (parent.title!=artist && parent.subtitle!=artist);
                 let album = {
                               id: "album_id:"+i.id,
                               artist_id: i.artist_id,

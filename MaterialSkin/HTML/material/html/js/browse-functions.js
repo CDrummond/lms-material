@@ -437,7 +437,7 @@ function browseHandleListResponse(view, item, command, resp, prevPage, appendIte
                         if (data && data.result && data.result.works_loop && data.result.works_loop.length>0) {
                             for (var loop=view.currentActions, i=loop.length-1; i>=0; --i) {
                                 if (loop[i].stdItem==STD_ITEM_ALL_TRACKS || loop[i].stdItem==STD_ITEM_COMPOSITION_TRACKS) {
-                                    loop.splice(i+1, 0, {title:i18n('Works'), svg:'classical-work', do:{ command: ['works'], params:[view.current.id]}, weight:82});
+                                    loop.splice(i+1, 0, {title:i18n('Works'), svg:'classical-work', stdItem:STD_ITEM_CLASSICAL_WORKS, do:{ command: ['works'], params:[view.current.id]}, weight:82});
                                     break;
                                 }
                             }

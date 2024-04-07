@@ -2308,7 +2308,7 @@ function browseBuildFullCommand(view, item, act) {
             command.command = ["playlist", INSERT_ACTION==act ? "insert" : ACTIONS[act].cmd, item.id];
         } else if (item.id) {
             command.command = ["playlistcontrol", "cmd:"+(act==PLAY_ACTION ? "load" : INSERT_ACTION==act ? "insert" :ACTIONS[act].cmd)];
-            if (item.id.startsWith("album_id:")  || item.id.startsWith("artist_id:")) {
+            if (item.id.startsWith("album_id:") || item.id.startsWith("artist_id:") || item.id.startsWith("work_id:")) {
                 var params = undefined!=item.stdItem || undefined!=item.altStdItem ? buildStdItemCommand(item, item.id==view.current.id ? view.history.length>0 ? view.history[view.history.length-1].command : undefined : view.command).params : item.params;
                 for (var i=0, loop = params, len=loop.length; i<len; ++i) {
                     if ( (!LMS_NO_ROLE_FILTER && (loop[i].startsWith("role_id:"))) ||
@@ -2320,7 +2320,7 @@ function browseBuildFullCommand(view, item, act) {
                         if (loop[i].startsWith("artist_id:") && !item.id.startsWith("album_id:")) {
                             command.params.push(SORT_KEY+ARTIST_ALBUM_SORT_PLACEHOLDER);
                         }
-                    } else if (loop[i].startsWith("work_id:")) {
+                    } else if (loop[i].startsWith("composer_id:")) {
                         command.params.push(loop[i]);
                     }
                 }

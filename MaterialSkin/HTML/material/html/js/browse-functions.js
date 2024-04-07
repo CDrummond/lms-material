@@ -431,23 +431,27 @@ function browseHandleListResponse(view, item, command, resp, prevPage, appendIte
                                               weight:110, svg:emblem ? emblem.name : undefined, id:loop[i], isService:true,
                                               artist_id:artist_id});
                 }
-                lmsList('', ['works'], [view.current.id], 0, 1, false, view.nextReqId()).then(({data}) => {
-                    if (data && data.result && data.result.works_loop && data.result.works_loop.length>0) {
-                        for (var loop=view.currentActions, i=loop.length-1; i>=0; --i) {
-                            if (loop[i].stdItem==STD_ITEM_ALL_TRACKS || loop[i].stdItem==STD_ITEM_COMPOSITION_TRACKS) {
-                                loop.splice(i+1, 0, {title:i18n('Works'), svg:'classical-work', do:{ command: ['works'], params:[view.current.id]}, weight:82});
-                                break;
+                if (LMS_VERSION>=90000) {
+                    lmsList('', ['works'], [view.current.id], 0, 1, false, view.nextReqId()).then(({data}) => {
+                        logJsonMessage("RESP", data);
+                        if (data && data.result && data.result.works_loop && data.result.works_loop.length>0) {
+                            for (var loop=view.currentActions, i=loop.length-1; i>=0; --i) {
+                                if (loop[i].stdItem==STD_ITEM_ALL_TRACKS || loop[i].stdItem==STD_ITEM_COMPOSITION_TRACKS) {
+                                    loop.splice(i+1, 0, {title:i18n('Works'), svg:'classical-work', do:{ command: ['works'], params:[view.current.id]}, weight:82});
+                                    break;
+                                }
                             }
                         }
-                    }
-                }).catch(err => {
-                });
+                    }).catch(err => {
+                    });
+                }
             } else if (undefined!=LMS_P_RP && view.$store.state.showRating && view.items.length>1 && !queryParams.party && !LMS_KIOSK_MODE) {
                 view.currentActions.push({albumRating:true, title:i18n("Set rating for all tracks"), icon:"stars", weight:102});
             }
             if (LMS_P_MAI && undefined!=actParams['path'] && actParams['path'].length>0 && !queryParams.party && !LMS_KIOSK_MODE) {
                 // Check we have some local files, if not hide entry!
                 lmsCommand('', ['musicartistinfo', 'localfiles', 'folder:'+actParams['path']]).then(({data}) => {
+                    logJsonMessage("RESP", data);
                     if (!data || !data.result || !data.result.item_loop || data.result.item_loop.length<1) {
                         for (var i=0, loop=view.currentActions, len=loop.length; i<len; ++i) {
                             if (loop[i].localfiles) {
@@ -2006,7 +2010,6 @@ function browseMyMusicMenu(view) {
             } else {
                 lmsList(view.playerId(), ["menu", "items"], ["direct:1"]).then(({data}) => {
                     if (data && data.result && data.result.item_loop) {
-                        logJsonMessage("RESP", data);
                         for (var idx=0, loop=data.result.item_loop, loopLen=loop.length; idx<loopLen; ++idx) {
                             var c = loop[idx];
                             if (c.node=="myMusic" && c.id) {
@@ -2144,7 +2147,7 @@ function browsePin(view, item, add, mapped) {
             var field = getField(item, "genre_id:");
             if (field>=0) {
                 lmsCommand("", ["material-skin", "map", item.params[field]]).then(({data}) => {
-                   if (data.result.genre) {
+                    if (data.result.genre) {
                         item.params[field]="genre:"+data.result.genre;
                         browsePin(view, item, add, true);
                     }

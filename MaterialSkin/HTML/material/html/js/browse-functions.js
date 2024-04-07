@@ -186,6 +186,9 @@ function browseActions(view, item, args, count, showCompositions) {
             }
             actions.push({title:i18n('Compositions'), svg:'composer', do:{ command: ['tracks'], params: params}, weight:81, stdItem:STD_ITEM_COMPOSITION_TRACKS});
         }
+        if (LMS_VERSION>=90000) {
+            actions.push({title:i18n('Works'), svg:'classical-work', stdItem:STD_ITEM_CLASSICAL_WORKS, do:{ command: ['works'], params:[view.current.id]}, weight:82});
+        }
     }
     if (undefined!=item && undefined!=item.stdItem && undefined!=STD_ITEMS[item.stdItem].actionMenu) {
         var weight = 200;
@@ -434,10 +437,10 @@ function browseHandleListResponse(view, item, command, resp, prevPage, appendIte
                 if (LMS_VERSION>=90000) {
                     lmsList('', ['works'], [view.current.id], 0, 1, false, view.nextReqId()).then(({data}) => {
                         logJsonMessage("RESP", data);
-                        if (data && data.result && data.result.works_loop && data.result.works_loop.length>0) {
-                            for (var loop=view.currentActions, i=loop.length-1; i>=0; --i) {
-                                if (loop[i].stdItem==STD_ITEM_ALL_TRACKS || loop[i].stdItem==STD_ITEM_COMPOSITION_TRACKS) {
-                                    loop.splice(i+1, 0, {title:i18n('Works'), svg:'classical-work', stdItem:STD_ITEM_CLASSICAL_WORKS, do:{ command: ['works'], params:[view.current.id]}, weight:82});
+                        if (!data || !data.result || !data.result.works_loop || data.result.works_loop.length<1) {
+                            for (var i=0, loop=view.currentActions, len=loop.length; i<len; ++i) {
+                                if (loop[i].stdItem==STD_ITEM_CLASSICAL_WORKS) {
+                                    loop.splice(i, 1);
                                     break;
                                 }
                             }

@@ -178,7 +178,7 @@ function buildStdItemCommand(item, parentCommand) {
                 command.params.splice(roleIdPos, 1);
             }
             if (undefined!=item.grouping) {
-                command.params.push("grouping:"+i.grouping);
+                command.params.push("grouping:"+item.grouping);
             }
         } else if (item.id.startsWith("genre_id:")) {
             for (var i=0, len=parentCommand.params.length; i<len; ++i) {

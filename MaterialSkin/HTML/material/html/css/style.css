@@ -3522,6 +3522,7 @@ div.v-subheader {
 .context-button {
  margin-left:0px;
  padding:0 10px;
+ min-width:78px!important;
 }
 
 .context-button:not(:last-of-type) {

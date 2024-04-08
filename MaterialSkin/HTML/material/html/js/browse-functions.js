@@ -120,7 +120,7 @@ function browseAddHistory(view) {
     view.history.push(prev);
 }
 
-function browseActions(view, item, args, count, showCompositions) {
+function browseActions(view, item, args, count, showCompositions, showWorks) {
     var actions=[];
     if ((undefined==item || undefined==item.id || !item.id.startsWith(MUSIC_ID_PREFIX)) && // Exclude 'Compilations'
         (undefined==args['artist'] || (args['artist']!=i18n('Various Artists') && args['artist']!=LMS_VA_STRING && args['artist'].toLowerCase()!='various artists'))) {
@@ -186,7 +186,7 @@ function browseActions(view, item, args, count, showCompositions) {
             }
             actions.push({title:i18n('Compositions'), svg:'composer', do:{ command: ['tracks'], params: params}, weight:81, stdItem:STD_ITEM_COMPOSITION_TRACKS});
         }
-        if (LMS_VERSION>=90000) {
+        if (showWorks) {
             actions.push({title:i18n('Works'), subtitle:args['artist'], svg:'classical-work', stdItem:STD_ITEM_CLASSICAL_WORKS, do:{ command: ['works'], params:[view.current.id]}, weight:82});
         }
     }
@@ -391,6 +391,7 @@ function browseHandleListResponse(view, item, command, resp, prevPage, appendIte
         var canAddAlbumSort=true;
         if ((listingArtistAlbums && listingAlbums) || (listingAlbumTracks && listingTracks)) {
             var actParams = new Map();
+            var showWorks = false;
             actParams[view.current.id.split(':')[0]]=view.current.id.split(':')[1];
             if (undefined!=artist_id) {
                 actParams["artist_id"] = artist_id;
@@ -409,6 +410,7 @@ function browseHandleListResponse(view, item, command, resp, prevPage, appendIte
                 if (field>=0) {
                     actParams['genre_id']=view.command.params[field];
                 }
+                showWorks = LMS_VERSION>=90000 && getField(view.command, "work_id:")<0;
             } else {
                 actParams['album']=title;
                 if (view.items.length>0) {
@@ -426,7 +428,7 @@ function browseHandleListResponse(view, item, command, resp, prevPage, appendIte
                     }
                 }
             }
-            view.currentActions = browseActions(view, resp.items.length>0 ? item : undefined, actParams, resp.items.length, resp.showCompositions);
+            view.currentActions = browseActions(view, resp.items.length>0 ? item : undefined, actParams, resp.items.length, resp.showCompositions, showWorks);
             if (listingArtistAlbums) {
                 for (var i=0, loop=view.onlineServices, len=loop.length; i<len; ++i) {
                     var emblem = getEmblem(loop[i].toLowerCase()+':');

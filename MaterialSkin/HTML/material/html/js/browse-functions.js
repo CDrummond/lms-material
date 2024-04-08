@@ -163,7 +163,6 @@ function browseActions(view, item, args, count, showCompositions, showWorks) {
                           weight:110});
         }
 
-
         if (undefined!=args['artist_id'] && undefined==args['album_id'] && undefined!=args['count'] && args['count']>1) {
             var params = [SORT_KEY+TRACK_SORT_PLACEHOLDER, PLAYLIST_TRACK_TAGS, 'artist_id:'+args['artist_id']];
             if (undefined!=args['role_id']) {
@@ -177,7 +176,18 @@ function browseActions(view, item, args, count, showCompositions, showWorks) {
                 params.push("library_id:"+libId);
             }
             actions.push({title:i18n('All songs'), icon:'music_note', do:{ command: ['tracks'], params: params}, weight:80, stdItem:STD_ITEM_ALL_TRACKS});
+        } else if (undefined!=args['work_id'] && undefined!=args['composer_id'] && undefined!=args['count'] && args['count']>1) {
+            var params = [SORT_KEY+TRACK_SORT_PLACEHOLDER, PLAYLIST_TRACK_TAGS, 'work_id:'+args['work_id'], 'composer_id:'+args['composer_id']];
+            if (undefined!=args['grouping']) {
+                params.push(args['grouping']);
+            }
+            let libId = view.currentLibId ? view.currentLibId : view.$store.state.library ? view.$store.state.library : LMS_DEFAULT_LIBRARY;
+            if (libId) {
+                params.push("library_id:"+libId);
+            }
+            actions.push({title:i18n('All songs'), icon:'music_note', do:{ command: ['tracks'], params: params}, weight:80, stdItem:STD_ITEM_ALL_TRACKS});
         }
+    
         if (undefined!=args['artist_id'] && showCompositions) {
             var params = [SORT_KEY+TRACK_SORT_PLACEHOLDER, PLAYLIST_TRACK_TAGS, 'artist_id:'+args['artist_id'], 'role_id:COMPOSER', 'material_skin_artist:'+args['artist']];
             let libId = view.currentLibId ? view.currentLibId : view.$store.state.library ? view.$store.state.library : LMS_DEFAULT_LIBRARY;
@@ -190,6 +200,7 @@ function browseActions(view, item, args, count, showCompositions, showWorks) {
             actions.push({title:i18n('Works'), subtitle:args['artist'], svg:'classical-work', stdItem:STD_ITEM_CLASSICAL_WORKS, do:{ command: ['works'], params:[view.current.id]}, weight:82});
         }
     }
+
     if (undefined!=item && undefined!=item.stdItem && undefined!=STD_ITEMS[item.stdItem].actionMenu) {
         var weight = 200;
         for (var i=0, loop=STD_ITEMS[item.stdItem].actionMenu, len=loop.length; i<len; ++i) {
@@ -360,11 +371,13 @@ function browseHandleListResponse(view, item, command, resp, prevPage, appendIte
         view.currentActions=[];
         let listingArtistAlbums = view.current.id.startsWith("artist_id:");
         let listingAlbumTracks = view.current.id.startsWith("album_id:");
+        let listingWorkAlbums = view.current.id.startsWith("work_id:");
         let listingAlbums = view.command.command[0]=="albums";
         let listingTracks = view.command.command[0]=="tracks";
         let title = view.current.title;
         let artist_id = listingArtistAlbums ? view.current.id.split(":")[1] : undefined;
         let album_id = listingAlbumTracks ? view.current.id.split(":")[1] : undefined;
+        let work_id = listingWorkAlbums ? view.current.id.split(":")[1] : undefined;
         if (!listingArtistAlbums && listingAlbums) {
             let pos = getField(command, "artist_id");
             if (pos>=0) {
@@ -389,12 +402,15 @@ function browseHandleListResponse(view, item, command, resp, prevPage, appendIte
             }
         }
         var canAddAlbumSort=true;
-        if ((listingArtistAlbums && listingAlbums) || (listingAlbumTracks && listingTracks)) {
+        if (((listingArtistAlbums || listingWorkAlbums) && listingAlbums) || (listingAlbumTracks && listingTracks)) {
             var actParams = new Map();
             var showWorks = false;
             actParams[view.current.id.split(':')[0]]=view.current.id.split(':')[1];
             if (undefined!=artist_id) {
                 actParams["artist_id"] = artist_id;
+            }
+            if (undefined!=work_id) {
+                actParams["work_id"] = work_id;
             }
             if (undefined!=album_id) {
                 actParams["album_id"] = album_id;
@@ -411,6 +427,17 @@ function browseHandleListResponse(view, item, command, resp, prevPage, appendIte
                     actParams['genre_id']=view.command.params[field];
                 }
                 showWorks = LMS_VERSION>=90000 && getField(view.command, "work_id:")<0;
+            } else if (listingWorkAlbums) {
+                actParams['composer']=title;
+                actParams['count']=resp.items.length;
+                var field = getField(view.command, "composer_id:");
+                if (field>=0) {
+                    actParams['composer_id']=view.command.params[field];
+                }
+                field = getField(view.command, "grouping:");
+                if (field>=0) {
+                    actParams['grouping']=view.command.params[field];
+                }
             } else {
                 actParams['album']=title;
                 if (view.items.length>0) {
@@ -450,7 +477,7 @@ function browseHandleListResponse(view, item, command, resp, prevPage, appendIte
                     }).catch(err => {
                     });
                 }
-            } else if (undefined!=LMS_P_RP && view.$store.state.showRating && view.items.length>1 && !queryParams.party && !LMS_KIOSK_MODE) {
+            } else if (!listingWorkAlbums && undefined!=LMS_P_RP && view.$store.state.showRating && view.items.length>1 && !queryParams.party && !LMS_KIOSK_MODE) {
                 view.currentActions.push({albumRating:true, title:i18n("Set rating for all tracks"), icon:"stars", weight:102});
             }
             if (LMS_P_MAI && undefined!=actParams['path'] && actParams['path'].length>0 && !queryParams.party && !LMS_KIOSK_MODE) {

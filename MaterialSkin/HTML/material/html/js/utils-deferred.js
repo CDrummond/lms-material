@@ -447,10 +447,12 @@ function inRect(x, y, rx, ry, rw, rh, padding) {
 
 const ALBUM_SORT_KEY = "albumSort";
 const ARTIST_ALBUM_SORT_KEY = "artistAlbumSort";
+const WORK_ALBUM_SORT_KEY = "workAlbumSort";
 
 function commandAlbumSortKey(command, genre) {
     var isArtist = false;
     var isCompilation = false;
+    var isWorks = false;
     [command.params, command.command].forEach(list => {
         for (var i=0, len=list.length; i<len; ++i) {
             let val = ""+list[i];
@@ -458,11 +460,13 @@ function commandAlbumSortKey(command, genre) {
                 isArtist = true;
             } else if (val=="compilation:1") {
                 isCompilation = true;
+            } else if (val.startsWith("work_id:")) {
+                isWorks = true;
             }
         }
     });
-    var baseSort = isArtist && !isCompilation ? ARTIST_ALBUM_SORT_KEY : ALBUM_SORT_KEY;
-    if (undefined!=genre && (lmsOptions.composerGenres.has(genre)) || lmsOptions.conductorGenres.has(genre) || lmsOptions.bandGenres.has(genre)) {
+    var baseSort = isWorks ? WORK_ALBUM_SORT_KEY : isArtist && !isCompilation ? ARTIST_ALBUM_SORT_KEY : ALBUM_SORT_KEY;
+    if (!isWorks && undefined!=genre && (lmsOptions.composerGenres.has(genre)) || lmsOptions.conductorGenres.has(genre) || lmsOptions.bandGenres.has(genre)) {
         return baseSort+"C";
     }
     return baseSort;
@@ -487,7 +491,7 @@ function setAlbumSort(command, genre, sort, reverse) {
 }
 
 function getTrackSort(stdItem) {
-    let key = stdItem==STD_ITEM_COMPOSITION_TRACKS ? "compositionTrackSort" : "trackSort";
+    let key = stdItem==STD_ITEM_COMPOSITION_TRACKS ? "compositionTrackSort" : stdItem==STD_ITEM_WORK ? "workTrackSort" : "trackSort";
     let def = "yearalbumtrack";
     let parts = getLocalStorageVal(key, def).split(".");
     let val = {by:parts[0], rev:parts.length>1};

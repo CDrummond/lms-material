@@ -168,7 +168,7 @@ function buildStdItemCommand(item, parentCommand) {
                         command.params.push(parentCommand.params[i]);
                     } else if (!LMS_NO_GENRE_FILTER && lower.startsWith("genre_id:")) {
                         command.params.push(parentCommand.params[i]);
-                    } else if (lower.startsWith("work_id:")) {
+                    } else if (lower.startsWith("work_id:") || lower.startsWith("grouping:")) {
                         command.params.push(parentCommand.params[i]);
                     }
                 }
@@ -190,7 +190,12 @@ function buildStdItemCommand(item, parentCommand) {
                 }
             }
         } else if (item.id.startsWith("work_id:")) {
-            command.params.push("composer_id:"+item.composer_id);
+            if (undefined!=item.composer_id) {
+                command.params.push("composer_id:"+item.composer_id);
+            }
+            if (undefined!=item.grouping) {
+                command.params.push("grouping:"+item.grouping);
+            }
         }
     }
     return command;

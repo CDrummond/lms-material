@@ -828,7 +828,8 @@ function parseBrowseResp(data, parent, options, cacheKey, parentCommand, parentG
                               image: (LMS_P_MAI && LMS_ARTIST_PICS) ? "/imageproxy/mai/artist/" + i.id + "/image" + LMS_IMAGE_SIZE : undefined,
                               stdItem: STD_ITEM_ARTIST,
                               type: "group",
-                              textkey: key
+                              textkey: key,
+                              isComposer: isComposers
                           };
                 resp.items.push(artist);
             }

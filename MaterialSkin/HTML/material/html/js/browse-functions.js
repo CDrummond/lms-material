@@ -375,26 +375,28 @@ function browseHandleListResponse(view, item, command, resp, prevPage, appendIte
         let artist_id = listingArtistAlbums ? view.current.id.split(":")[1] : undefined;
         let album_id = listingAlbumTracks ? view.current.id.split(":")[1] : undefined;
         let work_id = listingWorkAlbums ? view.current.id.split(":")[1] : undefined;
-        if (!listingArtistAlbums && listingAlbums) {
-            let pos = getField(command, "artist_id");
-            if (pos>=0) {
-                listingArtistAlbums = true;
-                let parts = title.split(":");
-                parts.shift();
-                title=parts.join(" ");
-                artist_id = command.params[pos].split(":")[1];
-            }
-        } else if (!listingAlbumTracks && listingTracks) {
-            let pos = getField(command, "album_id");
-            if (pos>=0) {
-                listingAlbumTracks = true;
-                let parts = title.split(":");
-                parts.shift();
-                title=parts.join(" ");
-                album_id = command.params[pos].split(":")[1];
-                pos = getField(command, "artist_id");
+        if (!view.current.id.startsWith(MUSIC_ID_PREFIX)) {
+            if (!listingArtistAlbums && listingAlbums) {
+                let pos = getField(command, "artist_id");
                 if (pos>=0) {
+                    listingArtistAlbums = true;
+                    let parts = title.split(":");
+                    parts.shift();
+                    title=parts.join(" ");
                     artist_id = command.params[pos].split(":")[1];
+                }
+            } else if (!listingAlbumTracks && listingTracks) {
+                let pos = getField(command, "album_id");
+                if (pos>=0) {
+                    listingAlbumTracks = true;
+                    let parts = title.split(":");
+                    parts.shift();
+                    title=parts.join(" ");
+                    album_id = command.params[pos].split(":")[1];
+                    pos = getField(command, "artist_id");
+                    if (pos>=0) {
+                        artist_id = command.params[pos].split(":")[1];
+                    }
                 }
             }
         }
@@ -652,7 +654,7 @@ function browseHandleListResponse(view, item, command, resp, prevPage, appendIte
             }
         }
 
-        if (listingArtistAlbums) {
+        if (listingAlbums && view.current.id.startsWith("artist_id:")) {
             browseAddWorks(view);
         }
 
@@ -672,12 +674,12 @@ function browseHandleListResponse(view, item, command, resp, prevPage, appendIte
 }
 
 function browseAddWorks(view) {
+    let id = view.current.id;
     if (LMS_VERSION>=90000 && view.items.length>0) {
         // Prevent flicker by not adding any albums, etc, until works list loaded
         let orig = [];
         orig.push.apply(orig, view.items);
         view.items = [];
-        let id = view.current.id;
         lmsList('', ['works'], [view.current.id], 0, LMS_BATCH_SIZE, true, view.nextReqId()).then(({data}) => {
             logJsonMessage("RESP", data);
             if (id==view.current.id) {

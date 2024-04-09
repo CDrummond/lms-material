@@ -104,6 +104,7 @@ function browseAddHistory(view) {
     prev.headerSubTitle = view.headerSubTitle;
     prev.detailedSubInfo = view.detailedSubInfo;
     prev.detailedSubExtra = view.detailedSubExtra;
+    prev.extraInfo = view.extraInfo;
     prev.tbarActions = view.tbarActions;
     prev.pos = view.scrollElement.scrollTop;
     prev.grid = view.grid;
@@ -500,7 +501,7 @@ function browseHandleListResponse(view, item, command, resp, prevPage, appendIte
                     let genreList = [];
                     let genreListPlain = [];
                     for (let g=0, loop=data.result.genres_loop, len=loop.length; g<len; ++g) {
-                        genreList.push("<obj class=\"link-item\" onclick=\"showGenre(event, "+loop[g].id+",\'"+escape(loop[g].genre)+"\', \'browse\')\">" + loop[g].genre + "</obj>");
+                        genreList.push(buildLink("show_genre", loop[g].id, loop[g].genre, "browse"));
                         if (IS_MOBILE) {
                             genreListPlain.push(loop[g].genre);
                         }
@@ -619,7 +620,11 @@ function browseHandleListResponse(view, item, command, resp, prevPage, appendIte
         }
 
         view.detailedSubInfo=resp.plainsubtitle ? resp.plainsubtitle : resp.years ? resp.years : "&nbsp;";
-        view.detailedSubExtra=resp.extraDetails ? [resp.extraDetails] : undefined;
+        view.detailedSubExtra = undefined;
+        view.extraInfo = resp.extra;
+        if (undefined!=resp.extra) {
+            view.detailedSubExtra=resp.extra['genres'] ? [resp.extra['genres'].join(SEPARATOR_HTML)] : resp.extra['genres.plain'] ? [resp.extra['genres.plain'].join(SEPARATOR_HTML)] : undefined;
+        }
         if ( (view.current && (view.current.stdItem==STD_ITEM_MAI || view.current.stdItem==STD_ITEM_MIX)) ||
              (1==view.items.length && ("text"==view.items[0].type || "html"==view.items[0].type)) ||
              (listingArtistAlbums && 0==view.items.length) /*Artist from online service*/ ) {
@@ -1766,6 +1771,7 @@ function browseGoBack(view, refresh) {
     view.headerSubTitle = prev.headerSubTitle;
     view.detailedSubInfo = prev.detailedSubInfo;
     view.detailedSubExtra = prev.detailedSubExtra;
+    view.extraInfo = prev.extraInfo;
     view.tbarActions = prev.tbarActions;
     view.command = prev.command;
     view.subtitleClickable = prev.subtitleClickable;
@@ -2096,7 +2102,6 @@ function browseMyMusicMenu(view) {
                     view.myMusic.push(item);
                 }
             }
-            console.log("listWorks", listWorks)
             if (listWorks!=lmsOptions.listWorks) {
                 lmsOptions.listWorks = listWorks;
                 setLocalStorageVal('listWorks', listWorks);
@@ -2669,14 +2674,55 @@ function browseAddExtra(view, html) {
     }
 }
 
+function browseBuildInfoHtml(view) {
+    if (undefined!=view.extraInfo) {
+        let html = "";
+        let firstEntry = true;
+        let infoTypes = [];
+        infoTypes.push.apply(infoTypes, ARTIST_TYPES);
+        infoTypes.push("years");
+        infoTypes.push("genres");
+        for (let i=0, len=infoTypes.length; i<len; ++i) {
+            let type = infoTypes[i];
+            if (undefined!=view.extraInfo[type]) {
+                if (firstEntry) {
+                    firstEntry = false;
+                    html+="<p><b>" + i18n("Details") + "</b><br/><table class=\"np-html-sect\">";
+                }
+                let key = "genres"==type
+                            ? i18n("Genre")
+                            : "years"==type
+                            ? i18n("Year")
+                            : "albumartist"==type
+                            ? i18n("Album artist")
+                            : "trackartist"==type
+                            ? undefined==view.extraInfo["artist"] ? i18n("Artist") : i18n("Track artist")
+                            : "composer"==type
+                            ? i18n("Composer")
+                            : "conductor"==type
+                            ? i18n("Conductor")
+                            : "band"==type
+                            ? i18n("Band/orchestra")
+                            : i18n("Artist");
+                html+="<tr><td>"+key+":&nbsp;</td><td>"+view.extraInfo[type].join(SEPARATOR_HTML)+"</td></tr>";
+            }
+        }
+        if (!firstEntry) {
+            html+="</table>"
+        }
+        return html;
+    }
+    return undefined;
+}
+
 function browseFetchExtra(view, fetchArtists) {
     let item = view.current;
-    let sub = view.detailedSubExtra[view.detailedSubExtra.length-1];
+    let infoHtml = browseBuildInfoHtml(view);
+
     view.extra = undefined;
     if (!fetchArtists) {
-        if (sub!=undefined) {
-            let html = "<p><b>" + i18n("Genres") + "</b><br/><br/>" + sub;
-            view.extra = { html:html, id: item.id };
+        if (infoHtml!=undefined) {
+            view.extra = { html:infoHtml, id: item.id };
         }
         return;
     }
@@ -2693,9 +2739,9 @@ function browseFetchExtra(view, fetchArtists) {
             }
         }
 
-        if (sub!=undefined) {
+        if (undefined!=sub) {
             html = undefined==html ? "" : (html+"<br/>");
-            html += "<p><b>" + i18n("Genres") + "</b><br/><br/>" + sub;
+            html += infoHtml;
         }
         if (undefined!=html) {
             if (undefined==view.fetchingItem) { // Have response already so can append
@@ -2705,12 +2751,11 @@ function browseFetchExtra(view, fetchArtists) {
             }
         }
     }).catch(err => {
-        if (sub!=undefined) {
-            let html = "<p><b>" + i18n("Genres") + "</b><br/><br/>" + sub;
+        if (undefined!=infoHtml) {
             if (undefined==view.fetchingItem) { // Have response alreadty so can append
-                browseAddExtra(view, html);
+                browseAddExtra(view, infoHtml);
             } else {
-                view.extra = { html:html, id: item.id };
+                view.extra = { html:infoHtml, id: item.id };
             }
         }
     });

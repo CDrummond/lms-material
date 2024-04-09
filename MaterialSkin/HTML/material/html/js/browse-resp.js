@@ -87,7 +87,7 @@ function releaseTypeSort(a, b) {
 
 function parseBrowseResp(data, parent, options, cacheKey, parentCommand, parentGenre) {
     // NOTE: If add key to resp, then update addToCache in utils.js
-    var resp = {items: [], allSongsItem:undefined, showCompositions:false, baseActions:[], canUseGrid: false, jumplist:[], numAudioItems:0, canDrop:false, itemCustomActions:undefined };
+    var resp = {items: [], allSongsItem:undefined, showCompositions:false, baseActions:[], canUseGrid: false, jumplist:[], numAudioItems:0, canDrop:false, itemCustomActions:undefined, extra:undefined };
     var allowPinning = !queryParams.party && (!LMS_KIOSK_MODE || !HIDE_FOR_KIOSK.has(PIN_ACTION));
 
     try {
@@ -942,7 +942,7 @@ function parseBrowseResp(data, parent, options, cacheKey, parentCommand, parentG
                 if (isSearch && (!IS_MOBILE || lmsOptions.touchLinks) && undefined!=artist_ids && undefined!=artists && artists.length==artist_ids.length) {
                     let entries = [];
                     for (let a=0, al=artists.length; a<al; ++a) {
-                        entries.push("<obj class=\"link-item\" onclick=\"showAlbumArtist(event, "+artist_ids[a]+",\'"+escape(artists[a])+"\', \'browse\')\">" + artists[a] + "</obj>");
+                        entries.push("<obj class=\"link-item\" onclick=\"show_albumartist(event, "+artist_ids[a]+",\'"+escape(artists[a])+"\', \'browse\')\">" + artists[a] + "</obj>");
                     }
                     artist = entries.join(", ");
                 }
@@ -1097,7 +1097,9 @@ function parseBrowseResp(data, parent, options, cacheKey, parentCommand, parentG
             let showTrackNumbers = true;
             let grouping = 0;
             let genres=new Set();
-            let genreList=[];
+            let yearSet = new Set();
+            let years = [];
+            resp.extra={};
 
             if (data.params[1].length>=4 && data.params[1][0]=="tracks") {
                 for (let p=0, plen=data.params[1].length; p<plen && (!allowPlayAlbum || !showAlbumName); ++p) {
@@ -1160,14 +1162,34 @@ function parseBrowseResp(data, parent, options, cacheKey, parentCommand, parentG
                     }
                 }
                 splitMultiples(i, true);
+
+                // Create list of artists on this album - to show in browse 'Information' view...
+                for (let a=0, alen=ARTIST_TYPES.length; a<alen; ++a) {
+                    let type = ARTIST_TYPES[a];
+                    // "albumartist", "trackartist", "artist", "band", "composer", "conductor"];
+                    let func = "trackartist"==type ? "show_artist" : ("show_"+type);
+                    if (undefined!=i[type+"_ids"]) {
+                        for (let v=0, vl=i[type+"_ids"], vlen=vl.length; v<vlen; ++v) {
+                            let val = i[type+"s"][v];
+                            if (!isEmpty(val) && (undefined==resp.extra[type] || !resp.extra[type].set.has(val))) {
+                                if (undefined==resp.extra[type]) {
+                                    resp.extra[type]={set:new Set(), items:[]};
+                                }
+                                resp.extra[type].set.add(val);
+                                resp.extra[type].items.push(buildLink(func, vl[v], val, "browse"));
+                            }
+                        }
+                    }
+                }
                 if (undefined!=highlightArtist) {
                     // Check if any of the artist IDs for this track match that to highlight
                     for (let a=0, alen=ARTIST_TYPES.length; a<alen && !highlight; ++a) {
-                        if (!highlight && undefined!=i[ARTIST_TYPES[a]+"_id"]) {
-                            highlight = highlightArtist == parseInt(i[ARTIST_TYPES[a]+"_id"]);
+                        let type = ARTIST_TYPES[a];
+                        if (!highlight && undefined!=i[type+"_id"]) {
+                            highlight = highlightArtist == parseInt(i[type+"_id"]);
                         }
-                        if (undefined!=i[ARTIST_TYPES[a]+"_ids"]) {
-                            for (let v=0, vl=i[ARTIST_TYPES[a]+"_ids"], vlen=vl.length; v<vlen && !highlight; ++v) {
+                        if (undefined!=i[type+"_ids"]) {
+                            for (let v=0, vl=i[type+"_ids"], vlen=vl.length; v<vlen && !highlight; ++v) {
                                 highlight = highlightArtist == parseInt(vl[v]);
                             }
                         }
@@ -1240,16 +1262,26 @@ function parseBrowseResp(data, parent, options, cacheKey, parentCommand, parentG
                         for (let g=0, glen=loop.length; g<glen; ++g) {
                             if (!genres.has(loop[g])) {
                                 genres.add(loop[g]);
-                                if ((!IS_MOBILE || lmsOptions.touchLinks)) {
-                                    genreList.push("<obj class=\"link-item\" onclick=\"showGenre(event, "+ids[g]+",\'"+escape(loop[g])+"\', \'browse\')\">" + loop[g] + "</obj>");
-                                } else {
-                                    genreList.push(loop[g]);
+                                if (undefined==resp.extra['genres']) {
+                                    resp.extra['genres']=[];
+                                }
+                                resp.extra['genres'].push(buildLink("show_genre", ids[g], loop[g], "browse"));
+                                if (IS_MOBILE && !lmsOptions.touchLinks) {
+                                    if (undefined==resp.extra['genres.plain']) {
+                                        resp.extra['genres.plain']=[];
+                                    }
+                                    resp.extra['genres.plain'].push(loop[g]);
                                 }
                             }
                         }
                     }
                 }
 
+                let year = undefined!=i.year ? parseInt(i.year) : undefined;
+                if (undefined!=year && !yearSet.has(year)) {
+                    yearSet.add(year);
+                    years.push(year);
+                }
                 resp.items.push({
                               id: "track_id:"+i.id,
                               title: title,
@@ -1264,7 +1296,7 @@ function parseBrowseResp(data, parent, options, cacheKey, parentCommand, parentG
                               emblem: showAlbumName ? getEmblem(i.extid) : undefined,
                               tracknum: sortTracks && undefined!=i.tracknum ? tracknum : undefined,
                               disc: i.disc ? parseInt(i.disc) : undefined,
-                              year: (sortTracks || 1==grouping) && i.year ? parseInt(i.year) : undefined,
+                              year: (sortTracks || 1==grouping) ? year : undefined,
                               album: sortTracks || isSearchResult || 1==grouping ? i.album : undefined,
                               artist: isSearchResult || 2==sortTracks || 3==grouping ? getArtist(i) : undefined,
                               album_id: isSearchResult ? i.album_id : undefined,
@@ -1456,12 +1488,22 @@ function parseBrowseResp(data, parent, options, cacheKey, parentCommand, parentG
             let totalDurationStr=formatSeconds(totalDuration);
             resp.subtitle=totalTracks+'<obj class="mat-icon music-note">music_note</obj>'+totalDurationStr;
             resp.plainsubtitle=(isCompositions ? i18np("1 Composition", "%1 Compositions", totalTracks) : i18np("1 Track", "%1 Tracks", totalTracks))+SEPARATOR+totalDurationStr;
-            if (genreList.length>0) {
-                resp.extraDetails=genreList.join(SEPARATOR_HTML);
-            }
             // set compilationAlbumArtist on first entry so that browse-view can use this
             if (lmsOptions.noArtistFilter && undefined!=compilationAlbumArtist & resp.items.length>0) {
                 resp.items[0].compilationAlbumArtist = compilationAlbumArtist;
+            }
+            if (years.length>0) {
+                years.sort();
+                resp.extra['years']=[];
+                for (let y=0, len=years.length; y<len; ++y) {
+                    resp.extra['years'].push(buildLink("show_year", years[y], years[y], "browse"));
+                }
+            }
+            for (let a=0, alen=ARTIST_TYPES.length; a<alen; ++a) {
+                let type = ARTIST_TYPES[a];
+                if (undefined!=resp.extra[type]) {
+                    resp.extra[type]=resp.extra[type].items;
+                }
             }
         } else if (data.result.genres_loop) {
             for (var idx=0, loop=data.result.genres_loop, loopLen=loop.length; idx<loopLen; ++idx) {

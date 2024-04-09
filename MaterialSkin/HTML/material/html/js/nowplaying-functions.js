@@ -584,7 +584,7 @@ function nowplayingFetchTrackInfo(view) {
     let others = [[undefined!=trk.albumartist, 'albumartist', i18n("Album artist")],
                   [trk.composer, 'composer', i18n("Composer")],
                   [trk.conductor, 'conductor', i18n("Conductor")],
-                  [trk.band, 'band', i18n("Band")]];
+                  [trk.band, 'band', i18n("Band/orchestra")]];
     for (let i=0, len=others.length; i<len; ++i) {
         if (others[i][0]) {
             let entry = nowplayingArtistEntry(trk, others[i][1], others[i][1].toUpperCase());

@@ -49,7 +49,7 @@ function buildArtistAlbumLines(i, queueAlbumStyle, queueContext) {
         } else if ((IS_MOBILE && !lmsOptions.touchLinks) || undefined==id) {
             artistAlbum = str;
         } else {
-            artistAlbum = buildLink(i.albumartist ? 'showAlbumArtist' : 'showArtist', id, str, 'queue');
+            artistAlbum = buildLink(i.albumartist ? 'show_albumartist' : 'show_artist', id, str, 'queue');
         }
     } else {
         artistAlbum = buildArtistLine(i, 'queue');

@@ -15,7 +15,7 @@ function browseItem(event, cmd, params, title, page) {
     bus.$emit('linkClicked');
 }
 
-function showArtist(event, id, title, page) {
+function show_artist(event, id, title, page) {
     browseItem(event, ["albums"], ["artist_id:"+id, ARTIST_ALBUM_TAGS, SORT_KEY+ARTIST_ALBUM_SORT_PLACEHOLDER], unescape(title), page);
 }
 
@@ -27,25 +27,29 @@ function showArtistRole(event, id, title, page, role) {
     browseItem(event, ["albums"], ["artist_id:"+id, ARTIST_ALBUM_TAGS, SORT_KEY+ARTIST_ALBUM_SORT_PLACEHOLDER, "role_id:"+role], unescape(title), page);
 }
 
-function showAlbumArtist(event, id, title, page) {
+function show_albumartist(event, id, title, page) {
     showArtistRole(event, id, title, page, "ALBUMARTIST");
 }
 
-function showComposer(event, id, title, page) {
+function show_composer(event, id, title, page) {
     showArtistRole(event, id, title, page, "COMPOSER");
 }
 
-function showConductor(event, id, title, page) {
+function show_conductor(event, id, title, page) {
     showArtistRole(event, id, title, page, "CONDUCTOR");
 }
 
-function showBand(event, id, title, page) {
+function show_band(event, id, title, page) {
     showArtistRole(event, id, title, page, "BAND");
 }
 
-function showGenre(event, id, title, page) {
+function show_genre(event, id, title, page) {
     // Just 'id' here no 'genre_id:' prefix!
     browseItem(event, ["genre"], id, unescape(title), page);
+}
+
+function show_year(event, val, title, page) {
+    browseItem(event, ["year"], val, title, page);
 }
 
 function buildLink(func, id, str, page) {
@@ -108,32 +112,32 @@ function buildArtistLine(i, page, plain, existing) {
     }
     if (lmsOptions.artistFirst) {
         if (i.trackartist) {
-            line=addArtistLink(i, line, "trackartist", "showArtist", page, used, plain);
+            line=addArtistLink(i, line, "trackartist", "show_artist", page, used, plain);
         } else if (i.artist) {
-            line=addArtistLink(i, line, "artist", "showArtist", page, used, plain);
+            line=addArtistLink(i, line, "artist", "show_artist", page, used, plain);
         } else if (i.albumartist) {
-            line=addArtistLink(i, line, "albumartist", "showAlbumArtist", page, used, plain);
+            line=addArtistLink(i, line, "albumartist", "show_albumartist", page, used, plain);
         }
         used.add(artist);
     }
 
     if (i.band && lmsOptions.showBand && useBand(i.genre)) {
-        line=addArtistLink(i, line, "band", "showBand", page, used, plain);
+        line=addArtistLink(i, line, "band", "show_band", page, used, plain);
     }
     if (i.composer && lmsOptions.showComposer && useComposer(i.genre)) {
-        line=addArtistLink(i, line, "composer", "showComposer", page, used, plain);
+        line=addArtistLink(i, line, "composer", "show_composer", page, used, plain);
     }
     if (i.conductor && lmsOptions.showConductor && useConductor(i.genre)) {
-        line=addArtistLink(i, line, "conductor", "showConductor", page, used, plain);
+        line=addArtistLink(i, line, "conductor", "show_conductor", page, used, plain);
     }
 
     if (!lmsOptions.artistFirst) {
         if (i.trackartist) {
-            line=addArtistLink(i, line, "trackartist", "showArtist", page, used, plain);
+            line=addArtistLink(i, line, "trackartist", "show_artist", page, used, plain);
         } else if (i.artist) {
-            line=addArtistLink(i, line, "artist", "showArtist", page, used, plain);
+            line=addArtistLink(i, line, "artist", "show_artist", page, used, plain);
         } else if (i.albumartist) {
-            line=addArtistLink(i, line, "albumartist", "showAlbumArtist", page, used, plain);
+            line=addArtistLink(i, line, "albumartist", "show_albumartist", page, used, plain);
         }
     }
     try {
@@ -146,21 +150,21 @@ function buildArtistLine(i, page, plain, existing) {
 function buildArtistWithContext(i, page, useBand, useComposer, useConductor) {
     let composers = undefined;
     if (useComposer) {
-        composers=addArtistLink(i, composers, "composer", "showComposer", page, new Set(), false);
+        composers=addArtistLink(i, composers, "composer", "show_composer", page, new Set(), false);
     }
     let conductors = undefined;
     if (useConductor) {
-        conductors=addArtistLink(i, conductors, "conductor", "showConductor", page, new Set(), false);
+        conductors=addArtistLink(i, conductors, "conductor", "show_conductor", page, new Set(), false);
     }
 
     let artists = undefined;
     let used = new Set();
     if (i.trackartist) {
-        artists=addArtistLink(i, artists, "trackartist", "showArtist", page, used, false);
+        artists=addArtistLink(i, artists, "trackartist", "show_artist", page, used, false);
     } else if (i.artist) {
-        artists=addArtistLink(i, artists, "artist", "showArtist", page, used, false);
+        artists=addArtistLink(i, artists, "artist", "show_artist", page, used, false);
     } else if (i.albumartist) {
-        artists=addArtistLink(i, artists, "albumartist", "showAlbumArtist", page, used, false);
+        artists=addArtistLink(i, artists, "albumartist", "show_albumartist", page, used, false);
     }
 
     if (undefined==composers && undefined==conductors && undefined==artists) {
@@ -168,7 +172,7 @@ function buildArtistWithContext(i, page, useBand, useComposer, useConductor) {
     }
 
     if (useBand) {
-        artists=addArtistLink(i, artists, "band", "showBand", page, used, false);
+        artists=addArtistLink(i, artists, "band", "show_band", page, used, false);
         if (artists) {
             artists=artists.replace(SEPARATOR, ", ");
         }

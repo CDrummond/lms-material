@@ -129,7 +129,7 @@ const ARTIST_TAGS = "tags:s";
 const ALBUM_TAGS = "tags:ajlqswyKS";
 const ALBUM_TAGS_ALL_ARTISTS = "tags:aajlqswyKSS";
 const ARTIST_ALBUM_TAGS = "tags:aajlqswyKRSSW";
-const TRACK_TAGS = "tags:dikstuAACGPS";
+const TRACK_TAGS = "tags:dikstyuAACGPS";
 const SEARCH_TRACK_TAGS = IS_MOBILE || LMS_VERSION<80400 ? "tags:dikstuAC" : "tags:dikstuAACS";
 const TECH_INFO_TAGS = "orITY";
 const PLAYLIST_TAGS = "tags:suxE";
@@ -150,7 +150,7 @@ const NP_EXPANDED = 'now-playing-expanded';
 const MAX_TRACKS_BEFORE_COLLAPSE = 200;
 const ALL_SONGS_ID = "allsongs";
 
-const ARTIST_TYPES = ["albumartist", "trackartist", "artist", "band", "composer", "conductor"];
+const ARTIST_TYPES = ["artist", "trackartist", "albumartist", "composer", "conductor", "band"];
 var MULTI_SPLIT_REGEX = ";"
 
 // Safari on iOS and macOS does not support lookbehind. Looks like it can't even parse the line

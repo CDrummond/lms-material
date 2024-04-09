@@ -1168,7 +1168,7 @@ function parseBrowseResp(data, parent, options, cacheKey, parentCommand, parentG
                     let type = ARTIST_TYPES[a];
                     // "albumartist", "trackartist", "artist", "band", "composer", "conductor"];
                     let func = "trackartist"==type ? "show_artist" : ("show_"+type);
-                    if (undefined!=i[type+"_ids"]) {
+                    if (undefined!=i[type+"_ids"] && undefined!=i[type+"s"] && i[type+"_ids"].length==i[type+"s"].length) {
                         for (let v=0, vl=i[type+"_ids"], vlen=vl.length; v<vlen; ++v) {
                             let val = i[type+"s"][v];
                             if (!isEmpty(val) && (undefined==resp.extra[type] || !resp.extra[type].set.has(val))) {
@@ -1178,6 +1178,16 @@ function parseBrowseResp(data, parent, options, cacheKey, parentCommand, parentG
                                 resp.extra[type].set.add(val);
                                 resp.extra[type].items.push(buildLink(func, vl[v], val, "browse"));
                             }
+                        }
+                    } else if (undefined!=i[type] && (undefined!=i[type+"_id"] || (undefined!=i[type+"_ids"] && i[type+"_ids"].length>0))) {
+                        let val = i[type];
+                        let id = undefined!=i[type+"_id"] ? i[type+"_id"] : i[type+"_ids"][0];
+                        if (!isEmpty(val) && (undefined==resp.extra[type] || !resp.extra[type].set.has(val))) {
+                            if (undefined==resp.extra[type]) {
+                                resp.extra[type]={set:new Set(), items:[]};
+                            }
+                            resp.extra[type].set.add(val);
+                            resp.extra[type].items.push(buildLink(func, id, val, "browse"));
                         }
                     }
                 }

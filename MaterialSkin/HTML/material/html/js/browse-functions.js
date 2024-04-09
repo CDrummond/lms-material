@@ -120,7 +120,7 @@ function browseAddHistory(view) {
     view.history.push(prev);
 }
 
-function browseActions(view, item, args, count, showCompositions, showWorks) {
+function browseActions(view, item, args, count, showCompositions) {
     var actions=[];
     if ((undefined==item || undefined==item.id || !item.id.startsWith(MUSIC_ID_PREFIX)) && // Exclude 'Compilations'
         (undefined==args['artist'] || (args['artist']!=i18n('Various Artists') && args['artist']!=LMS_VA_STRING && args['artist'].toLowerCase()!='various artists'))) {
@@ -195,9 +195,6 @@ function browseActions(view, item, args, count, showCompositions, showWorks) {
                 params.push("library_id:"+libId);
             }
             actions.push({title:i18n('Compositions'), svg:'composer', do:{ command: ['tracks'], params: params}, weight:81, stdItem:STD_ITEM_COMPOSITION_TRACKS});
-        }
-        if (showWorks) {
-            actions.push({title:i18n('Works'), subtitle:args['artist'], svg:'classical-work', stdItem:STD_ITEM_CLASSICAL_WORKS, do:{ command: ['works'], params:[view.current.id]}, weight:82});
         }
     }
 
@@ -404,7 +401,6 @@ function browseHandleListResponse(view, item, command, resp, prevPage, appendIte
         var canAddAlbumSort=true;
         if (((listingArtistAlbums || listingWorkAlbums) && listingAlbums) || (listingAlbumTracks && listingTracks)) {
             var actParams = new Map();
-            var showWorks = false;
             actParams[view.current.id.split(':')[0]]=view.current.id.split(':')[1];
             if (undefined!=artist_id) {
                 actParams["artist_id"] = artist_id;
@@ -426,7 +422,6 @@ function browseHandleListResponse(view, item, command, resp, prevPage, appendIte
                 if (field>=0) {
                     actParams['genre_id']=view.command.params[field];
                 }
-                showWorks = LMS_VERSION>=90000 && getField(view.command, "work_id:")<0;
             } else if (listingWorkAlbums) {
                 actParams['composer']=title;
                 actParams['count']=resp.items.length;
@@ -455,27 +450,13 @@ function browseHandleListResponse(view, item, command, resp, prevPage, appendIte
                     }
                 }
             }
-            view.currentActions = browseActions(view, resp.items.length>0 ? item : undefined, actParams, resp.items.length, resp.showCompositions, showWorks);
+            view.currentActions = browseActions(view, resp.items.length>0 ? item : undefined, actParams, resp.items.length, resp.showCompositions);
             if (listingArtistAlbums) {
                 for (var i=0, loop=view.onlineServices, len=loop.length; i<len; ++i) {
                     var emblem = getEmblem(loop[i].toLowerCase()+':');
                     view.currentActions.push({title:/*!i81n*/'wimp'==loop[i] ? 'Tidal' : capitalize(loop[i]),
                                               weight:110, svg:emblem ? emblem.name : undefined, id:loop[i], isService:true,
                                               artist_id:artist_id});
-                }
-                if (LMS_VERSION>=90000) {
-                    lmsList('', ['works'], [view.current.id], 0, 1, false, view.nextReqId()).then(({data}) => {
-                        logJsonMessage("RESP", data);
-                        if (!data || !data.result || !data.result.works_loop || data.result.works_loop.length<1) {
-                            for (var i=0, loop=view.currentActions, len=loop.length; i<len; ++i) {
-                                if (loop[i].stdItem==STD_ITEM_CLASSICAL_WORKS) {
-                                    loop.splice(i, 1);
-                                    break;
-                                }
-                            }
-                        }
-                    }).catch(err => {
-                    });
                 }
             } else if (!listingWorkAlbums && undefined!=LMS_P_RP && view.$store.state.showRating && view.items.length>1 && !queryParams.party && !LMS_KIOSK_MODE) {
                 view.currentActions.push({albumRating:true, title:i18n("Set rating for all tracks"), icon:"stars", weight:102});
@@ -670,6 +651,11 @@ function browseHandleListResponse(view, item, command, resp, prevPage, appendIte
                 view.hoverBtns = false;
             }
         }
+
+        if (listingArtistAlbums) {
+            browseAddWorks(view);
+        }
+
         view.$nextTick(function () {
             view.setBgndCover();
             view.filterJumplist();
@@ -685,14 +671,76 @@ function browseHandleListResponse(view, item, command, resp, prevPage, appendIte
     }
 }
 
+function browseAddWorks(view) {
+    if (LMS_VERSION>=90000 && view.items.length>0) {
+        // Prevent flicker by not adding any albums, etc, until works list loaded
+        let orig = [];
+        orig.push.apply(orig, view.items);
+        view.items = [];
+        let id = view.current.id;
+        lmsList('', ['works'], [view.current.id], 0, LMS_BATCH_SIZE, true, view.nextReqId()).then(({data}) => {
+            logJsonMessage("RESP", data);
+            if (id==view.current.id) {
+                var resp = parseBrowseResp(data, view.current, view.options);
+                if (resp.items.length>0) {
+                    let existing = orig.length;
+                    let sub = i18np("1 Work", "%1 Works", resp.items.length);
+                    let key = '_WORKS_';
+                    let icon = {svg:'release-work'};
+                    let haveHeader = orig[0].header;
+                    let items = [];
+                    let jumplist = [];
+                    items.push({title:i18n('Works')+" ("+resp.items.length+")", id:FILTER_PREFIX+key, header:true,
+                                isWorksCat: true, icon: icon.icon, svg: icon.svg,
+                                menu:[PLAY_ALL_ACTION, INSERT_ALL_ACTION, PLAY_SHUFFLE_ALL_ACTION, ADD_ALL_ACTION], count:resp.items.length});
+                    for (let i=0, loop=resp.items, len=loop.length; i<len; ++i) {
+                        loop[i].filter = FILTER_PREFIX+key;
+                    }
+
+                    items.push.apply(items, resp.items);
+                    jumplist.push({key:SECTION_JUMP, index:0, header:true, icon:icon});
+                    view.listSize += resp.listSize+1;
+                    for (let i=0, loop=resp.jumplist, len=loop.length; i<len; ++i) {
+                        loop[i].index+=1;
+                        jumplist.push(loop[i]);
+                    }
+                    if (!haveHeader) {
+                        key = orig[0].filter.substring(FILTER_PREFIX.length);
+                        if (isEmpty(key)) {
+                            key = 'ALBUM';
+                        }
+                        icon = releaseTypeIcon(key);
+                        jumplist.push({key:SECTION_JUMP, index:items.length, header:true, icon:icon});
+                        items.push({title:releaseTypeHeader(key)+" ("+existing+")", id:FILTER_PREFIX+key, header:true,
+                                    icon: icon.icon, svg: icon.svg,
+                                    menu:[PLAY_ALL_ACTION, INSERT_ALL_ACTION, PLAY_SHUFFLE_ALL_ACTION, ADD_ALL_ACTION], count:existing});
+                    }
+                    let offset = items.length;
+                    for (let i=0, loop=view.jumplist, len=loop.length; i<len; ++i) {
+                        loop[i].index+=offset;
+                        jumplist.push(loop[i]);
+                    }
+                    items.push.apply(items, orig);
+                    view.items = items;
+                    view.jumplist = jumplist;
+                    view.headerSubTitle = sub + SEPARATOR + view.headerSubTitle;
+                } else {
+                    // No works, just use original list
+                    view.items = orig;
+                }
+
+                view.$nextTick(function () {
+                    view.filterJumplist();
+                    view.layoutGrid(true);
+                });
+            }
+        }).catch(err => {
+        });
+    }
+}
+
 function browseHandleTextClickResponse(view, item, command, data, isMoreMenu) {
     var resp = parseBrowseResp(data, item, view.options);
-    var nextWindow = item.nextWindow
-                        ? item.nextWindow
-                        : item.actions && item.actions.go && item.actions.go.nextWindow
-                            ? item.actions.go.nextWindow
-                            : undefined;
-
     if (browseHandleNextWindow(view, item, command, resp, isMoreMenu)) {
         return;
     }
@@ -2371,7 +2419,10 @@ function browseBuildFullCommand(view, item, act) {
                 command.params.push(SORT_KEY+ALBUM_SORT_PLACEHOLDER);
             }
 
-            command.command.push(originalId(item.id));
+            let id = originalId(item.id);
+            if (getIndex(command.params, id.split(':')[0]+":")<0) {
+                command.command.push(id);
+            }
         }
         command=browseReplaceCommandTerms(view, command);
     }

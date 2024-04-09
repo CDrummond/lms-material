@@ -1037,11 +1037,11 @@ function parseBrowseResp(data, parent, options, cacheKey, parentCommand, parentG
                     // Create jump list
                     let start = resp.items.length;
                     let jl=[];
-                    resp.jumplist.push({key:SECTION_JUMP, index:start-1, sect:k*1000, header:true, icon});
+                    resp.jumplist.push({key:SECTION_JUMP, index:start-1, header:true, icon:icon});
                     for (let a=0, alen=alist.length; a<alen; ++a) {
                         if (undefined!=alist[a].textkey && (jl.length==0 || jl[jl.length-1].key!=alist[a].textkey)) {
                             jl.push({key: alist[a].textkey, index: resp.items.length});
-                            resp.jumplist.push({key: alist[a].textkey, index:start+a, sect:k});
+                            resp.jumplist.push({key: alist[a].textkey, index:start+a});
                             headerOnly = false;
                         }
                     }
@@ -1707,6 +1707,7 @@ function parseBrowseResp(data, parent, options, cacheKey, parentCommand, parentG
                     composer_id: i.composer_id,
                     id: "work_id:"+i.work_id,
                     type: "group",
+                    image: undefined==i.image ? DEFAULT_WORKS_COVER : resolveImageUrl(i.image, LMS_IMAGE_SIZE),
                     stdItem: STD_ITEM_WORK,
                     textkey: key
                 });

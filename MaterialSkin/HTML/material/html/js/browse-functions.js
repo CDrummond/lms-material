@@ -654,7 +654,7 @@ function browseHandleListResponse(view, item, command, resp, prevPage, appendIte
             }
         }
 
-        if (listingAlbums && view.current.id.startsWith("artist_id:")) {
+        if (listingAlbums && lmsOptions.listWorks && LMS_VERSION>=90000 && view.items.length>0 && view.current.id.startsWith("artist_id:")) {
             browseAddWorks(view);
         }
 
@@ -674,71 +674,69 @@ function browseHandleListResponse(view, item, command, resp, prevPage, appendIte
 }
 
 function browseAddWorks(view) {
+    // Prevent flicker by not adding any albums, etc, until works list loaded
     let id = view.current.id;
-    if (LMS_VERSION>=90000 && view.items.length>0) {
-        // Prevent flicker by not adding any albums, etc, until works list loaded
-        let orig = [];
-        orig.push.apply(orig, view.items);
-        view.items = [];
-        lmsList('', ['works'], [view.current.id], 0, LMS_BATCH_SIZE, true, view.nextReqId()).then(({data}) => {
-            logJsonMessage("RESP", data);
-            if (id==view.current.id) {
-                var resp = parseBrowseResp(data, view.current, view.options);
-                if (resp.items.length>0) {
-                    let existing = orig.length;
-                    let sub = i18np("1 Work", "%1 Works", resp.items.length);
-                    let key = '_WORKS_';
-                    let icon = {svg:'release-work'};
-                    let haveHeader = orig[0].header;
-                    let items = [];
-                    let jumplist = [];
-                    items.push({title:i18n('Works')+" ("+resp.items.length+")", id:FILTER_PREFIX+key, header:true,
-                                isWorksCat: true, icon: icon.icon, svg: icon.svg,
-                                menu:[PLAY_ALL_ACTION, INSERT_ALL_ACTION, PLAY_SHUFFLE_ALL_ACTION, ADD_ALL_ACTION], count:resp.items.length});
-                    for (let i=0, loop=resp.items, len=loop.length; i<len; ++i) {
-                        loop[i].filter = FILTER_PREFIX+key;
-                    }
-
-                    items.push.apply(items, resp.items);
-                    jumplist.push({key:SECTION_JUMP, index:0, header:true, icon:icon});
-                    view.listSize += resp.listSize+1;
-                    for (let i=0, loop=resp.jumplist, len=loop.length; i<len; ++i) {
-                        loop[i].index+=1;
-                        jumplist.push(loop[i]);
-                    }
-                    if (!haveHeader) {
-                        key = orig[0].filter.substring(FILTER_PREFIX.length);
-                        if (isEmpty(key)) {
-                            key = 'ALBUM';
-                        }
-                        icon = releaseTypeIcon(key);
-                        jumplist.push({key:SECTION_JUMP, index:items.length, header:true, icon:icon});
-                        items.push({title:releaseTypeHeader(key)+" ("+existing+")", id:FILTER_PREFIX+key, header:true,
-                                    icon: icon.icon, svg: icon.svg,
-                                    menu:[PLAY_ALL_ACTION, INSERT_ALL_ACTION, PLAY_SHUFFLE_ALL_ACTION, ADD_ALL_ACTION], count:existing});
-                    }
-                    let offset = items.length;
-                    for (let i=0, loop=view.jumplist, len=loop.length; i<len; ++i) {
-                        loop[i].index+=offset;
-                        jumplist.push(loop[i]);
-                    }
-                    items.push.apply(items, orig);
-                    view.items = items;
-                    view.jumplist = jumplist;
-                    view.headerSubTitle = sub + SEPARATOR + view.headerSubTitle;
-                } else {
-                    // No works, just use original list
-                    view.items = orig;
+    let orig = [];
+    orig.push.apply(orig, view.items);
+    view.items = [];
+    lmsList('', ['works'], [view.current.id], 0, LMS_BATCH_SIZE, true, view.nextReqId()).then(({data}) => {
+        logJsonMessage("RESP", data);
+        if (id==view.current.id) {
+            var resp = parseBrowseResp(data, view.current, view.options);
+            if (resp.items.length>0) {
+                let existing = orig.length;
+                let sub = i18np("1 Work", "%1 Works", resp.items.length);
+                let key = '_WORKS_';
+                let icon = {svg:'release-work'};
+                let haveHeader = orig[0].header;
+                let items = [];
+                let jumplist = [];
+                items.push({title:i18n('Works')+" ("+resp.items.length+")", id:FILTER_PREFIX+key, header:true,
+                            isWorksCat: true, icon: icon.icon, svg: icon.svg,
+                            menu:[PLAY_ALL_ACTION, INSERT_ALL_ACTION, PLAY_SHUFFLE_ALL_ACTION, ADD_ALL_ACTION], count:resp.items.length});
+                for (let i=0, loop=resp.items, len=loop.length; i<len; ++i) {
+                    loop[i].filter = FILTER_PREFIX+key;
                 }
 
-                view.$nextTick(function () {
-                    view.filterJumplist();
-                    view.layoutGrid(true);
-                });
+                items.push.apply(items, resp.items);
+                jumplist.push({key:SECTION_JUMP, index:0, header:true, icon:icon});
+                view.listSize += resp.listSize+1;
+                for (let i=0, loop=resp.jumplist, len=loop.length; i<len; ++i) {
+                    loop[i].index+=1;
+                    jumplist.push(loop[i]);
+                }
+                if (!haveHeader) {
+                    key = orig[0].filter.substring(FILTER_PREFIX.length);
+                    if (isEmpty(key)) {
+                        key = 'ALBUM';
+                    }
+                    icon = releaseTypeIcon(key);
+                    jumplist.push({key:SECTION_JUMP, index:items.length, header:true, icon:icon});
+                    items.push({title:releaseTypeHeader(key)+" ("+existing+")", id:FILTER_PREFIX+key, header:true,
+                                icon: icon.icon, svg: icon.svg,
+                                menu:[PLAY_ALL_ACTION, INSERT_ALL_ACTION, PLAY_SHUFFLE_ALL_ACTION, ADD_ALL_ACTION], count:existing});
+                }
+                let offset = items.length;
+                for (let i=0, loop=view.jumplist, len=loop.length; i<len; ++i) {
+                    loop[i].index+=offset;
+                    jumplist.push(loop[i]);
+                }
+                items.push.apply(items, orig);
+                view.items = items;
+                view.jumplist = jumplist;
+                view.headerSubTitle = sub + SEPARATOR + view.headerSubTitle;
+            } else {
+                // No works, just use original list
+                view.items = orig;
             }
-        }).catch(err => {
-        });
-    }
+
+            view.$nextTick(function () {
+                view.filterJumplist();
+                view.layoutGrid(true);
+            });
+        }
+    }).catch(err => {
+    });
 }
 
 function browseHandleTextClickResponse(view, item, command, data, isMoreMenu) {
@@ -1991,6 +1989,7 @@ function browseMyMusicMenu(view) {
             logJsonMessage("RESP", data);
             view.myMusic = [];
             var stdItems = new Set();
+            var listWorks = false;
             // Get basic, configurable, browse modes...
             if (data && data.result && data.result.modes_loop) {
                 for (var idx=0, loop=data.result.modes_loop, loopLen=loop.length; idx<loopLen; ++idx) {
@@ -2070,6 +2069,7 @@ function browseMyMusicMenu(view) {
                     } else if (c.id.startsWith("myMusicWorks")) {
                         item.svg = "classical-work";
                         item.icon = undefined;
+                        listWorks = true;
                     } else if (c.icon) {
                         if (c.icon.endsWith("/albums.png")) {
                             item.icon = "album";
@@ -2095,6 +2095,11 @@ function browseMyMusicMenu(view) {
                     }
                     view.myMusic.push(item);
                 }
+            }
+            console.log("listWorks", listWorks)
+            if (listWorks!=lmsOptions.listWorks) {
+                lmsOptions.listWorks = listWorks;
+                setLocalStorageVal('listWorks', listWorks);
             }
             // Now get standard menu, for extra (e.g. CustomBrowse) entries...
             if (!view.playerId()) { // No player, then can't get playre specific items just yet

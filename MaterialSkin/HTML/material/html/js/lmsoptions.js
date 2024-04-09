@@ -34,5 +34,6 @@ var lmsOptions = {techInfo: getLocalStorageBool('techInfo', false),
                   touchLinks: getLocalStorageBool('touchLinks', false),
                   yearInSub: getLocalStorageBool('yearInSub', true),
                   playShuffle: getLocalStorageBool('playShuffle', false),
-                  time12hr: LMS_DEF_12HR
+                  time12hr: LMS_DEF_12HR,
+                  listWorks: getLocalStorageBool('listWorks', false)
                 };

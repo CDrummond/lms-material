@@ -982,15 +982,20 @@ function parseBrowseResp(data, parent, options, cacheKey, parentCommand, parentG
                 releaseTypes.add(group);
 
                 let showArtist = undefined==parent || (parent.title!=artist && parent.subtitle!=artist);
+                let grouping = undefined!=i.grouping && i.grouping.length>0 ? i.grouping : undefined;
+                let subtitle = showArtist ? artist : showYear && lmsOptions.yearInSub ? ""+i.year : undefined;
+                if (!isEmpty(grouping)) {
+                    subtitle = undefined==subtitle ? grouping : (grouping + SEPARATOR + subtitle);
+                }
                 let album = {
                               id: "album_id:"+i.id,
                               artist_id: i.artist_id,
                               artist_ids: splitIntArray(i.artist_ids),
                               artists: artists,
                               work_id: i.work_id,
-                              grouping: undefined!=i.grouping && i.grouping.length>0 ? i.grouping : undefined,
+                              grouping: grouping,
                               title: showArtist || !lmsOptions.yearInSub ? title : i.album,
-                              subtitle: showArtist ? artist : showYear && lmsOptions.yearInSub ? ""+i.year : undefined,
+                              subtitle: subtitle,
                               subIsYear: lmsOptions.yearInSub && !showArtist && showYear,
                               image: i.artwork_url
                                         ? resolveImageUrl(i.artwork_url, LMS_IMAGE_SIZE)

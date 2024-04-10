@@ -374,7 +374,7 @@ function browseHandleListResponse(view, item, command, resp, prevPage, appendIte
         let listingTracks = view.command.command[0]=="tracks";
         let title = view.current.title;
         let artist_id = listingArtistAlbums ? view.current.id.split(":")[1] : undefined;
-        let album_id = listingAlbumTracks ? view.current.id.split(":")[1] : undefined;
+        let album_id = listingAlbumTracks ? originalId(view.current.id).split(":")[1] : undefined;
         let work_id = listingWorkAlbums ? view.current.id.split(":")[1] : undefined;
         if (!view.current.id.startsWith(MUSIC_ID_PREFIX)) {
             if (!listingArtistAlbums && listingAlbums) {
@@ -393,7 +393,7 @@ function browseHandleListResponse(view, item, command, resp, prevPage, appendIte
                     let parts = title.split(":");
                     parts.shift();
                     title=parts.join(" ");
-                    album_id = command.params[pos].split(":")[1];
+                    album_id = originalId(command.params[pos]).split(":")[1];
                     pos = getField(command, "artist_id");
                     if (pos>=0) {
                         artist_id = command.params[pos].split(":")[1];

@@ -156,11 +156,11 @@ function isInFavorites(item) {
 }
 
 function uniqueId(id, listSize) {
-    return id+"@index:"+listSize;
+    return id+"@index-"+listSize;
 }
 
 function originalId(id) {
-    return id.split("@index:")[0];
+    return id.split("@index-")[0];
 }
 
 function showMenu(obj, newMenu) {

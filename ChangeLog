@@ -11,6 +11,7 @@
  8. Always use name 'Lyrion'
  9. List album contributors in 'Information' page.
 10. Add 'Scroll to' action for artists with multiple release categories.
+11. Don't allow "fake" add/play-all for Qobuz playlists.
 
 4.4.1
 -----

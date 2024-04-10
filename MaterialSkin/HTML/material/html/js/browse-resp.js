@@ -612,7 +612,8 @@ function parseBrowseResp(data, parent, options, cacheKey, parentCommand, parentG
                 resp.canUseGrid = true;
             }
             if (playAction && resp.numAudioItems>2 && undefined==resp.allSongsItem && ALLOW_FAKE_ALL_SONGS_ITEM.has(command) &&
-                resp.baseActions['playControl'] && resp.baseActions['playControl'].params && resp.baseActions['playControl'].params.item_id) {
+                resp.baseActions['playControl'] && resp.baseActions['playControl'].params && resp.baseActions['playControl'].params.item_id &&
+                (command!="qobuz" || !types.has("playlist"))) {
                 resp.allSongsItem={id:resp.baseActions['playControl'].params.item_id, params:resp.baseActions['playControl'].params};
             }
             // If listing a radio app's entries and all images are the same, then hide images. e.g. iHeartRadio and RadioNet

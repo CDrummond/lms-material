@@ -643,7 +643,7 @@ function hasPlayableId(item) {
            item.album || item.artist || item.variousartist || item.year || item.genre || item.playlist; // CustomBrowse
 }
 
-const ADD_LIBRARY_ID = new Set(['artists', 'albums', 'tracks', 'genres', 'years', 'browselibrary', 'custombrowse']);
+const ADD_LIBRARY_ID = new Set(['artists', 'albums', 'tracks', 'genres', 'years', 'browselibrary', 'custombrowse', 'works']);
 
 function shouldAddLibraryId(command) {
     if (command.command && command.command.length>0) {
@@ -651,10 +651,15 @@ function shouldAddLibraryId(command) {
             return true;
         }
         if (command.command[0]=="playlistcontrol") {
-            for (var i=1, len=command.command.length; i<len; ++i) {
-                if (command.command[i].startsWith("artist_id:") || command.command[i].startsWith("album_id:") || command.command[i].startsWith("track_id:") ||
-                    command.command[i].startsWith("genre_id:") || command.command[i].startsWith("year:") || command.command[i].startsWith("playlist_id:")) {
-                    return true;
+            var lists =["command", "params"];
+            for (var l=0, llen=lists.length; l<llen; ++l) {
+                var list=command[lists[l]];
+                for (var i=0, len=list.length; i<len; ++i) {
+                    if (list[i].startsWith("artist_id:") || list[i].startsWith("album_id:") || list[i].startsWith("track_id:") ||
+                        list[i].startsWith("genre_id:") || list[i].startsWith("year:") || list[i].startsWith("playlist_id:") ||
+                        list[i].startsWith("work_id:")) {
+                        return true;
+                    }
                 }
             }
         }

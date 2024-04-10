@@ -90,6 +90,7 @@
 "Automatically close queue, in desktop layout and not pinned, a few seconds after last interaction.":"在桌面布局且未固定时，一段时间未交互后自动关闭队列。",
 "Average Volume":"平均音量",
 "Band":"乐团",
+"Band/orchestra":"乐队",
 "Bands":"乐团",
 "Basic options":"基本选项",
 "Bitrate":"比特率",

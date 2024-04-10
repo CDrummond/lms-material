@@ -90,6 +90,7 @@
 "Automatically close queue, in desktop layout and not pinned, a few seconds after last interaction.":"Die Warteschlange automatisch ein paar Sekunden nach der letzten Interaktion schließen, sobald diese im Desktop-Layout dargetellt und nicht angeheftet ist.",
 "Average Volume":"Durchschnittliche Lautstärke",
 "Band":"Gruppe",
+"Band/orchestra":"Band/Orchester",
 "Bands":"Gruppen",
 "Basic options":"Grundeinstellungen",
 "Bitrate":"Bitrate",
@@ -583,6 +584,7 @@
 "When no song is playing on current player, darken screen (and show date & time) after 60 seconds.":"Bildschirm nach 60 Sekunden abdunkeln (und Datum & Zeit anzeigen), wenn nichts wiedergegeben wird.",
 "With":"mit",
 "Without":"ohne",
+"Works":"Werke",
 "Year":"Jahr",
 "Year Mix":"Jahresmix",
 "Year, Album":"Jahr, Album",
@@ -653,7 +655,6 @@
 "%1 Years":"%1 Jahre",
 "1 day":"1 Tag",
 "%1 days":"%1 Tage",
-"Works":"",
 "Zoom":"",
 "1 Work":"",
 "%1 Works":""

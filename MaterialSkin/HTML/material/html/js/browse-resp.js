@@ -985,9 +985,6 @@ function parseBrowseResp(data, parent, options, cacheKey, parentCommand, parentG
                 let showArtist = undefined==parent || (parent.title!=artist && parent.subtitle!=artist);
                 let grouping = undefined!=i.grouping && i.grouping.length>0 ? i.grouping : undefined;
                 let subtitle = showArtist ? artist : showYear && lmsOptions.yearInSub ? ""+i.year : undefined;
-                if (!isEmpty(grouping)) {
-                    subtitle = undefined==subtitle ? grouping : (grouping + SEPARATOR + subtitle);
-                }
                 let album = {
                               id: "album_id:"+(ids.has(i.id) ? uniqueId(i.id, resp.items.length) : i.id),
                               artist_id: i.artist_id,

@@ -215,15 +215,17 @@ function browseActions(view, item, args, count, showCompositions) {
                 weight++;
                 actions.push({action:loop[i], weight:ALBUM_SORTS_ACTION==loop[i] || TRACK_SORTS_ACTION==loop[i]
                                                 ? 2
-                                                : INSERT_ACTION==loop[i]
+                                                : SCROLL_TO_ACTION==loop[i]
                                                     ? 3
-                                                    : PLAY_SHUFFLE_ACTION==loop[i]
+                                                    : INSERT_ACTION==loop[i]
                                                         ? 4
-                                                        : ADD_RANDOM_ALBUM_ACTION==loop[i]
+                                                        : PLAY_SHUFFLE_ACTION==loop[i]
                                                             ? 5
-                                                            : MORE_LIB_ACTION==loop[i]
-                                                                ? 1000
-                                                                : weight});
+                                                            : ADD_RANDOM_ALBUM_ACTION==loop[i]
+                                                                ? 6
+                                                                : MORE_LIB_ACTION==loop[i]
+                                                                    ? 1000
+                                                                    : weight});
             }
         }
     }

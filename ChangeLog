@@ -1,15 +1,16 @@
 4.5.0
 -----
-1. Add icons to release type and search headers.
-2. On desktop layout if click on link in now-playing or MAI that shows browse
-   view, then 'Go back' will go back to now-playing or MAI.
-3. If sorting tracks by 'title' then sub-sort by artist.
-4. Add material style image for random play in queue.
-5. Add support for Lyrion 9.0.0 'Works' feature.
-6. Add 'Shuffle' options to alarm dialog.
-7. Re-add some missing Russian translations.
-8. Always use name 'Lyrion'
-9. List album contributors in 'Information' page.
+ 1. Add icons to release type and search headers.
+ 2. On desktop layout if click on link in now-playing or MAI that shows browse
+    view, then 'Go back' will go back to now-playing or MAI.
+ 3. If sorting tracks by 'title' then sub-sort by artist.
+ 4. Add material style image for random play in queue.
+ 5. Add support for Lyrion 9.0.0 'Works' feature.
+ 6. Add 'Shuffle' options to alarm dialog.
+ 7. Re-add some missing Russian translations.
+ 8. Always use name 'Lyrion'
+ 9. List album contributors in 'Information' page.
+10. Add 'Scroll to' action for artists with multiple release categories.
 
 4.4.1
 -----

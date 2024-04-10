@@ -70,7 +70,7 @@ const SHOW_IMAGE_ACTION       = 54;
 const PQ_SORT_ACTION          = 55;
 const PLAYLIST_SORT_ACTION    = 56;
 const PQ_SAVE_ACTION          = 57;
-const SCROLL_TO_DISC_ACTION   = 58;
+const SCROLL_TO_ACTION        = 58;
 const PQ_TOGGLE_VIEW_ACTION   = 59;
 const TRACK_SORTS_ACTION      = 60;
 const PLAY_SHUFFLE_ACTION     = 61;
@@ -233,7 +233,7 @@ function updateActionStrings() {
     ACTIONS[PLAYLIST_SORT_ACTION].title=i18n("Sort tracks");
     ACTIONS[PQ_SAVE_ACTION].title=i18n("Save queue");
     ACTIONS[PQ_SAVE_ACTION].key=LMS_SAVE_QUEUE_KEYBOARD;
-    ACTIONS[SCROLL_TO_DISC_ACTION].title=i18n('Scroll to disc');
+    ACTIONS[SCROLL_TO_ACTION].title=i18n('Scroll to');
     ACTIONS[PQ_TOGGLE_VIEW_ACTION].title=i18n("Toggle view");
 
     ACTIONS[COPY_ACTION].title=i18n("Copy");

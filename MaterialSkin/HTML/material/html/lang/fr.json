@@ -414,7 +414,6 @@
 "Scroll play queue when current track changes.":"Faire défiler la liste de lecture lorsque le morceau change.",
 "Scroll queue to current track":"Faire défiler la liste de lecture jusqu'au morceau en cours",
 "Scroll to current":"Aller au morceau en cours",
-"Scroll to disc":"Faire défiler jusqu'au disque",
 "Search":"Rechercher",
 "Search library":"Rechercher dans la bibliothèque",
 "Search on...":"Rechercher sur...",
@@ -656,6 +655,7 @@
 "%1 Years":"%1 années",
 "1 day":"1 jour",
 "%1 days":"%1 jours",
+"Scroll to":"",
 "1 Work":"",
 "%1 Works":""
 }

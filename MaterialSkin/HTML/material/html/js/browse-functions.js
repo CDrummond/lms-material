@@ -1477,14 +1477,17 @@ function browseItemAction(view, act, item, index, event) {
         download(item, item.id.startsWith("album_id:") ? view.buildCommand(item) : undefined, aa);
     } else if (SHOW_IMAGE_ACTION==act) {
         bus.$emit('dlg.open', 'gallery', [item.image], 0, true);
-    } else if (SCROLL_TO_DISC_ACTION==act) {
-        var discs = [];
+    } else if (SCROLL_TO_ACTION==act) {
+        var choices = [];
         for (var i=0, loop=view.items, len=loop.length; i<len; ++i) {
             if (loop[i].header) {
-                discs.push(loop[i]);
+                if (undefined==loop[i].jump) {
+                    loop[i].jump = i;
+                }
+                choices.push(loop[i]);
             }
         }
-        choose(ACTIONS[act].title, discs).then(choice => {
+        choose(ACTIONS[act].title, choices).then(choice => {
             if (undefined!=choice) {
                 view.jumpTo(choice.jump);
             }

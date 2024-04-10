@@ -1298,7 +1298,7 @@ function browseItemAction(view, act, item, index, event) {
             var resp = parseBrowseResp(data, view.current, view.options);
             if (resp.items.length>0 && resp.items[0].id) {
                 var item = resp.items[0];
-                var command = ["playlistcontrol", "cmd:add", item.id];
+                var command = ["playlistcontrol", "cmd:add", originalId(item.id)];
                 var genrePos = LMS_NO_GENRE_FILTER ? -1 : getField({params:params}, "genre_id:");
                 if (genrePos>=0) {
                     command.push(params[genrePos]);
@@ -1395,7 +1395,7 @@ function browseItemAction(view, act, item, index, event) {
         } else { // Need to filter items...
             var itemList = [];
             var isFilter = item.id.startsWith(FILTER_PREFIX) || PLAY_DISC_ACTION==act; // MultiCD's have a 'filter' so we can play a single CD
-            var check = isFilter ? (PLAY_DISC_ACTION==act ? item.filter : item.id) : (SEARCH_ID==item.id && view.items[0].id.startsWith("track") ? "track_id" : "album_id");
+            var check = isFilter ? (PLAY_DISC_ACTION==act ? item.filter : originalId(item.id)) : (SEARCH_ID==item.id && view.items[0].id.startsWith("track") ? "track_id" : "album_id");
             var list = item.allItems && item.allItems.length>0 ? item.allItems : view.items;
             var itemIndex = undefined;
             for (var i=0, len=list.length; i<len; ++i) {
@@ -1444,7 +1444,7 @@ function browseItemAction(view, act, item, index, event) {
             sortPlaylist(view, undefined, ACTIONS[act].title, ["material-skin", "sort-playlist", item.id]);
         }
     } else if (BR_COPY_ACTION==act) {
-        bus.$emit('queueGetSelectedUrls', index, item.id);
+        bus.$emit('queueGetSelectedUrls', index, originalId(item.id));
     } else if (DOWNLOAD_ACTION==act) {
         // See if we can get album-artist from current view / history
         let aa = view.current.id.startsWith("artist_id:") ? view.current.title : undefined;
@@ -2405,9 +2405,9 @@ function browseBuildFullCommand(view, item, act) {
         if (item.url && (!item.id || (!item.id.startsWith("playlist_id:") && !item.id.startsWith("track_id")))) {
             command.command = ["playlist", INSERT_ACTION==act ? "insert" : ACTIONS[act].cmd, item.url, item.title];
         } else if (item.app && item.id) {
-            command.command = [item.app, "playlist", INSERT_ACTION==act ? "insert" :ACTIONS[act].cmd, item.id];
+            command.command = [item.app, "playlist", INSERT_ACTION==act ? "insert" :ACTIONS[act].cmd, originalId(item.id)];
         } else if (item.isFolderItem || item.isUrl) {
-            command.command = ["playlist", INSERT_ACTION==act ? "insert" : ACTIONS[act].cmd, item.id];
+            command.command = ["playlist", INSERT_ACTION==act ? "insert" : ACTIONS[act].cmd, originalId(item.id)];
         } else if (item.id) {
             command.command = ["playlistcontrol", "cmd:"+(act==PLAY_ACTION ? "load" : INSERT_ACTION==act ? "insert" :ACTIONS[act].cmd)];
             if (item.id.startsWith("album_id:") || item.id.startsWith("artist_id:") || item.id.startsWith("work_id:")) {

@@ -985,11 +985,11 @@ var lmsBrowse = Vue.component("lms-browse", {
             if (undefined!=queueIndex) {
                 this.fetchItems({command: ["trackinfo", "items"], params: ["playlist_index:"+queueIndex, "menu:1", "html:1"], ismore:true}, item, page);
             } else if (item.id) {
-                var params=[item.id, "menu:1", "html:1"];
+                var params=[originalId(item.id), "menu:1", "html:1"];
                 if (item.id.startsWith("artist_id:")) {
-                    this.fetchItems({command: ["artistinfo", "items"], params: params, ismore:true}, {id:item.id, title:item.title}, page);
+                    this.fetchItems({command: ["artistinfo", "items"], params: params, ismore:true}, {id:originalId(item.id), title:item.title}, page);
                 } else if (item.id.startsWith("album_id:")) {
-                    this.fetchItems({command: ["albuminfo", "items"], params: params, ismore:true}, {id:item.id, title:item.title}, page);
+                    this.fetchItems({command: ["albuminfo", "items"], params: params, ismore:true}, {id:originalId(item.id), title:item.title}, page);
                 } else if (item.id.startsWith("track_id:")) {
                     this.fetchItems({command: ["trackinfo", "items"], params: params, ismore:true}, item, page);
                 } else if (item.id.startsWith("genre_id:")) {

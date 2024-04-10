@@ -135,7 +135,7 @@ function buildStdItemCommand(item, parentCommand) {
                 }
             }
         }
-        command.params.push(item.id);
+        command.params.push(originalId(item.id));
     }
     if (undefined!=parentCommand) {
         if (item.id.startsWith("artist_id:")) {

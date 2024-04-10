@@ -884,6 +884,7 @@ function parseBrowseResp(data, parent, options, cacheKey, parentCommand, parentG
             var albumGroups = groupReleases && haveReleaseType && lmsOptions.supportReleaseTypes && lmsOptions.groupByReleaseType>0 ? {} : undefined;
             var albumKeys = [];
             var releaseTypes = new Set();
+            var ids = new Set();
 
             for (var idx=0, loop=data.result.albums_loop, loopLen=loop.length; idx<loopLen; ++idx) {
                 var i = loop[idx];
@@ -988,7 +989,7 @@ function parseBrowseResp(data, parent, options, cacheKey, parentCommand, parentG
                     subtitle = undefined==subtitle ? grouping : (grouping + SEPARATOR + subtitle);
                 }
                 let album = {
-                              id: "album_id:"+i.id,
+                              id: "album_id:"+(ids.has(i.id) ? uniqueId(i.id, resp.items.length) : i.id),
                               artist_id: i.artist_id,
                               artist_ids: splitIntArray(i.artist_ids),
                               artists: artists,
@@ -1012,6 +1013,7 @@ function parseBrowseResp(data, parent, options, cacheKey, parentCommand, parentG
                               compilation: i.compilation,
                               nonmain: nonmain
                           };
+                ids.add(i.id);
                 if (albumGroups) {
                     if (undefined==albumGroups[group]) {
                         albumGroups[group]=[album];

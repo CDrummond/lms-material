@@ -9,6 +9,13 @@ function browseCanSelect(item) {
     return undefined!=item && (undefined!=item.stdItem || (item.menu && item.menu.length>0));
 }
 
+function browseAddLibId(view, params) {
+    let libId = view.currentLibId ? view.currentLibId : view.$store.state.library ? view.$store.state.library : LMS_DEFAULT_LIBRARY;
+    if (libId) {
+        params.push("library_id:"+libId);
+    }
+}
+
 function browseMatches(text, title) {
     if (title.startsWith(text)) {
         return true;
@@ -172,29 +179,20 @@ function browseActions(view, item, args, count, showCompositions) {
             if (undefined!=args['genre_id']) {
                 params.push(args['genre_id']);
             }
-            let libId = view.currentLibId ? view.currentLibId : view.$store.state.library ? view.$store.state.library : LMS_DEFAULT_LIBRARY;
-            if (libId) {
-                params.push("library_id:"+libId);
-            }
+            browseAddLibId(view, params);
             actions.push({title:i18n('All songs'), icon:'music_note', do:{ command: ['tracks'], params: params}, weight:80, stdItem:STD_ITEM_ALL_TRACKS});
         } else if (undefined!=args['work_id'] && undefined!=args['composer_id'] && undefined!=args['count'] && args['count']>1) {
             var params = [SORT_KEY+TRACK_SORT_PLACEHOLDER, PLAYLIST_TRACK_TAGS, 'work_id:'+args['work_id'], 'composer_id:'+args['composer_id']];
             if (undefined!=args['grouping']) {
                 params.push(args['grouping']);
             }
-            let libId = view.currentLibId ? view.currentLibId : view.$store.state.library ? view.$store.state.library : LMS_DEFAULT_LIBRARY;
-            if (libId) {
-                params.push("library_id:"+libId);
-            }
+            browseAddLibId(view, params);
             actions.push({title:i18n('All songs'), icon:'music_note', do:{ command: ['tracks'], params: params}, weight:80, stdItem:STD_ITEM_ALL_TRACKS});
         }
 
         if (undefined!=args['artist_id'] && showCompositions) {
             var params = [SORT_KEY+TRACK_SORT_PLACEHOLDER, PLAYLIST_TRACK_TAGS, 'artist_id:'+args['artist_id'], 'role_id:COMPOSER', 'material_skin_artist:'+args['artist']];
-            let libId = view.currentLibId ? view.currentLibId : view.$store.state.library ? view.$store.state.library : LMS_DEFAULT_LIBRARY;
-            if (libId) {
-                params.push("library_id:"+libId);
-            }
+            browseAddLibId(view, params);
             actions.push({title:i18n('Compositions'), svg:'composer', do:{ command: ['tracks'], params: params}, weight:81, stdItem:STD_ITEM_COMPOSITION_TRACKS});
         }
     }
@@ -498,7 +496,9 @@ function browseHandleListResponse(view, item, command, resp, prevPage, appendIte
             let index = getField(command, "genre_id:");
             // Get genres for artist...
             let genreReqArtist=view.current.id;
-            lmsList('', ['genres'], [view.current.id].concat(index<0 ? [] : [command.params[index]]), 0, 25, false, view.nextReqId()).then(({data}) => {
+            let params = [view.current.id].concat(index<0 ? [] : [command.params[index]]);
+            browseAddLibId(view, params);
+            lmsList('', ['genres'], params, 0, 25, false, view.nextReqId()).then(({data}) => {
                 if (data.result && data.result.genres_loop && view.isCurrentReq(data) && genreReqArtist==view.current.id) {
                     let genreList = [];
                     let genreListPlain = [];
@@ -686,7 +686,9 @@ function browseAddWorks(view) {
     let orig = [];
     orig.push.apply(orig, view.items);
     view.items = [];
-    lmsList('', ['works'], [view.current.id], 0, LMS_BATCH_SIZE, true, view.nextReqId()).then(({data}) => {
+    let params = [view.current.id];
+    browseAddLibId(view, params);
+    lmsList('', ['works'], params, 0, LMS_BATCH_SIZE, true, view.nextReqId()).then(({data}) => {
         logJsonMessage("RESP", data);
         if (id==view.current.id) {
             var resp = parseBrowseResp(data, view.current, view.options);

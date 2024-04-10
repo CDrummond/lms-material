@@ -624,7 +624,7 @@ var lmsBrowse = Vue.component("lms-browse", {
             }
         },
         showMaiButton() {
-            if (LMS_P_MAI && this.showDetailedSubtoolbar && (undefined==this.current.stdItem || this.current.stdItem<STD_ITEM_MAI)) {
+            if (LMS_P_MAI && this.showDetailedSubtoolbar && (this.current.stdItem==STD_ITEM_ARTIST || this.current.stdItem==STD_ITEM_ALBUM)) {
                 if (this.current.stdItem==STD_ITEM_ARTIST) {
                     // 'Various Artists' will not have biography entry in its menu. So, if
                     // this item is not found then we don't show toolbar button...

@@ -1767,7 +1767,7 @@ function parseBrowseResp(data, parent, options, cacheKey, parentCommand, parentG
                 });
             }
             resp.subtitle=0==resp.items.length ? i18n("Empty") : i18np("1 Work", "%1 Works", resp.items.length);
-            resp.canUseGrid=false;
+            resp.canUseGrid=true;
         }
 
         if (data.result.count>LMS_BATCH_SIZE) {

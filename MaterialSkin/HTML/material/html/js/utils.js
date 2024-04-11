@@ -673,11 +673,11 @@ function addPart(str, part) {
 
 function commandGridKey(command, item) {
     return command.command[0]+
-           (undefined==item || undefined==item.type || undefined!=item.stdItem ? "" : ("-"+item.type))+
+           (undefined==item || undefined==item.type || undefined!=item.stdItem || item.id.startsWith(MUSIC_ID_PREFIX) ? "" : ("-"+item.type))+
            "-grid";
 }
 
-const USE_LIST_VIEW_BY_DEFAULT=new Set(["other-grid", "favorites-grid", "podcasts-grid", "youtube-grid", "playhistory-grid", "spotty-grid", "qobuz-grid", "tidal-grid", "wimp-grid"]);
+const USE_LIST_VIEW_BY_DEFAULT=new Set(["other-grid", "favorites-grid", "podcasts-grid", "youtube-grid", "playhistory-grid", "spotty-grid", "qobuz-grid", "tidal-grid", "wimp-grid", "works-grid"]);
 
 function isSetToUseGrid(command, item) {
     var key = commandGridKey(command, item);

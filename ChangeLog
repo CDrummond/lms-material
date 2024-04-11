@@ -17,6 +17,7 @@
     'work' release type icons.
 14. When getting release type icons try to map to a pre-supplied icon if
     specific icon not found.
+15. Append "material-skin:1" to all commands.
 
 4.4.1
 -----

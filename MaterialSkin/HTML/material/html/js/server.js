@@ -112,7 +112,7 @@ function visibilityOrFocusChanged() {
 
 function lmsCommand(playerid, command, commandId, timeout) {
     const URL = "/jsonrpc.js";
-    var data = { id: undefined==commandId ? 0 : commandId, method: "slim.request", params: [playerid, command]};
+    var data = { id: undefined==commandId ? 0 : commandId, method: "slim.request", params: [playerid, command.concat(['material-skin:1'])]};
 
     logJsonMessage("REQ", data.params);
     if (undefined!=timeout) {

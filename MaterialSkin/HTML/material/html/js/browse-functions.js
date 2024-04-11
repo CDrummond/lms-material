@@ -910,7 +910,7 @@ function browseClick(view, item, index, event) {
             window.open(item.weblink);
         }
     } else {
-        var command = view.buildCommand(item);
+        var command = browseBuildCommand(view, item);
         if (command.command.length>2 && command.command[1]=="playlist") {
             if (!item.menu || item.menu.length<1) { // No menu? Dynamic playlist? Just run command...
                 lmsCommand(view.playerId(), command.params ? command.command.concat(command.params) : command.command).then(({data}) => {
@@ -1802,6 +1802,7 @@ function browseGoBack(view, refresh) {
 }
 
 function browseBuildCommand(view, item, commandName, doReplacements) {
+    console.log("BC")
     var cmd = {command: [], params: [] };
 
     if (undefined===item || null===item) {
@@ -1987,7 +1988,6 @@ function browseBuildCommand(view, item, commandName, doReplacements) {
     if (undefined==doReplacements || doReplacements) {
         cmd=view.replaceCommandTerms(cmd, item);
     }
-
     return cmd;
 }
 
@@ -2446,15 +2446,13 @@ function browseBuildFullCommand(view, item, act) {
         command=browseReplaceCommandTerms(view, command);
     }
 
-    if (command.command.length===0) {
+    if (command.command.length==0) {
         return command;
     }
 
     // Add params onto command...
     if (command.params.length>0) {
-        command.params.forEach(i => {
-            command.command.push(i);
-        });
+        command.command = command.command.concat(command.params);
     }
     return command;
 }

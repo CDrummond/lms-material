@@ -126,7 +126,7 @@ var lmsBrowse = Vue.component("lms-browse", {
    <RecycleScroller :items="grid.rows" :item-size="grid.multiSize ? null : (grid.ih - (grid.haveSubtitle || isTop || current.id.startsWith(TOP_ID_PREFIX) ? 0 : GRID_SINGLE_LINE_DIFF))" page-mode key-field="id" :buffer="LMS_SCROLLER_GRID_BUFFER" v-if="grid.use">
     <div slot-scope="{item}" :class="[grid.few?'image-grid-few':'image-grid-full-width', grid.haveSubtitle?'image-grid-with-sub':'']">
 
-     <v-list-tile v-if="item.header && item.item" class="grid-header" @click.stop="itemMenu(item.item, undefined, $event)" v-bind:class="{'highlight':highlightIndex==(item.rs)}">
+     <v-list-tile v-if="(item.header || item.sbheader) && item.item" class="grid-header" @click.stop="item.sbheader ? click(item.item, undefined, $event) : itemMenu(item.item, undefined, $event)" v-bind:class="{'highlight':highlightIndex==(item.rs)}">
       <v-list-tile-avatar v-if="item.item.icon" :tile="true" class="lms-avatar">
        <v-icon>{{item.item.icon}}</v-icon>
       </v-list-tile-avatar>
@@ -180,7 +180,7 @@ var lmsBrowse = Vue.component("lms-browse", {
    </RecycleScroller>
 
    <RecycleScroller v-else-if="useRecyclerForLists" :items="items" :item-size="LMS_LIST_ELEMENT_SIZE" page-mode key-field="id" :buffer="LMS_SCROLLER_LIST_BUFFER">
-    <v-list-tile avatar @click="click(item, index, $event)" slot-scope="{item, index}" @dragstart="dragStart(index, $event)" @dragend="dragEnd()" @dragover="dragOver(index, $event)" @drop="drop(index, $event)" :draggable="item.draggable && (current.section!=SECTION_FAVORITES || 0==selection.size)" v-bind:class="{'browse-header':item.header, 'highlight':item.highlight || highlightIndex==index, 'list-active': (menu.show && index==menu.index) || (fetchingItem==item.id), 'drop-target':dragActive && index==dropIndex}" @contextmenu.prevent="contextMenu(item, index, $event)">
+    <v-list-tile avatar @click="click(item, index, $event)" slot-scope="{item, index}" @dragstart="dragStart(index, $event)" @dragend="dragEnd()" @dragover="dragOver(index, $event)" @drop="drop(index, $event)" :draggable="item.draggable && (current.section!=SECTION_FAVORITES || 0==selection.size)" v-bind:class="{'browse-header':item.header || item.sbheader, 'highlight':item.highlight || highlightIndex==index, 'list-active': (menu.show && index==menu.index) || (fetchingItem==item.id), 'drop-target':dragActive && index==dropIndex}" @contextmenu.prevent="contextMenu(item, index, $event)">
      <v-list-tile-avatar v-if="item.selected" :tile="true" class="lms-avatar">
       <v-icon>check_box</v-icon>
      </v-list-tile-avatar>
@@ -194,11 +194,11 @@ var lmsBrowse = Vue.component("lms-browse", {
       <v-icon>{{item.icon}}</v-icon>
      </v-list-tile-avatar>
      <v-list-tile-avatar v-else-if="item.svg" :tile="true" class="lms-avatar">
-      <img class="svg-list-img" :src="item.svg | svgIcon(darkUi, undefined, item.header)" loading="lazy"></img>
+      <img class="svg-list-img" :src="item.svg | svgIcon(darkUi, undefined, item.header || item.sbheader)" loading="lazy"></img>
      </v-list-tile-avatar>
 
      <!-- TODO: Do we have search fields with large lists?? -->
-     <v-list-tile-content v-if="item.header" @click.stop="itemMenu(item, index, $event)">
+     <v-list-tile-content v-if="item.header || item.sbheader" @click.stop="item.sbheader ? click(item, index, $event) : itemMenu(item, index, $event)">
       <v-list-tile-title>{{item.title}}</v-list-tile-title>
       <v-list-tile-sub-title v-if="item.subtitle && !item.hidesub">{{item.subtitle}}</v-list-tile-sub-title>
      </v-list-tile-content>
@@ -240,7 +240,7 @@ var lmsBrowse = Vue.component("lms-browse", {
      <v-list-tile-title v-html="item.title" @touchend="textSelectEnd" @mouseup="textSelectEnd" @contextmenu="event.preventDefault()"></v-list-tile-title>
     </v-list-tile-content>
    </v-list-tile>
-    <v-list-tile v-else-if="item.header" class="lms-list-item" v-bind:class="{'browse-header':item.header,'highlight':highlightIndex==index}" @click="click(item, index, $event)">
+    <v-list-tile v-else-if="item.header || item.sbheader" class="lms-list-item" v-bind:class="{'browse-header':item.header || item.sbheader,'highlight':highlightIndex==index}" @click="click(item, index, $event)">
      <v-list-tile-avatar v-if="item.icon" :tile="true" class="lms-avatar">
       <v-icon>{{item.icon}}</v-icon>
      </v-list-tile-avatar>

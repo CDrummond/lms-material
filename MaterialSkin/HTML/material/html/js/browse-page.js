@@ -152,7 +152,10 @@ var lmsBrowse = Vue.component("lms-browse", {
       <div v-else class="image-grid-item" @click="click(citem, item.rs+col, $event)" :title="citem | itemTooltip" :draggable="item.draggable && current.section!=SECTION_FAVORITES" @dragstart="dragStart(item.rs+col, $event)" @dragend="dragEnd()" v-bind:class="{'highlight':highlightIndex==(item.rs+col), 'list-active': (menu.show && (item.rs+col)==menu.index) || (fetchingItem==item.id)}">
        <div v-if="selection.size>0 && browseCanSelect(citem)" class="check-btn grid-btn image-grid-select-btn" @click.stop="select(citem, item.rs+col, $event)" :title="ACTIONS[citem.selected ? UNSELECT_ACTION : SELECT_ACTION].title" v-bind:class="{'check-btn-checked':citem.selected}"></div>
        <img v-else-if="citem.multi" class="multi-disc" :src="'album-multi' | svgIcon(true)" loading="lazy"></img>
-       <img v-if="citem.image" :key="citem.image" :src="citem.image" onerror="this.src=DEFAULT_COVER" v-bind:class="{'radio-img': SECTION_RADIO==citem.section || SECTION_APPS==citem.section || citem.isRadio}" class="image-grid-item-img" loading="lazy"></img>
+       <div v-if="citem.images" :tile="true" class="mi image-grid-item-img" :class="'mi'+citem.images.length">
+        <img v-for="(mic, midx) in citem.images" :class="'mi-'+midx" :key="mic" :src="mic" loading="lazy"></img>
+       </div>
+       <img v-else-if="citem.image" :key="citem.image" :src="citem.image" onerror="this.src=DEFAULT_COVER" v-bind:class="{'radio-img': SECTION_RADIO==citem.section || SECTION_APPS==citem.section || citem.isRadio}" class="image-grid-item-img" loading="lazy"></img>
        <div class="image-grid-item-icon" v-else>
         <v-icon v-if="citem.icon" class="image-grid-item-img image-grid-item-icon">{{citem.icon}}</v-icon>
         <img v-else-if="citem.svg" class="image-grid-item-svg" :src="citem.svg | svgIcon(darkUi)" loading="lazy"></img>
@@ -180,6 +183,9 @@ var lmsBrowse = Vue.component("lms-browse", {
     <v-list-tile avatar @click="click(item, index, $event)" slot-scope="{item, index}" @dragstart="dragStart(index, $event)" @dragend="dragEnd()" @dragover="dragOver(index, $event)" @drop="drop(index, $event)" :draggable="item.draggable && (current.section!=SECTION_FAVORITES || 0==selection.size)" v-bind:class="{'browse-header':item.header, 'highlight':item.highlight || highlightIndex==index, 'list-active': (menu.show && index==menu.index) || (fetchingItem==item.id), 'drop-target':dragActive && index==dropIndex}" @contextmenu.prevent="contextMenu(item, index, $event)">
      <v-list-tile-avatar v-if="item.selected" :tile="true" class="lms-avatar">
       <v-icon>check_box</v-icon>
+     </v-list-tile-avatar>
+     <v-list-tile-avatar v-else-if="item.images" :tile="true" class="mi lms-avatar" :class="'mi'+item.images.length">
+      <img v-for="(mic, midx) in item.images" :class="'mi-'+midx" :key="mic" :src="mic" loading="lazy"></img>
      </v-list-tile-avatar>
      <v-list-tile-avatar v-else-if="item.image" :tile="true" v-bind:class="{'radio-image': SECTION_RADIO==item.section || SECTION_APPS==item.section || item.isRadio}" class="lms-avatar">
       <img :key="item.image" :src="item.image" onerror="this.src=DEFAULT_COVER" class="allow-drag" loading="lazy"></img>
@@ -264,6 +270,9 @@ var lmsBrowse = Vue.component("lms-browse", {
     <v-list-tile v-else-if="!(isTop && (disabled.has(item.id) || hidden.has(item.id)) || (queryParams.party && HIDE_TOP_FOR_PARTY.has(item.id)))" avatar @click="click(item, index, $event)" :key="item.id" class="lms-avatar lms-list-item" :id="'item'+index" @dragstart="dragStart(index, $event)" @dragend="dragEnd()" @dragover="dragOver(index, $event)" @drop="drop(index, $event)" :draggable="isTop || (item.draggable && (current.section!=SECTION_FAVORITES || 0==selection.size))" @contextmenu.prevent="contextMenu(item, index, $event)" v-bind:class="{'drop-target': dragActive && index==dropIndex, 'highlight':item.highlight || highlightIndex==index, 'list-active': (menu.show && index==menu.index) || (fetchingItem==item.id)}">
      <v-list-tile-avatar v-if="item.selected" :tile="true" class="lms-avatar">
       <v-icon>check_box</v-icon>
+     </v-list-tile-avatar>
+     <v-list-tile-avatar v-else-if="item.images" :tile="true" class="mi lms-avatar" :class="'mi'+item.images.length">
+      <img v-for="(mic, midx) in item.images" :class="'mi-'+midx" :key="mic" :src="mic" loading="lazy"></img>
      </v-list-tile-avatar>
      <v-list-tile-avatar v-else-if="item.image" :tile="true" v-bind:class="{'radio-image': SECTION_RADIO==item.section || SECTION_APPS==item.section || item.isRadio, 'lms-avatar-small': isTop || (current && (current.id==TOP_RADIO_ID || current.id==TOP_APPS_ID)), 'lms-avatar': current && current.id!=TOP_RADIO_ID && current.id!=TOP_APPS_ID}">
       <img :key="item.image" v-lazy="item.image" class="allow-drag" onerror="this.src=DEFAULT_COVER"></img>

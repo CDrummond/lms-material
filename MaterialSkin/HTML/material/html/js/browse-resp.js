@@ -1755,15 +1755,23 @@ function parseBrowseResp(data, parent, options, cacheKey, parentCommand, parentG
                     resp.jumplist.push({key: key, index: resp.items.length});
                     textKeys.add(key);
                 }
+                var images = [];
+                if (undefined!=i.images) {
+                    for (var img=0, images=i.images, limit = images.length>4 ? 4 : images.length; img<limit; ++img) {
+                        images/push(resolveImageUrl(images[img], LMS_IMAGE_SIZE));
+                    }
+                }
+                var image = images.length==1 ? i.images[0] : i.image;
                 resp.items.push({
                     title: i.composer,
                     subtitle: i.work,
                     composer_id: i.composer_id,
                     id: "work_id:"+i.work_id,
                     type: "group",
-                    image: undefined==i.image ? DEFAULT_WORKS_COVER : resolveImageUrl(i.image, LMS_IMAGE_SIZE),
+                    image: images.length>1 || undefined==image ? DEFAULT_WORKS_COVER : resolveImageUrl(image, LMS_IMAGE_SIZE),
                     stdItem: STD_ITEM_WORK,
-                    textkey: key
+                    textkey: key,
+                    images: images.length>1 ? images : undefined
                 });
             }
             resp.subtitle=0==resp.items.length ? i18n("Empty") : i18np("1 Work", "%1 Works", resp.items.length);

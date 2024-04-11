@@ -3566,3 +3566,72 @@ div.v-subheader {
 .np-info-text-full h1, .np-info-text-full h2, .np-info-text-full h3 {
  font-size:calc(var(--std-font-size) * var(--np-zoom)) !important;
 }
+
+/* Works images*/
+.image-grid-item .mi,
+.mi .v-avatar {
+  position: relative;
+  overflow: hidden;
+}
+
+.mi img {
+ position: absolute;
+ width: 100%;
+ height: 100%;
+ object-fit: cover;
+ object-position: center left;
+}
+
+.mi2 .mi-0, .mi3 .mi-0, .mi4 .mi-0 {
+ transform: translateX(-50%);
+}
+
+.mi3 .mi-0 {
+ transform: translateX(-50%);
+}
+
+.mi3 .mi-1 {
+ transform: translateX(-17%);
+}
+
+.mi3 .mi-2 {
+ transform: translateX(17%);
+}
+
+.mi4 .mi-1 {
+ transform: translateX(-25%);
+}
+
+.mi4 .mi-3 {
+ transform: translateX(25%);
+}
+
+.v-list__tile .mi2 .mi-0,
+.v-list__tile .mi3 .mi-0,
+.v-list__tile .mi4 .mi-0 {
+ transform: translateX(0%);
+}
+
+.v-list__tile .mi2 .mi-1 {
+ transform: translateX(50%);
+}
+
+.v-list__tile .mi3 .mi-1 {
+ transform: translateX(34%);
+}
+
+.v-list__tile .mi3 .mi-2 {
+ transform: translateX(67%);
+}
+
+.v-list__tile .mi4 .mi-1 {
+ transform: translateX(25%);
+}
+
+.v-list__tile .mi4 .mi-2 {
+ transform: translateX(50%);
+}
+
+.v-list__tile .mi4 .mi-3 {
+ transform: translateX(75%);
+}

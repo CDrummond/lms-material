@@ -1641,10 +1641,18 @@ sub _svgHandler {
             $altFilePath = Slim::Utils::Prefs::dir() . "/material-skin/images/" . $svgName . ".svg";
         }
         if ((! -e $filePath) && (! -e $altFilePath)) {
-            if (rindex($svgName, "composer")>0) {
+            if (rindex($svgName, "release-live")==0) {
+                $filePath = $dir . "/HTML/material/html/images/release-live.svg";
+            } elsif (rindex($svgName, "release-remix")==0) {
+                $filePath = $dir . "/HTML/material/html/images/release-remix.svg";
+            } elsif (rindex($svgName, "composer")>0) {
                 $filePath = $dir . "/HTML/material/html/images/release-composer.svg";
             } elsif (rindex($svgName, "conductor")>0) {
                 $filePath = $dir . "/HTML/material/html/images/release-conductor.svg";
+            } elsif ((rindex($svgName, "orchestra")>0) || (rindex($svgName, "appearanceband")>0)) {
+                $filePath = $dir . "/HTML/material/html/images/release-orchestra.svg";
+            } elsif (rindex($svgName, "appearance")>0) {
+                $filePath = $dir . "/HTML/material/html/images/release-appearance.svg";
             }
         }
         if ((! -e $filePath) && (! -e $altFilePath)) {

@@ -13,7 +13,8 @@
 10. Add 'Scroll to' action for artists with multiple release categories.
 11. Don't allow "fake" add/play-all for Qobuz playlists.
 12. 'header' support for SlimBrowse lists.
-13. Add 'appearance', 'conductor', and 'work' icons.
+13. Add 'appearance', 'collection', 'conductor', 'orchestra', 'remix', and
+    'work' release type icons.
 14. When getting release type icons try to map to a pre-supplied icon if
     specific icon not found.
 

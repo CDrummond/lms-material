@@ -499,7 +499,7 @@ function browseHandleListResponse(view, item, command, resp, prevPage, appendIte
             let params = [view.current.id].concat(index<0 ? [] : [command.params[index]]);
             browseAddLibId(view, params);
             lmsList('', ['genres'], params, 0, 25, false, view.nextReqId()).then(({data}) => {
-                if (data.result && data.result.genres_loop && view.isCurrentReq(data) && genreReqArtist==view.current.id) {
+                if (data.result && data.result.genres_loop && genreReqArtist==view.current.id) {
                     let genreList = [];
                     let genreListPlain = [];
                     for (let g=0, loop=data.result.genres_loop, len=loop.length; g<len; ++g) {
@@ -1802,7 +1802,6 @@ function browseGoBack(view, refresh) {
 }
 
 function browseBuildCommand(view, item, commandName, doReplacements) {
-    console.log("BC")
     var cmd = {command: [], params: [] };
 
     if (undefined===item || null===item) {

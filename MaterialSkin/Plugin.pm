@@ -1634,7 +1634,22 @@ sub _svgHandler {
 
     # If this is for a release type then fallback to release.svg if it does not exist
     if (rindex($svgName, "release-")==0 && (! -e $filePath) && (! -e $altFilePath)) {
-        $filePath = $dir . "/HTML/material/html/images/release.svg";
+        my $end = substr($svgName, -1);
+        if ($end eq "s") {
+            $svgName = substr($svgName, 0, -1);
+            $filePath = $dir . "/HTML/material/html/images/" . $svgName . ".svg";
+            $altFilePath = Slim::Utils::Prefs::dir() . "/material-skin/images/" . $svgName . ".svg";
+        }
+        if ((! -e $filePath) && (! -e $altFilePath)) {
+            if (rindex($svgName, "composer")>0) {
+                $filePath = $dir . "/HTML/material/html/images/release-composer.svg";
+            } elsif (rindex($svgName, "conductor")>0) {
+                $filePath = $dir . "/HTML/material/html/images/release-conductor.svg";
+            }
+        }
+        if ((! -e $filePath) && (! -e $altFilePath)) {
+            $filePath = $dir . "/HTML/material/html/images/release.svg";
+        }
     }
     # If desired path does not exist check alt location
     if (! -e $filePath) {

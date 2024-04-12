@@ -1773,7 +1773,7 @@ function parseBrowseResp(data, parent, options, cacheKey, parentCommand, parentG
                     album_ids: i.album_ids,
                     id: "work_id:"+i.work_id,
                     type: "group",
-                    image: images.length>1 || undefined==image ? DEFAULT_WORKS_COVER : resolveImageUrl(image, LMS_IMAGE_SIZE),
+                    image: images.length>1 ? images[0] : undefined==image ? DEFAULT_WORKS_COVER : resolveImageUrl(image, LMS_IMAGE_SIZE),
                     stdItem: STD_ITEM_WORK,
                     textkey: key,
                     images: images.length>1 ? images : undefined,

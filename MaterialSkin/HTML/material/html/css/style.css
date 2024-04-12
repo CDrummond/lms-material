@@ -3573,6 +3573,10 @@ div.v-subheader {
   position: relative;
   overflow: hidden;
 }
+.image-grid-item .mi {
+  width: 100%;
+  height: 100%;
+}
 
 .mi img {
  position: absolute;

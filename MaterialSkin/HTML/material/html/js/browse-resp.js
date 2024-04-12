@@ -1758,24 +1758,28 @@ function parseBrowseResp(data, parent, options, cacheKey, parentCommand, parentG
                 }
                 var images = [];
                 if (undefined!=i.images) {
-                    for (var img=0, iloop=i.images, limit = iloop.length>4 ? 4 : iloop.length; img<limit; ++img) {
+                    for (var img=0, iloop=splitStringArray(i.images, true), limit = iloop.length>4 ? 4 : iloop.length; img<limit; ++img) {
                         var id = ""+iloop[img];
                         if (!isEmpty(id) && "null"!=id) {
                             images.push(resolveImageUrl(iloop[img], LMS_IMAGE_SIZE));
                         }
                     }
                 }
-                var image = images.length==1 ? images[0] : i.image;
+                var image = images.length>0 ? images[0] : i.image;
                 resp.items.push({
                     title: i.composer,
                     subtitle: i.work,
                     composer_id: i.composer_id,
+                    album_ids: i.album_ids,
                     id: "work_id:"+i.work_id,
                     type: "group",
                     image: images.length>1 || undefined==image ? DEFAULT_WORKS_COVER : resolveImageUrl(image, LMS_IMAGE_SIZE),
                     stdItem: STD_ITEM_WORK,
                     textkey: key,
-                    images: images.length>1 ? images : undefined
+                    images: images.length>1 ? images : undefined,
+                    // Favourites...
+                    favUrl: i.favorites_url,
+                    favTitle: i.favorites_text
                 });
             }
             resp.subtitle=0==resp.items.length ? i18n("Empty") : i18np("1 Work", "%1 Works", resp.items.length);

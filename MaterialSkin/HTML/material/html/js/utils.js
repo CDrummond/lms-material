@@ -968,8 +968,8 @@ function splitIntArray(val) {
     return undefined==val || Array.isArray(val) ? val : (""+val).split(",").map(function(itm) { return itm.trim() }).map(Number);
 }
 
-function splitStringArray(val, isGenre) {
-    return undefined==val || Array.isArray(val) ? val : (""+val).split(isGenre ? "," : MULTI_SPLIT_REGEX).map(function(itm) { return itm.trim() });
+function splitStringArray(val, plainSep) {
+    return undefined==val || Array.isArray(val) ? val : (""+val).split(plainSep ? "," : MULTI_SPLIT_REGEX).map(function(itm) { return itm.trim() });
 }
 
 function splitMultiple(item, typeKey, idsKey, isGenre) {

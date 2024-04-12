@@ -142,7 +142,7 @@ function updateItemFavorites(item) {
         }
 
         item.favUrl = item.favUrl ? item.favUrl : item.url;
-        item.favIcon = item.favIcon ? item.favIcon : item.image ? item.image : item.icon;
+        item.favIcon = item.images ? item.images[0] : item.image ? item.image : item.icon;
     } catch(e) {
     }
 }

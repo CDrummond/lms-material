@@ -1204,7 +1204,7 @@ function browseItemAction(view, act, item, index, event) {
         var favUrl = item.favUrl ? item.favUrl : item.url;
         var favIcon = item.favIcon;
         var favType = SECTION_PODCASTS==item.section ? "link" : "audio";
-        var favTitle = item.origTitle ? item.origTitle : item.title;
+        var favTitle = item.favTitle ? item.favTitle : item.origTitle ? item.origTitle : item.title;
 
         if (item.presetParams && item.presetParams.favorites_url) {
             favUrl = item.presetParams.favorites_url;
@@ -2428,7 +2428,7 @@ function browseBuildFullCommand(view, item, act) {
                         if (loop[i].startsWith("artist_id:") && !item.id.startsWith("album_id:")) {
                             command.params.push(SORT_KEY+ARTIST_ALBUM_SORT_PLACEHOLDER);
                         }
-                    } else if ((loop[i].startsWith("composer_id:") || loop[i].startsWith("work_id:") || loop[i].startsWith("grouping:")) &&
+                    } else if ((loop[i].startsWith("composer_id:") || loop[i].startsWith("work_id:") || loop[i].startsWith("grouping:") || loop[i].startsWith("album_ids:")) &&
                                 getIndex(command.params, loop[i].split(':')[0]+":")<0) {
                         command.params.push(loop[i]);
                     }

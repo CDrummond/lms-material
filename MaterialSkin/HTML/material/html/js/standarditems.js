@@ -195,6 +195,9 @@ function buildStdItemCommand(item, parentCommand) {
             if (undefined!=item.grouping) {
                 command.params.push("grouping:"+item.grouping);
             }
+            if (undefined!=item.album_ids) {
+                command.params.push("album_ids:"+item.album_ids);
+            }
         }
     }
     return command;

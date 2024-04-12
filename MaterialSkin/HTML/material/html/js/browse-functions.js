@@ -795,7 +795,7 @@ function browseClick(view, item, index, event) {
         }
         return;
     }
-    if (item.header) {
+    if (item.header && !i.slimbrowse) {
         if (item.allItems && item.allItems.length>0) { // Clicking on 'X Artists' / 'X Albums' / 'X Tracks' search header
             view.addHistory();
             view.items = item.allItems;
@@ -809,7 +809,7 @@ function browseClick(view, item, index, event) {
         } else if (view.selection.size>0) {
             view.select(item, index, event);
         } else {
-            view.itemMenu(item, index, event);
+            browseItemMenu(view, item, index, event);
         }
         return;
     }
@@ -820,7 +820,7 @@ function browseClick(view, item, index, event) {
         }
         let listRight = view.scrollElement.getBoundingClientRect().right;
         if (clickX>(listRight-64)) {
-            view.itemMenu(item, index, event);
+            browseItemMenu(view, item, index, event);
         } else {
             view.select(item, index, event);
         }
@@ -828,7 +828,7 @@ function browseClick(view, item, index, event) {
     }
     if (item.isPinned) {
         if (undefined!=item.url && "extra"!=item.type) { // Radio
-            view.itemMenu(item, index, event);
+            browseItemMenu(view, item, index, event);
             return;
         }
         if ("settingsPlayer"==item.type) {
@@ -848,7 +848,7 @@ function browseClick(view, item, index, event) {
         if (!view.clickTimer) {
             view.clickTimer = setTimeout(function () {
                 view.clickTimer = undefined;
-                view.itemMenu(item, index, event);
+                browseItemMenu(view, item, index, event);
             }.bind(view), LMS_DOUBLE_CLICK_TIMEOUT);
         } else {
             clearTimeout(view.clickTimer);
@@ -917,7 +917,7 @@ function browseClick(view, item, index, event) {
                     bus.$emit('showMessage', item.title);
                 });
             } else {
-                view.itemMenu(item, index, event);
+                browseItemMenu(view, item, index, event);
             }
             return;
         }

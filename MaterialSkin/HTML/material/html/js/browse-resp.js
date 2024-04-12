@@ -179,6 +179,7 @@ function parseBrowseResp(data, parent, options, cacheKey, parentCommand, parentG
 
             for (var idx=0, loop=data.result.item_loop, loopLen=loop.length; idx<loopLen; ++idx) {
                 var i = loop[idx];
+                i.slimbrowse = true;
                 if (!i.text || i.showBigArtwork==1) {
                     if (i.url && "musicartistinfo"==command) { // Artist images...
                         resp.items.push({id: "image:"+resp.items.length,
@@ -238,7 +239,7 @@ function parseBrowseResp(data, parent, options, cacheKey, parentCommand, parentG
                     i.title=i.title.replace(/&#(\d+);/g, function(m, dec) { return String.fromCharCode(dec); });
                     i.title=i.title.replace(/&quot;/g, '"').replace(/&amp;/g, '&').replace(/&lt;/g, '<').replace(/&gt;/g, '>');
                     if (i.type=="header") {
-                        i.sbheader = true;
+                        i.header = true;
                     }
                 }
 
@@ -364,7 +365,7 @@ function parseBrowseResp(data, parent, options, cacheKey, parentCommand, parentG
                         } else {
                             mapIcon(i);
                         }
-                        if (STREAM_SCHEMAS.has(i.presetParams.favorites_url.split(":")[0]) && allowPinning && !i.sbheader) {
+                        if (STREAM_SCHEMAS.has(i.presetParams.favorites_url.split(":")[0]) && allowPinning && !i.header) {
                             i.isRadio = true;
                             if (!addedDivider && i.menu.length>0) {
                                 i.menu.push(DIVIDER);
@@ -436,7 +437,7 @@ function parseBrowseResp(data, parent, options, cacheKey, parentCommand, parentG
                     if (queryParams.party && HIDE_APPS_FOR_PARTY.has(i.id)) {
                         continue;
                     }
-                    if (allowPinning && !i.sbheader) {
+                    if (allowPinning && !i.header) {
                         if (!addedDivider && i.menu.length>0) {
                             i.menu.push(DIVIDER);
                             addedDivider = true;
@@ -461,7 +462,7 @@ function parseBrowseResp(data, parent, options, cacheKey, parentCommand, parentG
                                 i.id = "radio:"+i.title;
                             }
                         }
-                        if (allowPinning && !i.sbheader) {
+                        if (allowPinning && !i.header) {
                             if (i.menu.length>0 && i.menu[0]==PLAY_ACTION && (i.icon || i.image) && i.type!="entry" && i.presetParams && i.presetParams.favorites_url) {
                                 // Only allow to pin if we can play!
                                 if (!addedDivider && i.menu.length>0) {

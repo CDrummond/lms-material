@@ -1015,6 +1015,10 @@ function parseBrowseResp(data, parent, options, cacheKey, parentCommand, parentG
                               compilation: i.compilation,
                               nonmain: nonmain
                           };
+                if (undefined!=i.favorites_url && undefined!=i.favorites_text) {
+                    album.favUrl=i.favorites_url;
+                    album.favTitle=i.favorites_text;
+                }
                 ids.add(i.id);
                 if (albumGroups) {
                     if (undefined==albumGroups[group]) {

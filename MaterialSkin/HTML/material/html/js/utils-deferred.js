@@ -141,7 +141,9 @@ function updateItemFavorites(item) {
             item.favIcon=item.infoParams.image;
         }
 
-        item.favUrl = item.favUrl ? item.favUrl : item.url;
+        if (!item.favUrl && item.url) {
+            item.favUrl = item.url;
+        }
         item.favIcon = item.images ? item.images[0] : item.image ? item.image : item.icon;
     } catch(e) {
     }

@@ -1759,7 +1759,10 @@ function parseBrowseResp(data, parent, options, cacheKey, parentCommand, parentG
                 var images = [];
                 if (undefined!=i.images) {
                     for (var img=0, iloop=i.images, limit = iloop.length>4 ? 4 : iloop.length; img<limit; ++img) {
-                        images.push(resolveImageUrl(iloop[img], LMS_IMAGE_SIZE));
+                        var id = ""+iloop[img];
+                        if (!isEmpty(id) && "null"!=id) {
+                            images.push(resolveImageUrl(iloop[img], LMS_IMAGE_SIZE));
+                        }
                     }
                 }
                 var image = images.length==1 ? images[0] : i.image;

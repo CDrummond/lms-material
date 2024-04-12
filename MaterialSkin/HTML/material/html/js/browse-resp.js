@@ -1770,7 +1770,7 @@ function parseBrowseResp(data, parent, options, cacheKey, parentCommand, parentG
                     title: i.composer,
                     subtitle: i.work,
                     composer_id: i.composer_id,
-                    album_ids: i.album_ids,
+                    album_id: i.album_id,
                     id: "work_id:"+i.work_id,
                     type: "group",
                     image: images.length>1 ? images[0] : undefined==image ? DEFAULT_WORKS_COVER : resolveImageUrl(image, LMS_IMAGE_SIZE),

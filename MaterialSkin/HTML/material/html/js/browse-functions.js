@@ -795,7 +795,7 @@ function browseClick(view, item, index, event) {
         }
         return;
     }
-    if (item.header && !i.slimbrowse) {
+    if (item.header && !item.slimbrowse) {
         if (item.allItems && item.allItems.length>0) { // Clicking on 'X Artists' / 'X Albums' / 'X Tracks' search header
             view.addHistory();
             view.items = item.allItems;

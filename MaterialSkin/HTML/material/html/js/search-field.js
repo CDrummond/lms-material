@@ -189,7 +189,7 @@ Vue.component('lms-search-field', {
                 lmsList(6==command.cat && this.$store.state.player ? this.$store.state.player.id : "", command.command, command.params, 5==command.cat ? 1 : 0, LMS_SEARCH_LIMIT, false, seachReqId).then(({data}) => {
                     if (data.id == seachReqId && this.searching) {
                         let resp = parseBrowseResp(data, undefined, {isSearch:true});
-                        if (5==command.cat) {
+                        if (6==command.cat) {
                             // Only want to show music sources...
                             let items = resp.items;
                             resp.items = [];

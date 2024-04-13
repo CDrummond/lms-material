@@ -3639,3 +3639,9 @@ div.v-subheader {
 .v-list__tile .mi4 .mi-3 {
  transform: translateX(75%);
 }
+
+/* Set these to 100% height to work-around strange issue (Chromium Linux) where if list only has one
+   item then only the item's background is blurred, not the rest of the view??? */
+.vue-recycle-scroller, .vue-recycle-scroller.direction-vertical .vue-recycle-scroller__item-wrapper {
+ height:100%;
+}

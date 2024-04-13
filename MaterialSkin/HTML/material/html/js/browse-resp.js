@@ -1761,6 +1761,15 @@ function parseBrowseResp(data, parent, options, cacheKey, parentCommand, parentG
                     textKeys.add(key);
                 }
                 var images = [];
+                if (0==idx) {
+                    i.images = ["9028efe0"]
+                } else if (1==idx) {
+                    i.images = ["9028efe0", "f12884b5"]
+                } else if (2==idx) {
+                    i.images = ["9028efe0", "f12884b5", "d9cbff5e"]
+                } else if (3==idx) {
+                    i.images = ["9028efe0", "f12884b5", "d9cbff5e", "eede7e85"]
+                }
                 if (undefined!=i.images) {
                     for (var img=0, iloop=splitStringArray(i.images, true), limit = iloop.length>4 ? 4 : iloop.length; img<limit; ++img) {
                         var id = ""+iloop[img];

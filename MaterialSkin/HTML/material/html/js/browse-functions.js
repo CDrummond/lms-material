@@ -128,7 +128,7 @@ function browseAddHistory(view) {
     view.history.push(prev);
 }
 
-function browseActions(view, item, args, count, showCompositions) {
+function browseActions(view, item, args, count, showCompositions, showWorks) {
     var actions=[];
     if ((undefined==item || undefined==item.id || !item.id.startsWith(MUSIC_ID_PREFIX)) && // Exclude 'Compilations'
         (undefined==args['artist'] || (args['artist']!=i18n('Various Artists') && args['artist']!=LMS_VA_STRING && args['artist'].toLowerCase()!='various artists'))) {
@@ -194,6 +194,9 @@ function browseActions(view, item, args, count, showCompositions) {
             var params = [SORT_KEY+TRACK_SORT_PLACEHOLDER, PLAYLIST_TRACK_TAGS, 'artist_id:'+args['artist_id'], 'role_id:COMPOSER', 'material_skin_artist:'+args['artist']];
             browseAddLibId(view, params);
             actions.push({title:i18n('Compositions'), svg:'composer', do:{ command: ['tracks'], params: params}, weight:81, stdItem:STD_ITEM_COMPOSITION_TRACKS});
+        }
+        if (showWorks) {
+            actions.push({title:i18n('Works'), subtitle:args['artist'], svg:'classical-work', stdItem:STD_ITEM_CLASSICAL_WORKS, do:{ command: ['works'], params:[view.current.id]}, weight:82});
         }
     }
 
@@ -404,6 +407,7 @@ function browseHandleListResponse(view, item, command, resp, prevPage, appendIte
         var canAddAlbumSort=true;
         if (((listingArtistAlbums || listingWorkAlbums) && listingAlbums) || (listingAlbumTracks && listingTracks)) {
             var actParams = new Map();
+            var showWorksInMenu = false;
             actParams[view.current.id.split(':')[0]]=view.current.id.split(':')[1];
             if (undefined!=artist_id) {
                 actParams["artist_id"] = artist_id;
@@ -425,6 +429,7 @@ function browseHandleListResponse(view, item, command, resp, prevPage, appendIte
                 if (field>=0) {
                     actParams['genre_id']=view.command.params[field];
                 }
+                showWorksInMenu = LMS_VERSION>=90000 && !lmsOptions.showWorks && getField(view.command, "work_id:")<0;
             } else if (listingWorkAlbums) {
                 actParams['composer']=title;
                 actParams['count']=resp.items.length;
@@ -453,13 +458,27 @@ function browseHandleListResponse(view, item, command, resp, prevPage, appendIte
                     }
                 }
             }
-            view.currentActions = browseActions(view, resp.items.length>0 ? item : undefined, actParams, resp.items.length, resp.showCompositions);
+            view.currentActions = browseActions(view, resp.items.length>0 ? item : undefined, actParams, resp.items.length, resp.showCompositions, showWorksInMenu);
             if (listingArtistAlbums) {
                 for (var i=0, loop=view.onlineServices, len=loop.length; i<len; ++i) {
                     var emblem = getEmblem(loop[i].toLowerCase()+':');
                     view.currentActions.push({title:/*!i81n*/'wimp'==loop[i] ? 'Tidal' : capitalize(loop[i]),
                                               weight:110, svg:emblem ? emblem.name : undefined, id:loop[i], isService:true,
                                               artist_id:artist_id});
+                }
+                if (showWorksInMenu) {
+                    lmsList('', ['works'], [view.current.id], 0, 1, false, view.nextReqId()).then(({data}) => {
+                        logJsonMessage("RESP", data);
+                        if (!data || !data.result || !data.result.works_loop || data.result.works_loop.length<1) {
+                            for (var i=0, loop=view.currentActions, len=loop.length; i<len; ++i) {
+                                if (loop[i].stdItem==STD_ITEM_CLASSICAL_WORKS) {
+                                    loop.splice(i, 1);
+                                    break;
+                                }
+                            }
+                        }
+                    }).catch(err => {
+                    });
                 }
             } else if (!listingWorkAlbums && undefined!=LMS_P_RP && view.$store.state.showRating && view.items.length>1 && !queryParams.party && !LMS_KIOSK_MODE) {
                 view.currentActions.push({albumRating:true, title:i18n("Set rating for all tracks"), icon:"stars", weight:102});

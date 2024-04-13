@@ -3591,11 +3591,11 @@ div.v-subheader {
 }
 
 .mi2 .mi-1, .mi3 .mi-1 {
- transform: translateX(-30%);
+ transform: translateX(-35%);
 }
 
-.mi3 .mi-2 {
- transform: translateX(-10%);
+.mi3 .mi-2, .mi4 .mi-3 {
+ transform: translateX(-20%);
 }
 
 .mi4 .mi-1 {
@@ -3604,10 +3604,6 @@ div.v-subheader {
 
 .mi4 .mi-2 {
  transform: translateX(-30%);
-}
-
-.mi4 .mi-3 {
- transform: translateX(-20%);
 }
 
 .mi .mi-1, .mi .mi-2, .mi .mi-3 {
@@ -3633,15 +3629,15 @@ div.v-subheader {
 }
 
 .v-list__tile .mi4 .mi-1 {
- transform: translateX(15%);
+ transform: translateX(13.3%);
 }
 
 .v-list__tile .mi4 .mi-2 {
- transform: translateX(30%);
+ transform: translateX(26.7%);
 }
 
 .v-list__tile .mi4 .mi-3 {
- transform: translateX(45%);
+ transform: translateX(40%);
 }
 
 /* Set these to 100% height to work-around strange issue (Chromium Linux) where if list only has one

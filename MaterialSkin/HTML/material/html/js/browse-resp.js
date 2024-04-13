@@ -1761,17 +1761,8 @@ function parseBrowseResp(data, parent, options, cacheKey, parentCommand, parentG
                     textKeys.add(key);
                 }
                 var images = [];
-                if (0==idx) {
-                    i.images = ["9028efe0"]
-                } else if (1==idx) {
-                    i.images = ["9028efe0", "f12884b5"]
-                } else if (2==idx) {
-                    i.images = ["9028efe0", "f12884b5", "d9cbff5e"]
-                } else if (3==idx) {
-                    i.images = ["9028efe0", "f12884b5", "d9cbff5e", "eede7e85"]
-                }
                 if (undefined!=i.images) {
-                    for (var img=0, iloop=splitStringArray(i.images, true), limit = iloop.length>4 ? 4 : iloop.length; img<limit; ++img) {
+                    for (var img=0, iloop=splitStringArray(i.images, true).reverse(), limit = iloop.length>4 ? 4 : iloop.length; img<limit; ++img) {
                         var id = ""+iloop[img];
                         if (!isEmpty(id) && "null"!=id) {
                             images.push(resolveImageUrl(iloop[img], LMS_IMAGE_SIZE));
@@ -1786,7 +1777,7 @@ function parseBrowseResp(data, parent, options, cacheKey, parentCommand, parentG
                     album_id: i.album_id,
                     id: "work_id:"+i.work_id,
                     type: "group",
-                    image: images.length>1 ? images[0] : undefined==image ? DEFAULT_WORKS_COVER : resolveImageUrl(image, LMS_IMAGE_SIZE),
+                    image: images.length>1 ? images[images.length-1] : undefined==image ? DEFAULT_WORKS_COVER : resolveImageUrl(image, LMS_IMAGE_SIZE),
                     stdItem: STD_ITEM_WORK,
                     textkey: key,
                     images: images.length>1 ? images : undefined,

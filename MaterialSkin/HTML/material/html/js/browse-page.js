@@ -153,7 +153,7 @@ var lmsBrowse = Vue.component("lms-browse", {
        <div v-if="selection.size>0 && browseCanSelect(citem)" class="check-btn grid-btn image-grid-select-btn" @click.stop="select(citem, item.rs+col, $event)" :title="ACTIONS[citem.selected ? UNSELECT_ACTION : SELECT_ACTION].title" v-bind:class="{'check-btn-checked':citem.selected}"></div>
        <img v-else-if="citem.multi" class="multi-disc" :src="'album-multi' | svgIcon(true)" loading="lazy"></img>
        <div v-if="citem.images" :tile="true" class="image-grid-item-img">
-        <div class="mi">
+        <div class="mi" :class="'mi'+citem.images.length">
          <img v-for="(mic, midx) in citem.images" :class="'mi-'+midx" :key="mic" :src="mic" loading="lazy"></img>
         </div>
        </div>
@@ -186,7 +186,7 @@ var lmsBrowse = Vue.component("lms-browse", {
      <v-list-tile-avatar v-if="item.selected" :tile="true" class="lms-avatar">
       <v-icon>check_box</v-icon>
      </v-list-tile-avatar>
-     <v-list-tile-avatar v-else-if="item.images" :tile="true" class="mi lms-avatar">
+     <v-list-tile-avatar v-else-if="item.images" :tile="true" class="mi lms-avatar" :class="'mi'+item.images.length">
       <img v-for="(mic, midx) in item.images" :class="'mi-'+midx" :key="mic" :src="mic" loading="lazy"></img>
      </v-list-tile-avatar>
      <v-list-tile-avatar v-else-if="item.image" :tile="true" v-bind:class="{'radio-image': SECTION_RADIO==item.section || SECTION_APPS==item.section || item.isRadio}" class="lms-avatar">
@@ -273,7 +273,7 @@ var lmsBrowse = Vue.component("lms-browse", {
      <v-list-tile-avatar v-if="item.selected" :tile="true" class="lms-avatar">
       <v-icon>check_box</v-icon>
      </v-list-tile-avatar>
-     <v-list-tile-avatar v-else-if="item.images" :tile="true" class="mi lms-avatar">
+     <v-list-tile-avatar v-else-if="item.images" :tile="true" class="mi lms-avatar" :class="'mi'+item.images.length">
       <img v-for="(mic, midx) in item.images" :class="'mi-'+midx" :key="mic" :src="mic" loading="lazy"></img>
      </v-list-tile-avatar>
      <v-list-tile-avatar v-else-if="item.image" :tile="true" v-bind:class="{'radio-image': SECTION_RADIO==item.section || SECTION_APPS==item.section || item.isRadio, 'lms-avatar-small': isTop || (current && (current.id==TOP_RADIO_ID || current.id==TOP_APPS_ID)), 'lms-avatar': current && current.id!=TOP_RADIO_ID && current.id!=TOP_APPS_ID}">

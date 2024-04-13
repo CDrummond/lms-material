@@ -1621,7 +1621,14 @@ var lmsQueue = Vue.component("lms-queue", {
                 this.cancelCloseTimer();
             }
         },
-        'fetchingItems': function(newVal) {
+        '$store.state.pinQueue': function(pinned) {
+            if (pinned) {
+                this.$nextTick(function () {
+                    this.updateWidth();
+                });
+            }
+        },
+        'fetchingItems': function() {
             this.searchActive = false;
         },
         'searchActive': function(newVal) {

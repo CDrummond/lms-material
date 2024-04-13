@@ -1617,6 +1617,7 @@ var lmsQueue = Vue.component("lms-queue", {
                     this.scrollToCurrent();
                 }
                 this.resetCloseTimer();
+                this.updateWidth();
             } else {
                 this.cancelCloseTimer();
             }

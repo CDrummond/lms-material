@@ -4,6 +4,14 @@
  border-radius:9px!important;
 }
 
+.lms-list .mi-1, .lms-list .mi-2, .lms-list .mi-3 {
+ border-radius:3px!important;
+}
+
+.image-grid-item .mi-1, .image-grid-item .mi-2, .image-grid-item .mi-3 {
+ border-radius:7px!important;
+}
+
 .lms-list img:not(.image-grid-item-img):not(.svg-list-img):not(.multi-disc):not(.mi-0):not(.mi-1):not(.mi-2):not(.mi-3), .pmgr-cover img, .np-info .lms-list img, .sub-cover, .menu-image, .mi .v-avatar {
  border-radius:4px!important;
 }

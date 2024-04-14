@@ -107,7 +107,7 @@ function updateItemFavorites(item) {
     }
 
     try {
-        var favTitle = item.origTitle ? item.origTitle : item.title;
+        var favTitle = item.favTitle ? item.favTitle : item.origTitle ? item.origTitle : item.title;
         if (item.id!=undefined && item.album_id!=undefined) {
             item.favIcon="music/"+item.album_id+"/cover.png";
         } else if (item.id.startsWith("genre_id:")) {
@@ -117,14 +117,16 @@ function updateItemFavorites(item) {
             item.favUrl="db:contributor.name="+encodeURIComponent(favTitle);
             item.favIcon=changeImageSizing(item.image);
         } else if (item.id.startsWith("album_id:")) {
-            item.favUrl="db:album.title="+encodeURIComponent(favTitle);
-            if (LMS_VERSION>=80300) {
-                if (undefined!=item.extid) {
-                    item.favUrl=item.extid;
-                } else if (undefined!=item.artists && item.artists.length>0) {
-                    item.favUrl+="&contributor.name="+encodeURIComponent(item.artists[0]);
-                } else if (undefined!=item.subtitle) {
-                    item.favUrl+="&contributor.name="+encodeURIComponent(item.subtitle);
+            if (undefined==item.favUrl) {
+                item.favUrl="db:album.title="+encodeURIComponent(favTitle);
+                if (LMS_VERSION>=80300) {
+                    if (undefined!=item.extid) {
+                        item.favUrl=item.extid;
+                    } else if (undefined!=item.artists && item.artists.length>0) {
+                        item.favUrl+="&contributor.name="+encodeURIComponent(item.artists[0]);
+                    } else if (undefined!=item.subtitle) {
+                        item.favUrl+="&contributor.name="+encodeURIComponent(item.subtitle);
+                    }
                 }
             }
             item.favIcon=changeImageSizing(item.image);

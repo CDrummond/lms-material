@@ -47,6 +47,8 @@
  --np-landscape-top-pad:calc((var(--np-landscape-item-height) - var(--np-image-landscape-size))/2);
  --mobile-scrollbar-thumb-color:transparent;
  --bgnd-filter:blur(7px);
+ --np-bgnd-filter-size:15px;
+ --np-bgnd-filter:blur(var(--np-bgnd-filter-size));
  --backdrop-filter:blur(4px);
  --toolbar-filter:blur(35px);
  --npbar-border-color:var(--bottom-toolbar-border-color);
@@ -1168,9 +1170,10 @@ div.v-subheader {
 .np-bgnd {
  position:fixed;
  top:var(--main-toolbar-height);
- width:100vw;
- height:calc(var(--100vh) - (var(--main-toolbar-height) + var(--bottom-toolbar-height)));
+ width:calc(100vw + (2* var(--np-bgnd-filter-size)));
+ height:calc((var(--100vh) + (2* var(--np-bgnd-filter-size))) - (var(--main-toolbar-height) + var(--bottom-toolbar-height)));
  background-color:var(--background-color);
+ margin:calc(-1 * var(--np-bgnd-filter-size));
 }
 
 .np-image {
@@ -1812,9 +1815,9 @@ div.v-rating i.primary--text, div.v-rating i.accent--text {
  background-size:cover !important;
  background-repeat:no-repeat !important;
  background-position:center top !important;
- filter:var(--bgnd-filter);
- -webkit-filter:var(--bgnd-filter);
- box-shadow:inset 100vw 100vh var(--background-shadow-color);
+ filter:var(--np-bgnd-filter);
+ -webkit-filter:var(--np-bgnd-filter) brightness(22%);
+ /*box-shadow:inset 100vw 100vh var(--background-shadow-color);*/
  overflow:hidden;
 }
 

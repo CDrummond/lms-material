@@ -156,7 +156,7 @@
 }
 
 .np-bgnd {
- height:calc(var(--100vh) - var(--main-toolbar-height));
+ height:calc((var(--100vh) + (2* var(--np-bgnd-filter-size))) - var(--main-toolbar-height));
 }
 
 .np-portrait-song-info {

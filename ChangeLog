@@ -17,8 +17,9 @@
     'work' release type icons.
 14. When getting release type icons try to map to a pre-supplied icon if
     specific icon not found.
-15. Append "material-skin:1" to all commands.
-16. Update queue settings when show or pin.
+15. Update queue settings when show or pin.
+16. Adjust now-playing background to prevent shadow/glow effect at edges, and
+    increase amount of blur.
 
 4.4.1
 -----

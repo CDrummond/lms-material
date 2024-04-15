@@ -105,9 +105,18 @@ function updateUiSettings(state, val) {
             browseDisplayChanged = true;
         }
     }
+    var screensaverChanged = false
     if (undefined!=val.screensaver && state.screensaver!=val.screensaver) {
         state.screensaver = val.screensaver;
         setLocalStorageVal('screensaver', state.screensaver);
+        screensaverChanged = true;
+    }
+    if (undefined!=val.screensaverNp && state.screensaverNp!=val.screensaverNp) {
+        state.screensaverNp = val.screensaverNp;
+        setLocalStorageVal('screensaverNp', state.screensaverNp);
+        screensaverChanged = true;
+    }
+    if (screensaverChanged) {
         bus.$emit('screensaverDisplayChanged');
     }
     if (undefined!=val.disabledBrowseModes) {
@@ -279,6 +288,7 @@ const store = new Vuex.Store({
         skipBSeconds: 10,
         skipFSeconds: 30,
         screensaver: false,
+        screensaverNp: false,
         homeButton: false,
         lang: 'en-US',
         twentyFourHour: false,
@@ -486,7 +496,7 @@ const store = new Vuex.Store({
 
             let boolItems = ['roundCovers', 'autoScrollQueue', 'sortFavorites', 'browseBackdrop', 'queueBackdrop', 'nowPlayingBackdrop',
                              'infoBackdrop', 'useDefaultBackdrops', 'browseTechInfo', 'techInfo', 'queueShowTrackNum', 'nowPlayingTrackNum',
-                             'nowPlayingClock', 'swipeVolume', 'swipeChangeTrack', 'keyboardControl', 'screensaver', 'homeButton',
+                             'nowPlayingClock', 'swipeVolume', 'swipeChangeTrack', 'keyboardControl', 'screensaver', 'screensaverNp', 'homeButton',
                              'powerButton', 'mediaControls', 'queueAlbumStyle', 'queueThreeLines', 'browseContext', 'nowPlayingContext',
                              'queueContext', 'moveDialogs', 'autoCloseQueue'];
             for (let i=0, len=boolItems.length; i<len; ++i) {

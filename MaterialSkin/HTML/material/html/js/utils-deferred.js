@@ -108,7 +108,13 @@ function updateItemFavorites(item) {
 
     try {
         var favTitle = item.favTitle ? item.favTitle : item.origTitle ? item.origTitle : item.title;
-        if (item.id!=undefined && item.album_id!=undefined) {
+        if (item.id.startsWith("work_id:") && item.images && item.images.length>0) {
+            let ids=[];
+            for (let i=0, list=item.images, len=list.length; i<len; ++i) {
+                ids.push(list[i].split('/')[list[i][0]=='/' ? 2 : 1]);
+            }
+            item.favIcon = changeImageSizing(item.images[item.images.length-1])+"?ids="+ids.reverse().join(",");
+        } else if (item.id!=undefined && item.album_id!=undefined) {
             item.favIcon="music/"+item.album_id+"/cover.png";
         } else if (item.id.startsWith("genre_id:")) {
             item.favUrl="db:genre.name="+encodeURIComponent(favTitle);
@@ -146,7 +152,9 @@ function updateItemFavorites(item) {
         if (!item.favUrl && item.url) {
             item.favUrl = item.url;
         }
-        item.favIcon = item.images ? item.images[0] : item.image ? item.image : item.icon;
+        if (!item.favIcon) {
+            item.favIcon = item.images ? changeImageSizing(item.images[item.images.length-1]) : item.image ? changeImageSizing(item.image) : item.icon;
+        }
     } catch(e) {
     }
 }

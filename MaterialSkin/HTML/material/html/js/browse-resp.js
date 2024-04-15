@@ -597,6 +597,27 @@ function parseBrowseResp(data, parent, options, cacheKey, parentCommand, parentG
                 if (undefined!=i.icon && (i.icon.startsWith('http') || i.icon.startsWith('/'))) {
                     i.icon = undefined;
                 }
+
+                // Check for multi-image covers for favourited works
+                if (undefined!=i.image) {
+                    var parts = i.image.split("?ids=");
+                    if (undefined!=parts && 2==parts.length) {
+                        var imageList = [];
+                        for (var img=0, iloop=splitStringArray(parts[1], true).reverse(), limit = iloop.length>4 ? 4 : iloop.length; img<limit; ++img) {
+                            var id = ""+iloop[img];
+                            if (!isEmpty(id) && "null"!=id) {
+                                imageList.push(resolveImageUrl(iloop[img], LMS_IMAGE_SIZE));
+                            }
+                        }
+                        if (imageList.length>1) {
+                            if (i.image) {
+                                i.image = imageList[imageList.length-1];
+                            }
+                            i.images = imageList;
+                        }
+                    }
+                }
+
                 resp.items.push(i);
                 // If this is a "text" item with an image then treat as a standard actionable item
                 if ("text"==i.type && (undefined!=i.image || undefined!=i.icon || undefined!=i.svg)) {

@@ -772,11 +772,11 @@ div.v-subheader {
 }
 
 .detailed-sub .lms-list .emblem, .detailed-sub .lms-list-jump .emblem {
- left:calc(96px + var(--home-button-size)) - var(--jump-list-adjust);
+ left:calc((100px + var(--home-button-size)) - var(--jump-list-adjust));
 }
 .indent-right .lms-list .emblem, .indent-right .lms-list-jump .emblem,
 .indent-both .lms-list .emblem, .indent-both .lms-list-jump .emblem {
- left:calc(192px + var(--home-button-size) - var(--jump-list-adjust));
+ left:calc((196px + var(--home-button-size)) - var(--jump-list-adjust));
 }
 
 .error-text {

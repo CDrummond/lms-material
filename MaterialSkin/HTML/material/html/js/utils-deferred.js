@@ -108,7 +108,7 @@ function updateItemFavorites(item) {
 
     try {
         var favTitle = item.favTitle ? item.favTitle : item.origTitle ? item.origTitle : item.title;
-        if (item.id.startsWith("work_id:") && item.images && item.images.length>0) {
+        if (item.id.startsWith("work_id:") && item.images && item.images.length>1) {
             let ids=[];
             for (let i=0, list=item.images, len=list.length; i<len; ++i) {
                 ids.push(list[i].split('/')[list[i][0]=='/' ? 2 : 1]);

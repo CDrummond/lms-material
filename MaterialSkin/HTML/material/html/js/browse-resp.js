@@ -1787,15 +1787,15 @@ function parseBrowseResp(data, parent, options, cacheKey, parentCommand, parentG
                     textKeys.add(key);
                 }
                 var images = [];
-                if (undefined!=i.images) {
-                    for (var img=0, iloop=splitStringArray(i.images, true).reverse(), limit = iloop.length>4 ? 4 : iloop.length; img<limit; ++img) {
+                if (undefined!=i.artwork_track_ids) {
+                    for (var img=0, iloop=splitStringArray(i.artwork_track_ids, true).reverse(), limit = iloop.length>4 ? 4 : iloop.length; img<limit; ++img) {
                         var id = ""+iloop[img];
                         if (!isEmpty(id) && "null"!=id) {
                             images.push(resolveImageUrl(iloop[img], LMS_IMAGE_SIZE));
                         }
                     }
                 }
-                var image = images.length>0 ? images[0] : i.image;
+                var image = images.length>0 ? images[0] : i.artwork_track_id;
                 var work = {
                     title: i.composer,
                     subtitle: i.work,

@@ -1019,6 +1019,22 @@ function parseBrowseResp(data, parent, options, cacheKey, parentCommand, parentG
                 let showArtist = undefined==parent || (parent.title!=artist && parent.subtitle!=artist);
                 let grouping = undefined!=i.grouping && i.grouping.length>0 ? i.grouping : undefined;
                 let subtitle = showArtist ? artist : showYear && lmsOptions.yearInSub ? ""+i.year : undefined;
+                let maintitle = showArtist || !lmsOptions.yearInSub ? title : i.album;
+
+                if (undefined!=i.work_id && undefined!=i.work_name && undefined!=i.composer) {
+                    maintitle = i.composer+SEPARATOR+i.work_name;
+                    subtitle =(showArtist ? i.artist+SEPARATOR : "")+i.album;
+                    if (!isEmpty(grouping)) {
+                        subtitle+=" ("+grouping;
+                        if (i.year && i.year>0) {
+                            subtitle+=", "+i.year;
+                        }
+                        subtitle+=")";
+                    } else if (i.year && i.year>0) {
+                        subtitle+=" ("+i.year+")";
+                    }
+                }
+
                 let album = {
                               id: "album_id:"+(ids.has(i.id) ? uniqueId(i.id, resp.items.length) : i.id),
                               artist_id: i.artist_id,
@@ -1026,7 +1042,7 @@ function parseBrowseResp(data, parent, options, cacheKey, parentCommand, parentG
                               artists: artists,
                               work_id: i.work_id,
                               grouping: grouping,
-                              title: showArtist || !lmsOptions.yearInSub ? title : i.album,
+                              title: maintitle,
                               subtitle: subtitle,
                               subIsYear: lmsOptions.yearInSub && !showArtist && showYear,
                               image: i.artwork_url

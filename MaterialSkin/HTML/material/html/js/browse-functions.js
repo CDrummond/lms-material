@@ -429,7 +429,7 @@ function browseHandleListResponse(view, item, command, resp, prevPage, appendIte
                 if (field>=0) {
                     actParams['genre_id']=view.command.params[field];
                 }
-                showWorksInMenu = LMS_VERSION>=90000 && !lmsOptions.showWorks && getField(view.command, "work_id:")<0;
+                showWorksInMenu = LMS_VERSION>=90000 && !lmsOptions.listWorks && getField(view.command, "work_id:")<0;
             } else if (listingWorkAlbums) {
                 actParams['composer']=title;
                 actParams['count']=resp.items.length;

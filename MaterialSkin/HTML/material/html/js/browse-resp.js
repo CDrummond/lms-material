@@ -85,6 +85,13 @@ function releaseTypeSort(a, b) {
     return fixedSort(a, b);
 }
 
+function setFavoritesParams(i, item) {
+    if (undefined!=i.favorites_url && undefined!=i.favorites_text) {
+        item.favUrl=i.favorites_url;
+        item.favTitle=i.favorites_text;
+    }
+}
+
 function parseBrowseResp(data, parent, options, cacheKey, parentCommand, parentGenre) {
     // NOTE: If add key to resp, then update addToCache in utils.js
     var resp = {items: [], allSongsItem:undefined, showCompositions:false, baseActions:[], canUseGrid: false, jumplist:[], numAudioItems:0, canDrop:false, itemCustomActions:undefined, extra:undefined };
@@ -856,6 +863,7 @@ function parseBrowseResp(data, parent, options, cacheKey, parentCommand, parentG
                               type: "group",
                               textkey: key
                           };
+                setFavoritesParams(i, artist);
                 resp.items.push(artist);
             }
             if (isComposers) {
@@ -1036,10 +1044,7 @@ function parseBrowseResp(data, parent, options, cacheKey, parentCommand, parentG
                               compilation: i.compilation,
                               nonmain: nonmain
                           };
-                if (undefined!=i.favorites_url && undefined!=i.favorites_text) {
-                    album.favUrl=i.favorites_url;
-                    album.favTitle=i.favorites_text;
-                }
+                setFavoritesParams(i, album);
                 ids.add(i.id);
                 if (albumGroups) {
                     if (undefined==albumGroups[group]) {
@@ -1791,7 +1796,7 @@ function parseBrowseResp(data, parent, options, cacheKey, parentCommand, parentG
                     }
                 }
                 var image = images.length>0 ? images[0] : i.image;
-                resp.items.push({
+                var work = {
                     title: i.composer,
                     subtitle: i.work,
                     composer_id: i.composer_id,
@@ -1801,11 +1806,10 @@ function parseBrowseResp(data, parent, options, cacheKey, parentCommand, parentG
                     image: images.length>1 ? images[images.length-1] : undefined==image ? DEFAULT_WORKS_COVER : resolveImageUrl(image, LMS_IMAGE_SIZE),
                     stdItem: STD_ITEM_WORK,
                     textkey: key,
-                    images: images.length>1 ? images : undefined,
-                    // Favourites...
-                    favUrl: i.favorites_url,
-                    favTitle: i.favorites_text
-                });
+                    images: images.length>1 ? images : undefined
+                };
+                setFavoritesParams(i, work);
+                resp.items.push(work);
             }
             resp.subtitle=0==resp.items.length ? i18n("Empty") : i18np("1 Work", "%1 Works", resp.items.length);
             resp.canUseGrid=true;

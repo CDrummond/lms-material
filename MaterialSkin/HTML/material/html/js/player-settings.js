@@ -7,6 +7,7 @@
 'use strict';
 
 var DAYS_OF_WEEK = ['Sun', 'Mon', 'Tues', 'Weds', 'Thurs', 'Fri', 'Sat'];
+const CURRENT_PLAYLIST = 'CURRENT_PLAYLIST'
 
 Vue.component('lms-player-settings', {
     template: `
@@ -517,14 +518,14 @@ Vue.component('lms-player-settings', {
                 if (data && data.result && data.result.item_loop) {
                     data.result.item_loop.forEach(i => {
                         if (!i.url) {
-                            this.alarmSounds.push({key:'CURRENT_PLAYLIST', label:i18n('Current play queue')});
+                            this.alarmSounds.push({key:CURRENT_PLAYLIST, label:i18n('Current play queue')});
                         } else {
                             this.alarmSounds.push({key:i.url, label:i.category+": "+i.title});
                         }
                     });
                 }
                 if (this.alarmSounds.length<1) {
-                    this.alarmSounds.push({key:'CURRENT_PLAYLIST', label:i18n('Current play queue')});
+                    this.alarmSounds.push({key:CURRENT_PLAYLIST, label:i18n('Current play queue')});
                 }
                 this.loadAlarms();
             });
@@ -705,7 +706,7 @@ Vue.component('lms-player-settings', {
         addAlarm(event) {
             storeClickOrTouchPos(event);
             this.alarmDialog = { show: true, id: undefined, time: "00:00", dow:["1", "2", "3", "4", "5"], repeat: false,
-                                 url: 'CURRENT_PLAYLIST', shufflemode: this.alarmShuffeItems[0].key };
+                                 url: CURRENT_PLAYLIST, shufflemode: this.alarmShuffeItems[0].key };
         },
         editAlarm(alarm, event) {
             storeClickOrTouchPos(event);
@@ -727,7 +728,7 @@ Vue.component('lms-player-settings', {
 
             cmd.push("time:"+time);
             cmd.push("dow:"+this.alarmDialog.dow.join(","));
-            cmd.push("url:"+this.alarmDialog.url);
+            cmd.push("url:"+(CURRENT_PLAYLIST==this.alarmDialog.url ? "" : this.alarmDialog.url));
             cmd.push("repeat:"+(this.alarmDialog.repeat ? 1 : 0));
             cmd.push("shufflemode:"+this.alarmDialog.shufflemode);
             lmsCommand(this.playerId, cmd).then(({data}) => {

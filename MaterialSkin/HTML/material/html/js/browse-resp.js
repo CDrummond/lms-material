@@ -1138,6 +1138,7 @@ function parseBrowseResp(data, parent, options, cacheKey, parentCommand, parentG
             let genres=new Set();
             let yearSet = new Set();
             let years = [];
+            let isWork = false;
             resp.extra={};
 
             if (data.params[1].length>=4 && data.params[1][0]=="tracks") {
@@ -1160,6 +1161,8 @@ function parseBrowseResp(data, parent, options, cacheKey, parentCommand, parentG
                         isCompositions = true;
                     } else if (param.startsWith("material_skin_artist:")) {
                         parentArtist = param.split(':')[1];
+                    } else if (param.startsWith("work_id:")) {
+                        isWork = true;
                     }
                 }
             }
@@ -1169,7 +1172,7 @@ function parseBrowseResp(data, parent, options, cacheKey, parentCommand, parentG
             if (undefined!=msksort) {
                 sort=msksort;
             }
-            if (undefined!=sort && (isAllSongs || isCompositions) && ("title"==sort || "artisttitle"==sort || "yeartitle"==sort)) {
+            if (isWork || (undefined!=sort && (isAllSongs || isCompositions) && ("title"==sort || "artisttitle"==sort || "yeartitle"==sort))) {
                 showTrackNumbers = false;
             }
             // Should we group tracks?
@@ -1343,7 +1346,7 @@ function parseBrowseResp(data, parent, options, cacheKey, parentCommand, parentG
                               image: showAlbumName ? ("/music/" + (""==i.coverid || undefined==i.coverid ? "0" : i.coverid) + "/cover" +LMS_IMAGE_SIZE) : undefined,
                               filter: FILTER_PREFIX+i.disc,
                               emblem: showAlbumName ? getEmblem(i.extid) : undefined,
-                              tracknum: sortTracks && undefined!=i.tracknum && undefined==i.work_id ? tracknum : undefined,
+                              tracknum: sortTracks && undefined!=i.tracknum ? tracknum : undefined,
                               disc: i.disc ? parseInt(i.disc) : undefined,
                               year: (sortTracks || 1==grouping) ? year : undefined,
                               album: sortTracks || isSearchResult || 1==grouping ? i.album : undefined,

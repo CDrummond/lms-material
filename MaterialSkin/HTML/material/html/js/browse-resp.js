@@ -1343,7 +1343,7 @@ function parseBrowseResp(data, parent, options, cacheKey, parentCommand, parentG
                               image: showAlbumName ? ("/music/" + (""==i.coverid || undefined==i.coverid ? "0" : i.coverid) + "/cover" +LMS_IMAGE_SIZE) : undefined,
                               filter: FILTER_PREFIX+i.disc,
                               emblem: showAlbumName ? getEmblem(i.extid) : undefined,
-                              tracknum: sortTracks && undefined!=i.tracknum ? tracknum : undefined,
+                              tracknum: sortTracks && undefined!=i.tracknum && undefined==i.work_id ? tracknum : undefined,
                               disc: i.disc ? parseInt(i.disc) : undefined,
                               year: (sortTracks || 1==grouping) ? year : undefined,
                               album: sortTracks || isSearchResult || 1==grouping ? i.album : undefined,

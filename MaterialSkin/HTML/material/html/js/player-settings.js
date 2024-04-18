@@ -728,7 +728,7 @@ Vue.component('lms-player-settings', {
 
             cmd.push("time:"+time);
             cmd.push("dow:"+this.alarmDialog.dow.join(","));
-            cmd.push("url:"+(CURRENT_PLAYLIST==this.alarmDialog.url ? "" : this.alarmDialog.url));
+            cmd.push("url:"+(CURRENT_PLAYLIST==this.alarmDialog.url ? "0" : this.alarmDialog.url));
             cmd.push("repeat:"+(this.alarmDialog.repeat ? 1 : 0));
             cmd.push("shufflemode:"+this.alarmDialog.shufflemode);
             lmsCommand(this.playerId, cmd).then(({data}) => {

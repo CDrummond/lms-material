@@ -538,10 +538,7 @@ function browseHandleListResponse(view, item, command, resp, prevPage, appendIte
         if (resp.canUseGrid && !resp.forceGrid) {
             view.currentActions.push({action:(view.grid.use ? USE_LIST_ACTION : USE_GRID_ACTION), weight:0});
         }
-        if (view.current.id==TOP_FAVORITES_ID) {
-            view.currentActions.push({action:SEARCH_LIST_ACTION, weight:1});
-            view.currentActions.push({action:IMPORT_ACTION, weight:1});
-        } else if (view.current.stdItem!=STD_ITEM_MAI && !item.id.startsWith(TOP_ID_PREFIX) && view.items.length>0) {
+        if (view.current.id==TOP_FAVORITES_ID || (view.current.stdItem!=STD_ITEM_MAI && !item.id.startsWith(TOP_ID_PREFIX) && view.items.length>0)) {
             view.currentActions.push({action:SEARCH_LIST_ACTION, weight:1});
         }
         let itemHasPlayAction=undefined!=item.menu && item.menu[0]==PLAY_ACTION;
@@ -1516,12 +1513,6 @@ function browseItemAction(view, act, item, index, event) {
         choose(ACTIONS[act].title, choices).then(choice => {
             if (undefined!=choice) {
                 view.jumpTo(choice.jump);
-            }
-        });
-    } else if (IMPORT_ACTION==act) {
-        promptForText(i18n("Import favorites"), i18n("URL or filename"), "", undefined, undefined, "opml").then(resp => {
-            if (resp.ok && resp.value && resp.value.length>0) {
-                console.log(resp.value);
             }
         });
     } else {

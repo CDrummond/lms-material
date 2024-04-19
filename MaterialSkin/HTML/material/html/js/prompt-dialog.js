@@ -13,6 +13,10 @@ var lmsPromptDialog = Vue.component("lms-prompt-dialog", {
   <v-card-title v-if="undefined!=title" class="dlgtitle">{{title}}</v-card-title>
   <v-card-text>
    <v-slider v-if="type=='slider'" :step="slider.step" :min="slider.min" :max="slider.max" v-model="slider.value" thumb-label="always"></v-slider>
+   <v-layout v-else-if="fileTypes">
+    <v-text-field single-line autocorrect="off" :label="hint" v-model="text" @keyup.enter="close(true);" ref="entry"></v-text-field>
+    <v-btn flat @click="browse()">Browse</v-btn>
+   </v-layout>
    <v-text-field v-else-if="type=='text'" single-line autocorrect="off" :label="hint" v-model="text" @keyup.enter="close(true);" ref="entry"></v-text-field>
    <div v-else v-html="text" class="clickable" ref="prompt-dlg-text"></div>
   </v-card-text>
@@ -39,16 +43,18 @@ var lmsPromptDialog = Vue.component("lms-prompt-dialog", {
             positiveButton:undefined,
             negativeButton:undefined,
             otherButton:undefined,
+            fileTypes:undefined,
             type:'confirm',
             slider:{step:1, min:0, max:100, value:0}
         }
     },
     mounted() {
-        bus.$on('prompt.open', function(type, title, text, extra, positiveButton, negativeButton, otherButton) {
+        bus.$on('prompt.open', function(type, title, text, extra, positiveButton, negativeButton, otherButton, fileTypes) {
             this.text = text ? text : "";
             this.maxWidth = this.text.length>=50 || 'confirm'!=type ? 500 : 300;
             this.type = type;
             this.title = title;
+            this.fileTypes = fileTypes;
             if ('slider'==type) {
                 this.slider = extra;
                 this.hint = undefined;
@@ -69,6 +75,11 @@ var lmsPromptDialog = Vue.component("lms-prompt-dialog", {
                 this.close(false);
             }
         }.bind(this));
+        bus.$on('prompt.fs', function(text) {
+            if (this.show) {
+                this.text = text;
+            }
+        }.bind(this));
     },
     methods: {
         close(resp) {
@@ -78,6 +89,9 @@ var lmsPromptDialog = Vue.component("lms-prompt-dialog", {
             } else {
                 bus.$emit('prompt.resp', resp, this.text);
             }
+        },
+        browse() {
+            bus.$emit('dlg.open', 'file', 'prompt.fs', false, this.fileTypes.split("|"));
         }
     },
     watch: {
@@ -96,10 +110,10 @@ function confirm(text, positiveButton, negativeButton, otherButton) {
     });
 }
 
-function promptForText(title, hint, text, positiveButton, negativeButton) {
+function promptForText(title, hint, text, positiveButton, negativeButton, fileTypes) {
     return new Promise(function(response) {
-        bus.$emit('dlg.open', 'prompt', 'text', title, text, hint, positiveButton, negativeButton);
-        bus.$once('prompt.resp', function(resp, value, hint) {
+        bus.$emit('dlg.open', 'prompt', 'text', title, text, hint, positiveButton, negativeButton, undefined, fileTypes);
+        bus.$once('prompt.resp', function(resp, value) {
             response({ok:resp, value:value.trim()});
         });
     });

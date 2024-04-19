@@ -52,7 +52,7 @@ var lmsFileDialog = Vue.component("lms-file-dialog", {
                 var params = ["folder:/"];
                 if (this.isDir) {
                     params.push("filter:foldersonly");
-                } else if (this.types.length>0) {
+                } else if (undefined!=this.types && this.types.length>0) {
                     params.push("filter:filetype:("+this.types.join("|")+")");
                 }
                 lmsList("", ["readdirectory"], params, 0, 500).then(({data}) => {
@@ -79,7 +79,11 @@ var lmsFileDialog = Vue.component("lms-file-dialog", {
         },
         useSelected() {
             if (undefined!=this.selected) {
-                this.elem.value=this.selected;
+                if (typeof this.elem === 'string' || this.elem instanceof String) {
+                    bus.$emit(this.elem, this.selected);
+                } else {
+                    this.elem.value=this.selected;
+                }
                 this.close();
             }
         },

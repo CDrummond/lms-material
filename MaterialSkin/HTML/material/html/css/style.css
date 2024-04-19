@@ -47,7 +47,7 @@
  --np-landscape-top-pad:calc((var(--np-landscape-item-height) - var(--np-image-landscape-size))/2);
  --mobile-scrollbar-thumb-color:transparent;
  --bgnd-filter:blur(7px);
- --np-bgnd-filter-size:10px;
+ --np-bgnd-filter-size:7px;
  --np-bgnd-filter:blur(var(--np-bgnd-filter-size));
  --backdrop-filter:blur(4px);
  --toolbar-filter:blur(35px);
@@ -79,45 +79,19 @@
   --bottom-nav-pad:0px;
  }
 }
-
-@media (min-width:500px) {
- :root {
-  --np-bgnd-filter-size:10px;
- }
-}
-@media (min-width:600px) {
- :root {
-  --np-bgnd-filter-size:12px;
- }
-}
-@media (min-width:700px) {
- :root {
-  --np-bgnd-filter-size:14px;
- }
-}
 @media (min-width:800px) {
  :root {
-  --np-bgnd-filter-size:16px;
- }
-}
-@media (min-width:900px) {
- :root {
-  --np-bgnd-filter-size:18px;
+  --np-bgnd-filter-size:9px;
  }
 }
 @media (min-width:1000px) {
  :root {
-  --np-bgnd-filter-size:20px;
- }
-}
-@media (min-width:1200px) {
- :root {
-  --np-bgnd-filter-size:22px;
+  --np-bgnd-filter-size:10px;
  }
 }
 @media (min-width:1500px) {
  :root {
-  --np-bgnd-filter-size:25px;
+  --np-bgnd-filter-size:12px;
  }
 }
 
@@ -1211,8 +1185,8 @@ div.v-subheader {
 .np-bgnd {
  position:fixed;
  top:var(--main-toolbar-height);
- width:calc(100vw + (2* var(--np-bgnd-filter-size)));
- height:calc((var(--100vh) + (2* var(--np-bgnd-filter-size))) - (var(--main-toolbar-height) + var(--bottom-toolbar-height)));
+ width:calc(100vw + (4* var(--np-bgnd-filter-size)));
+ height:calc((var(--100vh) + (4* var(--np-bgnd-filter-size))) - (var(--main-toolbar-height) + var(--bottom-toolbar-height)));
  background-color:var(--background-color);
  margin:calc(-1 * var(--np-bgnd-filter-size));
 }
@@ -1857,8 +1831,7 @@ div.v-rating i.primary--text, div.v-rating i.accent--text {
  background-repeat:no-repeat !important;
  background-position:center top !important;
  filter:var(--np-bgnd-filter);
- -webkit-filter:var(--np-bgnd-filter) brightness(22%);
- /*box-shadow:inset 100vw 100vh var(--background-shadow-color);*/
+ box-shadow:inset 100vw 100vh var(--background-shadow-color);
  overflow:hidden;
 }
 

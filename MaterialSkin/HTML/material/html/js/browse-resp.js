@@ -86,9 +86,9 @@ function releaseTypeSort(a, b) {
 }
 
 function setFavoritesParams(i, item) {
-    if (undefined!=i.favorites_url && undefined!=i.favorites_title) {
+    if (undefined!=i.favorites_url && (undefined!=i.favorites_title || undefined!=i.favorites_text)) {
         item.favUrl=i.favorites_url;
-        item.favTitle=i.favorites_title;
+        item.favTitle=undefined!=i.favorites_title ? i.favorites_title : i.favorites_text;
     }
 }
 

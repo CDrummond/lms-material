@@ -120,7 +120,9 @@ function updateItemFavorites(item) {
             item.favUrl="db:genre.name="+encodeURIComponent(favTitle);
             item.favIcon="html/images/genres.png";
         } else if (item.id.startsWith("artist_id:")) {
-            item.favUrl="db:contributor.name="+encodeURIComponent(favTitle);
+            if (!item.favUrl) {
+                item.favUrl="db:contributor.name="+encodeURIComponent(favTitle);
+            }
             item.favIcon=changeImageSizing(item.image);
         } else if (item.id.startsWith("album_id:")) {
             if (undefined==item.favUrl) {

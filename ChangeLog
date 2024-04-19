@@ -25,6 +25,7 @@
 15. Update queue settings when show or pin.
 16. Adjust now-playing background to prevent shadow/glow effect at edges, and
     increase amount of blur.
+17. Use "0" as URL for alarm playlist if set to current queue.
 
 4.4.1
 -----

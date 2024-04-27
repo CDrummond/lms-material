@@ -753,6 +753,7 @@ function browseAddWorks(view) {
                 view.items = items;
                 view.jumplist = jumplist;
                 view.headerSubTitle = sub + SEPARATOR + view.headerSubTitle;
+                view.listSize = view.items.length;
             } else {
                 // No works, just use original list
                 view.items = orig;

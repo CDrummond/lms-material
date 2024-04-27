@@ -118,7 +118,6 @@ const TOP_RADIO_ID = TOP_ID_PREFIX+"ra";
 const TOP_REMOTE_ID = TOP_ID_PREFIX+"rml";
 const TOP_CDPLAYER_ID = TOP_ID_PREFIX+"cdda";
 const HIDE_TOP_FOR_PARTY = new Set([TOP_EXTRAS_ID, TOP_RADIO_ID, TOP_REMOTE_ID, TOP_FAVORITES_ID]);
-const PODCASTS_ID = "apps.podcasts";
 const MUSIC_ID_PREFIX = "mm:/";
 const SEARCH_ID = MUSIC_ID_PREFIX+"lms-local-search";
 const ADV_SEARCH_ID = MUSIC_ID_PREFIX+"lms-adv-search";
@@ -148,7 +147,6 @@ const SIMPLE_LIB_VIEWS = "SimpleLibraryViews ";
 const GRID_SINGLE_LINE_DIFF = 20;
 const NP_INFO = 'now-playing-info';
 const NP_EXPANDED = 'now-playing-expanded';
-const MAX_TRACKS_BEFORE_COLLAPSE = 200;
 const ALL_SONGS_ID = "allsongs";
 
 const ARTIST_TYPES = ["artist", "trackartist", "albumartist", "composer", "conductor", "band"];

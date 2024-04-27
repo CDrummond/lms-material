@@ -1916,6 +1916,8 @@ function browseBuildCommand(view, item, commandName, doReplacements) {
                         mode="albums";
                     } else if (mode=="years") {
                         p.push("hasAlbums:1");
+                    } else if (mode.startsWith("myMusicWorks")) {
+                        mode="works";
                     } else if (mode!="artists" && mode!="albums" && mode!="genres" && mode!="tracks" && mode!="playlists" && mode!="works") {
                         canReplace = false;
                         break;

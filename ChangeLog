@@ -2,8 +2,9 @@
 -----
 1. Update translations.
 2. Fix jumplist not showing for albums and works lists.
-3. Only show lsit works if main 'Works' categoery is enabled, not any extended
+3. Only show lsit works if main 'Works' categoery is enabled, not any additional
    browse 'Works' category.
+4. Fix multi-cover listring in additional 'Works' browse modes.
 
 4.5.1
 -----

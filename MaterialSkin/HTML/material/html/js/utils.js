@@ -1030,7 +1030,7 @@ function stripTags(str) {
 }
 
 function trackTags(withCover) {
-    return TRACK_TAGS+(lmsOptions.techInfo ? TECH_INFO_TAGS : "")+(withCover ? 'c' : "");
+    return TRACK_TAGS+(lmsOptions.techInfo ? TECH_INFO_TAGS : "")+(withCover ? 'c' : "")+(LMS_VERSION>=90000 ? "bhz" : "");
 }
 
 function trackTitle(i) {

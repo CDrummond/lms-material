@@ -6,6 +6,7 @@
    browse 'Works' category.
 4. Fix multi-cover listring in additional 'Works' browse modes.
 5. Prepend work to track title if work is defined and not already in title.
+6. Ask for extra track meta-data for works info when using LMS >= 9.0
 
 4.5.1
 -----

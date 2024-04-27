@@ -2098,10 +2098,13 @@ function browseMyMusicMenu(view) {
                     } else if (c.id.startsWith("myMusicFlopTracks")) {
                         item.icon = "arrow_downward";
                         item.limit = 200;
-                    } else if (c.id.startsWith("myMusicWorks")) {
+                    } else if (c.id == "myMusicWorks") {
                         item.svg = "classical-work";
                         item.icon = undefined;
                         listWorks = true;
+                    } else if (c.id.startsWith("myMusicWorks")) {
+                        item.svg = "classical-work";
+                        item.icon = undefined;
                     } else if (c.icon) {
                         if (c.icon.endsWith("/albums.png")) {
                             item.icon = "album";

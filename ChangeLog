@@ -5,6 +5,7 @@
 3. Only show lsit works if main 'Works' categoery is enabled, not any additional
    browse 'Works' category.
 4. Fix multi-cover listring in additional 'Works' browse modes.
+5. Prepend work to track title if work is defined and not already in title.
 
 4.5.1
 -----

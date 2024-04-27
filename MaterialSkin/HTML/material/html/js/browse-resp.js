@@ -1208,7 +1208,7 @@ function parseBrowseResp(data, parent, options, cacheKey, parentCommand, parentG
             let browseContext = getLocalStorageBool('browseContext', false);
             for (let idx=0, loop=data.result.titles_loop, loopLen=loop.length; idx<loopLen; ++idx) {
                 let i = loop[idx];
-                let title = i.title;
+                let title = trackTitle(i);
                 let duration = parseFloat(i.duration || 0);
                 let tracknum = undefined==i.tracknum ? 0 : parseInt(i.tracknum);
                 let highlight = false;

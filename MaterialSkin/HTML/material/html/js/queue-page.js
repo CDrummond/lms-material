@@ -94,7 +94,7 @@ function parseResp(data, showTrackNum, index, showRatings, queueAlbumStyle, queu
             for (var idx=0, loop=data.result.playlist_loop, loopLen=loop.length; idx<loopLen; ++idx) {
                 let i = loop[idx];
                 splitMultiples(i);
-                let title = i.title;
+                let title = trackTitle(i);
                 if (showTrackNum && i.tracknum>0) {
                     title = formatTrackNum(i)+SEPARATOR+title;
                 }
@@ -456,7 +456,7 @@ var lmsQueue = Vue.component("lms-queue", {
                 var index = playerStatus.current["playlist index"];
                 if (undefined!=index && index>=0 && index<this.items.length) {
                     var i = playerStatus.current;
-                    var title = i.title;
+                    var title = trackTitle(i);
                     var rating = this.$store.state.showRating && undefined!=i.rating ? Math.ceil(i.rating/10.0)/2.0 : undefined;
                     if (this.$store.state.queueShowTrackNum && i.tracknum>0) {
                         title = formatTrackNum(i)+SEPARATOR+title;

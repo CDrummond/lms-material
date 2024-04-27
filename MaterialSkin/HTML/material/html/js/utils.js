@@ -1033,6 +1033,10 @@ function trackTags(withCover) {
     return TRACK_TAGS+(lmsOptions.techInfo ? TECH_INFO_TAGS : "")+(withCover ? 'c' : "");
 }
 
+function trackTitle(i) {
+    return undefined==i.work || i.title.toLowerCase().replace(/\W/g, '').includes(i.work.toLowerCase().replace(/\W/g, '')) ? i.title : i.work+SEPARATOR+i.title;
+}
+
 if (!String.prototype.replaceAll) {
     String.prototype.replaceAll = function(str, newStr) {
         let idx = 0;

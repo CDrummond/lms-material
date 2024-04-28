@@ -408,14 +408,17 @@ function browseHandleListResponse(view, item, command, resp, prevPage, appendIte
         if (((listingArtistAlbums || listingWorkAlbums) && listingAlbums) || (listingAlbumTracks && listingTracks)) {
             var actParams = new Map();
             var showWorksInMenu = false;
-            actParams[view.current.id.split(':')[0]]=view.current.id.split(':')[1];
-            if (undefined!=artist_id) {
+            var currentId = view.current.id.split(':');
+            if (currentId[1].indexOf(".")<0) {
+                actParams[currentId[0]]=currentId[1];
+            }
+            if (undefined!=artist_id && artist_id.indexOf(".")<0) {
                 actParams["artist_id"] = artist_id;
             }
-            if (undefined!=work_id) {
+            if (undefined!=work_id && work_id.indexOf(".")<0) {
                 actParams["work_id"] = work_id;
             }
-            if (undefined!=album_id) {
+            if (undefined!=album_id && album_id.indexOf(".")<0) {
                 actParams["album_id"] = album_id;
             }
             if (listingArtistAlbums) {

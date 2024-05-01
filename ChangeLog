@@ -2,9 +2,9 @@
 -----
 1. Update translations.
 2. Fix jumplist not showing for albums and works lists.
-3. Only show lsit works if main 'Works' categoery is enabled, not any additional
+3. Only show works if main 'Works' category is enabled, not any additional
    browse 'Works' category.
-4. Fix multi-cover listring in additional 'Works' browse modes.
+4. Fix multi-cover listing in additional 'Works' browse modes.
 5. Prepend work to track title if work is defined and not already in title.
 6. Ask for extra track meta-data for works info when using LMS >= 9.0
 7. Fix MAI when called after 'More'.

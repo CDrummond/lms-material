@@ -86,9 +86,9 @@ function releaseTypeSort(a, b) {
 }
 
 function setFavoritesParams(i, item) {
-    if (undefined!=i.favorites_url && undefined!=i.favorites_text) {
+    if (undefined!=i.favorites_url && (undefined!=i.favorites_title || undefined!=i.favorites_text)) {
         item.favUrl=i.favorites_url;
-        item.favTitle=i.favorites_text;
+        item.favTitle=undefined!=i.favorites_title ? i.favorites_title : i.favorites_text;
     }
 }
 
@@ -1208,7 +1208,7 @@ function parseBrowseResp(data, parent, options, cacheKey, parentCommand, parentG
             let browseContext = getLocalStorageBool('browseContext', false);
             for (let idx=0, loop=data.result.titles_loop, loopLen=loop.length; idx<loopLen; ++idx) {
                 let i = loop[idx];
-                let title = i.title;
+                let title = trackTitle(i);
                 let duration = parseFloat(i.duration || 0);
                 let tracknum = undefined==i.tracknum ? 0 : parseInt(i.tracknum);
                 let highlight = false;

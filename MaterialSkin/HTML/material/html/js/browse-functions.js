@@ -408,14 +408,17 @@ function browseHandleListResponse(view, item, command, resp, prevPage, appendIte
         if (((listingArtistAlbums || listingWorkAlbums) && listingAlbums) || (listingAlbumTracks && listingTracks)) {
             var actParams = new Map();
             var showWorksInMenu = false;
-            actParams[view.current.id.split(':')[0]]=view.current.id.split(':')[1];
-            if (undefined!=artist_id) {
+            var currentId = view.current.id.split(':');
+            if (currentId[1].indexOf(".")<0) {
+                actParams[currentId[0]]=currentId[1];
+            }
+            if (undefined!=artist_id && artist_id.indexOf(".")<0) {
                 actParams["artist_id"] = artist_id;
             }
-            if (undefined!=work_id) {
+            if (undefined!=work_id && work_id.indexOf(".")<0) {
                 actParams["work_id"] = work_id;
             }
-            if (undefined!=album_id) {
+            if (undefined!=album_id && album_id.indexOf(".")<0) {
                 actParams["album_id"] = album_id;
             }
             if (listingArtistAlbums) {
@@ -753,6 +756,7 @@ function browseAddWorks(view) {
                 view.items = items;
                 view.jumplist = jumplist;
                 view.headerSubTitle = sub + SEPARATOR + view.headerSubTitle;
+                view.listSize = view.items.length;
             } else {
                 // No works, just use original list
                 view.items = orig;
@@ -1915,6 +1919,8 @@ function browseBuildCommand(view, item, commandName, doReplacements) {
                         mode="albums";
                     } else if (mode=="years") {
                         p.push("hasAlbums:1");
+                    } else if (mode.startsWith("myMusicWorks")) {
+                        mode="works";
                     } else if (mode!="artists" && mode!="albums" && mode!="genres" && mode!="tracks" && mode!="playlists" && mode!="works") {
                         canReplace = false;
                         break;
@@ -2097,10 +2103,13 @@ function browseMyMusicMenu(view) {
                     } else if (c.id.startsWith("myMusicFlopTracks")) {
                         item.icon = "arrow_downward";
                         item.limit = 200;
-                    } else if (c.id.startsWith("myMusicWorks")) {
+                    } else if (c.id == "myMusicWorks") {
                         item.svg = "classical-work";
                         item.icon = undefined;
                         listWorks = true;
+                    } else if (c.id.startsWith("myMusicWorks")) {
+                        item.svg = "classical-work";
+                        item.icon = undefined;
                     } else if (c.icon) {
                         if (c.icon.endsWith("/albums.png")) {
                             item.icon = "album";

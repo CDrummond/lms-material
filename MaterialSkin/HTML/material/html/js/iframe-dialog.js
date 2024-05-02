@@ -593,7 +593,8 @@ Vue.component('lms-iframe-dialog', {
       <v-btn icon slot="activator"><v-icon>more_vert</v-icon></v-btn>
       <v-list>
        <template v-for="(item, index) in actions">
-        <v-list-tile @click="doAction(item, $event)">
+        <v-divider v-if="item===DIVIDER"></v-divider>
+        <v-list-tile v-else @click="doAction(item, $event)">
          <v-list-tile-avatar><v-icon v-if="item.icon">{{item.icon}}</v-icon></v-list-tile-avatar>
          <v-list-tile-content><v-list-tile-title>{{item.title}}</v-list-tile-title></v-list-tile-content>
         </v-list-tile>
@@ -758,12 +759,21 @@ Vue.component('lms-iframe-dialog', {
         },
         doAction(act, event) {
             storeClickOrTouchPos(event);
-            confirm(act.text, act.confirm).then(res => {
-                if (res) {
-                    lmsCommand("server"==this.page ? "" : this.$store.state.player.id, act.cmd);
-                    this.close();
+            if (act.link) {
+                if (act.follow) {
+                    this.history.push(this.src);
+                    this.src = act.link;
+                } else {
+                    bus.$emit('dlg.open', 'iframe', act.link, act.text, undefined, IFRAME_HOME_CLOSES_DIALOGS);
                 }
-            });
+            } else {
+                confirm(act.text, act.confirm).then(res => {
+                    if (res) {
+                        lmsCommand("server"==this.page ? "" : this.$store.state.player.id, act.cmd);
+                        this.close();
+                    }
+                });
+            }
         },
         doCustomAction(action, player) {
             performCustomAction(action, player);

@@ -379,9 +379,13 @@ function openServerSettings(serverName, showHome, path) {
     let pathToUse = undefined==path
                     ? '/material/settings/server/basic.html'
                     : path;
-    bus.$emit('dlg.open', 'iframe', pathToUse, TB_SERVER_SETTINGS.title+(serverName ? SEPARATOR+serverName : ""),
-            [{title:i18n('Shutdown'), text:i18n('Stop %1?', LMS_WINDOW_TITLE), icon:'power_settings_new', cmd:['stopserver'], confirm:i18n('Shutdown')},
-             {title:i18n('Restart'), text:i18n('Restart %1?', LMS_WINDOW_TITLE), icon:'refresh', cmd:['restartserver'], confirm:i18n('Restart')}], showHome);
+    let actions = [{title:i18n('Shutdown'), text:i18n('Stop %1?', LMS_WINDOW_TITLE), icon:'power_settings_new', cmd:['stopserver'], confirm:i18n('Shutdown')},
+                   {title:i18n('Restart'), text:i18n('Restart %1?', LMS_WINDOW_TITLE), icon:'refresh', cmd:['restartserver'], confirm:i18n('Restart')}];
+    if (LMS_OS_NAME.toLowerCase()=="picore") {
+        actions.push(DIVIDER);
+        actions.push({title:i18n("Configuration"), text:i18n("Configuration")+(serverName ? SEPARATOR+serverName : ""), icon:'build', link:"http://"+location.hostname});
+    }
+    bus.$emit('dlg.open', 'iframe', pathToUse, TB_SERVER_SETTINGS.title+(serverName ? SEPARATOR+serverName : ""), actions, showHome);
 }
 
 function getYear(text) {

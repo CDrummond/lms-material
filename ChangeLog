@@ -2,6 +2,8 @@
 -----
 1. Add option to auto-switch to reduced now-playing view, to help with OLED
    screen burn-in.
+2. For LMS running on piCorePlayer add 'Configuration' item to top-right menu
+   of 'Server settings'
 
 4.5.2
 -----

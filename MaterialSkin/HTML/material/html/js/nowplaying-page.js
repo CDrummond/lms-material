@@ -1106,6 +1106,7 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
                 clearTimeout(this.showOverlayTimer);
                 this.showOverlayTimer = undefined;
                 this.showOverlay = false;
+                this.touchStopped();
             }
         },
         touchStart(event) {
@@ -1121,6 +1122,9 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
             if (this.touch && this.touch.moving && this.overlayVolume>=0 && this.overlayVolume!=this.lastSentVolume && VOL_STD==this.playerStatus.dvc) {
                 bus.$emit('playerCommand', ["mixer", "volume", this.overlayVolume]);
             }
+            this.touchStopped();
+        },
+        touchStopped() {
             this.touch=undefined;
             this.overlayVolume=-1;
             this.lastSentVolume=-1;

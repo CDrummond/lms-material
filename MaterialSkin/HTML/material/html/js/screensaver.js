@@ -176,10 +176,6 @@ Vue.component('lms-screensaver', {
                 clearInterval(this.changePosInterval);
                 this.changePosInterval = undefined;
             }
-            if (undefined!==this.showNpTimer) {
-                clearTimeout(this.showNpTimer);
-                this.showNpTimer = undefined;
-            }
             if (doFade && this.state=='hidding') {
                 return;
             }

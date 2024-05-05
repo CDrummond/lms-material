@@ -517,7 +517,7 @@ var lmsBrowse = Vue.component("lms-browse", {
         },
         showLibraryName() {
             return this.pinnedItemLibName ||
-                   ( this.$store.state.library && this.$store.state.library!=LMS_DEFAULT_LIBRARY &&
+                   ( this.$store.state.library && !LMS_DEFAULT_LIBRARIES.has(""+this.$store.state.library) &&
                     ( (this.current && this.current.id.startsWith(MUSIC_ID_PREFIX)) ||
                       (this.history.length>1 && this.history[1].current && this.history[1].current.id.startsWith(MUSIC_ID_PREFIX)) ||
                       (this.history.length>2 && this.history[2].current && this.history[2].current.id.startsWith(MUSIC_ID_PREFIX)) ) )
@@ -1344,7 +1344,7 @@ var lmsBrowse = Vue.component("lms-browse", {
                 if (data && data.result && data.result.folder_loop && data.result.folder_loop.length>0) {
                     for (var i=0, loop=data.result.folder_loop, len=loop.length; i<len; ++i) {
                         if (loop[i].id == this.$store.state.library) {
-                            this.libraryName=loop[i].id!=LMS_DEFAULT_LIBRARY ? loop[i].name.replace(SIMPLE_LIB_VIEWS, "") : i18n("All");
+                            this.libraryName=LMS_DEFAULT_LIBRARIES.has(""+loop[i]) ? i18n("All") : loop[i].name.replace(SIMPLE_LIB_VIEWS, "");
                             break;
                         }
                     }

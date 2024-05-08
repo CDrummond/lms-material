@@ -1,6 +1,7 @@
 4.5.3
 -----
 1. Use "-1" as default library id.
+2. Show skip-overlay upon 'mouseup' not 'click' event.
 
 4.5.2
 -----

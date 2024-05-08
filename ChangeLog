@@ -4,6 +4,7 @@
 2. Show skip-overlay upon 'mouseup' not 'click' event.
 3. For consistency, only start volume change on swipe when landscape if
    started on cover image (as per portrait view).
+4. Fix plugin info retrievel for LMS >= 9.0 - thanks to Michael Herger.
 
 4.5.2
 -----

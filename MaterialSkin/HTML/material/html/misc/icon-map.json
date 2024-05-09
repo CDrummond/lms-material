@@ -44,6 +44,7 @@
     "/transfer.png":{"icon":"swap_horiz"},
     "/followartist.png":{"icon":"person_add"},
     "/radio.png":{"svg":"radio"},
+    "/refresh.png":{"icon":"refresh"},
     "html/images/cover.png":{"icon":"album"},
 
     "/ClassicalRadio/html/icon.png":{"svg":"music-clef-treble"},
@@ -71,6 +72,7 @@
     "/SugarCube/html/images/sugarcube.png":{"svg":"spicefly-sugarcube"},
     "/WalkWithMe/html/images/icon.png":{"icon":"directions_walk"},
     "/Wefunk/html/images/logo.png":{"svg":"radio-station"},
+    "plugins/SqueezeSonic/html/images/random.png":{"svg":"dice-album"},
 
     "/accuradio.png":{"icon":"volume_up"},
     "/accuradio.jpg":{"svg":"accuradio"},

@@ -8,6 +8,7 @@
 5. Ensure no images for 'search' or 'entry' items.
 6. For LMS >= 9.0 add 'Works' to 'Random Mix'.
 7. Map some SqueezeSonic icons.
+8. Don't append library name to toolbar subtitles, as is not always relevant.
 
 4.5.2
 -----

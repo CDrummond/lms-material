@@ -515,13 +515,6 @@ var lmsBrowse = Vue.component("lms-browse", {
         unlockAll() {
             return this.$store.state.unlockAll
         },
-        showLibraryName() {
-            return this.pinnedItemLibName ||
-                   ( this.$store.state.library && !LMS_DEFAULT_LIBRARIES.has(""+this.$store.state.library) &&
-                    ( (this.current && this.current.id.startsWith(MUSIC_ID_PREFIX)) ||
-                      (this.history.length>1 && this.history[1].current && this.history[1].current.id.startsWith(MUSIC_ID_PREFIX)) ||
-                      (this.history.length>2 && this.history[2].current && this.history[2].current.id.startsWith(MUSIC_ID_PREFIX)) ) )
-        },
         homeButton() {
             return this.$store.state.homeButton
         },
@@ -570,11 +563,8 @@ var lmsBrowse = Vue.component("lms-browse", {
             return this.headerTitle + (this.current && this.current.stdItem==STD_ITEM_ALBUM && this.current.subIsYear ? " (" + this.current.subtitle + ")" : "");
         },
         toolbarSubTitle() {
-            let suffix = this.current && this.current.id!=TOP_MYMUSIC_ID && (this.libraryName || this.pinnedItemLibName) && this.showLibraryName
-                ? "<small>"+(SEPARATOR+(this.pinnedItemLibName ? this.pinnedItemLibName : this.libraryName))+"</small>"
-                : "";
             if (undefined!=this.current && this.current.id==TOP_MYMUSIC_ID && this.libraryName) {
-                return this.libraryName + suffix;
+                return this.libraryName;
             }
             if (undefined!=this.current && (this.current.stdItem==STD_ITEM_ALBUM || this.current.stdItem==STD_ITEM_ALL_TRACKS || this.current.stdItem==STD_ITEM_COMPOSITION_TRACKS || this.current.stdItem==STD_ITEM_WORK || this.current.stdItem==STD_ITEM_CLASSICAL_WORKS)) {
                 let albumArtst = this.current.subIsYear ? undefined : this.current.subtitle;
@@ -582,17 +572,17 @@ var lmsBrowse = Vue.component("lms-browse", {
                     albumArtst = this.items[0].compilationAlbumArtist;
                 }
                 if (undefined!=albumArtst) {
-                    return albumArtst + ' (' + this.headerSubTitle + ')' + suffix;
+                    return albumArtst + ' (' + this.headerSubTitle + ')';
                 }
                 for (let loop=this.history, i=loop.length-1; i>=0 && undefined!=loop[i].current; --i) {
                     if (STD_ITEM_ALBUM==loop[i].current.stdItem && undefined!=loop[i].current.subtitle) {
-                        return loop[i].current.subtitle + ' (' + this.headerSubTitle + ')' + suffix;
+                        return loop[i].current.subtitle + ' (' + this.headerSubTitle + ')';
                     } else if (STD_ITEM_ARTIST==loop[i].current.stdItem) {
-                        return loop[i].current.title + ' (' + this.headerSubTitle + ')' + suffix;
+                        return loop[i].current.title + ' (' + this.headerSubTitle + ')';
                     }
                 }
             }
-            return this.headerSubTitle ? this.headerSubTitle + suffix : suffix.length<1 ? undefined : suffix;
+            return this.headerSubTitle ? this.headerSubTitle : undefined;
         },
         showDetailedSubtoolbar() {
             return this.wide>0 && this.current && undefined!=this.current.stdItem && (this.currentImage || this.current.stdItem==STD_ITEM_ONLINE_ARTIST_CATEGORY) &&

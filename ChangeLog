@@ -6,6 +6,7 @@
    started on cover image (as per portrait view).
 4. Fix plugin info retrievel for LMS >= 9.0 - thanks to Michael Herger.
 5. Ensure no images for 'search' or 'entry' items.
+6. For LMS >= 9.0 add 'Works' to 'Random Mix'.
 
 4.5.2
 -----

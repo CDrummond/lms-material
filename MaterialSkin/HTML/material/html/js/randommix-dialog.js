@@ -85,10 +85,13 @@ Vue.component('lms-randommix', {
             this.showAll = getLocalStorageVal("rndmix.showAll", false);
             this.playerId = this.$store.state.player.id;
             lmsCommand(this.playerId, ["randomplayisactive"]).then(({data}) => {
-                this.mixes=[{key:"tracks", label:i18n("Song Mix")},
-                            {key:"albums", label:lmsOptions.supportReleaseTypes ? i18n("Release Mix") : i18n("Album Mix")},
-                            {key:"contributors", label:i18n("Artist Mix")},
-                            {key:"year", label:i18n("Year Mix")}];
+                this.mixes=[{key:"tracks", label:i18n("Tracks")},
+                            {key:"albums", label:lmsOptions.supportReleaseTypes ? i18n("Releases") : i18n("Albums")},
+                            {key:"contributors", label:i18n("Artists")},
+                            {key:"year", label:i18n("Years")}];
+                if (LMS_VERSION>=90000) {
+                    this.mixes.push({key:"work", label:i18n("Works")});
+                }
                 if (data && data.result && data.result._randomplayisactive) {
                     this.chosenMix = data.result._randomplayisactive;
                     this.active = true;

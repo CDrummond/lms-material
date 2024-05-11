@@ -625,6 +625,14 @@ function parseBrowseResp(data, parent, options, cacheKey, parentCommand, parentG
                     }
                 }
 
+                // Only allow search to have an icon, no image
+                if ((i.type=="search" && i.icon!="search") || i.type=="entry") {
+                    i.image = undefined;
+                    i.svg = undefined;
+                    i.icon = undefined;
+                    haveWithoutIcons = true;
+                }
+
                 resp.items.push(i);
                 // If this is a "text" item with an image then treat as a standard actionable item
                 if ("text"==i.type && (undefined!=i.image || undefined!=i.icon || undefined!=i.svg)) {

@@ -37,6 +37,10 @@ my $log = Slim::Utils::Log->addLogCategory({
     'description' => 'PLUGIN_MATERIAL_SKIN'
 });
 
+*getCurrentPlugins = Slim::Utils::Versions->compareVersions($::VERSION, '9.0.0') < 0
+    ? \&Slim::Plugin::Extensions::Plugin::getCurrentPlugins
+    : \&Slim::Utils::PluginRepoManager::getCurrentPlugins;
+
 my $prefs = preferences('plugin.material-skin');
 my $serverprefs = preferences('server');
 my $skinMgr;
@@ -705,7 +709,7 @@ sub _cliCommand {
     }
 
     if ($cmd eq 'plugins') {
-        my ($current, $active, $inactive, $hide) = Slim::Plugin::Extensions::Plugin::getCurrentPlugins();
+        my ($current, $active, $inactive, $hide) = getCurrentPlugins();
         my $cnt = 0;
         foreach my $plugin (@{$active}) {
             $request->addResultLoop("plugins_loop", $cnt, "name", $plugin->{name});
@@ -1755,7 +1759,7 @@ sub _checkUpdates {
     main::DEBUGLOG && $log->debug("Check for updates");
     Slim::Utils::Timers::killTimers(undef, \&_checkUpdates);
 
-    my ($current) = Slim::Plugin::Extensions::Plugin::getCurrentPlugins();
+    my ($current) = getCurrentPlugins();
     my $request = Slim::Control::Request->new(undef, ['appsquery']);
 
     $request->addParam(args => {

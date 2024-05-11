@@ -1,14 +1,16 @@
 4.5.3
 -----
-1. Use '-1' as default library id.
-2. Show skip-overlay upon 'mouseup' not 'click' event.
-3. For consistency, only start volume change on swipe when landscape if
-   started on cover image (as per portrait view).
-4. Fix plugin info rretrieval for LMS >= 9.0 - thanks to Michael Herger.
-5. Ensure no images for 'search' or 'entry' items.
-6. For LMS >= 9.0 add 'Works' to 'Random Mix'.
-7. Map some SqueezeSonic icons.
-8. Don't append library name to toolbar subtitles, as is not always relevant.
+ 1. Use '-1' as default library id.
+ 2. Show skip-overlay upon 'mouseup' not 'click' event.
+ 3. For consistency, only start volume change on swipe when landscape if
+    started on cover image (as per portrait view).
+ 4. Fix plugin info rretrieval for LMS >= 9.0 - thanks to Michael Herger.
+ 5. Ensure no images for 'search' or 'entry' items.
+ 6. For LMS >= 9.0 add 'Works' to 'Random Mix'.
+ 7. Map some SqueezeSonic icons.
+ 8. Don't append library name to toolbar subtitles, as is not always relevant.
+ 9. Fix 'Play next' hover showing when in party mode.
+10. Fix detailed sub-toolbar not showing in party mode.
 
 4.5.2
 -----

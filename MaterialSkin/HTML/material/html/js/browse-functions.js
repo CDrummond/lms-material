@@ -160,7 +160,7 @@ function browseActions(view, item, args, count, showCompositions, showWorks) {
                 actions.push({localfiles:true, title:i18n('Local files'), icon:'insert_drive_file', do:{ command:['musicartistinfo', 'localfiles', 'folder:'+args['path']], params:[]}, weight:103});
             }
         }
-        if (LMS_P_BMIX && (undefined!=args['artist_id'] || undefined!=args['album_id'])) {
+        if (LMS_P_BMIX && !queryParams.party && (undefined!=args['artist_id'] || undefined!=args['album_id'])) {
             actions.push({title:i18n('Create Mix'), svg:'dice-multiple', stdItem:STD_ITEM_MIX,
                           do:{ command:["blissmixer", "mix"],
                                params:["menu:1", "useContextMenu:1", undefined!=args['album_id'] ? "album_id:"+args['album_id'] : "artist_id:"+args['artist_id']]}, weight:101});
@@ -665,9 +665,6 @@ function browseHandleListResponse(view, item, command, resp, prevPage, appendIte
             view.headerSubTitle=resp.subtitle
         } else {
             view.headerSubTitle=0==view.items.length ? i18n("Empty") : i18np("1 Item", "%1 Items", view.items.length);
-        }
-        if (queryParams.party) {
-            view.tbarActions=[];
         }
         // In party mode only want to allow to add tracks.
         if (queryParams.party) {

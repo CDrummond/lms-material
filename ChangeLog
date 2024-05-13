@@ -8,6 +8,7 @@
    width.
 4. Always blur background of detailed sub-toolbar.
 5. Manually reduce size of Vuetify CSS file.
+6. Multi-cover display for works in subtoolbar.
 
 4.5.3
 -----

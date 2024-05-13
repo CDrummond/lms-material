@@ -3593,13 +3593,15 @@ div.v-subheader {
 
 /* Works images*/
 .image-grid-item .mi,
-.mi .v-avatar {
-  position: relative;
-  overflow: hidden;
+.mi .v-avatar,
+.sub-cover .mi {
+ position: relative;
+ overflow: hidden;
 }
-.image-grid-item .mi {
-  width: 100%;
-  height: 100%;
+.image-grid-item .mi,
+.sub-cover .mi {
+ width: 100%;
+ height: 100%;
 }
 
 .mi img {
@@ -3613,21 +3615,36 @@ div.v-subheader {
 .mi .mi-0 {
  transform: translateX(-50%);
 }
+.sub-cover .mi .mi-0 {
+ transform: none;
+}
 
 .mi2 .mi-1, .mi3 .mi-1 {
  transform: translateX(-35%);
+}
+.sub-cover .mi2 .mi-1, .sub-cover .mi3 .mi-1 {
+ transform: translateX(15%);
 }
 
 .mi3 .mi-2, .mi4 .mi-3 {
  transform: translateX(-20%);
 }
+.sub-cover .mi3 .mi-2, .sub-cover .mi4 .mi-3{
+  transform: translateX(30%);
+}
 
 .mi4 .mi-1 {
  transform: translateX(-40%);
 }
+.sub-cover .mi4 .mi-1 {
+ transform: translateX(10%);
+}
 
 .mi4 .mi-2 {
  transform: translateX(-30%);
+}
+.sub-cover .mi4 .mi-2 {
+ transform: translateX(20%);
 }
 
 .mi .mi-1, .mi .mi-2, .mi .mi-3 {
@@ -3635,7 +3652,8 @@ div.v-subheader {
  box-shadow: -5px 0px 25px 0px black;
 }
 
-.v-list__tile .mi .mi-1, .v-list__tile .mi .mi-2, .v-list__tile .mi .mi-3 {
+.v-list__tile .mi .mi-1, .v-list__tile .mi .mi-2, .v-list__tile .mi .mi-3,
+.sub-cover .mi .mi-1, .sub-cover .mi .mi-2, .sub-cover .mi .mi-3  {
  /*mask-image: linear-gradient(to right, transparent 0px, black 6px);*/
  box-shadow: -3px 0px 8px 0px black;
 }

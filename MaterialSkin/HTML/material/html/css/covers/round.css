@@ -12,8 +12,13 @@
  border-radius:7px!important;
 }
 
-.lms-list img:not(.image-grid-item-img):not(.svg-list-img):not(.multi-disc):not(.mi-0):not(.mi-1):not(.mi-2):not(.mi-3), .pmgr-cover img, .np-info .lms-list img, .sub-cover, .menu-image, .mi .v-avatar {
+.lms-list img:not(.image-grid-item-img):not(.svg-list-img):not(.multi-disc):not(.mi-0):not(.mi-1):not(.mi-2):not(.mi-3), .pmgr-cover img, .np-info .lms-list img, .sub-cover, .menu-image, .mi .v-avatar,
+.sub-cover .mi {
  border-radius:4px!important;
+}
+
+.sub-cover .mi-1, .sub-cover .mi-2, .sub-cover .mi-3 {
+ border-radius:3px!important;
 }
 
 .lms-list3 img, .np-bar-image .np-cover {

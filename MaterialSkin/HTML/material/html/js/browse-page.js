@@ -48,7 +48,12 @@ var lmsBrowse = Vue.component("lms-browse", {
   <v-layout v-else-if="history.length>0">
    <v-btn flat icon v-longpress="backBtnPressed" class="toolbar-button" v-bind:class="{'back-button':!homeButton || history.length<2}" id="back-button" :title="trans.goBack | tooltipStr('esc', keyboardControl)"><v-icon>arrow_back</v-icon></v-btn>
    <v-btn v-if="history.length>1 && homeButton" flat icon @click="homeBtnPressed()" class="toolbar-button" id="home-button" :title="trans.goHome | tooltipStr('home', keyboardControl)"><v-icon>home</v-icon></v-btn>
-   <img v-if="wide>0 && currentImage" :src="current && currentImage" @click="showHistory($event)" class="sub-cover pointer"></img>
+   <div v-if="wide>0 && currentImages" @click="showHistory($event)" class="sub-cover pointer">
+    <div class="mi" :class="'mi'+currentImages.length">
+     <img v-for="(mic, midx) in currentImages" :class="'mi-'+midx" :key="mic" :src="mic" loading="lazy"></img>
+    </div>
+   </div>
+   <img v-else-if="wide>0 && currentImage" :src="current && currentImage" @click="showHistory($event)" class="sub-cover pointer"></img>
    <v-layout row wrap v-if="showDetailedSubtoolbar">
     <v-layout @click="showHistory($event)" class="link-item row wrap browse-title">
      <v-flex xs12 class="ellipsis subtoolbar-title subtoolbar-pad" v-bind:class="{'subtoolbar-title-single':undefined==toolbarSubTitle}">{{toolbarTitle}}</v-flex>
@@ -537,6 +542,21 @@ var lmsBrowse = Vue.component("lms-browse", {
                     }
                     if (prev.currentItemImage) {
                         return prev.currentItemImage;
+                    }
+                }
+            }
+            return undefined
+        },
+        currentImages() {
+            if (this.current) {
+                if (this.current.images) {
+                    return this.current.images;
+                }
+                let stdItem = this.current.stdItem ? this.current.stdItem : this.current.altStdItem;
+                if ((stdItem==STD_ITEM_ONLINE_ARTIST_CATEGORY || stdItem==STD_ITEM_WORK) && this.history.length>0) {
+                    let prev = this.history[this.history.length-1];
+                    if (prev.current.images) {
+                        return prev.current.images;
                     }
                 }
             }

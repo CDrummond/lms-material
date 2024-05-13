@@ -4,6 +4,8 @@
    screen burn-in.
 2. For LMS running on piCorePlayer add 'Configuration' item to top-right menu
    of 'Server settings'
+3. If width >= 1000px then allow image in now-playing landscape to take 60% of
+   width.
 
 4.5.3
 -----

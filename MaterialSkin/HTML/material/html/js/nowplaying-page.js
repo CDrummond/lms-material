@@ -1190,8 +1190,9 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
                 let val = parseInt(window.getComputedStyle(document.documentElement).getPropertyValue('--sab').replace('px', ''));
                 this.navPad = undefined==val || isNaN(val) ? 0 : val;
             }
+            let whRatio = window.innerWidth>1000 ? 0.6 : 0.5;
             let maxImgHeight = window.innerHeight - (this.$store.state.desktopLayout ? 50 : (this.navPad + 102));
-            let maxImgWidth = (window.innerWidth/2.0)-32;
+            let maxImgWidth = (window.innerWidth*whRatio)-32;
             this.landscape = window.innerWidth >= (window.innerHeight*queryParams.npRatio) && window.innerWidth>=450;
             this.wide = window.innerWidth>=600 &&
                         window.innerWidth>=(window.innerHeight*1.25) &&

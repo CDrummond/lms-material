@@ -45,6 +45,7 @@
  --np-image-border:16px;
  --np-image-btn-pad:2px;
  --np-landscape-top-pad:calc((var(--np-landscape-item-height) - var(--np-image-landscape-size))/2);
+ --np-wide-left:60vw;
  --mobile-scrollbar-thumb-color:transparent;
  --bgnd-filter:blur(7px);
  --np-bgnd-filter-size:7px;
@@ -71,6 +72,12 @@
  --100vh:calc(var(--vh, 1vh)*100);
  --np-zoom:1.0;
  --np-zoom-list:1.0;
+}
+
+@media (orientation:landscape) and (max-width: 1000px) {
+ :root {
+  --np-wide-left:50vw;
+ }
 }
 
 /* For old browsers that dont support min() */

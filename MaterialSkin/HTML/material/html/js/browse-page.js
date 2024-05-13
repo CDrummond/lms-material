@@ -21,8 +21,8 @@ const SUB_TEXT_WIDE = 4;
 var lmsBrowse = Vue.component("lms-browse", {
     template: `
 <div id="browse-view" v-bind:class="{'detailed-sub':showDetailedSubtoolbar, 'indent-both':showDetailedSubtoolbar && STD_ITEM_ALBUM==current.stdItem && wide>3 && (!desktopLayout || !pinQueue), 'indent-right':showDetailedSubtoolbar && STD_ITEM_ALBUM==current.stdItem  && wide==3 && (!desktopLayout || !pinQueue)}">
- <div class="noselect" v-bind:class="{'subtoolbar-cover':showDetailedSubtoolbar && drawBgndImage}">
- <div class="subtoolbar" v-bind:class="{'toolbar-blur':showDetailedSubtoolbar && drawBgndImage}">
+ <div class="noselect" v-bind:class="{'subtoolbar-cover':showDetailedSubtoolbar}">
+ <div class="subtoolbar" v-bind:class="{'toolbar-blur':showDetailedSubtoolbar}">
   <v-layout v-if="selection.size>0">
    <div class="toolbar-nobtn-pad"></div>
    <v-layout row wrap>
@@ -542,11 +542,9 @@ var lmsBrowse = Vue.component("lms-browse", {
             }
             return undefined
         },
-        bgndUrl() {
-            let url = this.$store.state.browseBackdrop
-                        ? this.currentImage
-                        : undefined;
-            if (this.$store.state.browseBackdrop && undefined==url && this.history.length>0) {
+        currentImageUrl() {
+            let url = this.currentImage;
+            if (undefined==url && this.history.length>0) {
                 let prev = this.history[this.history.length-1]
                 if (i18n("Select category")==prev.headerSubTitle) {
                     url = prev.current && prev.current.image ? prev.current.image : prev.currentItemImage;
@@ -554,8 +552,11 @@ var lmsBrowse = Vue.component("lms-browse", {
             }
             return url;
         },
+        bgndUrl() {
+            return this.$store.state.browseBackdrop ? this.currentImageUrl : undefined
+        },
         drawBgndImage() {
-            return this.$store.state.browseBackdrop && undefined!=this.bgndUrl
+            return undefined!=this.bgndUrl
         },
         drawBackdrop() {
             return !this.drawBgndImage && this.$store.state.browseBackdrop && this.$store.state.useDefaultBackdrops
@@ -1711,7 +1712,12 @@ var lmsBrowse = Vue.component("lms-browse", {
                 url=changeImageSizing(url, LMS_CURRENT_IMAGE_SIZE);
                 document.documentElement.style.setProperty('--subtoolbar-image-url', 'url(' + url + ')');
             } else {
-                document.documentElement.style.setProperty('--subtoolbar-image-url', 'url()');
+                var img = this.currentImageUrl;
+                if (img) {
+                    document.documentElement.style.setProperty('--subtoolbar-image-url', 'url(' + img + ')');
+                } else {
+                    document.documentElement.style.setProperty('--subtoolbar-image-url', 'url()');
+                }
                 if (this.drawBackdrop) {
                     url='material/backdrops/browse.jpg';
                 }

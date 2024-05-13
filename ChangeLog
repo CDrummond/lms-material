@@ -6,6 +6,7 @@
    of 'Server settings'
 3. If width >= 1000px then allow image in now-playing landscape to take 60% of
    width.
+4. Always blur background of detailed sub-toolbar.
 
 4.5.3
 -----

@@ -3687,3 +3687,13 @@ div.v-subheader {
 .single-item-list .vue-recycle-scroller, .single-item-list .vue-recycle-scroller.direction-vertical .vue-recycle-scroller__item-wrapper {
  height:100%;
 }
+
+.lms-app .primary {
+ background-color: var(--primary-color)!important;
+ border-color: var(--primary-color)!important;
+}
+
+.lms-app .accent {
+ background-color: var(--accent-color)!important;
+ border-color: var(--accent-color)!important;
+}

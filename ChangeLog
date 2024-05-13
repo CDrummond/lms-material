@@ -11,6 +11,8 @@
  8. Don't append library name to toolbar subtitles, as is not always relevant.
  9. Fix 'Play next' hover showing when in party mode.
 10. Fix detailed sub-toolbar not showing in party mode.
+11. Set vuetify 'accent' and 'primary' colours so that time picker uses chosen
+    colour.
 
 4.5.2
 -----

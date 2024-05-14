@@ -602,7 +602,7 @@ var lmsBrowse = Vue.component("lms-browse", {
                     if (STD_ITEM_ALBUM==loop[i].current.stdItem && undefined!=loop[i].current.subtitle) {
                         return loop[i].current.subtitle + ' (' + this.headerSubTitle + ')';
                     } else if (STD_ITEM_ARTIST==loop[i].current.stdItem) {
-                        return loop[i].current.title + ' (' + this.headerSubTitle + ')';
+                        return (loop[i].current.noReleaseGrouping ? loop[i].current.title.split(SEPARATOR)[0] : loop[i].current.title) + ' (' + this.headerSubTitle + ')';
                     }
                 }
             }

@@ -27,6 +27,7 @@ const NP_ITEM_ACT = 200;
 const NP_MIN_WIDTH_FOR_FULL = 780;
 
 var currentPlayingTrackPosition = 0;
+var npView = undefined;
 
 var lmsNowPlaying = Vue.component("lms-now-playing", {
     template: `
@@ -417,6 +418,7 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
                 };
     },
     mounted() {
+        npView = this;
         this.zoom = parseFloat(getLocalStorageVal("npInfoZoom", 1.0));
         this.setZoom(this.zoom);
         this.showNpBar = undefined;
@@ -828,14 +830,26 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
                                  undefined==this.infoTrack.album &&
                                  undefined==this.infoTrack.url;
         },
+        currentView() {
+            return this.$store.state.desktopLayout
+                        ? this.largeView
+                            ? this.info.show
+                                ? NP_INFO
+                                : NP_EXPANDED
+                            : undefined
+                        : this.info.show
+                            ? NP_INFO
+                            : 'now-playing'
+        },
         trackInfo() {
             if (undefined==this.playerStatus.current.id) {
                 bus.$emit('showMessage', i18n('Nothing playing'));
                 return;
             }
+            let returnView = this.currentView();
             this.close();
             bus.$emit('trackInfo', {id: "track_id:"+this.playerStatus.current.id, title:this.playerStatus.current.title, image: this.coverUrl},
-                      this.playerStatus.playlist.current, NP_INFO);
+                      this.playerStatus.playlist.current, returnView);
         },
         fetchTrackInfo() {
             nowplayingFetchTrackInfo(this);

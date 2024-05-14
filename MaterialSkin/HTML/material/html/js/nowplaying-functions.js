@@ -453,10 +453,10 @@ function nowplayingMenuAction(view, item) {
             view.info.tabs[view.menu.tab].sections[0].items.length>=0 && view.menu.index<view.info.tabs[view.menu.tab].sections[0].items.length) {
             let litem = view.info.tabs[view.menu.tab].sections[0].items[view.menu.index];
             if (MORE_LIB_ACTION==act) {
-                bus.$emit("browse", ["tracks"], [litem.id, trackTags(true), SORT_KEY+"tracknum"], unescape(litem.title), NP_INFO, undefined, unescape(litem.subtitle ? litem.subtitle : litem.origsubtitle));
+                bus.$emit("browse", ["tracks"], [litem.id, trackTags(true), SORT_KEY+"tracknum"], unescape(litem.title), view.currentView(), undefined, unescape(litem.subtitle ? litem.subtitle : litem.origsubtitle));
                 view.close();
             } else if (MORE_ACTION==act) {
-                bus.$emit('trackInfo', litem, undefined, NP_INFO);
+                bus.$emit('trackInfo', litem, undefined, view.currentView());
                 view.close();
             } else {
                 let command = ["playlistcontrol", "cmd:"+(act==PLAY_ACTION ? "load" : INSERT_ACTION==act ? "insert" : ACTIONS[act].cmd), litem.id];
@@ -919,7 +919,7 @@ function nowplayingBrowse(cat, param, title) {
     let cmd=undefined;
     let params=undefined;
     if ('year'==cat) {
-        bus.$emit("browse", cat, param, ""+param, NP_INFO);
+        bus.$emit("browse", cat, param, ""+param, npView.currentView());
         bus.$emit('npclose');
     } else if ('genre'==cat) {
         let name = unescape(title);
@@ -927,7 +927,7 @@ function nowplayingBrowse(cat, param, title) {
             lmsCommand("", ["material-skin", "map", "genre:"+name]).then(({data}) => {
                 if (data && data.result && data.result.genre_id) {
                     logJsonMessage("RESP", data);
-                    bus.$emit("browse", cat, data.result.genre_id, name, NP_INFO);
+                    bus.$emit("browse", cat, data.result.genre_id, name, npView.currentView());
                     bus.$emit('npclose');
                 } else {
                     bus.$emit('showError', undefined, i18n("Unknown genre"));
@@ -936,7 +936,7 @@ function nowplayingBrowse(cat, param, title) {
                 bus.$emit('showError', undefined, i18n("Unknown genre"));
             });
         } else {
-            bus.$emit("browse", cat, param, name, NP_INFO);
+            bus.$emit("browse", cat, param, name, npView.currentView());
             bus.$emit('npclose');
         }
     } else {
@@ -945,7 +945,7 @@ function nowplayingBrowse(cat, param, title) {
         if (cat!='ARTIST') {
             params.push("role_id:"+cat);
         }
-        bus.$emit("browse", cmd, params, unescape(title), NP_INFO);
+        bus.$emit("browse", cmd, params, unescape(title), npView.currentView());
         bus.$emit('npclose');
     }
 }

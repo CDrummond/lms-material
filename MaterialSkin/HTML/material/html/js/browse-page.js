@@ -1111,7 +1111,7 @@ var lmsBrowse = Vue.component("lms-browse", {
             } else if (undefined!=act.do) {
                 this.fetchItems(act.stdItem==STD_ITEM_ALL_TRACKS || act.stdItem==STD_ITEM_COMPOSITION_TRACKS || act.stdItem==STD_ITEM_CLASSICAL_WORKS ? browseReplaceCommandTerms(this, act.do, item) : act.do,
                                 {cancache:false, id:"currentaction:"+index,
-                                 title:act.title+(act.stdItem==STD_ITEM_ALL_TRACKS || act.stdItem==STD_ITEM_COMPOSITION_TRACKS || act.stdItem==STD_ITEM_CLASSICAL_WORKS ? "" : (SEPARATOR+item.title)),
+                                 title:act.title+(act.stdItem==STD_ITEM_ALL_TRACKS || act.stdItem==STD_ITEM_COMPOSITION_TRACKS || act.stdItem==STD_ITEM_CLASSICAL_WORKS ? "" : (SEPARATOR+(item.noReleaseGrouping ? item.title.split(SEPARATOR)[0] : item.title))),
                                  subtitle:act.subtitle,
                                  image:act.stdItem ? this.currentImage : undefined, stdItem:act.stdItem});
                 if (STD_ITEM_MAI==act.stdItem) {

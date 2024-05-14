@@ -12,7 +12,7 @@
  --np-image-landscape-size:min(var(--np-image-landscape-height) - (var(--np-image-border)*2), 50vw - (var(--np-image-border)*2));
  --np-image-landscape-wide-height:min(calc(var(--100vh) - (var(--main-toolbar-height) + var(--bottom-toolbar-height))), var(--np-wide-left));
  --np-image-landscape-wide-size:min(var(--np-image-landscape-wide-height) - (var(--np-image-border)*2), var(--np-wide-left) - (var(--np-image-border)*2));
- --np-landscape-item-height:calc(var(--100vh) - (var(--main-toolbar-height) + var(--bottom-toolbar-height) + 118px));
+ --np-landscape-item-height:calc(var(--100vh) - (var(--main-toolbar-height) + var(--bottom-toolbar-height) + var(--np-controls-height) + 68px));
  --nav-hover-color:var(--btn-hover-color);
 }
 

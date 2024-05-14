@@ -5,6 +5,7 @@
 :root {
  --main-toolbar-height:0px!important;
  --bottom-toolbar-height:0px!important;
+ --np-controls-height:0px!important;
 }
 
 .no-control-adjust {

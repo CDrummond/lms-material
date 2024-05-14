@@ -46,6 +46,7 @@
  --np-image-btn-pad:2px;
  --np-landscape-top-pad:calc((var(--np-landscape-item-height) - var(--np-image-landscape-size))/2);
  --np-wide-left:60vw;
+ --np-controls-height:50px;
  --mobile-scrollbar-thumb-color:transparent;
  --bgnd-filter:blur(7px);
  --np-bgnd-filter-size:7px;

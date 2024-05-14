@@ -11,6 +11,7 @@
 6. Multi-cover display for works in subtoolbar.
 7. Move pin/un-pin queue button into its menu.
 8. Show queue button in desktop now-playing bar if 1 or more tracks in queue.
+9. Base max grid cover size on window width.
 
 4.5.3
 -----

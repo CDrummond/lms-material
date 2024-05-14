@@ -13,6 +13,7 @@
 10. Fix detailed sub-toolbar not showing in party mode.
 11. Set vuetify 'accent' and 'primary' colours so that time picker uses chosen
     colour.
+12. Fix dark patch bottom-right of now-playing only view with light themes.
 
 4.5.2
 -----

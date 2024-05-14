@@ -10,6 +10,7 @@
 5. Manually reduce size of Vuetify CSS file.
 6. Multi-cover display for works in subtoolbar.
 7. Move pin/un-pin queue button into its menu.
+8. Show queue button in desktop now-playing bar if 1 or more tracks in queue.
 
 4.5.3
 -----

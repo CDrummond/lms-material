@@ -9,6 +9,7 @@
 4. Always blur background of detailed sub-toolbar.
 5. Manually reduce size of Vuetify CSS file.
 6. Multi-cover display for works in subtoolbar.
+7. Move pin/un-pin queue button into its menu.
 
 4.5.3
 -----

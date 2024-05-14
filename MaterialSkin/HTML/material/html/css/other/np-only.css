@@ -27,3 +27,7 @@ body {
 .np-close, .np-menu {
  visibility:hidden;
 }
+
+.np-bgnd-cover {
+ box-shadow:inset 100vw 120vh var(--background-shadow-color);
+}

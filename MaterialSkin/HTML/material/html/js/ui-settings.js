@@ -104,15 +104,6 @@ Vue.component('lms-ui-settings', {
     <v-divider v-if="!IS_MOBILE"></v-divider>
 
     <v-list-tile>
-     <v-list-tile-content @click="screensaver = !screensaver" class="switch-label">
-      <v-list-tile-title>{{i18n('Screensaver')}}</v-list-tile-title>
-      <v-list-tile-sub-title>{{i18n('When no song is playing on current player, darken screen (and show date & time) after 60 seconds.')}}</v-list-tile-sub-title>
-     </v-list-tile-content>
-     <v-list-tile-action><m3-switch v-model="screensaver"></m3-switch></v-list-tile-action>
-    </v-list-tile>
-    <v-divider></v-divider>
-
-    <v-list-tile>
      <v-list-tile-content @click="roundCovers = !roundCovers" class="switch-label">
       <v-list-tile-title>{{i18n('Round covers')}}</v-list-tile-title>
       <v-list-tile-sub-title>{{i18n('Round the corners of cover-art, etc.')}}</v-list-tile-sub-title>
@@ -367,6 +358,24 @@ Vue.component('lms-ui-settings', {
     </v-list-tile>
 
     <div class="dialog-padding"></div>
+    <v-header class="dialog-section-header">{{i18n('Screensaver')}}</v-header>
+    <v-list-tile>
+     <v-list-tile-content @click="screensaver = !screensaver" class="switch-label">
+      <v-list-tile-title>{{i18n('Show clock')}}</v-list-tile-title>
+      <v-list-tile-sub-title>{{i18n('When no song is playing on current player, darken screen (and show date & time) after 1 minute of inactivity.')}}</v-list-tile-sub-title>
+     </v-list-tile-content>
+     <v-list-tile-action><m3-switch v-model="screensaver"></m3-switch></v-list-tile-action>
+    </v-list-tile>
+    <v-divider></v-divider>
+    <v-list-tile>
+    <v-list-tile-content @click="screensaverNp = !screensaverNp" class="switch-label">
+     <v-list-tile-title>{{i18n('Switch to now-playing')}}</v-list-tile-title>
+     <v-list-tile-sub-title>{{i18n('Switch to basic now-playing view (cover, details, and progress) after 5 minutes of inactivity. Helps to prevent burn-in on OLED screens.')}}</v-list-tile-sub-title>
+    </v-list-tile-content>
+    <v-list-tile-action><m3-switch v-model="screensaverNp"></m3-switch></v-list-tile-action>
+   </v-list-tile>
+
+    <div class="dialog-padding"></div>
    </v-list>
   </v-card-text>
  </v-card>
@@ -454,6 +463,7 @@ Vue.component('lms-ui-settings', {
                 halfLen: 0
             },
             screensaver: false,
+            screensaverNp: false,
             serverName: "",
             showRating: false,
             homeButton: false,
@@ -623,6 +633,7 @@ Vue.component('lms-ui-settings', {
             this.showRating = this.$store.state.showRating;
             this.hidden = this.$store.state.hidden;
             this.screensaver = this.$store.state.screensaver;
+            this.screensaverNp = this.$store.state.screensaverNp;
             this.homeButton = this.$store.state.homeButton;
             this.powerButton = this.$store.state.powerButton;
             this.mediaControls = this.$store.state.mediaControls;
@@ -729,6 +740,7 @@ Vue.component('lms-ui-settings', {
                       skipFSeconds:this.skipFSeconds,
                       disabledBrowseModes:arrays ? Array.from(this.disabledBrowseModes()) : this.disabledBrowseModes(),
                       screensaver:this.screensaver,
+                      screensaverNp:this.screensaverNp,
                       homeButton:this.homeButton,
                       powerButton:this.powerButton,
                       showRating:this.showRating,

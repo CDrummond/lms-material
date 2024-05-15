@@ -11,9 +11,12 @@ function resetScreensaver(ev) {
     screensaver.resetTimer(ev);
 }
 
+const CLOCK_SCREENSAVER_TIMEOUT =   60*1000;
+const NP_SCREENSAVER_TIMEOUT    = 5*60*1000;
+
 Vue.component('lms-screensaver', {
     template: `
-<v-dialog v-model="show" v-if="show" scrollable fullscreen>
+<v-dialog v-model="showClock" v-if="showClock" scrollable fullscreen>
  <v-card class="screensaver-bgnd" v-on:mousemove="resetTimer($event)" v-on:touchstart="resetTimer($event)" id="screensaver">
   <div :style="{ marginLeft: marginLeft + 'px', marginTop: marginTop + 'px' }" id="screensaver-contents">
    <p class="screensaver-time ellipsis">{{time}}</p>
@@ -27,8 +30,10 @@ Vue.component('lms-screensaver', {
 `,
     props: [],
     data () {
-        return { enabled: false,
-                 show: false,
+        return { clockEnabled: false,
+                 npSwitchEnabled: false,
+                 showClock: false,
+                 npSwitched: false,
                  date: "date",
                  time: "time",
                  alarm: undefined,
@@ -44,21 +49,36 @@ Vue.component('lms-screensaver', {
     mounted() {
         screensaver = this;
         this.playing = false;
-        this.enabled = this.$store.state.screensaver;
-        this.control();
+        this.clockEnabled = this.$store.state.screensaver;
+        this.npSwitchEnabled = this.$store.state.screensaverNp;
+        this.controlClock();
+        this.controlNp();
         this.toggleHandlers();
         this.state = 'hidden';
         this.alarmTime = 0;
+        this.nowPlayingIsExpanded = false;
+        this.nowPlayingWasExpanded = false;
+        bus.$on('nowPlayingExpanded', function(val) {
+            this.nowPlayingIsExpanded = val;
+        }.bind(this));
         bus.$on('screensaverDisplayChanged', function() {
-            if (this.enabled != this.$store.state.screensaver) {
-                this.enabled = this.$store.state.screensaver;
+            let enabled = this.clockEnabled || this.npSwitchEnabled;
+            let enable = this.$store.state.screensaver || this.$store.state.screensaverNp;
+            if (enable != enabled) {
+                this.clockEnabled = this.$store.state.screensaver;
+                this.npSwitchEnabled = this.$store.state.screensaverNp;
                 this.toggleHandlers();
-                if (this.enabled) {
+                if (this.clockEnabled) {
                     if (!this.playing) {
-                        this.control();
+                        this.controlClock();
                     }
                 } else {
-                    this.cancelAll(false);
+                    this.cancelAllClock(false);
+                }
+                if (this.npSwitchEnabled) {
+                    this.controlNp();
+                } else {
+                    this.cancelAllNp();
                 }
             }
         }.bind(this));
@@ -67,30 +87,38 @@ Vue.component('lms-screensaver', {
                 // Player state changed
                 this.playing = playerStatus.isplaying;
                 this.updateAlarm(playerStatus);
-                this.control();
+                this.controlClock();
             }
         }.bind(this));
     },
     methods: {
-        control() {
-            if (this.enabled) {
+        controlClock() {
+            if (this.clockEnabled) {
                 if (this.playing) {
-                    this.cancelAll(true);
+                    this.cancelAllClock(true);
                 } else {
                     this.resetTimer();
                 }
             }
         },
+        controlNp() {
+            if (this.npSwitchEnabled) {
+                this.resetTimer();
+            }
+        },
         updateDateAndTime() {
+            if (!this.clockEnabled) {
+                return;
+            }
             let date = new Date();
             this.date = dateStr(date, this.$store.state.lang);
             this.time = timeStr(date, this.$store.state.lang);
 
-            if (undefined!==this.updateTimer) {
-                clearTimeout(this.updateTimer);
+            if (undefined!==this.updateClockTimer) {
+                clearTimeout(this.updateClockTimer);
             }
             let next = 60-date.getSeconds();
-            this.updateTimer = setTimeout(function () {
+            this.updateClockTimer = setTimeout(function () {
                 this.updateDateAndTime();
             }.bind(this), (next*1000)+25);
 
@@ -118,6 +146,9 @@ Vue.component('lms-screensaver', {
             }
         },
         updateAlarm(status) {
+            if (!this.clockEnabled) {
+                return;
+            }
             if (this.alarmTime!=status.alarm) {
                 if (undefined==status.alarm) {
                     this.alarm = undefined;
@@ -128,18 +159,18 @@ Vue.component('lms-screensaver', {
                 this.alarmTime=status.alarm;
             }
         },
-        cancelAll(doFade) {
-            if (undefined!==this.showTimer) {
-                clearTimeout(this.showTimer);
-                this.showTimer = undefined;
+        cancelAllClock(doFade) {
+            if (undefined!==this.showClockTimer) {
+                clearTimeout(this.showClockTimer);
+                this.showClockTimer = undefined;
             }
-            if (undefined!==this.updateTimer) {
-                clearTimeout(this.updateTimer);
-                this.updateTimer = undefined;
+            if (undefined!==this.updateClockTimer) {
+                clearTimeout(this.updateClockTimer);
+                this.updateClockTimer = undefined;
             }
-            if (undefined!==this.moveTimer) {
-                clearTimeout(this.moveTimer);
-                this.moveTimer = undefined;
+            if (undefined!==this.moveClockTimer) {
+                clearTimeout(this.moveClockTimer);
+                this.moveClockTimer = undefined;
             }
             if (undefined!==this.changePosInterval) {
                 clearInterval(this.changePosInterval);
@@ -151,7 +182,7 @@ Vue.component('lms-screensaver', {
             if (undefined!==this.fadeInterval) {
                 clearInterval(this.fadeInterval);
                 this.fadeInterval = undefined;
-                this.state = this.show ? "shown" : "hidden";
+                this.state = this.showClock ? "shown" : "hidden";
             }
 
             if (doFade) {
@@ -160,13 +191,19 @@ Vue.component('lms-screensaver', {
                 if (this.elem) {
                     this.elem.style.opacity=1.0;
                 }
-                this.show = false;
-                this.state = this.show ? "shown" : "hidden";
+                this.showClock = false;
+                this.state = this.showClock ? "shown" : "hidden";
+            }
+        },
+        cancelAllNp() {
+            if (undefined!==this.showNpTimer) {
+                clearTimeout(this.showNpTimer);
+                this.showNpTimer = undefined;
             }
         },
         fade(elem, fadeIn) {
             if (undefined==elem) {
-                this.show = false;
+                this.showClock = false;
                 return;
             }
             if ( (fadeIn && (this.state=='shown' || this.state=='showing')) ||
@@ -186,7 +223,7 @@ Vue.component('lms-screensaver', {
                 if (fadeIn ? val >= 1.0 : val<=0.0) {
                     elem.style.opacity = fadeIn ? 1.0 : 0.0;
                     if (!fadeIn) {
-                        this.show = false;
+                        this.showClock = false;
                     }
                     this.state = fadeIn ? 'shown' : 'hidden';
                     var interval = this.fadeInterval;
@@ -232,8 +269,8 @@ Vue.component('lms-screensaver', {
             }
         },
         startMoving() {
-            clearInterval(this.moveTimer);
-            this.moveTimer = setInterval(function () {
+            clearInterval(this.moveClockTimer);
+            this.moveClockTimer = setInterval(function () {
                 let factors = [-1, -0.75, -0.5, -0.25, 0, 0.25, 0.5, 0.75, 1.0];
                 let newPos = [0, 0];
                 for (let i=0; i<500; ++i) {
@@ -251,7 +288,7 @@ Vue.component('lms-screensaver', {
             }.bind(this), 5*60*1000); // Move every Xminutes
         },
         toggleHandlers() {
-            if (this.enabled) {
+            if (this.clockEnabled || this.npSwitchEnabled) {
                 if (!this.installedHandlers) {
                     window.addEventListener('touchstart', resetScreensaver);
                     window.addEventListener('mousedown', resetScreensaver);
@@ -272,20 +309,51 @@ Vue.component('lms-screensaver', {
             }
         },
         resetTimer(ev) {
-            this.cancelAll(true);
-            if (!this.playing) {
-                this.showTimer = setTimeout(function () {
-                    this.show = true;
-                    this.updateDateAndTime();
-                    this.$nextTick(function () {
-                        this.startDisplay();
-                    });
-                }.bind(this), 60*1000);
+            this.cancelAllClock(true);
+            this.cancelAllNp();
+            if (this.clockEnabled) {
+                if (!this.playing) {
+                    this.showClockTimer = setTimeout(function () {
+                        this.showClock = true;
+                        this.updateDateAndTime();
+                        this.$nextTick(function () {
+                            this.startDisplay();
+                        });
+                    }.bind(this), CLOCK_SCREENSAVER_TIMEOUT);
+                }
+            }
+            if (this.npSwitchEnabled) {
+                if (this.npSwitched) {
+                    changeLink("", "oled");
+                    this.npSwitched = false;
+                    if (this.$store.state.desktopLayout) {
+                        this.nowPlayingWasExpanded;
+                        if (!this.nowPlayingWasExpanded) {
+                            bus.$emit('expandNowPlaying', false);
+                        }
+                    } else {
+                        this.$store.commit('setPage', this.prevPage);
+                    }
+                } else {
+                    this.showNpTimer = setTimeout(function () {
+                        if (this.$store.state.desktopLayout) {
+                            this.nowPlayingWasExpanded = this.nowPlayingIsExpanded;
+                            if (!this.nowPlayingWasExpanded) {
+                                bus.$emit('expandNowPlaying', true);
+                            }
+                        } else {
+                            this.prevPage = this.$store.state.page;
+                            this.$store.commit('setPage', 'now-playing');
+                        }
+                        this.npSwitched = true;
+                        changeLink("html/css/other/np-only.css?r=" + LMS_MATERIAL_REVISION, "oled", true);
+                    }.bind(this), NP_SCREENSAVER_TIMEOUT);
+                }
             }
         }
     },
     beforeDestroy() {
-        this.cancelAll(false);
+        this.cancelAllClock(false);
+        this.cancelAllNp();
     }
 })
-

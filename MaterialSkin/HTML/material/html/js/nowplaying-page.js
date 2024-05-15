@@ -210,6 +210,7 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
      <div v-else-if="npBarRatings && (repAltBtn.show || shuffAltBtn.show)" class="np-bar-rating np-thumbs-desktop"><v-btn v-if="repAltBtn.show" :title="repAltBtn.tooltip" flat icon v-longpress="repeatClicked" class="np-std-button" v-bind:class="{'disabled':noPlayer}"><v-icon v-if="repAltBtn.icon" class="media-icon">{{repAltBtn.icon}}</v-icon><img v-else :src="repAltBtn.image" class="btn-img"></img></v-btn><v-btn v-if="shuffAltBtn.show" :title="shuffAltBtn.tooltip" flat icon @click="shuffleClicked" class="np-std-button"><v-icon v-if="shuffAltBtn.icon" class="media-icon">{{shuffAltBtn.icon}}</v-icon><img v-else :src="shuffAltBtn.image" class="btn-img"></img></v-btn></div>
      <v-rating v-else-if="showRatings" class="np-bar-rating" v-model="rating.value" half-increments hover clearable @click.native="setRating(true)" :readonly="undefined==LMS_P_RP"></v-rating>
      <div v-else-if="playerStatus.playlist.count>1" class="np-bar-tech" v-bind:class="{'link-item':totalTogglesQueue && !coloredToolbars, 'link-item-ct':totalTogglesQueue && coloredToolbars}" @click.stop="trackCountClicked">{{playerStatus.playlist.current | trackCount(playerStatus.playlist.count)}} <v-btn class="np-bar-queue" flat icon v-if="!pinQueue"><v-icon v-if="showQueue">queue_music</v-icon><img v-else class="svg-img" :src="'queue_music_outline' | svgIcon(darkUi, false, true, coloredToolbars)"></img></v-btn></div>
+     <div v-else-if="!pinQueue" class="np-bar-tech"><v-btn class="np-bar-queue" flat icon @click.stop="trackCountClicked"><v-icon v-if="showQueue">queue_music</v-icon><img v-else class="svg-img" :src="'queue_music_outline' | svgIcon(darkUi, false, true, coloredToolbars)"></img></v-btn></div>
      <div v-else class="np-bar-tech">&nbsp;</div>
     </v-list-tile-action>
    </v-list-tile>
@@ -1120,6 +1121,7 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
                 clearTimeout(this.showOverlayTimer);
                 this.showOverlayTimer = undefined;
                 this.showOverlay = false;
+                this.touchStopped();
             }
         },
         touchStart(event) {
@@ -1135,6 +1137,9 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
             if (this.touch && this.touch.moving && this.overlayVolume>=0 && this.overlayVolume!=this.lastSentVolume && VOL_STD==this.playerStatus.dvc) {
                 bus.$emit('playerCommand', ["mixer", "volume", this.overlayVolume]);
             }
+            this.touchStopped();
+        },
+        touchStopped() {
             this.touch=undefined;
             this.overlayVolume=-1;
             this.lastSentVolume=-1;
@@ -1200,8 +1205,9 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
                 let val = parseInt(window.getComputedStyle(document.documentElement).getPropertyValue('--sab').replace('px', ''));
                 this.navPad = undefined==val || isNaN(val) ? 0 : val;
             }
+            let whRatio = window.innerWidth>1000 ? 0.575 : 0.5;
             let maxImgHeight = window.innerHeight - (this.$store.state.desktopLayout ? 50 : (this.navPad + 102));
-            let maxImgWidth = (window.innerWidth/2.0)-32;
+            let maxImgWidth = (window.innerWidth*whRatio)-32;
             this.landscape = window.innerWidth >= (window.innerHeight*queryParams.npRatio) && window.innerWidth>=450;
             this.wide = window.innerWidth>=600 &&
                         window.innerWidth>=(window.innerHeight*1.25) &&

@@ -465,28 +465,41 @@ function removeLocalStorage(key) {
     }
 }
 
-function changeLink(href, id) {
+function createLink(href, id, oldLink) {
+    var newlink = document.createElement("link");
+    newlink.setAttribute("rel", "stylesheet");
+    newlink.setAttribute("type", "text/css");
+    newlink.setAttribute("href", href);
+    newlink.setAttribute("id", id);
+    if (undefined!=oldLink) {
+        var onErr = oldLink.getAttribute("onerror");
+        if (onErr!=undefined) {
+            newlink.setAttribute("onerror", onErr);
+        }
+    }
+    return newlink;
+}
+
+function changeLink(href, id, addIfNotFound) {
     var links = document.getElementsByTagName("link");
     if (undefined==links) {
         return;
     }
     for (var i=0, len=links.length; i<len; ++i) {
         if (links[i].getAttribute("id")==id) {
-            if (links[i].getAttribute("href")==href) {
-                return;
+            if (isEmpty(href)) {
+                document.getElementsByTagName("head").item(0).removeChild(links[i]);
+            } else {
+                if (links[i].getAttribute("href")==href) {
+                    return;
+                }
+                document.getElementsByTagName("head").item(0).replaceChild(createLink(href, id, links[i]), links[i]);
             }
-            var newlink = document.createElement("link");
-            newlink.setAttribute("rel", "stylesheet");
-            newlink.setAttribute("type", "text/css");
-            newlink.setAttribute("href", href);
-            newlink.setAttribute("id", id);
-            var onErr = links[i].getAttribute("onerror");
-            if (onErr!=undefined) {
-                newlink.setAttribute("onerror", onErr);
-            }
-            document.getElementsByTagName("head").item(0).replaceChild(newlink, links[i]);
             return;
         }
+    }
+    if (addIfNotFound) {
+        document.getElementsByTagName("head").item(0).appendChild(createLink(href, id));
     }
 }
 

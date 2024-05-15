@@ -181,6 +181,9 @@ function browseActions(view, item, args, count, showCompositions, showWorks) {
             }
             browseAddLibId(view, params);
             actions.push({title:i18n('All songs'), icon:'music_note', do:{ command: ['tracks'], params: params}, weight:80, stdItem:STD_ITEM_ALL_TRACKS});
+            if (lmsOptions.supportReleaseTypes && args['multi-group']) {
+                actions.push({action:ALL_RELEASES_ACTION, weight:84});
+            }
         } else if (undefined!=args['work_id'] && undefined!=args['composer_id'] && undefined!=args['count'] && args['count']>1) {
             var params = [SORT_KEY+TRACK_SORT_PLACEHOLDER, PLAYLIST_TRACK_TAGS, 'work_id:'+args['work_id'], 'composer_id:'+args['composer_id']];
             if (undefined!=args['grouping']) {
@@ -375,7 +378,7 @@ function browseHandleListResponse(view, item, command, resp, prevPage, appendIte
         let listingWorkAlbums = view.current.id.startsWith("work_id:");
         let listingAlbums = view.command.command[0]=="albums";
         let listingTracks = view.command.command[0]=="tracks";
-        let title = view.current.title;
+        let title = view.current.noReleaseGrouping ? view.current.title.split(SEPARATOR)[0] : view.current.title;
         let artist_id = listingArtistAlbums ? view.current.id.split(":")[1] : undefined;
         let album_id = listingAlbumTracks ? originalId(view.current.id).split(":")[1] : undefined;
         let work_id = listingWorkAlbums ? view.current.id.split(":")[1] : undefined;
@@ -433,6 +436,9 @@ function browseHandleListResponse(view, item, command, resp, prevPage, appendIte
                     actParams['genre_id']=view.command.params[field];
                 }
                 showWorksInMenu = LMS_VERSION>=90000 && !lmsOptions.listWorks && getField(view.command, "work_id:")<0;
+                if (resp.items.length>1 && resp.items[0].header) {
+                    actParams['multi-group'] = true;
+                }
             } else if (listingWorkAlbums) {
                 actParams['composer']=title;
                 actParams['count']=resp.items.length;
@@ -541,7 +547,7 @@ function browseHandleListResponse(view, item, command, resp, prevPage, appendIte
         if (resp.canUseGrid && !resp.forceGrid) {
             view.currentActions.push({action:(view.grid.use ? USE_LIST_ACTION : USE_GRID_ACTION), weight:0});
         }
-        if (view.current.stdItem!=STD_ITEM_MAI && !item.id.startsWith(TOP_ID_PREFIX) && view.items.length>0) {
+        if (view.current.id==TOP_FAVORITES_ID || (view.current.stdItem!=STD_ITEM_MAI && !item.id.startsWith(TOP_ID_PREFIX) && view.items.length>0)) {
             view.currentActions.push({action:SEARCH_LIST_ACTION, weight:1});
         }
         let itemHasPlayAction=undefined!=item.menu && item.menu[0]==PLAY_ACTION;
@@ -1516,6 +1522,12 @@ function browseItemAction(view, act, item, index, event) {
                 view.jumpTo(choice.jump);
             }
         });
+    } else if (ALL_RELEASES_ACTION==act) {
+        let clone = JSON.parse(JSON.stringify(view.current));
+        clone.noReleaseGrouping = true;
+        clone.isListItemInMenu = true;
+        clone.title=clone.title+SEPARATOR+i18n("All releases");
+        browseClick(view, clone);
     } else {
         // If we are acting on a multi-disc album, prompt which disc we should act on
         if (item.multi && !view.current.id.startsWith("album_id:") && (PLAY_ACTION==act || ADD_ACTION==act || INSERT_ACTION==act || PLAY_SHUFFLE_ACTION==act)) {
@@ -1690,7 +1702,6 @@ function browseHeaderAction(view, act, event, ignoreOpenMenus) {
         // If we are adding/playing/inserting from an artist's list of albums, check if we are using reverse sort
         // if we are then we need to add each album in the list one by one...'
         if ((PLAY_ACTION==act || ADD_ACTION==act) && STD_ITEM_ARTIST==item.stdItem) {
-            var reverseSort = false;
             for (var i=0, loop=view.command.params, len=loop.length; i<len; ++i) {
                 if (loop[i]==MSK_REV_SORT_OPT) {
                     view.itemAction(PLAY_ACTION==act ? PLAY_ALL_ACTION : ADD_ALL_ACTION, item);
@@ -2423,7 +2434,7 @@ function browseReplaceCommandTerms(view, cmd, item) {
         }
         // For non-artist albums, where LMS is set to group releases only for artists, we still want release
         // type so that header can say X Release(s) if there is a mixture. Otherwise it'd say X Album(s)
-        if (lmsOptions.groupByReleaseType==1 && isNonArtistAlbumList) {
+        if (lmsOptions.groupByReleaseType==1 && (isNonArtistAlbumList || (item && item.noReleaseGrouping))) {
             cmd.params.push(DONT_GROUP_RELEASE_TYPES)
         }
     }
@@ -2755,7 +2766,8 @@ function browseFetchExtra(view, fetchArtists) {
         }
         return;
     }
-    lmsCommand("", ["material-skin", "similar", "artist:"+item.title]).then(({data}) => {
+    let title = item.noReleaseGrouping ? item.title.split(SEPARATOR)[0] : item.title;
+    lmsCommand("", ["material-skin", "similar", "artist:"+title]).then(({data}) => {
         let html = undefined;
         if (data && data.result && data.result.similar_loop) {
             logJsonMessage("RESP", data);

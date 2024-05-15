@@ -298,6 +298,10 @@ sub readStringPref {
     return $prefval;
 }
 
+sub osName {
+    return Slim::Utils::OSDetect::details()->{'osName'};
+}
+
 sub initCLI {
     #                                                                      |requires Client
     #                                                                      |  |is a Query

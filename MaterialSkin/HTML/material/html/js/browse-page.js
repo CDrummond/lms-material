@@ -21,8 +21,8 @@ const SUB_TEXT_WIDE = 4;
 var lmsBrowse = Vue.component("lms-browse", {
     template: `
 <div id="browse-view" v-bind:class="{'detailed-sub':showDetailedSubtoolbar, 'indent-both':showDetailedSubtoolbar && STD_ITEM_ALBUM==current.stdItem && wide>3 && (!desktopLayout || !pinQueue), 'indent-right':showDetailedSubtoolbar && STD_ITEM_ALBUM==current.stdItem  && wide==3 && (!desktopLayout || !pinQueue)}">
- <div class="noselect" v-bind:class="{'subtoolbar-cover':showDetailedSubtoolbar && drawBgndImage}">
- <div class="subtoolbar" v-bind:class="{'toolbar-blur':showDetailedSubtoolbar && drawBgndImage}">
+ <div class="noselect" v-bind:class="{'subtoolbar-cover':showDetailedSubtoolbar}">
+ <div class="subtoolbar" v-bind:class="{'toolbar-blur':showDetailedSubtoolbar}">
   <v-layout v-if="selection.size>0">
    <div class="toolbar-nobtn-pad"></div>
    <v-layout row wrap>
@@ -48,7 +48,12 @@ var lmsBrowse = Vue.component("lms-browse", {
   <v-layout v-else-if="history.length>0">
    <v-btn flat icon v-longpress="backBtnPressed" class="toolbar-button" v-bind:class="{'back-button':!homeButton || history.length<2}" id="back-button" :title="trans.goBack | tooltipStr('esc', keyboardControl)"><v-icon>arrow_back</v-icon></v-btn>
    <v-btn v-if="history.length>1 && homeButton" flat icon @click="homeBtnPressed()" class="toolbar-button" id="home-button" :title="trans.goHome | tooltipStr('home', keyboardControl)"><v-icon>home</v-icon></v-btn>
-   <img v-if="wide>0 && currentImage" :src="current && currentImage" @click="showHistory($event)" class="sub-cover pointer"></img>
+   <div v-if="wide>0 && currentImages" @click="showHistory($event)" class="sub-cover pointer">
+    <div class="mi" :class="'mi'+currentImages.length">
+     <img v-for="(mic, midx) in currentImages" :class="'mi-'+midx" :key="mic" :src="mic" loading="lazy"></img>
+    </div>
+   </div>
+   <img v-else-if="wide>0 && currentImage" :src="current && currentImage" @click="showHistory($event)" class="sub-cover pointer"></img>
    <v-layout row wrap v-if="showDetailedSubtoolbar">
     <v-layout @click="showHistory($event)" class="link-item row wrap browse-title">
      <v-flex xs12 class="ellipsis subtoolbar-title subtoolbar-pad" v-bind:class="{'subtoolbar-title-single':undefined==toolbarSubTitle}">{{toolbarTitle}}</v-flex>
@@ -542,11 +547,24 @@ var lmsBrowse = Vue.component("lms-browse", {
             }
             return undefined
         },
-        bgndUrl() {
-            let url = this.$store.state.browseBackdrop
-                        ? this.currentImage
-                        : undefined;
-            if (this.$store.state.browseBackdrop && undefined==url && this.history.length>0) {
+        currentImages() {
+            if (this.current) {
+                if (this.current.images) {
+                    return this.current.images;
+                }
+                let stdItem = this.current.stdItem ? this.current.stdItem : this.current.altStdItem;
+                if ((stdItem==STD_ITEM_ONLINE_ARTIST_CATEGORY || stdItem==STD_ITEM_WORK) && this.history.length>0) {
+                    let prev = this.history[this.history.length-1];
+                    if (prev.current.images) {
+                        return prev.current.images;
+                    }
+                }
+            }
+            return undefined
+        },
+        currentImageUrl() {
+            let url = this.currentImage;
+            if (undefined==url && this.history.length>0) {
                 let prev = this.history[this.history.length-1]
                 if (i18n("Select category")==prev.headerSubTitle) {
                     url = prev.current && prev.current.image ? prev.current.image : prev.currentItemImage;
@@ -554,8 +572,11 @@ var lmsBrowse = Vue.component("lms-browse", {
             }
             return url;
         },
+        bgndUrl() {
+            return this.$store.state.browseBackdrop ? this.currentImageUrl : undefined
+        },
         drawBgndImage() {
-            return this.$store.state.browseBackdrop && undefined!=this.bgndUrl
+            return undefined!=this.bgndUrl
         },
         drawBackdrop() {
             return !this.drawBgndImage && this.$store.state.browseBackdrop && this.$store.state.useDefaultBackdrops
@@ -581,7 +602,7 @@ var lmsBrowse = Vue.component("lms-browse", {
                     if (STD_ITEM_ALBUM==loop[i].current.stdItem && undefined!=loop[i].current.subtitle) {
                         return loop[i].current.subtitle + ' (' + this.headerSubTitle + ')';
                     } else if (STD_ITEM_ARTIST==loop[i].current.stdItem) {
-                        return loop[i].current.title + ' (' + this.headerSubTitle + ')';
+                        return (loop[i].current.noReleaseGrouping ? loop[i].current.title.split(SEPARATOR)[0] : loop[i].current.title) + ' (' + this.headerSubTitle + ')';
                     }
                 }
             }
@@ -1074,7 +1095,7 @@ var lmsBrowse = Vue.component("lms-browse", {
         },
         currentAction(act, index, event) {
             storeClickOrTouchPos(event, this.menu);
-            let stdItem = this.current.stdItem ? this.current.stdItem : this.current.altStdItem;
+            let stdItem = this.current ? (this.current.stdItem ? this.current.stdItem : this.current.altStdItem) : undefined;
             let item = undefined!=this.current && stdItem==STD_ITEM_MAI ? this.history[this.history.length-1].current : this.current;
             if (undefined!=act.action) {
                 browseHeaderAction(this, act.action, event)
@@ -1090,7 +1111,7 @@ var lmsBrowse = Vue.component("lms-browse", {
             } else if (undefined!=act.do) {
                 this.fetchItems(act.stdItem==STD_ITEM_ALL_TRACKS || act.stdItem==STD_ITEM_COMPOSITION_TRACKS || act.stdItem==STD_ITEM_CLASSICAL_WORKS ? browseReplaceCommandTerms(this, act.do, item) : act.do,
                                 {cancache:false, id:"currentaction:"+index,
-                                 title:act.title+(act.stdItem==STD_ITEM_ALL_TRACKS || act.stdItem==STD_ITEM_COMPOSITION_TRACKS || act.stdItem==STD_ITEM_CLASSICAL_WORKS ? "" : (SEPARATOR+item.title)),
+                                 title:act.title+(act.stdItem==STD_ITEM_ALL_TRACKS || act.stdItem==STD_ITEM_COMPOSITION_TRACKS || act.stdItem==STD_ITEM_CLASSICAL_WORKS ? "" : (SEPARATOR+(item.noReleaseGrouping ? item.title.split(SEPARATOR)[0] : item.title))),
                                  subtitle:act.subtitle,
                                  image:act.stdItem ? this.currentImage : undefined, stdItem:act.stdItem});
                 if (STD_ITEM_MAI==act.stdItem) {
@@ -1588,11 +1609,17 @@ var lmsBrowse = Vue.component("lms-browse", {
             }
 
             const RIGHT_PADDING = 4;
+            const GRID_MAX_WIDTH = window.innerWidth>3500
+                                       ? 283 :
+                                   window.innerWidth>2500
+                                       ? 233 :
+                                   window.innerWidth>1500
+                                       ? 208
+                                       : 183;
             var changed = false;
             var haveSubtitle = false;
             var thisWidth = this.$store.state.desktopLayout ? this.pageElement.scrollWidth : window.innerWidth;
             var listWidth = thisWidth - ((/*scrollbar*/ IS_MOBILE ? 0 : 20) + (/*this.filteredJumplist.length>1 && this.items.length>10 ? */JUMP_LIST_WIDTH/* :0*/) + RIGHT_PADDING);
-
             var sz = undefined;
             var preferredColumns = 4;
             for (var i=preferredColumns; i>=1; --i) {
@@ -1711,7 +1738,12 @@ var lmsBrowse = Vue.component("lms-browse", {
                 url=changeImageSizing(url, LMS_CURRENT_IMAGE_SIZE);
                 document.documentElement.style.setProperty('--subtoolbar-image-url', 'url(' + url + ')');
             } else {
-                document.documentElement.style.setProperty('--subtoolbar-image-url', 'url()');
+                var img = this.currentImageUrl;
+                if (img) {
+                    document.documentElement.style.setProperty('--subtoolbar-image-url', 'url(' + img + ')');
+                } else {
+                    document.documentElement.style.setProperty('--subtoolbar-image-url', 'url()');
+                }
                 if (this.drawBackdrop) {
                     url='material/backdrops/browse.jpg';
                 }

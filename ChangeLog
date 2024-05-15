@@ -1,3 +1,21 @@
+4.6.0
+-----
+ 1. Add option to auto-switch to reduced now-playing view, to help with OLED
+    screen burn-in.
+ 2. For LMS running on piCorePlayer add 'Configuration' item to top-right menu
+    of 'Server settings'
+ 3. If width >= 1000px then allow image in now-playing landscape to take 60% of
+    width.
+ 4. Always blur background of detailed sub-toolbar.
+ 5. Manually reduce size of Vuetify CSS file.
+ 6. Multi-cover display for works in subtoolbar.
+ 7. Move pin/un-pin queue button into its menu.
+ 8. Show queue button in desktop now-playing bar if 1 or more tracks in queue.
+ 9. Base max grid cover size on window width.
+10. If an artist has multiple release types then show an 'All releases' action
+    in '...' menu.
+11. Add 'hover' to grid items.
+
 4.5.3
 -----
  1. Use '-1' as default library id.

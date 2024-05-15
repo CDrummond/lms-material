@@ -79,6 +79,10 @@ const PLAY_SHUFFLE_ALL_ACTION = 62;
 const COPY_ACTION             = 63;
 const SEARCH_LIST_ACTION      = 64;
 
+const PQ_PIN_ACTION           = 65;
+const PQ_UNPIN_ACTION         = 66;
+const ALL_RELEASES_ACTION     = 67;
+
 const HIDE_FOR_PARTY = new Set([DIVIDER, PLAY_ACTION, PLAY_ALBUM_ACTION, PLAY_ALL_ACTION, INSERT_ACTION, MORE_ACTION, MORE_LIB_ACTION, RENAME_ACTION, REMOVE_ACTION, EDIT_ACTION, ADD_FAV_ACTION, DELETE_ACTION, ADD_TO_FAV_ACTION, REMOVE_FROM_FAV_ACTION, SELECT_ACTION, RATING_ACTION, ADD_FAV_FOLDER_ACTION, DELETE_FAV_FOLDER_ACTION, MOVE_FAV_TO_PARENT_ACTION, UNSUB_PODCAST_ACTION, MOVE_HERE_ACTION, INSERT_ALL_ACTION, ADD_TO_PLAYLIST_ACTION, REMOVE_DUPES_ACTION, ADV_SEARCH_ACTION, SAVE_VLIB_ACTION, DOWNLOAD_ACTION, PLAY_DISC_ACTION, PLAY_PLAYLIST_ACTION, PQ_SORT_ACTION, PLAYLIST_SORT_ACTION, PQ_SAVE_ACTION, PLAY_SHUFFLE_ACTION, PLAY_SHUFFLE_ALL_ACTION]);
 
 var ACTIONS=[
@@ -154,7 +158,10 @@ var ACTIONS=[
     {cmd:"ps-all",       svg:"play-shuffle"},
 
     {cmd:"copy",         icon:"content_copy"},
-    {cmd:"search-list",  svg:"text-search"}
+    {cmd:"search-list",  svg:"text-search"},
+    {cmd:"pq-pin",       svg:"pin"},
+    {cmd:"pq-unpin",     svg:"unpin"},
+    {cmd:"ar",           svg:"release"}
 ];
 
 function updateActionStrings() {
@@ -239,6 +246,9 @@ function updateActionStrings() {
     ACTIONS[COPY_ACTION].title=i18n("Copy");
     ACTIONS[SEARCH_LIST_ACTION].title=i18n("Search within list");
     ACTIONS[SEARCH_LIST_ACTION].key=LMS_SEARCH_KEYBOARD;
+    ACTIONS[PQ_PIN_ACTION].title=i18n("Pin");
+    ACTIONS[PQ_UNPIN_ACTION].title=i18n("Unpin");
+    ACTIONS[ALL_RELEASES_ACTION].title=i18n("All releases");
 
     let albumActs = [GOTO_ALBUM_ACTION, PLAY_ALBUM_ACTION, PQ_REMOVE_ALBUM_ACTION, PQ_TOGGLE_VIEW_ACTION];
     for (let i=0, len=albumActs.length; i<len; ++i) {

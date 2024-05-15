@@ -174,10 +174,6 @@ var lmsQueue = Vue.component("lms-queue", {
 <lms-resizer v-if="!pinQueue && windowWide>0" varname="pq-unpinned-width"></lms-resizer>
  <div class="subtoolbar noselect" v-bind:class="{'list-details':pinQueue}" v-if="!desktopLayout || showQueue">
   <v-layout v-if="selection.size>0">
-   <v-btn v-if="desktopLayout && windowWide>1" :title="pinQueue ? trans.unpin : trans.pin" flat icon class="toolbar-button" @click="togglePin" id="pq-pin-1"><img :src="(pinQueue ? 'pin' : 'unpin') | svgIcon(darkUi)"></img></v-btn>
-   <div class="toolbar-nobtn-pad" v-if="!desktopLayout || (windowWide>1 && albumStyle)"></div>
-   <div v-if="desktopLayout && pinQueue && windowWide>1 && albumStyle" style="width:3px"></div>
-   <div v-else-if="desktopLayout && windowWide>1 && !albumStyle && !threeLines" :style="{'width':pinQueue ? '12px' : '8px'}"></div>
    <v-layout row wrap>
     <v-flex xs12 class="ellipsis subtoolbar-title subtoolbar-pad">{{trans.selectMultiple}}</v-flex>
     <v-flex xs12 class="ellipsis subtoolbar-subtitle subtext">{{selection.size | displaySelectionCount}}<obj class="mat-icon">check_box</obj>{{selectionDuration | displayTime}}</v-flex>
@@ -194,10 +190,6 @@ var lmsQueue = Vue.component("lms-queue", {
    <lms-search-list @scrollTo="highlightItem" :view="this"></lms-search-list>
   </v-layout>
   <v-layout v-else>
-   <v-btn v-if="desktopLayout && windowWide>1" :title="pinQueue ? trans.unpin : trans.pin" flat icon class="toolbar-button" @click="togglePin" id="pq-pin-2"><img :src="(pinQueue ? 'pin' : 'unpin') | svgIcon(darkUi)"></img></v-btn>
-   <div class="toolbar-nobtn-pad" v-if="!desktopLayout || (windowWide>1 && albumStyle)"></div>
-   <div v-if="desktopLayout && pinQueue && windowWide>1 && albumStyle" style="width:3px"></div>
-   <div v-else-if="desktopLayout && windowWide>1 && !albumStyle && !threeLines" :style="{'width':pinQueue ? '12px' : '8px'}"></div>
    <v-layout row wrap v-longpress="durationClicked" class="link-item">
     <v-flex xs12 class="ellipsis subtoolbar-title" v-bind:class="{'subtoolbar-title-single':undefined==duration || duration<=0}">{{remaining.show ? "-" :""}}{{(remaining.show ? remaining.size : listSize) | displayCount}}</v-flex>
     <v-flex xs12 v-if="undefined!=duration && duration>0" class="ellipsis subtoolbar-subtitle subtext">{{remaining.show ? "-" :""}}{{(remaining.show ? remaining.duration : duration) | displayTime}}{{name}}</v-flex>
@@ -213,7 +205,7 @@ var lmsQueue = Vue.component("lms-queue", {
    <v-btn :title="trans.shuffleAlbums" flat icon v-if="(desktopLayout || wide>0) && playerStatus.shuffle===2" class="toolbar-button" v-bind:class="{'disabled':noPlayer}" @click="shuffleClicked"><img class="svg-img media-icon" :src="'shuffle-albums' | svgIcon(darkUi)"></v-btn>
    <v-btn :title="trans.shuffleAll" flat icon v-else-if="(desktopLayout || wide>0) && playerStatus.shuffle===1" class="toolbar-button" v-bind:class="{'disabled':noPlayer}" @click="shuffleClicked"><v-icon >shuffle</v-icon></v-btn>
    <v-btn :title="trans.shuffleOff" flat icon v-else-if="desktopLayout || wide>0" class="toolbar-button dimmed" v-bind:class="{'disabled':noPlayer}" @click="shuffleClicked"><img class="svg-img media-icon" :src="'shuffle-off' | svgIcon(darkUi)"></img></v-btn>
-   <v-btn :title="ACTIONS[PQ_SAVE_ACTION].title | tooltip(LMS_SAVE_QUEUE_KEYBOARD,keyboardControl)" flat icon @click="save()" class="toolbar-button" v-bind:class="{'disabled':items.length<1}" v-if="(!LMS_KIOSK_MODE || !HIDE_FOR_KIOSK.has(PQ_SAVE_ACTION)) && !queryParams.party && wide>1"><v-icon>save</v-icon></v-btn>
+   <v-btn :title="ACTIONS[PQ_SAVE_ACTION].title | tooltip(LMS_SAVE_QUEUE_KEYBOARD,keyboardControl)" flat icon @click="save()" class="toolbar-button" v-bind:class="{'disabled':items.length<1}" v-if="(!LMS_KIOSK_MODE || !HIDE_FOR_KIOSK.has(PQ_SAVE_ACTION)) && !queryParams.party && wide>0"><v-icon>save</v-icon></v-btn>
    <v-btn :title="trans.clear | tooltip(LMS_CLEAR_QUEUE_KEYBOARD,keyboardControl)" flat icon v-longpress="clear" class="toolbar-button" v-bind:class="{'disabled':items.length<1}"v-if="!queryParams.party"><img class="svg-list-img" :src="'queue-clear' | svgIcon(darkUi)"></img></v-btn>
   </v-layout>
  </div>
@@ -293,7 +285,9 @@ var lmsQueue = Vue.component("lms-queue", {
   </v-list>
   <v-list v-else>
    <template v-for="(action, index) in menu.actions">
-    <v-list-tile @click="headerAction(action, $event)" v-bind:class="{'disabled':(items.length<1 && PQ_REQUIRE_AT_LEAST_1_ITEM.has(action)) || (items.length<2 && PQ_REQUIRE_MULTIPLE_ITEMS.has(action))}" v-if="(!LMS_KIOSK_MODE || !HIDE_FOR_KIOSK.has(action)) && (action==PQ_SAVE_ACTION ? wide<2 : action!=PQ_MOVE_QUEUE_ACTION || showMoveAction)">
+    <v-divider v-if="DIVIDER==action"></v-divider>
+    <div style="height:0px!important" v-else-if="(action==PQ_PIN_ACTION && (pinQueue || !desktopLayout || windowWide<2)) || (action==PQ_UNPIN_ACTION && (!pinQueue || !desktopLayout || windowWide<2))"/>
+    <v-list-tile @click="headerAction(action, $event)" v-bind:class="{'disabled':(items.length<1 && PQ_REQUIRE_AT_LEAST_1_ITEM.has(action)) || (items.length<2 && PQ_REQUIRE_MULTIPLE_ITEMS.has(action))}" v-else-if="(!LMS_KIOSK_MODE || !HIDE_FOR_KIOSK.has(action)) && (action==PQ_SAVE_ACTION ? wide<1 : action!=PQ_MOVE_QUEUE_ACTION || showMoveAction)">
      <v-list-tile-avatar>
       <v-icon v-if="action==PQ_TOGGLE_VIEW_ACTION && albumStyle">music_note</v-icon>
       <v-icon v-else-if="undefined==ACTIONS[action].svg">{{ACTIONS[action].icon}}</v-icon>
@@ -317,14 +311,16 @@ var lmsQueue = Vue.component("lms-queue", {
             duration: 0.0,
             playerStatus: { shuffle:0, repeat: 0 },
             remaining: {show:false, size:0, duration:0},
-            trans: { ok: undefined, cancel: undefined, clear:undefined, pin:undefined, unpin:undefined, goBack:undefined,
-                     repeatAll:undefined, repeatOne:undefined, repeatOff:undefined, shuffleAll:undefined, shuffleAlbums:undefined,
-                     shuffleOff:undefined, selectMultiple:undefined, removeall:undefined, invertSelect:undefined, dstm:undefined, actions:undefined },
+            trans: { ok: undefined, cancel: undefined, clear:undefined, goBack:undefined, repeatAll:undefined, repeatOne:undefined,
+                     repeatOff:undefined, shuffleAll:undefined, shuffleAlbums:undefined, shuffleOff:undefined, selectMultiple:undefined,
+                     removeall:undefined, invertSelect:undefined, dstm:undefined, actions:undefined },
             menu: { show:false, item: undefined, x:0, y:0, index:0},
             playlist: {name: undefined, modified: false},
             selection: new Set(),
             selectionDuration: 0,
-            otherActions: queryParams.party ? [PQ_SCROLL_ACTION, SEARCH_LIST_ACTION] : [PQ_SAVE_ACTION, PQ_MOVE_QUEUE_ACTION, PQ_SCROLL_ACTION, SEARCH_LIST_ACTION, PQ_ADD_URL_ACTION, PQ_SORT_ACTION, REMOVE_DUPES_ACTION, PQ_TOGGLE_VIEW_ACTION],
+            otherActions: queryParams.party
+                ? [PQ_SCROLL_ACTION, SEARCH_LIST_ACTION, DIVIDER, PQ_TOGGLE_VIEW_ACTION, PQ_PIN_ACTION, PQ_UNPIN_ACTION]
+                : [PQ_SAVE_ACTION, PQ_MOVE_QUEUE_ACTION, PQ_SCROLL_ACTION, SEARCH_LIST_ACTION, PQ_ADD_URL_ACTION, PQ_SORT_ACTION, REMOVE_DUPES_ACTION, DIVIDER, PQ_TOGGLE_VIEW_ACTION, PQ_PIN_ACTION, PQ_UNPIN_ACTION],
             wide: 0,
             dstm: false,
             dragActive: false,
@@ -683,8 +679,7 @@ var lmsQueue = Vue.component("lms-queue", {
     },
     methods: {
         initItems() {
-            this.trans= { ok:i18n('OK'), cancel: i18n('Cancel'), clear:i18n("Clear queue"),
-                          pin:i18n('Pin'), unpin:i18n('Unpin'), goBack:i18n("Go back"),
+            this.trans= { ok:i18n('OK'), cancel: i18n('Cancel'), clear:i18n("Clear queue"), goBack:i18n("Go back"),
                           repeatAll:i18n("Repeat queue"), repeatOne:i18n("Repeat single track"), repeatOff:i18n("No repeat"),
                           shuffleAll:i18n("Shuffle tracks"), shuffleOff:i18n("No shuffle"),
                           shuffleAlbums:lmsOptions.supportReleaseTypes ? i18n("Shuffle releases") : i18n("Shuffle albums"),
@@ -1112,6 +1107,8 @@ var lmsQueue = Vue.component("lms-queue", {
                 if (this.items.length>1) {
                     this.searchActive = true;
                 }
+            } else if (PQ_PIN_ACTION===act || PQ_UNPIN_ACTION==act) {
+                this.togglePin();
             }
         },
         actionsMenu(event) {

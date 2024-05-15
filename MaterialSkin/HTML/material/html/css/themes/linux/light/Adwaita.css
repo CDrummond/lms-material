@@ -36,7 +36,7 @@
  --active-nav-btn-color:var(--primary-color);
  --toolbar-volume-color:var(--primary-color);
  --bottom-position-slider-color:var(--primary-color);
- --browse-header-color:rgba(248, 248, 248, 0.35);
+ --browse-header-color:rgba(228, 228, 228, 0.35);
  --popup-background-color:#fafafa;
  --popup-border-color:var(--list-item-border-color);
 }

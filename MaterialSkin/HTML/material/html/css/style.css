@@ -3229,7 +3229,8 @@ div.v-subheader {
  .msk-is-non-touch .lms-list-sub .v-list__tile:hover,
  .msk-is-non-touch .lms-list3 .v-list__tile:hover,
  .msk-is-non-touch .lms-list-sub3 .v-list__tile:hover,
- .msk-is-non-touch .v-menu__content .v-list__tile:hover {
+ .msk-is-non-touch .v-menu__content .v-list__tile:hover,
+ .msk-is-non-touch .image-grid-item:not(.defcursor):hover {
   background-color:var(--list-hover-color)!important;
  }
 /*}*/

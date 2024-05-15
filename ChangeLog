@@ -14,6 +14,7 @@
  9. Base max grid cover size on window width.
 10. If an artist has multiple release types then show an 'All releases' action
     in '...' menu.
+11. Add 'hover' to grid items.
 
 4.5.3
 -----

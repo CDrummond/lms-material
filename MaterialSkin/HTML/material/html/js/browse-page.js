@@ -1095,7 +1095,7 @@ var lmsBrowse = Vue.component("lms-browse", {
         },
         currentAction(act, index, event) {
             storeClickOrTouchPos(event, this.menu);
-            let stdItem = this.current.stdItem ? this.current.stdItem : this.current.altStdItem;
+            let stdItem = this.current ? (this.current.stdItem ? this.current.stdItem : this.current.altStdItem) : undefined;
             let item = undefined!=this.current && stdItem==STD_ITEM_MAI ? this.history[this.history.length-1].current : this.current;
             if (undefined!=act.action) {
                 browseHeaderAction(this, act.action, event)

@@ -1144,7 +1144,7 @@ var lmsBrowse = Vue.component("lms-browse", {
                     }
                 }
                 this.fetchItems(this.replaceCommandTerms({command:["albums"], params:[id, ARTIST_ALBUM_TAGS, SORT_KEY+ARTIST_ALBUM_SORT_PLACEHOLDER]}),
-                                {cancache:false, id:"artist_id:"+item.artist_id, title:item.subtitle, stdItem:STD_ITEM_ARTIST});
+                                {cancache:false, id:"artist_id:"+item.artist_id, title: item.work_id ? item.artists[0] : item.subtitle, stdItem:STD_ITEM_ARTIST});
             } else {
                 this.click(item, index, event);
             }

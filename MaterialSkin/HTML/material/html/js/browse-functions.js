@@ -2780,7 +2780,7 @@ function browseFetchExtra(view, fetchArtists) {
             }
         }
 
-        if (undefined!=sub) {
+        if (undefined!=infoHtml) {
             html = undefined==html ? "" : (html+"<br/>");
             html += infoHtml;
         }

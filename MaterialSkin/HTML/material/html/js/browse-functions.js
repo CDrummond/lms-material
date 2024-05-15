@@ -2434,7 +2434,7 @@ function browseReplaceCommandTerms(view, cmd, item) {
         }
         // For non-artist albums, where LMS is set to group releases only for artists, we still want release
         // type so that header can say X Release(s) if there is a mixture. Otherwise it'd say X Album(s)
-        if (lmsOptions.groupByReleaseType==1 && (isNonArtistAlbumList || item.noReleaseGrouping)) {
+        if (lmsOptions.groupByReleaseType==1 && (isNonArtistAlbumList || (item && item.noReleaseGrouping))) {
             cmd.params.push(DONT_GROUP_RELEASE_TYPES)
         }
     }

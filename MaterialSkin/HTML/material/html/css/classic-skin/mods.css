@@ -725,3 +725,7 @@ table td input[type=checkbox] {
  background-color: var(--border-color);
  border-radius: 8px;
 }
+
+.pluginList ul.thumbWrap li.thumbWrap {
+ border: solid 1px var(--border-color);
+}

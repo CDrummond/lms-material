@@ -1096,7 +1096,10 @@ function parseBrowseResp(data, parent, options, cacheKey, parentCommand, parentG
                     let icon = releaseTypeIcon(key);
                     resp.items.push({title:releaseTypeHeader(key)+" ("+alist.length+")", id:FILTER_PREFIX+key, header:true,
                                      svg: icon.svg, icon: icon.icon,
-                                     menu:[PLAY_ALL_ACTION, INSERT_ALL_ACTION, PLAY_SHUFFLE_ALL_ACTION, ADD_ALL_ACTION], count:alist.length});
+                                     menu:alist.length>1
+                                        ? [PLAY_ALL_ACTION, INSERT_ALL_ACTION, PLAY_SHUFFLE_ALL_ACTION, ADD_ALL_ACTION, DIVIDER, ALL_SONGS_ACTION]
+                                        : [PLAY_ALL_ACTION, INSERT_ALL_ACTION, PLAY_SHUFFLE_ALL_ACTION, ADD_ALL_ACTION],
+                                     count:alist.length});
                     // Create jump list
                     let start = resp.items.length;
                     let jl=[];

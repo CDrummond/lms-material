@@ -180,7 +180,7 @@ function browseActions(view, item, args, count, showCompositions, showWorks) {
                 params.push(args['genre_id']);
             }
             browseAddLibId(view, params);
-            actions.push({title:i18n('All songs'), icon:'music_note', do:{ command: ['tracks'], params: params}, weight:80, stdItem:STD_ITEM_ALL_TRACKS});
+            actions.push({title:ACTIONS[ALL_SONGS_ACTION].title, icon:ACTIONS[ALL_SONGS_ACTION].icon, do:{ command: ['tracks'], params: params}, weight:80, stdItem:STD_ITEM_ALL_TRACKS});
             if (lmsOptions.supportReleaseTypes && args['multi-group']) {
                 actions.push({action:ALL_RELEASES_ACTION, weight:84});
             }
@@ -190,7 +190,7 @@ function browseActions(view, item, args, count, showCompositions, showWorks) {
                 params.push(args['grouping']);
             }
             browseAddLibId(view, params);
-            actions.push({title:i18n('All songs'), icon:'music_note', do:{ command: ['tracks'], params: params}, weight:80, stdItem:STD_ITEM_ALL_TRACKS});
+            actions.push({title:ACTIONS[ALL_SONGS_ACTION].title, icon:ACTIONS[ALL_SONGS_ACTION].icon, do:{ command: ['tracks'], params: params}, weight:80, stdItem:STD_ITEM_ALL_TRACKS});
         }
 
         if (undefined!=args['artist_id'] && showCompositions) {
@@ -1526,8 +1526,21 @@ function browseItemAction(view, act, item, index, event) {
         let clone = JSON.parse(JSON.stringify(view.current));
         clone.noReleaseGrouping = true;
         clone.isListItemInMenu = true;
-        clone.title=clone.title+SEPARATOR+i18n("All releases");
+        clone.title=clone.title+SEPARATOR+ACTIONS[act].title;
         browseClick(view, clone);
+    } else if (ALL_SONGS_ACTION==act) {
+        for (let a=0, loop=view.currentActions, len=loop.length; a<len; ++a) {
+            if (loop[a].stdItem==STD_ITEM_ALL_TRACKS) {
+                let cmd = JSON.parse(JSON.stringify(loop[a].do));
+                cmd.params.push("release_type:"+item.id.split(':')[1]);
+                view.fetchItems(browseReplaceCommandTerms(view, cmd, item),
+                        {cancache:false, id:"currentaction:"+view.current.id+":"+item.id,
+                         title:ACTIONS[act].title+SEPARATOR+item.title,
+                         subtitle:view.current.title,
+                         image:this.currentImage, stdItem:STD_ITEM_ALL_TRACKS});
+                return;
+            }
+        }
     } else {
         // If we are acting on a multi-disc album, prompt which disc we should act on
         if (item.multi && !view.current.id.startsWith("album_id:") && (PLAY_ACTION==act || ADD_ACTION==act || INSERT_ACTION==act || PLAY_SHUFFLE_ACTION==act)) {

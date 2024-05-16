@@ -32,6 +32,7 @@
 24. When opening browse from now-playing/MAI try to go back to view
     afterwards.
 25. Fix similar artists not showing in browse view.
+26. Add 'All songs' to release-type headers (if more than 1 entry).
 
 4.5.2
 -----

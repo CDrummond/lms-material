@@ -722,10 +722,15 @@ table td input[type=checkbox] {
 }
 
 .pluginItem div:first-of-type div:first-of-type img:first-of-type {
- background-color: var(--border-color);
- border-radius: 8px;
+ background-color:var(--border-color);
+ border-radius:8px;
+}
+
+.pluginList .pluginItem label img {
+ background-color:unset!important;
+ border-radius:unset!important;
 }
 
 .pluginList ul.thumbWrap li.thumbWrap {
- border: solid 1px var(--border-color);
+ border:solid 1px var(--border-color);
 }

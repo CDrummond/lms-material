@@ -1721,6 +1721,9 @@ sub _svgHandler {
             $svg =~ s/fill\s*=\s*"[#0-9a-fA-F\.]+"/fill="${colour}"/g;
             $svg =~ s/stroke\s*=\s*"[#0-9a-fA-F\.]+"/stroke="${colour}"/g;
         }
+        if (index($svg, "fill=\"")==-1) {
+            $svg =~ s/\<path /\<path fill="${colour}" /g;
+        }
         $response->code(RC_OK);
         $response->content_type('image/svg+xml');
         $response->header('Connection' => 'close');

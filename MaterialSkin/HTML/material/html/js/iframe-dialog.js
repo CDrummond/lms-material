@@ -51,6 +51,10 @@ function remapClassicSkinIcons(doc, col) {
                     }
                 }
             }
+            if (!replaced && imgList[i].src.endsWith(".svg") && imgList[i].src.indexOf("/material/html/")>=0) {
+                imgList[i].src=imgList[i].src.replace("/material/html/", "/material/svg/html/")+"?c="+col;
+                imgList[i].removeAttribute("srcset");
+            }
             /*if (!replaced) {
                 if (imgList[i].src.endsWith("/star_noborder.gif") || imgList[i].src.endsWith("/star.gif")) {
                     imgList[i].src="/material/svg/cs-star?c="+col;

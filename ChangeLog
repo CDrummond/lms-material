@@ -33,6 +33,7 @@
     afterwards.
 25. Fix similar artists not showing in browse view.
 26. Add 'All songs' to release-type headers (if more than 1 entry).
+27. Add icon for plugin management page.
 
 4.5.2
 -----

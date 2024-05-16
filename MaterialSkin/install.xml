@@ -4,6 +4,7 @@
   <module>Plugins::MaterialSkin::Plugin</module>
   <description>PLUGIN_MATERIAL_SKIN</description>
   <creator>Craig Drummond</creator>
+  <icon>plugins/MaterialSkin/html/images/icon.svg</icon>
   <version>DEVELOPMENT</version>
   <defaultState>enabled</defaultState>
   <type>2</type>

@@ -721,7 +721,7 @@ table td input[type=checkbox] {
  margin-top:3px!important;
 }
 
-.pluginItem div:first-of-type div:first-of-type img:first-of-type {
+.pluginItem div:first-of-type div:first-of-type > img:first-of-type {
  background-color:var(--border-color);
  border-radius:8px;
 }

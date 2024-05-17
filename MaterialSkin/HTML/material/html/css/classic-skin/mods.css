@@ -194,8 +194,8 @@ table td {
  cursor: pointer;
 }
 
-.msk-hidden-section {
- visibility: hidden;
+.msk-hidden-section, .msk-hidden-section ul, .msk-hidden-section ul li {
+ visibility:hidden;
  height:0px;
 }
 
@@ -726,11 +726,29 @@ table td input[type=checkbox] {
  border-radius:8px;
 }
 
-.pluginList .pluginItem label img {
- background-color:unset!important;
- border-radius:unset!important;
-}
-
 .pluginList ul.thumbWrap li.thumbWrap {
  border:solid 1px var(--border-color);
+}
+
+#pluginButtonBar {
+ padding-bottom:12px;
+ padding-left:4px;
+}
+
+#pluginButtonBar span {
+ padding-top:8px;
+ display:inline-block;
+}
+
+#pluginButtonBar span:last-of-type {
+ float:right
+}
+
+@media (max-width:580px) {
+ #pluginButtonBar span:last-of-type {
+  float:unset;
+ }
+ #pluginButtonBar span:first-of-type {
+   margin-right:12px;
+ }
 }

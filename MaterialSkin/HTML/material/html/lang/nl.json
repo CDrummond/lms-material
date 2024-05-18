@@ -652,9 +652,9 @@
 "%1 Years":"%1 Jaren",
 "1 day":"1 dag",
 "%1 days":"%1 dagen",
-"All releases":"",
-"Show clock":"",
-"Switch to basic now-playing view (cover, details, and progress) after 5 minutes of inactivity. Helps to prevent burn-in on OLED screens.":"",
-"Switch to now-playing":"",
-"When no song is playing on current player, darken screen (and show date & time) after 1 minute of inactivity.":""
+"All releases":"Alle releases",
+"Show clock":"Toon klok",
+"Switch to basic now-playing view (cover, details, and progress) after 5 minutes of inactivity. Helps to prevent burn-in on OLED screens.":"Ga naar de standaard 'Speelt nu' weergave (albumhoes, details en voortgang) na 5 minuten inactiviteit. Dit helpt om inbranden op oled schermen te voorkomen.",
+"Switch to now-playing":"Ga naar 'Speelt Nu'",
+"When no song is playing on current player, darken screen (and show date & time) after 1 minute of inactivity.":"Wanneer er geen nummer wordt afgespeeld op de huidige speler, wordt het scherm donkerder (en wordt de datum en tijd weergegeven) na 1 minuut inactiviteit."
 }

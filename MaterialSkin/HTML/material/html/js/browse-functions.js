@@ -2387,7 +2387,7 @@ function browseReplaceCommandTerms(view, cmd, item) {
                 let id = cmd.params[i].split(":")[1];
                 if (undefined!=id && (""+id)!="") {
                     haveLibId = true;
-                    cmd.libraryId = isPlayListControl && id==LMS_DEFAULT_LIBRARY ? LMS_DEFAULT_PC_LIBRARY : id;
+                    cmd.libraryId = id;
                     break;
                 }
             }

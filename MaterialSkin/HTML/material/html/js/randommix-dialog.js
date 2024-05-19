@@ -106,16 +106,16 @@ Vue.component('lms-randommix', {
                         this.library = undefined;
                         for (var i=0, len=data.result.item_loop.length; i<len; ++i) {
                             var id = data.result.item_loop[i].actions.do.cmd[1];
-                            if ((""+id).length>2) {
-                                this.libraries.push({name:data.result.item_loop[i].text.replace(SIMPLE_LIB_VIEWS, ""), id:id});
+                            if (undefined!=id && (""+id).length>2) {
+                                this.libraries.push({name:data.result.item_loop[i].text.replace(SIMPLE_LIB_VIEWS, ""), id:""+id});
                                 if (parseInt(data.result.item_loop[i].radio)==1) {
-                                    this.library = id;
+                                    this.library = ""+id;
                                 }
                             }
                         }
                         this.libraries.sort(nameSort);
                         this.libraries.unshift({name: i18n("All"), id:LMS_DEFAULT_LIBRARY});
-                        if (undefined==this.library) {
+                        if (undefined==this.library || LMS_DEFAULT_LIBRARIES.has(this.library)) {
                             this.library = LMS_DEFAULT_LIBRARY;
                         }
                     }
@@ -183,7 +183,11 @@ Vue.component('lms-randommix', {
             lmsCommand("", ["pref", "plugin.randomplay:continuous", this.continuous ? 1 : 0]);
             lmsCommand("", ["pref", "plugin.randomplay:newtracks", this.newTracks]);
             lmsCommand("", ["pref", "plugin.randomplay:oldtracks", this.oldTracks]);
-            lmsCommand(this.playerId, ["randomplaychooselibrary", this.library]).then(({data}) => {
+            let libId = this.library;
+            if (libId==LMS_DEFAULT_LIBRARY && LMS_VERSION<90000) {
+                libId=LMS_DEFAULT_LIBRARY_PREV;
+            }
+            lmsCommand(this.playerId, ["randomplaychooselibrary", libId]).then(({data}) => {
                 if (this.chosenGenres.length==0) {
                     lmsCommand(this.playerId, ["randomplaygenreselectall", "0"]).then(({data}) => {
                         lmsCommand(this.playerId, ["randomplay", this.chosenMix]);

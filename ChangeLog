@@ -1,6 +1,8 @@
 4.6.1
 -----
 1. Update some translations.
+2. Only use "-1" as default library id for 'playlistcontrol' and 'playlist'
+   commands.
 
 4.6.0
 -----

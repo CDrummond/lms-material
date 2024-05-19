@@ -2378,6 +2378,7 @@ function browseUpdateItemPinnedState(view, item) {
 }
 
 function browseReplaceCommandTerms(view, cmd, item) {
+    let isPlayListControl = 'playlistcontrol'==cmd.command[0] || 'playlist'==cmd.command[0];
     if (shouldAddLibraryId(cmd)) {
         // Check if command already has library_id
         var haveLibId = false;
@@ -2386,7 +2387,7 @@ function browseReplaceCommandTerms(view, cmd, item) {
                 let id = cmd.params[i].split(":")[1];
                 if (undefined!=id && (""+id)!="") {
                     haveLibId = true;
-                    cmd.libraryId = id;
+                    cmd.libraryId = isPlayListControl && id==LMS_DEFAULT_LIBRARY ? LMS_DEFAULT_PC_LIBRARY : id;
                     break;
                 }
             }
@@ -2416,7 +2417,7 @@ function browseReplaceCommandTerms(view, cmd, item) {
                        cmd.params[i].startsWith(SORT_KEY+ARTIST_ALBUM_SORT_PLACEHOLDER)) {
                 var sort=getAlbumSort(cmd, view.inGenre);
                 // Remove "sort:album" from "playlistcontrol" - LMS fails on this.
-                if (LMS_VERSION<80500 && 'album'==sort.by && 'playlistcontrol'==cmd.command[0]) {
+                if (LMS_VERSION<80500 && 'album'==sort.by && isPlayListControl) {
                     cmd.params.splice(i, 1);
                     len-=1;
                     --i;

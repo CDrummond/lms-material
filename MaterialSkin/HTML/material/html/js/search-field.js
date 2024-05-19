@@ -8,30 +8,37 @@
 
 const SEARCH_OTHER = new Set(["band's campout", 'bbc sounds', 'deezer', 'qobuz', 'spotty', 'tidal', 'youtube']);
 
+const SEARCH_ARTISTS_CAT = 1;
+const SEARCH_ALBUMS_CAT = 2;
+const SEARCH_WORKS_CAT = 3;
+const SEARCH_TRACKS_CAT = 4;
+const SEARCH_PLAYLISTS_CAT = 5;
+const SEARCH_OTHER_CAT = 6;
+
 function buildSearchResp(results) {
     let items=[];
     let total=0;
     for (let i=0, len=results.length; i<len; ++i) {
         let all = [];
         let numItems = results[i].resp.items.length;
-        let clamped = 5!=results[i].command.cat && numItems>LMS_INITIAL_SEARCH_RESULTS
+        let clamped = SEARCH_OTHER_CAT!=results[i].command.cat && numItems>LMS_INITIAL_SEARCH_RESULTS
         let limit = clamped ? LMS_INITIAL_SEARCH_RESULTS : numItems;
         let titleParam = clamped ? limit+" / "+numItems : numItems;
         let filter = undefined;
 
         total+=numItems;
-        if (1==results[i].command.cat) {
+        if (SEARCH_ARTISTS_CAT==results[i].command.cat) {
             filter = FILTER_PREFIX+"artist";
             items.push({title: i18n("Artists") + " ("+titleParam+")", id:filter, header:true, hidesub:true, svg:"artist",
                         allItems: all, subtitle: i18np("1 Artist", "%1 Artists", numItems)});
-        } else if (2==results[i].command.cat) {
+        } else if (SEARCH_ALBUMS_CAT==results[i].command.cat) {
             filter = FILTER_PREFIX+"album";
             items.push({title: (lmsOptions.supportReleaseTypes ? i18n("Releases") : i18n("Albums")) + " ("+titleParam+")",
                         id:filter, header:true, hidesub:true, svg: lmsOptions.supportReleaseTypes ? "release" : undefined,
                         icon: lmsOptions.supportReleaseTypes ? undefined : "album",
                         allItems: all, subtitle:lmsOptions.supportReleaseTypes ? i18np("1 Release", "%1 Releases", numItems) : i18np("1 Album", "%1 Albums", numItems),
                         menu:[PLAY_ALL_ACTION, INSERT_ALL_ACTION, ADD_ALL_ACTION]});
-        } else if (3==results[i].command.cat) {
+        } else if (SEARCH_WORKS_CAT==results[i].command.cat) {
             if (numItems>0) {
                 filter = FILTER_PREFIX+"work";
                 items.push({title: i18n("Works") + " ("+titleParam+")",
@@ -39,18 +46,18 @@ function buildSearchResp(results) {
                             allItems: all, subtitle:i18np("1 Work", "%1 Works", numItems),
                             menu:[PLAY_ALL_ACTION, INSERT_ALL_ACTION, ADD_ALL_ACTION]});
             }
-        } else if (4==results[i].command.cat) {
+        } else if (SEARCH_TRACKS_CAT==results[i].command.cat) {
             filter = FILTER_PREFIX+"track";
             items.push({title: i18n("Tracks", titleParam) + " ("+titleParam+")", id:filter, header:true, hidesub:true,
                         allItems: all, subtitle: i18np("1 Track", "%1 Tracks", numItems),
                         icon: "music_note",
                         menu:queryParams.party ? [] : [PLAY_ALL_ACTION, INSERT_ALL_ACTION, ADD_ALL_ACTION]});
-        } else if (5==results[i].command.cat) {
+        } else if (SEARCH_PLAYLISTS_CAT==results[i].command.cat) {
             filter = FILTER_PREFIX+"playlist";
             items.push({title: i18n("Playlists") + " ("+titleParam+")", id:filter, header:true, hidesub:true, icon:"list",
                         allItems: all, subtitle: i18np("1 Playlist", "%1 Playlists", numItems),
                         menu:[PLAY_ALL_ACTION, INSERT_ALL_ACTION, ADD_ALL_ACTION]});
-        } else if (6==results[i].command.cat) {
+        } else if (SEARCH_OTHER_CAT==results[i].command.cat) {
             items.push({title: i18n("Search on..."), id:"search.other", header:true, icon:"search"});
         }
         for (let idx=0, loop=results[i].resp.items; idx<numItems; ++idx) {
@@ -144,17 +151,17 @@ Vue.component('lms-search-field', {
                 setLocalStorageVal('search', this.str);
                 this.commands=[];
                 if (!queryParams.party) {
-                    this.commands.push({cat:1, command:["artists"], params:["tags:s", "search:"+this.str]});
-                    this.commands.push({cat:2, command:["albums"], params:[(lmsOptions.showAllArtists ? ALBUM_TAGS_ALL_ARTISTS : ALBUM_TAGS).replace("W", "")+(LMS_SRV_EMBLEM ? "E" : ""), "sort:album", "search:"+this.str]});
-                    this.commands.push({cat:3, command:["works"], params:["search:"+this.str]});
+                    this.commands.push({cat:SEARCH_ARTISTS_CAT, command:["artists"], params:["tags:s", "search:"+this.str]});
+                    this.commands.push({cat:SEARCH_ALBUMS_CAT, command:["albums"], params:[(lmsOptions.showAllArtists ? ALBUM_TAGS_ALL_ARTISTS : ALBUM_TAGS).replace("W", "")+(LMS_SRV_EMBLEM ? "E" : ""), "sort:album", "search:"+this.str]});
+                    this.commands.push({cat:SEARCH_WORKS_CAT, command:["works"], params:["search:"+this.str]});
                 }
-                this.commands.push({cat:4, command:["tracks"], params:[SEARCH_TRACK_TAGS+"elcy"+
+                this.commands.push({cat:SEARCH_TRACKS_CAT, command:["tracks"], params:[SEARCH_TRACK_TAGS+"elcy"+
                                                                        (this.$store.state.showRating ? "R" : "")+
                                                                        (LMS_SRV_EMBLEM ? "E" : "")+
                                                                        (lmsOptions.techInfo ? TECH_INFO_TAGS : ""), "search:"+this.str]});
                 if (!queryParams.party) {
-                    this.commands.push({cat:5, command:["playlists"], params:["tags:su", "search:"+this.str]});
-                    this.commands.push({cat:6, command:["globalsearch", "items"], params:["menu:1", "search:"+this.str]});
+                    this.commands.push({cat:SEARCH_PLAYLISTS_CAT, command:["playlists"], params:["tags:su", "search:"+this.str]});
+                    this.commands.push({cat:SEARCH_OTHER_CAT, command:["globalsearch", "items"], params:["menu:1", "search:"+this.str]});
                 }
                 let libId = this.$store.state.library ? this.$store.state.library : LMS_DEFAULT_LIBRARY;
                 if (libId) {
@@ -184,10 +191,10 @@ Vue.component('lms-search-field', {
                 this.searching=false;
             } else {
                 let command = this.commands.shift();
-                lmsList(6==command.cat && this.$store.state.player ? this.$store.state.player.id : "", command.command, command.params, 5==command.cat ? 1 : 0, LMS_SEARCH_LIMIT, false, seachReqId).then(({data}) => {
+                lmsList(SEARCH_OTHER_CAT==command.cat && this.$store.state.player ? this.$store.state.player.id : "", command.command, command.params, 5==command.cat ? 1 : 0, LMS_SEARCH_LIMIT, false, seachReqId).then(({data}) => {
                     if (data.id == seachReqId && this.searching) {
                         let resp = parseBrowseResp(data, undefined, {isSearch:true});
-                        if (6==command.cat) {
+                        if (SEARCH_OTHER_CAT==command.cat) {
                             // Only want to show music sources...
                             let items = resp.items;
                             resp.items = [];

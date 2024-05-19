@@ -385,14 +385,14 @@ Vue.component('lms-advancedsearch-dialog', {
                     let resp = parseBrowseResp(data, undefined, {isSearch:true});
                     data.result.albums_loop = undefined;
                     if (undefined!=resp) {
-                        results.push({resp:resp, command:{cat:2}});
+                        results.push({resp:resp, command:{cat:SEARCH_ALBUMS_CAT}});
                         total+=resp.items.length;
                     }
                 }
                 if (data.result.titles_loop) {
                     let resp = parseBrowseResp(data, undefined, {isSearch:true});
                     if (undefined!=resp) {
-                        results.push({resp:resp, command:{cat:3}});
+                        results.push({resp:resp, command:{cat:SEARCH_TRACKS_CAT}});
                         total+=resp.items.length;
                     }
                 }

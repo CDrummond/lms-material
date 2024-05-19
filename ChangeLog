@@ -1,7 +1,7 @@
 4.6.1
 -----
 1. Update some translations.
-2. If LMS < 9.0 and using 'All' tracks library for RandomMix then use '0' as
+2. If LMS < 8.5.0 and using 'All' tracks library for RandomMix then use '0' as
    library_id.
 
 4.6.0

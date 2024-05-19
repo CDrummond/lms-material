@@ -651,10 +651,10 @@
 "1 Year":"1 Год",
 "%1 Years":"%1 Лет",
 "1 day":"1 день",
-"%1 days":"%1 дней",
-"All releases":"",
-"Show clock":"",
-"Switch to basic now-playing view (cover, details, and progress) after 5 minutes of inactivity. Helps to prevent burn-in on OLED screens.":"",
-"Switch to now-playing":"",
-"When no song is playing on current player, darken screen (and show date & time) after 1 minute of inactivity.":""
+"%1 days":"%1 дней(я)",
+"All releases":"Все релизы",
+"Show clock":"Показать время",
+"Switch to basic now-playing view (cover, details, and progress) after 5 minutes of inactivity. Helps to prevent burn-in on OLED screens.":"Переключитесь на базовый режим текущего воспроизведения (обложка, подробности и прогресс) после 5 минут бездействия. Помогает предотвратить выгорание на OLED-экранах.",
+"Switch to now-playing":"Перейти к проигрываемуму",
+"When no song is playing on current player, darken screen (and show date & time) after 1 minute of inactivity.":"Если на текущем плеере не воспроизводится песня, экран затемняется (и отображается дата и время) через 1 минуту бездействия."
 }

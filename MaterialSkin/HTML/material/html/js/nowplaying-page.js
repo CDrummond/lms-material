@@ -239,7 +239,7 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
     </div>
     <div class="np-details-landscape" v-bind:class="{'np-details-landscape-wide': landscape && wide>1}">
 
-     <div class="np-landscape-song-info hide-scrollbar fade-both">
+     <div class="np-landscape-track-info hide-scrollbar fade-both">
       <div>
        <p class="np-title-landscape np-title" v-if="playerStatus.current.title">{{title}}</p>
        <p class="np-text-landscape subtext" v-if="artistAndComposerLine" v-html="artistAndComposerLine"></p>
@@ -311,7 +311,7 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
       </tr>
      </table>
     </div>
-    <div class="np-portrait-song-info hide-scrollbar fade-both">
+    <div class="np-portrait-track-info hide-scrollbar fade-both">
      <div>
       <p class="np-title" v-if="playerStatus.current.title">{{title}}</p>
       <p class="np-text subtext" v-if="artistAndComposerLine" v-html="artistAndComposerLine"></p>

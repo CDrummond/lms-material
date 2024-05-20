@@ -148,7 +148,7 @@ const SIMPLE_LIB_VIEWS = "SimpleLibraryViews ";
 const GRID_SINGLE_LINE_DIFF = 20;
 const NP_INFO = 'now-playing-info';
 const NP_EXPANDED = 'now-playing-expanded';
-const ALL_SONGS_ID = "allsongs";
+const ALL_TRACKS_ID = "alltracks";
 
 const ARTIST_TYPES = ["artist", "trackartist", "albumartist", "composer", "conductor", "band"];
 var MULTI_SPLIT_REGEX = ";"

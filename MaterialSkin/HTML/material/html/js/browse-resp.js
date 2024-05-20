@@ -94,7 +94,7 @@ function setFavoritesParams(i, item) {
 
 function parseBrowseResp(data, parent, options, cacheKey, parentCommand, parentGenre) {
     // NOTE: If add key to resp, then update addToCache in utils.js
-    var resp = {items: [], allSongsItem:undefined, showCompositions:false, baseActions:[], canUseGrid: false, jumplist:[], numAudioItems:0, canDrop:false, itemCustomActions:undefined, extra:undefined };
+    var resp = {items: [], allTracksItem:undefined, showCompositions:false, baseActions:[], canUseGrid: false, jumplist:[], numAudioItems:0, canDrop:false, itemCustomActions:undefined, extra:undefined };
     var allowPinning = !queryParams.party && (!LMS_KIOSK_MODE || !HIDE_FOR_KIOSK.has(PIN_ACTION));
 
     try {
@@ -210,7 +210,7 @@ function parseBrowseResp(data, parent, options, cacheKey, parentCommand, parentG
                     // Remove 'All Songs' entry
                     data.result.count--;
                     if (playAction && loopLen>1) { // Save as special entry, so browse page can use for add/play all buttons
-                        resp.allSongsItem = i;
+                        resp.allTracksItem = i;
                     }
                     continue;
                 }
@@ -651,10 +651,10 @@ function parseBrowseResp(data, parent, options, cacheKey, parentCommand, parentG
                (!types.has("text") /*&& !types.has("search") && !types.has("entry")*/ && !types.has(undefined))) {
                 resp.canUseGrid = true;
             }
-            if (playAction && resp.numAudioItems>2 && undefined==resp.allSongsItem && ALLOW_FAKE_ALL_SONGS_ITEM.has(command) &&
+            if (playAction && resp.numAudioItems>2 && undefined==resp.allTracksItem && ALLOW_FAKE_ALL_TRACKS_ITEM.has(command) &&
                 resp.baseActions['playControl'] && resp.baseActions['playControl'].params && resp.baseActions['playControl'].params.item_id &&
                 (command!="qobuz" || !types.has("playlist"))) {
-                resp.allSongsItem={id:resp.baseActions['playControl'].params.item_id, params:resp.baseActions['playControl'].params};
+                resp.allTracksItem={id:resp.baseActions['playControl'].params.item_id, params:resp.baseActions['playControl'].params};
             }
             // If listing a radio app's entries and all images are the same, then hide images. e.g. iHeartRadio and RadioNet
             if (!isRadiosTop && !isAppsTop && !isFromFavorites && !isBmf && (!isApps || (isApps && parent.id.split('.').length==2)) && resp.items.length>1 && resp.items.length<=100) {
@@ -1097,7 +1097,7 @@ function parseBrowseResp(data, parent, options, cacheKey, parentCommand, parentG
                     resp.items.push({title:releaseTypeHeader(key)+" ("+alist.length+")", id:FILTER_PREFIX+key, header:true,
                                      svg: icon.svg, icon: icon.icon,
                                      menu:alist.length>1
-                                        ? [PLAY_ALL_ACTION, INSERT_ALL_ACTION, PLAY_SHUFFLE_ALL_ACTION, ADD_ALL_ACTION, DIVIDER, ALL_SONGS_ACTION]
+                                        ? [PLAY_ALL_ACTION, INSERT_ALL_ACTION, PLAY_SHUFFLE_ALL_ACTION, ADD_ALL_ACTION, DIVIDER, ALL_TRACKS_ACTION]
                                         : [PLAY_ALL_ACTION, INSERT_ALL_ACTION, PLAY_SHUFFLE_ALL_ACTION, ADD_ALL_ACTION],
                                      count:alist.length});
                     // Create jump list
@@ -1148,9 +1148,9 @@ function parseBrowseResp(data, parent, options, cacheKey, parentCommand, parentG
         } else if (data.result.titles_loop) {
             let totalDuration=0;
             let allowPlayAlbum = parent && parent.id && parent.id.startsWith("album_id:");
-            let isAllSongs = parent && parent.id && (parent.id.startsWith("currentaction:") || parent.id == ALL_SONGS_ID);
+            let isAllTracks = parent && parent.id && (parent.id.startsWith("currentaction:") || parent.id == ALL_TRACKS_ID);
             let isSearchResult = options && options.isSearch;
-            let showAlbumName = isSearchResult || isAllSongs || (parent && parent.id && parent.id.startsWith("artist_id:"));
+            let showAlbumName = isSearchResult || isAllTracks || (parent && parent.id && parent.id.startsWith("artist_id:"));
             let discs = new Map();
             let sort = undefined;
             let msksort = undefined;
@@ -1199,11 +1199,11 @@ function parseBrowseResp(data, parent, options, cacheKey, parentCommand, parentG
             if (undefined!=msksort) {
                 sort=msksort;
             }
-            if (isWork || (undefined!=sort && (isAllSongs || isCompositions) && ("title"==sort || "artisttitle"==sort || "yeartitle"==sort))) {
+            if (isWork || (undefined!=sort && (isAllTracks || isCompositions) && ("title"==sort || "artisttitle"==sort || "yeartitle"==sort))) {
                 showTrackNumbers = false;
             }
             // Should we group tracks?
-            if (isAllSongs || isCompositions) {
+            if (isAllTracks || isCompositions) {
                 grouping = ("albumtrack"==sort || "yearalbumtrack"==sort) ? 1 : "title"==sort ? 2 : "artisttitle"==sort ? 3 : 0;
             }
 
@@ -1287,7 +1287,7 @@ function parseBrowseResp(data, parent, options, cacheKey, parentCommand, parentG
                         subtitleContext=i18n('<obj>from</obj> %1', buildAlbumLine(i, "browse", false)).replaceAll("<obj>", "<obj class=\"ext-details\">");
                     }
                 }
-                if (undefined!=i.disc && !isSearchResult && !isAllSongs && !isCompositions) {
+                if (undefined!=i.disc && !isSearchResult && !isAllTracks && !isCompositions) {
                     let discNum = parseInt(i.disc);
                     if (discs.has(discNum)) {
                         var entry = discs.get(discNum);
@@ -1533,7 +1533,7 @@ function parseBrowseResp(data, parent, options, cacheKey, parentCommand, parentG
 
             resp.numAudioItems = resp.items.length;
             if (allowPlayAlbum) {
-                resp.allSongsItem = parent;
+                resp.allTracksItem = parent;
             }
             if (grouping==0 && discs.size>1) {
                 let d = 0;

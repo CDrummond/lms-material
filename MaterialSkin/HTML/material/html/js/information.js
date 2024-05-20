@@ -317,7 +317,7 @@ Vue.component('lms-information-dialog', {
                     this.library=[ i18n("Total genres: %1", data.result["info total genres"]),
                                    i18n("Total artists: %1", data.result["info total artists"]),
                                    lmsOptions.supportReleaseTypes ? i18n("Total releases: %1", data.result["info total albums"]) : i18n("Total albums: %1", data.result["info total albums"]),
-                                   i18n("Total songs: %1", data.result["info total songs"])];
+                                   i18n("Total tracks: %1", data.result["info total songs"])];
                     if (undefined!=data.result["info total duration"]) {
                         this.library.push(i18n("Total duration: %1", formatSeconds(data.result["info total duration"], true)));
                     }

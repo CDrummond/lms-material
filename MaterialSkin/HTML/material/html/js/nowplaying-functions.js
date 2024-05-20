@@ -516,7 +516,7 @@ function nowplayingArtistEntry(trk, key, role) {
 }
 
 function nowplayingFetchTrackInfo(view) {
-    if (view.info.tabs[TRACK_TAB].artist!=view.infoTrack.artist || view.info.tabs[TRACK_TAB].songtitle!=view.infoTrack.title ||
+    if (view.info.tabs[TRACK_TAB].artist!=view.infoTrack.artist || view.info.tabs[TRACK_TAB].tracktitle!=view.infoTrack.title ||
         view.info.tabs[TRACK_TAB].track_id!=view.infoTrack.track_id || view.info.tabs[TRACK_TAB].artist_id!=view.infoTrack.artist_id ||
         view.info.tabs[TRACK_TAB].url!=view.infoTrack.url) {
         view.info.tabs[TRACK_TAB].texttitle=nowPlayingHeader(view.infoTrack.title);
@@ -526,7 +526,7 @@ function nowplayingFetchTrackInfo(view) {
         view.info.tabs[TRACK_TAB].artist=view.infoTrack.artist;
         view.info.tabs[TRACK_TAB].artist_id=view.infoTrack.artist_id;
         view.info.tabs[TRACK_TAB].url=view.infoTrack.url;
-        view.info.tabs[TRACK_TAB].songtitle=view.infoTrack.title;
+        view.info.tabs[TRACK_TAB].tracktitle=view.infoTrack.title;
         view.info.tabs[TRACK_TAB].reqId++;
         view.info.tabs[TRACK_TAB].pos=0;
         if (view.info.tabs[TRACK_TAB].reqId>65535) {
@@ -960,7 +960,7 @@ function nowPlayingConfigMenu(view, event) {
     if (view.windowWidth>NP_MIN_WIDTH_FOR_FULL) {
         view.menu.items.push({title:i18n("Show in tabs"), act:NP_SHOW_IN_TABS_ACT, check:view.info.showTabs});
     }
-    view.menu.items.push({title:i18n("Update on song change"), act:NP_SYNC_ACT, check:view.info.sync});
+    view.menu.items.push({title:i18n("Update on track change"), act:NP_SYNC_ACT, check:view.info.sync});
     if (view.info.tabs[TRACK_TAB].lines && (!view.info.showTabs || view.info.tab==TRACK_TAB)) {
         view.menu.items.push({title:i18n("Auto-scroll lyrics"), act:NP_LYRICS_SCROLL_ACT, check:view.info.tabs[TRACK_TAB].scroll});
         view.menu.items.push({title:i18n("Highlight current lyric line"), act:NP_LYRICS_HIGHLIGHT_ACT, check:view.info.tabs[TRACK_TAB].highlight});

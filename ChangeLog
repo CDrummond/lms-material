@@ -5,6 +5,7 @@
    as library_id.
 3. Fix incorrect 'Works' header showing for 'Advanced search' results.
 4. Get genre list for 'Random Mix' from 'randomplaygenrelist' command.
+5. Use term 'Track' instead of 'Song'.
 
 4.6.0
 -----

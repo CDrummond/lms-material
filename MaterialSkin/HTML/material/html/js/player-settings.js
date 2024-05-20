@@ -75,7 +75,7 @@ Vue.component('lms-player-settings', {
     <div class="dialog-padding" v-if="unlockAll"></div>
     <v-header class="dialog-section-header">{{i18n('Audio')}}</v-header>
     <v-list-tile>
-     <v-select :items="crossfadeItems" :label="i18n('On song change')" v-model="crossfade" item-text="label" item-value="key"></v-select>
+     <v-select :items="crossfadeItems" :label="i18n('On track change')" v-model="crossfade" item-text="label" item-value="key"></v-select>
     </v-list-tile>
     <v-divider></v-divider>
     <v-list-tile :disabled="0==crossfade" v-bind:class="{'disabled':0==crossfade}">
@@ -139,7 +139,7 @@ Vue.component('lms-player-settings', {
 
      <div v-if="libraries.length>1" class="dialog-padding"></div>
      <v-header v-if="libraries.length>1" class="dialog-section-header">{{i18n('Library')}}</v-header>
-     <v-list-tile class="settings-note" v-if="libraries.length>1"><p>{{i18n("Each player may be assigned a 'virtual' library. If set then this will be used to restrict song selection for 'Random Mix' (only songs from the chosen library will be used), and other modes. This setting might also affect library browsing with other Lyrion control points (such as the default web UI).")}}<br/><br/>{{i18n("Please note, the setting here will not affect this control point. To change the library of this control point you need to use the context menu button for 'My Music', or use the 'Change library' button when browsing 'My Music'")}}</p></v-list-tile>
+     <v-list-tile class="settings-note" v-if="libraries.length>1"><p>{{i18n("Each player may be assigned a 'virtual' library. If set then this will be used to restrict track selection for 'Random Mix' (only tracks from the chosen library will be used), and other modes. This setting might also affect library browsing with other Lyrion control points (such as the default web UI).")}}<br/><br/>{{i18n("Please note, the setting here will not affect this control point. To change the library of this control point you need to use the context menu button for 'My Music', or use the 'Change library' button when browsing 'My Music'")}}</p></v-list-tile>
      <v-list-tile v-if="libraries.length>1">
       <v-select :items="libraries" :label="i18n('Library')" v-model="library" item-text="name" item-value="id"></v-select>
      </v-list-tile>
@@ -585,7 +585,7 @@ Vue.component('lms-player-settings', {
                 ];
             this.alarmShuffeItems=[
                 { key:0, label:i18n("Don't shuffle")},
-                { key:1, label:i18n("Shuffle by song")},
+                { key:1, label:i18n("Shuffle by track")},
                 { key:2, label:i18n("Shuffle by album")},
                 ];
             DAYS_OF_WEEK = [i18n('Sun'), i18n('Mon'), i18n('Tues'), i18n('Weds'), i18n('Thurs'), i18n('Fri'), i18n('Sat')];

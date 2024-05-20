@@ -159,7 +159,7 @@
  height:calc((var(--100vh) + (2* var(--np-bgnd-filter-size))) - var(--main-toolbar-height));
 }
 
-.np-portrait-song-info {
+.np-portrait-track-info {
  height:calc(var(--100vh) - (var(--np-portrait-image-size) + (var(--thin-portrait-adjust) * 3) + var(--bottom-nav-pad) + (var(--np-image-border) * 2) + 140px));
 }
 

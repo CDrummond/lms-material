@@ -347,7 +347,7 @@ Vue.component('lms-ui-settings', {
     </v-list-tile>
 
     <div class="dialog-padding" v-if="LMS_P_MAI"></div>
-    <v-header class="dialog-section-header" v-if="LMS_P_MAI">{{i18n('Song Information')}}</v-header>
+    <v-header class="dialog-section-header" v-if="LMS_P_MAI">{{i18n('Track Information')}}</v-header>
 
     <v-list-tile v-if="LMS_P_MAI">
      <v-list-tile-content @click="infoBackdrop = !infoBackdrop" class="switch-label">
@@ -362,7 +362,7 @@ Vue.component('lms-ui-settings', {
     <v-list-tile>
      <v-list-tile-content @click="screensaver = !screensaver" class="switch-label">
       <v-list-tile-title>{{i18n('Show clock')}}</v-list-tile-title>
-      <v-list-tile-sub-title>{{i18n('When no song is playing on current player, darken screen (and show date & time) after 1 minute of inactivity.')}}</v-list-tile-sub-title>
+      <v-list-tile-sub-title>{{i18n('When no track is playing on current player, darken screen (and show date & time) after 1 minute of inactivity.')}}</v-list-tile-sub-title>
      </v-list-tile-content>
      <v-list-tile-action><m3-switch v-model="screensaver"></m3-switch></v-list-tile-action>
     </v-list-tile>

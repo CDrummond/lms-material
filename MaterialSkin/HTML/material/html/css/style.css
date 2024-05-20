@@ -1365,7 +1365,7 @@ div.v-subheader {
  opacity:0.2!important;
 }
 
-.np-portrait-song-info {
+.np-portrait-track-info {
  display: flex;
  display: -webkit-flex;
  position:fixed;
@@ -1385,14 +1385,14 @@ div.v-subheader {
  mask-image: linear-gradient(transparent 0px, black var(--fade-size), black calc(100% - var(--fade-size)), transparent 100%);
 }
 
-.np-landscape-song-info {
+.np-landscape-track-info {
  display: flex;
  display: -webkit-flex;
  width:100%;
  height:100%;
 }
 
-.np-portrait-song-info div, .np-landscape-song-info div {
+.np-portrait-track-info div, .np-landscape-track-info div {
  text-align:center;
  margin: auto;
  width:100%;
@@ -1401,7 +1401,7 @@ div.v-subheader {
  overflow-x:hidden;
 }
 
-.np-portrait-song-info div p {
+.np-portrait-track-info div p {
  margin:3px 0px!important;
  padding:0px!important;
 }
@@ -1495,7 +1495,7 @@ div.v-subheader {
  font-size:250%;
 }
 
-#np-page .np-landscape-song-info .v-rating .v-icon {
+#np-page .np-landscape-track-info .v-rating .v-icon {
  width:32px!important;
  height:32px!important;
  font-size:32px!important;
@@ -1521,7 +1521,7 @@ div.v-rating i.primary--text, div.v-rating i.accent--text {
  .np-title:not(.np-title-landscape) {
   font-size:135% !important;
  }
- #np-page .np-portrait-song-info .v-rating .v-icon {
+ #np-page .np-portrait-track-info .v-rating .v-icon {
   width:18px!important;
   height:18px!important;
   font-size:18px!important;
@@ -1535,7 +1535,7 @@ div.v-rating i.primary--text, div.v-rating i.accent--text {
  .np-text-landscape {
   font-size:225% !important;
  }
- #np-page .np-landscape-song-info .v-rating .v-icon {
+ #np-page .np-landscape-track-info .v-rating .v-icon {
   width:28px!important;
   height:28px!important;
   font-size:28px!important;
@@ -1549,11 +1549,11 @@ div.v-rating i.primary--text, div.v-rating i.accent--text {
  .np-text-landscape {
   font-size:200% !important;
  }
- .np-landscape-song-info div p {
+ .np-landscape-track-info div p {
   margin:10px 0px!important;
   padding:0px!important;
  }
- #np-page .np-landscape-song-info .v-rating .v-icon {
+ #np-page .np-landscape-track-info .v-rating .v-icon {
   width:22px!important;
   height:22px!important;
   font-size:22px!important;
@@ -1567,7 +1567,7 @@ div.v-rating i.primary--text, div.v-rating i.accent--text {
  .np-text-landscape {
   font-size:175% !important;
  }
- .np-landscape-song-info div p {
+ .np-landscape-track-info div p {
   margin:8px 0px!important;
   padding:0px!important;
  }
@@ -1580,11 +1580,11 @@ div.v-rating i.primary--text, div.v-rating i.accent--text {
  .np-text-landscape {
   font-size:125% !important;
  }
- .np-landscape-song-info div p {
+ .np-landscape-track-info div p {
   margin:3px 0px!important;
   padding:0px!important;
  }
- #np-page .np-landscape-song-info .v-rating .v-icon {
+ #np-page .np-landscape-track-info .v-rating .v-icon {
   width:18px!important;
   height:18px!important;
   font-size:18px!important;
@@ -1598,7 +1598,7 @@ div.v-rating i.primary--text, div.v-rating i.accent--text {
  .np-text-landscape {
   font-size:100% !important;
  }
- #np-page .np-landscape-song-info .v-rating .v-icon {
+ #np-page .np-landscape-track-info .v-rating .v-icon {
   width:16px!important;
   height:16px!important;
   font-size:16px!important;
@@ -1612,7 +1612,7 @@ div.v-rating i.primary--text, div.v-rating i.accent--text {
  .np-text-landscape {
   font-size:75% !important;
  }
- #np-page .np-landscape-song-info .v-rating .v-icon {
+ #np-page .np-landscape-track-info .v-rating .v-icon {
   width:12px!important;
   height:12px!important;
   font-size:12px!important;
@@ -1711,12 +1711,12 @@ div.v-rating i.primary--text, div.v-rating i.accent--text {
  width:calc(100vw - (var(--np-image-landscape-wide-height) + var(--np-image-border))) !important;
 }
 
-.np-details-landscape .np-landscape-song-info,
-.np-details-landscape .np-portrait-song-info div,
-.np-details-landscape .np-landscape-song-info div,
-.np-details-landscape-wide .np-landscape-song-info,
-.np-details-landscape-wide .np-portrait-song-info div,
-.np-details-landscape-wide .np-landscape-song-info div {
+.np-details-landscape .np-landscape-track-info,
+.np-details-landscape .np-portrait-track-info div,
+.np-details-landscape .np-landscape-track-info div,
+.np-details-landscape-wide .np-landscape-track-info,
+.np-details-landscape-wide .np-portrait-track-info div,
+.np-details-landscape-wide .np-landscape-track-info div {
  width:100%;
 }
 

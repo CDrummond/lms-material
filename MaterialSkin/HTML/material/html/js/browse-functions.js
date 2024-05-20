@@ -98,7 +98,7 @@ function browseAddHistory(view) {
     var prev = {};
     prev.items = view.items;
     prev.listSize = view.listSize;
-    prev.allSongsItem = view.allSongsItem;
+    prev.allTracksItem = view.allTracksItem;
     prev.jumplist = view.jumplist;
     prev.baseActions = view.baseActions;
     prev.current = view.current;
@@ -180,7 +180,7 @@ function browseActions(view, item, args, count, showCompositions, showWorks) {
                 params.push(args['genre_id']);
             }
             browseAddLibId(view, params);
-            actions.push({title:ACTIONS[ALL_SONGS_ACTION].title, icon:ACTIONS[ALL_SONGS_ACTION].icon, do:{ command: ['tracks'], params: params}, weight:80, stdItem:STD_ITEM_ALL_TRACKS});
+            actions.push({title:ACTIONS[ALL_TRACKS_ACTION].title, icon:ACTIONS[ALL_TRACKS_ACTION].icon, do:{ command: ['tracks'], params: params}, weight:80, stdItem:STD_ITEM_ALL_TRACKS});
             if (lmsOptions.supportReleaseTypes && args['multi-group']) {
                 actions.push({action:ALL_RELEASES_ACTION, weight:84});
             }
@@ -190,7 +190,7 @@ function browseActions(view, item, args, count, showCompositions, showWorks) {
                 params.push(args['grouping']);
             }
             browseAddLibId(view, params);
-            actions.push({title:ACTIONS[ALL_SONGS_ACTION].title, icon:ACTIONS[ALL_SONGS_ACTION].icon, do:{ command: ['tracks'], params: params}, weight:80, stdItem:STD_ITEM_ALL_TRACKS});
+            actions.push({title:ACTIONS[ALL_TRACKS_ACTION].title, icon:ACTIONS[ALL_TRACKS_ACTION].icon, do:{ command: ['tracks'], params: params}, weight:80, stdItem:STD_ITEM_ALL_TRACKS});
         }
 
         if (undefined!=args['artist_id'] && showCompositions) {
@@ -354,7 +354,7 @@ function browseHandleListResponse(view, item, command, resp, prevPage, appendIte
         view.currentLibId = command.libraryId;
         view.pinnedItemLibName = item.libname ? item.libname : view.pinnedItemLibName;
         view.listSize=resp.listSize;
-        view.allSongsItem=resp.allSongsItem;
+        view.allTracksItem=resp.allTracksItem;
         view.jumplist=resp.jumplist;
         view.filteredJumplist = [];
         view.baseActions=resp.baseActions;
@@ -573,7 +573,7 @@ function browseHandleListResponse(view, item, command, resp, prevPage, appendIte
             if (canAddAlbumSort) {
                 view.currentActions.push({action:ALBUM_SORTS_ACTION, weight:2});
             }
-        } else if ((view.current.stdItem==STD_ITEM_ALL_TRACKS || view.current.stdItem==STD_ITEM_COMPOSITION_TRACKS || view.current.id==ALL_SONGS_ID) && view.command.command.length>0 && view.command.command[0]=="tracks" && view.items.length>0) {
+        } else if ((view.current.stdItem==STD_ITEM_ALL_TRACKS || view.current.stdItem==STD_ITEM_COMPOSITION_TRACKS || view.current.id==ALL_TRACKS_ID) && view.command.command.length>0 && view.command.command[0]=="tracks" && view.items.length>0) {
             view.currentActions.push({action:TRACK_SORTS_ACTION, weight:10});
         }
         view.currentActions.sort(function(a, b) { return a.weight!=b.weight ? a.weight<b.weight ? -1 : 1 : titleSort(a, b) });
@@ -602,7 +602,7 @@ function browseHandleListResponse(view, item, command, resp, prevPage, appendIte
                     view.currentActions.push(loop[a]);
                 }
             }
-        } else if (view.allSongsItem || ("tracks"==command.command[0] && item.id.startsWith("currentaction:"))) {
+        } else if (view.allTracksItem || ("tracks"==command.command[0] && item.id.startsWith("currentaction:"))) {
             view.tbarActions=[ADD_ALL_ACTION, PLAY_ALL_ACTION];
         } else if (view.items.length>0 && view.items[0].type!="html" && !(view.current && view.current.isPodcast) && (itemHasPlayAction || addAndPlayAllActions(command, view.items))) {
             if (view.current && view.current.menu) {
@@ -1080,12 +1080,12 @@ function browseAddCategories(view, item, isGenre) {
         if (undefined!=alt_id) { cat.params.push(alt_id); }
         view.items.push(cat);
     }
-    cat = { title: i18n("All Songs"),
+    cat = { title: i18n("All Tracks"),
             command: ["tracks"],
             params: [item.id, trackTags(true)+"ely", SORT_KEY+TRACK_SORT_PLACEHOLDER],
             icon: "music_note",
             type: "group",
-            id: ALL_SONGS_ID};
+            id: ALL_TRACKS_ID};
     if (undefined!=alt_id) { cat.params.push(alt_id); }
     view.items.push(cat);
 
@@ -1416,8 +1416,8 @@ function browseItemAction(view, act, item, index, event) {
         });
     } else if (ADD_ALL_ACTION==act || INSERT_ALL_ACTION==act || PLAY_ALL_ACTION==act || PLAY_DISC_ACTION==act || PLAY_SHUFFLE_ALL_ACTION==act) {
         if (view.current && item.id == view.current.id) { // Called from subtoolbar => act on all items
-            if (view.allSongsItem) {
-                view.itemAction(ADD_ALL_ACTION==act ? ADD_ACTION : INSERT_ALL_ACTION==act ? INSERT_ACTION : PLAY_SHUFFLE_ALL_ACTION==act ? PLAY_SHUFFLE_ACTION : PLAY_ACTION, view.allSongsItem);
+            if (view.allTracksItem) {
+                view.itemAction(ADD_ALL_ACTION==act ? ADD_ACTION : INSERT_ALL_ACTION==act ? INSERT_ACTION : PLAY_SHUFFLE_ALL_ACTION==act ? PLAY_SHUFFLE_ACTION : PLAY_ACTION, view.allTracksItem);
             } else {
                 view.doList(view.items, act);
                 bus.$emit('showMessage', i18n("Adding tracks..."));
@@ -1528,7 +1528,7 @@ function browseItemAction(view, act, item, index, event) {
         clone.isListItemInMenu = true;
         clone.title=clone.title+SEPARATOR+ACTIONS[act].title;
         browseClick(view, clone);
-    } else if (ALL_SONGS_ACTION==act) {
+    } else if (ALL_TRACKS_ACTION==act) {
         for (let a=0, loop=view.currentActions, len=loop.length; a<len; ++a) {
             if (loop[a].stdItem==STD_ITEM_ALL_TRACKS) {
                 let cmd = JSON.parse(JSON.stringify(loop[a].do));
@@ -1806,7 +1806,7 @@ function browseGoBack(view, refresh) {
     var prev = view.history.pop();
     view.items = prev.items;
     view.listSize = prev.listSize;
-    view.allSongsItem = prev.allSongsItem;
+    view.allTracksItem = prev.allTracksItem;
     view.jumplist = prev.jumplist;
     view.filteredJumplist = [];
     view.grid = prev.grid;

@@ -8,11 +8,12 @@ MATERIAL_SKIN
 	ZH_CN	Material主题
 
 MATERIALPARTY_SKIN
+	CS	Material Skin (Párty)
 	EN	Material Skin (Party)
 	ZH_CN	Material主题 (Party)
 
 PLUGIN_MATERIAL_SKIN
-	CS	Vzhled 'Material Skin', vhodný pro mobilní používání.
+	CS	Vzhled "Material Skin", vhodný pro mobilní použití.
 	DE	Web-Skin im Material-Stil, für mobile Nutzung optimiert.
 	EN	Material themed skin, suitable for mobile use.
 	IT	Skin a tema Material, adatta per dispositivi mobili.
@@ -22,7 +23,7 @@ PLUGIN_MATERIAL_SKIN
 	ZH_CN	Material 主题皮肤，适合移动设备使用。
 
 PLUGIN_MATERIAL_SKIN_GENRES_LIST_NOTE
-	CS	POZNÁMKA: V níže uvedených seznamech žánrů použijte pro všechny žánry jednu hvězdičku (*). Pokud nechcete použít žádný žánr, použijte libovolný řetězec (např. 'N/A'), který neodpovídá žádnému z vašich žánrů.
+	CS	POZNÁMKA: V níže uvedených seznamech žánrů použijte pro všechny žánry jednu hvězdičku (*). Pokud nechcete použít žádný žánr, použijte libovolný řetězec (např. "N/A"), který neodpovídá žádnému z vašich žánrů.
 	DE	ANMERKUNG: Ein Sternchen (*) benutzen, um in der Genre-Liste alle Genres auszuwählen. Eine beliebige Zeichenkette, die keinem Genre entspricht (bspw. 'N/A') benutzen, um kein Genre auszuwählen.
 	EN	NOTE: In the genre lists, below, to apply to all genres use a single asterisk (*). To apply to no genres use any string (e.g. 'N/A') that does not match any of your genres.
 	IT	NOTA: Nell'elenco dei generi qui sotto, per assegnare a tutti i generi utilizzare un singolo asterisco (*). Per assegnare a nessun genere utilizzare qualunque testo che non corrisponde a nessun testo dei generi presenti (es. 'N/A').
@@ -52,7 +53,7 @@ PLUGIN_MATERIAL_SKIN_BAND_GENRES_DESC
 	ZH_CN	支持乐团流派列表，以逗号分隔。当进入其中一种流派时，系统会询问您是否希望按乐团浏览。
 
 PLUGIN_MATERIAL_SKIN_COMPOSER_GENRES
-	CS	Žánry skladetelů
+	CS	Žánry skladatelů
 	DE	Komponisten-Stilrichtungen
 	EN	Composer genres
 	IT	Generi per il tag "composer" (compositore)
@@ -141,11 +142,13 @@ PLUGIN_MATERIAL_SKIN_SHOW_COMPOSER_DESC
 	ZH_CN	如果曲目的流派与上面列表中的项目匹配并具有作曲家标识，则显示作曲家。
 
 PLUGIN_MATERIAL_SKIN_USE_COMPOSER_MAI
+	CS	Zobrazení skladatele v zobrazení "Informace"
 	EN	Display composer in 'Information' view
 	FR	Afficher le compositeur dans la vue "Informations"
 	NL	Toon componist in 'Informatie' weergave
 
 PLUGIN_MATERIAL_SKIN_USE_COMPOSER_MAI_DESC
+	CS	U vhodných skladeb zobrazit v zobrazení "Informace" informace o skladateli, nikoli o interpretovi.
 	EN	For suitable tracks show composer, and not artist, information in the 'Information' view.
 	FR	Selon le genre du morceau, afficher le compositeur plutôt que l'artiste  dans la vue "Informations".
 	NL	Afhankelijk van het genre van het nummer, wordt de componist in plaats van de artiest getoond in de "Informatie" weergave.
@@ -281,7 +284,7 @@ PLUGIN_MATERIAL_SKIN_ARTIST_FIRST_DESC
 	ZH_CN	如果曲目有作曲家、指挥家或乐团标签，并且这些都设置为显示，则在这些之前显示艺术家，否则在之后显示。
 
 PLUGIN_MATERIAL_SKIN_SHOW_ALL_ARTISTS
-	CS	Zobrazení všech interptetů
+	CS	Zobrazení všech interpretů
 	DE	Zeige alle Interpreten
 	EN	Show all artists
 	IT	Mostra tutti gli artisti
@@ -431,7 +434,7 @@ PLUGIN_MATERIAL_SKIN_ARTIST_FILTER
 	ZH_CN	过滤专辑曲目
 
 PLUGIN_MATERIAL_SKIN_ARTIST_FILTER_DESC
-	CS	Při procházení alb interpreta můžete použít všechny skladby ze sbírkových alb, alb, na kterých se tento interpret objevuje, atd., nebo zobrazit pouze skladby aktuálního interpreta.
+	CS	Při procházení alb interpreta můžete použít všechny skladby ze sbírkových alb, alb, na kterých se tento interpret objevuje atd., nebo zobrazit pouze skladby aktuálního interpreta.
 	DE	Zeige beim Durchsuchen der Alben eines Interpreten die Titel auf Kompilationen, Alben etc. mit seiner Beteiligung oder alle Titel auf diesen Kompilationen, Alben etc.
 	EN	When browsing an artist's albums use all tracks from compilation albums, albums this artist appears on, etc., or only show tracks from the current artist.
 	IT	Durante lo scorrimento degli album di un artista utilizzare tutte i brani delle compilation e degli album in cui l'artista compare, oppure mostrare solo i brani dell'artista corrente.
@@ -476,6 +479,7 @@ PLUGIN_MATERIAL_SKIN_RELEASE_TYPE_ORDER_DESC
 	ZH_CN	指定显示发布类型的顺序（以逗号分隔的发布类型名称列表） - 例如 “专辑、EP、单曲”
 
 PLUGIN_MATERIAL_SKIN_GENRE_IMAGES
+	CS	Obrázky žánrů
 	DE	Bilder zum Genre
 	EN	Genre images
 	IT	Immagini generi
@@ -484,14 +488,16 @@ PLUGIN_MATERIAL_SKIN_GENRE_IMAGES
 	ZH_CN	流派图像
 
 PLUGIN_MATERIAL_SKIN_GENRE_IMAGES_DESC
+	CS	Zobrazit obrázky při výpisu žánrů. To vyžaduje vytvoření obrázků JPEG 600x600 v podsložce "material-skin/genres" ve Složce předvoleb vašeho LMS. Všechny obrázky žánrů by měly být malými písmeny nebo číslicemi a všechny ostatní znaky by měly být odstraněny. Např. "R&B" je "rb.jpg", "Folk/Rock" je "folkrock.jpg".
 	DE	Anzeige von Bildern bei der Auflistung von Genres. Dazu müssen 600x600 JPEG-Bilder in einem Unterordner "material-skin/genres" im Einstellungsordner Ihres LMS erstellt werden. Genre-Bilder sollten alle Kleinbuchstaben oder Zahlen sein ([a-z0-9]), wobei alle anderen Zeichen entfernt werden. z.B. "R&B" ist "rb.jpg", "Folk/Rock" ist "folkrock.jpg".
-	EN	Display images when listing genres. This requires creating 600x600 JPEG images within a "material-skin/genres" sub-folder of your LMS's preferences folder. Genre images should all be lowercase letters or numbers, with all other characters removed. e.g. "R&B" is "rb.jpg", "Folk/Rock" is "folkrock.jpg"
+	EN	Display images when listing genres. This requires creating 600x600 JPEG images within a "material-skin/genres" sub-folder of your LMS's preferences folder. Genre images should all be lowercase letters or numbers, with all other characters removed. e.g. "R&B" is "rb.jpg", "Folk/Rock" is "folkrock.jpg".
 	IT	Mostrare immagini nella lista dei generi. Questo richiede che vengano create immagini JPEG 600x600 in una sottocartella "material-skin/genres" della cartella delle preferenze di LMS. I nomi delle immagini devono essere lettere e numeri minuscoli, senza altri caratteri. Es. "R&B" come "rb.jpg", "Folk/Rock" come "folkrock.jpg"
 	FR	Afficher des images dans la liste des genres. Cela nécessite de créer des images JPEG 600x600 dans un sous-dossier "material-skin/genres" du dossier des préférences de LMS. Les noms des fichiers doivent être constitués uniquement de lettres minuscules ou de chiffres. Par exemple : "R&B" devient "rb.jpg", "Folk/Rock" devient "folkrock.jpg".
 	NL	Toon afbeeldingen bij het weergeven van genres. Dit vereist JPEG afbeeldingen van 600x600 pixels in de submap 'material-skin/genres' van de voorkeurenmap van jouw LMS. Genre afbeeldingen dienen allemaal uit kleine letters of cijfers te bestaan ​​en mogen geen andere tekens bevatten. Bijv. "R&B" is "rb.jpg", "Folk/Rock" is "folkrock.jpg".
 	ZH_CN	列出流派时显示图像。这需要在LMS Preferences文件夹的“material-skin/genres”子文件夹中创建 600x600 分辨率的JPEG图像。流派图像应全部为小写字母或数字，并删除所有其它类型字符。例如 “R&B”为“rb.jpg”，“folk/rock”为“folkrock.jpg”。
 
 PLUGIN_MATERIAL_SKIN_TOUCH_LINKS
+	CS	Odkazy na položky v dotykových zařízeních
 	DE	Elementverknüpfungen auf Touch-Geräten
 	EN	Item links on touch devices
 	IT	Collegamenti delle voci su dispositivi touch
@@ -500,6 +506,7 @@ PLUGIN_MATERIAL_SKIN_TOUCH_LINKS
 	ZH_CN	触摸设备上的项目链接
 
 PLUGIN_MATERIAL_SKIN_TOUCH_LINKS_DESC
+	CS	Udělat z textových položek interpret, album, skladatel atd. klikací odkazy na dotykových zařízeních (např. mobilních telefonech).
 	DE	Erweitern Sie Textbausteine wie Künstler, Album, Komponist usw. zu klickbaren Links auf Touch-Geräten (z. B. Mobiltelefonen).
 	EN	Make artist, album, composer, etc. text items clickable links on touch devices (e.g. mobile phones).
 	IT	Rendere le voci artista, album, compositore e simili come link sui dispositivi touch (es. smartphone e tablet).
@@ -508,6 +515,7 @@ PLUGIN_MATERIAL_SKIN_TOUCH_LINKS_DESC
 	ZH_CN	将艺术家、专辑、作曲家等文本项在触摸设备（例如手机）上转换成可点击的链接。
 
 PLUGIN_MATERIAL_SKIN_YEAR_IN_SUB
+	CS	Zobrazení roku v podnázvu alba
 	DE	Jahr im Albumuntertitel anzeigen
 	EN	Show year in album subtitle
 	IT	Mostrare l'anno nel sottotitolo dell'album
@@ -516,6 +524,7 @@ PLUGIN_MATERIAL_SKIN_YEAR_IN_SUB
 	ZH_CN	在专辑副标题中显示年份
 
 PLUGIN_MATERIAL_SKIN_YEAR_IN_SUB_DESC
+	CS	Při procházení alb zobrazovat rok v podnázvu, pokud se nezobrazuje také interpret (v takovém případě se rok zobrazí v závorce za názvem alba).
 	DE	Beim Durchsuchen von Alben wird das Jahr im Untertitel angezeigt, es sei denn, es wird auch der Interpret angezeigt (in diesem Fall wird das Jahr in Klammern nach dem Albumnamen angezeigt)
 	EN	When browsing albums show year in the subtitle, unless also showing artist (in which case year is shown, in brackets, after album name)
 	IT	Durante lo scorrimento degli album mostrare l'anno nel sottotitolo, a meno che non venga mostrato anche l'artista (in tal caso l'anno viene mostrato tra parentesi dopo il nome dell'album)
@@ -524,6 +533,7 @@ PLUGIN_MATERIAL_SKIN_YEAR_IN_SUB_DESC
 	ZH_CN	浏览专辑时，在副标题中显示年份，除非还显示艺术家（在这种情况下，年份显示在专辑名称后面的括号中）
 
 PLUGIN_MATERIAL_SKIN_PLAY_SHUFFLE
+	CS	Akce přehrát náhodně
 	DE	Zufallswiedergabe
 	EN	Play shuffled action
 	IT	Azione "Riproduzione casuale"
@@ -532,6 +542,7 @@ PLUGIN_MATERIAL_SKIN_PLAY_SHUFFLE
 	ZH_CN	随机播放动作
 
 PLUGIN_MATERIAL_SKIN_PLAY_SHUFFLE_DESC
+	CS	Přidat akce pro spuštění alb nebo seznamů skladeb v náhodném režimu. Pokud je tato funkce povolena a je použita volba "Přehrát náhodně", přehrávač bude před přehráváním položek nastaven na "Náhodné skladby". Stejně tak, pokud je tato funkce povolena a je použita funkce "Přehrát nyní", bude náhodné přehrávání před přehráním položek vypnuto. Vezměte prosím na vědomí, že režim náhodného přehrávání přehrávače se nevrátí po vymazání fronty atd.
 	DE	Alben oder Wiedergabelisten werden zufällig wiedergegeben. Wenn diese Funktion aktiviert ist und "Zufällig abspielen" verwendet wird, wird der Player auf "Zufällige Wiedergabe" eingestellt, bevor die Elemente abgespielt werden. Wenn diese Option aktiviert ist und "Jetzt abspielen" verwendet wird, wird die Zufallswiedergabe vor der Wiedergabe der Elemente deaktiviert. Bitte beachten Sie, dass der Zufallswiedergabemodus des Players nicht wiederhergestellt wird, wenn die Warteschlange gelöscht wird usw.
 	EN	Add action to start albums, or playlists, in shuffled mode. When this is enabled and 'Play shuffled' is used, the player will be set to 'shuffle tracks' before the items are played. Likewise, if this is enabled and 'Play now' is used, then shuffle will be disabled before the items are played. Please note that the player's shuffle mode is not reverted after queue is cleared, etc.
 	IT	Aggiungere l'azione per avviare la riproduzione di album o playlist in modalità casuale. Se attivata e la riproduzione casuale viene utilizzata, il dispositivo di riproduzione verrà impostato per mettere in ordina casuale i brani prima di riprodurli. Allo stesso modo se attivato e viene utilizzato "Riproduci ora" la riproduzione casuale verrà disabilitata prima che i brani vengano riprodotti. Notare che la modalità di riproduzione causale del dispositivo non viene ripristinata dopo la cancellazione della coda.
@@ -540,6 +551,7 @@ PLUGIN_MATERIAL_SKIN_PLAY_SHUFFLE_DESC
 	ZH_CN	添加专辑或播放列表并开启随机播放模式。启用此功能并使用“随机播放”时，播放器将在播放项目之前设置为“随机播放曲目”。同样，如果启用此选项并使用“立即播放”，则在播放项目之前禁用随机播放。请注意，播放队列被清除后，播放器的随机播放模式不会恢复。
 
 PLUGIN_MATERIAL_SKIN_LOAD_DEFAULT_GENRES_DESC
+	CS	Tyto seznamy žánrů jsou uloženy v souboru nastavení a při změně jazyka se automaticky neaktualizují. Tlačítkem "Nastavit žánry na výchozí" (níže) můžete u každého seznamu obnovit výchozí hodnoty přeložené do aktuálního jazyka.
 	DE	Diese Genre-Listen werden in der Konfigurationsdatei gesichert und nicht automatisch aktualisiert, sollte die Sprache gewechselt werden. Die Funktion 'Genres auf Default setzen' setzt jede Liste zurück.
 	EN	These genre lists are saved in your settings file, and will not automatically be updated should you change language. You may use the "Set Genres To Default" button (below) to reset each list to the default values, translated into the current language.
 	IT	Queste liste dei generi musicali sono salvate nei file di configurazione e non saranno aggiornate automaticamente se viene modificata la lingua. E' posibile utilizzare il bottone sotto "Imposta i generi ai default" per reimmpostare ogni lista ai valori predefiniti della lingua corrente.
@@ -548,6 +560,7 @@ PLUGIN_MATERIAL_SKIN_LOAD_DEFAULT_GENRES_DESC
 	ZH_CN	这些流派列表保存在您的设置文件中，且不会随着您更改语言自动更新。您可以使用“将流派设为默认值”按钮（如下）将每个列表重置为默认值（翻译成当前语言）。
 
 PLUGIN_MATERIAL_SKIN_LOAD_DEFAULT_GENRES
+	CS	Nastavit žánry na výchozí
 	DE	Genres auf Default setzen
 	EN	Set Genres To Default
 	IT	Imposta generi ai valori predefiniti

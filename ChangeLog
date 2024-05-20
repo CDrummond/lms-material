@@ -1,9 +1,10 @@
 4.6.1
 -----
 1. Update some translations.
-2. If LMS < 8.5.0 and using 'All' tracks library for RandomMix then use '0' as
-   library_id.
+2. If LMS < 8.5.0 and using 'All' tracks library for 'Random Mix' then use '0'
+   as library_id.
 3. Fix incorrect 'Works' header showing for 'Advanced search' results.
+4. Get genre list for 'Random Mix' from 'randomplaygenrelist' command.
 
 4.6.0
 -----

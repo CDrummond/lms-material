@@ -998,7 +998,8 @@ function browseAddCategories(view, item, isGenre) {
             command: ["albums"],
             params: [item.id, ALBUM_TAGS_PLACEHOLDER, SORT_KEY+ALBUM_SORT_PLACEHOLDER],
             menu: [],
-            icon: "album",
+            icon: lmsOptions.supportReleaseTypes ? undefined : "album",
+            svg: lmsOptions.supportReleaseTypes ? "release" : undefined,
             type: "group",
             id: uniqueId(item.id, view.items.length)};
     if (undefined!=alt_id) { cat.params.push(alt_id); }

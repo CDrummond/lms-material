@@ -1952,7 +1952,7 @@ div.v-rating i.primary--text, div.v-rating i.accent--text {
  line-height:var(--list-elem-height);
  opacity:var(--sub-opacity);
  margin-right:-28px;
- min-width:44px;
+ min-width:32px;
  margin-top:calc(19px - var(--std-font-size));
 }
 
@@ -1960,7 +1960,7 @@ div.v-rating i.primary--text, div.v-rating i.accent--text {
  font-size:var(--small-font-size);
  font-weight:var(--bold-weight);
  opacity:1.0;
- min-width:44px;
+ min-width:32px;
  margin-right:9px;
  margin-top:2px;
  text-align:end;

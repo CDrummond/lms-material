@@ -7,6 +7,8 @@
 4. Get genre list for 'Random Mix' from 'randomplaygenrelist' command.
 5. Use term 'Track' instead of 'Song'.
 6. Use correct icon for 'Releases' under 'Genres'.
+7. Show release total time in release style queue for releases with more than 1
+   track.
 
 4.6.0
 -----

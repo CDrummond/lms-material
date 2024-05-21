@@ -1956,6 +1956,15 @@ div.v-rating i.primary--text, div.v-rating i.accent--text {
  margin-top:calc(19px - var(--std-font-size));
 }
 
+.pq-atime {
+ font-size:var(--small-font-size);
+ font-weight:var(--bold-weight);
+ opacity:1.0;
+ min-width:44px;
+ margin-right:1px;
+ margin-top:2px;
+}
+
 .pq-time-r {
  min-width:62px;
 }

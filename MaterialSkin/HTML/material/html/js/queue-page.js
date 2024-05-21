@@ -91,6 +91,9 @@ function parseResp(data, showTrackNum, index, showRatings, queueAlbumStyle, queu
         resp.size = data.result.playlist_tracks;
 
         if (data.result.playlist_loop) {
+            let albumFirstIdx = -1;
+            let albumDuration = 0;
+            let calcDurations = queueAlbumStyle && resp.size == data.result.playlist_loop.length;
             for (var idx=0, loop=data.result.playlist_loop, loopLen=loop.length; idx<loopLen; ++idx) {
                 let i = loop[idx];
                 splitMultiples(i);
@@ -124,6 +127,18 @@ function parseResp(data, showTrackNum, index, showRatings, queueAlbumStyle, queu
                                                                    (i.album!=prevItem.album) ) ) );
                 let grpKey = isAlbumHeader || undefined==prevItem ? index+resp.items.length : prevItem.grpKey;
                 let artistAlbumLines = !queueAlbumStyle || isAlbumHeader ? buildArtistAlbumLines(i, queueAlbumStyle, queueContext && !isAlbumHeader) : undefined;
+                if (calcDurations) {
+                    if (isAlbumHeader) {
+                        if (albumFirstIdx>=0 && albumDuration>0 && albumFirstIdx<(idx-1)) { // Previous album (of more than 1 track)
+                            resp.items[albumFirstIdx].totalDuration = albumDuration;
+                            resp.items[albumFirstIdx].totalDurationStr = formatSeconds(albumDuration);
+                        }
+                        albumDuration = duration;
+                        albumFirstIdx = idx;
+                    } else {
+                        albumDuration += duration;
+                    }
+                }
                 resp.items.push({
                               id: "track_id:"+i.id,
                               title: title,
@@ -148,6 +163,10 @@ function parseResp(data, showTrackNum, index, showRatings, queueAlbumStyle, queu
                               rating: !queueAlbumStyle && haveRating ? Math.ceil(i.rating/10.0)/2.0 : undefined
                           });
                 index++;
+            }
+            if (calcDurations && albumFirstIdx>=0 && albumDuration>0 && albumFirstIdx<(idx-1)) { // Previous album (of more than 1 track)
+                resp.items[albumFirstIdx].totalDuration = albumDuration;
+                resp.items[albumFirstIdx].totalDurationStr = formatSeconds(albumDuration);
             }
         }
         // Sometimes LMS states there are X tracks but only returns X-1, this causes the queue to break.
@@ -218,7 +237,7 @@ var lmsQueue = Vue.component("lms-queue", {
      <v-icon v-if="item.selected" v-bind:class="{'pq-first-track-check':item.artistAlbum}">check_box</v-icon>
      <img v-else-if="item.artistAlbum" :key="item.image" :src="item.image" onerror="this.src=DEFAULT_COVER" loading="lazy" v-bind:class="{'dimmed':item.dimcover}" class="radio-img allow-drag"></img>
     </v-list-tile-avatar>
-    <div class="pq-album-header ellipsis" v-if="item.artistAlbum" v-html="item.artistAlbum"></div>
+    <v-layout class="pq-album-header" v-if="item.artistAlbum"><div class="ellipsis" v-html="item.artistAlbum" v-bind:class="{'pq-album-header-d':item.totalDurationStr}"></div><v-spacer/><div v-if="item.totalDurationStr" class="pq-atime">{{item.totalDurationStr}}</div></v-layout>
     <v-list-tile-content v-bind:class="{'pq-first-track':item.artistAlbum}">
      <v-list-tile-title v-html="item.title"></v-list-tile-title>
     </v-list-tile-content>

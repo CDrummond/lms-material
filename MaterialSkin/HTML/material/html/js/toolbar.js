@@ -480,12 +480,12 @@ Vue.component('lms-toolbar', {
             }
         },
         emitInfo() {
-            if (this.$store.state.visibleMenus.size>0) {
+            if (this.$store.state.visibleMenus.size>0 || (this.playerStatus.count<1 && !this.infoOpen)) {
                 return;
             }
             if (LMS_P_MAI) {
                 bus.$emit('info');
-                if (!this.$store.state.desktopLayout) {
+                if (!this.$store.state.desktopLayout && this.playerStatus.count>=1) {
                     this.$store.commit('setPage', 'now-playing');
                 }
             }

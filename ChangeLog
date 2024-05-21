@@ -10,6 +10,7 @@
 7. Show release total time in release style queue for releases with more than 1
    track.
 8. Don't '0' pad times.
+9. Pass default library id when removing albums/releases from queue.
 
 4.6.0
 -----

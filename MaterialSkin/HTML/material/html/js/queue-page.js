@@ -942,7 +942,7 @@ var lmsQueue = Vue.component("lms-queue", {
                 bus.$emit('playerCommand', ["playlist", "delete", index]);
             } else if (PQ_REMOVE_ALBUM_ACTION==act) {
                 this.clearSelection();
-                bus.$emit('playerCommand', ["playlistcontrol", "cmd:delete", "album_id:"+item.album_id]);
+                bus.$emit('playerCommand', ["playlistcontrol", "cmd:delete", "album_id:"+item.album_id, "library_id:"+LMS_DEFAULT_LIBRARY]);
             } else if (PQ_REMOVE_DISC_ACTION==act) {
                 var indexes = [];
                 for (var i=0, len=this.items.length; i<len; ++i) {

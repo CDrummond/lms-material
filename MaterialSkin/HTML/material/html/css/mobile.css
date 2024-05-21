@@ -413,6 +413,9 @@
  .pq-time-ns {
   margin-right:-6px;
  }
+ .pq-atime {
+  margin-right:11px;
+ }
  .np-menu-fab {
   right:5px!important;
  }

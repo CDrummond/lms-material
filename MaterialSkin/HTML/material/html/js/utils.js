@@ -210,6 +210,9 @@ function formatSeconds(secs, showDays) {
     var minutes    = Math.floor(numSeconds / 60) % 60
     var seconds    = numSeconds % 60
 
+    if (numSeconds<600) {
+        return (minutes<1 ? "0" : minutes)+":"+(seconds<10 ? "0" : "")+seconds;
+    }
     return (days>0 ? i18np("1 day", "%1 days", days)+" " : "")+
            ((hours>0 || (showDays && days>0)) ? hours+":" : "")+
            (minutes<1 ? "00:" : "") +

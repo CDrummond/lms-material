@@ -1961,8 +1961,9 @@ div.v-rating i.primary--text, div.v-rating i.accent--text {
  font-weight:var(--bold-weight);
  opacity:1.0;
  min-width:44px;
- margin-right:1px;
+ margin-right:9px;
  margin-top:2px;
+ text-align:end;
 }
 
 .pq-time-r {

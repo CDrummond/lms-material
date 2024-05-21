@@ -9,6 +9,7 @@
 6. Use correct icon for 'Releases' under 'Genres'.
 7. Show release total time in release style queue for releases with more than 1
    track.
+8. Don't '0' pad times.
 
 4.6.0
 -----

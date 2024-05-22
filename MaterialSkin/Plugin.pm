@@ -49,6 +49,7 @@ my $listOfTranslations = "";
 my $LASTFM_API_KEY = '5a854b839b10f8d46e630e8287c2299b';
 my $MAX_CACHE_AGE = 90*24*60*60; # 90 days
 my $MAX_ADV_SEARCH_RESULTS = 1000;
+my $CACHE_MAX_AGE = 60 * 60 * 24 * 31; # 1 month
 my $DESKTOP_URL_PARSER_RE = qr{^desktop$}i;
 my $MINI_URL_PARSER_RE = qr{^mini$}i;
 my $NOW_PLAYING_URL_PARSER_RE = qr{^now-playing$}i;
@@ -1726,6 +1727,7 @@ sub _svgHandler {
         }
         $response->code(RC_OK);
         $response->content_type('image/svg+xml');
+        $response->header('Cache-Control' => 'max-age=' . $CACHE_MAX_AGE);
         $response->header('Connection' => 'close');
         $response->content($svg);
     } else {
@@ -1930,6 +1932,7 @@ sub _manifestHandler {
 
     $response->code(RC_OK);
     $response->content_type('application/manifest+json');
+    $response->header('Cache-Control' => 'max-age=' . $CACHE_MAX_AGE);
     $response->header('Connection' => 'close');
     $response->content($manifest);
     $httpClient->send_response($response);
@@ -2004,10 +2007,15 @@ sub _backdropHandler {
     my $request = $response->request;
     my $fileName = basename($request->uri->path);
     my $filePath = Slim::Utils::Prefs::dir() . "/material-skin/backdrops/" . $fileName;
+    my $user = 0;
     if (! -e $filePath) {
         $filePath = dirname(__FILE__) . "/HTML/material/html/backdrops/" . $fileName;
+        $user = 1;
     }
     $response->code(RC_OK);
+    if ($user == 0) {
+        $response->header('Cache-Control' => 'max-age=' . $CACHE_MAX_AGE);
+    }
     Slim::Web::HTTP::sendStreamingFile( $httpClient, $response, "image/jpeg", $filePath, '', 'noAttachment' );
 }
 

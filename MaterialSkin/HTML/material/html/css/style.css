@@ -646,7 +646,7 @@ div.v-subheader {
 }
 
 .image-grid-with-sub .image-grid-item {
- height:calc(195px + (5px * var(--image-grid-factor))) !important;
+ height:calc(190px + (5px * var(--image-grid-factor))) !important;
 }
 
 .defcursor {

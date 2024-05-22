@@ -212,7 +212,7 @@ Vue.component('lms-randommix', {
             lmsCommand("", ["pref", "plugin.randomplay:newtracks", this.newTracks]);
             lmsCommand("", ["pref", "plugin.randomplay:oldtracks", this.oldTracks]);
             let libId = this.library;
-            if (libId==LMS_DEFAULT_LIBRARY && LMS_VERSION<80500) {
+            if (libId==LMS_DEFAULT_LIBRARY && LMS_VERSION<80502) {
                 libId=LMS_DEFAULT_LIBRARY_PREV;
             }
             lmsCommand(this.playerId, ["randomplaychooselibrary", libId]).then(({data}) => {

@@ -52,7 +52,7 @@
  --np-bgnd-filter-size:7px;
  --np-bgnd-filter:blur(var(--np-bgnd-filter-size));
  --backdrop-filter:blur(4px);
- --toolbar-filter:blur(35px);
+ --toolbar-filter:blur(15px);
  --npbar-border-color:var(--bottom-toolbar-border-color);
  --album-separator-color:rgba(2, 2, 2, 0.2);
  --subtoolbar-image-url:url();

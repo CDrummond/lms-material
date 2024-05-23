@@ -1736,11 +1736,11 @@ var lmsBrowse = Vue.component("lms-browse", {
             var url = this.bgndUrl;
             if (url) {
                 url=changeImageSizing(url, LMS_CURRENT_IMAGE_SIZE);
-                document.documentElement.style.setProperty('--subtoolbar-image-url', 'url(' + url + ')');
+                document.documentElement.style.setProperty('--subtoolbar-image-url', 'url(' + changeImageSizing(url, LMS_TBAR_BGND_IMAGE_SIZE) + ')');
             } else {
                 var img = this.currentImageUrl;
                 if (img) {
-                    document.documentElement.style.setProperty('--subtoolbar-image-url', 'url(' + img + ')');
+                    document.documentElement.style.setProperty('--subtoolbar-image-url', 'url(' + changeImageSizing(img, LMS_TBAR_BGND_IMAGE_SIZE) + ')');
                 } else {
                     document.documentElement.style.setProperty('--subtoolbar-image-url', 'url()');
                 }

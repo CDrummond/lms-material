@@ -1,16 +1,17 @@
 4.6.1
 -----
-1. Update some translations.
-2. If LMS < 8.5.2 and using 'All' tracks library for 'Random Mix' then use '0'
-   as library_id.
-3. Fix incorrect 'Works' header showing for 'Advanced search' results.
-4. Get genre list for 'Random Mix' from 'randomplaygenrelist' command.
-5. Use term 'Track' instead of 'Song'.
-6. Use correct icon for 'Releases' under 'Genres'.
-7. Show release total time in release style queue for releases with more than 1
-   track.
-8. Don't '0' pad times.
-9. Pass default library id when removing albums/releases from queue.
+ 1. Update some translations.
+ 2. If LMS < 8.5.2 and using 'All' tracks library for 'Random Mix' then use '0'
+    as library_id.
+ 3. Fix incorrect 'Works' header showing for 'Advanced search' results.
+ 4. Get genre list for 'Random Mix' from 'randomplaygenrelist' command.
+ 5. Use term 'Track' instead of 'Song'.
+ 6. Use correct icon for 'Releases' under 'Genres'.
+ 7. Show release total time in release style queue for releases with more than 1
+    track.
+ 8. Don't '0' pad times.
+ 9. Pass default library id when removing albums/releases from queue.
+10. Change way toolbar backgrounds are blurred.
 
 4.6.0
 -----

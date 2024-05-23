@@ -919,16 +919,14 @@ function nowplayingBrowse(cat, param, title) {
     let cmd=undefined;
     let params=undefined;
     if ('year'==cat) {
-        bus.$emit("browse", cat, param, ""+param, npView.currentView());
-        bus.$emit('npclose');
+        bus.$emit("npbrowse", cat, param, ""+param);
     } else if ('genre'==cat) {
         let name = unescape(title);
         if (isNaN(param)) {
             lmsCommand("", ["material-skin", "map", "genre:"+name]).then(({data}) => {
                 if (data && data.result && data.result.genre_id) {
                     logJsonMessage("RESP", data);
-                    bus.$emit("browse", cat, data.result.genre_id, name, npView.currentView());
-                    bus.$emit('npclose');
+                    bus.$emit("npbrowse", cat, data.result.genre_id, name);
                 } else {
                     bus.$emit('showError', undefined, i18n("Unknown genre"));
                 }
@@ -936,8 +934,7 @@ function nowplayingBrowse(cat, param, title) {
                 bus.$emit('showError', undefined, i18n("Unknown genre"));
             });
         } else {
-            bus.$emit("browse", cat, param, name, npView.currentView());
-            bus.$emit('npclose');
+            bus.$emit("npbrowse", cat, param, name);
         }
     } else {
         cmd=["albums"];
@@ -945,8 +942,7 @@ function nowplayingBrowse(cat, param, title) {
         if (cat!='ARTIST') {
             params.push("role_id:"+cat);
         }
-        bus.$emit("browse", cmd, params, unescape(title), npView.currentView());
-        bus.$emit('npclose');
+        bus.$emit("npbrowse", cmd, params, unescape(title));
     }
 }
 

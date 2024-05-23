@@ -27,7 +27,6 @@ const NP_ITEM_ACT = 200;
 const NP_MIN_WIDTH_FOR_FULL = 780;
 
 var currentPlayingTrackPosition = 0;
-var npView = undefined;
 
 var lmsNowPlaying = Vue.component("lms-now-playing", {
     template: `
@@ -419,7 +418,6 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
                 };
     },
     mounted() {
-        npView = this;
         this.zoom = parseFloat(getLocalStorageVal("npInfoZoom", 1.0));
         this.setZoom(this.zoom);
         this.showNpBar = undefined;
@@ -494,7 +492,6 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
                 this.largeView=false;
             }
         }.bind(this));
-        var npView = this;
         this.sizeCheckDelay = 0; // How many resize events have we seen before size checked?
         window.addEventListener('resize', () => {
             if (npView.resizeTimeout) {
@@ -590,6 +587,10 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
             }
         }.bind(this));
         bus.$on('npclose', function() {
+            this.close();
+        }.bind(this));
+        bus.$on('npbrowse', function(cmd, params, title) {
+            bus.$emit("browse", cmd, params, title, this.currentView());
             this.close();
         }.bind(this));
         bus.$on('linkClicked', function() {
@@ -833,11 +834,11 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
         },
         currentView() {
             return this.$store.state.desktopLayout
-                        ? this.largeView
-                            ? this.info.show
-                                ? NP_INFO
-                                : NP_EXPANDED
-                            : undefined
+                        ? this.info.show
+                            ? NP_INFO
+                            : this.largeView
+                                ? NP_EXPANDED
+                                : undefined
                         : this.info.show
                             ? NP_INFO
                             : 'now-playing'

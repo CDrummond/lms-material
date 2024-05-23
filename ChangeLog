@@ -11,7 +11,8 @@
     track.
  8. Don't '0' pad times.
  9. Pass default library id when removing albums/releases from queue.
-10. Change way toolbar backgrounds are blurred.
+10. Alter how toobar background image is blurred.
+11. Fix links from now-playing.
 
 4.6.0
 -----

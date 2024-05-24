@@ -11,7 +11,7 @@
     track.
  8. Don't '0' pad times.
  9. Pass default library id when removing albums/releases from queue.
-10. Alter how toobar background image is blurred.
+10. Alter how toolbar background image is blurred.
 11. Fix links from now-playing.
 12. Don't use 'library_id' from SlimBrowse responses.
 

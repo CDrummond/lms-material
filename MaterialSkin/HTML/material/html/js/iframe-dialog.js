@@ -380,8 +380,30 @@ var iframeInfo = {
   content:undefined,
   action:undefined,
   actionCheckInterval: undefined,
-  actionChecks: 0
+  actionChecks: 0,
+  pbarHeight: 0
 };
+
+/* Manage plugins page has a selector and search field *above* the scrollable area. We need to take
+   its height into account when setting heigth of scroll area. The following sets a property for this */
+function iframeWidthChanged() {
+    var iframe = document.getElementById("embeddedIframe");
+    if (iframe) {
+        var content = iframe.contentDocument;
+        if (content) {
+            var pbarHeight = 0;
+            var pluginButtonBar = content.getElementById("pluginButtonBar");
+            if (undefined!=pluginButtonBar) {
+                pbarHeight = Math.max(0, pluginButtonBar.offsetHeight - 23);
+            }
+            if (pbarHeight!=iframeInfo.pbarHeight) {
+                iframeInfo.pbarHeight = pbarHeight;
+                console.log(pbarHeight)
+                iframe.contentWindow.document.documentElement.style.setProperty('--plugin-bar-adjust', pbarHeight +"px");
+            }
+        }
+    }
+}
 
 /* Check for file-entry fields, and sliders, each time form's action is changed */
 function iframeActionCheck() {
@@ -392,6 +414,7 @@ function iframeActionCheck() {
         if (content) {
             var settingsForm = content.getElementById("settingsForm");
             if (settingsForm) {
+                iframeWidthChanged();
                 if (settingsForm.action!=iframeInfo.action) {
                     iframeInfo.action = settingsForm.action;
                     addFsSelectButtons(content);
@@ -713,6 +736,11 @@ Vue.component('lms-iframe-dialog', {
             if (this.show && undefined!=iframeInfo.content) {
                 let vh = window.innerHeight * 0.01;
                 iframeInfo.content.documentElement.style.setProperty('--vh', `${vh}px`);
+            }
+        }.bind(this));
+        bus.$on('windowWidthChanged', function() {
+            if (this.show && undefined!=iframeInfo.content && 'server'==this.page) {
+                iframeWidthChanged();
             }
         }.bind(this));
     },

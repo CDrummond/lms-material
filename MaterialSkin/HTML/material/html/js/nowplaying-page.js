@@ -492,6 +492,7 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
                 this.largeView=false;
             }
         }.bind(this));
+        var npView = this;
         this.sizeCheckDelay = 0; // How many resize events have we seen before size checked?
         window.addEventListener('resize', () => {
             if (npView.resizeTimeout) {

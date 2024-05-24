@@ -1887,7 +1887,7 @@ function browseBuildCommand(view, item, commandName, doReplacements) {
             [command.params, item.commonParams].forEach(p => {
                 if (p) {
                     for (var key in p) {
-                        if (p[key]!=undefined && p[key]!=null && (""+p[key]).length>0) {
+                        if (p[key]!=undefined && p[key]!=null && (""+p[key]).length>0 && "library_id"!=key) {
                             cmd.params.push(key+":"+p[key]);
                             addedKeys.add(key);
                          }
@@ -1897,7 +1897,7 @@ function browseBuildCommand(view, item, commandName, doReplacements) {
             if (command.itemsParams && item[command.itemsParams]) {
                 /*var isMore = "more" == commandName;*/
                 for(var key in item[command.itemsParams]) {
-                    if ((/* !isMore || */ ("touchToPlaySingle"!=key && "touchToPlay"!=key)) && !addedKeys.has(key)) {
+                    if ((/* !isMore || */ ("touchToPlaySingle"!=key && "touchToPlay"!=key && "library_id"!=key)) && !addedKeys.has(key)) {
                         let val = item[command.itemsParams][key];
                         if (val!=undefined && val!=null && (""+val).length>0) {
                             cmd.params.push(key+":"+item[command.itemsParams][key]);
@@ -1911,7 +1911,7 @@ function browseBuildCommand(view, item, commandName, doReplacements) {
             if (undefined!=baseActions && undefined!=baseActions.parentParams) {
                 for (let i=0, loop=baseActions.parentParams, len=loop.length; i<len; ++i) {
                     let key = loop[i].split(":")[0];
-                    if (!addedKeys.has(key)) {
+                    if (!addedKeys.has(key) && "library_id"!=key) {
                         cmd.params.push(loop[i]);
                         addedKeys.add(key);
                     }

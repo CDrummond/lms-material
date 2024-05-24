@@ -13,6 +13,7 @@
  9. Pass default library id when removing albums/releases from queue.
 10. Alter how toobar background image is blurred.
 11. Fix links from now-playing.
+12. Don't use 'library_id' from SlimBrowse responses.
 
 4.6.0
 -----

@@ -327,7 +327,6 @@ Vue.component('lms-screensaver', {
                     changeLink("", "oled");
                     this.npSwitched = false;
                     if (this.$store.state.desktopLayout) {
-                        this.nowPlayingWasExpanded;
                         if (!this.nowPlayingWasExpanded) {
                             bus.$emit('expandNowPlaying', false);
                         }

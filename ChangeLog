@@ -2,6 +2,7 @@
 -----
 1. When adding obtaining random album/release to queue ensure title is asked
    from LMS.
+2. Only show 'Band/orchestra' if different to 'Album artist'.
 
 4.6.1
 -----

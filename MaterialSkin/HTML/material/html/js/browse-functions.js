@@ -1322,9 +1322,10 @@ function browseItemAction(view, act, item, index, event) {
         });
     } else if (act===ADD_RANDOM_ALBUM_ACTION) {
         var params = [];
-        buildStdItemCommand(item, view.command).params.forEach(p => { if (!p.startsWith("sort:")) { params.push(p); } });
+        buildStdItemCommand(item, view.command).params.forEach(p => { if (!p.startsWith("sort:") && !p.startsWith("tags:")) { params.push(p); } });
         params=browseReplaceCommandTerms(view, {command:[], params:params}).params;
         params.push(SORT_KEY+"random");
+        params.push(ALBUM_TAGS);
         lmsList(view.playerId(), ["albums"], params, 0, 1).then(({data}) => {
             var resp = parseBrowseResp(data, view.current, view.options);
             if (resp.items.length>0 && resp.items[0].id) {

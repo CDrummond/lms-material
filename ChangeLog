@@ -1,3 +1,8 @@
+4.6.2
+-----
+1. When adding obtaining random album/release to queue ensure title is asked
+   from LMS.
+
 4.6.1
 -----
  1. Update some translations.

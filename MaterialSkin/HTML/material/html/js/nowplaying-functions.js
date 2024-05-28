@@ -581,12 +581,12 @@ function nowplayingFetchTrackInfo(view) {
             }
         }
     }
-    let others = [['albumartist', i18n("Album artist")],
-                  ['composer', i18n("Composer")],
-                  ['conductor', i18n("Conductor")],
-                  ['band', i18n("Band/orchestra")]];
+    let others = [['albumartist', i18n("Album artist"), trk.albumartist!=trk.artist && trk.albumartist!=trk.trackartist],
+                  ['composer', i18n("Composer"), true],
+                  ['conductor', i18n("Conductor"), true],
+                  ['band', i18n("Band/orchestra"), trk.albumartist!=trk.band]];
     for (let i=0, len=others.length; i<len; ++i) {
-        if (undefined!=trk[others[i][0]] && (3!=i || trk.albumartist!=trk.band)) {
+        if (others[i][2] && undefined!=trk[others[i][0]]) {
             let entry = nowplayingArtistEntry(trk, others[i][0], others[i][0].toUpperCase());
             if (entry.length>1) {
                 html+="<tr><td>"+others[i][1]+"&nbsp;</td><td>"+entry+"</td></tr>";

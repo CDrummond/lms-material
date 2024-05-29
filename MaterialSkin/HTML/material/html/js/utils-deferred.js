@@ -772,3 +772,25 @@ function setDialogPos() {
         window.removeEventListener('resize', setDialogPos);
     }
 }
+
+function isSameArtists(item, rolea, roleb) {
+    if (item[rolea]!=item[roleb] ||
+        (undefined!=item[rolea+"s"] && undefined==item[roleb+"s"]) ||
+        (undefined==item[rolea+"s"] && undefined!=item[roleb+"s"])) {
+        return false;
+    }
+    if (undefined!=item[rolea+"s"]) {
+        let la=item[rolea+"s"];
+        let lb=item[roleb+"s"];
+        let len=la.length;
+        if (len!=lb.length) {
+            return false;
+        }
+        for (let i=0; i<len; ++i) {
+            if (la[i]!=lb[i]) {
+                return false;
+            }
+        }
+    }
+    return true;
+}

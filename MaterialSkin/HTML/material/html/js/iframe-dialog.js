@@ -88,7 +88,7 @@ function iframeBrowseArtist(id, name, role) {
     bus.$emit('iframe-close');
 }
 
-function iframeBrowseAlbum(id, name) {
+function iframeBrowseWork(id, name) {
     bus.$emit("browse", ["tracks"], ["album_id:"+id, TRACK_TAGS, SORT_KEY+"tracknum"], name, undefined, false);
     bus.$emit('iframe-close');
 }
@@ -103,6 +103,11 @@ function iframeBrowseYear(name) {
     bus.$emit('iframe-close');
 }
 
+function iframeBrowseWorks(id, name) {
+    bus.$emit("browse", ["albums"], ["work_id:"+id, ARTIST_ALBUM_TAGS, SORT_KEY+ARTIST_ALBUM_SORT_PLACEHOLDER], name, undefined, false);
+    bus.$emit('iframe-close');
+}
+
 function iframeTrackInfo(id, name) {
     bus.$emit('trackInfo', {id:"track_id:"+id, title:name});
     bus.$emit('iframe-close');
@@ -114,6 +119,7 @@ function addHooks(doc) {
         browseAlbum:iframeBrowseAlbum,
         browseGenre:iframeBrowseGenre,
         browseYear:iframeBrowseYear,
+        browseWork:iframeBrowseWork,
         trackInfo:iframeTrackInfo
     }
 }

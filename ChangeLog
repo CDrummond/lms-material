@@ -1,6 +1,7 @@
 x.x.x
 -----
 1. Add server-side option to combine 'Apps' and 'Radios' menus.
+2. Replace 'partnerId=16' with 'partnerId=15' for TuneIn URLs.
 
 4.6.2
 -----

@@ -88,7 +88,7 @@ function iframeBrowseArtist(id, name, role) {
     bus.$emit('iframe-close');
 }
 
-function iframeBrowseWork(id, name) {
+function iframeBrowseAlbum(id, name) {
     bus.$emit("browse", ["tracks"], ["album_id:"+id, TRACK_TAGS, SORT_KEY+"tracknum"], name, undefined, false);
     bus.$emit('iframe-close');
 }
@@ -103,7 +103,7 @@ function iframeBrowseYear(name) {
     bus.$emit('iframe-close');
 }
 
-function iframeBrowseWorks(id, name) {
+function iframeBrowseWork(id, name) {
     bus.$emit("browse", ["albums"], ["work_id:"+id, ARTIST_ALBUM_TAGS, SORT_KEY+ARTIST_ALBUM_SORT_PLACEHOLDER], name, undefined, false);
     bus.$emit('iframe-close');
 }

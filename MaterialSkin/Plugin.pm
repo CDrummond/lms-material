@@ -83,7 +83,7 @@ my @ADV_SEARCH_OTHER = ('content_type', 'contributor_namesearch.active1', 'contr
 
 my %IGNORE_PROTOCOLS = map { $_ => 1 } ('mms', 'file', 'tmp', 'http', 'https', 'spdr', 'icy', 'teststream', 'db', 'playlist');
 
-my @BOOL_OPTS = ('allowDownload', 'playShuffle', 'touchLinks', 'showAllArtists', 'artistFirst', 'yearInSub', 'showComment', 'genreImages', 'maiComposer', 'showComposer', 'showConductor', 'showBand');
+my @BOOL_OPTS = ('allowDownload', 'playShuffle', 'touchLinks', 'showAllArtists', 'artistFirst', 'yearInSub', 'showComment', 'genreImages', 'maiComposer', 'showComposer', 'showConductor', 'showBand', 'combineAppsAndRadio');
 
 sub initPlugin {
     my $class = shift;
@@ -136,7 +136,8 @@ sub initPlugin {
         genreImages => 0,
         touchLinks => 0,
         yearInSub => 1,
-        playShuffle => 0
+        playShuffle => 0,
+        combineAppsAndRadio => 0
     });
 
     $prefs->setChange(sub { $prefs->set($_[0], 0) unless defined $_[1]; }, 'showComposer');
@@ -460,6 +461,7 @@ sub _cliCommand {
         $request->addResult('touchLinks', $prefs->get('touchLinks'));
         $request->addResult('yearInSub', $prefs->get('yearInSub'));
         $request->addResult('playShuffle', $prefs->get('playShuffle'));
+        $request->addResult('combineAppsAndRadio', $prefs->get('combineAppsAndRadio'));
         $request->setStatusDone();
         return;
     }

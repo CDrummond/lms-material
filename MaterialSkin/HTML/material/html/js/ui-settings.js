@@ -208,7 +208,7 @@ Vue.component('lms-ui-settings', {
     </v-list-tile>
    
     <template v-for="(item, index) in showItems">
-     <div style="display:flex">
+     <div style="display:flex" v-if="item.id!=TOP_RADIO_ID || !lmsOptions.combineAppsAndRadio">
       <v-checkbox v-model="item.show" :label="item.name" class="settings-list-checkbox"></v-checkbox>
       <v-btn v-if="item.id==TOP_MYMUSIC_ID" @click.stop="showBrowseModesDialog($event)" flat icon class="settings-list-checkbox-action"><v-icon>settings</v-icon></v-btn>
      </div>

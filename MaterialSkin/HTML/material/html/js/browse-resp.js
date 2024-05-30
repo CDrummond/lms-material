@@ -126,10 +126,10 @@ function parseBrowseResp(data, parent, options, cacheKey, parentCommand, parentG
             var isFavorites = parent && parent.isFavFolder
             var isFromFavorites = isFavorites || (data.params[1].length>=1 && data.params[1][0]=="favorites") ? true : false;
             var isPlaylists = parent && parent.section == SECTION_PLAYLISTS;
-            var isRadios = parent && parent.section == SECTION_RADIO;
-            var isRadiosTop = isRadios && parent.id == TOP_RADIO_ID;
             var isApps = parent && parent.section == SECTION_APPS;
             var isAppsTop = parent && parent.id == TOP_APPS_ID;
+            var isRadios = parent && parent.section == SECTION_RADIO;
+            var isRadiosTop = (isRadios && parent.id == TOP_RADIO_ID) || (isApps && lmsOptions.combineAppsAndRadio && command=="radios" && 4==data.params[1].length && data.params[1][3]=="menu:radio");
             var isPodcastList = parent && parent.id == "apps.podcasts" && command == "podcasts" && 5==data.params[1].length && "items" == data.params[1][1] && "menu:podcasts"==data.params[1][4];
             var isPodcastSearch = command == "podcasts" && getIndex(data.params[1], "search:")>0;
             var isBmf = command == "browselibrary" && data.params[1].length>=5 && data.params[1].indexOf("mode:bmf")>0;
@@ -203,6 +203,11 @@ function parseBrowseResp(data, parent, options, cacheKey, parentCommand, parentG
                     } else {
                         data.result.count--;
                     }
+                    continue;
+                }
+
+                // If combining apps and radio, then *only* want TuneIn items in radios list
+                if (isRadiosTop && lmsOptions.combineAppsAndRadio && i["icon-id"] && !i["icon-id"].startsWith("/plugins/TuneIn")) {
                     continue;
                 }
 

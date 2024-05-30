@@ -35,5 +35,6 @@ var lmsOptions = {techInfo: getLocalStorageBool('techInfo', false),
                   yearInSub: getLocalStorageBool('yearInSub', true),
                   playShuffle: getLocalStorageBool('playShuffle', false),
                   time12hr: LMS_DEF_12HR,
-                  listWorks: getLocalStorageBool('listWorks', false)
+                  listWorks: getLocalStorageBool('listWorks', false),
+                  combineAppsAndRadio: getLocalStorageBool('combineAppsAndRadio', false)
                 };

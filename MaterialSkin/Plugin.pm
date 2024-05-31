@@ -1418,7 +1418,7 @@ sub _cliCommand {
         my $cnt = 0;
         for my $app (@$apps) {
             my $tag  = $app->can('tag') && $app->tag;
-            if ($tag) {
+            if ($tag && ($app->tag ne 'walkwithme')) {
                 my $name = Slim::Utils::Strings::getString($app->getDisplayName);
                 my $icon = $app->_pluginDataFor('icon');
                 $request->addResultLoop('item_loop', $cnt, 'text', $name);

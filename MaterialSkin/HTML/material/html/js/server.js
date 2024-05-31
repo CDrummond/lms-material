@@ -207,7 +207,7 @@ async function lmsList(playerid, command, params, start, batchSize, cancache, co
         return lmsListFragment(playerid, command, params, 0, 999, count, commandId);
     }
     if (lmsOptions.combineAppsAndRadio && command.length>1 && command[0]=="myapps" && command[1]=="items") {
-        return lmsListApps(playerid, ["myapps", "items", 0, LMS_BATCH_SIZE, "menu:1"], commandId);
+        return lmsListApps(playerid, ["material-skin", "apps"], commandId);
     }
 
     var cmdParams = command.slice();

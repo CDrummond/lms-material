@@ -146,7 +146,7 @@ function parseBrowseResp(data, parent, options, cacheKey, parentCommand, parentG
             var numTracks = 0;
 
             resp.isMusicMix = MIXER_APPS.has(command) && data.params[1].length>0 && (data.params[1][1]=="mix" || data.params[1][1]=="list");
-            resp.canUseGrid = maybeAllowGrid && (isRadiosTop || isBmf || (data.result.window && data.result.window.windowStyle && (data.result.window.windowStyle=="icon_list" || data.result.window.windowStyle=="home_menu"))) ? true : false;
+            resp.canUseGrid = maybeAllowGrid && (isRadiosTop || isAppsTop || isBmf || (data.result.window && data.result.window.windowStyle && (data.result.window.windowStyle=="icon_list" || data.result.window.windowStyle=="home_menu"))) ? true : false;
             resp.canDrop = isFavorites;
 
             if (data.result.base && data.result.base.actions) {

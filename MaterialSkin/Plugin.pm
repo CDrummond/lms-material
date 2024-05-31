@@ -435,7 +435,8 @@ sub _cliCommand {
                                                   'plugins', 'plugins-status', 'plugins-update', 'extras', 'delete-vlib', 'pass-isset',
                                                   'pass-check', 'browsemodes', 'geturl', 'command', 'scantypes', 'server', 'themes',
                                                   'playericons', 'activeplayers', 'urls', 'adv-search', 'adv-search-params', 'protocols',
-                                                  'players-extra-info', 'sort-playlist', 'mixer', 'release-types', 'check-for-updates', 'similar']) ) {
+                                                  'players-extra-info', 'sort-playlist', 'mixer', 'release-types', 'check-for-updates',
+                                                  'similar', 'apps']) ) {
         $request->setStatusBadParams();
         return;
     }
@@ -1411,6 +1412,27 @@ sub _cliCommand {
             return;
         }
     }
+
+    if ($cmd eq 'apps') {
+        my $apps = Slim::Plugin::Base->nonSNApps();
+        my $cnt = 0;
+        for my $app (@$apps) {
+            my $tag  = $app->can('tag') && $app->tag;
+            if ($tag) {
+                my $name = Slim::Utils::Strings::getString($app->getDisplayName);
+                my $icon = $app->_pluginDataFor('icon');
+                $request->addResultLoop('item_loop', $cnt, 'text', $name);
+                $request->addResultLoop('item_loop', $cnt, 'icon', $icon);
+                $request->addResultLoop('item_loop', $cnt, 'type', 'redirect');
+                my $actions = { go => { cmd => [ $app->tag, 'items' ], params => { menu => $app->tag } } };
+                $request->addResultLoop('item_loop', $cnt, 'actions', $actions);
+                $cnt++;
+            }
+        }
+        $request->setStatusDone();
+        return;
+    }
+
     $request->setStatusBadParams();
 }
 

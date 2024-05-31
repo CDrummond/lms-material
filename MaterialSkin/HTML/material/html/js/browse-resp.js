@@ -550,8 +550,6 @@ function parseBrowseResp(data, parent, options, cacheKey, parentCommand, parentG
                                  ( i.presetParams.favorites_url.startsWith("https:") && command=="bandcamp"))) {
                         numTracks++;
                         isOnlineTrack = true;
-                    } else if (i.presetParams.favorites_url.startsWith("http://opml.radiotime.com/") && i.presetParams.favorites_url.indexOf("&partnerId=16&")>0) {
-                        i.presetParams.favorites_url=i.presetParams.favorites_url.replace("&partnerId=16&", "&partnerId=15&");
                     }
                 } else if (parent && parent.stdItem==STD_ITEM_ONLINE_ARTIST) {
                     i.stdItem = STD_ITEM_ONLINE_ARTIST_CATEGORY;

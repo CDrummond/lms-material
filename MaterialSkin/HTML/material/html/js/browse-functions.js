@@ -718,29 +718,12 @@ function browseAddWorks(view) {
         if (id==view.current.id) {
             var resp = parseBrowseResp(data, view.current, view.options);
             if (resp.items.length>0) {
-                let existing = orig.length;
-                let sub = i18np("1 Work", "%1 Works", resp.items.length);
-                let key = '_WORKS_';
-                let icon = {svg:'release-work'};
                 let haveHeader = orig[0].header;
-                let items = [];
-                let jumplist = [];
-                items.push({title:i18n('Works')+" ("+resp.items.length+")", id:FILTER_PREFIX+key, header:true,
-                            isWorksCat: true, icon: icon.icon, svg: icon.svg,
-                            menu:[PLAY_ALL_ACTION, INSERT_ALL_ACTION, PLAY_SHUFFLE_ALL_ACTION, ADD_ALL_ACTION], count:resp.items.length});
-                for (let i=0, loop=resp.items, len=loop.length; i<len; ++i) {
-                    loop[i].filter = FILTER_PREFIX+key;
-                }
-
-                items.push.apply(items, resp.items);
-                jumplist.push({key:SECTION_JUMP, index:0, header:true, icon:icon});
-                view.listSize += resp.listSize+1;
-                for (let i=0, loop=resp.jumplist, len=loop.length; i<len; ++i) {
-                    loop[i].index+=1;
-                    jumplist.push(loop[i]);
-                }
+                let items = resp.items;
+                let jumplist = resp.jumplist;
                 if (!haveHeader) {
-                    key = orig[0].filter.substring(FILTER_PREFIX.length);
+                    let existing = orig.length;
+                    let key = orig[0].filter.substring(FILTER_PREFIX.length);
                     if (isEmpty(key)) {
                         key = 'ALBUM';
                     }
@@ -758,7 +741,7 @@ function browseAddWorks(view) {
                 items.push.apply(items, orig);
                 view.items = items;
                 view.jumplist = jumplist;
-                view.headerSubTitle = sub + SEPARATOR + view.headerSubTitle;
+                view.headerSubTitle = resp.subtitle + SEPARATOR + view.headerSubTitle;
                 view.listSize = view.items.length;
             } else {
                 // No works, just use original list

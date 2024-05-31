@@ -3,6 +3,7 @@ x.x.x
 1. Add server-side option to combine 'Apps' and 'Radios' menus.
 2. If combining 'Apps' and 'Radios', hide 'Music Walk With Me' as this
    duplicates Material functionality.
+3. When listing works, show composer as a header.
 
 4.6.2
 -----

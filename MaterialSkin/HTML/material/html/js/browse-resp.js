@@ -1814,8 +1814,26 @@ function parseBrowseResp(data, parent, options, cacheKey, parentCommand, parentG
             resp.subtitle=0==resp.items.length ? i18n("Empty") : i18np("1 Item", "%1 Items", resp.items.length);
             resp.canUseGrid=true;
         } else if (data.result.works_loop) {
-            for (var idx=0, loop=data.result.works_loop, loopLen=loop.length; idx<loopLen; ++idx) {
-                var i = loop[idx];
+            let lastComposer = undefined;
+            let lastIdx = -1;
+            let numWorks = 0;
+            let numComposers = 0;
+            for (let idx=0, loop=data.result.works_loop, loopLen=loop.length; idx<loopLen; ++idx) {
+                let i = loop[idx];
+                if (lastComposer!=i.composer) {
+                    if (lastIdx>=0) {
+                        resp.items[lastIdx].title+=" (" + i18np("1 Work", "%1 Works", resp.items.length-(lastIdx+1)) + ")";
+                    }
+                    lastIdx = resp.items.length;
+                    lastComposer=i.composer;
+                    numComposers++;
+                    if (1==numComposers) {
+                        resp.jumplist.push({key:SECTION_JUMP, index:resp.items.length, header:true, icon:{svg:'release-work'}});
+                    }
+                    resp.items.push({title:i.composer, id:FILTER_PREFIX+"wc"+lastIdx, header:true,
+                                     isWorksCat: true, svg: 'release-work',
+                                     menu:[PLAY_ALL_ACTION, INSERT_ALL_ACTION, PLAY_SHUFFLE_ALL_ACTION, ADD_ALL_ACTION], count:resp.items.length});
+                }
                 var key = removeDiactrics(i.textkey);
                 if (undefined!=key && (resp.jumplist.length==0 || resp.jumplist[resp.jumplist.length-1].key!=key) && !textKeys.has(key)) {
                     resp.jumplist.push({key: key, index: resp.items.length});
@@ -1832,8 +1850,8 @@ function parseBrowseResp(data, parent, options, cacheKey, parentCommand, parentG
                 }
                 var image = images.length>0 ? images[0] : i.artwork_track_id;
                 var work = {
-                    title: i.composer,
-                    subtitle: i.work,
+                    composer: i.composer,
+                    title: i.work,
                     composer_id: i.composer_id,
                     album_id: i.album_id,
                     id: "work_id:"+i.work_id,
@@ -1841,12 +1859,19 @@ function parseBrowseResp(data, parent, options, cacheKey, parentCommand, parentG
                     image: images.length>1 ? images[images.length-1] : undefined==image ? DEFAULT_WORKS_COVER : resolveImageUrl(image, LMS_IMAGE_SIZE),
                     stdItem: STD_ITEM_WORK,
                     textkey: key,
-                    images: images.length>1 ? images : undefined
+                    images: images.length>1 ? images : undefined,
+                    filter: FILTER_PREFIX+"wc"+lastIdx
                 };
                 setFavoritesParams(i, work);
                 resp.items.push(work);
+                numWorks++;
             }
-            resp.subtitle=0==resp.items.length ? i18n("Empty") : i18np("1 Work", "%1 Works", resp.items.length);
+
+            if (lastIdx>=0) {
+                resp.items[lastIdx].title+=" (" + i18np("1 Work", "%1 Works", resp.items.length-(lastIdx+1)) + ")";
+            }
+
+            resp.subtitle=0==numWorks ? i18n("Empty") : i18np("1 Work", "%1 Works", numWorks);
             resp.canUseGrid=true;
         }
 

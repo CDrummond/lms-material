@@ -840,6 +840,7 @@ function parseBrowseResp(data, parent, options, cacheKey, parentCommand, parentG
             var isComposers = false;
             var isConductors = false;
             var isBands = false;
+            var stdItem = parent && parent.id.startsWith("mmw") ? STD_ITEM_WORK_COMPOSER : STD_ITEM_ARTIST;
 
             if (data.params && data.params.length>1) {
                 for (var i=3, len=data.params[1].length; i<len; ++i) {
@@ -872,7 +873,7 @@ function parseBrowseResp(data, parent, options, cacheKey, parentCommand, parentG
                               id: "artist_id:"+i.id,
                               title: i.artist,
                               image: (LMS_P_MAI && LMS_ARTIST_PICS) ? "/imageproxy/mai/artist/" + i.id + "/image" + LMS_IMAGE_SIZE : undefined,
-                              stdItem: STD_ITEM_ARTIST,
+                              stdItem: stdItem,
                               type: "group",
                               textkey: key
                           };
@@ -1593,6 +1594,7 @@ function parseBrowseResp(data, parent, options, cacheKey, parentCommand, parentG
                 }
             }
         } else if (data.result.genres_loop) {
+            let stdItem = parent && parent.id.startsWith("mmw") ? STD_ITEM_WORK_GENRE : STD_ITEM_GENRE;
             for (var idx=0, loop=data.result.genres_loop, loopLen=loop.length; idx<loopLen; ++idx) {
                 var i = loop[idx];
                 var key = removeDiactrics(i.textkey);
@@ -1606,7 +1608,7 @@ function parseBrowseResp(data, parent, options, cacheKey, parentCommand, parentG
                               title: i.genre,
                               //icon: "label",
                               image: lmsOptions.genreImages ? "material/genres/" + genre : undefined,
-                              stdItem: STD_ITEM_GENRE,
+                              stdItem: stdItem,
                               type: "group",
                               textkey: key
                           });
@@ -1821,9 +1823,10 @@ function parseBrowseResp(data, parent, options, cacheKey, parentCommand, parentG
             let lastIdx = -1;
             let numWorks = 0;
             let numComposers = 0;
+            let useHeaders = !parent || parent.stdItem!=STD_ITEM_WORK_COMPOSER;
             for (let idx=0, loop=data.result.works_loop, loopLen=loop.length; idx<loopLen; ++idx) {
                 let i = loop[idx];
-                if (lastComposer!=i.composer) {
+                if (lastComposer!=i.composer && useHeaders) {
                     if (lastIdx>=0) {
                         resp.items[lastIdx].title+=" (" + i18np("1 Work", "%1 Works", resp.items.length-(lastIdx+1)) + ")";
                     }
@@ -1871,7 +1874,7 @@ function parseBrowseResp(data, parent, options, cacheKey, parentCommand, parentG
                 numWorks++;
             }
 
-            if (lastIdx>=0) {
+            if (lastIdx>=0 && useHeaders) {
                 resp.items[lastIdx].title+=" (" + i18np("1 Work", "%1 Works", resp.items.length-(lastIdx+1)) + ")";
             }
 

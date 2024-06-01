@@ -367,7 +367,7 @@ function browseHandleListResponse(view, item, command, resp, prevPage, appendIte
         view.jumplistActive=0;
         view.prevPage = prevPage;
         view.hoverBtns = !IS_MOBILE && view.items.length>0 &&
-                         ( (undefined!=view.items[0].stdItem && view.items[0].stdItem!=STD_ITEM_GENRE && view.items[0].stdItem!=STD_ITEM_YEAR) ||
+                         ( (undefined!=view.items[0].stdItem && view.items[0].stdItem!=STD_ITEM_GENRE && view.items[0].stdItem!=STD_ITEM_WORK_GENRE && view.items[0].stdItem!=STD_ITEM_YEAR) ||
                            (view.items.length>1 && view.items[0].header && undefined!=view.items[1].stdItem && view.items[1].stdItem!=STD_ITEM_GENRE && view.items[1].stdItem!=STD_ITEM_YEAR) ||
                            resp.allowHoverBtns );
 
@@ -896,6 +896,8 @@ function browseClick(view, item, index, event) {
         view.grid = {allowed:true, use:isSetToUseGrid(GRID_OTHER), numColumns:0, ih:GRID_MIN_HEIGHT, rows:[], few:false, haveSubtitle:true};
         view.currentActions=[{action:(view.grid.use ? USE_LIST_ACTION : USE_GRID_ACTION)}];
         view.layoutGrid(true);
+    } else if (MUSIC_ID_PREFIX+'myMusicWorks'==item.id) {
+        browseAddWorksCategories(view, item);
     } else if (RANDOM_MIX_ID==item.id) {
         bus.$emit('dlg.open', 'rndmix');
     } else if (STD_ITEM_GENRE==item.stdItem && view.current && (getField(item, "genre_id") || getField(item, "year"))) {
@@ -948,6 +950,45 @@ function browseClick(view, item, index, event) {
         }
         view.fetchItems(command, item);
     }
+}
+
+function browseAddWorksCategories(view, item) {
+    view.addHistory();
+    view.items=[];
+    view.items.push({
+        title: i18n("All Works"),
+        command: ["works"],
+        params: ['include_online_only_artists:1'],
+        svg: "classical-work",
+        type: "group",
+        id: "mmw:aw"});
+    view.items.push({
+        title: i18n("Composers"),
+        command: ["artists"],
+        params: ["role_id:COMPOSER", "work_id:-1"],
+        svg: "composer",
+        type: "group",
+        id: "mmw:ac"});
+    view.items.push({
+        title: i18n("Genres"),
+        command: ["genres"],
+        params: ["work_id:-1"],
+        svg: "guitar-acoustic",
+        type: "group",
+        id: "mmw:ag"});
+    view.headerTitle = stripLinkTags(item.title);
+    view.headerSubTitle = i18n("Select category");
+    browseSetScroll(view);
+    view.isTop = false;
+    view.jumplist = view.filteredJumplist = [];
+    view.grid = {allowed:true, use:isSetToUseGrid(GRID_OTHER), numColumns:0, ih:GRID_MIN_HEIGHT, rows:[], few:false, haveSubtitle:true};
+    view.currentActions=[];
+    view.tbarActions=[];
+    view.layoutGrid(true);
+    view.current = item;
+    view.currentActions.push({action:(view.grid.use ? USE_LIST_ACTION : USE_GRID_ACTION)});
+    view.currentItemImage = item.image;
+    view.setBgndCover();
 }
 
 function browseAddCategories(view, item, isGenre) {

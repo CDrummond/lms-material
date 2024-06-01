@@ -601,7 +601,7 @@ var lmsBrowse = Vue.component("lms-browse", {
                 for (let loop=this.history, i=loop.length-1; i>=0 && undefined!=loop[i].current; --i) {
                     if (STD_ITEM_ALBUM==loop[i].current.stdItem && undefined!=loop[i].current.subtitle) {
                         return loop[i].current.subtitle + ' (' + this.headerSubTitle + ')';
-                    } else if (STD_ITEM_ARTIST==loop[i].current.stdItem) {
+                    } else if (STD_ITEM_ARTIST==loop[i].current.stdItem || STD_ITEM_WORK_COMPOSER==loop[i].current.stdItem) {
                         return (loop[i].current.noReleaseGrouping ? loop[i].current.title.split(SEPARATOR)[0] : loop[i].current.title) + ' (' + this.headerSubTitle + ')';
                     }
                 }
@@ -611,13 +611,13 @@ var lmsBrowse = Vue.component("lms-browse", {
         showDetailedSubtoolbar() {
             let stdItem = this.current ? this.current.stdItem ? this.current.stdItem : this.current.altStdItem : undefined;
             return this.wide>0 && this.current && undefined!=stdItem && (this.currentImage || stdItem==STD_ITEM_ONLINE_ARTIST_CATEGORY) &&
-                   (stdItem==STD_ITEM_ARTIST || stdItem==STD_ITEM_ALBUM || stdItem==STD_ITEM_WORK  || stdItem==STD_ITEM_CLASSICAL_WORKS ||
+                   (stdItem==STD_ITEM_ARTIST || stdItem==STD_ITEM_WORK_COMPOSER || stdItem==STD_ITEM_ALBUM || stdItem==STD_ITEM_WORK  || stdItem==STD_ITEM_CLASSICAL_WORKS ||
                     stdItem==STD_ITEM_ONLINE_ARTIST || stdItem==STD_ITEM_ONLINE_ALBUM || stdItem==STD_ITEM_ONLINE_ARTIST_CATEGORY ||
                     stdItem>=STD_ITEM_MAI)
         },
         detailedSubTop() {
             let stdItem = this.current.stdItem ? this.current.stdItem : this.current.altStdItem;
-            if (stdItem==STD_ITEM_ARTIST) {
+            if (stdItem==STD_ITEM_ARTIST || stdItem==STD_ITEM_WORK_COMPOSER) {
                 return this.detailedSubInfo;
             }
             if (stdItem==STD_ITEM_WORK) {
@@ -634,7 +634,7 @@ var lmsBrowse = Vue.component("lms-browse", {
                 for (let loop=this.history, i=loop.length-1; i>=0 && undefined!=loop[i].current; --i) {
                     if (STD_ITEM_ALBUM==loop[i].current.stdItem && undefined!=loop[i].current.subtitle) {
                         return loop[i].current.subtitle;
-                    } else if (STD_ITEM_ARTIST==loop[i].current.stdItem) {
+                    } else if (STD_ITEM_ARTIST==loop[i].current.stdItem || STD_ITEM_WORK_COMPOSER==loop[i].current.stdItem) {
                         return loop[i].current.title;
                     }
                 }
@@ -644,7 +644,7 @@ var lmsBrowse = Vue.component("lms-browse", {
         },
         detailedSubBot() {
             let stdItem = this.current.stdItem ? this.current.stdItem : this.current.altStdItem;
-            if (stdItem==STD_ITEM_ARTIST || stdItem==STD_ITEM_WORK || stdItem==STD_ITEM_CLASSICAL_WORKS) {
+            if (stdItem==STD_ITEM_ARTIST || stdItem==STD_ITEM_WORK_COMPOSER || stdItem==STD_ITEM_WORK || stdItem==STD_ITEM_CLASSICAL_WORKS) {
                 return this.headerSubTitle
             }
             if (stdItem==STD_ITEM_ALBUM || stdItem==STD_ITEM_MIX || stdItem==STD_ITEM_ALL_TRACKS || stdItem==STD_ITEM_COMPOSITION_TRACKS) {
@@ -653,8 +653,8 @@ var lmsBrowse = Vue.component("lms-browse", {
         },
         showMaiButton() {
             let stdItem = this.current.stdItem ? this.current.stdItem : this.current.altStdItem;
-            if (LMS_P_MAI && this.showDetailedSubtoolbar && (stdItem==STD_ITEM_ARTIST || stdItem==STD_ITEM_ALBUM)) {
-                if (stdItem==STD_ITEM_ARTIST) {
+            if (LMS_P_MAI && this.showDetailedSubtoolbar && (stdItem==STD_ITEM_ARTIST || stdItem==STD_ITEM_WORK_COMPOSER || stdItem==STD_ITEM_ALBUM)) {
+                if (stdItem==STD_ITEM_ARTIST || stdItem==STD_ITEM_WORK_COMPOSER) {
                     // 'Various Artists' will not have biography entry in its menu. So, if
                     // this item is not found then we don't show toolbar button...
                     for (let i=0, loop=this.currentActions, len=loop.length; i<len; ++i) {
@@ -669,7 +669,7 @@ var lmsBrowse = Vue.component("lms-browse", {
             return false;
         },
         showMixButton() {
-            if (LMS_P_BMIX && this.wide>=2 && this.showDetailedSubtoolbar && (this.current.stdItem==STD_ITEM_ARTIST || this.current.stdItem==STD_ITEM_ALBUM)) {
+            if (LMS_P_BMIX && this.wide>=2 && this.showDetailedSubtoolbar && (this.current.stdItem==STD_ITEM_ARTIST || this.current.stdItem==STD_ITEM_WORK_COMPOSER ||this.current.stdItem==STD_ITEM_ALBUM)) {
                 for (let i=0, loop=this.currentActions, len=loop.length; i<len; ++i) {
                     if (loop[i].stdItem==STD_ITEM_MIX) {
                         return true;
@@ -1282,7 +1282,7 @@ var lmsBrowse = Vue.component("lms-browse", {
         },
         refreshList(restorePosition) {
             this.clearSelection();
-            // Only need to reload works list if we had one already...
+            // Only need to reload   list if we had one already...
             var refreshWorks = this.items.length>0 && this.items[0].isWorksCat;
             var pos = undefined==restorePosition || restorePosition ? this.scrollElement.scrollTop : 0;
             var stdItem = this.current.stdItem ? this.current.stdItem : this.current.altStdItem;

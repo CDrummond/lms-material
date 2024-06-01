@@ -4,6 +4,8 @@ x.x.x
 2. If combining 'Apps' and 'Radios', hide 'Music Walk With Me' as this
    duplicates Material functionality.
 3. When listing works, show composer as a header.
+4. When listing 'Works' main category ask if want to show 'All Works',
+   'Composers', or 'Genres'
 
 4.6.2
 -----

@@ -1873,6 +1873,7 @@ function parseBrowseResp(data, parent, options, cacheKey, parentCommand, parentG
 
             resp.subtitle=0==numWorks ? i18n("Empty") : i18np("1 Work", "%1 Works", numWorks);
             resp.canUseGrid=true;
+            resp.listSize=resp.items.length;
         }
 
         if (data.result.count>LMS_BATCH_SIZE) {

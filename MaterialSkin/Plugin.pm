@@ -39,7 +39,7 @@ my $log = Slim::Utils::Log->addLogCategory({
 
 *getCurrentPlugins = Slim::Utils::Versions->compareVersions($::VERSION, '9.0.0') < 0
     ? \&Slim::Plugin::Extensions::Plugin::getCurrentPlugins
-    : \&Slim::Utils::PluginRepoManager::getCurrentPlugins;
+    : \&Slim::Utils::ExtensionsManager::getCurrentPlugins;
 
 my $prefs = preferences('plugin.material-skin');
 my $serverprefs = preferences('server');

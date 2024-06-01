@@ -218,15 +218,15 @@ function browseActions(view, item, args, count, showCompositions, showWorks) {
             } else if ((ADD_RANDOM_ALBUM_ACTION!=loop[i] || count>1) && (DOWNLOAD_ACTION!=loop[i] || (lmsOptions.allowDownload && undefined==item.emblem))) {
                 weight++;
                 actions.push({action:loop[i], weight:ALBUM_SORTS_ACTION==loop[i] || TRACK_SORTS_ACTION==loop[i]
-                                                ? 2
+                                                ? 10
                                                 : SCROLL_TO_ACTION==loop[i]
-                                                    ? 3
+                                                    ? 15
                                                     : INSERT_ACTION==loop[i]
-                                                        ? 4
+                                                        ? 20
                                                         : PLAY_SHUFFLE_ACTION==loop[i]
-                                                            ? 5
+                                                            ? 25
                                                             : ADD_RANDOM_ALBUM_ACTION==loop[i]
-                                                                ? 6
+                                                                ? 30
                                                                 : MORE_LIB_ACTION==loop[i]
                                                                     ? 1000
                                                                     : weight});
@@ -548,17 +548,20 @@ function browseHandleListResponse(view, item, command, resp, prevPage, appendIte
             view.currentActions.push({action:(view.grid.use ? USE_LIST_ACTION : USE_GRID_ACTION), weight:0});
         }
         if (view.current.id==TOP_FAVORITES_ID || (view.current.stdItem!=STD_ITEM_MAI && !item.id.startsWith(TOP_ID_PREFIX) && view.items.length>0)) {
-            view.currentActions.push({action:SEARCH_LIST_ACTION, weight:1});
+            view.currentActions.push({action:SEARCH_LIST_ACTION, weight:5});
+        }
+        if (resp.numHeaders>1 && view.items.length>50 && view.current.stdItem!=STD_ITEM_ARTIST && view.current.stdItem!=STD_ITEM_ALBUM) {
+            view.currentActions.push({action:SCROLL_TO_ACTION, weight:4});
         }
         let itemHasPlayAction=undefined!=item.menu && item.menu[0]==PLAY_ACTION;
         if (undefined==item.stdItem && itemHasPlayAction && lmsOptions.playShuffle && view.items.length>1) {
-            view.currentActions.push({action:INSERT_ACTION, weight:3});
-            view.currentActions.push({action:PLAY_SHUFFLE_ACTION, weight:4});
+            view.currentActions.push({action:INSERT_ACTION, weight:15});
+            view.currentActions.push({action:PLAY_SHUFFLE_ACTION, weight:20});
         }
         if (resp.isMusicMix || (("albums"==command.command[0] && view.items.length>0 && command.params.find(elem => elem=="sort:random")))) {
-            view.currentActions.push({action:RELOAD_ACTION, weight:1});
+            view.currentActions.push({action:RELOAD_ACTION, weight:5});
             if (resp.isMusicMix && !queryParams.party) {
-                view.currentActions.push({action:ADD_TO_PLAYLIST_ACTION, weight:10});
+                view.currentActions.push({action:ADD_TO_PLAYLIST_ACTION, weight:50});
             }
         }
         if (canAddAlbumSort && view.command.command.length>0 && view.command.command[0]=="albums" && view.items.length>0) {
@@ -571,10 +574,10 @@ function browseHandleListResponse(view, item, command, resp, prevPage, appendIte
                 }
             }
             if (canAddAlbumSort) {
-                view.currentActions.push({action:ALBUM_SORTS_ACTION, weight:2});
+                view.currentActions.push({action:ALBUM_SORTS_ACTION, weight:10});
             }
         } else if ((view.current.stdItem==STD_ITEM_ALL_TRACKS || view.current.stdItem==STD_ITEM_COMPOSITION_TRACKS || view.current.id==ALL_TRACKS_ID) && view.command.command.length>0 && view.command.command[0]=="tracks" && view.items.length>0) {
-            view.currentActions.push({action:TRACK_SORTS_ACTION, weight:10});
+            view.currentActions.push({action:TRACK_SORTS_ACTION, weight:50});
         }
         view.currentActions.sort(function(a, b) { return a.weight!=b.weight ? a.weight<b.weight ? -1 : 1 : titleSort(a, b) });
         view.itemCustomActions = resp.itemCustomActions;

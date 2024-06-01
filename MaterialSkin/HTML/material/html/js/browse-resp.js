@@ -94,7 +94,7 @@ function setFavoritesParams(i, item) {
 
 function parseBrowseResp(data, parent, options, cacheKey, parentCommand, parentGenre) {
     // NOTE: If add key to resp, then update addToCache in utils.js
-    var resp = {items: [], allTracksItem:undefined, showCompositions:false, baseActions:[], canUseGrid: false, jumplist:[], numAudioItems:0, canDrop:false, itemCustomActions:undefined, extra:undefined };
+    var resp = {items: [], allTracksItem:undefined, showCompositions:false, baseActions:[], canUseGrid: false, jumplist:[], numAudioItems:0, canDrop:false, itemCustomActions:undefined, extra:undefined, numHeaders:0 };
     var allowPinning = !queryParams.party && (!LMS_KIOSK_MODE || !HIDE_FOR_KIOSK.has(PIN_ACTION));
 
     try {
@@ -1105,6 +1105,7 @@ function parseBrowseResp(data, parent, options, cacheKey, parentCommand, parentG
                                         ? [PLAY_ALL_ACTION, INSERT_ALL_ACTION, PLAY_SHUFFLE_ALL_ACTION, ADD_ALL_ACTION, DIVIDER, ALL_TRACKS_ACTION]
                                         : [PLAY_ALL_ACTION, INSERT_ALL_ACTION, PLAY_SHUFFLE_ALL_ACTION, ADD_ALL_ACTION],
                                      count:alist.length});
+                    resp.numHeaders++;
                     // Create jump list
                     let start = resp.items.length;
                     let jl=[];
@@ -1460,6 +1461,7 @@ function parseBrowseResp(data, parent, options, cacheKey, parentCommand, parentG
                                           {title: groups[i][1], id:FILTER_PREFIX+i, header:true,
                                            subtitle: isCompositions ? i18np("1 Composition", "%1 Compositions", count) : i18np("1 Track", "%1 Tracks", count), durationStr:formatSeconds(duration),
                                            menu:[PLAY_ALL_ACTION, INSERT_ALL_ACTION, PLAY_SHUFFLE_ALL_ACTION, ADD_ALL_ACTION]});
+                        resp.numHeaders++;
                     }
                     if (1==grouping) { // Grouped into albumns, so remove from subtitle
                         for (let i=0, loop=resp.items, len=loop.length; i<len; ++i) {
@@ -1560,6 +1562,7 @@ function parseBrowseResp(data, parent, options, cacheKey, parentCommand, parentG
                                        {title: lmsOptions.commentAsDiscTitle && title ? title : i18n("Disc %1", k), jump:disc.pos+d,
                                         subtitle: isCompositions ? i18np("1 Composition", "%1 Compositions", disc.total) : i18np("1 Track", "%1 Tracks", disc.total), durationStr:formatSeconds(disc.duration),
                                         id:FILTER_PREFIX+k, header:true, menu:[PLAY_ALL_ACTION, INSERT_ALL_ACTION, PLAY_SHUFFLE_ALL_ACTION, ADD_ALL_ACTION]});
+                    resp.numHeaders++;
                     d++;
                 }
             } else if (1==discs.size) {
@@ -1833,6 +1836,7 @@ function parseBrowseResp(data, parent, options, cacheKey, parentCommand, parentG
                     resp.items.push({title:i.composer, id:FILTER_PREFIX+"wc"+lastIdx, header:true,
                                      isWorksCat: true, svg: 'release-work',
                                      menu:[PLAY_ALL_ACTION, INSERT_ALL_ACTION, PLAY_SHUFFLE_ALL_ACTION, ADD_ALL_ACTION], count:resp.items.length});
+                    resp.numHeaders++;
                 }
                 var key = removeDiactrics(i.textkey);
                 if (undefined!=key && (resp.jumplist.length==0 || resp.jumplist[resp.jumplist.length-1].key!=key) && !textKeys.has(key)) {

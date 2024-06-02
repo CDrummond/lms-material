@@ -958,21 +958,21 @@ function browseAddWorksCategories(view, item) {
     view.items.push({
         title: i18n("All Works"),
         command: ["works"],
-        params: ['include_online_only_artists:1'],
+        params: ['include_online_only_artists:1', "tags:s"],
         svg: "classical-work",
         type: "group",
         id: "mmw:aw"});
     view.items.push({
         title: i18n("Composers"),
         command: ["artists"],
-        params: ["role_id:COMPOSER", "work_id:-1"],
+        params: ["role_id:COMPOSER", "work_id:-1", ARTIST_TAGS],
         svg: "composer",
         type: "group",
         id: "mmw:ac"});
     view.items.push({
         title: i18n("Genres"),
         command: ["genres"],
-        params: ["work_id:-1"],
+        params: ["work_id:-1", "tags:s"],
         svg: "guitar-acoustic",
         type: "group",
         id: "mmw:ag"});
@@ -1056,7 +1056,7 @@ function browseAddCategories(view, item, isGenre) {
     if (!isGenre && (undefined==command || "genres"!=command)) {
         cat = { title: i18n("Genres"),
                 command: ["genres"],
-                params: [item.id],
+                params: [item.id, "tags:s"],
                 svg: "guitar-acoustic",
                 type: "group",
                 id: uniqueId(item.id, view.items.length)};
@@ -1101,7 +1101,7 @@ function browseAddCategories(view, item, isGenre) {
     if (showcomposer && LMS_VERSION>=90000) {
         cat = { title: i18n("Works"),
                 command: ["works"],
-                params: [item.id],
+                params: [item.id, "tags:s"],
                 svg: "classical-work",
                 type: "group",
                 id: uniqueId(item.id, view.items.length)};

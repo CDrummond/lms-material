@@ -1,3 +1,8 @@
+4.6.3
+-----
+1. Add tag to 'viewport' meta-data to restore old Chrome behaviour when
+   showing keyboard on Android.
+
 4.6.2
 -----
 1. When adding random album/release to queue ensure title is asked from LMS.

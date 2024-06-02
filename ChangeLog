@@ -1,9 +1,8 @@
 4.6.2
 -----
-1. When adding obtaining random album/release to queue ensure title is asked
-   from LMS.
+1. When adding random album/release to queue ensure title is asked from LMS.
 2. In MAI track view only show 'Band/orchestra' if different to 'Album
-   artist', and only show 'Albuim artist' if different from track artist.
+   artist', and only show 'Album artist' if different from track artist.
 3. Add 'browseWork' to 'document.lmsMaterialSkin'
 
 4.6.1

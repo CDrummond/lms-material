@@ -902,6 +902,7 @@ function parseBrowseResp(data, parent, options, cacheKey, parentCommand, parentG
             var lastYear = 0;
             var reqArtistId = undefined;
             var groupReleases = true; // Prevent actually grouping ino releases even if we have releaseType
+            var isWorksAlbums = undefined!=parent && parent.id.startsWith("work_id:");
             if (data.params && data.params.length>1) {
                 let reverse = false;
                 let isNewMusic = false;
@@ -929,7 +930,7 @@ function parseBrowseResp(data, parent, options, cacheKey, parentCommand, parentG
                     data.result.albums_loop = data.result.albums_loop.reverse();
                 }
             }
-            var albumGroups = groupReleases && haveReleaseType && lmsOptions.supportReleaseTypes && lmsOptions.groupByReleaseType>0 ? {} : undefined;
+            var albumGroups = !isWorksAlbums && (groupReleases && haveReleaseType && lmsOptions.supportReleaseTypes && lmsOptions.groupByReleaseType>0) ? {} : undefined;
             var albumKeys = [];
             var releaseTypes = new Set();
             var ids = new Set();
@@ -1084,59 +1085,63 @@ function parseBrowseResp(data, parent, options, cacheKey, parentCommand, parentG
             if (undefined!=reqArtistId && LMS_P_MAI && LMS_ARTIST_PICS) {
                 resp.image= "/imageproxy/mai/artist/" + reqArtistId + "/image" + LMS_IMAGE_SIZE;
             }
-            let numGroups = albumGroups ? albumKeys.length : 0;
-            if (numGroups>1) {
-                resp.subtitle=i18np("1 Release", "%1 Releases", loopLen);
-                resp.jumplist = [];
-                albumKeys.sort(releaseTypeSort);
-                let headerOnly = true;
-                for (let k=0; k<numGroups; ++k) {
-                    let key = albumKeys[k];
-                    let alist = albumGroups[key];
-                    let icon = releaseTypeIcon(key);
-                    resp.items.push({title:releaseTypeHeader(key)+" ("+alist.length+")", id:FILTER_PREFIX+key, header:true,
-                                     svg: icon.svg, icon: icon.icon,
-                                     menu:alist.length>1
-                                        ? [PLAY_ALL_ACTION, INSERT_ALL_ACTION, PLAY_SHUFFLE_ALL_ACTION, ADD_ALL_ACTION, DIVIDER, ALL_TRACKS_ACTION]
-                                        : [PLAY_ALL_ACTION, INSERT_ALL_ACTION, PLAY_SHUFFLE_ALL_ACTION, ADD_ALL_ACTION],
-                                     count:alist.length});
-                    resp.numHeaders++;
-                    // Create jump list
-                    let start = resp.items.length;
-                    let jl=[];
-                    resp.jumplist.push({key:SECTION_JUMP, index:start-1, header:true, icon:icon});
-                    for (let a=0, alen=alist.length; a<alen; ++a) {
-                        if (undefined!=alist[a].textkey && (jl.length==0 || jl[jl.length-1].key!=alist[a].textkey)) {
-                            jl.push({key: alist[a].textkey, index: resp.items.length});
-                            resp.jumplist.push({key: alist[a].textkey, index:start+a});
-                            headerOnly = false;
-                        }
-                    }
-                    resp.items.push.apply(resp.items, alist);
-                }
-                resp.jumplist.headerOnly = headerOnly;
-                resp.listSize = resp.items.length;
+            if (isWorksAlbums) {
+                resp.subtitle=i18np("1 Item", "%1 Item", loopLen);
             } else {
-                if (numGroups==1) {
-                    resp.items = albumGroups[albumKeys[0]];
-                }
-                let releaseType = 1==releaseTypes.size ? releaseTypes.keys().next().value : undefined;
-                let lmsTrans = releaseType ? lmsOptions.releaseTypes[releaseType] : undefined;
-                if (undefined!=lmsTrans) {
-                    resp.subtitle=resp.items.length + " " + (lmsTrans[1==resp.items.length ? 0 : 1]);
-                } else if (releaseType=="COMPILATION") {
-                    resp.subtitle=i18np("1 Compilation", "%1 Compilations", resp.items.length);
-                } else if (releaseType && releaseType.startsWith("APPEARANCE")) {
-                    resp.subtitle=i18np("1 Appearance", "%1 Appearances", resp.items.length)+appearanceSuffix(releaseType);
-                } else if (releaseType=="COMPOSITION") {
-                    resp.subtitle=i18np("1 Composer Album", "%1 Composer Albums", resp.items.length);
-                } else if (lmsOptions.supportReleaseTypes) {
-                    resp.subtitle=i18np("1 Release", "%1 Releases", resp.items.length);
+                let numGroups = albumGroups ? albumKeys.length : 0;
+                if (numGroups>1) {
+                    resp.subtitle=i18np("1 Release", "%1 Releases", loopLen);
+                    resp.jumplist = [];
+                    albumKeys.sort(releaseTypeSort);
+                    let headerOnly = true;
+                    for (let k=0; k<numGroups; ++k) {
+                        let key = albumKeys[k];
+                        let alist = albumGroups[key];
+                        let icon = releaseTypeIcon(key);
+                        resp.items.push({title:releaseTypeHeader(key)+" ("+alist.length+")", id:FILTER_PREFIX+key, header:true,
+                                        svg: icon.svg, icon: icon.icon,
+                                        menu:alist.length>1
+                                            ? [PLAY_ALL_ACTION, INSERT_ALL_ACTION, PLAY_SHUFFLE_ALL_ACTION, ADD_ALL_ACTION, DIVIDER, ALL_TRACKS_ACTION]
+                                            : [PLAY_ALL_ACTION, INSERT_ALL_ACTION, PLAY_SHUFFLE_ALL_ACTION, ADD_ALL_ACTION],
+                                        count:alist.length});
+                        resp.numHeaders++;
+                        // Create jump list
+                        let start = resp.items.length;
+                        let jl=[];
+                        resp.jumplist.push({key:SECTION_JUMP, index:start-1, header:true, icon:icon});
+                        for (let a=0, alen=alist.length; a<alen; ++a) {
+                            if (undefined!=alist[a].textkey && (jl.length==0 || jl[jl.length-1].key!=alist[a].textkey)) {
+                                jl.push({key: alist[a].textkey, index: resp.items.length});
+                                resp.jumplist.push({key: alist[a].textkey, index:start+a});
+                                headerOnly = false;
+                            }
+                        }
+                        resp.items.push.apply(resp.items, alist);
+                    }
+                    resp.jumplist.headerOnly = headerOnly;
+                    resp.listSize = resp.items.length;
                 } else {
-                    resp.subtitle=i18np("1 Album", "%1 Albums", resp.items.length);
-                }
-                if (parent && parent.id && parent.id.startsWith("search:")) {
-                    resp.jumplist = []; // Search results NOT sorted???
+                    if (numGroups==1) {
+                        resp.items = albumGroups[albumKeys[0]];
+                    }
+                    let releaseType = 1==releaseTypes.size ? releaseTypes.keys().next().value : undefined;
+                    let lmsTrans = releaseType ? lmsOptions.releaseTypes[releaseType] : undefined;
+                    if (undefined!=lmsTrans) {
+                        resp.subtitle=resp.items.length + " " + (lmsTrans[1==resp.items.length ? 0 : 1]);
+                    } else if (releaseType=="COMPILATION") {
+                        resp.subtitle=i18np("1 Compilation", "%1 Compilations", resp.items.length);
+                    } else if (releaseType && releaseType.startsWith("APPEARANCE")) {
+                        resp.subtitle=i18np("1 Appearance", "%1 Appearances", resp.items.length)+appearanceSuffix(releaseType);
+                    } else if (releaseType=="COMPOSITION") {
+                        resp.subtitle=i18np("1 Composer Album", "%1 Composer Albums", resp.items.length);
+                    } else if (lmsOptions.supportReleaseTypes) {
+                        resp.subtitle=i18np("1 Release", "%1 Releases", resp.items.length);
+                    } else {
+                        resp.subtitle=i18np("1 Album", "%1 Albums", resp.items.length);
+                    }
+                    if (parent && parent.id && parent.id.startsWith("search:")) {
+                        resp.jumplist = []; // Search results NOT sorted???
+                    }
                 }
             }
             if (lastYear>0) {

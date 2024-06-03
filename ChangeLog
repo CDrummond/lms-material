@@ -13,6 +13,7 @@ x.x.x
    showing keyboard on Android.
 2. No album-sort for Works-Album list.
 3. Fix 'All tracks' for Works-Album list.
+4. Remove 'Append random album/release to queue' from Works-album actions.
 
 4.6.2
 -----

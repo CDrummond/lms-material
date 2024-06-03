@@ -185,7 +185,7 @@ function browseActions(view, item, args, count, showCompositions, showWorks) {
                 actions.push({action:ALL_RELEASES_ACTION, weight:84});
             }
         } else if (undefined!=args['work_id'] && undefined!=args['composer_id'] && undefined!=args['count'] && args['count']>1) {
-            var params = [SORT_KEY+TRACK_SORT_PLACEHOLDER, PLAYLIST_TRACK_TAGS, 'work_id:'+args['work_id'], 'composer_id:'+args['composer_id']];
+            var params = [SORT_KEY+TRACK_SORT_PLACEHOLDER, PLAYLIST_TRACK_TAGS, 'work_id:'+args['work_id'], args['composer_id']];
             if (undefined!=args['grouping']) {
                 params.push(args['grouping']);
             }

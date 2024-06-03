@@ -742,12 +742,14 @@ table td input[type=checkbox] {
 }
 
 #pluginButtonBar span:last-of-type {
- float:right
+ float:right;
+ margin-right:13px;
 }
 
 @media (max-width:580px) {
  #pluginButtonBar span:last-of-type {
   float:unset;
+  margin-right:unset;
  }
  #pluginButtonBar span:first-of-type {
    margin-right:12px;

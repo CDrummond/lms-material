@@ -11,6 +11,8 @@ x.x.x
 -----
 1. Add tag to 'viewport' meta-data to restore old Chrome behaviour when
    showing keyboard on Android.
+2. No album-sort for Works-Album list.
+3. Fix 'All tracks' for Works-Album list.
 
 4.6.2
 -----

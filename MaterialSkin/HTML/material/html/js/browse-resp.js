@@ -1036,16 +1036,10 @@ function parseBrowseResp(data, parent, options, cacheKey, parentCommand, parentG
                 let maintitle = showArtist || !lmsOptions.yearInSub ? title : i.album;
 
                 if (undefined!=i.work_id && undefined!=i.work_name && undefined!=i.composer) {
-                    maintitle = i.composer+SEPARATOR+i.work_name;
-                    subtitle =(showArtist ? i.artist+SEPARATOR : "")+i.album;
-                    if (!isEmpty(grouping)) {
-                        subtitle+=" ("+grouping;
-                        if (i.year && i.year>0) {
-                            subtitle+=", "+i.year;
-                        }
-                        subtitle+=")";
-                    } else if (i.year && i.year>0) {
-                        subtitle+=" ("+i.year+")";
+                    maintitle = (!isEmpty(grouping) ? grouping+SEPARATOR : "") + (showArtist ? maintitle : i.album);
+                    subtitle = showArtist ? i.artist : undefined;
+                    if (!subtitle && i.year && i.year>0 && lmsOptions.yearInSub) {
+                        subtitle = ""+i.year;
                     }
                 }
 

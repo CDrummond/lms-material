@@ -180,7 +180,7 @@ function buildStdItemCommand(item, parentCommand) {
                         command.params.push(parentCommand.params[i]);
                     } else if (!LMS_NO_GENRE_FILTER && lower.startsWith("genre_id:")) {
                         command.params.push(parentCommand.params[i]);
-                    } else if (lower.startsWith("work_id:") || lower.startsWith("grouping:")) {
+                    } else if (lower.startsWith("work_id:") || lower.startsWith("performance:")) {
                         command.params.push(parentCommand.params[i]);
                     }
                 }
@@ -189,8 +189,8 @@ function buildStdItemCommand(item, parentCommand) {
             if (artistIdRemoved && undefined!=roleIdPos) {
                 command.params.splice(roleIdPos, 1);
             }
-            if (undefined!=item.grouping) {
-                command.params.push("grouping:"+item.grouping);
+            if (undefined!=item.performance) {
+                command.params.push("performance:"+item.performance);
             }
         } else if (item.id.startsWith("genre_id:")) {
             for (var i=0, len=parentCommand.params.length; i<len; ++i) {
@@ -205,8 +205,8 @@ function buildStdItemCommand(item, parentCommand) {
             if (undefined!=item.composer_id) {
                 command.params.push("composer_id:"+item.composer_id);
             }
-            if (undefined!=item.grouping) {
-                command.params.push("grouping:"+item.grouping);
+            if (undefined!=item.performance) {
+                command.params.push("performance:"+item.performance);
             }
             if (undefined!=item.album_id) {
                 command.params.push("album_id:"+item.album_id);

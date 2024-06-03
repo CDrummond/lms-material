@@ -6,7 +6,7 @@
  */
 'use strict';
 
-const PLAYER_STATUS_TAGS = "tags:cdegilopqrstuy" + (LMS_VERSION>=90000 ? "bhz" : "") + "AABEGIKNPSTV";
+const PLAYER_STATUS_TAGS = "tags:cdegilopqrstuy" + (LMS_VERSION>=90000 ? "bhz1" : "") + "AABEGIKNPSTV";
 const STATUS_UPDATE_MAX_TIME = 4000;
 
 function logString(val) {

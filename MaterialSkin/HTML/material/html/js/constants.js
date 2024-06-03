@@ -130,7 +130,7 @@ const ARTIST_TAGS = "tags:s";
 const ALBUM_TAGS = "tags:ajlqswyKS";
 const ALBUM_TAGS_ALL_ARTISTS = "tags:aajlqswyKSS";
 const ARTIST_ALBUM_TAGS = "tags:aajlqswyKRSSW";
-const BASE_TRACK_TAGS = "tags:dist" + (LMS_VERSION>=90000 ? "bhz" : "");
+const BASE_TRACK_TAGS = "tags:dist" + (LMS_VERSION>=90000 ? "bhz1" : "");
 const TRACK_TAGS = BASE_TRACK_TAGS+"kyuAACGPS";
 const SEARCH_TRACK_TAGS = BASE_TRACK_TAGS+(IS_MOBILE || LMS_VERSION<80400 ? "kuAC" : "kuAACS");
 const TECH_INFO_TAGS = "orITY";

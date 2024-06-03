@@ -186,8 +186,8 @@ function browseActions(view, item, args, count, showCompositions, showWorks) {
             }
         } else if (undefined!=args['work_id'] && undefined!=args['composer_id'] && undefined!=args['count'] && args['count']>1) {
             var params = [SORT_KEY+TRACK_SORT_PLACEHOLDER, PLAYLIST_TRACK_TAGS, 'work_id:'+args['work_id'], args['composer_id']];
-            if (undefined!=args['grouping']) {
-                params.push(args['grouping']);
+            if (undefined!=args['performance']) {
+                params.push(args['performance']);
             }
             browseAddLibId(view, params);
             actions.push({title:ACTIONS[ALL_TRACKS_ACTION].title, icon:ACTIONS[ALL_TRACKS_ACTION].icon, do:{ command: ['tracks'], params: params}, weight:80, stdItem:STD_ITEM_ALL_TRACKS});
@@ -446,9 +446,9 @@ function browseHandleListResponse(view, item, command, resp, prevPage, appendIte
                 if (field>=0) {
                     actParams['composer_id']=view.command.params[field];
                 }
-                field = getField(view.command, "grouping:");
+                field = getField(view.command, "performance:");
                 if (field>=0) {
-                    actParams['grouping']=view.command.params[field];
+                    actParams['performance']=view.command.params[field];
                 }
             } else {
                 actParams['album']=title;
@@ -2507,7 +2507,7 @@ function browseBuildFullCommand(view, item, act) {
                         if (loop[i].startsWith("artist_id:") && !item.id.startsWith("album_id:")) {
                             command.params.push(SORT_KEY+ARTIST_ALBUM_SORT_PLACEHOLDER);
                         }
-                    } else if ((loop[i].startsWith("composer_id:") || loop[i].startsWith("work_id:") || loop[i].startsWith("grouping:") || loop[i].startsWith("album_id:")) &&
+                    } else if ((loop[i].startsWith("composer_id:") || loop[i].startsWith("work_id:") || loop[i].startsWith("performance:") || loop[i].startsWith("album_id:")) &&
                                 getIndex(command.params, loop[i].split(':')[0]+":")<0) {
                         command.params.push(loop[i]);
                     }

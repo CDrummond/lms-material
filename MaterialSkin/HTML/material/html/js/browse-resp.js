@@ -1032,12 +1032,12 @@ function parseBrowseResp(data, parent, options, cacheKey, parentCommand, parentG
                 releaseTypes.add(group);
 
                 let showArtist = undefined==parent || (parent.title!=artist && parent.subtitle!=artist);
-                let grouping = undefined!=i.grouping && i.grouping.length>0 ? i.grouping : undefined;
+                let performance = undefined!=i.performance && i.performance.length>0 ? i.performance : undefined;
                 let subtitle = showArtist ? artist : showYear && lmsOptions.yearInSub ? ""+i.year : undefined;
                 let maintitle = showArtist || !lmsOptions.yearInSub ? title : i.album;
 
                 if (undefined!=i.work_id && undefined!=i.work_name && undefined!=i.composer) {
-                    maintitle = (!isEmpty(grouping) ? grouping+SEPARATOR : "") + (showArtist ? maintitle : i.album);
+                    maintitle = (!isEmpty(performance) ? performance+SEPARATOR : "") + (showArtist ? maintitle : i.album);
                     subtitle = showArtist ? i.artist : undefined;
                     if (!subtitle && i.year && i.year>0 && lmsOptions.yearInSub) {
                         subtitle = ""+i.year;
@@ -1050,7 +1050,7 @@ function parseBrowseResp(data, parent, options, cacheKey, parentCommand, parentG
                               artist_ids: splitIntArray(i.artist_ids),
                               artists: artists,
                               work_id: i.work_id,
-                              grouping: grouping,
+                              performance: performance,
                               title: maintitle,
                               subtitle: subtitle,
                               subIsYear: lmsOptions.yearInSub && !showArtist && showYear,
@@ -1167,7 +1167,7 @@ function parseBrowseResp(data, parent, options, cacheKey, parentCommand, parentG
             let isCompositions = false;
             let parentArtist = undefined;
             let showTrackNumbers = true;
-            let grouping = 0;
+            let performance = 0;
             let genres=new Set();
             let yearSet = new Set();
             let years = [];
@@ -1210,7 +1210,7 @@ function parseBrowseResp(data, parent, options, cacheKey, parentCommand, parentG
             }
             // Should we group tracks?
             if (isAllTracks || isCompositions) {
-                grouping = ("albumtrack"==sort || "yearalbumtrack"==sort) ? 1 : "title"==sort ? 2 : "artisttitle"==sort ? 3 : 0;
+                performance = ("albumtrack"==sort || "yearalbumtrack"==sort) ? 1 : "title"==sort ? 2 : "artisttitle"==sort ? 3 : 0;
             }
 
             resp.itemCustomActions = getCustomActions("album-track");
@@ -1381,9 +1381,9 @@ function parseBrowseResp(data, parent, options, cacheKey, parentCommand, parentG
                               emblem: showAlbumName ? getEmblem(i.extid) : undefined,
                               tracknum: sortTracks && undefined!=i.tracknum ? tracknum : undefined,
                               disc: i.disc ? parseInt(i.disc) : undefined,
-                              year: (sortTracks || 1==grouping) ? year : undefined,
-                              album: sortTracks || isSearchResult || 1==grouping ? i.album : undefined,
-                              artist: isSearchResult || 2==sortTracks || 3==grouping ? getArtist(i) : undefined,
+                              year: (sortTracks || 1==performance) ? year : undefined,
+                              album: sortTracks || isSearchResult || 1==performance ? i.album : undefined,
+                              artist: isSearchResult || 2==sortTracks || 3==performance ? getArtist(i) : undefined,
                               album_id: isSearchResult ? i.album_id : undefined,
                               artist_id: isSearchResult ? i.artist_id : undefined,
                               url: i.url,
@@ -1435,13 +1435,13 @@ function parseBrowseResp(data, parent, options, cacheKey, parentCommand, parentG
             }
 
             let groups=[];
-            if (grouping>0 && resp.items.length>1) {
-                let field = 1==grouping ? 'album' : 2==grouping ? 'title' : 'artist';
+            if (performance>0 && resp.items.length>1) {
+                let field = 1==performance ? 'album' : 2==performance ? 'title' : 'artist';
                 // Groups is array of "<start index>, <title>"
-                groups=[[0, resp.items[0][field] + (1==grouping && resp.items[0].year ? " ("+resp.items[0].year+")" : "")]];
+                groups=[[0, resp.items[0][field] + (1==performance && resp.items[0].year ? " ("+resp.items[0].year+")" : "")]];
                 for (let i=1, loop=resp.items, len=loop.length; i<len; ++i) {
                     if (loop[i-1][field]!=loop[i][field]) {
-                        groups.push([i, loop[i][field] + (1==grouping && loop[i].year ? " ("+loop[i].year+")" : "")]);
+                        groups.push([i, loop[i][field] + (1==performance && loop[i].year ? " ("+loop[i].year+")" : "")]);
                     }
                 }
                 if (groups.length>1 && ((groups.length*100)/resp.items.length)<=25) {
@@ -1463,7 +1463,7 @@ function parseBrowseResp(data, parent, options, cacheKey, parentCommand, parentG
                                            menu:[PLAY_ALL_ACTION, INSERT_ALL_ACTION, PLAY_SHUFFLE_ALL_ACTION, ADD_ALL_ACTION]});
                         resp.numHeaders++;
                     }
-                    if (1==grouping) { // Grouped into albumns, so remove from subtitle
+                    if (1==performance) { // Grouped into albumns, so remove from subtitle
                         for (let i=0, loop=resp.items, len=loop.length; i<len; ++i) {
                             if (!loop[i].header) {
                                 loop[i].subtitle = loop[i].subtitleContext = undefined;
@@ -1500,7 +1500,7 @@ function parseBrowseResp(data, parent, options, cacheKey, parentCommand, parentG
                         if (item.header) {
                             lastHeader = i;
                         } else {
-                            if (undefined!=artists[item.idx] && (3!=grouping || stripLinkTags(artists[item.idx])!=loop[lastHeader].title)) {
+                            if (undefined!=artists[item.idx] && (3!=performance || stripLinkTags(artists[item.idx])!=loop[lastHeader].title)) {
                                 item.subtitle = undefined==item.subtitle ? artists[item.idx] : (artists[item.idx] + SEPARATOR + item.subtitle);
                                 if (browseContext) {
                                     item.subtitleContext = undefined==item.subtitleContext ? artistsWithContext[item.idx] : (artistsWithContext[item.idx] + " " + item.subtitleContext);
@@ -1542,7 +1542,7 @@ function parseBrowseResp(data, parent, options, cacheKey, parentCommand, parentG
             if (allowPlayAlbum) {
                 resp.allTracksItem = parent;
             }
-            if (grouping==0 && discs.size>1) {
+            if (performance==0 && discs.size>1) {
                 let d = 0;
 
                 for (let k of discs.keys()) {

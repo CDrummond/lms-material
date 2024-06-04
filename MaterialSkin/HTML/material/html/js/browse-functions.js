@@ -189,6 +189,9 @@ function browseActions(view, item, args, count, showCompositions, showWorks) {
             if (undefined!=args['performance']) {
                 params.push(args['performance']);
             }
+            if (item && item.album_id) {
+                params.push('album_id:'+item.album_id);
+            }
             browseAddLibId(view, params);
             actions.push({title:ACTIONS[ALL_TRACKS_ACTION].title, icon:ACTIONS[ALL_TRACKS_ACTION].icon, do:{ command: ['tracks'], params: params}, weight:80, stdItem:STD_ITEM_ALL_TRACKS});
         }
@@ -203,7 +206,7 @@ function browseActions(view, item, args, count, showCompositions, showWorks) {
         }
     }
 
-    if (undefined!=item && undefined!=item.stdItem && undefined!=STD_ITEMS[item.stdItem].actionMenu) {
+    if (undefined!=item && undefined!=item.stdItem && item.stdItem < STD_ITEMS.length && undefined!=STD_ITEMS[item.stdItem].actionMenu) {
         var weight = 200;
         for (var i=0, loop=STD_ITEMS[item.stdItem].actionMenu, len=loop.length; i<len; ++i) {
             if (CUSTOM_ACTIONS==loop[i]) {

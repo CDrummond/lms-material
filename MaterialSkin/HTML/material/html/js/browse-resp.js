@@ -1821,29 +1821,33 @@ function parseBrowseResp(data, parent, options, cacheKey, parentCommand, parentG
             let lastComposer = undefined;
             let lastIdx = -1;
             let numWorks = 0;
-            let numComposers = 0;
-            let useHeaders = !parent || parent.stdItem!=STD_ITEM_WORK_COMPOSER;
+            let singleHeader = parent && parent.stdItem==STD_ITEM_ARTIST; // Header is just "Works (N)"
+            let useHeaders = !singleHeader && (parent && (undefined==parent.stdItem || parent.stdItem==STD_ITEM_ARTIST || parent.stdItem==STD_ITEM_WORK_GENRE));
+
+            if (singleHeader && data.result.works_loop.length>0) {
+                resp.jumplist=[{key:SECTION_JUMP, index:0, header:true, icon:{svg:'release-work'}}];
+                resp.items.push({title:i18n('Works'), id:FILTER_PREFIX+"wc", header:true,
+                                 isWorksCat: true, svg: 'release-work',
+                                 menu:[PLAY_ALL_ACTION, INSERT_ALL_ACTION, PLAY_SHUFFLE_ALL_ACTION, ADD_ALL_ACTION], count:0});
+            }
+
             for (let idx=0, loop=data.result.works_loop, loopLen=loop.length; idx<loopLen; ++idx) {
                 let i = loop[idx];
-                if (lastComposer!=i.composer && useHeaders) {
-                    if (lastIdx>=0) {
-                        resp.items[lastIdx].title+=" (" + i18np("1 Work", "%1 Works", resp.items.length-(lastIdx+1)) + ")";
-                    }
-                    lastIdx = resp.items.length;
-                    lastComposer=i.composer;
-                    numComposers++;
-                    if (1==numComposers) {
-                        resp.jumplist.push({key:SECTION_JUMP, index:resp.items.length, header:true, icon:{svg:'release-work'}});
-                    }
-                    resp.items.push({title:i.composer, id:FILTER_PREFIX+"wc"+lastIdx, header:true,
-                                     isWorksCat: true, svg: 'release-work',
-                                     menu:[PLAY_ALL_ACTION, INSERT_ALL_ACTION, PLAY_SHUFFLE_ALL_ACTION, ADD_ALL_ACTION], count:resp.items.length});
-                    resp.numHeaders++;
-                }
                 var key = removeDiactrics(i.textkey);
                 if (undefined!=key && (resp.jumplist.length==0 || resp.jumplist[resp.jumplist.length-1].key!=key) && !textKeys.has(key)) {
                     resp.jumplist.push({key: key, index: resp.items.length});
                     textKeys.add(key);
+                }
+                if (useHeaders && lastComposer!=i.composer) {
+                    if (lastIdx>=0) {
+                        resp.items[lastIdx].title+=" (" + (resp.items.length-(lastIdx+1)) + ")";
+                    }
+                    lastIdx = resp.items.length;
+                    lastComposer=i.composer;
+                    resp.items.push({title:i.composer, id:FILTER_PREFIX+"wc"+lastIdx, header:true,
+                                     isWorksCat: true, svg: 'release-work',
+                                     menu:[PLAY_ALL_ACTION, INSERT_ALL_ACTION, PLAY_SHUFFLE_ALL_ACTION, ADD_ALL_ACTION], count:resp.items.length});
+                    resp.numHeaders++;
                 }
                 var images = [];
                 if (undefined!=i.artwork_track_ids) {
@@ -1873,8 +1877,11 @@ function parseBrowseResp(data, parent, options, cacheKey, parentCommand, parentG
                 numWorks++;
             }
 
-            if (lastIdx>=0 && useHeaders) {
-                resp.items[lastIdx].title+=" (" + i18np("1 Work", "%1 Works", resp.items.length-(lastIdx+1)) + ")";
+            if (singleHeader) {
+                resp.items[0].title+=" ("+(resp.items.length-1)+")";
+                resp.items[0].count=resp.items.length-1;
+            } else if (lastIdx>=0 && useHeaders) {
+                resp.items[lastIdx].title+=" (" + (resp.items.length-(lastIdx+1)) + ")";
             }
 
             resp.subtitle=0==numWorks ? i18n("Empty") : i18np("1 Work", "%1 Works", numWorks);

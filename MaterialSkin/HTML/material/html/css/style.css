@@ -3714,3 +3714,7 @@ div.v-subheader {
  background-color: var(--accent-color)!important;
  border-color: var(--accent-color)!important;
 }
+
+#stringLenCheckElem {
+ visibility:hidden!important;
+}

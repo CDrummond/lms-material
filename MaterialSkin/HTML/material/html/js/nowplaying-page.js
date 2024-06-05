@@ -1469,7 +1469,9 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
             return this.$store.state.nowPlayingContext && undefined!=this.playerStatus.current.artistAndComposerWithContext && !isEmpty(this.playerStatus.current.albumLine) ? i18n('<obj>from</obj> %1', this.playerStatus.current.albumLine).replaceAll("<obj>", "<obj class=\"ext-details\">") : this.playerStatus.current.albumLine
         },
         barInfoWithContext() {
-            if (this.$store.state.nowPlayingContext && this.windowWidth-380>this.barInfoWithContextWidth && undefined!=this.playerStatus.current.artistAndComposerWithContext && this.albumLine) {
+            if (this.$store.state.nowPlayingContext &&
+                this.windowWidth-(this.desktopLayout ? (this.techInfo && this.technicalInfo ? 570 : 450) : 240)>this.barInfoWithContextWidth &&
+                undefined!=this.playerStatus.current.artistAndComposerWithContext && this.albumLine) {
                 return replaceBr(this.artistAndComposerLine, " ")+" " + this.albumLine
             }
             return undefined;

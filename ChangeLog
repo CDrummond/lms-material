@@ -5,6 +5,8 @@
 2. No album-sort for Works-Album list.
 3. Fix 'All tracks' for Works-Album list.
 4. Remove 'Append random album/release to queue' from Works-album actions.
+5. Take into account layout and if tech info is shown when determining if to
+   show context strings in now-playing bar.
 
 4.6.2
 -----

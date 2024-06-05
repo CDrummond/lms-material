@@ -1736,7 +1736,7 @@ var lmsBrowse = Vue.component("lms-browse", {
         setBgndCover() {
             var url = this.bgndUrl;
             if (url) {
-                url=changeImageSizing(url, LMS_CURRENT_IMAGE_SIZE);
+                url=changeImageSizing(url, LMS_IMAGE_SIZE);
                 document.documentElement.style.setProperty('--subtoolbar-image-url', 'url(' + changeImageSizing(url, LMS_TBAR_BGND_IMAGE_SIZE) + ')');
             } else {
                 var img = this.currentImageUrl;

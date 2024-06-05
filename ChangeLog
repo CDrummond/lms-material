@@ -6,6 +6,7 @@ x.x.x
 3. When listing works, show composer as a header.
 4. When listing 'Works' main category ask if want to show 'All Works',
    'Composers', or 'Genres'
+5. Request smaller image for backgrounds, and reduce blur.
 
 4.6.3
 -----

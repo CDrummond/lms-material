@@ -516,7 +516,7 @@ var lmsQueue = Vue.component("lms-queue", {
         this.coverUrl = undefined;
         this.coverTrackIndex = undefined;
         bus.$on('currentCover', function(coverUrl, queueIndex) {
-            this.coverUrl = undefined==coverUrl || coverUrl.endsWith(DEFAULT_COVER) ? undefined : coverUrl;
+            this.coverUrl = undefined==coverUrl || coverUrl.endsWith(DEFAULT_COVER) ? undefined : changeImageSizing(coverUrl, LMS_IMAGE_SIZE);
             this.coverTrackIndex = queueIndex;
             this.setBgndCover();
         }.bind(this));

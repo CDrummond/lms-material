@@ -48,7 +48,8 @@
  --np-wide-left:57.5vw;
  --np-controls-height:50px;
  --mobile-scrollbar-thumb-color:transparent;
- --bgnd-filter:blur(7px);
+ --bgnd-filter-size:2px;
+ --bgnd-filter:blur(var(--bgnd-filter-size));
  --np-bgnd-filter-size:7px;
  --np-bgnd-filter:blur(var(--np-bgnd-filter-size));
  --backdrop-filter:blur(4px);
@@ -90,16 +91,19 @@
 @media (min-width:800px) {
  :root {
   --np-bgnd-filter-size:9px;
+  --bgnd-filter-size:3px;
  }
 }
 @media (min-width:1000px) {
  :root {
   --np-bgnd-filter-size:10px;
+  --bgnd-filter-size:4px;
  }
 }
 @media (min-width:1500px) {
  :root {
   --np-bgnd-filter-size:12px;
+  --bgnd-filter-size:5px;
  }
 }
 

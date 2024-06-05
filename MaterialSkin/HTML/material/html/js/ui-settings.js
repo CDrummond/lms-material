@@ -47,7 +47,8 @@ Vue.component('lms-ui-settings', {
       <v-list-tile-title>{{i18n('Color')}}</v-list-tile-title>
       <div class="color-grid">
        <template v-for="(item, index) in colorList.colors">
-         <div @click="color=item.key" :style="{'background-color':item.color}" class="color-circle" v-bind:class="{'selected-color-circle':item.key==color}"></div>
+         <div v-if="item.lcolor" @click="color=item.key" :style="{'background':'linear-gradient(to right,'+item.lcolor+' 0%, '+item.lcolor+' 50%, '+item.color+' 50%, '+item.color+' 100%)'}" class="color-circle" v-bind:class="{'selected-color-circle':item.key==color}"></div>
+         <div v-else @click="color=item.key" :style="{'background-color':item.color}" class="color-circle" v-bind:class="{'selected-color-circle':item.key==color}"></div>
        </template>
        <div v-for="(item, index) in userColors" @click="color=item.key" :style="{'background-color':item.color}" class="color-circle" v-bind:class="{'selected-color-circle':item.key==color}"></div>
        <div @click="color=COLOR_FROM_COVER" class="color-circle color-from-cover" v-bind:class="{'selected-color-circle':COLOR_FROM_COVER==color}"></div>

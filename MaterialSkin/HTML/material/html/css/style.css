@@ -74,6 +74,7 @@
  --100vh:calc(var(--vh, 1vh)*100);
  --np-zoom:1.0;
  --np-zoom-list:1.0;
+ --inverted-text-color:#edece7;
 }
 
 @media (orientation:landscape) and (max-width: 1000px) {
@@ -2853,7 +2854,7 @@ div.v-subheader {
 }
 
 .color-from-cover {
- background-image: linear-gradient(#c62828, #1976d2, #ff8f00, #455a64);
+ background-image: linear-gradient(to right, #c62828, #1976d2, #ff8f00, #455a64);
 }
 
 .selected-color-circle {

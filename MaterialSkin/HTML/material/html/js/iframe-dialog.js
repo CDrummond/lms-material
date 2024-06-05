@@ -475,7 +475,7 @@ function copyVar(iframe, name) {
     }
 }
 
-function applyModifications(page, textCol) {
+function applyModifications(page, textCol, darkUi) {
     if (!page) {
         return;
     }
@@ -491,7 +491,11 @@ function applyModifications(page, textCol) {
         copyVar(iframe, '--primary-color');
         copyVar(iframe, '--accent-color');
         copyVar(iframe, '--pq-current-color');
+        copyVar(iframe, '--inverted-text-color');
         content.documentElement.getElementsByTagName("body")[0].classList.add(IS_MOBILE ? "msk-is-touch" : "msk-is-non-touch");
+        if (darkUi) {
+            content.documentElement.getElementsByTagName("body")[0].classList.add("theme--dark");
+        }
         fixClassicSkinRefs(content);
         remapClassicSkinIcons(content, textCol);
         addHooks(content);
@@ -647,7 +651,7 @@ Vue.component('lms-iframe-dialog', {
    </v-card-title>
    <v-card-text class="embedded-page">
     <div v-if="!loaded" style="width:100%;padding-top:64px;display:flex;justify-content:center;font-size:18px">{{i18n('Loading...')}}</div>
-    <iframe id="embeddedIframe" v-on:load="applyModifications(page, textCol)" :src="src" frameborder="0" v-bind:class="{'iframe-text':'other'==page}"></iframe>
+    <iframe id="embeddedIframe" v-on:load="applyModifications(page, textCol, darkUi)" :src="src" frameborder="0" v-bind:class="{'iframe-text':'other'==page}"></iframe>
    </v-card-text>
   </v-card>
  </v-dialog>

@@ -794,3 +794,12 @@ function isSameArtists(item, rolea, roleb) {
     }
     return true;
 }
+
+function isSameArtistsL(item, rolea, roleList) {
+    for (let i=0, len=roleList.length; i<len; ++i) {
+        if (isSameArtists(item, rolea, roleList[i])) {
+            return true;
+        }
+    }
+    return false;
+}

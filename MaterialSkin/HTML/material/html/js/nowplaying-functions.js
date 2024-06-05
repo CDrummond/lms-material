@@ -255,6 +255,9 @@ function nowplayingOnPlayerStatus(view, playerStatus) {
     if (playerStatus.current.work!=view.playerStatus.current.work) {
         view.playerStatus.current.work = playerStatus.current.work;
     }
+    if (playerStatus.current.work_id!=view.playerStatus.current.work_id) {
+        view.playerStatus.current.work_id = playerStatus.current.work_id;
+    }
     if (playerStatus.current.performance!=view.playerStatus.current.performance) {
         view.playerStatus.current.performance = playerStatus.current.performance;
     }
@@ -599,12 +602,19 @@ function nowplayingFetchTrackInfo(view) {
         }
     }
     if (undefined!=trk.album ) {
-        html+="<tr><td>"+i18n("Album")+"&nbsp;</td><td><obj class=\"link-item\" onclick=\"nowplayingBrowse('album', "+trk.album_id+
-              ", \'"+escape(trk.album)+"\', \'" +escape(trk.albumartist ? trk.albumartist : trk.artist)+ "\')\">"+trk.album+"</obj></td></tr>";
+        if (undefined!=trk.album_id) {
+            html+="<tr><td>"+i18n("Album")+"&nbsp;</td><td><obj class=\"link-item\" onclick=\"nowplayingBrowse('album', "+trk.album_id+
+                  ", \'"+escape(trk.album)+"\', \'" +escape(trk.albumartist ? trk.albumartist : trk.artist)+ "\')\">"+trk.album+"</obj></td></tr>";
+        } else {
+            html+="<tr><td>"+i18n("Album")+"&nbsp;</td><td>"+trk.album+"</td></tr>";
+        }
     }
     if (undefined!=trk.work ) {
-        //html+="<tr><td>"+i18n("Work")+"&nbsp;</td><td><obj class=\"link-item\" onclick=\"nowplayingBrowse('work', "+trk.work_id+", \'"+escape(trk.work)+"\')\">"+trk.work+"</obj></td></tr>";
-        html+="<tr><td>"+i18n("Work")+"&nbsp;</td><td>"+trk.work+"</td></tr>";
+        if (undefined!=trk.work_id) {
+            html+="<tr><td>"+i18n("Work")+"&nbsp;</td><td><obj class=\"link-item\" onclick=\"nowplayingBrowse('work', "+trk.work_id+", \'"+escape(trk.work)+"\')\">"+trk.work+"</obj></td></tr>";
+        } else {
+            html+="<tr><td>"+i18n("Work")+"&nbsp;</td><td>"+trk.work+"</td></tr>";
+        }
     }
     if (undefined!=trk.performance ) {
         html+="<tr><td>"+i18n("Performance")+"&nbsp;</td><td>"+trk.performance+"</td></tr>";

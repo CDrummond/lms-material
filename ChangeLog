@@ -7,6 +7,7 @@ x.x.x
 4. When listing 'Works' main category ask if want to show 'All Works',
    'Composers', or 'Genres'
 5. Request smaller image for backgrounds, and reduce blur.
+6. Add Work, Performance, and Album to details in MAI track view.
 
 4.6.3
 -----

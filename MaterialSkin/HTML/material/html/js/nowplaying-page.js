@@ -590,8 +590,8 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
         bus.$on('npclose', function() {
             this.close();
         }.bind(this));
-        bus.$on('npbrowse', function(cmd, params, title) {
-            bus.$emit("browse", cmd, params, title, this.currentView());
+        bus.$on('npbrowse', function(cmd, params, title, subtitle) {
+            bus.$emit("browse", cmd, params, title, this.currentView(), undefined, subtitle);
             this.close();
         }.bind(this));
         bus.$on('linkClicked', function() {

@@ -252,7 +252,12 @@ function nowplayingOnPlayerStatus(view, playerStatus) {
     if (maiComposer!=view.playerStatus.current.maiComposer) {
         view.playerStatus.current.maiComposer = maiComposer;
     }
-
+    if (playerStatus.current.work!=view.playerStatus.current.work) {
+        view.playerStatus.current.work = playerStatus.current.work;
+    }
+    if (playerStatus.current.performance!=view.playerStatus.current.performance) {
+        view.playerStatus.current.performance = playerStatus.current.performance;
+    }
     if (trackChanged && view.info.sync) {
         view.setInfoTrack();
         view.showInfo();
@@ -593,6 +598,17 @@ function nowplayingFetchTrackInfo(view) {
             }
         }
     }
+    if (undefined!=trk.album ) {
+        html+="<tr><td>"+i18n("Album")+"&nbsp;</td><td><obj class=\"link-item\" onclick=\"nowplayingBrowse('album', "+trk.album_id+
+              ", \'"+escape(trk.album)+"\', \'" +escape(trk.albumartist ? trk.albumartist : trk.artist)+ "\')\">"+trk.album+"</obj></td></tr>";
+    }
+    if (undefined!=trk.work ) {
+        //html+="<tr><td>"+i18n("Work")+"&nbsp;</td><td><obj class=\"link-item\" onclick=\"nowplayingBrowse('work', "+trk.work_id+", \'"+escape(trk.work)+"\')\">"+trk.work+"</obj></td></tr>";
+        html+="<tr><td>"+i18n("Work")+"&nbsp;</td><td>"+trk.work+"</td></tr>";
+    }
+    if (undefined!=trk.performance ) {
+        html+="<tr><td>"+i18n("Performance")+"&nbsp;</td><td>"+trk.performance+"</td></tr>";
+    }
     if (undefined!=trk.year && trk.year>0) {
         html+="<tr><td>"+i18n("Year")+"&nbsp;</td><td><obj class=\"link-item\" onclick=\"nowplayingBrowse('year', "+trk.year+")\">"+trk.year+"</obj></td></tr>";
     }
@@ -915,7 +931,7 @@ function nowplayingSearch(str) {
     bus.$emit('npclose');
 }
 
-function nowplayingBrowse(cat, param, title) {
+function nowplayingBrowse(cat, param, title, subtitle) {
     let cmd=undefined;
     let params=undefined;
     if ('year'==cat) {
@@ -936,6 +952,10 @@ function nowplayingBrowse(cat, param, title) {
         } else {
             bus.$emit("npbrowse", cat, param, name);
         }
+    } else if ('work'==cat) {
+        bus.$emit("npbrowse", ["albums"], ["work_id:"+param, ARTIST_ALBUM_TAGS, SORT_KEY+ARTIST_ALBUM_SORT_PLACEHOLDER], unescape(title));
+    } else if ('album'==cat) {
+        bus.$emit("npbrowse", ["tracks"], ["album_id:"+param, trackTags(true), SORT_KEY+"tracknum"], unescape(title), unescape(subtitle));
     } else {
         cmd=["albums"];
         params=["artist_id:"+param, ARTIST_ALBUM_TAGS, SORT_KEY+ARTIST_ALBUM_SORT_PLACEHOLDER];

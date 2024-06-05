@@ -191,6 +191,8 @@ function buildStdItemCommand(item, parentCommand) {
             }
             if (undefined!=item.performance) {
                 command.params.push("performance:"+item.performance);
+            } else {
+                command.params.push("performance:");
             }
         } else if (item.id.startsWith("genre_id:")) {
             for (var i=0, len=parentCommand.params.length; i<len; ++i) {

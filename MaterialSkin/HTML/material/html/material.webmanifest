@@ -1,9 +1,9 @@
 {
-  "name": "LMS",
-  "short_name": "LMS",
+  "name": "Lyrion",
+  "short_name": "Lyrion",
   "description": "A mobile-friendly Material-style interface for controlling Squeezebox-compatible network music players.",
-  "theme_color": "#212121",
-  "background_color": "#212121",
+  "theme_color": "#404040",
+  "background_color": "#404040",
   "display": "standalone",
   "display_override": ["window-controls-overlay"],
   "scope": "/material",

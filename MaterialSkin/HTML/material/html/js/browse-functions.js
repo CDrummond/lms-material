@@ -962,7 +962,7 @@ function browseAddWorksCategories(view, item) {
         title: i18n("All Works"),
         command: ["works"],
         params: ['include_online_only_artists:1', "tags:s"],
-        svg: "classical-work",
+        svg: "release-work",
         type: "group",
         id: "mmw:aw"});
     view.items.push({

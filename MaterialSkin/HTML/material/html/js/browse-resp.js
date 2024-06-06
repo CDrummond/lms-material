@@ -1539,7 +1539,7 @@ function parseBrowseResp(data, parent, options, cacheKey, parentCommand, parentG
             }
 
             resp.numAudioItems = resp.items.length;
-            if (allowPlayAlbum) {
+            if (allowPlayAlbum && !isAllTracks) {
                 resp.allTracksItem = parent;
             }
             if (performance==0 && discs.size>1) {

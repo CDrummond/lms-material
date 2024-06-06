@@ -166,7 +166,7 @@ div#topGraphicMenu3 #statusMessage {
  font-size:0px!important;
 }
 
-@media (min-width: 1300px) {
+@media (min-width: 1620px) {
  div#innerSettingsBlock {
   width:100%!important;
  }

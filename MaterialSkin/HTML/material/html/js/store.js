@@ -156,25 +156,6 @@ function updateUiSettings(state, val) {
     }
 }
 
-function defaultTheme(standard) {
-    const prefersLight = standard ? false : (window.matchMedia && window.matchMedia('(prefers-color-scheme: light)').matches);
-    // Keep in sync with index.html
-    if (IS_IOS) {
-        return prefersLight ? "light" : "darker";
-    } else if (IS_ANDROID) {
-        return prefersLight ? "light" : "darker";
-    } else if (navigator.platform.indexOf("Linux") != -1) {
-        return window.location.href.indexOf('desktop=KDE') != -1
-                    ? (prefersLight ? "linux/light/Breeze" : "linux/dark/Breeze-Dark")
-                    : (prefersLight ? "linux/light/Adwaita" : "linux/dark/Adwaita-Dark");
-    } else if (navigator.platform.indexOf("Win") != -1) {
-        return prefersLight ? "windows/light/Windows-10" : "windows/dark/Windows-10-Dark";
-    } else if (navigator.platform.indexOf("Mac") != -1) {
-        return prefersLight ? "mac/light/Mojave" : "mac/dark/Mojave-Dark";
-    }
-    return "darker";
-}
-
 function storeCurrentPlayer(player) {
     setLocalStorageVal('player', player.id);
     if (1==queryParams.nativePlayer) {
@@ -242,15 +223,15 @@ const store = new Vuex.Store({
     state: {
         desktopLayout: false,
         mobileBar: MBAR_THIN,
-        showQueue: true,
-        pinQueue: true,
+        showQueue: false,
+        pinQueue: false,
         players: null, // List of players
         player: null, // Current player (from list)
         defaultPlayer: null,
         otherPlayers: [], // Players on other servers
-        theme: defaultTheme(true),        // Set to dark/light if theme is "auto"
-        chosenTheme: defaultTheme(true),  // Theme as chosen by user
-        color: 'blue',
+        theme: 'darker',        // Set to dark/light if theme is "auto"
+        chosenTheme: 'darker',  // Theme as chosen by user
+        color: 'lyrion',
         darkUi: true,
         roundCovers: true,
         fontSize: 'r',

@@ -6,7 +6,7 @@
   <link rel="stylesheet" type="text/css" href="[% webroot %]html/font/font.css?r=49"/>
   <link rel="stylesheet" type="text/css" href="[% webroot %]skin.css?r=MATERIAL_VERSION" />
   <link rel="stylesheet" type="text/css" href="[% webroot %]html/css/themes/dark.css?r=MATERIAL_VERSION"/>
-  <link rel="stylesheet" type="text/css" href="[% webroot %]html/css/colors/blue.css?r=MATERIAL_VERSION"/>
+  <link rel="stylesheet" type="text/css" href="[% webroot %]html/css/colors/lyrion.css?r=MATERIAL_VERSION"/>
   <script src="[% webroot %]html/lib/mousetrap.min.js?r=a4098"></script>
   <script>
   let theme = window.localStorage.getItem("lms-material::theme");
@@ -31,14 +31,14 @@
   }
 
   let col = window.localStorage.getItem("lms-material::color");
-  if ('blue'!=col && undefined!=col) {
+  if ('lyrion'!=col && undefined!=col) {
     if (col.startsWith("user:")) {
-      document.querySelector("link[href='[% webroot %]html/css/colors/blue.css?r=MATERIAL_VERSION']").href = "/material/usercolor/" + col.substring(5) + "?r=MATERIAL_VERSION";
+      document.querySelector("link[href='[% webroot %]html/css/colors/lyrion.css?r=MATERIAL_VERSION']").href = "/material/usercolor/" + col.substring(5) + "?r=MATERIAL_VERSION";
     } else {
      if (col=='from-cover') {
       col='bluegrey';
      }
-     document.querySelector("link[href='[% webroot %]html/css/colors/blue.css?r=MATERIAL_VERSION']").href = "[% webroot %]html/css/colors/"+col+".css?r=MATERIAL_VERSION";
+     document.querySelector("link[href='[% webroot %]html/css/colors/lyrion.css?r=MATERIAL_VERSION']").href = "[% webroot %]html/css/colors/"+col+".css?r=MATERIAL_VERSION";
     }
   }
   Mousetrap.bind('esc', function() { document.bus.$emit('esc') });

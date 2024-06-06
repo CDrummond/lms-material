@@ -411,9 +411,9 @@ Vue.component('lms-ui-settings', {
         return {
             show: false,
             showMenu: false,
-            theme: 'dark',
+            theme: 'darker',
             themes: [ ],
-            color: 'blue',
+            color: 'lyrion',
             colorList: { } ,
             userColors: [ ],
             colorToolbars: false,

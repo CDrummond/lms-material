@@ -188,6 +188,8 @@ function browseActions(view, item, args, count, showCompositions, showWorks) {
             var params = [SORT_KEY+TRACK_SORT_PLACEHOLDER, PLAYLIST_TRACK_TAGS, 'work_id:'+args['work_id'], args['composer_id']];
             if (undefined!=args['performance']) {
                 params.push(args['performance']);
+            } else {
+		params.push('performance:-1');
             }
             if (item && item.album_id) {
                 params.push('album_id:'+item.album_id);

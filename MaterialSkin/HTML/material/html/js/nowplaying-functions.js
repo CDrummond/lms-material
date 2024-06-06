@@ -601,23 +601,28 @@ function nowplayingFetchTrackInfo(view) {
             }
         }
     }
+    let artist = trk.albumartist ? trk.albumartist : trk.artist;
     if (undefined!=trk.album ) {
         if (undefined!=trk.album_id) {
             html+="<tr><td>"+i18n("Album")+"&nbsp;</td><td><obj class=\"link-item\" onclick=\"nowplayingBrowse('album', "+trk.album_id+
-                  ", \'"+escape(trk.album)+"\', \'" +escape(trk.albumartist ? trk.albumartist : trk.artist)+ "\')\">"+trk.album+"</obj></td></tr>";
+                  ", \'"+escape(trk.album)+"\', \'" +escape(artist)+ "\')\">"+trk.album+"</obj></td></tr>";
         } else {
             html+="<tr><td>"+i18n("Album")+"&nbsp;</td><td>"+trk.album+"</td></tr>";
         }
     }
     if (undefined!=trk.work ) {
         if (undefined!=trk.work_id) {
-            html+="<tr><td>"+i18n("Work")+"&nbsp;</td><td><obj class=\"link-item\" onclick=\"nowplayingBrowse('work', "+trk.work_id+", \'"+escape(trk.work)+"\')\">"+trk.work+"</obj></td></tr>";
+            html+="<tr><td>"+i18n("Work")+"&nbsp;</td><td><obj class=\"link-item\" onclick=\"nowplayingBrowse('work', "+trk.work_id+", \'"+escape(trk.work)+"\', \'"+escape(artist)+"\')\">"+trk.work+"</obj></td></tr>";
         } else {
             html+="<tr><td>"+i18n("Work")+"&nbsp;</td><td>"+trk.work+"</td></tr>";
         }
     }
     if (undefined!=trk.performance ) {
-        html+="<tr><td>"+i18n("Performance")+"&nbsp;</td><td>"+trk.performance+"</td></tr>";
+        if (undefined!=trk.work && undefined!=trk.work_id) {
+            html+="<tr><td>"+i18n("Performance")+"&nbsp;</td><td><obj class=\"link-item\" onclick=\"nowplayingBrowse('performance', "+trk.work_id+", \'"+escape(trk.performance+SEPARATOR+trk.work)+"\', \'"+escape(artist)+"\', \'"+escape(trk.performance)+"\')\">"+trk.performance+"</obj></td></tr>";
+        } else {
+            html+="<tr><td>"+i18n("Performance")+"&nbsp;</td><td>"+trk.performance+"</td></tr>";
+        }
     }
     if (undefined!=trk.year && trk.year>0) {
         html+="<tr><td>"+i18n("Year")+"&nbsp;</td><td><obj class=\"link-item\" onclick=\"nowplayingBrowse('year', "+trk.year+")\">"+trk.year+"</obj></td></tr>";
@@ -941,7 +946,7 @@ function nowplayingSearch(str) {
     bus.$emit('npclose');
 }
 
-function nowplayingBrowse(cat, param, title, subtitle) {
+function nowplayingBrowse(cat, param, title, subtitle, other) {
     let cmd=undefined;
     let params=undefined;
     if ('year'==cat) {
@@ -963,7 +968,9 @@ function nowplayingBrowse(cat, param, title, subtitle) {
             bus.$emit("npbrowse", cat, param, name);
         }
     } else if ('work'==cat) {
-        bus.$emit("npbrowse", ["albums"], ["work_id:"+param, ARTIST_ALBUM_TAGS, SORT_KEY+ARTIST_ALBUM_SORT_PLACEHOLDER], unescape(title));
+        bus.$emit("npbrowse", ["albums"], ["work_id:"+param, ARTIST_ALBUM_TAGS, SORT_KEY+ARTIST_ALBUM_SORT_PLACEHOLDER], unescape(title), unescape(subtitle));
+    } else if ('performance'==cat) {
+        bus.$emit("npbrowse", ["tracks"], ["work_id:"+param, "performance:"+unescape(other), trackTags(true), SORT_KEY+"tracknum"], unescape(title), unescape(subtitle));
     } else if ('album'==cat) {
         bus.$emit("npbrowse", ["tracks"], ["album_id:"+param, trackTags(true), SORT_KEY+"tracknum"], unescape(title), unescape(subtitle));
     } else {

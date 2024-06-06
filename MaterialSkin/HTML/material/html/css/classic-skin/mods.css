@@ -2,7 +2,12 @@
  --dialog-list-max-width:900px;
  --bold-weight:500;
  --plugin-bar-adjust:0px;
- scrollbar-color:var(--scrollbar-thumb-color) var(--scrollbar-track-color);
+}
+
+@supports not selector(::-webkit-scrollbar) {
+ :root {
+   scrollbar-color:var(--scrollbar-thumb-color) var(--scrollbar-track-color);
+ }
 }
 
 #sdi_logo, #topGraphicMenu1, #topGraphicMenu2, #statusMessage a, .playericon, .largeAttribute {

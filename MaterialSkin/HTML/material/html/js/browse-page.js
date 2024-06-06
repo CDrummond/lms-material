@@ -2230,7 +2230,7 @@ var lmsBrowse = Vue.component("lms-browse", {
                 return "/material/svg/"+name+"?c="+(dark||hoverInGrid ? LMS_DARK_SVG : LMS_LIGHT_SVG)+"&c2="+(dark||hoverInGrid ? "333" : "eee")+"&r="+LMS_MATERIAL_REVISION;
             }
             if (undefined!=header) {
-                return "/material/svg/"+name+"?c="+getComputedStyle(document.documentElement).getPropertyValue("--active-color").replace("#", "")+"&r="+LMS_MATERIAL_REVISION;
+                return "/material/svg/"+name+"?c="+getComputedStyle(document.getElementById("browse-view")).getPropertyValue("--active-color").replace("#", "")+"&r="+LMS_MATERIAL_REVISION;
             }
             return "/material/svg/"+name+"?c="+(dark ? LMS_DARK_SVG : LMS_LIGHT_SVG)+"&r="+LMS_MATERIAL_REVISION;
         },

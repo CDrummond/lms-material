@@ -18,6 +18,7 @@
  --active-color:#e2fdc4!important;
  --toolbar-volume-color:#e2fdc4!important;
  --inverted-text-color:#333;
+ --active-nav-btn-color:#e2fdc4;
 }
 
 .theme--dark .m3-switch--active:after {

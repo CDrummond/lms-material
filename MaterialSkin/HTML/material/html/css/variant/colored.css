@@ -20,6 +20,10 @@
  --bottom-position-slider-color:var(--light-text-color);
 }
 
+.theme--dark {
+ --active-nav-btn-color:var(--light-text-color)!important;
+}
+
 .lms-toolbar .v-input--slider .v-slider__track,
 .lms-toolbar .v-input--slider .v-slider__track-fill,
 .lms-toolbar .v-slider__thumb-container .v-slider__thumb {

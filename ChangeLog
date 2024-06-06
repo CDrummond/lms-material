@@ -12,6 +12,7 @@ x.x.x
  8. Change icon to match Lyrion.
  9. Fix custom scrollbar in iframes.
 10. Alter defaults; 'Darker' for all OSs, unpinned queue.
+11. Add custom look to settings pages combo-box menus.
 
 4.6.3
 -----

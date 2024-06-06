@@ -2,6 +2,7 @@
  --dialog-list-max-width:900px;
  --bold-weight:500;
  --plugin-bar-adjust:0px;
+ --select-highlight:rgba(var(--highlight-rgb),0.25);
 }
 
 @supports not selector(::-webkit-scrollbar) {
@@ -759,4 +760,56 @@ table td input[type=checkbox] {
  #pluginButtonBar span:first-of-type {
    margin-right:12px;
  }
+}
+
+.custom-select-option,
+.custom-select-optgroup::before {
+ color:var(--text-color);
+ background-color:var(--popup-background-color);
+}
+
+.custom-select-optgroup::before {
+ font-weight:bold;
+ color:var(--text-color)!important;
+}
+
+.custom-select-option.has-focus {
+ background-color:var(--select-highlight)!important;
+}
+
+.custom-select-opener {
+ color:var(--text-color);
+ background-color:transparent!important;
+ border-bottom:1px solid var(--text-color);
+ padding-left:0px!important;
+ margin-bottom:16px!important;
+ margin-top:-3px!important;
+ min-width:80px!important;
+ padding:4px!important;
+}
+
+#setup_chooser .custom-select-opener {
+ font-weight:bold!important;
+ color:var(--active-color);
+}
+
+#setup_chooser .custom-select-container {
+ max-width:calc(100vw - 36px)!important;
+}
+
+.custom-select-opener:focus {
+ border-bottom:1px solid var(--active-color);
+}
+
+.custom-select-container.is-open .custom-select-panel {
+ max-height:50em!important;
+}
+
+.custom-select-panel {
+ background-color:var(--popup-background-color)!important;
+ transition: max-height .25s ease-out, overflow-y 0.1s 0.25s !important;
+}
+
+:focus-visible {
+ outline: transparent auto 0px;
 }

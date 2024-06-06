@@ -8,14 +8,17 @@
 <link rel="stylesheet" type="text/css" href="[% webroot %]html/css/themes/dark.css?r=MATERIAL_VERSION"/>
 <link rel="stylesheet" type="text/css" href="[% webroot %]html/css/colors/blue.css?r=MATERIAL_VERSION"/>
 <link rel="stylesheet" type="text/css" href="[% webroot %]html/css/classic-skin/dark.css?r=MATERIAL_VERSION"/>
+<link rel="stylesheet" type="text/css" href="[% webroot %]html/lib/classic-skin/custom-select.css?r=1.1.16"/>
 <link rel="apple-touch-icon" href="[% webroot %]html/images/apple-touch-icon.png"/>
 [% IF mobileBrowser %]
 	<meta name="viewport" content="width=device-width">
 	<link rel="stylesheet" type="text/css" href="[% webroot %]mobile.css"/>
 [% END %]
 <script src="[% webroot %]html/lib/mousetrap.min.js?r=a4098"></script>
+<script src="[% webroot %]html/lib/classic-skin/custom-select.min.js?r=1.1.16"></script>
 <script>
  let theme = window.localStorage.getItem("lms-material::theme");
+ console.log("THEME", theme);
  if (undefined==theme) {
    theme = 'dark';
  } else if(theme=='auto') {
@@ -46,5 +49,17 @@
   }
  }
  Mousetrap.bind('esc', function() { document.bus.$emit('esc') });
+
+ function styleSelects() {
+  customSelect("select");
+ }
+
+ if (window.addEventListener) {
+  window.addEventListener("load", styleSelects, false);
+ } else if (window.attachEvent) {
+  window.attachEvent("onload", styleSelects);
+ } else {
+  window.onload = styleSelects;
+ }
 </script>
 

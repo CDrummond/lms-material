@@ -12,13 +12,13 @@
 }
 
 .theme--dark {
- --highlight-rgb:226,253,196;
- --primary-color:#e2fdc4;
- --accent-color:#e2fdc4;
- --active-color:#e2fdc4!important;
- --toolbar-volume-color:#e2fdc4!important;
+ --highlight-rgb:227,253,196;
+ --primary-color:#e3fdc4;
+ --accent-color:#e3fdc4;
+ --active-color:#e3fdc4!important;
+ --toolbar-volume-color:#e3fdc4!important;
  --inverted-text-color:#333;
- --active-nav-btn-color:#e2fdc4;
+ --active-nav-btn-color:#e3fdc4;
 }
 
 .theme--dark .m3-switch--active:after {

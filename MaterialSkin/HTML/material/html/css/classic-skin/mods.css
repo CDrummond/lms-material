@@ -810,6 +810,20 @@ table td input[type=checkbox] {
  transition: max-height .25s ease-out, overflow-y 0.1s 0.25s !important;
 }
 
+.custom-select-option.is-selected::before {
+ content: ""!important;
+ padding-right: unset!important;
+}
+
+.custom-select-option.is-selected {
+ color:var(--active-color);
+}
+
+#pluginButtonBar span:last-of-type {
+ margin-right: -4px;
+ min-width:280px;
+}
+
 :focus-visible {
  outline: transparent auto 0px;
 }

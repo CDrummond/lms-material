@@ -11,8 +11,7 @@ x.x.x
  7. Add 'Lyrion' colour - different between Light and Dark themes.
  8. Change icon to match Lyrion.
  9. Fix custom scrollbar in iframes.
-10. Alter defaults; 'Darker' for all OSs, 'Lyrion' colour scheme, unpinned
-    queue.
+10. Alter defaults; 'Darker' for all OSs, unpinned queue.
 
 4.6.3
 -----

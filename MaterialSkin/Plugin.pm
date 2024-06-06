@@ -1997,9 +1997,9 @@ sub _userColorHandler {
     $response->code(RC_OK);
     if (! -e $filePath) {
         # Not found, fallback to a default one...
-        $filePath = dirname(__FILE__) . "/HTML/material/html/css/colors/lyrion.css";
+        $filePath = dirname(__FILE__) . "/HTML/material/html/css/colors/blue.css";
         if (! -e $filePath) {
-            $filePath = dirname(__FILE__) . "/HTML/material/html/css/colors/lyrion.min.css";
+            $filePath = dirname(__FILE__) . "/HTML/material/html/css/colors/blue.min.css";
         }
     }
     $response->code(RC_OK);

@@ -15,7 +15,7 @@
   <link href="/material/icon.png" rel="apple-touch-icon" sizes="128x128">
   <link href="../html/font/font.css?r=49" rel="stylesheet">
   <link href="../html/css/themes/dark.css" rel="stylesheet">
-  <link href="../html/css/colors/lyrion.css" rel="stylesheet">
+  <link href="../html/css/colors/blue.css" rel="stylesheet">
   <link href="../html/css/style.css" rel="stylesheet">
   <style>
    *, body {
@@ -77,11 +77,11 @@
      }
 
      let col = window.localStorage.getItem("lms-material::color");
-     if ('lyrion'!=col && undefined!=col) {
+     if ('blue'!=col && undefined!=col) {
        if (col.startsWith("user:")) {
-         document.querySelector("link[href='../html/css/colors/lyrion.css']").href = "/material/usercolor/" + col.substring(5) + "";
+         document.querySelector("link[href='../html/css/colors/blue.css']").href = "/material/usercolor/" + col.substring(5) + "";
        } else {
-         document.querySelector("link[href='../html/css/colors/lyrion.css']").href = "../html/css/colors/"+col+".css";
+         document.querySelector("link[href='../html/css/colors/blue.css']").href = "../html/css/colors/"+col+".css";
        }
      }
 

@@ -231,7 +231,7 @@ const store = new Vuex.Store({
         otherPlayers: [], // Players on other servers
         theme: 'darker',        // Set to dark/light if theme is "auto"
         chosenTheme: 'darker',  // Theme as chosen by user
-        color: 'lyrion',
+        color: 'blue',
         darkUi: true,
         roundCovers: true,
         fontSize: 'r',

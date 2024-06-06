@@ -95,9 +95,9 @@ body {
  margin-top:0px;
 }
 
-@media screen and (min-width: 1300px) {
+@media screen and (min-width: 1620px) {
  body {
-  max-width:1200px;
+  max-width:1550px;
   margin-left:auto;
   margin-right:auto;
  }

@@ -404,7 +404,6 @@ function iframeWidthChanged() {
             }
             if (pbarHeight!=iframeInfo.pbarHeight) {
                 iframeInfo.pbarHeight = pbarHeight;
-                console.log(pbarHeight)
                 iframe.contentWindow.document.documentElement.style.setProperty('--plugin-bar-adjust', pbarHeight +"px");
             }
         }

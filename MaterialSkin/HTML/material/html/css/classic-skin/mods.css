@@ -550,46 +550,6 @@ input[type=checkbox]:checked:before, input[type=radio]:checked:before {
  border-radius:3px;
 }
 
-::-webkit-scrollbar {
- background:var(--scrollbar-track-color);
- max-height:10px;
- max-width:10px;
-}
-
-::-webkit-scrollbar-thumb {
- background:var(--scrollbar-thumb-color);
- border-radius:4px;
- border-left:2px solid var(--scrollbar-track-color);
- border-right:2px solid var(--scrollbar-track-color);
-}
-
-::-webkit-scrollbar-thumb:hover {
- background:var(--scrollbar-thumb-hover-color);
- border-left:1px solid var(--scrollbar-track-color);
- border-right:1px solid var(--scrollbar-track-color);
-}
-
-::-webkit-scrollbar-thumb:active {
- background:var(--primary-color);
-}
-
-/* Looks like 'select' is always active? So can't use primary colour here :( */
-select::-webkit-scrollbar-thumb:active {
- background:var(--scrollbar-thumb-hover-color);
-}
-
-::-webkit-scrollbar-corner {
- background:var(--scrollbar-corner-color);
-}
-
-::-webkit-scrollbar-thumb:vertical {
- min-height:64px;
-}
-
-::-webkit-scrollbar-thumb:horizontal {
- min-width:64px;
-}
-
 /* Progress bars (e.g. scan) */
 img[src*="bar_small_empty.gif"] {
  border:1px solid var(--active-color);

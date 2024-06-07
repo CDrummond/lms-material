@@ -13,6 +13,8 @@
 [% IF mobileBrowser %]
 	<meta name="viewport" content="width=device-width">
 	<link rel="stylesheet" type="text/css" href="[% webroot %]mobile.css"/>
+[% ELSE %]
+<link rel="stylesheet" type="text/css" href="[% webroot %]html/css/classic-skin/scrollbars.css?r=MATERIAL_VERSION"/>
 [% END %]
 <script src="[% webroot %]html/lib/mousetrap.min.js?r=a4098"></script>
 <script src="[% webroot %]html/lib/classic-skin/custom-select.min.js?r=1.1.16"></script>

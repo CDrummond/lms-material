@@ -1,4 +1,4 @@
-x.x.x
+5.0.0
 -----
  1. Add server-side option to combine 'Apps' and 'Radios' menus.
  2. If combining 'Apps' and 'Radios', hide 'Music Walk With Me' as this
@@ -17,16 +17,13 @@ x.x.x
 13. Add Lyrion logo, and link, to top-right of settings, information, and help
     pages - if screen with is 600px or more.
 14. Add custom icons for 'LCI' and 'Live365'
-
-4.6.3
------
-1. Add tag to 'viewport' meta-data to restore old Chrome behaviour when
+15. Add tag to 'viewport' meta-data to restore old Chrome behaviour when
    showing keyboard on Android.
-2. No album-sort for Works-Album list.
-3. Fix 'All tracks' for Works-Album list.
-4. Remove 'Append random album/release to queue' from Works-album actions.
-5. Take into account layout and if tech info is shown when determining if to
-   show context strings in now-playing bar.
+16. No album-sort for Works-Album list.
+17. Fix 'All tracks' for Works-Album list.
+18. Remove 'Append random album/release to queue' from Works-album actions.
+19. Take into account layout and if tech info is shown when determining if to
+    show context strings in now-playing bar.
 
 4.6.2
 -----

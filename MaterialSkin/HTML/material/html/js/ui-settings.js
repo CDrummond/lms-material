@@ -656,10 +656,11 @@ Vue.component('lms-ui-settings', {
         initItems() {
             this.themes=[
                 { key: AUTO_THEME, label:this.i18n('Automatic')},
-                { key:'light',  label:i18n('Light')},
-                { key:'dark',   label:i18n('Dark')},
-                { key:'darker', label:i18n('Darker')},
-                { key:'black',  label:i18n('Black')}
+                { key:'light',       label:i18n('Light')},
+                { key:'dark',        label:i18n('Dark')},
+                { key:'darker',      label:i18n('Darker')},
+                { key:'black',       label:i18n('Black')},
+                { key:'dark-lyrion', label:'Lyrion'}
                 ];
             this.layoutItems=[
                 { key:"auto",    label:i18n("Automatic")},

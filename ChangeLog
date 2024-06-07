@@ -9,13 +9,14 @@ x.x.x
  5. Request smaller image for backgrounds, and reduce blur.
  6. Add Work, Performance, and Album to details in MAI track view.
  7. Add 'Lyrion' colour - different between Light and Dark themes.
- 8. Change icon to match Lyrion.
- 9. Fix custom scrollbar in iframes.
-10. Default to 'Darker' for all OSs.
-11. Add custom look to settings pages combo-box menus.
-12. Add Lyrion logo, and link, to top-right of settings, information, and help
+ 8. Add a 'Lyrion' theme, based upon dark theme of forum.
+ 9. Change icon to match Lyrion.
+10. Fix custom scrollbar in iframes.
+11. Default to 'Darker' for all OSs.
+12. Add custom look to settings pages combo-box menus.
+13. Add Lyrion logo, and link, to top-right of settings, information, and help
     pages - if screen with is 600px or more.
-13. Add custom icons for 'LCI' and 'Live365'
+14. Add custom icons for 'LCI' and 'Live365'
 
 4.6.3
 -----

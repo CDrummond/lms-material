@@ -223,8 +223,8 @@ const store = new Vuex.Store({
     state: {
         desktopLayout: false,
         mobileBar: MBAR_THIN,
-        showQueue: false,
-        pinQueue: false,
+        showQueue: true,
+        pinQueue: true,
         players: null, // List of players
         player: null, // Current player (from list)
         defaultPlayer: null,

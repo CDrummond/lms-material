@@ -11,7 +11,7 @@ x.x.x
  7. Add 'Lyrion' colour - different between Light and Dark themes.
  8. Change icon to match Lyrion.
  9. Fix custom scrollbar in iframes.
-10. Alter defaults; 'Darker' for all OSs, unpinned queue.
+10. Default to 'Darker' for all OSs.
 11. Add custom look to settings pages combo-box menus.
 12. Add Lyrion logo, and link, to top-right of settings, information, and help
     pages - if screen with is 600px or more.

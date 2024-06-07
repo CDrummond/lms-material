@@ -468,7 +468,7 @@ function selectChanged() {
 }
 
 function copyVar(iframe, name) {
-    let v = getComputedStyle(document.documentElement).getPropertyValue(name);
+    let v = getComputedStyle(document.getElementById("iframe-page")).getPropertyValue(name);
     if (undefined!=v) {
         iframe.contentWindow.document.documentElement.style.setProperty(name, v);
     }
@@ -492,7 +492,8 @@ function applyModifications(page, textCol, darkUi) {
         copyVar(iframe, '--pq-current-color');
         copyVar(iframe, '--inverted-text-color');
         copyVar(iframe, '--popup-background-color');
-        copyVar(iframe, '--highlight-rgb');
+        copyVar(iframe, '--list-hover-color');
+        copyVar(iframe, '--menu-dlg-shadow');
         content.documentElement.getElementsByTagName("body")[0].classList.add(IS_MOBILE ? "msk-is-touch" : "msk-is-non-touch");
         if (darkUi) {
             content.documentElement.getElementsByTagName("body")[0].classList.add("theme--dark");
@@ -616,7 +617,7 @@ function applyModifications(page, textCol, darkUi) {
 
 Vue.component('lms-iframe-dialog', {
     template: `
-<div>
+<div id="iframe-page">
  <v-dialog v-model="show" v-if="show" persistent no-click-animation scrollable fullscreen>
   <v-card>
    <v-card-title class="settings-title">

@@ -2,7 +2,6 @@
  --dialog-list-max-width:900px;
  --bold-weight:500;
  --plugin-bar-adjust:0px;
- --select-highlight:rgba(var(--highlight-rgb),0.25);
 }
 
 @supports not selector(::-webkit-scrollbar) {
@@ -158,8 +157,8 @@ table {
 
 div#innerSettingsBlock {
  width:calc(100vw - 36px)!important;
- height:calc((var(--vh, 1vh)*100) - (160px + var(--plugin-bar-adjust)))!important;
- padding: 0px 21px 0px 7px;
+ height:calc((var(--vh, 1vh)*100) - (260px + var(--plugin-bar-adjust)))!important;
+ padding: 0px 21px 100px 7px;
 }
 
 div#topGraphicMenu3 #statusMessage {
@@ -774,7 +773,7 @@ table td input[type=checkbox] {
 }
 
 .custom-select-option.has-focus {
- background-color:var(--select-highlight)!important;
+ background-color:var(--list-hover-color)!important;
 }
 
 .custom-select-opener {
@@ -785,7 +784,7 @@ table td input[type=checkbox] {
  margin-bottom:16px!important;
  margin-top:-3px!important;
  min-width:80px!important;
- padding:4px!important;
+ padding:4px 16px 4px 0px!important;
 }
 
 #setup_chooser .custom-select-opener {
@@ -801,13 +800,17 @@ table td input[type=checkbox] {
  border-bottom:1px solid var(--active-color);
 }
 
-.custom-select-container.is-open .custom-select-panel {
- max-height:50em!important;
+#setup_chooser .custom-select-container.is-open .custom-select-panel {
+ max-height:calc((var(--vh, 1vh)*100) - 100px)!important;
 }
 
 .custom-select-panel {
  background-color:var(--popup-background-color)!important;
  transition: max-height .25s ease-out, overflow-y 0.1s 0.25s !important;
+}
+
+.custom-select-container.is-open .custom-select-panel {
+ box-shadow:var(--menu-dlg-shadow);
 }
 
 .custom-select-option.is-selected::before {

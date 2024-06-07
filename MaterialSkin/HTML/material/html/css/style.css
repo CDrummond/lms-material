@@ -3728,6 +3728,6 @@ div.v-subheader {
 
 @media (max-width:600px) {
  .lyrion-logo {
-  visibility: hidden;
+  display: none;
  }
 }

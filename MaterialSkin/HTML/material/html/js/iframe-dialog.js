@@ -628,7 +628,7 @@ Vue.component('lms-iframe-dialog', {
      <v-toolbar-title v-if="page=='player' && numPlayers>1" @click="openChoiceMenu" class="pointer">{{title}}</v-toolbar-title>
      <v-toolbar-title v-else>{{title}}</v-toolbar-title>
      <v-spacer class="drag-area"></v-spacer>
-     <a class="lyrion-logo" href="https://lyrion.org" target="_blank"><img :src="'lyrion' | svgIcon(darkUi||coloredToolbars)"></img></a>
+     <a v-if="showLogo" class="lyrion-logo" href="https://lyrion.org" target="_blank"><img :src="'lyrion' | svgIcon(darkUi||coloredToolbars)"></img></a>
      <v-menu bottom left v-model="showMenu" v-if="actions.length>0 || (customActions && customActions.length>0)">
       <v-btn icon slot="activator"><v-icon>more_vert</v-icon></v-btn>
       <v-list>
@@ -686,7 +686,8 @@ Vue.component('lms-iframe-dialog', {
             history: [],
             showHome:0,
             textCol: undefined,
-            playerId: undefined
+            playerId: undefined,
+            showLogo: false
         }
     },
     mounted() {
@@ -702,6 +703,7 @@ Vue.component('lms-iframe-dialog', {
                                     : page == '/material/html/material-skin/index.html'
                                         ? "help"
                                         : "other";
+            this.showLogo = this.page!='other' && !page.startsWith("plugins/");
             this.show = true;
             this.showMenu = false;
             this.choiceMenu = {show:false, x:0}

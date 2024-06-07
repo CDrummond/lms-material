@@ -9,6 +9,7 @@
 var iconMap = {};
 var playerIcons = {};
 var playerIdIconMap = {};
+const BAD_ICONS = new Set(['live365_svg.png']);
 
 function getMiscJson(item, name, obj) {
     let cfg = getLocalStorageVal("misc-"+name);
@@ -111,15 +112,18 @@ function mapIconType(item, app, type) {
         item.svg=lmsIcon.split("MTL_svg_").pop().split(".")[0];
         return true;
     }
-    if (lmsIcon.endsWith("_svg.png")) {
-        item.image=item.icon=undefined;
-        item.svg=lmsIcon.replace("_svg.png", ".svg").replace(/^\/+/, '');
-        return true;
-    }
-    if (lmsIcon.endsWith("_svg.jpg")) {
-        item.image=item.icon=undefined;
-        item.svg=lmsIcon.replace("_svg.jpg", ".svg").replace(/^\/+/, '');
-        return true;
+    let name=lmsIcon.split('/').pop();
+    if (!BAD_ICONS.has(name)) {
+        if (lmsIcon.endsWith("_svg.png")) {
+            item.image=item.icon=undefined;
+            item.svg=lmsIcon.replace("_svg.png", ".svg").replace(/^\/+/, '');
+            return true;
+        }
+        if (lmsIcon.endsWith("_svg.jpg")) {
+            item.image=item.icon=undefined;
+            item.svg=lmsIcon.replace("_svg.jpg", ".svg").replace(/^\/+/, '');
+            return true;
+        }
     }
     for (const [key, value] of Object.entries(iconMap["endsWith"])) {
         if (lmsIcon.endsWith(key) || (lmsIcon.indexOf('imageproxy')>0 && lmsIcon.endsWith(key.substring(1)+"/image.png"))) {

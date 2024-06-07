@@ -56,6 +56,8 @@
     "/RockRadio/html/icon.png":{"svg":"guitar-electric"},
     "/Sounds/html/images/icon.png":{"svg":"nature_sounds"},
     "/ZenRadio/html/icon.png":{"svg":"self-improvement"},
+    "/Live365/html/images/live365_svg.png":{"svg":"live365"},
+    "/LCI/html/images/LCI.png":{"svg":"lci"},
 
     "/Bandcamp/html/images/logo.png":{"svg":"bandcamp"},
     "/BookmarkHistory/html/images/icon.png":{"icon":"bookmark_border"},

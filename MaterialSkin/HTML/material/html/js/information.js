@@ -18,6 +18,7 @@ Vue.component('lms-information-dialog', {
      <div>{{i18n('Information')+(undefined==serverName ? "" : (SEPARATOR+serverName))}}</div>
     </v-toolbar-title>
     <v-spacer class="drag-area"></v-spacer>
+    <a class="lyrion-logo drag-area" href="https://lyrion.org" target="_blank"><img :src="'lyrion' | svgIcon(darkUi)"></img></a>
     <lms-windowcontrols v-if="queryParams.nativeTitlebar"></lms-windowcontrols>
    </v-toolbar>
   </v-card-title>

@@ -628,6 +628,7 @@ Vue.component('lms-iframe-dialog', {
      <v-toolbar-title v-if="page=='player' && numPlayers>1" @click="openChoiceMenu" class="pointer">{{title}}</v-toolbar-title>
      <v-toolbar-title v-else>{{title}}</v-toolbar-title>
      <v-spacer class="drag-area"></v-spacer>
+     <a class="lyrion-logo drag-area" href="https://lyrion.org" target="_blank"><img :src="'lyrion' | svgIcon(darkUi)"></img></a>
      <v-menu bottom left v-model="showMenu" v-if="actions.length>0 || (customActions && customActions.length>0)">
       <v-btn icon slot="activator"><v-icon>more_vert</v-icon></v-btn>
       <v-list>

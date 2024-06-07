@@ -3718,3 +3718,16 @@ div.v-subheader {
 #stringLenCheckElem {
  visibility:hidden!important;
 }
+
+.lyrion-logo {
+ border-radius: 32px;
+ padding:10px 14px 0px 24px;
+ top:4px;
+ right:32px;
+}
+
+@media (max-width:600px) {
+ .lyrion-logo {
+  visibility: hidden;
+ }
+}

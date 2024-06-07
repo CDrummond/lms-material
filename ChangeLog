@@ -24,6 +24,7 @@
 18. Remove 'Append random album/release to queue' from Works-album actions.
 19. Take into account layout and if tech info is shown when determining if to
     show context strings in now-playing bar.
+20. Support disc-subtitles from LMS >= 9.0
 
 4.6.2
 -----

@@ -1300,8 +1300,8 @@ function parseBrowseResp(data, parent, options, cacheKey, parentCommand, parentG
                         entry.total++;
                         entry.duration+=duration;
                     } else {
-                        let title = undefined;
-                        if (undefined!=i.comment) {
+                        let title = i.discsubtitle;
+                        if (undefined!=i.comment && undefined==title) {
                             switch(lmsOptions.commentAsDiscTitle) {
                                 case 1: // Comment is title
                                     title = i.comment;
@@ -1551,7 +1551,7 @@ function parseBrowseResp(data, parent, options, cacheKey, parentCommand, parentG
 
                     // If this is the 1st disc, using comment as title, it has no title but next does, then use
                     // 'Main disc' as title - looks nicer than 'Disc 1'
-                    if (k==1 && lmsOptions.commentAsDiscTitle && undefined==title) {
+                    if (k==1 && undefined==title) {
                         let nextDisc = discs.get(2);
                         if (undefined!=nextDisc && undefined!=nextDisc.title) {
                             title = i18n('Main disc');
@@ -1559,7 +1559,7 @@ function parseBrowseResp(data, parent, options, cacheKey, parentCommand, parentG
                     }
 
                     resp.items.splice(disc.pos+d, 0,
-                                       {title: lmsOptions.commentAsDiscTitle && title ? title : i18n("Disc %1", k), jump:disc.pos+d,
+                                       {title: title ? title : i18n("Disc %1", k), jump:disc.pos+d,
                                         subtitle: isCompositions ? i18np("1 Composition", "%1 Compositions", disc.total) : i18np("1 Track", "%1 Tracks", disc.total), durationStr:formatSeconds(disc.duration),
                                         id:FILTER_PREFIX+k, header:true, menu:[PLAY_ALL_ACTION, INSERT_ALL_ACTION, PLAY_SHUFFLE_ALL_ACTION, ADD_ALL_ACTION]});
                     resp.numHeaders++;

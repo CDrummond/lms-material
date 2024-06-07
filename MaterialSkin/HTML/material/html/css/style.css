@@ -3720,10 +3720,10 @@ div.v-subheader {
 }
 
 .lyrion-logo {
- border-radius: 32px;
- padding:10px 14px 0px 24px;
+ padding:11px 0px 0px 0px;
  top:4px;
  right:32px;
+ height:var(--main-toolbar-height)!important;
 }
 
 @media (max-width:600px) {

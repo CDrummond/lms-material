@@ -17,7 +17,7 @@ Vue.component('lms-ui-settings', {
     <v-btn flat icon @click="close" :title="ttShortcutStr(i18n('Go back'), 'esc')"><v-icon>arrow_back</v-icon></v-btn>
     <v-toolbar-title>{{width>=450 ? TB_UI_SETTINGS.title+serverName : TB_UI_SETTINGS.title}}</v-toolbar-title>
     <v-spacer class="drag-area"></v-spacer>
-    <a class="lyrion-logo" href="https://lyrion.org" target="_blank"><img :src="'lyrion' | svgIcon(darkUi)"></img></a>
+    <a class="lyrion-logo" href="https://lyrion.org" target="_blank"><img :src="'lyrion' | svgIcon(darkUi||usingColoredToolbars)"></img></a>
     <v-menu bottom left v-model="showMenu" v-if="!queryParams.party">
      <v-btn icon slot="activator"><v-icon>more_vert</v-icon></v-btn>
      <v-list>

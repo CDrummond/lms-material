@@ -22,7 +22,7 @@ Vue.component('lms-player-settings', {
      <v-toolbar-title v-if="numPlayers>1" @click="openPlayerMenu" class="pointer">{{TB_PLAYER_SETTINGS.title+SEPARATOR+playerName}}</v-toolbar-title>
      <v-toolbar-title v-else>{{TB_PLAYER_SETTINGS.title+SEPARATOR+playerName}}</v-toolbar-title>
      <v-spacer class="drag-area"></v-spacer>
-     <a class="lyrion-logo" href="https://lyrion.org" target="_blank"><img :src="'lyrion' | svgIcon(darkUi)"></img></a>
+     <a class="lyrion-logo" href="https://lyrion.org" target="_blank"><img :src="'lyrion' | svgIcon(darkUi||coloredToolbars)"></img></a>
      <v-menu bottom left v-model="showMenu">
       <v-btn icon slot="activator"><v-icon>more_vert</v-icon></v-btn>
       <v-list>
@@ -334,6 +334,9 @@ Vue.component('lms-player-settings', {
         },
         showAlarms() {
             return this.$store.state.unlockAll && this.alarms.on
+        },
+        coloredToolbars() {
+            return this.$store.state.coloredToolbars
         },
         darkUi () {
             return this.$store.state.darkUi

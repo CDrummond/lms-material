@@ -782,7 +782,7 @@ p > .custom-select-container { /* logging page */
 
 .custom-select-panel {
  background-color:var(--popup-background-color)!important;
- transition: max-height .25s ease-out, overflow-y 0.1s 0.25s !important;
+ transition:none!important;
 }
 
 .custom-select-container.is-open .custom-select-panel {

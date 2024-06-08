@@ -55,21 +55,29 @@
   let selects = customSelect("select");
   // If select is close to bottom then need to scroll into view...
   for (let i=0, len=selects.length; i<len; ++i) {
-   selects[i].container.addEventListener('custom-select:open',
-    (e) => {
-      let wh = window.innerHeight;
-      let top = selects[i].panel.getBoundingClientRect().top; // height not set?
-      if (wh-top<230) {
-       let sb = document.getElementById("innerSettingsBlock");
-       if (sb) {
-        window.requestAnimationFrame(function () {
-         // https://popmotion.io/blog/20170704-manually-set-scroll-while-ios-momentum-scroll-bounces/
-         sb.style['-webkit-overflow-scrolling'] = 'auto';
-         sb.scrollTop=sb.scrollTop+180;
-         sb.style['-webkit-overflow-scrolling'] = 'touch';
-        });
-       }
-      }
+   selects[i].container.addEventListener('custom-select:open', (e) => {
+    let wh = window.innerHeight;
+    let rect = selects[i].panel.getBoundingClientRect();
+    let top = rect.top;
+    if (wh-top>230) {
+     return;
+    }
+
+    let height = rect.height;
+    if (rect.height<5) {
+      rect.height = 180;
+    }
+    if ((rect.top+rect.height)>(wh-50)) {
+     let sb = document.getElementById("innerSettingsBlock");
+     if (sb) {
+      window.requestAnimationFrame(function () {
+       // https://popmotion.io/blog/20170704-manually-set-scroll-while-ios-momentum-scroll-bounces/
+       sb.style['-webkit-overflow-scrolling'] = 'auto';
+       sb.scrollTop=sb.scrollTop+16+((top+height)-(wh-50));
+       sb.style['-webkit-overflow-scrolling'] = 'touch';
+      });
+     }
+    }
    });
   }
  }

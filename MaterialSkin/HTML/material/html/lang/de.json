@@ -649,12 +649,16 @@
 "%1 Years":"%1 Jahre",
 "1 day":"1 Tag",
 "%1 days":"%1 Tage",
+"All Works":"",
 "All releases":"",
+"Performance":"",
 "Show clock":"",
 "Switch to basic now-playing view (cover, details, and progress) after 5 minutes of inactivity. Helps to prevent burn-in on OLED screens.":"",
 "Switch to now-playing":"",
 "When no track is playing on current player, darken screen (and show date & time) after 1 minute of inactivity.":"",
+"Work":"",
 "Zoom":"",
+"%1 Item":"",
 "1 Work":"",
 "%1 Works":""
 }

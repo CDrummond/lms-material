@@ -744,7 +744,7 @@ table td input[type=checkbox] {
  margin-bottom:16px!important;
  margin-top:-3px!important;
  min-width:80px!important;
- padding:4px 16px 4px 0px!important;
+ padding:8px 32px 4px 0px!important;
 }
 
 #setup_chooser .custom-select-opener {
@@ -752,8 +752,18 @@ table td input[type=checkbox] {
  color:var(--active-color);
 }
 
+.custom-select-container {
+ display:inline-block;
+ min-width:250px;
+}
+
+table .custom-select-container, /* additional browse modes */
+p > .custom-select-container { /* logging page */
+ min-width:100px;
+}
+
 #setup_chooser .custom-select-container {
- max-width:calc(100vw - 36px)!important;
+ width:calc(100vw - 36px)!important;
 }
 
 .custom-select-opener:focus {

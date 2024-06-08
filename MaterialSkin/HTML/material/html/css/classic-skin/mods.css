@@ -770,8 +770,13 @@ p > .custom-select-container { /* logging page */
  border-bottom:1px solid var(--active-color);
 }
 
+.custom-select-container.is-open .custom-select-panel {
+ top:30px!important;
+}
+
 #setup_chooser .custom-select-container.is-open .custom-select-panel {
- max-height:calc((var(--vh, 1vh)*100) - 100px)!important;
+ max-height:calc((var(--vh, 1vh)*100) - 146px)!important;
+ top:32px!important;
 }
 
 .custom-select-panel {

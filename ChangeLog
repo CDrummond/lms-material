@@ -2,6 +2,7 @@
 -----
 1. Don't automatically hide 'Music Walk With Me', change this to a server-side
    preference.
+2. Fix issue with 'defaultTheme()' no longer being defined.
 
 5.0.0
 -----

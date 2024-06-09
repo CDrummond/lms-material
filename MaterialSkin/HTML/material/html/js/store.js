@@ -43,7 +43,7 @@ function updateUiSettings(state, val) {
     if (undefined!=val.theme && state.chosenTheme!=val.theme) {
         state.chosenTheme=val.theme;
         state.coloredToolbars = state.chosenTheme.endsWith("-colored");
-        state.theme=state.chosenTheme.startsWith(AUTO_THEME) ? defaultTheme()+(state.coloredToolbars ? "-colored" : "") : state.chosenTheme;
+        state.theme=state.chosenTheme.startsWith(AUTO_THEME) ? LMS_DEFAULT_THEME+(state.coloredToolbars ? "-colored" : "") : state.chosenTheme;
         setLocalStorageVal('theme', state.chosenTheme);
         themeChanged = true;
     }
@@ -464,7 +464,7 @@ const store = new Vuex.Store({
             state.page = getLocalStorageVal('page', state.page);
             state.chosenTheme = getLocalStorageVal('theme', state.chosenTheme);
             state.coloredToolbars = state.chosenTheme.endsWith("-colored");
-            state.theme=state.chosenTheme.startsWith(AUTO_THEME) ? defaultTheme()+(state.coloredToolbars ? "-colored" : "") : state.chosenTheme;
+            state.theme=state.chosenTheme.startsWith(AUTO_THEME) ? LMS_DEFAULT_THEME+(state.coloredToolbars ? "-colored" : "") : state.chosenTheme;
             state.darkUi = !state.theme.startsWith('light') && state.theme.indexOf("/light/")<0;
             state.color = getLocalStorageVal('color', state.color);
             var larger = getLocalStorageBool('largerElements', getLocalStorageBool('largeFonts', undefined));
@@ -693,7 +693,7 @@ const store = new Vuex.Store({
             state.downloadStatus = val;
         },
         toggleDarkLight(state) {
-            let def = defaultTheme()+(state.coloredToolbars ? "-colored" : "");
+            let def = LMS_DEFAULT_THEME+(state.coloredToolbars ? "-colored" : "");
             if (def!=state.theme) {
                 state.theme=def;
                 state.darkUi = !state.theme.startsWith('light') && state.theme.indexOf("/light/")<0;

@@ -570,6 +570,8 @@ PLUGIN_MATERIAL_SKIN_LOAD_DEFAULT_GENRES
 
 PLUGIN_MATERIAL_COMBINE_APPS_AND_RADIO
 	EN	Combine 'Apps' and 'Radio'
+	FR	Combiner "Applications" et "Radio"
 
 PLUGIN_MATERIAL_COMBINE_APPS_AND_RADIO_DESC
 	EN	Combine the 'Apps' and 'Radio' menus into a single 'Apps' menu, with a 'TuneIn' app added for 'Radio' (if enabled).
+	FR	Fusionner les menus "Applications" et "Radio" en un seul menu "Applications" dans lequel est ajoutée une application "TuneIn" regroupant les éléments associés au plugin "Radio" (si ce plugin est activé).

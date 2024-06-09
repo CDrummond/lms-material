@@ -51,6 +51,7 @@
 "All":"Tout",
 "All Artists":"Tous les Artistes",
 "All Tracks":"Tous les Morceaux",
+"All Works":"Toutes les œuvres",
 "All discs":"Tous les disques",
 "All downloads complete.":"Tous les téléchargements sont terminés.",
 "All duplicates removed":"Doublons supprimés",
@@ -312,6 +313,7 @@
 "Other settings":"Autres paramètres",
 "Path":"Chemin",
 "Pause":"Pause",
+"Performance":"Interprétation",
 "Pictures":"Images",
 "Pin":"Épingler",
 "Pin to home screen":"Ajouter à l'écran d'accueil",
@@ -584,6 +586,7 @@
 "When no track is playing on current player, darken screen (and show date & time) after 1 minute of inactivity.":"Lorsqu'aucun morceau n'est en cours de lecture sur la platine actuelle, assombrir l'écran (et afficher la date et l'heure) après 1 minute d'inactivité.",
 "With":"Avec",
 "Without":"Sans",
+"Work":"Œuvre",
 "Works":"Œuvres",
 "Year":"Année",
 "Year, Album":"Année, Album",
@@ -642,6 +645,7 @@
 "1 Image":"1 image",
 "%1 Images":"%1 images",
 "1 Item":"1 élément",
+"%1 Item":"%1 élément",
 "%1 Items":"%1 éléments",
 "1 Player":"1 platine",
 "%1 Players":"%1 platines",
@@ -656,9 +660,5 @@
 "1 Year":"1 année",
 "%1 Years":"%1 années",
 "1 day":"1 jour",
-"%1 days":"%1 jours",
-"All Works":"",
-"Performance":"",
-"Work":"",
-"%1 Item":""
+"%1 days":"%1 jours"
 }

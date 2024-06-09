@@ -125,29 +125,33 @@ function mapIconType(item, app, type) {
             return true;
         }
     }
-    for (const [key, value] of Object.entries(iconMap["endsWith"])) {
-        if (lmsIcon.endsWith(key) || (lmsIcon.indexOf('imageproxy')>0 && lmsIcon.endsWith(key.substring(1)+"/image.png"))) {
-            let entry = undefined!=app && undefined!=value[app] ? value[app] : value;
-            if (entry['icon']) {
-                item.image=item[value]=item.svg=undefined; item.icon=entry['icon'];
-                return true;
-            } else if (entry['svg']) {
-                item.image=item[value]=item.icon=undefined; item.svg=entry['svg'];
-                return true;
+    try {
+        for (const [key, value] of Object.entries(iconMap["endsWith"])) {
+            if (lmsIcon.endsWith(key) || (lmsIcon.indexOf('imageproxy')>0 && lmsIcon.endsWith(key.substring(1)+"/image.png"))) {
+                let entry = undefined!=app && undefined!=value[app] ? value[app] : value;
+                if (entry['icon']) {
+                    item.image=item[value]=item.svg=undefined; item.icon=entry['icon'];
+                    return true;
+                } else if (entry['svg']) {
+                    item.image=item[value]=item.icon=undefined; item.svg=entry['svg'];
+                    return true;
+                }
             }
         }
-    }
-    for (const [key, value] of Object.entries(iconMap["indexOf"])) {
-        if (lmsIcon.indexOf(key)>=0) {
-            let entry = undefined!=app && undefined!=value[app] ? value[app] : value;
-            if (entry['icon']) {
-                item.image=item[value]=item.svg=undefined; item.icon=entry['icon'];
-                return true;
-            } else if (entry['svg']) {
-                item.image=item[value]=item.icon=undefined; item.svg=entry['svg'];
-                return true;
+        for (const [key, value] of Object.entries(iconMap["indexOf"])) {
+            if (lmsIcon.indexOf(key)>=0) {
+                let entry = undefined!=app && undefined!=value[app] ? value[app] : value;
+                if (entry['icon']) {
+                    item.image=item[value]=item.svg=undefined; item.icon=entry['icon'];
+                    return true;
+                } else if (entry['svg']) {
+                    item.image=item[value]=item.icon=undefined; item.svg=entry['svg'];
+                    return true;
+                }
             }
         }
+    } catch(e) {
+        console.error(e);
     }
     return false;
 }

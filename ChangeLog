@@ -1,3 +1,8 @@
+5.0.1
+-----
+1. Don't automatically hide 'Music Walk With Me', change this to a server-side
+   preference.
+
 5.0.0
 -----
  1. Add server-side option to combine 'Apps' and 'Radios' menus.

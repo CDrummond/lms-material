@@ -51,6 +51,7 @@
 "All":"Alle",
 "All Artists":"Alle kunstnere",
 "All Tracks":"Alle numre",
+"All Works":"Alle værker",
 "All discs":"Alle CD'ere",
 "All downloads complete.":"Filhentning afsluttet",
 "All duplicates removed":"Alle dubletter er fjernet",
@@ -312,6 +313,7 @@
 "Other settings":"Andre indstillinger",
 "Path":"Sti",
 "Pause":"Pause",
+"Performance":"Optræden",
 "Pictures":"Billeder",
 "Pin":"Knappenål",
 "Pin to home screen":"Fastgør til forsiden",
@@ -584,6 +586,7 @@
 "When no track is playing on current player, darken screen (and show date & time) after 1 minute of inactivity.":"Hvis nuværende afspiller er inaktiv, formørk skærmen (og vis dato og tid) efter 1 minuts inaktivitet.",
 "With":"Med",
 "Without":"Uden",
+"Work":"Værk",
 "Works":"Værker",
 "Year":"År",
 "Year, Album":"År, album",
@@ -642,6 +645,7 @@
 "1 Image":"1 billede",
 "%1 Images":"%1 billeder",
 "1 Item":"1 underpunkt",
+"%1 Item":"%1 underpunkt",
 "%1 Items":"%1 underpunkter",
 "1 Player":"1 afspiller",
 "%1 Players":"%1 afspillere",
@@ -656,9 +660,5 @@
 "1 Year":"1 år",
 "%1 Years":"%1 år",
 "1 day":"1 dag",
-"%1 days":"%1 dage",
-"All Works":"",
-"Performance":"",
-"Work":"",
-"%1 Item":""
+"%1 days":"%1 dage"
 }

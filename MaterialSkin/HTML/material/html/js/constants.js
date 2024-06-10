@@ -33,6 +33,7 @@ const IS_LINUX    = !IS_ANDROID && !IS_APPLE && !IS_WINDOWS && checkPlatform('Li
 
 const SKIP_SECONDS_VALS = [5, 10, 15, 30];
 const LMS_DEFAULT_THEME = 'darker';
+const LMS_DEFAULT_COLOR = 'blue';
 const LMS_BATCH_SIZE = 25000;
 const LMS_QUEUE_BATCH_SIZE = 5000;
 const LMS_MAX_NON_SCROLLER_ITEMS = 100;

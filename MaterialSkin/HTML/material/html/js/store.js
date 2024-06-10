@@ -43,7 +43,7 @@ function updateUiSettings(state, val) {
     if (undefined!=val.theme && state.chosenTheme!=val.theme) {
         state.chosenTheme=val.theme;
         state.coloredToolbars = state.chosenTheme.endsWith("-colored");
-        state.theme=state.chosenTheme.startsWith(AUTO_THEME) ? LMS_DEFAULT_THEME+(state.coloredToolbars ? "-colored" : "") : state.chosenTheme;
+        state.theme=state.chosenTheme.startsWith(AUTO_THEME) ? autoTheme()+(state.coloredToolbars ? "-colored" : "") : state.chosenTheme;
         setLocalStorageVal('theme', state.chosenTheme);
         themeChanged = true;
     }
@@ -156,6 +156,22 @@ function updateUiSettings(state, val) {
     }
 }
 
+function autoTheme() {
+    const prefersLight = window.matchMedia && window.matchMedia('(prefers-color-scheme: light)').matches;
+    if (IS_IOS || IS_ANDROID) {
+        return prefersLight ? "light" : "darker";
+    } else if (navigator.platform.indexOf("Linux") != -1) {
+        return window.location.href.indexOf('desktop=KDE') != -1
+                    ? (prefersLight ? "linux/light/Breeze" : "linux/dark/Breeze-Dark")
+                    : (prefersLight ? "linux/light/Adwaita" : "linux/dark/Adwaita-Dark");
+    } else if (navigator.platform.indexOf("Win") != -1) {
+        return prefersLight ? "windows/light/Windows-10" : "windows/dark/Windows-10-Dark";
+    } else if (navigator.platform.indexOf("Mac") != -1) {
+        return prefersLight ? "mac/light/Mojave" : "mac/dark/Mojave-Dark";
+    }
+    return prefersLight ? "light" : "darker";
+}
+
 function storeCurrentPlayer(player) {
     setLocalStorageVal('player', player.id);
     if (1==queryParams.nativePlayer) {
@@ -229,9 +245,9 @@ const store = new Vuex.Store({
         player: null, // Current player (from list)
         defaultPlayer: null,
         otherPlayers: [], // Players on other servers
-        theme: 'darker',        // Set to dark/light if theme is "auto"
-        chosenTheme: 'darker',  // Theme as chosen by user
-        color: 'blue',
+        theme: LMS_DEFAULT_THEME,        // Set to dark/light if theme is "auto"
+        chosenTheme: LMS_DEFAULT_THEME,  // Theme as chosen by user
+        color: LMS_DEFAULT_COLOR,
         darkUi: true,
         roundCovers: true,
         fontSize: 'r',
@@ -464,7 +480,7 @@ const store = new Vuex.Store({
             state.page = getLocalStorageVal('page', state.page);
             state.chosenTheme = getLocalStorageVal('theme', state.chosenTheme);
             state.coloredToolbars = state.chosenTheme.endsWith("-colored");
-            state.theme=state.chosenTheme.startsWith(AUTO_THEME) ? LMS_DEFAULT_THEME+(state.coloredToolbars ? "-colored" : "") : state.chosenTheme;
+            state.theme = state.chosenTheme.startsWith(AUTO_THEME) ? autoTheme()+(state.coloredToolbars ? "-colored" : "") : state.chosenTheme;
             state.darkUi = !state.theme.startsWith('light') && state.theme.indexOf("/light/")<0;
             state.color = getLocalStorageVal('color', state.color);
             var larger = getLocalStorageBool('largerElements', getLocalStorageBool('largeFonts', undefined));
@@ -693,9 +709,9 @@ const store = new Vuex.Store({
             state.downloadStatus = val;
         },
         toggleDarkLight(state) {
-            let def = LMS_DEFAULT_THEME+(state.coloredToolbars ? "-colored" : "");
-            if (def!=state.theme) {
-                state.theme=def;
+            let theme = autoTheme()+(state.coloredToolbars ? "-colored" : "");
+            if (theme!=state.theme) {
+                state.theme=theme;
                 state.darkUi = !state.theme.startsWith('light') && state.theme.indexOf("/light/")<0;
                 setTheme(state.theme, state.color);
                 bus.$emit('themeChanged');

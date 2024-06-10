@@ -412,9 +412,9 @@ Vue.component('lms-ui-settings', {
         return {
             show: false,
             showMenu: false,
-            theme: 'darker',
+            theme: LMS_DEFAULT_THEME,
             themes: [ ],
-            color: 'blue',
+            color: LMS_DEFAULT_COLOR,
             colorList: { } ,
             userColors: [ ],
             colorToolbars: false,

@@ -3,6 +3,7 @@
 1. Don't automatically hide 'Music Walk With Me', change this to a server-side
    preference.
 2. Fix 'Automatic' theme.
+3. Remove transparent border around PNG icons.
 
 5.0.0
 -----

@@ -1417,10 +1417,10 @@ sub _cliCommand {
     if ($cmd eq 'apps') {
         my $apps = Slim::Plugin::Base->nonSNApps();
         my $cnt = 0;
-        my @hideApps = split(/,/, $prefs->get('hideApps'));
+        my %hideApps = map { $_ => 1 } split(/,/, $prefs->get('hideApps'));
         for my $app (@$apps) {
             my $tag = $app->can('tag') && $app->tag;
-            if ($tag && !($app->tag ~~ @hideApps)) {
+            if ($tag && not exists($hideApps{$app->tag})) {
                 my $name = Slim::Utils::Strings::getString($app->getDisplayName);
                 my $icon = $app->_pluginDataFor('icon');
                 $request->addResultLoop('item_loop', $cnt, 'text', $name);

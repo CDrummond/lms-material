@@ -7,6 +7,7 @@
 3. Scroll to top when switch player via player menu in 'Player settings'.
 4. Allow to switch player when displaying an 'Extras' item.
 5. Add lower resoltion icon for browser tabs, etc. Thanks to Peter Oliver.
+6. When showing artist works, if more than 1 composer then split into groups.
 
 5.0.1
 -----

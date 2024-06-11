@@ -1821,15 +1821,8 @@ function parseBrowseResp(data, parent, options, cacheKey, parentCommand, parentG
             let lastComposer = undefined;
             let lastIdx = -1;
             let numWorks = 0;
-            let singleHeader = parent && parent.stdItem==STD_ITEM_ARTIST; // Header is just "Works (N)"
-            let useHeaders = !singleHeader && (parent && (undefined==parent.stdItem || parent.stdItem==STD_ITEM_ARTIST || parent.stdItem==STD_ITEM_WORK_GENRE));
-
-            if (singleHeader && data.result.works_loop.length>0) {
-                resp.jumplist=[{key:SECTION_JUMP, index:0, header:true, icon:{svg:'release-work'}}];
-                resp.items.push({title:i18n('Works'), id:FILTER_PREFIX+"wc", header:true,
-                                 isWorksCat: true, svg: 'release-work',
-                                 menu:[PLAY_ALL_ACTION, INSERT_ALL_ACTION, PLAY_SHUFFLE_ALL_ACTION, ADD_ALL_ACTION], count:0});
-            }
+            let isArtistWorks = parent && parent.stdItem==STD_ITEM_ARTIST; // Header is just "Works (N)"
+            let useHeaders = isArtistWorks || (parent && (undefined==parent.stdItem || parent.stdItem==STD_ITEM_ARTIST || parent.stdItem==STD_ITEM_WORK_GENRE));
 
             for (let idx=0, loop=data.result.works_loop, loopLen=loop.length; idx<loopLen; ++idx) {
                 let i = loop[idx];
@@ -1862,7 +1855,6 @@ function parseBrowseResp(data, parent, options, cacheKey, parentCommand, parentG
                 var work = {
                     composer: i.composer,
                     title: i.work,
-                    subtitle: singleHeader && i.composer && parent && i.composer!=parent.title ? i.composer : undefined,
                     composer_id: i.composer_id,
                     album_id: i.album_id,
                     id: "work_id:"+i.work_id,
@@ -1878,8 +1870,8 @@ function parseBrowseResp(data, parent, options, cacheKey, parentCommand, parentG
                 numWorks++;
             }
 
-            if (singleHeader) {
-                resp.items[0].title+=" ("+(resp.items.length-1)+")";
+            if (isArtistWorks && 1==resp.numHeaders) {
+                resp.items[0].title=i18n("Works") + " ("+(resp.items.length-1)+")";
                 resp.items[0].count=resp.items.length-1;
             } else if (lastIdx>=0 && useHeaders) {
                 resp.items[lastIdx].title+=" (" + (resp.items.length-(lastIdx+1)) + ")";

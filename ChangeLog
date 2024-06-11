@@ -1,3 +1,8 @@
+5.0.2
+-----
+1. When listing an artist's works show composer as subtitle if this is
+   different to artist name.
+
 5.0.1
 -----
 1. Don't automatically hide 'Music Walk With Me', change this to a server-side

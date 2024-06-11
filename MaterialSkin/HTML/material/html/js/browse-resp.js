@@ -1862,6 +1862,7 @@ function parseBrowseResp(data, parent, options, cacheKey, parentCommand, parentG
                 var work = {
                     composer: i.composer,
                     title: i.work,
+                    subtitle: singleHeader && i.composer && parent && i.composer!=parent.title ? i.composer : undefined,
                     composer_id: i.composer_id,
                     album_id: i.album_id,
                     id: "work_id:"+i.work_id,

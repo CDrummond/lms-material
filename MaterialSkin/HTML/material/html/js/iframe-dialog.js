@@ -517,9 +517,9 @@ function applyModifications(page, textCol, darkUi) {
 
         if (content) {
             if (content.addEventListener) {
-                content.addEventListener('click', 'other'==page || 'lms'==page ? otherClickHandler : iframeClickHandler);
+                content.addEventListener('click', 'other'==page || 'extras'==page || 'lms'==page ? otherClickHandler : iframeClickHandler);
             } else if (content.attachEvent) {
-                content.attachEvent('onclick', 'other'==page || 'lms'==page ? otherClickHandler : iframeClickHandler);
+                content.attachEvent('onclick', 'other'==page || 'extras'==page || 'lms'==page ? otherClickHandler : iframeClickHandler);
             }
         }
 
@@ -625,7 +625,7 @@ Vue.component('lms-iframe-dialog', {
      <div class="drag-area-left"></div>
      <v-btn flat icon v-longpress:stop="goBack" :title="ttShortcutStr(i18n('Go back'), 'esc')"><v-icon>arrow_back</v-icon></v-btn>
      <v-btn v-if="showHome && homeButton" flat icon @click="goHome" :title="ttShortcutStr(i18n('Go home'), 'home')"><v-icon>home</v-icon></v-btn>
-     <v-toolbar-title v-if="page=='player' && numPlayers>1" @click="openChoiceMenu" class="pointer">{{title}}</v-toolbar-title>
+     <v-toolbar-title v-if="playerId && numPlayers>1 && (page=='player' || page=='extras')" @click="openChoiceMenu" class="pointer">{{title}}</v-toolbar-title>
      <v-toolbar-title v-else>{{title}}</v-toolbar-title>
      <v-spacer class="drag-area"></v-spacer>
      <a v-if="showLogo" class="lyrion-logo" href="https://lyrion.org" target="_blank"><img :src="'lyrion' | svgIcon(darkUi||coloredToolbars)"></img></a>
@@ -698,11 +698,13 @@ Vue.component('lms-iframe-dialog', {
                             ? "player"
                             : page.indexOf("server/basic.html")>0 || page.indexOf("plugins/Extensions/settings/basic.html")>0
                                 ? "server"
-                                : (page == '/material/html/docs/index.html') || (page.startsWith("plugins/") && (page.indexOf("?player=")>0 || page.indexOf("&player=")>0))
-                                    ? "lms" // tech info, or 'extra' entry
-                                    : page == '/material/html/material-skin/index.html'
-                                        ? "help"
-                                        : "other";
+                                : page.startsWith("plugins/") && (page.indexOf("?player=")>0 || page.indexOf("&player=")>0)
+                                    ? "extras"
+                                    : page == '/material/html/docs/index.html'
+                                        ? "lms" // tech info, or 'extra' entry
+                                        : page == '/material/html/material-skin/index.html'
+                                            ? "help"
+                                            : "other";
             this.showLogo = this.page!='other' && !page.startsWith("plugins/");
             this.show = true;
             this.showMenu = false;
@@ -714,6 +716,12 @@ Vue.component('lms-iframe-dialog', {
             this.showHome = showHome;
             this.textCol = getComputedStyle(document.documentElement).getPropertyValue('--text-color').substring(1);
             this.playerId = playerId;
+            if (undefined==this.playerId && 'extras'==this.page) {
+                let parts = page.split("player=");
+                if (parts.length==2) {
+                    this.playerId = parts[1].substring(0, 17);
+                }
+            }
         }.bind(this));
         bus.$on('iframe-loaded', function() {
             this.loaded = true;
@@ -843,6 +851,9 @@ Vue.component('lms-iframe-dialog', {
             this.history = [];
             this.textCol = getComputedStyle(document.documentElement).getPropertyValue('--text-color').substring(1);
             this.playerId = player.id;
+            if (this.page=='extras') {
+                this.$store.commit('setPlayer', this.playerId);
+            }
         },
         mouseDown(ev) {
             toolbarMouseDown(ev);

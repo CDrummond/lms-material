@@ -5,6 +5,7 @@
 2. When showing player menu for 'Player settings' or 'Extra player settings'
    don't dim current player name.
 3. Scroll to top when switch player via player menu in 'Player settings'.
+4. Allow to switch player when displaying an 'Extras' item.
 
 5.0.1
 -----

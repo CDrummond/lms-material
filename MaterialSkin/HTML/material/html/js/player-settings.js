@@ -64,7 +64,7 @@ Vue.component('lms-player-settings', {
     </v-toolbar>
    </v-card-title>
 
-  <v-card-text>
+  <v-card-text id="player-settings">
    <v-list two-line subheader class="settings-list">
     <v-header class="dialog-section-header" v-if="unlockAll">{{i18n('General')}}</v-header>
     <v-list-tile v-if="unlockAll">
@@ -872,6 +872,10 @@ Vue.component('lms-player-settings', {
                 return;
             }
             this.playerSettings(player);
+            let elem = document.getElementById("player-settings");
+            if (elem) {
+                setElemScrollTop(elem, 0);
+            }
         },
         mouseDown(ev) {
             toolbarMouseDown(ev);

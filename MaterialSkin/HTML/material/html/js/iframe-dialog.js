@@ -661,7 +661,7 @@ Vue.component('lms-iframe-dialog', {
  <v-menu v-model="choiceMenu.show" :position-x="choiceMenu.x" :position-y="10" style="z-index:1000">
   <v-list>
    <template v-for="(player, index) in players">
-    <v-list-tile @click="setPlayer(player)" :disabled="player.id==playerId" v-bind:class="{'disabled':player.id==playerId}">
+    <v-list-tile @click="setPlayer(player)" :disabled="player.id==playerId">
      <v-list-tile-avatar>
       <v-icon v-if="player.icon.icon">{{player.icon.icon}}</v-icon><img v-else class="svg-img" :src="player.icon.svg | svgIcon(darkUi)"></img>
      </v-list-tile-avatar>

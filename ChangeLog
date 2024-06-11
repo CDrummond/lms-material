@@ -2,6 +2,8 @@
 -----
 1. When listing an artist's works show composer as subtitle if this is
    different to artist name.
+2. When showing player menu for 'Player settings' or 'Extra player settings'
+   don't dim current player name.
 
 5.0.1
 -----

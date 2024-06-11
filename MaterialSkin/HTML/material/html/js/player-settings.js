@@ -262,7 +262,7 @@ Vue.component('lms-player-settings', {
  <v-menu v-model="playerMenu.show" :position-x="playerMenu.x" :position-y="10" style="z-index:1000">
   <v-list>
    <template v-for="(player, index) in players">
-    <v-list-tile @click="setPlayer(player)" :disabled="player.id==playerId" v-bind:class="{'disabled':player.id==playerId}">
+    <v-list-tile @click="setPlayer(player)" :disabled="player.id==playerId">
      <v-list-tile-avatar>
       <v-icon v-if="player.icon.icon">{{player.icon.icon}}</v-icon><img v-else class="svg-img" :src="player.icon.svg | svgIcon(darkUi)"></img>
      </v-list-tile-avatar>

@@ -7,6 +7,11 @@
   <link rel="stylesheet" type="text/css" href="[% webroot %]skin.css?r=MATERIAL_VERSION" />
   <link rel="stylesheet" type="text/css" href="[% webroot %]html/css/themes/dark.css?r=MATERIAL_VERSION"/>
   <link rel="stylesheet" type="text/css" href="[% webroot %]html/css/colors/blue.css?r=MATERIAL_VERSION"/>
+  [% IF mobileBrowser %]
+	<meta name="viewport" content="width=device-width">
+  [% ELSE %]
+  <link rel="stylesheet" type="text/css" href="[% webroot %]html/css/classic-skin/scrollbars.css?r=MATERIAL_VERSION"/>
+  [% END %]
   <script src="[% webroot %]html/lib/mousetrap.min.js?r=a4098"></script>
   <script>
   let theme = window.localStorage.getItem("lms-material::theme");

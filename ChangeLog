@@ -8,6 +8,7 @@
 4. Allow to switch player when displaying an 'Extras' item.
 5. Add lower resoltion icon for browser tabs, etc. Thanks to Peter Oliver.
 6. When showing artist works, if more than 1 composer then split into groups.
+7. Fix custom scrollbar in 'Help' pages.
 
 5.0.1
 -----

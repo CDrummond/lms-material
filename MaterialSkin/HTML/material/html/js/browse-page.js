@@ -834,14 +834,6 @@ var lmsBrowse = Vue.component("lms-browse", {
                               type: "group",
                               weight: 5,
                               id: TOP_EXTRAS_ID }];
-                if (LMS_P_CD) {
-                    this.top.push({  command: ["cdplayer", "items"],
-                                params: ["menu:1"],
-                                svg: "cd-player",
-                                type: "group",
-                                weight: 6,
-                                id: TOP_CDPLAYER_ID });
-                }
                 if (LMS_P_RM) {
                     this.top.push({  command: ["selectRemoteLibrary", "items"],
                                 params: ["menu:selectRemoteLibrary", "menu:1"],
@@ -862,11 +854,9 @@ var lmsBrowse = Vue.component("lms-browse", {
                                     ? i18n("Apps")
                                     : this.top[i].id==TOP_EXTRAS_ID
                                         ? i18n("Extras")
-                                        :this.top[i].id==TOP_CDPLAYER_ID
-                                            ? i18n("CD Player")
-                                            : this.top[i].id==TOP_REMOTE_ID
-                                                ? i18n("Remote Libraries")
-                                                : this.top[i].title;
+                                        :this.top[i].id==TOP_REMOTE_ID
+                                            ? i18n("Remote Libraries")
+                                            : this.top[i].title;
             }
 
             if (this.history.length<1) {
@@ -1403,7 +1393,7 @@ var lmsBrowse = Vue.component("lms-browse", {
             }
             this.top=[];
             for (let i=0, len=items.length; i<len; ++i) {
-                if (((items[i].id!=TOP_CDPLAYER_ID || LMS_P_CD)) && (items[i].id!=TOP_REMOTE_ID || LMS_P_RM)) {
+                if (items[i].id!=TOP_REMOTE_ID || LMS_P_RM) {
                     this.top.push(items[i]);
                 }
             }
@@ -1421,8 +1411,6 @@ var lmsBrowse = Vue.component("lms-browse", {
                         }
                     }
                     this.options.pinned.add(this.top[i].id);
-                } else if (this.top[i].id==TOP_CDPLAYER_ID && this.top[i].params.length==0) {
-                    this.top[i].params.push("menu:1");
                 } else if (this.top[i].id==TOP_RADIO_ID) {
                     this.top[i].icon=undefined; this.top[i].svg="radio-tower";
                 } else if (this.top[i].id==TOP_MYMUSIC_ID) {

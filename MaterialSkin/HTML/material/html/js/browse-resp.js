@@ -1821,6 +1821,7 @@ function parseBrowseResp(data, parent, options, cacheKey, parentCommand, parentG
             let lastComposer = undefined;
             let lastIdx = -1;
             let numWorks = 0;
+            let artist = parent ? parent.title : undefined;
             let isArtistWorks = parent && parent.stdItem==STD_ITEM_ARTIST; // Header is just "Works (N)"
             let useHeaders = isArtistWorks || (parent && (undefined==parent.stdItem || parent.stdItem==STD_ITEM_ARTIST || parent.stdItem==STD_ITEM_WORK_GENRE));
 
@@ -1870,7 +1871,7 @@ function parseBrowseResp(data, parent, options, cacheKey, parentCommand, parentG
                 numWorks++;
             }
 
-            if (isArtistWorks && 1==resp.numHeaders) {
+            if (isArtistWorks && 1==resp.numHeaders && (undefined==lastComposer || lastComposer==artist)) {
                 resp.items[0].title=i18n("Works") + " ("+(resp.items.length-1)+")";
                 resp.items[0].count=resp.items.length-1;
             } else if (lastIdx>=0 && useHeaders) {

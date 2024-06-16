@@ -1,17 +1,18 @@
 5.0.2
 -----
-1. When listing an artist's works show composer as subtitle if this is
-   different to artist name.
-2. When showing player menu for 'Player settings' or 'Extra player settings'
-   don't dim current player name.
-3. Scroll to top when switch player via player menu in 'Player settings'.
-4. Allow to switch player when displaying an 'Extras' item.
-5. Add lower resoltion icon for browser tabs, etc. Thanks to Peter Oliver.
-6. When showing artist works, if more than 1 composer then split into groups.
-7. Fix custom scrollbar in 'Help' pages.
-8. Remove option of 'CD Player' as a top-level item. This is in 'Extras' and
-   can be pinned if required.
-9. When listing works under a genre filter by that genre.
+ 1. When listing an artist's works show composer as subtitle if this is
+    different to artist name.
+ 2. When showing player menu for 'Player settings' or 'Extra player settings'
+    don't dim current player name.
+ 3. Scroll to top when switch player via player menu in 'Player settings'.
+ 4. Allow to switch player when displaying an 'Extras' item.
+ 5. Add lower resoltion icon for browser tabs, etc. Thanks to Peter Oliver.
+ 6. When showing artist works, if more than 1 composer then split into groups.
+ 7. Fix custom scrollbar in 'Help' pages.
+ 8. Remove option of 'CD Player' as a top-level item. This is in 'Extras' and
+    can be pinned if required.
+ 9. When listing works under a genre filter by that genre.
+10. Don't show 'Search within list' for advanced search results.
 
 5.0.1
 -----

@@ -561,7 +561,7 @@ function browseHandleListResponse(view, item, command, resp, prevPage, appendIte
             view.currentActions.push({action:PLAY_SHUFFLE_ACTION, weight:20});
         }
         if (resp.isMusicMix || (("albums"==command.command[0] && view.items.length>0 && command.params.find(elem => elem=="sort:random")))) {
-            view.currentActions.push({action:RELOAD_ACTION, weight:5});
+            view.currentActions.push({action:RELOAD_ACTION, weight:-1});
             if (resp.isMusicMix && !queryParams.party) {
                 view.currentActions.push({action:ADD_TO_PLAYLIST_ACTION, weight:50});
             }
@@ -576,7 +576,7 @@ function browseHandleListResponse(view, item, command, resp, prevPage, appendIte
                 }
             }
             if (canAddAlbumSort) {
-                view.currentActions.push({action:ALBUM_SORTS_ACTION, weight:10});
+                view.currentActions.push({action:ALBUM_SORTS_ACTION, weight:undefined==view.current.stdItem ? -1 : 10});
             }
         } else if ((view.current.stdItem==STD_ITEM_ALL_TRACKS || view.current.stdItem==STD_ITEM_COMPOSITION_TRACKS || view.current.id==ALL_TRACKS_ID) && view.command.command.length>0 && view.command.command[0]=="tracks" && view.items.length>0) {
             view.currentActions.push({action:TRACK_SORTS_ACTION, weight:50});

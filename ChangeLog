@@ -11,6 +11,7 @@
 7. Fix custom scrollbar in 'Help' pages.
 8. Remove option of 'CD Player' as a top-level item. This is in 'Extras' and
    can be pinned if required.
+9. When listing works under a genre filter by that genre.
 
 5.0.1
 -----

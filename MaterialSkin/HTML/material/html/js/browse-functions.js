@@ -895,9 +895,9 @@ function browseClick(view, item, index, event) {
         view.current = item;
         browseSetScroll(view);
         view.isTop = false;
-        view.tbarActions=[VLIB_ACTION, SEARCH_LIB_ACTION];
+        view.tbarActions=[];
         view.grid = {allowed:true, use:isSetToUseGrid(GRID_OTHER), numColumns:0, ih:GRID_MIN_HEIGHT, rows:[], few:false, haveSubtitle:true};
-        view.currentActions=[{action:(view.grid.use ? USE_LIST_ACTION : USE_GRID_ACTION)}];
+        view.currentActions=[{action:VLIB_ACTION}, {action:(view.grid.use ? USE_LIST_ACTION : USE_GRID_ACTION)}, {action:SEARCH_LIB_ACTION}];
         view.layoutGrid(true);
     } else if (MUSIC_ID_PREFIX+'myMusicWorks'==item.id) {
         browseAddWorksCategories(view, item);

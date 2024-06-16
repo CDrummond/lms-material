@@ -13,6 +13,7 @@
     can be pinned if required.
  9. When listing works under a genre filter by that genre.
 10. Don't show 'Search within list' for advanced search results.
+11. Attempt to have more consistent toolbar icon positions.
 
 5.0.1
 -----

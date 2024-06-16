@@ -72,7 +72,7 @@ var lmsBrowse = Vue.component("lms-browse", {
     <tr align="right">
      <v-btn @click.stop="currentActionsMenu($event)" flat icon class="toolbar-button" :title="trans.actions" id="tbar-actions" v-if="currentActions.length>0 && numCurrentActionsInToolbar<currentActions.length"><v-icon>more_horiz</v-icon></v-btn>
      <template v-for="(action, index) in currentActions" v-if="numCurrentActionsInToolbar>0">
-      <v-btn @click.stop="currentAction(action, index, $event)" flat icon class="toolbar-button" :title="undefined==action.action ? action.title : ACTIONS[action.action].title" :id="'tbar-actions'+index" v-if="index<numCurrentActionsInToolbar">
+      <v-btn @click.stop="currentAction(action, index, $event)" flat icon class="toolbar-button" :title="undefined==action.action ? action.title : ACTIONS[action.action].title" :id="'tbar-actions'+index" v-if="index<numCurrentActionsInToolbar && (action.action!=VLIB_ACTION || libraryName)">
        <img v-if="undefined!=action.action && ACTIONS[action.action].svg" class="svg-img" :src="ACTIONS[action.action].svg | svgIcon(darkUi)"></img>
        <v-icon v-else-if="undefined!=action.action">{{ACTIONS[action.action].icon}}</v-icon>
        <img v-else-if="action.svg" class="svg-img" :src="action.svg | svgIcon(darkUi)"></img>
@@ -86,7 +86,7 @@ var lmsBrowse = Vue.component("lms-browse", {
       <v-btn flat :icon="wide<SUB_TEXT_WIDE" v-if="showDetailedSubtoolbar && wide>=2 && (action==PLAY_ACTION || action==PLAY_ALL_ACTION) && allowShuffle(current)" @click.stop="headerAction(action==PLAY_ACTION ? PLAY_SHUFFLE_ACTION : PLAY_SHUFFLE_ALL_ACTION, $event)" v-bind:class="{'context-button':wide>=SUB_TEXT_WIDE, 'toolbar-button':wide<SUB_TEXT_WIDE}" :title="PLAY_SHUFFLE_ACTION | tooltip(keyboardControl)" :id="'tbara'+index">
        <img class="svg-img" :src="ACTIONS[PLAY_SHUFFLE_ACTION].svg | svgIcon(darkUi)"></img><obj v-if="wide>=SUB_TEXT_WIDE">&nbsp;{{ACTIONS[PLAY_SHUFFLE_ACTION].short}}</obj>
       </v-btn>
-      <v-btn flat :icon="wide<SUB_TEXT_WIDE || !ACTIONS[action].short" @click.stop="headerAction(action, $event)" v-bind:class="{'context-button':wide>=SUB_TEXT_WIDE && undefined!=ACTIONS[action].short, 'toolbar-button':wide<SUB_TEXT_WIDE || !ACTIONS[action].short}" :title="action | tooltip(keyboardControl)" :id="'tbar'+index" v-if="(action!=VLIB_ACTION || libraryName) && (!queryParams.party || !HIDE_FOR_PARTY.has(action)) && (!LMS_KIOSK_MODE || !HIDE_FOR_KIOSK.has(action))">
+      <v-btn flat :icon="wide<SUB_TEXT_WIDE || !ACTIONS[action].short" @click.stop="headerAction(action, $event)" v-bind:class="{'context-button':wide>=SUB_TEXT_WIDE && undefined!=ACTIONS[action].short, 'toolbar-button':wide<SUB_TEXT_WIDE || !ACTIONS[action].short}" :title="action | tooltip(keyboardControl)" :id="'tbar'+index" v-if="(!queryParams.party || !HIDE_FOR_PARTY.has(action)) && (!LMS_KIOSK_MODE || !HIDE_FOR_KIOSK.has(action))">
        <img v-if="ACTIONS[action].svg" class="svg-img" :src="ACTIONS[action].svg | svgIcon(darkUi)"></img>
        <v-icon v-else>{{ACTIONS[action].icon}}</v-icon>
        <obj v-if="wide>=SUB_TEXT_WIDE && ACTIONS[action].short">&nbsp;{{ACTIONS[action].short}}</obj>
@@ -1377,7 +1377,8 @@ var lmsBrowse = Vue.component("lms-browse", {
             if (this.current && TOP_MYMUSIC_ID==this.current.id) {
                 this.items = this.myMusic;
                 this.grid = {allowed:true, use:isSetToUseGrid(GRID_OTHER), numColumns:0, ih:GRID_MIN_HEIGHT, rows:[], few:false, haveSubtitle:true, multiSize:false};
-                this.currentActions=[{action:(this.grid.use ? USE_LIST_ACTION : USE_GRID_ACTION)}];
+                this.tbarActions=[];
+                this.currentActions=[{action:VLIB_ACTION}, {action:(this.grid.use ? USE_LIST_ACTION : USE_GRID_ACTION)}, {action:SEARCH_LIB_ACTION}];
                 this.layoutGrid(true);
             } else if (this.history.length>1 && this.history[1].current && this.history[1].current.id==TOP_MYMUSIC_ID) {
                 this.history[1].items = this.myMusic;

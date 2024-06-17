@@ -502,11 +502,6 @@ function applyModifications(page, textCol, darkUi) {
         remapClassicSkinIcons(content, textCol);
         addHooks(content);
 
-        let toHide = undefined;
-        if ('player'==page) {
-            toHide = new Set(['ALARM', 'PLUGIN_DSTM']);
-        }
-
         if ('server'==page || 'player'==page) {
             var selector=content.getElementById("choose_setting");
             if (undefined!=selector) {
@@ -523,16 +518,6 @@ function applyModifications(page, textCol, darkUi) {
             }
         }
 
-        if (undefined!=toHide) {
-            var select = content.getElementById("choose_setting");
-            if (undefined!=select) {
-                for (let i=select.length-1; i>=0; i--) {
-                    if (toHide.has(select.options[i].value)) {
-                        select.remove(i);
-                    }
-                }
-            }
-        }
         if ('player'==page || 'server'==page) {
             // Set --vh as this is used to fix size of main settings frame, so that we can
             // correctly set its position, etc, to be consistent between mobile and desktop.
@@ -543,6 +528,7 @@ function applyModifications(page, textCol, darkUi) {
             let vh = window.innerHeight * 0.01;
             content.documentElement.style.setProperty('--vh', `${vh}px`);
 
+            content.documentElement.classList.add("lms-settings-"+page);
             // Look for any status message that needs to be shown in a toast or dialog (if there is an action)
             var statusarea = content.getElementById('statusarea');
             if (undefined!=statusarea) {

@@ -806,3 +806,10 @@ p > .custom-select-container { /* logging page */
 :focus-visible {
  outline: transparent auto 0px;
 }
+
+.lms-settings-player .custom-select-optgroup div[data-value="ALARM"],
+.lms-settings-player .custom-select-optgroup div[data-value="PLUGIN_DSTM"] {
+ height:0px!important;
+ visibility:hidden!important;
+ padding:0px!important;
+}

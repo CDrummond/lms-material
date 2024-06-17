@@ -16,6 +16,7 @@
 11. Attempt to have more consistent toolbar icon positions.
 12. Fix hiding 'Alarm' and 'DSTM' settings in player extra settings.
 13. Fix 'Audiobooks' entry in 'My Music'.
+14. Try to prevent selection occuring when drag volume slider.
 
 5.0.1
 -----

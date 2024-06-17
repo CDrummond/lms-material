@@ -1877,7 +1877,7 @@ function browseGoBack(view, refresh) {
     }
 }
 
-function browseBuildCommand(view, item, commandName, doReplacements) {
+function browseBuildCommand(view, item, commandName, doReplacements, allowLibId) {
     var cmd = {command: [], params: [] };
 
     if (undefined===item || null===item) {
@@ -1918,7 +1918,7 @@ function browseBuildCommand(view, item, commandName, doReplacements) {
             [command.params, item.commonParams].forEach(p => {
                 if (p) {
                     for (var key in p) {
-                        if (p[key]!=undefined && p[key]!=null && (""+p[key]).length>0 && "library_id"!=key) {
+                        if (p[key]!=undefined && p[key]!=null && (""+p[key]).length>0 && (allowLibId || "library_id"!=key)) {
                             cmd.params.push(key+":"+p[key]);
                             addedKeys.add(key);
                          }
@@ -1928,7 +1928,7 @@ function browseBuildCommand(view, item, commandName, doReplacements) {
             if (command.itemsParams && item[command.itemsParams]) {
                 /*var isMore = "more" == commandName;*/
                 for(var key in item[command.itemsParams]) {
-                    if ((/* !isMore || */ ("touchToPlaySingle"!=key && "touchToPlay"!=key && "library_id"!=key)) && !addedKeys.has(key)) {
+                    if ((/* !isMore || */ ("touchToPlaySingle"!=key && "touchToPlay"!=key && (allowLibId || "library_id"!=key))) && !addedKeys.has(key)) {
                         let val = item[command.itemsParams][key];
                         if (val!=undefined && val!=null && (""+val).length>0) {
                             cmd.params.push(key+":"+item[command.itemsParams][key]);
@@ -1942,7 +1942,7 @@ function browseBuildCommand(view, item, commandName, doReplacements) {
             if (undefined!=baseActions && undefined!=baseActions.parentParams) {
                 for (let i=0, loop=baseActions.parentParams, len=loop.length; i<len; ++i) {
                     let key = loop[i].split(":")[0];
-                    if (!addedKeys.has(key) && "library_id"!=key) {
+                    if (!addedKeys.has(key) && (allowLibId || "library_id"!=key)) {
                         cmd.params.push(loop[i]);
                         addedKeys.add(key);
                     }
@@ -2088,7 +2088,7 @@ function browseMyMusicMenu(view) {
                     if (view.$store.state.disabledBrowseModes.has(c.id)) {
                         continue;
                     }
-                    var command = view.buildCommand({id:c.id, actions:{go:{cmd:["browselibrary","items"], params:c.params}}}, "go", false);
+                    var command = browseBuildCommand(view, {id:c.id, actions:{go:{cmd:["browselibrary","items"], params:c.params}}}, "go", false, true);
                     var item = { title: c.text,
                                  command: command.command,
                                  params: command.params,

@@ -86,12 +86,14 @@
   }
  }
 
- if (window.addEventListener) {
-  window.addEventListener("load", styleSelects, false);
- } else if (window.attachEvent) {
-  window.attachEvent("onload", styleSelects);
- } else {
-  window.onload = styleSelects;
+ if (window.location.href.indexOf("plugins/")<0 || window.location.href.indexOf("player=")<0) {
+  if (window.addEventListener) {
+   window.addEventListener("load", styleSelects, false);
+  } else if (window.attachEvent) {
+   window.attachEvent("onload", styleSelects);
+  } else {
+   window.onload = styleSelects;
+  }
  }
 </script>
 

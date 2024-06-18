@@ -722,6 +722,10 @@ table td input[type=checkbox] {
  }
 }
 
+.custom-select-option {
+ min-height:32px!important;
+}
+
 .custom-select-option,
 .custom-select-optgroup::before {
  color:var(--text-color);
@@ -745,6 +749,7 @@ table td input[type=checkbox] {
  margin-bottom:16px!important;
  margin-top:-3px!important;
  min-width:80px!important;
+ min-height:32px!important;
  padding:8px 32px 4px 0px!important;
 }
 
@@ -810,6 +815,7 @@ p > .custom-select-container { /* logging page */
 .lms-settings-player .custom-select-optgroup div[data-value="ALARM"],
 .lms-settings-player .custom-select-optgroup div[data-value="PLUGIN_DSTM"] {
  height:0px!important;
+ min-height:0px!important;
  visibility:hidden!important;
  padding:0px!important;
 }

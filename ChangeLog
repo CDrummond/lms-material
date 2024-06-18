@@ -17,6 +17,8 @@
 12. Fix hiding 'Alarm' and 'DSTM' settings in player extra settings.
 13. Fix 'Audiobooks' entry in 'My Music'.
 14. Try to prevent selection occuring when drag volume slider.
+15. Don't use custom combobox look for 'Extras' pages, as breaks on some
+    plugins.
 
 5.0.1
 -----

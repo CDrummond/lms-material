@@ -3,7 +3,7 @@
  1. When listing an artist's works show composer as subtitle if this is
     different to artist name.
  2. When showing player menu for 'Player settings' or 'Extra player settings'
-    don't dim current player name.
+    indicate current player name as per main toolbar player menu.
  3. Scroll to top when switch player via player menu in 'Player settings'.
  4. Allow to switch player when displaying an 'Extras' item.
  5. Add lower resoltion icon for browser tabs, etc. Thanks to Peter Oliver.

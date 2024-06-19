@@ -834,7 +834,7 @@ var lmsBrowse = Vue.component("lms-browse", {
                               type: "group",
                               weight: 5,
                               id: TOP_EXTRAS_ID }];
-                if (LMS_P_RM) {
+                if (LMS_P_RL) {
                     this.top.push({  command: ["selectRemoteLibrary", "items"],
                                 params: ["menu:selectRemoteLibrary", "menu:1"],
                                 icon: "cloud",
@@ -1396,7 +1396,7 @@ var lmsBrowse = Vue.component("lms-browse", {
             for (let i=0, len=items.length; i<len; ++i) {
                 if (items[i].id==TOP_CDPLAYER_ID) {
                     updated = true; // No longer show CD Player, so want list saved to remove this
-                } else if (items[i].id!=TOP_REMOTE_ID || LMS_P_RM) {
+                } else if (items[i].id!=TOP_REMOTE_ID || LMS_P_RL) {
                     this.top.push(items[i]);
                 }
             }

@@ -1394,7 +1394,9 @@ var lmsBrowse = Vue.component("lms-browse", {
             }
             this.top=[];
             for (let i=0, len=items.length; i<len; ++i) {
-                if (items[i].id!=TOP_CDPLAYER_ID && (items[i].id!=TOP_REMOTE_ID || LMS_P_RM)) {
+                if (items[i].id==TOP_CDPLAYER_ID) {
+                    updated = true; // No longer show CD Player, so want list saved to remove this
+                } else if (items[i].id!=TOP_REMOTE_ID || LMS_P_RM) {
                     this.top.push(items[i]);
                 }
             }

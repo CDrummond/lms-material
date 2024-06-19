@@ -1,3 +1,7 @@
+5.0.3
+-----
+1. Remove any previously saved 'CD Player' entry from homescreen.
+
 5.0.2
 -----
  1. When listing an artist's works show composer as subtitle if this is

@@ -605,9 +605,9 @@ function nowplayingFetchTrackInfo(view) {
     if (undefined!=trk.album ) {
         if (undefined!=trk.album_id) {
             html+="<tr><td>"+i18n("Album")+"&nbsp;</td><td><obj class=\"link-item\" onclick=\"nowplayingBrowse('album', "+trk.album_id+
-                  ", \'"+escape(trk.album)+"\', \'" +escape(artist)+ "\')\">"+trk.album+"</obj></td></tr>";
+                  ", \'"+escape(trk.album)+"\', \'" +escape(artist)+ "\')\">"+trk.albumName+"</obj></td></tr>";
         } else {
-            html+="<tr><td>"+i18n("Album")+"&nbsp;</td><td>"+trk.album+"</td></tr>";
+            html+="<tr><td>"+i18n("Album")+"&nbsp;</td><td>"+trk.albumName+"</td></tr>";
         }
     }
     if (undefined!=trk.work ) {

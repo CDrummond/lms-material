@@ -1,6 +1,8 @@
 5.0.3
 -----
 1. Remove any previously saved 'CD Player' entry from homescreen.
+2. Don't show year in brackets after album name in MAI track view, as year is
+   shown separately.
 
 5.0.2
 -----

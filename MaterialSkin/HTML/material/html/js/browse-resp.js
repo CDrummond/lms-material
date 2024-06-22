@@ -1817,8 +1817,8 @@ function parseBrowseResp(data, parent, options, cacheKey, parentCommand, parentG
                     };
                 } else {
                     i.type="extra";
+                    mapIcon(i, 'lms-extras', {icon:"extension", svg:undefined});
                 }
-                mapIcon(i, 'lms-extras', {icon:"extension", svg:undefined});
                 i.id="extras:"+i.id;
                 if (allowPinning) {
                     i.menu=[options.pinned.has(i.id) ? UNPIN_ACTION : PIN_ACTION];

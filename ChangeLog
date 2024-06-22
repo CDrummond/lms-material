@@ -1,3 +1,7 @@
+5.0.4
+-----
+1. Treat CD player as if it were not in 'Extras'
+
 5.0.3
 -----
 1. Remove any previously saved 'CD Player' entry from homescreen.

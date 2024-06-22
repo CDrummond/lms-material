@@ -819,3 +819,7 @@ p > .custom-select-container { /* logging page */
  visibility:hidden!important;
  padding:0px!important;
 }
+
+.browsedbControls {
+ padding-top:0px;
+}

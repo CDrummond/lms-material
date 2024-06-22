@@ -1806,7 +1806,18 @@ function parseBrowseResp(data, parent, options, cacheKey, parentCommand, parentG
         } else if (data.result.extras_loop) {
             for (var idx=0, loop=data.result.extras_loop, loopLen=loop.length; idx<loopLen; ++idx) {
                 var i = loop[idx];
-                i.type="extra";
+                if (i.id=="PLUGIN_CDPLAYER") {
+                    i = {
+                        command: ["cdplayer", "items"],
+                        params: ["menu:1"],
+                        svg: "cd-player",
+                        type: "group",
+                        id: i.id,
+                        title: i.title
+                    };
+                } else {
+                    i.type="extra";
+                }
                 mapIcon(i, 'lms-extras', {icon:"extension", svg:undefined});
                 i.id="extras:"+i.id;
                 if (allowPinning) {

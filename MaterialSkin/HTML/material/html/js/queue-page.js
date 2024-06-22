@@ -215,7 +215,7 @@ var lmsQueue = Vue.component("lms-queue", {
    </v-layout>
    <v-spacer></v-spacer>
    <v-btn @click.stop="actionsMenu($event)" flat icon class="toolbar-button" :title="trans.actions" v-if="otherActions.length>0"><v-icon>more_horiz</v-icon></v-btn>
-   <v-btn :title="trans.repeatOne" flat icon v-if="(desktopLayout || wide>0) && playerStatus.repeat===1" class="toolbar-button" v-bind:class="{'disabled':noPlayer}" v-longpress="repeatClicked"><v-icon>repeat_one</v-icon></v-btn>
+   <v-btn :title="trans.randomMix" flat icon v-if="(desktopLayout || wide>0) && playerStatus.randomplay===1" class="toolbar-button" v-bind:class="{'disabled':noPlayer}" v-longpress="repeatClicked"><img class="svg-img media-icon" :src="'dice-multiple' | svgIcon(darkUi)"></img></v-btn>
    <v-btn :title="trans.repeatOne" flat icon v-else-if="(desktopLayout || wide>0) && playerStatus.repeat===1" class="toolbar-button" v-bind:class="{'disabled':noPlayer}" v-longpress="repeatClicked"><v-icon>repeat_one</v-icon></v-btn>
    <v-btn :title="trans.repeatAll" flat icon v-else-if="(desktopLayout || wide>0) && playerStatus.repeat===2" class="toolbar-button" v-bind:class="{'disabled':noPlayer}" v-longpress="repeatClicked"><v-icon>repeat</v-icon></v-btn>
    <v-btn :title="trans.dstm" flat icon v-else-if="(desktopLayout || wide>0) && dstm" class="toolbar-button" v-bind:class="{'disabled':noPlayer}" v-longpress="repeatClicked"><v-icon>all_inclusive</v-icon></v-btn>
@@ -328,11 +328,11 @@ var lmsQueue = Vue.component("lms-queue", {
             pulseCurrent: false,
             listSize:0,
             duration: 0.0,
-            playerStatus: { shuffle:0, repeat: 0 },
+            playerStatus: { shuffle:0, repeat: 0, randomplay:0 },
             remaining: {show:false, size:0, duration:0},
             trans: { ok: undefined, cancel: undefined, clear:undefined, goBack:undefined, repeatAll:undefined, repeatOne:undefined,
                      repeatOff:undefined, shuffleAll:undefined, shuffleAlbums:undefined, shuffleOff:undefined, selectMultiple:undefined,
-                     removeall:undefined, invertSelect:undefined, dstm:undefined, actions:undefined },
+                     removeall:undefined, invertSelect:undefined, dstm:undefined, actions:undefined, randomMix:undefined },
             menu: { show:false, item: undefined, x:0, y:0, index:0},
             playlist: {name: undefined, modified: false},
             selection: new Set(),
@@ -442,6 +442,9 @@ var lmsQueue = Vue.component("lms-queue", {
             }
             if (playerStatus.playlist.repeat!=this.playerStatus.repeat) {
                 this.playerStatus.repeat = playerStatus.playlist.repeat;
+            }
+            if (playerStatus.playlist.randomplay!=this.playerStatus.randomplay) {
+                this.playerStatus.randomplay = playerStatus.playlist.randomplay;
             }
             if (playerStatus.playlist.count!=this.listSize && 0==playerStatus.playlist.count && 0==playerStatus.playlist.timestamp) {
                 this.listSize=0;
@@ -700,7 +703,7 @@ var lmsQueue = Vue.component("lms-queue", {
         initItems() {
             this.trans= { ok:i18n('OK'), cancel: i18n('Cancel'), clear:i18n("Clear queue"), goBack:i18n("Go back"),
                           repeatAll:i18n("Repeat queue"), repeatOne:i18n("Repeat single track"), repeatOff:i18n("No repeat"),
-                          shuffleAll:i18n("Shuffle tracks"), shuffleOff:i18n("No shuffle"),
+                          shuffleAll:i18n("Shuffle tracks"), shuffleOff:i18n("No shuffle"), randomMix:i18n("Random Mix"),
                           shuffleAlbums:lmsOptions.supportReleaseTypes ? i18n("Shuffle releases") : i18n("Shuffle albums"),
                           selectMultiple:i18n("Select multiple items"), removeall:i18n("Remove all selected items"), 
                           invertSelect:i18n("Invert selection"), dstm:i18n("Don't Stop The Music"), actions:i18n("Actions")
@@ -1491,7 +1494,7 @@ var lmsQueue = Vue.component("lms-queue", {
             }
         },
         shuffleClicked() {
-            if (this.$store.state.visibleMenus.size>0 || queryParams.party) {
+            if (this.$store.state.visibleMenus.size>0 || queryParams.party || this.playerStatus.randomplay==1) {
                 return;
             }
             if (this.playerStatus.shuffle===2) {
@@ -1506,7 +1509,9 @@ var lmsQueue = Vue.component("lms-queue", {
             if (this.$store.state.visibleMenus.size>0 || queryParams.party) {
                 return;
             }
-            if (this.playerStatus.repeat===0) {
+            if (this.playerStatus.randomplay==1) {
+                bus.$emit('dlg.open', 'rndmix');
+            } else if (this.playerStatus.repeat===0) {
                 if (LMS_P_DSTM) {
                     if (longPress) {
                         bus.$emit('dlg.open', 'dstm');

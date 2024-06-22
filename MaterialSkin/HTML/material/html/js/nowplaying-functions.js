@@ -233,6 +233,9 @@ function nowplayingOnPlayerStatus(view, playerStatus) {
     if (playerStatus.playlist.repeat!=view.playerStatus.playlist.repeat) {
         view.playerStatus.playlist.repeat = playerStatus.playlist.repeat;
     }
+    if (playerStatus.playlist.randomplay!=view.playerStatus.playlist.randomplay) {
+        view.playerStatus.playlist.randomplay = playerStatus.playlist.randomplay;
+    }
     if (playerStatus.playlist.current!=view.playerStatus.playlist.current) {
         view.playerStatus.playlist.current = playerStatus.playlist.current;
     }

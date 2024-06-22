@@ -526,6 +526,7 @@ var lmsServer = Vue.component('lms-server', {
 
             player.playlist = { shuffle: parseInt(data["playlist shuffle"]),
                                 repeat: parseInt(data["playlist repeat"]),
+                                randomplay: undefined!=data.randomplay ? parseInt(data.randomplay) : 0,
                                 duration: undefined==data["playlist duration"] ? undefined : parseFloat(data["playlist duration"]),
                                 name: data.playlist_name,
                                 modified: undefined==data.playlist_modified ? false : (1==parseInt(data.playlist_modified)),

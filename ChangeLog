@@ -1,6 +1,11 @@
 5.1.0
 -----
 1. Replace shuffle icon with dice icon if random play is active.
+2. Move 'Random Mix' to queue menu.
+
+5.0.4
+-----
+1. Treat CD player as if it were not in 'Extras'
 
 5.0.3
 -----

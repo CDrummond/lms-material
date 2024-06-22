@@ -134,6 +134,7 @@
   my $mobile=0;
 
   # Query some LMS settingsnow to save JavaScript needing to make calls at start-up.
+  my $rndMix=Slim::Utils::PluginManager->isEnabled('Slim::Plugin::RandomPlay::Plugin') ? 1 : 0;
   my $remoteLibraries=Slim::Utils::PluginManager->isEnabled('Slim::Plugin::RemoteLibrary::Plugin') ? 1 : 0;
   my $ratingsPlugin=Slim::Utils::PluginManager->isEnabled('Plugins::RatingsLight::Plugin')
                     ? '"ratingslight"'
@@ -183,6 +184,7 @@
   print("const LMS_P_MAI=$mai;");
   print("const LMS_P_DSTM=$dstm;");
   print("const LMS_P_BMIX=$blissMixer;");
+  print("const LMS_P_RMIX=$rndMix;")
   print("const LMS_ARTIST_PICS=$artistPics;");
   print("const LMS_SRV_EMBLEM=$srvEmblem;");
   print("const LMS_NO_GENRE_FILTER=$noGenreFilter;");

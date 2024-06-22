@@ -698,6 +698,16 @@ function parseBrowseResp(data, parent, options, cacheKey, parentCommand, parentG
             }
 
             if (isAppsTop) {
+                if (LMS_P_CD) {
+                    resp.items.push({
+                        command: ["cdplayer", "items"],
+                        params: ["menu:1"],
+                        svg: "cd-player",
+                        type: "group",
+                        id: "cdplayer",
+                        title: i18n("CD Player")
+                    });
+                }
                 resp.items.sort(titleSort);
             } else if (isPodcastList) {
                 /* Only want to sort podcast feeds, and not actions. So create lists for:
@@ -1807,18 +1817,10 @@ function parseBrowseResp(data, parent, options, cacheKey, parentCommand, parentG
             for (var idx=0, loop=data.result.extras_loop, loopLen=loop.length; idx<loopLen; ++idx) {
                 var i = loop[idx];
                 if (i.id=="PLUGIN_CDPLAYER") {
-                    i = {
-                        command: ["cdplayer", "items"],
-                        params: ["menu:1"],
-                        svg: "cd-player",
-                        type: "group",
-                        id: i.id,
-                        title: i.title
-                    };
-                } else {
-                    i.type="extra";
-                    mapIcon(i, 'lms-extras', {icon:"extension", svg:undefined});
+                    continue;
                 }
+                i.type="extra";
+                mapIcon(i, 'lms-extras', {icon:"extension", svg:undefined});
                 i.id="extras:"+i.id;
                 if (allowPinning) {
                     i.menu=[options.pinned.has(i.id) ? UNPIN_ACTION : PIN_ACTION];

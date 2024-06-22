@@ -135,6 +135,7 @@
 
   # Query some LMS settingsnow to save JavaScript needing to make calls at start-up.
   my $remoteLibraries=Slim::Utils::PluginManager->isEnabled('Slim::Plugin::RemoteLibrary::Plugin') ? 1 : 0;
+  my $cdPlayer=Slim::Utils::PluginManager->isEnabled('Plugins::CDplayer::Plugin') ? 1 : 0;
   my $ratingsPlugin=Slim::Utils::PluginManager->isEnabled('Plugins::RatingsLight::Plugin')
                     ? '"ratingslight"'
                     : Slim::Utils::PluginManager->isEnabled('Plugins::TrackStat::Plugin')
@@ -177,6 +178,7 @@
   print("const LMS_MAX_PLAYLIST_EDIT_SIZE=$maxPlaylistEditSize;");
   print("const LMS_MOBILE_SCROLL=$mobile;");
   print("const LMS_P_RL=$remoteLibraries;");
+  print("const LMS_P_CD=$cdPlayer;");
   print("const LMS_P_RP=$ratingsPlugin;");
   print("const LMS_P_CS=$customSkip;");
   print("const LMS_P_YT=$youTube;");

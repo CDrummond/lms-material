@@ -1,6 +1,6 @@
 5.0.4
 -----
-1. Treat CD player as if it were not in 'Extras'
+1. Move 'CD Player' into 'Apps' and use JSONRCP API for this.
 
 5.0.3
 -----

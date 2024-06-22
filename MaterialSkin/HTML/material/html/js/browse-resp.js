@@ -705,7 +705,8 @@ function parseBrowseResp(data, parent, options, cacheKey, parentCommand, parentG
                         svg: "cd-player",
                         type: "group",
                         id: "cdplayer",
-                        title: i18n("CD Player")
+                        title: i18n("CD Player"),
+                        menu:[options.pinned.has("cdplayer") ? UNPIN_ACTION : PIN_ACTION]
                     });
                 }
                 resp.items.sort(titleSort);

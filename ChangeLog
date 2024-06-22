@@ -1,6 +1,7 @@
 5.0.4
 -----
 1. Move 'CD Player' into 'Apps' and use JSONRCP API for this.
+2. Open http/https weblinks in new window.
 
 5.0.3
 -----

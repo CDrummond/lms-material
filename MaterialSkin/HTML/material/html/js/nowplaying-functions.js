@@ -360,7 +360,7 @@ function nowplayingShowMenu(view, event) {
             view.menu.items.push({title:ACTIONS[act].title, act:NP_ITEM_ACT+act, svg:ACTIONS[act].svg});
         }
         if (undefined!=view.playerStatus.current.title) {
-            view.menu.items.push({title:i18n("Copy details"), act:NP_COPY_DETAILS_CMD, icon:"content_copy"});
+            view.menu.items.push({title:ACTIONS[COPY_DETAILS_ACTION].title, act:NP_COPY_DETAILS_CMD, icon:ACTIONS[COPY_DETAILS_ACTION].icon});
         }
         if (view.customActions && view.customActions.length>0) {
             for (let i=0, loop=view.customActions, len=loop.length; i<len; ++i) {

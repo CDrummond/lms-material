@@ -316,10 +316,13 @@ function decodeShortcutEvent(e) {
     return s;
 }
 
-function copyTextToClipboard(text) {
+function copyTextToClipboard(text, display) {
     if (navigator.clipboard) {
         try{
             navigator.clipboard.writeText(text);
+            if (display) {
+                bus.$emit('showMessage', i18n('Copied: %1', text));
+            }
             return;
         } catch (err) {
         }
@@ -350,6 +353,9 @@ function copyTextToClipboard(text) {
     textArea.setSelectionRange(0, textArea.value.length);
     try {
         document.execCommand('copy');
+        if (display) {
+            bus.$emit('showMessage', i18n('Copied: %1', text));
+        }
     } catch (err) {
     } finally {
         document.body.removeChild(textArea);

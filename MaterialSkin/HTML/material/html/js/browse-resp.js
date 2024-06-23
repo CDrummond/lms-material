@@ -566,6 +566,7 @@ function parseBrowseResp(data, parent, options, cacheKey, parentCommand, parentG
                         i.menu.push(ADD_TO_PLAYLIST_ACTION);
                     }
                     i.menu.push(SELECT_ACTION);
+                    i.menu.push(COPY_DETAILS_ACTION);
                 }
 
 

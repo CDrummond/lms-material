@@ -1571,6 +1571,8 @@ function browseItemAction(view, act, item, index, event) {
                 return;
             }
         }
+    } else if (COPY_DETAILS_ACTION==act) {
+        copyTextToClipboard(stripTags(item.title)+(item.subtitle ? " "+stripTags(item.subtitle) : ""), true);
     } else {
         // If we are acting on a multi-disc album, prompt which disc we should act on
         if (item.multi && !view.current.id.startsWith("album_id:") && (PLAY_ACTION==act || ADD_ACTION==act || INSERT_ACTION==act || PLAY_SHUFFLE_ACTION==act)) {

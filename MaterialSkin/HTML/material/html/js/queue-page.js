@@ -146,7 +146,7 @@ function parseResp(data, showTrackNum, index, showRatings, queueAlbumStyle, queu
                               artistAlbum: artistAlbumLines,
                               image: image,
                               dimcover: undefined!=image && image.endsWith(".png") && (image==DEFAULT_COVER || image==DEFAULT_RADIO_COVER || image==RANDOMPLAY_COVER),
-                              actions: [PQ_PLAY_NOW_ACTION, PQ_PLAY_NEXT_ACTION, DIVIDER, REMOVE_ACTION, PQ_REMOVE_ALBUM_ACTION, PQ_REMOVE_DISC_ACTION, ADD_TO_PLAYLIST_ACTION, PQ_ZAP_ACTION, DOWNLOAD_ACTION, SELECT_ACTION, PQ_COPY_ACTION, MOVE_HERE_ACTION, CUSTOM_ACTIONS, SHOW_IMAGE_ACTION, MORE_ACTION],
+                              actions: [PQ_PLAY_NOW_ACTION, PQ_PLAY_NEXT_ACTION, DIVIDER, REMOVE_ACTION, PQ_REMOVE_ALBUM_ACTION, PQ_REMOVE_DISC_ACTION, ADD_TO_PLAYLIST_ACTION, PQ_ZAP_ACTION, DOWNLOAD_ACTION, SELECT_ACTION, COPY_DETAILS_ACTION, PQ_COPY_ACTION, MOVE_HERE_ACTION, CUSTOM_ACTIONS, SHOW_IMAGE_ACTION, MORE_ACTION],
                               duration: duration,
                               durationStr: undefined!=duration && duration>0 ? formatSeconds(duration) : undefined,
                               key: i.id+"."+index,
@@ -1023,6 +1023,8 @@ var lmsQueue = Vue.component("lms-queue", {
             } else if (SHOW_IMAGE_ACTION==act) {
                 this.cancelCloseTimer(true);
                 bus.$emit('dlg.open', 'gallery', [item.image], 0, true, 'queueDialogClosed');
+            } else if (COPY_DETAILS_ACTION==act) {
+                copyTextToClipboard(stripTags(item.title)+" "+stripTags(item.artistAlbum.join(" ")), true);
             }
         },
         itemCustomAction(act, item, index, event) {

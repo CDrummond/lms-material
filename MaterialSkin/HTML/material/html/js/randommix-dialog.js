@@ -222,7 +222,9 @@ Vue.component('lms-randommix', {
                     });
                 } else if (this.chosenGenres.length==this.genres.length) {
                     lmsCommand(this.playerId, ["randomplaygenreselectall", "1"]).then(({data}) => {
-                        lmsCommand(this.playerId, ["randomplay", this.chosenMix]);
+                        lmsCommand(this.playerId, ["randomplay", this.chosenMix]).then(({data}) => {
+                            bus.$emit('refreshStatus');
+                        });
                     });
                 } else {
                     lmsCommand(this.playerId, ["randomplaygenreselectall", "0"]).then(({data}) => {
@@ -233,11 +235,15 @@ Vue.component('lms-randommix', {
         },
         stop() {
             this.close();
-            lmsCommand(this.playerId, ["randomplay", "disable"]);
+            lmsCommand(this.playerId, ["randomplay", "disable"]).then(({data}) => {
+                bus.$emit('refreshStatus');
+            });
         },
         addGenre() {
             if (0==this.chosenGenres.length) {
-                lmsCommand(this.playerId, ["randomplay", this.chosenMix]);
+                lmsCommand(this.playerId, ["randomplay", this.chosenMix]).then(({data}) => {
+                    bus.$emit('refreshStatus');
+                });
             } else {
                 lmsCommand(this.playerId, ["randomplaychoosegenre", this.chosenGenres.shift(), "1"]).then(({data}) => {
                     this.addGenre();

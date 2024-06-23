@@ -5,7 +5,9 @@
 
 5.0.4
 -----
-1. Treat CD player as if it were not in 'Extras'
+1. Move 'CD Player' into 'Apps' and use JSONRCP API for this.
+2. Open http/https weblinks in new window.
+3. Refresh player status after start/stop 'Random Mix'.
 
 5.0.3
 -----

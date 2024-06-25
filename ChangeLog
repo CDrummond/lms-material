@@ -5,6 +5,7 @@
 3. Add 'Copy details' action to menu of certain items.
 4. Prompt if change settings page and a value has been modified.
 5. Update skin language when LMS language is changed.
+6. Move 'Remote Libraries' into 'Apps'.
 
 5.0.4
 -----

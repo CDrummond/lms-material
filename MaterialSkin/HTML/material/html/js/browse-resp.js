@@ -710,6 +710,17 @@ function parseBrowseResp(data, parent, options, cacheKey, parentCommand, parentG
                         menu:[options.pinned.has("cdplayer") ? UNPIN_ACTION : PIN_ACTION]
                     });
                 }
+                if (LMS_P_RL) {
+                    resp.items.push({
+                        command: ["selectRemoteLibrary", "items"],
+                        params: ["menu:1"],
+                        icon: "cloud",
+                        type: "group",
+                        id: "cdplayer",
+                        title: i18n("Remote Libraries"),
+                        menu:[options.pinned.has("selectRemoteLibrary") ? UNPIN_ACTION : PIN_ACTION]
+                    });
+                }
                 resp.items.sort(titleSort);
             } else if (isPodcastList) {
                 /* Only want to sort podcast feeds, and not actions. So create lists for:

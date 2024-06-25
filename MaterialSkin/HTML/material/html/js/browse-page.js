@@ -854,9 +854,7 @@ var lmsBrowse = Vue.component("lms-browse", {
                                     ? i18n("Apps")
                                     : this.top[i].id==TOP_EXTRAS_ID
                                         ? i18n("Extras")
-                                        : this.top[i].id==TOP_REMOTE_ID
-                                            ? i18n("Remote Libraries")
-                                            : this.top[i].title;
+                                        : this.top[i].title;
             }
 
             if (this.history.length<1) {
@@ -1394,9 +1392,9 @@ var lmsBrowse = Vue.component("lms-browse", {
             }
             this.top=[];
             for (let i=0, len=items.length; i<len; ++i) {
-                if (items[i].id==TOP_CDPLAYER_ID) {
-                    updated = true; // No longer show CD Player, so want list saved to remove this
-                } else if (items[i].id!=TOP_REMOTE_ID || LMS_P_RL) {
+                if (items[i].id==TOP_CDPLAYER_ID || items[i].id==TOP_REMOTE_ID) {
+                    updated = true; // No longer show CD Player, or Remote Libraries, so want list saved to remove this
+                } else {
                     this.top.push(items[i]);
                 }
             }

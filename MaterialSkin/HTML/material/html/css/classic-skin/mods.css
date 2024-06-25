@@ -18,6 +18,7 @@
  width:100%!important;
  margin-left:auto!important;
  margin-right:auto!important;
+ max-width:1200px;
 }
 .pagebar > a, .pagebar > a > img, .pagebar > b, .browsedbLeftControls > a {
  vertical-align:middle;
@@ -86,11 +87,12 @@ html {
 
 body {
  margin-top:0px;
+ max-width:calc(100vw - 22px);
 }
 
-@media screen and (min-width: 1620px) {
+@media screen and (min-width: 2620px) {
  body {
-  max-width:1550px;
+  max-width:2500px;
   margin-left:auto;
   margin-right:auto;
  }
@@ -666,6 +668,57 @@ table td input[type=checkbox] {
   position: absolute;
   left: 252px;
   margin-top:6px;
+ }
+}
+
+@media (min-width: 1200px) {
+ .settingGroup {
+  padding-left: 298px;
+ }
+ .settingGroup .prefHead {
+  width: 270px;
+ }
+ .msk-help-btn {
+  left: 272px;
+ }
+}
+@media (min-width: 1500px) {
+ .settingGroup {
+  padding-left: 328px;
+ }
+ .settingGroup .prefHead {
+  width: 300px;
+ }
+ .msk-help-btn {
+  left: 302px;
+ }
+ #browsedbHeader, #browsedbList {
+  max-width:1250px;
+ }
+}
+@media (min-width: 1700px) {
+ .settingGroup {
+  padding-left: 348px;
+ }
+ .settingGroup .prefHead {
+  width: 320px;
+ }
+ .msk-help-btn {
+  left: 322px;
+ }
+ #browsedbHeader, #browsedbList {
+  max-width:1500px;
+ }
+}
+@media (min-width: 2000px) {
+ .settingGroup {
+  padding-left: 378px;
+ }
+ .settingGroup .prefHead {
+  width: 350px;
+ }
+ .msk-help-btn {
+  left: 352px;
  }
 }
 

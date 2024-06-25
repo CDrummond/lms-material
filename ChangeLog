@@ -4,6 +4,7 @@
 2. Open http/https weblinks in new window.
 3. Refresh player status after start/stop 'Random Mix'.
 4. Try to fix buttons, etc, in 'Extras' items opening new windows.
+5. Fix custom combobox being unset for plugin settings pages.
 
 5.0.3
 -----

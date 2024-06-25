@@ -880,7 +880,7 @@ function browseClick(view, item, index, event) {
     }
     if (item.type=="extra") {
         if (view.$store.state.player) {
-            bus.$emit('dlg.open', 'iframe', item.url+'player='+view.$store.state.player.id, item.title+SEPARATOR+view.$store.state.player.name, undefined, IFRAME_HOME_NAVIGATES_BROWSE_HOME);
+            bus.$emit('dlg.open', 'iframe', item.url+'player='+view.$store.state.player.id+"&mskextra=1", item.title+SEPARATOR+view.$store.state.player.name, undefined, IFRAME_HOME_NAVIGATES_BROWSE_HOME);
         } else {
             bus.$emit('showError', undefined, i18n("No Player"));
         }

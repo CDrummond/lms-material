@@ -387,7 +387,10 @@ var iframeInfo = {
   action:undefined,
   actionCheckInterval: undefined,
   actionChecks: 0,
-  pbarHeight: 0
+  pbarHeight: 0,
+  settingsSelector: undefined,
+  settingsPage: undefined,
+  settingModified: false
 };
 
 /* Manage plugins page has a selector and search field *above* the scrollable area. We need to take
@@ -452,7 +455,7 @@ function iframeActionCheck() {
     iframeInfo.actionChecks = 0;
 }
 
-function selectChanged() {
+function settingsSectionChanged() {
     if (undefined!=iframeInfo.actionCheckInterval) {
         clearInterval(iframeInfo.actionCheckInterval);
     }
@@ -467,10 +470,47 @@ function selectChanged() {
     iframeActionCheck();
 }
 
+function settingsSectionChangedReq() {
+    if (iframeInfo.settingModified) {
+        var reqPage = iframeInfo.settingsSelector.value;
+        iframeInfo.settingsSelector.value = iframeInfo.settingsPage;
+        confirm(i18n("Some settings were changed. Do you want to save them?"), i18n('Save'), i18n('Cancel'), i18n('Discard')).then(res => {
+            if (0==res) { // Cancel
+                return;
+            }
+            if (1==res) { // Save
+                document.getElementById("embeddedIframe").contentDocument.forms.settingsForm.submit();
+            }
+            setTimeout(function() {
+                iframeInfo.settingsSelector.value = reqPage;
+                iframeInfo.settingModified = false;
+                iframeInfo.settingsSelector.onchange();
+            }, 100);
+        });
+    } else {
+        iframeInfo.settingsDoChange();
+    }
+}
+
 function copyVar(iframe, name) {
     let v = getComputedStyle(document.getElementById("iframe-page")).getPropertyValue(name);
     if (undefined!=v) {
         iframe.contentWindow.document.documentElement.style.setProperty(name, v);
+    }
+}
+
+function initChangeListeners(doc) {
+    let types = ['input', 'textarea', 'select'];
+    iframeInfo.settingModified = false;
+    for (let i=0, len=types.length; i<len; ++i) {
+        let elems = doc.getElementsByTagName(types[i]);
+        for (let e=0, elen=elems.length; e<elen; ++e) {
+            if (elems[e].id!="choose_setting" && undefined==elems[e].onchange) {
+                elems[e].onchange = elems[e].onblur = function(ev) {
+                    iframeInfo.settingModified = iframeInfo.settingModified || (elems[e].value != elems[e].defaultValue);
+                };
+            }
+        }
     }
 }
 
@@ -502,11 +542,17 @@ function applyModifications(page, textCol, darkUi) {
         remapClassicSkinIcons(content, textCol);
         addHooks(content);
 
+        iframeInfo.settingModified = false;
+        iframeInfo.settingsPage = undefined;
+        iframeInfo.settingsSelector = undefined;
         if ('server'==page || 'player'==page) {
-            var selector=content.getElementById("choose_setting");
-            if (undefined!=selector) {
-                selector.addEventListener("change", selectChanged);
-                selectChanged();
+            iframeInfo.settingsSelector = content.getElementById("choose_setting");
+            if (undefined!=iframeInfo.settingsSelector) {
+                iframeInfo.settingsPage = iframeInfo.settingsSelector.value;
+                iframeInfo.settingsDoChange = iframeInfo.settingsSelector.onchange;
+                iframeInfo.settingsSelector.onchange = settingsSectionChangedReq;
+                iframeInfo.settingsSelector.addEventListener("change", settingsSectionChanged);
+                settingsSectionChanged();
             }
         }
 
@@ -519,6 +565,7 @@ function applyModifications(page, textCol, darkUi) {
         }
 
         if ('player'==page || 'server'==page) {
+            initChangeListeners(content.documentElement);
             // Set --vh as this is used to fix size of main settings frame, so that we can
             // correctly set its position, etc, to be consistent between mobile and desktop.
             // Previously desktop had a big padding above view selector.
@@ -678,6 +725,7 @@ Vue.component('lms-iframe-dialog', {
     },
     mounted() {
         bus.$on('iframe.open', function(page, title, actions, showHome, playerId) {
+            iframeInfo.settingModified = false;
             this.title = title;
             this.src = page;
             this.page = page.indexOf("player/basic.html")>0
@@ -770,7 +818,9 @@ Vue.component('lms-iframe-dialog', {
             }
         },
         goHome() {
-            this.close();
+            if (!this.close()) {
+                return;
+            }
             if (IFRAME_HOME_CLOSES_DIALOGS==this.showHome) {
                 this.$store.commit('closeAllDialogs', true);
             } else {
@@ -778,6 +828,23 @@ Vue.component('lms-iframe-dialog', {
             }
         },
         close() {
+            if (iframeInfo.settingModified) {
+                confirm(i18n("Some settings were changed. Do you want to save them?"), i18n('Save'), i18n('Cancel'), i18n('Discard')).then(res => {
+                    console.log
+                    if (0==res) { // Cancel
+                        return;
+                    }
+                    if (1==res) { // Save
+                        document.getElementById("embeddedIframe").contentDocument.forms.settingsForm.submit();
+                    }
+                    setTimeout(function() {
+                        iframeInfo.settingModified = false;
+                        this.close();
+                    }.bind(this), 100);
+                });
+                return;
+            }
+
             this.show=0;
             this.showMenu = false;
             this.history=[];

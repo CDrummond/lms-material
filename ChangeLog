@@ -6,6 +6,7 @@
 4. Try to fix buttons, etc, in 'Extras' items opening new windows.
 5. Fix custom combobox being unset for plugin settings pages.
 6. Allow settings pages to use more width.
+7. Fix missing text in YouTube comboboxes.
 
 5.0.3
 -----

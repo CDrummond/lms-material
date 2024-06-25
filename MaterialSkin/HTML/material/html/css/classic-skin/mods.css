@@ -1,5 +1,4 @@
 :root {
- --dialog-list-max-width:900px;
  --bold-weight:500;
  --plugin-bar-adjust:0px;
 }
@@ -15,13 +14,8 @@
 }
 
 /* Advanced search - has been removed, but these used elsewhere?*/
-div#browsedbList {
- margin-left:-8px;
- margin-right:-8px;
-}
 #browsedbHeader, #browsedbList {
  width:100%!important;
- max-width:var(--dialog-list-max-width)!important;
  margin-left:auto!important;
  margin-right:auto!important;
 }
@@ -156,7 +150,7 @@ table {
 }
 
 div#innerSettingsBlock {
- width:calc(100vw - 36px)!important;
+ width:calc(100% - 36px)!important;
  height:calc((var(--vh, 1vh)*100) - (280px + var(--plugin-bar-adjust)))!important;
  padding: 0px 21px 120px 7px;
 }
@@ -229,7 +223,7 @@ select:not([multiple]) {
  text-overflow:ellipsis;
  overflow:hidden;
  white-space:nowrap;
- max-width:calc(100vw - 32px);
+ max-width:100%;
  border-radius: 0px;
  min-height:26px;
  margin-bottom:1px;
@@ -254,7 +248,7 @@ input[type="text"], input[type="password"], input[type="stdedit"], input.stdedit
  border: none;
  border-bottom: 1px solid var(--text-color);
  min-width:80px;
- max-width:calc(100vw - 32px);
+ max-width:calc(100% - 32px);
  border-radius: 0px;
 }
 
@@ -512,7 +506,7 @@ input[type="text"]:focus, input[type="password"]:focus, input[type="stdedit"]:fo
 
 textarea {
  border: 1px solid var(--border-color);
- max-width:calc(100vw - 40px);
+ max-width:calc(100% - 40px);
 }
 
 textarea:focus {
@@ -676,11 +670,11 @@ table td input[type=checkbox] {
 }
 
 .prefs .selectFolder {
- max-width:calc(100vw - 84px)!important;
+ max-width:calc(100% - 84px)!important;
 }
 
 #mediadirs0, #mediadirs1, #mediadirs2, #mediadirs3, #mediadirs4, #mediadirs5, #mediadirs6, #mediadirs7, #mediadirs8, #mediadirs9 {
- max-width:calc(100vw - 232px)!important;
+ max-width:calc(100% - 232px)!important;
 }
 
 #ignoreInAudioScan0, #ignoreInAudioScan1, #ignoreInAudioScan2, #ignoreInAudioScan3, #ignoreInAudioScan4,
@@ -769,7 +763,7 @@ p > .custom-select-container { /* logging page */
 }
 
 #setup_chooser .custom-select-container {
- width:calc(100vw - 36px)!important;
+ width:100%!important;
 }
 
 .custom-select-opener:focus {

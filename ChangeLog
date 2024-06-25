@@ -3,6 +3,7 @@
 1. Move 'CD Player' into 'Apps' and use JSONRPC API for this.
 2. Open http/https weblinks in new window.
 3. Refresh player status after start/stop 'Random Mix'.
+4. Try to fix buttons, etc, in 'Extras' items opening new windows.
 
 5.0.3
 -----

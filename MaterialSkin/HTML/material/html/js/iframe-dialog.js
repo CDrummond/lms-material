@@ -135,13 +135,26 @@ function iframeClickHandler(e) {
 function otherClickHandler(e) {
     var target = e.target || e.srcElement;
     var href = undefined;
+    var clearHistoryOf = undefined;
     if (target.tagName === 'A') {
         href = target.getAttribute('href');
     } else if (target.tagName === 'SPAN' || target.tagName === 'IMG') {
         href = target.parentElement.getAttribute('href');
     }
+    // If href is "/status_header.html" then redirect to current URL
+    if (href && href.startsWith("/status_header.html?")) {
+        let hpos = href.indexOf('?');
+        let opos = iframeInfo.src.indexOf('?');
+        if (opos>0) {
+            href = iframeInfo.src.substring(0, opos+1) + href.substring(hpos+1);
+            // Prevent click from propagating further - as causes a new page to open?
+            e.preventDefault();
+            // Reset any history related to current URL - as we've reset from status to current page
+            clearHistoryOf = iframeInfo.src.substring(0, opos);
+        }
+    }
     if (href && !href.startsWith('#')) {
-        bus.$emit('iframe-href', href);
+        bus.$emit('iframe-href', href, undefined, clearHistoryOf);
     }
     iframeClickHandler(e);
 }
@@ -474,10 +487,11 @@ function copyVar(iframe, name) {
     }
 }
 
-function applyModifications(page, textCol, darkUi) {
+function applyModifications(page, textCol, darkUi, src) {
     if (!page) {
         return;
     }
+    iframeInfo.src = src;
     var iframe = document.getElementById("embeddedIframe");
     if (iframe && iframe.contentDocument) {
         iframe.contentDocument.bus = bus;
@@ -640,7 +654,7 @@ Vue.component('lms-iframe-dialog', {
    </v-card-title>
    <v-card-text class="embedded-page">
     <div v-if="!loaded" style="width:100%;padding-top:64px;display:flex;justify-content:center;font-size:18px">{{i18n('Loading...')}}</div>
-    <iframe id="embeddedIframe" v-on:load="applyModifications(page, textCol, darkUi)" :src="src" frameborder="0" v-bind:class="{'iframe-text':'other'==page}"></iframe>
+    <iframe id="embeddedIframe" v-on:load="applyModifications(page, textCol, darkUi, src)" :src="src" frameborder="0" v-bind:class="{'iframe-text':'other'==page}"></iframe>
    </v-card-text>
   </v-card>
  </v-dialog>
@@ -712,14 +726,21 @@ Vue.component('lms-iframe-dialog', {
         bus.$on('iframe-loaded', function() {
             this.loaded = true;
         }.bind(this));
-        bus.$on('iframe-href', function(ref, addToHistory) {
+        bus.$on('iframe-href', function(ref, addToHistory, clearHistoryOf) {
             if (ref.startsWith("javascript:")) {
                 return;
             }
             if (ref.startsWith("http://") || ref.startsWith("https://")) {
                 return;
             }
-            if (undefined==addToHistory || addToHistory) {
+            if (undefined!=clearHistoryOf) {
+                for (let idx=this.history.length-1; idx>=0; --idx) {
+                    if (!this.history[idx].startsWith(clearHistoryOf) && !("/"+this.history[idx]).startsWith(clearHistoryOf)) {
+                        break;
+                    }
+                    this.history.pop();
+                }
+            } else if (undefined==addToHistory || addToHistory) {
                 this.history.push(this.src);
             }
             this.src = ref;

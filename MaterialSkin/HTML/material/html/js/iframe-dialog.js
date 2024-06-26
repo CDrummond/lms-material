@@ -753,6 +753,7 @@ Vue.component('lms-iframe-dialog', {
                                         : page == '/material/html/material-skin/index.html'
                                             ? "help"
                                             : "other";
+            window.isMskExtraPage = 'extras'==this.page;
             this.showLogo = this.page!='other' && !page.startsWith("plugins/");
             this.show = true;
             this.showMenu = false;

@@ -56,6 +56,14 @@
  Mousetrap.bind('esc', function() { document.bus.$emit('esc') });
 
  function styleSelects() {
+  // YouTube plugin has label attribute for options, but custom-selects does not seem to pick
+  // this up. Work-around by copying label to text value.
+  let elems = document.getElementsByTagName("option");
+  for (let e=0, elen=elems.length; e<elen; ++e) {
+   if (undefined!=elems[e].label) {
+    elems[e].innerText = elems[e].label;
+   }
+  }
   let selects = customSelect("select");
   // If select is close to bottom then need to scroll into view...
   for (let i=0, len=selects.length; i<len; ++i) {
@@ -85,8 +93,8 @@
    });
   }
  }
-
- if (window.location.href.indexOf("plugins/")<0 || window.location.href.indexOf("player=")<0) {
+ // Don't enable custom select for extras pages - seems ro break on (e.g.) Visual Statistics
+ if (!window.parent.isMskExtraPage) {
   if (window.addEventListener) {
    window.addEventListener("load", styleSelects, false);
   } else if (window.attachEvent) {

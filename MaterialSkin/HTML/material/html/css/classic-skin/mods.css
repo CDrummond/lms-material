@@ -1,5 +1,4 @@
 :root {
- --dialog-list-max-width:900px;
  --bold-weight:500;
  --plugin-bar-adjust:0px;
 }
@@ -15,15 +14,10 @@
 }
 
 /* Advanced search - has been removed, but these used elsewhere?*/
-div#browsedbList {
- margin-left:-8px;
- margin-right:-8px;
-}
 #browsedbHeader, #browsedbList {
  width:100%!important;
- max-width:var(--dialog-list-max-width)!important;
- margin-left:auto!important;
  margin-right:auto!important;
+ max-width:1000px;
 }
 .pagebar > a, .pagebar > a > img, .pagebar > b, .browsedbLeftControls > a {
  vertical-align:middle;
@@ -61,6 +55,7 @@ div#browsedbList {
  color:transparent!important;
  background-color:transparent!important;
  border-top:1px solid var(--list-item-border-color);
+ padding-left:16px;
 }
 
 div#topGraphicMenu3 {
@@ -92,14 +87,9 @@ html {
 
 body {
  margin-top:0px;
-}
-
-@media screen and (min-width: 1620px) {
- body {
-  max-width:1550px;
-  margin-left:auto;
-  margin-right:auto;
- }
+ max-width:100%;
+ margin-left:auto;
+ margin-right:auto;
 }
 
 td input { /* Fix entry/combo alignment in additional browse modes */
@@ -155,20 +145,31 @@ table {
  padding-right:14px;
 }
 
+div#homeMenu {
+ margin-left:16px;
+ margin-right:16px;
+}
+.lms-settings-player div#homeMenu, .lms-settings-server div#homeMenu {
+ margin-left:0px;
+}
+div#homeMenu > div#settingsRegion {
+ margin-left:0px;
+ margin-right:0px;
+}
+table.topside {
+ width:calc(100% -16px);
+}
+
 div#innerSettingsBlock {
- width:calc(100vw - 36px)!important;
- height:calc((var(--vh, 1vh)*100) - (280px + var(--plugin-bar-adjust)))!important;
- padding: 0px 21px 120px 7px;
+ margin-left:0px!important;
+ margin-right:0px!important;
+ width:calc(100vw - 32px)!important;
+ height:calc((var(--vh, 1vh)*100) - (300px + var(--plugin-bar-adjust)))!important;
+ padding:20px 16px 120px 16px;
 }
 
 div#topGraphicMenu3 #statusMessage {
  font-size:0px!important;
-}
-
-@media (min-width: 1620px) {
- div#innerSettingsBlock {
-  width:100%!important;
- }
 }
 
 *, body, table, input, select, textarea, p, l {
@@ -229,7 +230,7 @@ select:not([multiple]) {
  text-overflow:ellipsis;
  overflow:hidden;
  white-space:nowrap;
- max-width:calc(100vw - 32px);
+ max-width:100%;
  border-radius: 0px;
  min-height:26px;
  margin-bottom:1px;
@@ -254,7 +255,7 @@ input[type="text"], input[type="password"], input[type="stdedit"], input.stdedit
  border: none;
  border-bottom: 1px solid var(--text-color);
  min-width:80px;
- max-width:calc(100vw - 32px);
+ max-width:calc(100% - 32px);
  border-radius: 0px;
 }
 
@@ -278,11 +279,16 @@ input[type=checkbox], input[type=radio] {
  border:none;
  background-color: transparent;
  width:24px;
- height:24px;
+ height:30px;
  min-width:24px;
- min-height:24px;
+ min-height:30px;
  max-width:24px;
- max-height:24px;
+ max-height:30px;
+ padding-top:3px;
+}
+
+input[type=checkbox] {
+ padding-top:1px;
 }
 
 input[type=checkbox]:before {
@@ -504,6 +510,11 @@ input[type="text"], input[type="password"], input[type="stdedit"] {
  background:var(--background-color) !important;
  color:var(--text-color);
  border-bottom: 1px solid var(--text-color);
+ min-height:28px;
+}
+
+label:not(.toggle) {
+ min-height:28px;
 }
 
 input[type="text"]:focus, input[type="password"]:focus, input[type="stdedit"]:focus, .stdedit:focus, select:focus {
@@ -512,7 +523,7 @@ input[type="text"]:focus, input[type="password"]:focus, input[type="stdedit"]:fo
 
 textarea {
  border: 1px solid var(--border-color);
- max-width:calc(100vw - 40px);
+ max-width:calc(100% - 40px);
 }
 
 textarea:focus {
@@ -675,12 +686,60 @@ table td input[type=checkbox] {
  }
 }
 
-.prefs .selectFolder {
- max-width:calc(100vw - 84px)!important;
+@media (min-width: 1200px) {
+ .settingGroup {
+  padding-left: 298px;
+ }
+ .settingGroup .prefHead {
+  width: 270px;
+ }
+ .msk-help-btn {
+  left: 272px;
+ }
+}
+@media (min-width: 1500px) {
+ .settingGroup {
+  padding-left: 328px;
+ }
+ .settingGroup .prefHead {
+  width: 300px;
+ }
+ .msk-help-btn {
+  left: 302px;
+ }
+}
+@media (min-width: 1700px) {
+ .settingGroup {
+  padding-left: 348px;
+ }
+ .settingGroup .prefHead {
+  width: 320px;
+ }
+ .msk-help-btn {
+  left: 322px;
+ }
+}
+@media (min-width: 2000px) {
+ .settingGroup {
+  padding-left: 378px;
+ }
+ .settingGroup .prefHead {
+  width: 350px;
+ }
+ .msk-help-btn {
+  left: 352px;
+ }
 }
 
-#mediadirs0, #mediadirs1, #mediadirs2, #mediadirs3, #mediadirs4, #mediadirs5, #mediadirs6, #mediadirs7, #mediadirs8, #mediadirs9 {
- max-width:calc(100vw - 232px)!important;
+.prefs .selectFolder {
+ max-width:calc(100% - 64px)!important;
+}
+
+/* Shrink path selection fields in 'Basic Settings' */
+@media (max-width: 570px) {
+ td.even, td.odd {
+  max-width:calc(100vw - 180px);
+ }
 }
 
 #ignoreInAudioScan0, #ignoreInAudioScan1, #ignoreInAudioScan2, #ignoreInAudioScan3, #ignoreInAudioScan4,
@@ -769,7 +828,7 @@ p > .custom-select-container { /* logging page */
 }
 
 #setup_chooser .custom-select-container {
- width:calc(100vw - 36px)!important;
+ width:calc(100% - 16px)!important;
 }
 
 .custom-select-opener:focus {

@@ -392,7 +392,7 @@ var app = new Vue({
             if (lang == 'en' || lang == 'en-US') {
                 // All strings are en-US by default, so remove any previous translation
                 // from storage.
-                if (storedTrans!=undefined) {
+                if (getLocalStorageVal('translation', undefined)!=undefined) {
                     removeLocalStorage('translation');
                     removeLocalStorage('lang');
                     setTranslation(undefined);

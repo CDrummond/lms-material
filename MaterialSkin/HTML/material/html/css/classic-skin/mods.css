@@ -512,10 +512,6 @@ input[type="text"], input[type="password"], input[type="stdedit"] {
  min-height:28px;
 }
 
-label:not(.toggle) {
- min-height:28px;
-}
-
 input[type="text"]:focus, input[type="password"]:focus, input[type="stdedit"]:focus, .stdedit:focus, select:focus {
  border-bottom: 1px solid var(--active-color);
 }
@@ -649,10 +645,6 @@ input[type="submit"], input[type="button"] {
  padding: 0px 6px 0px 0px;
 }
 
-.msk-is-non-touch table td {
- padding-bottom:0px;
-}
-
 table td input[type=checkbox] {
  margin-top:-2px;
 }
@@ -756,9 +748,10 @@ table td input[type=checkbox] {
 }
 
 #pluginButtonBar {
- padding-bottom:12px;
+ padding-top:32px;
+ padding-bottom:4px;
  padding-left:4px;
- height:100px;
+ height:80px;
 }
 
 #pluginButtonBar > span {
@@ -829,7 +822,6 @@ table td input[type=checkbox] {
  background-color:transparent!important;
  border-bottom:1px solid var(--text-color);
  padding-left:0px!important;
- margin-bottom:16px!important;
  margin-top:-3px!important;
  min-width:80px!important;
  min-height:32px!important;
@@ -904,4 +896,8 @@ p > .custom-select-container { /* logging page */
 
 .browsedbControls {
  padding-top:0px;
+}
+
+.Toggle { /* SqueezeDSP */
+ margin-top:-22px;
 }

@@ -56,6 +56,7 @@
  color:transparent!important;
  background-color:transparent!important;
  border-top:1px solid var(--list-item-border-color);
+ padding-left:16px;
 }
 
 div#topGraphicMenu3 {
@@ -87,15 +88,9 @@ html {
 
 body {
  margin-top:0px;
- max-width:calc(100vw - 22px);
-}
-
-@media screen and (min-width: 2620px) {
- body {
-  max-width:2500px;
-  margin-left:auto;
-  margin-right:auto;
- }
+ max-width:100%;
+ margin-left:auto;
+ margin-right:auto;
 }
 
 td input { /* Fix entry/combo alignment in additional browse modes */
@@ -151,20 +146,31 @@ table {
  padding-right:14px;
 }
 
+div#homeMenu {
+ margin-left:16px;
+ margin-right:16px;
+}
+.lms-settings-player div#homeMenu, .lms-settings-server div#homeMenu {
+ margin-left:0px;
+}
+div#homeMenu > div#settingsRegion {
+ margin-left:0px;
+ margin-right:0px;
+}
+table.topside {
+ width:calc(100% -16px);
+}
+
 div#innerSettingsBlock {
- width:calc(100% - 36px)!important;
- height:calc((var(--vh, 1vh)*100) - (280px + var(--plugin-bar-adjust)))!important;
- padding: 20px 21px 120px 7px;
+ margin-left:0px!important;
+ margin-right:0px!important;
+ width:calc(100vw - 32px)!important;
+ height:calc((var(--vh, 1vh)*100) - (300px + var(--plugin-bar-adjust)))!important;
+ padding:20px 16px 120px 16px;
 }
 
 div#topGraphicMenu3 #statusMessage {
  font-size:0px!important;
-}
-
-@media (min-width: 1620px) {
- div#innerSettingsBlock {
-  width:100%!important;
- }
 }
 
 *, body, table, input, select, textarea, p, l {
@@ -274,11 +280,16 @@ input[type=checkbox], input[type=radio] {
  border:none;
  background-color: transparent;
  width:24px;
- height:24px;
+ height:30px;
  min-width:24px;
- min-height:24px;
+ min-height:30px;
  max-width:24px;
- max-height:24px;
+ max-height:30px;
+ padding-top:3px;
+}
+
+input[type=checkbox] {
+ padding-top:1px;
 }
 
 input[type=checkbox]:before {
@@ -500,6 +511,11 @@ input[type="text"], input[type="password"], input[type="stdedit"] {
  background:var(--background-color) !important;
  color:var(--text-color);
  border-bottom: 1px solid var(--text-color);
+ min-height:28px;
+}
+
+label:not(.toggle) {
+ min-height:28px;
 }
 
 input[type="text"]:focus, input[type="password"]:focus, input[type="stdedit"]:focus, .stdedit:focus, select:focus {
@@ -723,11 +739,14 @@ table td input[type=checkbox] {
 }
 
 .prefs .selectFolder {
- max-width:calc(100% - 84px)!important;
+ max-width:calc(100% - 64px)!important;
 }
 
-#mediadirs0, #mediadirs1, #mediadirs2, #mediadirs3, #mediadirs4, #mediadirs5, #mediadirs6, #mediadirs7, #mediadirs8, #mediadirs9 {
- max-width:calc(100% - 232px)!important;
+/* Shrink path selection fields in 'Basic Settings' */
+@media (max-width: 570px) {
+ td.even, td.odd {
+  max-width:calc(100vw - 180px);
+ }
 }
 
 #ignoreInAudioScan0, #ignoreInAudioScan1, #ignoreInAudioScan2, #ignoreInAudioScan3, #ignoreInAudioScan4,
@@ -816,7 +835,7 @@ p > .custom-select-container { /* logging page */
 }
 
 #setup_chooser .custom-select-container {
- width:100%!important;
+ width:calc(100% - 16px)!important;
 }
 
 .custom-select-opener:focus {

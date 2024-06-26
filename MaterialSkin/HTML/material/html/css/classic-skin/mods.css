@@ -16,9 +16,8 @@
 /* Advanced search - has been removed, but these used elsewhere?*/
 #browsedbHeader, #browsedbList {
  width:100%!important;
- margin-left:auto!important;
  margin-right:auto!important;
- max-width:1200px;
+ max-width:1000px;
 }
 .pagebar > a, .pagebar > a > img, .pagebar > b, .browsedbLeftControls > a {
  vertical-align:middle;
@@ -708,9 +707,6 @@ table td input[type=checkbox] {
  .msk-help-btn {
   left: 302px;
  }
- #browsedbHeader, #browsedbList {
-  max-width:1250px;
- }
 }
 @media (min-width: 1700px) {
  .settingGroup {
@@ -721,9 +717,6 @@ table td input[type=checkbox] {
  }
  .msk-help-btn {
   left: 322px;
- }
- #browsedbHeader, #browsedbList {
-  max-width:1500px;
  }
 }
 @media (min-width: 2000px) {

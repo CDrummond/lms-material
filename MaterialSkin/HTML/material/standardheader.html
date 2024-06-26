@@ -94,14 +94,12 @@
   }
  }
  // Don't enable custom select for extras pages - seems ro break on (e.g.) Visual Statistics
- if (!window.parent.isMskExtraPage) {
-  if (window.addEventListener) {
-   window.addEventListener("load", styleSelects, false);
-  } else if (window.attachEvent) {
-   window.attachEvent("onload", styleSelects);
-  } else {
-   window.onload = styleSelects;
-  }
+ if (window.addEventListener) {
+  window.addEventListener("load", styleSelects, false);
+ } else if (window.attachEvent) {
+  window.attachEvent("onload", styleSelects);
+ } else {
+  window.onload = styleSelects;
  }
 </script>
 

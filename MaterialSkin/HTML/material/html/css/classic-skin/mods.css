@@ -16,7 +16,12 @@
 #browsedbHeader, #browsedbList {
  width:100%!important;
  margin-right:auto!important;
- max-width:1000px;
+ max-width:1400px;
+}
+@media screen and (max-width: 1800px) {
+ #browsedbHeader, #browsedbList {
+  margin-left:auto!important;
+ }
 }
 .pagebar > a, .pagebar > a > img, .pagebar > b, .browsedbLeftControls > a {
  vertical-align:middle;

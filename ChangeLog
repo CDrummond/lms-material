@@ -6,6 +6,7 @@
 4. Prompt if change settings page and a value has been modified.
 5. Update skin language when LMS language is changed.
 6. Move 'Remote Libraries' into 'Apps'.
+7. Hide iframe (e.g. Settings pages) until loaded.
 
 5.0.4
 -----

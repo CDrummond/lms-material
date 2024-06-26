@@ -2677,6 +2677,20 @@ div.v-subheader {
  background-color:#ddd!important;
 }
 
+.iframe-loading {
+ width:100%;
+ padding-top:64px;
+ display:flex;
+ justify-content:center;
+ font-size:18px;
+ animation:fadeIn 1s;
+}
+@keyframes fadeIn {
+ 0% { opacity:0.0; }
+ 10% { opacity:0.0; }
+ 100% { opacity:1; }
+}
+
 .transparent {
  opacity:0;
 }

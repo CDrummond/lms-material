@@ -448,6 +448,7 @@ function iframeActionCheck() {
 }
 
 function settingsSectionChanged() {
+    bus.$emit('iframe-loaded', false);
     if (undefined!=iframeInfo.actionCheckInterval) {
         clearInterval(iframeInfo.actionCheckInterval);
     }
@@ -466,8 +467,10 @@ function settingsSectionChangedReq() {
     if (iframeInfo.settingModified) {
         var reqPage = iframeInfo.settingsSelector.value;
         iframeInfo.settingsSelector.value = iframeInfo.settingsPage;
+        bus.$emit('iframe-prompting', true);
         confirm(i18n("Some settings were changed. Do you want to save them?"), i18n('Save'), i18n('Cancel'), i18n('Discard')).then(res => {
             if (0==res) { // Cancel
+                bus.$emit('iframe-prompting', false);
                 return;
             }
             if (1==res) { // Save
@@ -477,6 +480,7 @@ function settingsSectionChangedReq() {
                 iframeInfo.settingsSelector.value = reqPage;
                 iframeInfo.settingModified = false;
                 iframeInfo.settingsSelector.onchange();
+                bus.$emit('iframe-prompting', false);
             }, 100);
         });
     } else {
@@ -507,6 +511,7 @@ function initChangeListeners(doc) {
 }
 
 function applyModifications(page, textCol, darkUi, src) {
+    bus.$emit('iframe-loaded', true);
     if (!page) {
         return;
     }
@@ -639,7 +644,7 @@ function applyModifications(page, textCol, darkUi, src) {
             }
         }
     }
-    bus.$emit('iframe-loaded');
+    bus.$emit('iframe-loaded', true);
 }
 
 Vue.component('lms-iframe-dialog', {
@@ -680,8 +685,8 @@ Vue.component('lms-iframe-dialog', {
     </v-toolbar>
    </v-card-title>
    <v-card-text class="embedded-page">
-    <div v-if="!loaded" style="width:100%;padding-top:64px;display:flex;justify-content:center;font-size:18px">{{i18n('Loading...')}}</div>
-    <iframe id="embeddedIframe" v-on:load="applyModifications(page, textCol, darkUi, src)" :src="src" frameborder="0" v-bind:class="{'iframe-text':'other'==page}"></iframe>
+    <div v-if="!loaded && !prompting" class="iframe-loading">{{i18n('Loading...')}}</div>
+    <iframe id="embeddedIframe" v-on:load="applyModifications(page, textCol, darkUi, src)" :src="src" frameborder="0" v-bind:class="{'iframe-text':'other'==page,'transparent':!loaded && !prompting}"></iframe>
    </v-card-text>
   </v-card>
  </v-dialog>
@@ -708,6 +713,7 @@ Vue.component('lms-iframe-dialog', {
             src: undefined,
             page: undefined,
             loaded:false,
+            prompting:false,
             actions: [],
             customActions: [],
             history: [],
@@ -751,8 +757,11 @@ Vue.component('lms-iframe-dialog', {
                 }
             }
         }.bind(this));
-        bus.$on('iframe-loaded', function() {
-            this.loaded = true;
+        bus.$on('iframe-loaded', function(val) {
+            this.loaded = val;
+        }.bind(this));
+        bus.$on('iframe-prompting', function(val) {
+            this.prompting = val;
         }.bind(this));
         bus.$on('iframe-href', function(ref, addToHistory, clearHistoryOf) {
             if (ref.startsWith("javascript:")) {

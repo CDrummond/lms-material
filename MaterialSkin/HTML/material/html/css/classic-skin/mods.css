@@ -861,6 +861,10 @@ p > .custom-select-container { /* logging page */
 
 .custom-select-container.is-open .custom-select-panel {
  top:30px!important;
+ overflow-y:visible!important;
+}
+.container {
+ overflow-y:visible!important;
 }
 
 #setup_chooser .custom-select-container.is-open .custom-select-panel {

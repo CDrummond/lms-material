@@ -1,6 +1,5 @@
 :root {
  --bold-weight:500;
- --plugin-bar-adjust:0px;
 }
 
 @supports not selector(::-webkit-scrollbar) {
@@ -164,7 +163,7 @@ div#innerSettingsBlock {
  margin-left:0px!important;
  margin-right:0px!important;
  width:calc(100vw - 32px)!important;
- height:calc((var(--vh, 1vh)*100) - (300px + var(--plugin-bar-adjust)))!important;
+ height:calc((var(--vh, 1vh)*100) - 300px)!important;
  padding:20px 16px 120px 16px;
 }
 
@@ -759,25 +758,50 @@ table td input[type=checkbox] {
 #pluginButtonBar {
  padding-bottom:12px;
  padding-left:4px;
+ height:100px;
 }
 
-#pluginButtonBar span {
- padding-top:8px;
+#pluginButtonBar > span {
  display:inline-block;
+ padding-top:8px;
 }
 
-#pluginButtonBar span:last-of-type {
+#pluginButtonBar > span:first-of-type {
+ margin-left:12px;
+}
+
+#pluginButtonBar > span:last-of-type {
  float:right;
  margin-right:13px;
 }
 
-@media (max-width:580px) {
- #pluginButtonBar span:last-of-type {
-  float:unset;
-  margin-right:unset;
+.lms-settings-section-SETUP_PLUGINS div#innerSettingsBlock {
+ height:calc((var(--vh, 1vh)*100) - 247px)!important;
+}
+
+.lms-settings-section-SETUP_PLUGINS div#homeMenu > div#settingsRegion {
+ margin-top:-20px;
+}
+
+.lms-settings-section-SETUP_PLUGINS div#innerSettingsBlock {
+ padding: 0px 16px 16px 16px
+}
+
+@media (max-width:700px) {
+ #pluginButtonBar > span {
+  display:block;
+  margin-left:12px;
+  width:100%;
  }
- #pluginButtonBar span:first-of-type {
-   margin-right:12px;
+ #pluginButtonBar > span:last-of-type {
+  float:unset;
+  margin-right:0px!important;
+ }
+ .lms-settings-section-SETUP_PLUGINS div#homeMenu > div#settingsRegion {
+  margin-top:14px;
+ }
+ .lms-settings-section-SETUP_PLUGINS div#innerSettingsBlock {
+  height:calc((var(--vh, 1vh)*100) - 281px)!important;
  }
 }
 
@@ -860,11 +884,6 @@ p > .custom-select-container { /* logging page */
 
 .custom-select-option.is-selected {
  color:var(--active-color);
-}
-
-#pluginButtonBar span:last-of-type {
- margin-right: -4px;
- min-width:280px;
 }
 
 :focus-visible {

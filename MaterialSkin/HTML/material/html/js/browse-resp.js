@@ -1817,9 +1817,6 @@ function parseBrowseResp(data, parent, options, cacheKey, parentCommand, parentG
         } else if (data.result.extras_loop) {
             for (var idx=0, loop=data.result.extras_loop, loopLen=loop.length; idx<loopLen; ++idx) {
                 var i = loop[idx];
-                if (i.id=="PLUGIN_CDPLAYER") {
-                    continue;
-                }
                 i.type="extra";
                 mapIcon(i, 'lms-extras', {icon:"extension", svg:undefined});
                 i.id="extras:"+i.id;

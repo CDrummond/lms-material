@@ -56,8 +56,8 @@
  Mousetrap.bind('esc', function() { document.bus.$emit('esc') });
 
  function styleSelects() {
-  // YouTube plugin has label attribe for options, but custom-selects does not seem to pick
-  // this up. Work-around by coping label...
+  // YouTube plugin has label attribute for options, but custom-selects does not seem to pick
+  // this up. Work-around by copying label to text value.
   let elems = document.getElementsByTagName("option");
   for (let e=0, elen=elems.length; e<elen; ++e) {
    if (undefined!=elems[e].label) {
@@ -93,6 +93,7 @@
    });
   }
  }
+ // Don't enable custom select for extras pages - seems ro break on (e.g.) Visual Statistics
  if (!window.parent.isMskExtraPage) {
   if (window.addEventListener) {
    window.addEventListener("load", styleSelects, false);

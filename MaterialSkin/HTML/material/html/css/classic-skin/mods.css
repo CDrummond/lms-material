@@ -729,6 +729,10 @@ table td input[type=checkbox] {
  }
 }
 
+#mediadirs0, #mediadirs1, #mediadirs2, #mediadirs3, #mediadirs4, #mediadirs5, #mediadirs6, #mediadirs7, #mediadirs8, #mediadirs9 {
+ max-width: calc(100vw - 232px)!important;
+}
+
 .prefs .selectFolder {
  max-width:calc(100% - 64px)!important;
 }

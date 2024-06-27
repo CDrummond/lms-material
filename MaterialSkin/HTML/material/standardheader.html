@@ -1,10 +1,4 @@
 <title>[% IF pagetitle %][% pagetitle | html -%][% ELSE %][% "SQUEEZEBOX_SERVER" | string %][% END -%]</title>
-<link href="/material/icon-80.png" rel="icon shortcut" sizes="80x80">
-<link href="/material/icon-192.png" rel="icon shortcut" sizes="192x192">
-<link href="/material/icon.png" rel="icon shortcut" sizes="512x512">
-<link href="/material/icon-80.png" rel="apple-touch-icon" sizes="80x80">
-<link href="/material/icon-192.png" rel="apple-touch-icon" sizes="192x192">
-<link href="/material/icon.png" rel="apple-touch-icon" sizes="512x512">
 <meta http-equiv="Content-Type" content="text/html; charset=[% LOCALE %]"/>
 <link rel="stylesheet" type="text/css" href="[% webroot %]slimserver.css?r=[% revision %]"/>
 <link rel="stylesheet" type="text/css" href="[% webroot %]html/font/font.css?r=49"/>
@@ -13,7 +7,6 @@
 <link rel="stylesheet" type="text/css" href="[% webroot %]html/css/colors/blue.css?r=MATERIAL_VERSION"/>
 <link rel="stylesheet" type="text/css" href="[% webroot %]html/css/classic-skin/dark.css?r=MATERIAL_VERSION"/>
 <link rel="stylesheet" type="text/css" href="[% webroot %]html/lib/classic-skin/custom-select.css?r=1.1.16"/>
-<link rel="apple-touch-icon" href="[% webroot %]html/images/apple-touch-icon.png"/>
 [% IF mobileBrowser %]
 	<meta name="viewport" content="width=device-width">
 	<link rel="stylesheet" type="text/css" href="[% webroot %]mobile.css"/>
@@ -65,8 +58,23 @@
    }
   }
   let selects = customSelect("select");
-  // If select is close to bottom then need to scroll into view...
   for (let i=0, len=selects.length; i<len; ++i) {
+   // Check for max sizes of text, to set CSS styles
+   let maxLen = 0;
+   for (let o=0, loop=selects[i].select.options, olen=loop.length; o<olen && maxLen<=20; ++o) {
+     if (loop[o].text.length>maxLen) {
+      maxLen = loop[o].text.length;
+     }
+   }
+   if (maxLen<5) {
+    selects[i].panel.parentElement.classList.add("cs-xsmall");
+   } else if (maxLen<=10) {
+    selects[i].panel.parentElement.classList.add("cs-small");
+   } else if (maxLen<=20) {
+    selects[i].panel.parentElement.classList.add("cs-medium");
+   }
+
+   // If select is close to bottom then need to scroll into view...
    selects[i].container.addEventListener('custom-select:open', (e) => {
     let wh = window.innerHeight;
     let rect = selects[i].panel.getBoundingClientRect();
@@ -93,7 +101,7 @@
    });
   }
  }
- // Don't enable custom select for extras pages - seems ro break on (e.g.) Visual Statistics
+
  if (window.addEventListener) {
   window.addEventListener("load", styleSelects, false);
  } else if (window.attachEvent) {

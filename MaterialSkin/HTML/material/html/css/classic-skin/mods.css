@@ -12,12 +12,6 @@
  display:none;
 }
 
-/* Advanced search - has been removed, but these used elsewhere?*/
-#browsedbHeader, #browsedbList {
- width:100%!important;
- margin-right:auto!important;
- max-width:1000px;
-}
 .pagebar > a, .pagebar > a > img, .pagebar > b, .browsedbLeftControls > a {
  vertical-align:middle;
 }
@@ -86,7 +80,7 @@ html {
 
 body {
  margin-top:0px;
- max-width:100%;
+ max-width:1600px;
  margin-left:auto;
  margin-right:auto;
 }
@@ -162,9 +156,15 @@ table.topside {
 div#innerSettingsBlock {
  margin-left:0px!important;
  margin-right:0px!important;
- width:calc(100vw - 32px)!important;
+ width:calc(100% - 32px)!important;
  height:calc((var(--vh, 1vh)*100) - 300px)!important;
  padding:20px 16px 120px 16px;
+}
+
+@media screen and (max-width: 1600px) {
+ div#innerSettingsBlock {
+  width:calc(100vw - 32px)!important;
+ }
 }
 
 div#topGraphicMenu3 #statusMessage {
@@ -370,7 +370,7 @@ input[type=radio]:checked:before {
  text-align:center;
  opacity:0.5;
  padding-top:4px;
- padding-left:4px;
+ padding-left:0px;
  margin-bottom:-4px;
  cursor:pointer;
 }
@@ -461,7 +461,7 @@ input[type=radio]:checked:before {
 #saveSettings {
  color: var(--inverted-text-color) !important;
  background-color: var(--primary-color) !important;
- margin-top:8px;
+ margin-top:18px;
 }
 
 #saveSettings:active {
@@ -625,6 +625,7 @@ input[type="submit"], input[type="button"] {
  border-radius: 100px;
  font-weight:var(--bold-weight)!important;
  color:var(--active-color)!important;
+ padding:7px 18px 5px 18px;
 }
 
 .settingSection .settingGroup {
@@ -661,6 +662,7 @@ table td input[type=checkbox] {
   width: 250px;
   left: 0;
   margin-top:11px;
+  text-align:right;
  }
 
  .settingGroup .prefs {
@@ -674,6 +676,12 @@ table td input[type=checkbox] {
   position: absolute;
   left: 252px;
   margin-top:6px;
+ }
+ .lms-settings-section-PLUGIN_EXTENDED_BROWSEMODES .settingGroup {
+  padding-left: 208px;
+ }
+ .lms-settings-section-PLUGIN_EXTENDED_BROWSEMODES .settingGroup .prefHead {
+  width: 180px;
  }
 }
 
@@ -722,6 +730,10 @@ table td input[type=checkbox] {
  }
 }
 
+#mediadirs0, #mediadirs1, #mediadirs2, #mediadirs3, #mediadirs4, #mediadirs5, #mediadirs6, #mediadirs7, #mediadirs8, #mediadirs9 {
+ max-width: calc(100vw - 232px)!important;
+}
+
 .prefs .selectFolder {
  max-width:calc(100% - 64px)!important;
 }
@@ -729,7 +741,7 @@ table td input[type=checkbox] {
 /* Shrink path selection fields in 'Basic Settings' */
 @media (max-width: 570px) {
  td.even, td.odd {
-  max-width:calc(100vw - 180px);
+  max-width:calc(100% - 180px);
  }
 }
 
@@ -777,9 +789,15 @@ table td input[type=checkbox] {
 }
 
 .lms-settings-section-SETUP_PLUGINS div#innerSettingsBlock {
- padding: 0px 16px 16px 16px
+ padding: 0px 16px 4px 16px
 }
 
+
+@media (min-width:1150px) {
+ .lms-settings-section-PLUGIN_EXTENDED_BROWSEMODES td:nth-of-type(3) > div > span {
+  min-width:250px!important;
+ }
+}
 @media (max-width:700px) {
  #pluginButtonBar > span {
   display:block;
@@ -800,6 +818,7 @@ table td input[type=checkbox] {
 
 .custom-select-option {
  min-height:32px!important;
+ cursor: pointer;
 }
 
 .custom-select-option,
@@ -836,6 +855,16 @@ table td input[type=checkbox] {
 .custom-select-container {
  display:inline-block;
  min-width:250px;
+}
+
+.cs-xsmall {
+ min-width:80px;
+}
+.cs-small {
+ min-width:100px;
+}
+.cs-medium {
+ min-width:200px;
 }
 
 table .custom-select-container, /* additional browse modes */

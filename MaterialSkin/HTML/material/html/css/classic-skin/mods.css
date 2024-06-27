@@ -12,17 +12,6 @@
  display:none;
 }
 
-/* Advanced search - has been removed, but these used elsewhere?*/
-#browsedbHeader, #browsedbList {
- width:100%!important;
- margin-right:auto!important;
- max-width:1400px;
-}
-@media screen and (max-width: 2000px) {
- #browsedbHeader, #browsedbList {
-  margin-left:auto!important;
- }
-}
 .pagebar > a, .pagebar > a > img, .pagebar > b, .browsedbLeftControls > a {
  vertical-align:middle;
 }
@@ -91,7 +80,7 @@ html {
 
 body {
  margin-top:0px;
- max-width:100%;
+ max-width:1800px;
  margin-left:auto;
  margin-right:auto;
 }
@@ -167,9 +156,15 @@ table.topside {
 div#innerSettingsBlock {
  margin-left:0px!important;
  margin-right:0px!important;
- width:calc(100vw - 32px)!important;
+ width:calc(100% - 32px)!important;
  height:calc((var(--vh, 1vh)*100) - 300px)!important;
  padding:20px 16px 120px 16px;
+}
+
+@media screen and (max-width: 1800px) {
+ div#innerSettingsBlock {
+  width:calc(100vw - 32px)!important;
+ }
 }
 
 div#topGraphicMenu3 #statusMessage {
@@ -466,7 +461,7 @@ input[type=radio]:checked:before {
 #saveSettings {
  color: var(--inverted-text-color) !important;
  background-color: var(--primary-color) !important;
- margin-top:8px;
+ margin-top:18px;
 }
 
 #saveSettings:active {
@@ -666,6 +661,7 @@ table td input[type=checkbox] {
   width: 250px;
   left: 0;
   margin-top:11px;
+  text-align:right;
  }
 
  .settingGroup .prefs {
@@ -734,7 +730,7 @@ table td input[type=checkbox] {
 /* Shrink path selection fields in 'Basic Settings' */
 @media (max-width: 570px) {
  td.even, td.odd {
-  max-width:calc(100vw - 180px);
+  max-width:calc(100% - 180px);
  }
 }
 
@@ -782,9 +778,15 @@ table td input[type=checkbox] {
 }
 
 .lms-settings-section-SETUP_PLUGINS div#innerSettingsBlock {
- padding: 0px 16px 16px 16px
+ padding: 0px 16px 4px 16px
 }
 
+
+@media (min-width:1150px) {
+ .lms-settings-section-PLUGIN_EXTENDED_BROWSEMODES td:nth-of-type(3) > div > span {
+  min-width:250px!important;
+ }
+}
 @media (max-width:700px) {
  #pluginButtonBar > span {
   display:block;

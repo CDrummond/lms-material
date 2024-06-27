@@ -7,6 +7,7 @@
 5. Update skin language when LMS language is changed.
 6. Move 'Remote Libraries' into 'Apps'.
 7. Hide iframe (e.g. Settings pages) until loaded.
+8. Add custom icon for LMS 9's 'Recently Updated Albums' view.
 
 5.0.4
 -----

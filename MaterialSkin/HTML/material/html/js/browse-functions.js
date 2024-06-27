@@ -2140,6 +2140,12 @@ function browseMyMusicMenu(view) {
                     } else if (c.id == "myMusicNewMusic") {
                         item.icon = "new_releases";
                         item.section = SECTION_NEWMUSIC;
+                    } else if (c.id == "myMusicRecentlyChangeAlbums") {
+                        item.icon = undefined;
+                        item.svg = "updated-music";
+                        if (lmsOptions.supportReleaseTypes) {
+                            item.title = i18n("Recently Updated Releases");
+                        }
                     } else if (c.id.startsWith("myMusicMusicFolder")) {
                         item.icon = "folder";
                     } else if (c.id.startsWith("myMusicFileSystem")) {

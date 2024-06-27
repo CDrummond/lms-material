@@ -65,8 +65,23 @@
    }
   }
   let selects = customSelect("select");
-  // If select is close to bottom then need to scroll into view...
   for (let i=0, len=selects.length; i<len; ++i) {
+   // Check for max sizes of text, to set CSS styles
+   let maxLen = 0;
+   for (let o=0, loop=selects[i].select.options, olen=loop.length; o<olen && maxLen<=20; ++o) {
+     if (loop[o].text.length>maxLen) {
+      maxLen = loop[o].text.length;
+     }
+   }
+   if (maxLen<5) {
+    selects[i].panel.parentElement.classList.add("cs-xsmall");
+   } else if (maxLen<=10) {
+    selects[i].panel.parentElement.classList.add("cs-small");
+   } else if (maxLen<=20) {
+    selects[i].panel.parentElement.classList.add("cs-medium");
+   }
+
+   // If select is close to bottom then need to scroll into view...
    selects[i].container.addEventListener('custom-select:open', (e) => {
     let wh = window.innerHeight;
     let rect = selects[i].panel.getBoundingClientRect();

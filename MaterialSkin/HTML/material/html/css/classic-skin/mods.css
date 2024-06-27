@@ -845,6 +845,16 @@ table td input[type=checkbox] {
  min-width:250px;
 }
 
+.cs-xsmall {
+ min-width:80px;
+}
+.cs-small {
+ min-width:100px;
+}
+.cs-medium {
+ min-width:200px;
+}
+
 table .custom-select-container, /* additional browse modes */
 p > .custom-select-container { /* logging page */
  min-width:100px;

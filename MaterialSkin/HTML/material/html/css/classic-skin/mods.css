@@ -370,7 +370,7 @@ input[type=radio]:checked:before {
  text-align:center;
  opacity:0.5;
  padding-top:4px;
- padding-left:4px;
+ padding-left:0px;
  margin-bottom:-4px;
  cursor:pointer;
 }

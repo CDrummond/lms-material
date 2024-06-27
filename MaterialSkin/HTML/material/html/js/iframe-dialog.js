@@ -673,7 +673,9 @@ Vue.component('lms-iframe-dialog', {
     mounted() {
         bus.$on('iframe.open', function(page, title, actions, showHome, playerId) {
             this.title = title;
-            this.src = page;
+            // Delay setting URL for 50ms - othewise get to requests, first is cancelled...
+            // ...no idea why!
+            setTimeout(function() {this.src = page}.bind(this), 50);
             this.page = page.indexOf("player/basic.html")>0
                             ? "player"
                             : page.indexOf("server/basic.html")>0 || page.indexOf("plugins/Extensions/settings/basic.html")>0
@@ -774,9 +776,10 @@ Vue.component('lms-iframe-dialog', {
             }
         },
         close() {
-            this.show=0;
+            this.show = false;
             this.showMenu = false;
-            this.history=[];
+            this.history = [];
+            this.src = undefined;
             iframeInfo.content=undefined;
             bus.$emit('iframeClosed', this.isPlayer);
             if (this.page=='server') {

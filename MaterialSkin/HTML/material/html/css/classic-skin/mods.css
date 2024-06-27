@@ -625,6 +625,8 @@ input[type="submit"], input[type="button"] {
  border-radius: 100px;
  font-weight:var(--bold-weight)!important;
  color:var(--active-color)!important;
+ padding-left:32px;
+ padding-right:32px;
 }
 
 .settingSection .settingGroup {

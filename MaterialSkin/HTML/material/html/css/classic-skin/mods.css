@@ -813,6 +813,7 @@ table td input[type=checkbox] {
 
 .custom-select-option {
  min-height:32px!important;
+ cursor: pointer;
 }
 
 .custom-select-option,

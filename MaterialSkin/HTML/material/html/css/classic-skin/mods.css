@@ -80,7 +80,7 @@ html {
 
 body {
  margin-top:0px;
- max-width:1800px;
+ max-width:1600px;
  margin-left:auto;
  margin-right:auto;
 }
@@ -161,7 +161,7 @@ div#innerSettingsBlock {
  padding:20px 16px 120px 16px;
 }
 
-@media screen and (max-width: 1800px) {
+@media screen and (max-width: 1600px) {
  div#innerSettingsBlock {
   width:calc(100vw - 32px)!important;
  }
@@ -675,6 +675,12 @@ table td input[type=checkbox] {
   position: absolute;
   left: 252px;
   margin-top:6px;
+ }
+ .lms-settings-section-PLUGIN_EXTENDED_BROWSEMODES .settingGroup {
+  padding-left: 208px;
+ }
+ .lms-settings-section-PLUGIN_EXTENDED_BROWSEMODES .settingGroup .prefHead {
+  width: 180px;
  }
 }
 

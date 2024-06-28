@@ -145,7 +145,7 @@ function parseBrowseResp(data, parent, options, cacheKey, parentCommand, parentG
             var maybeAllowGrid = command!="trackstat"; // && !isFavorites; // && command!="playhistory";
             var numImages = 0;
             var numTracks = 0;
-console.log(isDisksAndFolders, command, data.params[1]);
+
             resp.isMusicMix = MIXER_APPS.has(command) && data.params[1].length>0 && (data.params[1][1]=="mix" || data.params[1][1]=="list");
             resp.canUseGrid = maybeAllowGrid && (isRadiosTop || isAppsTop || isBmf || isDisksAndFolders || (data.result.window && data.result.window.windowStyle && (data.result.window.windowStyle=="icon_list" || data.result.window.windowStyle=="home_menu"))) ? true : false;
             resp.canDrop = isFavorites;
@@ -499,6 +499,9 @@ console.log(isDisksAndFolders, command, data.params[1]);
                         mapIcon(i);
                     }
                 } else if (isBmf) {
+                    if (i.style=="itemNoAction") {
+                        continue;
+                    }
                     i.bmf = true;
                     i.icon = i.type=="playlist"
                         ? i.actions && i.actions.play && i.actions.play.params && i.actions.play.params.folder_id
@@ -510,6 +513,9 @@ console.log(isDisksAndFolders, command, data.params[1]);
                                 ? "music_note"
                                 : "crop_portrait";
                 } else if (isDisksAndFolders) {
+                    if (i.style=="itemNoAction") {
+                        continue;
+                    }
                     if (!i.icon) {
                         i.icon = undefined==i.type || i.type =="playlist"
                             ? "folder"

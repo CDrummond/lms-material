@@ -673,7 +673,7 @@ Vue.component('lms-iframe-dialog', {
     mounted() {
         bus.$on('iframe.open', function(page, title, actions, showHome, playerId) {
             this.title = title;
-            // Delay setting URL for 50ms - othewise get to requests, first is cancelled...
+            // Delay setting URL for 50ms - otherwise get two requests, first is cancelled...
             // ...no idea why!
             setTimeout(function() {this.src = page}.bind(this), 50);
             this.page = page.indexOf("player/basic.html")>0

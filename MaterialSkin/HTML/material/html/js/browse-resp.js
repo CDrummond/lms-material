@@ -934,7 +934,7 @@ function parseBrowseResp(data, parent, options, cacheKey, parentCommand, parentG
                         var lower = data.params[1][i].toLowerCase();
                         if (lower.startsWith("sort:year")) {
                             jumpListYear = true;
-                        } else if (lower.startsWith("sort:new")) {
+                        } else if (lower.startsWith("sort:new") || lower.startsWith("sort:changed")) {
                             isNewMusic = true;
                         } else if (lower==MSK_REV_SORT_OPT) {
                             reverse = true;

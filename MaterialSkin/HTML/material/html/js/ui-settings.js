@@ -530,6 +530,8 @@ Vue.component('lms-ui-settings', {
                                 loop[idx].text=i18n("Releases");
                             } else if (loop[idx].id=="myMusicRandomAlbums") {
                                 loop[idx].text=i18n("Random Releases");
+                            } else if (loop[idx].id=="myMusicRecentlyChangeAlbums") {
+                                loop[idx].text=i18n("Recently Updated Releases");
                             }
                         }
                     }

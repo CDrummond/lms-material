@@ -570,7 +570,7 @@ function browseHandleListResponse(view, item, command, resp, prevPage, appendIte
             for (var i=0, len=view.command.params.length; i<len && canAddAlbumSort; ++i) {
                 if (view.command.params[i].startsWith(SORT_KEY)) {
                     var sort=view.command.params[i].split(":")[1];
-                    canAddAlbumSort=sort!="new" && sort!="random";
+                    canAddAlbumSort=sort!="new" && sort!="changed" && sort!="random";
                 } else if (view.command.params[i].startsWith("search:")) {
                     canAddAlbumSort=false;
                 }
@@ -1968,7 +1968,7 @@ function browseBuildCommand(view, item, commandName, doReplacements, allowLibId)
                     mode = params[i].split(":")[1];
                     if (mode.startsWith("myMusicArtists")) {
                         mode="artists";
-                    } else if (mode.startsWith("myMusicAlbums") || mode=="randomalbums" || mode=="vaalbums") {
+                    } else if (mode.startsWith("myMusicAlbums") || mode=="randomalbums" || mode=="vaalbums" || mode=="recentlychanged") {
                         mode="albums";
                     } else if (mode=="years") {
                         p.push("hasAlbums:1");

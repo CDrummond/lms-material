@@ -1421,10 +1421,11 @@ sub _cliCommand {
         my %hideApps = map { $_ => 1 } split(/,/, $prefs->get('hideApps'));
         for my $app (@$apps) {
             my $tag = $app->can('tag') && $app->tag;
-            if ($tag && not exists($hideApps{$app->tag})) {
-                my $name = Slim::Utils::Strings::getString($app->getDisplayName);
+            my $name = $app->getDisplayName;
+            if ($tag && (not exists($hideApps{$app->tag})) && (not exists($hideApps{$name}))) {
+                my $uiName = Slim::Utils::Strings::getString($name);
                 my $icon = $app->_pluginDataFor('icon');
-                $request->addResultLoop('item_loop', $cnt, 'text', $name);
+                $request->addResultLoop('item_loop', $cnt, 'text', $uiName);
                 $request->addResultLoop('item_loop', $cnt, 'icon', $icon);
                 $request->addResultLoop('item_loop', $cnt, 'type', 'redirect');
                 my $actions = { go => { cmd => [ $app->tag, 'items' ], params => { menu => $app->tag } } };

@@ -1,14 +1,15 @@
 5.1.0
 -----
-1. Replace shuffle icon with dice icon if random play is active.
-2. Move 'Random Mix' to queue menu.
-3. Add 'Copy details' action to menu of certain items.
-4. Prompt if change settings page and a value has been modified.
-5. Update skin language when LMS language is changed.
-6. Move 'Remote Libraries' into 'Apps'.
-7. Hide iframe (e.g. Settings pages) until loaded.
-8. Add custom icon for LMS 9's 'Recently Updated Albums' view.
-9. Add ability to hide 'Extras' items via preference file.
+ 1. Replace shuffle icon with dice icon if random play is active.
+ 2. Move 'Random Mix' to queue menu.
+ 3. Add 'Copy details' action to menu of certain items.
+ 4. Prompt if change settings page and a value has been modified.
+ 5. Update skin language when LMS language is changed.
+ 6. Move 'Remote Libraries' into 'Apps'.
+ 7. Hide iframe (e.g. Settings pages) until loaded.
+ 8. Add custom icon for LMS 9's 'Recently Updated Albums' view.
+ 9. Add ability to hide 'Extras' items via preference file.
+10. Add icons to 'Disks and folders' listing.
 
 5.0.4
 -----

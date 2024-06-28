@@ -132,7 +132,8 @@ function parseBrowseResp(data, parent, options, cacheKey, parentCommand, parentG
             var isRadiosTop = (isRadios && parent.id == TOP_RADIO_ID) || (isApps && lmsOptions.combineAppsAndRadio && command=="radios" && 4==data.params[1].length && data.params[1][3]=="menu:radio");
             var isPodcastList = parent && parent.id == "apps.podcasts" && command == "podcasts" && 5==data.params[1].length && "items" == data.params[1][1] && "menu:podcasts"==data.params[1][4];
             var isPodcastSearch = command == "podcasts" && getIndex(data.params[1], "search:")>0;
-            var isBmf = command == "browselibrary" && data.params[1].length>=5 && data.params[1].indexOf("mode:bmf")>0;
+            var isBmf = command == "browselibrary" && data.params[1].length>0 && data.params[1].indexOf("mode:bmf")>=0;
+            var isDisksAndFolders = command == "browselibrary" && data.params[1].length>0 && data.params[1].indexOf("mode:filesystem")>=0;
             var isCustomBrowse = command == "custombrowse" ;
             var isDynamicPlaylist = command == "dynamicplaylist";
             var isPresets = command == "presets";
@@ -144,9 +145,9 @@ function parseBrowseResp(data, parent, options, cacheKey, parentCommand, parentG
             var maybeAllowGrid = command!="trackstat"; // && !isFavorites; // && command!="playhistory";
             var numImages = 0;
             var numTracks = 0;
-
+console.log(isDisksAndFolders, command, data.params[1]);
             resp.isMusicMix = MIXER_APPS.has(command) && data.params[1].length>0 && (data.params[1][1]=="mix" || data.params[1][1]=="list");
-            resp.canUseGrid = maybeAllowGrid && (isRadiosTop || isAppsTop || isBmf || (data.result.window && data.result.window.windowStyle && (data.result.window.windowStyle=="icon_list" || data.result.window.windowStyle=="home_menu"))) ? true : false;
+            resp.canUseGrid = maybeAllowGrid && (isRadiosTop || isAppsTop || isBmf || isDisksAndFolders || (data.result.window && data.result.window.windowStyle && (data.result.window.windowStyle=="icon_list" || data.result.window.windowStyle=="home_menu"))) ? true : false;
             resp.canDrop = isFavorites;
 
             if (data.result.base && data.result.base.actions) {
@@ -508,6 +509,14 @@ function parseBrowseResp(data, parent, options, cacheKey, parentCommand, parentG
                             : i.type=="audio"
                                 ? "music_note"
                                 : "crop_portrait";
+                } else if (isDisksAndFolders) {
+                    if (!i.icon) {
+                        i.icon = undefined==i.type || i.type =="playlist"
+                            ? "folder"
+                            : PLAYLIST_EXTENSIONS.has(i.title.split(".").slice(-1)[0].toLowerCase())
+                                ? "list"
+                                : "music_note";
+                    }
                 } else if (!isFavorites) { // move/rename on favs needs ids of a.b.c (created below)
                     if (i.params && i.params.item_id) {
                         i.id = "item_id:"+i.params.item_id;
@@ -663,7 +672,7 @@ function parseBrowseResp(data, parent, options, cacheKey, parentCommand, parentG
                 resp.allTracksItem={id:resp.baseActions['playControl'].params.item_id, params:resp.baseActions['playControl'].params};
             }
             // If listing a radio app's entries and all images are the same, then hide images. e.g. iHeartRadio and RadioNet
-            if (!isRadiosTop && !isAppsTop && !isFromFavorites && !isBmf && (!isApps || (isApps && parent.id.split('.').length==2)) && resp.items.length>1 && resp.items.length<=100) {
+            if (!isRadiosTop && !isAppsTop && !isFromFavorites && !isBmf && !isDisksAndFolders && (!isApps || (isApps && parent.id.split('.').length==2)) && resp.items.length>1 && resp.items.length<=100) {
                 if (images.size == 1 && undefined!=images.values().next().value) {
                     for (var i=0, loop=resp.items, len=loop.length; i<len; ++i) {
                         loop[i].image = loop[i].icon = loop[i].svg = undefined;

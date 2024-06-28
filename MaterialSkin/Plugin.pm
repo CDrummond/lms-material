@@ -9,7 +9,6 @@ package Plugins::MaterialSkin::Plugin;
 #
 
 use strict;
-
 use Config;
 use Scalar::Util qw(blessed);
 use Slim::Menu::BrowseLibrary;
@@ -138,7 +137,8 @@ sub initPlugin {
         yearInSub => 1,
         playShuffle => 0,
         combineAppsAndRadio => 0,
-        hideApps => ''
+        hideApps => '',
+        hideExtras => ''
     });
 
     $prefs->setChange(sub { $prefs->set($_[0], 0) unless defined $_[1]; }, 'showComposer');
@@ -755,6 +755,7 @@ sub _cliCommand {
     if ($cmd eq 'extras') {
         my $cnt = 0;
         my $icons;
+        my %hideExtras = map { $_ => 1 } split(/,/, $prefs->get('hideExtras'));
         while (my ($menu, $menuItems) = each %Slim::Web::Pages::additionalLinks ) {
             if ($menu eq 'icons') {
                 $icons = $menuItems;
@@ -764,7 +765,7 @@ sub _cliCommand {
         while (my ($menu, $menuItems) = each %Slim::Web::Pages::additionalLinks ) {
             if ($menu eq 'plugins') {
                 foreach my $key (keys %$menuItems) {
-                    if (not exists($EXCLUDE_EXTRAS{$key})) {
+                    if ((not exists($EXCLUDE_EXTRAS{$key})) && (not exists($hideExtras{$key}))) {
                         $request->addResultLoop("extras_loop", $cnt, "id", $key);
                         $request->addResultLoop("extras_loop", $cnt, "url", $menuItems->{$key});
                         $request->addResultLoop("extras_loop", $cnt, "title", string($key));
@@ -776,7 +777,7 @@ sub _cliCommand {
                 }
             } elsif ($menu eq 'browseiPeng') {
                 foreach my $key (keys %$menuItems) {
-                    if (not exists($EXCLUDE_EXTRAS{$key})) {
+                    if ((not exists($EXCLUDE_EXTRAS{$key})) && (not exists($hideExtras{$key}))) {
                         $request->addResultLoop("extras_loop", $cnt, "id", $key);
                         $request->addResultLoop("extras_loop", $cnt, "url", $menuItems->{$key});
                         $request->addResultLoop("extras_loop", $cnt, "title", string($key));

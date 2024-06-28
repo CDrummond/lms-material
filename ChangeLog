@@ -8,6 +8,7 @@
 6. Move 'Remote Libraries' into 'Apps'.
 7. Hide iframe (e.g. Settings pages) until loaded.
 8. Add custom icon for LMS 9's 'Recently Updated Albums' view.
+9. Add ability to hide 'Extras' items via preference file.
 
 5.0.4
 -----

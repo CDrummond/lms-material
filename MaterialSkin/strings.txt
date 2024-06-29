@@ -580,3 +580,15 @@ PLUGIN_MATERIAL_COMBINE_APPS_AND_RADIO_DESC
 	FR	Fusionner les menus "Applications" et "Radio" en un seul menu "Applications" dans lequel est ajoutée une application "TuneIn" regroupant les éléments associés au plugin "Radio" (si ce plugin est activé).
 	NL	Combineer de 'Applicaties' en 'Radio' in een enkel 'Applicaties' menu, waarbij de 'TuneIn' applicatie, indien ingeschakeld, wordt gebruikt als vervanging voor de 'Radio' applicatie.
 	ZH_CN	将“程序”和“电台”菜单合并成单个“程序”菜单。“电台”作为“TuneIn”程序添加到合并后的菜单里（如果已启用）。
+
+PLUGIN_MATERIAL_HIDE_PLAYERS
+	EN	Hide players
+	FR	Masquer les platines
+	NL	Hide players
+	ZH_CN	Hide players
+
+PLUGIN_MATERIAL_HIDE_PLAYERS_DESC
+	EN	Hide players with name starting with '!' character.
+	FR	Masquer les platines dont le nom commence par le caractère '!'.
+	NL	Hide players with name starting with '!' character.
+	ZH_CN	Hide players with name starting with '!' character.

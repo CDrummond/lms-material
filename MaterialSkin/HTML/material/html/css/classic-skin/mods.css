@@ -161,7 +161,7 @@ div#innerSettingsBlock {
  padding:20px 16px 120px 16px;
 }
 
-@media screen and (max-width: 1600px) {
+@media (max-width: 1600px) {
  div#innerSettingsBlock {
   width:calc(100vw - 32px)!important;
  }
@@ -399,12 +399,12 @@ input[type=radio]:checked:before {
  transition: opacity .2s;
 }
 
-@media screen and (min-width: 350px) {
+@media (min-width: 350px) {
  .msk-slider {
   width:180px;
  }
 }
-@media screen and (min-width: 370px) {
+@media (min-width: 370px) {
  .msk-slider {
   width:200px;
  }
@@ -625,7 +625,17 @@ input[type="submit"], input[type="button"] {
  border-radius: 100px;
  font-weight:var(--bold-weight)!important;
  color:var(--active-color)!important;
- padding:7px 18px 5px 18px;
+ padding:6px 14px 5px 14px;
+}
+
+input[name="pref_rescan"] {
+ margin-top:16px;
+}
+
+@media (min-width:450px) {
+ input[name="pref_rescan"] {
+  margin-left:16px;
+ }
 }
 
 .settingSection .settingGroup {
@@ -650,7 +660,7 @@ table td input[type=checkbox] {
  margin-top:-2px;
 }
 
-@media only screen and (min-width:1000px) {
+@media (min-width:1000px) {
  .settingGroup {
   position: relative;
   padding-left: 278px;

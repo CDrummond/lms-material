@@ -1,6 +1,7 @@
 5.1.0
 -----
- 1. Replace shuffle icon with dice icon if random play is active.
+ 1. Replace shuffle icon with dice icon if random play is active, when using
+    LMS >= 9.0
  2. Move 'Random Mix' to queue menu.
  3. Add 'Copy details' action to menu of certain items.
  4. Prompt if change settings page and a value has been modified.

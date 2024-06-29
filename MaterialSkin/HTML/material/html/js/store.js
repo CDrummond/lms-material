@@ -317,6 +317,12 @@ const store = new Vuex.Store({
             }
         },
         setPlayers(state, players) {
+            if(lmsOptions.hidePlayers) {
+                var i=players.length;
+                while(i--) {
+                    if(players[i].name.substring(0,1)==("!")) players.splice(i,1);
+                }
+            }
             var changed = !state.players || state.players.length!=players.length;
             if (!changed) {
                 for (var i=0, len=state.players.length; i<len; ++i) {

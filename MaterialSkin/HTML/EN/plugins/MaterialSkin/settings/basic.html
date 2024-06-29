@@ -28,6 +28,10 @@
     <input type="checkbox" name="pref_combineAppsAndRadio" id="pref_combineAppsAndRadio" [% IF prefs.pref_combineAppsAndRadio %] checked [% END %] value="1"/>
     [% END %]
 
+    [% WRAPPER setting title="PLUGIN_MATERIAL_HIDE_PLAYERS" desc="PLUGIN_MATERIAL_HIDE_PLAYERS_DESC" %]
+    <input type="checkbox" name="pref_hidePlayers" id="pref_hidePlayers" [% IF prefs.pref_hidePlayers %] checked [% END %] value="1"/>
+    [% END %]
+
     [% WRAPPER setting title="PLUGIN_MATERIAL_SKIN_RELEASE_TYPE_ORDER" desc="PLUGIN_MATERIAL_SKIN_RELEASE_TYPE_ORDER_DESC" %]
     <textarea class="stdedit" name="pref_releaseTypeOrder" id="releaseTypeOrder" cols="45" rows="5">[% prefs.releaseTypeOrder %]</textarea>
     [% END %]

@@ -427,6 +427,7 @@ var lmsServer = Vue.component('lms-server', {
                 for (var idx=0, len=data.players_loop.length; idx<len; ++idx) {
                     var i = data.players_loop[idx];
                     if (1==parseInt(i.connected) && // Only list/use connected players...
+                        !lmsOptions.hidePlayers.has(i.playerid) &&
                         (undefined==checkPlayer || (checkPlayer==i.playerid || checkPlayer==i.name))) {
                         players.push({ id: i.playerid,
                                        name: i.name,
@@ -448,7 +449,7 @@ var lmsServer = Vue.component('lms-server', {
                 if (data.other_players_loop) {
                     for (var idx=0, len=data.other_players_loop.length; idx<len; ++idx) {
                         var i = data.other_players_loop[idx];
-                        if (!ids.has(i.playerid) && 'group'!==i.model) {
+                        if (!ids.has(i.playerid) && 'group'!==i.model && !lmsOptions.hidePlayers.has(i.playerid)) {
                             otherPlayers.push({id: i.playerid, name: i.name, server: i.server, serverurl: i.serverurl, icon: mapPlayerIcon(i)});
                         }
                     }

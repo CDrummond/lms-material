@@ -138,7 +138,8 @@ sub initPlugin {
         playShuffle => 0,
         combineAppsAndRadio => 0,
         hideApps => '',
-        hideExtras => ''
+        hideExtras => '',
+        hidePlayers => ''
     });
 
     $prefs->setChange(sub { $prefs->set($_[0], 0) unless defined $_[1]; }, 'showComposer');
@@ -464,6 +465,7 @@ sub _cliCommand {
         $request->addResult('yearInSub', $prefs->get('yearInSub'));
         $request->addResult('playShuffle', $prefs->get('playShuffle'));
         $request->addResult('combineAppsAndRadio', $prefs->get('combineAppsAndRadio'));
+        $request->addResult('hidePlayers', $prefs->get('hidePlayers'));        
         $request->setStatusDone();
         return;
     }

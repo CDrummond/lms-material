@@ -135,6 +135,10 @@ var app = new Vue({
                     let arr = splitString(data.result['releaseTypeOrder'].split("\r").join("").split("\n").join(","));
                     lmsOptions.releaseTypeOrder = arr.length>0 ? arr : undefined;
                 }
+                if (undefined!=data.result['hidePlayers']) {
+                    setLocalStorageVal('hidePlayers', lmsOptions['hidePlayers']);
+                    lmsOptions.hidePlayers = new Set(data.result['hidePlayers'].split(','));
+                }
             }
         });
 

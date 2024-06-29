@@ -1,5 +1,4 @@
 {
-"Some settings were changed. Do you want to save them?":"Certains paramètres ont été modifiés. Voulez-vous les enregistrer ?",
 "%1 (Menu)":"(Menu) %1",
 "%1 minutes":"%1 minutes",
 "%1 of %2":"%1 de %2",
@@ -477,6 +476,7 @@
 "Smart crossfade":"Fondu enchaîné intelligent",
 "Smart gain":"Normalisation de volume 'intelligente'",
 "Snooze (minutes)":"Délai avant répétition (minutes)",
+"Some settings were changed. Do you want to save them?":"Certains paramètres ont été modifiés. Voulez-vous les enregistrer ?",
 "Something went wrong!":"Une erreur s'est produite !",
 "Sort by":"Trier par...",
 "Sort favorites list":"Trier les favoris",
@@ -661,5 +661,8 @@
 "1 Year":"1 année",
 "%1 Years":"%1 années",
 "1 day":"1 jour",
-"%1 days":"%1 jours"
+"%1 days":"%1 jours",
+"Copied: %1":"",
+"Discard":"",
+"Recently Updated Releases":""
 }

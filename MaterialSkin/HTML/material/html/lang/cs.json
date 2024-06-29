@@ -1,5 +1,4 @@
 {
-"Some settings were changed. Do you want to save them?":"Některá nastavení byla změněna. Chcete je uložit?",
 "%1 (Menu)":"(Nabídka) %1",
 "%1 minutes":"%1 minut",
 "%1 of %2":"%1 z %2",
@@ -475,6 +474,7 @@
 "Smart crossfade":"Chytré prolínání",
 "Smart gain":"Chytrá změna úrovně",
 "Snooze (minutes)":"Odkládat o (v minutách)",
+"Some settings were changed. Do you want to save them?":"Některá nastavení byla změněna. Chcete je uložit?",
 "Something went wrong!":"Něco se pokazilo!",
 "Sort by":"Řadit dle",
 "Sort favorites list":"Řazení seznamu oblíbených položek",
@@ -659,7 +659,10 @@
 "1 day":"1 den",
 "%1 days":"%1 dní",
 "All Works":"",
+"Copied: %1":"",
+"Discard":"",
 "Performance":"",
+"Recently Updated Releases":"",
 "Work":"",
 "%1 Item":""
 }

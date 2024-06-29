@@ -1,5 +1,4 @@
 {
-"Some settings were changed. Do you want to save them?":"Sommige instellingen zijn gewijzigd. Wil je ze opslaan?",
 "%1 (Menu)":"%1 (Menu)",
 "%1 minutes":"%1 minuten",
 "%1 of %2":"%1 van %2",
@@ -52,6 +51,7 @@
 "All":"Alle",
 "All Artists":"Alle artiesten",
 "All Tracks":"Alle nummers",
+"All Works":"Alle Composities",
 "All discs":"Alle discs",
 "All downloads complete.":"Alle downloads voltooid.",
 "All duplicates removed":"Alle duplicaten verwijderd",
@@ -313,6 +313,7 @@
 "Other settings":"Overige instellingen",
 "Path":"Pad",
 "Pause":"Pause",
+"Performance":"Uitvoering",
 "Pictures":"Foto's",
 "Pin":"Vastmaken",
 "Pin to home screen":"Vastmaken op startpagina",
@@ -475,6 +476,7 @@
 "Smart crossfade":"Slimme crossfade",
 "Smart gain":"Slimme normalisering",
 "Snooze (minutes)":"Snooze (minuten)",
+"Some settings were changed. Do you want to save them?":"Sommige instellingen zijn gewijzigd. Wil je ze opslaan?",
 "Something went wrong!":"Er is iets fout gelopen!",
 "Sort by":"Sorteer op",
 "Sort favorites list":"Sorteer favorieten",
@@ -585,6 +587,7 @@
 "When no track is playing on current player, darken screen (and show date & time) after 1 minute of inactivity.":"Wanneer er geen nummer wordt afgespeeld op de huidige speler, wordt het scherm donkerder (en wordt de datum en tijd weergegeven) na 1 minuut inactiviteit.",
 "With":"Met",
 "Without":"Zonder",
+"Work":"Compositie",
 "Works":"Composities",
 "Year":"Jaar",
 "Year, Album":"Jaar, Album",
@@ -643,6 +646,7 @@
 "1 Image":"1 Afbeelding",
 "%1 Images":"%1 Afbeeldingen",
 "1 Item":"1 Item",
+"%1 Item":"%1 Item",
 "%1 Items":"%1 Items",
 "1 Player":"1 Muziekspeler",
 "%1 Players":"%1 Muziekspelers",
@@ -658,8 +662,7 @@
 "%1 Years":"%1 Jaren",
 "1 day":"1 dag",
 "%1 days":"%1 dagen",
-"All Works":"Alle Composities",
-"Performance":"Uitvoering",
-"Work":"Compositie",
-"%1 Item":"%1 Item"
+"Copied: %1":"",
+"Discard":"",
+"Recently Updated Releases":""
 }

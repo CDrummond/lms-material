@@ -1,5 +1,4 @@
 {
-"Some settings were changed. Do you want to save them?":"Nogle indstillinger er ændret. Skal ændringerne gemmes?",
 "%1 (Menu)":"%1 (menu)",
 "%1 minutes":"%1 minutter",
 "%1 of %2":"%1 af %2",
@@ -477,6 +476,7 @@
 "Smart crossfade":"Smart glidende overgang (crossfade)",
 "Smart gain":"Intelligent normalisering",
 "Snooze (minutes)":"Snooze (minutter)",
+"Some settings were changed. Do you want to save them?":"Nogle indstillinger er ændret. Skal ændringerne gemmes?",
 "Something went wrong!":"Noget gik galt!",
 "Sort by":"Sorter efter",
 "Sort favorites list":"Sorter favoritlisten",
@@ -661,5 +661,8 @@
 "1 Year":"1 år",
 "%1 Years":"%1 år",
 "1 day":"1 dag",
-"%1 days":"%1 dage"
+"%1 days":"%1 dage",
+"Copied: %1":"",
+"Discard":"",
+"Recently Updated Releases":""
 }

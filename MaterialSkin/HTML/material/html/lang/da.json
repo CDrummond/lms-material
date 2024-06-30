@@ -120,6 +120,7 @@
 "Configuration":"Konfiguration",
 "Continuous":"Vedvarende",
 "Control when player should 'sleep'.":"Vælg hvornår afspilleren skal gå 'i dvale'",
+"Copied: %1":"Kopieret: %1",
 "Copy":"Kopier",
 "Copy browse selection here":"Kopier viste numre hertil",
 "Copy details":"Kopier detaljer",
@@ -151,6 +152,7 @@
 "Description":"Beskrivelse",
 "Details":"Detaljer",
 "Disc %1":"Skive",
+"Discard":"Kasser",
 "Display rating stars.":"Vis vurderingsstjerner",
 "Display technical info":"Vis teknisk information",
 "Do not crossfade successive tracks from the same album.":"Lav ikke glidende overgang (crossfade) mellem numre fra samme album",
@@ -356,6 +358,7 @@
 "Random Mix":"Tilfældig miks",
 "Random Releases":"Tilfældige udgivelser",
 "Rating":"Bedømmelse",
+"Recently Updated Releases":"Nyligt opdaterede udgivelser",
 "Regular":"Mellem",
 "Release":"Udgivelse",
 "Release, Track Number":"Udgivelse, albumsnummer",
@@ -661,8 +664,5 @@
 "1 Year":"1 år",
 "%1 Years":"%1 år",
 "1 day":"1 dag",
-"%1 days":"%1 dage",
-"Copied: %1":"",
-"Discard":"",
-"Recently Updated Releases":""
+"%1 days":"%1 dage"
 }

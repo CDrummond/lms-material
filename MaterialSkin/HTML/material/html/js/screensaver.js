@@ -7,8 +7,8 @@
 'use strict';
 
 var screensaver;
-function resetScreensaver(ev) {
-    screensaver.resetTimer(ev);
+function resetScreensaver() {
+    screensaver.resetTimers();
 }
 
 const CLOCK_SCREENSAVER_TIMEOUT =   60*1000;
@@ -17,7 +17,7 @@ const NP_SCREENSAVER_TIMEOUT    = 5*60*1000;
 Vue.component('lms-screensaver', {
     template: `
 <v-dialog v-model="showClock" v-if="showClock" scrollable fullscreen>
- <v-card class="screensaver-bgnd" v-on:mousemove="resetTimer($event)" v-on:touchstart="resetTimer($event)" id="screensaver">
+ <v-card class="screensaver-bgnd" v-on:mousemove="resetTimers()" v-on:touchstart="resetTimers()" id="screensaver">
   <div :style="{ marginLeft: marginLeft + 'px', marginTop: marginTop + 'px' }" id="screensaver-contents">
    <p class="screensaver-time ellipsis">{{time}}</p>
    <p class="screensaver-date ellipsis">{{date}}</p>
@@ -97,13 +97,13 @@ Vue.component('lms-screensaver', {
                 if (this.playing) {
                     this.cancelAllClock(true);
                 } else {
-                    this.resetTimer();
+                    this.resetClockTimer();
                 }
             }
         },
         controlNp() {
             if (this.npSwitchEnabled) {
-                this.resetTimer();
+                this.resetNpTimer();
             }
         },
         updateDateAndTime() {
@@ -308,9 +308,12 @@ Vue.component('lms-screensaver', {
                 this.installedHandlers = false;
             }
         },
-        resetTimer(ev) {
+        resetTimers() {
+            this.resetClockTimer();
+            this.resetNpTimer();
+        },
+        resetClockTimer() {
             this.cancelAllClock(true);
-            this.cancelAllNp();
             if (this.clockEnabled) {
                 if (!this.playing) {
                     this.showClockTimer = setTimeout(function () {
@@ -322,6 +325,9 @@ Vue.component('lms-screensaver', {
                     }.bind(this), CLOCK_SCREENSAVER_TIMEOUT);
                 }
             }
+        },
+        resetNpTimer() {
+            this.cancelAllNp();
             if (this.npSwitchEnabled) {
                 if (this.npSwitched) {
                     changeLink("", "oled");

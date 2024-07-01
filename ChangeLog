@@ -13,6 +13,7 @@
 10. Add icons to 'Disks and Folders' listing.
 11. Ignore 'itemNoAction' items in BMF and 'Disks and Folders'.
 12. Add ability to hide players via preference file.
+13. Separate timer resets in screensaver.
 
 5.0.4
 -----

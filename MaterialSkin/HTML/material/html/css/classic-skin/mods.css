@@ -865,6 +865,7 @@ table td input[type=checkbox] {
 .custom-select-container {
  display:inline-block;
  min-width:250px;
+ padding-bottom:4px;
 }
 
 .cs-xsmall {

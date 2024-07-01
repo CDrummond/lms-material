@@ -606,7 +606,41 @@ var lmsServer = Vue.component('lms-server', {
             logCometdMessage("PLAYERPREFS ("+playerId+")", data);
             if (data[1]=="plugin.dontstopthemusic" && data[2]=="provider") {
                 bus.$emit("prefset", data[1]+":"+data[2], data[3], playerId);
-            } else if (data[1]=="plugin.material-skin") {
+            }
+        },
+        getPlayerPrefs() {
+            if (undefined!=this.$store.state.player) {
+                bus.$emit("prefset", "plugin.dontstopthemusic:provider", 0, this.$store.state.player.id); // reset
+                if (LMS_P_DSTM && this.$store.state.player) {
+                    lmsCommand(this.$store.state.player.id, ["playerpref", "plugin.dontstopthemusic:provider", "?"]).then(({data}) => {
+                        if (data && data.result && undefined!=data.result._p2) {
+                            bus.$emit("prefset", "plugin.dontstopthemusic:provider", data.result._p2, this.$store.state.player.id);
+                        }
+                    });
+                }
+            }
+        },
+        handleServerPrefs(data) {
+            if (data.length<4 || data[0]!="prefset") {
+                return;
+            }
+            if (data[1]=="server") {
+                if (data[2]=="useUnifiedArtistsList") {
+                    lmsOptions.separateArtistsList=0==parseInt(data[3]);
+                    bus.$emit("prefset", data[1]+":"+data[2], data[3]);
+                } else if (data[2]=="groupArtistAlbumsByReleaseType") {
+                    lmsOptions.groupByReleaseType=parseInt(data[3]);
+                } else if (data[2]=="ignoreReleaseTypes") {
+                    lmsOptions.supportReleaseTypes=1!=parseInt(data[3]);
+                    updateActionStrings();
+                    bus.$emit('releaseSupportChanged');
+                } else if (data[2]=="language") {
+                    bus.$emit('lmsLangChanged', data[3]);
+                    this.updateReleaseTypes();
+                } else if (data[2]=="timeFormat") {
+                    lmsOptions.time12hr=data[3].includes("%I");
+                }
+            } else if (data[1]=="plugin.material-skin" && data[3]!=null && data[3]!=undefined) {
                 if (data[2]=="password") {
                     this.$store.commit('checkPassword', data[3]);
                 } else {
@@ -623,8 +657,11 @@ var lmsServer = Vue.component('lms-server', {
                     if (!found) {
                         for (var i=0, len=SKIN_BOOL_OPTS.length; i<len; ++i) {
                             if (data[2]==SKIN_BOOL_OPTS[i]) {
-                                lmsOptions[SKIN_BOOL_OPTS[i]] = 1 == parseInt(data[3]);
-                                setLocalStorageVal(SKIN_BOOL_OPTS[i], lmsOptions[SKIN_BOOL_OPTS[i]]);
+                                let val = 1 == parseInt(data[3]);
+                                if (val!=lmsOptions[SKIN_BOOL_OPTS[i]]) {
+                                    lmsOptions[SKIN_BOOL_OPTS[i]] = val;
+                                    setLocalStorageVal(SKIN_BOOL_OPTS[i], val);
+                                }
                                 found=true;
                                 break;
                             }
@@ -633,8 +670,11 @@ var lmsServer = Vue.component('lms-server', {
                     if (!found) {
                         for (var i=0, len=SKIN_INT_OPTS.length; i<len; ++i) {
                             if (data[2]==SKIN_INT_OPTS[i]) {
-                                lmsOptions[SKIN_INT_OPTS[i]] = parseInt(data[3]);
-                                setLocalStorageVal(SKIN_INT_OPTS[i], lmsOptions[SKIN_INT_OPTS[i]]);
+                                let val = parseInt(data[3]);
+                                if (val!=lmsOptions[SKIN_INT_OPTS[i]]) {
+                                    lmsOptions[SKIN_INT_OPTS[i]] = val;
+                                    setLocalStorageVal(SKIN_INT_OPTS[i], val);
+                                }
                                 found=true;
                                 break;
                             }
@@ -647,38 +687,6 @@ var lmsServer = Vue.component('lms-server', {
                         }
                     }
                 }
-            }
-        },
-        getPlayerPrefs() {
-            if (undefined!=this.$store.state.player) {
-                bus.$emit("prefset", "plugin.dontstopthemusic:provider", 0, this.$store.state.player.id); // reset
-                if (LMS_P_DSTM && this.$store.state.player) {
-                    lmsCommand(this.$store.state.player.id, ["playerpref", "plugin.dontstopthemusic:provider", "?"]).then(({data}) => {
-                        if (data && data.result && undefined!=data.result._p2) {
-                            bus.$emit("prefset", "plugin.dontstopthemusic:provider", data.result._p2, this.$store.state.player.id);
-                        }
-                    });
-                }
-            }
-        },
-        handleServerPrefs(data) {
-            if (data.length<4 || data[0]!="prefset" || data[1]!="server") {
-                return;
-            }
-            if (data[2]=="useUnifiedArtistsList") {
-                lmsOptions.separateArtistsList=0==parseInt(data[3]);
-                bus.$emit("prefset", data[1]+":"+data[2], data[3]);
-            } else if (data[2]=="groupArtistAlbumsByReleaseType") {
-                lmsOptions.groupByReleaseType=parseInt(data[3]);
-            } else if (data[2]=="ignoreReleaseTypes") {
-                lmsOptions.supportReleaseTypes=1!=parseInt(data[3]);
-                updateActionStrings();
-                bus.$emit('releaseSupportChanged');
-            } else if (data[2]=="language") {
-                bus.$emit('lmsLangChanged', data[3]);
-                this.updateReleaseTypes();
-            } else if (data[2]=="timeFormat") {
-                lmsOptions.time12hr=data[3].includes("%I");
             }
         },
         handleNotification(data) {

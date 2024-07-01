@@ -139,6 +139,7 @@ var app = new Vue({
                     setLocalStorageVal('hidePlayers', lmsOptions['hidePlayers']);
                     lmsOptions.hidePlayers = new Set(data.result['hidePlayers'].split(','));
                 }
+                bus.$emit('screensaverDisplayChanged');
             }
         });
 

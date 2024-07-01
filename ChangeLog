@@ -9,11 +9,13 @@
  6. Move 'Remote Libraries' into 'Apps'.
  7. Hide iframe (e.g. Settings pages) until loaded.
  8. Add custom icon for LMS 9's 'Recently Updated Albums' view.
- 9. Add ability to hide 'Extras' items via preference file.
+ 9. Add ability to hide 'Extras' items via server-side preference file.
 10. Add icons to 'Disks and Folders' listing.
 11. Ignore 'itemNoAction' items in BMF and 'Disks and Folders'.
 12. Add ability to hide players via preference file.
 13. Separate timer resets in screensaver.
+14. Allow to manually specify screensaver timeouts by editing
+    'screensaverTimeout' and 'npSwitchTimout' in server-side preference file.
 
 5.0.4
 -----

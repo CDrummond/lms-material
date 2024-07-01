@@ -139,7 +139,9 @@ sub initPlugin {
         combineAppsAndRadio => 0,
         hideApps => '',
         hideExtras => '',
-        hidePlayers => ''
+        hidePlayers => '',
+        screensaverTimeout => 60,
+        npSwitchTimeout => 5*60
     });
 
     $prefs->setChange(sub { $prefs->set($_[0], 0) unless defined $_[1]; }, 'showComposer');
@@ -465,7 +467,9 @@ sub _cliCommand {
         $request->addResult('yearInSub', $prefs->get('yearInSub'));
         $request->addResult('playShuffle', $prefs->get('playShuffle'));
         $request->addResult('combineAppsAndRadio', $prefs->get('combineAppsAndRadio'));
-        $request->addResult('hidePlayers', $prefs->get('hidePlayers'));        
+        $request->addResult('hidePlayers', $prefs->get('hidePlayers'));
+        $request->addResult('screensaverTimeout', $prefs->get('screensaverTimeout'));
+        $request->addResult('npSwitchTimeout', $prefs->get('npSwitchTimeout'));
         $request->setStatusDone();
         return;
     }

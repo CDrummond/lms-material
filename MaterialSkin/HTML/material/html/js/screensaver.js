@@ -11,7 +11,6 @@ function resetScreensaver() {
     screensaver.resetTimers();
 }
 
-const CLOCK_SCREENSAVER_TIMEOUT =   60*1000;
 const NP_SCREENSAVER_TIMEOUT    = 5*60*1000;
 
 Vue.component('lms-screensaver', {
@@ -81,6 +80,7 @@ Vue.component('lms-screensaver', {
                     this.cancelAllNp();
                 }
             }
+            this.resetTimers();
         }.bind(this));
         bus.$on('playerStatus', function(playerStatus) {
             if (playerStatus.isplaying != this.playing) {
@@ -314,7 +314,7 @@ Vue.component('lms-screensaver', {
         },
         resetClockTimer() {
             this.cancelAllClock(true);
-            if (this.clockEnabled) {
+            if (this.clockEnabled && lmsOptions.screensaverTimeout>0) {
                 if (!this.playing) {
                     this.showClockTimer = setTimeout(function () {
                         this.showClock = true;
@@ -322,13 +322,13 @@ Vue.component('lms-screensaver', {
                         this.$nextTick(function () {
                             this.startDisplay();
                         });
-                    }.bind(this), CLOCK_SCREENSAVER_TIMEOUT);
+                    }.bind(this), lmsOptions.screensaverTimeout*1000);
                 }
             }
         },
         resetNpTimer() {
             this.cancelAllNp();
-            if (this.npSwitchEnabled) {
+            if (this.npSwitchEnabled && lmsOptions.npSwitchTimeout>0) {
                 if (this.npSwitched) {
                     changeLink("", "oled");
                     this.npSwitched = false;
@@ -352,7 +352,7 @@ Vue.component('lms-screensaver', {
                         }
                         this.npSwitched = true;
                         changeLink("html/css/other/np-only.css?r=" + LMS_MATERIAL_REVISION, "oled", true);
-                    }.bind(this), NP_SCREENSAVER_TIMEOUT);
+                    }.bind(this), lmsOptions.npSwitchTimeout*1000);
                 }
             }
         }

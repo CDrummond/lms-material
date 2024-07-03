@@ -482,7 +482,7 @@ html, body, .homeMenuSection div, .settingSection div, #playingStatus, #currentP
 }
 
 pre, code {
- font-family:'Roboto Mono', monospace !important;
+ font-family: monospace, monospace !important;
 }
 
 .browsedbLeftControls > a:before {

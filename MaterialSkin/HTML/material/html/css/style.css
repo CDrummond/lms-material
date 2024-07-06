@@ -660,12 +660,12 @@ div.v-subheader {
 
 .image-grid-btn, .image-grid-btn:hover {
  position:absolute;
- bottom:13px !important;
+ bottom:11px !important;
  right:-10px !important;
 }
 
 .image-grid-with-sub .image-grid-btn, .image-grid-with-sub .image-grid-btn:hover {
- bottom:31px !important;
+ bottom:27px !important;
 }
 
 .grid-no-subtitle {

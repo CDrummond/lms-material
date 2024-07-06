@@ -662,7 +662,7 @@
 "%1 Years":"%1 Jaren",
 "1 day":"1 dag",
 "%1 days":"%1 dagen",
-"Copied: %1":"",
-"Discard":"",
-"Recently Updated Releases":""
+"Copied: %1":"Gekopieerd: %1",
+"Discard":"Uitsluiten",
+"Recently Updated Releases":"Recent gewijzigde releases"
 }

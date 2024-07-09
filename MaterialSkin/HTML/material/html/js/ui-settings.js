@@ -386,18 +386,11 @@ Vue.component('lms-ui-settings', {
  <v-dialog v-model="browseModesDialog.show" :width="browseModesDialog.wide ? 750 : 500" persistent style="overflow:hidden" v-if="browseModesDialog.show">
   <v-card>
    <v-card-title>{{i18n("Browse modes")}}</v-card-title>
-   <table class="browse-modes-table dialog-main-list">
-    <template v-for="(item, i) in browseModesDialog.modes">
-     <tr v-if="!browseModesDialog.wide || i<browseModesDialog.halfLen">
-      <td>
-       <v-checkbox v-model="browseModesDialog.modes[i].enabled" :label="browseModesDialog.modes[i].text" error-count="0" hide-details  class="player-settings-list-checkbox"></v-checkbox>
-      </td>
-      <td v-if="browseModesDialog.wide && i+(browseModesDialog.halfLen)<browseModesDialog.modes.length">
-       <v-checkbox v-model="browseModesDialog.modes[i+(browseModesDialog.halfLen)].enabled" :label="browseModesDialog.modes[i+(browseModesDialog.halfLen)].text" error-count="0" hide-details  class="player-settings-list-checkbox"></v-checkbox>
-      </td>
-     </tr>
-    </template>
-   </table>
+   <div class="browse-modes-table">
+    <div v-for="(item, i) in browseModesDialog.modes">
+     <v-checkbox v-model="browseModesDialog.modes[i].enabled" :label="browseModesDialog.modes[i].text" error-count="0" hide-details></v-checkbox>
+    </div>
+   </div>
    <div class="dialog-padding"></div>
    <v-card-actions>
     <v-spacer></v-spacer>

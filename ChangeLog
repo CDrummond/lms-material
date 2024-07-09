@@ -16,6 +16,7 @@
 13. Separate timer resets in screensaver.
 14. Allow to manually specify screensaver timeouts by editing
     'screensaverTimeout' and 'npSwitchTimout' in server-side preference file.
+15. Better layout for 'Browse modes' dialog.
 
 5.0.4
 -----

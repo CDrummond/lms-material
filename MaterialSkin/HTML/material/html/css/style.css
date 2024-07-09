@@ -2708,7 +2708,26 @@ div.v-subheader {
 }
 
 .browse-modes-table {
- min-height:360px;
+ display:grid!important;
+ grid-template-columns:auto auto auto;
+ padding-left:14px;
+}
+
+.browse-modes-table div .v-input--selection-controls {
+ padding-right:14px;
+}
+.browse-modes-table div .v-input--selection-controls {
+ margin-top:2px!important;
+}
+@media (max-width: 750px) {
+ .browse-modes-table {
+  grid-template-columns:auto auto;
+ }
+}
+@media (max-width: 500px) {
+ .browse-modes-table {
+  grid-template-columns:auto;
+ }
 }
 
 .browse-progress {

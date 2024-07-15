@@ -136,7 +136,7 @@ function parseBrowseResp(data, parent, options, cacheKey, parentCommand, parentG
             var isDisksAndFolders = command == "browselibrary" && data.params[1].length>0 && data.params[1].indexOf("mode:filesystem")>=0;
             var isCustomBrowse = command == "custombrowse" ;
             var isDynamicPlaylist = command == "dynamicplaylist";
-            var isPresets = command == "presets";
+            var isPresets = command == "presets" && getIndex(data.params[1], "item_id:")<0;
             var haveWithIcons = false;
             var haveWithoutIcons = false;
             var menu = undefined;

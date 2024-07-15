@@ -120,6 +120,7 @@
 "Configuration":"Configuration",
 "Continuous":"Continu",
 "Control when player should 'sleep'.":"Contrôler quand le lecteur doit être mis en veille.",
+"Copied: %1":"Copié : %1",
 "Copy":"Copier",
 "Copy browse selection here":"Copier la sélection de navigation ici",
 "Copy details":"Copier les détails",
@@ -151,6 +152,7 @@
 "Description":"Description",
 "Details":"Détails",
 "Disc %1":"Disque %1",
+"Discard":"Ignorer",
 "Display rating stars.":"Afficher les étoiles de notation.",
 "Display technical info":"Afficher les informations techniques",
 "Do not crossfade successive tracks from the same album.":"Ne pas effectuer de fondu enchaîné entre les morceaux successifs d'un même album.",
@@ -356,6 +358,7 @@
 "Random Mix":"Morceaux au hasard",
 "Random Releases":"Albums aléatoires",
 "Rating":"Classement",
+"Recently Updated Releases":"Albums mis à jour récemment",
 "Regular":"Normale",
 "Release":"Album",
 "Release, Track Number":"Album, Numéro de Morceau",
@@ -661,8 +664,5 @@
 "1 Year":"1 année",
 "%1 Years":"%1 années",
 "1 day":"1 jour",
-"%1 days":"%1 jours",
-"Copied: %1":"",
-"Discard":"",
-"Recently Updated Releases":""
+"%1 days":"%1 jours"
 }

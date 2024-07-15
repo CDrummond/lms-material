@@ -136,7 +136,6 @@ function parseBrowseResp(data, parent, options, cacheKey, parentCommand, parentG
             var isDisksAndFolders = command == "browselibrary" && data.params[1].length>0 && data.params[1].indexOf("mode:filesystem")>=0;
             var isCustomBrowse = command == "custombrowse" ;
             var isDynamicPlaylist = command == "dynamicplaylist";
-            var isPresets = command == "presets" && getIndex(data.params[1], "item_id:")<0;
             var haveWithIcons = false;
             var haveWithoutIcons = false;
             var menu = undefined;
@@ -599,7 +598,7 @@ function parseBrowseResp(data, parent, options, cacheKey, parentCommand, parentG
                     i.menu.push(MORE_ACTION);
                 }
 
-                if (!isFavorites && !isPresets && !isAppsTop && !isPodcastList && !isRadiosTop) {
+                if (!isFavorites && !isAppsTop && !isPodcastList && !isRadiosTop) {
                     var key = removeDiactrics(i.textkey);
                     if (undefined!=key && (resp.jumplist.length==0 || resp.jumplist[resp.jumplist.length-1].key!=key) && !textKeys.has(key)) {
                         resp.jumplist.push({key: key, index: resp.items.length});
@@ -767,7 +766,7 @@ function parseBrowseResp(data, parent, options, cacheKey, parentCommand, parentG
                 resp.items=before;
                 resp.items = resp.items.concat(feeds);
                 resp.items = resp.items.concat(after);
-            } else if (isFavorites || isPresets) {
+            } else if (isFavorites) {
                 resp.items.sort(options.sortFavorites ? favSort : partialFavSort);
             } else if (isRadiosTop) {
                 resp.items.sort(weightSort);

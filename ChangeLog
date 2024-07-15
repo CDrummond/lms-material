@@ -17,7 +17,7 @@
 14. Allow to manually specify screensaver timeouts by editing
     'screensaverTimeout' and 'npSwitchTimout' in server-side preference file.
 15. Better layout for 'Browse modes' dialog.
-16. Don't sort sub items of 'Radio / My Presets'
+16. Don't sort items of 'Radio / My Presets'
 
 5.0.4
 -----

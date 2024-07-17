@@ -18,6 +18,7 @@
     'screensaverTimeout' and 'npSwitchTimout' in server-side preference file.
 15. Better layout for 'Browse modes' dialog.
 16. Don't sort items of 'Radio / My Presets'
+17. Fix updating comboboxes in SqueezeDSP.
 
 5.0.4
 -----

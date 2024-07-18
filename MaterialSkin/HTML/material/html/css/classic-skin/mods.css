@@ -790,18 +790,17 @@ table td input[type=checkbox] {
  margin-right:13px;
 }
 
-.lms-settings-section-SETUP_PLUGINS div#innerSettingsBlock {
+.lms-settings-section-SETUP_PLUGINS_9 div#innerSettingsBlock {
  height:calc((var(--vh, 1vh)*100) - 247px)!important;
 }
 
-.lms-settings-section-SETUP_PLUGINS div#homeMenu > div#settingsRegion {
+.lms-settings-section-SETUP_PLUGINS_9 div#homeMenu > div#settingsRegion {
  margin-top:-20px;
 }
 
-.lms-settings-section-SETUP_PLUGINS div#innerSettingsBlock {
+.lms-settings-section-SETUP_PLUGINS_9 div#innerSettingsBlock {
  padding: 0px 16px 4px 16px
 }
-
 
 @media (min-width:1150px) {
  .lms-settings-section-PLUGIN_EXTENDED_BROWSEMODES td:nth-of-type(3) > div > span {
@@ -818,10 +817,10 @@ table td input[type=checkbox] {
   float:unset;
   margin-right:0px!important;
  }
- .lms-settings-section-SETUP_PLUGINS div#homeMenu > div#settingsRegion {
+ .lms-settings-section-SETUP_PLUGINS_9 div#homeMenu > div#settingsRegion {
   margin-top:14px;
  }
- .lms-settings-section-SETUP_PLUGINS div#innerSettingsBlock {
+ .lms-settings-section-SETUP_PLUGINS_9 div#innerSettingsBlock {
   height:calc((var(--vh, 1vh)*100) - 281px)!important;
  }
 }

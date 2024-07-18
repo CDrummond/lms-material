@@ -551,7 +551,7 @@ function applyModifications(page, textCol, darkUi, src) {
                 iframeInfo.settingsSelector.onchange = settingsSectionChangedReq;
                 iframeInfo.settingsSelector.addEventListener("change", settingsSectionChanged);
                 settingsSectionChanged();
-                content.documentElement.classList.add("lms-settings-section-"+iframeInfo.settingsSelector.value);
+                content.documentElement.classList.add("lms-settings-section-"+iframeInfo.settingsSelector.value+(LMS_VERSION<90000 || iframeInfo.settingsSelector.value!="SETUP_PLUGINS" ? "" : "_9"));
             }
         }
 
@@ -685,8 +685,8 @@ Vue.component('lms-iframe-dialog', {
     </v-toolbar>
    </v-card-title>
    <v-card-text class="embedded-page">
-    <div v-if="!loaded && !prompting" class="iframe-loading">{{i18n('Loading...')}}</div>
-    <iframe id="embeddedIframe" v-on:load="applyModifications(page, textCol, darkUi, src)" :src="src" frameborder="0" v-bind:class="{'iframe-text':'other'==page,'transparent':!loaded && !prompting}"></iframe>
+    <div v-if="showLoading" class="iframe-loading">{{i18n('Loading...')}}</div>
+    <iframe id="embeddedIframe" v-on:load="applyModifications(page, textCol, darkUi, src)" :src="src" frameborder="0" v-bind:class="{'iframe-text':'other'==page,'transparent':showLoading}"></iframe>
    </v-card-text>
   </v-card>
  </v-dialog>
@@ -938,6 +938,9 @@ Vue.component('lms-iframe-dialog', {
         },
         numPlayers() {
             return this.$store.state.players ? this.$store.state.players.length : 0
+        },
+        showLoading() {
+            return LMS_VERSION>=90000 && !this.loaded && !this.prompting
         }
     },
     filters: {

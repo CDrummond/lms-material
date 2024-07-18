@@ -877,8 +877,8 @@ table td input[type=checkbox] {
  min-width:200px;
 }
 
-table .custom-select-container, /* additional browse modes */
-p > .custom-select-container { /* logging page */
+.lms-settings-section-PLUGIN_EXTENDED_BROWSEMODES table .custom-select-container, /* additional browse modes */
+.lms-settings-section-DEBUGGING_SETTINGS p > .custom-select-container { /* logging page */
  min-width:100px;
 }
 

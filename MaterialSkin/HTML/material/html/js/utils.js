@@ -159,7 +159,7 @@ function emitNative(msg, dest) {
     if (2==dest) {
         console.log(msg);
     } else if (3==dest) {
-	try {
+	    try {
             window.webkit.messageHandlers.mskNative.postMessage(msg);
         } catch (e) {
         }

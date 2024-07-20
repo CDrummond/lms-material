@@ -128,7 +128,7 @@ function browseAddHistory(view) {
     view.history.push(prev);
 }
 
-function browseActions(view, item, args, count, showCompositions, showWorks) {
+function browseActions(view, item, args, count, showRoles, showWorks) {
     var actions=[];
     if ((undefined==item || undefined==item.id || !item.id.startsWith(MUSIC_ID_PREFIX)) && // Exclude 'Compilations'
         (undefined==args['artist'] || (args['artist']!=i18n('Various Artists') && args['artist']!=LMS_VA_STRING && args['artist'].toLowerCase()!='various artists'))) {
@@ -193,10 +193,21 @@ function browseActions(view, item, args, count, showCompositions, showWorks) {
             actions.push({title:ACTIONS[ALL_TRACKS_ACTION].title, icon:ACTIONS[ALL_TRACKS_ACTION].icon, do:{ command: ['tracks'], params: params}, weight:80, stdItem:STD_ITEM_ALL_TRACKS});
         }
 
-        if (undefined!=args['artist_id'] && showCompositions) {
-            var params = [SORT_KEY+TRACK_SORT_PLACEHOLDER, PLAYLIST_TRACK_TAGS, 'artist_id:'+args['artist_id'], 'role_id:COMPOSER', 'material_skin_artist:'+args['artist']];
-            browseAddLibId(view, params);
-            actions.push({title:i18n('Compositions'), svg:'composer', do:{ command: ['tracks'], params: params}, weight:81, stdItem:STD_ITEM_COMPOSITION_TRACKS});
+        if (undefined!=args['artist_id'] && showRoles && showRoles.length>0) {
+            for (let r=0, rlen=showRoles.length; r<rlen; ++r) {
+                if (COMPOSER_ARTIST_ROLE==showRoles[r]) {
+                    var params = [SORT_KEY+TRACK_SORT_PLACEHOLDER, PLAYLIST_TRACK_TAGS, 'artist_id:'+args['artist_id'], 'role_id:COMPOSER', 'material_skin_artist:'+args['artist']];
+                    browseAddLibId(view, params);
+                    actions.push({title:i18n('Compositions'), svg:'composer', do:{ command: ['tracks'], params: params}, weight:81, stdItem:STD_ITEM_COMPOSITION_TRACKS});
+                } else {
+                    let udr = lmsOptions.userDefinedRoles[showRoles[r]];
+                    if (undefined!=udr) {
+                        var params = [ARTIST_ALBUM_TAGS, /*SORT_KEY+ARTIST_ALBUM_SORT_PLACEHOLDER, */'artist_id:'+args['artist_id'], 'role_id:'+showRoles[r]];
+                        browseAddLibId(view, params);
+                        actions.push({title:udr['text'], svg:'role-'+udr['role'], do:{ command: ['albums'], params: params}, weight:81, stdItem:STD_ITEM_ARTIST});
+                    }
+                }
+            }
         }
         if (showWorks) {
             actions.push({title:i18n('Works'), subtitle:args['artist'], svg:'classical-work', stdItem:STD_ITEM_CLASSICAL_WORKS, do:{ command: ['works'], params:[view.current.id]}, weight:82});
@@ -467,7 +478,7 @@ function browseHandleListResponse(view, item, command, resp, prevPage, appendIte
                     }
                 }
             }
-            view.currentActions = browseActions(view, resp.items.length>0 ? item : undefined, actParams, resp.items.length, resp.showCompositions, showWorksInMenu);
+            view.currentActions = browseActions(view, resp.items.length>0 ? item : undefined, actParams, resp.items.length, resp.showRoles, showWorksInMenu);
             if (listingArtistAlbums) {
                 for (var i=0, loop=view.onlineServices, len=loop.length; i<len; ++i) {
                     var emblem = getEmblem(loop[i].toLowerCase()+':');
@@ -525,26 +536,31 @@ function browseHandleListResponse(view, item, command, resp, prevPage, appendIte
         if (listingArtistAlbums) {
             let index = getField(command, "genre_id:");
             // Get genres for artist...
-            let genreReqArtist=view.current.id;
-            let params = [view.current.id].concat(index<0 ? [] : [command.params[index]]);
-            browseAddLibId(view, params);
-            lmsList('', ['genres'], params, 0, 25, false, view.nextReqId()).then(({data}) => {
-                if (data.result && data.result.genres_loop && genreReqArtist==view.current.id) {
-                    let genreList = [];
-                    let genreListPlain = [];
-                    for (let g=0, loop=data.result.genres_loop, len=loop.length; g<len; ++g) {
-                        genreList.push(buildLink("show_genre", loop[g].id, loop[g].genre, "browse"));
+            let genreReqArtist = view.current.id;
+            if (!genreReqArtist.startsWith("artist_id:") && view.history.length>1) {
+                genreReqArtist = view.history[view.history.length-1].current.id;
+            }
+            if (genreReqArtist.startsWith("artist_id:")) {
+                let params = [genreReqArtist].concat(index<0 ? [] : [command.params[index]]);
+                browseAddLibId(view, params);
+                lmsList('', ['genres'], params, 0, 25, false, view.nextReqId()).then(({data}) => {
+                    if (data.result && data.result.genres_loop && genreReqArtist==view.current.id) {
+                        let genreList = [];
+                        let genreListPlain = [];
+                        for (let g=0, loop=data.result.genres_loop, len=loop.length; g<len; ++g) {
+                            genreList.push(buildLink("show_genre", loop[g].id, loop[g].genre, "browse"));
+                            if (IS_MOBILE) {
+                                genreListPlain.push(loop[g].genre);
+                            }
+                        }
+                        view.detailedSubExtra=[(IS_MOBILE ? genreListPlain : genreList).join(SEPARATOR_HTML)];
                         if (IS_MOBILE) {
-                            genreListPlain.push(loop[g].genre);
+                            view.detailedSubExtra.push(genreList.join(SEPARATOR_HTML));
                         }
                     }
-                    view.detailedSubExtra=[(IS_MOBILE ? genreListPlain : genreList).join(SEPARATOR_HTML)];
-                    if (IS_MOBILE) {
-                        view.detailedSubExtra.push(genreList.join(SEPARATOR_HTML));
-                    }
-                }
-            }).catch(err => {
-            });
+                }).catch(err => {
+                });
+            }
         }
         if (resp.canUseGrid && !resp.forceGrid) {
             view.currentActions.push({action:(view.grid.use ? USE_LIST_ACTION : USE_GRID_ACTION), weight:0});

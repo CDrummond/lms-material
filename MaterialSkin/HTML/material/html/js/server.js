@@ -110,6 +110,17 @@ function visibilityOrFocusChanged() {
     }
 }
 
+function parseUserDefinedRoles(data) {
+    lmsOptions.userDefinedRoles = {}
+    let keys = Object.keys(data);
+    for (let i=0, len=keys.length; i<len; ++i) {
+        let key = keys[i];
+        if (undefined!=data[key]['id'] && undefined!=data[key]['name']) {
+            lmsOptions.userDefinedRoles[parseInt(data[key]['id'])] = {'role':key, 'text':data[key]['name']};
+        }
+    }
+}
+
 function lmsCommand(playerid, command, commandId, timeout) {
     const URL = "/jsonrpc.js";
     var data = { id: undefined==commandId ? 0 : commandId, method: "slim.request", params: [playerid, command]};
@@ -356,6 +367,7 @@ var lmsServer = Vue.component('lms-server', {
                     this.cometd.subscribe('/slim/subscribe',
                                     function(res) { },
                                     {data:{response:'/'+this.cometd.getClientId()+'/slim/material-skin', request:['material-skin', ['notification']]}});
+                    this.updateUserDefinedRoles();
                     this.updateFavorites();
                     this.updateReleaseTypes();
                 }
@@ -639,6 +651,8 @@ var lmsServer = Vue.component('lms-server', {
                     this.updateReleaseTypes();
                 } else if (data[2]=="timeFormat") {
                     lmsOptions.time12hr=data[3].includes("%I");
+                } else if (data[2]=="userDefinedRoles") {
+                    parseUserDefinedRoles(data[3]);
                 }
             } else if (data[1]=="plugin.material-skin" && data[3]!=null && data[3]!=undefined) {
                 if (data[2]=="password") {
@@ -732,6 +746,13 @@ var lmsServer = Vue.component('lms-server', {
                     }
                 }
             }).catch(err => {
+            });
+        },
+        updateUserDefinedRoles() {
+            lmsCommand("", ["serverstatus", 0, 0, "prefs:userDefinedRoles"]).then(({data}) => {
+                if (data && data.result && data.result.userDefinedRoles) {
+                    parseUserDefinedRoles(data.result.userDefinedRoles);
+                }
             });
         },
         handleFavoritesUpdate() {

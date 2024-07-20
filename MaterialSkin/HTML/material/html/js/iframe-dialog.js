@@ -837,7 +837,6 @@ Vue.component('lms-iframe-dialog', {
         close() {
             if (iframeInfo.settingModified) {
                 confirm(i18n("Some settings were changed. Do you want to save them?"), i18n('Save'), i18n('Cancel'), i18n('Discard')).then(res => {
-                    console.log
                     if (0==res) { // Cancel
                         return;
                     }

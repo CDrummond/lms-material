@@ -25,6 +25,7 @@ use File::Basename;
 use File::Slurp qw(read_file);
 use List::Util qw(shuffle);
 use File::Spec::Functions qw(catdir);
+use Scalar::Util qw(looks_like_number);
 
 if (!Slim::Web::Pages::Search->can('parseAdvancedSearchParams')) {
     require Plugins::MaterialSkin::Search;
@@ -1706,6 +1707,35 @@ sub _svgHandler {
         }
         if ((! -e $filePath) && (! -e $altFilePath)) {
             $filePath = $dir . "/HTML/material/html/images/release.svg";
+        }
+    }
+    # If this is for a role type then fallback to artist.svg if it does not exist
+    if (rindex($svgName, "role-")==0 && (! -e $filePath) && (! -e $altFilePath)) {
+        $svgName = substr($svgName, 5);
+        if (looks_like_number($svgName)) { # Numerical value, map to name
+            my $val = int(0 + $svgName);
+            if (2==$val) {
+                $svgName = "role-composer";
+            } elsif (3==$val) {
+                $svgName = "role-conductor";
+            } elsif (4==$val) {
+                $svgName = "role-band";
+            } elsif (5==$val) {
+                $svgName = "role-albumartist";
+            } elsif ($val>=21) {
+                my $roles = $serverprefs->get('userDefinedRoles');
+                foreach my $role (keys %{$roles}) {
+                    if ($roles->{$role}->{id}==$val) {
+                        $svgName = "role-" . lc($role);
+                        last;
+                    }
+                }
+            }
+            $filePath = $dir . "/HTML/material/html/images/" . $svgName . ".svg";
+            $altFilePath = Slim::Utils::Prefs::dir() . "/material-skin/images/" . $svgName . ".svg";
+        }
+        if ((! -e $filePath) && (! -e $altFilePath)) {
+            $filePath = $dir . "/HTML/material/html/images/artist.svg";
         }
     }
     # If desired path does not exist check alt location

@@ -1,3 +1,7 @@
+5.2.0
+-----
+1. Add support for LMS 9.0 user defined roles.
+
 5.1.0
 -----
  1. Replace shuffle icon with dice icon if random play is active, when using

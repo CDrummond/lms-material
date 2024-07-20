@@ -721,30 +721,27 @@ function forceItemUpdate(vm, item) {
 
 function mapArtistIcon(params, item) {
     item.icon=undefined;
+    item.svg="artist";
     if (params && params.length>0) {
         for (var i=0, len=params.length; i<len; ++i) {
-            if (params[i]=="role_id:COMPOSER" || params[i]=="role_id:2") {
-                item.svg="composer";
-                return;
-            }
-            if (params[i]=="role_id:CONDUCTOR" || params[i]=="role_id:3") {
-                item.svg="conductor";
-                return;
-            }
-            if (params[i]=="role_id:ALBUMARTIST" || params[i]=="role_id:5") {
-                item.svg="albumartist";
-                return;
-            }
-            if (params[i]=="role_id:ARTIST" || params[i]=="role_id:TRACKARTIST" || params[i]=="role_id:PERFORMER" || params[i]=="role_id:1" || params[i]=="role_id:6") {
+            if (params[i].startsWith("role_id:")) {
+                let parts = params[i].split(':');
+                let role = parts[1].length>1
+                            ? parts[1].toLowerCase()
+                            : parts[1]=="2"
+                                ? "composer"
+                            : parts[1]=="3"
+                                ? "conductor"
+                            : parts[1]=="4"
+                                ? "band"
+                            : parts[1]=="5"
+                                ? "albumartist"
+                            : "artist";
+                    item.svg = "role-"+role;
                 break;
-            }
-            if (params[i]=="role_id:BAND" || params[i]=="role_id:4") {
-                item.svg="trumpet";
-                return;
             }
         }
     }
-    item.svg="artist";
 }
 
 function splitString(str) {

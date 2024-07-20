@@ -202,7 +202,7 @@ function browseActions(view, item, args, count, showRoles, showWorks) {
                 } else {
                     let udr = lmsOptions.userDefinedRoles[showRoles[r]];
                     if (undefined!=udr) {
-                        var params = [ARTIST_ALBUM_TAGS, /*SORT_KEY+ARTIST_ALBUM_SORT_PLACEHOLDER, */'artist_id:'+args['artist_id'], 'role_id:'+showRoles[r]];
+                        var params = [ARTIST_ALBUM_TAGS, SORT_KEY+ARTIST_ALBUM_SORT_PLACEHOLDER, 'artist_id:'+args['artist_id'], 'role_id:'+showRoles[r]];
                         browseAddLibId(view, params);
                         actions.push({title:udr['text'], svg:'role-'+udr['role'], do:{ command: ['albums'], params: params}, weight:81, stdItem:STD_ITEM_ARTIST});
                     }

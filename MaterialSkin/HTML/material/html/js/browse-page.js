@@ -834,14 +834,6 @@ var lmsBrowse = Vue.component("lms-browse", {
                               type: "group",
                               weight: 5,
                               id: TOP_EXTRAS_ID }];
-                if (LMS_P_RL) {
-                    this.top.push({  command: ["selectRemoteLibrary", "items"],
-                                params: ["menu:selectRemoteLibrary", "menu:1"],
-                                icon: "cloud",
-                                type: "group",
-                                weight: 7,
-                                id: TOP_REMOTE_ID });
-                }
             }
             for (var i=0, len=this.top.length; i<len; ++i) {
                 this.top[i].title= this.top[i].id==TOP_MYMUSIC_ID
@@ -1392,6 +1384,7 @@ var lmsBrowse = Vue.component("lms-browse", {
             }
             this.top=[];
             for (let i=0, len=items.length; i<len; ++i) {
+                console.log(i, items[i].id)
                 if (items[i].id==TOP_CDPLAYER_ID || items[i].id==TOP_REMOTE_ID) {
                     updated = true; // No longer show CD Player, or Remote Libraries, so want list saved to remove this
                 } else {
@@ -1958,6 +1951,7 @@ var lmsBrowse = Vue.component("lms-browse", {
             if (savedItems.length==0) {
                 lmsCommand("", ["pref", LMS_MATERIAL_DEFAULT_ITEMS_PREF, "?"]).then(({data}) => {
                     if (data && data.result && data.result._p2) {
+                        console.log("PREF");
                         this.updateTopList(JSON.parse(data.result._p2));
                         this.saveTopList();
                         this.autoExpand();
@@ -1979,6 +1973,7 @@ var lmsBrowse = Vue.component("lms-browse", {
                 this.autoExpand();
             }
         } else {
+            console.log("SAVE ITEMS");
             this.updateTopList(savedItems);
             this.autoExpand();
         }

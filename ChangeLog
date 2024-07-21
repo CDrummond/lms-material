@@ -2,6 +2,10 @@
 -----
 1. Add support for LMS 9.0 user defined roles.
 
+5.1.1
+-----
+1. Fix 'Remote libraries' cloud icon appearing with no text on home screen.
+
 5.1.0
 -----
  1. Replace shuffle icon with dice icon if random play is active, when using

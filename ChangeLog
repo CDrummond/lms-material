@@ -1,6 +1,7 @@
 5.1.1
 -----
 1. Fix 'Remote libraries' cloud icon appearing with no text on home screen.
+2. Use padding for desktop thin now-playing bar under iOS.
 
 5.1.0
 -----

@@ -2,6 +2,7 @@
 -----
 1. Fix 'Remote libraries' cloud icon appearing with no text on home screen.
 2. Use padding for desktop thin now-playing bar under iOS.
+3. Fix activation of pinned 'Random Mix'.
 
 5.1.0
 -----

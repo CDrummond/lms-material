@@ -901,6 +901,8 @@ function browseClick(view, item, index, event) {
         view.layoutGrid(true);
     } else if (MUSIC_ID_PREFIX+'myMusicWorks'==item.id) {
         browseAddWorksCategories(view, item);
+    } else if (RANDOM_MIX_ID==item.id) { // For older installations where 'Random Mix' was in 'My Music' and has been pinned.
+        bus.$emit('dlg.open', 'rndmix');
     } else if (STD_ITEM_GENRE==item.stdItem && view.current && (getField(item, "genre_id") || getField(item, "year"))) {
         browseAddCategories(view, item, true, getField(item, "year"));
         browseCheckExpand(view);

@@ -256,7 +256,7 @@ function updateActionStrings() {
     ACTIONS[PQ_UNPIN_ACTION].title=i18n("Unpin");
     ACTIONS[ALL_RELEASES_ACTION].title=i18n("All releases");
     ACTIONS[ALL_TRACKS_ACTION].title=i18n("All tracks");
-    ACTIONS[PQ_RANDOM_MIX].title=i18n("Random Mix");
+    ACTIONS[PQ_RANDOM_MIX].title=i18n("Random mix");
     ACTIONS[COPY_DETAILS_ACTION].title=i18n("Copy details");
 
     let albumActs = [GOTO_ALBUM_ACTION, PLAY_ALBUM_ACTION, PQ_REMOVE_ALBUM_ACTION, PQ_TOGGLE_VIEW_ACTION];

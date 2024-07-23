@@ -127,6 +127,7 @@ const SEARCH_ID = MUSIC_ID_PREFIX+"lms-local-search";
 const ADV_SEARCH_ID = MUSIC_ID_PREFIX+"lms-adv-search";
 const GENRES_ID = MUSIC_ID_PREFIX+"genres";
 const YEARS_ID = MUSIC_ID_PREFIX+"years";
+const RANDOM_MIX_ID = MUSIC_ID_PREFIX+"randomMix";
 const ARTIST_TAGS = "tags:s";
 const ALBUM_TAGS = "tags:ajlqswyKS";
 const ALBUM_TAGS_ALL_ARTISTS = "tags:aajlqswyKSS";

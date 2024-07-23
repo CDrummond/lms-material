@@ -1384,7 +1384,6 @@ var lmsBrowse = Vue.component("lms-browse", {
             }
             this.top=[];
             for (let i=0, len=items.length; i<len; ++i) {
-                console.log(i, items[i].id)
                 if (items[i].id==TOP_CDPLAYER_ID || items[i].id==TOP_REMOTE_ID) {
                     updated = true; // No longer show CD Player, or Remote Libraries, so want list saved to remove this
                 } else {
@@ -1913,7 +1912,9 @@ var lmsBrowse = Vue.component("lms-browse", {
                                     : 0;
         },
         textSelectEnd(event) {
-            viewHandleSelectedText(this, event);
+            if (!this.current.slimbrowse) { // DynamicPlaylists have a blank line that when double-clicked shows a menu!
+                viewHandleSelectedText(this, event);
+            }
         },
         allowShuffle(item) {
             if (lmsOptions.playShuffle && !queryParams.party && (!LMS_KIOSK_MODE || !HIDE_FOR_KIOSK.has(PLAY_SHUFFLE_ACTION))) {
@@ -1973,7 +1974,6 @@ var lmsBrowse = Vue.component("lms-browse", {
                 this.autoExpand();
             }
         } else {
-            console.log("SAVE ITEMS");
             this.updateTopList(savedItems);
             this.autoExpand();
         }

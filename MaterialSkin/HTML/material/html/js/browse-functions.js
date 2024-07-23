@@ -917,6 +917,8 @@ function browseClick(view, item, index, event) {
         view.layoutGrid(true);
     } else if (MUSIC_ID_PREFIX+'myMusicWorks'==item.id) {
         browseAddWorksCategories(view, item);
+    } else if (RANDOM_MIX_ID==item.id) { // For older installations where 'Random Mix' was in 'My Music' and has been pinned.
+        bus.$emit('dlg.open', 'rndmix');
     } else if (STD_ITEM_GENRE==item.stdItem && view.current && (getField(item, "genre_id") || getField(item, "year"))) {
         browseAddCategories(view, item, true, getField(item, "year"));
         browseCheckExpand(view);
@@ -1182,7 +1184,7 @@ function browseItemAction(view, act, item, index, event) {
     } else if (act===PIN_ACTION) {
         // If pinning a 'My Music' item, and we have virtual libraries (libraryName is only et if we do), then ask
         // user if we should save the library_id with the pinned item.
-        if (undefined!=view.current && view.current.id==TOP_MYMUSIC_ID && view.libraryName && item.params) {
+        if (RANDOM_MIX_ID!=item.id && undefined!=view.current && view.current.id==TOP_MYMUSIC_ID && view.libraryName && item.params) {
             confirm(i18n("Store current library with pinned item?")+
                     addNote(i18n("If you store the library when pinning then this library will always be used, regardless of changing the library in 'My Music'. If you elect not to store the library, then changing the library under 'My Music' will effect the items displayed within this pinned item.")),
                     i18n("With"), undefined, i18n("Without")).then(res => {
@@ -2227,7 +2229,15 @@ function browseMyMusicMenu(view) {
                         for (var idx=0, loop=data.result.item_loop, loopLen=loop.length; idx<loopLen; ++idx) {
                             var c = loop[idx];
                             if (c.node=="myMusic" && c.id) {
-                                if (c.id!="randomplay" && !c.id.startsWith("myMusicSearch") && !c.id.startsWith("opmlselect") && !stdItems.has(c.id)) {
+                                if (c.id=="randomplay") {
+                                    if (!queryParams.party) {
+                                        view.myMusic.push({ title: i18n("Random Mix"),
+                                                            svg: "dice-multiple",
+                                                            id: RANDOM_MIX_ID,
+                                                            type: "app",
+                                                            weight: c.weight ? parseFloat(c.weight) : 100 });
+                                    }
+                                } else if (!c.id.startsWith("myMusicSearch") && !c.id.startsWith("opmlselect") && !stdItems.has(c.id)) {
                                     var command = view.buildCommand(c, "go", false);
                                     var item = { title: c.text,
                                                  command: command.command,

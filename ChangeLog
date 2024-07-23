@@ -5,6 +5,10 @@
 5.1.1
 -----
 1. Fix 'Remote libraries' cloud icon appearing with no text on home screen.
+2. Use padding for desktop thin now-playing bar under iOS.
+3. Revert moving 'Random Mix' to queue menu, and place back under 'My Music'.
+4. Don't show 'Random Mix' in 'My Music' for party mode.
+5. Mix type is 'works', not 'work', for 'Random Mix' by 'Works'.
 
 5.1.0
 -----

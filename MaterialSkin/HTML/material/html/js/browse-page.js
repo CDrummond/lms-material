@@ -1384,7 +1384,6 @@ var lmsBrowse = Vue.component("lms-browse", {
             }
             this.top=[];
             for (let i=0, len=items.length; i<len; ++i) {
-                console.log(i, items[i].id)
                 if (items[i].id==TOP_CDPLAYER_ID || items[i].id==TOP_REMOTE_ID) {
                     updated = true; // No longer show CD Player, or Remote Libraries, so want list saved to remove this
                 } else {
@@ -1973,7 +1972,6 @@ var lmsBrowse = Vue.component("lms-browse", {
                 this.autoExpand();
             }
         } else {
-            console.log("SAVE ITEMS");
             this.updateTopList(savedItems);
             this.autoExpand();
         }

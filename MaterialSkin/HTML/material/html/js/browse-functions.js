@@ -606,7 +606,7 @@ function browseHandleListResponse(view, item, command, resp, prevPage, appendIte
                 view.tbarActions=[SEARCH_LIB_ACTION];
             }
         } else if (item.id==RANDOM_MIX_ID) {
-            view.currentActions=[{action:NEW_RANDOM_MIX_ACTION}, {action:SEARCH_LIST_ACTION}];
+            view.currentActions=[{action:NEW_RANDOM_MIX_ACTION}, {action:view.grid.use ? USE_LIST_ACTION : USE_GRID_ACTION}, {action:SEARCH_LIST_ACTION}];
         } else if (SECTION_FAVORITES==view.current.section && view.current.isFavFolder) {
             view.tbarActions=[ADD_FAV_FOLDER_ACTION, ADD_FAV_ACTION];
         } else if (SECTION_PLAYLISTS==view.current.section && view.current.id.startsWith("playlist_id:") && view.items.length>0 && undefined!=view.items[0].stdItem) {

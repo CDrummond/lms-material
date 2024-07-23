@@ -38,7 +38,6 @@ Vue.component('lms-randommix', {
    <v-btn v-else flat icon @click.native="showAll=!showAll" :title="showAll ? i18n('Basic options') : i18n('All options')"><v-icon>{{showAll ? 'expand_more' : 'expand_less'}}</v-icon></v-btn>
    <v-spacer></v-spacer>
    <v-btn flat @click.native="start()">{{i18n('Start')}}</v-btn>
-   <!-- <v-btn flat @click.native="stop()" v-if="active">{{i18n('Stop')}}</v-btn> -->
    <v-btn flat @click.native="save()" v-bind:class="{'disabled':!name || name.length<1}">{{i18n('Save')}}</v-btn>
    <v-btn flat @click.native="close()">{{i18n('Cancel')}}</v-btn>
   </v-card-actions>
@@ -48,7 +47,6 @@ Vue.component('lms-randommix', {
    <v-spacer></v-spacer>
    <v-btn flat @click.native="close()">{{i18n('Cancel')}}</v-btn>
    <v-btn flat @click.native="save()" v-bind:class="{'disabled':!name || name.length<1}">{{i18n('Save')}}</v-btn>
-   <!-- <v-btn flat @click.native="stop()" v-if="active">{{i18n('Stop')}}</v-btn> -->
    <v-btn flat @click.native="start()">{{i18n('Start')}}</v-btn>
   </v-card-actions>
  </v-card>
@@ -64,7 +62,6 @@ Vue.component('lms-randommix', {
             chosenGenres: [],
             mixes: [],
             chosenMix: "tracks",
-            //active: false,
             libraries: [],
             library: undefined,
             continuous: true,
@@ -89,32 +86,21 @@ Vue.component('lms-randommix', {
             this.showAll = getLocalStorageBool("rndmix.showAll", false);
             this.playerId = this.$store.state.player.id;
             this.chosenMix = "tracks";
-            //lmsCommand(this.playerId, ["randomplayisactive"]).then(({data}) => {
-                this.mixes=[{key:"tracks", label:i18n("Tracks")},
-                            {key:"albums", label:lmsOptions.supportReleaseTypes ? i18n("Releases") : i18n("Albums")},
-                            {key:"contributors", label:i18n("Artists")},
-                            {key:"year", label:i18n("Years")}];
-                if (LMS_VERSION>=90000) {
-                    this.mixes.push({key:"works", label:i18n("Works")});
-                }
-                /*
-                if (data && data.result && data.result._randomplayisactive) {
-                    this.chosenMix = data.result._randomplayisactive;
-                    this.active = true;
-                } else {
-                    this.active = false;
-                    this.chosenMix = "tracks";
-                }*/
+            this.mixes=[{key:"tracks", label:i18n("Tracks")},
+                        {key:"albums", label:lmsOptions.supportReleaseTypes ? i18n("Releases") : i18n("Albums")},
+                        {key:"contributors", label:i18n("Artists")},
+                        {key:"year", label:i18n("Years")}];
+            if (LMS_VERSION>=90000) {
+                this.mixes.push({key:"works", label:i18n("Works")});
+            }
 
-
-                if (undefined!=existingName) {
-                    this.loadSavedMixParams(existingName);
-                } else {
-                    this.initGenres();
-                    this.initLibraries();
-                    this.initConfig();
-                }
-            //});
+            if (undefined!=existingName) {
+                this.loadSavedMixParams(existingName);
+            } else {
+                this.initGenres();
+                this.initLibraries();
+                this.initConfig();
+            }
         }.bind(this));
         bus.$on('noPlayers', function() {
             this.show=false;
@@ -303,13 +289,6 @@ Vue.component('lms-randommix', {
                 }
             });
         },
-        /*
-        stop() {
-            this.close();
-            lmsCommand(this.playerId, ["randomplay", "disable"]).then(({data}) => {
-                bus.$emit('refreshStatus');
-            });
-        },*/
         save() {
             let name = this.name ? this.name.trim() : "";
             if (name.length<1) {
@@ -359,4 +338,3 @@ Vue.component('lms-randommix', {
         }
     }
 })
-

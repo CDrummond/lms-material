@@ -201,6 +201,6 @@ function releaseTypeIcon(rel) {
         : rel=="ALBUM"
             ? {icon:"album"}
             : rel=="COMPILATION"
-                ? {svg:"album-multi"}
+                ? {svg:lmsOptions.supportReleaseTypes ? "release-multi" : "album-multi"}
                 : {svg:"release-"+rel.toLowerCase().replace(/[^0-9a-z]/gi, '')};
 }

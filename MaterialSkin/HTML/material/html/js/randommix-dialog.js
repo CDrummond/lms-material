@@ -83,6 +83,7 @@ Vue.component('lms-randommix', {
     },
     mounted() {
         bus.$on('rndmix.open', function(existingName) {
+            this.name = undefined;
             this.showAll = getLocalStorageBool("rndmix.showAll", false);
             this.playerId = this.$store.state.player.id;
             this.chosenMix = "tracks";

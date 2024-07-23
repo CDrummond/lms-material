@@ -1435,9 +1435,6 @@ var lmsBrowse = Vue.component("lms-browse", {
         pin(item, add, mapped) {
             browsePin(this, item, add, mapped);
         },
-        updateItemPinnedState(item) {
-            browseUpdateItemPinnedState(this, item);
-        },
         invertSelection() {
             if (this.selection.size==this.items.length) {
                 this.clearSelection();

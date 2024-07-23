@@ -1694,13 +1694,24 @@ function browseItemMenu(view, item, index, event) {
     if (!item.menu) {
         if (undefined!=item.stdItem) {
             // Get menu items - if view is an album or track from search then we have a different menu
-            var itm = STD_ITEMS[item.stdItem];
+            let itm = STD_ITEMS[item.stdItem];
+            let menu = undefined!=itm.searchMenu && (view.current.libsearch || view.current.allItems)
+                    ? itm.searchMenu
+                    : undefined!=itm.maxBeforeLarge && view.listSize>itm.maxBeforeLarge
+                        ? itm.largeListMenu
+                        : itm.menu;
+            for (let m=0, len=menu.length; m<len; ++m) {
+                if (menu[m]==PIN_ACTION && view.options.pinned.has(item.id)) {
+                    menu[m]=UNPIN_ACTION;
+                    break;
+                }
+                if (menu[m]==UNPIN_ACTION && !view.options.pinned.has(item.id)) {
+                    menu[m]=PIN_ACTION;
+                    break;
+                }
+            }
             showMenu(view, {show:true, item:item, x:event.clientX, y:event.clientY, index:index,
-                            itemMenu:undefined!=itm.searchMenu && (view.current.libsearch || view.current.allItems)
-                                ? itm.searchMenu
-                                : undefined!=itm.maxBeforeLarge && view.listSize>itm.maxBeforeLarge
-                                    ? itm.largeListMenu
-                                    : itm.menu});
+                            itemMenu:menu});
         } else if (TOP_MYMUSIC_ID==item.id) {
             view.showLibMenu(event, index);
         }
@@ -2388,6 +2399,10 @@ function browsePin(view, item, add, mapped) {
                             {id: item.presetParams.favorites_url, title: item.title, image: item.image, icon: item.icon, svg: item.svg, isPinned: true,
                              url: item.presetParams.favorites_url, menu: [PLAY_ACTION, INSERT_ACTION, ADD_ACTION, DIVIDER, RENAME_ACTION, UNPIN_ACTION],
                              weight: undefined==item.weight ? 10000 : item.weight});
+        } else if (item.stdItem==STD_ITEM_RANDOM_MIX) {
+            view.top.splice(lastPinnedIndex+1, 0,
+                {id: item.id, title: item.title, svg: item.svg, isPinned: true, stdItem: item.stdItem,
+                 menu: [PLAY_ACTION, INSERT_ACTION, ADD_ACTION, DIVIDER, RENAME_ACTION, UNPIN_ACTION], weight: 10000});
         } else if (item.type=='extra') {
             view.top.splice(lastPinnedIndex+1, 0,
                             {id: item.id, title: item.title, icon: item.icon, svg: item.svg, url: item.url, isPinned: true, type:item.type,
@@ -2404,7 +2419,7 @@ function browsePin(view, item, add, mapped) {
                              weight: undefined==item.weight ? 10000 : item.weight, section: item.section, cancache: item.cancache});
         }
         view.options.pinned.add(item.id);
-        view.updateItemPinnedState(item);
+        browseUpdateItemPinnedState(view, item);
         view.saveTopList();
         bus.$emit('showMessage', i18n("Pinned '%1' to home screen.", item.title));
         bus.$emit('pinnedChanged');
@@ -2413,7 +2428,7 @@ function browsePin(view, item, add, mapped) {
             if (res) {
                 view.top.splice(index, 1);
                 view.options.pinned.delete(item.id);
-                view.updateItemPinnedState(item);
+                browseUpdateItemPinnedState(view, item);
                 if (item.id.startsWith(MUSIC_ID_PREFIX)) {
                     for (var i=0, len=view.myMusic.length; i<len; ++i) {
                         view.myMusic[i].menu=[view.options.pinned.has(view.myMusic[i].id) ? UNPIN_ACTION : PIN_ACTION];

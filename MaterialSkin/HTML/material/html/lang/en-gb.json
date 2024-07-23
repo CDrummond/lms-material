@@ -186,7 +186,7 @@
 "Duration":"",
 "E-Mail":"",
 "ERROR: List processing failed":"",
-"Each player may be assigned a 'virtual' library. If set then this will be used to restrict track selection for 'Random mix' (only tracks from the chosen library will be used), and other modes. This setting might also affect library browsing with other Lyrion control points (such as the default web UI).":"",
+"Each player may be assigned a 'virtual' library. If set then this will be used to restrict track selection for 'Random Mix' (only tracks from the chosen library will be used), and other modes. This setting might also affect library browsing with other Lyrion control points (such as the default web UI).":"",
 "Edit":"",
 "Edit alarm":"",
 "Edit group player":"",

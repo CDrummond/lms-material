@@ -90,7 +90,7 @@ Vue.component('lms-randommix', {
                             {key:"contributors", label:i18n("Artists")},
                             {key:"year", label:i18n("Years")}];
                 if (LMS_VERSION>=90000) {
-                    this.mixes.push({key:"work", label:i18n("Works")});
+                    this.mixes.push({key:"works", label:i18n("Works")});
                 }
                 if (data && data.result && data.result._randomplayisactive) {
                     this.chosenMix = data.result._randomplayisactive;

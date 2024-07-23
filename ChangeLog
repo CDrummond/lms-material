@@ -4,6 +4,7 @@
 2. Use padding for desktop thin now-playing bar under iOS.
 3. Revert moving 'Random Mix' to queue menu, and place back under 'My Music'.
 4. Don't show 'Random Mix' in 'My Music' for party mode.
+5. Mix type is 'works', not 'work', for 'Random Mix' by 'Works'.
 
 5.1.0
 -----

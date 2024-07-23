@@ -2214,11 +2214,13 @@ function browseMyMusicMenu(view) {
                             var c = loop[idx];
                             if (c.node=="myMusic" && c.id) {
                                 if (c.id=="randomplay") {
-                                    view.myMusic.push({ title: i18n("Random Mix"),
-                                                        svg: "dice-multiple",
-                                                        id: RANDOM_MIX_ID,
-                                                        type: "app",
-                                                        weight: c.weight ? parseFloat(c.weight) : 100 });
+                                    if (!queryParams.party) {
+                                        view.myMusic.push({ title: i18n("Random Mix"),
+                                                            svg: "dice-multiple",
+                                                            id: RANDOM_MIX_ID,
+                                                            type: "app",
+                                                            weight: c.weight ? parseFloat(c.weight) : 100 });
+                                    }
                                 } else if (!c.id.startsWith("myMusicSearch") && !c.id.startsWith("opmlselect") && !stdItems.has(c.id)) {
                                     var command = view.buildCommand(c, "go", false);
                                     var item = { title: c.text,

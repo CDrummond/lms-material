@@ -1254,11 +1254,11 @@ function browseItemAction(view, act, item, index, event) {
     } else if (act===DELETE_ACTION) {
         confirm(i18n("Delete '%1'?", item.title), i18n('Delete')).then(res => {
             if (res) {
-                if (item.id.startsWith("playlist_id:")) {
+                if (item.id.startsWith("playlist_id:") || item.stdItem==STD_ITEM_RANDOM_MIX) {
                     view.clearSelection();
                     var command = item.stdItem==STD_ITEM_RANDOM_MIX
-                                    ? ["material-skin", "rndmix", "act:delete", "name:"+item.name]
-                                    : ["playlists", "delete", item.id];
+                                    ? ["material-skin", "rndmix", "act:delete", "name:"+item.title]
+                                    : item.id.startsWith("playlist_id:")["playlists", "delete", item.id];
                     lmsCommand(view.playerId(), command).then(({data}) => {
                         logJsonMessage("RESP", data);
                         view.refreshList();

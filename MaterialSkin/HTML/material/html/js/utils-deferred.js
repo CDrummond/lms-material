@@ -292,7 +292,7 @@ function addAndPlayAllActions(cmd, items) {
 }
 
 function isAudioTrack(item) {
-    return (undefined!=item.stdItem && (STD_ITEM_TRACK==item.stdItem || STD_ITEM_ALBUM_TRACK==item.stdItem || STD_ITEM_PLAYLIST_TRACK==item.stdItem || STD_ITEM_REMOTE_PLAYLIST_TRACK==item.stdItem)) ||
+    return (undefined!=item.stdItem && (STD_ITEM_TRACK==item.stdItem || STD_ITEM_ALBUM_TRACK==item.stdItem || STD_ITEM_PLAYLIST_TRACK==item.stdItem || STD_ITEM_REMOTE_PLAYLIST_TRACK==item.stdItem || STD_ITEM_RANDOM_MIX==item.stdItem)) ||
            "audio"==item.type || "track"==item.type ||
                 ( ("itemplay"==item.style || "item_play"==item.style) && item.menu && item.menu.length>0) || // itemplay for dynamic playlists
                 (item.goAction && (item.goAction == "playControl" || item.goAction == "play"));

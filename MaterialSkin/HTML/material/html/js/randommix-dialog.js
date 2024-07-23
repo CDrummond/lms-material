@@ -86,7 +86,7 @@ Vue.component('lms-randommix', {
     },
     mounted() {
         bus.$on('rndmix.open', function(existingName) {
-            this.showAll = getLocalStorageVal("rndmix.showAll", false);
+            this.showAll = getLocalStorageBool("rndmix.showAll", false);
             this.playerId = this.$store.state.player.id;
             this.chosenMix = "tracks";
             //lmsCommand(this.playerId, ["randomplayisactive"]).then(({data}) => {
@@ -251,7 +251,6 @@ Vue.component('lms-randommix', {
                         }
                         if (undefined!=data.result.oldtracks) {
                             this.oldTracks = parseInt(data.result.oldtracks);
-                            console.log("OT", this.oldTracks, data.result.oldtracks);
                             if (this.oldTracks<1 || this.oldTracks>1000) {
                                 this.oldTracks = 10;
                             }
@@ -279,7 +278,6 @@ Vue.component('lms-randommix', {
         },
         start() {
             this.close();
-            setLocalStorageVal("rndmix.showAll", this.showAll);
             lmsCommand("", ["pref", "plugin.randomplay:continuous", this.continuous ? 1 : 0]);
             lmsCommand("", ["pref", "plugin.randomplay:newtracks", this.newTracks]);
             lmsCommand("", ["pref", "plugin.randomplay:oldtracks", this.oldTracks]);

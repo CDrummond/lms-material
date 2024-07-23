@@ -232,6 +232,9 @@ Vue.component('lms-randommix', {
                         if (undefined!=data.result.genres) {
                             this.chosenGenres = data.result.genres.split(",");
                         }
+                        if (this.chosenGenres.length==0 || this.chosenGenres.length==this.genres.length) {
+                            this.chosenGenres = [].concat(this.genres);
+                        }
                         if (undefined!=data.result.continuous) {
                             this.continuous = 1==parseInt(data.result.continuous);
                         }
@@ -297,7 +300,7 @@ Vue.component('lms-randommix', {
             lmsCommand("", ["material-skin", "rndmix", "act:save",
                             "name:"+name,
                             "mix:"+this.chosenMix,
-                            "genres:"+this.chosenGenres.join(","),
+                            "genres:"+(this.chosenGenres.length==this.genres.length ? "" : this.chosenGenres.join(",")),
                             "continuous:"+(this.continuous ? 1 : 0),
                             "oldtracks:"+this.oldTracks,
                             "newtracks:"+this.newTracks,

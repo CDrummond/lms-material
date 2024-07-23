@@ -1474,6 +1474,9 @@ sub _cliCommand {
                 }
                 $cnt++;
             }
+            if (0==$cnt) {
+                $request->addResult("rndmix_loop", "");
+            }
             $request->setStatusDone();
             return;
         } else {

@@ -1928,7 +1928,7 @@ function parseBrowseResp(data, parent, options, cacheKey, parentCommand, parentG
             resp.subtitle=0==numWorks ? i18n("Empty") : i18np("1 Work", "%1 Works", numWorks);
             resp.canUseGrid=true;
             resp.listSize=resp.items.length;
-        } else if (data.result.rndmix_loop) {
+        } else if (undefined!=data.result.rndmix_loop) {
             for (let idx=0, loop=data.result.rndmix_loop, loopLen=loop.length; idx<loopLen; ++idx) {
                 let i = loop[idx];
                 let mix = {title:i.name,
@@ -1953,9 +1953,18 @@ function parseBrowseResp(data, parent, options, cacheKey, parentCommand, parentG
             }
             resp.items.sort(titleSort);
             resp.subtitle=i18np("1 Mix", "%1 Mixes", resp.items.length);
+            if (resp.items.length==0) {
+                resp.items.push({ id:"info",
+                                  type:"text",
+                                  title:i18n("You have no saved 'Random Mixes'. Please use the '+' icon above to create one, or to simply start a 'Random Mix' on your current player.")
+                });
+            }
             resp.listSize=resp.items.length;
         }
 
+        if (1==resp.items.length && "text"==resp.items[0].type && !resp.items[0].title.startsWith("<")) {
+            resp.items[0].title = '<div style="margin-top:16px;margin-bottom:16px">' + resp.items[0].title + '</div>';
+        }
         if (data.result.count>LMS_BATCH_SIZE) {
             resp.subtitle = i18n("Only showing %1 items", LMS_BATCH_SIZE);
         }

@@ -33,21 +33,14 @@ Vue.component('lms-randommix', {
    <v-text-field v-if="showAll" :label="i18n('Upcoming track count')" v-model="newTracks" type="number"></v-text-field>
    </div>
   </v-card-text>
-  <v-card-actions v-if="queryParams.altBtnLayout">
-   <v-btn v-if="isWide" flat @click.native="showAll=!showAll">{{showAll ? i18n('Basic options') : i18n('All options')}}</v-btn>
-   <v-btn v-else flat icon @click.native="showAll=!showAll" :title="showAll ? i18n('Basic options') : i18n('All options')"><v-icon>{{showAll ? 'expand_more' : 'expand_less'}}</v-icon></v-btn>
+  <v-card-actions>
+   <v-btn flat icon @click.native="showAll=!showAll"><v-icon>{{showAll ? 'unfold_less' : 'unfold_more'}}</v-icon></v-btn>
    <v-spacer></v-spacer>
-   <v-btn flat @click.native="start()">{{i18n('Start')}}</v-btn>
+   <v-btn flat v-if="queryParams.altBtnLayout" @click.native="start()">{{i18n('Start')}}</v-btn>
+   <v-btn flat v-else @click.native="close()">{{i18n('Cancel')}}</v-btn>
    <v-btn flat @click.native="save()" v-bind:class="{'disabled':!name || name.length<1}">{{i18n('Save')}}</v-btn>
-   <v-btn flat @click.native="close()">{{i18n('Cancel')}}</v-btn>
-  </v-card-actions>
-  <v-card-actions v-else>
-   <v-btn v-if="isWide" flat @click.native="showAll=!showAll">{{showAll ? i18n('Basic options') : i18n('All options')}}</v-btn>
-   <v-btn v-else flat icon @click.native="showAll=!showAll" :title="showAll ? i18n('Basic options') : i18n('All options')"><v-icon>{{showAll ? 'expand_more' : 'expand_less'}}</v-icon></v-btn>
-   <v-spacer></v-spacer>
-   <v-btn flat @click.native="close()">{{i18n('Cancel')}}</v-btn>
-   <v-btn flat @click.native="save()" v-bind:class="{'disabled':!name || name.length<1}">{{i18n('Save')}}</v-btn>
-   <v-btn flat @click.native="start()">{{i18n('Start')}}</v-btn>
+   <v-btn flat v-if="queryParams.altBtnLayout" @click.native="close()">{{i18n('Cancel')}}</v-btn>
+   <v-btn flat v-else @click.native="save()" v-bind:class="{'disabled':!name || name.length<1}">{{i18n('Save')}}</v-btn>
   </v-card-actions>
  </v-card>
 </v-dialog>

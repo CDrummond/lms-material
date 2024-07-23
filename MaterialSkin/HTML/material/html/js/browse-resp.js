@@ -1951,6 +1951,7 @@ function parseBrowseResp(data, parent, options, cacheKey, parentCommand, parentG
                 }
                 resp.items.push(mix);
             }
+            resp.allowHoverBtns = true;
             resp.items.sort(titleSort);
             resp.subtitle=i18np("1 Mix", "%1 Mixes", resp.items.length);
             if (resp.items.length==0) {

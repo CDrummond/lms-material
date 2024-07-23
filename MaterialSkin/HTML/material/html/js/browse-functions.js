@@ -605,6 +605,8 @@ function browseHandleListResponse(view, item, command, resp, prevPage, appendIte
             } else {
                 view.tbarActions=[SEARCH_LIB_ACTION];
             }
+        } else if (item.id==RANDOM_MIX_ID) {
+            view.currentActions=[{action:NEW_RANDOM_MIX_ACTION}, {action:SEARCH_LIST_ACTION}];
         } else if (SECTION_FAVORITES==view.current.section && view.current.isFavFolder) {
             view.tbarActions=[ADD_FAV_FOLDER_ACTION, ADD_FAV_ACTION];
         } else if (SECTION_PLAYLISTS==view.current.section && view.current.id.startsWith("playlist_id:") && view.items.length>0 && undefined!=view.items[0].stdItem) {
@@ -917,8 +919,8 @@ function browseClick(view, item, index, event) {
         view.layoutGrid(true);
     } else if (MUSIC_ID_PREFIX+'myMusicWorks'==item.id) {
         browseAddWorksCategories(view, item);
-    } else if (RANDOM_MIX_ID==item.id) { // For older installations where 'Random Mix' was in 'My Music' and has been pinned.
-        bus.$emit('dlg.open', 'rndmix');
+    } else if (RANDOM_MIX_ID==item.id) {
+        view.fetchItems({command:["material-skin", "rndmix", "act:list"], params:[]}, item);
     } else if (STD_ITEM_GENRE==item.stdItem && view.current && (getField(item, "genre_id") || getField(item, "year"))) {
         browseAddCategories(view, item, true, getField(item, "year"));
         browseCheckExpand(view);
@@ -1232,7 +1234,11 @@ function browseItemAction(view, act, item, index, event) {
     } else if (act==ADD_FAV_ACTION) {
         bus.$emit('dlg.open', 'favorite', 'add', {id:(view.current.id.startsWith("item_id:") ? view.current.id+"." : "item_id:")+view.items.length});
     } else if (act==EDIT_ACTION) {
-        bus.$emit('dlg.open', 'favorite', 'edit', item);
+        if (item.stdItem==STD_ITEM_RANDOM_MIX) {
+            bus.$emit('dlg.open', 'rndmix', item.title);
+        } else {
+            bus.$emit('dlg.open', 'favorite', 'edit', item);
+        }
     } else if (act==ADD_FAV_FOLDER_ACTION) {
         promptForText(ACTIONS[ADD_FAV_FOLDER_ACTION].title, undefined, undefined, i18n("Create")).then(resp => {
             if (resp.ok && resp.value && resp.value.length>0) {
@@ -1250,12 +1256,14 @@ function browseItemAction(view, act, item, index, event) {
             if (res) {
                 if (item.id.startsWith("playlist_id:")) {
                     view.clearSelection();
-                    var command = ["playlists", "delete", item.id];
+                    var command = item.stdItem==STD_ITEM_RANDOM_MIX
+                                    ? ["material-skin", "rndmix", "act:delete", "name:"+item.name]
+                                    : ["playlists", "delete", item.id];
                     lmsCommand(view.playerId(), command).then(({data}) => {
                         logJsonMessage("RESP", data);
                         view.refreshList();
                     }).catch(err => {
-                        logAndShowError(err, i18n("Failed to delete playlist!"), command);
+                        logAndShowError(err, item.stdItem==STD_ITEM_RANDOM_MIX ? i18n("Failed to delete mix!") : i18n("Failed to delete playlist!"), command);
                     });
                 }
             }
@@ -1591,6 +1599,8 @@ function browseItemAction(view, act, item, index, event) {
         }
     } else if (COPY_DETAILS_ACTION==act) {
         copyTextToClipboard(stripTags(item.title)+(item.subtitle ? " "+stripTags(item.subtitle) : ""), true);
+    } else if (NEW_RANDOM_MIX_ACTION==act) {
+        bus.$emit('dlg.open', 'rndmix');
     } else {
         // If we are acting on a multi-disc album, prompt which disc we should act on
         if (item.multi && !view.current.id.startsWith("album_id:") && (PLAY_ACTION==act || ADD_ACTION==act || INSERT_ACTION==act || PLAY_SHUFFLE_ACTION==act)) {
@@ -1686,7 +1696,7 @@ function browseItemMenu(view, item, index, event) {
             // Get menu items - if view is an album or track from search then we have a different menu
             var itm = STD_ITEMS[item.stdItem];
             showMenu(view, {show:true, item:item, x:event.clientX, y:event.clientY, index:index,
-                            itemMenu:itm.searchMenu && (view.current.libsearch || view.current.allItems)
+                            itemMenu:undefined!=itm.searchMenu && (view.current.libsearch || view.current.allItems)
                                 ? itm.searchMenu
                                 : undefined!=itm.maxBeforeLarge && view.listSize>itm.maxBeforeLarge
                                     ? itm.largeListMenu
@@ -2516,7 +2526,9 @@ function browseReplaceCommandTerms(view, cmd, item) {
 function browseBuildFullCommand(view, item, act) {
     var command = browseBuildCommand(view, item, ACTIONS[act].cmd);
     if (command.command.length<1) { // Non slim-browse command
-        if (item.url && (!item.id || (!item.id.startsWith("playlist_id:") && !item.id.startsWith("track_id")))) {
+        if (item.stdItem==STD_ITEM_RANDOM_MIX) {
+            command.command = ["material-skin-client", "rndmix", "name:"+item.title, "act:"+(INSERT_ACTION==act ? "insert" : ACTIONS[act].cmd)];
+        } else if (item.url && (!item.id || (!item.id.startsWith("playlist_id:") && !item.id.startsWith("track_id")))) {
             command.command = ["playlist", INSERT_ACTION==act ? "insert" : ACTIONS[act].cmd, item.url, item.title];
         } else if (item.app && item.id) {
             command.command = [item.app, "playlist", INSERT_ACTION==act ? "insert" :ACTIONS[act].cmd, originalId(item.id)];

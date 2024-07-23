@@ -25,6 +25,7 @@ use File::Basename;
 use File::Slurp qw(read_file);
 use List::Util qw(shuffle);
 use File::Spec::Functions qw(catdir);
+use File::Path qw(make_path);
 use Scalar::Util qw(looks_like_number);
 
 if (!Slim::Web::Pages::Search->can('parseAdvancedSearchParams')) {
@@ -45,6 +46,8 @@ my $prefs = preferences('plugin.material-skin');
 my $serverprefs = preferences('server');
 my $skinMgr;
 my $listOfTranslations = "";
+
+use constant RANDOM_MIX_EXT => '.mix';
 
 my $LASTFM_API_KEY = '5a854b839b10f8d46e630e8287c2299b';
 my $MAX_CACHE_AGE = 90*24*60*60; # 90 days
@@ -447,7 +450,7 @@ sub _cliCommand {
                                                   'pass-check', 'browsemodes', 'geturl', 'command', 'scantypes', 'server', 'themes',
                                                   'playericons', 'activeplayers', 'urls', 'adv-search', 'adv-search-params', 'protocols',
                                                   'players-extra-info', 'sort-playlist', 'mixer', 'release-types', 'check-for-updates',
-                                                  'similar', 'apps']) ) {
+                                                  'similar', 'apps', 'rndmix']) ) {
         $request->setStatusBadParams();
         return;
     }
@@ -1450,6 +1453,70 @@ sub _cliCommand {
         return;
     }
 
+    if ($cmd eq 'rndmix') {
+        my $act = $request->getParam('act');
+        my $folder = Slim::Utils::Prefs::dir() . "/material-skin/random-mix";
+        if ($act eq 'list') {
+            my $extLen = length(RANDOM_MIX_EXT) * -1;
+            my @files = glob($folder . '/*' . RANDOM_MIX_EXT);
+            my $cnt = 0;
+            foreach my $file(@files) {
+                main::DEBUGLOG && $log->debug("Mix file:" . $file);
+                my $details = _readRandMix($file);
+                if ($details) {
+                    $request->addResultLoop('rndmix_loop', $cnt, 'name', substr(basename($file), 0, $extLen));
+                    $request->addResultLoop('rndmix_loop', $cnt, 'mix', $details->{'mix'});
+                    my $url = "randomplay://" . $details->{'mix'} . "?dontContinue=" . ($details->{'continuous'} ? 0 : 1);
+                    if (length($details->{'genres'})>0) {
+                        $url = $url . "&genres=" . $details->{'genres'};
+                    }
+                    $request->addResultLoop('rndmix_loop', $cnt, 'url', $url);
+                }
+                $cnt++;
+            }
+            $request->setStatusDone();
+            return;
+        } else {
+            my $name = $request->getParam('name');
+            if ($name) {
+                if ($act eq 'read') {
+                    my $path = File::Spec->catpath('', $folder, $name . RANDOM_MIX_EXT);
+                    my $details = _readRandMix($path);
+                    if ($details) {
+                        $request->addResult("mix", $details->{'mix'});
+                        $request->addResult("genres", $details->{'genres'});
+                        $request->addResult("library", $details->{'library'});
+                        $request->addResult("continuous", $details->{'continuous'});
+                        $request->addResult("oldtracks", $details->{'oldtracks'});
+                        $request->addResult("newtracks", $details->{'newtracks'});
+                        $request->setStatusDone();
+                        return;
+                    }
+                } elsif ($act eq 'save') {
+                    my $mix = $request->getParam('mix');
+                    if ($mix) {
+                        $request->addResult("ok",
+                            _saveRandMix($folder,
+                                         $name,
+                                         $mix,
+                                         $request->getParam('genres'),
+                                         $request->getParam('library'),
+                                         int($request->getParam('continuous')),
+                                         int($request->getParam('oldtracks')),
+                                         int($request->getParam('newtracks'))));
+                        $request->setStatusDone();
+                        return;
+                    }
+                } elsif ($act eq 'delete') {
+                    my $path = File::Spec->catpath('', $folder, $name . RANDOM_MIX_EXT);
+                    $request->addResult("ok", _deleteFile($path));
+                    $request->setStatusDone();
+                    return;
+                }
+            }
+        }
+    }
+
     $request->setStatusBadParams();
 }
 
@@ -1509,7 +1576,7 @@ sub _cliClientCommand {
     }
     my $cmd = $request->getParam('_cmd');
     my $client = $request->client();
-    if ($request->paramUndefinedOrNotOneOf($cmd, ['set-lib', 'get-alarm', 'get-dstm', 'save-dstm', 'sort-queue', 'remove-queue', 'command-list']) ) {
+    if ($request->paramUndefinedOrNotOneOf($cmd, ['set-lib', 'get-alarm', 'get-dstm', 'save-dstm', 'sort-queue', 'remove-queue', 'command-list', 'rndmix']) ) {
         $request->setStatusBadParams();
         return;
     }
@@ -1598,6 +1665,37 @@ sub _cliClientCommand {
         }
     }
 
+    if ($cmd eq 'rndmix') {
+        my $folder = Slim::Utils::Prefs::dir() . "/material-skin/random-mix";
+        my $name = $request->getParam('name');
+        my $act = $request->getParam('act');
+        if ($name && $act) {
+            my $path = File::Spec->catpath('', $folder, $name . RANDOM_MIX_EXT);
+            my $details = _readRandMix($path);
+            if ($details) {
+                my $url = "randomplay://" . $details->{'mix'} . "?dontContinue=" . ($details->{'continuous'} ? 0 : 1);
+                if (length($details->{'genres'})>0) {
+                    $url = $url . "&genres=" . $details->{'genres'};
+                }
+                my $rprefs = preferences('plugin.randomplay');
+                my $var = int($details->{'newtracks'});
+                if ($var<1 || $var>1000) {
+                    $var = 10;
+                }
+                $rprefs->set('newtracks', $var);
+                $var = int($details->{'oldtracks'});
+                if ($var<1 || $var>1000) {
+                    $var = 10;
+                }
+                $rprefs->set('oldtracks', $var);
+                $client->execute(["randomplaychooselibrary", $details->{'library'}]);
+                $client->execute(["playlist", $act, $url]);
+                $request->setStatusDone();
+                return;
+            }
+        }
+    }
+
     $request->setStatusBadParams();
 }
 
@@ -1668,6 +1766,80 @@ sub _cliGroupCommand {
     }
 
     $request->setStatusBadParams()
+}
+
+sub _readRandMix {
+    my $path = shift;
+    if (! -e $path) {
+        main::DEBUGLOG && $log->debug("Requested mix file, $path, does not exist");
+        return;
+    }
+
+    if (open my $fh, "<", $path) {
+        main::DEBUGLOG && $log->debug("Reading $path");
+        my %info = ();
+        while (my $line = <$fh>) {
+            if (rindex($line, '#', 0)==-1) {
+                $line =~ s/[\r\n]+$//;
+                my @parts = split /=/, $line;
+                if (scalar(@parts)==2) {
+                    if ((@parts[0] eq 'mix') || (@parts[0] eq 'genres') || (@parts[0] eq 'library'))  {
+                        $info{@parts[0]}=@parts[1];
+                    } elsif ((@parts[0] eq 'oldtracks') || (@parts[0] eq 'newtracks') || (@parts[0] eq 'continuous')) {
+                        $info{@parts[0]}=int(@parts[1]);
+                    }
+                }
+            }
+        }
+        close($fh);
+        return \%info;
+    }
+}
+
+sub _saveRandMix {
+    my $folder = shift;
+    my $name = shift;
+    my $mix = shift;
+    my $genres = shift;
+    my $lib = shift;
+    my $continuous = shift;
+    my $oldtracks = shift;
+    my $newtracks = shift;
+
+    my $path = File::Spec->catpath('', $folder, $name . RANDOM_MIX_EXT);
+    if (-e $path) {
+        if (! _deleteFile($path)) {
+            return 0;
+        }
+    }
+
+    if (! -e $folder) {
+        make_path($folder);
+    }
+    if (open my $fh, ">", $path) {
+        print $fh "mix=$mix\n";
+        print $fh "genres=$genres\n";
+        print $fh "library=$lib\n";
+        print $fh "continuous=$continuous\n";
+        print $fh "oldtracks=$oldtracks\n";
+        print $fh "newtracks=$newtracks\n";
+        close($fh);
+    }
+    if (-e $path) {
+        return 1;
+    }
+    return 0;
+}
+
+sub _deleteFile {
+    my $path = shift;
+    if (-e $path) {
+        unlink($path);
+    }
+    if (-e $path) {
+        return 0;
+    }
+    return 1;
 }
 
 sub _svgHandler {

@@ -1,6 +1,8 @@
 5.2.0
 -----
 1. Add support for LMS 9.0 user defined roles.
+2. Allow to save 'Random Mix' configs for later use, and list these when open
+   'Random Mix'.
 
 5.1.1
 -----

@@ -1512,7 +1512,13 @@ var lmsQueue = Vue.component("lms-queue", {
                 return;
             }
             if (this.playerStatus.randomplay==1) {
-                bus.$emit('dlg.open', 'rndmix');
+                confirm(i18n("Stop random mix?"), i18n('Stop')).then(res => {
+                    if (res) {
+                        lmsCommand(this.$store.state.player.id, ["randomplay", "disable"]).then(({data}) => {
+                            bus.$emit('refreshStatus');
+                        });
+                    }
+                });
             } else if (this.playerStatus.repeat===0) {
                 if (LMS_P_DSTM) {
                     if (longPress) {

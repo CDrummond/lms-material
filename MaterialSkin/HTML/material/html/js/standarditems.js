@@ -20,6 +20,7 @@ const STD_ITEM_MUSICIP_MOOD = 10;
 const STD_ITEM_WORK = 11;
 const STD_ITEM_WORK_COMPOSER = 12;
 const STD_ITEM_WORK_GENRE = 13;
+const STD_ITEM_RANDOM_MIX = 14;
 const STD_ITEM_MIX = 101;
 const STD_ITEM_MAI = 200;
 const STD_ITEM_ALL_TRACKS = 201;
@@ -94,9 +95,9 @@ const STD_ITEMS=[
         menu: [ADD_TO_FAV_ACTION, COPY_DETAILS_ACTION, CUSTOM_ACTIONS, MORE_LIB_ACTION]
     },
     {
-        command: ["works"],
-        params: ['include_online_only_artists:1'],
-        menu: [ADD_TO_FAV_ACTION, CUSTOM_ACTIONS, MORE_LIB_ACTION]
+    },
+    {
+        menu: [PLAY_ACTION, INSERT_ACTION, ADD_ACTION, DIVIDER, EDIT_ACTION, DELETE_ACTION]
     }
 ];
 

@@ -1928,6 +1928,32 @@ function parseBrowseResp(data, parent, options, cacheKey, parentCommand, parentG
             resp.subtitle=0==numWorks ? i18n("Empty") : i18np("1 Work", "%1 Works", numWorks);
             resp.canUseGrid=true;
             resp.listSize=resp.items.length;
+        } else if (data.result.rndmix_loop) {
+            for (let idx=0, loop=data.result.rndmix_loop, loopLen=loop.length; idx<loopLen; ++idx) {
+                let i = loop[idx];
+                let mix = {title:i.name,
+                           id: "rndmix." + resp.items.length,
+                           stdItem: STD_ITEM_RANDOM_MIX };
+                if (i.mix=="tracks") {
+                    mix.icon = "music_note";
+                } else if (i.mix=="albums") {
+                    if (lmsOptions.supportReleaseTypes) {
+                        mix.svg = "release";
+                    } else {
+                        mix.album = "album";
+                    }
+                } else if (i.mix=="contributors" || i.mix=="artists") {
+                    mix.svg = "artist";
+                } else if (i.mix=="year") {
+                    mix.icon = "date_range";
+                } else if (i.mix=="works") {
+                    mix.svg = "classical-work";
+                }
+                resp.items.push(mix);
+            }
+            resp.items.sort(titleSort);
+            resp.subtitle=i18np("1 Mix", "%1 Mixes", resp.items.length);
+            resp.listSize=resp.items.length;
         }
 
         if (data.result.count>LMS_BATCH_SIZE) {

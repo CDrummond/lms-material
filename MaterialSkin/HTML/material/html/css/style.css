@@ -3784,7 +3784,7 @@ div.v-subheader {
 }
 
 .lyrion-logo {
- padding:12px 14px 0px 0px;
+ padding:calc((var(--top-pad)/2.0) + 12px) 14px 0px 0px;
  height:var(--main-toolbar-height)!important;
 }
 

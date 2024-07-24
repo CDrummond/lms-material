@@ -79,7 +79,7 @@
  --np-zoom:1.0;
  --np-zoom-list:1.0;
  --inverted-text-color:#edece7;
- --np-bgnd-full-shadow-color:rgba(200, 200, 200, 0.8);
+ --np-bgnd-full-shadow-color:rgba(216, 216, 216, 0.8);
 }
 
 @media (orientation:landscape) and (max-width: 1000px) {
@@ -130,7 +130,7 @@
  --pq-current-color:rgba(var(--highlight-rgb),0.25);
  --pq-current-album-color:rgba(var(--highlight-rgb),0.1);
  --pbar-bgnd:rgba(200, 200, 200, 0.15);
- --np-bgnd-full-shadow-color:rgba(64, 64, 64, 0.8);
+ --np-bgnd-full-shadow-color:rgba(48, 48, 48, 0.8);
 }
 
 .dragging {

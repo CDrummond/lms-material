@@ -8,9 +8,9 @@
 :root {
  --bottom-toolbar-height:var(--desktop-npbar-height);
  --np-portrait-image-size:min(calc(var(--100vh) - (var(--main-toolbar-height) + 260px) - (var(--np-image-border)*2)), 100vw - (var(--np-image-border)*2), var(--50vh));
- --np-image-landscape-height:min(50vw, calc(var(--100vh) - (var(--main-toolbar-height) + var(--np-controls-height) + 66px + var(--bottom-nav-pad))));
+ --np-image-landscape-height:min(50vw, calc(var(--100vh) - (var(--main-toolbar-height) + var(--np-controls-height) + 66px + var(--bottom-pad))));
  --np-image-landscape-size:min(var(--np-image-landscape-height) - (var(--np-image-border)*2), 50vw - (var(--np-image-border)*2));
- --np-image-landscape-wide-height:min(calc(var(--100vh) - (var(--main-toolbar-height) + var(--bottom-nav-pad))), var(--np-wide-left) - var(--bottom-nav-pad));
+ --np-image-landscape-wide-height:min(calc(var(--100vh) - (var(--main-toolbar-height) + var(--bottom-pad))), var(--np-wide-left) - var(--bottom-pad));
  --np-image-landscape-wide-size:min(var(--np-image-landscape-wide-height) - (var(--np-image-border)*2), var(--np-wide-left) - (var(--np-image-border)*2));
  --np-landscape-item-height:calc(var(--100vh) - (var(--main-toolbar-height) + var(--np-controls-height) + 70px));
  --np-icon-size:24px;
@@ -164,7 +164,7 @@
 }
 
 .np-portrait-track-info {
- height:calc(var(--100vh) - (var(--np-portrait-image-size) + (var(--thin-portrait-adjust) * 3) + var(--bottom-nav-pad) + (var(--np-image-border) * 2) + 140px));
+ height:calc(var(--100vh) - (var(--np-portrait-image-size) + (var(--thin-portrait-adjust) * 3) + var(--all-pad) + (var(--np-image-border) * 2) + 140px));
 }
 
 .np-text-desktop {
@@ -272,17 +272,17 @@
   position:fixed;
   left:1px;
   bottom:1px;
-  height:calc(var(--bottom-nav-pad) + 43px);
-  width:calc(var(--bottom-nav-pad) + 43px);
+  height:calc(var(--bottom-pad) + 43px);
+  width:calc(var(--bottom-pad) + 43px);
  }
  .np-bar-image .np-cover {
-  height:calc(var(--bottom-nav-pad) + 43px);
-  width:calc(var(--bottom-nav-pad) + 43px);
+  height:calc(var(--bottom-pad) + 43px);
+  width:calc(var(--bottom-pad) + 43px);
  }
  .np-bar .np-playpause {
   position:fixed;
   margin-top:none!important;
-  bottom:calc((var(--bottom-nav-pad)/2) + 6px);
+  bottom:calc((var(--bottom-pad)/2) + 6px);
   right:6px!important;
   visibility:visible!important;
   width:32px!important;
@@ -292,9 +292,9 @@
   font-size:32px!important;
  }
  .np-bar-details {
-  left:calc(var(--bottom-nav-pad) + 50px);
-  bottom:calc(var(--bottom-nav-pad) - 4px);
-  width:calc(100vw - (var(--bottom-nav-pad) + 78px));
+  left:calc(var(--bottom-pad) + 50px);
+  bottom:calc(var(--bottom-pad) - 4px);
+  width:calc(100vw - (var(--bottom-pad) + 78px));
  }
  .np-bar-details .v-list__tile__title {
   margin-top:-1px;
@@ -557,5 +557,5 @@
 }
 
 .np-controls {
- bottom:calc(var(--thin-portrait-adjust) + var(--bottom-nav-pad));
+ bottom:calc(var(--thin-portrait-adjust) + var(--bottom-pad));
 }

@@ -12,10 +12,10 @@
  --sub-opacity:0.7;
  --bold-weight:500;
  --std-weight:400;
- --main-toolbar-height:48px;
+ --main-toolbar-height:calc(var(--top-pad) + 48px);
  --sub-toolbar-height:48px;
  --desktop-npbar-height:72px;
- --desktop-npbar-height-thin:calc(var(--bottom-nav-pad) + 48px);
+ --desktop-npbar-height-thin:calc(var(--bottom-pad) + 48px);
  --mobile-npbar-height:0px;
  --mobile-npbar-height-thin:22px;
  --mobile-npbar-height-thick:48px;
@@ -68,7 +68,9 @@
  --window-area-left:0px;
  --window-area-right:0px;
  --sab: env(safe-area-inset-bottom);
- --bottom-nav-pad:max(calc(var(--sab) - 22px), 0px);
+ --top-pad:0px;
+ --bottom-pad:max(calc(var(--sab) - 22px), 0px);
+ --all-pad:calc(var(--top-pad) + var(--bottom-pad));
  --dialog-opacity:1.0;
  --pbar-bgnd:rgba(32, 32, 32, 0.15);
  --pbar-colored-bgnd:rgba(220, 220, 220, 0.3);
@@ -87,9 +89,9 @@
 }
 
 /* For old browsers that dont support min() */
-@supports not (width: min(10px, 5vw)) {
+@supports not (width: min(10px, 5vw)) {--bottom-nav-pad
  :root {
-  --bottom-nav-pad:0px;
+  --bottom-pad:0px;
  }
 }
 @media (min-width:800px) {
@@ -281,6 +283,7 @@ html, .mini-player {
 }
 
 .dialog-toolbar {
+ padding-top:var(--top-pad);
  height:var(--main-toolbar-height) !important;
  color:var(--dialog-toolbar-text-color) !important;
  background-color:var(--dialog-toolbar-color) !important;
@@ -298,6 +301,7 @@ html, .mini-player {
 }
 
 .lms-toolbar {
+ padding-top:var(--top-pad);
  height:var(--main-toolbar-height) !important;
  color:var(--top-toolbar-text-color) !important;
  background-color:var(--top-toolbar-color) !important;
@@ -329,7 +333,7 @@ html, .mini-player {
 }
 
 .lms-toolbar > .v-toolbar__content, .dialog-toolbar > .v-toolbar__content {
- height:var(--main-toolbar-height) !important;
+ height:calc(var(--main-toolbar-height) - var(--top-pad)) !important;
  margin-left:-10px !important;
  margin-right:-20px !important;
 }
@@ -811,7 +815,7 @@ div.v-subheader {
 
 .maintoolbar-player-icon {
  position:fixed;
- top:12px;
+ top:calc(var(--top-pad) + 12px);
  left:24px;
 }
 
@@ -839,7 +843,7 @@ div.v-subheader {
 .maintoolbar-player-power-button, .maintoolbar-player-power-button:hover {
  position:fixed;
  left:12px!important;
- top:2px!important;
+ top:calc(var(--top-pad) + 2px);
  z-index:5;
 }
 
@@ -921,8 +925,11 @@ div.v-subheader {
  height:32px;
 }
 
+.lms-toolbar .vol-full-slider {
+ padding-top:var(--top-pad);
+}
+
 .vol-btn-label {
- position:relative;
  margin:-8px 0px 0px 0px;
  padding:0px;
  font-size:calc(var(--small-font-size)/1.75);
@@ -932,7 +939,7 @@ div.v-subheader {
  white-space:nowrap;
  overflow-x:hidden;
  overflow-y:hidden;
- top:40px;
+ top:calc(var(--top-pad) + 40px);
  width:36px !important;
  height:18px !important;
  line-height:18px !important;
@@ -2691,10 +2698,10 @@ div.v-subheader {
 
 .embedded-page iframe {
  position:fixed;
- top:48px;
+ top:calc(var(--top-pad) + 48px);
  left:0px;
  width:100vw;
- height:calc(var(--100vh) - 48px);
+ height:calc(var(--100vh) - (var(--all-pad) + 48px));
  border:none;
  margin:0px;
  padding:0px;
@@ -3149,7 +3156,7 @@ div.v-subheader {
 
 .toolbar-clock {
  position:fixed;
- top:2px;
+ top:calc(var(--top-pad) + 2px);
  left:calc((100vw - 200px) / 2);
  width:200px;
  text-align:center;

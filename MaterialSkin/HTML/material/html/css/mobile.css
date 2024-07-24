@@ -77,6 +77,10 @@
  background-color:var(--bottom-toolbar-color)!important;
 }
 
+.trans-footer {
+ background-color:transparent!important;
+}
+
 .lms-footer .lms-bottom-nav {
  position:fixed;
  bottom:calc(var(--bottom-toolbar-height) + 8px) !important;

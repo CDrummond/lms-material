@@ -5,6 +5,8 @@
    'Random Mix'.
 3. Remove 'Stop' button from 'Random Mix' dialog, as can be stopped elsewhere.
 4. Allow 'Random mixes' to be pinned to home screen.
+5. Add option to use full page for now-playing backdrop, i.e. extend into top
+   toolbar and (on mobile) bottom navigation bar.
 
 5.1.1
 -----

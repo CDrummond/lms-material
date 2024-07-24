@@ -275,6 +275,15 @@ Vue.component('lms-ui-settings', {
     <v-divider></v-divider>
 
     <v-list-tile>
+     <v-list-tile-content @click="nowPlayingFull = !nowPlayingFull" class="switch-label">
+      <v-list-tile-title>{{i18n('Use full screen for background')}}</v-list-tile-title>
+      <v-list-tile-sub-title>{{i18n('Cover whole page with background image.')}}</v-list-tile-sub-title>
+     </v-list-tile-content>
+     <v-list-tile-action><m3-switch v-model="nowPlayingFull"></m3-switch></v-list-tile-action>
+    </v-list-tile>
+    <v-divider></v-divider>
+
+    <v-list-tile>
      <v-list-tile-content @click="techInfo = !techInfo" class="switch-label">
       <v-list-tile-title>{{i18n('Display technical info')}}</v-list-tile-title>
       <v-list-tile-sub-title>{{i18n('Show file type, bitrate, etc.')}}</v-list-tile-sub-title>
@@ -427,6 +436,7 @@ Vue.component('lms-ui-settings', {
             queueShowTrackNum:false,
             nowPlayingTrackNum:false,
             nowPlayingClock:false,
+            nowPlayingFull:true,
             browseContext:false,
             nowPlayingContext:false,
             queueContext:false,
@@ -617,6 +627,7 @@ Vue.component('lms-ui-settings', {
             this.queueShowTrackNum = this.$store.state.queueShowTrackNum;
             this.nowPlayingTrackNum = this.$store.state.nowPlayingTrackNum;
             this.nowPlayingClock = this.$store.state.nowPlayingClock;
+            this.nowPlayingFull = this.$store.state.nowPlayingFull;
             this.browseContext = this.$store.state.browseContext;
             this.nowPlayingContext = this.$store.state.nowPlayingContext;
             this.queueContext = this.$store.state.queueContext;
@@ -721,6 +732,7 @@ Vue.component('lms-ui-settings', {
                       nowPlayingTrackNum:this.nowPlayingTrackNum,
                       nowPlayingClock:this.nowPlayingClock,
                       browseContext:this.browseContext,
+                      nowPlayingFull:this.nowPlayingFull,
                       nowPlayingContext:this.nowPlayingContext,
                       queueContext:this.queueContext,
                       swipeVolume:this.swipeVolume,

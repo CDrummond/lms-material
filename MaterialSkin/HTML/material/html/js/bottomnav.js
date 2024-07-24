@@ -8,8 +8,8 @@
 
 Vue.component('lms-bottomnav', {
     template: `
-<v-footer class="lms-footer" id="nav-bar">
- <v-bottom-nav class="lms-bottom-nav" :active="activeBtn">
+<v-footer class="lms-footer" v-bind:class="{'trans-footer':nowPlayingFull}" id="nav-bar">
+ <v-bottom-nav class="lms-bottom-nav" v-bind:class="{'trans-nav':nowPlayingFull}" :active="activeBtn">
   <template v-for="(item, index) in items">
    <v-btn flat class="lms-bottom-nav-button" v-longpress:nomove="btnPressed" v-bind:class="{'active-nav': activeBtn==index, 'inactive-nav': activeBtn!=index}" :id="'navbtn-'+index">
     <span>{{item.text}}</span>
@@ -24,7 +24,8 @@ Vue.component('lms-bottomnav', {
     props: [],
     data() {
         return {
-            items: []
+            items: [],
+            infoOpen: false
         }
     },
     created() {
@@ -32,7 +33,9 @@ Vue.component('lms-bottomnav', {
             this.initItems();
         }.bind(this));
         this.initItems();
-
+        bus.$on('infoDialog', function(val) {
+            this.infoOpen = val;
+        }.bind(this));
         if (!IS_MOBILE) {
             bindKey('f1');
             bindKey('f2');
@@ -93,6 +96,9 @@ Vue.component('lms-bottomnav', {
         },
         coloredToolbars() {
             return this.$store.state.coloredToolbars
+        },
+        nowPlayingFull() {
+            return this.$store.state.nowPlayingFull && this.$store.state.nowPlayingBackdrop && this.$store.state.page=='now-playing' && !this.infoOpen
         }
     },
     filters: {

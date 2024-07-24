@@ -155,8 +155,12 @@
  width:100%;
 }
 
-.np-bgnd {
+.np-bgnd, .np-bgnd div:first-of-type {
  height:calc((var(--100vh) + (2* var(--np-bgnd-filter-size))) - var(--main-toolbar-height));
+}
+
+.np-bgnd-full, .np-bgnd-full div:first-of-type {
+ height:calc((var(--100vh) + (2* var(--np-full-bgnd-filter-size))));
 }
 
 .np-portrait-track-info {

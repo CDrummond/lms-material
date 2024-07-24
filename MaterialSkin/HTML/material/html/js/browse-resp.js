@@ -1934,7 +1934,7 @@ function parseBrowseResp(data, parent, options, cacheKey, parentCommand, parentG
                 let mix = {title:i.name,
                            id: "rndmix."+i.name,
                            stdItem: STD_ITEM_RANDOM_MIX,
-                           svg: "random-"+(i.mix=="contributors" ? "artists" : i.mix) };
+                           svg: "random-"+(i.mix=="contributors" ? "artists" : lmsOptions.supportReleaseTypes && "albums"==i.mix ? "releases" : i.mix) };
                 resp.items.push(mix);
             }
             resp.allowHoverBtns = true;

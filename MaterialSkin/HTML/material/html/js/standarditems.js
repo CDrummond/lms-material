@@ -95,6 +95,9 @@ const STD_ITEMS=[
         menu: [ADD_TO_FAV_ACTION, COPY_DETAILS_ACTION, CUSTOM_ACTIONS, MORE_LIB_ACTION]
     },
     {
+        command: ["works"],
+        params: ['include_online_only_artists:1'],
+        menu: [ADD_TO_FAV_ACTION, COPY_DETAILS_ACTION, MORE_LIB_ACTION]
     },
     {
         menu: [PLAY_ACTION, INSERT_ACTION, ADD_ACTION, DIVIDER, PIN_ACTION, EDIT_ACTION, DELETE_ACTION]

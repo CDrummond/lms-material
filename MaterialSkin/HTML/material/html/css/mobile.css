@@ -78,7 +78,7 @@
 }
 
 .trans-footer {
- background-color:transparent!important;
+ background-color:var(--trans-bottom-toolbar-color) !important;
 }
 
 .lms-footer .lms-bottom-nav {
@@ -345,14 +345,6 @@
 
 .active-nav div span, .active-nav div i {
  color: var(--active-nav-btn-color) !important;
-}
-
-.text-footer .pill {
- background-color:var(--text-color);
-}
-
-.text-footer .active-nav div span, .text-footer .active-nav div i {
- color: var(--text-color) !important;
 }
 
 .nav-svg-img {

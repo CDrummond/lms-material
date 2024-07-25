@@ -81,6 +81,7 @@
  --np-zoom-list:1.0;
  --inverted-text-color:#edece7;
  --np-bgnd-full-shadow-color:rgba(216, 216, 216, 0.8);
+ --trans-bottom-toolbar-color:rgba(216, 216, 216, 0.25);
 }
 
 @media (orientation:landscape) and (max-width: 1000px) {
@@ -132,6 +133,7 @@
  --pq-current-album-color:rgba(var(--highlight-rgb),0.1);
  --pbar-bgnd:rgba(200, 200, 200, 0.15);
  --np-bgnd-full-shadow-color:rgba(48, 48, 48, 0.8);
+ --trans-bottom-toolbar-color:rgba(48, 48, 48, 0.25);
 }
 
 .v-dialog--fullscreen .v-sheet {
@@ -273,12 +275,11 @@ html, .mini-player {
 }
 
 .lms-bottom-nav {
- background-color:var(--bottom-toolbar-color) !important;
+ background-color:transparent !important;
  border-top:1px solid var(--bottom-toolbar-border-color);
 }
 
-.trans-nav {
- background-color:transparent !important;
+.trans-footer .v-bottom-nav {
  border-top:1px solid transparent;
 }
 
@@ -3782,12 +3783,6 @@ div.v-subheader {
 .lms-app .accent {
  background-color: var(--accent-color)!important;
  border-color: var(--accent-color)!important;
-}
-
-.np-cover-full .v-progress-linear .primary,
-.trans-toolbar .v-slider .primary {
-  background-color: var(--text-color)!important;
-  border-color: var(--text-color)!important;
 }
 
 #stringLenCheckElem {

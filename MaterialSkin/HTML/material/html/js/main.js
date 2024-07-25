@@ -61,6 +61,9 @@ var app = new Vue({
         if (queryParams.topPad>0) {
             document.documentElement.style.setProperty('--top-pad', queryParams.topPad + 'px');
         }
+        if (queryParams.dlgPad>0) {
+            document.documentElement.style.setProperty('--dialog-pad', queryParams.dlgPad + 'px');
+        }
         this.autoLayout = true;
         this.$store.commit('initUiSettings');
         this.$store.commit('setShowQueue', getLocalStorageBool('showQueue', true));

@@ -47,7 +47,7 @@ function parseQueryParams() {
     }
     var query = queryString.split('&');
     var resp = { actions:[], debug:new Set(), hide:new Set(), dontEmbed:new Set(), layout:undefined, player:undefined, single:false,
-        css:undefined, download:'browser', addpad:false, party:false, expand:[], npRatio:1.33333333, topPad:0, botPad:0,
+        css:undefined, download:'browser', addpad:false, party:false, expand:[], npRatio:1.33333333, topPad:0, botPad:0, dlgPad:0,
         nativeStatus:0, nativeColors:0, nativePlayer:0, nativeUiChanges:0, nativeTheme:0, nativeCover:0, nativePlayerPower:0, nativeAccent:0,
         nativeTitlebar:0, appSettings:undefined, appQuit:undefined, appLaunchPlayer:undefined, altBtnLayout:IS_WINDOWS, dontTrapBack:false};
 
@@ -107,7 +107,7 @@ function parseQueryParams() {
             resp.expand=decodeURIComponent(kv[1]).split("/");
         } else if ("npRatio"==kv[0]) {
             resp.npRatio=parseFloat(kv[1]);
-        } else if ("topPad"==kv[0] || "botPad"==kv[0]) {
+        } else if ("topPad"==kv[0] || "botPad"==kv[0] || "dlgPad"==kv[0]) {
             resp[kv[0]]=parseInt(kv[1]);
         }
     }

@@ -71,6 +71,7 @@
  --top-pad:0px;
  --bottom-pad:max(calc(var(--sab) - 22px), 0px);
  --all-pad:calc(var(--top-pad) + var(--bottom-pad));
+ --dialog-pad:0px;
  --dialog-opacity:1.0;
  --pbar-bgnd:rgba(32, 32, 32, 0.15);
  --pbar-colored-bgnd:rgba(220, 220, 220, 0.3);
@@ -131,6 +132,10 @@
  --pq-current-album-color:rgba(var(--highlight-rgb),0.1);
  --pbar-bgnd:rgba(200, 200, 200, 0.15);
  --np-bgnd-full-shadow-color:rgba(48, 48, 48, 0.8);
+}
+
+.v-dialog--fullscreen .v-sheet {
+ padding-bottom:var(--dialog-pad)!important;
 }
 
 .dragging {

@@ -347,6 +347,14 @@
  color: var(--active-nav-btn-color) !important;
 }
 
+.text-footer .pill {
+ background-color:var(--text-color);
+}
+
+.text-footer .active-nav div span, .text-footer .active-nav div i {
+ color: var(--text-color) !important;
+}
+
 .nav-svg-img {
  width:var(--icon-size) !important;
  height:calc(var(--icon-size) + 4px) !important;

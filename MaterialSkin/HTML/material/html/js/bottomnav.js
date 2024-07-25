@@ -8,8 +8,8 @@
 
 Vue.component('lms-bottomnav', {
     template: `
-<v-footer class="lms-footer" v-bind:class="{'trans-footer':nowPlayingFull}" id="nav-bar">
- <v-bottom-nav class="lms-bottom-nav" v-bind:class="{'trans-nav':nowPlayingFull}" :active="activeBtn">
+<v-footer class="lms-footer" v-bind:class="{'trans-footer':useTransparentFooter, 'text-footer':nowPlayingFull}" id="nav-bar">
+ <v-bottom-nav class="lms-bottom-nav" v-bind:class="{'trans-nav':useTransparentFooter}" :active="activeBtn">
   <template v-for="(item, index) in items">
    <v-btn flat class="lms-bottom-nav-button" v-longpress:nomove="btnPressed" v-bind:class="{'active-nav': activeBtn==index, 'inactive-nav': activeBtn!=index}" :id="'navbtn-'+index">
     <span>{{item.text}}</span>
@@ -97,8 +97,11 @@ Vue.component('lms-bottomnav', {
         coloredToolbars() {
             return this.$store.state.coloredToolbars
         },
-        nowPlayingFull() {
+        useTransparentFooter() {
             return this.$store.state.nowPlayingFull && this.$store.state.nowPlayingBackdrop && this.$store.state.page=='now-playing' && !this.infoOpen
+        },
+        nowPlayingFull() {
+            return this.$store.state.nowPlayingFull
         }
     },
     filters: {

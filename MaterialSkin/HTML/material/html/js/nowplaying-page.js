@@ -30,9 +30,9 @@ var currentPlayingTrackPosition = 0;
 
 var lmsNowPlaying = Vue.component("lms-now-playing", {
     template: `
-<div>
- <div v-show="(!desktopLayout && page=='now-playing') || (desktopLayout && (info.show || largeView))" class="np-bgnd" v-bind:class="{'np-bgnd-full':nowPlayingFull}">
-  <div v-bind:class="[(info.show ? drawInfoBgndImage||drawInfoBackdrop : drawBgndImage||drawBackdrop) ? 'np-bgnd-cover':'np-bgnd-cover-none', (info.show ? drawInfoBackdrop : drawBackdrop) ? 'np-backdrop-blur':'', nowPlayingFull ? 'np-bgnd-cover-full' : '']" id="np-bgnd"></div>
+<div v-bind:class="{'np-cover-full':nowPlayingFull}">
+ <div v-show="(!desktopLayout && page=='now-playing') || (desktopLayout && (info.show || largeView))" class="np-bgnd">
+  <div v-bind:class="[(info.show ? drawInfoBgndImage||drawInfoBackdrop : drawBgndImage||drawBackdrop) ? 'np-bgnd-cover':'np-bgnd-cover-none', (info.show ? drawInfoBackdrop : drawBackdrop) ? 'np-backdrop-blur':'']" id="np-bgnd"></div>
  </div>
  <v-tooltip top :position-x="timeTooltip.x" :position-y="timeTooltip.y" v-model="timeTooltip.show">{{timeTooltip.text}}</v-tooltip>
  <v-menu v-model="menu.show" :position-x="menu.x" :position-y="menu.y" absolute offset-y>
@@ -1493,7 +1493,7 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
             return this.$store.state.skipFSeconds
         },
         nowPlayingFull() {
-            return this.$store.state.nowPlayingFull && !this.info.show
+            return this.$store.state.nowPlayingFull && !this.info.show && ( this.$store.state.desktopLayout ? this.largeView : this.$store.state.page == 'now-playing')
         }
     },
     beforeDestroy() {

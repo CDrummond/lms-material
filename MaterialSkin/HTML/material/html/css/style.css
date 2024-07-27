@@ -52,7 +52,7 @@
  --bgnd-filter:blur(var(--bgnd-filter-size));
  --np-bgnd-filter-size:7px;
  --np-bgnd-filter:blur(var(--np-bgnd-filter-size));
- --np-full-bgnd-filter-size:50px;
+ --np-full-bgnd-filter-size:35px;
  --np-full-bgnd-filter:blur(var(--np-full-bgnd-filter-size)) saturate(3);
  --backdrop-filter:blur(4px);
  --toolbar-filter:blur(15px);
@@ -91,7 +91,7 @@
 }
 
 /* For old browsers that dont support min() */
-@supports not (width: min(10px, 5vw)) {--bottom-nav-pad
+@supports not (width: min(10px, 5vw)) {
  :root {
   --bottom-pad:0px;
  }
@@ -100,18 +100,21 @@
  :root {
   --np-bgnd-filter-size:9px;
   --bgnd-filter-size:6px;
+  --np-full-bgnd-filter-size:40px;
  }
 }
 @media (min-width:1000px) {
  :root {
   --np-bgnd-filter-size:10px;
   --bgnd-filter-size:7px;
+  --np-full-bgnd-filter-size:45px;
  }
 }
 @media (min-width:1500px) {
  :root {
   --np-bgnd-filter-size:12px;
   --bgnd-filter-size:9px;
+  --np-full-bgnd-filter-size:50px;
  }
 }
 

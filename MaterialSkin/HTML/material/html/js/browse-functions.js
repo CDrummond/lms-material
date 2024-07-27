@@ -2147,7 +2147,7 @@ function browseMyMusicMenu(view) {
                         item.cancache = true;
                     } else if (c.id.startsWith("myMusicAlbumsVariousArtists")) {
                         item.icon = undefined;
-                        item.svg = lmsOptions.supportReleaseTypes ? "release-multi" : "album-multi";
+                        item.svg = "album-multi";
                         item.cancache = true;
                     } else if (c.id.startsWith("myMusicAlbumsAudiobooks")) {
                         item.icon = "local_library";

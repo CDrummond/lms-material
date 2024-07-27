@@ -14,7 +14,7 @@
  --std-weight:400;
  --main-toolbar-height:calc(var(--top-pad) + 48px);
  --sub-toolbar-height:48px;
- --desktop-npbar-height:72px;
+ --desktop-npbar-height:calc(var(--desktop-np-bottom-pad) +  72px);
  --desktop-npbar-height-thin:calc(var(--bottom-pad) + 48px);
  --mobile-npbar-height:0px;
  --mobile-npbar-height-thin:22px;
@@ -72,6 +72,7 @@
  --bottom-pad:max(calc(var(--sab) - 22px), 0px);
  --all-pad:calc(var(--top-pad) + var(--bottom-pad));
  --dialog-pad:0px;
+ --desktop-np-bottom-pad:0px;
  --dialog-opacity:1.0;
  --pbar-bgnd:rgba(32, 32, 32, 0.15);
  --pbar-colored-bgnd:rgba(220, 220, 220, 0.3);

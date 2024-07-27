@@ -10,6 +10,7 @@
 6. Add slight shadow to now-playing image.
 7. On desktop layout auto-switch to no-playing when use 'Play now' action, as
    per mobile layout.
+8. If bottom padding is added then adjust desktop now-player bar for this.
 
 5.1.1
 -----

@@ -203,9 +203,9 @@
 
 .np-bar-details {
  position:fixed;
- left:240px;
- bottom:6px;
- width:calc(100vw - 240px);
+ left:calc(var(--desktop-np-bottom-pad) + 240px);
+ bottom:calc(var(--desktop-np-bottom-pad) + 6px);
+ width:calc(100vw - (var(--desktop-np-bottom-pad) + 240px));
  height:64px;
  padding:0px;
  background:transparent!important;
@@ -215,13 +215,13 @@
  position:fixed;
  left:162px;
  bottom:1px;
- height:64px;
- width:64px;
+ height:calc(var(--desktop-np-bottom-pad) + 64px);
+ width:calc(var(--desktop-np-bottom-pad) + 64px);
 }
 
 .np-bar-image .np-cover {
- height:64px;
- width:64px;
+ height:calc(var(--desktop-np-bottom-pad) + 64px);
+ width:calc(var(--desktop-np-bottom-pad) + 64px);
 }
 
 .np-bar-details div .v-list__tile {
@@ -247,15 +247,15 @@
   left:1px;
  }
  .np-bar-details {
-  left:72px;
-  width:calc(100vw - 136px);
+  left:calc(var(--desktop-np-bottom-pad) + 72px);
+  width:calc(100vw - (var(--desktop-np-bottom-pad) +136px));
  }
  .np-bar-details div .v-list__tile {
   margin:0px!important;
  }
  .np-bar .np-playpause {
   position:fixed;
-  bottom:6px;
+  bottom:calc(var(--desktop-np-bottom-pad) + 6px);
   right:8px!important;
  }
 }

@@ -8,6 +8,8 @@
 5. Add option to use full page for now-playing backdrop, i.e. extend into top
    toolbar and (on mobile) bottom navigation bar.
 6. Add slight shadow to now-playing image.
+7. On desktop layout auto-switch to no-playing when use 'Play now' action, as
+   per mobile layout.
 
 5.1.1
 -----

@@ -1672,7 +1672,9 @@ function browsePerformAction(view, item, act) {
         view.clearSelection();
         if (!view.$store.state.desktopLayout || !view.$store.state.showQueue) {
             if (act===PLAY_ACTION) {
-                if (!view.$store.state.desktopLayout) {
+                if (view.$store.state.desktopLayout) {
+                    bus.$emit('expandNowPlaying', true);
+                } else {
                     view.$store.commit('setPage', 'now-playing');
                 }
             } else if (act===ADD_ACTION) {

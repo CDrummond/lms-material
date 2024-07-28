@@ -1090,7 +1090,7 @@ var lmsBrowse = Vue.component("lms-browse", {
                     this.fetchItems(browseCmd, {cancache:false, id:"currentaction:"+index, title:act.title+SEPARATOR+item.title});
                 }
             } else if (undefined!=act.do) {
-                this.fetchItems(act.stdItem==STD_ITEM_ALL_TRACKS || act.stdItem==STD_ITEM_COMPOSITION_TRACKS || act.stdItem==STD_ITEM_CLASSICAL_WORKS ? browseReplaceCommandTerms(this, act.do, item) : act.do,
+                this.fetchItems(act.stdItem==STD_ITEM_ALL_TRACKS || act.stdItem==STD_ITEM_COMPOSITION_TRACKS || act.stdItem==STD_ITEM_CLASSICAL_WORKS || act.stdItem==STD_ITEM_ARTIST ? browseReplaceCommandTerms(this, act.do, item) : act.do,
                                 {cancache:false, id:"currentaction:"+index,
                                  title:act.title+(act.stdItem==STD_ITEM_ALL_TRACKS || act.stdItem==STD_ITEM_COMPOSITION_TRACKS || act.stdItem==STD_ITEM_CLASSICAL_WORKS ? "" : (SEPARATOR+(item.noReleaseGrouping ? item.title.split(SEPARATOR)[0] : item.title))),
                                  subtitle:act.subtitle,
@@ -1434,9 +1434,6 @@ var lmsBrowse = Vue.component("lms-browse", {
         },
         pin(item, add, mapped) {
             browsePin(this, item, add, mapped);
-        },
-        updateItemPinnedState(item) {
-            browseUpdateItemPinnedState(this, item);
         },
         invertSelection() {
             if (this.selection.size==this.items.length) {

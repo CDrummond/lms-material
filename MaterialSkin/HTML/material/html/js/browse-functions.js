@@ -128,7 +128,7 @@ function browseAddHistory(view) {
     view.history.push(prev);
 }
 
-function browseActions(view, item, args, count, showCompositions, showWorks) {
+function browseActions(view, item, args, count, showRoles, showWorks) {
     var actions=[];
     if ((undefined==item || undefined==item.id || !item.id.startsWith(MUSIC_ID_PREFIX)) && // Exclude 'Compilations'
         (undefined==args['artist'] || (args['artist']!=i18n('Various Artists') && args['artist']!=LMS_VA_STRING && args['artist'].toLowerCase()!='various artists'))) {
@@ -193,10 +193,21 @@ function browseActions(view, item, args, count, showCompositions, showWorks) {
             actions.push({title:ACTIONS[ALL_TRACKS_ACTION].title, icon:ACTIONS[ALL_TRACKS_ACTION].icon, do:{ command: ['tracks'], params: params}, weight:80, stdItem:STD_ITEM_ALL_TRACKS});
         }
 
-        if (undefined!=args['artist_id'] && showCompositions) {
-            var params = [SORT_KEY+TRACK_SORT_PLACEHOLDER, PLAYLIST_TRACK_TAGS, 'artist_id:'+args['artist_id'], 'role_id:COMPOSER', 'material_skin_artist:'+args['artist']];
-            browseAddLibId(view, params);
-            actions.push({title:i18n('Compositions'), svg:'composer', do:{ command: ['tracks'], params: params}, weight:81, stdItem:STD_ITEM_COMPOSITION_TRACKS});
+        if (undefined!=args['artist_id'] && showRoles && showRoles.length>0) {
+            for (let r=0, rlen=showRoles.length; r<rlen; ++r) {
+                if (COMPOSER_ARTIST_ROLE==showRoles[r]) {
+                    var params = [SORT_KEY+TRACK_SORT_PLACEHOLDER, PLAYLIST_TRACK_TAGS, 'artist_id:'+args['artist_id'], 'role_id:COMPOSER', 'material_skin_artist:'+args['artist']];
+                    browseAddLibId(view, params);
+                    actions.push({title:i18n('Compositions'), svg:'composer', do:{ command: ['tracks'], params: params}, weight:81, stdItem:STD_ITEM_COMPOSITION_TRACKS});
+                } else {
+                    let udr = lmsOptions.userDefinedRoles[showRoles[r]];
+                    if (undefined!=udr) {
+                        var params = [ARTIST_ALBUM_TAGS, SORT_KEY+ARTIST_ALBUM_SORT_PLACEHOLDER, 'artist_id:'+args['artist_id'], 'role_id:'+showRoles[r]];
+                        browseAddLibId(view, params);
+                        actions.push({title:udr['text'], svg:'role-'+udr['role'], do:{ command: ['albums'], params: params}, weight:81, stdItem:STD_ITEM_ARTIST});
+                    }
+                }
+            }
         }
         if (showWorks) {
             actions.push({title:i18n('Works'), subtitle:args['artist'], svg:'classical-work', stdItem:STD_ITEM_CLASSICAL_WORKS, do:{ command: ['works'], params:[view.current.id]}, weight:82});
@@ -467,7 +478,7 @@ function browseHandleListResponse(view, item, command, resp, prevPage, appendIte
                     }
                 }
             }
-            view.currentActions = browseActions(view, resp.items.length>0 ? item : undefined, actParams, resp.items.length, resp.showCompositions, showWorksInMenu);
+            view.currentActions = browseActions(view, resp.items.length>0 ? item : undefined, actParams, resp.items.length, resp.showRoles, showWorksInMenu);
             if (listingArtistAlbums) {
                 for (var i=0, loop=view.onlineServices, len=loop.length; i<len; ++i) {
                     var emblem = getEmblem(loop[i].toLowerCase()+':');
@@ -525,26 +536,31 @@ function browseHandleListResponse(view, item, command, resp, prevPage, appendIte
         if (listingArtistAlbums) {
             let index = getField(command, "genre_id:");
             // Get genres for artist...
-            let genreReqArtist=view.current.id;
-            let params = [view.current.id].concat(index<0 ? [] : [command.params[index]]);
-            browseAddLibId(view, params);
-            lmsList('', ['genres'], params, 0, 25, false, view.nextReqId()).then(({data}) => {
-                if (data.result && data.result.genres_loop && genreReqArtist==view.current.id) {
-                    let genreList = [];
-                    let genreListPlain = [];
-                    for (let g=0, loop=data.result.genres_loop, len=loop.length; g<len; ++g) {
-                        genreList.push(buildLink("show_genre", loop[g].id, loop[g].genre, "browse"));
+            let genreReqArtist = view.current.id;
+            if (!genreReqArtist.startsWith("artist_id:") && view.history.length>1) {
+                genreReqArtist = view.history[view.history.length-1].current.id;
+            }
+            if (genreReqArtist.startsWith("artist_id:")) {
+                let params = [genreReqArtist].concat(index<0 ? [] : [command.params[index]]);
+                browseAddLibId(view, params);
+                lmsList('', ['genres'], params, 0, 25, false, view.nextReqId()).then(({data}) => {
+                    if (data.result && data.result.genres_loop && genreReqArtist==view.current.id) {
+                        let genreList = [];
+                        let genreListPlain = [];
+                        for (let g=0, loop=data.result.genres_loop, len=loop.length; g<len; ++g) {
+                            genreList.push(buildLink("show_genre", loop[g].id, loop[g].genre, "browse"));
+                            if (IS_MOBILE) {
+                                genreListPlain.push(loop[g].genre);
+                            }
+                        }
+                        view.detailedSubExtra=[(IS_MOBILE ? genreListPlain : genreList).join(SEPARATOR_HTML)];
                         if (IS_MOBILE) {
-                            genreListPlain.push(loop[g].genre);
+                            view.detailedSubExtra.push(genreList.join(SEPARATOR_HTML));
                         }
                     }
-                    view.detailedSubExtra=[(IS_MOBILE ? genreListPlain : genreList).join(SEPARATOR_HTML)];
-                    if (IS_MOBILE) {
-                        view.detailedSubExtra.push(genreList.join(SEPARATOR_HTML));
-                    }
-                }
-            }).catch(err => {
-            });
+                }).catch(err => {
+                });
+            }
         }
         if (resp.canUseGrid && !resp.forceGrid) {
             view.currentActions.push({action:(view.grid.use ? USE_LIST_ACTION : USE_GRID_ACTION), weight:0});
@@ -589,6 +605,8 @@ function browseHandleListResponse(view, item, command, resp, prevPage, appendIte
             } else {
                 view.tbarActions=[SEARCH_LIB_ACTION];
             }
+        } else if (item.id==RANDOM_MIX_ID) {
+            view.currentActions=[{action:NEW_RANDOM_MIX_ACTION}, {action:view.grid.use ? USE_LIST_ACTION : USE_GRID_ACTION}, {action:SEARCH_LIST_ACTION}];
         } else if (SECTION_FAVORITES==view.current.section && view.current.isFavFolder) {
             view.tbarActions=[ADD_FAV_FOLDER_ACTION, ADD_FAV_ACTION];
         } else if (SECTION_PLAYLISTS==view.current.section && view.current.id.startsWith("playlist_id:") && view.items.length>0 && undefined!=view.items[0].stdItem) {
@@ -901,8 +919,8 @@ function browseClick(view, item, index, event) {
         view.layoutGrid(true);
     } else if (MUSIC_ID_PREFIX+'myMusicWorks'==item.id) {
         browseAddWorksCategories(view, item);
-    } else if (RANDOM_MIX_ID==item.id) { // For older installations where 'Random Mix' was in 'My Music' and has been pinned.
-        bus.$emit('dlg.open', 'rndmix');
+    } else if (RANDOM_MIX_ID==item.id) {
+        view.fetchItems({command:["material-skin", "rndmix", "act:list"], params:[]}, item);
     } else if (STD_ITEM_GENRE==item.stdItem && view.current && (getField(item, "genre_id") || getField(item, "year"))) {
         browseAddCategories(view, item, true, getField(item, "year"));
         browseCheckExpand(view);
@@ -1216,7 +1234,11 @@ function browseItemAction(view, act, item, index, event) {
     } else if (act==ADD_FAV_ACTION) {
         bus.$emit('dlg.open', 'favorite', 'add', {id:(view.current.id.startsWith("item_id:") ? view.current.id+"." : "item_id:")+view.items.length});
     } else if (act==EDIT_ACTION) {
-        bus.$emit('dlg.open', 'favorite', 'edit', item);
+        if (item.stdItem==STD_ITEM_RANDOM_MIX) {
+            bus.$emit('dlg.open', 'rndmix', item.title);
+        } else {
+            bus.$emit('dlg.open', 'favorite', 'edit', item);
+        }
     } else if (act==ADD_FAV_FOLDER_ACTION) {
         promptForText(ACTIONS[ADD_FAV_FOLDER_ACTION].title, undefined, undefined, i18n("Create")).then(resp => {
             if (resp.ok && resp.value && resp.value.length>0) {
@@ -1232,14 +1254,16 @@ function browseItemAction(view, act, item, index, event) {
     } else if (act===DELETE_ACTION) {
         confirm(i18n("Delete '%1'?", item.title), i18n('Delete')).then(res => {
             if (res) {
-                if (item.id.startsWith("playlist_id:")) {
+                if (item.id.startsWith("playlist_id:") || item.stdItem==STD_ITEM_RANDOM_MIX) {
                     view.clearSelection();
-                    var command = ["playlists", "delete", item.id];
+                    var command = item.stdItem==STD_ITEM_RANDOM_MIX
+                                    ? ["material-skin", "rndmix", "act:delete", "name:"+item.title]
+                                    : item.id.startsWith("playlist_id:")["playlists", "delete", item.id];
                     lmsCommand(view.playerId(), command).then(({data}) => {
                         logJsonMessage("RESP", data);
                         view.refreshList();
                     }).catch(err => {
-                        logAndShowError(err, i18n("Failed to delete playlist!"), command);
+                        logAndShowError(err, item.stdItem==STD_ITEM_RANDOM_MIX ? i18n("Failed to delete mix!") : i18n("Failed to delete playlist!"), command);
                     });
                 }
             }
@@ -1575,6 +1599,8 @@ function browseItemAction(view, act, item, index, event) {
         }
     } else if (COPY_DETAILS_ACTION==act) {
         copyTextToClipboard(stripTags(item.title)+(item.subtitle ? " "+stripTags(item.subtitle) : ""), true);
+    } else if (NEW_RANDOM_MIX_ACTION==act) {
+        bus.$emit('dlg.open', 'rndmix');
     } else {
         // If we are acting on a multi-disc album, prompt which disc we should act on
         if (item.multi && !view.current.id.startsWith("album_id:") && (PLAY_ACTION==act || ADD_ACTION==act || INSERT_ACTION==act || PLAY_SHUFFLE_ACTION==act)) {
@@ -1646,7 +1672,9 @@ function browsePerformAction(view, item, act) {
         view.clearSelection();
         if (!view.$store.state.desktopLayout || !view.$store.state.showQueue) {
             if (act===PLAY_ACTION) {
-                if (!view.$store.state.desktopLayout) {
+                if (view.$store.state.desktopLayout) {
+                    bus.$emit('expandNowPlaying', true);
+                } else {
                     view.$store.commit('setPage', 'now-playing');
                 }
             } else if (act===ADD_ACTION) {
@@ -1668,13 +1696,24 @@ function browseItemMenu(view, item, index, event) {
     if (!item.menu) {
         if (undefined!=item.stdItem) {
             // Get menu items - if view is an album or track from search then we have a different menu
-            var itm = STD_ITEMS[item.stdItem];
+            let itm = STD_ITEMS[item.stdItem];
+            let menu = undefined!=itm.searchMenu && (view.current.libsearch || view.current.allItems)
+                    ? itm.searchMenu
+                    : undefined!=itm.maxBeforeLarge && view.listSize>itm.maxBeforeLarge
+                        ? itm.largeListMenu
+                        : itm.menu;
+            for (let m=0, len=menu.length; m<len; ++m) {
+                if (menu[m]==PIN_ACTION && view.options.pinned.has(item.id)) {
+                    menu[m]=UNPIN_ACTION;
+                    break;
+                }
+                if (menu[m]==UNPIN_ACTION && !view.options.pinned.has(item.id)) {
+                    menu[m]=PIN_ACTION;
+                    break;
+                }
+            }
             showMenu(view, {show:true, item:item, x:event.clientX, y:event.clientY, index:index,
-                            itemMenu:itm.searchMenu && (view.current.libsearch || view.current.allItems)
-                                ? itm.searchMenu
-                                : undefined!=itm.maxBeforeLarge && view.listSize>itm.maxBeforeLarge
-                                    ? itm.largeListMenu
-                                    : itm.menu});
+                            itemMenu:menu});
         } else if (TOP_MYMUSIC_ID==item.id) {
             view.showLibMenu(event, index);
         }
@@ -2362,6 +2401,10 @@ function browsePin(view, item, add, mapped) {
                             {id: item.presetParams.favorites_url, title: item.title, image: item.image, icon: item.icon, svg: item.svg, isPinned: true,
                              url: item.presetParams.favorites_url, menu: [PLAY_ACTION, INSERT_ACTION, ADD_ACTION, DIVIDER, RENAME_ACTION, UNPIN_ACTION],
                              weight: undefined==item.weight ? 10000 : item.weight});
+        } else if (item.stdItem==STD_ITEM_RANDOM_MIX) {
+            view.top.splice(lastPinnedIndex+1, 0,
+                {id: item.id, title: item.title, svg: item.svg, isPinned: true, stdItem: item.stdItem,
+                 menu: [PLAY_ACTION, INSERT_ACTION, ADD_ACTION, DIVIDER, RENAME_ACTION, UNPIN_ACTION], weight: 10000});
         } else if (item.type=='extra') {
             view.top.splice(lastPinnedIndex+1, 0,
                             {id: item.id, title: item.title, icon: item.icon, svg: item.svg, url: item.url, isPinned: true, type:item.type,
@@ -2378,7 +2421,7 @@ function browsePin(view, item, add, mapped) {
                              weight: undefined==item.weight ? 10000 : item.weight, section: item.section, cancache: item.cancache});
         }
         view.options.pinned.add(item.id);
-        view.updateItemPinnedState(item);
+        browseUpdateItemPinnedState(view, item);
         view.saveTopList();
         bus.$emit('showMessage', i18n("Pinned '%1' to home screen.", item.title));
         bus.$emit('pinnedChanged');
@@ -2387,7 +2430,7 @@ function browsePin(view, item, add, mapped) {
             if (res) {
                 view.top.splice(index, 1);
                 view.options.pinned.delete(item.id);
-                view.updateItemPinnedState(item);
+                browseUpdateItemPinnedState(view, item);
                 if (item.id.startsWith(MUSIC_ID_PREFIX)) {
                     for (var i=0, len=view.myMusic.length; i<len; ++i) {
                         view.myMusic[i].menu=[view.options.pinned.has(view.myMusic[i].id) ? UNPIN_ACTION : PIN_ACTION];
@@ -2500,7 +2543,9 @@ function browseReplaceCommandTerms(view, cmd, item) {
 function browseBuildFullCommand(view, item, act) {
     var command = browseBuildCommand(view, item, ACTIONS[act].cmd);
     if (command.command.length<1) { // Non slim-browse command
-        if (item.url && (!item.id || (!item.id.startsWith("playlist_id:") && !item.id.startsWith("track_id")))) {
+        if (item.stdItem==STD_ITEM_RANDOM_MIX) {
+            command.command = ["material-skin-client", "rndmix", "name:"+item.title, "act:"+(INSERT_ACTION==act ? "insert" : ACTIONS[act].cmd)];
+        } else if (item.url && (!item.id || (!item.id.startsWith("playlist_id:") && !item.id.startsWith("track_id")))) {
             command.command = ["playlist", INSERT_ACTION==act ? "insert" : ACTIONS[act].cmd, item.url, item.title];
         } else if (item.app && item.id) {
             command.command = [item.app, "playlist", INSERT_ACTION==act ? "insert" :ACTIONS[act].cmd, originalId(item.id)];

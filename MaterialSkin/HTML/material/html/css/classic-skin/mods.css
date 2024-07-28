@@ -157,7 +157,7 @@ div#innerSettingsBlock {
  margin-left:0px!important;
  margin-right:0px!important;
  width:calc(100% - 32px)!important;
- height:calc((var(--vh, 1vh)*100) - 300px)!important;
+ height:calc((var(--vh, 1vh)*100) - (var(--all-pad) + 300px))!important;
  padding:20px 16px 120px 16px;
 }
 
@@ -791,7 +791,7 @@ table td input[type=checkbox] {
 }
 
 .lms-settings-section-SETUP_PLUGINS_9 div#innerSettingsBlock {
- height:calc((var(--vh, 1vh)*100) - 247px)!important;
+ height:calc((var(--vh, 1vh)*100) - (var(--all-pad) + 247px))!important;
 }
 
 .lms-settings-section-SETUP_PLUGINS_9 div#homeMenu > div#settingsRegion {
@@ -821,7 +821,7 @@ table td input[type=checkbox] {
   margin-top:14px;
  }
  .lms-settings-section-SETUP_PLUGINS_9 div#innerSettingsBlock {
-  height:calc((var(--vh, 1vh)*100) - 281px)!important;
+  height:calc((var(--vh, 1vh)*100) - (var(--all-pad) + 281px))!important;
  }
 }
 
@@ -899,7 +899,7 @@ table td input[type=checkbox] {
 }
 
 #setup_chooser .custom-select-container.is-open .custom-select-panel {
- max-height:calc((var(--vh, 1vh)*100) - 180px)!important;
+ max-height:calc((var(--vh, 1vh)*100) - (var(--all-pad) + 180px))!important;
  top:32px!important;
 }
 

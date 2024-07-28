@@ -55,8 +55,18 @@ var app = new Vue({
         } else {
             document.getElementsByTagName("body")[0].classList.add("msk-is-non-touch");
         }
-        if (queryParams.addpad || IS_IOS) {
-            document.documentElement.style.setProperty('--bottom-nav-pad', '12px');
+        let botPad = queryParams.botPad>0 ? queryParams.botPad : queryParams.addpad || IS_IOS ? 12 : 0;
+        if (botPad>0) {
+            document.documentElement.style.setProperty('--bottom-pad', botPad + 'px');
+            if (botPad>6) {
+                document.documentElement.style.setProperty('--desktop-np-bottom-pad', (botPad-6) + 'px');
+            }
+        }
+        if (queryParams.topPad>0) {
+            document.documentElement.style.setProperty('--top-pad', queryParams.topPad + 'px');
+        }
+        if (queryParams.dlgPad>0) {
+            document.documentElement.style.setProperty('--dialog-pad', queryParams.dlgPad + 'px');
         }
         this.autoLayout = true;
         this.$store.commit('initUiSettings');

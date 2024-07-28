@@ -39,5 +39,6 @@ var lmsOptions = {techInfo: getLocalStorageBool('techInfo', false),
                   combineAppsAndRadio: getLocalStorageBool('combineAppsAndRadio', false),
                   hidePlayers: new Set(getLocalStorageVal('hidePlayers', '').split(',')),
                   screensaverTimeout: getLocalStorageVal('screensaverTimeout', 60),
-                  npSwitchTimeout: getLocalStorageVal('npSwitchTimeout', 5*60)
+                  npSwitchTimeout: getLocalStorageVal('npSwitchTimeout', 5*60),
+                  userDefinedRoles: {}
                 };

@@ -11,6 +11,7 @@ Vue.component('lms-randommix', {
 <v-dialog v-model="show" v-if="show" persistent scrollable width="600">
  <v-card>
   <v-card-text>
+   <v-text-field :label="i18n('Name')" v-model="name" type="string"></v-text-field>
    <v-select :items="mixes" :label="i18n('Mix Type')" v-model="chosenMix" item-text="label" item-value="key"></v-select>
    <div class="dialog-main-list">
    <v-select chips deletable-chips multiple :items="genres" :label="i18n('Selected Genres')" v-model="chosenGenres">
@@ -32,21 +33,14 @@ Vue.component('lms-randommix', {
    <v-text-field v-if="showAll" :label="i18n('Upcoming track count')" v-model="newTracks" type="number"></v-text-field>
    </div>
   </v-card-text>
-  <v-card-actions v-if="queryParams.altBtnLayout">
-   <v-btn v-if="isWide" flat @click.native="showAll=!showAll">{{showAll ? i18n('Basic options') : i18n('All options')}}</v-btn>
-   <v-btn v-else flat icon @click.native="showAll=!showAll" :title="showAll ? i18n('Basic options') : i18n('All options')"><v-icon>{{showAll ? 'expand_more' : 'expand_less'}}</v-icon></v-btn>
+  <v-card-actions>
+   <v-btn flat icon @click.native="showAll=!showAll"><v-icon>{{showAll ? 'unfold_less' : 'unfold_more'}}</v-icon></v-btn>
    <v-spacer></v-spacer>
-   <v-btn flat @click.native="start()">{{i18n('Start')}}</v-btn>
-   <v-btn flat @click.native="stop()" v-if="active">{{i18n('Stop')}}</v-btn>
-   <v-btn flat @click.native="close()">{{i18n('Cancel')}}</v-btn>
-  </v-card-actions>
-  <v-card-actions v-else>
-   <v-btn v-if="isWide" flat @click.native="showAll=!showAll">{{showAll ? i18n('Basic options') : i18n('All options')}}</v-btn>
-   <v-btn v-else flat icon @click.native="showAll=!showAll" :title="showAll ? i18n('Basic options') : i18n('All options')"><v-icon>{{showAll ? 'expand_more' : 'expand_less'}}</v-icon></v-btn>
-   <v-spacer></v-spacer>
-   <v-btn flat @click.native="close()">{{i18n('Cancel')}}</v-btn>
-   <v-btn flat @click.native="stop()" v-if="active">{{i18n('Stop')}}</v-btn>
-   <v-btn flat @click.native="start()">{{i18n('Start')}}</v-btn>
+   <v-btn flat v-if="queryParams.altBtnLayout" @click.native="start()">{{i18n('Start')}}</v-btn>
+   <v-btn flat v-else @click.native="close()">{{i18n('Cancel')}}</v-btn>
+   <v-btn flat @click.native="save()" v-bind:class="{'disabled':!name || name.length<1}">{{i18n('Save')}}</v-btn>
+   <v-btn flat v-if="queryParams.altBtnLayout" @click.native="close()">{{i18n('Cancel')}}</v-btn>
+   <v-btn flat v-else @click.native="save()" v-bind:class="{'disabled':!name || name.length<1}">{{i18n('Save')}}</v-btn>
   </v-card-actions>
  </v-card>
 </v-dialog>
@@ -56,11 +50,11 @@ Vue.component('lms-randommix', {
         return {
             show: false,
             showAll: false,
+            name: undefined,
             genres: [],
             chosenGenres: [],
             mixes: [],
             chosenMix: "tracks",
-            active: false,
             libraries: [],
             library: undefined,
             continuous: true,
@@ -81,29 +75,26 @@ Vue.component('lms-randommix', {
         }
     },
     mounted() {
-        bus.$on('rndmix.open', function() {
-            this.showAll = getLocalStorageVal("rndmix.showAll", false);
+        bus.$on('rndmix.open', function(existingName) {
+            this.name = undefined;
+            this.showAll = getLocalStorageBool("rndmix.showAll", false);
             this.playerId = this.$store.state.player.id;
-            lmsCommand(this.playerId, ["randomplayisactive"]).then(({data}) => {
-                this.mixes=[{key:"tracks", label:i18n("Tracks")},
-                            {key:"albums", label:lmsOptions.supportReleaseTypes ? i18n("Releases") : i18n("Albums")},
-                            {key:"contributors", label:i18n("Artists")},
-                            {key:"year", label:i18n("Years")}];
-                if (LMS_VERSION>=90000) {
-                    this.mixes.push({key:"works", label:i18n("Works")});
-                }
-                if (data && data.result && data.result._randomplayisactive) {
-                    this.chosenMix = data.result._randomplayisactive;
-                    this.active = true;
-                } else {
-                    this.active = false;
-                    this.choseMix = "tracks";
-                }
+            this.chosenMix = "tracks";
+            this.mixes=[{key:"tracks", label:i18n("Tracks")},
+                        {key:"albums", label:lmsOptions.supportReleaseTypes ? i18n("Releases") : i18n("Albums")},
+                        {key:"contributors", label:i18n("Artists")},
+                        {key:"year", label:i18n("Years")}];
+            if (LMS_VERSION>=90000) {
+                this.mixes.push({key:"works", label:i18n("Works")});
+            }
 
+            if (undefined!=existingName) {
+                this.loadSavedMixParams(existingName);
+            } else {
                 this.initGenres();
                 this.initLibraries();
                 this.initConfig();
-            });
+            }
         }.bind(this));
         bus.$on('noPlayers', function() {
             this.show=false;
@@ -201,13 +192,75 @@ Vue.component('lms-randommix', {
                 }
             });
         },
+        loadSavedMixParams(name) {
+            lmsCommand("", ["genres", 0, 2500]).then(({data}) => {
+                this.genres = [];
+                this.chosenGenres = [];
+                this.oldTracks = this.newTracks = 10;
+                this.continuous = true;
+                this.chosenMix = "tracks";
+                this.library = LMS_DEFAULT_LIBRARY;
+                this.libraries = [];
+                if (data && data.result && data.result && data.result.genres_loop) {
+                    for (let i=0, list=data.result.genres_loop, len=list.length; i<len; ++i) {
+                        this.genres.push(list[i].genre);
+                    }
+                }
+                lmsList("", ["libraries"]).then(({data}) => {
+                    if (data && data.result && data.result.folder_loop && data.result.folder_loop.length>0) {
+                        var libraries = [];
+                        for (var i=0, list=data.result.folder_loop, len=list.length; i<len; ++i) {
+                            list[i].name = list[i].name.replace(SIMPLE_LIB_VIEWS, "");
+                            libraries.push(list[i]);
+                        }
+                        libraries.sort(nameSort);
+                        libraries.unshift({name: i18n("All"), id:LMS_DEFAULT_LIBRARY});
+                    }
+                });
+                lmsCommand("", ["material-skin", "rndmix", "name:"+name, "act:read"]).then(({data}) => {
+                    if (data && data.result && data.result) {
+                        this.name = name;
+                        if (undefined!=data.result.mix) {
+                            this.chosenMix = data.result.mix;
+                        }
+                        if (undefined!=data.result.genres) {
+                            this.chosenGenres = data.result.genres.split(",");
+                        }
+                        if (this.chosenGenres.length==0 || this.chosenGenres.length==this.genres.length) {
+                            this.chosenGenres = [].concat(this.genres);
+                        }
+                        if (undefined!=data.result.continuous) {
+                            this.continuous = 1==parseInt(data.result.continuous);
+                        }
+                        if (undefined!=data.result.oldtracks) {
+                            this.oldTracks = parseInt(data.result.oldtracks);
+                            if (this.oldTracks<1 || this.oldTracks>1000) {
+                                this.oldTracks = 10;
+                            }
+                        }
+                        if (undefined!=data.result.newtracks) {
+                            this.newTracks = parseInt(data.result.newtracks);
+                            if (this.newTracks<1 || this.newTracks>1000) {
+                                this.newTracks = 10;
+                            }
+                        }
+                        if (undefined!=data.result.library) {
+                            this.library = data.result.library;
+                        }
+                        if (undefined==this.library || LMS_DEFAULT_LIBRARIES.has(this.library)) {
+                            this.library = LMS_DEFAULT_LIBRARY;
+                        }
+                        this.show=true;
+                    }
+                });
+            });
+        },
         close() {
             this.show=false;
             setLocalStorageVal("rndmix.showAll", this.showAll);
         },
         start() {
             this.close();
-            setLocalStorageVal("rndmix.showAll", this.showAll);
             lmsCommand("", ["pref", "plugin.randomplay:continuous", this.continuous ? 1 : 0]);
             lmsCommand("", ["pref", "plugin.randomplay:newtracks", this.newTracks]);
             lmsCommand("", ["pref", "plugin.randomplay:oldtracks", this.oldTracks]);
@@ -233,10 +286,21 @@ Vue.component('lms-randommix', {
                 }
             });
         },
-        stop() {
-            this.close();
-            lmsCommand(this.playerId, ["randomplay", "disable"]).then(({data}) => {
-                bus.$emit('refreshStatus');
+        save() {
+            let name = this.name ? this.name.trim() : "";
+            if (name.length<1) {
+                return;
+            }
+            lmsCommand("", ["material-skin", "rndmix", "act:save",
+                            "name:"+name,
+                            "mix:"+this.chosenMix,
+                            "genres:"+(this.chosenGenres.length==this.genres.length ? "" : this.chosenGenres.join(",")),
+                            "continuous:"+(this.continuous ? 1 : 0),
+                            "oldtracks:"+this.oldTracks,
+                            "newtracks:"+this.newTracks,
+                            "library:"+this.library]).then(({data}) => {
+                bus.$emit('refreshList');
+                this.close();
             });
         },
         addGenre() {
@@ -271,4 +335,3 @@ Vue.component('lms-randommix', {
         }
     }
 })
-

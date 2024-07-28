@@ -532,6 +532,7 @@ function applyModifications(page, textCol, darkUi, src) {
         copyVar(iframe, '--popup-background-color');
         copyVar(iframe, '--list-hover-color');
         copyVar(iframe, '--menu-dlg-shadow');
+        copyVar(iframe, '--all-pad');
         content.documentElement.getElementsByTagName("body")[0].classList.add(IS_MOBILE ? "msk-is-touch" : "msk-is-non-touch");
         if (darkUi) {
             content.documentElement.getElementsByTagName("body")[0].classList.add("theme--dark");

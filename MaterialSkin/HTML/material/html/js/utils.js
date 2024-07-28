@@ -47,7 +47,7 @@ function parseQueryParams() {
     }
     var query = queryString.split('&');
     var resp = { actions:[], debug:new Set(), hide:new Set(), dontEmbed:new Set(), layout:undefined, player:undefined, single:false,
-        css:undefined, download:'browser', addpad:false, party:false, expand:[], npRatio:1.33333333,
+        css:undefined, download:'browser', addpad:false, party:false, expand:[], npRatio:1.33333333, topPad:0, botPad:0, dlgPad:0,
         nativeStatus:0, nativeColors:0, nativePlayer:0, nativeUiChanges:0, nativeTheme:0, nativeCover:0, nativePlayerPower:0, nativeAccent:0,
         nativeTitlebar:0, appSettings:undefined, appQuit:undefined, appLaunchPlayer:undefined, altBtnLayout:IS_WINDOWS, dontTrapBack:false};
 
@@ -107,6 +107,8 @@ function parseQueryParams() {
             resp.expand=decodeURIComponent(kv[1]).split("/");
         } else if ("npRatio"==kv[0]) {
             resp.npRatio=parseFloat(kv[1]);
+        } else if ("topPad"==kv[0] || "botPad"==kv[0] || "dlgPad"==kv[0]) {
+            resp[kv[0]]=parseInt(kv[1]);
         }
     }
     return resp;
@@ -688,12 +690,12 @@ function addPart(str, part) {
 }
 
 function commandGridKey(command, item) {
-    return command.command[0]+
+    return command.command[command.command[0]=="material-skin" && command.command.length>1 ? 1 : 0]+
            (undefined==item || undefined==item.type || undefined!=item.stdItem || item.id.startsWith(MUSIC_ID_PREFIX) ? "" : ("-"+item.type))+
            "-grid";
 }
 
-const USE_LIST_VIEW_BY_DEFAULT=new Set(["other-grid", "favorites-grid", "podcasts-grid", "youtube-grid", "playhistory-grid", "spotty-grid", "qobuz-grid", "tidal-grid", "wimp-grid", "works-grid"]);
+const USE_LIST_VIEW_BY_DEFAULT=new Set(["other-grid", "favorites-grid", "podcasts-grid", "youtube-grid", "playhistory-grid", "spotty-grid", "qobuz-grid", "tidal-grid", "wimp-grid", "works-grid", "rndmix-grid"]);
 
 function isSetToUseGrid(command, item) {
     var key = commandGridKey(command, item);
@@ -721,30 +723,27 @@ function forceItemUpdate(vm, item) {
 
 function mapArtistIcon(params, item) {
     item.icon=undefined;
+    item.svg="artist";
     if (params && params.length>0) {
         for (var i=0, len=params.length; i<len; ++i) {
-            if (params[i]=="role_id:COMPOSER" || params[i]=="role_id:2") {
-                item.svg="composer";
-                return;
-            }
-            if (params[i]=="role_id:CONDUCTOR" || params[i]=="role_id:3") {
-                item.svg="conductor";
-                return;
-            }
-            if (params[i]=="role_id:ALBUMARTIST" || params[i]=="role_id:5") {
-                item.svg="albumartist";
-                return;
-            }
-            if (params[i]=="role_id:ARTIST" || params[i]=="role_id:TRACKARTIST" || params[i]=="role_id:PERFORMER" || params[i]=="role_id:1" || params[i]=="role_id:6") {
+            if (params[i].startsWith("role_id:")) {
+                let parts = params[i].split(':');
+                let role = parts[1].length>1
+                            ? parts[1].toLowerCase()
+                            : parts[1]=="2"
+                                ? "composer"
+                            : parts[1]=="3"
+                                ? "conductor"
+                            : parts[1]=="4"
+                                ? "band"
+                            : parts[1]=="5"
+                                ? "albumartist"
+                            : "artist";
+                    item.svg = "role-"+role;
                 break;
-            }
-            if (params[i]=="role_id:BAND" || params[i]=="role_id:4") {
-                item.svg="trumpet";
-                return;
             }
         }
     }
-    item.svg="artist";
 }
 
 function splitString(str) {

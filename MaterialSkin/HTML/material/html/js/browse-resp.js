@@ -12,10 +12,12 @@ const STREAM_SCHEMAS = new Set(["http", "https", "wavin"]);
 const HIDE_APPS_FOR_PARTY = new Set(["apps.accuradio", "apps.ardaudiothek", "apps.bbcsounds", "apps.cplus", "apps.globalplayeruk", "apps.iheartradio", "apps.lastmix", "apps.mixcloud", "apps.planetradio", "apps.podcasts", "apps.radiofrance", "apps.radionet", "apps.radionowplaying", "apps.radioparadise", "apps.squeezecloud", "apps.timesradio", "apps.ukradioplayer", "apps.virginradio", "apps.wefunk", "apps.phishin", "apps.walkwithme"]);
 const RELEASE_TYPES = ["ALBUM", "EP", "BOXSET", "BESTOF", "COMPILATION", "SINGLE", "APPEARANCE", "APPEARANCE_BAND", "APPEARANCE_CONDUCTOR", "COMPOSITION"];
 const ARTIST_ROLES = new Set([1,5])
-const TRACK_ARTIST_ROLE = 6;
+const ARTIST_ROLE = 1;
 const COMPOSER_ARTIST_ROLE = 2;
 const CONDUCTOR_ARTIST_ROLE = 3;
 const BAND_ARTIST_ROLE = 4;
+const ALBUM_ARTIST_ROLE = 5;
+const TRACK_ARTIST_ROLE = 6;
 
 function itemText(i) {
     return i.title ? i.title : i.name ? i.name : i.caption ? i.caption : i.credits ? i.credits : undefined;
@@ -94,7 +96,7 @@ function setFavoritesParams(i, item) {
 
 function parseBrowseResp(data, parent, options, cacheKey, parentCommand, parentGenre) {
     // NOTE: If add key to resp, then update addToCache in utils.js
-    var resp = {items: [], allTracksItem:undefined, showCompositions:false, baseActions:[], canUseGrid: false, jumplist:[], numAudioItems:0, canDrop:false, itemCustomActions:undefined, extra:undefined, numHeaders:0 };
+    var resp = {items: [], allTracksItem:undefined, showRoles:[], baseActions:[], canUseGrid: false, jumplist:[], numAudioItems:0, canDrop:false, itemCustomActions:undefined, extra:undefined, numHeaders:0 };
     var allowPinning = !queryParams.party && (!LMS_KIOSK_MODE || !HIDE_FOR_KIOSK.has(PIN_ACTION));
 
     try {
@@ -940,6 +942,7 @@ function parseBrowseResp(data, parent, options, cacheKey, parentCommand, parentG
             var reqArtistId = undefined;
             var groupReleases = true; // Prevent actually grouping ino releases even if we have releaseType
             var isWorksAlbums = undefined!=parent && parent.id.startsWith("work_id:");
+            var ignoreRoles = new Set();
             if (data.params && data.params.length>1) {
                 let reverse = false;
                 let isNewMusic = false;
@@ -960,6 +963,8 @@ function parseBrowseResp(data, parent, options, cacheKey, parentCommand, parentG
                             reqArtistId = lower.split(':')[1];
                         } else if (lower == DONT_GROUP_RELEASE_TYPES) {
                             groupReleases = false;
+                        } else if (lower.startsWith("role_id:")) {
+                            ignoreRoles=new Set(splitIntArray(lower.split(':')[1]));
                         }
                     }
                 }
@@ -971,6 +976,7 @@ function parseBrowseResp(data, parent, options, cacheKey, parentCommand, parentG
             var albumKeys = [];
             var releaseTypes = new Set();
             var ids = new Set();
+            var showRoles = new Set();
 
             for (var idx=0, loop=data.result.albums_loop, loopLen=loop.length; idx<loopLen; ++idx) {
                 var i = loop[idx];
@@ -1043,6 +1049,7 @@ function parseBrowseResp(data, parent, options, cacheKey, parentCommand, parentG
                 let nonmain = undefined; // This artist is not main artist of album
                 if (lmsOptions.groupByReleaseType>0) {
                     let roles = new Set(undefined==i.role_ids ? [] : splitIntArray(i.role_ids));
+                    showRoles = new Set([...showRoles, ...roles]);
                     if (undefined!=i.compilation && 1==parseInt(i.compilation)) {
                         group = "COMPILATION";
                     } else {
@@ -1061,9 +1068,6 @@ function parseBrowseResp(data, parent, options, cacheKey, parentCommand, parentG
                             group = "COMPOSITION";
                             nonmain = true;
                         }
-                    }
-                    if (!resp.showCompositions && roles.has(COMPOSER_ARTIST_ROLE)) {
-                        resp.showCompositions = true;
                     }
                 }
                 releaseTypes.add(group);
@@ -1119,6 +1123,12 @@ function parseBrowseResp(data, parent, options, cacheKey, parentCommand, parentG
                     resp.items.push(album);
                 }
             }
+            showRoles.delete(ARTIST_ROLE);
+            showRoles.delete(BAND_ARTIST_ROLE);
+            showRoles.delete(ALBUM_ARTIST_ROLE);
+            showRoles.delete(TRACK_ARTIST_ROLE);
+            ignoreRoles.forEach(role => { showRoles.delete(role) });
+            resp.showRoles = Array.from(showRoles).sort();
             if (undefined!=reqArtistId && LMS_P_MAI && LMS_ARTIST_PICS) {
                 resp.image= "/imageproxy/mai/artist/" + reqArtistId + "/image" + LMS_IMAGE_SIZE;
             }
@@ -1918,8 +1928,31 @@ function parseBrowseResp(data, parent, options, cacheKey, parentCommand, parentG
             resp.subtitle=0==numWorks ? i18n("Empty") : i18np("1 Work", "%1 Works", numWorks);
             resp.canUseGrid=true;
             resp.listSize=resp.items.length;
+        } else if (undefined!=data.result.rndmix_loop) {
+            for (let idx=0, loop=data.result.rndmix_loop, loopLen=loop.length; idx<loopLen; ++idx) {
+                let i = loop[idx];
+                let mix = {title:i.name,
+                           id: "rndmix."+i.name,
+                           stdItem: STD_ITEM_RANDOM_MIX,
+                           svg: "random-"+(i.mix=="contributors" ? "artists" : lmsOptions.supportReleaseTypes && "albums"==i.mix ? "releases" : i.mix) };
+                resp.items.push(mix);
+            }
+            resp.allowHoverBtns = true;
+            resp.canUseGrid = resp.items.length>0;
+            resp.items.sort(titleSort);
+            resp.subtitle=i18np("1 Mix", "%1 Mixes", resp.items.length);
+            if (resp.items.length==0) {
+                resp.items.push({ id:"info",
+                                  type:"text",
+                                  title:i18n("You have no saved 'Random Mixes'. Please use the '+' icon above to create one, or to simply start a 'Random Mix' on your current player.")
+                });
+            }
+            resp.listSize=resp.items.length;
         }
 
+        if (1==resp.items.length && "text"==resp.items[0].type && !resp.items[0].title.startsWith("<")) {
+            resp.items[0].title = '<div style="margin-top:16px;margin-bottom:16px">' + resp.items[0].title + '</div>';
+        }
         if (data.result.count>LMS_BATCH_SIZE) {
             resp.subtitle = i18n("Only showing %1 items", LMS_BATCH_SIZE);
         }

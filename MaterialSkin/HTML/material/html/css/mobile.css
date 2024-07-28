@@ -6,7 +6,7 @@
  */
 
 :root {
- --bottom-toolbar-height:calc(var(--bottom-nav-pad) + 52px);
+ --bottom-toolbar-height:calc(var(--bottom-pad) + 52px);
  --np-portrait-image-size:min(calc(var(--100vh) - (var(--main-toolbar-height) + var(--bottom-toolbar-height) + 210px) - (var(--np-image-border)*2)), 100vw - (var(--np-image-border)*2), var(--50vh));
  --np-image-landscape-height:min(50vw, calc(var(--100vh) - (var(--main-toolbar-height) + var(--bottom-toolbar-height) + var(--np-controls-height) + 66px)));
  --np-image-landscape-size:min(var(--np-image-landscape-height) - (var(--np-image-border)*2), 50vw - (var(--np-image-border)*2));
@@ -77,10 +77,14 @@
  background-color:var(--bottom-toolbar-color)!important;
 }
 
+.trans-footer {
+ background-color:var(--trans-bottom-toolbar-color) !important;
+}
+
 .lms-footer .lms-bottom-nav {
  position:fixed;
  bottom:calc(var(--bottom-toolbar-height) + 8px) !important;
- height:calc(var(--bottom-toolbar-height) - var(--bottom-nav-pad)) !important;
+ height:calc(var(--bottom-toolbar-height) - var(--bottom-pad)) !important;
  box-shadow:none;
 }
 
@@ -92,7 +96,7 @@
 
 .lms-bottom-nav-button {
  width:33.3333% !important;
- height:calc(var(--bottom-toolbar-height) - var(--bottom-nav-pad)) !important;
+ height:calc(var(--bottom-toolbar-height) - var(--bottom-pad)) !important;
  max-width:250px !important;
  transition:none !important;
  padding:0px!important;
@@ -316,7 +320,7 @@
 
 .pill {
  position: absolute;
- top:calc((var(--bottom-nav-pad)/2) + 1px);
+ top:calc((var(--bottom-pad)/2) + 1px);
  height: 26px;
  border-radius: 13px;
  width: 56px;
@@ -354,6 +358,7 @@
 @media (hover: hover) and (pointer: fine) {
 .lms-footer .active-nav:hover, .lms-footer .inactive-nav:hover {
   background-color:var(--nav-hover-color)!important;
+  border-radius:8px;
  }
 }
 

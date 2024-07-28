@@ -23,7 +23,7 @@ const TB_CUSTOM_ACTIONS = {id:21};
 Vue.component('lms-toolbar', {
     template: `
 <div style="z-index:2"> <!-- Prevent np-cover leak -->
-<v-toolbar fixed dense app class="lms-toolbar noselect" v-bind:class="{'lms-toolbar-no-menu':connected && !showMenuButton}" @mousedown="mouseDown" id="main-toolbar">
+<v-toolbar fixed dense app class="lms-toolbar noselect" v-bind:class="{'lms-toolbar-no-menu':connected && !showMenuButton, 'trans-toolbar':nowPlayingFull}" @mousedown="mouseDown" id="main-toolbar">
 <div class="drag-area-left"></div>
 <div v-if="showClock" class="toolbar-clock">
  <div class="maintoolbar-title">{{time}}</div>
@@ -794,6 +794,9 @@ Vue.component('lms-toolbar', {
         },
         showMenuButton() {
             return !LMS_KIOSK_MODE || (undefined!=this.customSettingsActions && this.customSettingsActions.length>0) || (undefined!=this.customActions && this.customActions.length>0)
+        },
+        nowPlayingFull() {
+            return this.$store.state.nowPlayingFull && !this.infoOpen && this.$store.state.nowPlayingBackdrop && (this.desktopLayout ? this.nowPlayingExpanded : this.isNowPlayingPage)
         }
     },
     filters: {

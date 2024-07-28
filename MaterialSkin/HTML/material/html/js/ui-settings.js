@@ -277,7 +277,7 @@ Vue.component('lms-ui-settings', {
     <v-list-tile>
      <v-list-tile-content @click="nowPlayingFull = !nowPlayingFull" class="switch-label">
       <v-list-tile-title>{{i18n('Use full screen for background')}}</v-list-tile-title>
-      <v-list-tile-sub-title>{{i18n('Cover whole page with background image.')}}</v-list-tile-sub-title>
+      <v-list-tile-sub-title>{{i18n('Cover whole view (including toolbars, etc.) with background image.')}}</v-list-tile-sub-title>
      </v-list-tile-content>
      <v-list-tile-action><m3-switch v-model="nowPlayingFull"></m3-switch></v-list-tile-action>
     </v-list-tile>

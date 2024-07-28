@@ -1049,7 +1049,7 @@ function parseBrowseResp(data, parent, options, cacheKey, parentCommand, parentG
                 let nonmain = undefined; // This artist is not main artist of album
                 if (lmsOptions.groupByReleaseType>0) {
                     let roles = new Set(undefined==i.role_ids ? [] : splitIntArray(i.role_ids));
-                    showRoles = showRoles.union(roles);
+                    showRoles = new Set([...showRoles, ...roles]);
                     if (undefined!=i.compilation && 1==parseInt(i.compilation)) {
                         group = "COMPILATION";
                     } else {

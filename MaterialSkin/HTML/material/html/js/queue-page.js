@@ -237,7 +237,7 @@ var lmsQueue = Vue.component("lms-queue", {
      <v-icon v-if="item.selected" v-bind:class="{'pq-first-track-check':item.artistAlbum}">check_box</v-icon>
      <img v-else-if="item.artistAlbum" :key="item.image" :src="item.image" onerror="this.src=DEFAULT_COVER" loading="lazy" v-bind:class="{'dimmed':item.dimcover}" class="radio-img allow-drag"></img>
     </v-list-tile-avatar>
-    <v-layout class="pq-album-header" v-if="item.artistAlbum"><div class="ellipsis" v-html="item.artistAlbum" v-bind:class="{'pq-album-header-d':item.totalDurationStr}"></div><v-spacer/><div v-if="item.totalDurationStr" class="pq-atime">{{item.totalDurationStr}}</div></v-layout>
+    <v-layout class="pq-album-header" v-if="item.artistAlbum"><div class="ellipsis" v-html="item.artistAlbum"></div><v-spacer/><div v-if="item.totalDurationStr" class="pq-atime">{{item.totalDurationStr}}</div></v-layout>
     <v-list-tile-content v-bind:class="{'pq-first-track':item.artistAlbum}">
      <v-list-tile-title v-html="item.title"></v-list-tile-title>
     </v-list-tile-content>

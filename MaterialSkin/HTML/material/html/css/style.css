@@ -53,7 +53,7 @@
  --np-bgnd-filter-size:7px;
  --np-bgnd-filter:blur(var(--np-bgnd-filter-size));
  --np-full-bgnd-filter-size:35px;
- --np-full-bgnd-filter:blur(var(--np-full-bgnd-filter-size)) saturate(3);
+ --np-full-bgnd-filter:saturate(3) blur(var(--np-full-bgnd-filter-size));
  --backdrop-filter:blur(4px);
  --toolbar-filter:blur(15px);
  --npbar-border-color:var(--bottom-toolbar-border-color);

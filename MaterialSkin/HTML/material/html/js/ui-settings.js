@@ -396,9 +396,7 @@ Vue.component('lms-ui-settings', {
   <v-card>
    <v-card-title>{{i18n("Browse modes")}}</v-card-title>
    <div class="browse-modes-table dialog-main-list">
-    <div v-for="(item, i) in browseModesDialog.modes">
-     <v-checkbox v-model="browseModesDialog.modes[i].enabled" :label="browseModesDialog.modes[i].text" error-count="0" hide-details></v-checkbox>
-    </div>
+    <v-checkbox v-for="(item, i) in browseModesDialog.modes" class="bm-checkbox" v-model="browseModesDialog.modes[i].enabled" :label="browseModesDialog.modes[i].text" error-count="0" hide-details></v-checkbox>
    </div>
    <div class="dialog-padding"></div>
    <v-card-actions>

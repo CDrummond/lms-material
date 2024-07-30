@@ -1106,7 +1106,7 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
             }
         },
         barClicked(ev) {
-            if ((IS_MOBILE || (!this.desktopLayout && MBAR_REP_NAV==this.mobileBar)) && ev && ev.target && ev.target.className && !ev.target.className.includes('v-icon')) {
+            if ((IS_MOBILE || (!this.desktopLayout && MBAR_REP_NAV==this.mobileBar)) && ev && ev.target && (!ev.target.className || !ev.target.className.includes('v-icon'))) {
                 if (!this.desktopLayout) {
                     let touch = getTouchPos(ev);
                     let x = undefined==touch ? ev.x : touch.x;

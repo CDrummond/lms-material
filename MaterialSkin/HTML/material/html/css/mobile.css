@@ -275,10 +275,6 @@
  opacity:var(--sub-opacity);
  text-align:center;
 }
-.np-bar-mob-nav .np-bar-details-mobile {
- left:10px;
- width:calc(100vw - 18px);
-}
 
 #np-bar-prev, #np-bar-next, #np-bar-stop, #playPauseA, .np-bar .np-playpause, .np-bar-details .v-list__tile__action {
  visibility:hidden!important;
@@ -315,6 +311,11 @@
  left:34px!important;
  width:calc(100vw - 58px);
  bottom:calc(var(--bottom-toolbar-height) + var(--bottom-np-pad) - 20px);
+}
+
+.np-bar-mob-nav .np-bar-details {
+ left:35px!important;
+ width:calc(100vw - 59px);
 }
 
 /* Adjust link/more/close buttons in now-playing page up a little */
@@ -527,5 +528,5 @@
 }
 
 .mobile-np-view-controls .flex {
-  max-width:250px;
+ max-width:250px;
 }

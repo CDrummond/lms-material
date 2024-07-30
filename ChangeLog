@@ -8,9 +8,9 @@
  5. Add option to use full page for now-playing backdrop, i.e. extend into top
     toolbar and (on mobile) bottom navigation bar.
  6. Add slight shadow to now-playing image.
- 7. On desktop layout auto-switch to no-playing when use 'Play now' action, as
+ 7. On desktop layout auto-switch to now-playing when use 'Play now' action, as
     per mobile layout.
- 8. If bottom padding is added then adjust desktop now-player bar for this.
+ 8. If bottom padding is added then adjust desktop now-playing bar for this.
  9. Add option to replace mobile navigation bar with now-playing bar.
 10. Fix swiping on lists with only 1 item.
 11. Add Hungarian translation - thanks to Ambrits Tamás.

@@ -1856,12 +1856,12 @@ div.v-rating i.primary--text, div.v-rating i.accent--text {
 }
 
 .frosted {
- background-color:rgba(255, 255, 255, 0.65);
+ background-color:rgba(240, 240, 240, 0.65);
  backdrop-filter: blur(15px);
 }
 
 .theme--dark .frosted {
- background-color:rgba(32, 32, 32, 0.75);
+ background-color:rgba(32, 32, 32, 0.65);
 }
 
 .toolbar-blur {

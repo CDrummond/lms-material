@@ -270,6 +270,7 @@ const store = new Vuex.Store({
         maxRating: 5,
         showRating: false,
         page:'browse',
+        prevPage: 'browse',
         hidden: new Set(),
         visibleMenus: new Set(),
         disabledBrowseModes: new Set(),
@@ -479,6 +480,7 @@ const store = new Vuex.Store({
             updateLang(state, window.navigator.userLanguage || window.navigator.language);
             state.defaultPlayer = getLocalStorageVal('defaultPlayer', state.defaultPlayer);
             state.page = getLocalStorageVal('page', state.page);
+            state.prevPage = getLocalStorageVal('prevPage', state.prevPage);
             state.chosenTheme = getLocalStorageVal('theme', state.chosenTheme);
             state.coloredToolbars = state.chosenTheme.endsWith("-colored");
             state.theme = state.chosenTheme.startsWith(AUTO_THEME) ? autoTheme()+(state.coloredToolbars ? "-colored" : "") : state.chosenTheme;
@@ -606,8 +608,10 @@ const store = new Vuex.Store({
         },
         setPage(state, val) {
             if (val!=state.page) {
+                state.prevPage = state.page;
                 state.page = val;
                 setLocalStorageVal('page', val);
+                setLocalStorageVal('prevPage', state.prevPage);
                 bus.$emit('pageChanged', val);
             }
         },

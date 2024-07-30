@@ -316,7 +316,7 @@ var lmsBrowse = Vue.component("lms-browse", {
      </div>
     </v-list-tile>
    </template>
-
+   <div v-if="items.length>1" class="list-pad"></div>
   </div>
  </div>
 

@@ -7,13 +7,20 @@
 
 :root {
  --bottom-toolbar-height:calc(var(--bottom-pad) + 52px);
- --np-portrait-image-size:min(calc(var(--100vh) - (var(--main-toolbar-height) + var(--bottom-toolbar-height) + 210px) - (var(--np-image-border)*2)), 100vw - (var(--np-image-border)*2), var(--50vh));
- --np-image-landscape-height:min(50vw, calc(var(--100vh) - (var(--main-toolbar-height) + var(--bottom-toolbar-height) + var(--np-controls-height) + 66px)));
+ --bottom-np-pad:0px;
+ --np-portrait-image-size:min(calc(var(--100vh) - (var(--main-toolbar-height) + var(--bottom-toolbar-height) + var(--bottom-np-pad) + var(--mobile-np-view-control-size) + 210px) - (var(--np-image-border)*2)), 100vw - (var(--np-image-border)*2), var(--50vh));
+ --np-image-landscape-height:min(50vw, calc(var(--100vh) - (var(--main-toolbar-height) + var(--bottom-toolbar-height) + var(--bottom-np-pad) + var(--mobile-np-view-control-size) + var(--np-controls-height) + 66px)));
  --np-image-landscape-size:min(var(--np-image-landscape-height) - (var(--np-image-border)*2), 50vw - (var(--np-image-border)*2));
- --np-image-landscape-wide-height:min(calc(var(--100vh) - (var(--main-toolbar-height) + var(--bottom-toolbar-height))), var(--np-wide-left));
+ --np-image-landscape-wide-height:min(calc(var(--100vh) - (var(--main-toolbar-height) + var(--bottom-toolbar-height) + var(--bottom-np-pad) + var(--mobile-np-view-control-size))), var(--np-wide-left));
  --np-image-landscape-wide-size:min(var(--np-image-landscape-wide-height) - (var(--np-image-border)*2), var(--np-wide-left) - (var(--np-image-border)*2));
- --np-landscape-item-height:calc(var(--100vh) - (var(--main-toolbar-height) + var(--bottom-toolbar-height) + var(--np-controls-height) + 68px));
+ --np-landscape-item-height:calc(var(--100vh) - (var(--main-toolbar-height) + var(--bottom-toolbar-height) + var(--bottom-np-pad) + var(--mobile-np-view-control-size) + var(--np-controls-height) + 68px));
  --nav-hover-color:var(--btn-hover-color);
+}
+
+.no-navbar {
+ --bottom-toolbar-height:0px;
+ --bottom-np-pad:var(--bottom-pad);
+ --mobile-np-view-control-size:58px;
 }
 
 /* For old browsers that dont support min() */
@@ -26,26 +33,26 @@
  }
  @media (min-aspect-ratio: 75/100) {
   :root {
-   --np-portrait-image-size:calc(var(--100vh) - (var(--main-toolbar-height) + var(--bottom-toolbar-height) + 210px) - (var(--np-image-border)*6));
+   --np-portrait-image-size:calc(var(--100vh) - (var(--main-toolbar-height) + var(--bottom-toolbar-height) + var(--bottom-np-pad) + var(--mobile-np-view-control-size) + 210px) - (var(--np-image-border)*6));
    --np-image-landscape-size:calc(50vw - ((var(--np-image-border)*2) + var(--mobile-bottom-toolbar-height)));
   }
  }
  @media (min-aspect-ratio: 125/100) {
   :root {
-    --np-portrait-image-size:calc(var(--100vh) - (var(--main-toolbar-height) + var(--bottom-toolbar-height) + 210px));
+    --np-portrait-image-size:calc(var(--100vh) - (var(--main-toolbar-height) + var(--bottom-toolbar-height) + var(--bottom-np-pad) + var(--mobile-np-view-control-size) + 210px));
     --np-image-landscape-size:calc(50vw - ((var(--np-image-border)*2) + var(--mobile-bottom-toolbar-height)));
   }
  }
  @media (min-aspect-ratio: 165/100) {
   :root {
-    --np-portrait-image-size:calc(var(--100vh) - (var(--main-toolbar-height) + var(--bottom-toolbar-height) + 210px) - (var(--np-image-border)*6));
+    --np-portrait-image-size:calc(var(--100vh) - (var(--main-toolbar-height) + var(--bottom-toolbar-height) + var(--bottom-np-pad) + var(--mobile-np-view-control-size) + 210px) - (var(--np-image-border)*6));
     --np-image-landscape-size:calc(50vw - ((var(--np-image-border)*2) + 64px + var(--mobile-bottom-toolbar-height)));
   }
  }
  @media (min-aspect-ratio: 200/100) {
   :root {
    --np-image-landscape-size:calc(var(--np-image-landscape-height) - (var(--np-image-border)*2));
-   --np-image-landscape-wide-height:calc(var(--100vh) - (var(--main-toolbar-height) + var(--bottom-toolbar-height)));
+   --np-image-landscape-wide-height:calc(var(--100vh) - (var(--main-toolbar-height) + var(--bottom-toolbar-height) + var(--bottom-np-pad) + var(--mobile-np-view-control-size)));
    --np-image-landscape-wide-size:calc(var(--np-image-landscape-wide-height) - (var(--np-image-border)*2));
   }
  }
@@ -194,7 +201,7 @@
 }
 
 .np-image-landscape-wide {
- height:calc(var(--100vh) - (var(--main-toolbar-height) + var(--bottom-toolbar-height) + 16px)) !important;
+ height:calc(var(--100vh) - (var(--main-toolbar-height) + var(--bottom-toolbar-height) + var(--bottom-np-pad) + var(--mobile-np-view-control-size) + 16px)) !important;
 }
 
 .np-details-landscape {
@@ -226,7 +233,7 @@
  visibility:visible;
  position:fixed;
  left:1px;
- bottom:calc(var(--bottom-toolbar-height) + 1px);
+ bottom:calc(var(--bottom-toolbar-height) + var(--bottom-np-pad) + 1px);
  height:43px;
  width:43px;
 }
@@ -253,7 +260,7 @@
  position:fixed;
  left:8px;
  width:calc(100vw - 16px);
- bottom:calc(var(--bottom-toolbar-height) - 1px);
+ bottom:calc(var(--bottom-toolbar-height) + var(--bottom-np-pad) - 1px);
  font-size:14px; /*var(--small-font-size);*/
  opacity:var(--sub-opacity);
  text-align:center;
@@ -266,7 +273,7 @@
 .np-bar .np-playpause,
 .np-bar-mob-thick .np-playpause {
  position:fixed;
- bottom:calc(var(--bottom-toolbar-height) + 7px);
+ bottom:calc(var(--bottom-toolbar-height) + var(--bottom-np-pad) + 7px);
  right:-50px;
  width:32px!important;
  height:32px!important;
@@ -293,7 +300,7 @@
 .np-bar-mob-thick .np-bar-details {
  left:34px!important;
  width:calc(100vw - 58px);
- bottom:calc(var(--bottom-toolbar-height) - 20px);
+ bottom:calc(var(--bottom-toolbar-height) + var(--bottom-np-pad) - 20px);
 }
 
 /* Adjust link/more/close buttons in now-playing page up a little */
@@ -302,11 +309,11 @@
 }
 
 .np-info-text {
- height:calc(var(--100vh) - (var(--main-toolbar-height) + var(--sub-toolbar-height) + var(--bottom-toolbar-height) + var(--mobile-npbar-height)));
+ height:calc(var(--100vh) - (var(--main-toolbar-height) + var(--sub-toolbar-height) + var(--bottom-toolbar-height) + var(--bottom-np-pad) + var(--mobile-npbar-height)));
 }
 
 .np-info-text-full {
- height:calc(var(--100vh) - (var(--main-toolbar-height) + var(--bottom-toolbar-height) + var(--mobile-npbar-height)));
+ height:calc(var(--100vh) - (var(--main-toolbar-height) + var(--bottom-toolbar-height) + var(--bottom-np-pad) + var(--mobile-npbar-height)));
 }
 
 .no-control-adjust {
@@ -491,4 +498,16 @@
  .maintoolbar-title, .maintoolbar-subtitle {
   padding-left:12px;
  }
+}
+
+.mobile-np-view-controls {
+ position:fixed;
+ left:0px;
+ width:100vw;
+ height:52px;
+ justify-content: center;
+ display: flex;
+ bottom:var(--bottom-pad);
+ padding-left:32px;
+ padding-right:32px;
 }

@@ -373,6 +373,8 @@ function nowplayingShowMenu(view, event) {
             } else {
                 view.menu.items.push({title:view.trans.expandNp, icon:'fullscreen', act:NP_TOGGLE_ACT});
             }
+        } else if (!view.info.show && view.mobileBar==MBAR_REP_NAV) {
+            view.menu.items.push({title:view.trans.collapseNp, icon:'fullscreen_exit', act:NP_TOGGLE_ACT});
         }
         view.menu.items.push({title:ACTIONS[MORE_ACTION].title, svg:ACTIONS[MORE_ACTION].svg, act:NP_INFO_ACT});
         view.menu.x = event.clientX;

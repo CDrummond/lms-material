@@ -103,7 +103,10 @@ Vue.component('lms-toolbar', {
  <v-btn icon :title="trans.info | tooltip(LMS_TRACK_INFO_KEYBOARD,keyboardControl)" v-if="!desktopLayout && (MBAR_THICK==mobileBar || isNowPlayingPage)" @click.native="emitInfo" class="toolbar-button hide-for-mini" id="inf" v-bind:class="{'disabled':!LMS_P_MAI || (playerStatus.count<1 && !infoOpen)}">
   <v-icon>{{infoOpen ? 'info' : 'info_outline'}}</v-icon>
  </v-btn>
- <v-btn icon v-if="!desktopLayout && MBAR_THICK!=mobileBar && !isNowPlayingPage" v-longpress="playPauseButton" class="toolbar-button hide-for-mini" id="pp" :title="playerStatus.isplaying ? trans.pause : trans.play" v-bind:class="{'disabled':!LMS_P_MAI || (playerStatus.count<1 && !infoOpen)}">
+ <v-btn icon v-else-if="!desktopLayout && MBAR_REP_NAV==mobileBar" @click="changePage" class="toolbar-button hide-for-mini" id="cp" :title="currentPage=='browse' ? trans.queue : trans.browse">
+  <img class="svg-img" :src="(currentPage=='browse' ? 'queue_music_outline' : 'library-music-outline') | svgIcon(darkUi, false, true, coloredToolbars)" oncontextmenu="return false;"></img>
+ </v-btn>
+ <v-btn icon v-else-if="!desktopLayout && MBAR_THICK!=mobileBar && !isNowPlayingPage" v-longpress="playPauseButton" class="toolbar-button hide-for-mini" id="pp" :title="playerStatus.isplaying ? trans.pause : trans.play" v-bind:class="{'disabled':!LMS_P_MAI || (playerStatus.count<1 && !infoOpen)}">
   <v-icon>{{playerStatus.isplaying ? 'pause_circle_filled' : 'play_circle_filled'}}</v-icon>
  </v-btn>
  <v-btn icon :title="trans.info | tooltip(LMS_TRACK_INFO_KEYBOARD,keyboardControl)" v-if="desktopLayout" @click.native="emitInfo" class="toolbar-button hide-for-mini" v-bind:class="{'disabled':!LMS_P_MAI || (playerStatus.count<1 && !infoOpen)}" id="info-btn">
@@ -193,7 +196,7 @@ Vue.component('lms-toolbar', {
                  trans:{noplayer:undefined, nothingplaying:undefined, info:undefined, connectionLost:undefined, showLarge:undefined,
                         hideLarge:undefined, groupPlayers:undefined, standardPlayers:undefined, otherServerPlayers:undefined,
                         updatesAvailable:undefined, showVol:undefined, downloading:undefined, mainMenu: undefined, play:undefined,
-                        pause:undefined, toggleQueue:undefined, groupVol:undefined, restartRequired:undefined},
+                        pause:undefined, toggleQueue:undefined, groupVol:undefined, restartRequired:undefined, browse:undefined, queue:undefined},
                  infoOpen: false,
                  nowPlayingExpanded: false,
                  playerVolume: 0,
@@ -433,7 +436,7 @@ Vue.component('lms-toolbar', {
                           groupPlayers:i18n("Group Players"), standardPlayers:i18n("Standard Players"), updatesAvailable:i18n('Updates available'),
                           showVol:i18n("Show volume"), mainMenu: i18n("Main menu"), play:i18n("Play"), pause:i18n("Pause"),
                           toggleQueue:i18n('Toggle queue'), downloading:i18n('Downloading'), groupVol:i18n('Adjust volume of associated players'),
-                          restartRequired:i18n('Restart required')};
+                          restartRequired:i18n('Restart required'), browse:i18n('Browse'), queue:i18n('Queue')};
         },
         setPlayer(id) {
             if (id != this.$store.state.player.id) {
@@ -610,6 +613,9 @@ Vue.component('lms-toolbar', {
             } else if (event.deltaY>0) {
                 this.volumeDown();
             }
+        },
+        changePage() {
+            this.$store.commit('setPage', this.currentPage=='browse' ? 'queue' : 'browse');
         },
         playPauseButton(long) {
             if (this.$store.state.visibleMenus.size>0 || this.noPlayer) {

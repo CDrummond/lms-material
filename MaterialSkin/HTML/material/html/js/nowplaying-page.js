@@ -371,6 +371,9 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
    </v-layout>
   </div>
  </div>
+ <v-layout text-xs-center v-if="!desktopLayout && mobileBar==MBAR_REP_NAV && !info.show && page=='now-playing'" class="mobile-np-view-controls">
+  <v-flex xs12><v-btn v-if="!desktopLayout && mobileBar==MBAR_REP_NAV && !info.show && page=='now-playing'" icon @click.stop="$store.commit('setPage', $store.state.prevPage)" class="np-std-button" id="nb" :title="trans.collapse"><v-icon>keyboard_arrow_down</v-icon></v-btn></v-flex>
+ </v-layout>
  </div>
 </div>
 `,
@@ -426,7 +429,11 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
         this.desktopBarHeight = getComputedStyle(document.documentElement).getPropertyValue('--desktop-npbar-height');
         this.desktopBarThinHeight = getComputedStyle(document.documentElement).getPropertyValue('--desktop-npbar-height-thin');
         this.mobileBarThinHeight = getComputedStyle(document.documentElement).getPropertyValue('--mobile-npbar-height-thin');
-        this.mobileBarThickHeight = getComputedStyle(document.documentElement).getPropertyValue('--mobile-npbar-height-thick');
+        this.mobileBarThickHeight = parseInt(getComputedStyle(document.documentElement).getPropertyValue('--mobile-npbar-height-thick').replace("px", ""));
+        this.bottomPad = parseInt(getComputedStyle(document.documentElement).getPropertyValue('--bottom-pad').replace("px", ""));
+        if (isNaN(this.bottomPad)) {
+            this.bottomPad = 0;
+        }
         this.controlBar();
         this.info.tabs[TRACK_TAB].scroll=getLocalStorageBool("npScrollLyrics", true);
         this.info.tabs[TRACK_TAB].highlight=getLocalStorageBool("npHighlightLyrics", true);
@@ -647,7 +654,8 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
                            repeatOne:i18n("Repeat single track"), repeatOff:i18n("No repeat"), shuffleAll:i18n("Shuffle tracks"),
                            shuffleAlbums:lmsOptions.supportReleaseTypes ? i18n("Shuffle releases") : i18n("Shuffle albums"),
                            shuffleOff:i18n("No shuffle"), play:i18n("Play"), pause:i18n("Pause"), prev:i18n("Previous track"),
-                           next:i18n("Next track"), collapseNp:i18n("Collapse now playing"), expandNp:i18n("Expand now playing"), menu:i18n("Menu") };
+                           next:i18n("Next track"), collapseNp:i18n("Collapse now playing"), expandNp:i18n("Expand now playing"),
+                           menu:i18n("Menu") };
             this.info.tabs[TRACK_TAB].title=i18n("Track");
             this.info.tabs[ARTIST_TAB].title=i18n("Artist");
             this.info.tabs[ARTIST_TAB].ctitle=i18n("Composer");
@@ -1078,10 +1086,7 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
                 this.menu.show = false;
                 return;
             }
-            if (this.$store.state.visibleMenus.size>0) {
-                return;
-            }
-            if (!this.desktopLayout && this.$store.state.page!='now-playing') {
+            if (this.$store.state.visibleMenus.size>0 || this.info.show || (!this.desktopLayout && this.$store.state.page!='now-playing')) {
                 return;
             }
             if (!this.clickTimer) {
@@ -1099,12 +1104,13 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
             }
         },
         barClicked(ev) {
-            if (IS_MOBILE && ev && ev.target && ev.target.className && !ev.target.className.includes('v-icon')) {
+            if ((IS_MOBILE || (!this.desktopLayout && MBAR_REP_NAV==this.mobileBar)) && ev && ev.target && ev.target.className && !ev.target.className.includes('v-icon')) {
                 if (!this.desktopLayout) {
                     let touch = getTouchPos(ev);
                     let x = undefined==touch ? ev.x : touch.x;
-                    if (MBAR_THICK==this.$store.state.mobileBar && x<(window.innerWidth-50)) {
+                    if ((MBAR_THICK==this.mobileBar || MBAR_REP_NAV==this.mobileBar) && x<(window.innerWidth-50)) {
                         this.$store.commit('setPage', 'now-playing');
+                        this.info.show = false;
                     }
                 } else if (window.innerWidth<550 && (ev.x<(window.innerWidth-(window.innerWidth>420 ? 90 : 60)))) {
                     bus.$emit('expandNowPlaying', true);
@@ -1243,7 +1249,12 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
                 let mbar = this.$store.state.mobileBar;
                 document.documentElement.style.setProperty('--desktop-npbar-height', !showNpBar ? '0px' : this.desktopBarHeight);
                 document.documentElement.style.setProperty('--desktop-npbar-height-thin', !showNpBar ? '0px' : this.desktopBarThinHeight);
-                document.documentElement.style.setProperty('--mobile-npbar-height', !showNpBar || MBAR_NONE==mbar ? '0px' : (MBAR_THIN==mbar ? this.mobileBarThinHeight : this.mobileBarThickHeight));
+                document.documentElement.style.setProperty('--mobile-npbar-height',
+                    !showNpBar || MBAR_NONE==mbar
+                        ? '0px'
+                        : (MBAR_THIN==mbar
+                            ? this.mobileBarThinHeight
+                            : (this.mobileBarThickHeight + (MBAR_REP_NAV==mbar ? this.bottomPad : 0) + "px")));
                 document.documentElement.style.setProperty('--npbar-border-color', !showNpBar ? 'transparent' : 'var(--bottom-toolbar-border-color)');
             }
         },

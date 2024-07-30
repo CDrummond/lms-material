@@ -271,6 +271,7 @@ var lmsQueue = Vue.component("lms-queue", {
      <img v-if="index==currentIndex" class="pq-current-indicator" :src="'pq-current' | svgIcon(true, true)"></img>
     </v-list-tile>
    </RecycleScroller>
+   <div v-if="items.length>1" class="list-pad"></div>
   </div>
  </div>
 

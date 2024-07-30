@@ -78,7 +78,7 @@
   }
   [% END %]
   <div id="app" v-cloak>
-   <v-app class="lms-app" :dark="darkUi" v-touch:start="touchStart" v-touch:end="touchEnd">
+   <v-app class="lms-app" :dark="darkUi" v-touch:start="touchStart" v-touch:end="touchEnd" v-bind:class="{'no-navbar':!desktopLayout && MBAR_REP_NAV==mobileBar}">
     <div id="stringLenCheckElem" style="display:hidden; position:fixed; top:0px;"></div>
     <v-snackbar style="z-index:3000" v-model="snackbar.show" :multi-line="true" :timeout="snackbar.timeout ? snackbar.timeout : 2500" :color="snackbar.color" top>{{ snackbar.msg }}</v-snackbar>
     <lms-currentcover></lms-currentcover>
@@ -89,7 +89,7 @@
      <div slot="right-pane"><lms-queue v-show="(desktopLayout && showQueue) || page=='queue'"></lms-queue></div>
     </lms-splitter>
     <lms-now-playing></lms-now-playing>
-    <lms-bottomnav v-if="!desktopLayout"></lms-bottomnav>
+    <lms-bottomnav v-if="!desktopLayout && MBAR_REP_NAV!=mobileBar"></lms-bottomnav>
     <lms-ui-settings v-if="dialogs.uisettings"></lms-ui-settings>
     <lms-player-settings v-if="dialogs.playersettings"></lms-player-settings>
     <lms-player-settings-plugin v-if="dialogs.playersettingsplugin"></lms-player-settings-plugin>

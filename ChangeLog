@@ -13,6 +13,7 @@
  8. If bottom padding is added then adjust desktop now-player bar for this.
  9. Add option to replace mobile navigation bar with now-playing bar.
 10. Fix swiping on lists with only 1 item.
+11. Add Hungarian translation - thanks to Ambrits Tamás.
 
 5.1.1
 -----

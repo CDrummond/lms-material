@@ -1,0 +1,123 @@
+[% PROCESS materialhelpheader.html %]
+<h1>Bevezetés</h1>
+<p>A MaterialSkin egy (remélhetőleg) egyszerű HTML5 WebApp a Lyrionhoz, 2 fő elrendezéssel:
+  <ul>
+    <li>Mobil</li>
+    <li>Asztali</li>
+  </ul>
+Alapértelmezés szerint az alkalmazás megpróbálja a megfelelő elrendezést használni az aktuális képernyő szélességétől függően. Használhatja azonban
+'Beállítások -> Interfész', hogy felülírja ezt, és kényszerítse az egyik vagy a másik használatát.
+</p>
+<p>Ez a súgóoldal néhány alapvető tudnivalót tartalmaz
+információkat, amelyek remélhetőleg hasznos részletekkel szolgálnak az alkalmazás használatához.
+</p>
+<br/>
+
+<h1>Mobil elrendezés</h1>
+<p>Ez az elrendezés mobiltelefonokon és kisméretű táblagépeken való használatra készült. Alul szabványos nézetválasztót tartalmaz, amely lehetővé teszi
+az aktuális nézet a következők között váltható:
+  <ul>
+    <li>Böngészés – lehetővé teszi a helyi zenei gyűjtemény, alkalmazások, rádió stb. böngészését.</li>
+    <li>Lejátszás – információkat jelenít meg (pl. cím, borító stb.) az éppen lejátszott számról.</li>
+    <li>Lejátszási lista – az aktuálisan sorba állított műsorszámok listáját jeleníti meg.</li>
+  </ul>
+A nézetek között a képernyő alján található megfelelő gomb megérintésével vagy balra/jobbra csúsztatással navigálhat.
+Ha már egy nézetben van, és megérinti a gombját, akkor a következő történik:
+  <ul>
+    <li>Böngészés – egy szinttel visszafelé navigál, vagyis ez ugyanaz, mint a vissza gomb megnyomása. Hosszan megnyomva navigál a „Home” elemre.</li>
+    <li>Lejátszás – megjeleníti az előadó, az album és a szám adatait, ha a „Zene és előadói adatok” beépülő modul telepítve van
+ Lyrion rendszer. Hosszan megnyomva megjelenik az „Alvó állapot” párbeszédpanel.</li>
+    <li>Lejátszási lista – görgessen a lejátszási sort úgy, hogy az aktuális zeneszám látható legyen.</li>
+  </ul>
+</p>
+<br/>
+
+<h1>Asztali elrendezés</h1>
+<p>Ez az elrendezés széles képernyős eszközökhöz, például laptopokhoz és asztali számítógépekhez készült. Ez az elrendezés a Böngészés nézetet jeleníti meg
+a bal oldalon, a Lejátszási lista a jobb oldalon, és az aktuális sáv részletei alul (ha vannak számok a sorban). A borítükpre kattintva lecseréli a Böngészés és a Lejtszási lista nézeteket egyetlen nézetre, amely nagy
+borítókép és a szám részleteit mutatja. Hasonlóképpen kattintson az 'Aktuális szám információinak megjelenítése' elemre (ha a 'Zene és előadói információ' beépülő modul
+telepítve van) megjelenít egy nézetet, amely tartalmazza az előadót, az albumot és a számadatokat (pl. dalszövegeket).
+</p>
+<br/>
+
+<h1>Hosszan nyomva</h1>
+<p>Az alkalmazáson belül különféle hosszan megnyomható funkciók találhatók. Ezek lehetővé teszik a funkciók elérését egy elem 1/2 másodpercig tartó megnyomásával vagy
+több. A jelenlegi hosszan nyomott funkciók a következők:
+<ul>
+ <li>Böngészés az alsó lapon mobil elrendezésben – ha az alkalmazás már megjeleníti a Böngésző nézetet, akkor a hosszan megnyomva visszanavigál a Főoldalra.</li>
+ <li>„Vissza” gomb a Böngésző nézetben – navigáljon a „Főoldalra”.</li>
+ <li>"Vissza" gomb a párbeszédpanel fejléceiben (például "Lejátszó beállításai") - bezárja az összes párbeszédpanelt.</li>
+ <li>Hangerő címkék - némítás/némítás feloldása.</li>
+ <li>„Lejátszás/szünet” gombok – a lejátszás „leállítása”, azaz „leállítás” gombként működnek.</li>
+ <li>"Ismétlés kikapcsolva" ikon vagy a DSTM (végtelen) ikon – a DSTM (Ne állítsd le a zenét) opciók megjelenítése.</li>
+ <li>Időtartam címke a sorban – az „Átigazolási sor” párbeszédpanelt mutatja, ha 2 vagy több játékosod van.</li>
+ <li>Játékos ikon az eszköztáron a játékos neve mellett – a "Szinkronizálás" párbeszédpanelt mutatja, ha 2 vagy több játékosod van.</li>
+ <li>Tápellátás ikon – az „Alvó állapot” párbeszédpanelt mutatja.</li>
+ <li>„Játékosok kezelése” menübejegyzés – a „Szinkronizálás” párbeszédpanelt mutatja, ha 2 vagy több játékosod van.</li>
+ <li>„Előző szám” gomb – X másodperccel visszaugrik, többszöri kihagyáshoz tartsa lenyomva. A pontos kihagyási időtartam konfigurálható.</li>
+ <li>A „Következő szám” gomb – X másodperccel előre ugrik, többszöri kihagyáshoz tartsa lenyomva. A pontos kihagyási időtartam konfigurálható.</li>
+ <li>Ha beépülő modul-specifikus beállításokat adott hozzá a „Lejátszó beállításaihoz”, akkor ezek egyikének hosszan tartó lenyomása hozzáadja az elemet
+ a „Kezdőképernyőre”.</li>
+ <li>A „Tallózás” alsó navigációs gombja a „Tallózás” oldalon – navigáljon a „Főoldalra”.</li>
+ <li>A „Lejátszás” alsó navigációs gombja a „Lejátszás” oldalon – az „Alvó” párbeszédpanelt jeleníti meg.</li>
+ <li>"Várólista törlése" gomb – felszólítás nélkül törli a teljes sort.</li>
+ </ul></p>
+<br/>
+
+<h1>Lejátszók kezelése</h1>
+<p>Ha 2 vagy több lejátszó van a rendszereden, vagy több Lyrion-példányod van, akkor megjelenik a „Lejátszók kezelése”, amely akkor jelenik meg, ha megnyomja a játékos nevét a fő eszköztáron. Ekkor megjelenik egy párbeszédpanel, amelyen megtekintheti a
+az összes lejátszó aktuális állapotát (aktuális zeneszám, hangerő stb.). Ez a párbeszédpanel lehetővé teszi a következőket:
+<ul>
+ <li>Listázza a normál és a csoportos lejátszókat. A "Csoportos" lejátszók csak akkor jelennek meg, ha rendelkezik a "Group Players" Lyrion beépülő modullal.</li>
+ <li>A lejátszók szinkronizálása. Az egyik lejátszó másik fölé húzásával szinkronizált lejátszók csoportját hozhatja létre. A lejátszó eltávolításához a
+ csoportból húzza a lejátszót a fő eszköztárra (ahol a „Csoportból való eltávolításhoz húzza ide” szövegnek kell megjelennie).</li>
+ <li>Ha telepítve van a 'Group Players' Lyrion beépülő modul, akkor ezt a párbeszédpanelt használhatja ilyen csoportok létrehozására, szerkesztésére és törlésére.
+ Ennek a párbeszédablaknak van egy menügombja a jobb felső sarokban, és ott lesz egy művelet a csoportos lejátszó létrehozására.</li>
+ <li>Ha több Lyrion példánya van a hálózaton, akkor ez a párbeszédpanel használható lejátszók áthelyezésére egy másik Lyrion példányból
+ az aktuálisra.</li>
+ <li>„Alapértelmezett” lejátszó beállítása. Ha egy lejátszó alapértelmezettként van megjelölve, akkor az anyag újraindításakor automatikusan kiválasztásra kerül.
+ Ha az 'Alapértelmezett' lejátszó nem látható indításkor, egy másikat használunk, de amikor az 'Alapértelmezett' lejátszóra vált
+ látható lesz. Egy lejátszó „Alapértelmezett” beállításához használja a menü gombot (három pont) a lejátszó jobb szélén.</li>
+ </ul>Az éppen aktív lejátszó félig átlátszó kiemelés jelzi. Ha egy lejátszó az 'Alapértelmezett' lejátszó, akkor pipa lesz
+a neve mellett. Az aktív elalváskapcsolóval rendelkező lejátszók neve mellett egy ágy képe is látható.
+</p>
+<br/>
+
+<h1>Settings</h1>
+<p>A Lyrion természetéből adódóan több beállítási párbeszédpanel is létezik.
+<li>Interfész – a Material Skin interfész elrendezésének szabályozására szolgáló beállításokat tartalmaz. Az itt végzett változtatások a következőben tárolódnak
+ aktuális böngésző, tehát felhasználó-specifikusak. Az alapértelmezett beállítások megadásához ezen a párbeszédpanelen van egy menügomb a jobb felső sarokban
+ tartalmazó; 'Mentés alapértelmezettként' és 'Visszaállítás alapértelmezettre'. A Szerverbeállítások kategóriában Material Skin beállítások is találhatók -
+ ezeket a beállításokat minden felhasználó megosztja.</li>
+ <li>Lejátszó – lejátszóspecifikus beállításokat tartalmaz, például a nevét, riasztásait stb. Alapértelmezés szerint csak korlátozott számú beállítás érhető el
+ látható, de a Lyrion rendelkezik may beállításokkal. A Lyrion összes beállításának eléréséhez nyomja meg az 'Extra beállítások' gombot a lejátszó alján
+ ezt a párbeszédpanelt. Ha a lejátszó egy piCorePlayer vagy SqueezeESP32 eszköz, akkor ez a párbeszédpanel tartalmaz egy gombot is, amely lehetővé teszi
+ az eszközök webalapú konfigurációs felhasználói felületének eléréséhez.</li>
+ <li>Szerver – tartalmazza a Lyrion szerver összes beállítását, pl. bővítmények telepítéséhez stb.</li></p>
+<br/>
+
+<h1>Böngészési módok</h1>
+<p>A Lyrion esetében általában a böngészési módok listája (pl. Előadók, Albumok, Műfajok) lejátszónként van konfigurálva. Éppen ezért az „Extra
+beállítások" szakaszában a "Lejátszó beállításai" részben található egy "További böngészési módok" nevű szakasz. Mivel azonban ezt az alkalmazást arra tervezték
+több lejátszó vezérléséhez, az alkalmazáshoz elérhető böngészési módok listája nem ott van beállítva, hanem a „Beállítások -> Interfész” részben.
+Ebben a párbeszédpanelen egy sor jelölőnégyzetet láthat, amelyekkel beállíthatja, hogy mely legfelső szintű kategóriák jelenjenek meg a „Kezdőképernyőn”. Az én
+A Zene bejegyzés mellett egy fogaskerék ikon található. Ennek az ikonnak a megnyomásával párbeszédablak jelenik meg, amely lehetővé teszi a böngészési módok beállítását
+jelennek meg ezzel az alkalmazással.
+</p><br/>
+
+<h1>Virtuális könyvtárak</h1>
+<p>A Lyrion virtuális könyvtárai segítségével alkönyvtárakat hozhat létre zenei gyűjteményéből. például. mindegyiknek lehet könyvtára
+családtagja, így csak azokat a művészeket látják stb., akikkel foglalkoznak.
+</p>
+<p>A „Böngészési módok” szerint a Lyrion általában játékosonként állítja be az aktív könyvtárat. Ezzel az alkalmazással pedig beállíthat egy könyvtárat egy játékos számára
+a „Lejátszó beállításai” párbeszédpanelen. Ha igen, akkor ez a könyvtár korlátozná azokat a számokat, amelyeket a Lyrion egyes funkciói (például a „Véletlen keverék”) használnának
+használat. Ez az alkalmazás azonban ismét eltér a normál Lyriontól, mivel lehetővé teszi a könyvtár kiválasztását az alkalmazás ezen példányához, és
+ugyanaz lesz, függetlenül attól, hogy melyik játékost választja. Így például egy családtag láthatja a kívánt könyvtárat, függetlenül attól, hogy melyiket
+játékos, akit éppen irányítani próbáltak.
+</p>
+<p>Kérjük azonban, vegye figyelembe, hogy ezek a könyvtárak és a kijelölésük mindaddig nem lesznek láthatók, amíg nem hoz létre
+könyvtár. Ennek többféle módja van; egy „Speciális keresés” elmentésével (kattintson a keresés ikonra az alkalmazás „Kezdőlap” képernyőjén,
+majd kattintson a később megjelenő "Speciális keresés" ikonra), vagy használjon bővítményeket, például az "Egyszerű könyvtári nézeteket".
+</p></div>
+[% PROCESS materialhelpfooter.html %]
+

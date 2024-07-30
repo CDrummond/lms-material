@@ -244,6 +244,16 @@
  cursor:unset;
 }
 
+.np-bar-mob-nav .np-bar-image {
+ left:4px;
+ padding:1px;
+ bottom:calc(var(--bottom-toolbar-height) + var(--bottom-np-pad) + 2px);
+}
+.np-bar-mob-nav .np-bar-image .np-cover {
+ height:42px;
+ width:42px;
+}
+
 .np-bar-mob-thick .v-list__tile__title {
  margin-top:-1px;
  line-height:30px;
@@ -264,6 +274,10 @@
  font-size:14px; /*var(--small-font-size);*/
  opacity:var(--sub-opacity);
  text-align:center;
+}
+.np-bar-mob-nav .np-bar-details-mobile {
+ left:10px;
+ width:calc(100vw - 18px);
 }
 
 #np-bar-prev, #np-bar-next, #np-bar-stop, #playPauseA, .np-bar .np-playpause, .np-bar-details .v-list__tile__action {

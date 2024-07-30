@@ -176,7 +176,7 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
  </div>
 
  <div v-if="desktopLayout || (info.show ? MBAR_NONE!=mobileBar : (page=='now-playing' || MBAR_NONE!=mobileBar))">
- <div v-if="(desktopLayout && !largeView) || (!desktopLayout && (info.show || page!='now-playing'))" class="np-bar" id="np-bar" v-bind:class="{'mobile':!desktopLayout, 'np-bar-mob-thick':!desktopLayout && MBAR_THIN!=mobileBar, 'no-liveedge':undefined==playerStatus.current.liveEdge}" @click="barClicked">
+ <div v-if="(desktopLayout && !largeView) || (!desktopLayout && (info.show || page!='now-playing'))" class="np-bar" id="np-bar" v-bind:class="{'mobile':!desktopLayout, 'np-bar-mob-thick':!desktopLayout && MBAR_THIN!=mobileBar, 'np-bar-mob-nav':!desktopLayout && MBAR_REP_NAV==mobileBar, 'no-liveedge':undefined==playerStatus.current.liveEdge}" @click="barClicked">
   <v-layout row class="np-bar-controls" v-if="desktopLayout || MBAR_NONE!=mobileBar">
    <v-flex xs4>
     <v-btn flat icon id="np-bar-prev" v-bind:class="{'disabled':disablePrev}" v-longpress:repeat="prevButton" class="np-std-button" :title="trans.prev | tooltip('left', keyboardControl)"><v-icon large class="media-icon">skip_previous</v-icon></v-btn>

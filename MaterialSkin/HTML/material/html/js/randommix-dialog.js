@@ -40,7 +40,7 @@ Vue.component('lms-randommix', {
    <v-btn flat v-else @click.native="close()">{{i18n('Cancel')}}</v-btn>
    <v-btn flat @click.native="save()" v-bind:class="{'disabled':!name || name.length<1}">{{i18n('Save')}}</v-btn>
    <v-btn flat v-if="queryParams.altBtnLayout" @click.native="close()">{{i18n('Cancel')}}</v-btn>
-   <v-btn flat v-else @click.native="save()" v-bind:class="{'disabled':!name || name.length<1}">{{i18n('Save')}}</v-btn>
+   <v-btn flat v-else @click.native="start()">{{i18n('Start')}}</v-btn>
   </v-card-actions>
  </v-card>
 </v-dialog>

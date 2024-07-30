@@ -420,7 +420,11 @@ function nowplayingMenuAction(view, item) {
         bus.$emit('browse-search', item.text, NP_INFO);
         view.close();
     } else if (NP_TOGGLE_ACT==item.act) {
-        view.largeView=!view.largeView;
+        if (view.$store.state.desktopLayout) {
+            view.largeView=!view.largeView;
+        } else {
+            view.$store.commit('setPage', view.$store.state.prevPage);
+        }
     }  else if (NP_SHOW_IN_TABS_ACT==item.act) {
         view.info.showTabs = !view.info.showTabs;
     } else if (NP_SYNC_ACT==item.act) {

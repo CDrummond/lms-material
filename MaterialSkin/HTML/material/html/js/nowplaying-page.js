@@ -372,7 +372,9 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
   </div>
  </div>
  <v-layout text-xs-center v-if="!desktopLayout && mobileBar==MBAR_REP_NAV && !info.show && page=='now-playing'" class="mobile-np-view-controls">
-  <v-flex xs12><v-btn v-if="!desktopLayout && mobileBar==MBAR_REP_NAV && !info.show && page=='now-playing'" icon @click.stop="$store.commit('setPage', $store.state.prevPage)" class="np-std-button" id="nb" :title="trans.collapse"><v-icon>keyboard_arrow_down</v-icon></v-btn></v-flex>
+  <v-flex xs4><v-btn icon @click.stop="$store.commit('setPage', 'browse')" class="np-std-button" id="nb" :title="trans.browse"><img class="svg-img" :src="'library-music-outline' | svgIcon(darkUi)"></v-btn></v-flex>
+  <v-flex xs4><v-btn icon @click.stop="$store.commit('setPage', $store.state.prevPage)" class="np-std-button" id="nc" :title="trans.collapseNp"><v-icon>keyboard_arrow_down</v-icon></v-btn></v-flex>
+  <v-flex xs4><v-btn icon @click.stop="$store.commit('setPage', 'queue')" class="np-std-button" id="nq" :title="trans.queue"><img class="svg-img" :src="'queue_music_outline' | svgIcon(darkUi)"></v-btn></v-flex>
  </v-layout>
  </div>
 </div>
@@ -401,7 +403,7 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
                  infoTrack: {album_id:undefined, track_id:undefined},
                  trans: { expand:undefined, collapse:undefined, sync:undefined, unsync:undefined, more:undefined, dstm:undefined, randomMix:undefined,
                           repeatAll:undefined, repeatOne:undefined, repeatOff:undefined, shuffleAll:undefined, shuffleAlbums:undefined, shuffleOff:undefined,
-                          play:undefined, pause:undefined, prev:undefined, next:undefined, collapseNp:undefined, expandNp:undefined, menu:undefined },
+                          play:undefined, pause:undefined, prev:undefined, next:undefined, collapseNp:undefined, expandNp:undefined, menu:undefined, browse:undefined, queue:undefined },
                  showTotal: true,
                  landscape: false,
                  wide: 0,
@@ -655,7 +657,7 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
                            shuffleAlbums:lmsOptions.supportReleaseTypes ? i18n("Shuffle releases") : i18n("Shuffle albums"),
                            shuffleOff:i18n("No shuffle"), play:i18n("Play"), pause:i18n("Pause"), prev:i18n("Previous track"),
                            next:i18n("Next track"), collapseNp:i18n("Collapse now playing"), expandNp:i18n("Expand now playing"),
-                           menu:i18n("Menu") };
+                           menu:i18n("Menu"), browse:i18n('Browse'), queue:i18n('Queue') };
             this.info.tabs[TRACK_TAB].title=i18n("Track");
             this.info.tabs[ARTIST_TAB].title=i18n("Artist");
             this.info.tabs[ARTIST_TAB].ctitle=i18n("Composer");

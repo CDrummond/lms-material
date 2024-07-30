@@ -511,3 +511,7 @@
  padding-left:32px;
  padding-right:32px;
 }
+
+.mobile-np-view-controls .flex {
+  max-width:250px;
+}

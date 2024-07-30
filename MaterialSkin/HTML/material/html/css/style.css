@@ -3789,12 +3789,6 @@ div.v-subheader {
  transform: translateX(40%);
 }
 
-/* Set these to 100% height to work-around strange issue (Chromium Linux) where if list only has one
-   item then only the item's background is blurred, not the rest of the view??? */
-.single-item-list .vue-recycle-scroller, .single-item-list .vue-recycle-scroller.direction-vertical .vue-recycle-scroller__item-wrapper {
- height:100%;
-}
-
 .lms-app .primary {
  background-color: var(--primary-color)!important;
  border-color: var(--primary-color)!important;

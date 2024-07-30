@@ -17,6 +17,7 @@
 12. Add release-type icons to album headers in MAI view.
 13. Fix colour of queue button in now-playing bar when using light themes with
     coloured toolbars.
+14. Fix alignment of album times when using album style queue.
 
 5.1.1
 -----

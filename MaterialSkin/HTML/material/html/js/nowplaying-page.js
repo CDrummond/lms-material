@@ -501,6 +501,8 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
         bus.$on('swipeDown', function() {
             if (this.largeView && this.$store.state.desktopLayout && (this.$store.state.pinQueue || !this.$store.state.showQueue)) {
                 this.largeView=false;
+            } else if (!this.$store.state.desktopLayout && MBAR_REP_NAV==this.mobileBar && !this.info.show) {
+                this.$store.commit('setPage', this.$store.state.prevPage);
             }
         }.bind(this));
         var npView = this;

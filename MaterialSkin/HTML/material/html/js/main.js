@@ -520,8 +520,8 @@ var app = new Vue({
             } else {
                 if ('left'==direction) {
                     if (this.$store.state.page=='browse') {
-                        this.$store.commit('setPage', 'now-playing');
-                    } else if (this.$store.state.page=='now-playing') {
+                        this.$store.commit('setPage', this.$store.state.mobileBar==MBAR_REP_NAV ? 'queue' : 'now-playing');
+                    } else if (this.$store.state.page=='now-playing' && this.$store.state.mobileBar!=MBAR_REP_NAV) {
                         this.$store.commit('setPage', 'queue');
                     } else if (this.$store.state.page=='queue') {
                         this.$store.commit('setPage', 'browse');
@@ -529,10 +529,10 @@ var app = new Vue({
                 } else if ('right'==direction) {
                     if (this.$store.state.page=='browse') {
                         this.$store.commit('setPage', 'queue');
-                    } else if (this.$store.state.page=='now-playing') {
+                    } else if (this.$store.state.page=='now-playing' && this.$store.state.mobileBar!=MBAR_REP_NAV) {
                         this.$store.commit('setPage', 'browse');
                     } else if (this.$store.state.page=='queue') {
-                        this.$store.commit('setPage', 'now-playing');
+                        this.$store.commit('setPage', this.$store.state.mobileBar==MBAR_REP_NAV ? 'browse' : 'now-playing');
                     }
                 } else if (this.$store.state.page=='now-playing') {
                     if ('up'==direction) {

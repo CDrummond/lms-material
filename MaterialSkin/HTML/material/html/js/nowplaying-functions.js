@@ -309,6 +309,13 @@ function nowplayingOnPlayerStatus(view, playerStatus) {
     view.disableBtns=0==view.playerStatus.playlist.count;
     view.disablePrev=(btns && undefined!=btns.rew && 0==parseInt(btns.rew)) || view.disableBtns;
     view.disableNext=(btns && undefined!=btns.fwd && 0==parseInt(btns.fwd)) || view.disableBtns;
+    if (0==view.playerStatus.playlist.count && !view.info.show) {
+        if (view.$store.state.desktopLayout && view.largeView) {
+            view.largeView = false;
+        } else if (!view.$store.state.desktopLayout && view.mobileBar==MBAR_REP_NAV && 'now-playing'==view.$store.state.page) {
+            view.$store.commit('setPage', view.$store.state.prevPage);
+        }
+    }
 }
 
 function nowplayingShowMenu(view, event) {
@@ -317,7 +324,6 @@ function nowplayingShowMenu(view, event) {
     if (view.info.show || (view.playerStatus.playlist.count>0 && window.innerHeight>=LMS_MIN_NP_LARGE_INFO_HEIGHT)) {
         view.touch = undefined;
         view.menu.show = false;
-        let ontoolbar = false;
         if (view.$store.state.desktopLayout && view.info.show) {
             let val = parseInt(getComputedStyle(document.documentElement).getPropertyValue("--bottom-toolbar-height").replace("px", ""));
             ontoolbar=event.clientY>(window.innerHeight-val);

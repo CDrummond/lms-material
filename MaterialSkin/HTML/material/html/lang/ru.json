@@ -663,13 +663,13 @@
 "%1 Years":"%1 Лет",
 "1 day":"1 день",
 "%1 days":"%1 дней(я)",
-"Copied: %1":"",
-"Cover whole view (including toolbars, etc.) with background image.":"",
-"Failed to delete mix!":"",
-"Replace navigation bar":"",
-"Stop random mix?":"",
-"Use full screen for background":"",
-"You have no saved 'Random Mixes'. Please use the '+' icon above to create one, or to simply start a 'Random Mix' on your current player.":"",
-"1 Mix":"",
-"%1 Mixes":""
+"Copied: %1":"Скопировано: %1",
+"Cover whole view (including toolbars, etc.) with background image.":"Фоновое изображение на весь вид (включая панели инструментов и т. д.).",
+"Failed to delete mix!":"Не удалось удалить микс!",
+"Replace navigation bar":"Заменить панель навигации",
+"Stop random mix?":"Остановить случайный микс?",
+"Use full screen for background":"Использовать полноэкранный режим в качестве фона",
+"You have no saved 'Random Mixes'. Please use the '+' icon above to create one, or to simply start a 'Random Mix' on your current player.":"У вас нет сохраненных «Случайных миксов». Используйте значок «+» выше, чтобы создать его, или просто запустите «Случайный микс» на текущем проигрывателе.",
+"1 Mix":"1 Микс",
+"%1 Mixes":"%1 Миксов"
 }

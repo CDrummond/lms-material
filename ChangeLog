@@ -1,6 +1,7 @@
 5.2.1
 -----
 1. Fix permissions of Hungarian translations file.
+2. Rename Hungarian translation files from "hu-hu" to "hu"
 
 5.2.0
 -----

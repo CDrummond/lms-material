@@ -288,9 +288,11 @@ Vue.component('lms-randommix', {
         },
         save() {
             let name = this.name ? this.name.trim() : "";
+            name = name.replace(":", "_").replace("'", "").replace('"', '').replace('\t', ' ').replace('\n', '');
             if (name.length<1) {
                 return;
             }
+            this.name = name;
             lmsCommand("", ["material-skin", "rndmix", "act:save",
                             "name:"+name,
                             "mix:"+this.chosenMix,

@@ -288,7 +288,14 @@ Vue.component('lms-randommix', {
         },
         save() {
             let name = this.name ? this.name.trim() : "";
-            name = name.replace(":", "_").replace("'", "").replace('"', '').replace('\t', ' ').replace('\n', '');
+            let replace = "?<>\\:*|/";
+            for (let r=0, len=replace.length; r<len; ++r) {
+                name = name.replaceAll(replace[r], "_");
+            }
+            let remove = ";\"'\t\n";
+            for (let r=0, len=remove.length; r<len; ++r) {
+                name = name.replaceAll(remove[r], "");
+            }
             if (name.length<1) {
                 return;
             }

@@ -1260,7 +1260,7 @@ function browseItemAction(view, act, item, index, event) {
                     view.clearSelection();
                     var command = item.stdItem==STD_ITEM_RANDOM_MIX
                                     ? ["material-skin", "rndmix", "act:delete", "name:"+item.title]
-                                    : item.id.startsWith("playlist_id:")["playlists", "delete", item.id];
+                                    : ["playlists", "delete", item.id];
                     lmsCommand(view.playerId(), command).then(({data}) => {
                         logJsonMessage("RESP", data);
                         view.refreshList();

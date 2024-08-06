@@ -1035,13 +1035,15 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
                 this.doCommand(this.repAltBtn.command, this.repAltBtn.tooltip);
             } else {
                 if (this.playerStatus.playlist.randomplay===1) {
+                    /*
                     confirm(i18n("Stop random mix?"), i18n('Stop')).then(res => {
                         if (res) {
                             lmsCommand(this.$store.state.player.id, ["randomplay", "disable"]).then(({data}) => {
                                 bus.$emit('refreshStatus');
                             });
                         }
-                    });
+                    });*/
+                    bus.$emit('dlg.open', 'rndmix', undefined, true);
                 } else if (this.playerStatus.playlist.repeat===0) {
                     if (LMS_P_DSTM) {
                         if (longPress) {

@@ -2,6 +2,9 @@
 -----
 1. When offer to un-pin start-mix from home screen via 'Random Mix' dialog
    then use displayed text of home screen item.
+2. For LMS9.0 when click on queue/now-playing 'Random Mix' icon show start-mix
+   dialog.
+3. Fix mix types - these don't end in 's', i.e. 'track' not 'tracks'
 
 5.2.1
 -----

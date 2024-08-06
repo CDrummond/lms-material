@@ -1795,6 +1795,10 @@ sub _readRandMix {
             }
         }
         close($fh);
+        my $end = substr($info{'mix'}, -1);
+        if ($end eq "s") {
+            $info{'mix'} = substr($info{'mix'}, 0, length($info{'mix'}) - 1);
+        }
         return \%info;
     }
 }
@@ -1911,6 +1915,17 @@ sub _svgHandler {
         }
         if ((! -e $filePath) && (! -e $altFilePath)) {
             $filePath = $dir . "/HTML/material/html/images/artist.svg";
+        }
+    }
+
+    if (rindex($svgName, "random-")==0 && (! -e $filePath) && (! -e $altFilePath)) {
+        my $end = substr($svgName, -1);
+        if ($end ne "s") {
+            $filePath = $dir . "/HTML/material/html/images/" . $svgName . "s.svg";
+            $altFilePath = Slim::Utils::Prefs::dir() . "/material-skin/images/" . $svgName . "s.svg";
+        }
+        if ((! -e $filePath) && (! -e $altFilePath)) {
+            $filePath = $dir . "/HTML/material/html/images/dice-multiple.svg";
         }
     }
     # If desired path does not exist check alt location

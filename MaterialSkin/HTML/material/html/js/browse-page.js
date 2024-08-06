@@ -1383,11 +1383,15 @@ var lmsBrowse = Vue.component("lms-browse", {
                 }
             }
             this.top=[];
+            lmsOptions.randomMixDialogPinned = false;
             for (let i=0, len=items.length; i<len; ++i) {
                 if (items[i].id==TOP_CDPLAYER_ID || items[i].id==TOP_REMOTE_ID) {
                     updated = true; // No longer show CD Player, or Remote Libraries, so want list saved to remove this
                 } else {
                     this.top.push(items[i]);
+                    if (items[i].id==START_RANDOM_MIX_ID) {
+                        lmsOptions.randomMixDialogPinned = true;
+                    }
                 }
             }
             this.initItems();

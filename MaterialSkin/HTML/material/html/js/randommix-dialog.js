@@ -95,19 +95,19 @@ Vue.component('lms-randommix', {
         }
     },
     mounted() {
-        bus.$on('rndmix.open', function(existingName, controlOnly, browseHome) {
+        bus.$on('rndmix.open', function(existingName, controlOnly) {
             this.controlOnly = undefined!=controlOnly && controlOnly;
             this.name = undefined;
             this.pinnedItemName = undefined;
             this.showAll = getLocalStorageBool("rndmix.showAll", false);
             this.playerId = this.$store.state.player.id;
-            this.chosenMix = "tracks";
-            this.mixes=[{key:"tracks", label:i18n("Tracks")},
-                        {key:"albums", label:lmsOptions.supportReleaseTypes ? i18n("Releases") : i18n("Albums")},
-                        {key:"contributors", label:i18n("Artists")},
+            this.chosenMix = "track";
+            this.mixes=[{key:"track", label:i18n("Tracks")},
+                        {key:"album", label:lmsOptions.supportReleaseTypes ? i18n("Releases") : i18n("Albums")},
+                        {key:"contributor", label:i18n("Artists")},
                         {key:"year", label:i18n("Years")}];
             if (LMS_VERSION>=90000) {
-                this.mixes.push({key:"works", label:i18n("Works")});
+                this.mixes.push({key:"work", label:i18n("Works")});
             }
 
             if (undefined!=existingName) {
@@ -115,12 +115,12 @@ Vue.component('lms-randommix', {
             } else {
                 if (this.controlOnly) {
                     lmsCommand(this.playerId, ["randomplayisactive"]).then(({data}) => {
-                        if (data && data.result && data.result._randomplayisactive) {
+                        if (data && data.result && undefined!=data.result._randomplayisactive) {
                             this.chosenMix = data.result._randomplayisactive;
                             this.isActive = true;
                         } else {
                             this.isActive = false;
-                            this.chosenMix = "tracks";
+                            this.chosenMix = "track";
                         }
                         this.initGenres();
                         this.initLibraries();
@@ -132,16 +132,7 @@ Vue.component('lms-randommix', {
                     this.initConfig();
                 }
             }
-            this.pinned = false;
-            if (undefined!=browseHome) {
-                for (let i=0, len=browseHome.length; i<len; ++i) {
-                    if (browseHome[i].id==START_RANDOM_MIX_ID) {
-                        this.pinned = true;
-                        this.pinnedItemName = browseHome[i].title;
-                        break;
-                    }
-                }
-            }
+            this.pinned = lmsOptions.randomMixDialogPinned;
         }.bind(this));
         bus.$on('noPlayers', function() {
             this.show=false;
@@ -397,7 +388,6 @@ Vue.component('lms-randommix', {
             }
         },
         togglePin() {
-            console.log(this.pinnedItemName);
             bus.$emit('browse-pin', {id: START_RANDOM_MIX_ID, title: undefined==this.pinnedItemName ? i18n("Random Mix") : this.pinnedItemName, svg: "dice-play"}, !this.pinned);
         }
     },

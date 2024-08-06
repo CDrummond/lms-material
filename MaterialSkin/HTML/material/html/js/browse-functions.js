@@ -922,7 +922,7 @@ function browseClick(view, item, index, event) {
     } else if (RANDOM_MIX_ID==item.id) {
         view.fetchItems({command:["material-skin", "rndmix", "act:list"], params:[]}, item);
     } else if (START_RANDOM_MIX_ID==item.id) {
-        bus.$emit('dlg.open', 'rndmix', undefined, true, view.top);
+        bus.$emit('dlg.open', 'rndmix', undefined, true);
     } else if (STD_ITEM_GENRE==item.stdItem && view.current && (getField(item, "genre_id") || getField(item, "year"))) {
         browseAddCategories(view, item, true, getField(item, "year"));
         browseCheckExpand(view);
@@ -1237,7 +1237,7 @@ function browseItemAction(view, act, item, index, event) {
         bus.$emit('dlg.open', 'favorite', 'add', {id:(view.current.id.startsWith("item_id:") ? view.current.id+"." : "item_id:")+view.items.length});
     } else if (act==EDIT_ACTION) {
         if (item.stdItem==STD_ITEM_RANDOM_MIX) {
-            bus.$emit('dlg.open', 'rndmix', item.title, false, view.top);
+            bus.$emit('dlg.open', 'rndmix', item.title, false);
         } else {
             bus.$emit('dlg.open', 'favorite', 'edit', item);
         }
@@ -1602,7 +1602,7 @@ function browseItemAction(view, act, item, index, event) {
     } else if (COPY_DETAILS_ACTION==act) {
         copyTextToClipboard(stripTags(item.title)+(item.subtitle ? " "+stripTags(item.subtitle) : ""), true);
     } else if (NEW_RANDOM_MIX_ACTION==act) {
-        bus.$emit('dlg.open', 'rndmix', undefined, false, view.top);
+        bus.$emit('dlg.open', 'rndmix', undefined, false);
     } else {
         // If we are acting on a multi-disc album, prompt which disc we should act on
         if (item.multi && !view.current.id.startsWith("album_id:") && (PLAY_ACTION==act || ADD_ACTION==act || INSERT_ACTION==act || PLAY_SHUFFLE_ACTION==act)) {
@@ -2425,6 +2425,9 @@ function browsePin(view, item, add, mapped) {
                              command: command.command, params: command.params, isPinned: true, menu: [RENAME_ACTION, UNPIN_ACTION],
                              weight: undefined==item.weight ? 10000 : item.weight, section: item.section, cancache: item.cancache});
         }
+        if (item.id==START_RANDOM_MIX_ID) {
+            lmsOptions.randomMixDialogPinned = true;
+        }
         view.options.pinned.add(item.id);
         browseUpdateItemPinnedState(view, item);
         view.saveTopList();
@@ -2440,6 +2443,9 @@ function browsePin(view, item, add, mapped) {
                     for (var i=0, len=view.myMusic.length; i<len; ++i) {
                         view.myMusic[i].menu=[view.options.pinned.has(view.myMusic[i].id) ? UNPIN_ACTION : PIN_ACTION];
                     }
+                }
+                if (item.id==START_RANDOM_MIX_ID) {
+                    lmsOptions.randomMixDialogPinned = false;
                 }
                 view.saveTopList();
                 bus.$emit('pinnedChanged', item, false);

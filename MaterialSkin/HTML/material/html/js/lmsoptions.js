@@ -40,5 +40,6 @@ var lmsOptions = {techInfo: getLocalStorageBool('techInfo', false),
                   hidePlayers: new Set(getLocalStorageVal('hidePlayers', '').split(',')),
                   screensaverTimeout: getLocalStorageVal('screensaverTimeout', 60),
                   npSwitchTimeout: getLocalStorageVal('npSwitchTimeout', 5*60),
-                  userDefinedRoles: {}
+                  userDefinedRoles: {},
+                  randomMixDialogPinned: false
                 };

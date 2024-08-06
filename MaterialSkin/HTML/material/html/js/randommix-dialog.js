@@ -98,6 +98,7 @@ Vue.component('lms-randommix', {
         bus.$on('rndmix.open', function(existingName, controlOnly, browseHome) {
             this.controlOnly = undefined!=controlOnly && controlOnly;
             this.name = undefined;
+            this.pinnedItemName = undefined;
             this.showAll = getLocalStorageBool("rndmix.showAll", false);
             this.playerId = this.$store.state.player.id;
             this.chosenMix = "tracks";
@@ -136,6 +137,7 @@ Vue.component('lms-randommix', {
                 for (let i=0, len=browseHome.length; i<len; ++i) {
                     if (browseHome[i].id==START_RANDOM_MIX_ID) {
                         this.pinned = true;
+                        this.pinnedItemName = browseHome[i].title;
                         break;
                     }
                 }
@@ -156,6 +158,7 @@ Vue.component('lms-randommix', {
         bus.$on('pinnedChanged', function(item, state) {
             if (this.show && item.id==START_RANDOM_MIX_ID) {
                 this.pinned = state;
+                this.pinnedItemName = state ? item.title : undefined;
             }
         }.bind(this));
     },
@@ -394,7 +397,8 @@ Vue.component('lms-randommix', {
             }
         },
         togglePin() {
-            bus.$emit('browse-pin', {id: START_RANDOM_MIX_ID, title: i18n("Random Mix"), svg: "dice-play"}, !this.pinned);
+            console.log(this.pinnedItemName);
+            bus.$emit('browse-pin', {id: START_RANDOM_MIX_ID, title: undefined==this.pinnedItemName ? i18n("Random Mix") : this.pinnedItemName, svg: "dice-play"}, !this.pinned);
         }
     },
     watch: {

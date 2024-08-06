@@ -1,3 +1,8 @@
+5.2.2
+-----
+1. When offer to un-pin start-mix from home screen via 'Random Mix' dialog
+   then use displayed text of home screen item.
+
 5.2.1
 -----
 1. Fix permissions of Hungarian translations file.

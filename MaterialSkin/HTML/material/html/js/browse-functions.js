@@ -2406,7 +2406,7 @@ function browsePin(view, item, add, mapped) {
         } else if (item.stdItem==STD_ITEM_RANDOM_MIX) {
             view.top.splice(lastPinnedIndex+1, 0,
                 {id: item.id, title: item.title, svg: item.svg, isPinned: true, stdItem: item.stdItem,
-                 menu: [PLAY_ACTION, INSERT_ACTION, ADD_ACTION, DIVIDER, RENAME_ACTION, UNPIN_ACTION], weight: 10000});
+                 menu: [PLAY_ACTION, DIVIDER, UNPIN_ACTION], weight: 10000});
         } else if (item.id==START_RANDOM_MIX_ID) {
             view.top.splice(lastPinnedIndex+1, 0,
                 {id: item.id, title: item.title, svg: item.svg, isPinned: true, menu: [RENAME_ACTION, UNPIN_ACTION], weight: 10000});

@@ -7,6 +7,7 @@
 3. Fix mix types - these don't end in 's', i.e. 'track' not 'tracks'
 4. If no name entered into 'Random Mix' dialog then save should just update
    current settings.
+5. Only allow 'Play now' action for random mixes.
 
 5.2.1
 -----

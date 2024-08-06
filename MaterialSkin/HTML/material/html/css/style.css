@@ -3823,21 +3823,3 @@ div.v-subheader {
 .bm-checkbox .v-input--selection-controls__ripple {
  margin:0px!important;
 }
-
-.rndmix-ctrl {
- margin-left:32px!important;
-}
-
-@media (max-width:380px) {
- .rndmix-ctrl {
-  margin-left:16px!important;
- }
-}
-
-.rndmix-ctrl:first-of-type {
- margin-left:8px!important;
-}
-
-.rndmix-ctrl .v-icon {
-  color:var(--active-color) !important;
-}

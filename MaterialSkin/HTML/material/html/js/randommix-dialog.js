@@ -35,7 +35,7 @@ Vue.component('lms-randommix', {
   </v-card-text>
   <v-card-actions>
    <v-menu top v-model="showMenu">
-    <v-btn icon slot="activator"><v-icon>more_vert</v-icon></v-btn>
+    <v-btn icon slot="activator" style="position:absolute; bottom:8px"><v-icon>more_vert</v-icon></v-btn>
     <v-list>
      <v-list-tile @click.native="showAll=!showAll">
       <v-list-tile-avatar><v-icon>{{showAll ? 'check_box' : 'check_box_outline_blank'}}</v-icon></v-list-tile-avatar>
@@ -49,21 +49,33 @@ Vue.component('lms-randommix', {
    </v-menu>
    <v-spacer></v-spacer>
 
-   <v-btn flat icon class="rndmix-ctrl" v-if="icons && !queryParams.altBtnLayout" @click.native="close()"><v-icon>cancel</v-icon></v-btn>
-   <v-btn flat v-else-if="!queryParams.altBtnLayout" @click.native="close()">{{i18n('Cancel')}}</v-btn>
-
-   <v-btn flat icon class="rndmix-ctrl" v-if="icons" @click.native="save()"><v-icon>save</v-icon></v-btn>
-   <v-btn flat v-else @click.native="save()">{{i18n('Save')}}</v-btn>
-
-   <v-btn flat icon class="rndmix-ctrl" v-if="controlMix && icons" @click.native="stop()" v-bind:class="{'disabled':!isActive}"><v-icon>stop</v-icon></v-btn>
-   <v-btn flat v-else-if="controlMix" @click.native="stop()" v-bind:class="{'disabled':!isActive}">{{i18n('Stop')}}</v-btn>
-
-   <v-btn flat icon class="rndmix-ctrl" v-if="icons" @click.native="start()"><v-icon>play_arrow</v-icon></v-btn>
-   <v-btn flat v-else @click.native="start()">{{i18n('Start')}}</v-btn>
-
-   <v-btn flat icon class="rndmix-ctrl" v-if="icons && queryParams.altBtnLayout" @click.native="close()"><v-icon>cancel</v-icon></v-btn>
-   <v-btn flat v-else-if="queryParams.altBtnLayout" @click.native="close()">{{i18n('Cancel')}}</v-btn>
-
+   <table v-if="narrow" style="text-align: center">
+    <tr>
+     <td><v-btn flat v-if="controlMix" @click.native="stop()" v-bind:class="{'disabled':!isActive}">{{i18n('Stop')}}</v-btn></td>
+     <td><v-btn flat @click.native="start()">{{i18n('Start')}}</v-btn></td>
+    </tr>
+    <tr style="height:16px"></tr>
+    <tr v-if="queryParams.altBtnLayout">
+     <td><v-btn flat @click.native="save()">{{i18n('Save')}}</v-btn></td>
+     <td><v-btn flat @click.native="close()">{{i18n('Cancel')}}</v-btn></td>
+    </tr>
+    <tr v-else>
+     <td><v-btn flat @click.native="close()">{{i18n('Cancel')}}</v-btn></td>
+     <td><v-btn flat @click.native="save()">{{i18n('Save')}}</v-btn></td>
+    </tr>
+   </table>
+   <div v-else-if="queryParams.altBtnLayout">
+    <v-btn flat v-if="controlMix" @click.native="stop()" v-bind:class="{'disabled':!isActive}">{{i18n('Stop')}}</v-btn>
+    <v-btn flat @click.native="start()">{{i18n('Start')}}</v-btn>
+    <v-btn flat @click.native="save()">{{i18n('Save')}}</v-btn>
+    <v-btn flat @click.native="close()">{{i18n('Cancel')}}</v-btn>
+   </div>
+   <div v-else>
+    <v-btn flat @click.native="close()">{{i18n('Cancel')}}</v-btn>
+    <v-btn flat @click.native="save()">{{i18n('Save')}}</v-btn>
+    <v-btn flat v-if="controlMix" @click.native="stop()" v-bind:class="{'disabled':!isActive}">{{i18n('Stop')}}</v-btn>
+    <v-btn flat @click.native="start()">{{i18n('Start')}}</v-btn>
+   </div>
   </v-card-actions>
  </v-card>
 </v-dialog>
@@ -88,7 +100,7 @@ Vue.component('lms-randommix', {
             controlMix: false,
             isActive: false,
             pinned: false,
-            icons: false
+            narrow: false
         }
     },
     computed: {
@@ -172,7 +184,7 @@ Vue.component('lms-randommix', {
     },
     methods: {
         checkWidth() {
-            this.icons=window.innerWidth<=(this.controlMix ? 500 : 400);
+            this.narrow=window.innerWidth<=(this.controlMix ? 500 : 400);
         },
         initGenres() {
             this.chosenGenres = [];

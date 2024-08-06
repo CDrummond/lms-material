@@ -1859,70 +1859,76 @@ sub _svgHandler {
     my $colour2 = "#";
 
     # If this is for a release type then fallback to release.svg if it does not exist
-    if (rindex($svgName, "release-")==0 && (! -e $filePath) && (! -e $altFilePath)) {
-        my $end = substr($svgName, -1);
-        if ($end eq "s") {
-            $svgName = substr($svgName, 0, -1);
-            $filePath = $dir . "/HTML/material/html/images/" . $svgName . ".svg";
-            $altFilePath = Slim::Utils::Prefs::dir() . "/material-skin/images/" . $svgName . ".svg";
-        }
+    if (rindex($svgName, "release-")==0) {
         if ((! -e $filePath) && (! -e $altFilePath)) {
-            if (rindex($svgName, "release-live")==0) {
-                $filePath = $dir . "/HTML/material/html/images/release-live.svg";
-            } elsif (rindex($svgName, "release-remix")==0) {
-                $filePath = $dir . "/HTML/material/html/images/release-remix.svg";
-            } elsif (rindex($svgName, "composer")>0) {
-                $filePath = $dir . "/HTML/material/html/images/release-composer.svg";
-            } elsif (rindex($svgName, "conductor")>0) {
-                $filePath = $dir . "/HTML/material/html/images/release-conductor.svg";
-            } elsif ((rindex($svgName, "orchestra")>0) || (rindex($svgName, "appearanceband")>0)) {
-                $filePath = $dir . "/HTML/material/html/images/release-orchestra.svg";
-            } elsif (rindex($svgName, "appearance")>0) {
-                $filePath = $dir . "/HTML/material/html/images/release-appearance.svg";
+            my $end = substr($svgName, -1);
+            if ($end eq "s") {
+                $svgName = substr($svgName, 0, -1);
+                $filePath = $dir . "/HTML/material/html/images/" . $svgName . ".svg";
+                $altFilePath = Slim::Utils::Prefs::dir() . "/material-skin/images/" . $svgName . ".svg";
             }
-        }
-        if ((! -e $filePath) && (! -e $altFilePath)) {
-            $filePath = $dir . "/HTML/material/html/images/release.svg";
+            if ((! -e $filePath) && (! -e $altFilePath)) {
+                if (rindex($svgName, "release-live")==0) {
+                    $filePath = $dir . "/HTML/material/html/images/release-live.svg";
+                } elsif (rindex($svgName, "release-remix")==0) {
+                    $filePath = $dir . "/HTML/material/html/images/release-remix.svg";
+                } elsif (rindex($svgName, "composer")>0) {
+                    $filePath = $dir . "/HTML/material/html/images/release-composer.svg";
+                } elsif (rindex($svgName, "conductor")>0) {
+                    $filePath = $dir . "/HTML/material/html/images/release-conductor.svg";
+                } elsif ((rindex($svgName, "orchestra")>0) || (rindex($svgName, "appearanceband")>0)) {
+                    $filePath = $dir . "/HTML/material/html/images/release-orchestra.svg";
+                } elsif (rindex($svgName, "appearance")>0) {
+                    $filePath = $dir . "/HTML/material/html/images/release-appearance.svg";
+                }
+            }
+            if ((! -e $filePath) && (! -e $altFilePath)) {
+                $filePath = $dir . "/HTML/material/html/images/release.svg";
+            }
         }
     }
     # If this is for a role type then fallback to artist.svg if it does not exist
-    if (rindex($svgName, "role-")==0 && (! -e $filePath) && (! -e $altFilePath)) {
-        $svgName = substr($svgName, 5);
-        if (looks_like_number($svgName)) { # Numerical value, map to name
-            my $val = int(0 + $svgName);
-            if (2==$val) {
-                $svgName = "role-composer";
-            } elsif (3==$val) {
-                $svgName = "role-conductor";
-            } elsif (4==$val) {
-                $svgName = "role-band";
-            } elsif (5==$val) {
-                $svgName = "role-albumartist";
-            } elsif ($val>=21) {
-                my $roles = $serverprefs->get('userDefinedRoles');
-                foreach my $role (keys %{$roles}) {
-                    if ($roles->{$role}->{id}==$val) {
-                        $svgName = "role-" . lc($role);
-                        last;
+    elsif (rindex($svgName, "role-")==0) {
+        if ((! -e $filePath) && (! -e $altFilePath)) {
+            $svgName = substr($svgName, 5);
+            if (looks_like_number($svgName)) { # Numerical value, map to name
+                my $val = int(0 + $svgName);
+                if (2==$val) {
+                    $svgName = "role-composer";
+                } elsif (3==$val) {
+                    $svgName = "role-conductor";
+                } elsif (4==$val) {
+                    $svgName = "role-band";
+                } elsif (5==$val) {
+                    $svgName = "role-albumartist";
+                } elsif ($val>=21) {
+                    my $roles = $serverprefs->get('userDefinedRoles');
+                    foreach my $role (keys %{$roles}) {
+                        if ($roles->{$role}->{id}==$val) {
+                            $svgName = "role-" . lc($role);
+                            last;
+                        }
                     }
                 }
+                $filePath = $dir . "/HTML/material/html/images/" . $svgName . ".svg";
+                $altFilePath = Slim::Utils::Prefs::dir() . "/material-skin/images/" . $svgName . ".svg";
             }
-            $filePath = $dir . "/HTML/material/html/images/" . $svgName . ".svg";
-            $altFilePath = Slim::Utils::Prefs::dir() . "/material-skin/images/" . $svgName . ".svg";
-        }
-        if ((! -e $filePath) && (! -e $altFilePath)) {
-            $filePath = $dir . "/HTML/material/html/images/artist.svg";
+            if ((! -e $filePath) && (! -e $altFilePath)) {
+                $filePath = $dir . "/HTML/material/html/images/artist.svg";
+            }
         }
     }
 
-    if (rindex($svgName, "random-")==0 && (! -e $filePath) && (! -e $altFilePath)) {
-        my $end = substr($svgName, -1);
-        if ($end ne "s") {
-            $filePath = $dir . "/HTML/material/html/images/" . $svgName . "s.svg";
-            $altFilePath = Slim::Utils::Prefs::dir() . "/material-skin/images/" . $svgName . "s.svg";
-        }
+    elsif (rindex($svgName, "random-")==0) {
         if ((! -e $filePath) && (! -e $altFilePath)) {
-            $filePath = $dir . "/HTML/material/html/images/dice-multiple.svg";
+            my $end = substr($svgName, -1);
+            if ($end ne "s") {
+                $filePath = $dir . "/HTML/material/html/images/" . $svgName . "s.svg";
+                $altFilePath = Slim::Utils::Prefs::dir() . "/material-skin/images/" . $svgName . "s.svg";
+            }
+            if ((! -e $filePath) && (! -e $altFilePath)) {
+                $filePath = $dir . "/HTML/material/html/images/dice-multiple.svg";
+            }
         }
     }
     # If desired path does not exist check alt location

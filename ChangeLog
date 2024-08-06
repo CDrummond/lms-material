@@ -5,6 +5,8 @@
 2. For LMS9.0 when click on queue/now-playing 'Random Mix' icon show start-mix
    dialog.
 3. Fix mix types - these don't end in 's', i.e. 'track' not 'tracks'
+4. If no name entered into 'Random Mix' dialog then save should just update
+   current settings.
 
 5.2.1
 -----

@@ -11,7 +11,7 @@ Vue.component('lms-randommix', {
 <v-dialog v-model="show" v-if="show" persistent scrollable width="600">
  <v-card>
   <v-card-text>
-   <v-text-field v-if="!controlOnly" :label="i18n('Name')" v-model="name" type="string"></v-text-field>
+   <v-text-field v-if="!controlMix" :label="i18n('Name')" v-model="name" type="string"></v-text-field>
    <v-select :items="mixes" :label="i18n('Mix Type')" v-model="chosenMix" item-text="label" item-value="key"></v-select>
    <div class="dialog-main-list">
    <v-select chips deletable-chips multiple :items="genres" :label="i18n('Selected Genres')" v-model="chosenGenres">
@@ -48,12 +48,22 @@ Vue.component('lms-randommix', {
     </v-list>
    </v-menu>
    <v-spacer></v-spacer>
-   <v-btn flat v-if="queryParams.altBtnLayout" @click.native="start()">{{i18n('Start')}}</v-btn>
-   <v-btn flat v-else @click.native="close()">{{i18n('Cancel')}}</v-btn>
-   <v-btn flat v-if="controlOnly" @click.native="stop()" v-bind:class="{'disabled':!isActive}">{{i18n('Stop')}}</v-btn>
-   <v-btn flat v-else @click.native="save()" v-bind:class="{'disabled':!name || name.length<1}">{{i18n('Save')}}</v-btn>
-   <v-btn flat v-if="queryParams.altBtnLayout" @click.native="close()">{{i18n('Cancel')}}</v-btn>
+
+   <v-btn flat icon class="rndmix-ctrl" v-if="icons && !queryParams.altBtnLayout" @click.native="close()"><v-icon>cancel</v-icon></v-btn>
+   <v-btn flat v-else-if="!queryParams.altBtnLayout" @click.native="close()">{{i18n('Cancel')}}</v-btn>
+
+   <v-btn flat icon class="rndmix-ctrl" v-if="icons" @click.native="save()"><v-icon>save</v-icon></v-btn>
+   <v-btn flat v-else @click.native="save()">{{i18n('Save')}}</v-btn>
+
+   <v-btn flat icon class="rndmix-ctrl" v-if="controlMix && icons" @click.native="stop()" v-bind:class="{'disabled':!isActive}"><v-icon>stop</v-icon></v-btn>
+   <v-btn flat v-else-if="controlMix" @click.native="stop()" v-bind:class="{'disabled':!isActive}">{{i18n('Stop')}}</v-btn>
+
+   <v-btn flat icon class="rndmix-ctrl" v-if="icons" @click.native="start()"><v-icon>play_arrow</v-icon></v-btn>
    <v-btn flat v-else @click.native="start()">{{i18n('Start')}}</v-btn>
+
+   <v-btn flat icon class="rndmix-ctrl" v-if="icons && queryParams.altBtnLayout" @click.native="close()"><v-icon>cancel</v-icon></v-btn>
+   <v-btn flat v-else-if="queryParams.altBtnLayout" @click.native="close()">{{i18n('Cancel')}}</v-btn>
+
   </v-card-actions>
  </v-card>
 </v-dialog>
@@ -75,9 +85,10 @@ Vue.component('lms-randommix', {
             oldTracks: 10,
             newTracks: 10,
             isWide: true,
-            controlOnly: false,
+            controlMix: false,
             isActive: false,
-            pinned: false
+            pinned: false,
+            icons: false
         }
     },
     computed: {
@@ -95,8 +106,8 @@ Vue.component('lms-randommix', {
         }
     },
     mounted() {
-        bus.$on('rndmix.open', function(existingName, controlOnly) {
-            this.controlOnly = undefined!=controlOnly && controlOnly;
+        bus.$on('rndmix.open', function(existingName, controlMix) {
+            this.controlMix = undefined!=controlMix && controlMix;
             this.name = undefined;
             this.pinnedItemName = undefined;
             this.showAll = getLocalStorageBool("rndmix.showAll", false);
@@ -113,7 +124,7 @@ Vue.component('lms-randommix', {
             if (undefined!=existingName) {
                 this.loadSavedMixParams(existingName);
             } else {
-                if (this.controlOnly) {
+                if (this.controlMix) {
                     lmsCommand(this.playerId, ["randomplayisactive"]).then(({data}) => {
                         if (data && data.result && undefined!=data.result._randomplayisactive) {
                             this.chosenMix = data.result._randomplayisactive;
@@ -133,6 +144,7 @@ Vue.component('lms-randommix', {
                 }
             }
             this.pinned = lmsOptions.randomMixDialogPinned;
+            this.checkWidth();
         }.bind(this));
         bus.$on('noPlayers', function() {
             this.show=false;
@@ -152,8 +164,16 @@ Vue.component('lms-randommix', {
                 this.pinnedItemName = state ? item.title : undefined;
             }
         }.bind(this));
+        bus.$on('windowWidthChanged', function() {
+            if (this.show) {
+                this.checkWidth();
+            }
+        }.bind(this));
     },
     methods: {
+        checkWidth() {
+            this.icons=window.innerWidth<=(this.controlMix ? 500 : 400);
+        },
         initGenres() {
             this.chosenGenres = [];
             this.genres = [];
@@ -304,6 +324,9 @@ Vue.component('lms-randommix', {
             setLocalStorageVal("rndmix.showAll", this.showAll);
         },
         start() {
+            this.saveSettings(true);
+        },
+        saveSettings(activateMix) {
             this.close();
             lmsCommand("", ["pref", "plugin.randomplay:continuous", this.continuous ? 1 : 0]);
             lmsCommand("", ["pref", "plugin.randomplay:newtracks", this.newTracks]);
@@ -315,19 +338,26 @@ Vue.component('lms-randommix', {
             lmsCommand(this.playerId, ["randomplaychooselibrary", libId]).then(({data}) => {
                 if (this.chosenGenres.length==0) {
                     lmsCommand(this.playerId, ["randomplaygenreselectall", "0"]).then(({data}) => {
-                        lmsCommand(this.playerId, ["randomplay", this.chosenMix]);
+                        if (activateMix) {
+                            this.startMix();
+                        }
                     });
                 } else if (this.chosenGenres.length==this.genres.length) {
                     lmsCommand(this.playerId, ["randomplaygenreselectall", "1"]).then(({data}) => {
-                        lmsCommand(this.playerId, ["randomplay", this.chosenMix]).then(({data}) => {
-                            bus.$emit('refreshStatus');
-                        });
+                        if (activateMix) {
+                            this.startMix();
+                        }
                     });
                 } else {
                     lmsCommand(this.playerId, ["randomplaygenreselectall", "0"]).then(({data}) => {
-                        this.addGenre();
+                        this.addGenre(activateMix);
                     });
                 }
+            });
+        },
+        startMix() {
+            lmsCommand(this.playerId, ["randomplay", this.chosenMix]).then(({data}) => {
+                bus.$emit('refreshStatus');
             });
         },
         stop() {
@@ -347,6 +377,7 @@ Vue.component('lms-randommix', {
                 name = name.replaceAll(remove[r], "");
             }
             if (name.length<1) {
+                this.saveSettings(false);
                 return;
             }
             this.name = name;
@@ -362,14 +393,14 @@ Vue.component('lms-randommix', {
                 this.close();
             });
         },
-        addGenre() {
+        addGenre(activateMix) {
             if (0==this.chosenGenres.length) {
-                lmsCommand(this.playerId, ["randomplay", this.chosenMix]).then(({data}) => {
-                    bus.$emit('refreshStatus');
-                });
+                if (activateMix) {
+                    this.startMix();
+                }
             } else {
                 lmsCommand(this.playerId, ["randomplaychoosegenre", this.chosenGenres.shift(), "1"]).then(({data}) => {
-                    this.addGenre();
+                    this.addGenre(activateMix);
                 });
             }
         },

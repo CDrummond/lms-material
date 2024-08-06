@@ -121,6 +121,7 @@ Vue.component('lms-randommix', {
         bus.$on('rndmix.open', function(existingName, controlMix) {
             this.controlMix = undefined!=controlMix && controlMix;
             this.name = undefined;
+            this.origName = undefined;
             this.pinnedItemName = undefined;
             this.showAll = getLocalStorageBool("rndmix.showAll", false);
             this.playerId = this.$store.state.player.id;
@@ -135,6 +136,7 @@ Vue.component('lms-randommix', {
 
             if (undefined!=existingName) {
                 this.loadSavedMixParams(existingName);
+                this.origName = existingName;
             } else {
                 if (this.controlMix) {
                     lmsCommand(this.playerId, ["randomplayisactive"]).then(({data}) => {
@@ -389,7 +391,9 @@ Vue.component('lms-randommix', {
                 name = name.replaceAll(remove[r], "");
             }
             if (name.length<1) {
-                this.saveSettings(false);
+                if (this.origName!=undefined) {
+                    this.saveSettings(false);
+                }
                 return;
             }
             this.name = name;
@@ -401,8 +405,15 @@ Vue.component('lms-randommix', {
                             "oldtracks:"+this.oldTracks,
                             "newtracks:"+this.newTracks,
                             "library:"+this.library]).then(({data}) => {
-                bus.$emit('refreshList');
-                this.close();
+                if (this.origName!=undefined && name!=this.origName) {
+                    lmsCommand("", ["material-skin", "rndmix", "act:delete", "name:"+this.origName]).then(({data}) => {
+                        bus.$emit('refreshList');
+                        this.close();
+                    });
+                } else {
+                    bus.$emit('refreshList');
+                    this.close();
+                }
             });
         },
         addGenre(activateMix) {

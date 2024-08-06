@@ -1466,11 +1466,6 @@ sub _cliCommand {
                 if ($details) {
                     $request->addResultLoop('rndmix_loop', $cnt, 'name', substr(basename($file), 0, $extLen));
                     $request->addResultLoop('rndmix_loop', $cnt, 'mix', $details->{'mix'});
-                    my $url = "randomplay://" . $details->{'mix'} . "?dontContinue=" . ($details->{'continuous'} ? 0 : 1);
-                    if (length($details->{'genres'})>0) {
-                        $url = $url . "&genres=" . $details->{'genres'};
-                    }
-                    $request->addResultLoop('rndmix_loop', $cnt, 'url', $url);
                 }
                 $cnt++;
             }
@@ -1676,10 +1671,6 @@ sub _cliClientCommand {
             my $path = File::Spec->catpath('', $folder, $name . RANDOM_MIX_EXT);
             my $details = _readRandMix($path);
             if ($details) {
-                my $url = "randomplay://" . $details->{'mix'} . "?dontContinue=" . ($details->{'continuous'} ? 0 : 1);
-                if (length($details->{'genres'})>0) {
-                    $url = $url . "&genres=" . $details->{'genres'};
-                }
                 my $rprefs = preferences('plugin.randomplay');
                 my $var = int($details->{'newtracks'});
                 if ($var<1 || $var>1000) {
@@ -1691,8 +1682,14 @@ sub _cliClientCommand {
                     $var = 10;
                 }
                 $rprefs->set('oldtracks', $var);
+                $rprefs->set('continuous', int($details->{'continuous'}));
+                $client->execute(["randomplaygenreselectall", "0"]);
+                my @genres = split /,/, $details->{'genres'};
+                foreach my $genre (@genres) {
+                    $client->execute(["randomplaychoosegenre", $genre, "1"]);
+                }
                 $client->execute(["randomplaychooselibrary", $details->{'library'}]);
-                $client->execute(["playlist", $act, $url]);
+                $client->execute(["randomplay", $details->{'mix'}]);
                 $request->setStatusDone();
                 return;
             }

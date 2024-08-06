@@ -11,7 +11,7 @@ Vue.component('lms-randommix', {
 <v-dialog v-model="show" v-if="show" persistent scrollable width="600">
  <v-card>
   <v-card-text>
-   <v-text-field :label="i18n('Name')" v-model="name" type="string"></v-text-field>
+   <v-text-field v-if="!controlOnly" :label="i18n('Name')" v-model="name" type="string"></v-text-field>
    <v-select :items="mixes" :label="i18n('Mix Type')" v-model="chosenMix" item-text="label" item-value="key"></v-select>
    <div class="dialog-main-list">
    <v-select chips deletable-chips multiple :items="genres" :label="i18n('Selected Genres')" v-model="chosenGenres">
@@ -34,11 +34,24 @@ Vue.component('lms-randommix', {
    </div>
   </v-card-text>
   <v-card-actions>
-   <v-btn flat icon @click.native="showAll=!showAll"><v-icon>{{showAll ? 'unfold_less' : 'unfold_more'}}</v-icon></v-btn>
+   <v-menu top v-model="showMenu">
+    <v-btn icon slot="activator"><v-icon>more_vert</v-icon></v-btn>
+    <v-list>
+     <v-list-tile @click.native="showAll=!showAll">
+      <v-list-tile-avatar><v-icon>{{showAll ? 'check_box' : 'check_box_outline_blank'}}</v-icon></v-list-tile-avatar>
+      <v-list-tile-content><v-list-tile-title>{{i18n('All options')}}</v-list-tile-title></v-list-tile-content>
+     </v-list-tile>
+     <v-list-tile @click.native="togglePin">
+      <v-list-tile-avatar><img class="svg-img" :src="ACTIONS[pinned ? UNPIN_ACTION : PIN_ACTION].svg | svgIcon(darkUi)"></img></v-list-tile-avatar>
+      <v-list-tile-content><v-list-tile-title>{{ACTIONS[pinned ? UNPIN_ACTION : PIN_ACTION].title}}</v-list-tile-title></v-list-tile-content>
+     </v-list-tile>
+    </v-list>
+   </v-menu>
    <v-spacer></v-spacer>
    <v-btn flat v-if="queryParams.altBtnLayout" @click.native="start()">{{i18n('Start')}}</v-btn>
    <v-btn flat v-else @click.native="close()">{{i18n('Cancel')}}</v-btn>
-   <v-btn flat @click.native="save()" v-bind:class="{'disabled':!name || name.length<1}">{{i18n('Save')}}</v-btn>
+   <v-btn flat v-if="controlOnly" @click.native="stop()" v-bind:class="{'disabled':!isActive}">{{i18n('Stop')}}</v-btn>
+   <v-btn flat v-else @click.native="save()" v-bind:class="{'disabled':!name || name.length<1}">{{i18n('Save')}}</v-btn>
    <v-btn flat v-if="queryParams.altBtnLayout" @click.native="close()">{{i18n('Cancel')}}</v-btn>
    <v-btn flat v-else @click.native="start()">{{i18n('Start')}}</v-btn>
   </v-card-actions>
@@ -50,6 +63,7 @@ Vue.component('lms-randommix', {
         return {
             show: false,
             showAll: false,
+            showMenu: false,
             name: undefined,
             genres: [],
             chosenGenres: [],
@@ -60,7 +74,10 @@ Vue.component('lms-randommix', {
             continuous: true,
             oldTracks: 10,
             newTracks: 10,
-            isWide: true
+            isWide: true,
+            controlOnly: false,
+            isActive: false,
+            pinned: false
         }
     },
     computed: {
@@ -72,10 +89,14 @@ Vue.component('lms-randommix', {
                 return "indeterminate_check_box";
             }
             return "check_box_outline_blank";
+        },
+        darkUi () {
+            return this.$store.state.darkUi
         }
     },
     mounted() {
-        bus.$on('rndmix.open', function(existingName) {
+        bus.$on('rndmix.open', function(existingName, controlOnly, browseHome) {
+            this.controlOnly = undefined!=controlOnly && controlOnly;
             this.name = undefined;
             this.showAll = getLocalStorageBool("rndmix.showAll", false);
             this.playerId = this.$store.state.player.id;
@@ -91,9 +112,33 @@ Vue.component('lms-randommix', {
             if (undefined!=existingName) {
                 this.loadSavedMixParams(existingName);
             } else {
-                this.initGenres();
-                this.initLibraries();
-                this.initConfig();
+                if (this.controlOnly) {
+                    lmsCommand(this.playerId, ["randomplayisactive"]).then(({data}) => {
+                        if (data && data.result && data.result._randomplayisactive) {
+                            this.chosenMix = data.result._randomplayisactive;
+                            this.isActive = true;
+                        } else {
+                            this.isActive = false;
+                            this.chosenMix = "tracks";
+                        }
+                        this.initGenres();
+                        this.initLibraries();
+                        this.initConfig();
+                    });
+                } else {
+                    this.initGenres();
+                    this.initLibraries();
+                    this.initConfig();
+                }
+            }
+            this.pinned = false;
+            if (undefined!=browseHome) {
+                for (let i=0, len=browseHome.length; i<len; ++i) {
+                    if (browseHome[i].id==START_RANDOM_MIX_ID) {
+                        this.pinned = true;
+                        break;
+                    }
+                }
             }
         }.bind(this));
         bus.$on('noPlayers', function() {
@@ -107,6 +152,11 @@ Vue.component('lms-randommix', {
         this.isWide = window.innerWidth>=450;
         bus.$on('windowWidthChanged', function() {
             this.isWide = window.innerWidth>=450;
+        }.bind(this));
+        bus.$on('pinnedChanged', function(item, state) {
+            if (this.show && item.id==START_RANDOM_MIX_ID) {
+                this.pinned = state;
+            }
         }.bind(this));
     },
     methods: {
@@ -286,6 +336,12 @@ Vue.component('lms-randommix', {
                 }
             });
         },
+        stop() {
+            if (this.isActive) {
+                this.close();
+                lmsCommand(this.playerId, ["randomplay", "disable"]);
+            }
+        },
         save() {
             let name = this.name ? this.name.trim() : "";
             let replace = "?<>\\:*|/";
@@ -336,11 +392,19 @@ Vue.component('lms-randommix', {
             } else {
                 return str;
             }
+        },
+        togglePin() {
+            bus.$emit('browse-pin', {id: START_RANDOM_MIX_ID, title: i18n("Random Mix"), svg: "dice-play"}, !this.pinned);
         }
     },
     watch: {
         'show': function(val) {
             this.$store.commit('dialogOpen', {name:'rndmix', shown:val});
+        }
+    },
+    filters: {
+        svgIcon: function (name, dark) {
+            return "/material/svg/"+name+"?c="+(dark ? LMS_DARK_SVG : LMS_LIGHT_SVG)+"&r="+LMS_MATERIAL_REVISION;
         }
     }
 })

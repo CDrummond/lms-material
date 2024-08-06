@@ -921,6 +921,8 @@ function browseClick(view, item, index, event) {
         browseAddWorksCategories(view, item);
     } else if (RANDOM_MIX_ID==item.id) {
         view.fetchItems({command:["material-skin", "rndmix", "act:list"], params:[]}, item);
+    } else if (START_RANDOM_MIX_ID==item.id) {
+        bus.$emit('dlg.open', 'rndmix', undefined, true, view.top);
     } else if (STD_ITEM_GENRE==item.stdItem && view.current && (getField(item, "genre_id") || getField(item, "year"))) {
         browseAddCategories(view, item, true, getField(item, "year"));
         browseCheckExpand(view);
@@ -1235,7 +1237,7 @@ function browseItemAction(view, act, item, index, event) {
         bus.$emit('dlg.open', 'favorite', 'add', {id:(view.current.id.startsWith("item_id:") ? view.current.id+"." : "item_id:")+view.items.length});
     } else if (act==EDIT_ACTION) {
         if (item.stdItem==STD_ITEM_RANDOM_MIX) {
-            bus.$emit('dlg.open', 'rndmix', item.title);
+            bus.$emit('dlg.open', 'rndmix', item.title, false, view.top);
         } else {
             bus.$emit('dlg.open', 'favorite', 'edit', item);
         }
@@ -1600,7 +1602,7 @@ function browseItemAction(view, act, item, index, event) {
     } else if (COPY_DETAILS_ACTION==act) {
         copyTextToClipboard(stripTags(item.title)+(item.subtitle ? " "+stripTags(item.subtitle) : ""), true);
     } else if (NEW_RANDOM_MIX_ACTION==act) {
-        bus.$emit('dlg.open', 'rndmix');
+        bus.$emit('dlg.open', 'rndmix', undefined, false, view.top);
     } else {
         // If we are acting on a multi-disc album, prompt which disc we should act on
         if (item.multi && !view.current.id.startsWith("album_id:") && (PLAY_ACTION==act || ADD_ACTION==act || INSERT_ACTION==act || PLAY_SHUFFLE_ACTION==act)) {
@@ -2405,6 +2407,9 @@ function browsePin(view, item, add, mapped) {
             view.top.splice(lastPinnedIndex+1, 0,
                 {id: item.id, title: item.title, svg: item.svg, isPinned: true, stdItem: item.stdItem,
                  menu: [PLAY_ACTION, INSERT_ACTION, ADD_ACTION, DIVIDER, RENAME_ACTION, UNPIN_ACTION], weight: 10000});
+        } else if (item.id==START_RANDOM_MIX_ID) {
+            view.top.splice(lastPinnedIndex+1, 0,
+                {id: item.id, title: item.title, svg: item.svg, isPinned: true, menu: [RENAME_ACTION, UNPIN_ACTION], weight: 10000});
         } else if (item.type=='extra') {
             view.top.splice(lastPinnedIndex+1, 0,
                             {id: item.id, title: item.title, icon: item.icon, svg: item.svg, url: item.url, isPinned: true, type:item.type,
@@ -2424,7 +2429,7 @@ function browsePin(view, item, add, mapped) {
         browseUpdateItemPinnedState(view, item);
         view.saveTopList();
         bus.$emit('showMessage', i18n("Pinned '%1' to home screen.", item.title));
-        bus.$emit('pinnedChanged');
+        bus.$emit('pinnedChanged', item, true);
     } else if (!add && index!=-1) {
         confirm(i18n("Un-pin '%1'?", item.title), i18n('Un-pin')).then(res => {
             if (res) {
@@ -2437,7 +2442,7 @@ function browsePin(view, item, add, mapped) {
                     }
                 }
                 view.saveTopList();
-                bus.$emit('pinnedChanged');
+                bus.$emit('pinnedChanged', item, false);
                 if (view.grid.use) {
                     view.layoutGrid(true);
                 }

@@ -7,6 +7,8 @@
    underscores, and removing any semi-colon, single/double quote, tab, or
    new-line characters.
 4. Fix empty home screen if random mix pinned and showing a list.
+5. Add menu to 'Random Mix' dialog with option to pin start-mix dialog to home
+   screen.
 
 5.2.0
 -----

@@ -2028,7 +2028,9 @@ var lmsBrowse = Vue.component("lms-browse", {
                 bus.$emit('search-for', text, page);
             });
         }.bind(this));
-
+        bus.$on('browse-pin', function(item, add) {
+            browsePin(this, item, add);
+        }.bind(this));
         bus.$on('browse', function(cmd, params, title, page, clearHistory, subtitle) {
             this.clearSelection();
             if (this.$store.state.desktopLayout) {

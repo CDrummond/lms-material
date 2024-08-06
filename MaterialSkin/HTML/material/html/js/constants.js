@@ -128,6 +128,7 @@ const ADV_SEARCH_ID = MUSIC_ID_PREFIX+"lms-adv-search";
 const GENRES_ID = MUSIC_ID_PREFIX+"genres";
 const YEARS_ID = MUSIC_ID_PREFIX+"years";
 const RANDOM_MIX_ID = MUSIC_ID_PREFIX+"randomMix";
+const START_RANDOM_MIX_ID = MUSIC_ID_PREFIX+"randomMixStart";
 const ARTIST_TAGS = "tags:s";
 const ALBUM_TAGS = "tags:ajlqswyKS";
 const ALBUM_TAGS_ALL_ARTISTS = "tags:aajlqswyKSS";

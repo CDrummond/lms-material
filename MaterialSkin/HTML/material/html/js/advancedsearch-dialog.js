@@ -134,7 +134,7 @@ Vue.component('lms-advancedsearch-dialog', {
   <v-card-actions v-if="queryParams.altBtnLayout">
    <div v-if="searching" style="padding-left:8px">{{i18n('Searching...')}}</div>
    <v-menu v-else top v-model="showMenu">
-   <v-btn icon slot="activator"><v-icon>settings</v-icon></v-btn>
+   <v-btn icon slot="activator"><v-icon>more_vert</v-icon></v-btn>
    <v-list>
     <template v-for="(sect, index) in sections">
      <v-list-tile @click="sect.visible=!sect.visible" v-if="stats || !sect.isstats">
@@ -151,7 +151,7 @@ Vue.component('lms-advancedsearch-dialog', {
   <v-card-actions v-else>
    <div v-if="searching" style="padding-left:8px">{{i18n('Searching...')}}</div>
    <v-menu v-else top v-model="showMenu">
-   <v-btn icon slot="activator"><v-icon>settings</v-icon></v-btn>
+   <v-btn icon slot="activator"><v-icon>more_vert</v-icon></v-btn>
    <v-list>
     <template v-for="(sect, index) in sections">
      <v-list-tile @click="sect.visible=!sect.visible" v-if="stats || !sect.isstats">

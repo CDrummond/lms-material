@@ -126,7 +126,7 @@ Vue.component('lms-randommix', {
             } else {
                 if (this.controlMix) {
                     lmsCommand(this.playerId, ["randomplayisactive"]).then(({data}) => {
-                        if (data && data.result && undefined!=data.result._randomplayisactive) {
+                        if (data && data.result && !isEmpty(data.result._randomplayisactive)) {
                             this.chosenMix = data.result._randomplayisactive;
                             this.isActive = true;
                         } else {

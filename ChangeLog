@@ -2,8 +2,8 @@
 -----
 1. Fix permissions of Hungarian translations file.
 2. Rename Hungarian translation files from "hu-hu" to "hu"
-3. Try to ensure random mixes have "safe" names by replacing any quesiton mark,
-   less/greater than, back/forward slashes, colon, or asterisk charaters with
+3. Try to ensure random mixes have "safe" names by replacing any question mark,
+   less/greater than, back/forward slashes, colon, or asterisk characters with
    underscores, and removing any semi-colon, single/double quote, tab, or
    new-line characters.
 4. Fix empty home screen if random mix pinned and showing a list.

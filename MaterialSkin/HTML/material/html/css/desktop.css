@@ -10,7 +10,7 @@
  --np-portrait-image-size:min(calc(var(--100vh) - (var(--main-toolbar-height) + var(--bottom-pad) + 260px) - (var(--np-image-border)*2)), 100vw - (var(--np-image-border)*2), var(--50vh));
  --np-image-landscape-height:min(50vw, calc(var(--100vh) - (var(--main-toolbar-height) + var(--np-controls-height) + 66px + var(--bottom-pad))));
  --np-image-landscape-size:min(var(--np-image-landscape-height) - (var(--np-image-border)*2), 50vw - (var(--np-image-border)*2));
- --np-image-landscape-wide-height:min(calc(var(--100vh) - (var(--main-toolbar-height) + var(--bottom-pad))), var(--np-wide-left) - var(--bottom-pad));
+ --np-image-landscape-wide-height:min(calc(var(--100vh) - (var(--main-toolbar-height) + var(--bottom-pad) + var(--desktop-np-wide-pad))), var(--np-wide-left) - var(--bottom-pad));
  --np-image-landscape-wide-size:min(var(--np-image-landscape-wide-height) - (var(--np-image-border)*2), var(--np-wide-left) - (var(--np-image-border)*2));
  --np-landscape-item-height:calc(var(--100vh) - (var(--main-toolbar-height) + var(--bottom-pad) + var(--np-controls-height) + 70px));
  --np-icon-size:24px;
@@ -417,6 +417,23 @@
  justify-content:center;
  flex-direction:column;
  padding-top:10px;
+}
+
+.np-cover-full .np-details-landscape-wide {
+ width:calc(100vw - (var(--np-image-landscape-wide-height) + var(--np-image-border) + var(--desktop-np-wide-pad))) !important;
+}
+
+.np-cover-full .np-image-landscape-wide {
+ padding-left:var(--desktop-np-wide-pad);
+ width:calc(var(--np-image-landscape-wide-height) + var(--desktop-np-wide-pad));
+}
+
+.np-cover-full .np-image-landscape-wide .np-skip {
+ left:calc(var(--np-image-border) + var(--desktop-np-wide-pad));
+}
+
+.np-cover-full .np-image-landscape-wide .np-emblem, .np-cover-full .np-image-landscape-wide .np-menu {
+ left:calc((var(--np-image-landscape-wide-size) + var(--desktop-np-wide-pad)) - (var(--np-image-border) + (var(--np-image-btn-pad)*2)));
 }
 
 .ios-vcard-text-workaround {

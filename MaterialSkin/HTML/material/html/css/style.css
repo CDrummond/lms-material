@@ -84,6 +84,7 @@
  --np-bgnd-full-shadow-color:rgba(216, 216, 216, 0.8);
  --trans-bottom-toolbar-color:rgba(216, 216, 216, 0.25);
  --mobile-np-view-control-size:0px;
+ --desktop-np-wide-pad:0px;
 }
 
 @media (orientation:landscape) and (max-width: 1000px) {

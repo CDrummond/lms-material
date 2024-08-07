@@ -13,6 +13,10 @@ function copyPlayer(p){
     return {id:p.id, name:p.name, isgroup:p.isgroup, model:p.model, ip:p.ip, icon:p.icon, link:p.link, ison:p.ison, isplaying:p.isplaying, isconnected:p.isconnected, canpoweroff:p.canpoweroff};
 }
 
+function setDesktopWideCoverPad(on) {
+    document.documentElement.style.setProperty('--desktop-np-wide-pad', on ? getComputedStyle(document.documentElement).getPropertyValue('--sub-toolbar-height') : '0px');
+}
+
 function updateUiSettings(state, val) {
     var queueDisplayChanged = false;
     let stdItems = ['autoScrollQueue', 'browseBackdrop', 'queueBackdrop', 'nowPlayingBackdrop', 'infoBackdrop',
@@ -26,6 +30,8 @@ function updateUiSettings(state, val) {
             setLocalStorageVal(key, state[key]);
             if ('queueContext'==key) {
                 queueDisplayChanged = true;
+            } else if ('nowPlayingFull'==key) {
+                setDesktopWideCoverPad(state.nowPlayingFull);
             }
         }
     }
@@ -552,6 +558,7 @@ const store = new Vuex.Store({
                 });
             }
 
+            setDesktopWideCoverPad(state.nowPlayingFull);
             // Read defaults, stored on server
             lmsCommand("", ["pref", LMS_MATERIAL_UI_DEFAULT_PREF, "?"]).then(({data}) => {
                 if (data && data.result && data.result._p2) {

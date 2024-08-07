@@ -3065,6 +3065,15 @@ div.v-subheader {
  right:28px !important;
 }
 
+.pq .lms-list3 .list-btns {
+ top:22px !important;
+}
+
+.pq .pq-albumstyle .list-btns {
+ top:unset!important;
+ bottom:4px !important;
+}
+
 .list-btns-track {
  right:68px !important;
 }

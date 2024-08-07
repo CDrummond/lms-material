@@ -390,8 +390,8 @@ Vue.component('lms-randommix', {
             for (let r=0, len=remove.length; r<len; ++r) {
                 name = name.replaceAll(remove[r], "");
             }
-            if (name.length<1) {
-                if (this.origName!=undefined) {
+            if (isEmpty(name)) {
+                if (isEmpty(this.origName)) {
                     this.saveSettings(false);
                 }
                 return;

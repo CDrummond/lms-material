@@ -271,66 +271,66 @@ Vue.component('lms-randommix', {
             });
         },
         loadSavedMixParams(name) {
+            this.genres = [];
+            this.chosenGenres = [];
+            this.oldTracks = this.newTracks = 10;
+            this.continuous = true;
+            this.chosenMix = "tracks";
+            this.library = LMS_DEFAULT_LIBRARY;
+            this.libraries = [];
+
             lmsCommand("", ["genres", 0, 2500]).then(({data}) => {
-                this.genres = [];
-                this.chosenGenres = [];
-                this.oldTracks = this.newTracks = 10;
-                this.continuous = true;
-                this.chosenMix = "tracks";
-                this.library = LMS_DEFAULT_LIBRARY;
-                this.libraries = [];
                 if (data && data.result && data.result && data.result.genres_loop) {
                     for (let i=0, list=data.result.genres_loop, len=list.length; i<len; ++i) {
                         this.genres.push(list[i].genre);
                     }
                 }
-                lmsList("", ["libraries"]).then(({data}) => {
-                    if (data && data.result && data.result.folder_loop && data.result.folder_loop.length>0) {
-                        var libraries = [];
-                        for (var i=0, list=data.result.folder_loop, len=list.length; i<len; ++i) {
-                            list[i].name = list[i].name.replace(SIMPLE_LIB_VIEWS, "");
-                            libraries.push(list[i]);
-                        }
-                        libraries.sort(nameSort);
-                        libraries.unshift({name: i18n("All"), id:LMS_DEFAULT_LIBRARY});
+            });
+            lmsList("", ["libraries"]).then(({data}) => {
+                if (data && data.result && data.result.folder_loop && data.result.folder_loop.length>0) {
+                    for (var i=0, list=data.result.folder_loop, len=list.length; i<len; ++i) {
+                        list[i].name = list[i].name.replace(SIMPLE_LIB_VIEWS, "");
+                        this.libraries.push(list[i]);
                     }
-                });
-                lmsCommand("", ["material-skin", "rndmix", "name:"+name, "act:read"]).then(({data}) => {
-                    if (data && data.result && data.result) {
-                        this.name = name;
-                        if (undefined!=data.result.mix) {
-                            this.chosenMix = data.result.mix;
-                        }
-                        if (undefined!=data.result.genres) {
-                            this.chosenGenres = data.result.genres.split(",");
-                        }
-                        if (this.chosenGenres.length==0 || this.chosenGenres.length==this.genres.length) {
-                            this.chosenGenres = [].concat(this.genres);
-                        }
-                        if (undefined!=data.result.continuous) {
-                            this.continuous = 1==parseInt(data.result.continuous);
-                        }
-                        if (undefined!=data.result.oldtracks) {
-                            this.oldTracks = parseInt(data.result.oldtracks);
-                            if (this.oldTracks<1 || this.oldTracks>1000) {
-                                this.oldTracks = 10;
-                            }
-                        }
-                        if (undefined!=data.result.newtracks) {
-                            this.newTracks = parseInt(data.result.newtracks);
-                            if (this.newTracks<1 || this.newTracks>1000) {
-                                this.newTracks = 10;
-                            }
-                        }
-                        if (undefined!=data.result.library) {
-                            this.library = data.result.library;
-                        }
-                        if (undefined==this.library || LMS_DEFAULT_LIBRARIES.has(this.library)) {
-                            this.library = LMS_DEFAULT_LIBRARY;
-                        }
-                        this.show=true;
+                    this.libraries.sort(nameSort);
+                    this.libraries.unshift({name: i18n("All"), id:LMS_DEFAULT_LIBRARY});
+                }
+            });
+            lmsCommand("", ["material-skin", "rndmix", "name:"+name, "act:read"]).then(({data}) => {
+                if (data && data.result && data.result) {
+                    this.name = name;
+                    if (undefined!=data.result.mix) {
+                        this.chosenMix = data.result.mix;
                     }
-                });
+                    if (undefined!=data.result.genres) {
+                        this.chosenGenres = data.result.genres.split(",");
+                    }
+                    if (this.chosenGenres.length==0 || this.chosenGenres.length==this.genres.length) {
+                        this.chosenGenres = [].concat(this.genres);
+                    }
+                    if (undefined!=data.result.continuous) {
+                        this.continuous = 1==parseInt(data.result.continuous);
+                    }
+                    if (undefined!=data.result.oldtracks) {
+                        this.oldTracks = parseInt(data.result.oldtracks);
+                        if (this.oldTracks<1 || this.oldTracks>1000) {
+                            this.oldTracks = 10;
+                        }
+                    }
+                    if (undefined!=data.result.newtracks) {
+                        this.newTracks = parseInt(data.result.newtracks);
+                        if (this.newTracks<1 || this.newTracks>1000) {
+                            this.newTracks = 10;
+                        }
+                    }
+                    if (undefined!=data.result.library) {
+                        this.library = data.result.library;
+                    }
+                    if (undefined==this.library || LMS_DEFAULT_LIBRARIES.has(this.library)) {
+                        this.library = LMS_DEFAULT_LIBRARY;
+                    }
+                    this.show=true;
+                }
             });
         },
         close() {

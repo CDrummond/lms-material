@@ -30,7 +30,7 @@ var currentPlayingTrackPosition = 0;
 
 var lmsNowPlaying = Vue.component("lms-now-playing", {
     template: `
-<div v-bind:class="{'np-cover-full':nowPlayingFull}">
+<div v-bind:class="{'np-cover-full':nowPlayingFull, 'np-mob-nonav':!desktopLayout && MBAR_REP_NAV==mobileBar}">
  <div v-show="(!desktopLayout && page=='now-playing') || (desktopLayout && (info.show || largeView))" class="np-bgnd">
   <div v-bind:class="[(info.show ? drawInfoBgndImage||drawInfoBackdrop : drawBgndImage||drawBackdrop) ? 'np-bgnd-cover':'np-bgnd-cover-none', (info.show ? drawInfoBackdrop : drawBackdrop) ? 'np-backdrop-blur':'']" id="np-bgnd"></div>
  </div>

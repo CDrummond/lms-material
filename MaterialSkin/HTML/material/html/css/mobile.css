@@ -331,6 +331,14 @@
  height:calc(var(--100vh) - (var(--main-toolbar-height) + var(--bottom-toolbar-height) + var(--bottom-np-pad) + var(--mobile-npbar-height)));
 }
 
+.np-mob-nonav .np-info-text {
+ height:calc(var(--100vh) - (var(--main-toolbar-height) + var(--bottom-toolbar-height) + var(--mobile-npbar-height)));
+}
+
+.np-mob-nonav .np-info-text-full {
+ height:calc(var(--100vh) - (var(--main-toolbar-height) + var(--mobile-npbar-height)));
+}
+
 .no-control-adjust {
  margin-top:-14px;
 }

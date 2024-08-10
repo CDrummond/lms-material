@@ -1,3 +1,7 @@
+5.2.3
+-----
+1. In mobile layout, if queue is cleared then switch to browse view.
+
 5.2.2
 -----
 1. When offer to un-pin start-mix from home screen via 'Random Mix' dialog

@@ -446,6 +446,10 @@ var lmsQueue = Vue.component("lms-queue", {
             if (playerStatus.playlist.randomplay!=this.playerStatus.randomplay) {
                 this.playerStatus.randomplay = playerStatus.playlist.randomplay;
             }
+            // If queue is being cleard switch to browse view
+            if (!this.$store.state.desktopLayout && 0==playerStatus.playlist.count && this.items.length>0 && 'queue'==this.$store.state.page) {
+                this.$store.commit('setPage', 'browse');
+            }
             if (playerStatus.playlist.count!=this.listSize && 0==playerStatus.playlist.count && 0==playerStatus.playlist.timestamp) {
                 this.listSize=0;
                 this.items=[];

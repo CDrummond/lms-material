@@ -1424,11 +1424,15 @@ div.v-subheader {
  display: flex;
  display: -webkit-flex;
  position:fixed;
- top:calc(var(--np-portrait-image-size) + (var(--np-image-border) * 2) + 32px);
+ top:calc(var(--np-portrait-image-size) + (var(--np-image-border) * 2) + var(--top-pad) + 32px);
  width:100vw;
- height:calc(var(--100vh) - (var(--np-portrait-image-size) + 187px + (var(--thin-portrait-adjust) * 3) + (var(--np-image-border) * 2)));
+ height:calc(var(--100vh) - (var(--np-portrait-image-size) + 187px + var(--top-pad) + var(--bottom-pad) + (var(--thin-portrait-adjust) * 3) + (var(--np-image-border) * 2)));
  padding-left:16px;
  padding-right:16px;
+}
+
+.no-navbar .np-portrait-track-info {
+ height:calc(var(--100vh) - (var(--np-portrait-image-size) + 171px + var(--top-pad) + var(--bottom-pad) + (var(--thin-portrait-adjust) * 3) + (var(--np-image-border) * 2)));
 }
 
 .hide-scrollbar::-webkit-scrollbar {

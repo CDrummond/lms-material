@@ -1,6 +1,7 @@
 5.2.3
 -----
 1. In mobile layout, if queue is cleared then switch to browse view.
+2. Take top/bottom padding into account in more places.
 
 5.2.2
 -----

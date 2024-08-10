@@ -20,7 +20,7 @@
 .no-navbar {
  --bottom-toolbar-height:0px;
  --bottom-np-pad:var(--bottom-pad);
- --mobile-np-view-control-size:58px;
+ --mobile-np-view-control-size:calc(var(--bottom-pad) + 38px);
 }
 
 /* For old browsers that dont support min() */

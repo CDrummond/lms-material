@@ -11,8 +11,7 @@
 6. Handle renaming if random mixes.
 7. If using whole view for now-playing background and using wide desktop
    layout, then place cover vertically in the middle.
-8. Add hover play button to queue tracks.
-9. Fix MAI height when using bottom padding and replacing navigation bar.
+8. Fix MAI height when using bottom padding and replacing navigation bar.
 
 5.2.1
 -----

@@ -189,7 +189,7 @@ function parseResp(data, showTrackNum, index, showRatings, queueAlbumStyle, queu
 
 var lmsQueue = Vue.component("lms-queue", {
   template: `
-<div :class="[!pinQueue ? nowPlayingExpanded ? 'pq-unpinned-np'+nowPlayingWide : 'pq-unpinned' : '', 'pq']" id="queue-view">
+<div :class="[!pinQueue ? nowPlayingExpanded ? 'pq-unpinned-np'+nowPlayingWide : 'pq-unpinned' : '']" id="queue-view">
 <lms-resizer v-if="!pinQueue && windowWide>0" varname="pq-unpinned-width"></lms-resizer>
  <div class="subtoolbar noselect" v-bind:class="{'list-details':pinQueue}" v-if="!desktopLayout || showQueue">
   <v-layout v-if="selection.size>0">
@@ -245,9 +245,6 @@ var lmsQueue = Vue.component("lms-queue", {
     <v-list-tile-action class="queue-action" v-bind:class="{'pq-first-track-menu':item.artistAlbum}" @click.stop="itemMenu(item, index, $event)">
      <div class="grid-btn list-btn hover-btn menu-btn" :title="i18n('%1 (Menu)', item.tooltip)"></div>
     </v-list-tile-action>
-    <div v-if="hoverBtns && 0==selection.size" class="list-btns list-btns-track">
-     <img class="main-btn grid-btn" @click.stop="itemAction(PQ_PLAY_NOW_ACTION, item, index, $event)" :title="ACTIONS[PLAY_ACTION].title" :src="'hover-play' | svgIconHover(darkUi)"></img>
-    </div>
     <img v-if="index==currentIndex" class="pq-current-indicator" :src="'pq-current' | svgIcon(true, true)"></img>
    </v-list-tile>
   </RecycleScroller>
@@ -270,9 +267,6 @@ var lmsQueue = Vue.component("lms-queue", {
      <v-list-tile-action class="queue-action" @click.stop="itemMenu(item, index, $event)">
       <div class="grid-btn list-btn hover-btn menu-btn" :title="i18n('%1 (Menu)', item.tooltip)"></div>
      </v-list-tile-action>
-     <div v-if="hoverBtns && 0==selection.size" class="list-btns list-btns-track">
-      <img class="main-btn grid-btn" @click.stop="itemAction(PQ_PLAY_NOW_ACTION, item, index, $event)" :title="ACTIONS[PLAY_ACTION].title" :src="'hover-play' | svgIconHover(darkUi)"></img>
-     </div>
      <v-rating v-if="undefined!=item.rating" class="pq-rating" v-bind:class="{'pq-rating-3':threeLines}" v-model="item.rating" half-increments readonly></v-rating>
      <img v-if="index==currentIndex" class="pq-current-indicator" :src="'pq-current' | svgIcon(true, true)"></img>
     </v-list-tile>
@@ -356,8 +350,7 @@ var lmsQueue = Vue.component("lms-queue", {
             queueCustomActions: [],
             nowPlayingExpanded: false,
             nowPlayingWide:0,
-            windowWide:2,
-            hoverBtns: !IS_MOBILE
+            windowWide:2
         }
     },
     computed: {
@@ -1628,12 +1621,8 @@ var lmsQueue = Vue.component("lms-queue", {
         displaySelectionCount: function (value) {
             return value ? value : 0;
         },
-        svgIconHover: function (name, dark) {
-            return "/material/svg/"+name+"?c="+(dark ? LMS_DARK_SVG : LMS_LIGHT_SVG)+"&c2="+(dark ? "333" : "eee")+"&r="+LMS_MATERIAL_REVISION;
-        },
         svgIcon: function (name, dark, ci, hover) {
             if (undefined==ci || !ci) {
-                console.log("/material/svg/"+name+"?c="+(dark ? LMS_DARK_SVG : LMS_LIGHT_SVG) +"&r="+LMS_MATERIAL_REVISION)
                 return "/material/svg/"+name+"?c="+(dark ? LMS_DARK_SVG : LMS_LIGHT_SVG) +"&r="+LMS_MATERIAL_REVISION;
             }
             return "/material/svg/"+name+"?c="+getComputedStyle(document.documentElement).getPropertyValue("--primary-color").replace("#", "")+"&c2="+LMS_DARK_SVG+"&r="+LMS_MATERIAL_REVISION;

@@ -2,6 +2,8 @@
 -----
 1. In mobile layout, if queue is cleared then switch to browse view.
 2. Take top/bottom padding into account in more places.
+3. Add "npAutoClose=false" URL query parameter to stop now-playing
+   auto-close when no tracks.
 
 5.2.2
 -----

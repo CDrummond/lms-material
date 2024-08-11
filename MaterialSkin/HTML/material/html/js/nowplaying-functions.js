@@ -309,7 +309,7 @@ function nowplayingOnPlayerStatus(view, playerStatus) {
     view.disableBtns=0==view.playerStatus.playlist.count;
     view.disablePrev=(btns && undefined!=btns.rew && 0==parseInt(btns.rew)) || view.disableBtns;
     view.disableNext=(btns && undefined!=btns.fwd && 0==parseInt(btns.fwd)) || view.disableBtns;
-    if (0==view.playerStatus.playlist.count && !view.info.show) {
+    if (queryParams.npAutoClose && 0==view.playerStatus.playlist.count && !view.info.show) {
         if (view.$store.state.desktopLayout && view.largeView) {
             view.largeView = false;
         } else if (!view.$store.state.desktopLayout && view.mobileBar==MBAR_REP_NAV && 'now-playing'==view.$store.state.page) {

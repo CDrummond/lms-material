@@ -555,9 +555,11 @@ var app = new Vue({
                     if (parts.length>2) { // Check required player exists
                         var playerId = parts[2];
                         var found = false;
-                        for (var j=0, len=this.$store.state.players.length; j<len && !found; ++j) {
-                            if (this.$store.state.players[j].id == playerId || this.$store.state.players[j].name == playerId) {
-                                found = true;
+                        if (this.$store.state.players) {
+                            for (var j=0, len=this.$store.state.players.length; j<len && !found; ++j) {
+                                if (this.$store.state.players[j].id == playerId || this.$store.state.players[j].name == playerId) {
+                                    found = true;
+                                }
                             }
                         }
                         if (!found) {
@@ -565,7 +567,6 @@ var app = new Vue({
                             continue;
                         }
                     }
-
                     bus.$emit(parts[0], params.length>0 ? params[0] : undefined, params.length>1 ? params[1] : undefined, params.length>2 ? params[2] : undefined);
                     queryParams.actions.splice(i, 1);
                 } else {

@@ -37,7 +37,7 @@ var lmsBrowse = Vue.component("lms-browse", {
    <v-btn :title="trans.playall" flat icon class="toolbar-button" @click="actionSelectedItems(PLAY_ACTION, $event)"><v-icon>play_circle_outline</v-icon></v-btn>
    <v-btn :title="trans.addall" flat icon class="toolbar-button" @click="actionSelectedItems(ADD_ACTION, $event)"><v-icon>add_circle_outline</v-icon></v-btn>
    <v-divider vertical></v-divider>
-   <v-btn :title="trans.invertSelect" flat icon class="toolbar-button" @click="invertSelection()"><img :src="'invert-select' | svgIcon(darkUi, undefined, undefined, coloredToolbars)"></img></v-btn>
+   <v-btn :title="trans.invertSelect" flat icon class="toolbar-button" @click="invertSelection()"><img :src="'invert-select' | svgIcon(darkUi)"></img></v-btn>
    <v-btn :title="trans.cancel" flat icon class="toolbar-button" @click="clearSelection()"><v-icon>cancel</v-icon></v-btn>
   </v-layout>
   <v-layout v-else-if="searchActive">
@@ -73,39 +73,39 @@ var lmsBrowse = Vue.component("lms-browse", {
      <v-btn @click.stop="currentActionsMenu($event)" flat icon class="toolbar-button" :title="trans.actions" id="tbar-actions" v-if="currentActions.length>0 && numCurrentActionsInToolbar<currentActions.length"><v-icon>more_horiz</v-icon></v-btn>
      <template v-for="(action, index) in currentActions" v-if="numCurrentActionsInToolbar>0">
       <v-btn @click.stop="currentAction(action, index, $event)" flat icon class="toolbar-button" :title="undefined==action.action ? action.title : ACTIONS[action.action].title" :id="'tbar-actions'+index" v-if="index<numCurrentActionsInToolbar && (action.action!=VLIB_ACTION || libraryName)">
-       <img v-if="undefined!=action.action && ACTIONS[action.action].svg" class="svg-img" :src="ACTIONS[action.action].svg | svgIcon(darkUi, undefined, undefined, coloredToolbars)"></img>
+       <img v-if="undefined!=action.action && ACTIONS[action.action].svg" class="svg-img" :src="ACTIONS[action.action].svg | svgIcon(darkUi)"></img>
        <v-icon v-else-if="undefined!=action.action">{{ACTIONS[action.action].icon}}</v-icon>
-       <img v-else-if="action.svg" class="svg-img" :src="action.svg | svgIcon(darkUi, undefined, undefined, coloredToolbars)"></img>
+       <img v-else-if="action.svg" class="svg-img" :src="action.svg | svgIcon(darkUi)"></img>
        <v-icon v-else>{{action.icon}}</v-icon>
       </v-btn>
      </template>
      <template v-for="(action, index) in tbarActions">
       <v-btn flat :icon="wide<SUB_TEXT_WIDE" v-if="showDetailedSubtoolbar && wide>=2 && (action==PLAY_ACTION || action==PLAY_ALL_ACTION) && !allowShuffle(current)" @click.stop="headerAction(action==PLAY_ACTION ? INSERT_ACTION : INSERT_ALL_ACTION, $event)" v-bind:class="{'context-button':wide>=SUB_TEXT_WIDE, 'toolbar-button':wide<SUB_TEXT_WIDE}" :title="INSERT_ACTION | tooltip(keyboardControl)" :id="'tbarb'+index">
-       <img class="svg-img" :src="ACTIONS[INSERT_ACTION].svg | svgIcon(darkUi, undefined, undefined, coloredToolbars)"></img><obj v-if="wide>=SUB_TEXT_WIDE">&nbsp;{{ACTIONS[INSERT_ACTION].short}}</obj>
+       <img class="svg-img" :src="ACTIONS[INSERT_ACTION].svg | svgIcon(darkUi)"></img><obj v-if="wide>=SUB_TEXT_WIDE">&nbsp;{{ACTIONS[INSERT_ACTION].short}}</obj>
       </v-btn>
       <v-btn flat :icon="wide<SUB_TEXT_WIDE" v-if="showDetailedSubtoolbar && wide>=2 && (action==PLAY_ACTION || action==PLAY_ALL_ACTION) && allowShuffle(current)" @click.stop="headerAction(action==PLAY_ACTION ? PLAY_SHUFFLE_ACTION : PLAY_SHUFFLE_ALL_ACTION, $event)" v-bind:class="{'context-button':wide>=SUB_TEXT_WIDE, 'toolbar-button':wide<SUB_TEXT_WIDE}" :title="PLAY_SHUFFLE_ACTION | tooltip(keyboardControl)" :id="'tbara'+index">
-       <img class="svg-img" :src="ACTIONS[PLAY_SHUFFLE_ACTION].svg | svgIcon(darkUi, undefined, undefined, coloredToolbars)"></img><obj v-if="wide>=SUB_TEXT_WIDE">&nbsp;{{ACTIONS[PLAY_SHUFFLE_ACTION].short}}</obj>
+       <img class="svg-img" :src="ACTIONS[PLAY_SHUFFLE_ACTION].svg | svgIcon(darkUi)"></img><obj v-if="wide>=SUB_TEXT_WIDE">&nbsp;{{ACTIONS[PLAY_SHUFFLE_ACTION].short}}</obj>
       </v-btn>
       <v-btn flat :icon="wide<SUB_TEXT_WIDE || !ACTIONS[action].short" @click.stop="headerAction(action, $event)" v-bind:class="{'context-button':wide>=SUB_TEXT_WIDE && undefined!=ACTIONS[action].short, 'toolbar-button':wide<SUB_TEXT_WIDE || !ACTIONS[action].short}" :title="action | tooltip(keyboardControl)" :id="'tbar'+index" v-if="(!queryParams.party || !HIDE_FOR_PARTY.has(action)) && (!LMS_KIOSK_MODE || !HIDE_FOR_KIOSK.has(action))">
-       <img v-if="ACTIONS[action].svg" class="svg-img" :src="ACTIONS[action].svg | svgIcon(darkUi, undefined, undefined, coloredToolbars)"></img>
+       <img v-if="ACTIONS[action].svg" class="svg-img" :src="ACTIONS[action].svg | svgIcon(darkUi)"></img>
        <v-icon v-else>{{ACTIONS[action].icon}}</v-icon>
        <obj v-if="wide>=SUB_TEXT_WIDE && ACTIONS[action].short">&nbsp;{{ACTIONS[action].short}}</obj>
       </v-btn>
      </template>
     </tr>
     <tr v-if="showMixButton || showMaiButton" align="right">
-     <v-btn flat v-if="showMixButton" class="context-button" @click="doContext(STD_ITEM_MIX)"><img class="svg-img" :src="'dice-multiple' | svgIcon(darkUi, undefined, undefined, coloredToolbars)"></img>&nbsp;{{i18n('Create Mix')}}</v-btn>
-     <v-btn flat v-if="showMaiButton" class="context-button" @click="doContext(STD_ITEM_MAI)"><v-icon v-if="current.stdItem==STD_ITEM_ALBUM">album</v-icon><img v-else class="svg-img" :src="'artist' | svgIcon(darkUi, undefined, undefined, coloredToolbars)"></img>&nbsp;{{i18n('Information')}}</v-btn>
+     <v-btn flat v-if="showMixButton" class="context-button" @click="doContext(STD_ITEM_MIX)"><img class="svg-img" :src="'dice-multiple' | svgIcon(darkUi)"></img>&nbsp;{{i18n('Create Mix')}}</v-btn>
+     <v-btn flat v-if="showMaiButton" class="context-button" @click="doContext(STD_ITEM_MAI)"><v-icon v-if="current.stdItem==STD_ITEM_ALBUM">album</v-icon><img v-else class="svg-img" :src="'artist' | svgIcon(darkUi)"></img>&nbsp;{{i18n('Information')}}</v-btn>
     </tr>
    </table>
   </v-layout>
-  <v-layout v-else class="pointer link-item" v-bind:class="{'link-item-cbt':coloredToolbars}">
+  <v-layout v-else class="pointer link-item">
    <div class="toolbar-nobtn-pad"></div>
    <div @click="sourcesClicked" class="ellipsis subtoolbar-title subtoolbar-title-single">{{trans.sources}}</div>
    <v-spacer @click="itemAction(SEARCH_LIB_ACTION, undefined, undefined, $event)" class="pointer"></v-spacer>
 
    <v-btn @click.stop="currentAction(currentActions[0], 0, $event)" flat icon class="toolbar-button" :title="undefined==currentActions[0].action ? currentActions[0].title : ACTIONS[currentActions[0].action].title" id="tbar-actions" v-if="currentActions.length==1">
-    <img v-if="undefined!=currentActions[0].action && ACTIONS[currentActions[0].action].svg" class="svg-img" :src="currentActions[0].svg | svgIcon(darkUi, undefined, undefined, coloredToolbars)"></img>
+    <img v-if="undefined!=currentActions[0].action && ACTIONS[currentActions[0].action].svg" class="svg-img" :src="currentActions[0].svg | svgIcon(darkUi)"></img>
     <v-icon v-else-if="undefined!=currentActions[0].action">{{ACTIONS[currentActions[0].action].icon}}</v-icon>
    </v-btn>
    <v-btn :title="SEARCH_LIB_ACTION | tooltip(keyboardControl)" flat icon class="toolbar-button" @click.stop="itemAction(SEARCH_LIB_ACTION, undefined, undefined, $event)"><v-icon>{{ACTIONS[SEARCH_LIB_ACTION].icon}}</v-icon></v-btn>
@@ -507,9 +507,6 @@ var lmsBrowse = Vue.component("lms-browse", {
         },
         darkUi() {
             return this.$store.state.darkUi
-        },
-        coloredToolbars() {
-            return this.$store.state.coloredToolbars
         },
         hidden() {
             return this.$store.state.hidden
@@ -2221,14 +2218,14 @@ var lmsBrowse = Vue.component("lms-browse", {
         displaySelectionCount: function (value) {
             return value ? value : 0;
         },
-        svgIcon: function (name, dark, hoverInGrid, header, coloredToolbars) {
+        svgIcon: function (name, dark, hoverInGrid, header) {
             if (undefined!=hoverInGrid) {
                 return "/material/svg/"+name+"?c="+(dark||hoverInGrid ? LMS_DARK_SVG : LMS_LIGHT_SVG)+"&c2="+(dark||hoverInGrid ? "333" : "eee")+"&r="+LMS_MATERIAL_REVISION;
             }
             if (undefined!=header) {
                 return "/material/svg/"+name+"?c="+getComputedStyle(document.getElementById("browse-view")).getPropertyValue("--active-color").replace("#", "")+"&r="+LMS_MATERIAL_REVISION;
             }
-            return "/material/svg/"+name+"?c="+(dark||coloredToolbars ? LMS_DARK_SVG : LMS_LIGHT_SVG)+"&r="+LMS_MATERIAL_REVISION;
+            return "/material/svg/"+name+"?c="+(dark ? LMS_DARK_SVG : LMS_LIGHT_SVG)+"&r="+LMS_MATERIAL_REVISION;
         },
         emblem: function (e) {
             return "/material/svg/"+e.name+"?c="+e.color.substr(1)+"&r="+LMS_MATERIAL_REVISION;

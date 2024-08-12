@@ -4,8 +4,6 @@
 2. Take top/bottom padding into account in more places.
 3. Add "npAutoClose=false" URL query parameter to stop now-playing
    auto-close when no tracks.
-4. If using coloured toolbars then also colour sub-toolbar and mobile
-   now-playing bar.
 
 5.2.2
 -----

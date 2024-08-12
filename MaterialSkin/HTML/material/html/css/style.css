@@ -3828,16 +3828,3 @@ div.v-subheader {
 .bm-checkbox .v-input--selection-controls__ripple {
  margin:0px!important;
 }
-
-.np-bar-colored {
- background-color:var(--pbar-colored-bgnd)!important;
-}
-
-.np-bar-colored .primary, .no-liveedge .np-bar-colored .v-progress-linear__background  {
- background-color:var(--bottom-position-slider-color)!important;
- border-color:var(--bottom-position-slider-color)!important;
-}
-
-.no-liveedge .np-bar-colored {
- background-color:transparent!important;
-}

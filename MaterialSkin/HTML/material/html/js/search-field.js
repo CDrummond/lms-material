@@ -80,7 +80,7 @@ Vue.component('lms-search-field', {
 <v-layout>
  <v-text-field :label="ACTIONS[SEARCH_LIB_ACTION].title" single-line clearable autocorrect="off" v-model.lazy="term" class="lms-search lib-search" @input="textChanged($event)" @blur="stopDebounce" v-on:keyup.enter="searchNow" ref="entry"></v-text-field>
  <v-icon v-if="searching" class="toolbar-button pulse">search</v-icon>
- <v-btn v-else-if="!queryParams.party" :title="ACTIONS[ADV_SEARCH_ACTION].title" flat icon class="toolbar-button" @click="advanced()"><img :src="ACTIONS[ADV_SEARCH_ACTION].svg | svgIcon(darkUi, coloredToolbars)"></img></v-btn>
+ <v-btn v-else-if="!queryParams.party" :title="ACTIONS[ADV_SEARCH_ACTION].title" flat icon class="toolbar-button" @click="advanced()"><img :src="ACTIONS[ADV_SEARCH_ACTION].svg | svgIcon(darkUi)"></img></v-btn>
 </v-layout>
 `,
     props: [],
@@ -93,9 +93,6 @@ Vue.component('lms-search-field', {
     computed: {
         darkUi() {
             return this.$store.state.darkUi
-        },
-        coloredToolbars() {
-            return this.$store.state.coloredToolbars
         }
     },
     mounted() {
@@ -225,8 +222,8 @@ Vue.component('lms-search-field', {
         this.cancel();
     },
     filters: {
-        svgIcon: function (name, dark, coloredToolbars) {
-            return "/material/svg/"+name+"?c="+(dark||coloredToolbars ? LMS_DARK_SVG : LMS_LIGHT_SVG)+"&r="+LMS_MATERIAL_REVISION;
+        svgIcon: function (name, dark) {
+            return "/material/svg/"+name+"?c="+(dark ? LMS_DARK_SVG : LMS_LIGHT_SVG)+"&r="+LMS_MATERIAL_REVISION;
         }
     }
 })

@@ -226,7 +226,7 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
     </v-list-tile-action>
    </v-list-tile>
   </v-list>
-  <v-progress-linear height="5" id="pos-slider" v-if="IS_MOBILE && playerStatus.playlist.count>0" :disabled="playerStatus.current.duration>0" class="np-slider np-bar-slider" :value="playerStatus.current.pospc" :buffer-value="playerStatus.current.bufpc"></v-progress-linear>
+  <v-progress-linear height="5" id="pos-slider" v-if="IS_MOBILE && playerStatus.playlist.count>0" :disabled="playerStatus.current.duration>0" class="xxx np-slider np-bar-slider np-bar-colored" :value="playerStatus.current.pospc" :buffer-value="playerStatus.current.bufpc" v-bind:class="{'np-bar-colored':coloredToolbars}"></v-progress-linear>
   <v-progress-linear height="5" id="pos-slider" v-else-if="playerStatus.playlist.count>0" :disabled="playerStatus.current.duration>0" class="np-slider np-bar-slider" :value="playerStatus.current.pospc" :buffer-value="playerStatus.current.bufpc" v-bind:class="{'np-bar-colored':coloredToolbars}" v-on:click="sliderChanged($event, false)" @mouseover="showTimeTooltip" @mouseout="hideTimeTooltip" @mousemove="moveTimeTooltip" @touchstart.passive="touchSliderStart" @touchend.passive="touchSliderEnd" @touchmove.passive="moveTimeTooltipTouch"></v-progress-linear>
  </div>
  
@@ -1496,7 +1496,7 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
             return !this.drawInfoBgndImage && this.$store.state.infoBackdrop && this.$store.state.useDefaultBackdrops
         },
         coloredToolbars() {
-            return this.$store.state.desktopLayout && this.$store.state.coloredToolbars
+            return this.$store.state.coloredToolbars
         },
         keyboardControl() {
             return this.$store.state.keyboardControl && !IS_MOBILE

@@ -9,11 +9,15 @@
  --dialog-toolbar-color:var(--primary-color);
  --bottom-toolbar-color:var(--primary-color);
  --top-toolbar-color:var(--primary-color);
- --bottom-toolbar-border-color:var(--primary-color);
  --top-toolbar-border-color:var(--primary-color);
+ --sub-toolbar-color:var(--primary-color);
+ --top-toolbar-border-color:rgba(220, 220, 220, 0.1);
+ --bottom-toolbar-border-color:rgba(220, 220, 220, 0.1);
+ --sub-toolbar-border-color:rgba(220, 220, 220, 0.1);
  --dialog-toolbar-border-color:var(--primary-color);
  --dialog-toolbar-text-color:var(--light-text-color);
  --top-toolbar-text-color:var(--light-text-color);
+ --sub-toolbar-text-color:var(--light-text-color);
  --bottom-toolbar-text-color:var(--light-text-color);
  --active-nav-btn-color:var(--light-text-color);
  --toolbar-volume-color:var(--light-text-color);
@@ -46,4 +50,25 @@
   opacity:0.8!important;
   background-color:transparent;
  }
+}
+
+.subtoolbar {
+ --primary-color:var(--light-text-color);
+ --active-color:var(--light-text-color);
+}
+
+.subtoolbar .theme--light.v-text-field.v-input--is-active > .v-input__control > .v-input__slot:before,
+.subtoolbar .theme--light.v-text-field.v-input--is-focused > .v-input__control > .v-input__slot:before {
+ border-color:1px solid var(--light-text-color);
+}
+
+.subtoolbar .theme--light.v-input:not(.v-input--is-disabled) input,
+.subtoolbar .theme--light.v-label,
+.subtoolbar .v-icon,
+.np-bar-details-mobile {
+ color:var(--light-text-color)!important;
+}
+
+.link-item-cbt:hover .subtoolbar-title {
+ opacity:var(--sub-opacity)!important;
 }

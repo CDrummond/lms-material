@@ -245,7 +245,7 @@ var lmsQueue = Vue.component("lms-queue", {
     <v-list-tile-action class="queue-action" v-bind:class="{'pq-first-track-menu':item.artistAlbum}" @click.stop="itemMenu(item, index, $event)">
      <div class="grid-btn list-btn hover-btn menu-btn" :title="i18n('%1 (Menu)', item.tooltip)"></div>
     </v-list-tile-action>
-    <img v-if="index==currentIndex" class="pq-current-indicator" :src="'pq-current' | svgIcon(darkUi, true)"></img>
+    <img v-if="index==currentIndex" :class="['pqi-'+iRgb, 'pq-current-indicator']" :src="'pq-current' | svgIcon(true, true)"></img>
    </v-list-tile>
   </RecycleScroller>
   <RecycleScroller v-else :items="items" :item-size="threeLines ? LMS_LIST_3LINE_ELEMENT_SIZE : LMS_LIST_ELEMENT_SIZE"  page-mode key-field="key" :buffer="LMS_SCROLLER_LIST_BUFFER">
@@ -268,7 +268,7 @@ var lmsQueue = Vue.component("lms-queue", {
       <div class="grid-btn list-btn hover-btn menu-btn" :title="i18n('%1 (Menu)', item.tooltip)"></div>
      </v-list-tile-action>
      <v-rating v-if="undefined!=item.rating" class="pq-rating" v-bind:class="{'pq-rating-3':threeLines}" v-model="item.rating" half-increments readonly></v-rating>
-     <img v-if="index==currentIndex" class="pq-current-indicator" :src="'pq-current' | svgIcon(darkUi, true)"></img>
+     <img v-if="index==currentIndex" :class="['pqi-'+iRgb, 'pq-current-indicator']" :src="'pq-current' | svgIcon(true, true)"></img>
     </v-list-tile>
    </RecycleScroller>
   </div>
@@ -350,7 +350,8 @@ var lmsQueue = Vue.component("lms-queue", {
             queueCustomActions: [],
             nowPlayingExpanded: false,
             nowPlayingWide:0,
-            windowWide:2
+            windowWide:2,
+            iRgb: '000'
         }
     },
     computed: {
@@ -537,6 +538,10 @@ var lmsQueue = Vue.component("lms-queue", {
         bus.$on('themeChanged', function() {
             this.setBgndCover();
             setTimeout(function() { this.$forceUpdate(); }.bind(this), 500);
+        }.bind(this));
+
+        bus.$on('colorChanged', function(col) {
+            this.iRgb = col;
         }.bind(this));
 
         bus.$on('langChanged', function() {
@@ -1625,11 +1630,11 @@ var lmsQueue = Vue.component("lms-queue", {
         displaySelectionCount: function (value) {
             return value ? value : 0;
         },
-        svgIcon: function (name, dark, ci) {
+        svgIcon: function (name, dark, ci, hover) {
             if (undefined==ci || !ci) {
                 return "/material/svg/"+name+"?c="+(dark ? LMS_DARK_SVG : LMS_LIGHT_SVG) +"&r="+LMS_MATERIAL_REVISION;
             }
-            return "/material/svg/"+name+"?c="+(dark ? LMS_DARK_SVG : LMS_LIGHT_SVG) +"&c2="+(dark ? LMS_LIGHT_SVG : LMS_DARK_SVG)+"&r="+LMS_MATERIAL_REVISION;
+            return "/material/svg/"+name+"?c="+getComputedStyle(document.documentElement).getPropertyValue("--primary-color").replace("#", "")+"&c2="+LMS_DARK_SVG+"&r="+LMS_MATERIAL_REVISION;
         },
         tooltip: function (str, key, showShortcut) {
             return showShortcut ? ttShortcutStr(str, key) : str;

@@ -225,6 +225,7 @@ var lmsCurrentCover = Vue.component('lms-currentcover', {
                 } else if (queryParams.nativeAccent>0) {
                     emitNative("MATERIAL-ACCENT\nVAL " + hexColor, queryParams.nativeAccent);
                 }
+                bus.$emit("colorChanged", rgb[0]+rgb[1]+rgb[2]);
             }).catch(e => {
             });
         }

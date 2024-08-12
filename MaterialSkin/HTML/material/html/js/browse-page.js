@@ -136,7 +136,7 @@ var lmsBrowse = Vue.component("lms-browse", {
        <v-icon>{{item.item.icon}}</v-icon>
       </v-list-tile-avatar>
       <v-list-tile-avatar v-else-if="item.item.svg" :tile="true" class="lms-avatar">
-       <img class="svg-list-img" :src="item.item.svg | svgIcon(darkUi, undefined, true)" loading="lazy"></img>
+       <img :class="['hdr-'+hRgb, 'svg-list-img']" :src="item.item.svg | svgIcon(darkUi, undefined, true)" loading="lazy"></img>
       </v-list-tile-avatar>
       <v-list-tile-content>
        <v-list-tile-title>{{item.item.title}}</v-list-tile-title>
@@ -201,7 +201,7 @@ var lmsBrowse = Vue.component("lms-browse", {
       <v-icon>{{item.icon}}</v-icon>
      </v-list-tile-avatar>
      <v-list-tile-avatar v-else-if="item.svg" :tile="true" class="lms-avatar">
-      <img class="svg-list-img" :src="item.svg | svgIcon(darkUi, undefined, item.header)" loading="lazy"></img>
+      <img :class="['hdr-'+hRgb, 'svg-list-img']" :src="item.svg | svgIcon(darkUi, undefined, item.header)" loading="lazy"></img>
      </v-list-tile-avatar>
 
      <!-- TODO: Do we have search fields with large lists?? -->
@@ -252,7 +252,7 @@ var lmsBrowse = Vue.component("lms-browse", {
       <v-icon>{{item.icon}}</v-icon>
      </v-list-tile-avatar>
      <v-list-tile-avatar v-else-if="item.svg" :tile="true" class="lms-avatar">
-      <img class="svg-list-img" :src="item.svg | svgIcon(darkUi, undefined, true)" loading="lazy"></img>
+      <img :class="['hdr-'+hRgb, 'svg-list-img']" :src="item.svg | svgIcon(darkUi, undefined, true)" loading="lazy"></img>
      </v-list-tile-avatar>
      <v-list-tile-content>
       <v-list-tile-title>{{item.title}}</v-list-tile-title>
@@ -491,7 +491,8 @@ var lmsBrowse = Vue.component("lms-browse", {
             searchActive: 0,
             dragActive: false,
             dropIndex: -1,
-            highlightIndex: -1
+            highlightIndex: -1,
+            hRgb: "000"
         }
     },
     computed: {
@@ -2171,6 +2172,9 @@ var lmsBrowse = Vue.component("lms-browse", {
         }.bind(this));
         bus.$on('themeChanged', function() {
             this.setBgndCover();
+        }.bind(this));
+        bus.$on('colorChanged', function(col) {
+            this.hRgb = col;
         }.bind(this));
         this.setBgndCover();
         bus.$on('browseQueueDrop', function(browseIndex, queueIndex, queueSize) {

@@ -8,11 +8,11 @@
 
 Vue.component('lms-favorite', {
     template: `
-<v-dialog v-model="show" v-if="show" persistent width="600">
+<v-dialog v-model="show" v-if="show" persistent width="600" class="lms-dialog">
  <v-card>
   <v-card-title>{{isAdd ? i18n("Add favorite") : i18n("Edit favorite")}}</v-card-title>
-  <v-form ref="form" v-model="valid" lazy-validation>
-   <v-list two-line>
+  <v-card-text>
+   <v-list two-line class="dialog-main-list">
     <v-list-tile>
      <v-list-tile-content>
       <v-text-field clearable autocorrect="off" :label="i18n('Name')" v-model="name" class="lms-search" ref="entry"></v-text-field>
@@ -29,7 +29,7 @@ Vue.component('lms-favorite', {
      </v-list-tile-content>
     </v-list-tile>
    </v-list>
-  </v-form>
+  </v-card-text>
   <v-card-actions v-if="queryParams.altBtnLayout">
    <v-spacer></v-spacer>
    <v-btn flat @click.native="add()" v-if="isAdd">{{i18n('Add')}}</v-btn>
@@ -48,7 +48,6 @@ Vue.component('lms-favorite', {
     props: [],
     data() {
         return {
-            valid: false,
             show: false,
             name: "",
             url: "",

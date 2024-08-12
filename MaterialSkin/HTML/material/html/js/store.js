@@ -147,6 +147,9 @@ function updateUiSettings(state, val) {
         }
     }
     lmsOptions.techInfo = state.browseTechInfo;
+    if (state.coloredToolbars) {
+        state.nowPlayingFull = false;
+    }
     if (queueDisplayChanged) {
         bus.$emit('queueDisplayChanged');
     }
@@ -508,6 +511,9 @@ const store = new Vuex.Store({
             for (let i=0, len=boolItems.length; i<len; ++i) {
                 let key = boolItems[i];
                 state[key] = getLocalStorageBool(key, state[key]);
+            }
+            if (state.coloredToolbars) {
+                state.nowPlayingFull = false;
             }
             let intItems = ['skipBSeconds', 'skipFSeconds', 'mobileBar', 'maxRating', 'volumeStep'];
             for (let i=0, len=intItems.length; i<len; ++i) {

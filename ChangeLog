@@ -6,6 +6,7 @@
    auto-close when no tracks.
 4. Don't allow using full-screen/view for now-playing background if also using
    coloured toolbars.
+5. Don't colour play queue current track indicator, always use text colours.
 
 5.2.2
 -----

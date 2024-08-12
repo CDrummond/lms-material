@@ -72,3 +72,8 @@
 .link-item-cbt:hover .subtoolbar-title {
  opacity:var(--sub-opacity)!important;
 }
+
+.application--wrap .lms-splitter .splitter {
+ background-color:var(--primary-color)!important;
+ background:linear-gradient(rgba(237, 236, 231, 0.15) 48px, rgba(237, 236, 231, 0.15) 48.1px, var(--splitter-color) 48.2px, var(--splitter-color) 100%);
+}

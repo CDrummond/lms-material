@@ -665,12 +665,12 @@
 "%1 Years":"%1 Jaren",
 "1 day":"1 dag",
 "%1 days":"%1 dagen",
-"Cover whole view (including toolbars, etc.) with background image.":"",
-"Failed to delete mix!":"",
-"Replace navigation bar":"",
-"Stop random mix?":"",
-"Use full screen for background":"",
-"You have no saved 'Random Mixes'. Please use the '+' icon above to create one, or to simply start a 'Random Mix' on your current player.":"",
-"1 Mix":"",
-"%1 Mixes":""
+"Cover whole view (including toolbars, etc.) with background image.":"Bedek de hele weergave (inclusief werkbalken, enz.) met een achtergrondafbeelding",
+"Failed to delete mix!":"Verwijderen van mix mislukt!",
+"Replace navigation bar":"Vervang navigatiebalk",
+"Stop random mix?":"Stop willekeurige mix?",
+"Use full screen for background":"Gebruik volledig scherm als achtergrond",
+"You have no saved 'Random Mixes'. Please use the '+' icon above to create one, or to simply start a 'Random Mix' on your current player.":"Je hebt geen opgeslagen 'Willekeurige Mix'. Gebruik het '+'-pictogram hierboven om er een te maken, of om eenvoudigweg een 'Willekeurige Mix' op jouw huidige muziekspeler te starten.",
+"1 Mix":"1 Mix",
+"%1 Mixes":"%1 Mixen"
 }

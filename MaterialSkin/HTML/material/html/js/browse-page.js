@@ -1711,8 +1711,7 @@ var lmsBrowse = Vue.component("lms-browse", {
             // Hacky work-around. Noticed sometimes if we only have 1 grid row then *only* that row's background is blurred???
             if (1==this.grid.rows.length) {
                 let prev = this.grid.rows[0];
-                this.grid.rows.push({id:"row.dummy."+this.current.id, items:[], r:prev.r+1, rs:prev.rs, size:preferredColumns.size, numStd:0, hasSub:false});
-
+                this.grid.rows.push({id:"row.dummy."+(this.current ? this.current.id : "x"), items:[], r:prev.r+1, rs:prev.rs, size:preferredColumns.size, numStd:0, hasSub:false});
             }
             if (this.grid.few != few) {
                 this.grid.few = few;

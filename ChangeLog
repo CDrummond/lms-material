@@ -10,6 +10,7 @@
    changes.
 6. Resize more metrics when mobile keyboard shown.
 7. Allow long words to be broken up for word-wrap in now-playing.
+8. Fix desktop now-playing bar text clipping if width lesss than 550px.
 
 5.2.2
 -----

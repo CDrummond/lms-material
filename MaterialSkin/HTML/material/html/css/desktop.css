@@ -248,7 +248,7 @@
  }
  .np-bar-details {
   left:calc(var(--desktop-np-bottom-pad) + 72px);
-  width:calc(100vw - (var(--desktop-np-bottom-pad) +136px));
+  width:calc(100vw - (var(--desktop-np-bottom-pad) + 136px));
  }
  .np-bar-details div .v-list__tile {
   margin:0px!important;

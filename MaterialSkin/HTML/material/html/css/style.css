@@ -69,7 +69,7 @@
  --window-area-right:0px;
  --sab: env(safe-area-inset-bottom);
  --top-pad:0px;
- --bottom-pad:max(calc(var(--sab) - 22px), 0px);
+ --bottom-pad:0px;
  --all-pad:calc(var(--top-pad) + var(--bottom-pad));
  --dialog-pad:0px;
  --desktop-np-bottom-pad:0px;

@@ -44,6 +44,7 @@ var app = new Vue({
                 }
     },
     created() {
+        let lmsApp = this;
         if (IS_MOBILE) {
             // Disable hover effects for buttons in mobile, as these can get 'stuck'. This /should/ be automatic, but
             // is failing. Placing in "@media (hover: none)" did not seem to work. So, apply here for just mobile...
@@ -55,11 +56,11 @@ var app = new Vue({
         } else {
             document.getElementsByTagName("body")[0].classList.add("msk-is-non-touch");
         }
-        let botPad = queryParams.botPad>0 ? queryParams.botPad : queryParams.addpad || IS_IOS ? 12 : 0;
-        if (botPad>0) {
-            document.documentElement.style.setProperty('--bottom-pad', botPad + 'px');
-            if (botPad>6) {
-                document.documentElement.style.setProperty('--desktop-np-bottom-pad', (botPad-6) + 'px');
+        lmsApp.botPad = queryParams.botPad>0 ? queryParams.botPad : queryParams.addpad || IS_IOS ? 12 : 0;
+        if (lmsApp.botPad>0) {
+            document.documentElement.style.setProperty('--bottom-pad', lmsApp.botPad + 'px');
+            if (lmsApp.botPad>6) {
+                document.documentElement.style.setProperty('--desktop-np-bottom-pad', (lmsApp.botPad-6) + 'px');
             }
         }
         if (queryParams.topPad>0) {
@@ -163,7 +164,6 @@ var app = new Vue({
         let lastReportedHeight = lastWinHeight;
         let lastWinWidth = window.innerWidth;
         let timeout = undefined;
-        let lmsApp = this;
         this.bottomBar = {height: undefined, shown:true};
 
         // Only need to do 100vh work-around when running within mobile browsers, not when installled to homescreen.
@@ -174,6 +174,7 @@ var app = new Vue({
         if (!appMode) {
             document.documentElement.style.setProperty('--vh', `${window.innerHeight * 0.01}px`);
         }
+        lmsApp.keyboardShown = false;
         window.addEventListener('resize', () => {
             if (timeout) {
                 clearTimeout(timeout);
@@ -202,16 +203,34 @@ var app = new Vue({
 
                 // Check entries are visible
                 if (IS_MOBILE) {
-                    if (undefined==lmsApp.bottomBar.height) {
-                        lmsApp.bottomBar.height = getComputedStyle(document.documentElement).getPropertyValue('--bottom-toolbar-height');
-                    }
                     var keyboardShown = 0==widthChange && heightChange>100;
-                    if (keyboardShown == lmsApp.bottomBar.shown) {
+                    if (keyboardShown != lmsApp.keyboardShown) {
+                        if (keyboardShown) {
+                            lmsApp.heights = [];
+                            let vars = ['--bottom-toolbar-height', '--desktop-npbar-height', '--desktop-npbar-height-thin', '--mobile-npbar-height-thin', '--mobile-npbar-height-thick', '--mobile-npbar-height'];
+                            for (let v=0, len=vars.length; v<len; ++v) {
+                                lmsApp.heights.push([vars[v], getComputedStyle(document.documentElement).getPropertyValue(vars[v])]);
+                            }
+                        }
+                        lmsApp.keyboardShown = keyboardShown;
                         var elem = document.getElementById('nav-bar');
                         if (elem) {
                             elem.style.display = keyboardShown ? 'none' : 'block';
-                            document.documentElement.style.setProperty('--bottom-toolbar-height', keyboardShown ? '0px' : lmsApp.bottomBar.height);
-                            lmsApp.bottomBar.shown = !keyboardShown;
+                        }
+                        elem = document.getElementById('np-bar');
+                        if (elem) {
+                            elem.style.display = keyboardShown ? 'none' : 'block';
+                        }
+                        for (let v=0, list=lmsApp.heights, len=list.length; v<len; ++v) {
+                            if (undefined!=list[v][1]) {
+                                document.documentElement.style.setProperty(list[v][0], keyboardShown ? '0px' : list[v][1]);
+                            }
+                        }
+                        if (lmsApp.botPad>0) {
+                            document.documentElement.style.setProperty('--bottom-pad', (keyboardShown ? 0 : lmsApp.botPad) + 'px');
+                            if (lmsApp.botPad>6) {
+                                document.documentElement.style.setProperty('--desktop-np-bottom-pad', (keyboardShown ? 0 : (lmsApp.botPad-6)) + 'px');
+                            }
                         }
                     }
                     if (document.activeElement.tagName=="INPUT" || document.activeElement.tagName=="TEXTAREA") {

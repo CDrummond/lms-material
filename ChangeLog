@@ -8,6 +8,7 @@
    coloured toolbars.
 5. Fix updating some coloured SVG icons when using colour from cover and cover
    changes.
+6. Resize more metrics when mobile keyboard shown.
 
 5.2.2
 -----

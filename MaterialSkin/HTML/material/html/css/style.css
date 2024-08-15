@@ -1538,12 +1538,14 @@ div.v-subheader {
  font-size:250%;
  font-weight:var(--bold-weight);
  letter-spacing:.02em;
+ word-wrap:break-word;
 }
 
 .np-text {
  margin:0px 8px 0px 8px;
  text-align:center;
  font-size:175%;
+ word-wrap:break-word;
 }
 
 .np-title-landscape {

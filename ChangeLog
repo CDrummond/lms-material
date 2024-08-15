@@ -9,6 +9,7 @@
 5. Fix updating some coloured SVG icons when using colour from cover and cover
    changes.
 6. Resize more metrics when mobile keyboard shown.
+7. Allow long words to be broken up for word-wrap in now-playing.
 
 5.2.2
 -----

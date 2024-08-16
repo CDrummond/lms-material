@@ -2681,6 +2681,10 @@ div.v-subheader {
  margin-right:-14px;
 }
 
+.v-snack--top {
+ top:var(--top-pad)!important;
+}
+
 .v-card__title, .v-dialog .v-card .v-card__text, .v-snack__content {
  font-size:var(--std-font-size) !important;
 }

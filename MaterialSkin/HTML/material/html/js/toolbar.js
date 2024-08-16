@@ -14,7 +14,7 @@ var TB_APP_SETTINGS    = {id:4, svg:  "app-settings" };
 var TB_INFO            = {id:5, icon: "info" };
 var TB_HELP            = {id:6, icon: "help" };
 var TB_MANAGE_PLAYERS  = {id:7, svg:  "player-manager" };
-var TB_APP_QUIT        = {id:8, icon: "power_settings_new" }
+var TB_APP_QUIT        = {id:8, svg:  "close" }
 var TB_START_PLAYER    = {id:9, icon: "surround_sound" }
 
 const TB_CUSTOM_SETTINGS_ACTIONS = {id:20};
@@ -143,7 +143,7 @@ Vue.component('lms-toolbar', {
      <v-list-tile-title>{{TB_START_PLAYER.title}}</v-list-tile-title>
     </v-list-tile>
     <v-list-tile :href="appQuit" v-else-if="TB_APP_QUIT.id==item.id">
-     <v-list-tile-avatar><v-icon>{{TB_APP_QUIT.icon}}</v-icon></v-list-tile-avatar>
+     <v-list-tile-avatar><img class="svg-img" :src="TB_APP_QUIT.svg | svgIcon(darkUi)"></img></v-list-tile-avatar>
      <v-list-tile-title>{{TB_APP_QUIT.title}}</v-list-tile-title>
     </v-list-tile>
     <template v-else-if="(TB_CUSTOM_SETTINGS_ACTIONS.id==item.id && undefined!=customSettingsActions && customSettingsActions.length>0) || (TB_CUSTOM_ACTIONS.id==item.id && undefined!=customActions && customActions.length>0)" v-for="(action, actIndex) in (TB_CUSTOM_SETTINGS_ACTIONS.id==item.id ? customSettingsActions : customActions)">

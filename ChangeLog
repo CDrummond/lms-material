@@ -9,8 +9,8 @@
 5. Fix updating some coloured SVG icons when using colour from cover and cover
    changes.
 6. Resize more metrics when mobile keyboard shown.
-7. Allow long words to be broken up for word-wrap in now-playing.
-8. Fix desktop now-playing bar text clipping if width lesss than 550px.
+6. Allow long words to be broken up for word-wrap in now-playing.
+8. Fix desktop now-playing bar text clipping if width less than 550px.
 
 5.2.2
 -----

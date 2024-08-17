@@ -266,6 +266,10 @@
  background-color:var(--pbar-bgnd)!important;
 }
 
+.np-bar-slider .v-progress-linear__bar__determinate {
+ height:3px !important;
+}
+
 .np-bar-details-mobile {
  position:fixed;
  left:8px;

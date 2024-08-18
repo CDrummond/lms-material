@@ -301,8 +301,11 @@
   line-height:30px;
  }
  .np-bar .np-slider {
-  bottom:calc(var(--desktop-npbar-height-thin) - 3.5px);
+  bottom:calc(var(--desktop-npbar-height-thin) - 3px);
   width:100vw;
+  height:3px!important;
+ }
+ .np-slider .v-progress-linear__background, .np-slider .v-progress-linear__bar__determinate {
   height:3px!important;
  }
 }

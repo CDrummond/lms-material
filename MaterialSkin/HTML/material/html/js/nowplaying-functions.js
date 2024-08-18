@@ -1026,3 +1026,44 @@ function nowPlayingConfigMenu(view, event) {
         view.menu.show = true;
     });
 }
+
+function nowPlayingClickImage(view, event) {
+    if (view.menu.show) {
+        view.menu.show = false;
+        return;
+    }
+    if (view.$store.state.visibleMenus.size>0 || view.info.show || (!view.desktopLayout && view.$store.state.page!='now-playing')) {
+        return;
+    }
+    if (view.showOverlay) {
+        let cp = getClickPos(event);
+        let elems = [document.getElementById("overlay-menu"), document.getElementById("overlay-close"), document.getElementById("skip-back"), document.getElementById("skip-fwd")];
+        let closeOverlay = true;
+        for (let e=0, len=elems.length; e<len; ++e) {
+            if (undefined!=elems[e]) {
+                let r = elems[e].getBoundingClientRect();
+                if (inRect(cp.x, cp.y, r.x, r.y, r.width, r.height, 16)) {
+                    closeOverlay = false;
+                    break
+                }
+            }
+        }
+        if (closeOverlay) {
+            view.clearShowOverlayTimeout();
+            return;
+        }
+    }
+    if (!view.clickTimer) {
+        view.clickTimer = setTimeout(function () {
+            view.clearClickTimeout();
+            if (view.$store.state.desktopLayout && !view.largeView) {
+                bus.$emit('expandNowPlaying', true);
+            } else if (view.playerStatus.playlist.count>0) {
+                view.resetShowOverlayTimeout();
+            }
+        }.bind(view), LMS_DOUBLE_CLICK_TIMEOUT);
+    } else {
+        view.clearClickTimeout();
+        view.showPic();
+    }
+}

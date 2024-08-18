@@ -235,16 +235,16 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
    <div v-show="overlayVolume>-1 && VOL_STD==playerStatus.dvc" id="volumeOverlay">{{overlayVolume}}%</div>
    <div v-if="landscape">
     <div v-if="!info.show" class="np-image-landscape" v-bind:class="{'np-image-landscape-wide':landscape && wide>1}">
-     <img :key="coverUrl" :src="coverUrl" loading="lazy" onerror="this.src=DEFAULT_COVER" @contextmenu="showMenu" @mouseup="clickImage(event)" class="np-cover" v-touch:start="touchStart" v-touch:end="touchEnd" v-touch:moving="touchMoving" v-bind:class="{'np-trans':transCvr, 'np-cover-dim':showOverlay}"></img>
+     <img :key="coverUrl" :src="coverUrl" loading="lazy" onerror="this.src=DEFAULT_COVER" @click="clickImage(event)" class="np-cover" v-touch:start="touchStart" v-touch:end="touchEnd" v-touch:moving="touchMoving" v-bind:class="{'np-trans':transCvr, 'np-cover-dim':showOverlay}"></img>
      <div class="np-emblem" v-if="playerStatus.current.emblem" @click="emblemClicked" :style="{background:playerStatus.current.emblem.bgnd}" v-bind:class="{'np-cover-dim':showOverlay}">
       <img :src="playerStatus.current.emblem | emblem()" loading="lazy"></img>
      </div>
-     <div class="np-menu" :title="trans.menu" @click="showMenu" v-if="showOverlay && playerStatus.playlist.count>0" v-bind:class="{'np-skip-elevate':showOverlay}"></div>
-     <table class="np-skip" v-if="showOverlay">
+     <div class="np-menu" :title="trans.menu" @click="showMenu" id="overlay-menu" v-if="showOverlay && playerStatus.playlist.count>0" v-bind:class="{'np-skip-elevate':showOverlay}"></div>
+     <table class="np-skip" v-if="showOverlay" @click="clickImage(event)">
       <tr>
-       <td><v-btn icon outline @click.stop="skipBack" class="np-std-button" v-bind:class="{'disabled':disableBtns}"><img class="svg-img" :src="'rewind-'+skipBSeconds | svgIcon(true)"></img></v-btn></td>
+       <td><v-btn icon outline @click.stop="skipBack" id="skip-back" class="np-std-button" v-bind:class="{'disabled':disableBtns}"><img class="svg-img" :src="'rewind-'+skipBSeconds | svgIcon(true)"></img></v-btn></td>
        </td>
-       <td><v-btn icon outline @click.stop="skipForward" class="np-std-button" v-bind:class="{'disabled':disableBtns}"><img class="svg-img" :src="'fast-forward-'+skipFSeconds | svgIcon(true)"></img></v-btn></td>
+       <td><v-btn icon outline @click.stop="skipForward" id="skip-fwd" class="np-std-button" v-bind:class="{'disabled':disableBtns}"><img class="svg-img" :src="'fast-forward-'+skipFSeconds | svgIcon(true)"></img></v-btn></td>
       </tr>
      </table>
     </div>
@@ -309,17 +309,17 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
    </div>
    <div v-else>
     <div v-if="!info.show" class="np-image">
-     <img :key="coverUrl" :src="coverUrl" loading="lazy" onerror="this.src=DEFAULT_COVER" @contextmenu="showMenu" @mouseup="clickImage(event)" v-touch:start="touchStart" v-touch:end="touchEnd" v-touch:moving="touchMoving" class="np-cover" v-bind:class="{'np-trans':transCvr, 'np-cover-dim':showOverlay}"></img>
+     <img :key="coverUrl" :src="coverUrl" loading="lazy" onerror="this.src=DEFAULT_COVER" @click="clickImage(event)" v-touch:start="touchStart" v-touch:end="touchEnd" v-touch:moving="touchMoving" class="np-cover" v-bind:class="{'np-trans':transCvr, 'np-cover-dim':showOverlay}"></img>
      <div class="np-emblem" v-if="playerStatus.current.emblem" @click="emblemClicked" :style="{background: playerStatus.current.emblem.bgnd}" v-bind:class="{'np-cover-dim':showOverlay}">
       <img :src="playerStatus.current.emblem | emblem()" loading="lazy"></img>
      </div>
-     <div class="np-menu" :title="trans.menu" @click="showMenu" v-if="showOverlay && playerStatus.playlist.count>0" v-bind:class="{'np-skip-elevate':showOverlay}"></div>
-     <div class="np-close" :title="trans.collapseNp" @click="largeView=false" v-if="showOverlay" v-bind:class="{'np-skip-elevate':showOverlay}"></div>
-     <table class="np-skip" v-if="showOverlay">
+     <div class="np-menu" :title="trans.menu" @click="showMenu" id="overlay-menu" v-if="showOverlay && playerStatus.playlist.count>0" v-bind:class="{'np-skip-elevate':showOverlay}"></div>
+     <div class="np-close" :title="trans.collapseNp" @click="largeView=false" id="overlay-close" v-if="showOverlay" v-bind:class="{'np-skip-elevate':showOverlay}"></div>
+     <table class="np-skip" v-if="showOverlay" @click="clickImage(event)">
       <tr>
-       <td><v-btn icon outline @click.stop="skipBack" class="np-std-button" v-bind:class="{'disabled':disableBtns}"><img class="svg-img" :src="'rewind-'+skipBSeconds | svgIcon(true)"></img></v-btn></td>
+       <td><v-btn icon outline @click.stop="skipBack" id="skip-back" class="np-std-button" v-bind:class="{'disabled':disableBtns}"><img class="svg-img" :src="'rewind-'+skipBSeconds | svgIcon(true)"></img></v-btn></td>
        </td>
-       <td><v-btn icon outline @click.stop="skipForward" class="np-std-button" v-bind:class="{'disabled':disableBtns}"><img class="svg-img" :src="'fast-forward-'+skipFSeconds | svgIcon(true)"></img></v-btn></td>
+       <td><v-btn icon outline @click.stop="skipForward" id="skip-fwd" class="np-std-button" v-bind:class="{'disabled':disableBtns}"><img class="svg-img" :src="'fast-forward-'+skipFSeconds | svgIcon(true)"></img></v-btn></td>
       </tr>
      </table>
     </div>
@@ -1100,26 +1100,7 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
             });
         },
         clickImage(event) {
-            if (this.menu.show) {
-                this.menu.show = false;
-                return;
-            }
-            if (this.$store.state.visibleMenus.size>0 || this.info.show || (!this.desktopLayout && this.$store.state.page!='now-playing')) {
-                return;
-            }
-            if (!this.clickTimer) {
-                this.clickTimer = setTimeout(function () {
-                    this.clearClickTimeout();
-                    if (this.$store.state.desktopLayout && !this.largeView) {
-                        bus.$emit('expandNowPlaying', true);
-                    } else if (this.playerStatus.playlist.count>0) {
-                        this.resetShowOverlayTimeout();
-                    }
-                }.bind(this), LMS_DOUBLE_CLICK_TIMEOUT);
-            } else {
-                this.clearClickTimeout();
-                this.showPic();
-            }
+            nowPlayingClickImage(this, event);
         },
         barClicked(ev) {
             if ((IS_MOBILE || (!this.desktopLayout && MBAR_REP_NAV==this.mobileBar)) && ev && ev.target && (!ev.target.className || !ev.target.className.includes('v-icon'))) {

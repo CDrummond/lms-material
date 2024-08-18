@@ -755,26 +755,19 @@ var lmsQueue = Vue.component("lms-queue", {
                 this.menu.show) {
                 return;
             }
-            let clickX = e['pageX'] || e.clientX;
-            if (clickX==undefined && e.touches) {
-                clickX = e.touches[0].pageX;
-            }
-            let clickY = e['pageY'] || e.clientY;
-            if (clickY==undefined && e.touches) {
-                clickY = e.touches[0].pageY;
-            }
+            let cp = getClickPos(e);
             // Ignore clicks within main toolbar - unless on (i) or empty space
-            if (inRect(clickX, clickY, 0, 0, window.innerWidth, 48, 2) &&
+            if (inRect(cp.x, cp.y, 0, 0, window.innerWidth, 48, 2) &&
                 (!e.target || (e.target.className!="v-toolbar__content" && e.target.id!="info-btn" && e.target.id!="info-icon"))) {
                 return;
             }
             // Ignore clicks within queue
-            if (inRect(clickX, clickY, window.innerWidth-this.viewElement.scrollWidth, 48, window.innerWidth, window.innerHeight-(48+72), 4)) {
+            if (inRect(cp.x, cp.y, window.innerWidth-this.viewElement.scrollWidth, 48, window.innerWidth, window.innerHeight-(48+72), 4)) {
                 this.resetCloseTimer();
                 return;
             }
             // Ignore clicks on now-playing bar controls
-            if (this.items.length>0 && !this.nowPlayingExpanded && inRect(clickX, clickY, 0, window.innerHeight-72, window.innerWidth<=550 ? 90 : 162, 72, 4)) {
+            if (this.items.length>0 && !this.nowPlayingExpanded && inRect(cp.x, cp.y, 0, window.innerHeight-72, window.innerWidth<=550 ? 90 : 162, 72, 4)) {
                 return;
             }
             this.$store.commit('setShowQueue', false);
@@ -890,12 +883,9 @@ var lmsQueue = Vue.component("lms-queue", {
                 return;
             }
             if (this.selection.size>0) {
-                let clickX = event['pageX'] || event.clientX;
-                if (clickX==undefined && event.touches) {
-                    clickX = event.touches[0].pageX;
-                }
+                let cp = getClickPos(event);
                 let listRight = this.scrollElement.getBoundingClientRect().right;
-                if (clickX>(listRight-64)) {
+                if (cp.x>(listRight-64)) {
                     this.itemMenu(item, index, event);
                 } else {
                     this.select(item, index, event);

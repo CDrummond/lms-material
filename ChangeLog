@@ -11,6 +11,7 @@
 6. Resize more metrics when mobile keyboard shown.
 6. Allow long words to be broken up for word-wrap in now-playing.
 8. Fix desktop now-playing bar text clipping if width less than 550px.
+9. Click on now-playing overlay to close.
 
 5.2.2
 -----

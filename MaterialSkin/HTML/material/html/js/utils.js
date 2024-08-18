@@ -963,6 +963,21 @@ function getTouchPos(ev) {
     return {x:ev.touches[0].clientX, y:ev.touches[0].clientY};
 }
 
+function getClickPos(ev) {
+    if (undefined==ev) {
+        return undefined;
+    }
+    let clickX = ev['pageX'] || ev.clientX;
+    if (clickX==undefined && ev.touches) {
+        clickX = ev.touches[0].pageX;
+    }
+    let clickY = ev['pageY'] || ev.clientY;
+    if (clickY==undefined && ev.touches) {
+        clickY = ev.touches[0].pageY;
+    }
+    return {x:clickX, y:clickY};
+}
+
 function useArtistTagType(genre, genres) {
     return (genre && genres.has(genre)) || (1==genres.size && genres.has('*'));
 }

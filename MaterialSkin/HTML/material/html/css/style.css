@@ -1697,6 +1697,7 @@ div.v-rating i.primary--text, div.v-rating i.accent--text {
  cursor: pointer;
 }
 
+.np-slider .v-progress-linear__background,
 .np-slider .v-progress-linear__bar__determinate {
  height:5px;
 }

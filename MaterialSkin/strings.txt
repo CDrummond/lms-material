@@ -201,7 +201,7 @@ PLUGIN_MATERIAL_SKIN_SHOW_BAND
 	NL	Toon band
 	ZH_TW	顯示樂團
 	ZH_CN	显示乐团
-	EN	Zenekar megjelenítése
+	HU	Zenekar megjelenítése
 
 PLUGIN_MATERIAL_SKIN_SHOW_BAND_DESC
 	CS	Zobrazit skupinu, pokud se žánr skladby shoduje s položkou ve výše uvedeném seznamu a skladba má tag skupiny.

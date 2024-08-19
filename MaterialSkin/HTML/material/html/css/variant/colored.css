@@ -47,3 +47,8 @@
   background-color:transparent;
  }
 }
+
+.theme--light:is(.np-full) {
+ --top-toolbar-text-color:var(--dark-text-color);
+ --bottom-toolbar-text-color:var(--dark-text-color);
+}

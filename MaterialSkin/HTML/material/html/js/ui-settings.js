@@ -59,7 +59,7 @@ Vue.component('lms-ui-settings', {
     <v-divider></v-divider>
 
     <v-list-tile>
-     <v-list-tile-content @click="toggleColorToolbars" class="switch-label">
+     <v-list-tile-content @click="colorToolbars = !colorToolbars" class="switch-label">
       <v-list-tile-title>{{i18n('Color toolbars')}}</v-list-tile-title>
       <v-list-tile-sub-title>{{i18n('Use chosen color for toolbars.')}}</v-list-tile-sub-title>
      </v-list-tile-content>
@@ -274,8 +274,8 @@ Vue.component('lms-ui-settings', {
     </v-list-tile>
     <v-divider></v-divider>
 
-    <v-list-tile v-bind:class="{'disabled':colorToolbars}">
-     <v-list-tile-content @click="toggleNowPlayingFull" class="switch-label">
+    <v-list-tile>
+     <v-list-tile-content @click="nowPlayingFull = !nowPlayingFull" class="switch-label">
       <v-list-tile-title>{{i18n('Use full screen for background')}}</v-list-tile-title>
       <v-list-tile-sub-title>{{i18n('Cover whole view (including toolbars, etc.) with background image.')}}</v-list-tile-sub-title>
      </v-list-tile-content>
@@ -825,18 +825,6 @@ Vue.component('lms-ui-settings', {
                 }
             }
             return disabledModes;
-        },
-        toggleColorToolbars() {
-            this.colorToolbars = !this.colorToolbars;
-            if (this.colorToolbars) {
-                this.nowPlayingFull = false;
-            }
-        },
-        toggleNowPlayingFull() {
-            if (this.colorToolbars) {
-                return;
-            }
-            this.nowPlayingFull = !this.nowPlayingFull;
         },
         keyboardInfo(event) {
             storeClickOrTouchPos(event);

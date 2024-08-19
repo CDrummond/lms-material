@@ -4,17 +4,15 @@
  2. Take top/bottom padding into account in more places.
  3. Add "npAutoClose=false" URL query parameter to stop now-playing
     auto-close when no tracks.
- 4. Don't allow using full-screen/view for now-playing background if also using
-    coloured toolbars.
- 5. Fix updating some coloured SVG icons when using colour from cover and cover
+ 4. Fix updating some coloured SVG icons when using colour from cover and cover
     changes.
- 6. Resize more metrics when mobile keyboard shown.
+ 5. Resize more metrics when mobile keyboard shown.
  6. Allow long words to be broken up for word-wrap in now-playing.
- 8. Fix desktop now-playing bar text clipping if width less than 550px.
- 9. Click on now-playing overlay to close.
-10. Fix broken 'Show band' translation.
-11. Use custom progress bar class.
-12. If using full-screen/view for now-playing background then when showing
+ 7. Fix desktop now-playing bar text clipping if width less than 550px.
+ 8. Click on now-playing overlay to close.
+ 9. Fix broken 'Show band' translation.
+10. Use custom progress bar class.
+11. If using full-screen/view for now-playing background then when showing
     now-playing use text colour for volume slider, song progress, and mobile
     bottom navigation bar.
 

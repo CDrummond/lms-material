@@ -15,7 +15,7 @@ Vue.component('lms-bottomnav', {
     <span>{{item.text}}</span>
     <div class="pill" v-bind:class="{'pill-ct':coloredToolbars}" v-if="activeBtn==index"></div>
     <v-icon v-if="activeBtn==index">{{item.active}}</v-icon>
-    <img v-else class="nav-svg-img" :src="item.inactive | svgIcon(darkUi|coloredToolbars)" oncontextmenu="return false;"></img>
+    <img v-else class="nav-svg-img" :src="item.inactive | svgIcon(darkUi|(coloredToolbars&&!nowPlayingFull))" oncontextmenu="return false;"></img>
    </v-btn>
   </template>
  </v-bottom-nav>

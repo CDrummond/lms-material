@@ -227,7 +227,7 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
    </v-list-tile>
   </v-list>
   <lms-progressbar id="pos-slider" v-if="IS_MOBILE && playerStatus.playlist.count>0" :height="desktopLayout ? 5 : 3" :disabled="playerStatus.current.duration>0" class="np-slider np-bar-slider" :value="playerStatus.current.pospc" :buffer="playerStatus.current.bufpc"></lms-progressbar>
-  <lms-progressbar id="pos-slider" v-else-if="playerStatus.playlist.count>0" :height="desktopLayout ? 5 : 3" :disabled="playerStatus.current.duration>0" class="np-slider np-bar-slider" :value="playerStatus.current.pospc" :buffer="playerStatus.current.bufpc" v-bind:class="{'np-bar-colored':coloredToolbars}" v-on:click="sliderChanged($event, false)" @mouseover="showTimeTooltip" @mouseout="hideTimeTooltip" @mousemove="moveTimeTooltip" @touchstart.passive="touchSliderStart" @touchend.passive="touchSliderEnd" @touchmove.passive="moveTimeTooltipTouch"></lms-progressbar>
+  <lms-progressbar id="pos-slider" v-else-if="playerStatus.playlist.count>0" :height="desktopLayout ? 5 : 3" :disabled="playerStatus.current.duration>0" class="np-slider np-bar-slider" :value="playerStatus.current.pospc" :buffer="playerStatus.current.bufpc" v-bind:class="{'np-bar-colored':coloredToolbars}" v-on:click.stop="sliderChanged($event, false)" @mouseover="showTimeTooltip" @mouseout="hideTimeTooltip" @mousemove="moveTimeTooltip" @touchstart.passive.stop="touchSliderStart" @touchend.passive.stop="touchSliderEnd" @touchmove.passive.stop="moveTimeTooltipTouch"></lms-progressbar>
  </div>
  
  <div class="np-page" v-else id="np-page" v-bind:class="{'no-liveedge':undefined==playerStatus.current.liveEdge}">

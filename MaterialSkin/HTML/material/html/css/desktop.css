@@ -305,7 +305,7 @@
   width:100vw;
   height:3px!important;
  }
- .np-slider .v-progress-linear__background, .np-slider .v-progress-linear__bar__determinate {
+ .np-bar-slider, .np-bar-slider .value, .np-bar-slider .buffer {
   height:3px!important;
  }
 }
@@ -389,7 +389,7 @@
  background-color:var(--pbar-colored-bgnd)!important;
 }
 
-.np-bar-colored .primary, .no-liveedge .np-bar-colored .v-progress-linear__background  {
+.np-bar-colored .value, .np-bar-colored .buffer  {
  background-color:var(--bottom-position-slider-color)!important;
  border-color:var(--bottom-position-slider-color)!important;
 }

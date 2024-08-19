@@ -13,6 +13,7 @@
  8. Fix desktop now-playing bar text clipping if width less than 550px.
  9. Click on now-playing overlay to close.
 10. Fix broken 'Show band' translation.
+11. Use custom progress bar class.
 
 5.2.2
 -----

@@ -262,12 +262,9 @@
 .np-bar-slider {
  bottom:calc((var(--bottom-toolbar-height) + var(--mobile-npbar-height)) - 3px);
  width:100vw;
- height:3px !important;
- background-color:var(--pbar-bgnd)!important;
 }
 
-.np-bar-slider .v-progress-linear__background primary,
-.np-bar-slider .v-progress-linear__bar__determinate {
+.np-bar-slider, .np-bar-slider .value, .np-bar-slider .buffer {
  height:3px !important;
 }
 

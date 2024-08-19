@@ -40,7 +40,9 @@ var app = new Vue({
                             gallery: false, choice: false, playersettingsplugin: false
                           },
                  loaded: false,
-                 snackbar:{ show: false, msg: undefined}
+                 snackbar:{ show: false, msg: undefined},
+                 nowPlayingExpanded: false,
+                 infoOpen: false
                 }
     },
     created() {
@@ -369,6 +371,12 @@ var app = new Vue({
                 this.snackbar = {msg: stripLinkTags(msg), show: true, timeout: undefined!=timeout && timeout>0 && timeout<=30 ? timeout*1000 : undefined };
             }
         }.bind(this));
+        bus.$on('infoDialog', function(val) {
+            this.infoOpen = val;
+        }.bind(this));
+        bus.$on('nowPlayingExpanded', function(val) {
+            this.nowPlayingExpanded = val;
+        }.bind(this));
     },
     computed: {
         darkUi() {
@@ -388,6 +396,9 @@ var app = new Vue({
         },
         showQueue() {
             return this.$store.state.showQueue
+        },
+        nowPlayingFull() {
+            return this.$store.state.nowPlayingFull && !this.infoOpen && this.$store.state.nowPlayingBackdrop && (this.desktopLayout ? this.nowPlayingExpanded : (this.$store.state.page == 'now-playing'))
         }
     },
     methods: {

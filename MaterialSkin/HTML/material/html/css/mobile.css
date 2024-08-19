@@ -379,6 +379,13 @@
  color: var(--active-nav-btn-color) !important;
 }
 
+.np-full .pill {
+ background-color:var(--text-color);
+}
+.np-full .active-nav div span, .np-full .active-nav div i {
+ color: var(--text-color) !important;
+}
+
 .nav-svg-img {
  width:var(--icon-size) !important;
  height:calc(var(--icon-size) + 4px) !important;

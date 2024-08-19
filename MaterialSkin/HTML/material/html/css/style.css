@@ -1226,7 +1226,7 @@ div.v-subheader {
  margin:calc(-1 * var(--np-bgnd-filter-size));
 }
 
-.np-cover-full .np-bgnd, .np-cover-full .np-bgnd div:first-of-type {
+.np-full .np-bgnd, .np-full .np-bgnd div:first-of-type {
  top:0;
  width:calc(100vw + (4* var(--np-full-bgnd-filter-size)));
  height:calc(var(--100vh) + (4* var(--np-full-bgnd-filter-size)));
@@ -1865,7 +1865,7 @@ div.v-rating i.primary--text, div.v-rating i.accent--text {
  overflow:hidden;
 }
 
-.np-cover-full .np-bgnd-cover {
+.np-full .np-bgnd-cover {
  filter:var(--np-full-bgnd-filter);
  -webkit-filter:var(--np-full-bgnd-filter);
  box-shadow:inset 100vw 100vh var(--np-bgnd-full-shadow-color);
@@ -3808,7 +3808,6 @@ div.v-subheader {
 
 .pbar .value, .pbar .buffer {
  background-color: var(--primary-color);
- border-color: var(--primary-color);
  position:absolute;
  top:0px;
  left:0px;
@@ -3836,4 +3835,13 @@ div.v-subheader {
 
 .np-bar-slider, .np-bar-slider .value, .np-bar-slider .buffer {
  border-radius: 0px;
+}
+
+.np-full .pbar .value, .np-full .pbar .buffer {
+ background-color: var(--text-color);
+}
+
+.np-full .lms-toolbar .v-slider .primary {
+  background-color: var(--text-color) !important;
+  border-color: var(--text-color) !important;
 }

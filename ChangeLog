@@ -14,6 +14,9 @@
  9. Click on now-playing overlay to close.
 10. Fix broken 'Show band' translation.
 11. Use custom progress bar class.
+12. If using full-screen/view for now-playing background then when showing
+    now-playing use text colour for volume slider, song progress, and mobile
+    bottom navigation bar.
 
 5.2.2
 -----

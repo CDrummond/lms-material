@@ -159,7 +159,7 @@ Vue.component('lms-toolbar', {
   <v-btn slot="activator" icon :title="trans.mainMenu"><v-icon class="red">error</v-icon></v-btn>
   <v-list>
    <v-list-tile @click="bus.$emit('showError', undefined, trans.connectionLost)">
-    <v-list-tile-avatar><v-icon>error</v-icon></v-btn></v-list-tile-avatar>
+    <v-list-tile-avatar><v-icon class="red">error</v-icon></v-btn></v-list-tile-avatar>
     <v-list-tile-content><v-list-tile-title>{{trans.connectionLost}}</v-list-tile-title></v-list-tile-content>
    </v-list-tile>
    <v-list-tile :href="queryParams.appSettings" v-if="undefined!=queryParams.appSettings">

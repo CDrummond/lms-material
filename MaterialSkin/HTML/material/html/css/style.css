@@ -324,12 +324,12 @@ html, .mini-player {
  opacity:0.5;
 }
 
-.lms-toolbar .v-btn__content i.red {
+.lms-toolbar .v-btn__content i.red, .v-icon:is(.red) {
  color:#f00 !important;
  background-color:transparent!important;
 }
 
-.lms-toolbar .v-toolbar__title i.amber {
+.lms-toolbar .v-toolbar__title i.amber, .v-icon:is(.amber)  {
  color:#ffc107 !important;
  background-color:transparent!important;
 }

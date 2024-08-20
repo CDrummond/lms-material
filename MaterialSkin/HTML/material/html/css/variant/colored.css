@@ -52,3 +52,7 @@
  --top-toolbar-text-color:var(--dark-text-color);
  --bottom-toolbar-text-color:var(--dark-text-color);
 }
+
+.theme--light:is(.np-full) .lms-toolbar .v-input--slider .v-slider__track {
+ background:rgba(0, 0, 0, 0.26)!important;
+}

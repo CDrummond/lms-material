@@ -620,6 +620,7 @@ const store = new Vuex.Store({
                 setLocalStorageVal('page', val);
                 setLocalStorageVal('prevPage', state.prevPage);
                 bus.$emit('pageChanged', val);
+                emitTextColor();
             }
         },
         menuVisible(state, val) {
@@ -659,6 +660,7 @@ const store = new Vuex.Store({
                 resetDialogPos();
             }
             emitToolbarColorsFromState(state);
+            emitTextColor();
         },
         closeAllDialogs(state, val) {
             closePrevDialog(state);

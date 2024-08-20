@@ -49,7 +49,7 @@ function parseQueryParams() {
     var resp = { actions:[], debug:new Set(), hide:new Set(), dontEmbed:new Set(), layout:undefined, player:undefined, single:false,
         css:undefined, download:'browser', addpad:false, party:false, expand:[], npRatio:1.33333333, topPad:0, botPad:0, dlgPad:0,
         nativeStatus:0, nativeColors:0, nativePlayer:0, nativeUiChanges:0, nativeTheme:0, nativeCover:0, nativePlayerPower:0, nativeAccent:0,
-        nativeTitlebar:0, appSettings:undefined, appQuit:undefined, appLaunchPlayer:undefined, altBtnLayout:IS_WINDOWS, dontTrapBack:false, npAutoClose:true};
+        nativeTitlebar:0, nativeTextColor:0, appSettings:undefined, appQuit:undefined, appLaunchPlayer:undefined, altBtnLayout:IS_WINDOWS, dontTrapBack:false, npAutoClose:true};
 
     for (var i = query.length - 1; i >= 0; i--) {
         var kv = query[i].split('=');
@@ -79,7 +79,7 @@ function parseQueryParams() {
             element.src = "/material/customjs/"+kv[1]+"?r=" + LMS_MATERIAL_REVISION;
             document.body.appendChild(element);
         } else if ("nativeStatus"==kv[0] || "nativeColors"==kv[0] || "nativePlayer"==kv[0] || "nativeUiChanges"==kv[0] || "nativeTheme"==kv[0] ||
-                   "nativeCover"==kv[0] || "nativePlayerPower"==kv[0] || "nativeAccent"==kv[0] || "nativeTitlebar"==kv[0]) {
+                   "nativeCover"==kv[0] || "nativePlayerPower"==kv[0] || "nativeAccent"==kv[0] || "nativeTitlebar"==kv[0] || "nativeTextColor"==kv[0]) {
             resp[kv[0]]=kv[1]=="w" ? 3 : kv[1]=="c" ? 2 : 1;
         } else if ("hide"==kv[0]) {
             var parts = kv[1].split(",");
@@ -512,6 +512,39 @@ function setRoundCovers(round) {
     changeLink("html/css/covers/" + (round ? "round" : "square") + ".css?r=" + LMS_MATERIAL_REVISION, "covercss");
 }
 
+window.lastMskTextColors = {top:undefined};
+function emitTextColor() {
+    if (queryParams.nativeTextColor<1) {
+        return;
+    }
+    if (undefined==window.mskToolbarElem) {
+        window.mskToolbarElem=document.getElementById("main-toolbar");
+        if (undefined==window.mskToolbarElem) {
+            window.setTimeout(function() {
+                emitTextColor();
+            }, 500);
+            return;
+        }
+    }
+    bus.$nextTick(function () {
+        let top = undefined!=store.state.activeDialog
+                        ? getComputedStyle(document.documentElement).getPropertyValue("--dialog-toolbar-text-color")
+                        : getComputedStyle(window.mskToolbarElem).getPropertyValue("--top-toolbar-text-color");
+        if (window.lastMskTextColors.top==top) {
+            return;
+        }
+        window.lastMskTextColors.top=top;
+        if (1==queryParams.nativeTextColor) {
+            try {
+                NativeReceiver.updateTextColor(top);
+            } catch (e) {
+            }
+        } else if (queryParams.nativeTextColor>0) {
+            emitNative("MATERIAL-TEXTCOLOR\nTOP " + top, queryParams.nativeTextColor);
+        }
+    });
+}
+
 function setTheme(theme, color, prevColor) {
     if (theme!=undefined) {
         let t = theme.split('-');
@@ -524,6 +557,7 @@ function setTheme(theme, color, prevColor) {
             changeLink("html/css/themes/" + themeName + ".css?r=" + LMS_MATERIAL_REVISION, "themecss");
         }
         changeLink("html/css/variant/" + variant + ".css?r=" + LMS_MATERIAL_REVISION, "variantcss");
+        emitTextColor();
         if (1==queryParams.nativeTheme) {
             bus.$nextTick(function () {
                 try {

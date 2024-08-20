@@ -168,7 +168,7 @@ Vue.component('lms-toolbar', {
    </v-list-tile>
    <v-divider v-if="undefined!=appQuit"></v-divider>
    <v-list-tile :href="appQuit" v-if="undefined!=appQuit">
-    <v-list-tile-avatar><v-icon>{{TB_APP_QUIT.icon}}</v-icon></v-list-tile-avatar>
+    <v-list-tile-avatar><img class="svg-img" :src="TB_APP_QUIT.svg | svgIcon(darkUi)"></img></v-list-tile-avatar>
     <v-list-tile-title>{{TB_APP_QUIT.title}}</v-list-tile-title>
    </v-list-tile>
   </v-list>

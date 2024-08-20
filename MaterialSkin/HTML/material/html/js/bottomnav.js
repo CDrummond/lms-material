@@ -8,7 +8,7 @@
 
 Vue.component('lms-bottomnav', {
     template: `
-<v-footer class="lms-footer" v-bind:class="{'trans-footer':useTransparentFooter, 'nav-text':nowPlayingFull}" id="nav-bar">
+<v-footer class="lms-footer" v-bind:class="{'trans-footer':useTransparentFooter, 'nav-text':nowPlayingFull&&!coloredToolbars}" id="nav-bar">
  <v-bottom-nav class="lms-bottom-nav" :active="activeBtn">
   <template v-for="(item, index) in items">
    <v-btn flat class="lms-bottom-nav-button" v-longpress:nomove="btnPressed" v-bind:class="{'active-nav': activeBtn==index, 'inactive-nav': activeBtn!=index}" :id="'navbtn-'+index">

@@ -99,7 +99,7 @@ Vue.component('lms-ui-settings', {
     <v-list-tile v-if="!IS_MOBILE">
      <v-list-tile-content @click="keyboardControl = !keyboardControl" class="switch-label">
       <v-list-tile-title>{{i18n('Keyboard shortcuts')}}</v-list-tile-title>
-      <v-list-tile-sub-title>{{i18n("Enable keyboard shortcuts")}} <v-btn flat icon style="margin-top:4px;height:18px;width:18px; opacity:var(--sub-opacity)" @click.stop="keyboardInfo($event)"><v-icon small>help_outline</v-icon></v-btn</v-list-tile-sub-title>
+      <v-list-tile-sub-title>{{i18n("Enable keyboard shortcuts.")}} <v-btn flat icon style="margin-top:4px;height:18px;width:18px; opacity:var(--sub-opacity)" @click.stop="keyboardInfo($event)"><v-icon small>help_outline</v-icon></v-btn</v-list-tile-sub-title>
      </v-list-tile-content>
      <v-list-tile-action><m3-switch v-model="keyboardControl"></m3-switch></v-list-tile-action>
     </v-list-tile>

@@ -379,7 +379,7 @@
 "Drop here to remove from group":"",
 "E-Mail":"",
 "Each player may be assigned a 'virtual' library. If set then this will be used to restrict track selection for 'Random Mix' (only tracks from the chosen library will be used), and other modes. This setting might also affect library browsing with other Lyrion control points (such as the default web UI).":"",
-"Enable keyboard shortcuts":"",
+"Enable keyboard shortcuts.":"",
 "Esc":"",
 "Extra player settings":"",
 "Extra player settings, such as synchronization options, player specific plugin settings, etc.":"",

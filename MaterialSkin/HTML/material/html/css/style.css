@@ -3845,3 +3845,7 @@ div.v-subheader {
   background-color: var(--text-color) !important;
   border-color: var(--text-color) !important;
 }
+
+.pswp__top-bar {
+ top:var(--top-pad)!important;
+}

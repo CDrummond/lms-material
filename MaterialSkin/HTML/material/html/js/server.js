@@ -958,6 +958,17 @@ var lmsServer = Vue.component('lms-server', {
             if (connected) {
                 this.checkForUpdates(true);
             }
+            if (1==queryParams.nativeConnectionStatus) {
+                try {
+                    NativeReceiver.updateConnectionStatus(connected);
+                } catch (e) {
+                }
+            } else if (queryParams.nativeConnectionStatus>0) {
+                emitNative("MATERIAL-CONNETIONSTATUS\nCONNECTED " + connected, queryParams.nativeConnectionStatus);
+            }
+            if (connected && this.$store.state.player) {
+                this.updatePlayer(this.$store.state.player.id);
+            }
         }.bind(this));
         bus.$on('reconnect', function() {
             this.playerStatusMessages.clear();

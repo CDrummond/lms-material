@@ -40,6 +40,11 @@ var queryParams = parseQueryParams();
 var canUseCache = true;
 
 function parseQueryParams() {
+    const NATIVE_QPARMS = new Set(["nativeStatus", "nativeColors", "nativePlayer", "nativeUiChanges", "nativeTheme", "nativeCover", "nativePlayerPower", "nativeAccent", "nativeTitlebar", "nativeTextColor", "nativeConnectionStatus"]);
+    const BOOL_QPARAMS = new Set(["single", "addpad", "party", "altBtnLayout", "dontTrapBack", "npAutoClose"]);
+    const INT_QPARAMS = new Set(["topPad", "botPad", "dlgPad"]);
+    const STR_QPARAMS = new Set(["layout", "appSettings", "appQuit", "appLaunchPlayer", "download"]);
+
     var queryString = window.location.href.substring(window.location.href.indexOf('?')+1);
     var hash = queryString.indexOf('#');
     if (hash>0) {
@@ -49,7 +54,7 @@ function parseQueryParams() {
     var resp = { actions:[], debug:new Set(), hide:new Set(), dontEmbed:new Set(), layout:undefined, player:undefined, single:false,
         css:undefined, download:'browser', addpad:false, party:false, expand:[], npRatio:1.33333333, topPad:0, botPad:0, dlgPad:0,
         nativeStatus:0, nativeColors:0, nativePlayer:0, nativeUiChanges:0, nativeTheme:0, nativeCover:0, nativePlayerPower:0, nativeAccent:0,
-        nativeTitlebar:0, nativeTextColor:0, appSettings:undefined, appQuit:undefined, appLaunchPlayer:undefined, altBtnLayout:IS_WINDOWS, dontTrapBack:false, npAutoClose:true};
+        nativeTitlebar:0, nativeTextColor:0, nativeConnectionStatus:0, appSettings:undefined, appQuit:undefined, appLaunchPlayer:undefined, altBtnLayout:IS_WINDOWS, dontTrapBack:false, npAutoClose:true};
 
     for (var i = query.length - 1; i >= 0; i--) {
         var kv = query[i].split('=');
@@ -78,15 +83,14 @@ function parseQueryParams() {
             var element = document.createElement("script");
             element.src = "/material/customjs/"+kv[1]+"?r=" + LMS_MATERIAL_REVISION;
             document.body.appendChild(element);
-        } else if ("nativeStatus"==kv[0] || "nativeColors"==kv[0] || "nativePlayer"==kv[0] || "nativeUiChanges"==kv[0] || "nativeTheme"==kv[0] ||
-                   "nativeCover"==kv[0] || "nativePlayerPower"==kv[0] || "nativeAccent"==kv[0] || "nativeTitlebar"==kv[0] || "nativeTextColor"==kv[0]) {
+        } else if (NATIVE_QPARMS.has(kv[0])) {
             resp[kv[0]]=kv[1]=="w" ? 3 : kv[1]=="c" ? 2 : 1;
         } else if ("hide"==kv[0]) {
             var parts = kv[1].split(",");
             for (var j=0, len=parts.length; j<len; ++j) {
                 resp.hide.add(parts[j]);
             }
-        } else if ("layout"==kv[0] || "appSettings"==kv[0] || "appQuit"==kv[0] || "appLaunchPlayer"==kv[0]) {
+        } else if (STR_QPARAMS.has(kv[0]))  {
             resp[kv[0]]=kv[1];
         } else if ("theme"==kv[0]) {
             var parts = kv[1].split(",");
@@ -94,10 +98,8 @@ function parseQueryParams() {
             if (parts.length>1) {
                 setLocalStorageVal('color', parts[1]);
             }
-        } else if ("single"==kv[0] || "addpad"==kv[0] || "party"==kv[0] || "altBtnLayout"==kv[0] || "dontTrapBack"==kv[0] || "npAutoClose"==kv[0]) {
+        } else if (BOOL_QPARAMS.has(kv[0])) {
             resp[kv[0]]=kv.length<2 || "true"==kv[1] || "1"==kv[1];
-        } else if ("download"==kv[0] && kv.length>1) {
-            resp.download=kv[1];
         } else if ("dontEmbed"==kv[0]) {
             var parts = kv[1].split(",");
             for (var j=0, len=parts.length; j<len; ++j) {
@@ -107,7 +109,7 @@ function parseQueryParams() {
             resp.expand=decodeURIComponent(kv[1]).split("/");
         } else if ("npRatio"==kv[0]) {
             resp.npRatio=parseFloat(kv[1]);
-        } else if ("topPad"==kv[0] || "botPad"==kv[0] || "dlgPad"==kv[0]) {
+        } else if (INT_QPARAMS.has(kv[0])) {
             resp[kv[0]]=parseInt(kv[1]);
         }
     }

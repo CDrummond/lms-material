@@ -3849,3 +3849,7 @@ div.v-subheader {
 .pswp__top-bar {
  top:var(--top-pad)!important;
 }
+
+.msk-is-touch .pswp__top-bar {
+ visibility: hidden!important;
+}

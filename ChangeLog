@@ -1,3 +1,7 @@
+5.2.4
+-----
+1. Fix setting colour from cover when colour setting changed in settings.
+
 5.2.3
 -----
  1. In mobile layout, if queue is cleared then switch to browse view.

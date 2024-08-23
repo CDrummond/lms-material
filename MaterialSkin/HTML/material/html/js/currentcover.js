@@ -182,7 +182,9 @@ var lmsCurrentCover = Vue.component('lms-currentcover', {
             currentCover.calculateColors();
         });
         bus.$on('themeChanged', function() {
-            this.calculateColors();
+            if (this.$store.state.color==COLOR_FROM_COVER && this.accessUrl!=this.coverUrl) {
+                this.accessUrl = this.coverUrl;
+            }
         }.bind(this));
     },
     methods: {

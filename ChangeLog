@@ -1,6 +1,7 @@
 5.2.4
 -----
 1. Fix setting colour from cover when colour setting changed in settings.
+2. Re-add showing of now-playing menu on context/long-press of image.
 
 5.2.3
 -----

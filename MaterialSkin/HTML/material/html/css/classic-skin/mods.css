@@ -940,3 +940,10 @@ table td input[type=checkbox] {
 .Toggle { /* SqueezeDSP */
  margin-top:-22px;
 }
+
+.custom-select-container:has(select:disabled),
+select:disabled,
+input:disabled,
+button:disabled {
+ opacity:0.7;
+}

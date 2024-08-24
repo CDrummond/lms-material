@@ -89,7 +89,6 @@
 
  function selectMutation(mutationList, observer) {
   // Nuclear option - recreate all selects on changes
-  console.log("MUTATION");
   window.customSelectObserver.disconnect();
   for (let s=0, len=window.customSelects.length; s<len; ++s) {
     window.customSelects[s].destroy();
@@ -113,6 +112,10 @@
 
    // If select is close to bottom then need to scroll into view...
    window.customSelects[i].container.addEventListener('custom-select:open', (e) => {
+    if (e.target.customSelect.disabled) {
+     e.target.customSelect.open=false;
+     return;
+    }
     let wh = window.innerHeight;
     let rect = window.customSelects[i].panel.getBoundingClientRect();
     let top = rect.top;

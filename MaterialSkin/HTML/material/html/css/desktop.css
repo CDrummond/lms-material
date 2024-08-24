@@ -189,9 +189,19 @@
 }
 
 .np-bar-queue {
- margin:-8px -6px -6px -3px!important;
- height:28px;
- width:28px;
+ margin:-8px -8px -10px -3px!important;
+ height:38px;
+ width:38px;
+ border-radius: 0!important;
+}
+.np-bar-queue:before {
+  margin-top:-2px;
+}
+.np-bar-queue .v-btn__content {
+  margin-top:-2px;
+}
+.np-bar-queue:hover {
+ background-color:transparent!important;
 }
 
 .np-bar-controls {

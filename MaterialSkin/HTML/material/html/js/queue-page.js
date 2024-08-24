@@ -1049,10 +1049,10 @@ var lmsQueue = Vue.component("lms-queue", {
             }
             if (act==PQ_ADD_URL_ACTION) {
                 this.cancelCloseTimer(true);
-                promptForText(ACTIONS[PQ_ADD_URL_ACTION].title, i18n("URL"), undefined, i18n("Add")).then(resp => {
+                promptForText(ACTIONS[PQ_ADD_URL_ACTION].title, i18n("URL"), undefined, i18n("Play"), undefined, i18n("Add")).then(resp => {
                     this.resetCloseTimer();
                     if (resp.ok && resp.value && resp.value.length>0) {
-                        lmsCommand(this.$store.state.player.id, ["playlist", this.items.length==0 ? "play" : "add", resp.value]).then(({data}) => {
+                        lmsCommand(this.$store.state.player.id, ["playlist", 1==resp.ok ? "play" : "add", resp.value]).then(({data}) => {
                             bus.$emit('refreshStatus');
                         });
                     }

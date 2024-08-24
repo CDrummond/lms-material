@@ -110,9 +110,9 @@ function confirm(text, positiveButton, negativeButton, otherButton) {
     });
 }
 
-function promptForText(title, hint, text, positiveButton, negativeButton, fileTypes) {
+function promptForText(title, hint, text, positiveButton, negativeButton, otherBottom, fileTypes) {
     return new Promise(function(response) {
-        bus.$emit('dlg.open', 'prompt', 'text', title, text, hint, positiveButton, negativeButton, undefined, fileTypes);
+        bus.$emit('dlg.open', 'prompt', 'text', title, text, hint, positiveButton, negativeButton, otherBottom, fileTypes);
         bus.$once('prompt.resp', function(resp, value) {
             response({ok:resp, value:value.trim()});
         });

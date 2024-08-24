@@ -4,6 +4,7 @@
 2. Re-add showing of now-playing menu on context/long-press of image.
 3. Dim disabled items in server-side, and extra player, settings.
 4. If combobox is disabled then don't show its menu.
+5. Add 'Play' button to 'Add URL to queue dialog.
 
 5.2.3
 -----

@@ -98,12 +98,15 @@ function parseResp(data, showTrackNum, index, showRatings, queueAlbumStyle, queu
                 let i = loop[idx];
                 splitMultiples(i);
                 let title = trackTitle(i);
+                let artist = i.albumartist ? i.albumartist : i.artist ? i.artist : i.trackartist;
+                if (i.remote && undefined==title && undefined==artist && undefined==album) {
+                    title = artist = i.album = i.artist = i18n('Unknown');
+                }
                 if (showTrackNum && i.tracknum>0) {
                     title = formatTrackNum(i)+SEPARATOR+title;
                 }
                 let haveRating = showRatings && undefined!=i.rating;
                 if (queueAlbumStyle) {
-                    let artist = i.albumartist ? i.albumartist : i.artist ? i.artist : i.trackartist;
                     let extra = buildArtistLine(i, 'queue', false, artist);
                     let addedClass = false;
                     if (!isEmpty(extra)) {

@@ -5,6 +5,7 @@
 3. Dim disabled items in server-side, and extra player, settings.
 4. If combobox is disabled then don't show its menu.
 5. Add 'Play' button to 'Add URL to queue dialog.
+6. Override 'setValue' of selects.
 
 5.2.3
 -----

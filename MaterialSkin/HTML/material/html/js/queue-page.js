@@ -99,7 +99,7 @@ function parseResp(data, showTrackNum, index, showRatings, queueAlbumStyle, queu
                 splitMultiples(i);
                 let title = trackTitle(i);
                 let artist = i.albumartist ? i.albumartist : i.artist ? i.artist : i.trackartist;
-                if (i.remote && undefined==title && undefined==artist && undefined==album) {
+                if (i.remote && undefined==title && undefined==artist && undefined==i.album) {
                     title = artist = i.album = i.artist = i18n('Unknown');
                 }
                 if (showTrackNum && i.tracknum>0) {

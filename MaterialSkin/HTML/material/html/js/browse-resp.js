@@ -352,7 +352,7 @@ function parseBrowseResp(data, parent, options, cacheKey, parentCommand, parentG
                                 i.image=undefined;
                             }
                         } else if (i.presetParams.favorites_url.startsWith("db:genre.name") && i.presetParams.icon=="html/images/genres.png") {
-                            i.icon="label";
+                            i.svg="guitar-acoustic";
                             i.image=undefined;
                         } else if (i.presetParams.favorites_url.startsWith("db:year.id") && i.presetParams.icon=="html/images/years.png") {
                             i.icon="date_range";

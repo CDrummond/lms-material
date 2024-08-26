@@ -27,6 +27,7 @@ use List::Util qw(shuffle);
 use File::Spec::Functions qw(catdir);
 use File::Path qw(make_path);
 use Scalar::Util qw(looks_like_number);
+use URI::Escape qw(uri_unescape);
 
 if (!Slim::Web::Pages::Search->can('parseAdvancedSearchParams')) {
     require Plugins::MaterialSkin::Search;
@@ -349,6 +350,37 @@ sub initTranslationList() {
     $listOfTranslations = join(',', @trans);
 }
 
+sub _getUrlQueryParam {
+    my $uri = shift;
+    my $key = shift;
+    my $start = index($uri, $key . "=");
+
+    if ($start > 0) {
+        $start += length($key)+1;
+        my $end = index($uri, "&", $start);
+        if ($end > $start) {
+            return substr($uri, $start, $end-$start);
+        }
+        return substr($uri, $start);
+    }
+    return undef;
+}
+
+sub _fetchDbVal {
+    my $dbh = shift;
+    my $query = shift;
+    my $key = shift;
+    my $col = shift;
+    if ($key) {
+        my $sql = $dbh->prepare_cached( $query );
+        $sql->execute(uri_unescape($key));
+        if ( my $result = $sql->fetchall_arrayref({}) ) {
+            return $result->[0]->{$col} if ref $result && scalar @$result;
+        }
+    }
+    return undef;
+}
+
 sub _startsWith {
     return substr($_[0], 0, length($_[1])) eq $_[1];
 }
@@ -445,7 +477,7 @@ sub _cliCommand {
     }
 
     my $cmd = $request->getParam('_cmd');
-    if ($request->paramUndefinedOrNotOneOf($cmd, ['prefs', 'info', 'transferqueue', 'delete-favorite', 'map', 'delete-podcast',
+    if ($request->paramUndefinedOrNotOneOf($cmd, ['prefs', 'info', 'transferqueue', 'delete-favorite', 'map', 'resolve', 'delete-podcast',
                                                   'plugins', 'plugins-status', 'plugins-update', 'extras', 'delete-vlib', 'pass-isset',
                                                   'pass-check', 'browsemodes', 'geturl', 'command', 'scantypes', 'server', 'themes',
                                                   'playericons', 'activeplayers', 'urls', 'adv-search', 'adv-search-params', 'protocols',
@@ -707,6 +739,51 @@ sub _cliCommand {
         }
         $request->addResult($resp_name, $resp);
         $request->setStatusDone();
+        return;
+    }
+
+    if ($cmd eq 'resolve') {
+        my $fav_url = $request->getParam('fav_url');
+        my $dbh = Slim::Schema->dbh;
+        if ($fav_url) {
+            my $genreId = _fetchDbVal($dbh, qq{SELECT genres.id FROM genres WHERE name = ? LIMIT 1}, _getUrlQueryParam($fav_url, "genre.name"), "id");
+            my $artistName = _getUrlQueryParam($fav_url, "contributor.name");
+            my $artistId = _fetchDbVal($dbh, qq{SELECT contributors.id FROM contributors WHERE name = ? LIMIT 1}, $artistName, "id");
+            my $albumId = _fetchDbVal($dbh, qq{SELECT albums.id FROM albums WHERE title = ? LIMIT 1}, _getUrlQueryParam($fav_url, "album.title"), "id");
+            my $workId = _fetchDbVal($dbh, qq{SELECT works.id FROM works WHERE title = ? LIMIT 1}, _getUrlQueryParam($fav_url, "work.title"), "id");
+            my $composerId = _fetchDbVal($dbh, qq{SELECT contributors.id FROM contributors WHERE name = ? LIMIT 1}, _getUrlQueryParam($fav_url, "composer.name"), "id");
+
+            if ($genreId) {
+                $request->addResult('genre_id', $genreId);
+            }
+            if ($artistId) {
+                $request->addResult('artist_id', $artistId);
+            }
+            if ($albumId) {
+                $request->addResult('album_id', $albumId);
+                if ($artistName) {
+                    $request->addResult('artist_name', uri_unescape($artistName));
+                }
+            }
+            if ($workId) {
+                $request->addResult('work_id', $workId);
+            }
+            if ($composerId) {
+                $request->addResult('composer_id', $composerId);
+            }
+            if (index($fav_url, "file:///")==0 && index($fav_url, ".m3u")==(length($fav_url)-4)) {
+                my $rs = Slim::Schema->rs('Playlist')->getPlaylists('all', undef, undef);
+                for my $item ($rs->slice(0, 25000)) {
+                    if ($item->url eq $fav_url) {
+                        $request->addResult('playlist_id', $item->id());
+                        last;
+                    }
+                }
+            }
+            $request->setStatusDone();
+        } else {
+            $request->setStatusBadParams();
+        }
         return;
     }
 
@@ -1941,27 +2018,10 @@ sub _svgHandler {
         $colour2 = "#" . $request->uri->query_param('c2');
     } else { # Manually extract "c=colour" query parameter...
         my $uri = $request->uri->as_string;
-        my $start = index($uri, "c=");
-
-        if ($start > 0) {
-            $start += 2;
-            my $end = index($uri, "&", $start);
-            if ($end > $start) {
-                $colour = "#" . substr($uri, $start, $end-$start);
-            } else {
-                $colour = "#" . substr($uri, $start);
-            }
-        }
-
-        $start = index($uri, "c2=");
-        if ($start > 0) {
-            $start += 2;
-            my $end = index($uri, "&", $start);
-            if ($end > $start) {
-                $colour2 = "#" . substr($uri, $start, $end-$start);
-            } else {
-                $colour2 = "#" . substr($uri, $start);
-            }
+        $colour = "#" . _getUrlQueryParam($uri, "c");
+        my $c2 = _getUrlQueryParam($uri, "c2");
+        if ($c2) {
+            $colour2 = "#" . $c2;
         }
     }
 

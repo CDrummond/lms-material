@@ -607,13 +607,13 @@ function browseHandleListResponse(view, item, command, resp, prevPage, appendIte
             }
         } else if (item.id==RANDOM_MIX_ID) {
             view.currentActions=[{action:NEW_RANDOM_MIX_ACTION}, {action:view.grid.use ? USE_LIST_ACTION : USE_GRID_ACTION}, {action:SEARCH_LIST_ACTION}];
-        } else if (SECTION_FAVORITES==view.current.section && view.current.isFavFolder) {
-            view.tbarActions=[ADD_FAV_FOLDER_ACTION, ADD_FAV_ACTION];
-        } else if (SECTION_PLAYLISTS==view.current.section && view.current.id.startsWith("playlist_id:") && view.items.length>0 && undefined!=view.items[0].stdItem) {
+        } else if ((SECTION_PLAYLISTS==view.current.section || SECTION_FAVORITES==view.current.section) && view.current.id.startsWith("playlist_id:") && view.items.length>0 && undefined!=view.items[0].stdItem) {
             view.tbarActions=[ADD_ACTION, PLAY_ACTION];
             view.currentActions=browseActions(view, resp.items.length>0 ? item : undefined, {}, resp.items.length);
             view.currentActions.unshift({action:SEARCH_LIST_ACTION, weight:1});
             view.currentActions.sort(function(a, b) { return a.weight!=b.weight ? a.weight<b.weight ? -1 : 1 : titleSort(a, b) });
+        } else if (SECTION_FAVORITES==view.current.section && view.current.isFavFolder) {
+            view.tbarActions=[ADD_FAV_FOLDER_ACTION, ADD_FAV_ACTION];
         } else if (view.current.stdItem==STD_ITEM_MAI && view.history.length>0 && view.history[view.history.length-1].current.stdItem==STD_ITEM_ALBUM) {
             view.tbarActions=[ADD_ACTION, PLAY_ACTION];
             // We are showing album review, copy some of the album's actions into this view's actions...
@@ -877,7 +877,8 @@ function browseClick(view, item, index, event) {
         view.showImage(index);
         return;
     }
-    if (isAudioTrack(item)) {
+    let isFavouritePlaylist = item.section==SECTION_FAVORITES && item.presetParams && item.presetParams.favorites_url && item.presetParams.favorites_url.startsWith("file:///") && item.presetParams.favorites_url.endsWith(".m3u");
+    if (isAudioTrack(item) && !isFavouritePlaylist) {
         if (!view.clickTimer) {
             view.clickTimer = setTimeout(function () {
                 view.clickTimer = undefined;
@@ -924,7 +925,7 @@ function browseClick(view, item, index, event) {
     } else if (START_RANDOM_MIX_ID==item.id) {
         bus.$emit('dlg.open', 'rndmix', undefined, true);
     } else if (STD_ITEM_GENRE==item.stdItem && view.current && (getField(item, "genre_id") || getField(item, "year"))) {
-        browseAddCategories(view, item, true, getField(item, "year"));
+        browseAddCategories(view, item, true);
         browseCheckExpand(view);
     } else if (item.actions && item.actions.go && item.actions.go.params && item.actions.go.params.genre_id && item.actions.go.params.mode=='artists' && item.title.indexOf(': ')>0) {
         // Genre from 'More' menu?
@@ -946,33 +947,84 @@ function browseClick(view, item, index, event) {
         } else {
             window.open(item.weblink);
         }
-    } else {
-        var command = browseBuildCommand(view, item);
-        if (command.command.length>2 && command.command[1]=="playlist") {
-            if (!item.menu || item.menu.length<1) { // No menu? Dynamic playlist? Just run command...
-                lmsCommand(view.playerId(), command.params ? command.command.concat(command.params) : command.command).then(({data}) => {
-                    bus.$emit('showMessage', item.title);
-                });
+    } else if (SECTION_FAVORITES==item.section && !item.isFavFolder && item.presetParams && item.presetParams.favorites_url &&
+               (isFavouritePlaylist || item.presetParams.favorites_url.startsWith("db:"))) {
+        if (item.presetParams.favorites_url.startsWith("db:year.id")) {
+            let parts = item.presetParams.favorites_url.split("=");
+            if (parts.length>=2) {
+                parts = parts[1].split("&");
+                browseAddCategories(view, {id:"year:"+parts[0], title:item.title, stdItem:STD_ITEM_YEAR}, true);
             } else {
                 browseItemMenu(view, item, index, event);
             }
+        } else {
+            lmsCommand("", ["material-skin", "resolve", "fav_url:"+item.presetParams.favorites_url]).then(({data}) => {
+                if (data && data.result) {
+                    if (data.result.genre_id) {
+                        browseAddCategories(view, {id:"genre_id:"+data.result.genre_id, title:item.title, stdItem:STD_ITEM_GENRE}, true);
+                    } else if (data.result.album_id) {
+                        let itm = {id:"album_id:"+data.result.album_id, title:item.title, stdItem:STD_ITEM_ALBUM};
+                        if (data.result.artist_id) {
+                            itm["artist_id"]='artist_id:'+data.result.artist_id;
+                            if (data.result.artist_name) {
+                                itm["subtitle"]=data.result.artist_name;
+                            }
+                        }
+                        browseDoClick(view, itm, index, event);
+                    } else if (data.result.artist_id) {
+                        browseDoClick(view, {id:"artist_id:"+data.result.artist_id, title:item.title, stdItem:STD_ITEM_ARTIST}, index, event);
+                    } else if (data.result.work_id && data.result.composer_id) {
+                        browseDoClick(view, {id:"work_id:"+data.result.work_id, composer_id:data.result.composer_id, title:item.title, stdItem:STD_ITEM_WORK}, index, event);
+                    } else if (isFavouritePlaylist) {
+                        if (data.result.playlist_id) {
+                            browseDoClick(view, {id:"playlist_id:"+data.result.playlist_id, title:item.title, stdItem:STD_ITEM_PLAYLIST, section:item.section}, index, event);
+                        } else {
+                            browseItemMenu(view, item, index, event);
+                        }
+                    } else {
+                        browseDoClick(view, item, index, event);
+                    }
+                }
+            }).catch(err => {
+                if (isFavouritePlaylist) {
+                    browseItemMenu(view, item, index, event);
+                } else {
+                    browseDoClick(view, item, index, event);
+                }
+            });
             return;
         }
-
-        if (item.mapgenre) {
-            var field = getField(command, "genre:");
-            if (field>=0) {
-                lmsCommand("", ["material-skin", "map", command.params[field]]).then(({data}) => {
-                    if (data.result.genre_id) {
-                        command.params[field]="genre_id:"+data.result.genre_id;
-                        view.fetchItems(command, item);
-                    }
-                });
-                return;
-            }
-        }
-        view.fetchItems(command, item);
+    } else {
+        browseDoClick(view, item, index, event);
     }
+}
+
+function browseDoClick(view, item, index, event) {
+    var command = browseBuildCommand(view, item);
+    if (command.command.length>2 && command.command[1]=="playlist") {
+        if (!item.menu || item.menu.length<1) { // No menu? Dynamic playlist? Just run command...
+            lmsCommand(view.playerId(), command.params ? command.command.concat(command.params) : command.command).then(({data}) => {
+                bus.$emit('showMessage', item.title);
+            });
+        } else {
+            browseItemMenu(view, item, index, event);
+        }
+        return;
+    }
+
+    if (item.mapgenre) {
+        var field = getField(command, "genre:");
+        if (field>=0) {
+            lmsCommand("", ["material-skin", "map", command.params[field]]).then(({data}) => {
+                if (data.result.genre_id) {
+                    command.params[field]="genre_id:"+data.result.genre_id;
+                    view.fetchItems(command, item);
+                }
+            });
+            return;
+        }
+    }
+    view.fetchItems(command, item);
 }
 
 function browseAddWorksCategories(view, item) {

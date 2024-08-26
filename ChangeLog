@@ -1,3 +1,8 @@
+5.3.0
+-----
+1. When navigating into an album, artist, work, or playlist from favourites
+   attempt to obtain DB IDs and navigate using those.
+
 5.2.4
 -----
 1. Fix setting colour from cover when colour setting changed in settings.

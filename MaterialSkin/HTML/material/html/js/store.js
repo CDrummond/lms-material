@@ -46,6 +46,9 @@ function updateUiSettings(state, val) {
     var relayoutGrid = false;
     var themeChanged = false;
     var prevColor = state.color;
+    if (undefined!=val.theme) {
+        val.theme=val.theme.replace("darker", "dark");
+    }
     if (undefined!=val.theme && state.chosenTheme!=val.theme) {
         state.chosenTheme=val.theme;
         state.coloredToolbars = state.chosenTheme.endsWith("-colored");
@@ -165,7 +168,7 @@ function updateUiSettings(state, val) {
 function autoTheme() {
     const prefersLight = window.matchMedia && window.matchMedia('(prefers-color-scheme: light)').matches;
     if (IS_IOS || IS_ANDROID) {
-        return prefersLight ? "light" : "darker";
+        return prefersLight ? "light" : "dark";
     } else if (navigator.platform.indexOf("Linux") != -1) {
         return window.location.href.indexOf('desktop=KDE') != -1
                     ? (prefersLight ? "linux/light/Breeze" : "linux/dark/Breeze-Dark")
@@ -175,7 +178,7 @@ function autoTheme() {
     } else if (navigator.platform.indexOf("Mac") != -1) {
         return prefersLight ? "mac/light/Mojave" : "mac/dark/Mojave-Dark";
     }
-    return prefersLight ? "light" : "darker";
+    return prefersLight ? "light" : "dark";
 }
 
 function storeCurrentPlayer(player) {
@@ -488,8 +491,10 @@ const store = new Vuex.Store({
             state.page = getLocalStorageVal('page', state.page);
             state.prevPage = getLocalStorageVal('prevPage', state.prevPage);
             state.chosenTheme = getLocalStorageVal('theme', state.chosenTheme);
+            state.chosenTheme=state.chosenTheme.replace("darker", "dark");
             state.coloredToolbars = state.chosenTheme.endsWith("-colored");
             state.theme = state.chosenTheme.startsWith(AUTO_THEME) ? autoTheme()+(state.coloredToolbars ? "-colored" : "") : state.chosenTheme;
+            state.theme=state.theme.replace("darker", "dark");
             state.darkUi = !state.theme.startsWith('light') && state.theme.indexOf("/light/")<0;
             state.color = getLocalStorageVal('color', state.color);
             var larger = getLocalStorageBool('largerElements', getLocalStorageBool('largeFonts', undefined));

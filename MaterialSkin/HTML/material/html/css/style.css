@@ -6,6 +6,12 @@
  */
 
 :root {
+ --scrollbar-track-color:var(--background-color);
+ --scrollbar-corner-color:var(--background-color);
+ --dialog-toolbar-color:var(--background-color);
+ --bottom-toolbar-color:var(--background-color);
+ --top-toolbar-color:var(--background-color);
+ --sub-toolbar-color:var(--background-color);
  /* Also set setFontSize() (utils.js) */
  --std-font-size: 16px;
  --small-font-size: 14px;

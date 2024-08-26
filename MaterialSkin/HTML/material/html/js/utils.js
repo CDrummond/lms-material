@@ -549,6 +549,7 @@ function emitTextColor() {
 
 function setTheme(theme, color, prevColor) {
     if (theme!=undefined) {
+        theme=theme.replace("darker", "dark");
         let t = theme.split('-');
         let variant = t.length>1 && ('colored'==t[t.length-1] || 'standard'==t[t.length-1]) ? t.pop() : 'standard';
         let themeName = t.join('-');

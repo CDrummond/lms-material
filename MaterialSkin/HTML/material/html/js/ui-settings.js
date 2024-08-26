@@ -656,7 +656,6 @@ Vue.component('lms-ui-settings', {
                 { key: AUTO_THEME, label:this.i18n('Automatic')},
                 { key:'light',       label:i18n('Light')},
                 { key:'dark',        label:i18n('Dark')},
-                { key:'darker',      label:i18n('Darker')},
                 { key:'black',       label:i18n('Black')},
                 { key:'dark-lyrion', label:'Lyrion'}
                 ];

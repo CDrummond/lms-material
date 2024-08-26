@@ -2,6 +2,8 @@
 -----
 1. When navigating into an album, artist, work, or playlist from favourites
    attempt to obtain DB IDs and navigate using those.
+2. Remove 'Dark' theme and rename 'Darker' to 'Dark'.
+3. Simplify themes.
 
 5.2.4
 -----

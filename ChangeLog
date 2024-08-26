@@ -6,6 +6,7 @@
 4. If combobox is disabled then don't show its menu.
 5. Add 'Play' button to 'Add URL to queue dialog.
 6. Hide 'Loading...' message after a few seconds.
+7. Fix position of '(?)' buttons in 'Additional Browse Modes'
 
 5.2.3
 -----

@@ -693,6 +693,9 @@ table td input[type=checkbox] {
  .lms-settings-section-PLUGIN_EXTENDED_BROWSEMODES .settingGroup .prefHead {
   width: 180px;
  }
+ .lms-settings-section-PLUGIN_EXTENDED_BROWSEMODES .msk-help-btn {
+  left: 182px;
+ }
 }
 
 @media (min-width: 1200px) {

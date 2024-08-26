@@ -6,6 +6,8 @@
  */
 'use strict';
 
+const SLOW_PAGES = new Set(['SETUP_PLUGINS']);
+
 function remapClassicSkinIcons(doc, col) {
     const ICONS = ["play", "add", "edit", "favorite", "favorite_remove", "delete", "delete_white", "first", "last", "up", "down", "mix", "mmix", "next", "prev", "queue"];
     const OTHER_EXT = [".png", ".gif"];
@@ -448,7 +450,7 @@ function iframeActionCheck() {
 }
 
 function settingsSectionChanged() {
-    bus.$emit('iframe-loaded', false);
+    bus.$emit('iframe-loaded', false, undefined==iframeInfo.settingsSelector ? undefined : iframeInfo.settingsSelector.value);
     if (undefined!=iframeInfo.actionCheckInterval) {
         clearInterval(iframeInfo.actionCheckInterval);
     }
@@ -551,7 +553,7 @@ function applyModifications(page, textCol, darkUi, src) {
                 iframeInfo.settingsDoChange = iframeInfo.settingsSelector.onchange;
                 iframeInfo.settingsSelector.onchange = settingsSectionChangedReq;
                 iframeInfo.settingsSelector.addEventListener("change", settingsSectionChanged);
-                settingsSectionChanged();
+                settingsSectionChanged(iframeInfo.settingsSelector.value);
                 content.documentElement.classList.add("lms-settings-section-"+iframeInfo.settingsSelector.value+(LMS_VERSION<90000 || iframeInfo.settingsSelector.value!="SETUP_PLUGINS" ? "" : "_9"));
             }
         }
@@ -747,7 +749,7 @@ Vue.component('lms-iframe-dialog', {
             this.showMenu = false;
             this.choiceMenu = {show:false, x:0}
             this.loaded = false;
-            this.startLoadTimer();
+            this.startLoadTimer(page.indexOf("plugins/Extensions/settings/basic.html")>=0 ? "SETUP_PLUGINS" : undefined);
             this.actions = undefined==actions ? [] : actions;
             this.customActions = getCustomActions(this.page+"-dialog", this.$store.state.unlockAll);
             this.history = [];
@@ -761,12 +763,12 @@ Vue.component('lms-iframe-dialog', {
                 }
             }
         }.bind(this));
-        bus.$on('iframe-loaded', function(val) {
+        bus.$on('iframe-loaded', function(val, settingsPage) {
             this.loaded = val;
             if (val) {
                 this.stopLoadTimer();
             } else {
-                this.startLoadTimer();
+                this.startLoadTimer(settingsPage);
             }
         }.bind(this));
         bus.$on('iframe-prompting', function(val) {
@@ -816,12 +818,13 @@ Vue.component('lms-iframe-dialog', {
         }.bind(this));
     },
     methods: {
-        startLoadTimer() {
+        startLoadTimer(settingsPage) {
+            let timeout = undefined!=settingsPage && SLOW_PAGES.has(settingsPage) ? 4000 : 1500;
             this.stopLoadTimer();
             this.loadTimer = setTimeout(function() {
                 this.loadTimer = undefined;
                 this.loaded = true;
-            }.bind(this), 5000);
+            }.bind(this), timeout);
         },
         stopLoadTimer() {
             if (this.loadTimer) {
@@ -841,6 +844,7 @@ Vue.component('lms-iframe-dialog', {
                 this.close();
             } else {
                 this.loaded = false;
+                this.startLoadTimer();
                 this.src = this.history.pop();
             }
         },
@@ -928,6 +932,7 @@ Vue.component('lms-iframe-dialog', {
             this.showMenu = false;
             this.choiceMenu = {show:false, x:this.choiceMenu.x}
             this.loaded = false;
+            this.startLoadTimer();
             this.history = [];
             this.textCol = getComputedStyle(document.documentElement).getPropertyValue('--text-color').substring(1);
             this.playerId = player.id;

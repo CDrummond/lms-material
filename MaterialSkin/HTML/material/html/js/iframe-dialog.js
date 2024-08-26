@@ -747,6 +747,7 @@ Vue.component('lms-iframe-dialog', {
             this.showMenu = false;
             this.choiceMenu = {show:false, x:0}
             this.loaded = false;
+            this.startLoadTimer();
             this.actions = undefined==actions ? [] : actions;
             this.customActions = getCustomActions(this.page+"-dialog", this.$store.state.unlockAll);
             this.history = [];
@@ -762,6 +763,11 @@ Vue.component('lms-iframe-dialog', {
         }.bind(this));
         bus.$on('iframe-loaded', function(val) {
             this.loaded = val;
+            if (val) {
+                this.stopLoadTimer();
+            } else {
+                this.startLoadTimer();
+            }
         }.bind(this));
         bus.$on('iframe-prompting', function(val) {
             this.prompting = val;
@@ -810,6 +816,19 @@ Vue.component('lms-iframe-dialog', {
         }.bind(this));
     },
     methods: {
+        startLoadTimer() {
+            this.stopLoadTimer();
+            this.loadTimer = setTimeout(function() {
+                this.loadTimer = undefined;
+                this.loaded = true;
+            }.bind(this), 5000);
+        },
+        stopLoadTimer() {
+            if (this.loadTimer) {
+                clearTimeout(this.loadTimer);
+                this.loadTimer = undefined;
+            }
+        },
         goBack(longpress) {
             if (!this.show) {
                 return;

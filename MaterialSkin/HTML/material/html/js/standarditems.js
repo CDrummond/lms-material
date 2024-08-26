@@ -178,6 +178,10 @@ function buildStdItemCommand(item, parentCommand) {
             } else {
                 command.params.push("performance:");
             }
+            // For albums browsed from favourites...
+            if (undefined!=item.artist_id && getIndex(command.params, "artist_id:")<0) {
+                command.params.push("artist_id:"+item.artist_id);
+            }
         } else if (item.id.startsWith("genre_id:")) {
             for (var i=0, len=parentCommand.params.length; i<len; ++i) {
                 if (typeof parentCommand.params[i] === 'string' || parentCommand.params[i] instanceof String) {

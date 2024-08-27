@@ -5,6 +5,8 @@
 2. Remove 'Dark' theme and rename 'Darker' to 'Dark'.
 3. Simplify themes.
 4. Fix showing detailed sub-toolbar on mobile layout.
+5. Only draw blurred background in detailed sub-toolbar if browse view is set
+   to draw background images.
 
 5.2.4
 -----

@@ -961,10 +961,10 @@ function browseClick(view, item, index, event) {
             lmsCommand("", ["material-skin", "resolve", "fav_url:"+item.presetParams.favorites_url]).then(({data}) => {
                 if (data && data.result) {
                     if (data.result.genre_id) {
-                        browseAddCategories(view, {id:"genre_id:"+data.result.genre_id, title:item.title, stdItem:STD_ITEM_GENRE}, true);
+                        browseAddCategories(view, {id:"genre_id:"+data.result.genre_id, title:item.title, image:item.image, stdItem:STD_ITEM_GENRE}, true);
                     } else if (data.result.album_id) {
                         if (data.result.artist_id) {
-                            let itm = {id:"album_id:"+data.result.album_id, artist_id:data.result.artist_id, title:item.title, stdItem:STD_ITEM_ALBUM};
+                            let itm = {id:"album_id:"+data.result.album_id, artist_id:data.result.artist_id, title:item.title, image:item.image, stdItem:STD_ITEM_ALBUM};
                             if (data.result.artist_name) {
                                 itm["subtitle"]=data.result.artist_name;
                             }
@@ -973,9 +973,9 @@ function browseClick(view, item, index, event) {
                             browseDoClick(view, item, index, event);
                         }
                     } else if (data.result.artist_id) {
-                        browseDoClick(view, {id:"artist_id:"+data.result.artist_id, title:item.title, stdItem:STD_ITEM_ARTIST}, index, event);
+                        browseDoClick(view, {id:"artist_id:"+data.result.artist_id, title:item.title, image:item.image, stdItem:STD_ITEM_ARTIST}, index, event);
                     } else if (data.result.work_id && data.result.composer_id) {
-                        browseDoClick(view, {id:"work_id:"+data.result.work_id, composer_id:data.result.composer_id, title:item.title, stdItem:STD_ITEM_WORK}, index, event);
+                        browseDoClick(view, {id:"work_id:"+data.result.work_id, composer_id:data.result.composer_id, title:item.title, image:item.image, images:item.images, stdItem:STD_ITEM_WORK}, index, event);
                     } else if (isFavouritePlaylist) {
                         if (data.result.playlist_id) {
                             browseDoClick(view, {id:"playlist_id:"+data.result.playlist_id, title:item.title, stdItem:STD_ITEM_PLAYLIST, section:item.section}, index, event);

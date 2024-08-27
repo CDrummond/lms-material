@@ -110,7 +110,7 @@ var ACTIONS=[
     {cmd:"select",       icon:"check_box_outline_blank"},
     {cmd:"unselect",     icon:"check_box"},
     {cmd:"rating",       icon:"stars"},
-    {cmd:"search-lib",   icon:"search"},
+    {cmd:"search-lib",   svg: "search-library"},
     {cmd:"use-grid",     icon:"grid_on"},
     {cmd:"use-list",     icon:"grid_off"},
     {cmd:"albsort",      icon:"sort_by_alpha"},

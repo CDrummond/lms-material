@@ -31,7 +31,7 @@
    }
 
    if (havePlayer) {
-     window.location.href = window.location.href.replace(/\/np-only/i, '/').replace(/\.html/i, '') + (queryPos>0 ? "&" : "?")+"layout=desktop&action=expandNowPlaying/true&css=msk--np-only&js=msk--np-only&single=true";
+     window.location.href = window.location.href.replace(/\/np-only/i, '/').replace(/\.html/i, '') + (queryPos>0 ? "&" : "?")+"layout=desktop&npAutoClose=false&action=expandNowPlaying/true&css=msk--np-only&js=msk--np-only&single=true";
    } else {
      window.alert("No player name or ID in URL\n\nSupply player via \"?player=Name\" or \"?player=ID\"");
    }

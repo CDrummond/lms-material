@@ -7,6 +7,7 @@
 5. Add 'Play' button to 'Add URL to queue dialog.
 6. Hide 'Loading...' message after a few seconds.
 7. Fix position of '(?)' buttons in 'Additional Browse Modes'
+8. Automatically add 'npAutoClose=false' to 'np-only'
 
 5.2.3
 -----

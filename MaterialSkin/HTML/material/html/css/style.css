@@ -6,6 +6,7 @@
  */
 
 :root {
+ --background-color:var(--std-background-color);
  --scrollbar-track-color:var(--background-color);
  --scrollbar-corner-color:var(--background-color);
  --dialog-toolbar-color:var(--background-color);
@@ -91,6 +92,27 @@
  --trans-bottom-toolbar-color:rgba(216, 216, 216, 0.25);
  --mobile-np-view-control-size:0px;
  --desktop-np-wide-pad:0px;
+}
+
+.tinted {
+ --background-color:color-mix(in srgb, var(--std-background-color), var(--primary-color) 15%);
+ --scrollbar-track-color:var(--background-color);
+ --scrollbar-corner-color:var(--background-color);
+ --dialog-toolbar-color:var(--background-color);
+ --bottom-toolbar-color:var(--background-color);
+ --top-toolbar-color:var(--background-color);
+ --sub-toolbar-color:var(--background-color);
+ --bottom-toolbar-border-color:rgba(51, 51, 51, 0.1);
+ --top-toolbar-border-color:rgba(51, 51, 51, 0.1);
+ --sub-toolbar-border-color:rgba(51, 51, 51, 0.1);
+ --dialog-toolbar-border-color:rgba(51, 51, 51, 0.1);
+}
+
+.tinted:is(.theme--dark) {
+ --bottom-toolbar-border-color:rgba(237, 232, 232, 0.1);
+ --top-toolbar-border-color:rgba(237, 232, 232, 0.1);
+ --sub-toolbar-border-color:rgba(237, 232, 232, 0.1);
+ --dialog-toolbar-border-color:rgba(237, 232, 232, 0.1);
 }
 
 @media (orientation:landscape) and (max-width: 1000px) {

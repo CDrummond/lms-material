@@ -399,6 +399,9 @@ var app = new Vue({
         },
         nowPlayingFull() {
             return this.$store.state.nowPlayingFull && !this.infoOpen && this.$store.state.nowPlayingBackdrop && (this.desktopLayout ? this.nowPlayingExpanded : (this.$store.state.page == 'now-playing'))
+        },
+        tinted() {
+            return this.$store.state.tinted
         }
     },
     methods: {

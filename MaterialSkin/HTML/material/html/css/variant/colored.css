@@ -5,7 +5,7 @@
  * MIT license.
  */
 
-:root {
+:root, .tinted {
  --dialog-toolbar-color:var(--primary-color);
  --bottom-toolbar-color:var(--primary-color);
  --top-toolbar-color:var(--primary-color);

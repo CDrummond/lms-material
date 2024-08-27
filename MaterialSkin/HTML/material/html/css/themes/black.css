@@ -9,7 +9,7 @@
  --active-color:var(--accent-color);
  --scrollbar-thumb-color:#5f5f5f;
  --scrollbar-thumb-hover-color:#7f7f7f;
- --background-color:#000;
+ --std-background-color:#000;
  --background-shadow-color:rgba(0, 0, 0, 0.8);
  --subtoolbar-shadow-color:rgba(0, 0, 0, 0.5);
  --bottom-toolbar-border-color:#1f1f1f;

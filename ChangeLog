@@ -8,6 +8,7 @@
 5. Only draw blurred background in detailed sub-toolbar if browse view is set
    to draw background images.
 6. Consistent search library icon.
+7. Add option to tint background colour.
 
 5.2.4
 -----

@@ -67,6 +67,15 @@ Vue.component('lms-ui-settings', {
     </v-list-tile>
     <v-divider></v-divider>
 
+    <v-list-tile>
+    <v-list-tile-content @click="tinted = !tinted" class="switch-label">
+     <v-list-tile-title>{{i18n('Tint background')}}</v-list-tile-title>
+     <v-list-tile-sub-title>{{i18n('Tint background with chosen color.')}}</v-list-tile-sub-title>
+    </v-list-tile-content>
+    <v-list-tile-action><m3-switch v-model="tinted"></m3-switch></v-list-tile-action>
+   </v-list-tile>
+   <v-divider></v-divider>
+
     <v-list-tile v-if="allowLayoutAdjust">
      <v-select :items="layoutItems" :label="i18n('Application layout')" v-model="layout" item-text="label" item-value="key"></v-select>
     </v-list-tile>
@@ -418,6 +427,7 @@ Vue.component('lms-ui-settings', {
             colorList: { } ,
             userColors: [ ],
             colorToolbars: false,
+            tinted: false,
             roundCovers : true,
             fontSize: 'r',
             fontSizes: [],
@@ -610,6 +620,7 @@ Vue.component('lms-ui-settings', {
             this.theme = themeParts.join('-');
             this.colorToolbars = 'colored'==variant;
             this.color = this.$store.state.color;
+            this.tinted = this.$store.state.tinted;
             this.mobileBar = this.$store.state.mobileBar;
             this.roundCovers = this.$store.state.roundCovers;
             this.fontSize = this.$store.state.fontSize;
@@ -713,6 +724,7 @@ Vue.component('lms-ui-settings', {
             let settings = {
                       theme:this.theme+(this.colorToolbars ? '-colored' : ''),
                       color:this.color,
+                      tinted:this.tinted,
                       mobileBar:this.mobileBar,
                       roundCovers:this.roundCovers,
                       fontSize:this.fontSize,

@@ -10,7 +10,7 @@ var B_ALBUM_SORTS=[ ];
 var B_TRACK_SORTS=[ ];
 const ALLOW_ADD_ALL = new Set(['trackinfo', 'youtube', 'spotty', 'qobuz', 'tidal', 'wimp' /*is Tidal*/, 'deezer', 'tracks', 'musicip', 'musicsimilarity', 'blissmixer', 'bandcamp']); // Allow add-all/play-all from 'trackinfo', as Spotty's 'Top Titles' access via 'More' needs this
 const ALLOW_FAKE_ALL_TRACKS_ITEM = new Set(['youtube', 'qobuz']); // Allow using 'fake' add all item
-const MIN_WIDTH_FOR_COVER = 600;
+const MIN_WIDTH_FOR_COVER = 650;
 const MIN_WIDTH_FOR_MIX_BTN = 800;
 const MIN_WIDTH_FOR_COVER_INDENT = 1000;
 const MIN_WIDTH_FOR_BOTH_INDENT = 1300;
@@ -1908,13 +1908,14 @@ var lmsBrowse = Vue.component("lms-browse", {
             this.dragIndex = undefined;
         },
         setWide() {
-            this.wide = this.pageElement.scrollWidth>=MIN_WIDTH_FOR_BOTH_INDENT
+            let viewWidth = this.$store.state.desktopLayout ? this.pageElement.scrollWidth : window.innerWidth;
+            this.wide = viewWidth>=MIN_WIDTH_FOR_BOTH_INDENT
                         ? 4
-                        :this.pageElement.scrollWidth>=MIN_WIDTH_FOR_COVER_INDENT
+                        :viewWidth>=MIN_WIDTH_FOR_COVER_INDENT
                             ? 3
-                            : this.pageElement.scrollWidth>=MIN_WIDTH_FOR_MIX_BTN
+                            : viewWidth>=MIN_WIDTH_FOR_MIX_BTN
                                 ? 2
-                                : this.pageElement.scrollWidth>=MIN_WIDTH_FOR_COVER
+                                : viewWidth>=MIN_WIDTH_FOR_COVER
                                     ? 1
                                     : 0;
         },

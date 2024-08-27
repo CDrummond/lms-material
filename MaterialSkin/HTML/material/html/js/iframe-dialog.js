@@ -819,7 +819,7 @@ Vue.component('lms-iframe-dialog', {
     },
     methods: {
         startLoadTimer(settingsPage) {
-            let timeout = undefined!=settingsPage && SLOW_PAGES.has(settingsPage) ? 4000 : 1500;
+            let timeout = undefined!=settingsPage && SLOW_PAGES.has(settingsPage) ? 4000 : 500;
             this.stopLoadTimer();
             this.loadTimer = setTimeout(function() {
                 this.loadTimer = undefined;

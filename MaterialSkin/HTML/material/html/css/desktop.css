@@ -304,11 +304,14 @@
  .np-bar-details {
   left:calc(var(--bottom-pad) + 50px);
   bottom:calc(var(--bottom-pad) - 4px);
-  width:calc(100vw - (var(--bottom-pad) + 78px));
+  width:calc(100vw - (var(--bottom-pad) + 90px));
  }
  .np-bar-details .v-list__tile__title {
   margin-top:-1px;
   line-height:30px;
+ }
+ .np-bar-details .v-list__tile__content {
+  margin-right:0px;
  }
  .np-bar .np-slider {
   bottom:calc(var(--desktop-npbar-height-thin) - 3px);

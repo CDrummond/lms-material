@@ -108,9 +108,14 @@
  --bottom-toolbar-text-color:var(--dark-text-color);
 }
 
+.tinted:not(.theme--dark) {
+ --background-color:color-mix(in srgb, var(--std-background-color), var(--primary-color) 25%);
+ --tbar-bgnd-color:color-mix(in srgb, var(--std-background-color), var(--primary-color) 40%);
+}
+
 .tinted {
- --background-color:color-mix(in srgb, var(--std-background-color), var(--primary-color) 12.5%);
- --tbar-bgnd-color:color-mix(in srgb, var(--std-background-color), var(--primary-color) 20%);
+ --background-color:color-mix(in srgb, var(--std-background-color), var(--primary-color) 20%);
+ --tbar-bgnd-color:color-mix(in srgb, var(--std-background-color), var(--primary-color) 35%);
  --scrollbar-track-color:var(--background-color);
  --scrollbar-corner-color:var(--background-color);
  --dialog-toolbar-color:var(--tbar-bgnd-color);

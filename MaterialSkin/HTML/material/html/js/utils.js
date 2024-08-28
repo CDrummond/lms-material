@@ -543,7 +543,7 @@ function emitTextColor() {
     }
     bus.$nextTick(function () {
         let top = undefined;
-        if (undefined!=store.state.activeDialog) {
+        if (undefined!=store.state.activeDialog && !store.state.darkUi && store.state.coloredToolbars) {
             let elems = getElementsByClassName(document.documentElement, "nav", "dialog-toolbar");
             top=getComputedStyle(elems.length>0 ? elems[0] : document.documentElement).getPropertyValue("--dialog-toolbar-text-color");
         } else {

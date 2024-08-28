@@ -514,6 +514,19 @@ function setRoundCovers(round) {
     changeLink("html/css/covers/" + (round ? "round" : "square") + ".css?r=" + LMS_MATERIAL_REVISION, "covercss");
 }
 
+
+function getElementsByClassName(elem, tagName, clazz){
+	var elems = (tagName == "*" && elem.all) ? elem.all : elem.getElementsByTagName(tagName);
+	var found = new Array();
+	var re = new RegExp("(^|\\s)" + clazz.replace(/\-/g, "\\-") + "(\\s|$)");
+	for (var i=0, len=elems.length; i<len; i++) {
+		if (re.test(elems[i].className)) {
+			found.push(elems[i]);
+		}
+	}
+	return found;
+}
+
 window.lastMskTextColors = {top:undefined};
 function emitTextColor() {
     if (queryParams.nativeTextColor<1) {
@@ -529,9 +542,13 @@ function emitTextColor() {
         }
     }
     bus.$nextTick(function () {
-        let top = undefined!=store.state.activeDialog
-                        ? getComputedStyle(document.documentElement).getPropertyValue("--dialog-toolbar-text-color")
-                        : getComputedStyle(window.mskToolbarElem).getPropertyValue("--top-toolbar-text-color");
+        let top = undefined;
+        if (undefined!=store.state.activeDialog) {
+            let elems = getElementsByClassName(document.documentElement, "nav", "dialog-toolbar");
+            top=getComputedStyle(elems.length>0 ? elems[0] : document.documentElement).getPropertyValue("--dialog-toolbar-text-color");
+        } else {
+            top = getComputedStyle(window.mskToolbarElem).getPropertyValue("--top-toolbar-text-color");
+        }
         if (window.lastMskTextColors.top==top) {
             return;
         }

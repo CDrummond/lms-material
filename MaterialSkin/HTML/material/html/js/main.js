@@ -42,7 +42,8 @@ var app = new Vue({
                  loaded: false,
                  snackbar:{ show: false, msg: undefined},
                  nowPlayingExpanded: false,
-                 infoOpen: false
+                 infoOpen: false,
+                 queueEmpty: true
                 }
     },
     created() {
@@ -377,6 +378,9 @@ var app = new Vue({
         bus.$on('nowPlayingExpanded', function(val) {
             this.nowPlayingExpanded = val;
         }.bind(this));
+        bus.$on('queueStatus', function(size) {
+            this.queueEmpty = size<1;
+        }.bind(this));
     },
     computed: {
         darkUi() {
@@ -401,7 +405,7 @@ var app = new Vue({
             return this.$store.state.nowPlayingFull && !this.infoOpen && this.$store.state.nowPlayingBackdrop && (this.desktopLayout ? this.nowPlayingExpanded : (this.$store.state.page == 'now-playing'))
         },
         tinted() {
-            return this.$store.state.tinted
+            return this.$store.state.tinted && (!this.queueEmpty || this.$store.state.color!=COLOR_FROM_COVER)
         }
     },
     methods: {

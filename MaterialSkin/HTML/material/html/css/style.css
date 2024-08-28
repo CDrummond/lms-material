@@ -110,12 +110,12 @@
 
 .tinted:not(.theme--dark) {
  --background-color:color-mix(in srgb, var(--std-background-color), var(--primary-color) 25%);
- --tbar-bgnd-color:color-mix(in srgb, var(--std-background-color), var(--primary-color) 40%);
+ --tbar-bgnd-color:color-mix(in srgb, var(--std-background-color), var(--primary-color) 35%);
 }
 
 .tinted {
- --background-color:color-mix(in srgb, var(--std-background-color), var(--primary-color) 20%);
- --tbar-bgnd-color:color-mix(in srgb, var(--std-background-color), var(--primary-color) 35%);
+ --background-color:color-mix(in srgb, var(--std-background-color), var(--primary-color) 15%);
+ --tbar-bgnd-color:color-mix(in srgb, var(--std-background-color), var(--primary-color) 25%);
  --scrollbar-track-color:var(--background-color);
  --scrollbar-corner-color:var(--background-color);
  --dialog-toolbar-color:var(--tbar-bgnd-color);

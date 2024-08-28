@@ -189,18 +189,6 @@ function addFsSelectButton(doc, elem, isDir) {
     }
 }
 
-function getElementsByClassName(elem, tagName, clazz){
-	var elems = (tagName == "*" && elem.all) ? elem.all : elem.getElementsByTagName(tagName);
-	var found = new Array();
-	var re = new RegExp("(^|\\s)" + clazz.replace(/\-/g, "\\-") + "(\\s|$)");
-	for (var i=0, len=elems.length; i<len; i++) {
-		if (re.test(elems[i].className)) {
-			found.push(elems[i]);
-		}
-	}
-	return found;
-}
-
 function addFsSelectButtons(doc) {
     var types=["selectFolder", "selectFile", "selectFile_.+"];
     for (var t=0; t<types.length; ++t) {

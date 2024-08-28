@@ -97,6 +97,15 @@
  --sub-toolbar-border-color:rgba(51, 51, 51, 0.1);
  --dialog-toolbar-border-color:rgba(51, 51, 51, 0.1);
  --splitter-color:rgba(51, 51, 51, 0.1);
+ --list-item-border-color:rgba(51, 51, 51, 0.1);
+ --subheader-color:rgba(0, 0, 0, 0.87);
+ --text-color:var(--dark-text-color);
+ --icon-color:var(--dark-text-color);
+ --dlg-icon-color:var(--dark-text-color);
+ --dialog-toolbar-text-color:var(--dark-text-color);
+ --top-toolbar-text-color:var(--dark-text-color);
+ --sub-toolbar-text-color:var(--dark-text-color);
+ --bottom-toolbar-text-color:var(--dark-text-color);
 }
 
 .tinted {
@@ -167,6 +176,15 @@
  --sub-toolbar-border-color:rgba(237, 232, 232, 0.1);
  --dialog-toolbar-border-color:rgba(237, 232, 232, 0.1);
  --splitter-color:rgba(237, 232, 232, 0.1);
+ --list-item-border-color:rgba(237, 232, 232, 0.1);
+ --subheader-color:#edece7;
+ --text-color:var(--light-text-color);
+ --icon-color:var(--light-text-color);
+ --dlg-icon-color:var(--light-text-color);
+ --dialog-toolbar-text-color:var(--light-text-color);
+ --top-toolbar-text-color:var(--light-text-color);
+ --sub-toolbar-text-color:var(--light-text-color);
+ --bottom-toolbar-text-color:var(--light-text-color);
 }
 
 .v-dialog--fullscreen .v-sheet {

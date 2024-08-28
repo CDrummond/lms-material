@@ -109,12 +109,13 @@
 }
 
 .tinted {
- --background-color:color-mix(in srgb, var(--std-background-color), var(--primary-color) 15%);
+ --background-color:color-mix(in srgb, var(--std-background-color), var(--primary-color) 12.5%);
+ --tbar-bgnd-color:color-mix(in srgb, var(--std-background-color), var(--primary-color) 20%);
  --scrollbar-track-color:var(--background-color);
  --scrollbar-corner-color:var(--background-color);
- --dialog-toolbar-color:var(--background-color);
+ --dialog-toolbar-color:var(--tbar-bgnd-color);
  --bottom-toolbar-color:var(--background-color);
- --top-toolbar-color:var(--background-color);
+ --top-toolbar-color:var(--tbar-bgnd-color);
  --sub-toolbar-color:var(--background-color);
 }
 

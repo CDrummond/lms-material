@@ -95,7 +95,7 @@ function parseResp(data, showTrackNum, index, showRatings, queueAlbumStyle, queu
             let albumDuration = 0;
             let calcDurations = queueAlbumStyle && resp.size == data.result.playlist_loop.length;
             for (var idx=0, loop=data.result.playlist_loop, loopLen=loop.length; idx<loopLen; ++idx) {
-                let i = loop[idx];
+                let i = makeHtmlSafe(loop[idx]);
                 splitMultiples(i);
                 let title = trackTitle(i);
                 let artist = i.albumartist ? i.albumartist : i.artist ? i.artist : i.trackartist;

@@ -548,7 +548,7 @@ var lmsServer = Vue.component('lms-server', {
                                 timestamp: undefined==data.playlist_timestamp ? 0.0 : parseFloat(data.playlist_timestamp)
                               };
             if (data.playlist_loop && data.playlist_loop.length>0) {
-                player.current = data.playlist_loop[0];
+                player.current = makeHtmlSafe(data.playlist_loop[0]);
                 if (undefined!=player.current.title) {
                     player.current.title = trackTitle(player.current);
                 }

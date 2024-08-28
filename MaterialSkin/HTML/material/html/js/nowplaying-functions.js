@@ -563,10 +563,10 @@ function nowplayingFetchTrackInfo(view) {
                 command.push("url:"+view.infoTrack.url);
             }
             if (view.infoTrack.title!=undefined) {
-                command.push("title:"+view.infoTrack.title);
+                command.push("title:"+revertHtmlBrackets(view.infoTrack.title));
             }
             if (view.infoTrack.artist!=undefined) {
-                command.push("artist:"+view.infoTrack.artist);
+                command.push("artist:"+revertHtmlBrackets(view.infoTrack.artist));
             }
         }
         if (3==command.length) { // No details?
@@ -758,7 +758,7 @@ function nowplayingFetchArtistInfo(view) {
             if (undefined!=artist_id) {
                 command.push("artist_id:"+artist_id);
             } else {
-                command.push("artist:"+artist);
+                command.push("artist:"+revertHtmlBrackets(artist));
             }
             if (3==command.length) { // No details?
                 view.info.tabs[ARTIST_TAB].text=undefined;
@@ -775,7 +775,7 @@ function nowplayingFetchArtistInfo(view) {
                             if (view.infoTrack.albumartist_ids!=undefined) {
                                 command.push("artist_id:"+view.infoTrack.albumartist_ids[0]);
                             } else if (view.infoTrack.albumartist!=undefined) {
-                                command.push("artist:"+view.infoTrack.albumartist);
+                                command.push("artist:"+revertHtmlBrackets(view.infoTrack.albumartist));
                             }
                             if (3==command.length) {
                                 view.info.tabs[ARTIST_TAB].text=undefined;
@@ -809,7 +809,7 @@ function nowplayingFetchArtistInfo(view) {
         if (artist_id!=undefined && artist_id>=0) {
             nowPlayingGetArtistAlbums(view, artist_id);
         } else if (view.info.tabs[ARTIST_TAB].albumartist || view.info.tabs[ARTIST_TAB].artist) {
-            lmsCommand("", ["material-skin", "map", "artist:"+(view.info.tabs[ARTIST_TAB].albumartist ? view.info.tabs[ARTIST_TAB].albumartist : view.info.tabs[ARTIST_TAB].artist)], view.info.tabs[ARTIST_TAB].reqId).then(({data}) => {
+            lmsCommand("", ["material-skin", "map", "artist:"+revertHtmlBrackets(view.info.tabs[ARTIST_TAB].albumartist ? view.info.tabs[ARTIST_TAB].albumartist : view.info.tabs[ARTIST_TAB].artist)], view.info.tabs[ARTIST_TAB].reqId).then(({data}) => {
                 if (data && data.result && data.result.artist_id && view.isCurrent(data, ARTIST_TAB)) {
                     logJsonMessage("RESP", data);
                     nowPlayingGetArtistAlbums(view, data.result.artist_id);
@@ -818,7 +818,7 @@ function nowplayingFetchArtistInfo(view) {
         }
 
         if (view.info.tabs[ARTIST_TAB].albumartist || view.info.tabs[ARTIST_TAB].artist) {
-            lmsCommand("", ["material-skin", "similar", "artist:"+(view.info.tabs[ARTIST_TAB].artist ? view.info.tabs[ARTIST_TAB].artist : view.info.tabs[ARTIST_TAB].albumartist)], view.info.tabs[ARTIST_TAB].reqId).then(({data}) => {
+            lmsCommand("", ["material-skin", "similar", "artist:"+revertHtmlBrackets(view.info.tabs[ARTIST_TAB].artist ? view.info.tabs[ARTIST_TAB].artist : view.info.tabs[ARTIST_TAB].albumartist)], view.info.tabs[ARTIST_TAB].reqId).then(({data}) => {
                 if (data && data.result && data.result.similar_loop) {
                     logJsonMessage("RESP", data);
                     if (data.result.similar_loop.length>0) {
@@ -861,13 +861,13 @@ function nowplayingFetchAlbumInfo(view) {
             command.push("album_id:"+view.infoTrack.album_id);
         } else {
             if (view.infoTrack.album!=undefined) {
-                command.push("album:"+view.infoTrack.album);
+                command.push("album:"+revertHtmlBrackets(view.infoTrack.album));
             }
             if (view.infoTrack.artist_id!=undefined) {
                 command.push("artist_id:"+view.infoTrack.artist_id);
             }
             if (albumartist!=undefined) {
-                command.push("artist:"+albumartist);
+                command.push("artist:"+revertHtmlBrackets(albumartist));
             }
         }
 

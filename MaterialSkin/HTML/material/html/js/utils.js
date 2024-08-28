@@ -1096,6 +1096,26 @@ function stripTags(str) {
     return isEmpty(str) ? str : str.replace('<br/>', '\n').replace(/<\/?[^>]+(>|$)/g, "");
 }
 
+function replaceHtmlBrackets(str){
+    return isEmpty(str) ? str : str.replace(/</g, '\ufe64').replace(/>/g, '\ufe65');
+}
+
+function revertHtmlBrackets(str){
+    return isEmpty(str) ? str : str.replace(/\ufe64/g, '<').replace(/\ufe65/g, '>');
+}
+
+function makeHtmlSafe(i) {
+    if (undefined!=i) {
+        for (let v=0, len=STRING_ITEM_PROPS.length; v<len; ++v) {
+            let p = STRING_ITEM_PROPS[v];
+            if (undefined!=i[p]) {
+                i[p] = replaceHtmlBrackets(i[p]);
+            }
+        }
+    }
+    return i;
+}
+
 function trackTags(withCover) {
     return TRACK_TAGS+(lmsOptions.techInfo ? TECH_INFO_TAGS : "")+(withCover ? 'c' : "");
 }

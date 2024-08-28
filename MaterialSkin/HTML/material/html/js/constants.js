@@ -155,6 +155,9 @@ const NP_EXPANDED = 'now-playing-expanded';
 const ALL_TRACKS_ID = "alltracks";
 
 const ARTIST_TYPES = ["artist", "trackartist", "albumartist", "composer", "conductor", "band"];
+const STRING_ITEM_PROPS = ["genre", "remote_title", "title", "album",
+    "artist",  "trackartist",  "albumartist",  "composer",  "conductor", "band",
+    "artists", "trackartists", "albumartists", "composers", "conductors", "bands"];
 var MULTI_SPLIT_REGEX = ";"
 
 // Safari on iOS and macOS does not support lookbehind. Looks like it can't even parse the line

@@ -10,6 +10,11 @@
 6. Consistent search library icon.
 7. Add option to tint background colour.
 
+5.2.5
+-----
+1. Make strings HTML safe by replacing less than and greater than signs with
+   similar unicode characters.
+
 5.2.4
 -----
 1. Fix setting colour from cover when colour setting changed in settings.

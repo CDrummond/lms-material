@@ -192,7 +192,7 @@ function parseBrowseResp(data, parent, options, cacheKey, parentCommand, parentG
                 if (!i.text || i.showBigArtwork==1) {
                     if (i.url && "musicartistinfo"==command) { // Artist images...
                         resp.items.push({id: "image:"+resp.items.length,
-                                         title: itemText(i),
+                                         title: replaceHtmlBrackets(itemText(i)),
                                          type: "image",
                                          image: resolveImageUrl(i.url, LMS_IMAGE_SIZE),
                                          src: resolveImageUrl(i.url),
@@ -910,7 +910,7 @@ function parseBrowseResp(data, parent, options, cacheKey, parentCommand, parentG
                 }
                 var artist = {
                               id: "artist_id:"+i.id,
-                              title: i.artist,
+                              title: replaceHtmlBrackets(i.artist),
                               image: (LMS_P_MAI && LMS_ARTIST_PICS) ? "/imageproxy/mai/artist/" + i.id + "/image" + LMS_IMAGE_SIZE : undefined,
                               stdItem: stdItem,
                               type: "group",
@@ -979,7 +979,7 @@ function parseBrowseResp(data, parent, options, cacheKey, parentCommand, parentG
             var showRoles = new Set();
 
             for (var idx=0, loop=data.result.albums_loop, loopLen=loop.length; idx<loopLen; ++idx) {
-                var i = loop[idx];
+                var i = makeHtmlSafe(loop[idx]);
 
                 // Bug on my system? There is a 'No Album' entry with no tracks!
                 /*
@@ -1271,7 +1271,7 @@ function parseBrowseResp(data, parent, options, cacheKey, parentCommand, parentG
             let extraSubs = [];
             let browseContext = getLocalStorageBool('browseContext', false);
             for (let idx=0, loop=data.result.titles_loop, loopLen=loop.length; idx<loopLen; ++idx) {
-                let i = loop[idx];
+                let i = makeHtmlSafe(loop[idx]);
                 let title = trackTitle(i);
                 let duration = parseFloat(i.duration || 0);
                 let tracknum = undefined==i.tracknum ? 0 : parseInt(i.tracknum);
@@ -1651,7 +1651,7 @@ function parseBrowseResp(data, parent, options, cacheKey, parentCommand, parentG
                 let genre = i.genre.toLowerCase().replace(/[^0-9a-z]/gi, '');
                 resp.items.push({
                               id: "genre_id:"+i.id,
-                              title: i.genre,
+                              title: replaceHtmlBrackets(i.genre),
                               //icon: "label",
                               image: lmsOptions.genreImages ? "material/genres/" + genre : undefined,
                               stdItem: stdItem,
@@ -1678,7 +1678,7 @@ function parseBrowseResp(data, parent, options, cacheKey, parentCommand, parentG
                 }
                 resp.items.push({
                               id: "playlist_id:"+i.id,
-                              title: i.playlist,
+                              title: replaceHtmlBrackets(i.playlist),
                               icon: undefined == emblem ? "list" : undefined,
                               svg: undefined == emblem ? undefined : emblem.name,
                               stdItem: isRemote ? STD_ITEM_REMOTE_PLAYLIST : STD_ITEM_PLAYLIST,
@@ -1700,7 +1700,7 @@ function parseBrowseResp(data, parent, options, cacheKey, parentCommand, parentG
             var totalDuration = 0;
             let browseContext = getLocalStorageBool('browseContext', false);
             for (var idx=0, loop=data.result.playlisttracks_loop, loopLen=loop.length; idx<loopLen; ++idx) {
-                var i = loop[idx];
+                var i = makeHtmlSafe(loop[idx]);
                 var title = i.title;
                 splitMultiples(i, true);
                 let subtitle = buildArtistLine(i, "browse", false);
@@ -1783,7 +1783,7 @@ function parseBrowseResp(data, parent, options, cacheKey, parentCommand, parentG
             for (var idx=0, loop=data.result.data, loopLen=loop.length; idx<loopLen; ++idx) {
                 var i = loop[idx];
                 if (i.image) {
-                    i.title = itemText(i);
+                    i.title = replaceHtmlBrackets(itemText(i));
                     i.id = "image:"+resp.items.length,
                     i.type = "image";
                     i.src = resolveImageUrl(i.image);
@@ -1813,7 +1813,7 @@ function parseBrowseResp(data, parent, options, cacheKey, parentCommand, parentG
             for (var idx=0, loop=data.result.loop_loop, loopLen=loop.length; idx<loopLen; ++idx) {
                 var i = loop[idx];
                 var mappedIcon = mapIcon(i);
-                i.title = itemText(i);
+                i.title = replaceHtmlBrackets(itemText(i));
                 i.image = mappedIcon ? undefined : resolveImage(i.icon, i.image, LMS_IMAGE_SIZE);
                 if ("text"===i.type || "textarea"===i.type) {
                     if (i.title.length<75 && i.image) { // Possible image?
@@ -1873,7 +1873,7 @@ function parseBrowseResp(data, parent, options, cacheKey, parentCommand, parentG
             let useHeaders = isArtistWorks || (parent && (undefined==parent.stdItem || parent.stdItem==STD_ITEM_ARTIST || parent.stdItem==STD_ITEM_WORK_GENRE));
 
             for (let idx=0, loop=data.result.works_loop, loopLen=loop.length; idx<loopLen; ++idx) {
-                let i = loop[idx];
+                let i = makeHtmlSafe(loop[idx]);
                 var key = removeDiactrics(i.textkey);
                 if (undefined!=key && (resp.jumplist.length==0 || resp.jumplist[resp.jumplist.length-1].key!=key) && !textKeys.has(key)) {
                     resp.jumplist.push({key: key, index: resp.items.length});
@@ -1930,7 +1930,7 @@ function parseBrowseResp(data, parent, options, cacheKey, parentCommand, parentG
             resp.listSize=resp.items.length;
         } else if (undefined!=data.result.rndmix_loop) {
             for (let idx=0, loop=data.result.rndmix_loop, loopLen=loop.length; idx<loopLen; ++idx) {
-                let i = loop[idx];
+                let i = makeHtmlSafe(loop[idx]);
                 let mix = {title:i.name,
                            id: "rndmix."+i.name,
                            stdItem: STD_ITEM_RANDOM_MIX,

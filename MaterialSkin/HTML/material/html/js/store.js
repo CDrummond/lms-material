@@ -304,7 +304,7 @@ const store = new Vuex.Store({
         mediaControls: false,
         downloadStatus: [],
         coloredToolbars: false,
-        tinted: true,
+        tinted: false,
         moveDialogs: false,
         autoCloseQueue: false
     },

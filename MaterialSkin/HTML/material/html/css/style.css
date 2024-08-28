@@ -92,6 +92,11 @@
  --trans-bottom-toolbar-color:rgba(216, 216, 216, 0.25);
  --mobile-np-view-control-size:0px;
  --desktop-np-wide-pad:0px;
+ --bottom-toolbar-border-color:rgba(51, 51, 51, 0.1);
+ --top-toolbar-border-color:rgba(51, 51, 51, 0.1);
+ --sub-toolbar-border-color:rgba(51, 51, 51, 0.1);
+ --dialog-toolbar-border-color:rgba(51, 51, 51, 0.1);
+ --splitter-color:rgba(51, 51, 51, 0.1);
 }
 
 .tinted {
@@ -102,17 +107,6 @@
  --bottom-toolbar-color:var(--background-color);
  --top-toolbar-color:var(--background-color);
  --sub-toolbar-color:var(--background-color);
- --bottom-toolbar-border-color:rgba(51, 51, 51, 0.1);
- --top-toolbar-border-color:rgba(51, 51, 51, 0.1);
- --sub-toolbar-border-color:rgba(51, 51, 51, 0.1);
- --dialog-toolbar-border-color:rgba(51, 51, 51, 0.1);
-}
-
-.tinted:is(.theme--dark) {
- --bottom-toolbar-border-color:rgba(237, 232, 232, 0.1);
- --top-toolbar-border-color:rgba(237, 232, 232, 0.1);
- --sub-toolbar-border-color:rgba(237, 232, 232, 0.1);
- --dialog-toolbar-border-color:rgba(237, 232, 232, 0.1);
 }
 
 @media (orientation:landscape) and (max-width: 1000px) {
@@ -168,6 +162,11 @@
  --pbar-bgnd:rgba(200, 200, 200, 0.15);
  --np-bgnd-full-shadow-color:rgba(48, 48, 48, 0.8);
  --trans-bottom-toolbar-color:rgba(48, 48, 48, 0.25);
+ --bottom-toolbar-border-color:rgba(237, 232, 232, 0.1);
+ --top-toolbar-border-color:rgba(237, 232, 232, 0.1);
+ --sub-toolbar-border-color:rgba(237, 232, 232, 0.1);
+ --dialog-toolbar-border-color:rgba(237, 232, 232, 0.1);
+ --splitter-color:rgba(237, 232, 232, 0.1);
 }
 
 .v-dialog--fullscreen .v-sheet {

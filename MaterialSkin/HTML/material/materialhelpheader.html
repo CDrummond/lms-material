@@ -15,7 +15,7 @@
   <script src="[% webroot %]html/lib/mousetrap.min.js?r=a4098"></script>
   <script>
   let theme = window.localStorage.getItem("lms-material::theme");
-  if (undefined==theme) {
+  if (undefined==theme || 'darker'==theme) {
     theme = 'dark';
   } else if(theme=='auto') {
     const prefersLight = window.matchMedia && window.matchMedia('(prefers-color-scheme: light)').matches;

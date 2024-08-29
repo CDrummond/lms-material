@@ -193,29 +193,34 @@ var lmsCurrentCover = Vue.component('lms-currentcover', {
                 return;
             }
             this.fac.getColorAsync(document.getElementById('current-cover')).then(color => {
-                let bgndLum = rgbLuminence(hex2Rgb(getComputedStyle(document.documentElement).getPropertyValue('--background-color')));
-                let rgbs = color.rgb.replace('rgb(', '').replace(')', '').split(',');
-                let rgb = [parseInt(rgbs[0]), parseInt(rgbs[1]), parseInt(rgbs[2])];
+                let rgb = undefined;
                 if (DEFAULT_COVER==this.coverUrl) {
-                    rgb = [69,90,100]; // bluegrey
+                    rgb = [25,118,210];
+                    document.documentElement.style.setProperty('--accent-color', '#82b1ff');
+                    document.documentElement.style.setProperty('--primary-color', '#1976d2');
+                    document.documentElement.style.setProperty('--highlight-rgb', '25,118,210');
+                } else {
+                    let bgndLum = rgbLuminence(hex2Rgb(getComputedStyle(document.documentElement).getPropertyValue('--background-color')));
+                    let rgbs = color.rgb.replace('rgb(', '').replace(')', '').split(',');
+                    rgb = [parseInt(rgbs[0]), parseInt(rgbs[1]), parseInt(rgbs[2])];
+
+                    let hsv = rgb2Hsv(rgb);
+                    hsv[2] = Math.max(Math.min(hsv[2], 150/255), 100/255)
+                    rgb = hsv2Rgb(hsv);
+
+                    let hexColor=rgb2Hex(rgb);
+                    document.documentElement.style.setProperty('--primary-color', hexColor);
+                    document.documentElement.style.setProperty('--highlight-rgb', rgb[0]+","+rgb[1]+","+rgb[2]);
+
+                    // Try to ensure accent colour has decent contrast...
+                    let a=0;
+                    while (contrastRatio(bgndLum, rgbLuminence(rgb))<3.0 && a<20) {
+                        rgb = shadeRgb(rgb, this.$store.state.darkUi ? 0.05 : -0.05);
+                        a+=1;
+                    }
+
+                    document.documentElement.style.setProperty('--accent-color', rgb2Hex(rgb));
                 }
-
-                let hsv = rgb2Hsv(rgb);
-                hsv[2] = Math.max(Math.min(hsv[2], 150/255), 100/255)
-                rgb = hsv2Rgb(hsv);
-
-                let hexColor=rgb2Hex(rgb);
-                document.documentElement.style.setProperty('--primary-color', hexColor);
-                document.documentElement.style.setProperty('--highlight-rgb', rgb[0]+","+rgb[1]+","+rgb[2]);
-
-                // Try to ensure accent colour has decent contrast...
-                let a=0;
-                while (contrastRatio(bgndLum, rgbLuminence(rgb))<3.0 && a<20) {
-                    rgb = shadeRgb(rgb, this.$store.state.darkUi ? 0.05 : -0.05);
-                    a+=1;
-                }
-
-                document.documentElement.style.setProperty('--accent-color', rgb2Hex(rgb));
                 emitToolbarColorsFromState(this.$store.state);
                 if (1==queryParams.nativeAccent) {
                     bus.$nextTick(function () {

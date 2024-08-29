@@ -10,6 +10,8 @@
 6. Consistent search library icon.
 7. Add option to tint background colour.
 8. Use detailed sub-toolbar if width is 350px or more.
+9. If using 'colour from cover' and have no track the default to 'Blue'
+   colours.
 
 5.2.5
 -----

@@ -2998,9 +2998,12 @@ div.v-subheader {
 }
 
 #browse-view .lms-list .menu-btn,
-.lms-list3 .menu-btn,
 .pq-albumstyle .menu-btn {
  padding-top:4px;
+}
+
+.lms-list3 .menu-btn {
+ padding-top:5px;
 }
 
 .list-btn {

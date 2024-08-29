@@ -129,6 +129,7 @@
  --bottom-toolbar-color:var(--background-color);
  --top-toolbar-color:var(--tbar-bgnd-color);
  --sub-toolbar-color:var(--background-color);
+ --pbar-bgnd:transparent;
 }
 
 @media (orientation:landscape) and (max-width: 1000px) {
@@ -198,6 +199,10 @@
  --top-toolbar-text-color:var(--light-text-color);
  --sub-toolbar-text-color:var(--light-text-color);
  --bottom-toolbar-text-color:var(--light-text-color);
+}
+
+.tinted:is(.theme--dark) {
+ --pbar-bgnd:transparent;
 }
 
 .v-dialog--fullscreen .v-sheet {

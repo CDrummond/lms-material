@@ -500,6 +500,24 @@ function initChangeListeners(doc) {
     }
 }
 
+function copyVars(iframe) {
+    if (undefined==iframe) {
+        return;
+    }
+    copyVar(iframe, '--primary-color');
+    copyVar(iframe, '--accent-color');
+    copyVar(iframe, '--pq-current-color');
+    copyVar(iframe, '--inverted-text-color');
+    copyVar(iframe, '--popup-background-color');
+    copyVar(iframe, '--list-hover-color');
+    copyVar(iframe, '--text-color');
+    copyVar(iframe, '--icon-color');
+    copyVar(iframe, '--dark-text-color');
+    copyVar(iframe, '--light-text-color');
+    copyVar(iframe, '--menu-dlg-shadow');
+    copyVar(iframe, '--all-pad');
+}
+
 function applyModifications(page, textCol, darkUi, src) {
     bus.$emit('iframe-loaded', true);
     if (!page) {
@@ -515,18 +533,7 @@ function applyModifications(page, textCol, darkUi, src) {
             return;
         }
 
-        copyVar(iframe, '--primary-color');
-        copyVar(iframe, '--accent-color');
-        copyVar(iframe, '--pq-current-color');
-        copyVar(iframe, '--inverted-text-color');
-        copyVar(iframe, '--popup-background-color');
-        copyVar(iframe, '--list-hover-color');
-        copyVar(iframe, '--text-color');
-        copyVar(iframe, '--icon-color');
-        copyVar(iframe, '--dark-text-color');
-        copyVar(iframe, '--light-text-color');
-        copyVar(iframe, '--menu-dlg-shadow');
-        copyVar(iframe, '--all-pad');
+        copyVars(iframe);
         content.documentElement.getElementsByTagName("body")[0].classList.add(IS_MOBILE ? "msk-is-touch" : "msk-is-non-touch");
         if (darkUi) {
             content.documentElement.getElementsByTagName("body")[0].classList.add("theme--dark");
@@ -806,6 +813,11 @@ Vue.component('lms-iframe-dialog', {
             if (this.show && undefined!=iframeInfo.content) {
                 let vh = window.innerHeight * 0.01;
                 iframeInfo.content.documentElement.style.setProperty('--vh', `${vh}px`);
+            }
+        }.bind(this));
+        bus.$on('colorChanged', function() {
+            if (this.show) {
+                copyVars(document.getElementById("embeddedIframe"));
             }
         }.bind(this));
     },

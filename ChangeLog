@@ -4,6 +4,7 @@
    similar unicode characters.
 2. Fix touch/click area of play/pause button when on right in now-playing bar.
 3. Fix MAI view when now-playing bar replaces mobile navigation.
+4. Fix activating rescans, etc., when promted to in 'Server settings'.
 
 5.2.4
 -----

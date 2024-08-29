@@ -521,6 +521,10 @@ function applyModifications(page, textCol, darkUi, src) {
         copyVar(iframe, '--inverted-text-color');
         copyVar(iframe, '--popup-background-color');
         copyVar(iframe, '--list-hover-color');
+        copyVar(iframe, '--text-color');
+        copyVar(iframe, '--icon-color');
+        copyVar(iframe, '--dark-text-color');
+        copyVar(iframe, '--light-text-color');
         copyVar(iframe, '--menu-dlg-shadow');
         copyVar(iframe, '--all-pad');
         content.documentElement.getElementsByTagName("body")[0].classList.add(IS_MOBILE ? "msk-is-touch" : "msk-is-non-touch");

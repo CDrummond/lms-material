@@ -9,6 +9,7 @@
    to draw background images.
 6. Consistent search library icon.
 7. Add option to tint background colour.
+8. Use detailed sub-toolbar if width is 350px or more.
 
 5.2.5
 -----

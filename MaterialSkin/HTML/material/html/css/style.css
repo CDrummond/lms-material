@@ -575,8 +575,8 @@ div.v-subheader {
  border-bottom: none!important;
 }
 
-.detailed-sub .vue-recycle-scroller__item-view a,
-.detailed-sub .lms-list-item a,
+.indent-left .vue-recycle-scroller__item-view a,
+.indent-left .lms-list-item a,
 .indent-both .browse-html,
 .indent-right .browse-html {
  padding-left:calc(71px + var(--home-button-size) - var(--jump-list-adjust)) !important;

@@ -10,17 +10,29 @@ var B_ALBUM_SORTS=[ ];
 var B_TRACK_SORTS=[ ];
 const ALLOW_ADD_ALL = new Set(['trackinfo', 'youtube', 'spotty', 'qobuz', 'tidal', 'wimp' /*is Tidal*/, 'deezer', 'tracks', 'musicip', 'musicsimilarity', 'blissmixer', 'bandcamp']); // Allow add-all/play-all from 'trackinfo', as Spotty's 'Top Titles' access via 'More' needs this
 const ALLOW_FAKE_ALL_TRACKS_ITEM = new Set(['youtube', 'qobuz']); // Allow using 'fake' add all item
+const MIN_WIDTH_FOR_DETAILED_SUB = 350;
+const MIN_WIDTH_FOR_HBTNS = 500;
+const MIN_WIDTH_INDENT_LEFT = 550;
 const MIN_WIDTH_FOR_COVER = 650;
 const MIN_WIDTH_FOR_MIX_BTN = 800;
 const MIN_WIDTH_FOR_COVER_INDENT = 1000;
 const MIN_WIDTH_FOR_BOTH_INDENT = 1300;
 const JUMP_LIST_WIDTH = 32;
 
-const SUB_TEXT_WIDE = 4;
+const WIDE_BOTH = 7;
+const WIDE_SUB_TEXT = 7;
+const WIDE_COVER_IDENT = 6;
+const WIDE_MIX_BTN = 5;
+const WIDE_COVER = 4;
+const WIDE_INDENT_L = 3;
+const WIDE_HBTNS = 2;
+const WIDE_DETAILED_SUB = 1;
+const WIDE_NONE = 0;
+
 
 var lmsBrowse = Vue.component("lms-browse", {
     template: `
-<div id="browse-view" v-bind:class="{'detailed-sub':showDetailedSubtoolbar, 'indent-both':showDetailedSubtoolbar && STD_ITEM_ALBUM==current.stdItem && wide>3 && (!desktopLayout || !pinQueue), 'indent-right':showDetailedSubtoolbar && STD_ITEM_ALBUM==current.stdItem  && wide==3 && (!desktopLayout || !pinQueue)}">
+<div id="browse-view" v-bind:class="{'detailed-sub':showDetailedSubtoolbar, 'indent-both':showDetailedSubtoolbar && STD_ITEM_ALBUM==current.stdItem && wide>WIDE_COVER_IDENT && (!desktopLayout || !pinQueue), 'indent-right':showDetailedSubtoolbar && STD_ITEM_ALBUM==current.stdItem && wide==WIDE_COVER_IDENT && (!desktopLayout || !pinQueue), 'indent-left':showDetailedSubtoolbar && wide>=WIDE_INDENT_L && (!desktopLayout || !pinQueue)}">
  <div class="noselect" v-bind:class="{'subtoolbar-cover':showDetailedSubtoolbar&&drawBgndImage}">
  <div class="subtoolbar" v-bind:class="{'toolbar-blur':showDetailedSubtoolbar&&drawBgndImage}">
   <v-layout v-if="selection.size>0">
@@ -48,12 +60,12 @@ var lmsBrowse = Vue.component("lms-browse", {
   <v-layout v-else-if="history.length>0">
    <v-btn flat icon v-longpress="backBtnPressed" class="toolbar-button" v-bind:class="{'back-button':!homeButton || history.length<2}" id="back-button" :title="trans.goBack | tooltipStr('esc', keyboardControl)"><v-icon>arrow_back</v-icon></v-btn>
    <v-btn v-if="history.length>1 && homeButton" flat icon @click="homeBtnPressed()" class="toolbar-button" id="home-button" :title="trans.goHome | tooltipStr('home', keyboardControl)"><v-icon>home</v-icon></v-btn>
-   <div v-if="wide>0 && currentImages" @click="showHistory($event)" class="sub-cover pointer">
+   <div v-if="wide>=WIDE_COVER && currentImages" @click="showHistory($event)" class="sub-cover pointer">
     <div class="mi" :class="'mi'+currentImages.length">
      <img v-for="(mic, midx) in currentImages" :class="'mi-'+midx" :key="mic" :src="mic" loading="lazy"></img>
     </div>
    </div>
-   <img v-else-if="wide>0 && currentImage" :src="current && currentImage" @click="showHistory($event)" class="sub-cover pointer"></img>
+   <img v-else-if="wide>=WIDE_COVER && currentImage" :src="current && currentImage" @click="showHistory($event)" class="sub-cover pointer"></img>
    <v-layout row wrap v-if="showDetailedSubtoolbar">
     <v-layout @click="showHistory($event)" class="link-item row wrap browse-title">
      <v-flex xs12 class="ellipsis subtoolbar-title subtoolbar-pad" v-bind:class="{'subtoolbar-title-single':undefined==toolbarSubTitle}">{{toolbarTitle}}</v-flex>
@@ -70,7 +82,7 @@ var lmsBrowse = Vue.component("lms-browse", {
    <v-spacer style="flex-grow: 10!important"></v-spacer>
    <table class="browse-commands">
     <tr align="right">
-     <v-btn @click.stop="currentActionsMenu($event)" flat icon class="toolbar-button" :title="trans.actions" id="tbar-actions" v-if="currentActions.length>0 && numCurrentActionsInToolbar<currentActions.length"><v-icon>more_horiz</v-icon></v-btn>
+     <v-btn @click.stop="currentActionsMenu($event)" flat icon class="toolbar-button" :title="trans.actions" id="tbar-actions" v-if="currentActions.length>0 && numCurrentActionsInToolbar<currentActions.length && (!showDetailedSubtoolbar || wide>=WIDE_HBTNS)"><v-icon>more_horiz</v-icon></v-btn>
      <template v-for="(action, index) in currentActions" v-if="numCurrentActionsInToolbar>0">
       <v-btn @click.stop="currentAction(action, index, $event)" flat icon class="toolbar-button" :title="undefined==action.action ? action.title : ACTIONS[action.action].title" :id="'tbar-actions'+index" v-if="index<numCurrentActionsInToolbar && (action.action!=VLIB_ACTION || libraryName)">
        <img v-if="undefined!=action.action && ACTIONS[action.action].svg" class="svg-img" :src="ACTIONS[action.action].svg | svgIcon(darkUi)"></img>
@@ -80,20 +92,21 @@ var lmsBrowse = Vue.component("lms-browse", {
       </v-btn>
      </template>
      <template v-for="(action, index) in tbarActions">
-      <v-btn flat :icon="wide<SUB_TEXT_WIDE" v-if="showDetailedSubtoolbar && wide>=2 && (action==PLAY_ACTION || action==PLAY_ALL_ACTION) && !allowShuffle(current)" @click.stop="headerAction(action==PLAY_ACTION ? INSERT_ACTION : INSERT_ALL_ACTION, $event)" v-bind:class="{'context-button':wide>=SUB_TEXT_WIDE, 'toolbar-button':wide<SUB_TEXT_WIDE}" :title="INSERT_ACTION | tooltip(keyboardControl)" :id="'tbarb'+index">
-       <img class="svg-img" :src="ACTIONS[INSERT_ACTION].svg | svgIcon(darkUi)"></img><obj v-if="wide>=SUB_TEXT_WIDE">&nbsp;{{ACTIONS[INSERT_ACTION].short}}</obj>
+      <v-btn flat :icon="wide<WIDE_SUB_TEXT" v-if="showDetailedSubtoolbar && wide>=WIDE_MIX_BTN && (action==PLAY_ACTION || action==PLAY_ALL_ACTION) && !allowShuffle(current)" @click.stop="headerAction(action==PLAY_ACTION ? INSERT_ACTION : INSERT_ALL_ACTION, $event)" v-bind:class="{'context-button':wide>=WIDE_SUB_TEXT, 'toolbar-button':wide<WIDE_SUB_TEXT}" :title="INSERT_ACTION | tooltip(keyboardControl)" :id="'tbarb'+index">
+       <img class="svg-img" :src="ACTIONS[INSERT_ACTION].svg | svgIcon(darkUi)"></img><obj v-if="wide>=WIDE_SUB_TEXT">&nbsp;{{ACTIONS[INSERT_ACTION].short}}</obj>
       </v-btn>
-      <v-btn flat :icon="wide<SUB_TEXT_WIDE" v-if="showDetailedSubtoolbar && wide>=2 && (action==PLAY_ACTION || action==PLAY_ALL_ACTION) && allowShuffle(current)" @click.stop="headerAction(action==PLAY_ACTION ? PLAY_SHUFFLE_ACTION : PLAY_SHUFFLE_ALL_ACTION, $event)" v-bind:class="{'context-button':wide>=SUB_TEXT_WIDE, 'toolbar-button':wide<SUB_TEXT_WIDE}" :title="PLAY_SHUFFLE_ACTION | tooltip(keyboardControl)" :id="'tbara'+index">
-       <img class="svg-img" :src="ACTIONS[PLAY_SHUFFLE_ACTION].svg | svgIcon(darkUi)"></img><obj v-if="wide>=SUB_TEXT_WIDE">&nbsp;{{ACTIONS[PLAY_SHUFFLE_ACTION].short}}</obj>
+      <v-btn flat :icon="wide<WIDE_SUB_TEXT" v-if="showDetailedSubtoolbar && wide>=WIDE_MIX_BTN && (action==PLAY_ACTION || action==PLAY_ALL_ACTION) && allowShuffle(current)" @click.stop="headerAction(action==PLAY_ACTION ? PLAY_SHUFFLE_ACTION : PLAY_SHUFFLE_ALL_ACTION, $event)" v-bind:class="{'context-button':wide>=WIDE_SUB_TEXT, 'toolbar-button':wide<WIDE_SUB_TEXT}" :title="PLAY_SHUFFLE_ACTION | tooltip(keyboardControl)" :id="'tbara'+index">
+       <img class="svg-img" :src="ACTIONS[PLAY_SHUFFLE_ACTION].svg | svgIcon(darkUi)"></img><obj v-if="wide>=WIDE_SUB_TEXT">&nbsp;{{ACTIONS[PLAY_SHUFFLE_ACTION].short}}</obj>
       </v-btn>
-      <v-btn flat :icon="wide<SUB_TEXT_WIDE || !ACTIONS[action].short" @click.stop="headerAction(action, $event)" v-bind:class="{'context-button':wide>=SUB_TEXT_WIDE && undefined!=ACTIONS[action].short, 'toolbar-button':wide<SUB_TEXT_WIDE || !ACTIONS[action].short}" :title="action | tooltip(keyboardControl)" :id="'tbar'+index" v-if="(!queryParams.party || !HIDE_FOR_PARTY.has(action)) && (!LMS_KIOSK_MODE || !HIDE_FOR_KIOSK.has(action))">
+      <v-btn flat :icon="wide<WIDE_SUB_TEXT || !ACTIONS[action].short" @click.stop="headerAction(action, $event)" v-bind:class="{'context-button':wide>=WIDE_SUB_TEXT && undefined!=ACTIONS[action].short, 'toolbar-button':wide<WIDE_SUB_TEXT || !ACTIONS[action].short}" :title="action | tooltip(keyboardControl)" :id="'tbar'+index" v-if="(!queryParams.party || !HIDE_FOR_PARTY.has(action)) && (!LMS_KIOSK_MODE || !HIDE_FOR_KIOSK.has(action))">
        <img v-if="ACTIONS[action].svg" class="svg-img" :src="ACTIONS[action].svg | svgIcon(darkUi)"></img>
        <v-icon v-else>{{ACTIONS[action].icon}}</v-icon>
-       <obj v-if="wide>=SUB_TEXT_WIDE && ACTIONS[action].short">&nbsp;{{ACTIONS[action].short}}</obj>
+       <obj v-if="wide>=WIDE_SUB_TEXT && ACTIONS[action].short">&nbsp;{{ACTIONS[action].short}}</obj>
       </v-btn>
      </template>
     </tr>
-    <tr v-if="showMixButton || showMaiButton" align="right">
+    <tr v-if="showMixButton || showMaiButton || (showDetailedSubtoolbar && wide<WIDE_HBTNS)" align="right" style="height:48px">
+     <v-btn @click.stop="currentActionsMenu($event)" flat icon class="toolbar-button" :title="trans.actions" id="tbar-actions" v-if="wide<WIDE_HBTNS && currentActions.length>0 && numCurrentActionsInToolbar<currentActions.length"><v-icon>more_horiz</v-icon></v-btn>
      <v-btn flat v-if="showMixButton" class="context-button" @click="doContext(STD_ITEM_MIX)"><img class="svg-img" :src="'dice-multiple' | svgIcon(darkUi)"></img>&nbsp;{{i18n('Create Mix')}}</v-btn>
      <v-btn flat v-if="showMaiButton" class="context-button" @click="doContext(STD_ITEM_MAI)"><v-icon v-if="current.stdItem==STD_ITEM_ALBUM">album</v-icon><img v-else class="svg-img" :src="'artist' | svgIcon(darkUi)"></img>&nbsp;{{i18n('Information')}}</v-btn>
     </tr>
@@ -214,7 +227,7 @@ var lmsBrowse = Vue.component("lms-browse", {
      </v-list-tile-content>
      <v-list-tile-content v-else>
       <v-list-tile-title v-html="item.title"></v-list-tile-title>
-      <v-list-tile-sub-title v-if="wide>0 && item.subtitleContext" v-html="item.subtitleContext"></v-list-tile-sub-title>
+      <v-list-tile-sub-title v-if="wide>WIDE_NONE && item.subtitleContext" v-html="item.subtitleContext"></v-list-tile-sub-title>
       <v-list-tile-sub-title v-else v-html="item.subtitle" v-bind:class="{'link-item':subtitleClickable}" @click.stop="clickSubtitle(item, index, $event, $event)"></v-list-tile-sub-title>
      </v-list-tile-content>
 
@@ -297,7 +310,7 @@ var lmsBrowse = Vue.component("lms-browse", {
      <v-list-tile-content>
       <v-list-tile-title v-html="item.title" v-if="undefined!=item.stdItem && (item.stdItem==STD_ITEM_TRACK || item.stdItem==STD_ITEM_ALBUM_TRACK || item.stdItem==STD_ITEM_PLAYLIST_TRACK)"></v-list-tile-title>
       <v-list-tile-title v-else>{{item.title}}<b class="vlib-name" v-if="isTop && (item.libname || (libraryName && item.id==TOP_MYMUSIC_ID))">{{SEPARATOR+(item.libname ? item.libname : libraryName)}}</b></v-list-tile-title>
-      <v-list-tile-sub-title v-if="wide>0 && item.subtitleContext" v-html="item.subtitleContext"></v-list-tile-sub-title>
+      <v-list-tile-sub-title v-if="wide>WIDE_NONE && item.subtitleContext" v-html="item.subtitleContext"></v-list-tile-sub-title>
       <v-list-tile-sub-title v-else v-html="item.subtitle" v-bind:class="{'link-item':subtitleClickable}" @click.stop="clickSubtitle(item, index, $event)"></v-list-tile-sub-title>
      </v-list-tile-content>
 
@@ -487,7 +500,7 @@ var lmsBrowse = Vue.component("lms-browse", {
             itemCustomActions: [],
             subtitleClickable: false,
             disabled: new Set(),
-            wide: 0,
+            wide: WIDE_NONE,
             searchActive: 0,
             dragActive: false,
             dropIndex: -1,
@@ -611,7 +624,7 @@ var lmsBrowse = Vue.component("lms-browse", {
         },
         showDetailedSubtoolbar() {
             let stdItem = this.current ? this.current.stdItem ? this.current.stdItem : this.current.altStdItem : undefined;
-            return this.wide>0 && this.current && undefined!=stdItem && (this.currentImage || stdItem==STD_ITEM_ONLINE_ARTIST_CATEGORY) &&
+            return this.wide>WIDE_NONE && this.current && undefined!=stdItem && (this.currentImage || stdItem==STD_ITEM_ONLINE_ARTIST_CATEGORY) &&
                    (stdItem==STD_ITEM_ARTIST || stdItem==STD_ITEM_WORK_COMPOSER || stdItem==STD_ITEM_ALBUM || stdItem==STD_ITEM_WORK  || stdItem==STD_ITEM_CLASSICAL_WORKS ||
                     stdItem==STD_ITEM_ONLINE_ARTIST || stdItem==STD_ITEM_ONLINE_ALBUM || stdItem==STD_ITEM_ONLINE_ARTIST_CATEGORY ||
                     stdItem>=STD_ITEM_MAI)
@@ -653,6 +666,9 @@ var lmsBrowse = Vue.component("lms-browse", {
             }
         },
         showMaiButton() {
+            if (this.wide<WIDE_HBTNS) {
+                return false;
+            }
             let stdItem = this.current.stdItem ? this.current.stdItem : this.current.altStdItem;
             if (LMS_P_MAI && this.showDetailedSubtoolbar && (stdItem==STD_ITEM_ARTIST || stdItem==STD_ITEM_WORK_COMPOSER || stdItem==STD_ITEM_ALBUM)) {
                 if (stdItem==STD_ITEM_ARTIST || stdItem==STD_ITEM_WORK_COMPOSER) {
@@ -670,7 +686,7 @@ var lmsBrowse = Vue.component("lms-browse", {
             return false;
         },
         showMixButton() {
-            if (LMS_P_BMIX && this.wide>=2 && this.showDetailedSubtoolbar && (this.current.stdItem==STD_ITEM_ARTIST || this.current.stdItem==STD_ITEM_WORK_COMPOSER ||this.current.stdItem==STD_ITEM_ALBUM)) {
+            if (LMS_P_BMIX && this.wide>=WIDE_MIX_BTN && this.showDetailedSubtoolbar && (this.current.stdItem==STD_ITEM_ARTIST || this.current.stdItem==STD_ITEM_WORK_COMPOSER ||this.current.stdItem==STD_ITEM_ALBUM)) {
                 for (let i=0, loop=this.currentActions, len=loop.length; i<len; ++i) {
                     if (loop[i].stdItem==STD_ITEM_MIX) {
                         return true;
@@ -1051,15 +1067,15 @@ var lmsBrowse = Vue.component("lms-browse", {
             for (let i=0, loop=this.currentActions, len=loop.length; i<len; ++i) {
                 if ( (queryParams.party && HIDE_FOR_PARTY.has(loop[i].action)) ||
                      (LMS_KIOSK_MODE && HIDE_FOR_KIOSK.has(loop[i].action)) ||
-                     (PLAY_SHUFFLE_ACTION==loop[i].action && (!lmsOptions.playShuffle || (this.wide>=2 && this.showDetailedSubtoolbar))) ||
-                     (INSERT_ACTION==loop[i].action && this.wide>=2 && this.showDetailedSubtoolbar && !lmsOptions.playShuffle) ||
+                     (PLAY_SHUFFLE_ACTION==loop[i].action && (!lmsOptions.playShuffle || (this.wide>=WIDE_MIX_BTN && this.showDetailedSubtoolbar))) ||
+                     (INSERT_ACTION==loop[i].action && this.wide>=WIDE_MIX_BTN && this.showDetailedSubtoolbar && !lmsOptions.playShuffle) ||
                      (this.tbarActions.length<2 && (i<(this.tbarActions.length<2 ? 2 : 1))) ||
                      ((ALBUM_SORTS_ACTION==loop[i].action || TRACK_SORTS_ACTION==loop[i].action) && this.items.length<2) ||
                      ((ALBUM_SORTS_ACTION==loop[i].action || ADD_RANDOM_ALBUM_ACTION==loop[i].action) && this.current && this.current.stdItem==STD_ITEM_WORK) ||
                      (SCROLL_TO_ACTION==loop[i].action &&
                         (!this.items[0].id.startsWith(FILTER_PREFIX) ||
                          (this.items.length < (this.grid.use ? (this.grid.numColumns*10) : 50) ) ) ) ||
-                     ((loop[i].stdItem==STD_ITEM_MAI || (loop[i].stdItem==STD_ITEM_MIX && this.wide>=2)) && this.showDetailedSubtoolbar) ||
+                     (((loop[i].stdItem==STD_ITEM_MAI && this.wide>=WIDE_HBTNS) || (loop[i].stdItem==STD_ITEM_MIX && this.wide>=WIDE_MIX_BTN)) && this.showDetailedSubtoolbar) ||
                      (loop[i].action==DIVIDER && (0==actions.length || actions[actions.length-1].action==DIVIDER)) ) {
                     continue;
                 }
@@ -1908,16 +1924,22 @@ var lmsBrowse = Vue.component("lms-browse", {
             this.dragIndex = undefined;
         },
         setWide() {
-            let viewWidth = this.$store.state.desktopLayout ? this.pageElement.scrollWidth : window.innerWidth;
+            let viewWidth = (this.$store.state.desktopLayout ? this.pageElement.scrollWidth : window.innerWidth) - (this.$store.state.homeButton ? 48 : 0);
             this.wide = viewWidth>=MIN_WIDTH_FOR_BOTH_INDENT
-                        ? 4
-                        :viewWidth>=MIN_WIDTH_FOR_COVER_INDENT
-                            ? 3
-                            : viewWidth>=MIN_WIDTH_FOR_MIX_BTN
-                                ? 2
-                                : viewWidth>=MIN_WIDTH_FOR_COVER
-                                    ? 1
-                                    : 0;
+                            ? WIDE_BOTH
+                            : viewWidth>=MIN_WIDTH_FOR_COVER_INDENT
+                                ? WIDE_COVER_IDENT
+                                : viewWidth>=MIN_WIDTH_FOR_MIX_BTN
+                                    ? WIDE_MIX_BTN
+                                    : viewWidth>=MIN_WIDTH_FOR_COVER
+                                        ? WIDE_COVER
+                                        : viewWidth>=MIN_WIDTH_INDENT_LEFT
+                                            ? WIDE_INDENT_L
+                                            : viewWidth>=MIN_WIDTH_FOR_HBTNS
+                                                ? WIDE_HBTNS
+                                                : viewWidth>=MIN_WIDTH_FOR_DETAILED_SUB
+                                                    ? WIDE_DETAILED_SUB
+                                                    : WIDE_NONE;
         },
         textSelectEnd(event) {
             if (!this.current.slimbrowse) { // DynamicPlaylists have a blank line that when double-clicked shows a menu!

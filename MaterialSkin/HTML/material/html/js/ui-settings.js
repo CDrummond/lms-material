@@ -67,14 +67,14 @@ Vue.component('lms-ui-settings', {
     </v-list-tile>
     <v-divider></v-divider>
 
-    <v-list-tile>
+    <v-list-tile v-if="cMixSupported">
     <v-list-tile-content @click="tinted = !tinted" class="switch-label">
      <v-list-tile-title>{{i18n('Tint background')}}</v-list-tile-title>
      <v-list-tile-sub-title>{{i18n('Tint background with chosen color.')}}</v-list-tile-sub-title>
     </v-list-tile-content>
     <v-list-tile-action><m3-switch v-model="tinted"></m3-switch></v-list-tile-action>
    </v-list-tile>
-   <v-divider></v-divider>
+   <v-divider v-if="cMixSupported"></v-divider>
 
     <v-list-tile v-if="allowLayoutAdjust">
      <v-select :items="layoutItems" :label="i18n('Application layout')" v-model="layout" item-text="label" item-value="key"></v-select>
@@ -501,6 +501,9 @@ Vue.component('lms-ui-settings', {
         },
         usingColoredToolbars() {
             return this.$store.state.coloredToolbars
+        },
+        cMixSupported() {
+            return this.$store.state.cMixSupported
         }
     },
     mounted() {

@@ -305,7 +305,8 @@ const store = new Vuex.Store({
         coloredToolbars: false,
         tinted: false,
         moveDialogs: false,
-        autoCloseQueue: false
+        autoCloseQueue: false,
+        cMixSupported: 1==parseInt(getComputedStyle(document.documentElement).getPropertyValue('--color-mix-supported'))
     },
     mutations: {
         updatePlayer(state, player) {

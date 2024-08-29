@@ -405,7 +405,7 @@ var app = new Vue({
             return this.$store.state.nowPlayingFull && !this.infoOpen && this.$store.state.nowPlayingBackdrop && (this.desktopLayout ? this.nowPlayingExpanded : (this.$store.state.page == 'now-playing'))
         },
         tinted() {
-            return this.$store.state.tinted && (!this.queueEmpty || this.$store.state.color!=COLOR_FROM_COVER)
+            return this.$store.state.tinted && this.$store.state.cMixSupported && (!this.queueEmpty || this.$store.state.color!=COLOR_FROM_COVER)
         }
     },
     methods: {

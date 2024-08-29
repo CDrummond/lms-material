@@ -106,6 +106,13 @@
  --top-toolbar-text-color:var(--dark-text-color);
  --sub-toolbar-text-color:var(--dark-text-color);
  --bottom-toolbar-text-color:var(--dark-text-color);
+ --color-mix-supported:1;
+}
+
+@supports not (color: color-mix(in srgb, red, green)) {
+ :root {
+  --color-mix-supported:0;
+ }
 }
 
 .tinted:not(.theme--dark) {

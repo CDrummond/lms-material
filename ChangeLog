@@ -8,7 +8,7 @@
  5. Only draw blurred background in detailed sub-toolbar if browse view is set
     to draw background images.
  6. Consistent search library icon.
- 7. Add option to tint background colour.
+ 7. Add option to tint background colour, if supported by browser.
  8. Use detailed sub-toolbar if width is 350px or more.
  9. If using 'colour from cover' and have no track the default to 'Blue'
     colours.

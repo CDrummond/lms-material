@@ -311,13 +311,17 @@
 
 .np-bar-mob-thick .np-bar-details {
  left:34px!important;
- width:calc(100vw - 58px);
+ width:calc(100vw - 70px);
  bottom:calc(var(--bottom-toolbar-height) + var(--bottom-np-pad) - 20px);
+}
+
+.np-bar-mob-thick .np-bar-details .v-list__tile {
+ padding-right:4px!important;
 }
 
 .np-bar-mob-nav .np-bar-details {
  left:35px!important;
- width:calc(100vw - 59px);
+ width:calc(100vw - 71px);
 }
 
 /* Adjust link/more/close buttons in now-playing page up a little */

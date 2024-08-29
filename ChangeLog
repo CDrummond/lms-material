@@ -15,6 +15,7 @@
 -----
 1. Make strings HTML safe by replacing less than and greater than signs with
    similar unicode characters.
+2. Fix touch/click area of play/pause button when on right in now-playing bar.
 
 5.2.4
 -----

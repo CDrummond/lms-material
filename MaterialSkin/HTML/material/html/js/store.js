@@ -64,7 +64,6 @@ function updateUiSettings(state, val) {
     if (undefined!=val.homeButton && state.homeButton!=val.homeButton) {
         state.homeButton = val.homeButton;
         setLocalStorageVal('homeButton', state.homeButton);
-        document.documentElement.style.setProperty('--home-button-size', state.homeButton ? '42px' : '0px');
     }
     if (undefined!=val.mobileBar && state.mobileBar!=val.mobileBar) {
         state.mobileBar = val.mobileBar;
@@ -525,9 +524,6 @@ const store = new Vuex.Store({
             }
             if (!VALID_SKIP_SECONDS.has(state.skipFSeconds)) {
                 state.skipFSeconds = 30;
-            }
-            if (state.homeButton) {
-                document.documentElement.style.setProperty('--home-button-size', '42px');
             }
             setQueuePinned(state, getLocalStorageBool('pinQueue', state.pinQueue), true);
             setQueueShown(state, getLocalStorageBool('showQueue', state.showQueue), true);

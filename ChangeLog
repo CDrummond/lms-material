@@ -1,17 +1,18 @@
 5.3.0
 -----
-1. When navigating into an album, artist, work, or playlist from favourites
-   attempt to obtain DB IDs and navigate using those.
-2. Remove 'Dark' theme and rename 'Darker' to 'Dark'.
-3. Simplify themes.
-4. Fix showing detailed sub-toolbar on mobile layout.
-5. Only draw blurred background in detailed sub-toolbar if browse view is set
-   to draw background images.
-6. Consistent search library icon.
-7. Add option to tint background colour.
-8. Use detailed sub-toolbar if width is 350px or more.
-9. If using 'colour from cover' and have no track the default to 'Blue'
-   colours.
+ 1. When navigating into an album, artist, work, or playlist from favourites
+    attempt to obtain DB IDs and navigate using those.
+ 2. Remove 'Dark' theme and rename 'Darker' to 'Dark'.
+ 3. Simplify themes.
+ 4. Fix showing detailed sub-toolbar on mobile layout.
+ 5. Only draw blurred background in detailed sub-toolbar if browse view is set
+    to draw background images.
+ 6. Consistent search library icon.
+ 7. Add option to tint background colour.
+ 8. Use detailed sub-toolbar if width is 350px or more.
+ 9. If using 'colour from cover' and have no track the default to 'Blue'
+    colours.
+10. If using detailed sub-toolbar the place home button below back button.
 
 5.2.5
 -----

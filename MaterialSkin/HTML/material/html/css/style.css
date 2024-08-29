@@ -67,7 +67,6 @@
  --npbar-border-color:var(--bottom-toolbar-border-color);
  --album-separator-color:rgba(2, 2, 2, 0.2);
  --subtoolbar-image-url:url();
- --home-button-size:0px;
  --pq-current-color:rgba(var(--highlight-rgb),0.2);
  --pq-current-album-color:rgba(var(--highlight-rgb),0.075);
  --drop-target-color:rgba(var(--highlight-rgb),0.5);
@@ -580,7 +579,7 @@ div.v-subheader {
 .indent-left .lms-list-item a,
 .indent-both .browse-html,
 .indent-right .browse-html {
- padding-left:calc(71px + var(--home-button-size) - var(--jump-list-adjust)) !important;
+ padding-left:calc(71px - var(--jump-list-adjust)) !important;
 }
 
 .detailed-sub .lms-image-grid .vue-recycle-scroller__item-view a {
@@ -599,14 +598,14 @@ div.v-subheader {
 .indent-right .vue-recycle-scroller__item-view a,
 .indent-right .lms-list-item a,
 .indent-right .browse-html {
- padding-right:calc(71px + var(--home-button-size)) !important;
+ padding-right:71px !important;
 }
 
 .indent-both .vue-recycle-scroller__item-view a,
 .indent-both .lms-list-item a,
 .indent-both .browse-html {
- padding-left:calc(171px + var(--home-button-size) - var(--jump-list-adjust)) !important;
- padding-right:calc(171px + var(--home-button-size)) !important;
+ padding-left:calc(171px - var(--jump-list-adjust)) !important;
+ padding-right:171px !important;
 }
 
 .browse-html a,
@@ -830,11 +829,11 @@ div.v-subheader {
 }
 
 .detailed-sub .lms-list .emblem, .detailed-sub .lms-list-jump .emblem {
- left:calc((100px + var(--home-button-size)) - var(--jump-list-adjust));
+ left:calc(100px - var(--jump-list-adjust));
 }
 .indent-right .lms-list .emblem, .indent-right .lms-list-jump .emblem,
 .indent-both .lms-list .emblem, .indent-both .lms-list-jump .emblem {
- left:calc((196px + var(--home-button-size)) - var(--jump-list-adjust));
+ left:calc(196px - var(--jump-list-adjust));
 }
 
 .error-text {
@@ -2534,6 +2533,12 @@ div.v-subheader {
  #home-button{display:none;}
 }
 
+.dst-home, .dst-home:hover {
+ position:fixed;
+ left:12px;
+ bottom:2px;
+}
+
 .lib-select-btn {
  margin-top: 10px;
  margin-left:-4px;
@@ -3092,17 +3097,17 @@ div.v-subheader {
 }
 
 .indent-right .list-btns {
- right:calc(88px + var(--home-button-size))!important;
+ right:88px!important;
 }
 .indent-right .list-btns-track {
- right:calc(128px + var(--home-button-size))!important;
+ right:128px!important;
 }
 
 .indent-both .list-btns {
- right:calc(188px + var(--home-button-size))!important;
+ right:188px!important;
 }
 .indent-both .list-btns-track {
- right:calc(228px + var(--home-button-size))!important;
+ right:228px!important;
 }
 
 .indent-both .lms-image-grid .list-btns {

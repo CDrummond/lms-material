@@ -476,6 +476,9 @@
  .pq-rating {
   right:12px;
  }
+ .dst-home, .dst-home:hover {
+  left:7px;
+ }
 }
 
 .lms-splitter .splitter {

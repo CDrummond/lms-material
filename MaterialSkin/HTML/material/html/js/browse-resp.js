@@ -876,9 +876,7 @@ function parseBrowseResp(data, parent, options, cacheKey, parentCommand, parentG
                 }
             }
         } else if (data.result.artists_loop) {
-            var isComposers = false;
-            var isConductors = false;
-            var isBands = false;
+            var type = 0;
             var stdItem = parent && parent.id.startsWith("mmw") ? STD_ITEM_WORK_COMPOSER : STD_ITEM_ARTIST;
 
             if (data.params && data.params.length>1) {
@@ -887,11 +885,16 @@ function parseBrowseResp(data, parent, options, cacheKey, parentCommand, parentG
                         var lower = data.params[1][i].toLowerCase();
                         if (lower.startsWith("role_id:")) {
                             if (lower=="role_id:composer" || lower=="role_id:2") {
-                                isComposers = true;
+                                type = 2;
                             } else if (lower=="role_id:conductor" || lower=="role_id:3") {
-                                isConductors = true;
+                                type = 3;
                             } else if (lower=="role_id:band" || lower=="role_id:4") {
-                                isBands = true;
+                                type = 4;
+                            } else {
+                                let t = lower.split(':')[1];
+                                if (!isNaN(t)) {
+                                    type = parseInt(t);
+                                }
                             }
                             break;
                         }
@@ -919,14 +922,16 @@ function parseBrowseResp(data, parent, options, cacheKey, parentCommand, parentG
                 setFavoritesParams(i, artist);
                 resp.items.push(artist);
             }
-            if (isComposers) {
-                resp.subtitle=i18np("1 Composer", "%1 Composers", resp.items.length);
-            } else if (isConductors) {
-                resp.subtitle=i18np("1 Conductor", "%1 Conductors", resp.items.length);
-            } else if (isBands) {
-                resp.subtitle=i18np("1 Band", "%1 Bands", resp.items.length);
-            } else {
-                resp.subtitle=i18np("1 Artist", "%1 Artists", resp.items.length);
+            switch (type) {
+                case 2: resp.subtitle=i18np("1 Composer", "%1 Composers", resp.items.length); break;
+                case 3: resp.subtitle=i18np("1 Conductor", "%1 Conductors", resp.items.length); break;
+                case 4: resp.subtitle=i18np("1 Band", "%1 Bands", resp.items.length); break;
+                default:
+                    if (undefined!=type && type>=20) {
+                        resp.subtitle=i18np("1 Item", "%1 Items", resp.items.length);
+                    } else {
+                        resp.subtitle=i18np("1 Artist", "%1 Artists", resp.items.length);
+                    }
             }
             if (parent && parent.id && parent.id.startsWith("search:")) {
                 resp.jumplist = []; // Search results NOT sorted???

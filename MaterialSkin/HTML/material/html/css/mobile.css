@@ -330,7 +330,8 @@
 }
 
 .np-info-text {
- height:calc(var(--100vh) - (var(--main-toolbar-height) + var(--sub-toolbar-height) + var(--bottom-toolbar-height) + var(--bottom-np-pad) + var(--mobile-npbar-height)));
+ margin-top:1px;
+ height:calc(var(--100vh) - (var(--main-toolbar-height) + var(--sub-toolbar-height) + var(--bottom-toolbar-height) + var(--bottom-np-pad) + var(--mobile-npbar-height) + 1px));
 }
 
 .np-info-text-full {
@@ -338,7 +339,7 @@
 }
 
 .np-mob-nonav .np-info-text {
- height:calc(var(--100vh) - (var(--main-toolbar-height) + var(--bottom-toolbar-height) + var(--mobile-npbar-height)));
+ height:calc(var(--100vh) - (var(--main-toolbar-height) + var(--bottom-toolbar-height) + var(--mobile-npbar-height) + var(--tab-bar-height) + 1px));
 }
 
 .np-mob-nonav .np-info-text-full {

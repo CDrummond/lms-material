@@ -420,7 +420,8 @@
 }
 
 .np-info-text {
- height:calc(var(--100vh) - (var(--main-toolbar-height) + var(--sub-toolbar-height) + var(--bottom-toolbar-height)));
+ margin-top:1px;
+ height:calc(var(--100vh) - (var(--main-toolbar-height) + var(--sub-toolbar-height) + var(--bottom-toolbar-height) + 1px));
 }
 
 .np-info-text-full {

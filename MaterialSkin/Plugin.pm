@@ -1935,6 +1935,11 @@ sub _svgHandler {
     my $colour = "#f00";
     my $colour2 = "#";
 
+    if ((! -e $filePath) && (! -e $altFilePath)) {
+        $svgName = lc $svgName;
+        $filePath = $dir . "/HTML/material/html/images/" . $svgName . ".svg";
+        $altFilePath = Slim::Utils::Prefs::dir() . "/material-skin/images/" . $svgName . ".svg";
+    }
     # If this is for a release type then fallback to release.svg if it does not exist
     if (rindex($svgName, "release-")==0) {
         if ((! -e $filePath) && (! -e $altFilePath)) {

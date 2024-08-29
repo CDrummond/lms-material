@@ -26,6 +26,7 @@
  --mobile-npbar-height:0px;
  --mobile-npbar-height-thin:22px;
  --mobile-npbar-height-thick:48px;
+ --tab-bar-height:48px;
  --list-elem-height:50px;
  --list-elem-3line-height:70px;
  --pq-album-header:68px;
@@ -3049,9 +3050,12 @@ div.v-subheader {
 }
 
 #browse-view .lms-list .menu-btn,
-.lms-list3 .menu-btn,
 .pq-albumstyle .menu-btn {
  padding-top:4px;
+}
+
+.lms-list3 .menu-btn {
+ padding-top:5px;
 }
 
 .list-btn {

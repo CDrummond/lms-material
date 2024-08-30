@@ -1,10 +1,10 @@
 5.2.5
 -----
 1. Make strings HTML safe by replacing less than and greater than signs with
-   similar unicode characters.
+   similar Unicode characters.
 2. Fix touch/click area of play/pause button when on right in now-playing bar.
 3. Fix MAI view when now-playing bar replaces mobile navigation.
-4. Fix activating rescans, etc., when promted to in 'Server settings'.
+4. Fix activating rescans, etc., when prompted to do so in 'Server settings'.
 5. Fix flicker when collapse mobile now-playing.
 
 5.2.4

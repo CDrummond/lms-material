@@ -225,6 +225,10 @@
  color:var(--sub-toolbar-text-color) !important;
 }
 
+.np-bar-details:is(.v-list--two-line) .v-list__tile {
+ height:48px!important;
+}
+
 .np-bar-image {
  visibility:hidden;
 }
@@ -312,7 +316,7 @@
 .np-bar-mob-thick .np-bar-details {
  left:34px!important;
  width:calc(100vw - 70px);
- bottom:calc(var(--bottom-toolbar-height) + var(--bottom-np-pad) - 20px);
+ bottom:calc(var(--bottom-toolbar-height) + var(--bottom-np-pad) - 8px);
 }
 
 .np-bar-mob-thick .np-bar-details .v-list__tile {

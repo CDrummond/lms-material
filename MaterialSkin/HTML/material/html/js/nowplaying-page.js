@@ -547,6 +547,21 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
                 }
             }
         }.bind(this));
+        bus.$on('escPressed', function() {
+            if (this.$store.state.desktopLayout) {
+                if (this.info.show) {
+                    bus.$emit('info');
+                } else if (this.largeView) {
+                    this.largeView = false;
+                }
+            } else if (this.$store.state.page=="now-playing") {
+                if (this.info.show) {
+                    bus.$emit('info');
+                } else if (this.mobileBar==MBAR_REP_NAV) {
+                    this.$store.commit('setPage', this.$store.state.prevPage)
+                }
+            }
+        }.bind(this));
 
         this.info.sync=getLocalStorageBool("syncInfo", true);
         bus.$on('playerStatus', function(playerStatus) {

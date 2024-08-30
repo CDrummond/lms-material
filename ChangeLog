@@ -6,6 +6,7 @@
 3. Fix MAI view when now-playing bar replaces mobile navigation.
 4. Fix activating rescans, etc., when prompted to do so in 'Server settings'.
 5. Fix flicker when collapse mobile now-playing.
+6. Close now-playing, and MAI, with 'Esc' (or back swipe in APK).
 
 5.2.4
 -----

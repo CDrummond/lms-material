@@ -7,6 +7,8 @@
 4. Fix activating rescans, etc., when prompted to do so in 'Server settings'.
 5. Fix flicker when collapse mobile now-playing.
 6. Close now-playing, and MAI, with 'Esc' (or back swipe in APK).
+7. Append category title to 'Search within list' hint.
+8. Don't hide search hints.
 
 5.2.4
 -----

@@ -14,6 +14,11 @@
     colours.
 10. If using detailed sub-toolbar then place home button below back button.
 
+5.2.6
+-----
+1. Allow to open server settings via 'action=dlg.open/serversettings' URL
+   query.
+
 5.2.5
 -----
 1. Make strings HTML safe by replacing less than and greater than signs with

@@ -10,9 +10,9 @@
  6. Consistent search library icon.
  7. Add option to tint background colour, if supported by browser.
  8. Use detailed sub-toolbar if width is 350px or more.
- 9. If using 'colour from cover' and have no track the default to 'Blue'
+ 9. If using 'colour from cover' and have no track then default to 'Blue'
     colours.
-10. If using detailed sub-toolbar the place home button below back button.
+10. If using detailed sub-toolbar then place home button below back button.
 
 5.2.5
 -----

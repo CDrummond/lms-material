@@ -6,6 +6,7 @@
 3. Add more icon sizes.
 4. Use 1024x1024 as default icon size.
 5. Don't add 80x80 icon to HTML for mobile devices.
+6. Allow listing of apps even if no player connected.
 
 5.2.5
 -----

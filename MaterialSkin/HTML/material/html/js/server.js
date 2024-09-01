@@ -217,8 +217,11 @@ async function lmsList(playerid, command, params, start, batchSize, cancache, co
     if (command.length>1 && command[0]=="custombrowse" && (command[1]=="browsejive" || command[1]=="browse") && count>999) {
         return lmsListFragment(playerid, command, params, 0, 999, count, commandId);
     }
-    if (lmsOptions.combineAppsAndRadio && command.length>1 && command[0]=="myapps" && command[1]=="items") {
-        return lmsListApps(playerid, ["material-skin", "apps"], commandId);
+    if (command.length>1 && command[0]=="myapps" && command[1]=="items") {
+        command = ["material-skin", "apps"];
+        if (lmsOptions.combineAppsAndRadio) {
+            return lmsListApps(playerid, command, commandId);
+        }
     }
 
     var cmdParams = command.slice();

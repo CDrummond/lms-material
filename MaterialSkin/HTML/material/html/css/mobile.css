@@ -20,7 +20,7 @@
 .no-navbar {
  --bottom-toolbar-height:0px;
  --bottom-np-pad:var(--bottom-pad);
- --mobile-np-view-control-size:calc(var(--bottom-pad) + 38px);
+ --mobile-np-view-control-size:calc(var(--bottom-pad) + 54px);
 }
 
 /* For old browsers that dont support min() */
@@ -225,6 +225,10 @@
  color:var(--sub-toolbar-text-color) !important;
 }
 
+.np-bar-details:is(.v-list--two-line) .v-list__tile {
+ height:48px!important;
+}
+
 .np-bar-image {
  visibility:hidden;
 }
@@ -312,7 +316,7 @@
 .np-bar-mob-thick .np-bar-details {
  left:34px!important;
  width:calc(100vw - 70px);
- bottom:calc(var(--bottom-toolbar-height) + var(--bottom-np-pad) - 20px);
+ bottom:calc(var(--bottom-toolbar-height) + var(--bottom-np-pad) - 8px);
 }
 
 .np-bar-mob-thick .np-bar-details .v-list__tile {

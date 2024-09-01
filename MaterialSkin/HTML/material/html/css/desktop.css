@@ -303,8 +303,11 @@
  }
  .np-bar-details {
   left:calc(var(--bottom-pad) + 50px);
-  bottom:calc(var(--bottom-pad) - 4px);
+  bottom:calc(var(--bottom-pad) - 16px);
   width:calc(100vw - (var(--bottom-pad) + 90px));
+ }
+ .np-bar-details:is(.v-list--two-line) .v-list__tile {
+  height:48px!important;
  }
  .np-bar-details .v-list__tile__title {
   margin-top:-1px;

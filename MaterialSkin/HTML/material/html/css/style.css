@@ -1474,10 +1474,6 @@ div.v-subheader {
  padding-right:16px;
 }
 
-.no-navbar .np-portrait-track-info {
- height:calc(var(--100vh) - (var(--np-portrait-image-size) + 171px + var(--top-pad) + var(--bottom-pad) + (var(--thin-portrait-adjust) * 3) + (var(--np-image-border) * 2)));
-}
-
 .hide-scrollbar::-webkit-scrollbar {
  display: none;
 }
@@ -3924,4 +3920,8 @@ div.v-subheader {
 
 .msk-is-touch .pswp__top-bar {
  visibility: hidden!important;
+}
+
+.v-text-field .v-label {
+ top:8px!important;
 }

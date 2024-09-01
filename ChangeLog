@@ -17,10 +17,14 @@
 5.2.5
 -----
 1. Make strings HTML safe by replacing less than and greater than signs with
-   similar unicode characters.
+   similar Unicode characters.
 2. Fix touch/click area of play/pause button when on right in now-playing bar.
 3. Fix MAI view when now-playing bar replaces mobile navigation.
-4. Fix activating rescans, etc., when promted to in 'Server settings'.
+4. Fix activating rescans, etc., when prompted to do so in 'Server settings'.
+5. Fix flicker when collapse mobile now-playing.
+6. Close now-playing, and MAI, with 'Esc' (or back swipe in APK).
+7. Append category title to 'Search within list' hint.
+8. Don't hide search hints.
 
 5.2.4
 -----

@@ -336,10 +336,25 @@ var app = new Vue({
 
         bus.$on('dlg.open', function(name, a, b, c, d, e, f, g, h) {
             if (typeof DEFERRED_LOADED != 'undefined') {
-                this.dialogs[name] = true; // Mount
-                this.$nextTick(function () {
-                    bus.$emit(name+".open", a, b, c, d, e, f, g, h);
-                });
+                if ('serversettings'==name) {
+                    if (typeof openServerSettings == 'undefined') {
+                        setTimeout(function() { bus.$emit('dlg.open', name, a, b, c, d, e, f, g, h)}, 50);
+                        return;
+                    }
+                    if (store.state.unlockAll) {
+                        lmsCommand("", ["material-skin", "server"]).then(({data}) => {
+                            if (data && data.result) {
+                                openServerSettings(data.result.libraryname, 0);
+                            }
+                        }).catch(err => {
+                        });
+                    }
+                } else {
+                    this.dialogs[name] = true; // Mount
+                    this.$nextTick(function () {
+                        bus.$emit(name+".open", a, b, c, d, e, f, g, h);
+                    });
+                }
             } else {
                 console.warn("Ignoring dialog request, as deferred JS files not yet loaded");
             }

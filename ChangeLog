@@ -3,9 +3,8 @@
 1. Allow to open server settings via 'action=dlg.open/serversettings' URL
    query.
 2. Tweak maskable icon.
-3. Add more icon sizes.
-4. Use 1024x1024 as default icon size.
-5. Don't add 80x80 icon to HTML for mobile devices.
+3. Add a 1024x1024 icon.
+4. Don't add 80x80 icon to HTML for mobile devices.
 
 5.2.5
 -----

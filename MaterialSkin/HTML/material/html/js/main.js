@@ -589,34 +589,29 @@ var app = new Vue({
             }
         },
         doQueryActions(actOnPlayers) {
-            for (var i=0; i<queryParams.actions.length; ) {
-                if ( queryParams.actions[i]=='dlg.open/serversettings' || (actOnPlayers && queryParams.actions[i].startsWith("dlg.")) || (!actOnPlayers && !queryParams.actions[i].startsWith("dlg."))) {
-                    var act = queryParams.actions[i];
-                    var parts = act.split('/');
-                    var params = [];
-                    if (parts.length>1) {
-                        params = parts[1].split(',');
-                    }
-                    if (parts.length>2) { // Check required player exists
-                        var playerId = parts[2];
-                        var found = false;
-                        if (this.$store.state.players) {
-                            for (var j=0, len=this.$store.state.players.length; j<len && !found; ++j) {
-                                if (this.$store.state.players[j].id == playerId || this.$store.state.players[j].name == playerId) {
-                                    found = true;
-                                }
+            for (var i=0; i<queryParams.actions.length; i++) {
+                var act = queryParams.actions[i];
+                var parts = act.split('/');
+                var params = [];
+                if (parts.length>1) {
+                    params = parts[1].split(',');
+                }
+                if (parts.length>2) { // Check required player exists
+                    var playerId = parts[2];
+                    var found = false;
+                    if (this.$store.state.players) {
+                        for (var j=0, len=this.$store.state.players.length; j<len && !found; ++j) {
+                            if (this.$store.state.players[j].id == playerId || this.$store.state.players[j].name == playerId) {
+                                found = true;
                             }
                         }
-                        if (!found) {
-                            i++;
-                            continue;
-                        }
                     }
-                    bus.$emit(parts[0], params.length>0 ? params[0] : undefined, params.length>1 ? params[1] : undefined, params.length>2 ? params[2] : undefined);
-                    queryParams.actions.splice(i, 1);
-                } else {
-                    i++;
+                    if (!found) {
+                        continue;
+                    }
                 }
+                bus.$emit(parts[0], params.length>0 ? params[0] : undefined, params.length>1 ? params[1] : undefined, params.length>2 ? params[2] : undefined);
+                queryParams.actions.splice(i, 1);
             }
         },
         checkLayout() {

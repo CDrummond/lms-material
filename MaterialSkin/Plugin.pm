@@ -27,7 +27,6 @@ use List::Util qw(shuffle);
 use File::Spec::Functions qw(catdir);
 use File::Path qw(make_path);
 use Scalar::Util qw(looks_like_number);
-require Plugins::MaterialSkin::Player;
 
 if (!Slim::Web::Pages::Search->can('parseAdvancedSearchParams')) {
     require Plugins::MaterialSkin::Search;
@@ -92,7 +91,6 @@ my @BOOL_OPTS = ('allowDownload', 'playShuffle', 'touchLinks', 'showAllArtists',
 sub initPlugin {
     my $class = shift;
 
-    my $player = Plugins::MaterialSkin::Player->new();
     if (my $composergenres = $prefs->get('composergenres')) {
         $prefs->set('composergenres', $DEFAULT_COMPOSER_GENRES) if $composergenres eq '';
     } else {

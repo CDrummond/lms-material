@@ -356,7 +356,7 @@ var app = new Vue({
                     });
                 }
             } else {
-                console.warn("Ignoring dialog request, as deferred JS files not yet loaded");
+                setTimeout(function() { bus.$emit('dlg.open', name, a, b, c, d, e, f, g, h)}, 50);
             }
         }.bind(this));
         if (queryParams.actions.length>0) {
@@ -590,7 +590,7 @@ var app = new Vue({
         },
         doQueryActions(actOnPlayers) {
             for (var i=0; i<queryParams.actions.length; ) {
-                if ( (actOnPlayers && queryParams.actions[i].startsWith("dlg.")) || (!actOnPlayers && !queryParams.actions[i].startsWith("dlg."))) {
+                if ( queryParams.actions[i]=='dlg.open/serversettings' || (actOnPlayers && queryParams.actions[i].startsWith("dlg.")) || (!actOnPlayers && !queryParams.actions[i].startsWith("dlg."))) {
                     var act = queryParams.actions[i];
                     var parts = act.split('/');
                     var params = [];

@@ -89,6 +89,8 @@ my %IGNORE_PROTOCOLS = map { $_ => 1 } ('mms', 'file', 'tmp', 'http', 'https', '
 
 my @BOOL_OPTS = ('allowDownload', 'playShuffle', 'touchLinks', 'showAllArtists', 'artistFirst', 'yearInSub', 'showComment', 'genreImages', 'maiComposer', 'showComposer', 'showConductor', 'showBand', 'combineAppsAndRadio');
 
+my %ROLE_MAP = ('bass' => 'bassist', 'cello' => 'cellist', 'drums' => 'drummer', 'flute' => 'flutist', 'guitar' => 'guitarist', 'piano' => 'pianist', 'saxophone' => 'saxophonist', 'trombone' => 'trombonist', 'violin' => 'violinist', 'vocals' => 'vocalist', 'singer' => 'vocalist');
+
 sub initPlugin {
     my $class = shift;
 
@@ -1975,7 +1977,9 @@ sub _svgHandler {
             $svgName = substr($svgName, 5);
             if (looks_like_number($svgName)) { # Numerical value, map to name
                 my $val = int(0 + $svgName);
-                if (2==$val) {
+                if (1==$val || 6==$val) {
+                    $svgName = "artist";
+                } elsif (2==$val) {
                     $svgName = "role-composer";
                 } elsif (3==$val) {
                     $svgName = "role-conductor";
@@ -1994,6 +1998,14 @@ sub _svgHandler {
                 }
                 $filePath = $dir . "/HTML/material/html/images/" . $svgName . ".svg";
                 $altFilePath = Slim::Utils::Prefs::dir() . "/material-skin/images/" . $svgName . ".svg";
+            }
+            if ((! -e $filePath) && (! -e $altFilePath)) {
+                foreach my $k (keys %ROLE_MAP) {
+                    if (rindex($svgName, $k)>=0) {
+                        $filePath = $dir . "/HTML/material/html/images/role-" . $ROLE_MAP{$k}.".svg";
+                        last;
+                    }
+                }
             }
             if ((! -e $filePath) && (! -e $altFilePath)) {
                 $filePath = $dir . "/HTML/material/html/images/artist.svg";

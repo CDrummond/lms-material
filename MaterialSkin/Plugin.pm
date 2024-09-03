@@ -89,7 +89,7 @@ my %IGNORE_PROTOCOLS = map { $_ => 1 } ('mms', 'file', 'tmp', 'http', 'https', '
 
 my @BOOL_OPTS = ('allowDownload', 'playShuffle', 'touchLinks', 'showAllArtists', 'artistFirst', 'yearInSub', 'showComment', 'genreImages', 'maiComposer', 'showComposer', 'showConductor', 'showBand', 'combineAppsAndRadio');
 
-my %ROLE_MAP = ('bass' => 'bassist', 'cello' => 'cellist', 'drums' => 'drummer', 'flute' => 'flutist', 'guitar' => 'guitarist', 'piano' => 'pianist', 'saxophone' => 'saxophonist', 'trombone' => 'trombonist', 'violin' => 'violinist', 'vocals' => 'vocalist', 'singer' => 'vocalist');
+my %ROLE_MAP = ('bass' => 'bassist', 'cello' => 'cellist', 'drums' => 'drummer', 'flute' => 'flutist', 'guitar' => 'guitarist', 'keyboards' => 'keyboardist', 'piano' => 'pianist', 'saxophone' => 'saxophonist', 'trombone' => 'trombonist', 'trumpet' => 'trumpeter', 'violin' => 'violinist', 'vocals' => 'vocalist', 'singer' => 'vocalist');
 
 sub initPlugin {
     my $class = shift;

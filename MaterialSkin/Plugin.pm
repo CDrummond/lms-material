@@ -89,7 +89,31 @@ my %IGNORE_PROTOCOLS = map { $_ => 1 } ('mms', 'file', 'tmp', 'http', 'https', '
 
 my @BOOL_OPTS = ('allowDownload', 'playShuffle', 'touchLinks', 'showAllArtists', 'artistFirst', 'yearInSub', 'showComment', 'genreImages', 'maiComposer', 'showComposer', 'showConductor', 'showBand', 'combineAppsAndRadio');
 
-my %ROLE_MAP = ('bass' => 'bassist', 'cello' => 'cellist', 'drums' => 'drummer', 'flute' => 'flutist', 'guitar' => 'guitarist', 'keyboards' => 'keyboardist', 'piano' => 'pianist', 'saxophone' => 'saxophonist', 'trombone' => 'trombonist', 'trumpet' => 'trumpeter', 'violin' => 'violinist', 'vocals' => 'vocalist', 'singer' => 'vocalist');
+my %ROLE_ICON_MAP = (
+    'bass' => 'bassist',
+    'cello' => 'cellist',
+    'choirmaster' => 'conductor',
+    'concertmaster' => 'conductor',
+    'director' => 'conductor',
+    'drums' => 'drummer',
+    'flute' => 'flutist',
+    'guitar' => 'guitarist',
+    'harpsichord' => 'pianist',
+    'harpsichordist' => 'pianist',
+    'keyboards' => 'keyboardist',
+    'organ' => 'keyboardist',
+    'organist' => 'keyboardist',
+    'piano' => 'pianist',
+    'saxophone' => 'saxophonist',
+    'singer' => 'vocalist',
+    'songwriter' => 'composer',
+    'trombone' => 'trombonist',
+    'trumpet' => 'trumpeter',
+    'viola' => 'violinist',
+    'violist' => 'violinist',
+    'violin' => 'violinist',
+    'vocals' => 'vocalist'
+);
 
 sub initPlugin {
     my $class = shift;
@@ -1974,7 +1998,10 @@ sub _svgHandler {
     # If this is for a role type then fallback to artist.svg if it does not exist
     elsif (rindex($svgName, "role-")==0) {
         if ((! -e $filePath) && (! -e $altFilePath)) {
-            $svgName = substr($svgName, 5);
+            $svgName = substr($svgName, 5); # Remove 'role-'
+            $svgName =~ s/[-_,\s]+//g; # Remove some chars
+            my $roleName = "";
+            my $useRoleName = 0;
             if (looks_like_number($svgName)) { # Numerical value, map to name
                 my $val = int(0 + $svgName);
                 if (1==$val || 6==$val) {
@@ -1991,7 +2018,10 @@ sub _svgHandler {
                     my $roles = $serverprefs->get('userDefinedRoles');
                     foreach my $role (keys %{$roles}) {
                         if ($roles->{$role}->{id}==$val) {
-                            $svgName = "role-" . lc($role);
+                            $roleName = lc($role);
+                            $roleName =~ s/[-_,\s]+//g;
+                            $svgName = "role-" . $roleName;
+                            $useRoleName = 1;
                             last;
                         }
                     }
@@ -2000,9 +2030,11 @@ sub _svgHandler {
                 $altFilePath = Slim::Utils::Prefs::dir() . "/material-skin/images/" . $svgName . ".svg";
             }
             if ((! -e $filePath) && (! -e $altFilePath)) {
-                foreach my $k (keys %ROLE_MAP) {
-                    if (rindex($svgName, $k)>=0) {
-                        $filePath = $dir . "/HTML/material/html/images/role-" . $ROLE_MAP{$k}.".svg";
+                my $lookFor = $useRoleName==1 ? $roleName : $svgName;
+                foreach my $k (keys %ROLE_ICON_MAP) {
+                    if (rindex($lookFor, $k)>=0) {
+                        $filePath = $dir . "/HTML/material/html/images/role-" . $ROLE_ICON_MAP{$k} . ".svg";
+                        $altFilePath = Slim::Utils::Prefs::dir() . "/material-skin/images/role-" . $ROLE_ICON_MAP{$k} . ".svg";
                         last;
                     }
                 }

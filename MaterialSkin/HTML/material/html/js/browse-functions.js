@@ -2079,6 +2079,7 @@ function browseMyMusicMenu(view) {
             // Get basic, configurable, browse modes...
             var resp = parseBrowseModes(view, data);
             view.myMusic = resp.items;
+            view.stdItems = resp.stdItems;
 
             if (resp.listWorks!=lmsOptions.listWorks) {
                 lmsOptions.listWorks = resp.listWorks;
@@ -2104,7 +2105,7 @@ function browseMyMusicMenu(view) {
                                                             type: "app",
                                                             weight: c.weight ? parseFloat(c.weight) : 100 });
                                     }
-                                } else if (!c.id.startsWith("myMusicSearch") && !c.id.startsWith("opmlselect") && !stdItems.has(c.id)) {
+                                } else if (!c.id.startsWith("myMusicSearch") && !c.id.startsWith("opmlselect") && !view.stdItems.has(c.id)) {
                                     var command = view.buildCommand(c, "go", false);
                                     var item = { title: c.text,
                                                  command: command.command,

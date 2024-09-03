@@ -1543,10 +1543,13 @@ function browseItemAction(view, act, item, index, event) {
         clone.title=clone.title+SEPARATOR+ACTIONS[act].title;
         browseClick(view, clone);
     } else if (ALL_TRACKS_ACTION==act) {
+        // This 'All tracks' action is *only* activate when using context menu of a release-type header
         for (let a=0, loop=view.currentActions, len=loop.length; a<len; ++a) {
             if (loop[a].stdItem==STD_ITEM_ALL_TRACKS) {
                 let cmd = JSON.parse(JSON.stringify(loop[a].do));
-                cmd.params.push("release_type:"+item.id.split(':')[1]);
+                if (item.header) {
+                    cmd.params.push("release_type:"+item.id.split(':')[1]);
+                }
                 view.fetchItems(browseReplaceCommandTerms(view, cmd, item),
                         {cancache:false, id:"currentaction:"+view.current.id+":"+item.id,
                          title:ACTIONS[act].title+SEPARATOR+item.title,

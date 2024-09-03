@@ -13,6 +13,8 @@
  9. If using 'colour from cover' and have no track then default to 'Blue'
     colours.
 10. If using detailed sub-toolbar then place home button below back button.
+11. Use 'My Music' categories as basis of categories to show under Genres and
+    Years.
 
 5.2.6
 -----

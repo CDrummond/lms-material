@@ -1999,3 +1999,168 @@ function parseBrowseResp(data, parent, options, cacheKey, parentCommand, parentG
 
     return resp;
 }
+
+function parseBrowseModes(view, data, genreFilter, yearFilter, altId) {
+    let resp={stdItems:new Set(), items:[], listWorks:false};
+    if (data && data.result && data.result.modes_loop) {
+        for (var idx=0, loop=data.result.modes_loop, loopLen=loop.length; idx<loopLen; ++idx) {
+            var c = loop[idx];
+            resp.stdItems.add(c.id);
+            if (view.$store.state.disabledBrowseModes.has(c.id)) {
+                continue;
+            }
+            var command = browseBuildCommand(view, {id:c.id, actions:{go:{cmd:["browselibrary","items"], params:c.params}}}, "go", false, true);
+            var item = { title: c.text,
+                         command: command.command,
+                         params: command.params,
+                         weight: c.weight ? parseFloat(c.weight) : 100,
+                         id: undefined!=genreFilter || undefined!=yearFilter ? uniqueId(undefined!=genreFilter ? genreFilter : yearFilter, resp.items.length) : (MUSIC_ID_PREFIX+c.id),
+                         type: "group",
+                         icon: "music_note"
+                        };
+            var tryMapping = false;
+            if (c.id.startsWith("myMusicArtistsAudiobooks")) {
+                if (undefined!=genreFilter || undefined!=yearFilter) {
+                    continue;
+                }
+                item.icon = "edit";
+                item.cancache = true;
+            } else if (c.id.startsWith("myMusicArtists")) {
+                mapArtistIcon(item.params, item);
+                item.cancache = true;
+            } else if (c.id.startsWith("myMusicAlbumsVariousArtists")) {
+                item.icon = undefined;
+                item.svg = "album-multi";
+                item.isVa = true;
+                item.cancache = true;
+            } else if (c.id.startsWith("myMusicAlbumsAudiobooks")) {
+                if (undefined!=genreFilter || undefined!=yearFilter) {
+                    continue;
+                }
+                item.icon = "local_library";
+                item.cancache = true;
+            } else if (c.id.startsWith("myMusicAlbums")) {
+                item.cancache = true;
+                if (c.id=="myMusicAlbums") {
+                    item.icon = "album";
+                    if (lmsOptions.supportReleaseTypes) {
+                        item.title = i18n("Releases");
+                        item.icon = undefined;
+                        item.svg = "release"
+                    }
+                } else {
+                    let icon = releaseTypeIcon(getParamVal(command, "release_type", "ALBUM"));
+                    item.icon = icon.icon;
+                    item.svg = icon.svg;
+                }
+            } else if (c.id.startsWith("myMusicGenres")) {
+                if (undefined!=genreFilter) {
+                    continue;
+                }
+                item.svg = "guitar-acoustic";
+                item.icon = undefined;
+                item.cancache = false;
+                item.id = GENRES_ID;
+            } else if (c.id == "myMusicPlaylists") {
+                if (undefined!=genreFilter || undefined!=yearFilter) {
+                    continue;
+                }
+                item.icon = "list";
+                item.section = SECTION_PLAYLISTS;
+            } else if (c.id.startsWith("myMusicYears")) {
+                if (undefined!=genreFilter || undefined!=yearFilter) {
+                    continue;
+                }
+                item.icon = "date_range";
+                item.cancache = true;
+                item.id = YEARS_ID;
+            } else if (c.id == "myMusicNewMusic") {
+                item.icon = "new_releases";
+                item.section = SECTION_NEWMUSIC;
+            } else if (c.id == "myMusicRecentlyChangeAlbums") {
+                item.icon = undefined;
+                item.svg = "updated-music";
+                if (lmsOptions.supportReleaseTypes) {
+                    item.title = i18n("Recently Updated Releases");
+                }
+            } else if (c.id.startsWith("myMusicMusicFolder")) {
+                if (undefined!=genreFilter || undefined!=yearFilter) {
+                    continue;
+                }
+                item.icon = "folder";
+            } else if (c.id.startsWith("myMusicFileSystem")) {
+                if (undefined!=genreFilter || undefined!=yearFilter) {
+                    continue;
+                }
+                item.icon = "computer";
+            } else if (c.id == "myMusicRandomAlbums") {
+                item.svg = lmsOptions.supportReleaseTypes ? "dice-release" : "dice-album";
+                item.icon = undefined;
+                if (lmsOptions.supportReleaseTypes) {
+                    item.title = i18n("Random Releases");
+                }
+            } else if (c.id.startsWith("myMusicTopTracks")) {
+                if (undefined!=genreFilter || undefined!=yearFilter) {
+                    continue;
+                }
+                item.icon = "arrow_upward";
+                item.limit = 200;
+            } else if (c.id.startsWith("myMusicFlopTracks")) {
+                if (undefined!=genreFilter || undefined!=yearFilter) {
+                    continue;
+                }
+                item.icon = "arrow_downward";
+                item.limit = 200;
+            } else if (c.id == "myMusicWorks") {
+                item.svg = "classical-work";
+                item.icon = undefined;
+                resp.listWorks = true;
+            } else if (c.id.startsWith("myMusicWorks")) {
+                item.svg = "classical-work";
+                item.icon = undefined;
+            } else if (c.icon) {
+                if (c.icon.endsWith("/albums.png")) {
+                    item.icon = "album";
+                } else if (c.icon.endsWith("/artists.png")) {
+                    item.svg = "artist";
+                    item.icon = undefined;
+                } else if (c.icon.endsWith("/genres.png")) {
+                    if (undefined!=genreFilter) {
+                        continue;
+                    }
+                    item.svg = "guitar-acoustic";
+                    item.icon = undefined;
+                } else {
+                    tryMapping = true;
+                }
+            } else {
+                tryMapping = true;
+            }
+            if (tryMapping && mapIcon(c)) {
+                item.svg = c.svg;
+                item.icon = c.icon;
+            }
+            item.params.push("menu:1");
+            if (getField(item, "genre_id:")>=0) {
+                if (undefined!=genreFilter) {
+                    continue;
+                }
+                item['mapgenre']=true;
+            }
+            if (undefined!=yearFilter && getField(item, "year:")>=0) {
+                continue;
+            }
+            if (undefined!=genreFilter) {
+                item.params.push(genreFilter);
+            }
+            if (undefined!=yearFilter) {
+                item.params.push(yearFilter);
+            }
+            if (undefined!=altId) {
+                item.params.push(altId);
+            }
+            resp.items.push(item);
+        }
+    }
+    return resp;
+}

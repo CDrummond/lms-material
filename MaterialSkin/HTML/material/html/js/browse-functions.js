@@ -384,7 +384,7 @@ function browseHandleListResponse(view, item, command, resp, prevPage, appendIte
 
         // Get list of actions (e.g. biography, online services) to show in subtoolbar
         view.currentActions=[];
-        let listingArtistAlbums = view.current.id.startsWith("artist_id:");
+        let listingArtistAlbums = !view.current.isVa && view.current.id.startsWith("artist_id:");
         let listingAlbumTracks = view.current.id.startsWith("album_id:");
         let listingWorkAlbums = view.current.id.startsWith("work_id:");
         let listingAlbums = view.command.command[0]=="albums";
@@ -394,7 +394,7 @@ function browseHandleListResponse(view, item, command, resp, prevPage, appendIte
         let album_id = listingAlbumTracks ? originalId(view.current.id).split(":")[1] : undefined;
         let work_id = listingWorkAlbums ? view.current.id.split(":")[1] : undefined;
         if (!view.current.id.startsWith(MUSIC_ID_PREFIX)) {
-            if (!listingArtistAlbums && listingAlbums) {
+            if (!listingArtistAlbums && listingAlbums && !view.current.isVa) {
                 let pos = getField(command, "artist_id");
                 if (pos>=0) {
                     listingArtistAlbums = true;
@@ -1071,149 +1071,52 @@ function browseAddCategories(view, item, isGenre) {
     view.addHistory();
     view.items=[];
 
-    let command = view.history.length<2 || !view.history[view.history.length-2].current || !view.history[view.history.length-2].current.command ? undefined : view.history[view.history.length-2].current.command[0];
-
     // check if there is a grandparent ID we should use.
     let alt_id = view.history.length<1 || !view.history[view.history.length-1].current ? undefined : originalId(view.history[view.history.length-1].current.id);
     if (undefined!=alt_id && (alt_id.includes("/") || alt_id[0]==item.id[0] || /*alt_id.startsWith("year:") ||*/ alt_id.startsWith("artist_id:") || alt_id.startsWith("album_id:") || alt_id.startsWith("track_id:"))) {
         alt_id = undefined;
     }
 
-    let cat = { title: lmsOptions.separateArtistsList ? i18n("All Artists") : i18n("Artists"),
-            command: ["artists"],
-            params: [item.id, ARTIST_TAGS, 'include_online_only_artists:1'],
-            svg: "artist",
-            type: "group",
-            id: uniqueId(item.id, view.items.length)};
-    if (undefined!=alt_id) { cat.params.push(alt_id); }
-    view.items.push(cat);
-    if (lmsOptions.separateArtistsList) {
-        cat = { title: i18n("Album Artists"),
-                command: ["artists"],
-                params: [item.id, ARTIST_TAGS, 'role_id:ALBUMARTIST', 'include_online_only_artists:1'],
-                svg: "albumartist",
-                type: "group",
-                id: uniqueId(item.id, view.items.length)};
-        if (undefined!=alt_id) { cat.params.push(alt_id); }
-        view.items.push(cat);
-    }
-    cat = { title: lmsOptions.supportReleaseTypes ? i18n("Releases") : i18n("Albums"),
-            command: ["albums"],
-            params: [item.id, ALBUM_TAGS_PLACEHOLDER, SORT_KEY+ALBUM_SORT_PLACEHOLDER],
-            menu: [],
-            icon: lmsOptions.supportReleaseTypes ? undefined : "album",
-            svg: lmsOptions.supportReleaseTypes ? "release" : undefined,
-            type: "group",
-            id: uniqueId(item.id, view.items.length)};
-    if (undefined!=alt_id) { cat.params.push(alt_id); }
-    view.items.push(cat);
-    cat = { title: lmsOptions.supportReleaseTypes ? i18n("Random Releases") : i18n("Random Albums"),
-            command: ["albums"],
-            params: [item.id, ALBUM_TAGS_PLACEHOLDER, "sort:random"],
-            menu: [],
-            svg: lmsOptions.supportReleaseTypes ? "dice-release" : "dice-album",
-            type: "group",
-            id: uniqueId(item.id, view.items.length)};
-    if (undefined!=alt_id) { cat.params.push(alt_id); }
-    view.items.push(cat);
-    /* 'years' does not accept genre filter, so this would show all years regardless
-    * of whether there was a track in that year of this genre in that year or not :(
-    if (isGenre && (undefined==command || "years"!=command)) {
-        cat = { title: i18n("Years"),
-                command: ["years"],
-                params: [item.id],
-                icon: "date_range",
-                type: "group",
-                id: uniqueId(item.id, view.items.length)};
-        if (undefined!=alt_id) { cat.params.push(alt_id); }
-        view.items.push(cat);
-    }
-    */
-    if (!isGenre && (undefined==command || "genres"!=command)) {
-        cat = { title: i18n("Genres"),
-                command: ["genres"],
-                params: [item.id, "tags:s"],
-                svg: "guitar-acoustic",
-                type: "group",
-                id: uniqueId(item.id, view.items.length)};
-        if (undefined!=alt_id) { cat.params.push(alt_id); }
-        view.items.push(cat);
-    }
-    view.inGenre = isGenre ? item.title : 'years';
-    let showcomposer=isGenre ? useComposer(item.title) : lmsOptions.showComposer;
-    if (showcomposer) {
-        cat = { title: i18n("Composers"),
-                command: ["artists"],
-                params: ["role_id:COMPOSER", item.id, ARTIST_TAGS],
-                cancache: true,
-                svg: "composer",
-                type: "group",
-                id: uniqueId(item.id, view.items.length)};
-        if (undefined!=alt_id) { cat.params.push(alt_id); }
-        view.items.push(cat);
-    }
-    if (isGenre ? useConductor(item.title) : lmsOptions.showConductor) {
-        cat = { title: i18n("Conductors"),
-                command: ["artists"],
-                params: ["role_id:CONDUCTOR", item.id, ARTIST_TAGS],
-                cancache: true,
-                svg: "conductor",
-                type: "group",
-                id: uniqueId(item.id, view.items.length)};
-        if (undefined!=alt_id) { cat.params.push(alt_id); }
-        view.items.push(cat);
-    }
-    if (isGenre ? useBand(item.title) : lmsOptions.showBand) {
-        cat = { title: i18n("Bands"),
-                command: ["artists"],
-                params: ["role_id:BAND", item.id, ARTIST_TAGS],
-                cancache: true,
-                svg: "trumpet",
-                type: "group",
-                id: uniqueId(item.id, view.items.length)};
-        if (undefined!=alt_id) { cat.params.push(alt_id); }
-        view.items.push(cat);
-    }
-    if (showcomposer && LMS_VERSION>=90000) {
-        cat = { title: i18n("Works"),
-                command: ["works"],
-                params: [item.id, "tags:s"],
-                svg: "classical-work",
-                type: "group",
-                id: uniqueId(item.id, view.items.length)};
-        if (undefined!=alt_id) { cat.params.push(alt_id); }
-        view.items.push(cat);
-    }
-    cat = { title: i18n("All Tracks"),
+    view.fetchingItem = {id:item.id};
+    lmsCommand("", ["material-skin", "browsemodes"]).then(({data}) => {
+        view.fetchingItem = undefined;
+        logJsonMessage("RESP", data);
+        var resp = parseBrowseModes(view, data, isGenre ? item.id : undefined, isGenre ? undefined : item.id, alt_id);
+        view.items = resp.items;
+        view.items.sort(weightSort);
+        var allTracks = { title: i18n("All Tracks"),
             command: ["tracks"],
             params: [item.id, trackTags(true)+"ely", SORT_KEY+TRACK_SORT_PLACEHOLDER],
             icon: "music_note",
             type: "group",
             id: ALL_TRACKS_ID};
-    if (undefined!=alt_id) { cat.params.push(alt_id); }
-    view.items.push(cat);
+        if (undefined!=alt_id) { allTracks.params.push(alt_id); }
+        view.items.push(allTracks);
+        view.headerTitle = stripLinkTags(item.title);
+        view.headerSubTitle = i18n("Select category");
+        browseSetScroll(view);
+        view.isTop = false;
+        view.jumplist = view.filteredJumplist = [];
+        view.grid = {allowed:true, use:isSetToUseGrid(GRID_OTHER), numColumns:0, ih:GRID_MIN_HEIGHT, rows:[], few:false, haveSubtitle:true};
+        view.currentActions=[];
+        view.tbarActions=[];
+        view.layoutGrid(true);
 
-    view.headerTitle = stripLinkTags(item.title);
-    view.headerSubTitle = i18n("Select category");
-    browseSetScroll(view);
-    view.isTop = false;
-    view.jumplist = view.filteredJumplist = [];
-    view.grid = {allowed:true, use:isSetToUseGrid(GRID_OTHER), numColumns:0, ih:GRID_MIN_HEIGHT, rows:[], few:false, haveSubtitle:true};
-    view.currentActions=[];
-    view.tbarActions=[];
-    view.layoutGrid(true);
-
-    var custom = getCustomActions(isGenre ? "genre" : "year", false);
-    if (undefined!=custom) {
-        for (var i=0, len=custom.length; i<len; ++i) {
-            custom[i].custom=true;
-            view.currentActions.push(custom[i]);
+        var custom = getCustomActions(isGenre ? "genre" : "year", false);
+        if (undefined!=custom) {
+            for (var i=0, len=custom.length; i<len; ++i) {
+                custom[i].custom=true;
+                view.currentActions.push(custom[i]);
+            }
         }
-    }
-    view.current = item;
-    view.currentActions.push({action:(view.grid.use ? USE_LIST_ACTION : USE_GRID_ACTION)});
-    view.currentItemImage = item.image;
-    view.setBgndCover();
+        view.current = item;
+        view.currentActions.push({action:(view.grid.use ? USE_LIST_ACTION : USE_GRID_ACTION)});
+        view.currentItemImage = item.image;
+        view.setBgndCover();
+    }).catch(err => {
+        console.log(err);
+        view.fetchingItem = undefined;
+    });
 }
 
 function browseItemAction(view, act, item, index, event) {
@@ -2173,130 +2076,16 @@ function browseMyMusicMenu(view) {
     lmsCommand("", ["material-skin", "browsemodes"]).then(({data}) => {
         if (data && data.result) {
             logJsonMessage("RESP", data);
-            view.myMusic = [];
-            var stdItems = new Set();
-            var listWorks = false;
             // Get basic, configurable, browse modes...
-            if (data && data.result && data.result.modes_loop) {
-                for (var idx=0, loop=data.result.modes_loop, loopLen=loop.length; idx<loopLen; ++idx) {
-                    var c = loop[idx];
-                    stdItems.add(c.id);
-                    if (view.$store.state.disabledBrowseModes.has(c.id)) {
-                        continue;
-                    }
-                    var command = browseBuildCommand(view, {id:c.id, actions:{go:{cmd:["browselibrary","items"], params:c.params}}}, "go", false, true);
-                    var item = { title: c.text,
-                                 command: command.command,
-                                 params: command.params,
-                                 weight: c.weight ? parseFloat(c.weight) : 100,
-                                 id: MUSIC_ID_PREFIX+c.id,
-                                 type: "group",
-                                 icon: "music_note"
-                                };
-                    var tryMapping = false;
-                    if (c.id.startsWith("myMusicArtistsAudiobooks")) {
-                        item.icon = "edit";
-                        item.cancache = true;
-                    } else if (c.id.startsWith("myMusicArtists")) {
-                        mapArtistIcon(item.params, item);
-                        item.cancache = true;
-                    } else if (c.id.startsWith("myMusicAlbumsVariousArtists")) {
-                        item.icon = undefined;
-                        item.svg = "album-multi";
-                        item.cancache = true;
-                    } else if (c.id.startsWith("myMusicAlbumsAudiobooks")) {
-                        item.icon = "local_library";
-                        item.cancache = true;
-                    } else if (c.id.startsWith("myMusicAlbums")) {
-                        item.cancache = true;
-                        if (c.id=="myMusicAlbums") {
-                            item.icon = "album";
-                            if (lmsOptions.supportReleaseTypes) {
-                                item.title = i18n("Releases");
-                                item.icon = undefined;
-                                item.svg = "release"
-                            }
-                        } else {
-                            let icon = releaseTypeIcon(getParamVal(command, "release_type", "ALBUM"));
-                            item.icon = icon.icon;
-                            item.svg = icon.svg;
-                        }
-                    } else if (c.id.startsWith("myMusicGenres")) {
-                        item.svg = "guitar-acoustic";
-                        item.icon = undefined;
-                        item.cancache = false;
-                        item.id = GENRES_ID;
-                    } else if (c.id == "myMusicPlaylists") {
-                        item.icon = "list";
-                        item.section = SECTION_PLAYLISTS;
-                    } else if (c.id.startsWith("myMusicYears")) {
-                        item.icon = "date_range";
-                        item.cancache = true;
-                        item.id = YEARS_ID;
-                    } else if (c.id == "myMusicNewMusic") {
-                        item.icon = "new_releases";
-                        item.section = SECTION_NEWMUSIC;
-                    } else if (c.id == "myMusicRecentlyChangeAlbums") {
-                        item.icon = undefined;
-                        item.svg = "updated-music";
-                        if (lmsOptions.supportReleaseTypes) {
-                            item.title = i18n("Recently Updated Releases");
-                        }
-                    } else if (c.id.startsWith("myMusicMusicFolder")) {
-                        item.icon = "folder";
-                    } else if (c.id.startsWith("myMusicFileSystem")) {
-                        item.icon = "computer";
-                    } else if (c.id == "myMusicRandomAlbums") {
-                        item.svg = lmsOptions.supportReleaseTypes ? "dice-release" : "dice-album";
-                        item.icon = undefined;
-                        if (lmsOptions.supportReleaseTypes) {
-                            item.title = i18n("Random Releases");
-                        }
-                    } else if (c.id.startsWith("myMusicTopTracks")) {
-                        item.icon = "arrow_upward";
-                        item.limit = 200;
-                    } else if (c.id.startsWith("myMusicFlopTracks")) {
-                        item.icon = "arrow_downward";
-                        item.limit = 200;
-                    } else if (c.id == "myMusicWorks") {
-                        item.svg = "classical-work";
-                        item.icon = undefined;
-                        listWorks = true;
-                    } else if (c.id.startsWith("myMusicWorks")) {
-                        item.svg = "classical-work";
-                        item.icon = undefined;
-                    } else if (c.icon) {
-                        if (c.icon.endsWith("/albums.png")) {
-                            item.icon = "album";
-                        } else if (c.icon.endsWith("/artists.png")) {
-                            item.svg = "artist";
-                            item.icon = undefined;
-                        } else if (c.icon.endsWith("/genres.png")) {
-                            item.svg = "guitar-acoustic";
-                            item.icon = undefined;
-                        } else {
-                            tryMapping = true;
-                        }
-                    } else {
-                        tryMapping = true;
-                    }
-                    if (tryMapping && mapIcon(c)) {
-                        item.svg = c.svg;
-                        item.icon = c.icon;
-                    }
-                    item.params.push("menu:1");
-                    if (getField(item, "genre_id:")>=0) {
-                        item['mapgenre']=true;
-                    }
-                    view.myMusic.push(item);
-                }
-            }
-            if (listWorks!=lmsOptions.listWorks) {
-                lmsOptions.listWorks = listWorks;
-                setLocalStorageVal('listWorks', listWorks);
+            var resp = parseBrowseModes(view, data);
+            view.myMusic = resp.items;
+
+            if (resp.listWorks!=lmsOptions.listWorks) {
+                lmsOptions.listWorks = resp.listWorks;
+                setLocalStorageVal('listWorks', resp.listWorks);
             }
             // Now get standard menu, for extra (e.g. CustomBrowse) entries...
-            if (!view.playerId()) { // No player, then can't get playre specific items just yet
+            if (!view.playerId()) { // No player, then can't get player specific items just yet
                 view.processMyMusicMenu();
                 view.myMusic[0].needsUpdating=true; // Still needs updating to get the rest of view...
                 view.fetchingItem = undefined;

@@ -47,15 +47,15 @@ PLUGIN_MATERIAL_SKIN_BAND_GENRES
 	HU	Zenekar műfajok
 
 PLUGIN_MATERIAL_SKIN_BAND_GENRES_DESC
-	CS	Seznam žánrů podporujících skupinu oddělený čárkami. Při zadání jednoho z těchto žánrů budete dotázáni, zda si přejete procházet podle skupiny.
-	DE	Komma-getrennte Liste von Stilrichtungen, die Bands unterstützen. Wenn du eine dieser Stilrichtungen wählst, wirst du gefragt, ob du nach Bands durchsuchen willst.
-	EN	Comma-separated list of genres supporting band. When entering one of these genres, you will be asked if you wish to browse by band.
-	IT	Lista separata da virgola dei generi che supportano il tag "band". All'inserimento di uno di questi generi, verrà richiesto se si desidera sfogliare per gruppo/orchestra.
-	FR	Liste des genres concernés, séparés par des virgules. Lorsque vous choisirez l'un de ces genres, il vous sera demandé si vous souhaitez naviguer par groupe/orchestre.
-	NL	Komma gescheiden lijst van band genres. Indien deze genres worden geselecteerd, wordt er gevraagd of je wilt bladeren op band.
-	ZH_TW	以逗號來將支援的樂團音樂風格作分隔，當輸入其中一種音樂風格時，系統會詢問您是否希望按樂團瀏覽。
-	ZH_CN	支持乐团流派列表，以逗号分隔。当进入其中一种流派时，系统会询问您是否希望按乐团浏览。
-	HU	Vesszővel elválasztott lista a műfajt támogató zenekarnak. Amikor belép az egyik ilyen műfajba, megkérdezi, hogy szeretné-e böngészni a zenekart.
+	CS	Seznam žánrů podporujících skupinu oddělený čárkami.
+	DE	Komma-getrennte Liste von Stilrichtungen, die Bands unterstützen.
+	EN	Comma-separated list of genres supporting band.
+	IT	Lista separata da virgola dei generi che supportano il tag "band".
+	FR	Liste des genres concernés, séparés par des virgules.
+	NL	Komma gescheiden lijst van band genres.
+	ZH_TW	以逗號來將支援的樂團音樂風格作分隔。
+	ZH_CN	支持乐团流派列表，以逗号分隔。
+	HU	Vesszővel elválasztott lista a műfajt támogató zenekarnak.
 
 PLUGIN_MATERIAL_SKIN_COMPOSER_GENRES
 	CS	Žánry skladatelů
@@ -69,15 +69,15 @@ PLUGIN_MATERIAL_SKIN_COMPOSER_GENRES
 	HU	Zeneszerző műfajok
 
 PLUGIN_MATERIAL_SKIN_COMPOSER_GENRES_DESC
-	CS	Seznam žánrů podporujících skladatele oddělený čárkami. Při zadání jednoho z těchto žánrů budete dotázáni, zda si přejete procházet podle skladatele.
-	DE	Komma-getrennte Liste von Stilrichtungen, die Komponisten unterstützen. Wenn du eine dieser Stilrichtungen wählst, wirst du gefragt, ob du nach Komponisten durchsuchen willst.
-	EN	Comma-separated list of genres supporting composers. When entering one of these genres, you will be asked if you wish to browse by composer.
-	IT	Lista separata da virgola dei generi che supportano il tag "composer". All'inserimento di uno di questi generi, verrà richiesto se si desidera sfogliare per compositore.
-	FR	Liste des genres concernés, séparés par des virgules. Lorsque vous choisirez l'un de ces genres, il vous sera demandé si vous souhaitez naviguer par compositeur.
-	NL	Komma gescheiden lijst van componist genres. Indien deze genres worden geselecteerd, wordt er gevraagd of je wilt bladeren op componist.
-	ZH_TW	以逗號來將支援的作曲家音樂風格作分隔，當輸入其中一種音樂風格時，系統會詢問您是否希望按作曲家瀏覽。
-	ZH_CN	支持作曲家流派列表，以逗号分隔。当进入其中一种流派时，系统会询问您是否希望按作曲家浏览。
-	HU	Vesszővel elválasztott lista a műfajt támogató zeneszerzőhöz. Amikor belép az egyik ilyen műfajba, megkérdezi, hogy szeretné-e böngészni a zeneszerzőt.
+	CS	Seznam žánrů podporujících skladatele oddělený čárkami.
+	DE	Komma-getrennte Liste von Stilrichtungen, die Komponisten unterstützen.
+	EN	Comma-separated list of genres supporting composers.
+	IT	Lista separata da virgola dei generi che supportano il tag "composer".
+	FR	Liste des genres concernés, séparés par des virgules.
+	NL	Komma gescheiden lijst van componist genres.
+	ZH_TW	以逗號來將支援的作曲家音樂風格作分隔。
+	ZH_CN	支持作曲家流派列表，以逗号分隔。
+	HU	Vesszővel elválasztott lista a műfajt támogató zeneszerzőhöz.
 
 PLUGIN_MATERIAL_SKIN_CONDUCTOR_GENRES
 	CS	Žánry dirigentů
@@ -91,15 +91,15 @@ PLUGIN_MATERIAL_SKIN_CONDUCTOR_GENRES
 	HU	Karmester műfajok
 
 PLUGIN_MATERIAL_SKIN_CONDUCTOR_GENRES_DESC
-	CS	Seznam žánrů podporujících dirigenta oddělený čárkami. Při zadávání jednoho z těchto žánrů budete dotázáni, zda si přejete procházet podle dirigenta.
-	DE	Komma-getrennte Liste von Stilrichtungen, die Dirigenten unterstützen. Wenn du eine dieser Stilrichtungen wählst, wirst du gefragt, ob du nach Dirigenten durchsuchen willst.
-	EN	Comma-separated list of genres supporting conductors. When entering one of these genres, you will be asked if you wish to browse by conductor.
-	IT	Lista separata da virgola dei generi che supportano il tag "conductor". All'inserimento di uno di questi generi, verrà richiesto se si desidera sfogliare per direttore d'orchestra.
-	FR	Liste des genres concernés, séparés par des virgules. Lorsque vous choisirez l'un de ces genres, il vous sera demandé si vous souhaitez naviguer par chef d'orchestre.
-	NL	Komma gescheiden lijst van dirigent genres. Indien deze genres worden geselecteerd, wordt er gevraagd of je wilt bladeren op dirigent.
-	ZH_TW	以逗號來將支援的指揮家音樂風格作分隔，當輸入其中一種音樂風格時，系統會詢問您是否希望按指揮家瀏覽。
-	ZH_CN	支持指挥家流派列表，以逗号分隔。当进入其中一种流派时，系统会询问您是否希望按指挥家浏览。
-	HU	Vesszővel elválasztott lista a műfajt támogató karmesterhez. Amikor belép az egyik ilyen műfajba, megkérdezi, hogy szeretné-e böngészni a karmestert.
+	CS	Seznam žánrů podporujících dirigenta oddělený čárkami.
+	DE	Komma-getrennte Liste von Stilrichtungen, die Dirigenten unterstützen.
+	EN	Comma-separated list of genres supporting conductors.
+	IT	Lista separata da virgola dei generi che supportano il tag "conductor".
+	FR	Liste des genres concernés, séparés par des virgules.
+	NL	Komma gescheiden lijst van dirigent genres.
+	ZH_TW	以逗號來將支援的指揮家音樂風格作分隔。
+	ZH_CN	支持指挥家流派列表，以逗号分隔。
+	HU	Vesszővel elválasztott lista a műfajt támogató karmesterhez.
 
 PLUGIN_MATERIAL_SKIN_DEFAULT_COMPOSER_GENRES
 	CS	Klasika, Avantgarda, Baroko, Komorní hudba, Zpěv, Sbor, Klasický crossover, Raná hudba, Vrcholná klasika, Impresionismus, Jazz, Středověk, Minimalismus, Moderní kompozice, Opera, Orchestr, Renesance, Romantika, Symfonie, Svatební hudba, Classical, Avant-Garde, Baroque, Chamber Music, Chant, Choral, Classical Crossover, Early Music, High Classical, Impressionist, Jazz, Medieval, Minimalism, Modern Composition, Opera, Orchestral, Renaissance, Romantic, Symphony, Wedding Music, Symphonies

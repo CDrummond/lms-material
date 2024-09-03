@@ -10,22 +10,40 @@
   "start_url": "/material",
   "icons": [
     {
-      "src": "html/images/icon-192.png",
-      "sizes": "192x192",
-      "type": "image/png",
-      "purpose": "any"
-    },
-    {
       "src": "html/images/icon.png",
       "sizes": "512x512",
       "type": "image/png",
       "purpose": "any"
     },
     {
-      "src": "html/images/icon-maskable.png",
-      "sizes": "512x512",
+      "src": "html/images/icon-192.png",
+      "sizes": "192x192",
       "type": "image/png",
-      "purpose": "maskable"
+      "purpose": "any"
+    },
+    {
+      "src": "html/images/icon-1024.png",
+      "sizes": "1024x1024",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "purpose": "maskable",
+      "sizes": "512x512",
+      "src": "html/images/icon-maskable.png",
+      "type": "image/png"
+    },
+    {
+      "purpose": "maskable",
+      "sizes": "192x192",
+      "src": "html/images/icon-maskable-192.png",
+      "type": "image/png"
+    },
+    {
+      "purpose": "maskable",
+      "sizes": "1024x1024",
+      "src": "html/images/icon-maskable-1024.png",
+      "type": "image/png"
     }
   ],
   "categories": [

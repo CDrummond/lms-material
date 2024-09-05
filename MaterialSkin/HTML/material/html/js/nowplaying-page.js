@@ -220,8 +220,8 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
      <div v-if="techInfo" class="np-bar-tech ellipsis">{{technicalInfo}}</div>
      <div v-else-if="npBarRatings && (repAltBtn.show || shuffAltBtn.show)" class="np-bar-rating np-thumbs-desktop"><v-btn v-if="repAltBtn.show" :title="repAltBtn.tooltip" flat icon v-longpress="repeatClicked" class="np-std-button" v-bind:class="{'disabled':noPlayer}"><v-icon v-if="repAltBtn.icon" class="media-icon">{{repAltBtn.icon}}</v-icon><img v-else :src="repAltBtn.image" class="btn-img"></img></v-btn><v-btn v-if="shuffAltBtn.show" :title="shuffAltBtn.tooltip" flat icon @click="shuffleClicked" class="np-std-button"><v-icon v-if="shuffAltBtn.icon" class="media-icon">{{shuffAltBtn.icon}}</v-icon><img v-else :src="shuffAltBtn.image" class="btn-img"></img></v-btn></div>
      <v-rating v-else-if="showRatings" class="np-bar-rating" v-model="rating.value" half-increments hover clearable @click.native="setRating(true)" :readonly="undefined==LMS_P_RP"></v-rating>
-     <div v-else-if="playerStatus.playlist.count>1" class="np-bar-tech" v-bind:class="{'link-item':totalTogglesQueue && !coloredToolbars, 'link-item-ct':totalTogglesQueue && coloredToolbars}" @click.stop="trackCountClicked">{{playerStatus.playlist.current | trackCount(playerStatus.playlist.count)}} <v-btn class="np-bar-queue" flat icon v-if="!pinQueue"><v-icon v-if="showQueue">queue_music</v-icon><img v-else class="svg-img" :src="'queue_music_outline' | svgIcon(darkUi|coloredToolbars)"></img></v-btn></div>
-     <div v-else-if="!pinQueue" class="np-bar-tech"><v-btn class="np-bar-queue" flat icon @click.stop="trackCountClicked"><v-icon v-if="showQueue">queue_music</v-icon><img v-else class="svg-img" :src="'queue_music_outline' | svgIcon(darkUi)"></img></v-btn></div>
+     <div v-else-if="playerStatus.playlist.count>1" class="np-bar-tech" v-bind:class="{'link-item':totalTogglesQueue && !coloredToolbars, 'link-item-ct':totalTogglesQueue && coloredToolbars}" @click.stop="trackCountClicked">{{playerStatus.playlist.current | trackCount(playerStatus.playlist.count)}} <v-btn class="np-bar-queue" flat icon v-if="!pinQueue"><v-icon v-if="showQueue">queue_music</v-icon><img v-else class="svg-img" :src="'queue_music_outline' | svgIcon(darkUi||coloredToolbars)"></img></v-btn></div>
+     <div v-else-if="!pinQueue" class="np-bar-tech"><v-btn class="np-bar-queue" flat icon @click.stop="trackCountClicked"><v-icon v-if="showQueue">queue_music</v-icon><img v-else class="svg-img" :src="'queue_music_outline' | svgIcon(darkUi||coloredToolbars)"></img></v-btn></div>
      <div v-else class="np-bar-tech">&nbsp;</div>
     </v-list-tile-action>
    </v-list-tile>
@@ -857,6 +857,9 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
                                 : this.playerStatus.current.composer_id,
                              composer_ids: this.playerStatus.current.composer_ids,
                              albumartist: this.playerStatus.current.albumartist,
+                             albumartist_id: this.playerStatus.current.albumartist_ids
+                                ? this.playerStatus.current.albumartist_ids[0]
+                                : this.playerStatus.current.artist_id,
                              albumartist_ids: this.playerStatus.current.albumartist_ids,
                              album: this.playerStatus.current.albumName,
                              album_id: this.playerStatus.current.album_id,
@@ -870,6 +873,7 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
                                  undefined==this.infoTrack.composer_id &&
                                  undefined==this.infoTrack.composer_ids &&
                                  undefined==this.infoTrack.albumartist &&
+                                 undefined==this.infoTrack.albumartist_id &&
                                  undefined==this.infoTrack.albumartist_ids &&
                                  undefined==this.infoTrack.album &&
                                  undefined==this.infoTrack.url;

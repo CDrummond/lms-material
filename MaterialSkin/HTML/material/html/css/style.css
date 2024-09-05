@@ -274,7 +274,7 @@
 
 .np-bar-details .v-list__tile__content, .np-bar-details .v-list__tile__content .v-list__tile__sub-title,
 .np-bar-details .v-list__tile__content .v-list__tile__title, .np-bar-details .np-bar-tech, .np-bar-details .np-bar-time, .np-bar-controls div i,
-.np-bar-details div.v-rating i.primary--text, .np-bar-details div.v-rating i.accent--text {
+.np-bar-details div i, .np-bar-details div.v-rating i.primary--text, .np-bar-details div.v-rating i.accent--text {
  color:var(--bottom-toolbar-text-color) !important;
 }
 

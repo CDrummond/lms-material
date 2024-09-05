@@ -200,7 +200,7 @@ function parseBrowseResp(data, parent, options, cacheKey, parentCommand, parentG
                                          h: 0});
                         resp.canUseGrid = true;
                         numImages++;
-                    } else if(options.allowNoTitle) {
+                    } else if (options.allowNoTitle) {
                         resp.items.push(i);
                     } else {
                         data.result.count--;
@@ -792,13 +792,12 @@ function parseBrowseResp(data, parent, options, cacheKey, parentCommand, parentG
                     resp.subtitle=0==resp.items.length ? i18n("Empty") : i18np("1 Track", "%1 Tracks", resp.items.length);
                 } else {
                     if (resp.items.length>0 &&
-                        ( ("spotty"==command) ||
-                           ("trackinfo"==command && getIndex(data.params[1], "url:spotify://track:")>0))) {
-                        if (resp.allowHoverBtns && resp.items[0].menu.length>0 && resp.items[0].menu[0]==PLAY_ACTION &&
-                            resp.items[resp.items.length-1].style=='itemNoAction') {
+                        ( ("spotty"==command) || ("trackinfo"==command && getIndex(data.params[1], "url:spotify://track:")>0))) {
+                        if (resp.allowHoverBtns && undefined!=resp.items[0].menu  && resp.items[0].menu.length>0 &&
+                            resp.items[0].menu[0]==PLAY_ACTION && resp.items[resp.items.length-1].style=='itemNoAction') {
                             resp.actionItems = [];
                             while (resp.items.length>0 &&
-                                !(resp.items[resp.items.length-1].menu.length>0 && resp.items[resp.items.length-1].menu[0]==PLAY_ACTION)) {
+                                !(undefined!=resp.items[resp.items.length-1].menu && resp.items[resp.items.length-1].menu.length>0 && resp.items[resp.items.length-1].menu[0]==PLAY_ACTION)) {
                                 let itm = resp.items.pop();
                                 if (itm.style=='itemNoAction') { // Year?
                                     let parts = itm.title.split(':');

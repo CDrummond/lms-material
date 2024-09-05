@@ -857,6 +857,9 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
                                 : this.playerStatus.current.composer_id,
                              composer_ids: this.playerStatus.current.composer_ids,
                              albumartist: this.playerStatus.current.albumartist,
+                             albumartist_id: this.playerStatus.current.albumartist_ids
+                                ? this.playerStatus.current.albumartist_ids[0]
+                                : this.playerStatus.current.artist_id,
                              albumartist_ids: this.playerStatus.current.albumartist_ids,
                              album: this.playerStatus.current.albumName,
                              album_id: this.playerStatus.current.album_id,
@@ -870,6 +873,7 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
                                  undefined==this.infoTrack.composer_id &&
                                  undefined==this.infoTrack.composer_ids &&
                                  undefined==this.infoTrack.albumartist &&
+                                 undefined==this.infoTrack.albumartist_id &&
                                  undefined==this.infoTrack.albumartist_ids &&
                                  undefined==this.infoTrack.album &&
                                  undefined==this.infoTrack.url;

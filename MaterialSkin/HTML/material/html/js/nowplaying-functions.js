@@ -840,8 +840,11 @@ function nowplayingFetchArtistInfo(view) {
 
 function nowplayingFetchAlbumInfo(view) {
     let albumartist = view.infoTrack.albumartist!=undefined ? view.infoTrack.albumartist : view.infoTrack.artist;
-    if (view.info.tabs[ALBUM_TAB].albumartist!=albumartist || view.info.tabs[ALBUM_TAB].artist_id!=view.infoTrack.artist_id ||
-        view.info.tabs[ALBUM_TAB].album!=view.infoTrack.album || view.info.tabs[ALBUM_TAB].album_id!=view.infoTrack.album_id) {
+    let albumartist_id = view.infoTrack.albumartist_id!=undefined ? view.infoTrack.albumartist_id : view.infoTrack.artist_id;
+    if (undefined!=view.infoTrack.album_id
+            ? view.info.tabs[ALBUM_TAB].album_id!=view.infoTrack.album_id
+            : (view.info.tabs[ALBUM_TAB].albumartist!=albumartist || view.info.tabs[ALBUM_TAB].albumartist_id!=albumartist_id ||
+        view.info.tabs[ALBUM_TAB].album!=view.infoTrack.album || view.info.tabs[ALBUM_TAB].album_id!=view.infoTrack.album_id)) {
         view.info.tabs[ALBUM_TAB].sections[0].items=[];
         view.info.tabs[ALBUM_TAB].sections[0].more=undefined;
         view.info.tabs[ALBUM_TAB].texttitle=nowPlayingHeader(view.infoTrack.album);
@@ -849,7 +852,7 @@ function nowplayingFetchAlbumInfo(view) {
         view.info.tabs[ALBUM_TAB].image=undefined;
         view.info.tabs[ALBUM_TAB].isMsg=true;
         view.info.tabs[ALBUM_TAB].albumartist=albumartist;
-        view.info.tabs[ALBUM_TAB].artist_id=view.infoTrack.artist_id;
+        view.info.tabs[ALBUM_TAB].albumartist_id=albumartist_id;
         view.info.tabs[ALBUM_TAB].album=view.infoTrack.album;
         view.info.tabs[ALBUM_TAB].album_id=view.infoTrack.album_id;
         view.info.tabs[ALBUM_TAB].reqId++;
@@ -863,8 +866,8 @@ function nowplayingFetchAlbumInfo(view) {
             if (view.infoTrack.album!=undefined) {
                 command.push("album:"+revertHtmlBrackets(view.infoTrack.album));
             }
-            if (view.infoTrack.artist_id!=undefined) {
-                command.push("artist_id:"+view.infoTrack.artist_id);
+            if (albumartist_id!=undefined) {
+                command.push("artist_id:"+albumartist_id);
             }
             if (albumartist!=undefined) {
                 command.push("artist:"+revertHtmlBrackets(albumartist));

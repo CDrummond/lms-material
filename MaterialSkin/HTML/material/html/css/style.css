@@ -132,6 +132,10 @@
  --pbar-bgnd:transparent;
 }
 
+.plainprogress {
+ --pbar-bgnd:transparent;
+}
+
 @media (orientation:landscape) and (max-width: 1000px) {
  :root {
   --np-wide-left:50vw;
@@ -201,7 +205,7 @@
  --bottom-toolbar-text-color:var(--light-text-color);
 }
 
-.tinted:is(.theme--dark) {
+.tinted:is(.theme--dark), .plainprogress:is(.theme--dark) {
  --pbar-bgnd:transparent;
 }
 
@@ -3905,10 +3909,12 @@ div.v-subheader {
  border-radius: 0px;
 }
 
+.plainprogress .pbar .value, .plainprogress .pbar .buffer,
 .np-full .pbar .value, .np-full .pbar .buffer {
  background-color: var(--text-color);
 }
 
+.plainprogress .lms-toolbar .v-slider .primary,
 .np-full .lms-toolbar .v-slider .primary {
   background-color: var(--text-color) !important;
   border-color: var(--text-color) !important;

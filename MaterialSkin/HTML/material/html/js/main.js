@@ -421,6 +421,9 @@ var app = new Vue({
         },
         tinted() {
             return this.$store.state.tinted && this.$store.state.cMixSupported && (!this.queueEmpty || this.$store.state.color!=COLOR_FROM_COVER)
+        },
+        plainprogress() {
+            return this.$store.state.color==COLOR_FROM_COVER
         }
     },
     methods: {

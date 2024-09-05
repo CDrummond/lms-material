@@ -161,7 +161,7 @@ function browseActions(view, item, args, count, showRoles, showWorks) {
             }
         }
         if (LMS_P_BMIX && !queryParams.party && (undefined!=args['artist_id'] || undefined!=args['album_id'])) {
-            actions.push({title:i18n('Create Mix'), svg:'music-mix', stdItem:STD_ITEM_MIX,
+            actions.push({title:i18n('Create mix'), svg:'music-mix', stdItem:STD_ITEM_MIX,
                           do:{ command:["blissmixer", "mix"],
                                params:["menu:1", "useContextMenu:1", undefined!=args['album_id'] ? "album_id:"+args['album_id'] : "artist_id:"+args['artist_id']]}, weight:103});
         }

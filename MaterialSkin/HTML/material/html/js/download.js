@@ -23,8 +23,8 @@ function downloadViaBrowser(items) {
                      : item.filename);
 
         downloadElem = document.createElement('a');
-        downloadElem.download = name;
-        downloadElem.href = '/material/download/' + item.id;
+        downloadElem.download = name.replaceAll(":", "_").replaceAll("*", "_").replaceAll("?", "_").replaceAll("/", "-");
+        downloadElem.href = '/material/download/' + encodeURI(name.replaceAll(":", "_").replaceAll("*", "_").replaceAll("?", "_")).replaceAll("/", "-")+"?id="+item.id;
         downloadElem.style.display = 'none';
         document.body.append(downloadElem);
         downloadElem.click();

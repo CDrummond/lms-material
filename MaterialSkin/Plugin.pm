@@ -2255,7 +2255,21 @@ sub _downloadHandler {
     return unless $httpClient->connected;
 
     my $request = $response->request;
-    my $obj = Slim::Schema->find('Track', basename($request->uri->path));
+    my $id = undef;
+
+    if ($request->uri->can('query_param')) {
+        $id = $request->uri->query_param('id');
+    } else { # Manually extract "id=trackid" query parameter...
+        my $uri = $request->uri->as_string;
+        my $start = index($uri, "id=");
+
+        if ($start > 0) {
+            $start += 3;
+            $id = "#" . substr($uri, $start+3);
+        }
+    }
+
+    my $obj = Slim::Schema->find('Track', $id);
 
     if (blessed($obj) && Slim::Music::Info::isSong($obj) && Slim::Music::Info::isFile($obj->url)) {
         $response->code(RC_OK);

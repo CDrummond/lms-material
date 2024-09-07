@@ -3928,6 +3928,6 @@ div.v-subheader {
  visibility: hidden!important;
 }
 
-.v-text-field .v-label {
+.v-text-field .v-label--active {
  top:8px!important;
 }

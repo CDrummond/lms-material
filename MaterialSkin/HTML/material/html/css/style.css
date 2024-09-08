@@ -3857,3 +3857,7 @@ div.v-subheader {
 .v-text-field .v-label--active {
  top:8px!important;
 }
+
+.lms-list .v-text-field .v-label--active {
+ top:9px!important;
+}

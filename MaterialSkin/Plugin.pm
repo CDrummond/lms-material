@@ -47,6 +47,7 @@ my $prefs = preferences('plugin.material-skin');
 my $serverprefs = preferences('server');
 my $skinMgr;
 my $listOfTranslations = "";
+my @listOfRoles = ();
 
 use constant RANDOM_MIX_EXT => '.mix';
 
@@ -234,6 +235,7 @@ sub initPlugin {
 
     $class->initCLI();
     $class->initTranslationList();
+    $class->initRoleList();
     if (Slim::Utils::Versions->compareVersions($::VERSION, '8.4.0') < 0) {
         Slim::Utils::Timers::setTimer(undef, Time::HiRes::time() + 15, \&_checkUpdates);
     }
@@ -374,6 +376,28 @@ sub initTranslationList() {
         }
     }
     $listOfTranslations = join(',', @trans);
+}
+
+sub initRoleList() {
+    my $dir = dirname(__FILE__) . "/HTML/material/html/images/";
+
+    opendir(DIR, $dir);
+    my @paths = grep(/\.svg$/,readdir(DIR));
+    closedir(DIR);
+    foreach my $path (@paths) {
+        my $fname = basename($path);
+        if (rindex($fname, "role-")==0) {
+            $fname = substr($fname, 5, length($fname)-9);
+            if (length($fname)>2) {
+                push(@listOfRoles, $fname);
+            }
+        }
+    }
+
+    # @listOfRoles is used to provide role icons by seeing if request
+    # has text of role - so want largest strings first.
+    @listOfRoles = sort { length($a) <=> length($b) } @listOfRoles;
+    @listOfRoles = reverse(@listOfRoles);
 }
 
 sub _getUrlQueryParam {
@@ -2029,12 +2053,21 @@ sub _svgHandler {
                 $filePath = $dir . "/HTML/material/html/images/" . $svgName . ".svg";
                 $altFilePath = Slim::Utils::Prefs::dir() . "/material-skin/images/" . $svgName . ".svg";
             }
+            my $lookFor = $useRoleName==1 ? $roleName : $svgName;
             if ((! -e $filePath) && (! -e $altFilePath)) {
-                my $lookFor = $useRoleName==1 ? $roleName : $svgName;
                 foreach my $k (keys %ROLE_ICON_MAP) {
                     if (rindex($lookFor, $k)>=0) {
                         $filePath = $dir . "/HTML/material/html/images/role-" . $ROLE_ICON_MAP{$k} . ".svg";
                         $altFilePath = Slim::Utils::Prefs::dir() . "/material-skin/images/role-" . $ROLE_ICON_MAP{$k} . ".svg";
+                        last;
+                    }
+                }
+            }
+            if ((! -e $filePath) && (! -e $altFilePath)) {
+                foreach my $role (@listOfRoles) {
+                    if (rindex($lookFor, $role)>=0) {
+                        $filePath = $dir . "/HTML/material/html/images/role-" . $role . ".svg";
+                        $altFilePath = Slim::Utils::Prefs::dir() . "/material-skin/images/role-" . $role . ".svg";
                         last;
                     }
                 }

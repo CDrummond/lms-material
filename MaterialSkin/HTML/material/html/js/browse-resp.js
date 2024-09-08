@@ -1954,7 +1954,7 @@ function parseBrowseResp(data, parent, options, cacheKey, parentCommand, parentG
             resp.listSize=resp.items.length;
         }
 
-        if (1==resp.items.length && "text"==resp.items[0].type && !resp.items[0].title.startsWith("<")) {
+        if (1==resp.items.length && "text"==resp.items[0].type&& !resp.items[0].weblink && !resp.items[0].title.startsWith("<")) {
             resp.items[0].title = '<div style="margin-top:16px;margin-bottom:16px">' + resp.items[0].title + '</div>';
         }
         if (data.result.count>LMS_BATCH_SIZE) {

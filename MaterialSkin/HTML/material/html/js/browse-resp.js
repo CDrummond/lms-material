@@ -927,7 +927,7 @@ function parseBrowseResp(data, parent, options, cacheKey, parentCommand, parentG
                 case 4: resp.subtitle=i18np("1 Band", "%1 Bands", resp.items.length); break;
                 default:
                     if (undefined!=type && type>=20) {
-                        resp.subtitle=i18np("1 Contributor", "%1 Contributors", resp.items.length);
+                        resp.subtitle=i18np("1 Item", "%1 Items", resp.items.length);
                     } else {
                         resp.subtitle=i18np("1 Artist", "%1 Artists", resp.items.length);
                     }

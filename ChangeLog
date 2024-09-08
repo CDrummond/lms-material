@@ -17,6 +17,12 @@
     Years.
 12. If using 'colour from cover' then always use text colour for progress.
 
+5.2.7
+-----
+1. Fix download via browser.
+2. Don't add HTLM formatting to weblink entries.
+3. If delete a saved 'Random Mix' then also un-pin from homescreen.
+
 5.2.6
 -----
 1. Allow to open server settings via 'action=dlg.open/serversettings' URL

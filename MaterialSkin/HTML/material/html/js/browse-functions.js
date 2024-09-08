@@ -1264,6 +1264,13 @@ function browseItemAction(view, act, item, index, event) {
                     lmsCommand(view.playerId(), command).then(({data}) => {
                         logJsonMessage("RESP", data);
                         view.refreshList();
+                        // Un-pin if pinned
+                        for (var i=0, len=view.top.length; i<len; ++i) {
+                            if (view.top[i].id == (item.isRadio ? item.presetParams.favorites_url : item.id)) {
+                                browseUnpin(view, item, i);
+                                break;
+                            }
+                        }
                     }).catch(err => {
                         logAndShowError(err, item.stdItem==STD_ITEM_RANDOM_MIX ? i18n("Failed to delete mix!") : i18n("Failed to delete playlist!"), command);
                     });
@@ -2436,24 +2443,28 @@ function browsePin(view, item, add, mapped) {
     } else if (!add && index!=-1) {
         confirm(i18n("Un-pin '%1'?", item.title), i18n('Un-pin')).then(res => {
             if (res) {
-                view.top.splice(index, 1);
-                view.options.pinned.delete(item.id);
-                browseUpdateItemPinnedState(view, item);
-                if (item.id.startsWith(MUSIC_ID_PREFIX)) {
-                    for (var i=0, len=view.myMusic.length; i<len; ++i) {
-                        view.myMusic[i].menu=[view.options.pinned.has(view.myMusic[i].id) ? UNPIN_ACTION : PIN_ACTION];
-                    }
-                }
-                if (item.id==START_RANDOM_MIX_ID) {
-                    lmsOptions.randomMixDialogPinned = false;
-                }
-                view.saveTopList();
-                bus.$emit('pinnedChanged', item, false);
-                if (view.grid.use) {
-                    view.layoutGrid(true);
-                }
+                browseUnpin(view, item, index);
             }
         });
+    }
+}
+
+function browseUnpin(view, item, index) {
+    view.top.splice(index, 1);
+    view.options.pinned.delete(item.id);
+    browseUpdateItemPinnedState(view, item);
+    if (item.id.startsWith(MUSIC_ID_PREFIX)) {
+        for (var i=0, len=view.myMusic.length; i<len; ++i) {
+            view.myMusic[i].menu=[view.options.pinned.has(view.myMusic[i].id) ? UNPIN_ACTION : PIN_ACTION];
+        }
+    }
+    if (item.id==START_RANDOM_MIX_ID) {
+        lmsOptions.randomMixDialogPinned = false;
+    }
+    view.saveTopList();
+    bus.$emit('pinnedChanged', item, false);
+    if (view.grid.use) {
+        view.layoutGrid(true);
     }
 }
 

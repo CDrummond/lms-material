@@ -54,3 +54,8 @@
 .theme--light:is(.np-full) .lms-toolbar .v-input--slider .v-slider__track {
  background:rgba(0, 0, 0, 0.26)!important;
 }
+
+.plainprogress:not(.np-full) .lms-toolbar .v-slider .primary {
+ background-color: var(--toolbar-volume-color) !important;
+ border-color: var(--toolbar-volume-color) !important;
+}

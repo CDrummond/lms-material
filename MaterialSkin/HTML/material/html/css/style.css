@@ -3916,8 +3916,8 @@ div.v-subheader {
 
 .plainprogress .lms-toolbar .v-slider .primary,
 .np-full .lms-toolbar .v-slider .primary {
-  background-color: var(--text-color) !important;
-  border-color: var(--text-color) !important;
+ background-color: var(--text-color) !important;
+ border-color: var(--text-color) !important;
 }
 
 .pswp__top-bar {

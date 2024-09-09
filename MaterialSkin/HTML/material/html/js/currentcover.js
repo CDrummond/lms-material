@@ -127,15 +127,14 @@ var lmsCurrentCover = Vue.component('lms-currentcover', {
     methods: {
         colorListLoaded() {
             let list = [];
+            this.otherList = [];
             for (let c=0, cl=this.colorList.colors, len=cl.length; c<len; ++c) {
                 if (undefined!=cl[c].acolor) {
                     list.push([hex2Rgb(cl[c].color), cl[c]]);
+                } else if (undefined!=cl[c].others) {
+                    this.otherList = cl[c].others;
                 }
             }
-            //let lightgrey = "#999999";
-            //list.push([hex2Rgb(lightgrey), {color:lightgrey, acolor:lightgrey}]);
-            //let darkgrey = "#555555";
-            //list.push([hex2Rgb(darkgrey), {color:darkgrey, acolor:darkgrey}]);
             this.colorList = list;
             if (this.calculateColorsRequired) {
                 this.calculateColorsRequired = false;
@@ -161,20 +160,41 @@ var lmsCurrentCover = Vue.component('lms-currentcover', {
                     // HSP (Highly Sensitive Poo) equation from http://alienryderflex.com/hsp.html
                     let hsp = Math.sqrt(0.299 * (orgb[0]**2) + 0.587 * (orgb[1]**2) + 0.114 * (orgb[2]**2));
                     useDefault = hsp>=235 || hsp<=50;
+                    console.log(hsp, useDefault);
                     if (!useDefault) {
                         // Find the nearest colour in our palette
                         let col = 0;
                         let diff = 2000000;
-                        for (let c=0, len=this.colorList.length; c<len; ++c) {
-                            let d = ((orgb[0]-this.colorList[c][0][0])**2) + ((orgb[1]-this.colorList[c][0][1])**2) + ((orgb[2]-this.colorList[c][0][2])**2);
+                        let useOtherList = false;
+                        for (let c=0, list=this.colorList, len=list.length; c<len; ++c) {
+                            let d = ((orgb[0]-list[c][0][0])**2) + ((orgb[1]-list[c][0][1])**2) + ((orgb[2]-list[c][0][2])**2);
                             if (d<diff) {
                                 diff = d;
                                 col = c;
                             }
                         }
-                        rgb = this.colorList[col][0];
-                        document.documentElement.style.setProperty('--accent-color', this.colorList[col][1].acolor);
-                        document.documentElement.style.setProperty('--primary-color', this.colorList[col][1].color);
+                        if (!store.state.coloredToolbars) {
+                            for (let c=0, list=this.otherList, len=list.length; c<len; ++c) {
+                                let d = ((orgb[0]-list[c][0])**2) + ((orgb[1]-list[c][1])**2) + ((orgb[2]-list[c][2])**2);
+                                if (d<diff) {
+                                    diff = d;
+                                    col = c;
+                                    useOtherList = true;
+                                }
+                            }
+                        }
+                        if (useOtherList) {
+                            rgb = this.otherList[col];
+                            let hexStr = rgb2Hex(rgb);
+                            document.documentElement.style.setProperty('--accent-color', hexStr);
+                            document.documentElement.style.setProperty('--primary-color', hexStr);
+                            console.log("use other", rgb[0]+","+rgb[1]+","+rgb[2], hexStr);
+                        } else {
+                            rgb = this.colorList[col][0];
+                            document.documentElement.style.setProperty('--accent-color', this.colorList[col][1].acolor);
+                            document.documentElement.style.setProperty('--primary-color', this.colorList[col][1].color);
+                            console.log("use pal", rgb[0]+","+rgb[1]+","+rgb[2], rgb2Hex(rgb));
+                        }
                         document.documentElement.style.setProperty('--highlight-rgb', rgb[0]+","+rgb[1]+","+rgb[2]);
                     }
                 }

@@ -129,17 +129,6 @@ sub advancedSearch {
 				$query{$newKey}->{'>'} = '0';
 			}
 
-=pod Shall we treat an undefined rating the same as 0?
-			if ($newKey eq 'persistent.rating' && $op eq '<') {
-				$query{$newKey} = {
-					'or' => [
-						$newKey => { '=' => undef },
-						$newKey => $query{$newKey},
-					],
-				};
-			}
-=cut
-
 			delete $params->{$key};
 
 			next;
@@ -161,7 +150,7 @@ sub advancedSearch {
 		# 
 		# Turn the track_title into track.title for the query.
 		# We need the _'s in the form, because . means hash key.
-		if ($newKey =~ s/(.+)_(titlesearch|namesearch|value|)$/$1\.$2/) {
+		if ($newKey =~ s/(.+)_(titlesearch|namesearch|value|release_type|)$/$1\.$2/) {
 			$joins{$1}++ if $1 ne 'me';
 
 			$params->{$key} = Slim::Utils::Text::searchStringSplit($params->{$key});
@@ -262,7 +251,7 @@ sub advancedSearch {
 	
 	$query{'me.audio'} = 1;
 
-	if ($query{'album.titlesearch'} || $joins{'album'}) {
+	if ($query{'album.titlesearch'} || $query{'album.release_type'} || $joins{'album'}) {
 
 		push @joins, 'album';
 	}

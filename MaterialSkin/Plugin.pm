@@ -81,7 +81,7 @@ my @DEFAULT_BROWSE_MODES = ( 'myMusicArtists', 'myMusicArtistsAlbumArtists', 'my
 
 my %EXCLUDE_EXTRAS = map { $_ => 1 } ( 'ALARM', 'PLUGIN_CUSTOMBROWSE', 'PLUGIN_IPENG_CUSTOM_BROWSE_MORE', 'PLUGIN_DSTM', 'PLUGIN_TRACKSTAT', 'PLUGIN_DYNAMICPLAYLIST', 'PLUGIN_CDPLAYER' );
 
-my @ADV_SEARCH_OPS = ('album_titlesearch', 'bitrate', 'comments_value', 'contributor_namesearch', 'filesize', 'lyrics', 'me_titlesearch', 'persistent_playcount',
+my @ADV_SEARCH_OPS = ('album_titlesearch', 'album_release_type', 'bitrate', 'comments_value', 'contributor_namesearch', 'filesize', 'lyrics', 'me_titlesearch', 'persistent_playcount',
                       'persistent_rating', 'samplerate', 'samplesize', 'secs', 'timestamp', 'tracknum', 'url', 'year' );
 my @ADV_SEARCH_OTHER = ('content_type', 'contributor_namesearch.active1', 'contributor_namesearch.active2', 'contributor_namesearch.active3', 'contributor_namesearch.active4',
                         'contributor_namesearch.active5', 'genre', 'genre_name' );
@@ -1255,7 +1255,7 @@ sub _cliCommand {
         if ($saveLib) {
             Slim::Control::Request::notifyFromArray(undef, ['material-skin', 'notification', 'internal', 'vlib']);
         } else {
-            if ($tracks) {
+            if (blessed($tracks)) {
                 $tracks = $tracks->slice(0, $MAX_ADV_SEARCH_RESULTS);
                 my $count = 0;
                 while (my $track = $tracks->next) {
@@ -1296,7 +1296,7 @@ sub _cliCommand {
                     main::idleStreams() unless $count % 5;
                 }
             }
-            if ($albums) {
+            if (blessed($albums)) {
                 $albums = $albums->slice(0, $MAX_ADV_SEARCH_RESULTS);
                 my $count = 0;
                 while (my $album = $albums->next) {

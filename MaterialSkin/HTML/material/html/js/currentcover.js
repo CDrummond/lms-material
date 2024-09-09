@@ -192,7 +192,7 @@ var lmsCurrentCover = Vue.component('lms-currentcover', {
             if (this.$store.state.color!=COLOR_FROM_COVER) {
                 return;
             }
-            this.fac.getColorAsync(document.getElementById('current-cover')).then(color => {
+            this.fac.getColorAsync(document.getElementById('current-cover'), {algorithm:'dominant', mode:'precision'}).then(color => {
                 let rgb = undefined;
                 if (DEFAULT_COVER==this.coverUrl) {
                     rgb = [25,118,210];

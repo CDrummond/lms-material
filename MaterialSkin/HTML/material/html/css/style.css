@@ -116,23 +116,19 @@
 }
 
 .tinted:not(.theme--dark) {
- --background-color:color-mix(in srgb, var(--std-background-color), var(--primary-color) 25%);
- --tbar-bgnd-color:color-mix(in srgb, var(--std-background-color), var(--primary-color) 35%);
+ --background-color:color-mix(in srgb, var(--std-background-color), var(--tint-color) 25%);
+ --tbar-bgnd-color:color-mix(in srgb, var(--std-background-color), var(--tint-color) 35%);
 }
 
 .tinted {
- --background-color:color-mix(in srgb, var(--std-background-color), var(--primary-color) 15%);
- --tbar-bgnd-color:color-mix(in srgb, var(--std-background-color), var(--primary-color) 25%);
+ --background-color:color-mix(in srgb, var(--std-background-color), var(--tint-color) 15%);
+ --tbar-bgnd-color:color-mix(in srgb, var(--std-background-color), var(--tint-color) 25%);
  --scrollbar-track-color:var(--background-color);
  --scrollbar-corner-color:var(--background-color);
  --dialog-toolbar-color:var(--tbar-bgnd-color);
  --bottom-toolbar-color:var(--background-color);
  --top-toolbar-color:var(--tbar-bgnd-color);
  --sub-toolbar-color:var(--background-color);
- --pbar-bgnd:transparent;
-}
-
-.plainprogress {
  --pbar-bgnd:transparent;
 }
 
@@ -203,10 +199,6 @@
  --top-toolbar-text-color:var(--light-text-color);
  --sub-toolbar-text-color:var(--light-text-color);
  --bottom-toolbar-text-color:var(--light-text-color);
-}
-
-.tinted:is(.theme--dark), .plainprogress:is(.theme--dark) {
- --pbar-bgnd:transparent;
 }
 
 .v-dialog--fullscreen .v-sheet {
@@ -3909,12 +3901,10 @@ div.v-subheader {
  border-radius: 0px;
 }
 
-.plainprogress .pbar .value, .plainprogress .pbar .buffer,
 .np-full .pbar .value, .np-full .pbar .buffer {
  background-color: var(--text-color);
 }
 
-.plainprogress .lms-toolbar .v-slider .primary,
 .np-full .lms-toolbar .v-slider .primary {
  background-color: var(--text-color) !important;
  border-color: var(--text-color) !important;

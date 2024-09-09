@@ -11,7 +11,7 @@ var playerIcons = {};
 var playerIdIconMap = {};
 const BAD_ICONS = new Set(['live365_svg.png']);
 
-function getMiscJson(item, name, obj) {
+function getMiscJson(item, name, obj, signal) {
     let cfg = getLocalStorageVal("misc-"+name);
     if (undefined!=cfg) {
         try {
@@ -37,11 +37,19 @@ function getMiscJson(item, name, obj) {
             if (obj) {
                obj.$forceUpdate();
             }
+            if (signal) {
+                bus.$emit(signal);
+            }
         }).catch(err => {
             window.console.error(err);
         });
-    } else if (obj) {
-        obj.$forceUpdate();
+    } else {
+        if (obj) {
+            obj.$forceUpdate();
+        }
+        if (signal) {
+            bus.$emit(signal);
+        }
     }
 }
 

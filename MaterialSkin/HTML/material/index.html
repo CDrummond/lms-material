@@ -84,7 +84,7 @@
   }
   [% END %]
   <div id="app" v-cloak>
-   <v-app class="lms-app" :dark="darkUi" v-touch:start="touchStart" v-touch:end="touchEnd" v-bind:class="{'no-navbar':!desktopLayout && MBAR_REP_NAV==mobileBar, 'np-full':nowPlayingFull, 'tinted':tinted, 'plainprogress':plainprogress}">
+   <v-app class="lms-app" :dark="darkUi" v-touch:start="touchStart" v-touch:end="touchEnd" v-bind:class="{'no-navbar':!desktopLayout && MBAR_REP_NAV==mobileBar, 'np-full':nowPlayingFull, 'tinted':tinted}">
     <div id="stringLenCheckElem" style="display:hidden; position:fixed; top:0px;"></div>
     <v-snackbar style="z-index:3000" v-model="snackbar.show" :multi-line="true" :timeout="snackbar.timeout ? snackbar.timeout : 2500" :color="snackbar.color" top>{{ snackbar.msg }}</v-snackbar>
     <lms-currentcover></lms-currentcover>

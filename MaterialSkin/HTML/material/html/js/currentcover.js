@@ -6,16 +6,6 @@
  */
 'use strict';
 
-function shadeRgb(rgb, percent) {
-    var t = percent < 0 ? 0 : 255,
-        p = percent < 0 ? percent*-1 : percent;
-    return [Math.round((t-rgb[0])*p)+rgb[0], Math.round((t-rgb[1])*p)+rgb[1], Math.round((t-rgb[2])*p)+rgb[2]];
-}
-
-function rgbBrightness(rgb) {
-    return (((rgb[0]*299)+(rgb[1]*587)+(rgb[2]*114))/1000);
-}
-
 function rgb2Hex(rgb) {
     let hex="#";
     for (let i=0; i<3; ++i) {
@@ -32,64 +22,6 @@ function hex2Rgb(hx) {
         rgb.push(parseInt("0x"+hx.substr(1+(p*step), step, 16)));
     }
     return rgb;
-}
-
-function rgb2Hsv(rgb) {
-    let r = rgb[0],
-        g = rgb[1],
-        b = rgb[2],
-        max = Math.max(r, g, b),
-        min = Math.min(r, g, b),
-        d = max - min,
-        h,
-        s = (max === 0 ? 0 : d / max),
-        v = max / 255;
-
-    switch (max) {
-        case min: h = 0; break;
-        case r: h = (g - b) + d * (g < b ? 6: 0); h /= 6 * d; break;
-        case g: h = (b - r) + d * 2; h /= 6 * d; break;
-        case b: h = (r - g) + d * 4; h /= 6 * d; break;
-    }
-
-    return [h, s, v];
-}
-
-function hsv2Rgb(hsv) {
-    let h = hsv[0],
-        s = hsv[1],
-        v = hsv[2],
-        r,
-        g,
-        b,
-        i = Math.floor(h * 6),
-        f = h * 6 - i,
-        p = v * (1 - s),
-        q = v * (1 - f * s),
-        t = v * (1 - (1 - f) * s);
-    switch (i % 6) {
-        case 0: r = v, g = t, b = p; break;
-        case 1: r = q, g = v, b = p; break;
-        case 2: r = p, g = v, b = t; break;
-        case 3: r = p, g = q, b = v; break;
-        case 4: r = t, g = p, b = v; break;
-        case 5: r = v, g = p, b = q; break;
-    }
-    return [Math.round(r * 255), Math.round(g * 255), Math.round(b * 255)];
-}
-
-function rgbLuminence(rgb) {
-    let gamma = 2.4
-    let srgb = [], c = [];
-    for (let i = 0; i < 3; i++) {
-        srgb[i] = rgb[i] / 255;
-        c[i] = srgb[i] > 0.03928 ? Math.pow((srgb[i]+0.055) / 1.055, gamma) : srgb[i] / 12.92;
-    }
-    return 0.2126*c[0] + 0.7152*c[1] + 0.0722*c[2]
-}
-
-function contrastRatio(l1, l2) {
-    return (Math.max(l1, l2) + 0.05)/(Math.min(l1, l2) + 0.05);
 }
 
 var currentCover = undefined;
@@ -186,41 +118,80 @@ var lmsCurrentCover = Vue.component('lms-currentcover', {
                 this.accessUrl = this.coverUrl;
             }
         }.bind(this));
+        bus.$on('colorListLoaded', function() {
+            this.colorListLoaded();
+        }.bind(this));
+        this.colorList = { };
+        getMiscJson(this.colorList, "colors", undefined, 'colorListLoaded');
     },
     methods: {
+        colorListLoaded() {
+            let list = [];
+            for (let c=0, cl=this.colorList.colors, len=cl.length; c<len; ++c) {
+                if (undefined!=cl[c].acolor) {
+                    list.push([hex2Rgb(cl[c].color), cl[c]]);
+                }
+            }
+            //let lightgrey = "#999999";
+            //list.push([hex2Rgb(lightgrey), {color:lightgrey, acolor:lightgrey}]);
+            //let darkgrey = "#555555";
+            //list.push([hex2Rgb(darkgrey), {color:darkgrey, acolor:darkgrey}]);
+            this.colorList = list;
+            if (this.calculateColorsRequired) {
+                this.calculateColorsRequired = false;
+                this.calculateColors();
+            }
+        },
         calculateColors() {
             if (this.$store.state.color!=COLOR_FROM_COVER) {
                 return;
             }
+            if (this.colorList.length<1) {
+                this.calculateColorsRequired = true;
+                return;
+            }
             this.fac.getColorAsync(document.getElementById('current-cover'), {mode:'precision'}).then(color => {
                 let rgb = undefined;
-                if (DEFAULT_COVER==this.coverUrl) {
+                let orgbs = color.rgb.replace('rgb(', '').replace(')', '').split(',');
+                let orgb = [parseInt(orgbs[0]), parseInt(orgbs[1]), parseInt(orgbs[2])];
+                let isDefCover = DEFAULT_COVER==this.coverUrl;
+                let useDefault = isDefCover;
+                if (!useDefault) {
+                    // If colour is too light, or too dark, then use default
+                    // HSP (Highly Sensitive Poo) equation from http://alienryderflex.com/hsp.html
+                    let hsp = Math.sqrt(0.299 * (orgb[0]**2) + 0.587 * (orgb[1]**2) + 0.114 * (orgb[2]**2));
+                    useDefault = hsp>=235 || hsp<=50;
+                    if (!useDefault) {
+                        // Find the nearest colour in our palette
+                        let col = 0;
+                        let diff = 100000;
+                        for (let c=0, len=this.colorList.length; c<len; ++c) {
+                            let d = ((orgb[0]-this.colorList[c][0][0])**2) + ((orgb[1]-this.colorList[c][0][1])**2) + ((orgb[2]-this.colorList[c][0][2])**2);
+                            if (d<diff) {
+                                diff = d;
+                                col = c;
+                            }
+                        }
+                        rgb = this.colorList[col][0];
+                        document.documentElement.style.setProperty('--accent-color', this.colorList[col][1].acolor);
+                        document.documentElement.style.setProperty('--primary-color', this.colorList[col][1].color);
+                        document.documentElement.style.setProperty('--highlight-rgb', rgb[0]+","+rgb[1]+","+rgb[2]);
+                    }
+                }
+
+                if (isDefCover) {
+                    document.documentElement.style.setProperty('--tint-color', '#1976d2');
+                } else {
+                    document.documentElement.style.setProperty('--tint-color', rgb2Hex(orgb));
+                }
+
+                if (useDefault) {
                     rgb = [25,118,210];
                     document.documentElement.style.setProperty('--accent-color', '#82b1ff');
                     document.documentElement.style.setProperty('--primary-color', '#1976d2');
                     document.documentElement.style.setProperty('--highlight-rgb', '25,118,210');
-                } else {
-                    let bgndLum = rgbLuminence(hex2Rgb(getComputedStyle(document.documentElement).getPropertyValue('--background-color')));
-                    let rgbs = color.rgb.replace('rgb(', '').replace(')', '').split(',');
-                    rgb = [parseInt(rgbs[0]), parseInt(rgbs[1]), parseInt(rgbs[2])];
-
-                    let hsv = rgb2Hsv(rgb);
-                    hsv[2] = Math.max(Math.min(hsv[2], 150/255), 100/255)
-                    rgb = hsv2Rgb(hsv);
-
-                    let hexColor=rgb2Hex(rgb);
-                    document.documentElement.style.setProperty('--primary-color', hexColor);
-                    document.documentElement.style.setProperty('--highlight-rgb', rgb[0]+","+rgb[1]+","+rgb[2]);
-
-                    // Try to ensure accent colour has decent contrast...
-                    let a=0;
-                    while (contrastRatio(bgndLum, rgbLuminence(rgb))<3.0 && a<20) {
-                        rgb = shadeRgb(rgb, this.$store.state.darkUi ? 0.05 : -0.05);
-                        a+=1;
-                    }
-
-                    document.documentElement.style.setProperty('--accent-color', rgb2Hex(rgb));
                 }
+
                 emitToolbarColorsFromState(this.$store.state);
                 if (1==queryParams.nativeAccent) {
                     bus.$nextTick(function () {
@@ -238,4 +209,3 @@ var lmsCurrentCover = Vue.component('lms-currentcover', {
         }
     }
 });
-

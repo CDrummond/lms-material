@@ -15,7 +15,8 @@
 10. If using detailed sub-toolbar then place home button below back button.
 11. Use 'My Music' categories as basis of categories to show under Genres and
     Years.
-12. If using 'colour from cover' then always use text colour for progress.
+12. If using 'colour from cover' then choose nearest colour from palette for
+    highlight colour.
 
 5.2.7
 -----

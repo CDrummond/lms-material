@@ -1255,7 +1255,7 @@ sub _cliCommand {
         if ($saveLib) {
             Slim::Control::Request::notifyFromArray(undef, ['material-skin', 'notification', 'internal', 'vlib']);
         } else {
-            if ($tracks) {
+            if (blessed($tracks)) {
                 $tracks = $tracks->slice(0, $MAX_ADV_SEARCH_RESULTS);
                 my $count = 0;
                 while (my $track = $tracks->next) {
@@ -1296,7 +1296,7 @@ sub _cliCommand {
                     main::idleStreams() unless $count % 5;
                 }
             }
-            if ($albums) {
+            if (blessed($albums)) {
                 $albums = $albums->slice(0, $MAX_ADV_SEARCH_RESULTS);
                 my $count = 0;
                 while (my $album = $albums->next) {

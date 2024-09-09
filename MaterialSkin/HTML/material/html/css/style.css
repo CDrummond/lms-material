@@ -107,6 +107,8 @@
  --sub-toolbar-text-color:var(--dark-text-color);
  --bottom-toolbar-text-color:var(--dark-text-color);
  --color-mix-supported:1;
+ --scrollbar-thumb-color:var(--std-scrollbar-thumb-color);
+ --scrollbar-thumb-hover-color:var(--std-scrollbar-thumb-hover-color);
 }
 
 @supports not (color: color-mix(in srgb, red, green)) {
@@ -118,11 +120,15 @@
 .tinted:not(.theme--dark) {
  --background-color:color-mix(in srgb, var(--std-background-color), var(--tint-color) 25%);
  --tbar-bgnd-color:color-mix(in srgb, var(--std-background-color), var(--tint-color) 35%);
+ --scrollbar-thumb-color:color-mix(in srgb, var(--std-scrollbar-thumb-color), var(--tint-color) 35%);
+ --scrollbar-thumb-color:color-mix(in srgb, var(--std-scrollbar-thumb-color), var(--tint-color) 35%);
 }
 
 .tinted {
  --background-color:color-mix(in srgb, var(--std-background-color), var(--tint-color) 15%);
  --tbar-bgnd-color:color-mix(in srgb, var(--std-background-color), var(--tint-color) 25%);
+ --scrollbar-thumb-color:color-mix(in srgb, var(--std-scrollbar-thumb-color), var(--tint-color) 25%);
+ --scrollbar-thumb-hover-color:color-mix(in srgb, var(--std-scrollbar-thumb-hover-color), var(--tint-color) 25%);
  --scrollbar-track-color:var(--background-color);
  --scrollbar-corner-color:var(--background-color);
  --dialog-toolbar-color:var(--tbar-bgnd-color);

@@ -7,8 +7,8 @@
 
 :root {
  --active-color:var(--primary-color);
- --scrollbar-thumb-color:#8e9192;
- --scrollbar-thumb-hover-color:#6e7172;
+ --std-scrollbar-thumb-color:#8e9192;
+ --std-scrollbar-thumb-hover-color:#6e7172;
  --std-background-color:#fff;
  --background-shadow-color:rgba(255, 255, 255, 0.9);
  --subtoolbar-shadow-color:rgba(255, 255, 255, 0.75);

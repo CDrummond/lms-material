@@ -164,7 +164,7 @@ var lmsCurrentCover = Vue.component('lms-currentcover', {
                     if (!useDefault) {
                         // Find the nearest colour in our palette
                         let col = 0;
-                        let diff = 100000;
+                        let diff = 2000000;
                         for (let c=0, len=this.colorList.length; c<len; ++c) {
                             let d = ((orgb[0]-this.colorList[c][0][0])**2) + ((orgb[1]-this.colorList[c][0][1])**2) + ((orgb[2]-this.colorList[c][0][2])**2);
                             if (d<diff) {

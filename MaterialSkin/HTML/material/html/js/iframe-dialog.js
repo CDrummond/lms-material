@@ -516,6 +516,10 @@ function copyVars(iframe) {
     copyVar(iframe, '--light-text-color');
     copyVar(iframe, '--menu-dlg-shadow');
     copyVar(iframe, '--all-pad');
+    copyVar(iframe, '--scrollbar-thumb-color');
+    copyVar(iframe, '--std-scrollbar-thumb-color');
+    copyVar(iframe, '--scrollbar-thumb-hover-color');
+    copyVar(iframe, '--std-scrollbar-thumb-hover-color');
 }
 
 function applyModifications(page, textCol, darkUi, src) {

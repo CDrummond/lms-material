@@ -7,8 +7,8 @@
 
 :root {
  --active-color:var(--primary-color);
- --scrollbar-thumb-color:#8e9192;
- --scrollbar-thumb-hover-color:#6e7172;
+ --std-scrollbar-thumb-color:#8e9192;
+ --std-scrollbar-thumb-hover-color:#6e7172;
  --std-background-color:#fff;
  --background-shadow-color:rgba(255, 255, 255, 0.9);
  --subtoolbar-shadow-color:rgba(255, 255, 255, 0.75);
@@ -22,7 +22,7 @@
  --btn-hover-color:rgba(184, 184, 184, 0.3)!important;
  --popup-background-color:#fff;
  --popup-border-color:var(--list-item-border-color);
- scrollbar-color:var(--scrollbar-thumb-color) var(--scrollbar-track-color);
+ scrollbar-color:var(--std-scrollbar-thumb-color) var(--scrollbar-track-color);
 }
 
 .np-info-cover {

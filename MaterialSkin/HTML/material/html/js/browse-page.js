@@ -126,7 +126,7 @@ var lmsBrowse = Vue.component("lms-browse", {
  </div>
  </div>
  <v-icon class="browse-progress" v-if="fetchingItem!=undefined" color="primary">refresh</v-icon>
- <div class="lms-list bgnd-cover" v-bind:class="{'browse-backdrop-cover':drawBackdrop, 'album-track-list':current && current.stdItem==STD_ITEM_ALBUM}" id="browse-bgnd">
+ <div class="lms-list bgnd-cover" v-bind:class="{'browse-backdrop-cover':drawBackdrop, 'tint-bgnd-cover':tint, 'album-track-list':current && current.stdItem==STD_ITEM_ALBUM}" id="browse-bgnd">
   <div class="noselect lms-jumplist" v-bind:class="{'bgnd-blur':drawBgndImage,'backdrop-blur':drawBackdrop, 'lms-jumplist-h':filteredJumplist[0].header}" v-if="filteredJumplist.length>1">
    <div class="jl-inner" v-bind:style="{'max-height':(filteredJumplist.length*50)+'px'}">
     <template v-for="(item, index) in filteredJumplist">
@@ -700,6 +700,9 @@ var lmsBrowse = Vue.component("lms-browse", {
         },
         showRating() {
             return undefined!=LMS_P_RP && this.$store.state.showRating
+        },
+        tint() {
+            return this.$store.state.tinted && this.$store.state.cMixSupported
         }
     },
     created() {

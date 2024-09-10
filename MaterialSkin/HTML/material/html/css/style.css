@@ -109,6 +109,7 @@
  --color-mix-supported:1;
  --scrollbar-thumb-color:var(--std-scrollbar-thumb-color);
  --scrollbar-thumb-hover-color:var(--std-scrollbar-thumb-hover-color);
+ --tinted-background-shadow-color:var(--background-shadow-color);
 }
 
 @supports not (color: color-mix(in srgb, red, green)) {
@@ -122,6 +123,7 @@
  --tbar-bgnd-color:color-mix(in srgb, var(--std-background-color), var(--tint-color) 35%);
  --scrollbar-thumb-color:color-mix(in srgb, var(--std-scrollbar-thumb-color), var(--tint-color) 35%);
  --scrollbar-thumb-color:color-mix(in srgb, var(--std-scrollbar-thumb-color), var(--tint-color) 35%);
+ --tinted-background-shadow-color:color-mix(in srgb, var(--background-shadow-color), var(--tint-color) 8%);
 }
 
 .tinted {
@@ -129,6 +131,7 @@
  --tbar-bgnd-color:color-mix(in srgb, var(--std-background-color), var(--tint-color) 25%);
  --scrollbar-thumb-color:color-mix(in srgb, var(--std-scrollbar-thumb-color), var(--tint-color) 25%);
  --scrollbar-thumb-hover-color:color-mix(in srgb, var(--std-scrollbar-thumb-hover-color), var(--tint-color) 25%);
+ --tinted-background-shadow-color:color-mix(in srgb, var(--background-shadow-color), var(--tint-color) 3%);
  --scrollbar-track-color:var(--background-color);
  --scrollbar-corner-color:var(--background-color);
  --dialog-toolbar-color:var(--tbar-bgnd-color);
@@ -1864,6 +1867,10 @@ div.v-rating i.primary--text, div.v-rating i.accent--text {
  background-position:center top !important;
  box-shadow:inset 100vw 100vh var(--background-shadow-color);
  transition:background 0.05s!important;
+}
+
+.tint-bgnd-cover {
+ box-shadow:inset 100vw 100vh var(--tinted-background-shadow-color);
 }
 
 .subtoolbar-cover {

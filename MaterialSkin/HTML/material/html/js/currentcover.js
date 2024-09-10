@@ -160,7 +160,6 @@ var lmsCurrentCover = Vue.component('lms-currentcover', {
                     // HSP (Highly Sensitive Poo) equation from http://alienryderflex.com/hsp.html
                     let hsp = Math.sqrt(0.299 * (orgb[0]**2) + 0.587 * (orgb[1]**2) + 0.114 * (orgb[2]**2));
                     useDefault = hsp>=235 || hsp<=50;
-                    console.log(hsp, useDefault);
                     if (!useDefault) {
                         // Find the nearest colour in our palette
                         let col = 0;
@@ -188,12 +187,10 @@ var lmsCurrentCover = Vue.component('lms-currentcover', {
                             let hexStr = rgb2Hex(rgb);
                             document.documentElement.style.setProperty('--accent-color', hexStr);
                             document.documentElement.style.setProperty('--primary-color', hexStr);
-                            console.log("use other", rgb[0]+","+rgb[1]+","+rgb[2], hexStr);
                         } else {
                             rgb = this.colorList[col][0];
                             document.documentElement.style.setProperty('--accent-color', this.colorList[col][1].acolor);
                             document.documentElement.style.setProperty('--primary-color', this.colorList[col][1].color);
-                            console.log("use pal", rgb[0]+","+rgb[1]+","+rgb[2], rgb2Hex(rgb));
                         }
                         document.documentElement.style.setProperty('--highlight-rgb', rgb[0]+","+rgb[1]+","+rgb[2]);
                     }

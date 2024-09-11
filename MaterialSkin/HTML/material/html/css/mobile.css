@@ -388,9 +388,11 @@
  color: var(--active-nav-btn-color) !important;
 }
 
+.np-full .pill,
 .nav-text .pill {
  background-color:var(--text-color);
 }
+.np-full .active-nav div span, .np-full .active-nav div i,
 .nav-text .active-nav div span, .nav-text .active-nav div i {
  color: var(--text-color) !important;
 }

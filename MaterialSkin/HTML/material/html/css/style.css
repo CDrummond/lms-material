@@ -128,7 +128,7 @@
  --tinted-background-shadow-color:color-mix(in srgb, var(--background-shadow-color), var(--tint-color) 8%);
 }
 
-.tinted:is(.theme--dark) {
+.tinted {
  --background-color:color-mix(in srgb, var(--std-background-color), var(--tint-color) 15%);
  --popup-background-color:color-mix(in srgb, var(--std-popup-background-color), var(--tint-color) 15%);
  --tbar-bgnd-color:color-mix(in srgb, var(--std-background-color), var(--tint-color) 25%);
@@ -141,7 +141,6 @@
  --bottom-toolbar-color:var(--background-color);
  --top-toolbar-color:var(--tbar-bgnd-color);
  --sub-toolbar-color:var(--background-color);
- --pbar-bgnd:transparent;
 }
 
 @media (orientation:landscape) and (max-width: 1000px) {
@@ -3940,4 +3939,8 @@ div.v-subheader {
 
 .lms-list .v-text-field .v-label--active {
  top:9px!important;
+}
+
+.tinted {
+  --pbar-bgnd:transparent;
 }

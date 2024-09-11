@@ -19,12 +19,9 @@
     highlight colour.
 13. More role icons.
 14. Add 'Release type' to advanced search, for LMS9 onwards.
-
-5.2.7
------
-1. Fix download via browser.
-2. Don't add HTML formatting to weblink entries.
-3. If delete a saved 'Random Mix' then also un-pin from homescreen.
+15. Fix download via browser.
+16. Don't add HTML formatting to weblink entries.
+17. If delete a saved 'Random Mix' then also un-pin from homescreen.
 
 5.2.6
 -----

@@ -128,7 +128,7 @@
  --tinted-background-shadow-color:color-mix(in srgb, var(--background-shadow-color), var(--tint-color) 8%);
 }
 
-.tinted {
+.tinted:is(.theme--dark) {
  --background-color:color-mix(in srgb, var(--std-background-color), var(--tint-color) 15%);
  --popup-background-color:color-mix(in srgb, var(--std-popup-background-color), var(--tint-color) 15%);
  --tbar-bgnd-color:color-mix(in srgb, var(--std-background-color), var(--tint-color) 25%);

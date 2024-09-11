@@ -110,6 +110,7 @@
  --scrollbar-thumb-color:var(--std-scrollbar-thumb-color);
  --scrollbar-thumb-hover-color:var(--std-scrollbar-thumb-hover-color);
  --tinted-background-shadow-color:var(--background-shadow-color);
+ --popup-background-color:var(--std-popup-background-color);
 }
 
 @supports not (color: color-mix(in srgb, red, green)) {
@@ -120,6 +121,7 @@
 
 .tinted:not(.theme--dark) {
  --background-color:color-mix(in srgb, var(--std-background-color), var(--tint-color) 25%);
+ --popup-background-color:color-mix(in srgb, var(--std-popup-background-color), var(--tint-color) 25%);
  --tbar-bgnd-color:color-mix(in srgb, var(--std-background-color), var(--tint-color) 35%);
  --scrollbar-thumb-color:color-mix(in srgb, var(--std-scrollbar-thumb-color), var(--tint-color) 35%);
  --scrollbar-thumb-color:color-mix(in srgb, var(--std-scrollbar-thumb-color), var(--tint-color) 35%);
@@ -128,6 +130,7 @@
 
 .tinted {
  --background-color:color-mix(in srgb, var(--std-background-color), var(--tint-color) 15%);
+ --popup-background-color:color-mix(in srgb, var(--std-popup-background-color), var(--tint-color) 15%);
  --tbar-bgnd-color:color-mix(in srgb, var(--std-background-color), var(--tint-color) 25%);
  --scrollbar-thumb-color:color-mix(in srgb, var(--std-scrollbar-thumb-color), var(--tint-color) 25%);
  --scrollbar-thumb-hover-color:color-mix(in srgb, var(--std-scrollbar-thumb-hover-color), var(--tint-color) 25%);

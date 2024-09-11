@@ -20,7 +20,7 @@
  --bottom-position-slider-color:var(--primary-color);
  --browse-header-color:rgba(240, 240, 240, 0.35);
  --btn-hover-color:rgba(184, 184, 184, 0.3)!important;
- --popup-background-color:#fff;
+ --std-popup-background-color:#fff;
  --popup-border-color:var(--list-item-border-color);
  scrollbar-color:var(--std-scrollbar-thumb-color) var(--scrollbar-track-color);
 }

@@ -6,24 +6,6 @@
  */
 'use strict';
 
-function rgb2Hex(rgb) {
-    let hex="#";
-    for (let i=0; i<3; ++i) {
-        let hv = rgb[i].toString(16);
-        hex += (hv.length==1 ? "0" : "") + hv;
-    }
-    return hex;
-}
-
-function hex2Rgb(hx) {
-    let step = hx.length>4 ? 2 : 1;
-    let rgb=[]
-    for (let p=0; p<3; ++p) {
-        rgb.push(parseInt("0x"+hx.substr(1+(p*step), step, 16)));
-    }
-    return rgb;
-}
-
 var currentCover = undefined;
 var lmsCurrentCover = Vue.component('lms-currentcover', {
     template: `<div><img crossOrigin="anonymous" id="current-cover" :src="accessUrl" style="display:none"/></div>`,

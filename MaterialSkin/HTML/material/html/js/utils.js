@@ -950,11 +950,50 @@ function addNote(str) {
     return "<br/><br/><div class='note'>"+str+"</div>";
 }
 
+function rgb2Hex(rgb) {
+    let hex="#";
+    for (let i=0; i<3; ++i) {
+        let hv = rgb[i].toString(16);
+        hex += (hv.length==1 ? "0" : "") + hv;
+    }
+    return hex;
+}
+
+function hex2Rgb(hx) {
+    let step = hx.length>4 ? 2 : 1;
+    let rgb=[]
+    for (let p=0; p<3; ++p) {
+        rgb.push(parseInt("0x"+hx.substr(1+(p*step), step, 16)));
+    }
+    return rgb;
+}
+
 let lastToolbarColors = {top: undefined, bot:undefined};
 function emitToolbarColors(top, bot, tries) {
+    if (undefined==window.mskToolbarElem && store.state.tinted && store.state.cMixSupported) {
+        window.mskToolbarElem=document.getElementById("main-toolbar");
+        if (undefined==window.mskToolbarElem) {
+            window.setTimeout(function() {
+                emitToolbarColors(top, bot, tries);
+            }, 500);
+            return;
+        }
+    }
     // screen saver passes undefined for both top and bot whn its on => use black as colour.
-    let t = undefined==top ? '#000000' : getComputedStyle(document.documentElement).getPropertyValue(top);
+    let t = undefined==top ? '#000000' : getComputedStyle(window.mskToolbarElem ? window.mskToolbarElem : document.documentElement).getPropertyValue(top);
     let b = undefined==bot ? '#000000' : getComputedStyle(document.documentElement).getPropertyValue(bot);
+    if (t.startsWith('color-mix(')) {
+        let parts = t.split(" ");
+        let ca = hex2Rgb(parts[2].replace(",", ""));
+        let cb = hex2Rgb(parts[3]);
+        let pc = parseFloat(parts[4].replace("%", ""))/100.0;
+        let mixed = [];
+        for (let i=0; i<3; ++i) {
+            mixed.push( Math.ceil((ca[i]*(1.0-pc))+(cb[i]*pc)) );
+        }
+        t = rgb2Hex(mixed);
+    }
+
     if (t!=lastToolbarColors.top || b!=lastToolbarColors.bot) {
         if (undefined==t || 0==t.length || undefined==b || 0==b.length) {
             if (undefined==tries || tries<20) {
@@ -984,7 +1023,7 @@ function emitToolbarColors(top, bot, tries) {
 
 const FULLSCREEN_DIALOGS = new Set(["uisettings", "playersettings", "info", "iframe", "manage"]);
 function emitToolbarColorsFromState(state) {
-    if (0!=queryParams.nativeColors || COLOR_FROM_COVER==state.color) {
+    if (0!=queryParams.nativeColors || COLOR_FROM_COVER==state.color || state.coloredToolbars || (state.tinted && state.cMixSupported)) {
         let topColorVar = "--top-toolbar-color";
         let botColorVar = "--bottom-toolbar-color";
         for (var i=state.openDialogs.length; i>=0; --i) {

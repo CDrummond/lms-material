@@ -225,13 +225,13 @@
  position:fixed;
  left:162px;
  bottom:1px;
- height:calc(var(--desktop-np-bottom-pad) + 64px);
- width:calc(var(--desktop-np-bottom-pad) + 64px);
+ height:calc(var(--desktop-np-bottom-pad) + 65px);
+ width:calc(var(--desktop-np-bottom-pad) + 65px);
 }
 
 .np-bar-image .np-cover {
- height:calc(var(--desktop-np-bottom-pad) + 64px);
- width:calc(var(--desktop-np-bottom-pad) + 64px);
+ height:calc(var(--desktop-np-bottom-pad) + 65px);
+ width:calc(var(--desktop-np-bottom-pad) + 65px);
 }
 
 .np-bar-details div .v-list__tile {

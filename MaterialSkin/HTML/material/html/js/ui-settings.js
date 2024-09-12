@@ -905,7 +905,7 @@ Vue.component('lms-ui-settings', {
         },
         mediaControlsInfo(event) {
             storeClickOrTouchPos(event);
-            bus.$emit('dlg.open', 'iteminfo', { list:[i18n('To support this feature, this app needs to fool your browser into thinking its is playing audio. This is accomplished by playing a silent audio file in a loop. Most browsers block auto-playing of audio so this cannot start until you have interacted with the app (e.g. clicked somewhere). Alternatively you can configure your browser to allow auto-play of audio for the URL you use to access this app (%1).', window.location.hostname+':'+window.location.port)]});
+            bus.$emit('dlg.open', 'iteminfo', { list:[i18n("To support this feature, this app needs to fool your browser into thinking it is playing audio. This is accomplished by playing a silent audio file in a loop. Most browsers block auto-playing of audio so this cannot start until you have interacted with the app (e.g. clicked somewhere). Alternatively you can configure your browser to allow auto-play of audio for the URL you use to access this app (%1).", window.location.hostname+':'+window.location.port)]});
         },
         i18n(str, a1, a2) {
             if (this.show) {

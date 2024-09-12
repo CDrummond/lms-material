@@ -450,7 +450,7 @@
 "Thursday":"星期四",
 "Timeout (minutes)":"逾時（分鐘）",
 "Title":"標題",
-"To support this feature, this app needs to fool your browser into thinking its is playing audio. This is accomplished by playing a silent audio file in a loop. Most browsers block auto-playing of audio so this cannot start until you have interacted with the app (e.g. clicked somewhere). Alternatively you can configure your browser to allow auto-play of audio for the URL you use to access this app (%1).":"為了支援此功能，此應用程序需要欺騙您的瀏覽器，使其認為它正在播放音訊。這是通過循環播放沒有聲音訊檔案來實現的。大多數瀏覽器會阻止音訊自動播放，因此只有在您與應用程序交互（例如點擊某處）後才能開始播放。或者，您可以將瀏覽器設定為允許自動播放用於訪問此應用程序 (%1) 的網路音訊。",
+"To support this feature, this app needs to fool your browser into thinking it is playing audio. This is accomplished by playing a silent audio file in a loop. Most browsers block auto-playing of audio so this cannot start until you have interacted with the app (e.g. clicked somewhere). Alternatively you can configure your browser to allow auto-play of audio for the URL you use to access this app (%1).":"為了支援此功能，此應用程序需要欺騙您的瀏覽器，使其認為它正在播放音訊。這是通過循環播放沒有聲音訊檔案來實現的。大多數瀏覽器會阻止音訊自動播放，因此只有在您與應用程序交互（例如點擊某處）後才能開始播放。或者，您可以將瀏覽器設定為允許自動播放用於訪問此應用程序 (%1) 的網路音訊。",
 "Toggle queue":"切換佇列",
 "Toggle view":"切換檢視",
 "Total albums: %1":"專輯總數：%1",

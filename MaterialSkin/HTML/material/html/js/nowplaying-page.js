@@ -64,7 +64,7 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
       <v-card-text :class="['np-info-text', TRACK_TAB==index || tab.isMsg ? 'np-info-lyrics' : '', ALBUM_TAB==index ? 'np-info-review' : '']" :id="'np-tab'+index">
        <div v-if="TRACK_TAB==index && tab.texttitle" v-html="tab.texttitle" class="np-info-title" v-bind:class="{'lyrics-current-line':tab.highlight && undefined!=playerStatus.current.time && tab.lines && tab.lines[0].time>playerStatus.current.time}"></div>
        <div v-else-if="TRACK_TAB!=index && tab.texttitle" v-html="tab.texttitle" class="np-info-title"></div>
-       <img v-if="tab.image" :src="tab.image" loading="lazy" class="np-mai-img"></img>
+       <img v-if="tab.image" :src="tab.image" loading="lazy" class="np-mai-img" @dragstart.prevent="" @dragenter.prevent=""></img>
        <div v-if="TRACK_TAB==index && tab.lines">
         <template v-for="(line, lindex) in tab.lines">
          <obj :id="'np-lyrics-'+lindex" v-bind:class="{'lyrics-current-line':tab.highlight && undefined!=playerStatus.current.time && playerStatus.current.time>=line.time && playerStatus.current.time<((lindex+1)<tab.lines.length ? tab.lines[lindex+1].time : 86400)}">{{line.text.length<1 ? '&nbsp;' : line.text}}</obj></br/>
@@ -77,13 +77,13 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
          <template v-for="(item, iindex) in sect.items">
           <v-list-tile class="lms-list-item" v-bind:class="{'pq-current': (ALBUM_TAB==index && item.id==('track_id:'+infoTrack.track_id)) || (ARTIST_TAB==index && item.id==('album_id:'+infoTrack.album_id)), 'list-active':menu.show && index==menu.tab && sindex==menu.section && iindex==menu.index, 'browse-header' : item.header}" @click.stop="itemClicked(index, sindex, iindex, $event)">
            <v-list-tile-avatar v-if="item.image" :tile="true" class="lms-avatar">
-            <img :key="item.image" v-lazy="item.image"></img>
+            <img :key="item.image" v-lazy="item.image" @dragstart.prevent="" @dragenter.prevent=""></img>
            </v-list-tile-avatar>
            <v-list-tile-avatar v-else-if="item.icon" :tile="true" class="lms-avatar">
             <v-icon>{{item.icon}}</v-icon>
            </v-list-tile-avatar>
            <v-list-tile-avatar v-else-if="item.svg" :tile="true" class="lms-avatar">
-            <img class="svg-list-img" :src="item.svg | svgIcon(darkUi, item.header)" loading="lazy"></img>
+            <img class="svg-list-img" :src="item.svg | svgIcon(darkUi, item.header)" loading="lazy" @dragstart.prevent="" @dragenter.prevent=""></img>
            </v-list-tile-avatar>
            <v-list-tile-content>
             <v-list-tile-title v-if="ALBUM_TAB==index" v-html="item.title"></v-list-tile-title>
@@ -93,7 +93,7 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
            </v-list-tile-content>
            <v-list-tile-action v-if="ALBUM_TAB==index && undefined!=item.durationStr" class="np-list-time">{{item.durationStr}}</v-list-tile-action>
            <div class="emblem" v-if="item.emblem" :style="{background: item.emblem.bgnd}">
-            <img :src="item.emblem | emblem()" loading="lazy"></img>
+            <img :src="item.emblem | emblem()" loading="lazy" @dragstart.prevent="" @dragenter.prevent=""></img>
            </div>
           </v-list-tile>
          </template>
@@ -102,11 +102,11 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
         <div class="np-grid-sect" v-else-if="undefined!=sect.items && sect.grid && sect.items.length>=sect.min">
          <template v-for="(item, iindex) in sect.items">
           <div v-if="!item.header" class="np-grid-item" v-bind:class="{'pq-current': (ALBUM_TAB==index && item.id==('track_id:'+infoTrack.track_id)) || (ARTIST_TAB==index && item.id==('album_id:'+infoTrack.album_id)), 'list-active':menu.show && index==menu.tab && sindex==menu.section && iindex==menu.index, 'np-grid-item-nosub':ARTIST_TAB==index && !sect.haveSub}" @click.stop="itemClicked(index, sindex, iindex, $event)">
-           <img :key="item.image" v-lazy="item.image"></img>
+           <img :key="item.image" v-lazy="item.image" @dragstart.prevent="" @dragenter.prevent=""></img>
            <v-list-tile-title>{{item.title}}</v-list-tile-title>
            <v-list-tile-sub-title v-html="item.subtitle"></v-list-tile-sub-title>
            <div class="emblem" v-if="item.emblem" :style="{background: item.emblem.bgnd}">
-            <img :src="item.emblem | emblem()" loading="lazy"></img>
+            <img :src="item.emblem | emblem()" loading="lazy" @dragstart.prevent="" @dragenter.prevent=""></img>
            </div>
           </div>
          </template>
@@ -128,7 +128,7 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
        <v-card-text :class="['np-info-text-full', TRACK_TAB==index || tab.isMsg ? 'np-info-lyrics' : '', ALBUM_TAB==index ? 'np-info-review' : '']" :id="'np-tab'+index">
         <div v-if="TRACK_TAB==index && tab.texttitle" v-html="tab.texttitle" class="np-info-title" v-bind:class="{'lyrics-current-line':tab.highlight && undefined!=playerStatus.current.time && tab.lines && tab.lines[0].time>playerStatus.current.time}"></div>
         <div v-else-if="TRACK_TAB!=index && tab.texttitle" v-html="tab.texttitle" class="np-info-title"></div>
-        <img v-if="tab.image" :src="tab.image" loading="lazy" class="np-mai-img"></img>
+        <img v-if="tab.image" :src="tab.image" loading="lazy" class="np-mai-img" @dragstart.prevent="" @dragenter.prevent=""></img>
         <div v-if="TRACK_TAB==index && tab.lines">
          <template v-for="(line, lindex) in tab.lines">
           <obj :id="'np-lyrics-'+lindex" v-bind:class="{'lyrics-current-line':tab.highlight && undefined!=playerStatus.current.time && playerStatus.current.time>line.time && playerStatus.current.time<((lindex+1)<tab.lines.length ? tab.lines[lindex+1].time : 86400)}">{{line.text.length<1 ? '&nbsp;' : line.text}}</obj></br/>
@@ -141,13 +141,13 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
           <template v-for="(item, iindex) in sect.items">
            <v-list-tile class="lms-list-item" v-bind:class="{'pq-current': (ALBUM_TAB==index && item.id==('track_id:'+infoTrack.track_id)) || (ARTIST_TAB==index && item.id==('album_id:'+infoTrack.album_id)), 'list-active':menu.show && index==menu.tab && sindex==menu.section && iindex==menu.index, 'browse-header' : item.header}" @click.stop="itemClicked(index, sindex, iindex, $event)">
             <v-list-tile-avatar v-if="item.image" :tile="true" class="lms-avatar">
-             <img :key="item.image" v-lazy="item.image"></img>
+             <img :key="item.image" v-lazy="item.image" @dragstart.prevent="" @dragenter.prevent=""></img>
             </v-list-tile-avatar>
             <v-list-tile-avatar v-else-if="item.icon" :tile="true" class="lms-avatar">
              <v-icon>{{item.icon}}</v-icon>
             </v-list-tile-avatar>
             <v-list-tile-avatar v-else-if="item.svg" :tile="true" class="lms-avatar">
-             <img class="svg-list-img" :src="item.svg | svgIcon(darkUi, item.header)" loading="lazy"></img>
+             <img class="svg-list-img" :src="item.svg | svgIcon(darkUi, item.header)" loading="lazy" @dragstart.prevent="" @dragenter.prevent=""></img>
             </v-list-tile-avatar>
             <v-list-tile-content>
              <v-list-tile-title v-if="ALBUM_TAB==index" v-html="item.title"></v-list-tile-title>
@@ -157,7 +157,7 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
             </v-list-tile-content>
             <v-list-tile-action v-if="ALBUM_TAB==index && undefined!=item.durationStr" class="np-list-time">{{item.durationStr}}</v-list-tile-action>
             <div class="emblem" v-if="item.emblem" :style="{background: item.emblem.bgnd}">
-             <img :src="item.emblem | emblem()" loading="lazy"></img>
+             <img :src="item.emblem | emblem()" loading="lazy" @dragstart.prevent="" @dragenter.prevent=""></img>
             </div>
            </v-list-tile>
           </template>
@@ -166,11 +166,11 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
          <div class="np-grid-sect" v-else-if="undefined!=sect.items && sect.grid && sect.items.length>=sect.min">
           <template v-for="(item, iindex) in sect.items">
            <div v-if="!item.header" class="np-grid-item" v-bind:class="{'pq-current': (ALBUM_TAB==index && item.id==('track_id:'+infoTrack.track_id)) || (ARTIST_TAB==index && item.id==('album_id:'+infoTrack.album_id)), 'list-active':menu.show && index==menu.tab && sindex==menu.section && iindex==menu.index, 'browse-header' : item.header, 'np-grid-item-nosub':ARTIST_TAB==index && !sect.haveSub}" @click.stop="itemClicked(index, sindex, iindex, $event)">
-            <img :key="item.image" v-lazy="item.image"></img>
+            <img :key="item.image" v-lazy="item.image" @dragstart.prevent="" @dragenter.prevent=""></img>
             <v-list-tile-title>{{item.title}}</v-list-tile-title>
             <v-list-tile-sub-title v-html="item.subtitle"></v-list-tile-sub-title>
             <div class="emblem" v-if="item.emblem" :style="{background: item.emblem.bgnd}">
-             <img :src="item.emblem | emblem()" loading="lazy"></img>
+             <img :src="item.emblem | emblem()" loading="lazy" @dragstart.prevent="" @dragenter.prevent=""></img>
             </div>
            </div>
           </template>
@@ -201,7 +201,7 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
    </v-flex>
   </v-layout>
   <div v-if="!largeView && !disableBtns && (desktopLayout || MBAR_NONE!=mobileBar)" class="np-bar-image">
-  <img :key="coverUrl" :src="coverUrl" loading="lazy" onerror="this.src=DEFAULT_COVER" @contextmenu="showMenu" @click="clickImage(event)" class="np-cover" v-bind:class="{'np-trans':transCvr}"></img>
+  <img :key="coverUrl" :src="coverUrl" loading="lazy" onerror="this.src=DEFAULT_COVER" @dragstart.prevent="" @dragenter.prevent="" @contextmenu="showMenu" @click="clickImage(event)" class="np-cover" v-bind:class="{'np-trans':transCvr}"></img>
   </div>
   <div v-if="!desktopLayout && MBAR_THIN==mobileBar" class="np-bar-details-mobile ellipsis">{{mobileBarText}}</div>
   <v-list two-line subheader class="np-bar-details noselect" v-else-if="playerStatus.playlist.count>0 && (desktopLayout || MBAR_NONE!=mobileBar)">
@@ -235,9 +235,9 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
    <div v-show="overlayVolume>-1 && VOL_STD==playerStatus.dvc" id="volumeOverlay">{{overlayVolume}}%</div>
    <div v-if="landscape">
     <div v-if="!info.show" class="np-image-landscape" v-bind:class="{'np-image-landscape-wide':landscape && wide>1}">
-     <img :key="coverUrl" :src="coverUrl" loading="lazy" onerror="this.src=DEFAULT_COVER" @contextmenu="showMenu" @click="clickImage(event)" class="np-cover" v-touch:start="touchStart" v-touch:end="touchEnd" v-touch:moving="touchMoving" v-bind:class="{'np-trans':transCvr, 'np-cover-dim':showOverlay}"></img>
+     <img :key="coverUrl" :src="coverUrl" loading="lazy" onerror="this.src=DEFAULT_COVER" @dragstart.prevent="" @dragenter.prevent="" @contextmenu="showMenu" @click="clickImage(event)" class="np-cover" v-touch:start="touchStart" v-touch:end="touchEnd" v-touch:moving="touchMoving" v-bind:class="{'np-trans':transCvr, 'np-cover-dim':showOverlay}"></img>
      <div class="np-emblem" v-if="playerStatus.current.emblem" @click="emblemClicked" :style="{background:playerStatus.current.emblem.bgnd}" v-bind:class="{'np-cover-dim':showOverlay}">
-      <img :src="playerStatus.current.emblem | emblem()" loading="lazy"></img>
+      <img :src="playerStatus.current.emblem | emblem()" loading="lazy" @dragstart.prevent="" @dragenter.prevent=""></img>
      </div>
      <div class="np-menu" :title="trans.menu" @click="showMenu" id="overlay-menu" v-if="showOverlay && playerStatus.playlist.count>0" v-bind:class="{'np-skip-elevate':showOverlay}"></div>
      <table class="np-skip" v-if="showOverlay" @contextmenu="showMenu" @click="clickImage(event)">
@@ -309,9 +309,9 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
    </div>
    <div v-else>
     <div v-if="!info.show" class="np-image">
-     <img :key="coverUrl" :src="coverUrl" loading="lazy" onerror="this.src=DEFAULT_COVER" @contextmenu="showMenu" @click="clickImage(event)" v-touch:start="touchStart" v-touch:end="touchEnd" v-touch:moving="touchMoving" class="np-cover" v-bind:class="{'np-trans':transCvr, 'np-cover-dim':showOverlay}"></img>
+     <img :key="coverUrl" :src="coverUrl" loading="lazy" onerror="this.src=DEFAULT_COVER" @dragstart.prevent="" @dragenter.prevent="" @contextmenu="showMenu" @click="clickImage(event)" v-touch:start="touchStart" v-touch:end="touchEnd" v-touch:moving="touchMoving" class="np-cover" v-bind:class="{'np-trans':transCvr, 'np-cover-dim':showOverlay}"></img>
      <div class="np-emblem" v-if="playerStatus.current.emblem" @click="emblemClicked" :style="{background: playerStatus.current.emblem.bgnd}" v-bind:class="{'np-cover-dim':showOverlay}">
-      <img :src="playerStatus.current.emblem | emblem()" loading="lazy"></img>
+      <img :src="playerStatus.current.emblem | emblem()" loading="lazy" @dragstart.prevent="" @dragenter.prevent=""></img>
      </div>
      <div class="np-menu" :title="trans.menu" @click="showMenu" id="overlay-menu" v-if="showOverlay && playerStatus.playlist.count>0" v-bind:class="{'np-skip-elevate':showOverlay}"></div>
      <div class="np-close" :title="trans.collapseNp" @click="largeView=false" id="overlay-close" v-if="showOverlay" v-bind:class="{'np-skip-elevate':showOverlay}"></div>

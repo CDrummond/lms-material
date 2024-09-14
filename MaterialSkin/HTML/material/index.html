@@ -220,7 +220,7 @@
   <script src="html/lib/vue-touch-events.min.js?r=2.2.1pre1502"></script>
   <script src="html/lib/mousetrap.min.js?r=a4098"></script>
   <script src="html/lib/fast-average-color.min.js?r=9.3.0"></script>
-  <script src="html/lib/mobile-drag-drop.min.js?r=3.0.0-rc.0"></script>
+  <script src="html/lib/mobile-drag-drop.min.js?r=2.3.0-rc.2"></script>
   [% PERL %]
   my $version=Plugins::MaterialSkin::Plugin->pluginVersion();
   print("  <script src=\"html/lib/longpress.min.js?r=$version\"></script>\n");
@@ -262,7 +262,9 @@
   my $ua=$stash->get("userAgent");
   my $forceDndPolyfill = index($ua, 'Android') != -1; # || index($ua, 'iPad') != -1 || index($ua, 'iPhone') != -1 || index($ua, 'MobileSafari') != -1 ? 1 : 0;
   if ($forceDndPolyfill==1) {
-    print("  <script>MobileDragDrop.polyfill({ forceApply: true });</script>\n");
+    print("  <script>MobileDragDrop.polyfill({ forceApply:true, holdToDrag:250 });</script>\n");
+  } else {
+    print("  <script>MobileDragDrop.polyfill({ holdToDrag:250 });</script>\n");
   }
   [% END %]
   <script src="material/custom.js"></script>

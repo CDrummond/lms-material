@@ -114,7 +114,7 @@ Vue.component('lms-manage-players', {
       <v-flex xs12 v-bind:class="{'pmgr-sync':!isMainPlayer(player), 'active-player':currentPlayer && currentPlayer.id === player.id}">
        <v-flex xs12>
         <v-list class="pmgr-playerlist">
-         <v-list-tile @dragstart.native="dragStart(index, $event)" @dragend.native="dragEnd()" @dragover.native="dragOver($event)" @drop.native="drop(index, $event)" :draggable="!player.isgroup" v-bind:class="{'highlight-drop':dropId==('pmgr-player-'+index), 'highlight-drag':dragIndex==index}" :id="'tile-pmgr-player-'+index">
+         <v-list-tile @dragstart.native="dragStart(index, $event)" @dragenter.prevent="" @dragend.native="dragEnd()" @dragover.native="dragOver($event)" @drop.native="drop(index, $event)" :draggable="!player.isgroup" v-bind:class="{'highlight-drop':dropId==('pmgr-player-'+index), 'highlight-drag':dragIndex==index}" :id="'tile-pmgr-player-'+index">
           <v-list-tile-avatar v-if="!isMainPlayer(player)" class="pmgr-sync-player" @click="unsync(player, index)" v-bind:class="{'dimmed': !player.ison}">
            <v-icon class="link-item">link</v-icon>
           </v-list-tile-avatar>
@@ -155,7 +155,7 @@ Vue.component('lms-manage-players', {
        <v-flex xs12 v-if="player.isgroup && player.members && player.members.length>0 && (!player.syncmaster || player.syncmaster.length<1)">
         <div class="pmgr-member-list ellipsis">
          <template v-for="(member, idx) in player.members">
-         <obj @dragstart="dragStart(((index+1)*PMGR_GROUP_MEMBER_ID_MOD)+idx, $event)" @dragend="dragEnd()" :draggable="true" :id="'pmgr-player-'+(((index+1)*PMGR_GROUP_MEMBER_ID_MOD)+idx)" class="cursor link-item">{{playerMap[member] ? playerMap[member].name : member}}</obj><obj>{{idx==player.members.length-1 ? "" : ", "}}</obj>
+         <obj @dragstart="dragStart(((index+1)*PMGR_GROUP_MEMBER_ID_MOD)+idx, $event)" @dragenter.prevent="" @dragend="dragEnd()" :draggable="true" :id="'pmgr-player-'+(((index+1)*PMGR_GROUP_MEMBER_ID_MOD)+idx)" class="cursor link-item">{{playerMap[member] ? playerMap[member].name : member}}</obj><obj>{{idx==player.members.length-1 ? "" : ", "}}</obj>
          </template>
         </div>
        </v-flex>
@@ -668,7 +668,7 @@ Vue.component('lms-manage-players', {
         },
         dragStart(which, ev) {
             ev.dataTransfer.dropEffect = 'move';
-            ev.dataTransfer.setData('Text', "player:"+which);
+            ev.dataTransfer.setData('text/plain', "player:"+which);
             ev.dataTransfer.setDragImage(which<PMGR_GROUP_MEMBER_ID_MOD
                                             ? document.getElementById("pmgr-player-"+which).parentNode.parentNode.parentNode
                                             : document.getElementById("pmgr-player-"+which),

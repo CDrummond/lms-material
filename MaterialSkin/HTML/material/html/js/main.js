@@ -287,7 +287,7 @@ var app = new Vue({
         }
 
         // https://github.com/timruffles/mobile-drag-drop/issues/77
-        window.addEventListener( 'touchmove', function() {});
+        window.addEventListener( 'touchmove', function() {}, {passive: false});
 
         window.addEventListener('keyup', function(event) {
             if (event.keyCode === 27) {

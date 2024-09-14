@@ -671,7 +671,7 @@ var lmsServer = Vue.component('lms-server', {
                     if (!found) {
                         for (var i=0, len=SKIN_BOOL_OPTS.length; i<len; ++i) {
                             if (data[2]==SKIN_BOOL_OPTS[i]) {
-                                let val = 1 == parseInt(data[3]);
+                                let val = undefined!=data[3] && 1 == parseInt(data[3]);
                                 if (val!=lmsOptions[SKIN_BOOL_OPTS[i]]) {
                                     lmsOptions[SKIN_BOOL_OPTS[i]] = val;
                                     setLocalStorageVal(SKIN_BOOL_OPTS[i], val);

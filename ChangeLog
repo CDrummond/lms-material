@@ -22,6 +22,7 @@
 15. Fix download via browser.
 16. Don't add HTML formatting to weblink entries.
 17. If delete a saved 'Random Mix' then also un-pin from homescreen.
+18. Fix toggling 'Radios' non in 'Apps'.
 
 5.2.6
 -----

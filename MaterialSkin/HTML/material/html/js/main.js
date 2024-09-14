@@ -130,10 +130,8 @@ var app = new Vue({
                     }
                 }
                 for (var i=0, len=SKIN_BOOL_OPTS.length; i<len; ++i) {
-                    if (undefined!=data.result[SKIN_BOOL_OPTS[i]]) {
-                        lmsOptions[SKIN_BOOL_OPTS[i]] = 1 == parseInt(data.result[SKIN_BOOL_OPTS[i]]);
-                        setLocalStorageVal(SKIN_BOOL_OPTS[i], lmsOptions[SKIN_BOOL_OPTS[i]]);
-                    }
+                    lmsOptions[SKIN_BOOL_OPTS[i]] = undefined!=data.result[SKIN_BOOL_OPTS[i]] && 1 == parseInt(data.result[SKIN_BOOL_OPTS[i]]);
+                    setLocalStorageVal(SKIN_BOOL_OPTS[i], lmsOptions[SKIN_BOOL_OPTS[i]]);
                 }
                 for (var i=0, len=SKIN_INT_OPTS.length; i<len; ++i) {
                     if (undefined!=data.result[SKIN_INT_OPTS[i]]) {

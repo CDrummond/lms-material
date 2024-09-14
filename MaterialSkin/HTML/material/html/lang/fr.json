@@ -357,6 +357,7 @@
 "Recently Updated Releases":"Albums mis à jour récemment",
 "Regular":"Normale",
 "Release":"Album",
+"Release type":"Type de sortie",
 "Release, Track Number":"Album, Numéro de Morceau",
 "Releases":"Albums",
 "Reload":"Recharger",
@@ -525,6 +526,8 @@
 "Thurs":"Je",
 "Thursday":"Jeudi",
 "Timeout (minutes)":"Durée (minutes)",
+"Tint background":"Teindre l'arrière-plan",
+"Tint background with chosen color.":"Colorer l'arrière-plan avec la couleur choisie.",
 "Title":"Titre",
 "To support this feature, this app needs to fool your browser into thinking it is playing audio. This is accomplished by playing a silent audio file in a loop. Most browsers block auto-playing of audio so this cannot start until you have interacted with the app (e.g. clicked somewhere). Alternatively you can configure your browser to allow auto-play of audio for the URL you use to access this app (%1).":"Pour prendre en charge cette fonctionnalité, l'application doit faire croire au navigateur qu'elle lit de l'audio. À ce titre, elle joue un fichier audio silencieux en boucle. La plupart des navigateurs bloquent la lecture automatique de l'audio. Dans ce cas, la lecture ne démarrera pas tant que vous n'aurez pas interagi avec l'application (par exemple, en cliquant quelque part). Vous pouvez aussi configurer votre navigateur pour autoriser la lecture automatique de l'audio pour l'URL que vous utilisez pour accéder à cette application (%1).",
 "Toggle queue":"Afficher ou pas la liste de lecture",
@@ -666,8 +669,5 @@
 "1 Year":"1 année",
 "%1 Years":"%1 années",
 "1 day":"1 jour",
-"%1 days":"%1 jours",
-"Release type":"",
-"Tint background":"",
-"Tint background with chosen color.":""
+"%1 days":"%1 jours"
 }

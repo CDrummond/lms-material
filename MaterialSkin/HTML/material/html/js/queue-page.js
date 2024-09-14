@@ -1430,12 +1430,23 @@ var lmsQueue = Vue.component("lms-queue", {
             this.dropIndex = index;
             // Drag over item at top/bottom of list to start scrolling
             this.stopScrolling = true;
-            if (ev.clientY < 110) {
+            if (ev.clientY < (queryParams.topPad + 110)) {
                 this.stopScrolling = false;
                 this.scrollList(-5)
             }
 
-            if (ev.clientY > (window.innerHeight - 70)) {
+            let distance = 28 + queryParams.botPad +
+                (this.$store.state.desktopLayout
+                    ? 72
+                    : (52 +
+                        (this.$store.state.mobileBar==MBAR_NONE
+                            ? 0
+                            : this.$store.state.mobileBar==MBAR_THIN
+                                ? 22
+                                : this.$store.state.mobileBar==MBAR_THICK
+                                   ? 48
+                                    : 0)));
+            if (ev.clientY > (window.innerHeight - distance)) {
                 this.stopScrolling = false;
                 this.scrollList(5)
             }

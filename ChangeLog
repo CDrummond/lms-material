@@ -2,6 +2,7 @@
 -----
 1. Delay dnd, via Polyfill, for 1/4 of a second so that it does not interfere
    with scrolling.
+2. Improve drag scrolling.
 
 5.3.0
 -----

@@ -790,6 +790,10 @@ var lmsBrowse = Vue.component("lms-browse", {
         bus.$on('releaseSupportChanged', function() {
             this.updateSortStrings();
         }.bind(this));
+        this.queueEmpty = true;
+        bus.$on('queueStatus', function(size) {
+            this.queueEmpty = size<1;
+        }.bind(this));
     },
     methods: {
         updateSortStrings() {
@@ -1856,12 +1860,23 @@ var lmsBrowse = Vue.component("lms-browse", {
                 this.dropIndex = index;
                 // Drag over item at top/bottom of list to start scrolling
                 this.stopScrolling = true;
-                if (ev.clientY < 110) {
+                if (ev.clientY < (queryParams.topPad + 110)) {
                     this.stopScrolling = false;
                     this.scrollList(-5)
                 }
 
-                if (ev.clientY > (window.innerHeight - 70)) {
+                let distance = 28 + queryParams.botPad + this.queueEmpty ? 0 :
+                    (this.$store.state.desktopLayout
+                        ? 72
+                        : (52 +
+                            (this.$store.state.mobileBar==MBAR_NONE
+                                ? 0
+                                : this.$store.state.mobileBar==MBAR_THIN
+                                    ? 22
+                                    : this.$store.state.mobileBar==MBAR_THICK
+                                    ? 48
+                                        : 0)));
+                if (ev.clientY > (window.innerHeight - distance)) {
                     this.stopScrolling = false;
                     this.scrollList(5)
                 }

@@ -149,7 +149,7 @@ var lmsBrowse = Vue.component("lms-browse", {
        <v-icon>{{item.item.icon}}</v-icon>
       </v-list-tile-avatar>
       <v-list-tile-avatar v-else-if="item.item.svg" :tile="true" class="lms-avatar">
-       <img :class="['hdr-'+hRgb, 'svg-list-img']" :src="item.item.svg | svgIcon(darkUi, undefined, true)" loading="lazy"></img>
+       <img :class="['hdr-'+hRgb, 'svg-list-img']" :src="item.item.svg | svgIcon(darkUi, undefined, true)" loading="lazy" @dragstart.prevent="" @dragenter.prevent=""></img>
       </v-list-tile-avatar>
       <v-list-tile-content>
        <v-list-tile-title>{{item.item.title}}</v-list-tile-title>
@@ -178,8 +178,8 @@ var lmsBrowse = Vue.component("lms-browse", {
        <img v-else-if="citem.image" :key="citem.image" :src="citem.image" onerror="this.src=DEFAULT_COVER" v-bind:class="{'radio-img': SECTION_RADIO==citem.section || SECTION_APPS==citem.section || citem.isRadio}" class="image-grid-item-img" loading="lazy"></img>
        <div class="image-grid-item-icon" v-else>
         <v-icon v-if="citem.icon" class="image-grid-item-img image-grid-item-icon">{{citem.icon}}</v-icon>
-        <img v-else-if="citem.svg" class="image-grid-item-svg" :src="citem.svg | svgIcon(darkUi)" loading="lazy"></img>
-        <img v-else class="image-grid-item-svg" :src="'image' | svgIcon(darkUi)" loading="lazy"></img>
+        <img v-else-if="citem.svg" class="image-grid-item-svg" :src="citem.svg | svgIcon(darkUi)" loading="lazy" @dragstart.prevent="" @dragenter.prevent=""></img>
+        <img v-else class="image-grid-item-svg" :src="'image' | svgIcon(darkUi)" loading="lazy" @dragstart.prevent="" @dragenter.prevent=""></img>
        </div>
        <div v-if="citem.image" class="image-grid-text" @click.stop="itemMenu(citem, item.rs+col, $event)">{{citem.title}}</div>
        <div v-else class="image-grid-text">{{citem.title}}</div>
@@ -214,7 +214,7 @@ var lmsBrowse = Vue.component("lms-browse", {
       <v-icon>{{item.icon}}</v-icon>
      </v-list-tile-avatar>
      <v-list-tile-avatar v-else-if="item.svg" :tile="true" class="lms-avatar">
-      <img :class="['hdr-'+hRgb, 'svg-list-img']" :src="item.svg | svgIcon(darkUi, undefined, item.header)" loading="lazy"></img>
+      <img :class="['hdr-'+hRgb, 'svg-list-img']" :src="item.svg | svgIcon(darkUi, undefined, item.header)" loading="lazy" @dragstart.prevent="" @dragenter.prevent=""></img>
      </v-list-tile-avatar>
 
      <!-- TODO: Do we have search fields with large lists?? -->
@@ -265,7 +265,7 @@ var lmsBrowse = Vue.component("lms-browse", {
       <v-icon>{{item.icon}}</v-icon>
      </v-list-tile-avatar>
      <v-list-tile-avatar v-else-if="item.svg" :tile="true" class="lms-avatar">
-      <img :class="['hdr-'+hRgb, 'svg-list-img']" :src="item.svg | svgIcon(darkUi, undefined, true)" loading="lazy"></img>
+      <img :class="['hdr-'+hRgb, 'svg-list-img']" :src="item.svg | svgIcon(darkUi, undefined, true)" loading="lazy" @dragstart.prevent="" @dragenter.prevent=""></img>
      </v-list-tile-avatar>
      <v-list-tile-content>
       <v-list-tile-title>{{item.title}}</v-list-tile-title>
@@ -301,7 +301,7 @@ var lmsBrowse = Vue.component("lms-browse", {
       <v-icon>{{item.icon}}</v-icon>
      </v-list-tile-avatar>
      <v-list-tile-avatar v-else-if="item.svg" :tile="true" class="lms-avatar">
-      <img class="svg-list-img" :src="item.svg | svgIcon(darkUi)"></img>
+      <img class="svg-list-img" :src="item.svg | svgIcon(darkUi)" @dragstart.prevent="" @dragenter.prevent=""></img>
      </v-list-tile-avatar>
      <v-list-tile-avatar v-else-if="selection.size>0 && browseCanSelect(item)" :tile="true" class="lms-avatar">
       <v-icon>check_box_outline_blank</v-icon>

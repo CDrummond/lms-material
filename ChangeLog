@@ -1,6 +1,7 @@
 5.3.2
 -----
 1. Only show play/add button text if showing detailed sub-toolbar.
+2. Don't add HTML formatting to audio entries.
 
 5.3.1
 -----

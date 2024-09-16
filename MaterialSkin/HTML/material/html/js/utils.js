@@ -1229,3 +1229,10 @@ function timeStr(date, lang) {
 function dateStr(date, lang) {
     return date.toLocaleDateString(lang, { weekday: 'short', month: 'short', day: 'numeric', year: undefined }).replace(", ", "  ");
 }
+
+function canClickItem(item) {
+    return (item.style && item.style.startsWith('item') && item.style!='itemNoAction') ||
+            undefined!=item.weblink ||
+            // Some items have style=itemNoAction, but we have an action??? DynamicPlaylists...
+            (/*!item.style &&*/ ( (item.actions && (item.actions.go || item.actions.do)) || item.nextWindow || item.params /*CustomBrowse*/));
+}

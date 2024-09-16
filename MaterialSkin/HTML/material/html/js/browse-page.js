@@ -951,10 +951,7 @@ var lmsBrowse = Vue.component("lms-browse", {
             browseHandleTextClickResponse(this, item, command, data, isMoreMenu);
         },
         canClickText(item) {
-            return (item.style && item.style.startsWith('item') && item.style!='itemNoAction') ||
-                   undefined!=item.weblink ||
-                   // Some items have style=itemNoAction, but we have an action??? DynamicPlaylists...
-                   (/*!item.style &&*/ ( (item.actions && (item.actions.go || item.actions.do)) || item.nextWindow || item.params /*CustomBrowse*/));
+            return canClickItem(item);
         },
         doTextClick(item, isMoreMenu) {
             var command = this.buildCommand(item);

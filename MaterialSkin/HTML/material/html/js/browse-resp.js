@@ -947,6 +947,7 @@ function parseBrowseResp(data, parent, options, cacheKey, parentCommand, parentG
             var groupReleases = true; // Prevent actually grouping ino releases even if we have releaseType
             var isWorksAlbums = undefined!=parent && parent.id.startsWith("work_id:");
             var ignoreRoles = new Set();
+            var reqComposerId = undefined;
             if (data.params && data.params.length>1) {
                 let reverse = false;
                 let isNewMusic = false;
@@ -968,7 +969,15 @@ function parseBrowseResp(data, parent, options, cacheKey, parentCommand, parentG
                         } else if (lower == DONT_GROUP_RELEASE_TYPES) {
                             groupReleases = false;
                         } else if (lower.startsWith("role_id:")) {
-                            ignoreRoles=new Set(splitIntArray(lower.split(':')[1]));
+                            let roles = lower.split(':')[1];
+                            if (roles=='composer') {
+                                roles=[COMPOSER_ARTIST_ROLE];
+                            } else if (roles=='conductor') {
+                                roles=[CONDUCTOR_ARTIST_ROLE];
+                            }
+                            ignoreRoles=new Set(splitIntArray(roles));
+                        } else if (lower.startsWith("composer_id:")) {
+                            reqComposerId = lower.split(':')[1];
                         }
                     }
                 }
@@ -1114,6 +1123,10 @@ function parseBrowseResp(data, parent, options, cacheKey, parentCommand, parentG
                               compilation: i.compilation,
                               nonmain: nonmain
                           };
+                // For My Music / works / Composer / <composer> / <work> / <album> store composer_id
+                if (undefined!=reqComposerId && 1==ignoreRoles.size && ignoreRoles.has(COMPOSER_ARTIST_ROLE)) {
+                    album['composer_id'] = reqComposerId;
+                }
                 setFavoritesParams(i, album);
                 ids.add(i.id);
                 if (albumGroups) {

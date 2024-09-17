@@ -2,6 +2,8 @@
 -----
 1. Only show play/add button text if showing detailed sub-toolbar.
 2. Don't add HTML formatting to audio, or other clickable, entries.
+3. Fix listing album tracks under My Music / Works / Composer / COMPOSER /
+   WORK / ALBUM
 
 5.3.1
 -----

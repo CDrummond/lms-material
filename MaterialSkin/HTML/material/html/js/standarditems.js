@@ -178,8 +178,12 @@ function buildStdItemCommand(item, parentCommand) {
             } else {
                 command.params.push("performance:");
             }
-            // For albums browsed from favourites...
-            if (undefined!=item.artist_id && getIndex(command.params, "artist_id:")<0) {
+
+            if (undefined!=item.composer_id && getIndex(command.params, "work_id:")>=0) {
+                // My Music / works / Composer / <composer> / <work> / <album>
+                command.params.push("composer_id:"+item.composer_id);
+            } else if (undefined!=item.artist_id && getIndex(command.params, "artist_id:")<0) {
+                // For albums browsed from favourites...
                 command.params.push("artist_id:"+item.artist_id);
             }
         } else if (item.id.startsWith("genre_id:")) {

@@ -3277,6 +3277,7 @@ div.v-subheader {
  }
 }
 
+.detailed-sub #back-button,
 .back-button {
  margin-right:14px !important;
 }

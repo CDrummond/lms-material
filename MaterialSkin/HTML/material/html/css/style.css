@@ -3945,3 +3945,8 @@ div.v-subheader {
 .tinted {
   --pbar-bgnd:transparent;
 }
+
+/* Disable transititions on subtoolbar stops weird effect when home button is used */
+.subtoolbar * {
+ transition:none!important;
+}

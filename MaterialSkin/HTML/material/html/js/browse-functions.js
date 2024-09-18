@@ -196,7 +196,7 @@ function browseActions(view, item, args, count, showRoles, showWorks) {
         if (undefined!=args['artist_id'] && showRoles && showRoles.length>0) {
             for (let r=0, rlen=showRoles.length; r<rlen; ++r) {
                 if (COMPOSER_ARTIST_ROLE==showRoles[r]) {
-                    var params = [SORT_KEY+TRACK_SORT_PLACEHOLDER, PLAYLIST_TRACK_TAGS, 'artist_id:'+args['artist_id'], 'role_id:COMPOSER', 'material_skin_artist:'+args['artist']];
+                    var params = [SORT_KEY+TRACK_SORT_PLACEHOLDER, PLAYLIST_TRACK_TAGS, 'artist_id:'+args['artist_id'], 'role_id:2', 'material_skin_artist:'+args['artist']];
                     browseAddLibId(view, params);
                     actions.push({title:i18n('Compositions'), svg:'composer', do:{ command: ['tracks'], params: params}, weight:81, stdItem:STD_ITEM_COMPOSITION_TRACKS});
                 } else {
@@ -1041,7 +1041,7 @@ function browseAddWorksCategories(view, item) {
     view.items.push({
         title: i18n("Composers"),
         command: ["artists"],
-        params: ["role_id:COMPOSER", "work_id:-1", ARTIST_TAGS],
+        params: ["role_id:2", "work_id:-1", ARTIST_TAGS],
         svg: "composer",
         type: "group",
         id: "mmw:ac"});

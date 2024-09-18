@@ -80,13 +80,13 @@ const STD_ITEMS=[
     }
 ];
 
-function addParentParams(item, parentCommand, command, isWorks) {
+function addParentParams(item, parentCommand, command) {
     let roleIdPos = undefined;
     let artistIdRemoved = false;
     for (var i=0, len=parentCommand.params.length; i<len; ++i) {
         if (typeof parentCommand.params[i] === 'string' || parentCommand.params[i] instanceof String) {
             var lower = parentCommand.params[i].toLowerCase();
-            if (lower.startsWith("artist_id:") && !isWorks) {
+            if (lower.startsWith("artist_id:")) {
                 if (lmsOptions.noArtistFilter && (item.compilation || item.nonmain)) {
                     // Want all tracks from an album, not just those from this artist, so don't filter on artist_id
                     command.params.push('material_skin_'+parentCommand.params[i]);
@@ -96,6 +96,7 @@ function addParentParams(item, parentCommand, command, isWorks) {
                     command.params.push(parentCommand.params[i]);
                 }
             } else if (!LMS_NO_ROLE_FILTER && lower.startsWith("role_id:")) {
+                console.log("ADD ROLE");
                 roleIdPos = command.params.length;
                 command.params.push(parentCommand.params[i]);
             } else if (!LMS_NO_GENRE_FILTER && lower.startsWith("genre_id:")) {
@@ -179,11 +180,8 @@ function buildStdItemCommand(item, parentCommand) {
                 command.params.push("performance:");
             }
 
-            if (undefined!=item.composer_id && getIndex(command.params, "work_id:")>=0) {
-                // My Music / works / Composer / <composer> / <work> / <album>
-                command.params.push("composer_id:"+item.composer_id);
-            } else if (undefined!=item.artist_id && getIndex(command.params, "artist_id:")<0) {
-                // For albums browsed from favourites...
+            // For albums browsed from favourites...
+            if (undefined!=item.artist_id && getIndex(command.params, "artist_id:")<0) {
                 command.params.push("artist_id:"+item.artist_id);
             }
         } else if (item.id.startsWith("genre_id:")) {
@@ -205,7 +203,7 @@ function buildStdItemCommand(item, parentCommand) {
             if (undefined!=item.album_id) {
                 command.params.push("album_id:"+item.album_id);
             }
-            addParentParams(item, parentCommand, command, true);
+            addParentParams(item, parentCommand, command);
         }
     }
     return command;

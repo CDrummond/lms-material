@@ -504,6 +504,7 @@ function copyVars(iframe) {
     if (undefined==iframe) {
         return;
     }
+    copyVar(iframe, '--background-color');
     copyVar(iframe, '--primary-color');
     copyVar(iframe, '--accent-color');
     copyVar(iframe, '--pq-current-color');

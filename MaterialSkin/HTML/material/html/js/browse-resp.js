@@ -1057,7 +1057,6 @@ function parseBrowseResp(data, parent, options, cacheKey, parentCommand, parentG
                     artists = [parent.title];
                 }
                 let group = "ALBUM";
-                let nonmain = undefined; // This artist is not main artist of album
                 if (lmsOptions.groupByReleaseType>0) {
                     let roles = new Set(undefined==i.role_ids ? [] : splitIntArray(i.role_ids));
                     showRoles = new Set([...showRoles, ...roles]);
@@ -1068,16 +1067,12 @@ function parseBrowseResp(data, parent, options, cacheKey, parentCommand, parentG
                             group = undefined==i.release_type ? "ALBUM" : i.release_type.toUpperCase();
                         } else if (roles.has(TRACK_ARTIST_ROLE)) {
                             group = "APPEARANCE";
-                            nonmain = true;
                         } else if (roles.has(CONDUCTOR_ARTIST_ROLE)) {
                             group = "APPEARANCE_CONDUCTOR";
-                            nonmain = true;
                         } else if (roles.has(BAND_ARTIST_ROLE)) {
                             group = "APPEARANCE_BAND";
-                            nonmain = true;
                         } else if (roles.has(COMPOSER_ARTIST_ROLE)) {
                             group = "COMPOSITION";
-                            nonmain = true;
                         }
                     }
                 }
@@ -1118,8 +1113,7 @@ function parseBrowseResp(data, parent, options, cacheKey, parentCommand, parentG
                               multi: LMS_GROUP_DISCS && undefined!=i.disccount && parseInt(i.disccount)>1,
                               extid: i.extid,
                               filter: FILTER_PREFIX+group,
-                              compilation: i.compilation,
-                              nonmain: nonmain
+                              compilation: i.compilation
                           };
 
                 setFavoritesParams(i, album);

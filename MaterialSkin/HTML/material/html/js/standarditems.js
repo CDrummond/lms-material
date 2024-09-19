@@ -80,14 +80,17 @@ const STD_ITEMS=[
     }
 ];
 
-function addParentParams(item, parentCommand, command, isWorks) {
+function addParentParams(parentCommand, command) {
+    if (undefined==parentCommand || undefined==parentCommand.params) {
+        return;
+    }
     let roleIdPos = undefined;
     let artistIdRemoved = false;
     for (var i=0, len=parentCommand.params.length; i<len; ++i) {
         if (typeof parentCommand.params[i] === 'string' || parentCommand.params[i] instanceof String) {
             var lower = parentCommand.params[i].toLowerCase();
             if (lower.startsWith("artist_id:")) {
-                if (!isWorks && (lmsOptions.noArtistFilter && (item.compilation || item.nonmain))) {
+                if (lmsOptions.noArtistFilter) {
                     // Want all tracks from an album, not just those from this artist, so don't filter on artist_id
                     command.params.push('material_skin_'+parentCommand.params[i]);
                     artistIdRemoved = true;
@@ -173,7 +176,7 @@ function buildStdItemCommand(item, parentCommand) {
                 }
             }
         } else if (item.id.startsWith("album_id:")) {
-            let artistIdRemoved = addParentParams(item, parentCommand, command);
+            let artistIdRemoved = addParentParams(parentCommand, command);
             if (undefined!=item.performance) {
                 command.params.push("performance:"+item.performance);
             } else {
@@ -203,7 +206,7 @@ function buildStdItemCommand(item, parentCommand) {
             if (undefined!=item.album_id) {
                 command.params.push("album_id:"+item.album_id);
             }
-            addParentParams(item, parentCommand, command, true);
+            addParentParams(parentCommand, command);
         }
     }
     return command;

@@ -7,6 +7,7 @@
 4. Fix background colour of 'Update information' screen.
 5. Fix showing all tracks of a multi-artist album if navigating from an
    artist, and Material is configured to show all.
+6. Use no-artist filter always, if set.
 
 5.3.1
 -----

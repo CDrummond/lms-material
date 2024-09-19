@@ -5,6 +5,8 @@
 3. Fix listing album tracks under My Music / Works / Composer / COMPOSER /
    WORK / ALBUM
 4. Fix background colour of 'Update information' screen.
+5. Fix showing all tracks of a multi-artist album if navigating from an
+   artist, and Material is configured to show all.
 
 5.3.1
 -----

@@ -109,6 +109,7 @@ function addParentParams(item, parentCommand, command, isWorks) {
     if (artistIdRemoved && undefined!=roleIdPos) {
         command.params.splice(roleIdPos, 1);
     }
+    return artistIdRemoved;
 }
 
 function buildStdItemCommand(item, parentCommand) {
@@ -172,7 +173,7 @@ function buildStdItemCommand(item, parentCommand) {
                 }
             }
         } else if (item.id.startsWith("album_id:")) {
-            addParentParams(item, parentCommand, command);
+            let artistIdRemoved = addParentParams(item, parentCommand, command);
             if (undefined!=item.performance) {
                 command.params.push("performance:"+item.performance);
             } else {
@@ -180,7 +181,7 @@ function buildStdItemCommand(item, parentCommand) {
             }
 
             // For albums browsed from favourites...
-            if (undefined!=item.artist_id && getIndex(command.params, "artist_id:")<0) {
+            if (!artistIdRemoved && undefined!=item.artist_id && getIndex(command.params, "artist_id:")<0) {
                 command.params.push("artist_id:"+item.artist_id);
             }
         } else if (item.id.startsWith("genre_id:")) {

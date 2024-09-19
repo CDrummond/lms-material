@@ -91,12 +91,11 @@ function addParentParams(item, parentCommand, command, isWorks) {
                     // Want all tracks from an album, not just those from this artist, so don't filter on artist_id
                     command.params.push('material_skin_'+parentCommand.params[i]);
                     artistIdRemoved = true;
-                } else {
+                } else if (getIndex(command.params, "artist_id:")<0) {
                     // Retrict to only tracks from this artist
                     command.params.push(parentCommand.params[i]);
                 }
             } else if (!LMS_NO_ROLE_FILTER && lower.startsWith("role_id:")) {
-                console.log("ADD ROLE");
                 roleIdPos = command.params.length;
                 command.params.push(parentCommand.params[i]);
             } else if (!LMS_NO_GENRE_FILTER && lower.startsWith("genre_id:")) {

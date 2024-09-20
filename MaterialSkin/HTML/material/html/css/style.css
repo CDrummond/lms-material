@@ -111,6 +111,7 @@
  --scrollbar-thumb-hover-color:var(--std-scrollbar-thumb-hover-color);
  --tinted-background-shadow-color:var(--background-shadow-color);
  --popup-background-color:var(--std-popup-background-color);
+ --tint-color:var(--primary-color);
 }
 
 @supports not (color: color-mix(in srgb, red, green)) {
@@ -210,6 +211,7 @@
  --top-toolbar-text-color:var(--light-text-color);
  --sub-toolbar-text-color:var(--light-text-color);
  --bottom-toolbar-text-color:var(--light-text-color);
+ --tint-color:var(--primary-color);
 }
 
 .v-dialog--fullscreen .v-sheet {

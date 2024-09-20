@@ -81,7 +81,7 @@
  --dialog-pad:0px;
  --desktop-np-bottom-pad:0px;
  --dialog-opacity:1.0;
- --pbar-bgnd:rgba(32, 32, 32, 0.15);
+ --pbar-bgnd:rgba(32, 32, 32, 0.12);
  --pbar-colored-bgnd:rgba(220, 220, 220, 0.3);
  --50vh:calc(var(--vh, 1vh)*50);
  --100vh:calc(var(--vh, 1vh)*100);
@@ -194,7 +194,7 @@
  --album-separator-color:rgba(255, 255, 255, 0.2);
  --pq-current-color:rgba(var(--highlight-rgb),0.25);
  --pq-current-album-color:rgba(var(--highlight-rgb),0.1);
- --pbar-bgnd:rgba(200, 200, 200, 0.15);
+ --pbar-bgnd:rgba(200, 200, 200, 0.12);
  --np-bgnd-full-shadow-color:rgba(48, 48, 48, 0.8);
  --trans-bottom-toolbar-color:rgba(48, 48, 48, 0.25);
  --bottom-toolbar-border-color:rgba(237, 232, 232, 0.1);
@@ -3942,10 +3942,6 @@ div.v-subheader {
 
 .lms-list .v-text-field .v-label--active {
  top:9px!important;
-}
-
-.tinted {
-  --pbar-bgnd:transparent;
 }
 
 /* Disable transititions on subtoolbar stops weird effect when home button is used */

@@ -1963,9 +1963,9 @@ div.v-rating i.primary--text, div.v-rating i.accent--text {
 }
 
 .lms-list .highlight {
- -webkit-box-shadow:inset 0px 0px 0px 2px var(--active-color)!important;
- -moz-box-shadow:inset 0px 0px 0px 2px var(--active-color)!important;
- box-shadow:inset 0px 0px 0px 2px var(--active-color)!important;
+ -webkit-box-shadow:inset 0px 0px 0px 2px rgb(var(--highlight-rgb), 0.5)!important;
+ -moz-box-shadow:inset 0px 0px 0px 2px rgb(var(--highlight-rgb), 0.5)!important;
+ box-shadow:inset 0px 0px 0px 2px rgb(var(--highlight-rgb), 0.5)!important;
  border-radius: 6px;
 }
 

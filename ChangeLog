@@ -9,6 +9,7 @@
    artist, and Material is configured to show all.
 6. Use no-artist filter always, if set.
 7. Fix tinted background when not using colour from cover.
+8. Reduce opacity of current artist highlight in track list.
 
 5.3.1
 -----

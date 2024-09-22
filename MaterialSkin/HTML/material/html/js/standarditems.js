@@ -80,7 +80,7 @@ const STD_ITEMS=[
     }
 ];
 
-function addParentParams(parentCommand, command) {
+function addParentParams(parentCommand, command, canRemoveArtistId) {
     if (undefined==parentCommand || undefined==parentCommand.params) {
         return;
     }
@@ -90,7 +90,7 @@ function addParentParams(parentCommand, command) {
         if (typeof parentCommand.params[i] === 'string' || parentCommand.params[i] instanceof String) {
             var lower = parentCommand.params[i].toLowerCase();
             if (lower.startsWith("artist_id:")) {
-                if (lmsOptions.noArtistFilter) {
+                if (lmsOptions.noArtistFilter && canRemoveArtistId) {
                     // Want all tracks from an album, not just those from this artist, so don't filter on artist_id
                     command.params.push('material_skin_'+parentCommand.params[i]);
                     artistIdRemoved = true;
@@ -176,7 +176,7 @@ function buildStdItemCommand(item, parentCommand) {
                 }
             }
         } else if (item.id.startsWith("album_id:")) {
-            let artistIdRemoved = addParentParams(parentCommand, command);
+            let artistIdRemoved = addParentParams(parentCommand, command, true);
             if (undefined!=item.performance) {
                 command.params.push("performance:"+item.performance);
             } else {
@@ -206,7 +206,7 @@ function buildStdItemCommand(item, parentCommand) {
             if (undefined!=item.album_id) {
                 command.params.push("album_id:"+item.album_id);
             }
-            addParentParams(parentCommand, command);
+            addParentParams(parentCommand, command, "tracks"==command[0]);
         }
     }
     return command;

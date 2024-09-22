@@ -3231,6 +3231,12 @@ div.v-subheader {
  font-size:100%;
 }
 
+.detailed-sub .subtoolbar-subtitle {
+ line-height:24px;
+ min-height:24px;
+ vertical-align: middle;
+}
+
 .toolbar-clock {
  position:fixed;
  top:calc(var(--top-pad) + 2px);

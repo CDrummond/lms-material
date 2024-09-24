@@ -352,7 +352,7 @@ function parseBrowseResp(data, parent, options, cacheKey, parentCommand, parentG
                                 i.image=undefined;
                             }
                         } else if (i.presetParams.favorites_url.startsWith("db:genre.name") && i.presetParams.icon=="html/images/genres.png") {
-                            i.svg="guitar-acoustic";
+                            i.svg="genre";
                             i.image=undefined;
                         } else if (i.presetParams.favorites_url.startsWith("db:year.id") && i.presetParams.icon=="html/images/years.png") {
                             i.icon="date_range";
@@ -2070,7 +2070,7 @@ function parseBrowseModes(view, data, genreFilter, yearFilter, altId) {
                 if (undefined!=genreFilter) {
                     continue;
                 }
-                item.svg = "guitar-acoustic";
+                item.svg = "genre";
                 item.icon = undefined;
                 item.cancache = false;
                 item.id = GENRES_ID;
@@ -2141,7 +2141,7 @@ function parseBrowseModes(view, data, genreFilter, yearFilter, altId) {
                     if (undefined!=genreFilter) {
                         continue;
                     }
-                    item.svg = "guitar-acoustic";
+                    item.svg = "genre";
                     item.icon = undefined;
                 } else {
                     tryMapping = true;

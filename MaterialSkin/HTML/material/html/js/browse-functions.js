@@ -1049,7 +1049,7 @@ function browseAddWorksCategories(view, item) {
         title: i18n("Genres"),
         command: ["genres"],
         params: ["work_id:-1", "tags:s"],
-        svg: "guitar-acoustic",
+        svg: "genre",
         type: "group",
         id: "mmw:ag"});
     view.headerTitle = stripLinkTags(item.title);
@@ -2148,7 +2148,7 @@ function browseMyMusicMenu(view) {
                                             item.svg = "artist";
                                             item.icon = undefined;
                                         } else if (c.id.startsWith("genre")) {
-                                            item.svg = "guitar-acoustic";
+                                            item.svg = "genre";
                                             item.icon = undefined;
                                         } else {
                                             item.icon = c.id.startsWith("new") ? "new_releases" :
@@ -2165,7 +2165,7 @@ function browseMyMusicMenu(view) {
                                             item.svg = "artist";
                                             item.icon = undefined;
                                         } else if (c.icon.endsWith("/genres.png")) {
-                                            item.svg = "guitar-acoustic";
+                                            item.svg = "genre";
                                             item.icon = undefined;
                                         }
                                     }

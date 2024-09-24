@@ -439,7 +439,7 @@ Vue.component('lms-player-settings', {
             }
         }.bind(this));
         bus.$on('iframeClosed', function(isPlayer) {
-            if (isPlayer) { // update any settings that might have changed
+            if (this.show && isPlayer) { // update any settings that might have changed
                 this.update(true);
             }
         }.bind(this));
@@ -630,6 +630,17 @@ Vue.component('lms-player-settings', {
             }
             this.show=false;
             this.showMenu = false;
+            this.save();
+            this.playerIconUpdate = undefined;
+            this.playerId = undefined;
+        },
+        save() {
+            let nameChanged = this.orig.player.name!=this.playerName && !isEmpty(this.playerName);
+            if (nameChanged) {
+                lmsCommand(this.playerId, ['name', this.playerName]).then(({data}) => {
+                    bus.$emit('refreshServerStatus');
+                });
+            }
             if (this.dstmItems.length>1 && this.dstm!=this.orig.dstm && !isNull(this.dstm)) {
                 bus.$emit("dstm", this.playerId, this.dstm);
             }
@@ -658,12 +669,6 @@ Vue.component('lms-player-settings', {
                 lmsCommand(this.playerId, ["playerpref", "alarmDefaultVolume", this.alarms.volume]);
             }
 
-            if (this.orig.player.name!=this.playerName && !isEmpty(this.playerName)) {
-                lmsCommand(this.playerId, ['name', this.playerName]).then(({data}) => {
-                    bus.$emit('refreshServerStatus');
-                });
-            }
-
             if (this.orig.player.icon.icon!=this.playerIcon.icon || this.orig.player.icon.svg!=this.playerIcon.svg) {
                 lmsCommand(this.playerId, ["playerpref", "plugin.material-skin:icon", JSON.stringify(this.playerIcon)]);
                 this.$store.commit('setIcon', {id:this.playerId, icon:this.playerIcon});
@@ -676,8 +681,7 @@ Vue.component('lms-player-settings', {
             if (this.playerId==this.$store.state.player.id) {
                 bus.$emit("updatePlayer", this.$store.state.player.id);
             }
-            this.playerIconUpdate = undefined;
-            this.playerId = undefined;
+            return nameChanged;
         },
         loadAlarms() {
             lmsList(this.playerId, ["alarms"], ["filter:all"], 0).then(({data}) => {
@@ -798,6 +802,15 @@ Vue.component('lms-player-settings', {
         },
         showExtraSettings() {
             this.showMenu = false;
+            if (this.save()) {
+                // Name was changed, so allow a little time for this to be processed
+                setTimeout(function () { this.openExtraSettings() }.bind(this), 250);
+            } else {
+                // No name change, so can show straight away...
+                this.openExtraSettings();
+            }
+        },
+        openExtraSettings() {
             bus.$emit('dlg.open', 'iframe', '/material/settings/player/basic.html?player='+this.playerId, i18n('Extra player settings')+SEPARATOR+this.playerName, undefined, IFRAME_HOME_CLOSES_DIALOGS, this.playerId);
         },
         showConfig() {

@@ -889,7 +889,7 @@ Vue.component('lms-iframe-dialog', {
             this.history = [];
             this.src = undefined;
             iframeInfo.content=undefined;
-            bus.$emit('iframeClosed', this.isPlayer);
+            bus.$emit('iframeClosed', this.page=='player');
             if (this.page=='server') {
                 if (LMS_VERSION>=80400) {
                     bus.$emit('refreshServerStatus');

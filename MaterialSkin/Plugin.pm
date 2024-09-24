@@ -102,6 +102,7 @@ my %ROLE_ICON_MAP = (
     'harpsichord' => 'pianist',
     'harpsichordist' => 'pianist',
     'keyboards' => 'keyboardist',
+    'keyboard' => 'keyboardist',
     'organ' => 'keyboardist',
     'organist' => 'keyboardist',
     'piano' => 'pianist',

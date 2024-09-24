@@ -883,17 +883,9 @@ function parseBrowseResp(data, parent, options, cacheKey, parentCommand, parentG
                     if (typeof data.params[1][i] === 'string' || data.params[1][i] instanceof String) {
                         var lower = data.params[1][i].toLowerCase();
                         if (lower.startsWith("role_id:")) {
-                            if (lower=="role_id:composer" || lower=="role_id:2") {
-                                type = 2;
-                            } else if (lower=="role_id:conductor" || lower=="role_id:3") {
-                                type = 3;
-                            } else if (lower=="role_id:band" || lower=="role_id:4") {
-                                type = 4;
-                            } else {
-                                let t = lower.split(':')[1];
-                                if (!isNaN(t)) {
-                                    type = parseInt(t);
-                                }
+                            let id = roleIntValue(data.params[1][i].split(':')[1]);
+                            if (id>0) {
+                                type = id;
                             }
                             break;
                         }
@@ -970,12 +962,12 @@ function parseBrowseResp(data, parent, options, cacheKey, parentCommand, parentG
                             groupReleases = false;
                         } else if (lower.startsWith("role_id:")) {
                             let roles = lower.split(':')[1];
-                            if (roles=='composer') {
-                                roles=[COMPOSER_ARTIST_ROLE];
-                            } else if (roles=='conductor') {
-                                roles=[CONDUCTOR_ARTIST_ROLE];
+                            let val = roleIntValue(roles);
+                            if (val>0) {
+                                ignoreRoles = new Set([val]);
+                            } else {
+                                ignoreRoles=new Set(splitIntArray(roles));
                             }
-                            ignoreRoles=new Set(splitIntArray(roles));
                         }
                     }
                 }
@@ -1216,6 +1208,7 @@ function parseBrowseResp(data, parent, options, cacheKey, parentCommand, parentG
             let sortTracks = 0;
             let highlightArtist = undefined;
             let highlighted = 0;
+            let highlightRole = 0;
             let reverse = false;
             let isCompositions = false;
             let parentArtist = undefined;
@@ -1236,6 +1229,8 @@ function parseBrowseResp(data, parent, options, cacheKey, parentCommand, parentG
                         showAlbumName = true;
                     } else if (param.startsWith("material_skin_artist_id:")) {
                         highlightArtist = parseInt(param.split(':')[1]);
+                    } else if (param.startsWith("material_skin_role_id:")) {
+                        highlightRole = roleIntValue(param.split(':')[1]);
                     } else if (param==MSK_REV_SORT_OPT) {
                         reverse = true;
                     } else if (param.startsWith(SORT_KEY)) {
@@ -1243,7 +1238,7 @@ function parseBrowseResp(data, parent, options, cacheKey, parentCommand, parentG
                     } else if (param.startsWith(MSK_SORT_KEY)) {
                         msksort = param.split(':')[1];
                         sortTracks = msksort=="yearalbumtrack" ? 1 : msksort=="artisttitle" ? 2 : msksort=="yeartitle" ? 3 : 0;
-                    } else if (param=="role_id:COMPOSER") {
+                    } else if (param=="role_id:COMPOSER" || param=="role_id:2") {
                         isCompositions = true;
                     } else if (param.startsWith("material_skin_artist:")) {
                         parentArtist = param.split(':')[1];
@@ -1252,6 +1247,7 @@ function parseBrowseResp(data, parent, options, cacheKey, parentCommand, parentG
                     }
                 }
             }
+            console.log(highlightArtist, highlightRole);
             if (0==sortTracks && "title"==sort) {
                 sortTracks = 4;
             }
@@ -1326,7 +1322,7 @@ function parseBrowseResp(data, parent, options, cacheKey, parentCommand, parentG
                         if (!highlight && undefined!=i[type+"_id"]) {
                             highlight = highlightArtist == parseInt(i[type+"_id"]);
                         }
-                        if (undefined!=i[type+"_ids"]) {
+                        if (!highlight && undefined!=i[type+"_ids"]) {
                             for (let v=0, vl=i[type+"_ids"], vlen=vl.length; v<vlen && !highlight; ++v) {
                                 highlight = highlightArtist == parseInt(vl[v]);
                             }

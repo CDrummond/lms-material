@@ -155,6 +155,8 @@ const NP_EXPANDED = 'now-playing-expanded';
 const ALL_TRACKS_ID = "alltracks";
 
 const ARTIST_TYPES = ["artist", "trackartist", "albumartist", "composer", "conductor", "band"];
+var ALL_ARTIST_TYPES = [];
+
 const STRING_ITEM_PROPS = ["genre", "remote_title", "title", "album",
     "artist",  "trackartist",  "albumartist",  "composer",  "conductor", "band",
     "artists", "trackartists", "albumartists", "composers", "conductors", "bands"];

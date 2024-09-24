@@ -200,6 +200,7 @@ function browseActions(view, item, args, count, showRoles, showWorks) {
                     browseAddLibId(view, params);
                     actions.push({title:i18n('Compositions'), svg:'composer', do:{ command: ['tracks'], params: params}, weight:81, stdItem:STD_ITEM_COMPOSITION_TRACKS});
                 } else {
+                    console.log("SHOW ROLES", r, showRoles[r], lmsOptions.userDefinedRoles[showRoles[r]]);
                     let udr = lmsOptions.userDefinedRoles[showRoles[r]];
                     if (undefined!=udr) {
                         var params = [ARTIST_ALBUM_TAGS, SORT_KEY+ARTIST_ALBUM_SORT_PLACEHOLDER, 'artist_id:'+args['artist_id'], 'role_id:'+showRoles[r]];

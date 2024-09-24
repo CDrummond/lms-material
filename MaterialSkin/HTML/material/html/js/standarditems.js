@@ -110,7 +110,7 @@ function addParentParams(parentCommand, command, canRemoveArtistId) {
     }
     // If we're not supplying artist_id then can't supply role_id
     if (artistIdRemoved && undefined!=roleIdPos) {
-        command.params.splice(roleIdPos, 1);
+        command.params[roleIdPos]='material_skin_'+command.params[roleIdPos];
     }
     return artistIdRemoved;
 }

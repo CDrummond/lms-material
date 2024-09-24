@@ -1236,3 +1236,17 @@ function canClickItem(item) {
             // Some items have style=itemNoAction, but we have an action??? DynamicPlaylists...
             (/*!item.style &&*/ ( (item.actions && (item.actions.go || item.actions.do)) || item.nextWindow || item.params /*CustomBrowse*/));
 }
+
+function roleIntValue(val) {
+    let lower = (""+val).toLowerCase();
+    if (lower=="composer" || lower=="2") {
+        return 2;
+    } else if (lower=="conductor" || lower=="3") {
+        return 3;
+    } else if (lower=="band" || lower=="4") {
+        return 4;
+    } else if (!isNaN(lower)) {
+        return parseInt(lower);
+    }
+    return 0;
+}

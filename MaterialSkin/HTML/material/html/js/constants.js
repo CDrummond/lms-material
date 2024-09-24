@@ -154,8 +154,11 @@ const NP_INFO = 'now-playing-info';
 const NP_EXPANDED = 'now-playing-expanded';
 const ALL_TRACKS_ID = "alltracks";
 
-const ARTIST_TYPES = ["artist", "trackartist", "albumartist", "composer", "conductor", "band"];
-var ALL_ARTIST_TYPES = [];
+const BASE_ARTIST_TYPES = ["artist", "trackartist", "albumartist", "composer", "conductor", "band"];
+const BASE_ARTIST_TYPE_IDS = [1, 6, 5, 2, 3, 4];
+var ARTIST_TYPES = [].concat(BASE_ARTIST_TYPES);
+var ARTIST_TYPE_IDS = [].concat(BASE_ARTIST_TYPE_IDS);
+var USER_ARTIST_TYPES = [];
 
 const STRING_ITEM_PROPS = ["genre", "remote_title", "title", "album",
     "artist",  "trackartist",  "albumartist",  "composer",  "conductor", "band",

@@ -1208,7 +1208,7 @@ function parseBrowseResp(data, parent, options, cacheKey, parentCommand, parentG
             let sortTracks = 0;
             let highlightArtist = undefined;
             let highlighted = 0;
-            let highlightRole = 0;
+            let highlightRole = undefined;
             let reverse = false;
             let isCompositions = false;
             let parentArtist = undefined;
@@ -1230,7 +1230,10 @@ function parseBrowseResp(data, parent, options, cacheKey, parentCommand, parentG
                     } else if (param.startsWith("material_skin_artist_id:")) {
                         highlightArtist = parseInt(param.split(':')[1]);
                     } else if (param.startsWith("material_skin_role_id:")) {
-                        highlightRole = roleIntValue(param.split(':')[1]);
+                        let roleId = roleIntValue(param.split(':')[1]);
+                        if (roleId>=20) {
+                            highlightRole = lmsOptions.userDefinedRoles[roleId];
+                        }
                     } else if (param==MSK_REV_SORT_OPT) {
                         reverse = true;
                     } else if (param.startsWith(SORT_KEY)) {
@@ -1247,7 +1250,7 @@ function parseBrowseResp(data, parent, options, cacheKey, parentCommand, parentG
                     }
                 }
             }
-            console.log(highlightArtist, highlightRole);
+
             if (0==sortTracks && "title"==sort) {
                 sortTracks = 4;
             }
@@ -1288,10 +1291,11 @@ function parseBrowseResp(data, parent, options, cacheKey, parentCommand, parentG
                 splitMultiples(i, true);
 
                 // Create list of artists on this album - to show in browse 'Information' view...
+                let baseTypesLen=BASE_ARTIST_TYPES.length;
                 for (let a=0, alen=ARTIST_TYPES.length; a<alen; ++a) {
                     let type = ARTIST_TYPES[a];
                     // "albumartist", "trackartist", "artist", "band", "composer", "conductor"];
-                    let func = "trackartist"==type ? "show_artist" : ("show_"+type);
+                    let func = a>baseTypesLen ? "show_userrole" : "trackartist"==type ? "show_artist" : ("show_"+type);
                     if (undefined!=i[type+"_ids"] && undefined!=i[type+"s"] && i[type+"_ids"].length==i[type+"s"].length) {
                         for (let v=0, vl=i[type+"_ids"], vlen=vl.length; v<vlen; ++v) {
                             let val = i[type+"s"][v];
@@ -1300,7 +1304,7 @@ function parseBrowseResp(data, parent, options, cacheKey, parentCommand, parentG
                                     resp.extra[type]={set:new Set(), items:[]};
                                 }
                                 resp.extra[type].set.add(val);
-                                resp.extra[type].items.push(buildLink(func, vl[v], val, "browse"));
+                                resp.extra[type].items.push(buildLink(func, vl[v], val, "browse", a>baseTypesLen ? ARTIST_TYPE_IDS[a] : undefined));
                             }
                         }
                     } else if (undefined!=i[type] && (undefined!=i[type+"_id"] || (undefined!=i[type+"_ids"] && i[type+"_ids"].length>0))) {
@@ -1311,14 +1315,26 @@ function parseBrowseResp(data, parent, options, cacheKey, parentCommand, parentG
                                 resp.extra[type]={set:new Set(), items:[]};
                             }
                             resp.extra[type].set.add(val);
-                            resp.extra[type].items.push(buildLink(func, id, val, "browse"));
+                            resp.extra[type].items.push(buildLink(func, id, val, "browse", a>baseTypesLen ? ARTIST_TYPE_IDS[a] : undefined));
                         }
                     }
                 }
                 if (undefined!=highlightArtist) {
                     // Check if any of the artist IDs for this track match that to highlight
-                    for (let a=0, alen=ARTIST_TYPES.length; a<alen && !highlight; ++a) {
-                        let type = ARTIST_TYPES[a];
+                    if (undefined==highlightRole) {
+                        for (let a=0, alen=ARTIST_TYPES.length; a<alen && !highlight; ++a) {
+                            let type = ARTIST_TYPES[a];
+                            if (!highlight && undefined!=i[type+"_id"]) {
+                                highlight = highlightArtist == parseInt(i[type+"_id"]);
+                            }
+                            if (!highlight && undefined!=i[type+"_ids"]) {
+                                for (let v=0, vl=i[type+"_ids"], vlen=vl.length; v<vlen && !highlight; ++v) {
+                                    highlight = highlightArtist == parseInt(vl[v]);
+                                }
+                            }
+                        }
+                    } else {
+                        let type = highlightRole.lrole;
                         if (!highlight && undefined!=i[type+"_id"]) {
                             highlight = highlightArtist == parseInt(i[type+"_id"]);
                         }

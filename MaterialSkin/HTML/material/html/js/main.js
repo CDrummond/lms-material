@@ -103,7 +103,6 @@ var app = new Vue({
         initEmblems();
         initCustomActions();
         initTrackSources();
-        ALL_ARTIST_TYPES = ALL_ARTIST_TYPES.concat(ARTIST_TYPES);
 
         this.setLanguage(LMS_LANG);
         bus.$on('lmsLangChanged', function(lang) {

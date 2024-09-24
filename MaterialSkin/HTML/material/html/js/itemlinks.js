@@ -52,8 +52,13 @@ function show_year(event, val, title, page) {
     browseItem(event, ["year"], val, title, page);
 }
 
-function buildLink(func, id, str, page) {
-    return "<obj class=\"link-item\" onclick=\""+func+"(event, "+id+",\'"+escape(str)+"\', \'"+page+"\')\">" + str + "</obj>";
+function show_userrole(event, id, title, page, role) {
+    showArtistRole(event, id, title, page, role);
+}
+
+function buildLink(func, id, str, page, extra) {
+    return "<obj class=\"link-item\" onclick=\""+func+"(event, "+id+",\'"+escape(str)+"\', \'"+page+"\'"+
+           (undefined==extra ? "" : ","+extra)+")\">" + str + "</obj>";
 }
 
 function addArtistLink(item, line, type, func, page, used, plain) {

@@ -179,8 +179,9 @@ function nowplayingOnPlayerStatus(view, playerStatus) {
     let useConductorTag = playerStatus.current.conductor && lmsOptions.showConductor && useConductor(playerStatus.current.genre);
     let useBandTag = playerStatus.current.band && lmsOptions.showBand && useBand(playerStatus.current.genre);
 
-    let keys = ['composer', 'conductor', 'band'];
+    let keys = ['composer', 'conductor', 'band'].concat(USER_ARTIST_TYPES);
     let mods = ['', 's', '_ids'];
+
     for (let i=0, len=keys.length; i<len; ++i) {
         let idk = keys[i]+"_id";
         for (let j=0, jl=mods.length; j<jl; ++j) {
@@ -613,6 +614,16 @@ function nowplayingFetchTrackInfo(view) {
             let entry = nowplayingArtistEntry(trk, others[i][0], others[i][0].toUpperCase());
             if (entry.length>1) {
                 html+="<tr><td>"+others[i][1]+"&nbsp;</td><td>"+entry+"</td></tr>";
+            }
+        }
+    }
+    if (undefined!=lmsOptions.userDefinedRoles) {
+        for (const [key, value] of Object.entries(lmsOptions.userDefinedRoles)) {
+            if (undefined!=trk[value.lrole]) {
+                let entry = nowplayingArtistEntry(trk, value.lrole, value.role);
+                if (entry.length>1) {
+                    html+="<tr><td>"+value.text+"&nbsp;</td><td>"+entry+"</td></tr>";
+                }
             }
         }
     }

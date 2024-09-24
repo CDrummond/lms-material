@@ -113,16 +113,19 @@ function visibilityOrFocusChanged() {
 function parseUserDefinedRoles(data) {
     lmsOptions.userDefinedRoles = {}
     let keys = Object.keys(data);
-    ALL_ARTIST_TYPES = [];
-    ALL_ARTIST_TYPES = ALL_ARTIST_TYPES.concat(ARTIST_TYPES);
+    ARTIST_TYPES = [].concat(BASE_ARTIST_TYPES);
+    ARTIST_TYPE_IDS = [].concat(ARTIST_TYPE_IDS);
     for (let i=0, len=keys.length; i<len; ++i) {
         let key = keys[i];
         if (undefined!=data[key]['id'] && undefined!=data[key]['name']) {
-            lmsOptions.userDefinedRoles[parseInt(data[key]['id'])] = {'role':key, 'text':data[key]['name']};
-            ALL_ARTIST_TYPES.push(key.toLocaleLowerCase());
+            let id = parseInt(data[key]['id']);
+            let lkey = key.toLocaleLowerCase();
+            lmsOptions.userDefinedRoles[id] = {'role':key, 'lrole':lkey, 'text':data[key]['name']};
+            ARTIST_TYPES.push(lkey);
+            USER_ARTIST_TYPES.push(lkey);
+            ARTIST_TYPE_IDS.push(id);
         }
     }
-    console.log(ALL_ARTIST_TYPES);
 }
 
 function lmsCommand(playerid, command, commandId, timeout) {

@@ -200,7 +200,6 @@ function browseActions(view, item, args, count, showRoles, showWorks) {
                     browseAddLibId(view, params);
                     actions.push({title:i18n('Compositions'), svg:'composer', do:{ command: ['tracks'], params: params}, weight:81, stdItem:STD_ITEM_COMPOSITION_TRACKS});
                 } else {
-                    console.log("SHOW ROLES", r, showRoles[r], lmsOptions.userDefinedRoles[showRoles[r]]);
                     let udr = lmsOptions.userDefinedRoles[showRoles[r]];
                     if (undefined!=udr) {
                         var params = [ARTIST_ALBUM_TAGS, SORT_KEY+ARTIST_ALBUM_SORT_PLACEHOLDER, 'artist_id:'+args['artist_id'], 'role_id:'+showRoles[r]];
@@ -2707,13 +2706,27 @@ function browseBuildInfoHtml(view) {
                             ? i18n("Album artist")
                             : "trackartist"==type
                             ? undefined==view.extraInfo["artist"] ? i18n("Artist") : i18n("Track artist")
+                            : "artist"==type
+                            ? i18n("Artist")
                             : "composer"==type
                             ? i18n("Composer")
                             : "conductor"==type
                             ? i18n("Conductor")
                             : "band"==type
                             ? i18n("Band/orchestra")
-                            : i18n("Artist");
+                            : undefined;
+                if (undefined==key) {
+                    let pos = ARTIST_TYPES.indexOf(type);
+                    if (pos>=0) {
+                        let role = lmsOptions.userDefinedRoles[ARTIST_TYPE_IDS[pos]]
+                        if (undefined!=role) {
+                            key = role.text;
+                        }
+                    }
+                }
+                if (undefined==key) {
+                    key = i18n("Artist");
+                }
                 html+="<tr><td>"+key+":&nbsp;</td><td>"+view.extraInfo[type].join(SEPARATOR_HTML)+"</td></tr>";
             }
         }

@@ -775,26 +775,19 @@ function forceItemUpdate(vm, item) {
     });
 }
 
-function mapArtistIcon(params, item) {
+function mapArtistIcon(item) {
     item.icon=undefined;
     item.svg="artist";
-    if (params && params.length>0) {
-        for (var i=0, len=params.length; i<len; ++i) {
-            if (params[i].startsWith("role_id:")) {
-                let parts = params[i].split(':');
-                let role = parts[1].length>1
-                            ? parts[1].toLowerCase()
-                            : parts[1]=="2"
-                                ? "composer"
-                            : parts[1]=="3"
-                                ? "conductor"
-                            : parts[1]=="4"
-                                ? "band"
-                            : parts[1]=="5"
-                                ? "albumartist"
-                            : "artist";
-                    item.svg = "role-"+role;
-                break;
+    let field = getField(item, "role_id:");
+    if (field>=0) {
+        let roleStr = item.params[field].split(':')[1];
+        let roleInt = parseInt(roleStr);
+        if (isNaN(roleInt)) {
+            item.svg = "role-"+roleStr.toLowerCase();
+        } else {
+            let pos = ARTIST_TYPE_IDS.indexOf(roleInt==TRACK_ARTIST_ROLE ? ARTIST_ROLE : roleInt);
+            if (pos>=0) {
+                item.svg = "role-"+ARTIST_TYPES[pos];
             }
         }
     }

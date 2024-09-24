@@ -2251,6 +2251,17 @@ function browsePin(view, item, add, mapped) {
                 return;
             }
         }
+        // Convert integer role to name, if user-defined
+        var field = getField(item, "role_id:");
+        if (field>=0) {
+            let val = parseInt(item.params[field].split(':')[1]);
+            if (!isNaN(val) && val>20) {
+                let role = lmsOptions.userDefinedRoles[val];
+                if (undefined!=role) {
+                    item.params[field]="role_id:"+role.role;
+                }
+            }
+        }
         if (item.isRadio) {
             view.top.splice(lastPinnedIndex+1, 0,
                             {id: item.presetParams.favorites_url, title: item.title, image: item.image, icon: item.icon, svg: item.svg, isPinned: true,

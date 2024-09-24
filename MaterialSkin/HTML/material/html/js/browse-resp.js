@@ -2039,7 +2039,7 @@ function parseBrowseModes(view, data, genreFilter, yearFilter, altId) {
                 item.icon = "edit";
                 item.cancache = true;
             } else if (c.id.startsWith("myMusicArtists")) {
-                mapArtistIcon(item.params, item);
+                mapArtistIcon(item);
                 item.cancache = true;
             } else if (c.id.startsWith("myMusicAlbumsVariousArtists")) {
                 item.icon = undefined;

@@ -154,8 +154,16 @@ const NP_INFO = 'now-playing-info';
 const NP_EXPANDED = 'now-playing-expanded';
 const ALL_TRACKS_ID = "alltracks";
 
+const ARTIST_ROLE = 1;
+const COMPOSER_ARTIST_ROLE = 2;
+const CONDUCTOR_ARTIST_ROLE = 3;
+const BAND_ARTIST_ROLE = 4;
+const ALBUM_ARTIST_ROLE = 5;
+const TRACK_ARTIST_ROLE = 6;
+const ARTIST_ROLES = new Set([ARTIST_ROLE, ALBUM_ARTIST_ROLE]);
+
 const BASE_ARTIST_TYPES = ["artist", "trackartist", "albumartist", "composer", "conductor", "band"];
-const BASE_ARTIST_TYPE_IDS = [1, 6, 5, 2, 3, 4];
+const BASE_ARTIST_TYPE_IDS = [ARTIST_ROLE, TRACK_ARTIST_ROLE, ALBUM_ARTIST_ROLE, COMPOSER_ARTIST_ROLE, CONDUCTOR_ARTIST_ROLE, BAND_ARTIST_ROLE];
 var ARTIST_TYPES = [].concat(BASE_ARTIST_TYPES);
 var ARTIST_TYPE_IDS = [].concat(BASE_ARTIST_TYPE_IDS);
 var USER_ARTIST_TYPES = [];

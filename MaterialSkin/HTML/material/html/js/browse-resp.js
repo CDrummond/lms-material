@@ -11,13 +11,6 @@ const MIXER_APPS = new Set(["musicip", "blissmixer", "musicsimilarity"]);
 const STREAM_SCHEMAS = new Set(["http", "https", "wavin"]);
 const HIDE_APPS_FOR_PARTY = new Set(["apps.accuradio", "apps.ardaudiothek", "apps.bbcsounds", "apps.cplus", "apps.globalplayeruk", "apps.iheartradio", "apps.lastmix", "apps.mixcloud", "apps.planetradio", "apps.podcasts", "apps.radiofrance", "apps.radionet", "apps.radionowplaying", "apps.radioparadise", "apps.squeezecloud", "apps.timesradio", "apps.ukradioplayer", "apps.virginradio", "apps.wefunk", "apps.phishin", "apps.walkwithme"]);
 const RELEASE_TYPES = ["ALBUM", "EP", "BOXSET", "BESTOF", "COMPILATION", "SINGLE", "APPEARANCE", "APPEARANCE_BAND", "APPEARANCE_CONDUCTOR", "COMPOSITION"];
-const ARTIST_ROLES = new Set([1,5])
-const ARTIST_ROLE = 1;
-const COMPOSER_ARTIST_ROLE = 2;
-const CONDUCTOR_ARTIST_ROLE = 3;
-const BAND_ARTIST_ROLE = 4;
-const ALBUM_ARTIST_ROLE = 5;
-const TRACK_ARTIST_ROLE = 6;
 
 function itemText(i) {
     return i.title ? i.title : i.name ? i.name : i.caption ? i.caption : i.credits ? i.credits : undefined;
@@ -1231,8 +1224,13 @@ function parseBrowseResp(data, parent, options, cacheKey, parentCommand, parentG
                         highlightArtist = parseInt(param.split(':')[1]);
                     } else if (param.startsWith("material_skin_role_id:")) {
                         let roleId = roleIntValue(param.split(':')[1]);
-                        if (roleId>=20) {
+                        if (roleId>20) {
                             highlightRole = lmsOptions.userDefinedRoles[roleId];
+                        } else if (roleId!=ALBUM_ARTIST_ROLE && roleId!=TRACK_ARTIST_ROLE) {
+                            let ridx = BASE_ARTIST_TYPE_IDS.indexOf(roleId);
+                            if (ridx>=0 && ridx<BASE_ARTIST_TYPES.length) {
+                                highlightRole = BASE_ARTIST_TYPES[ridx];
+                            }
                         }
                     } else if (param==MSK_REV_SORT_OPT) {
                         reverse = true;

@@ -1232,14 +1232,9 @@ function canClickItem(item) {
 
 function roleIntValue(val) {
     let lower = (""+val).toLowerCase();
-    if (lower=="composer" || lower=="2") {
-        return 2;
-    } else if (lower=="conductor" || lower=="3") {
-        return 3;
-    } else if (lower=="band" || lower=="4") {
-        return 4;
-    } else if (!isNaN(lower)) {
-        return parseInt(lower);
+    let idx = BASE_ARTIST_TYPES.indexOf(lower);
+    if (idx>=0 && idx<BASE_ARTIST_TYPES.length) {
+        return BASE_ARTIST_TYPE_IDS[idx];
     }
-    return 0;
+    return isNaN(lower) ? 0 : parseInt(lower);
 }

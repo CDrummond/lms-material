@@ -103,7 +103,7 @@ function addParentParams(parentCommand, command, canRemoveArtistId) {
                 command.params.push(parentCommand.params[i]);
             } else if (!LMS_NO_GENRE_FILTER && lower.startsWith("genre_id:")) {
                 command.params.push(parentCommand.params[i]);
-            } else if (lower.startsWith("work_id:") || lower.startsWith("performance:")) {
+            } else if (lower.startsWith("work_id:") || lower.startsWith("performance:") || lower.startsWith("material_skin_role_id:")) {
                 command.params.push(parentCommand.params[i]);
             }
         }
@@ -170,7 +170,13 @@ function buildStdItemCommand(item, parentCommand) {
             for (var i=0, len=parentCommand.params.length; i<len; ++i) {
                 if (typeof parentCommand.params[i] === 'string' || parentCommand.params[i] instanceof String) {
                     var lower = parentCommand.params[i].toLowerCase();
-                    if ((!LMS_NO_ROLE_FILTER && lower.startsWith("role_id:")) || (!LMS_NO_GENRE_FILTER && lower.startsWith("genre_id:")) || lower.startsWith("year:")) {
+                    if (lower.startsWith("role_id:")) {
+                        if (LMS_NO_ROLE_FILTER) {
+                            command.params.push('material_skin_'+parentCommand.params[i]);
+                        } else {
+                            command.params.push(parentCommand.params[i]);
+                        }
+                    } else if ((!LMS_NO_GENRE_FILTER && lower.startsWith("genre_id:")) || lower.startsWith("year:")) {
                         command.params.push(parentCommand.params[i]);
                     }
                 }

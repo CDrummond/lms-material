@@ -932,6 +932,7 @@ function parseBrowseResp(data, parent, options, cacheKey, parentCommand, parentG
             var groupReleases = true; // Prevent actually grouping ino releases even if we have releaseType
             var isWorksAlbums = undefined!=parent && parent.id.startsWith("work_id:");
             var ignoreRoles = new Set();
+            var mskRoleId = undefined
 
             if (data.params && data.params.length>1) {
                 let reverse = false;
@@ -961,6 +962,8 @@ function parseBrowseResp(data, parent, options, cacheKey, parentCommand, parentG
                             } else {
                                 ignoreRoles=new Set(splitIntArray(roles));
                             }
+                        } else if (lower.startsWith("material_skin_role_id:")) {
+                            mskRoleId = roleIntValue(lower.split(':')[1]);
                         }
                     }
                 }
@@ -1098,7 +1101,8 @@ function parseBrowseResp(data, parent, options, cacheKey, parentCommand, parentG
                               multi: LMS_GROUP_DISCS && undefined!=i.disccount && parseInt(i.disccount)>1,
                               extid: i.extid,
                               filter: FILTER_PREFIX+group,
-                              compilation: i.compilation
+                              compilation: i.compilation,
+                              material_skin_role_id: mskRoleId
                           };
 
                 setFavoritesParams(i, album);

@@ -1971,7 +1971,6 @@ div.v-rating i.primary--text, div.v-rating i.accent--text {
 }
 
 .lms-list .highlight {
- border-radius: 6px;
  background-color: var(--pq-current-color);
 }
 

@@ -1229,7 +1229,7 @@ function parseBrowseResp(data, parent, options, cacheKey, parentCommand, parentG
                         } else if (roleId!=ALBUM_ARTIST_ROLE && roleId!=TRACK_ARTIST_ROLE) {
                             let ridx = BASE_ARTIST_TYPE_IDS.indexOf(roleId);
                             if (ridx>=0 && ridx<BASE_ARTIST_TYPES.length) {
-                                highlightRole = BASE_ARTIST_TYPES[ridx];
+                                highlightRole = {lrole: BASE_ARTIST_TYPES[ridx] };
                             }
                         }
                     } else if (param==MSK_REV_SORT_OPT) {
@@ -1248,7 +1248,6 @@ function parseBrowseResp(data, parent, options, cacheKey, parentCommand, parentG
                     }
                 }
             }
-
             if (0==sortTracks && "title"==sort) {
                 sortTracks = 4;
             }

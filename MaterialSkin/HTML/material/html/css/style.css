@@ -1958,15 +1958,21 @@ div.v-rating i.primary--text, div.v-rating i.accent--text {
  background:var(--pq-current-color);
 }
 
-.highlight, .highlight .v-list__tile__title, .highlight .v-list__tile__sub-title {
+.highlight, .highlight .v-list__tile__title, .highlight .v-list__tile__sub-title,
+.search-highlight, .search-highlight .v-list__tile__title, .search-highlight .v-list__tile__sub-title {
  font-weight:var(--bold-weight)!important;
 }
 
-.lms-list .highlight {
+.lms-list .search-highlight {
  -webkit-box-shadow:inset 0px 0px 0px 2px rgb(var(--highlight-rgb), 0.5)!important;
  -moz-box-shadow:inset 0px 0px 0px 2px rgb(var(--highlight-rgb), 0.5)!important;
  box-shadow:inset 0px 0px 0px 2px rgb(var(--highlight-rgb), 0.5)!important;
  border-radius: 6px;
+}
+
+.lms-list .highlight {
+ border-radius: 6px;
+ background-color: rgb(var(--highlight-rgb), 0.1);
 }
 
 .pq-current {

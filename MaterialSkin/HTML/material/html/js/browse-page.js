@@ -1111,10 +1111,10 @@ var lmsBrowse = Vue.component("lms-browse", {
                     this.fetchItems(browseCmd, {cancache:false, id:"currentaction:"+index, title:act.title+SEPARATOR+item.title});
                 }
             } else if (undefined!=act.do) {
+                let title = item.origTitle ? item.origTitle : item.title;
+                let origTitle = (act.stdItem==STD_ITEM_ALL_TRACKS || act.stdItem==STD_ITEM_COMPOSITION_TRACKS || act.stdItem==STD_ITEM_CLASSICAL_WORKS ? undefined : (item.noReleaseGrouping ? title.split(SEPARATOR)[0] : title));
                 this.fetchItems(act.stdItem==STD_ITEM_ALL_TRACKS || act.stdItem==STD_ITEM_COMPOSITION_TRACKS || act.stdItem==STD_ITEM_CLASSICAL_WORKS || act.stdItem==STD_ITEM_ARTIST ? browseReplaceCommandTerms(this, act.do, item) : act.do,
-                                {cancache:false, id:"currentaction:"+index,
-                                 title:act.title+(act.stdItem==STD_ITEM_ALL_TRACKS || act.stdItem==STD_ITEM_COMPOSITION_TRACKS || act.stdItem==STD_ITEM_CLASSICAL_WORKS ? "" : (SEPARATOR+(item.noReleaseGrouping ? item.title.split(SEPARATOR)[0] : item.title))),
-                                 subtitle:act.subtitle,
+                                {cancache:false, id:"currentaction:"+index, title:act.title+(origTitle ? SEPARATOR+origTitle : ""), subtitle:act.subtitle, origTitle:origTitle,
                                  image:act.stdItem ? this.currentImage : undefined, stdItem:act.stdItem});
                 if (STD_ITEM_MAI==act.stdItem) {
                     browseFetchExtra(this, act.do.command[1]=="biography");

@@ -90,9 +90,9 @@ function addParentParams(parentCommand, command, canRemoveArtistId) {
         if (typeof parentCommand.params[i] === 'string' || parentCommand.params[i] instanceof String) {
             var lower = parentCommand.params[i].toLowerCase();
             if (lower.startsWith("artist_id:")) {
+                command.params.push('material_skin_'+parentCommand.params[i]);
                 if (lmsOptions.noArtistFilter && canRemoveArtistId) {
                     // Want all tracks from an album, not just those from this artist, so don't filter on artist_id
-                    command.params.push('material_skin_'+parentCommand.params[i]);
                     artistIdRemoved = true;
                 } else if (getIndex(command.params, "artist_id:")<0) {
                     // Retrict to only tracks from this artist

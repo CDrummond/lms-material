@@ -199,7 +199,7 @@ function browseActions(view, item, args, count, showRoles, showWorks) {
                 if (COMPOSER_ARTIST_ROLE==showRoles[r]) {
                     var params = [SORT_KEY+TRACK_SORT_PLACEHOLDER, PLAYLIST_TRACK_TAGS, 'artist_id:'+args['artist_id'], 'role_id:2', 'material_skin_artist:'+args['artist']];
                     browseAddLibId(view, params);
-                    actions.push({title:i18n('Compositions'), svg:'composer', do:{ command: ['tracks'], params: params}, weight:81, stdItem:STD_ITEM_COMPOSITION_TRACKS});
+                    actions.push({title:i18n('Compositions'), svg:'composer', do:{ command: ['tracks'], params: params}, weight:81, stdItem:STD_ITEM_COMPOSITION_TRACKS, udr:true});
                 } else {
                     let udr = lmsOptions.userDefinedRoles[showRoles[r]];
                     if (undefined!=udr) {

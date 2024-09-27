@@ -84,6 +84,7 @@ function addParentParams(parentCommand, command, canRemoveArtistId) {
     if (undefined==parentCommand || undefined==parentCommand.params) {
         return;
     }
+    let roleIdPos = undefined;
     let artistIdRemoved = false;
     for (var i=0, len=parentCommand.params.length; i<len; ++i) {
         if (typeof parentCommand.params[i] === 'string' || parentCommand.params[i] instanceof String) {
@@ -97,14 +98,19 @@ function addParentParams(parentCommand, command, canRemoveArtistId) {
                     // Retrict to only tracks from this artist
                     command.params.push(parentCommand.params[i]);
                 }
-            } else if (lower.startsWith("role_id:")) {
-                command.params.push((LMS_NO_ROLE_FILTER ? 'material_skin_' : '')+parentCommand.params[i]);
+            } else if (!LMS_NO_ROLE_FILTER && lower.startsWith("role_id:")) {
+                roleIdPos = command.params.length;
+                command.params.push(parentCommand.params[i]);
             } else if (!LMS_NO_GENRE_FILTER && lower.startsWith("genre_id:")) {
                 command.params.push(parentCommand.params[i]);
             } else if (lower.startsWith("work_id:") || lower.startsWith("year:") || lower.startsWith("performance:") || lower.startsWith("material_skin_role_id:")) {
                 command.params.push(parentCommand.params[i]);
             }
         }
+    }
+    // If we're not supplying artist_id then can't supply role_id
+    if (artistIdRemoved && undefined!=roleIdPos) {
+        command.params[roleIdPos]='material_skin_'+command.params[roleIdPos];
     }
     return artistIdRemoved;
 }

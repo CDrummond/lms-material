@@ -109,6 +109,7 @@ function browseAddHistory(view) {
     prev.currentActions = view.currentActions;
     prev.headerTitle = view.headerTitle;
     prev.headerSubTitle = view.headerSubTitle;
+    prev.historyExtra = view.historyExtra;
     prev.detailedSubInfo = view.detailedSubInfo;
     prev.detailedSubExtra = view.detailedSubExtra;
     prev.extraInfo = view.extraInfo;
@@ -204,7 +205,7 @@ function browseActions(view, item, args, count, showRoles, showWorks) {
                     if (undefined!=udr) {
                         var params = [ARTIST_ALBUM_TAGS, SORT_KEY+ARTIST_ALBUM_SORT_PLACEHOLDER, 'artist_id:'+args['artist_id'], 'role_id:'+showRoles[r]];
                         browseAddLibId(view, params);
-                        actions.push({title:udr['text'], svg:'role-'+udr['role'], do:{ command: ['albums'], params: params}, weight:81, stdItem:STD_ITEM_ARTIST});
+                        actions.push({title:udr['text'], svg:'role-'+udr['role'], do:{ command: ['albums'], params: params}, weight:81, stdItem:STD_ITEM_ARTIST, udr:true});
                     }
                 }
             }
@@ -673,6 +674,19 @@ function browseHandleListResponse(view, item, command, resp, prevPage, appendIte
         }
 
         view.detailedSubInfo=resp.plainsubtitle ? resp.plainsubtitle : resp.years ? resp.years : "&nbsp;";
+        view.historyExtra = undefined;
+        // Add non-artist role before years display
+        if (resp.years && "albums"==command.command[0]) {
+            let rolePos = getField(command, "role_id:");
+            if (rolePos>=0) {
+                let roleName = roleDisplayName(command.params[rolePos].split(':')[1]);
+                if (undefined!=roleName) {
+                    view.historyExtra = roleName;
+                    view.detailedSubInfo=roleName+SEPARATOR+view.detailedSubInfo;
+                }
+            }
+        }
+
         view.detailedSubExtra = undefined;
         view.extraInfo = resp.extra;
         if (undefined!=resp.extra) {
@@ -1788,6 +1802,7 @@ function browseGoHome(view) {
     view.pinnedItemLibName = undefined;
     view.headerTitle = null;
     view.headerSubTitle=null;
+    view.historyExtra = undefined;
     view.baseActions=[];
     view.currentBaseActions=[];
     view.currentItemImage=undefined;
@@ -1861,6 +1876,7 @@ function browseGoBack(view, refresh) {
     view.pinnedItemLibName = prev.pinnedItemLibName;
     view.headerTitle = prev.headerTitle;
     view.headerSubTitle = prev.headerSubTitle;
+    view.historyExtra = prev.historyExtra;
     view.detailedSubInfo = prev.detailedSubInfo;
     view.detailedSubExtra = prev.detailedSubExtra;
     view.extraInfo = prev.extraInfo;

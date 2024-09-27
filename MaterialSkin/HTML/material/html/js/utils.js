@@ -1232,9 +1232,8 @@ function canClickItem(item) {
 
 function roleIntValue(val) {
     let lower = (""+val).toLowerCase();
-    let idx = BASE_ARTIST_TYPES.indexOf(lower);
-    if (idx>=0 && idx<BASE_ARTIST_TYPES.length) {
-        return BASE_ARTIST_TYPE_IDS[idx];
-    }
-    return isNaN(lower) ? 0 : parseInt(lower);
+    let idx = ARTIST_TYPES.indexOf(lower);
+    return idx>=0 && idx<ARTIST_TYPES.length
+        ? ARTIST_TYPE_IDS[idx]
+        : isNaN(lower) ? 0 : parseInt(lower);
 }

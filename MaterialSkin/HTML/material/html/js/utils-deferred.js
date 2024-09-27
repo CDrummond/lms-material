@@ -809,3 +809,28 @@ function isSameArtistsL(item, rolea, roleList) {
     }
     return false;
 }
+
+function roleDisplayName(role) {
+    if (undefined==role) {
+        return undefined;
+    }
+    let val = isNaN(role) ? roleIntValue(role) : parseInt(role);
+    if (val<=0) {
+        return undefined;
+    }
+    if (val==ARTIST_ROLE || val==ALBUM_ARTIST_ROLE || val==TRACK_ARTIST_ROLE) {
+        return undefined;
+    }
+    if (val==BAND_ARTIST_ROLE) {
+        return i18n("Band/Orchestra");
+    }
+    if (val==COMPOSER_ARTIST_ROLE) {
+        return i18n("Composer");
+    }
+    if (val==CONDUCTOR_ARTIST_ROLE) {
+        return i18n("Conductor");
+    }
+    return lmsOptions.userDefinedRoles[val]==undefined
+        ? undefined
+        : lmsOptions.userDefinedRoles[val].text;
+}

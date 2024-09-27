@@ -6,6 +6,8 @@
 4. Change genre icon.
 5. Different highlight for matching artists as opposed to search in list.
 6. Tidy up artist title strings if navigating through multiple roles.
+7. If browsing non basic artist roles then show role name before years in
+   subtoolbar when listing an artist's albums.
 
 5.3.2
 -----

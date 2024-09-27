@@ -1114,7 +1114,7 @@ var lmsBrowse = Vue.component("lms-browse", {
                 let title = item.origTitle ? item.origTitle : item.title;
                 let origTitle = (act.stdItem==STD_ITEM_ALL_TRACKS || act.stdItem==STD_ITEM_COMPOSITION_TRACKS || act.stdItem==STD_ITEM_CLASSICAL_WORKS ? undefined : (item.noReleaseGrouping ? title.split(SEPARATOR)[0] : title));
                 this.fetchItems(act.stdItem==STD_ITEM_ALL_TRACKS || act.stdItem==STD_ITEM_COMPOSITION_TRACKS || act.stdItem==STD_ITEM_CLASSICAL_WORKS || act.stdItem==STD_ITEM_ARTIST ? browseReplaceCommandTerms(this, act.do, item) : act.do,
-                                {cancache:false, id:"currentaction:"+index, title:act.title+(origTitle ? SEPARATOR+origTitle : ""), subtitle:act.subtitle, origTitle:origTitle,
+                                {cancache:false, id:"currentaction:"+index, title:act.udr && origTitle ? origTitle : act.title+(origTitle ? SEPARATOR+origTitle : ""), subtitle:act.subtitle, origTitle:origTitle,
                                  image:act.stdItem ? this.currentImage : undefined, stdItem:act.stdItem});
                 if (STD_ITEM_MAI==act.stdItem) {
                     browseFetchExtra(this, act.do.command[1]=="biography");
@@ -1177,6 +1177,9 @@ var lmsBrowse = Vue.component("lms-browse", {
                 let history=[];
                 for (let i=0, loop=this.history, len=loop.length; i<len; ++i) {
                     let hi = {title:0==i ? i18n("Home") : (loop[i].headerTitle + (loop[i].current && loop[i].current.stdItem==STD_ITEM_ALBUM && loop[i].current.subIsYear ? " (" + loop[i].current.subtitle + ")" : "") )};
+                    if (undefined!=loop[i].historyExtra) {
+                        hi.title += SEPARATOR + loop[i].historyExtra;
+                    }
                     if (0==i) {
                         hi.icon = 'home';
                     } else if (undefined!=loop[i].current) {

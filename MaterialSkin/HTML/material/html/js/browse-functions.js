@@ -982,7 +982,7 @@ function browseClick(view, item, index, event) {
                         browseAddCategories(view, {id:"genre_id:"+data.result.genre_id, title:item.title, image:item.image, stdItem:STD_ITEM_GENRE}, true);
                     } else if (data.result.album_id) {
                         if (data.result.artist_id) {
-                            let itm = {id:"album_id:"+data.result.album_id, artist_id:data.result.artist_id, title:item.title, image:item.image, stdItem:STD_ITEM_ALBUM};
+                            let itm = {id:"album_id:"+data.result.album_id, artist_id:data.result.artist_id, title:item.title, image:item.image, stdItem:STD_ITEM_ALBUM, fromFav:true};
                             if (data.result.artist_name) {
                                 itm["subtitle"]=data.result.artist_name;
                             }

@@ -184,9 +184,9 @@ function buildStdItemCommand(item, parentCommand) {
             } else {
                 command.params.push("performance:");
             }
-
+console.log(item.fromFav);
             // For albums browsed from favourites...
-            if (!artistIdRemoved && undefined!=item.artist_id && getIndex(command.params, "artist_id:")<0) {
+            if (item.fromFav && !artistIdRemoved && undefined!=item.artist_id && getIndex(command.params, "artist_id:")<0) {
                 command.params.push("artist_id:"+item.artist_id);
             }
         } else if (item.id.startsWith("genre_id:")) {

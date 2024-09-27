@@ -680,7 +680,7 @@ function browseHandleListResponse(view, item, command, resp, prevPage, appendIte
         view.detailedSubInfo=resp.plainsubtitle ? resp.plainsubtitle : resp.years ? resp.years : "&nbsp;";
         view.historyExtra = undefined;
         // Add non-artist role before years display
-        if (resp.years && "albums"==command.command[0]) {
+        if (resp.years && "albums"==command.command[0] && getField(command, "work_id:")<0) {
             let rolePos = getField(command, "role_id:");
             if (rolePos>=0) {
                 let roleName = roleDisplayName(command.params[rolePos].split(':')[1]);

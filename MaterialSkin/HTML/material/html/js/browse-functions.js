@@ -545,7 +545,11 @@ function browseHandleListResponse(view, item, command, resp, prevPage, appendIte
                 let params = [genreReqArtist].concat(index<0 ? [] : [command.params[index]]);
                 browseAddLibId(view, params);
                 lmsList('', ['genres'], params, 0, 25, false, view.nextReqId()).then(({data}) => {
-                    if (data.result && data.result.genres_loop && genreReqArtist==view.current.id) {
+                    let currentId = view.current.id;
+                    if (!currentId.startsWith("artist_id:") && view.history.length>1) {
+                        currentId = view.history[view.history.length-1].current.id;
+                    }
+                    if (data.result && data.result.genres_loop && genreReqArtist==currentId) {
                         let genreList = [];
                         let genreListPlain = [];
                         for (let g=0, loop=data.result.genres_loop, len=loop.length; g<len; ++g) {

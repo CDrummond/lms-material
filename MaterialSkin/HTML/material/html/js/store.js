@@ -10,7 +10,7 @@ const VALID_SKIP_SECONDS = new Set(SKIP_SECONDS_VALS);
 var lmsNumVisibleMenus = 0;
 
 function copyPlayer(p){
-    return {id:p.id, name:p.name, isgroup:p.isgroup, model:p.model, ip:p.ip, icon:p.icon, link:p.link, ison:p.ison, isplaying:p.isplaying, isconnected:p.isconnected, canpoweroff:p.canpoweroff};
+    return {id:p.id, name:p.name, isgroup:p.isgroup, model:p.model, ip:p.ip, icon:p.icon, link:p.link, ison:p.ison, isplaying:p.isplaying, iswaiting:p.iswaiting, isconnected:p.isconnected, canpoweroff:p.canpoweroff};
 }
 
 function setDesktopWideCoverPad(on) {
@@ -315,12 +315,14 @@ const store = new Vuex.Store({
                     state.players[i].name = player.name;
                     state.players[i].ison = player.ison;
                     state.players[i].isplaying = player.isplaying;
+                    state.players[i].iswaiting = player.iswaiting;
                     state.players[i].isgroup = player.isgroup;
                     state.players[i].icon = player.icon;
                     if (state.player!=undefined && player.id == state.player.id) {
                         state.player.name = player.name;
                         state.player.ison = player.ison;
                         state.player.isplaying = player.isplaying;
+                        state.player.iswaiting = player.iswaiting;
                         state.player.isgroup = player.isgroup;
                         state.player.icon = player.icon;
                     }

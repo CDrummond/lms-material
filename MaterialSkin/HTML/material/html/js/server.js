@@ -500,7 +500,8 @@ var lmsServer = Vue.component('lms-server', {
             var isCurrent = this.$store.state.player && playerId==this.$store.state.player.id;
             var dvc = 1==parseInt(data.digital_volume_control);
             var player = { ison: undefined==data.power || 1==parseInt(data.power),
-                           isplaying: data.mode === "play" && !data.waitingToPlay,
+                           isplaying: data.mode === "play",
+                           iswaiting: data.mode === "play" && data.waitingToPlay,
                            volume: -1,
                            // If 'respectFixedVol' is 0, then we treat fixed-volume players as normal - and enable all volume controls.
                            dvc: VOL_STD==lmsOptions.respectFixedVol || dvc ? VOL_STD : VOL_HIDDEN==lmsOptions.respectFixedVol && !dvc ? VOL_HIDDEN : VOL_FIXED,

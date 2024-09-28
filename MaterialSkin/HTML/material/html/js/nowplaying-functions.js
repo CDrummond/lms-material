@@ -70,6 +70,7 @@ function nowplayingOnPlayerStatus(view, playerStatus) {
         view.playerStatus.isplaying = playerStatus.isplaying;
         playStateChanged = true;
     }
+    view.playerStatus.iswaiting = playerStatus.iswaiting;
     if (playerStatus.current.canseek!=view.playerStatus.current.canseek) {
         view.playerStatus.current.canseek = playerStatus.current.canseek;
     }

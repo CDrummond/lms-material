@@ -1323,8 +1323,8 @@ function parseBrowseResp(data, parent, options, cacheKey, parentCommand, parentG
                 if (undefined!=highlightArtist) {
                     // Check if any of the artist IDs for this track match that to highlight
                     if (undefined==highlightRole) {
-                        for (let a=0, alen=BASE_ARTIST_TYPES.length; a<alen && !highlight; ++a) {
-                            let type = BASE_ARTIST_TYPES[a];
+                        for (let a=0, alen=ARTIST_TYPES.length; a<alen && !highlight; ++a) {
+                            let type = ARTIST_TYPES[a];
                             if (!highlight && undefined!=i[type+"_id"]) {
                                 highlight = highlightArtist == parseInt(i[type+"_id"]);
                             }

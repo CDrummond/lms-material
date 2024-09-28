@@ -85,6 +85,7 @@ function addParentParams(parentCommand, command, canRemoveArtistId) {
         return;
     }
     let artistIdRemoved = false;
+    let roleIdPos = undefined;
     for (var i=0, len=parentCommand.params.length; i<len; ++i) {
         if (typeof parentCommand.params[i] === 'string' || parentCommand.params[i] instanceof String) {
             var lower = parentCommand.params[i].toLowerCase();
@@ -100,7 +101,8 @@ function addParentParams(parentCommand, command, canRemoveArtistId) {
             } else if (lower.startsWith("role_id:")) {
                  command.params.push('material_skin_'+parentCommand.params[i]);
                  if (!LMS_NO_ROLE_FILTER) {
-                     command.params.push(parentCommand.params[i]);
+                    roleIdPos = command.params.length;
+                    command.params.push(parentCommand.params[i]);
                  }
             } else if (!LMS_NO_GENRE_FILTER && lower.startsWith("genre_id:")) {
                 command.params.push(parentCommand.params[i]);
@@ -108,6 +110,10 @@ function addParentParams(parentCommand, command, canRemoveArtistId) {
                 command.params.push(parentCommand.params[i]);
             }
         }
+    }
+    // If we're not supplying artist_id then can't supply role_id
+    if (artistIdRemoved && undefined!=roleIdPos) {
+        command.params.splice(roleIdPos, 1);
     }
     return artistIdRemoved;
 }

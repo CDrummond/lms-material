@@ -99,7 +99,7 @@ function addParentParams(parentCommand, command, canRemoveArtistId) {
                 }
             } else if (lower.startsWith("role_id:")) {
                  command.params.push('material_skin_'+parentCommand.params[i]);
-                 if (!(lmsOptions.noArtistFilter && canRemoveArtistId)) {
+                 if (!(lmsOptions.noArtistFilter && canRemoveArtistId) && !LMS_NO_ROLE_FILTER) {
                      command.params.push(parentCommand.params[i]);
                  }
             } else if (!LMS_NO_GENRE_FILTER && lower.startsWith("genre_id:")) {

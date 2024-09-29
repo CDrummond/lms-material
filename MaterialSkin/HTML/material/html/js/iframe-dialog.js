@@ -393,7 +393,8 @@ var iframeInfo = {
   pbarHeight: 0,
   settingsSelector: undefined,
   settingsPage: undefined,
-  settingModified: false
+  settingModified: false,
+  initialLoad: true
 };
 
 /* Check for file-entry fields, and sliders, each time form's action is changed */
@@ -502,7 +503,7 @@ function initChangeListeners(doc) {
 
 function copyVars(iframe) {
     if (undefined==iframe) {
-        return;
+        return false;
     }
     copyVar(iframe, '--background-color');
     copyVar(iframe, '--primary-color');
@@ -521,24 +522,27 @@ function copyVars(iframe) {
     copyVar(iframe, '--std-scrollbar-thumb-color');
     copyVar(iframe, '--scrollbar-thumb-hover-color');
     copyVar(iframe, '--std-scrollbar-thumb-hover-color');
+    return true;
 }
 
 function applyModifications(page, textCol, darkUi, src) {
-    bus.$emit('iframe-loaded', true);
     if (!page) {
+        bus.$emit('iframe-loaded', true);
         return;
     }
     iframeInfo.src = src;
     var iframe = document.getElementById("embeddedIframe");
+    var copiedVars = false;
     if (iframe && iframe.contentDocument) {
         iframe.contentDocument.bus = bus;
         var content = iframe.contentDocument;
         iframeInfo.content = content;
         if (undefined==content) {
+            bus.$emit('iframe-loaded', true);
             return;
         }
 
-        copyVars(iframe);
+        copiedVars = copyVars(iframe);
         content.documentElement.getElementsByTagName("body")[0].classList.add(IS_MOBILE ? "msk-is-touch" : "msk-is-non-touch");
         if (darkUi) {
             content.documentElement.getElementsByTagName("body")[0].classList.add("theme--dark");
@@ -626,6 +630,7 @@ function applyModifications(page, textCol, darkUi, src) {
                                             }
                                         }
                                     });
+                                    bus.$emit('iframe-loaded', true);
                                     return;
                                 }
                             }
@@ -651,7 +656,11 @@ function applyModifications(page, textCol, darkUi, src) {
             }
         }
     }
-    bus.$emit('iframe-loaded', true);
+    if (copiedVars && iframeInfo.initialLoad) {
+        setTimeout(function() { bus.$emit('iframe-loaded', true); }, 250);
+    } else {
+        bus.$emit('iframe-loaded', true);
+    }
 }
 
 Vue.component('lms-iframe-dialog', {
@@ -733,6 +742,7 @@ Vue.component('lms-iframe-dialog', {
     mounted() {
         bus.$on('iframe.open', function(page, title, actions, showHome, playerId) {
             iframeInfo.settingModified = false;
+            iframeInfo.initialLoad = true;
             this.title = title;
             // Delay setting URL for 50ms - otherwise get two requests, first is cancelled...
             // ...no idea why!
@@ -769,6 +779,7 @@ Vue.component('lms-iframe-dialog', {
         }.bind(this));
         bus.$on('iframe-loaded', function(val, settingsPage) {
             this.loaded = val;
+            iframeInfo.initialLoad = false;
             if (val) {
                 this.stopLoadTimer();
             } else {

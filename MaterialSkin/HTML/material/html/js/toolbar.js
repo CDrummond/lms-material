@@ -29,9 +29,11 @@ Vue.component('lms-toolbar', {
  <div class="maintoolbar-title">{{time}}</div>
  <div class="maintoolbar-subtitle subtext">{{date}}</div>
 </div>
-
+ <v-btn icon class="toolbar-button" @click="bus.$emit('navDrawer')"><v-icon>menu</v-icon></v-btn>
+ <!--
  <v-btn v-if="!noPlayer && powerButton" icon class="toolbar-button maintoolbar-player-power-button" v-longpress:stop="handlePlayerToolbarButton" :title="playerStatus.ison ? i18n('Switch off %1', player.name) : i18n('Switch on %1', player.name)"><v-icon v-bind:class="{'dimmed': !playerStatus.ison}">power_settings_new</v-icon></v-btn>
  <v-btn v-else-if="!noPlayer" icon class="toolbar-button maintoolbar-player-power-button" v-longpress:stop="handlePlayerToolbarButton" :title="player.name"><v-icon v-if="player.icon.icon" class="maintoolbar-player-icon" v-bind:class="{'dimmed': !playerStatus.ison}">{{player.icon.icon}}</v-icon><img v-else class="svg-img maintoolbar-player-icon" v-bind:class="{'dimmed': !playerStatus.ison}" :src="player.icon.svg | svgIcon(darkUi, false, true, coloredToolbars&&!nowPlayingFull)"></img></v-btn>
+ -->
 
  <v-menu bottom :disabled="!connected" class="ellipsis" v-model="showPlayerMenu">
   <v-toolbar-title slot="activator" v-bind:class="{'link-item':!coloredToolbars && (!queryParams.single || !powerButton), 'link-item-ct': coloredToolbars && (!queryParams.single || !powerButton), 'maintoolbar-title-clock':showClock}">

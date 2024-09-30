@@ -483,6 +483,9 @@
  .dst-home, .dst-home:hover {
   left:7px;
  }
+ .v-navigation-drawer {
+  margin-left:-5px;
+ }
 }
 
 .lms-splitter .splitter {

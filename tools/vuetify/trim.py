@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+#!/usr/bin/env python3
 
 #
 # Hacky script to trim modules out of Vuetify
@@ -15,6 +15,8 @@ CSS_DEST = 'vuetify-trimmed.min.css'
 CSS_TMP = 'temp.css'
 
 REMOVE_CSS=[
+".blue",
+".light-blue",
 ".red",
 ".pink",
 ".purple",
@@ -30,6 +32,7 @@ REMOVE_CSS=[
 ".orange",
 ".deep-orange",
 ".brown",
+".grey",
 ".bottom-sheet",
 ".carousel",
 ".scroll-y",
@@ -54,10 +57,10 @@ REMOVE_CSS=[
 ".v-date-picker",
 ".v-expansion-panel",
 ".v-messages",
-".v-navigation-drawer",
 ".v-pagination",
 ".v-parallax",
 ".v-progress-circular",
+".v-progress-linear",
 ".v-input--radio-group",
 ".v-radio",
 ".v-responsive",

@@ -416,7 +416,20 @@ html, .mini-player {
  margin-right:-19px !important;
 }
 
-.v-list__tile__title, .v-select__selection, .v-select__selection--comma, .v-btn__content, html, .pq-albumstyle .v-list__tile {
+.v-navigation-drawer,
+.theme--dark .v-navigation-drawer,
+.theme--light .v-navigation-drawer,
+.v-navigation-drawer .v-list div:not(.active-player) .v-list__tile,
+.v-navigation-drawer .v-list .v-subheader {
+ background-color: var(--popup-background-color);
+}
+
+.v-navigation-drawer__border {
+ background-color: var(--popup-border-color);
+}
+
+.v-list__tile__title, .v-select__selection, .v-select__selection--comma, .v-btn__content, html, .pq-albumstyle .v-list__tile,
+.v-navigation-drawer >.v-list:not(.v-list--dense) .v-list__tile {
  font-size:var(--std-font-size);
  font-weight:var(--std-weight);
 }
@@ -517,7 +530,7 @@ div.v-subheader {
  border-left:1px solid var(--list-item-border-color) !important;
 }
 
-.v-menu__content .theme--dark.v-divider {
+.v-menu__content .theme--dark.v-divider, .v-navigation-drawer .theme--dark.v-divider {
  border-top:1px solid var(--popup-divider-color) !important;
 }
 
@@ -900,7 +913,7 @@ div.v-subheader {
 }
 
 .maintoolbar-title {
- padding-left:58px;
+ padding-left:10px;
  font-size:var(--std-font-size) !important;
  font-weight:var(--bold-weight);
 }
@@ -2597,7 +2610,8 @@ div.v-subheader {
  opacity:var(--sub-opacity);
 }
 
-.v-menu__content .v-list__tile .menu-shortcut {
+.v-menu__content .v-list__tile .menu-shortcut,
+.v-navigation-drawer .v-list__tile .menu-shortcut {
  min-width:40px!important;
  margin-left:16px;
  margin-right:4px;
@@ -2619,7 +2633,13 @@ div.v-subheader {
  margin-right:-9px;
 }
 
-.v-menu__content .v-list__tile .menu-shortcut-player-apple {
+.v-navigation-drawer .v-list__tile .menu-shortcut-player {
+ min-width:42px!important;
+ margin-right:-32px;
+}
+
+.v-menu__content .v-list__tile .menu-shortcut-player-apple,
+.v-navigation-drawer .v-list__tile .menu-shortcut-player-apple {
  min-width:48px!important;
 }
 
@@ -3874,18 +3894,18 @@ div.v-subheader {
 }
 
 .lyrion-logo {
- padding:calc((var(--top-pad)/2.0) + 12px) 14px 0px 0px;
- height:var(--main-toolbar-height)!important;
+ width:100%;
 }
 
 .lyrion-logo img {
- height:22px!important;
-}
-
-@media (max-width:600px) {
- .lyrion-logo {
-  display: none;
- }
+ height:30px!important;
+ padding:4px!important;
+ width:116px;
+ border:2px solid var(--text-color);
+ border-radius: 15px;
+ position:fixed;
+ right:19px;
+ top:7px;
 }
 
 .bm-checkbox .v-input--selection-controls__ripple {

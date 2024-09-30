@@ -3922,6 +3922,7 @@ div.v-subheader {
 }
 
 .lyrion-logo img {
+ opacity:0.7;
  height:30px!important;
  padding:4px!important;
  width:116px;

@@ -3436,19 +3436,19 @@ div.v-subheader {
 }
 
 /*@media (hover: hover) and (pointer: fine) {*/
- .msk-is-non-touch .menu-btn:hover,
- .msk-is-non-touch .v-btn:hover {
-  background-color:var(--btn-hover-color);
- }
- .msk-is-non-touch .lms-list .v-list__tile:hover,
- .msk-is-non-touch .lms-list-sub .v-list__tile:hover,
- .msk-is-non-touch .lms-list3 .v-list__tile:hover,
- .msk-is-non-touch .lms-list-sub3 .v-list__tile:hover,
- .msk-is-non-touch .v-menu__content .v-list__tile:hover,
- .msk-is-non-touch .v-navigation-drawer .v-list__tile:hover,
- .msk-is-non-touch .image-grid-item:not(.defcursor):hover {
-  background-color:var(--list-hover-color)!important;
- }
+.msk-is-non-touch .menu-btn:hover,
+.msk-is-non-touch .v-btn:hover {
+ background-color:var(--btn-hover-color);
+}
+.msk-is-non-touch .lms-list .v-list__tile:hover,
+.msk-is-non-touch .lms-list-sub .v-list__tile:hover,
+.msk-is-non-touch .lms-list3 .v-list__tile:hover,
+.msk-is-non-touch .lms-list-sub3 .v-list__tile:hover,
+.msk-is-non-touch .v-menu__content .v-list__tile:hover,
+.v-navigation-drawer .v-list__tile:hover,
+.msk-is-non-touch .image-grid-item:not(.defcursor):hover {
+ background-color:var(--list-hover-color)!important;
+}
 /*}*/
 
 @media (hover: none) {

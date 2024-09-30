@@ -17,19 +17,8 @@ Vue.component('lms-ui-settings', {
     <v-btn flat icon @click="close" :title="ttShortcutStr(i18n('Go back'), 'esc')"><v-icon>arrow_back</v-icon></v-btn>
     <v-toolbar-title>{{width>=450 ? TB_UI_SETTINGS.title+serverName : TB_UI_SETTINGS.title}}</v-toolbar-title>
     <v-spacer class="drag-area"></v-spacer>
-    <v-menu bottom left v-model="showMenu" v-if="!queryParams.party">
-     <v-btn icon slot="activator"><v-icon>more_vert</v-icon></v-btn>
-     <v-list>
-      <v-list-tile @click="saveAsDefault($event)">
-       <v-list-tile-avatar><v-icon>save_alt</v-icon></v-list-tile-avatar>
-       <v-list-tile-content><v-list-tile-title>{{i18n('Save as default')}}</v-list-tile-title></v-list-tile-content>
-      </v-list-tile>
-      <v-list-tile @click="revertToDefault($event)">
-       <v-list-tile-avatar><v-icon>settings_backup_restore</v-icon></v-list-tile-avatar>
-       <v-list-tile-content><v-list-tile-title>{{i18n('Revert to default')}}</v-list-tile-title></v-list-tile-content>
-      </v-list-tile>
-     </v-list>
-    </v-menu>
+    <v-btn icon :title="i18n('Save as default')" @click="saveAsDefault($event)"><v-icon>save_alt</v-icon></v-btn>
+    <v-btn icon :title="i18n('Revert to default')" @click="revertToDefault($event)"><v-icon>settings_backup_restore</v-icon></v-btn>
     <div class="drag-area-right"></div>
     <lms-windowcontrols v-if="queryParams.nativeTitlebar"></lms-windowcontrols>
    </v-toolbar>

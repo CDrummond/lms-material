@@ -22,7 +22,7 @@ Vue.component('lms-player-settings', {
      <v-toolbar-title v-if="numPlayers>1" @click="openPlayerMenu" class="pointer">{{TB_PLAYER_SETTINGS.title+SEPARATOR+playerName}}</v-toolbar-title>
      <v-toolbar-title v-else>{{TB_PLAYER_SETTINGS.title+SEPARATOR+playerName}}</v-toolbar-title>
      <v-spacer class="drag-area"></v-spacer>
-     <v-menu bottom left v-model="showMenu">
+     <v-menu bottom left v-model="showMenu" v-if="customActions && customActions.length>0">
       <v-btn icon slot="activator"><v-icon>more_vert</v-icon></v-btn>
       <v-list>
        <template v-for="(action, index) in customActions">
@@ -31,31 +31,6 @@ Vue.component('lms-player-settings', {
          <v-list-tile-content><v-list-tile-title>{{action.title}}</v-list-tile-title></v-list-tile-content>
         </v-list-tile>
        </template>
-       <v-divider v-if="customActions && customActions.length>0"></v-divider>
-       <v-list-tile @click="setSleep($event)">
-        <v-list-tile-avatar><v-icon class="btn-icon">hotel</v-icon></v-list-tile-avatar>
-        <v-list-tile-content><v-list-tile-title>{{i18n('Sleep')}}</v-list-tile-title></v-list-tile-content>
-       </v-list-tile>
-       <v-list-tile v-if="showSync" @click="bus.$emit('dlg.open', 'sync', {id:playerId, isgroup:false, name:playerName})">
-        <v-list-tile-avatar><v-icon class="btn-icon">link</v-icon></v-list-tile-avatar>
-        <v-list-tile-content><v-list-tile-title>{{i18n('Synchronize')}}</v-list-tile-title></v-list-tile-content>
-       </v-list-tile>
-       <v-list-tile v-if="unlockAll" @click="showExtraSettings">
-        <v-list-tile-avatar><img class="svg-img" :src="'configure'| svgIcon(darkUi)"></img></v-list-tile-avatar>
-        <v-list-tile-content><v-list-tile-title>{{i18n('Extra settings')}}</v-list-tile-title></v-list-tile-content>
-       </v-list-tile>
-       <v-list-tile v-if="unlockAll && playerLink" @click="showConfig">
-        <v-list-tile-avatar><v-icon>build</v-icon></v-list-tile-avatar>
-        <v-list-tile-content><v-list-tile-title>{{i18n('Configuration')}}</v-list-tile-title></v-list-tile-content>
-       </v-list-tile>
-       <v-list-tile v-for="(plugin, index) in plugins" @click="showPlugin(index)">
-        <v-list-tile-avatar>
-         <img v-if="plugin.svg" class="svg-img" :src="plugin.svg| svgIcon(darkUi)"></img>
-         <v-icon v-else-if="plugin.icon">{{plugin.icon}}</v-icon>
-         <img v-else-if="plugin.image" class="svg-img" :key="plugin.image" v-lazy="plugin.image">
-        </v-list-tile-avatar>
-        <v-list-tile-content><v-list-tile-title>{{plugin.title}}</v-list-tile-title></v-list-tile-content>
-       </v-list-tile>
       </v-list>
      </v-menu>
      <div class="drag-area-right"></div>
@@ -154,7 +129,7 @@ Vue.component('lms-player-settings', {
      </v-list-tile>
      <v-list-tile v-if="showSync" class="other-setting">
       <v-list-tile-content>
-       <v-list-tile-title><v-btn flat @click="this.showMenu = false; bus.$emit('dlg.open', 'sync', {id:playerId, isgroup:false, name:playerName})"><v-icon class="btn-icon">link</v-icon>{{i18n('Synchronize')}}</v-btn></v-list-tile-title>
+       <v-list-tile-title><v-btn flat @click="showMenu = false; bus.$emit('dlg.open', 'sync', {id:playerId, isgroup:false, name:playerName})"><v-icon class="btn-icon">link</v-icon>{{i18n('Synchronize')}}</v-btn></v-list-tile-title>
        <v-list-tile-sub-title>{{isSynced ? i18n('Synchronized with other players.') : i18n('Not currently synchronised with any other player.')}}</v-list-tile-sub-title>
       </v-list-tile-content>
      </v-list-tile>

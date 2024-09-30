@@ -23,7 +23,7 @@ const TB_CUSTOM_ACTIONS = {id:21};
 Vue.component('lms-navdrawer', {
     template: `
 <v-navigation-drawer v-model="show" absolute temporary :width="maxWidth">
- <v-list style="padding:0px!important">
+ <v-list style="padding:0px!important" class="nd-list">
   <v-list-tile>
    <v-list-tile-avatar><v-btn icon flat @click="show=false"><v-icon>arrow_back<v-icon></v-btn></v-list-tile-avatar>
    <a class="lyrion-logo" href="https://lyrion.org" target="_blank"><img :src="'lyrion' | svgIcon(darkUi)"></img></a>

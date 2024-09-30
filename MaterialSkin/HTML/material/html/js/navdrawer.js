@@ -148,6 +148,30 @@ Vue.component('lms-navdrawer', {
             this.customActions = getCustomActions(undefined, this.$store.state.unlockAll);
             this.customSettingsActions = getCustomActions("settings", this.$store.state.unlockAll);
         }.bind(this));
+
+        bus.$on('playerStatus', function(playerStatus) {
+            if (playerStatus.ison!=this.playerStatus.ison) {
+                this.playerStatus.ison = playerStatus.ison;
+            }
+            if (playerStatus.isplaying!=this.playerStatus.isplaying) {
+                this.playerStatus.isplaying = playerStatus.isplaying;
+            }
+            this.controlSleepTimer(playerStatus.will_sleep_in);
+            if (playerStatus.synced!=this.playerStatus.synced) {
+                this.playerStatus.synced = playerStatus.synced;
+            }
+            this.playerId = ""+this.$store.state.player.id;
+            if (this.playerStatus.alarm!=playerStatus.alarm) {
+                if (undefined==playerStatus.alarm) {
+                    this.playerStatus.alarmStr = undefined;
+                } else {
+                    let alarmDate = new Date(playerStatus.alarm*1000);
+                    this.playerStatus.alarmStr = dateStr(alarmDate, this.$store.state.lang)+" "+timeStr(alarmDate, this.$store.state.lang);
+                }
+                this.playerStatus.alarm=playerStatus.alarm;
+            }
+        }.bind(this));
+
         this.customActions = getCustomActions(undefined, this.$store.state.unlockAll);
         this.customSettingsActions = getCustomActions("settings", this.$store.state.unlockAll);
 
@@ -326,7 +350,7 @@ Vue.component('lms-navdrawer', {
                 });
             }
         },
-        togglePower() {
+        togglePower(longPress, el, event) {
             storeClickOrTouchPos(event);
             if (queryParams.party) {
                 return;
@@ -339,6 +363,36 @@ Vue.component('lms-navdrawer', {
         doCustomAction(action) {
             performCustomAction(action, this.$store.state.player);
         },
+        cancelSleepTimer() {
+            this.playerStatus.sleepTime = undefined;
+            if (undefined!==this.playerStatus.sleepTimer) {
+                clearInterval(this.playerStatus.sleepTimer);
+                this.playerStatus.sleepTimer = undefined;
+            }
+        },
+        controlSleepTimer(timeLeft) {
+            if (undefined!=timeLeft && timeLeft>1) {
+                timeLeft = Math.floor(timeLeft);
+                if (this.playerStatus.sleepTimeLeft!=timeLeft) {
+                    this.cancelSleepTimer();
+                    this.playerStatus.sleepTime = timeLeft;
+                    this.playerStatus.sleepTimeLeft = this.playerStatus.sleepTime;
+                    this.playerStatus.sleepStart = new Date();
+
+                    this.playerStatus.sleepTimer = setInterval(function () {
+                        var current = new Date();
+                        var diff = (current.getTime()-this.playerStatus.sleepStart.getTime())/1000.0;
+                        this.playerStatus.sleepTime = this.playerStatus.sleepTimeLeft - diff;
+                        if (this.playerStatus.sleepTime<=0) {
+                            this.playerStatus.sleepTime = undefined;
+                            this.cancelSleepTimer();
+                        }
+                    }.bind(this), 1000);
+                }
+            } else {
+                this.cancelSleepTimer();
+            }
+        }
     },
     computed: {
         darkUi () {
@@ -378,7 +432,16 @@ Vue.component('lms-navdrawer', {
         },
         playerShortcut: function(index) {
             return IS_APPLE ? ("⌥+"+(9==index ? 0 : index+1)) : i18n("Alt+%1", 9==index ? 0 : index+1);
+        },
+        displayTime: function (value) {
+            if (undefined==value) {
+                return '';
+            }
+            return formatSeconds(Math.floor(value));
         }
+    },
+    beforeDestroy() {
+        this.cancelSleepTimer();
     }
 })
 

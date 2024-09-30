@@ -131,15 +131,8 @@ Vue.component('lms-toolbar', {
             if (playerStatus.volume!=this.playerStatus.volume) {
                 this.playerStatus.volume = playerStatus.volume;
             }
-            this.controlSleepTimer(playerStatus.will_sleep_in);
             if (playerStatus.synced!=this.playerStatus.synced) {
                 this.playerStatus.synced = playerStatus.synced;
-            }
-            if (playerStatus.syncmaster!=this.playerStatus.syncmaster) {
-                this.playerStatus.syncmaster = playerStatus.syncmaster;
-            }
-            if (playerStatus.syncslaves!=this.playerStatus.syncslaves) {
-                this.playerStatus.syncslaves = playerStatus.syncslaves;
             }
             this.playerStatus.count=playerStatus.playlist ? playerStatus.playlist.count : 0;
             this.playerDvc = playerStatus.dvc;
@@ -147,6 +140,9 @@ Vue.component('lms-toolbar', {
             var vol = playerStatus.volume;
             if (vol != this.playerVolume) {
                 this.playerVolume = vol;
+            }
+            if (this.playerStatus.sleepTime!=playerStatus.will_sleep_in) {
+                this.playerStatus.sleepTime=playerStatus.will_sleep_in;
             }
             this.playerId = ""+this.$store.state.player.id;
             if (this.playerStatus.alarm!=playerStatus.alarm) {
@@ -165,11 +161,6 @@ Vue.component('lms-toolbar', {
         }.bind(this));
         this.initItems();
 
-        bus.$on('closeMenu', function() {
-            this.showPlayerMenu = false;
-            this.showMainMenu = false;
-            this.showErrorMenu = false;
-        }.bind(this));
         bus.$on('infoDialog', function(val) {
             this.infoOpen = val;
             this.initItems();
@@ -293,36 +284,6 @@ Vue.component('lms-toolbar', {
                 return;
             }
             bus.$emit('dlg.open', 'sleep', this.$store.state.player);
-        },
-        cancelSleepTimer() {
-            this.playerStatus.sleepTime = undefined;
-            if (undefined!==this.playerStatus.sleepTimer) {
-                clearInterval(this.playerStatus.sleepTimer);
-                this.playerStatus.sleepTimer = undefined;
-            }
-        },
-        controlSleepTimer(timeLeft) {
-            if (undefined!=timeLeft && timeLeft>1) {
-                timeLeft = Math.floor(timeLeft);
-                if (this.playerStatus.sleepTimeLeft!=timeLeft) {
-                    this.cancelSleepTimer();
-                    this.playerStatus.sleepTime = timeLeft;
-                    this.playerStatus.sleepTimeLeft = this.playerStatus.sleepTime;
-                    this.playerStatus.sleepStart = new Date();
-
-                    this.playerStatus.sleepTimer = setInterval(function () {
-                        var current = new Date();
-                        var diff = (current.getTime()-this.playerStatus.sleepStart.getTime())/1000.0;
-                        this.playerStatus.sleepTime = this.playerStatus.sleepTimeLeft - diff;
-                        if (this.playerStatus.sleepTime<=0) {
-                            this.playerStatus.sleepTime = undefined;
-                                this.cancelSleepTimer();
-                        }
-                    }.bind(this), 1000);
-                }
-            } else {
-                this.cancelSleepTimer();
-            }
         },
         cancelDisconnectedTimer() {
             if (undefined!==this.disconnectedTimer) {
@@ -452,12 +413,6 @@ Vue.component('lms-toolbar', {
         }
     },
     filters: {
-        displayTime: function (value) {
-            if (undefined==value) {
-                return '';
-            }
-            return formatSeconds(Math.floor(value));
-        },
         displayVolume: function (value, dvc) {
             if (undefined==value || VOL_STD!=dvc) {
                 return '';
@@ -474,25 +429,7 @@ Vue.component('lms-toolbar', {
             return IS_APPLE ? ("⌥+"+(9==index ? 0 : index+1)) : i18n("Alt+%1", 9==index ? 0 : index+1);
         }
     },
-    watch: {
-        'showPlayerMenu': function(newVal) {
-            this.$store.commit('menuVisible', {name:'player', shown:newVal});
-            if (newVal) {
-                bus.$emit('refreshServerStatus');
-                this.startStatusTimer();
-            } else {
-                this.cancelStatusTimer();
-            }
-        },
-        'showMainMenu': function(newVal) {
-            this.$store.commit('menuVisible', {name:'main', shown:newVal});
-        },
-        'showErrorMenu': function(newVal) {
-            this.$store.commit('menuVisible', {name:'error', shown:newVal});
-        }
-    },
     beforeDestroy() {
-        this.cancelSleepTimer();
         this.cancelDisconnectedTimer();
         this.cancelClockTimer();
         this.cancelStatusTimer();

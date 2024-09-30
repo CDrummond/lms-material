@@ -88,15 +88,15 @@ Vue.component('lms-navdrawer', {
     </v-list-tile-content>
     <v-list-tile-action v-if="item.shortcut && keyboardControl" class="menu-shortcut">{{item.shortcut}}</v-list-tile-action>
    </v-list-tile>
-   <v-list-tile :href="queryParams.appSettings" v-else-if="TB_APP_SETTINGS.id==item.id && undefined!=queryParams.appSettings">
+   <v-list-tile :href="queryParams.appSettings" v-else-if="TB_APP_SETTINGS.id==item.id && undefined!=queryParams.appSettings" @click="show=false">
     <v-list-tile-avatar><img class="svg-img" :src="TB_APP_SETTINGS.svg | svgIcon(darkUi)"></img></v-list-tile-avatar>
     <v-list-tile-content><v-list-tile-title>{{TB_APP_SETTINGS.stitle}}</v-list-tile-title></v-list-tile-content>
    </v-list-tile>
-   <v-list-tile :href="appLaunchPlayer" v-else-if="TB_START_PLAYER.id==item.id">
+   <v-list-tile :href="appLaunchPlayer" v-else-if="TB_START_PLAYER.id==item.id" @click="show=false">
     <v-list-tile-avatar><v-icon>{{TB_START_PLAYER.icon}}</v-icon></v-list-tile-avatar>
     <v-list-tile-title>{{TB_START_PLAYER.title}}</v-list-tile-title>
    </v-list-tile>
-   <v-list-tile :href="appQuit" v-else-if="TB_APP_QUIT.id==item.id">
+   <v-list-tile :href="appQuit" v-else-if="TB_APP_QUIT.id==item.id" @click="show=false">
     <v-list-tile-avatar><img class="svg-img" :src="TB_APP_QUIT.svg | svgIcon(darkUi)"></img></v-list-tile-avatar>
     <v-list-tile-title>{{TB_APP_QUIT.title}}</v-list-tile-title>
    </v-list-tile>

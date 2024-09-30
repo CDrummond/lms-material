@@ -22,8 +22,9 @@ const TB_CUSTOM_ACTIONS = {id:21};
 
 Vue.component('lms-navdrawer', {
     template: `
-<v-navigation-drawer v-model="show" absolute temporary :width="maxWidth">
- <v-list style="padding:0px!important" class="nd-list">
+<v-navigation-drawer v-model="show" absolute temporary :width="maxWidth" style="display:flex;flex-direction:column">
+ <v-list class="nd-list py-0">
+  <div class="nd-top"></div>
   <v-list-tile @click="show=false">
    <v-list-tile-avatar><v-btn icon flat @click="show=false"><v-icon>arrow_back<v-icon></v-btn></v-list-tile-avatar>
    <a class="lyrion-logo" href="https://lyrion.org" target="_blank"><img :src="'lyrion' | svgIcon(darkUi)"></img></a>
@@ -76,6 +77,9 @@ Vue.component('lms-navdrawer', {
   </v-list-tile>
 
   <v-divider v-if="!noPlayer"></v-divider>
+ </v-list>
+ <v-spacer></v-spacer>
+ <v-list class="nd-list py-0">
   <template v-for="(item, index) in menuItems">
    <v-divider v-if="item===DIVIDER"></v-divider>
    <v-subheader v-else-if="item.hdr">{{item.title}}</v-subheader>
@@ -107,6 +111,7 @@ Vue.component('lms-navdrawer', {
     </v-list-tile>
    </template>
   </template>
+  <div class="nd-bottom"></div>
  </v-list>
 </v-navigation-drawer>
 `,

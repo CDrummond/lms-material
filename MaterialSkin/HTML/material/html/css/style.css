@@ -416,9 +416,12 @@ html, .mini-player {
  margin-right:-19px !important;
 }
 
-.v-navigation-drawer {
- padding-top:var(--top-pad);
- padding-bottom:var(--bottom-pad);
+.nd-top {
+ height:var(--top-pad)!important;
+}
+
+.nd-bottom {
+ height:var(--bottom-pad)!important;
 }
 
 .v-navigation-drawer,

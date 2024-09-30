@@ -2139,9 +2139,8 @@ div.v-rating i.primary--text, div.v-rating i.accent--text {
 }
 
 .settings-title .dialog-toolbar .v-toolbar__title {
- font-size:110% !important;
+ font-size:var(--std-font-size) !important;
  font-weight:var(--bold-weight);
- margin-left:8px;
 }
 
 .settings-title {
@@ -3286,8 +3285,19 @@ div.v-subheader {
 }
 
 .toolbar-clock .maintoolbar-title, .toolbar-clock .maintoolbar-subtitle {
- padding-left:0px!important;
  min-width:unset!important;
+}
+
+.maintoolbar-title, .maintoolbar-subtitle {
+ padding-left:0px!important;
+}
+
+.v-toolbar__title:not(:first-child) {
+ margin-left: 10px;
+}
+
+.v-dialog--fullscreen .v-toolbar__title:not(:first-child) {
+ margin-left: 12px;
 }
 
 .highlight-drop {

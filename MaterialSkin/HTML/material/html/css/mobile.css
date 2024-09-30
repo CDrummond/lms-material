@@ -431,14 +431,6 @@
   padding:2px 1px 0px 7px;
  }
 
- .maintoolbar-player-icon {
-  left:20px;
- }
-
- .maintoolbar-player-power-button, .maintoolbar-player-power-button:hover {
-  left:8px!important;
- }
-
  .lms-list .v-list__tile,
  .detailed-sub .lms-image-grid .vue-recycle-scroller__item-view a {
   padding:0 12px !important;
@@ -486,6 +478,9 @@
  .v-navigation-drawer {
   margin-left:-5px;
  }
+ .v-toolbar__title:not(:first-child) {
+  margin-left:12px;
+ }
 }
 
 .lms-splitter .splitter {
@@ -531,15 +526,6 @@
   width:120px;
   height:120px;
   padding-top:45px;
- }
-}
-
-@media (max-width:290px) {
- .maintoolbar-player-power-button, .maintoolbar-player-icon {
-  visibility: hidden;
- }
- .maintoolbar-title, .maintoolbar-subtitle {
-  padding-left:12px;
  }
 }
 

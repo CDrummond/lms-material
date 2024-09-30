@@ -534,12 +534,6 @@
  }
 }
 
-@media (min-width:750px) {
- .group-vol {
-  right:calc(var(--window-controls-space) + 36px);
- }
-}
-
 @media (max-width:290px) {
  .maintoolbar-player-power-button, .maintoolbar-player-icon {
   visibility: hidden;

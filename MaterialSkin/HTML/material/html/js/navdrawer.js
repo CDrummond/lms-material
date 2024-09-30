@@ -6,63 +6,77 @@
  */
 'use strict';
 
+var TB_SETTINGS        = {id:0, hdr: true };
+var TB_UI_SETTINGS     = {id:1, svg:  "ui-settings" };
+var TB_PLAYER_SETTINGS = {id:2, svg:  "player-settings" };
+var TB_SERVER_SETTINGS = {id:3, svg:  "server-settings" };
+var TB_APP_SETTINGS    = {id:4, svg:  "app-settings" };
+var TB_INFO            = {id:5, icon: "info" };
+var TB_HELP            = {id:6, icon: "help" };
+var TB_MANAGE_PLAYERS  = {id:7, svg:  "player-manager" };
+var TB_APP_QUIT        = {id:8, svg:  "close" }
+var TB_START_PLAYER    = {id:9, icon: "surround_sound" }
+
+const TB_CUSTOM_SETTINGS_ACTIONS = {id:20};
+const TB_CUSTOM_ACTIONS = {id:21};
+
 Vue.component('lms-navdrawer', {
     template: `
 <v-navigation-drawer v-model="show" absolute temporary :width="maxWidth">
-   <v-list style="padding:0px!important">
-   <v-list-tile >
+ <v-list style="padding:0px!important">
+  <v-list-tile>
    <v-list-tile-avatar><v-btn icon flat @click="show=false"><v-icon>arrow_back<v-icon></v-btn></v-list-tile-avatar>
    <a class="lyrion-logo" href="https://lyrion.org" target="_blank"><img :src="'lyrion' | svgIcon(darkUi)"></img></a>
   </v-list-tile>
-   <template v-for="(item, index) in players"  v-if="!queryParams.single">
-    <v-subheader v-if="index==0 && !item.isgroup && players[players.length-1].isgroup">{{trans.standardPlayers}}</v-subheader>
-    <v-subheader v-else-if="index>0 && item.isgroup && !players[index-1].isgroup">{{trans.groupPlayers}}</v-subheader>
-    <v-list-tile @click="setPlayer(item.id)" v-bind:class="{'active-player':player && item.id === player.id}">
-     <v-list-tile-avatar>
-      <v-icon v-if="item.isplaying" class="playing-badge">play_arrow</v-icon>
-      <v-icon v-if="item.icon.icon">{{item.icon.icon}}</v-icon><img v-else class="svg-img" :src="item.icon.svg | svgIcon(darkUi)"></img>
-      <div v-if="player && item.id === player.id" class="active-player"></div>
-     </v-list-tile-avatar>
-     <v-list-tile-content>
-      <v-list-tile-title v-bind:class="{'active-player-title':player && item.id === player.id}">{{item.name}}</v-list-tile-title>
-     </v-list-tile-content>
-      <v-list-tile-action v-if="index<10 && keyboardControl" class="menu-shortcut" v-bind:class="{'menu-shortcut-player':item.canpoweroff,'menu-shortcut-player-apple':IS_APPLE && item.canpoweroff}">{{index|playerShortcut}}</v-list-tile-action>
-      <v-list-tile-action>
-       <v-btn v-if="item.canpoweroff" icon style="float:right" v-longpress:stop="togglePower" :id="index+'-power-btn'" :title="(item.id==player.id && playerStatus.ison) || item.ison ? i18n('Switch off %1', item.name) : i18n('Switch on %1', item.name)"><v-icon v-bind:class="{'dimmed': (item.id==player.id ? !playerStatus.ison : !item.ison)}">power_settings_new</v-icon></v-btn>
-      </v-list-tile-action>
-    </v-list-tile>
-   </template>
-
-   <v-divider v-if="!noPlayer && (((players && players.length>1) || playerStatus.sleepTime || otherPlayers.length>0))" class="hide-for-mini"></v-divider>
-
-   <v-list-tile v-if="((players && players.length>1) || otherPlayers.length>0) && !queryParams.party" v-longpress="managePlayers" class="hide-for-mini noselect">
-    <v-list-tile-avatar><img class="svg-img" :src="TB_MANAGE_PLAYERS.svg | svgIcon(darkUi)"></img></v-list-tile-avatar>
-    <v-list-tile-content><v-list-tile-title>{{TB_MANAGE_PLAYERS.title}}</v-list-tile-title></v-list-tile-content>
-    <v-list-tile-action v-if="TB_MANAGE_PLAYERS.shortcut && keyboardControl" class="menu-shortcut player-menu-shortcut">{{TB_MANAGE_PLAYERS.shortcut}}</v-list-tile-action>
-   </v-list-tile>
-
-   <template v-if="!noPlayer && customPlayerActions && customPlayerActions.length>0" v-for="(action, index) in customPlayerActions">
-    <v-list-tile @click="doCustomAction(action)" v-if="undefined==action.players || action.players.indexOf(player.id)>=0">
-     <v-list-tile-avatar><v-icon v-if="action.icon">{{action.icon}}</v-icon><img v-else-if="action.svg" class="svg-img" :src="action.svg | svgIcon(darkUi)"></img></v-list-tile-avatar>
-     <v-list-tile-content><v-list-tile-title>{{action.title}}</v-list-tile-title></v-list-tile-content>
-    </v-list-tile>
-   </template>
-
-   <v-list-tile v-if="playerStatus.sleepTime" @click="bus.$emit('dlg.open', 'sleep', player)" class="hide-for-mini">
-    <v-list-tile-avatar><v-icon>hotel</v-icon></v-list-tile-avatar>
+  <template v-for="(item, index) in players"  v-if="!queryParams.single">
+   <v-subheader v-if="index==0 && !item.isgroup && players[players.length-1].isgroup">{{trans.standardPlayers}}</v-subheader>
+   <v-subheader v-else-if="index>0 && item.isgroup && !players[index-1].isgroup">{{trans.groupPlayers}}</v-subheader>
+   <v-list-tile @click="setPlayer(item.id)" v-bind:class="{'active-player':player && item.id === player.id}">
+    <v-list-tile-avatar>
+     <v-icon v-if="item.isplaying" class="playing-badge">play_arrow</v-icon>
+     <v-icon v-if="item.icon.icon">{{item.icon.icon}}</v-icon><img v-else class="svg-img" :src="item.icon.svg | svgIcon(darkUi)"></img>
+     <div v-if="player && item.id === player.id" class="active-player"></div>
+    </v-list-tile-avatar>
     <v-list-tile-content>
-     <v-list-tile-title>{{playerStatus.sleepTime | displayTime}}</v-list-tile-title>
+     <v-list-tile-title v-bind:class="{'active-player-title':player && item.id === player.id}">{{item.name}}</v-list-tile-title>
     </v-list-tile-content>
+     <v-list-tile-action v-if="index<10 && keyboardControl" class="menu-shortcut" v-bind:class="{'menu-shortcut-player':item.canpoweroff,'menu-shortcut-player-apple':IS_APPLE && item.canpoweroff}">{{index|playerShortcut}}</v-list-tile-action>
+     <v-list-tile-action>
+      <v-btn v-if="item.canpoweroff" icon style="float:right" v-longpress:stop="togglePower" :id="index+'-power-btn'" :title="(item.id==player.id && playerStatus.ison) || item.ison ? i18n('Switch off %1', item.name) : i18n('Switch on %1', item.name)"><v-icon v-bind:class="{'dimmed': (item.id==player.id ? !playerStatus.ison : !item.ison)}">power_settings_new</v-icon></v-btn>
+     </v-list-tile-action>
    </v-list-tile>
-   <v-list-tile v-if="playerStatus.alarmStr" @click="bus.$emit('dlg.open', 'playersettings', undefined, 'alarms')" class="hide-for-mini">
-    <v-list-tile-avatar><v-icon>alarm</v-icon></v-list-tile-avatar>
-    <v-list-tile-content>
-     <v-list-tile-title>{{playerStatus.alarmStr}}</v-list-tile-title>
-    </v-list-tile-content>
-   </v-list-tile>
+  </template>
 
-   <v-divider v-if="!noPlayer"></v-divider>
-   <template v-for="(item, index) in menuItems">
+  <v-divider v-if="!noPlayer && (((players && players.length>1) || playerStatus.sleepTime || otherPlayers.length>0))" class="hide-for-mini"></v-divider>
+
+  <v-list-tile v-if="((players && players.length>1) || otherPlayers.length>0) && !queryParams.party" v-longpress="managePlayers" class="hide-for-mini noselect">
+   <v-list-tile-avatar><img class="svg-img" :src="TB_MANAGE_PLAYERS.svg | svgIcon(darkUi)"></img></v-list-tile-avatar>
+   <v-list-tile-content><v-list-tile-title>{{TB_MANAGE_PLAYERS.title}}</v-list-tile-title></v-list-tile-content>
+   <v-list-tile-action v-if="TB_MANAGE_PLAYERS.shortcut && keyboardControl" class="menu-shortcut player-menu-shortcut">{{TB_MANAGE_PLAYERS.shortcut}}</v-list-tile-action>
+  </v-list-tile>
+
+  <template v-if="!noPlayer && customPlayerActions && customPlayerActions.length>0" v-for="(action, index) in customPlayerActions">
+   <v-list-tile @click="doCustomAction(action)" v-if="undefined==action.players || action.players.indexOf(player.id)>=0">
+    <v-list-tile-avatar><v-icon v-if="action.icon">{{action.icon}}</v-icon><img v-else-if="action.svg" class="svg-img" :src="action.svg | svgIcon(darkUi)"></img></v-list-tile-avatar>
+    <v-list-tile-content><v-list-tile-title>{{action.title}}</v-list-tile-title></v-list-tile-content>
+   </v-list-tile>
+  </template>
+
+  <v-list-tile v-if="playerStatus.sleepTime" @click="bus.$emit('dlg.open', 'sleep', player)" class="hide-for-mini">
+   <v-list-tile-avatar><v-icon>hotel</v-icon></v-list-tile-avatar>
+   <v-list-tile-content>
+    <v-list-tile-title>{{playerStatus.sleepTime | displayTime}}</v-list-tile-title>
+   </v-list-tile-content>
+  </v-list-tile>
+  <v-list-tile v-if="playerStatus.alarmStr" @click="bus.$emit('dlg.open', 'playersettings', undefined, 'alarms')" class="hide-for-mini">
+   <v-list-tile-avatar><v-icon>alarm</v-icon></v-list-tile-avatar>
+   <v-list-tile-content>
+    <v-list-tile-title>{{playerStatus.alarmStr}}</v-list-tile-title>
+   </v-list-tile-content>
+  </v-list-tile>
+
+  <v-divider v-if="!noPlayer"></v-divider>
+  <template v-for="(item, index) in menuItems">
    <v-divider v-if="item===DIVIDER"></v-divider>
    <v-subheader v-else-if="item.hdr">{{item.title}}</v-subheader>
    <v-list-tile @click="menuAction(item.id)" v-else-if="(TB_UI_SETTINGS.id==item.id) || (TB_PLAYER_SETTINGS.id==item.id && player) || (TB_SERVER_SETTINGS.id==item.id && unlockAll) || (TB_HELP.id==item.id) || (TB_INFO.id==item.id)">
@@ -93,11 +107,7 @@ Vue.component('lms-navdrawer', {
     </v-list-tile>
    </template>
   </template>
-
-
-  </v-list>
-
-
+ </v-list>
 </v-navigation-drawer>
 `,
     props: [],
@@ -127,9 +137,94 @@ Vue.component('lms-navdrawer', {
         bus.$on('windowWidthChanged', function() {
             this.maxWidth = window.innerWidth>500 ? 400 : 300;
         }.bind(this));
+        bus.$on('customActions', function() {
+            if (undefined==this.customActions) {
+                this.customActions = getCustomActions(undefined, this.$store.state.unlockAll);
+                this.customSettingsActions = getCustomActions("settings", this.$store.state.unlockAll);
+                this.customPlayerActions = getCustomActions("players", this.$store.state.unlockAll);
+            }
+        }.bind(this));
+        bus.$on('lockChanged', function() {
+            this.customActions = getCustomActions(undefined, this.$store.state.unlockAll);
+            this.customSettingsActions = getCustomActions("settings", this.$store.state.unlockAll);
+        }.bind(this));
+        this.customActions = getCustomActions(undefined, this.$store.state.unlockAll);
+        this.customSettingsActions = getCustomActions("settings", this.$store.state.unlockAll);
+
+        if (!IS_MOBILE && !LMS_KIOSK_MODE) {
+            bindKey(LMS_UI_SETTINGS_KEYBOARD, 'mod');
+            bindKey(LMS_PLAYER_SETTINGS_KEYBOARD, 'mod');
+            bindKey(LMS_SERVER_SETTINGS_KEYBOARD, 'mod');
+            bindKey(LMS_INFORMATION_KEYBOARD, 'mod');
+            bindKey(LMS_MANAGEPLAYERS_KEYBOARD, 'mod');
+            bindKey(LMS_TOGGLE_QUEUE_KEYBOARD, 'mod+shift');
+            for (var i=0; i<=9; ++i) {
+                bindKey(''+i, 'alt');
+            }
+            bus.$on('keyboard', function(key, modifier) {
+                if (this.$store.state.openDialogs.length>1 || (1==this.$store.state.openDialogs.length && this.$store.state.openDialogs[0]!='info-dialog')) {
+                    return;
+                }
+                if ('mod'==modifier) {
+                    if (this.$store.state.visibleMenus.size==1 && this.$store.state.visibleMenus.has('main')) {
+                        if (LMS_UI_SETTINGS_KEYBOARD==key || LMS_PLAYER_SETTINGS_KEYBOARD==key ||  LMS_SERVER_SETTINGS_KEYBOARD==key || LMS_INFORMATION_KEYBOARD==key) {
+                            this.menuAction(LMS_UI_SETTINGS_KEYBOARD==key ? TB_UI_SETTINGS.id : LMS_PLAYER_SETTINGS_KEYBOARD==key ? TB_PLAYER_SETTINGS.id :
+                                            LMS_SERVER_SETTINGS_KEYBOARD==key ? TB_SERVER_SETTINGS.id : TB_INFO.id);
+                            this.showMainMenu = false;
+                        }
+                    } else if (this.$store.state.visibleMenus.size==1 && this.$store.state.visibleMenus.has('player')) {
+                        if (LMS_MANAGEPLAYERS_KEYBOARD==key && this.$store.state.players.length>1) {
+                            this.menuAction(TB_MANAGE_PLAYERS.id);
+                            this.showPlayerMenu = false;
+                        }
+                    } else if (this.$store.state.visibleMenus.size==0) {
+                        if (LMS_UI_SETTINGS_KEYBOARD==key || LMS_PLAYER_SETTINGS_KEYBOARD==key || LMS_SERVER_SETTINGS_KEYBOARD==key || LMS_INFORMATION_KEYBOARD==key ||
+                            (LMS_MANAGEPLAYERS_KEYBOARD==key && this.$store.state.players.length>1)) {
+                            this.menuAction(LMS_UI_SETTINGS_KEYBOARD==key ? TB_UI_SETTINGS.id : LMS_PLAYER_SETTINGS_KEYBOARD==key ? TB_PLAYER_SETTINGS.id :
+                                            LMS_SERVER_SETTINGS_KEYBOARD==key ? TB_SERVER_SETTINGS.id :
+                                            LMS_INFORMATION_KEYBOARD==key ? TB_INFO.id : TB_MANAGE_PLAYERS.id);
+                        }
+                    }
+                } else if ('alt'==modifier && 1==key.length && !isNaN(key)) {
+                    var player = parseInt(key);
+                    if (player==0) {
+                        player=10;
+                    } else {
+                        player=player-1;
+                    }
+                    if (player<this.$store.state.players.length) {
+                        var id = this.$store.state.players[player].id;
+                        if (id!=this.$store.state.player.id) {
+                            this.setPlayer(id);
+                        }
+                    }
+                } else if ('mod+shift'==modifier && LMS_TOGGLE_QUEUE_KEYBOARD==key && this.$store.state.desktopLayout) {
+                    this.toggleQueue();
+                }
+            }.bind(this));
+        }
     },
     methods: {
         initItems() {
+            TB_SETTINGS.title=i18n('Settings');
+            TB_UI_SETTINGS.title=i18n('Interface settings');
+            TB_UI_SETTINGS.stitle=i18n('Interface');
+            TB_UI_SETTINGS.shortcut=shortcutStr(LMS_UI_SETTINGS_KEYBOARD);
+            TB_PLAYER_SETTINGS.title=i18n('Player settings');
+            TB_PLAYER_SETTINGS.stitle=i18n('Player');
+            TB_PLAYER_SETTINGS.shortcut=shortcutStr(LMS_PLAYER_SETTINGS_KEYBOARD);
+            TB_SERVER_SETTINGS.title=i18n('Server settings');
+            TB_SERVER_SETTINGS.stitle=i18n('Server');
+            TB_SERVER_SETTINGS.shortcut=shortcutStr(LMS_SERVER_SETTINGS_KEYBOARD);
+            TB_INFO.title=i18n('Information');
+            TB_INFO.shortcut=shortcutStr(LMS_INFORMATION_KEYBOARD);
+            TB_HELP.title=i18n('Help');
+            TB_MANAGE_PLAYERS.title=i18n('Manage players');
+            TB_MANAGE_PLAYERS.shortcut=shortcutStr(LMS_MANAGEPLAYERS_KEYBOARD);
+            TB_APP_SETTINGS.title=i18n('Application settings');
+            TB_APP_SETTINGS.stitle=i18n('Application');
+            TB_APP_QUIT.title=i18n('Quit');
+            TB_START_PLAYER.title=i18n('Start player');
             this.trans = {groupPlayers:i18n("Group Players"), standardPlayers:i18n("Standard Players")};
             if (LMS_KIOSK_MODE) {
                 this.menuItems = LMS_KIOSK_MODE==2
@@ -172,9 +267,78 @@ Vue.component('lms-navdrawer', {
                 this.menuAction(TB_MANAGE_PLAYERS.id);
             }
         },
+        menuAction(id) {
+            if (TB_UI_SETTINGS.id==id) {
+                bus.$emit('dlg.open', 'uisettings');
+            } else if (TB_PLAYER_SETTINGS.id==id) {
+                bus.$emit('dlg.open', 'playersettings');
+            } else if (TB_SERVER_SETTINGS.id==id) {
+                if (this.$store.state.unlockAll) {
+                    lmsCommand("", ["material-skin", "server"]).then(({data}) => {
+                        if (data && data.result) {
+                            openServerSettings(data.result.libraryname, 0);
+                        }
+                    }).catch(err => {
+                    });
+                }
+            } else if (TB_INFO.id==id) {
+                bus.$emit('dlg.open', 'info');
+            } else if (TB_HELP.id==id) {
+                bus.$emit('dlg.open', 'iframe', '/material/html/material-skin/index.html', TB_HELP.title, undefined, 0);
+            } else if (TB_MANAGE_PLAYERS.id==id) {
+                bus.$emit('dlg.open', 'manage');
+            } else {
+                bus.$emit('toolbarAction', id);
+            }
+            this.show = false;
+        },
+        togglePlayerPower(player, longPress) {
+            if (queryParams.party) {
+                return;
+            }
+            if (longPress) {
+                this.showPlayerMenu = false;
+                bus.$emit('dlg.open', 'sleep', player);
+            } else {
+                let ison = this.$store.state.player.id == player.id ? this.playerStatus.ison : player.ison;
+                if (1==queryParams.nativePlayerPower) {
+                    try {
+                        if (1==NativeReceiver.controlLocalPlayerPower(player.id, player.ip, ison ? 0 : 1)) {
+                            setTimeout(function () {
+                                bus.$emit('refreshServerStatus');
+                                setTimeout(function () { bus.$emit('refreshServerStatus');}.bind(this), 1000);
+                            }.bind(this), 500);
+                            return;
+                        }
+                    } catch (e) {
+                    }
+                } else if (queryParams.nativePlayerPower>0) {
+                    emitNative("MATERIAL-PLAYERPOWER\nID " + player.id+"\nIP "+player.ip+"\nSTATE "+(ison ? 0 : 1), queryParams.nativePlayerPower);
+                }
+                lmsCommand(player.id, ["power", ison ? "0" : "1"]).then(({data}) => {
+                    bus.$emit('refreshStatus', player.id);
+                    // Status seems to take while to update, so check again 1/2 second later...
+                    setTimeout(function () {
+                        bus.$emit('refreshStatus', player.id);
+                        // And after a further second?
+                        setTimeout(function () { bus.$emit('refreshStatus', player.id); }.bind(this), 1000);
+                    }.bind(this), 500);
+                });
+            }
+        },
         togglePower() {
-
-        }
+            storeClickOrTouchPos(event);
+            if (queryParams.party) {
+                return;
+            }
+            let idx = parseInt(el.id.split("-")[0]);
+            if (idx>=0 && idx<=this.$store.state.players.length) {
+                this.togglePlayerPower(this.$store.state.players[idx], longPress);
+            }
+        },
+        doCustomAction(action) {
+            performCustomAction(action, this.$store.state.player);
+        },
     },
     computed: {
         darkUi () {

@@ -20,7 +20,6 @@ Vue.component('lms-player-settings-plugin', {
       <v-btn v-if="showHome && homeButton" flat icon @click="goHome" :title="ttShortcutStr(i18n('Go home'), 'home')"><v-icon>home</v-icon></v-btn>
       <v-toolbar-title>{{title}}</v-toolbar-title>
       <v-spacer class="drag-area"></v-spacer>
-      <a class="lyrion-logo" href="https://lyrion.org" target="_blank"><img :src="'lyrion' | svgIcon(darkUi||coloredToolbars)"></img></a>
       <lms-windowcontrols v-if="queryParams.nativeTitlebar"></lms-windowcontrols>
      </v-toolbar>
     </v-card-title>

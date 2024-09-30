@@ -416,6 +416,11 @@ html, .mini-player {
  margin-right:-19px !important;
 }
 
+.v-navigation-drawer {
+ padding-top:var(--top-pad);
+ padding-bottom:var(--bottom-pad);
+}
+
 .v-navigation-drawer,
 .theme--dark .v-navigation-drawer,
 .theme--light .v-navigation-drawer,
@@ -3905,7 +3910,7 @@ div.v-subheader {
  border-radius: 15px;
  position:fixed;
  right:19px;
- top:7px;
+ top:calc(var(--top-pad) + 7px);
 }
 
 .bm-checkbox .v-input--selection-controls__ripple {

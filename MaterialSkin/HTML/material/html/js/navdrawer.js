@@ -48,12 +48,17 @@ Vue.component('lms-navdrawer', {
    </v-list-tile>
   </template>
 
-  <v-divider v-if="!noPlayer && (((players && players.length>1) || playerStatus.sleepTime || otherPlayers.length>0))" class="hide-for-mini"></v-divider>
+  <v-divider v-if="!noPlayer && (undefined!=appLaunchPlayer || ((players && players.length>1) || playerStatus.sleepTime || otherPlayers.length>0))" class="hide-for-mini"></v-divider>
 
   <v-list-tile v-if="((players && players.length>1) || otherPlayers.length>0) && !queryParams.party" v-longpress="managePlayers" class="hide-for-mini noselect">
    <v-list-tile-avatar><img class="svg-img" :src="TB_MANAGE_PLAYERS.svg | svgIcon(darkUi)"></img></v-list-tile-avatar>
    <v-list-tile-content><v-list-tile-title>{{TB_MANAGE_PLAYERS.title}}</v-list-tile-title></v-list-tile-content>
    <v-list-tile-action v-if="TB_MANAGE_PLAYERS.shortcut && keyboardControl" class="menu-shortcut player-menu-shortcut">{{TB_MANAGE_PLAYERS.shortcut}}</v-list-tile-action>
+  </v-list-tile>
+
+  <v-list-tile :href="appLaunchPlayer" v-if="undefined!=appLaunchPlayer" @click="show=false">
+   <v-list-tile-avatar><v-icon>{{TB_START_PLAYER.icon}}</v-icon></v-list-tile-avatar>
+   <v-list-tile-title>{{TB_START_PLAYER.title}}</v-list-tile-title>
   </v-list-tile>
 
   <template v-if="!noPlayer && customPlayerActions && customPlayerActions.length>0" v-for="(action, index) in customPlayerActions">
@@ -95,10 +100,6 @@ Vue.component('lms-navdrawer', {
    <v-list-tile :href="queryParams.appSettings" v-else-if="TB_APP_SETTINGS.id==item.id && undefined!=queryParams.appSettings" @click="show=false">
     <v-list-tile-avatar><img class="svg-img" :src="TB_APP_SETTINGS.svg | svgIcon(darkUi)"></img></v-list-tile-avatar>
     <v-list-tile-content><v-list-tile-title>{{TB_APP_SETTINGS.stitle}}</v-list-tile-title></v-list-tile-content>
-   </v-list-tile>
-   <v-list-tile :href="appLaunchPlayer" v-else-if="TB_START_PLAYER.id==item.id" @click="show=false">
-    <v-list-tile-avatar><v-icon>{{TB_START_PLAYER.icon}}</v-icon></v-list-tile-avatar>
-    <v-list-tile-title>{{TB_START_PLAYER.title}}</v-list-tile-title>
    </v-list-tile>
    <v-list-tile :href="appQuit" v-else-if="TB_APP_QUIT.id==item.id" @click="show=false">
     <v-list-tile-avatar><img class="svg-img" :src="TB_APP_QUIT.svg | svgIcon(darkUi)"></img></v-list-tile-avatar>
@@ -264,9 +265,6 @@ Vue.component('lms-navdrawer', {
                     this.menuItems = [TB_APP_SETTINGS, TB_UI_SETTINGS, DIVIDER, TB_INFO, TB_HELP];
                 } else {
                     this.menuItems = [TB_SETTINGS, TB_APP_SETTINGS, TB_UI_SETTINGS, TB_PLAYER_SETTINGS, TB_SERVER_SETTINGS, TB_CUSTOM_SETTINGS_ACTIONS, DIVIDER];
-                    if (queryParams.appLaunchPlayer) {
-                        this.menuItems.push(TB_START_PLAYER);
-                    }
                     this.menuItems=this.menuItems.concat([TB_INFO, TB_HELP, TB_CUSTOM_ACTIONS]);
                 }
                 if (queryParams.appQuit) {

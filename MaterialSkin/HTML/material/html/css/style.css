@@ -913,12 +913,6 @@ div.v-subheader {
  border-radius: 2px;
 }
 
-.maintoolbar-player-icon {
- position:fixed;
- top:calc(var(--top-pad) + 12px);
- left:24px;
-}
-
 .menutitle, .dlgtitle {
  font-size:var(--std-font-size) !important;
  font-weight:var(--bold-weight);
@@ -2465,15 +2459,6 @@ div.v-rating i.primary--text, div.v-rating i.accent--text {
   opacity:var(--sub-opacity)!important;
  }
 /*}*/
-
-.svg-badge {
- position:absolute;
- top:1px;
- right:0px;
- width:16px !important;
- height:16px !important;
- vertical-align:middle;
-}
 
 .playing-badge {
  position:absolute;

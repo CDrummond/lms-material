@@ -29,7 +29,11 @@ Vue.component('lms-navdrawer', {
    <v-list-tile-avatar><v-btn icon flat @click="show=false"><v-icon>arrow_back<v-icon></v-btn></v-list-tile-avatar>
    <a class="lyrion-logo" href="https://lyrion.org" target="_blank"><img :src="'lyrion' | svgIcon(darkUi)"></img></a>
   </v-list-tile>
-  <template v-for="(item, index) in players"  v-if="!queryParams.single">
+  <v-list-tile v-if="!connected" @click="bus.$emit('showError', undefined, trans.connectionLost)">
+   <v-list-tile-avatar><v-icon class="red">error</v-icon></v-list-tile-avatar>
+   <v-list-tile-content><v-list-tile-title>{{trans.connectionLost}}</v-list-tile-title></v-list-tile-content>
+  </v-list-tile>
+  <template v-for="(item, index) in players"  v-if="connected && !queryParams.single">
    <v-subheader v-if="index==0 && !item.isgroup && players[players.length-1].isgroup">{{trans.standardPlayers}}</v-subheader>
    <v-subheader v-else-if="index>0 && item.isgroup && !players[index-1].isgroup">{{trans.groupPlayers}}</v-subheader>
    <v-list-tile @click="setPlayer(item.id)" v-bind:class="{'active-player':player && item.id === player.id}">
@@ -50,7 +54,7 @@ Vue.component('lms-navdrawer', {
 
   <v-divider v-if="!noPlayer && (undefined!=appLaunchPlayer || ((players && players.length>1) || playerStatus.sleepTime || otherPlayers.length>0))" class="hide-for-mini"></v-divider>
 
-  <v-list-tile v-if="((players && players.length>1) || otherPlayers.length>0) && !queryParams.party" v-longpress="managePlayers" class="hide-for-mini noselect">
+  <v-list-tile v-if="connected && ((players && players.length>1) || otherPlayers.length>0) && !queryParams.party" v-longpress="managePlayers" class="hide-for-mini noselect">
    <v-list-tile-avatar><img class="svg-img" :src="TB_MANAGE_PLAYERS.svg | svgIcon(darkUi)"></img></v-list-tile-avatar>
    <v-list-tile-content><v-list-tile-title>{{TB_MANAGE_PLAYERS.title}}</v-list-tile-title></v-list-tile-content>
    <v-list-tile-action v-if="TB_MANAGE_PLAYERS.shortcut && keyboardControl" class="menu-shortcut player-menu-shortcut">{{TB_MANAGE_PLAYERS.shortcut}}</v-list-tile-action>
@@ -68,13 +72,13 @@ Vue.component('lms-navdrawer', {
    </v-list-tile>
   </template>
 
-  <v-list-tile v-if="playerStatus.sleepTime" @click="bus.$emit('dlg.open', 'sleep', player)" class="hide-for-mini">
+  <v-list-tile v-if="connected && playerStatus.sleepTime" @click="bus.$emit('dlg.open', 'sleep', player)" class="hide-for-mini">
    <v-list-tile-avatar><v-icon>hotel</v-icon></v-list-tile-avatar>
    <v-list-tile-content>
     <v-list-tile-title>{{playerStatus.sleepTime | displayTime}}</v-list-tile-title>
    </v-list-tile-content>
   </v-list-tile>
-  <v-list-tile v-if="playerStatus.alarmStr" @click="bus.$emit('dlg.open', 'playersettings', undefined, 'alarms')" class="hide-for-mini">
+  <v-list-tile v-if="connected && playerStatus.alarmStr" @click="bus.$emit('dlg.open', 'playersettings', undefined, 'alarms')" class="hide-for-mini">
    <v-list-tile-avatar><v-icon>alarm</v-icon></v-list-tile-avatar>
    <v-list-tile-content>
     <v-list-tile-title>{{playerStatus.alarmStr}}</v-list-tile-title>
@@ -88,7 +92,7 @@ Vue.component('lms-navdrawer', {
   <template v-for="(item, index) in menuItems">
    <v-divider v-if="item===DIVIDER"></v-divider>
    <v-subheader v-else-if="item.hdr">{{item.title}}</v-subheader>
-   <v-list-tile @click="menuAction(item.id)" v-else-if="(TB_UI_SETTINGS.id==item.id) || (TB_PLAYER_SETTINGS.id==item.id && player) || (TB_SERVER_SETTINGS.id==item.id && unlockAll) || (TB_HELP.id==item.id) || (TB_INFO.id==item.id)">
+   <v-list-tile @click="menuAction(item.id)" v-else-if="(TB_UI_SETTINGS.id==item.id) || (TB_PLAYER_SETTINGS.id==item.id && player && connected) || (TB_SERVER_SETTINGS.id==item.id && unlockAll && connected) || (TB_HELP.id==item.id) || (TB_INFO.id==item.id)">
     <v-list-tile-avatar><img v-if="TB_INFO.id==item.id && updatesAvailable" class="svg-img" :src="'update' | svgIcon(darkUi, true)"></img><img v-else-if="TB_INFO.id==item.id && restartRequired" class="svg-img" :src="'restart' | svgIcon(darkUi, true)"><img v-else-if="item.svg" class="svg-img" :src="item.svg | svgIcon(darkUi)"><v-icon v-else>{{item.icon}}</v-icon></v-list-tile-avatar>
     <v-list-tile-content>
      <v-list-tile-title>{{item.stitle ? item.stitle : item.title}}</v-list-tile-title>
@@ -120,7 +124,7 @@ Vue.component('lms-navdrawer', {
     data() {
         return {
             show: false,
-            trans:{groupPlayers:undefined, standardPlayers:undefined},
+            trans:{groupPlayers:undefined, standardPlayers:undefined, connectionLost:undefined, updatesAvailable:undefined, restartRequired:undefined },
             menuItems: [],
             customActions:undefined,
             customSettingsActions:undefined,
@@ -128,7 +132,8 @@ Vue.component('lms-navdrawer', {
             playerStatus: { ison: 1, isplaying: false, volume: 0, synced: false, sleepTime: undefined, count:0, alarm: undefined, alarmStr: undefined },
             appQuit: queryParams.appQuit,
             appLaunchPlayer: queryParams.appLaunchPlayer,
-            maxWidth: 300
+            maxWidth: 300,
+            connected: true
         }
     },
     created() {
@@ -154,7 +159,12 @@ Vue.component('lms-navdrawer', {
             this.customActions = getCustomActions(undefined, this.$store.state.unlockAll);
             this.customSettingsActions = getCustomActions("settings", this.$store.state.unlockAll);
         }.bind(this));
-
+        bus.$on('closeMenu', function() {
+            this.show = false;
+        }.bind(this));
+        bus.$on('networkStatus', function(connected) {
+            this.connected=connected;
+        }.bind(this));
         bus.$on('playerStatus', function(playerStatus) {
             if (playerStatus.ison!=this.playerStatus.ison) {
                 this.playerStatus.ison = playerStatus.ison;
@@ -255,7 +265,8 @@ Vue.component('lms-navdrawer', {
             TB_APP_SETTINGS.stitle=i18n('Application');
             TB_APP_QUIT.title=i18n('Quit');
             TB_START_PLAYER.title=i18n('Start player');
-            this.trans = {groupPlayers:i18n("Group Players"), standardPlayers:i18n("Standard Players")};
+            this.trans = { groupPlayers:i18n("Group Players"), standardPlayers:i18n("Standard Players"),
+                           connectionLost:i18n('Server connection lost!'), updatesAvailable:i18n('Updates available'), restartRequired:i18n('Restart required') };
             if (LMS_KIOSK_MODE) {
                 this.menuItems = LMS_KIOSK_MODE==2
                                    ? [TB_SETTINGS, TB_CUSTOM_SETTINGS_ACTIONS, DIVIDER, TB_CUSTOM_ACTIONS]
@@ -298,9 +309,11 @@ Vue.component('lms-navdrawer', {
             if (TB_UI_SETTINGS.id==id) {
                 bus.$emit('dlg.open', 'uisettings');
             } else if (TB_PLAYER_SETTINGS.id==id) {
-                bus.$emit('dlg.open', 'playersettings');
+                if (this.connected) {
+                    bus.$emit('dlg.open', 'playersettings');
+                }
             } else if (TB_SERVER_SETTINGS.id==id) {
-                if (this.$store.state.unlockAll) {
+                if (this.$store.state.unlockAll && this.connected) {
                     lmsCommand("", ["material-skin", "server"]).then(({data}) => {
                         if (data && data.result) {
                             openServerSettings(data.result.libraryname, 0);
@@ -313,7 +326,9 @@ Vue.component('lms-navdrawer', {
             } else if (TB_HELP.id==id) {
                 bus.$emit('dlg.open', 'iframe', '/material/html/material-skin/index.html', TB_HELP.title, undefined, 0);
             } else if (TB_MANAGE_PLAYERS.id==id) {
-                bus.$emit('dlg.open', 'manage');
+                if (this.connected) {
+                    bus.$emit('dlg.open', 'manage');
+                }
             } else {
                 bus.$emit('toolbarAction', id);
             }
@@ -395,7 +410,23 @@ Vue.component('lms-navdrawer', {
             } else {
                 this.cancelSleepTimer();
             }
-        }
+        },
+        startStatusTimer() {
+            // Have player menu open, so poll LMS server for updates in case another player starts or stops playback
+            if (undefined==this.statusTimer) {
+                this.statusTimer = setInterval(function () {
+                    if (this.$store.state.players && this.$store.state.players.length>1) {
+                        bus.$emit('refreshServerStatus');
+                    }
+                }.bind(this), 2500);
+            }
+        },
+        cancelStatusTimer() {
+            if (undefined!==this.statusTimer) {
+                clearInterval(this.statusTimer);
+                this.statusTimer = undefined;
+            }
+        },
     },
     computed: {
         darkUi () {
@@ -430,8 +461,8 @@ Vue.component('lms-navdrawer', {
         }
     },
     filters: {
-        svgIcon: function (name, dark) {
-            return "/material/svg/"+name+"?c="+(dark ? LMS_DARK_SVG : LMS_LIGHT_SVG)+"&r="+LMS_MATERIAL_REVISION;
+        svgIcon: function (name, dark, updateIcon) {
+            return "/material/svg/"+name+"?c="+(updateIcon ? LMS_UPDATE_SVG : dark ? LMS_DARK_SVG : LMS_LIGHT_SVG)+"&r="+LMS_MATERIAL_REVISION;
         },
         playerShortcut: function(index) {
             return IS_APPLE ? ("⌥+"+(9==index ? 0 : index+1)) : i18n("Alt+%1", 9==index ? 0 : index+1);
@@ -443,8 +474,20 @@ Vue.component('lms-navdrawer', {
             return formatSeconds(Math.floor(value));
         }
     },
+    watch: {
+        'show': function(newVal) {
+            this.$store.commit('menuVisible', {name:'navdrawer', shown:newVal});
+            if (newVal) {
+                bus.$emit('refreshServerStatus');
+                this.startStatusTimer();
+            } else {
+                this.cancelStatusTimer();
+            }
+        }
+    },
     beforeDestroy() {
         this.cancelSleepTimer();
+        this.cancelStatusTimer();
     }
 })
 

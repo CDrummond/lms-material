@@ -2,6 +2,8 @@ x.x.x
 -----
 1. Combine man menu and players menu into left hand navigation drawer.
 2. Remove most dialog toolbar menus and replace with buttons.
+3. Remove option to replace player icon with power button, as no longer
+   applicable.
 
 5.3.3
 -----

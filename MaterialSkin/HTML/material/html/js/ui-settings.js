@@ -130,15 +130,6 @@ Vue.component('lms-ui-settings', {
     <v-divider v-if="LMS_STATS_ENABLED"></v-divider>
 
     <v-list-tile>
-     <v-list-tile-content @click="powerButton = !powerButton" class="switch-label">
-      <v-list-tile-title>{{i18n('Show power button')}}</v-list-tile-title>
-      <v-list-tile-sub-title>{{i18n("Replace player's icon in toolbar with a power button.")}}</v-list-tile-sub-title>
-     </v-list-tile-content>
-     <v-list-tile-action><m3-switch v-model="powerButton"></m3-switch></v-list-tile-action>
-    </v-list-tile>
-    <v-divider></v-divider>
-
-    <v-list-tile>
      <v-list-tile-content @click="homeButton = !homeButton" class="switch-label">
       <v-list-tile-title>{{i18n('Show home button')}}</v-list-tile-title>
       <v-list-tile-sub-title>{{i18n('When navigating into lists, show a home button to quickly navigate to the main (home) screen. Otherwise navigating home can be achieved via a long-press on the back button.')}}</v-list-tile-sub-title>
@@ -468,7 +459,6 @@ Vue.component('lms-ui-settings', {
             serverName: "",
             showRating: false,
             homeButton: false,
-            powerButton: false,
             width: 500,
             mediaControls: false,
             mediaControlsSupported: !queryParams.hide.has('mediaControls') && ('mediaSession' in navigator),
@@ -643,7 +633,6 @@ Vue.component('lms-ui-settings', {
             this.screensaver = this.$store.state.screensaver;
             this.screensaverNp = this.$store.state.screensaverNp;
             this.homeButton = this.$store.state.homeButton;
-            this.powerButton = this.$store.state.powerButton;
             this.mediaControls = this.$store.state.mediaControls;
             this.moveDialogs = this.$store.state.moveDialogs;
             this.autoCloseQueue = this.$store.state.autoCloseQueue;
@@ -747,7 +736,6 @@ Vue.component('lms-ui-settings', {
                       screensaver:this.screensaver,
                       screensaverNp:this.screensaverNp,
                       homeButton:this.homeButton,
-                      powerButton:this.powerButton,
                       showRating:this.showRating,
                       mediaControls:this.mediaControls,
                       moveDialogs:this.moveDialogs,

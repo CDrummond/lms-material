@@ -113,6 +113,9 @@ function parseQueryParams() {
             resp[kv[0]]=parseInt(kv[1]);
         }
     }
+    if (resp.single && !resp.player) {
+        resp.single = false;
+    }
     return resp;
 }
 

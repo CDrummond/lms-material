@@ -33,7 +33,7 @@ Vue.component('lms-navdrawer', {
    <v-list-tile-avatar><v-icon class="red">error</v-icon></v-list-tile-avatar>
    <v-list-tile-content><v-list-tile-title>{{trans.connectionLost}}</v-list-tile-title></v-list-tile-content>
   </v-list-tile>
-  <template v-for="(item, index) in players"  v-if="connected && !queryParams.single">
+  <template v-for="(item, index) in players" v-if="connected">
    <v-subheader v-if="index==0 && !item.isgroup && players[players.length-1].isgroup">{{trans.standardPlayers}}</v-subheader>
    <v-subheader v-else-if="index>0 && item.isgroup && !players[index-1].isgroup">{{trans.groupPlayers}}</v-subheader>
    <v-list-tile @click="setPlayer(item.id)" v-bind:class="{'active-player':player && item.id === player.id}">

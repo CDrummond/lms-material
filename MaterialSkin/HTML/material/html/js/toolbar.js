@@ -21,7 +21,7 @@ Vue.component('lms-toolbar', {
  <img v-else-if="restartRequired" class="svg-img" :src="'restart' | menuIcon(darkUi, coloredToolbars)"></img>
  <v-icon v-else>menu</v-icon>
 </v-btn>
-<v-toolbar-title v-bind:class="{'link-item':!coloredToolbars && (!queryParams.single || !powerButton), 'link-item-ct': coloredToolbars && (!queryParams.single || !powerButton), 'maintoolbar-title-clock':showClock}" @click="bus.$emit('navDrawer')">
+<v-toolbar-title v-bind:class="{'link-item':!coloredToolbars, 'link-item-ct': coloredToolbars, 'maintoolbar-title-clock':showClock}" @click="bus.$emit('navDrawer')">
  <div class="maintoolbar-title ellipsis" v-bind:class="{'dimmed': !playerStatus.ison}">
   {{noPlayer ? trans.noplayer : player.name}}<v-icon v-if="playerStatus.sleepTime" class="player-status-icon dimmed">hotel</v-icon><v-icon v-if="playerStatus.alarmStr" class="player-status-icon dimmed">alarm</v-icon><v-icon v-if="playerStatus.synced" class="player-status-icon dimmed">link</v-icon></div>
  <div v-if="!desktopLayout && !noPlayer && MBAR_NONE==mobileBar" class="maintoolbar-subtitle subtext ellipsis" v-bind:class="{'dimmed' : !playerStatus.ison}">{{playerStatus.count<1 ? trans.nothingplaying : isNowPlayingPage ? queueInfo : npInfo}}</div>
@@ -374,9 +374,6 @@ Vue.component('lms-toolbar', {
         showClock() {
             return this.$store.state.nowPlayingClock && (this.$store.state.desktopLayout
                                                             ? (this.nowPlayingExpanded && this.width>=1300) : (this.$store.state.page == 'now-playing' && this.width>=500))
-        },
-        powerButton() {
-            return this.$store.state.powerButton
         },
         downloadCount() {
             return this.$store.state.downloadStatus.length

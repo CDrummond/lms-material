@@ -294,7 +294,7 @@
  color:var(--text-color);
 }
 
-.v-dialog .v-sheet, .v-list:not(.nd-list) {
+.v-dialog .v-sheet, .v-list:not(.nd-list):not(.np-bar-details) {
  background-color:var(--background-color) !important;
 }
 

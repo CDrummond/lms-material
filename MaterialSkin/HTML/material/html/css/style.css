@@ -432,8 +432,7 @@ html, .mini-player {
 }
 
 .v-navigation-drawer div[role="listitem"] .v-list__tile {
- margin-left:8px;
- margin-right:8px;
+ margin:2px 8px 2px 8px;
  border-radius: 24px;
 }
 

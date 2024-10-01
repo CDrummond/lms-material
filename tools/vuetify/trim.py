@@ -70,7 +70,9 @@ REMOVE_CSS=[
 ".v-textarea",
 ".v-timeline",
 ".v-treeview",
-".v-window"
+".v-window",
+".theme--dark.v-list",
+".theme--light.v-list"
 ]
 
 #.theme--light+XXX

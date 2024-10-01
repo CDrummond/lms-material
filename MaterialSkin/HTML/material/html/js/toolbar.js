@@ -183,6 +183,18 @@ Vue.component('lms-toolbar', {
                 }.bind(this), 5000);
             }
         }.bind(this));
+
+        if (!IS_MOBILE && !LMS_KIOSK_MODE) {
+            bindKey(LMS_TOGGLE_QUEUE_KEYBOARD, 'mod+shift');
+            bus.$on('keyboard', function(key, modifier) {
+                if (this.$store.state.openDialogs.length>1 || (1==this.$store.state.openDialogs.length && this.$store.state.openDialogs[0]!='info-dialog')) {
+                    return;
+                }
+                if ('mod+shift'==modifier && LMS_TOGGLE_QUEUE_KEYBOARD==key && this.$store.state.desktopLayout) {
+                    this.toggleQueue();
+                }
+            }.bind(this));
+        }
     },
     methods: {
         initItems() {

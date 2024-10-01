@@ -203,6 +203,10 @@
 .np-bar-queue:hover {
  background-color:transparent!important;
 }
+.np-bar-queue:hover:before {
+ margin-top:0px;
+ border-radius:19px;
+}
 
 .np-bar-controls {
  margin-left:-16px;

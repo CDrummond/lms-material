@@ -431,6 +431,16 @@ html, .mini-player {
  border-radius: 0px 12px 12px 0px;
 }
 
+.v-navigation-drawer div[role="listitem"] .v-list__tile {
+ margin-left:8px;
+ margin-right:8px;
+ border-radius: 24px;
+}
+
+.v-navigation-drawer div[role="listitem"] .v-list__tile .v-list__tile__avatar {
+ margin-left:-8px;
+}
+
 .v-navigation-drawer .v-list,
 .v-navigation-drawer .v-list div:not(.active-player) .v-list__tile,
 .v-navigation-drawer .v-list .v-subheader {
@@ -3369,7 +3379,8 @@ div.v-subheader {
  background-color:var(--drop-target-color)!important;
 }
 
-.active-player {
+.active-player, .nd-active-player .v-list__tile,
+.msk-is-non-touch .v-navigation-drawer .nd-active-player .v-list__tile:hover {
  background-color:var(--pq-current-color)!important;
 }
 
@@ -3921,7 +3932,7 @@ div.v-subheader {
  border:2px solid var(--text-color);
  border-radius: 15px;
  position:fixed;
- right:16px;
+ right:calc(50% - 58px);
  top:calc(var(--top-pad) + 7px);
 }
 

@@ -478,6 +478,12 @@
  .v-navigation-drawer {
   margin-left:-5px;
  }
+ .v-navigation-drawer div[role="listitem"] .v-list__tile {
+  margin-left:13px;
+ }
+ .lyrion-logo img {
+  right:calc(50% - 60px);
+ }
  .v-toolbar__title:not(:first-child) {
   margin-left:12px;
  }

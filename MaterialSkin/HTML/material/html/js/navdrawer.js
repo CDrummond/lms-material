@@ -27,7 +27,7 @@ Vue.component('lms-navdrawer', {
   <div class="nd-top"></div>
   <v-list-tile @click="show=false">
    <v-list-tile-avatar><v-btn icon flat @click="show=false"><v-icon>arrow_back<v-icon></v-btn></v-list-tile-avatar>
-   <a class="lyrion-logo" href="https://lyrion.org" target="_blank"><img :src="'lyrion' | svgIcon(darkUi)"></img></a>
+   <div class="lyrion-logo"><img :src="'lyrion' | svgIcon(darkUi)"></img></div>
   </v-list-tile>
   <v-list-tile v-if="!connected" @click="bus.$emit('showError', undefined, trans.connectionLost)">
    <v-list-tile-avatar><v-icon class="red">error</v-icon></v-list-tile-avatar>
@@ -36,7 +36,7 @@ Vue.component('lms-navdrawer', {
   <template v-for="(item, index) in players" v-if="connected">
    <v-subheader v-if="index==0 && !item.isgroup && players[players.length-1].isgroup">{{trans.standardPlayers}}</v-subheader>
    <v-subheader v-else-if="index>0 && item.isgroup && !players[index-1].isgroup">{{trans.groupPlayers}}</v-subheader>
-   <v-list-tile @click="setPlayer(item.id)" v-bind:class="{'active-player':player && item.id === player.id}">
+   <v-list-tile @click="setPlayer(item.id)" v-bind:class="{'nd-active-player':player && item.id === player.id}">
     <v-list-tile-avatar>
      <v-icon v-if="item.isplaying" class="playing-badge">play_arrow</v-icon>
      <v-icon v-if="item.icon.icon">{{item.icon.icon}}</v-icon><img v-else class="svg-img" :src="item.icon.svg | svgIcon(darkUi)"></img>

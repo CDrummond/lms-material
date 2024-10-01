@@ -428,6 +428,7 @@ html, .mini-player {
 .theme--dark .v-navigation-drawer,
 .theme--light .v-navigation-drawer {
  background-color: var(--popup-background-color);
+ border-radius: 0px 16px 16px 0px;
 }
 
 .v-navigation-drawer .v-list,
@@ -437,7 +438,7 @@ html, .mini-player {
 }
 
 .v-navigation-drawer__border {
- background-color: var(--popup-border-color);
+ background-color: var(--popup-background-color)!important;
 }
 
 .v-list__tile__title, .v-select__selection, .v-select__selection--comma, .v-btn__content, html, .pq-albumstyle .v-list__tile,
@@ -3439,7 +3440,7 @@ div.v-subheader {
 .msk-is-non-touch .lms-list3 .v-list__tile:hover,
 .msk-is-non-touch .lms-list-sub3 .v-list__tile:hover,
 .msk-is-non-touch .v-menu__content .v-list__tile:hover,
-.v-navigation-drawer .v-list__tile:hover,
+.msk-is-non-touch .v-navigation-drawer .v-list__tile:hover,
 .msk-is-non-touch .image-grid-item:not(.defcursor):hover {
  background-color:var(--list-hover-color)!important;
 }

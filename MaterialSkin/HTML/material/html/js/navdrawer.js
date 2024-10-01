@@ -205,18 +205,7 @@ Vue.component('lms-navdrawer', {
                     return;
                 }
                 if ('mod'==modifier) {
-                    if (this.$store.state.visibleMenus.size==1 && this.$store.state.visibleMenus.has('main')) {
-                        if (LMS_UI_SETTINGS_KEYBOARD==key || LMS_PLAYER_SETTINGS_KEYBOARD==key ||  LMS_SERVER_SETTINGS_KEYBOARD==key || LMS_INFORMATION_KEYBOARD==key) {
-                            this.menuAction(LMS_UI_SETTINGS_KEYBOARD==key ? TB_UI_SETTINGS.id : LMS_PLAYER_SETTINGS_KEYBOARD==key ? TB_PLAYER_SETTINGS.id :
-                                            LMS_SERVER_SETTINGS_KEYBOARD==key ? TB_SERVER_SETTINGS.id : TB_INFO.id);
-                            this.showMainMenu = false;
-                        }
-                    } else if (this.$store.state.visibleMenus.size==1 && this.$store.state.visibleMenus.has('player')) {
-                        if (LMS_MANAGEPLAYERS_KEYBOARD==key && this.$store.state.players.length>1) {
-                            this.menuAction(TB_MANAGE_PLAYERS.id);
-                            this.showPlayerMenu = false;
-                        }
-                    } else if (this.$store.state.visibleMenus.size==0) {
+                    if (this.$store.state.visibleMenus.size==0 || (this.$store.state.visibleMenus.size==1 && this.$store.state.visibleMenus.has('navdrawer'))) {
                         if (LMS_UI_SETTINGS_KEYBOARD==key || LMS_PLAYER_SETTINGS_KEYBOARD==key || LMS_SERVER_SETTINGS_KEYBOARD==key || LMS_INFORMATION_KEYBOARD==key ||
                             (LMS_MANAGEPLAYERS_KEYBOARD==key && this.$store.state.players.length>1)) {
                             this.menuAction(LMS_UI_SETTINGS_KEYBOARD==key ? TB_UI_SETTINGS.id : LMS_PLAYER_SETTINGS_KEYBOARD==key ? TB_PLAYER_SETTINGS.id :
@@ -297,7 +286,7 @@ Vue.component('lms-navdrawer', {
                 // the event => sometimes na entry in the sync-dialog gets this
                 // and toggles its setting.
                 setTimeout(function () {
-                    this.showPlayerMenu = false;
+                    this.show = false;
                     bus.$emit('dlg.open', 'sync', this.$store.state.player);
                 }.bind(this), 250);
             } else {
@@ -338,7 +327,7 @@ Vue.component('lms-navdrawer', {
                 return;
             }
             if (longPress) {
-                this.showPlayerMenu = false;
+                this.show = false;
                 bus.$emit('dlg.open', 'sleep', player);
             } else {
                 let ison = this.$store.state.player.id == player.id ? this.playerStatus.ison : player.ison;

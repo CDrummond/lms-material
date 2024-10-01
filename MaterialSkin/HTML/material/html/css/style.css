@@ -428,7 +428,7 @@ html, .mini-player {
 .theme--dark .v-navigation-drawer,
 .theme--light .v-navigation-drawer {
  background-color: var(--popup-background-color);
- border-radius: 0px 16px 16px 0px;
+ border-radius: 0px 12px 12px 0px;
 }
 
 .v-navigation-drawer .v-list,

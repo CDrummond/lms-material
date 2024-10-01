@@ -27,7 +27,7 @@ Vue.component('lms-navdrawer', {
   <div class="nd-top"></div>
   <v-list-tile @click="show=false">
    <v-list-tile-avatar><v-btn icon flat @click="show=false"><v-icon>arrow_back<v-icon></v-btn></v-list-tile-avatar>
-   <div class="lyrion-logo"><img :src="'lyrion' | svgIcon(darkUi)"></img></div>
+   <div class="lyrion-logo" v-longpress:stop="clickLogo"><img :src="'lyrion' | svgIcon(darkUi)"></img></div>
   </v-list-tile>
   <v-list-tile v-if="!connected" @click="bus.$emit('showError', undefined, trans.connectionLost)">
    <v-list-tile-avatar><v-icon class="red">error</v-icon></v-list-tile-avatar>
@@ -376,6 +376,12 @@ Vue.component('lms-navdrawer', {
             if (idx>=0 && idx<=this.$store.state.players.length) {
                 this.togglePlayerPower(this.$store.state.players[idx], longPress);
             }
+        },
+        clickLogo(longPress) {
+            if (longPress) {
+                window.open("https://lyrion.org", "_blank").focus();
+            }
+            this.show = false;
         },
         doCustomAction(action) {
             performCustomAction(action, this.$store.state.player);

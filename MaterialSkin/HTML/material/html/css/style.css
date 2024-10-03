@@ -3943,7 +3943,7 @@ div.v-subheader {
  border-radius: 15px;
  position:fixed;
  right:calc(50% - 58px);
- top:calc(var(--top-pad) + 11px);
+ top:calc(var(--top-pad) + 9px);
 }
 
 .bm-checkbox .v-input--selection-controls__ripple {

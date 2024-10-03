@@ -26,7 +26,7 @@ Vue.component('lms-navdrawer', {
  <v-list class="nd-list py-0">
   <div class="nd-top"></div>
   <div v-if="windowControlsOnLeft" style="height:var(--main-toolbar-height); width:100%"></div>
-  <v-list-tile @click.prevent="show=false">
+  <v-list-tile @click.prevent="show=false" style="margin-top:-2px">
    <v-list-tile-avatar><v-btn icon flat @click="show=false"><v-icon>arrow_back<v-icon></v-btn></v-list-tile-avatar>
    <div class="lyrion-logo" v-longpress:stop="clickLogo"><img :src="'lyrion' | svgIcon(darkUi)"></img></div>
   </v-list-tile>

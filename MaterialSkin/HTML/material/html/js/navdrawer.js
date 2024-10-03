@@ -25,7 +25,8 @@ Vue.component('lms-navdrawer', {
 <v-navigation-drawer v-model="show" absolute temporary :width="maxWidth" style="display:flex;flex-direction:column">
  <v-list class="nd-list py-0">
   <div class="nd-top"></div>
-  <v-list-tile @click="show=false">
+  <div v-if="windowControlsOnLeft" style="height:var(--main-toolbar-height); width:100%"></div>
+  <v-list-tile @click.prevent="show=false">
    <v-list-tile-avatar><v-btn icon flat @click="show=false"><v-icon>arrow_back<v-icon></v-btn></v-list-tile-avatar>
    <div class="lyrion-logo" v-longpress:stop="clickLogo"><img :src="'lyrion' | svgIcon(darkUi)"></img></div>
   </v-list-tile>
@@ -132,10 +133,15 @@ Vue.component('lms-navdrawer', {
             appQuit: queryParams.appQuit,
             appLaunchPlayer: queryParams.appLaunchPlayer,
             maxWidth: 300,
-            connected: true
+            connected: true,
+            windowControlsOnLeft: false
         }
     },
     created() {
+        try {
+            let tbRect = window.navigator.windowControlsOverlay.getTitlebarAreaRect();
+            this.windowControlsOnLeft = tbRect.left>32;
+        } catch (e) { }
         bus.$on('langChanged', function() {
             this.initItems();
         }.bind(this));
@@ -470,6 +476,7 @@ Vue.component('lms-navdrawer', {
     },
     watch: {
         'show': function(newVal) {
+            bus.$emit('navdrawer', newVal);
             this.$store.commit('menuVisible', {name:'navdrawer', shown:newVal});
             if (newVal) {
                 bus.$emit('refreshServerStatus');

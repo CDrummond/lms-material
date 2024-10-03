@@ -271,6 +271,17 @@
 .drag-area-right {
  width:var(--window-area-right)!important;
 }
+/* If using window controls, then we need are under navdrawer to not be drag-active whendraer open */
+@media (min-width:501px) {
+ .nd-title-fix {
+  min-width:calc(400px - (var(--window-area-left) + 70px));
+ }
+}
+@media (min-width:350px) and (max-width:500px) {
+.nd-title-fix {
+  min-width:calc(300px - (var(--window-area-left) + 70px));
+ }
+}
 
 .lms-toolbar .v-slider .primary {
  background-color:var(--toolbar-volume-color)!important;
@@ -3932,7 +3943,7 @@ div.v-subheader {
  border-radius: 15px;
  position:fixed;
  right:calc(50% - 58px);
- top:calc(var(--top-pad) + 7px);
+ top:calc(var(--top-pad) + 11px);
 }
 
 .bm-checkbox .v-input--selection-controls__ripple {

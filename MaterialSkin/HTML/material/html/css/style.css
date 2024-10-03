@@ -3718,6 +3718,9 @@ div.v-subheader {
 .theme--dark .v-overlay:before {
  background-color:black!important;
 }
+.v-overlay--active:before {
+ opacity:0.25!important;
+}
 
 .v-chip {
  border-radius:8px!important;

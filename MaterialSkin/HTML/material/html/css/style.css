@@ -555,16 +555,10 @@ div.v-subheader {
  margin:0px 8px 0px 8px;
 }
 
-.theme--dark.v-divider, .theme--light.v-divider, .pmgr-divider, .alarm-divider {
- border-top:1px solid var(--list-item-border-color) !important;
-}
-
-.theme--dark.v-divider--vertical, .theme--light.v-divider--vertical {
- border-left:1px solid var(--list-item-border-color) !important;
-}
-
+.theme--dark.v-divider, .theme--light.v-divider, .pmgr-divider, .alarm-divider,
+.theme--dark.v-divider--vertical, .theme--light.v-divider--vertical,
 .v-menu__content .theme--dark.v-divider, .v-navigation-drawer .theme--dark.v-divider {
- border-top:1px solid var(--popup-divider-color) !important;
+ border-top:1px solid var(--list-item-border-color) !important;
 }
 
 /* Stop horizontal scrollbar in full screen dialogs */

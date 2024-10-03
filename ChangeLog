@@ -5,6 +5,12 @@ x.x.x
 3. Remove option to replace player icon with power button, as no longer
    applicable.
 
+5.3.4
+-----
+1. Fix drag'n'drop on iOS by only using polyfill for Android.
+2. If URL contains 'dndPolyfill=0' then always disable polyfill, likewise
+   always enable if URL has 'dndPolyfill=1'
+
 5.3.3
 -----
 1. Save player settings before opening 'Extra settings'.

@@ -261,11 +261,10 @@
   <!--JS end-->
   [% PERL %]
   my $ua=$stash->get("userAgent");
-  my $forceDndPolyfill = index($ua, 'Android') != -1; # || index($ua, 'iPad') != -1 || index($ua, 'iPhone') != -1 || index($ua, 'MobileSafari') != -1 ? 1 : 0;
-  if ($forceDndPolyfill==1) {
+  my $query=$stash->get("url_query");
+  my $useDndPolyfill = (index($ua, 'Android') != -1 && index($query, 'dndPolyfill=0') == -1 ) || index($query, 'dndPolyfill=1') != -1 ? 1 : 0;
+  if ($useDndPolyfill ==1 ) {
     print("  <script>MobileDragDrop.polyfill({ forceApply:true, holdToDrag:250 });</script>\n");
-  } else {
-    print("  <script>MobileDragDrop.polyfill({ holdToDrag:250 });</script>\n");
   }
   [% END %]
   <script src="material/custom.js"></script>

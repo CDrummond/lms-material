@@ -1433,6 +1433,12 @@ function parseBrowseResp(data, parent, options, cacheKey, parentCommand, parentG
                     yearSet.add(year);
                     years.push(year);
                 }
+                if (i.subtitle) {
+                    subtitle = undefined==subtitle ? i.subtitle : (i.subtitle + SEPARATOR + subtitle);
+                    if (undefined!=subtitleContext) {
+                        subtitleContext = SEPARATOR + subtitleContext;
+                    }
+                }
                 resp.items.push({
                               id: "track_id:"+i.id,
                               title: title,
@@ -1751,6 +1757,12 @@ function parseBrowseResp(data, parent, options, cacheKey, parentCommand, parentG
                     }
                     if (subtitleContext) {
                         subtitleContext+=SEPARATOR+techInfo;
+                    }
+                }
+                if (i.subtitle) {
+                    subtitle = undefined==subtitle ? i.subtitle : (i.subtitle + SEPARATOR + subtitle);
+                    if (undefined!=subtitleContext) {
+                        subtitleContext = SEPARATOR + subtitleContext;
                     }
                 }
                 var isRemote = undefined!=parent && parent.remotePlaylist;

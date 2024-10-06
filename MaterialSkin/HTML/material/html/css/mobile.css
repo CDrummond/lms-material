@@ -481,6 +481,9 @@
  .v-navigation-drawer div[role="listitem"] .v-list__tile {
   margin-left:13px;
  }
+ .v-navigation-drawer .v-divider {
+  margin:0px 13px 0px 13px;
+ }
  .lyrion-logo img {
   right:calc(50% - 60px);
  }

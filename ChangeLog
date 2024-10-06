@@ -10,6 +10,7 @@ x.x.x
 1. Fix drag'n'drop on iOS by only using polyfill for Android.
 2. If URL contains 'dndPolyfill=0' then always disable polyfill, likewise
    always enable if URL has 'dndPolyfill=1'
+3. Fix subtitle links when 'Group all lists by release type' is enabled.
 
 5.3.3
 -----

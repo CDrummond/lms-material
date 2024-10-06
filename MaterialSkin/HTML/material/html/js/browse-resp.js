@@ -333,7 +333,7 @@ function parseBrowseResp(data, parent, options, cacheKey, parentCommand, parentG
                         i.menu.push(MOVE_FAV_TO_PARENT_ACTION);
                     }
                     if (i.isFavFolder && (!i.image || i.image.startsWith("/html/images/favorites"+LMS_IMAGE_SIZE))) {
-                        i.icon="folder";
+                        i.svg="folder-favorite";
                         i.image=undefined;
                     } else if (!i.isFavFolder && undefined!=i.presetParams && undefined!=i.presetParams.favorites_url) {
                         if (i.presetParams.favorites_url.startsWith("db:album.title") && i.presetParams.icon=="html/images/albums.png") {

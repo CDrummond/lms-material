@@ -212,13 +212,13 @@ var lmsCurrentCover = Vue.component('lms-currentcover', {
                     }
 
                     let a=0;
-                    while (this.$store.state.darkUi ? rgbLuminence(rgb)<0.333 : rgbLuminence(rgb)>0.3) {
+                    while (this.$store.state.darkUi ? rgbLuminence(rgb)<0.2 : rgbLuminence(rgb)>0.4) {
                         rgb = shadeRgb(rgb, this.$store.state.darkUi ? 0.05 : -0.05);
                         a+=1;
                     }
 
                     a=0;
-                    while (this.$store.state.darkUi ? rgbLuminence(rgb)>0.7 : rgbLuminence(rgb)<0.3) {
+                    while (this.$store.state.darkUi ? rgbLuminence(rgb)>0.8 : rgbLuminence(rgb)<0.2) {
                         rgb = shadeRgb(rgb, this.$store.state.darkUi ? -0.05 : 0.05);
                         a+=1;
                     }

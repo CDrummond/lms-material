@@ -5,6 +5,7 @@
    always enable if URL has 'dndPolyfill=1'
 3. Fix subtitle links when 'Group all lists by release type' is enabled.
 4. Show user-defined roles in 'Advanced search'
+5. Fix unpinned queue border colour.
 
 5.3.3
 -----

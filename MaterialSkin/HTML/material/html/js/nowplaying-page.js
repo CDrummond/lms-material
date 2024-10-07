@@ -188,7 +188,7 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
  </div>
 
  <div v-if="desktopLayout || (info.show ? MBAR_NONE!=mobileBar : (page=='now-playing' || MBAR_NONE!=mobileBar))">
- <div v-if="(desktopLayout && !largeView) || (!desktopLayout && (info.show || page!='now-playing'))" class="np-bar" id="np-bar" v-bind:class="{'mobile':!desktopLayout, 'np-bar-mob-thick':!desktopLayout && MBAR_THIN!=mobileBar, 'np-bar-mob-nav':!desktopLayout && MBAR_REP_NAV==mobileBar, 'no-liveedge':undefined==playerStatus.current.liveEdge}" @click="barClicked">
+ <div v-if="(desktopLayout && !largeView) || (!desktopLayout && (info.show || page!='now-playing'))" class="np-bar" id="np-bar" v-bind:class="{'mobile':!desktopLayout, 'np-bar-mob-thick':!desktopLayout && MBAR_THIN!=mobileBar, 'np-bar-mob-nav':!desktopLayout && MBAR_REP_NAV==mobileBar}" @click="barClicked">
   <v-layout row class="np-bar-controls" v-if="desktopLayout || MBAR_NONE!=mobileBar">
    <v-flex xs4>
     <v-btn flat icon id="np-bar-prev" v-bind:class="{'disabled':disablePrev}" v-longpress:repeat="prevButton" class="np-std-button" :title="trans.prev | tooltip('left', keyboardControl)"><v-icon large class="media-icon">skip_previous</v-icon></v-btn>
@@ -230,7 +230,7 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
   <lms-progressbar id="pos-slider" v-else-if="playerStatus.playlist.count>0" :height="desktopLayout ? 5 : 3" :disabled="playerStatus.current.duration>0" class="np-slider np-bar-slider" :value="playerStatus.current.pospc" :buffer="progressBuffer" v-bind:class="{'np-bar-colored':coloredToolbars}" v-on:click.stop="sliderChanged($event, false)" @mouseover="showTimeTooltip" @mouseout="hideTimeTooltip" @mousemove="moveTimeTooltip" @touchstart.passive.stop="touchSliderStart" @touchend.passive.stop="touchSliderEnd" @touchmove.passive.stop="moveTimeTooltipTouch"></lms-progressbar>
  </div>
  
- <div class="np-page" v-else id="np-page" v-bind:class="{'no-liveedge':undefined==playerStatus.current.liveEdge}">
+ <div class="np-page" v-else id="np-page">
   <div>
    <div v-show="overlayVolume>-1 && VOL_STD==playerStatus.dvc" id="volumeOverlay">{{overlayVolume}}%</div>
    <div v-if="landscape">

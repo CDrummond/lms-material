@@ -414,10 +414,6 @@
  border-color:var(--bottom-position-slider-color)!important;
 }
 
-.no-liveedge .np-bar-colored {
- background-color:transparent!important;
-}
-
 .np-bar .np-playpause {
  margin-top:-3px!important;
 }

@@ -186,40 +186,34 @@ var lmsCurrentCover = Vue.component('lms-currentcover', {
             }
 
             if (DEFAULT_COVER==this.coverUrl) {
-                this.handleColor(undefined);
+                this.handleColor(undefined, undefined);
                 return;
             }
 
-            var rgb = undefined;
+            var vRgb = undefined;
             try {
                 var vibrant = new Vibrant(document.getElementById('current-cover'));
                 var swatches = vibrant.swatches()
                 var desired = this.$store.state.darkUi
                     ? ["Vibrant", "LightVibrant", "Muted", "LightMuted", "DarkVibrant", "DarkMuted"]
                     : ["Vibrant", "DarkVibrant", "Muted", "DarkMuted", "LightVibrant", "LightMuted"]
-                for (let d=0, len=desired.length; d<len && undefined==rgb; ++d) {
+                for (let d=0, len=desired.length; d<len && undefined==vRgb; ++d) {
                     if (swatches[desired[d]]) {
-                        rgb = swatches[desired[d]].getRgb();
-                        console.log(desired[d], swatches[desired[d]].getHex(), swatches[desired[d]].getRgb());
+                        vRgb = swatches[desired[d]].getRgb();
                     }
                 }
 
             } catch(e) {
             }
 
-            if (undefined==rgb) {
-                // vibrant.js seems to fail on greyscale image, so fallback fo fast-average-color...
-                this.fac.getColorAsync(document.getElementById('current-cover'), {mode:'precision'}).then(color => {
-                    let rgbs = color.rgb.replace('rgb(', '').replace(')', '').split(',');
-                    rgb = [parseInt(rgbs[0]), parseInt(rgbs[1]), parseInt(rgbs[2])];
-                    this.handleColor(rgb);
-                }).catch(e => { });
-            } else {
-                this.handleColor(rgb);
-            }
+            this.fac.getColorAsync(document.getElementById('current-cover'), {mode:'precision'}).then(color => {
+                let rgbs = color.rgb.replace('rgb(', '').replace(')', '').split(',');
+                let avRgb = [parseInt(rgbs[0]), parseInt(rgbs[1]), parseInt(rgbs[2])];
+                this.handleColor(vRgb, avRgb);
+            }).catch(e => { });
         },
-        handleColor(rgb) {
-            let isDefCover = undefined==rgb || DEFAULT_COVER==this.coverUrl;
+        handleColor(vRgb, avRgb) {
+            let isDefCover = undefined==avRgb || DEFAULT_COVER==this.coverUrl;
 
             if (isDefCover) {
                 document.documentElement.style.setProperty('--tint-color', '#1976d2');
@@ -228,7 +222,9 @@ var lmsCurrentCover = Vue.component('lms-currentcover', {
                 document.documentElement.style.setProperty('--primary-color', '#1976d2');
                 document.documentElement.style.setProperty('--highlight-rgb', '25,118,210');
             } else {
-                let orgb = [rgb[0], rgb[1], rgb[2]]; // [parseInt(rgbs[0]), parseInt(rgbs[1]), parseInt(rgbs[2])];
+                document.documentElement.style.setProperty('--tint-color', rgb2Hex(avRgb));
+
+                let rgb = vRgb ? vRgb : avRgb;
                 if (this.$store.state.coloredToolbars) {
                     let hsv = rgb2Hsv(rgb);
                     hsv[2] = Math.max(Math.min(hsv[2], 150/255), 100/255)
@@ -248,7 +244,6 @@ var lmsCurrentCover = Vue.component('lms-currentcover', {
                 }
 
                 let hexColor=rgb2Hex(rgb);
-                document.documentElement.style.setProperty('--tint-color', rgb2Hex(orgb));
                 document.documentElement.style.setProperty('--primary-color', hexColor);
                 document.documentElement.style.setProperty('--highlight-rgb', rgb[0]+","+rgb[1]+","+rgb[2]);
                 document.documentElement.style.setProperty('--accent-color', rgb2Hex(rgb));

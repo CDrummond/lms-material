@@ -226,8 +226,8 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
     </v-list-tile-action>
    </v-list-tile>
   </v-list>
-  <lms-progressbar id="pos-slider" v-if="IS_MOBILE && playerStatus.playlist.count>0" :height="desktopLayout ? 5 : 3" :disabled="playerStatus.current.duration>0" class="np-slider np-bar-slider" :value="playerStatus.current.pospc" :buffer="playerStatus.current.bufpc"></lms-progressbar>
-  <lms-progressbar id="pos-slider" v-else-if="playerStatus.playlist.count>0" :height="desktopLayout ? 5 : 3" :disabled="playerStatus.current.duration>0" class="np-slider np-bar-slider" :value="playerStatus.current.pospc" :buffer="playerStatus.current.bufpc" v-bind:class="{'np-bar-colored':coloredToolbars}" v-on:click.stop="sliderChanged($event, false)" @mouseover="showTimeTooltip" @mouseout="hideTimeTooltip" @mousemove="moveTimeTooltip" @touchstart.passive.stop="touchSliderStart" @touchend.passive.stop="touchSliderEnd" @touchmove.passive.stop="moveTimeTooltipTouch"></lms-progressbar>
+  <lms-progressbar id="pos-slider" v-if="IS_MOBILE && playerStatus.playlist.count>0" :height="desktopLayout ? 5 : 3" :disabled="playerStatus.current.duration>0" class="np-slider np-bar-slider" :value="playerStatus.current.pospc" :buffer="progressBuffer"></lms-progressbar>
+  <lms-progressbar id="pos-slider" v-else-if="playerStatus.playlist.count>0" :height="desktopLayout ? 5 : 3" :disabled="playerStatus.current.duration>0" class="np-slider np-bar-slider" :value="playerStatus.current.pospc" :buffer="progressBuffer" v-bind:class="{'np-bar-colored':coloredToolbars}" v-on:click.stop="sliderChanged($event, false)" @mouseover="showTimeTooltip" @mouseout="hideTimeTooltip" @mousemove="moveTimeTooltip" @touchstart.passive.stop="touchSliderStart" @touchend.passive.stop="touchSliderEnd" @touchmove.passive.stop="moveTimeTooltipTouch"></lms-progressbar>
  </div>
  
  <div class="np-page" v-else id="np-page" v-bind:class="{'no-liveedge':undefined==playerStatus.current.liveEdge}">
@@ -265,7 +265,7 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
        <v-flex xs12 v-if="!info.show && undefined!=playerStatus.current.time">
         <v-layout class="np-time-layout">
          <p class="np-pos" v-bind:class="{'np-pos-center': playerStatus.current.duration<=0}">{{playerStatus.current.time | displayTime}}</p>
-         <lms-progressbar v-if="playerStatus.current.duration>0" id="pos-slider" class="np-slider" :value="playerStatus.current.pospc" :buffer="playerStatus.current.bufpc" v-on:click="sliderChanged($event)" @mouseover="showTimeTooltip" @mouseout="hideTimeTooltip" @mousemove="moveTimeTooltip" @touchstart.passive="touchSliderStart" @touchend.passive="touchSliderEnd" @touchmove.passive="moveTimeTooltipTouch"></lms-progressbar>
+         <lms-progressbar v-if="playerStatus.current.duration>0" id="pos-slider" class="np-slider" :value="playerStatus.current.pospc" :buffer="progressBuffer" v-on:click="sliderChanged($event)" @mouseover="showTimeTooltip" @mouseout="hideTimeTooltip" @mousemove="moveTimeTooltip" @touchstart.passive="touchSliderStart" @touchend.passive="touchSliderEnd" @touchmove.passive="moveTimeTooltipTouch"></lms-progressbar>
          <p class="np-duration link-item" v-if="(showTotal || undefined==playerStatus.current.time) && playerStatus.current.duration>0" @click="toggleTime()">{{playerStatus.current.duration | displayTime}}</p>
          <p class="np-duration link-item" v-else-if="playerStatus.current.duration>0" @click="toggleTime()">-{{playerStatus.current.duration-playerStatus.current.time | displayTime}}</p>
         </v-layout>
@@ -340,7 +340,7 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
     <v-flex xs12 v-if="!info.show && undefined!=playerStatus.current.time">
      <v-layout>
       <p class="np-pos" v-bind:class="{'np-pos-center': playerStatus.current.duration<=0}">{{playerStatus.current.time | displayTime}}</p>
-      <lms-progressbar v-if="playerStatus.current.duration>0" id="pos-slider" class="np-slider" :value="playerStatus.current.pospc" :buffer="playerStatus.current.bufpc" v-on:click="sliderChanged($event, false)" @mouseover="showTimeTooltip" @mouseout="hideTimeTooltip" @mousemove="moveTimeTooltip" @touchstart.passive="touchSliderStart" @touchend.passive="touchSliderEnd" @touchmove.passive="moveTimeTooltipTouch"></lms-progressbar>
+      <lms-progressbar v-if="playerStatus.current.duration>0" id="pos-slider" class="np-slider" :value="playerStatus.current.pospc" :buffer="progressBuffer" v-on:click="sliderChanged($event, false)" @mouseover="showTimeTooltip" @mouseout="hideTimeTooltip" @mousemove="moveTimeTooltip" @touchstart.passive="touchSliderStart" @touchend.passive="touchSliderEnd" @touchmove.passive="moveTimeTooltipTouch"></lms-progressbar>
       <p class="np-duration link-item" v-if="(showTotal || undefined==playerStatus.current.time) && playerStatus.current.duration>0" @click="toggleTime()">{{playerStatus.current.duration | displayTime}}</p>
       <p class="np-duration link-item" v-else-if="playerStatus.current.duration>0" @click="toggleTime()">-{{playerStatus.current.duration-playerStatus.current.time | displayTime}}</p>
      </v-layout>
@@ -1527,6 +1527,9 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
         },
         nowPlayingFull() {
             return this.$store.state.nowPlayingFull && !this.info.show && ( this.$store.state.desktopLayout ? this.largeView : this.$store.state.page == 'now-playing')
+        },
+        progressBuffer() {
+            return this.playerStatus.current.bufpc<99 ? this.playerStatus.current.bufpc : 0
         }
     },
     beforeDestroy() {

@@ -1246,6 +1246,15 @@ sub _cliCommand {
             }
         }
 
+        my $roles = $serverprefs->get('userDefinedRoles');
+        foreach my $role (keys %{$roles}) {
+            my $term = "contributor_namesearch.active" . $roles->{$role}->{id};
+            my $val = $request->getParam($term);
+            if ($val) {
+                $params->{'search.' . $term} = $val;
+            }
+        }
+
         if ($saveLib) {
             $params->{'action'} = 'saveLibraryView';
             $params->{'saveSearch'} = $saveLib;

@@ -3947,7 +3947,7 @@ div.v-subheader {
  margin:0px!important;
 }
 
-.pbar {
+.pbar, .lms-app:not(.tinted) .np-full .pbar {
  width:100%;
  position:relative;
  border:none !important;
@@ -3969,7 +3969,7 @@ div.v-subheader {
 }
 
 .pbar .buffer {
- opacity:0.25;
+ opacity:0.2;
 }
 
 .np-full .pbar .buffer {
@@ -3990,6 +3990,10 @@ div.v-subheader {
  margin:0px !important;
  left:0px;
  width:100vw;
+}
+
+.lms-app:not(.tinted):not(.np-full) .np-bar-slider, .lms-app:not(.tinted):not(.np-full) .np-slider {
+ background-color:rgba(var(--highlight-rgb), 0.25)!important;
 }
 
 .np-bar-slider, .np-bar-slider .value, .np-bar-slider .buffer {

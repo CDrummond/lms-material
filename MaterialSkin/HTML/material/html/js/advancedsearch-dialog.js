@@ -254,18 +254,24 @@ Vue.component('lms-advancedsearch-dialog', {
                            {key:224, label:'224 kbps'},
                            {key:320, label:'320 kbps'}];
             this.fileFormats=[{key:ADVS_ANY_CONTENT_TYPE, label:i18n('any')}];
-            this.artistTypes=[{key:1, label:i18n('Artist')},
-                             {key:5, label:i18n('Album artist')},
-                             {key:6, label:i18n('Track artist')},
-                             {key:2, label:i18n('Composer')},
-                             {key:3, label:i18n('Conductor')},
-                             {key:4, label:i18n('Band')}];
+            this.artistTypes=[{key:ARTIST_ROLE, label:i18n('Artist')},
+                              {key:ALBUM_ARTIST_ROLE, label:i18n('Album artist')},
+                              {key:TRACK_ARTIST_ROLE, label:i18n('Track artist')},
+                              {key:COMPOSER_ARTIST_ROLE, label:i18n('Composer')},
+                              {key:CONDUCTOR_ARTIST_ROLE, label:i18n('Conductor')},
+                              {key:BAND_ARTIST_ROLE, label:i18n('Band')}];
             this.genres=[{key:ADVS_ANY_GENRE, label:i18n('any genre')},
                          {key:ADVS_IN_GENRE, label:i18n('contains')},
                          {key:ADVS_NOT_IN_GENRE, label:i18n("doesn't contain")}];
             this.sections.tech.label=i18n('Technical');
             this.sections.file.label=i18n('File');
             this.sections.stats.label=i18n('Stats');
+
+            if (lmsOptions.userDefinedRoles) {
+                for (let [key, value] of Object.entries(lmsOptions.userDefinedRoles)) {
+                    this.artistTypes.push({key: key, label:value.text});
+                }
+            }
 
             if (reset) {
                 this.params.me_titlesearch= {val:undefined, op:"LIKE"};

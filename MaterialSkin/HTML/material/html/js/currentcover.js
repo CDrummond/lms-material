@@ -184,58 +184,88 @@ var lmsCurrentCover = Vue.component('lms-currentcover', {
             if (this.$store.state.color!=COLOR_FROM_COVER) {
                 return;
             }
-            this.fac.getColorAsync(document.getElementById('current-cover'), {mode:'precision'}).then(color => {
-                let rgbs = color.rgb.replace('rgb(', '').replace(')', '').split(',');
-                let rgb = [parseInt(rgbs[0]), parseInt(rgbs[1]), parseInt(rgbs[2])];
-                let orgb = [parseInt(rgbs[0]), parseInt(rgbs[1]), parseInt(rgbs[2])];
-                let isDefCover = DEFAULT_COVER==this.coverUrl;
 
-                if (isDefCover) {
-                    document.documentElement.style.setProperty('--tint-color', '#1976d2');
-                    rgb = [25,118,210];
-                    document.documentElement.style.setProperty('--accent-color', '#82b1ff');
-                    document.documentElement.style.setProperty('--primary-color', '#1976d2');
-                    document.documentElement.style.setProperty('--highlight-rgb', '25,118,210');
-                } else {
-                    if (this.$store.state.coloredToolbars) {
-                        let hsv = rgb2Hsv(rgb);
-                        hsv[2] = Math.max(Math.min(hsv[2], 150/255), 100/255)
-                        rgb = hsv2Rgb(hsv);
+            if (DEFAULT_COVER==this.coverUrl) {
+                this.handleColor(undefined);
+                return;
+            }
+
+            var rgb = undefined;
+            try {
+                var vibrant = new Vibrant(document.getElementById('current-cover'));
+                var swatches = vibrant.swatches()
+                var desired = this.$store.state.darkUi
+                    ? ["Vibrant", "LightVibrant", "Muted", "LightMuted", "DarkVibrant", "DarkMuted"]
+                    : ["Vibrant", "DarkVibrant", "Muted", "DarkMuted", "LightVibrant", "LightMuted"]
+                for (let d=0, len=desired.length; d<len && undefined==rgb; ++d) {
+                    if (swatches[desired[d]]) {
+                        rgb = swatches[desired[d]].getRgb();
+                        console.log(desired[d], swatches[desired[d]].getHex(), swatches[desired[d]].getRgb());
                     }
-
-                    let a=0;
-                    while (this.$store.state.darkUi ? rgbLuminence(rgb)<0.2 : rgbLuminence(rgb)>0.4) {
-                        rgb = shadeRgb(rgb, this.$store.state.darkUi ? 0.05 : -0.05);
-                        a+=1;
-                    }
-
-                    a=0;
-                    while (this.$store.state.darkUi ? rgbLuminence(rgb)>0.8 : rgbLuminence(rgb)<0.2) {
-                        rgb = shadeRgb(rgb, this.$store.state.darkUi ? -0.05 : 0.05);
-                        a+=1;
-                    }
-
-                    let hexColor=rgb2Hex(rgb);
-                    document.documentElement.style.setProperty('--tint-color', rgb2Hex(orgb));
-                    document.documentElement.style.setProperty('--primary-color', hexColor);
-                    document.documentElement.style.setProperty('--highlight-rgb', rgb[0]+","+rgb[1]+","+rgb[2]);
-                    document.documentElement.style.setProperty('--accent-color', rgb2Hex(rgb));
                 }
 
-                emitToolbarColorsFromState(this.$store.state);
-                if (1==queryParams.nativeAccent) {
-                    bus.$nextTick(function () {
-                        try {
-                            NativeReceiver.updateAccentColor(hexColor);
-                        } catch (e) {
-                        }
-                    });
-                } else if (queryParams.nativeAccent>0) {
-                    emitNative("MATERIAL-ACCENT\nVAL " + hexColor, queryParams.nativeAccent);
+            } catch(e) {
+            }
+
+            if (undefined==rgb) {
+                // vibrant.js seems to fail on greyscale image, so fallback fo fast-average-color...
+                this.fac.getColorAsync(document.getElementById('current-cover'), {mode:'precision'}).then(color => {
+                    let rgbs = color.rgb.replace('rgb(', '').replace(')', '').split(',');
+                    rgb = [parseInt(rgbs[0]), parseInt(rgbs[1]), parseInt(rgbs[2])];
+                    this.handleColor(rgb);
+                }).catch(e => { });
+            } else {
+                this.handleColor(rgb);
+            }
+        },
+        handleColor(rgb) {
+            let isDefCover = undefined==rgb || DEFAULT_COVER==this.coverUrl;
+
+            if (isDefCover) {
+                document.documentElement.style.setProperty('--tint-color', '#1976d2');
+                rgb = [25,118,210];
+                document.documentElement.style.setProperty('--accent-color', '#82b1ff');
+                document.documentElement.style.setProperty('--primary-color', '#1976d2');
+                document.documentElement.style.setProperty('--highlight-rgb', '25,118,210');
+            } else {
+                let orgb = [rgb[0], rgb[1], rgb[2]]; // [parseInt(rgbs[0]), parseInt(rgbs[1]), parseInt(rgbs[2])];
+                if (this.$store.state.coloredToolbars) {
+                    let hsv = rgb2Hsv(rgb);
+                    hsv[2] = Math.max(Math.min(hsv[2], 150/255), 100/255)
+                    rgb = hsv2Rgb(hsv);
                 }
-                bus.$emit("colorChanged", rgb[0]+rgb[1]+rgb[2]);
-            }).catch(e => {
-            });
+
+                let a=0;
+                while (this.$store.state.darkUi ? rgbLuminence(rgb)<0.15 : rgbLuminence(rgb)>0.4) {
+                    rgb = shadeRgb(rgb, this.$store.state.darkUi ? 0.05 : -0.05);
+                    a+=1;
+                }
+
+                a=0;
+                while (this.$store.state.darkUi ? rgbLuminence(rgb)>0.8 : rgbLuminence(rgb)<0.2) {
+                    rgb = shadeRgb(rgb, this.$store.state.darkUi ? -0.05 : 0.05);
+                    a+=1;
+                }
+
+                let hexColor=rgb2Hex(rgb);
+                document.documentElement.style.setProperty('--tint-color', rgb2Hex(orgb));
+                document.documentElement.style.setProperty('--primary-color', hexColor);
+                document.documentElement.style.setProperty('--highlight-rgb', rgb[0]+","+rgb[1]+","+rgb[2]);
+                document.documentElement.style.setProperty('--accent-color', rgb2Hex(rgb));
+            }
+
+            emitToolbarColorsFromState(this.$store.state);
+            if (1==queryParams.nativeAccent) {
+                bus.$nextTick(function () {
+                    try {
+                        NativeReceiver.updateAccentColor(hexColor);
+                    } catch (e) {
+                    }
+                });
+            } else if (queryParams.nativeAccent>0) {
+                emitNative("MATERIAL-ACCENT\nVAL " + hexColor, queryParams.nativeAccent);
+            }
+            bus.$emit("colorChanged", rgb[0]+rgb[1]+rgb[2]);
         }
     }
 });

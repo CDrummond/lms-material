@@ -12,10 +12,6 @@ function shadeRgb(rgb, percent) {
     return [Math.round((t-rgb[0])*p)+rgb[0], Math.round((t-rgb[1])*p)+rgb[1], Math.round((t-rgb[2])*p)+rgb[2]];
 }
 
-function rgbBrightness(rgb) {
-    return (((rgb[0]*299)+(rgb[1]*587)+(rgb[2]*114))/1000);
-}
-
 function rgb2Hex(rgb) {
     let hex="#";
     for (let i=0; i<3; ++i) {
@@ -86,10 +82,6 @@ function rgbLuminence(rgb) {
         c[i] = srgb[i] > 0.03928 ? Math.pow((srgb[i]+0.055) / 1.055, gamma) : srgb[i] / 12.92;
     }
     return 0.2126*c[0] + 0.7152*c[1] + 0.0722*c[2]
-}
-
-function contrastRatio(l1, l2) {
-    return (Math.max(l1, l2) + 0.05)/(Math.min(l1, l2) + 0.05);
 }
 
 var currentCover = undefined;

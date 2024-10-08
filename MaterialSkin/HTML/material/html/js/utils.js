@@ -658,22 +658,26 @@ function cacheKey(command, params, start, batchSize) {
            (command && (command[0]=="artists" || command[0]=="albums") ? (LMS_NO_GENRE_FILTER ? ":1" : ":0") : "") +
            (command && command[0]=="albums" ? (LMS_NO_ROLE_FILTER ? ":1" : ":0") : "") +
            (command && command[0]=="artists" ? (LMS_P_MAI && LMS_ARTIST_PICS ? ":1" : ":0") : "") +
-           (command && command[0]=="artists" ? ":"+lmsOptions.excludedUserDefinedRoles : "") +
            ":"+start+":"+batchSize;
 }
 
-function clearListCache(force) {
+function clearListCache(force, command) {
     // Delete old local-storage cache
     for (var key in window.localStorage) {
         if (key.startsWith(LS_PREFIX+LMS_LIST_CACHE_PREFIX) &&
-            (force || !key.startsWith(LS_PREFIX+LMS_LIST_CACHE_PREFIX+LMS_CACHE_VERSION+":"+lmsLastScan+":"))) {
+            (force ||
+             !key.startsWith(LS_PREFIX+LMS_LIST_CACHE_PREFIX+LMS_CACHE_VERSION+":"+lmsLastScan+":") ||
+             (undefined!=command && key.indexOf(":"+command+":")>0))) {
             window.localStorage.removeItem(key);
         }
     }
     // Delete IndexedDB cache
     idbKeyval.keys().then(keys => {
         for (var i=0, len=keys.length; i<len; ++i) {
-            if (keys[i].startsWith(LMS_LIST_CACHE_PREFIX) && (force || !keys[i].startsWith(LMS_LIST_CACHE_PREFIX+LMS_CACHE_VERSION+":"+lmsLastScan+":"))) {
+            if (keys[i].startsWith(LMS_LIST_CACHE_PREFIX) &&
+                (force ||
+                 !keys[i].startsWith(LMS_LIST_CACHE_PREFIX+LMS_CACHE_VERSION+":"+lmsLastScan+":") ||
+                 (undefined!=command && key.indexOf(":"+command+":")>0))) {
                 idbKeyval.del(keys[i]);
             }
         }

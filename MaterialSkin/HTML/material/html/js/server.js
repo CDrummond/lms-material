@@ -130,7 +130,11 @@ function parseUserDefinedRoles(data) {
             ARTIST_TYPE_IDS.push(id);
         }
     }
-    lmsOptions.excludedUserDefinedRoles = excluded.join(",");
+    let excludedUserDefinedRoles = excluded.join(",");
+    if (lmsOptions.excludedUserDefinedRoles!=excludedUserDefinedRoles) {
+        clearListCache(true, "artists");
+    }
+    lmsOptions.excludedUserDefinedRoles = excludedUserDefinedRoles;
 }
 
 function lmsCommand(playerid, command, commandId, timeout) {

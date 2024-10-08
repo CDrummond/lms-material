@@ -658,6 +658,7 @@ function cacheKey(command, params, start, batchSize) {
            (command && (command[0]=="artists" || command[0]=="albums") ? (LMS_NO_GENRE_FILTER ? ":1" : ":0") : "") +
            (command && command[0]=="albums" ? (LMS_NO_ROLE_FILTER ? ":1" : ":0") : "") +
            (command && command[0]=="artists" ? (LMS_P_MAI && LMS_ARTIST_PICS ? ":1" : ":0") : "") +
+           (command && command[0]=="artists" ? ":"+lmsOptions.excludedUserDefinedRoles : "") +
            ":"+start+":"+batchSize;
 }
 

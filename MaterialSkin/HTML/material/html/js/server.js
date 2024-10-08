@@ -112,20 +112,25 @@ function visibilityOrFocusChanged() {
 
 function parseUserDefinedRoles(data) {
     lmsOptions.userDefinedRoles = {}
-    let keys = Object.keys(data);
+    let keys = Object.keys(data).sort();
     ARTIST_TYPES = [].concat(BASE_ARTIST_TYPES);
     ARTIST_TYPE_IDS = [].concat(ARTIST_TYPE_IDS);
+    let excluded = [];
     for (let i=0, len=keys.length; i<len; ++i) {
         let key = keys[i];
         if (undefined!=data[key]['id'] && undefined!=data[key]['name']) {
             let id = parseInt(data[key]['id']);
             let lkey = key.toLocaleLowerCase();
             lmsOptions.userDefinedRoles[id] = {'role':key, 'lrole':lkey, 'text':data[key]['name']};
+            if (1==parseInt(data[key]['exclude'])) {
+                excluded.push(lkey);
+            }
             ARTIST_TYPES.push(lkey);
             USER_ARTIST_TYPES.push(lkey);
             ARTIST_TYPE_IDS.push(id);
         }
     }
+    lmsOptions.excludedUserDefinedRoles = excluded.join(",");
 }
 
 function lmsCommand(playerid, command, commandId, timeout) {

@@ -195,21 +195,28 @@ var lmsCurrentCover = Vue.component('lms-currentcover', {
             } else {
                 document.documentElement.style.setProperty('--tint-color', rgb2Hex(avRgb));
 
-                rgb = isGrey(avRgb) ? [25,118,210] : vRgb ? vRgb : avRgb;
-                if (this.$store.state.coloredToolbars) {
+                if (isGrey(avRgb)) {
+                    rgb = [25,118,210];
+                    document.documentElement.style.setProperty('--accent-color', '#82b1ff');
+                    document.documentElement.style.setProperty('--primary-color', '#1976d2');
+                    document.documentElement.style.setProperty('--highlight-rgb', '25,118,210');
+                } else {
+                    rgb = vRgb ? vRgb : avRgb;
+                    if (this.$store.state.coloredToolbars) {
+                        let hsv = rgb2Hsv(rgb);
+                        hsv[2] = Math.max(Math.min(hsv[2], 150/255), 100/255)
+                        rgb = hsv2Rgb(hsv);
+                    }
+
                     let hsv = rgb2Hsv(rgb);
-                    hsv[2] = Math.max(Math.min(hsv[2], 150/255), 100/255)
+                    hsv[2]=0.75;
                     rgb = hsv2Rgb(hsv);
+
+                    let hexColor=rgb2Hex(rgb);
+                    document.documentElement.style.setProperty('--primary-color', hexColor);
+                    document.documentElement.style.setProperty('--highlight-rgb', rgb[0]+","+rgb[1]+","+rgb[2]);
+                    document.documentElement.style.setProperty('--accent-color', rgb2Hex(rgb));
                 }
-
-                let hsv = rgb2Hsv(rgb);
-                hsv[2]=0.75;
-                rgb = hsv2Rgb(hsv);
-
-                let hexColor=rgb2Hex(rgb);
-                document.documentElement.style.setProperty('--primary-color', hexColor);
-                document.documentElement.style.setProperty('--highlight-rgb', rgb[0]+","+rgb[1]+","+rgb[2]);
-                document.documentElement.style.setProperty('--accent-color', rgb2Hex(rgb));
             }
 
             emitToolbarColorsFromState(this.$store.state);

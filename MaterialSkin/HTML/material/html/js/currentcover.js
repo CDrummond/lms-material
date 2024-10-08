@@ -6,12 +6,6 @@
  */
 'use strict';
 
-function shadeRgb(rgb, percent) {
-    var t = percent < 0 ? 0 : 255,
-        p = percent < 0 ? percent*-1 : percent;
-    return [Math.round((t-rgb[0])*p)+rgb[0], Math.round((t-rgb[1])*p)+rgb[1], Math.round((t-rgb[2])*p)+rgb[2]];
-}
-
 function rgb2Hsv(rgb) {
     let r = rgb[0],
         g = rgb[1],
@@ -56,14 +50,8 @@ function hsv2Rgb(hsv) {
     return [Math.round(r * 255), Math.round(g * 255), Math.round(b * 255)];
 }
 
-function rgbLuminence(rgb) {
-    let gamma = 2.4
-    let srgb = [], c = [];
-    for (let i = 0; i < 3; i++) {
-        srgb[i] = rgb[i] / 255;
-        c[i] = srgb[i] > 0.03928 ? Math.pow((srgb[i]+0.055) / 1.055, gamma) : srgb[i] / 12.92;
-    }
-    return 0.2126*c[0] + 0.7152*c[1] + 0.0722*c[2]
+function isGrey(rgb) {
+    return Math.abs(rgb[0]-rgb[1])<2 && Math.abs(rgb[0]-rgb[2])<2 && Math.abs(rgb[1]-rgb[2])<2;
 }
 
 var currentCover = undefined;
@@ -207,24 +195,16 @@ var lmsCurrentCover = Vue.component('lms-currentcover', {
             } else {
                 document.documentElement.style.setProperty('--tint-color', rgb2Hex(avRgb));
 
-                rgb = vRgb ? vRgb : avRgb;
+                rgb = isGrey(avRgb) ? [25,118,210] : vRgb ? vRgb : avRgb;
                 if (this.$store.state.coloredToolbars) {
                     let hsv = rgb2Hsv(rgb);
                     hsv[2] = Math.max(Math.min(hsv[2], 150/255), 100/255)
                     rgb = hsv2Rgb(hsv);
                 }
 
-                let a=0;
-                while (this.$store.state.darkUi ? rgbLuminence(rgb)<0.15 : rgbLuminence(rgb)>0.4) {
-                    rgb = shadeRgb(rgb, this.$store.state.darkUi ? 0.05 : -0.05);
-                    a+=1;
-                }
-
-                a=0;
-                while (this.$store.state.darkUi ? rgbLuminence(rgb)>0.8 : rgbLuminence(rgb)<0.2) {
-                    rgb = shadeRgb(rgb, this.$store.state.darkUi ? -0.05 : 0.05);
-                    a+=1;
-                }
+                let hsv = rgb2Hsv(rgb);
+                hsv[2]=0.75;
+                rgb = hsv2Rgb(hsv);
 
                 let hexColor=rgb2Hex(rgb);
                 document.documentElement.style.setProperty('--primary-color', hexColor);

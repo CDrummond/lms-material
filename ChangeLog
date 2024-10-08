@@ -9,6 +9,7 @@ x.x.x
 6. Try to extract dominant, and not average, colour from image when using
    colour from cover.
 7. Invalidate artist list cache if user-defined role exclusion changed.
+8. Use coloured mobile navigation, progress, sliders, etc. even when tinting.
 
 5.3.4
 -----

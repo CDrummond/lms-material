@@ -211,7 +211,6 @@
  --top-toolbar-text-color:var(--light-text-color);
  --sub-toolbar-text-color:var(--light-text-color);
  --bottom-toolbar-text-color:var(--light-text-color);
- --tint-color:var(--primary-color);
 }
 
 .v-dialog--fullscreen .v-sheet {

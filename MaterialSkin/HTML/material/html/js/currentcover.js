@@ -194,7 +194,6 @@ var lmsCurrentCover = Vue.component('lms-currentcover', {
                 document.documentElement.style.setProperty('--highlight-rgb', '25,118,210');
             } else {
                 document.documentElement.style.setProperty('--tint-color', rgb2Hex(avRgb));
-
                 if (isGrey(avRgb)) {
                     rgb = [25,118,210];
                     document.documentElement.style.setProperty('--accent-color', '#82b1ff');
@@ -202,14 +201,8 @@ var lmsCurrentCover = Vue.component('lms-currentcover', {
                     document.documentElement.style.setProperty('--highlight-rgb', '25,118,210');
                 } else {
                     rgb = vRgb ? vRgb : avRgb;
-                    if (this.$store.state.coloredToolbars) {
-                        let hsv = rgb2Hsv(rgb);
-                        hsv[2] = Math.max(Math.min(hsv[2], 150/255), 100/255)
-                        rgb = hsv2Rgb(hsv);
-                    }
-
                     let hsv = rgb2Hsv(rgb);
-                    hsv[2]=0.75;
+                    hsv[2]=0.8235; // Matches 'v' from [25,118,210]
                     rgb = hsv2Rgb(hsv);
 
                     let hexColor=rgb2Hex(rgb);

@@ -950,7 +950,7 @@ function addNote(str) {
 function rgb2Hex(rgb) {
     let hex="#";
     for (let i=0; i<3; ++i) {
-        let hv = rgb[i].toString(16);
+        let hv = Math.round(rgb[i]).toString(16);
         hex += (hv.length==1 ? "0" : "") + hv;
     }
     return hex;

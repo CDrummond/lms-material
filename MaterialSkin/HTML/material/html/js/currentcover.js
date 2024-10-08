@@ -12,24 +12,6 @@ function shadeRgb(rgb, percent) {
     return [Math.round((t-rgb[0])*p)+rgb[0], Math.round((t-rgb[1])*p)+rgb[1], Math.round((t-rgb[2])*p)+rgb[2]];
 }
 
-function rgb2Hex(rgb) {
-    let hex="#";
-    for (let i=0; i<3; ++i) {
-        let hv = rgb[i].toString(16);
-        hex += (hv.length==1 ? "0" : "") + hv;
-    }
-    return hex;
-}
-
-function hex2Rgb(hx) {
-    let step = hx.length>4 ? 2 : 1;
-    let rgb=[]
-    for (let p=0; p<3; ++p) {
-        rgb.push(parseInt("0x"+hx.substr(1+(p*step), step, 16)));
-    }
-    return rgb;
-}
-
 function rgb2Hsv(rgb) {
     let r = rgb[0],
         g = rgb[1],

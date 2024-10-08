@@ -192,10 +192,11 @@ var lmsCurrentCover = Vue.component('lms-currentcover', {
                 let rgbs = color.rgb.replace('rgb(', '').replace(')', '').split(',');
                 let avRgb = [parseInt(rgbs[0]), parseInt(rgbs[1]), parseInt(rgbs[2])];
                 this.handleColor(vRgb, avRgb);
-            }).catch(e => { });
+            }).catch(e => { this.handleColor(undefined, undefined); });
         },
         handleColor(vRgb, avRgb) {
             let isDefCover = undefined==avRgb || DEFAULT_COVER==this.coverUrl;
+            let rgb = undefined;
 
             if (isDefCover) {
                 document.documentElement.style.setProperty('--tint-color', '#1976d2');
@@ -206,7 +207,7 @@ var lmsCurrentCover = Vue.component('lms-currentcover', {
             } else {
                 document.documentElement.style.setProperty('--tint-color', rgb2Hex(avRgb));
 
-                let rgb = vRgb ? vRgb : avRgb;
+                rgb = vRgb ? vRgb : avRgb;
                 if (this.$store.state.coloredToolbars) {
                     let hsv = rgb2Hsv(rgb);
                     hsv[2] = Math.max(Math.min(hsv[2], 150/255), 100/255)

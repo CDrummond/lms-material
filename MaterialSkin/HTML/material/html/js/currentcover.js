@@ -168,11 +168,10 @@ var lmsCurrentCover = Vue.component('lms-currentcover', {
                     ? ["Vibrant", "LightVibrant", "Muted", "LightMuted", "DarkVibrant", "DarkMuted"]
                     : ["Vibrant", "DarkVibrant", "Muted", "DarkMuted", "LightVibrant", "LightMuted"]
                 for (let d=0, len=desired.length; d<len && undefined==vRgb; ++d) {
-                    if (swatches[desired[d]]) {
+                    if (swatches[desired[d]] && swatches[desired[d]].getPopulation()>0) {
                         vRgb = swatches[desired[d]].getRgb();
                     }
                 }
-
             } catch(e) {
             }
 
@@ -194,7 +193,7 @@ var lmsCurrentCover = Vue.component('lms-currentcover', {
                 document.documentElement.style.setProperty('--highlight-rgb', '25,118,210');
             } else {
                 document.documentElement.style.setProperty('--tint-color', rgb2Hex(avRgb));
-                if (isGrey(avRgb)) {
+                if (isGrey(avRgb) || undefined==vRgb || isGrey(vRgb)) {
                     rgb = [25,118,210];
                     document.documentElement.style.setProperty('--accent-color', '#82b1ff');
                     document.documentElement.style.setProperty('--primary-color', '#1976d2');

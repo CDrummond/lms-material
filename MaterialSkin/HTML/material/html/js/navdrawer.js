@@ -12,10 +12,9 @@ var TB_PLAYER_SETTINGS = {id:2, svg:  "player-settings" };
 var TB_SERVER_SETTINGS = {id:3, svg:  "server-settings" };
 var TB_APP_SETTINGS    = {id:4, svg:  "app-settings" };
 var TB_INFO            = {id:5, icon: "info" };
-var TB_HELP            = {id:6, icon: "help" };
-var TB_MANAGE_PLAYERS  = {id:7, svg:  "player-manager" };
-var TB_APP_QUIT        = {id:8, svg:  "close" }
-var TB_START_PLAYER    = {id:9, icon: "surround_sound" }
+var TB_MANAGE_PLAYERS  = {id:6, svg:  "player-manager" };
+var TB_APP_QUIT        = {id:7, svg:  "close" }
+var TB_START_PLAYER    = {id:8, icon: "surround_sound" }
 
 const TB_CUSTOM_SETTINGS_ACTIONS = {id:20};
 const TB_CUSTOM_ACTIONS = {id:21};
@@ -92,7 +91,7 @@ Vue.component('lms-navdrawer', {
   <template v-for="(item, index) in menuItems">
    <v-divider v-if="item===DIVIDER"></v-divider>
    <v-subheader v-else-if="item.hdr">{{item.title}}</v-subheader>
-   <v-list-tile @click="menuAction(item.id)" v-else-if="(TB_UI_SETTINGS.id==item.id) || (TB_PLAYER_SETTINGS.id==item.id && player && connected) || (TB_SERVER_SETTINGS.id==item.id && unlockAll && connected) || (TB_HELP.id==item.id) || (TB_INFO.id==item.id)">
+   <v-list-tile @click="menuAction(item.id)" v-else-if="(TB_UI_SETTINGS.id==item.id) || (TB_PLAYER_SETTINGS.id==item.id && player && connected) || (TB_SERVER_SETTINGS.id==item.id && unlockAll && connected) || (TB_INFO.id==item.id)">
     <v-list-tile-avatar><img v-if="TB_INFO.id==item.id && updatesAvailable" class="svg-img" :src="'update' | svgIcon(darkUi, true)"></img><img v-else-if="TB_INFO.id==item.id && restartRequired" class="svg-img" :src="'restart' | svgIcon(darkUi, true)"><img v-else-if="item.svg" class="svg-img" :src="item.svg | svgIcon(darkUi)"><v-icon v-else>{{item.icon}}</v-icon></v-list-tile-avatar>
     <v-list-tile-content>
      <v-list-tile-title>{{item.stitle ? item.stitle : item.title}}</v-list-tile-title>
@@ -252,7 +251,6 @@ Vue.component('lms-navdrawer', {
             TB_SERVER_SETTINGS.shortcut=shortcutStr(LMS_SERVER_SETTINGS_KEYBOARD);
             TB_INFO.title=i18n('Information');
             TB_INFO.shortcut=shortcutStr(LMS_INFORMATION_KEYBOARD);
-            TB_HELP.title=i18n('Help');
             TB_MANAGE_PLAYERS.title=i18n('Manage players');
             TB_MANAGE_PLAYERS.shortcut=shortcutStr(LMS_MANAGEPLAYERS_KEYBOARD);
             TB_APP_SETTINGS.title=i18n('Application settings');
@@ -267,13 +265,12 @@ Vue.component('lms-navdrawer', {
                                    : [TB_CUSTOM_SETTINGS_ACTIONS, TB_CUSTOM_ACTIONS]
             } else {
                 if (queryParams.party) {
-                    this.menuItems = [TB_APP_SETTINGS, TB_UI_SETTINGS, DIVIDER, TB_INFO, TB_HELP];
+                    this.menuItems = [TB_APP_SETTINGS, TB_UI_SETTINGS, DIVIDER, TB_INFO];
                 } else {
                     this.menuItems = [TB_SETTINGS, TB_APP_SETTINGS, TB_UI_SETTINGS, TB_PLAYER_SETTINGS, TB_SERVER_SETTINGS, TB_CUSTOM_SETTINGS_ACTIONS, DIVIDER];
-                    this.menuItems=this.menuItems.concat([TB_INFO, TB_HELP, TB_CUSTOM_ACTIONS]);
+                    this.menuItems=this.menuItems.concat([TB_INFO, TB_CUSTOM_ACTIONS]);
                 }
                 if (queryParams.appQuit) {
-                    this.menuItems.push(DIVIDER);
                     this.menuItems.push(TB_APP_QUIT)
                 }
             }
@@ -300,7 +297,7 @@ Vue.component('lms-navdrawer', {
             }
         },
         menuAction(id) {
-            if (TB_UI_SETTINGS.id==id) {
+            if (TB_UI_SETTINGS.id==id) {appQuit
                 bus.$emit('dlg.open', 'uisettings');
             } else if (TB_PLAYER_SETTINGS.id==id) {
                 if (this.connected) {
@@ -317,8 +314,6 @@ Vue.component('lms-navdrawer', {
                 }
             } else if (TB_INFO.id==id) {
                 bus.$emit('dlg.open', 'info');
-            } else if (TB_HELP.id==id) {
-                bus.$emit('dlg.open', 'iframe', '/material/html/material-skin/index.html', TB_HELP.title, undefined, 0);
             } else if (TB_MANAGE_PLAYERS.id==id) {
                 if (this.connected) {
                     bus.$emit('dlg.open', 'manage');

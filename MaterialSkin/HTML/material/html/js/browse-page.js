@@ -1485,7 +1485,8 @@ var lmsBrowse = Vue.component("lms-browse", {
         },
         clearSelection() {
             var selection = Array.from(this.selection);
-            for (var i=0, len=selection.length; i<len; ++i) {
+            var numSelected = selection.length;
+            for (var i=0, len=numSelected; i<len; ++i) {
                 var index = selection[i];
                 if (index>-1 && index<this.items.length) {
                     if (this.items[index].menu) {
@@ -1501,6 +1502,12 @@ var lmsBrowse = Vue.component("lms-browse", {
             this.selectionDuration = 0;
             this.lastSelect = undefined;
             bus.$emit('browseSelection', false);
+            if (numSelected>0) {
+                // When using recycler view items can sometimes still look selected until interact with view.
+                // Add an item, and then removing seems to work-around this...
+                this.items.push({id:"fake", title:'', artistAlbum:'', key:"fake."+this.items.length});
+                setTimeout(function () { this.items.splice(this.items.length-1, 0); }.bind(this), 50);
+            }
         },
         select(item, index, event) {
             if (this.selection.size>0) {

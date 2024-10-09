@@ -23,7 +23,7 @@ Vue.component('lms-toolbar', {
 </v-btn>
 <v-toolbar-title v-bind:class="{'link-item':!coloredToolbars, 'link-item-ct': coloredToolbars, 'maintoolbar-title-clock':showClock}" @click="bus.$emit('navDrawer')">
  <div class="maintoolbar-title ellipsis" v-bind:class="{'dimmed': !playerStatus.ison, 'nd-title-fix':navdrawerVisible}">
-  {{noPlayer ? trans.noplayer : player.name}}<v-icon v-if="playerStatus.sleepTime" class="player-status-icon dimmed">hotel</v-icon><v-icon v-if="playerStatus.alarmStr" class="player-status-icon dimmed">alarm</v-icon><v-icon v-if="playerStatus.synced" class="player-status-icon dimmed">link</v-icon></div>
+  {{noPlayer ? trans.noplayer : player.name}}<v-icon v-if="playerStatus.sleepTime" class="player-status-icon dimmed" v-bind:class="{'link-item':!IS_MOBILE}" @click.stop="openSleep">hotel</v-icon><v-icon v-if="playerStatus.alarmStr" class="player-status-icon dimmed" v-bind:class="{'link-item':!IS_MOBILE}" @click.stop="openAlarms">alarm</v-icon><v-icon v-if="playerStatus.synced" class="player-status-icon dimmed">link</v-icon></div>
  <div v-if="!desktopLayout && !noPlayer && MBAR_NONE==mobileBar" class="maintoolbar-subtitle subtext ellipsis" v-bind:class="{'dimmed' : !playerStatus.ison}">{{playerStatus.count<1 ? trans.nothingplaying : isNowPlayingPage ? queueInfo : npInfo}}</div>
 </v-toolbar-title>
  <v-spacer class="drag-area"></v-spacer>
@@ -286,11 +286,20 @@ Vue.component('lms-toolbar', {
                 bus.$emit('playerCommand', [this.playerStatus.isplaying ? 'pause' : 'play']);
             }
         },
-        showSleep() {
-            if (this.$store.state.visibleMenus.size>0 || this.noPlayer) {
+        openSleep(event) {
+            if (IS_MOBILE) {
+                bus.$emit('navDrawer');
                 return;
             }
             bus.$emit('dlg.open', 'sleep', this.$store.state.player);
+        },
+        openAlarms(event) {
+            if (IS_MOBILE) {
+                bus.$emit('navDrawer');
+                return;
+            }
+            event.preventDefault();
+            bus.$emit('dlg.open', 'playersettings', undefined, 'alarms');
         },
         cancelDisconnectedTimer() {
             if (undefined!==this.disconnectedTimer) {

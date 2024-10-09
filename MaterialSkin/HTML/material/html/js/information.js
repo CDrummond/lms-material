@@ -87,6 +87,7 @@ Vue.component('lms-information-dialog', {
      <li><a class="lms-link" href="https://forums.slimdevices.com/showthread.php?109624-Announce-Material-Skin" target="_blank">{{i18n('Lyrion support forums')}}</a></li>
      <li><div class="lms-link cursor" @click="openTechInfo">{{i18n('Lyrion technical information')}}</div></li>
      <li><a class="lms-link" href="https://github.com/CDrummond/lms-material" target="_blank">{{i18n('GitHub development page')}}</a></li>
+     <li><div class="lms-link cursor" @click="openHelp">{{i18n('Help page')}}</div></li>
     </ul>
    </p>
 
@@ -385,6 +386,9 @@ Vue.component('lms-information-dialog', {
         },
         openTechInfo() {
             bus.$emit('dlg.open', 'iframe', '/material/html/docs/index.html', i18n('Lyrion technical information'), undefined, IFRAME_HOME_CLOSES_DIALOGS);
+        },
+        openHelp() {
+            bus.$emit('dlg.open', 'iframe', '/material/html/material-skin/index.html', i18n('Help'), undefined, IFRAME_HOME_CLOSES_DIALOGS);
         },
         rescan(item) {
             let now = new Date().getTime();

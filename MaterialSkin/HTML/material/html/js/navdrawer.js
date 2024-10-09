@@ -49,6 +49,10 @@ Vue.component('lms-navdrawer', {
       <v-btn v-if="item.canpoweroff" icon style="float:right" v-longpress:stop="togglePower" :id="index+'-power-btn'" :title="(item.id==player.id && playerStatus.ison) || item.ison ? i18n('Switch off %1', item.name) : i18n('Switch on %1', item.name)"><v-icon v-bind:class="{'dimmed': (item.id==player.id ? !playerStatus.ison : !item.ison)}">power_settings_new</v-icon></v-btn>
      </v-list-tile-action>
    </v-list-tile>
+   <v-list-tile v-if="connected && player && item.id === player.id && (playerStatus.sleepTime || playerStatus.alarmStr)" class="hide-for-mini status">
+    <div v-if="playerStatus.sleepTime" class="link-item" @click="bus.$emit('dlg.open', 'sleep', player)"><v-icon class="player-status-icon">hotel</v-icon> {{playerStatus.sleepTime | displayTime}}</div>
+    <div v-if="playerStatus.alarmStr" class="link-item" @click="bus.$emit('dlg.open', 'playersettings', undefined, 'alarms')"><v-icon class="player-status-icon">alarm</v-icon> {{playerStatus.alarmStr}}</div>
+   </v-list-tile>
   </template>
 
   <v-divider v-if="!noPlayer && (undefined!=appLaunchPlayer || ((players && players.length>1) || playerStatus.sleepTime || otherPlayers.length>0))" class="hide-for-mini"></v-divider>
@@ -70,19 +74,6 @@ Vue.component('lms-navdrawer', {
     <v-list-tile-content><v-list-tile-title>{{action.title}}</v-list-tile-title></v-list-tile-content>
    </v-list-tile>
   </template>
-
-  <v-list-tile v-if="connected && playerStatus.sleepTime" @click="bus.$emit('dlg.open', 'sleep', player)" class="hide-for-mini">
-   <v-list-tile-avatar><v-icon>hotel</v-icon></v-list-tile-avatar>
-   <v-list-tile-content>
-    <v-list-tile-title>{{playerStatus.sleepTime | displayTime}}</v-list-tile-title>
-   </v-list-tile-content>
-  </v-list-tile>
-  <v-list-tile v-if="connected && playerStatus.alarmStr" @click="bus.$emit('dlg.open', 'playersettings', undefined, 'alarms')" class="hide-for-mini">
-   <v-list-tile-avatar><v-icon>alarm</v-icon></v-list-tile-avatar>
-   <v-list-tile-content>
-    <v-list-tile-title>{{playerStatus.alarmStr}}</v-list-tile-title>
-   </v-list-tile-content>
-  </v-list-tile>
 
   <v-divider v-if="!noPlayer"></v-divider>
  </v-list>

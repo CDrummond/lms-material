@@ -476,6 +476,22 @@ html, .mini-player {
  font-weight:var(--std-weight);
 }
 
+.v-navigation-drawer .status {
+ opacity:var(--sub-opacity);
+}
+.v-navigation-drawer .status .link-item {
+ font-size:14px!important;
+ padding-right:4px;
+}
+.v-navigation-drawer .status .link-item i{
+ margin-top:-4px;
+}
+
+.v-navigation-drawer .status .v-list__tile {
+ height:22px!important;
+ margin-left:50px!important;
+ margin-right:50px!important;
+}
 .np-info .v-list__tile__title, .np-info .browse-header .v-list__tile__title, .np-info .grid-header .v-list__tile__title {
  font-size:calc(var(--std-font-size) * var(--np-zoom-list)) !important;
 }

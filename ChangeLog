@@ -16,6 +16,7 @@ x.x.x
 11. Work-around item selection apparing 'stuck' after clear selection.
 12. Remove 'Help' action from menu, and move link into 'Information' dialog.
 13. Make sleep and alarm icons clickable links on non-mobile devices.
+14. Combine sleep and alarm status items into 1 line in navigation drawer.
 
 5.3.4
 -----

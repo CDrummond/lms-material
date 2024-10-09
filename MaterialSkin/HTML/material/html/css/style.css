@@ -998,7 +998,7 @@ div.v-subheader {
 
 .subtoolbar-title {
  margin-top:calc(16px - var(--std-font-size)) !important;
- margin-left:1px;
+ margin-left:3px;
  margin-bottom:0px !important;
  padding-bottom:0px !important;
  min-width:2em;

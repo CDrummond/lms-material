@@ -42,5 +42,6 @@ var lmsOptions = {techInfo: getLocalStorageBool('techInfo', false),
                   npSwitchTimeout: getLocalStorageVal('npSwitchTimeout', 5*60),
                   userDefinedRoles: {},
                   excludedUserDefinedRoles: getLocalStorageVal('excludedUserDefinedRoles', '-'),
-                  randomMixDialogPinned: false
+                  randomMixDialogPinned: false,
+                  showSubtitle: getLocalStorageBool('showSubtitle', false)
                 };

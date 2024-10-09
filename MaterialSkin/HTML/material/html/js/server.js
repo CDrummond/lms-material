@@ -138,6 +138,15 @@ function parseUserDefinedRoles(data) {
     lmsOptions.excludedUserDefinedRoles = excludedUserDefinedRoles;
 }
 
+function parseTitleFormat(titleFormat, titleFormatWeb) {
+    let chosen = parseInt(titleFormatWeb);
+    let showSubtitle = chosen<titleFormat.length && titleFormat[chosen].indexOf('SUBTITLE')>=0;
+    if (showSubtitle!=lmsOptions.showSubtitle) {
+        lmsOptions.showSubtitle = showSubtitle;
+        setLocalStorageVal('showSubtitle', lmsOptions.showSubtitle);
+    }
+}
+
 function lmsCommand(playerid, command, commandId, timeout) {
     const URL = "/jsonrpc.js";
     var data = { id: undefined==commandId ? 0 : commandId, method: "slim.request", params: [playerid, command]};
@@ -384,7 +393,7 @@ var lmsServer = Vue.component('lms-server', {
                     this.cometd.subscribe('/slim/subscribe',
                                     function(res) { },
                                     {data:{response:'/'+this.cometd.getClientId()+'/slim/material-skin', request:['material-skin', ['notification']]}});
-                    this.updateUserDefinedRoles();
+                    this.updateServerPrefs();
                     this.updateFavorites();
                     this.updateReleaseTypes();
                 }
@@ -671,6 +680,12 @@ var lmsServer = Vue.component('lms-server', {
                     lmsOptions.time12hr=data[3].includes("%I");
                 } else if (data[2]=="userDefinedRoles") {
                     parseUserDefinedRoles(data[3]);
+                } else if (data[2]=="titleFormatWeb") {
+                    lmsCommand("", ["serverstatus", 0, 0, "prefs:titleFormatWeb,titleFormat"]).then(({data}) => {
+                        if (data && data.result && data.result.titleFormat && data.result.titleFormatWeb) {
+                            parseTitleFormat(data.result.titleFormat, data.result.titleFormatWeb);
+                        }
+                    });
                 }
             } else if (data[1]=="plugin.material-skin" && data[3]!=null && data[3]!=undefined) {
                 if (data[2]=="password") {
@@ -766,10 +781,15 @@ var lmsServer = Vue.component('lms-server', {
             }).catch(err => {
             });
         },
-        updateUserDefinedRoles() {
-            lmsCommand("", ["serverstatus", 0, 0, "prefs:userDefinedRoles"]).then(({data}) => {
-                if (data && data.result && data.result.userDefinedRoles) {
-                    parseUserDefinedRoles(data.result.userDefinedRoles);
+        updateServerPrefs() {
+            lmsCommand("", ["serverstatus", 0, 0, "prefs:userDefinedRoles,titleFormatWeb,titleFormat"]).then(({data}) => {
+                if (data && data.result) {
+                    if (data.result.userDefinedRoles) {
+                        parseUserDefinedRoles(data.result.userDefinedRoles);
+                    }
+                    if (data.result.titleFormat && data.result.titleFormatWeb) {
+                        parseTitleFormat(data.result.titleFormat, data.result.titleFormatWeb);
+                    }
                 }
             });
         },

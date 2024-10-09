@@ -575,7 +575,14 @@ function applyModifications(page, textCol, darkUi, src) {
             // See https://css-tricks.com/the-trick-to-viewport-units-on-mobile/
             let vh = window.innerHeight * 0.01;
             content.documentElement.style.setProperty('--vh', `${vh}px`);
-
+            if (iframeInfo.settingsSelector && iframeInfo.settingsSelector.value=='INTERFACE_SETTINGS') {
+                let elems = getElementsByClassName(content, "div", "settingSection");
+                if (undefined!=elems && elems.length>0) {
+                    let element = content.createElement("div");
+                    element.innerHTML="<div style=\"padding-top:16px\"><i>"+i18n("NOTE: Only some of these settings apply to 'Material Skin'. However these settings will affect other skins and hardware players.")+"</i></div><hr class=\"main-sep\"/>";
+                    elems[0].parentNode.insertBefore(element, elems[0]);
+                }
+            }
             content.documentElement.classList.add("lms-settings-"+page);
             // Look for any status message that needs to be shown in a toast or dialog (if there is an action)
             var statusarea = content.getElementById('statusarea');

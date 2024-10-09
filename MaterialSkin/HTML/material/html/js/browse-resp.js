@@ -1433,7 +1433,7 @@ function parseBrowseResp(data, parent, options, cacheKey, parentCommand, parentG
                     yearSet.add(year);
                     years.push(year);
                 }
-                if (i.subtitle) {
+                if (lmsOptions.showSubtitle && i.subtitle) {
                     subtitle = undefined==subtitle ? i.subtitle : (i.subtitle + SEPARATOR + subtitle);
                     if (undefined!=subtitleContext) {
                         subtitleContext = SEPARATOR + subtitleContext;

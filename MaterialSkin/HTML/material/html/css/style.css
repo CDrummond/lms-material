@@ -965,6 +965,7 @@ div.v-subheader {
 
 .maintoolbar-title {
  padding-left:10px;
+ padding-top:1px;
  font-size:var(--std-font-size) !important;
  font-weight:var(--bold-weight);
 }

@@ -406,7 +406,7 @@ Vue.component('lms-ui-settings', {
             colorList: { } ,
             userColors: [ ],
             colorToolbars: false,
-            tinted: false,
+            tinted: true,
             roundCovers : true,
             fontSize: 'r',
             fontSizes: [],

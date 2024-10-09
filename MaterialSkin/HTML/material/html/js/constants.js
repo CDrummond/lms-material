@@ -31,9 +31,10 @@ const IS_HIGH_DPI = matchMedia( "(-webkit-min-device-pixel-ratio: 2), (min-devic
 const IS_WINDOWS  = !IS_ANDROID && !IS_APPLE && checkPlatform('Win');
 const IS_LINUX    = !IS_ANDROID && !IS_APPLE && !IS_WINDOWS && checkPlatform('Linux');
 
+const COLOR_FROM_COVER = 'from-cover';
 const SKIP_SECONDS_VALS = [5, 10, 15, 30];
 const LMS_DEFAULT_THEME = 'dark';
-const LMS_DEFAULT_COLOR = 'blue';
+const LMS_DEFAULT_COLOR = COLOR_FROM_COVER;
 const LMS_BATCH_SIZE = 25000;
 const LMS_QUEUE_BATCH_SIZE = 5000;
 const LMS_MAX_NON_SCROLLER_ITEMS = 100;
@@ -192,7 +193,6 @@ const SKIN_INT_OPTS = ['respectFixedVol', 'commentAsDiscTitle', 'pagedBatchSize'
 const MSK_REV_SORT_OPT = "msk-revsort:1";
 
 const MIN_TIME_BETWEEN_VOL_UPDATES = 150;
-const COLOR_FROM_COVER = 'from-cover';
 
 const MBAR_NONE = 0;
 const MBAR_THIN = 1;

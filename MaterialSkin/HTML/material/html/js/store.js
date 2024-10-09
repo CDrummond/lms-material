@@ -247,8 +247,8 @@ const store = new Vuex.Store({
     state: {
         desktopLayout: false,
         mobileBar: MBAR_THIN,
-        showQueue: true,
-        pinQueue: true,
+        showQueue: false,
+        pinQueue: false,
         players: null, // List of players
         player: null, // Current player (from list)
         defaultPlayer: null,
@@ -302,7 +302,7 @@ const store = new Vuex.Store({
         mediaControls: false,
         downloadStatus: [],
         coloredToolbars: false,
-        tinted: false,
+        tinted: true,
         moveDialogs: false,
         autoCloseQueue: false,
         cMixSupported: 1==parseInt(getComputedStyle(document.documentElement).getPropertyValue('--color-mix-supported'))
@@ -527,8 +527,8 @@ const store = new Vuex.Store({
             if (!VALID_SKIP_SECONDS.has(state.skipFSeconds)) {
                 state.skipFSeconds = 30;
             }
-            setQueuePinned(state, getLocalStorageBool('pinQueue', state.pinQueue), true);
-            setQueueShown(state, getLocalStorageBool('showQueue', state.showQueue), true);
+            setQueuePinned(state, getLocalStorageBool('pinQueue', state.pinQueue), false);
+            setQueueShown(state, getLocalStorageBool('showQueue', state.showQueue), false);
 
             state.disabledBrowseModes = new Set(JSON.parse(getLocalStorageVal('disabledBrowseModes', '["myMusicFlopTracks", "myMusicTopTracks", "myMusicMusicFolder", "myMusicFileSystem", "myMusicArtistsComposers", "myMusicArtistsConductors", "myMusicArtistsJazzComposers", "myMusicAlbumsAudiobooks", "myMusicRecentlyChangeAlbums"]')));
             state.hidden = new Set(JSON.parse(getLocalStorageVal('hidden', JSON.stringify([TOP_EXTRAS_ID]))));

@@ -267,12 +267,6 @@ Vue.component('lms-advancedsearch-dialog', {
             this.sections.file.label=i18n('File');
             this.sections.stats.label=i18n('Stats');
 
-            if (lmsOptions.userDefinedRoles) {
-                for (let [key, value] of Object.entries(lmsOptions.userDefinedRoles)) {
-                    this.artistTypes.push({key: key, label:value.text});
-                }
-            }
-
             if (reset) {
                 this.params.me_titlesearch= {val:undefined, op:"LIKE"};
                 this.params.contributor_namesearch= {val:undefined, op:"LIKE", types:[1, 5]};
@@ -294,6 +288,15 @@ Vue.component('lms-advancedsearch-dialog', {
                 this.params.filesize= {val:undefined, op:">"};
                 this.params.comments_value= {val:undefined, op:"LIKE"};
                 this.params.lyrics= {val:undefined, op:"LIKE"};
+            }
+
+            if (lmsOptions.userDefinedRoles) {
+                for (let [key, value] of Object.entries(lmsOptions.userDefinedRoles)) {
+                    this.artistTypes.push({key: key, label:value.text});
+                    if (reset && value.include) {
+                        this.params.contributor_namesearch.types.push(key);
+                    }
+                }
             }
 
             lmsCommand("", ["material-skin", "adv-search-params"]).then(({data}) => {

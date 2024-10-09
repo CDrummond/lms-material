@@ -297,7 +297,7 @@ Vue.component('lms-navdrawer', {
             }
         },
         menuAction(id) {
-            if (TB_UI_SETTINGS.id==id) {appQuit
+            if (TB_UI_SETTINGS.id==id) {
                 bus.$emit('dlg.open', 'uisettings');
             } else if (TB_PLAYER_SETTINGS.id==id) {
                 if (this.connected) {

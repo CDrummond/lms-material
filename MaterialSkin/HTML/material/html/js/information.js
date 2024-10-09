@@ -11,7 +11,7 @@ Vue.component('lms-information-dialog', {
 <v-dialog v-model="show" v-if="show" persistent no-click-animation scrollable fullscreen>
  <v-card>
   <v-card-title class="settings-title">
-   <v-toolbar app class="dialog-toolbar" @mousedown="mouseDown" id="information-toolbar">
+   <v-toolbar app-data class="dialog-toolbar" @mousedown="mouseDown" id="information-toolbar">
     <div class="drag-area-left"></div>
     <v-btn flat icon v-longpress:stop="close" :title="ttShortcutStr(i18n('Go back'), 'esc')"><v-icon>arrow_back</v-icon></v-btn>
     <v-toolbar-title>

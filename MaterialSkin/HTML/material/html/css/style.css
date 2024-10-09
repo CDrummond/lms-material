@@ -418,12 +418,13 @@ html, .mini-player {
 
 .lms-toolbar > .v-toolbar__content, .dialog-toolbar > .v-toolbar__content {
  height:calc(var(--main-toolbar-height) - var(--top-pad)) !important;
- margin-left:-10px !important;
- margin-right:-20px !important;
+ margin-left:-9px !important;
+ margin-right:-9px !important;
 }
 
-.lms-toolbar-no-menu > .v-toolbar__content {
- margin-right:-19px !important;
+.dialog-toolbar > .v-toolbar__content {
+ margin-left:-3px !important;
+ margin-right:3px !important;
 }
 
 .nd-top {
@@ -434,20 +435,29 @@ html, .mini-player {
  height:var(--bottom-pad)!important;
 }
 
+.v-list__tile__avatar {
+ min-width:54px;
+}
+
 .v-navigation-drawer,
 .theme--dark .v-navigation-drawer,
 .theme--light .v-navigation-drawer {
  background-color: var(--popup-background-color);
  border-radius: 0px 12px 12px 0px;
+ margin-left:-5px;
 }
 
 .v-navigation-drawer div[role="listitem"] .v-list__tile {
- margin:2px 8px 2px 8px;
+ margin:2px 3px 2px 8px;
  border-radius: 24px;
 }
 
 .v-navigation-drawer div[role="listitem"] .v-list__tile .v-list__tile__avatar {
  margin-left:-8px;
+}
+
+.v-navigation-drawer .v-divider {
+ margin:0px 8px 0px 8px;
 }
 
 .v-navigation-drawer .v-list,
@@ -601,6 +611,10 @@ div.v-subheader {
  height:calc(var(--pq-album-header) - 1px) !important;
 }
 
+.pq-albumstyle img {
+ margin-left:2px;
+}
+
 .lms-list-album .pq-track,
 .lms-list-album .pq-track .v-list__tile {
  height:calc(var(--pq-album-track) - 1px) !important;
@@ -639,11 +653,12 @@ div.v-subheader {
 .indent-left .lms-list-item a,
 .indent-both .browse-html,
 .indent-right .browse-html {
- padding-left:calc(71px - var(--jump-list-adjust)) !important;
+ padding-left:calc(64px - var(--jump-list-adjust)) !important;
 }
 
+.lms-list .v-list__tile,
 .detailed-sub .lms-image-grid .vue-recycle-scroller__item-view a {
- padding:0 16px !important;
+ padding:0 12px 0 10px !important;
 }
 
 .detailed-sub .lms-list-item a .v-avatar {
@@ -658,14 +673,14 @@ div.v-subheader {
 .indent-right .vue-recycle-scroller__item-view a,
 .indent-right .lms-list-item a,
 .indent-right .browse-html {
- padding-right:71px !important;
+ padding-right:64px !important;
 }
 
 .indent-both .vue-recycle-scroller__item-view a,
 .indent-both .lms-list-item a,
 .indent-both .browse-html {
- padding-left:calc(171px - var(--jump-list-adjust)) !important;
- padding-right:171px !important;
+ padding-left:calc(161px - var(--jump-list-adjust)) !important;
+ padding-right:161px !important;
 }
 
 .browse-html a,
@@ -876,7 +891,7 @@ div.v-subheader {
 .lms-list .emblem, .lms-list-jump .emblem {
  position:absolute;
  top:1px !important;
- left:39px;
+ left:35px;
  width:calc(var(--small-icon-size) + 2px) !important;
  height:calc(var(--small-icon-size) + 2px) !important;
  border-radius:50% !important;
@@ -974,7 +989,7 @@ div.v-subheader {
  white-space:nowrap;
  overflow-x:hidden;
  overflow-y:hidden;
- padding:2px 4px 0px 12px;
+ padding:2px 7px 0px 7px;
 }
 
 .detailed-sub .subtoolbar {
@@ -983,7 +998,7 @@ div.v-subheader {
 
 .subtoolbar-title {
  margin-top:calc(16px - var(--std-font-size)) !important;
- margin-left:4px;
+ margin-left:1px;
  margin-bottom:0px !important;
  padding-bottom:0px !important;
  min-width:2em;
@@ -996,7 +1011,7 @@ div.v-subheader {
 }
 
 .toolbar-nobtn-pad {
- width:8px;
+ width:10px;
 }
 
 .subtoolbar-pad {
@@ -1010,7 +1025,7 @@ div.v-subheader {
 }
 
 .subtoolbar-subtitle {
- margin-left:4px;
+ margin-left:1px;
  padding-top:0px;
  margin-top:calc(12px - var(--small-font-size)) !important;
 }
@@ -1199,11 +1214,9 @@ div.v-subheader {
 }
 
 /* Stop vuetify changing padding when width changes */
-@media (max-width:959px) {
- .v-toolbar__content,
- .v-toolbar__extension {
-   padding:0 24px;
-  }
+.v-toolbar__content,
+.v-toolbar__extension {
+ padding:0 16px;
 }
 
 .dimmed {
@@ -1354,7 +1367,7 @@ div.v-subheader {
 
 .np-menu-fab {
  top:3px!important;
- right:8px!important;
+ right:5px!important;
  opacity:0.25;
 }
 
@@ -2043,8 +2056,8 @@ div.v-rating i.primary--text, div.v-rating i.accent--text {
 .pq-album-header {
  position:fixed;
  top:0px;
- left:72px;
- width:calc(100% - 76px);
+ left:68px;
+ width:calc(100% - 66px);
  font-weight:var(--bold-weight);
  padding-top:7px;
  padding-bottom:3px;
@@ -2062,7 +2075,7 @@ div.v-rating i.primary--text, div.v-rating i.accent--text {
 .pq-current-indicator {
  position:absolute;
  top:7px !important;
- left:36px !important;
+ left:31px !important;
  width:16px !important;
  height:16px !important;
  vertical-align:middle !important;
@@ -2071,11 +2084,11 @@ div.v-rating i.primary--text, div.v-rating i.accent--text {
 
 .lms-list3 .pq-current-indicator {
  top:8px !important;
- left:56px !important;
+ left:50px !important;
 }
 
 .lms-list-album .pq-current-indicator {
- left:46px !important;
+ left:41px !important;
 }
 
 .pq-text {
@@ -2100,7 +2113,7 @@ div.v-rating i.primary--text, div.v-rating i.accent--text {
  font-size:var(--small-font-size);
  font-weight:var(--bold-weight);
  opacity:1.0;
- margin-right:9px;
+ margin-right:11px;
  margin-top:2px;
  margin-left:4px;
  text-align:end;
@@ -2110,10 +2123,14 @@ div.v-rating i.primary--text, div.v-rating i.accent--text {
 .pq-time-r {
  min-width:62px;
 }
+.pq-time-ns {
+ margin-right:-6px;
+}
+
 .pq-rating {
  position:fixed;
  opacity:var(--sub-opacity);
- right:19px;
+ right:12px;
  bottom:-4px;
 }
 
@@ -2159,7 +2176,7 @@ div.v-rating i.primary--text, div.v-rating i.accent--text {
 }
 
 .settings-title {
- margin:0px 0px 0px -2px!important;
+ margin:0px -12px 0px -6px!important;
  padding:0px !important;
  height:var(--main-toolbar-height) !important;
  max-height:var(--main-toolbar-height) !important;
@@ -2513,7 +2530,7 @@ div.v-subheader {
 .lms-avatar .v-avatar {
  width:calc(var(--list-elem-height) - 3px) !important;
  height:calc(var(--list-elem-height) - 3px) !important;
- margin-left:-4px;
+ margin-left:-2px;
 }
 
 .np-info .lms-avatar .v-avatar {
@@ -2584,7 +2601,7 @@ div.v-subheader {
 
 .dst-home, .dst-home:hover {
  position:fixed;
- left:12px;
+ left:7px;
  bottom:2px;
 }
 
@@ -2740,7 +2757,7 @@ div.v-subheader {
 
 .queue-action {
  min-width:44px !important;
- margin-right:-12px;
+ margin-right:-14px;
  margin-top:-1px;
 }
 
@@ -3305,12 +3322,9 @@ div.v-subheader {
  padding-left:0px!important;
 }
 
-.v-toolbar__title:not(:first-child) {
- margin-left: 10px;
-}
-
+.v-toolbar__title:not(:first-child),
 .v-dialog--fullscreen .v-toolbar__title:not(:first-child) {
- margin-left: 12px;
+ margin-left: 9px;
 }
 
 .highlight-drop {
@@ -3735,7 +3749,7 @@ div.v-subheader {
  display:block;
  width:calc(var(--sub-toolbar-height) - 5px);
  height:calc(var(--sub-toolbar-height) - 5px);
- margin-left:4px;
+ margin-left:2px;
  margin-right:4px;
  background-color:var(--image-background-color);
 }
@@ -3938,7 +3952,7 @@ div.v-subheader {
  border:2px solid var(--text-color);
  border-radius: 15px;
  position:fixed;
- right:calc(50% - 58px);
+ right:calc(50% - 60px);
  top:calc(var(--top-pad) + 9px);
 }
 

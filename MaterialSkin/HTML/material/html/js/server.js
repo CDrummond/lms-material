@@ -121,9 +121,9 @@ function parseUserDefinedRoles(data) {
         if (undefined!=data[key]['id'] && undefined!=data[key]['name']) {
             let id = parseInt(data[key]['id']);
             let lkey = key.toLocaleLowerCase();
-            let exclude = 1==parseInt(data[key]['exclude']);
-            lmsOptions.userDefinedRoles[id] = {role:key, lrole:lkey, text:data[key]['name'], exclude:exclude};
-            if (exclude) {
+            let include = 1==parseInt(data[key]['include']);
+            lmsOptions.userDefinedRoles[id] = {role:key, lrole:lkey, text:data[key]['name']};
+            if (!include) {
                 excluded.push(lkey);
             }
             ARTIST_TYPES.push(lkey);

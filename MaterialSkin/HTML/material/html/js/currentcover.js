@@ -202,7 +202,7 @@ var lmsCurrentCover = Vue.component('lms-currentcover', {
                     rgb = vRgb ? vRgb : avRgb;
                     let hsv = rgb2Hsv(rgb);
                     hsv[2]=0.8235; // Matches 'v' from [25,118,210]
-                    hsv[1]=Math.min(hsv[1], 0.6);
+                    hsv[1]=Math.min(hsv[1], 0.8);
                     rgb = hsv2Rgb(hsv);
 
                     let hexColor=rgb2Hex(rgb);

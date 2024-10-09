@@ -527,8 +527,8 @@ const store = new Vuex.Store({
             if (!VALID_SKIP_SECONDS.has(state.skipFSeconds)) {
                 state.skipFSeconds = 30;
             }
-            setQueuePinned(state, getLocalStorageBool('pinQueue', state.pinQueue), false);
-            setQueueShown(state, getLocalStorageBool('showQueue', state.showQueue), false);
+            setQueuePinned(state, getLocalStorageBool('pinQueue', state.pinQueue), true);
+            setQueueShown(state, getLocalStorageBool('showQueue', state.showQueue), true);
 
             state.disabledBrowseModes = new Set(JSON.parse(getLocalStorageVal('disabledBrowseModes', '["myMusicFlopTracks", "myMusicTopTracks", "myMusicMusicFolder", "myMusicFileSystem", "myMusicArtistsComposers", "myMusicArtistsConductors", "myMusicArtistsJazzComposers", "myMusicAlbumsAudiobooks", "myMusicRecentlyChangeAlbums"]')));
             state.hidden = new Set(JSON.parse(getLocalStorageVal('hidden', JSON.stringify([TOP_EXTRAS_ID]))));

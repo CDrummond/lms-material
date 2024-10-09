@@ -3429,6 +3429,7 @@ div.v-subheader {
 
 .other-setting .v-list__tile__title {
  height:48px;
+ padding-left:16px;
 }
 
 .avs-title {

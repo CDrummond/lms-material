@@ -50,8 +50,8 @@ Vue.component('lms-navdrawer', {
      </v-list-tile-action>
    </v-list-tile>
    <v-list-tile v-if="connected && player && item.id === player.id && (playerStatus.sleepTime || playerStatus.alarmStr)" class="hide-for-mini status">
-    <div v-if="playerStatus.sleepTime" class="link-item" @click="bus.$emit('dlg.open', 'sleep', player)"><v-icon class="player-status-icon">hotel</v-icon> {{playerStatus.sleepTime | displayTime}}</div>
-    <div v-if="playerStatus.alarmStr" class="link-item" @click="bus.$emit('dlg.open', 'playersettings', undefined, 'alarms')"><v-icon class="player-status-icon">alarm</v-icon> {{playerStatus.alarmStr}}</div>
+    <div v-if="playerStatus.sleepTime" class="link-item" @click="show=false; bus.$emit('dlg.open', 'sleep', player)"><v-icon class="player-status-icon">hotel</v-icon> {{playerStatus.sleepTime | displayTime}}</div>
+    <div v-if="playerStatus.alarmStr" class="link-item" @click="show=false; bus.$emit('dlg.open', 'playersettings', undefined, 'alarms')"><v-icon class="player-status-icon">alarm</v-icon> {{playerStatus.alarmStr}}</div>
    </v-list-tile>
   </template>
 

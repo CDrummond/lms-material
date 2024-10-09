@@ -269,9 +269,7 @@ Vue.component('lms-advancedsearch-dialog', {
 
             if (lmsOptions.userDefinedRoles) {
                 for (let [key, value] of Object.entries(lmsOptions.userDefinedRoles)) {
-                    if (!value.exclude) {
-                        this.artistTypes.push({key: key, label:value.text});
-                    }
+                    this.artistTypes.push({key: key, label:value.text});
                 }
             }
 

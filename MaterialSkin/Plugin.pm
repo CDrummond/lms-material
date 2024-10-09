@@ -1248,12 +1248,10 @@ sub _cliCommand {
 
         my $roles = $serverprefs->get('userDefinedRoles');
         foreach my $role (keys %{$roles}) {
-            if (!$roles->{$role}->{exclude}) {
-                my $term = "contributor_namesearch.active" . $roles->{$role}->{id};
-                my $val = $request->getParam($term);
-                if ($val) {
-                    $params->{'search.' . $term} = $val;
-                }
+            my $term = "contributor_namesearch.active" . $roles->{$role}->{id};
+            my $val = $request->getParam($term);
+            if ($val) {
+                $params->{'search.' . $term} = $val;
             }
         }
 

@@ -481,7 +481,7 @@ html, .mini-player {
  opacity:var(--sub-opacity);
 }
 .v-navigation-drawer .status .link-item {
- font-size:14px!important;
+ font-size:var(--small-font-size)!important;
  padding-right:4px;
 }
 .v-navigation-drawer .status .link-item i{

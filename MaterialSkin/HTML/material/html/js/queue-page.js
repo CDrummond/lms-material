@@ -1065,9 +1065,9 @@ var lmsQueue = Vue.component("lms-queue", {
                     return;
                 } else if (this.items.length>=1) {
                     let opts = [
-                        { val:0, title:i18n("Copy the queue to:")},
-                        { val:1, title:i18n("Move the queue to:")},
-                        { val:2, title:i18n("Swap the queue with:")}
+                        { val:0, title:i18n("Copy the queue to")},
+                        { val:1, title:i18n("Move the queue to")},
+                        { val:2, title:i18n("Swap the queue with")}
                     ]
                     let players = [ ];
                     for (let i=0, loop=this.$store.state.players, len=loop.length; i<len; ++i) {

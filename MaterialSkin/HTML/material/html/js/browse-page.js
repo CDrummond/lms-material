@@ -1918,7 +1918,6 @@ var lmsBrowse = Vue.component("lms-browse", {
                         this.items = arrayMove(this.top, this.dragIndex, to);
                         this.saveTopList();
                     } else if (this.current) {
-                        var command = [];
                         if (this.current.section==SECTION_FAVORITES) {
                             var fromId = this.items[this.dragIndex].id.startsWith("item_id:")
                                             ? this.items[this.dragIndex].id.replace("item_id:", "from_id:")
@@ -1926,12 +1925,21 @@ var lmsBrowse = Vue.component("lms-browse", {
                             var toId = this.items[to].id.startsWith("item_id:")
                                             ? this.items[to].id.replace("item_id:", "to_id:")
                                             : "to_id:"+this.items[to].params.item_id;
-                            command = ["favorites", "move", fromId, toId+(this.items[to].isFavFolder ? ".0" : "")];
+                            if (this.items[to].isFavFolder) {
+                                confirm(i18n("Move '%1' into '%2' folder, or move to position?", this.items[this.dragIndex].title, this.items[to].title), i18n("Folder"), undefined, i18n("Position")).then(res => {
+                                    if (res>0) {
+                                        lmsCommand(this.playerId(), ["favorites", "move", fromId, toId+(1==res ? ".0" : "")]).then(({data}) => {
+                                            this.refreshList();
+                                        });
+                                    }
+                                });
+                            } else {
+                                lmsCommand(this.playerId(), ["favorites", "move", fromId, toId]).then(({data}) => {
+                                    this.refreshList();
+                                });
+                            }
                         } else if (this.current.section==SECTION_PLAYLISTS) {
-                            command = ["playlists", "edit", "cmd:move", this.current.id, "index:"+this.dragIndex, "toindex:"+to];
-                        }
-                        if (command.length>0) {
-                            lmsCommand(this.playerId(), command).then(({data}) => {
+                            lmsCommand(this.playerId(), ["playlists", "edit", "cmd:move", this.current.id, "index:"+this.dragIndex, "toindex:"+to]).then(({data}) => {
                                 this.refreshList();
                             });
                         }

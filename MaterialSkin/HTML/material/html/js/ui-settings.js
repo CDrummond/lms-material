@@ -157,7 +157,7 @@ Vue.component('lms-ui-settings', {
     <v-list-tile>
      <v-list-tile-content @click="sortFavorites = !sortFavorites" class="switch-label">
       <v-list-tile-title>{{i18n('Sort favorites list')}}</v-list-tile-title>
-      <v-list-tile-sub-title>{{i18n('Alphabetically sort favorites, rather than server supplied order.')}} {{i18n('NOTE: Folders are always sorted, this setting only affects playable items.')}}</v-list-tile-sub-title>
+      <v-list-tile-sub-title>{{i18n('Alphabetically sort favorites, rather than server supplied order.')}}</v-list-tile-sub-title>
      </v-list-tile-content>
      <v-list-tile-action><m3-switch v-model="sortFavorites"></m3-switch></v-list-tile-action>
     </v-list-tile>

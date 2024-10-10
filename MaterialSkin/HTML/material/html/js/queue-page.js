@@ -192,7 +192,7 @@ function parseResp(data, showTrackNum, index, showRatings, queueAlbumStyle, queu
 
 var lmsQueue = Vue.component("lms-queue", {
   template: `
-<div :class="[!pinQueue ? nowPlayingExpanded ? 'pq-unpinned-np'+nowPlayingWide : 'pq-unpinned' : '']" id="queue-view">
+<div :class="[!pinQueue && showQueue ? nowPlayingExpanded ? 'pq-unpinned-np'+nowPlayingWide : 'pq-unpinned' : '']" id="queue-view">
 <lms-resizer v-if="!pinQueue && windowWide>0" varname="pq-unpinned-width"></lms-resizer>
  <div class="subtoolbar noselect" v-bind:class="{'list-details':pinQueue}" v-if="!desktopLayout || showQueue">
   <v-layout v-if="selection.size>0">

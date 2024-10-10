@@ -3414,6 +3414,10 @@ div.v-subheader {
  background-color:var(--drop-target-color)!important;
 }
 
+.lms-image-grid .drop-target {
+ border-radius:6px;
+}
+
 .active-player, .nd-active-player .v-list__tile,
 .msk-is-non-touch .v-navigation-drawer .nd-active-player .v-list__tile:hover {
  background-color:var(--pq-current-color)!important;

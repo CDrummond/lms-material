@@ -22,6 +22,7 @@ x.x.x
 17. Don't force favourite folders to always be first.
 18. If drag favourite over folder then prompt if moving into folder or moving
     to position in list.
+19. Allow drag'n'drop in grid view.
 
 5.3.4
 -----

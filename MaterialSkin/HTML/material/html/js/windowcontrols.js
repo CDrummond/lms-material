@@ -8,28 +8,28 @@
 
 Vue.component('lms-windowcontrols', {
     template: `
-<v-layout v-if="queryParams.tbarBtns>0" row wrap class="wc">
- <v-flex xs4 v-if="queryParams.tbarBtns&1"><v-btn outline icon class="wc-btn-o" @click="sendButton('min')"><img :src="'minimize' | svgIcon(dark)"></img></v-btn></v-flex>
- <v-flex xs4 v-if="queryParams.tbarBtns&2"><v-btn outline icon class="wc-btn-o" @click="sendButton('max')"><img :src="maximized ? 'restore': 'maximize' | svgIcon(dark)"></img></v-btn></v-flex>
- <v-flex xs4 v-if="queryParams.tbarBtns&4"><v-btn outline icon class="wc-btn-o wc-close" @click="sendButton('close')"><img :src="'close' | svgIcon(dark)"></img></v-btn></v-flex>
-</v-layout>
-<v-layout v-else row wrap class="wc">
- <v-flex xs4><v-btn flat icon class="wc-btn" @click="sendButton('min')"><v-icon class="wc-icn">remove</v-icon></v-btn></v-flex>
- <v-flex xs4><v-btn flat icon class="wc-btn" @click="sendButton('max')"><v-icon class="wc-icn">add</v-icon></v-btn></v-flex>
- <v-flex xs4><v-btn flat icon class="wc-btn wc-close" @click="sendButton('close')"><v-icon class="wc-icn">close</v-icon></v-btn></v-flex>
+<v-layout row wrap class="wc">
+ <v-flex v-for="(btn, index) in btns" xs4><v-btn outline icon class="wc-btn wc-btn-r" v-bind:class="{'wc-close':'close'==btn}" @click="sendButton(btn)"><img :src="btn=='max'&&maximized ? 'restore' : btn | svgIcon(dark)"></img></v-btn></v-flex>
 </v-layout>
 `,
     data () {
         return {
-            maximized:false
+            maximized:false,
+            btns:[]
         }
     },
     mounted() {
-        let numBtns = 3;
-        if (queryParams.tbarBtns>0) {
-            numBtns = ((queryParams.tbarBtns&1) ? 1 : 0) + ((queryParams.tbarBtns&2) ? 1 : 0) + ((queryParams.tbarBtns&4) ? 1 : 0)
+        if (undefined==queryParams.tbarBtnsRight) {
+            if (undefined==queryParams.tbarBtns) {
+                queryParams.tbarBtnsRight=['min', 'max', 'close'];
+            } else {
+                queryParams.tbarBtnsRight=queryParams.tbarBtns.split(',');
+            }
         }
-        document.documentElement.style.setProperty("--window-controls-space", ((numBtns*36)+12)+"px");
+        this.btns = queryParams.tbarBtnsRight;
+        let space = this.btns.length==1 ? 16 : 0;
+        document.documentElement.style.setProperty("--window-controls-padr", space+"px");
+        document.documentElement.style.setProperty("--window-controls-space", ((this.btns.length*32)+space)+"px");
         bus.$on('windowMaximized', function(isMax) {
             this.maximized = isMax;
         }.bind(this));

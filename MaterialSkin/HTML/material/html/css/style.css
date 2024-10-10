@@ -71,6 +71,7 @@
  --pq-current-album-color:rgba(var(--highlight-rgb),0.075);
  --drop-target-color:rgba(var(--highlight-rgb),0.5);
  --window-controls-space:0px;
+ --window-controls-padr:0px;
  --drag-area-height:100%;
  --window-area-left:0px;
  --window-area-right:0px;
@@ -3778,38 +3779,28 @@ div.v-subheader {
 }
 
 .wc {
+ padding-left:var(--window-controls-padr);
  min-width:var(--window-controls-space);
  max-width:var(--window-controls-space);
- padding-left:4px;
- padding-right:8px;
 }
 
 .wc-btn {
- width:24px!important;
- height:24px!important;
-}
-
-.wc-icn {
- width:18px!important;
- height:18px!important;
- font-size:18px!important;
- vertical-align:middle !important;
- border-radius:unset !important;
-}
-
-.wc-btn-o {
- width:20px!important;
- height:20px!important;
+ width:22px!important;
+ height:22px!important;
  opacity:0.5;
 }
 
-.wc-btn-o:hover {
-  opacity:1.0;
+.wc-btn-r {
+ margin-left:4px;
 }
 
-.wc-btn-o img {
- width:14px!important;
- height:14px!important;
+.wc-btn:hover {
+ opacity:1.0;
+}
+
+.wc-btn img {
+ width:16px!important;
+ height:16px!important;
 }
 
 .wc-close:hover {

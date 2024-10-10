@@ -16,11 +16,11 @@ Vue.component('lms-sync-dialog', {
      <v-flex xs12 class="dlgtitle">{{i18n("Select which players you would like to synchronise with '%1':", player.name)}}</v-flex>
      <v-flex xs12>
       <v-list class="sleep-list dialog-main-list">
-       <v-list-tile @click="toggleAll()">
+       <v-list-tile @click="toggleAll()" v-if="players.length>1">
         <v-list-tile-avatar :tile="true" class="lms-avatar"><v-icon>{{selectAllIcon}}</v-icon></v-list-tile-avatar>
         <v-list-tile-title class="sleep-item">{{i18n('Select All')}}</v-list-tile-title>
        </v-list-tile>
-       <v-divider></v-divider>
+       <v-divider v-if="players.length>1"></v-divider>
        <template v-for="(p, index) in players">
         <v-list-tile @click="p.synced=!p.synced; numSync+=(p.synced ? 1 : -1)">
          <v-list-tile-avatar :tile="true" class="lms-avatar"><v-icon>{{p.synced ? 'check_box' : 'check_box_outline_blank'}}</v-icon></v-list-tile-avatar>

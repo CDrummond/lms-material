@@ -112,7 +112,8 @@ Vue.component('lms-manage-players', {
           </v-list-tile-avatar>
           <v-list-tile-content v-if="isMainPlayer(player)" v-bind:class="{'dimmed': !player.ison}">
            <v-list-tile-title class="ellipsis cursor link-item" @click="setActive(player.id)"><obj :id="'pmgr-player-'+index"><v-icon v-if="player.icon.icon" class="pmgr-icon">{{player.icon.icon}}</v-icon><img v-else class="pmgr-icon svg-img" :src="player.icon.svg | svgIcon(darkUi)"></img>
-           <font v-bind:class="{'active-player-title':currentPlayer && currentPlayer.id === player.id}">{{player.name}}</font></obj><v-icon v-if="player.id==defaultPlayer" class="player-status-icon dimmed">check</v-icon><v-icon v-if="player.will_sleep_in" class="player-status-icon dimmed">hotel</v-icon><v-icon v-if="undefined!=player.alarm" class="player-status-icon dimmed">alarm</v-icon></v-list-tile-title>
+           <font v-bind:class="{'active-player-title':currentPlayer && currentPlayer.id === player.id}">{{player.name}}</font></obj><v-icon v-if="player.id==defaultPlayer" class="player-status-icon dimmed">check</v-icon><v-icon v-if="player.will_sleep_in" class="player-status-icon dimmed" v-bind:class="{'link-item':!IS_MOBILE}" @click.stop="openSleep(player)">hotel</v-icon><v-icon v-if="undefined!=player.alarm" class="player-status-icon dimmed" v-bind:class="{'link-item':!IS_MOBILE}" @click.stop="openAlarms(player)">alarm</v-icon>
+           </v-list-tile-title>
            <v-list-tile-sub-title class="ellipsis">{{player.track}}</v-list-tile-sub-title>
           </v-list-tile-content>
           <v-list-tile-content v-else v-bind:class="{'dimmed': !player.ison}">
@@ -819,6 +820,16 @@ Vue.component('lms-manage-players', {
         },
         mouseDown(ev) {
             toolbarMouseDown(ev);
+        },
+        openSleep(player) {
+            if (!IS_MOBILE) {
+                bus.$emit('dlg.open', 'sleep', player);
+            }
+        },
+        openAlarms(player) {
+            if (!IS_MOBILE) {
+                bus.$emit('dlg.open', 'playersettings', player, 'alarms', true);
+            }
         }
     },
     computed: {

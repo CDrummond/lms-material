@@ -17,6 +17,7 @@ x.x.x
 12. Remove 'Help' action from menu, and move link into 'Information' dialog.
 13. Make sleep and alarm icons clickable links on non-mobile devices.
 14. Combine sleep and alarm status items into 1 line in navigation drawer.
+15. Allow apps to have better control over titlebar buttons.
 
 5.3.4
 -----

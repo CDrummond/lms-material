@@ -3778,8 +3778,8 @@ div.v-subheader {
 }
 
 .wc {
- max-width:92px;
- min-width:92px;
+ min-width:var(--window-controls-space);
+ max-width:var(--window-controls-space);
  padding-left:4px;
  padding-right:8px;
 }
@@ -3795,6 +3795,21 @@ div.v-subheader {
  font-size:18px!important;
  vertical-align:middle !important;
  border-radius:unset !important;
+}
+
+.wc-btn-o {
+ width:20px!important;
+ height:20px!important;
+ opacity:0.5;
+}
+
+.wc-btn-o:hover {
+  opacity:1.0;
+}
+
+.wc-btn-o img {
+ width:14px!important;
+ height:14px!important;
 }
 
 .wc-close:hover {

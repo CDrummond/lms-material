@@ -763,7 +763,7 @@ function parseBrowseResp(data, parent, options, cacheKey, parentCommand, parentG
                 resp.items = resp.items.concat(after);
             } else if (isFavorites) {
                 if (options.sortFavorites) {
-                    resp.items.sort(titleSort);
+                    resp.items.sort(favSort);
                 }
             } else if (isRadiosTop) {
                 resp.items.sort(weightSort);

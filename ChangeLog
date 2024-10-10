@@ -19,7 +19,7 @@ x.x.x
 14. Combine sleep and alarm status items into 1 line in navigation drawer.
 15. Allow apps to have better control over titlebar buttons.
 16. Fix unpinned queue slide-in animation.
-17. Don't force favourite folders to always be first.
+17. Don't force favourite folders to always be first, only if sort is enabled.
 18. If drag favourite over folder then prompt if moving into folder or moving
     to position in list.
 19. Allow drag'n'drop in grid view.

@@ -114,7 +114,9 @@ my %ROLE_ICON_MAP = (
     'viola' => 'violinist',
     'violist' => 'violinist',
     'violin' => 'violinist',
-    'vocals' => 'vocalist'
+    'vocals' => 'vocalist',
+    'moods' => 'mood',
+    'themes' => 'theme'
 );
 
 sub initPlugin {

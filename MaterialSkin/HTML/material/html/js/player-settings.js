@@ -309,9 +309,6 @@ Vue.component('lms-player-settings', {
         showAlarms() {
             return this.$store.state.unlockAll && this.alarms.on
         },
-        coloredToolbars() {
-            return this.$store.state.coloredToolbars
-        },
         darkUi () {
             return this.$store.state.darkUi
         },

@@ -17,11 +17,11 @@ Vue.component('lms-toolbar', {
 </div>
 <v-btn icon class="toolbar-button" @click="bus.$emit('navDrawer')">
  <v-icon v-if="!connected" class="red">error</v-icon>
- <img v-else-if="updatesAvailable" class="svg-img" :src="'update' | menuIcon(darkUi, coloredToolbars)"></img>
- <img v-else-if="restartRequired" class="svg-img" :src="'restart' | menuIcon(darkUi, coloredToolbars)"></img>
+ <img v-else-if="updatesAvailable" class="svg-img" :src="'update' | menuIcon(darkUi)"></img>
+ <img v-else-if="restartRequired" class="svg-img" :src="'restart' | menuIcon(darkUi)"></img>
  <v-icon v-else>menu</v-icon>
 </v-btn>
-<v-toolbar-title v-bind:class="{'link-item':!coloredToolbars, 'link-item-ct': coloredToolbars, 'maintoolbar-title-clock':showClock}" @click="bus.$emit('navDrawer')">
+<v-toolbar-title class="link-item" v-bind:class="{'maintoolbar-title-clock':showClock}" @click="bus.$emit('navDrawer')">
  <div class="maintoolbar-title ellipsis" v-bind:class="{'dimmed': !playerStatus.ison, 'nd-title-fix':navdrawerVisible}">
   {{noPlayer ? trans.noplayer : player.name}}<v-icon v-if="playerStatus.sleepTime" class="player-status-icon dimmed" v-bind:class="{'link-item':!IS_MOBILE}" @click.stop="openSleep">hotel</v-icon><v-icon v-if="playerStatus.alarmStr" class="player-status-icon dimmed" v-bind:class="{'link-item':!IS_MOBILE}" @click.stop="openAlarms">alarm</v-icon><v-icon v-if="playerStatus.synced" class="player-status-icon dimmed" v-bind:class="{'link-item':!IS_MOBILE}" @click.stop="openSync">link</v-icon></div>
  <div v-if="!desktopLayout && !noPlayer && MBAR_NONE==mobileBar" class="maintoolbar-subtitle subtext ellipsis" v-bind:class="{'dimmed' : !playerStatus.ison}">{{playerStatus.count<1 ? trans.nothingplaying : isNowPlayingPage ? queueInfo : npInfo}}</div>
@@ -40,7 +40,7 @@ Vue.component('lms-toolbar', {
   <v-icon>{{infoOpen ? 'info' : 'info_outline'}}</v-icon>
  </v-btn>
  <v-btn icon v-else-if="!desktopLayout && MBAR_REP_NAV==mobileBar" @click="changePage" class="toolbar-button hide-for-mini" id="cp" :title="currentPage=='browse' ? trans.queue : trans.browse">
-  <img class="svg-img" :src="(currentPage=='browse' ? 'queue_music_outline' : 'library-music-outline') | svgIcon(darkUi, true, coloredToolbars)" oncontextmenu="return false;"></img>
+  <img class="svg-img" :src="(currentPage=='browse' ? 'queue_music_outline' : 'library-music-outline') | svgIcon(darkUi)" oncontextmenu="return false;"></img>
  </v-btn>
  <v-btn icon v-else-if="!desktopLayout && MBAR_THICK!=mobileBar && !isNowPlayingPage" v-longpress="playPauseButton" class="toolbar-button hide-for-mini" id="pp" :title="playerStatus.isplaying ? trans.pause : trans.play" v-bind:class="{'disabled':!LMS_P_MAI || (playerStatus.count<1 && !infoOpen)}">
   <v-icon>{{playerStatus.isplaying ? 'pause_circle_filled' : 'play_circle_filled'}}</v-icon>
@@ -53,7 +53,7 @@ Vue.component('lms-toolbar', {
  </v-btn>
  <v-btn icon :title="trans.toggleQueue | tooltip(LMS_TOGGLE_QUEUE_KEYBOARD,keyboardControl,true)" v-if="desktopLayout" @click.native.stop="toggleQueue()" class="toolbar-button hide-for-mini">
   <v-icon v-if="showQueue">queue_music</v-icon>
-  <img v-else class="svg-img" :src="'queue_music_outline' | svgIcon(darkUi, true, coloredToolbars&&!nowPlayingFull)"></img>
+  <img v-else class="svg-img" :src="'queue_music_outline' | svgIcon(darkUi)"></img>
  </v-btn>
  <div class="drag-area-right"></div>
  <lms-windowcontrols v-if="queryParams.nativeTitlebar"></lms-windowcontrols>
@@ -414,9 +414,6 @@ Vue.component('lms-toolbar', {
         downloadCount() {
             return this.$store.state.downloadStatus.length
         },
-        coloredToolbars() {
-            return this.$store.state.coloredToolbars
-        },
         nowPlayingFull() {
             return this.$store.state.nowPlayingFull && !this.infoOpen && this.$store.state.nowPlayingBackdrop && (this.desktopLayout ? this.nowPlayingExpanded : this.isNowPlayingPage)
         }
@@ -428,11 +425,11 @@ Vue.component('lms-toolbar', {
             }
             return (isNaN(value) ? 0 : value)+"%";
         },
-        svgIcon: function (name, dark, toolbar, coloredToolbars) {
-            return "/material/svg/"+name+"?c="+(dark || (toolbar && coloredToolbars) ? LMS_DARK_SVG : LMS_LIGHT_SVG)+"&r="+LMS_MATERIAL_REVISION;
+        svgIcon: function (name, dark) {
+            return "/material/svg/"+name+"?c="+(dark ? LMS_DARK_SVG : LMS_LIGHT_SVG)+"&r="+LMS_MATERIAL_REVISION;
         },
-        menuIcon: function (name, dark, coloredToolbars) {
-            return "/material/svg/menu-"+name+"?c="+(dark || coloredToolbars ? LMS_DARK_SVG : LMS_LIGHT_SVG)+"&c2="+(coloredToolbars ? LMS_DARK_SVG : LMS_UPDATE_SVG)+"&r="+LMS_MATERIAL_REVISION;
+        menuIcon: function (name, dark) {
+            return "/material/svg/menu-"+name+"?c="+(dark ? LMS_DARK_SVG : LMS_LIGHT_SVG)+"&c2="+LMS_UPDATE_SVG+"&r="+LMS_MATERIAL_REVISION;
         },
         tooltip: function (str, shortcut, showShortcut, shift) {
             return showShortcut ? ttShortcutStr(str, shortcut, shift) : str;

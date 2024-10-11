@@ -51,8 +51,7 @@ function updateUiSettings(state, val) {
     }
     if (undefined!=val.theme && state.chosenTheme!=val.theme) {
         state.chosenTheme=val.theme;
-        state.coloredToolbars = state.chosenTheme.endsWith("-colored");
-        state.theme=state.chosenTheme.startsWith(AUTO_THEME) ? autoTheme()+(state.coloredToolbars ? "-colored" : "") : state.chosenTheme;
+        state.theme=state.chosenTheme.startsWith(AUTO_THEME) ? autoTheme() : state.chosenTheme;
         setLocalStorageVal('theme', state.chosenTheme);
         themeChanged = true;
     }
@@ -301,7 +300,6 @@ const store = new Vuex.Store({
         twentyFourHour: false,
         mediaControls: false,
         downloadStatus: [],
-        coloredToolbars: false,
         tinted: true,
         moveDialogs: false,
         autoCloseQueue: false,
@@ -494,8 +492,7 @@ const store = new Vuex.Store({
             state.prevPage = getLocalStorageVal('prevPage', state.prevPage);
             state.chosenTheme = getLocalStorageVal('theme', state.chosenTheme);
             state.chosenTheme=state.chosenTheme.replace("darker", "dark");
-            state.coloredToolbars = state.chosenTheme.endsWith("-colored");
-            state.theme = state.chosenTheme.startsWith(AUTO_THEME) ? autoTheme()+(state.coloredToolbars ? "-colored" : "") : state.chosenTheme;
+            state.theme = state.chosenTheme.startsWith(AUTO_THEME) ? autoTheme() : state.chosenTheme;
             state.theme=state.theme.replace("darker", "dark");
             state.darkUi = !state.theme.startsWith('light') && state.theme.indexOf("/light/")<0;
             state.color = getLocalStorageVal('color', state.color);
@@ -727,7 +724,7 @@ const store = new Vuex.Store({
             state.downloadStatus = val;
         },
         toggleDarkLight(state) {
-            let theme = autoTheme()+(state.coloredToolbars ? "-colored" : "");
+            let theme = autoTheme();
             if (theme!=state.theme) {
                 state.theme=theme;
                 state.darkUi = !state.theme.startsWith('light') && state.theme.indexOf("/light/")<0;

@@ -85,7 +85,7 @@ Vue.component('lms-manage-players', {
     <v-toolbar-title class="ellipsis" v-else>{{TB_MANAGE_PLAYERS.title}}</v-toolbar-title>
     <v-spacer v-if="!draggingSyncedPlayer" class="drag-area"></v-spacer>
     <v-btn icon @click="sleepAll($event)" :title="i18n('Set sleep time for all players')" v-if="!draggingSyncedPlayer && players.length>1"><v-icon>hotel</v-icon></v-btn>
-    <v-btn icon @click="createGroup($event)" :title="i18n('Create group player')" v-if="!draggingSyncedPlayer && manageGroups && unlockAll"><img class="svg-img" :src="'speaker-group-add' | svgIcon(darkUi, coloredToolbars)"></img></v-btn>
+    <v-btn icon @click="createGroup($event)" :title="i18n('Create group player')" v-if="!draggingSyncedPlayer && manageGroups && unlockAll"><img class="svg-img" :src="'speaker-group-add' | svgIcon(darkUi)"></img></v-btn>
     <div class="drag-area-right"></div>
     <lms-windowcontrols v-if="queryParams.nativeTitlebar"></lms-windowcontrols>
    </v-toolbar>
@@ -854,14 +854,11 @@ Vue.component('lms-manage-players', {
         },
         unlockAll() {
             return this.$store.state.unlockAll
-        },
-        coloredToolbars() {
-            return this.$store.state.coloredToolbars
         }
     },
     filters: {
-        svgIcon: function (name, dark, coloredToolbars) {
-            return "/material/svg/"+name+"?c="+(dark || coloredToolbars ? LMS_DARK_SVG : LMS_LIGHT_SVG)+"&r="+LMS_MATERIAL_REVISION;
+        svgIcon: function (name, dark) {
+            return "/material/svg/"+name+"?c="+(dark ? LMS_DARK_SVG : LMS_LIGHT_SVG)+"&r="+LMS_MATERIAL_REVISION;
         }
     },
     watch: {

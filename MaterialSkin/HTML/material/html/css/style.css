@@ -83,7 +83,6 @@
  --desktop-np-bottom-pad:0px;
  --dialog-opacity:1.0;
  --pbar-bgnd:rgba(32, 32, 32, 0.1);
- --pbar-colored-bgnd:rgba(220, 220, 220, 0.3);
  --50vh:calc(var(--vh, 1vh)*50);
  --100vh:calc(var(--vh, 1vh)*100);
  --np-zoom:1.0;
@@ -2496,16 +2495,13 @@ div.v-rating i.primary--text, div.v-rating i.accent--text {
  border-radius:unset !important;
 }
 
-.link-item, .link-item-ct {
+.link-item {
  cursor:pointer;
 }
 
 /*@media (hover: hover) and (pointer: fine) {*/
  .msk-is-non-touch .link-item:hover, .msk-is-non-touch .np-bar .link-item:hover {
   color:var(--active-color)!important;
- }
- .msk-is-non-touch .link-item-ct:hover, .msk-is-non-touch .np-bar .link-item-ct:hover {
-  opacity:var(--sub-opacity)!important;
  }
 /*}*/
 

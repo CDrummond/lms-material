@@ -371,10 +371,6 @@
  to{width:56px}
 }
 
-.pill-ct {
- background-color:white;
-}
-
 .inactive-nav div span, .inactive-nav div i, .inactive-nav div img {
  opacity:var(--inactive-nav-opacity);
  color:var(--bottom-toolbar-text-color) !important;

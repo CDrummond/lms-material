@@ -533,13 +533,7 @@ function emitTextColor() {
         }
     }
     bus.$nextTick(function () {
-        let top = undefined;
-        if (undefined!=store.state.activeDialog && !store.state.darkUi && store.state.coloredToolbars) {
-            let elems = getElementsByClassName(document.documentElement, "nav", "dialog-toolbar");
-            top=getComputedStyle(elems.length>0 ? elems[0] : document.documentElement).getPropertyValue("--dialog-toolbar-text-color");
-        } else {
-            top = getComputedStyle(window.mskToolbarElem).getPropertyValue("--top-toolbar-text-color");
-        }
+        let top = getComputedStyle(window.mskToolbarElem).getPropertyValue("--top-toolbar-text-color");
         if (window.lastMskTextColors.top==top) {
             return;
         }
@@ -558,16 +552,13 @@ function emitTextColor() {
 function setTheme(theme, color, prevColor) {
     if (theme!=undefined) {
         theme=theme.replace("darker", "dark");
-        let t = theme.split('-');
-        let variant = t.length>1 && ('colored'==t[t.length-1] || 'standard'==t[t.length-1]) ? t.pop() : 'standard';
-        let themeName = t.join('-');
+        let themeName = theme.replace("-colored", "");
 
         if (themeName.startsWith("user:")) {
             changeLink("/material/usertheme/" + themeName.substring(5) + "?r=" + LMS_MATERIAL_REVISION, "themecss");
         } else {
             changeLink("html/css/themes/" + themeName + ".css?r=" + LMS_MATERIAL_REVISION, "themecss");
         }
-        changeLink("html/css/variant/" + variant + ".css?r=" + LMS_MATERIAL_REVISION, "variantcss");
         emitTextColor();
         if (1==queryParams.nativeTheme) {
             bus.$nextTick(function () {
@@ -1012,7 +1003,7 @@ function emitToolbarColors(top, bot, tries) {
 
 const FULLSCREEN_DIALOGS = new Set(["uisettings", "playersettings", "info", "iframe", "manage"]);
 function emitToolbarColorsFromState(state) {
-    if (0!=queryParams.nativeColors || COLOR_FROM_COVER==state.color || state.coloredToolbars || (state.tinted && state.cMixSupported)) {
+    if (0!=queryParams.nativeColors || COLOR_FROM_COVER==state.color || (state.tinted && state.cMixSupported)) {
         let topColorVar = "--top-toolbar-color";
         let botColorVar = "--bottom-toolbar-color";
         for (var i=state.openDialogs.length; i>=0; --i) {

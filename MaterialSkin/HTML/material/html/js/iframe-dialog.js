@@ -942,9 +942,6 @@ Vue.component('lms-iframe-dialog', {
         darkUi () {
             return this.$store.state.darkUi
         },
-        coloredToolbars() {
-            return this.$store.state.coloredToolbars
-        },
         homeButton() {
             return this.$store.state.homeButton
         },

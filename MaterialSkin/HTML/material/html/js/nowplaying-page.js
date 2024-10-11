@@ -215,19 +215,19 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
      <v-list-tile-sub-title v-else-if="playerStatus.current.title">&#x22ef;</v-list-tile-sub-title>
     </v-list-tile-content>
     <v-list-tile-action v-if="desktopLayout">
-     <div v-if="playerStatus.playlist.count>1 && (npBarRatings || techInfo)" class="np-bar-time " v-bind:class="{'np-bar-time-r': techInfo || npBarRatings}"><obj v-bind:class="{'link-item-ct':coloredToolbars,'link-item':!coloredToolbars}" @click="toggleTime()">{{formattedTime}}</obj>{{SEPARATOR}}<obj v-bind:class="{'link-item':totalTogglesQueue && !coloredToolbars, 'link-item-ct':totalTogglesQueue && coloredToolbars}" @click.stop="trackCountClicked">{{playerStatus.playlist.current | trackCount(playerStatus.playlist.count)}}</obj></div>
-     <div v-else class="np-bar-time" v-bind:class="{'link-item-ct':coloredToolbars,'link-item':!coloredToolbars,'np-bar-time-r': techInfo || npBarRatings}" @click="toggleTime()">{{formattedTime}}</div>
+     <div v-if="playerStatus.playlist.count>1 && (npBarRatings || techInfo)" class="np-bar-time " v-bind:class="{'np-bar-time-r': techInfo || npBarRatings}"><obj class"link-item" @click="toggleTime()">{{formattedTime}}</obj>{{SEPARATOR}}<obj v-bind:class="{'link-item':totalTogglesQueue}" @click.stop="trackCountClicked">{{playerStatus.playlist.current | trackCount(playerStatus.playlist.count)}}</obj></div>
+     <div v-else class="np-bar-time link-item" v-bind:class="{'np-bar-time-r': techInfo || npBarRatings}" @click="toggleTime()">{{formattedTime}}</div>
      <div v-if="techInfo" class="np-bar-tech ellipsis">{{technicalInfo}}</div>
      <div v-else-if="npBarRatings && (repAltBtn.show || shuffAltBtn.show)" class="np-bar-rating np-thumbs-desktop"><v-btn v-if="repAltBtn.show" :title="repAltBtn.tooltip" flat icon v-longpress="repeatClicked" class="np-std-button" v-bind:class="{'disabled':noPlayer}"><v-icon v-if="repAltBtn.icon" class="media-icon">{{repAltBtn.icon}}</v-icon><img v-else :src="repAltBtn.image" class="btn-img"></img></v-btn><v-btn v-if="shuffAltBtn.show" :title="shuffAltBtn.tooltip" flat icon @click="shuffleClicked" class="np-std-button"><v-icon v-if="shuffAltBtn.icon" class="media-icon">{{shuffAltBtn.icon}}</v-icon><img v-else :src="shuffAltBtn.image" class="btn-img"></img></v-btn></div>
      <v-rating v-else-if="showRatings" class="np-bar-rating" v-model="rating.value" half-increments hover clearable @click.native="setRating(true)" :readonly="undefined==LMS_P_RP"></v-rating>
-     <div v-else-if="playerStatus.playlist.count>1" class="np-bar-tech" v-bind:class="{'link-item':totalTogglesQueue && !coloredToolbars, 'link-item-ct':totalTogglesQueue && coloredToolbars}" @click.stop="trackCountClicked">{{playerStatus.playlist.current | trackCount(playerStatus.playlist.count)}} <v-btn class="np-bar-queue" flat icon v-if="!pinQueue"><v-icon v-if="showQueue">queue_music</v-icon><img v-else class="svg-img" :src="'queue_music_outline' | svgIcon(darkUi||coloredToolbars)"></img></v-btn></div>
-     <div v-else-if="!pinQueue" class="np-bar-tech"><v-btn class="np-bar-queue" flat icon @click.stop="trackCountClicked"><v-icon v-if="showQueue">queue_music</v-icon><img v-else class="svg-img" :src="'queue_music_outline' | svgIcon(darkUi||coloredToolbars)"></img></v-btn></div>
+     <div v-else-if="playerStatus.playlist.count>1" class="np-bar-tech link-item" @click.stop="trackCountClicked">{{playerStatus.playlist.current | trackCount(playerStatus.playlist.count)}} <v-btn class="np-bar-queue" flat icon v-if="!pinQueue"><v-icon v-if="showQueue">queue_music</v-icon><img v-else class="svg-img" :src="'queue_music_outline' | svgIcon(darkUi)"></img></v-btn></div>
+     <div v-else-if="!pinQueue" class="np-bar-tech"><v-btn class="np-bar-queue" flat icon @click.stop="trackCountClicked"><v-icon v-if="showQueue">queue_music</v-icon><img v-else class="svg-img" :src="'queue_music_outline' | svgIcon(darkUi)"></img></v-btn></div>
      <div v-else class="np-bar-tech">&nbsp;</div>
     </v-list-tile-action>
    </v-list-tile>
   </v-list>
   <lms-progressbar id="pos-slider" v-if="IS_MOBILE && playerStatus.playlist.count>0" :height="desktopLayout ? 5 : 3" :disabled="playerStatus.current.duration>0" class="np-slider np-bar-slider" :value="playerStatus.current.pospc" :buffer="progressBuffer"></lms-progressbar>
-  <lms-progressbar id="pos-slider" v-else-if="playerStatus.playlist.count>0" :height="desktopLayout ? 5 : 3" :disabled="playerStatus.current.duration>0" class="np-slider np-bar-slider" :value="playerStatus.current.pospc" :buffer="progressBuffer" v-bind:class="{'np-bar-colored':coloredToolbars}" v-on:click.stop="sliderChanged($event, false)" @mouseover="showTimeTooltip" @mouseout="hideTimeTooltip" @mousemove="moveTimeTooltip" @touchstart.passive.stop="touchSliderStart" @touchend.passive.stop="touchSliderEnd" @touchmove.passive.stop="moveTimeTooltipTouch"></lms-progressbar>
+  <lms-progressbar id="pos-slider" v-else-if="playerStatus.playlist.count>0" :height="desktopLayout ? 5 : 3" :disabled="playerStatus.current.duration>0" class="np-slider np-bar-slider" :value="playerStatus.current.pospc" :buffer="progressBuffer" v-on:click.stop="sliderChanged($event, false)" @mouseover="showTimeTooltip" @mouseout="hideTimeTooltip" @mousemove="moveTimeTooltip" @touchstart.passive.stop="touchSliderStart" @touchend.passive.stop="touchSliderEnd" @touchmove.passive.stop="moveTimeTooltipTouch"></lms-progressbar>
  </div>
  
  <div class="np-page" v-else id="np-page">
@@ -1495,9 +1495,6 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
         },
         drawInfoBackdrop() {
             return !this.drawInfoBgndImage && this.$store.state.infoBackdrop && this.$store.state.useDefaultBackdrops
-        },
-        coloredToolbars() {
-            return this.$store.state.desktopLayout && this.$store.state.coloredToolbars
         },
         keyboardControl() {
             return this.$store.state.keyboardControl && !IS_MOBILE

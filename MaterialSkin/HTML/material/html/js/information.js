@@ -423,9 +423,6 @@ Vue.component('lms-information-dialog', {
         darkUi () {
             return this.$store.state.darkUi
         },
-        coloredToolbars() {
-            return this.$store.state.coloredToolbars
-        },
         unlockAll() {
             return this.$store.state.unlockAll
         }

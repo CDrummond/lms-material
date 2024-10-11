@@ -77,9 +77,6 @@ Vue.component('lms-player-settings-plugin', {
         darkUi () {
             return this.$store.state.darkUi
         },
-        coloredToolbars() {
-            return this.$store.state.coloredToolbars
-        },
         homeButton() {
             return this.$store.state.homeButton
         }

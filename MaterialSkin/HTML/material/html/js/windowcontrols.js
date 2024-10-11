@@ -50,7 +50,7 @@ Vue.component('lms-windowcontrols', {
     },
     computed: {
         dark () {
-            return this.$store.state.darkUi || this.$store.state.coloredToolbar
+            return this.$store.state.darkUi
         }
     },
     filters: {

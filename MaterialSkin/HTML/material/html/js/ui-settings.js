@@ -46,15 +46,6 @@ Vue.component('lms-ui-settings', {
     </v-list-tile>
     <v-divider></v-divider>
 
-    <v-list-tile>
-     <v-list-tile-content @click="colorToolbars = !colorToolbars" class="switch-label">
-      <v-list-tile-title>{{i18n('Color toolbars')}}</v-list-tile-title>
-      <v-list-tile-sub-title>{{i18n('Use chosen color for toolbars.')}}</v-list-tile-sub-title>
-     </v-list-tile-content>
-     <v-list-tile-action><m3-switch v-model="colorToolbars"></m3-switch></v-list-tile-action>
-    </v-list-tile>
-    <v-divider></v-divider>
-
     <v-list-tile v-if="cMixSupported">
     <v-list-tile-content @click="tinted = !tinted" class="switch-label">
      <v-list-tile-title>{{i18n('Tint background')}}</v-list-tile-title>
@@ -405,7 +396,6 @@ Vue.component('lms-ui-settings', {
             color: LMS_DEFAULT_COLOR,
             colorList: { } ,
             userColors: [ ],
-            colorToolbars: false,
             tinted: true,
             roundCovers : true,
             fontSize: 'r',
@@ -476,9 +466,6 @@ Vue.component('lms-ui-settings', {
         },
         player() {
             return this.$store.state.player
-        },
-        usingColoredToolbars() {
-            return this.$store.state.coloredToolbars
         },
         cMixSupported() {
             return this.$store.state.cMixSupported
@@ -597,9 +584,7 @@ Vue.component('lms-ui-settings', {
     methods: {
         readStore() {
             let themeParts = this.$store.state.chosenTheme ? this.$store.state.chosenTheme.split('-') : ['dark'];
-            let variant = themeParts.length>1 && ('colored'==themeParts[themeParts.length-1] || 'standard'==themeParts[themeParts.length-1]) ? themeParts.pop() : 'standard';
             this.theme = themeParts.join('-');
-            this.colorToolbars = 'colored'==variant;
             this.color = this.$store.state.color;
             this.tinted = this.$store.state.tinted;
             this.mobileBar = this.$store.state.mobileBar;
@@ -702,7 +687,7 @@ Vue.component('lms-ui-settings', {
         },
         settings(arrays, withSorts) {
             let settings = {
-                      theme:this.theme+(this.colorToolbars ? '-colored' : ''),
+                      theme:this.theme,
                       color:this.color,
                       tinted:this.tinted,
                       mobileBar:this.mobileBar,
@@ -911,8 +896,8 @@ Vue.component('lms-ui-settings', {
         }
     },
     filters: {
-        svgIcon: function (name, dark, coloredToolbars) {
-            return "/material/svg/"+name+"?c="+(dark || coloredToolbars ? LMS_DARK_SVG : LMS_LIGHT_SVG)+"&r="+LMS_MATERIAL_REVISION;
+        svgIcon: function (name, dark) {
+            return "/material/svg/"+name+"?c="+(dark ? LMS_DARK_SVG : LMS_LIGHT_SVG)+"&r="+LMS_MATERIAL_REVISION;
         }
     }
 })

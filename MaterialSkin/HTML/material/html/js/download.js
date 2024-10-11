@@ -158,7 +158,7 @@ Vue.component('lms-downloadstatus', {
     <v-btn flat icon v-longpress:stop="close" :title="ttShortcutStr(i18n('Go back'), 'esc')"><v-icon>arrow_back</v-icon></v-btn>
     <v-toolbar-title>{{i18n('Downloading')}}</v-toolbar-title>
     <v-spacer class="drag-area"></v-spacer>
-    <v-btn icon v-if="undefined!=items && items.length>1" flat @click.native="abortAll()" :title="i18n('Abort all')"><img class="svg-img" :src="'close-all' | svgIcon(darkUi, coloredToolbars)"></img></v-btn>
+    <v-btn icon v-if="undefined!=items && items.length>1" flat @click.native="abortAll()" :title="i18n('Abort all')"><img class="svg-img" :src="'close-all' | svgIcon(darkUi)"></img></v-btn>
     <div class="drag-area-right"></div>
     <lms-windowcontrols v-if="queryParams.nativeTitlebar"></lms-windowcontrols>
    </v-toolbar>
@@ -247,14 +247,11 @@ Vue.component('lms-downloadstatus', {
         },
         darkUi () {
             return this.$store.state.darkUi
-        },
-        coloredToolbars() {
-            return this.$store.state.coloredToolbars
         }
     },
     filters: {
-        svgIcon: function (name, dark, coloredToolbars) {
-            return "/material/svg/"+name+"?c="+(dark || coloredToolbars ? LMS_DARK_SVG : LMS_LIGHT_SVG)+"&r="+LMS_MATERIAL_REVISION;
+        svgIcon: function (name, dark) {
+            return "/material/svg/"+name+"?c="+(dark ? LMS_DARK_SVG : LMS_LIGHT_SVG)+"&r="+LMS_MATERIAL_REVISION;
         }
     },
     watch: {

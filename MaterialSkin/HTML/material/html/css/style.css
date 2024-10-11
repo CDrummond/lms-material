@@ -3789,22 +3789,23 @@ div.v-subheader {
 }
 
 .wc-btn {
- width:22px!important;
- height:22px!important;
- opacity:0.5;
+ width:20px!important;
+ height:20px!important;
+ background-color:var(--btn-hover-color);
 }
 
 .wc-btn-r {
  margin-left:4px;
 }
 
-.wc-btn:hover {
+.wc-btn img:hover {
  opacity:1.0;
 }
 
 .wc-btn img {
  width:16px!important;
  height:16px!important;
+ opacity:0.5;
 }
 
 .wc-close:hover {

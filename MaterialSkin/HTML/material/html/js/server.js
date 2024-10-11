@@ -144,7 +144,7 @@ function parseUseUnifiedArtistsList(val) {
     if (separateArtistsList!=lmsOptions.separateArtistsList) {
         lmsOptions.separateArtistsList=separateArtistsList;
         clearListCache(true, "artists");
-        setLocalStorageVal(separateArtistsList, separateArtistsList);
+        setLocalStorageVal('separateArtistsList', separateArtistsList);
     }
 }
 
@@ -153,7 +153,7 @@ function parseRolesInArtists(composerInArtists, conductorInArtists, bandInArtist
     if (setting!=lmsOptions.rolesInArtists) {
         lmsOptions.rolesInArtists=setting;
         clearListCache(true, "artists");
-        setLocalStorageVal(rolesInArtists, setting);
+        setLocalStorageVal('rolesInArtists', setting);
     }
 }
 

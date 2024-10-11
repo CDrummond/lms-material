@@ -9,7 +9,7 @@
 Vue.component('lms-windowcontrols', {
     template: `
 <v-layout row wrap class="wc">
- <v-flex v-for="(btn, index) in btns" xs4><v-btn icon class="wc-btn wc-btn-r" v-bind:class="{'wc-close':'close'==btn}" @click="sendButton(btn)"><v-icon class="wc-icn" v-bind:class="{'wc-res':btn=='max'&&maximized}">{{btn=='max' ? (maximized ? 'filter_none' : 'crop_square') : btn=='min' ? 'remove' : 'close'}}</v-icon></v-btn></v-flex>
+ <v-flex v-for="(btn, index) in btns" xs4><div class="wc-btn wc-btn-r" v-bind:class="{'wc-close':'close'==btn}" @click="sendButton(btn)"><v-icon class="wc-icn" v-bind:class="{'wc-res':btn=='max'&&maximized}">{{btn=='max' ? (maximized ? 'filter_none' : 'crop_square') : btn=='min' ? 'remove' : 'close'}}</v-icon></div></v-flex>
 </v-layout>
 `,
     data () {
@@ -47,15 +47,5 @@ Vue.component('lms-windowcontrols', {
                 emitNative("MATERIAL-TITLEBAR\nNAME " + btn, queryParams.nativeTitlebar);
             }
         }
-    },
-    computed: {
-        dark () {
-            return this.$store.state.darkUi || this.$store.state.coloredToolbar
-        }
-    },
-    filters: {
-        svgIcon: function (name, dark) {
-            return "/material/svg/window-"+name+"?c="+(dark ? LMS_DARK_SVG : LMS_LIGHT_SVG)+"&r="+LMS_MATERIAL_REVISION;
-        }
-    },
+    }
 });

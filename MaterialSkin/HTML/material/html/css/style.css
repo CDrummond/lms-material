@@ -46,6 +46,8 @@
  --border-color:rgba(51, 51, 51, 0.25);
  --tab-border-color:rgba(51, 51, 51, 0.1);
  --btn-hover-color:rgba(128, 128, 128, 0.3);
+ --window-btn-color:rgba(128, 128, 128, 0.3);
+ --window-btn-hover-color:rgba(128, 128, 128, 0.5);
  --list-hover-color:rgba(0, 0, 0, 0.04)!important;
  --list-active-color:rgba(0, 0, 0, 0.08)!important;
  --menu-dlg-shadow:0 1px 6px 1px rgba(0,0,0,.12);
@@ -3791,26 +3793,29 @@ div.v-subheader {
 .wc-btn {
  width:20px!important;
  height:20px!important;
- background-color:var(--btn-hover-color);
+ background-color:var(--window-btn-color);
+ border-radius:50%;
+ display:flex;
 }
 
 .wc-btn-r {
  margin-left:4px;
 }
 
-.wc-icn:hover {
- opacity:1.0;
-}
-
 .wc-icn {
- font-size:16px!important;
+ font-size:14px!important;
  vertical-align:middle !important;
  text-align:center!important;
- opacity:0.5;
+ width:100%;
+ line-height: 14px;
 }
 
 .wc-res {
  font-size:12px!important;
+}
+
+.wc-btn:hover {
+ background-color:var(--window-btn-hover-color);
 }
 
 .wc-close:hover {

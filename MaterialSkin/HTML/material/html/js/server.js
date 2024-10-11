@@ -134,8 +134,27 @@ function parseUserDefinedRoles(data) {
     let excludedUserDefinedRoles = excluded.join(",");
     if (lmsOptions.excludedUserDefinedRoles!=excludedUserDefinedRoles) {
         clearListCache(true, "artists");
+        setLocalStorageVal("excludedUserDefinedRoles", excludedUserDefinedRoles)
     }
     lmsOptions.excludedUserDefinedRoles = excludedUserDefinedRoles;
+}
+
+function parseUseUnifiedArtistsList(val) {
+    let separateArtistsList = 0==parseInt(val);
+    if (separateArtistsList!=lmsOptions.separateArtistsList) {
+        lmsOptions.separateArtistsList=separateArtistsList;
+        clearListCache(true, "artists");
+        setLocalStorageVal(separateArtistsList, separateArtistsList);
+    }
+}
+
+function parseRolesInArtists(composerInArtists, conductorInArtists, bandInArtists) {
+    let setting = [parseInt(composerInArtists), parseInt(conductorInArtists), parseInt(bandInArtists)].join(',');
+    if (setting!=lmsOptions.rolesInArtists) {
+        lmsOptions.rolesInArtists=setting;
+        clearListCache(true, "artists");
+        setLocalStorageVal(rolesInArtists, setting);
+    }
 }
 
 function parseTitleFormat(titleFormat, titleFormatWeb) {
@@ -665,7 +684,7 @@ var lmsServer = Vue.component('lms-server', {
             }
             if (data[1]=="server") {
                 if (data[2]=="useUnifiedArtistsList") {
-                    lmsOptions.separateArtistsList=0==parseInt(data[3]);
+                    parseUseUnifiedArtistsList(data[3]);
                     bus.$emit("prefset", data[1]+":"+data[2], data[3]);
                 } else if (data[2]=="groupArtistAlbumsByReleaseType") {
                     lmsOptions.groupByReleaseType=parseInt(data[3]);
@@ -782,13 +801,19 @@ var lmsServer = Vue.component('lms-server', {
             });
         },
         updateServerPrefs() {
-            lmsCommand("", ["serverstatus", 0, 0, "prefs:userDefinedRoles,titleFormatWeb,titleFormat"]).then(({data}) => {
+            lmsCommand("", ["serverstatus", 0, 0, "prefs:userDefinedRoles,useUnifiedArtistsList,titleFormatWeb,titleFormat,composerInArtists,conductorInArtists,bandInArtists"]).then(({data}) => {
                 if (data && data.result) {
                     if (data.result.userDefinedRoles) {
                         parseUserDefinedRoles(data.result.userDefinedRoles);
                     }
                     if (data.result.titleFormat && data.result.titleFormatWeb) {
                         parseTitleFormat(data.result.titleFormat, data.result.titleFormatWeb);
+                    }
+                    if (undefined!=data.result.useUnifiedArtistsList) {
+                        parseUseUnifiedArtistsList(data.result.useUnifiedArtistsList);
+                    }
+                    if (undefined!=data.result.composerInArtists && undefined!=data.result.conductorInArtists && undefined!=data.result.bandInArtists) {
+                        parseRolesInArtists(data.result.composerInArtists, data.result.conductorInArtists, data.result.bandInArtists);
                     }
                 }
             });

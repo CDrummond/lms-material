@@ -8,7 +8,9 @@ x.x.x
  5. Add custom favourite folder icon.
  6. Try to extract dominant, and not average, colour from image when using
     colour from cover.
- 7. Invalidate artist list cache if user-defined role exclusion changed.
+ 7. Invalidate artist list cache if user-defined role exclusion changed,
+    unified artist setting changed, or band/composer/conductor in artist list
+    changed.
  8. Use coloured mobile navigation, progress, sliders, etc. even when tinting.
  9. Show full server-side interface settings page, but add a note that not all
     settings affect Material Skin.

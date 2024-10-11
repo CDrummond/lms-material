@@ -17,8 +17,8 @@ Vue.component('lms-toolbar', {
 </div>
 <v-btn icon class="toolbar-button" @click="bus.$emit('navDrawer')">
  <v-icon v-if="!connected" class="red">error</v-icon>
- <img v-else-if="updatesAvailable" class="svg-img" :src="'update' | menuIcon(darkUi, coloredToolbars)"></img>
- <img v-else-if="restartRequired" class="svg-img" :src="'restart' | menuIcon(darkUi, coloredToolbars)"></img>
+ <img v-else-if="updatesAvailable" class="svg-img" :src="'update' | menuIcon(darkUi, coloredToolbars&&!nowPlayingFull)"></img>
+ <img v-else-if="restartRequired" class="svg-img" :src="'restart' | menuIcon(darkUi, coloredToolbars&&!nowPlayingFull)"></img>
  <v-icon v-else>menu</v-icon>
 </v-btn>
 <v-toolbar-title v-bind:class="{'link-item':!coloredToolbars, 'link-item-ct': coloredToolbars, 'maintoolbar-title-clock':showClock}" @click="bus.$emit('navDrawer')">

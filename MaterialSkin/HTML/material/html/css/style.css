@@ -400,7 +400,7 @@ html, .mini-player {
  background-color:transparent !important;
  border-bottom:1px solid transparent !important;
 }
-.lms-toolbar .v-btn__content i {
+.lms-toolbar .v-btn__content i, .lms-toolbar .wc-icn {
  color:var(--top-toolbar-text-color) !important;
 }
 

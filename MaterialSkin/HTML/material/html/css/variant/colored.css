@@ -54,3 +54,11 @@
 .theme--light:is(.np-full) .lms-toolbar .v-input--slider .v-slider__track {
  background:rgba(0, 0, 0, 0.26)!important;
 }
+.np-full .lms-toolbar .v-slider .primary {
+ background-color:var(--primary-color) !important;
+ border-color:var(--primary-color) !important;
+}
+
+#app:not(.np-full) .v-dialog .v-card__title .v-icon {
+color:var(--light-text-color) !important;
+}

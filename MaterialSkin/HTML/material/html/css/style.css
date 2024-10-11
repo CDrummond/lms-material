@@ -3808,11 +3808,12 @@ div.v-subheader {
  text-align:center!important;
  width:100%;
  line-height: 14px;
+ transition:none!important;
 }
 
 .wc-res {
  font-size:12px!important;
- rotate:180deg;
+ transform: rotate(180deg)!important;
 }
 
 .wc-btn:hover {

@@ -9,7 +9,7 @@
 Vue.component('lms-windowcontrols', {
     template: `
 <v-layout row wrap class="wc">
- <v-flex v-for="(btn, index) in btns" xs4><v-btn icon class="wc-btn wc-btn-r" v-bind:class="{'wc-close':'close'==btn}" @click="sendButton(btn)"><img :src="btn=='max'&&maximized ? 'restore' : btn | svgIcon(dark)"></img></v-btn></v-flex>
+ <v-flex v-for="(btn, index) in btns" xs4><v-btn icon class="wc-btn wc-btn-r" v-bind:class="{'wc-close':'close'==btn}" @click="sendButton(btn)"><v-icon class="wc-icn" v-bind:class="{'wc-res':btn=='max'&&maximized}">{{btn=='max' ? (maximized ? 'filter_none' : 'crop_square') : btn=='min' ? 'remove' : 'close'}}</v-icon></v-btn></v-flex>
 </v-layout>
 `,
     data () {

@@ -3798,14 +3798,19 @@ div.v-subheader {
  margin-left:4px;
 }
 
-.wc-btn img:hover {
+.wc-icn:hover {
  opacity:1.0;
 }
 
-.wc-btn img {
- width:16px!important;
- height:16px!important;
+.wc-icn {
+ font-size:16px!important;
+ vertical-align:middle !important;
+ text-align:center!important;
  opacity:0.5;
+}
+
+.wc-res {
+ font-size:12px!important;
 }
 
 .wc-close:hover {

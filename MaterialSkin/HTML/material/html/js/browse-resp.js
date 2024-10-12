@@ -28,14 +28,16 @@ function removeDiactrics(key) {
 
 function appearanceSuffix(rel) {
     let type = undefined!=lmsOptions.releaseAppearances[rel] ? lmsOptions.releaseAppearances[rel] : undefined;
+    if (!type) {
+        if ("APPEARANCE_BAND"==rel) {
+            type = i18n("Band/orchestra");
+        } else if ("APPEARANCE_CONDUCTOR"==rel) {
+            type = i18n("Conductor");
+        }
+    }
+
     if (type) {
         return " (" + type + ")";
-    }
-    if ("APPEARANCE_BAND"==rel) {
-        return " (Band/Orchestra)";
-    }
-    if ("APPEARANCE_CONDUCTOR"==rel) {
-        return " (Conductor)";
     }
     return "";
 }

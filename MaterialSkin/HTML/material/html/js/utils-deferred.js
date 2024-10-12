@@ -822,7 +822,7 @@ function roleDisplayName(role) {
         return undefined;
     }
     if (val==BAND_ARTIST_ROLE) {
-        return i18n("Band/Orchestra");
+        return i18n("Band/orchestra");
     }
     if (val==COMPOSER_ARTIST_ROLE) {
         return i18n("Composer");

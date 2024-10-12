@@ -25,6 +25,8 @@
 18. If drag favourite over folder then prompt if moving into folder or moving
     to position in list.
 19. Allow drag'n'drop in grid view.
+20. Clear cached artists lists if certain server-side changes are made that
+    would affect these (some changes require page to be reloaded).
 
 5.3.4
 -----

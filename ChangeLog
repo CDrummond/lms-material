@@ -1,4 +1,4 @@
-x.x.x
+5.4.0
 -----
  1. Combine man menu and players menu into left hand navigation drawer.
  2. Remove most dialog toolbar menus and replace with buttons.

@@ -203,6 +203,10 @@
 .np-bar-queue:hover {
  background-color:transparent!important;
 }
+.np-bar-queue:hover:before {
+ margin-top:0px;
+ border-radius:19px;
+}
 
 .np-bar-controls {
  margin-left:-16px;
@@ -398,7 +402,6 @@
 .np-bar-slider {
  bottom:calc(var(--bottom-toolbar-height) - 5px);
  height:5px !important;
- background-color:var(--pbar-bgnd)!important;
 }
 
 .np-bar-colored {
@@ -408,10 +411,6 @@
 .np-bar-colored .value, .np-bar-colored .buffer  {
  background-color:var(--bottom-position-slider-color)!important;
  border-color:var(--bottom-position-slider-color)!important;
-}
-
-.no-liveedge .np-bar-colored {
- background-color:transparent!important;
 }
 
 .np-bar .np-playpause {
@@ -503,22 +502,8 @@
 
 @media (min-width:750px) {
  .group-vol {
-  right:calc(var(--window-controls-space) + 132px);
+  right:calc(var(--window-controls-space) + 90px);
  }
-}
-
-/* Give more space for 'Open mini-player icon */
-.toolbar-player-list-desktop {
- min-width:320px!important;
-}
-.v-menu__content .toolbar-player-list-desktop .v-list__tile .menu-shortcut-player {
- min-width:54px!important;
-}
-.v-menu__content .toolbar-player-list-desktop .v-list__tile .menu-shortcut-player-apple {
- min-width:62px!important;
-}
-.v-menu__content .toolbar-player-list-desktop .v-list__tile .player-menu-shortcut {
- min-width:80px!important;
 }
 
 .right-pane {
@@ -540,7 +525,7 @@
  border-top:1px solid var(--popup-border-color);
  border-left:1px solid var(--popup-border-color);
  border-bottom:1px solid var(--popup-border-color);
- border-radius:8px 0  0 8px;
+ border-radius:8px 0 0 8px;
  box-shadow:var(--menu-dlg-shadow);
  overflow: hidden;
  animation: pqSlideIn .25s linear forwards;

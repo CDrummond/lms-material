@@ -167,7 +167,7 @@ var lmsBrowse = Vue.component("lms-browse", {
 
      <div v-else align="center" style="vertical-align: top" v-for="(citem, col) in item.items" @contextmenu.prevent="contextMenu(citem, item.rs+col, $event)">
       <div v-if="undefined==citem" class="image-grid-item defcursor"></div>
-      <div v-else class="image-grid-item" @click="click(citem, item.rs+col, $event)" :title="citem | itemTooltip" :draggable="item.draggable && current.section!=SECTION_FAVORITES" @dragstart="dragStart(item.rs+col, $event)" @dragenter.prevent="" @dragend="dragEnd()" v-bind:class="{'search-highlight':highlightIndex==(item.rs+col), 'list-active': (menu.show && (item.rs+col)==menu.index) || (fetchingItem==item.id)}">
+      <div v-else class="image-grid-item" @click="click(citem, item.rs+col, $event)" :title="citem | itemTooltip" :draggable="citem.draggable || isTop" @dragstart="dragStart(item.rs+col, $event)" @dragenter.prevent="" @dragend="dragEnd()" @dragover="dragOver(item.rs+col, $event)" @drop="drop(item.rs+col, $event)" v-bind:class="{'search-highlight':highlightIndex==(item.rs+col), 'list-active': (menu.show && (item.rs+col)==menu.index) || (fetchingItem==item.id), 'drop-target':dragActive && (item.rs+col)==dropIndex}">
        <div v-if="selection.size>0 && browseCanSelect(citem)" class="check-btn grid-btn image-grid-select-btn" @click.stop="select(citem, item.rs+col, $event)" :title="ACTIONS[citem.selected ? UNSELECT_ACTION : SELECT_ACTION].title" v-bind:class="{'check-btn-checked':citem.selected}"></div>
        <img v-else-if="citem.multi" class="multi-disc" :src="'album-multi' | svgIcon(true)" loading="lazy"></img>
        <div v-if="citem.images" :tile="true" class="image-grid-item-img">
@@ -178,8 +178,8 @@ var lmsBrowse = Vue.component("lms-browse", {
        <img v-else-if="citem.image" :key="citem.image" :src="citem.image" onerror="this.src=DEFAULT_COVER" v-bind:class="{'radio-img': SECTION_RADIO==citem.section || SECTION_APPS==citem.section || citem.isRadio}" class="image-grid-item-img" loading="lazy"></img>
        <div class="image-grid-item-icon" v-else>
         <v-icon v-if="citem.icon" class="image-grid-item-img image-grid-item-icon">{{citem.icon}}</v-icon>
-        <img v-else-if="citem.svg" class="image-grid-item-svg" :src="citem.svg | svgIcon(darkUi)" loading="lazy" @dragstart.prevent="" @dragenter.prevent=""></img>
-        <img v-else class="image-grid-item-svg" :src="'image' | svgIcon(darkUi)" loading="lazy" @dragstart.prevent="" @dragenter.prevent=""></img>
+        <img v-else-if="citem.svg" class="image-grid-item-svg" :src="citem.svg | svgIcon(darkUi)" loading="lazy"></img>
+        <img v-else class="image-grid-item-svg" :src="'image' | svgIcon(darkUi)" loading="lazy"></img>
        </div>
        <div v-if="citem.image" class="image-grid-text" @click.stop="itemMenu(citem, item.rs+col, $event)">{{citem.title}}</div>
        <div v-else class="image-grid-text">{{citem.title}}</div>
@@ -1485,7 +1485,8 @@ var lmsBrowse = Vue.component("lms-browse", {
         },
         clearSelection() {
             var selection = Array.from(this.selection);
-            for (var i=0, len=selection.length; i<len; ++i) {
+            var numSelected = selection.length;
+            for (var i=0, len=numSelected; i<len; ++i) {
                 var index = selection[i];
                 if (index>-1 && index<this.items.length) {
                     if (this.items[index].menu) {
@@ -1501,6 +1502,12 @@ var lmsBrowse = Vue.component("lms-browse", {
             this.selectionDuration = 0;
             this.lastSelect = undefined;
             bus.$emit('browseSelection', false);
+            if (numSelected>0) {
+                // When using recycler view items can sometimes still look selected until interact with view.
+                // Add an item, and then removing seems to work-around this...
+                this.items.push({id:"fake", title:'', artistAlbum:'', key:"fake."+this.items.length});
+                setTimeout(function () { this.items.splice(this.items.length-1, 0); }.bind(this), 50);
+            }
         },
         select(item, index, event) {
             if (this.selection.size>0) {
@@ -1821,7 +1828,11 @@ var lmsBrowse = Vue.component("lms-browse", {
             if (!this.$store.state.desktopLayout && this.items[0].stdItem==STD_ITEM_PLAYLIST_TRACK && this.listSize>LMS_MAX_PLAYLIST_EDIT_SIZE) {
                 return;
             }
-            if ((!this.$store.state.desktopLayout || !this.$store.state.showQueue) && (!this.canDrop || this.grid.use)) {
+            if ((!this.$store.state.desktopLayout || !this.$store.state.showQueue) && !this.canDrop) {
+                return;
+            }
+            // For some reason drag is accessible in 'My Music'??? The following stops this...
+            if (this.grid.use && !this.isTop && !this.items[which].draggable) {
                 return;
             }
             bus.$emit('dragActive', true);
@@ -1829,7 +1840,9 @@ var lmsBrowse = Vue.component("lms-browse", {
             ev.dataTransfer.setData('text/plain', this.items[which].title);
             window.mskBrowseDrag=which;
             if (this.grid.use) {
-                this.dragElem = undefined;
+                this.dragElem = ev.target.nodeName=='IMG' ? ev.srcElement.parentNode.parentNode : ev.srcElement;
+                setListElemClass(this.dragElem, 'dragging', true);
+                ev.dataTransfer.setDragImage(this.dragElem, 0, 0);
             } else {
                 this.dragElem = ev.target.nodeName=='IMG' ? ev.srcElement.parentNode.parentNode.parentNode : ev.srcElement;
                 setListElemClass(this.dragElem, 'dragging', true);
@@ -1910,8 +1923,10 @@ var lmsBrowse = Vue.component("lms-browse", {
                     } else if (this.isTop) {
                         this.items = arrayMove(this.top, this.dragIndex, to);
                         this.saveTopList();
+                        if (this.grid.use) {
+                            this.layoutGrid(true);
+                        }
                     } else if (this.current) {
-                        var command = [];
                         if (this.current.section==SECTION_FAVORITES) {
                             var fromId = this.items[this.dragIndex].id.startsWith("item_id:")
                                             ? this.items[this.dragIndex].id.replace("item_id:", "from_id:")
@@ -1919,12 +1934,28 @@ var lmsBrowse = Vue.component("lms-browse", {
                             var toId = this.items[to].id.startsWith("item_id:")
                                             ? this.items[to].id.replace("item_id:", "to_id:")
                                             : "to_id:"+this.items[to].params.item_id;
-                            command = ["favorites", "move", fromId, toId+(this.items[to].isFavFolder ? ".0" : "")];
+console.log(fromId, toId);
+                            if (this.items[to].isFavFolder) {
+                                let choices = [
+                                    {val:1, title:i18n("Move into '%1'", this.items[this.dragIndex].title), svg:"folder-favorite"},
+                                    {val:2, title:i18n("Move position"), icon:ACTIONS[SCROLL_TO_ACTION].icon, svg:ACTIONS[SCROLL_TO_ACTION].svg}
+                                ]
+                                choose(i18n("Move '%1'", this.items[this.dragIndex].title, this.items[to].title), choices).then(choice => {
+                                    console.log(choice);
+                                    if (undefined!=choice && choice.val>0) {
+                                        console.log(choice.val);
+                                        lmsCommand(this.playerId(), ["favorites", "move", fromId, toId+(1==choice.val ? ".0" : "")]).then(({data}) => {
+                                            this.refreshList();
+                                        });
+                                    }
+                                });
+                            } else {
+                                lmsCommand(this.playerId(), ["favorites", "move", fromId, toId]).then(({data}) => {
+                                    this.refreshList();
+                                });
+                            }
                         } else if (this.current.section==SECTION_PLAYLISTS) {
-                            command = ["playlists", "edit", "cmd:move", this.current.id, "index:"+this.dragIndex, "toindex:"+to];
-                        }
-                        if (command.length>0) {
-                            lmsCommand(this.playerId(), command).then(({data}) => {
+                            lmsCommand(this.playerId(), ["playlists", "edit", "cmd:move", this.current.id, "index:"+this.dragIndex, "toindex:"+to]).then(({data}) => {
                                 this.refreshList();
                             });
                         }
@@ -2006,7 +2037,6 @@ var lmsBrowse = Vue.component("lms-browse", {
             if (savedItems.length==0) {
                 lmsCommand("", ["pref", LMS_MATERIAL_DEFAULT_ITEMS_PREF, "?"]).then(({data}) => {
                     if (data && data.result && data.result._p2) {
-                        console.log("PREF");
                         this.updateTopList(JSON.parse(data.result._p2));
                         this.saveTopList();
                         this.autoExpand();

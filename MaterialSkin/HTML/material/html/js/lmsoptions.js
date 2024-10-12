@@ -24,7 +24,7 @@ var lmsOptions = {techInfo: getLocalStorageBool('techInfo', false),
                   showComment: getLocalStorageBool('showComment', false),
                   pagedBatchSize: parseInt(getLocalStorageVal('pagedBatchSize', 100)),
                   noArtistFilter: getLocalStorageBool('noArtistFilter', true),
-                  separateArtistsList: LMS_DEF_SEPARATE_ARTISTS,
+                  separateArtistsList: getLocalStorageBool('separateArtistsList', true),
                   supportReleaseTypes: LMS_DEF_SUPPORT_RELEASE_TYPES,
                   groupByReleaseType: LMS_DEF_GROUP_BY_RELEASE_TYPE,
                   releaseTypeOrder: undefined,
@@ -41,5 +41,8 @@ var lmsOptions = {techInfo: getLocalStorageBool('techInfo', false),
                   screensaverTimeout: getLocalStorageVal('screensaverTimeout', 60),
                   npSwitchTimeout: getLocalStorageVal('npSwitchTimeout', 5*60),
                   userDefinedRoles: {},
-                  randomMixDialogPinned: false
+                  excludedUserDefinedRoles: getLocalStorageVal('excludedUserDefinedRoles', '-'),
+                  rolesInArtists: getLocalStorageVal('rolesInArtists', '-'),
+                  randomMixDialogPinned: false,
+                  showSubtitle: getLocalStorageBool('showSubtitle', false)
                 };

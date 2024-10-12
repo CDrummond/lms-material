@@ -192,7 +192,7 @@ function parseResp(data, showTrackNum, index, showRatings, queueAlbumStyle, queu
 
 var lmsQueue = Vue.component("lms-queue", {
   template: `
-<div :class="[!pinQueue ? nowPlayingExpanded ? 'pq-unpinned-np'+nowPlayingWide : 'pq-unpinned' : '']" id="queue-view">
+<div :class="[!pinQueue && showQueue ? nowPlayingExpanded ? 'pq-unpinned-np'+nowPlayingWide : 'pq-unpinned' : '']" id="queue-view">
 <lms-resizer v-if="!pinQueue && windowWide>0" varname="pq-unpinned-width"></lms-resizer>
  <div class="subtoolbar noselect" v-bind:class="{'list-details':pinQueue}" v-if="!desktopLayout || showQueue">
   <v-layout v-if="selection.size>0">
@@ -1065,9 +1065,9 @@ var lmsQueue = Vue.component("lms-queue", {
                     return;
                 } else if (this.items.length>=1) {
                     let opts = [
-                        { val:0, title:i18n("Copy the queue to:")},
-                        { val:1, title:i18n("Move the queue to:")},
-                        { val:2, title:i18n("Swap the queue with:")}
+                        { val:0, title:i18n("Copy the queue to")},
+                        { val:1, title:i18n("Move the queue to")},
+                        { val:2, title:i18n("Swap the queue with")}
                     ]
                     let players = [ ];
                     for (let i=0, loop=this.$store.state.players, len=loop.length; i<len; ++i) {
@@ -1184,7 +1184,8 @@ var lmsQueue = Vue.component("lms-queue", {
         clearSelection() {
             this.lastSelect = undefined;
             var selection = Array.from(this.selection);
-            for (var i=0, len=selection.length; i<len; ++i) {
+            var numSelected = selection.length;
+            for (var i=0, len=numSelected; i<len; ++i) {
                 var index = selection[i];
                 if (index>-1 && index<this.items.length) {
                     var idx = this.items[index].actions.indexOf(UNSELECT_ACTION);
@@ -1199,6 +1200,12 @@ var lmsQueue = Vue.component("lms-queue", {
             lmsQueueSelectionActive = false;
             bus.$emit('queueSelection', false);
             this.resetCloseTimer();
+            if (numSelected>0) {
+                // When using recycler view items can sometimes still look selected until interact with view.
+                // Add an item, and then removing seems to work-around this...
+                this.items.push({id:"fake", title:'', artistAlbum:'', key:"fake."+this.items.length});
+                setTimeout(function () { this.items.splice(this.items.length-1, 0); }.bind(this), 50);
+            }
         },
         select(item, index, event) {
             if (this.selection.size>0) {

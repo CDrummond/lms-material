@@ -43,7 +43,7 @@ function parseQueryParams() {
     const NATIVE_QPARMS = new Set(["nativeStatus", "nativeColors", "nativePlayer", "nativeUiChanges", "nativeTheme", "nativeCover", "nativePlayerPower", "nativeAccent", "nativeTitlebar", "nativeTextColor", "nativeConnectionStatus"]);
     const BOOL_QPARAMS = new Set(["single", "addpad", "party", "altBtnLayout", "dontTrapBack", "npAutoClose"]);
     const INT_QPARAMS = new Set(["topPad", "botPad", "dlgPad"]);
-    const STR_QPARAMS = new Set(["layout", "appSettings", "appQuit", "appLaunchPlayer", "download"]);
+    const STR_QPARAMS = new Set(["layout", "appSettings", "appQuit", "appLaunchPlayer", "download", "tbarBtns"]);
 
     var queryString = window.location.href.substring(window.location.href.indexOf('?')+1);
     var hash = queryString.indexOf('#');
@@ -52,7 +52,7 @@ function parseQueryParams() {
     }
     var query = queryString.split('&');
     var resp = { actions:[], debug:new Set(), hide:new Set(), dontEmbed:new Set(), layout:undefined, player:undefined, single:false,
-        css:undefined, download:'browser', addpad:false, party:false, expand:[], npRatio:1.33333333, topPad:0, botPad:0, dlgPad:0,
+        css:undefined, download:'browser', addpad:false, party:false, expand:[], npRatio:1.33333333, topPad:0, botPad:0, dlgPad:0, tbarBtns:undefined,
         nativeStatus:0, nativeColors:0, nativePlayer:0, nativeUiChanges:0, nativeTheme:0, nativeCover:0, nativePlayerPower:0, nativeAccent:0,
         nativeTitlebar:0, nativeTextColor:0, nativeConnectionStatus:0, appSettings:undefined, appQuit:undefined, appLaunchPlayer:undefined, altBtnLayout:IS_WINDOWS, dontTrapBack:false, npAutoClose:true};
 
@@ -112,6 +112,9 @@ function parseQueryParams() {
         } else if (INT_QPARAMS.has(kv[0])) {
             resp[kv[0]]=parseInt(kv[1]);
         }
+    }
+    if (resp.single && !resp.player) {
+        resp.single = false;
     }
     return resp;
 }
@@ -364,18 +367,6 @@ function favSort(a, b) {
         return at<bt ? -1 : 1;
     }
     return titleSort(a, b);
-}
-
-function partialFavSort(a, b) {
-    var at = a.isFavFolder ? 0 : 1;
-    var bt = b.isFavFolder ? 0 : 1;
-    if (at!=bt) {
-        return at<bt ? -1 : 1;
-    }
-    if (a.isFavFolder) {
-        return titleSort(a, b);
-    }
-    return a.pos<b.pos ? -1 : 1;
 }
 
 function playerSort(a, b) {
@@ -658,18 +649,23 @@ function cacheKey(command, params, start, batchSize) {
            ":"+start+":"+batchSize;
 }
 
-function clearListCache(force) {
+function clearListCache(force, command) {
     // Delete old local-storage cache
     for (var key in window.localStorage) {
         if (key.startsWith(LS_PREFIX+LMS_LIST_CACHE_PREFIX) &&
-            (force || !key.startsWith(LS_PREFIX+LMS_LIST_CACHE_PREFIX+LMS_CACHE_VERSION+":"+lmsLastScan+":"))) {
+            (force ||
+             !key.startsWith(LS_PREFIX+LMS_LIST_CACHE_PREFIX+LMS_CACHE_VERSION+":"+lmsLastScan+":") ||
+             (undefined!=command && key.indexOf(":"+command+":")>0))) {
             window.localStorage.removeItem(key);
         }
     }
     // Delete IndexedDB cache
     idbKeyval.keys().then(keys => {
         for (var i=0, len=keys.length; i<len; ++i) {
-            if (keys[i].startsWith(LMS_LIST_CACHE_PREFIX) && (force || !keys[i].startsWith(LMS_LIST_CACHE_PREFIX+LMS_CACHE_VERSION+":"+lmsLastScan+":"))) {
+            if (keys[i].startsWith(LMS_LIST_CACHE_PREFIX) &&
+                (force ||
+                 !keys[i].startsWith(LMS_LIST_CACHE_PREFIX+LMS_CACHE_VERSION+":"+lmsLastScan+":") ||
+                 (undefined!=command && key.indexOf(":"+command+":")>0))) {
                 idbKeyval.del(keys[i]);
             }
         }
@@ -946,7 +942,7 @@ function addNote(str) {
 function rgb2Hex(rgb) {
     let hex="#";
     for (let i=0; i<3; ++i) {
-        let hv = rgb[i].toString(16);
+        let hv = Math.round(rgb[i]).toString(16);
         hex += (hv.length==1 ? "0" : "") + hv;
     }
     return hex;

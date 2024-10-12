@@ -112,19 +112,57 @@ function visibilityOrFocusChanged() {
 
 function parseUserDefinedRoles(data) {
     lmsOptions.userDefinedRoles = {}
-    let keys = Object.keys(data);
+    let keys = Object.keys(data).sort();
     ARTIST_TYPES = [].concat(BASE_ARTIST_TYPES);
     ARTIST_TYPE_IDS = [].concat(ARTIST_TYPE_IDS);
+    let excluded = [];
     for (let i=0, len=keys.length; i<len; ++i) {
         let key = keys[i];
         if (undefined!=data[key]['id'] && undefined!=data[key]['name']) {
             let id = parseInt(data[key]['id']);
             let lkey = key.toLocaleLowerCase();
-            lmsOptions.userDefinedRoles[id] = {'role':key, 'lrole':lkey, 'text':data[key]['name']};
+            let include = 1==parseInt(data[key]['include']);
+            lmsOptions.userDefinedRoles[id] = {role:key, lrole:lkey, text:data[key]['name'], include:include};
+            if (!include) {
+                excluded.push(lkey);
+            }
             ARTIST_TYPES.push(lkey);
             USER_ARTIST_TYPES.push(lkey);
             ARTIST_TYPE_IDS.push(id);
         }
+    }
+    let excludedUserDefinedRoles = excluded.join(",");
+    if (lmsOptions.excludedUserDefinedRoles!=excludedUserDefinedRoles) {
+        clearListCache(true, "artists");
+        setLocalStorageVal("excludedUserDefinedRoles", excludedUserDefinedRoles)
+    }
+    lmsOptions.excludedUserDefinedRoles = excludedUserDefinedRoles;
+}
+
+function parseUseUnifiedArtistsList(val) {
+    let separateArtistsList = 0==parseInt(val);
+    if (separateArtistsList!=lmsOptions.separateArtistsList) {
+        lmsOptions.separateArtistsList=separateArtistsList;
+        clearListCache(true, "artists");
+        setLocalStorageVal('separateArtistsList', separateArtistsList);
+    }
+}
+
+function parseRolesInArtists(composerInArtists, conductorInArtists, bandInArtists) {
+    let setting = [parseInt(composerInArtists), parseInt(conductorInArtists), parseInt(bandInArtists)].join(',');
+    if (setting!=lmsOptions.rolesInArtists) {
+        lmsOptions.rolesInArtists=setting;
+        clearListCache(true, "artists");
+        setLocalStorageVal('rolesInArtists', setting);
+    }
+}
+
+function parseTitleFormat(titleFormat, titleFormatWeb) {
+    let chosen = parseInt(titleFormatWeb);
+    let showSubtitle = chosen<titleFormat.length && titleFormat[chosen].indexOf('SUBTITLE')>=0;
+    if (showSubtitle!=lmsOptions.showSubtitle) {
+        lmsOptions.showSubtitle = showSubtitle;
+        setLocalStorageVal('showSubtitle', lmsOptions.showSubtitle);
     }
 }
 
@@ -374,7 +412,7 @@ var lmsServer = Vue.component('lms-server', {
                     this.cometd.subscribe('/slim/subscribe',
                                     function(res) { },
                                     {data:{response:'/'+this.cometd.getClientId()+'/slim/material-skin', request:['material-skin', ['notification']]}});
-                    this.updateUserDefinedRoles();
+                    this.updateServerPrefs();
                     this.updateFavorites();
                     this.updateReleaseTypes();
                 }
@@ -646,7 +684,7 @@ var lmsServer = Vue.component('lms-server', {
             }
             if (data[1]=="server") {
                 if (data[2]=="useUnifiedArtistsList") {
-                    lmsOptions.separateArtistsList=0==parseInt(data[3]);
+                    parseUseUnifiedArtistsList(data[3]);
                     bus.$emit("prefset", data[1]+":"+data[2], data[3]);
                 } else if (data[2]=="groupArtistAlbumsByReleaseType") {
                     lmsOptions.groupByReleaseType=parseInt(data[3]);
@@ -661,6 +699,12 @@ var lmsServer = Vue.component('lms-server', {
                     lmsOptions.time12hr=data[3].includes("%I");
                 } else if (data[2]=="userDefinedRoles") {
                     parseUserDefinedRoles(data[3]);
+                } else if (data[2]=="titleFormatWeb") {
+                    lmsCommand("", ["serverstatus", 0, 0, "prefs:titleFormatWeb,titleFormat"]).then(({data}) => {
+                        if (data && data.result && data.result.titleFormat && data.result.titleFormatWeb) {
+                            parseTitleFormat(data.result.titleFormat, data.result.titleFormatWeb);
+                        }
+                    });
                 }
             } else if (data[1]=="plugin.material-skin" && data[3]!=null && data[3]!=undefined) {
                 if (data[2]=="password") {
@@ -756,10 +800,21 @@ var lmsServer = Vue.component('lms-server', {
             }).catch(err => {
             });
         },
-        updateUserDefinedRoles() {
-            lmsCommand("", ["serverstatus", 0, 0, "prefs:userDefinedRoles"]).then(({data}) => {
-                if (data && data.result && data.result.userDefinedRoles) {
-                    parseUserDefinedRoles(data.result.userDefinedRoles);
+        updateServerPrefs() {
+            lmsCommand("", ["serverstatus", 0, 0, "prefs:userDefinedRoles,useUnifiedArtistsList,titleFormatWeb,titleFormat,composerInArtists,conductorInArtists,bandInArtists"]).then(({data}) => {
+                if (data && data.result) {
+                    if (data.result.userDefinedRoles) {
+                        parseUserDefinedRoles(data.result.userDefinedRoles);
+                    }
+                    if (data.result.titleFormat && data.result.titleFormatWeb) {
+                        parseTitleFormat(data.result.titleFormat, data.result.titleFormatWeb);
+                    }
+                    if (undefined!=data.result.useUnifiedArtistsList) {
+                        parseUseUnifiedArtistsList(data.result.useUnifiedArtistsList);
+                    }
+                    if (undefined!=data.result.composerInArtists && undefined!=data.result.conductorInArtists && undefined!=data.result.bandInArtists) {
+                        parseRolesInArtists(data.result.composerInArtists, data.result.conductorInArtists, data.result.bandInArtists);
+                    }
                 }
             });
         },

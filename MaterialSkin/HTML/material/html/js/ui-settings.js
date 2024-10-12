@@ -17,20 +17,8 @@ Vue.component('lms-ui-settings', {
     <v-btn flat icon @click="close" :title="ttShortcutStr(i18n('Go back'), 'esc')"><v-icon>arrow_back</v-icon></v-btn>
     <v-toolbar-title>{{width>=450 ? TB_UI_SETTINGS.title+serverName : TB_UI_SETTINGS.title}}</v-toolbar-title>
     <v-spacer class="drag-area"></v-spacer>
-    <a class="lyrion-logo" href="https://lyrion.org" target="_blank"><img :src="'lyrion' | svgIcon(darkUi||usingColoredToolbars)"></img></a>
-    <v-menu bottom left v-model="showMenu" v-if="!queryParams.party">
-     <v-btn icon slot="activator"><v-icon>more_vert</v-icon></v-btn>
-     <v-list>
-      <v-list-tile @click="saveAsDefault($event)">
-       <v-list-tile-avatar><v-icon>save_alt</v-icon></v-list-tile-avatar>
-       <v-list-tile-content><v-list-tile-title>{{i18n('Save as default')}}</v-list-tile-title></v-list-tile-content>
-      </v-list-tile>
-      <v-list-tile @click="revertToDefault($event)">
-       <v-list-tile-avatar><v-icon>settings_backup_restore</v-icon></v-list-tile-avatar>
-       <v-list-tile-content><v-list-tile-title>{{i18n('Revert to default')}}</v-list-tile-title></v-list-tile-content>
-      </v-list-tile>
-     </v-list>
-    </v-menu>
+    <v-btn icon :title="i18n('Save as default')" @click="saveAsDefault($event)"><v-icon>save_alt</v-icon></v-btn>
+    <v-btn icon :title="i18n('Revert to default')" @click="revertToDefault($event)"><v-icon>settings_backup_restore</v-icon></v-btn>
     <div class="drag-area-right"></div>
     <lms-windowcontrols v-if="queryParams.nativeTitlebar"></lms-windowcontrols>
    </v-toolbar>
@@ -142,15 +130,6 @@ Vue.component('lms-ui-settings', {
     <v-divider v-if="LMS_STATS_ENABLED"></v-divider>
 
     <v-list-tile>
-     <v-list-tile-content @click="powerButton = !powerButton" class="switch-label">
-      <v-list-tile-title>{{i18n('Show power button')}}</v-list-tile-title>
-      <v-list-tile-sub-title>{{i18n("Replace player's icon in toolbar with a power button.")}}</v-list-tile-sub-title>
-     </v-list-tile-content>
-     <v-list-tile-action><m3-switch v-model="powerButton"></m3-switch></v-list-tile-action>
-    </v-list-tile>
-    <v-divider></v-divider>
-
-    <v-list-tile>
      <v-list-tile-content @click="homeButton = !homeButton" class="switch-label">
       <v-list-tile-title>{{i18n('Show home button')}}</v-list-tile-title>
       <v-list-tile-sub-title>{{i18n('When navigating into lists, show a home button to quickly navigate to the main (home) screen. Otherwise navigating home can be achieved via a long-press on the back button.')}}</v-list-tile-sub-title>
@@ -178,7 +157,7 @@ Vue.component('lms-ui-settings', {
     <v-list-tile>
      <v-list-tile-content @click="sortFavorites = !sortFavorites" class="switch-label">
       <v-list-tile-title>{{i18n('Sort favorites list')}}</v-list-tile-title>
-      <v-list-tile-sub-title>{{i18n('Alphabetically sort favorites, rather than server supplied order.')}} {{i18n('NOTE: Folders are always sorted, this setting only affects playable items.')}}</v-list-tile-sub-title>
+      <v-list-tile-sub-title>{{i18n('Alphabetically sort favorites, rather than server supplied order.')}}</v-list-tile-sub-title>
      </v-list-tile-content>
      <v-list-tile-action><m3-switch v-model="sortFavorites"></m3-switch></v-list-tile-action>
     </v-list-tile>
@@ -427,7 +406,7 @@ Vue.component('lms-ui-settings', {
             colorList: { } ,
             userColors: [ ],
             colorToolbars: false,
-            tinted: false,
+            tinted: true,
             roundCovers : true,
             fontSize: 'r',
             fontSizes: [],
@@ -480,7 +459,6 @@ Vue.component('lms-ui-settings', {
             serverName: "",
             showRating: false,
             homeButton: false,
-            powerButton: false,
             width: 500,
             mediaControls: false,
             mediaControlsSupported: !queryParams.hide.has('mediaControls') && ('mediaSession' in navigator),
@@ -655,7 +633,6 @@ Vue.component('lms-ui-settings', {
             this.screensaver = this.$store.state.screensaver;
             this.screensaverNp = this.$store.state.screensaverNp;
             this.homeButton = this.$store.state.homeButton;
-            this.powerButton = this.$store.state.powerButton;
             this.mediaControls = this.$store.state.mediaControls;
             this.moveDialogs = this.$store.state.moveDialogs;
             this.autoCloseQueue = this.$store.state.autoCloseQueue;
@@ -759,7 +736,6 @@ Vue.component('lms-ui-settings', {
                       screensaver:this.screensaver,
                       screensaverNp:this.screensaverNp,
                       homeButton:this.homeButton,
-                      powerButton:this.powerButton,
                       showRating:this.showRating,
                       mediaControls:this.mediaControls,
                       moveDialogs:this.moveDialogs,

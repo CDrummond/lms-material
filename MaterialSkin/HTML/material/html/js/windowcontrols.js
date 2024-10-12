@@ -9,17 +9,30 @@
 Vue.component('lms-windowcontrols', {
     template: `
 <v-layout row wrap class="wc">
- <v-flex xs4><v-btn flat icon class="wc-btn" @click="sendButton('min')"><v-icon class="wc-icn">remove</v-icon></v-btn></v-flex>
- <v-flex xs4><v-btn flat icon class="wc-btn" @click="sendButton('max')"><v-icon class="wc-icn">add</v-icon></v-btn></v-flex>
- <v-flex xs4><v-btn flat icon class="wc-btn wc-close" @click="sendButton('close')"><v-icon class="wc-icn">close</v-icon></v-btn></v-flex>
+ <v-flex v-for="(btn, index) in btns" xs4><div class="wc-btn wc-btn-r" v-bind:class="{'wc-close':'close'==btn}" @click="sendButton(btn)"><v-icon class="wc-icn" v-bind:class="{'wc-res':btn=='max'&&maximized}">{{btn=='max' ? (maximized ? 'filter_none' : 'crop_square') : btn=='min' ? 'remove' : 'close'}}</v-icon></div></v-flex>
 </v-layout>
 `,
     data () {
         return {
+            maximized:false,
+            btns:[]
         }
     },
     mounted() {
-        document.documentElement.style.setProperty("--window-controls-space", "94px");
+        if (undefined==queryParams.tbarBtnsRight) {
+            if (undefined==queryParams.tbarBtns) {
+                queryParams.tbarBtnsRight=['min', 'max', 'close'];
+            } else {
+                queryParams.tbarBtnsRight=queryParams.tbarBtns.split(',');
+            }
+        }
+        this.btns = queryParams.tbarBtnsRight;
+        let space = this.btns.length==1 ? 16 : 0;
+        document.documentElement.style.setProperty("--window-controls-padr", space+"px");
+        document.documentElement.style.setProperty("--window-controls-space", ((this.btns.length*32)+space)+"px");
+        bus.$on('windowMaximized', function(isMax) {
+            this.maximized = isMax;
+        }.bind(this));
     },
     methods: {
         sendButton(btn) {

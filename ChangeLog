@@ -1,3 +1,31 @@
+x.x.x
+-----
+ 1. Combine man menu and players menu into left hand navigation drawer.
+ 2. Remove most dialog toolbar menus and replace with buttons.
+ 3. Remove option to replace player icon with power button, as no longer
+    applicable.
+ 4. Show track subtitles, if enabled in interface settings.
+ 5. Add custom favourite folder icon.
+ 6. Try to extract dominant, and not average, colour from image when using
+    colour from cover.
+ 7. Invalidate artist list cache if user-defined role exclusion changed,
+    unified artist setting changed, or band/composer/conductor in artist list
+    changed.
+ 8. Use coloured mobile navigation, progress, sliders, etc. even when tinting.
+ 9. Show full server-side interface settings page, but add a note that not all
+    settings affect Material Skin.
+10. Change defaults; use colour from cover, tinted background, unpinned queue.
+11. Work-around item selection apparing 'stuck' after clear selection.
+12. Remove 'Help' action from menu, and move link into 'Information' dialog.
+13. Make sleep, alarm, and sync icons clickable links on non-mobile devices.
+14. Combine sleep and alarm status items into 1 line in navigation drawer.
+15. Allow apps to have better control over titlebar buttons.
+16. Fix unpinned queue slide-in animation.
+17. Don't force favourite folders to always be first, only if sort is enabled.
+18. If drag favourite over folder then prompt if moving into folder or moving
+    to position in list.
+19. Allow drag'n'drop in grid view.
+
 5.3.4
 -----
 1. Fix drag'n'drop on iOS by only using polyfill for Android.

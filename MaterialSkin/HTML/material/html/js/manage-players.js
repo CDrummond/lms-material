@@ -84,19 +84,8 @@ Vue.component('lms-manage-players', {
     <v-toolbar-title class="ellipsis" style="width:100%; text-align:center" v-if="draggingSyncedPlayer">{{i18n('Drop here to remove from group')}}</v-toolbar-title>
     <v-toolbar-title class="ellipsis" v-else>{{TB_MANAGE_PLAYERS.title}}</v-toolbar-title>
     <v-spacer v-if="!draggingSyncedPlayer" class="drag-area"></v-spacer>
-    <v-menu v-if="!draggingSyncedPlayer" bottom left v-model="showMenu">
-     <v-btn icon slot="activator"><v-icon>more_vert</v-icon></v-btn>
-     <v-list>
-      <v-list-tile @click="sleepAll($event)">
-       <v-list-tile-avatar><v-icon>hotel</v-icon></v-list-tile-avatar>
-       <v-list-tile-content><v-list-tile-title>{{i18n('Set sleep time for all players')}}</v-list-tile-title></v-list-tile-content>
-      </v-list-tile>
-      <v-list-tile @click="createGroup($event)" v-if="manageGroups && unlockAll">
-       <v-list-tile-avatar><v-icon>add_circle_outline</v-icon></v-list-tile-avatar>
-       <v-list-tile-content><v-list-tile-title>{{i18n("Create group player")}}</v-list-tile-title></v-list-tile-content>
-      </v-list-tile>
-     </v-list>
-    </v-menu>
+    <v-btn icon @click="sleepAll($event)" :title="i18n('Set sleep time for all players')" v-if="!draggingSyncedPlayer && players.length>1"><v-icon>hotel</v-icon></v-btn>
+    <v-btn icon @click="createGroup($event)" :title="i18n('Create group player')" v-if="!draggingSyncedPlayer && manageGroups && unlockAll"><img class="svg-img" :src="'speaker-group-add' | svgIcon(darkUi, coloredToolbars)"></img></v-btn>
     <div class="drag-area-right"></div>
     <lms-windowcontrols v-if="queryParams.nativeTitlebar"></lms-windowcontrols>
    </v-toolbar>
@@ -123,7 +112,8 @@ Vue.component('lms-manage-players', {
           </v-list-tile-avatar>
           <v-list-tile-content v-if="isMainPlayer(player)" v-bind:class="{'dimmed': !player.ison}">
            <v-list-tile-title class="ellipsis cursor link-item" @click="setActive(player.id)"><obj :id="'pmgr-player-'+index"><v-icon v-if="player.icon.icon" class="pmgr-icon">{{player.icon.icon}}</v-icon><img v-else class="pmgr-icon svg-img" :src="player.icon.svg | svgIcon(darkUi)"></img>
-           <font v-bind:class="{'active-player-title':currentPlayer && currentPlayer.id === player.id}">{{player.name}}</font></obj><v-icon v-if="player.id==defaultPlayer" class="player-status-icon dimmed">check</v-icon><v-icon v-if="player.will_sleep_in" class="player-status-icon dimmed">hotel</v-icon><v-icon v-if="undefined!=player.alarm" class="player-status-icon dimmed">alarm</v-icon></v-list-tile-title>
+           <font v-bind:class="{'active-player-title':currentPlayer && currentPlayer.id === player.id}">{{player.name}}</font></obj><v-icon v-if="player.id==defaultPlayer" class="player-status-icon dimmed">check</v-icon><v-icon v-if="player.will_sleep_in" class="player-status-icon dimmed" v-bind:class="{'link-item':!IS_MOBILE}" @click.stop="openSleep(player)">hotel</v-icon><v-icon v-if="undefined!=player.alarm" class="player-status-icon dimmed" v-bind:class="{'link-item':!IS_MOBILE}" @click.stop="openAlarms(player)">alarm</v-icon>
+           </v-list-tile-title>
            <v-list-tile-sub-title class="ellipsis">{{player.track}}</v-list-tile-sub-title>
           </v-list-tile-content>
           <v-list-tile-content v-else v-bind:class="{'dimmed': !player.ison}">
@@ -206,7 +196,6 @@ Vue.component('lms-manage-players', {
     data() {
         return {
             show: false,
-            showMenu: false,
             showAllButtons: true,
             players: [],
             manageGroups: false,
@@ -267,9 +256,7 @@ Vue.component('lms-manage-players', {
             if (undefined!=this.dragEndTime && ((new Date().getTime()-this.dragEndTime)<=250)) {
                 return;
             }
-            if (this.showMenu) {
-                this.showMenu = false;
-            } else if (this.menu.show) {
+            if (this.menu.show) {
                 this.menu.show = false;
             }
         }.bind(this));
@@ -288,10 +275,6 @@ Vue.component('lms-manage-players', {
 
         bus.$on('otherPlayerStatus', function(player) {
             this.updatePlayer(player);
-        }.bind(this));
-
-        bus.$on('noPlayers', function() {
-            this.showMenu = false;
         }.bind(this));
 
         bus.$on('playersRemoved', function(players) {
@@ -389,7 +372,6 @@ Vue.component('lms-manage-players', {
         close() {
             this.menu.show=false;
             this.show=false;
-            this.showMenu = false;
             this.scrollElement = undefined;
             this.stopScrolling = true;
             this.draggingSyncedPlayer = false;
@@ -838,6 +820,16 @@ Vue.component('lms-manage-players', {
         },
         mouseDown(ev) {
             toolbarMouseDown(ev);
+        },
+        openSleep(player) {
+            if (!IS_MOBILE) {
+                bus.$emit('dlg.open', 'sleep', player);
+            }
+        },
+        openAlarms(player) {
+            if (!IS_MOBILE) {
+                bus.$emit('dlg.open', 'playersettings', player, 'alarms', true);
+            }
         }
     },
     computed: {
@@ -862,11 +854,14 @@ Vue.component('lms-manage-players', {
         },
         unlockAll() {
             return this.$store.state.unlockAll
+        },
+        coloredToolbars() {
+            return this.$store.state.coloredToolbars
         }
     },
     filters: {
-        svgIcon: function (name, dark, active) {
-            return "/material/svg/"+name+"?c="+(active ? getComputedStyle(document.documentElement).getPropertyValue("--active-color").replace("#", "") : dark ? LMS_DARK_SVG : LMS_LIGHT_SVG)+"&r="+LMS_MATERIAL_REVISION;
+        svgIcon: function (name, dark, coloredToolbars) {
+            return "/material/svg/"+name+"?c="+(dark || coloredToolbars ? LMS_DARK_SVG : LMS_LIGHT_SVG)+"&r="+LMS_MATERIAL_REVISION;
         }
     },
     watch: {
@@ -880,9 +875,6 @@ Vue.component('lms-manage-players', {
             if (!val) {
                 this.menu.closed = new Date().getTime();
             }
-        },
-        'showMenu': function(val) {
-            this.$store.commit('menuVisible', {name:'manage-menu', shown:val});
         }
     }
 })

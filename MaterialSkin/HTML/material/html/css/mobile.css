@@ -149,10 +149,6 @@
  margin:0px;
 }
 
-.lms-list .v-list__tile {
- padding:0 16px !important;
-}
-
 .lms-list-jump, .lms-image-grid-jump {
  width:calc(100vw - var(--jump-list-width))!important;
  left:var(--jump-list-width);
@@ -388,15 +384,6 @@
  color: var(--active-nav-btn-color) !important;
 }
 
-.np-full .pill,
-.nav-text .pill {
- background-color:var(--text-color);
-}
-.np-full .active-nav div span, .np-full .active-nav div i,
-.nav-text .active-nav div span, .nav-text .active-nav div i {
- color: var(--text-color) !important;
-}
-
 .nav-svg-img {
  width:var(--icon-size) !important;
  height:calc(var(--icon-size) + 4px) !important;
@@ -409,79 +396,6 @@
 .lms-footer .active-nav:hover, .lms-footer .inactive-nav:hover {
   background-color:var(--nav-hover-color)!important;
   border-radius:8px;
- }
-}
-
-@media (max-width:540px) {
- .lms-toolbar > .v-toolbar__content {
-  margin-left:-16px !important;
-  margin-right:-23px !important;
- }
-
- .settings-title {
-  margin:0px -12px 0px -6px!important;
- }
-
- /* Adjust dialog toolbar, so that menu icon aligns with main menu icon */
- .dialog-toolbar > .v-toolbar__content {
-  margin-right: -11px !important;
- }
-
- .subtoolbar {
-  padding:2px 1px 0px 7px;
- }
-
- .maintoolbar-player-icon {
-  left:20px;
- }
-
- .maintoolbar-player-power-button, .maintoolbar-player-power-button:hover {
-  left:8px!important;
- }
-
- .lms-list .v-list__tile,
- .detailed-sub .lms-image-grid .vue-recycle-scroller__item-view a {
-  padding:0 12px !important;
- }
-
- .lms-list .emblem, .lms-list-jump .emblem {
-  left:35px !important;
- }
-
- .pq-current-indicator {
-  left:31px !important;
- }
-
- .lms-list3 .pq-current-indicator {
-  left:50px !important;
- }
- .lms-list-album .pq-current-indicator {
-  left:41px !important;
- }
- .pq-album-header {
-  left:68px;
-  width:calc(100% - 66px);
- }
- .pq-albumstyle img {
-  margin-left:2px;
- }
- .pq-time-ns {
-  margin-right:-6px;
- }
- .pq-atime {
-  margin-right:11px;
- }
- .np-menu-fab {
-  right:5px!important;
- }
- .queue-action {
-  margin-right:-14px;
- }
- .pq-rating {
-  right:12px;
- }
- .dst-home, .dst-home:hover {
-  left:7px;
  }
 }
 
@@ -528,21 +442,6 @@
   width:120px;
   height:120px;
   padding-top:45px;
- }
-}
-
-@media (min-width:750px) {
- .group-vol {
-  right:calc(var(--window-controls-space) + 36px);
- }
-}
-
-@media (max-width:290px) {
- .maintoolbar-player-power-button, .maintoolbar-player-icon {
-  visibility: hidden;
- }
- .maintoolbar-title, .maintoolbar-subtitle {
-  padding-left:12px;
  }
 }
 

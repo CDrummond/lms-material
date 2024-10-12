@@ -333,7 +333,7 @@ function parseBrowseResp(data, parent, options, cacheKey, parentCommand, parentG
                         i.menu.push(MOVE_FAV_TO_PARENT_ACTION);
                     }
                     if (i.isFavFolder && (!i.image || i.image.startsWith("/html/images/favorites"+LMS_IMAGE_SIZE))) {
-                        i.icon="folder";
+                        i.svg="folder-favorite";
                         i.image=undefined;
                     } else if (!i.isFavFolder && undefined!=i.presetParams && undefined!=i.presetParams.favorites_url) {
                         if (i.presetParams.favorites_url.startsWith("db:album.title") && i.presetParams.icon=="html/images/albums.png") {
@@ -762,7 +762,9 @@ function parseBrowseResp(data, parent, options, cacheKey, parentCommand, parentG
                 resp.items = resp.items.concat(feeds);
                 resp.items = resp.items.concat(after);
             } else if (isFavorites) {
-                resp.items.sort(options.sortFavorites ? favSort : partialFavSort);
+                if (options.sortFavorites) {
+                    resp.items.sort(favSort);
+                }
             } else if (isRadiosTop) {
                 resp.items.sort(weightSort);
             }
@@ -1433,6 +1435,12 @@ function parseBrowseResp(data, parent, options, cacheKey, parentCommand, parentG
                     yearSet.add(year);
                     years.push(year);
                 }
+                if (lmsOptions.showSubtitle && i.subtitle) {
+                    subtitle = undefined==subtitle ? i.subtitle : (i.subtitle + SEPARATOR + subtitle);
+                    if (undefined!=subtitleContext) {
+                        subtitleContext = SEPARATOR + subtitleContext;
+                    }
+                }
                 resp.items.push({
                               id: "track_id:"+i.id,
                               title: title,
@@ -1751,6 +1759,12 @@ function parseBrowseResp(data, parent, options, cacheKey, parentCommand, parentG
                     }
                     if (subtitleContext) {
                         subtitleContext+=SEPARATOR+techInfo;
+                    }
+                }
+                if (i.subtitle) {
+                    subtitle = undefined==subtitle ? i.subtitle : (i.subtitle + SEPARATOR + subtitle);
+                    if (undefined!=subtitleContext) {
+                        subtitleContext = SEPARATOR + subtitleContext;
                     }
                 }
                 var isRemote = undefined!=parent && parent.remotePlaylist;

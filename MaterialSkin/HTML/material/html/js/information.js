@@ -11,14 +11,13 @@ Vue.component('lms-information-dialog', {
 <v-dialog v-model="show" v-if="show" persistent no-click-animation scrollable fullscreen>
  <v-card>
   <v-card-title class="settings-title">
-   <v-toolbar app class="dialog-toolbar" @mousedown="mouseDown" id="information-toolbar">
+   <v-toolbar app-data class="dialog-toolbar" @mousedown="mouseDown" id="information-toolbar">
     <div class="drag-area-left"></div>
     <v-btn flat icon v-longpress:stop="close" :title="ttShortcutStr(i18n('Go back'), 'esc')"><v-icon>arrow_back</v-icon></v-btn>
     <v-toolbar-title>
      <div>{{i18n('Information')+(undefined==serverName ? "" : (SEPARATOR+serverName))}}</div>
     </v-toolbar-title>
     <v-spacer class="drag-area"></v-spacer>
-    <a class="lyrion-logo" href="https://lyrion.org" target="_blank"><img :src="'lyrion' | svgIcon(darkUi||coloredToolbars)"></img></a>
     <lms-windowcontrols v-if="queryParams.nativeTitlebar"></lms-windowcontrols>
    </v-toolbar>
   </v-card-title>
@@ -88,6 +87,7 @@ Vue.component('lms-information-dialog', {
      <li><a class="lms-link" href="https://forums.slimdevices.com/showthread.php?109624-Announce-Material-Skin" target="_blank">{{i18n('Lyrion support forums')}}</a></li>
      <li><div class="lms-link cursor" @click="openTechInfo">{{i18n('Lyrion technical information')}}</div></li>
      <li><a class="lms-link" href="https://github.com/CDrummond/lms-material" target="_blank">{{i18n('GitHub development page')}}</a></li>
+     <li><div class="lms-link cursor" @click="openHelp">{{i18n('Help page')}}</div></li>
     </ul>
    </p>
 
@@ -386,6 +386,9 @@ Vue.component('lms-information-dialog', {
         },
         openTechInfo() {
             bus.$emit('dlg.open', 'iframe', '/material/html/docs/index.html', i18n('Lyrion technical information'), undefined, IFRAME_HOME_CLOSES_DIALOGS);
+        },
+        openHelp() {
+            bus.$emit('dlg.open', 'iframe', '/material/html/material-skin/index.html', i18n('Help'), undefined, IFRAME_HOME_CLOSES_DIALOGS);
         },
         rescan(item) {
             let now = new Date().getTime();

@@ -17,8 +17,9 @@ function setWindowArea() {
     if (undefined==rect) {
         return;
     }
-    let left = rect.y;
-    let right = rect.width<=0 ? 0 : ((window.innerWidth - (left+rect.width)) - 8);
+    let fullscrenn = 0==window.screenTop && 0==window.screenY;
+    let left = fullscrenn ? 0 : rect.left;
+    let right = rect.width<=0 || fullscrenn ? 0 : ((window.innerWidth - rect.right) - 8);
     if (left<0 || right<0) {
         return;
     }

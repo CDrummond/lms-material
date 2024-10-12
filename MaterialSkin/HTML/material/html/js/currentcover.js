@@ -6,6 +6,54 @@
  */
 'use strict';
 
+function rgb2Hsv(rgb) {
+    let r = rgb[0],
+        g = rgb[1],
+        b = rgb[2],
+        max = Math.max(r, g, b),
+        min = Math.min(r, g, b),
+        d = max - min,
+        h,
+        s = (max === 0 ? 0 : d / max),
+        v = max / 255;
+
+    switch (max) {
+        case min: h = 0; break;
+        case r: h = (g - b) + d * (g < b ? 6: 0); h /= 6 * d; break;
+        case g: h = (b - r) + d * 2; h /= 6 * d; break;
+        case b: h = (r - g) + d * 4; h /= 6 * d; break;
+    }
+
+    return [h, s, v];
+}
+
+function hsv2Rgb(hsv) {
+    let h = hsv[0],
+        s = hsv[1],
+        v = hsv[2],
+        r,
+        g,
+        b,
+        i = Math.floor(h * 6),
+        f = h * 6 - i,
+        p = v * (1 - s),
+        q = v * (1 - f * s),
+        t = v * (1 - (1 - f) * s);
+    switch (i % 6) {
+        case 0: r = v, g = t, b = p; break;
+        case 1: r = q, g = v, b = p; break;
+        case 2: r = p, g = v, b = t; break;
+        case 3: r = p, g = q, b = v; break;
+        case 4: r = t, g = p, b = v; break;
+        case 5: r = v, g = p, b = q; break;
+    }
+    return [Math.round(r * 255), Math.round(g * 255), Math.round(b * 255)];
+}
+
+function isGrey(rgb) {
+    return Math.abs(rgb[0]-rgb[1])<2 && Math.abs(rgb[0]-rgb[2])<2 && Math.abs(rgb[1]-rgb[2])<2;
+}
+
 var currentCover = undefined;
 var lmsCurrentCover = Vue.component('lms-currentcover', {
     template: `<div><img crossOrigin="anonymous" id="current-cover" :src="accessUrl" style="display:none"/></div>`,
@@ -100,111 +148,82 @@ var lmsCurrentCover = Vue.component('lms-currentcover', {
                 this.accessUrl = this.coverUrl;
             }
         }.bind(this));
-        bus.$on('colorListLoaded', function() {
-            this.colorListLoaded();
-        }.bind(this));
-        this.colorList = { };
-        getMiscJson(this.colorList, "colors", undefined, 'colorListLoaded');
     },
     methods: {
-        colorListLoaded() {
-            let list = [];
-            this.otherList = [];
-            for (let c=0, cl=this.colorList.colors, len=cl.length; c<len; ++c) {
-                if (undefined!=cl[c].acolor) {
-                    list.push([hex2Rgb(cl[c].color), cl[c]]);
-                } else if (undefined!=cl[c].others) {
-                    this.otherList = cl[c].others;
-                }
-            }
-            this.colorList = list;
-            if (this.calculateColorsRequired) {
-                this.calculateColorsRequired = false;
-                this.calculateColors();
-            }
-        },
         calculateColors() {
             if (this.$store.state.color!=COLOR_FROM_COVER) {
                 return;
             }
-            if (this.colorList.length<1) {
-                this.calculateColorsRequired = true;
+
+            if (DEFAULT_COVER==this.coverUrl) {
+                this.handleColor(undefined, undefined);
                 return;
             }
-            this.fac.getColorAsync(document.getElementById('current-cover'), {mode:'precision'}).then(color => {
-                let rgb = undefined;
-                let orgbs = color.rgb.replace('rgb(', '').replace(')', '').split(',');
-                let orgb = [parseInt(orgbs[0]), parseInt(orgbs[1]), parseInt(orgbs[2])];
-                let isDefCover = DEFAULT_COVER==this.coverUrl;
-                let useDefault = isDefCover;
-                if (!useDefault) {
-                    // If colour is too light, or too dark, then use default
-                    // HSP (Highly Sensitive Poo) equation from http://alienryderflex.com/hsp.html
-                    let hsp = Math.sqrt(0.299 * (orgb[0]**2) + 0.587 * (orgb[1]**2) + 0.114 * (orgb[2]**2));
-                    useDefault = hsp>=235 || hsp<=50;
-                    if (!useDefault) {
-                        // Find the nearest colour in our palette
-                        let col = 0;
-                        let diff = 2000000;
-                        let useOtherList = false;
-                        for (let c=0, list=this.colorList, len=list.length; c<len; ++c) {
-                            let d = ((orgb[0]-list[c][0][0])**2) + ((orgb[1]-list[c][0][1])**2) + ((orgb[2]-list[c][0][2])**2);
-                            if (d<diff) {
-                                diff = d;
-                                col = c;
-                            }
-                        }
-                        if (!store.state.coloredToolbars) {
-                            for (let c=0, list=this.otherList, len=list.length; c<len; ++c) {
-                                let d = ((orgb[0]-list[c][0])**2) + ((orgb[1]-list[c][1])**2) + ((orgb[2]-list[c][2])**2);
-                                if (d<diff) {
-                                    diff = d;
-                                    col = c;
-                                    useOtherList = true;
-                                }
-                            }
-                        }
-                        if (useOtherList) {
-                            rgb = this.otherList[col];
-                            let hexStr = rgb2Hex(rgb);
-                            document.documentElement.style.setProperty('--accent-color', hexStr);
-                            document.documentElement.style.setProperty('--primary-color', hexStr);
-                        } else {
-                            rgb = this.colorList[col][0];
-                            document.documentElement.style.setProperty('--accent-color', this.colorList[col][1].acolor);
-                            document.documentElement.style.setProperty('--primary-color', this.colorList[col][1].color);
-                        }
-                        document.documentElement.style.setProperty('--highlight-rgb', rgb[0]+","+rgb[1]+","+rgb[2]);
+
+            var vRgb = undefined;
+            try {
+                var vibrant = new Vibrant(document.getElementById('current-cover'));
+                var swatches = vibrant.swatches()
+                var desired = this.$store.state.darkUi
+                    ? ["Vibrant", "LightVibrant", "Muted", "LightMuted", "DarkVibrant", "DarkMuted"]
+                    : ["Vibrant", "DarkVibrant", "Muted", "DarkMuted", "LightVibrant", "LightMuted"]
+                for (let d=0, len=desired.length; d<len && undefined==vRgb; ++d) {
+                    if (swatches[desired[d]] && swatches[desired[d]].getPopulation()>0) {
+                        vRgb = swatches[desired[d]].getRgb();
                     }
                 }
+            } catch(e) {
+            }
 
-                if (isDefCover) {
-                    document.documentElement.style.setProperty('--tint-color', '#1976d2');
-                } else {
-                    document.documentElement.style.setProperty('--tint-color', rgb2Hex(orgb));
-                }
+            this.fac.getColorAsync(document.getElementById('current-cover'), {mode:'precision'}).then(color => {
+                let rgbs = color.rgb.replace('rgb(', '').replace(')', '').split(',');
+                let avRgb = [parseInt(rgbs[0]), parseInt(rgbs[1]), parseInt(rgbs[2])];
+                this.handleColor(vRgb, avRgb);
+            }).catch(e => { this.handleColor(undefined, undefined); });
+        },
+        handleColor(vRgb, avRgb) {
+            let isDefCover = undefined==avRgb || DEFAULT_COVER==this.coverUrl;
+            let rgb = undefined;
 
-                if (useDefault) {
+            if (isDefCover) {
+                document.documentElement.style.setProperty('--tint-color', '#1976d2');
+                rgb = [25,118,210];
+                document.documentElement.style.setProperty('--accent-color', '#82b1ff');
+                document.documentElement.style.setProperty('--primary-color', '#1976d2');
+                document.documentElement.style.setProperty('--highlight-rgb', '25,118,210');
+            } else {
+                document.documentElement.style.setProperty('--tint-color', rgb2Hex(avRgb));
+                if (isGrey(avRgb) || undefined==vRgb || isGrey(vRgb)) {
                     rgb = [25,118,210];
                     document.documentElement.style.setProperty('--accent-color', '#82b1ff');
                     document.documentElement.style.setProperty('--primary-color', '#1976d2');
                     document.documentElement.style.setProperty('--highlight-rgb', '25,118,210');
-                }
+                } else {
+                    rgb = vRgb ? vRgb : avRgb;
+                    let hsv = rgb2Hsv(rgb);
+                    hsv[2]=0.8235; // Matches 'v' from [25,118,210]
+                    hsv[1]=Math.min(hsv[1], 0.8);
+                    rgb = hsv2Rgb(hsv);
 
-                emitToolbarColorsFromState(this.$store.state);
-                if (1==queryParams.nativeAccent) {
-                    bus.$nextTick(function () {
-                        try {
-                            NativeReceiver.updateAccentColor(hexColor);
-                        } catch (e) {
-                        }
-                    });
-                } else if (queryParams.nativeAccent>0) {
-                    emitNative("MATERIAL-ACCENT\nVAL " + hexColor, queryParams.nativeAccent);
+                    let hexColor=rgb2Hex(rgb);
+                    document.documentElement.style.setProperty('--primary-color', hexColor);
+                    document.documentElement.style.setProperty('--highlight-rgb', rgb[0]+","+rgb[1]+","+rgb[2]);
+                    document.documentElement.style.setProperty('--accent-color', rgb2Hex(rgb));
                 }
-                bus.$emit("colorChanged", rgb[0]+rgb[1]+rgb[2]);
-            }).catch(e => {
-            });
+            }
+
+            emitToolbarColorsFromState(this.$store.state);
+            if (1==queryParams.nativeAccent) {
+                bus.$nextTick(function () {
+                    try {
+                        NativeReceiver.updateAccentColor(hexColor);
+                    } catch (e) {
+                    }
+                });
+            } else if (queryParams.nativeAccent>0) {
+                emitNative("MATERIAL-ACCENT\nVAL " + hexColor, queryParams.nativeAccent);
+            }
+            bus.$emit("colorChanged", rgb[0]+rgb[1]+rgb[2]);
         }
     }
 });

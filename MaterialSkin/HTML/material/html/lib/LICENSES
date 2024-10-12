@@ -45,6 +45,11 @@ PhotoSwipe:
     URL: https://github.com/dimsemenov/PhotoSwipe
     License: MIT
 
+Vibrant:
+    Version: 1.0
+    URL: https://github.com/jariz/vibrant.js
+    License: MIT
+
 vue
     Version: 2.7.15
     URL: https://github.com/vuejs/vue
@@ -69,7 +74,7 @@ vue-virtual-scroller:
     "if(o)" to "if(o&&y.start!=this.$_lastUpdateScrollPosition)"
 
 vuetify
-    Version: 1.5.24trim
+    Version: 1.5.24trim202410
     URL: https://github.com/vuetifyjs/vuetify
     License: MIT
     NOTES: Custom build with unused components removed. See tools/vuetify for

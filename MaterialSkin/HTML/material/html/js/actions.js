@@ -154,7 +154,7 @@ var ACTIONS=[
     {cmd:"pq-sort",      icon:"sort"},
     {cmd:"playlist-sort",icon:"sort"},
     {cmd:"pq-save",      icon:"save"},
-    {cmd:"disc-scroll",  svg:"arrow-circle"},
+    {cmd:"disc-scroll",  icon:"low_priority"},
     {cmd:"pq-style",     icon:"album"},
     {cmd:"trksort",      icon:"sort_by_alpha"},
     {cmd:"play-shuffle", svg:"play-shuffle"},

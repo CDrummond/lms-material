@@ -30,7 +30,7 @@ const IS_APPLE   = !IS_ANDROID && checkPlatform('Mac|iPhone|iPad');
 const IS_HIGH_DPI = matchMedia( "(-webkit-min-device-pixel-ratio: 2), (min-device-pixel-ratio: 2), (min-resolution: 192dpi)").matches;
 const IS_WINDOWS  = !IS_ANDROID && !IS_APPLE && checkPlatform('Win');
 const IS_LINUX    = !IS_ANDROID && !IS_APPLE && !IS_WINDOWS && checkPlatform('Linux');
-
+const SUPPORTS_TOUCH = (('ontouchstart' in window) || (navigator.maxTouchPoints > 0) ||(navigator.msMaxTouchPoints > 0));
 const COLOR_FROM_COVER = 'from-cover';
 const SKIP_SECONDS_VALS = [5, 10, 15, 30];
 const LMS_DEFAULT_THEME = 'dark';

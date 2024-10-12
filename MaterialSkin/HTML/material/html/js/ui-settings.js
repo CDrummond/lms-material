@@ -217,23 +217,23 @@ Vue.component('lms-ui-settings', {
     </v-list-tile>
     <v-divider></v-divider>
 
-    <v-list-tile>
+    <v-list-tile v-if="SUPPORTS_TOUCH">
      <v-list-tile-content @click="swipeChangeTrack = !swipeChangeTrack" class="switch-label">
       <v-list-tile-title>{{i18n('Swipe to change track')}}</v-list-tile-title>
       <v-list-tile-sub-title>{{i18n("Swipe left and right (on cover in mobile layout) to change track.")}}</v-list-tile-sub-title>
      </v-list-tile-content>
      <v-list-tile-action><m3-switch v-model="swipeChangeTrack"></m3-switch></v-list-tile-action>
     </v-list-tile>
-    <v-divider></v-divider>
+    <v-divider v-if="SUPPORTS_TOUCH"></v-divider>
 
-    <v-list-tile>
+    <v-list-tile v-if="SUPPORTS_TOUCH">
      <v-list-tile-content @click="swipeVolume = !swipeVolume" class="switch-label">
       <v-list-tile-title>{{i18n('Swipe to change volume')}}</v-list-tile-title>
       <v-list-tile-sub-title>{{i18n("Swipe up and down to change current volume.")}}</v-list-tile-sub-title>
      </v-list-tile-content>
      <v-list-tile-action><m3-switch v-model="swipeVolume"></m3-switch></v-list-tile-action>
     </v-list-tile>
-    <v-divider></v-divider>
+    <v-divider v-if="SUPPORTS_TOUCH"></v-divider>
 
     <v-list-tile>
      <v-select :items="skipSecondsOptions" :label="i18n('Skip backward')" v-model="skipBSeconds" item-text="label" item-value="value"></v-select>
@@ -741,7 +741,7 @@ Vue.component('lms-ui-settings', {
                       moveDialogs:this.moveDialogs,
                       autoCloseQueue:this.autoCloseQueue
                   };
-             if (withSorts) {
+            if (withSorts) {
                 for (var key in window.localStorage) {
                     if (key.startsWith(LS_PREFIX+ALBUM_SORT_KEY) || key.startsWith(LS_PREFIX+ARTIST_ALBUM_SORT_KEY)) {
                         if (undefined==settings.sorts) {

@@ -4067,6 +4067,6 @@ div.v-subheader {
 }
 
 /* Disable transititions on subtoolbar stops weird effect when home button is used */
-.subtoolbar * {
+.np-bar *, .subtoolbar * {
  transition:none!important;
 }

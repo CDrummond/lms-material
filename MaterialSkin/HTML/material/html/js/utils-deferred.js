@@ -834,3 +834,22 @@ function roleDisplayName(role) {
         ? undefined
         : lmsOptions.userDefinedRoles[val].text;
 }
+
+function refreshViewItems(view) {
+    // When using recycler view items can sometimes still look selected until interact with view.
+    // Changing, and reverting, item text seems to work-around this...
+    if (view.items.length>0) {
+        for (let i=0, len=view.items.length; i<len; ++i) {
+            view.items[i].titlex = view.items[i].title;
+            view.items[i].title = view.items[i].title+" ";
+        }
+        view.$nextTick(function () {
+            for (let i=0, len=view.items.length; i<len; ++i) {
+                if (undefined!=view.items[i].titlex) {
+                    view.items[i].title = view.items[i].titlex;
+                    delete view.items[i].titlex;
+                }
+            }
+        });
+    }
+}

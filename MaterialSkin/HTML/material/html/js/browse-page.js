@@ -1504,10 +1504,7 @@ var lmsBrowse = Vue.component("lms-browse", {
             this.lastSelect = undefined;
             bus.$emit('browseSelection', false);
             if (numSelected>0) {
-                // When using recycler view items can sometimes still look selected until interact with view.
-                // Add an item, and then removing seems to work-around this...
-                this.items.push({id:"fake", title:'', artistAlbum:'', key:"fake."+this.items.length});
-                setTimeout(function () { this.items.splice(this.items.length-1, 0); }.bind(this), 50);
+                refreshViewItems(this);
             }
         },
         select(item, index, event) {

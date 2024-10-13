@@ -442,6 +442,10 @@ html, .mini-player {
  min-width:54px;
 }
 
+.pq-albumstyle .v-list__tile__avatar {
+ min-width:57px;
+}
+
 .v-navigation-drawer,
 .theme--dark .v-navigation-drawer,
 .theme--light .v-navigation-drawer {
@@ -657,7 +661,7 @@ div.v-subheader {
 .lms-list-album .lms-avatar .v-avatar {
  width:calc(var(--pq-album-header) - 7px) !important;
  height:calc(var(--pq-album-header) - 7px) !important;
- margin-left:-10px!important;
+ margin-left:-8px!important;
 }
 
 .vue-recycle-scroller__item-view, .lms-list-item {
@@ -2104,7 +2108,7 @@ div.v-rating i.primary--text, div.v-rating i.accent--text {
 
 .lms-list3 .pq-current-indicator {
  top:8px !important;
- left:50px !important;
+ left:46px !important;
 }
 
 .lms-list-album .pq-current-indicator {
@@ -2567,8 +2571,8 @@ div.v-subheader {
  width:calc(var(--list-elem-3line-height) - 3px) !important;
  height:calc(var(--list-elem-3line-height) - 3px) !important;
  margin-left:-4px;
- margin-right:4px;
- min-width: 74px;
+ margin-right:0px;
+ min-width: 70px;
 }
 
 /* Ensure only text are of subtitle is clickable */

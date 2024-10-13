@@ -126,7 +126,7 @@ var lmsBrowse = Vue.component("lms-browse", {
  </div>
  </div>
  <v-icon class="browse-progress" v-if="fetchingItem!=undefined" color="primary">refresh</v-icon>
- <div class="lms-list bgnd-cover" v-bind:class="{'browse-backdrop-cover':drawBackdrop, 'tint-bgnd-cover':tint&&!drawBgndImage, 'album-track-list':current && current.stdItem==STD_ITEM_ALBUM}" id="browse-bgnd">
+ <div class="lms-list bgnd-cover" v-bind:style="{'background-image':'url('+currentBgndUrl+')'}" v-bind:class="{'browse-backdrop-cover':drawBackdrop, 'tint-bgnd-cover':tint&&!drawBgndImage, 'album-track-list':current && current.stdItem==STD_ITEM_ALBUM}">
   <div class="noselect lms-jumplist" v-bind:class="{'bgnd-blur':drawBgndImage,'backdrop-blur':drawBackdrop, 'lms-jumplist-h':filteredJumplist[0].header}" v-if="filteredJumplist.length>1">
    <div class="jl-inner" v-bind:style="{'max-height':(filteredJumplist.length*50)+'px'}">
     <template v-for="(item, index) in filteredJumplist">
@@ -476,6 +476,7 @@ var lmsBrowse = Vue.component("lms-browse", {
             current: {image: undefined},
             currentActions: [],
             currentItemImage: undefined, // image set in broweResp - currently only for album track lists
+            currentBgndUrl: "",
             headerTitle: undefined,
             headerSubTitle: undefined,
             detailedSubInfo: undefined,
@@ -1767,9 +1768,11 @@ var lmsBrowse = Vue.component("lms-browse", {
                     url='material/backdrops/browse.jpg';
                 }
             }
+            if (undefined==url || url.endsWith(DEFAULT_COVER) || url.endsWith("/music/undefined/cover")) {
+                url = "";
+            }
             if (url!=this.currentBgndUrl) {
                 this.currentBgndUrl = url;
-                setBgndCover(this.bgndElement, url);
             }
         },
         setAlbumRating() {
@@ -2213,7 +2216,6 @@ var lmsBrowse = Vue.component("lms-browse", {
         }.bind(this));
         this.setLibrary();
 
-        this.bgndElement = document.getElementById("browse-bgnd");
         this.scrollElement = document.getElementById("browse-list");
         this.scrollElement.addEventListener("scroll", this.handleScroll, PASSIVE_SUPPORTED ? { passive: true } : false);
         msRegister(this, this.scrollElement);

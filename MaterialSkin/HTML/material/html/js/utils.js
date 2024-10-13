@@ -615,16 +615,6 @@ function fixId(id, prefix) {
     return id;
 }
 
-function setBgndCover(elem, coverUrl) {
-    if (elem) {
-        if (undefined==coverUrl || coverUrl.endsWith(DEFAULT_COVER) || coverUrl.endsWith("/music/undefined/cover")) {
-            elem.style.backgroundImage = "url()";
-        } else {
-            elem.style.backgroundImage = "url('"+coverUrl+"')";
-        }
-    }
-}
-
 function isVisible(elem) {
     var rect = elem.getBoundingClientRect();
     var viewHeight = Math.max(document.documentElement.clientHeight, window.innerHeight);

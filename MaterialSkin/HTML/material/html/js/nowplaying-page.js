@@ -32,7 +32,7 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
     template: `
 <div v-bind:class="{'np-mob-nonav':!desktopLayout && MBAR_REP_NAV==mobileBar}">
  <div v-show="(!desktopLayout && page=='now-playing') || (desktopLayout && (info.show || largeView))" class="np-bgnd">
-  <div v-bind:class="[(info.show ? drawInfoBgndImage||drawInfoBackdrop : drawBgndImage||drawBackdrop) ? 'np-bgnd-cover':'np-bgnd-cover-none', (info.show ? drawInfoBackdrop : drawBackdrop) ? 'np-backdrop-blur':'']" id="np-bgnd"></div>
+  <div v-bind:style="{'background-image':'url('+currentBgndUrl+')'}" v-bind:class="[(info.show ? drawInfoBgndImage||drawInfoBackdrop : drawBgndImage||drawBackdrop) ? 'np-bgnd-cover':'np-bgnd-cover-none', (info.show ? drawInfoBackdrop : drawBackdrop) ? 'np-backdrop-blur':'']"></div>
  </div>
  <v-tooltip top :position-x="timeTooltip.x" :position-y="timeTooltip.y" v-model="timeTooltip.show">{{timeTooltip.text}}</v-tooltip>
  <v-menu v-model="menu.show" :position-x="menu.x" :position-y="menu.y" absolute offset-y>
@@ -434,7 +434,8 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
                  disableNext:true,
                  dstm:false,
                  showOverlay:false,
-                 showOverlayTimer:undefined
+                 showOverlayTimer:undefined,
+                 currentBgndUrl:""
                 };
     },
     mounted() {
@@ -576,7 +577,6 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
         // Refresh status now, in case we were mounted after initial status call
         bus.$emit('refreshStatus');
 
-        this.bgndElement = document.getElementById("np-bgnd");
         this.page = document.getElementById("np-page");
         bus.$on('themeChanged', function() {
             this.setBgndCover();
@@ -985,10 +985,12 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
         },
         setBgndCover() {
             var url = this.coverUrl;
-            if ((!url || url==DEFAULT_COVER) && (this.drawBackdrop || this.drawInfoBackdrop)) {
-                url='material/backdrops/nowplaying.jpg';
+            if (undefined==url || url.endsWith(DEFAULT_COVER) || url.endsWith("/music/undefined/cover")) {
+                url=this.drawBackdrop || this.drawInfoBackdrop ? 'material/backdrops/nowplaying.jpg' : '';
             }
-            setBgndCover(this.bgndElement, url);
+            if (url!=this.currentBgndUrl) {
+                this.currentBgndUrl = url;
+            }
         },
         playPauseButton(longPress) {
             if (this.$store.state.visibleMenus.size>0) {

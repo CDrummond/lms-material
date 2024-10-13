@@ -27,7 +27,8 @@
 19. Allow drag'n'drop in grid view.
 20. Clear cached artists lists if certain server-side changes are made that
     would affect these (some changes require page to be reloaded).
-21. Only show swipe settings if brower suppors touch events.
+21. Only show swipe settings if browser suppors touch events.
+22. Make background image URLs reactive elements to force refresh.
 
 5.3.4
 -----

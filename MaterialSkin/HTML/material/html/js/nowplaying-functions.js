@@ -269,7 +269,7 @@ function nowplayingOnPlayerStatus(view, playerStatus) {
     if (trackChanged && view.info.sync) {
         view.setInfoTrack();
         view.showInfo();
-        if (!IS_MOBILE) {
+        if (!IS_MOBILE && (queryParams.setTitle || queryParams.dontTrapBack)) {
             nowplayingSetWindowTitle(view);
         }
     }

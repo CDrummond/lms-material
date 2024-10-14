@@ -32,6 +32,8 @@
 23. Each time an item is browsed, a menu opened, or a dialog opened, add a
     fake item to the browser's history to allow trapping browser's back
     button.
+24. Don't set window title, unless '?setTitle' or '?dontTrapBack' are passed in
+    URL, as trapping back button breaks this use case.
 
 5.3.4
 -----

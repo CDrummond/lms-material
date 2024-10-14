@@ -9,26 +9,33 @@
 Vue.use(VueLazyload, {error:DEFAULT_COVER});
 
 let prevWindowArea={l:0, r:0};
+let windowAreaTimeout = null;
 function setWindowArea() {
-    let rect = undefined;
-    try {
-        rect = window.navigator.windowControlsOverlay.getTitlebarAreaRect();
-    } catch (e) {}
-    if (undefined==rect) {
+    if (null!=windowAreaTimeout) {
         return;
     }
-    let fullscrenn = 0==window.screenTop && 0==window.screenY;
-    let left = fullscrenn ? 0 : rect.left;
-    let right = rect.width<=0 || fullscrenn ? 0 : ((window.innerWidth - rect.right) - 8);
-    if (left<0 || right<0) {
-        return;
-    }
-    if (left!=prevWindowArea.l || right!=prevWindowArea.r) {
-        prevWindowArea={l:left, r:right};
-        document.documentElement.style.setProperty('--window-area-left', left+'px');
-        document.documentElement.style.setProperty('--window-area-right', right+'px');
-        document.documentElement.style.setProperty('--window-controls-space', right+'px');
-    }
+    windowAreaTimeout = setTimeout(function() {
+        windowAreaTimeout=  null;
+        let rect = undefined;
+        try {
+            rect = window.navigator.windowControlsOverlay.getTitlebarAreaRect();
+        } catch (e) { }
+        if (undefined==rect) {
+            return;
+        }
+        let fullscreen = window.innerWidth==screen.width && window.innerHeight==screen.height;
+        let left = fullscreen ? 0 : rect.left;
+        let right = rect.width<=0 || fullscreen ? 0 : ((window.innerWidth - rect.right) - 8);
+        if (left<0 || right<0) {
+            return;
+        }
+        if (left!=prevWindowArea.l || right!=prevWindowArea.r) {
+            prevWindowArea={l:left, r:right};
+            document.documentElement.style.setProperty('--window-area-left', left+'px');
+            document.documentElement.style.setProperty('--window-area-right', right+'px');
+            document.documentElement.style.setProperty('--window-controls-space', right+'px');
+        }
+    }, 50);
 }
 
 var app = new Vue({
@@ -316,6 +323,7 @@ var app = new Vue({
             }, false);
         } catch (e) { }
         if (undefined!=window.navigator && undefined!=window.navigator.windowControlsOverlay) {
+            setWindowArea();
             try {
                 window.matchMedia('(display-mode: window-controls-overlay)').addEventListener('change', () => {
                     setWindowArea();

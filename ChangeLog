@@ -36,6 +36,7 @@
     URL, as trapping back button breaks this use case.
 25. Only auto-switch to large now-playing view is using mobile layout and
     now-playing bar set to 'None'.
+26. Fix window controls overlay under Wayland.
 
 5.3.4
 -----

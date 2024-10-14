@@ -1229,3 +1229,13 @@ function addBrowserHistoryItem() {
         window.history.pushState({ }, '' );
     }
 }
+
+function updateBgndImage(view, url) {
+    if (url!=view.currentBgndUrl) {
+        view.currentBgndUrl = url;
+        if (IS_IOS) {
+            view.showBgnd = false;
+            setTimeout(function() { view.showBgnd = true; }, 50);
+        }
+    }
+}

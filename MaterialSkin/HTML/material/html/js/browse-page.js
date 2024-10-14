@@ -477,6 +477,7 @@ var lmsBrowse = Vue.component("lms-browse", {
             currentActions: [],
             currentItemImage: undefined, // image set in broweResp - currently only for album track lists
             currentBgndUrl: "",
+            showBgnd: true,
             headerTitle: undefined,
             headerSubTitle: undefined,
             detailedSubInfo: undefined,
@@ -591,10 +592,10 @@ var lmsBrowse = Vue.component("lms-browse", {
             return this.$store.state.browseBackdrop ? this.currentImageUrl : undefined
         },
         drawBgndImage() {
-            return undefined!=this.bgndUrl
+            return undefined!=this.bgndUrl && this.showBgnd
         },
         drawBackdrop() {
-            return !this.drawBgndImage && this.$store.state.browseBackdrop && this.$store.state.useDefaultBackdrops
+            return !this.drawBgndImage && this.$store.state.browseBackdrop && this.$store.state.useDefaultBackdrops && this.showBgnd
         },
         toolbarTitle() {
             let stdItem = this.current ? this.current.stdItem ? this.current.stdItem : this.current.altStdItem : undefined;
@@ -1768,9 +1769,7 @@ var lmsBrowse = Vue.component("lms-browse", {
             if (undefined==url || url.endsWith(DEFAULT_COVER) || url.endsWith("/music/undefined/cover")) {
                 url = "";
             }
-            if (url!=this.currentBgndUrl) {
-                this.currentBgndUrl = url;
-            }
+            updateBgndImage(this, url);
         },
         setAlbumRating() {
             var ids = [];

@@ -37,6 +37,7 @@
 25. Only auto-switch to large now-playing view is using mobile layout and
     now-playing bar set to 'None'.
 26. Fix window controls overlay under Wayland.
+27. Hacky fix for background images not showing/updating on iOS.
 
 5.3.4
 -----

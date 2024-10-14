@@ -329,6 +329,7 @@ var lmsQueue = Vue.component("lms-queue", {
             items: [],
             currentIndex: -1,
             currentBgndUrl: "",
+            showBgnd:true,
             pulseCurrent: false,
             listSize:0,
             duration: 0.0,
@@ -387,10 +388,10 @@ var lmsQueue = Vue.component("lms-queue", {
             return !this.$store.state.player
         },
         drawBgndImage() {
-            return this.$store.state.queueBackdrop && undefined!=this.coverUrl
+            return this.$store.state.queueBackdrop && undefined!=this.coverUrl && this.showBgnd
         },
         drawBackdrop() {
-            return !this.drawBgndImage && this.$store.state.queueBackdrop && this.$store.state.useDefaultBackdrops
+            return !this.drawBgndImage && this.$store.state.queueBackdrop && this.$store.state.useDefaultBackdrops && this.showBgnd
         },
         showMoveAction() {
             if (queryParams.party) {
@@ -1503,9 +1504,7 @@ var lmsQueue = Vue.component("lms-queue", {
             if (undefined==url || url.endsWith(DEFAULT_COVER) || url.endsWith("/music/undefined/cover")) {
                 url = "";
             }
-            if (url!=this.currentBgndUrl) {
-                this.currentBgndUrl = url;
-            }
+            updateBgndImage(this, url);
             // Check for cover changes in radio streams...
             if (this.coverUrl && undefined!=this.coverTrackIndex && this.coverTrackIndex>=0 && this.coverTrackIndex<this.items.length) {
                 var resizedUrl = changeImageSizing(this.coverUrl, LMS_IMAGE_SIZE);

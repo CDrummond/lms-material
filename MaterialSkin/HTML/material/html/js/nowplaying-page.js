@@ -435,7 +435,8 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
                  dstm:false,
                  showOverlay:false,
                  showOverlayTimer:undefined,
-                 currentBgndUrl:""
+                 currentBgndUrl:"",
+                 showBgnd:true
                 };
     },
     mounted() {
@@ -990,9 +991,7 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
             if (undefined==url || url.endsWith(DEFAULT_COVER) || url.endsWith("/music/undefined/cover")) {
                 url=this.drawBackdrop || this.drawInfoBackdrop ? 'material/backdrops/nowplaying.jpg' : '';
             }
-            if (url!=this.currentBgndUrl) {
-                this.currentBgndUrl = url;
-            }
+            updateBgndImage(this, url);
         },
         playPauseButton(longPress) {
             if (this.$store.state.visibleMenus.size>0) {
@@ -1495,10 +1494,10 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
             return !this.drawBgndImage && this.$store.state.nowPlayingBackdrop && this.$store.state.useDefaultBackdrops
         },
         drawInfoBgndImage() {
-            return this.$store.state.infoBackdrop && undefined!=this.coverUrl && LMS_BLANK_COVER!=this.coverUrl && DEFAULT_COVER!=this.coverUrl && DEFAULT_RADIO_COVER!=this.coverUrl
+            return this.$store.state.infoBackdrop && undefined!=this.coverUrl && LMS_BLANK_COVER!=this.coverUrl && DEFAULT_COVER!=this.coverUrl && DEFAULT_RADIO_COVER!=this.coverUrl && this.showBgnd
         },
         drawInfoBackdrop() {
-            return !this.drawInfoBgndImage && this.$store.state.infoBackdrop && this.$store.state.useDefaultBackdrops
+            return !this.drawInfoBgndImage && this.$store.state.infoBackdrop && this.$store.state.useDefaultBackdrops && this.showBgnd
         },
         coloredToolbars() {
             return this.$store.state.desktopLayout && this.$store.state.coloredToolbars

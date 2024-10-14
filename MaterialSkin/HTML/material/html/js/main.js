@@ -8,7 +8,7 @@
 
 Vue.use(VueLazyload, {error:DEFAULT_COVER});
 
-let prevWindowArea={l:0, r:0};
+let prevWindowArea={l:0, r:0, rmin:0};
 let windowAreaTimeout = null;
 function setWindowArea() {
     if (null!=windowAreaTimeout) {
@@ -29,8 +29,16 @@ function setWindowArea() {
         if (left<0 || right<0) {
             return;
         }
-        if (left!=prevWindowArea.l || right!=prevWindowArea.r) {
-            prevWindowArea={l:left, r:right};
+        // When theme-color is changed (i.e using colour from cover) Chrome flashes the website name
+        // briefly. This causes items to shift left. So, we ignore right change unless rmin==0 or this change
+        // is <=rmin
+        console.log(right, prevWindowArea.r, prevWindowArea.rmin);
+        if (left!=prevWindowArea.l || (right!=prevWindowArea.r && 0==prevWindowArea.rmin || right<=prevWindowArea.rmin)) {
+            prevWindowArea.l=left;
+            prevWindowArea.r=right;
+            if (right>0 && (0==prevWindowArea.rmin || right<prevWindowArea.rmin)) {
+                prevWindowArea.rmin = right;
+            }
             document.documentElement.style.setProperty('--window-area-left', left+'px');
             document.documentElement.style.setProperty('--window-area-right', right+'px');
             document.documentElement.style.setProperty('--window-controls-space', right+'px');

@@ -55,9 +55,9 @@ Vue.component('lms-navdrawer', {
    </v-list-tile>
   </template>
 
-  <v-divider v-if="!noPlayer && (undefined!=appLaunchPlayer || ((players && players.length>1) || playerStatus.sleepTime || otherPlayers.length>0))" class="hide-for-mini"></v-divider>
+  <v-divider v-if="playersDivider" class="hide-for-mini"></v-divider>
 
-  <v-list-tile v-if="connected && ((players && players.length>1) || otherPlayers.length>0) && !queryParams.party" v-longpress="managePlayers" class="hide-for-mini noselect">
+  <v-list-tile v-if="showManagePlayers" v-longpress="managePlayers" class="hide-for-mini noselect">
    <v-list-tile-avatar><img class="svg-img" :src="TB_MANAGE_PLAYERS.svg | svgIcon(darkUi)"></img></v-list-tile-avatar>
    <v-list-tile-content><v-list-tile-title>{{TB_MANAGE_PLAYERS.title}}</v-list-tile-title></v-list-tile-content>
    <v-list-tile-action v-if="TB_MANAGE_PLAYERS.shortcut && keyboardControl" class="menu-shortcut player-menu-shortcut">{{TB_MANAGE_PLAYERS.shortcut}}</v-list-tile-action>
@@ -68,14 +68,14 @@ Vue.component('lms-navdrawer', {
    <v-list-tile-title>{{TB_START_PLAYER.title}}</v-list-tile-title>
   </v-list-tile>
 
-  <template v-if="!noPlayer && customPlayerActions && customPlayerActions.length>0" v-for="(action, index) in customPlayerActions">
+  <template v-if="showCustomActions" v-for="(action, index) in customPlayerActions">
    <v-list-tile @click="doCustomAction(action)" v-if="undefined==action.players || action.players.indexOf(player.id)>=0">
     <v-list-tile-avatar><v-icon v-if="action.icon">{{action.icon}}</v-icon><img v-else-if="action.svg" class="svg-img" :src="action.svg | svgIcon(darkUi)"></img></v-list-tile-avatar>
     <v-list-tile-content><v-list-tile-title>{{action.title}}</v-list-tile-title></v-list-tile-content>
    </v-list-tile>
   </template>
 
-  <v-divider v-if="!noPlayer"></v-divider>
+  <v-divider v-if="playerSectionsDivider"></v-divider>
  </v-list>
  <v-spacer></v-spacer>
  <v-list class="nd-list py-0">
@@ -445,6 +445,18 @@ Vue.component('lms-navdrawer', {
         },
         unlockAll() {
             return this.$store.state.unlockAll
+        },
+        showManagePlayers() {
+            return this.connected && ((this.players && this.players.length>1) || this.otherPlayers.length>0) && !queryParams.party
+        },
+        showCustomActions() {
+            return !this.noPlayer && this.customPlayerActions && this.customPlayerActions.length>0
+        },
+        playersDivider() {
+            return this.showManagePlayers || undefined!=this.appLaunchPlayer || this.showCustomActions
+        },
+        playerSectionsDivider() {
+            return !this.noPlayer && this.players && (this.players.length>1 || this.playerStatus.sleepTime || this.playerStatus.alarmStr)
         }
     },
     filters: {
@@ -463,6 +475,7 @@ Vue.component('lms-navdrawer', {
     },
     watch: {
         'show': function(newVal) {
+
             bus.$emit('navdrawer', newVal);
             this.$store.commit('menuVisible', {name:'navdrawer', shown:newVal});
             if (newVal) {

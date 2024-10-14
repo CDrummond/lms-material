@@ -34,6 +34,8 @@
     button.
 24. Don't set window title, unless '?setTitle' or '?dontTrapBack' are passed in
     URL, as trapping back button breaks this use case.
+25. Only auto-switch to large now-playing view is using mobile layout and
+    now-playing bar set to 'None'.
 
 5.3.4
 -----

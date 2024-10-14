@@ -1661,11 +1661,7 @@ function browsePerformAction(view, item, act) {
         view.clearSelection();
         if (!view.$store.state.desktopLayout || !view.$store.state.showQueue) {
             if (act===PLAY_ACTION) {
-                if (view.$store.state.desktopLayout) {
-                    bus.$emit('expandNowPlaying', true);
-                } else {
-                    view.$store.commit('setPage', 'now-playing');
-                }
+                browseSwitchToNowPlaying(view);
             } else if (act===ADD_ACTION) {
                 bus.$emit('showMessage', i18n("Appended '%1' to the play queue", undefined==item.title ? view.headerTitle : item.title));
             } else if (act===INSERT_ACTION) {
@@ -1675,6 +1671,12 @@ function browsePerformAction(view, item, act) {
     }).catch(err => {
         logAndShowError(err, undefined, command.command);
     });
+}
+
+function browseSwitchToNowPlaying(view) {
+    if (!view.$store.state.desktopLayout && MBAR_NONE==view.$store.state.mobileBar) {
+        view.$store.commit('setPage', 'now-playing');
+    }
 }
 
 function browseItemMenu(view, item, index, event) {
@@ -2535,9 +2537,7 @@ function browseDoListAction(view, list, act, index) {
                 lmsCommand(view.playerId(), command.command).then(({data}) => {
                     bus.$emit('refreshStatus');
                     logJsonMessage("RESP", data);
-                    if (!view.$store.state.desktopLayout) {
-                        view.$store.commit('setPage', 'now-playing');
-                    }
+                    browseSwitchToNowPlaying(view);
                 }).catch(err => {
                     logError(err, command.command);
                 });
@@ -2569,8 +2569,8 @@ function browseDoCommandChunks(view, chunks, npAfterLast, refreshSig) {
                 bus.$emit(refreshSig);
                 setTimeout(function () { bus.$emit(refreshSig); }.bind(view), 500);
             }
-            if (npAfterLast && !view.$store.state.desktopLayout && data && data.result && parseInt(data.result.actioned)>0) {
-                view.$store.commit('setPage', 'now-playing');
+            if (npAfterLast && data && data.result && parseInt(data.result.actioned)>0) {
+                browseSwitchToNowPlaying(view);
             }
         } else {
             if (undefined!=refreshSig) {

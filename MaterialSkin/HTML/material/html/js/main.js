@@ -32,7 +32,6 @@ function setWindowArea() {
         // When theme-color is changed (i.e using colour from cover) Chrome flashes the website name
         // briefly. This causes items to shift left. So, we ignore right change unless rmin==0 or this change
         // is <=rmin
-        console.log(right, prevWindowArea.r, prevWindowArea.rmin);
         if (left!=prevWindowArea.l || (right!=prevWindowArea.r && 0==prevWindowArea.rmin || right<=prevWindowArea.rmin)) {
             prevWindowArea.l=left;
             prevWindowArea.r=right;
@@ -330,7 +329,7 @@ var app = new Vue({
                 }
             }, false);
         } catch (e) { }
-        if (undefined!=window.navigator && undefined!=window.navigator.windowControlsOverlay) {
+        if (undefined!=window.navigator && undefined!=window.navigator.windowControlsOverlay && 0==queryParams.nativeTitlebar) {
             setWindowArea();
             try {
                 window.matchMedia('(display-mode: window-controls-overlay)').addEventListener('change', () => {

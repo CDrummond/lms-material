@@ -1223,3 +1223,9 @@ function roleIntValue(val) {
         ? ARTIST_TYPE_IDS[idx]
         : isNaN(lower) ? 0 : parseInt(lower);
 }
+
+function addBrowserHistoryItem() {
+    if (!queryParams.dontTrapBack && window.mskHistoryLen<200) {
+        window.history.pushState({ }, '' );
+    }
+}

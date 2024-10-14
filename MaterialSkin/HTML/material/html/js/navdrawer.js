@@ -138,6 +138,7 @@ Vue.component('lms-navdrawer', {
         this.initItems();
         bus.$on('navDrawer', function() {
             this.show = true;
+            addBrowserHistoryItem();
         }.bind(this));
         this.maxWidth = window.innerWidth>500 ? 400 : 300;
         bus.$on('windowWidthChanged', function() {

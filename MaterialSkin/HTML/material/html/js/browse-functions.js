@@ -95,6 +95,7 @@ function browseHandleKey(view, event) {
 }
 
 function browseAddHistory(view) {
+    addBrowserHistoryItem();
     var prev = {};
     prev.items = view.items;
     prev.listSize = view.listSize;

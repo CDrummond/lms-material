@@ -276,13 +276,17 @@ var app = new Vue({
         }, false);
 
         if (!queryParams.dontTrapBack) {
-            // https://stackoverflow.com/questions/43329654/android-back-button-on-a-progressive-web-thislication-closes-de-this
+            window.mskHistoryLen = 0;
+            // https://stackoverflow.com/questions/43329654/android-back-button-on-a-progressive-web-application-closes-de-app
             window.addEventListener('load', function() {
-                window.history.pushState({ }, '');
+                addBrowserHistoryItem();
             }, false);
             window.addEventListener('popstate', function(event) {
-                window.history.pushState({ }, '');
                 bus.$emit('esc');
+                window.mskHistoryLen--;
+                if (window.mskHistoryLen<0) {
+                    window.mskHistoryLen=0;
+                }
                 event.preventDefault();
             }, false);
         }

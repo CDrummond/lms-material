@@ -469,6 +469,7 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
             this.largeView = false;
         }.bind(this));
         bus.$on('expandNowPlaying', function(val) {
+            addBrowserHistoryItem();
             if (window.innerHeight>=LMS_MIN_NP_LARGE_INFO_HEIGHT) {
                 if (val) {
                     this.info.show = false;
@@ -623,6 +624,7 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
             if (!LMS_P_MAI) {
                 return;
             }
+            addBrowserHistoryItem();
             if ((window.innerHeight>=LMS_MIN_NP_LARGE_INFO_HEIGHT && this.playerStatus.playlist.count>0) || this.info.show) {
                 this.largeView = false;
                 this.info.show = !this.info.show;

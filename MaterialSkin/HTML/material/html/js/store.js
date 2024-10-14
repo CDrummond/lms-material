@@ -632,6 +632,7 @@ const store = new Vuex.Store({
                 state.visibleMenus.add(val.name);
                 lmsNumVisibleMenus = state.visibleMenus.size;
                 bus.$emit('menuOpen');
+                addBrowserHistoryItem();
             } else {
                 // Delay handling of menu being closed by 1/4 second. If a menu is closed
                 // by 'esc' the 'esc' also falls through to the browse page. If we decrement
@@ -647,6 +648,7 @@ const store = new Vuex.Store({
             if (val.shown) {
                 state.openDialogs.push(val.name);
                 dialogPosition(state);
+                addBrowserHistoryItem();
             } else {
                 resetDialogPos();
                 if (state.openDialogs.length>0) {
@@ -719,6 +721,7 @@ const store = new Vuex.Store({
         },
         setShowQueue(state, val) {
             setQueueShown(state, val);
+            addBrowserHistoryItem();
         },
         setPinQueue(state, val) {
             setQueuePinned(state, val);

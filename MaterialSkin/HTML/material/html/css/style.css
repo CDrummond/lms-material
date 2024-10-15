@@ -452,6 +452,7 @@ html, .mini-player {
  background-color: var(--popup-background-color);
  border-radius: 0px 12px 12px 0px;
  margin-left:-5px;
+ height:var(--100vh)!important;
 }
 
 .v-navigation-drawer div[role="listitem"] .v-list__tile {

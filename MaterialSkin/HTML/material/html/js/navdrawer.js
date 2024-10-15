@@ -360,12 +360,13 @@ Vue.component('lms-navdrawer', {
             }
         },
         clickLogo(longPress) {
+            this.show = false;
             if (longPress) {
                 window.open("https://lyrion.org", "_blank").focus();
             }
-            this.show = false;
         },
         doCustomAction(action) {
+            this.show = false;
             performCustomAction(action, this.$store.state.player);
         },
         cancelSleepTimer() {

@@ -2145,11 +2145,13 @@ div.v-rating i.primary--text, div.v-rating i.accent--text {
  min-width:unset!important;
 }
 
-.pq-time-r {
+.pq-have-rating .pq-time {
  min-width:62px;
 }
-.pq-time-ns {
- margin-right:-6px;
+
+.lms-list .pq-have-rating .v-list__tile__sub-title,
+.lms-list3 .pq-have-rating .v-list__tile__sub-title:nth-child(3) {
+ padding-right:34px;
 }
 
 .pq-rating {

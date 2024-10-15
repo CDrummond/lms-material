@@ -252,7 +252,7 @@ var lmsQueue = Vue.component("lms-queue", {
    </v-list-tile>
   </RecycleScroller>
   <RecycleScroller v-else :items="items" :item-size="threeLines ? LMS_LIST_3LINE_ELEMENT_SIZE : LMS_LIST_ELEMENT_SIZE"  page-mode key-field="key" :buffer="LMS_SCROLLER_LIST_BUFFER">
-    <v-list-tile avatar v-bind:class="{'pq-current': index==currentIndex, 'pq-pulse':index==currentIndex && pulseCurrent, 'list-active': menu.show && index==menu.index, 'drop-target': dragActive && index==dropIndex, 'highlight':index==highlightIndex}" @dragstart="dragStart(index, $event)" @dragenter.prevent="" @dragend="dragEnd()" @dragover="dragOver(index, $event)" @drop.stop="drop(index, $event)" draggable @click.prevent.stop="click(item, index, $event)" slot-scope="{item, index}" key-field="key" @contextmenu.prevent="contextMenu(item, index, $event)">
+    <v-list-tile avatar v-bind:class="{'pq-current': index==currentIndex, 'pq-pulse':index==currentIndex && pulseCurrent, 'list-active': menu.show && index==menu.index, 'drop-target': dragActive && index==dropIndex, 'highlight':index==highlightIndex, 'pq-have-rating':undefined!=item.rating}" @dragstart="dragStart(index, $event)" @dragenter.prevent="" @dragend="dragEnd()" @dragover="dragOver(index, $event)" @drop.stop="drop(index, $event)" draggable @click.prevent.stop="click(item, index, $event)" slot-scope="{item, index}" key-field="key" @contextmenu.prevent="contextMenu(item, index, $event)">
      <v-list-tile-avatar :tile="true" v-bind:class="{'radio-image': 0==item.duration}" class="lms-avatar">
       <v-icon v-if="item.selected">check_box</v-icon>
       <img v-else :key="item.image" :src="item.image" onerror="this.src=DEFAULT_COVER" loading="lazy" v-bind:class="{'dimmed':item.dimcover}" class="radio-img allow-drag"></img>
@@ -266,7 +266,7 @@ var lmsQueue = Vue.component("lms-queue", {
       <v-list-tile-sub-title v-if="threeLines && queueContext" v-html="item.artistAlbum[3]"></v-list-tile-sub-title>
       <v-list-tile-sub-title v-else-if="threeLines" v-html="item.artistAlbum[1]"></v-list-tile-sub-title>
      </v-list-tile-content>
-     <v-list-tile-action class="pq-time" v-bind:class="{'pq-time-r':undefined!=item.rating}">{{item.durationStr}}</v-list-tile-action>
+     <v-list-tile-action class="pq-time">{{item.durationStr}}</v-list-tile-action>
      <v-list-tile-action class="queue-action" @click.stop="itemMenu(item, index, $event)">
       <div class="grid-btn list-btn hover-btn menu-btn" :title="i18n('%1 (Menu)', item.tooltip)"></div>
      </v-list-tile-action>

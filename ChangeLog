@@ -38,6 +38,7 @@
     now-playing bar set to 'None'.
 26. Fix window controls overlay under Wayland.
 27. Hacky fix for background images not showing/updating on iOS.
+28. Fix text/rating overlap in queue.
 
 5.3.4
 -----

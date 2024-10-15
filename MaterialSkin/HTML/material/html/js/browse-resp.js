@@ -603,7 +603,7 @@ function parseBrowseResp(data, parent, options, cacheKey, parentCommand, parentG
                     }
                 }
                 if (isFavorites) {
-                    i.draggable = true;
+                    i.draggable = !options.sortFavorites || !i.isFavFolder;
                     i.realIndex = resp.items.length; // So items are deleted in correct order, even when list is sorted.
                 } else if (isAudioTrack(i)) {
                     i.draggable = true;

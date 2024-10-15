@@ -1867,6 +1867,9 @@ var lmsBrowse = Vue.component("lms-browse", {
             if (this.items[0].stdItem==STD_ITEM_PLAYLIST_TRACK && this.listSize>LMS_MAX_PLAYLIST_EDIT_SIZE) {
                 return;
             }
+            if (this.current && (this.current.section==SECTION_FAVORITES || this.current.isFavFolder) && this.$store.state.sortFavorites) {
+                return;
+            }
             if ( ((this.canDrop && undefined!=window.mskBrowseDrag) || (undefined!=window.mskQueueDrag && this.current.section==SECTION_PLAYLISTS)) &&
                (!this.current || !this.current.isFavFolder || !this.options.sortFavorites || this.items[index].isFavFolder)) {
                 this.dropIndex = index;
@@ -1927,6 +1930,9 @@ var lmsBrowse = Vue.component("lms-browse", {
                         }
                     } else if (this.current) {
                         if (this.current.section==SECTION_FAVORITES) {
+                            if (this.$store.state.sortFavorites) {
+                                return;
+                            }
                             var fromId = this.items[this.dragIndex].id.startsWith("item_id:")
                                             ? this.items[this.dragIndex].id.replace("item_id:", "from_id:")
                                             : "from_id:"+this.items[this.dragIndex].params.item_id;

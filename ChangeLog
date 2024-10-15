@@ -14,7 +14,8 @@
     unified artist setting changed, or band/composer/conductor in artist list
     changed.
  9. Use coloured mobile navigation, progress, sliders, etc. even when tinting.
-10. Change defaults; use colour from cover, tinted background, unpinned queue.
+10. Change defaults; use colour from cover, tinted background, unpinned queue,
+    don't sort favourites.
 11. Work-around item selection apparing 'stuck' after clear selection.
 12. Remove 'Help' action from menu, and move link into 'Information' dialog.
 13. Make sleep, alarm, and sync icons clickable links on non-mobile devices.

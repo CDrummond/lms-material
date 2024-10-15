@@ -259,7 +259,7 @@ const store = new Vuex.Store({
         darkUi: true,
         roundCovers: true,
         fontSize: 'r',
-        sortFavorites:true,
+        sortFavorites:false,
         autoScrollQueue:true,
         library: null,
         browseBackdrop: true,

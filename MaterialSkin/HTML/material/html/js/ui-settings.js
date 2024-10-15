@@ -410,7 +410,7 @@ Vue.component('lms-ui-settings', {
             roundCovers : true,
             fontSize: 'r',
             fontSizes: [],
-            sortFavorites:true,
+            sortFavorites:false,
             autoScrollQueue:true,
             browseBackdrop:true,
             queueThreeLines:true,

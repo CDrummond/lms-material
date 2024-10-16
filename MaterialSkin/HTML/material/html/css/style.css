@@ -3847,6 +3847,10 @@ div.v-subheader {
  border-spacing:0px !important;
 }
 
+.browse-commands tr {
+ height:48px;
+}
+
 .context-button {
  margin-left:0px;
  padding:0 10px;

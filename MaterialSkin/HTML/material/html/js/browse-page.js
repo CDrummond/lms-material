@@ -745,10 +745,12 @@ var lmsBrowse = Vue.component("lms-browse", {
                 }
                 if ('mod'==modifier) {
                     if (LMS_SEARCH_KEYBOARD==key) {
-                        if ((this.history.length==0 && !this.$store.state.hidden.has(TOP_MYMUSIC_ID)) || (this.current && (this.current.id==TOP_MYMUSIC_ID || this.current.id.startsWith(SEARCH_ID)))) {
-                            this.itemAction(SEARCH_LIB_ACTION);
-                        } else if (this.currentActions.indexOf(SEARCH_LIST_ACTION)) {
-                            this.itemAction(SEARCH_LIST_ACTION);
+                        if (this.selection.size<=0) {
+                            if ((this.history.length==0 && !this.$store.state.hidden.has(TOP_MYMUSIC_ID)) || (this.current && (this.current.id==TOP_MYMUSIC_ID || this.current.id.startsWith(SEARCH_ID)))) {
+                                this.itemAction(SEARCH_LIB_ACTION);
+                            } else if (this.currentActions.indexOf(SEARCH_LIST_ACTION)) {
+                                this.itemAction(SEARCH_LIST_ACTION);
+                            }
                         }
                     } else {
                         for (var i=0, len=this.tbarActions.length; i<len; ++i) {
@@ -1050,6 +1052,10 @@ var lmsBrowse = Vue.component("lms-browse", {
             }
         },
         menuItemAction(act, item, index, event) {
+            if (act==SELECT_ACTION && this.searchActive) {
+                this.searchActive = 0;
+                this.highlightIndex = -1;
+            }
             storeClickOrTouchPos(event, this.menu);
             let itm = undefined!=this.current && item.id==this.current.id && item.stdItem==STD_ITEM_MAI ? this.history[this.history.length-1].current : item;
             this.itemAction(act, itm, index, this.menu ? {clientX:this.menu.x, clientY:this.menu.y} : event);

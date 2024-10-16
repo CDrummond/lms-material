@@ -165,10 +165,10 @@ var lmsBrowse = Vue.component("lms-browse", {
       </div>
      </v-list-tile>
 
-     <div v-else align="center" style="vertical-align: top" v-for="(citem, col) in item.items" @contextmenu.prevent="contextMenu(citem, item.rs+col, $event)">
+     <div v-else align="center" style="vertical-align: top" v-for="(citem, col) in item.items" @contextmenu.prevent="contextMenu(citem, isTop ? citem.gidx : (item.rs+col), $event)">
       <div v-if="undefined==citem" class="image-grid-item defcursor"></div>
-      <div v-else class="image-grid-item" @click="click(citem, item.rs+col, $event)" :title="citem | itemTooltip" :draggable="citem.draggable || isTop" @dragstart="dragStart(item.rs+col, $event)" @dragenter.prevent="" @dragend="dragEnd()" @dragover="dragOver(item.rs+col, $event)" @drop="drop(item.rs+col, $event)" v-bind:class="{'search-highlight':highlightIndex==(item.rs+col), 'list-active': (menu.show && (item.rs+col)==menu.index) || (fetchingItem==item.id), 'drop-target':dragActive && (item.rs+col)==dropIndex}">
-       <div v-if="selection.size>0 && browseCanSelect(citem)" class="check-btn grid-btn image-grid-select-btn" @click.stop="select(citem, item.rs+col, $event)" :title="ACTIONS[citem.selected ? UNSELECT_ACTION : SELECT_ACTION].title" v-bind:class="{'check-btn-checked':citem.selected}"></div>
+      <div v-else class="image-grid-item" @click="click(citem, isTop ? citem.gidx : (item.rs+col), $event)" :title="citem | itemTooltip" :draggable="citem.draggable || isTop" @dragstart="dragStart(isTop ? citem.gidx : (item.rs+col), $event)" @dragenter.prevent="" @dragend="dragEnd()" @dragover="dragOver(isTop ? citem.gidx : (item.rs+col), $event)" @drop="drop(isTop ? citem.gidx : (item.rs+col), $event)" v-bind:class="{'search-highlight':highlightIndex==(isTop ? citem.gidx : (item.rs+col)), 'list-active': (menu.show && (isTop ? citem.gidx : (item.rs+col))==menu.index) || (fetchingItem==item.id), 'drop-target':dragActive && (isTop ? citem.gidx : (item.rs+col))==dropIndex}">
+       <div v-if="selection.size>0 && browseCanSelect(citem)" class="check-btn grid-btn image-grid-select-btn" @click.stop="select(citem, isTop ? citem.gidx : (item.rs+col), $event)" :title="ACTIONS[citem.selected ? UNSELECT_ACTION : SELECT_ACTION].title" v-bind:class="{'check-btn-checked':citem.selected}"></div>
        <img v-else-if="citem.multi" class="multi-disc" :src="'album-multi' | svgIcon(true)" loading="lazy"></img>
        <div v-if="citem.images" :tile="true" class="image-grid-item-img">
         <div class="mi" :class="'mi'+citem.images.length">
@@ -181,18 +181,18 @@ var lmsBrowse = Vue.component("lms-browse", {
         <img v-else-if="citem.svg" class="image-grid-item-svg" :src="citem.svg | svgIcon(darkUi)" loading="lazy"></img>
         <img v-else class="image-grid-item-svg" :src="'image' | svgIcon(darkUi)" loading="lazy"></img>
        </div>
-       <div v-if="citem.image" class="image-grid-text" @click.stop="itemMenu(citem, item.rs+col, $event)">{{citem.title}}</div>
+       <div v-if="citem.image" class="image-grid-text" @click.stop="itemMenu(citem, isTop ? citem.gidx : (item.rs+col), $event)">{{citem.title}}</div>
        <div v-else class="image-grid-text">{{citem.title}}</div>
-       <div class="image-grid-text subtext" v-bind:class="{'link-item':subtitleClickable}" @click.stop="clickSubtitle(citem, item.rs+col, $event)">{{isTop && libraryName && citem.id==TOP_MYMUSIC_ID ? libraryName : citem.libname ? citem.libname : citem.subtitle}}</div>
-       <div class="grid-btn image-grid-btn hover-btn menu-btn" v-if="undefined!=citem.stdItem || (citem.menu && citem.menu.length>0 && (!citem.isPinned || (!queryParams.party && (!LMS_KIOSK_MODE || !HIDE_FOR_KIOSK.has(PIN_ACTION))))) || (isTop && libraryName && citem.id==TOP_MYMUSIC_ID)" @click.stop="itemMenu(citem, item.rs+col, $event)" :title="i18n('%1 (Menu)', stripLinkTags(citem.title))"></div>
+       <div class="image-grid-text subtext" v-bind:class="{'link-item':subtitleClickable}" @click.stop="clickSubtitle(citem, isTop ? citem.gidx : (item.rs+col), $event)">{{isTop && libraryName && citem.id==TOP_MYMUSIC_ID ? libraryName : citem.libname ? citem.libname : citem.subtitle}}</div>
+       <div class="grid-btn image-grid-btn hover-btn menu-btn" v-if="undefined!=citem.stdItem || (citem.menu && citem.menu.length>0 && (!citem.isPinned || (!queryParams.party && (!LMS_KIOSK_MODE || !HIDE_FOR_KIOSK.has(PIN_ACTION))))) || (isTop && libraryName && citem.id==TOP_MYMUSIC_ID)" @click.stop="itemMenu(citem, isTop ? citem.gidx : (item.rs+col), $event)" :title="i18n('%1 (Menu)', stripLinkTags(citem.title))"></div>
        <div class="emblem" v-if="citem.emblem" :style="{background: citem.emblem.bgnd}">
         <img :src="citem.emblem | emblem()" loading="lazy"></img>
        </div>
        <div v-if="hoverBtns && selection.size==0 && (undefined!=citem.stdItem || (citem.menu && citem.menu.length>0 && (citem.menu[0]==PLAY_ACTION || citem.menu[0]==PLAY_ALL_ACTION)))" class="grid-btns">
-        <img v-if="(!LMS_KIOSK_MODE || !HIDE_FOR_KIOSK.has(ADD_ACTION)) && allowAdd(citem)" class="other-btn grid-btn" @click.stop="itemAction(ADD_ACTION, citem, item.rs+col, $event)" :title="ACTIONS[ADD_ACTION].title" :src="'hover-add' | svgIcon(darkUi, true)"></img>
-        <img v-if="!queryParams.party && (!INSERT_ACTION || !HIDE_FOR_KIOSK.has(INSERT_ACTION)) && allowInsert(citem)" class="other-btn grid-btn" @click.stop="itemAction(INSERT_ACTION, citem, item.rs+col, $event)" :title="ACTIONS[INSERT_ACTION].title" :src="'hover-playnext' | svgIcon(darkUi, true)"></img>
-        <img v-if="allowShuffle(citem)" class="other-btn grid-btn" @click.stop="itemAction(PLAY_SHUFFLE_ACTION, citem, item.rs+col, $event)" :title="ACTIONS[PLAY_SHUFFLE_ACTION].title" :src="'hover-shuffle' | svgIcon(darkUi, true)"></img>
-        <img v-if="!queryParams.party && (!LMS_KIOSK_MODE || !HIDE_FOR_KIOSK.has(PLAY_ACTION))" class="main-btn grid-btn" @click.stop="itemAction(PLAY_ACTION, citem, item.rs+col, $event)" :title="ACTIONS[PLAY_ACTION].title" :src="'hover-play' | svgIcon(darkUi, true)"></img>
+        <img v-if="(!LMS_KIOSK_MODE || !HIDE_FOR_KIOSK.has(ADD_ACTION)) && allowAdd(citem)" class="other-btn grid-btn" @click.stop="itemAction(ADD_ACTION, citem, isTop ? citem.gidx : (item.rs+col), $event)" :title="ACTIONS[ADD_ACTION].title" :src="'hover-add' | svgIcon(darkUi, true)"></img>
+        <img v-if="!queryParams.party && (!INSERT_ACTION || !HIDE_FOR_KIOSK.has(INSERT_ACTION)) && allowInsert(citem)" class="other-btn grid-btn" @click.stop="itemAction(INSERT_ACTION, citem, isTop ? citem.gidx : (item.rs+col), $event)" :title="ACTIONS[INSERT_ACTION].title" :src="'hover-playnext' | svgIcon(darkUi, true)"></img>
+        <img v-if="allowShuffle(citem)" class="other-btn grid-btn" @click.stop="itemAction(PLAY_SHUFFLE_ACTION, citem, isTop ? citem.gidx : (item.rs+col), $event)" :title="ACTIONS[PLAY_SHUFFLE_ACTION].title" :src="'hover-shuffle' | svgIcon(darkUi, true)"></img>
+        <img v-if="!queryParams.party && (!LMS_KIOSK_MODE || !HIDE_FOR_KIOSK.has(PLAY_ACTION))" class="main-btn grid-btn" @click.stop="itemAction(PLAY_ACTION, citem, isTop ? citem.gidx : (item.rs+col), $event)" :title="ACTIONS[PLAY_ACTION].title" :src="'hover-play' | svgIcon(darkUi, true)"></img>
        </div>
       </div>
      </div>
@@ -1657,6 +1657,7 @@ var lmsBrowse = Vue.component("lms-browse", {
                 if (this.isTop) {
                     for (var i=0, len=this.items.length; i<len; ++i) {
                         if (!this.disabled.has(this.items[i].id) && !(this.hidden.has(this.items[i].id)  || (this.items[i].id==TOP_RADIO_ID && lmsOptions.combineAppsAndRadio)) && (!queryParams.party || !HIDE_TOP_FOR_PARTY.has(this.items[i].id))) {
+                            this.items[i].gidx = i;
                             items.push(this.items[i]);
                         }
                     }

@@ -1391,9 +1391,13 @@ div.v-subheader {
 }
 
 .np-menu-fab {
- top:3px!important;
- right:5px!important;
+ top:10px!important;
+ right:12px!important;
  opacity:0.25;
+ z-index:1;
+ width:28px!important;
+ height:28px!important;
+ min-width:28px!important;
 }
 
 .np-menu-fab .v-icon {

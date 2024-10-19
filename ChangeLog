@@ -16,7 +16,7 @@
  9. Use coloured mobile navigation, progress, sliders, etc. even when tinting.
 10. Change defaults; use colour from cover, tinted background, unpinned queue,
     don't sort favourites.
-11. Work-around item selection apparing 'stuck' after clear selection.
+11. Work-around item selection appearing 'stuck' after clear selection.
 12. Remove 'Help' action from menu, and move link into 'Information' dialog.
 13. Make sleep, alarm, and sync icons clickable links on non-mobile devices.
 14. Combine sleep and alarm status items into 1 line in navigation drawer.
@@ -28,7 +28,7 @@
 19. Allow drag'n'drop in grid view.
 20. Clear cached artists lists if certain server-side changes are made that
     would affect these (some changes require page to be reloaded).
-21. Only show swipe settings if browser suppors touch events.
+21. Only show swipe settings if browser supports touch events.
 22. Make background image URLs reactive elements to force refresh.
 23. Each time an item is browsed, a menu opened, or a dialog opened, add a
     fake item to the browser's history to allow trapping browser's back

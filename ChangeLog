@@ -40,6 +40,8 @@
 26. Fix window controls overlay under Wayland.
 27. Hacky fix for background images not showing/updating on iOS.
 28. Fix text/rating overlap in queue.
+29. Try to help accidental page changes in mobile layout by only handing
+    long-presses on 'pill' area of active page.
 
 5.3.4
 -----

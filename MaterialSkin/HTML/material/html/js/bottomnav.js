@@ -68,6 +68,10 @@ Vue.component('lms-bottomnav', {
             if (this.$store.state.visibleMenus.size>0) {
                 return;
             }
+            if (undefined!=this.lastIcnPress && (new Date().getTime()-this.lastIcnPress)<100) {
+                return;
+            }
+            this.lastIcnPress = undefined;
             this.tabPressed(this.items[idx].page, false)
         },
         icnPressed(longPress, el, ev) {
@@ -78,6 +82,7 @@ Vue.component('lms-bottomnav', {
             if (idx<0 || idx>this.items.length) {
                 return;
             }
+            this.lastIcnPress = new Date().getTime();
             this.tabPressed(this.items[idx].page, longPress)
         },
         tabPressed(page, longPress) {

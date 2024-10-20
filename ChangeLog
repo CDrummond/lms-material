@@ -11,6 +11,7 @@
  8. Improve performance of queue slide-in animation.
  9. Change browse waiting to load list icon.
 10. Change toolbar update icon when LMS is scanning files.
+11. UTF-8 decode random mix filenames.
 
 5.4.0
 -----

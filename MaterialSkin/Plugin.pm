@@ -10,6 +10,7 @@ package Plugins::MaterialSkin::Plugin;
 
 use strict;
 use Config;
+use Encode;
 use Scalar::Util qw(blessed);
 use Slim::Menu::BrowseLibrary;
 use Slim::Music::VirtualLibraries;
@@ -1603,7 +1604,7 @@ sub _cliCommand {
                 main::DEBUGLOG && $log->debug("Mix file:" . $file);
                 my $details = _readRandMix($file);
                 if ($details) {
-                    $request->addResultLoop('rndmix_loop', $cnt, 'name', substr(basename($file), 0, $extLen));
+                    $request->addResultLoop('rndmix_loop', $cnt, 'name', decode('utf8', substr(basename($file), 0, $extLen)));
                     $request->addResultLoop('rndmix_loop', $cnt, 'mix', $details->{'mix'});
                 }
                 $cnt++;

@@ -36,7 +36,7 @@ Vue.component('lms-navdrawer', {
   <template v-for="(item, index) in players" v-if="connected">
    <v-subheader v-if="index==0 && !item.isgroup && players[players.length-1].isgroup">{{trans.standardPlayers}}</v-subheader>
    <v-subheader v-else-if="index>0 && item.isgroup && !players[index-1].isgroup">{{trans.groupPlayers}}</v-subheader>
-   <v-list-tile @click="setPlayer(item.id)" v-bind:class="{'nd-active-player':player && item.id === player.id}">
+   <v-list-tile @click="setPlayer(item.id)" v-bind:class="{'nd-active-player':player && item.id === player.id}" :id="'nd-player-'+index">
     <v-list-tile-avatar v-longpress:stop="syncPlayer" :id="index+'-icon'">
      <v-icon v-if="item.isplaying" class="playing-badge">play_arrow</v-icon>
      <v-icon v-if="item.icon.icon">{{item.icon.icon}}</v-icon><img v-else class="svg-img" :src="item.icon.svg | svgIcon(darkUi)"></img>
@@ -139,6 +139,20 @@ Vue.component('lms-navdrawer', {
         bus.$on('navDrawer', function() {
             this.show = true;
             addBrowserHistoryItem();
+            if (this.$store.state.player) {
+                for (let i=0, loop=this.$store.state.players, len=loop.length; i<len; ++i) {
+                    if (loop[i].id==this.$store.state.player.id) {
+                        let maxVis = Math.floor(window.innerHeight/48)-2;
+                        if (i>maxVis) {
+                            this.$nextTick(function () {
+                                let elem = document.getElementById('nd-player-'+(i-maxVis));
+                                ensureVisible(elem);
+                            });
+                        }
+                        break;
+                    }
+                }
+            }
         }.bind(this));
         this.maxWidth = window.innerWidth>500 ? 400 : 300;
         bus.$on('windowWidthChanged', function() {

@@ -16,6 +16,7 @@
 12. UTF-8 decode random mix filenames.
 13. Ignore horizontal swipes 48px from either side.
 14. Increase hit-area of menu+title.
+15. When opening navigation drawer try to ensure current player is visible.
 
 5.4.0
 -----

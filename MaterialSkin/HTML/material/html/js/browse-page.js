@@ -1876,9 +1876,6 @@ var lmsBrowse = Vue.component("lms-browse", {
             if (this.items[0].stdItem==STD_ITEM_PLAYLIST_TRACK && this.listSize>LMS_MAX_PLAYLIST_EDIT_SIZE) {
                 return;
             }
-            if (this.current && (this.current.section==SECTION_FAVORITES || this.current.isFavFolder) && this.$store.state.sortFavorites) {
-                return;
-            }
             if ( ((this.canDrop && undefined!=window.mskBrowseDrag) || (undefined!=window.mskQueueDrag && this.current.section==SECTION_PLAYLISTS)) &&
                (!this.current || !this.current.isFavFolder || !this.options.sortFavorites || this.items[index].isFavFolder)) {
                 this.dropIndex = index;
@@ -1939,7 +1936,7 @@ var lmsBrowse = Vue.component("lms-browse", {
                         }
                     } else if (this.current) {
                         if (this.current.section==SECTION_FAVORITES) {
-                            if (this.$store.state.sortFavorites) {
+                            if (this.$store.state.sortFavorites && !this.items[to].isFavFolder) {
                                 return;
                             }
                             var fromId = this.items[this.dragIndex].id.startsWith("item_id:")
@@ -1949,17 +1946,23 @@ var lmsBrowse = Vue.component("lms-browse", {
                                             ? this.items[to].id.replace("item_id:", "to_id:")
                                             : "to_id:"+this.items[to].params.item_id;
                             if (this.items[to].isFavFolder) {
-                                let choices = [
-                                    {val:1, title:i18n("Move into '%1'", this.items[to].title), svg:"folder-favorite"},
-                                    {val:2, title:i18n("Move position"), icon:ACTIONS[SCROLL_TO_ACTION].icon, svg:ACTIONS[SCROLL_TO_ACTION].svg}
-                                ]
-                                choose(i18n("Move '%1'", this.items[this.dragIndex].title), choices).then(choice => {
-                                    if (undefined!=choice && choice.val>0) {
-                                        lmsCommand(this.playerId(), ["favorites", "move", fromId, toId+(1==choice.val ? ".0" : "")]).then(({data}) => {
-                                            this.refreshList();
-                                        });
-                                    }
-                                });
+                                if (this.$store.state.sortFavorites) {
+                                    lmsCommand(this.playerId(), ["favorites", "move", fromId, toId+".0"]).then(({data}) => {
+                                        this.refreshList();
+                                    });
+                                } else {
+                                    let choices = [
+                                        {val:1, title:i18n("Move into '%1'", this.items[to].title), svg:"folder-favorite"},
+                                        {val:2, title:i18n("Move position"), icon:ACTIONS[SCROLL_TO_ACTION].icon, svg:ACTIONS[SCROLL_TO_ACTION].svg}
+                                    ]
+                                    choose(i18n("Move '%1'", this.items[this.dragIndex].title), choices).then(choice => {
+                                        if (undefined!=choice && choice.val>0) {
+                                            lmsCommand(this.playerId(), ["favorites", "move", fromId, toId+(1==choice.val ? ".0" : "")]).then(({data}) => {
+                                                this.refreshList();
+                                            });
+                                        }
+                                    });
+                                }
                             } else {
                                 lmsCommand(this.playerId(), ["favorites", "move", fromId, toId]).then(({data}) => {
                                     this.refreshList();

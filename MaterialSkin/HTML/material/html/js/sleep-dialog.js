@@ -18,7 +18,7 @@ Vue.component('lms-sleep-dialog', {
      <v-flex xs12>
       <v-list class="sleep-list dialog-main-list">
        <template v-for="(item, index) in items">
-        <v-list-tile @click="setSleep(item.duration)">
+        <v-list-tile @click="" @mousedown="selectA(item.duration)" @mouseup="selectB(item.duration)" @touchstart="selectA(item.duration)" @touchend="selectB(item.duration)">
          <div :tile="true" v-if="boundKeys" class="choice-key">{{9==index ? 0 : index+1}}</div>
          <v-list-tile-title>{{item.label}}</v-list-tile-title>
         </v-list-tile>
@@ -51,12 +51,12 @@ Vue.component('lms-sleep-dialog', {
             if (queryParams.party) {
                 return;
             }
+            this.selectedDuration = undefined;
             this.boundKeys = false;
             bindNumeric(this);
             this.player = player;
             this.sleepTime = undefined;
             this.show = true;
-            this.shownAt = new Date().getTime();
             if (undefined!=this.player) {
                 lmsCommand(this.player.id, ["sleep", "?"]).then(({data}) => {
                     if (data && data.result && data.result._sleep) {
@@ -109,11 +109,16 @@ Vue.component('lms-sleep-dialog', {
             this.cancelTimer();
             unbindNumeric(this);
         },
-        setSleep(duration) {
-            // Work-around for long-press clicks falling through...
-            if ((new Date().getTime()-this.shownAt)<250) {
-                return;
+        selectA(duration) {
+            this.selectedDuration = duration;
+        },
+        selectB(duration) {
+            if (undefined!=this.selectedDuration && duration==this.selectedDuration) {
+                this.setSleep(duration);
             }
+            this.selectedDuration = undefined;
+        },
+        setSleep(duration) {
             if (undefined==this.player) {
                 this.$store.state.players.forEach(p => {
                     if (!p.isgroup) {

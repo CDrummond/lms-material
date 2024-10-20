@@ -6,6 +6,8 @@
 4. Fix move into favourites folder prompt.
 5. Fix emblem position in lists.
 6. Allow dropping favourites into folders even with sort enabled.
+7. Work-around long-press on power button falling through to auto-select a
+   sleep item.
 
 5.4.0
 -----

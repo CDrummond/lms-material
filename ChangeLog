@@ -8,6 +8,7 @@
 6. Allow dropping favourites into folders even with sort enabled.
 7. Work-around long-press on power button falling through to auto-select a
    sleep item.
+8. Improve performance of queue slide-in animation.
 
 5.4.0
 -----

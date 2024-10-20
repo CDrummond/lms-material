@@ -528,7 +528,18 @@
  border-radius:8px 0 0 8px;
  box-shadow:var(--menu-dlg-shadow);
  overflow: hidden;
- animation: pqSlideIn .25s linear forwards;
+ transform: translate3d(100%, 0, 0);
+ -webkit-transform: translate3d(100%, 0, 0);
+ animation: pqSlideIn 0.2s forwards;
+ -webkit-animation: pqSlideIn 0.2s forwards;
+}
+
+@keyframes pqSlideIn {
+ 100% { transform: translate3d(0%, 0, 0); }
+}
+
+@-webkit-keyframes pqSlideIn {
+ 100% { -webkit-transform: translate3d(0%, 0, 0); }
 }
 
 .pq-unpinned .lms-list {
@@ -560,11 +571,6 @@
   border-left:none!important;
   width:100vw!important;
  }
-}
-
-@keyframes pqSlideIn {
- from{right:-100%}
- to{right:0px}
 }
 
 .lms-resizer {

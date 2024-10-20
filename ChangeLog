@@ -8,11 +8,14 @@
  6. Allow dropping favourites into folders even with sort enabled.
  7. Work-around long-press on power button falling through to auto-select a
     sleep item.
- 8. Improve performance of queue slide-in animation.
- 9. Change browse waiting to load list icon.
-10. Change toolbar update icon when LMS is scanning files.
-11. UTF-8 decode random mix filenames.
-12. Ignore horizontal swipes 48px from either side.
+ 8. Work-around potential long-press on player icon button falling through to
+    auto-select sync players.
+ 9. Improve performance of queue slide-in animation.
+10. Change browse waiting to load list icon.
+11. Change toolbar update icon when LMS is scanning files.
+12. UTF-8 decode random mix filenames.
+13. Ignore horizontal swipes 48px from either side.
+14. Increase hit-area of menu+title.
 
 5.4.0
 -----

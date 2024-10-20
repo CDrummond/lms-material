@@ -3352,6 +3352,11 @@ div.v-subheader {
  min-width:unset!important;
 }
 
+.navdrawer-selector .maintoolbar-title {
+ padding-top:calc((var(--main-toolbar-height) - (var(--std-font-size) + 9px))/2);
+ height:100%;
+}
+
 .maintoolbar-title, .maintoolbar-subtitle {
  padding-left:0px!important;
 }

@@ -928,7 +928,10 @@ div.v-subheader {
 }
 
 .detailed-sub .lms-list .emblem, .detailed-sub .lms-list-jump .emblem {
- left:calc(100px - var(--jump-list-adjust));
+ left:calc(39px - var(--jump-list-adjust));
+}
+.indent-left .lms-list .emblem, .indent-left .lms-list-jump .emblem {
+ left:calc(92px - var(--jump-list-adjust));
 }
 .indent-right .lms-list .emblem, .indent-right .lms-list-jump .emblem,
 .indent-both .lms-list .emblem, .indent-both .lms-list-jump .emblem {

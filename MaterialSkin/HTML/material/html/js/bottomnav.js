@@ -11,9 +11,9 @@ Vue.component('lms-bottomnav', {
 <v-footer class="lms-footer" v-bind:class="{'trans-footer':useTransparentFooter, 'nav-text':nowPlayingFull&&!coloredToolbars}" id="nav-bar">
  <v-bottom-nav class="lms-bottom-nav" :active="activeBtn">
   <template v-for="(item, index) in items">
-   <v-btn flat class="lms-bottom-nav-button" v-longpress:nomove="btnPressed" v-bind:class="{'active-nav': activeBtn==index, 'inactive-nav': activeBtn!=index}" :id="'navbtn-'+index">
+   <v-btn flat class="lms-bottom-nav-button" @click="btnPressed(index)" v-bind:class="{'active-nav': activeBtn==index, 'inactive-nav': activeBtn!=index}">
     <span>{{item.text}}</span>
-    <div class="pill" v-bind:class="{'pill-ct':coloredToolbars}" v-if="activeBtn==index"></div>
+    <div class="pill" v-bind:class="{'pill-ct':coloredToolbars}" v-if="activeBtn==index" v-longpress:nomove="icnPressed" :id="'navbtn-'+index"></div>
     <v-icon v-if="activeBtn==index">{{item.active}}</v-icon>
     <img v-else class="nav-svg-img" :src="item.inactive | svgIcon(darkUi|(coloredToolbars&&!useTransparentFooter))" oncontextmenu="return false;"></img>
    </v-btn>
@@ -64,7 +64,13 @@ Vue.component('lms-bottomnav', {
                           { text: i18n('Queue'),   page: 'queue',       active:'queue_music',   inactive:'queue_music_outline' },
                          ];
         },
-        btnPressed(longPress, el) {
+        btnPressed(idx) {
+            if (this.$store.state.visibleMenus.size>0) {
+                return;
+            }
+            this.tabPressed(this.items[idx].page, false)
+        },
+        icnPressed(longPress, el, ev) {
             if (this.$store.state.visibleMenus.size>0) {
                 return;
             }
@@ -72,7 +78,9 @@ Vue.component('lms-bottomnav', {
             if (idx<0 || idx>this.items.length) {
                 return;
             }
-            this.tabPressed(this.items[idx].page, longPress)
+            try { ev.preventDefault(); } catch(e) { }
+            try { ev.stopPropagation();} catch(e) { }
+            this.tabPressed(this.items[idx].page, longPress);
         },
         tabPressed(page, longPress) {
             if (page!=this.$store.state.page) {

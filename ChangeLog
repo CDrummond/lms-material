@@ -1,3 +1,12 @@
+5.4.1
+-----
+1. Translation update.
+2. Fix MAI settings button (top right cog icon).
+3. Add long-press on player icon in navigation drawer to open sync dialog.
+4. Fix move into favourites folder prompt.
+5. Fix emblem position in lists.
+6. Allow dropping favourites into folders even with sort enabled.
+
 5.4.0
 -----
  1. Combine main menu and players menu into left hand navigation drawer.
@@ -12,11 +21,11 @@
     colour from cover.
  8. Invalidate artist list cache if user-defined role exclusion changed,
     unified artist setting changed, or band/composer/conductor in artist list
-    changed.
+    changed (some changes require page to be reloaded).
  9. Use coloured mobile navigation, progress, sliders, etc. even when tinting.
 10. Change defaults; use colour from cover, tinted background, unpinned queue,
     don't sort favourites.
-11. Work-around item selection apparing 'stuck' after clear selection.
+11. Work-around item selection appearing 'stuck' after clear selection.
 12. Remove 'Help' action from menu, and move link into 'Information' dialog.
 13. Make sleep, alarm, and sync icons clickable links on non-mobile devices.
 14. Combine sleep and alarm status items into 1 line in navigation drawer.
@@ -26,20 +35,20 @@
 18. If drag favourite over folder then prompt if moving into folder or moving
     to position in list.
 19. Allow drag'n'drop in grid view.
-20. Clear cached artists lists if certain server-side changes are made that
-    would affect these (some changes require page to be reloaded).
-21. Only show swipe settings if browser suppors touch events.
-22. Make background image URLs reactive elements to force refresh.
-23. Each time an item is browsed, a menu opened, or a dialog opened, add a
+20. Only show swipe settings if browser supports touch events.
+21. Make background image URLs reactive elements to force refresh.
+22. Each time an item is browsed, a menu opened, or a dialog opened, add a
     fake item to the browser's history to allow trapping browser's back
     button.
-24. Don't set window title, unless '?setTitle' or '?dontTrapBack' are passed in
+23. Don't set window title, unless '?setTitle' or '?dontTrapBack' are passed in
     URL, as trapping back button breaks this use case.
-25. Only auto-switch to large now-playing view is using mobile layout and
+24. Only auto-switch to large now-playing view is using mobile layout and
     now-playing bar set to 'None'.
-26. Fix window controls overlay under Wayland.
-27. Hacky fix for background images not showing/updating on iOS.
-28. Fix text/rating overlap in queue.
+25. Fix window controls overlay under Wayland.
+26. Hacky fix for background images not showing/updating on iOS.
+27. Fix text/rating overlap in queue.
+28. Try to help accidental page changes in mobile layout by only handling
+    long-presses on 'pill' area of active page.
 
 5.3.4
 -----

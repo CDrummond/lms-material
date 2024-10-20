@@ -108,7 +108,7 @@ Vue.component('lms-manage-players', {
            <v-icon class="link-item">link</v-icon>
           </v-list-tile-avatar>
           <v-list-tile-avatar v-else-if="player.image" :tile="true" class="pmgr-cover" v-bind:class="{'dimmed': !player.ison}">
-           <img :key="player.image" v-lazy="player.image" v-bind:class="{'dimmed':player.image==DEFAULT_COVER || player.image==DEFAULT_RADIO_COVER}"></img>
+           <img :key="player.image" v-lazy="player.image" :draggable="false" v-bind:class="{'dimmed':player.image==DEFAULT_COVER || player.image==DEFAULT_RADIO_COVER}"></img>
           </v-list-tile-avatar>
           <v-list-tile-content v-if="isMainPlayer(player)" v-bind:class="{'dimmed': !player.ison}">
            <v-list-tile-title class="ellipsis cursor link-item" @click="setActive(player.id)"><obj :id="'pmgr-player-'+index"><v-icon v-if="player.icon.icon" class="pmgr-icon">{{player.icon.icon}}</v-icon><img v-else class="pmgr-icon svg-img" :src="player.icon.svg | svgIcon(darkUi)"></img>

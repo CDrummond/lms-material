@@ -148,8 +148,8 @@ function parseUseUnifiedArtistsList(val) {
     }
 }
 
-function parseRolesInArtists(composerInArtists, conductorInArtists, bandInArtists) {
-    let setting = [parseInt(composerInArtists), parseInt(conductorInArtists), parseInt(bandInArtists)].join(',');
+function parseRolesInArtists(composerInArtists, conductorInArtists, bandInArtists, trackartistInArtists) {
+    let setting = [parseInt(composerInArtists), parseInt(conductorInArtists), parseInt(bandInArtists), undefined==trackartistInArtists ? 0 : parseInt(trackartistInArtists)].join(',');
     if (setting!=lmsOptions.rolesInArtists) {
         lmsOptions.rolesInArtists=setting;
         clearListCache(true, "artists");
@@ -801,7 +801,7 @@ var lmsServer = Vue.component('lms-server', {
             });
         },
         updateServerPrefs() {
-            lmsCommand("", ["serverstatus", 0, 0, "prefs:userDefinedRoles,useUnifiedArtistsList,titleFormatWeb,titleFormat,composerInArtists,conductorInArtists,bandInArtists"]).then(({data}) => {
+            lmsCommand("", ["serverstatus", 0, 0, "prefs:userDefinedRoles,useUnifiedArtistsList,titleFormatWeb,titleFormat,composerInArtists,conductorInArtists,bandInArtists,trackartistInArtists"]).then(({data}) => {
                 if (data && data.result) {
                     if (data.result.userDefinedRoles) {
                         parseUserDefinedRoles(data.result.userDefinedRoles);
@@ -813,7 +813,7 @@ var lmsServer = Vue.component('lms-server', {
                         parseUseUnifiedArtistsList(data.result.useUnifiedArtistsList);
                     }
                     if (undefined!=data.result.composerInArtists && undefined!=data.result.conductorInArtists && undefined!=data.result.bandInArtists) {
-                        parseRolesInArtists(data.result.composerInArtists, data.result.conductorInArtists, data.result.bandInArtists);
+                        parseRolesInArtists(data.result.composerInArtists, data.result.conductorInArtists, data.result.bandInArtists, data.result.trackartistInArtists);
                     }
                 }
             });

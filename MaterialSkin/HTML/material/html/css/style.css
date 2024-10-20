@@ -928,7 +928,10 @@ div.v-subheader {
 }
 
 .detailed-sub .lms-list .emblem, .detailed-sub .lms-list-jump .emblem {
- left:calc(100px - var(--jump-list-adjust));
+ left:calc(39px - var(--jump-list-adjust));
+}
+.indent-left .lms-list .emblem, .indent-left .lms-list-jump .emblem {
+ left:calc(92px - var(--jump-list-adjust));
 }
 .indent-right .lms-list .emblem, .indent-right .lms-list-jump .emblem,
 .indent-both .lms-list .emblem, .indent-both .lms-list-jump .emblem {
@@ -1391,9 +1394,13 @@ div.v-subheader {
 }
 
 .np-menu-fab {
- top:3px!important;
- right:5px!important;
+ top:10px!important;
+ right:12px!important;
  opacity:0.25;
+ z-index:1;
+ width:28px!important;
+ height:28px!important;
+ min-width:28px!important;
 }
 
 .np-menu-fab .v-icon {
@@ -2886,13 +2893,13 @@ div.v-subheader {
 /* Long press on buttons sometimes causes select? */
 .v-btn--icon, .v-btn__content, .v-btn__content i, .noselect, .v-slider, .vol-control-0, .vol-control-1, .vol-control-2,
 .vol-control-0 p, .vol-control-1 p, .vol-control-2 p, .vol-slider, .vol-slider input, .lms-splitter, .splitter,
-.v-slider__track__container, .v-slider__track, .v-slider__thumb-container, .v-slider__thumb, .np-bar-image {
- -webkit-touch-callout:none;
- -webkit-user-select:none;
- -khtml-user-select:none;
- -moz-user-select:none;
- -ms-user-select:none;
- user-select:none;
+.v-slider__track__container, .v-slider__track, .v-slider__thumb-container, .v-slider__thumb, .np-bar-image, .vol-sheet * {
+ -webkit-touch-callout:none!important;
+ -webkit-user-select:none!important;
+ -khtml-user-select:none!important;
+ -moz-user-select:none!important;
+ -ms-user-select:none!important;
+ user-select:none!important;
 }
 
 .browse-modes-table {

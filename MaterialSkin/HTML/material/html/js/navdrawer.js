@@ -37,7 +37,7 @@ Vue.component('lms-navdrawer', {
    <v-subheader v-if="index==0 && !item.isgroup && players[players.length-1].isgroup">{{trans.standardPlayers}}</v-subheader>
    <v-subheader v-else-if="index>0 && item.isgroup && !players[index-1].isgroup">{{trans.groupPlayers}}</v-subheader>
    <v-list-tile @click="setPlayer(item.id)" v-bind:class="{'nd-active-player':player && item.id === player.id}">
-    <v-list-tile-avatar>
+    <v-list-tile-avatar v-longpress:stop="syncPlayer" :id="index+'-icon'">
      <v-icon v-if="item.isplaying" class="playing-badge">play_arrow</v-icon>
      <v-icon v-if="item.icon.icon">{{item.icon.icon}}</v-icon><img v-else class="svg-img" :src="item.icon.svg | svgIcon(darkUi)"></img>
     </v-list-tile-avatar>
@@ -347,6 +347,18 @@ Vue.component('lms-navdrawer', {
                         setTimeout(function () { bus.$emit('refreshStatus', player.id); }.bind(this), 1000);
                     }.bind(this), 500);
                 });
+            }
+        },
+        syncPlayer(longPress, el, event) {
+            storeClickOrTouchPos(event);
+            let idx = parseInt(el.id.split("-")[0]);
+            if (idx>=0 && idx<=this.$store.state.players.length) {
+                if (longPress) {
+                    this.show = false;
+                    bus.$emit('dlg.open', 'sync', this.$store.state.players[idx]);
+                } else {
+                    this.setPlayer(this.$store.state.players[idx].id);
+                }
             }
         },
         togglePower(longPress, el, event) {

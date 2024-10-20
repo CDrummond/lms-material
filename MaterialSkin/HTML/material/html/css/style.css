@@ -2923,9 +2923,9 @@ div.v-subheader {
 
 .browse-progress {
  z-index:2;
- width:64px;
- height:64px;
- font-size:64px;
+ width:96px;
+ height:96px;
+ font-size:96px;
  opacity:0.0;
  animation:pulse 2s infinite;
  animation-delay:2s;

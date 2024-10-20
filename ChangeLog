@@ -12,6 +12,7 @@
  9. Change browse waiting to load list icon.
 10. Change toolbar update icon when LMS is scanning files.
 11. UTF-8 decode random mix filenames.
+12. Ignore horizontal swipes 48px from either side.
 
 5.4.0
 -----

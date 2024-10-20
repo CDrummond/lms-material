@@ -16,13 +16,13 @@ Vue.component('lms-sync-dialog', {
      <v-flex xs12 class="dlgtitle">{{i18n("Select which players you would like to synchronise with '%1'", player.name)}}</v-flex>
      <v-flex xs12>
       <v-list class="sleep-list dialog-main-list">
-       <v-list-tile @click="toggleAll()" v-if="players.length>1">
+       <v-list-tile @click="" @mousedown="toggleAllA" @mouseup="toggleAllB" @touchstart="toggleAllA" @touchend="toggleAllB" v-if="players.length>1">
         <v-list-tile-avatar :tile="true" class="lms-avatar"><v-icon>{{selectAllIcon}}</v-icon></v-list-tile-avatar>
         <v-list-tile-title class="sleep-item">{{i18n('Select All')}}</v-list-tile-title>
        </v-list-tile>
        <v-divider v-if="players.length>1"></v-divider>
        <template v-for="(p, index) in players">
-        <v-list-tile @click="p.synced=!p.synced; numSync+=(p.synced ? 1 : -1)">
+        <v-list-tile @click="" @mousedown="togglePlayerA(index)" @mouseup="togglePlayerB(index)" @touchstart="togglePlayerA(index)" @touchend="togglePlayerB(index)">
          <v-list-tile-avatar :tile="true" class="lms-avatar"><v-icon>{{p.synced ? 'check_box' : 'check_box_outline_blank'}}</v-icon></v-list-tile-avatar>
          <v-list-tile-title class="sleep-item">{{p.name}}</v-list-tile-title>
         </v-list-tile>
@@ -75,6 +75,7 @@ Vue.component('lms-sync-dialog', {
             }
             this.player = player;
             this.numSync = 0;
+            this.lastBtn = undefined;
             lmsCommand(this.player.id, ["sync", "?"]).then(({data}) => {
                 if (data && data.result && undefined!=data.result._sync) {
                     let sync = data.result._sync.split(",");
@@ -155,6 +156,32 @@ Vue.component('lms-sync-dialog', {
                     this.doCommands(commands);
                 });
             }
+        },
+        togglePlayerA(index) {
+            this.lastBtn = index;
+        },
+        togglePlayerB(index) {
+            if (index!=undefined && this.lastBtn==index) {
+                this.togglePlayer(index);
+            }
+            this.lastBtn = undefined;
+        },
+        togglePlayer(index) {
+            if (index<0 || index>this.players.length) {
+                return;
+            }
+            let player = this.players[index];
+            player.synced=!player.synced;
+            this.numSync+=(player.synced ? 1 : -1);
+        },
+        toggleAllA() {
+            this.lastBtn=-1;
+        },
+        toggleAllB() {
+            if (this.lastBtn==-1) {
+                this.toggleAll();
+            }
+            this.lastBtn = undefined;
         },
         toggleAll() {
             let sel = this.numSync!=this.players.length;

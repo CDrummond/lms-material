@@ -1919,6 +1919,7 @@ var lmsBrowse = Vue.component("lms-browse", {
         drop(to, ev) {
             this.stopScrolling = true;
             ev.preventDefault();
+            bus.$emit('dragActive', false);
             if (this.dragIndex!=undefined && to!=this.dragIndex) {
                 var item = this.items[this.dragIndex];
                 if (this.isTop || (this.current && (this.current.section==SECTION_FAVORITES || (this.current.section==SECTION_PLAYLISTS && item.stdItem==STD_ITEM_PLAYLIST_TRACK)))) {

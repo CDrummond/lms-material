@@ -2,6 +2,7 @@
 -----
 1. Tweak how navigation drawer list is scrolled to ensure current player is
    visible.
+2. Work-around drag highlight sometimes reamining after drop.
 
 5.4.1
 -----

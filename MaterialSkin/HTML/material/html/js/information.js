@@ -149,7 +149,6 @@ Vue.component('lms-information-dialog', {
             this.show = true;
             var scrolled = this.scrollToPlugins();
             lmsCommand("", ["material-skin", "plugins"]).then(({data}) => {
-                var hadPlugins = this.plugins.names.length>0 || this.updates.names.length>0;
                 this.plugins.names.clear();
                 this.plugins.details = [];
                 if (data && data.result && data.result.plugins_loop) {
@@ -163,8 +162,6 @@ Vue.component('lms-information-dialog', {
             if (this.$store.state.unlockAll) {
                 this.updates.server = this.$store.state.updatesAvailable.has("server");
                 axios.get(location.protocol+'//'+location.hostname+(location.port ? ':'+location.port : '')+"/updateinfo.json?x=time"+(new Date().getTime())).then((resp) => {
-                    var hadServer = this.updates.server;
-                    var hadPlugins = this.plugins.names.length>0 || this.updates.names.length>0;
                     var updates = eval(resp.data);
                     this.updates.names.clear();
                     this.updates.details = [];

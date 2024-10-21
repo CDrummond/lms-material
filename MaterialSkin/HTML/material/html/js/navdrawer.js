@@ -142,10 +142,11 @@ Vue.component('lms-navdrawer', {
             if (this.$store.state.player) {
                 for (let i=0, loop=this.$store.state.players, len=loop.length; i<len; ++i) {
                     if (loop[i].id==this.$store.state.player.id) {
-                        let maxVis = Math.floor(window.innerHeight/48)-2;
-                        if (i>maxVis || ((i+3)*48)>=window.innerHeight) {
+                        let adjust = loop[i].isgroup ? 2 : 1;
+                        let maxVis = Math.floor(window.innerHeight/48)-(1+adjust);
+                        if (i>=maxVis || ((i+(adjust + 2))*48)>=window.innerHeight) {
                             this.$nextTick(function () {
-                                ensureVisible(document.getElementById('nd-player-'+(i>maxVis ? i-maxVis : (i>0 ? i-1 : 0))));
+                                ensureVisible(document.getElementById('nd-player-'+(i>=maxVis ? i-maxVis : (i>0 ? i-adjust : 0))));
                             });
                         } else {
                             setElemScrollTop(document.getElementById('nd-list', 0));

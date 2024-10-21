@@ -19,6 +19,7 @@ function setDesktopWideCoverPad(on) {
 
 function updateUiSettings(state, val) {
     var queueDisplayChanged = false;
+    var themeChanged = false;
     let stdItems = ['autoScrollQueue', 'browseBackdrop', 'queueBackdrop', 'nowPlayingBackdrop', 'infoBackdrop',
                     'browseTechInfo', 'techInfo', 'nowPlayingTrackNum', 'swipeVolume', 'swipeChangeTrack',
                     'keyboardControl', 'skipBSeconds', 'skipFSeconds', 'mediaControls', 'showRating', 'browseContext',
@@ -32,6 +33,8 @@ function updateUiSettings(state, val) {
                 queueDisplayChanged = true;
             } else if ('nowPlayingFull'==key) {
                 setDesktopWideCoverPad(state.nowPlayingFull);
+            } else if ('tinted'==key) {
+                themeChanged = true;
             }
         }
     }
@@ -44,7 +47,6 @@ function updateUiSettings(state, val) {
 
     var browseDisplayChanged = false;
     var relayoutGrid = false;
-    var themeChanged = false;
     var prevColor = state.color;
     if (undefined!=val.theme) {
         val.theme=val.theme.replace("darker", "dark");
@@ -161,6 +163,9 @@ function updateUiSettings(state, val) {
         for (let [key, value] of Object.entries(val.sorts)) {
             setLocalStorageVal(key, value);
         }
+    }
+    if (themeChanged) {
+        setTimeout(function() { emitToolbarColorsFromState(state, true)}, 100);
     }
 }
 
@@ -535,6 +540,7 @@ const store = new Vuex.Store({
             state.showRating = LMS_STATS_ENABLED && getLocalStorageBool('showRating', state.showRating);
             state.library = getLocalStorageVal('library', state.library);
             setTheme(state.theme, state.color);
+            emitToolbarColorsFromState(state, true);
             setRoundCovers(state.roundCovers);
             if (state.fontSize!='r') {
                 setFontSize(state.fontSize);
@@ -735,6 +741,8 @@ const store = new Vuex.Store({
                 state.theme=theme;
                 state.darkUi = !state.theme.startsWith('light') && state.theme.indexOf("/light/")<0;
                 setTheme(state.theme, state.color);
+                setTimeout(function() { emitToolbarColorsFromState(state, true) }, 250);
+                setTimeout(function() { emitToolbarColorsFromState(state, true) }, 500);
                 bus.$emit('themeChanged');
             }
         },

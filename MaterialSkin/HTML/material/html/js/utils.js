@@ -526,9 +526,7 @@ function emitTextColor() {
     if (undefined==window.mskToolbarElem) {
         window.mskToolbarElem=document.getElementById("main-toolbar");
         if (undefined==window.mskToolbarElem) {
-            window.setTimeout(function() {
-                emitTextColor();
-            }, 500);
+            window.setTimeout(function() { emitTextColor(); }, 500);
             return;
         }
     }
@@ -593,9 +591,6 @@ function setTheme(theme, color, prevColor) {
         } else {
             changeLink("html/css/colors/" + color + ".css?r=" + LMS_MATERIAL_REVISION, "colorcss");
         }
-        window.setTimeout(function() {
-            emitToolbarColors("--top-toolbar-color", "--bottom-toolbar-color");
-        }, 250);
     }
 }
 
@@ -952,9 +947,7 @@ function emitToolbarColors(top, bot, tries) {
     if (undefined==window.mskToolbarElem && store.state.tinted && store.state.cMixSupported) {
         window.mskToolbarElem=document.getElementById("main-toolbar");
         if (undefined==window.mskToolbarElem) {
-            window.setTimeout(function() {
-                emitToolbarColors(top, bot, tries);
-            }, 500);
+            window.setTimeout(function() { emitToolbarColors(top, bot, tries); }, 500);
             return;
         }
     }
@@ -972,13 +965,10 @@ function emitToolbarColors(top, bot, tries) {
         }
         t = rgb2Hex(mixed);
     }
-
     if (t!=lastToolbarColors.top || b!=lastToolbarColors.bot) {
         if (undefined==t || 0==t.length || undefined==b || 0==b.length) {
             if (undefined==tries || tries<20) {
-                setTimeout(function() {
-                    emitToolbarColors(top, bot, undefined==tries ? 1 : (tries+1));
-                }, 100);
+                setTimeout(function() { emitToolbarColors(top, bot, undefined==tries ? 1 : (tries+1)); }, 100);
             }
             return;
         }
@@ -1001,8 +991,8 @@ function emitToolbarColors(top, bot, tries) {
 }
 
 const FULLSCREEN_DIALOGS = new Set(["uisettings", "playersettings", "info", "iframe", "manage"]);
-function emitToolbarColorsFromState(state) {
-    if (0!=queryParams.nativeColors || COLOR_FROM_COVER==state.color || state.coloredToolbars || (state.tinted && state.cMixSupported)) {
+function emitToolbarColorsFromState(state, force) {
+    if (0!=queryParams.nativeColors || COLOR_FROM_COVER==state.color || state.coloredToolbars || (state.tinted && state.cMixSupported) || force) {
         let topColorVar = "--top-toolbar-color";
         let botColorVar = "--bottom-toolbar-color";
         for (var i=state.openDialogs.length; i>=0; --i) {

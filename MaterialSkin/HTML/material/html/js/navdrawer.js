@@ -21,7 +21,7 @@ const TB_CUSTOM_ACTIONS = {id:21};
 
 Vue.component('lms-navdrawer', {
     template: `
-<v-navigation-drawer v-model="show" absolute temporary :width="maxWidth" style="display:flex;flex-direction:column">
+<v-navigation-drawer v-model="show" absolute temporary :width="maxWidth" style="display:flex;flex-direction:column" id="nd-list">
  <v-list class="nd-list py-0">
   <div class="nd-top"></div>
   <div v-if="windowControlsOnLeft" style="height:var(--main-toolbar-height); width:100%"></div>
@@ -143,11 +143,12 @@ Vue.component('lms-navdrawer', {
                 for (let i=0, loop=this.$store.state.players, len=loop.length; i<len; ++i) {
                     if (loop[i].id==this.$store.state.player.id) {
                         let maxVis = Math.floor(window.innerHeight/48)-2;
-                        if (i>maxVis) {
+                        if (i>maxVis || ((i+3)*48)>=window.innerHeight) {
                             this.$nextTick(function () {
-                                let elem = document.getElementById('nd-player-'+(i-maxVis));
-                                ensureVisible(elem);
+                                ensureVisible(document.getElementById('nd-player-'+(i>maxVis ? i-maxVis : (i>0 ? i-1 : 0))));
                             });
+                        } else {
+                            setElemScrollTop(document.getElementById('nd-list', 0));
                         }
                         break;
                     }

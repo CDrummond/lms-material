@@ -15,7 +15,7 @@ Vue.component('lms-toolbar', {
  <div class="maintoolbar-title">{{time}}</div>
  <div class="maintoolbar-subtitle subtext">{{date}}</div>
 </div>
-<v-layout class="navdrawer-selector link-item" @click.stop="bus.$emit('navDrawer')">
+<v-layout class="link-item" @click.stop="bus.$emit('navDrawer')" v-bind:class="{'navdrawer-selector':!mobileNoNowPlaying}">
  <v-btn icon class="toolbar-button" @click.stop="bus.$emit('navDrawer')">
   <v-icon v-if="!connected" class="red">error</v-icon>
   <img v-else-if="updatesAvailable" class="svg-img" :src="'update' | menuIcon(darkUi, coloredToolbars&&!nowPlayingFull)"></img>
@@ -421,6 +421,9 @@ Vue.component('lms-toolbar', {
         },
         nowPlayingFull() {
             return this.$store.state.nowPlayingFull && !this.infoOpen && this.$store.state.nowPlayingBackdrop && (this.desktopLayout ? this.nowPlayingExpanded : this.isNowPlayingPage)
+        },
+        mobileNoNowPlaying() {
+            return !this.$store.state.desktopLayout && this.$store.state.mobileBar==MBAR_NONE
         }
     },
     filters: {

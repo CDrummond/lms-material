@@ -41,6 +41,7 @@ function setWindowArea() {
             document.documentElement.style.setProperty('--window-area-left', left+'px');
             document.documentElement.style.setProperty('--window-area-right', right+'px');
             document.documentElement.style.setProperty('--window-controls-space', right+'px');
+            bus.$emit('windowControlsOverlayChanged');
         }
     }, 50);
 }

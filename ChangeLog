@@ -3,6 +3,7 @@
 1. Tweak how navigation drawer list is scrolled to ensure current player is
    visible.
 2. Work-around drag highlight sometimes reamining after drop.
+3. Update volume slider collapsing code to handle window controls overlay.
 
 5.4.1
 -----

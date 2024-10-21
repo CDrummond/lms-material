@@ -80,7 +80,8 @@ Vue.component('lms-toolbar', {
                  updateProgress: {show:false, text:undefined},
                  date: undefined,
                  time: undefined,
-                 navdrawerVisible: false
+                 navdrawerVisible: false,
+                 windowControlsOverlayRight:0
                }
     },
     mounted() {
@@ -206,6 +207,10 @@ Vue.component('lms-toolbar', {
                 }
             }.bind(this));
         }
+        bus.$on('windowControlsOverlayChanged', function() {
+            this.updateWindowControlsOverlay();
+        }.bind(this));
+        this.updateWindowControlsOverlay();
     },
     methods: {
         initItems() {
@@ -213,6 +218,10 @@ Vue.component('lms-toolbar', {
                           showLarge:i18n("Expand now playing"), hideLarge:i18n("Collapse now playing"), showVol:i18n("Show volume"), play:i18n("Play"), 
                           pause:i18n("Pause"), toggleQueue:i18n('Toggle queue'), downloading:i18n('Downloading'),
                           groupVol:i18n('Adjust volume of associated players'), browse:i18n('Browse'), queue:i18n('Queue')};
+        },
+        updateWindowControlsOverlay() {
+            let val = parseInt(window.getComputedStyle(document.documentElement).getPropertyValue('--window-area-right').replace('px', ''));
+            this.windowControlsOverlayRight = undefined==val ? 0 : val;
         },
         emitInfo() {
             if (this.$store.state.visibleMenus.size>0 || (this.playerStatus.count<1 && !this.infoOpen)) {
@@ -404,7 +413,7 @@ Vue.component('lms-toolbar', {
             return this.$store.state.showQueue
         },
         showVolumeSlider() {
-            return VOL_HIDDEN!=this.playerDvc && this.width>=(this.$store.state.desktopLayout ? (this.height>=200 ? 750 : 600) : (this.$store.state.nowPlayingClock ? 1300 : (this.$store.state.mobileBar==MBAR_NONE ? 850 : 750)))
+            return VOL_HIDDEN!=this.playerDvc && this.width>=this.windowControlsOverlayRight + (this.$store.state.desktopLayout ? (this.height>=200 ? 800 : 650) : (this.$store.state.nowPlayingClock ? 1300 : (this.$store.state.mobileBar==MBAR_NONE ? 850 : 750)))
         },
         showUpdateProgress() {
             return (!this.$store.state.nowPlayingClock || (this.$store.state.desktopLayout ? !this.nowPlayingExpanded : (this.$store.state.page != 'now-playing'))) && this.width>=1050

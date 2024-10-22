@@ -78,7 +78,7 @@ Vue.component('lms-manage-players', {
 <v-dialog v-model="show" v-if="show" persistent no-click-animation scrollable fullscreen>
  <v-card>
   <v-card-title class="settings-title">
-   <v-toolbar app-data class="dialog-toolbar" @drop.native="drop(-1, $event)" @dragover.native="dragOver($event)" @mousedown="mouseDown" id="manageplayers-toolbar">
+   <v-toolbar app-data class="dialog-toolbar" @drop.native="drop(-1, $event)" @dragover.native="dragOver(-1, $event)" @mousedown="mouseDown" id="manageplayers-toolbar">
     <div v-if="!draggingSyncedPlayer" class="drag-area-left"></div>
     <v-btn flat v-if="!draggingSyncedPlayer" icon v-longpress:stop="close" :title="ttShortcutStr(i18n('Go back'), 'esc')"><v-icon>arrow_back</v-icon></v-btn>
     <v-toolbar-title class="ellipsis" style="width:100%; text-align:center" v-if="draggingSyncedPlayer">{{i18n('Drop here to remove from group')}}</v-toolbar-title>
@@ -103,7 +103,7 @@ Vue.component('lms-manage-players', {
       <v-flex xs12 v-bind:class="{'pmgr-sync':!isMainPlayer(player), 'active-player':currentPlayer && currentPlayer.id === player.id}">
        <v-flex xs12>
         <v-list class="pmgr-playerlist">
-         <v-list-tile @dragstart.native="dragStart(index, $event)" @dragenter.prevent="" @dragend.native="dragEnd()" @dragover.native="dragOver($event)" @drop.native="drop(index, $event)" :draggable="!player.isgroup" v-bind:class="{'highlight-drop':dropId==('pmgr-player-'+index), 'highlight-drag':dragIndex==index}" :id="'tile-pmgr-player-'+index">
+         <v-list-tile @dragstart.native="dragStart(index, $event)" @dragenter.prevent="" @dragend.native="dragEnd()" @dragover.native="dragOver(index, $event)" @drop.native="drop(index, $event)" :draggable="!player.isgroup" v-bind:class="{'highlight-drop':dropId==('pmgr-player-'+index), 'highlight-drag':dragIndex==index}" :id="'tile-pmgr-player-'+index">
           <v-list-tile-avatar v-if="!isMainPlayer(player)" class="pmgr-sync-player" @click="unsync(player, index)" v-bind:class="{'dimmed': !player.ison}">
            <v-icon class="link-item">link</v-icon>
           </v-list-tile-avatar>
@@ -656,6 +656,7 @@ Vue.component('lms-manage-players', {
                                             : document.getElementById("pmgr-player-"+which),
                                          0, 0);
             this.dragIndex = which;
+            this.dropIndex = undefined;
             this.stopScrolling = false;
             this.draggingSyncedPlayer = which>PMGR_GROUP_MEMBER_ID_MOD || this.players[which].issyncmaster || undefined!=this.players[which].syncmaster;
         },
@@ -665,45 +666,49 @@ Vue.component('lms-manage-players', {
             this.dragIndex = undefined;
             this.draggingSyncedPlayer = false;
             this.dropId = undefined;
+            this.dropIndex = undefined;
         },
-        dragOver(ev) {
-            this.dropId=undefined;
-            if (undefined!=ev.target && this.dragIndex<PMGR_GROUP_MEMBER_ID_MOD) {
-                let elem = ev.target;
-                let dropId = undefined;
-                for (let level=0; level<5 & undefined!=elem && undefined==dropId; ++level) {
-                    if (elem.id) {
-                        if (elem.id.startsWith("pmgr-")) {
-                            dropId=elem.id
-                        } else if (elem.id.startsWith("tile-pmgr-")) {
-                            dropId=elem.id.substring(5);
+        dragOver(index, ev) {
+            if (index!=this.dropIndex) {
+                this.dropIndex = index;
+                this.dropId=undefined;
+                if (undefined!=ev.target && this.dragIndex<PMGR_GROUP_MEMBER_ID_MOD) {
+                    let elem = ev.target;
+                    let dropId = undefined;
+                    for (let level=0; level<5 & undefined!=elem && undefined==dropId; ++level) {
+                        if (elem.id) {
+                            if (elem.id.startsWith("pmgr-")) {
+                                dropId=elem.id
+                            } else if (elem.id.startsWith("tile-pmgr-")) {
+                                dropId=elem.id.substring(5);
+                            }
+                        }
+                        elem=elem.parentNode;
+                    }
+                    if (undefined!=dropId) {
+                        let index=parseInt(dropId.split('-').slice(-1)[0]);
+                        if (index>=0 && index<this.players.length) {
+                            let player = this.players[index];
+                            let dragPlayer = this.players[this.dragIndex];
+                            let playerMaster = player.syncmaster ? player.syncmaster : "A";
+                            let dragPlayerMaster = dragPlayer.syncmaster ? dragPlayer.syncmaster : "B";
+                            if (player.id!=dragPlayer.id && player.id!=dragPlayerMaster && playerMaster!=dragPlayerMaster) {
+                                this.dropId=dropId;
+                            }
                         }
                     }
-                    elem=elem.parentNode;
                 }
-                if (undefined!=dropId) {
-                    let index=parseInt(dropId.split('-').slice(-1)[0]);
-                    if (index>=0 && index<this.players.length) {
-                        let player = this.players[index];
-                        let dragPlayer = this.players[this.dragIndex];
-                        let playerMaster = player.syncmaster ? player.syncmaster : "A";
-                        let dragPlayerMaster = dragPlayer.syncmaster ? dragPlayer.syncmaster : "B";
-                        if (player.id!=dragPlayer.id && player.id!=dragPlayerMaster && playerMaster!=dragPlayerMaster) {
-                            this.dropId=dropId;
-                        }
-                    }
+                // Drag over item at top/bottom of list to start scrolling
+                this.stopScrolling = true;
+                if (ev.clientY < 110) {
+                    this.stopScrolling = false;
+                    this.scrollList(-5)
                 }
-            }
-            // Drag over item at top/bottom of list to start scrolling
-            this.stopScrolling = true;
-            if (ev.clientY < 110) {
-                this.stopScrolling = false;
-                this.scrollList(-5)
-            }
 
-            if (ev.clientY > (window.innerHeight - 70)) {
-                this.stopScrolling = false;
-                this.scrollList(5)
+                if (ev.clientY > (window.innerHeight - 70)) {
+                    this.stopScrolling = false;
+                    this.scrollList(5)
+                }
             }
             ev.preventDefault(); // Otherwise drop is never called!
         },

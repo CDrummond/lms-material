@@ -1873,38 +1873,40 @@ var lmsBrowse = Vue.component("lms-browse", {
             setTimeout(function () { bus.$emit('dragActive', false); }.bind(this), 250);
         },
         dragOver(index, ev) {
-            if (this.items[0].stdItem==STD_ITEM_PLAYLIST_TRACK && this.listSize>LMS_MAX_PLAYLIST_EDIT_SIZE) {
-                return;
-            }
-            if ( ((this.canDrop && undefined!=window.mskBrowseDrag) || (undefined!=window.mskQueueDrag && this.current.section==SECTION_PLAYLISTS)) &&
-               (!this.current || !this.current.isFavFolder || !this.options.sortFavorites || this.items[index].isFavFolder)) {
-                this.dropIndex = index;
-                // Drag over item at top/bottom of list to start scrolling
-                this.stopScrolling = true;
-                if (ev.clientY < (queryParams.topPad + 110)) {
-                    this.stopScrolling = false;
-                    this.scrollList(-5)
+            if (index!=this.dropIndex) {
+                if (this.items[0].stdItem==STD_ITEM_PLAYLIST_TRACK && this.listSize>LMS_MAX_PLAYLIST_EDIT_SIZE) {
+                    return;
                 }
+                if ( ((this.canDrop && undefined!=window.mskBrowseDrag) || (undefined!=window.mskQueueDrag && this.current.section==SECTION_PLAYLISTS)) &&
+                (!this.current || !this.current.isFavFolder || !this.options.sortFavorites || this.items[index].isFavFolder)) {
+                    this.dropIndex = index;
+                    // Drag over item at top/bottom of list to start scrolling
+                    this.stopScrolling = true;
+                    if (ev.clientY < (queryParams.topPad + 110)) {
+                        this.stopScrolling = false;
+                        this.scrollList(-5)
+                    }
 
-                let distance = 28 + queryParams.botPad + this.queueEmpty ? 0 :
-                    (this.$store.state.desktopLayout
-                        ? 72
-                        : (52 +
-                            (this.$store.state.mobileBar==MBAR_NONE
-                                ? 0
-                                : this.$store.state.mobileBar==MBAR_THIN
-                                    ? 22
-                                    : this.$store.state.mobileBar==MBAR_THICK
-                                    ? 48
-                                        : 0)));
-                if (ev.clientY > (window.innerHeight - distance)) {
-                    this.stopScrolling = false;
-                    this.scrollList(5)
+                    let distance = 28 + queryParams.botPad + this.queueEmpty ? 0 :
+                        (this.$store.state.desktopLayout
+                            ? 72
+                            : (52 +
+                                (this.$store.state.mobileBar==MBAR_NONE
+                                    ? 0
+                                    : this.$store.state.mobileBar==MBAR_THIN
+                                        ? 22
+                                        : this.$store.state.mobileBar==MBAR_THICK
+                                        ? 48
+                                            : 0)));
+                    if (ev.clientY > (window.innerHeight - distance)) {
+                        this.stopScrolling = false;
+                        this.scrollList(5)
+                    }
+                } else {
+                    this.dropIndex = undefined;
                 }
-                ev.preventDefault(); // Otherwise drop is never called!
-            } else {
-                this.dropIndex = undefined;
             }
+            ev.preventDefault(); // Otherwise drop is never called!
         },
         scrollList(step) {
             var pos = this.scrollElement.scrollTop + step;

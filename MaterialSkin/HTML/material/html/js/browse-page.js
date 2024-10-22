@@ -1902,6 +1902,8 @@ var lmsBrowse = Vue.component("lms-browse", {
                     this.scrollList(5)
                 }
                 ev.preventDefault(); // Otherwise drop is never called!
+            } else {
+                this.dropIndex = undefined;
             }
         },
         scrollList(step) {

@@ -4,6 +4,7 @@
    visible.
 2. Work-around drag highlight sometimes reamining after drop.
 3. Update volume slider collapsing code to handle window controls overlay.
+4. Add Wiim player icon.
 
 5.4.1
 -----

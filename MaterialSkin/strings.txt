@@ -169,6 +169,7 @@ PLUGIN_MATERIAL_SKIN_USE_COMPOSER_MAI_DESC
 	FR	Selon le genre du morceau, afficher le compositeur plutôt que l'artiste  dans la vue "Informations".
 	NL	Afhankelijk van het genre van het nummer, wordt de componist in plaats van de artiest getoond in de "Informatie" weergave.
 	HU	A megfelelő műsorszámokhoz a zeneszerző, és nem az előadó megjelenítése az „Információ” nézetben.
+	ZH_CN	对于合适的曲目，在“信息”视图中显示作曲家而非艺术家的信息。
 
 PLUGIN_MATERIAL_SKIN_SHOW_CONDUCTOR
 	CS	Zobrazení dirigenta

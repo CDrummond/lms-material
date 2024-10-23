@@ -6,7 +6,8 @@
  */
 
 :root {
- --highlight-rgb:25,118,210;
- --primary-color:#1976d2;
- --accent-color:#82b1ff;
+ --col-highlight-rgb:25,118,210;
+ --highlight-rgb:var(--theme-highlight-rgb, var(--col-highlight-rgb));
+ --primary-color:var(--theme-primary-color, #1976d2);
+ --accent-color:var(--theme-accent-color, #82b1ff);
 }

@@ -186,18 +186,19 @@ var lmsCurrentCover = Vue.component('lms-currentcover', {
             let rgb = undefined;
 
             if (isDefCover) {
-                document.documentElement.style.setProperty('--tint-color', '#1976d2');
+                document.documentElement.style.setProperty('--tint-color', 'var(--default-primary-color)');
                 rgb = [25,118,210];
-                document.documentElement.style.setProperty('--accent-color', '#82b1ff');
-                document.documentElement.style.setProperty('--primary-color', '#1976d2');
-                document.documentElement.style.setProperty('--highlight-rgb', '25,118,210');
+                document.documentElement.style.setProperty('--accent-color', 'var(--default-accent-color)');
+                document.documentElement.style.setProperty('--primary-color', 'var(--default-primary-color)');
+                document.documentElement.style.setProperty('--highlight-rgb', 'var(--default-highlight-rgb)');
             } else {
                 document.documentElement.style.setProperty('--tint-color', rgb2Hex(avRgb));
                 if (isGrey(avRgb) || undefined==vRgb || isGrey(vRgb)) {
                     rgb = [25,118,210];
-                    document.documentElement.style.setProperty('--accent-color', '#82b1ff');
-                    document.documentElement.style.setProperty('--primary-color', '#1976d2');
-                    document.documentElement.style.setProperty('--highlight-rgb', '25,118,210');
+                    console.log("GREY")
+                    document.documentElement.style.setProperty('--accent-color', 'var(--default-accent-color)');
+                    document.documentElement.style.setProperty('--primary-color', 'var(--default-primary-color)');
+                    document.documentElement.style.setProperty('--highlight-rgb', 'var(--default-highlight-rgb)');
                 } else {
                     rgb = vRgb ? vRgb : avRgb;
                     let hsv = rgb2Hsv(rgb);

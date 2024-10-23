@@ -1,3 +1,8 @@
+5.5.0
+-----
+1. If using Lyrion theme and colour from cover, then default to green
+   highlight.
+
 5.4.2
 -----
 1. Tweak how navigation drawer list is scrolled to ensure current player is

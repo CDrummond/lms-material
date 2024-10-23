@@ -115,6 +115,9 @@
  --tinted-background-shadow-color:var(--background-shadow-color);
  --popup-background-color:var(--std-popup-background-color);
  --tint-color:var(--primary-color);
+ --default-primary-color:#1976d2;
+ --default-accent-color:#82b1ff;
+ --default-highlight-rgb:25,118,21;
 }
 
 @supports not (color: color-mix(in srgb, red, green)) {

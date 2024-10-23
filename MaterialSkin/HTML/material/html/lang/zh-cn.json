@@ -663,12 +663,12 @@
 "%1 Years":"%1 个年份",
 "1 day":"1 天",
 "%1 days":"%1 天",
-"Help page":"",
-"Move '%1'":"",
-"Move into '%1'":"",
-"Move position":"",
-"NOTE: Only some of these settings apply to 'Material Skin'. However these settings will affect other skins and hardware players.":"",
-"Release type":"",
-"Tint background":"",
-"Tint background with chosen color.":""
+"Help page":"帮助页面",
+"Move '%1'":"移动 '%1'",
+"Move into '%1'":"移动至 '%1'",
+"Move position":"移动位置",
+"NOTE: Only some of these settings apply to 'Material Skin'. However these settings will affect other skins and hardware players.":"提示：这些设置会影响其它皮肤和硬件播放器，但是仅有一部分适用于'Material Skin'",
+"Release type":"发行版类型",
+"Tint background":"渲染背景",
+"Tint background with chosen color.":"使用选定的颜色渲染背景"
 }

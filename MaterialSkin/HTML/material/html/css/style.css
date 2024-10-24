@@ -232,16 +232,6 @@
  font-weight:200;
 }
 
-.list-pad {
- height:0px!important;
- width:100%;
- background-color:transparent;
-}
-
-.no-navbar .list-pad {
- height:var(--bottom-pad)!important;
-}
-
 .browse-title {
  display:inline-block!important;
  flex:unset!important
@@ -1039,7 +1029,7 @@ div.v-subheader {
 
 .subtoolbar-title {
  margin-top:calc(16px - var(--std-font-size)) !important;
- margin-left:3px;
+ margin-left:1px;
  margin-bottom:0px !important;
  padding-bottom:0px !important;
  min-width:2em;
@@ -1069,6 +1059,10 @@ div.v-subheader {
  margin-left:1px;
  padding-top:0px;
  margin-top:calc(12px - var(--small-font-size)) !important;
+}
+
+#queue-view .subtoolbar-subtitle, #queue-view .subtoolbar-title {
+ margin-left:3px;
 }
 
 .subtoolbar, .subtoolbar .v-btn__content i {
@@ -2274,6 +2268,10 @@ div.v-rating i.primary--text, div.v-rating i.accent--text {
 .switch-label {
  cursor:pointer;
  margin-right:8px;
+}
+
+.no-navbar #browse-list {
+ padding-bottom:var(--bottom-pad);
 }
 
 #browse-list .v-subheader {

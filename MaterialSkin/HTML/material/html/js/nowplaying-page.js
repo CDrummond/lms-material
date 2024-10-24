@@ -621,15 +621,11 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
             }
         }.bind(this));
 
-        bus.$on('info', function(hide) {
+        bus.$on('info', function() {
             if (!LMS_P_MAI) {
                 return;
             }
             addBrowserHistoryItem();
-            if (undefined!=hide && hide) {
-                this.info.show = false;
-                return;
-            }
             if ((window.innerHeight>=LMS_MIN_NP_LARGE_INFO_HEIGHT && this.playerStatus.playlist.count>0) || this.info.show) {
                 this.largeView = false;
                 this.info.show = !this.info.show;

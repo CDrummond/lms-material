@@ -432,13 +432,24 @@ html, .mini-player {
 }
 
 .nd-shortuts {
- display:grid;
- margin-left:16px;
- grid-template-columns: 54px 54px 54px 54px 54px;
+ margin:0px;
+ list-style-type:none;
+ list-style-image:none;
+ padding-left:12px;
 }
 
 .nd-shortuts-wide {
- grid-template-columns: 54px 54px 54px 54px 54px 54px 54px;
+ padding-left:14px;
+}
+
+.nd-shortuts li {
+ float:left;
+ margin-left:0px;
+ margin-right:8px;
+}
+
+.nd-shortuts-wide li {
+ margin-right:16px;
 }
 
 .v-list__tile__avatar {

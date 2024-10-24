@@ -81,12 +81,14 @@ Vue.component('lms-navdrawer', {
 
  <div v-if="showShortcuts">
   <v-subheader>{{trans.shortcuts}}</v-subheader>
-  <div class="nd-shortuts" v-bind:class="{'nd-shortuts-wide':maxWidth>320}">
-   <v-btn icon class="toolbar-button" v-for="(item, index) in shortcuts" @click="show=false; bus.$emit('browse-shortcut', item.id)">
-    <v-icon v-if="undefined!=item.icon">{{item.icon}}</v-icon>
-    <img v-else class="svg-img" :src="item.svg | svgIcon(darkUi)"></img>
-   </v-btn>
-  </div>
+  <ul class="nd-shortuts" v-bind:class="{'nd-shortuts-wide':maxWidth>320}">
+   <li v-for="(item, index) in shortcuts">
+    <v-btn icon class="toolbar-button" @click="show=false; bus.$emit('browse-shortcut', item.id)">
+     <v-icon v-if="undefined!=item.icon">{{item.icon}}</v-icon>
+     <img v-else class="svg-img" :src="item.svg | svgIcon(darkUi)"></img>
+    </v-btn>
+   </li>
+  </ul>
  </div>
 
  <v-list class="nd-list py-0">

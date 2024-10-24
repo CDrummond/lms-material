@@ -8,6 +8,7 @@
 5. If using 18px or more of bottom padding then try to ensure menus do not
    go into padded area.
 6. Adjust sub-toolbar text alignments.
+7. Allow dragging favourites folder even if 'sort favourites' is enabled.
 
 5.4.1
 -----

@@ -10,6 +10,8 @@
 6. Adjust sub-toolbar text alignments.
 7. Allow dragging favourites folder even if 'sort favourites' is enabled.
 8. Add custom classical, jazz, and rock radio icons.
+9. Fix home button position when detailed sub-toolbar is shown and background
+   images are not used.
 
 5.4.1
 -----

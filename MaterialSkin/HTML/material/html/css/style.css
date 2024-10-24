@@ -2637,6 +2637,12 @@ div.v-subheader {
  bottom:2px;
 }
 
+.dst-home-nobgnd, .dst-home-nobgnd:hover {
+ position:fixed;
+ top:calc(var(--top-pad) + (var(--sub-toolbar-height) *2 ));
+ bottom:unset!important;
+}
+
 .lib-select-btn {
  margin-top: 10px;
  margin-left:-4px;

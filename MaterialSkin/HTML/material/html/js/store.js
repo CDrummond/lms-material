@@ -639,6 +639,17 @@ const store = new Vuex.Store({
                 lmsNumVisibleMenus = state.visibleMenus.size;
                 bus.$emit('menuOpen');
                 addBrowserHistoryItem();
+                if (queryParams.botPad>18) {
+                    setTimeout(function() {
+                        let elems = document.getElementsByClassName('menuable__content__active');
+                        if (null!=elems && 1==elems.length) {
+                            let rect = elems[0].getBoundingClientRect();
+                            if (rect.bottom>(window.innerHeight-queryParams.botPad)) {
+                                elems[0].style.height=(rect.height-(rect.bottom-(window.innerHeight-(queryParams.botPad+8))))+"px";
+                            }
+                        }
+                    }, 100);
+                }
             } else {
                 // Delay handling of menu being closed by 1/4 second. If a menu is closed
                 // by 'esc' the 'esc' also falls through to the browse page. If we decrement

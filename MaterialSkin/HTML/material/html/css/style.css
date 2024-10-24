@@ -229,16 +229,6 @@
  font-weight:200;
 }
 
-.list-pad {
- height:0px!important;
- width:100%;
- background-color:transparent;
-}
-
-.no-navbar .list-pad {
- height:var(--bottom-pad)!important;
-}
-
 .browse-title {
  display:inline-block!important;
  flex:unset!important
@@ -2261,6 +2251,10 @@ div.v-rating i.primary--text, div.v-rating i.accent--text {
 .switch-label {
  cursor:pointer;
  margin-right:8px;
+}
+
+.no-navbar #browse-list {
+ padding-bottom:var(--bottom-pad);
 }
 
 #browse-list .v-subheader {

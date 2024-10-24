@@ -643,9 +643,28 @@ const store = new Vuex.Store({
                     setTimeout(function() {
                         let elems = document.getElementsByClassName('menuable__content__active');
                         if (null!=elems && 1==elems.length) {
-                            let rect = elems[0].getBoundingClientRect();
-                            if (rect.bottom>(window.innerHeight-queryParams.botPad)) {
-                                elems[0].style.height=(rect.height-(rect.bottom-(window.innerHeight-(queryParams.botPad+8))))+"px";
+                            let bcr = elems[0].getBoundingClientRect();
+                            let r = {top:bcr.top, height:bcr.height, bottom:bcr.bottom};
+                            let orig = {top:bcr.top, height:bcr.height, bottom:bcr.bottom};
+                            let topMin = 8+queryParams.topPad;
+                            let botMax = window.innerHeight-(queryParams.botPad+8);
+                            if (r.bottom>botMax) {
+                                r.bottom = botMax;
+                            }
+                            if (r.top<topMin) {
+                                r.top = topMin;
+                            } else if (r.bottom!=orig.bottom) {
+                                let diff = Math.min(orig.bottom - r.bottom, r.top - topMin);
+                                if (diff>0) {
+                                    r.top-=diff;
+                                }
+                            }
+                            if (r.top!=orig.top) {
+                                elems[0].style.top = r.top+"px";
+                            }
+                            let h = r.bottom-r.top;
+                            if (h!=orig.height) {
+                                elems[0].style.height=h+"px";
                             }
                         }
                     }, 100);

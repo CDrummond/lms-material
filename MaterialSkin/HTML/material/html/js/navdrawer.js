@@ -77,6 +77,18 @@ Vue.component('lms-navdrawer', {
 
   <v-divider v-if="playerSectionsDivider"></v-divider>
  </v-list>
+
+ <v-spacer v-if="showShortcuts"></v-spacer>
+ <div v-if="showShortcuts">
+  <v-subheader>{{trans.shortcuts}}</v-subheader>
+  <div class="nd-shortuts" v-bind:class="{'nd-shortuts-wide':maxWidth>320}">
+   <v-btn icon class="toolbar-button" v-for="(item, index) in shortcuts" @click="show=false; bus.$emit('browse-shortcut', item.id)">
+    <v-icon v-if="undefined!=item.icon">{{item.icon}}</v-icon>
+    <img v-else class="svg-img" :src="item.svg | svgIcon(darkUi)"></img>
+   </v-btn>
+  </div>
+ </div>
+
  <v-spacer></v-spacer>
  <v-list class="nd-list py-0">
   <template v-for="(item, index) in menuItems">
@@ -114,8 +126,9 @@ Vue.component('lms-navdrawer', {
     data() {
         return {
             show: false,
-            trans:{groupPlayers:undefined, standardPlayers:undefined, connectionLost:undefined, updatesAvailable:undefined, restartRequired:undefined },
+            trans:{groupPlayers:undefined, standardPlayers:undefined, connectionLost:undefined, updatesAvailable:undefined, restartRequired:undefined, shortcuts:undefined },
             menuItems: [],
+            shortcuts: [],
             customActions:undefined,
             customSettingsActions:undefined,
             customPlayerActions:undefined,
@@ -135,6 +148,9 @@ Vue.component('lms-navdrawer', {
         bus.$on('langChanged', function() {
             this.initItems();
         }.bind(this));
+        bus.$on('homeScreenItems', function(view) {
+            this.updateShortcuts(view);
+        }.bind(this));
         this.initItems();
         bus.$on('navDrawer', function() {
             this.show = true;
@@ -142,7 +158,7 @@ Vue.component('lms-navdrawer', {
             if (this.$store.state.player) {
                 for (let i=0, loop=this.$store.state.players, len=loop.length; i<len; ++i) {
                     if (loop[i].id==this.$store.state.player.id) {
-                        let adjust = loop[i].isgroup ? 2 : 1;
+                        let adjust = (loop[i].isgroup ? 2 : 1);
                         let maxVis = Math.floor(window.innerHeight/48)-(1+adjust);
                         if (i>=maxVis || ((i+(adjust + 2))*48)>=window.innerHeight) {
                             this.$nextTick(function () {
@@ -265,8 +281,8 @@ Vue.component('lms-navdrawer', {
             TB_APP_SETTINGS.stitle=i18n('Application');
             TB_APP_QUIT.title=i18n('Quit');
             TB_START_PLAYER.title=i18n('Start player');
-            this.trans = { groupPlayers:i18n("Group Players"), standardPlayers:i18n("Standard Players"),
-                           connectionLost:i18n('Server connection lost!'), updatesAvailable:i18n('Updates available'), restartRequired:i18n('Restart required') };
+            this.trans = { groupPlayers:i18n("Group Players"), standardPlayers:i18n("Standard Players"), connectionLost:i18n('Server connection lost!'),
+                           updatesAvailable:i18n('Updates available'), restartRequired:i18n('Restart required'), shortcuts:i18n('Shortcuts') };
             if (LMS_KIOSK_MODE) {
                 this.menuItems = LMS_KIOSK_MODE==2
                                    ? [TB_SETTINGS, TB_CUSTOM_SETTINGS_ACTIONS, DIVIDER, TB_CUSTOM_ACTIONS]
@@ -280,6 +296,20 @@ Vue.component('lms-navdrawer', {
                 }
                 if (queryParams.appQuit) {
                     this.menuItems.push(TB_APP_QUIT)
+                }
+            }
+        },
+        updateShortcuts(view) {
+            this.shortcuts = [];
+            if (undefined!=view && undefined!=view.top) {
+                for (let i=0, items=view.top, len=items.length; i<len; ++i) {
+                    let item = items[i];
+                    if (!item.isRadio && item.stdItem!=STD_ITEM_RANDOM_MIX && !view.hidden.has(item.id) && (item.id!=TOP_RADIO_ID || !lmsOptions.combineAppsAndRadio)) {
+                        this.shortcuts.push({id:item.id, icon:item.icon, svg:item.svg});
+                    }
+                }
+                if (this.shortcuts.length>0) {
+                    this.shortcuts.unshift({id:'-', icon:'home'});
                 }
             }
         },
@@ -486,6 +516,9 @@ Vue.component('lms-navdrawer', {
         },
         playerSectionsDivider() {
             return !this.noPlayer && this.players && (this.players.length>1 || this.playerStatus.sleepTime || this.playerStatus.alarmStr)
+        },
+        showShortcuts() {
+            return this.$store.state.ndShortcuts && this.shortcuts.length>0
         }
     },
     filters: {

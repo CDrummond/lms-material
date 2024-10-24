@@ -367,12 +367,22 @@ Vue.component('lms-ui-settings', {
     </v-list-tile>
     <v-divider></v-divider>
     <v-list-tile>
-    <v-list-tile-content @click="screensaverNp = !screensaverNp" class="switch-label">
-     <v-list-tile-title>{{i18n('Switch to now-playing')}}</v-list-tile-title>
-     <v-list-tile-sub-title>{{i18n('Switch to basic now-playing view (cover, details, and progress) after 5 minutes of inactivity. Helps to prevent burn-in on OLED screens.')}}</v-list-tile-sub-title>
-    </v-list-tile-content>
-    <v-list-tile-action><m3-switch v-model="screensaverNp"></m3-switch></v-list-tile-action>
-   </v-list-tile>
+     <v-list-tile-content @click="screensaverNp = !screensaverNp" class="switch-label">
+      <v-list-tile-title>{{i18n('Switch to now-playing')}}</v-list-tile-title>
+      <v-list-tile-sub-title>{{i18n('Switch to basic now-playing view (cover, details, and progress) after 5 minutes of inactivity. Helps to prevent burn-in on OLED screens.')}}</v-list-tile-sub-title>
+     </v-list-tile-content>
+     <v-list-tile-action><m3-switch v-model="screensaverNp"></m3-switch></v-list-tile-action>
+    </v-list-tile>
+
+    <div class="dialog-padding"></div>
+    <v-header class="dialog-section-header">{{i18n('Navigation drawer')}}</v-header>
+    <v-list-tile>
+     <v-list-tile-content @click="ndShortcuts = !ndShortcuts" class="switch-label">
+      <v-list-tile-title>{{i18n('Show shortcuts')}}</v-list-tile-title>
+      <v-list-tile-sub-title>{{i18n('Show shortuct to home screen items in navigation drawer. (Note: radio streams and random mixes are excluded)')}}</v-list-tile-sub-title>
+     </v-list-tile-content>
+     <v-list-tile-action><m3-switch v-model="ndShortcuts"></m3-switch></v-list-tile-action>
+    </v-list-tile>
 
     <div class="dialog-padding"></div>
    </v-list>
@@ -464,7 +474,8 @@ Vue.component('lms-ui-settings', {
             mediaControlsSupported: !queryParams.hide.has('mediaControls') && ('mediaSession' in navigator),
             moveDialogs: false,
             showMoveDialogs: false,
-            autoCloseQueue: false
+            autoCloseQueue: false,
+            ndShortcuts: false
         }
     },
     computed: {
@@ -636,6 +647,7 @@ Vue.component('lms-ui-settings', {
             this.mediaControls = this.$store.state.mediaControls;
             this.moveDialogs = this.$store.state.moveDialogs;
             this.autoCloseQueue = this.$store.state.autoCloseQueue;
+            this.ndShortcuts = this.$store.state.ndShortcuts;
             this.showItems=[{id: TOP_MYMUSIC_ID, name:i18n("My Music"), show:!this.hidden.has(TOP_MYMUSIC_ID)},
                             {id: TOP_RADIO_ID, name:i18n("Radio"), show:!this.hidden.has(TOP_RADIO_ID)},
                             {id: TOP_FAVORITES_ID, name:i18n("Favorites"), show:!this.hidden.has(TOP_FAVORITES_ID)},
@@ -739,7 +751,8 @@ Vue.component('lms-ui-settings', {
                       showRating:this.showRating,
                       mediaControls:this.mediaControls,
                       moveDialogs:this.moveDialogs,
-                      autoCloseQueue:this.autoCloseQueue
+                      autoCloseQueue:this.autoCloseQueue,
+                      ndShortcuts:this.ndShortcuts
                   };
             if (withSorts) {
                 for (var key in window.localStorage) {

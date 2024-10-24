@@ -23,7 +23,7 @@ function updateUiSettings(state, val) {
     let stdItems = ['autoScrollQueue', 'browseBackdrop', 'queueBackdrop', 'nowPlayingBackdrop', 'infoBackdrop',
                     'browseTechInfo', 'techInfo', 'nowPlayingTrackNum', 'swipeVolume', 'swipeChangeTrack',
                     'keyboardControl', 'skipBSeconds', 'skipFSeconds', 'mediaControls', 'showRating', 'browseContext',
-                    'nowPlayingContext', 'queueContext', 'moveDialogs', 'autoCloseQueue', 'nowPlayingFull', 'tinted'];
+                    'nowPlayingContext', 'queueContext', 'moveDialogs', 'autoCloseQueue', 'nowPlayingFull', 'tinted', 'ndShortcuts'];
     for (let i=0, len=stdItems.length; i<len; ++i) {
         let key=stdItems[i];
         if (undefined!=val[key] && state[key]!=val[key]) {
@@ -310,6 +310,7 @@ const store = new Vuex.Store({
         tinted: true,
         moveDialogs: false,
         autoCloseQueue: false,
+        ndShortcuts: false,
         cMixSupported: 1==parseInt(getComputedStyle(document.documentElement).getPropertyValue('--color-mix-supported'))
     },
     mutations: {
@@ -516,7 +517,7 @@ const store = new Vuex.Store({
                              'infoBackdrop', 'useDefaultBackdrops', 'browseTechInfo', 'techInfo', 'queueShowTrackNum', 'nowPlayingTrackNum',
                              'nowPlayingClock', 'swipeVolume', 'swipeChangeTrack', 'keyboardControl', 'screensaver', 'screensaverNp', 'homeButton',
                              'mediaControls', 'queueAlbumStyle', 'queueThreeLines', 'browseContext', 'nowPlayingContext', 'queueContext',
-                             'moveDialogs', 'autoCloseQueue', 'nowPlayingFull', 'tinted'];
+                             'moveDialogs', 'autoCloseQueue', 'nowPlayingFull', 'tinted', 'ndShortcuts'];
             for (let i=0, len=boolItems.length; i<len; ++i) {
                 let key = boolItems[i];
                 state[key] = getLocalStorageBool(key, state[key]);

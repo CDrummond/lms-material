@@ -877,6 +877,7 @@ var lmsBrowse = Vue.component("lms-browse", {
                                         : this.top[i].title;
             }
 
+            bus.$emit('homeScreenItems', this);
             if (this.history.length<1) {
                 this.items = this.top;
                 this.layoutGrid(true);
@@ -1464,6 +1465,7 @@ var lmsBrowse = Vue.component("lms-browse", {
         saveTopList() {
             setLocalStorageVal("topItems", JSON.stringify(this.top));
             removeLocalStorage("pinned");
+            bus.$emit('homeScreenItems', this);
         },
         addPinned(pinned) {
             browseAddPinned(this, pinned);
@@ -2106,7 +2108,28 @@ var lmsBrowse = Vue.component("lms-browse", {
         bus.$on('browse-home', function() {
             this.goHome();
         }.bind(this));
-
+        bus.$on('browse-shortcut', function(id) {
+            if (this.current && id==this.current.id) {
+                return;
+            }
+            this.goHome();
+            if (this.$store.state.desktopLayout) {
+                bus.$emit('info', false);
+                if (this.nowPlayingExpanded) {
+                    bus.$emit('expandNowPlaying', false);
+                }
+            } else {
+                this.$store.commit('setPage', 'browse');
+            }
+            if (id!='-') {
+                for (let i=0, len=this.items.length; i<len; ++i) {
+                    if (this.items[i].id==id) {
+                        this.$nextTick(function () { this.$nextTick(function () { browseClick(this, this.items[i], i, undefined, true); }) });
+                        break;
+                    }
+                }
+            }
+        }.bind(this));
         bus.$on('prefset', function(pref, value) {
             if (this.myMusic.length>0 && ('plugin.material-skin:enabledBrowseModes'==pref || 'server:useUnifiedArtistsList'==pref)) {
                 this.myMusic[0].needsUpdating=true;

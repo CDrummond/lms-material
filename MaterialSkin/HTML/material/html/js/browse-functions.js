@@ -826,11 +826,12 @@ function browseSetScroll(view) {
     view.next = undefined;
 }
 
-function browseClick(view, item, index, event) {
+function browseClick(view, item, index, event, ignoreOpenMenu) {
     if (view.fetchingItem!=undefined || "html"==item.type) {
          return;
     }
-    if (!item.isListItemInMenu) {
+    if (!item.isListItemInMenu && !ignoreOpenMenu) {
+        console.log('xx', ignoreOpenMenu)
         if (view.menu.show) {
             view.menu.show=false;
             return;

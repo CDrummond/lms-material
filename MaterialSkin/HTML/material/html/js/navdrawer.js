@@ -77,8 +77,8 @@ Vue.component('lms-navdrawer', {
 
   <v-divider v-if="playerSectionsDivider"></v-divider>
  </v-list>
+ <v-spacer></v-spacer>
 
- <v-spacer v-if="showShortcuts"></v-spacer>
  <div v-if="showShortcuts">
   <v-subheader>{{trans.shortcuts}}</v-subheader>
   <div class="nd-shortuts" v-bind:class="{'nd-shortuts-wide':maxWidth>320}">
@@ -89,7 +89,6 @@ Vue.component('lms-navdrawer', {
   </div>
  </div>
 
- <v-spacer></v-spacer>
  <v-list class="nd-list py-0">
   <template v-for="(item, index) in menuItems">
    <v-divider v-if="item===DIVIDER"></v-divider>

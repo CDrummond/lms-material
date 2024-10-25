@@ -81,6 +81,15 @@ var app = new Vue({
             if (lmsApp.botPad>6) {
                 document.documentElement.style.setProperty('--desktop-np-bottom-pad', (lmsApp.botPad-6) + 'px');
             }
+            if (lmsApp.botPad>20) {
+                document.documentElement.style.setProperty('--desktop-np-bottom-pad-alt', '0px');
+                document.documentElement.style.setProperty('--desktop-np-bottom-pad-alt2', (lmsApp.botPad-6) + 'px');
+                document.documentElement.style.setProperty('--desktop-np-bottom-pad-alt3', (lmsApp.botPad-6) + 'px');
+            } else {
+                document.documentElement.style.setProperty('--desktop-np-bottom-pad-alt', (lmsApp.botPad-6) + 'px');
+                document.documentElement.style.setProperty('--desktop-np-bottom-pad-alt2', '0px');
+                document.documentElement.style.setProperty('--desktop-np-bottom-pad-alt3', ((lmsApp.botPad-6)/2) + 'px');
+            }
         }
         if (queryParams.topPad>0) {
             document.documentElement.style.setProperty('--top-pad', queryParams.topPad + 'px');

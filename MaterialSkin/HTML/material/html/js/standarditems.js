@@ -95,7 +95,7 @@ function addParentParams(parentCommand, command, canRemoveArtistId) {
                     // Want all tracks from an album, not just those from this artist, so don't filter on artist_id
                     artistIdRemoved = true;
                 } else if (getIndex(command.params, "artist_id:")<0) {
-                    // Retrict to only tracks from this artist
+                    // Restrict to only tracks from this artist
                     command.params.push(parentCommand.params[i]);
                 }
             } else if (lower.startsWith("role_id:")) {
@@ -114,6 +114,19 @@ function addParentParams(parentCommand, command, canRemoveArtistId) {
     // If we're not supplying artist_id then can't supply role_id
     if (artistIdRemoved && undefined!=roleIdPos) {
         command.params.splice(roleIdPos, 1);
+    }
+    // Ensure we don't have xxx and material_skin_xxx with same values...
+    if (command.command[0]=='works') {
+        let params = ['artist_id:', 'role_id:'];
+        for (let p=0, len=params.length; p<len; ++p) {
+            let idPos = getIndex(command.params, params[p]);
+            if (undefined!=idPos) {
+                let mskIdPos = getIndex(command.params, "material_skin_"+params[p]);
+                if (undefined!=mskIdPos && command.params[idPos].split(':')[1] == command.params[mskIdPos].split(':')[1]) {
+                    command.params.splice(mskIdPos, 1);
+                }
+            }
+        }
     }
     return artistIdRemoved;
 }

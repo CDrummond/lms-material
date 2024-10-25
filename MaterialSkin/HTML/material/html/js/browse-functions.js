@@ -212,7 +212,9 @@ function browseActions(view, item, args, count, showRoles, showWorks) {
             }
         }
         if (showWorks) {
-            actions.push({title:i18n('Works'), subtitle:args['artist'], svg:'classical-work', stdItem:STD_ITEM_CLASSICAL_WORKS, do:{ command: ['works'], params:[view.current.id]}, weight:82});
+            let command = {command: ['works'], params:[view.current.id]};
+            addParentParams(view.command, command, false);
+            actions.push({title:i18n('Works'), subtitle:args['artist'], svg:'classical-work', stdItem:STD_ITEM_CLASSICAL_WORKS, do:command, weight:82});
         }
     }
 
@@ -492,7 +494,7 @@ function browseHandleListResponse(view, item, command, resp, prevPage, appendIte
                 }
                 if (showWorksInMenu) {
                     let command = {command:['works'], params:[view.current.id]};
-                    addParentParams(view.current, view.command, command, true);
+                    addParentParams(view.command, command, false);
                     lmsList('', command.command, command.params, 0, 1, false, view.nextReqId()).then(({data}) => {
                         logJsonMessage("RESP", data);
                         if (!data || !data.result || !data.result.works_loop || data.result.works_loop.length<1) {
@@ -755,9 +757,9 @@ function browseAddWorks(view) {
     let orig = [];
     orig.push.apply(orig, view.items);
     view.items = [];
-    let command = {'command':['works'], params:[view.current.id]};
+    let command = {command:['works'], params:[view.current.id]};
     browseAddLibId(view, command.params);
-    addParentParams(view.current, view.command, command, true);
+    addParentParams(view.command, command, false);
     lmsList('', command.command, command.params, 0, LMS_BATCH_SIZE, true, view.nextReqId()).then(({data}) => {
         logJsonMessage("RESP", data);
         if (id==view.current.id) {

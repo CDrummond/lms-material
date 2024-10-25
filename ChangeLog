@@ -16,6 +16,7 @@
     only the first of type.
 11. Use javascript code to play saved random mixes.
 12. Add bottom padding to various fullscreen dialogs.
+13. Pass rold_id to works command.
 
 5.4.1
 -----

@@ -19,6 +19,7 @@
 13. Pass rold_id to works command.
 14. If using large (greater than 20px) bottom padding in desktop layout, then
     don't expand now-playing bar image - just add padded area.
+15. Remove smaller desktop now-playing bar, always use same height.
 
 5.4.1
 -----

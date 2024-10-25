@@ -233,7 +233,7 @@ var app = new Vue({
                     if (keyboardShown != lmsApp.keyboardShown) {
                         if (keyboardShown) {
                             lmsApp.heights = [];
-                            let vars = ['--bottom-toolbar-height', '--desktop-npbar-height', '--desktop-npbar-height-thin', '--mobile-npbar-height-thin', '--mobile-npbar-height-thick', '--mobile-npbar-height'];
+                            let vars = ['--bottom-toolbar-height', '--desktop-npbar-height', '--mobile-npbar-height-thin', '--mobile-npbar-height-thick', '--mobile-npbar-height'];
                             for (let v=0, len=vars.length; v<len; ++v) {
                                 lmsApp.heights.push([vars[v], getComputedStyle(document.documentElement).getPropertyValue(vars[v])]);
                             }

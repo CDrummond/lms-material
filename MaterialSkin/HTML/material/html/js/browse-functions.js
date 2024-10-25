@@ -1592,6 +1592,9 @@ function browseItemAction(view, act, item, index, event) {
         copyTextToClipboard(stripTags(item.title)+(item.subtitle ? " "+stripTags(item.subtitle) : ""), true);
     } else if (NEW_RANDOM_MIX_ACTION==act) {
         bus.$emit('dlg.open', 'rndmix', undefined, false);
+    } else if (item.stdItem==STD_ITEM_RANDOM_MIX) {
+        // Use random mix dialog code to play mix
+        bus.$emit('dlg.open', 'rndmix', item.title, false, true);
     } else {
         // If we are acting on a multi-disc album, prompt which disc we should act on
         if (item.multi && !view.current.id.startsWith("album_id:") && (PLAY_ACTION==act || ADD_ACTION==act || INSERT_ACTION==act || PLAY_SHUFFLE_ACTION==act)) {
@@ -2449,7 +2452,7 @@ function browseReplaceCommandTerms(view, cmd, item) {
 function browseBuildFullCommand(view, item, act) {
     var command = browseBuildCommand(view, item, ACTIONS[act].cmd);
     if (command.command.length<1) { // Non slim-browse command
-        if (item.stdItem==STD_ITEM_RANDOM_MIX) {
+        if (item.stdItem==STD_ITEM_RANDOM_MIX) { // Should no longer actually occur...
             command.command = ["material-skin-client", "rndmix", "name:"+item.title, "act:"+(INSERT_ACTION==act ? "insert" : ACTIONS[act].cmd)];
         } else if (item.url && (!item.id || (!item.id.startsWith("playlist_id:") && !item.id.startsWith("track_id")))) {
             command.command = ["playlist", INSERT_ACTION==act ? "insert" : ACTIONS[act].cmd, item.url, item.title];

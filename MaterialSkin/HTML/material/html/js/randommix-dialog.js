@@ -118,7 +118,7 @@ Vue.component('lms-randommix', {
         }
     },
     mounted() {
-        bus.$on('rndmix.open', function(existingName, controlMix) {
+        bus.$on('rndmix.open', function(existingName, controlMix, playMix) {
             this.controlMix = undefined!=controlMix && controlMix;
             this.name = undefined;
             this.origName = undefined;
@@ -135,7 +135,7 @@ Vue.component('lms-randommix', {
             }
 
             if (undefined!=existingName) {
-                this.loadSavedMixParams(existingName);
+                this.loadSavedMixParams(existingName, playMix);
                 this.origName = existingName;
             } else {
                 if (this.controlMix) {
@@ -270,7 +270,7 @@ Vue.component('lms-randommix', {
                 }
             });
         },
-        loadSavedMixParams(name) {
+        loadSavedMixParams(name, andPlay) {
             this.genres = [];
             this.chosenGenres = [];
             this.oldTracks = this.newTracks = 10;
@@ -329,7 +329,11 @@ Vue.component('lms-randommix', {
                     if (undefined==this.library || LMS_DEFAULT_LIBRARIES.has(this.library)) {
                         this.library = LMS_DEFAULT_LIBRARY;
                     }
-                    this.show=true;
+                    if (andPlay) {
+                        this.start();
+                    } else {
+                        this.show=true;
+                    }
                 }
             });
         },

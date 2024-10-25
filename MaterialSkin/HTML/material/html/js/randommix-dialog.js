@@ -279,11 +279,16 @@ Vue.component('lms-randommix', {
             this.library = LMS_DEFAULT_LIBRARY;
             this.libraries = [];
 
+            let loaded = 0;
             lmsCommand("", ["genres", 0, 2500]).then(({data}) => {
                 if (data && data.result && data.result && data.result.genres_loop) {
                     for (let i=0, list=data.result.genres_loop, len=list.length; i<len; ++i) {
                         this.genres.push(list[i].genre);
                     }
+                }
+                loaded++;
+                if (andPlay && 3==loaded) {
+                    this.start();
                 }
             });
             lmsList("", ["libraries"]).then(({data}) => {
@@ -294,6 +299,10 @@ Vue.component('lms-randommix', {
                     }
                     this.libraries.sort(nameSort);
                     this.libraries.unshift({name: i18n("All"), id:LMS_DEFAULT_LIBRARY});
+                }
+                loaded++;
+                if (andPlay && 3==loaded) {
+                    this.start();
                 }
             });
             lmsCommand("", ["material-skin", "rndmix", "name:"+name, "act:read"]).then(({data}) => {
@@ -330,7 +339,10 @@ Vue.component('lms-randommix', {
                         this.library = LMS_DEFAULT_LIBRARY;
                     }
                     if (andPlay) {
-                        this.start();
+                        loaded++;
+                        if (3==loaded) {
+                            this.start();
+                        }
                     } else {
                         this.show=true;
                     }

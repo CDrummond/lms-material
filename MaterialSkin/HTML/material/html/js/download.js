@@ -186,6 +186,7 @@ Vue.component('lms-downloadstatus', {
       <div style="padding-top:64px;width:100%;display:flex;justify-content:center;align-items:center;">{{i18n('All downloads complete.')}}</div>
      </v-flex>
      <div class="dialog-padding"></div>
+     <div class="dialog-bottom-pad"></div>
     </v-layout>
    </v-container>
   </v-card-text>

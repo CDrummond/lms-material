@@ -157,6 +157,7 @@ Vue.component('lms-player-settings', {
      </v-list-tile>
        
      <div class="dialog-padding"></div>
+     <div class="dialog-bottom-pad"></div>
 
     </v-list>
    </v-card-text>

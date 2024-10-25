@@ -99,6 +99,7 @@ Vue.component('lms-information-dialog', {
    <div class="dialog-padding"></div>
    <p>© 2018-2024 Craig Drummond</p>
    <div class="dialog-padding"></div>
+   <div class="dialog-bottom-pad"></div>
   </div></div>
  </v-card>
 

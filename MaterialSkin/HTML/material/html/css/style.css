@@ -940,6 +940,10 @@ div.v-subheader {
  height:32px;
 }
 
+.dialog-bottom-pad {
+ height:var(--bottom-pad);
+}
+
 .np-info .lms-list {
  height:unset!important;
  position:unset!important;

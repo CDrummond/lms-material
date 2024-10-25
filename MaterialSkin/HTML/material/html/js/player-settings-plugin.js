@@ -58,6 +58,7 @@ Vue.component('lms-player-settings-plugin', {
        </v-list-tile>
       </v-template>
      </v-list>
+     <div class="dialog-bottom-pad"></div>
     </v-card-text>
    </v-card>
   </v-dialog>

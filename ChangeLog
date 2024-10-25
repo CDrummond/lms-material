@@ -15,6 +15,7 @@
 10. In sync and sleep dialogs don't respond to both touch and click events,
     only the first of type.
 11. Use javascript code to play saved random mixes.
+12. Add bottom padding to various fullscreen dialogs.
 
 5.4.1
 -----

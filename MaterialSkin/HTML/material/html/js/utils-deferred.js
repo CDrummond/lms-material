@@ -853,3 +853,7 @@ function refreshViewItems(view) {
         });
     }
 }
+
+function isTouchEvent(e) {
+    return undefined!=e && e.type.startsWith("touch");
+}

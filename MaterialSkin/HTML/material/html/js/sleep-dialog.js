@@ -18,7 +18,7 @@ Vue.component('lms-sleep-dialog', {
      <v-flex xs12>
       <v-list class="sleep-list dialog-main-list">
        <template v-for="(item, index) in items">
-        <v-list-tile @click="" @mousedown="selectA(item.duration)" @mouseup="selectB(item.duration)" @touchstart="selectA(item.duration)" @touchend="selectB(item.duration)">
+        <v-list-tile @click="" @mousedown="selectA($event, item.duration)" @mouseup="selectB($event, item.duration)" @touchstart="selectA($event, item.duration)" @touchend="selectB($event, item.duration)">
          <div :tile="true" v-if="boundKeys" class="choice-key">{{9==index ? 0 : index+1}}</div>
          <v-list-tile-title>{{item.label}}</v-list-tile-title>
         </v-list-tile>
@@ -109,10 +109,18 @@ Vue.component('lms-sleep-dialog', {
             this.cancelTimer();
             unbindNumeric(this);
         },
-        selectA(duration) {
+        selectA(ev, duration) {
+            let isTouch = isTouchEvent(ev);
+            if (undefined!=this.startIsTouch && isTouch!=this.startIsTouch) {
+                return;
+            }
+            this.startIsTouch = isTouch;
             this.selectedDuration = duration;
         },
-        selectB(duration) {
+        selectB(ev, duration) {
+            if (isTouchEvent(ev)!=this.startIsTouch) {
+                return;
+            }
             if (undefined!=this.selectedDuration && duration==this.selectedDuration) {
                 this.setSleep(duration);
             }

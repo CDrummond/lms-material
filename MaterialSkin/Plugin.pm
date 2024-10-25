@@ -1812,6 +1812,8 @@ sub _cliClientCommand {
             my $details = _readRandMix($path);
             if ($details) {
                 my $rprefs = preferences('plugin.randomplay');
+                $rprefs->set('continuous', int($details->{'continuous'}));
+
                 my $var = int($details->{'newtracks'});
                 if ($var<1 || $var>1000) {
                     $var = 10;
@@ -1822,13 +1824,26 @@ sub _cliClientCommand {
                     $var = 10;
                 }
                 $rprefs->set('oldtracks', $var);
-                $rprefs->set('continuous', int($details->{'continuous'}));
-                $client->execute(["randomplaygenreselectall", "0"]);
-                my @genres = split /,/, $details->{'genres'};
-                foreach my $genre (@genres) {
-                    $client->execute(["randomplaychoosegenre", $genre, "1"]);
-                }
                 $client->execute(["randomplaychooselibrary", $details->{'library'}]);
+
+                my @genres = split /,/, $details->{'genres'};
+                my $numGenres = scalar(@genres);
+                my $allGenres = 0 == $numGenres;
+                if ($allGenres==0 && Slim::Schema::hasLibrary()) {
+                    my $totals = Slim::Schema->totals($request->client);
+                    if ($totals->{genre} == scalar(@genres)) {
+                        $allGenres = 1;
+                    }
+                }
+                if ($allGenres == 1) {
+                    $client->execute(["randomplaygenreselectall", "1"]);
+                } elsif ($allGenres == 0) {
+                    $client->execute(["randomplaygenreselectall", "0"]);
+                    foreach my $genre (@genres) {
+                        $client->execute(["randomplaychoosegenre", $genre, "1"]);
+                    }
+                }
+
                 $client->execute(["randomplay", $details->{'mix'}]);
                 $request->setStatusDone();
                 return;

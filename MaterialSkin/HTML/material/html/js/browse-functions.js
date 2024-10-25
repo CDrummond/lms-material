@@ -300,6 +300,23 @@ function browseHandleNextWindow(view, item, command, resp, isMoreMenu, isBrowse)
     return false;
 }
 
+// If a 'current' action is invoked then the item's id is 'currentaction:' but we ideally
+// want the item the action was invoked on. Hence we iterate back in the history looking
+// for non 'currentaction:' id...
+function browseGetCurrent(view) {
+    if (view.current.id.startsWith("currentaction:")) {
+        for (let i=view.history.length-1; i>=0; --i) {
+            if (undefined==view.history[i].current) {
+                break;
+            }
+            if (!view.history[i].current.id.startsWith("currentaction:")) {
+                return view.history[i].current;
+            }
+        }
+    }
+    return view.current;
+}
+
 function browseHandleListResponse(view, item, command, resp, prevPage, appendItems) {
     if (resp && resp.items) {
         if (appendItems) {
@@ -390,17 +407,18 @@ function browseHandleListResponse(view, item, command, resp, prevPage, appendIte
 
         // Get list of actions (e.g. biography, online services) to show in subtoolbar
         view.currentActions=[];
-        let listingArtistAlbums = !view.current.isVa && view.current.id.startsWith("artist_id:");
-        let listingAlbumTracks = view.current.id.startsWith("album_id:");
-        let listingWorkAlbums = view.current.id.startsWith("work_id:");
+        let curitem = browseGetCurrent(view);
+        let listingArtistAlbums = !curitem.isVa && curitem.id.startsWith("artist_id:");
+        let listingAlbumTracks = curitem.id.startsWith("album_id:");
+        let listingWorkAlbums = curitem.id.startsWith("work_id:");
         let listingAlbums = view.command.command[0]=="albums";
         let listingTracks = view.command.command[0]=="tracks";
-        let title = view.current.noReleaseGrouping ? view.current.title.split(SEPARATOR)[0] : view.current.title;
-        let artist_id = listingArtistAlbums ? view.current.id.split(":")[1] : undefined;
-        let album_id = listingAlbumTracks ? originalId(view.current.id).split(":")[1] : undefined;
-        let work_id = listingWorkAlbums ? view.current.id.split(":")[1] : undefined;
-        if (!view.current.id.startsWith(MUSIC_ID_PREFIX)) {
-            if (!listingArtistAlbums && listingAlbums && !view.current.isVa) {
+        let title = curitem.noReleaseGrouping ? curitem.title.split(SEPARATOR)[0] : curitem.title;
+        let artist_id = listingArtistAlbums ? curitem.id.split(":")[1] : undefined;
+        let album_id = listingAlbumTracks ? originalId(curitem.id).split(":")[1] : undefined;
+        let work_id = listingWorkAlbums ? curitem.id.split(":")[1] : undefined;
+        if (!curitem.id.startsWith(MUSIC_ID_PREFIX)) {
+            if (!listingArtistAlbums && listingAlbums && !curitem.isVa) {
                 let pos = getField(command, "artist_id");
                 if (pos>=0) {
                     listingArtistAlbums = true;
@@ -428,7 +446,7 @@ function browseHandleListResponse(view, item, command, resp, prevPage, appendIte
         if (((listingArtistAlbums || listingWorkAlbums) && listingAlbums) || (listingAlbumTracks && listingTracks)) {
             var actParams = new Map();
             var showWorksInMenu = false;
-            var currentId = view.current.id.split(':');
+            var currentId = curitem.id.split(':');
             if (currentId[1].indexOf(".")<0) {
                 actParams[currentId[0]]=currentId[1];
             }
@@ -493,7 +511,7 @@ function browseHandleListResponse(view, item, command, resp, prevPage, appendIte
                                               artist_id:artist_id});
                 }
                 if (showWorksInMenu) {
-                    let command = {command:['works'], params:[view.current.id]};
+                    let command = {command:['works'], params:[curitem.id]};
                     addParentParams(view.command, command, false);
                     lmsList('', command.command, command.params, 0, 1, false, view.nextReqId()).then(({data}) => {
                         logJsonMessage("RESP", data);
@@ -542,7 +560,7 @@ function browseHandleListResponse(view, item, command, resp, prevPage, appendIte
         if (listingArtistAlbums) {
             let index = getField(command, "genre_id:");
             // Get genres for artist...
-            let genreReqArtist = view.current.id;
+            let genreReqArtist = curitem.id;
             if (!genreReqArtist.startsWith("artist_id:") && view.history.length>1) {
                 genreReqArtist = view.history[view.history.length-1].current.id;
             }
@@ -550,7 +568,7 @@ function browseHandleListResponse(view, item, command, resp, prevPage, appendIte
                 let params = [genreReqArtist].concat(index<0 ? [] : [command.params[index]]);
                 browseAddLibId(view, params);
                 lmsList('', ['genres'], params, 0, 25, false, view.nextReqId()).then(({data}) => {
-                    let currentId = view.current.id;
+                    let currentId = curitem.id;
                     if (!currentId.startsWith("artist_id:") && view.history.length>1) {
                         currentId = view.history[view.history.length-1].current.id;
                     }
@@ -578,7 +596,7 @@ function browseHandleListResponse(view, item, command, resp, prevPage, appendIte
         if (view.current.id==TOP_FAVORITES_ID || (view.current.id!=ADV_SEARCH_ID && view.current.stdItem!=STD_ITEM_MAI && !item.id.startsWith(TOP_ID_PREFIX) && view.items.length>0)) {
             view.currentActions.push({action:SEARCH_LIST_ACTION, weight:5});
         }
-        if (resp.numHeaders>1 && view.items.length>50 && view.current.stdItem!=STD_ITEM_ARTIST && view.current.stdItem!=STD_ITEM_ALBUM) {
+        if (resp.numHeaders>1 && view.items.length>50 && curitem.stdItem!=STD_ITEM_ARTIST && curitem.stdItem!=STD_ITEM_ALBUM) {
             view.currentActions.push({action:SCROLL_TO_ACTION, weight:4});
         }
         let itemHasPlayAction=undefined!=item.menu && item.menu[0]==PLAY_ACTION;
@@ -602,7 +620,7 @@ function browseHandleListResponse(view, item, command, resp, prevPage, appendIte
                 }
             }
             if (canAddAlbumSort) {
-                view.currentActions.push({action:ALBUM_SORTS_ACTION, weight:undefined==view.current.stdItem ? -1 : 10});
+                view.currentActions.push({action:ALBUM_SORTS_ACTION, weight:undefined==curitem.stdItem ? -1 : 10});
             }
         } else if ((view.current.stdItem==STD_ITEM_ALL_TRACKS || view.current.stdItem==STD_ITEM_COMPOSITION_TRACKS || view.current.id==ALL_TRACKS_ID) && view.command.command.length>0 && view.command.command[0]=="tracks" && view.items.length>0) {
             view.currentActions.push({action:TRACK_SORTS_ACTION, weight:50});
@@ -732,8 +750,8 @@ function browseHandleListResponse(view, item, command, resp, prevPage, appendIte
             }
         }
 
-        if (listingAlbums && lmsOptions.listWorks && LMS_VERSION>=90000 && view.items.length>0 && view.current.id.startsWith("artist_id:")) {
-            browseAddWorks(view);
+        if (listingAlbums && lmsOptions.listWorks && LMS_VERSION>=90000 && view.items.length>0 && curitem.id.startsWith("artist_id:")) {
+            browseAddWorks(view, curitem);
         }
 
         view.$nextTick(function () {
@@ -751,13 +769,13 @@ function browseHandleListResponse(view, item, command, resp, prevPage, appendIte
     }
 }
 
-function browseAddWorks(view) {
+function browseAddWorks(view, curitem) {
     // Prevent flicker by not adding any albums, etc, until works list loaded
     let id = view.current.id;
     let orig = [];
     orig.push.apply(orig, view.items);
     view.items = [];
-    let command = {command:['works'], params:[view.current.id]};
+    let command = {command:['works'], params:[curitem.id]};
     browseAddLibId(view, command.params);
     addParentParams(view.command, command, false);
     lmsList('', command.command, command.params, 0, LMS_BATCH_SIZE, true, view.nextReqId()).then(({data}) => {

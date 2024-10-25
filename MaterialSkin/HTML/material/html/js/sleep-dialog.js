@@ -110,17 +110,11 @@ Vue.component('lms-sleep-dialog', {
             unbindNumeric(this);
         },
         selectA(ev, duration) {
-            let isTouch = isTouchEvent(ev);
-            if (undefined!=this.startIsTouch && isTouch!=this.startIsTouch) {
-                return;
-            }
-            this.startIsTouch = isTouch;
+            ev.preventDefault();
             this.selectedDuration = duration;
         },
         selectB(ev, duration) {
-            if (isTouchEvent(ev)!=this.startIsTouch) {
-                return;
-            }
+            ev.preventDefault();
             if (undefined!=this.selectedDuration && duration==this.selectedDuration) {
                 this.setSleep(duration);
             }

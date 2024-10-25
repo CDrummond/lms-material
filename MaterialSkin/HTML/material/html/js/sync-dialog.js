@@ -158,17 +158,11 @@ Vue.component('lms-sync-dialog', {
             }
         },
         togglePlayerA(ev, index) {
-            let isTouch = isTouchEvent(ev);
-            if (undefined!=this.startIsTouch && isTouch!=this.startIsTouch) {
-                return;
-            }
-            this.startIsTouch = isTouch;
+            ev.preventDefault();
             this.lastBtn = index;
         },
         togglePlayerB(ev, index) {
-            if (isTouchEvent(ev)!=this.startIsTouch) {
-                return;
-            }
+            ev.preventDefault();
             if (index!=undefined && this.lastBtn==index) {
                 this.togglePlayer(index);
             }
@@ -183,17 +177,11 @@ Vue.component('lms-sync-dialog', {
             this.numSync+=(player.synced ? 1 : -1);
         },
         toggleAllA(ev) {
-            let isTouch = isTouchEvent(ev);
-            if (undefined!=this.startIsTouch && isTouch!=this.startIsTouch) {
-                return;
-            }
-            this.startIsTouch = isTouch;
+            ev.preventDefault();
             this.lastBtn=-1;
         },
         toggleAllB(ev) {
-            if (isTouchEvent(ev)!=this.startIsTouch) {
-                return;
-            }
+            ev.preventDefault();
             if (this.lastBtn==-1) {
                 this.toggleAll();
             }

@@ -120,9 +120,9 @@ function addParentParams(parentCommand, command, canRemoveArtistId) {
         let params = ['artist_id:', 'role_id:'];
         for (let p=0, len=params.length; p<len; ++p) {
             let idPos = getIndex(command.params, params[p]);
-            if (undefined!=idPos) {
+            if (idPos>=0) {
                 let mskIdPos = getIndex(command.params, "material_skin_"+params[p]);
-                if (undefined!=mskIdPos && command.params[idPos].split(':')[1] == command.params[mskIdPos].split(':')[1]) {
+                if (mskIdPos>=0 && command.params[idPos].split(':')[1] == command.params[mskIdPos].split(':')[1]) {
                     command.params.splice(mskIdPos, 1);
                 }
             }

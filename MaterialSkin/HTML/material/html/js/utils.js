@@ -1057,7 +1057,7 @@ function useBand(genre) {
 }
 
 function splitIntArray(val) {
-    return undefined==val || Array.isArray(val) ? val : (""+val).split(",").map(function(itm) { return itm.trim() }).map(Number);
+    return undefined==val ? val : Array.isArray(val) ? val.map(Number) : (""+val).split(",").map(function(itm) { return itm.trim() }).map(Number);
 }
 
 function splitStringArray(val, plainSep) {

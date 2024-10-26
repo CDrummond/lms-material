@@ -5,6 +5,8 @@
  * MIT license.
  */
 
+const UDR_PLACEHOLDER = 200000000;
+
 function browseCanSelect(item) {
     return undefined!=item && (undefined!=item.stdItem || (item.menu && item.menu.length>0));
 }
@@ -130,7 +132,7 @@ function browseAddHistory(view) {
     view.history.push(prev);
 }
 
-function browseActions(view, item, args, count, showRoles, showWorks) {
+function browseActions(view, item, args, count, showRoles, showWorks, addRolesPlaceholder) {
     var actions=[];
     if ((undefined==item || undefined==item.id || !item.id.startsWith(MUSIC_ID_PREFIX)) && // Exclude 'Compilations'
         (undefined==args['artist'] || (args['artist']!=i18n('Various Artists') && args['artist']!=LMS_VA_STRING && args['artist'].toLowerCase()!='various artists'))) {
@@ -195,26 +197,33 @@ function browseActions(view, item, args, count, showRoles, showWorks) {
             actions.push({title:ACTIONS[ALL_TRACKS_ACTION].title, icon:ACTIONS[ALL_TRACKS_ACTION].icon, do:{ command: ['tracks'], params: params}, weight:80, stdItem:STD_ITEM_ALL_TRACKS});
         }
 
-        if (undefined!=args['artist_id'] && showRoles && showRoles.length>0) {
-            for (let r=0, rlen=showRoles.length; r<rlen; ++r) {
-                if (COMPOSER_ARTIST_ROLE==showRoles[r]) {
-                    var params = [SORT_KEY+TRACK_SORT_PLACEHOLDER, PLAYLIST_TRACK_TAGS, 'artist_id:'+args['artist_id'], 'role_id:2', 'material_skin_artist:'+args['artist']];
-                    browseAddLibId(view, params);
-                    actions.push({title:i18n('Compositions'), svg:'composer', do:{ command: ['tracks'], params: params}, weight:81, stdItem:STD_ITEM_COMPOSITION_TRACKS, udr:true});
-                } else {
-                    let udr = lmsOptions.userDefinedRoles[showRoles[r]];
-                    if (undefined!=udr) {
-                        var params = [ARTIST_ALBUM_TAGS, SORT_KEY+ARTIST_ALBUM_SORT_PLACEHOLDER, 'artist_id:'+args['artist_id'], 'role_id:'+showRoles[r]];
+        if (undefined!=args['artist_id']) {
+            let added = false;
+            if (showRoles && showRoles.length>0) {
+                for (let r=0, rlen=showRoles.length; r<rlen; ++r) {
+                    if (COMPOSER_ARTIST_ROLE==showRoles[r]) {
+                        var params = [SORT_KEY+TRACK_SORT_PLACEHOLDER, PLAYLIST_TRACK_TAGS, 'artist_id:'+args['artist_id'], 'role_id:2', 'material_skin_artist:'+args['artist']];
                         browseAddLibId(view, params);
-                        actions.push({title:udr['text'], svg:'role-'+udr['role'], do:{ command: ['albums'], params: params}, weight:81, stdItem:STD_ITEM_ARTIST, udr:true});
+                        actions.push({title:i18n('Compositions'), svg:'composer', do:{ command: ['tracks'], params: params}, weight:81, stdItem:STD_ITEM_COMPOSITION_TRACKS, udr:2});
+                    } else {
+                        let udr = lmsOptions.userDefinedRoles[showRoles[r]];
+                        if (undefined!=udr) {
+                            var params = [ARTIST_ALBUM_TAGS, SORT_KEY+ARTIST_ALBUM_SORT_PLACEHOLDER, 'artist_id:'+args['artist_id'], 'role_id:'+showRoles[r]];
+                            browseAddLibId(view, params);
+                            actions.push({title:udr['text'], svg:'role-'+udr['role'], do:{ command: ['albums'], params: params}, weight:82, stdItem:STD_ITEM_ARTIST, udr:showRoles[r]});
+                            added = true;
+                        }
                     }
                 }
+            }
+            if (addRolesPlaceholder && !added) {
+                actions.push({title:"", weight:81, udr:UDR_PLACEHOLDER});
             }
         }
         if (showWorks) {
             let command = {command: ['works'], params:[view.current.id]};
             addParentParams(view.command, command, false);
-            actions.push({title:i18n('Works'), subtitle:args['artist'], svg:'classical-work', stdItem:STD_ITEM_CLASSICAL_WORKS, do:command, weight:82});
+            actions.push({title:i18n('Works'), subtitle:args['artist'], svg:'classical-work', stdItem:STD_ITEM_CLASSICAL_WORKS, do:command, weight:83});
         }
     }
 
@@ -417,6 +426,8 @@ function browseHandleListResponse(view, item, command, resp, prevPage, appendIte
         let artist_id = listingArtistAlbums ? curitem.id.split(":")[1] : undefined;
         let album_id = listingAlbumTracks ? originalId(curitem.id).split(":")[1] : undefined;
         let work_id = listingWorkAlbums ? curitem.id.split(":")[1] : undefined;
+        let addWorksOrRoles = listingArtistAlbums && LMS_VERSION>=90000 && view.items.length>0;
+        let addUserDefinedRoles = addWorksOrRoles && Object.keys(lmsOptions.userDefinedRoles).length>0;
         if (!curitem.id.startsWith(MUSIC_ID_PREFIX)) {
             if (!listingArtistAlbums && listingAlbums && !curitem.isVa) {
                 let pos = getField(command, "artist_id");
@@ -502,7 +513,7 @@ function browseHandleListResponse(view, item, command, resp, prevPage, appendIte
                     }
                 }
             }
-            view.currentActions = browseActions(view, resp.items.length>0 ? item : undefined, actParams, resp.items.length, resp.showRoles, showWorksInMenu);
+            view.currentActions = browseActions(view, resp.items.length>0 ? item : undefined, actParams, resp.items.length, resp.showRoles, showWorksInMenu, addUserDefinedRoles);
             if (listingArtistAlbums) {
                 for (var i=0, loop=view.onlineServices, len=loop.length; i<len; ++i) {
                     var emblem = getEmblem(loop[i].toLowerCase()+':');
@@ -750,8 +761,13 @@ function browseHandleListResponse(view, item, command, resp, prevPage, appendIte
             }
         }
 
-        if (listingAlbums && lmsOptions.listWorks && LMS_VERSION>=90000 && view.items.length>0 && curitem.id.startsWith("artist_id:")) {
-            browseAddWorks(view, curitem);
+        if (addWorksOrRoles) {
+            if (lmsOptions.listWorks) {
+                browseAddWorks(view, curitem);
+            }
+            if (addUserDefinedRoles) {
+                browseGetRoles(view, curitem);
+            }
         }
 
         view.$nextTick(function () {
@@ -767,6 +783,67 @@ function browseHandleListResponse(view, item, command, resp, prevPage, appendIte
             browseCheckExpand(view);
         }
     }
+}
+
+function browseGetRoles(view, curitem) {
+    let id = view.current.id;
+    let command = {command:['roles'], params:[curitem.id]};
+    browseAddLibId(view, command.params);
+    lmsList('', command.command, command.params, 0, LMS_BATCH_SIZE, true, view.nextReqId()).then(({data}) => {
+        logJsonMessage("RESP", data);
+        if (id==view.current.id && data.result && undefined!=data.result.role_ids) {
+            let roles = splitIntArray(data.result.role_ids);
+            let actions = [];
+            let excludeRole = 0;
+            if (undefined!=view.command && undefined!=view.command.params) {
+                let val = parseInt(getParamVal(view.command, "role_id:", "x"));
+                if (!isNaN(val)) {
+                    excludeRole = val;
+                }
+            }
+            for (let r=0, len=roles.length; r<len; ++r) {
+                if (roles[r]>=20 && roles[r]!=excludeRole) {
+                    let udr = lmsOptions.userDefinedRoles[roles[r]];
+                    if (undefined!=udr) {
+                        let params = [ARTIST_ALBUM_TAGS, SORT_KEY+ARTIST_ALBUM_SORT_PLACEHOLDER, curitem.id, 'role_id:'+roles[r]];
+                        browseAddLibId(view, params);
+                        actions.push({title:udr['text'], svg:'role-'+udr['role'], do:{ command: ['albums'], params: params}, weight:81, stdItem:STD_ITEM_ARTIST, udr:roles[r]});
+                    }
+                }
+            }
+            if (actions.length>0) {
+                actions.sort(titleSort);
+            }
+            let insertPos = 0;
+            for (let i=view.currentActions.length-1; i>=0; --i) {
+                if (undefined!=view.currentActions[i].udr && view.currentActions[i].udr>=20) {
+                    insertPos = i;
+                    view.currentActions.splice(i, 1);
+                } else if (0!=insertPos) {
+                    break;
+                }
+            }
+            for (let i=actions.length-1; i>=0; --i) {
+                view.currentActions.splice(insertPos, 0, actions[i]);
+            }
+        } else {
+            // Remove placeholder
+            for (let i=view.currentActions.length-1; i>=0; --i) {
+                if (undefined!=view.currentActions[i].udr && view.currentActions[i].udr==UDR_PLACEHOLDER) {
+                    view.currentActions.splice(i, 1);
+                    break;
+                }
+            }
+        }
+    }).catch(err => {
+        // Remove placeholder
+        for (let i=view.currentActions.length-1; i>=0; --i) {
+            if (undefined!=view.currentActions[i].udr && view.currentActions[i].udr==UDR_PLACEHOLDER) {
+                view.currentActions.splice(i, 1);
+                break;
+            }
+        }
+    });
 }
 
 function browseAddWorks(view, curitem) {

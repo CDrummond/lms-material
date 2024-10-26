@@ -1120,7 +1120,19 @@ var lmsBrowse = Vue.component("lms-browse", {
             } else if (undefined!=act.do) {
                 let title = item.origTitle ? item.origTitle : item.title;
                 let origTitle = (act.stdItem==STD_ITEM_ALL_TRACKS || act.stdItem==STD_ITEM_COMPOSITION_TRACKS || act.stdItem==STD_ITEM_CLASSICAL_WORKS ? undefined : (item.noReleaseGrouping ? title.split(SEPARATOR)[0] : title));
-                this.fetchItems(act.stdItem==STD_ITEM_ALL_TRACKS || act.stdItem==STD_ITEM_COMPOSITION_TRACKS || act.stdItem==STD_ITEM_CLASSICAL_WORKS || act.stdItem==STD_ITEM_ARTIST ? browseReplaceCommandTerms(this, act.do, item) : act.do,
+                let command = act.stdItem==STD_ITEM_ALL_TRACKS || act.stdItem==STD_ITEM_COMPOSITION_TRACKS || act.stdItem==STD_ITEM_CLASSICAL_WORKS || act.stdItem==STD_ITEM_ARTIST ? browseReplaceCommandTerms(this, act.do, item) : act.do;
+
+                // If navigating via a user-defined role can go artist->guitarist->vocals->guitarist->vocals, etc, and don't want a massive history!
+                if (undefined!=act.udr && this.history.length>0) {
+                    for (let loop=this.history, i=loop.length-1; i>=0; --i) {
+                        if (undefined!=loop[i].command && undefined!=loop[i].command.command && undefined!=loop[i].command.params && arraysEqual(loop[i].command.command, command.command) && arraysEqual(loop[i].command.params, command.params)) {
+                            this.goTo(i);
+                            break;
+                        }
+                    }
+                }
+
+                this.fetchItems(command,
                                 {cancache:false, id:"currentaction:"+index, title:act.udr && origTitle ? origTitle : act.title+(origTitle ? SEPARATOR+origTitle : ""), subtitle:act.subtitle, origTitle:origTitle,
                                  image:act.stdItem ? this.currentImage : undefined, stdItem:act.stdItem});
                 if (STD_ITEM_MAI==act.stdItem) {

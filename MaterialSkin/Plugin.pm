@@ -82,7 +82,7 @@ my @DEFAULT_BROWSE_MODES = ( 'myMusicArtists', 'myMusicArtistsAlbumArtists', 'my
 
 my %EXCLUDE_EXTRAS = map { $_ => 1 } ( 'ALARM', 'PLUGIN_CUSTOMBROWSE', 'PLUGIN_IPENG_CUSTOM_BROWSE_MORE', 'PLUGIN_DSTM', 'PLUGIN_TRACKSTAT', 'PLUGIN_DYNAMICPLAYLIST', 'PLUGIN_CDPLAYER' );
 
-my @ADV_SEARCH_OPS = ('album_titlesearch', 'album_release_type', 'bitrate', 'comments_value', 'contributor_namesearch', 'filesize', 'lyrics', 'me_titlesearch', 'persistent_playcount',
+my @ADV_SEARCH_OPS = ('album_titlesearch', 'work_titlesearch', 'album_release_type', 'bitrate', 'comments_value', 'contributor_namesearch', 'filesize', 'lyrics', 'me_titlesearch', 'persistent_playcount',
                       'persistent_rating', 'samplerate', 'samplesize', 'secs', 'timestamp', 'tracknum', 'url', 'year' );
 my @ADV_SEARCH_OTHER = ('content_type', 'contributor_namesearch.active1', 'contributor_namesearch.active2', 'contributor_namesearch.active3', 'contributor_namesearch.active4',
                         'contributor_namesearch.active5', 'genre', 'genre_name' );
@@ -1262,8 +1262,7 @@ sub _cliCommand {
             $params->{'action'} = 'saveLibraryView';
             $params->{'saveSearch'} = $saveLib;
         }
-
-        my ($tracks, $albums) = Plugins::MaterialSkin::Search::advancedSearch($request->client(), $params);
+        my ($tracks, $albums, $works) = Plugins::MaterialSkin::Search::advancedSearch($request->client(), $params);
 
         if ($saveLib) {
             Slim::Control::Request::notifyFromArray(undef, ['material-skin', 'notification', 'internal', 'vlib']);
@@ -1332,6 +1331,17 @@ sub _cliCommand {
                     $count++;
                     main::idleStreams() unless $count % 5;
                 }
+            }
+            if (blessed($works)) {
+                $works = $works->slice(0, $MAX_ADV_SEARCH_RESULTS);
+                my $count = 0;
+                #while (my $work = $works->next) {
+                #    $request->addResultLoop('works_loop', $count, 'work', $work->title);
+                #    $request->addResultLoop('works_loop', $count, 'work_id', $work->id);
+                #    $request->addResultLoop('works_loop', $count, 'composer_id', $work->composer);
+                #    $count++;
+                #    main::idleStreams() unless $count % 5;
+                #}
             }
         }
         $request->setStatusDone();
@@ -2493,6 +2503,11 @@ sub advancedSearch {
     my ($client, $params) = @_;
 
     $params->{'searchType'} ||= 'Album';
+
+    my @versionParts = split /\./, $::VERSION;
+    if ($versionParts[0]>=9) {
+        $params->{'searchType'} ||= 'Work';
+    }
     return Slim::Web::Pages::Search::parseAdvancedSearchParams($client, $params);
 }
 

@@ -256,6 +256,11 @@ sub advancedSearch {
 		push @joins, 'album';
 	}
 
+    if ($query{'work.titlesearch'}) {
+
+           push @joins, 'work';
+    }
+
 	if ($query{'comments.value'} || $joins{'comments'}) {
 
 		push @joins, 'comments';
@@ -284,29 +289,41 @@ sub advancedSearch {
 		'joins' => \@joins,
 	);
 
+	my @versionParts = split /\./, $::VERSION;
 	my $collate = Slim::Utils::OSDetect->getOS()->sqlHelperClass()->collate();
 	$attrs{'order_by'} = "me.disc, me.titlesort $collate"; #if $type eq 'Track';
-	
+	if ($versionParts[0]>=9) {
+        $attrs{'prefetch'} = "work";
+	}
+
 	# Create a resultset - have fillInSearchResults do the actual search.
 	my $tracksRs = Slim::Schema->search('Track', \%query, \%attrs)->distinct;
 	
-	my $rs;
-	#if ( $type eq 'Album' ) {
-		$rs = Slim::Schema->search('Album', {
+	my $albumRs = Slim::Schema->search('Album', {
 			'id' => { 'in' => $tracksRs->get_column('album')->as_query },
 		},{
 			'order_by' => "me.disc, me.titlesort $collate",
-		});
-	#}
+	    });
+
+	my $worksRs;
+	if ($versionParts[0]>=9) {
+		$worksRs = Slim::Schema->search('Work', {
+                'me.id' => { 'in' => $tracksRs->get_column('work')->as_query },
+            },{
+                'order_by' => "composer.namesort, me.titlesort $collate",
+            },{
+                'join' => 'composer',
+            });
+	}
 
 	if ( $params->{'action'} && $params->{'action'} eq 'saveLibraryView' && (my $saveSearch = $params->{saveSearch}) ) {
 		# build our own resultset, as we don't want the result to be sorted
-		my $rs = Slim::Schema->search('Track', \%query, {
+		my $albumRs = Slim::Schema->search('Track', \%query, {
 			'join'     => \@joins,
 			'joins'    => \@joins,
 		})->distinct;
 		
-		my $sqlQuery = $rs->get_column('id')->as_query;
+		my $sqlQuery = $albumRs->get_column('id')->as_query;
 		
 		my $vlid = 'advSrch_' . time;
 		
@@ -320,7 +337,7 @@ sub advancedSearch {
 		Slim::Music::VirtualLibraries->rebuild($vlid);
 	}
 
-	return ($tracksRs, $rs);
+	return ($tracksRs, $albumRs, $worksRs);
 }
 
 sub options {

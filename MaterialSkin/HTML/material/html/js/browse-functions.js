@@ -791,8 +791,7 @@ function browseGetRoles(view, curitem) {
     browseAddLibId(view, command.params);
     lmsList('', command.command, command.params, 0, LMS_BATCH_SIZE, true, view.nextReqId()).then(({data}) => {
         logJsonMessage("RESP", data);
-        if (id==view.current.id && data.result && undefined!=data.result.role_ids) {
-            let roles = splitIntArray(data.result.role_ids);
+        if (id==view.current.id && data.result && undefined!=data.result.roles_loop) {
             let actions = [];
             let excludeRole = 0;
             if (undefined!=view.command && undefined!=view.command.params) {
@@ -801,13 +800,14 @@ function browseGetRoles(view, curitem) {
                     excludeRole = val;
                 }
             }
-            for (let r=0, len=roles.length; r<len; ++r) {
-                if (roles[r]>=20 && roles[r]!=excludeRole) {
-                    let udr = lmsOptions.userDefinedRoles[roles[r]];
+            for (let r=0, loop=data.result.roles_loop, len=loop.length; r<len; ++r) {
+                let rid = parseInt(loop[r].role_id);
+                if (rid>=20 && rid!=excludeRole) {
+                    let udr = lmsOptions.userDefinedRoles[rid];
                     if (undefined!=udr) {
-                        let params = [ARTIST_ALBUM_TAGS, SORT_KEY+ARTIST_ALBUM_SORT_PLACEHOLDER, curitem.id, 'role_id:'+roles[r]];
+                        let params = [ARTIST_ALBUM_TAGS, SORT_KEY+ARTIST_ALBUM_SORT_PLACEHOLDER, curitem.id, 'role_id:'+rid];
                         browseAddLibId(view, params);
-                        actions.push({title:udr['text'], svg:'role-'+udr['role'], do:{ command: ['albums'], params: params}, weight:81, stdItem:STD_ITEM_ARTIST, udr:roles[r]});
+                        actions.push({title:udr['text'], svg:'role-'+udr['role'], do:{ command: ['albums'], params: params}, weight:81, stdItem:STD_ITEM_ARTIST, udr:rid});
                     }
                 }
             }

@@ -2108,15 +2108,15 @@ var lmsBrowse = Vue.component("lms-browse", {
             this.goHome();
         }.bind(this));
         bus.$on('browse-shortcut', function(id) {
-            if (this.current && id==this.current.id) {
-                return;
-            }
-            this.goHome();
             if (this.$store.state.desktopLayout) {
                 bus.$emit('npclose');
             } else {
                 this.$store.commit('setPage', 'browse');
             }
+            if (this.current && id==this.current.id) {
+                return;
+            }
+            this.goHome();
             if (id!='-') {
                 for (let i=0, len=this.items.length; i<len; ++i) {
                     if (this.items[i].id==id) {

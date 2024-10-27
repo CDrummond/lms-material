@@ -414,6 +414,14 @@ Vue.component('lms-advancedsearch-dialog', {
                         total+=resp.items.length;
                     }
                 }
+                if (data.result.works_loop) {
+                    let resp = parseBrowseResp(data, undefined, {isSearch:true});
+                    data.result.works_loop = undefined;
+                    if (undefined!=resp) {
+                        results.push({resp:resp, command:{cat:SEARCH_WORKS_CAT}});
+                        total+=resp.items.length;
+                    }
+                }
                 if (data.result.titles_loop) {
                     let resp = parseBrowseResp(data, undefined, {isSearch:true});
                     if (undefined!=resp) {

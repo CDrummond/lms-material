@@ -405,8 +405,17 @@ Vue.component('lms-advancedsearch-dialog', {
                 let results = [];
                 let total = 0;
 
-                //parseBrowseResp looks for albums_loop before titles_loop, so must get albums first
-                if (data.result.albums_loop) {
+                // Rename loops so that parseBrowseResp handles in
+                // requested order...
+                data.result.albums_loopx = data.result.albums_loop;
+                data.result.works_loopx = data.result.works_loop;
+                data.result.titles_loopx = data.result.titles_loop;
+                data.result.albums_loop = undefined;
+                data.result.works_loop = undefined;
+                data.result.titles_loop = undefined;
+
+                if (data.result.albums_loopx) {
+                    data.result.albums_loop = data.result.albums_loopx;
                     let resp = parseBrowseResp(data, undefined, {isSearch:true});
                     data.result.albums_loop = undefined;
                     if (undefined!=resp) {
@@ -414,7 +423,8 @@ Vue.component('lms-advancedsearch-dialog', {
                         total+=resp.items.length;
                     }
                 }
-                if (data.result.works_loop) {
+                if (data.result.works_loopx) {
+                    data.result.works_loop = data.result.works_loopx;
                     let resp = parseBrowseResp(data, undefined, {isSearch:true});
                     data.result.works_loop = undefined;
                     if (undefined!=resp) {
@@ -422,7 +432,8 @@ Vue.component('lms-advancedsearch-dialog', {
                         total+=resp.items.length;
                     }
                 }
-                if (data.result.titles_loop) {
+                if (data.result.titles_loopx) {
+                    data.result.titles_loop = data.result.titles_loopx;
                     let resp = parseBrowseResp(data, undefined, {isSearch:true});
                     if (undefined!=resp) {
                         results.push({resp:resp, command:{cat:SEARCH_TRACKS_CAT}});

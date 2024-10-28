@@ -27,7 +27,7 @@ Vue.component('lms-navdrawer', {
   <div v-if="windowControlsOnLeft" style="height:var(--main-toolbar-height); width:100%"></div>
   <v-list-tile @click.prevent="show=false" style="margin-top:-2px">
    <v-list-tile-avatar><v-btn icon flat @click="show=false"><v-icon>arrow_back<v-icon></v-btn></v-list-tile-avatar>
-   <div class="lyrion-logo" v-longpress:stop="clickLogo"><img :src="'lyrion' | svgIcon(darkUi)"></img></div>
+   <div class="lyrion-logo" v-longpress:nomove="clickLogo"><img :src="'lyrion' | svgIcon(darkUi)"></img></div>
   </v-list-tile>
   <v-list-tile v-if="!connected" @click="bus.$emit('showError', undefined, trans.connectionLost)">
    <v-list-tile-avatar><v-icon class="red">error</v-icon></v-list-tile-avatar>
@@ -37,7 +37,7 @@ Vue.component('lms-navdrawer', {
    <v-subheader v-if="index==0 && !item.isgroup && players[players.length-1].isgroup">{{trans.standardPlayers}}</v-subheader>
    <v-subheader v-else-if="index>0 && item.isgroup && !players[index-1].isgroup">{{trans.groupPlayers}}</v-subheader>
    <v-list-tile @click="setPlayer(item.id)" v-bind:class="{'nd-active-player':player && item.id === player.id}" :id="'nd-player-'+index">
-    <v-list-tile-avatar v-longpress:stop="syncPlayer" :id="index+'-icon'">
+    <v-list-tile-avatar v-longpress:nomove="syncPlayer" :id="index+'-icon'">
      <v-icon v-if="item.isplaying" class="playing-badge">play_arrow</v-icon>
      <v-icon v-if="item.icon.icon">{{item.icon.icon}}</v-icon><img v-else class="svg-img" :src="item.icon.svg | svgIcon(darkUi)"></img>
     </v-list-tile-avatar>
@@ -46,7 +46,7 @@ Vue.component('lms-navdrawer', {
     </v-list-tile-content>
      <v-list-tile-action v-if="index<10 && keyboardControl" class="menu-shortcut" v-bind:class="{'menu-shortcut-player':item.canpoweroff,'menu-shortcut-player-apple':IS_APPLE && item.canpoweroff}">{{index|playerShortcut}}</v-list-tile-action>
      <v-list-tile-action>
-      <v-btn v-if="item.canpoweroff" icon style="float:right" v-longpress:stop="togglePower" :id="index+'-power-btn'" :title="(item.id==player.id && playerStatus.ison) || item.ison ? i18n('Switch off %1', item.name) : i18n('Switch on %1', item.name)"><v-icon v-bind:class="{'dimmed': (item.id==player.id ? !playerStatus.ison : !item.ison)}">power_settings_new</v-icon></v-btn>
+      <v-btn v-if="item.canpoweroff" icon style="float:right" v-longpress:nomove="togglePower" :id="index+'-power-btn'" :title="(item.id==player.id && playerStatus.ison) || item.ison ? i18n('Switch off %1', item.name) : i18n('Switch on %1', item.name)"><v-icon v-bind:class="{'dimmed': (item.id==player.id ? !playerStatus.ison : !item.ison)}">power_settings_new</v-icon></v-btn>
      </v-list-tile-action>
    </v-list-tile>
    <v-list-tile v-if="connected && player && item.id === player.id && (playerStatus.sleepTime || playerStatus.alarmStr)" class="hide-for-mini status">
@@ -57,7 +57,7 @@ Vue.component('lms-navdrawer', {
 
   <v-divider v-if="playersDivider" class="hide-for-mini"></v-divider>
 
-  <v-list-tile v-if="showManagePlayers" v-longpress="managePlayers" class="hide-for-mini noselect">
+  <v-list-tile v-if="showManagePlayers" v-longpress:nomove="managePlayers" class="hide-for-mini noselect">
    <v-list-tile-avatar><img class="svg-img" :src="TB_MANAGE_PLAYERS.svg | svgIcon(darkUi)"></img></v-list-tile-avatar>
    <v-list-tile-content><v-list-tile-title>{{TB_MANAGE_PLAYERS.title}}</v-list-tile-title></v-list-tile-content>
    <v-list-tile-action v-if="TB_MANAGE_PLAYERS.shortcut && keyboardControl" class="menu-shortcut player-menu-shortcut">{{TB_MANAGE_PLAYERS.shortcut}}</v-list-tile-action>
@@ -320,7 +320,11 @@ Vue.component('lms-navdrawer', {
             }
             this.show = false;
         },
-        managePlayers(longPress) {
+        managePlayers(longPress, el, event) {
+            if (event) {
+                event.preventDefault();
+                event.stopPropagation();
+            }
             if (longPress) {
                 // Leave menu open for 1/4 of a second so that it captures the
                 // click/touch end event. If we close immediately then the element
@@ -398,6 +402,8 @@ Vue.component('lms-navdrawer', {
         },
         syncPlayer(longPress, el, event) {
             storeClickOrTouchPos(event);
+            event.preventDefault();
+            event.stopPropagation();
             let idx = parseInt(el.id.split("-")[0]);
             if (idx>=0 && idx<=this.$store.state.players.length) {
                 if (longPress) {
@@ -410,6 +416,8 @@ Vue.component('lms-navdrawer', {
         },
         togglePower(longPress, el, event) {
             storeClickOrTouchPos(event);
+            event.preventDefault();
+            event.stopPropagation();
             if (queryParams.party) {
                 return;
             }

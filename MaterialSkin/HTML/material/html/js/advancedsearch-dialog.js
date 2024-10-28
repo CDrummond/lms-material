@@ -434,7 +434,7 @@ Vue.component('lms-advancedsearch-dialog', {
                         total+=resp.items.length;
                     }
                 }
-                if (data.result.works_loopx && data.result.works_loopx.length>0) {
+                if (LMS_VERSION>=90000 && data.result.works_loopx && data.result.works_loopx.length>0) {
                     workPos = results.length;
                     results.push({resp:[], command:{cat:SEARCH_WORKS_CAT}});
                     for (let i=0, loop=data.result.works_loopx, len=loop.length; i<len; ++i) {

@@ -22,6 +22,8 @@
 15. Remove smaller desktop now-playing bar, always use same height.
 16. Add 'Work' to advanced search terms, and results.
 17. Pass library_id to advanced search.
+18. Prevent item activation when scrolling navigation drawer on a long-press
+    item.
 
 5.4.1
 -----

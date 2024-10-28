@@ -674,10 +674,6 @@ div.v-subheader {
  padding:0 12px 0 10px !important;
 }
 
-.detailed-sub .lms-list-item a .v-avatar {
- margin-left:2px;
-}
-
 .indent-both .lms-list-item a .v-avatar,
 .indent-right .lms-list-item a .v-avatar {
  margin-left:-2px;

@@ -81,6 +81,15 @@ var app = new Vue({
             if (lmsApp.botPad>6) {
                 document.documentElement.style.setProperty('--desktop-np-bottom-pad', (lmsApp.botPad-6) + 'px');
             }
+            if (lmsApp.botPad>20) {
+                document.documentElement.style.setProperty('--desktop-np-bottom-pad-alt', '0px');
+                document.documentElement.style.setProperty('--desktop-np-bottom-pad-alt2', (lmsApp.botPad-6) + 'px');
+                document.documentElement.style.setProperty('--desktop-np-bottom-pad-alt3', (lmsApp.botPad-6) + 'px');
+            } else {
+                document.documentElement.style.setProperty('--desktop-np-bottom-pad-alt', (lmsApp.botPad-6) + 'px');
+                document.documentElement.style.setProperty('--desktop-np-bottom-pad-alt2', '0px');
+                document.documentElement.style.setProperty('--desktop-np-bottom-pad-alt3', ((lmsApp.botPad-6)/2) + 'px');
+            }
         }
         if (queryParams.topPad>0) {
             document.documentElement.style.setProperty('--top-pad', queryParams.topPad + 'px');
@@ -224,7 +233,7 @@ var app = new Vue({
                     if (keyboardShown != lmsApp.keyboardShown) {
                         if (keyboardShown) {
                             lmsApp.heights = [];
-                            let vars = ['--bottom-toolbar-height', '--desktop-npbar-height', '--desktop-npbar-height-thin', '--mobile-npbar-height-thin', '--mobile-npbar-height-thick', '--mobile-npbar-height'];
+                            let vars = ['--bottom-toolbar-height', '--desktop-npbar-height', '--mobile-npbar-height-thin', '--mobile-npbar-height-thick', '--mobile-npbar-height'];
                             for (let v=0, len=vars.length; v<len; ++v) {
                                 lmsApp.heights.push([vars[v], getComputedStyle(document.documentElement).getPropertyValue(vars[v])]);
                             }

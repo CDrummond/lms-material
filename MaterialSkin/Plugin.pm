@@ -82,7 +82,7 @@ my @DEFAULT_BROWSE_MODES = ( 'myMusicArtists', 'myMusicArtistsAlbumArtists', 'my
 
 my %EXCLUDE_EXTRAS = map { $_ => 1 } ( 'ALARM', 'PLUGIN_CUSTOMBROWSE', 'PLUGIN_IPENG_CUSTOM_BROWSE_MORE', 'PLUGIN_DSTM', 'PLUGIN_TRACKSTAT', 'PLUGIN_DYNAMICPLAYLIST', 'PLUGIN_CDPLAYER' );
 
-my @ADV_SEARCH_OPS = ('album_titlesearch', 'album_release_type', 'bitrate', 'comments_value', 'contributor_namesearch', 'filesize', 'lyrics', 'me_titlesearch', 'persistent_playcount',
+my @ADV_SEARCH_OPS = ('album_titlesearch', 'work_titlesearch', 'album_release_type', 'bitrate', 'comments_value', 'contributor_namesearch', 'filesize', 'lyrics', 'me_titlesearch', 'persistent_playcount',
                       'persistent_rating', 'samplerate', 'samplesize', 'secs', 'timestamp', 'tracknum', 'url', 'year' );
 my @ADV_SEARCH_OTHER = ('content_type', 'contributor_namesearch.active1', 'contributor_namesearch.active2', 'contributor_namesearch.active3', 'contributor_namesearch.active4',
                         'contributor_namesearch.active5', 'genre', 'genre_name' );
@@ -1263,7 +1263,12 @@ sub _cliCommand {
             $params->{'saveSearch'} = $saveLib;
         }
 
-        my ($tracks, $albums) = Plugins::MaterialSkin::Search::advancedSearch($request->client(), $params);
+        my $libId = $request->getParam('library_id');
+        if ($libId) {
+            $params->{'library_id'} = $libId;
+        }
+
+        my ($tracks, $albums, $works) = Plugins::MaterialSkin::Search::advancedSearch($request->client(), $params);
 
         if ($saveLib) {
             Slim::Control::Request::notifyFromArray(undef, ['material-skin', 'notification', 'internal', 'vlib']);
@@ -1329,6 +1334,15 @@ sub _cliCommand {
                         $request->addResultLoop('albums_loop', $count, 'extid', $album->extid);
                     }
                     # TODO: artists, artwork_url ???
+                    $count++;
+                    main::idleStreams() unless $count % 5;
+                }
+            }
+            if (blessed($works)) {
+                $works = $works->slice(0, $MAX_ADV_SEARCH_RESULTS);
+                my $count = 0;
+                while (my $work = $works->next) {
+                    $request->addResultLoop('works_loop', $count, 'id', $work->id);
                     $count++;
                     main::idleStreams() unless $count % 5;
                 }
@@ -1812,6 +1826,8 @@ sub _cliClientCommand {
             my $details = _readRandMix($path);
             if ($details) {
                 my $rprefs = preferences('plugin.randomplay');
+                $rprefs->set('continuous', int($details->{'continuous'}));
+
                 my $var = int($details->{'newtracks'});
                 if ($var<1 || $var>1000) {
                     $var = 10;
@@ -1822,13 +1838,26 @@ sub _cliClientCommand {
                     $var = 10;
                 }
                 $rprefs->set('oldtracks', $var);
-                $rprefs->set('continuous', int($details->{'continuous'}));
-                $client->execute(["randomplaygenreselectall", "0"]);
-                my @genres = split /,/, $details->{'genres'};
-                foreach my $genre (@genres) {
-                    $client->execute(["randomplaychoosegenre", $genre, "1"]);
-                }
                 $client->execute(["randomplaychooselibrary", $details->{'library'}]);
+
+                my @genres = split /,/, $details->{'genres'};
+                my $numGenres = scalar(@genres);
+                my $allGenres = 0 == $numGenres;
+                if ($allGenres==0 && Slim::Schema::hasLibrary()) {
+                    my $totals = Slim::Schema->totals($request->client);
+                    if ($totals->{genre} == scalar(@genres)) {
+                        $allGenres = 1;
+                    }
+                }
+                if ($allGenres == 1) {
+                    $client->execute(["randomplaygenreselectall", "1"]);
+                } elsif ($allGenres == 0) {
+                    $client->execute(["randomplaygenreselectall", "0"]);
+                    foreach my $genre (@genres) {
+                        $client->execute(["randomplaychoosegenre", $genre, "1"]);
+                    }
+                }
+
                 $client->execute(["randomplay", $details->{'mix'}]);
                 $request->setStatusDone();
                 return;
@@ -2478,6 +2507,11 @@ sub advancedSearch {
     my ($client, $params) = @_;
 
     $params->{'searchType'} ||= 'Album';
+
+    my @versionParts = split /\./, $::VERSION;
+    if ($versionParts[0]>=9) {
+        $params->{'searchType'} = 'AlbumWork';
+    }
     return Slim::Web::Pages::Search::parseAdvancedSearchParams($client, $params);
 }
 

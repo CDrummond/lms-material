@@ -444,7 +444,6 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
         this.setZoom(this.zoom);
         this.showNpBar = undefined;
         this.desktopBarHeight = getComputedStyle(document.documentElement).getPropertyValue('--desktop-npbar-height');
-        this.desktopBarThinHeight = getComputedStyle(document.documentElement).getPropertyValue('--desktop-npbar-height-thin');
         this.mobileBarThinHeight = getComputedStyle(document.documentElement).getPropertyValue('--mobile-npbar-height-thin');
         this.mobileBarThickHeight = parseInt(getComputedStyle(document.documentElement).getPropertyValue('--mobile-npbar-height-thick').replace("px", ""));
         this.bottomPad = parseInt(getComputedStyle(document.documentElement).getPropertyValue('--bottom-pad').replace("px", ""));
@@ -1270,7 +1269,6 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
             if (showNpBar!=this.showNpBar || force) {
                 let mbar = this.$store.state.mobileBar;
                 document.documentElement.style.setProperty('--desktop-npbar-height', !showNpBar ? '0px' : this.desktopBarHeight);
-                document.documentElement.style.setProperty('--desktop-npbar-height-thin', !showNpBar ? '0px' : this.desktopBarThinHeight);
                 document.documentElement.style.setProperty('--mobile-npbar-height',
                     !showNpBar || MBAR_NONE==mbar
                         ? '0px'

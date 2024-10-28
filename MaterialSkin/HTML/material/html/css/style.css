@@ -22,12 +22,11 @@
  --main-toolbar-height:calc(var(--top-pad) + 48px);
  --sub-toolbar-height:48px;
  --desktop-npbar-height:calc(var(--desktop-np-bottom-pad) +  72px);
- --desktop-npbar-height-thin:calc(var(--bottom-pad) + 48px);
  --mobile-npbar-height:0px;
  --mobile-npbar-height-thin:22px;
  --mobile-npbar-height-thick:48px;
  --tab-bar-height:48px;
- --list-elem-height:50px;
+ --list-elem-height:48px;
  --list-elem-3line-height:70px;
  --pq-album-header:68px;
  --pq-album-track:34px;
@@ -699,10 +698,6 @@ div.v-subheader {
  padding:0 12px 0 10px !important;
 }
 
-.detailed-sub .lms-list-item a .v-avatar {
- margin-left:2px;
-}
-
 .indent-both .lms-list-item a .v-avatar,
 .indent-right .lms-list-item a .v-avatar {
  margin-left:-2px;
@@ -962,6 +957,10 @@ div.v-subheader {
 
 .dialog-padding {
  height:32px;
+}
+
+.dialog-bottom-pad {
+ height:var(--bottom-pad);
 }
 
 .np-info .lms-list {
@@ -2659,6 +2658,12 @@ div.v-subheader {
  position:fixed;
  left:7px;
  bottom:2px;
+}
+
+.dst-home-nobgnd, .dst-home-nobgnd:hover {
+ position:fixed;
+ top:calc(var(--top-pad) + (var(--sub-toolbar-height) *2 ));
+ bottom:unset!important;
 }
 
 .lib-select-btn {

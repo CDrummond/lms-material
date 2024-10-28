@@ -286,10 +286,10 @@ sub advancedSearch {
 
 	my $collate = Slim::Utils::OSDetect->getOS()->sqlHelperClass()->collate();
 	$attrs{'order_by'} = "me.disc, me.titlesort $collate"; #if $type eq 'Track';
-	
+
 	# Create a resultset - have fillInSearchResults do the actual search.
 	my $tracksRs = Slim::Schema->search('Track', \%query, \%attrs)->distinct;
-	
+
 	my $rs;
 	#if ( $type eq 'Album' ) {
 		$rs = Slim::Schema->search('Album', {

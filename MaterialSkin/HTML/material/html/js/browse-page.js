@@ -59,7 +59,7 @@ var lmsBrowse = Vue.component("lms-browse", {
   </v-layout>
   <v-layout v-else-if="history.length>0">
    <v-btn flat icon v-longpress="backBtnPressed" class="toolbar-button" v-bind:class="{'back-button':!homeButton || history.length<2}" id="back-button" :title="trans.goBack | tooltipStr('esc', keyboardControl)"><v-icon>arrow_back</v-icon></v-btn>
-   <v-btn v-if="history.length>1 && homeButton" flat icon @click="homeBtnPressed()" class="toolbar-button" id="home-button" v-bind:class="{'dst-home':showDetailedSubtoolbar}" :title="trans.goHome | tooltipStr('home', keyboardControl)"><v-icon>home</v-icon></v-btn>
+   <v-btn v-if="history.length>1 && homeButton" flat icon @click="homeBtnPressed()" class="toolbar-button" id="home-button" v-bind:class="{'dst-home':showDetailedSubtoolbar, 'dst-home-nobgnd':showDetailedSubtoolbar&&!drawBgndImage}" :title="trans.goHome | tooltipStr('home', keyboardControl)"><v-icon>home</v-icon></v-btn>
    <div v-if="wide>=WIDE_COVER && currentImages" @click="showHistory($event)" class="sub-cover pointer">
     <div class="mi" :class="'mi'+currentImages.length">
      <img v-for="(mic, midx) in currentImages" :class="'mi-'+midx" :key="mic" :src="mic" loading="lazy"></img>
@@ -110,6 +110,7 @@ var lmsBrowse = Vue.component("lms-browse", {
      <v-btn flat v-if="showMixButton" class="context-button" @click="doContext(STD_ITEM_MIX)"><img class="svg-img" :src="'music-mix' | svgIcon(darkUi)"></img>&nbsp;{{i18n('Create mix')}}</v-btn>
      <v-btn flat v-if="showMaiButton" class="context-button" @click="doContext(STD_ITEM_MAI)"><v-icon v-if="current.stdItem==STD_ITEM_ALBUM">album</v-icon><img v-else class="svg-img" :src="'artist' | svgIcon(darkUi)"></img>&nbsp;{{i18n('Information')}}</v-btn>
     </tr>
+    <tr v-else><obj>&nbsp;</obj></tr>
    </table>
   </v-layout>
   <v-layout v-else class="pointer link-item">
@@ -1121,7 +1122,19 @@ var lmsBrowse = Vue.component("lms-browse", {
             } else if (undefined!=act.do) {
                 let title = item.origTitle ? item.origTitle : item.title;
                 let origTitle = (act.stdItem==STD_ITEM_ALL_TRACKS || act.stdItem==STD_ITEM_COMPOSITION_TRACKS || act.stdItem==STD_ITEM_CLASSICAL_WORKS ? undefined : (item.noReleaseGrouping ? title.split(SEPARATOR)[0] : title));
-                this.fetchItems(act.stdItem==STD_ITEM_ALL_TRACKS || act.stdItem==STD_ITEM_COMPOSITION_TRACKS || act.stdItem==STD_ITEM_CLASSICAL_WORKS || act.stdItem==STD_ITEM_ARTIST ? browseReplaceCommandTerms(this, act.do, item) : act.do,
+                let command = act.stdItem==STD_ITEM_ALL_TRACKS || act.stdItem==STD_ITEM_COMPOSITION_TRACKS || act.stdItem==STD_ITEM_CLASSICAL_WORKS || act.stdItem==STD_ITEM_ARTIST ? browseReplaceCommandTerms(this, act.do, item) : act.do;
+
+                // If navigating via a user-defined role can go artist->guitarist->vocals->guitarist->vocals, etc, and don't want a massive history!
+                if (undefined!=act.udr && this.history.length>0) {
+                    for (let loop=this.history, i=loop.length-1; i>=0; --i) {
+                        if (undefined!=loop[i].command && undefined!=loop[i].command.command && undefined!=loop[i].command.params && arraysEqual(loop[i].command.command, command.command) && arraysEqual(loop[i].command.params, command.params)) {
+                            this.goTo(i);
+                            break;
+                        }
+                    }
+                }
+
+                this.fetchItems(command,
                                 {cancache:false, id:"currentaction:"+index, title:act.udr && origTitle ? origTitle : act.title+(origTitle ? SEPARATOR+origTitle : ""), subtitle:act.subtitle, origTitle:origTitle,
                                  image:act.stdItem ? this.currentImage : undefined, stdItem:act.stdItem});
                 if (STD_ITEM_MAI==act.stdItem) {

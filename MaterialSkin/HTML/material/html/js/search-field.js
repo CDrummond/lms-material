@@ -132,7 +132,7 @@ Vue.component('lms-search-field', {
         },
         advanced() {
             bus.$emit('closeLibSearch');
-            bus.$emit('dlg.open', 'advancedsearch', true);
+            bus.$emit('dlg.open', 'advancedsearch', true, this.$store.state.library ? this.$store.state.library : LMS_DEFAULT_LIBRARY);
         },
         textChanged(event) {
             this.stopDebounce();

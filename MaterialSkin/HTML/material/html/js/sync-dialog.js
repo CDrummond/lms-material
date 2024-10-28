@@ -16,13 +16,13 @@ Vue.component('lms-sync-dialog', {
      <v-flex xs12 class="dlgtitle">{{i18n("Select which players you would like to synchronise with '%1'", player.name)}}</v-flex>
      <v-flex xs12>
       <v-list class="sleep-list dialog-main-list">
-       <v-list-tile @click="" @mousedown="toggleAllA" @mouseup="toggleAllB" @touchstart="toggleAllA" @touchend="toggleAllB" v-if="players.length>1">
+       <v-list-tile @click="" @mousedown="toggleAllA($event)" @mouseup="toggleAllB($event)" @touchstart="toggleAllA($event)" @touchend="toggleAllB($event)" v-if="players.length>1">
         <v-list-tile-avatar :tile="true" class="lms-avatar"><v-icon>{{selectAllIcon}}</v-icon></v-list-tile-avatar>
         <v-list-tile-title class="sleep-item">{{i18n('Select All')}}</v-list-tile-title>
        </v-list-tile>
        <v-divider v-if="players.length>1"></v-divider>
        <template v-for="(p, index) in players">
-        <v-list-tile @click="" @mousedown="togglePlayerA(index)" @mouseup="togglePlayerB(index)" @touchstart="togglePlayerA(index)" @touchend="togglePlayerB(index)">
+        <v-list-tile @click="" @mousedown="togglePlayerA($event, index)" @mouseup="togglePlayerB($event, index)" @touchstart="togglePlayerA($event, index)" @touchend="togglePlayerB($event, index)">
          <v-list-tile-avatar :tile="true" class="lms-avatar"><v-icon>{{p.synced ? 'check_box' : 'check_box_outline_blank'}}</v-icon></v-list-tile-avatar>
          <v-list-tile-title class="sleep-item">{{p.name}}</v-list-tile-title>
         </v-list-tile>
@@ -157,10 +157,12 @@ Vue.component('lms-sync-dialog', {
                 });
             }
         },
-        togglePlayerA(index) {
+        togglePlayerA(ev, index) {
+            ev.preventDefault();
             this.lastBtn = index;
         },
-        togglePlayerB(index) {
+        togglePlayerB(ev, index) {
+            ev.preventDefault();
             if (index!=undefined && this.lastBtn==index) {
                 this.togglePlayer(index);
             }
@@ -174,10 +176,12 @@ Vue.component('lms-sync-dialog', {
             player.synced=!player.synced;
             this.numSync+=(player.synced ? 1 : -1);
         },
-        toggleAllA() {
+        toggleAllA(ev) {
+            ev.preventDefault();
             this.lastBtn=-1;
         },
-        toggleAllB() {
+        toggleAllB(ev) {
+            ev.preventDefault();
             if (this.lastBtn==-1) {
                 this.toggleAll();
             }

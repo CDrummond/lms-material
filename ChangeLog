@@ -1,3 +1,7 @@
+5.4.3
+-----
+1. Save settings when change player via menu in player settings dialog.
+
 5.4.2
 -----
  1. Tweak how navigation drawer list is scrolled to ensure current player is

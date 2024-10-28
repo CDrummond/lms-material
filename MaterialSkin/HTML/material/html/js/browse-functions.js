@@ -1859,7 +1859,7 @@ function browseHeaderAction(view, act, event, ignoreOpenMenus) {
         view.refreshList(true);
         bus.$emit('showMessage', i18n('Reloading'));
     } else if (ADV_SEARCH_ACTION==act) {
-        bus.$emit('dlg.open', 'advancedsearch', false);
+        bus.$emit('dlg.open', 'advancedsearch', false, view.$store.state.library ? view.$store.state.library : LMS_DEFAULT_LIBRARY);
     } else if (SAVE_VLIB_ACTION==act) {
         promptForText(ACTIONS[SAVE_VLIB_ACTION].title, undefined, undefined, i18n("Save")).then(resp => {
             if (resp.ok && resp.value && resp.value.length>0) {

@@ -1262,6 +1262,12 @@ sub _cliCommand {
             $params->{'action'} = 'saveLibraryView';
             $params->{'saveSearch'} = $saveLib;
         }
+
+        my $libId = $request->getParam('library_id');
+        if ($libId) {
+            $params->{'library_id'} = $libId;
+        }
+
         my ($tracks, $albums, $works) = Plugins::MaterialSkin::Search::advancedSearch($request->client(), $params);
 
         if ($saveLib) {

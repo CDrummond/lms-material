@@ -229,7 +229,8 @@ Vue.component('lms-advancedsearch-dialog', {
         }
     },
     mounted() {
-        bus.$on('advancedsearch.open', function(reset) {
+        bus.$on('advancedsearch.open', function(reset, libId) {
+            this.libId = libId;
             this.textOps=[{key:"LIKE", label:i18n("contains")},
                           {key:"NOT LIKE", label:i18n("doesn't contain")},
                           {key:"STARTS WITH", label:i18n("starts with")},
@@ -307,7 +308,11 @@ Vue.component('lms-advancedsearch-dialog', {
                 }
             }
 
-            lmsCommand("", ["material-skin", "adv-search-params"]).then(({data}) => {
+            let cmd = ["material-skin", "adv-search-params"];
+            if (undefined!=this.libId) {
+                cmd.push("library_id:"+this.libId);
+            }
+            lmsCommand("", cmd).then(({data}) => {
                 if (data && data.result) {
                     if (data.result.genres_loop) {
                         this.genres=[{key:ADVS_ANY_GENRE, label:i18n('any genre')},
@@ -398,6 +403,10 @@ Vue.component('lms-advancedsearch-dialog', {
                 command.push("genre:"+this.params.genre);
             }
 
+
+            if (undefined!=this.libId) {
+                command.push("library_id:"+this.libId);
+            }
             lmsCommand("", command).then(({data}) => {
                 if (!this.searching) {
                     return;

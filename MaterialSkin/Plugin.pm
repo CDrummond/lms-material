@@ -1335,13 +1335,13 @@ sub _cliCommand {
             if (blessed($works)) {
                 $works = $works->slice(0, $MAX_ADV_SEARCH_RESULTS);
                 my $count = 0;
-                #while (my $work = $works->next) {
-                #    $request->addResultLoop('works_loop', $count, 'work', $work->title);
-                #    $request->addResultLoop('works_loop', $count, 'work_id', $work->id);
+                while (my $work = $works->next) {
+                    $request->addResultLoop('works_loop', $count, 'work', $work->title);
+                    $request->addResultLoop('works_loop', $count, 'work_id', $work->id);
                 #    $request->addResultLoop('works_loop', $count, 'composer_id', $work->composer);
-                #    $count++;
-                #    main::idleStreams() unless $count % 5;
-                #}
+                    $count++;
+                    main::idleStreams() unless $count % 5;
+                }
             }
         }
         $request->setStatusDone();
@@ -2506,7 +2506,7 @@ sub advancedSearch {
 
     my @versionParts = split /\./, $::VERSION;
     if ($versionParts[0]>=9) {
-        $params->{'searchType'} ||= 'Work';
+        $params->{'searchType'} = 'AlbumWork';
     }
     return Slim::Web::Pages::Search::parseAdvancedSearchParams($client, $params);
 }

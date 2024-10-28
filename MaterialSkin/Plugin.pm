@@ -1342,15 +1342,7 @@ sub _cliCommand {
                 $works = $works->slice(0, $MAX_ADV_SEARCH_RESULTS);
                 my $count = 0;
                 while (my $work = $works->next) {
-                    my $title = $work->title;
-                    my $composer = $work->composer->get_column('name');
-                    $request->addResultLoop('works_loop', $count, 'work', $title);
-                    $request->addResultLoop('works_loop', $count, 'work_id', $work->id);
-                    $request->addResultLoop('works_loop', $count, 'composer', $composer);
-                    $request->addResultLoop('works_loop', $count, 'composer_id', $work->composer->get_column('id'));
-                    $request->addResultLoop('works_loop', $count, 'favorites_url', sprintf('db:work.title=%s&composer.name=%s',
-                                            URI::Escape::uri_escape_utf8($title), URI::Escape::uri_escape_utf8($composer)));
-                    $request->addResultLoop('works_loop', $count, 'favorites_title', $composer . string('COLON') . " $title");
+                    $request->addResultLoop('works_loop', $count, 'id', $work->id);
                     $count++;
                     main::idleStreams() unless $count % 5;
                 }

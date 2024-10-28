@@ -411,6 +411,8 @@ Vue.component('lms-advancedsearch-dialog', {
                 if (!this.searching) {
                     return;
                 }
+                let workIds = [];
+                let workPos = -1;
                 let results = [];
                 let total = 0;
 
@@ -432,13 +434,11 @@ Vue.component('lms-advancedsearch-dialog', {
                         total+=resp.items.length;
                     }
                 }
-                if (data.result.works_loopx) {
-                    data.result.works_loop = data.result.works_loopx;
-                    let resp = parseBrowseResp(data, undefined, {isSearch:true});
-                    data.result.works_loop = undefined;
-                    if (undefined!=resp) {
-                        results.push({resp:resp, command:{cat:SEARCH_WORKS_CAT}});
-                        total+=resp.items.length;
+                if (data.result.works_loopx && data.result.works_loopx.length>0) {
+                    workPos = results.length;
+                    results.push({resp:[], command:{cat:SEARCH_WORKS_CAT}});
+                    for (let i=0, loop=data.result.works_loopx, len=loop.length; i<len; ++i) {
+                        workIds.push(loop[i].id);
                     }
                 }
                 if (data.result.titles_loopx) {
@@ -449,15 +449,34 @@ Vue.component('lms-advancedsearch-dialog', {
                         total+=resp.items.length;
                     }
                 }
-                let item = {cancache:false, title:i18n("Advanced search results"), id:ADV_SEARCH_ID, type:"search", libsearch:true};
-                bus.$emit('advSearchResults', item, {command:command, params:[]},
-                          { items:buildSearchResp(results), baseActions:[], canUseGrid: false, jumplist:[], subtitle:i18np("1 Item", "%1 Items", total)});
-                this.searching = false;
-                this.close();
+                if (0==workIds.length) {
+                    this.emitResults(results, total, command);
+                } else {
+                    lmsList('', ["works"], ["include_online_only_artists:1", "tags:s", "library_id:-1", "work_id:"+workIds.join(',')]).then(({data}) => {
+                        let resp = parseBrowseResp(data, undefined);
+                        if (undefined!=resp && resp.items.length>0) {
+                            total+=resp.items.length;
+                            results[workPos].resp = resp;
+                        } else {
+                            results.splice(workPos, 1);
+                        }
+                        this.emitResults(results, total, command);
+                    }).catch(err => {
+                        results.splice(workPos, 1);
+                        this.emitResults(results, total, command);
+                    });
+                }
             }).catch(err => {
                 this.searching = false;
                 logError(err);
             });
+        },
+        emitResults(results, total, command) {
+            let item = {cancache:false, title:i18n("Advanced search results"), id:ADV_SEARCH_ID, type:"search", libsearch:true};
+            bus.$emit('advSearchResults', item, {command:command, params:[]},
+                      { items:buildSearchResp(results), baseActions:[], canUseGrid: false, jumplist:[], subtitle:i18np("1 Item", "%1 Items", total)});
+            this.searching = false;
+            this.close();
         },
         i18n(str) {
             if (this.show) {

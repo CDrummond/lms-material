@@ -401,7 +401,7 @@ function browseHandleListResponse(view, item, command, resp, prevPage, appendIte
         view.baseActions=resp.baseActions;
         view.tbarActions=[];
         view.isTop = false;
-        view.subtitleClickable = (!IS_MOBILE || lmsOptions.touchLinks) &&
+        view.subtitleClickable = (!IS_MOBILE || lmsOptions.touchLinks) && !view.searchActive &&
             ( (view.items.length>0 && undefined!=view.items[0].id && undefined!=view.items[0].artist_id && view.items[0].id.startsWith("album_id:")) ||
               (view.items.length>1 && view.items[0].header && undefined!=view.items[1].id && undefined!=view.items[1].artist_id && view.items[1].id.startsWith("album_id:")));
         view.grid = {allowed:resp.canUseGrid,

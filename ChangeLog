@@ -1,6 +1,7 @@
 5.4.3
 -----
 1. Save settings when change player via menu in player settings dialog.
+2. Only fetch list of works if not already showing list of works.
 
 5.4.2
 -----

@@ -426,7 +426,7 @@ function browseHandleListResponse(view, item, command, resp, prevPage, appendIte
         let artist_id = listingArtistAlbums ? curitem.id.split(":")[1] : undefined;
         let album_id = listingAlbumTracks ? originalId(curitem.id).split(":")[1] : undefined;
         let work_id = listingWorkAlbums ? curitem.id.split(":")[1] : undefined;
-        let addWorksOrRoles = listingArtistAlbums && LMS_VERSION>=90000 && view.items.length>0;
+        let addWorksOrRoles = listingArtistAlbums && listingAlbums && LMS_VERSION>=90000 && view.items.length>0;
         let addUserDefinedRoles = addWorksOrRoles && Object.keys(lmsOptions.userDefinedRoles).length>0;
         if (!curitem.id.startsWith(MUSIC_ID_PREFIX)) {
             if (!listingArtistAlbums && listingAlbums && !curitem.isVa) {

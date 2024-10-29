@@ -1621,8 +1621,9 @@ var lmsBrowse = Vue.component("lms-browse", {
             msHandleScrollEvent(this);
         },
         calcSizes(quantity, listWidth, maxItemWidth, adjust) {
-            var width = GRID_MIN_WIDTH-adjust;
-            var height = GRID_MIN_HEIGHT-adjust;
+            const NARROW_WIDTH = 475;
+            var width = (window.innerWidth<=NARROW_WIDTH ? GRID_MIN_WIDTH_NARROW : GRID_MIN_WIDTH)-adjust;
+            var height = (window.innerWidth<=NARROW_WIDTH ? GRID_MIN_HEIGHT_NARROW : GRID_MIN_HEIGHT)-adjust;
             var steps = 0;
             if (0!=quantity) {
                 while (listWidth>=((width+GRID_STEP)*quantity) && (width+GRID_STEP)<=maxItemWidth) {

@@ -3,6 +3,8 @@
 1. If using Lyrion theme and colour from cover, then default to green
    highlight.
 2. Add option to show home-screen shortcuts in navigation drawer.
+3. Allow smaller grid items if screen 475px or less.
+4. Scale grid icons by grid size.
 
 5.4.2
 -----

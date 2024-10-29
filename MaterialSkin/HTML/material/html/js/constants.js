@@ -99,6 +99,8 @@ const SEARCH_OTHER_ID = "search.other";
 // Browse page
 const GRID_MIN_WIDTH = 139;
 const GRID_MIN_HEIGHT = 195;
+const GRID_MIN_WIDTH_NARROW = 104;
+const GRID_MIN_HEIGHT_NARROW = 151;
 const GRID_STEP = 5;
 const GRID_OTHER = {command:['other']};
 

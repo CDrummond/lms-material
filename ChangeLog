@@ -2,6 +2,7 @@
 -----
 1. Save settings when change player via menu in player settings dialog.
 2. Only fetch list of works if not already showing list of works.
+3. Remove role filter when listing album's via artist link.
 
 5.4.2
 -----

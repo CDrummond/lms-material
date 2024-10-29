@@ -123,7 +123,7 @@
  --grid-icon-size:75px;
 }
 
-@media (max-width:475px) {
+@media (max-width: 350px) {
  :root {
   --min-grid-width:104px;
   --min-grid-height:151px;

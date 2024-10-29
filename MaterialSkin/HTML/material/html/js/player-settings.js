@@ -859,6 +859,7 @@ Vue.component('lms-player-settings', {
             if (player.id==this.playerId) {
                 return;
             }
+            this.save();
             this.playerSettings(player);
             let elem = document.getElementById("player-settings");
             if (elem) {

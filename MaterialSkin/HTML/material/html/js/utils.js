@@ -629,7 +629,7 @@ function cacheKey(command, params, start, batchSize) {
     return LMS_LIST_CACHE_PREFIX+LMS_CACHE_VERSION+":"+lmsLastScan+":"+
            (command ? command.join("-") : "") + ":" + (params ? params.join("-") : "") + 
            (command && (command[0]=="artists" || command[0]=="albums") ? (LMS_NO_GENRE_FILTER ? ":1" : ":0") : "") +
-           (command && command[0]=="albums" ? (LMS_NO_ROLE_FILTER ? ":1" : ":0") : "") +
+           (command && command[0]=="albums" ? ((!IS_MOBILE || lmsOptions.touchLinks) ? ":1" : ":0") + (LMS_NO_ROLE_FILTER ? ":1" : ":0") : "") +
            (command && command[0]=="artists" ? (LMS_P_MAI && LMS_ARTIST_PICS ? ":1" : ":0") : "") +
            ":"+start+":"+batchSize;
 }

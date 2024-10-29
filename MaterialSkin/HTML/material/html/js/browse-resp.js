@@ -1011,6 +1011,7 @@ function parseBrowseResp(data, parent, options, cacheKey, parentCommand, parentG
                 }
 
                 let artist = undefined;
+                let subtitleLinks = undefined;
                 let artists = undefined;
                 let artist_ids = undefined;
 
@@ -1035,12 +1036,12 @@ function parseBrowseResp(data, parent, options, cacheKey, parentCommand, parentG
                     }
                 }
 
-                if (isSearch && (!IS_MOBILE || lmsOptions.touchLinks) && undefined!=artist_ids && undefined!=artists && artists.length==artist_ids.length) {
+                if ((!IS_MOBILE || lmsOptions.touchLinks) && undefined!=artist_ids && undefined!=artists && artists.length==artist_ids.length) {
                     let entries = [];
                     for (let a=0, al=artists.length; a<al; ++a) {
-                        entries.push("<obj class=\"link-item\" onclick=\"show_albumartist(event, "+artist_ids[a]+",\'"+escape(artists[a])+"\', \'browse\')\">" + artists[a] + "</obj>");
+                        entries.push("<obj class=\"link-item\" onclick=\"show_artist(event, "+artist_ids[a]+",\'"+escape(artists[a])+"\', \'browse\')\">" + artists[a] + "</obj>");
                     }
-                    artist = entries.join(", ");
+                    subtitleLinks = entries.join(", ");
                 }
 
                 if (LMS_VERSION>=80300 && undefined==i.extid && undefined==artists && undefined!=parent && undefined!=parent.title && undefined!=parent.id && !parent.id.startsWith(MUSIC_ID_PREFIX)) {
@@ -1083,6 +1084,11 @@ function parseBrowseResp(data, parent, options, cacheKey, parentCommand, parentG
                     }
                 }
 
+                let subIsYear = lmsOptions.yearInSub && !showArtist && showYear;
+                if (subIsYear && ((!IS_MOBILE || lmsOptions.touchLinks))) {
+                    subtitleLinks = "<obj class=\"link-item\" onclick=\"show_year(event, "+i.year+",\'"+i.year+"\', \'browse\')\">" + i.year + "</obj>";
+                }
+
                 let album = {
                               id: "album_id:"+(ids.has(i.id) ? uniqueId(i.id, resp.items.length) : i.id),
                               artist_id: i.artist_id,
@@ -1091,8 +1097,8 @@ function parseBrowseResp(data, parent, options, cacheKey, parentCommand, parentG
                               work_id: i.work_id,
                               performance: performance,
                               title: maintitle,
-                              subtitle: subtitle,
-                              subIsYear: lmsOptions.yearInSub && !showArtist && showYear,
+                              subtitle: undefined==subtitleLinks ? subtitle : subtitleLinks,
+                              subIsYear: subIsYear,
                               image: i.artwork_url
                                         ? resolveImageUrl(i.artwork_url, LMS_IMAGE_SIZE)
                                         : ("/music/" + (i.artwork_track_id ? i.artwork_track_id : i.artwork) + "/cover" + LMS_IMAGE_SIZE),

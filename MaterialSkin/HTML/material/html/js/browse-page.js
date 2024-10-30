@@ -185,7 +185,7 @@ var lmsBrowse = Vue.component("lms-browse", {
        <div v-if="citem.image" class="image-grid-text" @click.stop="itemMenu(citem, isTop ? citem.gidx : (item.rs+col), $event)">{{citem.title}}</div>
        <div v-else class="image-grid-text">{{citem.title}}</div>
        <div class="image-grid-text subtext" v-if="(isTop && libraryName && citem.id==TOP_MYMUSIC_ID) || citem.libname">{{isTop && libraryName && citem.id==TOP_MYMUSIC_ID ? libraryName : citem.libname}}</div>
-       <div class="image-grid-text subtext" v-else v-html="citem.subtitle"></div>
+       <div class="image-grid-text subtext" v-else v-html="citem.subtitle" v-bind:class="{'link-item':subtitleClickable}" @click.stop="clickSubtitle(citem, isTop ? citem.gidx : (item.rs+col), $event)"></div>
        <div class="grid-btn image-grid-btn hover-btn menu-btn" v-if="undefined!=citem.stdItem || (citem.menu && citem.menu.length>0 && (!citem.isPinned || (!queryParams.party && (!LMS_KIOSK_MODE || !HIDE_FOR_KIOSK.has(PIN_ACTION))))) || (isTop && libraryName && citem.id==TOP_MYMUSIC_ID)" @click.stop="itemMenu(citem, isTop ? citem.gidx : (item.rs+col), $event)" :title="i18n('%1 (Menu)', stripLinkTags(citem.title))"></div>
        <div class="emblem" v-if="citem.emblem" :style="{background: citem.emblem.bgnd}">
         <img :src="citem.emblem | emblem()" loading="lazy"></img>
@@ -230,7 +230,7 @@ var lmsBrowse = Vue.component("lms-browse", {
      <v-list-tile-content v-else>
       <v-list-tile-title v-html="item.title"></v-list-tile-title>
       <v-list-tile-sub-title v-if="wide>WIDE_NONE && item.subtitleContext" v-html="item.subtitleContext"></v-list-tile-sub-title>
-      <v-list-tile-sub-title v-else v-html="item.subtitle"></v-list-tile-sub-title>
+      <v-list-tile-sub-title v-else v-html="item.subtitleLinks ? item.subtitleLinks : item.subtitle"></v-list-tile-sub-title>
      </v-list-tile-content>
 
      <v-list-tile-action v-if="undefined!=item.durationStr" class="browse-time">{{item.durationStr}}</v-list-tile-action>
@@ -313,7 +313,7 @@ var lmsBrowse = Vue.component("lms-browse", {
       <v-list-tile-title v-html="item.title" v-if="undefined!=item.stdItem && (item.stdItem==STD_ITEM_TRACK || item.stdItem==STD_ITEM_ALBUM_TRACK || item.stdItem==STD_ITEM_PLAYLIST_TRACK)"></v-list-tile-title>
       <v-list-tile-title v-else>{{item.title}}<b class="vlib-name" v-if="isTop && (item.libname || (libraryName && item.id==TOP_MYMUSIC_ID))">{{SEPARATOR+(item.libname ? item.libname : libraryName)}}</b></v-list-tile-title>
       <v-list-tile-sub-title v-if="wide>WIDE_NONE && item.subtitleContext" v-html="item.subtitleContext"></v-list-tile-sub-title>
-      <v-list-tile-sub-title v-else v-html="item.subtitle"></v-list-tile-sub-title>
+      <v-list-tile-sub-title v-else v-html="item.subtitleLinks ? item.subtitleLinks : item.subtitle"></v-list-tile-sub-title>
      </v-list-tile-content>
 
      <v-list-tile-action v-if="undefined!=item.durationStr" class="browse-time">{{item.durationStr}}</v-list-tile-action>
@@ -501,6 +501,7 @@ var lmsBrowse = Vue.component("lms-browse", {
             filteredJumplist: [],
             tbarActions: [],
             itemCustomActions: [],
+            subtitleClickable: false,
             disabled: new Set(),
             wide: WIDE_NONE,
             searchActive: 0,
@@ -1155,6 +1156,41 @@ var lmsBrowse = Vue.component("lms-browse", {
                 openWindow(item.link);
             } else if (SEARCH_TEXT_ACTION==item.act) {
                 bus.$emit('browse-search', item.text);
+            }
+        },
+        clickSubtitle(item, index, event) {
+            storeClickOrTouchPos(event, this.menu);
+            if (this.selection.size>0) {
+                this.select(item, index, event);
+                return;
+            }
+            if ((IS_MOBILE && !lmsOptions.touchLinks) && this.grid.use) {
+                this.itemMenu(item, index, event);
+            } else if ((!IS_MOBILE || lmsOptions.touchLinks) && this.subtitleClickable && item.id && item.artist_id && item.id.startsWith("album_id:")) {
+                if (item.subIsYear) {
+                    bus.$emit("browse", "year", item.subtitle, item.subtitle, "browse");
+                    return;
+                }
+                let id = "artist_id:"+item.artist_id;
+                if (undefined!=item.artist_ids && item.artist_ids.length>1) {
+                    var entries = [];
+                    for (var i=0, len=item.artist_ids.length; i<len; ++i) {
+                        id = "artist_id:"+item.artist_ids[i];
+                        if (id!=this.current.id) {
+                            entries.push({id:id, title:item.artists[i], stdItem:STD_ITEM_ARTIST});
+                        }
+                    }
+                    if (entries.length>1) {
+                        showMenu(this, {show:true, x:event.clientX, y:event.clientY, item:{moremenu:entries}});
+                        return;
+                    } else {
+                        id = entries[0].id;
+                    }
+                }
+                this.fetchItems(this.replaceCommandTerms({command:["albums"], params:[id, ARTIST_ALBUM_TAGS, SORT_KEY+ARTIST_ALBUM_SORT_PLACEHOLDER]}),
+                                {cancache:false, id:"artist_id:"+item.artist_id, title: item.work_id ? item.artists[0] : item.subtitle, stdItem:STD_ITEM_ARTIST});
+            } else {
+                this.click(item, index, event);
             }
         },
         showHistory(event) {

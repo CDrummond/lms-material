@@ -453,7 +453,7 @@ Vue.component('lms-advancedsearch-dialog', {
                     this.emitResults(results, total, command);
                 } else {
                     lmsList('', ["works"], ["include_online_only_artists:1", "tags:s", "library_id:-1", "work_id:"+workIds.join(',')]).then(({data}) => {
-                        let resp = parseBrowseResp(data, undefined);
+                        let resp = parseBrowseResp(data, undefined, {isSearch:true});
                         if (undefined!=resp && resp.items.length>0) {
                             total+=resp.items.length;
                             results[workPos].resp = resp;

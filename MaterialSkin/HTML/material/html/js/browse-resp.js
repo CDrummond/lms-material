@@ -928,7 +928,7 @@ function parseBrowseResp(data, parent, options, cacheKey, parentCommand, parentG
             resp.canUseGrid = true;
             resp.itemCustomActions = getCustomActions("album");
             var jumpListYear = false;
-            var isSearch = false;
+            var isSearch = options && options.isSearch;
             var haveReleaseType = false;
             var firstYear = 65535;
             var lastYear = 0;
@@ -1909,9 +1909,10 @@ function parseBrowseResp(data, parent, options, cacheKey, parentCommand, parentG
             let lastComposer = undefined;
             let lastIdx = -1;
             let numWorks = 0;
+            let isSearch = options && options.isSearch;
             let artist = parent ? parent.title : undefined;
             let isArtistWorks = parent && parent.stdItem==STD_ITEM_ARTIST; // Header is just "Works (N)"
-            let useHeaders = isArtistWorks || (parent && (undefined==parent.stdItem || parent.stdItem==STD_ITEM_ARTIST || parent.stdItem==STD_ITEM_WORK_GENRE));
+            let useHeaders = !isSearch && (isArtistWorks || (parent && (undefined==parent.stdItem || parent.stdItem==STD_ITEM_ARTIST || parent.stdItem==STD_ITEM_WORK_GENRE)));
 
             for (let idx=0, loop=data.result.works_loop, loopLen=loop.length; idx<loopLen; ++idx) {
                 let i = makeHtmlSafe(loop[idx]);
@@ -1944,6 +1945,7 @@ function parseBrowseResp(data, parent, options, cacheKey, parentCommand, parentG
                 var work = {
                     composer: i.composer,
                     title: i.work,
+                    subtitle: isSearch ? i.composer : undefined,
                     composer_id: i.composer_id,
                     album_id: i.album_id,
                     id: "work_id:"+i.work_id,

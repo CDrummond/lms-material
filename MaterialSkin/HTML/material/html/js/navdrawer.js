@@ -81,7 +81,7 @@ Vue.component('lms-navdrawer', {
 
  <div v-if="showShortcuts">
   <v-subheader>{{trans.shortcuts}}</v-subheader>
-  <ul class="nd-shortuts" v-bind:class="{'nd-shortuts-wide':maxWidth>320}">
+  <ul class="nd-shortuts" v-bind:class="{'nd-shortuts-wide':maxWidth>320, 'nd-shortuts-1':2==ndShortcuts}">
    <li v-for="(item, index) in shortcuts">
     <v-btn icon class="toolbar-button" @click="show=false; bus.$emit('browse-shortcut', item.id)">
      <v-icon v-if="undefined!=item.icon">{{item.icon}}</v-icon>
@@ -527,7 +527,10 @@ Vue.component('lms-navdrawer', {
             return !this.noPlayer && this.players && (this.players.length>1 || this.playerStatus.sleepTime || this.playerStatus.alarmStr)
         },
         showShortcuts() {
-            return this.$store.state.ndShortcuts && this.shortcuts.length>0
+            return this.$store.state.ndShortcuts>0 && this.shortcuts.length>0
+        },
+        ndShortcuts() {
+            return this.$store.state.ndShortcuts
         }
     },
     filters: {

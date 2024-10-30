@@ -310,7 +310,7 @@ const store = new Vuex.Store({
         tinted: true,
         moveDialogs: false,
         autoCloseQueue: false,
-        ndShortcuts: false,
+        ndShortcuts: 0,
         cMixSupported: 1==parseInt(getComputedStyle(document.documentElement).getPropertyValue('--color-mix-supported'))
     },
     mutations: {
@@ -517,12 +517,12 @@ const store = new Vuex.Store({
                              'infoBackdrop', 'useDefaultBackdrops', 'browseTechInfo', 'techInfo', 'queueShowTrackNum', 'nowPlayingTrackNum',
                              'nowPlayingClock', 'swipeVolume', 'swipeChangeTrack', 'keyboardControl', 'screensaver', 'screensaverNp', 'homeButton',
                              'mediaControls', 'queueAlbumStyle', 'queueThreeLines', 'browseContext', 'nowPlayingContext', 'queueContext',
-                             'moveDialogs', 'autoCloseQueue', 'nowPlayingFull', 'tinted', 'ndShortcuts'];
+                             'moveDialogs', 'autoCloseQueue', 'nowPlayingFull', 'tinted'];
             for (let i=0, len=boolItems.length; i<len; ++i) {
                 let key = boolItems[i];
                 state[key] = getLocalStorageBool(key, state[key]);
             }
-            let intItems = ['skipBSeconds', 'skipFSeconds', 'mobileBar', 'maxRating', 'volumeStep'];
+            let intItems = ['skipBSeconds', 'skipFSeconds', 'mobileBar', 'maxRating', 'volumeStep', 'ndShortcuts'];
             for (let i=0, len=intItems.length; i<len; ++i) {
                 let key = intItems[i];
                 state[key] = parseInt(getLocalStorageVal(key, state[key]));

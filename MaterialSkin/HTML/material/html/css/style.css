@@ -450,6 +450,11 @@ html, .mini-player {
  padding-left:12px;
 }
 
+.nd-shortuts-1 {
+ max-height:44px;
+ overflow-y:hidden;
+}
+
 .nd-shortuts-wide {
  padding-left:14px;
 }

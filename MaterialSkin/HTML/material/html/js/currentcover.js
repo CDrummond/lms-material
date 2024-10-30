@@ -195,7 +195,6 @@ var lmsCurrentCover = Vue.component('lms-currentcover', {
                 document.documentElement.style.setProperty('--tint-color', rgb2Hex(avRgb));
                 if (isGrey(avRgb) || undefined==vRgb || isGrey(vRgb)) {
                     rgb = [25,118,210];
-                    console.log("GREY")
                     document.documentElement.style.setProperty('--accent-color', 'var(--default-accent-color)');
                     document.documentElement.style.setProperty('--primary-color', 'var(--default-primary-color)');
                     document.documentElement.style.setProperty('--highlight-rgb', 'var(--default-highlight-rgb)');

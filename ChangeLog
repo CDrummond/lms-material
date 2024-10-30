@@ -5,6 +5,7 @@
 3. Remove role filter when listing album's via artist link.
 4. Fix search results sub-title link highlight.
 5. Make each artist clickable in album sub-titles.
+6. Use composer as sub-title for Works search results.
 
 5.4.2
 -----

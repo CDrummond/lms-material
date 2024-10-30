@@ -924,7 +924,6 @@ function browseClick(view, item, index, event, ignoreOpenMenu) {
          return;
     }
     if (!item.isListItemInMenu && !ignoreOpenMenu) {
-        console.log('xx', ignoreOpenMenu)
         if (view.menu.show) {
             view.menu.show=false;
             return;

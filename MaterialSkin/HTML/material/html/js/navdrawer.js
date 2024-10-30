@@ -305,7 +305,7 @@ Vue.component('lms-navdrawer', {
             if (undefined!=view && undefined!=view.top) {
                 for (let i=0, items=view.top, len=items.length; i<len; ++i) {
                     let item = items[i];
-                    if (!item.isRadio && item.stdItem!=STD_ITEM_RANDOM_MIX && !view.hidden.has(item.id) && (item.id!=TOP_RADIO_ID || !lmsOptions.combineAppsAndRadio)) {
+                    if ((undefined==item.menu || item.menu.length<1 || item.menu[0]!=PLAY_ACTION) && item.stdItem!=STD_ITEM_RANDOM_MIX && !view.hidden.has(item.id) && (item.id!=TOP_RADIO_ID || !lmsOptions.combineAppsAndRadio)) {
                         this.shortcuts.push({id:item.id, icon:item.icon, svg:item.svg});
                     }
                 }

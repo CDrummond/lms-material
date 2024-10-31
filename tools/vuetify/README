@@ -3,6 +3,8 @@ vuetify-1.5.24/packages/vuetify/src/components/index.ts and unused modules
 have been commented out. Vuetify is then built. To trim even more from its
 CSS file, trim.py is used to remove extra colours, etc.
 
+VMenu.js has been modified to that when 'menu-props="auto"' is used on
+v-select it stil ha smax-height of 300px and opens below.
 
 Building Vuetify
 ================
@@ -13,5 +15,6 @@ sudo npm install --global yarn
 
 cd vuetify
 cp index.ts packages/vuetify/src/components/index.ts
+cp VMenu.js packages/vuetify/src/components/VMenu/VMenu.js
 yarn
 NODE_OPTIONS=--openssl-legacy-provider yarn build

@@ -11,7 +11,7 @@ Vue.component('lms-choice-dialog', {
 <v-dialog v-model="show" v-if="show" persistent width="450" class="lms-dialog">
  <v-card>
   <v-card-text>
-   <v-select v-if="undefined!=options && options.length>1" :items="options" v-model="option" item-text="title" item-value="val"></v-select>
+   <v-select v-if="undefined!=options && options.length>1" menu-props="auto" :items="options" v-model="option" item-text="title" item-value="val"></v-select>
    <v-container grid-list-md style="padding: 4px">
     <v-layout wrap>
      <v-flex xs12 v-if="undefined==options || options.length<=1" class="dlgtitle">{{title}}</v-flex>

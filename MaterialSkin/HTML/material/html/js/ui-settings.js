@@ -28,7 +28,7 @@ Vue.component('lms-ui-settings', {
     <v-header class="dialog-section-header">{{i18n('General')}}</v-header>
 
     <v-list-tile>
-     <v-select :items="themes" :label="i18n('Theme')" v-model="theme" item-text="label" item-value="key"></v-select>
+     <v-select menu-props="auto" :items="themes" :label="i18n('Theme')" v-model="theme" item-text="label" item-value="key"></v-select>
     </v-list-tile>
     <v-divider></v-divider>
     <v-list-tile>

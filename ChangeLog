@@ -8,6 +8,7 @@
 6. Use composer as sub-title for Works search results.
 7. Fix treeview rendering.
 8. Don't exclude current artist from album-subtitle click menu.
+9. Type to scroll to genre in advanced search.
 
 5.4.2
 -----

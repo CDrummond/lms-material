@@ -1175,10 +1175,7 @@ var lmsBrowse = Vue.component("lms-browse", {
                 if (undefined!=item.artist_ids && item.artist_ids.length>1) {
                     var entries = [];
                     for (var i=0, len=item.artist_ids.length; i<len; ++i) {
-                        id = "artist_id:"+item.artist_ids[i];
-                        if (id!=this.current.id) {
-                            entries.push({id:id, title:item.artists[i], stdItem:STD_ITEM_ARTIST});
-                        }
+                        entries.push({id:"artist_id:"+item.artist_ids[i], title:item.artists[i], stdItem:STD_ITEM_ARTIST});
                     }
                     if (entries.length>1) {
                         showMenu(this, {show:true, x:event.clientX, y:event.clientY, item:{moremenu:entries}});

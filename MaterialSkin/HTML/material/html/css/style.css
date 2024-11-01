@@ -3541,6 +3541,14 @@ div.v-subheader {
  margin-right:8px;
 }
 
+.msk-is-non-touch .v-select-list .v-list .v-list__tile--highlighted:hover {
+ background-color: rgba(var(--highlight-rgb), 0.15)!important;
+}
+
+.v-select-list .v-list .v-list__tile--highlighted {
+ background-color: rgba(var(--highlight-rgb), 0.2)!important;
+}
+
 .avs-section .v-text-field {
  padding-top:7px;
 }

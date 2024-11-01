@@ -69,7 +69,6 @@ REMOVE_CSS=[
 ".v-system-bar",
 ".v-textarea",
 ".v-timeline",
-".v-treeview",
 ".v-window",
 ".theme--dark.v-list",
 ".theme--light.v-list"

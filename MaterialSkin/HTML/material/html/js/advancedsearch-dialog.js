@@ -54,7 +54,7 @@ Vue.component('lms-advancedsearch-dialog', {
 
    <v-layout class="avs-section" wrap :disabled="searching">
     <v-flex xs12 sm3><div class="avs-title">{{i18n('Genre')}}</div></v-flex>
-    <v-flex xs12 sm4><v-select :items="genres" v-model="params.genre" item-text="label" item-value="key"></v-select></v-flex>
+    <v-flex xs12 sm4><v-select menu-props="auto" :items="genres" v-model="params.genre" item-text="label" item-value="key"></v-select></v-flex>
     <v-flex xs12 sm5><v-text-field clearable autocorrect="off" v-model="params.genre_name" class="lms-search" :disabled="params.genre!=ADVS_IN_GENRE && params.genre!=ADVS_NOT_IN_GENRE"></v-text-field></v-flex>
    </v-layout>
 

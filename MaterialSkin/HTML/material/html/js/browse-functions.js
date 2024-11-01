@@ -121,6 +121,7 @@ function browseAddHistory(view) {
     prev.grid = view.grid;
     prev.hoverBtns = view.hoverBtns;
     prev.command = view.command;
+    prev.subtitleClickable = view.subtitleClickable;
     prev.prevPage = view.prevPage;
     prev.allItems = view.allItems;
     prev.inGenre = view.inGenre;
@@ -400,6 +401,9 @@ function browseHandleListResponse(view, item, command, resp, prevPage, appendIte
         view.baseActions=resp.baseActions;
         view.tbarActions=[];
         view.isTop = false;
+        view.subtitleClickable = (!IS_MOBILE || lmsOptions.touchLinks) &&
+            ( (view.items.length>0 && undefined!=view.items[0].id && undefined!=view.items[0].artist_id && view.items[0].id.startsWith("album_id:")) ||
+              (view.items.length>1 && view.items[0].header && undefined!=view.items[1].id && undefined!=view.items[1].artist_id && view.items[1].id.startsWith("album_id:")));
         view.grid = {allowed:resp.canUseGrid,
                      use: resp.canUseGrid && (resp.forceGrid || isSetToUseGrid(view.current && view.current.id.startsWith(TOP_ID_PREFIX) && view.current.id!=TOP_FAVORITES_ID ? GRID_OTHER : command, view.current)),
                      numColumns:0, ih:GRID_MIN_HEIGHT, rows:[], few:false, haveSubtitle:true};
@@ -1917,6 +1921,7 @@ function browseGoHome(view) {
     view.currentActions=[{action:(view.grid.use ? USE_LIST_ACTION : USE_GRID_ACTION)}];
     view.hoverBtns = !IS_MOBILE;
     view.command = undefined;
+    view.subtitleClickable = false;
     view.inGenre = undefined;
     view.canDrop = true;
     view.$nextTick(function () {
@@ -1986,6 +1991,7 @@ function browseGoBack(view, refresh) {
     view.extraInfo = prev.extraInfo;
     view.tbarActions = prev.tbarActions;
     view.command = prev.command;
+    view.subtitleClickable = prev.subtitleClickable;
     view.prevPage = prev.prevPage;
     view.allItems = prev.allItems;
     view.inGenre = prev.inGenre;

@@ -66,7 +66,7 @@ Vue.component('lms-player-settings', {
     </v-list-tile>
     <v-divider v-if="dstmItems && dstmItems.length>1"></v-divider>
     <v-list-tile v-if="dstmItems && dstmItems.length>1">
-     <v-select :items="dstmItems" :label="trans.dstm" v-model="dstm" item-text="label" item-value="key"></v-select>
+     <v-select menu-props="auto" :items="dstmItems" :label="trans.dstm" v-model="dstm" item-text="label" item-value="key"></v-select>
     </v-list-tile>
      
     <div class="dialog-padding" v-if="unlockAll"></div>
@@ -116,7 +116,7 @@ Vue.component('lms-player-settings', {
      <v-header v-if="libraries.length>1" class="dialog-section-header">{{i18n('Library')}}</v-header>
      <v-list-tile class="settings-note" v-if="libraries.length>1"><p>{{i18n("Each player may be assigned a 'virtual' library. If set then this will be used to restrict track selection for 'Random Mix' (only tracks from the chosen library will be used), and other modes. This setting might also affect library browsing with other Lyrion control points (such as the default web UI).")}}<br/><br/>{{i18n("Please note, the setting here will not affect this control point. To change the library of this control point you need to use the context menu button for 'My Music', or use the 'Change library' button when browsing 'My Music'")}}</p></v-list-tile>
      <v-list-tile v-if="libraries.length>1">
-      <v-select :items="libraries" :label="i18n('Library')" v-model="library" item-text="name" item-value="id"></v-select>
+      <v-select menu-props="auto" :items="libraries" :label="i18n('Library')" v-model="library" item-text="name" item-value="id"></v-select>
      </v-list-tile>
 
      <div class="dialog-padding"></div>
@@ -205,7 +205,7 @@ Vue.component('lms-player-settings', {
     <div class="dialog-padding"></div>
 
     <v-list-tile>
-     <v-select :items="alarmSounds" :label="i18n('Sound')" v-model="alarmDialog.url" item-text="label" item-value="key"></v-select>
+     <v-select menu-props="auto" :items="alarmSounds" :label="i18n('Sound')" v-model="alarmDialog.url" item-text="label" item-value="key"></v-select>
     </v-list-tile>
 
     <v-list-tile class="settings-compact-row">

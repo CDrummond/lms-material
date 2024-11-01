@@ -1097,7 +1097,8 @@ function parseBrowseResp(data, parent, options, cacheKey, parentCommand, parentG
                               work_id: i.work_id,
                               performance: performance,
                               title: maintitle,
-                              subtitle: undefined==subtitleLinks ? subtitle : subtitleLinks,
+                              subtitle: subtitle,
+                              subtitleLinks: subtitleLinks,
                               subIsYear: subIsYear,
                               image: i.artwork_url
                                         ? resolveImageUrl(i.artwork_url, LMS_IMAGE_SIZE)

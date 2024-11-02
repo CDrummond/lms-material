@@ -590,7 +590,6 @@ function parseBrowseResp(data, parent, options, cacheKey, parentCommand, parentG
                     i.menu.push(SHOW_IMAGE_ACTION);
                 }
 
-
                 // Only show 'More' action if:
                 //    'more' is in baseActions and item has item_id
                 //    - OR -

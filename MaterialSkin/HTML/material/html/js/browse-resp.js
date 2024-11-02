@@ -578,6 +578,16 @@ function parseBrowseResp(data, parent, options, cacheKey, parentCommand, parentG
                     }
                     i.menu.push(SELECT_ACTION);
                     i.menu.push(COPY_DETAILS_ACTION);
+                    if (undefined!=i.image) {
+                        i.menu.push(SHOW_IMAGE_ACTION);
+                    }
+                } else if (undefined!=i.image) {
+                    if (!addedDivider) {
+                        i.menu.push(DIVIDER);
+                        addedDivider = true;
+                    }
+                    i.menu.push(COPY_DETAILS_ACTION);
+                    i.menu.push(SHOW_IMAGE_ACTION);
                 }
 
 

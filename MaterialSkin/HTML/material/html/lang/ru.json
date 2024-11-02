@@ -666,9 +666,9 @@
 "%1 Years":"%1 Лет",
 "1 day":"1 день",
 "%1 days":"%1 дней(я)",
-"Help page":"",
-"Move '%1'":"",
-"Move into '%1'":"",
-"Move position":"",
-"NOTE: Only some of these settings apply to 'Material Skin'. However these settings will affect other skins and hardware players.":""
+"Help page":"Помощь",
+"Move '%1'":"Переместить '%1'",
+"Move into '%1'":"Переместить в '%1'",
+"Move position":"Переместить",
+"NOTE: Only some of these settings apply to 'Material Skin'. However these settings will affect other skins and hardware players.":"ПРИМЕЧАНИЕ: Только некоторые из этих настроек применяются к 'Material Skin'. Однако эти настройки повлияют на другие скины и проигрыватели."
 }

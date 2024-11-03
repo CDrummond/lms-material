@@ -2,6 +2,7 @@
 -----
 1. Add 'Show image' to more context menus.
 2. Fix add/play and menu icons sometimes showing when they should not.
+3. When resolving album favourite resolove artist_id.
 
 5.4.3
 -----

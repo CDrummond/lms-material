@@ -424,10 +424,15 @@ sub _fetchDbVal {
     my $dbh = shift;
     my $query = shift;
     my $key = shift;
+    my $key2 = shift;
     my $col = shift;
     if ($key) {
         my $sql = $dbh->prepare_cached( $query );
-        $sql->execute(uri_unescape($key));
+        if ($key2) {
+            $sql->execute(uri_unescape($key), uri_unescape($key2));
+        } else {
+            $sql->execute(uri_unescape($key));
+        }
         if ( my $result = $sql->fetchall_arrayref({}) ) {
             return $result->[0]->{$col} if ref $result && scalar @$result;
         }
@@ -800,12 +805,14 @@ sub _cliCommand {
         my $fav_url = $request->getParam('fav_url');
         my $dbh = Slim::Schema->dbh;
         if ($fav_url) {
-            my $genreId = _fetchDbVal($dbh, qq{SELECT genres.id FROM genres WHERE name = ? LIMIT 1}, _getUrlQueryParam($fav_url, "genre.name"), "id");
+            my $genreId = _fetchDbVal($dbh, qq{SELECT genres.id FROM genres WHERE name = ? LIMIT 1}, _getUrlQueryParam($fav_url, "genre.name"), undef, "id");
             my $artistName = _getUrlQueryParam($fav_url, "contributor.name");
-            my $artistId = _fetchDbVal($dbh, qq{SELECT contributors.id FROM contributors WHERE name = ? LIMIT 1}, $artistName, "id");
-            my $albumId = _fetchDbVal($dbh, qq{SELECT albums.id FROM albums WHERE title = ? LIMIT 1}, _getUrlQueryParam($fav_url, "album.title"), "id");
-            my $workId = _fetchDbVal($dbh, qq{SELECT works.id FROM works WHERE title = ? LIMIT 1}, _getUrlQueryParam($fav_url, "work.title"), "id");
-            my $composerId = _fetchDbVal($dbh, qq{SELECT contributors.id FROM contributors WHERE name = ? LIMIT 1}, _getUrlQueryParam($fav_url, "composer.name"), "id");
+            my $artistId = _fetchDbVal($dbh, qq{SELECT contributors.id FROM contributors WHERE name = ? LIMIT 1}, $artistName, undef, "id");
+            my $albumId = $artistId
+                            ? _fetchDbVal($dbh, qq{SELECT albums.id FROM albums WHERE title = ? AND contributor = ? LIMIT 1}, _getUrlQueryParam($fav_url, "album.title"), $artistId, "id")
+                            : _fetchDbVal($dbh, qq{SELECT albums.id FROM albums WHERE title = ? LIMIT 1}, _getUrlQueryParam($fav_url, "album.title"), undef, "id");
+            my $workId = _fetchDbVal($dbh, qq{SELECT works.id FROM works WHERE title = ? LIMIT 1}, _getUrlQueryParam($fav_url, "work.title"), undef, "id");
+            my $composerId = _fetchDbVal($dbh, qq{SELECT contributors.id FROM contributors WHERE name = ? LIMIT 1}, _getUrlQueryParam($fav_url, "composer.name"), undef, "id");
 
             if ($genreId) {
                 $request->addResult('genre_id', $genreId);

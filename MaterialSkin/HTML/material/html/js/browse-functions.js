@@ -1081,14 +1081,14 @@ function browseClick(view, item, index, event) {
                     if (data.result.genre_id) {
                         browseAddCategories(view, {id:"genre_id:"+data.result.genre_id, title:item.title, image:item.image, stdItem:STD_ITEM_GENRE}, true);
                     } else if (data.result.album_id) {
-                        if (data.result.artist_id) {
+                        if (data.result.work_id && data.result.composer_id) {
+                            browseDoClick(view, {id:"album_id:"+data.result.album_id, work_id:data.result.work_id, performance:data.result.performance, composer_id:data.result.composer_id, title:item.title, subtitle:data.result.artist_name, image:item.image, images:item.images, stdItem:STD_ITEM_ALBUM, fromFav:true}, index, event);
+                        } else if (data.result.artist_id) {
                             let itm = {id:"album_id:"+data.result.album_id, artist_id:data.result.artist_id, title:item.title, image:item.image, stdItem:STD_ITEM_ALBUM, fromFav:true};
                             if (data.result.artist_name) {
                                 itm["subtitle"]=data.result.artist_name;
                             }
                             browseDoClick(view, itm, index, event);
-                        } else if (data.result.work_id && data.result.composer_id) {
-                            browseDoClick(view, {id:"album_id:"+data.result.album_id, work_id:data.result.work_id, composer_id:data.result.composer_id, title:item.title, image:item.image, images:item.images, stdItem:STD_ITEM_ALBUM, fromFav:true}, index, event);
                         } else {
                             browseDoClick(view, item, index, event);
                         }

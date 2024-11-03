@@ -427,15 +427,11 @@ sub _fetchDbVal {
     my $dbh = shift;
     my $query = shift;
     my $key = shift;
-    my $key2 = shift;
     my $col = shift;
+    $key = [split(/,/,$key)] if !ref $key;
     if ($key) {
         my $sql = $dbh->prepare_cached( $query );
-        if ($key2) {
-            $sql->execute(uri_unescape($key), uri_unescape($key2));
-        } else {
-            $sql->execute(uri_unescape($key));
-        }
+        $sql->execute(uri_unescape(@{$key}));
         if ( my $result = $sql->fetchall_arrayref({}) ) {
             return $result->[0]->{$col} if ref $result && scalar @$result;
         }
@@ -808,15 +804,26 @@ sub _cliCommand {
         my $fav_url = $request->getParam('fav_url');
         my $dbh = Slim::Schema->dbh;
         if ($fav_url) {
-            my $genreId = _fetchDbVal($dbh, qq{SELECT genres.id FROM genres WHERE name = ? LIMIT 1}, _getUrlQueryParam($fav_url, "genre.name"), undef, "id");
-            my $artistName = _getUrlQueryParam($fav_url, "contributor.name");
-            my $artistId = _fetchDbVal($dbh, qq{SELECT contributors.id FROM contributors WHERE name = ? LIMIT 1}, $artistName, undef, "id");
+            my $genreId = _fetchDbVal($dbh, qq{SELECT genres.id FROM genres WHERE name = ? LIMIT 1}, _getUrlQueryParam($fav_url, "genre.name"), "id");
+            my $artistId = _fetchDbVal($dbh, qq{SELECT contributors.id FROM contributors WHERE name = ? LIMIT 1}, _getUrlQueryParam($fav_url, "contributor.name"), "id");
             my $albumId = $artistId
-                            ? _fetchDbVal($dbh, qq{SELECT albums.id FROM albums WHERE title = ? AND contributor = ? LIMIT 1}, _getUrlQueryParam($fav_url, "album.title"), $artistId, "id")
-                            : _fetchDbVal($dbh, qq{SELECT albums.id FROM albums WHERE title = ? LIMIT 1}, _getUrlQueryParam($fav_url, "album.title"), undef, "id");
-            my $workId = _fetchDbVal($dbh, qq{SELECT works.id FROM works WHERE title = ? LIMIT 1}, _getUrlQueryParam($fav_url, "work.title"), undef, "id");
-            my $composerId = _fetchDbVal($dbh, qq{SELECT contributors.id FROM contributors WHERE name = ? LIMIT 1}, _getUrlQueryParam($fav_url, "composer.name"), undef, "id");
+                            ? _fetchDbVal($dbh, qq{SELECT albums.id FROM albums WHERE title = ? AND contributor = ? LIMIT 1}, [_getUrlQueryParam($fav_url, "album.title"), $artistId], "id")
+                            : _fetchDbVal($dbh, qq{SELECT albums.id FROM albums WHERE title = ? LIMIT 1}, _getUrlQueryParam($fav_url, "album.title"), "id");
+            my $workId = _fetchDbVal($dbh, qq{SELECT works.id FROM works WHERE title = ? LIMIT 1}, _getUrlQueryParam($fav_url, "work.title"), "id");
             my $performance = _getUrlQueryParam($fav_url, "track.performance");
+            my $artistName;
+            if ( $workId && $albumId && $fav_url =~ /^db:album.title/ ) {
+                $artistName = _fetchDbVal($dbh,
+                                          qq{
+                                              SELECT contributors.name FROM albums JOIN tracks ON albums.id = tracks.album JOIN contributors ON contributors.id = tracks.primary_artist
+                                              WHERE albums.id = ? AND tracks.work = ? AND ( (? IS NULL AND tracks.performance IS NULL) OR tracks.performance = ? ) LIMIT 1
+                                          },
+                                          [$albumId, $workId, $performance, $performance],
+                                          "name");
+            } else {
+                $artistName = _getUrlQueryParam($fav_url, "contributor.name");
+            }
+            my $composerId = _fetchDbVal($dbh, qq{SELECT contributors.id FROM contributors WHERE name = ? LIMIT 1}, _getUrlQueryParam($fav_url, "composer.name"), "id");
 
             if ($genreId) {
                 $request->addResult('genre_id', $genreId);
@@ -837,7 +844,7 @@ sub _cliCommand {
                 $request->addResult('composer_id', $composerId);
             }
             if ($performance) {
-                $request->addResult('performance', $performance);
+                $request->addResult('performance', uri_unescape($performance));
             }
             if (index($fav_url, "file:///")==0 && index($fav_url, ".m3u")==(length($fav_url)-4)) {
                 my $rs = Slim::Schema->rs('Playlist')->getPlaylists('all', undef, undef);

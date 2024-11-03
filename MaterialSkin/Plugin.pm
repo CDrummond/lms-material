@@ -412,6 +412,9 @@ sub _getUrlQueryParam {
     if ($start > 0) {
         $start += length($key)+1;
         my $end = index($uri, "&", $start);
+        if ($end == $start) {
+            return undef;
+        }
         if ($end > $start) {
             return substr($uri, $start, $end-$start);
         }
@@ -813,6 +816,7 @@ sub _cliCommand {
                             : _fetchDbVal($dbh, qq{SELECT albums.id FROM albums WHERE title = ? LIMIT 1}, _getUrlQueryParam($fav_url, "album.title"), undef, "id");
             my $workId = _fetchDbVal($dbh, qq{SELECT works.id FROM works WHERE title = ? LIMIT 1}, _getUrlQueryParam($fav_url, "work.title"), undef, "id");
             my $composerId = _fetchDbVal($dbh, qq{SELECT contributors.id FROM contributors WHERE name = ? LIMIT 1}, _getUrlQueryParam($fav_url, "composer.name"), undef, "id");
+            my $performance = _getUrlQueryParam($fav_url, "track.performance");
 
             if ($genreId) {
                 $request->addResult('genre_id', $genreId);
@@ -831,6 +835,9 @@ sub _cliCommand {
             }
             if ($composerId) {
                 $request->addResult('composer_id', $composerId);
+            }
+            if ($performance) {
+                $request->addResult('performance', $performance);
             }
             if (index($fav_url, "file:///")==0 && index($fav_url, ".m3u")==(length($fav_url)-4)) {
                 my $rs = Slim::Schema->rs('Playlist')->getPlaylists('all', undef, undef);

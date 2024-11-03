@@ -1087,6 +1087,8 @@ function browseClick(view, item, index, event) {
                                 itm["subtitle"]=data.result.artist_name;
                             }
                             browseDoClick(view, itm, index, event);
+                        } else if (data.result.work_id && data.result.composer_id) {
+                            browseDoClick(view, {id:"album_id:"+data.result.album_id, work_id:data.result.work_id, composer_id:data.result.composer_id, title:item.title, image:item.image, images:item.images, stdItem:STD_ITEM_ALBUM, fromFav:true}, index, event);
                         } else {
                             browseDoClick(view, item, index, event);
                         }

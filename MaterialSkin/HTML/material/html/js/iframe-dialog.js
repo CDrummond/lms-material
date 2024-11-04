@@ -694,7 +694,7 @@ Vue.component('lms-iframe-dialog', {
       </v-list>
      </v-menu>
      <template v-else v-for="(item, index) in actions">
-      <v-btn icon @click="doAction(item, $event)" :title="item.title"><v-icon v-if="item.icon">{{item.icon}}</v-icon><img v-else-if="item.svg" class="svg-img" :src="item.svg | svgIcon(darkUi)"></img></v-btn>
+      <v-btn icon v-if="item!=DIVIDER" @click="doAction(item, $event)" :title="item.title"><v-icon v-if="item.icon">{{item.icon}}</v-icon><img v-else-if="item.svg" class="svg-img" :src="item.svg | svgIcon(darkUi)"></img></v-btn>
      </template>
      <div class="drag-area-right"></div>
      <lms-windowcontrols v-if="queryParams.nativeTitlebar"></lms-windowcontrols>

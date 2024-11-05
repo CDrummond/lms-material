@@ -5,6 +5,8 @@
 2. Add option to show home-screen shortcuts in navigation drawer.
 3. Allow smaller grid items if screen 350px or less.
 4. Scale grid icons by grid size.
+5. If viewing images from browse then allow to swiping left/right to view
+   prev/next images.
 
 5.4.3
 -----

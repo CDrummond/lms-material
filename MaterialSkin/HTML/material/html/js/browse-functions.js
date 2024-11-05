@@ -1645,7 +1645,17 @@ function browseItemAction(view, act, item, index, event) {
         }
         download(item, item.id.startsWith("album_id:") ? view.buildCommand(item) : undefined, aa);
     } else if (SHOW_IMAGE_ACTION==act) {
-        bus.$emit('dlg.open', 'gallery', [item.image], 0, true);
+        let images = [];
+        let idx = 0;
+        for (let i=0, loop=view.items, len=loop.length; i<len; ++i) {
+            if (loop[i].image) {
+                if (loop[i].id==item.id) {
+                    idx = images.length;
+                }
+                images.push(loop[i].image);
+            }
+        }
+        bus.$emit('dlg.open', 'gallery', images, idx, false);
     } else if (SCROLL_TO_ACTION==act) {
         var choices = [];
         for (var i=0, loop=view.items, len=loop.length; i<len; ++i) {

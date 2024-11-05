@@ -3,9 +3,10 @@
 1. Add 'Show image' to more context menus.
 2. Fix add/play and menu icons sometimes showing when they should not.
 3. When resolving album favourite resolve artist_id.
-4. Fix blank/empty button in 'Server settings' if LMS is on pCP.
-5. Use menu in 'Server settings' toolbar if 3 or more items.
-6. Scroll to top when reload random albums/releases.
+4. Fix browsing favourited works albums - thanks to Darrell.
+5. Fix blank/empty button in 'Server settings' if LMS is on pCP.
+6. Use menu in 'Server settings' toolbar if 3 or more items.
+7. Scroll to top when reload random albums/releases.
 
 5.4.3
 -----

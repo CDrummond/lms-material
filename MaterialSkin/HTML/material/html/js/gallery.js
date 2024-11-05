@@ -16,10 +16,10 @@ var lmsGallery = Vue.component("lms-gallery", {
    <div class="pswp__item"></div>
    <div class="pswp__item"></div>
   </div>
-  <img v-if="showActions && !queryParams.party && (!LMS_KIOSK_MODE || !HIDE_FOR_KIOSK.has(PLAY_ACTION))" class="ps-btn grid-btn" @click.stop="itemAction(PLAY_ACTION)" :title="ACTIONS[PLAY_ACTION].title" :src="'hover-play' | svgIcon"></img>
-  <img v-if="showActions && allowShuffle" class="ps-btn grid-btn" @click.stop="itemAction(PLAY_SHUFFLE_ACTION)" :title="ACTIONS[PLAY_SHUFFLE_ACTION].title" :src="'hover-shuffle' | svgIcon"></img>
-  <img v-if="showActions && !queryParams.party && (!LMS_KIOSK_MODE || !HIDE_FOR_KIOSK.has(INSERT_ACTION))" class="ps-btn grid-btn" @click.stop="itemAction(INSERT_ACTION)" :title="ACTIONS[INSERT_ACTION].title" :src="'hover-playnext' | svgIcon"></img>
-  <img v-if="showActions && (!LMS_KIOSK_MODE || !HIDE_FOR_KIOSK.has(ADD_ACTION))" class="ps-btn grid-btn" @click.stop="itemAction(ADD_ACTION)" :title="ACTIONS[ADD_ACTION].title" :src="'hover-add' | svgIcon"></img>
+  <img v-if="showActions && !queryParams.party && (!LMS_KIOSK_MODE || !HIDE_FOR_KIOSK.has(PLAY_ACTION))" class="ps-btn grid-btn" v-bind:class="{'ps-btn-mobile':IS_MOBILE}" @click.stop="itemAction(PLAY_ACTION)" :title="ACTIONS[PLAY_ACTION].title" :src="'hover-play' | svgIcon"></img>
+  <img v-if="showActions && allowShuffle" class="ps-btn grid-btn" v-bind:class="{'ps-btn-mobile':IS_MOBILE}" @click.stop="itemAction(PLAY_SHUFFLE_ACTION)" :title="ACTIONS[PLAY_SHUFFLE_ACTION].title" :src="'hover-shuffle' | svgIcon"></img>
+  <img v-if="showActions && !queryParams.party && (!LMS_KIOSK_MODE || !HIDE_FOR_KIOSK.has(INSERT_ACTION))" class="ps-btn grid-btn" v-bind:class="{'ps-btn-mobile':IS_MOBILE}" @click.stop="itemAction(INSERT_ACTION)" :title="ACTIONS[INSERT_ACTION].title" :src="'hover-playnext' | svgIcon"></img>
+  <img v-if="showActions && (!LMS_KIOSK_MODE || !HIDE_FOR_KIOSK.has(ADD_ACTION))" class="ps-btn grid-btn" v-bind:class="{'ps-btn-mobile':IS_MOBILE}" @click.stop="itemAction(ADD_ACTION)" :title="ACTIONS[ADD_ACTION].title" :src="'hover-add' | svgIcon"></img>
   <div class="pswp__ui pswp__ui--hidden">
    <div class="pswp__top-bar">
     <div class="pswp__counter"></div>

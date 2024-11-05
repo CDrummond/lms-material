@@ -3244,7 +3244,7 @@ div.v-subheader {
 
 .ps-btn {
  position:relative;
- top:48px;
+ top:calc(var(--top-pad) + 48px);
  right:6px;
  float:right;
  margin-left:12px;
@@ -3255,6 +3255,11 @@ div.v-subheader {
  width: 32px;
  height: 32px;
 }
+.ps-btn-mobile {
+ top:calc(var(--top-pad) + 6px);
+ opacity:1;
+}
+
 .pswp__button {
  opacity:var(--sub-opacity)!important;
 }

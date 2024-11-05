@@ -3235,6 +3235,30 @@ div.v-subheader {
  right:-4px!important;
 }
 
+.ps-btns {
+ position:absolute;
+ top:4px;
+ left:16px;
+ width:calc(100vw - 32px);
+}
+
+.ps-btn {
+ position:relative;
+ top:48px;
+ right:6px;
+ float:right;
+ margin-left:12px;
+ z-index:5;
+ opacity:var(--sub-opacity);
+ background:rgba(32, 32, 32, 0.75);
+ padding-bottom: 3px;
+ width: 32px;
+ height: 32px;
+}
+.ps-btn:hover {
+ opacity:1;
+}
+
 .grid-btn-left {
  position:absolute;
  top:unset!important;

@@ -1647,15 +1647,24 @@ function browseItemAction(view, act, item, index, event) {
     } else if (SHOW_IMAGE_ACTION==act) {
         let images = [];
         let idx = 0;
+        let items = [];
+        let allowShuffle = -1;
         for (let i=0, loop=view.items, len=loop.length; i<len; ++i) {
-            if (loop[i].image) {
-                if (loop[i].id==item.id) {
+            let itm = loop[i];
+            if (itm.image) {
+                if (itm.id==item.id) {
                     idx = images.length;
                 }
-                images.push(loop[i].image);
+                images.push(itm.image);
+                if (!queryParams.party && !LMS_KIOSK_MODE && (itm.stdItem==STD_ITEM_ALBUM || (undefined!=itm.menu && itm.menu[0]==PLAY_ACTION))) {
+                    items.push(i);
+                }
+                if (allowShuffle!=0 && lmsOptions.playShuffle && !queryParams.party && (!LMS_KIOSK_MODE || !HIDE_FOR_KIOSK.has(PLAY_SHUFFLE_ACTION))) {
+                    allowShuffle = undefined!=itm && undefined!=itm.stdItem && (itm.stdItem==STD_ITEM_ARTIST || itm.stdItem==STD_ITEM_ALBUM || itm.stdItem==STD_ITEM_PLAYLIST || itm.stdItem==STD_ITEM_WORK) ? 1 : 0
+                }
             }
         }
-        bus.$emit('dlg.open', 'gallery', images, idx, false);
+        bus.$emit('dlg.open', 'gallery', images, idx, false, undefined, items, 1==allowShuffle);
     } else if (SCROLL_TO_ACTION==act) {
         var choices = [];
         for (var i=0, loop=view.items, len=loop.length; i<len; ++i) {

@@ -160,7 +160,7 @@ var lmsBrowse = Vue.component("lms-browse", {
       </v-list-tile-action>
       <div v-if="hoverBtns && 0==selection.size && (item.item.menu && (item.item.menu[0]==PLAY_ACTION || item.item.menu[0]==PLAY_ALL_ACTION))" class="list-btns">
        <img v-if="!LMS_KIOSK_MODE || !HIDE_FOR_KIOSK.has(ADD_ACTION)" class="other-btn grid-btn" @click.stop="itemAction(ADD_ALL_ACTION, item.item, undefined, $event)" :title="ACTIONS[ADD_ACTION].title" :src="'hover-add' | svgIcon(darkUi, false)"></img>
-       <img v-if="!queryParams.party && (!INSERT_ACTION || !HIDE_FOR_KIOSK.has(INSERT_ACTION))" class="other-btn grid-btn" @click.stop="itemAction(INSERT_ALL_ACTION, item.item, undefined, $event)" :title="ACTIONS[INSERT_ACTION].title" :src="'hover-playnext' | svgIcon(darkUi, false)"></img>
+       <img v-if="!queryParams.party && (!LMS_KIOSK_MODE || !HIDE_FOR_KIOSK.has(INSERT_ACTION))" class="other-btn grid-btn" @click.stop="itemAction(INSERT_ALL_ACTION, item.item, undefined, $event)" :title="ACTIONS[INSERT_ACTION].title" :src="'hover-playnext' | svgIcon(darkUi, false)"></img>
        <img v-if="allowShuffle(item.item)" class="other-btn grid-btn" @click.stop="itemAction(PLAY_SHUFFLE_ALL_ACTION, item.item, undefined, $event)" :title="ACTIONS[PLAY_SHUFFLE_ACTION].title" :src="'hover-shuffle' | svgIcon(darkUi, false)"></img>
        <img v-if="!queryParams.party && (!LMS_KIOSK_MODE || !HIDE_FOR_KIOSK.has(PLAY_ACTION))" class="main-btn grid-btn" @click.stop="itemAction(PLAY_ALL_ACTION, item.item, undefined, $event)" :title="ACTIONS[PLAY_ACTION].title" :src="'hover-play' | svgIcon(darkUi, false)"></img>
       </div>
@@ -192,7 +192,7 @@ var lmsBrowse = Vue.component("lms-browse", {
        </div>
        <div v-if="hoverBtns && selection.size==0 && (undefined!=citem.stdItem || (citem.menu && citem.menu.length>0 && (citem.menu[0]==PLAY_ACTION || citem.menu[0]==PLAY_ALL_ACTION)))" class="grid-btns">
         <img v-if="(!LMS_KIOSK_MODE || !HIDE_FOR_KIOSK.has(ADD_ACTION)) && allowAdd(citem)" class="other-btn grid-btn" @click.stop="itemAction(ADD_ACTION, citem, isTop ? citem.gidx : (item.rs+col), $event)" :title="ACTIONS[ADD_ACTION].title" :src="'hover-add' | svgIcon(darkUi, true)"></img>
-        <img v-if="!queryParams.party && (!INSERT_ACTION || !HIDE_FOR_KIOSK.has(INSERT_ACTION)) && allowInsert(citem)" class="other-btn grid-btn" @click.stop="itemAction(INSERT_ACTION, citem, isTop ? citem.gidx : (item.rs+col), $event)" :title="ACTIONS[INSERT_ACTION].title" :src="'hover-playnext' | svgIcon(darkUi, true)"></img>
+        <img v-if="!queryParams.party && (!LMS_KIOSK_MODE || !HIDE_FOR_KIOSK.has(INSERT_ACTION)) && allowInsert(citem)" class="other-btn grid-btn" @click.stop="itemAction(INSERT_ACTION, citem, isTop ? citem.gidx : (item.rs+col), $event)" :title="ACTIONS[INSERT_ACTION].title" :src="'hover-playnext' | svgIcon(darkUi, true)"></img>
         <img v-if="allowShuffle(citem)" class="other-btn grid-btn" @click.stop="itemAction(PLAY_SHUFFLE_ACTION, citem, isTop ? citem.gidx : (item.rs+col), $event)" :title="ACTIONS[PLAY_SHUFFLE_ACTION].title" :src="'hover-shuffle' | svgIcon(darkUi, true)"></img>
         <img v-if="!queryParams.party && (!LMS_KIOSK_MODE || !HIDE_FOR_KIOSK.has(PLAY_ACTION))" class="main-btn grid-btn" @click.stop="itemAction(PLAY_ACTION, citem, isTop ? citem.gidx : (item.rs+col), $event)" :title="ACTIONS[PLAY_ACTION].title" :src="'hover-play' | svgIcon(darkUi, true)"></img>
        </div>
@@ -241,7 +241,7 @@ var lmsBrowse = Vue.component("lms-browse", {
      </v-list-tile-action>
      <div v-if="hoverBtns && 0==selection.size && (undefined!=item.stdItem || (item.menu && (item.menu[0]==PLAY_ACTION || item.menu[0]==PLAY_ALL_ACTION)))" class="list-btns" v-bind:class="{'list-btns-track':item.durationStr}">
       <img v-if="(!LMS_KIOSK_MODE || !HIDE_FOR_KIOSK.has(ADD_ACTION)) && allowAdd(item)" class="other-btn grid-btn" @click.stop="itemAction(item.header ? ADD_ALL_ACTION : ADD_ACTION, item, index, $event)" :title="ACTIONS[ADD_ACTION].title" :src="'hover-add' | svgIcon(darkUi, true)"></img>
-      <img v-if="!queryParams.party && (!INSERT_ACTION || !HIDE_FOR_KIOSK.has(INSERT_ACTION)) && allowInsert(item)" class="other-btn grid-btn" @click.stop="itemAction( item.header ? INSERT_ALL_ACTION : INSERT_ACTION, item, index, $event)" :title="ACTIONS[INSERT_ACTION].title" :src="'hover-playnext' | svgIcon(darkUi, true)"></img>
+      <img v-if="!queryParams.party && (!LMS_KIOSK_MODE || !HIDE_FOR_KIOSK.has(INSERT_ACTION)) && allowInsert(item)" class="other-btn grid-btn" @click.stop="itemAction( item.header ? INSERT_ALL_ACTION : INSERT_ACTION, item, index, $event)" :title="ACTIONS[INSERT_ACTION].title" :src="'hover-playnext' | svgIcon(darkUi, true)"></img>
       <img v-if="allowShuffle(item)" class="other-btn grid-btn" @click.stop="itemAction(item.header ? PLAY_SHUFFLE_ALL_ACTION : PLAY_SHUFFLE_ACTION, item, index, $event)" :title="ACTIONS[PLAY_SHUFFLE_ACTION].title" :src="'hover-shuffle' | svgIcon(darkUi, true)"></img>
       <img v-if="!queryParams.party && (!LMS_KIOSK_MODE || !HIDE_FOR_KIOSK.has(PLAY_ACTION))" class="main-btn grid-btn" @click.stop="itemAction(item.header ? PLAY_ALL_ACTION : PLAY_ACTION, item, index, $event)" :title="ACTIONS[PLAY_ACTION].title" :src="'hover-play' | svgIcon(darkUi, true)"></img>
      </div>
@@ -281,7 +281,7 @@ var lmsBrowse = Vue.component("lms-browse", {
      </v-list-tile-action>
      <div v-if="hoverBtns && 0==selection.size && (undefined!=item.stdItem || (item.menu && (item.menu[0]==PLAY_ACTION || item.menu[0]==PLAY_ALL_ACTION)))" class="list-btns" v-bind:class="{'list-btns-track':item.durationStr}">
       <img v-if="(!LMS_KIOSK_MODE || !HIDE_FOR_KIOSK.has(ADD_ACTION)) && allowAdd(item)" class="other-btn grid-btn" @click.stop="itemAction(ADD_ALL_ACTION, item, index, $event)" :title="ACTIONS[ADD_ACTION].title" :src="'hover-add' | svgIcon(darkUi, false)"></img>
-      <img v-if="!queryParams.party && (!INSERT_ACTION || !HIDE_FOR_KIOSK.has(INSERT_ACTION)) && allowInsert(item)" class="other-btn grid-btn" @click.stop="itemAction(INSERT_ALL_ACTION, item, index, $event)" :title="ACTIONS[INSERT_ACTION].title" :src="'hover-playnext' | svgIcon(darkUi, false)"></img>
+      <img v-if="!queryParams.party && (!LMS_KIOSK_MODE || !HIDE_FOR_KIOSK.has(INSERT_ACTION)) && allowInsert(item)" class="other-btn grid-btn" @click.stop="itemAction(INSERT_ALL_ACTION, item, index, $event)" :title="ACTIONS[INSERT_ACTION].title" :src="'hover-playnext' | svgIcon(darkUi, false)"></img>
       <img v-if="allowShuffle(item)" class="other-btn grid-btn" @click.stop="itemAction(PLAY_SHUFFLE_ALL_ACTION, item, index, $event)" :title="ACTIONS[PLAY_SHUFFLE_ACTION].title" :src="'hover-shuffle' | svgIcon(darkUi, false)"></img>
       <img v-if="!queryParams.party && (!LMS_KIOSK_MODE || !HIDE_FOR_KIOSK.has(PLAY_ACTION))" class="main-btn grid-btn" @click.stop="itemAction(PLAY_ALL_ACTION, item, index, $event)" :title="ACTIONS[PLAY_ACTION].title" :src="'hover-play' | svgIcon(darkUi, false)"></img>
      </div>
@@ -324,7 +324,7 @@ var lmsBrowse = Vue.component("lms-browse", {
      </v-list-tile-action>
      <div v-if="hoverBtns && 0==selection.size && (undefined!=item.stdItem || (item.menu && (item.menu[0]==PLAY_ACTION || item.menu[0]==PLAY_ALL_ACTION)))" class="list-btns" v-bind:class="{'list-btns-track':item.durationStr}">
       <img v-if="(!LMS_KIOSK_MODE || !HIDE_FOR_KIOSK.has(ADD_ACTION)) && allowAdd(item)" class="other-btn grid-btn" @click.stop="itemAction(ADD_ACTION, item, index, $event)" :title="ACTIONS[ADD_ACTION].title" :src="'hover-add' | svgIcon(darkUi, false)"></img>
-      <img v-if="!queryParams.party && (!INSERT_ACTION || !HIDE_FOR_KIOSK.has(INSERT_ACTION)) && allowInsert(item)" class="other-btn grid-btn" @click.stop="itemAction(INSERT_ACTION, item, index, $event)" :title="ACTIONS[INSERT_ACTION].title" :src="'hover-playnext' | svgIcon(darkUi, false)"></img>
+      <img v-if="!queryParams.party && (!LMS_KIOSK_MODE || !HIDE_FOR_KIOSK.has(INSERT_ACTION)) && allowInsert(item)" class="other-btn grid-btn" @click.stop="itemAction(INSERT_ACTION, item, index, $event)" :title="ACTIONS[INSERT_ACTION].title" :src="'hover-playnext' | svgIcon(darkUi, false)"></img>
       <img v-if="allowShuffle(item)" class="other-btn grid-btn" @click.stop="itemAction(PLAY_SHUFFLE_ACTION, item, index, $event)" :title="ACTIONS[PLAY_SHUFFLE_ACTION].title" :src="'hover-shuffle' | svgIcon(darkUi, false)"></img>
       <img v-if="!queryParams.party" class="main-btn grid-btn" @click.stop="itemAction(PLAY_ACTION, item, index, $event)" :title="ACTIONS[PLAY_ACTION].title" :src="'hover-play' | svgIcon(darkUi, false)"></img>
      </div>
@@ -2121,6 +2121,11 @@ var lmsBrowse = Vue.component("lms-browse", {
 
         bus.$on('browse-home', function() {
             this.goHome();
+        }.bind(this));
+        bus.$on('browse-action', function(act, idx) {
+            if (idx>=0 && idx<this.items.length) {
+                this.itemAction(act, this.items[idx], idx, undefined);
+            }
         }.bind(this));
         bus.$on('browse-shortcut', function(id) {
             if (this.$store.state.desktopLayout) {

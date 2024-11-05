@@ -3271,9 +3271,8 @@ div.v-subheader {
 
 .grid-btn-left {
  position:absolute;
- top:unset!important;
+ top:calc((var(--min-grid-width) - 5px) + (5px * var(--image-grid-factor)) - 26px) !important;
  right:0px!important;
- bottom:43px!important;
 }
 
 .image-grid-with-sub .grid-btn-left {

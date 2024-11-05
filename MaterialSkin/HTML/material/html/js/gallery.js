@@ -73,6 +73,7 @@ var lmsGallery = Vue.component("lms-gallery", {
                 setTimeout(function () {
                     galleryInst.$store.commit('dialogOpen', {name:'gallery', shown:false});
                     galleryInst.isNowPlaying = false;
+                    history.replaceState(null, null, ' ');
                     if (galleryInst.closeSignal) {
                         bus.$emit(galleryInst.closeSignal);
                     }

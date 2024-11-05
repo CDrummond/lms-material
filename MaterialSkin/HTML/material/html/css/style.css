@@ -3255,8 +3255,11 @@ div.v-subheader {
  width: 32px;
  height: 32px;
 }
-.ps-btn:hover {
- opacity:1;
+.pswp__button {
+ opacity:var(--sub-opacity)!important;
+}
+.ps-btn:hover, .pswp__button:hover {
+ opacity:1!important;
 }
 
 .grid-btn-left {

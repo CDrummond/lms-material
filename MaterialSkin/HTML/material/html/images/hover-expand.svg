@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg id="svg4" version="1.1" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+ <path id="path424" d="m12 2a10 10 0 0 0-10 10 10 10 0 0 0 10 10 10 10 0 0 0 10-10 10 10 0 0 0-10-10" fill="#000"/>
+ <path id="path2" d="m12 20c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8" fill="#fff"/>
+ <path id="rect1049-3-5" d="m11.993 8.5v-2h5v2zm0.92157 3.5-1.4142-1.4142 2.8284-2.8284 1.4142 1.4142zm4.0784-0.5h-2v-5h2zm-5.4926 3.5v2h-5v-2zm-0.92157-3.5 1.4142 1.4142-2.8284 2.8284-1.4142-1.4142zm-4.0784 0.5h2v5h-2z" stroke-width="0" style="paint-order:stroke fill markers" fill="#000"/>
+</svg>

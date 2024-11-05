@@ -3231,8 +3231,19 @@ div.v-subheader {
 
 .grid-btns {
  position:absolute;
- top:4px !important;
- right:-4px !important;
+ top:4px!important;
+ right:-4px!important;
+}
+
+.grid-btn-left {
+ position:absolute;
+ top:unset!important;
+ right:0px!important;
+ bottom:43px!important;
+}
+
+.image-grid-with-sub .grid-btn-left {
+ bottom:58px!important;
 }
 
 .np-menu:after,
@@ -3240,11 +3251,11 @@ div.v-subheader {
  content:"more_vert";
 }
 
-.image-grid-item .grid-btns, .v-list__tile .list-btns, .msk-is-non-touch .image-grid-item .hover-btn, .msk-is-non-touch .v-list__tile .hover-btn {
+.image-grid-item .grid-btns, .v-list__tile .list-btns, .msk-is-non-touch .image-grid-item .hover-btn, .msk-is-non-touch .v-list__tile .hover-btn, .image-grid-item .grid-btn-left {
  visibility: hidden;
 }
 
-.image-grid-item:hover .grid-btns, .v-list__tile:hover .list-btns, .msk-is-non-touch .image-grid-item:hover .hover-btn, .msk-is-non-touch .v-list__tile:hover .hover-btn {
+.image-grid-item:hover .grid-btns, .v-list__tile:hover .list-btns, .msk-is-non-touch .image-grid-item:hover .hover-btn, .msk-is-non-touch .v-list__tile:hover .hover-btn, .image-grid-item:hover .grid-btn-left {
  visibility: visible;
 }
 

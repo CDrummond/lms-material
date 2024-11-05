@@ -5,6 +5,7 @@
 3. When resolving album favourite resolove artist_id.
 4. Fix blank/empty button in 'Server settings' if LMS is on pCP.
 5. Use menu in 'Server settings' toolbar if 3 or more items.
+6. Scroll to top when reload random albums/releases.
 
 5.4.3
 -----

@@ -1858,7 +1858,7 @@ function browseHeaderAction(view, act, event, ignoreOpenMenus) {
     } else if (ADD_TO_PLAYLIST_ACTION==act) {
         bus.$emit('dlg.open', 'addtoplaylist', view.items);
     } else if (RELOAD_ACTION==act) {
-        view.refreshList(true);
+        view.refreshList(false);
         bus.$emit('showMessage', i18n('Reloading'));
     } else if (ADV_SEARCH_ACTION==act) {
         bus.$emit('dlg.open', 'advancedsearch', false, view.$store.state.library ? view.$store.state.library : LMS_DEFAULT_LIBRARY);

@@ -3261,6 +3261,13 @@ div.v-subheader {
 .ps-btn:hover, .pswp__button:hover {
  opacity:1!important;
 }
+.pswp__button--arrow--left:before, .pswp__button--arrow--right:before {
+ border-radius:50%;
+ height:32px!important;
+ width:32px!important;
+ background-size: 264px 89px!important;
+ background-color:rgba(32, 32, 32, 0.75)!important;
+}
 
 .grid-btn-left {
  position:absolute;

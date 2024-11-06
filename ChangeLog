@@ -8,6 +8,7 @@
 6. Use menu in 'Server settings' toolbar if 3 or more items.
 7. Scroll to top when reload random albums/releases.
 8. Change default album/release icon to reflect release type support.
+9. Fix grid clipping on certain widths.
 
 5.4.3
 -----

@@ -1637,6 +1637,7 @@ var lmsBrowse = Vue.component("lms-browse", {
                 return;
             }
 
+            const LEFT_PADDING = 4;
             const RIGHT_PADDING = 4;
             const GRID_MAX_WIDTH = window.innerWidth>3500
                                        ? 283 :
@@ -1648,7 +1649,7 @@ var lmsBrowse = Vue.component("lms-browse", {
             var changed = false;
             var haveSubtitle = false;
             var thisWidth = this.$store.state.desktopLayout ? this.pageElement.scrollWidth : window.innerWidth;
-            var listWidth = thisWidth - ((/*scrollbar*/ IS_MOBILE ? 0 : 20) + (/*this.filteredJumplist.length>1 && this.items.length>10 ? */JUMP_LIST_WIDTH/* :0*/) + RIGHT_PADDING);
+            var listWidth = thisWidth - ((/*scrollbar*/ IS_MOBILE ? 0 : 20) + (/*this.filteredJumplist.length>1 && this.items.length>10 ? */JUMP_LIST_WIDTH/* :0*/) + LEFT_PADDING + RIGHT_PADDING);
             var sz = undefined;
             var preferredColumns = 4;
             for (var i=preferredColumns; i>=1; --i) {

@@ -755,7 +755,7 @@ div.v-subheader {
 .lms-image-grid {
  overflow-x:hidden !important;
  overflow-y:auto !important;
- padding: 8px 4px 8px 4px;/* t, r, b, l */
+ padding: 8px 4px 8px 4px;/* t, r, b, l Keep in sync with LEFT_PADDING and RIGHT_PADDING in browse-page.js */
 }
 
 .lms-grouped-image-grid {

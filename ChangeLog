@@ -10,6 +10,17 @@
 6. Add button, shown on hover, to view images.
 7. Add play/add/insert/shuffle buttons when viewing some images.
 
+5.4.4
+-----
+1. Add 'Show image' to more context menus.
+2. Fix add/play and menu icons sometimes showing when they should not.
+3. When resolving album favourite resolve artist_id.
+4. Fix browsing favourited works albums - thanks to Darrell.
+5. Fix blank/empty button in 'Server settings' if LMS is on pCP.
+6. Use menu in 'Server settings' toolbar if 3 or more items.
+7. Scroll to top when reload random albums/releases.
+8. Change default album/release icon to reflect releas type support.
+
 5.4.3
 -----
 1. Save settings when change player via menu in player settings dialog.

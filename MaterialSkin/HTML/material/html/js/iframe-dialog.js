@@ -674,7 +674,7 @@ Vue.component('lms-iframe-dialog', {
      <v-toolbar-title v-if="playerId && numPlayers>1 && (page=='player' || page=='extras')" @click="openChoiceMenu" class="pointer">{{title}}</v-toolbar-title>
      <v-toolbar-title v-else>{{title}}</v-toolbar-title>
      <v-spacer class="drag-area"></v-spacer>
-     <v-menu bottom left v-model="showMenu" v-if="haveCustomActions">
+     <v-menu bottom left v-model="showMenu" v-if="haveCustomActions || (undefined!=actions && actions.length>2)">
       <v-btn icon slot="activator"><v-icon>more_vert</v-icon></v-btn>
       <v-list>
        <template v-for="(item, index) in actions">
@@ -684,8 +684,8 @@ Vue.component('lms-iframe-dialog', {
          <v-list-tile-content><v-list-tile-title>{{item.title}}</v-list-tile-title></v-list-tile-content>
         </v-list-tile>
        </template>
-       <v-divider></v-divider>
-       <template v-for="(action, index) in customActions">
+       <v-divider v-if="haveCustomActions"></v-divider>
+       <template v-for="(action, index) in customActions" v-if="haveCustomActions">
         <v-list-tile @click="doCustomAction(action, player)">
          <v-list-tile-avatar><v-icon v-if="action.icon">{{action.icon}}</v-icon><img v-else-if="action.svg" class="svg-img" :src="action.svg | svgIcon(darkUi)"></img></v-list-tile-avatar>
          <v-list-tile-content><v-list-tile-title>{{action.title}}</v-list-tile-title></v-list-tile-content>
@@ -694,7 +694,7 @@ Vue.component('lms-iframe-dialog', {
       </v-list>
      </v-menu>
      <template v-else v-for="(item, index) in actions">
-      <v-btn icon @click="doAction(item, $event)" :title="item.title"><v-icon v-if="item.icon">{{item.icon}}</v-icon><img v-else-if="item.svg" class="svg-img" :src="item.svg | svgIcon(darkUi)"></img></v-btn>
+      <v-btn icon v-if="item!=DIVIDER" @click="doAction(item, $event)" :title="item.title"><v-icon v-if="item.icon">{{item.icon}}</v-icon><img v-else-if="item.svg" class="svg-img" :src="item.svg | svgIcon(darkUi)"></img></v-btn>
      </template>
      <div class="drag-area-right"></div>
      <lms-windowcontrols v-if="queryParams.nativeTitlebar"></lms-windowcontrols>

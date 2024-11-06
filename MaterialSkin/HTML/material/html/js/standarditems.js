@@ -202,8 +202,18 @@ function buildStdItemCommand(item, parentCommand) {
             }
 
             // For albums browsed from favourites...
-            if (item.fromFav && !artistIdRemoved && undefined!=item.artist_id && getIndex(command.params, "artist_id:")<0) {
-                command.params.push("artist_id:"+item.artist_id);
+            if (item.fromFav) {
+                if (undefined!=item.work_id && undefined!=item.composer_id && getIndex(command.params, "work_id:")<0 && getIndex(command.params, "composer_id:")<0) {
+                    // Favourited classical work-album
+                    command.params.push("work_id:"+item.work_id);
+                    command.params.push("composer_id:"+item.composer_id);
+                    let idx = getIndex(command.params, "artist_id:");
+                    if (idx>=0) {
+                        command.params.splice(idx, 1);
+                    }
+                } else if (!artistIdRemoved && undefined!=item.artist_id && getIndex(command.params, "artist_id:")<0) {
+                    command.params.push("artist_id:"+item.artist_id);
+                }
             }
         } else if (item.id.startsWith("genre_id:")) {
             for (var i=0, len=parentCommand.params.length; i<len; ++i) {

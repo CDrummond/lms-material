@@ -339,7 +339,13 @@ function parseBrowseResp(data, parent, options, cacheKey, parentCommand, parentG
                         i.image=undefined;
                     } else if (!i.isFavFolder && undefined!=i.presetParams && undefined!=i.presetParams.favorites_url) {
                         if (i.presetParams.favorites_url.startsWith("db:album.title") && i.presetParams.icon=="html/images/albums.png") {
-                            i.icon="album";
+                            if (i.presetParams.favorites_url.indexOf("work.title")>0) {
+                                i.svg = "release-work"
+                            } else if (lmsOptions.supportReleaseTypes) {
+                                i.svg = "release";
+                            } else {
+                                i.icon = "album";
+                            }
                             i.image=undefined;
                         } else if (i.presetParams.favorites_url.startsWith("db:contributor.name")) {
                             if (i.presetParams.icon=="html/images/artists.png" || !(LMS_P_MAI && LMS_ARTIST_PICS)) {
@@ -354,7 +360,7 @@ function parseBrowseResp(data, parent, options, cacheKey, parentCommand, parentG
                             i.image=undefined;
                         } else if (i.presetParams.favorites_url.startsWith("db:work.title") && undefined==i.presetParams.icon) {
                             i.icon=undefined;
-                            i.svg="release-work";
+                            i.svg="classical-work";
                             i.image=undefined;
                         } else if (i.presetParams.favorites_url.startsWith("file://") && i.presetParams.icon=="html/images/playlists.png") {
                             i.icon="list";
@@ -578,8 +584,17 @@ function parseBrowseResp(data, parent, options, cacheKey, parentCommand, parentG
                     }
                     i.menu.push(SELECT_ACTION);
                     i.menu.push(COPY_DETAILS_ACTION);
+                    if (undefined!=i.image) {
+                        i.menu.push(SHOW_IMAGE_ACTION);
+                    }
+                } else if (undefined!=i.image) {
+                    if (!addedDivider) {
+                        i.menu.push(DIVIDER);
+                        addedDivider = true;
+                    }
+                    i.menu.push(COPY_DETAILS_ACTION);
+                    i.menu.push(SHOW_IMAGE_ACTION);
                 }
-
 
                 // Only show 'More' action if:
                 //    'more' is in baseActions and item has item_id

@@ -333,7 +333,7 @@ function nowplayingShowMenu(view, event) {
 
         view.menu.items=[];
         view.menu.icons=true;
-        view.menu.items.push({title:i18n("Show image"), icon:"photo", act:NP_PIC_ACT});
+        view.menu.items.push({title:ACTIONS[SHOW_IMAGE_ACTION].title, svg:ACTIONS[SHOW_IMAGE_ACTION].svg, act:NP_PIC_ACT});
 
         let artist_id = view.playerStatus.current.artist_ids
                     ? view.playerStatus.current.artist_ids[0]

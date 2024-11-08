@@ -150,7 +150,7 @@ var ACTIONS=[
     {cmd:"pq-rmdisc",    svg:"album-multi"},
     {cmd:"play-disc",    svg:"album-multi"},
     {cmd:"pl-track",     icon:"playlist_play"},
-    {cmd:"show-img",     icon:"photo"},
+    {cmd:"show-img",     svg:"expand"},
     {cmd:"pq-sort",      icon:"sort"},
     {cmd:"playlist-sort",icon:"sort"},
     {cmd:"pq-save",      icon:"save"},

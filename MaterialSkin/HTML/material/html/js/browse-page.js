@@ -348,7 +348,7 @@ var lmsBrowse = Vue.component("lms-browse", {
    <template v-for="(action, index) in menu.itemMenu">
     <v-list-tile v-if="(action==MORE_LIB_ACTION || action==MORE_ACTION) && undefined!=menu.item.image" @click="menuItemAction(SHOW_IMAGE_ACTION, menu.item, menu.index, $event)">
      <v-list-tile-avatar>
-      <v-icon>{{ACTIONS[SHOW_IMAGE_ACTION].icon}}</v-icon>
+      <img class="svg-img" :src="ACTIONS[SHOW_IMAGE_ACTION].svg | svgIcon(darkUi)"></img>
      </v-list-tile-avatar>
      <v-list-tile-title>{{ACTIONS[SHOW_IMAGE_ACTION].title}}</v-list-tile-title>
     </v-list-tile>

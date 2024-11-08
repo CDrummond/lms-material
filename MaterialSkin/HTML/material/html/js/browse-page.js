@@ -994,13 +994,6 @@ var lmsBrowse = Vue.component("lms-browse", {
             storeClickOrTouchPos(event, this.menu);
             browseClick(this, item, index, event);
         },
-        showImage(index) {
-            var urls = [];
-            for (var i=0, len=this.items.length; i<len; ++i) {
-                urls.push(this.items[i].src);
-            }
-            bus.$emit('dlg.open', 'gallery', urls, index);
-        },
         entry(item, text) {
             if (this.fetchingItem!=undefined) {
                 return;

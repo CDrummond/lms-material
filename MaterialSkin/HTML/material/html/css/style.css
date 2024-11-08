@@ -3273,6 +3273,14 @@ div.v-subheader {
  background-size: 264px 89px!important;
  background-color:rgba(32, 32, 32, 0.75)!important;
 }
+.pswp__caption__center {
+ text-align:center!important;
+ font-size:var(--std-font-size)!important;
+ font-weight:var(--bold-weight)!important;
+}
+.pswp__caption, .pswp__top-bar {
+ background-color:rgba(0, 0, 0, .5)!important;
+}
 
 .grid-btn-left {
  position:absolute;

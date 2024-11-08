@@ -68,6 +68,8 @@ var lmsCurrentCover = Vue.component('lms-currentcover', {
         bus.$on('playerStatus', function(playerStatus) {
             // Has cover changed?
             var coverUrl = this.coverUrl;
+            var artist = undefined;
+            var album = undefined;
 
             if (playerStatus.playlist.count == 0) {
                 this.queueIndex = undefined;
@@ -76,6 +78,8 @@ var lmsCurrentCover = Vue.component('lms-currentcover', {
                     this.coverFromInfo = false;
                 }
             } else {
+                artist = playerStatus.current.albumartist ? playerStatus.current.albumartist : playerStatus.current.trackartist ? playerStatus.current.trackartist : playerStatus.current.artist;
+                album = playerStatus.current.album;
                 this.queueIndex = playerStatus.current["playlist index"];
                 coverUrl = undefined;
                 if (playerStatus.current.artwork_url) {
@@ -115,7 +119,7 @@ var lmsCurrentCover = Vue.component('lms-currentcover', {
 
             if (coverUrl!=this.coverUrl) {
                 this.coverUrl = coverUrl;
-                bus.$emit('currentCover', this.coverUrl, this.queueIndex);
+                bus.$emit('currentCover', this.coverUrl, this.queueIndex, artist, album);
                 if (1==queryParams.nativeCover) {
                     try {
                         NativeReceiver.coverUrl(this.coverUrl);

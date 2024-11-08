@@ -719,7 +719,9 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
             nowplayingMenuStdAction(this, item);
         },
         showPic() {
-            bus.$emit('dlg.open', 'gallery', [this.coverUrl], 0, true);
+            let artist = this.playerStatus.current.albumartist ? this.playerStatus.current.albumartist : this.playerStatus.current.artist;
+            let title = artist ? (this.playerStatus.current.albumName ? this.playerStatus.current.albumName + SEPARATOR + artist : artist) : undefined;
+            bus.$emit('dlg.open', 'gallery', [{url:this.coverUrl, title:title}], 0, true);
         },
         doAction(command) {
             if (this.$store.state.visibleMenus.size>0) {

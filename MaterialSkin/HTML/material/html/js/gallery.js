@@ -52,17 +52,17 @@ var lmsGallery = Vue.component("lms-gallery", {
     },
     mounted() {
         this.isNowPlaying = false;
-        bus.$on('gallery.open', function(urls, startIndex, isNowPlaying, closeSignal, browseItems, allowShuffle) {
+        bus.$on('gallery.open', function(items, startIndex, isNowPlaying, closeSignal, allowedActions) {
             this.isNowPlaying = undefined==isNowPlaying ? false : isNowPlaying;
             this.closeSignal = closeSignal;
-            this.npUrl = isNowPlaying ? urls[0] : undefined;
-            this.browseItems = browseItems;
-            this.showActions = undefined!=browseItems && browseItems.length==urls.length;
-            this.allowShuffle = allowShuffle;
+            this.npUrl = isNowPlaying ? items[0].url : undefined;
+            this.showActions = allowedActions>0;
+            this.allowShuffle = allowedActions>1;
             var galleryInst = this;
             var images = [];
-            for (var i=0, len=urls.length; i<len; ++i) {
-                images.push({src:changeImageSizing(urls[i]), w:0, h:0});
+            for (var i=0, len=items.length; i<len; ++i) {
+                let item = items[i];
+                images.push({src:changeImageSizing(item.url), w:0, h:0, title:item.title, browseIndex:item.index});
             }
             this.gallery = new PhotoSwipe(document.querySelectorAll('.pswp')[0], PhotoSwipeUI_Default, images, {index: startIndex, history:false});
             this.gallery.listen('gettingData', function (index, item) {
@@ -82,7 +82,6 @@ var lmsGallery = Vue.component("lms-gallery", {
             // dialogOpen.browse-viewer.false by 1/2 second the code looking for 'esc' still thinks this dialog is open, and
             // so ignores the event. Hacky, but works.
             this.gallery.listen('close', function() {
-                galleryInst.browseItems = undefined;
                 setTimeout(function () {
                     galleryInst.$store.commit('dialogOpen', {name:'gallery', shown:false});
                     galleryInst.isNowPlaying = false;
@@ -97,12 +96,12 @@ var lmsGallery = Vue.component("lms-gallery", {
                 this.gallery.close();
             }
         }.bind(this));
-        bus.$on('currentCover', function(coverUrl) {
+        bus.$on('currentCover', function(coverUrl, queueIndex, artist, album) {
             if (this.isNowPlaying) {
                 var cUrl = undefined==coverUrl ? LMS_BLANK_COVER : coverUrl;
                 if (cUrl!=this.npUrl) {
                     this.npUrl = cUrl;
-                    this.gallery.items[0]={src:changeImageSizing(cUrl), w:0, h:0};
+                    this.gallery.items[0]={src:changeImageSizing(cUrl), w:0, h:0, title:artist&&album ? album+SEPARATOR+artist:undefined};
                     this.gallery.invalidateCurrItems();
                     this.gallery.updateSize(true);
                 }
@@ -112,9 +111,12 @@ var lmsGallery = Vue.component("lms-gallery", {
     methods: {
         itemAction(act) {
             let idx = this.gallery.getCurrentIndex();
-            if (undefined!=this.browseItems && idx>=0 && idx<this.browseItems.length) {
-                bus.$emit('browse-action', act, this.browseItems[idx]);
-                this.gallery.close();
+            if (idx>=0 && idx<this.gallery.items.length) {
+                let item = this.gallery.items[idx];
+                if (item.browseIndex!=undefined) {
+                    bus.$emit('browse-action', act, item.browseIndex);
+                    this.gallery.close();
+                }
             }
         }
     },

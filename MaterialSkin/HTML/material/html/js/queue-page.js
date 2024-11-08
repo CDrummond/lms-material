@@ -158,7 +158,7 @@ function parseResp(data, showTrackNum, index, showRatings, queueAlbumStyle, queu
                               url: i.url,
                               isLocal: i.url && i.url.startsWith("file:"),
                               artist: i.artist ? i.artist : i.trackartist ? i.trackartist : i.albumartist,
-                              album: queueAlbumStyle ? i.album : undefined,
+                              album: i.album,
                               size: queueAlbumStyle
                                       ? isAlbumHeader ? LMS_ALBUM_QUEUE_HEADER : LMS_ALBUM_QUEUE_TRACK
                                       : undefined,
@@ -515,6 +515,7 @@ var lmsQueue = Vue.component("lms-queue", {
                             this.items[index].artistAlbum = artistAlbum;
                         }
                         this.items[index].artist = i.artist ? i.artist : i.trackartist ? i.trackartist : i.albumartist;
+                        this.items[index].album = i.album;
                         if (duration!=this.items[index].duration) {
                             this.items[index].durationStr = undefined!=duration && duration>0 ? formatSeconds(duration) : undefined;
                             this.items[index].duration = duration;
@@ -1025,7 +1026,8 @@ var lmsQueue = Vue.component("lms-queue", {
                 download(item);
             } else if (SHOW_IMAGE_ACTION==act) {
                 this.cancelCloseTimer(true);
-                bus.$emit('dlg.open', 'gallery', [item.image], 0, true, 'queueDialogClosed');
+                let title = item.artist ? (item.album ? item.album + SEPARATOR + item.artist : item.artist) : undefined;
+                bus.$emit('dlg.open', 'gallery', [{url:item.image,title:title}], 0, false, 'queueDialogClosed');
             } else if (COPY_DETAILS_ACTION==act) {
                 copyTextToClipboard(stripTags(item.title)+" "+stripTags(item.artistAlbum.join(" ")), true);
             }

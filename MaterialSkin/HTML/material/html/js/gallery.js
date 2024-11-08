@@ -64,7 +64,7 @@ var lmsGallery = Vue.component("lms-gallery", {
             for (var i=0, len=urls.length; i<len; ++i) {
                 images.push({src:changeImageSizing(urls[i]), w:0, h:0});
             }
-            this.gallery = new PhotoSwipe(document.querySelectorAll('.pswp')[0], PhotoSwipeUI_Default, images, {index: startIndex});
+            this.gallery = new PhotoSwipe(document.querySelectorAll('.pswp')[0], PhotoSwipeUI_Default, images, {index: startIndex, history:false});
             this.gallery.listen('gettingData', function (index, item) {
                 if (item.w < 1 || item.h < 1) {
                     var img = new Image();
@@ -86,7 +86,6 @@ var lmsGallery = Vue.component("lms-gallery", {
                 setTimeout(function () {
                     galleryInst.$store.commit('dialogOpen', {name:'gallery', shown:false});
                     galleryInst.isNowPlaying = false;
-                    history.replaceState(null, null, ' ');
                     if (galleryInst.closeSignal) {
                         bus.$emit(galleryInst.closeSignal);
                     }

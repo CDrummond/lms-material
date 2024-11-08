@@ -544,3 +544,7 @@
 .np-controls-wide {
  bottom:var(--bottom-pad);
 }
+
+.notracks #browse-list {
+ padding-bottom:var(--bottom-pad);
+}

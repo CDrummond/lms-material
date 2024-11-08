@@ -460,3 +460,7 @@
 .mobile-np-view-controls .flex {
  max-width:250px;
 }
+
+.no-navbar #browse-list {
+ padding-bottom:var(--bottom-pad);
+}

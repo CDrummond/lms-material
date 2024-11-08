@@ -666,9 +666,15 @@
 "%1 Years":"%1 Jaren",
 "1 day":"1 dag",
 "%1 days":"%1 dagen",
+"Don't show":"",
 "Help page":"",
 "Move '%1'":"",
 "Move into '%1'":"",
 "Move position":"",
-"NOTE: Only some of these settings apply to 'Material Skin'. However these settings will affect other skins and hardware players.":""
+"NOTE: Only some of these settings apply to 'Material Skin'. However these settings will affect other skins and hardware players.":"",
+"Shortcuts":"",
+"Shortcuts in main menu":"",
+"Show all":"",
+"Show shortcuts to pinned home screen items in main menu. (Note: radio streams and random mixes are excluded)":"",
+"Single line only":""
 }

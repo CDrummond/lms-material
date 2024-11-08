@@ -2107,8 +2107,10 @@ var lmsBrowse = Vue.component("lms-browse", {
             if (this.$store.state.desktopLayout ? !this.nowPlayingExpanded : this.$store.state.page=='browse') {
                 if (this.selection.size>0) {
                     this.clearSelection();
-                } else {
+                } else if (this.history.length>0) {
                     this.goBack();
+                } else {
+                    this.$store.commit('setPage', this.$store.state.prevPage);
                 }
             }
         }.bind(this));

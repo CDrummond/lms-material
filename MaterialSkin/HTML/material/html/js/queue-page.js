@@ -563,8 +563,13 @@ var lmsQueue = Vue.component("lms-queue", {
             if (this.dragActive) {
                 return;
             }
-            if (this.selection.size>0) {
-                this.clearSelection();
+            if (this.$store.state.desktopLayout ? !this.nowPlayingExpanded : this.$store.state.page=='queue') {
+                if (this.selection.size>0) {
+                    this.clearSelection();
+                } else if (!this.$store.state.desktopLayout) {
+                    let prev = this.$store.state.prevPage;
+                    this.$store.commit('setPage', prev==undefined || prev=='queue' ? 'browse' : prev);
+                }
             }
         }.bind(this));
 

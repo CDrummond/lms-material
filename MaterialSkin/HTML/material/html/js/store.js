@@ -625,6 +625,13 @@ const store = new Vuex.Store({
             }
         },
         setPage(state, val) {
+            // 'escPressed' goes to all 3 views, so need to ignore setPage calls
+            // that are in quick succession
+            let now = new Date().getTime();
+            if (undefined!=state.lastSetPage && now-state.lastSetPage<=25) {
+                return;
+            }
+            state.lastSetPage = now;
             if (val!=state.page) {
                 state.prevPage = state.page;
                 state.page = val;

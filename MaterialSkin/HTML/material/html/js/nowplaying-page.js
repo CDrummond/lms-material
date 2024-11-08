@@ -560,8 +560,9 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
             } else if (this.$store.state.page=="now-playing") {
                 if (this.info.show) {
                     bus.$emit('info');
-                } else if (this.mobileBar==MBAR_REP_NAV) {
-                    this.$store.commit('setPage', this.$store.state.prevPage)
+                } else {
+                    let prev = this.$store.state.prevPage;
+                    this.$store.commit('setPage', prev==undefined || prev=='now-playing' ? 'browse' : prev);
                 }
             }
         }.bind(this));
@@ -610,13 +611,6 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
         bus.$on('closeDialog', function(dlg) {
             if (dlg == 'info-dialog') {
                 this.info.show = false;
-            }
-        }.bind(this));
-
-        bus.$on('escPressed', function() {
-            if (this.$store.state.openDialogs.length==0 && this.$store.state.visibleMenus.size<=0 &&
-                       this.largeView && this.$store.state.desktopLayout) {
-                this.largeView = false;
             }
         }.bind(this));
 

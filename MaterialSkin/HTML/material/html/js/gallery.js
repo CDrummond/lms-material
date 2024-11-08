@@ -40,6 +40,7 @@ var lmsGallery = Vue.component("lms-gallery", {
    <button class="pswp__button pswp__button--arrow--right"></button>
    <div class="pswp__caption">
     <div class="pswp__caption__center"></div>
+    <div class="pswp__caption__pad"></div>
    </div>
   </div>
  </div>

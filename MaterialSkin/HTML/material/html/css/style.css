@@ -3260,28 +3260,6 @@ div.v-subheader {
  opacity:1;
 }
 
-.pswp__button {
- opacity:var(--sub-opacity)!important;
-}
-.ps-btn:hover, .pswp__button:hover {
- opacity:1!important;
-}
-.pswp__button--arrow--left:before, .pswp__button--arrow--right:before {
- border-radius:50%;
- height:32px!important;
- width:32px!important;
- background-size: 264px 89px!important;
- background-color:rgba(32, 32, 32, 0.75)!important;
-}
-.pswp__caption__center {
- text-align:center!important;
- font-size:var(--std-font-size)!important;
- font-weight:var(--bold-weight)!important;
-}
-.pswp__caption, .pswp__top-bar {
- background-color:rgba(0, 0, 0, .5)!important;
-}
-
 .grid-btn-left {
  position:absolute;
  top:calc((var(--min-grid-width) - 5px) + (5px * var(--image-grid-factor)) - 26px) !important;
@@ -4197,12 +4175,39 @@ div.v-subheader {
  border-radius: 0px;
 }
 
-.pswp__top-bar {
- top:var(--top-pad)!important;
+.pswp__top-bar, .pswp__counter {
+ padding-top:var(--top-pad)!important;
+ height:calc(44px + var(--top-pad))!important;
 }
 
 .msk-is-touch .pswp__top-bar {
  visibility: hidden!important;
+}
+
+.pswp__button {
+ opacity:var(--sub-opacity)!important;
+}
+.ps-btn:hover, .pswp__button:hover {
+ opacity:1!important;
+}
+.pswp__button--arrow--left:before, .pswp__button--arrow--right:before {
+ border-radius:50%;
+ height:32px!important;
+ width:32px!important;
+ background-size: 264px 89px!important;
+ background-color:rgba(32, 32, 32, 0.75)!important;
+}
+.pswp__caption__center {
+ text-align:center!important;
+ font-size:var(--std-font-size)!important;
+ font-weight:var(--bold-weight)!important;
+}
+.pswp__caption, .pswp__top-bar {
+ background-color:rgba(0, 0, 0, .3)!important;
+ text-shadow: 0 0 3px black;
+}
+.pswp__caption__pad {
+ height:var(--bottom-pad)!important;
 }
 
 .v-text-field .v-label--active {

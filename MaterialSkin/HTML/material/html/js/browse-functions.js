@@ -1661,21 +1661,21 @@ function browseItemAction(view, act, item, index, event) {
                 if (itm.id==item.id) {
                     idx = images.length;
                 }
+                let useActions = !queryParams.party && !LMS_KIOSK_MODE && (itm.stdItem==STD_ITEM_ALBUM || (undefined!=itm.menu && itm.menu[0]==PLAY_ACTION));
                 let image = {url:itm.image,
-                             title:itm.title+(undefined==item.subtitle ? "" : (SEPARATOR+item.subtitle)),
-                             index:!queryParams.party && !LMS_KIOSK_MODE && (itm.stdItem==STD_ITEM_ALBUM || (undefined!=itm.menu && itm.menu[0]==PLAY_ACTION))
-                                    ? i : undefined
+                             title:itm.title+(undefined==itm.subtitle ? "" : (SEPARATOR+itm.subtitle)),
+                             index:useActions ? i : undefined
                              };
                 images.push(image);
                 if (allowActions!=0) {
-                    allowActions = undefined!=image.index ? 1 : 0;
+                    allowActions = useActions ? 1 : 0;
                 }
-                if (allowActions!=0 && allowShuffle!=0 && lmsOptions.playShuffle && !queryParams.party && (!LMS_KIOSK_MODE || !HIDE_FOR_KIOSK.has(PLAY_SHUFFLE_ACTION))) {
+                if (allowActions==1 && allowShuffle!=0 && lmsOptions.playShuffle && !queryParams.party && (!LMS_KIOSK_MODE || !HIDE_FOR_KIOSK.has(PLAY_SHUFFLE_ACTION))) {
                     allowShuffle = undefined!=itm && undefined!=itm.stdItem && (itm.stdItem==STD_ITEM_ARTIST || itm.stdItem==STD_ITEM_ALBUM || itm.stdItem==STD_ITEM_PLAYLIST || itm.stdItem==STD_ITEM_WORK) ? 1 : 0
                 }
             }
         }
-        bus.$emit('dlg.open', 'gallery', images, idx, false, undefined, allowActions ? allowShuffle ? 2 : 1 : 0);
+        bus.$emit('dlg.open', 'gallery', images, idx, false, undefined, allowActions==1 ? allowShuffle==1 ? 2 : 1 : 0);
     } else if (SCROLL_TO_ACTION==act) {
         var choices = [];
         for (var i=0, loop=view.items, len=loop.length; i<len; ++i) {

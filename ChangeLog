@@ -5,11 +5,11 @@
 2. Add option to show home-screen shortcuts in navigation drawer.
 3. Allow smaller grid items if screen 350px or less.
 4. Scale grid icons by grid size.
-5. If viewing images from browse then allow to swiping left/right to view
+5. If viewing images from browse then allow swiping left/right to view
    prev/next images.
 6. Add button, shown on hover, to view images.
 7. Add play/add/insert/shuffle buttons when viewing some images.
-8. Add captions to images.
+8. Add captions to images in viewer.
 
 5.4.4
 -----

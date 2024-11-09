@@ -284,9 +284,9 @@
 "Music sources":"媒体源",
 "Mute":"静音",
 "My Music":"我的音乐",
+"NOTE: 'Application layout' is not saved, as this is a per-device setting.":"注意：“应用程序布局”不会保存，因为这是针对每个设备的设置。",
 "NOTE: Changing ratings requires an additional plugin.":"注意：更改评级需要安装额外的插件。",
 "NOTE: Only some of these settings apply to 'Material Skin'. However these settings will affect other skins and hardware players.":"提示：这些设置会影响其它皮肤和硬件播放器，但是仅有一部分适用于'Material Skin'",
-"NOTE:'Application layout' is not saved, as this is a per-device setting.":"注意：“应用程序布局”不会保存，因为这是针对每个设备的设置。",
 "Name":"名称",
 "New version available":"有可用新版本",
 "Next":"下一个",
@@ -675,6 +675,6 @@
 "Shortcuts":"",
 "Shortcuts in main menu":"",
 "Show all":"",
-"Show shortcuts to pinned home screen items in main menu. (Note: radio streams and random mixes are excluded)":"",
+"Show shortcuts to pinned home screen items in main menu. (NOTE: Radio streams and random mixes are excluded.)":"",
 "Single line only":""
 }

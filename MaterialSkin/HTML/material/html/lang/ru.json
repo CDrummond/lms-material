@@ -284,9 +284,9 @@
 "Music sources":"Источники музыки",
 "Mute":"Выкл громкость",
 "My Music":"Моя Музыка",
+"NOTE: 'Application layout' is not saved, as this is a per-device setting.":"ПРИМЕЧАНИЕ. «Макет приложения» не сохраняется, так как это настройка для каждого устройства.",
 "NOTE: Changing ratings requires an additional plugin.":"ПРИМЕЧАНИЕ. Для изменения рейтинга требуется дополнительный плагин.",
 "NOTE: Only some of these settings apply to 'Material Skin'. However these settings will affect other skins and hardware players.":"ПРИМЕЧАНИЕ: Только некоторые из этих настроек применяются к 'Material Skin'. Однако эти настройки повлияют на другие скины и проигрыватели.",
-"NOTE:'Application layout' is not saved, as this is a per-device setting.":"ПРИМЕЧАНИЕ. «Макет приложения» не сохраняется, так как это настройка для каждого устройства.",
 "Name":"Название",
 "New version available":"Доступна новая версия",
 "Next":"Дальше",
@@ -675,6 +675,6 @@
 "Shortcuts":"",
 "Shortcuts in main menu":"",
 "Show all":"",
-"Show shortcuts to pinned home screen items in main menu. (Note: radio streams and random mixes are excluded)":"",
+"Show shortcuts to pinned home screen items in main menu. (NOTE: Radio streams and random mixes are excluded.)":"",
 "Single line only":""
 }

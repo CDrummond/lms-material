@@ -284,9 +284,9 @@
 "Music sources":"Musik",
 "Mute":"Sluk lyden",
 "My Music":"Min musik",
+"NOTE: 'Application layout' is not saved, as this is a per-device setting.":"NB: Sidens udseende gemmes ikke, da dette gemmes per enhed.",
 "NOTE: Changing ratings requires an additional plugin.":"NB: Ændringer i bedømmelser kræver et yderligere plugin",
 "NOTE: Only some of these settings apply to 'Material Skin'. However these settings will affect other skins and hardware players.":"NB: Kun nogle af disse indstillinger gælder 'Material Skin'. Imidlertid vil de påvirke andre skins og hardwareafspillere.",
-"NOTE:'Application layout' is not saved, as this is a per-device setting.":"NB: Sidens udseende gemmes ikke, da dette gemmes per enhed.",
 "Name":"Navn",
 "New version available":"Ny version tilgængelig",
 "Next":"Næste",
@@ -675,6 +675,6 @@
 "Shortcuts":"",
 "Shortcuts in main menu":"",
 "Show all":"",
-"Show shortcuts to pinned home screen items in main menu. (Note: radio streams and random mixes are excluded)":"",
+"Show shortcuts to pinned home screen items in main menu. (NOTE: Radio streams and random mixes are excluded.)":"",
 "Single line only":""
 }

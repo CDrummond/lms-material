@@ -87,7 +87,7 @@ Vue.component('lms-ui-settings', {
     <v-list-tile>
      <v-select :items="ndShortcutValues" :label="i18n('Shortcuts in main menu')" v-model="ndShortcuts" item-text="label" item-value="key"></v-select>
     </v-list-tile>
-    <v-list-tile-sub-title style="padding-bottom:16px">{{i18n('Show shortcuts to pinned home screen items in main menu. (Note: radio streams and random mixes are excluded)')}}</v-list-tile-sub-title>
+    <v-list-tile-sub-title style="padding-bottom:16px">{{i18n('Show shortcuts to pinned home screen items in main menu. (NOTE: Radio streams and random mixes are excluded.)')}}</v-list-tile-sub-title>
     <v-divider></v-divider>
 
     <v-list-tile v-if="mediaControlsSupported">
@@ -772,7 +772,7 @@ Vue.component('lms-ui-settings', {
         saveAsDefault(event) {
             storeClickOrTouchPos(event);
             confirm(i18n("Save the current settings as default for new users?")+
-                         (this.allowLayoutAdjust ? addNote(i18n("NOTE:'Application layout' is not saved, as this is a per-device setting.")) : ""),
+                         (this.allowLayoutAdjust ? addNote(i18n("NOTE: 'Application layout' is not saved, as this is a per-device setting.")) : ""),
                     i18n('Set Defaults')).then(res => {
                 if (res) {
                     var settings = this.settings(true, true);

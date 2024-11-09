@@ -280,8 +280,8 @@
 "Music sources":"Musikquellen",
 "Mute":"Stummschalten",
 "My Music":"Meine Musik",
+"NOTE: 'Application layout' is not saved, as this is a per-device setting.":"Hinweis: Das Anwendungs-Layout wird nicht gespeichert, da diese Einstellung gerätespezifisch ist.",
 "NOTE: Changing ratings requires an additional plugin.":"Hinweis: Das Ändern von Bewertungen erfordert ein zusätzliches Plugin.",
-"NOTE:'Application layout' is not saved, as this is a per-device setting.":"Hinweis: Das Anwendungs-Layout wird nicht gespeichert, da diese Einstellung gerätespezifisch ist.",
 "Name":"Name",
 "New version available":"Neue Version verfügbar",
 "Next":"Nächster",
@@ -673,7 +673,7 @@
 "Shortcuts":"",
 "Shortcuts in main menu":"",
 "Show all":"",
-"Show shortcuts to pinned home screen items in main menu. (Note: radio streams and random mixes are excluded)":"",
+"Show shortcuts to pinned home screen items in main menu. (NOTE: Radio streams and random mixes are excluded.)":"",
 "Single line only":"",
 "Tint background":"",
 "Tint background with chosen color.":""

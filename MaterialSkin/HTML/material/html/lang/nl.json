@@ -280,8 +280,8 @@
 "Music sources":"Muziekbronnen",
 "Mute":"Dempen",
 "My Music":"Mijn Muziek",
+"NOTE: 'Application layout' is not saved, as this is a per-device setting.":"Let op: Layout is niet opgeslagen, aangezien dit een instelling per apparaat is.",
 "NOTE: Changing ratings requires an additional plugin.":"Opmerking: Het wijzigen van ratings vereist een additionele plug-in.",
-"NOTE:'Application layout' is not saved, as this is a per-device setting.":"Let op: Layout is niet opgeslagen, aangezien dit een instelling per apparaat is.",
 "Name":"Naam",
 "New version available":"Nieuwe versie beschikbaar",
 "Next":"Volgende",
@@ -675,6 +675,6 @@
 "Shortcuts":"",
 "Shortcuts in main menu":"",
 "Show all":"",
-"Show shortcuts to pinned home screen items in main menu. (Note: radio streams and random mixes are excluded)":"",
+"Show shortcuts to pinned home screen items in main menu. (NOTE: Radio streams and random mixes are excluded.)":"",
 "Single line only":""
 }

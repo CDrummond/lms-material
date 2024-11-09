@@ -284,9 +284,9 @@
 "Music sources":"Sources de musique",
 "Mute":"Couper le son",
 "My Music":"Ma Musique",
+"NOTE: 'Application layout' is not saved, as this is a per-device setting.":"REMARQUE : La mise en page de l'application n'est pas enregistrée car il s'agit d'un paramètre propre à chaque périphérique de contrôle.",
 "NOTE: Changing ratings requires an additional plugin.":"REMARQUE : la modification des notes nécessite un plugin supplémentaire.",
 "NOTE: Only some of these settings apply to 'Material Skin'. However these settings will affect other skins and hardware players.":"REMARQUE : seuls certains de ces paramètres s'appliquent à \"Material Skin\". Les autres servent à d'autres skins ou platines physiques.",
-"NOTE:'Application layout' is not saved, as this is a per-device setting.":"REMARQUE : La mise en page de l'application n'est pas enregistrée car il s'agit d'un paramètre propre à chaque périphérique de contrôle.",
 "Name":"Nom",
 "New version available":"Nouvelle version disponible",
 "Next":"Prochain",
@@ -675,6 +675,6 @@
 "Shortcuts":"",
 "Shortcuts in main menu":"",
 "Show all":"",
-"Show shortcuts to pinned home screen items in main menu. (Note: radio streams and random mixes are excluded)":"",
+"Show shortcuts to pinned home screen items in main menu. (NOTE: Radio streams and random mixes are excluded.)":"",
 "Single line only":""
 }

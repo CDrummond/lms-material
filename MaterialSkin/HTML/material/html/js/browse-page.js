@@ -70,7 +70,7 @@ var lmsBrowse = Vue.component("lms-browse", {
     <v-layout @click="showHistory($event)" class="link-item row wrap browse-title">
      <v-flex xs12 class="ellipsis subtoolbar-title subtoolbar-pad" v-bind:class="{'subtoolbar-title-single':undefined==toolbarSubTitle}">{{toolbarTitle}}</v-flex>
      <v-flex xs12 class="ellipsis subtoolbar-subtitle subtext" v-html="detailedSubTop"></v-flex>
-    </v-layout>9px
+    </v-layout>
     <v-flex xs12 v-if="detailedSubExtra" class="ellipsis subtoolbar-subtitle subtext" v-html="detailedSubExtra[0]"></v-flex>
     <v-flex xs12 v-else class="ellipsis subtoolbar-subtitle subtext">&nbsp;</v-flex>
     <v-flex xs12 class="ellipsis subtoolbar-subtitle subtext" v-html="detailedSubBot"></v-flex>

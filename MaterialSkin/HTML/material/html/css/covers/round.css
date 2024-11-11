@@ -17,6 +17,10 @@
  border-radius:4px!important;
 }
 
+.circular img, .circular img:not(.image-grid-item-img):not(.svg-list-img):not(.multi-disc):not(.mi-0):not(.mi-1):not(.mi-2):not(.mi-3) {
+ border-radius: 50%!important;
+}
+
 .sub-cover .mi-1, .sub-cover .mi-2, .sub-cover .mi-3 {
  border-radius:3px!important;
 }

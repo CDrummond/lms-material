@@ -1,17 +1,18 @@
 5.5.0
 -----
-1. If using Lyrion theme and colour from cover, then default to green
-   highlight.
-2. Add option to show home-screen shortcuts in navigation drawer.
-3. Allow smaller grid items if screen 350px or less.
-4. Scale grid icons by grid size.
-5. If viewing images from browse then allow swiping left/right to view
+ 1. If using Lyrion theme and colour from cover, then default to green
+    highlight.
+ 2. Add option to show home-screen shortcuts in navigation drawer.
+ 3. Allow smaller grid items if screen 350px or less.
+ 4. Scale grid icons by grid size.
+  5. If viewing images from browse then allow swiping left/right to view
    prev/next images.
-6. Add button, shown on hover, to view images.
-7. Add play/add/insert/shuffle buttons when viewing some images.
-8. Add captions to images in viewer.
-9. Only show detailed sub-toolbar for online items if also have space for
-   image.
+ 6. Add button, shown on hover, to view images.
+ 7. Add play/add/insert/shuffle buttons when viewing some images.
+ 8. Add captions to images in viewer.
+ 9. Only show detailed sub-toolbar for online items if also have space for
+    image.
+10. If using rounded covers then use circles for artist images.
 
 5.4.4
 -----

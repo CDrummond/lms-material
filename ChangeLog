@@ -10,6 +10,8 @@
 6. Add button, shown on hover, to view images.
 7. Add play/add/insert/shuffle buttons when viewing some images.
 8. Add captions to images in viewer.
+9. Only show detailed sub-toolbar for online items if also have space for
+   image.
 
 5.4.4
 -----

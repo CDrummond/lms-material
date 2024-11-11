@@ -710,7 +710,7 @@ var lmsBrowse = Vue.component("lms-browse", {
             return this.$store.state.tinted && this.$store.state.cMixSupported
         },
         circular() {
-            return this.$store.state.roundCovers && this.items.length>0 && (this.items[0].stdItem==STD_ITEM_ARTIST || this.items[0].stdItem==STD_ITEM_ONLINE_ARTIST);
+            return this.$store.state.roundCovers && this.current && !this.current.isFavFolder && this.items.length>0 && (this.items[0].stdItem==STD_ITEM_ARTIST || this.items[0].stdItem==STD_ITEM_ONLINE_ARTIST);
         }
     },
     created() {

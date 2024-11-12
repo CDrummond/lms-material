@@ -140,7 +140,7 @@ var lmsBrowse = Vue.component("lms-browse", {
     </template>
    </div>
   </div>
-  <div class="lms-list" id="browse-list" style="overflow:auto;" v-bind:class="{'lms-image-grid':grid.use,'lms-grouped-image-grid':grid.use && grid.multiSize,'lms-image-grid-jump':grid.use && filteredJumplist.length>1,'lms-list-jump':!grid.use && filteredJumplist.length>1,'bgnd-blur':drawBgndImage,'backdrop-blur':drawBackdrop, 'circular':circular}">
+  <div class="lms-list" id="browse-list" style="overflow:auto;" v-bind:class="{'lms-image-grid':grid.use,'lms-grouped-image-grid':grid.use && grid.multiSize,'lms-image-grid-jump':grid.use && filteredJumplist.length>1,'lms-list-jump':!grid.use && filteredJumplist.length>1,'bgnd-blur':drawBgndImage,'backdrop-blur':drawBackdrop}">
 
    <RecycleScroller :items="grid.rows" :item-size="grid.multiSize ? null : (grid.ih - (grid.haveSubtitle || isTop || current.id.startsWith(TOP_ID_PREFIX) ? 0 : GRID_SINGLE_LINE_DIFF))" page-mode key-field="id" :buffer="LMS_SCROLLER_GRID_BUFFER" v-if="grid.use">
     <div slot-scope="{item}" :class="[grid.few?'image-grid-few':'image-grid-full-width', grid.haveSubtitle?'image-grid-with-sub':'']">
@@ -176,7 +176,7 @@ var lmsBrowse = Vue.component("lms-browse", {
          <img v-for="(mic, midx) in citem.images" :class="'mi-'+midx" :key="mic" :src="mic" loading="lazy"></img>
         </div>
        </div>
-       <img v-else-if="citem.image" :key="citem.image" :src="citem.image" onerror="this.src=DEFAULT_COVER" v-bind:class="{'radio-img': SECTION_RADIO==citem.section || SECTION_APPS==citem.section || citem.isRadio}" class="image-grid-item-img" loading="lazy"></img>
+       <img v-else-if="citem.image" :key="citem.image" :src="citem.image" onerror="this.src=DEFAULT_COVER" v-bind:class="{'radio-img': SECTION_RADIO==citem.section || SECTION_APPS==citem.section || citem.isRadio, 'circular':citem.stdItem==STD_ITEM_ARTIST || citem.stdItem==STD_ITEM_ONLINE_ARTIST}" class="image-grid-item-img" loading="lazy"></img>
        <div class="image-grid-item-icon" v-else>
         <v-icon v-if="citem.icon" class="image-grid-item-img image-grid-item-icon">{{citem.icon}}</v-icon>
         <img v-else-if="citem.svg" class="image-grid-item-svg" :src="citem.svg | svgIcon(darkUi)" loading="lazy"></img>
@@ -212,7 +212,7 @@ var lmsBrowse = Vue.component("lms-browse", {
       <img v-for="(mic, midx) in item.images" :class="'mi-'+midx" :key="mic" :src="mic" loading="lazy"></img>
      </v-list-tile-avatar>
      <v-list-tile-avatar v-else-if="item.image" :tile="true" v-bind:class="{'radio-image': SECTION_RADIO==item.section || SECTION_APPS==item.section || item.isRadio}" class="lms-avatar">
-      <img :key="item.image" :src="item.image" onerror="this.src=DEFAULT_COVER" class="allow-drag" loading="lazy"></img>
+      <img :key="item.image" :src="item.image" onerror="this.src=DEFAULT_COVER" class="allow-drag" v-bind:class="{'circular':item.stdItem==STD_ITEM_ARTIST || item.stdItem==STD_ITEM_ONLINE_ARTIST}" loading="lazy"></img>
      </v-list-tile-avatar>
      <v-list-tile-avatar v-else-if="item.icon" :tile="true" class="lms-avatar">
       <v-icon>{{item.icon}}</v-icon>
@@ -299,7 +299,7 @@ var lmsBrowse = Vue.component("lms-browse", {
       <img v-for="(mic, midx) in item.images" :class="'mi-'+midx" :key="mic" :src="mic" loading="lazy"></img>
      </v-list-tile-avatar>
      <v-list-tile-avatar v-else-if="item.image" :tile="true" v-bind:class="{'radio-image': SECTION_RADIO==item.section || SECTION_APPS==item.section || item.isRadio, 'lms-avatar-small': isTop || (current && (current.id==TOP_RADIO_ID || current.id==TOP_APPS_ID)), 'lms-avatar': current && current.id!=TOP_RADIO_ID && current.id!=TOP_APPS_ID}">
-      <img :key="item.image" v-lazy="item.image" class="allow-drag" onerror="this.src=DEFAULT_COVER"></img>
+      <img :key="item.image" v-lazy="item.image" class="allow-drag" v-bind:class="{'circular':item.stdItem==STD_ITEM_ARTIST || item.stdItem==STD_ITEM_ONLINE_ARTIST}" onerror="this.src=DEFAULT_COVER"></img>
      </v-list-tile-avatar>
      <v-list-tile-avatar v-else-if="item.icon" :tile="true" class="lms-avatar">
       <v-icon>{{item.icon}}</v-icon>
@@ -708,9 +708,6 @@ var lmsBrowse = Vue.component("lms-browse", {
         },
         tint() {
             return this.$store.state.tinted && this.$store.state.cMixSupported
-        },
-        circular() {
-            return this.$store.state.roundCovers && this.current && !this.current.isFavFolder && this.items.length>0 && (this.items[0].stdItem==STD_ITEM_ARTIST || this.items[0].stdItem==STD_ITEM_ONLINE_ARTIST);
         }
     },
     created() {

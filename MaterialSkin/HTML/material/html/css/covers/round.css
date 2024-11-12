@@ -12,12 +12,12 @@
  border-radius:7px!important;
 }
 
-.lms-list img:not(.image-grid-item-img):not(.svg-list-img):not(.multi-disc):not(.mi-0):not(.mi-1):not(.mi-2):not(.mi-3), .pmgr-cover img, .np-info .lms-list img, .sub-cover, .menu-image, .mi .v-avatar,
+.lms-list img:not(.image-grid-item-img):not(.svg-list-img):not(.multi-disc):not(.mi-0):not(.mi-1):not(.mi-2):not(.mi-3):not(.circular), .pmgr-cover img, .np-info .lms-list img, .sub-cover, .menu-image, .mi .v-avatar,
 .sub-cover .mi {
  border-radius:4px!important;
 }
 
-.circular img, .circular img:not(.image-grid-item-img):not(.svg-list-img):not(.multi-disc):not(.mi-0):not(.mi-1):not(.mi-2):not(.mi-3) {
+.circular {
  border-radius: 50%!important;
 }
 

@@ -348,6 +348,7 @@ function parseBrowseResp(data, parent, options, cacheKey, parentCommand, parentG
                             }
                             i.image=undefined;
                         } else if (i.presetParams.favorites_url.startsWith("db:contributor.name")) {
+                            i.stdItem=STD_ITEM_ARTIST;
                             if (i.presetParams.icon=="html/images/artists.png" || !(LMS_P_MAI && LMS_ARTIST_PICS)) {
                                 i.svg="artist";
                                 i.image=undefined;
@@ -379,6 +380,9 @@ function parseBrowseResp(data, parent, options, cacheKey, parentCommand, parentG
                             i.image=undefined;
                         } else {
                             mapIcon(i);
+                        }
+                        if (i.presetParams.favorites_url.startsWith("spotify:artist:")) {
+                            i.stdItem = STD_ITEM_ONLINE_ARTIST;
                         }
                         if (STREAM_SCHEMAS.has(i.presetParams.favorites_url.split(":")[0]) && allowPinning && !i.header) {
                             i.isRadio = true;

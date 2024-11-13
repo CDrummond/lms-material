@@ -208,7 +208,7 @@ function formatTechInfo(item, source, isCurrent) {
 }
 
 function formatSeconds(secs, showDays) {
-    if (undefined==secs) {
+    if (undefined==secs || isNaN(secs)) {
         secs = 0;
     }
     var numSeconds = parseInt(secs, 10)

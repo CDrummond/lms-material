@@ -994,7 +994,7 @@ function browseClick(view, item, index, event, ignoreOpenMenu) {
     if ("image"==item.type) {
         var images = [];
         for (var i=0, len=view.items.length; i<len; ++i) {
-            images.push({url:this.items[i].src, title:item.title});
+            images.push({url:view.items[i].src, title:view.items[i].title});
         }
         bus.$emit('dlg.open', 'gallery', images, index);
         return;

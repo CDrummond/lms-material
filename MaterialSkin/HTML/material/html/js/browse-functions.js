@@ -1661,7 +1661,7 @@ function browseItemAction(view, act, item, index, event) {
                 if (itm.id==item.id) {
                     idx = images.length;
                 }
-                let useActions = !queryParams.party && !LMS_KIOSK_MODE && (itm.stdItem==STD_ITEM_ALBUM || itm.stdItem==STD_ITEM_ARTIST || (undefined!=itm.menu && itm.menu[0]==PLAY_ACTION));
+                let useActions = !queryParams.party && !LMS_KIOSK_MODE && (itm.stdItem==STD_ITEM_ALBUM || itm.stdItem==STD_ITEM_ARTIST || itm.stdItem==STD_ITEM_WORK || itm.stdItem==STD_ITEM_WORK_COMPOSER || (undefined!=itm.menu && itm.menu[0]==PLAY_ACTION));
                 let image = {url:itm.image,
                              title:itm.title+(undefined==itm.subtitle ? "" : (SEPARATOR+itm.subtitle)),
                              index:useActions ? i : undefined

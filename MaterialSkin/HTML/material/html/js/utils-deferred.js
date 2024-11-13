@@ -832,7 +832,7 @@ function roleDisplayName(role) {
     }
     return lmsOptions.userDefinedRoles[val]==undefined
         ? undefined
-        : lmsOptions.userDefinedRoles[val].text;
+        : lmsOptions.userDefinedRoles[val].name;
 }
 
 function refreshViewItems(view) {

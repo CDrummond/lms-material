@@ -13,6 +13,7 @@
  9. Only show detailed sub-toolbar for online items if also have space for
     image.
 10. If using rounded covers then use circles for artist images.
+11. Support plural/singular user-defined role names.
 
 5.4.4
 -----

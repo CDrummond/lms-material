@@ -122,7 +122,9 @@ function parseUserDefinedRoles(data) {
             let id = parseInt(data[key]['id']);
             let lkey = key.toLocaleLowerCase();
             let include = 1==parseInt(data[key]['include']);
-            lmsOptions.userDefinedRoles[id] = {role:key, lrole:lkey, text:data[key]['name'], include:include};
+            let name = data[key]['name'];
+            let plural = data[key]['namePlural'];
+            lmsOptions.userDefinedRoles[id] = {role:key, lrole:lkey, name:name, plural:plural, include:include};
             if (!include) {
                 excluded.push(lkey);
             }

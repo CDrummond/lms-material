@@ -935,7 +935,13 @@ function parseBrowseResp(data, parent, options, cacheKey, parentCommand, parentG
                 case 4: resp.subtitle=i18np("1 Band", "%1 Bands", resp.items.length); break;
                 default:
                     if (undefined!=type && type>=20) {
-                        resp.subtitle=i18np("1 Item", "%1 Items", resp.items.length);
+                        let role = lmsOptions.userDefinedRoles[type];
+                        if (undefined==role || isEmpty(role.plural) || role.name==role.plural) {
+                            resp.subtitle=i18np("1 Item", "%1 Items", resp.items.length);
+                        } else {
+                            resp.subtitle=resp.items.length==1 ? ("1 " + role.name)
+                                                               : (resp.items.length + " " + role.plural);
+                        }
                     } else {
                         resp.subtitle=i18np("1 Artist", "%1 Artists", resp.items.length);
                     }

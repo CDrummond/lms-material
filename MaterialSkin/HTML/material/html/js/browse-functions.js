@@ -210,7 +210,7 @@ function browseActions(view, item, args, count, showRoles, showWorks, addRolesPl
                         if (undefined!=udr) {
                             var params = [ARTIST_ALBUM_TAGS, SORT_KEY+ARTIST_ALBUM_SORT_PLACEHOLDER, 'artist_id:'+args['artist_id'], 'role_id:'+showRoles[r]];
                             browseAddLibId(view, params);
-                            actions.push({title:udr['text'], svg:'role-'+udr['role'], do:{ command: ['albums'], params: params}, weight:82, stdItem:STD_ITEM_ARTIST, udr:showRoles[r]});
+                            actions.push({title:udr.name, svg:'role-'+udr.role, do:{ command: ['albums'], params: params}, weight:82, stdItem:STD_ITEM_ARTIST, udr:showRoles[r]});
                             added = true;
                         }
                     }
@@ -807,7 +807,7 @@ function browseGetRoles(view, curitem) {
                     if (undefined!=udr) {
                         let params = [ARTIST_ALBUM_TAGS, SORT_KEY+ARTIST_ALBUM_SORT_PLACEHOLDER, curitem.id, 'role_id:'+rid];
                         browseAddLibId(view, params);
-                        actions.push({title:udr['text'], svg:'role-'+udr['role'], do:{ command: ['albums'], params: params}, weight:81, stdItem:STD_ITEM_ARTIST, udr:rid});
+                        actions.push({title:udr.name, svg:'role-'+udr.role, do:{ command: ['albums'], params: params}, weight:81, stdItem:STD_ITEM_ARTIST, udr:rid});
                     }
                 }
             }
@@ -2882,9 +2882,9 @@ function browseBuildInfoHtml(view) {
                 if (undefined==key) {
                     let pos = ARTIST_TYPES.indexOf(type);
                     if (pos>=0) {
-                        let role = lmsOptions.userDefinedRoles[ARTIST_TYPE_IDS[pos]]
+                        let role = lmsOptions.userDefinedRoles[ARTIST_TYPE_IDS[pos]];
                         if (undefined!=role) {
-                            key = role.text;
+                            key = role.name;
                         }
                     }
                 }

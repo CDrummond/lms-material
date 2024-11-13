@@ -623,7 +623,7 @@ function nowplayingFetchTrackInfo(view) {
             if (undefined!=trk[value.lrole]) {
                 let entry = nowplayingArtistEntry(trk, value.lrole, value.role);
                 if (entry.length>1) {
-                    html+="<tr><td>"+value.text+"&nbsp;</td><td>"+entry+"</td></tr>";
+                    html+="<tr><td>"+value.name+"&nbsp;</td><td>"+entry+"</td></tr>";
                 }
             }
         }

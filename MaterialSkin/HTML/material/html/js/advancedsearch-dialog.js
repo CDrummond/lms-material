@@ -301,7 +301,7 @@ Vue.component('lms-advancedsearch-dialog', {
 
             if (lmsOptions.userDefinedRoles) {
                 for (let [key, value] of Object.entries(lmsOptions.userDefinedRoles)) {
-                    this.artistTypes.push({key: key, label:value.text});
+                    this.artistTypes.push({key: key, label:value.name});
                     if (reset && value.include) {
                         this.params.contributor_namesearch.types.push(key);
                     }

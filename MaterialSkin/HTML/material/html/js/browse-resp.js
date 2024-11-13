@@ -939,8 +939,9 @@ function parseBrowseResp(data, parent, options, cacheKey, parentCommand, parentG
                         if (undefined==role || isEmpty(role.plural) || role.name==role.plural) {
                             resp.subtitle=i18np("1 Item", "%1 Items", resp.items.length);
                         } else {
-                            resp.subtitle=resp.items.length==1 ? ("1 " + role.name)
-                                                               : (resp.items.length + " " + role.plural);
+                            resp.subtitle=1==resp.items.length
+                                                ? i18n("1 %1", role.name)
+                                                : i18n("%1 %2", resp.items.length, role.plural);
                         }
                     } else {
                         resp.subtitle=i18np("1 Artist", "%1 Artists", resp.items.length);

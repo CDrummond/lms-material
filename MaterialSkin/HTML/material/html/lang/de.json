@@ -663,6 +663,8 @@
 "%1 Years":"%1 Jahre",
 "1 day":"1 Tag",
 "%1 days":"%1 Tage",
+"%1 %2":"",
+"1 %1":"",
 "Don't show":"",
 "Help page":"",
 "Move '%1'":"",

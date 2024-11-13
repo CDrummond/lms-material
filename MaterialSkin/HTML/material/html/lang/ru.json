@@ -671,6 +671,8 @@
 "%1 Years":"%1 Лет",
 "1 day":"1 день",
 "%1 days":"%1 дней(я)",
+"%1 %2":"",
+"1 %1":"",
 "Don't show":"",
 "Shortcuts":"",
 "Shortcuts in main menu":"",

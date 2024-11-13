@@ -647,6 +647,8 @@
 "%1 Years":"%1 roků",
 "1 day":"1 den",
 "%1 days":"%1 dní",
+"%1 %2":"",
+"1 %1":"",
 "All Works":"",
 "Copied: %1":"",
 "Cover whole view (including toolbars, etc.) with background image.":"",

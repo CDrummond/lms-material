@@ -352,7 +352,7 @@ var lmsBrowse = Vue.component("lms-browse", {
      </v-list-tile-avatar>
      <v-list-tile-title>{{ACTIONS[SHOW_IMAGE_ACTION].title}}</v-list-tile-title>
     </v-list-tile>
-    <div style="height:0px!important" v-if="(queryParams.party && HIDE_FOR_PARTY.has(action)) || (LMS_KIOSK_MODE && HIDE_FOR_KIOSK.has(action)) || (PLAY_SHUFFLE_ACTION==action && !lmsOptions.playShuffle)"></div>
+    <div style="height:0px!important" v-if="(queryParams.party && HIDE_FOR_PARTY.has(action)) || (LMS_KIOSK_MODE && HIDE_FOR_KIOSK.has(action)) || ((PLAY_SHUFFLE_ACTION==action || PLAY_SHUFFLE_ALL_ACTION==action) && !lmsOptions.playShuffle)"></div>
     <v-divider v-else-if="DIVIDER==action"></v-divider>
     <template v-for="(cact, cindex) in itemCustomActions" v-else-if="CUSTOM_ACTIONS==action">
      <v-list-tile @click="itemCustomAction(cact, menu.item, menu.index)">
@@ -2026,6 +2026,9 @@ var lmsBrowse = Vue.component("lms-browse", {
         },
         allowShuffle(item) {
             if (lmsOptions.playShuffle && !queryParams.party && (!LMS_KIOSK_MODE || !HIDE_FOR_KIOSK.has(PLAY_SHUFFLE_ACTION))) {
+                if (item.header && undefined!=item.menu && item.menu.length>2 && item.menu[2]==PLAY_SHUFFLE_ALL_ACTION) {
+                    return true;
+                }
                 let itm = item.header ? this.current : item;
                 return undefined!=itm && undefined!=itm.stdItem && (itm.stdItem==STD_ITEM_ARTIST || itm.stdItem==STD_ITEM_ALBUM || itm.stdItem==STD_ITEM_PLAYLIST || itm.stdItem==STD_ITEM_WORK);
             }

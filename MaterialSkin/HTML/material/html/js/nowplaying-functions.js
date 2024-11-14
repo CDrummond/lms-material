@@ -170,16 +170,15 @@ function nowplayingOnPlayerStatus(view, playerStatus) {
     if (emblem!=view.playerStatus.current.emblem) {
         view.playerStatus.current.emblem = emblem;
     }
-    let mobileBarText = addPart(playerStatus.current.title, buildArtistLine(playerStatus.current, 'np', true));
+    let useComposerTag = playerStatus.current.composer && lmsOptions.showComposer && useComposer(playerStatus.current.genre);
+    let useConductorTag = playerStatus.current.conductor && lmsOptions.showConductor && useConductor(playerStatus.current.genre);
+    let useBandTag = playerStatus.current.band && lmsOptions.showBand && useBand(playerStatus.current.genre);
+    let mobileBarText = addPart(playerStatus.current.title, buildArtistLine(playerStatus.current, 'np', true, undefined, useBandTag, useComposerTag, useConductorTag));
     if (mobileBarText!=view.mobileBarText) {
         view.mobileBarText = mobileBarText;
         bus.$emit("nowPlayingBrief", mobileBarText);
     }
-    let artistAndComposer = buildArtistLine(playerStatus.current, 'now-playing');
-    let useComposerTag = playerStatus.current.composer && lmsOptions.showComposer && useComposer(playerStatus.current.genre);
-    let useConductorTag = playerStatus.current.conductor && lmsOptions.showConductor && useConductor(playerStatus.current.genre);
-    let useBandTag = playerStatus.current.band && lmsOptions.showBand && useBand(playerStatus.current.genre);
-
+    let artistAndComposer = buildArtistLine(playerStatus.current, 'now-playing', undefined, undefined, useBandTag, useComposerTag, useConductorTag);
     let keys = ['composer', 'conductor', 'band'].concat(USER_ARTIST_TYPES);
     let mods = ['', 's', '_ids'];
 

@@ -14,6 +14,7 @@
     image.
 10. If using rounded covers then use circles for artist images.
 11. Support plural/singular user-defined role names.
+12. Fix showing 'composed by', etc., in queue and elsewhere.
 
 5.4.4
 -----

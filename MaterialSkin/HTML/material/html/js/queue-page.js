@@ -52,8 +52,11 @@ function buildArtistAlbumLines(i, queueAlbumStyle, queueContext) {
             artistAlbum = buildLink(i.albumartist ? 'show_albumartist' : 'show_artist', id, str, 'queue');
         }
     } else {
-        artistAlbum = buildArtistLine(i, 'queue');
-        artistAlbumContext = queueContext ? buildArtistWithContext(i, 'queue') : undefined;
+        let useComposerTag = i.composer && lmsOptions.showComposer && useComposer(i.genre);
+        let useConductorTag = i.conductor && lmsOptions.showConductor && useConductor(i.genre);
+        let useBandTag = i.band && lmsOptions.showBand && useBand(i.genre);
+        artistAlbum = buildArtistLine(i, 'queue', undefined, undefined, useBandTag, useComposerTag, useConductorTag);
+        artistAlbumContext = queueContext ? replaceBr(buildArtistWithContext(i, 'queue', useBandTag, useComposerTag, useConductorTag), " ") : undefined;
     }
     var lines = [];
     var linesContext = [];

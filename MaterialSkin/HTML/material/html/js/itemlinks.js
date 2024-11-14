@@ -107,7 +107,7 @@ function addArtistLink(item, line, type, func, page, used, plain) {
     return line;
 }
 
-function buildArtistLine(i, page, plain, existing) {
+function buildArtistLine(i, page, plain, existing, useBandTag, useComposerTag, useConductorTag) {
     var line = undefined;
     var used = new Set();
     var artist = i.trackartist ? i.trackartist : i.artist ? i.artist : i.albumartist;
@@ -126,13 +126,13 @@ function buildArtistLine(i, page, plain, existing) {
         used.add(artist);
     }
 
-    if (i.band && lmsOptions.showBand && useBand(i.genre)) {
+    if (undefined!=useBandTag ? useBandTag : (i.band && lmsOptions.showBand && useBand(i.genre))) {
         line=addArtistLink(i, line, "band", "show_band", page, used, plain);
     }
-    if (i.composer && lmsOptions.showComposer && useComposer(i.genre)) {
+    if (undefined!=useComposerTag ? useComposerTag : (i.composer && lmsOptions.showComposer && useComposer(i.genre))) {
         line=addArtistLink(i, line, "composer", "show_composer", page, used, plain);
     }
-    if (i.conductor && lmsOptions.showConductor && useConductor(i.genre)) {
+    if (undefined!=useConductorTag ? useConductorTag : (i.conductor && lmsOptions.showConductor && useConductor(i.genre))) {
         line=addArtistLink(i, line, "conductor", "show_conductor", page, used, plain);
     }
 

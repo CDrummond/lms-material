@@ -1384,9 +1384,12 @@ function parseBrowseResp(data, parent, options, cacheKey, parentCommand, parentG
                     }
                 }
 
-                artists.push(buildArtistLine(i, "browse", false));
+                let useComposerTag = i.composer && lmsOptions.showComposer && useComposer(i.genre);
+                let useConductorTag = i.conductor && lmsOptions.showConductor && useConductor(i.genre);
+                let useBandTag = i.band && lmsOptions.showBand && useBand(i.genre);
+                artists.push(buildArtistLine(i, "browse", false, undefined, useBandTag, useComposerTag, useConductorTag));
                 if (browseContext) {
-                    artistsWithContext.push(replaceBr(buildArtistWithContext(i, "browse", false), " "));
+                    artistsWithContext.push(replaceBr(buildArtistWithContext(i, "browse", useBandTag, useComposerTag, useConductorTag), " "));
                 }
                 let subtitle = undefined;
                 let subtitleContext = undefined;
@@ -1765,8 +1768,11 @@ function parseBrowseResp(data, parent, options, cacheKey, parentCommand, parentG
                 var i = makeHtmlSafe(loop[idx]);
                 var title = i.title;
                 splitMultiples(i, true);
-                let subtitle = buildArtistLine(i, "browse", false);
-                let subtitleContext = browseContext ? replaceBr(buildArtistWithContext(i, "browse", false), " ") : undefined;
+                let useComposerTag = i.composer && lmsOptions.showComposer && useComposer(i.genre);
+                let useConductorTag = i.conductor && lmsOptions.showConductor && useConductor(i.genre);
+                let useBandTag = i.band && lmsOptions.showBand && useBand(i.genre);
+                let subtitle = buildArtistLine(i, "browse", false, undefined, useBandTag, useComposerTag, useConductorTag);
+                let subtitleContext = browseContext ? replaceBr(buildArtistWithContext(i, "browse", useBandTag, useComposerTag, useConductorTag), " ") : undefined;
                 if (!title) {
                     title=i18n("Unknown");
                 }

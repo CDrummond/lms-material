@@ -312,7 +312,8 @@
 .np-bar-mob-thick .np-bar-details {
  left:34px!important;
  width:calc(100vw - 70px);
- bottom:calc(var(--bottom-toolbar-height) + var(--bottom-np-pad) - 8px);
+ height:48px!important;
+ bottom:calc(var(--bottom-toolbar-height) + var(--bottom-np-pad));
 }
 
 .np-bar-mob-thick .np-bar-details .v-list__tile {

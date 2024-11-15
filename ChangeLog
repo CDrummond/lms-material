@@ -15,6 +15,7 @@
 10. If using rounded covers then use circles for artist images.
 11. Support plural/singular user-defined role names.
 12. Fix showing 'composed by', etc., in queue and elsewhere.
+13. Fix showing/hiding of 'Play shuffled' action in certain cases.
 
 5.4.4
 -----

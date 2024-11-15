@@ -1000,7 +1000,7 @@ function browseClick(view, item, index, event, ignoreOpenMenu) {
         return;
     }
     let isFavouritePlaylist = item.section==SECTION_FAVORITES && item.presetParams && item.presetParams.favorites_url && item.presetParams.favorites_url.startsWith("file:///") && item.presetParams.favorites_url.endsWith(".m3u");
-    if (isAudioTrack(item) && !isFavouritePlaylist) {
+    if (isAudioTrack(item) && !isFavouritePlaylist && !item.mskOnlyGoAction) {
         if (!view.clickTimer) {
             view.clickTimer = setTimeout(function () {
                 view.clickTimer = undefined;
@@ -1654,28 +1654,34 @@ function browseItemAction(view, act, item, index, event) {
         let images = [];
         let idx = 0;
         let allowShuffle = -1;
-        let allowActions = -1;
+        let allowPlayAction = -1;
+        let allowOtherActions = -1;
         for (let i=0, loop=view.items, len=loop.length; i<len; ++i) {
             let itm = loop[i];
             if (itm.image) {
                 if (itm.id==item.id) {
                     idx = images.length;
                 }
-                let useActions = !queryParams.party && !LMS_KIOSK_MODE && (itm.stdItem==STD_ITEM_ALBUM || itm.stdItem==STD_ITEM_ARTIST || itm.stdItem==STD_ITEM_WORK || itm.stdItem==STD_ITEM_WORK_COMPOSER || (undefined!=itm.menu && itm.menu[0]==PLAY_ACTION));
+                let isStdItem = itm.stdItem==STD_ITEM_ALBUM || itm.stdItem==STD_ITEM_ARTIST || itm.stdItem==STD_ITEM_WORK || itm.stdItem==STD_ITEM_WORK_COMPOSER;
+                let playAction = !queryParams.party && !LMS_KIOSK_MODE && (isStdItem || (undefined!=itm.menu && itm.menu[0]==PLAY_ACTION));
+                let otherAction = playAction && (isStdItem || (undefined!=itm.menu && itm.menu[0]==INSERT_ACTION));
                 let image = {url:itm.image,
                              title:itm.title+(undefined==itm.subtitle ? "" : (SEPARATOR+itm.subtitle)),
-                             index:useActions ? i : undefined
+                             index:playAction ? i : undefined
                              };
                 images.push(image);
-                if (allowActions!=0) {
-                    allowActions = useActions ? 1 : 0;
+                if (allowPlayAction!=0) {
+                    allowPlayAction = playAction ? 1 : 0;
                 }
-                if (allowActions==1 && allowShuffle!=0 && lmsOptions.playShuffle && !queryParams.party && (!LMS_KIOSK_MODE || !HIDE_FOR_KIOSK.has(PLAY_SHUFFLE_ACTION))) {
+                if (allowOtherActions!=0) {
+                    allowOtherActions = otherAction ? 1 : 0;
+                }
+                if (allowOtherActions==1 && allowShuffle!=0 && lmsOptions.playShuffle && !queryParams.party && (!LMS_KIOSK_MODE || !HIDE_FOR_KIOSK.has(PLAY_SHUFFLE_ACTION))) {
                     allowShuffle = undefined!=itm && undefined!=itm.stdItem && (itm.stdItem==STD_ITEM_ARTIST || itm.stdItem==STD_ITEM_ALBUM || itm.stdItem==STD_ITEM_PLAYLIST || itm.stdItem==STD_ITEM_WORK) ? 1 : 0
                 }
             }
         }
-        bus.$emit('dlg.open', 'gallery', images, idx, false, undefined, allowActions==1 ? allowShuffle==1 ? 2 : 1 : 0);
+        bus.$emit('dlg.open', 'gallery', images, idx, false, undefined, allowShuffle==1 && allowOtherActions==1 ? 3 : (allowPlayAction==1 ? (allowOtherActions==1 ? 2 : 1) : 0) );
     } else if (SCROLL_TO_ACTION==act) {
         var choices = [];
         for (var i=0, loop=view.items, len=loop.length; i<len; ++i) {
@@ -2054,7 +2060,7 @@ function browseBuildCommand(view, item, commandName, doReplacements, allowLibId)
     }
 
     if (cmd.command.length<1) { // Build SlimBrowse command
-        if (undefined==commandName) {
+        if (undefined==commandName || item.mskOnlyGoAction) {
             commandName = "go";
         }
         var baseActions = view.current == item ? view.currentBaseActions : view.baseActions;

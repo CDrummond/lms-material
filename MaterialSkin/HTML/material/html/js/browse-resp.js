@@ -131,7 +131,7 @@ function parseBrowseResp(data, parent, options, cacheKey, parentCommand, parentG
             var isPodcastSearch = command == "podcasts" && getIndex(data.params[1], "search:")>0;
             var isBmf = command == "browselibrary" && data.params[1].length>0 && data.params[1].indexOf("mode:bmf")>=0;
             var isDisksAndFolders = command == "browselibrary" && data.params[1].length>0 && data.params[1].indexOf("mode:filesystem")>=0;
-            var isCustomBrowse = command == "custombrowse" ;
+            var isCustomBrowse = command == "custombrowse";
             var isDynamicPlaylist = command == "dynamicplaylist";
             var haveWithIcons = false;
             var haveWithoutIcons = false;
@@ -293,24 +293,29 @@ function parseBrowseResp(data, parent, options, cacheKey, parentCommand, parentG
                         i.title = (num>9 ? num : ("0" + num))+SEPARATOR+text;
                     }
                     */
-                    if ((i.params && hasPlayableId(i.params)) || (i.commonParams && hasPlayableId(i.commonParams)) ||
-                        (i.actions && i.actions.add && i.actions.add.params && hasPlayableId(i.actions.add.params)) || isCustomBrowse) {
+                    // Bookmarks plugin has 'go' action, but no 'add' action => play only?
+                    let hasAddAction = i.actions && i.actions.add && i.actions.add.params && hasPlayableId(i.actions.add.params);
+                    let onlyHasGoAction = !hasAddAction && i.actions && i.actions.go && i.actions.go.params && hasPlayableId(i.actions.go.params);
+                    if ((i.params && hasPlayableId(i.params)) || (i.commonParams && hasPlayableId(i.commonParams)) || isCustomBrowse || hasAddAction || onlyHasGoAction) {
                         if (playAction) {
                             i.menu.push(PLAY_ACTION);
                             addedPlayAction = true;
-                            resp.allowHoverBtns = true;
+                            resp.allowHoverBtns = !onlyHasGoAction;
                             resp.numAudioItems++;
                         }
-                        if (insertAction) {
+                        if (insertAction && !onlyHasGoAction) {
                             i.menu.push(INSERT_ACTION);
                             addedPlayAction = true;
                         }
-                        if (addedPlayAction && lmsOptions.playShuffle) {
+                        if (addedPlayAction && !onlyHasGoAction && lmsOptions.playShuffle) {
                             i.menu.push(PLAY_SHUFFLE_ACTION);
                         }
-                        if (addAction) {
+                        if (addAction && !onlyHasGoAction) {
                             i.menu.push(ADD_ACTION);
                             addedPlayAction = true;
+                        }
+                        if (onlyHasGoAction) {
+                            i.mskOnlyGoAction=true;
                         }
                     }
                 }
@@ -586,7 +591,9 @@ function parseBrowseResp(data, parent, options, cacheKey, parentCommand, parentG
                         i.saveableTrack = true; // Can save track list to playlist...
                         i.menu.push(ADD_TO_PLAYLIST_ACTION);
                     }
-                    i.menu.push(SELECT_ACTION);
+                    if (!i.mskOnlyGoAction) {
+                        i.menu.push(SELECT_ACTION);
+                    }
                     i.menu.push(COPY_DETAILS_ACTION);
                     if (undefined!=i.image) {
                         i.menu.push(SHOW_IMAGE_ACTION);

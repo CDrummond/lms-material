@@ -9,10 +9,10 @@
 var lmsGallery = Vue.component("lms-gallery", {
   template: `
 <div class="pswp" tabindex="-1" role="dialog" aria-hidden="true">
- <img v-if="showActions && !queryParams.party && (!LMS_KIOSK_MODE || !HIDE_FOR_KIOSK.has(PLAY_ACTION))" class="ps-btn grid-btn" v-bind:class="{'ps-btn-mobile':IS_MOBILE}" @click.stop="itemAction(PLAY_ACTION)" :title="ACTIONS[PLAY_ACTION].title" :src="'hover-play' | svgIcon"></img>
- <img v-if="showActions && allowShuffle" class="ps-btn grid-btn" v-bind:class="{'ps-btn-mobile':IS_MOBILE}" @click.stop="itemAction(PLAY_SHUFFLE_ACTION)" :title="ACTIONS[PLAY_SHUFFLE_ACTION].title" :src="'hover-shuffle' | svgIcon"></img>
- <img v-if="showActions && !queryParams.party && (!LMS_KIOSK_MODE || !HIDE_FOR_KIOSK.has(INSERT_ACTION))" class="ps-btn grid-btn" v-bind:class="{'ps-btn-mobile':IS_MOBILE}" @click.stop="itemAction(INSERT_ACTION)" :title="ACTIONS[INSERT_ACTION].title" :src="'hover-playnext' | svgIcon"></img>
- <img v-if="showActions && (!LMS_KIOSK_MODE || !HIDE_FOR_KIOSK.has(ADD_ACTION))" class="ps-btn grid-btn" v-bind:class="{'ps-btn-mobile':IS_MOBILE}" @click.stop="itemAction(ADD_ACTION)" :title="ACTIONS[ADD_ACTION].title" :src="'hover-add' | svgIcon"></img>
+ <img v-if="allowPlay && !queryParams.party && (!LMS_KIOSK_MODE || !HIDE_FOR_KIOSK.has(PLAY_ACTION))" class="ps-btn grid-btn" v-bind:class="{'ps-btn-mobile':IS_MOBILE}" @click.stop="itemAction(PLAY_ACTION)" :title="ACTIONS[PLAY_ACTION].title" :src="'hover-play' | svgIcon"></img>
+ <img v-if="allowShuffle" class="ps-btn grid-btn" v-bind:class="{'ps-btn-mobile':IS_MOBILE}" @click.stop="itemAction(PLAY_SHUFFLE_ACTION)" :title="ACTIONS[PLAY_SHUFFLE_ACTION].title" :src="'hover-shuffle' | svgIcon"></img>
+ <img v-if="allowOther && !queryParams.party && (!LMS_KIOSK_MODE || !HIDE_FOR_KIOSK.has(INSERT_ACTION))" class="ps-btn grid-btn" v-bind:class="{'ps-btn-mobile':IS_MOBILE}" @click.stop="itemAction(INSERT_ACTION)" :title="ACTIONS[INSERT_ACTION].title" :src="'hover-playnext' | svgIcon"></img>
+ <img v-if="allowOther && (!LMS_KIOSK_MODE || !HIDE_FOR_KIOSK.has(ADD_ACTION))" class="ps-btn grid-btn" v-bind:class="{'ps-btn-mobile':IS_MOBILE}" @click.stop="itemAction(ADD_ACTION)" :title="ACTIONS[ADD_ACTION].title" :src="'hover-add' | svgIcon"></img>
  <div class="pswp__bg"></div>
  <div class="pswp__scroll-wrap">
   <div class="pswp__container">
@@ -47,7 +47,8 @@ var lmsGallery = Vue.component("lms-gallery", {
 </div>`,
     data() {
         return {
-            showActions:false,
+            allowPlay:false,
+            allowOther:false,
             allowShuffle:false
         }
     },
@@ -57,8 +58,9 @@ var lmsGallery = Vue.component("lms-gallery", {
             this.isNowPlaying = undefined==isNowPlaying ? false : isNowPlaying;
             this.closeSignal = closeSignal;
             this.npUrl = isNowPlaying ? items[0].url : undefined;
-            this.showActions = allowedActions>0;
-            this.allowShuffle = allowedActions>1;
+            this.allowPlay = allowedActions>0;
+            this.allowOther = allowedActions>1;
+            this.allowShuffle = allowedActions>2;
             var galleryInst = this;
             var images = [];
             for (var i=0, len=items.length; i<len; ++i) {

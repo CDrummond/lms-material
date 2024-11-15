@@ -16,6 +16,7 @@
 11. Support plural/singular user-defined role names.
 12. Fix showing 'composed by', etc., in queue and elsewhere.
 13. Fix showing/hiding of 'Play shuffled' action in certain cases.
+14. Fix 'Bookmarks' plugin.
 
 5.4.4
 -----

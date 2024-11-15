@@ -1,4 +1,5 @@
 {
+"%1 %2":"%1 %2",
 "%1 (Menu)":"%1 (menu)",
 "%1 minutes":"%1 minutter",
 "%1 of %2":"%1 af %2",
@@ -14,6 +15,7 @@
 "...then album artist, release, disc no., track no.":"... dernæst albumkunstner, udgivelse, CD nummer, albumsnummer.",
 "...then album, disc no., track no.":"... dernæst album, CD nr., albumsnummer",
 "...then release, disc no., track no.":"... dernæst udgivelse, CD nummer, albumsnummer.",
+"1 %1":"1 %1",
 "<obj>by</obj> %1":"<obj>af</obj> %1",
 "<obj>composed by</obj> %1":"<obj>komponeret af</obj> %1",
 "<obj>conducted by</obj> %1":"<obj>dirigeret af</obj> %1",
@@ -676,7 +678,5 @@
 "1 Year":"1 år",
 "%1 Years":"%1 år",
 "1 day":"1 dag",
-"%1 days":"%1 dage",
-"%1 %2":"",
-"1 %1":""
+"%1 days":"%1 dage"
 }

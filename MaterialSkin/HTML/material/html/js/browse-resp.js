@@ -563,9 +563,15 @@ function parseBrowseResp(data, parent, options, cacheKey, parentCommand, parentG
                 let isOnlineTrack = false;
                 // Check for online artist, album, or tracks
                 if (i.presetParams && i.presetParams.favorites_url) {
-                    if (i.presetParams.favorites_url.startsWith("spotify:artist:")) {
+                    if (i.presetParams.favorites_url.startsWith("spotify:artist:") ||
+                        i.presetParams.favorites_url.startsWith("deezer://artist:") ||
+                        i.presetParams.favorites_url.startsWith("qobuz://artist:") ||
+                        i.presetParams.favorites_url.startsWith("tidal://artist:")) {
                         i.stdItem = STD_ITEM_ONLINE_ARTIST;
-                    } else if (i.presetParams.favorites_url.startsWith("spotify:album:")) {
+                    } else if (i.presetParams.favorites_url.startsWith("spotify:album:") ||
+                               i.presetParams.favorites_url.startsWith("deezer://album:") ||
+                               i.presetParams.favorites_url.startsWith("qobuz://album:") ||
+                               i.presetParams.favorites_url.startsWith("tidal://album:")) {
                         i.stdItem = STD_ITEM_ONLINE_ALBUM;
                     } else if (i.presetParams.favorites_type=="audio" &&
                                ( i.presetParams.favorites_url.startsWith("spotify:track:") ||

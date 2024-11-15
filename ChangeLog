@@ -17,6 +17,8 @@
 12. Fix showing 'composed by', etc., in queue and elsewhere.
 13. Fix showing/hiding of 'Play shuffled' action in certain cases.
 14. Fix 'Bookmarks' plugin.
+15. Only use detailed sub-toolbar if wide enough for cover or have text for
+    at least one of bottom 2 lines.
 
 5.4.4
 -----

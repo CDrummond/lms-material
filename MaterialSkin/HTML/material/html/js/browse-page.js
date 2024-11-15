@@ -628,11 +628,14 @@ var lmsBrowse = Vue.component("lms-browse", {
             return this.headerSubTitle ? this.headerSubTitle : undefined;
         },
         showDetailedSubtoolbar() {
-            let stdItem = this.current ? this.current.stdItem ? this.current.stdItem : this.current.altStdItem : undefined;
-            return this.wide>WIDE_NONE && this.current && undefined!=stdItem && (this.currentImage || stdItem==STD_ITEM_ONLINE_ARTIST_CATEGORY) &&
-                   (stdItem==STD_ITEM_ARTIST || stdItem==STD_ITEM_WORK_COMPOSER || stdItem==STD_ITEM_ALBUM || stdItem==STD_ITEM_WORK  || stdItem==STD_ITEM_CLASSICAL_WORKS ||
-                    (this.wide>=WIDE_COVER && (stdItem==STD_ITEM_ONLINE_ARTIST || stdItem==STD_ITEM_ONLINE_ALBUM || stdItem==STD_ITEM_ONLINE_ARTIST_CATEGORY)) ||
-                    stdItem>=STD_ITEM_MAI)
+            if (undefined!=this.detailedSubExtra || this.detailedSubBot || this.wide>=WIDE_COVER) {
+                let stdItem = this.current ? this.current.stdItem ? this.current.stdItem : this.current.altStdItem : undefined;
+                return this.wide>WIDE_NONE && this.current && undefined!=stdItem && (this.currentImage || stdItem==STD_ITEM_ONLINE_ARTIST_CATEGORY) &&
+                        (stdItem==STD_ITEM_ARTIST || stdItem==STD_ITEM_WORK_COMPOSER || stdItem==STD_ITEM_ALBUM || stdItem==STD_ITEM_WORK  || stdItem==STD_ITEM_CLASSICAL_WORKS ||
+                            (this.wide>=WIDE_COVER && (stdItem==STD_ITEM_ONLINE_ARTIST || stdItem==STD_ITEM_ONLINE_ALBUM || stdItem==STD_ITEM_ONLINE_ARTIST_CATEGORY)) ||
+                            stdItem>=STD_ITEM_MAI);
+            }
+            return false;
         },
         detailedSubTop() {
             let stdItem = this.current.stdItem ? this.current.stdItem : this.current.altStdItem;
@@ -662,6 +665,9 @@ var lmsBrowse = Vue.component("lms-browse", {
             return this.headerSubTitle
         },
         detailedSubBot() {
+            if (!this.current) {
+                return false;
+            }
             let stdItem = this.current.stdItem ? this.current.stdItem : this.current.altStdItem;
             if (stdItem==STD_ITEM_ARTIST || stdItem==STD_ITEM_WORK_COMPOSER || stdItem==STD_ITEM_WORK || stdItem==STD_ITEM_CLASSICAL_WORKS) {
                 return this.headerSubTitle

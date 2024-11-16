@@ -1846,17 +1846,13 @@ var lmsBrowse = Vue.component("lms-browse", {
             }
         },
         dragStart(which, ev) {
-            if (queryParams.party || (LMS_KIOSK_MODE && HIDE_FOR_KIOSK.has(ADD_TO_FAV_ACTION))) {
-                return;
-            }
-            if (!this.$store.state.desktopLayout && this.items[0].stdItem==STD_ITEM_PLAYLIST_TRACK && this.listSize>LMS_MAX_PLAYLIST_EDIT_SIZE) {
-                return;
-            }
-            if ((!this.$store.state.desktopLayout || !this.$store.state.showQueue) && !this.canDrop) {
-                return;
-            }
-            // For some reason drag is accessible in 'My Music'??? The following stops this...
-            if (this.grid.use && !this.isTop && !this.items[which].draggable) {
+            if (queryParams.party || (LMS_KIOSK_MODE && HIDE_FOR_KIOSK.has(ADD_TO_FAV_ACTION)) ||
+                (!this.$store.state.desktopLayout && this.items[0].stdItem==STD_ITEM_PLAYLIST_TRACK && this.listSize>LMS_MAX_PLAYLIST_EDIT_SIZE) ||
+                ((!this.$store.state.desktopLayout || !this.$store.state.showQueue) && !this.canDrop) ||
+                // For some reason drag is accessible in 'My Music'??? The following stops this...
+                (this.grid.use && !this.isTop && !this.items[which].draggable)) {
+                ev.preventDefault();
+                ev.stopPropagation();
                 return;
             }
             bus.$emit('dragActive', true);

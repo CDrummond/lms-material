@@ -1400,6 +1400,8 @@ var lmsQueue = Vue.component("lms-queue", {
         },
         dragStart(which, ev) {
             if (queryParams.party) {
+                ev.preventDefault();
+                ev.stopPropagation();
                 return;
             }
             bus.$emit('dragActive', true);

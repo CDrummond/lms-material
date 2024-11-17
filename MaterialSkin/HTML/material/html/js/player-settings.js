@@ -283,7 +283,7 @@ Vue.component('lms-player-settings', {
                 id: undefined,
                 time: undefined,
                 dow: [],
-                repeat: false,
+                repeat: true,
                 url: undefined,
                 shufflemode: undefined
             },

@@ -1,6 +1,7 @@
 5.5.1
 -----
 1. Enable repeat by default for alarms.
+2. Adjust list menu button position to cater for overlay scrollbars in Firefox.
 
 5.5.0
 -----

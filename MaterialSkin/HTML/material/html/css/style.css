@@ -121,6 +121,7 @@
  --min-grid-height:195px;
  --grid-menu-offset:0px;
  --grid-icon-size:75px;
+ --overlay-sb-pad:0px;
 }
 
 @media (max-width: 350px) {
@@ -2171,7 +2172,7 @@ div.v-rating i.primary--text, div.v-rating i.accent--text {
  height:var(--list-elem-height);
  line-height:var(--list-elem-height);
  opacity:var(--sub-opacity);
- margin-right:-28px;
+ margin-right:calc(-28px + var(--overlay-sb-pad));
  min-width:unset!important;
  margin-top:calc(19px - var(--std-font-size));
  margin-left:4px;
@@ -2181,7 +2182,7 @@ div.v-rating i.primary--text, div.v-rating i.accent--text {
  font-size:var(--small-font-size);
  font-weight:var(--bold-weight);
  opacity:1.0;
- margin-right:11px;
+ margin-right:calc(11px + var(--overlay-sb-pad));
  margin-top:2px;
  margin-left:4px;
  text-align:end;
@@ -2200,7 +2201,7 @@ div.v-rating i.primary--text, div.v-rating i.accent--text {
 .pq-rating {
  position:fixed;
  opacity:var(--sub-opacity);
- right:12px;
+ right:calc(12px + (var(--overlay-sb-pad) * 1.25));
  bottom:-4px;
 }
 
@@ -2217,7 +2218,7 @@ div.v-rating i.primary--text, div.v-rating i.accent--text {
 }
 
 .browse-time {
- margin-right:-12px;
+ margin-right:calc(-12px + var(--overlay-sb-pad));
 }
 
 .np-list-time {
@@ -3222,7 +3223,7 @@ div.v-subheader {
 }
 
 .list-btn {
- margin-right:-4px;
+ margin-right:calc(-4px + (var(--overlay-sb-pad) * 1.25));
 }
 
 .grid-btns {

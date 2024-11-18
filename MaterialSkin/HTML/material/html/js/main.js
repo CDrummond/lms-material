@@ -200,6 +200,20 @@ var app = new Vue({
         if (!appMode) {
             document.documentElement.style.setProperty('--vh', `${window.innerHeight * 0.01}px`);
         }
+
+        // Try to detect if we are on Firefox with overlay scrollbars - if so need to add padding
+        if (undefined!=navigator && undefined!=navigator.userAgent && navigator.userAgent.indexOf(" Gecko/")>0) {
+            let div = document.createElement('div');
+            div.style.overflowY = 'scroll';
+            div.style.width = '50px';
+            div.style.height = '50px';
+            document.body.append(div);
+            let sbarWidth = div.offsetWidth - div.clientWidth;
+            div.remove();
+            if (sbarWidth<=0) {
+                document.documentElement.style.setProperty('--overlay-sb-pad', '8px');
+            }
+        }
         lmsApp.keyboardShown = false;
         window.addEventListener('resize', () => {
             if (timeout) {

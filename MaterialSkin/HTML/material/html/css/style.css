@@ -2604,6 +2604,7 @@ div.v-subheader {
  margin-left:-2px;
 }
 
+.indent-left .lms-avatar .v-avatar,
 .np-info .lms-avatar .v-avatar {
  margin-left:0px!important;
 }

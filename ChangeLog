@@ -2,6 +2,8 @@
 -----
 1. Enable repeat by default for alarms.
 2. Adjust list menu button position to cater for overlay scrollbars in Firefox.
+3. Adjust volume control layout for fixed volume players in 'Manage players'
+   dialog.
 
 5.5.0
 -----

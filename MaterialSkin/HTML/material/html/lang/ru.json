@@ -671,12 +671,12 @@
 "%1 Years":"%1 Лет",
 "1 day":"1 день",
 "%1 days":"%1 дней(я)",
-"%1 %2":"",
-"1 %1":"",
-"Don't show":"",
-"Shortcuts":"",
-"Shortcuts in main menu":"",
-"Show all":"",
-"Show shortcuts to pinned home screen items in main menu. (NOTE: Radio streams and random mixes are excluded.)":"",
-"Single line only":""
+"%1 %2":"%1 %2",
+"1 %1":"1 %1",
+"Don't show":"Спрятать",
+"Shortcuts":"Ярлыки",
+"Shortcuts in main menu":"Ярлыки в главном меню",
+"Show all":"Показать все",
+"Show shortcuts to pinned home screen items in main menu. (NOTE: Radio streams and random mixes are excluded.)":"Показывать ярлыки для закрепленных элементов домашнего экрана в главном меню. (ПРИМЕЧАНИЕ: радиопотоки и случайные миксы исключены.)",
+"Single line only":"Только одной строкой"
 }

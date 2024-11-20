@@ -1293,7 +1293,7 @@ function parseBrowseResp(data, parent, options, cacheKey, parentCommand, parentG
                     } else if (param.startsWith(MSK_SORT_KEY)) {
                         msksort = param.split(':')[1];
                         sortTracks = msksort=="yearalbumtrack" ? 1 : msksort=="artisttitle" ? 2 : msksort=="yeartitle" ? 3 : 0;
-                    } else if (param=="role_id:COMPOSER" || param=="role_id:2") {
+                    } else if (param=="material_skin_compositions:1") {
                         isCompositions = true;
                     } else if (param.startsWith("material_skin_artist:")) {
                         parentArtist = param.split(':')[1];

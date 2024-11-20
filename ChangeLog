@@ -6,6 +6,7 @@
    dialog.
 4. Remove composer role restraint when checking if all artists, etc., should
    appear in track subtitle.
+5. Only show 'N Compositions' when called from 'Compositions' action.
 
 5.5.0
 -----

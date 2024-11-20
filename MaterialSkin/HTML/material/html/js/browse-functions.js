@@ -202,7 +202,7 @@ function browseActions(view, item, args, count, showRoles, showWorks, addRolesPl
             if (showRoles && showRoles.length>0) {
                 for (let r=0, rlen=showRoles.length; r<rlen; ++r) {
                     if (COMPOSER_ARTIST_ROLE==showRoles[r]) {
-                        var params = [SORT_KEY+TRACK_SORT_PLACEHOLDER, PLAYLIST_TRACK_TAGS, 'artist_id:'+args['artist_id'], 'role_id:2', 'material_skin_artist:'+args['artist']];
+                        var params = [SORT_KEY+TRACK_SORT_PLACEHOLDER, PLAYLIST_TRACK_TAGS, 'artist_id:'+args['artist_id'], 'role_id:2', 'material_skin_artist:'+args['artist'], 'material_skin_compositions:1'];
                         browseAddLibId(view, params);
                         actions.push({title:i18n('Compositions'), svg:'composer', do:{ command: ['tracks'], params: params}, weight:81, stdItem:STD_ITEM_COMPOSITION_TRACKS, udr:2});
                     } else {

@@ -4,6 +4,8 @@
 2. Adjust list menu button position to cater for overlay scrollbars in Firefox.
 3. Adjust volume control layout for fixed volume players in 'Manage players'
    dialog.
+4. Remove composer role restraint when checking if all artists, etc., should
+   appear in track subtitle.
 
 5.5.0
 -----

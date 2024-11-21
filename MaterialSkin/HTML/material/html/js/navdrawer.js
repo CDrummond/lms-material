@@ -134,6 +134,7 @@ Vue.component('lms-navdrawer', {
   </v-list>
  </div>
 
+ <div v-if="ndSettingsVisible" style="height:1px; width:100%; border-top:1px solid var(--list-item-border-color)!important;"></div>
  <div v-if="showShortcuts && ndSettingsVisible">
   <v-subheader>{{trans.shortcuts}}</v-subheader>
   <ul class="nd-shortuts" v-bind:class="{'nd-shortuts-wide':maxWidth>320, 'nd-shortuts-1':2==ndShortcuts}">
@@ -580,7 +581,7 @@ Vue.component('lms-navdrawer', {
             return this.showManagePlayers || undefined!=this.appLaunchPlayer
         },
         playerSectionsDivider() {
-            return !this.noPlayer && this.players && (this.players.length>1 || this.playerStatus.sleepTime || this.playerStatus.alarmStr)
+            return !this.ndSettingsVisible && !this.noPlayer && this.players && (this.players.length>1 || this.playerStatus.sleepTime || this.playerStatus.alarmStr)
         },
         showShortcuts() {
             return this.$store.state.ndShortcuts>0 && this.shortcuts.length>0

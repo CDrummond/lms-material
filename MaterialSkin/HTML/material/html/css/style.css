@@ -437,8 +437,8 @@ html, .mini-player {
 }
 
 .nd-header {
- height:var(--main-toolbar-height);
- width:100%;
+ border-bottom:1px solid var(--list-item-border-color)!important;
+ height:var(--sub-toolbar-height)!important;
 }
 
 .nd-main {

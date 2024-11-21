@@ -13,11 +13,9 @@ var TB_SERVER_SETTINGS = {id:3, svg:  "server-settings" };
 var TB_APP_SETTINGS    = {id:4, svg:  "app-settings" };
 var TB_INFO            = {id:5, svg:  "info" };
 var TB_MANAGE_PLAYERS  = {id:6, svg:  "player-manager" };
-var TB_APP_QUIT        = {id:7, svg:  "close" }
-var TB_START_PLAYER    = {id:8, icon: "surround_sound" }
+var TB_START_PLAYER    = {id:7, icon: "surround_sound" }
 
 const TB_CUSTOM_SETTINGS_ACTIONS = {id:20};
-const TB_CUSTOM_ACTIONS = {id:21};
 
 Vue.component('lms-navdrawer', {
     template: `
@@ -77,18 +75,11 @@ Vue.component('lms-navdrawer', {
     <v-list-tile-title>{{TB_START_PLAYER.title}}</v-list-tile-title>
    </v-list-tile>
 
-   <template v-if="showCustomActions" v-for="(action, index) in customPlayerActions">
-    <v-list-tile @click="doCustomAction(action)" v-if="undefined==action.players || action.players.indexOf(player.id)>=0">
-     <v-list-tile-avatar><v-icon v-if="action.icon">{{action.icon}}</v-icon><img v-else-if="action.svg" class="svg-img" :src="action.svg | svgIcon(darkUi)"></img></v-list-tile-avatar>
-     <v-list-tile-content><v-list-tile-title>{{action.title}}</v-list-tile-title></v-list-tile-content>
-    </v-list-tile>
-   </template>
-
    <v-divider v-if="playerSectionsDivider"></v-divider>
   </v-list>
   <v-spacer></v-spacer>
 
-  <div v-if="showShortcuts">
+  <div v-if="showShortcuts && !ndSettingsVisible">
    <v-subheader>{{trans.shortcuts}}</v-subheader>
    <ul class="nd-shortuts" v-bind:class="{'nd-shortuts-wide':maxWidth>320, 'nd-shortuts-1':2==ndShortcuts}">
     <li v-for="(item, index) in shortcuts">
@@ -100,7 +91,26 @@ Vue.component('lms-navdrawer', {
    </ul>
   </div>
 
-  <v-list class="nd-list py-0">
+  <div v-if="ndSettingsIcons && !ndSettingsVisible">
+   <v-subheader>{{TB_SETTINGS.title}}</v-subheader>
+   <ul class="nd-shortuts nd-shortuts-1" v-bind:class="{'nd-shortuts-wide':maxWidth>320}">
+    <template v-for="(item, index) in menuItems">
+     <li :title="item.title" v-if="item!=DIVIDER && !item.hdr">
+      <v-btn v-if="TB_APP_SETTINGS.id==item.id" :href="queryParams.appSettings" @click="show=false" icon class="toolbar-button">
+       <img class="svg-img" :src="TB_APP_SETTINGS.svg | svgIcon(darkUi)"></img>
+      </v-btn>
+      <v-btn v-else-if="TB_CUSTOM_SETTINGS_ACTIONS.id==item.id && undefined!=customSettingsAction" @click="doCustomSettingsAction()" icon class="toolbar-button" :title="customSettingsAction.title">
+       <v-icon v-if="customSettingsAction.icon">{{customSettingsAction.icon}}</v-icon><img v-else class="svg-img" :src="customSettingsAction.svg | svgIcon(darkUi)"></img>
+      </v-btn>
+      <v-btn v-else icon class="toolbar-button" @click="menuAction(item.id)">
+       <v-icon v-if="undefined!=item.icon">{{item.icon}}</v-icon>
+       <img v-else class="svg-img" :src="item.svg | svgIcon(darkUi)"></img>
+      </v-btn>
+     </li>
+    </template>
+   </ul>
+  </div>
+  <v-list class="nd-list py-0" v-else-if="!ndSettingsVisible">
    <template v-for="(item, index) in menuItems">
     <v-divider v-if="item===DIVIDER"></v-divider>
     <v-subheader v-else-if="item.hdr">{{item.title}}</v-subheader>
@@ -111,24 +121,72 @@ Vue.component('lms-navdrawer', {
      </v-list-tile-content>
      <v-list-tile-action v-if="item.shortcut && keyboardControl" class="menu-shortcut">{{item.shortcut}}</v-list-tile-action>
     </v-list-tile>
-    <v-list-tile :href="queryParams.appSettings" v-else-if="TB_APP_SETTINGS.id==item.id && undefined!=queryParams.appSettings" @click="show=false">
+    <v-list-tile v-else-if="TB_APP_SETTINGS.id==item.id" :href="queryParams.appSettings" @click="show=false">
      <v-list-tile-avatar><img class="svg-img" :src="TB_APP_SETTINGS.svg | svgIcon(darkUi)"></img></v-list-tile-avatar>
      <v-list-tile-content><v-list-tile-title>{{TB_APP_SETTINGS.stitle}}</v-list-tile-title></v-list-tile-content>
     </v-list-tile>
-    <v-list-tile :href="appQuit" v-else-if="TB_APP_QUIT.id==item.id" @click="show=false">
-     <v-list-tile-avatar><img class="svg-img" :src="TB_APP_QUIT.svg | svgIcon(darkUi)"></img></v-list-tile-avatar>
-     <v-list-tile-title>{{TB_APP_QUIT.title}}</v-list-tile-title>
+    <v-list-tile v-else-if="TB_CUSTOM_SETTINGS_ACTIONS.id==item.id && undefined!=customSettingsAction" @click="doCustomSettingsAction()">
+     <v-list-tile-avatar><v-icon v-if="customSettingsAction.icon">{{customSettingsAction.icon}}</v-icon><img v-else class="svg-img" :src="customSettingsAction.svg | svgIcon(darkUi)"></img></v-list-tile-avatar>
+     <v-list-tile-content><v-list-tile-title>{{customSettingsAction.title}}</v-list-tile-title></v-list-tile-content>
     </v-list-tile>
-    <template v-else-if="(TB_CUSTOM_SETTINGS_ACTIONS.id==item.id && undefined!=customSettingsActions && customSettingsActions.length>0) || (TB_CUSTOM_ACTIONS.id==item.id && undefined!=customActions && customActions.length>0)" v-for="(action, actIndex) in (TB_CUSTOM_SETTINGS_ACTIONS.id==item.id ? customSettingsActions : customActions)">
-     <v-list-tile @click="doCustomAction(action)">
-      <v-list-tile-avatar><v-icon v-if="action.icon">{{action.icon}}</v-icon><img v-else-if="action.svg" class="svg-img" :src="action.svg | svgIcon(darkUi)"></img></v-list-tile-avatar>
-      <v-list-tile-content><v-list-tile-title>{{action.title}}</v-list-tile-title></v-list-tile-content>
-     </v-list-tile>
-    </template>
    </template>
    <div class="nd-bottom"></div>
   </v-list>
  </div>
+
+ <div v-if="showShortcuts && ndSettingsVisible">
+  <v-subheader>{{trans.shortcuts}}</v-subheader>
+  <ul class="nd-shortuts" v-bind:class="{'nd-shortuts-wide':maxWidth>320, 'nd-shortuts-1':2==ndShortcuts}">
+   <li v-for="(item, index) in shortcuts">
+    <v-btn icon class="toolbar-button" @click="show=false; bus.$emit('browse-shortcut', item.id)" v-if="!homeButton || item.id!='-'">
+     <v-icon v-if="undefined!=item.icon">{{item.icon}}</v-icon>
+     <img v-else class="svg-img" :src="item.svg | svgIcon(darkUi)"></img>
+    </v-btn>
+   </li>
+  </ul>
+ </div>
+ <div v-if="ndSettingsIcons && ndSettingsVisible">
+  <v-subheader>{{TB_SETTINGS.title}}</v-subheader>
+  <ul class="nd-shortuts nd-shortuts-1" v-bind:class="{'nd-shortuts-wide':maxWidth>320}">
+   <template v-for="(item, index) in menuItems">
+    <li :title="item.title" v-if="item!=DIVIDER && !item.hdr">
+     <v-btn v-if="TB_APP_SETTINGS.id==item.id" :href="queryParams.appSettings" @click="show=false" icon class="toolbar-button">
+      <img class="svg-img" :src="TB_APP_SETTINGS.svg | svgIcon(darkUi)"></img>
+     </v-btn>
+     <v-btn v-else-if="TB_CUSTOM_SETTINGS_ACTIONS.id==item.id && undefined!=customSettingsAction" @click="doCustomSettingsAction()" icon class="toolbar-button" :title="customSettingsAction.title">
+      <v-icon v-if="customSettingsAction.icon">{{customSettingsAction.icon}}</v-icon><img v-else class="svg-img" :src="customSettingsAction.svg | svgIcon(darkUi)"></img>
+     </v-btn>
+     <v-btn v-else icon class="toolbar-button" @click="menuAction(item.id)">
+      <v-icon v-if="undefined!=item.icon">{{item.icon}}</v-icon>
+      <img v-else class="svg-img" :src="item.svg | svgIcon(darkUi)"></img>
+     </v-btn>
+    </li>
+   </template>
+  </ul>
+  <div style="height:8px"></div>
+ </div>
+ <v-list class="nd-list py-0" v-else-if="ndSettingsVisible">
+  <template v-for="(item, index) in menuItems">
+   <v-divider v-if="item===DIVIDER"></v-divider>
+   <v-subheader v-else-if="item.hdr">{{item.title}}</v-subheader>
+   <v-list-tile @click="menuAction(item.id)" v-else-if="(TB_UI_SETTINGS.id==item.id) || (TB_PLAYER_SETTINGS.id==item.id && player && connected) || (TB_SERVER_SETTINGS.id==item.id && unlockAll && connected)">
+    <v-list-tile-avatar><img v-if="item.svg" class="svg-img" :src="item.svg | svgIcon(darkUi)"><v-icon v-else>{{item.icon}}</v-icon></v-list-tile-avatar>
+    <v-list-tile-content>
+     <v-list-tile-title>{{item.stitle ? item.stitle : item.title}}</v-list-tile-title>
+    </v-list-tile-content>
+    <v-list-tile-action v-if="item.shortcut && keyboardControl" class="menu-shortcut">{{item.shortcut}}</v-list-tile-action>
+   </v-list-tile>
+   <v-list-tile v-else-if="TB_APP_SETTINGS.id==item.id" :href="queryParams.appSettings" @click="show=false">
+    <v-list-tile-avatar><img class="svg-img" :src="TB_APP_SETTINGS.svg | svgIcon(darkUi)"></img></v-list-tile-avatar>
+    <v-list-tile-content><v-list-tile-title>{{TB_APP_SETTINGS.stitle}}</v-list-tile-title></v-list-tile-content>
+   </v-list-tile>
+   <v-list-tile v-else-if="TB_CUSTOM_SETTINGS_ACTIONS.id==item.id && undefined!=customSettingsAction" @click="doCustomSettingsAction()">
+    <v-list-tile-avatar><v-icon v-if="customSettingsAction.icon">{{customSettingsAction.icon}}</v-icon><img v-else class="svg-img" :src="customSettingsAction.svg | svgIcon(darkUi)"></img></v-list-tile-avatar>
+    <v-list-tile-content><v-list-tile-title>{{customSettingsAction.title}}</v-list-tile-title></v-list-tile-content>
+   </v-list-tile>
+  </template>
+  <div class="nd-bottom"></div>
+ </v-list>
 </v-navigation-drawer>
 `,
     props: [],
@@ -138,11 +196,8 @@ Vue.component('lms-navdrawer', {
             trans:{groupPlayers:undefined, standardPlayers:undefined, connectionLost:undefined, updatesAvailable:undefined, restartRequired:undefined, shortcuts:undefined },
             menuItems: [],
             shortcuts: [],
-            customActions:undefined,
-            customSettingsActions:undefined,
-            customPlayerActions:undefined,
+            customSettingsAction:undefined,
             playerStatus: { ison: 1, isplaying: false, volume: 0, synced: false, sleepTime: undefined, count:0, alarm: undefined, alarmStr: undefined },
-            appQuit: queryParams.appQuit,
             appLaunchPlayer: queryParams.appLaunchPlayer,
             maxWidth: 300,
             connected: true,
@@ -186,15 +241,12 @@ Vue.component('lms-navdrawer', {
             this.maxWidth = window.innerWidth>500 ? 400 : 300;
         }.bind(this));
         bus.$on('customActions', function() {
-            if (undefined==this.customActions) {
-                this.customActions = getCustomActions(undefined, this.$store.state.unlockAll);
-                this.customSettingsActions = getCustomActions("settings", this.$store.state.unlockAll);
-                this.customPlayerActions = getCustomActions("players", this.$store.state.unlockAll);
+            if (undefined==this.customSettingsAction) {
+                this.updateCustomSettingsAction();
             }
         }.bind(this));
         bus.$on('lockChanged', function() {
-            this.customActions = getCustomActions(undefined, this.$store.state.unlockAll);
-            this.customSettingsActions = getCustomActions("settings", this.$store.state.unlockAll);
+            this.updateCustomSettingsAction();
         }.bind(this));
         bus.$on('closeMenu', function() {
             this.show = false;
@@ -225,8 +277,7 @@ Vue.component('lms-navdrawer', {
             }
         }.bind(this));
 
-        this.customActions = getCustomActions(undefined, this.$store.state.unlockAll);
-        this.customSettingsActions = getCustomActions("settings", this.$store.state.unlockAll);
+        this.updateCustomSettingsAction();
 
         if (!IS_MOBILE && !LMS_KIOSK_MODE) {
             bindKey(LMS_UI_SETTINGS_KEYBOARD, 'mod');
@@ -288,26 +339,25 @@ Vue.component('lms-navdrawer', {
             TB_MANAGE_PLAYERS.shortcut=shortcutStr(LMS_MANAGEPLAYERS_KEYBOARD);
             TB_APP_SETTINGS.title=i18n('Application settings');
             TB_APP_SETTINGS.stitle=i18n('Application');
-            TB_APP_QUIT.title=i18n('Quit');
             TB_START_PLAYER.title=i18n('Start player');
             this.trans = { groupPlayers:i18n("Group Players"), standardPlayers:i18n("Standard Players"), connectionLost:i18n('Server connection lost!'),
                            updatesAvailable:i18n('Updates available'), restartRequired:i18n('Restart required'), shortcuts:i18n('Shortcuts') };
             if (LMS_KIOSK_MODE) {
-                this.menuItems = LMS_KIOSK_MODE==2
-                                   ? [TB_SETTINGS, TB_CUSTOM_SETTINGS_ACTIONS, TB_CUSTOM_ACTIONS]
-                                   : [TB_CUSTOM_SETTINGS_ACTIONS, TB_CUSTOM_ACTIONS]
+                this.menuItems = []
             } else {
                 if (queryParams.party) {
-                    this.menuItems = [TB_APP_SETTINGS, TB_UI_SETTINGS];
+                    this.menuItems = queryParams.appSettings ? [TB_SETTINGS, TB_APP_SETTINGS, TB_UI_SETTINGS] : [TB_SETTINGS, TB_UI_SETTINGS];
                 } else {
-                    this.menuItems = [TB_SETTINGS, TB_APP_SETTINGS, TB_UI_SETTINGS, TB_PLAYER_SETTINGS, TB_SERVER_SETTINGS, TB_CUSTOM_SETTINGS_ACTIONS];
-                    this.menuItems=this.menuItems.concat([TB_CUSTOM_ACTIONS]);
-                }
-                if (queryParams.appQuit) {
-                    this.menuItems.push(DIVIDER)
-                    this.menuItems.push(TB_APP_QUIT)
+                    this.menuItems = queryParams.appSettings
+                        ? [TB_SETTINGS, TB_APP_SETTINGS, TB_UI_SETTINGS, TB_PLAYER_SETTINGS, TB_SERVER_SETTINGS, TB_CUSTOM_SETTINGS_ACTIONS]
+                        : [TB_SETTINGS, TB_UI_SETTINGS, TB_PLAYER_SETTINGS, TB_SERVER_SETTINGS, TB_CUSTOM_SETTINGS_ACTIONS]
                 }
             }
+        },
+        updateCustomSettingsAction() {
+            let actions = getCustomActions("settings", this.$store.state.unlockAll);
+            this.customSettingsAction = undefined!=actions && actions.length==1 && (undefined!=actions[0].icon || undefined!=actions[0].svg)
+                ? this.customSettingsAction=actions[0] : undefined;
         },
         updateShortcuts(view) {
             this.shortcuts = [];
@@ -441,9 +491,9 @@ Vue.component('lms-navdrawer', {
                 window.open("https://lyrion.org", "_blank").focus();
             }
         },
-        doCustomAction(action) {
+        doCustomSettingsAction() {
             this.show = false;
-            performCustomAction(action, this.$store.state.player);
+            performCustomAction(this.customSettingsAction, this.$store.state.player);
         },
         cancelSleepTimer() {
             this.playerStatus.sleepTime = undefined;
@@ -526,11 +576,8 @@ Vue.component('lms-navdrawer', {
         showManagePlayers() {
             return this.connected && ((this.players && this.players.length>1) || this.otherPlayers.length>0) && !queryParams.party
         },
-        showCustomActions() {
-            return !this.noPlayer && this.customPlayerActions && this.customPlayerActions.length>0
-        },
         playersDivider() {
-            return this.showManagePlayers || undefined!=this.appLaunchPlayer || this.showCustomActions
+            return this.showManagePlayers || undefined!=this.appLaunchPlayer
         },
         playerSectionsDivider() {
             return !this.noPlayer && this.players && (this.players.length>1 || this.playerStatus.sleepTime || this.playerStatus.alarmStr)
@@ -540,6 +587,12 @@ Vue.component('lms-navdrawer', {
         },
         ndShortcuts() {
             return this.$store.state.ndShortcuts
+        },
+        ndSettingsIcons() {
+            return this.$store.state.ndSettingsIcons
+        },
+        ndSettingsVisible() {
+            return this.$store.state.ndSettingsVisible
         },
         homeButton() {
             return this.$store.state.homeButton

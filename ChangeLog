@@ -4,6 +4,11 @@
 2. Move 'Information' into navigation drawer titlebar.
 3. Custom MAI icons.
 4. Use block 'i' icon for 'Information' in navigation drawer titlebar.
+5. Add option to show settings actions as a row of icons.
+6. Add option to always show settings (and shortcut) actions.
+7. De-support 'players' and 'system' sections from custom actions.
+8. Only single 'settings' custom action supported, and must have icon or svg
+   defined.
 
 5.5.1
 -----

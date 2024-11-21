@@ -436,8 +436,22 @@ html, .mini-player {
  margin-right:3px !important;
 }
 
+.nd-header {
+ height:var(--main-toolbar-height);
+ width:100%;
+}
+
+.nd-main {
+ width: 100%;
+ height: 100%;
+ overflow-y: auto;
+ overflow-x: hidden;
+ display: flex;
+ flex-direction: column;
+}
+
 .nd-top {
- height:var(--top-pad)!important;
+ min-height:var(--top-pad)!important;
 }
 
 .nd-bottom {

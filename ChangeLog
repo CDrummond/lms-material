@@ -1,3 +1,8 @@
+5.6.0
+-----
+1. Keep navigation drawer titlebar visible, and only scroll contents.
+2. Move 'Information' into navigation drawer titlebar.
+
 5.5.1
 -----
 1. Enable repeat by default for alarms.

@@ -21,106 +21,115 @@ const TB_CUSTOM_ACTIONS = {id:21};
 
 Vue.component('lms-navdrawer', {
     template: `
-<v-navigation-drawer v-model="show" absolute temporary :width="maxWidth" style="display:flex;flex-direction:column" id="nd-list">
- <v-list class="nd-list py-0">
-  <div class="nd-top"></div>
-  <div v-if="windowControlsOnLeft" style="height:var(--main-toolbar-height); width:100%"></div>
+<v-navigation-drawer v-model="show" app temporary :width="maxWidth" style="display:flex;flex-direction:column" id="nd-list">
+ <div class="nd-top"></div>
+ <div style="nd-header">
   <v-list-tile @click.prevent="show=false" style="margin-top:-2px">
    <v-list-tile-avatar><v-btn icon flat @click="show=false"><v-icon>arrow_back<v-icon></v-btn></v-list-tile-avatar>
    <div class="lyrion-logo" v-longpress:nomove="clickLogo"><img :src="'lyrion' | svgIcon(darkUi)"></img></div>
-  </v-list-tile>
-  <v-list-tile v-if="!connected" @click="bus.$emit('showError', undefined, trans.connectionLost)">
-   <v-list-tile-avatar><v-icon class="red">error</v-icon></v-list-tile-avatar>
-   <v-list-tile-content><v-list-tile-title>{{trans.connectionLost}}</v-list-tile-title></v-list-tile-content>
-  </v-list-tile>
-  <template v-for="(item, index) in players" v-if="connected">
-   <v-subheader v-if="index==0 && !item.isgroup && players[players.length-1].isgroup">{{trans.standardPlayers}}</v-subheader>
-   <v-subheader v-else-if="index>0 && item.isgroup && !players[index-1].isgroup">{{trans.groupPlayers}}</v-subheader>
-   <v-list-tile @click="setPlayer(item.id)" v-bind:class="{'nd-active-player':player && item.id === player.id}" :id="'nd-player-'+index">
-    <v-list-tile-avatar v-longpress:nomove="syncPlayer" :id="index+'-icon'">
-     <v-icon v-if="item.isplaying" class="playing-badge">play_arrow</v-icon>
-     <v-icon v-if="item.icon.icon">{{item.icon.icon}}</v-icon><img v-else class="svg-img" :src="item.icon.svg | svgIcon(darkUi)"></img>
-    </v-list-tile-avatar>
-    <v-list-tile-content>
-     <v-list-tile-title>{{item.name}}</v-list-tile-title>
-    </v-list-tile-content>
-     <v-list-tile-action v-if="index<10 && keyboardControl" class="menu-shortcut" v-bind:class="{'menu-shortcut-player':item.canpoweroff,'menu-shortcut-player-apple':IS_APPLE && item.canpoweroff}">{{index|playerShortcut}}</v-list-tile-action>
-     <v-list-tile-action>
-      <v-btn v-if="item.canpoweroff" icon style="float:right" v-longpress:nomove="togglePower" :id="index+'-power-btn'" :title="(item.id==player.id && playerStatus.ison) || item.ison ? i18n('Switch off %1', item.name) : i18n('Switch on %1', item.name)"><v-icon v-bind:class="{'dimmed': (item.id==player.id ? !playerStatus.ison : !item.ison)}">power_settings_new</v-icon></v-btn>
-     </v-list-tile-action>
-   </v-list-tile>
-   <v-list-tile v-if="connected && player && item.id === player.id && (playerStatus.sleepTime || playerStatus.alarmStr)" class="hide-for-mini status">
-    <div v-if="playerStatus.sleepTime" class="link-item" @click="show=false; bus.$emit('dlg.open', 'sleep', player)"><v-icon class="player-status-icon">hotel</v-icon> {{playerStatus.sleepTime | displayTime}}</div>
-    <div v-if="playerStatus.alarmStr" class="link-item" @click="show=false; bus.$emit('dlg.open', 'playersettings', undefined, 'alarms')"><v-icon class="player-status-icon">alarm</v-icon> {{playerStatus.alarmStr}}</div>
-   </v-list-tile>
-  </template>
-
-  <v-divider v-if="playersDivider" class="hide-for-mini"></v-divider>
-
-  <v-list-tile v-if="showManagePlayers" v-longpress:nomove="managePlayers" class="hide-for-mini noselect">
-   <v-list-tile-avatar><img class="svg-img" :src="TB_MANAGE_PLAYERS.svg | svgIcon(darkUi)"></img></v-list-tile-avatar>
-   <v-list-tile-content><v-list-tile-title>{{TB_MANAGE_PLAYERS.title}}</v-list-tile-title></v-list-tile-content>
-   <v-list-tile-action v-if="TB_MANAGE_PLAYERS.shortcut && keyboardControl" class="menu-shortcut player-menu-shortcut">{{TB_MANAGE_PLAYERS.shortcut}}</v-list-tile-action>
-  </v-list-tile>
-
-  <v-list-tile :href="appLaunchPlayer" v-if="undefined!=appLaunchPlayer" @click="show=false">
-   <v-list-tile-avatar><v-icon>{{TB_START_PLAYER.icon}}</v-icon></v-list-tile-avatar>
-   <v-list-tile-title>{{TB_START_PLAYER.title}}</v-list-tile-title>
-  </v-list-tile>
-
-  <template v-if="showCustomActions" v-for="(action, index) in customPlayerActions">
-   <v-list-tile @click="doCustomAction(action)" v-if="undefined==action.players || action.players.indexOf(player.id)>=0">
-    <v-list-tile-avatar><v-icon v-if="action.icon">{{action.icon}}</v-icon><img v-else-if="action.svg" class="svg-img" :src="action.svg | svgIcon(darkUi)"></img></v-list-tile-avatar>
-    <v-list-tile-content><v-list-tile-title>{{action.title}}</v-list-tile-title></v-list-tile-content>
-   </v-list-tile>
-  </template>
-
-  <v-divider v-if="playerSectionsDivider"></v-divider>
- </v-list>
- <v-spacer></v-spacer>
-
- <div v-if="showShortcuts">
-  <v-subheader>{{trans.shortcuts}}</v-subheader>
-  <ul class="nd-shortuts" v-bind:class="{'nd-shortuts-wide':maxWidth>320, 'nd-shortuts-1':2==ndShortcuts}">
-   <li v-for="(item, index) in shortcuts">
-    <v-btn icon class="toolbar-button" @click="show=false; bus.$emit('browse-shortcut', item.id)" v-if="!homeButton || item.id!='-'">
-     <v-icon v-if="undefined!=item.icon">{{item.icon}}</v-icon>
-     <img v-else class="svg-img" :src="item.svg | svgIcon(darkUi)"></img>
+   <v-list-tile-action>
+    <v-btn icon @click="menuAction(TB_INFO.id)" style="position:absolute;right:16px" :title="updatesAvailable ? trans.updatesAvailable : restartRequired ? trans.restartRequired : TB_INFO.title">
+     <img v-if="updatesAvailable" class="svg-img" :src="'update' | svgIcon(darkUi, true)"></img>
+     <img v-else-if="restartRequired" class="svg-img" :src="'restart' | svgIcon(darkUi, true)">
+     <img v-else-if="TB_INFO.svg" class="svg-img" :src="TB_INFO.svg | svgIcon(darkUi)">
+     <v-icon v-else>{{TB_INFO.icon}}</v-icon>
     </v-btn>
-   </li>
-  </ul>
+   </v-list-tile-action>
+  </v-list-tile>
  </div>
+ <div class="nd-main">
+  <v-list class="nd-list py-0">
+   <v-list-tile v-if="!connected" @click="bus.$emit('showError', undefined, trans.connectionLost)">
+    <v-list-tile-avatar><v-icon class="red">error</v-icon></v-list-tile-avatar>
+    <v-list-tile-content><v-list-tile-title>{{trans.connectionLost}}</v-list-tile-title></v-list-tile-content>
+   </v-list-tile>
+   <template v-for="(item, index) in players" v-if="connected">
+    <v-subheader v-if="index==0 && !item.isgroup && players[players.length-1].isgroup">{{trans.standardPlayers}}</v-subheader>
+    <v-subheader v-else-if="index>0 && item.isgroup && !players[index-1].isgroup">{{trans.groupPlayers}}</v-subheader>
+    <v-list-tile @click="setPlayer(item.id)" v-bind:class="{'nd-active-player':player && item.id === player.id}" :id="'nd-player-'+index">
+     <v-list-tile-avatar v-longpress:nomove="syncPlayer" :id="index+'-icon'">
+      <v-icon v-if="item.isplaying" class="playing-badge">play_arrow</v-icon>
+      <v-icon v-if="item.icon.icon">{{item.icon.icon}}</v-icon><img v-else class="svg-img" :src="item.icon.svg | svgIcon(darkUi)"></img>
+     </v-list-tile-avatar>
+     <v-list-tile-content>
+      <v-list-tile-title>{{item.name}}</v-list-tile-title>
+     </v-list-tile-content>
+      <v-list-tile-action v-if="index<10 && keyboardControl" class="menu-shortcut" v-bind:class="{'menu-shortcut-player':item.canpoweroff,'menu-shortcut-player-apple':IS_APPLE && item.canpoweroff}">{{index|playerShortcut}}</v-list-tile-action>
+      <v-list-tile-action>
+       <v-btn v-if="item.canpoweroff" icon style="float:right" v-longpress:nomove="togglePower" :id="index+'-power-btn'" :title="(item.id==player.id && playerStatus.ison) || item.ison ? i18n('Switch off %1', item.name) : i18n('Switch on %1', item.name)"><v-icon v-bind:class="{'dimmed': (item.id==player.id ? !playerStatus.ison : !item.ison)}">power_settings_new</v-icon></v-btn>
+      </v-list-tile-action>
+    </v-list-tile>
+    <v-list-tile v-if="connected && player && item.id === player.id && (playerStatus.sleepTime || playerStatus.alarmStr)" class="hide-for-mini status">
+     <div v-if="playerStatus.sleepTime" class="link-item" @click="show=false; bus.$emit('dlg.open', 'sleep', player)"><v-icon class="player-status-icon">hotel</v-icon> {{playerStatus.sleepTime | displayTime}}</div>
+     <div v-if="playerStatus.alarmStr" class="link-item" @click="show=false; bus.$emit('dlg.open', 'playersettings', undefined, 'alarms')"><v-icon class="player-status-icon">alarm</v-icon> {{playerStatus.alarmStr}}</div>
+    </v-list-tile>
+   </template>
 
- <v-list class="nd-list py-0">
-  <template v-for="(item, index) in menuItems">
-   <v-divider v-if="item===DIVIDER"></v-divider>
-   <v-subheader v-else-if="item.hdr">{{item.title}}</v-subheader>
-   <v-list-tile @click="menuAction(item.id)" v-else-if="(TB_UI_SETTINGS.id==item.id) || (TB_PLAYER_SETTINGS.id==item.id && player && connected) || (TB_SERVER_SETTINGS.id==item.id && unlockAll && connected) || (TB_INFO.id==item.id)">
-    <v-list-tile-avatar><img v-if="TB_INFO.id==item.id && updatesAvailable" class="svg-img" :src="'update' | svgIcon(darkUi, true)"></img><img v-else-if="TB_INFO.id==item.id && restartRequired" class="svg-img" :src="'restart' | svgIcon(darkUi, true)"><img v-else-if="item.svg" class="svg-img" :src="item.svg | svgIcon(darkUi)"><v-icon v-else>{{item.icon}}</v-icon></v-list-tile-avatar>
-    <v-list-tile-content>
-     <v-list-tile-title>{{item.stitle ? item.stitle : item.title}}</v-list-tile-title>
-     <v-list-tile-sub-title v-if="TB_INFO.id==item.id && updatesAvailable">{{trans.updatesAvailable}}</v-list-tile-sub-title>
-     <v-list-tile-sub-title v-else-if="TB_INFO.id==item.id && restartRequired">{{trans.restartRequired}}</v-list-tile-sub-title>
-    </v-list-tile-content>
-    <v-list-tile-action v-if="item.shortcut && keyboardControl" class="menu-shortcut">{{item.shortcut}}</v-list-tile-action>
+   <v-divider v-if="playersDivider" class="hide-for-mini"></v-divider>
+
+   <v-list-tile v-if="showManagePlayers" v-longpress:nomove="managePlayers" class="hide-for-mini noselect">
+    <v-list-tile-avatar><img class="svg-img" :src="TB_MANAGE_PLAYERS.svg | svgIcon(darkUi)"></img></v-list-tile-avatar>
+    <v-list-tile-content><v-list-tile-title>{{TB_MANAGE_PLAYERS.title}}</v-list-tile-title></v-list-tile-content>
+    <v-list-tile-action v-if="TB_MANAGE_PLAYERS.shortcut && keyboardControl" class="menu-shortcut player-menu-shortcut">{{TB_MANAGE_PLAYERS.shortcut}}</v-list-tile-action>
    </v-list-tile>
-   <v-list-tile :href="queryParams.appSettings" v-else-if="TB_APP_SETTINGS.id==item.id && undefined!=queryParams.appSettings" @click="show=false">
-    <v-list-tile-avatar><img class="svg-img" :src="TB_APP_SETTINGS.svg | svgIcon(darkUi)"></img></v-list-tile-avatar>
-    <v-list-tile-content><v-list-tile-title>{{TB_APP_SETTINGS.stitle}}</v-list-tile-title></v-list-tile-content>
+
+   <v-list-tile :href="appLaunchPlayer" v-if="undefined!=appLaunchPlayer" @click="show=false">
+    <v-list-tile-avatar><v-icon>{{TB_START_PLAYER.icon}}</v-icon></v-list-tile-avatar>
+    <v-list-tile-title>{{TB_START_PLAYER.title}}</v-list-tile-title>
    </v-list-tile>
-   <v-list-tile :href="appQuit" v-else-if="TB_APP_QUIT.id==item.id" @click="show=false">
-    <v-list-tile-avatar><img class="svg-img" :src="TB_APP_QUIT.svg | svgIcon(darkUi)"></img></v-list-tile-avatar>
-    <v-list-tile-title>{{TB_APP_QUIT.title}}</v-list-tile-title>
-   </v-list-tile>
-   <template v-else-if="(TB_CUSTOM_SETTINGS_ACTIONS.id==item.id && undefined!=customSettingsActions && customSettingsActions.length>0) || (TB_CUSTOM_ACTIONS.id==item.id && undefined!=customActions && customActions.length>0)" v-for="(action, actIndex) in (TB_CUSTOM_SETTINGS_ACTIONS.id==item.id ? customSettingsActions : customActions)">
-    <v-list-tile @click="doCustomAction(action)">
+
+   <template v-if="showCustomActions" v-for="(action, index) in customPlayerActions">
+    <v-list-tile @click="doCustomAction(action)" v-if="undefined==action.players || action.players.indexOf(player.id)>=0">
      <v-list-tile-avatar><v-icon v-if="action.icon">{{action.icon}}</v-icon><img v-else-if="action.svg" class="svg-img" :src="action.svg | svgIcon(darkUi)"></img></v-list-tile-avatar>
      <v-list-tile-content><v-list-tile-title>{{action.title}}</v-list-tile-title></v-list-tile-content>
     </v-list-tile>
    </template>
-  </template>
-  <div class="nd-bottom"></div>
- </v-list>
+
+   <v-divider v-if="playerSectionsDivider"></v-divider>
+  </v-list>
+  <v-spacer></v-spacer>
+
+  <div v-if="showShortcuts">
+   <v-subheader>{{trans.shortcuts}}</v-subheader>
+   <ul class="nd-shortuts" v-bind:class="{'nd-shortuts-wide':maxWidth>320, 'nd-shortuts-1':2==ndShortcuts}">
+    <li v-for="(item, index) in shortcuts">
+     <v-btn icon class="toolbar-button" @click="show=false; bus.$emit('browse-shortcut', item.id)" v-if="!homeButton || item.id!='-'">
+      <v-icon v-if="undefined!=item.icon">{{item.icon}}</v-icon>
+      <img v-else class="svg-img" :src="item.svg | svgIcon(darkUi)"></img>
+     </v-btn>
+    </li>
+   </ul>
+  </div>
+
+  <v-list class="nd-list py-0">
+   <template v-for="(item, index) in menuItems">
+    <v-divider v-if="item===DIVIDER"></v-divider>
+    <v-subheader v-else-if="item.hdr">{{item.title}}</v-subheader>
+    <v-list-tile @click="menuAction(item.id)" v-else-if="(TB_UI_SETTINGS.id==item.id) || (TB_PLAYER_SETTINGS.id==item.id && player && connected) || (TB_SERVER_SETTINGS.id==item.id && unlockAll && connected)">
+     <v-list-tile-avatar><img v-if="item.svg" class="svg-img" :src="item.svg | svgIcon(darkUi)"><v-icon v-else>{{item.icon}}</v-icon></v-list-tile-avatar>
+     <v-list-tile-content>
+      <v-list-tile-title>{{item.stitle ? item.stitle : item.title}}</v-list-tile-title>
+     </v-list-tile-content>
+     <v-list-tile-action v-if="item.shortcut && keyboardControl" class="menu-shortcut">{{item.shortcut}}</v-list-tile-action>
+    </v-list-tile>
+    <v-list-tile :href="queryParams.appSettings" v-else-if="TB_APP_SETTINGS.id==item.id && undefined!=queryParams.appSettings" @click="show=false">
+     <v-list-tile-avatar><img class="svg-img" :src="TB_APP_SETTINGS.svg | svgIcon(darkUi)"></img></v-list-tile-avatar>
+     <v-list-tile-content><v-list-tile-title>{{TB_APP_SETTINGS.stitle}}</v-list-tile-title></v-list-tile-content>
+    </v-list-tile>
+    <v-list-tile :href="appQuit" v-else-if="TB_APP_QUIT.id==item.id" @click="show=false">
+     <v-list-tile-avatar><img class="svg-img" :src="TB_APP_QUIT.svg | svgIcon(darkUi)"></img></v-list-tile-avatar>
+     <v-list-tile-title>{{TB_APP_QUIT.title}}</v-list-tile-title>
+    </v-list-tile>
+    <template v-else-if="(TB_CUSTOM_SETTINGS_ACTIONS.id==item.id && undefined!=customSettingsActions && customSettingsActions.length>0) || (TB_CUSTOM_ACTIONS.id==item.id && undefined!=customActions && customActions.length>0)" v-for="(action, actIndex) in (TB_CUSTOM_SETTINGS_ACTIONS.id==item.id ? customSettingsActions : customActions)">
+     <v-list-tile @click="doCustomAction(action)">
+      <v-list-tile-avatar><v-icon v-if="action.icon">{{action.icon}}</v-icon><img v-else-if="action.svg" class="svg-img" :src="action.svg | svgIcon(darkUi)"></img></v-list-tile-avatar>
+      <v-list-tile-content><v-list-tile-title>{{action.title}}</v-list-tile-title></v-list-tile-content>
+     </v-list-tile>
+    </template>
+   </template>
+   <div class="nd-bottom"></div>
+  </v-list>
+ </div>
 </v-navigation-drawer>
 `,
     props: [],
@@ -290,10 +299,10 @@ Vue.component('lms-navdrawer', {
                                    : [TB_CUSTOM_SETTINGS_ACTIONS, TB_CUSTOM_ACTIONS]
             } else {
                 if (queryParams.party) {
-                    this.menuItems = [TB_APP_SETTINGS, TB_UI_SETTINGS, DIVIDER, TB_INFO];
+                    this.menuItems = [TB_APP_SETTINGS, TB_UI_SETTINGS];
                 } else {
                     this.menuItems = [TB_SETTINGS, TB_APP_SETTINGS, TB_UI_SETTINGS, TB_PLAYER_SETTINGS, TB_SERVER_SETTINGS, TB_CUSTOM_SETTINGS_ACTIONS, DIVIDER];
-                    this.menuItems=this.menuItems.concat([TB_INFO, TB_CUSTOM_ACTIONS]);
+                    this.menuItems=this.menuItems.concat([TB_CUSTOM_ACTIONS]);
                 }
                 if (queryParams.appQuit) {
                     this.menuItems.push(TB_APP_QUIT)

@@ -11,7 +11,7 @@ var TB_UI_SETTINGS     = {id:1, svg:  "ui-settings" };
 var TB_PLAYER_SETTINGS = {id:2, svg:  "player-settings" };
 var TB_SERVER_SETTINGS = {id:3, svg:  "server-settings" };
 var TB_APP_SETTINGS    = {id:4, svg:  "app-settings" };
-var TB_INFO            = {id:5, icon: "info" };
+var TB_INFO            = {id:5, svg:  "info" };
 var TB_MANAGE_PLAYERS  = {id:6, svg:  "player-manager" };
 var TB_APP_QUIT        = {id:7, svg:  "close" }
 var TB_START_PLAYER    = {id:8, icon: "surround_sound" }
@@ -31,8 +31,7 @@ Vue.component('lms-navdrawer', {
     <v-btn icon @click="menuAction(TB_INFO.id)" style="position:absolute;right:16px" :title="updatesAvailable ? trans.updatesAvailable : restartRequired ? trans.restartRequired : TB_INFO.title">
      <img v-if="updatesAvailable" class="svg-img" :src="'update' | svgIcon(darkUi, true)"></img>
      <img v-else-if="restartRequired" class="svg-img" :src="'restart' | svgIcon(darkUi, true)">
-     <img v-else-if="TB_INFO.svg" class="svg-img" :src="TB_INFO.svg | svgIcon(darkUi)">
-     <v-icon v-else>{{TB_INFO.icon}}</v-icon>
+     <img v-else class="svg-img" :src="TB_INFO.svg | svgIcon(darkUi)">
     </v-btn>
    </v-list-tile-action>
   </v-list-tile>

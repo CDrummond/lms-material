@@ -294,16 +294,17 @@ Vue.component('lms-navdrawer', {
                            updatesAvailable:i18n('Updates available'), restartRequired:i18n('Restart required'), shortcuts:i18n('Shortcuts') };
             if (LMS_KIOSK_MODE) {
                 this.menuItems = LMS_KIOSK_MODE==2
-                                   ? [TB_SETTINGS, TB_CUSTOM_SETTINGS_ACTIONS, DIVIDER, TB_CUSTOM_ACTIONS]
+                                   ? [TB_SETTINGS, TB_CUSTOM_SETTINGS_ACTIONS, TB_CUSTOM_ACTIONS]
                                    : [TB_CUSTOM_SETTINGS_ACTIONS, TB_CUSTOM_ACTIONS]
             } else {
                 if (queryParams.party) {
                     this.menuItems = [TB_APP_SETTINGS, TB_UI_SETTINGS];
                 } else {
-                    this.menuItems = [TB_SETTINGS, TB_APP_SETTINGS, TB_UI_SETTINGS, TB_PLAYER_SETTINGS, TB_SERVER_SETTINGS, TB_CUSTOM_SETTINGS_ACTIONS, DIVIDER];
+                    this.menuItems = [TB_SETTINGS, TB_APP_SETTINGS, TB_UI_SETTINGS, TB_PLAYER_SETTINGS, TB_SERVER_SETTINGS, TB_CUSTOM_SETTINGS_ACTIONS];
                     this.menuItems=this.menuItems.concat([TB_CUSTOM_ACTIONS]);
                 }
                 if (queryParams.appQuit) {
+                    this.menuItems.push(DIVIDER)
                     this.menuItems.push(TB_APP_QUIT)
                 }
             }

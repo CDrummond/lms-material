@@ -102,7 +102,7 @@ Vue.component('lms-navdrawer', {
       <v-btn v-else-if="TB_CUSTOM_SETTINGS_ACTIONS.id==item.id && undefined!=customSettingsAction" @click="doCustomSettingsAction()" icon class="toolbar-button" :title="customSettingsAction.title">
        <v-icon v-if="customSettingsAction.icon">{{customSettingsAction.icon}}</v-icon><img v-else class="svg-img" :src="customSettingsAction.svg | svgIcon(darkUi)"></img>
       </v-btn>
-      <v-btn v-else icon class="toolbar-button" @click="menuAction(item.id)">
+      <v-btn v-else-if="TB_CUSTOM_SETTINGS_ACTIONS.id!=item.id" icon class="toolbar-button" @click="menuAction(item.id)">
        <v-icon v-if="undefined!=item.icon">{{item.icon}}</v-icon>
        <img v-else class="svg-img" :src="item.svg | svgIcon(darkUi)"></img>
       </v-btn>
@@ -157,7 +157,7 @@ Vue.component('lms-navdrawer', {
      <v-btn v-else-if="TB_CUSTOM_SETTINGS_ACTIONS.id==item.id && undefined!=customSettingsAction" @click="doCustomSettingsAction()" icon class="toolbar-button" :title="customSettingsAction.title">
       <v-icon v-if="customSettingsAction.icon">{{customSettingsAction.icon}}</v-icon><img v-else class="svg-img" :src="customSettingsAction.svg | svgIcon(darkUi)"></img>
      </v-btn>
-     <v-btn v-else icon class="toolbar-button" @click="menuAction(item.id)">
+     <v-btn v-else-if="TB_CUSTOM_SETTINGS_ACTIONS.id!=item.id" icon class="toolbar-button" @click="menuAction(item.id)">
       <v-icon v-if="undefined!=item.icon">{{item.icon}}</v-icon>
       <img v-else class="svg-img" :src="item.svg | svgIcon(darkUi)"></img>
      </v-btn>
@@ -358,7 +358,7 @@ Vue.component('lms-navdrawer', {
         updateCustomSettingsAction() {
             let actions = getCustomActions("settings", this.$store.state.unlockAll);
             this.customSettingsAction = undefined!=actions && actions.length==1 && (undefined!=actions[0].icon || undefined!=actions[0].svg)
-                ? this.customSettingsAction=actions[0] : undefined;
+                ? actions[0] : undefined;
         },
         updateShortcuts(view) {
             this.shortcuts = [];

@@ -455,7 +455,7 @@ html, .mini-player {
 }
 
 .nd-bottom {
- height:var(--bottom-pad)!important;
+ height:calc(8px + var(--bottom-pad))!important;
 }
 
 .nd-shortuts {

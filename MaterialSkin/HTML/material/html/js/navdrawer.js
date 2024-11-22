@@ -109,6 +109,7 @@ Vue.component('lms-navdrawer', {
      </li>
     </template>
    </ul>
+   <div class="nd-bottom"></div>
   </div>
   <v-list class="nd-list py-0" v-else-if="!ndSettingsVisible">
    <template v-for="(item, index) in menuItems">
@@ -164,7 +165,7 @@ Vue.component('lms-navdrawer', {
     </li>
    </template>
   </ul>
-  <div style="height:8px"></div>
+  <div class="nd-bottom"></div>
  </div>
  <v-list class="nd-list py-0" v-else-if="ndSettingsVisible">
   <template v-for="(item, index) in menuItems">

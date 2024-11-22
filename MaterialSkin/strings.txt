@@ -1,5 +1,6 @@
 MATERIAL_SKIN
 	CS	Material Skin
+	DA	Material Skin
 	DE	Material-Skin
 	EN	Material Skin
 	IT	Material Skin
@@ -10,11 +11,13 @@ MATERIAL_SKIN
 
 MATERIALPARTY_SKIN
 	CS	Material Skin (Párty)
+	DA	Material Skin (Fest)
 	EN	Material Skin (Party)
 	ZH_CN	Material主题 (Party)
 
 PLUGIN_MATERIAL_SKIN
 	CS	Vzhled "Material Skin", vhodný pro mobilní použití.
+	DA	Web-skin i Material stil, optimeret for mobiltelefonbrug. 
 	DE	Web-Skin im Material-Stil, für mobile Nutzung optimiert.
 	EN	Material themed skin, suitable for mobile use.
 	IT	Skin a tema Material, adatta per dispositivi mobili.
@@ -26,6 +29,7 @@ PLUGIN_MATERIAL_SKIN
 
 PLUGIN_MATERIAL_SKIN_GENRES_LIST_NOTE
 	CS	POZNÁMKA: V níže uvedených seznamech žánrů použijte pro všechny žánry jednu hvězdičku (*). Pokud nechcete použít žádný žánr, použijte libovolný řetězec (např. "N/A"), který neodpovídá žádnému z vašich žánrů.
+	DA	Bemærk: For at vælge alle genrer i listen herunder, brug en enkelt stjerne (*). For ikke at vælge nogen genre, brug en vilkårling tekst (f.eks. 'N/A') som ikke matcher nogen af dine genrer.
 	DE	ANMERKUNG: Ein Sternchen (*) benutzen, um in der Genre-Liste alle Genres auszuwählen. Eine beliebige Zeichenkette, die keinem Genre entspricht (bspw. 'N/A') benutzen, um kein Genre auszuwählen.
 	EN	NOTE: In the genre lists, below, to apply to all genres use a single asterisk (*). To apply to no genres use any string (e.g. 'N/A') that does not match any of your genres.
 	IT	NOTA: Nell'elenco dei generi qui sotto, per assegnare a tutti i generi utilizzare un singolo asterisco (*). Per assegnare a nessun genere utilizzare qualunque testo che non corrisponde a nessun testo dei generi presenti (es. 'N/A').
@@ -37,6 +41,7 @@ PLUGIN_MATERIAL_SKIN_GENRES_LIST_NOTE
 
 PLUGIN_MATERIAL_SKIN_BAND_GENRES
 	CS	Žánry skupin
+	DA	Orkester genrer
 	DE	Band-Genres
 	EN	Band genres
 	IT	Generi per il tag "band" (gruppo/orchestra)
@@ -48,6 +53,7 @@ PLUGIN_MATERIAL_SKIN_BAND_GENRES
 
 PLUGIN_MATERIAL_SKIN_BAND_GENRES_DESC
 	CS	Seznam žánrů podporujících skupinu oddělený čárkami.
+	DA	Kommasepareret liste over genrer, der understøtter mærket "Orkester".
 	DE	Komma-getrennte Liste von Stilrichtungen, die Bands unterstützen.
 	EN	Comma-separated list of genres supporting band.
 	IT	Lista separata da virgola dei generi che supportano il tag "band".
@@ -59,6 +65,7 @@ PLUGIN_MATERIAL_SKIN_BAND_GENRES_DESC
 
 PLUGIN_MATERIAL_SKIN_COMPOSER_GENRES
 	CS	Žánry skladatelů
+	DA	Komponistgenrer
 	DE	Komponisten-Stilrichtungen
 	EN	Composer genres
 	IT	Generi per il tag "composer" (compositore)
@@ -70,6 +77,7 @@ PLUGIN_MATERIAL_SKIN_COMPOSER_GENRES
 
 PLUGIN_MATERIAL_SKIN_COMPOSER_GENRES_DESC
 	CS	Seznam žánrů podporujících skladatele oddělený čárkami.
+	DA	Kommasepareret liste over genrer, der understøtter mærket "Komponist".
 	DE	Komma-getrennte Liste von Stilrichtungen, die Komponisten unterstützen.
 	EN	Comma-separated list of genres supporting composers.
 	IT	Lista separata da virgola dei generi che supportano il tag "composer".
@@ -81,6 +89,7 @@ PLUGIN_MATERIAL_SKIN_COMPOSER_GENRES_DESC
 
 PLUGIN_MATERIAL_SKIN_CONDUCTOR_GENRES
 	CS	Žánry dirigentů
+	DA	Dirigentgenrer
 	DE	Dirigenten-Stilrichtungen
 	EN	Conductor genres
 	IT	Generi per il tag "conductor" (direttore d'orchestra)
@@ -92,6 +101,7 @@ PLUGIN_MATERIAL_SKIN_CONDUCTOR_GENRES
 
 PLUGIN_MATERIAL_SKIN_CONDUCTOR_GENRES_DESC
 	CS	Seznam žánrů podporujících dirigenta oddělený čárkami.
+	DA	Kommasepareret liste over genrer, der understøtter mærket "Dirigent".
 	DE	Komma-getrennte Liste von Stilrichtungen, die Dirigenten unterstützen.
 	EN	Comma-separated list of genres supporting conductors.
 	IT	Lista separata da virgola dei generi che supportano il tag "conductor".
@@ -103,6 +113,7 @@ PLUGIN_MATERIAL_SKIN_CONDUCTOR_GENRES_DESC
 
 PLUGIN_MATERIAL_SKIN_DEFAULT_COMPOSER_GENRES
 	CS	Klasika, Avantgarda, Baroko, Komorní hudba, Zpěv, Sbor, Klasický crossover, Raná hudba, Vrcholná klasika, Impresionismus, Jazz, Středověk, Minimalismus, Moderní kompozice, Opera, Orchestr, Renesance, Romantika, Symfonie, Svatební hudba, Classical, Avant-Garde, Baroque, Chamber Music, Chant, Choral, Classical Crossover, Early Music, High Classical, Impressionist, Jazz, Medieval, Minimalism, Modern Composition, Opera, Orchestral, Renaissance, Romantic, Symphony, Wedding Music, Symphonies
+	DA	Klassisk, Avantgarde, Barok, Kammerensemble, Korsang, Klassisk inspireret, Oldtidsmusik, Impressionisme, Jazz, Middelaldermusik, Minimalisme, Moderne sammensætning, Opera, Orkester, Renæssance, Romantik, Symfoni, Bryllupsmusik, Symfonier
 	DE	Klassik, Avantgarde, Barok, Kammermusik, Choral, Klassik-Crossover, Hochklassik, Impressionist, Jazz, Mittelalterlich, Medieval, Minimalismus, Moderne Komposition, Oper, Orchester, Renaissance, Romantik, Symphonie, Hochzeitsmusik
 	EN	Classical, Avant-Garde, Baroque, Chamber Music, Chant, Choral, Classical Crossover, Early Music, High Classical, Impressionist, Jazz, Medieval, Minimalism, Modern Composition, Opera, Orchestral, Renaissance, Romantic, Symphony, Wedding Music, Symphonies
 	IT	Classica, Avant-Garde, Barocco, Musica da camera, A capella, Corali, Classica Crossover, Musica antica, High Classical, Impressionist, Jazz, Medievale, Minimalista, Composizioni Moderne, Opera Lirica, Orchestrale, Rinascimentale, Romantica, Musica Sinfonica, Musica da matrimonio, Sinfonie
@@ -114,6 +125,7 @@ PLUGIN_MATERIAL_SKIN_DEFAULT_COMPOSER_GENRES
 
 PLUGIN_MATERIAL_SKIN_DEFAULT_CONDUCTOR_GENRES
 	CS	Klasika, Avantgarda, Baroko, Komorní hudba, Zpěv, Sbor, Klasický crossover, Raná hudba, Vrcholná klasika, Impresionismus, Středověk, Minimalismus, Moderní kompozice, Opera, Orchestr, Renesance, Romantika, Symfonie, Svatební hudba, Classical, Avant-Garde, Baroque, Chamber Music, Chant, Choral, Classical Crossover, Early Music, High Classical, Impressionist, Medieval, Minimalism, Modern Composition, Opera, Orchestral, Renaissance, Romantic, Symphony, Wedding Music, Symphonies
+	DA	Klassisk, Avantgarde, Barok, Kammerensemble, Korsang, Klassisk inspireret, Oldtidsmusik, Impressionisme, Middelaldermusik, Minimalisme, Moderne sammensætning, Opera, Orkester, Renæssance, Romantik, Symfoni, Bryllupsmusik, Symfonier
 	DE	Klassik, Avantgarde, Barok, Kammermusik, Choral, Klassik-Crossover, Hochklassik, Impressionist, Mittelalterlich, Minimalismus, Moderne Komposition, Oper, Orchester, Renaissance, Romantik, Symphonie, Hochzeitsmusik
 	EN	Classical, Avant-Garde, Baroque, Chamber Music, Chant, Choral, Classical Crossover, Early Music, High Classical, Impressionist, Medieval, Minimalism, Modern Composition, Opera, Orchestral, Renaissance, Romantic, Symphony, Wedding Music, Symphonies
 	FR	Musique de film, Classique, Musique concertante, Musique de chambre, Musique symphonique, Musique vocale, Opéra, Opérette, Musique de l'Antiquité, Musique du Moyen-Age, Musique de la Renaissance, Musique baroque, Musique classique, Musique romantique, Musique moderne, Musique contemporaine, Musique électronique ou concrète
@@ -124,6 +136,7 @@ PLUGIN_MATERIAL_SKIN_DEFAULT_CONDUCTOR_GENRES
 
 PLUGIN_MATERIAL_SKIN_DEFAULT_BAND_GENRES
 	CS	N/A
+	DA	N/A
 	DE	nicht verfügbar
 	EN	N/A
 	IT	N/A
@@ -135,6 +148,7 @@ PLUGIN_MATERIAL_SKIN_DEFAULT_BAND_GENRES
 
 PLUGIN_MATERIAL_SKIN_SHOW_COMPOSER
 	CS	Zobrazení skladatele
+	DA	Vis komponist
 	DE	Komponisten anzeigen
 	EN	Show composer
 	IT	Mostra compositore
@@ -146,6 +160,7 @@ PLUGIN_MATERIAL_SKIN_SHOW_COMPOSER
 
 PLUGIN_MATERIAL_SKIN_SHOW_COMPOSER_DESC
 	CS	Zobrazit skladatele, pokud se žánr skladby shoduje s položkou ve výše uvedeném seznamu a skladba má tag skladatele.
+	DA	Viser komponisten, hvis genren matcher et element i listen ovenfor og nummeret har et komponistmærke.
 	DE	Wenn das Genre eines Titels der Liste oben entspricht und er einen 'Composer'-Tag hat, zeige diesen in 'Aktueller Titel' und der Warteschlange.
 	EN	Show composer if a song's genre matches an entry in the list above and it has a composer tag.
 	IT	Mostra il compositore se il genere del brano corrisponde ad una voce dell'elenco sopra e possiede un tag "composer".
@@ -157,6 +172,7 @@ PLUGIN_MATERIAL_SKIN_SHOW_COMPOSER_DESC
 
 PLUGIN_MATERIAL_SKIN_USE_COMPOSER_MAI
 	CS	Zobrazení skladatele v zobrazení "Informace"
+	DA	Vis komponist i "Information" visningen
 	EN	Display composer in 'Information' view
 	FR	Afficher le compositeur dans la vue "Informations"
 	NL	Toon componist in 'Informatie' weergave
@@ -165,6 +181,7 @@ PLUGIN_MATERIAL_SKIN_USE_COMPOSER_MAI
 
 PLUGIN_MATERIAL_SKIN_USE_COMPOSER_MAI_DESC
 	CS	U vhodných skladeb zobrazit v zobrazení "Informace" informace o skladateli, nikoli o interpretovi.
+	DA	Afhængigt af genren for nummeret, bliver komponisten i stedet for kunstneren vist i "Information" visningen.
 	EN	For suitable tracks show composer, and not artist, information in the 'Information' view.
 	FR	Selon le genre du morceau, afficher le compositeur plutôt que l'artiste  dans la vue "Informations".
 	NL	Afhankelijk van het genre van het nummer, wordt de componist in plaats van de artiest getoond in de "Informatie" weergave.
@@ -173,6 +190,7 @@ PLUGIN_MATERIAL_SKIN_USE_COMPOSER_MAI_DESC
 
 PLUGIN_MATERIAL_SKIN_SHOW_CONDUCTOR
 	CS	Zobrazení dirigenta
+	DA	Vis dirigenten
 	DE	Dirigenten anzeigen
 	EN	Show conductor
 	IT	Mostra direttore d'orchestra
@@ -184,6 +202,7 @@ PLUGIN_MATERIAL_SKIN_SHOW_CONDUCTOR
 
 PLUGIN_MATERIAL_SKIN_SHOW_CONDUCTOR_DESC
 	CS	Zobrazit dirigenta, pokud se žánr skladby shoduje s položkou ve výše uvedeném seznamu a skladba má tag dirigenta.
+	DA	Vis dirigenten hvis genren for et nummer matcher et element i listen ovenfor og nummeret har et dirigentmærke.
 	DE	Wenn das Genre eines Titels der Liste oben entspricht und er einen 'Conductor'-Tag hat, zeige diesen in 'Aktueller Titel' und der Warteschlange.
 	EN	Show conductor if a song's genre matches an entry in the list above and it has a conductor tag.
 	IT	Mostra il direttore d'orchestra se il genere del brano corrisponde ad una voce dell'elenco sopra e possiede un tag "conductor".
@@ -195,6 +214,7 @@ PLUGIN_MATERIAL_SKIN_SHOW_CONDUCTOR_DESC
 
 PLUGIN_MATERIAL_SKIN_SHOW_BAND
 	CS	Zobrazení skupiny
+	DA	Vis orkester
 	DE	Band anzeigen
 	EN	Show band
 	IT	Mostra gruppo/orchestra
@@ -206,6 +226,7 @@ PLUGIN_MATERIAL_SKIN_SHOW_BAND
 
 PLUGIN_MATERIAL_SKIN_SHOW_BAND_DESC
 	CS	Zobrazit skupinu, pokud se žánr skladby shoduje s položkou ve výše uvedeném seznamu a skladba má tag skupiny.
+	DA	Vis orkester, hvis genren for et nummer matcher et element i listen ovenfor og nummeret har et orkestermærke.
 	DE	Wenn das Genre eines Titels der Liste oben entspricht und er einen 'Band'-Tag hat, zeige diesen in 'Aktueller Titel' und der Warteschlange.
 	EN	Show band if a song's genre matches an entry in the list above and it has a band tag.
 	IT	Mostra band o orchestra se il genere del brano corrisponde ad una voce dell'elenco sopra e possiede un tag "band".
@@ -217,6 +238,7 @@ PLUGIN_MATERIAL_SKIN_SHOW_BAND_DESC
 
 PLUGIN_MATERIAL_SKIN_PASSWORD
 	CS	Heslo
+	DA	Adgangskode
 	DE	Passwort
 	EN	Password
 	IT	Password
@@ -228,6 +250,7 @@ PLUGIN_MATERIAL_SKIN_PASSWORD
 
 PLUGIN_MATERIAL_SKIN_PASSWORD_DESC
 	CS	Nastavte heslo pro kontrolu přístupu k alarmům a nastavení serveru.
+	DA	Sæt en adgangskode for at styre tilgangen til alarmer og serverindstillinger.
 	DE	Passwort für den Zugang zu Weckalarm und Server-Einstellungen setzen.
 	EN	Set a password to control access to alarms and server settings.
 	IT	Imposta una password per l'accesso ad allarmi ed impostazioni del server.
@@ -239,6 +262,7 @@ PLUGIN_MATERIAL_SKIN_PASSWORD_DESC
 
 PLUGIN_MATERIAL_SKIN_FIXED_VOL
 	CS	Přehrávače s pevnou hlasitostí
+	DA	Afspillere med fast lydniveau
 	DE	Player mit fest eingestellter Lautstärke
 	EN	Fixed volume players
 	IT	Dispositivo di riproduzione a volume fisso
@@ -250,6 +274,7 @@ PLUGIN_MATERIAL_SKIN_FIXED_VOL
 
 PLUGIN_MATERIAL_SKIN_FIXED_VOL_DESC
 	CS	Jak by se měly ovládat přehrávače s pevnou hlasitostí?
+	DA	Hvordan skal afspillere med fast lydniveau styres?
 	DE	Wie sollen Player mit fest eingestellter Lautstärke gesteuert werden?
 	EN	How should player's with a fixed volume be controlled?
 	IT	Come devono essere gestiti i dispositivi di riproduzione con volume fisso?
@@ -261,6 +286,7 @@ PLUGIN_MATERIAL_SKIN_FIXED_VOL_DESC
 
 PLUGIN_MATERIAL_SKIN_FIXED_VOL_A_NORMAL
 	CS	Zobrazit standardní ovládání hlasitosti
+	DA	Vis standard volumenkontrol
 	DE	Normalen Lautstärkeregler anzeigen
 	EN	Display standard volume control
 	IT	Mostra controllo di volume standard
@@ -272,6 +298,7 @@ PLUGIN_MATERIAL_SKIN_FIXED_VOL_A_NORMAL
 
 PLUGIN_MATERIAL_SKIN_FIXED_VOL_B_SPECIAL
 	CS	Zakázat posuvník hlasitosti a skrýt úroveň hlasitosti
+	DA	Deaktiver volumenkontrol, og skjul lydniveau
 	DE	Lautstärkeregler abschalten und Laustärkelevel verstecken
 	EN	Disable volume slider, and hide volume level
 	IT	Disabilita il cursore del volume e nascondi l'indicatore del volume
@@ -283,6 +310,7 @@ PLUGIN_MATERIAL_SKIN_FIXED_VOL_B_SPECIAL
 
 PLUGIN_MATERIAL_SKIN_FIXED_VOL_C_HIDE
 	CS	Skrýt ovládání hlasitosti
+	DA	Skjul volumenkontrol
 	DE	Lautstärkeregler verstecken
 	EN	Hide volume control
 	IT	Nascondi il controlle del volume
@@ -294,6 +322,7 @@ PLUGIN_MATERIAL_SKIN_FIXED_VOL_C_HIDE
 
 PLUGIN_MATERIAL_SKIN_ARTIST_FIRST
 	CS	Zobrazení interpreta jako prvního v Právě hraje a ve frontě
+	DA	Vis kunstneren først i 'Nu afspilles' visning og i afspilleliste
 	DE	Intepreten als erstes in 'Aktueller Titel' und Warteschlange anzeigen
 	EN	Show artist first in now-playing and queue
 	IT	Mostra prima l'artista in In riproduzione e nella coda di riproduzione 
@@ -305,6 +334,7 @@ PLUGIN_MATERIAL_SKIN_ARTIST_FIRST
 
 PLUGIN_MATERIAL_SKIN_ARTIST_FIRST_DESC
 	CS	Pokud má skladba skladatele, dirigenta nebo skupinu a jsou nakonfigurovány tak, aby se zobrazovaly, zobrazí se interpret před nimi, jinak až za nimi.
+	DA	Hvis et nummer har et komponist-, dirigent- eller orkestermærke, og dette er konfigureret til at blive vist, vises kunstneren først, ellers vises kunstneren sidst.
 	DE	Wenn ein Titel Komponist, Dirigent, Orchester hat und diese angezeigt werden sollen, zeige den Interpreten vor diesen, andernfalls danach.
 	EN	If a track has composer, conductor, or band, and these are configured to be shown, then show artist before these, otherwise show after.
 	IT	Se un brano ha i tag "composer", "conductor" o "band" e questi sono configurati per essere visualizzati, mostra artista prima, altrimenti dopo.
@@ -316,10 +346,10 @@ PLUGIN_MATERIAL_SKIN_ARTIST_FIRST_DESC
 
 PLUGIN_MATERIAL_SKIN_SHOW_ALL_ARTISTS
 	CS	Zobrazení všech interpretů
+	DA	Vis alle kunstnere
 	DE	Zeige alle Interpreten
 	EN	Show all artists
 	IT	Mostra tutti gli artisti
-	DA	Vis alle kunstnere
 	FR	Afficher tous les artistes
 	NL	Toon alle artiesten
 	RU	Показать всех исполнителей
@@ -329,10 +359,10 @@ PLUGIN_MATERIAL_SKIN_SHOW_ALL_ARTISTS
 
 PLUGIN_MATERIAL_SKIN_SHOW_ALL_ARTISTS_DESC
 	CS	Pokud má skladba více interpretů, autorů alb, skladatelů atd., zobrazí se všechny při procházení alb, v Právě hraje a ve frontě. V opačném případě zobrazí pouze prvního z nich.
+	DA	Hvis et nummer har flere kunstnere, albumkunstnere, komponister m.v., så vis dem alle når der kigges på albums, hvad der afspilles nu og i køen. I modsat fald vis kun den første af hver slags.
 	DE	Wenn ein Titel mehrere Interpreten, Albuminterpreten, Komponisten etc. hat, zeige alle beim Durchsuchen von Alben, in 'Aktueller Titel' und der Warteschlange an. Andernfalls zeige nur den jeweils ersten an.
 	EN	If a track has multiple artists, album-artists, composers, etc. then show all when browsing albums, in now-playing and the queue. Otherwise just show the first of each.
 	IT	Se un brano ha più artisti, artisti per album, compositori ecc mostra tutti quando si sfogliano gli album, in In Riproduzione e nella coda di riproduzione. Altrimenti mostra solo il primo.
-	DA	Hvis et nummer har flere kunstnere, albumkunstnere, komponister m.v., så vis dem alle mens der kigges på albums, hvad der afspilles nu og i køen. I modsat fald vis kun den første af hver slags.
 	FR	Si un morceau a plusieurs artistes ou artistes d'album, compositeurs, etc., choisir de les afficher tous (lors de la navigation dans les albums, dans la vue "lecture en cours" et dans la liste de lecture) ou de n'afficher que le premier de chaque type.
 	NL	Als een nummer meerdere artiesten, albumartiesten, componisten, etc. heeft, laat ze dan allemaal zien bij het bladeren door albums, bij het afspelen en in de afspeellijst. Laat anders gewoon de eerste van elk zien.
 	RU	Если в треке есть несколько исполнителей, музыкантов, композиторов и т. д., Тогда показывать все при просмотре альбомов, в «Сейчас играет» и в очереди. В противном случае просто позать первое из каждого
@@ -342,6 +372,7 @@ PLUGIN_MATERIAL_SKIN_SHOW_ALL_ARTISTS_DESC
 
 PLUGIN_MATERIAL_SKIN_ALLOW_DOWNLOAD
 	CS	Povolení stahování
+	DA	Tillad downloading
 	DE	Herunterladen erlauben
 	EN	Allow downloading
 	IT	Permetti il download
@@ -353,6 +384,7 @@ PLUGIN_MATERIAL_SKIN_ALLOW_DOWNLOAD
 
 PLUGIN_MATERIAL_SKIN_ALLOW_DOWNLOAD_DESC
 	CS	Přidejte akce stahování ke skladbám, albům a seznamům skladeb a umožněte uživatelům stahovat skladby.
+	DA	Tilføj en handling for download af numre, albums og afspillelister for at gøre det muligt for brugere at downloade numre.
 	DE	Füge eine Aktion zum Herunterladen von Titeln, Alben oder Wiedergabelisten hinzu, die Nutzern das Herunterladen von Titeln ermöglicht.
 	EN	Add download actions to tracks, albums, and playlists to allow users to download tracks.
 	IT	Aggiungi l'azione download ai brani, album e playlist per permettere agli utenti di scaricare i brani.
@@ -364,6 +396,7 @@ PLUGIN_MATERIAL_SKIN_ALLOW_DOWNLOAD_DESC
 
 PLUGIN_MATERIAL_SKIN_COMMENT_AS_DISC_TITLE
 	CS	Použití komentáře pro název disku
+	DA	Benyt kommentarmærke for titler på fysiske medier (diske)
 	DE	Benutze den 'Comment'-Tag für Albumtitel.
 	EN	Use comment for disc title
 	IT	Utilizza i commenti per il titolo del disco
@@ -375,6 +408,7 @@ PLUGIN_MATERIAL_SKIN_COMMENT_AS_DISC_TITLE
 
 PLUGIN_MATERIAL_SKIN_COMMENT_AS_DISC_TITLE_DESC
 	CS	U alb s více disky použít jako název disku komentář z první stopy každého disku. Pokud používáte "Oddělen středníkem", pak musí názvu disku předcházet buď "TITLE=", "DISCTITLE=", "TITLE:" nebo "DISCTITLE:" - např. "TITLE=Disk s doplňky;OTHER=Další informace".
+	DA	Ved multi-disk albums, benyt kommentarmærke feltet fra det første nummer på hver disk som albumtitel. Hvis der bruges "Semikolon separeret" må albumtitlen nødvendigvis komme efter enten "TITLE=", "DISCTITLE=", "TITLE:", eller "DISCTITLE:" - f.eks. "TITLE=Extras disc;OTHER=En anden kommentar"
 	DE	Benutze bei Multi-Disk-Alben den 'Comment'-Tag des jeweils ersten Titels als Albumtitel
 	EN	For multi-disc albums use comment from first track of each disc as disc title. If using "Semi-colon separated" then the disc-title needs to be preceeded by either "TITLE=", "DISCTITLE=", "TITLE:", or "DISCTITLE:" - e.g. "TITLE=Extras disc;OTHER=Some other comment info"
 	IT	Utilizzare il commento della prima traccia di ogni disco come titolo del disco per gli album su più dischi. Se presente un commento separato da ":" il dics-title deve essere preceduto da una di queste keyword "TITLE=", "DISCTITLE=", "TITLE:", o "DISCTITLE:" (es. "TITLE=Extras disc;OTHER=Some other comment info").
@@ -386,6 +420,7 @@ PLUGIN_MATERIAL_SKIN_COMMENT_AS_DISC_TITLE_DESC
 
 PLUGIN_MATERIAL_SKIN_COMMENT_A_DONT_USE
 	CS	Nepoužívat
+	DA	Benyt ikke
 	DE	Nicht benutzen
 	EN	Don't use
 	IT	Non utilizzare
@@ -397,6 +432,7 @@ PLUGIN_MATERIAL_SKIN_COMMENT_A_DONT_USE
 
 PLUGIN_MATERIAL_SKIN_COMMENT_B_PLAIN
 	CS	Obsahuje pouze název
+	DA	Indeholder kun titlen
 	DE	Enthält ausschließlich den Titel
 	EN	Contains only title
 	IT	Contiene solo il titolo
@@ -408,6 +444,7 @@ PLUGIN_MATERIAL_SKIN_COMMENT_B_PLAIN
 
 PLUGIN_MATERIAL_SKIN_COMMENT_C_SEMI_SEP
 	CS	Oddělen středníkem
+	DA	Semikolon separeret
 	DE	Semikolon getrennt
 	EN	Semi-colon separated
 	IT	Separato da ":"
@@ -419,6 +456,7 @@ PLUGIN_MATERIAL_SKIN_COMMENT_C_SEMI_SEP
 
 PLUGIN_MATERIAL_SKIN_SHOW_COMMENT
 	CS	Zobrazení komentáře v zobrazení informací
+	DA	Vis indholdet i kommentarmærket i "Information" visning
 	DE	Zeige den 'comment' tag in der Informationsansicht
 	EN	Show comment in info view
 	IT	Mostra il commento nelle informazioni
@@ -430,6 +468,7 @@ PLUGIN_MATERIAL_SKIN_SHOW_COMMENT
 
 PLUGIN_MATERIAL_SKIN_SHOW_COMMENT_DESC
 	CS	Zobrazit tag komentáře skladby v části "Skladba" v zobrazení informací o skladbě, pod textem skladby.
+	DA	Vis kommentarmærke indholdet i nummerafsnittet for "Information" visningen, nede under sangteksterne.
 	DE	Zeige den 'comment' tag in der 'Track'-Sektion der Track-Informationsansicht.
 	EN	Show a track's comment tag in the 'Track' section of the track information view, below the lyrics.
 	IT	Mostra il commento di una traccia nella sezione "Traccia" delle informazioni di ogni traccia, sotto il testo del brano.
@@ -441,6 +480,7 @@ PLUGIN_MATERIAL_SKIN_SHOW_COMMENT_DESC
 
 PLUGIN_MATERIAL_SKIN_RELOAD_NOTE
 	CS	POZNÁMKA: Pokud změníte některé z níže uvedených nastavení, může být nutné obnovit webovou stránku, aby se změny projevily.
+	DA	BEMÆRK: Efter en ændring af indstillingerne kan det være nødvendigt at genopfriske websiden før ændringerne træder i kraft.
 	DE	HINWEIS: Nach einer Änderung der Einstellungen kann eine Aktualisierung der Web-Seite nötig sein, um die Änderungen zu zeigen.
 	EN	NOTE: If you change any of the settings below then you might need to refresh the web page for the changes to take effect.
 	IT	NOTA: Se viene modificata una delle impostazioni seguenti, potrebbe essere necessario aggiornare la pagina web affinchè le modifiche abbiano effetto.
@@ -452,6 +492,7 @@ PLUGIN_MATERIAL_SKIN_RELOAD_NOTE
 
 PLUGIN_MATERIAL_SKIN_PAGED_BATCH_SIZE
 	CS	Velikost dávky stránkování
+	DA	Størrelse af sideindhold
 	DE	Größe des Seiteninhalts
 	EN	Paged batch size
 	IT	Dimensione delle pagine
@@ -462,6 +503,7 @@ PLUGIN_MATERIAL_SKIN_PAGED_BATCH_SIZE
 
 PLUGIN_MATERIAL_SKIN_PAGED_BATCH_SIZE_DESC
 	CS	Počet počátečních položek, které se načtou (a zobrazí) při výpisu obsahu některých seznamů (například obsahu seznamu skladeb). Posouvání seznamu pak způsobí načtení další dávky položek atd.
+	DA	Antal indledende elementer, der skal hentes og vises, når indholdet af nogle lister vises (såsom en afspilleliste). Rulning af listen henter derefter yderligere elementer osv.
 	DE	Anzahl der anfänglichen Elemente, die beim Auflisten des Inhalts einiger Listen (wie beispielsweise der Inhalte einer Wiedergabeliste) abgerufen und angezeigt werden sollen. Durch das Scrollen in der Liste werden dann weitere Elemente abgerufen, usw.
 	EN	Number of initial items to fetch (and display) when listing contents of some lists (such as playlist contents). Scrolling list will then cause another batch of items to be fetched, etc.
 	IT	Numero delle voci da precaricare (e mostrare) durante la visualizzazione delle liste (come il contenuto delle playlist). Lo scorrimento della lista provocherà il caricamento di un altro blocco di voci e così via.
@@ -472,6 +514,7 @@ PLUGIN_MATERIAL_SKIN_PAGED_BATCH_SIZE_DESC
 
 PLUGIN_MATERIAL_SKIN_ARTIST_FILTER
 	CS	Filtrování skladeb alba
+	DA	Filtrér album numre
 	DE	Albumtitel filtern
 	EN	Filter album tracks
 	FR	Filtrer les morceaux des albums
@@ -481,6 +524,7 @@ PLUGIN_MATERIAL_SKIN_ARTIST_FILTER
 
 PLUGIN_MATERIAL_SKIN_ARTIST_FILTER_DESC
 	CS	Při procházení alb interpreta můžete použít všechny skladby ze sbírkových alb, alb, na kterých se tento interpret objevuje atd., nebo zobrazit pouze skladby aktuálního interpreta.
+	DA	Når du gennemser en kunstners albums, benyt alle numre fra opsamlingsalbums, albums som denne kunstner optræder på osv., ellers vises kun numre fra den aktuelle kunstner.
 	DE	Zeige beim Durchsuchen der Alben eines Interpreten die Titel auf Kompilationen, Alben etc. mit seiner Beteiligung oder alle Titel auf diesen Kompilationen, Alben etc.
 	EN	When browsing an artist's albums use all tracks from compilation albums, albums this artist appears on, etc., or only show tracks from the current artist.
 	IT	Durante lo scorrimento degli album di un artista utilizzare tutte i brani delle compilation e degli album in cui l'artista compare, oppure mostrare solo i brani dell'artista corrente.
@@ -491,6 +535,7 @@ PLUGIN_MATERIAL_SKIN_ARTIST_FILTER_DESC
 
 PLUGIN_MATERIAL_SKIN_ARTIST_FILTER_ARTIST_ONLY
 	CS	Zobrazit pouze skladby aktuálního interpreta
+	DA	Vis kun numre fra nuværende kunstner
 	DE	Nur Titel mit Beteiligung des Interpreten anzeigen
 	EN	Only display tracks from current artist
 	IT	Mostrare solo i brani dell'artista corrente
@@ -501,6 +546,7 @@ PLUGIN_MATERIAL_SKIN_ARTIST_FILTER_ARTIST_ONLY
 
 PLUGIN_MATERIAL_SKIN_ARTIST_FILTER_ALL_TRACKS
 	CS	Zobrazit všechny skladby alba
+	DA	Vis alle numre på albummet
 	DE	Alle Titel des Albums anzeigen
 	EN	Display all tracks of album
 	IT	Mostrare tutti i brani dell'album
@@ -511,6 +557,7 @@ PLUGIN_MATERIAL_SKIN_ARTIST_FILTER_ALL_TRACKS
 
 PLUGIN_MATERIAL_SKIN_RELEASE_TYPE_ORDER
 	CS	Pořadí typu vydání
+	DA	Rækkefølge for udgivelsestyper
 	DE	Reihenfolge der Veröffentlichungsarten
 	EN	Release type order
 	IT	Ordine delle release
@@ -521,6 +568,7 @@ PLUGIN_MATERIAL_SKIN_RELEASE_TYPE_ORDER
 
 PLUGIN_MATERIAL_SKIN_RELEASE_TYPE_ORDER_DESC
 	CS	Zadejte pořadí, v jakém se mají zobrazovat typy vydání (jedná se o seznam názvů typů vydání oddělený čárkou) - např. "Album, EP, Single".
+	DA	Specificér den rækkefølge, som udgivelsestyper skal vises (dette er en kommasepareret liste af navne for udgivelsestyper) - f.eks. "Album, EP, Single"
 	DE	Geben Sie die Reihenfolge an, in der die Veröffentlichungsarten angezeigt werden sollen (dies ist eine durch Kommas getrennte Liste von Veröffentlichungsarten) - z.B. "Album, EP, Single".
 	EN	Specify order to display release types (this is a comma separated list of release type names) - e.g. "Album, EP, Single"
 	IT	Specificare l'ordine in cui mostrare i tipi di release (lista separata da virgole dei tipi di release) - Es. "Album, EP, Single"
@@ -531,6 +579,7 @@ PLUGIN_MATERIAL_SKIN_RELEASE_TYPE_ORDER_DESC
 
 PLUGIN_MATERIAL_SKIN_GENRE_IMAGES
 	CS	Obrázky žánrů
+	DA	Genre billeder
 	DE	Bilder zum Genre
 	EN	Genre images
 	IT	Immagini generi
@@ -541,6 +590,7 @@ PLUGIN_MATERIAL_SKIN_GENRE_IMAGES
 
 PLUGIN_MATERIAL_SKIN_GENRE_IMAGES_DESC
 	CS	Zobrazit obrázky při výpisu žánrů. To vyžaduje vytvoření obrázků JPEG 600x600 v podsložce "material-skin/genres" ve Složce předvoleb vašeho LMS. Všechny obrázky žánrů by měly být malými písmeny nebo číslicemi a všechny ostatní znaky by měly být odstraněny. Např. "R&B" je "rb.jpg", "Folk/Rock" je "folkrock.jpg".
+	DA	Vis billeder når du angiver genrer. Dette kræver frembringelse af 600x600 JPEG billeder i et "Material-skin/genrer" underkatalog til LMS indstillinger kataloget. Filnavnet for genre-billeder må kun bruge små bogstaver eller tal, hvor alle andre tegn er fjernet. For eksempel "R&B" er "rb.jpg", "Folk/Rock" er "folkrock.jpg".
 	DE	Anzeige von Bildern bei der Auflistung von Genres. Dazu müssen 600x600 JPEG-Bilder in einem Unterordner "material-skin/genres" im Einstellungsordner Ihres LMS erstellt werden. Genre-Bilder sollten alle Kleinbuchstaben oder Zahlen sein ([a-z0-9]), wobei alle anderen Zeichen entfernt werden. z.B. "R&B" ist "rb.jpg", "Folk/Rock" ist "folkrock.jpg".
 	EN	Display images when listing genres. This requires creating 600x600 JPEG images within a "material-skin/genres" sub-folder of your LMS's preferences folder. Genre images should all be lowercase letters or numbers, with all other characters removed. e.g. "R&B" is "rb.jpg", "Folk/Rock" is "folkrock.jpg".
 	IT	Mostrare immagini nella lista dei generi. Questo richiede che vengano create immagini JPEG 600x600 in una sottocartella "material-skin/genres" della cartella delle preferenze di LMS. I nomi delle immagini devono essere lettere e numeri minuscoli, senza altri caratteri. Es. "R&B" come "rb.jpg", "Folk/Rock" come "folkrock.jpg"
@@ -551,6 +601,7 @@ PLUGIN_MATERIAL_SKIN_GENRE_IMAGES_DESC
 
 PLUGIN_MATERIAL_SKIN_TOUCH_LINKS
 	CS	Odkazy na položky v dotykových zařízeních
+	DA	Hyperlinks på touch enheder
 	DE	Elementverknüpfungen auf Touch-Geräten
 	EN	Item links on touch devices
 	IT	Collegamenti delle voci su dispositivi touch
@@ -561,6 +612,7 @@ PLUGIN_MATERIAL_SKIN_TOUCH_LINKS
 
 PLUGIN_MATERIAL_SKIN_TOUCH_LINKS_DESC
 	CS	Udělat z textových položek interpret, album, skladatel atd. klikací odkazy na dotykových zařízeních (např. mobilních telefonech).
+	DA	Omdan tekst som kunstner, album, komponist osv. til hyperlinks på touch-enheder (f.eks. mobiltelefoner).
 	DE	Erweitern Sie Textbausteine wie Künstler, Album, Komponist usw. zu klickbaren Links auf Touch-Geräten (z. B. Mobiltelefonen).
 	EN	Make artist, album, composer, etc. text items clickable links on touch devices (e.g. mobile phones).
 	IT	Rendere le voci artista, album, compositore e simili come link sui dispositivi touch (es. smartphone e tablet).
@@ -571,6 +623,7 @@ PLUGIN_MATERIAL_SKIN_TOUCH_LINKS_DESC
 
 PLUGIN_MATERIAL_SKIN_YEAR_IN_SUB
 	CS	Zobrazení roku v podnázvu alba
+	DA	Vis årstal i album undertitel
 	DE	Jahr im Albumuntertitel anzeigen
 	EN	Show year in album subtitle
 	IT	Mostrare l'anno nel sottotitolo dell'album
@@ -581,6 +634,7 @@ PLUGIN_MATERIAL_SKIN_YEAR_IN_SUB
 
 PLUGIN_MATERIAL_SKIN_YEAR_IN_SUB_DESC
 	CS	Při procházení alb zobrazovat rok v podnázvu, pokud se nezobrazuje také interpret (v takovém případě se rok zobrazí v závorce za názvem alba).
+	DA	Ved bladring i albums vises årstallet i undertitlen, med mindre kunstneren vises her (i dette tilfælde bliver årstallet vist i klammer efter album navnet)
 	DE	Beim Durchsuchen von Alben wird das Jahr im Untertitel angezeigt, es sei denn, es wird auch der Interpret angezeigt (in diesem Fall wird das Jahr in Klammern nach dem Albumnamen angezeigt)
 	EN	When browsing albums show year in the subtitle, unless also showing artist (in which case year is shown, in brackets, after album name)
 	IT	Durante lo scorrimento degli album mostrare l'anno nel sottotitolo, a meno che non venga mostrato anche l'artista (in tal caso l'anno viene mostrato tra parentesi dopo il nome dell'album)
@@ -591,6 +645,7 @@ PLUGIN_MATERIAL_SKIN_YEAR_IN_SUB_DESC
 
 PLUGIN_MATERIAL_SKIN_PLAY_SHUFFLE
 	CS	Akce přehrát náhodně
+	DA	Tilfældig afspilningsrækkefølge
 	DE	Zufallswiedergabe
 	EN	Play shuffled action
 	IT	Azione "Riproduzione casuale"
@@ -601,6 +656,7 @@ PLUGIN_MATERIAL_SKIN_PLAY_SHUFFLE
 
 PLUGIN_MATERIAL_SKIN_PLAY_SHUFFLE_DESC
 	CS	Přidat akce pro spuštění alb nebo seznamů skladeb v náhodném režimu. Pokud je tato funkce povolena a je použita volba "Přehrát náhodně", přehrávač bude před přehráváním položek nastaven na "Náhodné skladby". Stejně tak, pokud je tato funkce povolena a je použita funkce "Přehrát nyní", bude náhodné přehrávání před přehráním položek vypnuto. Vezměte prosím na vědomí, že režim náhodného přehrávání přehrávače se nevrátí po vymazání fronty atd.
+	DA	Albums eller afspillelister bliver afspillet i tilfældig rækkefølge. Når funktionen er tilvalgt og "Tilfældig afspilning" anvendes, indstilles afspilleren til at blande numrene før afspilning. Når funktionen er valgt og "Afspil nu" vælges, blandes afspilningen ikke. Bemærk at afspillerens tilstand ikke nulstilles efter at afspillelisten er slettet, osv.
 	DE	Alben oder Wiedergabelisten werden zufällig wiedergegeben. Wenn diese Funktion aktiviert ist und "Zufällig abspielen" verwendet wird, wird der Player auf "Zufällige Wiedergabe" eingestellt, bevor die Elemente abgespielt werden. Wenn diese Option aktiviert ist und "Jetzt abspielen" verwendet wird, wird die Zufallswiedergabe vor der Wiedergabe der Elemente deaktiviert. Bitte beachten Sie, dass der Zufallswiedergabemodus des Players nicht wiederhergestellt wird, wenn die Warteschlange gelöscht wird usw.
 	EN	Add action to start albums, or playlists, in shuffled mode. When this is enabled and 'Play shuffled' is used, the player will be set to 'shuffle tracks' before the items are played. Likewise, if this is enabled and 'Play now' is used, then shuffle will be disabled before the items are played. Please note that the player's shuffle mode is not reverted after queue is cleared, etc.
 	IT	Aggiungere l'azione per avviare la riproduzione di album o playlist in modalità casuale. Se attivata e la riproduzione casuale viene utilizzata, il dispositivo di riproduzione verrà impostato per mettere in ordina casuale i brani prima di riprodurli. Allo stesso modo se attivato e viene utilizzato "Riproduci ora" la riproduzione casuale verrà disabilitata prima che i brani vengano riprodotti. Notare che la modalità di riproduzione causale del dispositivo non viene ripristinata dopo la cancellazione della coda.
@@ -611,6 +667,7 @@ PLUGIN_MATERIAL_SKIN_PLAY_SHUFFLE_DESC
 
 PLUGIN_MATERIAL_SKIN_LOAD_DEFAULT_GENRES_DESC
 	CS	Tyto seznamy žánrů jsou uloženy v souboru nastavení a při změně jazyka se automaticky neaktualizují. Tlačítkem "Nastavit žánry na výchozí" (níže) můžete u každého seznamu obnovit výchozí hodnoty přeložené do aktuálního jazyka.
+	DA	Disse genrelister gemmes i din fil for indstillinger og bliver ikke automatisk opdateret ved ændring af sprog. Du kan bruge "Sæt genrer til standard" knappen (herunder) for at nulstille hver liste til standard værdierne, oversat i det nuværende sprog.
 	DE	Diese Genre-Listen werden in der Konfigurationsdatei gesichert und nicht automatisch aktualisiert, sollte die Sprache gewechselt werden. Die Funktion 'Genres auf Default setzen' setzt jede Liste zurück.
 	EN	These genre lists are saved in your settings file, and will not automatically be updated should you change language. You may use the "Set Genres To Default" button (below) to reset each list to the default values, translated into the current language.
 	IT	Queste liste dei generi musicali sono salvate nei file di configurazione e non saranno aggiornate automaticamente se viene modificata la lingua. E' posibile utilizzare il bottone sotto "Imposta i generi ai default" per reimmpostare ogni lista ai valori predefiniti della lingua corrente.
@@ -621,6 +678,7 @@ PLUGIN_MATERIAL_SKIN_LOAD_DEFAULT_GENRES_DESC
 
 PLUGIN_MATERIAL_SKIN_LOAD_DEFAULT_GENRES
 	CS	Nastavit žánry na výchozí
+	DA	Sæt genrer til standard
 	DE	Genres auf Default setzen
 	EN	Set Genres To Default
 	IT	Imposta generi ai valori predefiniti
@@ -630,6 +688,7 @@ PLUGIN_MATERIAL_SKIN_LOAD_DEFAULT_GENRES
 	HU	Alapértelmezett műfajok beállítása
 
 PLUGIN_MATERIAL_COMBINE_APPS_AND_RADIO
+	DA	Kombinér 'Apps' og 'Radio'
 	EN	Combine 'Apps' and 'Radio'
 	FR	Combiner "Applications" et "Radio"
 	NL	Combineer 'Applicaties' en 'Radio'
@@ -638,6 +697,7 @@ PLUGIN_MATERIAL_COMBINE_APPS_AND_RADIO
 
 PLUGIN_MATERIAL_COMBINE_APPS_AND_RADIO_DESC
 	EN	Combine the 'Apps' and 'Radio' menus into a single 'Apps' menu, with a 'TuneIn' app added for 'Radio' (if enabled).
+	DA	Læg 'Apps' og 'Radio' menuerne sammen til en 'Apps' menu, med en 'TuneIn' app for 'Radio' (hvis det er aktiveret).
 	FR	Fusionner les menus "Applications" et "Radio" en un seul menu "Applications" dans lequel est ajoutée une application "TuneIn" regroupant les éléments associés au plugin "Radio" (si ce plugin est activé).
 	NL	Combineer de 'Applicaties' en 'Radio' in een enkel 'Applicaties' menu, waarbij de 'TuneIn' applicatie, indien ingeschakeld, wordt gebruikt als vervanging voor de 'Radio' applicatie.
 	ZH_CN	将“程序”和“电台”菜单合并成单个“程序”菜单。“电台”作为“TuneIn”程序添加到合并后的菜单里（如果已启用）。

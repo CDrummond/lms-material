@@ -75,6 +75,13 @@ Vue.component('lms-navdrawer', {
     <v-list-tile-title>{{TB_START_PLAYER.title}}</v-list-tile-title>
    </v-list-tile>
 
+   <template v-if="showCustomActions" v-for="(action, index) in customPlayerActions">
+    <v-list-tile @click="doCustomAction(action)" v-if="undefined==action.players || action.players.indexOf(player.id)>=0">
+     <v-list-tile-avatar><v-icon v-if="action.icon">{{action.icon}}</v-icon><img v-else-if="action.svg" class="svg-img" :src="action.svg | svgIcon(darkUi)"></img></v-list-tile-avatar>
+     <v-list-tile-content><v-list-tile-title>{{action.title}}</v-list-tile-title></v-list-tile-content>
+    </v-list-tile>
+   </template>
+
    <v-divider v-if="playerSectionsDivider"></v-divider>
   </v-list>
   <v-spacer></v-spacer>
@@ -199,6 +206,7 @@ Vue.component('lms-navdrawer', {
             menuItems: [],
             shortcuts: [],
             customSettingsAction:undefined,
+            customPlayerActions:undefined,
             playerStatus: { ison: 1, isplaying: false, volume: 0, synced: false, sleepTime: undefined, count:0, alarm: undefined, alarmStr: undefined },
             appLaunchPlayer: queryParams.appLaunchPlayer,
             maxWidth: 300,
@@ -244,11 +252,11 @@ Vue.component('lms-navdrawer', {
         }.bind(this));
         bus.$on('customActions', function() {
             if (undefined==this.customSettingsAction) {
-                this.updateCustomSettingsAction();
+                this.updateCustomActions();
             }
         }.bind(this));
         bus.$on('lockChanged', function() {
-            this.updateCustomSettingsAction();
+            this.updateCustomActions();
         }.bind(this));
         bus.$on('closeMenu', function() {
             this.show = false;
@@ -279,7 +287,7 @@ Vue.component('lms-navdrawer', {
             }
         }.bind(this));
 
-        this.updateCustomSettingsAction();
+        this.updateCustomActions();
 
         if (!IS_MOBILE && !LMS_KIOSK_MODE) {
             bindKey(LMS_UI_SETTINGS_KEYBOARD, 'mod');
@@ -356,10 +364,11 @@ Vue.component('lms-navdrawer', {
                 }
             }
         },
-        updateCustomSettingsAction() {
+        updateCustomActions() {
             let actions = getCustomActions("settings", this.$store.state.unlockAll);
             this.customSettingsAction = undefined!=actions && actions.length==1 && (undefined!=actions[0].icon || undefined!=actions[0].svg)
                 ? actions[0] : undefined;
+            this.customPlayerActions = getCustomActions("players", this.$store.state.unlockAll);
         },
         updateShortcuts(view) {
             this.shortcuts = [];
@@ -578,8 +587,11 @@ Vue.component('lms-navdrawer', {
         showManagePlayers() {
             return this.connected && ((this.players && this.players.length>1) || this.otherPlayers.length>0) && !queryParams.party
         },
+        showCustomActions() {
+            return !this.noPlayer && this.customPlayerActions && this.customPlayerActions.length>0
+        },
         playersDivider() {
-            return this.showManagePlayers || undefined!=this.appLaunchPlayer
+            return this.showManagePlayers || undefined!=this.appLaunchPlayer || this.showCustomActions
         },
         playerSectionsDivider() {
             return !this.ndSettingsVisible && !this.noPlayer && this.players && (this.players.length>1 || this.playerStatus.sleepTime || this.playerStatus.alarmStr)

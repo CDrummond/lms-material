@@ -19,7 +19,7 @@ const TB_CUSTOM_SETTINGS_ACTIONS = {id:20};
 
 Vue.component('lms-navdrawer', {
     template: `
-<v-navigation-drawer v-model="show" app temporary :width="maxWidth" style="display:flex;flex-direction:column" id="nd-list">
+<v-navigation-drawer v-model="show" app temporary :width="maxWidth" style="display:flex;flex-direction:column">
  <div class="nd-top"></div>
  <div class="nd-header">
   <v-list-tile @click.prevent="show=false" style="margin-top:-2px">
@@ -34,7 +34,7 @@ Vue.component('lms-navdrawer', {
    </v-list-tile-action>
   </v-list-tile>
  </div>
- <div class="nd-main">
+ <div class="nd-main" id="nd-list">
   <v-list class="nd-list py-0">
    <v-list-tile v-if="!connected" @click="bus.$emit('showError', undefined, trans.connectionLost)">
     <v-list-tile-avatar><v-icon class="red">error</v-icon></v-list-tile-avatar>
@@ -232,14 +232,19 @@ Vue.component('lms-navdrawer', {
             if (this.$store.state.player) {
                 for (let i=0, loop=this.$store.state.players, len=loop.length; i<len; ++i) {
                     if (loop[i].id==this.$store.state.player.id) {
-                        let adjust = (loop[i].isgroup ? 2 : 1);
-                        let maxVis = Math.floor(window.innerHeight/48)-(1+adjust);
-                        if (i>=maxVis || ((i+(adjust + 2))*48)>=window.innerHeight) {
-                            this.$nextTick(function () {
-                                ensureVisible(document.getElementById('nd-player-'+(i>=maxVis ? i-maxVis : (i>0 ? i-adjust : 0))));
-                            });
+                        let list = document.getElementById('nd-list', 0);
+                        if (i<2) {
+                            setElemScrollTop(list, 0);
                         } else {
-                            setElemScrollTop(document.getElementById('nd-list', 0));
+                            let listHeight = list.clientHeight;
+                            let entrySize = 48;
+                            let elementTop = list.offsetTop;
+                            let divTop = document.getElementById('nd-player-'+i).offsetTop;
+                            let elementRelativeTop = divTop - elementTop;
+
+                            if ((elementRelativeTop + (2*entrySize)) > listHeight) {
+                                setElemScrollTop(list, elementRelativeTop-entrySize);
+                            }
                         }
                         break;
                     }

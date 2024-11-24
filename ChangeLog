@@ -10,6 +10,11 @@
 8. Only single 'settings' custom action supported, and must have icon or svg
    defined.
 
+5.5.2
+-----
+1. If at top-level then Ctr+F should always open 'Search library', even if 'My
+   Music' is hidden.
+
 5.5.1
 -----
 1. Enable repeat by default for alarms.

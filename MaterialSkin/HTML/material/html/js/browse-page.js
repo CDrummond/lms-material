@@ -742,6 +742,7 @@ var lmsBrowse = Vue.component("lms-browse", {
         if (!IS_MOBILE) {
             bindKey('home');
             bindKey(LMS_SEARCH_KEYBOARD, 'mod');
+            bindKey(LMS_SEARCH_KEYBOARD, 'alt');
             bindKey(LMS_PLAY_KEYBOARD, 'mod+shift');
             bindKey(LMS_APPEND_KEYBOARD, 'mod+shift');
             bindKey(LMS_ADD_ITEM_ACTION_KEYBOARD, 'mod+shift');
@@ -781,6 +782,10 @@ var lmsBrowse = Vue.component("lms-browse", {
                             }
                             break;
                         }
+                    }
+                } else if ('alt'==modifier) {
+                    if (LMS_SEARCH_KEYBOARD==key && this.selection.size<=0) {
+                        bus.$emit('dlg.open', 'advancedsearch', true, this.$store.state.library ? this.$store.state.library : LMS_DEFAULT_LIBRARY);
                     }
                 } else if (!modifier) {
                     if ('home'==key) {

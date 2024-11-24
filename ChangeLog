@@ -9,6 +9,7 @@
 7. De-support 'system' section from custom actions.
 8. Only single 'settings' custom action supported, and must have icon or svg
    defined.
+9. Add 'Alt+F' as shortcut for 'Advanced search'.
 
 5.5.2
 -----

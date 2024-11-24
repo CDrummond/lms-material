@@ -755,7 +755,7 @@ var lmsBrowse = Vue.component("lms-browse", {
                 if ('mod'==modifier) {
                     if (LMS_SEARCH_KEYBOARD==key) {
                         if (this.selection.size<=0) {
-                            if ((this.history.length==0 && !this.$store.state.hidden.has(TOP_MYMUSIC_ID)) || (this.current && (this.current.id==TOP_MYMUSIC_ID || this.current.id.startsWith(SEARCH_ID)))) {
+                            if (this.isTop || (this.current && (this.current.id==TOP_MYMUSIC_ID || this.current.id.startsWith(SEARCH_ID)))) {
                                 this.itemAction(SEARCH_LIB_ACTION);
                             } else if (this.currentActions.indexOf(SEARCH_LIST_ACTION)) {
                                 this.itemAction(SEARCH_LIST_ACTION);

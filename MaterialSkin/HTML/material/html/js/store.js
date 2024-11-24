@@ -363,6 +363,7 @@ const store = new Vuex.Store({
                 return;
             }
 
+            var currentId = state.player ? ""+state.player.id : undefined;
             var existing = new Set();
             var update = new Set();
 
@@ -462,7 +463,9 @@ const store = new Vuex.Store({
             } else {
                 bus.$emit('playerListChanged');
             }
-            bus.$emit('playerChanged');
+            if (undefined==state.player || currentId!=state.player.id) {
+                bus.$emit('playerChanged');
+            }
         },
         setPlayer(state, id) {
             if (state.players) {

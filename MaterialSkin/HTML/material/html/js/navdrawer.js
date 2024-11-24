@@ -20,19 +20,20 @@ const TB_CUSTOM_SETTINGS_ACTIONS = {id:20};
 
 Vue.component('lms-navdrawer-system-entries', {
     template: `
-    <v-list class="nd-list py-0">
-     <v-divider></v-divider>
-     <template v-if="view.showCustomSystemActions" v-for="(action, index) in view.customSystemActions">
-      <v-list-tile @click="view.doCustomAction(action)" v-if="undefined==action.players || action.players.indexOf(player.id)>=0">
-       <v-list-tile-avatar><v-icon v-if="action.icon">{{action.icon}}</v-icon><img v-else-if="action.svg" class="svg-img" :src="action.svg | svgIcon(view.darkUi)"></img></v-list-tile-avatar>
-       <v-list-tile-content><v-list-tile-title>{{action.title}}</v-list-tile-title></v-list-tile-content>
-      </v-list-tile>
-     </template>
-     <v-list-tile :href="queryParams.appQuit" @click="$emit('close')" v-if="queryParams.appQuit">
-     <v-list-tile-avatar><img class="svg-img" :src="TB_APP_QUIT.svg | svgIcon(view.darkUi)"></img></v-list-tile-avatar>
-     <v-list-tile-title>{{TB_APP_QUIT.title}}</v-list-tile-title>
-    </v-list-tile>
-   <v-list>
+<v-list class="nd-list py-0">
+ <div style="height:8px"></div>
+ <v-divider></v-divider>
+ <template v-if="view.showCustomSystemActions" v-for="(action, index) in view.customSystemActions">
+  <v-list-tile @click="view.doCustomAction(action)" v-if="undefined==action.players || action.players.indexOf(player.id)>=0">
+   <v-list-tile-avatar><v-icon v-if="action.icon">{{action.icon}}</v-icon><img v-else-if="action.svg" class="svg-img" :src="action.svg | svgIcon(view.darkUi)"></img></v-list-tile-avatar>
+   <v-list-tile-content><v-list-tile-title>{{action.title}}</v-list-tile-title></v-list-tile-content>
+  </v-list-tile>
+ </template>
+  <v-list-tile :href="queryParams.appQuit" @click="$emit('quit')" v-if="queryParams.appQuit">
+  <v-list-tile-avatar><img class="svg-img" :src="TB_APP_QUIT.svg | svgIcon(view.darkUi)"></img></v-list-tile-avatar>
+  <v-list-tile-title>{{TB_APP_QUIT.title}}</v-list-tile-title>
+ </v-list-tile>
+</v-list>
     `,
     props: {
         view: {
@@ -133,20 +134,22 @@ Vue.component('lms-navdrawer', {
 
   <div v-if="ndSettingsIcons && !ndSettingsVisible">
    <v-subheader>{{TB_SETTINGS.title}}</v-subheader>
-   <ul class="nd-shortuts nd-shortuts-1" v-bind:class="{'nd-shortuts-wide':maxWidth>320}">
+   <ul class="nd-shortuts" v-bind:class="{'nd-shortuts-wide':maxWidth>320}">
     <template v-for="(item, index) in menuItems">
      <li :title="item.title" v-if="item!=DIVIDER && !item.hdr">
       <v-btn v-if="TB_APP_SETTINGS.id==item.id" :href="queryParams.appSettings" @click="show=false" icon class="toolbar-button">
        <img class="svg-img" :src="TB_APP_SETTINGS.svg | svgIcon(darkUi)"></img>
-      </v-btn>
-      <v-btn v-else-if="TB_CUSTOM_SETTINGS_ACTIONS.id==item.id && undefined!=customSettingsAction" @click="doCustomAction(customSettingsAction)" icon class="toolbar-button" :title="customSettingsAction.title">
-       <v-icon v-if="customSettingsAction.icon">{{customSettingsAction.icon}}</v-icon><img v-else class="svg-img" :src="customSettingsAction.svg | svgIcon(darkUi)"></img>
       </v-btn>
       <v-btn v-else-if="TB_CUSTOM_SETTINGS_ACTIONS.id!=item.id" icon class="toolbar-button" @click="menuAction(item.id)">
        <v-icon v-if="undefined!=item.icon">{{item.icon}}</v-icon>
        <img v-else class="svg-img" :src="item.svg | svgIcon(darkUi)"></img>
       </v-btn>
      </li>
+     <template v-if="TB_CUSTOM_SETTINGS_ACTIONS.id==item.id && undefined!=customSettingsActions && customSettingsActions.length>0" v-for="(action, actIndex) in customSettingsActions">
+      <li><v-btn icon class="toolbar-button" @click="doCustomAction(action)" :title="action.title">
+       <v-icon v-if="action.icon">{{action.icon}}</v-icon><img v-else-if="action.svg" class="svg-img" :src="action.svg | svgIcon(darkUi)"></img>
+      </v-btn></li>
+     </template>
     </template>
    </ul>
    <lms-navdrawer-system-entries :view="this" v-if="queryParams.appQuit || showCustomSystemActions" @quit="show=false"></lms-navdrawer-system-entries>
@@ -167,10 +170,12 @@ Vue.component('lms-navdrawer', {
      <v-list-tile-avatar><img class="svg-img" :src="TB_APP_SETTINGS.svg | svgIcon(darkUi)"></img></v-list-tile-avatar>
      <v-list-tile-content><v-list-tile-title>{{TB_APP_SETTINGS.stitle}}</v-list-tile-title></v-list-tile-content>
     </v-list-tile>
-    <v-list-tile v-else-if="TB_CUSTOM_SETTINGS_ACTIONS.id==item.id && undefined!=customSettingsAction" @click="doCustomAction(customSettingsAction)">
-     <v-list-tile-avatar><v-icon v-if="customSettingsAction.icon">{{customSettingsAction.icon}}</v-icon><img v-else class="svg-img" :src="customSettingsAction.svg | svgIcon(darkUi)"></img></v-list-tile-avatar>
-     <v-list-tile-content><v-list-tile-title>{{customSettingsAction.title}}</v-list-tile-title></v-list-tile-content>
-    </v-list-tile>
+    <template v-else-if="TB_CUSTOM_SETTINGS_ACTIONS.id==item.id && undefined!=customSettingsActions && customSettingsActions.length>0" v-for="(action, actIndex) in customSettingsActions">
+     <v-list-tile @click="doCustomAction(action)">
+      <v-list-tile-avatar><v-icon v-if="action.icon">{{action.icon}}</v-icon><img v-else-if="action.svg" class="svg-img" :src="action.svg | svgIcon(darkUi)"></img></v-list-tile-avatar>
+      <v-list-tile-content><v-list-tile-title>{{action.title}}</v-list-tile-title></v-list-tile-content>
+     </v-list-tile>
+    </template>
    </template>
    <lms-navdrawer-system-entries :view="this" v-if="queryParams.appQuit || showCustomSystemActions" @quit="show=false"></lms-navdrawer-system-entries>
    <div class="nd-bottom"></div>
@@ -191,20 +196,22 @@ Vue.component('lms-navdrawer', {
  </div>
  <div v-if="ndSettingsIcons && ndSettingsVisible">
   <v-subheader>{{TB_SETTINGS.title}}</v-subheader>
-  <ul class="nd-shortuts nd-shortuts-1" v-bind:class="{'nd-shortuts-wide':maxWidth>320}">
+  <ul class="nd-shortuts" v-bind:class="{'nd-shortuts-wide':maxWidth>320}">
    <template v-for="(item, index) in menuItems">
     <li :title="item.title" v-if="item!=DIVIDER && !item.hdr">
      <v-btn v-if="TB_APP_SETTINGS.id==item.id" :href="queryParams.appSettings" @click="show=false" icon class="toolbar-button">
       <img class="svg-img" :src="TB_APP_SETTINGS.svg | svgIcon(darkUi)"></img>
-     </v-btn>
-     <v-btn v-else-if="TB_CUSTOM_SETTINGS_ACTIONS.id==item.id && undefined!=customSettingsAction" @click="doCustomAction(customSettingsAction)" icon class="toolbar-button" :title="customSettingsAction.title">
-      <v-icon v-if="customSettingsAction.icon">{{customSettingsAction.icon}}</v-icon><img v-else class="svg-img" :src="customSettingsAction.svg | svgIcon(darkUi)"></img>
      </v-btn>
      <v-btn v-else-if="TB_CUSTOM_SETTINGS_ACTIONS.id!=item.id" icon class="toolbar-button" @click="menuAction(item.id)">
       <v-icon v-if="undefined!=item.icon">{{item.icon}}</v-icon>
       <img v-else class="svg-img" :src="item.svg | svgIcon(darkUi)"></img>
      </v-btn>
     </li>
+    <template v-if="TB_CUSTOM_SETTINGS_ACTIONS.id==item.id && undefined!=customSettingsActions && customSettingsActions.length>0" v-for="(action, actIndex) in customSettingsActions">
+     <li><v-btn icon class="toolbar-button" @click="doCustomAction(action)" :title="action.title">
+      <v-icon v-if="action.icon">{{action.icon}}</v-icon><img v-else-if="action.svg" class="svg-img" :src="action.svg | svgIcon(darkUi)"></img>
+     </v-btn></li>
+    </template>
    </template>
   </ul>
   <lms-navdrawer-system-entries :view="this" v-if="queryParams.appQuit || showCustomSystemActions" @quit="show=false"></lms-navdrawer-system-entries>
@@ -221,14 +228,12 @@ Vue.component('lms-navdrawer', {
     </v-list-tile-content>
     <v-list-tile-action v-if="item.shortcut && keyboardControl" class="menu-shortcut">{{item.shortcut}}</v-list-tile-action>
    </v-list-tile>
-   <v-list-tile v-else-if="TB_APP_SETTINGS.id==item.id" :href="queryParams.appSettings" @click="show=false">
-    <v-list-tile-avatar><img class="svg-img" :src="TB_APP_SETTINGS.svg | svgIcon(darkUi)"></img></v-list-tile-avatar>
-    <v-list-tile-content><v-list-tile-title>{{TB_APP_SETTINGS.stitle}}</v-list-tile-title></v-list-tile-content>
-   </v-list-tile>
-   <v-list-tile v-else-if="TB_CUSTOM_SETTINGS_ACTIONS.id==item.id && undefined!=customSettingsAction" @click="doCustomAction(customSettingsAction)">
-    <v-list-tile-avatar><v-icon v-if="customSettingsAction.icon">{{customSettingsAction.icon}}</v-icon><img v-else class="svg-img" :src="customSettingsAction.svg | svgIcon(darkUi)"></img></v-list-tile-avatar>
-    <v-list-tile-content><v-list-tile-title>{{customSettingsAction.title}}</v-list-tile-title></v-list-tile-content>
-   </v-list-tile>
+   <template v-else-if="TB_CUSTOM_SETTINGS_ACTIONS.id==item.id && undefined!=customSettingsActions && customSettingsActions.length>0" v-for="(action, actIndex) in customSettingsActions">
+    <v-list-tile @click="doCustomAction(action)">
+     <v-list-tile-avatar><v-icon v-if="action.icon">{{action.icon}}</v-icon><img v-else-if="action.svg" class="svg-img" :src="action.svg | svgIcon(darkUi)"></img></v-list-tile-avatar>
+     <v-list-tile-content><v-list-tile-title>{{action.title}}</v-list-tile-title></v-list-tile-content>
+    </v-list-tile>
+   </template>
   </template>
   <lms-navdrawer-system-entries :view="this" v-if="queryParams.appQuit || showCustomSystemActions" @quit="show=false"></lms-navdrawer-system-entries>
   <div class="nd-bottom"></div>
@@ -243,7 +248,7 @@ Vue.component('lms-navdrawer', {
             menuItems: [],
             shortcuts: [],
             customSystemActions:undefined,
-            customSettingsAction:undefined,
+            customSettingsActions:undefined,
             customPlayerActions:undefined,
             playerStatus: { ison: 1, isplaying: false, volume: 0, synced: false, sleepTime: undefined, count:0, alarm: undefined, alarmStr: undefined },
             appLaunchPlayer: queryParams.appLaunchPlayer,
@@ -294,7 +299,7 @@ Vue.component('lms-navdrawer', {
             this.maxWidth = window.innerWidth>500 ? 400 : 300;
         }.bind(this));
         bus.$on('customActions', function() {
-            if (undefined==this.customSettingsAction) {
+            if (undefined==this.customSettingsActions) {
                 this.updateCustomActions();
             }
         }.bind(this));
@@ -409,9 +414,7 @@ Vue.component('lms-navdrawer', {
             }
         },
         updateCustomActions() {
-            let actions = getCustomActions("settings", this.$store.state.unlockAll);
-            this.customSettingsAction = undefined!=actions && actions.length==1 && (undefined!=actions[0].icon || undefined!=actions[0].svg)
-                ? actions[0] : undefined;
+            this.customSettingsActions = getCustomActions("settings", this.$store.state.unlockAll);
             this.customPlayerActions = getCustomActions("players", this.$store.state.unlockAll);
             this.customSystemActions = getCustomActions(undefined, this.$store.state.unlockAll);
         },

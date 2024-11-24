@@ -463,6 +463,7 @@ html, .mini-player {
  list-style-type:none;
  list-style-image:none;
  padding-left:12px;
+ overflow-y:auto;
 }
 
 .nd-shortuts-1 {

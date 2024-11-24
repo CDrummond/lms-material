@@ -106,7 +106,7 @@ Vue.component('lms-navdrawer', {
       <v-btn v-if="TB_APP_SETTINGS.id==item.id" :href="queryParams.appSettings" @click="show=false" icon class="toolbar-button">
        <img class="svg-img" :src="TB_APP_SETTINGS.svg | svgIcon(darkUi)"></img>
       </v-btn>
-      <v-btn v-else-if="TB_CUSTOM_SETTINGS_ACTIONS.id==item.id && undefined!=customSettingsAction" @click="doCustomSettingsAction()" icon class="toolbar-button" :title="customSettingsAction.title">
+      <v-btn v-else-if="TB_CUSTOM_SETTINGS_ACTIONS.id==item.id && undefined!=customSettingsAction" @click="doCustomAction(customSettingsAction)" icon class="toolbar-button" :title="customSettingsAction.title">
        <v-icon v-if="customSettingsAction.icon">{{customSettingsAction.icon}}</v-icon><img v-else class="svg-img" :src="customSettingsAction.svg | svgIcon(darkUi)"></img>
       </v-btn>
       <v-btn v-else-if="TB_CUSTOM_SETTINGS_ACTIONS.id!=item.id" icon class="toolbar-button" @click="menuAction(item.id)">
@@ -133,7 +133,7 @@ Vue.component('lms-navdrawer', {
      <v-list-tile-avatar><img class="svg-img" :src="TB_APP_SETTINGS.svg | svgIcon(darkUi)"></img></v-list-tile-avatar>
      <v-list-tile-content><v-list-tile-title>{{TB_APP_SETTINGS.stitle}}</v-list-tile-title></v-list-tile-content>
     </v-list-tile>
-    <v-list-tile v-else-if="TB_CUSTOM_SETTINGS_ACTIONS.id==item.id && undefined!=customSettingsAction" @click="doCustomSettingsAction()">
+    <v-list-tile v-else-if="TB_CUSTOM_SETTINGS_ACTIONS.id==item.id && undefined!=customSettingsAction" @click="doCustomAction(customSettingsAction)">
      <v-list-tile-avatar><v-icon v-if="customSettingsAction.icon">{{customSettingsAction.icon}}</v-icon><img v-else class="svg-img" :src="customSettingsAction.svg | svgIcon(darkUi)"></img></v-list-tile-avatar>
      <v-list-tile-content><v-list-tile-title>{{customSettingsAction.title}}</v-list-tile-title></v-list-tile-content>
     </v-list-tile>
@@ -162,7 +162,7 @@ Vue.component('lms-navdrawer', {
      <v-btn v-if="TB_APP_SETTINGS.id==item.id" :href="queryParams.appSettings" @click="show=false" icon class="toolbar-button">
       <img class="svg-img" :src="TB_APP_SETTINGS.svg | svgIcon(darkUi)"></img>
      </v-btn>
-     <v-btn v-else-if="TB_CUSTOM_SETTINGS_ACTIONS.id==item.id && undefined!=customSettingsAction" @click="doCustomSettingsAction()" icon class="toolbar-button" :title="customSettingsAction.title">
+     <v-btn v-else-if="TB_CUSTOM_SETTINGS_ACTIONS.id==item.id && undefined!=customSettingsAction" @click="doCustomAction(customSettingsAction)" icon class="toolbar-button" :title="customSettingsAction.title">
       <v-icon v-if="customSettingsAction.icon">{{customSettingsAction.icon}}</v-icon><img v-else class="svg-img" :src="customSettingsAction.svg | svgIcon(darkUi)"></img>
      </v-btn>
      <v-btn v-else-if="TB_CUSTOM_SETTINGS_ACTIONS.id!=item.id" icon class="toolbar-button" @click="menuAction(item.id)">
@@ -189,7 +189,7 @@ Vue.component('lms-navdrawer', {
     <v-list-tile-avatar><img class="svg-img" :src="TB_APP_SETTINGS.svg | svgIcon(darkUi)"></img></v-list-tile-avatar>
     <v-list-tile-content><v-list-tile-title>{{TB_APP_SETTINGS.stitle}}</v-list-tile-title></v-list-tile-content>
    </v-list-tile>
-   <v-list-tile v-else-if="TB_CUSTOM_SETTINGS_ACTIONS.id==item.id && undefined!=customSettingsAction" @click="doCustomSettingsAction()">
+   <v-list-tile v-else-if="TB_CUSTOM_SETTINGS_ACTIONS.id==item.id && undefined!=customSettingsAction" @click="doCustomAction(customSettingsAction)">
     <v-list-tile-avatar><v-icon v-if="customSettingsAction.icon">{{customSettingsAction.icon}}</v-icon><img v-else class="svg-img" :src="customSettingsAction.svg | svgIcon(darkUi)"></img></v-list-tile-avatar>
     <v-list-tile-content><v-list-tile-title>{{customSettingsAction.title}}</v-list-tile-title></v-list-tile-content>
    </v-list-tile>
@@ -507,9 +507,9 @@ Vue.component('lms-navdrawer', {
                 window.open("https://lyrion.org", "_blank").focus();
             }
         },
-        doCustomSettingsAction() {
+        doCustomAction(action) {
             this.show = false;
-            performCustomAction(this.customSettingsAction, this.$store.state.player);
+            performCustomAction(action, this.$store.state.player);
         },
         cancelSleepTimer() {
             this.playerStatus.sleepTime = undefined;

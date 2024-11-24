@@ -18,6 +18,38 @@ var TB_APP_QUIT        = {id:8, svg:  "close" }
 
 const TB_CUSTOM_SETTINGS_ACTIONS = {id:20};
 
+Vue.component('lms-navdrawer-system-entries', {
+    template: `
+    <v-list class="nd-list py-0">
+     <v-divider></v-divider>
+     <template v-if="view.showCustomSystemActions" v-for="(action, index) in view.customSystemActions">
+      <v-list-tile @click="view.doCustomAction(action)" v-if="undefined==action.players || action.players.indexOf(player.id)>=0">
+       <v-list-tile-avatar><v-icon v-if="action.icon">{{action.icon}}</v-icon><img v-else-if="action.svg" class="svg-img" :src="action.svg | svgIcon(view.darkUi)"></img></v-list-tile-avatar>
+       <v-list-tile-content><v-list-tile-title>{{action.title}}</v-list-tile-title></v-list-tile-content>
+      </v-list-tile>
+     </template>
+     <v-list-tile :href="queryParams.appQuit" @click="$emit('close')" v-if="queryParams.appQuit">
+     <v-list-tile-avatar><img class="svg-img" :src="TB_APP_QUIT.svg | svgIcon(view.darkUi)"></img></v-list-tile-avatar>
+     <v-list-tile-title>{{TB_APP_QUIT.title}}</v-list-tile-title>
+    </v-list-tile>
+   <v-list>
+    `,
+    props: {
+        view: {
+            type: Object,
+            required: true
+        }
+    },
+    data() {
+        return { }
+    },
+    filters: {
+        svgIcon: function (name, dark, updateIcon) {
+            return "/material/svg/"+name+"?c="+(updateIcon ? LMS_UPDATE_SVG : dark ? LMS_DARK_SVG : LMS_LIGHT_SVG)+"&r="+LMS_MATERIAL_REVISION;
+        }
+    }
+})
+
 Vue.component('lms-navdrawer', {
     template: `
 <v-navigation-drawer v-model="show" app temporary :width="maxWidth" style="display:flex;flex-direction:column">
@@ -117,13 +149,7 @@ Vue.component('lms-navdrawer', {
      </li>
     </template>
    </ul>
-   <v-list class="nd-list py-0" v-if="queryParams.appQuit">
-    <v-divider></v-divider>
-     <v-list-tile :href="queryParams.appQuit"@click="show=false">
-     <v-list-tile-avatar><img class="svg-img" :src="TB_APP_QUIT.svg | svgIcon(darkUi)"></img></v-list-tile-avatar>
-     <v-list-tile-title>{{TB_APP_QUIT.title}}</v-list-tile-title>
-    </v-list-tile>
-   <v-list>
+   <lms-navdrawer-system-entries :view="this" v-if="queryParams.appQuit || showCustomSystemActions" @quit="show=false"></lms-navdrawer-system-entries>
    <div class="nd-bottom"></div>
   </div>
   <v-list class="nd-list py-0" v-else-if="!ndSettingsVisible">
@@ -146,11 +172,7 @@ Vue.component('lms-navdrawer', {
      <v-list-tile-content><v-list-tile-title>{{customSettingsAction.title}}</v-list-tile-title></v-list-tile-content>
     </v-list-tile>
    </template>
-   <v-divider v-if="queryParams.appQuit"></v-divider>
-    <v-list-tile :href="queryParams.appQuit" v-if="queryParams.appQuit" @click="show=false">
-    <v-list-tile-avatar><img class="svg-img" :src="TB_APP_QUIT.svg | svgIcon(darkUi)"></img></v-list-tile-avatar>
-    <v-list-tile-title>{{TB_APP_QUIT.title}}</v-list-tile-title>
-   </v-list-tile>
+   <lms-navdrawer-system-entries :view="this" v-if="queryParams.appQuit || showCustomSystemActions" @quit="show=false"></lms-navdrawer-system-entries>
    <div class="nd-bottom"></div>
   </v-list>
  </div>
@@ -185,13 +207,7 @@ Vue.component('lms-navdrawer', {
     </li>
    </template>
   </ul>
-  <v-list class="nd-list py-0" v-if="queryParams.appQuit">
-   <v-divider></v-divider>
-    <v-list-tile :href="queryParams.appQuit"@click="show=false">
-    <v-list-tile-avatar><img class="svg-img" :src="TB_APP_QUIT.svg | svgIcon(darkUi)"></img></v-list-tile-avatar>
-    <v-list-tile-title>{{TB_APP_QUIT.title}}</v-list-tile-title>
-   </v-list-tile>
-  <v-list>
+  <lms-navdrawer-system-entries :view="this" v-if="queryParams.appQuit || showCustomSystemActions" @quit="show=false"></lms-navdrawer-system-entries>
   <div class="nd-bottom"></div>
  </div>
  <v-list class="nd-list py-0" v-else-if="ndSettingsVisible">
@@ -214,11 +230,7 @@ Vue.component('lms-navdrawer', {
     <v-list-tile-content><v-list-tile-title>{{customSettingsAction.title}}</v-list-tile-title></v-list-tile-content>
    </v-list-tile>
   </template>
-  <v-divider v-if="queryParams.appQuit"></v-divider>
-  <v-list-tile :href="queryParams.appQuit" v-if="queryParams.appQuit" @click="show=false">
-   <v-list-tile-avatar><img class="svg-img" :src="TB_APP_QUIT.svg | svgIcon(darkUi)"></img></v-list-tile-avatar>
-   <v-list-tile-title>{{TB_APP_QUIT.title}}</v-list-tile-title>
-  </v-list-tile>
+  <lms-navdrawer-system-entries :view="this" v-if="queryParams.appQuit || showCustomSystemActions" @quit="show=false"></lms-navdrawer-system-entries>
   <div class="nd-bottom"></div>
  </v-list>
 </v-navigation-drawer>
@@ -230,6 +242,7 @@ Vue.component('lms-navdrawer', {
             trans:{groupPlayers:undefined, standardPlayers:undefined, connectionLost:undefined, updatesAvailable:undefined, restartRequired:undefined, shortcuts:undefined },
             menuItems: [],
             shortcuts: [],
+            customSystemActions:undefined,
             customSettingsAction:undefined,
             customPlayerActions:undefined,
             playerStatus: { ison: 1, isplaying: false, volume: 0, synced: false, sleepTime: undefined, count:0, alarm: undefined, alarmStr: undefined },
@@ -400,6 +413,7 @@ Vue.component('lms-navdrawer', {
             this.customSettingsAction = undefined!=actions && actions.length==1 && (undefined!=actions[0].icon || undefined!=actions[0].svg)
                 ? actions[0] : undefined;
             this.customPlayerActions = getCustomActions("players", this.$store.state.unlockAll);
+            this.customSystemActions = getCustomActions(undefined, this.$store.state.unlockAll);
         },
         updateShortcuts(view) {
             this.shortcuts = [];
@@ -621,6 +635,9 @@ Vue.component('lms-navdrawer', {
         showCustomActions() {
             return !this.noPlayer && this.customPlayerActions && this.customPlayerActions.length>0
         },
+        showCustomSystemActions() {
+            return this.customSystemActions && this.customSystemActions.length>0
+        },
         playersDivider() {
             return this.showManagePlayers || undefined!=this.appLaunchPlayer || this.showCustomActions
         },
@@ -675,4 +692,3 @@ Vue.component('lms-navdrawer', {
         this.cancelStatusTimer();
     }
 })
-

@@ -14,6 +14,7 @@ var TB_APP_SETTINGS    = {id:4, svg:  "app-settings" };
 var TB_INFO            = {id:5, svg:  "info" };
 var TB_MANAGE_PLAYERS  = {id:6, svg:  "player-manager" };
 var TB_START_PLAYER    = {id:7, icon: "surround_sound" }
+var TB_APP_QUIT        = {id:8, svg:  "close" }
 
 const TB_CUSTOM_SETTINGS_ACTIONS = {id:20};
 
@@ -116,6 +117,13 @@ Vue.component('lms-navdrawer', {
      </li>
     </template>
    </ul>
+   <v-list class="nd-list py-0" v-if="queryParams.appQuit">
+    <v-divider></v-divider>
+     <v-list-tile :href="queryParams.appQuit"@click="show=false">
+     <v-list-tile-avatar><img class="svg-img" :src="TB_APP_QUIT.svg | svgIcon(darkUi)"></img></v-list-tile-avatar>
+     <v-list-tile-title>{{TB_APP_QUIT.title}}</v-list-tile-title>
+    </v-list-tile>
+   <v-list>
    <div class="nd-bottom"></div>
   </div>
   <v-list class="nd-list py-0" v-else-if="!ndSettingsVisible">
@@ -138,6 +146,11 @@ Vue.component('lms-navdrawer', {
      <v-list-tile-content><v-list-tile-title>{{customSettingsAction.title}}</v-list-tile-title></v-list-tile-content>
     </v-list-tile>
    </template>
+   <v-divider v-if="queryParams.appQuit"></v-divider>
+    <v-list-tile :href="queryParams.appQuit" v-if="queryParams.appQuit" @click="show=false">
+    <v-list-tile-avatar><img class="svg-img" :src="TB_APP_QUIT.svg | svgIcon(darkUi)"></img></v-list-tile-avatar>
+    <v-list-tile-title>{{TB_APP_QUIT.title}}</v-list-tile-title>
+   </v-list-tile>
    <div class="nd-bottom"></div>
   </v-list>
  </div>
@@ -172,6 +185,13 @@ Vue.component('lms-navdrawer', {
     </li>
    </template>
   </ul>
+  <v-list class="nd-list py-0" v-if="queryParams.appQuit">
+   <v-divider></v-divider>
+    <v-list-tile :href="queryParams.appQuit"@click="show=false">
+    <v-list-tile-avatar><img class="svg-img" :src="TB_APP_QUIT.svg | svgIcon(darkUi)"></img></v-list-tile-avatar>
+    <v-list-tile-title>{{TB_APP_QUIT.title}}</v-list-tile-title>
+   </v-list-tile>
+  <v-list>
   <div class="nd-bottom"></div>
  </div>
  <v-list class="nd-list py-0" v-else-if="ndSettingsVisible">
@@ -194,6 +214,11 @@ Vue.component('lms-navdrawer', {
     <v-list-tile-content><v-list-tile-title>{{customSettingsAction.title}}</v-list-tile-title></v-list-tile-content>
    </v-list-tile>
   </template>
+  <v-divider v-if="queryParams.appQuit"></v-divider>
+  <v-list-tile :href="queryParams.appQuit" v-if="queryParams.appQuit" @click="show=false">
+   <v-list-tile-avatar><img class="svg-img" :src="TB_APP_QUIT.svg | svgIcon(darkUi)"></img></v-list-tile-avatar>
+   <v-list-tile-title>{{TB_APP_QUIT.title}}</v-list-tile-title>
+  </v-list-tile>
   <div class="nd-bottom"></div>
  </v-list>
 </v-navigation-drawer>
@@ -355,6 +380,7 @@ Vue.component('lms-navdrawer', {
             TB_APP_SETTINGS.title=i18n('Application settings');
             TB_APP_SETTINGS.stitle=i18n('Application');
             TB_START_PLAYER.title=i18n('Start player');
+            TB_APP_QUIT.title=i18n('Quit');
             this.trans = { groupPlayers:i18n("Group Players"), standardPlayers:i18n("Standard Players"), connectionLost:i18n('Server connection lost!'),
                            updatesAvailable:i18n('Updates available'), restartRequired:i18n('Restart required'), shortcuts:i18n('Shortcuts') };
             if (LMS_KIOSK_MODE) {

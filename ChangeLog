@@ -7,12 +7,9 @@
 5. Add option to show settings actions as a row of icons.
 6. Add option to always show settings (and shortcut) actions.
 7. Add 'Alt+F' as shortcut for 'Advanced search'.
-
-5.5.2
------
-1. If at top-level then Ctr+F should always open 'Search library', even if 'My
+8. If at top-level then Ctr+F should always open 'Search library', even if 'My
    Music' is hidden.
-2. Fix queue being shown empty when adding/removing a player.
+9. Fix queue being shown empty when adding/removing a player.
 
 5.5.1
 -----

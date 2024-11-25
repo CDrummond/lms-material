@@ -146,8 +146,8 @@ Vue.component('lms-navdrawer', {
       </v-btn>
      </li>
      <template v-if="TB_CUSTOM_SETTINGS_ACTIONS.id==item.id && undefined!=customSettingsActions && customSettingsActions.length>0" v-for="(action, actIndex) in customSettingsActions">
-      <li><v-btn icon class="toolbar-button" @click="doCustomAction(action)" :title="action.title">
-       <v-icon v-if="action.icon">{{action.icon}}</v-icon><img v-else-if="action.svg" class="svg-img" :src="action.svg | svgIcon(darkUi)"></img>
+      <li><v-btn icon class="toolbar-button" @click="doCustomAction(action)" :title="action.title" v-if="action.icon || action.svg">
+       <v-icon v-if="action.icon">{{action.icon}}</v-icon><img v-else class="svg-img" :src="action.svg | svgIcon(darkUi)"></img>
       </v-btn></li>
      </template>
     </template>
@@ -208,8 +208,8 @@ Vue.component('lms-navdrawer', {
      </v-btn>
     </li>
     <template v-if="TB_CUSTOM_SETTINGS_ACTIONS.id==item.id && undefined!=customSettingsActions && customSettingsActions.length>0" v-for="(action, actIndex) in customSettingsActions">
-     <li><v-btn icon class="toolbar-button" @click="doCustomAction(action)" :title="action.title">
-      <v-icon v-if="action.icon">{{action.icon}}</v-icon><img v-else-if="action.svg" class="svg-img" :src="action.svg | svgIcon(darkUi)"></img>
+     <li><v-btn icon class="toolbar-button" @click="doCustomAction(action)" :title="action.title" v-if="action.icon || action.svg">
+      <v-icon v-if="action.icon">{{action.icon}}</v-icon><img v-else class="svg-img" :src="action.svg | svgIcon(darkUi)"></img>
      </v-btn></li>
     </template>
    </template>

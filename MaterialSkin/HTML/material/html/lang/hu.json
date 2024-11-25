@@ -667,16 +667,21 @@
 "1 %1":"",
 "Don't show":"",
 "Help page":"",
+"Main menu":"",
 "Move '%1'":"",
 "Move into '%1'":"",
 "Move position":"",
 "NOTE: Only some of these settings apply to 'Material Skin'. However these settings will affect other skins and hardware players.":"",
+"Only scroll player list, keep settings (and shortcuts) visible at bottom.":"",
 "Release type":"",
+"Settings (and shortcuts) always visible":"",
 "Shortcuts":"",
 "Shortcuts in main menu":"",
 "Show all":"",
 "Show shortcuts to pinned home screen items in main menu. (NOTE: Radio streams and random mixes are excluded.)":"",
 "Single line only":"",
 "Tint background":"",
-"Tint background with chosen color.":""
+"Tint background with chosen color.":"",
+"Use a row of icons, and not a list of text, for settings entries.":"",
+"Use icons for settings":""
 }

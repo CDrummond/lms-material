@@ -678,5 +678,10 @@
 "1 Year":"1 år",
 "%1 Years":"%1 år",
 "1 day":"1 dag",
-"%1 days":"%1 dage"
+"%1 days":"%1 dage",
+"Main menu":"",
+"Only scroll player list, keep settings (and shortcuts) visible at bottom.":"",
+"Settings (and shortcuts) always visible":"",
+"Use a row of icons, and not a list of text, for settings entries.":"",
+"Use icons for settings":""
 }

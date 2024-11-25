@@ -503,8 +503,9 @@ html, .mini-player {
 }
 
 .v-navigation-drawer div[role="listitem"] .v-list__tile {
- margin:2px 3px 2px 8px;
- border-radius: 24px;
+ margin:1px 3px 1px 8px;
+ border-radius: 23px;
+ height:46px;
 }
 
 .v-navigation-drawer div[role="listitem"] .v-list__tile .v-list__tile__avatar {

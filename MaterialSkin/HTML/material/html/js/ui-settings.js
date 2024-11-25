@@ -375,7 +375,7 @@ Vue.component('lms-ui-settings', {
     </v-list-tile>
 
     <div class="dialog-padding"></div>
-    <v-header class="dialog-section-header">{{i18n('Main menu')}}</v-header>
+    <v-header class="dialog-section-header">{{i18n('Main Menu')}}</v-header>
     <v-list-tile>
      <v-select :items="ndShortcutValues" :label="i18n('Shortcuts in main menu')" v-model="ndShortcuts" item-text="label" item-value="key"></v-select>
     </v-list-tile>

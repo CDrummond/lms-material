@@ -132,6 +132,7 @@ function parseResp(data, showTrackNum, index, showRatings, queueAlbumStyle, queu
                                        (i.disc!=prevItem.disc && undefined==i.work_id) ||
                                        i.work_id!=prevItem.work_id ||
                                        i.performance!=prevItem.performance ||
+                                       i.grouping!=prevItem.grouping ||
                                        (undefined==i.album_id && ( (undefined!=image && image!=prevItem.image) ||
                                                                    (i.album!=prevItem.album) ) ) );
                 let grpKey = isAlbumHeader || undefined==prevItem ? index+resp.items.length : prevItem.grpKey;
@@ -171,7 +172,8 @@ function parseResp(data, showTrackNum, index, showRatings, queueAlbumStyle, queu
                               grpKey:grpKey,
                               rating: !queueAlbumStyle && haveRating ? Math.ceil(i.rating/10.0)/2.0 : undefined,
                               work_id: i.work_id,
-                              performance: i.performance
+                              performance: i.performance,
+                              grouping: i.grouping
                           });
                 index++;
             }

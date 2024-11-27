@@ -40,16 +40,16 @@ function buildArtistAlbumLines(i, queueAlbumStyle, queueContext) {
     let artistAlbum = undefined;
     let artistAlbumContext = undefined;
     let artistIsRemoteTitle = false;
+    let artistStr = i.albumartist ? i.albumartist : i.artist ? i.artist : i.trackartist;
     if (queueAlbumStyle) {
-        let str = i.albumartist ? i.albumartist : i.artist ? i.artist : i.trackartist;
         let id = i.albumartist ? i.albumartist_id : i.artist_id ? i.artist_id : i.trackartist_id;
-        if (!str && i.remote) {
+        if (!artistStr && i.remote) {
             artistAlbum = i.remote_title ? i.remote_title : i.title;
             artistIsRemoteTitle = true;
         } else if ((IS_MOBILE && !lmsOptions.touchLinks) || undefined==id) {
-            artistAlbum = str;
+            artistAlbum = artistStr;
         } else {
-            artistAlbum = buildLink(i.albumartist ? 'show_albumartist' : 'show_artist', id, str, 'queue');
+            artistAlbum = buildLink(i.albumartist ? 'show_albumartist' : 'show_artist', id, artistStr, 'queue');
         }
     } else {
         let useComposerTag = i.composer && lmsOptions.showComposer && useComposer(i.genre);
@@ -69,6 +69,7 @@ function buildArtistAlbumLines(i, queueAlbumStyle, queueContext) {
         artistAlbumContext = undefined;
     }
     if (!queueAlbumStyle || !artistIsRemoteTitle) {
+        artistAlbum = addPart(artistAlbum, buildWorkLine(i, artistStr, 'queue'));
         artistAlbum = addPart(artistAlbum, buildAlbumLine(i, 'queue'));
         if (queueContext) {
             let al = i18n('<obj>from</obj> %1', buildAlbumLine(i, "queue")).replaceAll("<obj>", "<obj class=\"ext-details\">");

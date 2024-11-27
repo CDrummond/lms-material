@@ -6,12 +6,12 @@
  */
 'use strict';
 
-function browseItem(event, cmd, params, title, page) {
+function browseItem(event, cmd, params, title, page, subtitle) {
     if (lmsNumVisibleMenus>0 || ('queue'==page && lmsQueueSelectionActive)) { // lmsNumVisibleMenus defined in store.js
         return;
     }
     event.stopPropagation();
-    bus.$emit("browse", cmd, params, unescape(title), page, page!="browse");
+    bus.$emit("browse", cmd, params, unescape(title), page, page!="browse", subtitle);
     bus.$emit('linkClicked');
 }
 
@@ -21,6 +21,10 @@ function show_artist(event, id, title, page) {
 
 function showAlbum(event, album, title, page) {
     browseItem(event, ["tracks"], ["album_id:"+album, trackTags(true), SORT_KEY+"tracknum"], unescape(title), page);
+}
+
+function showWork(event, work, title, artist, page) {
+    browseItem(event, ["albums"], ["work_id:"+work, ARTIST_ALBUM_TAGS, SORT_KEY+ARTIST_ALBUM_SORT_PLACEHOLDER], unescape(title), page, unescape(artist));
 }
 
 function showArtistRole(event, id, title, page, role) {
@@ -232,3 +236,14 @@ function buildAlbumLine(i, page, plain) {
     }
 }
 
+function buildWorkLine(i, artist, page, plain) {
+    var line = undefined;
+    if (i.work && artist) {
+        var work = i.work;
+        if (i.work_id && (!IS_MOBILE || lmsOptions.touchLinks) && !plain) {
+            work="<obj class=\"link-item\" onclick=\"showWork(event, "+i.work_id+",\'"+escape(work)+"\',\'"+escape(artist)+"\', \'"+page+"\')\">" + work + "</obj>";
+        }
+        line=addPart(line, work);
+    }
+    return line;
+}

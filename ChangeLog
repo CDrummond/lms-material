@@ -1,15 +1,16 @@
 5.6.0
 -----
-1. Keep navigation drawer titlebar visible, and only scroll contents.
-2. Move 'Information' into navigation drawer titlebar.
-3. Custom MAI icons.
-4. Use block 'i' icon for 'Information' in navigation drawer titlebar.
-5. Add option to show settings actions as a row of icons.
-6. Add option to always show settings (and shortcut) actions.
-7. Add 'Alt+F' as shortcut for 'Advanced search'.
-8. If at top-level then Ctr+F should always open 'Search library', even if 'My
-   Music' is hidden.
-9. Fix queue being shown empty when adding/removing a player.
+ 1. Keep navigation drawer titlebar visible, and only scroll contents.
+ 2. Move 'Information' into navigation drawer titlebar.
+ 3. Custom MAI icons.
+ 4. Use block 'i' icon for 'Information' in navigation drawer titlebar.
+ 5. Add option to show settings actions as a row of icons.
+ 6. Add option to always show settings (and shortcut) actions.
+ 7. Add 'Alt+F' as shortcut for 'Advanced search'.
+ 8. If at top-level then Ctr+F should always open 'Search library', even if 'My
+    Music' is hidden.
+ 9. Fix queue being shown empty when adding/removing a player.
+10. If using album-style queue then also group by work/performance.
 
 5.5.1
 -----

@@ -129,6 +129,8 @@ function parseResp(data, showTrackNum, index, showRatings, queueAlbumStyle, queu
                                      ( undefined==prevItem ||
                                        i.album_id!=prevItem.album_id ||
                                        i.disc!=prevItem.disc ||
+                                       i.work_id!=prevItem.work_id ||
+                                       i.performance!=prevItem.performance ||
                                        (undefined==i.album_id && ( (undefined!=image && image!=prevItem.image) ||
                                                                    (i.album!=prevItem.album) ) ) );
                 let grpKey = isAlbumHeader || undefined==prevItem ? index+resp.items.length : prevItem.grpKey;
@@ -166,7 +168,9 @@ function parseResp(data, showTrackNum, index, showRatings, queueAlbumStyle, queu
                                       ? isAlbumHeader ? LMS_ALBUM_QUEUE_HEADER : LMS_ALBUM_QUEUE_TRACK
                                       : undefined,
                               grpKey:grpKey,
-                              rating: !queueAlbumStyle && haveRating ? Math.ceil(i.rating/10.0)/2.0 : undefined
+                              rating: !queueAlbumStyle && haveRating ? Math.ceil(i.rating/10.0)/2.0 : undefined,
+                              work_id: i.work_id,
+                              performance: i.performance
                           });
                 index++;
             }

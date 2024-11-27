@@ -129,7 +129,7 @@ function parseResp(data, showTrackNum, index, showRatings, queueAlbumStyle, queu
                 let isAlbumHeader = queueAlbumStyle &&
                                      ( undefined==prevItem ||
                                        i.album_id!=prevItem.album_id ||
-                                       i.disc!=prevItem.disc ||
+                                       (i.disc!=prevItem.disc && undefined==i.work_id) ||
                                        i.work_id!=prevItem.work_id ||
                                        i.performance!=prevItem.performance ||
                                        (undefined==i.album_id && ( (undefined!=image && image!=prevItem.image) ||

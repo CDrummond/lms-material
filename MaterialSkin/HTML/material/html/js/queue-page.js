@@ -40,6 +40,8 @@ function buildArtistAlbumLines(i, queueAlbumStyle, queueContext) {
     let artistAlbum = undefined;
     let artistAlbumContext = undefined;
     let artistIsRemoteTitle = false;
+    let workGroupStr = i.work && i.composer ? i.composer+SEPARATOR+i.work : '';
+    workGroupStr += i.work && i.grouping ? SEPARATOR + i.grouping : i.grouping ? i.grouping : '';
     let artistStr = i.albumartist ? i.albumartist : i.artist ? i.artist : i.trackartist;
     if (queueAlbumStyle) {
         let id = i.albumartist ? i.albumartist_id : i.artist_id ? i.artist_id : i.trackartist_id;
@@ -69,8 +71,10 @@ function buildArtistAlbumLines(i, queueAlbumStyle, queueContext) {
         artistAlbumContext = undefined;
     }
     if (!queueAlbumStyle || !artistIsRemoteTitle) {
-        artistAlbum = addPart(artistAlbum, buildWorkLine(i, artistStr, 'queue'));
         artistAlbum = addPart(artistAlbum, buildAlbumLine(i, 'queue'));
+        if (workGroupStr) {
+            artistAlbum = '<obj>' + workGroupStr + '</obj>'+ SEPARATOR + artistAlbum;
+        }
         if (queueContext) {
             let al = i18n('<obj>from</obj> %1', buildAlbumLine(i, "queue")).replaceAll("<obj>", "<obj class=\"ext-details\">");
             artistAlbumContext = undefined == artistAlbumContext ? al : (artistAlbumContext + " " + al);

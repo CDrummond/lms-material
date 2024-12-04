@@ -1041,7 +1041,8 @@ function getClickPos(ev) {
 }
 
 function useArtistTagType(genre, genres) {
-    return (genre && genres.has(genre)) || (1==genres.size && genres.has('*'));
+    const genreArray = genre.toString().split(/\s*,\s*/);
+    return (genreArray.some(g => genres.has(g))) || (1==genres.size && genres.has('*'));
 }
 
 function useComposer(genre) {

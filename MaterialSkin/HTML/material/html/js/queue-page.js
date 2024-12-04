@@ -6,7 +6,7 @@
  */
 'use strict';
 
-const PQ_STATUS_TAGS = "tags:cdegilqtuy" + (LMS_VERSION>=90000 ? "bhz1" : "") + "AAIKNSxx";
+const PQ_STATUS_TAGS = "tags:cdegilqtuy" + (LMS_VERSION>=90000 ? "bhz1" : "") + "AAIKNSxxGP";
 const PQ_REQUIRE_AT_LEAST_1_ITEM = new Set([PQ_SAVE_ACTION, PQ_MOVE_QUEUE_ACTION, PQ_SCROLL_ACTION, PQ_SORT_ACTION, REMOVE_DUPES_ACTION]);
 const PQ_REQUIRE_MULTIPLE_ITEMS = new Set([PQ_SCROLL_ACTION, SEARCH_LIST_ACTION, PQ_SORT_ACTION, REMOVE_DUPES_ACTION]);
 
@@ -52,9 +52,9 @@ function buildArtistAlbumLines(i, queueAlbumStyle, queueContext) {
             artistAlbum = buildLink(i.albumartist ? 'show_albumartist' : 'show_artist', id, artistStr, 'queue');
         }
     } else {
-        let useComposerTag = i.composer && lmsOptions.showComposer && useComposer(i.genre);
-        let useConductorTag = i.conductor && lmsOptions.showConductor && useConductor(i.genre);
-        let useBandTag = i.band && lmsOptions.showBand && useBand(i.genre);
+        let useComposerTag = i.composer && lmsOptions.showComposer && useComposer(i.genres);
+        let useConductorTag = i.conductor && lmsOptions.showConductor && useConductor(i.genres);
+        let useBandTag = i.band && lmsOptions.showBand && useBand(i.genres);
         artistAlbum = buildArtistLine(i, 'queue', undefined, undefined, useBandTag, useComposerTag, useConductorTag);
         artistAlbumContext = queueContext ? replaceBr(buildArtistWithContext(i, 'queue', useBandTag, useComposerTag, useConductorTag), " ") : undefined;
     }

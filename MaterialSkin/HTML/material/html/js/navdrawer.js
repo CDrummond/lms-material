@@ -228,6 +228,10 @@ Vue.component('lms-navdrawer', {
     </v-list-tile-content>
     <v-list-tile-action v-if="item.shortcut && keyboardControl" class="menu-shortcut">{{item.shortcut}}</v-list-tile-action>
    </v-list-tile>
+   <v-list-tile v-else-if="TB_APP_SETTINGS.id==item.id" :href="queryParams.appSettings" @click="show=false">
+    <v-list-tile-avatar><img class="svg-img" :src="TB_APP_SETTINGS.svg | svgIcon(darkUi)"></img></v-list-tile-avatar>
+    <v-list-tile-content><v-list-tile-title>{{TB_APP_SETTINGS.stitle}}</v-list-tile-title></v-list-tile-content>
+   </v-list-tile>
    <template v-else-if="TB_CUSTOM_SETTINGS_ACTIONS.id==item.id && undefined!=customSettingsActions && customSettingsActions.length>0" v-for="(action, actIndex) in customSettingsActions">
     <v-list-tile @click="doCustomAction(action)">
      <v-list-tile-avatar><v-icon v-if="action.icon">{{action.icon}}</v-icon><img v-else-if="action.svg" class="svg-img" :src="action.svg | svgIcon(darkUi)"></img></v-list-tile-avatar>

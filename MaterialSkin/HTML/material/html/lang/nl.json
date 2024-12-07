@@ -679,9 +679,9 @@
 "%1 Years":"%1 Jaren",
 "1 day":"1 dag",
 "%1 days":"%1 dagen",
-"Main Menu":"",
-"Only scroll player list, keep settings (and shortcuts) visible at bottom.":"",
-"Settings (and shortcuts) always visible":"",
-"Use a row of icons, and not a list of text, for settings entries.":"",
-"Use icons for settings":""
+"Main Menu":"Hoofdmenu",
+"Only scroll player list, keep settings (and shortcuts) visible at bottom.":"Blader alleen door de lijst met muziekspelers, houd de instellingen (en snelkoppelingen) onderaan zichtbaar.",
+"Settings (and shortcuts) always visible":"Instellingen (en snelkoppelingen) altijd zichtbaar",
+"Use a row of icons, and not a list of text, for settings entries.":"Gebruik een rij pictogrammen en geen tekst voor toegang tot instellingen.",
+"Use icons for settings":"Gebruik pictogrammen voor instellingen"
 }

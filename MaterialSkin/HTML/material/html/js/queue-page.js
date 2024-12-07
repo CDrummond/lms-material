@@ -52,9 +52,9 @@ function buildArtistAlbumLines(i, queueAlbumStyle, queueContext) {
             artistAlbum = buildLink(i.albumartist ? 'show_albumartist' : 'show_artist', id, artistStr, 'queue');
         }
     } else {
-        let useComposerTag = i.composer && lmsOptions.showComposer && useComposer(i.genre);
-        let useConductorTag = i.conductor && lmsOptions.showConductor && useConductor(i.genre);
-        let useBandTag = i.band && lmsOptions.showBand && useBand(i.genre);
+        let useComposerTag = i.composer && lmsOptions.showComposer && useComposer(i);
+        let useConductorTag = i.conductor && lmsOptions.showConductor && useConductor(i);
+        let useBandTag = i.band && lmsOptions.showBand && useBand(i);
         artistAlbum = buildArtistLine(i, 'queue', undefined, undefined, useBandTag, useComposerTag, useConductorTag);
         artistAlbumContext = queueContext ? replaceBr(buildArtistWithContext(i, 'queue', useBandTag, useComposerTag, useConductorTag), " ") : undefined;
     }
@@ -100,7 +100,7 @@ function parseResp(data, showTrackNum, index, showRatings, queueAlbumStyle, queu
             let calcDurations = queueAlbumStyle && resp.size == data.result.playlist_loop.length;
             for (var idx=0, loop=data.result.playlist_loop, loopLen=loop.length; idx<loopLen; ++idx) {
                 let i = makeHtmlSafe(loop[idx]);
-                splitMultiples(i);
+                splitMultiples(i, true);
                 let title = trackTitle(i);
                 let artist = i.albumartist ? i.albumartist : i.artist ? i.artist : i.trackartist;
                 if (i.remote && undefined==title && undefined==artist && undefined==i.album) {

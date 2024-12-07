@@ -12,6 +12,8 @@
  9. Fix queue being shown empty when adding/removing a player.
 10. If using album-style queue then also group by work/performance.
 11. Don't split album-style queue on disc number if work_id is present.
+12. Support multiple-genres when checking if to show composer, conductor, or
+    band.
 
 5.5.1
 -----

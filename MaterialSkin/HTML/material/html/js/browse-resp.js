@@ -1397,9 +1397,9 @@ function parseBrowseResp(data, parent, options, cacheKey, parentCommand, parentG
                     }
                 }
 
-                let useComposerTag = i.composer && lmsOptions.showComposer && useComposer(i.genre);
-                let useConductorTag = i.conductor && lmsOptions.showConductor && useConductor(i.genre);
-                let useBandTag = i.band && lmsOptions.showBand && useBand(i.genre);
+                let useComposerTag = i.composer && lmsOptions.showComposer && useComposer(i);
+                let useConductorTag = i.conductor && lmsOptions.showConductor && useConductor(i);
+                let useBandTag = i.band && lmsOptions.showBand && useBand(i);
                 artists.push(buildArtistLine(i, "browse", false, undefined, useBandTag, useComposerTag, useConductorTag));
                 if (browseContext) {
                     artistsWithContext.push(replaceBr(buildArtistWithContext(i, "browse", useBandTag, useComposerTag, useConductorTag), " "));
@@ -1781,9 +1781,9 @@ function parseBrowseResp(data, parent, options, cacheKey, parentCommand, parentG
                 var i = makeHtmlSafe(loop[idx]);
                 var title = i.title;
                 splitMultiples(i, true);
-                let useComposerTag = i.composer && lmsOptions.showComposer && useComposer(i.genre);
-                let useConductorTag = i.conductor && lmsOptions.showConductor && useConductor(i.genre);
-                let useBandTag = i.band && lmsOptions.showBand && useBand(i.genre);
+                let useComposerTag = i.composer && lmsOptions.showComposer && useComposer(i);
+                let useConductorTag = i.conductor && lmsOptions.showConductor && useConductor(i);
+                let useBandTag = i.band && lmsOptions.showBand && useBand(i);
                 let subtitle = buildArtistLine(i, "browse", false, undefined, useBandTag, useComposerTag, useConductorTag);
                 let subtitleContext = browseContext ? replaceBr(buildArtistWithContext(i, "browse", useBandTag, useComposerTag, useConductorTag), " ") : undefined;
                 if (!title) {

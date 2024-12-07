@@ -170,9 +170,9 @@ function nowplayingOnPlayerStatus(view, playerStatus) {
     if (emblem!=view.playerStatus.current.emblem) {
         view.playerStatus.current.emblem = emblem;
     }
-    let useComposerTag = playerStatus.current.composer && lmsOptions.showComposer && useComposer(playerStatus.current.genre);
-    let useConductorTag = playerStatus.current.conductor && lmsOptions.showConductor && useConductor(playerStatus.current.genre);
-    let useBandTag = playerStatus.current.band && lmsOptions.showBand && useBand(playerStatus.current.genre);
+    let useComposerTag = playerStatus.current.composer && lmsOptions.showComposer && useComposer(playerStatus.current);
+    let useConductorTag = playerStatus.current.conductor && lmsOptions.showConductor && useConductor(playerStatus.current);
+    let useBandTag = playerStatus.current.band && lmsOptions.showBand && useBand(playerStatus.current);
     let mobileBarText = addPart(playerStatus.current.title, buildArtistLine(playerStatus.current, 'np', true, undefined, useBandTag, useComposerTag, useConductorTag));
     if (mobileBarText!=view.mobileBarText) {
         view.mobileBarText = mobileBarText;
@@ -252,7 +252,7 @@ function nowplayingOnPlayerStatus(view, playerStatus) {
         view.playerStatus.current.technicalInfo = technical;
     }
 
-    let maiComposer = lmsOptions.maiComposer && view.playerStatus.current.composer && undefined!=view.playerStatus.current.composer_id && useComposer(view.playerStatus.current.genre);
+    let maiComposer = lmsOptions.maiComposer && view.playerStatus.current.composer && undefined!=view.playerStatus.current.composer_id && useComposerTag;
     if (maiComposer!=view.playerStatus.current.maiComposer) {
         view.playerStatus.current.maiComposer = maiComposer;
     }
@@ -347,13 +347,13 @@ function nowplayingShowMenu(view, event) {
                 view.menu.items.push({title:ACTIONS[GOTO_ARTIST_ACTION].title, act:NP_BROWSE_CMD, cmd:{command:["albums"], params:["artist_id:"+albumartist_id, ARTIST_ALBUM_TAGS, SORT_KEY+ARTIST_ALBUM_SORT_PLACEHOLDER, "role_id:ALBUMARTIST"], title:view.playerStatus.current.albumartist}, svg:ACTIONS[GOTO_ARTIST_ACTION].svg});
             }
         }
-        if (lmsOptions.showComposer && view.playerStatus.current.composer && view.playerStatus.current.composer_id && useComposer(view.playerStatus.current.genre)) {
+        if (lmsOptions.showComposer && view.playerStatus.current.composer && view.playerStatus.current.composer_id && useComposer(view.playerStatus.current)) {
             view.menu.items.push({title:i18n("Go to composer"), act:NP_BROWSE_CMD, cmd:{command:["albums"], params:["artist_id:"+view.playerStatus.current.composer_id, ARTIST_ALBUM_TAGS, SORT_KEY+ARTIST_ALBUM_SORT_PLACEHOLDER, "role_id:COMPOSER"], title:view.playerStatus.current.composer}, svg:"composer"});
         }
-        if (lmsOptions.showConductor && view.playerStatus.current.conductor && view.playerStatus.current.conductor_id && useConductor(view.playerStatus.current.genre)) {
+        if (lmsOptions.showConductor && view.playerStatus.current.conductor && view.playerStatus.current.conductor_id && useConductor(view.playerStatus.current)) {
             view.menu.items.push({title:i18n("Go to conductor"), act:NP_BROWSE_CMD, cmd:{command:["albums"], params:["artist_id:"+view.playerStatus.current.conductor_id, ARTIST_ALBUM_TAGS, SORT_KEY+ARTIST_ALBUM_SORT_PLACEHOLDER, "role_id:CONDUCTOR"], title:view.playerStatus.current.conductor}, svg:"conductor"});
         }
-        if (lmsOptions.showBand && view.playerStatus.current.band && view.playerStatus.current.band_id && useBand(view.playerStatus.current.genre)) {
+        if (lmsOptions.showBand && view.playerStatus.current.band && view.playerStatus.current.band_id && useBand(view.playerStatus.current)) {
             view.menu.items.push({title:i18n("Go to band"), act:NP_BROWSE_CMD, cmd:{command:["albums"], params:["artist_id:"+view.playerStatus.current.band_id, ARTIST_ALBUM_TAGS, SORT_KEY+ARTIST_ALBUM_SORT_PLACEHOLDER, "role_id:BAND"], title:view.playerStatus.current.band}, svg:"trumpet"});
         }
         if (view.playerStatus.current.album_id && view.playerStatus.current.album) {

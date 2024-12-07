@@ -23,9 +23,11 @@ function showAlbum(event, album, title, page) {
     browseItem(event, ["tracks"], ["album_id:"+album, trackTags(true), SORT_KEY+"tracknum"], unescape(title), page);
 }
 
+/*
 function showWork(event, work, title, artist, page) {
     browseItem(event, ["albums"], ["work_id:"+work, ARTIST_ALBUM_TAGS, SORT_KEY+ARTIST_ALBUM_SORT_PLACEHOLDER], unescape(title), page, unescape(artist));
 }
+*/
 
 function showArtistRole(event, id, title, page, role) {
     browseItem(event, ["albums"], ["artist_id:"+id, ARTIST_ALBUM_TAGS, SORT_KEY+ARTIST_ALBUM_SORT_PLACEHOLDER, "role_id:"+role], unescape(title), page);
@@ -236,6 +238,7 @@ function buildAlbumLine(i, page, plain) {
     }
 }
 
+/*
 function buildWorkLine(i, artist, page, plain) {
     var line = undefined;
     if (i.work && artist) {
@@ -247,3 +250,4 @@ function buildWorkLine(i, artist, page, plain) {
     }
     return line;
 }
+*/

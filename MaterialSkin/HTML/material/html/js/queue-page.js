@@ -40,8 +40,9 @@ function buildArtistAlbumLines(i, queueAlbumStyle, queueContext) {
     let artistAlbum = undefined;
     let artistAlbumContext = undefined;
     let artistIsRemoteTitle = false;
-    let artistStr = i.albumartist ? i.albumartist : i.artist ? i.artist : i.trackartist;
+    //let artistStr = i.albumartist ? i.albumartist : i.artist ? i.artist : i.trackartist; - moved into queueAlbumStyle block
     if (queueAlbumStyle) {
+        let artistStr = i.albumartist ? i.albumartist : i.artist ? i.artist : i.trackartist;
         let id = i.albumartist ? i.albumartist_id : i.artist_id ? i.artist_id : i.trackartist_id;
         if (!artistStr && i.remote) {
             artistAlbum = i.remote_title ? i.remote_title : i.title;
@@ -69,7 +70,7 @@ function buildArtistAlbumLines(i, queueAlbumStyle, queueContext) {
         artistAlbumContext = undefined;
     }
     if (!queueAlbumStyle || !artistIsRemoteTitle) {
-        artistAlbum = addPart(artistAlbum, buildWorkLine(i, artistStr, 'queue'));
+        //artistAlbum = addPart(artistAlbum, buildWorkLine(i, artistStr, 'queue'));
         artistAlbum = addPart(artistAlbum, buildAlbumLine(i, 'queue'));
         if (queueContext) {
             let al = i18n('<obj>from</obj> %1', buildAlbumLine(i, "queue")).replaceAll("<obj>", "<obj class=\"ext-details\">");
@@ -129,10 +130,10 @@ function parseResp(data, showTrackNum, index, showRatings, queueAlbumStyle, queu
                 let isAlbumHeader = queueAlbumStyle &&
                                      ( undefined==prevItem ||
                                        i.album_id!=prevItem.album_id ||
-                                       (i.disc!=prevItem.disc && undefined==i.work_id) ||
-                                       i.work_id!=prevItem.work_id ||
-                                       i.performance!=prevItem.performance ||
-                                       i.grouping!=prevItem.grouping ||
+                                       (i.disc!=prevItem.disc /*&& undefined==i.work_id*/) ||
+                                       //i.work_id!=prevItem.work_id ||
+                                       //i.performance!=prevItem.performance ||
+                                       //i.grouping!=prevItem.grouping ||
                                        (undefined==i.album_id && ( (undefined!=image && image!=prevItem.image) ||
                                                                    (i.album!=prevItem.album) ) ) );
                 let grpKey = isAlbumHeader || undefined==prevItem ? index+resp.items.length : prevItem.grpKey;
@@ -170,10 +171,10 @@ function parseResp(data, showTrackNum, index, showRatings, queueAlbumStyle, queu
                                       ? isAlbumHeader ? LMS_ALBUM_QUEUE_HEADER : LMS_ALBUM_QUEUE_TRACK
                                       : undefined,
                               grpKey:grpKey,
-                              rating: !queueAlbumStyle && haveRating ? Math.ceil(i.rating/10.0)/2.0 : undefined,
-                              work_id: i.work_id,
-                              performance: i.performance,
-                              grouping: i.grouping
+                              rating: !queueAlbumStyle && haveRating ? Math.ceil(i.rating/10.0)/2.0 : undefined
+                              //work_id: i.work_id,
+                              //performance: i.performance,
+                              //grouping: i.grouping
                           });
                 index++;
             }

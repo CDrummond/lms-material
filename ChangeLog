@@ -10,8 +10,6 @@
  8. If at top-level then Ctr+F should always open 'Search library', even if 'My
     Music' is hidden.
  9. Fix queue being shown empty when adding/removing a player.
-10. If using album-style queue then also group by work/performance.
-11. Don't split album-style queue on disc number if work_id is present.
 
 5.5.1
 -----

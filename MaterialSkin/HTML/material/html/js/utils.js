@@ -1040,20 +1040,22 @@ function getClickPos(ev) {
     return {x:clickX, y:clickY};
 }
 
-function useArtistTagType(genre, genres) {
-    return (genre && genres.has(genre)) || (1==genres.size && genres.has('*'));
+function useArtistTagType(item, tagGenres) {
+    return (1==tagGenres.size && tagGenres.has('*')) ||
+           (item.genres && Array.isArray(item.genres) && item.genres.some(g => tagGenres.has(g)) ||
+           (!item.genres && item.genre && tagGenres.has(item.genre)));
 }
 
-function useComposer(genre) {
-    return useArtistTagType(genre, lmsOptions.composerGenres);
+function useComposer(item) {
+    return useArtistTagType(item, lmsOptions.composerGenres);
 }
 
-function useConductor(genre) {
-    return useArtistTagType(genre, lmsOptions.conductorGenres);
+function useConductor(item) {
+    return useArtistTagType(item, lmsOptions.conductorGenres);
 }
 
-function useBand(genre) {
-    return useArtistTagType(genre, lmsOptions.bandGenres);
+function useBand(item) {
+    return useArtistTagType(item, lmsOptions.bandGenres);
 }
 
 function splitIntArray(val) {

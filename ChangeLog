@@ -10,6 +10,8 @@
  8. If at top-level then Ctr+F should always open 'Search library', even if 'My
     Music' is hidden.
  9. Fix queue being shown empty when adding/removing a player.
+10. Support multiple-genres when checking if to show composer, conductor, or
+    band.
 
 5.5.1
 -----

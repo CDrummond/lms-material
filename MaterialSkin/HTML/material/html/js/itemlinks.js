@@ -132,13 +132,13 @@ function buildArtistLine(i, page, plain, existing, useBandTag, useComposerTag, u
         used.add(artist);
     }
 
-    if (undefined!=useBandTag ? useBandTag : (i.band && lmsOptions.showBand && useBand(i.genre))) {
+    if (undefined!=useBandTag ? useBandTag : (i.band && lmsOptions.showBand && useBand(i))) {
         line=addArtistLink(i, line, "band", "show_band", page, used, plain);
     }
-    if (undefined!=useComposerTag ? useComposerTag : (i.composer && lmsOptions.showComposer && useComposer(i.genre))) {
+    if (undefined!=useComposerTag ? useComposerTag : (i.composer && lmsOptions.showComposer && useComposer(i))) {
         line=addArtistLink(i, line, "composer", "show_composer", page, used, plain);
     }
-    if (undefined!=useConductorTag ? useConductorTag : (i.conductor && lmsOptions.showConductor && useConductor(i.genre))) {
+    if (undefined!=useConductorTag ? useConductorTag : (i.conductor && lmsOptions.showConductor && useConductor(i))) {
         line=addArtistLink(i, line, "conductor", "show_conductor", page, used, plain);
     }
 

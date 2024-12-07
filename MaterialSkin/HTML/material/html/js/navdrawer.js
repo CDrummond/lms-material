@@ -56,7 +56,7 @@ Vue.component('lms-navdrawer', {
 <v-navigation-drawer v-model="show" app temporary :width="maxWidth" style="display:flex;flex-direction:column">
  <div class="nd-top"></div>
  <div class="nd-header">
-  <v-list-tile @click.prevent="show=false" style="margin-top:-2px">
+  <v-list-tile @click.prevent="show=false">
    <v-list-tile-avatar><v-btn icon flat @click="show=false"><v-icon>arrow_back<v-icon></v-btn></v-list-tile-avatar>
    <div class="lyrion-logo" v-longpress:nomove="clickLogo"><img :src="'lyrion' | svgIcon(darkUi)"></img></div>
    <v-list-tile-action>

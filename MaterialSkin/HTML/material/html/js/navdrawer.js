@@ -11,7 +11,7 @@ var TB_UI_SETTINGS     = {id:1, svg:  "ui-settings" };
 var TB_PLAYER_SETTINGS = {id:2, svg:  "player-settings" };
 var TB_SERVER_SETTINGS = {id:3, svg:  "server-settings" };
 var TB_APP_SETTINGS    = {id:4, svg:  "app-settings" };
-var TB_INFO            = {id:5, svg:  "info" };
+var TB_INFO            = {id:5, icon: "info_outline" };
 var TB_MANAGE_PLAYERS  = {id:6, svg:  "player-manager" };
 var TB_START_PLAYER    = {id:7, icon: "surround_sound" }
 var TB_APP_QUIT        = {id:8, svg:  "close" }
@@ -63,7 +63,7 @@ Vue.component('lms-navdrawer', {
     <v-btn icon @click="menuAction(TB_INFO.id)" style="position:absolute;right:16px" :title="updatesAvailable ? trans.updatesAvailable : restartRequired ? trans.restartRequired : TB_INFO.title">
      <img v-if="updatesAvailable" class="svg-img" :src="'update' | svgIcon(darkUi, true)"></img>
      <img v-else-if="restartRequired" class="svg-img" :src="'restart' | svgIcon(darkUi, true)">
-     <img v-else class="svg-img" :src="TB_INFO.svg | svgIcon(darkUi)">
+     <v-icon v-else>{{TB_INFO.icon}}</v-icon>
     </v-btn>
    </v-list-tile-action>
   </v-list-tile>
@@ -136,7 +136,7 @@ Vue.component('lms-navdrawer', {
    <v-subheader>{{TB_SETTINGS.title}}</v-subheader>
    <ul class="nd-shortuts" v-bind:class="{'nd-shortuts-wide':maxWidth>320}">
     <template v-for="(item, index) in menuItems">
-     <li :title="item.title" v-if="item!=DIVIDER && !item.hdr">
+     <li :title="item.title" v-if="item!=DIVIDER && !item.hdr && (TB_PLAYER_SETTINGS.id==item.id ? (player && connected) : (TB_SERVER_SETTINGS.id!=item.id || (unlockAll && connected)))">
       <v-btn v-if="TB_APP_SETTINGS.id==item.id" :href="queryParams.appSettings" @click="show=false" icon class="toolbar-button">
        <img class="svg-img" :src="TB_APP_SETTINGS.svg | svgIcon(darkUi)"></img>
       </v-btn>
@@ -198,7 +198,7 @@ Vue.component('lms-navdrawer', {
   <v-subheader>{{TB_SETTINGS.title}}</v-subheader>
   <ul class="nd-shortuts" v-bind:class="{'nd-shortuts-wide':maxWidth>320}">
    <template v-for="(item, index) in menuItems">
-    <li :title="item.title" v-if="item!=DIVIDER && !item.hdr">
+    <li :title="item.title" v-if="item!=DIVIDER && !item.hdr && (TB_PLAYER_SETTINGS.id==item.id ? (player && connected) : (TB_SERVER_SETTINGS.id!=item.id || (unlockAll && connected)))">
      <v-btn v-if="TB_APP_SETTINGS.id==item.id" :href="queryParams.appSettings" @click="show=false" icon class="toolbar-button">
       <img class="svg-img" :src="TB_APP_SETTINGS.svg | svgIcon(darkUi)"></img>
      </v-btn>

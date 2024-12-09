@@ -83,6 +83,7 @@
     <input type="checkbox" name="pref_genreImages" id="pref_genreImages" [% IF prefs.pref_genreImages %] checked [% END %] value="1"/>
     [% END %]
 
+    [% IF lmsHasClassicalGenreList == 0 %]
     <br/><hr class="main-sep"/>
     <div><i>[% "PLUGIN_MATERIAL_SKIN_GENRES_LIST_NOTE" | string %]</i></div><br/>
     <div><i>[% "PLUGIN_MATERIAL_SKIN_LOAD_DEFAULT_GENRES_DESC" | string %]</i></div><br/>
@@ -114,6 +115,22 @@
     [% END %]
     [% WRAPPER setting title="PLUGIN_MATERIAL_SKIN_SHOW_BAND" desc="PLUGIN_MATERIAL_SKIN_SHOW_BAND_DESC" %]
     <input type="checkbox" name="pref_showBand" id="pref_showBand" [% IF prefs.pref_showBand %] checked [% END %] value="1"/>
+    [% END %]
+
+    [% END %]
+    [% IF lmsHasClassicalGenreList == 1 %]
+    [% WRAPPER setting title="PLUGIN_MATERIAL_SKIN_SHOW_COMPOSER" desc="PLUGIN_MATERIAL_SKIN_IF_CLASSICAL_GENRE_DESC" %]
+    <input type="checkbox" name="pref_showComposer" id="pref_showComposer" [% IF prefs.pref_showComposer %] checked [% END %] value="1"/>
+    [% END %]
+    [% WRAPPER setting title="PLUGIN_MATERIAL_SKIN_USE_COMPOSER_MAI" desc="PLUGIN_MATERIAL_SKIN_USE_COMPOSER_MAI_DESC" %]
+    <input type="checkbox" name="pref_maiComposer" id="pref_maiComposer" [% IF prefs.maiComposer %] checked [% END %] value="1"/>
+    [% END %]
+    [% WRAPPER setting title="PLUGIN_MATERIAL_SKIN_SHOW_CONDUCTOR" desc="PLUGIN_MATERIAL_SKIN_IF_CLASSICAL_GENRE_DESC" %]
+    <input type="checkbox" name="pref_showConductor" id="pref_showConductor" [% IF prefs.pref_showConductor %] checked [% END %] value="1"/>
+    [% END %]
+    [% WRAPPER setting title="PLUGIN_MATERIAL_SKIN_SHOW_BAND" desc="PLUGIN_MATERIAL_SKIN_IF_CLASSICAL_GENRE_DESC" %]
+    <input type="checkbox" name="pref_showBand" id="pref_showBand" [% IF prefs.pref_showBand %] checked [% END %] value="1"/>
+    [% END %]
     [% END %]
 
 [% PROCESS settings/footer.html %]

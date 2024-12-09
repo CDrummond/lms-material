@@ -123,22 +123,24 @@ my %ROLE_ICON_MAP = (
 sub initPlugin {
     my $class = shift;
 
-    if (my $composergenres = $prefs->get('composergenres')) {
-        $prefs->set('composergenres', $DEFAULT_COMPOSER_GENRES) if $composergenres eq '';
-    } else {
-        $prefs->set('composergenres', $DEFAULT_COMPOSER_GENRES);
-    }
+    if (Slim::Utils::Versions->compareVersions($::VERSION, '9.1.0')<0) {
+        if (my $composergenres = $prefs->get('composergenres')) {
+            $prefs->set('composergenres', $DEFAULT_COMPOSER_GENRES) if $composergenres eq '';
+        } else {
+            $prefs->set('composergenres', $DEFAULT_COMPOSER_GENRES);
+        }
 
-    if (my $conductorgenres = $prefs->get('conductorgenres')) {
-        $prefs->set('conductorgenres', $DEFAULT_CONDUCTOR_GENRES) if $conductorgenres eq '';
-    } else {
-        $prefs->set('conductorgenres', $DEFAULT_CONDUCTOR_GENRES);
-    }
+        if (my $conductorgenres = $prefs->get('conductorgenres')) {
+            $prefs->set('conductorgenres', $DEFAULT_CONDUCTOR_GENRES) if $conductorgenres eq '';
+        } else {
+            $prefs->set('conductorgenres', $DEFAULT_CONDUCTOR_GENRES);
+        }
 
-    if (my $bandgenres = $prefs->get('bandgenres')) {
-        $prefs->set('bandgenres', $DEFAULT_BAND_GENRES) if $bandgenres eq '';
-    } else {
-        $prefs->set('bandgenres', $DEFAULT_BAND_GENRES);
+        if (my $bandgenres = $prefs->get('bandgenres')) {
+            $prefs->set('bandgenres', $DEFAULT_BAND_GENRES) if $bandgenres eq '';
+        } else {
+            $prefs->set('bandgenres', $DEFAULT_BAND_GENRES);
+        }
     }
 
     # 4.2.2 changed bool opts to be 'on', revert this to '1'/'0'
@@ -150,35 +152,64 @@ sub initPlugin {
         }
     }
 
-    $prefs->init({
-        composergenres => $DEFAULT_COMPOSER_GENRES,
-        conductorgenres => $DEFAULT_CONDUCTOR_GENRES,
-        bandgenres => $DEFAULT_BAND_GENRES,
-        maiComposer => 0,
-        showComposer => 1,
-        showConductor => 0,
-        showBand => 0,
-        respectFixedVol => 1,
-        showAllArtists => 1,
-        artistFirst => 1,
-        password => '',
-        allowDownload => 0,
-        commentAsDiscTitle => 0,
-        showComment => 0,
-        pagedBatchSize => lmsVersion()>=80400 ? 250 : 100,
-        noArtistFilter => 1,
-        releaseTypeOrder => '',
-        genreImages => 0,
-        touchLinks => 0,
-        yearInSub => 1,
-        playShuffle => 0,
-        combineAppsAndRadio => 0,
-        hideApps => '',
-        hideExtras => '',
-        hidePlayers => '',
-        screensaverTimeout => 60,
-        npSwitchTimeout => 5*60
-    });
+    if (Slim::Utils::Versions->compareVersions($::VERSION, '9.1.0')<0) {
+        $prefs->init({
+            composergenres => $DEFAULT_COMPOSER_GENRES,
+            conductorgenres => $DEFAULT_CONDUCTOR_GENRES,
+            bandgenres => $DEFAULT_BAND_GENRES,
+            maiComposer => 0,
+            showComposer => 1,
+            showConductor => 0,
+            showBand => 0,
+            respectFixedVol => 1,
+            showAllArtists => 1,
+            artistFirst => 1,
+            password => '',
+            allowDownload => 0,
+            commentAsDiscTitle => 0,
+            showComment => 0,
+            pagedBatchSize => lmsVersion()>=80400 ? 250 : 100,
+            noArtistFilter => 1,
+            releaseTypeOrder => '',
+            genreImages => 0,
+            touchLinks => 0,
+            yearInSub => 1,
+            playShuffle => 0,
+            combineAppsAndRadio => 0,
+            hideApps => '',
+            hideExtras => '',
+            hidePlayers => '',
+            screensaverTimeout => 60,
+            npSwitchTimeout => 5*60
+        });
+    } else {
+        $prefs->init({
+            maiComposer => 0,
+            showComposer => 1,
+            showConductor => 0,
+            showBand => 0,
+            respectFixedVol => 1,
+            showAllArtists => 1,
+            artistFirst => 1,
+            password => '',
+            allowDownload => 0,
+            commentAsDiscTitle => 0,
+            showComment => 0,
+            pagedBatchSize => lmsVersion()>=80400 ? 250 : 100,
+            noArtistFilter => 1,
+            releaseTypeOrder => '',
+            genreImages => 0,
+            touchLinks => 0,
+            yearInSub => 1,
+            playShuffle => 0,
+            combineAppsAndRadio => 0,
+            hideApps => '',
+            hideExtras => '',
+            hidePlayers => '',
+            screensaverTimeout => 60,
+            npSwitchTimeout => 5*60
+        });
+    }
     $prefs->setChange(sub { $prefs->set($_[0], 0) unless defined $_[1]; }, 'maiComposer');
     $prefs->setChange(sub { $prefs->set($_[0], 0) unless defined $_[1]; }, 'showBand');
     $prefs->setChange(sub { $prefs->set($_[0], 0) unless defined $_[1]; }, 'showComposer');
@@ -546,9 +577,11 @@ sub _cliCommand {
     }
 
     if ($cmd eq 'prefs') {
-        $request->addResult('composergenres', $prefs->get('composergenres'));
-        $request->addResult('conductorgenres', $prefs->get('conductorgenres'));
-        $request->addResult('bandgenres', $prefs->get('bandgenres'));
+        if (Slim::Utils::Versions->compareVersions($::VERSION, '9.1.0')<0) {
+            $request->addResult('composergenres', $prefs->get('composergenres'));
+            $request->addResult('conductorgenres', $prefs->get('conductorgenres'));
+            $request->addResult('bandgenres', $prefs->get('bandgenres'));
+        }
         $request->addResult('maiComposer', $prefs->get('maiComposer'));
         $request->addResult('showComposer', $prefs->get('showComposer'));
         $request->addResult('showConductor', $prefs->get('showConductor'));

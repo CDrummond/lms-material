@@ -601,6 +601,7 @@ var lmsServer = Vue.component('lms-server', {
                     player.current.title = trackTitle(player.current);
                 }
                 splitMultiples(player.current, true);
+                player.current.isClassical = undefined!=player.current.isClassical && 1==parseInt(player.current.isClassical);
                 player.current.time = undefined==data.time ? undefined : "stop"==data.mode ? 0 : parseFloat(data.time);
                 player.current.live_edge = data.remoteMeta && data.remoteMeta.live_edge ? parseFloat(data.remoteMeta.live_edge) : undefined;
                 player.current.canseek = parseInt(data.can_seek);
@@ -713,13 +714,15 @@ var lmsServer = Vue.component('lms-server', {
                     this.$store.commit('checkPassword', data[3]);
                 } else {
                     let found = false;
-                    for (var t=0, len=SKIN_GENRE_TAGS.length; t<len; ++t ) {
-                        if (data[2]==(SKIN_GENRE_TAGS[t]+'genres')) {
-                            var genres = splitString(data[3].split("\r").join("").split("\n").join(","));
-                            lmsOptions[SKIN_GENRE_TAGS[t]+'Genres'] = new Set(genres);
-                            setLocalStorageVal(SKIN_GENRE_TAGS[t]+"genres", data[3]);
-                            found=true;
-                            break;
+                    if (LMS_VERSION<90100) {
+                        for (var t=0, len=SKIN_GENRE_TAGS.length; t<len; ++t ) {
+                            if (data[2]==(SKIN_GENRE_TAGS[t]+'genres')) {
+                                var genres = splitString(data[3].split("\r").join("").split("\n").join(","));
+                                lmsOptions[SKIN_GENRE_TAGS[t]+'Genres'] = new Set(genres);
+                                setLocalStorageVal(SKIN_GENRE_TAGS[t]+"genres", data[3]);
+                                found=true;
+                                break;
+                            }
                         }
                     }
                     if (!found) {

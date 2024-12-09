@@ -1047,15 +1047,15 @@ function useArtistTagType(item, tagGenres) {
 }
 
 function useComposer(item) {
-    return useArtistTagType(item, lmsOptions.composerGenres);
+    return item.isClassical || useArtistTagType(item, lmsOptions.composerGenres);
 }
 
 function useConductor(item) {
-    return useArtistTagType(item, lmsOptions.conductorGenres);
+    return item.isClassical || useArtistTagType(item, lmsOptions.conductorGenres);
 }
 
 function useBand(item) {
-    return useArtistTagType(item, lmsOptions.bandGenres);
+    return item.isClassical || useArtistTagType(item, lmsOptions.bandGenres);
 }
 
 function splitIntArray(val) {

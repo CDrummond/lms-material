@@ -134,23 +134,27 @@ var app = new Vue({
             this.setLanguage(lang);
         }.bind(this));
 
-        lmsOptions.conductorGenres = new Set(["Classical", "Avant-Garde", "Baroque", "Chamber Music", "Chant", "Choral", "Classical Crossover",
-                                              "Early Music", "High Classical", "Impressionist", "Medieval", "Minimalism","Modern Composition",
-                                              "Opera", "Orchestral", "Renaissance", "Romantic", "Symphony", "Wedding Music"]);
-        lmsOptions.composerGenres = new Set([...new Set(["Jazz"]), ...lmsOptions.conductorGenres]);
+        if (LMS_VERSION<90100) {
+            lmsOptions.conductorGenres = new Set(["Classical", "Avant-Garde", "Baroque", "Chamber Music", "Chant", "Choral", "Classical Crossover",
+                                                  "Early Music", "High Classical", "Impressionist", "Medieval", "Minimalism","Modern Composition",
+                                                  "Opera", "Orchestral", "Renaissance", "Romantic", "Symphony", "Wedding Music"]);
+            lmsOptions.composerGenres = new Set([...new Set(["Jazz"]), ...lmsOptions.conductorGenres]);
+        }
 
         if (lmsOptions.allowDownload && queryParams.download!='browser' && queryParams.download!='native') {
             lmsOptions.allowDownload = false;
         }
         lmsCommand("", ["material-skin", "prefs"]).then(({data}) => {
             if (data && data.result) {
-                for (var t=0, len=SKIN_GENRE_TAGS.length; t<len; ++t ) {
-                    if (data.result[SKIN_GENRE_TAGS[t]+'genres']) {
-                        var genres = splitString(data.result[SKIN_GENRE_TAGS[t]+'genres'].split("\r").join("").split("\n").join(","));
-                        if (genres.length>0) {
-                            lmsOptions[SKIN_GENRE_TAGS[t]+'Genres'] = new Set(genres);
-                            logJsonMessage(SKIN_GENRE_TAGS[t].toUpperCase()+"_GENRES", genres);
-                            setLocalStorageVal(SKIN_GENRE_TAGS[t]+"genres", data.result[SKIN_GENRE_TAGS[t]+'genres']);
+                if (LMS_VERSION<90100) {
+                    for (var t=0, len=SKIN_GENRE_TAGS.length; t<len; ++t ) {
+                        if (data.result[SKIN_GENRE_TAGS[t]+'genres']) {
+                            var genres = splitString(data.result[SKIN_GENRE_TAGS[t]+'genres'].split("\r").join("").split("\n").join(","));
+                            if (genres.length>0) {
+                                lmsOptions[SKIN_GENRE_TAGS[t]+'Genres'] = new Set(genres);
+                                logJsonMessage(SKIN_GENRE_TAGS[t].toUpperCase()+"_GENRES", genres);
+                                setLocalStorageVal(SKIN_GENRE_TAGS[t]+"genres", data.result[SKIN_GENRE_TAGS[t]+'genres']);
+                            }
                         }
                     }
                 }

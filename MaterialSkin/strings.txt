@@ -702,3 +702,6 @@ PLUGIN_MATERIAL_COMBINE_APPS_AND_RADIO_DESC
 	NL	Combineer de 'Applicaties' en 'Radio' in een enkel 'Applicaties' menu, waarbij de 'TuneIn' applicatie, indien ingeschakeld, wordt gebruikt als vervanging voor de 'Radio' applicatie.
 	ZH_CN	将“程序”和“电台”菜单合并成单个“程序”菜单。“电台”作为“TuneIn”程序添加到合并后的菜单里（如果已启用）。
 	HU	Kapcsolja össze az 'Apps' és a 'Radio' menüket egyetlen 'Apps' menübe, a 'Radio' (ha engedélyezve) hozzáadott 'Tunein' alkalmazással.
+
+PLUGIN_MATERIAL_SKIN_IF_CLASSICAL_GENRE_DESC
+	EN	Only show if a song's genre is in LMS's list of classical genres.

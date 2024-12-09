@@ -123,7 +123,7 @@ my %ROLE_ICON_MAP = (
 sub initPlugin {
     my $class = shift;
 
-    if (Slim::Utils::Versions->compareVersions($::VERSION, '9.1.0')<0) {
+    if (Slim::Utils::Versions->compareVersions($::VERSION, '9.0.1')<0) {
         if (my $composergenres = $prefs->get('composergenres')) {
             $prefs->set('composergenres', $DEFAULT_COMPOSER_GENRES) if $composergenres eq '';
         } else {
@@ -152,7 +152,7 @@ sub initPlugin {
         }
     }
 
-    if (Slim::Utils::Versions->compareVersions($::VERSION, '9.1.0')<0) {
+    if (Slim::Utils::Versions->compareVersions($::VERSION, '9.0.1')<0) {
         $prefs->init({
             composergenres => $DEFAULT_COMPOSER_GENRES,
             conductorgenres => $DEFAULT_CONDUCTOR_GENRES,
@@ -577,7 +577,7 @@ sub _cliCommand {
     }
 
     if ($cmd eq 'prefs') {
-        if (Slim::Utils::Versions->compareVersions($::VERSION, '9.1.0')<0) {
+        if (Slim::Utils::Versions->compareVersions($::VERSION, '9.0.1')<0) {
             $request->addResult('composergenres', $prefs->get('composergenres'));
             $request->addResult('conductorgenres', $prefs->get('conductorgenres'));
             $request->addResult('bandgenres', $prefs->get('bandgenres'));

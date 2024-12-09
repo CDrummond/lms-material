@@ -714,7 +714,7 @@ var lmsServer = Vue.component('lms-server', {
                     this.$store.commit('checkPassword', data[3]);
                 } else {
                     let found = false;
-                    if (LMS_VERSION<90100) {
+                    if (LMS_VERSION<90001) {
                         for (var t=0, len=SKIN_GENRE_TAGS.length; t<len; ++t ) {
                             if (data[2]==(SKIN_GENRE_TAGS[t]+'genres')) {
                                 var genres = splitString(data[3].split("\r").join("").split("\n").join(","));

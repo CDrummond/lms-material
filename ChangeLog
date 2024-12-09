@@ -1,6 +1,6 @@
 5.7.0
 -----
-1. Use LMS 9.1's 'Classical' genre list instead of separate composer,
+1. Use LMS 9.0.1's 'Classical' genre list instead of separate composer,
    conductor, and band genre lists.
 2. For remote streams, if genre(s) is empty/undefined the show composer,
    conductor, or band if relevent option is enabled (so skip genre check).

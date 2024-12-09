@@ -134,7 +134,7 @@ var app = new Vue({
             this.setLanguage(lang);
         }.bind(this));
 
-        if (LMS_VERSION<90100) {
+        if (LMS_VERSION<90001) {
             lmsOptions.conductorGenres = new Set(["Classical", "Avant-Garde", "Baroque", "Chamber Music", "Chant", "Choral", "Classical Crossover",
                                                   "Early Music", "High Classical", "Impressionist", "Medieval", "Minimalism","Modern Composition",
                                                   "Opera", "Orchestral", "Renaissance", "Romantic", "Symphony", "Wedding Music"]);
@@ -146,7 +146,7 @@ var app = new Vue({
         }
         lmsCommand("", ["material-skin", "prefs"]).then(({data}) => {
             if (data && data.result) {
-                if (LMS_VERSION<90100) {
+                if (LMS_VERSION<90001) {
                     for (var t=0, len=SKIN_GENRE_TAGS.length; t<len; ++t ) {
                         if (data.result[SKIN_GENRE_TAGS[t]+'genres']) {
                             var genres = splitString(data.result[SKIN_GENRE_TAGS[t]+'genres'].split("\r").join("").split("\n").join(","));

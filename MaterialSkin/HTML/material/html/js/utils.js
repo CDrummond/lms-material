@@ -1042,9 +1042,10 @@ function getClickPos(ev) {
 
 function useArtistTagType(item, tagGenres) {
     return (item.remote && undefined==item.genre && (undefined==item.genres || (Array.isArray(item.genres) && item.genres.length<1))) ||
-           (1==tagGenres.size && tagGenres.has('*')) ||
-           (item.genres && Array.isArray(item.genres) && item.genres.some(g => tagGenres.has(g)) ||
-           (!item.genres && item.genre && tagGenres.has(item.genre)));
+           (LMS_VERSION<90100 &&
+              ((1==tagGenres.size && tagGenres.has('*')) ||
+               (item.genres && Array.isArray(item.genres) && item.genres.some(g => tagGenres.has(g)) ||
+               (!item.genres && item.genre && tagGenres.has(item.genre)))));
 }
 
 function useComposer(item) {

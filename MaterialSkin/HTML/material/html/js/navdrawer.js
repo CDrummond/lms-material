@@ -61,8 +61,8 @@ Vue.component('lms-navdrawer', {
    <div class="lyrion-logo" v-longpress:nomove="clickLogo"><img :src="'lyrion' | svgIcon(darkUi)"></img></div>
    <v-list-tile-action>
     <v-btn icon @click="menuAction(TB_INFO.id)" style="position:absolute;right:16px" :title="updatesAvailable ? trans.updatesAvailable : restartRequired ? trans.restartRequired : TB_INFO.title">
-     <img v-if="updatesAvailable" class="svg-img" :src="'update' | svgIcon(darkUi, true)"></img>
-     <img v-else-if="restartRequired" class="svg-img" :src="'restart' | svgIcon(darkUi, true)">
+     <img v-if="updatesAvailable" class="svg-img" :src="'update' | infoIcon(darkUi, true)"></img>
+     <img v-else-if="restartRequired" class="svg-img" :src="'restart' | infoIcon(darkUi, true)">
      <v-icon v-else>{{TB_INFO.icon}}</v-icon>
     </v-btn>
    </v-list-tile-action>
@@ -670,6 +670,9 @@ Vue.component('lms-navdrawer', {
     filters: {
         svgIcon: function (name, dark, updateIcon) {
             return "/material/svg/"+name+"?c="+(updateIcon ? LMS_UPDATE_SVG : dark ? LMS_DARK_SVG : LMS_LIGHT_SVG)+"&r="+LMS_MATERIAL_REVISION;
+        },
+        infoIcon: function (name, dark) {
+            return "/material/svg/info-"+name+"?c="+(dark ? LMS_DARK_SVG : LMS_LIGHT_SVG)+"&c2="+LMS_UPDATE_SVG+"&r="+LMS_MATERIAL_REVISION;
         },
         playerShortcut: function(index) {
             return IS_APPLE ? ("⌥+"+(9==index ? 0 : index+1)) : i18n("Alt+%1", 9==index ? 0 : index+1);

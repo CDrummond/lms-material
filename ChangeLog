@@ -1,7 +1,8 @@
 5.6.1
 -----
 1. Sans-serif 'i' for info icon in navigation drawer.
-2. Fix hiding of 'Server' settings entry if using icons in navigation drawer
+2. Overlay small update/restart icon over info icon as per menu icon.
+3. Fix hiding of 'Server' settings entry if using icons in navigation drawer
    and a password has been set.
 
 5.6.0

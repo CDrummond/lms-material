@@ -4,6 +4,8 @@
 2. Overlay small update/restart icon over info icon as per menu icon.
 3. Fix hiding of 'Server' settings entry if using icons in navigation drawer
    and a password has been set.
+4. Fix showing multiple artists for albums on touch devices with links
+   disabled.
 
 5.6.0
 -----

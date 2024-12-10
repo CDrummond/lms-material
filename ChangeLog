@@ -1,7 +1,8 @@
 5.7.0
 -----
-1. Use LMS 9.0.1's 'isClassical' attribute instead of separate composer,
-   conductor, and band genre lists.
+1. Use LMS 9.0.1's 'isClassical' attribute to determine if composer, conductor,
+   and/or band should be shown (when relevent option is enabled) - instead of
+   using Material specific genre lists.
 2. For remote streams, if genre(s) is empty/undefined then show composer,
    conductor, or band if relevent option is enabled (i.e. skip genre check).
 

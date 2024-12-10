@@ -1117,7 +1117,7 @@ function parseBrowseResp(data, parent, options, cacheKey, parentCommand, parentG
 
                 if (undefined!=i.work_id && undefined!=i.work_name && undefined!=i.composer) {
                     maintitle = (!isEmpty(performance) ? performance+SEPARATOR : "") + (showArtist ? maintitle : i.album);
-                    subtitle = showArtist ? i.artist : undefined;
+                    subtitle = showArtist ? artist : undefined;
                     if (!subtitle && i.year && i.year>0 && lmsOptions.yearInSub) {
                         subtitle = ""+i.year;
                     }

@@ -513,6 +513,7 @@ function copyVars(iframe) {
     copyVar(iframe, '--std-scrollbar-thumb-color');
     copyVar(iframe, '--scrollbar-thumb-hover-color');
     copyVar(iframe, '--std-scrollbar-thumb-hover-color');
+    copyVar(iframe, '--list-item-border-color');
     return true;
 }
 

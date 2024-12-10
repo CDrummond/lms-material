@@ -686,7 +686,6 @@ Vue.component('lms-navdrawer', {
     },
     watch: {
         'show': function(newVal) {
-
             bus.$emit('navdrawer', newVal);
             this.$store.commit('menuVisible', {name:'navdrawer', shown:newVal});
             if (newVal) {

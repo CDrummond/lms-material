@@ -5,6 +5,7 @@
    using Material specific genre lists.
 2. For remote streams, if genre(s) is empty/undefined then show composer,
    conductor, or band if relevent option is enabled (i.e. skip genre check).
+3. Group album tracks by works for classical music, but only if single disc.
 
 5.6.1
 -----

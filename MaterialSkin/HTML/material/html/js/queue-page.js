@@ -9,6 +9,7 @@
 const PQ_STATUS_TAGS = "tags:cdegilqtuy" + (LMS_VERSION>=90000 ? "bhz1" : "") + "AAGIKNPSxx";
 const PQ_REQUIRE_AT_LEAST_1_ITEM = new Set([PQ_SAVE_ACTION, PQ_MOVE_QUEUE_ACTION, PQ_SCROLL_ACTION, PQ_SORT_ACTION, REMOVE_DUPES_ACTION]);
 const PQ_REQUIRE_MULTIPLE_ITEMS = new Set([PQ_SCROLL_ACTION, SEARCH_LIST_ACTION, PQ_SORT_ACTION, REMOVE_DUPES_ACTION]);
+let isExtendedAlbumHeader = false;
 
 function queueMakePlain(str) {
     let rating = str.indexOf(SEPARATOR+RATINGS_START);
@@ -39,6 +40,8 @@ var lmsQueueSelectionActive = false;
 function buildArtistAlbumLines(i, queueAlbumStyle, queueContext) {
     let artistAlbum = undefined;
     let artistAlbumContext = undefined;
+    let workLine = undefined;
+    let groupingLine = undefined;
     let artistIsRemoteTitle = false;
     //let artistStr = i.albumartist ? i.albumartist : i.artist ? i.artist : i.trackartist; - moved into queueAlbumStyle block
     if (queueAlbumStyle) {
@@ -72,6 +75,15 @@ function buildArtistAlbumLines(i, queueAlbumStyle, queueContext) {
     if (!queueAlbumStyle || !artistIsRemoteTitle) {
         //artistAlbum = addPart(artistAlbum, buildWorkLine(i, artistStr, 'queue'));
         artistAlbum = addPart(artistAlbum, buildAlbumLine(i, 'queue'));
+        workLine = buildWorkLine(i, 'queue');
+        groupingLine = buildGroupingLine(i, 'queue');
+        isExtendedAlbumHeader = false;
+        if (workLine && queueAlbumStyle) {
+            artistAlbum = addPart(workLine, groupingLine)+"<br />"+artistAlbum;
+            isExtendedAlbumHeader = true;
+        } else if (groupingLine) {
+            artistAlbum = addPart(artistAlbum, groupingLine);
+        }
         if (queueContext) {
             let al = i18n('<obj>from</obj> %1', buildAlbumLine(i, "queue")).replaceAll("<obj>", "<obj class=\"ext-details\">");
             artistAlbumContext = undefined == artistAlbumContext ? al : (artistAlbumContext + " " + al);
@@ -131,10 +143,10 @@ function parseResp(data, showTrackNum, index, showRatings, queueAlbumStyle, queu
                 let isAlbumHeader = queueAlbumStyle &&
                                      ( undefined==prevItem ||
                                        i.album_id!=prevItem.album_id ||
-                                       (i.disc!=prevItem.disc /*&& undefined==i.work_id*/) ||
-                                       //i.work_id!=prevItem.work_id ||
-                                       //i.performance!=prevItem.performance ||
-                                       //i.grouping!=prevItem.grouping ||
+                                       (i.disc!=prevItem.disc && undefined==i.work_id) ||
+                                       i.work_id!=prevItem.work_id ||
+                                       i.performance!=prevItem.performance ||
+                                       i.grouping!=prevItem.grouping ||
                                        (undefined==i.album_id && ( (undefined!=image && image!=prevItem.image) ||
                                                                    (i.album!=prevItem.album) ) ) );
                 let grpKey = isAlbumHeader || undefined==prevItem ? index+resp.items.length : prevItem.grpKey;
@@ -169,13 +181,15 @@ function parseResp(data, showTrackNum, index, showRatings, queueAlbumStyle, queu
                               artist: i.artist ? i.artist : i.trackartist ? i.trackartist : i.albumartist,
                               album: i.album,
                               size: queueAlbumStyle
-                                      ? isAlbumHeader ? LMS_ALBUM_QUEUE_HEADER : LMS_ALBUM_QUEUE_TRACK
+                                      ? isAlbumHeader
+                                          ? isExtendedAlbumHeader ? LMS_ALBUM_QUEUE_HEADER+LMS_ALBUM_QUEUE_TRACK : LMS_ALBUM_QUEUE_HEADER
+                                          : LMS_ALBUM_QUEUE_TRACK
                                       : undefined,
                               grpKey:grpKey,
-                              rating: !queueAlbumStyle && haveRating ? Math.ceil(i.rating/10.0)/2.0 : undefined
-                              //work_id: i.work_id,
-                              //performance: i.performance,
-                              //grouping: i.grouping
+                              rating: !queueAlbumStyle && haveRating ? Math.ceil(i.rating/10.0)/2.0 : undefined,
+                              work_id: i.work_id,
+                              performance: i.performance,
+                              grouping: i.grouping
                           });
                 index++;
             }

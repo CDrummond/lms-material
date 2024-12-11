@@ -1412,7 +1412,25 @@ function parseBrowseResp(data, parent, options, cacheKey, parentCommand, parentG
                         subtitleContext=i18n('<obj>from</obj> %1', buildAlbumLine(i, "browse", false)).replaceAll("<obj>", "<obj class=\"ext-details\">");
                     }
                 }
-                if (undefined!=i.disc && !isSearchResult && !isAllTracks && !isCompositions) {
+                if ( (undefined!=i.work && undefined!=i.composer || undefined!=i.grouping) && !isSearchResult && !isAllTracks && !isCompositions) {
+                    let discNum = undefined;
+                    if (i.composer && i.work) {
+                        discNum = i.composer+SEPARATOR+i.work;
+                        if (i.performance) {discNum += SEPARATOR+i.performance};
+                        if (i.grouping) {discNum += SEPARATOR+i.grouping};
+                    } else {
+                    	discNum = i.grouping;
+                    }
+                    if (discs.has(discNum)) {
+                        var entry = discs.get(discNum);
+                        entry.total++;
+                        entry.duration+=duration;
+                    } else {
+                        let title = discNum;
+                        discs.set(discNum, {pos: resp.items.length, total:1, duration:duration, title:title});
+                    }
+                }
+                else if (undefined!=i.disc && !isSearchResult && !isAllTracks && !isCompositions) {
                     let discNum = parseInt(i.disc);
                     if (discs.has(discNum)) {
                         var entry = discs.get(discNum);

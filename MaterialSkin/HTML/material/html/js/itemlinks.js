@@ -238,16 +238,22 @@ function buildAlbumLine(i, page, plain) {
     }
 }
 
-/*
-function buildWorkLine(i, artist, page, plain) {
+
+function buildWorkLine(i, page, plain) {
     var line = undefined;
-    if (i.work && artist) {
-        var work = i.work;
-        if (i.work_id && (!IS_MOBILE || lmsOptions.touchLinks) && !plain) {
-            work="<obj class=\"link-item\" onclick=\"showWork(event, "+i.work_id+",\'"+escape(work)+"\',\'"+escape(artist)+"\', \'"+page+"\')\">" + work + "</obj>";
-        }
+    if ((!IS_MOBILE || lmsOptions.touchLinks) && !plain && i.work && i.composer) {
+        var work="<obj class=\"link-item\" onclick=\"showWork(event, "+i.work_id+",\'"+escape(i.work)+"\',\'"+escape(i.composer)+"\', \'"+page+"\')\">" + i.composer + SEPARATOR + i.work + "</obj>";
         line=addPart(line, work);
     }
     return line;
 }
-*/
+
+function buildGroupingLine(i, page, plain) {
+    var line = undefined;
+    if ((!IS_MOBILE || lmsOptions.touchLinks) && !plain && i.grouping) {
+        var grouping = "<obj>" + i.grouping + "</obj>";
+        line=addPart(line, grouping);
+    }
+    return line;
+}
+

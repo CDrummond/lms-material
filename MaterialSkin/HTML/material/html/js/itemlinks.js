@@ -238,16 +238,14 @@ function buildAlbumLine(i, page, plain) {
     }
 }
 
-/*
 function buildWorkLine(i, artist, page, plain) {
     var line = undefined;
-    if (i.work && artist) {
-        var work = i.work;
+    if (i.work && i.composer) {
+        var work = i.composer + SEPARATOR + i.work;
         if (i.work_id && (!IS_MOBILE || lmsOptions.touchLinks) && !plain) {
-            work="<obj class=\"link-item\" onclick=\"showWork(event, "+i.work_id+",\'"+escape(work)+"\',\'"+escape(artist)+"\', \'"+page+"\')\">" + work + "</obj>";
+            work="<obj class=\"link-item\" onclick=\"showWork(event, "+i.work_id+",\'"+escape(i.work)+"\',\'"+escape(i.composer)+"\', \'"+page+"\')\">" + work + "</obj>";
         }
         line=addPart(line, work);
     }
     return line;
 }
-*/

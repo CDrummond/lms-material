@@ -89,7 +89,7 @@ function buildArtistAlbumLines(i, queueAlbumStyle, queueContext) {
             if (queueContext) {
                 linesContext.push(artistAlbumContext);
             }
-            return lines.concat(linesContext);
+            return [lines.concat(linesContext)];
         }
     }
     return [artistAlbum, ws];

@@ -58,6 +58,7 @@ const LMS_CACHE_VERSION = 543;
 const LMS_LIST_ELEMENT_SIZE = 50;
 const LMS_LIST_3LINE_ELEMENT_SIZE = 70;
 const LMS_ALBUM_QUEUE_HEADER = 68;
+const LMS_GROUP_QUEUE_HEADER = 82;
 const LMS_ALBUM_QUEUE_TRACK = 34;
 const LMS_BLANK_COVER = "/music/0/cover";
 const DEFAULT_RADIO_COVER = "/material/html/images/noradio.png";

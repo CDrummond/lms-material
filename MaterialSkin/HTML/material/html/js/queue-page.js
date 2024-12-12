@@ -40,6 +40,7 @@ function buildArtistAlbumLines(i, queueAlbumStyle, queueContext) {
     let artistAlbum = undefined;
     let artistAlbumContext = undefined;
     let artistIsRemoteTitle = false;
+    let ws = false;
     //let artistStr = i.albumartist ? i.albumartist : i.artist ? i.artist : i.trackartist; - moved into queueAlbumStyle block
     if (queueAlbumStyle) {
         let artistStr = i.albumartist ? i.albumartist : i.artist ? i.artist : i.trackartist;
@@ -59,8 +60,8 @@ function buildArtistAlbumLines(i, queueAlbumStyle, queueContext) {
         artistAlbum = buildArtistLine(i, 'queue', undefined, undefined, useBandTag, useComposerTag, useConductorTag);
         artistAlbumContext = queueContext ? replaceBr(buildArtistWithContext(i, 'queue', useBandTag, useComposerTag, useConductorTag), " ") : undefined;
     }
-    var lines = [];
-    var linesContext = [];
+    let lines = [];
+    let linesContext = [];
     lines.push(artistAlbum);
     if (queueContext) {
         linesContext.push(artistAlbumContext);
@@ -70,8 +71,15 @@ function buildArtistAlbumLines(i, queueAlbumStyle, queueContext) {
         artistAlbumContext = undefined;
     }
     if (!queueAlbumStyle || !artistIsRemoteTitle) {
-        //artistAlbum = addPart(artistAlbum, buildWorkLine(i, artistStr, 'queue'));
         artistAlbum = addPart(artistAlbum, buildAlbumLine(i, 'queue'));
+        let work = buildWorkLine(i, 'queue');
+        if (work && queueAlbumStyle) {
+            artistAlbum = addPart(work, i.grouping)+'<br/><div class="pq-gsub">'+artistAlbum+'</div>';
+            ws = true;
+        } else if (queueAlbumStyle && i.grouping) {
+            artistAlbum +='<br/><div class="pq-gsub">'+i.grouping+'</div>';
+            ws = true;
+        }
         if (queueContext) {
             let al = i18n('<obj>from</obj> %1', buildAlbumLine(i, "queue")).replaceAll("<obj>", "<obj class=\"ext-details\">");
             artistAlbumContext = undefined == artistAlbumContext ? al : (artistAlbumContext + " " + al);
@@ -84,7 +92,7 @@ function buildArtistAlbumLines(i, queueAlbumStyle, queueContext) {
             return lines.concat(linesContext);
         }
     }
-    return artistAlbum;
+    return [artistAlbum, ws];
 }
 
 function parseResp(data, showTrackNum, index, showRatings, queueAlbumStyle, queueContext, lastInCurrent) {
@@ -137,7 +145,7 @@ function parseResp(data, showTrackNum, index, showRatings, queueAlbumStyle, queu
                                        (undefined==i.album_id && ( (undefined!=image && image!=prevItem.image) ||
                                                                    (i.album!=prevItem.album) ) ) );
                 let grpKey = isAlbumHeader || undefined==prevItem ? index+resp.items.length : prevItem.grpKey;
-                let artistAlbumLines = !queueAlbumStyle || isAlbumHeader ? buildArtistAlbumLines(i, queueAlbumStyle, queueContext && !isAlbumHeader) : undefined;
+                let artistAlbumLinesInfo = !queueAlbumStyle || isAlbumHeader ? buildArtistAlbumLines(i, queueAlbumStyle, queueContext && !isAlbumHeader) : undefined;
                 if (calcDurations) {
                     if (isAlbumHeader) {
                         if (albumFirstIdx>=0 && albumDuration>0 && albumFirstIdx<(idx-1)) { // Previous album (of more than 1 track)
@@ -154,7 +162,8 @@ function parseResp(data, showTrackNum, index, showRatings, queueAlbumStyle, queu
                               id: "track_id:"+i.id,
                               title: title,
                               tooltip: i.title,
-                              artistAlbum: artistAlbumLines,
+                              artistAlbum: artistAlbumLinesInfo ? artistAlbumLinesInfo[0] : undefined,
+                              isGrpHeader: artistAlbumLinesInfo && artistAlbumLinesInfo[1],
                               image: image,
                               dimcover: undefined!=image && image.endsWith(".png") && (image==DEFAULT_COVER || image==DEFAULT_RADIO_COVER || image==RANDOMPLAY_COVER),
                               actions: [PQ_PLAY_NOW_ACTION, PQ_PLAY_NEXT_ACTION, DIVIDER, REMOVE_ACTION, PQ_REMOVE_ALBUM_ACTION, PQ_REMOVE_DISC_ACTION, ADD_TO_PLAYLIST_ACTION, PQ_ZAP_ACTION, DOWNLOAD_ACTION, SELECT_ACTION, COPY_DETAILS_ACTION, PQ_COPY_ACTION, MOVE_HERE_ACTION, CUSTOM_ACTIONS, SHOW_IMAGE_ACTION, MORE_ACTION],
@@ -169,7 +178,7 @@ function parseResp(data, showTrackNum, index, showRatings, queueAlbumStyle, queu
                               artist: i.artist ? i.artist : i.trackartist ? i.trackartist : i.albumartist,
                               album: i.album,
                               size: queueAlbumStyle
-                                      ? isAlbumHeader ? LMS_ALBUM_QUEUE_HEADER : LMS_ALBUM_QUEUE_TRACK
+                                      ? isAlbumHeader ? (artistAlbumLinesInfo && artistAlbumLinesInfo[1] ? LMS_GROUP_QUEUE_HEADER : LMS_ALBUM_QUEUE_HEADER) : LMS_ALBUM_QUEUE_TRACK
                                       : undefined,
                               grpKey:grpKey,
                               rating: !queueAlbumStyle && haveRating ? Math.ceil(i.rating/10.0)/2.0 : undefined
@@ -244,7 +253,7 @@ var lmsQueue = Vue.component("lms-queue", {
   <div class="lms-list" id="queue-list" v-bind:class="{'lms-list3':!albumStyle && threeLines,'lms-list-album':albumStyle,'bgnd-blur':drawBgndImage,'backdrop-blur':drawBackdrop}" @drop.stop="drop(-1, $event)">
    <div v-if="items.length<1"></div> <!-- RecycleScroller does not like it if 0 items? -->
    <RecycleScroller v-else-if="albumStyle" :items="items" :item-size="null" page-mode key-field="key" :buffer="LMS_SCROLLER_LIST_BUFFER">
-   <v-list-tile avatar class="pq-albumstyle" v-bind:class="{'pq-track':!item.artistAlbum, 'pq-current-album':index!=currentIndex && currentIndex<items.length && item.grpKey==items[currentIndex].grpKey, 'pq-current': index==currentIndex, 'pq-current-first-track': index==currentIndex && item.artistAlbum, 'pq-pulse':index==currentIndex && pulseCurrent, 'list-active': menu.show && index==menu.index, 'drop-target': dragActive && index==dropIndex, 'highlight':index==highlightIndex}" @dragstart="dragStart(index, $event)" @dragenter.prevent="" @dragend="dragEnd()" @dragover="dragOver(index, $event)" @drop.stop="drop(index, $event)" draggable @click.prevent.stop="click(item, index, $event)" slot-scope="{item, index}" key-field="key" @contextmenu.prevent="contextMenu(item, index, $event)">
+   <v-list-tile avatar class="pq-albumstyle" v-bind:class="{'pq-track':!item.artistAlbum, 'pq-current-album':index!=currentIndex && currentIndex<items.length && item.grpKey==items[currentIndex].grpKey, 'pq-current': index==currentIndex, 'pq-current-first-track': index==currentIndex && item.artistAlbum, 'pq-pulse':index==currentIndex && pulseCurrent, 'list-active': menu.show && index==menu.index, 'drop-target': dragActive && index==dropIndex, 'highlight':index==highlightIndex, 'pq-grp-header':item.isGrpHeader}" @dragstart="dragStart(index, $event)" @dragenter.prevent="" @dragend="dragEnd()" @dragover="dragOver(index, $event)" @drop.stop="drop(index, $event)" draggable @click.prevent.stop="click(item, index, $event)" slot-scope="{item, index}" key-field="key" @contextmenu.prevent="contextMenu(item, index, $event)">
     <v-list-tile-avatar :tile="true" v-bind:class="{'radio-image': 0==item.duration}" class="lms-avatar">
      <v-icon v-if="item.selected" v-bind:class="{'pq-first-track-check':item.artistAlbum}">check_box</v-icon>
      <img v-else-if="item.artistAlbum" :key="item.image" :src="item.image" onerror="this.src=DEFAULT_COVER" loading="lazy" v-bind:class="{'dimmed':item.dimcover}" class="radio-img allow-drag"></img>
@@ -512,7 +521,8 @@ var lmsQueue = Vue.component("lms-queue", {
                             title+='</obj>';
                         }
                     }
-                    var artistAlbum = undefined!=this.items[index].artistAlbum ? buildArtistAlbumLines(i, this.$store.state.queueAlbumStyle, this.$store.state.queueContext) : undefined;
+                    var artistAlbumInfo = undefined!=this.items[index].artistAlbum ? buildArtistAlbumLines(i, this.$store.state.queueAlbumStyle, this.$store.state.queueContext) : undefined;
+                    var artistAlbum = artistAlbumInfo ? artistAlbumInfo[0] : undefined;
                     // ?? var remoteTitle = checkRemoteTitle(i);
                     var duration = undefined==i.duration ? undefined : parseFloat(i.duration);
 

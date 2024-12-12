@@ -6,6 +6,7 @@
 2. For remote streams, if genre(s) is empty/undefined then show composer,
    conductor, or band if relevent option is enabled (i.e. skip genre check).
 3. Group album tracks by works, or other groupings.
+4. Add grouping support to album style queue.
 
 5.6.1
 -----

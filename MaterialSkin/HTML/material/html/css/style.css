@@ -29,6 +29,7 @@
  --list-elem-height:48px;
  --list-elem-3line-height:70px;
  --pq-album-header:68px;
+ --pq-grp-header:82px;
  --pq-album-track:34px;
  --image-grid-factor:0;
  --dialog-list-max-width:1000px;
@@ -683,6 +684,11 @@ div.v-subheader {
  height:calc(var(--pq-album-header) - 1px) !important;
 }
 
+.lms-list-album .pq-grp-header,
+.lms-list-album .pq-grp-header .v-list__tile {
+ height:calc(var(--pq-grp-header) - 1px) !important;
+}
+
 .pq-albumstyle img {
  margin-left:2px;
 }
@@ -711,6 +717,36 @@ div.v-subheader {
  width:calc(var(--pq-album-header) - 7px) !important;
  height:calc(var(--pq-album-header) - 7px) !important;
  margin-left:-8px!important;
+}
+
+.lms-list-album .pq-grp-header .lms-avatar .v-avatar {
+ margin-top:-11px;
+}
+
+.lms-list-album .pq-grp-header .v-list__tile__title {
+ margin-top:13px;
+}
+
+.lms-list-album .pq-grp-header .pq-album-header {
+ padding-bottom:1px;
+ margin-top:-2px;
+}
+
+.lms-list-album .pq-grp-header:not(.pq-track) .pq-time {
+ margin-top: unset !important;
+ margin-bottom:-48px !important;
+}
+
+.lms-list-album .pq-grp-header:not(.pq-track) .pq-first-track-menu {
+ margin-bottom:-22px;
+}
+
+.lms-list-album .pq-grp-header .pq-atime {
+ margin-top:2px;
+}
+
+.lms-list-album .pq-grp-header .pq-first-track-check {
+ padding-top:48px!important;
 }
 
 .vue-recycle-scroller__item-view, .lms-list-item {
@@ -2089,6 +2125,13 @@ div.v-rating i.primary--text, div.v-rating i.accent--text {
  background:var(--pq-current-color);
 }
 
+.pq-gsub {
+ opacity:var(--sub-opacity);
+ font-weight: var(--std-weight);
+ margin-top:-4px;
+ font-size:var(--small-font-size);
+}
+
 .highlight, .highlight .v-list__tile__title, .highlight .v-list__tile__sub-title,
 .search-highlight, .search-highlight .v-list__tile__title, .search-highlight .v-list__tile__sub-title {
  font-weight:var(--bold-weight)!important;
@@ -2112,8 +2155,12 @@ div.v-rating i.primary--text, div.v-rating i.accent--text {
  background:var(--pq-current-album-color);
 }
 
-.pq-current-first-track {
+.pq-current-first-track:not(.pq-grp-header) {
  background: linear-gradient(var(--pq-current-album-color) 50%, var(--pq-current-color) 50%);
+}
+
+.pq-current-first-track:is(.pq-grp-header) {
+ background: linear-gradient(var(--pq-current-album-color) 59%, var(--pq-current-color) 41%);
 }
 
 .pq-pulse {

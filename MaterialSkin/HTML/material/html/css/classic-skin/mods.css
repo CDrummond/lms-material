@@ -497,12 +497,12 @@ div.even {
  background-color:var(--background-color) !important;
 }
 
-a {
- color: var(--active-color);
+a, div.prefs a, div.prefDesc a {
+ color: var(--active-color) !important;
 }
 
-a:focus {
- border-bottom: 1px solid var(--active-color);
+a:focus, div.prefs a:focus, div.prefDesc a:focus {
+ border-bottom: 1px solid var(--active-color) !important;
 }
 
 input[type="text"], input[type="password"], input[type="stdedit"] {

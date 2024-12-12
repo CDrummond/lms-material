@@ -1128,6 +1128,11 @@ function parseBrowseResp(data, parent, options, cacheKey, parentCommand, parentG
                     subtitleLinks = "<obj class=\"link-item\" onclick=\"show_year(event, "+i.year+",\'"+i.year+"\', \'browse\')\">" + i.year + "</obj>";
                 }
 
+                let groupType = undefined!=i.group_count && parseInt(i.group_count)>1
+                                 ? MULTI_GROUP_ALBUM
+                                 : LMS_GROUP_DISCS && undefined!=i.disccount && parseInt(i.disccount)>1
+                                   ? MULTI_DISC_ALBUM
+                                   : 0;
                 let album = {
                               id: "album_id:"+(ids.has(i.id) ? uniqueId(i.id, resp.items.length) : i.id),
                               artist_id: i.artist_id,
@@ -1148,7 +1153,7 @@ function parseBrowseResp(data, parent, options, cacheKey, parentCommand, parentG
                               textkey: key,
                               emblem: getEmblem(i.extid),
                               draggable: true,
-                              multi: LMS_GROUP_DISCS && undefined!=i.disccount && parseInt(i.disccount)>1,
+                              multi: groupType,
                               extid: i.extid,
                               filter: FILTER_PREFIX+group,
                               compilation: i.compilation,
@@ -1250,7 +1255,7 @@ function parseBrowseResp(data, parent, options, cacheKey, parentCommand, parentG
             let isSearchResult = options && options.isSearch;
             let showAlbumName = isSearchResult || isAllTracks || (parent && parent.id && parent.id.startsWith("artist_id:"));
             let discs = new Map();
-            let works = new Map();
+            let groupings = new Map();
             let sort = undefined;
             let msksort = undefined;
             let sortTracks = 0;
@@ -1262,7 +1267,7 @@ function parseBrowseResp(data, parent, options, cacheKey, parentCommand, parentG
             let parentArtist = undefined;
             let showTrackNumbers = true;
             let performance = 0;
-            let genres=new Set();
+            let genres = new Set();
             let yearSet = new Set();
             let years = [];
             let isWork = false;
@@ -1413,12 +1418,11 @@ function parseBrowseResp(data, parent, options, cacheKey, parentCommand, parentG
                         subtitleContext=i18n('<obj>from</obj> %1', buildAlbumLine(i, "browse", false)).replaceAll("<obj>", "<obj class=\"ext-details\">");
                     }
                 }
-                let workTitle = undefined;
                 if (!isSearchResult && !isAllTracks && !isCompositions) {
                     if (undefined!=i.disc) {
                         let discNum = parseInt(i.disc);
                         if (discs.has(discNum)) {
-                            var entry = discs.get(discNum);
+                            let entry = discs.get(discNum);
                             entry.total++;
                             entry.duration+=duration;
                         } else {
@@ -1446,24 +1450,25 @@ function parseBrowseResp(data, parent, options, cacheKey, parentCommand, parentG
                             discs.set(discNum, {pos: resp.items.length, total:1, duration:duration, title:title});
                         }
                     }
-                    if (1==parseInt(i.isClassical) && undefined!=i.work && (undefined!=i.composer || undefined!=i.grouping)) {
+                    if ((undefined!=i.work && undefined!=i.composer) || undefined!=i.grouping) {
+                        let groupingTitle = undefined;
                         if (i.composer && i.work) {
-                            workTitle = i.composer+SEPARATOR+i.work;
+                            groupingTitle = i.composer+SEPARATOR+i.work;
                             if (i.performance) {
-                                workTitle += SEPARATOR+i.performance;
+                                groupingTitle += SEPARATOR+i.performance;
                             }
                             if (i.grouping) {
-                                workTitle += SEPARATOR+i.grouping;
+                                groupingTitle += SEPARATOR+i.grouping;
                             }
                         } else {
-                            workTitle = i.grouping;
+                            groupingTitle = i.grouping;
                         }
-                        if (works.has(workTitle)) {
-                            var entry = works.get(workTitle);
+                        if (groupings.has(groupingTitle)) {
+                            let entry = groupings.get(groupingTitle);
                             entry.total++;
                             entry.duration+=duration;
                         } else {
-                            works.set(workTitle, {pos: resp.items.length, total:1, duration:duration, title:workTitle});
+                            groupings.set(groupingTitle, {pos: resp.items.length, total:1, duration:duration, title:groupingTitle, id:(groupings.size+1)});
                         }
                     }
                 }
@@ -1527,10 +1532,10 @@ function parseBrowseResp(data, parent, options, cacheKey, parentCommand, parentG
                               rating: i.rating,
                               image: showAlbumName ? ("/music/" + (""==i.coverid || undefined==i.coverid ? "0" : i.coverid) + "/cover" +LMS_IMAGE_SIZE) : undefined,
                               filter: FILTER_PREFIX+i.disc,
+                              gfilter: FILTER_PREFIX+groupings.size,
                               emblem: showAlbumName ? getEmblem(i.extid) : undefined,
                               tracknum: sortTracks && undefined!=i.tracknum ? tracknum : undefined,
                               disc: i.disc ? parseInt(i.disc) : undefined,
-                              work: workTitle,
                               year: (sortTracks || 1==performance) ? year : undefined,
                               album: sortTracks || isSearchResult || 1==performance ? i.album : undefined,
                               artist: isSearchResult || 2==sortTracks || 3==performance ? getArtist(i) : undefined,
@@ -1693,9 +1698,27 @@ function parseBrowseResp(data, parent, options, cacheKey, parentCommand, parentG
                 resp.allTracksItem = parent;
             }
             let removeDiscNumbers = false;
-            let removeWorkTitles = false;
+            let removeGroupFilter = false;
             if (performance==0) {
-                if (discs.size>1) {
+                if (groupings.size>1) {
+                    let d = 0;
+                    for (var idx=0, len=resp.items.length; idx<len; ++idx) {
+                        resp.items[idx].filter = resp.items[idx].gfilter;
+                        resp.items[idx].gfilter = undefined;
+                        resp.items[idx].disc = undefined;
+                    }
+                    for (let k of groupings.keys()) {
+                        let grouping = groupings.get(k);
+                        let title = grouping.title;
+
+                        resp.items.splice(grouping.pos+d, 0,
+                                           {title:title, jump:grouping.pos+d,
+                                            subtitle: i18np("1 Track", "%1 Tracks", grouping.total), durationStr:formatSeconds(grouping.duration),
+                                            id:FILTER_PREFIX+grouping.id, header:true, menu:[PLAY_ALL_ACTION, INSERT_ALL_ACTION, PLAY_SHUFFLE_ALL_ACTION, ADD_ALL_ACTION]});
+                        resp.numHeaders++;
+                        d++;
+                    }
+                } else if (discs.size>1) {
                     let d = 0;
 
                     for (let k of discs.keys()) {
@@ -1718,46 +1741,28 @@ function parseBrowseResp(data, parent, options, cacheKey, parentCommand, parentG
                         resp.numHeaders++;
                         d++;
                     }
-                    removeWorkTitles = works.size>0;
-                } else if (works.size>1) {
-                    let d = 0;
-                    for (var idx=0, len=resp.items.length; idx<len; ++idx) {
-                        resp.items[idx].filter = FILTER_PREFIX+resp.items[idx].work;
-                        resp.items[idx].work = undefined;
-                        resp.items[idx].disc = undefined;
-                    }
-                    for (let k of works.keys()) {
-                        let work = works.get(k);
-                        let title = work.title;
-
-                        resp.items.splice(work.pos+d, 0,
-                                           {title:title, jump:work.pos+d,
-                                            subtitle: i18np("1 Track", "%1 Tracks", work.total), durationStr:formatSeconds(work.duration),
-                                            id:FILTER_PREFIX+title, header:true, menu:[PLAY_ALL_ACTION, INSERT_ALL_ACTION, PLAY_SHUFFLE_ALL_ACTION, ADD_ALL_ACTION]});
-                        resp.numHeaders++;
-                        d++;
-                    }
+                    removeGroupFilter = true;
                 } else {
                     removeDiscNumbers = discs.size>0;
-                    removeWorkTitles = works.size>0;
+                    removeGroupFilter = true;
                 }
             } else {
                 removeDiscNumbers = discs.size>0;
-                removeWorkTitles = works.size>0;
+                removeGroupFilter = true;
             }
 
-            if (removeDiscNumbers || removeWorkTitles) {
+            if (removeDiscNumbers || removeGroupFilter) {
                 // Remove item's disc/work value so that 'PLAY_DISC_ACTION' is not shown
                 for (var idx=0, len=resp.items.length; idx<len; ++idx) {
-                    if (removeWorkTitles) {
-                        resp.items[idx].work = undefined;
+                    if (removeGroupFilter) {
+                        resp.items[idx].gfilter = undefined;
                     }
                     if (removeDiscNumbers) {
                         resp.items[idx].disc = undefined;
                     }
                 }
             }
-            let totalTracks=resp.items.length-((groups.length>1 ? groups.length : 0)+(discs.size>1 ? discs.size : 0));
+            let totalTracks=resp.items.length-resp.numHeaders;
             let totalDurationStr=formatSeconds(totalDuration);
             resp.subtitle=totalTracks+'<obj class="mat-icon music-note">music_note</obj>'+totalDurationStr;
             resp.plainsubtitle=(isCompositions ? i18np("1 Composition", "%1 Compositions", totalTracks) : i18np("1 Track", "%1 Tracks", totalTracks))+SEPARATOR+totalDurationStr;

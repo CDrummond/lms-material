@@ -607,7 +607,7 @@ function browseHandleListResponse(view, item, command, resp, prevPage, appendIte
         if (view.current.id==TOP_FAVORITES_ID || (view.current.id!=ADV_SEARCH_ID && view.current.stdItem!=STD_ITEM_MAI && !item.id.startsWith(TOP_ID_PREFIX) && view.items.length>0)) {
             view.currentActions.push({action:SEARCH_LIST_ACTION, weight:5});
         }
-        if (resp.numHeaders>1 && view.items.length>50 && curitem.stdItem!=STD_ITEM_ARTIST && curitem.stdItem!=STD_ITEM_ALBUM) {
+        if (resp.numHeaders>1 && view.items.length>50) { // } && curitem.stdItem!=STD_ITEM_ARTIST && curitem.stdItem!=STD_ITEM_ALBUM) {
             view.currentActions.push({action:SCROLL_TO_ACTION, weight:4});
         }
         let itemHasPlayAction=undefined!=item.menu && item.menu[0]==PLAY_ACTION;
@@ -1738,7 +1738,7 @@ function browseItemAction(view, act, item, index, event) {
                 if (resp.items.length<=0) {
                     return;
                 }
-                var discs = [{title:i18n('All discs'), subtitle:resp.plainsubtitle ? resp.plainsubtitle : resp.subtitle, id:"ALL_DISCS"}];
+                var discs = [{title:lmsOptions.supportReleaseTypes ? i18n('Whole release') : i18n('Whole album'), subtitle:resp.plainsubtitle ? resp.plainsubtitle : resp.subtitle, id:"ALL_DISCS"}];
                 for (var i=0, loop=resp.items, len=loop.length; i<len; ++i) {
                     if (loop[i].header) {
                         discs.push(loop[i]);

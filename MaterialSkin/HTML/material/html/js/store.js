@@ -165,8 +165,21 @@ function updateUiSettings(state, val) {
             setLocalStorageVal(key, value);
         }
     }
-    if (themeChanged) {
-        setTimeout(function() { emitToolbarColorsFromState(state, true)}, 100);
+    if (themeChanged || undefined!=val.mai || undefined!=val.pinQueue) {
+        setTimeout(function() {
+            if (themeChanged) {
+                emitToolbarColorsFromState(state, true);
+            }
+            if (undefined!=val.mai) {
+                bus.$emit('maiDefaults', val.mai, val.isRevert);
+            }
+            if (undefined!=val.pinQueue) {
+                setQueuePinned(state, val.pinQueue, true);
+                if (undefined!=val.pinQueue) {
+                    setQueueShown(state, true, true);
+                }
+            }
+        }, 100);
     }
 }
 
@@ -500,6 +513,7 @@ const store = new Vuex.Store({
             updateLang(state, val);
         },
         initUiSettings(state) {
+            let pinQueueInSettings = undefined!=getLocalStorageVal('pinQueue', undefined);
             updateLang(state, window.navigator.userLanguage || window.navigator.language);
             state.defaultPlayer = getLocalStorageVal('defaultPlayer', state.defaultPlayer);
             state.page = getLocalStorageVal('page', state.page);
@@ -612,6 +626,12 @@ const store = new Vuex.Store({
                         }
                         if (undefined==opts.fontSize && undefined!=opts.largerElements) {
                             opts.fontSize = opts.largerElements ? 'l' : 'r';
+                        }
+                        if (undefined!=prefs.mai) {
+                            opts.mai=prefs.mai;
+                        }
+                        if (!pinQueueInSettings && undefined!=prefs.pinQueue) {
+                            opts.pinQueue=prefs.pinQueue;
                         }
                         updateUiSettings(state, opts);
                     } catch(e) {

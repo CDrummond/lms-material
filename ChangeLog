@@ -18,6 +18,9 @@
    disabled.
 5. Add missing border to bottom of server settings pages.
 6. Add 'Show image' after 'Copy details' for items with an image.
+7. Darken subtoolbar background (when using cover) for dark themes.
+8. Save/restore pin queue and MAI zoom/tabs/lyrics settings when
+   saving/restoring defaults.
 
 5.6.0
 -----

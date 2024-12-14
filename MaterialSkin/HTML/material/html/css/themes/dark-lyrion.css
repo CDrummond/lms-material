@@ -11,7 +11,7 @@
  --std-scrollbar-thumb-hover-color:#7f7f7f;
  --std-background-color:#081f22;
  --background-shadow-color:rgba(32, 32, 32, 0.9);
- --subtoolbar-shadow-color:rgba(32, 32, 32, 0.5);
+ --subtoolbar-shadow-color:rgba(32, 32, 32, 0.75);
  --text-shadow-color:#5f6364;
  --active-nav-btn-color:var(--accent-color);
  --toolbar-volume-color:var(--primary-color);

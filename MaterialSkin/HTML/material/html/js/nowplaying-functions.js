@@ -445,7 +445,6 @@ function nowplayingMenuAction(view, item) {
         setLocalStorageVal("npHighlightLyrics", view.info.tabs[TRACK_TAB].highlight);
     } else if (NP_ZOOM_ACT==item.act) {
         if (!item.checked) {
-            setLocalStorageVal("npInfoZoom", item.value);
             view.setZoom(item.value);
         }
     } else if (item.act>=NP_ITEM_ACT) {

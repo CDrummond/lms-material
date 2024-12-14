@@ -453,17 +453,17 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
         this.info.tabs[TRACK_TAB].scroll=getLocalStorageBool("npScrollLyrics", true);
         this.info.tabs[TRACK_TAB].highlight=getLocalStorageBool("npHighlightLyrics", true);
 
-        bus.$on('maiDefaults', function(def) {
-            if (undefined!=def.npInfoZoom) {
+        bus.$on('maiDefaults', function(def, isRevert) {
+            if (undefined!=def.npInfoZoom && (isRevert || undefined==getLocalStorageVal('npInfoZoom', undefined))) {
                 this.setZoom(parseFloat(def.npInfoZoom));
             }
-            if (undefined!=def.npScrollLyrics) {
+            if (undefined!=def.npScrollLyrics && (isRevert || undefined==getLocalStorageVal('npScrollLyrics', undefined))) {
                 this.info.tabs[TRACK_TAB].scroll = def.npScrollLyrics;
             }
-            if (undefined!=def.npHighlightLyrics) {
+            if (undefined!=def.npHighlightLyrics && (isRevert || undefined==getLocalStorageVal('npHighlightLyrics', undefined))) {
                 this.info.tabs[TRACK_TAB].highlight = def.npHighlightLyrics;
             }
-            if (undefined!=def.showTabs) {
+            if (undefined!=def.showTabs && (isRevert || undefined==getLocalStorageVal('showTabs', undefined))) {
                 this.info.showTabs = def.showTabs;
             }
         }.bind(this));

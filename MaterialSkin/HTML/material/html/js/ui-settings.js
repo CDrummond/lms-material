@@ -830,6 +830,7 @@ Vue.component('lms-ui-settings', {
                                 } catch(e) {
                                     prefs.disabledBrowseModes = undefined;
                                 }
+                                prefs.isRevert = true;
                                 this.$store.commit('setUiSettings', prefs);
                                 this.readStore();
                                 for (var idx=0, loop=this.browseModesDialog.modes, loopLen=loop.length; idx<loopLen; ++idx) {

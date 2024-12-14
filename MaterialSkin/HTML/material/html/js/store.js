@@ -171,7 +171,7 @@ function updateUiSettings(state, val) {
                 emitToolbarColorsFromState(state, true);
             }
             if (undefined!=val.mai) {
-                bus.$emit('maiDefaults', val.mai);
+                bus.$emit('maiDefaults', val.mai, val.isRevert);
             }
             if (undefined!=val.pinQueue) {
                 setQueuePinned(state, val.pinQueue, true);
@@ -513,6 +513,7 @@ const store = new Vuex.Store({
             updateLang(state, val);
         },
         initUiSettings(state) {
+            let pinQueueInSettings = undefined!=getLocalStorageVal('pinQueue', undefined);
             updateLang(state, window.navigator.userLanguage || window.navigator.language);
             state.defaultPlayer = getLocalStorageVal('defaultPlayer', state.defaultPlayer);
             state.page = getLocalStorageVal('page', state.page);
@@ -629,7 +630,7 @@ const store = new Vuex.Store({
                         if (undefined!=prefs.mai) {
                             opts.mai=prefs.mai;
                         }
-                        if (undefined!=prefs.pinQueue) {
+                        if (!pinQueueInSettings && undefined!=prefs.pinQueue) {
                             opts.pinQueue=prefs.pinQueue;
                         }
                         updateUiSettings(state, opts);

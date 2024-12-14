@@ -52,7 +52,6 @@
 "All":"Tout",
 "All Tracks":"Tous les Morceaux",
 "All Works":"Toutes les œuvres",
-"All discs":"Tous les disques",
 "All downloads complete.":"Tous les téléchargements sont terminés.",
 "All duplicates removed":"Doublons supprimés",
 "All options":"Toutes les options",
@@ -262,8 +261,8 @@
 "Lyrion support forums":"Forum du support Lyrion",
 "Lyrion technical information":"Informations techniques Lyrion",
 "MAC Address: %1":"Adresse MAC : %1",
-"Main disc":"Disque principal",
 "Main Menu":"Menu principal",
+"Main disc":"Disque principal",
 "Manage players":"Gérer les platines",
 "Manage plugins":"Gérer les plugins",
 "Material Skin is a HTML5 WebApp for Lyrion. For support, to report bugs, or ask for new features, please visit one of the following links:":"Material Skin est une application Web HTML5 pour Lyrion. Pour obtenir de l'aide, signaler des bugs ou demander de nouvelles fonctionnalités, veuillez visiter l'un des liens suivants :",
@@ -683,5 +682,7 @@
 "1 Year":"1 année",
 "%1 Years":"%1 années",
 "1 day":"1 jour",
-"%1 days":"%1 jours"
+"%1 days":"%1 jours",
+"Whole album":"",
+"Whole release":""
 }

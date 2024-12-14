@@ -50,7 +50,6 @@
 "All":"Alle",
 "All Tracks":"Alle Titel",
 "All Works":"Alle Werke",
-"All discs":"Alle CDs",
 "All downloads complete.":"Herunterladen beendet",
 "All duplicates removed":"Alle doppelten Einträge entfernt",
 "All options":"Alle optionen",
@@ -683,5 +682,7 @@
 "Tint background":"",
 "Tint background with chosen color.":"",
 "Use a row of icons, and not a list of text, for settings entries.":"",
-"Use icons for settings":""
+"Use icons for settings":"",
+"Whole album":"",
+"Whole release":""
 }

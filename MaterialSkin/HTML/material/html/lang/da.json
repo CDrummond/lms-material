@@ -52,7 +52,6 @@
 "All":"Alle",
 "All Tracks":"Alle numre",
 "All Works":"Alle værker",
-"All discs":"Alle CD'ere",
 "All downloads complete.":"Filhentning afsluttet",
 "All duplicates removed":"Alle dubletter er fjernet",
 "All options":"Alle indstillinger",
@@ -683,5 +682,7 @@
 "1 Year":"1 år",
 "%1 Years":"%1 år",
 "1 day":"1 dag",
-"%1 days":"%1 dage"
+"%1 days":"%1 dage",
+"Whole album":"",
+"Whole release":""
 }

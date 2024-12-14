@@ -52,7 +52,6 @@
 "All":"Все",
 "All Tracks":"Все песни",
 "All Works":"Все работы",
-"All discs":"Все диски",
 "All downloads complete.":"Все загружено",
 "All duplicates removed":"Все дубли удалены",
 "All options":"Все опции",
@@ -683,5 +682,7 @@
 "Only scroll player list, keep settings (and shortcuts) visible at bottom.":"",
 "Settings (and shortcuts) always visible":"",
 "Use a row of icons, and not a list of text, for settings entries.":"",
-"Use icons for settings":""
+"Use icons for settings":"",
+"Whole album":"",
+"Whole release":""
 }

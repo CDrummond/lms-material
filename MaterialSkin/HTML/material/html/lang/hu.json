@@ -50,7 +50,6 @@
 "All":"Minden",
 "All Tracks":"Minden zeneszám",
 "All Works":"Minden munka",
-"All discs":"Minden lemez",
 "All downloads complete.":"Minden letöltés kész",
 "All duplicates removed":"Minden duplázás törölve",
 "All options":"Minden lehetőség",
@@ -683,5 +682,7 @@
 "Tint background":"",
 "Tint background with chosen color.":"",
 "Use a row of icons, and not a list of text, for settings entries.":"",
-"Use icons for settings":""
+"Use icons for settings":"",
+"Whole album":"",
+"Whole release":""
 }

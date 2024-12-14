@@ -1738,7 +1738,7 @@ function browseItemAction(view, act, item, index, event) {
                 if (resp.items.length<=0) {
                     return;
                 }
-                var discs = [{title:lmsOptions.supportReleaseTypes ? i18n('Whole release') : i18n('Whole album'), subtitle:resp.plainsubtitle ? resp.plainsubtitle : resp.subtitle, id:"ALL_DISCS"}];
+                var discs = [{title:i18n('All tracks'), subtitle:resp.plainsubtitle ? resp.plainsubtitle : resp.subtitle, id:"ALL_DISCS"}];
                 for (var i=0, loop=resp.items, len=loop.length; i<len; ++i) {
                     if (loop[i].header) {
                         discs.push(loop[i]);

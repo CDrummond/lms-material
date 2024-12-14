@@ -801,6 +801,11 @@ Vue.component('lms-ui-settings', {
                     i18n('Set Defaults')).then(res => {
                 if (res) {
                     var settings = this.settings(true, true);
+                    settings.pinQueue = this.$store.state.pinQueue;
+                    settings.mai = {showTabs: getLocalStorageBool("showTabs", false),
+                                    npScrollLyrics: getLocalStorageBool("npScrollLyrics", true),
+                                    npHighlightLyrics: getLocalStorageBool("npHighlightLyrics", true),
+                                    npInfoZoom: parseFloat(getLocalStorageVal("npInfoZoom", 1.0))};
 
                     lmsCommand("", ["pref", LMS_MATERIAL_UI_DEFAULT_PREF, JSON.stringify(settings)]);
                     lmsCommand("", ["pref", LMS_MATERIAL_DEFAULT_ITEMS_PREF, getLocalStorageVal("topItems", "[]")]);

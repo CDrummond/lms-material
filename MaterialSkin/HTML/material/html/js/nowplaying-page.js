@@ -440,8 +440,7 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
                 };
     },
     mounted() {
-        this.zoom = parseFloat(getLocalStorageVal("npInfoZoom", 1.0));
-        this.setZoom(this.zoom);
+        this.setZoom(parseFloat(getLocalStorageVal("npInfoZoom", 1.0)));
         this.showNpBar = undefined;
         this.desktopBarHeight = getComputedStyle(document.documentElement).getPropertyValue('--desktop-npbar-height');
         this.mobileBarThinHeight = getComputedStyle(document.documentElement).getPropertyValue('--mobile-npbar-height-thin');
@@ -454,6 +453,20 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
         this.info.tabs[TRACK_TAB].scroll=getLocalStorageBool("npScrollLyrics", true);
         this.info.tabs[TRACK_TAB].highlight=getLocalStorageBool("npHighlightLyrics", true);
 
+        bus.$on('maiDefaults', function(def) {
+            if (undefined!=def.npInfoZoom) {
+                this.setZoom(parseFloat(def.npInfoZoom));
+            }
+            if (undefined!=def.npScrollLyrics) {
+                this.info.tabs[TRACK_TAB].scroll = def.npScrollLyrics;
+            }
+            if (undefined!=def.npHighlightLyrics) {
+                this.info.tabs[TRACK_TAB].highlight = def.npHighlightLyrics;
+            }
+            if (undefined!=def.showTabs) {
+                this.info.showTabs = def.showTabs;
+            }
+        }.bind(this));
         bus.$on('mobileBarChanged', function() {
             this.controlBar(true);
         }.bind(this));
@@ -1305,11 +1318,15 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
             viewHandleSelectedText(this, event);
         },
         setZoom(zoom) {
-            if (undefined==zoom || zoom<1.0 || zoom>2.0) {
-                this.zoom = 1.0;
-            } else {
-                this.zoom = zoom;
+            let z = 1.0;
+            if (undefined!=zoom && zoom>1.0 && zoom<=2.0) {
+                z = zoom;
             }
+            if (z==this.zoom) {
+                return;
+            }
+            this.zoom = z;
+            setLocalStorageVal("npInfoZoom", this.zoom);
             document.documentElement.style.setProperty('--np-zoom', this.zoom);
             document.documentElement.style.setProperty('--np-zoom-list', Math.min(this.zoom, 1.4));
         }

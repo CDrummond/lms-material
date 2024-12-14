@@ -170,6 +170,9 @@ PLUGIN_MATERIAL_SKIN_SHOW_COMPOSER_DESC
 	ZH_CN	如果曲目的流派与上面列表中的项目匹配并具有作曲家标识，则显示作曲家。
 	HU	Zeneszerző megjelenítése, ha egy dal műfaja megegyezik a fenti listában szereplő műfajjal, és van zeneszerző adat.
 
+PLUGIN_MATERIAL_SKIN_SHOW_COMPOSER_DESC_LMS9
+	EN	Show song's composer if its genre is in LMS's list of classical genres.
+
 PLUGIN_MATERIAL_SKIN_USE_COMPOSER_MAI
 	CS	Zobrazení skladatele v zobrazení "Informace"
 	DA	Vis komponist i "Information" visningen
@@ -212,17 +215,20 @@ PLUGIN_MATERIAL_SKIN_SHOW_CONDUCTOR_DESC
 	ZH_CN	如果曲目的流派与上面列表中的项目匹配并具有指挥家标识，则显示指挥家。
 	HU	A karmester megjelenítése, ha egy dal műfaja megegyezik a fenti listában szereplő műfajjal, és van karmester adat.
 
+PLUGIN_MATERIAL_SKIN_SHOW_CONDUCTOR_DESC_LMS9
+	EN	Show song's conductor if its genre is in LMS's list of classical genres.
+
 PLUGIN_MATERIAL_SKIN_SHOW_BAND
-	CS	Zobrazení skupiny
-	DA	Vis orkester
-	DE	Band anzeigen
-	EN	Show band
+	CS	Zobrazení skupina/orchestr
+	DA	Vis band/orkester
+	DE	Band/Orchester anzeigen
+	EN	Show band/orchestra
 	IT	Mostra gruppo/orchestra
 	FR	Afficher le groupe/orchestre
-	NL	Toon band
+	NL	Toon band/orkest
 	ZH_TW	顯示樂團
 	ZH_CN	显示乐团
-	HU	Zenekar megjelenítése
+	HU	Együttes/Zenekar megjelenítése
 
 PLUGIN_MATERIAL_SKIN_SHOW_BAND_DESC
 	CS	Zobrazit skupinu, pokud se žánr skladby shoduje s položkou ve výše uvedeném seznamu a skladba má tag skupiny.
@@ -235,6 +241,9 @@ PLUGIN_MATERIAL_SKIN_SHOW_BAND_DESC
 	ZH_TW	如果歌曲的音樂風格與上面列表中的項目匹配並且具有樂團標籤，則顯示樂團。
 	ZH_CN	如果曲目的流派与上面列表中的项目匹配并具有乐团标识，则显示乐团。
 	HU	A zenekar megjelenítése, ha egy dal műfaja megegyezik a fenti listában szereplő műfajjal, és van zenekar adat.
+
+PLUGIN_MATERIAL_SKIN_SHOW_BAND_DESC_LMS9
+	EN	Show song's band/orchestra if its genre is in LMS's list of classical genres.
 
 PLUGIN_MATERIAL_SKIN_PASSWORD
 	CS	Heslo
@@ -703,5 +712,3 @@ PLUGIN_MATERIAL_COMBINE_APPS_AND_RADIO_DESC
 	ZH_CN	将“程序”和“电台”菜单合并成单个“程序”菜单。“电台”作为“TuneIn”程序添加到合并后的菜单里（如果已启用）。
 	HU	Kapcsolja össze az 'Apps' és a 'Radio' menüket egyetlen 'Apps' menübe, a 'Radio' (ha engedélyezve) hozzáadott 'Tunein' alkalmazással.
 
-PLUGIN_MATERIAL_SKIN_IF_CLASSICAL_GENRE_DESC
-	EN	Only show if a song's genre is in LMS's list of classical genres.

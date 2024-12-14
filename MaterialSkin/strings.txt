@@ -172,6 +172,7 @@ PLUGIN_MATERIAL_SKIN_SHOW_COMPOSER_DESC
 
 PLUGIN_MATERIAL_SKIN_SHOW_COMPOSER_DESC_LMS9
 	EN	Show song's composer if its genre is in LMS's list of classical genres.
+	FR	Afficher le compositeur si le genre du morceau est dans la liste LMS des genres en lien avec des œuvres et des compositeurs. 
 
 PLUGIN_MATERIAL_SKIN_USE_COMPOSER_MAI
 	CS	Zobrazení skladatele v zobrazení "Informace"
@@ -217,6 +218,7 @@ PLUGIN_MATERIAL_SKIN_SHOW_CONDUCTOR_DESC
 
 PLUGIN_MATERIAL_SKIN_SHOW_CONDUCTOR_DESC_LMS9
 	EN	Show song's conductor if its genre is in LMS's list of classical genres.
+	FR	Afficher le chef d'orchestre si le genre du morceau est dans la liste LMS des genres en lien avec des œuvres et des compositeurs. 
 
 PLUGIN_MATERIAL_SKIN_SHOW_BAND
 	CS	Zobrazení skupina/orchestr
@@ -244,6 +246,7 @@ PLUGIN_MATERIAL_SKIN_SHOW_BAND_DESC
 
 PLUGIN_MATERIAL_SKIN_SHOW_BAND_DESC_LMS9
 	EN	Show song's band/orchestra if its genre is in LMS's list of classical genres.
+	FR	Afficher le groupe/orchestre si le genre du morceau est dans la liste LMS des genres en lien avec des œuvres et des compositeurs. 
 
 PLUGIN_MATERIAL_SKIN_PASSWORD
 	CS	Heslo

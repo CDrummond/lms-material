@@ -35,7 +35,7 @@ sub handler {
         $params->{'pref_conductorgenres'} = string('PLUGIN_MATERIAL_SKIN_DEFAULT_CONDUCTOR_GENRES');
         $params->{'pref_bandgenres'} = string('PLUGIN_MATERIAL_SKIN_DEFAULT_BAND_GENRES');
     }
-    $params->{'lmsHasClassicalGenreList'} = Slim::Utils::Versions->compareVersions($::VERSION, '9.1.0') >= 0 ? 1 : 0;
+    $params->{'lmsHasClassicalGenreList'} = Slim::Utils::Versions->compareVersions($::VERSION, '9.0.1') >= 0 ? 1 : 0;
     return $class->SUPER::handler($client, $params);
 }
 

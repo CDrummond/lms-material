@@ -428,13 +428,13 @@ function getLocalStorageBool(key, def) {
     return undefined!=val ? "true" == val : def;
 }
 
-function getLocalStorageVal(key, def) {
+function getLocalStorageVal(key, def, checkForBool) {
     let val = undefined;
     try {
         val = undefined==window.localStorage ? (window.materialSkinStorage ? window.materialSkinStorage[key] : undefined) : window.localStorage.getItem(LS_PREFIX+key);
     } catch (e) {
     }
-    return undefined!=val ? val : def;
+    return undefined!=val ? (checkForBool ? ("true"==val ? 1 : "false"==val ? 0 : val) : val) : def;
 }
 
 function setLocalStorageVal(key, val) {
@@ -1049,7 +1049,7 @@ function useArtistTagType(item, tagGenres) {
 }
 
 function useComposer(item) {
-    return item.isClassical || useArtistTagType(item, lmsOptions.composerGenres);
+    return item.isClassical || 2==lmsOptions.showComposer || useArtistTagType(item, lmsOptions.composerGenres);
 }
 
 function useConductor(item) {

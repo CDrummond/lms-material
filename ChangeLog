@@ -1,3 +1,8 @@
+5.7.1
+-----
+1. Change 'Show composer' option from boolean to 'No', 'Classical genres',
+   'All genres'.
+
 5.7.0
 -----
  1. Use LMS 9.0.1's 'isClassical' attribute to determine if composer, conductor,

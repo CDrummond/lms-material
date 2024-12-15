@@ -120,7 +120,15 @@
     [% END %]
     [% IF lmsHasClassicalGenreList == 1 %]
     [% WRAPPER setting title="PLUGIN_MATERIAL_SKIN_SHOW_COMPOSER" desc="PLUGIN_MATERIAL_SKIN_SHOW_COMPOSER_DESC_LMS9" %]
-    <input type="checkbox" name="pref_showComposer" id="pref_showComposer" [% IF prefs.pref_showComposer %] checked [% END %] value="1"/>
+    <select class="stdedit" name="pref_showComposer" id="showComposer">
+        [% FOREACH option = {
+            'NO' => 0,
+            'PLUGIN_MATERIAL_SKIN_SHOW_COMPOSER_CLASSICAL' => 1,
+            'PLUGIN_MATERIAL_SKIN_SHOW_COMPOSER_ALL' => 2
+        } %]
+        <option [% IF prefs.showComposer == option.value %]selected [% END %]value="[% option.value %]">[% option.key | string %]</option>
+        [%- END -%]
+    </select>
     [% END %]
     [% WRAPPER setting title="PLUGIN_MATERIAL_SKIN_USE_COMPOSER_MAI" desc="PLUGIN_MATERIAL_SKIN_USE_COMPOSER_MAI_DESC" %]
     <input type="checkbox" name="pref_maiComposer" id="pref_maiComposer" [% IF prefs.maiComposer %] checked [% END %] value="1"/>

@@ -8,7 +8,7 @@
 :root {
  --bottom-toolbar-height:calc(var(--bottom-pad) + 52px);
  --bottom-np-pad:0px;
- --np-portrait-image-size:min(calc(var(--100vh) - (var(--main-toolbar-height) + var(--bottom-toolbar-height) + var(--bottom-np-pad) + var(--mobile-np-view-control-size) + 210px) - (var(--np-image-border)*2)), 100vw - (var(--np-image-border)*2), var(--50vh));
+ --np-portrait-image-size:min(calc(var(--100vh) - (var(--main-toolbar-height) + var(--bottom-toolbar-height) + var(--bottom-np-pad) + var(--mobile-np-view-control-size) + 210px) - (var(--np-image-border)*2)), 100vw - (var(--np-image-border)*2), var(--100vh) * 0.6);
  --np-image-landscape-height:min(50vw, calc(var(--100vh) - (var(--main-toolbar-height) + var(--bottom-toolbar-height) + var(--bottom-np-pad) + var(--mobile-np-view-control-size) + var(--np-controls-height) + 66px)));
  --np-image-landscape-size:min(var(--np-image-landscape-height) - (var(--np-image-border)*2), 50vw - (var(--np-image-border)*2));
  --np-image-landscape-wide-height:min(calc(var(--100vh) - (var(--main-toolbar-height) + var(--bottom-toolbar-height) + var(--bottom-np-pad) + var(--mobile-np-view-control-size))), var(--np-wide-left));

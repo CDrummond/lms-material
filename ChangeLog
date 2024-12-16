@@ -3,6 +3,7 @@
 1. Change 'Show composer' option from boolean to 'No', 'Classical genres',
    'All genres'.
 2. Allow now-playing portrait image to be larger.
+3. Fix URL parsing - thanks to Michael Herger.
 
 5.7.0
 -----

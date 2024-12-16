@@ -452,7 +452,7 @@ function parseBrowseResp(data, parent, options, cacheKey, parentCommand, parentG
                 }
 
                 if (i.parseURLs) {
-                    i.title = i.title.replace(/\b(https?:\/\/[A-Za-z0-9\-_\.\!~*'();\/?:@&=+$,]+)/, "<a href=\"$1\" target=\"_blank\">$1</a>");
+                    i.title = i.title.replace(/\b(https?:\/\/[A-Za-z0-9\-_\.\!~*'();\/?:@%&=+$,]+)/, "<a href=\"$1\" target=\"_blank\">$1</a>");
                 }
 
                 if (isAppsTop && i.actions && i.actions.go && i.actions.go.params && i.actions.go.params.menu) {

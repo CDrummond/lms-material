@@ -171,7 +171,7 @@ PLUGIN_MATERIAL_SKIN_SHOW_COMPOSER_DESC
 	HU	Zeneszerző megjelenítése, ha egy dal műfaja megegyezik a fenti listában szereplő műfajjal, és van zeneszerző adat.
 
 PLUGIN_MATERIAL_SKIN_SHOW_COMPOSER_DESC_LMS9
-	EN	Show song's composer if if its genre is in Lyrion's "My work and composer album genres" setting, or for all genres.
+	EN	Show song's composer if if its genre is in Lyrion's "%s" setting, or for all genres.
 
 PLUGIN_MATERIAL_SKIN_SHOW_COMPOSER_CLASSICAL
 	EN	For configured genres only
@@ -222,7 +222,7 @@ PLUGIN_MATERIAL_SKIN_SHOW_CONDUCTOR_DESC
 	HU	A karmester megjelenítése, ha egy dal műfaja megegyezik a fenti listában szereplő műfajjal, és van karmester adat.
 
 PLUGIN_MATERIAL_SKIN_SHOW_CONDUCTOR_DESC_LMS9
-	EN	Show song's conductor if its genre is in Lyrion's "My work and composer album genres" setting.
+	EN	Show song's conductor if its genre is in Lyrion's "%s" setting.
 
 PLUGIN_MATERIAL_SKIN_SHOW_BAND
 	CS	Zobrazení skupina/orchestr
@@ -249,7 +249,7 @@ PLUGIN_MATERIAL_SKIN_SHOW_BAND_DESC
 	HU	A zenekar megjelenítése, ha egy dal műfaja megegyezik a fenti listában szereplő műfajjal, és van zenekar adat.
 
 PLUGIN_MATERIAL_SKIN_SHOW_BAND_DESC_LMS9
-	EN	Show song's band/orchestra if its genre is in Lyrion's "My work and composer album genres" setting.
+	EN	Show song's band/orchestra if its genre is in Lyrion's "%s" setting.
 
 PLUGIN_MATERIAL_SKIN_PASSWORD
 	CS	Heslo

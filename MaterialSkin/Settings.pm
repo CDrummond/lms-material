@@ -35,6 +35,9 @@ sub handler {
         $params->{'pref_conductorgenres'} = string('PLUGIN_MATERIAL_SKIN_DEFAULT_CONDUCTOR_GENRES');
         $params->{'pref_bandgenres'} = string('PLUGIN_MATERIAL_SKIN_DEFAULT_BAND_GENRES');
     }
+    $params->{'showComposerDesc'} = string('PLUGIN_MATERIAL_SKIN_SHOW_COMPOSER_DESC_LMS9', string('SETUP_MYCLASSICALGENRES'));
+    $params->{'showConductorDesc'} = string('PLUGIN_MATERIAL_SKIN_SHOW_CONDUCTOR_DESC_LMS9', string('SETUP_MYCLASSICALGENRES'));
+    $params->{'showBandDesc'} = string('PLUGIN_MATERIAL_SKIN_SHOW_BAND_DESC_LMS9', string('SETUP_MYCLASSICALGENRES'));
     $params->{'lmsHasClassicalGenreList'} = Slim::Utils::Versions->compareVersions($::VERSION, '9.0.1') >= 0 ? 1 : 0;
     return $class->SUPER::handler($client, $params);
 }

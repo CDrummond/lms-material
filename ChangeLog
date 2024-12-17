@@ -4,6 +4,7 @@
    'All genres'.
 2. Allow now-playing portrait image to be larger.
 3. Fix URL parsing - thanks to Michael Herger.
+4. Don't add custom select wrapping to multi-selects.
 
 5.7.0
 -----

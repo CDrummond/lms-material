@@ -5,6 +5,7 @@
 2. Allow now-playing portrait image to be larger.
 3. Fix URL parsing - thanks to Michael Herger.
 4. Don't add custom select wrapping to multi-selects.
+5. Fix sorting of albums list if it contains a Works section.
 
 5.7.0
 -----

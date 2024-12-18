@@ -1341,7 +1341,7 @@ var lmsBrowse = Vue.component("lms-browse", {
                 });
                 this.fetchingItem = undefined;
                 if (refreshWorks) {
-                    browseAddWorks(this);
+                    browseAddWorks(this, this.current);
                 }
             }).catch(err => {
                 logAndShowError(err, undefined, this.command.command, this.command.params);

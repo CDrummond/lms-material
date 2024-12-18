@@ -1876,12 +1876,34 @@ function browseHeaderAction(view, act, event, ignoreOpenMenus) {
     } else if (USE_GRID_ACTION==act) {
         view.changeLayout(true);
     } else if (ALBUM_SORTS_ACTION==act || TRACK_SORTS_ACTION==act) {
+console.log("DK id="+view.current.id);
         var sort=ALBUM_SORTS_ACTION==act ? getAlbumSort(view.command, view.inGenre) : getTrackSort(item.stdItem);
         var menuItems=[];
         var sorts=ALBUM_SORTS_ACTION==act ? B_ALBUM_SORTS : B_TRACK_SORTS;
         for (var i=0,len=sorts.length; i<len; ++i) {
             menuItems.push({key:sorts[i].key, label:sorts[i].label, selected:sort.by==sorts[i].key});
         }
+        
+        if (LMS_VERSION>=90100) {
+            let id = view.current.id;
+            let command = {command:['roles'], params:[id]};
+            browseAddLibId(view, command.params);
+            lmsList('', command.command, command.params, 0, LMS_BATCH_SIZE, true, view.nextReqId()).then(({data}) => {
+                logJsonMessage("RESP", data);
+                if (data.result && undefined!=data.result.roles_loop) {
+                    let excludeRole = id.startsWith("work_id") ? 2 : 0; // no point including composer if we're viewing a work
+                    for (let r=0, loop=data.result.roles_loop, len=loop.length; r<len; ++r) {
+                        let rid = parseInt(loop[r].role_id);
+                        if (rid!=excludeRole) {
+                            menuItems.push({key:loop[r].role_id, label:roleDisplayName(loop[r].role_id,1), selected:sort.by==loop[r].role_id});
+                        }
+                    }
+                }    
+            }).catch(err => {
+            //????
+            });
+        }
+        
         showMenu(view, {show:true, x:event ? event.clientX : window.innerWidth, y:event ? event.clientY : 52, sortItems:menuItems, reverseSort:sort.rev,
                         isAlbums:ALBUM_SORTS_ACTION==act, name:'sort'});
     } else if (VLIB_ACTION==act) {

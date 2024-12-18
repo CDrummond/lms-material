@@ -1091,7 +1091,7 @@ var lmsBrowse = Vue.component("lms-browse", {
                      (INSERT_ACTION==loop[i].action && this.wide>=WIDE_MIX_BTN && this.showDetailedSubtoolbar && !lmsOptions.playShuffle) ||
                      (this.tbarActions.length<2 && (i<(this.tbarActions.length<2 ? 2 : 1))) ||
                      ((ALBUM_SORTS_ACTION==loop[i].action || TRACK_SORTS_ACTION==loop[i].action) && this.items.length<2) ||
-                     ((ALBUM_SORTS_ACTION==loop[i].action || ADD_RANDOM_ALBUM_ACTION==loop[i].action) && this.current && this.current.stdItem==STD_ITEM_WORK) ||
+//                     ((ALBUM_SORTS_ACTION==loop[i].action || ADD_RANDOM_ALBUM_ACTION==loop[i].action) && this.current && this.current.stdItem==STD_ITEM_WORK) ||
                      (SCROLL_TO_ACTION==loop[i].action &&
                         (!this.items[0].id.startsWith(FILTER_PREFIX) ||
                          (this.items.length < (this.grid.use ? (this.grid.numColumns*10) : 50) ) ) ) ||

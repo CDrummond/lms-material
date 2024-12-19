@@ -1886,6 +1886,14 @@ console.log("DK id="+view.current.id);
         
         if (LMS_VERSION>=90100) {
             let id = view.current.id;
+            if (id.startsWith('artist_id')) {
+                id = 'album_id:';
+                for (var i=0,len=view.items.length; i<len; ++i) {
+                    if (view.items[i]['id'].startsWith('album_id:')) {
+                        id += view.items[i]['id'].replace('album_id:','')+',';
+                    }
+                }
+            }
             let command = {command:['roles'], params:[id]};
             browseAddLibId(view, command.params);
             lmsList('', command.command, command.params, 0, LMS_BATCH_SIZE, true, view.nextReqId()).then(({data}) => {

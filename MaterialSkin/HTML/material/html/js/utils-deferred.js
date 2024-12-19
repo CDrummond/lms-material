@@ -496,7 +496,12 @@ function commandAlbumSortKey(command, genre) {
     return baseSort;
 }
 
-const VALID_ALBUM_SORTS = new Set(["album", "artistalbum", "artflow", "yearalbum", "yearartistalbum"]);
+let validAlbumSorts = ["album", "artistalbum", "artflow", "yearalbum", "yearartistalbum"];
+if (LMS_VERSION>=90100) {
+    let udrs = Object.keys(lmsOptions.userDefinedRoles);
+    validAlbumSorts = validAlbumSorts.concat(BASE_ARTIST_TYPE_IDS.map(String),Object.keys(lmsOptions.userDefinedRoles));
+}
+const VALID_ALBUM_SORTS = new Set(validAlbumSorts);
 const VALID_TRACK_SORTS = new Set(["title", "tracknum", "albumtrack", "yearalbumtrack", "artisttitle", "yeartitle"]);
 
 function getAlbumSort(command, genre) {

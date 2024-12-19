@@ -1891,10 +1891,13 @@ console.log("DK id="+view.current.id);
             lmsList('', command.command, command.params, 0, LMS_BATCH_SIZE, true, view.nextReqId()).then(({data}) => {
                 logJsonMessage("RESP", data);
                 if (data.result && undefined!=data.result.roles_loop) {
-                    let excludeRole = id.startsWith("work_id") ? 2 : 0; // no point including composer if we're viewing a work
+                    let excludeRole = [1,5,6]; // don't want artist, albumartist, trackartist
+                    if (id.startsWith("work_id")) {
+                        excludeRole.push(2); // don't want composer if we're already viewing a work
+                    }
                     for (let r=0, loop=data.result.roles_loop, len=loop.length; r<len; ++r) {
                         let rid = parseInt(loop[r].role_id);
-                        if (rid!=excludeRole) {
+                        if (!excludeRole.includes(rid)) {
                             menuItems.push({key:loop[r].role_id, label:roleDisplayName(loop[r].role_id,1), selected:sort.by==loop[r].role_id});
                         }
                     }

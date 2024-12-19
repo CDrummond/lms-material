@@ -1263,7 +1263,7 @@ var lmsBrowse = Vue.component("lms-browse", {
                     this.command.params.push(MSK_REV_SORT_OPT);
                 }
                 if (isAlbums) {
-                    setAlbumSort(this.command, this.inGenre, sort.key, reverseSort);
+                    setAlbumSort(this.command, this.inGenre, sort, reverseSort);
                 } else {
                     let stdItem = this.current.stdItem ? this.current.stdItem : this.current.altStdItem;
                     setTrackSort(getTrackSort(stdItem).by, reverseSort, stdItem);

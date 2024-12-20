@@ -7,6 +7,7 @@
 4. Don't add custom select wrapping to multi-selects.
 5. Fix sorting of albums list if it contains a Works section.
 6. Fix sync and sleep dialogs not being scrollable on touch devices.
+7. Fix sort-descending toggle - thanks to Darrell.
 
 5.7.0
 -----

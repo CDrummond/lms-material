@@ -105,7 +105,22 @@
     elems[e].innerText = elems[e].label;
    }
   }
-  window.customSelects = customSelect("select");
+  console.log("SET");
+  let selectList = window.document.getElementsByTagName("select");
+  if (null==selectList) {
+    console.log("NULL???")
+  }
+  let setToCustom = [];
+  for (let i=0, len=selectList.length; i<len; ++i) {
+    if (!selectList[i].hasAttribute("multiple")) {
+      setToCustom.push(selectList[i]);
+    }
+  }
+  console.log(selectList.length, setToCustom.length);
+  if (setToCustom.length<1) {
+    return;
+  }
+  window.customSelects = customSelect(setToCustom);
   window.customSelectObserver = new MutationObserver(selectMutation);
   for (let i=0, len=window.customSelects.length; i<len; ++i) {
    setSelectStyle(window.customSelects[i]);

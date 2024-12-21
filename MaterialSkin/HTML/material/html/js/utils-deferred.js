@@ -504,7 +504,8 @@ function getAlbumSort(command, genre) {
     let def = ALBUM_SORT_KEY==key || (ALBUM_SORT_KEY+"C")==key ? "album" : "yearalbum";
     let parts = getLocalStorageVal(key, def).split(".");
     let val = {by:parts[0], rev:parts.length>1};
-    if (!VALID_ALBUM_SORTS.has(val.by)) {
+    let rolesort = LMS_VERSION>=90100 && (BASE_ARTIST_TYPE_IDS.map(String).includes(val.by) || lmsOptions.userDefinedRoles[val.by]!=undefined) ? 1 : 0;
+    if (!VALID_ALBUM_SORTS.has(val.by) && !rolesort) {
         val.by = def;
     }
     return val;
@@ -810,7 +811,7 @@ function isSameArtistsL(item, rolea, roleList) {
     return false;
 }
 
-function roleDisplayName(role) {
+function roleDisplayName(role, includeArtists) {
     if (undefined==role) {
         return undefined;
     }
@@ -818,8 +819,17 @@ function roleDisplayName(role) {
     if (val<=0) {
         return undefined;
     }
-    if (val==ARTIST_ROLE || val==ALBUM_ARTIST_ROLE || val==TRACK_ARTIST_ROLE) {
+    if (!includeArtists && (val==ARTIST_ROLE || val==ALBUM_ARTIST_ROLE || val==TRACK_ARTIST_ROLE)) {
         return undefined;
+    }
+    if (val==ARTIST_ROLE) {
+        return i18n("Artist");
+    }
+    if (val==ALBUM_ARTIST_ROLE) {
+        return i18n("Album artist");
+    }
+    if (val==TRACK_ARTIST_ROLE) {
+        return i18n("Track artist");
     }
     if (val==BAND_ARTIST_ROLE) {
         return i18n("Band/orchestra");

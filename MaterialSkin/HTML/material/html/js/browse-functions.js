@@ -1886,6 +1886,39 @@ function browseHeaderAction(view, act, event, ignoreOpenMenus) {
         for (var i=0,len=sorts.length; i<len; ++i) {
             menuItems.push({key:sorts[i].key, label:sorts[i].label, selected:sort.by==sorts[i].key});
         }
+
+        if (LMS_VERSION>=90100 && ALBUM_SORTS_ACTION==act) {
+            let id = view.current.id;
+            if (id.startsWith('artist_id')) {
+                let albums = [];
+                for (var i=0,len=view.items.length; i<len; ++i) {
+                    if (view.items[i]['id'].startsWith('album_id:')) {
+                        albums.push(view.items[i]['id'].split(':')[1]);
+                    }
+                }
+                id = 'album_id:'+albums.join(',');
+            }
+            let command = {command:['roles'], params:[id]};
+            browseAddLibId(view, command.params);
+            lmsList('', command.command, command.params, 0, LMS_BATCH_SIZE, true, view.nextReqId()).then(({data}) => {
+                logJsonMessage("RESP", data);
+                if (data.result && undefined!=data.result.roles_loop) {
+                    let excludeRole = [1,5,6]; // don't want artist, albumartist, trackartist
+                    if (id.startsWith('work_id:')) {
+                        excludeRole.push(2); // don't want composer if we're already viewing a work
+                    }
+                    for (let r=0, loop=data.result.roles_loop, len=loop.length; r<len; ++r) {
+                        let rid = parseInt(loop[r].role_id);
+                        if (!excludeRole.includes(rid)) {
+                            menuItems.push({key:loop[r].role_id, label:roleDisplayName(loop[r].role_id,1)+', '+sorts[sorts.map(e => e.key).indexOf('album')].label, selected:sort.by==loop[r].role_id});
+                        }
+                    }
+                }
+            }).catch(err => {
+            //????
+            });
+        }
+
         showMenu(view, {show:true, x:event ? event.clientX : window.innerWidth, y:event ? event.clientY : 52, sortItems:menuItems, reverseSort:sort.rev,
                         isAlbums:ALBUM_SORTS_ACTION==act, name:'sort'});
     } else if (VLIB_ACTION==act) {

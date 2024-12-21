@@ -10,6 +10,8 @@
 7. Fix sort-descending toggle - thanks to Darrell.
 8. In desktop layout, show expanded now-playing when clicking bar image even if
    MAI showing.
+9. Fix reloading of bliss mix if reload action activated following 'Create
+   mix'.
 
 5.7.0
 -----

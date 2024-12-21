@@ -1726,6 +1726,10 @@ function browseItemAction(view, act, item, index, event) {
     } else if (item.stdItem==STD_ITEM_RANDOM_MIX) {
         // Use random mix dialog code to play mix
         bus.$emit('dlg.open', 'rndmix', item.title, false, true);
+    } else if (RELOAD_ACTION==act) {
+        // Not sure this is really a 'menu item action'??? But Blix mix reload is activated this way...
+        view.refreshList(false);
+        bus.$emit('showMessage', i18n('Reloading'));
     } else {
         // If we are acting on a multi-disc album, prompt which disc we should act on
         if (item.multi && !view.current.id.startsWith("album_id:") && (PLAY_ACTION==act || ADD_ACTION==act || INSERT_ACTION==act || PLAY_SHUFFLE_ACTION==act)) {

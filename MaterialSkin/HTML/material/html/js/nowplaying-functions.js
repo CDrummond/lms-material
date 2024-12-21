@@ -1045,7 +1045,7 @@ function nowPlayingClickImage(view, event) {
         view.menu.show = false;
         return;
     }
-    if (view.$store.state.visibleMenus.size>0 || view.info.show || (!view.desktopLayout && view.$store.state.page!='now-playing')) {
+    if (view.$store.state.visibleMenus.size>0 || (!view.desktopLayout && view.$store.state.page!='now-playing')) {
         return;
     }
     if (view.showOverlay) {

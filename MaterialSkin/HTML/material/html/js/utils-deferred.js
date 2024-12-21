@@ -496,12 +496,7 @@ function commandAlbumSortKey(command, genre) {
     return baseSort;
 }
 
-let validAlbumSorts = ["album", "artistalbum", "artflow", "yearalbum", "yearartistalbum"];
-if (LMS_VERSION>=90100) {
-    let udrs = Object.keys(lmsOptions.userDefinedRoles);
-    validAlbumSorts = validAlbumSorts.concat(BASE_ARTIST_TYPE_IDS.map(String),Object.keys(lmsOptions.userDefinedRoles));
-}
-const VALID_ALBUM_SORTS = new Set(validAlbumSorts);
+const VALID_ALBUM_SORTS = new Set(["album", "artistalbum", "artflow", "yearalbum", "yearartistalbum"]);
 const VALID_TRACK_SORTS = new Set(["title", "tracknum", "albumtrack", "yearalbumtrack", "artisttitle", "yeartitle"]);
 
 function getAlbumSort(command, genre) {
@@ -509,7 +504,8 @@ function getAlbumSort(command, genre) {
     let def = ALBUM_SORT_KEY==key || (ALBUM_SORT_KEY+"C")==key ? "album" : "yearalbum";
     let parts = getLocalStorageVal(key, def).split(".");
     let val = {by:parts[0], rev:parts.length>1};
-    if (!VALID_ALBUM_SORTS.has(val.by)) {
+    let rolesort = LMS_VERSION>=90100 && (BASE_ARTIST_TYPE_IDS.map(String).includes(val.by) || lmsOptions.userDefinedRoles[val.by]!=undefined) ? 1 : 0;
+    if (!VALID_ALBUM_SORTS.has(val.by) && !rolesort) {
         val.by = def;
     }
     return val;

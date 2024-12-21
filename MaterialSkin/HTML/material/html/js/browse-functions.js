@@ -1876,23 +1876,23 @@ function browseHeaderAction(view, act, event, ignoreOpenMenus) {
     } else if (USE_GRID_ACTION==act) {
         view.changeLayout(true);
     } else if (ALBUM_SORTS_ACTION==act || TRACK_SORTS_ACTION==act) {
-console.log("DK id="+view.current.id);
         var sort=ALBUM_SORTS_ACTION==act ? getAlbumSort(view.command, view.inGenre) : getTrackSort(item.stdItem);
         var menuItems=[];
         var sorts=ALBUM_SORTS_ACTION==act ? B_ALBUM_SORTS : B_TRACK_SORTS;
         for (var i=0,len=sorts.length; i<len; ++i) {
             menuItems.push({key:sorts[i].key, label:sorts[i].label, selected:sort.by==sorts[i].key});
         }
-        
-        if (LMS_VERSION>=90100) {
+
+        if (LMS_VERSION>=90100 && ALBUM_SORTS_ACTION==act) {
             let id = view.current.id;
             if (id.startsWith('artist_id')) {
-                id = 'album_id:';
+                let albums = [];
                 for (var i=0,len=view.items.length; i<len; ++i) {
                     if (view.items[i]['id'].startsWith('album_id:')) {
-                        id += view.items[i]['id'].replace('album_id:','')+',';
+                        albums.push(view.items[i]['id'].split(':')[1]);
                     }
                 }
+                id = 'album_id:'+albums.join(',');
             }
             let command = {command:['roles'], params:[id]};
             browseAddLibId(view, command.params);
@@ -1900,21 +1900,21 @@ console.log("DK id="+view.current.id);
                 logJsonMessage("RESP", data);
                 if (data.result && undefined!=data.result.roles_loop) {
                     let excludeRole = [1,5,6]; // don't want artist, albumartist, trackartist
-                    if (id.startsWith("work_id")) {
+                    if (id.startsWith('work_id:')) {
                         excludeRole.push(2); // don't want composer if we're already viewing a work
                     }
                     for (let r=0, loop=data.result.roles_loop, len=loop.length; r<len; ++r) {
                         let rid = parseInt(loop[r].role_id);
                         if (!excludeRole.includes(rid)) {
-                            menuItems.push({key:loop[r].role_id, label:roleDisplayName(loop[r].role_id,1), selected:sort.by==loop[r].role_id});
+                            menuItems.push({key:loop[r].role_id, label:roleDisplayName(loop[r].role_id,1)+', '+sorts[sorts.map(e => e.key).indexOf('album')].label, selected:sort.by==loop[r].role_id});
                         }
                     }
-                }    
+                }
             }).catch(err => {
             //????
             });
         }
-        
+
         showMenu(view, {show:true, x:event ? event.clientX : window.innerWidth, y:event ? event.clientY : 52, sortItems:menuItems, reverseSort:sort.rev,
                         isAlbums:ALBUM_SORTS_ACTION==act, name:'sort'});
     } else if (VLIB_ACTION==act) {

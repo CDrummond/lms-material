@@ -1,17 +1,19 @@
 5.7.1
 -----
-1. Change 'Show composer' option from boolean to 'No', 'Classical genres',
-   'All genres'.
-2. Allow now-playing portrait image to be larger.
-3. Fix URL parsing - thanks to Michael Herger.
-4. Fix sorting of albums list if it contains a Works section.
-5. Fix sync and sleep dialogs not being scrollable on touch devices.
-6. Fix sort-descending toggle - thanks to Darrell.
-7. In desktop layout, show expanded now-playing when clicking bar image even if
-   MAI showing.
-8. Fix reloading of bliss mix if reload action activated following 'Create
-   mix'.
-9. Remove use of custom select library, its breaking too many things.
+ 1. Change 'Show composer' option from boolean to 'No', 'Classical genres',
+    'All genres'.
+ 2. Allow now-playing portrait image to be larger.
+ 3. Fix URL parsing - thanks to Michael Herger.
+ 4. Fix sorting of albums list if it contains a Works section.
+ 5. Fix sync and sleep dialogs not being scrollable on touch devices.
+ 6. Fix sort-descending toggle - thanks to Darrell.
+ 7. In desktop layout, show expanded now-playing when clicking bar image even if
+    MAI showing.
+ 8. Fix reloading of bliss mix if reload action activated following 'Create
+    mix'.
+ 9. Remove use of custom select library, its breaking too many things.
+10. Fix file selector buttons not showing on subsequent showing of 'Server'
+    settings.
 
 5.7.0
 -----

@@ -376,17 +376,21 @@ function addHelp(doc) {
     return added;
 }
 
-var iframeInfo = {
-  content:undefined,
-  action:undefined,
-  actionCheckInterval: undefined,
-  actionChecks: 0,
-  pbarHeight: 0,
-  settingsSelector: undefined,
-  settingsPage: undefined,
-  settingModified: false,
-  initialLoad: true
-};
+var iframeInfo = { };
+
+function iframeInitInfo() {
+    iframeInfo = {
+        content:undefined,
+        action:undefined,
+        actionCheckInterval: undefined,
+        actionChecks: 0,
+        pbarHeight: 0,
+        settingsSelector: undefined,
+        settingsPage: undefined,
+        settingModified: false,
+        initialLoad: true
+      };
+}
 
 /* Check for file-entry fields, and sliders, each time form's action is changed */
 function iframeActionCheck() {
@@ -741,8 +745,7 @@ Vue.component('lms-iframe-dialog', {
     },
     mounted() {
         bus.$on('iframe.open', function(page, title, actions, showHome, playerId) {
-            iframeInfo.settingModified = false;
-            iframeInfo.initialLoad = true;
+            iframeInitInfo();
             this.title = title;
             // Delay setting URL for 50ms - otherwise get two requests, first is cancelled...
             // ...no idea why!

@@ -10,11 +10,6 @@ cometd
     Notes: Renamed to libcometd.js. Changess made to work with LMS. Original is
            libcometd.orig.js
 
-custom-select
-    Version: 1.1.16
-    URL: https://github.com/custom-select/custom-select
-    License: MIT
-
 fast-average-color
     Version: 9.3.0
     URL: https://github.com/fast-average-color/fast-average-color

@@ -521,7 +521,7 @@ function copyVars(iframe) {
     return true;
 }
 
-function applyModifications(page, textCol, darkUi, src) {
+function applyModifications(page, svgCol, darkUi, src) {
     if (!page) {
         bus.$emit('iframe-loaded', true);
         return;
@@ -544,7 +544,7 @@ function applyModifications(page, textCol, darkUi, src) {
             content.documentElement.getElementsByTagName("body")[0].classList.add("theme--dark");
         }
         fixClassicSkinRefs(content);
-        remapClassicSkinIcons(content, textCol);
+        remapClassicSkinIcons(content, svgCol);
         addHooks(content);
 
         iframeInfo.settingModified = false;
@@ -707,7 +707,7 @@ Vue.component('lms-iframe-dialog', {
    </v-card-title>
    <v-card-text class="embedded-page">
     <div v-if="showLoading" class="iframe-loading">{{i18n('Loading...')}}</div>
-    <iframe id="embeddedIframe" v-on:load="applyModifications(page, textCol, darkUi, src)" :src="src" frameborder="0" v-bind:class="{'iframe-text':'other'==page,'transparent':showLoading}"></iframe>
+    <iframe id="embeddedIframe" v-on:load="applyModifications(page, svgCol, darkUi, src)" :src="src" frameborder="0" v-bind:class="{'iframe-text':'other'==page,'transparent':showLoading}"></iframe>
    </v-card-text>
   </v-card>
  </v-dialog>
@@ -739,7 +739,7 @@ Vue.component('lms-iframe-dialog', {
             customActions: [],
             history: [],
             showHome:0,
-            textCol: undefined,
+            svgCol: undefined,
             playerId: undefined
         }
     },
@@ -770,7 +770,7 @@ Vue.component('lms-iframe-dialog', {
             this.customActions = getCustomActions(this.page+"-dialog", this.$store.state.unlockAll);
             this.history = [];
             this.showHome = showHome;
-            this.textCol = getComputedStyle(document.documentElement).getPropertyValue('--text-color').substring(1);
+            this.svgCol = this.darkUi ? LMS_DARK_SVG : LMS_LIGHT_SVG;
             this.playerId = playerId;
             if (undefined==this.playerId && 'extras'==this.page) {
                 let parts = page.split("player=");
@@ -948,7 +948,6 @@ Vue.component('lms-iframe-dialog', {
             this.loaded = false;
             this.startLoadTimer();
             this.history = [];
-            this.textCol = getComputedStyle(document.documentElement).getPropertyValue('--text-color').substring(1);
             this.playerId = player.id;
             if (this.page=='extras') {
                 this.$store.commit('setPlayer', this.playerId);

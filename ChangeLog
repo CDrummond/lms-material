@@ -14,6 +14,8 @@
  9. Remove use of custom select library, its breaking too many things.
 10. Fix file selector buttons not showing on subsequent showing of 'Server'
     settings.
+11. Fix SVG icon colour in 'Extras', 'Server' settings, and extra player
+    settings pages.
 
 5.7.0
 -----

@@ -88,6 +88,7 @@
  --pbar-colored-bgnd:rgba(220, 220, 220, 0.3);
  --50vh:calc(var(--vh, 1vh)*50);
  --100vh:calc(var(--vh, 1vh)*100);
+ --1vh:var(--vh, 1vh);
  --np-zoom:1.0;
  --np-zoom-list:1.0;
  --inverted-text-color:#edece7;

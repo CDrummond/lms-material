@@ -1876,43 +1876,68 @@ function browseHeaderAction(view, act, event, ignoreOpenMenus) {
     } else if (USE_GRID_ACTION==act) {
         view.changeLayout(true);
     } else if (ALBUM_SORTS_ACTION==act || TRACK_SORTS_ACTION==act) {
-        var sort=ALBUM_SORTS_ACTION==act ? getAlbumSort(view.command, view.inGenre) : getTrackSort(item.stdItem);
+console.log("DK item.id="+item.id);
+        var sort=ALBUM_SORTS_ACTION==act ? getAlbumSort(view.command, view.inGenre, view.current.roleArray) : getTrackSort(item.stdItem);
         var menuItems=[];
         var sorts=ALBUM_SORTS_ACTION==act ? B_ALBUM_SORTS : B_TRACK_SORTS;
+//        var gotSelection;
         for (var i=0,len=sorts.length; i<len; ++i) {
+//            gotSelection ||= sort.by==sorts[i].key;
             menuItems.push({key:sorts[i].key, label:sorts[i].label, selected:sort.by==sorts[i].key});
         }
 
         if (LMS_VERSION>=90100 && ALBUM_SORTS_ACTION==act) {
-            let id = view.current.id;
-            if (id.startsWith('artist_id')) {
-                let albums = [];
-                for (var i=0,len=view.items.length; i<len; ++i) {
-                    if (view.items[i]['id'].startsWith('album_id:')) {
-                        albums.push(view.items[i]['id'].split(':')[1]);
-                    }
+            if (view.current.roleSortItems!=undefined && this.lmsLastScan==view.current.lmsLastScan) {
+console.log("DK using stored role list");
+                for (var i=0,len=view.current.roleSortItems.length; i<len; ++i) {
+//                    gotSelection ||= sort.by==view.current.roleSortItems[i].key;
+                    menuItems.push({key:view.current.roleSortItems[i].key, label:view.current.roleSortItems[i].label, selected:sort.by==view.current.roleSortItems[i].key});
                 }
-                id = 'album_id:'+albums.join(',');
-            }
-            let command = {command:['roles'], params:[id]};
-            browseAddLibId(view, command.params);
-            lmsList('', command.command, command.params, 0, LMS_BATCH_SIZE, true, view.nextReqId()).then(({data}) => {
-                logJsonMessage("RESP", data);
-                if (data.result && undefined!=data.result.roles_loop) {
-                    let excludeRole = [1,5,6]; // don't want artist, albumartist, trackartist
-                    if (id.startsWith('work_id:')) {
-                        excludeRole.push(2); // don't want composer if we're already viewing a work
-                    }
-                    for (let r=0, loop=data.result.roles_loop, len=loop.length; r<len; ++r) {
-                        let rid = parseInt(loop[r].role_id);
-                        if (!excludeRole.includes(rid)) {
-                            menuItems.push({key:loop[r].role_id, label:roleDisplayName(loop[r].role_id,1)+', '+sorts[sorts.map(e => e.key).indexOf('album')].label, selected:sort.by==loop[r].role_id});
+//                if (!gotSelection) {
+//                    // this means the stored sort is not available for the current list, so set the selected sort to 'album'.
+//                    menuItems[0].selected = 1;
+//                }
+            } else {
+console.log("DK refreshing role list");
+                view.current.lmsLastScan = this.lmsLastScan;
+                view.current.roleSortItems=[];
+                let id = originalId(view.current.id);
+                if (id.startsWith('artist_id')) {
+                    let albums = [];
+                    for (var i=0,len=view.items.length; i<len; ++i) {
+                        if (view.items[i]['id'].startsWith('album_id:')) {
+                            albums.push(view.items[i]['id'].split(':')[1]);
                         }
                     }
+                    id = 'album_id:'+albums.join(',');
                 }
-            }).catch(err => {
-            //????
-            });
+                let command = {command:['roles'], params:[id]};
+                browseAddLibId(view, command.params);
+                lmsList('', command.command, command.params, 0, LMS_BATCH_SIZE, true, view.nextReqId()).then(({data}) => {
+                    logJsonMessage("RESP", data);
+                    if (data.result && undefined!=data.result.roles_loop) {
+                        let excludeRole = [1,5,6]; // don't want artist, albumartist, trackartist
+                        if (id.startsWith('work_id:')) {
+                            excludeRole.push(2); // don't want composer if we're already viewing a work
+                        }
+                        view.current.roleArray = data.result.roles_loop.map(e => e.role_id).filter(e => !excludeRole.includes(e));
+                        for (let r=0, loop=data.result.roles_loop, len=loop.length; r<len; ++r) {
+                            let rid = parseInt(loop[r].role_id);
+                            if (!excludeRole.includes(rid)) {
+//                                gotSelection ||= sort.by==loop[r].role_id;
+                                view.current.roleSortItems.push({key:loop[r].role_id, label:roleDisplayName(loop[r].role_id,1)+', '+sorts[sorts.map(e => e.key).indexOf('album')].label});
+                                menuItems.push({key:loop[r].role_id, label:roleDisplayName(loop[r].role_id,1)+', '+sorts[sorts.map(e => e.key).indexOf('album')].label, selected:sort.by==loop[r].role_id});
+                            }
+                        }
+//                        if (!gotSelection) {
+//                            // this means the stored sort is not available for the current list, so set the selected sort to 'album'.
+//                            menuItems[0].selected = 1;
+//                        }
+                    }
+                }).catch(err => {
+                //????
+                });
+            }
         }
 
         showMenu(view, {show:true, x:event ? event.clientX : window.innerWidth, y:event ? event.clientY : 52, sortItems:menuItems, reverseSort:sort.rev,
@@ -2573,7 +2598,8 @@ function browseReplaceCommandTerms(view, cmd, item) {
                 }
             } else if (cmd.params[i].startsWith(SORT_KEY+ALBUM_SORT_PLACEHOLDER) ||
                        cmd.params[i].startsWith(SORT_KEY+ARTIST_ALBUM_SORT_PLACEHOLDER)) {
-                var sort=getAlbumSort(cmd, view.inGenre);
+console.log("DK item.id="+item.id);
+                var sort=getAlbumSort(cmd, view.inGenre, undefined, item.id=='mm:/myMusicAlbums');
                 // Remove "sort:album" from "playlistcontrol" - LMS fails on this.
                 if (LMS_VERSION<80500 && 'album'==sort.by && isPlayListControl) {
                     cmd.params.splice(i, 1);

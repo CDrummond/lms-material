@@ -87,6 +87,9 @@
         },
         "SqueezeLiteAndroid":{
             "icon":"android"
+        },
+        "WiiM Player":{
+            "svg":"wiim"
         }
     },
     "squeezeplay":{

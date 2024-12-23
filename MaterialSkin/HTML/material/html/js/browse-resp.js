@@ -1403,6 +1403,7 @@ function parseBrowseResp(data, parent, options, cacheKey, parentCommand, parentG
                     }
                 }
 
+                let groupingTitle = undefined;
                 let useComposerTag = i.composer && lmsOptions.showComposer && useComposer(i);
                 let useConductorTag = i.conductor && lmsOptions.showConductor && useConductor(i);
                 let useBandTag = i.band && lmsOptions.showBand && useBand(i);
@@ -1451,7 +1452,6 @@ function parseBrowseResp(data, parent, options, cacheKey, parentCommand, parentG
                         }
                     }
                     if ((undefined!=i.work && undefined!=i.composer) || undefined!=i.grouping) {
-                        let groupingTitle = undefined;
                         if (i.composer && i.work) {
                             groupingTitle = i.composer+SEPARATOR+i.work;
                             if (i.performance) {
@@ -1531,8 +1531,8 @@ function parseBrowseResp(data, parent, options, cacheKey, parentCommand, parentG
                               type: "track",
                               rating: i.rating,
                               image: showAlbumName ? ("/music/" + (""==i.coverid || undefined==i.coverid ? "0" : i.coverid) + "/cover" +LMS_IMAGE_SIZE) : undefined,
-                              filter: FILTER_PREFIX+i.disc,
-                              gfilter: FILTER_PREFIX+groupings.size,
+                              filter: i.disc!=undefined ? FILTER_PREFIX+i.disc : undefined,
+                              gfilter: groupingTitle!=undefined ? FILTER_PREFIX+groupings.size : undefined,
                               emblem: showAlbumName ? getEmblem(i.extid) : undefined,
                               tracknum: sortTracks && undefined!=i.tracknum ? tracknum : undefined,
                               disc: i.disc ? parseInt(i.disc) : undefined,

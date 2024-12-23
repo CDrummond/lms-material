@@ -20,6 +20,7 @@
 13. Add icon mapping for 'WiiM Player'.
 14. Fix progress bar in desktop layout when used on mobile and coloured
     toolbars.
+15. Only set group filter for tracks that have a grouping.
 
 5.7.0
 -----

@@ -17,6 +17,8 @@
 11. Fix SVG icon colour in 'Extras', 'Server' settings, and extra player
     settings pages.
 12. Add icon mapping for 'WiiM Player'.
+13. Fix progress bar in dedktop layout when used on mobile and coloured
+    toolbars.
 
 5.7.0
 -----

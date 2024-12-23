@@ -4016,6 +4016,10 @@ div.v-subheader {
  height:48px;
 }
 
+.browse-no-sub {
+ margin-top:-3px;
+}
+
 .context-button {
  margin-left:0px;
  padding:0 10px;

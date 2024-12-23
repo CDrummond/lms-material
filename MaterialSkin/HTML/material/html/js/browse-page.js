@@ -230,7 +230,7 @@ var lmsBrowse = Vue.component("lms-browse", {
       <v-list-tile-title v-html="item.title" @touchend="textSelectEnd" @mouseup="textSelectEnd" @contextmenu="event.preventDefault()"></v-list-tile-title>
      </v-list-tile-content>
      <v-list-tile-content v-else>
-      <v-list-tile-title v-html="item.title"></v-list-tile-title>
+      <v-list-tile-title v-html="item.title" v-bind:class="{'browse-no-sub':!item.subtitle}"></v-list-tile-title>
       <v-list-tile-sub-title v-if="wide>WIDE_NONE && item.subtitleContext" v-html="item.subtitleContext"></v-list-tile-sub-title>
       <v-list-tile-sub-title v-else v-html="item.subtitleLinks ? item.subtitleLinks : item.subtitle"></v-list-tile-sub-title>
      </v-list-tile-content>
@@ -312,8 +312,8 @@ var lmsBrowse = Vue.component("lms-browse", {
      </v-list-tile-avatar>
 
      <v-list-tile-content>
-      <v-list-tile-title v-html="item.title" v-if="undefined!=item.stdItem && (item.stdItem==STD_ITEM_TRACK || item.stdItem==STD_ITEM_ALBUM_TRACK || item.stdItem==STD_ITEM_PLAYLIST_TRACK)"></v-list-tile-title>
-      <v-list-tile-title v-else>{{item.title}}<b class="vlib-name" v-if="isTop && (item.libname || (libraryName && item.id==TOP_MYMUSIC_ID))">{{SEPARATOR+(item.libname ? item.libname : libraryName)}}</b></v-list-tile-title>
+      <v-list-tile-title v-html="item.title" v-if="undefined!=item.stdItem && (item.stdItem==STD_ITEM_TRACK || item.stdItem==STD_ITEM_ALBUM_TRACK || item.stdItem==STD_ITEM_PLAYLIST_TRACK)" v-bind:class="{'browse-no-sub':!item.subtitle}"></v-list-tile-title>
+      <v-list-tile-title v-else>{{item.title}}<b class="vlib-name" v-if="isTop && (item.libname || (libraryName && item.id==TOP_MYMUSIC_ID))" v-bind:class="{'browse-no-sub':!item.subtitle}">{{SEPARATOR+(item.libname ? item.libname : libraryName)}}</b></v-list-tile-title>
       <v-list-tile-sub-title v-if="wide>WIDE_NONE && item.subtitleContext" v-html="item.subtitleContext"></v-list-tile-sub-title>
       <v-list-tile-sub-title v-else v-html="item.subtitleLinks ? item.subtitleLinks : item.subtitle"></v-list-tile-sub-title>
      </v-list-tile-content>

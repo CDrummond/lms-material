@@ -1183,11 +1183,7 @@ function parseBrowseResp(data, parent, options, cacheKey, parentCommand, parentG
                 resp.image= "/imageproxy/mai/artist/" + reqArtistId + "/image" + LMS_IMAGE_SIZE;
             }
             if (isWorksAlbums) {
-                if (lmsOptions.supportReleaseTypes) {
-                    resp.subtitle=i18np("1 Release", "%1 Releases", loopLen);
-                } else {
-                    resp.subtitle=i18np("1 Album", "%1 Albums", loopLen);
-                }
+                resp.subtitle=i18np("1 Item", "%1 Items", loopLen);
             } else {
                 let numGroups = albumGroups ? albumKeys.length : 0;
                 if (numGroups>1) {

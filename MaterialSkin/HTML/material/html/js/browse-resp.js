@@ -1469,6 +1469,8 @@ function parseBrowseResp(data, parent, options, cacheKey, parentCommand, parentG
                     } else if (prevGroupingTitle!=undefined && prevGroupingTitle!=otherGroupingTitle && !prevGroupingTitle.startsWith(otherGroupingTitle +" (")) {
                         numOtherGroups++;
                         groupingTitle = otherGroupingTitle + (numOtherGroups>1 ? " (" + numOtherGroups + ")" : "");
+                    } else {
+                        groupingTitle = prevGroupingTitle;
                     }
 
                     if (undefined!=groupingTitle) {

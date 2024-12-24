@@ -1271,6 +1271,9 @@ function parseBrowseResp(data, parent, options, cacheKey, parentCommand, parentG
             let yearSet = new Set();
             let years = [];
             let isWork = false;
+            let prevGroupingTitle = undefined;
+            let otherGroupingTitle = i18n("Other");
+            let numOtherGroups = 0;
             resp.extra={};
 
             if (data.params[1].length>=4 && data.params[1][0]=="tracks") {
@@ -1463,6 +1466,12 @@ function parseBrowseResp(data, parent, options, cacheKey, parentCommand, parentG
                         } else {
                             groupingTitle = i.grouping;
                         }
+                    } else if (prevGroupingTitle!=undefined && prevGroupingTitle!=otherGroupingTitle && !prevGroupingTitle.startsWith(otherGroupingTitle +" (")) {
+                        numOtherGroups++;
+                        groupingTitle = otherGroupingTitle + (numOtherGroups>1 ? " (" + numOtherGroups + ")" : "");
+                    }
+
+                    if (undefined!=groupingTitle) {
                         if (groupings.has(groupingTitle)) {
                             let entry = groupings.get(groupingTitle);
                             entry.total++;
@@ -1472,6 +1481,7 @@ function parseBrowseResp(data, parent, options, cacheKey, parentCommand, parentG
                         }
                     }
                 }
+                prevGroupingTitle = groupingTitle;
                 totalDuration += duration>0 ? duration : 0;
                 //var subtitle = duration>0 ? formatSeconds(duration) : undefined;
                 let extraSub = undefined;

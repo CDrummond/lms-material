@@ -21,6 +21,7 @@
 14. Fix progress bar in desktop layout when used on mobile and coloured
     toolbars.
 15. Only set group filter for tracks that have a grouping.
+16. If grouping tracks of album and some have no group then use 'Other'.
 
 5.7.0
 -----

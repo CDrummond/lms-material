@@ -4288,3 +4288,9 @@ div.v-subheader {
 .np-bar *, .subtoolbar * {
  transition:none!important;
 }
+
+::selection {
+ background-color:var(--pq-current-color)!important;
+ color: var(--text-color)!important;
+ text-shadow: none!important;
+}

@@ -835,3 +835,18 @@ table td input[type=checkbox] {
 .Toggle { /* SqueezeDSP */
  margin-top:-22px;
 }
+
+select option, select optgroup {
+ color:var(--text-color)!important;
+ background:var(--popup-background-color)!important;
+}
+
+select option:checked {
+ background:var(--primary-color)!important;
+}
+
+::selection {
+ background-color:var(--pq-current-color)!important;
+ color: var(--text-color)!important;
+ text-shadow: none!important;
+}

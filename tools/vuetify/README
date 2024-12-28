@@ -18,3 +18,6 @@ cp index.ts packages/vuetify/src/components/index.ts
 cp VMenu.js packages/vuetify/src/components/VMenu/VMenu.js
 yarn
 NODE_OPTIONS=--openssl-legacy-provider yarn build
+
+**EXTRA STEPS**
+Edit vuetify.min.css and *remove* ::selection block!

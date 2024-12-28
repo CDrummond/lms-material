@@ -1469,11 +1469,22 @@ function parseBrowseResp(data, parent, options, cacheKey, parentCommand, parentG
                     } else if (prevGroupingTitle!=undefined && prevGroupingTitle!=otherGroupingTitle && !prevGroupingTitle.startsWith(otherGroupingTitle +" (")) {
                         numOtherGroups++;
                         groupingTitle = otherGroupingTitle + (numOtherGroups>1 ? " (" + numOtherGroups + ")" : "");
+                        if (2==numOtherGroups) {
+                            let og = groupings.get(otherGroupingTitle);
+                            if (undefined!=og) {
+                                og.title += " (1)";
+                            }
+                        }
                     } else {
                         groupingTitle = prevGroupingTitle;
                     }
 
                     if (undefined!=groupingTitle) {
+                        // 'Other' tracks before a grouping?
+                        if (0==numOtherGroups && groupings.size<1 && idx>0) {
+                            numOtherGroups=1;
+                            groupings.set(otherGroupingTitle, {pos: 0, total:idx, duration:totalDuration, title:otherGroupingTitle, id:1});
+                        }
                         if (groupings.has(groupingTitle)) {
                             let entry = groupings.get(groupingTitle);
                             entry.total++;

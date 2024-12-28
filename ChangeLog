@@ -1,6 +1,7 @@
 5.7.2
 -----
 1. Re-add custom select library, but disable for 'Custom Skip'.
+2. Handle case where there is an 'Other' group at start of release.
 
 5.7.1
 -----

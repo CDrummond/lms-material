@@ -1466,13 +1466,13 @@ function parseBrowseResp(data, parent, options, cacheKey, parentCommand, parentG
                         } else {
                             groupingTitle = i.grouping;
                         }
-                    } else if (prevGroupingTitle!=undefined && prevGroupingTitle!=otherGroupingTitle && !prevGroupingTitle.startsWith(otherGroupingTitle +" (")) {
+                    } else if (prevGroupingTitle!=undefined && prevGroupingTitle!=otherGroupingTitle && !prevGroupingTitle.startsWith(otherGroupingTitle + SEPARATOR)) {
                         numOtherGroups++;
-                        groupingTitle = otherGroupingTitle + (numOtherGroups>1 ? " (" + numOtherGroups + ")" : "");
+                        groupingTitle = otherGroupingTitle + (numOtherGroups>1 ? SEPARATOR + numOtherGroups : "");
                         if (2==numOtherGroups) {
                             let og = groupings.get(otherGroupingTitle);
                             if (undefined!=og) {
-                                og.title += " (1)";
+                                og.title += SEPARATOR + "1";
                             }
                         }
                     } else {

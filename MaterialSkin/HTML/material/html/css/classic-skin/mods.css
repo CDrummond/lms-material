@@ -636,7 +636,7 @@ input[type="submit"]:active, input[type="button"]:active {
 }
 
 input[type="submit"], input[type="button"] {
- border:1px solid var(--active-color);
+ border:1px solid var(--primary-color);
 }
 
 input[name="pref_rescan"] {

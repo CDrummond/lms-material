@@ -1,3 +1,7 @@
+5.7.2
+-----
+1. Re-add custom select library, but disable for 'Custom Skip'.
+
 5.7.1
 -----
  1. Change 'Show composer' option from boolean to; 'No', 'Classical genres',

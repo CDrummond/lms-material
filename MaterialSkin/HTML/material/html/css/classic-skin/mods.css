@@ -459,8 +459,7 @@ input[type=radio]:checked:before {
 }
 
 #saveSettings {
- color: var(--inverted-text-color) !important;
- background-color: var(--primary-color) !important;
+ border: 2px solid var(--primary-color) !important;
  margin-top:18px;
 }
 
@@ -626,6 +625,18 @@ input[type="submit"], input[type="button"] {
  font-weight:var(--bold-weight)!important;
  color:var(--active-color)!important;
  padding:6px 14px 5px 14px;
+}
+
+input[type="submit"]:hover, input[type="button"]:hover, input[type="submit"]:focus, input[type="button"]:focus, .msk-dir-btn:hover, .msk-dir-btn:focus {
+ background-color: var(--pq-current-color);
+}
+
+input[type="submit"]:active, input[type="button"]:active {
+ opacity: 0.8;
+}
+
+input[type="submit"], input[type="button"] {
+ border:1px solid var(--active-color);
 }
 
 input[name="pref_rescan"] {

@@ -2,6 +2,8 @@
 -----
 1. Re-add custom select library, but disable for 'Custom Skip'.
 2. Handle case where there is an 'Other' group at start of release.
+3. Don't use solid colour for 'Save Settings' button as some colours (if set
+   from cover) can cause poor contrast.
 
 5.7.1
 -----

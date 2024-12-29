@@ -46,6 +46,7 @@ Vue.component('lms-mediasession', {
             bus.$emit('getCurrentCover');
             this.haveLocalAndroidPlayer = false;
             this.currentIpAddress = undefined;
+            let mediasession = this;
             if (IS_ANDROID) { // currently only need to check current IP address to detect SB player, and this is Android only.
                 try {
                     var RTCPeerConnection = window.RTCPeerConnection || window.webkitRTCPeerConnection || window.mozRTCPeerConnection;
@@ -66,7 +67,7 @@ Vue.component('lms-mediasession', {
                             var ip = /(192\.168\.(0|\d{0,3})\.(0|\d{0,3}))/i;
                             sdp.split('\r\n').forEach(function(line) {
                                 if (line.match(ip)) {
-                                    this.currentIpAddress = line.match(ip)[0];
+                                    mediasession.currentIpAddress = line.match(ip)[0];
                                 }
                             });
                         }

@@ -6,6 +6,7 @@
    from cover) can cause poor contrast.
 4. Prevent flash of blue when activating a select menu in settings pages on
    touch devices.
+5. Fix clipping of covers in grid view.
 
 5.7.1
 -----

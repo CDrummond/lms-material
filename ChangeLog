@@ -4,6 +4,8 @@
 2. Handle case where there is an 'Other' group at start of release.
 3. Don't use solid colour for 'Save Settings' button as some colours (if set
    from cover) can cause poor contrast.
+4. Prevent flash of blue when activating a select menu in settings pages on
+   touch devices.
 
 5.7.1
 -----

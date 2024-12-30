@@ -107,8 +107,9 @@ function updateItemFavorites(item) {
     }
 
     try {
-        var favTitle = item.favTitle ? item.favTitle : item.origTitle ? item.origTitle : item.title;
-        if (item.id.startsWith("work_id:") && item.images && item.images.length>1) {
+        let favTitle = item.favTitle ? item.favTitle : item.origTitle ? item.origTitle : item.title;
+        let id = ""+item.id;
+        if (id.startsWith("work_id:") && item.images && item.images.length>1) {
             let ids=[];
             for (let i=0, list=item.images, len=list.length; i<len; ++i) {
                 ids.push(list[i].split('/')[list[i][0]=='/' ? 2 : 1]);
@@ -116,15 +117,15 @@ function updateItemFavorites(item) {
             item.favIcon = changeImageSizing(item.images[item.images.length-1])+"?ids="+ids.reverse().join(",");
         } else if (item.id!=undefined && item.album_id!=undefined) {
             item.favIcon="music/"+item.album_id+"/cover.png";
-        } else if (item.id.startsWith("genre_id:")) {
+        } else if (id.startsWith("genre_id:")) {
             item.favUrl="db:genre.name="+encodeURIComponent(favTitle);
             item.favIcon="html/images/genres.png";
-        } else if (item.id.startsWith("artist_id:")) {
+        } else if (id.startsWith("artist_id:")) {
             if (!item.favUrl) {
                 item.favUrl="db:contributor.name="+encodeURIComponent(favTitle);
             }
             item.favIcon=changeImageSizing(item.image);
-        } else if (item.id.startsWith("album_id:")) {
+        } else if (id.startsWith("album_id:")) {
             if (undefined==item.favUrl) {
                 item.favUrl="db:album.title="+encodeURIComponent(favTitle);
                 if (LMS_VERSION>=80300) {
@@ -138,10 +139,10 @@ function updateItemFavorites(item) {
                 }
             }
             item.favIcon=changeImageSizing(item.image);
-        } else if (item.id.startsWith("year:")) {
+        } else if (id.startsWith("year:")) {
             item.favUrl="db:year.id="+encodeURIComponent(favTitle);
             item.favIcon="html/images/years.png";
-        } else if (item.id.startsWith("playlist:")) {
+        } else if (id.startsWith("playlist:")) {
             item.favIcon="html/images/playlists.png";
         } else if (item.stdItem==STD_ITEM_MUSICIP_MOOD) {
             item.favUrl=item.id;

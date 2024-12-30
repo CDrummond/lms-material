@@ -7,6 +7,7 @@
 4. Prevent flash of blue when activating a select menu in settings pages on
    touch devices.
 5. Fix clipping of covers in grid view.
+6. Fix adding, and removing, tracks from favourites via now-playing.
 
 5.7.1
 -----

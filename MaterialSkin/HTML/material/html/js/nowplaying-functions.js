@@ -466,6 +466,7 @@ function nowplayingMenuAction(view, item) {
                     } else {
                         lmsCommand(view.$store.state.player.id, ["favorites", "add", "url:"+litem.favUrl, "title:"+litem.title, "icon:"+litem.favIcon]).then(({data})=> {
                             logJsonMessage("RESP", data);
+                            bus.$emit('showMessage', i18n("Added to favorites"));
                             bus.$emit('refreshFavorites');
                         }).catch(err => {
                         });

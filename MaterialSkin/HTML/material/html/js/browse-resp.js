@@ -1274,6 +1274,7 @@ function parseBrowseResp(data, parent, options, cacheKey, parentCommand, parentG
             let prevGroupingTitle = undefined;
             let otherGroupingTitle = i18n("Other");
             let numOtherGroups = 0;
+            let splitIntoGroups = true;
             resp.extra={};
 
             if (data.params[1].length>=4 && data.params[1][0]=="tracks") {
@@ -1489,6 +1490,9 @@ function parseBrowseResp(data, parent, options, cacheKey, parentCommand, parentG
                             let entry = groupings.get(groupingTitle);
                             entry.total++;
                             entry.duration+=duration;
+                            if (entry.pos+entry.total!=(idx+1)) {
+                                splitIntoGroups = false; // Group is split?
+                            }
                         } else {
                             groupings.set(groupingTitle, {pos: resp.items.length, total:1, duration:duration, title:groupingTitle, id:(groupings.size+1)});
                         }
@@ -1723,7 +1727,7 @@ function parseBrowseResp(data, parent, options, cacheKey, parentCommand, parentG
             let removeDiscNumbers = false;
             let removeGroupFilter = false;
             if (performance==0) {
-                if (groupings.size>1) {
+                if (groupings.size>1 && splitIntoGroups) {
                     let d = 0;
                     for (var idx=0, len=resp.items.length; idx<len; ++idx) {
                         resp.items[idx].filter = resp.items[idx].gfilter;

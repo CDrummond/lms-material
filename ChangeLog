@@ -8,6 +8,7 @@
    touch devices.
 5. Fix clipping of covers in grid view.
 6. Fix adding, and removing, tracks from favourites via now-playing.
+7. Only split into groups if all groups are single blocks.
 
 5.7.1
 -----

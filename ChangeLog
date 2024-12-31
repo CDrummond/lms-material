@@ -9,6 +9,8 @@
 5. Fix clipping of covers in grid view.
 6. Fix adding, and removing, tracks from favourites via now-playing.
 7. Only split into groups if all groups are single blocks.
+8. Use same icon to show library refresh in progress in 'Information' dialog
+   as per in toolbar.
 
 5.7.1
 -----

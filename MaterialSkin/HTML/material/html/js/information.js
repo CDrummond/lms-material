@@ -36,7 +36,7 @@ Vue.component('lms-information-dialog', {
    <p class="about-header">{{i18n('Library')}}</p>
    <ul>
     <template v-for="(item, index) in library"><li>{{item}}</li></template>
-    <li v-if="scanning" @click="showScanDetails" class="link-item"><v-icon class="pulse">update</v-icon> {{scanInfo}}</li>
+    <li v-if="scanning" @click="showScanDetails" class="link-item"><v-icon class="pulse">refresh</v-icon> {{scanInfo}}</li>
     <li v-else-if="undefined!=scanInfo">{{scanInfo}}</li>
    </ul>
    <v-menu bottom v-if="!scanning && unlockAll">

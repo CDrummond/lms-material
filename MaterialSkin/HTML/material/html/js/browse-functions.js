@@ -1097,7 +1097,7 @@ function browseClick(view, item, index, event, ignoreOpenMenu) {
                             browseDoClick(view, item, index, event);
                         }
                     } else if (data.result.artist_id) {
-                        browseDoClick(view, {id:"artist_id:"+data.result.artist_id, title:item.title, image:item.image, stdItem:STD_ITEM_ARTIST}, index, event);
+                        browseDoClick(view, {id:"artist_id:"+data.result.artist_id, title:item.title, image:item.image, stdItem:STD_ITEM_ARTIST, fromFav:true}, index, event);
                     } else if (data.result.work_id && data.result.composer_id) {
                         browseDoClick(view, {id:"work_id:"+data.result.work_id, composer_id:data.result.composer_id, title:item.title, image:item.image, images:item.images, stdItem:STD_ITEM_WORK}, index, event);
                     } else if (isFavouritePlaylist) {
@@ -2064,6 +2064,11 @@ function browseBuildCommand(view, item, commandName, doReplacements, allowLibId)
     }
 
     if (cmd.command.length<1) { // Build SlimBrowse command
+        // Ignore Albums, and Playlists, in Favourites - handled better outside...
+        if (undefined!=item.id && !item.id.startsWith("item_id:") && undefined!=item.stdItem && (SECTION_FAVORITES==item.section || item.fromFav) && undefined!=commandName) {
+            return cmd;
+        }
+
         if (undefined==commandName || item.mskOnlyGoAction) {
             commandName = "go";
         }

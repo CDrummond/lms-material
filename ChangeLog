@@ -1,17 +1,18 @@
 5.7.2
 -----
-1. Re-add custom select library, but disable for 'Custom Skip'.
-2. Handle case where there is an 'Other' group at start of release.
-3. Don't use solid colour for 'Save Settings' button as some colours (if set
-   from cover) can cause poor contrast.
-4. Prevent flash of blue when activating a select menu in settings pages on
-   touch devices.
-5. Fix clipping of covers in grid view.
-6. Fix adding, and removing, tracks from favourites via now-playing.
-7. Only split into groups if all groups are single blocks.
-8. Use same icon to show library refresh in progress in 'Information' dialog
-   as per in toolbar.
-9. Update current player status if click on it's name in navigation drawer.
+ 1. Re-add custom select library, but disable for 'Custom Skip'.
+ 2. Handle case where there is an 'Other' group at start of release.
+ 3. Don't use solid colour for 'Save Settings' button as some colours (if set
+    from cover) can cause poor contrast.
+ 4. Prevent flash of blue when activating a select menu in settings pages on
+    touch devices.
+ 5. Fix clipping of covers in grid view.
+ 6. Fix adding, and removing, tracks from favourites via now-playing.
+ 7. Only split into groups if all groups are single blocks.
+ 8. Use same icon to show library refresh in progress in 'Information' dialog
+    as per in toolbar.
+ 9. Update current player status if click on it's name in navigation drawer.
+10. Fix playing playlists, artists, and albums, from favourites.
 
 5.7.1
 -----

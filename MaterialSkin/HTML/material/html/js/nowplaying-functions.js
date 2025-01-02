@@ -170,6 +170,7 @@ function nowplayingOnPlayerStatus(view, playerStatus) {
     if (emblem!=view.playerStatus.current.emblem) {
         view.playerStatus.current.emblem = emblem;
     }
+    view.playerStatus.current.isClassical = playerStatus.current.isClassical;
     let useComposerTag = playerStatus.current.composer && lmsOptions.showComposer && useComposer(playerStatus.current);
     let useConductorTag = playerStatus.current.conductor && lmsOptions.showConductor && useConductor(playerStatus.current);
     let useBandTag = playerStatus.current.band && lmsOptions.showBand && useBand(playerStatus.current);
@@ -338,23 +339,33 @@ function nowplayingShowMenu(view, event) {
                     ? view.playerStatus.current.artist_ids[0]
                     : view.playerStatus.current.artist_id;
         if (artist_id && view.playerStatus.current.artist && view.playerStatus.current.artist!="?") {
-            view.menu.items.push({title:ACTIONS[GOTO_ARTIST_ACTION].title, act:NP_BROWSE_CMD, cmd:{command:["albums"], params:["artist_id:"+artist_id, ARTIST_ALBUM_TAGS, SORT_KEY+ARTIST_ALBUM_SORT_PLACEHOLDER], title:view.playerStatus.current.artist}, svg:ACTIONS[GOTO_ARTIST_ACTION].svg});
+            view.menu.items.push({title:ACTIONS[GOTO_ARTIST_ACTION].title, act:NP_BROWSE_CMD, cmd:{command:["albums"], params:[ARTIST_ALBUM_TAGS, SORT_KEY+ARTIST_ALBUM_SORT_PLACEHOLDER], title:view.playerStatus.current.artist}, svg:ACTIONS[GOTO_ARTIST_ACTION].svg,
+                                  ids: view.playerStatus.current.artist_ids ? view.playerStatus.current.artist_ids : [artist_id],
+                                  artists:view.playerStatus.current.artists});
         } else {
             let albumartist_id = view.playerStatus.current.albumartist_ids
                         ? view.playerStatus.current.albumartist_ids[0]
                         : view.playerStatus.current.albumartist_id;
             if (albumartist_id && view.playerStatus.current.albumartist && view.playerStatus.current.albumartist!="?") {
-                view.menu.items.push({title:ACTIONS[GOTO_ARTIST_ACTION].title, act:NP_BROWSE_CMD, cmd:{command:["albums"], params:["artist_id:"+albumartist_id, ARTIST_ALBUM_TAGS, SORT_KEY+ARTIST_ALBUM_SORT_PLACEHOLDER, "role_id:ALBUMARTIST"], title:view.playerStatus.current.albumartist}, svg:ACTIONS[GOTO_ARTIST_ACTION].svg});
+                view.menu.items.push({title:ACTIONS[GOTO_ARTIST_ACTION].title, act:NP_BROWSE_CMD, cmd:{command:["albums"], params:[ARTIST_ALBUM_TAGS, SORT_KEY+ARTIST_ALBUM_SORT_PLACEHOLDER, "role_id:ALBUMARTIST"], title:view.playerStatus.current.albumartist}, svg:ACTIONS[GOTO_ARTIST_ACTION].svg,
+                                      ids: view.playerStatus.current.albumartist_ids ? view.playerStatus.current.albumartist_ids : [albumartist_id],
+                                      artists:view.playerStatus.current.albumartists});
             }
         }
         if (lmsOptions.showComposer && view.playerStatus.current.composer && view.playerStatus.current.composer_id && useComposer(view.playerStatus.current)) {
-            view.menu.items.push({title:i18n("Go to composer"), act:NP_BROWSE_CMD, cmd:{command:["albums"], params:["artist_id:"+view.playerStatus.current.composer_id, ARTIST_ALBUM_TAGS, SORT_KEY+ARTIST_ALBUM_SORT_PLACEHOLDER, "role_id:COMPOSER"], title:view.playerStatus.current.composer}, svg:"composer"});
+            view.menu.items.push({title:i18n("Go to composer"), act:NP_BROWSE_CMD, cmd:{command:["albums"], params:[ARTIST_ALBUM_TAGS, SORT_KEY+ARTIST_ALBUM_SORT_PLACEHOLDER, "role_id:COMPOSER"], title:view.playerStatus.current.composer}, svg:"composer",
+            ids: view.playerStatus.current.composer_ids ? view.playerStatus.current.composer_ids : [view.playerStatus.current.composer_id],
+            artists:view.playerStatus.current.composers});
         }
         if (lmsOptions.showConductor && view.playerStatus.current.conductor && view.playerStatus.current.conductor_id && useConductor(view.playerStatus.current)) {
-            view.menu.items.push({title:i18n("Go to conductor"), act:NP_BROWSE_CMD, cmd:{command:["albums"], params:["artist_id:"+view.playerStatus.current.conductor_id, ARTIST_ALBUM_TAGS, SORT_KEY+ARTIST_ALBUM_SORT_PLACEHOLDER, "role_id:CONDUCTOR"], title:view.playerStatus.current.conductor}, svg:"conductor"});
+            view.menu.items.push({title:i18n("Go to conductor"), act:NP_BROWSE_CMD, cmd:{command:["albums"], params:[ARTIST_ALBUM_TAGS, SORT_KEY+ARTIST_ALBUM_SORT_PLACEHOLDER, "role_id:CONDUCTOR"], title:view.playerStatus.current.conductor}, svg:"conductor",
+            ids: view.playerStatus.current.conductor_ids ? view.playerStatus.current.conductor_ids : [view.playerStatus.current.conductor_id],
+            artists:view.playerStatus.current.conductors});
         }
         if (lmsOptions.showBand && view.playerStatus.current.band && view.playerStatus.current.band_id && useBand(view.playerStatus.current)) {
-            view.menu.items.push({title:i18n("Go to band"), act:NP_BROWSE_CMD, cmd:{command:["albums"], params:["artist_id:"+view.playerStatus.current.band_id, ARTIST_ALBUM_TAGS, SORT_KEY+ARTIST_ALBUM_SORT_PLACEHOLDER, "role_id:BAND"], title:view.playerStatus.current.band}, svg:"trumpet"});
+            view.menu.items.push({title:i18n("Go to band"), act:NP_BROWSE_CMD, cmd:{command:["albums"], params:[ARTIST_ALBUM_TAGS, SORT_KEY+ARTIST_ALBUM_SORT_PLACEHOLDER, "role_id:BAND"], title:view.playerStatus.current.band}, svg:"trumpet",
+            ids: view.playerStatus.current.band_ids ? view.playerStatus.current.band_ids : [view.playerStatus.current.band_id],
+            artists:view.playerStatus.current.bands});
         }
         if (view.playerStatus.current.album_id && view.playerStatus.current.album) {
             view.menu.items.push({title:ACTIONS[GOTO_ALBUM_ACTION].title, act:NP_BROWSE_CMD, cmd:{command:["tracks"], params:["album_id:"+view.playerStatus.current.album_id, trackTags(true), SORT_KEY+"tracknum"], title:view.playerStatus.current.album,
@@ -398,6 +409,24 @@ function nowplayingMenuAction(view, item) {
     } else if (NP_INFO_ACT==item.act) {
         view.trackInfo();
     } else if (NP_BROWSE_CMD==item.act) {
+        if (undefined!=item.ids) {
+            if (1==item.ids.length || undefined==item.artists || item.artists.length!=item.ids.length) {
+                item.cmd.params.unshift("artist_id:"+item.ids[0]);
+            } else {
+                let choices = [];
+                for (let i=0, loop=item.artists, len=loop.length; i<len; ++i) {
+                    choices.push({id:item.ids[i], title:loop[i]});
+                }
+                choose(item.title, choices).then(choice => {
+                    if (undefined!=choice) {
+                        item.cmd.params.unshift("artist_id:"+choice.id);
+                        bus.$emit("browse", item.cmd.command, item.cmd.params, choice.title, 'now-playing', undefined, item.cmd.subtitle);
+                        view.close();
+                    }
+                });
+                return;
+            }
+        }
         bus.$emit("browse", item.cmd.command, item.cmd.params, item.cmd.title, 'now-playing', undefined, item.cmd.subtitle);
         view.close();
     } else if (NP_COPY_DETAILS_CMD==item.act) {

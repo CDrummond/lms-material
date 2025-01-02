@@ -13,6 +13,10 @@
     as per in toolbar.
  9. Update current player status if click on it's name in navigation drawer.
 10. Fix playing playlists, artists, and albums, from favourites.
+11. Fix 'Go to composer', etc., sometimes not showing in now-playing menu for
+    LMS9.0.1+
+12. If have multiple artists, composers, etc. then prompt for which to go to
+    when using now-playing menu.
 
 5.7.1
 -----

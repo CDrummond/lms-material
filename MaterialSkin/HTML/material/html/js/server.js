@@ -926,6 +926,9 @@ var lmsServer = Vue.component('lms-server', {
                     }
                 }
                 this.subscribe(this.$store.state.player.id);
+                setTimeout(function () {
+                    this.updateCurrentPlayer();
+                }.bind(this), 500);
             } else {
                 this.updateCurrentPlayer();
             }

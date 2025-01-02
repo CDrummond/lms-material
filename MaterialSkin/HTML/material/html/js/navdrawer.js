@@ -437,7 +437,9 @@ Vue.component('lms-navdrawer', {
             }
         },
         setPlayer(id) {
-            if (id != this.$store.state.player.id) {
+            if (id == this.$store.state.player.id) {
+                bus.$emit('refreshStatus');
+            } else {
                 this.$store.commit('setPlayer', id);
             }
             this.show = false;

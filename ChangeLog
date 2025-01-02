@@ -11,6 +11,7 @@
 7. Only split into groups if all groups are single blocks.
 8. Use same icon to show library refresh in progress in 'Information' dialog
    as per in toolbar.
+9. Update current player status if click on it's name in navigation drawer.
 
 5.7.1
 -----

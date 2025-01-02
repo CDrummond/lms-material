@@ -967,7 +967,6 @@ function parseBrowseResp(data, parent, options, cacheKey, parentCommand, parentG
             resp.canUseGrid = true;
             resp.itemCustomActions = getCustomActions("album");
             var jumpListYear = false;
-            var isSearch = options && options.isSearch;
             var haveReleaseType = false;
             var firstYear = 65535;
             var lastYear = 0;
@@ -989,8 +988,6 @@ function parseBrowseResp(data, parent, options, cacheKey, parentCommand, parentG
                             isNewMusic = true;
                         } else if (lower==MSK_REV_SORT_OPT) {
                             reverse = true;
-                        } else if (lower.startsWith("search:")) {
-                            isSearch = true;
                         } else if (lower.startsWith("tags:") && data.params[1][i].indexOf("W")>0) {
                             haveReleaseType = true;
                         } else if (lower.startsWith("artist_id:")) {
@@ -1128,7 +1125,7 @@ function parseBrowseResp(data, parent, options, cacheKey, parentCommand, parentG
                     subtitleLinks = "<obj class=\"link-item\" onclick=\"show_year(event, "+i.year+",\'"+i.year+"\', \'browse\')\">" + i.year + "</obj>";
                 }
 
-                let groupType = undefined!=i.group_count && parseInt(i.group_count)>1
+                let groupType = undefined!=i.group_count && parseInt(i.group_count)>1 && (undefined==i.contiguous_groups || 1==parseInt(i.contiguous_groups))
                                  ? MULTI_GROUP_ALBUM
                                  : LMS_GROUP_DISCS && undefined!=i.disccount && parseInt(i.disccount)>1
                                    ? MULTI_DISC_ALBUM
@@ -1336,6 +1333,8 @@ function parseBrowseResp(data, parent, options, cacheKey, parentCommand, parentG
             let compilationAlbumArtist = undefined;
             let extraSubs = [];
             let browseContext = getLocalStorageBool('browseContext', false);
+            let albumMightHaveMultiGroups = undefined==parent || undefined==parent.multi || MULTI_GROUP_ALBUM==parent.multi;
+
             for (let idx=0, loop=data.result.titles_loop, loopLen=loop.length; idx<loopLen; ++idx) {
                 let i = makeHtmlSafe(loop[idx]);
                 let title = trackTitle(i);
@@ -1455,46 +1454,48 @@ function parseBrowseResp(data, parent, options, cacheKey, parentCommand, parentG
                             discs.set(discNum, {pos: resp.items.length, total:1, duration:duration, title:title});
                         }
                     }
-                    if ((undefined!=i.work && undefined!=i.composer) || undefined!=i.grouping) {
-                        if (i.composer && i.work) {
-                            groupingTitle = i.composer+SEPARATOR+i.work;
-                            if (i.performance) {
-                                groupingTitle += SEPARATOR+i.performance;
+                    if (albumMightHaveMultiGroups) {
+                        if ((undefined!=i.work && undefined!=i.composer) || undefined!=i.grouping) {
+                            if (i.composer && i.work) {
+                                groupingTitle = i.composer+SEPARATOR+i.work;
+                                if (i.performance) {
+                                    groupingTitle += SEPARATOR+i.performance;
+                                }
+                                if (i.grouping) {
+                                    groupingTitle += SEPARATOR+i.grouping;
+                                }
+                            } else {
+                                groupingTitle = i.grouping;
                             }
-                            if (i.grouping) {
-                                groupingTitle += SEPARATOR+i.grouping;
+                        } else if (prevGroupingTitle!=undefined && prevGroupingTitle!=otherGroupingTitle && !prevGroupingTitle.startsWith(otherGroupingTitle + SEPARATOR)) {
+                            numOtherGroups++;
+                            groupingTitle = otherGroupingTitle + (numOtherGroups>1 ? SEPARATOR + numOtherGroups : "");
+                            if (2==numOtherGroups) {
+                                let og = groupings.get(otherGroupingTitle);
+                                if (undefined!=og) {
+                                    og.title += SEPARATOR + "1";
+                                }
                             }
                         } else {
-                            groupingTitle = i.grouping;
+                            groupingTitle = prevGroupingTitle;
                         }
-                    } else if (prevGroupingTitle!=undefined && prevGroupingTitle!=otherGroupingTitle && !prevGroupingTitle.startsWith(otherGroupingTitle + SEPARATOR)) {
-                        numOtherGroups++;
-                        groupingTitle = otherGroupingTitle + (numOtherGroups>1 ? SEPARATOR + numOtherGroups : "");
-                        if (2==numOtherGroups) {
-                            let og = groupings.get(otherGroupingTitle);
-                            if (undefined!=og) {
-                                og.title += SEPARATOR + "1";
-                            }
-                        }
-                    } else {
-                        groupingTitle = prevGroupingTitle;
-                    }
 
-                    if (undefined!=groupingTitle) {
-                        // 'Other' tracks before a grouping?
-                        if (0==numOtherGroups && groupings.size<1 && idx>0) {
-                            numOtherGroups=1;
-                            groupings.set(otherGroupingTitle, {pos: 0, total:idx, duration:totalDuration, title:otherGroupingTitle, id:1});
-                        }
-                        if (groupings.has(groupingTitle)) {
-                            let entry = groupings.get(groupingTitle);
-                            entry.total++;
-                            entry.duration+=duration;
-                            if (entry.pos+entry.total!=(idx+1)) {
-                                splitIntoGroups = false; // Group is split?
+                        if (undefined!=groupingTitle) {
+                            // 'Other' tracks before a grouping?
+                            if (0==numOtherGroups && groupings.size<1 && idx>0) {
+                                numOtherGroups=1;
+                                groupings.set(otherGroupingTitle, {pos: 0, total:idx, duration:totalDuration, title:otherGroupingTitle, id:1});
                             }
-                        } else {
-                            groupings.set(groupingTitle, {pos: resp.items.length, total:1, duration:duration, title:groupingTitle, id:(groupings.size+1)});
+                            if (groupings.has(groupingTitle)) {
+                                let entry = groupings.get(groupingTitle);
+                                entry.total++;
+                                entry.duration+=duration;
+                                if (entry.pos+entry.total!=(idx+1)) {
+                                    splitIntoGroups = false; // Group is split?
+                                }
+                            } else {
+                                groupings.set(groupingTitle, {pos: resp.items.length, total:1, duration:duration, title:groupingTitle, id:(groupings.size+1)});
+                            }
                         }
                     }
                 }

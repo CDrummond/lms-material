@@ -173,14 +173,17 @@ PLUGIN_MATERIAL_SKIN_SHOW_COMPOSER_DESC
 PLUGIN_MATERIAL_SKIN_SHOW_COMPOSER_DESC_LMS9
 	EN	Show song's composer if its genre is in Lyrion's "%s" setting, or for all genres.
 	FR	Afficher le compositeur du morceau systématiquement ou uniquement si le genre est mentionné dans le réglage "%s" de Lyrion.
+	NL	Toon de componist van het nummer voor alle genres of alleen als het genre is geconfigureerd in de "%s"-instelling van Lyrion.
 
 PLUGIN_MATERIAL_SKIN_SHOW_COMPOSER_CLASSICAL
 	EN	For configured genres only
 	FR	Pour les genres configurés seulement
+	NL	Alleen voor geconfigureerde genres
 
 PLUGIN_MATERIAL_SKIN_SHOW_COMPOSER_ALL
 	EN	For all genres
 	FR	Pour tous les genres
+	NL	Voor alle genres
 
 PLUGIN_MATERIAL_SKIN_USE_COMPOSER_MAI
 	CS	Zobrazení skladatele v zobrazení "Informace"
@@ -226,6 +229,7 @@ PLUGIN_MATERIAL_SKIN_SHOW_CONDUCTOR_DESC
 
 PLUGIN_MATERIAL_SKIN_SHOW_CONDUCTOR_DESC_LMS9
 	EN	Show song's conductor if its genre is in Lyrion's "%s" setting.
+	NL	Toon de dirigent van het nummer als het genre is geconfigureerd in de "%s"-instelling van Lyrion.
 
 PLUGIN_MATERIAL_SKIN_SHOW_BAND
 	CS	Zobrazení skupina/orchestr
@@ -253,6 +257,7 @@ PLUGIN_MATERIAL_SKIN_SHOW_BAND_DESC
 
 PLUGIN_MATERIAL_SKIN_SHOW_BAND_DESC_LMS9
 	EN	Show song's band/orchestra if its genre is in Lyrion's "%s" setting.
+	NL	Toon de band van het nummer als het genre is geconfigureerd in de "%s"-instelling van Lyrion.
 
 PLUGIN_MATERIAL_SKIN_PASSWORD
 	CS	Heslo

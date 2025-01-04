@@ -9,13 +9,15 @@
  5. Fix clipping of covers in grid view.
  6. Fix adding, and removing, tracks from favourites via now-playing.
  7. Only split into groups if all groups are single blocks.
- 8. Use same icon to show library refresh in progress in 'Information' dialog
+ 8. Use LMS 9.0.1's contiguous_groups flag to only show multi-group icon in
+    album covers if groups of album are in contiguous blocks.
+ 9. Use same icon to show library refresh in progress in 'Information' dialog
     as per in toolbar.
- 9. Update current player status if click on it's name in navigation drawer.
-10. Fix playing playlists, artists, and albums, from favourites.
-11. Fix 'Go to composer', etc., sometimes not showing in now-playing menu for
+10. Update current player status if click on it's name in navigation drawer.
+11. Fix playing playlists, artists, and albums, from favourites.
+12. Fix 'Go to composer', etc., sometimes not showing in now-playing menu for
     LMS9.0.1+
-12. If have multiple artists, composers, etc. then prompt for which to go to
+13. If have multiple artists, composers, etc. then prompt for which to go to
     when using now-playing menu.
 
 5.7.1

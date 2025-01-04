@@ -141,4 +141,16 @@
     [% END %]
     [% END %]
 
+    <hr style="opacity:0.4" class="sub-sep"/><br/>
+    [% WRAPPER setting title="PLUGIN_MATERIAL_SKIN_USE_DEFAULT_FOR_SETTINGS" desc="PLUGIN_MATERIAL_SKIN_USE_DEFAULT_FOR_SETTINGS_DEC" %]
+    <select class="stdedit" name="pref_useDefaultForSettings" id="useDefaultForSettings">
+        [% FOREACH option = {
+            'NO' => 0,
+            'PLUGIN_MATERIAL_SKIN_USE_DEFAULT_FOR_SETTINGS_EMBEDDED' => 1,
+            'PLUGIN_MATERIAL_SKIN_USE_DEFAULT_FOR_SETTINGS_NEW_TAB' => 2
+        } %]
+        <option [% IF prefs.useDefaultForSettings == option.value %]selected [% END %]value="[% option.value %]">[% option.key | string %]</option>
+        [%- END -%]
+    </select>
+    [% END %]
 [% PROCESS settings/footer.html %]

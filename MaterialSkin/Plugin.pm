@@ -180,7 +180,8 @@ sub initPlugin {
             hideExtras => '',
             hidePlayers => '',
             screensaverTimeout => 60,
-            npSwitchTimeout => 5*60
+            npSwitchTimeout => 5*60,
+            useDefaultForSettings => 0
         });
     } else {
         $prefs->init({
@@ -207,7 +208,8 @@ sub initPlugin {
             hideExtras => '',
             hidePlayers => '',
             screensaverTimeout => 60,
-            npSwitchTimeout => 5*60
+            npSwitchTimeout => 5*60,
+            useDefaultForSettings => 0
         });
     }
     $prefs->setChange(sub { $prefs->set($_[0], 0) unless defined $_[1]; }, 'maiComposer');
@@ -222,6 +224,7 @@ sub initPlugin {
     $prefs->setChange(sub { $prefs->set($_[0], 0) unless defined $_[1]; }, 'showComment');
     $prefs->setChange(sub { $prefs->set($_[0], 0) unless defined $_[1]; }, 'genreImages');
     $prefs->setChange(sub { $prefs->set($_[0], 0) unless defined $_[1]; }, 'allowDownload');
+    $prefs->setChange(sub { $prefs->set($_[0], 0) unless defined $_[1]; }, 'useDefaultForSettings');
 
     if (main::WEBUI) {
         require Plugins::MaterialSkin::Settings;
@@ -603,6 +606,7 @@ sub _cliCommand {
         $request->addResult('hidePlayers', $prefs->get('hidePlayers'));
         $request->addResult('screensaverTimeout', $prefs->get('screensaverTimeout'));
         $request->addResult('npSwitchTimeout', $prefs->get('npSwitchTimeout'));
+        $request->addResult('useDefaultForSettings', $prefs->get('useDefaultForSettings'));
         $request->setStatusDone();
         return;
     }

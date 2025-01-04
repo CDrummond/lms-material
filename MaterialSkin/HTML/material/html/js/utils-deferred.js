@@ -383,6 +383,10 @@ function removeDuplicates(playistId, items) {
 }
 
 function openServerSettings(serverName, showHome, path) {
+    if (lmsOptions.useDefaultForSettings==2) {
+        openWindow("/Default/settings/index.html" + (bus.$store.state.player ? "?player=" + bus.$store.state.player.id : ""));
+        return;
+    }
     let pathToUse = undefined==path
                     ? '/material/settings/server/basic.html'
                     : path;

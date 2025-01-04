@@ -572,7 +572,7 @@ function applyModifications(page, svgCol, darkUi, src) {
             }
         }
 
-        if (useDefaultSkinForServerSettings && 'server'==page) {
+        if ('dserver'==page) {
             let cancelBtn = content.getElementById("cancel");
             if (cancelBtn!=undefined) {
                 cancelBtn.onclick = function() {
@@ -758,7 +758,7 @@ Vue.component('lms-iframe-dialog', {
             this.title = title;
             // Delay setting URL for 50ms - otherwise get two requests, first is cancelled...
             // ...no idea why!
-            if (useDefaultSkinForServerSettings && page.indexOf("server/basic.html")>0) {
+            if (lmsOptions.useDefaultForSettings==1 && page.indexOf("server/basic.html")>0) {
                 page = page.replace("material/settings/server/basic.html", "Default/settings/index.html");
                 if (this.$store.state.player) {
                     page+="?player="+this.$store.state.player.id;
@@ -767,15 +767,17 @@ Vue.component('lms-iframe-dialog', {
             setTimeout(function() {this.src = page}.bind(this), 50);
             this.page = page.indexOf("player/basic.html")>0
                             ? "player"
-                            : page.indexOf("server/basic.html")>0 || page.indexOf("plugins/Extensions/settings/basic.html")>0 || page.indexOf("Default/settings/index.html")>0
+                            : page.indexOf("server/basic.html")>0 || page.indexOf("plugins/Extensions/settings/basic.html")>0
                                 ? "server"
-                                : page.startsWith("plugins/") && (page.indexOf("?player=")>0 || page.indexOf("&player=")>0)
-                                    ? "extras"
-                                    : page == '/material/html/docs/index.html'
-                                        ? "lms" // tech info, or 'extra' entry
-                                        : page == '/material/html/material-skin/index.html'
-                                            ? "help"
-                                            : "other";
+                                : page.indexOf("Default/settings/index.html")>0
+                                    ? "dserver"
+                                    : page.startsWith("plugins/") && (page.indexOf("?player=")>0 || page.indexOf("&player=")>0)
+                                        ? "extras"
+                                       : page == '/material/html/docs/index.html'
+                                            ? "lms" // tech info, or 'extra' entry
+                                            : page == '/material/html/material-skin/index.html'
+                                                ? "help"
+                                                : "other";
             this.show = true;
             this.showMenu = false;
             this.choiceMenu = {show:false, x:0}
@@ -911,7 +913,7 @@ Vue.component('lms-iframe-dialog', {
             this.src = undefined;
             iframeInfo.content=undefined;
             bus.$emit('iframeClosed', this.page=='player');
-            if (this.page=='server') {
+            if (this.page=='server' || this.page=='dserver') {
                 if (LMS_VERSION>=80400) {
                     bus.$emit('refreshServerStatus');
                 } else {
@@ -938,7 +940,7 @@ Vue.component('lms-iframe-dialog', {
             } else {
                 confirm(act.text, act.confirm).then(res => {
                     if (res) {
-                        lmsCommand("server"==this.page ? "" : this.$store.state.player.id, act.cmd);
+                        lmsCommand("server"==this.page || "dserver"==this.page ? "" : this.$store.state.player.id, act.cmd);
                         this.close();
                     }
                 });

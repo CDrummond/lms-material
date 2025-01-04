@@ -44,5 +44,6 @@ var lmsOptions = {techInfo: getLocalStorageBool('techInfo', false),
                   excludedUserDefinedRoles: getLocalStorageVal('excludedUserDefinedRoles', '-'),
                   rolesInArtists: getLocalStorageVal('rolesInArtists', '-'),
                   randomMixDialogPinned: false,
-                  showSubtitle: getLocalStorageBool('showSubtitle', false)
+                  showSubtitle: getLocalStorageBool('showSubtitle', false),
+                  useDefaultForSettings: getLocalStorageVal('useDefaultForSettings', 0)
                 };

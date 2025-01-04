@@ -24,7 +24,7 @@ sub page {
 }
 
 sub prefs {
-    return ($prefs, qw(composergenres conductorgenres bandgenres maiComposer showComposer showConductor showBand password respectFixedVol showAllArtists artistFirst allowDownload commentAsDiscTitle showComment pagedBatchSize noArtistFilter releaseTypeOrder genreImages touchLinks yearInSub playShuffle combineAppsAndRadio hidePlayers screensaverTimeout npSwitchTimeout));
+    return ($prefs, qw(composergenres conductorgenres bandgenres maiComposer showComposer showConductor showBand password respectFixedVol showAllArtists artistFirst allowDownload commentAsDiscTitle showComment pagedBatchSize noArtistFilter releaseTypeOrder genreImages touchLinks yearInSub playShuffle combineAppsAndRadio hidePlayers screensaverTimeout npSwitchTimeout useDefaultForSettings));
 }
 
 sub handler {

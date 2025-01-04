@@ -726,3 +726,14 @@ PLUGIN_MATERIAL_COMBINE_APPS_AND_RADIO_DESC
 	ZH_CN	将“程序”和“电台”菜单合并成单个“程序”菜单。“电台”作为“TuneIn”程序添加到合并后的菜单里（如果已启用）。
 	HU	Kapcsolja össze az 'Apps' és a 'Radio' menüket egyetlen 'Apps' menübe, a 'Radio' (ha engedélyezve) hozzáadott 'Tunein' alkalmazással.
 
+PLUGIN_MATERIAL_SKIN_USE_DEFAULT_FOR_SETTINGS
+	EN	Use 'Default' skin for server settings
+
+PLUGIN_MATERIAL_SKIN_USE_DEFAULT_FOR_SETTINGS_DEC
+	EN	When showing erver settings use pages from the 'Default' skin and not re-themed pages from the 'Classic' skin. This will only be used if window is large enough.
+
+PLUGIN_MATERIAL_SKIN_USE_DEFAULT_FOR_SETTINGS_EMBEDDED
+	EN	Yes (embedded)
+
+PLUGIN_MATERIAL_SKIN_USE_DEFAULT_FOR_SETTINGS_NEW_TAB
+	EN	Yes (new tab/window)

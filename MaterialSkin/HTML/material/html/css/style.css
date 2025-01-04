@@ -4293,3 +4293,13 @@ div.v-subheader {
  color: var(--text-color)!important;
  text-shadow: none!important;
 }
+
+.v-snack__wrapper {
+ opacity:0.85;
+ pointer-events: none;
+}
+
+.theme--dark .v-snack__wrapper {
+ opacity:0.9;
+ border:1px solid var(--tab-border-color);
+}

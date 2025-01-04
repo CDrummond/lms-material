@@ -19,6 +19,7 @@
     LMS9.0.1+
 13. If have multiple artists, composers, etc. then prompt for which to go to
     when using now-playing menu.
+14. Make popup messages slightly transparent and pass through pointer events.
 
 5.7.1
 -----

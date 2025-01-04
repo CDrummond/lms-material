@@ -758,7 +758,7 @@ Vue.component('lms-iframe-dialog', {
             this.title = title;
             // Delay setting URL for 50ms - otherwise get two requests, first is cancelled...
             // ...no idea why!
-            if (lmsOptions.useDefaultForSettings==1 && page.indexOf("server/basic.html")>0) {
+            if (lmsOptions.useDefaultForSettings==1 && window.innerWidth>=MIN_DEF_SETTINGS_WIDTH && page.indexOf("server/basic.html")>0) {
                 page = page.replace("material/settings/server/basic.html", "Default/settings/index.html");
                 if (this.$store.state.player) {
                     page+="?player="+this.$store.state.player.id;

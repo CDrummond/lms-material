@@ -579,6 +579,11 @@ function applyModifications(page, svgCol, darkUi, src) {
                     bus.$emit('iframe-close');
                 };
             }
+            let css = document.createElement("link");
+            css.href = "/material/html/css/default-skin/mods.css?r=MATERIAL_VERSION";
+            css.rel = "stylesheet";
+            css.type = "text/css";
+            iframe.contentDocument.head.appendChild(css);
         } else if ('player'==page || 'server'==page) {
             initChangeListeners(content.documentElement);
             // Set --vh as this is used to fix size of main settings frame, so that we can

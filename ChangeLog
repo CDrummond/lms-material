@@ -1,3 +1,7 @@
+5.7.3
+-----
+1. Re-add fix to not use custom select library for multi-select lists.
+
 5.7.2
 -----
  1. Re-add custom select library, but disable for 'Custom Skip'.

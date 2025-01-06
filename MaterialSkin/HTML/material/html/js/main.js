@@ -546,7 +546,7 @@ var app = new Vue({
                 let diffY = Math.abs(this.touch.y-end.y);
                 let horizValid = diffX>diffY && diffX>60 && diffY<40 && (this.touch.x>48 && this.touch.x<window.innerWidth-48) && (end.x>48 && end.x<window.innerWidth-48);
                 let vertValid = diffX<diffY && diffX<40 && diffY>60;
-                if (horizValid && this.$store.state.page=='now-playing') {
+                if (horizValid && !this.$store.state.desktopLayout && this.$store.state.page=='now-playing') {
                     // Ignore swipes on position slider...
                     var elem = document.getElementById("pos-slider");
                     if (elem) {

@@ -8,9 +8,8 @@
 
 Vue.component('lms-volume', {
     template: `
-<v-sheet v-model="show" v-if="show" elevation="5" class="vol-sheet noselect">
+<v-sheet v-model="show" v-if="show" elevation="5" class="vol-sheet noselect" v-clickoutside="close">
  <v-container grid-list-md text-xs-center>
-  <volume-control
   <v-layout row wrap>
    <v-flex xs12>
     <volume-control :value="playerVolume" :muted="muted" :playing="true" :dvc="dvc" :layout="0" @inc="volumeUp" @dec="volumeDown" @changed="setVolume" @moving="movingSlider" @toggleMute="toggleMute()"></volume-control>
@@ -21,7 +20,7 @@ Vue.component('lms-volume', {
  <v-card-actions>
   <v-btn flat v-if="dvc==VOL_STD" @click.native="toggleMute()">{{muted ? i18n('Unmute') : i18n('Mute')}}</v-btn>
   <v-spacer></v-spacer>
-  <v-btn flat @click.native="show = false">{{i18n('Close')}}</v-btn>
+  <v-btn flat @click.native="close">{{i18n('Close')}}</v-btn>
  </v-card-actions>
 </v-sheet>
     `,
@@ -143,7 +142,7 @@ Vue.component('lms-volume', {
         resetCloseTimer() {
             this.cancelCloseTimer();
             this.closeTimer = setTimeout(function () {
-                this.show = false;
+                this.close();
             }.bind(this), LMS_VOLUME_CLOSE_TIMEOUT);
         },
         cancelUpdateTimer() {
@@ -156,6 +155,7 @@ Vue.component('lms-volume', {
     watch: {
         'show': function(val) {
             this.$store.commit('dialogOpen', {name:'volume', shown:val});
+            this.$store.commit('menuVisible', {name:'volume', shown:val});
             this.resetCloseTimer();
             this.cancelUpdateTimer();
         }

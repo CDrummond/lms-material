@@ -9,12 +9,6 @@ MATERIAL_SKIN
 	ZH_CN	Material主题
 	HU	Material Skin
 
-MATERIALPARTY_SKIN
-	CS	Material Skin (Párty)
-	DA	Material Skin (Fest)
-	EN	Material Skin (Party)
-	ZH_CN	Material主题 (Party)
-
 PLUGIN_MATERIAL_SKIN
 	CS	Vzhled "Material Skin", vhodný pro mobilní použití.
 	DA	Web-skin i Material stil, optimeret for mobiltelefonbrug. 

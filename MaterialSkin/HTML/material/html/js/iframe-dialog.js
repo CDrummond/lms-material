@@ -690,7 +690,7 @@ Vue.component('lms-iframe-dialog', {
      <div class="drag-area-left"></div>
      <v-btn flat icon v-longpress:stop="goBack" :title="ttShortcutStr(i18n('Go back'), 'esc')"><v-icon>arrow_back</v-icon></v-btn>
      <v-btn v-if="showHome && homeButton" flat icon @click="goHome" :title="ttShortcutStr(i18n('Go home'), 'home')"><v-icon>home</v-icon></v-btn>
-     <v-toolbar-title v-if="playerId && numPlayers>1 && (page=='player' || page=='extras')" @click="openChoiceMenu" class="pointer">{{title}}</v-toolbar-title>
+     <v-toolbar-title v-if="playerId && numPlayers>1 && (page=='player' || page=='extras')" @click="openChoiceMenu" class="pointer">{{title}} <v-icon>arrow_drop_down</v-icon></v-toolbar-title>
      <v-toolbar-title v-else>{{title}}</v-toolbar-title>
      <v-spacer class="drag-area"></v-spacer>
      <v-menu bottom left v-model="showMenu" v-if="haveCustomActions || (undefined!=actions && actions.length>2)">

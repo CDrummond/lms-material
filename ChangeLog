@@ -6,6 +6,13 @@
 5.7.3
 -----
 1. Re-add fix to not use custom select library for multi-select lists.
+2. Try not to switch to MAI view when swiping on track info that needs to be
+   scrolled.
+3. Add down arrow next to player name in 'Player' settings dialogs, if more
+   than 1 player.
+4. Close volume popups if click outside.
+5. Remove 'Material Skin (Party)' from LMS skins list, cuases to much
+   confusion.
 
 5.7.2
 -----

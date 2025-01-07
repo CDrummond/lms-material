@@ -25,7 +25,7 @@ function grpVolSort(a, b) {
 
 Vue.component('lms-groupvolume', {
     template: `
-<v-sheet v-model="show" v-if="show" elevation="5" class="vol-sheet group-vol noselect">
+<v-sheet v-model="show" v-if="show" elevation="5" class="vol-sheet group-vol noselect" v-clickoutside="close">
  <v-container grid-list-md text-xs-center id="gv-container">
   <v-layout row wrap>
    <template v-for="(player, index) in players">
@@ -41,7 +41,7 @@ Vue.component('lms-groupvolume', {
  <div class="padding"></div>
  <v-card-actions>
   <v-spacer></v-spacer>
-  <v-btn flat @click.native="show = false">{{i18n('Close')}}</v-btn>
+  <v-btn flat @click.native="close">{{i18n('Close')}}</v-btn>
  </v-card-actions>
 </v-sheet>
     `,
@@ -341,6 +341,7 @@ Vue.component('lms-groupvolume', {
     watch: {
         'show': function(val) {
             this.$store.commit('dialogOpen', {name:'groupvolume', shown:val});
+            this.$store.commit('menuVisible', {name:'groupvolume', shown:val});
             this.resetCloseTimer();
             this.cancelUpdateTimer();
             bus.$emit('subscribeAll', val);

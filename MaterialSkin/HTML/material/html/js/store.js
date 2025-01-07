@@ -7,6 +7,7 @@
 'use strict';
 
 const VALID_SKIP_SECONDS = new Set(SKIP_SECONDS_VALS);
+const FAKE_MENU = new Set(['volume', 'groupvolume'])
 var lmsNumVisibleMenus = 0;
 
 function copyPlayer(p){
@@ -671,6 +672,9 @@ const store = new Vuex.Store({
             if (val.shown) {
                 state.visibleMenus.add(val.name);
                 lmsNumVisibleMenus = state.visibleMenus.size;
+                if (FAKE_MENU.has(val.name)) {
+                    return;
+                }
                 bus.$emit('menuOpen');
                 addBrowserHistoryItem();
                 if (queryParams.botPad>18) {

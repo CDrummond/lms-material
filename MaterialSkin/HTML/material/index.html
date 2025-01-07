@@ -222,6 +222,7 @@
   <script src="html/lib/mobile-drag-drop.min.js?r=2.3.0-rc.2"></script>
   [% PERL %]
   my $version=Plugins::MaterialSkin::Plugin->pluginVersion();
+  print("  <script src=\"html/lib/clickoutside.min.js?r=$version\"></script>\n");
   print("  <script src=\"html/lib/longpress.min.js?r=$version\"></script>\n");
   print("  <script src=\"html/js/mobile-scroll.js?r=$version\"></script>\n");
   print("  <script src=\"html/js/actions.js?r=$version\"></script>\n");

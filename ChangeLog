@@ -6,6 +6,8 @@
 3. Add down arrow next to player name in 'Player' settings dialogs, if more
    than 1 player.
 4. Close volume popups if click outside.
+5. Remove 'Material Skin (Party)' from LMS skins list, cuases to much
+   confusion.
 
 5.7.2
 -----

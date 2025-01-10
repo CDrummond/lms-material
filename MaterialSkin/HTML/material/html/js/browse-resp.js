@@ -1125,7 +1125,7 @@ function parseBrowseResp(data, parent, options, cacheKey, parentCommand, parentG
                     subtitleLinks = "<obj class=\"link-item\" onclick=\"show_year(event, "+i.year+",\'"+i.year+"\', \'browse\')\">" + i.year + "</obj>";
                 }
 
-                let groupType = undefined!=i.group_count && parseInt(i.group_count)>1 && (undefined==i.contiguous_groups || 1==parseInt(i.contiguous_groups))
+                let groupType = lmsOptions.useGrouping && undefined!=i.group_count && parseInt(i.group_count)>1 && (undefined==i.contiguous_groups || 1==parseInt(i.contiguous_groups))
                                  ? MULTI_GROUP_ALBUM
                                  : LMS_GROUP_DISCS && undefined!=i.disccount && parseInt(i.disccount)>1
                                    ? MULTI_DISC_ALBUM
@@ -1263,7 +1263,14 @@ function parseBrowseResp(data, parent, options, cacheKey, parentCommand, parentG
             let isCompositions = false;
             let parentArtist = undefined;
             let showTrackNumbers = true;
-            let performance = 0;
+            /*
+               If this track list is from 'all tracks' or 'compositions' then we might nbeed to group the tracks
+               0 = no grouping
+               1 = album
+               2 = title
+               3 = artist
+            */
+            let allTracksGrouping = 0;
             let genres = new Set();
             let yearSet = new Set();
             let years = [];
@@ -1320,7 +1327,7 @@ function parseBrowseResp(data, parent, options, cacheKey, parentCommand, parentG
             }
             // Should we group tracks?
             if (isAllTracks || isCompositions) {
-                performance = ("albumtrack"==sort || "yearalbumtrack"==sort) ? 1 : "title"==sort ? 2 : "artisttitle"==sort ? 3 : 0;
+                allTracksGrouping = ("albumtrack"==sort || "yearalbumtrack"==sort) ? 1 : "title"==sort ? 2 : "artisttitle"==sort ? 3 : 0;
             }
 
             resp.itemCustomActions = getCustomActions("album-track");
@@ -1333,7 +1340,7 @@ function parseBrowseResp(data, parent, options, cacheKey, parentCommand, parentG
             let compilationAlbumArtist = undefined;
             let extraSubs = [];
             let browseContext = getLocalStorageBool('browseContext', false);
-            let albumMightHaveMultiGroups = undefined==parent || undefined==parent.multi || MULTI_GROUP_ALBUM==parent.multi;
+            let splitIntoGroupings = lmsOptions.useGrouping && (undefined==parent || undefined==parent.multi || MULTI_GROUP_ALBUM==parent.multi);
 
             for (let idx=0, loop=data.result.titles_loop, loopLen=loop.length; idx<loopLen; ++idx) {
                 let i = makeHtmlSafe(loop[idx]);
@@ -1454,7 +1461,7 @@ function parseBrowseResp(data, parent, options, cacheKey, parentCommand, parentG
                             discs.set(discNum, {pos: resp.items.length, total:1, duration:duration, title:title});
                         }
                     }
-                    if (albumMightHaveMultiGroups) {
+                    if (splitIntoGroupings) {
                         if ((undefined!=i.work && undefined!=i.composer) || undefined!=i.grouping) {
                             if (i.composer && i.work) {
                                 groupingTitle = i.composer+SEPARATOR+i.work;
@@ -1564,9 +1571,9 @@ function parseBrowseResp(data, parent, options, cacheKey, parentCommand, parentG
                               emblem: showAlbumName ? getEmblem(i.extid) : undefined,
                               tracknum: sortTracks && undefined!=i.tracknum ? tracknum : undefined,
                               disc: i.disc ? parseInt(i.disc) : undefined,
-                              year: (sortTracks || 1==performance) ? year : undefined,
-                              album: sortTracks || isSearchResult || 1==performance ? i.album : undefined,
-                              artist: isSearchResult || 2==sortTracks || 3==performance ? getArtist(i) : undefined,
+                              year: (sortTracks || 1==allTracksGrouping) ? year : undefined,
+                              album: sortTracks || isSearchResult || 1==allTracksGrouping ? i.album : undefined,
+                              artist: isSearchResult || 2==sortTracks || 3==allTracksGrouping ? getArtist(i) : undefined,
                               album_id: isSearchResult ? i.album_id : undefined,
                               artist_id: isSearchResult ? i.artist_id : undefined,
                               url: i.url,
@@ -1618,13 +1625,13 @@ function parseBrowseResp(data, parent, options, cacheKey, parentCommand, parentG
             }
 
             let groups=[];
-            if (performance>0 && resp.items.length>1) {
-                let field = 1==performance ? 'album' : 2==performance ? 'title' : 'artist';
+            if (allTracksGrouping>0 && resp.items.length>1) {
+                let field = 1==allTracksGrouping ? 'album' : 2==allTracksGrouping ? 'title' : 'artist';
                 // Groups is array of "<start index>, <title>"
-                groups=[[0, resp.items[0][field] + (1==performance && resp.items[0].year ? " ("+resp.items[0].year+")" : "")]];
+                groups=[[0, resp.items[0][field] + (1==allTracksGrouping && resp.items[0].year ? " ("+resp.items[0].year+")" : "")]];
                 for (let i=1, loop=resp.items, len=loop.length; i<len; ++i) {
                     if (loop[i-1][field]!=loop[i][field]) {
-                        groups.push([i, loop[i][field] + (1==performance && loop[i].year ? " ("+loop[i].year+")" : "")]);
+                        groups.push([i, loop[i][field] + (1==allTracksGrouping && loop[i].year ? " ("+loop[i].year+")" : "")]);
                     }
                 }
                 if (groups.length>1 && ((groups.length*100)/resp.items.length)<=25) {
@@ -1646,7 +1653,7 @@ function parseBrowseResp(data, parent, options, cacheKey, parentCommand, parentG
                                            menu:[PLAY_ALL_ACTION, INSERT_ALL_ACTION, PLAY_SHUFFLE_ALL_ACTION, ADD_ALL_ACTION]});
                         resp.numHeaders++;
                     }
-                    if (1==performance) { // Grouped into albums, so remove from subtitle
+                    if (1==allTracksGrouping) { // Grouped into albums, so remove from subtitle
                         for (let i=0, loop=resp.items, len=loop.length; i<len; ++i) {
                             if (!loop[i].header) {
                                 loop[i].subtitle = loop[i].subtitleContext = undefined;
@@ -1683,7 +1690,7 @@ function parseBrowseResp(data, parent, options, cacheKey, parentCommand, parentG
                         if (item.header) {
                             lastHeader = i;
                         } else {
-                            if (undefined!=artists[item.idx] && (3!=performance || stripLinkTags(artists[item.idx])!=loop[lastHeader].title)) {
+                            if (undefined!=artists[item.idx] && (3!=allTracksGrouping || stripLinkTags(artists[item.idx])!=loop[lastHeader].title)) {
                                 item.subtitle = undefined==item.subtitle ? artists[item.idx] : (artists[item.idx] + SEPARATOR + item.subtitle);
                                 if (browseContext) {
                                     item.subtitleContext = undefined==item.subtitleContext ? artistsWithContext[item.idx] : (artistsWithContext[item.idx] + " " + item.subtitleContext);
@@ -1727,7 +1734,7 @@ function parseBrowseResp(data, parent, options, cacheKey, parentCommand, parentG
             }
             let removeDiscNumbers = false;
             let removeGroupFilter = false;
-            if (performance==0) {
+            if (allTracksGrouping==0) {
                 if (groupings.size>1 && splitIntoGroups) {
                     let d = 0;
                     for (var idx=0, len=resp.items.length; idx<len; ++idx) {

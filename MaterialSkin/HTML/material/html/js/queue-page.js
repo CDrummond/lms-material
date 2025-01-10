@@ -136,7 +136,7 @@ function parseResp(data, showTrackNum, index, showRatings, queueAlbumStyle, queu
                 let duration = undefined==i.duration ? undefined : parseFloat(i.duration);
                 let prevItem = 0==idx ? lastInCurrent : resp.items[idx-1];
                 let image = queueItemCover(i);
-                let groupId = i.composer && i.work ? i.composer+"-"+i.work+(i.performance ? "-"+i.performance : "")+(i.grouping ? "-"+i.grouping : "") : i.grouping ? i.grouping : undefined;
+                let groupId = lmsOptions.useGrouping ? (i.composer && i.work ? i.composer+"-"+i.work+(i.performance ? "-"+i.performance : "")+(i.grouping ? "-"+i.grouping : "") : i.grouping ? i.grouping : undefined) : undefined;
                 let isAlbumHeader = queueAlbumStyle &&
                                      ( undefined==prevItem ||
                                        i.album_id!=prevItem.album_id ||

@@ -731,3 +731,9 @@ PLUGIN_MATERIAL_SKIN_USE_DEFAULT_FOR_SETTINGS_EMBEDDED
 
 PLUGIN_MATERIAL_SKIN_USE_DEFAULT_FOR_SETTINGS_NEW_TAB
 	EN	Yes (new tab/window)
+
+PLUGIN_MATERIAL_SKIN_USE_GROUPING
+	EN	Group album tracks
+
+PLUGIN_MATERIAL_SKIN_USE_GROUPING_DESC
+	EN	Support grouping tracks by work and composer, or by grouping tag. If enabled, then this grouping will take preference over grouping via disc number - therefore if you have a multi-disc release that also has groupings, then tracks will be shown group via these groupings.

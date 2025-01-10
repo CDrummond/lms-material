@@ -89,7 +89,7 @@ my @ADV_SEARCH_OTHER = ('content_type', 'contributor_namesearch.active1', 'contr
 
 my %IGNORE_PROTOCOLS = map { $_ => 1 } ('mms', 'file', 'tmp', 'http', 'https', 'spdr', 'icy', 'teststream', 'db', 'playlist');
 
-my @BOOL_OPTS = ('allowDownload', 'playShuffle', 'touchLinks', 'showAllArtists', 'artistFirst', 'yearInSub', 'showComment', 'genreImages', 'maiComposer', 'showConductor', 'showBand', 'combineAppsAndRadio');
+my @BOOL_OPTS = ('allowDownload', 'playShuffle', 'touchLinks', 'showAllArtists', 'artistFirst', 'yearInSub', 'showComment', 'genreImages', 'maiComposer', 'showConductor', 'showBand', 'combineAppsAndRadio', 'useGrouping');
 
 my %ROLE_ICON_MAP = (
     'bass' => 'bassist',
@@ -181,7 +181,8 @@ sub initPlugin {
             hidePlayers => '',
             screensaverTimeout => 60,
             npSwitchTimeout => 5*60,
-            useDefaultForSettings => 0
+            useDefaultForSettings => 0,
+            useGrouping => 1
         });
     } else {
         $prefs->init({
@@ -209,7 +210,8 @@ sub initPlugin {
             hidePlayers => '',
             screensaverTimeout => 60,
             npSwitchTimeout => 5*60,
-            useDefaultForSettings => 0
+            useDefaultForSettings => 0,
+            useGrouping => 1
         });
     }
     $prefs->setChange(sub { $prefs->set($_[0], 0) unless defined $_[1]; }, 'maiComposer');
@@ -225,6 +227,7 @@ sub initPlugin {
     $prefs->setChange(sub { $prefs->set($_[0], 0) unless defined $_[1]; }, 'genreImages');
     $prefs->setChange(sub { $prefs->set($_[0], 0) unless defined $_[1]; }, 'allowDownload');
     $prefs->setChange(sub { $prefs->set($_[0], 0) unless defined $_[1]; }, 'useDefaultForSettings');
+    $prefs->setChange(sub { $prefs->set($_[0], 0) unless defined $_[1]; }, 'useGrouping');
 
     if (main::WEBUI) {
         require Plugins::MaterialSkin::Settings;
@@ -607,6 +610,7 @@ sub _cliCommand {
         $request->addResult('screensaverTimeout', $prefs->get('screensaverTimeout'));
         $request->addResult('npSwitchTimeout', $prefs->get('npSwitchTimeout'));
         $request->addResult('useDefaultForSettings', $prefs->get('useDefaultForSettings'));
+        $request->addResult('useGrouping', $prefs->get('useGrouping'));
         $request->setStatusDone();
         return;
     }

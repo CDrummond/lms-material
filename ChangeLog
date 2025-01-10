@@ -2,6 +2,7 @@
 -----
 1. Add a server-side option to use 'Default' skin for server settings, either
    embedded in Material or a new tab/window.
+2. Add a server-side option to enable track grouping.
 
 5.7.3
 -----

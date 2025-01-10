@@ -79,6 +79,10 @@
     <input type="checkbox" name="pref_showComment" id="pref_showComment" [% IF prefs.pref_showComment %] checked [% END %] value="1"/>
     [% END %]
 
+    [% WRAPPER setting title="PLUGIN_MATERIAL_SKIN_USE_GROUPING" desc="PLUGIN_MATERIAL_SKIN_USE_GROUPING_DESC" %]
+    <input type="checkbox" name="pref_useGrouping" id="pref_useGrouping" [% IF prefs.pref_useGrouping %] checked [% END %] value="1"/>
+    [% END %]
+
     [% WRAPPER setting title="PLUGIN_MATERIAL_SKIN_GENRE_IMAGES" desc="PLUGIN_MATERIAL_SKIN_GENRE_IMAGES_DESC" %]
     <input type="checkbox" name="pref_genreImages" id="pref_genreImages" [% IF prefs.pref_genreImages %] checked [% END %] value="1"/>
     [% END %]

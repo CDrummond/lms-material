@@ -45,5 +45,6 @@ var lmsOptions = {techInfo: getLocalStorageBool('techInfo', false),
                   rolesInArtists: getLocalStorageVal('rolesInArtists', '-'),
                   randomMixDialogPinned: false,
                   showSubtitle: getLocalStorageBool('showSubtitle', false),
-                  useDefaultForSettings: getLocalStorageVal('useDefaultForSettings', 0)
+                  useDefaultForSettings: getLocalStorageVal('useDefaultForSettings', 0),
+                  useGrouping: getLocalStorageBool('useGrouping', true)
                 };

@@ -8,7 +8,7 @@
 
 Vue.component('lms-groupplayers-dialog', {
     template: `
-<v-dialog v-model="show" v-if="show" persistent scrollable width="600" class="lms-dialog">
+<v-dialog v-model="show" v-if="show" scrollable width="600" class="lms-dialog">
  <v-card>
   <v-card-title>{{player ? i18n("Edit group player") : i18n("Create group player")}}</v-card-title>
   <v-card-text>

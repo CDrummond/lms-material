@@ -8,7 +8,7 @@
 
 Vue.component('lms-randommix', {
     template: `
-<v-dialog v-model="show" v-if="show" persistent scrollable width="600">
+<v-dialog v-model="show" v-if="show" scrollable width="600">
  <v-card>
   <v-card-text>
    <v-text-field v-if="!controlMix" :label="i18n('Name')" v-model="name" type="string"></v-text-field>

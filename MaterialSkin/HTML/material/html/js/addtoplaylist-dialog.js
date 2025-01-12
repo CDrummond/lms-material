@@ -8,7 +8,7 @@
 
 Vue.component('lms-addtoplaylist-dialog', {
     template: `
-<v-dialog v-model="show" v-if="show" persistent width="600">
+<v-dialog v-model="show" v-if="show" width="600">
  <v-card>
   <v-card-title>{{i18n('Add to playlist')}}</v-card-title>
   <v-form>

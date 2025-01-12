@@ -1,6 +1,7 @@
 5.7.4
 -----
 1. Fix oddities with group volume dialog.
+2. Close other dialogs via click outside.
 
 5.7.3
 -----

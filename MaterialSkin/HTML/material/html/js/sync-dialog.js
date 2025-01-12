@@ -8,7 +8,7 @@
 
 Vue.component('lms-sync-dialog', {
     template: `
-<v-dialog v-model="show" v-if="show" persistent width="600" class="lms-dialog">
+<v-dialog v-model="show" v-if="show" persistent width="600" class="lms-dialog" v-clickoutside="outsideClick">
  <v-card v-if="player">
   <v-card-text>
    <v-container grid-list-md style="padding: 4px">
@@ -109,6 +109,9 @@ Vue.component('lms-sync-dialog', {
         }.bind(this));
     },
     methods: {
+        outsideClick() {
+            setTimeout(function () { this.close(); }.bind(this), 50);
+        },
         close() {
             this.show=false;
         },

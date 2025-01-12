@@ -57,6 +57,9 @@ Vue.component('lms-groupvolume', {
     mounted() {
         this.closeTimer = undefined;
         bus.$on('groupvolume.open', function(playerStatus, scrollCurrent) {
+            if (undefined!=this.closeTime && new Date().getTime()-this.closeTime<25) {
+                return;
+            }
             this.openTime = new Date().getTime();
             if (queryParams.party || queryParams.single) {
                 return;
@@ -168,6 +171,7 @@ Vue.component('lms-groupvolume', {
             this.show=false;
             this.showing=false;
             this.cancelCloseTimer();
+            this.closeTime = new Date().getTime();
         },
         i18n(str) {
             if (this.show) {

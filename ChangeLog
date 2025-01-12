@@ -1,3 +1,7 @@
+5.7.4
+-----
+1. Fix oddities with group volume dialog.
+
 5.7.3
 -----
 1. Re-add fix to not use custom select library for multi-select lists.

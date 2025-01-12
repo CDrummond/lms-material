@@ -25,7 +25,7 @@ function grpVolSort(a, b) {
 
 Vue.component('lms-groupvolume', {
     template: `
-<v-sheet v-model="show" v-if="show" elevation="5" class="vol-sheet group-vol noselect" v-clickoutside="close">
+<v-sheet v-model="show" v-if="show" elevation="5" class="vol-sheet group-vol noselect" v-clickoutside="outsideClick">
  <v-container grid-list-md text-xs-center id="gv-container">
   <v-layout row wrap>
    <template v-for="(player, index) in players">
@@ -57,6 +57,7 @@ Vue.component('lms-groupvolume', {
     mounted() {
         this.closeTimer = undefined;
         bus.$on('groupvolume.open', function(playerStatus, scrollCurrent) {
+            this.openTime = new Date().getTime();
             if (queryParams.party || queryParams.single) {
                 return;
             }
@@ -158,6 +159,11 @@ Vue.component('lms-groupvolume', {
         this.cancelCloseTimer();
     },
     methods: {
+        outsideClick() {
+            if ((new Date().getTime()-this.openTime)>100) {
+                this.close();
+            }
+        },
         close() {
             this.show=false;
             this.showing=false;
@@ -238,7 +244,7 @@ Vue.component('lms-groupvolume', {
             return ids.join(",");
         },
         adjustVolume(id, inc) {
-            if (!this.show || this.$store.state.visibleMenus.size>0) {
+            if (!this.show || this.$store.state.visibleMenus.size>1) { // We pretend to be a menu!
                 return;
             }
             var idx = this.playerMap[id];

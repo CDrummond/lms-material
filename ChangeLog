@@ -1,3 +1,7 @@
+5.7.5
+-----
+1. Fix not being able to toggle a player in sync dialog.
+
 5.7.4
 -----
 1. Fix oddities with group volume dialog.

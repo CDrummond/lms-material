@@ -8,8 +8,8 @@
 
 Vue.component('lms-sync-dialog', {
     template: `
-<v-dialog v-model="show" v-if="show" persistent width="600" class="lms-dialog" v-clickoutside="outsideClick">
- <v-card v-if="player">
+<v-dialog v-model="show" v-if="show" persistent width="600" class="lms-dialog">
+ <v-card v-if="player" v-clickoutside="outsideClick">
   <v-card-text>
    <v-container grid-list-md style="padding: 4px">
     <v-layout wrap>

@@ -2,6 +2,7 @@
 -----
 1. Fix not being able to toggle a player in sync dialog.
 2. Fix dropping external files onto queue.
+3. Fix colour of 'Other settings' header in 'Player' settings dialog.
 
 5.7.4
 -----

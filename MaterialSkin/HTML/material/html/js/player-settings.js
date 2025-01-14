@@ -120,7 +120,7 @@ Vue.component('lms-player-settings', {
      </v-list-tile>
 
      <div class="dialog-padding"></div>
-     <v-header>{{i18n('Other settings')}}</v-header>
+     <v-header class="dialog-section-header">{{i18n('Other settings')}}</v-header>
      <v-list-tile class="other-setting">
       <v-list-tile-content>
        <v-list-tile-title><v-btn flat @click="setSleep($event)"><v-icon class="btn-icon">hotel</v-icon>{{i18n('Sleep')}} {{sleepTime | displayTime}}</v-btn></v-list-tile-title>

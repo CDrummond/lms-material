@@ -6,6 +6,17 @@
 3. Move save/restore defaults buttons from toolbar to bottom of 'Interface'
    settings dialog.
 
+5.7.5
+-----
+1. Fix not being able to toggle a player in sync dialog.
+2. Fix dropping external files onto queue.
+3. Fix colour of 'Other settings' header in 'Player' settings dialog.
+
+5.7.4
+-----
+1. Fix oddities with group volume dialog.
+2. Close other dialogs via click outside.
+
 5.7.3
 -----
 1. Re-add fix to not use custom select library for multi-select lists.

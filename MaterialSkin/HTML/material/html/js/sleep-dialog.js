@@ -9,7 +9,7 @@
 Vue.component('lms-sleep-dialog', {
     template: `
 <v-dialog v-model="show" v-if="show" persistent width="450" class="lms-dialog">
- <v-card>
+ <v-card v-clickoutside="outsideClick">
   <v-card-text>
    <v-container grid-list-md style="padding: 4px">
     <v-layout wrap>
@@ -103,6 +103,9 @@ Vue.component('lms-sleep-dialog', {
                 { duration: -1,    label:i18n("Remaining duration of current track")}/*,
                 { duration: -2,    label:xxx("Remaining duration of play queue")} */
                 ];
+        },
+        outsideClick() {
+            setTimeout(function () { this.cancel(); }.bind(this), 50);
         },
         cancel() {
             this.show=false;

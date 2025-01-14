@@ -13,7 +13,7 @@ const ADVS_ANY_CONTENT_TYPE = "*";
 
 Vue.component('lms-advancedsearch-dialog', {
     template: `
-<v-dialog v-model="show" v-if="show" persistent scrollable width="900">
+<v-dialog v-model="show" v-if="show" scrollable width="900">
  <v-card>
   <v-card-title>{{i18n("Advanced search")}}</v-card-title>
   <v-card-text>

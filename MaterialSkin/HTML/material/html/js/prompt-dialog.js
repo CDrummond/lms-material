@@ -8,7 +8,7 @@
 
 var lmsPromptDialog = Vue.component("lms-prompt-dialog", {
   template: `
-<v-dialog v-model="show" v-if="show" persistent :max-width="maxWidth">
+<v-dialog v-model="show" v-if="show" :max-width="maxWidth">
  <v-card>
   <v-card-title v-if="undefined!=title" class="dlgtitle">{{title}}</v-card-title>
   <v-card-text>

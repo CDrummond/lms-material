@@ -8,7 +8,7 @@
 
 Vue.component('lms-dstm-dialog', {
     template: `
-<v-dialog v-model="show" v-if="show" persistent width="450" class="lms-dialog">
+<v-dialog v-model="show" v-if="show" persistent width="450" class="lms-dialog" v-clickoutside="outsideClick">
  <v-card>
   <v-card-text>
    <v-container grid-list-md style="padding: 4px">
@@ -73,6 +73,9 @@ Vue.component('lms-dstm-dialog', {
         handleNumeric(this, this.setDstm, 'key');
     },
     methods: {
+        outsideClick() {
+            setTimeout(function () { this.cancel(); }.bind(this), 50);
+        },
         cancel() {
             this.show=false;
             unbindNumeric(this);

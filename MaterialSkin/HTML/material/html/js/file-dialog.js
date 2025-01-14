@@ -8,7 +8,7 @@
 
 var lmsFileDialog = Vue.component("lms-file-dialog", {
   template: `
-<v-dialog v-model="show" v-if="show" persistent max-width="600">
+<v-dialog v-model="show" v-if="show" max-width="600">
  <v-card>
   <v-card-title>{{isDir ? i18n('Select folder') : i18n('Select file')}}</v-card-title>
   <v-card-text class="file-dialog-select-list">

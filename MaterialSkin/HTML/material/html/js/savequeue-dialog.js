@@ -8,7 +8,7 @@
 
 Vue.component('lms-savequeue', {
     template: `
-<v-dialog v-model="show" v-if="show" persistent width="600">
+<v-dialog v-model="show" v-if="show" width="600">
  <v-card>
   <v-card-title>{{i18n('Save play queue')}}</v-card-title>
   <v-form class="save-queue-dialog">

@@ -8,7 +8,7 @@
 
 Vue.component('lms-favorite', {
     template: `
-<v-dialog v-model="show" v-if="show" persistent width="600" class="lms-dialog">
+<v-dialog v-model="show" v-if="show" width="600" class="lms-dialog">
  <v-card>
   <v-card-title>{{isAdd ? i18n("Add favorite") : i18n("Edit favorite")}}</v-card-title>
   <v-card-text>

@@ -17,9 +17,6 @@ Vue.component('lms-ui-settings', {
     <v-btn flat icon @click="close" :title="ttShortcutStr(i18n('Go back'), 'esc')"><v-icon>arrow_back</v-icon></v-btn>
     <v-toolbar-title>{{width>=450 ? TB_UI_SETTINGS.title+serverName : TB_UI_SETTINGS.title}}</v-toolbar-title>
     <v-spacer class="drag-area"></v-spacer>
-    <v-btn icon :title="i18n('Save as default')" @click="saveAsDefault($event)"><v-icon>save_alt</v-icon></v-btn>
-    <v-btn icon :title="i18n('Revert to default')" @click="revertToDefault($event)"><v-icon>settings_backup_restore</v-icon></v-btn>
-    <div class="drag-area-right"></div>
     <lms-windowcontrols v-if="queryParams.nativeTitlebar"></lms-windowcontrols>
    </v-toolbar>
   </v-card-title>
@@ -399,6 +396,13 @@ Vue.component('lms-ui-settings', {
      <v-list-tile-action><m3-switch v-model="ndSettingsVisible"></m3-switch></v-list-tile-action>
     </v-list-tile>
 
+    <div class="dialog-padding" v-if="unlockAll" ></div>
+    <v-header class="dialog-section-header" v-if="unlockAll" >{{i18n('Defaults')}}</v-header>
+    <v-list-tile class="settings-note" v-if="unlockAll"><p>{{i18n("Settings (and home screen items) are stored locally in your browser. However, some browser extensions can remove these. The 'Save as default' button can be used to store your current settings (and home screen items) on the Lyrion server. These will then be used for any settings that are not found in your browser. Likewise, 'Revert to default' can be used to manually revert to the settings stored on your Lyrion server.")}}</p></v-list-tile>
+    <div style="margin-left:-10px">
+    <v-btn flat @click="saveAsDefault($event)"><v-icon>save_alt</v-icon>{{i18n('Save as default')}}</v-btn>
+    <v-btn flat @click="revertToDefault($event)"><v-icon>settings_backup_restore</v-icon>{{i18n('Revert to default')}}</v-btn>
+    </div>
     <div class="dialog-padding"></div>
     <div class="dialog-bottom-pad"></div>
    </v-list>

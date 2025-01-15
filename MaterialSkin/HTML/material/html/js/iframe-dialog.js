@@ -684,7 +684,7 @@ Vue.component('lms-iframe-dialog', {
     template: `
 <div id="iframe-page">
  <v-dialog v-model="show" v-if="show" persistent no-click-animation scrollable fullscreen>
-  <v-card>
+  <v-card v-bind:class="{'def-server':'dserver'==page}">
    <v-card-title class="settings-title">
     <v-toolbar app-data class="dialog-toolbar" @mousedown="mouseDown" id="iframe-toolbar">
      <div class="drag-area-left"></div>

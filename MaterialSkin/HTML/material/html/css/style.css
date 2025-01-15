@@ -2975,6 +2975,14 @@ div.v-subheader {
  padding:0px;
 }
 
+.def-server iframe {
+ top:calc(var(--top-pad) + 4px)!important;
+ height:calc(var(--100vh) - (var(--all-pad)) + 4px)!important;
+}
+.def-server .dialog-toolbar {
+ z-index:2;
+}
+
 .iframe-text {
  background-color:#ddd!important;
 }

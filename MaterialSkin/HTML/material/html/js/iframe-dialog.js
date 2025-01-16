@@ -523,6 +523,14 @@ function copyVars(iframe) {
     return true;
 }
 
+function addDefaultSkinCss(doc, iframe) {
+    let css = doc.createElement("link");
+    css.href = "/material/html/css/default-skin/mods.css?r=MATERIAL_VERSION";
+    css.rel = "stylesheet";
+    css.type = "text/css";
+    iframe.contentDocument.head.appendChild(css);
+}
+
 function applyModifications(page, svgCol, darkUi, src) {
     if (!page) {
         bus.$emit('iframe-loaded', true);
@@ -579,11 +587,16 @@ function applyModifications(page, svgCol, darkUi, src) {
                     bus.$emit('iframe-close');
                 };
             }
-            let css = document.createElement("link");
-            css.href = "/material/html/css/default-skin/mods.css?r=MATERIAL_VERSION";
-            css.rel = "stylesheet";
-            css.type = "text/css";
-            iframe.contentDocument.head.appendChild(css);
+            addDefaultSkinCss(document, iframe);
+            let elems = content.documentElement.getElementsByTagName("iframe");
+            if (undefined!=elems && elems.length>0) {
+                for (let e=0, len=elems.length; e<len ; ++e) {
+                    addDefaultSkinCss(elems[e].contentDocument, elems[e]);
+                    elems[e].onload = function() {
+                        addDefaultSkinCss(elems[e].contentDocument, elems[e]);
+                    };
+                }
+            }
         } else if ('player'==page || 'server'==page) {
             initChangeListeners(content.documentElement);
             // Set --vh as this is used to fix size of main settings frame, so that we can

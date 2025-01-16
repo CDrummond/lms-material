@@ -819,12 +819,12 @@ function getParamVal(item, field, defVal) {
 }
 
 function setFontSize(sz) {
-    let std = 16;
-    let small = 14;
+    let std = 15;
+    let small = 13;
     switch(sz) {
     case 'l':
-        std = 19;
-        small = 18;
+        std = 17;
+        small = 15;
         break;
     case 'r':
         break;

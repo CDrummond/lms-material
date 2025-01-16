@@ -14,8 +14,8 @@
  --top-toolbar-color:var(--background-color);
  --sub-toolbar-color:var(--background-color);
  /* Also set setFontSize() (utils.js) */
- --std-font-size: 16px;
- --small-font-size: 14px;
+ --std-font-size: 15px;
+ --small-font-size: 13px;
  --sub-opacity:0.7;
  --bold-weight:500;
  --std-weight:400;
@@ -1179,7 +1179,7 @@ div.v-subheader {
  white-space:nowrap;
  overflow-x:hidden;
  overflow-y:hidden;
- top:calc(var(--top-pad) + 40px);
+ top:calc(var(--top-pad) + 40.5px);
  width:36px !important;
  height:18px !important;
  line-height:18px !important;
@@ -1194,7 +1194,7 @@ div.v-subheader {
 }
 
 .vol-full-label {
- padding-top:12px;
+ padding-top:12.5px;
  min-width:3em!important;
  text-align:left;
  font-size:var(--std-font-size) !important;
@@ -1202,7 +1202,7 @@ div.v-subheader {
 
 .vol-fixed-label {
  margin:-16px 0px 0px 0px;
- padding-top:4px;
+ padding-top:4.5px;
  font-size:var(--small-font-size);
  text-align:center;
  text-overflow:ellipsis;
@@ -2206,7 +2206,7 @@ div.v-rating i.primary--text, div.v-rating i.accent--text {
 
 .pq-current-indicator {
  position:absolute;
- top:7px !important;
+ top:7.5px !important;
  left:31px !important;
  width:16px !important;
  height:16px !important;
@@ -2237,7 +2237,7 @@ div.v-rating i.primary--text, div.v-rating i.accent--text {
  opacity:var(--sub-opacity);
  margin-right:calc(-28px + var(--overlay-sb-pad));
  min-width:unset!important;
- margin-top:calc(19px - var(--std-font-size));
+ margin-top:calc(18px - var(--std-font-size));
  margin-left:4px;
 }
 
@@ -2690,6 +2690,11 @@ div.v-subheader {
 .lms-list .v-list__tile__sub-title, .lms-list3 .v-list__tile__sub-title {
  width:auto!important;
  max-width:100%!important;
+}
+
+.lms-list3 .v-list__tile__sub-title, .lms-list-album .v-list__tile__title {
+ height:22px;
+ line-height:22px;
 }
 
 .lms-jumplist {
@@ -3453,7 +3458,7 @@ div.v-subheader {
 
 .nd-list .v-list__tile__title {
  height:unset!important;
- line-height:calc(var(--std-font-size) + 4px);
+ line-height:calc(var(--std-font-size) + 3px);
 }
 
 .vlib-menu .v-list__tile__title {

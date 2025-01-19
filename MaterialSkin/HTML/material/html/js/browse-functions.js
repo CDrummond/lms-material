@@ -1979,10 +1979,15 @@ function browseGoBack(view, refresh) {
         return;
     }
     let searchWasActive = view.searchActive;
-    if (view.searchActive) {
-        let val = view.searchActive;
+    // 0 = not active
+    // 1 = library search
+    // 2 = search within list
+    if (2==view.searchActive) {
         view.searchActive = 0;
-        if (2==val || (1==val && (view.items.length<1 || (undefined==view.items[0].allItems && SEARCH_OTHER_ID!=view.items[0].id)))) {
+        return;
+    } else if (view.searchActive) {
+        view.searchActive = 0;
+        if (view.items.length<1 || (undefined==view.items[0].allItems && SEARCH_OTHER_ID!=view.items[0].id)) {
             return; // Search results not being shown, so '<-' button just closes search field
         }
     }

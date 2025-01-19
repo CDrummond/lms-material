@@ -863,8 +863,21 @@ function parseBrowseResp(data, parent, options, cacheKey, parentCommand, parentG
                         }
                         // If each item has the same image as parent image then do not show!
                         if (allHaveSameImageAsParent) {
+                            let showImageActionPos = undefined;
                             for (let i=0, loop=resp.items, len=loop.length; i<len; ++i) {
                                 loop[i].image=undefined;
+                                // If removing image then also remove action to show image!
+                                if (undefined!=loop[i].menu) {
+                                    if (undefined!=showImageActionPos && (showImageActionPos>=loop[i].length || loop[i].menu[showImageActionPos]!=SHOW_IMAGE_ACTION)) {
+                                        showImageActionPos = undefined;
+                                    }
+                                    if (undefined==showImageActionPos) {
+                                        showImageActionPos = loop[i].menu.indexOf(SHOW_IMAGE_ACTION);
+                                    }
+                                    if (undefined!=showImageActionPos) {
+                                        loop[i].menu.splice(showImageActionPos, 1);
+                                    }
+                                }
                             }
                         }
                     }

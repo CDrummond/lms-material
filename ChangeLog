@@ -8,6 +8,13 @@
 4. Better(?) multi-group icon.
 5. Reduce font size by 1px.
 
+5.7.6
+-----
+1. If images are removed from a list item then also remove 'Show image'
+   action.
+2. Fix missing 'Play next' and 'Append to queue' actions when showing covers
+   of online service albums via 'Show image' action.
+
 5.7.5
 -----
 1. Fix not being able to toggle a player in sync dialog.

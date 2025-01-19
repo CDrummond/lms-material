@@ -1664,7 +1664,7 @@ function browseItemAction(view, act, item, index, event) {
                 }
                 let isStdItem = itm.stdItem==STD_ITEM_ALBUM || itm.stdItem==STD_ITEM_ARTIST || itm.stdItem==STD_ITEM_WORK || itm.stdItem==STD_ITEM_WORK_COMPOSER;
                 let playAction = !queryParams.party && !LMS_KIOSK_MODE && (isStdItem || (undefined!=itm.menu && itm.menu[0]==PLAY_ACTION));
-                let otherAction = playAction && (isStdItem || (undefined!=itm.menu && itm.menu[0]==INSERT_ACTION));
+                let otherAction = playAction && (isStdItem || (undefined!=itm.menu && itm.menu.length>1 && itm.menu[1]==INSERT_ACTION));
                 let image = {url:itm.image,
                              title:itm.title+(undefined==itm.subtitle ? "" : (SEPARATOR+itm.subtitle)),
                              index:playAction ? i : undefined

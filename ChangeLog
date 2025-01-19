@@ -4,6 +4,8 @@
    action.
 2. Fix missing 'Play next' and 'Append to queue' actions when showing covers
    of online service albums via 'Show image' action.
+3. Allow specifying a list of player IDs to hide vi 'hidePlayers=a,b' URL
+   query parameter.
 
 5.7.5
 -----

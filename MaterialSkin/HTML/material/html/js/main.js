@@ -144,6 +144,10 @@ var app = new Vue({
         if (lmsOptions.allowDownload && queryParams.download!='browser' && queryParams.download!='native') {
             lmsOptions.allowDownload = false;
         }
+        if (undefined!=queryParams.hidePlayers) {
+            setLocalStorageVal('hidePlayers', queryParams.hidePlayers);
+            lmsOptions.hidePlayers = new Set(queryParams.hidePlayers.split(','));
+        }
         lmsCommand("", ["material-skin", "prefs"]).then(({data}) => {
             if (data && data.result) {
                 if (LMS_VERSION<90001) {
@@ -176,8 +180,8 @@ var app = new Vue({
                     let arr = splitString(data.result['releaseTypeOrder'].split("\r").join("").split("\n").join(","));
                     lmsOptions.releaseTypeOrder = arr.length>0 ? arr : undefined;
                 }
-                if (undefined!=data.result['hidePlayers']) {
-                    setLocalStorageVal('hidePlayers', lmsOptions['hidePlayers']);
+                if (undefined!=data.result['hidePlayers'] && undefined==queryParams.hidePlayers) {
+                    setLocalStorageVal('hidePlayers', data.result['hidePlayers']);
                     lmsOptions.hidePlayers = new Set(data.result['hidePlayers'].split(','));
                 }
                 bus.$emit('screensaverDisplayChanged');

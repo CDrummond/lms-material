@@ -6,6 +6,7 @@
    of online service albums via 'Show image' action.
 3. Allow specifying a list of player IDs to hide via 'hidePlayers=a,b' URL
    query parameter.
+4. Fix issues when closing 'Search within list' on iOS devices.
 
 5.7.5
 -----

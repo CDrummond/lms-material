@@ -502,6 +502,7 @@ function copyVars(iframe) {
     if (undefined==iframe) {
         return false;
     }
+    copyVar(iframe, '--std-font-size');
     copyVar(iframe, '--background-color');
     copyVar(iframe, '--primary-color');
     copyVar(iframe, '--accent-color');

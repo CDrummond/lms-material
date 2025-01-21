@@ -1,5 +1,6 @@
 :root {
  --bold-weight:500;
+ --std-font-size:15px;
 }
 
 @supports not selector(::-webkit-scrollbar) {
@@ -172,7 +173,7 @@ div#topGraphicMenu3 #statusMessage {
 }
 
 *, body, table, input, select, textarea, p, l {
- font-size:16px !important;
+ font-size:var(--std-font-size) !important;
  font-family:Roboto,sans-serif !important;
  text-rendering: optimizeLegibility;
  line-height: 1.25;

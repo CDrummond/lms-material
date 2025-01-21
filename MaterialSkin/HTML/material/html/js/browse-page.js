@@ -53,7 +53,7 @@ var lmsBrowse = Vue.component("lms-browse", {
    <v-btn :title="trans.cancel" flat icon class="toolbar-button" @click="clearSelection()"><v-icon>cancel</v-icon></v-btn>
   </v-layout>
   <v-layout v-else-if="searchActive">
-   <v-btn flat icon v-longpress="backBtnPressed" class="toolbar-button back-button" id="back-button" :title="trans.goBack"><v-icon>arrow_back</v-icon></v-btn>
+   <v-btn flat icon @click="closeSearch" class="toolbar-button back-button" id="close-search-button" :title="trans.close"><v-icon>arrow_back</v-icon></v-btn>
    <lms-search-field v-if="searchActive==1" @results="handleListResponse"></lms-search-field>
    <lms-search-list v-else @scrollTo="highlightItem" :view="this" :msearch="true" :title="toolbarTitle"></lms-search-list>
   </v-layout>
@@ -489,7 +489,7 @@ var lmsBrowse = Vue.component("lms-browse", {
             grid: {allowed:true, use:false, numItems:0, numColumns:0, ih:GRID_MIN_HEIGHT, rows:[], few:false, haveSubtitle:true, multiSize:false},
             fetchingItem:undefined,
             hoverBtns: !IS_MOBILE,
-            trans: { ok:undefined, cancel: undefined, selectMultiple:undefined, addall:undefined, playall:undefined,
+            trans: { ok:undefined, cancel: undefined, close: undefined, selectMultiple:undefined, addall:undefined, playall:undefined,
                      deleteall:undefined, removeall:undefined, invertSelect:undefined, choosepos:undefined, goHome:undefined, goBack:undefined,
                      select:undefined, unselect:undefined, sources: undefined, desc: undefined, actions:undefined },
             menu: { show:false, item: undefined, x:0, y:0, index:-1},
@@ -833,8 +833,8 @@ var lmsBrowse = Vue.component("lms-browse", {
             updateActionStrings();
             this.updateSortStrings();
 
-            this.trans= { ok:i18n('OK'), cancel: i18n('Cancel'), selectMultiple:i18n("Select multiple items"), addall:i18n("Add selection to queue"),
-                          playall:i18n("Play selection"), deleteall:i18n("Delete all selected items"),
+            this.trans= { ok:i18n('OK'), cancel: i18n('Cancel'), close: i18n('Close'), selectMultiple:i18n("Select multiple items"),
+                          addall:i18n("Add selection to queue"),  playall:i18n("Play selection"), deleteall:i18n("Delete all selected items"),
                           invertSelect:i18n("Invert selection"), removeall:i18n("Remove all selected items"), choosepos:i18n("Choose position"), 
                           goHome:i18n("Go home"), goBack:i18n("Go back"), sources:i18n("Music sources"), desc:i18n("Descending"),
                           actions:i18n("Actions")
@@ -1368,6 +1368,9 @@ var lmsBrowse = Vue.component("lms-browse", {
                 }
                 this.goBack();
             }
+        },
+        closeSearch() {
+            this.goBack();
         },
         backBtnPressed(longPress) {
             if (this.$store.state.visibleMenus.size<1) {

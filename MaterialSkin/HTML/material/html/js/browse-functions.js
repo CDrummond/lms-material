@@ -282,7 +282,7 @@ function browseHandleNextWindow(view, item, command, resp, isMoreMenu, isBrowse)
             }
         } else if (view.history.length>0 && (nextWindow=="parent" || /*nextWindow=="nowplaying" ||*/ (isMoreMenu && nextWindow=="grandparent"))) {
             // If "trackinfo items" has "parent" and returns an empty list, then don't go back... Work-around for:
-            // https://forums.slimdevices.com/showthread.php?109624-Announce-Material-Skin&p=983626&viewfull=1#post983626
+            // https://forums.lyrion.org/showthread.php?109624-Announce-Material-Skin&p=983626&viewfull=1#post983626
             if (nextWindow!="parent" || command.command[0]!="trackinfo" || command.command[1]!="items" || !resp.items || resp.items.length>0) {
                 if (isBrowse) {
                     view.history.pop();
@@ -2224,7 +2224,7 @@ function browseBuildCommand(view, item, commandName, doReplacements, allowLibId)
         } else if (view.command && view.command.params && cmd.command[0]=="artistinfo" || cmd.command[0]=="albuminfo") {
             // artistinfo and albuminfo when called from 'More' pass down (e.g.) 'item_id:5' view seems to somtimes fail
             // (actually most times with epiphany) due to 'connectionID' changing?
-            // See https://forums.slimdevices.com/showthread.php?111749-quot-artistinfo-quot-JSONRPC-call-sometimes-fails
+            // See https://forums.lyrion.org/showthread.php?111749-quot-artistinfo-quot-JSONRPC-call-sometimes-fails
             // Passing artist_id and album_id should work-around view.
             var haveArtistId = false;
             var haveAlbumId = false;

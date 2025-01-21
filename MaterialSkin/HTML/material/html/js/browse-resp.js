@@ -221,7 +221,7 @@ function parseBrowseResp(data, parent, options, cacheKey, parentCommand, parentG
                 if (undefined!=i.text && undefined!=i.text.name && 'text'==i.text.type) {
                     // BBC Sounds seems to place error message in '"text":{"name":"<sting>, "type":"text"}'
                     // So, we need to check for this and use text.name as text and text.type as type.
-                    // See https://forums.slimdevices.com/showthread.php?113045-Announce-BBC-Sounds-Plugin&p=1032136&viewfull=1#post1032136
+                    // See https://forums.lyrion.org/showthread.php?113045-Announce-BBC-Sounds-Plugin&p=1032136&viewfull=1#post1032136
                     i.text = i.text.name;
                     i.type = i.text.type;
                     i.style = i.goAction = undefined;
@@ -730,7 +730,7 @@ function parseBrowseResp(data, parent, options, cacheKey, parentCommand, parentG
                         } else {
                             // Found an item without and image and not marked as an artist or album, no
                             // default image set - so disable grid usage.
-                            // See: https://forums.slimdevices.com/showthread.php?109624-Announce-Material-Skin&p=944597&viewfull=1#post944597
+                            // See: https://forums.lyrion.org/showthread.php?109624-Announce-Material-Skin&p=944597&viewfull=1#post944597
                             resp.canUseGrid = false;
                             break;
                         }

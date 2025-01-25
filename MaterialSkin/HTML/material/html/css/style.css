@@ -2241,6 +2241,10 @@ div.v-rating i.primary--text, div.v-rating i.accent--text {
  margin-left:4px;
 }
 
+.browse-time {
+ margin-top:calc(16.5px - var(--std-font-size));
+}
+
 .pq-atime {
  font-size:var(--small-font-size);
  font-weight:var(--bold-weight);

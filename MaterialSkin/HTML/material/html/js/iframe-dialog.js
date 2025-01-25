@@ -524,6 +524,7 @@ function copyVars(iframe) {
     return true;
 }
 
+/*
 function addDefaultSkinCss(doc, iframe) {
     let css = doc.createElement("link");
     css.href = "/material/html/css/default-skin/mods.css?r=MATERIAL_VERSION";
@@ -531,6 +532,7 @@ function addDefaultSkinCss(doc, iframe) {
     css.type = "text/css";
     iframe.contentDocument.head.appendChild(css);
 }
+*/
 
 function applyModifications(page, svgCol, darkUi, src) {
     if (!page) {
@@ -588,6 +590,7 @@ function applyModifications(page, svgCol, darkUi, src) {
                     bus.$emit('iframe-close');
                 };
             }
+            /*
             addDefaultSkinCss(document, iframe);
             let elems = content.documentElement.getElementsByTagName("iframe");
             if (undefined!=elems && elems.length>0) {
@@ -598,6 +601,7 @@ function applyModifications(page, svgCol, darkUi, src) {
                     };
                 }
             }
+            */
         } else if ('player'==page || 'server'==page) {
             initChangeListeners(content.documentElement);
             // Set --vh as this is used to fix size of main settings frame, so that we can

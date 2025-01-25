@@ -1397,6 +1397,7 @@ sub _cliCommand {
                 my $count = 0;
                 while (my $work = $works->next) {
                     $request->addResultLoop('works_loop', $count, 'id', $work->id);
+                    $request->addResultLoop('works_loop', $count, 'album_id', $work->get_column('albumId'));
                     $count++;
                     main::idleStreams() unless $count % 5;
                 }

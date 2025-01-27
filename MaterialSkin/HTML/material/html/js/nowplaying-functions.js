@@ -180,7 +180,7 @@ function nowplayingOnPlayerStatus(view, playerStatus) {
         bus.$emit("nowPlayingBrief", mobileBarText);
     }
     let artistAndComposer = buildArtistLine(playerStatus.current, 'now-playing', undefined, undefined, useBandTag, useComposerTag, useConductorTag);
-    let keys = ['composer', 'conductor', 'band'].concat(USER_ARTIST_TYPES);
+    let keys = ['band', 'conductor', 'composer'].concat(USER_ARTIST_TYPES);
     let mods = ['', 's', '_ids'];
 
     for (let i=0, len=keys.length; i<len; ++i) {
@@ -352,20 +352,20 @@ function nowplayingShowMenu(view, event) {
                                       artists:view.playerStatus.current.albumartists});
             }
         }
-        if (lmsOptions.showComposer && view.playerStatus.current.composer && view.playerStatus.current.composer_id && useComposer(view.playerStatus.current)) {
-            view.menu.items.push({title:i18n("Go to composer"), act:NP_BROWSE_CMD, cmd:{command:["albums"], params:[ARTIST_ALBUM_TAGS, SORT_KEY+ARTIST_ALBUM_SORT_PLACEHOLDER, "role_id:COMPOSER"], title:view.playerStatus.current.composer}, svg:"composer",
-            ids: view.playerStatus.current.composer_ids ? view.playerStatus.current.composer_ids : [view.playerStatus.current.composer_id],
-            artists:view.playerStatus.current.composers});
+        if (lmsOptions.showBand && view.playerStatus.current.band && view.playerStatus.current.band_id && useBand(view.playerStatus.current)) {
+            view.menu.items.push({title:i18n("Go to band"), act:NP_BROWSE_CMD, cmd:{command:["albums"], params:[ARTIST_ALBUM_TAGS, SORT_KEY+ARTIST_ALBUM_SORT_PLACEHOLDER, "role_id:BAND"], title:view.playerStatus.current.band}, svg:"trumpet",
+            ids: view.playerStatus.current.band_ids ? view.playerStatus.current.band_ids : [view.playerStatus.current.band_id],
+            artists:view.playerStatus.current.bands});
         }
         if (lmsOptions.showConductor && view.playerStatus.current.conductor && view.playerStatus.current.conductor_id && useConductor(view.playerStatus.current)) {
             view.menu.items.push({title:i18n("Go to conductor"), act:NP_BROWSE_CMD, cmd:{command:["albums"], params:[ARTIST_ALBUM_TAGS, SORT_KEY+ARTIST_ALBUM_SORT_PLACEHOLDER, "role_id:CONDUCTOR"], title:view.playerStatus.current.conductor}, svg:"conductor",
             ids: view.playerStatus.current.conductor_ids ? view.playerStatus.current.conductor_ids : [view.playerStatus.current.conductor_id],
             artists:view.playerStatus.current.conductors});
         }
-        if (lmsOptions.showBand && view.playerStatus.current.band && view.playerStatus.current.band_id && useBand(view.playerStatus.current)) {
-            view.menu.items.push({title:i18n("Go to band"), act:NP_BROWSE_CMD, cmd:{command:["albums"], params:[ARTIST_ALBUM_TAGS, SORT_KEY+ARTIST_ALBUM_SORT_PLACEHOLDER, "role_id:BAND"], title:view.playerStatus.current.band}, svg:"trumpet",
-            ids: view.playerStatus.current.band_ids ? view.playerStatus.current.band_ids : [view.playerStatus.current.band_id],
-            artists:view.playerStatus.current.bands});
+        if (lmsOptions.showComposer && view.playerStatus.current.composer && view.playerStatus.current.composer_id && useComposer(view.playerStatus.current)) {
+            view.menu.items.push({title:i18n("Go to composer"), act:NP_BROWSE_CMD, cmd:{command:["albums"], params:[ARTIST_ALBUM_TAGS, SORT_KEY+ARTIST_ALBUM_SORT_PLACEHOLDER, "role_id:COMPOSER"], title:view.playerStatus.current.composer}, svg:"composer",
+            ids: view.playerStatus.current.composer_ids ? view.playerStatus.current.composer_ids : [view.playerStatus.current.composer_id],
+            artists:view.playerStatus.current.composers});
         }
         if (view.playerStatus.current.album_id && view.playerStatus.current.album) {
             view.menu.items.push({title:ACTIONS[GOTO_ALBUM_ACTION].title, act:NP_BROWSE_CMD, cmd:{command:["tracks"], params:["album_id:"+view.playerStatus.current.album_id, trackTags(true), SORT_KEY+"tracknum"], title:view.playerStatus.current.album,
@@ -635,9 +635,10 @@ function nowplayingFetchTrackInfo(view) {
         }
     }
     let others = [['albumartist', i18n("Album artist"), !isSameArtistsL(trk, 'albumartist', ['artist', 'trackartist'])],
-                  ['composer', i18n("Composer"), true],
+                  ['band', i18n("Band/orchestra"), !isSameArtistsL(trk, 'band', ['albumartist', 'artist', 'trackartist'])],
                   ['conductor', i18n("Conductor"), true],
-                  ['band', i18n("Band/orchestra"), !isSameArtistsL(trk, 'band', ['albumartist', 'artist', 'trackartist'])] ];
+                  ['composer', i18n("Composer"), true]
+                 ];
     for (let i=0, len=others.length; i<len; ++i) {
         if (others[i][2] && undefined!=trk[others[i][0]]) {
             let entry = nowplayingArtistEntry(trk, others[i][0], others[i][0].toUpperCase());

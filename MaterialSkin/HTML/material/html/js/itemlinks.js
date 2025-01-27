@@ -135,11 +135,11 @@ function buildArtistLine(i, page, plain, existing, useBandTag, useComposerTag, u
     if (undefined!=useBandTag ? useBandTag : (i.band && lmsOptions.showBand && useBand(i))) {
         line=addArtistLink(i, line, "band", "show_band", page, used, plain);
     }
-    if (undefined!=useComposerTag ? useComposerTag : (i.composer && lmsOptions.showComposer && useComposer(i))) {
-        line=addArtistLink(i, line, "composer", "show_composer", page, used, plain);
-    }
     if (undefined!=useConductorTag ? useConductorTag : (i.conductor && lmsOptions.showConductor && useConductor(i))) {
         line=addArtistLink(i, line, "conductor", "show_conductor", page, used, plain);
+    }
+    if (undefined!=useComposerTag ? useComposerTag : (i.composer && lmsOptions.showComposer && useComposer(i))) {
+        line=addArtistLink(i, line, "composer", "show_composer", page, used, plain);
     }
 
     if (!lmsOptions.artistFirst) {
@@ -203,11 +203,11 @@ function buildArtistWithContext(i, page, useBand, useComposer, useConductor) {
         if (artistFirst) {
             details += i18n('<obj>performed by</obj> %1', artists) + "<br/>";
         }
-        if (haveComp) {
-            details += i18n('<obj>composed by</obj> %1', composers) + (haveCond || artistLast ? "<br/>" : "");
-        }
         if (haveCond) {
             details += i18n('<obj>conducted by</obj> %1', conductors) + (artistLast ? "<br/>" : "");
+        }
+        if (haveComp) {
+            details += i18n('<obj>composed by</obj> %1', composers) + (haveCond || artistLast ? "<br/>" : "");
         }
         if (artistLast) {
             details += i18n('<obj>performed by</obj> %1', artists);

@@ -46,5 +46,11 @@ var lmsOptions = {techInfo: getLocalStorageBool('techInfo', false),
                   randomMixDialogPinned: false,
                   showSubtitle: getLocalStorageBool('showSubtitle', false),
                   useDefaultForSettings: getLocalStorageVal('useDefaultForSettings', 0),
-                  useGrouping: getLocalStorageBool('useGrouping', true)
+                  useGrouping: getLocalStorageBool('useGrouping', true),
+                  showArtistImages: LMS_DEF_ARTIST_PICS,
+                  serviceEmblems: LMS_DEF_SRV_EMBLEM,
+                  noGenreFilter: LMS_DEF_NO_GENRE_FILTER,
+                  noRoleFilter: LMS_DEF_NO_ROLE_FILTER,
+                  groupdiscs: LMS_DEF_GROUP_DISCS,
+                  variousArtistsString: LMS_DEF_VA_STRING
                 };

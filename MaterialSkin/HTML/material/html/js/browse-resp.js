@@ -354,7 +354,7 @@ function parseBrowseResp(data, parent, options, cacheKey, parentCommand, parentG
                             i.image=undefined;
                         } else if (i.presetParams.favorites_url.startsWith("db:contributor.name")) {
                             i.stdItem=STD_ITEM_ARTIST;
-                            if (i.presetParams.icon=="html/images/artists.png" || !(LMS_P_MAI && LMS_ARTIST_PICS)) {
+                            if (i.presetParams.icon=="html/images/artists.png" || !(LMS_P_MAI && lmsOptions.showArtistImages)) {
                                 i.svg="artist";
                                 i.image=undefined;
                             }
@@ -935,7 +935,7 @@ function parseBrowseResp(data, parent, options, cacheKey, parentCommand, parentG
                 }
             }
 
-            resp.canUseGrid = LMS_P_MAI && LMS_ARTIST_PICS;
+            resp.canUseGrid = LMS_P_MAI && lmsOptions.showArtistImages;
             resp.itemCustomActions = getCustomActions("artist");
             for (var idx=0, loop=data.result.artists_loop, loopLen=loop.length; idx<loopLen; ++idx) {
                 var i = loop[idx];
@@ -947,7 +947,7 @@ function parseBrowseResp(data, parent, options, cacheKey, parentCommand, parentG
                 var artist = {
                               id: "artist_id:"+i.id,
                               title: replaceHtmlBrackets(i.artist),
-                              image: (LMS_P_MAI && LMS_ARTIST_PICS) ? "/imageproxy/mai/artist/" + i.id + "/image" + LMS_IMAGE_SIZE : undefined,
+                              image: (LMS_P_MAI && lmsOptions.showArtistImages) ? "/imageproxy/mai/artist/" + i.id + "/image" + LMS_IMAGE_SIZE : undefined,
                               stdItem: stdItem,
                               type: "group",
                               textkey: key
@@ -1140,7 +1140,7 @@ function parseBrowseResp(data, parent, options, cacheKey, parentCommand, parentG
 
                 let groupType = lmsOptions.useGrouping && undefined!=i.group_count && parseInt(i.group_count)>1 && (undefined==i.contiguous_groups || 1==parseInt(i.contiguous_groups))
                                  ? MULTI_GROUP_ALBUM
-                                 : LMS_GROUP_DISCS && undefined!=i.disccount && parseInt(i.disccount)>1
+                                 : lmsOptions.groupdiscs && undefined!=i.disccount && parseInt(i.disccount)>1
                                    ? MULTI_DISC_ALBUM
                                    : 0;
                 let album = {
@@ -1189,7 +1189,7 @@ function parseBrowseResp(data, parent, options, cacheKey, parentCommand, parentG
             showRoles.delete(TRACK_ARTIST_ROLE);
             ignoreRoles.forEach(role => { showRoles.delete(role) });
             resp.showRoles = Array.from(showRoles).sort();
-            if (undefined!=reqArtistId && LMS_P_MAI && LMS_ARTIST_PICS) {
+            if (undefined!=reqArtistId && LMS_P_MAI && lmsOptions.showArtistImages) {
                 resp.image= "/imageproxy/mai/artist/" + reqArtistId + "/image" + LMS_IMAGE_SIZE;
             }
             if (isWorksAlbums) {
@@ -1622,7 +1622,7 @@ function parseBrowseResp(data, parent, options, cacheKey, parentCommand, parentG
                 } else if (compilationArtists.size==1) {
                     compilationAlbumArtist = compilationArtists.keys().next().value;
                 } else {
-                    compilationAlbumArtist = LMS_VA_STRING;
+                    compilationAlbumArtist = lmsOptions.variousArtistsString;
                 }
             }
 

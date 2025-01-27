@@ -708,6 +708,10 @@ var lmsServer = Vue.component('lms-server', {
                             parseTitleFormat(data.result.titleFormat, data.result.titleFormatWeb);
                         }
                     });
+                } else if (data[2]=="noGenreFilter" || data[2]=="noRoleFilter" || data[2]=="groupdiscs") {
+                    lmsOptions[data[2]] = 1==parseInt(data[3]);
+                } else if (data[2]=="variousArtistsString") {
+                    lmsOptions[data[2]] = data[3];
                 }
             } else if (data[1]=="plugin.material-skin" && data[3]!=null && data[3]!=undefined) {
                 if (data[2]=="password") {
@@ -758,6 +762,10 @@ var lmsServer = Vue.component('lms-server', {
                         }
                     }
                 }
+            } else if (data[1]=="plugin.musicartistinfo" && data[3]!=null && data[3]!=undefined && data[2]=="browseArtistPictures") {
+                lmsOptions.showArtistImages = 1==parseInt(data[3]);
+            } else if (data[1]=="plugin.onlinelibrary" && data[3]!=null && data[3]!=undefined && data[2]=="enableServiceEmblem") {
+                lmsOptions.serviceEmblems = 1==parseInt(data[3]);
             }
         },
         handleNotification(data) {

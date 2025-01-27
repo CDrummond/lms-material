@@ -135,7 +135,7 @@ function browseAddHistory(view) {
 function browseActions(view, item, args, count, showRoles, showWorks, addRolesPlaceholder) {
     var actions=[];
     if ((undefined==item || undefined==item.id || !item.id.startsWith(MUSIC_ID_PREFIX)) && // Exclude 'Compilations'
-        (undefined==args['artist'] || (args['artist']!=i18n('Various Artists') && args['artist']!=LMS_VA_STRING && args['artist'].toLowerCase()!='various artists'))) {
+        (undefined==args['artist'] || (args['artist']!=i18n('Various Artists') && args['artist']!=lmsOptions.variousArtistsString && args['artist'].toLowerCase()!='various artists'))) {
         if (LMS_P_MAI) {
             if (undefined!=args['album_id'] || (undefined!=args['album'] && (undefined!=args['artist_id'] || undefined!=args['artist']))) {
                 actions.push({title:i18n('Information'), icon:'album', stdItem:STD_ITEM_MAI,
@@ -1474,7 +1474,7 @@ function browseItemAction(view, act, item, index, event) {
             if (resp.items.length>0 && resp.items[0].id) {
                 var item = resp.items[0];
                 var command = ["playlistcontrol", "cmd:add", originalId(item.id)];
-                var genrePos = LMS_NO_GENRE_FILTER ? -1 : getField({params:params}, "genre_id:");
+                var genrePos = lmsOptions.noGenreFilter ? -1 : getField({params:params}, "genre_id:");
                 if (genrePos>=0) {
                     command.push(params[genrePos]);
                 }
@@ -2580,7 +2580,7 @@ function browseReplaceCommandTerms(view, cmd, item) {
                 if (view.$store.state.showRating && "tracks"==cmd.command[0] && cmd.params[i].indexOf("R")<0) {
                     cmd.params[i]+="R";
                 }
-                if (LMS_SRV_EMBLEM && ("tracks"==cmd.command[0] || "albums"==cmd.command[0]) && cmd.params[i].indexOf("E")<0) {
+                if (lmsOptions.serviceEmblems && ("tracks"==cmd.command[0] || "albums"==cmd.command[0]) && cmd.params[i].indexOf("E")<0) {
                     cmd.params[i]+="E";
                 }
             }
@@ -2610,8 +2610,8 @@ function browseBuildFullCommand(view, item, act) {
             if (item.id.startsWith("album_id:") || item.id.startsWith("artist_id:") || item.id.startsWith("work_id:")) {
                 var params = undefined!=item.stdItem || undefined!=item.altStdItem ? buildStdItemCommand(item, item.id==view.current.id ? view.history.length>0 ? view.history[view.history.length-1].command : undefined : view.command).params : item.params;
                 for (var i=0, loop = params, len=loop.length; i<len; ++i) {
-                    if ( (!LMS_NO_ROLE_FILTER && (loop[i].startsWith("role_id:"))) ||
-                         (!LMS_NO_GENRE_FILTER && loop[i].startsWith("genre_id:")) ||
+                    if ( (!lmsOptions.noRoleFilter && (loop[i].startsWith("role_id:"))) ||
+                         (!lmsOptions.noGenreFilter && loop[i].startsWith("genre_id:")) ||
                          loop[i].startsWith("artist_id:")) {
                         if (!item.id.startsWith("artist_id:") || !loop[i].startsWith("artist_id:")) {
                             command.command.push(loop[i]);

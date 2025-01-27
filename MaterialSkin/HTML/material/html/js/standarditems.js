@@ -100,11 +100,11 @@ function addParentParams(parentCommand, command, canRemoveArtistId) {
                 }
             } else if (lower.startsWith("role_id:")) {
                  command.params.push('material_skin_'+parentCommand.params[i]);
-                 if (!LMS_NO_ROLE_FILTER) {
+                 if (!lmsOptions.noRoleFilter) {
                     roleIdPos = command.params.length;
                     command.params.push(parentCommand.params[i]);
                  }
-            } else if (!LMS_NO_GENRE_FILTER && lower.startsWith("genre_id:")) {
+            } else if (!lmsOptions.noGenreFilter && lower.startsWith("genre_id:")) {
                 command.params.push(parentCommand.params[i]);
             } else if (lower.startsWith("work_id:") || lower.startsWith("year:") || lower.startsWith("performance:") || lower.startsWith("material_skin_role_id:")) {
                 command.params.push(parentCommand.params[i]);
@@ -187,8 +187,8 @@ function buildStdItemCommand(item, parentCommand) {
                 if (typeof parentCommand.params[i] === 'string' || parentCommand.params[i] instanceof String) {
                     var lower = parentCommand.params[i].toLowerCase();
                     if (lower.startsWith("role_id:")) {
-                        command.params.push((LMS_NO_ROLE_FILTER ? 'material_skin_' : '')+parentCommand.params[i]);
-                    } else if ((!LMS_NO_GENRE_FILTER && lower.startsWith("genre_id:")) || lower.startsWith("year:")) {
+                        command.params.push((lmsOptions.noRoleFilter ? 'material_skin_' : '')+parentCommand.params[i]);
+                    } else if ((!lmsOptions.noGenreFilter && lower.startsWith("genre_id:")) || lower.startsWith("year:")) {
                         command.params.push(parentCommand.params[i]);
                     }
                 }
@@ -219,7 +219,7 @@ function buildStdItemCommand(item, parentCommand) {
             for (var i=0, len=parentCommand.params.length; i<len; ++i) {
                 if (typeof parentCommand.params[i] === 'string' || parentCommand.params[i] instanceof String) {
                     var lower = parentCommand.params[i].toLowerCase();
-                    if ((!LMS_NO_ROLE_FILTER && lower.startsWith("role_id:")) || lower.startsWith("year:")) {
+                    if ((!lmsOptions.noRoleFilter && lower.startsWith("role_id:")) || lower.startsWith("year:")) {
                         command.params.push(parentCommand.params[i]);
                     }
                 }

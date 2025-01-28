@@ -1021,7 +1021,15 @@ function parseBrowseResp(data, parent, options, cacheKey, parentCommand, parentG
                     }
                 }
                 if (reverse && !isNewMusic) {
-                    data.result.albums_loop = data.result.albums_loop.reverse();
+                // sort field for role sorting might be null, if so make sure nulls stay below non-nulls even when reversed.
+                    let loopNotNulls = [];
+                    let loopNulls = [];
+                    const firstNullPos = data.result.albums_loop.map(e => e.rolesort_name).indexOf('');
+                    if (firstNullPos>0) {
+                        loopNotNulls = data.result.albums_loop.slice(0,firstNullPos);
+                        loopNulls = data.result.albums_loop.slice(firstNullPos);
+                    }
+                    data.result.albums_loop = loopNulls.length ? loopNotNulls.reverse().concat(loopNulls) : data.result.albums_loop.reverse();
                 }
             }
             var albumGroups = !isWorksAlbums && (groupReleases && haveReleaseType && lmsOptions.supportReleaseTypes && lmsOptions.groupByReleaseType>0) ? {} : undefined;

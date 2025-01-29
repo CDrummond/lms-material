@@ -6,6 +6,7 @@
  */
 
 const UDR_PLACEHOLDER = 200000000;
+const UDR_PLACEHOLDER_WEIGHT = 81;
 
 function browseCanSelect(item) {
     return undefined!=item && (undefined!=item.stdItem || (item.menu && item.menu.length>0));
@@ -132,10 +133,10 @@ function browseAddHistory(view) {
     view.history.push(prev);
 }
 
-function browseActions(view, item, args, count, showRoles, showWorks, addRolesPlaceholder) {
+function browseActions(view, item, args, count, showRoles, showWorks, addRolesPlaceholder, isVariousArtists) {
     var actions=[];
     if ((undefined==item || undefined==item.id || !item.id.startsWith(MUSIC_ID_PREFIX)) && // Exclude 'Compilations'
-        (undefined==args['artist'] || (args['artist']!=i18n('Various Artists') && args['artist']!=lmsOptions.variousArtistsString && args['artist'].toLowerCase()!='various artists'))) {
+        (undefined==args['artist'] || !isVariousArtists)) {
         if (LMS_P_MAI) {
             if (undefined!=args['album_id'] || (undefined!=args['album'] && (undefined!=args['artist_id'] || undefined!=args['artist']))) {
                 actions.push({title:i18n('Information'), icon:'album', stdItem:STD_ITEM_MAI,
@@ -217,7 +218,7 @@ function browseActions(view, item, args, count, showRoles, showWorks, addRolesPl
                 }
             }
             if (addRolesPlaceholder && !added) {
-                actions.push({title:"", weight:81, udr:UDR_PLACEHOLDER});
+                actions.push({title:"", weight:UDR_PLACEHOLDER_WEIGHT, udr:UDR_PLACEHOLDER});
             }
         }
         if (showWorks) {
@@ -458,6 +459,7 @@ function browseHandleListResponse(view, item, command, resp, prevPage, appendIte
             var actParams = new Map();
             var showWorksInMenu = false;
             var currentId = curitem.id.split(':');
+            var isVariousArtists = false;
             if (currentId[1].indexOf(".")<0) {
                 actParams[currentId[0]]=currentId[1];
             }
@@ -481,9 +483,15 @@ function browseHandleListResponse(view, item, command, resp, prevPage, appendIte
                 if (field>=0) {
                     actParams['genre_id']=view.command.params[field];
                 }
-                showWorksInMenu = LMS_VERSION>=90000 && !lmsOptions.listWorks && getField(view.command, "work_id:")<0;
                 if (resp.items.length>1 && resp.items[0].header) {
                     actParams['multi-group'] = true;
+                }
+                isVariousArtists = title==i18n('Various Artists') || title==lmsOptions.variousArtistsString || title.toLowerCase()=='various artists';
+                if (isVariousArtists) {
+                    addUserDefinedRoles = false;
+                    addWorksOrRoles = false;
+                } else {
+                    showWorksInMenu = LMS_VERSION>=90000 && !lmsOptions.listWorks && getField(view.command, "work_id:")<0;
                 }
             } else if (listingWorkAlbums) {
                 actParams['composer']=title;
@@ -513,7 +521,8 @@ function browseHandleListResponse(view, item, command, resp, prevPage, appendIte
                     }
                 }
             }
-            view.currentActions = browseActions(view, resp.items.length>0 ? item : undefined, actParams, resp.items.length, resp.showRoles, showWorksInMenu, addUserDefinedRoles);
+
+            view.currentActions = browseActions(view, resp.items.length>0 ? item : undefined, actParams, resp.items.length, resp.showRoles, showWorksInMenu, addUserDefinedRoles,isVariousArtists);
             if (listingArtistAlbums) {
                 for (var i=0, loop=view.onlineServices, len=loop.length; i<len; ++i) {
                     var emblem = getEmblem(loop[i].toLowerCase()+':');
@@ -819,6 +828,9 @@ function browseGetRoles(view, curitem) {
                 if (undefined!=view.currentActions[i].udr && view.currentActions[i].udr>=20) {
                     insertPos = i;
                     view.currentActions.splice(i, 1);
+                } else if (0==insertPos && undefined!=view.currentActions[i].weight && view.currentActions[i].weight<=UDR_PLACEHOLDER_WEIGHT) {
+                    insertPos = i;
+                    break;
                 } else if (0!=insertPos) {
                     break;
                 }

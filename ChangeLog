@@ -1,16 +1,17 @@
 5.8.0
 -----
-1. Add a server-side option to use 'Default' skin for server settings, either
-   embedded in Material or a new tab/window.
-2. Add a server-side option to enable track grouping.
-3. Move save/restore defaults buttons from toolbar to bottom of 'Interface'
-   settings dialog.
-4. Better(?) multi-group icon.
-5. Reduce font size by 1px.
-6. Use configured font size in settings pages.
-7. Re-order: band, conductor, composer.
-8. Monitor more LMS settings for changes (e.g. MAI artist images).
-9. Change list/grid toggle from per-view to global.
+ 1. Add a server-side option to use 'Default' skin for server settings, either
+    embedded in Material or a new tab/window.
+ 2. Add a server-side option to enable track grouping.
+ 3. Move save/restore defaults buttons from toolbar to bottom of 'Interface'
+    settings dialog.
+ 4. Better(?) multi-group icon.
+ 5. Reduce font size by 1px.
+ 6. Use configured font size in settings pages.
+ 7. Re-order: band, conductor, composer.
+ 8. Monitor more LMS settings for changes (e.g. MAI artist images).
+ 9. Change list/grid toggle from per-view to global.
+10. Don't add user-defined roles entries for 'Various Artists'.
 
 5.7.6
 -----

@@ -890,12 +890,14 @@ function localPath(url) {
     return undefined;
 }
 
+const LOCAL_FILE_EXT = new Set(["txt", "text", "htm", "html"]);
+
 function openWebLink(item) {
     let url = item.weblink;
     let parts = url.split('/').pop().split('?')[0].split('.');
     let ext = parts[parts.length-1].toLowerCase();
 
-    if (!IS_IOS && !IS_ANDROID && !queryParams.dontEmbed.has(ext) && (item.isLocalFile || (!url.startsWith("http:") && !url.startsWith("https:")))) {
+    if (((!IS_IOS && !IS_ANDROID) || (LOCAL_FILE_EXT.has(ext.toLowerCase()))) && !queryParams.dontEmbed.has(ext) && (item.isLocalFile || (!url.startsWith("http:") && !url.startsWith("https:")))) {
         bus.$emit('dlg.open', 'iframe', url, item.title, undefined, IFRAME_HOME_NAVIGATES_BROWSE_HOME);
     } else {
         window.open(url);

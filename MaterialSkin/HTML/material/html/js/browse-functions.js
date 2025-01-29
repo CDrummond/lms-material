@@ -404,8 +404,8 @@ function browseHandleListResponse(view, item, command, resp, prevPage, appendIte
         view.subtitleClickable = (!IS_MOBILE || lmsOptions.touchLinks) &&
             ( (view.items.length>0 && undefined!=view.items[0].id && undefined!=view.items[0].artist_id && view.items[0].id.startsWith("album_id:")) ||
               (view.items.length>1 && view.items[0].header && undefined!=view.items[1].id && undefined!=view.items[1].artist_id && view.items[1].id.startsWith("album_id:")));
-        view.grid = {allowed:resp.canUseGrid,
-                     use: resp.canUseGrid && (resp.forceGrid || isSetToUseGrid(view.current && view.current.id.startsWith(TOP_ID_PREFIX) && view.current.id!=TOP_FAVORITES_ID ? GRID_OTHER : command, view.current)),
+        view.grid = {allowed:resp.canUseGrid ? true : false,
+                     use: resp.forceGrid || view.grid.use,
                      numColumns:0, ih:GRID_MIN_HEIGHT, rows:[], few:false, haveSubtitle:true};
         view.jumplistActive=0;
         view.prevPage = prevPage;
@@ -1037,7 +1037,7 @@ function browseClick(view, item, index, event, ignoreOpenMenu) {
         browseSetScroll(view);
         view.isTop = false;
         view.tbarActions=[];
-        view.grid = {allowed:true, use:isSetToUseGrid(GRID_OTHER), numColumns:0, ih:GRID_MIN_HEIGHT, rows:[], few:false, haveSubtitle:true};
+        view.grid = {allowed:true, use:view.grid.use, numColumns:0, ih:GRID_MIN_HEIGHT, rows:[], few:false, haveSubtitle:true};
         view.currentActions=[{action:VLIB_ACTION}, {action:(view.grid.use ? USE_LIST_ACTION : USE_GRID_ACTION)}, {action:SEARCH_LIB_ACTION}];
         view.layoutGrid(true);
     } else if (MUSIC_ID_PREFIX+'myMusicWorks'==item.id) {
@@ -1181,7 +1181,7 @@ function browseAddWorksCategories(view, item) {
     browseSetScroll(view);
     view.isTop = false;
     view.jumplist = view.filteredJumplist = [];
-    view.grid = {allowed:true, use:isSetToUseGrid(GRID_OTHER), numColumns:0, ih:GRID_MIN_HEIGHT, rows:[], few:false, haveSubtitle:true};
+    view.grid = {allowed:true, use:view.grid.use, numColumns:0, ih:GRID_MIN_HEIGHT, rows:[], few:false, haveSubtitle:true};
     view.currentActions=[];
     view.tbarActions=[];
     view.layoutGrid(true);
@@ -1221,7 +1221,7 @@ function browseAddCategories(view, item, isGenre) {
         browseSetScroll(view);
         view.isTop = false;
         view.jumplist = view.filteredJumplist = [];
-        view.grid = {allowed:true, use:isSetToUseGrid(GRID_OTHER), numColumns:0, ih:GRID_MIN_HEIGHT, rows:[], few:false, haveSubtitle:true};
+        view.grid = {allowed:true, use:view.grid.use, numColumns:0, ih:GRID_MIN_HEIGHT, rows:[], few:false, haveSubtitle:true};
         view.currentActions=[];
         view.tbarActions=[];
         view.layoutGrid(true);
@@ -1957,7 +1957,7 @@ function browseGoHome(view) {
     view.currentItemImage=undefined;
     view.tbarActions=[];
     view.isTop = true;
-    view.grid = {allowed:true, use:isSetToUseGrid(GRID_OTHER), numColumns:0, ih:GRID_MIN_HEIGHT, rows:[], few:false, haveSubtitle:true};
+    view.grid = {allowed:true, use:view.grid.use, numColumns:0, ih:GRID_MIN_HEIGHT, rows:[], few:false, haveSubtitle:true};
     view.currentActions=[{action:(view.grid.use ? USE_LIST_ACTION : USE_GRID_ACTION)}];
     view.hoverBtns = !IS_MOBILE;
     view.command = undefined;
@@ -2019,7 +2019,11 @@ function browseGoBack(view, refresh) {
     view.allTracksItem = prev.allTracksItem;
     view.jumplist = prev.jumplist;
     view.filteredJumplist = [];
+    let gridWillBeActive = view.grid.allowed && view.grid.use ? true : false;
+    let gridWasActive = prev.grid.allowed && prev.grid.use ? true : false;
+    let use = view.grid.use;
     view.grid = prev.grid;
+    view.grid.use = use;
     view.hoverBtns = prev.hoverBtns;
     view.baseActions = prev.baseActions;
     view.current = prev.current;
@@ -2043,6 +2047,9 @@ function browseGoBack(view, refresh) {
     view.searchActive = 1==prev.searchActive && !searchWasActive ? prev.searchActive : 0;
     view.canDrop = prev.canDrop;
     view.itemCustomActions = prev.itemCustomActions;
+    if (gridWasActive!=gridWillBeActive) {
+        view.setLayoutAction();
+    }
 
     if (refresh || prev.needsRefresh) {
         view.refreshList();
@@ -2495,9 +2502,7 @@ function browseUnpin(view, item, index) {
     }
     view.saveTopList();
     bus.$emit('pinnedChanged', item, false);
-    if (view.grid.use) {
-        view.layoutGrid(true);
-    }
+    view.layoutGrid(true);
 }
 
 function browseUpdateItemPinnedState(view, item) {

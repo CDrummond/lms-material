@@ -804,6 +804,7 @@ function parseBrowseResp(data, parent, options, cacheKey, parentCommand, parentG
             }
             if (numImages>0 && numImages==resp.items.length) {
                 resp.subtitle=i18np("1 Image", "%1 Images", resp.items.length);
+                resp.canUseGrid = resp.forceGrid = true;
             } else {
                 if (data.result.window && data.result.window.textarea && resp.items.length<LMS_MAX_NON_SCROLLER_ITEMS) {
                     var text = replaceNewLines(data.result.window.textarea);

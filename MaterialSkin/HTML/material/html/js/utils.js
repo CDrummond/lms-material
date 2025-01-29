@@ -724,30 +724,6 @@ function addPart(str, part) {
     return str ? (part ? str+SEPARATOR+part : str) : part;
 }
 
-function commandGridKey(command, item) {
-    return command.command[command.command[0]=="material-skin" && command.command.length>1 ? 1 : 0]+
-           (undefined==item || undefined==item.type || undefined!=item.stdItem || item.id.startsWith(MUSIC_ID_PREFIX) ? "" : ("-"+item.type))+
-           "-grid";
-}
-
-const USE_LIST_VIEW_BY_DEFAULT=new Set(["other-grid", "favorites-grid", "podcasts-grid", "youtube-grid", "playhistory-grid", "spotty-grid", "qobuz-grid", "tidal-grid", "wimp-grid", "works-grid", "rndmix-grid"]);
-
-function isSetToUseGrid(command, item) {
-    var key = commandGridKey(command, item);
-    return getLocalStorageBool(key, !USE_LIST_VIEW_BY_DEFAULT.has(key));
-}
-
-function setUseGrid(command, use, item) {
-    var key = commandGridKey(command, item)
-    var defList = USE_LIST_VIEW_BY_DEFAULT.has(key);
-    // Only store value if different from default
-    if ((defList && !use) || (!defList && use)) {
-        removeLocalStorage(key);
-    } else {
-        setLocalStorageVal(key, use);
-    }
-}
-
 function forceItemUpdate(vm, item) {
     var prev = item.title;
     item.title = "XX"+item.title;

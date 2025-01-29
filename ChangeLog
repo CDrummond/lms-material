@@ -10,6 +10,7 @@
 6. Use configured font size in settings pages.
 7. Re-order: band, conductor, composer.
 8. Monitor more LMS settings for changes (e.g. MAI artist images).
+9. Change list/grid toggle from per-view to global.
 
 5.7.6
 -----

@@ -140,9 +140,9 @@ var lmsBrowse = Vue.component("lms-browse", {
     </template>
    </div>
   </div>
-  <div class="lms-list" id="browse-list" style="overflow:auto;" v-bind:class="{'lms-image-grid':grid.use,'lms-grouped-image-grid':grid.use && grid.multiSize,'lms-image-grid-jump':grid.use && filteredJumplist.length>1,'lms-list-jump':!grid.use && filteredJumplist.length>1,'bgnd-blur':drawBgndImage,'backdrop-blur':drawBackdrop}">
+  <div class="lms-list" id="browse-list" style="overflow:auto;" v-bind:class="{'lms-image-grid':grid.allowed&&grid.use,'lms-grouped-image-grid':grid.allowed&&grid.use && grid.multiSize,'lms-image-grid-jump':grid.allowed&&grid.use && filteredJumplist.length>1,'lms-list-jump':!(grid.allowed&&grid.use) && filteredJumplist.length>1,'bgnd-blur':drawBgndImage,'backdrop-blur':drawBackdrop}">
 
-   <RecycleScroller :items="grid.rows" :item-size="grid.multiSize ? null : (grid.ih - (grid.haveSubtitle || isTop || current.id.startsWith(TOP_ID_PREFIX) ? 0 : GRID_SINGLE_LINE_DIFF))" page-mode key-field="id" :buffer="LMS_SCROLLER_GRID_BUFFER" v-if="grid.use">
+   <RecycleScroller :items="grid.rows" :item-size="grid.multiSize ? null : (grid.ih - (grid.haveSubtitle || isTop || current.id.startsWith(TOP_ID_PREFIX) ? 0 : GRID_SINGLE_LINE_DIFF))" page-mode key-field="id" :buffer="LMS_SCROLLER_GRID_BUFFER" v-if="grid.allowed&&grid.use">
     <div slot-scope="{item}" :class="[grid.few?'image-grid-few':'image-grid-full-width', grid.haveSubtitle?'image-grid-with-sub':'']">
 
      <v-list-tile v-if="item.header && item.item" class="grid-header" @click.stop="click(item.item, undefined, $event)" v-bind:class="{'search-highlight':highlightIndex==(item.rs)}">
@@ -486,7 +486,7 @@ var lmsBrowse = Vue.component("lms-browse", {
             detailedSubInfo: undefined,
             detailedSubExtra: undefined,
             items: [],
-            grid: {allowed:true, use:false, numItems:0, numColumns:0, ih:GRID_MIN_HEIGHT, rows:[], few:false, haveSubtitle:true, multiSize:false},
+            grid: {allowed:true, use:getLocalStorageBool('grid', true), numItems:0, numColumns:0, ih:GRID_MIN_HEIGHT, rows:[], few:false, haveSubtitle:true, multiSize:false},
             fetchingItem:undefined,
             hoverBtns: !IS_MOBILE,
             trans: { ok:undefined, cancel: undefined, close: undefined, selectMultiple:undefined, addall:undefined, playall:undefined,
@@ -735,7 +735,7 @@ var lmsBrowse = Vue.component("lms-browse", {
         this.options={pinned: new Set(),
                       sortFavorites: this.$store.state.sortFavorites};
         this.previousScrollPos=0;
-        this.grid = {allowed:true, use:isSetToUseGrid(GRID_OTHER), numItems:0, numColumns:0, ih:GRID_MIN_HEIGHT, rows:[], few:false, haveSubtitle:true, multiSize:false};
+        this.grid = {allowed:true, use:getLocalStorageBool('grid', true), numItems:0, numColumns:0, ih:GRID_MIN_HEIGHT, rows:[], few:false, haveSubtitle:true, multiSize:false};
         this.currentActions=[{action:(this.grid.use ? USE_LIST_ACTION : USE_GRID_ACTION)}];
         this.canDrop = true;
 
@@ -1094,7 +1094,7 @@ var lmsBrowse = Vue.component("lms-browse", {
                      ((ALBUM_SORTS_ACTION==loop[i].action || ADD_RANDOM_ALBUM_ACTION==loop[i].action) && this.current && this.current.stdItem==STD_ITEM_WORK) ||
                      (SCROLL_TO_ACTION==loop[i].action &&
                         (!this.items[0].id.startsWith(FILTER_PREFIX) ||
-                         (this.items.length < (this.grid.use ? (this.grid.numColumns*10) : 50) ) ) ) ||
+                         (this.items.length < (this.grid.allowed && this.grid.use ? (this.grid.numColumns*10) : 50) ) ) ) ||
                      (((loop[i].stdItem==STD_ITEM_MAI && this.wide>=WIDE_HBTNS) || (loop[i].stdItem==STD_ITEM_MIX && this.wide>=WIDE_MIX_BTN)) && this.showDetailedSubtoolbar) ||
                      (loop[i].action==DIVIDER && (0==actions.length || actions[actions.length-1].action==DIVIDER)) ) {
                     continue;
@@ -1171,7 +1171,7 @@ var lmsBrowse = Vue.component("lms-browse", {
                 this.select(item, index, event);
                 return;
             }
-            if ((IS_MOBILE && !lmsOptions.touchLinks) && this.grid.use) {
+            if ((IS_MOBILE && !lmsOptions.touchLinks) && this.grid.allowed && this.grid.use) {
                 this.itemMenu(item, index, event);
             } else if ((!IS_MOBILE || lmsOptions.touchLinks) && this.subtitleClickable && item.id && item.artist_id && item.id.startsWith("album_id:")) {
                 if (item.subIsYear) {
@@ -1289,25 +1289,31 @@ var lmsBrowse = Vue.component("lms-browse", {
             browseHeaderAction(this, act, event);
         },
         changeLayout(useGrid) {
+            if (!this.grid.allowed) {
+                useGrid = false;
+            }
             if (this.grid.use!=useGrid) {
                 this.grid.use=useGrid;
                 this.$nextTick(function () {
                     this.setBgndCover();
                     this.layoutGrid(true);
-                    setUseGrid(this.isTop || undefined==this.command || (this.current && this.current.id!=TOP_FAVORITES_ID && (this.current.id.startsWith(TOP_ID_PREFIX) || this.current.id==GENRES_ID)) ? GRID_OTHER : this.command, this.grid.use, this.current);
-                    var af = this.grid.use ? USE_GRID_ACTION : USE_LIST_ACTION;
-                    var at = this.grid.use ? USE_LIST_ACTION : USE_GRID_ACTION;
-                    for (var i=0, loop=this.currentActions, len=loop.length; i<len; ++i) {
-                        if (loop[i].action == af) {
-                            loop[i].action = at;
-                            break;
-                        }
-                    }
+                    setLocalStorageVal('grid', useGrid);
+                    this.setLayoutAction();
                     this.$forceUpdate();
                     // Scroll to top. Without this, on iPad with iOS12 at least, grid->list scroll becomes slugish.
                     // But if user clicks on jumplist (which would call setScrollTop) then scrolling improves???
                     setScrollTop(this, 0);
                 });
+            }
+        },
+        setLayoutAction() {
+            var af = this.grid.use ? USE_GRID_ACTION : USE_LIST_ACTION;
+            var at = this.grid.use ? USE_LIST_ACTION : USE_GRID_ACTION;
+            for (var i=0, loop=this.currentActions, len=loop.length; i<len; ++i) {
+                if (loop[i].action == af) {
+                    loop[i].action = at;
+                    break;
+                }
             }
         },
         refreshList(restorePosition) {
@@ -1418,7 +1424,7 @@ var lmsBrowse = Vue.component("lms-browse", {
             }
             if (this.current && TOP_MYMUSIC_ID==this.current.id) {
                 this.items = this.myMusic;
-                this.grid = {allowed:true, use:isSetToUseGrid(GRID_OTHER), numItems:0, numColumns:0, ih:GRID_MIN_HEIGHT, rows:[], few:false, haveSubtitle:true, multiSize:false};
+                this.grid = {allowed:true, use:getLocalStorageBool('grid', true), numItems:0, numColumns:0, ih:GRID_MIN_HEIGHT, rows:[], few:false, haveSubtitle:true, multiSize:false};
                 this.tbarActions=[];
                 this.currentActions=[{action:VLIB_ACTION}, {action:(this.grid.use ? USE_LIST_ACTION : USE_GRID_ACTION)}, {action:SEARCH_LIB_ACTION}];
                 this.layoutGrid(true);
@@ -1646,7 +1652,7 @@ var lmsBrowse = Vue.component("lms-browse", {
             return {w: width, h: height, s: steps, mc: maxColumns, nc: numColumns}
         },
         layoutGrid(force) {
-            if (!this.grid.use) {
+            if (!this.grid.allowed || !this.grid.use) {
                 return;
             }
 
@@ -1821,7 +1827,7 @@ var lmsBrowse = Vue.component("lms-browse", {
         },
         jumpTo(index) {
             let pos = 0;
-            if (this.grid.use && this.items.length>0 && this.items[0].header) {
+            if (this.grid.allowed && this.grid.use && this.items.length>0 && this.items[0].header) {
                 for (let r=0, loop=this.grid.rows, len=loop.length-1; r<len && loop[r+1].rs<=index; ++r) {
                     pos += loop[r].size;
                 }
@@ -1858,7 +1864,7 @@ var lmsBrowse = Vue.component("lms-browse", {
                 (!this.$store.state.desktopLayout && this.items[0].stdItem==STD_ITEM_PLAYLIST_TRACK && this.listSize>LMS_MAX_PLAYLIST_EDIT_SIZE) ||
                 ((!this.$store.state.desktopLayout || !this.$store.state.showQueue) && !this.canDrop) ||
                 // For some reason drag is accessible in 'My Music'??? The following stops this...
-                (this.grid.use && !this.isTop && !this.items[which].draggable)) {
+                (this.grid.allowed && this.grid.use && !this.isTop && !this.items[which].draggable)) {
                 ev.preventDefault();
                 ev.stopPropagation();
                 return;
@@ -1867,7 +1873,7 @@ var lmsBrowse = Vue.component("lms-browse", {
             ev.dataTransfer.dropEffect = 'move';
             ev.dataTransfer.setData('text/plain', this.items[which].title);
             window.mskBrowseDrag=which;
-            if (this.grid.use) {
+            if (this.grid.allowed && this.grid.use) {
                 this.dragElem = ev.target.nodeName=='IMG' ? ev.srcElement.parentNode.parentNode : ev.srcElement;
                 setListElemClass(this.dragElem, 'dragging', true);
                 ev.dataTransfer.setDragImage(this.dragElem, 0, 0);
@@ -1956,9 +1962,7 @@ var lmsBrowse = Vue.component("lms-browse", {
                     } else if (this.isTop) {
                         this.items = arrayMove(this.top, this.dragIndex, to);
                         this.saveTopList();
-                        if (this.grid.use) {
-                            this.layoutGrid(true);
-                        }
+                        this.layoutGrid(true);
                     } else if (this.current) {
                         if (this.current.section==SECTION_FAVORITES) {
                             if (this.$store.state.sortFavorites && !this.items[to].isFavFolder) {
@@ -2273,9 +2277,7 @@ var lmsBrowse = Vue.component("lms-browse", {
             }
             this.options.sortFavorites=this.$store.state.sortFavorites;
             this.goHome();
-            if (this.grid.use) {
-                this.layoutGrid(true);
-            }
+            this.layoutGrid(true);
         }.bind(this));
         bus.$on('setBgndCover', function() {
            this.setBgndCover();

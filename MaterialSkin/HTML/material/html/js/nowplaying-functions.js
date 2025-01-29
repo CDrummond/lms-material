@@ -888,6 +888,7 @@ function nowplayingFetchAlbumInfo(view) {
         view.info.tabs[ALBUM_TAB].album!=view.infoTrack.album || view.info.tabs[ALBUM_TAB].album_id!=view.infoTrack.album_id)) {
         view.info.tabs[ALBUM_TAB].sections[0].items=[];
         view.info.tabs[ALBUM_TAB].sections[0].more=undefined;
+        view.info.tabs[ALBUM_TAB].sections[1].items=[];
         view.info.tabs[ALBUM_TAB].texttitle=nowPlayingHeader(view.infoTrack.album);
         view.info.tabs[ALBUM_TAB].text=i18n("Fetching...");
         view.info.tabs[ALBUM_TAB].image=undefined;
@@ -950,6 +951,18 @@ function nowplayingFetchAlbumInfo(view) {
                 }
             });
         }
+        if (LMS_P_MAI && view.infoTrack.path!=undefined) {
+            lmsCommand('', ['musicartistinfo', 'localfiles', 'folder:'+view.infoTrack.path]).then(({data}) => {
+                if (data && data.result && data.result.item_loop && data.result.item_loop.length>0) {
+                    let resp = parseBrowseResp(data);
+                    if (undefined==resp || undefined==resp.items || resp.items.length<1) {
+                        return;
+                    }
+                    view.info.tabs[ALBUM_TAB].sections[1].items=resp.items;
+                }
+            }).catch(err => {
+            });
+        }
     } else if (undefined==view.infoTrack.albumartist && undefined==view.infoTrack.artist_id &&
                undefined==view.infoTrack.album && undefined==view.infoTrack.album) {
         view.info.tabs[ALBUM_TAB].isMsg=true;
@@ -960,7 +973,12 @@ function nowplayingFetchAlbumInfo(view) {
 }
 
 function nowplayingItemClicked(view, tab, section, index, event) {
-    if (view.info.tabs[tab].sections[section].items[index].header) {
+    let item = view.info.tabs[tab].sections[section].items[index];
+    if (item.header) {
+        return;
+    }
+    if (item.weblink) {
+        openWebLink(item);
         return;
     }
     view.menu.items=[{title:ACTIONS[PLAY_ACTION].title, icon:ACTIONS[PLAY_ACTION].icon, act:NP_ITEM_ACT+PLAY_ACTION},

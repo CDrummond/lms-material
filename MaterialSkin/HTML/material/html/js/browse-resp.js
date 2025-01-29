@@ -133,6 +133,7 @@ function parseBrowseResp(data, parent, options, cacheKey, parentCommand, parentG
             var isDisksAndFolders = command == "browselibrary" && data.params[1].length>0 && data.params[1].indexOf("mode:filesystem")>=0;
             var isCustomBrowse = command == "custombrowse";
             var isDynamicPlaylist = command == "dynamicplaylist";
+            var isLocalFiles = command == "musicartistinfo" && data.params[1].length>0 && data.params[1][1] == "localfiles";
             var haveWithIcons = false;
             var haveWithoutIcons = false;
             var menu = undefined;
@@ -227,6 +228,9 @@ function parseBrowseResp(data, parent, options, cacheKey, parentCommand, parentG
                     i.style = i.goAction = undefined;
                 }
 
+                if (isLocalFiles && i.weblink) {
+                    i.isLocalFile = true;
+                }
                 if ("text"==i.type) {
                     // Exclude 'More' Play,Insert commands
                     if ( (i.style && MORE_COMMANDS.has(i.style)) ||

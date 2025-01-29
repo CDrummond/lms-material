@@ -12,6 +12,7 @@
  8. Monitor more LMS settings for changes (e.g. MAI artist images).
  9. Change list/grid toggle from per-view to global.
 10. Don't add user-defined roles entries for 'Various Artists'.
+11. List local file links under all tracks in MAI album view.
 
 5.7.6
 -----

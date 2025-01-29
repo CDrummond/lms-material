@@ -874,3 +874,30 @@ function arraysEqual(a, b) {
     }
     return true;
 }
+
+function localPath(url) {
+    if (undefined!=url && /^file:\/\//.test(url)) {
+        try {
+            let path=decodeURIComponent(url.substring(0, url.lastIndexOf('/'))+'/').substring(7);
+            // if we have (e.g.) /c:/path change to c:/path
+            if (/^\/[a-zA-Z]:\/.+/.test(path)) {
+                path = path.substring(1);
+            }
+            return path;
+        } catch(e) {
+        }
+    }
+    return undefined;
+}
+
+function openWebLink(item) {
+    let url = item.weblink;
+    let parts = url.split('/').pop().split('?')[0].split('.');
+    let ext = parts[parts.length-1].toLowerCase();
+
+    if (!IS_IOS && !IS_ANDROID && !queryParams.dontEmbed.has(ext) && (item.isLocalFile || (!url.startsWith("http:") && !url.startsWith("https:")))) {
+        bus.$emit('dlg.open', 'iframe', url, item.title, undefined, IFRAME_HOME_NAVIGATES_BROWSE_HOME);
+    } else {
+        window.open(url);
+    }
+}

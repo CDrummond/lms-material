@@ -509,14 +509,9 @@ function browseHandleListResponse(view, item, command, resp, prevPage, appendIte
                 if (view.items.length>0) {
                     let url = view.items[0].header ? (view.items.length>1 ? view.items[1].url : undefined) : view.items[0].url;
                     if (undefined!=url && /^file:\/\//.test(url)) {
-                        try {
-                            actParams['path']=decodeURIComponent(url.substring(0, url.lastIndexOf('/'))+'/').substring(7);
-                            // if we have (e.g.) /c:/path change to c:/path
-                            if (/^\/[a-zA-Z]:\/.+/.test(actParams['path'])) {
-                                actParams['path'] = actParams['path'].substring(1);
-                            }
-                        } catch(e) {
-                            logError(e);
+                        let path = localPath(url);
+                        if (undefined!=path) {
+                            actParams['path'] = path;
                         }
                     }
                 }
@@ -1073,14 +1068,7 @@ function browseClick(view, item, index, event, ignoreOpenMenu) {
         browseAddCategories(view, {id:'year:'+item.actions.go.params.year, title:item.title.split(': ')[1]}, false);
         browseCheckExpand(view);
     } else if (item.weblink) {
-        let url = item.weblink;
-        let parts = url.split('/').pop().split('?')[0].split('.');
-        let ext = parts[parts.length-1].toLowerCase();
-        if (!IS_IOS && !IS_ANDROID && !queryParams.dontEmbed.has(ext) && !url.startsWith("http:") && !url.startsWith("https:")) {
-            bus.$emit('dlg.open', 'iframe', item.weblink, item.title, undefined, IFRAME_HOME_NAVIGATES_BROWSE_HOME);
-        } else {
-            window.open(item.weblink);
-        }
+        openWebLink(item);
     } else if (SECTION_FAVORITES==item.section && !item.isFavFolder && item.presetParams && item.presetParams.favorites_url &&
                (isFavouritePlaylist || item.presetParams.favorites_url.startsWith("db:"))) {
         if (item.presetParams.favorites_url.startsWith("db:year.id")) {

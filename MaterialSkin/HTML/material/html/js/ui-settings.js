@@ -124,8 +124,8 @@ Vue.component('lms-ui-settings', {
      </v-list-tile-content>
      <v-list-tile-action><m3-switch v-model="showRating"></m3-switch></v-list-tile-action>
     </v-list-tile>
-    <v-divider v-if="LMS_STATS_ENABLED"></v-divider>
 
+    <v-divider v-if="LMS_STATS_ENABLED"></v-divider>
     <v-list-tile>
      <v-list-tile-content @click="homeButton = !homeButton" class="switch-label">
       <v-list-tile-title>{{i18n('Show home button')}}</v-list-tile-title>
@@ -184,6 +184,15 @@ Vue.component('lms-ui-settings', {
       <v-list-tile-sub-title>{{i18n("Show 'performed by', 'from', etc. when listing track details (e.g. Title by Artist from Album).")}}</v-list-tile-sub-title>
      </v-list-tile-content>
     <v-list-tile-action><m3-switch v-model="browseContext"></m3-switch></v-list-tile-action>
+    </v-list-tile>
+    <v-divider></v-divider>
+
+    <v-list-tile>
+     <v-list-tile-content @click="gridPerView = !gridPerView" class="switch-label">
+      <v-list-tile-title>{{i18n('Save list/grid per view')}}</v-list-tile-title>
+      <v-list-tile-sub-title>{{i18n('Save list/grid setting per view, or globally.')}}</v-list-tile-sub-title>
+     </v-list-tile-content>
+     <v-list-tile-action><m3-switch v-model="gridPerView"></m3-switch></v-list-tile-action>
     </v-list-tile>
     <v-divider></v-divider>
 
@@ -489,6 +498,7 @@ Vue.component('lms-ui-settings', {
             serverName: "",
             showRating: false,
             homeButton: false,
+            gridPerView: false,
             width: 500,
             mediaControls: false,
             mediaControlsSupported: !queryParams.hide.has('mediaControls') && ('mediaSession' in navigator),
@@ -667,6 +677,7 @@ Vue.component('lms-ui-settings', {
             this.screensaver = this.$store.state.screensaver;
             this.screensaverNp = this.$store.state.screensaverNp;
             this.homeButton = this.$store.state.homeButton;
+            this.gridPerView = this.$store.state.gridPerView;
             this.mediaControls = this.$store.state.mediaControls;
             this.moveDialogs = this.$store.state.moveDialogs;
             this.autoCloseQueue = this.$store.state.autoCloseQueue;
@@ -778,6 +789,7 @@ Vue.component('lms-ui-settings', {
                       screensaver:this.screensaver,
                       screensaverNp:this.screensaverNp,
                       homeButton:this.homeButton,
+                      gridPerView:this.gridPerView,
                       showRating:this.showRating,
                       mediaControls:this.mediaControls,
                       moveDialogs:this.moveDialogs,

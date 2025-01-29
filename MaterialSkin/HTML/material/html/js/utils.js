@@ -724,6 +724,23 @@ function addPart(str, part) {
     return str ? (part ? str+SEPARATOR+part : str) : part;
 }
 
+function commandGridKey(command, item) {
+    return command.command[command.command[0]=="material-skin" && command.command.length>1 ? 1 : 0]+
+           (undefined==item || undefined==item.type || undefined!=item.stdItem || item.id.startsWith(MUSIC_ID_PREFIX) || item.id.startsWith(TOP_ID_PREFIX) ? "" : ("-"+item.type))+
+           "-grid";
+}
+
+const USE_LIST_VIEW_BY_DEFAULT=new Set(["podcasts-grid", "youtube-grid", "playhistory-grid", "rndmix-grid"]);
+
+function isSetToUseGrid(command, item) {
+    var key = commandGridKey(command, item);
+    return getLocalStorageBool(key, lmsOptions.defaultToGrid && !USE_LIST_VIEW_BY_DEFAULT.has(key))
+}
+
+function setUseGrid(command, use, item) {
+    setLocalStorageVal(commandGridKey(command, item), use);
+}
+
 function forceItemUpdate(vm, item) {
     var prev = item.title;
     item.title = "XX"+item.title;

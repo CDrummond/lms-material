@@ -735,7 +735,7 @@ var lmsBrowse = Vue.component("lms-browse", {
         this.options={pinned: new Set(),
                       sortFavorites: this.$store.state.sortFavorites};
         this.previousScrollPos=0;
-        this.grid = {allowed:true, use:getLocalStorageBool('grid', true), numItems:0, numColumns:0, ih:GRID_MIN_HEIGHT, rows:[], few:false, haveSubtitle:true, multiSize:false};
+        this.grid = {allowed:true, use:this.$store.state.gridPerView ? isSetToUseGrid(GRID_OTHER) : getLocalStorageBool('grid', true), numItems:0, numColumns:0, ih:GRID_MIN_HEIGHT, rows:[], few:false, haveSubtitle:true, multiSize:false};
         this.currentActions=[{action:(this.grid.use ? USE_LIST_ACTION : USE_GRID_ACTION)}];
         this.canDrop = true;
 
@@ -1297,7 +1297,11 @@ var lmsBrowse = Vue.component("lms-browse", {
                 this.$nextTick(function () {
                     this.setBgndCover();
                     this.layoutGrid(true);
-                    setLocalStorageVal('grid', useGrid);
+                    if (this.$store.state.gridPerView) {
+                        setUseGrid(this.isTop || undefined==this.command || (this.current && this.current.id!=TOP_FAVORITES_ID && (this.current.id.startsWith(TOP_ID_PREFIX) || this.current.id==GENRES_ID)) ? GRID_OTHER : this.command, this.grid.use, this.current);
+                    } else {
+                        setLocalStorageVal('grid', useGrid);
+                    }
                     this.setLayoutAction();
                     this.$forceUpdate();
                     // Scroll to top. Without this, on iPad with iOS12 at least, grid->list scroll becomes slugish.
@@ -1424,7 +1428,7 @@ var lmsBrowse = Vue.component("lms-browse", {
             }
             if (this.current && TOP_MYMUSIC_ID==this.current.id) {
                 this.items = this.myMusic;
-                this.grid = {allowed:true, use:getLocalStorageBool('grid', true), numItems:0, numColumns:0, ih:GRID_MIN_HEIGHT, rows:[], few:false, haveSubtitle:true, multiSize:false};
+                this.grid = {allowed:true, use:this.$store.state.gridPerView ? isSetToUseGrid(GRID_OTHER) : getLocalStorageBool('grid', true), numItems:0, numColumns:0, ih:GRID_MIN_HEIGHT, rows:[], few:false, haveSubtitle:true, multiSize:false};
                 this.tbarActions=[];
                 this.currentActions=[{action:VLIB_ACTION}, {action:(this.grid.use ? USE_LIST_ACTION : USE_GRID_ACTION)}, {action:SEARCH_LIB_ACTION}];
                 this.layoutGrid(true);

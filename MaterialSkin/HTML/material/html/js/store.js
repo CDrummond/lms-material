@@ -25,7 +25,7 @@ function updateUiSettings(state, val) {
                     'browseTechInfo', 'techInfo', 'nowPlayingTrackNum', 'swipeVolume', 'swipeChangeTrack',
                     'keyboardControl', 'skipBSeconds', 'skipFSeconds', 'mediaControls', 'showRating', 'browseContext',
                     'nowPlayingContext', 'queueContext', 'moveDialogs', 'autoCloseQueue', 'nowPlayingFull', 'tinted',
-                    'ndShortcuts', 'ndSettingsIcons', 'ndSettingsVisible'];
+                    'ndShortcuts', 'ndSettingsIcons', 'ndSettingsVisible', 'gridPerView'];
     for (let i=0, len=stdItems.length; i<len; ++i) {
         let key=stdItems[i];
         if (undefined!=val[key] && state[key]!=val[key]) {
@@ -317,6 +317,7 @@ const store = new Vuex.Store({
         screensaver: false,
         screensaverNp: false,
         homeButton: false,
+        gridPerView: false,
         lang: 'en-US',
         twentyFourHour: false,
         mediaControls: false,
@@ -538,7 +539,7 @@ const store = new Vuex.Store({
                              'infoBackdrop', 'useDefaultBackdrops', 'browseTechInfo', 'techInfo', 'queueShowTrackNum', 'nowPlayingTrackNum',
                              'nowPlayingClock', 'swipeVolume', 'swipeChangeTrack', 'keyboardControl', 'screensaver', 'screensaverNp', 'homeButton',
                              'mediaControls', 'queueAlbumStyle', 'queueThreeLines', 'browseContext', 'nowPlayingContext', 'queueContext',
-                             'moveDialogs', 'autoCloseQueue', 'nowPlayingFull', 'tinted', 'ndSettingsIcons', 'ndSettingsVisible'];
+                             'moveDialogs', 'autoCloseQueue', 'nowPlayingFull', 'tinted', 'ndSettingsIcons', 'ndSettingsVisible', 'gridPerView'];
             for (let i=0, len=boolItems.length; i<len; ++i) {
                 let key = boolItems[i];
                 state[key] = getLocalStorageBool(key, state[key]);

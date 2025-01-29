@@ -10,7 +10,7 @@
  6. Use configured font size in settings pages.
  7. Re-order: band, conductor, composer.
  8. Monitor more LMS settings for changes (e.g. MAI artist images).
- 9. Change list/grid toggle from per-view to global.
+ 9. Add option to use list/grid setting globally and not per-view.
 10. Don't add user-defined roles entries for 'Various Artists'.
 11. List local file links under all tracks in MAI album view.
 

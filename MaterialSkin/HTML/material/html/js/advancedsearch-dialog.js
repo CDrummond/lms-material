@@ -415,6 +415,7 @@ Vue.component('lms-advancedsearch-dialog', {
                 let workPos = -1;
                 let results = [];
                 let total = 0;
+                let albumIds = [];
 
                 // Rename loops so that parseBrowseResp handles in
                 // requested order...
@@ -439,6 +440,9 @@ Vue.component('lms-advancedsearch-dialog', {
                     results.push({resp:[], command:{cat:SEARCH_WORKS_CAT}});
                     for (let i=0, loop=data.result.works_loopx, len=loop.length; i<len; ++i) {
                         workIds.push(loop[i].id);
+                        if ( undefined!=loop[i].album_id && !albumIds.includes(loop[i].album_id) ) {
+                            albumIds.push(loop[i].album_id);
+                        }
                     }
                 }
                 if (data.result.titles_loopx) {
@@ -452,7 +456,7 @@ Vue.component('lms-advancedsearch-dialog', {
                 if (0==workIds.length) {
                     this.emitResults(results, total, command);
                 } else {
-                    lmsList('', ["works"], ["include_online_only_artists:1", "tags:s", "library_id:-1", "work_id:"+workIds.join(',')]).then(({data}) => {
+                    lmsList('', ["works"], ["include_online_only_artists:1", "tags:s", "library_id:-1", "work_id:"+workIds.join(','), "album_id:"+albumIds.join(',')]).then(({data}) => {
                         let resp = parseBrowseResp(data, undefined, {isSearch:true});
                         if (undefined!=resp && resp.items.length>0) {
                             total+=resp.items.length;

@@ -903,3 +903,8 @@ function openWebLink(item) {
         window.open(url);
     }
 }
+
+function openWebUrl(url) {
+    let u = unescape(url);
+    openWebLink({weblink:u, title:u});
+}

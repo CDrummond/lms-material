@@ -707,7 +707,10 @@ function nowplayingFetchTrackInfo(view) {
     }
 
     if (undefined!=trk.comment) {
-        html+="<tr><td>"+i18n("Comment")+"&nbsp;</td><td>"+trk.comment+"</td></tr>";
+        let start = trk.comment.startsWith("http://") || trk.comment.startsWith("https://")
+            ? "<td class=\"link-item\" onclick=\"openWebUrl('" + escape(trk.comment)+"')\">"
+            : "<td>"+trk.comment
+        html+="<tr><td>"+i18n("Comment")+"&nbsp;</td>"+start+trk.comment+"</td></tr>";
     }
 
     if (html.length>0) {

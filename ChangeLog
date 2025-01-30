@@ -13,6 +13,8 @@
  9. Add option to use list/grid setting globally and not per-view.
 10. Don't add user-defined roles entries for 'Various Artists'.
 11. List local file links under all tracks in MAI album view.
+12. If showing comment in MAI view and comment starts with 'http://' or
+    'https://' then make clickable.
 
 5.7.6
 -----

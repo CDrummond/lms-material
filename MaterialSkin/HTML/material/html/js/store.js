@@ -317,7 +317,7 @@ const store = new Vuex.Store({
         screensaver: false,
         screensaverNp: false,
         homeButton: false,
-        gridPerView: false,
+        gridPerView: true,
         lang: 'en-US',
         twentyFourHour: false,
         mediaControls: false,

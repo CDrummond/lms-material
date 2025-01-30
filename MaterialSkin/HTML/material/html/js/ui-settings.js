@@ -498,7 +498,7 @@ Vue.component('lms-ui-settings', {
             serverName: "",
             showRating: false,
             homeButton: false,
-            gridPerView: false,
+            gridPerView: true,
             width: 500,
             mediaControls: false,
             mediaControlsSupported: !queryParams.hide.has('mediaControls') && ('mediaSession' in navigator),

@@ -190,7 +190,7 @@ Vue.component('lms-ui-settings', {
     <v-list-tile>
      <v-list-tile-content @click="gridPerView = !gridPerView" class="switch-label">
       <v-list-tile-title>{{i18n('Save list/grid per view')}}</v-list-tile-title>
-      <v-list-tile-sub-title>{{i18n('Save list/grid setting per view, or globally.')}}</v-list-tile-sub-title>
+      <v-list-tile-sub-title>{{i18n('Save the choice of list or grid separately per view type (home screen, artists, etc.), otherwise the same setting will be used for all applicable views.')}}</v-list-tile-sub-title>
      </v-list-tile-content>
      <v-list-tile-action><m3-switch v-model="gridPerView"></m3-switch></v-list-tile-action>
     </v-list-tile>

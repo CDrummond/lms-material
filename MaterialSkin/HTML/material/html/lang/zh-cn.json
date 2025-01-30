@@ -665,7 +665,6 @@
 "1 Image":"1 张图片",
 "%1 Images":"%1 张图片",
 "1 Item":"1 个项目",
-"%1 Item":"%1 项目",
 "%1 Items":"%1 个项目",
 "1 Mix":"1 个混合队列",
 "%1 Mixes":"%1 个混合队列",
@@ -682,5 +681,10 @@
 "1 Year":"1 个年份",
 "%1 Years":"%1 个年份",
 "1 day":"1 天",
-"%1 days":"%1 天"
+"%1 days":"%1 天",
+"Defaults":"",
+"Other":"",
+"Save list/grid per view":"",
+"Save the choice of list or grid separately per view type (home screen, artists, etc.), otherwise the same setting will be used for all applicable views.":"",
+"Settings (and home screen items) are stored locally in your browser. However, some browser extensions can remove these. The 'Save as default' button can be used to store your current settings (and home screen items) on the Lyrion server. These will then be used for any settings that are not found in your browser. Likewise, 'Revert to default' can be used to manually revert to the settings stored on your Lyrion server.":""
 }

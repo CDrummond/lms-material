@@ -14,6 +14,7 @@
 10. Don't add user-defined roles entries for 'Various Artists'.
 11. List local file links under all tracks in MAI album view.
 12. Make http and https links within comments clickable in MAI view.
+13. Limit works advanced search to discovered albums.
 
 5.7.6
 -----

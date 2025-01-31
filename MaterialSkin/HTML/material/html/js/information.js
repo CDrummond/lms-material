@@ -124,6 +124,7 @@ Vue.component('lms-information-dialog', {
     mounted() {
         bus.$on('info.open', function(act) {
             this.openTime = new Date().getTime();
+            this.updateCount = 0;
             lmsCommand("", ["material-skin", "info"]).then(({data}) => {
                 if (data && data.result && data.result.info) {
                     var inf = JSON.parse(data.result.info);
@@ -240,6 +241,11 @@ Vue.component('lms-information-dialog', {
                     }
                 });
             }
+            if (0!=this.updateCount % 3) {
+                this.updateCount++;
+                return;
+            }
+            this.updateCount++;
             lmsCommand("", ["serverstatus", 0, LMS_MAX_PLAYERS]).then(({data}) => {
                 if (data && data.result) {
                     var prevStrengths={};

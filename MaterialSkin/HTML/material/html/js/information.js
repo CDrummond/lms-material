@@ -324,7 +324,7 @@ Vue.component('lms-information-dialog', {
 
                     // Noticed a scan has started, so get server class to also poll for changes - so that icon in main toolbar is updated...
                     if (this.scanning && !wasScanning) {
-                        bus.$emit('refreshServerStatus');
+                        bus.$emit('refreshServerScanProgress');
                     }
                     if (data.result.lastscanfailed) {
                         this.library.push("Last scan failure: %1", data.result.lastscanfailed);

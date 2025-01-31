@@ -577,7 +577,7 @@ sub _cliCommand {
                                                   'pass-check', 'browsemodes', 'geturl', 'command', 'scantypes', 'server', 'themes',
                                                   'playericons', 'activeplayers', 'urls', 'adv-search', 'adv-search-params', 'protocols',
                                                   'players-extra-info', 'sort-playlist', 'mixer', 'release-types', 'check-for-updates',
-                                                  'similar', 'apps', 'rndmix']) ) {
+                                                  'similar', 'apps', 'rndmix', 'scan-progress']) ) {
         $request->setStatusBadParams();
         return;
     }
@@ -1730,6 +1730,27 @@ sub _cliCommand {
                 }
             }
         }
+    }
+
+    if ($cmd eq 'scan-progress') {
+        if (Slim::Schema::hasLibrary()) {
+            if (Slim::Music::Import->stillScanning()) {
+                $request->addResult('rescan', "1");
+                if (my $p = Slim::Schema->rs('Progress')->search({ 'type' => 'importer', 'active' => 1 })->first) {
+                    # remove leading path information from the progress name
+                    my $name = $p->name;
+                    $name =~ s/(.*)\|//;
+
+                    $request->addResult('progressname', $request->string($name . '_PROGRESS'));
+                    $request->addResult('progressdone', $p->done);
+                    $request->addResult('progresstotal', $p->total);
+                }
+            } else {
+                $request->addResult( lastscan => Slim::Music::Import->lastScanTime() );
+            }
+        }
+        $request->setStatusDone();
+        return;
     }
 
     $request->setStatusBadParams();

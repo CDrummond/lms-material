@@ -8,6 +8,7 @@
 
 const PLAYER_STATUS_TAGS = "tags:cdegilopqrstuy" + (LMS_VERSION>=90000 ? "bhz1" : "") + "AABEGIKNPSTV";
 const STATUS_UPDATE_MAX_TIME = 4000;
+const SCAN_UPDATE_INTERVAL = 2000;
 
 function logString(val) {
     return undefined==val ? "" : val;
@@ -358,12 +359,25 @@ var lmsServer = Vue.component('lms-server', {
                 }.bind(this), timeout<250 ? 250 : timeout);
             }
         },
-        scheduleNextServerStatus: function(timeout) {
+        /*scheduleNextServerStatus: function(timeout) {
             this.cancelServerStatusTimer();
             if (timeout>0) {
                 logCometdDebug("Schedule next server status poll in: "+timeout+"ms");
                 this.serverStatusTimer = setTimeout(function () {
                     this.refreshServerStatus();
+                }.bind(this), timeout);
+            }
+        },*/
+        scheduleNextScanProgress: function(timeout) {
+            this.cancelServerScanProgressTimer();
+            if (timeout>0) {
+                logCometdDebug("Schedule next server scan progress poll in: "+timeout+"ms");
+                this.serverScanProgressTimer = setTimeout(function () {
+                    lmsCommand("", ["material-skin", "scan-progress"]).then(({data}) => {
+                        if (data && data.result) {
+                            this.handleScanProgress(data.result);
+                        }
+                    });
                 }.bind(this), timeout);
             }
         },
@@ -442,6 +456,26 @@ var lmsServer = Vue.component('lms-server', {
                 logCometdDebug("ERROR: Unexpected channel:"+msg.channel);
             }
         },
+        handleScanProgress(data) {
+            if (undefined!=data && undefined!=data.rescan && 1==parseInt(data.rescan)) {
+                let total = undefined!=data.progresstotal ? parseInt(data.progresstotal) : undefined;
+                let done = undefined!=data.progressdone ? parseInt(data.progressdone) : undefined;
+                bus.$emit("scanProgress", (undefined==data.progressname ? '?' : data.progressname)+
+                            (undefined!=done && undefined!=total
+                                ? ' ('+done+(total>=done ? '/'+total : '')+')'
+                                : ''));
+                // Scan in progress, so poll every 2 seconds for updates...
+                this.scheduleNextScanProgress(SCAN_UPDATE_INTERVAL);
+                this.scanInProgress = true;
+            } else if (this.scanInProgress) {
+                bus.$emit("scanProgress", undefined);
+                this.scheduleNextScanProgress(0);
+                this.scanInProgress = false;
+                bus.$emit('refreshList', SECTION_NEWMUSIC);
+                this.updateReleaseTypes();
+                this.refreshServerStatus();
+            }
+        },
         handleServerStatus(data) {
             logCometdMessage("SERVER", data);
             var players = [];
@@ -462,23 +496,7 @@ var lmsServer = Vue.component('lms-server', {
                 this.$store.commit('setUpdatesAvailable', avail);
                 this.$store.commit('setRestartRequired', undefined!=data.needsrestart && parseInt(data.needsrestart)>0);
             }
-            if (undefined!=data.rescan && 1==parseInt(data.rescan)) {
-                let total = undefined!=data.progresstotal ? parseInt(data.progresstotal) : undefined;
-                let done = undefined!=data.progressdone ? parseInt(data.progressdone) : undefined;
-                bus.$emit("scanProgress", (undefined==data.progressname ? '?' : data.progressname)+
-                            (undefined!=done && undefined!=total
-                                ? ' ('+done+(total>=done ? '/'+total : '')+')'
-                                : ''));
-                // Scan in progress, so poll every 2 seconds for updates...
-                this.scheduleNextServerStatus(2000);
-                this.scanInProgress = true;
-            } else if (this.scanInProgress) {
-                bus.$emit("scanProgress", undefined);
-                this.scheduleNextServerStatus(0);
-                this.scanInProgress = false;
-                bus.$emit('refreshList', SECTION_NEWMUSIC);
-                this.updateReleaseTypes();
-            }
+            this.handleScanProgress(data);
 
             if (data.players_loop) {
                 // if ?player=x&single is passed as a query param, then we only care about that single player
@@ -1005,6 +1023,12 @@ var lmsServer = Vue.component('lms-server', {
                 this.serverStatusTimer = undefined;
             }
         },
+        cancelServerScanProgressTimer() {
+            if (undefined!==this.serverScanProgressTimer) {
+                clearTimeout(this.serverScanProgressTimer);
+                this.serverScanProgressTimer = undefined;
+            }
+        },
         cancelFavoritesTimer() {
             if (undefined!==this.favoritesTimer) {
                 clearTimeout(this.favoritesTimer);
@@ -1081,6 +1105,9 @@ var lmsServer = Vue.component('lms-server', {
                     this.refreshServerStatus();
                 }.bind(this), delay);
             }
+        }.bind(this));
+        bus.$on('refreshServerScanProgress', function() {
+            this.scheduleNextScanProgress(SCAN_UPDATE_INTERVAL);
         }.bind(this));
         bus.$on('refreshFavorites', function() {
             this.updateFavorites();
@@ -1250,6 +1277,7 @@ var lmsServer = Vue.component('lms-server', {
         this.cancelConnectionFailureTimer();
         this.cancelPlayerStatusTimer();
         this.cancelServerStatusTimer();
+        this.cancelServerScanProgressTimer();
         this.cancelFavoritesTimer();
         this.cancelMoveTimer();
     },

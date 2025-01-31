@@ -15,6 +15,7 @@
 11. List local file links under all tracks in MAI album view.
 12. Make http and https links within comments clickable in MAI view.
 13. Limit works advanced search to discovered albums.
+14. Ensure only 1 'serverstatus' at a time.
 
 5.7.6
 -----

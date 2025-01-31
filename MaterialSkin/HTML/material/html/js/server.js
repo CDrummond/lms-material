@@ -943,19 +943,27 @@ var lmsServer = Vue.component('lms-server', {
             this.getPlayerPrefs();
         },
         refreshServerStatus() {
+            if (this.serverStatusActive) {
+                return;
+            }
             // Check its been at least 100ms since last serverstatus message, don't want to thrash server...
             let now = (new Date()).getTime();
             if (undefined!=this.lastServerStatusTime && (now-this.lastServerStatusTime)<100) {
                 return;
             }
             this.lastServerStatusTime = now;
+            this.serverStatusActive = true;
             lmsCommand("", ["serverstatus", 0, LMS_MAX_PLAYERS]).then(({data}) => {
                 if (data && data.result) {
                     this.handleServerStatus(data.result);
                 }
+                this.serverStatusActive = false;
+            }).catch(err => {
+                this.serverStatusActive = false;
             });
         },
         checkForMovedPlayer(id, attempts) {
+            this.serverStatusActive = true;
             lmsCommand("", ["serverstatus", 0, LMS_MAX_PLAYERS]).then(({data}) => {
                 if (data && data.result) {
                     var otherPlayers = this.handleServerStatus(data.result);
@@ -974,6 +982,9 @@ var lmsServer = Vue.component('lms-server', {
                         }.bind(this), 500);
                     }
                 }
+                this.serverStatusActive = true;
+            }).catch(err => {
+                this.serverStatusActive = false;
             });
         },
         cancelConnectionFailureTimer() {
@@ -1026,6 +1037,7 @@ var lmsServer = Vue.component('lms-server', {
     },
     created: function() {
         this.subscribeAll = false;
+        this.serverStatusActive = false;
         this.connectToCometD();
     },
     mounted: function() {

@@ -18,6 +18,7 @@
 14. Ensure only 1 'serverstatus' at a time.
 15. Use simpler custom API to poll scan progress to reduce load on LMS.
 16. In 'Information' dialog only poll 'serverstatus' every 6 seconds.
+17. Long-press on navigation drawer button to open sync dialog.
 
 5.7.6
 -----

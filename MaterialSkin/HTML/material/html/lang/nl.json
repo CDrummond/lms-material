@@ -682,9 +682,9 @@
 "%1 Years":"%1 Jaren",
 "1 day":"1 dag",
 "%1 days":"%1 dagen",
-"Defaults":"",
-"Other":"",
-"Save list/grid per view":"",
-"Save the choice of list or grid separately per view type (home screen, artists, etc.), otherwise the same setting will be used for all applicable views.":"",
-"Settings (and home screen items) are stored locally in your browser. However, some browser extensions can remove these. The 'Save as default' button can be used to store your current settings (and home screen items) on the Lyrion server. These will then be used for any settings that are not found in your browser. Likewise, 'Revert to default' can be used to manually revert to the settings stored on your Lyrion server.":""
+"Defaults":"Standaardinstellingen",
+"Other":"Overig",
+"Save list/grid per view":"Lijst/raster per weergave opslaan",
+"Save the choice of list or grid separately per view type (home screen, artists, etc.), otherwise the same setting will be used for all applicable views.":"Sla de keuze voor lijst of raster apart op per weergavetype (startscherm, artiesten, etc.), anders worden dezelfde instellingen gebruikt voor alle toepasselijke weergaven.",
+"Settings (and home screen items) are stored locally in your browser. However, some browser extensions can remove these. The 'Save as default' button can be used to store your current settings (and home screen items) on the Lyrion server. These will then be used for any settings that are not found in your browser. Likewise, 'Revert to default' can be used to manually revert to the settings stored on your Lyrion server.":"Instellingen (en items op het startscherm) worden lokaal in jouw browser opgeslagen. Sommige browserextensies kunnen deze echter verwijderen. De knop 'Opslaan als standaard' kan worden gebruikt om jouw huidige instellingen (en items op het startscherm) op te slaan op de Lyrion-server. Deze worden vervolgens gebruikt voor alle instellingen die niet in jouw browser worden gevonden. Op dezelfde manier kan 'Terugkeren naar standaard' worden gebruikt om handmatig terug te keren naar de instellingen die op jouw Lyrion-server zijn opgeslagen."
 }

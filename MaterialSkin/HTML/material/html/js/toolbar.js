@@ -247,7 +247,6 @@ Vue.component('lms-toolbar', {
             }
         },
         openNavDrawer(longPress) {
-            console.log(longPress);
             if (longPress && undefined!=this.$store.state.players && this.$store.state.players.length>1) {
                 setTimeout(function () {
                     this.show = false;

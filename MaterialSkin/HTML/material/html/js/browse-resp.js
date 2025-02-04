@@ -992,7 +992,8 @@ function parseBrowseResp(data, parent, options, cacheKey, parentCommand, parentG
             var groupReleases = true; // Prevent actually grouping ino releases even if we have releaseType
             var isWorksAlbums = undefined!=parent && parent.id.startsWith("work_id:");
             var ignoreRoles = new Set();
-            var mskRoleId = undefined
+            var mskRoleId = undefined;
+            var roleId = undefined;
 
             if (data.params && data.params.length>1) {
                 let reverse = false;
@@ -1014,9 +1015,9 @@ function parseBrowseResp(data, parent, options, cacheKey, parentCommand, parentG
                             groupReleases = false;
                         } else if (lower.startsWith("role_id:")) {
                             let roles = lower.split(':')[1];
-                            let val = roleIntValue(roles);
-                            if (val>0) {
-                                ignoreRoles = new Set([val]);
+                            roleId = roleIntValue(roles);
+                            if (roleId>0) {
+                                ignoreRoles = new Set([roleId]);
                             } else {
                                 ignoreRoles=new Set(splitIntArray(roles));
                             }
@@ -1025,6 +1026,7 @@ function parseBrowseResp(data, parent, options, cacheKey, parentCommand, parentG
                         }
                     }
                 }
+                roleId ||= mskRoleId;
                 if (reverse && !isNewMusic) {
                     data.result.albums_loop = data.result.albums_loop.reverse();
                 }
@@ -1106,6 +1108,8 @@ function parseBrowseResp(data, parent, options, cacheKey, parentCommand, parentG
                 let group = "ALBUM";
                 if (lmsOptions.groupByReleaseType>0) {
                     let roles = new Set(undefined==i.role_ids ? [] : splitIntArray(i.role_ids));
+                    let paramRoles = new Set(undefined==roleId ? [] : splitIntArray(roleId));
+                    roles = intersect(roles, paramRoles).size>0 ? paramRoles : roles; // prioritise parameter roles in release group allocation.
                     showRoles = new Set([...showRoles, ...roles]);
                     if (undefined!=i.compilation && 1==parseInt(i.compilation)) {
                         group = "COMPILATION";

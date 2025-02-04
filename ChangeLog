@@ -21,6 +21,8 @@
 17. Long-press on navigation drawer button to open sync dialog.
 18. When checking whether to use "/imageproxy" check if URL starts with "http"
     or "https", not just if URL contains one of those.
+19. Prioritize browsed menu role when allocating a release to a release type -
+    thanks to Darrell.
 
 5.7.6
 -----

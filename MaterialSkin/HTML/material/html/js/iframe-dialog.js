@@ -33,25 +33,29 @@ function remapClassicSkinIcons(doc, col) {
                  * in plugin's HTML its just 'dplc_export.gif?svg=DynamicPlaylistCreator'
                  */
                 for (var e = 0, elen = OTHER_EXT.length; e<elen && !replaced; ++e) {
-                    if (imgList[i].src.indexOf(OTHER_EXT[e]+"?svg=")>0) {
-                        let url = undefined;
-                        let path = imgList[i].src;
-                        let pluginPath = "";
-                        if (imgList[i].src.startsWith("http:")) {
-                            url = new URL(path);
-                            path = url.pathname;
-                            pluginPath = "plugins/"+url.search.split("=")[1]+(path.startsWith("/html/images/") ? "/" : "/html/images/");
+                    try {
+                        if (imgList[i].src.indexOf(OTHER_EXT[e]+"?svg=")>0) {
+                            let url = undefined;
+                            let path = imgList[i].src;
+                            let pluginPath = "";
+                            if (imgList[i].src.startsWith("http:")) {
+                                url = new URL(path);
+                                path = url.pathname;
+                                pluginPath = "plugins/"+url.search.split("=")[1]+(path.startsWith("/html/images/") ? "/" : "/html/images/");
+                            }
+                            path="/material/svg/"+pluginPath+path.replace(OTHER_EXT[e], ".svg").replace(/^\/+/, '')
+                            if (url!=undefined) {
+                                url.pathname = path;
+                                path=url.href;
+                            }
+                            imgList[i].src = path+"&c="+col;
+                            if (IS_MOBILE) {
+                                imgList[i].classList.add("msk-cs-touch-img");
+                            }
+                            replaced = true;
                         }
-                        path="/material/svg/"+pluginPath+path.replace(OTHER_EXT[e], ".svg").replace(/^\/+/, '')
-                        if (url!=undefined) {
-                            url.pathname = path;
-                            path=url.href;
-                        }
-                        imgList[i].src = path+"&c="+col;
-                        if (IS_MOBILE) {
-                            imgList[i].classList.add("msk-cs-touch-img");
-                        }
-                        replaced = true;
+                    } catch(e) {
+                        logError(e);
                     }
                 }
             }

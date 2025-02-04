@@ -250,11 +250,16 @@ function formatDate(timestamp) {
 function resolveImageUrl(image, size) {
     image=""+image; // Ensure its a string!
     if ((image.startsWith("http://") || image.startsWith("https://")) && !(image.startsWith('/imageproxy') || image.startsWith('imageproxy'))) {
-        var url = new URL(image);
-        if (url.hostname.startsWith("192.168.") || url.hostname.startsWith("127.") || url.hostname.endsWith(".local")) {
+        try {
+            var url = new URL(image);
+            if (url.hostname.startsWith("192.168.") || url.hostname.startsWith("127.") || url.hostname.endsWith(".local")) {
+                return image;
+            }
+            return '/imageproxy/' + encodeURIComponent(image) + '/image' + (size ? size : LMS_IMAGE_SIZE);
+        } catch(e) {
+            logError(e);
             return image;
         }
-        return '/imageproxy/' + encodeURIComponent(image) + '/image' + (size ? size : LMS_IMAGE_SIZE);
     }
 
     if (image=="html/images/cover.png") {

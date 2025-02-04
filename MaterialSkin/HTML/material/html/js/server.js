@@ -1136,12 +1136,16 @@ var lmsServer = Vue.component('lms-server', {
             }
         }.bind(this));
         bus.$on('movePlayer', function(player) {
-            let url = new URL(player.serverurl);
-            lmsCommand("", ["disconnect", player.id, url.hostname]).then(({data}) => {
-                this.checkForMovedPlayer(player.id, 8);
-            }).catch(err => {
-                bus.$emit('showError', undefined, i18n("Failed to move '%1'", player.name));
-            });
+            try {
+                let url = new URL(player.serverurl);
+                lmsCommand("", ["disconnect", player.id, url.hostname]).then(({data}) => {
+                    this.checkForMovedPlayer(player.id, 8);
+                }).catch(err => {
+                    bus.$emit('showError', undefined, i18n("Failed to move '%1'", player.name));
+                });
+            } catch(e) {
+                logError(e);
+            }
         }.bind(this));
         bus.$on('power', function(state) {
             lmsCommand(this.$store.state.player.id, ["power", state]).then(({data}) => {

@@ -8,7 +8,7 @@
 
 Vue.component('lms-volume', {
     template: `
-<v-sheet v-model="show" v-if="show" elevation="5" class="vol-sheet noselect" v-clickoutside="close">
+<v-sheet v-model="show" v-if="show" elevation="5" class="vol-sheet noselect" v-clickoutside="outsideClick">
  <v-container grid-list-md text-xs-center>
   <v-layout row wrap>
    <v-flex xs12>
@@ -61,6 +61,7 @@ Vue.component('lms-volume', {
                 return;
             }
             this.showing=true;
+            this.openTime = new Date().getTime();
             bus.$emit('refreshStatus');
         }.bind(this));
         bus.$on('noPlayers', function() {
@@ -94,6 +95,11 @@ Vue.component('lms-volume', {
             this.show=false;
             this.showing=false;
             this.cancelCloseTimer();
+        },
+        outsideClick() {
+            if ((new Date().getTime()-this.openTime)>150) {
+                this.close();
+            }
         },
         volumeDown() {
             bus.$emit('playerCommand', ["mixer", "volume", "-"+lmsOptions.volumeStep]);

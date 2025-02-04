@@ -163,7 +163,7 @@ Vue.component('lms-groupvolume', {
     },
     methods: {
         outsideClick() {
-            if ((new Date().getTime()-this.openTime)>100) {
+            if ((new Date().getTime()-this.openTime)>150) {
                 this.close();
             }
         },

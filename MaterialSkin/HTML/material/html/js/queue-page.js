@@ -6,9 +6,10 @@
  */
 'use strict';
 
-const PQ_STATUS_TAGS = "tags:cdegilqtuy" + (LMS_VERSION>=90000 ? "bhz1" : "") + "AAGIKNPSxx";
+const PQ_STATUS_TAGS = "tags:cdegilqtuy" + (LMS_VERSION>=90000 ? "bhz12" : "") + "AAGIKNPSxx";
 const PQ_REQUIRE_AT_LEAST_1_ITEM = new Set([PQ_SAVE_ACTION, PQ_MOVE_QUEUE_ACTION, PQ_SCROLL_ACTION, PQ_SORT_ACTION, REMOVE_DUPES_ACTION]);
 const PQ_REQUIRE_MULTIPLE_ITEMS = new Set([PQ_SCROLL_ACTION, SEARCH_LIST_ACTION, PQ_SORT_ACTION, REMOVE_DUPES_ACTION]);
+const pqContiguousMap = new Map();
 
 function queueMakePlain(str) {
     let rating = str.indexOf(SEPARATOR+RATINGS_START);
@@ -107,11 +108,16 @@ function parseResp(data, showTrackNum, index, showRatings, queueAlbumStyle, queu
             let albumFirstIdx = -1;
             let albumDuration = 0;
             let calcDurations = queueAlbumStyle && resp.size == data.result.playlist_loop.length;
+            pqContiguousMap.clear();
             for (var idx=0, loop=data.result.playlist_loop, loopLen=loop.length; idx<loopLen; ++idx) {
                 let i = makeHtmlSafe(loop[idx]);
+                if ( !('contiguous_groups' in i) ) {
+                    i.contiguous_groups = 1; // for versions of LMS that don't provide this flag
+                }
+                pqContiguousMap.set(parseInt(i['playlist index']), parseInt(i.contiguous_groups));
                 i.isClassical = undefined!=i.isClassical && 1==parseInt(i.isClassical);
                 splitMultiples(i, true);
-                let title = trackTitle(i);
+                let title = queueAlbumStyle && i.contiguous_groups==1 ? i.title : trackTitle(i);
                 let artist = i.albumartist ? i.albumartist : i.artist ? i.artist : i.trackartist;
                 if (i.remote && undefined==title && undefined==artist && undefined==i.album) {
                     title = artist = i.album = i.artist = i18n('Unknown');
@@ -136,7 +142,7 @@ function parseResp(data, showTrackNum, index, showRatings, queueAlbumStyle, queu
                 let duration = undefined==i.duration ? undefined : parseFloat(i.duration);
                 let prevItem = 0==idx ? lastInCurrent : resp.items[idx-1];
                 let image = queueItemCover(i);
-                let groupId = lmsOptions.useGrouping ? (i.composer && i.work ? i.composer+"-"+i.work+(i.performance ? "-"+i.performance : "")+(i.grouping ? "-"+i.grouping : "") : i.grouping ? i.grouping : undefined) : undefined;
+                let groupId = lmsOptions.useGrouping && i.contiguous_groups==1 ? (i.composer && i.work ? i.composer+"-"+i.work+(i.performance ? "-"+i.performance : "")+(i.grouping ? "-"+i.grouping : "") : i.grouping ? i.grouping : undefined) : undefined;
                 let isAlbumHeader = queueAlbumStyle &&
                                      ( undefined==prevItem ||
                                        i.album_id!=prevItem.album_id ||
@@ -502,7 +508,7 @@ var lmsQueue = Vue.component("lms-queue", {
                 var index = playerStatus.current["playlist index"];
                 if (undefined!=index && index>=0 && index<this.items.length) {
                     var i = playerStatus.current;
-                    var title = trackTitle(i);
+                    var title = this.$store.state.queueAlbumStyle && pqContiguousMap.get(parseInt(index))==1 ? i.title : trackTitle(i);
                     var rating = this.$store.state.showRating && undefined!=i.rating ? Math.ceil(i.rating/10.0)/2.0 : undefined;
                     if (this.$store.state.queueShowTrackNum && i.tracknum>0) {
                         title = formatTrackNum(i)+SEPARATOR+title;

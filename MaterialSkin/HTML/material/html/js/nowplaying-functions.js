@@ -96,7 +96,7 @@ function nowplayingOnPlayerStatus(view, playerStatus) {
         view.playerStatus.current.id = playerStatus.current.id;
     }
     if (playerStatus.current.title!=view.playerStatus.current.title) {
-        view.playerStatus.current.title = playerStatus.current.title;
+        view.playerStatus.current.title = trackTitle(playerStatus.current);
         trackChanged = true;
     }
     if (playerStatus.current.tracknum!=view.playerStatus.current.tracknum) {
@@ -623,6 +623,7 @@ function nowplayingFetchTrackInfo(view) {
     let html="";
     let trk = view.playerStatus.current;
 
+    trk.title = trackTitle(trk);
     if (undefined!=trk.artist) {
         let entry = nowplayingArtistEntry(trk, 'artist', 'ARTIST');
         if (entry.length>1) {

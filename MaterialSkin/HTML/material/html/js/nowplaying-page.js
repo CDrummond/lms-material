@@ -1485,9 +1485,9 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
         },
         title() {
             if (this.$store.state.nowPlayingTrackNum && this.playerStatus.current.tracknum) {
-                return formatTrackNum(this.playerStatus.current)+SEPARATOR+this.playerStatus.current.title;
+                return formatTrackNum(this.playerStatus.current)+SEPARATOR+trackTitle(this.playerStatus.current);
             }
-            return this.playerStatus.current.title;
+            return trackTitle(this.playerStatus.current);
         },
         desktopLayout() {
             return this.$store.state.desktopLayout

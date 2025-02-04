@@ -1358,16 +1358,18 @@ function parseBrowseResp(data, parent, options, cacheKey, parentCommand, parentG
             let compilationAlbumArtist = undefined;
             let extraSubs = [];
             let browseContext = getLocalStorageBool('browseContext', false);
-            let splitIntoGroupings = lmsOptions.useGrouping && (undefined==parent || undefined==parent.multi || MULTI_GROUP_ALBUM==parent.multi);
+            let splitIntoGroupings = lmsOptions.useGrouping && (undefined==parent || undefined==parent.multi || MULTI_GROUP_ALBUM==parent.multi || isWork);
 
             for (let idx=0, loop=data.result.titles_loop, loopLen=loop.length; idx<loopLen; ++idx) {
                 let i = makeHtmlSafe(loop[idx]);
+                let baseTitle = i.title;
                 let title = trackTitle(i);
                 let duration = parseFloat(i.duration || 0);
                 let tracknum = undefined==i.tracknum ? 0 : parseInt(i.tracknum);
                 let highlight = false;
                 if (tracknum>0 && showTrackNumbers) {
                     title = (tracknum>9 ? tracknum : ("0" + tracknum))+SEPARATOR+title;
+                    baseTitle = (tracknum>9 ? tracknum : ("0" + tracknum))+SEPARATOR+baseTitle;
                     //title = tracknum + ". " + title; // SlimBrowse format
                     if (isSearchResult && undefined!=i.disc) {
                         title = i.disc+"."+title;
@@ -1577,6 +1579,7 @@ function parseBrowseResp(data, parent, options, cacheKey, parentCommand, parentG
                 resp.items.push({
                               id: "track_id:"+i.id,
                               title: title,
+                              baseTitle: baseTitle,
                               subtitle: subtitle,
                               subtitleContext: subtitleContext,
                               //icon: "music_note",
@@ -1753,12 +1756,13 @@ function parseBrowseResp(data, parent, options, cacheKey, parentCommand, parentG
             let removeDiscNumbers = false;
             let removeGroupFilter = false;
             if (allTracksGrouping==0) {
-                if (groupings.size>1 && splitIntoGroups) {
+                if ( (groupings.size>1 || isWork) && splitIntoGroups ) {
                     let d = 0;
                     for (var idx=0, len=resp.items.length; idx<len; ++idx) {
                         resp.items[idx].filter = resp.items[idx].gfilter;
                         resp.items[idx].gfilter = undefined;
                         resp.items[idx].disc = undefined;
+                        resp.items[idx].title = resp.items[idx].baseTitle;
                     }
                     for (let k of groupings.keys()) {
                         let grouping = groupings.get(k);

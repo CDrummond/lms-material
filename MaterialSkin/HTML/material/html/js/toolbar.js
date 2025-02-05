@@ -16,7 +16,7 @@ Vue.component('lms-toolbar', {
  <div class="maintoolbar-subtitle subtext">{{date}}</div>
 </div>
 <v-layout class="link-item" @click.stop="bus.$emit('navDrawer')" v-bind:class="{'navdrawer-selector':!mobileNoNowPlaying}">
- <v-btn icon class="toolbar-button" v-longpress.stop="openNavDrawer">
+ <v-btn icon class="toolbar-button" @click.stop="bus.$emit('navDrawer')">
   <v-icon v-if="!connected" class="red">error</v-icon>
   <img v-else-if="updatesAvailable" class="svg-img" :src="'update' | menuIcon(darkUi, coloredToolbars&&!nowPlayingFull)"></img>
   <img v-else-if="restartRequired" class="svg-img" :src="'restart' | menuIcon(darkUi, coloredToolbars&&!nowPlayingFull)"></img>
@@ -244,16 +244,6 @@ Vue.component('lms-toolbar', {
             bus.$emit('expandNowPlaying', !this.nowPlayingExpanded);
             if (!this.$store.state.pinQueue && this.$store.state.showQueue) {
                 this.$store.commit('setShowQueue', false);
-            }
-        },
-        openNavDrawer(longPress) {
-            if (longPress && undefined!=this.$store.state.players && this.$store.state.players.length>1) {
-                setTimeout(function () {
-                    this.show = false;
-                    bus.$emit('dlg.open', 'sync', this.$store.state.player);
-                }.bind(this), 250);
-            } else {
-                bus.$emit('navDrawer');
             }
         },
         volumeBtn(longPress, el) {

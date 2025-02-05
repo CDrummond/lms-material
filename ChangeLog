@@ -18,12 +18,11 @@
 14. Ensure only 1 'serverstatus' at a time.
 15. Use simpler custom API to poll scan progress to reduce load on LMS.
 16. In 'Information' dialog only poll 'serverstatus' every 6 seconds.
-17. Long-press on navigation drawer button to open sync dialog.
-18. When checking whether to use "/imageproxy" check if URL starts with "http"
+17. When checking whether to use "/imageproxy" check if URL starts with "http"
     or "https", not just if URL contains one of those.
-19. Prioritize browsed menu role when allocating a release to a release type -
+18. Prioritize browsed menu role when allocating a release to a release type -
     thanks to Darrell.
-20. Try to work-around issues with volume dialog closing immediately.
+19. Try to work-around issues with volume dialog closing immediately.
 
 5.7.6
 -----

@@ -580,7 +580,7 @@ PLUGIN_MATERIAL_SKIN_RELEASE_TYPE_ORDER
 	IT	Ordine delle release
 	FR	Ordre des types de sorties
 	NL	Releasetype volgorde
-	ZH_CN	发布类型顺序
+	ZH_CN	发行类型顺序
 	HU	Kiadás típus sorrend
 
 PLUGIN_MATERIAL_SKIN_RELEASE_TYPE_ORDER_DESC
@@ -591,7 +591,7 @@ PLUGIN_MATERIAL_SKIN_RELEASE_TYPE_ORDER_DESC
 	IT	Specificare l'ordine in cui mostrare i tipi di release (lista separata da virgole dei tipi di release) - Es. "Album, EP, Single"
 	FR	Spécifier l'ordre d'affichage des types de sorties (par une liste de types de sorties séparés par des virgules) - par ex. "Album, EP, Single"
 	NL	Bepaal de volgorde hoe releasetypes worden getoond (dit is een door komma's gescheiden lijst van releasetypes) - bijv. "Album, EP, Single."
-	ZH_CN	指定显示发布类型的顺序（以逗号分隔的发布类型名称列表） - 例如 “专辑、EP、单曲”
+	ZH_CN	指定显示发行类型的顺序（以逗号分隔的发布类型名称列表） - 例如 “专辑、EP、单曲”
 	HU	Adja meg a kiadási típusok megjelenítéséhez a sorrendet (a vesszővel elválasztott listában a kiadás típusneveivel) - pl. "Album, EP, Single"
 
 PLUGIN_MATERIAL_SKIN_GENRE_IMAGES

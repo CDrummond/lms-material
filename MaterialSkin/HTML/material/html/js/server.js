@@ -142,6 +142,10 @@ function parseUserDefinedRoles(data) {
     lmsOptions.excludedUserDefinedRoles = excludedUserDefinedRoles;
 }
 
+function parseMyClassicalGenres(data) {
+    lmsOptions.classicalGenres = new Set(data.split(","));
+}
+
 function parseUseUnifiedArtistsList(val) {
     let separateArtistsList = 0==parseInt(val);
     if (separateArtistsList!=lmsOptions.separateArtistsList) {
@@ -727,6 +731,8 @@ var lmsServer = Vue.component('lms-server', {
                     lmsOptions[data[2]] = 1==parseInt(data[3]);
                 } else if (data[2]=="variousArtistsString") {
                     lmsOptions[data[2]] = data[3];
+                } else if (data[2]=="myClassicalGenres") {
+                    parseMyClassicalGenres(data[3]);
                 }
             } else if (data[1]=="plugin.material-skin" && data[3]!=null && data[3]!=undefined) {
                 if (data[2]=="password") {
@@ -829,7 +835,7 @@ var lmsServer = Vue.component('lms-server', {
             });
         },
         updateServerPrefs() {
-            lmsCommand("", ["serverstatus", 0, 0, "prefs:userDefinedRoles,useUnifiedArtistsList,titleFormatWeb,titleFormat,composerInArtists,conductorInArtists,bandInArtists,trackartistInArtists"]).then(({data}) => {
+            lmsCommand("", ["serverstatus", 0, 0, "prefs:userDefinedRoles,useUnifiedArtistsList,titleFormatWeb,titleFormat,composerInArtists,conductorInArtists,bandInArtists,trackartistInArtists,myClassicalGenres"]).then(({data}) => {
                 if (data && data.result) {
                     if (data.result.userDefinedRoles) {
                         parseUserDefinedRoles(data.result.userDefinedRoles);
@@ -842,6 +848,9 @@ var lmsServer = Vue.component('lms-server', {
                     }
                     if (undefined!=data.result.composerInArtists && undefined!=data.result.conductorInArtists && undefined!=data.result.bandInArtists) {
                         parseRolesInArtists(data.result.composerInArtists, data.result.conductorInArtists, data.result.bandInArtists, data.result.trackartistInArtists);
+                    }
+                    if (data.result.myClassicalGenres) {
+                        parseMyClassicalGenres(data.result.myClassicalGenres);
                     }
                 }
             });

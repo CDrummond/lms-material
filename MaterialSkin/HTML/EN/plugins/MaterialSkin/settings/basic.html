@@ -145,6 +145,10 @@
     [% END %]
     [% END %]
 
+    [% WRAPPER setting title="PLUGIN_MATERIAL_SKIN_SHOW_WORKS_IN_ARTIST_ALBUM_LIST" desc="PLUGIN_MATERIAL_SKIN_SHOW_WORKS_IN_ARTIST_ALBUM_LIST_DESC" %]
+    <input type="checkbox" name="pref_showArtistWorks" id="pref_showArtistWorks" [% IF prefs.pref_showArtistWorks %] checked [% END %] value="1"/>
+    [% END %]
+
     <hr style="opacity:0.4" class="sub-sep"/><br/>
     [% WRAPPER setting title="PLUGIN_MATERIAL_SKIN_USE_DEFAULT_FOR_SETTINGS" desc="PLUGIN_MATERIAL_SKIN_USE_DEFAULT_FOR_SETTINGS_DEC" %]
     <select class="stdedit" name="pref_useDefaultForSettings" id="useDefaultForSettings">

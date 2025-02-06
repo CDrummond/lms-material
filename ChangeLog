@@ -20,9 +20,11 @@
 16. In 'Information' dialog only poll 'serverstatus' every 6 seconds.
 17. When checking whether to use "/imageproxy" check if URL starts with "http"
     or "https", not just if URL contains one of those.
-18. Prioritize browsed menu role when allocating a release to a release type -
+18. Prioritise browsed menu role when allocating a release to a release type -
     thanks to Darrell.
 19. Try to work-around issues with volume dialog closing immediately.
+20. Add a server-side option to disable showing list of works when showing an
+    artist's releases.
 
 5.7.6
 -----
@@ -2925,7 +2927,7 @@
  1. Don't colour toolbars of fullscreen dialogs for dark and light themes, only
     colour if using coloured toolbars.
  2. Use separate checkbox for coloured toolbars option.
- 3. Place colored css mods into separate file, no need for theme-colored.css
+ 3. Place coloured css mods into separate file, no need for theme-colored.css
  4. Add 'Darker' theme variant.
  5. Add support for OS-specific and user themes (see 'Detailed Information' on
     Material's github wiki for more details).

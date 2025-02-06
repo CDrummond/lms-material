@@ -14,6 +14,7 @@ var lmsOptions = {techInfo: getLocalStorageBool('techInfo', false),
                   showConductor: getLocalStorageBool('showConductor', false),
                   showComposer: getLocalStorageVal('showComposer', 1, true),
                   showBand: getLocalStorageBool('showBand', true),
+                  showArtistWorks: getLocalStorageBool('showArtistWorks', true),
                   volumeStep: parseInt(getLocalStorageVal('volumeStep', 5)),
                   respectFixedVol: getLocalStorageVal('respectFixedVol', VOL_FIXED),
                   showAllArtists: getLocalStorageBool('showAllArtists', true),
@@ -52,5 +53,6 @@ var lmsOptions = {techInfo: getLocalStorageBool('techInfo', false),
                   noGenreFilter: LMS_DEF_NO_GENRE_FILTER,
                   noRoleFilter: LMS_DEF_NO_ROLE_FILTER,
                   groupdiscs: LMS_DEF_GROUP_DISCS,
-                  variousArtistsString: LMS_DEF_VA_STRING
+                  variousArtistsString: LMS_DEF_VA_STRING,
+                  classicalGenres: new Set(["Classical"])
                 };

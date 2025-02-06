@@ -89,7 +89,7 @@ my @ADV_SEARCH_OTHER = ('content_type', 'contributor_namesearch.active1', 'contr
 
 my %IGNORE_PROTOCOLS = map { $_ => 1 } ('mms', 'file', 'tmp', 'http', 'https', 'spdr', 'icy', 'teststream', 'db', 'playlist');
 
-my @BOOL_OPTS = ('allowDownload', 'playShuffle', 'touchLinks', 'showAllArtists', 'artistFirst', 'yearInSub', 'showComment', 'genreImages', 'maiComposer', 'showConductor', 'showBand', 'combineAppsAndRadio', 'useGrouping');
+my @BOOL_OPTS = ('allowDownload', 'playShuffle', 'touchLinks', 'showAllArtists', 'artistFirst', 'yearInSub', 'showComment', 'genreImages', 'maiComposer', 'showConductor', 'showBand', 'showArtistWorks', 'combineAppsAndRadio', 'useGrouping');
 
 my %ROLE_ICON_MAP = (
     'bass' => 'bassist',
@@ -161,6 +161,7 @@ sub initPlugin {
             showComposer => 1,
             showConductor => 0,
             showBand => 0,
+            showArtistWorks => 1,
             respectFixedVol => 1,
             showAllArtists => 1,
             artistFirst => 1,
@@ -190,6 +191,7 @@ sub initPlugin {
             showComposer => 1,
             showConductor => 0,
             showBand => 0,
+            showArtistWorks => 1,
             respectFixedVol => 1,
             showAllArtists => 1,
             artistFirst => 1,
@@ -218,6 +220,7 @@ sub initPlugin {
     $prefs->setChange(sub { $prefs->set($_[0], 0) unless defined $_[1]; }, 'showBand');
     $prefs->setChange(sub { $prefs->set($_[0], 0) unless defined $_[1]; }, 'showComposer');
     $prefs->setChange(sub { $prefs->set($_[0], 0) unless defined $_[1]; }, 'showConductor');
+    $prefs->setChange(sub { $prefs->set($_[0], 0) unless defined $_[1]; }, 'showArtistWorks');
     $prefs->setChange(sub { $prefs->set($_[0], 0) unless defined $_[1]; }, 'showAllArtists');
     $prefs->setChange(sub { $prefs->set($_[0], 0) unless defined $_[1]; }, 'artistFirst');
     $prefs->setChange(sub { $prefs->set($_[0], 0) unless defined $_[1]; }, 'noArtistFilter');
@@ -592,6 +595,7 @@ sub _cliCommand {
         $request->addResult('showComposer', $prefs->get('showComposer'));
         $request->addResult('showConductor', $prefs->get('showConductor'));
         $request->addResult('showBand', $prefs->get('showBand'));
+        $request->addResult('showArtistWorks', $prefs->get('showArtistWorks'));
         $request->addResult('respectFixedVol', $prefs->get('respectFixedVol'));
         $request->addResult('showAllArtists', $prefs->get('showAllArtists'));
         $request->addResult('artistFirst', $prefs->get('artistFirst'));

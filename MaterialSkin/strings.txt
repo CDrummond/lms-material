@@ -743,3 +743,9 @@ PLUGIN_MATERIAL_SKIN_USE_GROUPING
 PLUGIN_MATERIAL_SKIN_USE_GROUPING_DESC
 	EN	Support grouping tracks by work and composer, or by grouping tag. If enabled, then this grouping will take preference over grouping via disc number - therefore if you have a multi-disc release that also has groupings, then tracks will be shown group via these groupings.
 	FR	Prendre en charge le regroupement des morceaux par œuvre et compositeur, ou par tag de regroupement. Si cette option est activée, ce regroupement sera prioritaire sur le regroupement par numéro de disque. Par conséquent, si vous avez un album à plusieurs disques qui comporte également des regroupements, les morceaux seront affichés groupés via ces regroupements.
+
+PLUGIN_MATERIAL_SKIN_SHOW_WORKS_IN_ARTIST_ALBUM_LIST
+	EN	Show artist works
+
+PLUGIN_MATERIAL_SKIN_SHOW_WORKS_IN_ARTIST_ALBUM_LIST_DESC
+	EN	Show list of an artist's works when listing the artist's releases.

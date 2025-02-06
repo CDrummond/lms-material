@@ -491,7 +491,7 @@ function browseHandleListResponse(view, item, command, resp, prevPage, appendIte
                     addUserDefinedRoles = false;
                     addWorksOrRoles = false;
                 } else {
-                    showWorksInMenu = LMS_VERSION>=90000 && !lmsOptions.listWorks && getField(view.command, "work_id:")<0;
+                    showWorksInMenu = LMS_VERSION>=90000 && (!lmsOptions.listWorks || !lmsOptions.showArtistWorks) && getField(view.command, "work_id:")<0;
                 }
             } else if (listingWorkAlbums) {
                 actParams['composer']=title;
@@ -766,7 +766,7 @@ function browseHandleListResponse(view, item, command, resp, prevPage, appendIte
         }
 
         if (addWorksOrRoles) {
-            if (lmsOptions.listWorks) {
+            if (lmsOptions.listWorks && lmsOptions.showArtistWorks) {
                 browseAddWorks(view, curitem);
             }
             if (addUserDefinedRoles) {
@@ -1205,7 +1205,10 @@ function browseAddCategories(view, item, isGenre) {
     lmsCommand("", ["material-skin", "browsemodes"]).then(({data}) => {
         view.fetchingItem = undefined;
         logJsonMessage("RESP", data);
-        var resp = parseBrowseModes(view, data, isGenre ? item.id : undefined, isGenre ? undefined : item.id, alt_id);
+        if (isGenre) {
+            console.log(item.text, lmsOptions.classicalGenres.has(item.title));
+        }
+        var resp = parseBrowseModes(view, data, isGenre ? item.id : undefined, isGenre ? undefined : item.id, alt_id, isGenre && undefined!=lmsOptions.classicalGenres && !lmsOptions.classicalGenres.has(item.title));
         view.items = resp.items;
         view.items.sort(weightSort);
         var allTracks = { title: i18n("All Tracks"),

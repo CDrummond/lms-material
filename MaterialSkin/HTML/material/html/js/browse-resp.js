@@ -2211,7 +2211,7 @@ function parseBrowseResp(data, parent, options, cacheKey, parentCommand, parentG
     return resp;
 }
 
-function parseBrowseModes(view, data, genreFilter, yearFilter, altId) {
+function parseBrowseModes(view, data, genreFilter, yearFilter, altId, excludeWorks) {
     let resp={stdItems:new Set(), items:[], listWorks:false};
     if (data && data.result && data.result.modes_loop) {
         for (var idx=0, loop=data.result.modes_loop, loopLen=loop.length; idx<loopLen; ++idx) {
@@ -2229,6 +2229,10 @@ function parseBrowseModes(view, data, genreFilter, yearFilter, altId) {
                          type: "group",
                          icon: "music_note"
                         };
+            console.log(item.title, item.command[0], excludeWorks);
+            if (excludeWorks && item.command[0]=="works") {
+                continue;
+            }
             var tryMapping = false;
             if (c.id.startsWith("myMusicArtistsAudiobooks")) {
                 if (undefined!=genreFilter || undefined!=yearFilter) {

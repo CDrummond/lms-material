@@ -241,11 +241,10 @@ Vue.component('lms-information-dialog', {
                     }
                 });
             }
-            if (0!=this.updateCount % 3) {
-                this.updateCount++;
+            this.updateCount++;
+            if (0!=((this.updateCount-1)%3)) {
                 return;
             }
-            this.updateCount++;
             lmsCommand("", ["serverstatus", 0, LMS_MAX_PLAYERS]).then(({data}) => {
                 if (data && data.result) {
                     var prevStrengths={};

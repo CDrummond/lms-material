@@ -410,7 +410,7 @@
 "Sat":"六",
 "Saturday":"星期六",
 "Save":"保存",
-"Save as default":"另存为默认",
+"Save as default":"保存为默认值",
 "Save as virtual library":"另存为虚拟库",
 "Save play queue":"保存播放队列",
 "Save queue":"保存队列",
@@ -682,9 +682,9 @@
 "%1 Years":"%1 个年份",
 "1 day":"1 天",
 "%1 days":"%1 天",
-"Defaults":"",
-"Other":"",
-"Save list/grid per view":"",
-"Save the choice of list or grid separately per view type (home screen, artists, etc.), otherwise the same setting will be used for all applicable views.":"",
-"Settings (and home screen items) are stored locally in your browser. However, some browser extensions can remove these. The 'Save as default' button can be used to store your current settings (and home screen items) on the Lyrion server. These will then be used for any settings that are not found in your browser. Likewise, 'Revert to default' can be used to manually revert to the settings stored on your Lyrion server.":""
+"Defaults":"默认",
+"Other":"其它",
+"Save list/grid per view":"保存单视图列表/格子布局",
+"Save the choice of list or grid separately per view type (home screen, artists, etc.), otherwise the same setting will be used for all applicable views.":"为不同类型视图（例如主页，艺术家视图等）单独保存列表或格子布局，否则所有视图使用同样的列表或格子布局",
+"Settings (and home screen items) are stored locally in your browser. However, some browser extensions can remove these. The 'Save as default' button can be used to store your current settings (and home screen items) on the Lyrion server. These will then be used for any settings that are not found in your browser. Likewise, 'Revert to default' can be used to manually revert to the settings stored on your Lyrion server.":"设置（以及主页项目）存储在您的浏览器缓存中，某些浏览器扩展可能会删除这些设置。“保存为默认值”按钮可用于将您当前的设置（以及主页项目）存储在 Lyrion 服务器上，当浏览器缓存中找不到任何设置时应用此默认设置，或者使用“恢复默认值”手动将存储在 Lyrion 服务器上的设置应用到此浏览器。"
 }

@@ -2132,6 +2132,8 @@ sub _svgHandler {
             if ((! -e $filePath) && (! -e $altFilePath)) {
                 if (rindex($svgName, "release-live")==0) {
                     $filePath = $dir . "/HTML/material/html/images/release-live.svg";
+                } else if (rindex($svgName, "release-studio")==0) {
+                    $filePath = $dir . "/HTML/material/html/images/release-studio.svg";
                 } elsif (rindex($svgName, "release-remix")==0) {
                     $filePath = $dir . "/HTML/material/html/images/release-remix.svg";
                 } elsif (rindex($svgName, "composer")>0) {

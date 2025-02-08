@@ -746,6 +746,8 @@ PLUGIN_MATERIAL_SKIN_USE_GROUPING_DESC
 
 PLUGIN_MATERIAL_SKIN_SHOW_WORKS_IN_ARTIST_ALBUM_LIST
 	EN	Show artist works
+	FR	Afficher les œuvres des artistes
 
 PLUGIN_MATERIAL_SKIN_SHOW_WORKS_IN_ARTIST_ALBUM_LIST_DESC
 	EN	Show list of an artist's works when listing the artist's releases.
+	FR	Inclure les œuvres d'un artiste dans la liste des albums de l'artiste.

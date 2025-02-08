@@ -333,8 +333,6 @@ function nowplayingShowMenu(view, event) {
 
         view.menu.items=[];
         view.menu.icons=true;
-        view.menu.items.push({title:ACTIONS[SHOW_IMAGE_ACTION].title, svg:ACTIONS[SHOW_IMAGE_ACTION].svg, act:NP_PIC_ACT});
-
         let artist_id = view.playerStatus.current.artist_ids
                     ? view.playerStatus.current.artist_ids[0]
                     : view.playerStatus.current.artist_id;
@@ -380,6 +378,7 @@ function nowplayingShowMenu(view, event) {
         if (undefined!=view.playerStatus.current.title) {
             view.menu.items.push({title:ACTIONS[COPY_DETAILS_ACTION].title, act:NP_COPY_DETAILS_CMD, icon:ACTIONS[COPY_DETAILS_ACTION].icon});
         }
+        view.menu.items.push({title:ACTIONS[SHOW_IMAGE_ACTION].title, svg:ACTIONS[SHOW_IMAGE_ACTION].svg, act:NP_PIC_ACT});
         if (view.customActions && view.customActions.length>0) {
             for (let i=0, loop=view.customActions, len=loop.length; i<len; ++i) {
                 view.menu.items.push({title:loop[i].title, act:NP_CUSTOM+i, icon:loop[i].icon, svg:loop[i].svg});

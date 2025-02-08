@@ -25,6 +25,8 @@
 19. Try to work-around issues with volume dialog closing immediately.
 20. Add a server-side option to disable showing list of works when showing an
     artist's releases.
+21. Place 'Show image' after 'Copy details' in now-playing context menu, to be
+    consistent with browse menus.
 
 5.7.6
 -----

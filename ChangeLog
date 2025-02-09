@@ -12,9 +12,9 @@
  8. Monitor more LMS settings for changes (e.g. MAI artist images).
  9. Add option to use list/grid setting globally and not per-view.
 10. Don't add user-defined roles entries for 'Various Artists'.
-11. List local file links under all tracks in MAI album view.
+11. List local file links under tracks in MAI album view.
 12. Make 'http' and 'https' links within comments clickable in MAI view.
-13. Limit works advanced search to discovered albums.
+13. Limit works advanced search to discovered albums - thanks to Darrell.
 14. Ensure only 1 'serverstatus' at a time.
 15. Use simpler custom API to poll scan progress to reduce load on LMS.
 16. In 'Information' dialog only poll 'serverstatus' every 6 seconds.

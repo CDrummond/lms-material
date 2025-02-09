@@ -1026,7 +1026,9 @@ function parseBrowseResp(data, parent, options, cacheKey, parentCommand, parentG
                         }
                     }
                 }
-                roleId ||= mskRoleId;
+                if (!roleId) {
+                    roleId=mskRoleId;
+                }
                 if (reverse && !isNewMusic) {
                     data.result.albums_loop = data.result.albums_loop.reverse();
                 }

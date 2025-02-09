@@ -27,6 +27,7 @@
     artist's releases.
 21. Place 'Show image' after 'Copy details' in now-playing context menu, to be
     consistent with browse menus.
+22. When clicking album links also pass album-artist, or artist.
 
 5.7.6
 -----

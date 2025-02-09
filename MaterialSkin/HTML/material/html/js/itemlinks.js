@@ -19,8 +19,8 @@ function show_artist(event, id, title, page) {
     browseItem(event, ["albums"], ["artist_id:"+id, ARTIST_ALBUM_TAGS, SORT_KEY+ARTIST_ALBUM_SORT_PLACEHOLDER], unescape(title), page);
 }
 
-function showAlbum(event, album, title, page) {
-    browseItem(event, ["tracks"], ["album_id:"+album, trackTags(true), SORT_KEY+"tracknum"], unescape(title), page);
+function showAlbum(event, album, title, page, subtitle) {
+    browseItem(event, ["tracks"], ["album_id:"+album, trackTags(true), SORT_KEY+"tracknum"], unescape(title), page, undefined==subtitle ? subtitle : unescape(subtitle));
 }
 
 /*
@@ -225,7 +225,8 @@ function buildAlbumLine(i, page, plain) {
             album+=" (" + i.year + ")";
         }
         if (i.album_id && (!IS_MOBILE || lmsOptions.touchLinks) && !plain) {
-            album="<obj class=\"link-item\" onclick=\"showAlbum(event, "+i.album_id+",\'"+escape(album)+"\', \'"+page+"\')\">" + album + "</obj>";
+            let artist = i.albumartist ? i.albumartist : i.artist;
+            album="<obj class=\"link-item\" onclick=\"showAlbum(event, "+i.album_id+",\'"+escape(album)+"\', \'"+page+"\',\'"+escape(artist)+"\')\">" + album + "</obj>";
         }
         line=addPart(line, album);
     } else if (remoteTitle && remoteTitle!=i.title) {

@@ -38,6 +38,7 @@ function setWindowArea() {
             if (right>0 && (0==prevWindowArea.rmin || right<prevWindowArea.rmin)) {
                 prevWindowArea.rmin = right;
             }
+            queryParams['dragleft']=left;
             document.documentElement.style.setProperty('--window-area-left', left+'px');
             document.documentElement.style.setProperty('--window-area-right', right+'px');
             document.documentElement.style.setProperty('--window-controls-space', right+'px');

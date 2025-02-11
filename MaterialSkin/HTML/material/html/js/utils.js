@@ -111,6 +111,12 @@ function parseQueryParams() {
             resp.npRatio=parseFloat(kv[1]);
         } else if (INT_QPARAMS.has(kv[0])) {
             resp[kv[0]]=parseInt(kv[1]);
+        } else if ("dragleft"==kv[0] || "dragright"==kv[0]) {
+            let val = parseInt(kv[1]);
+            if (val>0) {
+                resp[kv[0]]=val;
+                document.documentElement.style.setProperty('--window-area-'+kv[0].substr(4), val+'px');
+            }
         }
     }
     if (resp.single && !resp.player) {

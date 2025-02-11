@@ -1,3 +1,8 @@
+5.8.1
+-----
+1. Allow specifying left/right window drag areas via 'dragleft' and
+   'dragright' URL query parameters.
+
 5.8.0
 -----
  1. Add a server-side option to use 'Default' skin for server settings, either

@@ -443,6 +443,10 @@ html, .mini-player {
  height:var(--sub-toolbar-height)!important;
 }
 
+.nd-header .v-avatar {
+ padding-left:var(--window-area-left);
+}
+
 .nd-main {
  width: 100%;
  height: 100%;

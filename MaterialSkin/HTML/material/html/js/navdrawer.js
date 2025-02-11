@@ -57,7 +57,7 @@ Vue.component('lms-navdrawer', {
  <div class="nd-top"></div>
  <div class="nd-header">
   <v-list-tile @click.prevent="show=false">
-   <v-list-tile-avatar><v-btn icon flat @click="show=false"><v-icon>arrow_back<v-icon></v-btn></v-list-tile-avatar>
+   <v-list-tile-avatar v-if="undefined==queryParams.dragleft || queryParams.dragleft<=48"><v-btn icon flat @click="show=false"><v-icon>arrow_back<v-icon></v-btn></v-list-tile-avatar>
    <div class="lyrion-logo" v-longpress:nomove="clickLogo"><img :src="'lyrion' | svgIcon(darkUi)"></img></div>
    <v-list-tile-action>
     <v-btn icon @click="menuAction(TB_INFO.id)" style="position:absolute;right:16px" :title="updatesAvailable ? trans.updatesAvailable : restartRequired ? trans.restartRequired : TB_INFO.title">

@@ -2,6 +2,8 @@
 -----
 1. Allow specifying left/right window drag areas via 'dragleft' and
    'dragright' URL query parameters.
+2. Add 'tbarBtnsPos' to specify window titlebar button position; 'l' for left,
+   'r' for right, anything else to hide display.
 
 5.8.0
 -----

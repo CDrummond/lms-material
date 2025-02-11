@@ -10,6 +10,7 @@ Vue.component('lms-toolbar', {
     template: `
 <div style="z-index:2"> <!-- Prevent np-cover leak -->
 <v-toolbar fixed dense app class="lms-toolbar noselect" v-bind:class="{'trans-toolbar':nowPlayingFull}" @mousedown="mouseDown" id="main-toolbar">
+<lms-windowcontrols v-if="queryParams.nativeTitlebar && queryParams.tbarBtnsPos=='l'"></lms-windowcontrols>
 <div class="drag-area-left"></div>
 <div v-if="showClock" class="toolbar-clock">
  <div class="maintoolbar-title">{{time}}</div>

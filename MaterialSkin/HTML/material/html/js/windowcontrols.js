@@ -19,20 +19,23 @@ Vue.component('lms-windowcontrols', {
         }
     },
     mounted() {
-        if (undefined==queryParams.tbarBtns) {
-            this.btns=queryParams.tbarBtnsPos=='l' ? ['close', 'min', 'max'] : ['min', 'max', 'close'];
-        } else {
-            this.btns=queryParams.tbarBtns.split(',');
+        if (undefined==window.mskTitlebarControls) {
+            if (undefined==queryParams.tbarBtns) {
+                window.mskTitlebarControls=queryParams.tbarBtnsPos=='l' ? ['close', 'min', 'max'] : ['min', 'max', 'close'];
+            } else {
+                window.mskTitlebarControls=queryParams.tbarBtns.split(',');
+            }
+            if ('win'==queryParams.tbarBtnsStyle) {
+                let space = 8;
+                document.documentElement.style.setProperty("--window-controls-padr", space+"px");
+                document.documentElement.style.setProperty("--window-controls-space", ((window.mskTitlebarControls.length*48)+space)+"px");
+            } else {
+                let space = window.mskTitlebarControls.length==1 ? 16 : 0;
+                document.documentElement.style.setProperty("--window-controls-padr", space+"px");
+                document.documentElement.style.setProperty("--window-controls-space", ((window.mskTitlebarControls.length*32)+space)+"px");
+            }
         }
-        if ('win'==queryParams.tbarBtnsStyle) {
-            let space = 8;
-            document.documentElement.style.setProperty("--window-controls-padr", space+"px");
-            document.documentElement.style.setProperty("--window-controls-space", ((this.btns.length*48)+space)+"px");
-        } else {
-            let space = this.btns.length==1 ? 16 : 0;
-            document.documentElement.style.setProperty("--window-controls-padr", space+"px");
-            document.documentElement.style.setProperty("--window-controls-space", ((this.btns.length*32)+space)+"px");
-        }
+        this.btns = window.mskTitlebarControls;
         bus.$on('windowMaximized', function(isMax) {
             this.maximized = isMax;
         }.bind(this));

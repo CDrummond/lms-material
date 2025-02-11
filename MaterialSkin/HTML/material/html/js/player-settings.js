@@ -131,7 +131,7 @@ Vue.component('lms-player-settings', {
      <v-list-tile v-if="showSync" class="other-setting">
       <v-list-tile-content>
        <v-list-tile-title><v-btn flat @click="showMenu = false; bus.$emit('dlg.open', 'sync', {id:playerId, isgroup:false, name:playerName})"><v-icon class="btn-icon">link</v-icon>{{i18n('Synchronize')}}</v-btn></v-list-tile-title>
-       <v-list-tile-sub-title>{{isSynced ? i18n('Synchronized with other players.') : i18n('Not currently synchronised with any other player.')}}</v-list-tile-sub-title>
+       <v-list-tile-sub-title>{{isSynced ? i18n('Synchronized with other players.') : i18n('Not currently synchronized with any other player.')}}</v-list-tile-sub-title>
       </v-list-tile-content>
      </v-list-tile>
      <v-list-tile v-if="unlockAll" class="other-setting">

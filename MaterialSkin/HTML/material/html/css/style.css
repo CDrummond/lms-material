@@ -4004,6 +4004,22 @@ div.v-subheader {
  transition:none!important;
 }
 
+.wc-style-mac .wc-btn {
+ width:20px!important;
+ height:20px!important;
+ opacity:0.7;
+}
+.wc-style-mac .wc-btn:hover {
+ opacity:1.0;
+}
+.wc-style-mac .wc-btn .wc-icn {
+ visibility: hidden;
+}
+.wc-style-mac .wc-btn:hover .wc-icn {
+ visibility: visible;
+ color:var(--dark-text-color)!important;
+}
+
 .wc-min {
  margin-top:5px!important;
 }
@@ -4016,6 +4032,16 @@ div.v-subheader {
 
 .wc-btn:hover {
  background-color:var(--window-btn-hover-color);
+}
+
+.wc-style-mac .wc-btn-close {
+ background-color: red;
+}
+.wc-style-mac .wc-btn-min {
+ background-color: orange;
+}
+.wc-style-mac .wc-btn-max {
+ background-color: green;
 }
 
 /*

@@ -2231,7 +2231,6 @@ function parseBrowseModes(view, data, genreFilter, yearFilter, altId, excludeWor
                          type: "group",
                          icon: "music_note"
                         };
-            console.log(item.title, item.command[0], excludeWorks);
             if (excludeWorks && item.command[0]=="works") {
                 continue;
             }

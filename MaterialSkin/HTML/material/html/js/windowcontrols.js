@@ -19,14 +19,11 @@ Vue.component('lms-windowcontrols', {
         }
     },
     mounted() {
-        if (undefined==queryParams.tbarBtnsRight) {
-            if (undefined==queryParams.tbarBtns) {
-                queryParams.tbarBtnsRight=['min', 'max', 'close'];
-            } else {
-                queryParams.tbarBtnsRight=queryParams.tbarBtns.split(',');
-            }
+        if (undefined==queryParams.tbarBtns) {
+            this.btns=['min', 'max', 'close'];
+        } else {
+            this.btns=queryParams.tbarBtns.split(',');
         }
-        this.btns = queryParams.tbarBtnsRight;
         let space = this.btns.length==1 ? 16 : 0;
         document.documentElement.style.setProperty("--window-controls-padr", space+"px");
         document.documentElement.style.setProperty("--window-controls-space", ((this.btns.length*32)+space)+"px");

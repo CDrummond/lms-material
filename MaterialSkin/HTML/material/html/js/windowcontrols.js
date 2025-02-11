@@ -20,7 +20,7 @@ Vue.component('lms-windowcontrols', {
     },
     mounted() {
         if (undefined==queryParams.tbarBtns) {
-            this.btns=['min', 'max', 'close'];
+            this.btns=queryParams.tbarBtnsPos=='l' ? ['close', 'min', 'max'] : ['min', 'max', 'close'];
         } else {
             this.btns=queryParams.tbarBtns.split(',');
         }

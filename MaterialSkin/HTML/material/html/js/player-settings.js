@@ -34,7 +34,7 @@ Vue.component('lms-player-settings', {
       </v-list>
      </v-menu>
      <div class="drag-area-right"></div>
-     <lms-windowcontrols v-if="queryParams.nativeTitlebar"></lms-windowcontrols>
+     <lms-windowcontrols v-if="queryParams.nativeTitlebar && queryParams.tbarBtnsPos=='r'"></lms-windowcontrols>
     </v-toolbar>
    </v-card-title>
 

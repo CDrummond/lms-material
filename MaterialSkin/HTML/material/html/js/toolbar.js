@@ -58,7 +58,7 @@ Vue.component('lms-toolbar', {
   <img v-else class="svg-img" :src="'queue_music_outline' | svgIcon(darkUi, true, coloredToolbars&&!nowPlayingFull)"></img>
  </v-btn>
  <div class="drag-area-right"></div>
- <lms-windowcontrols v-if="queryParams.nativeTitlebar"></lms-windowcontrols>
+ <lms-windowcontrols v-if="queryParams.nativeTitlebar && queryParams.tbarBtnsPos=='r'"></lms-windowcontrols>
 </v-toolbar>
 </div>
     `,

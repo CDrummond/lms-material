@@ -87,7 +87,7 @@ Vue.component('lms-manage-players', {
     <v-btn icon @click="sleepAll($event)" :title="i18n('Set sleep time for all players')" v-if="!draggingSyncedPlayer && players.length>1"><v-icon>hotel</v-icon></v-btn>
     <v-btn icon @click="createGroup($event)" :title="i18n('Create group player')" v-if="!draggingSyncedPlayer && manageGroups && unlockAll"><img class="svg-img" :src="'speaker-group-add' | svgIcon(darkUi, coloredToolbars)"></img></v-btn>
     <div class="drag-area-right"></div>
-    <lms-windowcontrols v-if="queryParams.nativeTitlebar"></lms-windowcontrols>
+    <lms-windowcontrols v-if="queryParams.nativeTitlebar && queryParams.tbarBtnsPos=='r'"></lms-windowcontrols>
    </v-toolbar>
   </v-card-title>
 

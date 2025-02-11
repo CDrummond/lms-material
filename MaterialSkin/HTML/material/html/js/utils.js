@@ -43,7 +43,7 @@ function parseQueryParams() {
     const NATIVE_QPARMS = new Set(["nativeStatus", "nativeColors", "nativePlayer", "nativeUiChanges", "nativeTheme", "nativeCover", "nativePlayerPower", "nativeAccent", "nativeTitlebar", "nativeTextColor", "nativeConnectionStatus"]);
     const BOOL_QPARAMS = new Set(["single", "addpad", "party", "altBtnLayout", "dontTrapBack", "npAutoClose", "setTitle"]);
     const INT_QPARAMS = new Set(["topPad", "botPad", "dlgPad"]);
-    const STR_QPARAMS = new Set(["layout", "appSettings", "appQuit", "appLaunchPlayer", "download", "tbarBtns", "hidePlayers"]);
+    const STR_QPARAMS = new Set(["layout", "appSettings", "appQuit", "appLaunchPlayer", "download", "tbarBtns", "tbarBtnsPos", "hidePlayers"]);
 
     var queryString = window.location.href.substring(window.location.href.indexOf('?')+1);
     var hash = queryString.indexOf('#');
@@ -52,7 +52,7 @@ function parseQueryParams() {
     }
     var query = queryString.split('&');
     var resp = { actions:[], debug:new Set(), hide:new Set(), dontEmbed:new Set(), layout:undefined, player:undefined, single:false,
-        css:undefined, download:'browser', addpad:false, party:false, setTitle:false, expand:[], npRatio:1.33333333, topPad:0, botPad:0, dlgPad:0, tbarBtns:undefined,
+        css:undefined, download:'browser', addpad:false, party:false, setTitle:false, expand:[], npRatio:1.33333333, topPad:0, botPad:0, dlgPad:0, tbarBtns:undefined, tbarBtnsPos:'r',
         nativeStatus:0, nativeColors:0, nativePlayer:0, nativeUiChanges:0, nativeTheme:0, nativeCover:0, nativePlayerPower:0, nativeAccent:0,
         nativeTitlebar:0, nativeTextColor:0, nativeConnectionStatus:0, appSettings:undefined, appQuit:undefined, appLaunchPlayer:undefined, altBtnLayout:IS_WINDOWS, dontTrapBack:false, npAutoClose:true};
 

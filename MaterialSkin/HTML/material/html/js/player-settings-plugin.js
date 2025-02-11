@@ -20,7 +20,7 @@ Vue.component('lms-player-settings-plugin', {
       <v-btn v-if="showHome && homeButton" flat icon @click="goHome" :title="ttShortcutStr(i18n('Go home'), 'home')"><v-icon>home</v-icon></v-btn>
       <v-toolbar-title>{{title}}</v-toolbar-title>
       <v-spacer class="drag-area"></v-spacer>
-      <lms-windowcontrols v-if="queryParams.nativeTitlebar"></lms-windowcontrols>
+      <lms-windowcontrols v-if="queryParams.nativeTitlebar && queryParams.tbarBtnsPos=='r'"></lms-windowcontrols>
      </v-toolbar>
     </v-card-title>
     <v-card-text>

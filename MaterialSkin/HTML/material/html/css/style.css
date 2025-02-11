@@ -4004,6 +4004,38 @@ div.v-subheader {
  transition:none!important;
 }
 
+.wc-style-win .wc-icn {
+ font-size:16px!important;
+ line-height:16px;
+}
+
+.wc-style-win .wc-btn-r {
+ margin-left:0px;
+}
+
+.wc-style-win .wc-btn {
+ width:var(--sub-toolbar-height)!important;
+ height:var(--sub-toolbar-height)!important;
+ border-radius:0;
+ background-color:transparent;
+}
+
+.v-toolbar__content:has(.wc-style-win) {
+ margin-right:-16px!important;
+}
+
+.dialog-toolbar > .v-toolbar__content:has(.wc-style-win) {
+ margin-right:-4px!important;
+}
+
+.wc-style-win .wc-btn-close:hover  {
+ background-color: red;
+}
+
+.wc-style-win .wc-btn-close:hover .v-icon {
+ color:var(--light-text-color)!important;
+}
+
 .wc-style-mac .wc-btn {
  width:20px!important;
  height:20px!important;
@@ -4043,16 +4075,6 @@ div.v-subheader {
 .wc-style-mac .wc-btn-max {
  background-color: green;
 }
-
-/*
-.wc-close:hover {
- background-color:#dd4751!important;
-}
-
-.wc-close:hover .v-icon {
- color:var(--light-text-color)!important;
-}
-*/
 
 .browse-commands {
  border-spacing:0px !important;

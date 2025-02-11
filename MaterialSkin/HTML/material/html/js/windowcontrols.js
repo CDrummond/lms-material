@@ -24,9 +24,15 @@ Vue.component('lms-windowcontrols', {
         } else {
             this.btns=queryParams.tbarBtns.split(',');
         }
-        let space = this.btns.length==1 ? 16 : 0;
-        document.documentElement.style.setProperty("--window-controls-padr", space+"px");
-        document.documentElement.style.setProperty("--window-controls-space", ((this.btns.length*32)+space)+"px");
+        if ('win'==queryParams.tbarBtnsStyle) {
+            let space = 8;
+            document.documentElement.style.setProperty("--window-controls-padr", space+"px");
+            document.documentElement.style.setProperty("--window-controls-space", ((this.btns.length*48)+space)+"px");
+        } else {
+            let space = this.btns.length==1 ? 16 : 0;
+            document.documentElement.style.setProperty("--window-controls-padr", space+"px");
+            document.documentElement.style.setProperty("--window-controls-space", ((this.btns.length*32)+space)+"px");
+        }
         bus.$on('windowMaximized', function(isMax) {
             this.maximized = isMax;
         }.bind(this));

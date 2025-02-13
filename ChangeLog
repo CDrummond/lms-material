@@ -6,6 +6,7 @@
    'r' for right, anything else to hide display.
 3. Add 'tbarBtnsStyle' o specify window titlebar button style; 'mac', win',
    'gnome' (default).
+4. Fix long-press of queue time to show transfer dialog.
 
 5.8.0
 -----

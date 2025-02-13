@@ -8,8 +8,8 @@
 
 Vue.component('lms-choice-dialog', {
     template: `
-<v-dialog v-model="show" v-if="show" width="450" class="lms-dialog">
- <v-card>
+<v-dialog v-model="show" v-if="show" width="450" persistent class="lms-dialog">
+ <v-card v-clickoutside="outsideClick">
   <v-card-text>
    <v-select v-if="undefined!=options && options.length>1" menu-props="auto" :items="options" v-model="option" item-text="title" item-value="val"></v-select>
    <v-container grid-list-md style="padding: 4px">
@@ -82,6 +82,9 @@ Vue.component('lms-choice-dialog', {
         handleNumeric(this, this.choose);
     },
     methods: {
+        outsideClick() {
+            setTimeout(function () { this.cancel(); }.bind(this), 50);
+        },
         cancel() {
             this.show=false;
             unbindNumeric(this);

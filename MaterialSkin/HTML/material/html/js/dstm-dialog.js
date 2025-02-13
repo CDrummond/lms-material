@@ -8,8 +8,8 @@
 
 Vue.component('lms-dstm-dialog', {
     template: `
-<v-dialog v-model="show" v-if="show" persistent width="450" class="lms-dialog" v-clickoutside="outsideClick">
- <v-card>
+<v-dialog v-model="show" v-if="show" persistent width="450" class="lms-dialog">
+ <v-card v-clickoutside="outsideClick">
   <v-card-text>
    <v-container grid-list-md style="padding: 4px">
     <v-layout wrap>

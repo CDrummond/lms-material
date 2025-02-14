@@ -1110,15 +1110,14 @@ function parseBrowseResp(data, parent, options, cacheKey, parentCommand, parentG
                 let group = "ALBUM";
                 if (lmsOptions.groupByReleaseType>0) {
                     let roles = new Set(undefined==i.role_ids ? [] : splitIntArray(i.role_ids));
-                    let paramRoles = new Set(undefined==roleId ? [] : splitIntArray(roleId));
-                    roles = intersect(roles, paramRoles).size>0 ? paramRoles : roles; // prioritise parameter roles in release group allocation.
-                    showRoles = new Set([...showRoles, ...roles]);
                     if (undefined!=i.compilation && 1==parseInt(i.compilation)) {
                         group = "COMPILATION";
-                    } else {
-                        if (intersect(ARTIST_ROLES, roles).size>0 || roles.size==0) {
+                    } else if (intersect(ARTIST_ROLES, roles).size>0 || roles.size==0) {
                             group = undefined==i.release_type ? "ALBUM" : i.release_type.toUpperCase();
-                        } else if (roles.has(TRACK_ARTIST_ROLE)) {
+                    } else {
+                        let paramRoles = new Set(undefined==roleId ? [] : splitIntArray(roleId));
+                        roles = intersect(roles, paramRoles).size>0 ? paramRoles : roles; // prioritise parameter roles in release group roles allocation.
+                        if (roles.has(TRACK_ARTIST_ROLE)) {
                             group = "APPEARANCE";
                         } else if (roles.has(CONDUCTOR_ARTIST_ROLE)) {
                             group = "APPEARANCE_CONDUCTOR";
@@ -1128,6 +1127,7 @@ function parseBrowseResp(data, parent, options, cacheKey, parentCommand, parentG
                             group = "COMPOSITION";
                         }
                     }
+                    showRoles = new Set([...showRoles, ...roles]);
                 }
                 releaseTypes.add(group);
 

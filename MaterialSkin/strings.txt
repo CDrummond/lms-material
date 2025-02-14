@@ -723,31 +723,39 @@ PLUGIN_MATERIAL_COMBINE_APPS_AND_RADIO_DESC
 PLUGIN_MATERIAL_SKIN_USE_DEFAULT_FOR_SETTINGS
 	EN	Use 'Default' skin for server settings
 	FR	Utiliser le thème "Défaut" du serveur pour son paramétrage
+	NL	Gebruik 'Standaard' skin voor server instellingen
 
 PLUGIN_MATERIAL_SKIN_USE_DEFAULT_FOR_SETTINGS_DEC
 	EN	When showing erver settings use pages from the 'Default' skin and not re-themed pages from the 'Classic' skin. This will only be used if window is large enough.
 	FR	Pour l'affichage des paramètres du serveur, utiliser l'interface du thème "Défaut" au lieu d'une interface adaptée à l'écran, basée sur le thème "Classic". Ce ne sera possible que si la fenêtre est suffisamment grande.
+	NL	Kies welke skin wordt getoond voor de server instellingen. Indien de 'Standaard' skin wordt gekozen, werkt deze alleen als het scherm groot genoeg is.
 
 PLUGIN_MATERIAL_SKIN_USE_DEFAULT_FOR_SETTINGS_EMBEDDED
 	EN	Yes (embedded)
 	FR	Oui (intégré)
+	NL	Ja (ingebed)
 
 PLUGIN_MATERIAL_SKIN_USE_DEFAULT_FOR_SETTINGS_NEW_TAB
 	EN	Yes (new tab/window)
 	FR	Oui (nouvel onglet/fenêtre)
+	NL	Ja (nieuw tabblad)
 
 PLUGIN_MATERIAL_SKIN_USE_GROUPING
 	EN	Group album tracks
 	FR	Regrouper les morceaux d'un album
+	NL	Groepeer album nummers
 
 PLUGIN_MATERIAL_SKIN_USE_GROUPING_DESC
 	EN	Support grouping tracks by work and composer, or by grouping tag. If enabled, then this grouping will take preference over grouping via disc number - therefore if you have a multi-disc release that also has groupings, then tracks will be shown group via these groupings.
 	FR	Prendre en charge le regroupement des morceaux par œuvre et compositeur, ou par tag de regroupement. Si cette option est activée, ce regroupement sera prioritaire sur le regroupement par numéro de disque. Par conséquent, si vous avez un album à plusieurs disques qui comporte également des regroupements, les morceaux seront affichés groupés via ces regroupements.
+	NL	Ondersteuning voor het groeperen van nummers op werk en componist, of op basis van de tag GROUPING. Indien ingeschakeld, krijgt de GROUPING tag de voorkeur boven groepering via schijfnummer. Als jij dus een release met meerdere schijven hebt, die ook een GROUPING tag hebben, worden de nummers gegroepeerd op basis van de GROUPING tag.
 
 PLUGIN_MATERIAL_SKIN_SHOW_WORKS_IN_ARTIST_ALBUM_LIST
 	EN	Show artist works
 	FR	Afficher les œuvres des artistes
+	NL	Toon artiest composities
 
 PLUGIN_MATERIAL_SKIN_SHOW_WORKS_IN_ARTIST_ALBUM_LIST_DESC
 	EN	Show list of an artist's works when listing the artist's releases.
 	FR	Inclure les œuvres d'un artiste dans la liste des albums de l'artiste.
+	NL	Toon lijst van composities bij de lijst van de releases van de artiest. 

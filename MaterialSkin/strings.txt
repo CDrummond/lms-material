@@ -733,10 +733,10 @@ PLUGIN_MATERIAL_SKIN_USE_DEFAULT_FOR_SETTINGS_DEC
 	HU	A szerverbeállítások megjelenítésekor az „Alapértelmezett” felület oldalait használja, és ne a „Classic” felületből származó új-témájú oldalakat. Ez csak akkor használható, ha az ablak elég nagy.
 
 PLUGIN_MATERIAL_SKIN_USE_DEFAULT_FOR_SETTINGS_EMBEDDED
-	EN	Yes (beágyazott)
+	EN	Yes (embedded)
 	FR	Oui (intégré)
 	NL	Ja (ingebed)
-	HU	Igen (ingebed)
+	HU	Igen (beágyazott)
 
 PLUGIN_MATERIAL_SKIN_USE_DEFAULT_FOR_SETTINGS_NEW_TAB
 	EN	Yes (new tab/window)

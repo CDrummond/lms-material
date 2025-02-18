@@ -16,14 +16,14 @@ Vue.component('lms-toolbar', {
  <div class="maintoolbar-title">{{time}}</div>
  <div class="maintoolbar-subtitle subtext">{{date}}</div>
 </div>
-<v-layout class="link-item" @click.stop="bus.$emit('navDrawer')" @contextmenu.prevent="playerContextMenu" v-bind:class="{'navdrawer-selector':!mobileNoNowPlaying}">
- <v-btn icon class="toolbar-button" @click.stop="bus.$emit('navDrawer')">
+<v-layout class="link-item" @click.stop="openNavDrawer" @contextmenu.prevent="playerContextMenu" v-bind:class="{'navdrawer-selector':!mobileNoNowPlaying}">
+ <v-btn icon class="toolbar-button" @click.stop="openNavDrawer">
   <v-icon v-if="!connected" class="red">error</v-icon>
   <img v-else-if="updatesAvailable" class="svg-img" :src="'update' | menuIcon(darkUi, coloredToolbars&&!nowPlayingFull)"></img>
   <img v-else-if="restartRequired" class="svg-img" :src="'restart' | menuIcon(darkUi, coloredToolbars&&!nowPlayingFull)"></img>
   <v-icon v-else>menu</v-icon>
  </v-btn>
- <v-toolbar-title v-bind:class="{'link-item':!coloredToolbars, 'link-item-ct': coloredToolbars, 'maintoolbar-title-clock':showClock}" @click.stop="bus.$emit('navDrawer')">
+ <v-toolbar-title v-bind:class="{'link-item':!coloredToolbars, 'link-item-ct': coloredToolbars, 'maintoolbar-title-clock':showClock}" @click.stop="openNavDrawer">
   <div class="maintoolbar-title ellipsis" v-bind:class="{'dimmed': !playerStatus.ison, 'nd-title-fix':navdrawerVisible}">
    {{noPlayer ? trans.noplayer : player.name}}<v-icon v-if="playerStatus.sleepTime" class="player-status-icon dimmed" v-bind:class="{'link-item':!IS_MOBILE}" @click.stop="openSleep">hotel</v-icon><v-icon v-if="playerStatus.alarmStr" class="player-status-icon dimmed" v-bind:class="{'link-item':!IS_MOBILE}" @click.stop="openAlarms">alarm</v-icon><v-icon v-if="playerStatus.synced" class="player-status-icon dimmed" v-bind:class="{'link-item':!IS_MOBILE}" @click.stop="openSync">link</v-icon></div>
   <div v-if="!desktopLayout && !noPlayer && MBAR_NONE==mobileBar" class="maintoolbar-subtitle subtext ellipsis" v-bind:class="{'dimmed' : !playerStatus.ison}">{{playerStatus.count<1 ? trans.nothingplaying : isNowPlayingPage ? queueInfo : npInfo}}</div>
@@ -319,22 +319,31 @@ Vue.component('lms-toolbar', {
             }
         },
         openSleep() {
+            if (this.$store.state.visibleMenus.size>0) {
+                return;
+            }
             if (IS_MOBILE) {
-                bus.$emit('navDrawer');
+                this.openNavDrawer();
                 return;
             }
             bus.$emit('dlg.open', 'sleep', this.$store.state.player);
         },
         openAlarms() {
+            if (this.$store.state.visibleMenus.size>0) {
+                return;
+            }
             if (IS_MOBILE) {
-                bus.$emit('navDrawer');
+                this.openNavDrawer();
                 return;
             }
             bus.$emit('dlg.open', 'playersettings', undefined, 'alarms');
         },
         openSync() {
+            if (this.$store.state.visibleMenus.size>0) {
+                return;
+            }
             if (IS_MOBILE) {
-                bus.$emit('navDrawer');
+                this.openNavDrawer();
                 return;
             }
             bus.$emit('dlg.open', 'sync', this.$store.state.player);
@@ -412,6 +421,14 @@ Vue.component('lms-toolbar', {
             } else if (PMGR_SLEEP_ACTION.cmd==cmd) {
                 bus.$emit('dlg.open', 'sleep', this.$store.state.player);
             }
+        },
+        openNavDrawer() {
+            console.log("OPEN NAV", this.$store.state.visibleMenus.size);
+            if (this.$store.state.visibleMenus.size>0) {
+                console.log("MV", this.$store.state.visibleMenus.size);
+                return;
+            }
+            bus.$emit('navDrawer');
         }
     },
     computed: {
@@ -435,9 +452,6 @@ Vue.component('lms-toolbar', {
         },
         darkUi () {
             return this.$store.state.darkUi
-        },
-        menuVisible() {
-            return this.$store.state.visibleMenus.size>0
         },
         updatesAvailable() {
             return this.$store.state.unlockAll && this.$store.state.updatesAvailable.size>0
@@ -500,5 +514,13 @@ Vue.component('lms-toolbar', {
     beforeDestroy() {
         this.cancelDisconnectedTimer();
         this.cancelClockTimer();
+    },
+    watch: {
+        'menu.show': function(val) {
+            this.$store.commit('menuVisible', {name:'toolbar', shown:val});
+            if (!val) {
+                this.menu.closed = new Date().getTime();
+            }
+        }
     }
 })

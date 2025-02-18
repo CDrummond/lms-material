@@ -82,7 +82,7 @@ function shrinkJumplist(array, limit, totalItems) {
     let items = [];
     for (let i=0, len=array.length; i<len; ++i) {
         if (array[i].key==SECTION_JUMP || 0==i) {
-            items.push({weight:-25000, pos:i, item:array[i]});
+            items.push({weight:-1*LMS_BATCH_SIZE, pos:i, item:array[i]});
         } else {
             items.push({weight:-1*((i+1<len ? array[i+1].index : totalItems)-array[i].index), pos:i, item:array[i]});
         }

@@ -682,9 +682,9 @@
 "%1 Years":"%1 Лет",
 "1 day":"1 день",
 "%1 days":"%1 дней(я)",
-"Defaults":"",
-"Other":"",
+"Defaults":"По умолчанию",
+"Other":"Другое",
 "Save list/grid per view":"",
-"Save the choice of list or grid separately per view type (home screen, artists, etc.), otherwise the same setting will be used for all applicable views.":"",
-"Settings (and home screen items) are stored locally in your browser. However, some browser extensions can remove these. The 'Save as default' button can be used to store your current settings (and home screen items) on the Lyrion server. These will then be used for any settings that are not found in your browser. Likewise, 'Revert to default' can be used to manually revert to the settings stored on your Lyrion server.":""
+"Save the choice of list or grid separately per view type (home screen, artists, etc.), otherwise the same setting will be used for all applicable views.":"Сохраните выбор списка или сетки отдельно для каждого вида (главный экран, исполнители и т. д.), в противном случае для всех применимых видов будет использоваться одна и та же настройка.",
+"Settings (and home screen items) are stored locally in your browser. However, some browser extensions can remove these. The 'Save as default' button can be used to store your current settings (and home screen items) on the Lyrion server. These will then be used for any settings that are not found in your browser. Likewise, 'Revert to default' can be used to manually revert to the settings stored on your Lyrion server.":"Настройки (и элементы домашнего экрана) хранятся локально в вашем браузере. Однако некоторые расширения браузера могут удалять их. Кнопка «Сохранить как настройки по умолчанию» может использоваться для сохранения текущих настроек (и элементов домашнего экрана) на сервере Lyrion. Затем они будут использоваться для любых настроек, которые не найдены в вашем браузере. Аналогично, «Вернуться к настройкам по умолчанию» может использоваться для ручного возврата к настройкам, хранящимся на вашем сервере Lyrion."
 }

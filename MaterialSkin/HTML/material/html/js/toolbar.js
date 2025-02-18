@@ -423,9 +423,7 @@ Vue.component('lms-toolbar', {
             }
         },
         openNavDrawer() {
-            console.log("OPEN NAV", this.$store.state.visibleMenus.size);
             if (this.$store.state.visibleMenus.size>0) {
-                console.log("MV", this.$store.state.visibleMenus.size);
                 return;
             }
             bus.$emit('navDrawer');

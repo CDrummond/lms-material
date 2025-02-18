@@ -16,7 +16,7 @@ Vue.component('lms-toolbar', {
  <div class="maintoolbar-title">{{time}}</div>
  <div class="maintoolbar-subtitle subtext">{{date}}</div>
 </div>
-<v-layout class="link-item" @click.stop="bus.$emit('navDrawer')" v-bind:class="{'navdrawer-selector':!mobileNoNowPlaying}">
+<v-layout class="link-item" @click.stop="bus.$emit('navDrawer')" @contextmenu.prevent="playerContextMenu" v-bind:class="{'navdrawer-selector':!mobileNoNowPlaying}">
  <v-btn icon class="toolbar-button" @click.stop="bus.$emit('navDrawer')">
   <v-icon v-if="!connected" class="red">error</v-icon>
   <img v-else-if="updatesAvailable" class="svg-img" :src="'update' | menuIcon(darkUi, coloredToolbars&&!nowPlayingFull)"></img>
@@ -61,6 +61,19 @@ Vue.component('lms-toolbar', {
  <div class="drag-area-right"></div>
  <lms-windowcontrols v-if="queryParams.nativeTitlebar && queryParams.tbarBtnsPos=='r'"></lms-windowcontrols>
 </v-toolbar>
+<v-menu v-model="menu.show" :position-x="menu.x" :position-y="menu.y">
+ <v-list>
+  <template v-for="(entry, index) in menu.items">
+   <v-list-tile @click="menuAction(entry.cmd, $event)">
+    <v-list-tile-avatar>
+     <v-icon v-if="undefined==entry.svg">{{entry.icon}}</v-icon>
+     <img v-else class="svg-img" :src="entry.svg | svgIcon(darkUi)"></img>
+    </v-list-tile-avatar>
+    <v-list-tile-title>{{entry.title}}</v-list-tile-title>
+   </v-list-tile>
+  </template>
+ </v-list>
+<v-menu>
 </div>
     `,
     data() {
@@ -82,7 +95,8 @@ Vue.component('lms-toolbar', {
                  date: undefined,
                  time: undefined,
                  navdrawerVisible: false,
-                 windowControlsOverlayRight:0
+                 windowControlsOverlayRight:0,
+                 menu: {show:false, items:[]}
                }
     },
     mounted() {
@@ -371,6 +385,33 @@ Vue.component('lms-toolbar', {
         },
         mouseDown(ev) {
             toolbarMouseDown(ev);
+        },
+        playerContextMenu(ev) {
+            if (!this.$store.state.player) {
+                return;
+            }
+            let items = [PMGR_SETTINGS_ACTION, this.$store.state.player.ison ? PMGR_POWER_OFF_ACTION : PMGR_POWER_ON_ACTION, PMGR_SLEEP_ACTION];
+            if (this.$store.state.players && this.$store.state.players.length>1) {
+                items.push(PMGR_SYNC_ACTION);
+            }
+            showMenu(this, {show:true, items:items, x:event.clientX, y:event.clientY});
+        },
+        menuAction(cmd, event) {
+            if (!this.$store.state.player) {
+                return;
+            }
+            storeClickOrTouchPos(event, this.menu);
+            if (PMGR_SYNC_ACTION.cmd==cmd) {
+                bus.$emit('dlg.open', 'sync', this.$store.state.player);
+            } else if (PMGR_SETTINGS_ACTION.cmd==cmd) {
+                bus.$emit('dlg.open', 'playersettings', this.$store.state.player, undefined, true);
+            } else if (PMGR_POWER_ON_ACTION.cmd==cmd || PMGR_POWER_OFF_ACTION.cmd==cmd) {
+                lmsCommand(this.$store.state.player.id, ["power", this.$store.state.player.ison ? "0" : "1"]).then(({data}) => {
+                    this.refreshPlayer(player);
+                });
+            } else if (PMGR_SLEEP_ACTION.cmd==cmd) {
+                bus.$emit('dlg.open', 'sleep', this.$store.state.player);
+            }
         }
     },
     computed: {

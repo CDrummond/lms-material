@@ -6,15 +6,6 @@
  */
 'use strict';
 
-var PMGR_EDIT_GROUP_ACTION       = {cmd:"edit",     icon:"edit"};
-var PMGR_DELETE_GROUP_ACTION     = {cmd:"delete",   icon:"delete"};
-var PMGR_SYNC_ACTION             = {cmd:"sync",     icon:"link"};
-var PMGR_SETTINGS_ACTION         = {cmd:"settings", svg:"player-settings"};
-var PMGR_POWER_ON_ACTION         = {cmd:"on",       icon:"power_settings_new", dimmed:true};
-var PMGR_POWER_OFF_ACTION        = {cmd:"off",      icon:"power_settings_new", active:true};
-var PMGR_SLEEP_ACTION            = {cmd:"sleep",    icon:"hotel"};
-var PMGR_SET_DEF_PLAYER_ACTION   = {cmd:"sdp",      icon:"check_box_outline_blank"};
-var PMGR_UNSET_DEF_PLAYER_ACTION = {cmd:"usdp",     icon:"check_box", active:true};
 const PMGR_GROUP_MEMBER_ID_MOD = 1000;
 
 var playerMap = {};
@@ -316,14 +307,6 @@ Vue.component('lms-manage-players', {
     },
     methods: {
         initItems() {
-            PMGR_EDIT_GROUP_ACTION.title=i18n("Edit");
-            PMGR_DELETE_GROUP_ACTION.title=i18n("Delete");
-            PMGR_SYNC_ACTION.title=i18n("Synchronize");
-            PMGR_SETTINGS_ACTION.title=i18n("Player settings");
-            PMGR_POWER_ON_ACTION.title=i18n("Switch on");
-            PMGR_POWER_OFF_ACTION.title=i18n("Switch off");
-            PMGR_SLEEP_ACTION.title=i18n("Sleep");
-            PMGR_SET_DEF_PLAYER_ACTION.title=PMGR_UNSET_DEF_PLAYER_ACTION.title=i18n("Default player");
             this.trans = { play:i18n("Play"), pause:i18n("Pause"), stop:i18n("Stop"), prev:i18n("Previous track"), next:i18n("Next track"),
                            menu:i18n("Menu"), noplayer:i18n('No Player')  };
         },

@@ -66,7 +66,7 @@ Vue.component('lms-toolbar', {
   <template v-for="(entry, index) in menu.items">
    <v-list-tile @click="menuAction(entry.cmd, $event)">
     <v-list-tile-avatar>
-     <v-icon v-if="undefined==entry.svg">{{entry.icon}}</v-icon>
+     <v-icon v-if="undefined==entry.svg" v-bind:class="{'dimmed': entry.dimmed}">{{entry.icon}}</v-icon>
      <img v-else class="svg-img" :src="entry.svg | svgIcon(darkUi)"></img>
     </v-list-tile-avatar>
     <v-list-tile-title>{{entry.title}}</v-list-tile-title>

@@ -407,7 +407,7 @@ Vue.component('lms-toolbar', {
                 bus.$emit('dlg.open', 'playersettings', this.$store.state.player, undefined, true);
             } else if (PMGR_POWER_ON_ACTION.cmd==cmd || PMGR_POWER_OFF_ACTION.cmd==cmd) {
                 lmsCommand(this.$store.state.player.id, ["power", this.$store.state.player.ison ? "0" : "1"]).then(({data}) => {
-                    this.refreshPlayer(player);
+                    bus.$emit('refreshStatus', this.$store.state.player.id);
                 });
             } else if (PMGR_SLEEP_ACTION.cmd==cmd) {
                 bus.$emit('dlg.open', 'sleep', this.$store.state.player);

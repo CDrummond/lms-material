@@ -937,6 +937,8 @@ Vue.component('lms-iframe-dialog', {
             }
 
             this.show = false;
+            this.showMenu = false;
+            this.choiceMenu.show = false;
             this.history = [];
             this.src = undefined;
             iframeInfo.content=undefined;
@@ -989,7 +991,7 @@ Vue.component('lms-iframe-dialog', {
             this.title=parts.join(SEPARATOR);
             this.src = this.src.replace(this.playerId, player.id);
             this.show = true;
-            this.choiceMenu = {show:false, x:this.choiceMenu.x}
+            this.choiceMenu = {show:false, x:this.choiceMenu.x};
             this.loaded = false;
             this.startLoadTimer();
             this.history = [];

@@ -391,7 +391,7 @@ Vue.component('lms-player-settings', {
             this.fetchPlugins();
         }.bind(this));
         bus.$on('noPlayers', function() {
-            this.show=this.alarmDialog.show=false;
+            this.show=this.alarmDialog.show=this.playerMenu.show=false;
         }.bind(this));
         this.sleepOpen = false;
         bus.$on('dialogOpen', function(name, open) {
@@ -403,8 +403,8 @@ Vue.component('lms-player-settings', {
             if (this.showMenu) {
                 this.showMenu = false;
             }
-            if (this.playersMenu.show) {
-                this.playersMenu.show = false;
+            if (this.playerMenu.show) {
+                this.playerMenu.show = false;
             }
         }.bind(this));
         bus.$on('closeDialog', function(dlg) {
@@ -606,6 +606,7 @@ Vue.component('lms-player-settings', {
             }
             this.show=false;
             this.showMenu = false;
+            this.playerMenu.show = false;
             this.save();
             this.playerIconUpdate = undefined;
             this.playerId = undefined;

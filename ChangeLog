@@ -2,6 +2,7 @@
 -----
 1. Translation updates.
 2. Add context-menu to player name in main toolbar.
+3. Use 75px (or 150px HiDPI) for queue images.
 
 5.8.1
 -----

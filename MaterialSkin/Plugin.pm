@@ -269,9 +269,11 @@ sub initPlugin {
         Slim::Web::Pages->addRawFunction($BACKDROP_URL_PARSER_RE, \&_backdropHandler);
         Slim::Web::Pages->addRawFunction($GENRE_URL_PARSER_RE, \&_genreHandler);
         # make sure scanner does pre-cache artwork in the size the skin is using in browse modesl
-        Slim::Control::Request::executeRequest(undef, [ 'artworkspec', 'add', '300x300_f', 'Material Skin' ]);
+        Slim::Control::Request::executeRequest(undef, [ 'artworkspec', 'add', '300x300_f', 'Material Skin (Browse)' ]);
+        Slim::Control::Request::executeRequest(undef, [ 'artworkspec', 'add', '75x75_f', 'Material Skin (Queue)' ]);
     	if ($serverprefs->get('precacheHiDPIArtwork')) {
-            Slim::Control::Request::executeRequest(undef, [ 'artworkspec', 'add', '600x600_f', 'Material Skin (HiDPI)' ]);
+            Slim::Control::Request::executeRequest(undef, [ 'artworkspec', 'add', '600x600_f', 'Material Skin (Browse, HiDPI)' ]);
+            Slim::Control::Request::executeRequest(undef, [ 'artworkspec', 'add', '150x150_f', 'Material Skin (Queue, HiDPI)' ]);
         }
 
         $skinMgr = Slim::Web::HTTP::getSkinManager();

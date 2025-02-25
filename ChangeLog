@@ -10,6 +10,8 @@
 6. Add PLAYLISTID and PLAYLISTNAME to custom action variables.
 7. Remove fix for mapping of mysqueezebox.com icons, as no longer required and
    breaks some favourites images.
+8. Add support for volume control of individual players with volume fixed at
+   100% via new status query attribute - thanks to Sam Y
 
 5.8.1
 -----

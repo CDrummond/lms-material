@@ -560,7 +560,7 @@ var lmsServer = Vue.component('lms-server', {
                 logCometdMessage("PLAYER ("+playerId+")", data);
             }
             var isCurrent = this.$store.state.player && playerId==this.$store.state.player.id;
-            var dvc = 1==parseInt(data.digital_volume_control);
+            var dvc = 1==parseInt(data.digital_volume_control) || (undefined!=data.has_digital_out && 0==parseInt(data.has_digital_out));
             var player = { ison: undefined==data.power || 1==parseInt(data.power),
                            isplaying: data.mode === "play",
                            iswaiting: data.mode === "play" && data.waitingToPlay,

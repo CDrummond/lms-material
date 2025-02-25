@@ -77,7 +77,7 @@ function performCustomAction(action, player, item) {
     }
 }
 
-const ACTION_KEYS = ['ID', 'NAME', 'ARTISTID', 'ARTISTNAME', 'ALBUMID', 'ALBUMNAME', 'TRACKID', 'TRACKNAME', 'TRACKNUM', 'DISC', 'GENREID', 'GENRENAME', 'YEAR', 'COMPOSER', 'CONDUCTOR', 'BAND', 'LANG', 'FAVURL', 'TITLE', 'ITEMID'];
+const ACTION_KEYS = ['ID', 'NAME', 'ARTISTID', 'ARTISTNAME', 'ALBUMID', 'ALBUMNAME', 'TRACKID', 'TRACKNAME', 'TRACKNUM', 'DISC', 'GENREID', 'GENRENAME', 'YEAR', 'PLAYLISTID', 'PLAYLISTNAME', 'COMPOSER', 'CONDUCTOR', 'BAND', 'LANG', 'FAVURL', 'TITLE', 'ITEMID',];
 
 function doReplacements(string, player, item) {
     let val = ''+string;
@@ -116,11 +116,12 @@ function doReplacements(string, player, item) {
                 val=val.replaceAll("$GENREID", id.split(':')[1]);
             } else if (id.startsWith("year:")) {
                 val=val.replaceAll("$YEAR", id.split(':')[1]);
+            } else if (id.startsWith("playlist_id:")) {
+                val=val.replaceAll("$PLAYLISTID", id.split(':')[1]);
             } else if (id.indexOf(':')>0) {
                 val=val.replaceAll("$TRACKID", id.split(':')[1]);
-            } else {
-                val=val.replaceAll("$ITEMID", id);
             }
+            val=val.replaceAll("$ITEMID", id);
         }
         if (undefined!=item.artist) {
             val=val.replaceAll("$ARTISTNAME", item.artist);
@@ -148,6 +149,8 @@ function doReplacements(string, player, item) {
                     val=val.replaceAll("$GENRENAME", item.title);
                 } else if (!id.startsWith("year:")) {
                     val=val.replaceAll("$TRACKNAME", item.title);
+                } else if (id.startsWith("playlist_id:")) {
+                    val=val.replaceAll("$PLAYLISTNAME", item.title);
                 } else {
                     val=val.replaceAll("$TRACKNAME", item.title);
                 }

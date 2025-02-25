@@ -3061,13 +3061,6 @@ div.v-subheader {
  will-change: opacity;
 }
 
-.waiting {
- opacity:1.0;
- animation:pulse 3s infinite;
- animation-delay:2s;
- will-change: opacity;
-}
-
 .dialog-main-list {
  max-height:calc(100vh - 220px);
  overflow-y:auto;

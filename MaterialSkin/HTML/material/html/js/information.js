@@ -37,7 +37,7 @@ Vue.component('lms-information-dialog', {
    <p class="about-header">{{i18n('Library')}}</p>
    <ul>
     <template v-for="(item, index) in library"><li>{{item}}</li></template>
-    <li v-if="scanning" @click="showScanDetails" class="link-item"><v-icon class="pulse">refresh</v-icon> {{scanInfo}}</li>
+    <li v-if="scanning" @click="showScanDetails" class="link-item"><v-icon>refresh</v-icon> {{scanInfo}}</li>
     <li v-else-if="undefined!=scanInfo">{{scanInfo}}</li>
    </ul>
    <v-menu bottom v-if="!scanning && unlockAll">
@@ -61,7 +61,7 @@ Vue.component('lms-information-dialog', {
    <v-btn v-if="updates.details.length>0 && 'idle'==pluginStatus && unlockAll" @click="updatePlugins" flat><img class="svg-img btn-icon" :src="'update' | svgIcon(darkUi)">{{i18n('Update plugins')}}</v-btn>
    <p v-if="updates.details.length>0 && 'idle'==pluginStatus && unlockAll" style="padding-top:16px" class="subtext cursor link-item" @click='openPluginSettings'>{{i18n("For more fine-grained control over plugins please visit the 'Manage Plugins' section of 'Server settings'")}}</p>
 
-   <p v-if="'downloading'==pluginStatus"><v-icon class="pulse">cloud_download</v-icon> {{i18n('Downloading plugin updates')}}</p>
+   <p v-if="'downloading'==pluginStatus"><v-icon>cloud_download</v-icon> {{i18n('Downloading plugin updates')}}</p>
    <v-btn v-if="'needs_restart'==pluginStatus && unlockAll" @click="restartServer" flat><img class="svg-img btn-icon" :src="'restart' | svgIcon(darkUi)">{{i18n('Restart server')}}</v-btn>
    <p v-if="'downloading'!=pluginStatus && updates.details.length>0" style="padding-top:16px">{{i18n('The following plugins are up to date:')}}</p>
    <ul>

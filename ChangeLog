@@ -8,6 +8,8 @@
    icon to indicate waiting to play.
 5. Fix custom actions for playlists.
 6. Add PLAYLISTID and PLAYLISTNAME to custom action variables.
+7. Remove fix for mapping of mysqueezebox.com icons, as no longer required and
+   breaks some favourites images.
 
 5.8.1
 -----

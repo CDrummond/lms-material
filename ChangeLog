@@ -12,6 +12,7 @@
    breaks some favourites images.
 8. Add support for volume control of individual players with volume fixed at
    100% via new status query attribute - thanks to Sam Y
+9. In group volume dialog, fix player name for fixed volume players.
 
 5.8.1
 -----

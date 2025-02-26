@@ -1073,6 +1073,9 @@ var lmsQueue = Vue.component("lms-queue", {
             if ((this.$store.state.visibleMenus.size>0 && this.otherActions.indexOf(act)<0)) {
                 return;
             }
+            if ((this.items.length<1 && PQ_REQUIRE_AT_LEAST_1_ITEM.has(act)) || (this.items.length<2 && PQ_REQUIRE_MULTIPLE_ITEMS.has(act))) {
+                return;
+            }
             storeClickOrTouchPos(event, this.menu);
             if (act==PQ_SAVE_ACTION) {
                 this.save();

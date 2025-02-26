@@ -1,18 +1,19 @@
 5.8.2
 -----
-1. Translation updates.
-2. Add context-menu to player name in main toolbar.
-3. Use 75px (or 150px HiDPI) for queue images.
-4. Reduce CPU load by removing some CSS animations - don't pulse library
-   refresh status, don't pulse playing but muted volume, and use outlined pause
-   icon to indicate waiting to play.
-5. Fix custom actions for playlists.
-6. Add PLAYLISTID and PLAYLISTNAME to custom action variables.
-7. Remove fix for mapping of mysqueezebox.com icons, as no longer required and
-   breaks some favourites images.
-8. Add support for volume control of individual players with volume fixed at
-   100% via new status query attribute - thanks to Sam Y
-9. In group volume dialog, fix player name for fixed volume players.
+ 1. Translation updates.
+ 2. Add context-menu to player name in main toolbar.
+ 3. Use 75px (or 150px HiDPI) for queue images.
+ 4. Reduce CPU load by removing some CSS animations - don't pulse library
+    refresh status, don't pulse playing but muted volume, and use outlined pause
+    icon to indicate waiting to play.
+ 5. Fix custom actions for playlists.
+ 6. Add PLAYLISTID and PLAYLISTNAME to custom action variables.
+ 7. Remove fix for mapping of mysqueezebox.com icons, as no longer required and
+    breaks some favourites images.
+ 8. Add support for volume control of individual players with volume fixed at
+    100% via new status query attribute - thanks to Sam Y
+ 9. In group volume dialog, fix player name for fixed volume players.
+10. Ignore clicks on disabled queue context menu items.
 
 5.8.1
 -----

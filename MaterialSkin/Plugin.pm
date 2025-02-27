@@ -1969,15 +1969,16 @@ sub _cliGroupCommand {
 
     my $cmd = $request->getParam('_cmd');
     my $client = $request->client();
-    if ($request->paramUndefinedOrNotOneOf($cmd, ['set-modes']) ) {
+    if ($request->paramUndefinedOrNotOneOf($cmd, ['init']) ) {
         $request->setStatusBadParams();
         return;
     }
 
-    if ($cmd eq 'set-modes') {
+    if ($cmd eq 'init') {
         # Set group player's enabled browse modes to the enabled modes of all members
         my $groupsPluginPrefs = preferences('plugin.groups');
         my $group = $groupsPluginPrefs->client($client);
+        my $volumes = {};
         if ($group) {
             my $members = $group->get('members');
             if ($members) {
@@ -2004,7 +2005,14 @@ sub _cliGroupCommand {
                             }
                         }
                     }
+                    if (!defined $member || $serverprefs->client($member)->get('digitalVolumeControl')) {
+                        # if member is not connected, just use the last known volume
+                        $volumes->{$id} = (defined $member ? $member->volume : 50) if !defined $volumes->{$id};
+                    } else {
+                        $volumes->{$id} = -1;
+                    }
                 }
+                $group->set('volumes', $volumes);
 
                 if ($haveMember == 0) {
                     # Group has no members??? Enable some basic modes...

@@ -203,7 +203,7 @@ Vue.component('lms-groupplayers-dialog', {
                             'weakVolume:'+(this.options.weakVolume ? 1 : 0)]).then(({data}) => {
                 bus.$emit('refreshServerStatus', 1000);
                 if (data && data.result && data.result.id) {
-                    lmsCommand(data.result.id, ["material-skin-group", "set-modes"]);
+                    lmsCommand(data.result.id, ["material-skin-group", "init"]);
                 }
                 this.show=false;
             });

@@ -14,6 +14,7 @@
     100% via new status query attribute - thanks to Sam Y
  9. In group volume dialog, fix player name for fixed volume players.
 10. Ignore clicks on disabled queue context menu items.
+11. Store player volumes when creating a group player.
 
 5.8.1
 -----

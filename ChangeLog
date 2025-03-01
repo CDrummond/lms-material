@@ -2,7 +2,7 @@
 -----
  1. Translation updates.
  2. Add context-menu to player name in main toolbar.
- 3. Use 75px (or 150px HiDPI) for queue images.
+ 3. Use 150px (or 300px HiDPI) for queue images.
  4. Reduce CPU load by removing some CSS animations - don't pulse library
     refresh status, don't pulse playing but muted volume, and use outlined pause
     icon to indicate waiting to play.

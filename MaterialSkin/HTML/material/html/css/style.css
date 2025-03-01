@@ -850,12 +850,14 @@ div.v-subheader {
  margin-bottom:5px;
  height:calc((var(--min-grid-width) - 5px) + (5px * var(--image-grid-factor))) !important;
  width:calc((var(--min-grid-width) - 5px) + (5px * var(--image-grid-factor))) !important;
+ pointer-events:none!important;
 }
 
 .image-grid-item-icon {
  display:block;
  height:calc(var(--min-grid-width) + (5px * var(--image-grid-factor))) !important;
  width:calc((var(--min-grid-width) - 5px) + (5px * var(--image-grid-factor))) !important;
+ pointer-events:none!important;
 }
 
 .image-grid-item-icon .image-grid-item-svg {

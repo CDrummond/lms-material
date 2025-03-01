@@ -15,6 +15,7 @@
  9. In group volume dialog, fix player name for fixed volume players.
 10. Ignore clicks on disabled queue context menu items.
 11. Store player volumes when creating a group player.
+12. Fix drag'n'drop in grid view not showing drag thumbnail.
 
 5.8.1
 -----

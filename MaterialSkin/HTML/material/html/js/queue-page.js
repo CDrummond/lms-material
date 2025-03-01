@@ -24,13 +24,13 @@ function queueItemCover(item) {
         return resolveImageUrl(item.artwork_url);
     }
     if (undefined!=item.coverid) { // && !(""+item.coverid).startsWith("-")) {
-        return "/music/"+item.coverid+"/cover"+LMS_QUEUE_IMAGE_SIZE;
+        return "/music/"+item.coverid+"/cover"+LMS_LIST_IMAGE_SIZE;
     }
     if (LMS_P_MAI) {
         if (item.artist_ids) {
-            return "/imageproxy/mai/artist/" + item.artist_ids[0] + "/image" + LMS_QUEUE_IMAGE_SIZE;
+            return "/imageproxy/mai/artist/" + item.artist_ids[0] + "/image" + LMS_LIST_IMAGE_SIZE;
         } else if (item.artist_id) {
-            return "/imageproxy/mai/artist/" + item.artist_id + "/image" + LMS_QUEUE_IMAGE_SIZE;
+            return "/imageproxy/mai/artist/" + item.artist_id + "/image" + LMS_LIST_IMAGE_SIZE;
         }
     }
     return resolveImageUrl(LMS_BLANK_COVER);
@@ -555,7 +555,7 @@ var lmsQueue = Vue.component("lms-queue", {
         this.coverUrl = undefined;
         this.coverTrackIndex = undefined;
         bus.$on('currentCover', function(coverUrl, queueIndex) {
-            this.coverUrl = undefined==coverUrl || coverUrl.endsWith(DEFAULT_COVER) ? undefined : changeImageSizing(coverUrl, LMS_QUEUE_IMAGE_SIZE);
+            this.coverUrl = undefined==coverUrl || coverUrl.endsWith(DEFAULT_COVER) ? undefined : changeImageSizing(coverUrl, LMS_LIST_IMAGE_SIZE);
             this.coverTrackIndex = queueIndex;
             this.setBgndCover();
         }.bind(this));
@@ -1546,7 +1546,7 @@ var lmsQueue = Vue.component("lms-queue", {
             updateBgndImage(this, url);
             // Check for cover changes in radio streams...
             if (this.coverUrl && undefined!=this.coverTrackIndex && this.coverTrackIndex>=0 && this.coverTrackIndex<this.items.length) {
-                var resizedUrl = changeImageSizing(this.coverUrl, LMS_QUEUE_IMAGE_SIZE);
+                var resizedUrl = changeImageSizing(this.coverUrl, LMS_LIST_IMAGE_SIZE);
                 if (this.items[this.coverTrackIndex].image!=resizedUrl) {
                     // Change item's key to force an update...
                     this.items[this.coverTrackIndex].key=this.items[this.coverTrackIndex].id+"."+this.coverTrackIndex+"."+(new Date().getTime().toString(16));

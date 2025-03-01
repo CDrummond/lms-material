@@ -190,7 +190,7 @@ function parseBrowseResp(data, parent, options, cacheKey, parentCommand, parentG
                         resp.items.push({id: "image:"+resp.items.length,
                                          title: replaceHtmlBrackets(itemText(i)),
                                          type: "image",
-                                         image: resolveImageUrl(i.url, LMS_IMAGE_SIZE),
+                                         image: resolveImageUrl(i.url, LMS_LIST_IMAGE_SIZE),
                                          src: resolveImageUrl(i.url),
                                          w: 0,
                                          h: 0});
@@ -273,10 +273,10 @@ function parseBrowseResp(data, parent, options, cacheKey, parentCommand, parentG
                 }
 
                 i.text = undefined;
-                i.image = resolveImage(i.icon ? i.icon : i["icon-id"], undefined, LMS_IMAGE_SIZE);
+                i.image = resolveImage(i.icon ? i.icon : i["icon-id"], undefined, LMS_LIST_IMAGE_SIZE);
 
                 if (!i.image && i.commonParams && i.commonParams.album_id) {
-                    i.image = resolveImage("music/0/cover" + LMS_IMAGE_SIZE);
+                    i.image = resolveImage("music/0/cover" + LMS_LIST_IMAGE_SIZE);
                 }
 
                 if (i.image) {
@@ -343,7 +343,7 @@ function parseBrowseResp(data, parent, options, cacheKey, parentCommand, parentG
                     if (undefined!=parent && parent.id!=TOP_FAVORITES_ID) {
                         i.menu.push(MOVE_FAV_TO_PARENT_ACTION);
                     }
-                    if (i.isFavFolder && (!i.image || i.image.startsWith("/html/images/favorites"+LMS_IMAGE_SIZE))) {
+                    if (i.isFavFolder && (!i.image || i.image.startsWith("/html/images/favorites"+LMS_LIST_IMAGE_SIZE))) {
                         i.svg="folder-favorite";
                         i.image=undefined;
                     } else if (!i.isFavFolder && undefined!=i.presetParams && undefined!=i.presetParams.favorites_url) {
@@ -666,7 +666,7 @@ function parseBrowseResp(data, parent, options, cacheKey, parentCommand, parentG
                         for (var img=0, iloop=splitStringArray(parts[1], true).reverse(), limit = iloop.length>4 ? 4 : iloop.length; img<limit; ++img) {
                             var id = ""+iloop[img];
                             if (!isEmpty(id) && "null"!=id) {
-                                imageList.push(resolveImageUrl(iloop[img], LMS_IMAGE_SIZE));
+                                imageList.push(resolveImageUrl(iloop[img], LMS_LIST_IMAGE_SIZE));
                             }
                         }
                         if (imageList.length>1) {
@@ -721,8 +721,8 @@ function parseBrowseResp(data, parent, options, cacheKey, parentCommand, parentG
                     resp.canUseGrid = false;
                 }
             } else if (haveWithoutIcons && haveWithIcons) {
-                var defAlbumCover = resolveImage("music/0/cover" + LMS_IMAGE_SIZE);
-                var defArtistImage = resolveImage("html/images/artists" + LMS_IMAGE_SIZE);
+                var defAlbumCover = resolveImage("music/0/cover" + LMS_LIST_IMAGE_SIZE);
+                var defArtistImage = resolveImage("html/images/artists" + LMS_LIST_IMAGE_SIZE);
 
                 for (var i=0, loop=resp.items, len=loop.length; i<len; ++i) {
                     var item=loop[i];
@@ -952,7 +952,7 @@ function parseBrowseResp(data, parent, options, cacheKey, parentCommand, parentG
                 var artist = {
                               id: "artist_id:"+i.id,
                               title: replaceHtmlBrackets(i.artist),
-                              image: (LMS_P_MAI && lmsOptions.showArtistImages) ? "/imageproxy/mai/artist/" + i.id + "/image" + LMS_IMAGE_SIZE : undefined,
+                              image: (LMS_P_MAI && lmsOptions.showArtistImages) ? "/imageproxy/mai/artist/" + i.id + "/image" + LMS_LIST_IMAGE_SIZE : undefined,
                               stdItem: stdItem,
                               type: "group",
                               textkey: key
@@ -1166,8 +1166,8 @@ function parseBrowseResp(data, parent, options, cacheKey, parentCommand, parentG
                               subtitleLinks: subtitleLinks,
                               subIsYear: subIsYear,
                               image: i.artwork_url
-                                        ? resolveImageUrl(i.artwork_url, LMS_IMAGE_SIZE)
-                                        : ("/music/" + (i.artwork_track_id ? i.artwork_track_id : i.artwork) + "/cover" + LMS_IMAGE_SIZE),
+                                        ? resolveImageUrl(i.artwork_url, LMS_LIST_IMAGE_SIZE)
+                                        : ("/music/" + (i.artwork_track_id ? i.artwork_track_id : i.artwork) + "/cover" + LMS_LIST_IMAGE_SIZE),
                               stdItem: STD_ITEM_ALBUM,
                               type: "group",
                               origTitle: i.album,
@@ -1201,7 +1201,7 @@ function parseBrowseResp(data, parent, options, cacheKey, parentCommand, parentG
             ignoreRoles.forEach(role => { showRoles.delete(role) });
             resp.showRoles = Array.from(showRoles).sort();
             if (undefined!=reqArtistId && LMS_P_MAI && lmsOptions.showArtistImages) {
-                resp.image= "/imageproxy/mai/artist/" + reqArtistId + "/image" + LMS_IMAGE_SIZE;
+                resp.image= "/imageproxy/mai/artist/" + reqArtistId + "/image" + LMS_LIST_IMAGE_SIZE;
             }
             if (isWorksAlbums) {
                 resp.subtitle=i18np("1 Item", "%1 Items", loopLen);
@@ -1592,7 +1592,7 @@ function parseBrowseResp(data, parent, options, cacheKey, parentCommand, parentG
                               stdItem: stdItem,
                               type: "track",
                               rating: i.rating,
-                              image: showAlbumName ? ("/music/" + (""==i.coverid || undefined==i.coverid ? "0" : i.coverid) + "/cover" +LMS_IMAGE_SIZE) : undefined,
+                              image: showAlbumName ? ("/music/" + (""==i.coverid || undefined==i.coverid ? "0" : i.coverid) + "/cover" +LMS_LIST_IMAGE_SIZE) : undefined,
                               filter: i.disc!=undefined ? FILTER_PREFIX+i.disc : undefined,
                               gfilter: groupingTitle!=undefined ? FILTER_PREFIX+groupings.size : undefined,
                               emblem: showAlbumName ? getEmblem(i.extid) : undefined,
@@ -1625,7 +1625,7 @@ function parseBrowseResp(data, parent, options, cacheKey, parentCommand, parentG
                     }
                 }
                 if (0==idx && !showAlbumName && i.coverid!=undefined && !isEmpty(""+i.coverid)) {
-                    resp.image="/music/"+i.coverid+"/cover"+LMS_IMAGE_SIZE;
+                    resp.image="/music/"+i.coverid+"/cover"+LMS_LIST_IMAGE_SIZE;
                 }
             }
             // If all tracks marked as a compilation, then see what we can (potentially) use
@@ -1957,8 +1957,8 @@ function parseBrowseResp(data, parent, options, cacheKey, parentCommand, parentG
                               subtitle: subtitle,
                               subtitleContext: subtitleContext,
                               image: i.artwork_url
-                                        ? resolveImageUrl(i.artwork_url, LMS_IMAGE_SIZE)
-                                        : ("/music/" + (""==i.coverid || undefined==i.coverid ? "0" : i.coverid) + "/cover" +LMS_IMAGE_SIZE),
+                                        ? resolveImageUrl(i.artwork_url, LMS_LIST_IMAGE_SIZE)
+                                        : ("/music/" + (""==i.coverid || undefined==i.coverid ? "0" : i.coverid) + "/cover" +LMS_LIST_IMAGE_SIZE),
                               //icon: "music_note",
                               stdItem: isRemote ? STD_ITEM_REMOTE_PLAYLIST_TRACK : STD_ITEM_PLAYLIST_TRACK,
                               type: "track",
@@ -2003,7 +2003,7 @@ function parseBrowseResp(data, parent, options, cacheKey, parentCommand, parentG
                     i.id = "image:"+resp.items.length,
                     i.type = "image";
                     i.src = resolveImageUrl(i.image);
-                    i.image = resolveImageUrl(i.image, LMS_IMAGE_SIZE);
+                    i.image = resolveImageUrl(i.image, LMS_LIST_IMAGE_SIZE);
                     i.w=0;
                     i.h=0;
                     resp.items.push(i);
@@ -2030,7 +2030,7 @@ function parseBrowseResp(data, parent, options, cacheKey, parentCommand, parentG
                 var i = loop[idx];
                 var mappedIcon = mapIcon(i);
                 i.title = replaceHtmlBrackets(itemText(i));
-                i.image = mappedIcon ? undefined : resolveImage(i.icon, i.image, LMS_IMAGE_SIZE);
+                i.image = mappedIcon ? undefined : resolveImage(i.icon, i.image, LMS_LIST_IMAGE_SIZE);
                 if ("text"===i.type || "textarea"===i.type) {
                     if (i.title.length<75 && i.image) { // Possible image?
                         numImages++;
@@ -2039,7 +2039,7 @@ function parseBrowseResp(data, parent, options, cacheKey, parentCommand, parentG
                 } else if ("search"===i.type) {
                     i.command = [i.cmd ? i.cmd : parent.command[0], "items"];
                     i.params = ["want_url:1", "item_id:"+i.id, "search:"+TERM_PLACEHOLDER];
-                    i.image = mappedIcon ? undefined : resolveImage(i.icon, i.image, LMS_IMAGE_SIZE);
+                    i.image = mappedIcon ? undefined : resolveImage(i.icon, i.image, LMS_LIST_IMAGE_SIZE);
                     i.icon = "search";
                     i.type = "xmlsearch"; // Hack, so that we don't think this is library search...
                     i.id = parent.url+i.cmd+i.id;
@@ -2112,7 +2112,7 @@ function parseBrowseResp(data, parent, options, cacheKey, parentCommand, parentG
                     for (var img=0, iloop=splitStringArray(i.artwork_track_ids, true).reverse(), limit = iloop.length>4 ? 4 : iloop.length; img<limit; ++img) {
                         var id = ""+iloop[img];
                         if (!isEmpty(id) && "null"!=id) {
-                            images.push(resolveImageUrl(iloop[img], LMS_IMAGE_SIZE));
+                            images.push(resolveImageUrl(iloop[img], LMS_LIST_IMAGE_SIZE));
                         }
                     }
                 }
@@ -2125,7 +2125,7 @@ function parseBrowseResp(data, parent, options, cacheKey, parentCommand, parentG
                     album_id: i.album_id,
                     id: "work_id:"+i.work_id,
                     type: "group",
-                    image: images.length>0 ? images[images.length-1] : undefined==image ? DEFAULT_WORKS_COVER : resolveImageUrl(image, LMS_IMAGE_SIZE),
+                    image: images.length>0 ? images[images.length-1] : undefined==image ? DEFAULT_WORKS_COVER : resolveImageUrl(image, LMS_LIST_IMAGE_SIZE),
                     stdItem: STD_ITEM_WORK,
                     textkey: key,
                     images: images.length>1 ? images : undefined,

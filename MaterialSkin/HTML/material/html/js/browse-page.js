@@ -173,10 +173,10 @@ var lmsBrowse = Vue.component("lms-browse", {
        <img v-else-if="citem.multi" class="multi-disc" :src="(1==citem.multi ? 'group-multi' : 'album-multi') | svgIcon(true)" loading="lazy"></img>
        <div v-if="citem.images" :tile="true" class="image-grid-item-img">
         <div class="mi" :class="'mi'+citem.images.length">
-         <img v-for="(mic, midx) in citem.images" :class="'mi-'+midx" :key="mic" :src="mic" loading="lazy"></img>
+         <img v-for="(mic, midx) in citem.images" :class="'mi-'+midx" :key="mic" :src="mic|gridImageSize" loading="lazy"></img>
         </div>
        </div>
-       <img v-else-if="citem.image" :key="citem.image" :src="citem.image" onerror="this.src=DEFAULT_COVER" v-bind:class="{'radio-img': SECTION_RADIO==citem.section || SECTION_APPS==citem.section || citem.isRadio, 'circular':citem.stdItem==STD_ITEM_ARTIST || citem.stdItem==STD_ITEM_ONLINE_ARTIST}" class="image-grid-item-img" loading="lazy"></img>
+       <img v-else-if="citem.image" :key="citem.image" :src="citem.image|gridImageSize" onerror="this.src=DEFAULT_COVER" v-bind:class="{'radio-img': SECTION_RADIO==citem.section || SECTION_APPS==citem.section || citem.isRadio, 'circular':citem.stdItem==STD_ITEM_ARTIST || citem.stdItem==STD_ITEM_ONLINE_ARTIST}" class="image-grid-item-img" loading="lazy"></img>
        <div class="image-grid-item-icon" v-else>
         <v-icon v-if="citem.icon" class="image-grid-item-img image-grid-item-icon">{{citem.icon}}</v-icon>
         <img v-else-if="citem.svg" class="image-grid-item-svg" :src="citem.svg | svgIcon(darkUi)" loading="lazy"></img>
@@ -2393,6 +2393,9 @@ var lmsBrowse = Vue.component("lms-browse", {
         },
         tooltipStr(str, val, showShortcut) {
             return showShortcut ? ttShortcutStr(str, val) : str;
+        },
+        gridImageSize(str) {
+            return toggleBrowseImageSize(str, true);
         }
     },
     watch: {

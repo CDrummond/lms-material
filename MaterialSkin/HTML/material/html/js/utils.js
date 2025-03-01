@@ -307,7 +307,7 @@ function resolveImage(icon, image, size) {
 
 function changeImageSizing(path, newSize) {
     if (undefined!=path) {
-        var specs = [LMS_IMAGE_SIZE, LMS_CURRENT_IMAGE_SIZE, LMS_QUEUE_IMAGE_SIZE, "_50x50_o"];
+        var specs = [LMS_IMAGE_SIZE, LMS_CURRENT_IMAGE_SIZE, LMS_LIST_IMAGE_SIZE, "_50x50_o"];
         for (var s=0, len=specs.length; s<len; ++s) {
             if (path.endsWith(specs[s]+".png")) {
                 return path.replace(specs[s]+".png", (newSize ? newSize : "")+".png");
@@ -315,6 +315,20 @@ function changeImageSizing(path, newSize) {
             if (path.endsWith(specs[s])) {
                 return path.substring(0, path.length - specs[s].length)+(newSize ? newSize : "");
             }
+        }
+    }
+    return path;
+}
+
+function toggleBrowseImageSize(path, toGrid) {
+    if (undefined!=path) {
+        let from = toGrid ? LMS_LIST_IMAGE_SIZE : LMS_IMAGE_SIZE;
+        let to = toGrid ? LMS_IMAGE_SIZE : LMS_LIST_IMAGE_SIZE;
+        if (path.endsWith(from+".png")) {
+            return path.replace(from+".png", to+".png");
+        }
+        if (path.endsWith(from)) {
+            return path.replace(from, to+".png");
         }
     }
     return path;

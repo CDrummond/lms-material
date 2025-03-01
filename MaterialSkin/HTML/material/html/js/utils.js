@@ -307,7 +307,7 @@ function resolveImage(icon, image, size) {
 
 function changeImageSizing(path, newSize) {
     if (undefined!=path) {
-        var specs = [LMS_IMAGE_SIZE, LMS_CURRENT_IMAGE_SIZE, "_50x50_o"];
+        var specs = [LMS_IMAGE_SIZE, LMS_CURRENT_IMAGE_SIZE, LMS_QUEUE_IMAGE_SIZE, "_50x50_o"];
         for (var s=0, len=specs.length; s<len; ++s) {
             if (path.endsWith(specs[s]+".png")) {
                 return path.replace(specs[s]+".png", (newSize ? newSize : "")+".png");

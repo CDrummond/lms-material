@@ -204,10 +204,10 @@ function buildArtistWithContext(i, page, useBand, useComposer, useConductor) {
             details += i18n('<obj>performed by</obj> %1', artists) + "<br/>";
         }
         if (haveCond) {
-            details += i18n('<obj>conducted by</obj> %1', conductors) + (artistLast ? "<br/>" : "");
+            details += i18n('<obj>conducted by</obj> %1', conductors) + (haveComp || artistLast ? "<br/>" : "");
         }
         if (haveComp) {
-            details += i18n('<obj>composed by</obj> %1', composers) + (haveCond || artistLast ? "<br/>" : "");
+            details += i18n('<obj>composed by</obj> %1', composers) + (artistLast ? "<br/>" : "");
         }
         if (artistLast) {
             details += i18n('<obj>performed by</obj> %1', artists);

@@ -188,10 +188,12 @@ var lmsCurrentCover = Vue.component('lms-currentcover', {
         handleColor(vRgb, avRgb) {
             let isDefCover = undefined==avRgb || DEFAULT_COVER==this.coverUrl;
             let rgb = undefined;
+            let hexColor = undefined;
 
             if (isDefCover) {
                 document.documentElement.style.setProperty('--tint-color', 'var(--default-primary-color)');
                 rgb = [25,118,210];
+                hexColor=rgb2Hex(rgb);
                 document.documentElement.style.setProperty('--accent-color', 'var(--default-accent-color)');
                 document.documentElement.style.setProperty('--primary-color', 'var(--default-primary-color)');
                 document.documentElement.style.setProperty('--highlight-rgb', 'var(--default-highlight-rgb)');
@@ -199,6 +201,7 @@ var lmsCurrentCover = Vue.component('lms-currentcover', {
                 document.documentElement.style.setProperty('--tint-color', rgb2Hex(avRgb));
                 if (isGrey(avRgb) || undefined==vRgb || isGrey(vRgb)) {
                     rgb = [25,118,210];
+                    hexColor=rgb2Hex(rgb);
                     document.documentElement.style.setProperty('--accent-color', 'var(--default-accent-color)');
                     document.documentElement.style.setProperty('--primary-color', 'var(--default-primary-color)');
                     document.documentElement.style.setProperty('--highlight-rgb', 'var(--default-highlight-rgb)');
@@ -209,7 +212,7 @@ var lmsCurrentCover = Vue.component('lms-currentcover', {
                     hsv[1]=Math.min(hsv[1], 0.8);
                     rgb = hsv2Rgb(hsv);
 
-                    let hexColor=rgb2Hex(rgb);
+                    hexColor=rgb2Hex(rgb);
                     document.documentElement.style.setProperty('--primary-color', hexColor);
                     document.documentElement.style.setProperty('--highlight-rgb', rgb[0]+","+rgb[1]+","+rgb[2]);
                     document.documentElement.style.setProperty('--accent-color', rgb2Hex(rgb));

@@ -2590,8 +2590,13 @@ sub _genreHandler {
     if (-e $filePath) {
         Slim::Web::HTTP::sendStreamingFile( $httpClient, $response, "image/jpeg", $filePath, '', 'noAttachment' );
     } else {
-        $filePath = dirname(__FILE__) . "/HTML/material/html/images/nogenre.png";
-        Slim::Web::HTTP::sendStreamingFile( $httpClient, $response, "image/png", $filePath, '', 'noAttachment' );
+        $filePath = Slim::Utils::Prefs::dir() . "/material-skin/genres/" . $fileName . ".png";
+        if (-e $filePath) {
+            Slim::Web::HTTP::sendStreamingFile( $httpClient, $response, "image/png", $filePath, '', 'noAttachment' );
+        } else {
+            $filePath = dirname(__FILE__) . "/HTML/material/html/images/nogenre.png";
+            Slim::Web::HTTP::sendStreamingFile( $httpClient, $response, "image/png", $filePath, '', 'noAttachment' );
+        }
     }
 }
 

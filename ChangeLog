@@ -21,6 +21,8 @@
     "playlistImages: '1'" to 'prefs/plugin/material-skin.prefs'. Images need to
     be in 'prefs/material-skin/playlists/' - and have same name requiresments
     as per genre images.
+15. Use user genre, and playlist, images when listing favourites, if relevant
+    option is enabled.
 
 5.8.1
 -----

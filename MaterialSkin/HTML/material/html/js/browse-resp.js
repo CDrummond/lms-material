@@ -363,8 +363,12 @@ function parseBrowseResp(data, parent, options, cacheKey, parentCommand, parentG
                                 i.image=undefined;
                             }
                         } else if (i.presetParams.favorites_url.startsWith("db:genre.name") && i.presetParams.icon=="html/images/genres.png") {
-                            i.svg="genre";
-                            i.image=undefined;
+                            if (lmsOptions.genreImages) {
+                                i.image = "material/genres/" + i.title.toLowerCase().replace(/[^0-9a-z]/gi, '');
+                            } else {
+                                i.svg="genre";
+                                i.image=undefined;
+                            }
                         } else if (i.presetParams.favorites_url.startsWith("db:year.id") && i.presetParams.icon=="html/images/years.png") {
                             i.icon="date_range";
                             i.image=undefined;
@@ -373,8 +377,12 @@ function parseBrowseResp(data, parent, options, cacheKey, parentCommand, parentG
                             i.svg="classical-work";
                             i.image=undefined;
                         } else if (i.presetParams.favorites_url.startsWith("file://") && i.presetParams.icon=="html/images/playlists.png") {
-                            i.icon="list";
-                            i.image=undefined;
+                            if (lmsOptions.playlistImages) {
+                                i.image = "material/playlists/" + i.title.toLowerCase().replace(/[^0-9a-z]/gi, '');
+                            } else {
+                                i.icon="list";
+                                i.image=undefined;
+                            }
                         } else if (i.presetParams.favorites_url.startsWith("dynamicplaylist://") && i.presetParams.icon=="plugins/DynamicPlayList/html/images/dynamicplaylist.png") {
                             i.svg="dice-list";
                             i.image=undefined;

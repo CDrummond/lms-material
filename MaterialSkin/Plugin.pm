@@ -2579,25 +2579,35 @@ sub _backdropHandler {
     Slim::Web::HTTP::sendStreamingFile( $httpClient, $response, "image/jpeg", $filePath, '', 'noAttachment' );
 }
 
-sub _genreHandler {
-    my ( $httpClient, $response ) = @_;
+sub _sendImage {
+    my ( $httpClient, $response, $path, $ext, $mime ) = @_;
+    my $filePath = $path . "." . $ext;
+    if (-e $filePath) {
+        Slim::Web::HTTP::sendStreamingFile( $httpClient, $response, $mime, $filePath, '', 'noAttachment' );
+        return 1;
+    }
+    return 0;
+}
+
+sub _sendMaterialImage {
+    my ( $httpClient, $response, $subdir, $notfound ) = @_;
     return unless $httpClient->connected;
 
     my $request = $response->request;
     my $fileName = basename($request->uri->path);
-    my $filePath = Slim::Utils::Prefs::dir() . "/material-skin/genres/" . $fileName . ".jpg";
+    my $filePath = Slim::Utils::Prefs::dir() . "/material-skin/" . $subdir . "/" . $fileName;
     $response->code(RC_OK);
-    if (-e $filePath) {
-        Slim::Web::HTTP::sendStreamingFile( $httpClient, $response, "image/jpeg", $filePath, '', 'noAttachment' );
-    } else {
-        $filePath = Slim::Utils::Prefs::dir() . "/material-skin/genres/" . $fileName . ".png";
-        if (-e $filePath) {
-            Slim::Web::HTTP::sendStreamingFile( $httpClient, $response, "image/png", $filePath, '', 'noAttachment' );
-        } else {
-            $filePath = dirname(__FILE__) . "/HTML/material/html/images/nogenre.png";
+    if (_sendImage($httpClient, $response, $filePath, "jpg", "image/jpeg")==0) {
+        if (_sendImage($httpClient, $response, $filePath, "png", "image/png")==0) {
+            $filePath = dirname(__FILE__) . "/HTML/material/html/images/" . $notfound . ".png";
             Slim::Web::HTTP::sendStreamingFile( $httpClient, $response, "image/png", $filePath, '', 'noAttachment' );
         }
     }
+}
+
+sub _genreHandler {
+    my ( $httpClient, $response ) = @_;
+    _sendMaterialImage($httpClient, $response, "genres", "nogenre");
 }
 
 1;

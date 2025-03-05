@@ -72,6 +72,7 @@ my $USER_COLOR_URL_PARSER_RE = qr{material/usercolor/.+}i;
 my $DOWNLOAD_PARSER_RE = qr{material/download/.+}i;
 my $BACKDROP_URL_PARSER_RE = qr{material/backdrops/.+}i;
 my $GENRE_URL_PARSER_RE = qr{material/genres/.+}i;
+my $PLAYLIST_URL_PARSER_RE = qr{material/playlists/.+}i;
 
 my $DEFAULT_COMPOSER_GENRES = string('PLUGIN_MATERIAL_SKIN_DEFAULT_COMPOSER_GENRES');
 my $DEFAULT_CONDUCTOR_GENRES = string('PLUGIN_MATERIAL_SKIN_DEFAULT_CONDUCTOR_GENRES');
@@ -89,7 +90,7 @@ my @ADV_SEARCH_OTHER = ('content_type', 'contributor_namesearch.active1', 'contr
 
 my %IGNORE_PROTOCOLS = map { $_ => 1 } ('mms', 'file', 'tmp', 'http', 'https', 'spdr', 'icy', 'teststream', 'db', 'playlist');
 
-my @BOOL_OPTS = ('allowDownload', 'playShuffle', 'touchLinks', 'showAllArtists', 'artistFirst', 'yearInSub', 'showComment', 'genreImages', 'maiComposer', 'showConductor', 'showBand', 'showArtistWorks', 'combineAppsAndRadio', 'useGrouping');
+my @BOOL_OPTS = ('allowDownload', 'playShuffle', 'touchLinks', 'showAllArtists', 'artistFirst', 'yearInSub', 'showComment', 'genreImages', 'playlistImages', 'maiComposer', 'showConductor', 'showBand', 'showArtistWorks', 'combineAppsAndRadio', 'useGrouping');
 
 my %ROLE_ICON_MAP = (
     'bass' => 'bassist',
@@ -173,6 +174,7 @@ sub initPlugin {
             noArtistFilter => 1,
             releaseTypeOrder => '',
             genreImages => 0,
+            playlistImages => 0,
             touchLinks => 0,
             yearInSub => 1,
             playShuffle => 0,
@@ -203,6 +205,7 @@ sub initPlugin {
             noArtistFilter => 1,
             releaseTypeOrder => '',
             genreImages => 0,
+            playlistImages => 0,
             touchLinks => 0,
             yearInSub => 1,
             playShuffle => 0,
@@ -228,6 +231,7 @@ sub initPlugin {
     $prefs->setChange(sub { $prefs->set($_[0], 0) unless defined $_[1]; }, 'touchLinks');
     $prefs->setChange(sub { $prefs->set($_[0], 0) unless defined $_[1]; }, 'showComment');
     $prefs->setChange(sub { $prefs->set($_[0], 0) unless defined $_[1]; }, 'genreImages');
+    $prefs->setChange(sub { $prefs->set($_[0], 0) unless defined $_[1]; }, 'playlistImages');
     $prefs->setChange(sub { $prefs->set($_[0], 0) unless defined $_[1]; }, 'allowDownload');
     $prefs->setChange(sub { $prefs->set($_[0], 0) unless defined $_[1]; }, 'useDefaultForSettings');
     $prefs->setChange(sub { $prefs->set($_[0], 0) unless defined $_[1]; }, 'useGrouping');
@@ -268,6 +272,7 @@ sub initPlugin {
         Slim::Web::Pages->addRawFunction($DOWNLOAD_PARSER_RE, \&_downloadHandler);
         Slim::Web::Pages->addRawFunction($BACKDROP_URL_PARSER_RE, \&_backdropHandler);
         Slim::Web::Pages->addRawFunction($GENRE_URL_PARSER_RE, \&_genreHandler);
+        Slim::Web::Pages->addRawFunction($PLAYLIST_URL_PARSER_RE, \&_playlistHandler);
         # make sure scanner does pre-cache artwork in the size the skin is using in browse modesl
         Slim::Control::Request::executeRequest(undef, [ 'artworkspec', 'add', '300x300_f', 'Material Skin (Grid)' ]);
         Slim::Control::Request::executeRequest(undef, [ 'artworkspec', 'add', '150x150_f', 'Material Skin (List)' ]);
@@ -607,6 +612,7 @@ sub _cliCommand {
         $request->addResult('noArtistFilter', $prefs->get('noArtistFilter'));
         $request->addResult('releaseTypeOrder', uc($prefs->get('releaseTypeOrder')));
         $request->addResult('genreImages', $prefs->get('genreImages'));
+        $request->addResult('playlistImages', $prefs->get('playlistImages'));
         $request->addResult('touchLinks', $prefs->get('touchLinks'));
         $request->addResult('yearInSub', $prefs->get('yearInSub'));
         $request->addResult('playShuffle', $prefs->get('playShuffle'));
@@ -2608,6 +2614,11 @@ sub _sendMaterialImage {
 sub _genreHandler {
     my ( $httpClient, $response ) = @_;
     _sendMaterialImage($httpClient, $response, "genres", "nogenre");
+}
+
+sub _playlistHandler {
+    my ( $httpClient, $response ) = @_;
+    _sendMaterialImage($httpClient, $response, "playlists", "noplaylist");
 }
 
 1;

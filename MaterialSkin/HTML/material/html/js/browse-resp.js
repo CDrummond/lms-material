@@ -1888,6 +1888,7 @@ function parseBrowseResp(data, parent, options, cacheKey, parentCommand, parentG
                               title: replaceHtmlBrackets(i.playlist),
                               icon: undefined == emblem ? "list" : undefined,
                               svg: undefined == emblem ? undefined : emblem.name,
+                              image: lmsOptions.playlistImages ? "material/playlists/" + i.playlist.toLowerCase().replace(/[^0-9a-z]/gi, '') : undefined,
                               stdItem: isRemote ? STD_ITEM_REMOTE_PLAYLIST : STD_ITEM_PLAYLIST,
                               type: "group",
                               section: SECTION_PLAYLISTS,
@@ -1901,6 +1902,7 @@ function parseBrowseResp(data, parent, options, cacheKey, parentCommand, parentG
                     resp.items[i].icon = resp.items[i].svg = undefined;
                 }
             }
+            resp.canUseGrid = lmsOptions.playlistImages;
             resp.itemCustomActions = getCustomActions("playlist");
             resp.subtitle=i18np("1 Playlist", "%1 Playlists", resp.items.length);
         } else if (data.result.playlisttracks_loop) {

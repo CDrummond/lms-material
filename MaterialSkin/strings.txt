@@ -748,7 +748,7 @@ PLUGIN_MATERIAL_SKIN_USE_GROUPING
 	EN	Group album tracks
 	FR	Regrouper les morceaux d'un album
 	NL	Groepeer album nummers
-	EN	Csoportosítsa az album számait
+	HU	Csoportosítsa az album számait
 
 PLUGIN_MATERIAL_SKIN_USE_GROUPING_DESC
 	EN	Support grouping tracks by work and composer, or by grouping tag. If enabled, then this grouping will take preference over grouping via disc number - therefore if you have a multi-disc release that also has groupings, then tracks will be shown group via these groupings.

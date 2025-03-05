@@ -711,7 +711,10 @@ function nowplayingFetchTrackInfo(view) {
         let comment = trk.comment.replace(urlRegex, function(url) {
             return "<a class=\"link-item\" onclick=\"openWebUrl('" + escape(url)+"')\">"+url+"</a>";
         });
-        html+="<tr><td>"+i18n("Comment")+"&nbsp;</td><td>"+comment+"</td></tr>";
+        comment = filterComments(comment);
+        if (undefined!=comment) {
+            html+="<tr><td>"+i18n("Comment")+"&nbsp;</td><td>"+comment+"</td></tr>";
+        }
     }
 
     if (html.length>0) {

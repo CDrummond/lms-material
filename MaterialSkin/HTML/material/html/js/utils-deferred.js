@@ -908,3 +908,20 @@ function openWebUrl(url) {
     let u = unescape(url);
     openWebLink({weblink:u, title:u});
 }
+
+function filterComments(comments) {
+    if (undefined==comments) {
+        return undefined;
+    }
+    let parts = comments.split(" / ");
+    let usable = [];
+    for (let p=0, len=parts.length; p<len; ++p) {
+        if (!parts[p].startsWith("BLISS_ANALYSIS,")) {
+            usable.push(parts[p]);
+        }
+    }
+    if (usable.length>0) {
+        return usable.join(" / ");
+    }
+    return undefined;
+}

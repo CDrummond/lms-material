@@ -711,15 +711,9 @@ function nowplayingFetchTrackInfo(view) {
         let comment = trk.comment.replace(urlRegex, function(url) {
             return "<a class=\"link-item\" onclick=\"openWebUrl('" + escape(url)+"')\">"+url+"</a>";
         });
-        let parts = comment.split(" / ");
-        let usable = [];
-        for (let p=0, len=parts.length; p<len; ++p) {
-            if (!parts[p].startsWith("BLISS_ANALYSIS,")) {
-                usable.push(parts[p]);
-            }
-        }
-        if (parts.length>0) {
-            html+="<tr><td>"+i18n("Comment")+"&nbsp;</td><td>"+usable.join(" / ")+"</td></tr>";
+        comment = filterComments(comment);
+        if (undefined!=comment) {
+            html+="<tr><td>"+i18n("Comment")+"&nbsp;</td><td>"+comment+"</td></tr>";
         }
     }
 

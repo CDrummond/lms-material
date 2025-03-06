@@ -2601,10 +2601,16 @@ sub _sendMaterialImage {
 
     my $request = $response->request;
     my $fileName = basename($request->uri->path);
-    my $filePath = Slim::Utils::Prefs::dir() . "/material-skin/" . $subdir . "/" . $fileName;
+    my $imageDir = Slim::Utils::Prefs::dir() . "/material-skin/" . $subdir;
+    my $filePath = $imageDir . "/" . $fileName;
     $response->code(RC_OK);
     if (_sendImage($httpClient, $response, $filePath, "jpg", "image/jpeg")==0) {
         if (_sendImage($httpClient, $response, $filePath, "png", "image/png")==0) {
+            if (! -e $imageDir) {
+                make_path($imageDir);
+            }
+            my $placeholder = $filePath . ".missing";
+            File::Slurp::write_file($placeholder, { err_mode => 'carp' }, '' ) unless -f $placeholder;
             $filePath = dirname(__FILE__) . "/HTML/material/html/images/" . $notfound . ".png";
             Slim::Web::HTTP::sendStreamingFile( $httpClient, $response, "image/png", $filePath, '', 'noAttachment' );
         }

@@ -949,10 +949,13 @@ function parseBrowseResp(data, parent, options, cacheKey, parentCommand, parentG
                     resp.jumplist.push({key: key, index: resp.items.length});
                     textKeys.add(key);
                 }
-                var artist = {
+                let image = undefined!=i.portraitid && "/contributor/" + i.portraitid + "/image" + LMS_LIST_IMAGE_SIZE;
+                image = image || (LMS_P_MAI && lmsOptions.showArtistImages) && "/imageproxy/mai/artist/" + i.id + "/image" + LMS_LIST_IMAGE_SIZE;
+                if (i.artist.match(/ubble/)) console.log(image, i)
+                    var artist = {
                               id: "artist_id:"+i.id,
                               title: replaceHtmlBrackets(i.artist),
-                              image: (LMS_P_MAI && lmsOptions.showArtistImages) ? "/imageproxy/mai/artist/" + i.id + "/image" + LMS_LIST_IMAGE_SIZE : undefined,
+                              image: image,
                               stdItem: stdItem,
                               type: "group",
                               textkey: key
@@ -1200,6 +1203,7 @@ function parseBrowseResp(data, parent, options, cacheKey, parentCommand, parentG
             showRoles.delete(TRACK_ARTIST_ROLE);
             ignoreRoles.forEach(role => { showRoles.delete(role) });
             resp.showRoles = Array.from(showRoles).sort();
+            // TODO - don't know how to handle this. We can have an album's main artist picture. But that's probably not suitable here.
             if (undefined!=reqArtistId && LMS_P_MAI && lmsOptions.showArtistImages) {
                 resp.image= "/imageproxy/mai/artist/" + reqArtistId + "/image" + LMS_LIST_IMAGE_SIZE;
             }

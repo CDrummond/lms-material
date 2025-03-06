@@ -23,7 +23,7 @@
     as per genre images.
 15. Use user genre, and playlist, images when listing favourites (if relevant
     option is enabled).
-16. Create '.missing' images (e.g. 'rock.missing') from genre, and playlist,
+16. Create '.missing' images (e.g. 'rock.missing') for genre, and playlist,
     images that are not found (if relevant option is enabled).
 
 5.8.1

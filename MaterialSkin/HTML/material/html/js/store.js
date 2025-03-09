@@ -11,7 +11,7 @@ const FAKE_MENU = new Set(['volume', 'groupvolume'])
 var lmsNumVisibleMenus = 0;
 
 function copyPlayer(p){
-    return {id:p.id, name:p.name, isgroup:p.isgroup, model:p.model, ip:p.ip, icon:p.icon, link:p.link, ison:p.ison, isplaying:p.isplaying, iswaiting:p.iswaiting, isconnected:p.isconnected, canpoweroff:p.canpoweroff};
+    return {id:p.id, name:p.name, isgroup:p.isgroup, model:p.model, ip:p.ip, icon:p.icon, color:p.color, link:p.link, ison:p.ison, isplaying:p.isplaying, iswaiting:p.iswaiting, isconnected:p.isconnected, canpoweroff:p.canpoweroff};
 }
 
 function setDesktopWideCoverPad(on) {
@@ -49,7 +49,6 @@ function updateUiSettings(state, val) {
 
     var browseDisplayChanged = false;
     var relayoutGrid = false;
-    var prevColor = state.color;
     if (undefined!=val.theme) {
         val.theme=val.theme.replace("darker", "dark");
     }
@@ -60,9 +59,19 @@ function updateUiSettings(state, val) {
         setLocalStorageVal('theme', state.chosenTheme);
         themeChanged = true;
     }
-    if (undefined!=val.color && state.color!=val.color) {
+    if (val.color=='from-cover') {
+        val.colorUsage = COLOR_USE_FROM_COVER;
+        val.color = LMS_DEFAULT_COLOR;
+    }
+    if ((undefined==val.colorUsage || COLOR_USE_PER_PLAYER!=val.colorUsage) && undefined!=val.color && state.color!=val.color) {
         state.color = val.color;
         setLocalStorageVal('color', state.color);
+        themeChanged = true;
+    }
+    let wasFromCover = state.colorUsage==COLOR_USE_FROM_COVER;
+    if (undefined!=val.colorUsage && state.colorUsage!=val.colorUsage) {
+        state.colorUsage = val.colorUsage;
+        setLocalStorageVal('colorUsage', state.colorUsage);
         themeChanged = true;
     }
     if (undefined!=val.homeButton && state.homeButton!=val.homeButton) {
@@ -81,7 +90,7 @@ function updateUiSettings(state, val) {
     }
     state.darkUi = !state.theme.startsWith('light') && state.theme.indexOf("/light/")<0;
     if (themeChanged) {
-        setTheme(state.theme, state.color, prevColor);
+        setTheme(state.theme, COLOR_USE_PER_PLAYER==state.colorUsage ? undefined : state.color, wasFromCover!=(state.colorUsage==COLOR_USE_FROM_COVER));
         bus.$emit('themeChanged');
     }
     if (undefined!=val.fontSize && state.fontSize!=val.fontSize) {
@@ -200,15 +209,19 @@ function autoTheme() {
     return prefersLight ? "light" : "dark";
 }
 
-function storeCurrentPlayer(player) {
-    setLocalStorageVal('player', player.id);
+function storeCurrentPlayer(state) {
+    setLocalStorageVal('player', state.player.id);
     if (1==queryParams.nativePlayer) {
         try {
-            NativeReceiver.updatePlayer(player.id, player.name);
+            NativeReceiver.updatePlayer(state.player.id, state.player.name);
         } catch (e) {
         }
     } else if (queryParams.nativePlayer>0) {
-        emitNative("MATERIAL-PLAYER\nID "+player.id+"\nNAME "+player.name, queryParams.nativePlayer);
+        emitNative("MATERIAL-PLAYER\nID "+state.player.id+"\nNAME "+state.player.name, queryParams.nativePlayer);
+    }
+    if (COLOR_USE_PER_PLAYER==state.colorUsage) {
+        state.color = mapPlayerColor(state.player);
+        setTheme(state.theme, state.color, true);
     }
 }
 
@@ -276,6 +289,7 @@ const store = new Vuex.Store({
         theme: LMS_DEFAULT_THEME,        // Set to dark/light if theme is "auto"
         chosenTheme: LMS_DEFAULT_THEME,  // Theme as chosen by user
         color: LMS_DEFAULT_COLOR,
+        colorUsage: COLOR_USE_FROM_COVER,
         darkUi: true,
         roundCovers: true,
         fontSize: 'r',
@@ -341,6 +355,7 @@ const store = new Vuex.Store({
                     state.players[i].iswaiting = player.iswaiting;
                     state.players[i].isgroup = player.isgroup;
                     state.players[i].icon = player.icon;
+                    state.players[i].color = player.color;
                     if (state.player!=undefined && player.id == state.player.id) {
                         state.player.name = player.name;
                         state.player.ison = player.ison;
@@ -348,6 +363,7 @@ const store = new Vuex.Store({
                         state.player.iswaiting = player.iswaiting;
                         state.player.isgroup = player.isgroup;
                         state.player.icon = player.icon;
+                        state.player.color = player.color;
                     }
                     break;
                 }
@@ -376,6 +392,7 @@ const store = new Vuex.Store({
                     state.players[i].isconnected = players[i].isconnected;
                     state.players[i].isgroup = players[i].isgroup;
                     state.players[i].icon = players[i].icon;
+                    state.players[i].color = players[i].color;
                     state.players[i].link = players[i].link;
                 }
                 return;
@@ -413,7 +430,7 @@ const store = new Vuex.Store({
                 for (var i=0, len=state.players.length; i<len; ++i) {
                     if (state.players[i].id === autoSelect) {
                         state.player = copyPlayer(state.players[i]);
-                        storeCurrentPlayer(state.player);
+                        storeCurrentPlayer(state);
                         defaultSet = true;
                         break;
                     }
@@ -442,7 +459,7 @@ const store = new Vuex.Store({
                     for (var i=0, len=state.players.length; i<len; ++i) {
                         if (state.players[i].id === state.defaultPlayer) {
                             state.player = copyPlayer(state.players[i]);
-                            storeCurrentPlayer(state.player);
+                            storeCurrentPlayer(state);
                             break;
                         }
                     }
@@ -453,7 +470,7 @@ const store = new Vuex.Store({
                         for (var i=0, len=state.players.length; i<len; ++i) {
                             if (state.players[i].id === config || state.players[i].name == config) {
                                 state.player = copyPlayer(state.players[i]);
-                                storeCurrentPlayer(state.player);
+                                storeCurrentPlayer(state);
                                 break;
                             }
                         }
@@ -469,7 +486,7 @@ const store = new Vuex.Store({
                         for (var i=0, len=state.players.length; i<len; ++i) {
                             if ((j==1 || j==3 || state.players[i].ison) && (j<2 ? !state.players[i].isgroup : state.players[i].isgroup)) {
                                 state.player = copyPlayer(state.players[i]);
-                                storeCurrentPlayer(state.player);
+                                storeCurrentPlayer(state);
                                 break;
                             }
                         }
@@ -490,7 +507,7 @@ const store = new Vuex.Store({
                 for (var i=0, len=state.players.length; i<len; ++i) {
                     if (state.players[i].id === id) {
                         state.player = copyPlayer(state.players[i]);
-                        storeCurrentPlayer(state.player);
+                        storeCurrentPlayer(state);
                         bus.$emit('playerChanged');
                         break;
                     }
@@ -527,6 +544,14 @@ const store = new Vuex.Store({
             state.theme=state.theme.replace("darker", "dark");
             state.darkUi = !state.theme.startsWith('light') && state.theme.indexOf("/light/")<0;
             state.color = getLocalStorageVal('color', state.color);
+            if ('from-cover'==state.color) {
+                state.colorUsage = COLOR_USE_FROM_COVER;
+                state.color = LMS_DEFAULT_COLOR;
+                setLocalStorageVal('color', state.color);
+                setLocalStorageVal('colorUsage', state.colorUsage);
+            } else {
+                state.colorUsage = parseInt(getLocalStorageVal('colorUsage', state.colorUsage));
+            }
             var larger = getLocalStorageBool('largerElements', getLocalStorageBool('largeFonts', undefined));
             var fontSize = getLocalStorageVal('fontSize', undefined);
             if (undefined==fontSize && undefined!=larger) {
@@ -791,6 +816,16 @@ const store = new Vuex.Store({
             for (var i=0, len=state.players.length; i<len; ++i) {
                 if (playerIcon.id==state.players[i].id) {
                     state.players[i].icon=playerIcon.icon;
+                }
+            }
+        },
+        setColor(state, playerColor) {
+            if (state.player && playerColor.id==state.player.id) {
+                state.player.color=playerColor.color;
+            }
+            for (var i=0, len=state.players.length; i<len; ++i) {
+                if (playerColor.id==state.players[i].id) {
+                    state.players[i].color=playerColor.color;
                 }
             }
         },

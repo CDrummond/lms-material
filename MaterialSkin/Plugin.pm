@@ -584,7 +584,7 @@ sub _cliCommand {
     if ($request->paramUndefinedOrNotOneOf($cmd, ['prefs', 'info', 'transferqueue', 'delete-favorite', 'map', 'resolve', 'delete-podcast',
                                                   'plugins', 'plugins-status', 'plugins-update', 'extras', 'delete-vlib', 'pass-isset',
                                                   'pass-check', 'browsemodes', 'geturl', 'command', 'scantypes', 'server', 'themes',
-                                                  'playericons', 'activeplayers', 'urls', 'adv-search', 'adv-search-params', 'protocols',
+                                                  'playersettings', 'activeplayers', 'urls', 'adv-search', 'adv-search-params', 'protocols',
                                                   'players-extra-info', 'sort-playlist', 'mixer', 'release-types', 'check-for-updates',
                                                   'similar', 'apps', 'rndmix', 'scan-progress']) ) {
         $request->setStatusBadParams();
@@ -1250,14 +1250,20 @@ sub _cliCommand {
         return;
     }
 
-    if ($cmd eq 'playericons') {
+    if ($cmd eq 'playersettings') {
         my $cnt = 0;
         foreach my $key (keys %{$prefs->{prefs}}) {
             if ($key =~ /^_client:.+/) {
                 my $icon = $prefs->get($key)->{'icon'};
-                if ($icon) {
+                my $color = $prefs->get($key)->{'color'};
+                if ($icon || $color) {
                     $request->addResultLoop("players", $cnt, "id", substr($key, 8));
-                    $request->addResultLoop("players", $cnt, "icon", $icon);
+                    if ($icon) {
+                        $request->addResultLoop("players", $cnt, "icon", $icon);
+                    }
+                    if ($color) {
+                        $request->addResultLoop("players", $cnt, "color", $color);
+                    }
                     $cnt++;
                 }
             }

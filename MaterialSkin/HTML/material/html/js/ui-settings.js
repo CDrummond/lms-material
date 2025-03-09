@@ -31,14 +31,13 @@ Vue.component('lms-ui-settings', {
     <v-divider></v-divider>
     <v-list-tile>
      <v-list-tile-content>
-      <v-list-tile-title>{{i18n('Color')}}</v-list-tile-title>
-      <div class="color-grid">
+      <v-select style="width:100%" menu-props="auto" :items="colorUsages" :label="i18n('Color')" v-model="colorUsage" item-text="label" item-value="key" @change="if(colorUsage==COLOR_USE_STANDARD) color=LMS_DEFAULT_COLOR"></v-select>
+      <div class="color-grid" v-if="colorUsage==COLOR_USE_STANDARD">
        <template v-for="(item, index) in colorList.colors">
         <div v-if="item.lcolor" @click="color=item.key" :style="{'background':'linear-gradient(to right,'+item.lcolor+' 0%, '+item.lcolor+' 50%, '+item.color+' 50%, '+item.color+' 100%)'}" class="color-circle" v-bind:class="{'selected-color-circle':item.key==color}"></div>
         <div v-else-if="item.color" @click="color=item.key" :style="{'background-color':item.color}" class="color-circle" v-bind:class="{'selected-color-circle':item.key==color}"></div>
        </template>
        <div v-for="(item, index) in userColors" @click="color=item.key" :style="{'background-color':item.color}" class="color-circle" v-bind:class="{'selected-color-circle':item.key==color}"></div>
-       <div @click="color=COLOR_FROM_COVER" class="color-circle color-from-cover" v-bind:class="{'selected-color-circle':COLOR_FROM_COVER==color}"></div>
       </div>
      </v-list-tile-content>
     </v-list-tile>
@@ -442,6 +441,8 @@ Vue.component('lms-ui-settings', {
             showMenu: false,
             theme: LMS_DEFAULT_THEME,
             themes: [ ],
+            colorUsage: COLOR_USE_FROM_COVER,
+            colorUsages: { },
             color: LMS_DEFAULT_COLOR,
             colorList: { } ,
             userColors: [ ],
@@ -646,6 +647,7 @@ Vue.component('lms-ui-settings', {
             this.theme = themeParts.join('-');
             this.colorToolbars = 'colored'==variant;
             this.color = this.$store.state.color;
+            this.colorUsage = this.$store.state.colorUsage;
             this.tinted = this.$store.state.tinted;
             this.mobileBar = this.$store.state.mobileBar;
             this.roundCovers = this.$store.state.roundCovers;
@@ -710,6 +712,11 @@ Vue.component('lms-ui-settings', {
                 { key:MBAR_THICK,   label:i18n("Thick (two lines of text)")},
                 { key:MBAR_REP_NAV, label:i18n("Replace navigation bar")},
                 ];
+            this.colorUsages=[
+                { key:COLOR_USE_STANDARD,   label:this.i18n("For all players ") },
+                { key:COLOR_USE_FROM_COVER, label:this.i18n("From current cover (all players)") },
+                { key:COLOR_USE_PER_PLAYER, label:this.i18n("Per player") }
+            ]
             this.skipSecondsOptions = [ ];
             for (let s=0, len=SKIP_SECONDS_VALS.length; s<len; ++s) {
                 this.skipSecondsOptions.push({ value: SKIP_SECONDS_VALS[s],  label: i18n("%1 seconds", SKIP_SECONDS_VALS[s]) });
@@ -758,6 +765,7 @@ Vue.component('lms-ui-settings', {
             let settings = {
                       theme:this.theme+(this.colorToolbars ? '-colored' : ''),
                       color:this.color,
+                      colorUsage:this.colorUsage,
                       tinted:this.tinted,
                       mobileBar:this.mobileBar,
                       roundCovers:this.roundCovers,

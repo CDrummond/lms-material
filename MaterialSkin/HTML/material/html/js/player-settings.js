@@ -48,6 +48,20 @@ Vue.component('lms-player-settings', {
      </v-list-tile-content>
      <v-list-tile-action><v-btn icon flat @click="setIcon($event)" style="margin-top:-18px"><v-icon v-if="playerIcon.icon">{{playerIcon.icon}}</v-icon><img v-else class="svg-img" :src="playerIcon.svg | svgIcon(darkUi)"></img></v-btn></v-list-tile-action>
     </v-list-tile>
+
+    <v-divider v-if="perPlayerColor"></v-divider>
+    <v-list-tile v-if="perPlayerColor">
+     <v-list-tile-content>
+      <v-list-tile-title>{{i18n('Color')}}</v-list-tile-title>
+      <div class="color-grid">
+       <template v-for="(item, index) in colorList.colors">
+        <div v-if="item.lcolor" @click="playerColor=item.key" :style="{'background':'linear-gradient(to right,'+item.lcolor+' 0%, '+item.lcolor+' 50%, '+item.color+' 50%, '+item.color+' 100%)'}" class="color-circle" v-bind:class="{'selected-color-circle':item.key==playerColor}"></div>
+        <div v-else-if="item.color" @click="playerColor=item.key" :style="{'background-color':item.color}" class="color-circle" v-bind:class="{'selected-color-circle':item.key==playerColor}"></div>
+       </template>
+      </div>
+     </v-list-tile-content>
+    </v-list-tile>
+
     <div class="dialog-padding" v-if="unlockAll"></div>
     <v-header class="dialog-section-header">{{i18n('Audio')}}</v-header>
     <v-list-tile>
@@ -258,7 +272,10 @@ Vue.component('lms-player-settings', {
             playerId: undefined,
             playerName: undefined,
             playerIcon: undefined,
+            playerColor: undefined,
             playerLink: undefined,
+            color: LMS_DEFAULT_COLOR,
+            colorList: { },
             isGroup: false,
             isSynced: false,
             crossfade: undefined,
@@ -335,6 +352,9 @@ Vue.component('lms-player-settings', {
         },
         players() {
             return this.$store.state.players
+        },
+        perPlayerColor() {
+            return COLOR_USE_PER_PLAYER==this.$store.state.colorUsage;
         }
     },
     mounted() {
@@ -389,6 +409,7 @@ Vue.component('lms-player-settings', {
             }
             this.showHome=showHome;
             this.fetchPlugins();
+            getMiscJson(this.colorList, "colors", this);
         }.bind(this));
         bus.$on('noPlayers', function() {
             this.show=this.alarmDialog.show=this.playerMenu.show=false;
@@ -440,6 +461,7 @@ Vue.component('lms-player-settings', {
             this.playerId = player.id;
             this.playerName = player.name;
             this.playerIcon = player.icon;
+            this.playerColor = player.color;
             this.playerLink = player.link;
             this.isGroup = player.isgroup;
             this.isSynced = false;
@@ -652,6 +674,13 @@ Vue.component('lms-player-settings', {
                 // From icon-mapping.js
                 playerIdIconMap[this.playerId]=this.playerIcon;
                 setLocalStorageVal("playerIdIconMap", JSON.stringify(playerIdIconMap));
+            }
+            if (this.orig.player.color!=this.playerColor) {
+                lmsCommand(this.playerId, ["playerpref", "plugin.material-skin:color", this.playerColor]);
+                this.$store.commit('setColor', {id:this.playerId, color:this.playerColor});
+                // From icon-mapping.js
+                playerIdColorMap[this.playerId]=this.playerColor;
+                setLocalStorageVal("playerIdColorMap", JSON.stringify(playerIdColorMap));
             }
 
             // Update current player

@@ -578,7 +578,7 @@ function emitTextColor() {
     });
 }
 
-function setTheme(theme, color, prevColor) {
+function setTheme(theme, color, clearColorVars) {
     if (theme!=undefined) {
         theme=theme.replace("darker", "dark");
         let t = theme.split('-');
@@ -604,7 +604,7 @@ function setTheme(theme, color, prevColor) {
         }
     }
     if (color!=undefined) {
-        if (undefined!=prevColor && prevColor==COLOR_FROM_COVER && color!=COLOR_FROM_COVER) {
+        if (clearColorVars) {
             document.documentElement.style.removeProperty('--primary-color');
             document.documentElement.style.removeProperty('--pq-current-color');
             document.documentElement.style.removeProperty('--pq-current-album-color');
@@ -1010,7 +1010,7 @@ function emitToolbarColors(top, bot, tries) {
 
 const FULLSCREEN_DIALOGS = new Set(["uisettings", "playersettings", "info", "iframe", "manage"]);
 function emitToolbarColorsFromState(state, force) {
-    if (0!=queryParams.nativeColors || COLOR_FROM_COVER==state.color || state.coloredToolbars || (state.tinted && state.cMixSupported) || force) {
+    if (0!=queryParams.nativeColors || COLOR_USE_FROM_COVER==state.colorUsage || state.coloredToolbars || (state.tinted && state.cMixSupported) || force) {
         let topColorVar = "--top-toolbar-color";
         let botColorVar = "--bottom-toolbar-color";
         for (var i=state.openDialogs.length; i>=0; --i) {

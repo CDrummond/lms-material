@@ -519,6 +519,7 @@ var lmsServer = Vue.component('lms-server', {
                                        model: i.modelname,
                                        ip: i.ip,
                                        icon: mapPlayerIcon(i),
+                                       color: mapPlayerColor(i),
                                        link: ("squeezelite"==i.model && i.firmware && i.firmware.endsWith("-pCP")) || "squeezeesp32"==i.model
                                              ? "http://"+i.ip.split(':')[0] : undefined
                                       });
@@ -581,6 +582,7 @@ var lmsServer = Vue.component('lms-server', {
             if (isCurrent) {
                 player.isgroup = this.$store.state.player.isgroup;
                 player.icon = this.$store.state.player.icon;
+                player.color = this.$store.state.player.color;
                 player.link = this.$store.state.player.link;
                 player.model = this.$store.state.player.model;
                 this.isPlaying = player.isplaying;
@@ -590,6 +592,7 @@ var lmsServer = Vue.component('lms-server', {
                     if (this.$store.state.players[i].id == playerId) {
                         player.isgroup = this.$store.state.players[i].isgroup;
                         player.icon = this.$store.state.players[i].icon;
+                        player.color = this.$store.state.players[i].color;
                         player.link = this.$store.state.players[i].link;
                         player.model = this.$store.state.players[i].model;
                         found = true;

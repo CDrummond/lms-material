@@ -87,8 +87,9 @@ var lmsCurrentCover = Vue.component('lms-currentcover', {
                 }
                 if (undefined==coverUrl && undefined!=playerStatus.current.coverid) { // && !(""+playerStatus.current.coverid).startsWith("-")) {
                     coverUrl="/music/"+playerStatus.current.coverid+"/cover"+LMS_CURRENT_IMAGE_SIZE;
-                }
-                if (undefined==coverUrl && LMS_P_MAI) {
+                } else if (undefined==coverUrl && undefined!=playerStatus.current.portraitid) {
+                    coverUrl = "/contributor/" + playerStatus.current.portraitid + "/image" + LMS_CURRENT_IMAGE_SIZE
+                } else if (undefined==coverUrl && LMS_P_MAI) {
                     if (playerStatus.current.artist_ids) {
                         coverUrl="/imageproxy/mai/artist/" + playerStatus.current.artist_ids[0] + "/image" + LMS_CURRENT_IMAGE_SIZE;
                     } else if (playerStatus.current.artist_id) {

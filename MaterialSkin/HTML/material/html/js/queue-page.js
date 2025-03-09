@@ -6,7 +6,7 @@
  */
 'use strict';
 
-const PQ_STATUS_TAGS = "tags:cdegilqtuy" + (LMS_VERSION>=90000 ? "bhz12" : "") + "AAGIKNPSxx";
+const PQ_STATUS_TAGS = "tags:cdegilqtuy" + (LMS_VERSION>=90000 ? "bhz124" : "") + "AAGIKNPSxx";
 const PQ_REQUIRE_AT_LEAST_1_ITEM = new Set([PQ_SAVE_ACTION, PQ_MOVE_QUEUE_ACTION, PQ_SCROLL_ACTION, PQ_SORT_ACTION, REMOVE_DUPES_ACTION]);
 const PQ_REQUIRE_MULTIPLE_ITEMS = new Set([PQ_SCROLL_ACTION, SEARCH_LIST_ACTION, PQ_SORT_ACTION, REMOVE_DUPES_ACTION]);
 const pqContiguousMap = new Map();
@@ -25,6 +25,9 @@ function queueItemCover(item) {
     }
     if (undefined!=item.coverid) { // && !(""+item.coverid).startsWith("-")) {
         return "/music/"+item.coverid+"/cover"+LMS_LIST_IMAGE_SIZE;
+    }
+    if (undefined!=item.portraitid) {
+        return "/contributor/" + item.portraitid + "/image" + LMS_CURRENT_IMAGE_SIZE
     }
     if (LMS_P_MAI) {
         if (item.artist_ids) {
@@ -749,7 +752,7 @@ var lmsQueue = Vue.component("lms-queue", {
                           repeatAll:i18n("Repeat queue"), repeatOne:i18n("Repeat single track"), repeatOff:i18n("No repeat"),
                           randomMix:i18n("Random mix"), shuffleAll:i18n("Shuffle tracks"), shuffleOff:i18n("No shuffle"),
                           shuffleAlbums:lmsOptions.supportReleaseTypes ? i18n("Shuffle releases") : i18n("Shuffle albums"),
-                          selectMultiple:i18n("Select multiple items"), removeAll:i18n("Remove all selected items"), 
+                          selectMultiple:i18n("Select multiple items"), removeAll:i18n("Remove all selected items"),
                           invertSelect:i18n("Invert selection"), dstm:i18n("Don't Stop The Music"), actions:i18n("Actions")
             };
         },

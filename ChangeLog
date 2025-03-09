@@ -19,7 +19,7 @@
 13. Allow genre images to be PNG files.
 14. Add (initial) support for playlist images - need to manually add
     "playlistImages: '1'" to 'prefs/plugin/material-skin.prefs'. Images need to
-    be in 'prefs/material-skin/playlists/' - and have same name requiresments
+    be in 'prefs/material-skin/playlists/' - and have same name requirements
     as per genre images.
 15. Use user genre, and playlist, images when listing favourites (if relevant
     option is enabled).

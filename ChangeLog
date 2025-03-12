@@ -1,3 +1,7 @@
+5.9.0
+-----
+1. Allow per-player colour setting.
+
 5.8.2
 -----
  1. Translation updates.
@@ -16,6 +20,15 @@
 10. Ignore clicks on disabled queue context menu items.
 11. Store player volumes when creating a group player.
 12. Fix drag'n'drop in grid view not showing drag thumbnail.
+13. Allow genre images to be PNG files.
+14. Add (initial) support for playlist images - need to manually add
+    "playlistImages: '1'" to 'prefs/plugin/material-skin.prefs'. Images need to
+    be in 'prefs/material-skin/playlists/' - and have same name requirements
+    as per genre images.
+15. Use user genre, and playlist, images when listing favourites (if relevant
+    option is enabled).
+16. Create '.missing' images (e.g. 'rock.missing') for genre, and playlist,
+    images that are not found (if relevant option is enabled).
 
 5.8.1
 -----

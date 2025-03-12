@@ -31,10 +31,12 @@ const IS_HIGH_DPI = matchMedia( "(-webkit-min-device-pixel-ratio: 2), (min-devic
 const IS_WINDOWS  = !IS_ANDROID && !IS_APPLE && checkPlatform('Win');
 const IS_LINUX    = !IS_ANDROID && !IS_APPLE && !IS_WINDOWS && checkPlatform('Linux');
 const SUPPORTS_TOUCH = (('ontouchstart' in window) || (navigator.maxTouchPoints > 0) ||(navigator.msMaxTouchPoints > 0));
-const COLOR_FROM_COVER = 'from-cover';
+const COLOR_USE_STANDARD = 0;
+const COLOR_USE_FROM_COVER = 1;
+const COLOR_USE_PER_PLAYER = 2;
 const SKIP_SECONDS_VALS = [5, 10, 15, 30];
 const LMS_DEFAULT_THEME = 'dark';
-const LMS_DEFAULT_COLOR = COLOR_FROM_COVER;
+const LMS_DEFAULT_COLOR = 'blue';
 const LMS_BATCH_SIZE = 25000;
 const LMS_QUEUE_BATCH_SIZE = 5000;
 const LMS_MAX_NON_SCROLLER_ITEMS = 100;
@@ -192,7 +194,7 @@ const IFRAME_HOME_NAVIGATES_BROWSE_HOME = 1
 const IFRAME_HOME_CLOSES_DIALOGS = 2
 
 const SKIN_GENRE_TAGS = ['composer', 'conductor', 'band'];
-const SKIN_BOOL_OPTS = ['maiComposer', 'showConductor', 'showBand', 'showArtistWorks', 'showAllArtists', 'artistFirst', IS_IOS ? 'xx' : 'allowDownload', 'showComment', 'noArtistFilter', 'genreImages', 'touchLinks', 'yearInSub', 'playShuffle', 'combineAppsAndRadio', 'useGrouping'];
+const SKIN_BOOL_OPTS = ['maiComposer', 'showConductor', 'showBand', 'showArtistWorks', 'showAllArtists', 'artistFirst', IS_IOS ? 'xx' : 'allowDownload', 'showComment', 'noArtistFilter', 'genreImages', 'playlistImages', 'touchLinks', 'yearInSub', 'playShuffle', 'combineAppsAndRadio', 'useGrouping'];
 const SKIN_INT_OPTS = ['showComposer', 'respectFixedVol', 'commentAsDiscTitle', 'pagedBatchSize', 'screensaverTimeout', 'npSwitchTimeout', 'useDefaultForSettings'];
 
 const MSK_REV_SORT_OPT = "msk-revsort:1";

@@ -519,6 +519,7 @@ var lmsServer = Vue.component('lms-server', {
                                        model: i.modelname,
                                        ip: i.ip,
                                        icon: mapPlayerIcon(i),
+                                       color: mapPlayerColor(i),
                                        link: ("squeezelite"==i.model && i.firmware && i.firmware.endsWith("-pCP")) || "squeezeesp32"==i.model
                                              ? "http://"+i.ip.split(':')[0] : undefined
                                       });
@@ -560,7 +561,7 @@ var lmsServer = Vue.component('lms-server', {
                 logCometdMessage("PLAYER ("+playerId+")", data);
             }
             var isCurrent = this.$store.state.player && playerId==this.$store.state.player.id;
-            var dvc = 1==parseInt(data.digital_volume_control) || (undefined!=data.has_digital_out && 0==parseInt(data.has_digital_out));
+            var dvc = 1==parseInt(data.digital_volume_control) || (undefined!=data.use_volume_control && 1==parseInt(data.use_volume_control));
             var player = { ison: undefined==data.power || 1==parseInt(data.power),
                            isplaying: data.mode === "play",
                            iswaiting: data.mode === "play" && data.waitingToPlay,
@@ -581,6 +582,7 @@ var lmsServer = Vue.component('lms-server', {
             if (isCurrent) {
                 player.isgroup = this.$store.state.player.isgroup;
                 player.icon = this.$store.state.player.icon;
+                player.color = this.$store.state.player.color;
                 player.link = this.$store.state.player.link;
                 player.model = this.$store.state.player.model;
                 this.isPlaying = player.isplaying;
@@ -590,6 +592,7 @@ var lmsServer = Vue.component('lms-server', {
                     if (this.$store.state.players[i].id == playerId) {
                         player.isgroup = this.$store.state.players[i].isgroup;
                         player.icon = this.$store.state.players[i].icon;
+                        player.color = this.$store.state.players[i].color;
                         player.link = this.$store.state.players[i].link;
                         player.model = this.$store.state.players[i].model;
                         found = true;

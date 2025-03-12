@@ -696,7 +696,7 @@ function parseBrowseResp(data, parent, options, cacheKey, parentCommand, parentG
                 }
                 
                 // show duration if duration has been passed as a parameter
-                i.duration = i.duration>0 ? i.duration : undefined,
+                i.duration = parseFloat(i.duration || 0);
                 i.durationStr = i.duration>0 ? formatSeconds(i.duration) : undefined,
                 totalDuration += i.duration>0 ? i.duration : 0;
                 

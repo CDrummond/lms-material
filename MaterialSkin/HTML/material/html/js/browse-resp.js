@@ -142,6 +142,7 @@ function parseBrowseResp(data, parent, options, cacheKey, parentCommand, parentG
             var maybeAllowGrid = command!="trackstat"; // && !isFavorites; // && command!="playhistory";
             var numImages = 0;
             var numTracks = 0;
+            var totalDuration = 0; // support for total duration if duration has been passed as a parameter
 
             resp.isMusicMix = MIXER_APPS.has(command) && data.params[1].length>0 && (data.params[1][1]=="mix" || data.params[1][1]=="list");
             resp.canUseGrid = maybeAllowGrid && (isRadiosTop || isAppsTop || isBmf || isDisksAndFolders || (data.result.window && data.result.window.windowStyle && (data.result.window.windowStyle=="icon_list" || data.result.window.windowStyle=="home_menu"))) ? true : false;
@@ -693,7 +694,12 @@ function parseBrowseResp(data, parent, options, cacheKey, parentCommand, parentG
                     i.icon = undefined;
                     haveWithoutIcons = true;
                 }
-
+                
+                // show duration if duration has been passed as a parameter
+                i.duration = i.duration>0 ? i.duration : undefined,
+                i.durationStr = i.duration>0 ? formatSeconds(i.duration) : undefined,
+                totalDuration += i.duration>0 ? i.duration : 0;
+                
                 resp.items.push(i);
                 // If this is a "text" item with an image then treat as a standard actionable item
                 if ("text"==i.type && (undefined!=i.image || undefined!=i.icon || undefined!=i.svg)) {
@@ -928,6 +934,11 @@ function parseBrowseResp(data, parent, options, cacheKey, parentCommand, parentG
                         resp.subtitle=i18np("1 Item", "%1 Items", resp.items.length);
                     }
                 }
+            }
+
+            // show total duration if duration has been passed as a parameter
+            if (totalDuration>0) {
+                resp.subtitle+=SEPARATOR+formatSeconds(totalDuration);
             }
         } else if (data.result.artists_loop) {
             var type = 0;

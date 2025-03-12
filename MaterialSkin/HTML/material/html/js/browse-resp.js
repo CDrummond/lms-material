@@ -1211,7 +1211,8 @@ function parseBrowseResp(data, parent, options, cacheKey, parentCommand, parentG
             showRoles.delete(TRACK_ARTIST_ROLE);
             ignoreRoles.forEach(role => { showRoles.delete(role) });
             resp.showRoles = Array.from(showRoles).sort();
-            // TODO - don't know how to handle this. We can have an album's main artist picture. But that's probably not suitable here.
+            // TODO - don't know how to handle a portraitId here. We can have an album's main artist picture. But that's not always suitable here.
+            // Using the artist ID could cause caching issues again.
             if (undefined!=reqArtistId && LMS_P_MAI && lmsOptions.showArtistImages) {
                 resp.image= "/imageproxy/mai/artist/" + reqArtistId + "/image" + LMS_LIST_IMAGE_SIZE;
             }

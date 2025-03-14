@@ -6,7 +6,7 @@
  */
 'use strict';
 
-const PLAYER_STATUS_TAGS = "tags:cdegilopqrstuy" + (LMS_VERSION>=90000 ? "bhz1" : "") + "AABEGIKNPSTV";
+const PLAYER_STATUS_TAGS = "tags:cdegilopqrstuy" + (LMS_VERSION>=90000 ? "bhz14" : "") + "AABEGIKNPSTV";
 const STATUS_UPDATE_MAX_TIME = 4000;
 const SCAN_UPDATE_INTERVAL = 2000;
 
@@ -42,12 +42,12 @@ function updateNative(status) {
 
 function getHiddenProp(){
     var prefixes = ['webkit','moz','ms','o'];
-    
+
     // if 'hidden' is natively supported just return it
     if ('hidden' in document) {
         return 'hidden';
     }
-    
+
     // otherwise loop over all the known prefixes until we find one
     for (var i = 0, len=prefixes.length; i < len; i++) {
         if ((prefixes[i] + 'Hidden') in document)  {
@@ -897,7 +897,7 @@ var lmsServer = Vue.component('lms-server', {
                         lmsFavorites = favs;
                         bus.$emit('refreshList', SECTION_FAVORITES);
                     }
-                } 
+                }
             }).catch(err => {
             });
         },

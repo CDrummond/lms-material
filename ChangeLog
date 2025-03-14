@@ -1,3 +1,8 @@
+5.8.3
+-----
+1. Don't react to slider, etc., changes in group volume dialog for fixed volume
+   players when Material is set to 'Hide volume control'.
+
 5.8.2
 -----
  1. Translation updates.

@@ -1,6 +1,7 @@
 5.9.0
 -----
 1. Allow per-player colour setting.
+2. Add support for LMS9's portraitid attribute - thanks to Michael Herger.
 
 5.8.2
 -----

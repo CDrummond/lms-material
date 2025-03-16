@@ -2601,36 +2601,73 @@ sub _sendImage {
     return 0;
 }
 
-sub _sendMaterialImage {
-    my ( $httpClient, $response, $subdir, $notfound ) = @_;
+sub _sendFallbackImage {
+    my ( $httpClient, $response, $subdir, $fileName, $notfound ) = @_;
     return unless $httpClient->connected;
-
-    my $request = $response->request;
-    my $fileName = basename($request->uri->path);
     my $imageDir = Slim::Utils::Prefs::dir() . "/material-skin/" . $subdir;
+    if (! -e $imageDir) {
+        make_path($imageDir);
+    }
     my $filePath = $imageDir . "/" . $fileName;
-    $response->code(RC_OK);
-    if (_sendImage($httpClient, $response, $filePath, "jpg", "image/jpeg")==0) {
-        if (_sendImage($httpClient, $response, $filePath, "png", "image/png")==0) {
-            if (! -e $imageDir) {
-                make_path($imageDir);
+    my $placeholder = $filePath . ".missing";
+    File::Slurp::write_file($placeholder, { err_mode => 'carp' }, '' ) unless -f $placeholder;
+    $filePath = dirname(__FILE__) . "/HTML/material/html/images/" . $notfound . ".png";
+    Slim::Web::HTTP::sendStreamingFile( $httpClient, $response, "image/png", $filePath, '', 'noAttachment' );
+}
+
+sub _sendMaterialImage {
+    my ( $httpClient, $response, $subdir, $fileName ) = @_;
+    if ($httpClient->connected) {
+        my $imageDir = Slim::Utils::Prefs::dir() . "/material-skin/" . $subdir;
+        my $filePath = $imageDir . "/" . $fileName;
+        $response->code(RC_OK);
+        if (_sendImage($httpClient, $response, $filePath, "jpg", "image/jpeg")==0) {
+            if (_sendImage($httpClient, $response, $filePath, "png", "image/png")==0) {
+                return 0
             }
-            my $placeholder = $filePath . ".missing";
-            File::Slurp::write_file($placeholder, { err_mode => 'carp' }, '' ) unless -f $placeholder;
-            $filePath = dirname(__FILE__) . "/HTML/material/html/images/" . $notfound . ".png";
-            Slim::Web::HTTP::sendStreamingFile( $httpClient, $response, "image/png", $filePath, '', 'noAttachment' );
         }
     }
+    return 1
 }
 
 sub _genreHandler {
     my ( $httpClient, $response ) = @_;
-    _sendMaterialImage($httpClient, $response, "genres", "nogenre");
+    my $fileName = basename($response->reques->uri->path);
+    if (0==_sendMaterialImage($httpClient, $response, "genres", $fileName)) {
+        _sendFallbackImage($httpClient, $response, "genres", $fileName, "nogenre");
+    }
 }
 
 sub _playlistHandler {
     my ( $httpClient, $response ) = @_;
-    _sendMaterialImage($httpClient, $response, "playlists", "noplaylist");
+    my $playlistName = uri_unescape(basename($response->request->uri->path));
+    my $fileName = lc($playlistName);
+    $fileName =~ s/[^a-z_0-9]//ig;
+
+    if (0==_sendMaterialImage($httpClient, $response, "playlists", $fileName)) {
+        foreach my $playlist ( Slim::Schema->rs('Playlist')->getPlaylists('all')->all ) {
+            if ($playlist->title eq $playlistName) {
+                my $request = Slim::Control::Request->new(undef, ["playlists", "tracks", 0, 10, "tags:cK", "playlist_id:" . $playlist->id] );
+                $request->execute();
+                if ( !$request->isStatusError() ) {
+                    my $results = $request->getResults();
+                    my $items = $results->{'playlisttracks_loop'};
+                    foreach (@$items) {
+                        my $image = $_->{'artwork_url'} ? $_->{'artwork_url'} : $_->{'coverid'} ? "/music/" . $_->{'coverid'} . "/cover" : undef;
+                        if ($image) {
+                            $response->code(307);
+                            $response->header('Location' => $image );
+                            $response->header('Cache-Control' => 'no-cache');
+                            $httpClient->send_response($response);
+                            Slim::Web::HTTP::closeHTTPSocket($httpClient);
+                            return;
+                        }
+                    }
+                }
+            }
+        }
+        _sendFallbackImage($httpClient, $response, "playlists", $fileName, "noplaylist");
+    }
 }
 
 1;

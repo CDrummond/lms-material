@@ -2,6 +2,7 @@
 -----
 1. Allow per-player colour setting.
 2. Add support for LMS9's portraitid attribute - thanks to Michael Herger.
+3. If no playlist image found, use first valid image found in playlist tracks.
 
 5.8.3
 -----

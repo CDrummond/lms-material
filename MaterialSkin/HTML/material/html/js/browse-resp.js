@@ -378,7 +378,7 @@ function parseBrowseResp(data, parent, options, cacheKey, parentCommand, parentG
                             i.image=undefined;
                         } else if (i.presetParams.favorites_url.startsWith("file://") && i.presetParams.icon=="html/images/playlists.png") {
                             if (lmsOptions.playlistImages) {
-                                i.image = "material/playlists/" + i.title.toLowerCase().replace(/[^0-9a-z]/gi, '');
+                                i.image = "material/playlists/" + encodeURIComponent(i.title);
                             } else {
                                 i.icon="list";
                                 i.image=undefined;
@@ -1904,7 +1904,7 @@ function parseBrowseResp(data, parent, options, cacheKey, parentCommand, parentG
                               title: replaceHtmlBrackets(i.playlist),
                               icon: undefined == emblem ? "list" : undefined,
                               svg: undefined == emblem ? undefined : emblem.name,
-                              image: lmsOptions.playlistImages ? "material/playlists/" + i.playlist.toLowerCase().replace(/[^0-9a-z]/gi, '') : undefined,
+                              image: lmsOptions.playlistImages ? "material/playlists/" + encodeURIComponent(i.playlist) : undefined,
                               stdItem: isRemote ? STD_ITEM_REMOTE_PLAYLIST : STD_ITEM_PLAYLIST,
                               type: "group",
                               section: SECTION_PLAYLISTS,

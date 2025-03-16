@@ -3,6 +3,13 @@
 1. Allow per-player colour setting.
 2. Add support for LMS9's portraitid attribute - thanks to Michael Herger.
 
+5.8.3
+-----
+1. Don't react to slider, etc., changes in group volume dialog for fixed volume
+   players when Material is set to 'Hide volume control'.
+2. Fix closing of transfer queue and sort list dialogs when clicking on select
+   option.
+
 5.8.2
 -----
  1. Translation updates.

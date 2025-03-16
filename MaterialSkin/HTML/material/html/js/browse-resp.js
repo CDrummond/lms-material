@@ -1005,6 +1005,7 @@ function parseBrowseResp(data, parent, options, cacheKey, parentCommand, parentG
             var ignoreRoles = new Set();
             var mskRoleId = undefined;
             var roleId = undefined;
+            var portraitId = undefined;
 
             if (data.params && data.params.length>1) {
                 let reverse = false;
@@ -1034,6 +1035,8 @@ function parseBrowseResp(data, parent, options, cacheKey, parentCommand, parentG
                             }
                         } else if (lower.startsWith("material_skin_role_id:")) {
                             mskRoleId = roleIntValue(lower.split(':')[1]);
+                        } else if (lower.startsWith("material_skin_portraitid:")) {
+                            portraitId = lower.split(':')[1];
                         }
                     }
                 }
@@ -1211,9 +1214,9 @@ function parseBrowseResp(data, parent, options, cacheKey, parentCommand, parentG
             showRoles.delete(TRACK_ARTIST_ROLE);
             ignoreRoles.forEach(role => { showRoles.delete(role) });
             resp.showRoles = Array.from(showRoles).sort();
-            // TODO - don't know how to handle a portraitId here. We can have an album's main artist picture. But that's not always suitable here.
-            // Using the artist ID could cause caching issues again.
-            if (undefined!=reqArtistId && LMS_P_MAI && lmsOptions.showArtistImages) {
+            if (undefined!=portraitId) {
+                resp.image= "/contributor/" + portraitId + "/image" + LMS_LIST_IMAGE_SIZE;
+            } else if (undefined!=reqArtistId && LMS_P_MAI && lmsOptions.showArtistImages) {
                 resp.image= "/imageproxy/mai/artist/" + reqArtistId + "/image" + LMS_LIST_IMAGE_SIZE;
             }
             if (isWorksAlbums) {

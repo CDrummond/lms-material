@@ -80,7 +80,7 @@ function browseHandleKey(view, event) {
                                 let title = jloop[j].title.toUpperCase();
                                 if (browseMatches(lmsLastKeyPress.text, title) || browseMatches(lmsLastKeyPress.text, title.replaceAll('.', '').replaceAll('(', '').replaceAll(')', '').replaceAll('/', '').replaceAll('-', '').replaceAll(',', ''))) {
                                     if (isEnter) {
-                                        view.click(view.items[j], j);
+                                        browseClick(view, view.items[j], j);
                                     } else {
                                         view.jumpTo(j);
                                         return;
@@ -303,7 +303,7 @@ function browseHandleNextWindow(view, item, command, resp, isMoreMenu, isBrowse)
             }
             view.goBack(true);
         } else if (nextWindow=="home") {
-            view.goHome();
+            browseGoHome(view);
         }
         return true;
     }
@@ -2010,7 +2010,7 @@ function browseGoBack(view, refresh) {
     }
     let next = undefined==view.current ? undefined : {id:view.current.id, pos:view.scrollElement.scrollTop};
     if (view.history.length<2) {
-        view.goHome();
+        browseGoHome(view);
         view.next = next;
         return;
     }
@@ -2977,6 +2977,57 @@ function browseFetchExtra(view, fetchArtists) {
             }
         }
     });
+}
+
+function browseGoToItem(view, cmd, params, title, page, clearHistory, subtitle) {
+    view.clearSelection();
+    if (view.$store.state.desktopLayout) {
+        if ('now-playing'==page && view.nowPlayingExpanded) {
+            page = NP_EXPANDED;
+        }
+    } else {
+        view.$store.commit('setPage', 'browse');
+    }
+    if (undefined==clearHistory || clearHistory) {
+        browseGoHome(view);
+    }
+    if ('genre'==cmd || 'year'==cmd) {
+        let item = {id:'click.'+cmd+'.'+params,
+                    actions: { go: { params: { mode:'genre'==cmd?'artists':'albums'}}},
+                    title:/**/'CLICK: '+title,
+                    type:'click',
+                    image: 'genre'==cmd && lmsOptions.genreImages ? "material/genres/" + title.toLowerCase().replace(/[^0-9a-z]/gi, '') : undefined};
+        if ('genre'==cmd) {
+            item.actions.go.params['genre_id']=params;
+        } else {
+            item.actions.go.params['year']=params;
+        }
+        var len = view.history.length;
+        if (undefined==view.current) {
+            view.current = {id:'XXXX', title:/**/'?'}; // Create fake item here or else view toggle breaks?
+        }
+        browseClick(view, item);
+        if (view.history.length>len) {
+            view.prevPage = page;
+        }
+    } else if (LMS_VERSION>=90100 && 'albums'==cmd) {
+        // With LMS9.1+ try to get portraitid to use for artist image in toolbar
+        let artist_id = getParamVal({params:params}, 'artist_id:', undefined);
+        if (undefined==artist_id) {
+            view.fetchItems(view.replaceCommandTerms({command:cmd, params:params}), {cancache:false, id:params[0], title:title, subtitle:subtitle, stdItem:params[0].startsWith("artist_id:") ? STD_ITEM_ARTIST : STD_ITEM_ALBUM}, page);
+        } else {
+            lmsCommand(view.playerId(), ['artists', 0, 1, 'tags:4', 'artist_id:'+artist_id]).then(({data}) => {
+                if (data && data.result && data.result.artists_loop && 1==data.result.artists_loop.length && data.result.artists_loop[0].portraitid) {
+                    params.push('material_skin_portraitid:'+data.result.artists_loop[0].portraitid);
+                }
+                view.fetchItems(view.replaceCommandTerms({command:cmd, params:params}), {cancache:false, id:params[0], title:title, subtitle:subtitle, stdItem:params[0].startsWith("artist_id:") ? STD_ITEM_ARTIST : STD_ITEM_ALBUM}, page);
+            }).catch(err => {
+                view.fetchItems(view.replaceCommandTerms({command:cmd, params:params}), {cancache:false, id:params[0], title:title, subtitle:subtitle, stdItem:params[0].startsWith("artist_id:") ? STD_ITEM_ARTIST : STD_ITEM_ALBUM}, page);
+            });
+        }
+    } else {
+        view.fetchItems(view.replaceCommandTerms({command:cmd, params:params}), {cancache:false, id:params[0], title:title, subtitle:subtitle, stdItem:params[0].startsWith("artist_id:") ? STD_ITEM_ARTIST : STD_ITEM_ALBUM}, page);
+    }
 }
 
 const DEFERRED_LOADED = true;

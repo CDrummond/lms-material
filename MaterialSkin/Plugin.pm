@@ -2653,7 +2653,15 @@ sub _playlistHandler {
                     my $results = $request->getResults();
                     my $items = $results->{'playlisttracks_loop'};
                     foreach (@$items) {
-                        my $image = $_->{'artwork_url'} ? $_->{'artwork_url'} : $_->{'coverid'} ? "/music/" . $_->{'coverid'} . "/cover" : undef;
+                        my $image = undef;
+                        if ($_->{'artwork_url'}) {
+                            $image = $_->{'artwork_url'};
+                            if (_startsWith($image, "http:") || _startsWith($image, "https:")) {
+                                $image = "/imageproxy/" . URI::Escape::uri_escape_utf8($image) . "/image_300x300_f";
+                            }
+                        } elsif ($_->{'coverid'}) {
+                            $image = "/music/" . $_->{'coverid'} . "/cover_300x300_f";
+                        }
                         if ($image) {
                             $response->code(307);
                             $response->header('Location' => $image );

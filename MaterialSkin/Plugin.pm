@@ -2647,29 +2647,24 @@ sub _playlistHandler {
     if (0==_sendMaterialImage($httpClient, $response, "playlists", $fileName)) {
         foreach my $playlist ( Slim::Schema->rs('Playlist')->getPlaylists('all')->all ) {
             if ($playlist->title eq $playlistName) {
-                my $request = Slim::Control::Request->new(undef, ["playlists", "tracks", 0, 10, "tags:cK", "playlist_id:" . $playlist->id] );
-                $request->execute();
-                if ( !$request->isStatusError() ) {
-                    my $results = $request->getResults();
-                    my $items = $results->{'playlisttracks_loop'};
-                    foreach (@$items) {
-                        my $image = undef;
-                        if ($_->{'artwork_url'}) {
-                            $image = $_->{'artwork_url'};
-                            if (_startsWith($image, "http:") || _startsWith($image, "https:")) {
-                                $image = "/imageproxy/" . URI::Escape::uri_escape_utf8($image) . "/image_300x300_f";
-                            }
-                        } elsif ($_->{'coverid'}) {
-                            $image = "/music/" . $_->{'coverid'} . "/cover_300x300_f";
+                my $request = Slim::Control::Request::executeRequest(undef, ["playlists", "tracks", 0, 10, "tags:cK", "playlist_id:" . $playlist->id] );
+                foreach my $playlist ( @{ $request->getResult('playlisttracks_loop') || [] } ) {
+                    my $image = undef;
+                    if ($playlist->{'artwork_url'}) {
+                        $image = $playlist->{'artwork_url'};
+                        if (_startsWith($image, "http:") || _startsWith($image, "https:")) {
+                            $image = "/imageproxy/" . URI::Escape::uri_escape_utf8($image) . "/image_300x300_f";
                         }
-                        if ($image) {
-                            $response->code(307);
-                            $response->header('Location' => $image );
-                            $response->header('Cache-Control' => 'no-cache');
-                            $httpClient->send_response($response);
-                            Slim::Web::HTTP::closeHTTPSocket($httpClient);
-                            return;
-                        }
+                    } elsif ($playlist->{'coverid'}) {
+                        $image = "/music/" . $playlist->{'coverid'} . "/cover_300x300_f";
+                    }
+                    if ($image) {
+                        $response->code(307);
+                        $response->header('Location' => $image );
+                        $response->header('Cache-Control' => 'no-cache');
+                        $httpClient->send_response($response);
+                        Slim::Web::HTTP::closeHTTPSocket($httpClient);
+                        return;
                     }
                 }
             }

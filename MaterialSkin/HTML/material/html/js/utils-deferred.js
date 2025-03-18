@@ -471,7 +471,6 @@ function sortPlaylist(view, playerId, title, command) {
 }
 
 function inRect(x, y, rx, ry, rw, rh, padding) {
-    console.log("IN RECT", x, y, x>=(rx-padding), x<=(rx+rw+padding), y>=(ry-padding), y<=(ry+rh+padding),
     rx-padding, rx+rw+padding, ry-padding, ry+rh+padding);
     return x>=(rx-padding) && x<=(rx+rw+padding) && y>=(ry-padding) && y<=(ry+rh+padding);
 }

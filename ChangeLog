@@ -1,3 +1,9 @@
+5.8.4
+-----
+1. Read half-star setting from ratings light, and use to control if can set
+   half stars.
+2. Fix setting of half-stars in ratings dialog.
+
 5.8.3
 -----
 1. Don't react to slider, etc., changes in group volume dialog for fixed volume

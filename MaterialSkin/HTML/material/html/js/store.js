@@ -569,11 +569,10 @@ const store = new Vuex.Store({
                 setFontSize(state.fontSize);
             }
             lmsOptions.techInfo = state.browseTechInfo;
-            // Max rating (for trackstat)
-            if (LMS_P_RP=='trackstat') {
+            if (LMS_P_RP=='trackstat' || LMS_P_RP=='ratingslight') {
                 state.maxRating = 5;
                 setLocalStorageVal('maxRating', state.maxRating);
-                lmsCommand("", ["pref", "plugin."+LMS_P_RP+":rating_10scale", "?"]).then(({data}) => {
+                lmsCommand("", ["pref", "plugin."+LMS_P_RP+(LMS_P_RP=='ratingslight' ? ":usehalfstarratings" : ":rating_10scale"), "?"]).then(({data}) => {
                     if (data && data.result && data.result._p2 != null) {
                         state.maxRating = 1 == parseInt(data.result._p2) ? 10 : 5;
                         setLocalStorageVal('maxRating', state.maxRating);

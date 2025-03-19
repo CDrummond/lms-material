@@ -14,8 +14,7 @@ Vue.component('lms-rating-dialog', {
   <v-card-text>
    <v-layout text-xs-center row wrap>
     <v-flex xs12 class="np-text">
-     <v-rating large v-if="maxRating>5" v-model="value" half-increments hover clearable></v-rating>
-     <v-rating large v-else v-model="value" hover clearable></v-rating>
+     <v-rating large v-model="value" :halfIncrements="maxRating>5" hover clearable></v-rating>
     </v-flex>
    </v-layout>
   </v-card-text>
@@ -44,12 +43,13 @@ Vue.component('lms-rating-dialog', {
         }
     },
     computed: {
-            maxRating() {
+        maxRating() {
             return this.$store.state.maxRating
         }
     },
     mounted() {
         bus.$on('rating.open', function(ids, current) {
+            console.log(this.$store.state.maxRating)
             if (this.$store.state.player.id) {
                 this.ids = ids;
                 if (ids.length>1) {

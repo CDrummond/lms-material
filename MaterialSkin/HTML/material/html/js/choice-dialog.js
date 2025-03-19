@@ -9,7 +9,7 @@
 Vue.component('lms-choice-dialog', {
     template: `
 <v-dialog v-model="show" v-if="show" width="450" persistent class="lms-dialog">
- <v-card v-clickoutside="outsideClick">
+ <v-card v-clickoutside="outsideClick" id="choice-dialog">
   <v-card-text>
    <v-select v-if="undefined!=options && options.length>1" menu-props="auto" :items="options" v-model="option" item-text="title" item-value="val"></v-select>
    <v-container grid-list-md style="padding: 4px">
@@ -82,7 +82,23 @@ Vue.component('lms-choice-dialog', {
         handleNumeric(this, this.choose);
     },
     methods: {
-        outsideClick() {
+        outsideClick(ev) {
+            let rect = document.getElementById("choice-dialog").getBoundingClientRect();
+            let pos = getTouchOrClickPos(ev);
+            if (inRect(pos.x, pos.y, rect.x, rect.y, rect.width, rect.height, 0)) {
+                return;
+            }
+            if (this.options && this.options.length>1) {
+                let elems = document.getElementsByClassName("v-select-list");
+                if (undefined!=elems) {
+                    for (let i=0, len=elems.length; i<len; ++i) {
+                        rect = elems[i].getBoundingClientRect();
+                        if (inRect(pos.x, pos.y, rect.x, rect.y, rect.width, rect.height, 0)) {
+                            return;
+                        }
+                    }
+                }
+            }
             setTimeout(function () { this.cancel(); }.bind(this), 50);
         },
         cancel() {

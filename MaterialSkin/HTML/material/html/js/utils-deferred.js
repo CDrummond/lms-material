@@ -471,6 +471,7 @@ function sortPlaylist(view, playerId, title, command) {
 }
 
 function inRect(x, y, rx, ry, rw, rh, padding) {
+    rx-padding, rx+rw+padding, ry-padding, ry+rh+padding);
     return x>=(rx-padding) && x<=(rx+rw+padding) && y>=(ry-padding) && y<=(ry+rh+padding);
 }
 
@@ -709,11 +710,15 @@ let mskinDialogWindowResize = false;
 function storeClickOrTouchPos(event, menu) {
     if (event) {
         let now = new Date().getTime();
-        let pos = undefined!=menu && (menu.show || (undefined!=menu.closed && now-menu.closed<100)) ? {x:menu.x, y:menu.y} : getTouchPos(event);
-        mskinLastClickOrTouch={ time:now,
-                                x:pos ? pos.x : undefined==event.x ? event.clientX : event.x,
-                                y:pos ? pos.y : undefined==event.y ? event.clientY : event.y };
+        let pos = undefined!=menu && (menu.show || (undefined!=menu.closed && now-menu.closed<100)) ? {x:menu.x, y:menu.y} : getTouchOrClickPos(event);
+        mskinLastClickOrTouch={ time:now, x:pos.x, y:pos.y };
     }
+}
+
+function getTouchOrClickPos(event) {
+    let tp = getTouchPos(event);
+    return { x:tp ? tp.x : undefined==event.x ? event.clientX : event.x,
+             y:tp ? tp.y : undefined==event.y ? event.clientY : event.y };
 }
 
 function resetDialogPos() {

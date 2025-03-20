@@ -75,7 +75,7 @@ function buildArtistAlbumLines(i, queueAlbumStyle, queueContext) {
         artistAlbum = addPart(artistAlbum, buildAlbumLine(i, 'queue'));
         let work = buildWorkLine(i, 'queue');
         if (work && queueAlbumStyle) {
-            artistAlbum = addPart(work, i.grouping)+'<br/><div class="pq-gsub">'+artistAlbum+'</div>';
+            artistAlbum = addPart(work, i.work!=i.grouping ? i.grouping : undefined)+'<br/><div class="pq-gsub">'+artistAlbum+'</div>';
             ws = true;
         } else if (queueAlbumStyle && i.grouping) {
             artistAlbum +='<br/><div class="pq-gsub">'+i.grouping+'</div>';

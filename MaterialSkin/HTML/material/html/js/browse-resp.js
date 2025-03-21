@@ -1372,7 +1372,7 @@ function parseBrowseResp(data, parent, options, cacheKey, parentCommand, parentG
             let compilationAlbumArtist = undefined;
             let extraSubs = [];
             let browseContext = getLocalStorageBool('browseContext', false);
-            let splitIntoGroupings = lmsOptions.useGrouping && (undefined==parent || undefined==parent.multi || MULTI_GROUP_ALBUM==parent.multi || isWork);
+            let splitIntoGroupings = (lmsOptions.useGrouping || isWork) && (undefined==parent || undefined==parent.multi || MULTI_GROUP_ALBUM==parent.multi || isWork);
 
             for (let idx=0, loop=data.result.titles_loop, loopLen=loop.length; idx<loopLen; ++idx) {
                 let i = makeHtmlSafe(loop[idx]);

@@ -243,6 +243,9 @@ function buildWorkLine(i, artist, page, plain) {
     var line = undefined;
     if (i.work && i.composer) {
         var work = i.composer + SEPARATOR + i.work;
+        if (i.performance) {
+            work += SEPARATOR + i.performance;
+        }
         if (i.work_id && (!IS_MOBILE || lmsOptions.touchLinks) && !plain) {
             work="<obj class=\"link-item\" onclick=\"showWork(event, "+i.work_id+",\'"+escape(i.work)+"\',\'"+escape(i.composer)+"\', \'"+page+"\')\">" + work + "</obj>";
         }

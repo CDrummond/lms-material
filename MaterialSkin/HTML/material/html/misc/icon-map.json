@@ -30,7 +30,7 @@
     "/musicfolder.png":{"icon":"folder"},
     "/newmusic.png":{"icon":"new_releases"},
     "/years.png":{"icon":"date_range"},
-    "/genres.png":{"svg":"guitar-acoustic"},
+    "/genres.png":{"svg":"genre"},
     "/favorites.png":{"icon":"favorite"},
     "/alarm.png":{"icon":"alarm"},
     "/plugin.png":{"icon":"extension"},

@@ -74,11 +74,14 @@ function buildArtistAlbumLines(i, queueAlbumStyle, queueContext) {
     if (!queueAlbumStyle || !artistIsRemoteTitle) {
         artistAlbum = addPart(artistAlbum, buildAlbumLine(i, 'queue'));
         let work = buildWorkLine(i, 'queue');
-        if (work && queueAlbumStyle) {
+        if (lmsOptions.useGrouping && work && queueAlbumStyle) {
             artistAlbum = addPart(work, i.work!=i.grouping ? i.grouping : undefined)+'<br/><div class="pq-gsub">'+artistAlbum+'</div>';
             ws = true;
-        } else if (queueAlbumStyle && i.grouping) {
+        } else if (lmsOptions.useGrouping && queueAlbumStyle && i.grouping) {
             artistAlbum +='<br/><div class="pq-gsub">'+i.grouping+'</div>';
+            ws = true;
+        } else if (i.disccount && i.disccount>1 || i.discsubtitle) {
+            artistAlbum +='<br/><div class="pq-gsub">'+ (i.discsubtitle ? i.discsubtitle : i18n("Disc %1", i.disc)) +'</div>';
             ws = true;
         }
         if (queueContext) {

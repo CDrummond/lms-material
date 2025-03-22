@@ -3,6 +3,7 @@
 1. Read half-star setting from ratings light, and use to control if can set
    half stars.
 2. Fix setting of half-stars in ratings dialog.
+3. Fix mapping of icons in apps.
 
 5.8.3
 -----

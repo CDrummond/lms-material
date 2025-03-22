@@ -519,7 +519,7 @@ function parseBrowseResp(data, parent, options, cacheKey, parentCommand, parentG
                         }
                         mapIcon(i, undefined, {icon:undefined, svg:"radio-station"});
                     } else {
-                        mapIcon(i);
+                        mapIcon(i, command);
                     }
                 } else if (isBmf) {
                     if (i.style=="itemNoAction") {

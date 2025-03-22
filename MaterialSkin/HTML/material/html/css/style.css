@@ -2203,6 +2203,10 @@ div.v-rating i.primary--text, div.v-rating i.accent--text {
  border-bottom:1px solid var(--album-separator-color);
 }
 
+.pq-grp-header .pq-album-header {
+ padding-top:10px;
+}
+
 .pq-first-track,
 .pq-first-track-menu,
 .pq-first-track-check {

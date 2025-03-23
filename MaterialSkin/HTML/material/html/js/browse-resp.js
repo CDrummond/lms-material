@@ -520,7 +520,7 @@ function parseBrowseResp(data, parent, options, cacheKey, parentCommand, parentG
                         }
                         mapIcon(i, undefined, {icon:undefined, svg:"radio-station"});
                     } else {
-                        mapIcon(i);
+                        mapIcon(i, command);
                     }
                 } else if (isBmf) {
                     if (i.style=="itemNoAction") {
@@ -1513,7 +1513,7 @@ function parseBrowseResp(data, parent, options, cacheKey, parentCommand, parentG
                                 if (i.performance) {
                                     groupingTitle += SEPARATOR+i.performance;
                                 }
-                                if (i.grouping) {
+                                if (i.grouping && i.grouping!=i.work) {
                                     groupingTitle += SEPARATOR+i.grouping;
                                 }
                             } else {

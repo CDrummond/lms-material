@@ -248,7 +248,6 @@ function buildWorkLine(i, page, plain) {
         if (i.performance) {
             work += SEPARATOR + i.performance;
         }
-        console.log("WORK", work);
         if (i.work_id && (!IS_MOBILE || lmsOptions.touchLinks) && !plain) {
             work="<obj class=\"link-item\" onclick=\"showWork(event, "+i.work_id+",\'"+escape(i.work)+"\',\'"+(i.performance ? escape(i.performance) : "")+"\',\'"+escape(i.composer)+"\',\'"+page+"\')\">" + work + "</obj>";
         }

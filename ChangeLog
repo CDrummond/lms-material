@@ -8,6 +8,8 @@
    'compilation=1' into 'Compilations' if they have no explicit release type.
 5. Don't allow 'Compilations' entry to be pinned, as this has 'artist_id:'
    parameter that can change.
+6. If a 'My Music' item view has 'library_id' then don't ask whether to pin
+   with ID or not - as will always use its ID.
 
 5.8.3
 -----

@@ -23,11 +23,13 @@ function showAlbum(event, album, title, page, subtitle) {
     browseItem(event, ["tracks"], ["album_id:"+album, trackTags(true), SORT_KEY+"tracknum"], unescape(title), page, undefined==subtitle ? subtitle : unescape(subtitle));
 }
 
-/*
-function showWork(event, work, title, artist, page) {
-    browseItem(event, ["albums"], ["work_id:"+work, ARTIST_ALBUM_TAGS, SORT_KEY+ARTIST_ALBUM_SORT_PLACEHOLDER], unescape(title), page, unescape(artist));
+function showWork(event, workid, work, performance, composer, page) {
+    var cmd = ["work_id:"+workid, ARTIST_ALBUM_TAGS, SORT_KEY+ARTIST_ALBUM_SORT_PLACEHOLDER];
+    if (undefined!=performance && performance.length>0) {
+        cmd.push("performance:"+performance);
+    }
+    browseItem(event, ["albums"], cmd, unescape(work), page, unescape(composer));
 }
-*/
 
 function showArtistRole(event, id, title, page, role) {
     browseItem(event, ["albums"], ["artist_id:"+id, ARTIST_ALBUM_TAGS, SORT_KEY+ARTIST_ALBUM_SORT_PLACEHOLDER, "role_id:"+role], unescape(title), page);
@@ -226,7 +228,7 @@ function buildAlbumLine(i, page, plain) {
         }
         if (i.album_id && (!IS_MOBILE || lmsOptions.touchLinks) && !plain) {
             let artist = i.albumartist ? i.albumartist : i.artist;
-            album="<obj class=\"link-item\" onclick=\"showAlbum(event, "+i.album_id+",\'"+escape(album)+"\', \'"+page+"\',\'"+escape(artist)+"\')\">" + album + "</obj>";
+            album="<obj class=\"link-item\" onclick=\"showAlbum(event, "+i.album_id+",\'"+escape(album)+"\',\'"+page+"\',\'"+escape(artist)+"\')\">" + album + "</obj>";
         }
         line=addPart(line, album);
     } else if (remoteTitle && remoteTitle!=i.title) {
@@ -239,12 +241,15 @@ function buildAlbumLine(i, page, plain) {
     }
 }
 
-function buildWorkLine(i, artist, page, plain) {
+function buildWorkLine(i, page, plain) {
     var line = undefined;
     if (i.work && i.composer) {
         var work = i.composer + SEPARATOR + i.work;
+        if (i.performance) {
+            work += SEPARATOR + i.performance;
+        }
         if (i.work_id && (!IS_MOBILE || lmsOptions.touchLinks) && !plain) {
-            work="<obj class=\"link-item\" onclick=\"showWork(event, "+i.work_id+",\'"+escape(i.work)+"\',\'"+escape(i.composer)+"\', \'"+page+"\')\">" + work + "</obj>";
+            work="<obj class=\"link-item\" onclick=\"showWork(event, "+i.work_id+",\'"+escape(i.work)+"\',\'"+(i.performance ? escape(i.performance) : "")+"\',\'"+escape(i.composer)+"\',\'"+page+"\')\">" + work + "</obj>";
         }
         line=addPart(line, work);
     }

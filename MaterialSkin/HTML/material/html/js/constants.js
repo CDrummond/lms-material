@@ -129,6 +129,7 @@ const TOP_REMOTE_ID = TOP_ID_PREFIX+"rml";
 const TOP_CDPLAYER_ID = TOP_ID_PREFIX+"cdda";
 const HIDE_TOP_FOR_PARTY = new Set([TOP_EXTRAS_ID, TOP_RADIO_ID, TOP_REMOTE_ID, TOP_FAVORITES_ID]);
 const MUSIC_ID_PREFIX = "mm:/";
+const COMPILATIONS_ID = MUSIC_ID_PREFIX+"myMusicAlbumsVariousArtists";
 const SEARCH_ID = MUSIC_ID_PREFIX+"lms-local-search";
 const ADV_SEARCH_ID = MUSIC_ID_PREFIX+"lms-adv-search";
 const GENRES_ID = MUSIC_ID_PREFIX+"genres";

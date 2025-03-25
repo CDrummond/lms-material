@@ -4,6 +4,8 @@
    half stars.
 2. Fix setting of half-stars in ratings dialog.
 3. Fix mapping of icons in apps.
+4. When splitting release lists into groups, only group releases with
+   'compilation=1' into 'Compilations' if they have no explicit release type.
 
 5.8.3
 -----

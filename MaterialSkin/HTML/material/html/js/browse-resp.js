@@ -1156,12 +1156,8 @@ function parseBrowseResp(data, parent, options, cacheKey, parentCommand, parentG
                 if (subIsYear && ((!IS_MOBILE || lmsOptions.touchLinks))) {
                     subtitleLinks = "<obj class=\"link-item\" onclick=\"show_year(event, "+i.year+",\'"+i.year+"\', \'browse\')\">" + i.year + "</obj>";
                 }
+                let groupType = albumGroupingType(i.disccount, i.group_count, i.contiguous_groups, isWorksAlbums);
 
-                let groupType = lmsOptions.useGrouping && undefined!=i.group_count && parseInt(i.group_count)>1 && (undefined==i.contiguous_groups || 1==parseInt(i.contiguous_groups))
-                                 ? MULTI_GROUP_ALBUM
-                                 : lmsOptions.groupdiscs && undefined!=i.disccount && parseInt(i.disccount)>1
-                                   ? MULTI_DISC_ALBUM
-                                   : 0;
                 let album = {
                               id: "album_id:"+(ids.has(i.id) ? uniqueId(i.id, resp.items.length) : i.id),
                               artist_id: i.artist_id,
@@ -1372,7 +1368,7 @@ function parseBrowseResp(data, parent, options, cacheKey, parentCommand, parentG
             let compilationAlbumArtist = undefined;
             let extraSubs = [];
             let browseContext = getLocalStorageBool('browseContext', false);
-            let splitIntoGroupings = (lmsOptions.useGrouping || isWork) && (undefined==parent || undefined==parent.multi || MULTI_GROUP_ALBUM==parent.multi || isWork);
+            let splitIntoGroupings = undefined==parent || undefined==parent.multi || MULTI_GROUP_ALBUM==parent.multi;
 
             for (let idx=0, loop=data.result.titles_loop, loopLen=loop.length; idx<loopLen; ++idx) {
                 let i = makeHtmlSafe(loop[idx]);

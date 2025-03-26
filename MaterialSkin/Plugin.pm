@@ -885,8 +885,18 @@ sub _cliCommand {
             }
             if ($albumId) {
                 $request->addResult('album_id', $albumId);
-                if ($artistName) {
-                    $request->addResult('artist_name', uri_unescape($artistName));
+                if ( $artistName = uri_unescape($artistName) ) {
+                    utf8::decode($artistName);
+                    $request->addResult('artist_name', $artistName);
+                }
+                my $albumsRequest = Slim::Control::Request->new( undef, [ 'albums', 0, 1, "album_id:$albumId", "tags:2q" ] );
+                $albumsRequest->execute();
+                if ($albumsRequest->isStatusError()) {
+                    $log->error($albumsRequest->getStatusText());
+                } else {
+                    $request->addResult('disc_count', @{$albumsRequest->getResult('albums_loop')}[0]->{'disccount'});
+                    $request->addResult('group_count', @{$albumsRequest->getResult('albums_loop')}[0]->{'group_count'});
+                    $request->addResult('contiguous_groups', @{$albumsRequest->getResult('albums_loop')}[0]->{'contiguous_groups'});
                 }
             }
             if ($workId) {
@@ -895,8 +905,9 @@ sub _cliCommand {
             if ($composerId) {
                 $request->addResult('composer_id', $composerId);
             }
-            if ($performance) {
-                $request->addResult('performance', uri_unescape($performance));
+            if ( $performance = uri_unescape($performance) ) {
+                utf8::decode($performance);
+                $request->addResult('performance', $performance);
             }
             if (index($fav_url, "file:///")==0 && index($fav_url, ".m3u")==(length($fav_url)-4)) {
                 my $rs = Slim::Schema->rs('Playlist')->getPlaylists('all', undef, undef);

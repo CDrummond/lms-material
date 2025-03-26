@@ -745,16 +745,32 @@ PLUGIN_MATERIAL_SKIN_USE_DEFAULT_FOR_SETTINGS_NEW_TAB
 	HU	Igen (új lap/ablak)
 
 PLUGIN_MATERIAL_SKIN_USE_GROUPING
+	DE	Titel des Gruppenalbums
 	EN	Group album tracks
 	FR	Regrouper les morceaux d'un album
 	NL	Groepeer album nummers
 	HU	Csoportosítsa az album számait
 
 PLUGIN_MATERIAL_SKIN_USE_GROUPING_DESC
-	EN	Support grouping tracks by work and composer, or by grouping tag. If enabled, then this grouping will take preference over grouping via disc number - therefore if you have a multi-disc release that also has groupings, then tracks will be shown group via these groupings.
-	FR	Prendre en charge le regroupement des morceaux par œuvre et compositeur, ou par tag de regroupement. Si cette option est activée, ce regroupement sera prioritaire sur le regroupement par numéro de disque. Par conséquent, si vous avez un album à plusieurs disques qui comporte également des regroupements, les morceaux seront affichés groupés via ces regroupements.
-	NL	Ondersteuning voor het groeperen van nummers op werk en componist, of op basis van de tag GROUPING. Indien ingeschakeld, krijgt de GROUPING tag de voorkeur boven groepering via schijfnummer. Als jij dus een release met meerdere schijven hebt, die ook een GROUPING tag hebben, worden de nummers gegroepeerd op basis van de GROUPING tag.
-	HU	Támogatja a számok csoportosítását mű és zeneszerző vagy csoportosítási címke alapján. Ha engedélyezve van, akkor ez a csoportosítás előnyben részesíti a lemezszám alapján történő csoportosítást – ezért ha többlemezes kiadása van, amely csoportosításokat is tartalmaz, akkor a műsorszámok ezeken a csoportosításokon keresztül jelennek meg.
+	DE	Wenn ein Album aus mehreren Discs besteht und Werk- und/oder Gruppierungs-Tags enthält, welche Gruppierung sollte bei der Erstellung von Zwischenüberschriften bevorzugt werden?
+	EN	When an album is both multi-disc and contains work and/or grouping tags, which grouping should take preference when generating subheadings?
+	FR	Lorsqu'un album est à la fois multi-disques et qu'il contient des balises de travail et/ou de regroupement, quel regroupement doit être privilégié lors de la génération des sous-titres ?
+	HU	Ha egy album egyszerre többlemezes és tartalmaz munka- és/vagy csoportosítási címkéket, melyik csoportosítás élvezzen elsőbbséget az alcímek generálásakor?
+	NL	Wanneer een album zowel uit meerdere cd's bestaat als werk- en/of groeperingstags bevat, welke groepering moet dan de voorkeur krijgen bij het genereren van onderverdelingen?
+
+PLUGIN_MATERIAL_SKIN_PREFER_DISC_GROUPS
+	DE	Bevorzugte Disc-Nummer/Disc-Untertitel
+	EN	Prefer disc number/disc subtitle
+	FR	Préférer le numéro de disque/le sous-titre du disque
+	HU	Lemezszám/lemezfelirat előnyben részesítése
+	NL	Voorkeur disc nummer/disc ondertitel
+
+PLUGIN_MATERIAL_SKIN_PREFER_WORK_GROUPING_GROUPS
+	DE	Liever werken en groeperen
+	EN	Prefer work and grouping
+	FR	Préférer le travail et le regroupement
+	HU	A munka és a csoportosítás előnyben részesítése
+	NL	Liever werken en groeperen
 
 PLUGIN_MATERIAL_SKIN_SHOW_WORKS_IN_ARTIST_ALBUM_LIST
 	EN	Show artist works

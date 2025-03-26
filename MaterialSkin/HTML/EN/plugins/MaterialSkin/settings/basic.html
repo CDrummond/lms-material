@@ -90,6 +90,10 @@
     <input type="checkbox" name="pref_genreImages" id="pref_genreImages" [% IF prefs.pref_genreImages %] checked [% END %] value="1"/>
     [% END %]
 
+    [% WRAPPER setting title="PLUGIN_MATERIAL_SKIN_PLAYLIST_IMAGES" desc="PLUGIN_MATERIAL_SKIN_PLAYLIST_IMAGES_DESC" %]
+    <input type="checkbox" name="pref_playlistImages" id="pref_playlistImages" [% IF prefs.pref_playlistImages %] checked [% END %] value="1"/>
+    [% END %]
+
     [% IF lmsHasClassicalGenreList == 0 %]
     <br/><hr class="main-sep"/>
     <div><i>[% "PLUGIN_MATERIAL_SKIN_GENRES_LIST_NOTE" | string %]</i></div><br/>

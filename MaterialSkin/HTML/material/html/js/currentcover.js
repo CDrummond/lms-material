@@ -87,8 +87,9 @@ var lmsCurrentCover = Vue.component('lms-currentcover', {
                 }
                 if (undefined==coverUrl && undefined!=playerStatus.current.coverid) { // && !(""+playerStatus.current.coverid).startsWith("-")) {
                     coverUrl="/music/"+playerStatus.current.coverid+"/cover"+LMS_CURRENT_IMAGE_SIZE;
-                }
-                if (undefined==coverUrl && LMS_P_MAI) {
+                } else if (undefined==coverUrl && undefined!=playerStatus.current.portraitid) {
+                    coverUrl = "/contributor/" + playerStatus.current.portraitid + "/image" + LMS_CURRENT_IMAGE_SIZE
+                } else if (undefined==coverUrl && LMS_P_MAI) {
                     if (playerStatus.current.artist_ids) {
                         coverUrl="/imageproxy/mai/artist/" + playerStatus.current.artist_ids[0] + "/image" + LMS_CURRENT_IMAGE_SIZE;
                     } else if (playerStatus.current.artist_id) {
@@ -129,7 +130,7 @@ var lmsCurrentCover = Vue.component('lms-currentcover', {
                     emitNative("MATERIAL-COVER\nURL " + this.coverUrl, queryParams.nativeCover);
                 }
 
-                if (this.$store.state.color==COLOR_FROM_COVER) {
+                if (this.$store.state.colorUsage==COLOR_USE_FROM_COVER) {
                     this.accessUrl = undefined==coverUrl || (!coverUrl.startsWith("http:") && !coverUrl.startsWith("https:"))
                         ? coverUrl
                         : "https://images1-focus-opensocial.googleusercontent.com/gadgets/proxy?container=focus&refresh=2592000&url="+encodeURIComponent(coverUrl);
@@ -148,14 +149,14 @@ var lmsCurrentCover = Vue.component('lms-currentcover', {
             currentCover.calculateColors();
         });
         bus.$on('themeChanged', function() {
-            if (this.$store.state.color==COLOR_FROM_COVER && this.accessUrl!=this.coverUrl) {
+            if (this.$store.state.colorUsage==COLOR_USE_FROM_COVER && this.accessUrl!=this.coverUrl) {
                 this.accessUrl = this.coverUrl;
             }
         }.bind(this));
     },
     methods: {
         calculateColors() {
-            if (this.$store.state.color!=COLOR_FROM_COVER) {
+            if (this.$store.state.colorUsage!=COLOR_USE_FROM_COVER) {
                 return;
             }
 

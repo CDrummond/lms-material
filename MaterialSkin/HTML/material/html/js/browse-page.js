@@ -2196,39 +2196,7 @@ var lmsBrowse = Vue.component("lms-browse", {
             browsePin(this, item, add);
         }.bind(this));
         bus.$on('browse', function(cmd, params, title, page, clearHistory, subtitle) {
-            this.clearSelection();
-            if (this.$store.state.desktopLayout) {
-                if ('now-playing'==page && this.nowPlayingExpanded) {
-                    page = NP_EXPANDED;
-                }
-            } else {
-                this.$store.commit('setPage', 'browse');
-            }
-            if (undefined==clearHistory || clearHistory) {
-                this.goHome();
-            }
-            if ('genre'==cmd || 'year'==cmd) {
-                let item = {id:'click.'+cmd+'.'+params,
-                            actions: { go: { params: { mode:'genre'==cmd?'artists':'albums'}}},
-                            title:/**/'CLICK: '+title,
-                            type:'click',
-                            image: 'genre'==cmd && lmsOptions.genreImages ? "material/genres/" + title.toLowerCase().replace(/[^0-9a-z]/gi, '') : undefined};
-                if ('genre'==cmd) {
-                    item.actions.go.params['genre_id']=params;
-                } else {
-                    item.actions.go.params['year']=params;
-                }
-                var len = this.history.length;
-                if (undefined==this.current) {
-                    this.current = {id:'XXXX', title:/**/'?'}; // Create fake item here or else view toggle breaks?
-                }
-                this.click(item);
-                if (this.history.length>len) {
-                    this.prevPage = page;
-                }
-            } else {
-                this.fetchItems(this.replaceCommandTerms({command:cmd, params:params}), {cancache:false, id:params[0], title:title, subtitle:subtitle, stdItem:params[0].startsWith("artist_id:") ? STD_ITEM_ARTIST : STD_ITEM_ALBUM}, page);
-            }
+            browseGoToItem(this, cmd, params, title, page, clearHistory, subtitle);
         }.bind(this));
 
         bus.$on('refreshList', function(section) {

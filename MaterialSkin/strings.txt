@@ -784,3 +784,8 @@ PLUGIN_MATERIAL_SKIN_SHOW_WORKS_IN_ARTIST_ALBUM_LIST_DESC
 	NL	Toon lijst van composities bij de lijst van de releases van de artiest. 
 	HU	Egy művész munkáinak listájának megjelenítése az előadó kiadványainak felsorolásakor
 
+PLUGIN_MATERIAL_SKIN_PLAYLIST_IMAGES
+	EN	Playlist images
+
+PLUGIN_MATERIAL_SKIN_PLAYLIST_IMAGES_DESC
+	EN	Display images when listing playlists. This (optionally) requires creating 600x600 JPEG images within a "material-skin/playlists" sub-folder of your Lyrion's preferences folder. Playlist images should all be lowercase letters or numbers, with all other characters removed. e.g. "R&B" is "rb.jpg", "Folk/Rock" is "folkrock.jpg". If no image is found, then the first valid image from the playlist track listing is used. Note, however, that this (using a track image) may have an effect on playlist browsing speed (as each playlist will need to be queried for its track listing, etc).

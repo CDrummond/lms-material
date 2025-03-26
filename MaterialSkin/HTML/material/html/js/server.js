@@ -6,7 +6,7 @@
  */
 'use strict';
 
-const PLAYER_STATUS_TAGS = "tags:cdegilopqrstuy" + (LMS_VERSION>=90000 ? "bhz12" : "") + "AABEGIKNPSTV";
+const PLAYER_STATUS_TAGS = "tags:cdegilopqrstuy" + (LMS_VERSION>=90000 ? "bhz124" : "") + "AABEGIKNPSTV";
 const STATUS_UPDATE_MAX_TIME = 4000;
 const SCAN_UPDATE_INTERVAL = 2000;
 
@@ -42,12 +42,12 @@ function updateNative(status) {
 
 function getHiddenProp(){
     var prefixes = ['webkit','moz','ms','o'];
-    
+
     // if 'hidden' is natively supported just return it
     if ('hidden' in document) {
         return 'hidden';
     }
-    
+
     // otherwise loop over all the known prefixes until we find one
     for (var i = 0, len=prefixes.length; i < len; i++) {
         if ((prefixes[i] + 'Hidden') in document)  {
@@ -519,6 +519,7 @@ var lmsServer = Vue.component('lms-server', {
                                        model: i.modelname,
                                        ip: i.ip,
                                        icon: mapPlayerIcon(i),
+                                       color: mapPlayerColor(i),
                                        link: ("squeezelite"==i.model && i.firmware && i.firmware.endsWith("-pCP")) || "squeezeesp32"==i.model
                                              ? "http://"+i.ip.split(':')[0] : undefined
                                       });
@@ -581,6 +582,7 @@ var lmsServer = Vue.component('lms-server', {
             if (isCurrent) {
                 player.isgroup = this.$store.state.player.isgroup;
                 player.icon = this.$store.state.player.icon;
+                player.color = this.$store.state.player.color;
                 player.link = this.$store.state.player.link;
                 player.model = this.$store.state.player.model;
                 this.isPlaying = player.isplaying;
@@ -590,6 +592,7 @@ var lmsServer = Vue.component('lms-server', {
                     if (this.$store.state.players[i].id == playerId) {
                         player.isgroup = this.$store.state.players[i].isgroup;
                         player.icon = this.$store.state.players[i].icon;
+                        player.color = this.$store.state.players[i].color;
                         player.link = this.$store.state.players[i].link;
                         player.model = this.$store.state.players[i].model;
                         found = true;
@@ -894,7 +897,7 @@ var lmsServer = Vue.component('lms-server', {
                         lmsFavorites = favs;
                         bus.$emit('refreshList', SECTION_FAVORITES);
                     }
-                } 
+                }
             }).catch(err => {
             });
         },

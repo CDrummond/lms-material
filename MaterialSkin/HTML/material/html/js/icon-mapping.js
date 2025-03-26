@@ -9,6 +9,7 @@
 var iconMap = {};
 var playerIcons = {};
 var playerIdIconMap = {};
+var playerIdColorMap = {};
 const BAD_ICONS = new Set(['live365_svg.png']);
 
 function getMiscJson(item, name, obj, signal) {
@@ -62,12 +63,18 @@ function initIconMap() {
     if (cfg!=undefined) {
         playerIdIconMap = JSON.parse(cfg);
     }
-    lmsCommand("", ["material-skin", "playericons"]).then(({data}) => {
+    lmsCommand("", ["material-skin", "playersettings"]).then(({data}) => {
         if (data && data.result && data.result.players) {
             for (var i=0, loop=data.result.players, len=loop.length; i<len; ++i) {
-                playerIdIconMap[loop[i].id]=JSON.parse(loop[i].icon);
+                if (undefined!=loop[i].icon) {
+                    playerIdIconMap[loop[i].id]=JSON.parse(loop[i].icon);
+                }
+                if (undefined!=loop[i].color) {
+                    playerIdColorMap[loop[i].id]=loop[i].color;
+                }
             }
             setLocalStorageVal("playerIdIconMap", JSON.stringify(playerIdIconMap));
+            setLocalStorageVal("playerIdColorMap", JSON.stringify(playerIdColorMap));
         }
     });
 }
@@ -103,6 +110,14 @@ function mapPlayerIcon(player) {
     }
 
     return {icon:"speaker"};
+}
+
+function mapPlayerColor(player) {
+    let id = undefined==player.id ? player.playerid : player.id;
+    if (undefined!=playerIdColorMap && undefined!=playerIdColorMap[id]) {
+        return playerIdColorMap[id];
+    }
+    return LMS_DEFAULT_COLOR;
 }
 
 function mapIconType(item, app, type) {

@@ -1,16 +1,20 @@
-5.8.4
+5.9.0
 -----
-1. Read half-star setting from ratings light, and use to control if can set
-   half stars.
-2. Fix setting of half-stars in ratings dialog.
-3. Fix mapping of icons in apps.
-4. When splitting release lists into groups, only group releases with
-   'compilation=1' into 'Compilations' if they have no explicit release type.
-5. Don't allow 'Compilations' entry to be pinned, as this has 'artist_id:'
-   parameter that can change.
-6. If a 'My Music' item view has 'library_id' then don't ask whether to pin
-   with ID or not - as will always use its ID.
-7. Improve album style queue with grouping - thanks to Darrell.
+ 1. Read half-star setting from ratings light, and use to control if can set
+    half stars.
+ 2. Fix setting of half-stars in ratings dialog.
+ 3. Fix mapping of icons in apps.
+ 4. When splitting release lists into groups, only group releases with
+    'compilation=1' into 'Compilations' if they have no explicit release type.
+ 5. Don't allow 'Compilations' entry to be pinned, as this has 'artist_id:'
+    parameter that can change.
+ 6. If a 'My Music' item view has 'library_id' then don't ask whether to pin
+    with ID or not - as will always use its ID.
+ 7. Improve album style queue with grouping - thanks to Darrell.
+ 8. Allow per-player colour setting.
+ 9. Add support for LMS9's portraitid attribute - thanks to Michael Herger.
+10. If no playlist image found, use first valid image found in playlist tracks.
+11. Add (server side) option to enable playlist images.
 
 5.8.3
 -----

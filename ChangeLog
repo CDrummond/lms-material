@@ -10,6 +10,7 @@
    parameter that can change.
 6. If a 'My Music' item view has 'library_id' then don't ask whether to pin
    with ID or not - as will always use its ID.
+7. Improve album style queue with grouping - thanks to Darrell.
 
 5.8.3
 -----

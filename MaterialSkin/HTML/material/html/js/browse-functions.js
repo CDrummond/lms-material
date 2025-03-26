@@ -1088,10 +1088,11 @@ function browseClick(view, item, index, event, ignoreOpenMenu) {
                         if (data.result.work_id && data.result.composer_id) {
                             browseDoClick(view, {id:"album_id:"+data.result.album_id, work_id:data.result.work_id, performance:data.result.performance, composer_id:data.result.composer_id, title:item.title, subtitle:data.result.artist_name, image:item.image, images:item.images, stdItem:STD_ITEM_ALBUM, fromFav:true}, index, event);
                         } else if (data.result.artist_id) {
-                            let itm = {id:"album_id:"+data.result.album_id, artist_id:data.result.artist_id, title:item.title, image:item.image, stdItem:STD_ITEM_ALBUM, fromFav:true};
+                            let itm = {id:"album_id:"+data.result.album_id, title:item.title, image:item.image, stdItem:STD_ITEM_ALBUM, fromFav:true};
                             if (data.result.artist_name) {
                                 itm["subtitle"]=data.result.artist_name;
                             }
+                            itm['multi'] = albumGroupingType(data.result.disc_count, data.result.group_count, data.result.contiguous_groups);
                             browseDoClick(view, itm, index, event);
                         } else {
                             browseDoClick(view, item, index, event);
@@ -2628,6 +2629,9 @@ function browseBuildFullCommand(view, item, act) {
                         }
                         if (loop[i].startsWith("artist_id:") && !item.id.startsWith("album_id:")) {
                             command.params.push(SORT_KEY+ARTIST_ALBUM_SORT_PLACEHOLDER);
+                            if (item.stdItem==STD_ITEM_WORK_COMPOSER && LMS_VERSION>=90003) {
+                                command.params.push("work_id:-1");
+                            }
                         }
                     } else if ((loop[i].startsWith("composer_id:") || loop[i].startsWith("work_id:") || loop[i].startsWith("performance:") || loop[i].startsWith("album_id:")) &&
                                 getIndex(command.params, loop[i].split(':')[0]+":")<0) {
@@ -2636,6 +2640,9 @@ function browseBuildFullCommand(view, item, act) {
                 }
             } else if (item.id.startsWith("genre_id:")) {
                 command.params.push(SORT_KEY+ALBUM_SORT_PLACEHOLDER);
+                if (item.stdItem==STD_ITEM_WORK_GENRE && LMS_VERSION>=90003) {
+                    command.params.push("work_id:-1");
+                }
             }
 
             let id = originalId(item.id);
@@ -2977,6 +2984,16 @@ function browseFetchExtra(view, fetchArtists) {
             }
         }
     });
+}
+
+function albumGroupingType(discCount, groupCount, contiguousGroups, parentIsWork) {
+    let multiDisc = lmsOptions.groupdiscs && undefined!=discCount && parseInt(discCount)>1;
+    let multiGroup = undefined!=groupCount && parseInt(groupCount)>1 && (undefined==contiguousGroups || 1==parseInt(contiguousGroups));
+    return multiGroup && (lmsOptions.useGrouping || !multiDisc || parentIsWork)
+        ? MULTI_GROUP_ALBUM
+        : multiDisc
+            ? MULTI_DISC_ALBUM
+            : 0;
 }
 
 const DEFERRED_LOADED = true;

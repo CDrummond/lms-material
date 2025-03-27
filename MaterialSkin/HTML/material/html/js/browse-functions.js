@@ -80,7 +80,7 @@ function browseHandleKey(view, event) {
                                 let title = jloop[j].title.toUpperCase();
                                 if (browseMatches(lmsLastKeyPress.text, title) || browseMatches(lmsLastKeyPress.text, title.replaceAll('.', '').replaceAll('(', '').replaceAll(')', '').replaceAll('/', '').replaceAll('-', '').replaceAll(',', ''))) {
                                     if (isEnter) {
-                                        view.click(view.items[j], j);
+                                        browseClick(view, view.items[j], j);
                                     } else {
                                         view.jumpTo(j);
                                         return;
@@ -303,7 +303,7 @@ function browseHandleNextWindow(view, item, command, resp, isMoreMenu, isBrowse)
             }
             view.goBack(true);
         } else if (nextWindow=="home") {
-            view.goHome();
+            browseGoHome(view);
         }
         return true;
     }
@@ -1088,10 +1088,11 @@ function browseClick(view, item, index, event, ignoreOpenMenu) {
                         if (data.result.work_id && data.result.composer_id) {
                             browseDoClick(view, {id:"album_id:"+data.result.album_id, work_id:data.result.work_id, performance:data.result.performance, composer_id:data.result.composer_id, title:item.title, subtitle:data.result.artist_name, image:item.image, images:item.images, stdItem:STD_ITEM_ALBUM, fromFav:true}, index, event);
                         } else if (data.result.artist_id) {
-                            let itm = {id:"album_id:"+data.result.album_id, artist_id:data.result.artist_id, title:item.title, image:item.image, stdItem:STD_ITEM_ALBUM, fromFav:true};
+                            let itm = {id:"album_id:"+data.result.album_id, title:item.title, image:item.image, stdItem:STD_ITEM_ALBUM, fromFav:true};
                             if (data.result.artist_name) {
                                 itm["subtitle"]=data.result.artist_name;
                             }
+                            itm['multi'] = albumGroupingType(data.result.disc_count, data.result.group_count, data.result.contiguous_groups);
                             browseDoClick(view, itm, index, event);
                         } else {
                             browseDoClick(view, item, index, event);
@@ -2010,7 +2011,7 @@ function browseGoBack(view, refresh) {
     }
     let next = undefined==view.current ? undefined : {id:view.current.id, pos:view.scrollElement.scrollTop};
     if (view.history.length<2) {
-        view.goHome();
+        browseGoHome(view);
         view.next = next;
         return;
     }
@@ -2628,6 +2629,9 @@ function browseBuildFullCommand(view, item, act) {
                         }
                         if (loop[i].startsWith("artist_id:") && !item.id.startsWith("album_id:")) {
                             command.params.push(SORT_KEY+ARTIST_ALBUM_SORT_PLACEHOLDER);
+                            if (item.stdItem==STD_ITEM_WORK_COMPOSER && LMS_VERSION>=90003) {
+                                command.params.push("work_id:-1");
+                            }
                         }
                     } else if ((loop[i].startsWith("composer_id:") || loop[i].startsWith("work_id:") || loop[i].startsWith("performance:") || loop[i].startsWith("album_id:")) &&
                                 getIndex(command.params, loop[i].split(':')[0]+":")<0) {
@@ -2636,6 +2640,9 @@ function browseBuildFullCommand(view, item, act) {
                 }
             } else if (item.id.startsWith("genre_id:")) {
                 command.params.push(SORT_KEY+ALBUM_SORT_PLACEHOLDER);
+                if (item.stdItem==STD_ITEM_WORK_GENRE && LMS_VERSION>=90003) {
+                    command.params.push("work_id:-1");
+                }
             }
 
             let id = originalId(item.id);
@@ -2977,6 +2984,57 @@ function browseFetchExtra(view, fetchArtists) {
             }
         }
     });
+}
+
+function browseGoToItem(view, cmd, params, title, page, clearHistory, subtitle) {
+    view.clearSelection();
+    if (view.$store.state.desktopLayout) {
+        if ('now-playing'==page && view.nowPlayingExpanded) {
+            page = NP_EXPANDED;
+        }
+    } else {
+        view.$store.commit('setPage', 'browse');
+    }
+    if (undefined==clearHistory || clearHistory) {
+        browseGoHome(view);
+    }
+    if ('genre'==cmd || 'year'==cmd) {
+        let item = {id:'click.'+cmd+'.'+params,
+                    actions: { go: { params: { mode:'genre'==cmd?'artists':'albums'}}},
+                    title:/**/'CLICK: '+title,
+                    type:'click',
+                    image: 'genre'==cmd && lmsOptions.genreImages ? "material/genres/" + title.toLowerCase().replace(/[^0-9a-z]/gi, '') : undefined};
+        if ('genre'==cmd) {
+            item.actions.go.params['genre_id']=params;
+        } else {
+            item.actions.go.params['year']=params;
+        }
+        var len = view.history.length;
+        if (undefined==view.current) {
+            view.current = {id:'XXXX', title:/**/'?'}; // Create fake item here or else view toggle breaks?
+        }
+        browseClick(view, item);
+        if (view.history.length>len) {
+            view.prevPage = page;
+        }
+    } else if (LMS_VERSION>=90100 && 'albums'==cmd) {
+        // With LMS9.1+ try to get portraitid to use for artist image in toolbar
+        let artist_id = getParamVal({params:params}, 'artist_id:', undefined);
+        if (undefined==artist_id) {
+            view.fetchItems(view.replaceCommandTerms({command:cmd, params:params}), {cancache:false, id:params[0], title:title, subtitle:subtitle, stdItem:params[0].startsWith("artist_id:") ? STD_ITEM_ARTIST : STD_ITEM_ALBUM}, page);
+        } else {
+            lmsCommand(view.playerId(), ['artists', 0, 1, 'tags:4', 'artist_id:'+artist_id]).then(({data}) => {
+                if (data && data.result && data.result.artists_loop && 1==data.result.artists_loop.length && data.result.artists_loop[0].portraitid) {
+                    params.push('material_skin_portraitid:'+data.result.artists_loop[0].portraitid);
+                }
+                view.fetchItems(view.replaceCommandTerms({command:cmd, params:params}), {cancache:false, id:params[0], title:title, subtitle:subtitle, stdItem:params[0].startsWith("artist_id:") ? STD_ITEM_ARTIST : STD_ITEM_ALBUM}, page);
+            }).catch(err => {
+                view.fetchItems(view.replaceCommandTerms({command:cmd, params:params}), {cancache:false, id:params[0], title:title, subtitle:subtitle, stdItem:params[0].startsWith("artist_id:") ? STD_ITEM_ARTIST : STD_ITEM_ALBUM}, page);
+            });
+        }
+    } else {
+        view.fetchItems(view.replaceCommandTerms({command:cmd, params:params}), {cancache:false, id:params[0], title:title, subtitle:subtitle, stdItem:params[0].startsWith("artist_id:") ? STD_ITEM_ARTIST : STD_ITEM_ALBUM}, page);
+    }
 }
 
 const DEFERRED_LOADED = true;

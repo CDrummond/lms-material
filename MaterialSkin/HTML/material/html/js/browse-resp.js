@@ -379,7 +379,7 @@ function parseBrowseResp(data, parent, options, cacheKey, parentCommand, parentG
                             i.image=undefined;
                         } else if (i.presetParams.favorites_url.startsWith("file://") && i.presetParams.icon=="html/images/playlists.png") {
                             if (lmsOptions.playlistImages) {
-                                i.image = "material/playlists/" + i.title.toLowerCase().replace(/[^0-9a-z]/gi, '');
+                                i.image = "material/playlists/" + encodeURIComponent(i.title);
                             } else {
                                 i.icon="list";
                                 i.image=undefined;
@@ -968,10 +968,13 @@ function parseBrowseResp(data, parent, options, cacheKey, parentCommand, parentG
                     resp.jumplist.push({key: key, index: resp.items.length});
                     textKeys.add(key);
                 }
-                var artist = {
+                let image = undefined!=i.portraitid && "/contributor/" + i.portraitid + "/image" + LMS_LIST_IMAGE_SIZE;
+                image = image || (LMS_P_MAI && lmsOptions.showArtistImages) && "/imageproxy/mai/artist/" + i.id + "/image" + LMS_LIST_IMAGE_SIZE;
+                if (i.artist.match(/ubble/)) console.log(image, i)
+                    var artist = {
                               id: "artist_id:"+i.id,
                               title: replaceHtmlBrackets(i.artist),
-                              image: (LMS_P_MAI && lmsOptions.showArtistImages) ? "/imageproxy/mai/artist/" + i.id + "/image" + LMS_LIST_IMAGE_SIZE : undefined,
+                              image: image,
                               stdItem: stdItem,
                               type: "group",
                               textkey: key
@@ -1013,6 +1016,7 @@ function parseBrowseResp(data, parent, options, cacheKey, parentCommand, parentG
             var ignoreRoles = new Set();
             var mskRoleId = undefined;
             var roleId = undefined;
+            var portraitId = undefined;
 
             if (data.params && data.params.length>1) {
                 let reverse = false;
@@ -1042,6 +1046,8 @@ function parseBrowseResp(data, parent, options, cacheKey, parentCommand, parentG
                             }
                         } else if (lower.startsWith("material_skin_role_id:")) {
                             mskRoleId = roleIntValue(lower.split(':')[1]);
+                        } else if (lower.startsWith("material_skin_portraitid:")) {
+                            portraitId = lower.split(':')[1];
                         }
                     }
                 }
@@ -1167,12 +1173,8 @@ function parseBrowseResp(data, parent, options, cacheKey, parentCommand, parentG
                 if (subIsYear && ((!IS_MOBILE || lmsOptions.touchLinks))) {
                     subtitleLinks = "<obj class=\"link-item\" onclick=\"show_year(event, "+i.year+",\'"+i.year+"\', \'browse\')\">" + i.year + "</obj>";
                 }
+                let groupType = albumGroupingType(i.disccount, i.group_count, i.contiguous_groups, isWorksAlbums);
 
-                let groupType = lmsOptions.useGrouping && undefined!=i.group_count && parseInt(i.group_count)>1 && (undefined==i.contiguous_groups || 1==parseInt(i.contiguous_groups))
-                                 ? MULTI_GROUP_ALBUM
-                                 : lmsOptions.groupdiscs && undefined!=i.disccount && parseInt(i.disccount)>1
-                                   ? MULTI_DISC_ALBUM
-                                   : 0;
                 let album = {
                               id: "album_id:"+(ids.has(i.id) ? uniqueId(i.id, resp.items.length) : i.id),
                               artist_id: i.artist_id,
@@ -1219,7 +1221,9 @@ function parseBrowseResp(data, parent, options, cacheKey, parentCommand, parentG
             showRoles.delete(TRACK_ARTIST_ROLE);
             ignoreRoles.forEach(role => { showRoles.delete(role) });
             resp.showRoles = Array.from(showRoles).sort();
-            if (undefined!=reqArtistId && LMS_P_MAI && lmsOptions.showArtistImages) {
+            if (undefined!=portraitId) {
+                resp.image= "/contributor/" + portraitId + "/image" + LMS_LIST_IMAGE_SIZE;
+            } else if (undefined!=reqArtistId && LMS_P_MAI && lmsOptions.showArtistImages) {
                 resp.image= "/imageproxy/mai/artist/" + reqArtistId + "/image" + LMS_LIST_IMAGE_SIZE;
             }
             if (isWorksAlbums) {
@@ -1383,7 +1387,7 @@ function parseBrowseResp(data, parent, options, cacheKey, parentCommand, parentG
             let compilationAlbumArtist = undefined;
             let extraSubs = [];
             let browseContext = getLocalStorageBool('browseContext', false);
-            let splitIntoGroupings = lmsOptions.useGrouping && (undefined==parent || undefined==parent.multi || MULTI_GROUP_ALBUM==parent.multi || isWork);
+            let splitIntoGroupings = undefined==parent || undefined==parent.multi || MULTI_GROUP_ALBUM==parent.multi;
 
             for (let idx=0, loop=data.result.titles_loop, loopLen=loop.length; idx<loopLen; ++idx) {
                 let i = makeHtmlSafe(loop[idx]);
@@ -1907,7 +1911,7 @@ function parseBrowseResp(data, parent, options, cacheKey, parentCommand, parentG
                               title: replaceHtmlBrackets(i.playlist),
                               icon: undefined == emblem ? "list" : undefined,
                               svg: undefined == emblem ? undefined : emblem.name,
-                              image: lmsOptions.playlistImages ? "material/playlists/" + i.playlist.toLowerCase().replace(/[^0-9a-z]/gi, '') : undefined,
+                              image: lmsOptions.playlistImages ? "material/playlists/" + encodeURIComponent(i.playlist) : undefined,
                               stdItem: isRemote ? STD_ITEM_REMOTE_PLAYLIST : STD_ITEM_PLAYLIST,
                               type: "group",
                               section: SECTION_PLAYLISTS,

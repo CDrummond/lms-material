@@ -584,7 +584,7 @@ sub _cliCommand {
     if ($request->paramUndefinedOrNotOneOf($cmd, ['prefs', 'info', 'transferqueue', 'delete-favorite', 'map', 'resolve', 'delete-podcast',
                                                   'plugins', 'plugins-status', 'plugins-update', 'extras', 'delete-vlib', 'pass-isset',
                                                   'pass-check', 'browsemodes', 'geturl', 'command', 'scantypes', 'server', 'themes',
-                                                  'playericons', 'activeplayers', 'urls', 'adv-search', 'adv-search-params', 'protocols',
+                                                  'playersettings', 'activeplayers', 'urls', 'adv-search', 'adv-search-params', 'protocols',
                                                   'players-extra-info', 'sort-playlist', 'mixer', 'release-types', 'check-for-updates',
                                                   'similar', 'apps', 'rndmix', 'scan-progress']) ) {
         $request->setStatusBadParams();
@@ -885,8 +885,18 @@ sub _cliCommand {
             }
             if ($albumId) {
                 $request->addResult('album_id', $albumId);
-                if ($artistName) {
-                    $request->addResult('artist_name', uri_unescape($artistName));
+                if ( $artistName = uri_unescape($artistName) ) {
+                    utf8::decode($artistName);
+                    $request->addResult('artist_name', $artistName);
+                }
+                my $albumsRequest = Slim::Control::Request->new( undef, [ 'albums', 0, 1, "album_id:$albumId", "tags:2q" ] );
+                $albumsRequest->execute();
+                if ($albumsRequest->isStatusError()) {
+                    $log->error($albumsRequest->getStatusText());
+                } else {
+                    $request->addResult('disc_count', @{$albumsRequest->getResult('albums_loop')}[0]->{'disccount'});
+                    $request->addResult('group_count', @{$albumsRequest->getResult('albums_loop')}[0]->{'group_count'});
+                    $request->addResult('contiguous_groups', @{$albumsRequest->getResult('albums_loop')}[0]->{'contiguous_groups'});
                 }
             }
             if ($workId) {
@@ -895,8 +905,9 @@ sub _cliCommand {
             if ($composerId) {
                 $request->addResult('composer_id', $composerId);
             }
-            if ($performance) {
-                $request->addResult('performance', uri_unescape($performance));
+            if ( $performance = uri_unescape($performance) ) {
+                utf8::decode($performance);
+                $request->addResult('performance', $performance);
             }
             if (index($fav_url, "file:///")==0 && index($fav_url, ".m3u")==(length($fav_url)-4)) {
                 my $rs = Slim::Schema->rs('Playlist')->getPlaylists('all', undef, undef);
@@ -1250,14 +1261,20 @@ sub _cliCommand {
         return;
     }
 
-    if ($cmd eq 'playericons') {
+    if ($cmd eq 'playersettings') {
         my $cnt = 0;
         foreach my $key (keys %{$prefs->{prefs}}) {
             if ($key =~ /^_client:.+/) {
                 my $icon = $prefs->get($key)->{'icon'};
-                if ($icon) {
+                my $color = $prefs->get($key)->{'color'};
+                if ($icon || $color) {
                     $request->addResultLoop("players", $cnt, "id", substr($key, 8));
-                    $request->addResultLoop("players", $cnt, "icon", $icon);
+                    if ($icon) {
+                        $request->addResultLoop("players", $cnt, "icon", $icon);
+                    }
+                    if ($color) {
+                        $request->addResultLoop("players", $cnt, "color", $color);
+                    }
                     $cnt++;
                 }
             }
@@ -2595,36 +2612,76 @@ sub _sendImage {
     return 0;
 }
 
-sub _sendMaterialImage {
-    my ( $httpClient, $response, $subdir, $notfound ) = @_;
+sub _sendFallbackImage {
+    my ( $httpClient, $response, $subdir, $fileName, $notfound ) = @_;
     return unless $httpClient->connected;
-
-    my $request = $response->request;
-    my $fileName = basename($request->uri->path);
     my $imageDir = Slim::Utils::Prefs::dir() . "/material-skin/" . $subdir;
+    if (! -e $imageDir) {
+        make_path($imageDir);
+    }
     my $filePath = $imageDir . "/" . $fileName;
-    $response->code(RC_OK);
-    if (_sendImage($httpClient, $response, $filePath, "jpg", "image/jpeg")==0) {
-        if (_sendImage($httpClient, $response, $filePath, "png", "image/png")==0) {
-            if (! -e $imageDir) {
-                make_path($imageDir);
+    my $placeholder = $filePath . ".missing";
+    File::Slurp::write_file($placeholder, { err_mode => 'carp' }, '' ) unless -f $placeholder;
+    $filePath = dirname(__FILE__) . "/HTML/material/html/images/" . $notfound . ".png";
+    Slim::Web::HTTP::sendStreamingFile( $httpClient, $response, "image/png", $filePath, '', 'noAttachment' );
+}
+
+sub _sendMaterialImage {
+    my ( $httpClient, $response, $subdir, $fileName ) = @_;
+    if ($httpClient->connected) {
+        my $imageDir = Slim::Utils::Prefs::dir() . "/material-skin/" . $subdir;
+        my $filePath = $imageDir . "/" . $fileName;
+        $response->code(RC_OK);
+        if (_sendImage($httpClient, $response, $filePath, "jpg", "image/jpeg")==0) {
+            if (_sendImage($httpClient, $response, $filePath, "png", "image/png")==0) {
+                return 0
             }
-            my $placeholder = $filePath . ".missing";
-            File::Slurp::write_file($placeholder, { err_mode => 'carp' }, '' ) unless -f $placeholder;
-            $filePath = dirname(__FILE__) . "/HTML/material/html/images/" . $notfound . ".png";
-            Slim::Web::HTTP::sendStreamingFile( $httpClient, $response, "image/png", $filePath, '', 'noAttachment' );
         }
     }
+    return 1
 }
 
 sub _genreHandler {
     my ( $httpClient, $response ) = @_;
-    _sendMaterialImage($httpClient, $response, "genres", "nogenre");
+    my $fileName = basename($response->reques->uri->path);
+    if (0==_sendMaterialImage($httpClient, $response, "genres", $fileName)) {
+        _sendFallbackImage($httpClient, $response, "genres", $fileName, "nogenre");
+    }
 }
 
 sub _playlistHandler {
     my ( $httpClient, $response ) = @_;
-    _sendMaterialImage($httpClient, $response, "playlists", "noplaylist");
+    my $playlistName = uri_unescape(basename($response->request->uri->path));
+    my $fileName = lc($playlistName);
+    $fileName =~ s/[^a-z_0-9]//ig;
+
+    if (0==_sendMaterialImage($httpClient, $response, "playlists", $fileName)) {
+        foreach my $playlist ( Slim::Schema->rs('Playlist')->getPlaylists('all')->all ) {
+            if ($playlist->title eq $playlistName) {
+                my $request = Slim::Control::Request::executeRequest(undef, ["playlists", "tracks", 0, 10, "tags:cK", "playlist_id:" . $playlist->id] );
+                foreach my $playlist ( @{ $request->getResult('playlisttracks_loop') || [] } ) {
+                    my $image = undef;
+                    if ($playlist->{'artwork_url'}) {
+                        $image = $playlist->{'artwork_url'};
+                        if (_startsWith($image, "http:") || _startsWith($image, "https:")) {
+                            $image = "/imageproxy/" . URI::Escape::uri_escape_utf8($image) . "/image_300x300_f";
+                        }
+                    } elsif ($playlist->{'coverid'}) {
+                        $image = "/music/" . $playlist->{'coverid'} . "/cover_300x300_f";
+                    }
+                    if ($image) {
+                        $response->code(307);
+                        $response->header('Location' => $image );
+                        $response->header('Cache-Control' => 'no-cache');
+                        $httpClient->send_response($response);
+                        Slim::Web::HTTP::closeHTTPSocket($httpClient);
+                        return;
+                    }
+                }
+            }
+        }
+        _sendFallbackImage($httpClient, $response, "playlists", $fileName, "noplaylist");
+    }
 }
 
 1;

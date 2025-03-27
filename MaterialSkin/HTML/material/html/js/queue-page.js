@@ -6,10 +6,10 @@
  */
 'use strict';
 
-const PQ_STATUS_TAGS = "tags:cdegilqtuy" + (LMS_VERSION>=90000 ? "bhz12" : "") + "AAGIKNPSxx";
+const PQ_STATUS_TAGS = "tags:cdegilqtuy" + (LMS_VERSION>=90000 ? "bhz124" : "") + "AAGIKNPSxx";
 const PQ_REQUIRE_AT_LEAST_1_ITEM = new Set([PQ_SAVE_ACTION, PQ_MOVE_QUEUE_ACTION, PQ_SCROLL_ACTION, PQ_SORT_ACTION, REMOVE_DUPES_ACTION]);
 const PQ_REQUIRE_MULTIPLE_ITEMS = new Set([PQ_SCROLL_ACTION, SEARCH_LIST_ACTION, PQ_SORT_ACTION, REMOVE_DUPES_ACTION]);
-const pqContiguousMap = new Map();
+const pqGroupingMap = new Map();
 
 function queueMakePlain(str) {
     let rating = str.indexOf(SEPARATOR+RATINGS_START);
@@ -25,6 +25,9 @@ function queueItemCover(item) {
     }
     if (undefined!=item.coverid) { // && !(""+item.coverid).startsWith("-")) {
         return "/music/"+item.coverid+"/cover"+LMS_LIST_IMAGE_SIZE;
+    }
+    if (undefined!=item.portraitid) {
+        return "/contributor/" + item.portraitid + "/image" + LMS_CURRENT_IMAGE_SIZE
     }
     if (LMS_P_MAI) {
         if (item.artist_ids) {
@@ -74,12 +77,22 @@ function buildArtistAlbumLines(i, queueAlbumStyle, queueContext) {
     if (!queueAlbumStyle || !artistIsRemoteTitle) {
         artistAlbum = addPart(artistAlbum, buildAlbumLine(i, 'queue'));
         let work = buildWorkLine(i, 'queue');
-        if (work && queueAlbumStyle) {
-            artistAlbum = addPart(work, i.work!=i.grouping ? i.grouping : undefined)+'<br/><div class="pq-gsub">'+artistAlbum+'</div>';
-            ws = true;
-        } else if (queueAlbumStyle && i.grouping) {
-            artistAlbum +='<br/><div class="pq-gsub">'+i.grouping+'</div>';
-            ws = true;
+        if (queueAlbumStyle) {
+            if (albumGroupingType(i.disccount, ALWAYS_GROUP_HEADING, i.contiguous_groups, i.added_from_work)==MULTI_GROUP_ALBUM) {
+                if (work) {
+                    // track has a work tag
+                    artistAlbum = addPart(work, i.work!=i.grouping ? i.grouping : undefined)+'<br/><div class="pq-gsub">'+artistAlbum+'</div>';
+                    ws = true;
+                } else if (i.grouping) {
+                    // track has a grouping tag
+                    artistAlbum +='<br/><div class="pq-gsub">'+i.grouping+'</div>';
+                    ws = true;
+                }
+            } else if (i.discsubtitle) {
+                // track has a discsubtitle tag
+                artistAlbum +='<br/><div class="pq-gsub">'+i.discsubtitle+'</div>';
+                ws = true;
+            }
         }
         if (queueContext) {
             let al = i18n('<obj>from</obj> %1', buildAlbumLine(i, "queue")).replaceAll("<obj>", "<obj class=\"ext-details\">");
@@ -108,16 +121,19 @@ function parseResp(data, showTrackNum, index, showRatings, queueAlbumStyle, queu
             let albumFirstIdx = -1;
             let albumDuration = 0;
             let calcDurations = queueAlbumStyle && resp.size == data.result.playlist_loop.length;
-            pqContiguousMap.clear();
+            pqGroupingMap.clear();
             for (var idx=0, loop=data.result.playlist_loop, loopLen=loop.length; idx<loopLen; ++idx) {
                 let i = makeHtmlSafe(loop[idx]);
                 if ( !('contiguous_groups' in i) ) {
                     i.contiguous_groups = 1; // for versions of LMS that don't provide this flag
                 }
-                pqContiguousMap.set(parseInt(i['playlist index']), parseInt(i.contiguous_groups));
+                if ( !('disccount' in i) ) {
+                    i.disccount = 1; // might not exist for single disc album
+                }
+                pqGroupingMap.set(parseInt(i['playlist index']), [parseInt(i.disccount), parseInt(i.contiguous_groups), parseInt(i.added_from_work)]);
                 i.isClassical = undefined!=i.isClassical && 1==parseInt(i.isClassical);
                 splitMultiples(i, true);
-                let title = queueAlbumStyle && i.contiguous_groups==1 ? i.title : trackTitle(i);
+                let title = queueAlbumStyle && albumGroupingType(i.disccount, ALWAYS_GROUP_HEADING, i.contiguous_groups, i.added_from_work)==MULTI_GROUP_ALBUM ? i.title : trackTitle(i);
                 let artist = i.albumartist ? i.albumartist : i.artist ? i.artist : i.trackartist;
                 if (i.remote && undefined==title && undefined==artist && undefined==i.album) {
                     title = artist = i.album = i.artist = i18n('Unknown');
@@ -142,7 +158,7 @@ function parseResp(data, showTrackNum, index, showRatings, queueAlbumStyle, queu
                 let duration = undefined==i.duration ? undefined : parseFloat(i.duration);
                 let prevItem = 0==idx ? lastInCurrent : resp.items[idx-1];
                 let image = queueItemCover(i);
-                let groupId = lmsOptions.useGrouping && i.contiguous_groups==1 ? (i.composer && i.work ? i.composer+"-"+i.work+(i.performance ? "-"+i.performance : "")+(i.grouping ? "-"+i.grouping : "") : i.grouping ? i.grouping : undefined) : undefined;
+                let groupId = albumGroupingType(i.disccount, ALWAYS_GROUP_HEADING, i.contiguous_groups, i.added_from_work)==MULTI_GROUP_ALBUM ? (i.composer && i.work ? i.composer+"-"+i.work+(i.performance ? "-"+i.performance : "")+(i.grouping ? "-"+i.grouping : "")+(i.added_from_work ? "-"+i.added_from_work : "") : i.grouping ? i.grouping : undefined) : undefined;
                 let isAlbumHeader = queueAlbumStyle &&
                                      ( undefined==prevItem ||
                                        i.album_id!=prevItem.album_id ||
@@ -508,7 +524,10 @@ var lmsQueue = Vue.component("lms-queue", {
                 var index = playerStatus.current["playlist index"];
                 if (undefined!=index && index>=0 && index<this.items.length) {
                     var i = playerStatus.current;
-                    var title = this.$store.state.queueAlbumStyle && pqContiguousMap.get(parseInt(index))==1 ? i.title : trackTitle(i);
+                    var discCount = pqGroupingMap.get(parseInt(index))[0];
+                    var contiguousGroups = pqGroupingMap.get(parseInt(index))[1];
+                    var addedFromWork = pqGroupingMap.get(parseInt(index))[2];
+                    var title = this.$store.state.queueAlbumStyle && albumGroupingType(discCount, ALWAYS_GROUP_HEADING, contiguousGroups, addedFromWork)==MULTI_GROUP_ALBUM ? i.title : trackTitle(i);
                     var rating = this.$store.state.showRating && undefined!=i.rating ? Math.ceil(i.rating/10.0)/2.0 : undefined;
                     if (this.$store.state.queueShowTrackNum && i.tracknum>0) {
                         title = formatTrackNum(i)+SEPARATOR+title;
@@ -749,7 +768,7 @@ var lmsQueue = Vue.component("lms-queue", {
                           repeatAll:i18n("Repeat queue"), repeatOne:i18n("Repeat single track"), repeatOff:i18n("No repeat"),
                           randomMix:i18n("Random mix"), shuffleAll:i18n("Shuffle tracks"), shuffleOff:i18n("No shuffle"),
                           shuffleAlbums:lmsOptions.supportReleaseTypes ? i18n("Shuffle releases") : i18n("Shuffle albums"),
-                          selectMultiple:i18n("Select multiple items"), removeAll:i18n("Remove all selected items"), 
+                          selectMultiple:i18n("Select multiple items"), removeAll:i18n("Remove all selected items"),
                           invertSelect:i18n("Invert selection"), dstm:i18n("Don't Stop The Music"), actions:i18n("Actions")
             };
         },

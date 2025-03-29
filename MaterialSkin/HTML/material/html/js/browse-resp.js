@@ -1620,7 +1620,8 @@ function parseBrowseResp(data, parent, options, cacheKey, parentCommand, parentG
                               duration: duration>0 ? duration : undefined,
                               durationStr: duration>0 ? formatSeconds(duration) : undefined,
                               highlight: highlight,
-                              idx: idx
+                              idx: idx,
+                              work_id: i.work_id
                           });
 
                 if (highlight) {

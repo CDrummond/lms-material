@@ -2629,7 +2629,7 @@ function browseBuildFullCommand(view, item, act) {
                         }
                         if (loop[i].startsWith("artist_id:") && !item.id.startsWith("album_id:")) {
                             command.params.push(SORT_KEY+ARTIST_ALBUM_SORT_PLACEHOLDER);
-                            if (item.stdItem==STD_ITEM_WORK_COMPOSER && LMS_VERSION>=90003) {
+                            if (item.stdItem==STD_ITEM_WORK_COMPOSER && LMS_VERSION>=90100) {
                                 command.params.push("work_id:-1");
                             }
                         }
@@ -2640,9 +2640,11 @@ function browseBuildFullCommand(view, item, act) {
                 }
             } else if (item.id.startsWith("genre_id:")) {
                 command.params.push(SORT_KEY+ALBUM_SORT_PLACEHOLDER);
-                if (item.stdItem==STD_ITEM_WORK_GENRE && LMS_VERSION>=90003) {
+                if (item.stdItem==STD_ITEM_WORK_GENRE && LMS_VERSION>=90100) {
                     command.params.push("work_id:-1");
                 }
+            } else if (item.id.startsWith("track_id:") && item.work_id && LMS_VERSION>=90100) {
+                command.params.push("work_id:-1");
             }
 
             let id = originalId(item.id);
@@ -2687,7 +2689,7 @@ function browseDoListAction(view, list, act, index) {
                 ids+=","+originalId(list[i].id).split(":")[1];
             }
         }
-        var command = browseBuildFullCommand(view, {id:ids}, /*PLAY_ACTION==act && undefined!=index ? ADD_ACTION :*/ act);
+        var command = browseBuildFullCommand(view, {id:ids, work_id:list[0].work_id}, /*PLAY_ACTION==act && undefined!=index ? ADD_ACTION :*/ act);
         if (command.command.length===0) {
             bus.$emit('showError', undefined, i18n("Don't know how to handle this!"));
             return;

@@ -1752,7 +1752,7 @@ function browseItemAction(view, act, item, index, event) {
                         discs.push(loop[i]);
                     }
                 }
-                choose(ACTIONS[act].title, discs).then(choice => {
+                choose(ACTIONS[act].title, discs, undefined, true).then(choice => {
                     if (undefined!=choice) {
                         if (choice.id==discs[0].id) {
                             if (lmsOptions.playShuffle && (PLAY_ACTION==act || PLAY_SHUFFLE_ACTION==act)) {

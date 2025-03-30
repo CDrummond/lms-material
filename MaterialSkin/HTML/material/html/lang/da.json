@@ -211,9 +211,11 @@
 "Firmware: %1":"Firmware: %1",
 "Follow link":"Følg link",
 "Font size":"Fontstørrelse",
+"For all players ":"For alle afspillere",
 "For more fine-grained control over plugins please visit the 'Manage Plugins' section of 'Server settings'":"For et mere præcis kontrol over plugins, se afsnittet 'Behandl plugins' i 'Serverindstillinger'",
 "Fri":"Fre",
 "Friday":"Fredag",
+"From current cover (all players)":"Fra nuværende album (alle afspillere)",
 "General":"Generelt",
 "Genre":"Genre",
 "Genres":"Genrer",
@@ -320,6 +322,7 @@
 "Other settings":"Andre indstillinger",
 "Path":"Sti",
 "Pause":"Pause",
+"Per player":"Per afspiller",
 "Performance":"Optræden",
 "Pictures":"Billeder",
 "Pin":"Knappenål",
@@ -686,8 +689,5 @@
 "1 Year":"1 år",
 "%1 Years":"%1 år",
 "1 day":"1 dag",
-"%1 days":"%1 dage",
-"For all players ":"",
-"From current cover (all players)":"",
-"Per player":""
+"%1 days":"%1 dage"
 }

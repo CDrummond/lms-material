@@ -158,12 +158,11 @@ Vue.component('lms-manage-players', {
        </v-list>
       </v-flex>
      </div>
-
+     <div class="dialog-bottom-pad"></div>
     </v-layout>
    </v-container>
   </div>
   <div class="dialog-padding"></div>
-  <div class="dialog-bottom-pad"></div>
  </v-card>
 
  <v-menu offset-y v-model="menu.show" :position-x="menu.x" :position-y="menu.y">

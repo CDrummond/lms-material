@@ -1039,6 +1039,8 @@ div.v-subheader {
 
 .dialog-bottom-pad {
  height:var(--bottom-pad);
+ width:1px;
+ color:transparent;
 }
 
 .np-info .lms-list {

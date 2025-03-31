@@ -16,6 +16,7 @@
 10. If no playlist image found, use first valid image found in playlist tracks.
 11. Add (server side) option to enable playlist images.
 12. When prompting for discs to add to queue use '0' for 'All discs'.
+13. Fix padding in 'Manage players' dialog.
 
 5.8.3
 -----

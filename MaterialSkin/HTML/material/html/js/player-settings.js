@@ -476,7 +476,7 @@ Vue.component('lms-player-settings', {
             this.playerLink = player.link;
             this.isGroup = player.isgroup;
             this.isSynced = false;
-            this.orig = { player: {name:player.name, icon:player.icon}, dstm:"",
+            this.orig = { player: {name:player.name, icon:player.icon, color:player.color}, dstm:"",
                           alarms: { fade:false, timeout:0, snooze:0, on:false, volume:0 },
                           library:"", crossfade:"0", smartCrossfade:false, replaygain:"" };
             this.customActions = getCustomActions(player.id, this.$store.state.unlockAll);
@@ -686,12 +686,13 @@ Vue.component('lms-player-settings', {
                 playerIdIconMap[this.playerId]=this.playerIcon;
                 setLocalStorageVal("playerIdIconMap", JSON.stringify(playerIdIconMap));
             }
+
             if (this.orig.player.color!=this.playerColor) {
-                lmsCommand(this.playerId, ["playerpref", "plugin.material-skin:color", this.playerColor]);
-                this.$store.commit('setColor', {id:this.playerId, color:this.playerColor});
                 // From icon-mapping.js
                 playerIdColorMap[this.playerId]=this.playerColor;
                 setLocalStorageVal("playerIdColorMap", JSON.stringify(playerIdColorMap));
+                lmsCommand(this.playerId, ["playerpref", "plugin.material-skin:color", this.playerColor]);
+                this.$store.commit('setColor', {id:this.playerId, color:this.playerColor});
             }
 
             // Update current player

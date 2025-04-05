@@ -2643,7 +2643,7 @@ sub _sendMaterialImage {
 
 sub _genreHandler {
     my ( $httpClient, $response ) = @_;
-    my $fileName = basename($response->reques->uri->path);
+    my $fileName = basename($response->request->uri->path);
     if (0==_sendMaterialImage($httpClient, $response, "genres", $fileName)) {
         _sendFallbackImage($httpClient, $response, "genres", $fileName, "nogenre");
     }

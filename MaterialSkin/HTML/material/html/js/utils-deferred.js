@@ -931,3 +931,9 @@ function filterComments(comments) {
     }
     return undefined;
 }
+
+function logNoPlayerError(obj) {
+    if (!obj.$store.state.player) {
+        bus.$emit('showError', undefined, i18n('No Player'));
+    }
+}

@@ -961,6 +961,7 @@ var lmsBrowse = Vue.component("lms-browse", {
                 this.fetchingItem = undefined;
                 this.handleListResponse(item, command, {items: []});
                 logError(err, command.command, command.params, 0, count);
+                logNoPlayerError(this);
             });
         },
         handleListResponse(item, command, resp, prevPage, appendItems) {
@@ -985,6 +986,7 @@ var lmsBrowse = Vue.component("lms-browse", {
                 }).catch(err => {
                     this.fetchingItem = undefined;
                     logError(err, command.command, command.params);
+                    logNoPlayerError(this);
                 });
             } else if (command.command.length>0) {
                 if (command.params) {
@@ -998,6 +1000,7 @@ var lmsBrowse = Vue.component("lms-browse", {
                     this.handleTextClickResponse(item, command, data, isMoreMenu);
                 }).catch(err => {
                     logError(err, command.command);
+                    logNoPlayerError(this);
                 });
             }
         },

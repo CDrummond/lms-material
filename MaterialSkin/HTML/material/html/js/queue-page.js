@@ -81,16 +81,16 @@ function buildArtistAlbumLines(i, queueAlbumStyle, queueContext) {
             if (albumGroupingType(i.disccount, ALWAYS_GROUP_HEADING, i.contiguous_groups, i.added_from_work)==MULTI_GROUP_ALBUM) {
                 if (work) {
                     // track has a work tag
-                    artistAlbum = addPart(work, i.work!=i.grouping ? i.grouping : undefined)+'<br/><div class="pq-gsub">'+artistAlbum+'</div>';
+                    artistAlbum = addPart(work, i.work!=i.grouping ? i.grouping : undefined)+'<br/><div class="pq-gsub ellipsis">'+artistAlbum+'</div>';
                     ws = true;
                 } else if (i.grouping) {
                     // track has a grouping tag
-                    artistAlbum +='<br/><div class="pq-gsub">'+i.grouping+'</div>';
+                    artistAlbum +='<br/><div class="pq-gsub ellipsis">'+i.grouping+'</div>';
                     ws = true;
                 }
             } else if (i.discsubtitle) {
                 // track has a discsubtitle tag
-                artistAlbum +='<br/><div class="pq-gsub">'+i.discsubtitle+'</div>';
+                artistAlbum +='<br/><div class="pq-gsub ellipsis">'+i.discsubtitle+'</div>';
                 ws = true;
             }
         }

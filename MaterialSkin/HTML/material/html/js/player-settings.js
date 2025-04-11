@@ -55,7 +55,8 @@ Vue.component('lms-player-settings', {
       <v-list-tile-title>{{i18n('Color')}}</v-list-tile-title>
       <div class="color-grid">
        <template v-for="(item, index) in colorList.colors">
-        <div v-if="item.lcolor" @click="playerColor=item.key" :style="{'background':'linear-gradient(to right,'+item.lcolor+' 0%, '+item.lcolor+' 50%, '+item.color+' 50%, '+item.color+' 100%)'}" class="color-circle" v-bind:class="{'selected-color-circle':item.key==playerColor}"></div>
+        <div v-if="item.key=='lyrion'" style="height:0px;width:0px"></div>
+        <div v-else-if="item.lcolor" @click="playerColor=item.key" :style="{'background':'linear-gradient(to right,'+item.lcolor+' 0%, '+item.lcolor+' 50%, '+item.color+' 50%, '+item.color+' 100%)'}" class="color-circle" v-bind:class="{'selected-color-circle':item.key==playerColor}"></div>
         <div v-else-if="item.color" @click="playerColor=item.key" :style="{'background-color':item.color}" class="color-circle" v-bind:class="{'selected-color-circle':item.key==playerColor}"></div>
        </template>
        <div v-for="(item, index) in userColors" @click="playerColor=item.key" :style="{'background-color':item.color}" class="color-circle" v-bind:class="{'selected-color-circle':item.key==playerColor}"></div>

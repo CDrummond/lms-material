@@ -175,6 +175,9 @@ function updateUiSettings(state, val) {
             setLocalStorageVal(key, value);
         }
     }
+    if (COLOR_USE_STANDARD==state.colorUsage && state.coloredToolbars && state.tinted && 'lyrion'==state.color) {
+        state.tinted = false;
+    }
     if (themeChanged || undefined!=val.mai || undefined!=val.pinQueue) {
         setTimeout(function() {
             if (themeChanged) {

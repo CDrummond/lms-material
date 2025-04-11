@@ -69,7 +69,7 @@ function initIconMap() {
                 if (undefined!=loop[i].icon) {
                     playerIdIconMap[loop[i].id]=JSON.parse(loop[i].icon);
                 }
-                if (undefined!=loop[i].color) {
+                if (undefined!=loop[i].color && 'lyrion'!=loop[i].color) {
                     playerIdColorMap[loop[i].id]=loop[i].color;
                 }
             }

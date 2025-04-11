@@ -34,10 +34,10 @@ Vue.component('lms-ui-settings', {
       <v-select style="width:100%" menu-props="auto" :items="colorUsages" :label="i18n('Color')" v-model="colorUsage" item-text="label" item-value="key" @change="if(colorUsage==COLOR_USE_STANDARD) color=LMS_DEFAULT_COLOR"></v-select>
       <div class="color-grid" v-if="colorUsage==COLOR_USE_STANDARD">
        <template v-for="(item, index) in colorList.colors">
-        <div v-if="item.lcolor" @click="color=item.key" :style="{'background':'linear-gradient(to right,'+item.lcolor+' 0%, '+item.lcolor+' 50%, '+item.color+' 50%, '+item.color+' 100%)'}" class="color-circle" v-bind:class="{'selected-color-circle':item.key==color}"></div>
-        <div v-else-if="item.color" @click="color=item.key" :style="{'background-color':item.color}" class="color-circle" v-bind:class="{'selected-color-circle':item.key==color}"></div>
+        <div v-if="item.lcolor" @click="setColor(item.key)" :style="{'background':'linear-gradient(to right,'+item.lcolor+' 0%, '+item.lcolor+' 50%, '+item.color+' 50%, '+item.color+' 100%)'}" class="color-circle" v-bind:class="{'selected-color-circle':item.key==color}"></div>
+        <div v-else-if="item.color" @click="setColor(item.key)" :style="{'background-color':item.color}" class="color-circle" v-bind:class="{'selected-color-circle':item.key==color}"></div>
        </template>
-       <div v-for="(item, index) in userColors" @click="color=item.key" :style="{'background-color':item.color}" class="color-circle" v-bind:class="{'selected-color-circle':item.key==color}"></div>
+       <div v-for="(item, index) in userColors" @click="setColor(item.key)" :style="{'background-color':item.color}" class="color-circle" v-bind:class="{'selected-color-circle':item.key==color}"></div>
       </div>
      </v-list-tile-content>
     </v-list-tile>
@@ -52,14 +52,14 @@ Vue.component('lms-ui-settings', {
     </v-list-tile>
     <v-divider></v-divider>
 
-    <v-list-tile v-if="cMixSupported">
+    <v-list-tile v-if="cMixSupported && allowTint">
     <v-list-tile-content @click="tinted = !tinted" class="switch-label">
      <v-list-tile-title>{{i18n('Tint background')}}</v-list-tile-title>
      <v-list-tile-sub-title>{{i18n('Tint background with chosen color.')}}</v-list-tile-sub-title>
     </v-list-tile-content>
     <v-list-tile-action><m3-switch v-model="tinted"></m3-switch></v-list-tile-action>
    </v-list-tile>
-   <v-divider v-if="cMixSupported"></v-divider>
+   <v-divider v-if="cMixSupported && allowTint"></v-divider>
 
     <v-list-tile v-if="allowLayoutAdjust">
      <v-select :items="layoutItems" :label="i18n('Application layout')" v-model="layout" item-text="label" item-value="key"></v-select>
@@ -528,6 +528,9 @@ Vue.component('lms-ui-settings', {
         },
         cMixSupported() {
             return this.$store.state.cMixSupported
+        },
+        allowTint() {
+            return 'lyrion'!=this.color || !this.colorToolbars || this.colorUsage!=COLOR_USE_STANDARD
         }
     },
     mounted() {
@@ -867,6 +870,12 @@ Vue.component('lms-ui-settings', {
                     });
                 }
             });
+        },
+        setColor(c) {
+            this.color = c;
+            if ('lyrion'==c && this.colorToolbars) {
+                this.tinted = false;
+            }
         },
         hiddenItems() {
             var hidden = new Set(Array.from(this.hidden));

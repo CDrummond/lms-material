@@ -2,6 +2,9 @@
 -----
 1. Fix genre images.
 2. Add ellipsis to album-style queue sub-titles.
+3. Try to prevent selecting 'Lyrion' colour scheme with tinted and coloured
+   toolbars.
+4. Don't allow usage of 'Lyrion' colour scheme in per-player setting.
 
 5.9.0
 -----

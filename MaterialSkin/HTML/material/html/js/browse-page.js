@@ -645,7 +645,7 @@ var lmsBrowse = Vue.component("lms-browse", {
             if (stdItem==STD_ITEM_WORK) {
                 return undefined!=this.current.composer ? this.current.composer : this.current.subtitle;
             }
-            if (stdItem==STD_ITEM_ALBUM || stdItem==STD_ITEM_ALL_TRACKS || stdItem==STD_ITEM_COMPOSITION_TRACKS || stdItem==STD_ITEM_MIX || stdItem==STD_ITEM_CLASSICAL_WORKS) {
+            if (stdItem==STD_ITEM_ALBUM || stdItem==STD_ITEM_ALL_TRACKS || stdItem==STD_ITEM_COMPOSITION_TRACKS || stdItem==STD_ITEM_MIX || stdItem==STD_ITEM_CLASSICAL_WORKS  || stdItem==STD_ITEM_ONLINE_ALBUM) {
                 let albumArtst = this.current.subIsYear ? undefined : this.current.subtitle;
                 if (lmsOptions.noArtistFilter && this.current.compilation && this.items.length>0 && undefined!=this.items[0].compilationAlbumArtist) {
                     albumArtst = this.items[0].compilationAlbumArtist;
@@ -669,7 +669,7 @@ var lmsBrowse = Vue.component("lms-browse", {
                 return false;
             }
             let stdItem = this.current.stdItem ? this.current.stdItem : this.current.altStdItem;
-            if (stdItem==STD_ITEM_ARTIST || stdItem==STD_ITEM_WORK_COMPOSER || stdItem==STD_ITEM_WORK || stdItem==STD_ITEM_CLASSICAL_WORKS) {
+            if (stdItem==STD_ITEM_ARTIST || stdItem==STD_ITEM_WORK_COMPOSER || stdItem==STD_ITEM_WORK || stdItem==STD_ITEM_CLASSICAL_WORKS || stdItem==STD_ITEM_ONLINE_ALBUM) {
                 return this.headerSubTitle
             }
             if (stdItem==STD_ITEM_ALBUM || stdItem==STD_ITEM_MIX || stdItem==STD_ITEM_ALL_TRACKS || stdItem==STD_ITEM_COMPOSITION_TRACKS) {

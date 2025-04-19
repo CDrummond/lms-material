@@ -4,7 +4,7 @@
  * Copyright (c) 2018-2024 Craig Drummond <craig.p.drummond@gmail.com>
  * MIT license.
  */
-const NP_MAX_ALBUMS = 50;
+const NP_MAX_ALBUMS = Math.max(50, lmsOptions.pagedBatchSize);
 const NP_MAX_TRACKS = 50;
 
 function  nowPlayingHeader(s) {

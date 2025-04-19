@@ -610,6 +610,7 @@ function setTheme(theme, color, clearColorVars) {
             document.documentElement.style.removeProperty('--pq-current-album-color');
             document.documentElement.style.removeProperty('--drop-target-color');
             document.documentElement.style.removeProperty('--accent-color');
+            document.documentElement.style.removeProperty('--highlight-rgb');
         }
         if (color.startsWith("user:")) {
             changeLink("/material/usercolor/" + color.substring(5) + "?r=" + LMS_MATERIAL_REVISION, "colorcss");

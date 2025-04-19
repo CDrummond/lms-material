@@ -1139,6 +1139,9 @@ function parseBrowseResp(data, parent, options, cacheKey, parentCommand, parentG
                             group = "APPEARANCE_BAND";
                         } else if (roles.has(COMPOSER_ARTIST_ROLE)) {
                             group = "COMPOSITION";
+                        } else if (!(roles.size===0)) {
+                            let firstRole=[...roles][0];
+                            group = lmsOptions.userDefinedRoles[firstRole].name;
                         }
                     }
                     showRoles = new Set([...showRoles, ...roles]);
@@ -1264,6 +1267,8 @@ function parseBrowseResp(data, parent, options, cacheKey, parentCommand, parentG
                         resp.subtitle=i18np("1 Appearance", "%1 Appearances", resp.items.length)+appearanceSuffix(releaseType);
                     } else if (releaseType=="COMPOSITION") {
                         resp.subtitle=i18np("1 Composer Album", "%1 Composer Albums", resp.items.length);
+                    } else if (releaseType!="ALBUM") {
+                        resp.subtitle=releaseType;
                     } else if (lmsOptions.supportReleaseTypes) {
                         resp.subtitle=i18np("1 Release", "%1 Releases", resp.items.length);
                     } else {

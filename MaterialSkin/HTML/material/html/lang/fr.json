@@ -211,9 +211,11 @@
 "Firmware: %1":"Firmware : %1",
 "Follow link":"Suivre le lien",
 "Font size":"Taille de police",
+"For all players ":"Pour toutes les platines",
 "For more fine-grained control over plugins please visit the 'Manage Plugins' section of 'Server settings'":"Pour un contrôle plus précis des plugins, veuillez visiter la section \"Gérer les plugins\" des \"Préférences du serveur\"",
 "Fri":"Ve",
 "Friday":"Vendredi",
+"From current cover (all players)":"D'après la pochette actuelle (toutes les platines)",
 "General":"Général",
 "Genre":"Genre",
 "Genres":"Genres",
@@ -320,6 +322,7 @@
 "Other settings":"Autres paramètres",
 "Path":"Chemin",
 "Pause":"Pause",
+"Per player":"Par platine",
 "Performance":"Interprétation",
 "Pictures":"Images",
 "Pin":"Épingler",
@@ -686,8 +689,5 @@
 "1 Year":"1 année",
 "%1 Years":"%1 années",
 "1 day":"1 jour",
-"%1 days":"%1 jours",
-"For all players ":"",
-"From current cover (all players)":"",
-"Per player":""
+"%1 days":"%1 jours"
 }

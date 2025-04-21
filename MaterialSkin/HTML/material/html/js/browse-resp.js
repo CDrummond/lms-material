@@ -69,7 +69,7 @@ function setFavoritesParams(i, item) {
 
 function parseBrowseResp(data, parent, options, cacheKey, parentCommand, parentGenre) {
     // NOTE: If add key to resp, then update addToCache in utils.js
-    var resp = {items: [], allTracksItem:undefined, baseActions:[], canUseGrid: false, jumplist:[], numAudioItems:0, canDrop:false, itemCustomActions:undefined, extra:undefined, numHeaders:0, ignoreRoles: undefined };
+    var resp = {items: [], allTracksItem:undefined, baseActions:[], canUseGrid: false, jumplist:[], numAudioItems:0, canDrop:false, itemCustomActions:undefined, extra:undefined, numHeaders:0, ignoreRoles: new Set() };
     var allowPinning = !queryParams.party && (!LMS_KIOSK_MODE || !HIDE_FOR_KIOSK.has(PIN_ACTION));
 
     try {
@@ -1098,12 +1098,15 @@ function parseBrowseResp(data, parent, options, cacheKey, parentCommand, parentG
                     artists = [parent.title];
                 }
                 let group = "ALBUM";
-                if (lmsOptions.groupByReleaseType>0) {
-                    let roles = new Set(isEmpty(i.role_ids) ? [] : splitIntArray(i.role_ids));
-                    if (intersect(ARTIST_ROLES, roles).size>0 || roles.size==0) {
+                let roles = new Set(isEmpty(i.role_ids) ? [] : splitIntArray(i.role_ids));
+                if (intersect(ARTIST_ROLES, roles).size>0 || roles.size==0) {
+                    if (lmsOptions.groupByReleaseType>0) {
                         let isCompilation = undefined!=i.compilation && 1==parseInt(i.compilation) && (undefined==i.release_type || i.release_type.toUpperCase()=="ALBUM");
                         group = isCompilation ? "COMPILATION" : undefined==i.release_type ? "ALBUM" : i.release_type.toUpperCase();
                     }
+                }
+                if (0==roles.size || !roles.has(TRACK_ARTIST_ROLE)) {
+                    resp.ignoreRoles(TRACK_ARTIST_ROLE);
                 }
                 releaseTypes.add(group);
 

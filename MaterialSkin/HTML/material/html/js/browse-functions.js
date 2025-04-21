@@ -782,23 +782,38 @@ function browseGetRoles(view, curitem, ignoreRoles) {
                 if (undefined!=ignoreRoles && ignoreRoles.has(rid)) {
                     continue;
                 }
+                let params = [ARTIST_ALBUM_TAGS, SORT_KEY+ARTIST_ALBUM_SORT_PLACEHOLDER, curitem.id, 'role_id:'+rid];
+                browseAddLibId(view, params);
                 if (rid>=20) {
                     let udr = lmsOptions.userDefinedRoles[rid];
                     if (undefined!=udr) {
-                        let params = [ARTIST_ALBUM_TAGS, SORT_KEY+ARTIST_ALBUM_SORT_PLACEHOLDER, curitem.id, 'role_id:'+rid];
-                        browseAddLibId(view, params);
                         actions.push({title:udr.name, svg:'role-'+udr.role, do:{ command: ['albums'], params: params}, weight:81, stdItem:STD_ITEM_ARTIST, udr:rid});
                     }
                 } else {
-                    if (COMPOSER_ARTIST_ROLE==rid) {
-                        var params = [SORT_KEY+TRACK_SORT_PLACEHOLDER, PLAYLIST_TRACK_TAGS, curitem.id, 'role_id:'+rid, 'material_skin_artist:'+curitem.title, 'material_skin_compositions:1'];
-                        browseAddLibId(view, params);
-                        actions.push({title:i18n('Compositions'), svg:'composer', do:{ command: ['tracks'], params: params}, weight:81, stdItem:STD_ITEM_COMPOSITION_TRACKS, udr:COMPOSER_ARTIST_ROLE});
-                    } else if ((TRACK_ARTIST_ROLE==rid && undefined!=ignoreRoles) || BAND_ARTIST_ROLE==rid) {
-                        let params = [ARTIST_ALBUM_TAGS, SORT_KEY+ARTIST_ALBUM_SORT_PLACEHOLDER, curitem.id, 'role_id:'+rid];
-                        browseAddLibId(view, params);
-                        actions.push({title:TRACK_ARTIST_ROLE==rid ? i18n('Appearances') : i18n('Band/orchestra'), svg:TRACK_ARTIST_ROLE==rid ? 'artist' : 'role-band', do:{ command: ['albums'], params: params}, weight:81, stdItem:STD_ITEM_ARTIST, udr:rid});
+                    let title = '';
+                    let svg = '';
+                    if (TRACK_ARTIST_ROLE==rid) {
+                        title = i18n('Appearances');
+                        svg = 'artist';
+                    } else if (BAND_ARTIST_ROLE==rid) {
+                        title = i18n('Band/orchestra');
+                        svg = 'role-band';
+                    } else if (COMPOSER_ARTIST_ROLE==rid) {
+                        title = i18n('Composer Albums');
+                        svg = 'composer';
+                    } else if (CONDUCTOR_ARTIST_ROLE==rid) {
+                        title = i18n('Conductor');
+                        svg = 'conductor';
+                    } else if (ALBUM_ARTIST_ROLE==rid || ARTIST_ROLE==rid) {
+                        title = i18n('Main Artist');
+                        svg = 'artist';
+                        params = [ARTIST_ALBUM_TAGS, SORT_KEY+ARTIST_ALBUM_SORT_PLACEHOLDER, curitem.id, 'role_id:1,5'];
                     }
+                    actions.push({title:title, svg:svg, do:{ command: ['albums'], params: params}, weight:81, stdItem:STD_ITEM_ARTIST, udr:rid});
+                }
+                if (COMPOSER_ARTIST_ROLE==rid) {
+                    params = [SORT_KEY+TRACK_SORT_PLACEHOLDER, PLAYLIST_TRACK_TAGS, curitem.id, 'role_id:'+rid, 'material_skin_artist:'+curitem.title, 'material_skin_compositions:1'];
+                    actions.push({title:i18n('Compositions'), svg:'composer', do:{ command: ['tracks'], params: params}, weight:81, stdItem:STD_ITEM_COMPOSITION_TRACKS, udr:COMPOSER_ARTIST_ROLE});
                 }
             }
             if (actions.length>0) {

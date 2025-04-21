@@ -782,7 +782,8 @@ function browseGetRoles(view, curitem, ignoreRoles) {
                 if (undefined!=ignoreRoles && ignoreRoles.has(rid)) {
                     continue;
                 }
-                let params = [ARTIST_ALBUM_TAGS, SORT_KEY+ARTIST_ALBUM_SORT_PLACEHOLDER, curitem.id, 'role_id:'+rid];
+                let roleIds = ALBUM_ARTIST_ROLE==rid || ARTIST_ROLE==rid ? '1,5' : rid;
+                let params = [ARTIST_ALBUM_TAGS, SORT_KEY+ARTIST_ALBUM_SORT_PLACEHOLDER, curitem.id, 'role_id:'+roleIds];
                 browseAddLibId(view, params);
                 if (rid>=20) {
                     let udr = lmsOptions.userDefinedRoles[rid];
@@ -807,12 +808,12 @@ function browseGetRoles(view, curitem, ignoreRoles) {
                     } else if (ALBUM_ARTIST_ROLE==rid || ARTIST_ROLE==rid) {
                         title = i18n('Main Artist');
                         svg = 'artist';
-                        params = [ARTIST_ALBUM_TAGS, SORT_KEY+ARTIST_ALBUM_SORT_PLACEHOLDER, curitem.id, 'role_id:1,5'];
                     }
                     actions.push({title:title, svg:svg, do:{ command: ['albums'], params: params}, weight:81, stdItem:STD_ITEM_ARTIST, udr:rid});
                 }
                 if (COMPOSER_ARTIST_ROLE==rid) {
                     params = [SORT_KEY+TRACK_SORT_PLACEHOLDER, PLAYLIST_TRACK_TAGS, curitem.id, 'role_id:'+rid, 'material_skin_artist:'+curitem.title, 'material_skin_compositions:1'];
+                    browseAddLibId(view, params);
                     actions.push({title:i18n('Compositions'), svg:'composer', do:{ command: ['tracks'], params: params}, weight:81, stdItem:STD_ITEM_COMPOSITION_TRACKS, udr:COMPOSER_ARTIST_ROLE});
                 }
             }

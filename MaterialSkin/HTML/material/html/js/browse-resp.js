@@ -1099,11 +1099,9 @@ function parseBrowseResp(data, parent, options, cacheKey, parentCommand, parentG
                 }
                 let group = "ALBUM";
                 let roles = new Set(isEmpty(i.role_ids) ? [] : splitIntArray(i.role_ids));
-                if (intersect(ARTIST_ROLES, roles).size>0 || roles.size==0) {
-                    if (lmsOptions.groupByReleaseType>0) {
-                        let isCompilation = undefined!=i.compilation && 1==parseInt(i.compilation) && (undefined==i.release_type || i.release_type.toUpperCase()=="ALBUM");
-                        group = isCompilation ? "COMPILATION" : undefined==i.release_type ? "ALBUM" : i.release_type.toUpperCase();
-                    }
+                if (lmsOptions.groupByReleaseType>0) {
+                    let isCompilation = undefined!=i.compilation && 1==parseInt(i.compilation) && (undefined==i.release_type || i.release_type.toUpperCase()=="ALBUM");
+                    group = isCompilation ? "COMPILATION" : undefined==i.release_type ? "ALBUM" : i.release_type.toUpperCase();
                 }
                 if (0==roles.size || !roles.has(TRACK_ARTIST_ROLE)) {
                     resp.ignoreRoles.add(TRACK_ARTIST_ROLE);

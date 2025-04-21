@@ -1106,7 +1106,7 @@ function parseBrowseResp(data, parent, options, cacheKey, parentCommand, parentG
                     }
                 }
                 if (0==roles.size || !roles.has(TRACK_ARTIST_ROLE)) {
-                    resp.ignoreRoles(TRACK_ARTIST_ROLE);
+                    resp.ignoreRoles.add(TRACK_ARTIST_ROLE);
                 }
                 releaseTypes.add(group);
 

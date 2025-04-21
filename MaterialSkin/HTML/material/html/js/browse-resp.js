@@ -69,7 +69,7 @@ function setFavoritesParams(i, item) {
 
 function parseBrowseResp(data, parent, options, cacheKey, parentCommand, parentGenre) {
     // NOTE: If add key to resp, then update addToCache in utils.js
-    var resp = {items: [], allTracksItem:undefined, showRoles:[], baseActions:[], canUseGrid: false, jumplist:[], numAudioItems:0, canDrop:false, itemCustomActions:undefined, extra:undefined, numHeaders:0 };
+    var resp = {items: [], allTracksItem:undefined, baseActions:[], canUseGrid: false, jumplist:[], numAudioItems:0, canDrop:false, itemCustomActions:undefined, extra:undefined, numHeaders:0, ignoreRoles: undefined };
     var allowPinning = !queryParams.party && (!LMS_KIOSK_MODE || !HIDE_FOR_KIOSK.has(PIN_ACTION));
 
     try {
@@ -980,7 +980,6 @@ function parseBrowseResp(data, parent, options, cacheKey, parentCommand, parentG
             var reqArtistId = undefined;
             var groupReleases = true; // Prevent actually grouping ino releases even if we have releaseType
             var isWorksAlbums = undefined!=parent && parent.id.startsWith("work_id:");
-            var ignoreRoles = new Set();
             var mskRoleId = undefined;
             var roleId = undefined;
             var portraitId = undefined;
@@ -1007,9 +1006,9 @@ function parseBrowseResp(data, parent, options, cacheKey, parentCommand, parentG
                             let roles = lower.split(':')[1];
                             roleId = roleIntValue(roles);
                             if (roleId>0) {
-                                ignoreRoles = new Set([roleId]);
+                                resp.ignoreRoles = new Set([roleId]);
                             } else {
-                                ignoreRoles=new Set(splitIntArray(roles));
+                                resp.ignoreRoles=new Set(splitIntArray(roles));
                             }
                         } else if (lower.startsWith("material_skin_role_id:")) {
                             mskRoleId = roleIntValue(lower.split(':')[1]);
@@ -1029,7 +1028,6 @@ function parseBrowseResp(data, parent, options, cacheKey, parentCommand, parentG
             var albumKeys = [];
             var releaseTypes = new Set();
             var ids = new Set();
-            var showRoles = new Set();
 
             for (var idx=0, loop=data.result.albums_loop, loopLen=loop.length; idx<loopLen; ++idx) {
                 var i = makeHtmlSafe(loop[idx]);
@@ -1102,9 +1100,10 @@ function parseBrowseResp(data, parent, options, cacheKey, parentCommand, parentG
                 let group = "ALBUM";
                 if (lmsOptions.groupByReleaseType>0) {
                     let roles = new Set(isEmpty(i.role_ids) ? [] : splitIntArray(i.role_ids));
-                    let isCompilation = undefined!=i.compilation && 1==parseInt(i.compilation) && (undefined==i.release_type || i.release_type.toUpperCase()=="ALBUM");
-                    group = isCompilation ? "COMPILATION" : undefined==i.release_type ? "ALBUM" : i.release_type.toUpperCase();
-                    showRoles = new Set([...showRoles, ...roles]);
+                    if (intersect(ARTIST_ROLES, roles).size>0 || roles.size==0) {
+                        let isCompilation = undefined!=i.compilation && 1==parseInt(i.compilation) && (undefined==i.release_type || i.release_type.toUpperCase()=="ALBUM");
+                        group = isCompilation ? "COMPILATION" : undefined==i.release_type ? "ALBUM" : i.release_type.toUpperCase();
+                    }
                 }
                 releaseTypes.add(group);
 
@@ -1166,11 +1165,6 @@ function parseBrowseResp(data, parent, options, cacheKey, parentCommand, parentG
                 } else {
                     resp.items.push(album);
                 }
-            }
-            showRoles.delete(ARTIST_ROLE);
-            if (ignoreRoles.size!=0 || 1!=showRoles.size) {
-                ignoreRoles.forEach(role => { showRoles.delete(role) });
-                resp.showRoles = Array.from(showRoles).sort();
             }
             if (undefined!=portraitId) {
                 resp.image= "/contributor/" + portraitId + "/image" + LMS_LIST_IMAGE_SIZE;

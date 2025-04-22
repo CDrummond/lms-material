@@ -775,7 +775,7 @@ function browseGetRoles(view, curitem, ignoreRoles) {
     browseAddLibId(view, command.params);
     lmsList('', command.command, command.params, 0, LMS_BATCH_SIZE, true, view.nextReqId()).then(({data}) => {
         logJsonMessage("RESP", data);
-        let multipleRoles = data.result.roles_loop.length==1;
+        let multipleRoles = data.result.roles_loop.length>1;
         if ( data.result.roles_loop.length==2 && 
              ( (data.result.roles_loop[0].role_id==ARTIST_ROLE && data.result.roles_loop[1].role_id==ALBUM_ARTIST_ROLE ||
                (data.result.roles_loop[1].role_id==ARTIST_ROLE && data.result.roles_loop[0].role_id==ALBUM_ARTIST_ROLE) ) ) ) {

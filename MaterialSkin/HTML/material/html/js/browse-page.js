@@ -430,6 +430,7 @@ var lmsBrowse = Vue.component("lms-browse", {
   <v-list v-else-if="menu.currentActions">
    <template v-for="(item, index) in menu.currentActions">
     <v-divider v-if="DIVIDER==item.action"></v-divider>
+    <v-subheader v-else-if="HEADER==item.action">{{item.title}}</v-subheader>
     <v-list-tile v-else-if="!item.isListItemInMenu && item.action==ADD_TO_FAV_ACTION && isInFavorites(current)" @click="menuItemAction(REMOVE_FROM_FAV_ACTION, current, undefined, $event)">
      <v-list-tile-avatar>
       <v-icon v-if="undefined==ACTIONS[REMOVE_FROM_FAV_ACTION].svg">{{ACTIONS[REMOVE_FROM_FAV_ACTION].icon}}</v-icon>

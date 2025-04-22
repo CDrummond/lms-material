@@ -842,6 +842,8 @@ function browseGetRoles(view, curitem, ignoreRoles) {
                     break;
                 }
             }
+            view.currentActions.splice(insertPos, 0, {action:HEADER, title:i18n("Browse by")});
+            insertPos+=1;
             for (let i=actions.length-1; i>=0; --i) {
                 view.currentActions.splice(insertPos, 0, actions[i]);
             }

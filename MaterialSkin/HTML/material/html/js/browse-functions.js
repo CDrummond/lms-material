@@ -775,8 +775,15 @@ function browseGetRoles(view, curitem, ignoreRoles) {
     browseAddLibId(view, command.params);
     lmsList('', command.command, command.params, 0, LMS_BATCH_SIZE, true, view.nextReqId()).then(({data}) => {
         logJsonMessage("RESP", data);
-        if (id==view.current.id && data.result && undefined!=data.result.roles_loop) {
+        let multipleRoles = data.result.roles_loop.length==1 ? 0 : 1;
+        if ( data.result.roles_loop.length==2 && 
+         (data.result.roles_loop[0].role_id==ARTIST_ROLE && data.result.roles_loop[1].role_id==ALBUM_ARTIST_ROLE ||
+          data.result.roles_loop[1].role_id==ARTIST_ROLE && data.result.roles_loop[0].role_id==ALBUM_ARTIST_ROLE) ) {
+             multipleRoles = 0;
+        }
+        if (id==view.current.id && data.result && undefined!=data.result.roles_loop && multipleRoles==1) {
             let actions = [];
+            let compositionAction = {};
             for (let r=0, loop=data.result.roles_loop, len=loop.length; r<len; ++r) {
                 let rid = parseInt(loop[r].role_id);
                 if (undefined!=ignoreRoles && ignoreRoles.has(rid)) {
@@ -814,11 +821,14 @@ function browseGetRoles(view, curitem, ignoreRoles) {
                 if (COMPOSER_ARTIST_ROLE==rid) {
                     params = [SORT_KEY+TRACK_SORT_PLACEHOLDER, PLAYLIST_TRACK_TAGS, curitem.id, 'role_id:'+rid, 'material_skin_artist:'+curitem.title, 'material_skin_compositions:1'];
                     browseAddLibId(view, params);
-                    actions.push({title:i18n('Compositions'), svg:'composer', do:{ command: ['tracks'], params: params}, weight:81, stdItem:STD_ITEM_COMPOSITION_TRACKS, udr:COMPOSER_ARTIST_ROLE});
+                    compositionAction = {title:i18n('Compositions'), svg:'composer', do:{ command: ['tracks'], params: params}, weight:81, stdItem:STD_ITEM_COMPOSITION_TRACKS, udr:COMPOSER_ARTIST_ROLE};
                 }
             }
             if (actions.length>0) {
                 actions.sort(titleSort);
+            }
+            if (Object.keys(compositionAction).length>0) {
+                actions.unshift(compositionAction);
             }
             let insertPos = 0;
             for (let i=view.currentActions.length-1; i>=0; --i) {

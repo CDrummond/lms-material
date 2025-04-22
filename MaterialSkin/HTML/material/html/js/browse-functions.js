@@ -778,10 +778,10 @@ function browseGetRoles(view, curitem, ignoreRoles) {
         let multipleRoles = data.result.roles_loop.length==1;
         if ( data.result.roles_loop.length==2 && 
              ( (data.result.roles_loop[0].role_id==ARTIST_ROLE && data.result.roles_loop[1].role_id==ALBUM_ARTIST_ROLE ||
-             (data.result.roles_loop[1].role_id==ARTIST_ROLE && data.result.roles_loop[0].role_id==ALBUM_ARTIST_ROLE) ) ) ) {
+               (data.result.roles_loop[1].role_id==ARTIST_ROLE && data.result.roles_loop[0].role_id==ALBUM_ARTIST_ROLE) ) ) ) {
              multipleRoles = false;
         }
-        if (id==view.current.id && data.result && undefined!=data.result.roles_loop && multipleRoles==1) {
+        if (id==view.current.id && data.result && undefined!=data.result.roles_loop && multipleRoles) {
             let actions = [];
             let compositionAction = undefined;
             for (let r=0, loop=data.result.roles_loop, len=loop.length; r<len; ++r) {

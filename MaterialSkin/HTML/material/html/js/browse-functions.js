@@ -572,14 +572,13 @@ function browseHandleListResponse(view, item, command, resp, prevPage, appendIte
                         let genreListPlain = [];
                         for (let g=0, loop=data.result.genres_loop, len=loop.length; g<len; ++g) {
                             genreList.push(buildLink("show_genre", loop[g].id, loop[g].genre, "browse"));
-                            if (IS_MOBILE) {
-                                genreListPlain.push(loop[g].genre);
-                            }
+                            genreListPlain.push(loop[g].genre);
                         }
                         view.detailedSubExtra=[(IS_MOBILE ? genreListPlain : genreList).join(SEPARATOR_HTML)];
                         if (IS_MOBILE) {
                             view.detailedSubExtra.push(genreList.join(SEPARATOR_HTML));
                         }
+                        curitem.genreSet = new Set(genreListPlain);
                     }
                 }).catch(err => {
                 });
@@ -797,6 +796,15 @@ function browseGetRoles(view, curitem, ignoreRoles) {
                     if (undefined!=udr) {
                         actions.push({title:udr.name, svg:'role-'+udr.role, do:{ command: ['albums'], params: params}, weight:81, stdItem:STD_ITEM_ARTIST, udr:rid});
                     }
+                } else if (COMPOSER_ARTIST_ROLE==rid) {
+                    let isNonClassical = undefined==curitem.genreSet || undefined==lmsOptions.classicalGenres || intersect(curitem.genreSet, lmsOptions.classicalGenres).size<1;
+                    if (isNonClassical) {
+                        params = [SORT_KEY+TRACK_SORT_PLACEHOLDER, PLAYLIST_TRACK_TAGS, curitem.id, 'role_id:'+rid, 'material_skin_artist:'+curitem.title, 'material_skin_compositions:1'];
+                        browseAddLibId(view, params);
+                        compositionAction = {title:i18n('Compositions'), svg:'composer', do:{ command: ['tracks'], params: params}, weight:81, stdItem:STD_ITEM_COMPOSITION_TRACKS, udr:COMPOSER_ARTIST_ROLE};
+                    } else {
+                        actions.push({title:i18n('Composer'), svg:'composer', do:{ command: ['albums'], params: params}, weight:81, stdItem:STD_ITEM_ARTIST, udr:rid});
+                    }
                 } else {
                     let title = '';
                     let svg = '';
@@ -806,9 +814,6 @@ function browseGetRoles(view, curitem, ignoreRoles) {
                     } else if (BAND_ARTIST_ROLE==rid) {
                         title = i18n('Band/orchestra');
                         svg = 'role-band';
-                    } else if (COMPOSER_ARTIST_ROLE==rid) {
-                        title = lmsOptions.supportReleaseTypes ? i18n("Composer releases") : i18n('Composer albums');
-                        svg = 'release-composition';
                     } else if (CONDUCTOR_ARTIST_ROLE==rid) {
                         title = i18n('Conductor');
                         svg = 'conductor';
@@ -817,11 +822,6 @@ function browseGetRoles(view, curitem, ignoreRoles) {
                         svg = 'role-albumartist';
                     }
                     actions.push({title:title, svg:svg, do:{ command: ['albums'], params: params}, weight:81, stdItem:STD_ITEM_ARTIST, udr:rid});
-                }
-                if (COMPOSER_ARTIST_ROLE==rid) {
-                    params = [SORT_KEY+TRACK_SORT_PLACEHOLDER, PLAYLIST_TRACK_TAGS, curitem.id, 'role_id:'+rid, 'material_skin_artist:'+curitem.title, 'material_skin_compositions:1'];
-                    browseAddLibId(view, params);
-                    compositionAction = {title:i18n('Compositions'), svg:'composer', do:{ command: ['tracks'], params: params}, weight:81, stdItem:STD_ITEM_COMPOSITION_TRACKS, udr:COMPOSER_ARTIST_ROLE};
                 }
             }
             if (actions.length>0) {

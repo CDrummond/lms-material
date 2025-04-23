@@ -5,8 +5,8 @@
  * MIT license.
  */
 
-const UDR_PLACEHOLDER = 200000000;
-const UDR_PLACEHOLDER_WEIGHT = 81;
+const ROLES_PLACEHOLDER = 200000000;
+const SERVICES_PLACEHOLDER = 300000000;
 
 function browseCanSelect(item) {
     return undefined!=item && (undefined!=item.stdItem || (item.menu && item.menu.length>0));
@@ -133,7 +133,7 @@ function browseAddHistory(view) {
     view.history.push(prev);
 }
 
-function browseActions(view, item, args, count, showWorks, addRolesPlaceholder, isVariousArtists) {
+function browseActions(view, item, args, count, showWorks, addRoleAndServices, isVariousArtists) {
     var actions=[];
     if ((undefined==item || undefined==item.id || !item.id.startsWith(MUSIC_ID_PREFIX)) && // Exclude 'Compilations'
         (undefined==args['artist'] || !isVariousArtists)) {
@@ -170,11 +170,6 @@ function browseActions(view, item, args, count, showWorks, addRolesPlaceholder, 
                           do:{ command:["blissmixer", "mix"],
                                params:["menu:1", "useContextMenu:1", undefined!=args['album_id'] ? "album_id:"+args['album_id'] : "artist_id:"+args['artist_id']]}, weight:103});
         }
-        if (LMS_P_YT && undefined!=args['artist']) {
-            actions.push({title:/*NoTrans*/'YouTube', svg:'youtube',
-                          do:{ command: ['youtube','items'], params:['want_url:1', 'item_id:3', 'search:'+args['artist'], 'menu:youtube']},
-                          weight:110});
-        }
 
         if (undefined!=args['artist_id'] && undefined==args['album_id'] && undefined!=args['count'] && args['count']>1) {
             var params = [SORT_KEY+TRACK_SORT_PLACEHOLDER, PLAYLIST_TRACK_TAGS, 'artist_id:'+args['artist_id']];
@@ -198,8 +193,11 @@ function browseActions(view, item, args, count, showWorks, addRolesPlaceholder, 
             actions.push({title:ACTIONS[ALL_TRACKS_ACTION].title, icon:ACTIONS[ALL_TRACKS_ACTION].icon, do:{ command: ['tracks'], params: params}, weight:80, stdItem:STD_ITEM_ALL_TRACKS});
         }
 
-        if (undefined!=args['artist_id'] && addRolesPlaceholder) {
-            actions.push({title:"", weight:UDR_PLACEHOLDER_WEIGHT, udr:UDR_PLACEHOLDER});
+        if (undefined!=args['artist_id'] && addRoleAndServices) {
+            actions.push({title:"", weight:81, id:ROLES_PLACEHOLDER});
+        }
+        if ((undefined!=args['artist_id'] || undefined!=args['artist']) && addRoleAndServices && (LMS_P_YT || view.onlineServices.length>0)) {
+            actions.push({title:"", weight:82, id:SERVICES_PLACEHOLDER});
         }
         if (showWorks) {
             let command = {command: ['works'], params:[view.current.id]};
@@ -407,8 +405,7 @@ function browseHandleListResponse(view, item, command, resp, prevPage, appendIte
         let artist_id = listingArtistAlbums ? curitem.id.split(":")[1] : undefined;
         let album_id = listingAlbumTracks ? originalId(curitem.id).split(":")[1] : undefined;
         let work_id = listingWorkAlbums ? curitem.id.split(":")[1] : undefined;
-        let addWorksOrRoles = listingArtistAlbums && listingAlbums && LMS_VERSION>=90000 && view.items.length>0;
-        let addUserDefinedRoles = addWorksOrRoles && Object.keys(lmsOptions.userDefinedRoles).length>0;
+        let addWorksRolesServices = listingArtistAlbums && listingAlbums && LMS_VERSION>=90000 && view.items.length>0;
         if (!curitem.id.startsWith(MUSIC_ID_PREFIX)) {
             if (!listingArtistAlbums && listingAlbums && !curitem.isVa) {
                 let pos = getField(command, "artist_id");
@@ -468,8 +465,7 @@ function browseHandleListResponse(view, item, command, resp, prevPage, appendIte
                 }
                 isVariousArtists = title==i18n('Various Artists') || title==lmsOptions.variousArtistsString || title.toLowerCase()=='various artists';
                 if (isVariousArtists) {
-                    addUserDefinedRoles = false;
-                    addWorksOrRoles = false;
+                    addWorksRolesServices = false;
                 } else {
                     showWorksInMenu = LMS_VERSION>=90000 && (!lmsOptions.listWorks || !lmsOptions.showArtistWorks) && getField(view.command, "work_id:")<0;
                 }
@@ -497,14 +493,8 @@ function browseHandleListResponse(view, item, command, resp, prevPage, appendIte
                 }
             }
 
-            view.currentActions = browseActions(view, resp.items.length>0 ? item : undefined, actParams, resp.items.length, showWorksInMenu, addUserDefinedRoles,isVariousArtists);
+            view.currentActions = browseActions(view, resp.items.length>0 ? item : undefined, actParams, resp.items.length, showWorksInMenu, addWorksRolesServices, isVariousArtists);
             if (listingArtistAlbums) {
-                for (var i=0, loop=view.onlineServices, len=loop.length; i<len; ++i) {
-                    var emblem = getEmblem(loop[i].toLowerCase()+':');
-                    view.currentActions.push({title:/*!i81n*/'wimp'==loop[i] ? 'Tidal' : capitalize(loop[i]),
-                                              weight:110, svg:emblem ? emblem.name : undefined, id:loop[i], isService:true,
-                                              artist_id:artist_id});
-                }
                 if (showWorksInMenu) {
                     let command = {command:['works'], params:[curitem.id]};
                     addParentParams(view.command, command, false);
@@ -745,12 +735,24 @@ function browseHandleListResponse(view, item, command, resp, prevPage, appendIte
             }
         }
 
-        if (addWorksOrRoles) {
+        if (addWorksRolesServices) {
             if (lmsOptions.listWorks && lmsOptions.showArtistWorks) {
                 browseAddWorks(view, curitem);
             }
-            if (addUserDefinedRoles) {
-                browseGetRoles(view, curitem, resp.ignoreRoles);
+            browseGetRoles(view, curitem, resp.ignoreRoles);
+            if (LMS_P_YT || view.onlineServices.length>0) {
+                let actions = [];
+                for (var i=0, loop=view.onlineServices, len=loop.length; i<len; ++i) {
+                    var emblem = getEmblem(loop[i].toLowerCase()+':');
+                    actions.push({title:/*!i81n*/'wimp'==loop[i] ? 'Tidal' : capitalize(loop[i]),
+                                svg:emblem ? emblem.name : undefined, id:loop[i], isService:true,
+                                artist_id:artist_id});
+                }
+                if (LMS_P_YT) {
+                    actions.push({title:/*NoTrans*/'YouTube', svg:'youtube',
+                                do:{ command: ['youtube','items'], params:['want_url:1', 'item_id:3', 'search:'+title, 'menu:youtube']}});
+                }
+                browseReplaceAction(view, SERVICES_PLACEHOLDER, actions, i18n("Browse on"));
             }
         }
 
@@ -769,6 +771,32 @@ function browseHandleListResponse(view, item, command, resp, prevPage, appendIte
     }
 }
 
+function browseReplaceAction(view, id, actions, header) {
+    if (undefined==actions || actions.length<1) {
+        for (let i=view.currentActions.length-1; i>=0; --i) {
+            if (undefined!=view.currentActions[i].udr && view.currentActions[i].id==id) {
+                view.currentActions.splice(i, 1);
+                break;
+            }
+        }
+    } else {
+        let insertPos = 0;
+        for (let i=view.currentActions.length-1; i>=0; --i) {
+            if (undefined!=view.currentActions[i].id && view.currentActions[i].id==id) {
+                insertPos = i;
+                view.currentActions.splice(i, 1);
+                break;
+            }
+        }
+        view.currentActions.splice(insertPos, 0, {action:HEADER, title:header});
+        insertPos+=1;
+        for (let i=actions.length-1; i>=0; --i) {
+            view.currentActions.splice(insertPos, 0, actions[i]);
+        }
+        view.currentActions.splice(insertPos+actions.length, 0, {action:DIVIDER});
+    }
+}
+
 function browseGetRoles(view, curitem, ignoreRoles) {
     let id = view.current.id;
     let command = {command:['roles'], params:[curitem.id]};
@@ -781,8 +809,8 @@ function browseGetRoles(view, curitem, ignoreRoles) {
                (data.result.roles_loop[1].role_id==ARTIST_ROLE && data.result.roles_loop[0].role_id==ALBUM_ARTIST_ROLE) ) ) ) {
              multipleRoles = false;
         }
+        let actions = [];
         if (id==view.current.id && data.result && undefined!=data.result.roles_loop && multipleRoles) {
-            let actions = [];
             for (let r=0, loop=data.result.roles_loop, len=loop.length; r<len; ++r) {
                 let rid = parseInt(loop[r].role_id);
                 if (undefined!=ignoreRoles && ignoreRoles.has(rid)) {
@@ -821,41 +849,11 @@ function browseGetRoles(view, curitem, ignoreRoles) {
             if (actions.length>0) {
                 actions.sort(titleSort);
             }
-            let insertPos = 0;
-            for (let i=view.currentActions.length-1; i>=0; --i) {
-                if (undefined!=view.currentActions[i].udr && view.currentActions[i].udr>=20) {
-                    insertPos = i;
-                    view.currentActions.splice(i, 1);
-                } else if (0==insertPos && undefined!=view.currentActions[i].weight && view.currentActions[i].weight<=UDR_PLACEHOLDER_WEIGHT) {
-                    insertPos = i;
-                    break;
-                } else if (0!=insertPos) {
-                    break;
-                }
-            }
-            view.currentActions.splice(insertPos, 0, {action:HEADER, title:i18n("Browse by")});
-            insertPos+=1;
-            for (let i=actions.length-1; i>=0; --i) {
-                view.currentActions.splice(insertPos, 0, actions[i]);
-            }
-            view.currentActions.splice(insertPos+actions.length, 0, {action:DIVIDER});
-        } else {
-            // Remove placeholder
-            for (let i=view.currentActions.length-1; i>=0; --i) {
-                if (undefined!=view.currentActions[i].udr && view.currentActions[i].udr==UDR_PLACEHOLDER) {
-                    view.currentActions.splice(i, 1);
-                    break;
-                }
-            }
         }
+        browseReplaceAction(view, ROLES_PLACEHOLDER, actions, i18n("Browse by"));
     }).catch(err => {
         // Remove placeholder
-        for (let i=view.currentActions.length-1; i>=0; --i) {
-            if (undefined!=view.currentActions[i].udr && view.currentActions[i].udr==UDR_PLACEHOLDER) {
-                view.currentActions.splice(i, 1);
-                break;
-            }
-        }
+        browseReplaceAction(view, ROLES_PLACEHOLDER);
     });
 }
 

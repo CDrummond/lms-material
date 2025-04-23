@@ -805,6 +805,14 @@ table td input[type=checkbox] {
  margin-right:13px;
 }
 
+#viewToggle {
+  background-color: var(--border-color);
+  vertical-align:middle;
+  width:15px;
+  height:15px;
+  margin-left:12px;
+ }
+
 .lms-settings-section-SETUP_PLUGINS_9 div#innerSettingsBlock {
  height:calc((var(--vh, 1vh)*100) - (var(--all-pad) + 247px))!important;
 }

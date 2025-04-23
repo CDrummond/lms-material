@@ -689,9 +689,10 @@ function browseHandleListResponse(view, item, command, resp, prevPage, appendIte
         view.historyExtra = undefined;
         // Add non-artist role before years display
         if (resp.years && "albums"==command.command[0] && getField(command, "work_id:")<0) {
-            let rolePos = getField(command, "role_id:");
+            let showRolePos = getField(command, "msk_show_role_id");
+            let rolePos = showRolePos>=0 ? showRolePos : getField(command, "role_id:");
             if (rolePos>=0) {
-                let roleName = roleDisplayName(command.params[rolePos].split(':')[1]);
+                let roleName = roleDisplayName(command.params[rolePos].split(':')[1], showRolePos>=0);
                 if (undefined!=roleName) {
                     view.historyExtra = roleName;
                     view.detailedSubInfo=roleName+SEPARATOR+view.detailedSubInfo;
@@ -817,7 +818,7 @@ function browseGetRoles(view, curitem, ignoreRoles) {
                     continue;
                 }
                 let roleIds = ALBUM_ARTIST_ROLE==rid || ARTIST_ROLE==rid ? '1,5' : rid;
-                let params = [ARTIST_ALBUM_TAGS, SORT_KEY+ARTIST_ALBUM_SORT_PLACEHOLDER, curitem.id, 'role_id:'+roleIds];
+                let params = [ARTIST_ALBUM_TAGS, SORT_KEY+ARTIST_ALBUM_SORT_PLACEHOLDER, curitem.id, 'role_id:'+roleIds, 'msk_show_role_id:'+rid];
                 browseAddLibId(view, params);
                 if (rid>=20) {
                     let udr = lmsOptions.userDefinedRoles[rid];
@@ -825,22 +826,17 @@ function browseGetRoles(view, curitem, ignoreRoles) {
                         actions.push({title:udr.name, svg:'role-'+udr.role, do:{ command: ['albums'], params: params}, weight:81, stdItem:STD_ITEM_ARTIST, udr:rid});
                     }
                 } else {
-                    let title = '';
+                    let title = roleDisplayName(rid, true);
                     let svg = '';
                     if (TRACK_ARTIST_ROLE==rid) {
-                        title = i18n('Appearances');
                         svg = 'artist';
                     } else if (BAND_ARTIST_ROLE==rid) {
-                        title = i18n('Band/orchestra');
                         svg = 'role-band';
                     } else if (COMPOSER_ARTIST_ROLE==rid) {
-                        title = i18n('Composer');
                         svg = 'composer';
                     } else if (CONDUCTOR_ARTIST_ROLE==rid) {
-                        title = i18n('Conductor');
                         svg = 'conductor';
                     } else if (ALBUM_ARTIST_ROLE==rid || ARTIST_ROLE==rid) {
-                        title = i18n('Main artist');
                         svg = 'role-albumartist';
                     }
                     actions.push({title:title, svg:svg, do:{ command: ['albums'], params: params}, weight:81, stdItem:STD_ITEM_ARTIST, udr:rid});

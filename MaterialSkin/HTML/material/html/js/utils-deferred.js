@@ -836,7 +836,7 @@ function roleDisplayName(role, showArtist) {
         return showArtist ? i18n("Main artist") : undefined;
     }
     if (TRACK_ARTIST_ROLE) {
-        return showArtist ? i18n("Appearance") : undefined;
+        return showArtist ? i18n("Track artist") : undefined;
     }
     if (val==BAND_ARTIST_ROLE) {
         return i18n("Band/orchestra");

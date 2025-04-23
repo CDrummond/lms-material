@@ -801,24 +801,43 @@ function browseReplaceAction(view, id, actions, header) {
 function browseGetRoles(view, curitem, ignoreRoles) {
     let id = view.current.id;
     let command = {command:['roles'], params:[curitem.id]};
+    const artistRoles = new Set([TRACK_ARTIST_ROLE, ALBUM_ARTIST_ROLE, ARTIST_ROLE]);
     browseAddLibId(view, command.params);
     lmsList('', command.command, command.params, 0, LMS_BATCH_SIZE, true, view.nextReqId()).then(({data}) => {
         logJsonMessage("RESP", data);
         let multipleRoles = data.result.roles_loop.length>1;
         if ( data.result.roles_loop.length==2 && 
-             ( (data.result.roles_loop[0].role_id==ARTIST_ROLE && data.result.roles_loop[1].role_id==ALBUM_ARTIST_ROLE ||
-               (data.result.roles_loop[1].role_id==ARTIST_ROLE && data.result.roles_loop[0].role_id==ALBUM_ARTIST_ROLE) ) ) ) {
+            (data.result.roles_loop[0].role_id==ALBUM_ARTIST_ROLE && (data.result.roles_loop[1].role_id==ARTIST_ROLE || data.result.roles_loop[1].role_id==TRACK_ARTIST_ROLE)) ||
+            (data.result.roles_loop[1].role_id==ALBUM_ARTIST_ROLE && (data.result.roles_loop[0].role_id==ARTIST_ROLE || data.result.roles_loop[0].role_id==TRACK_ARTIST_ROLE)) ) {
              multipleRoles = false;
         }
         let actions = [];
         if (id==view.current.id && data.result && undefined!=data.result.roles_loop && multipleRoles) {
+            // Create lists of artist and non-artist roles
+            let validArtistRoleIds = [];
+            let otherRoles = []
             for (let r=0, loop=data.result.roles_loop, len=loop.length; r<len; ++r) {
                 let rid = parseInt(loop[r].role_id);
                 if (undefined!=ignoreRoles && ignoreRoles.has(rid)) {
                     continue;
                 }
-                let roleIds = ALBUM_ARTIST_ROLE==rid || ARTIST_ROLE==rid ? '1,5' : rid;
-                let params = [ARTIST_ALBUM_TAGS, SORT_KEY+ARTIST_ALBUM_SORT_PLACEHOLDER, curitem.id, 'role_id:'+roleIds, 'msk_show_role_id:'+rid];
+                if (artistRoles.has(rid)) {
+                    validArtistRoleIds.push(rid);
+                } else {
+                    otherRoles.push(rid);
+                }
+            }
+
+            // Add artist entry, if current view has non-artist role
+            if (validArtistRoleIds.length>0 && otherRoles.length>0) {
+                let params = [ARTIST_ALBUM_TAGS, SORT_KEY+ARTIST_ALBUM_SORT_PLACEHOLDER, curitem.id, 'role_id:'+validArtistRoleIds.join(','), 'msk_show_role_id:'+ARTIST_ROLE];
+                browseAddLibId(view, params);
+            }
+
+            // Add other non-artist roles
+            for (let r=0, loop=otherRoles, len=loop.length; r<len; ++r) {
+                let rid = loop[r];
+                let params = [ARTIST_ALBUM_TAGS, SORT_KEY+ARTIST_ALBUM_SORT_PLACEHOLDER, curitem.id, 'role_id:'+rid];
                 browseAddLibId(view, params);
                 if (rid>=20) {
                     let udr = lmsOptions.userDefinedRoles[rid];
@@ -828,16 +847,14 @@ function browseGetRoles(view, curitem, ignoreRoles) {
                 } else {
                     let title = roleDisplayName(rid, true);
                     let svg = '';
-                    if (TRACK_ARTIST_ROLE==rid) {
-                        svg = 'artist';
-                    } else if (BAND_ARTIST_ROLE==rid) {
+                    if (BAND_ARTIST_ROLE==rid) {
                         svg = 'role-band';
                     } else if (COMPOSER_ARTIST_ROLE==rid) {
                         svg = 'composer';
                     } else if (CONDUCTOR_ARTIST_ROLE==rid) {
                         svg = 'conductor';
-                    } else if (ALBUM_ARTIST_ROLE==rid || ARTIST_ROLE==rid) {
-                        svg = 'role-albumartist';
+                    } else {
+                        continue;
                     }
                     actions.push({title:title, svg:svg, do:{ command: ['albums'], params: params}, weight:81, stdItem:STD_ITEM_ARTIST, udr:rid});
                 }
@@ -849,6 +866,7 @@ function browseGetRoles(view, curitem, ignoreRoles) {
         browseReplaceAction(view, ROLES_PLACEHOLDER, actions, i18n("Browse by"));
     }).catch(err => {
         // Remove placeholder
+        console.log(err);
         browseReplaceAction(view, ROLES_PLACEHOLDER);
     });
 }

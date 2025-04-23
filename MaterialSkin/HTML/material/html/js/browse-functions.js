@@ -572,13 +572,14 @@ function browseHandleListResponse(view, item, command, resp, prevPage, appendIte
                         let genreListPlain = [];
                         for (let g=0, loop=data.result.genres_loop, len=loop.length; g<len; ++g) {
                             genreList.push(buildLink("show_genre", loop[g].id, loop[g].genre, "browse"));
-                            genreListPlain.push(loop[g].genre);
+                            if (IS_MOBILE) {
+                                genreListPlain.push(loop[g].genre);
+                            }
                         }
                         view.detailedSubExtra=[(IS_MOBILE ? genreListPlain : genreList).join(SEPARATOR_HTML)];
                         if (IS_MOBILE) {
                             view.detailedSubExtra.push(genreList.join(SEPARATOR_HTML));
                         }
-                        curitem.genreSet = new Set(genreListPlain);
                     }
                 }).catch(err => {
                 });
@@ -782,7 +783,6 @@ function browseGetRoles(view, curitem, ignoreRoles) {
         }
         if (id==view.current.id && data.result && undefined!=data.result.roles_loop && multipleRoles) {
             let actions = [];
-            let compositionAction = undefined;
             for (let r=0, loop=data.result.roles_loop, len=loop.length; r<len; ++r) {
                 let rid = parseInt(loop[r].role_id);
                 if (undefined!=ignoreRoles && ignoreRoles.has(rid)) {
@@ -796,15 +796,6 @@ function browseGetRoles(view, curitem, ignoreRoles) {
                     if (undefined!=udr) {
                         actions.push({title:udr.name, svg:'role-'+udr.role, do:{ command: ['albums'], params: params}, weight:81, stdItem:STD_ITEM_ARTIST, udr:rid});
                     }
-                } else if (COMPOSER_ARTIST_ROLE==rid) {
-                    let isNonClassical = undefined==curitem.genreSet || undefined==lmsOptions.classicalGenres || intersect(curitem.genreSet, lmsOptions.classicalGenres).size<1;
-                    if (isNonClassical) {
-                        params = [SORT_KEY+TRACK_SORT_PLACEHOLDER, PLAYLIST_TRACK_TAGS, curitem.id, 'role_id:'+rid, 'material_skin_artist:'+curitem.title, 'material_skin_compositions:1'];
-                        browseAddLibId(view, params);
-                        compositionAction = {title:i18n('Compositions'), svg:'composer', do:{ command: ['tracks'], params: params}, weight:81, stdItem:STD_ITEM_COMPOSITION_TRACKS, udr:COMPOSER_ARTIST_ROLE};
-                    } else {
-                        actions.push({title:i18n('Composer'), svg:'composer', do:{ command: ['albums'], params: params}, weight:81, stdItem:STD_ITEM_ARTIST, udr:rid});
-                    }
                 } else {
                     let title = '';
                     let svg = '';
@@ -814,6 +805,9 @@ function browseGetRoles(view, curitem, ignoreRoles) {
                     } else if (BAND_ARTIST_ROLE==rid) {
                         title = i18n('Band/orchestra');
                         svg = 'role-band';
+                    } else if (COMPOSER_ARTIST_ROLE==rid) {
+                        title = i18n('Composer');
+                        svg = 'composer';
                     } else if (CONDUCTOR_ARTIST_ROLE==rid) {
                         title = i18n('Conductor');
                         svg = 'conductor';
@@ -826,9 +820,6 @@ function browseGetRoles(view, curitem, ignoreRoles) {
             }
             if (actions.length>0) {
                 actions.sort(titleSort);
-            }
-            if (undefined!=compositionAction) {
-                actions.unshift(compositionAction);
             }
             let insertPos = 0;
             for (let i=view.currentActions.length-1; i>=0; --i) {

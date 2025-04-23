@@ -182,7 +182,7 @@ function browseActions(view, item, args, count, showWorks, addRoleAndServices, i
             browseAddLibId(view, params);
             actions.push({title:ACTIONS[ALL_TRACKS_ACTION].title, icon:ACTIONS[ALL_TRACKS_ACTION].icon, do:{ command: ['tracks'], params: params}, weight:80, stdItem:STD_ITEM_ALL_TRACKS});
             if (lmsOptions.supportReleaseTypes && args['multi-group']) {
-                actions.push({action:ALL_RELEASES_ACTION, weight:84});
+                actions.push({action:ALL_RELEASES_ACTION, weight:81});
             }
         } else if (undefined!=args['work_id'] && undefined!=args['composer_id'] && undefined!=args['count'] && args['count']>1) {
             var params = [SORT_KEY+TRACK_SORT_PLACEHOLDER, PLAYLIST_TRACK_TAGS, 'work_id:'+args['work_id'], args['composer_id'], undefined!=args['performance'] ? args['performance'] : 'performance:-1'];

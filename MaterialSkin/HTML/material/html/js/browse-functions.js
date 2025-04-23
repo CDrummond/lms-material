@@ -774,7 +774,7 @@ function browseHandleListResponse(view, item, command, resp, prevPage, appendIte
 function browseReplaceAction(view, id, actions, header) {
     if (undefined==actions || actions.length<1) {
         for (let i=view.currentActions.length-1; i>=0; --i) {
-            if (undefined!=view.currentActions[i].udr && view.currentActions[i].id==id) {
+            if (undefined!=view.currentActions[i].id && view.currentActions[i].id==id) {
                 view.currentActions.splice(i, 1);
                 break;
             }

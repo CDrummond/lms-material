@@ -1176,6 +1176,18 @@ function browseDoClick(view, item, index, event) {
             return;
         }
     }
+    if (item.isVa) {
+        var field = getField(command, "artist_id:");
+        if (field>=0) {
+            lmsCommand("", ["material-skin", "map", "va:1"]).then(({data}) => {
+                if (data.result.artist_id) {
+                    command.params[field]="artist_id:"+data.result.artist_id;
+                    view.fetchItems(command, item);
+                }
+            });
+            return;
+        }
+    }
     view.fetchItems(command, item);
 }
 
@@ -1307,6 +1319,9 @@ function browseItemAction(view, act, item, index, event) {
                     copy.title=item.title;
                     copy.libname=view.libraryName;
                     copy.params.push("library_id:"+libId);
+                    if (undefined!=item.isVa) {
+                        copy.isVa = item.isVa;
+                    }
                     view.pin(copy, true);
                 } else if (2==res) {
                     view.pin(item, true);
@@ -2495,10 +2510,13 @@ function browsePin(view, item, add, mapped) {
                              actions: item.actions, players: item.players, menu: [RENAME_ACTION, UNPIN_ACTION], weight:10000});
         } else {
             var command = view.buildCommand(item, undefined, false);
-            view.top.splice(lastPinnedIndex+1, 0,
-                            {id: item.id, title: item.title, libname: item.libname, image: item.image, icon: item.icon, svg: item.svg, mapgenre: item.mapgenre,
-                             command: command.command, params: command.params, isPinned: true, menu: [RENAME_ACTION, UNPIN_ACTION],
-                             weight: undefined==item.weight ? 10000 : item.weight, section: item.section, cancache: item.cancache});
+            var pinItem = {id: item.id, title: item.title, libname: item.libname, image: item.image, icon: item.icon, svg: item.svg, mapgenre: item.mapgenre,
+                           command: command.command, params: command.params, isPinned: true, menu: [RENAME_ACTION, UNPIN_ACTION],
+                           weight: undefined==item.weight ? 10000 : item.weight, section: item.section, cancache: item.cancache};
+            if (item.isVa) {
+                pinItem.isVa = item.isVa;
+            }
+            view.top.splice(lastPinnedIndex+1, 0, pinItem);
         }
         if (item.id==START_RANDOM_MIX_ID) {
             lmsOptions.randomMixDialogPinned = true;

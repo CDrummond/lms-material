@@ -804,6 +804,12 @@ sub _cliCommand {
     }
 
     if ($cmd eq 'map') {
+        my $va = $request->getParam('va');
+        if ($va) {
+            $request->addResult('artist_id', Slim::Schema->variousArtistsObject->id);
+            $request->setStatusDone();
+            return;
+        }
         my $genre = $request->getParam('genre');
         my $artist = $request->getParam('artist');
         my $genre_id = $request->getParam('genre_id');

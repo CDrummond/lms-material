@@ -5,6 +5,8 @@
 3. Fix resetting some colour variables when changing colour setting from 'From
    current cover'
 4. Change lsit/grid toggle icon to match LMS9.1's
+5. Allow 'Compilations' entry to be pinned, but map artist_id to LMS's current
+   ID when listing.
 
 5.9.1
 -----

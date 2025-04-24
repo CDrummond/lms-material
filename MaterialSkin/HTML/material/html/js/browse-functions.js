@@ -829,13 +829,16 @@ function browseGetRoles(view, curitem, currentRoleIds) {
 
             // Add artist entry, if current view has non-artist role
             if (validArtistRoleIds.length>0 && otherRoles.length>0) {
-                let viewHasNonArtist = false;
-                for (const rid of currentRoleIds) {
-                    if (!artistRoles.has(rid)) {
-                        viewHasNonArtist = true;
-                        break;
+                let viewHasNonArtist = currentRoleIds.size==0;
+                if (!viewHasNonArtist) {
+                    for (const rid of currentRoleIds) {
+                        if (!artistRoles.has(rid)) {
+                            viewHasNonArtist = true;
+                            break;
+                        }
                     }
                 }
+
                 if (viewHasNonArtist) {
                     let params = [ARTIST_ALBUM_TAGS, SORT_KEY+ARTIST_ALBUM_SORT_PLACEHOLDER, curitem.id, 'role_id:'+validArtistRoleIds.join(','), 'msk_show_role_id:'+ARTIST_ROLE];
                     browseAddLibId(view, params);

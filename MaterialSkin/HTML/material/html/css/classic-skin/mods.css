@@ -628,8 +628,12 @@ input[type="submit"], input[type="button"] {
  padding:6px 14px 5px 14px;
 }
 
-input[type="submit"]:hover, input[type="button"]:hover, input[type="submit"]:focus, input[type="button"]:focus, .msk-dir-btn:hover, .msk-dir-btn:focus {
+input[type="submit"]:hover, input[type="button"]:hover, input[type="submit"]:focus, input[type="button"]:focus {
  background-color: var(--pq-current-color);
+}
+
+.msk-dir-btn:hover, .msk-dir-btn:focus, #viewToggle:hover, #viewToggle:focus {
+ background-color: var(--border-color);
 }
 
 input[type="submit"]:active, input[type="button"]:active {
@@ -814,12 +818,14 @@ table td input[type=checkbox] {
 }
 
 #viewToggle {
- height: 20px!important;
- width: 20px!important;
- position: fixed!important;
- top:58px!important;
- left:20px!important;
+ height:24px!important;
+ width:24px!important;
+ position:fixed!important;
+ top:52px!important;
+ left:16px!important;
  border:none!important;
+ border-radius:50%!important;
+ padding:4px;
 }
 
 .lms-settings-section-SETUP_PLUGINS_9 div#innerSettingsBlock {

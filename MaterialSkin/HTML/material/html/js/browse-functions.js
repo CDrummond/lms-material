@@ -826,9 +826,6 @@ function browseGetRoles(view, curitem, ignoreRoles) {
             let otherRoles = []
             for (let r=0, loop=data.result.roles_loop, len=loop.length; r<len; ++r) {
                 let rid = parseInt(loop[r].role_id);
-                if (undefined!=ignoreRoles && ignoreRoles.has(rid)) {
-                    continue;
-                }
                 if (artistRoles.has(rid)) {
                     validArtistRoleIds.push(rid);
                 } else {
@@ -838,13 +835,26 @@ function browseGetRoles(view, curitem, ignoreRoles) {
 
             // Add artist entry, if current view has non-artist role
             if (validArtistRoleIds.length>0 && otherRoles.length>0) {
-                let params = [ARTIST_ALBUM_TAGS, SORT_KEY+ARTIST_ALBUM_SORT_PLACEHOLDER, curitem.id, 'role_id:'+validArtistRoleIds.join(','), 'msk_show_role_id:'+ARTIST_ROLE];
-                browseAddLibId(view, params);
+                let viewHasNonArtist = false;
+                for (const rid of ignoreRoles) {
+                    if (!artistRoles.has(rid)) {
+                        viewHasNonArtist = true;
+                        break;
+                    }
+                }
+                if (viewHasNonArtist) {
+                    let params = [ARTIST_ALBUM_TAGS, SORT_KEY+ARTIST_ALBUM_SORT_PLACEHOLDER, curitem.id, 'role_id:'+validArtistRoleIds.join(','), 'msk_show_role_id:'+ARTIST_ROLE];
+                    browseAddLibId(view, params);
+                    actions.push({title:roleDisplayName(ARTIST_ROLE, true), svg:'artist', do:{ command: ['albums'], params: params}, weight:81, stdItem:STD_ITEM_ARTIST, udr:ARTIST_ROLE});
+                }
             }
 
             // Add other non-artist roles
             for (let r=0, loop=otherRoles, len=loop.length; r<len; ++r) {
                 let rid = loop[r];
+                if (undefined!=ignoreRoles && ignoreRoles.has(rid)) {
+                    continue;
+                }
                 let params = [ARTIST_ALBUM_TAGS, SORT_KEY+ARTIST_ALBUM_SORT_PLACEHOLDER, curitem.id, 'role_id:'+rid];
                 browseAddLibId(view, params);
                 if (rid>=20) {

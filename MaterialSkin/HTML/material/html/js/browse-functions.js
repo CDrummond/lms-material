@@ -1186,7 +1186,7 @@ function browseDoClick(view, item, index, event) {
             return;
         }
     }
-    if (item.isVa) {
+    if (item.isPinned && (item.id==COMPILATIONS_ID || item.id.endsWith("::"+COMPILATIONS_ID))) {
         var field = getField(command, "artist_id:");
         if (field>=0) {
             lmsCommand("", ["material-skin", "map", "va:1"]).then(({data}) => {
@@ -1329,9 +1329,6 @@ function browseItemAction(view, act, item, index, event) {
                     copy.title=item.title;
                     copy.libname=view.libraryName;
                     copy.params.push("library_id:"+libId);
-                    if (undefined!=item.isVa) {
-                        copy.isVa = item.isVa;
-                    }
                     view.pin(copy, true);
                 } else if (2==res) {
                     view.pin(item, true);
@@ -2523,9 +2520,6 @@ function browsePin(view, item, add, mapped) {
             var pinItem = {id: item.id, title: item.title, libname: item.libname, image: item.image, icon: item.icon, svg: item.svg, mapgenre: item.mapgenre,
                            command: command.command, params: command.params, isPinned: true, menu: [RENAME_ACTION, UNPIN_ACTION],
                            weight: undefined==item.weight ? 10000 : item.weight, section: item.section, cancache: item.cancache};
-            if (item.isVa) {
-                pinItem.isVa = item.isVa;
-            }
             view.top.splice(lastPinnedIndex+1, 0, pinItem);
         }
         if (item.id==START_RANDOM_MIX_ID) {

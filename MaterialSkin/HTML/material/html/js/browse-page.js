@@ -1337,7 +1337,7 @@ var lmsBrowse = Vue.component("lms-browse", {
                 return;
             }
             lmsList(this.playerId(), this.command.command, this.command.params, 0, count, this.current.cancache).then(({data}) => {
-                var resp = parseBrowseResp(data, this.current, this.options, this.current.cancache && browseCanUseCache(this) ? cacheKey(this.command.command, this.command.params, 0, LMS_BATCH_SIZE) : undefine);
+                var resp = parseBrowseResp(data, this.current, this.options, this.current.cancache && browseCanUseCache(this) ? cacheKey(this.command.command, this.command.params, 0, LMS_BATCH_SIZE) : undefined);
                 this.items=resp.items;
                 this.listSize=resp.listSize;
                 this.jumplist=resp.jumplist;

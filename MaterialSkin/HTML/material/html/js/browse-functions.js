@@ -1290,7 +1290,9 @@ function browseAddCategories(view, item, isGenre) {
     });
 }
 
-function browseItemAction(view, act, item, index, event) {
+function browseItemAction(view, act, origItem, index, event) {
+    let item = origItem.id.startsWith("currentaction:") ? browseGetCurrent(view) : origItem;
+
     if (act==SEARCH_LIST_ACTION) {
         view.searchActive=2;
     } else if (act==SEARCH_TEXT_ACTION) {

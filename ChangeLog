@@ -9,6 +9,7 @@
    ID when listing.
 6. Fix compilation tracks in 'All tracks' when called from release-type
    header.
+7. Fix 'More...', and other actions, when browsing into other roles.
 
 5.9.1
 -----

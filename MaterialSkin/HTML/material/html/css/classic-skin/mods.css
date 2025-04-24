@@ -801,6 +801,10 @@ table td input[type=checkbox] {
 }
 
 #pluginButtonBar > span:first-of-type {
+ margin-left:12px;
+}
+
+.lms-91p #pluginButtonBar > span:first-of-type {
  margin-left:48px;
 }
 
@@ -811,10 +815,6 @@ table td input[type=checkbox] {
 
 .pluginListList {
  max-width: calc(100vw - 12px)!important;
-}
-
-.lms-91p .pluginListList { /* space for view toggle */
- max-width: calc(100vw - 48px)!important;
 }
 
 #viewToggle {

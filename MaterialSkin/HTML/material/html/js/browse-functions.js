@@ -12,8 +12,16 @@ function browseCanSelect(item) {
     return undefined!=item && (undefined!=item.stdItem || (item.menu && item.menu.length>0));
 }
 
+function browseLibId(view) {
+    return view.currentLibId ? view.currentLibId : view.$store.state.library ? view.$store.state.library : LMS_DEFAULT_LIBRARY;
+}
+
+function browseCanUseCache(view) {
+    return LMS_DEFAULT_LIBRARIES.has(""+browseLibId(view));
+}
+
 function browseAddLibId(view, params) {
-    let libId = view.currentLibId ? view.currentLibId : view.$store.state.library ? view.$store.state.library : LMS_DEFAULT_LIBRARY;
+    let libId = browseLibId(view);
     if (libId) {
         params.push("library_id:"+libId);
     }
@@ -1621,7 +1629,7 @@ function browseItemAction(view, act, item, index, event) {
             if (res) {
                 if (view.items[0].id.startsWith("playlist_id:")) { // Showing playlists, so need to get track list...
                     lmsList("", ["playlists", "tracks"], [item.id, PLAYLIST_TRACK_TAGS]).then(({data}) => {
-                        var resp = parseBrowseResp(data, item, view.options, undefined);
+                        var resp = parseBrowseResp(data, item, view.options);
                         if (resp.items.length>0) {
                             removeDuplicates(item.id, resp.items);
                         } else {
@@ -1756,7 +1764,7 @@ function browseItemAction(view, act, item, index, event) {
             view.clearSelection();
             lmsList(view.playerId(), command.command, command.params, 0, LMS_BATCH_SIZE, false, view.nextReqId()).then(({data}) => {
                 view.options.neverColapseDiscs = true;
-                var resp = parseBrowseResp(data, item, view.options, undefined, view.command, view.inGenre);
+                var resp = parseBrowseResp(data, item, view.options);
                 view.options.neverColapseDiscs = undefined;
                 if (resp.items.length<=0) {
                     return;
@@ -1875,7 +1883,7 @@ function browseItemMenu(view, item, index, event) {
         } else {
             var command = browseBuildFullCommand(view, item, item.menu[0]);
             lmsList(view.playerId(), command.command, command.params, 0, 100, false).then(({data}) => {
-                var resp = parseBrowseResp(data, item, view.options, undefined);
+                var resp = parseBrowseResp(data, item, view.options);
                 if (resp.items.length>0) {
                     item.moremenu = resp.items;
                     showMenu(view, {show:true, item:item, x:event.clientX, y:event.clientY, index:index});

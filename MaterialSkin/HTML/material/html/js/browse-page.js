@@ -954,7 +954,7 @@ var lmsBrowse = Vue.component("lms-browse", {
             var count = item.stdItem==STD_ITEM_PLAYLIST ? lmsOptions.pagedBatchSize : (item.limit ? item.limit : LMS_BATCH_SIZE);
             lmsList(this.playerId(), command.command, command.params, undefined==startIndex ? 0 : startIndex, count, item.cancache, this.nextReqId()).then(({data}) => {
                 if (this.isCurrentReq(data)) {
-                    var resp = parseBrowseResp(data, item, this.options, item.cancache ? cacheKey(command.command, command.params, 0, count) : undefined, this.command, this.inGenre);
+                    var resp = parseBrowseResp(data, item, this.options, item.cancache && browseCanUseCache(this) ? cacheKey(command.command, command.params, 0, count) : undefined);
                     this.fetchingItem = undefined;
                     this.handleListResponse(item, command, resp, prevPage, startIndex>0);
                 }
@@ -1337,7 +1337,7 @@ var lmsBrowse = Vue.component("lms-browse", {
                 return;
             }
             lmsList(this.playerId(), this.command.command, this.command.params, 0, count, this.current.cancache).then(({data}) => {
-                var resp = parseBrowseResp(data, this.current, this.options, this.current.cancache ? cacheKey(this.command.command, this.command.params, 0, LMS_BATCH_SIZE) : undefined, this.command, this.inGenre);
+                var resp = parseBrowseResp(data, this.current, this.options, this.current.cancache && browseCanUseCache(this) ? cacheKey(this.command.command, this.command.params, 0, LMS_BATCH_SIZE) : undefine);
                 this.items=resp.items;
                 this.listSize=resp.listSize;
                 this.jumplist=resp.jumplist;

@@ -1,6 +1,7 @@
 5.10.0
 ------
 1. Only show 'roles' in '...' menu, not as categories in browse list.
+2. Only cache artists and albums lists if using default library view.
 
 5.9.2
 -----

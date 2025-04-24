@@ -67,7 +67,7 @@ function setFavoritesParams(i, item) {
     }
 }
 
-function parseBrowseResp(data, parent, options, cacheKey, parentCommand, parentGenre) {
+function parseBrowseResp(data, parent, options, cacheKey) {
     // NOTE: If add key to resp, then update addToCache in utils.js
     var resp = {items: [], allTracksItem:undefined, baseActions:[], canUseGrid: false, jumplist:[], numAudioItems:0, canDrop:false, itemCustomActions:undefined, extra:undefined, numHeaders:0, ignoreRoles: new Set() };
     var allowPinning = !queryParams.party && (!LMS_KIOSK_MODE || !HIDE_FOR_KIOSK.has(PIN_ACTION));

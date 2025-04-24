@@ -7,6 +7,8 @@
 4. Change lsit/grid toggle icon to match LMS9.1's
 5. Allow 'Compilations' entry to be pinned, but map artist_id to LMS's current
    ID when listing.
+6. Fix compilation tracks in 'All tracks' when called from release-type
+   header.
 
 5.9.1
 -----

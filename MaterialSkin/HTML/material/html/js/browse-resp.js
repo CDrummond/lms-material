@@ -1267,6 +1267,7 @@ function parseBrowseResp(data, parent, options, cacheKey) {
             let otherGroupingTitle = i18n("Other");
             let numOtherGroups = 0;
             let splitIntoGroups = true;
+            let filterCompilation = undefined;
             resp.extra={};
 
             if (data.params[1].length>=4 && data.params[1][0]=="tracks") {
@@ -1288,6 +1289,8 @@ function parseBrowseResp(data, parent, options, cacheKey) {
                                 highlightRole = {lrole: BASE_ARTIST_TYPES[ridx] };
                             }
                         }
+                    } else if (param.startsWith("material_skin_filter_comp:")) {
+                        filterCompilation = parseInt(param.split(':')[1]);
                     } else if (param==MSK_REV_SORT_OPT) {
                         reverse = true;
                     } else if (param.startsWith(SORT_KEY)) {
@@ -1330,6 +1333,9 @@ function parseBrowseResp(data, parent, options, cacheKey) {
 
             for (let idx=0, loop=data.result.titles_loop, loopLen=loop.length; idx<loopLen; ++idx) {
                 let i = makeHtmlSafe(loop[idx]);
+                if (undefined!=filterCompilation && (undefined==i.compilation ? 0 : parseInt(i.compilation))!=filterCompilation) {
+                    continue;
+                }
                 let baseTitle = i.title;
                 let title = trackTitle(i);
                 let duration = parseFloat(i.duration || 0);

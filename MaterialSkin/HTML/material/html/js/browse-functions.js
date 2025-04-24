@@ -1758,7 +1758,13 @@ function browseItemAction(view, act, item, index, event) {
             if (loop[a].stdItem==STD_ITEM_ALL_TRACKS) {
                 let cmd = JSON.parse(JSON.stringify(loop[a].do));
                 if (item.header) {
-                    cmd.params.push("release_type:"+item.id.split(':')[1]);
+                    let rt = item.id.split(':')[1];
+                    if (rt=="COMPILATION") {
+                        cmd.params.push("material_skin_filter_comp:1");
+                    } else {
+                        cmd.params.push("release_type:"+rt);
+                        cmd.params.push("material_skin_filter_comp:0");
+                    }
                 }
                 view.fetchItems(browseReplaceCommandTerms(view, cmd, item),
                         {cancache:false, id:"currentaction:"+view.current.id+":"+item.id,

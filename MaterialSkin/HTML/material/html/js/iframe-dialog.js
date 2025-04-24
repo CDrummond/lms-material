@@ -576,6 +576,9 @@ function applyModifications(page, svgCol, darkUi, src) {
                 iframeInfo.settingsSelector.addEventListener("change", settingsSectionChanged);
                 settingsSectionChanged(iframeInfo.settingsSelector.value);
                 content.documentElement.classList.add("lms-settings-section-"+iframeInfo.settingsSelector.value+(LMS_VERSION<90000 || iframeInfo.settingsSelector.value!="SETUP_PLUGINS" ? "" : "_9"));
+                if (LMS_VERSION>=90100) {
+                    content.documentElement.classList.add("lms-91p");
+                }
             }
         }
 

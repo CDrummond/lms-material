@@ -119,7 +119,7 @@ var lmsBrowse = Vue.component("lms-browse", {
    <v-spacer @click="itemAction(SEARCH_LIB_ACTION, undefined, undefined, $event)" class="pointer"></v-spacer>
 
    <v-btn @click.stop="currentAction(currentActions[0], 0, $event)" flat icon class="toolbar-button" :title="undefined==currentActions[0].action ? currentActions[0].title : ACTIONS[currentActions[0].action].title" id="tbar-actions" v-if="currentActions.length==1">
-    <img v-if="undefined!=currentActions[0].action && ACTIONS[currentActions[0].action].svg" class="svg-img" :src="currentActions[0].svg | svgIcon(darkUi)"></img>
+    <img v-if="undefined!=currentActions[0].action && ACTIONS[currentActions[0].action].svg" class="svg-img" :src="ACTIONS[currentActions[0].action].svg | svgIcon(darkUi)"></img>
     <v-icon v-else-if="undefined!=currentActions[0].action">{{ACTIONS[currentActions[0].action].icon}}</v-icon>
    </v-btn>
    <v-btn :title="SEARCH_LIB_ACTION | tooltip(keyboardControl)" flat icon class="toolbar-button" @click.stop="itemAction(SEARCH_LIB_ACTION, undefined, undefined, $event)"><img class="svg-img" :src="ACTIONS[SEARCH_LIB_ACTION].svg | svgIcon(darkUi)"></img></v-btn>

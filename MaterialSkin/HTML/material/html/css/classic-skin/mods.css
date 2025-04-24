@@ -785,7 +785,7 @@ table td input[type=checkbox] {
 }
 
 #pluginButtonBar {
- padding-top:32px;
+ padding-top:20px;
  padding-bottom:4px;
  padding-left:4px;
  height:80px;
@@ -797,12 +797,29 @@ table td input[type=checkbox] {
 }
 
 #pluginButtonBar > span:first-of-type {
- margin-left:12px;
+ margin-left:48px;
 }
 
 #pluginButtonBar > span:last-of-type {
  float:right;
  margin-right:13px;
+}
+
+.pluginListList {
+ max-width: calc(100vw - 12px)!important;
+}
+
+.lms-91p .pluginListList { /* space for view toggle */
+ max-width: calc(100vw - 48px)!important;
+}
+
+#viewToggle {
+ height: 20px!important;
+ width: 20px!important;
+ position: fixed!important;
+ top:58px!important;
+ left:20px!important;
+ border:none!important;
 }
 
 .lms-settings-section-SETUP_PLUGINS_9 div#innerSettingsBlock {

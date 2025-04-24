@@ -72,7 +72,8 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
        </div>
        <div v-else-if="tab.text" v-bind:class="{'text':TRACK_TAB!=index}" v-html="tab.text"></div>
        <template v-for="(sect, sindex) in tab.sections">
-        <div class="np-sect-title" v-if="(undefined!=sect.items && sect.items.length>=sect.min) || undefined!=sect.html">{{sect.title}}<v-btn flat icon class="np-sect-toggle" v-if="undefined!=sect.grid" @click="toggleGrid(index, sindex)"><v-icon>{{ACTIONS[sect.grid ? USE_LIST_ACTION : USE_GRID_ACTION].icon}}</v-icon></v-btn></div>
+        <div class="np-sect-title" v-if="(undefined!=sect.items && sect.items.length>=sect.min) || undefined!=sect.html">{{sect.title}}<v-btn flat icon class="np-sect-toggle" v-if="undefined!=sect.grid" @click="toggleGrid(index, sindex)">
+         <img class="svg-img" :src="ACTIONS[sect.grid ? USE_LIST_ACTION : USE_GRID_ACTION].svg | svgIcon(darkUi)" loading="lazy" @dragstart.prevent="" @dragenter.prevent=""></img></v-btn></div>
         <v-list v-if="undefined!=sect.items && !sect.grid && sect.items.length>=sect.min" class="lms-list np-info-list">
          <template v-for="(item, iindex) in sect.items">
           <v-list-tile class="lms-list-item" v-bind:class="{'pq-current': (ALBUM_TAB==index && item.id==('track_id:'+infoTrack.track_id)) || (ARTIST_TAB==index && item.id==('album_id:'+infoTrack.album_id)), 'list-active':menu.show && index==menu.tab && sindex==menu.section && iindex==menu.index, 'browse-header' : item.header}" @click.stop="itemClicked(index, sindex, iindex, $event)">
@@ -136,7 +137,8 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
         </div>
         <div v-else-if="tab.text" v-bind:class="{'text':TRACK_TAB!=index}" v-html="tab.text"></div>
         <template v-for="(sect, sindex) in tab.sections">
-         <div class="np-sect-title" v-if="(undefined!=sect.items && sect.items.length>=sect.min) || undefined!=sect.html">{{sect.title}}<v-btn flat icon class="np-sect-toggle" v-if="undefined!=sect.grid" @click="toggleGrid(index, sindex)"><v-icon>{{ACTIONS[sect.grid ? USE_LIST_ACTION : USE_GRID_ACTION].icon}}</v-icon></v-btn></div>
+         <div class="np-sect-title" v-if="(undefined!=sect.items && sect.items.length>=sect.min) || undefined!=sect.html">{{sect.title}}<v-btn flat icon class="np-sect-toggle" v-if="undefined!=sect.grid" @click="toggleGrid(index, sindex)">
+          <img class="svg-img" :src="ACTIONS[sect.grid ? USE_LIST_ACTION : USE_GRID_ACTION].svg | svgIcon(darkUi)" loading="lazy" @dragstart.prevent="" @dragenter.prevent=""></img></v-btn></div>
          <v-list v-if="undefined!=sect.items && !sect.grid && sect.items.length>=sect.min" class="lms-list np-info-list">
           <template v-for="(item, iindex) in sect.items">
            <v-list-tile class="lms-list-item" v-bind:class="{'pq-current': (ALBUM_TAB==index && item.id==('track_id:'+infoTrack.track_id)) || (ARTIST_TAB==index && item.id==('album_id:'+infoTrack.album_id)), 'list-active':menu.show && index==menu.tab && sindex==menu.section && iindex==menu.index, 'browse-header' : item.header}" @click.stop="itemClicked(index, sindex, iindex, $event)">

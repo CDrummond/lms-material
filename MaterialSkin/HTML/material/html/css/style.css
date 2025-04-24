@@ -1363,7 +1363,7 @@ div.v-subheader {
  font-weight:200!important;
 }
 
-.browse-html img, .np-info-text img, .np-info-text-full img, .inline-image {
+.browse-html img, .np-info-text img:not(.svg-img), .np-info-text-full img, .inline-image {
  max-width:100% !important;
  max-height:300px !important;
  height:auto;

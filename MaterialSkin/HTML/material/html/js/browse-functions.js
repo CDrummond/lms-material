@@ -696,14 +696,14 @@ function browseHandleListResponse(view, item, command, resp, prevPage, appendIte
         view.detailedSubInfo=resp.plainsubtitle ? resp.plainsubtitle : resp.years ? resp.years : "&nbsp;";
         view.historyExtra = undefined;
         // Add non-artist role before years display
-        if (resp.years && "albums"==command.command[0] && getField(command, "work_id:")<0) {
+        if ("albums"==command.command[0] && getField(command, "work_id:")<0) {
             let showRolePos = getField(command, "msk_show_role_id");
             let rolePos = showRolePos>=0 ? showRolePos : getField(command, "role_id:");
             if (rolePos>=0) {
                 let roleName = roleDisplayName(command.params[rolePos].split(':')[1], showRolePos>=0);
                 if (undefined!=roleName) {
                     view.historyExtra = roleName;
-                    view.detailedSubInfo=roleName+SEPARATOR+view.detailedSubInfo;
+                    view.detailedSubInfo = resp.years ? roleName+SEPARATOR+view.detailedSubInfo : roleName;
                 }
             }
         }

@@ -813,14 +813,8 @@ function browseGetRoles(view, curitem, currentRoleIds) {
     browseAddLibId(view, command.params);
     lmsList('', command.command, command.params, 0, LMS_BATCH_SIZE, true, view.nextReqId()).then(({data}) => {
         logJsonMessage("RESP", data);
-        let multipleRoles = data.result.roles_loop.length>1;
-        if ( data.result.roles_loop.length==2 && 
-            (data.result.roles_loop[0].role_id==ALBUM_ARTIST_ROLE && (data.result.roles_loop[1].role_id==ARTIST_ROLE || data.result.roles_loop[1].role_id==TRACK_ARTIST_ROLE)) ||
-            (data.result.roles_loop[1].role_id==ALBUM_ARTIST_ROLE && (data.result.roles_loop[0].role_id==ARTIST_ROLE || data.result.roles_loop[0].role_id==TRACK_ARTIST_ROLE)) ) {
-             multipleRoles = false;
-        }
         let actions = [];
-        if (id==view.current.id && data.result && undefined!=data.result.roles_loop && multipleRoles) {
+        if (id==view.current.id && data.result && undefined!=data.result.roles_loop) {
             // Create lists of artist and non-artist roles
             let validArtistRoleIds = [];
             let otherRoles = []

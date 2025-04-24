@@ -5,15 +5,23 @@
  * MIT license.
  */
 
-const UDR_PLACEHOLDER = 200000000;
-const UDR_PLACEHOLDER_WEIGHT = 81;
+const ROLES_PLACEHOLDER = 200000000;
+const SERVICES_PLACEHOLDER = 300000000;
 
 function browseCanSelect(item) {
     return undefined!=item && (undefined!=item.stdItem || (item.menu && item.menu.length>0));
 }
 
+function browseLibId(view) {
+    return view.currentLibId ? view.currentLibId : view.$store.state.library ? view.$store.state.library : LMS_DEFAULT_LIBRARY;
+}
+
+function browseCanUseCache(view) {
+    return LMS_DEFAULT_LIBRARIES.has(""+browseLibId(view));
+}
+
 function browseAddLibId(view, params) {
-    let libId = view.currentLibId ? view.currentLibId : view.$store.state.library ? view.$store.state.library : LMS_DEFAULT_LIBRARY;
+    let libId = browseLibId(view);
     if (libId) {
         params.push("library_id:"+libId);
     }
@@ -133,7 +141,7 @@ function browseAddHistory(view) {
     view.history.push(prev);
 }
 
-function browseActions(view, item, args, count, showRoles, showWorks, addRolesPlaceholder, isVariousArtists) {
+function browseActions(view, item, args, count, showWorks, addRoleAndServices, isVariousArtists) {
     var actions=[];
     if ((undefined==item || undefined==item.id || !item.id.startsWith(MUSIC_ID_PREFIX)) && // Exclude 'Compilations'
         (undefined==args['artist'] || !isVariousArtists)) {
@@ -170,11 +178,6 @@ function browseActions(view, item, args, count, showRoles, showWorks, addRolesPl
                           do:{ command:["blissmixer", "mix"],
                                params:["menu:1", "useContextMenu:1", undefined!=args['album_id'] ? "album_id:"+args['album_id'] : "artist_id:"+args['artist_id']]}, weight:103});
         }
-        if (LMS_P_YT && undefined!=args['artist']) {
-            actions.push({title:/*NoTrans*/'YouTube', svg:'youtube',
-                          do:{ command: ['youtube','items'], params:['want_url:1', 'item_id:3', 'search:'+args['artist'], 'menu:youtube']},
-                          weight:110});
-        }
 
         if (undefined!=args['artist_id'] && undefined==args['album_id'] && undefined!=args['count'] && args['count']>1) {
             var params = [SORT_KEY+TRACK_SORT_PLACEHOLDER, PLAYLIST_TRACK_TAGS, 'artist_id:'+args['artist_id']];
@@ -187,7 +190,7 @@ function browseActions(view, item, args, count, showRoles, showWorks, addRolesPl
             browseAddLibId(view, params);
             actions.push({title:ACTIONS[ALL_TRACKS_ACTION].title, icon:ACTIONS[ALL_TRACKS_ACTION].icon, do:{ command: ['tracks'], params: params}, weight:80, stdItem:STD_ITEM_ALL_TRACKS});
             if (lmsOptions.supportReleaseTypes && args['multi-group']) {
-                actions.push({action:ALL_RELEASES_ACTION, weight:84});
+                actions.push({action:ALL_RELEASES_ACTION, weight:81});
             }
         } else if (undefined!=args['work_id'] && undefined!=args['composer_id'] && undefined!=args['count'] && args['count']>1) {
             var params = [SORT_KEY+TRACK_SORT_PLACEHOLDER, PLAYLIST_TRACK_TAGS, 'work_id:'+args['work_id'], args['composer_id'], undefined!=args['performance'] ? args['performance'] : 'performance:-1'];
@@ -198,28 +201,11 @@ function browseActions(view, item, args, count, showRoles, showWorks, addRolesPl
             actions.push({title:ACTIONS[ALL_TRACKS_ACTION].title, icon:ACTIONS[ALL_TRACKS_ACTION].icon, do:{ command: ['tracks'], params: params}, weight:80, stdItem:STD_ITEM_ALL_TRACKS});
         }
 
-        if (undefined!=args['artist_id']) {
-            let added = false;
-            if (showRoles && showRoles.length>0) {
-                for (let r=0, rlen=showRoles.length; r<rlen; ++r) {
-                    if (COMPOSER_ARTIST_ROLE==showRoles[r]) {
-                        var params = [SORT_KEY+TRACK_SORT_PLACEHOLDER, PLAYLIST_TRACK_TAGS, 'artist_id:'+args['artist_id'], 'role_id:2', 'material_skin_artist:'+args['artist'], 'material_skin_compositions:1'];
-                        browseAddLibId(view, params);
-                        actions.push({title:i18n('Compositions'), svg:'composer', do:{ command: ['tracks'], params: params}, weight:81, stdItem:STD_ITEM_COMPOSITION_TRACKS, udr:2});
-                    } else {
-                        let udr = lmsOptions.userDefinedRoles[showRoles[r]];
-                        if (undefined!=udr) {
-                            var params = [ARTIST_ALBUM_TAGS, SORT_KEY+ARTIST_ALBUM_SORT_PLACEHOLDER, 'artist_id:'+args['artist_id'], 'role_id:'+showRoles[r]];
-                            browseAddLibId(view, params);
-                            actions.push({title:udr.name, svg:'role-'+udr.role, do:{ command: ['albums'], params: params}, weight:82, stdItem:STD_ITEM_ARTIST, udr:showRoles[r]});
-                            added = true;
-                        }
-                    }
-                }
-            }
-            if (addRolesPlaceholder && !added) {
-                actions.push({title:"", weight:UDR_PLACEHOLDER_WEIGHT, udr:UDR_PLACEHOLDER});
-            }
+        if (undefined!=args['artist_id'] && addRoleAndServices) {
+            actions.push({title:"", weight:81, id:ROLES_PLACEHOLDER});
+        }
+        if ((undefined!=args['artist_id'] || undefined!=args['artist']) && addRoleAndServices && (LMS_P_YT || view.onlineServices.length>0)) {
+            actions.push({title:"", weight:82, id:SERVICES_PLACEHOLDER});
         }
         if (showWorks) {
             let command = {command: ['works'], params:[view.current.id]};
@@ -427,8 +413,7 @@ function browseHandleListResponse(view, item, command, resp, prevPage, appendIte
         let artist_id = listingArtistAlbums ? curitem.id.split(":")[1] : undefined;
         let album_id = listingAlbumTracks ? originalId(curitem.id).split(":")[1] : undefined;
         let work_id = listingWorkAlbums ? curitem.id.split(":")[1] : undefined;
-        let addWorksOrRoles = listingArtistAlbums && listingAlbums && LMS_VERSION>=90000 && view.items.length>0;
-        let addUserDefinedRoles = addWorksOrRoles && Object.keys(lmsOptions.userDefinedRoles).length>0;
+        let addWorksRolesServices = listingArtistAlbums && listingAlbums && LMS_VERSION>=90000 && view.items.length>0;
         if (!curitem.id.startsWith(MUSIC_ID_PREFIX)) {
             if (!listingArtistAlbums && listingAlbums && !curitem.isVa) {
                 let pos = getField(command, "artist_id");
@@ -488,8 +473,7 @@ function browseHandleListResponse(view, item, command, resp, prevPage, appendIte
                 }
                 isVariousArtists = title==i18n('Various Artists') || title==lmsOptions.variousArtistsString || title.toLowerCase()=='various artists';
                 if (isVariousArtists) {
-                    addUserDefinedRoles = false;
-                    addWorksOrRoles = false;
+                    addWorksRolesServices = false;
                 } else {
                     showWorksInMenu = LMS_VERSION>=90000 && (!lmsOptions.listWorks || !lmsOptions.showArtistWorks) && getField(view.command, "work_id:")<0;
                 }
@@ -517,14 +501,8 @@ function browseHandleListResponse(view, item, command, resp, prevPage, appendIte
                 }
             }
 
-            view.currentActions = browseActions(view, resp.items.length>0 ? item : undefined, actParams, resp.items.length, resp.showRoles, showWorksInMenu, addUserDefinedRoles,isVariousArtists);
+            view.currentActions = browseActions(view, resp.items.length>0 ? item : undefined, actParams, resp.items.length, showWorksInMenu, addWorksRolesServices, isVariousArtists);
             if (listingArtistAlbums) {
-                for (var i=0, loop=view.onlineServices, len=loop.length; i<len; ++i) {
-                    var emblem = getEmblem(loop[i].toLowerCase()+':');
-                    view.currentActions.push({title:/*!i81n*/'wimp'==loop[i] ? 'Tidal' : capitalize(loop[i]),
-                                              weight:110, svg:emblem ? emblem.name : undefined, id:loop[i], isService:true,
-                                              artist_id:artist_id});
-                }
                 if (showWorksInMenu) {
                     let command = {command:['works'], params:[curitem.id]};
                     addParentParams(view.command, command, false);
@@ -719,9 +697,10 @@ function browseHandleListResponse(view, item, command, resp, prevPage, appendIte
         view.historyExtra = undefined;
         // Add non-artist role before years display
         if (resp.years && "albums"==command.command[0] && getField(command, "work_id:")<0) {
-            let rolePos = getField(command, "role_id:");
+            let showRolePos = getField(command, "msk_show_role_id");
+            let rolePos = showRolePos>=0 ? showRolePos : getField(command, "role_id:");
             if (rolePos>=0) {
-                let roleName = roleDisplayName(command.params[rolePos].split(':')[1]);
+                let roleName = roleDisplayName(command.params[rolePos].split(':')[1], showRolePos>=0);
                 if (undefined!=roleName) {
                     view.historyExtra = roleName;
                     view.detailedSubInfo=roleName+SEPARATOR+view.detailedSubInfo;
@@ -765,12 +744,24 @@ function browseHandleListResponse(view, item, command, resp, prevPage, appendIte
             }
         }
 
-        if (addWorksOrRoles) {
+        if (addWorksRolesServices) {
             if (lmsOptions.listWorks && lmsOptions.showArtistWorks) {
                 browseAddWorks(view, curitem);
             }
-            if (addUserDefinedRoles) {
-                browseGetRoles(view, curitem);
+            browseGetRoles(view, curitem, resp.ignoreRoles);
+            if (LMS_P_YT || view.onlineServices.length>0) {
+                let actions = [];
+                for (var i=0, loop=view.onlineServices, len=loop.length; i<len; ++i) {
+                    var emblem = getEmblem(loop[i].toLowerCase()+':');
+                    actions.push({title:/*!i81n*/'wimp'==loop[i] ? 'Tidal' : capitalize(loop[i]),
+                                svg:emblem ? emblem.name : undefined, id:loop[i], isService:true,
+                                artist_id:artist_id});
+                }
+                if (LMS_P_YT) {
+                    actions.push({title:/*NoTrans*/'YouTube', svg:'youtube',
+                                do:{ command: ['youtube','items'], params:['want_url:1', 'item_id:3', 'search:'+title, 'menu:youtube']}});
+                }
+                browseReplaceAction(view, SERVICES_PLACEHOLDER, actions, i18n("Browse on"));
             }
         }
 
@@ -789,67 +780,102 @@ function browseHandleListResponse(view, item, command, resp, prevPage, appendIte
     }
 }
 
-function browseGetRoles(view, curitem) {
+function browseReplaceAction(view, id, actions, header) {
+    if (undefined==actions || actions.length<1) {
+        for (let i=view.currentActions.length-1; i>=0; --i) {
+            if (undefined!=view.currentActions[i].id && view.currentActions[i].id==id) {
+                view.currentActions.splice(i, 1);
+                break;
+            }
+        }
+    } else {
+        let insertPos = 0;
+        for (let i=view.currentActions.length-1; i>=0; --i) {
+            if (undefined!=view.currentActions[i].id && view.currentActions[i].id==id) {
+                insertPos = i;
+                view.currentActions.splice(i, 1);
+                break;
+            }
+        }
+        view.currentActions.splice(insertPos, 0, {action:HEADER, title:header});
+        insertPos+=1;
+        for (let i=actions.length-1; i>=0; --i) {
+            view.currentActions.splice(insertPos, 0, actions[i]);
+        }
+        view.currentActions.splice(insertPos+actions.length, 0, {action:DIVIDER});
+    }
+}
+
+function browseGetRoles(view, curitem, ignoreRoles) {
     let id = view.current.id;
     let command = {command:['roles'], params:[curitem.id]};
+    const artistRoles = new Set([TRACK_ARTIST_ROLE, ALBUM_ARTIST_ROLE, ARTIST_ROLE]);
     browseAddLibId(view, command.params);
     lmsList('', command.command, command.params, 0, LMS_BATCH_SIZE, true, view.nextReqId()).then(({data}) => {
         logJsonMessage("RESP", data);
-        if (id==view.current.id && data.result && undefined!=data.result.roles_loop) {
-            let actions = [];
-            let excludeRole = 0;
-            if (undefined!=view.command && undefined!=view.command.params) {
-                let val = parseInt(getParamVal(view.command, "role_id:", "x"));
-                if (!isNaN(val)) {
-                    excludeRole = val;
-                }
-            }
+        let multipleRoles = data.result.roles_loop.length>1;
+        if ( data.result.roles_loop.length==2 && 
+            (data.result.roles_loop[0].role_id==ALBUM_ARTIST_ROLE && (data.result.roles_loop[1].role_id==ARTIST_ROLE || data.result.roles_loop[1].role_id==TRACK_ARTIST_ROLE)) ||
+            (data.result.roles_loop[1].role_id==ALBUM_ARTIST_ROLE && (data.result.roles_loop[0].role_id==ARTIST_ROLE || data.result.roles_loop[0].role_id==TRACK_ARTIST_ROLE)) ) {
+             multipleRoles = false;
+        }
+        let actions = [];
+        if (id==view.current.id && data.result && undefined!=data.result.roles_loop && multipleRoles) {
+            // Create lists of artist and non-artist roles
+            let validArtistRoleIds = [];
+            let otherRoles = []
             for (let r=0, loop=data.result.roles_loop, len=loop.length; r<len; ++r) {
                 let rid = parseInt(loop[r].role_id);
-                if (rid>=20 && rid!=excludeRole) {
+                if (undefined!=ignoreRoles && ignoreRoles.has(rid)) {
+                    continue;
+                }
+                if (artistRoles.has(rid)) {
+                    validArtistRoleIds.push(rid);
+                } else {
+                    otherRoles.push(rid);
+                }
+            }
+
+            // Add artist entry, if current view has non-artist role
+            if (validArtistRoleIds.length>0 && otherRoles.length>0) {
+                let params = [ARTIST_ALBUM_TAGS, SORT_KEY+ARTIST_ALBUM_SORT_PLACEHOLDER, curitem.id, 'role_id:'+validArtistRoleIds.join(','), 'msk_show_role_id:'+ARTIST_ROLE];
+                browseAddLibId(view, params);
+            }
+
+            // Add other non-artist roles
+            for (let r=0, loop=otherRoles, len=loop.length; r<len; ++r) {
+                let rid = loop[r];
+                let params = [ARTIST_ALBUM_TAGS, SORT_KEY+ARTIST_ALBUM_SORT_PLACEHOLDER, curitem.id, 'role_id:'+rid];
+                browseAddLibId(view, params);
+                if (rid>=20) {
                     let udr = lmsOptions.userDefinedRoles[rid];
                     if (undefined!=udr) {
-                        let params = [ARTIST_ALBUM_TAGS, SORT_KEY+ARTIST_ALBUM_SORT_PLACEHOLDER, curitem.id, 'role_id:'+rid];
-                        browseAddLibId(view, params);
                         actions.push({title:udr.name, svg:'role-'+udr.role, do:{ command: ['albums'], params: params}, weight:81, stdItem:STD_ITEM_ARTIST, udr:rid});
                     }
+                } else {
+                    let title = roleDisplayName(rid, true);
+                    let svg = '';
+                    if (BAND_ARTIST_ROLE==rid) {
+                        svg = 'role-band';
+                    } else if (COMPOSER_ARTIST_ROLE==rid) {
+                        svg = 'composer';
+                    } else if (CONDUCTOR_ARTIST_ROLE==rid) {
+                        svg = 'conductor';
+                    } else {
+                        continue;
+                    }
+                    actions.push({title:title, svg:svg, do:{ command: ['albums'], params: params}, weight:81, stdItem:STD_ITEM_ARTIST, udr:rid});
                 }
             }
             if (actions.length>0) {
                 actions.sort(titleSort);
             }
-            let insertPos = 0;
-            for (let i=view.currentActions.length-1; i>=0; --i) {
-                if (undefined!=view.currentActions[i].udr && view.currentActions[i].udr>=20) {
-                    insertPos = i;
-                    view.currentActions.splice(i, 1);
-                } else if (0==insertPos && undefined!=view.currentActions[i].weight && view.currentActions[i].weight<=UDR_PLACEHOLDER_WEIGHT) {
-                    insertPos = i;
-                    break;
-                } else if (0!=insertPos) {
-                    break;
-                }
-            }
-            for (let i=actions.length-1; i>=0; --i) {
-                view.currentActions.splice(insertPos, 0, actions[i]);
-            }
-        } else {
-            // Remove placeholder
-            for (let i=view.currentActions.length-1; i>=0; --i) {
-                if (undefined!=view.currentActions[i].udr && view.currentActions[i].udr==UDR_PLACEHOLDER) {
-                    view.currentActions.splice(i, 1);
-                    break;
-                }
-            }
         }
+        browseReplaceAction(view, ROLES_PLACEHOLDER, actions, i18n("Browse by"));
     }).catch(err => {
         // Remove placeholder
-        for (let i=view.currentActions.length-1; i>=0; --i) {
-            if (undefined!=view.currentActions[i].udr && view.currentActions[i].udr==UDR_PLACEHOLDER) {
-                view.currentActions.splice(i, 1);
-                break;
-            }
-        }
+        console.log(err);
+        browseReplaceAction(view, ROLES_PLACEHOLDER);
     });
 }
 
@@ -1206,9 +1232,6 @@ function browseAddCategories(view, item, isGenre) {
     lmsCommand("", ["material-skin", "browsemodes"]).then(({data}) => {
         view.fetchingItem = undefined;
         logJsonMessage("RESP", data);
-        if (isGenre) {
-            console.log(item.text, lmsOptions.classicalGenres.has(item.title));
-        }
         var resp = parseBrowseModes(view, data, isGenre ? item.id : undefined, isGenre ? undefined : item.id, alt_id, isGenre && undefined!=lmsOptions.classicalGenres && !lmsOptions.classicalGenres.has(item.title));
         view.items = resp.items;
         view.items.sort(weightSort);
@@ -1606,7 +1629,7 @@ function browseItemAction(view, act, item, index, event) {
             if (res) {
                 if (view.items[0].id.startsWith("playlist_id:")) { // Showing playlists, so need to get track list...
                     lmsList("", ["playlists", "tracks"], [item.id, PLAYLIST_TRACK_TAGS]).then(({data}) => {
-                        var resp = parseBrowseResp(data, item, view.options, undefined);
+                        var resp = parseBrowseResp(data, item, view.options);
                         if (resp.items.length>0) {
                             removeDuplicates(item.id, resp.items);
                         } else {
@@ -1741,7 +1764,7 @@ function browseItemAction(view, act, item, index, event) {
             view.clearSelection();
             lmsList(view.playerId(), command.command, command.params, 0, LMS_BATCH_SIZE, false, view.nextReqId()).then(({data}) => {
                 view.options.neverColapseDiscs = true;
-                var resp = parseBrowseResp(data, item, view.options, undefined, view.command, view.inGenre);
+                var resp = parseBrowseResp(data, item, view.options);
                 view.options.neverColapseDiscs = undefined;
                 if (resp.items.length<=0) {
                     return;
@@ -1860,7 +1883,7 @@ function browseItemMenu(view, item, index, event) {
         } else {
             var command = browseBuildFullCommand(view, item, item.menu[0]);
             lmsList(view.playerId(), command.command, command.params, 0, 100, false).then(({data}) => {
-                var resp = parseBrowseResp(data, item, view.options, undefined);
+                var resp = parseBrowseResp(data, item, view.options);
                 if (resp.items.length>0) {
                     item.moremenu = resp.items;
                     showMenu(view, {show:true, item:item, x:event.clientX, y:event.clientY, index:index});

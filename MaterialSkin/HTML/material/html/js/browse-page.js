@@ -430,6 +430,7 @@ var lmsBrowse = Vue.component("lms-browse", {
   <v-list v-else-if="menu.currentActions">
    <template v-for="(item, index) in menu.currentActions">
     <v-divider v-if="DIVIDER==item.action"></v-divider>
+    <v-subheader v-else-if="HEADER==item.action">{{item.title}}</v-subheader>
     <v-list-tile v-else-if="!item.isListItemInMenu && item.action==ADD_TO_FAV_ACTION && isInFavorites(current)" @click="menuItemAction(REMOVE_FROM_FAV_ACTION, current, undefined, $event)">
      <v-list-tile-avatar>
       <v-icon v-if="undefined==ACTIONS[REMOVE_FROM_FAV_ACTION].svg">{{ACTIONS[REMOVE_FROM_FAV_ACTION].icon}}</v-icon>
@@ -953,7 +954,7 @@ var lmsBrowse = Vue.component("lms-browse", {
             var count = item.stdItem==STD_ITEM_PLAYLIST ? lmsOptions.pagedBatchSize : (item.limit ? item.limit : LMS_BATCH_SIZE);
             lmsList(this.playerId(), command.command, command.params, undefined==startIndex ? 0 : startIndex, count, item.cancache, this.nextReqId()).then(({data}) => {
                 if (this.isCurrentReq(data)) {
-                    var resp = parseBrowseResp(data, item, this.options, item.cancache ? cacheKey(command.command, command.params, 0, count) : undefined, this.command, this.inGenre);
+                    var resp = parseBrowseResp(data, item, this.options, item.cancache && browseCanUseCache(this) ? cacheKey(command.command, command.params, 0, count) : undefined);
                     this.fetchingItem = undefined;
                     this.handleListResponse(item, command, resp, prevPage, startIndex>0);
                 }
@@ -1336,7 +1337,7 @@ var lmsBrowse = Vue.component("lms-browse", {
                 return;
             }
             lmsList(this.playerId(), this.command.command, this.command.params, 0, count, this.current.cancache).then(({data}) => {
-                var resp = parseBrowseResp(data, this.current, this.options, this.current.cancache ? cacheKey(this.command.command, this.command.params, 0, LMS_BATCH_SIZE) : undefined, this.command, this.inGenre);
+                var resp = parseBrowseResp(data, this.current, this.options, this.current.cancache && browseCanUseCache(this) ? cacheKey(this.command.command, this.command.params, 0, LMS_BATCH_SIZE) : undefine);
                 this.items=resp.items;
                 this.listSize=resp.listSize;
                 this.jumplist=resp.jumplist;

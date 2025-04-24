@@ -69,7 +69,7 @@ function setFavoritesParams(i, item) {
 
 function parseBrowseResp(data, parent, options, cacheKey) {
     // NOTE: If add key to resp, then update addToCache in utils.js
-    var resp = {items: [], allTracksItem:undefined, baseActions:[], canUseGrid: false, jumplist:[], numAudioItems:0, canDrop:false, itemCustomActions:undefined, extra:undefined, numHeaders:0, ignoreRoles: new Set() };
+    var resp = {items: [], allTracksItem:undefined, baseActions:[], canUseGrid: false, jumplist:[], numAudioItems:0, canDrop:false, itemCustomActions:undefined, extra:undefined, numHeaders:0, currentRoleIds: new Set() };
     var allowPinning = !queryParams.party && (!LMS_KIOSK_MODE || !HIDE_FOR_KIOSK.has(PIN_ACTION));
 
     try {
@@ -1006,9 +1006,9 @@ function parseBrowseResp(data, parent, options, cacheKey) {
                             let roles = lower.split(':')[1];
                             roleId = roleIntValue(roles);
                             if (roleId>0) {
-                                resp.ignoreRoles = new Set([roleId]);
+                                resp.currentRoleIds = new Set([roleId]);
                             } else {
-                                resp.ignoreRoles=new Set(splitIntArray(roles));
+                                resp.currentRoleIds=new Set(splitIntArray(roles));
                             }
                         } else if (lower.startsWith("material_skin_role_id:")) {
                             mskRoleId = roleIntValue(lower.split(':')[1]);
@@ -1102,9 +1102,6 @@ function parseBrowseResp(data, parent, options, cacheKey) {
                 if (lmsOptions.groupByReleaseType>0) {
                     let isCompilation = undefined!=i.compilation && 1==parseInt(i.compilation) && (undefined==i.release_type || i.release_type.toUpperCase()=="ALBUM");
                     group = isCompilation ? "COMPILATION" : undefined==i.release_type ? "ALBUM" : i.release_type.toUpperCase();
-                }
-                if (0==roles.size || !roles.has(TRACK_ARTIST_ROLE)) {
-                    resp.ignoreRoles.add(TRACK_ARTIST_ROLE);
                 }
                 releaseTypes.add(group);
 

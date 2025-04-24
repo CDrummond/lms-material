@@ -748,7 +748,7 @@ function browseHandleListResponse(view, item, command, resp, prevPage, appendIte
             if (lmsOptions.listWorks && lmsOptions.showArtistWorks) {
                 browseAddWorks(view, curitem);
             }
-            browseGetRoles(view, curitem, resp.ignoreRoles);
+            browseGetRoles(view, curitem, resp.currentRoleIds);
             if (LMS_P_YT || view.onlineServices.length>0) {
                 let actions = [];
                 for (var i=0, loop=view.onlineServices, len=loop.length; i<len; ++i) {
@@ -806,7 +806,7 @@ function browseReplaceAction(view, id, actions, header) {
     }
 }
 
-function browseGetRoles(view, curitem, ignoreRoles) {
+function browseGetRoles(view, curitem, currentRoleIds) {
     let id = view.current.id;
     let command = {command:['roles'], params:[curitem.id]};
     const artistRoles = new Set([TRACK_ARTIST_ROLE, ALBUM_ARTIST_ROLE, ARTIST_ROLE]);
@@ -836,7 +836,7 @@ function browseGetRoles(view, curitem, ignoreRoles) {
             // Add artist entry, if current view has non-artist role
             if (validArtistRoleIds.length>0 && otherRoles.length>0) {
                 let viewHasNonArtist = false;
-                for (const rid of ignoreRoles) {
+                for (const rid of currentRoleIds) {
                     if (!artistRoles.has(rid)) {
                         viewHasNonArtist = true;
                         break;
@@ -852,7 +852,8 @@ function browseGetRoles(view, curitem, ignoreRoles) {
             // Add other non-artist roles
             for (let r=0, loop=otherRoles, len=loop.length; r<len; ++r) {
                 let rid = loop[r];
-                if (undefined!=ignoreRoles && ignoreRoles.has(rid)) {
+                // Don't show role menu item for a role used for this request
+                if (undefined!=currentRoleIds && currentRoleIds.has(rid)) {
                     continue;
                 }
                 let params = [ARTIST_ALBUM_TAGS, SORT_KEY+ARTIST_ALBUM_SORT_PLACEHOLDER, curitem.id, 'role_id:'+rid];

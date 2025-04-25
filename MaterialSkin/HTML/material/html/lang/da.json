@@ -92,8 +92,10 @@
 "Bitrate":"Bithastighed",
 "Black":"Sort",
 "Browse":"Musik",
+"Browse by":"Vis efter",
 "Browse modes":"Måder at gennemgå musikbiblioteket på",
 "Browse music library":"Gå på opdagelse i dit musikbibliotek",
+"Browse on":"Vis efter",
 "CD Player":"CD-afspiller",
 "Cancel":"Afbryd",
 "Change library":"Skift bibliotek",
@@ -262,6 +264,7 @@
 "Lyrion technical information":"Lyrion teknisk information",
 "MAC Address: %1":"MAC adresse: %1",
 "Main Menu":"Hovedmenu",
+"Main artist":"Hovedkunstner",
 "Main disc":"Hoved CD",
 "Manage players":"Administrer alle afspillere",
 "Manage plugins":"Udvidelsesmoduler",
@@ -680,8 +683,5 @@
 "1 Year":"1 år",
 "%1 Years":"%1 år",
 "1 day":"1 dag",
-"%1 days":"%1 dage",
-"Browse by":"",
-"Browse on":"",
-"Main artist":""
+"%1 days":"%1 dage"
 }

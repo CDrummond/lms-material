@@ -92,8 +92,10 @@
 "Bitrate":"Débit binaire",
 "Black":"Noir",
 "Browse":"Bibliothèque",
+"Browse by":"Parcourir par",
 "Browse modes":"Parcourir les modes",
 "Browse music library":"Parcourir la bibliothèque",
+"Browse on":"Naviguer sur",
 "CD Player":"Lecteur CD",
 "Cancel":"Annuler",
 "Change library":"Changer de bibliothèque",
@@ -262,6 +264,7 @@
 "Lyrion technical information":"Informations techniques Lyrion",
 "MAC Address: %1":"Adresse MAC : %1",
 "Main Menu":"Menu principal",
+"Main artist":"Artiste principal",
 "Main disc":"Disque principal",
 "Manage players":"Gérer les platines",
 "Manage plugins":"Gérer les plugins",
@@ -680,8 +683,5 @@
 "1 Year":"1 année",
 "%1 Years":"%1 années",
 "1 day":"1 jour",
-"%1 days":"%1 jours",
-"Browse by":"",
-"Browse on":"",
-"Main artist":""
+"%1 days":"%1 jours"
 }

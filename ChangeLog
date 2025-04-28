@@ -10,6 +10,7 @@
 6. Fix compilation tracks in 'All tracks' when called from release-type
    header.
 7. Fix 'More...', and other actions, when browsing into other roles.
+8. Combine 'Apps' and 'Radio' perl side, to fix errors when no radio items.
 
 5.9.1
 -----

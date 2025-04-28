@@ -214,55 +214,6 @@ async function lmsListFragment(playerid, command, params, start, fagmentSize, ba
     });
 }
 
-async function lmsListApps(playerid, command, commandId, accumulated) {
-    return lmsCommand(playerid, command, commandId).then(({data}) => {
-        logJsonMessage("RESP", data);
-        if (data && data.result && data.result.item_loop) {
-            let isApps = undefined == accumulated;
-            if (isApps) {
-                accumulated = data;
-            } else {
-                let addTuneIn = false;
-                for (let i=0, loop=data.result.item_loop, len=loop.length; i<len; ++i) {
-                    if (!loop[i]["icon-id"] || !loop[i]["icon-id"].startsWith("/plugins/TuneIn")) {
-                        accumulated.result.item_loop.push(loop[i]);
-                    } else {
-                        addTuneIn = true;
-                    }
-                }
-                if (addTuneIn) {
-                    accumulated.result.item_loop.push(
-                        {
-                            "addAction":"go",
-                            "type":"redirect",
-                            "text":"TuneIn",
-                            "svg":"/material/svg/tunein",
-                            "actions": {
-                                "go": {
-                                    "cmd":["radios"],
-                                    "params":{
-                                        "menu":"radio"
-                                    }
-                                }
-                            }
-                        });
-                }
-            }
-            if (!isApps) {
-                return new Promise(function(resolve, reject) {
-                    resolve({data:accumulated});
-                });
-            } else {
-                return lmsListApps(playerid, ["radios", 0, LMS_BATCH_SIZE, "menu:radio"], commandId, accumulated);
-            }
-        } else {
-            return new Promise(function(resolve, reject) {
-                resolve({data:accumulated});
-            });
-        }
-    });
-}
-
 async function lmsList(playerid, command, params, start, batchSize, cancache, commandId) {
     var count = undefined===batchSize ? LMS_BATCH_SIZE : Math.max(batchSize, 50);
 
@@ -270,7 +221,7 @@ async function lmsList(playerid, command, params, start, batchSize, cancache, co
         return lmsListFragment(playerid, command, params, 0, 999, count, commandId);
     }
     if (lmsOptions.combineAppsAndRadio && command.length>1 && command[0]=="myapps" && command[1]=="items") {
-        return lmsListApps(playerid, ["material-skin", "apps"], commandId);
+        return lmsCommand(playerid, ["material-skin", "apps"], commandId);
     }
 
     var cmdParams = command.slice();

@@ -3687,7 +3687,8 @@ div.v-subheader {
 .msk-is-non-touch .lms-list-sub3 .v-list__tile:hover,
 .msk-is-non-touch .v-menu__content .v-list__tile:hover,
 .msk-is-non-touch .v-navigation-drawer .v-list__tile:hover,
-.msk-is-non-touch .image-grid-item:not(.defcursor):hover {
+.msk-is-non-touch .image-grid-item:not(.defcursor):hover,
+.msk-is-non-touch .v-list__group__header:hover {
  background-color:var(--list-hover-color)!important;
 }
 /*}*/
@@ -4372,4 +4373,10 @@ div.v-subheader {
 .theme--dark .v-snack__wrapper {
  opacity:0.9;
  border:1px solid var(--tab-border-color);
+}
+
+/* group headers have some weird area that reacts to hover? Disable */
+.v-list__group__header div[role="listitem"]:hover,
+.v-list__group__header div[role="listitem"] .v-list__tile:hover {
+ background-color:transparent!important;
 }

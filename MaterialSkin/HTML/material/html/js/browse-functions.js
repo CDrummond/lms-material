@@ -780,7 +780,7 @@ function browseHandleListResponse(view, item, command, resp, prevPage, appendIte
     }
 }
 
-function browseReplaceAction(view, id, actions, header) {
+function browseReplaceAction(view, id, actions, headerText) {
     for (let i=view.currentActions.length-1; i>=0; --i) {
         if (undefined!=view.currentActions[i].id && view.currentActions[i].id==id) {
             insertPos = i;
@@ -789,12 +789,7 @@ function browseReplaceAction(view, id, actions, header) {
 
             // Add actions, if applicable
             if (undefined!=actions && actions.length>=1) {
-                view.currentActions.splice(i, 0, {action:HEADER, title:header});
-                i+=1;
-                for (let a=actions.length-1; a>=0; --a) {
-                    view.currentActions.splice(i, 0, actions[a]);
-                }
-                view.currentActions.splice(i+actions.length, 0, {action:DIVIDER});
+                view.currentActions.splice(i, 0, {action:GROUP, title:headerText, actions:actions});
             }
             return;
         }

@@ -9,6 +9,7 @@
 const DIVIDER                 = -1;
 const CUSTOM_ACTIONS          = -2;
 const HEADER                  = -3;
+const GROUP                   = -4;
 const PLAY_ACTION             = 0;
 const PLAY_ALBUM_ACTION       = 1;
 const PLAY_ALL_ACTION         = 2;

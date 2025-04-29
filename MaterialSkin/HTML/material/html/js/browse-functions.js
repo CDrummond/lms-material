@@ -761,7 +761,7 @@ function browseHandleListResponse(view, item, command, resp, prevPage, appendIte
                     actions.push({title:/*NoTrans*/'YouTube', svg:'youtube',
                                 do:{ command: ['youtube','items'], params:['want_url:1', 'item_id:3', 'search:'+title, 'menu:youtube']}});
                 }
-                browseReplaceAction(view, SERVICES_PLACEHOLDER, actions, i18n("Browse on"), "browse-on");
+                browseReplaceAction(view, SERVICES_PLACEHOLDER, actions, i18n("Browse on %1"), i18n("Browse on"), "browse-on");
             }
         }
 
@@ -780,7 +780,7 @@ function browseHandleListResponse(view, item, command, resp, prevPage, appendIte
     }
 }
 
-function browseReplaceAction(view, id, actions, headerText, key) {
+function browseReplaceAction(view, id, actions, singleText, multiText, key) {
     for (let i=view.currentActions.length-1; i>=0; --i) {
         if (undefined!=view.currentActions[i].id && view.currentActions[i].id==id) {
             insertPos = i;
@@ -789,7 +789,13 @@ function browseReplaceAction(view, id, actions, headerText, key) {
 
             // Add actions, if applicable
             if (undefined!=actions && actions.length>=1) {
-                view.currentActions.splice(i, 0, {action:GROUP, title:headerText, actions:actions, key:key, expanded:getLocalStorageBool(key+"-expanded", false)});
+                if (1==actions.length) {
+                    var copy = JSON.parse(JSON.stringify(actions[0]));
+                    copy.title = singleText.replace("%1", copy.title);
+                    view.currentActions.splice(i, 0, copy);
+                } else {
+                    view.currentActions.splice(i, 0, {action:GROUP, title:multiText, actions:actions, key:key, expanded:getLocalStorageBool(key+"-expanded", false)});
+                }
             }
             return;
         }
@@ -869,7 +875,7 @@ function browseGetRoles(view, curitem, currentRoleIds) {
                 actions.sort(titleSort);
             }
         }
-        browseReplaceAction(view, ROLES_PLACEHOLDER, actions, i18n("Browse by"), "browse-by");
+        browseReplaceAction(view, ROLES_PLACEHOLDER, actions, i18n("Browse by %1"), i18n("Browse by"), "browse-by");
     }).catch(err => {
         // Remove placeholder
         console.log(err);

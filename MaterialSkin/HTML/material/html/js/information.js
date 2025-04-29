@@ -323,6 +323,15 @@ Vue.component('lms-information-dialog', {
                                    i18n("Total artists: %1", data.result["info total artists"]),
                                    lmsOptions.supportReleaseTypes ? i18n("Total releases: %1", data.result["info total albums"]) : i18n("Total albums: %1", data.result["info total albums"]),
                                    i18n("Total tracks: %1", data.result["info total songs"])];
+                    if (undefined!=data.result["info total playlists"]) {
+                        this.library.push(i18n("Total playlists: %1", data.result["info total playlists"]));
+                    }
+                    if (undefined!=data.result["info total works"]) {
+                        this.library.push(i18n("Total works: %1", data.result["info total works"]));
+                    }
+                    if (undefined!=data.result["info total labels"]) {
+                        this.library.push(i18n("Total labels: %1", data.result["info total labels"]));
+                    }
                     if (undefined!=data.result["info total duration"]) {
                         this.library.push(i18n("Total duration: %1", formatSeconds(data.result["info total duration"], true)));
                     }

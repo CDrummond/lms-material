@@ -781,28 +781,23 @@ function browseHandleListResponse(view, item, command, resp, prevPage, appendIte
 }
 
 function browseReplaceAction(view, id, actions, header) {
-    if (undefined==actions || actions.length<1) {
-        for (let i=view.currentActions.length-1; i>=0; --i) {
-            if (undefined!=view.currentActions[i].id && view.currentActions[i].id==id) {
-                view.currentActions.splice(i, 1);
-                break;
+    for (let i=view.currentActions.length-1; i>=0; --i) {
+        if (undefined!=view.currentActions[i].id && view.currentActions[i].id==id) {
+            insertPos = i;
+            // Remove current entry
+            view.currentActions.splice(i, 1);
+
+            // Add actions, if applicable
+            if (undefined!=actions && actions.length>=1) {
+                view.currentActions.splice(i, 0, {action:HEADER, title:header});
+                i+=1;
+                for (let a=actions.length-1; a>=0; --a) {
+                    view.currentActions.splice(i, 0, actions[a]);
+                }
+                view.currentActions.splice(i+actions.length, 0, {action:DIVIDER});
             }
+            return;
         }
-    } else {
-        let insertPos = 0;
-        for (let i=view.currentActions.length-1; i>=0; --i) {
-            if (undefined!=view.currentActions[i].id && view.currentActions[i].id==id) {
-                insertPos = i;
-                view.currentActions.splice(i, 1);
-                break;
-            }
-        }
-        view.currentActions.splice(insertPos, 0, {action:HEADER, title:header});
-        insertPos+=1;
-        for (let i=actions.length-1; i>=0; --i) {
-            view.currentActions.splice(insertPos, 0, actions[i]);
-        }
-        view.currentActions.splice(insertPos+actions.length, 0, {action:DIVIDER});
     }
 }
 

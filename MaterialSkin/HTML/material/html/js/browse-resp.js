@@ -2212,6 +2212,10 @@ function parseBrowseModes(view, data, genreFilter, yearFilter, altId, excludeWor
             } else if (c.id.startsWith("myMusicArtists")) {
                 mapArtistIcon(item);
                 item.cancache = true;
+            } else if (c.id.startsWith("myMusicLabels")) {
+                item.icon = undefined;
+                item.svg = "role-label";
+                item.cancache = true;
             } else if (c.id.startsWith("myMusicAlbumsVariousArtists")) {
                 item.icon = undefined;
                 item.svg = "album-multi";

@@ -339,7 +339,7 @@ var lmsQueue = Vue.component("lms-queue", {
      <v-list-tile-title>{{ACTIONS[UNSELECT_ACTION].title}}</v-list-tile-title>
     </v-list-tile>
     <div v-else-if="action==REMOVE_ACTION && ((undefined!=menu.item.disc && menu.item.disc>0) || (undefined!=menu.item.album_id))">
-     <v-list-group v-model="menu.subactive" @click.stop="">
+     <v-list-group v-model="menuExpanded" @click.stop="">
       <template v-slot:activator><v-list-tile><v-list-tile-content><v-list-tile-title>{{ACTIONS[REMOVE_ACTION].title}}</v-list-tile-title></v-list-tile-content><v-list-tile></template>
       <template v-for="subAction in PQ_REMOVE_ACTIONS">
        <v-list-tile @click="itemAction(subAction, menu.item, menu.index, $event)" v-if="(PQ_REMOVE_DISC_ACTION==subAction && undefined!=menu.item.disc && menu.item.disc>0) || (PQ_REMOVE_ALBUM_ACTION==subAction && undefined!=menu.item.album_id) || (PQ_REMOVE_ARTIST_ACTION==subAction && undefined!=menu.item.artist_id) || PQ_REMOVE_TRACK_ACTION==subAction">
@@ -396,6 +396,7 @@ var lmsQueue = Vue.component("lms-queue", {
                      repeatOff:undefined, randomMix:undefined, shuffleAll:undefined, shuffleAlbums:undefined, shuffleOff:undefined,
                      selectMultiple:undefined, removeAll:undefined, invertSelect:undefined, dstm:undefined, actions:undefined,  },
             menu: { show:false, item: undefined, x:0, y:0, index:0},
+            menuExpanded: false,
             playlist: {name: undefined, modified: false},
             selection: new Set(),
             selectionDuration: 0,

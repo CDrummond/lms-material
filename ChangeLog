@@ -1,18 +1,19 @@
 5.10.0
 ------
-1. Only show 'roles' in '...' menu, not as categories in browse list.
-2. Only cache artists and albums lists if using default library view.
-3. Fix resetting some colour variables when changing colour setting from 'From
-   current cover'
-4. Change list/grid toggle icon to match LMS9.1's
-5. Allow 'Compilations' entry to be pinned, but map artist_id to LMS's current
-   ID when listing.
-6. Fix compilation tracks in 'All tracks' when called from release-type
-   header.
-7. Fix 'More...', and other actions, when browsing into other roles.
-8. Combine 'Apps' and 'Radio' perl side, to fix errors when no radio items.
-9. In queue menu if item is part of an album, or multi-disc, then use sub-menu
-   for remove actions.
+ 1. Only show 'roles' in '...' menu, not as categories in browse list.
+ 2. Only cache artists and albums lists if using default library view.
+ 3. Fix resetting some colour variables when changing colour setting from 'From
+    current cover'
+ 4. Change list/grid toggle icon to match LMS9.1's
+ 5. Allow 'Compilations' entry to be pinned, but map artist_id to LMS's current
+    ID when listing.
+ 6. Fix compilation tracks in 'All tracks' when called from release-type
+    header.
+ 7. Fix 'More...', and other actions, when browsing into other roles.
+ 8. Combine 'Apps' and 'Radio' perl side, to fix errors when no radio items.
+ 9. In queue menu if item is part of an album, or multi-disc, then use sub-menu
+    for remove actions.
+10. Move browse sort selection into dialog, to match queue sorting.
 
 5.9.1
 -----

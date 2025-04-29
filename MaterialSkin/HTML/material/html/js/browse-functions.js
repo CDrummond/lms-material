@@ -1925,14 +1925,55 @@ function browseHeaderAction(view, act, event, ignoreOpenMenus) {
     } else if (USE_GRID_ACTION==act) {
         view.changeLayout(true);
     } else if (ALBUM_SORTS_ACTION==act || TRACK_SORTS_ACTION==act) {
-        var sort=ALBUM_SORTS_ACTION==act ? getAlbumSort(view.command, view.inGenre) : getTrackSort(item.stdItem);
+        var currentSort=ALBUM_SORTS_ACTION==act ? getAlbumSort(view.command, view.inGenre) : getTrackSort(item.stdItem);
         var menuItems=[];
         var sorts=ALBUM_SORTS_ACTION==act ? B_ALBUM_SORTS : B_TRACK_SORTS;
         for (var i=0,len=sorts.length; i<len; ++i) {
-            menuItems.push({key:sorts[i].key, label:sorts[i].label, selected:sort.by==sorts[i].key});
+            menuItems.push({key:sorts[i].key, title:sorts[i].label, selected:currentSort.by==sorts[i].key});
         }
-        showMenu(view, {show:true, x:event ? event.clientX : window.innerWidth, y:event ? event.clientY : 52, sortItems:menuItems, reverseSort:sort.rev,
-                        isAlbums:ALBUM_SORTS_ACTION==act, name:'sort'});
+        menuItems.push({title:i18n("Descending"), checked:currentSort.rev});
+        choose(ACTIONS[act].title, menuItems).then(sort => {
+            if (undefined!=sort) {
+                if (undefined==sort.key) {
+                    var reverseSort = !currentSort.rev;
+                    var revKey = MSK_REV_SORT_OPT.split('.')[0];
+                    var revPos = -1;
+                    for (var i=0, len=view.command.params.length; i<len; ++i) {
+                        if (view.command.params[i].startsWith(SORT_KEY) || (ALBUM_SORTS_ACTION!=act && view.command.params[i].startsWith(MSK_SORT_KEY))) {
+                            sort = view.command.params[i].split(':')[1];
+                        } else if (view.command.params[i].startsWith(revKey)) {
+                            revPos = i;
+                        }
+                    }
+                    if (revPos>=0) {
+                        view.command.params.splice(revPos, 1);
+                    }
+                    if (reverseSort) {
+                        view.command.params.push(MSK_REV_SORT_OPT);
+                    }
+                    if (ALBUM_SORTS_ACTION==act) {
+                        setAlbumSort(view.command, view.inGenre, sort, reverseSort);
+                    } else {
+                        let stdItem = view.current.stdItem ? view.current.stdItem : view.current.altStdItem;
+                        setTrackSort(getTrackSort(stdItem).by, reverseSort, stdItem);
+                    }
+                    view.refreshList(false);
+                } else if (!sort.selected) {
+                    for (var i=0, len=view.command.params.length; i<len; ++i) {
+                        if (view.command.params[i].startsWith(SORT_KEY) || (ALBUM_SORTS_ACTION!=act && view.command.params[i].startsWith(MSK_SORT_KEY))) {
+                            view.command.params[i]=(ALBUM_SORTS_ACTION==act || LMS_TRACK_SORTS.has(sort.key) ? SORT_KEY : MSK_SORT_KEY)+sort.key;
+                            break;
+                        }
+                    }
+                    if (ALBUM_SORTS_ACTION==act) {
+                        setAlbumSort(view.command, view.inGenre, sort.key, currentSort.rev);
+                    } else {
+                        setTrackSort(sort.key, currentSort.rev, view.current.stdItem ? view.current.stdItem : view.current.altStdItem);
+                    }
+                    view.refreshList(false);
+                }
+            }
+        });
     } else if (VLIB_ACTION==act) {
         view.showLibMenu(event);
     } else if (undefined!=item.allid && (ADD_ACTION==act || PLAY_ACTION==act)) {

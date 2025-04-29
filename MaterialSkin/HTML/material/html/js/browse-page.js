@@ -406,19 +406,6 @@ var lmsBrowse = Vue.component("lms-browse", {
     </v-list-tile>
    </template>
   </v-list>
-  <v-list v-else-if="menu.sortItems">
-   <template v-for="(item, index) in menu.sortItems">
-    <v-list-tile @click="sortItems(item, menu.reverseSort, menu.isAlbums)">
-     <v-list-tile-avatar><v-icon small>{{item.selected ? 'radio_button_checked' :'radio_button_unchecked'}}</v-icon></v-list-tile-avatar>
-     <v-list-tile-content><v-list-tile-title>{{item.label}}</v-list-tile-title></v-list-tile-content>
-    </v-list-tile>
-   </template>
-   <v-divider v-if="undefined!=menu.reverseSort"></v-divider>
-   <v-list-tile @click="sortItems(undefined, !menu.reverseSort, menu.isAlbums)" v-if="undefined!=menu.reverseSort">
-     <v-list-tile-avatar><v-icon small>{{menu.reverseSort ? 'check_box' :'check_box_outline_blank'}}</v-icon></v-list-tile-avatar>
-     <v-list-tile-content><v-list-tile-title>{{trans.desc}}</v-list-tile-title></v-list-tile-content>
-    </v-list-tile>
-  </v-list>
   <v-list v-else-if="menu.items">
    <template v-for="(item, index) in menu.items">
     <v-list-tile @click="menuItemAction(item, undefined, undefined, $event)" v-if="undefined==item.title">
@@ -1264,45 +1251,6 @@ var lmsBrowse = Vue.component("lms-browse", {
                     });
                 }
             });
-        },
-        sortItems(sort, reverseSort, isAlbums) {
-            if (undefined==sort) {
-                var revKey = MSK_REV_SORT_OPT.split('.')[0];
-                var revPos = -1;
-                for (var i=0, len=this.command.params.length; i<len; ++i) {
-                    if (this.command.params[i].startsWith(SORT_KEY) || (!isAlbums && this.command.params[i].startsWith(MSK_SORT_KEY))) {
-                        sort = this.command.params[i].split(':')[1];
-                    } else if (this.command.params[i].startsWith(revKey)) {
-                        revPos = i;
-                    }
-                }
-                if (revPos>=0) {
-                    this.command.params.splice(revPos, 1);
-                }
-                if (reverseSort) {
-                    this.command.params.push(MSK_REV_SORT_OPT);
-                }
-                if (isAlbums) {
-                    setAlbumSort(this.command, this.inGenre, sort, reverseSort);
-                } else {
-                    let stdItem = this.current.stdItem ? this.current.stdItem : this.current.altStdItem;
-                    setTrackSort(getTrackSort(stdItem).by, reverseSort, stdItem);
-                }
-                this.refreshList(false);
-            } else if (!sort.selected) {
-                for (var i=0, len=this.command.params.length; i<len; ++i) {
-                    if (this.command.params[i].startsWith(SORT_KEY) || (!isAlbums && this.command.params[i].startsWith(MSK_SORT_KEY))) {
-                        this.command.params[i]=(isAlbums || LMS_TRACK_SORTS.has(sort.key) ? SORT_KEY : MSK_SORT_KEY)+sort.key;
-                        break;
-                    }
-                }
-                if (isAlbums) {
-                    setAlbumSort(this.command, this.inGenre, sort.key, reverseSort);
-                } else {
-                    setTrackSort(sort.key, reverseSort, this.current.stdItem ? this.current.stdItem : this.current.altStdItem);
-                }
-                this.refreshList(false);
-            }
         },
         headerAction(act, event) {
             storeClickOrTouchPos(event, this.menu);

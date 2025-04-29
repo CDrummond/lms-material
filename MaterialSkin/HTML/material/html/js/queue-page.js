@@ -10,6 +10,7 @@ const PQ_STATUS_TAGS = "tags:cdegilqtuy" + (LMS_VERSION>=90000 ? "bhz124" : "") 
 const PQ_REQUIRE_AT_LEAST_1_ITEM = new Set([PQ_SAVE_ACTION, PQ_MOVE_QUEUE_ACTION, PQ_SCROLL_ACTION, PQ_SORT_ACTION, REMOVE_DUPES_ACTION]);
 const PQ_REQUIRE_MULTIPLE_ITEMS = new Set([PQ_SCROLL_ACTION, SEARCH_LIST_ACTION, PQ_SORT_ACTION, REMOVE_DUPES_ACTION]);
 const pqGroupingMap = new Map();
+const PQ_REMOVE_ACTIONS = [PQ_REMOVE_TRACK_ACTION, PQ_REMOVE_ALBUM_ACTION, PQ_REMOVE_DISC_ACTION];
 
 function queueMakePlain(str) {
     let rating = str.indexOf(SEPARATOR+RATINGS_START);
@@ -338,24 +339,15 @@ var lmsQueue = Vue.component("lms-queue", {
     </v-list-tile>
     <v-list-group v-model="menu.subactive" v-else-if="action==REMOVE_ACTION && ((undefined!=menu.item.disc && menu.item.disc>0) || (undefined!=menu.item.album_id))" @click.stop="">
      <template v-slot:activator><v-list-tile><v-list-tile-content><v-list-tile-title>{{ACTIONS[REMOVE_ACTION].title}}</v-list-tile-title></v-list-tile-content><v-list-tile></template>
-     <v-list-tile @click="itemAction(REMOVE_ACTION, menu.item, menu.index, $event)">
-      <v-list-tile-avatar><v-icon>music_note</v-icon></v-list-tile-avatar>
-      <v-list-tile-title>{{i18n("Track")}}</v-list-tile-title>
-     </v-list-tile>
-     <v-list-tile @click="itemAction(PQ_REMOVE_ALBUM_ACTION, menu.item, menu.index, $event)">
-      <v-list-tile-avatar>
-       <v-icon v-if="undefined==ACTIONS[PQ_REMOVE_ALBUM_ACTION].svg">{{ACTIONS[PQ_REMOVE_ALBUM_ACTION].icon}}</v-icon>
-       <img v-else class="svg-img" :src="ACTIONS[PQ_REMOVE_ALBUM_ACTION].svg | svgIcon(darkUi)"></img>
-      </v-list-tile-avatar>
-      <v-list-tile-title>{{lmsOptions.supportReleaseTypes ? i18n("Release") : i18n("Album")}}</v-list-tile-title>
-     </v-list-tile>
-     <v-list-tile @click="itemAction(PQ_REMOVE_DISC_ACTION, menu.item, menu.index, $event)">
-      <v-list-tile-avatar>
-       <v-icon v-if="undefined==ACTIONS[PQ_REMOVE_DISC_ACTION].svg">{{ACTIONS[PQ_REMOVE_DISC_ACTION].icon}}</v-icon>
-       <img v-else class="svg-img" :src="ACTIONS[PQ_REMOVE_DISC_ACTION].svg | svgIcon(darkUi)"></img>
-      </v-list-tile-avatar>
-      <v-list-tile-content><v-list-tile-title>{{i18n("Disc")}}</v-list-tile-title>
-     </v-list-tile>
+     <template v-for="subAction in PQ_REMOVE_ACTIONS">
+      <v-list-tile @click="itemAction(subAction, menu.item, menu.index, $event)" v-if="(PQ_REMOVE_DISC_ACTION==subAction && undefined!=menu.item.disc && menu.item.disc>0) || (PQ_REMOVE_ALBUM_ACTION==subAction && undefined!=menu.item.album_id) || PQ_REMOVE_TRACK_ACTION==subAction">
+       <v-list-tile-avatar>
+        <v-icon v-if="undefined==ACTIONS[subAction].svg">{{ACTIONS[subAction].icon}}</v-icon>
+        <img v-else class="svg-img" :src="ACTIONS[subAction].svg | svgIcon(darkUi)"></img>
+       </v-list-tile-avatar>
+       <v-list-tile-title>{{ACTIONS[subAction].title}}</v-list-tile-title>
+      </v-list-tile>
+     </template>
      <v-divider></v-divider>
     </v-list-group>
     <v-list-tile v-else-if="action==PQ_COPY_ACTION ? browseSelection : action==MOVE_HERE_ACTION ? (selection.size>0 && !menu.item.selected) : action==PQ_ZAP_ACTION ? LMS_P_CS : action==DOWNLOAD_ACTION ? lmsOptions.allowDownload && menu.item.isLocal : (action!=PQ_PLAY_NEXT_ACTION || (menu.index!=currentIndex && menu.index!=currentIndex+1))" @click="itemAction(action, menu.item, menu.index, $event)">
@@ -1015,7 +1007,7 @@ var lmsQueue = Vue.component("lms-queue", {
                     this.clearSelection();
                     bus.$emit('playerCommand', ["playlist", "move", index, index>this.currentIndex ? this.currentIndex+1 : this.currentIndex]);
                 }
-            } else if (REMOVE_ACTION===act) {
+            } else if (REMOVE_ACTION===act || PQ_REMOVE_TRACK_ACTION==act) {
                 this.clearSelection();
                 bus.$emit('playerCommand', ["playlist", "delete", index]);
             } else if (PQ_REMOVE_ALBUM_ACTION==act) {

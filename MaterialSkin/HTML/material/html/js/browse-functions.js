@@ -1287,7 +1287,7 @@ function browseAddCategories(view, item, isGenre) {
 }
 
 function browseItemAction(view, act, origItem, index, event) {
-    let item = origItem.id.startsWith("currentaction:") ? browseGetCurrent(view) : origItem;
+    let item = undefined!=origItem && origItem.id.startsWith("currentaction:") ? browseGetCurrent(view) : origItem;
 
     if (act==SEARCH_LIST_ACTION) {
         view.searchActive=2;

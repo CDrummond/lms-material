@@ -431,17 +431,19 @@ var lmsBrowse = Vue.component("lms-browse", {
    <template v-for="(item, index) in menu.currentActions">
     <v-divider v-if="DIVIDER==item.action"></v-divider>
     <v-subheader v-else-if="HEADER==item.action">{{item.title}}</v-subheader>
-    <v-list-group v-else-if="GROUP==item.action" v-model="item.subactive" @click.stop="">
-     <template v-slot:activator><v-list-tile><v-list-tile-content><v-list-tile-title>{{item.title}}</v-list-tile-title></v-list-tile-content><v-list-tile></template>
-     <v-list-tile v-for="(subItem, subIndex) in item.actions" @click="currentAction(subItem, index+subIndex, $event)">
-      <v-list-tile-avatar>
-       <v-icon v-if="undefined==subItem.svg">{{subItem.icon}}</v-icon>
-       <img v-else class="svg-img" :src="subItem.svg | svgIcon(darkUi)"></img>
-      </v-list-tile-avatar>
-      <v-list-tile-content><v-list-tile-title>{{subItem.title}}</v-list-tile-title></v-list-tile-content>
-     </v-list-tile>
+    <div v-else-if="GROUP==item.action">
+     <v-list-group v-model="item.subactive" @click.stop="">
+      <template v-slot:activator><v-list-tile><v-list-tile-content><v-list-tile-title>{{item.title}}</v-list-tile-title></v-list-tile-content><v-list-tile></template>
+      <v-list-tile v-for="(subItem, subIndex) in item.actions" @click="currentAction(subItem, index+subIndex, $event)">
+       <v-list-tile-avatar>
+        <v-icon v-if="undefined==subItem.svg">{{subItem.icon}}</v-icon>
+        <img v-else class="svg-img" :src="subItem.svg | svgIcon(darkUi)"></img>
+       </v-list-tile-avatar>
+       <v-list-tile-content><v-list-tile-title>{{subItem.title}}</v-list-tile-title></v-list-tile-content>
+      </v-list-tile>
+     </v-list-group>
      <v-divider></v-divider>
-    </v-list-group>
+    </div>
     <v-list-tile v-else-if="!item.isListItemInMenu && item.action==ADD_TO_FAV_ACTION && isInFavorites(current)" @click="menuItemAction(REMOVE_FROM_FAV_ACTION, current, undefined, $event)">
      <v-list-tile-avatar>
       <v-icon v-if="undefined==ACTIONS[REMOVE_FROM_FAV_ACTION].svg">{{ACTIONS[REMOVE_FROM_FAV_ACTION].icon}}</v-icon>

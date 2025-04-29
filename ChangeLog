@@ -15,6 +15,7 @@
     for remove actions.
 10. Move browse sort selection into dialog, to match queue sorting.
 11. Add action to remove artist from queue.
+12. When embed iframe only copy CSS variables if this is a LMS page.
 
 5.9.1
 -----

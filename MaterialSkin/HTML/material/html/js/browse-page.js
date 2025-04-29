@@ -419,7 +419,7 @@ var lmsBrowse = Vue.component("lms-browse", {
     <v-divider v-if="DIVIDER==item.action"></v-divider>
     <v-subheader v-else-if="HEADER==item.action">{{item.title}}</v-subheader>
     <div v-else-if="GROUP==item.action">
-     <v-list-group v-model="item.subactive" @click.stop="">
+     <v-list-group v-model="item.expanded" @click.stop="">
       <template v-slot:activator><v-list-tile><v-list-tile-content><v-list-tile-title>{{item.title}}</v-list-tile-title></v-list-tile-content><v-list-tile></template>
       <v-list-tile v-for="(subItem, subIndex) in item.actions" @click="currentAction(subItem, index+subIndex, $event)">
        <v-list-tile-avatar>
@@ -1102,9 +1102,6 @@ var lmsBrowse = Vue.component("lms-browse", {
                      (((loop[i].stdItem==STD_ITEM_MAI && this.wide>=WIDE_HBTNS) || (loop[i].stdItem==STD_ITEM_MIX && this.wide>=WIDE_MIX_BTN)) && this.showDetailedSubtoolbar) ||
                      (loop[i].action==DIVIDER && (0==actions.length || actions[actions.length-1].action==DIVIDER)) ) {
                     continue;
-                }
-                if (loop[i].action==GROUP) {
-                    loop[i].subactive = false;
                 }
                 actions.push(loop[i]);
             }
@@ -2341,6 +2338,13 @@ var lmsBrowse = Vue.component("lms-browse", {
                 this.menu.selection = undefined;
                 clearTextSelection();
                 this.menu.closed = new Date().getTime();
+                if (undefined!=this.menu.currentActions) {
+                    for (let i=0, loop=this.menu.currentActions, len=loop.length; i<len; ++i) {
+                        if (undefined!=loop[i].expanded && undefined!=loop[i].key) {
+                            setLocalStorageVal(loop[i].key+'-expanded', loop[i].expanded);
+                        }
+                    }
+                }
             }
         },
         '$store.state.pinQueue': function() {

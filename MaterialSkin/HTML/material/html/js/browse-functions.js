@@ -761,7 +761,7 @@ function browseHandleListResponse(view, item, command, resp, prevPage, appendIte
                     actions.push({title:/*NoTrans*/'YouTube', svg:'youtube',
                                 do:{ command: ['youtube','items'], params:['want_url:1', 'item_id:3', 'search:'+title, 'menu:youtube']}});
                 }
-                browseReplaceAction(view, SERVICES_PLACEHOLDER, actions, i18n("Browse on"));
+                browseReplaceAction(view, SERVICES_PLACEHOLDER, actions, i18n("Browse on"), "browse-on");
             }
         }
 
@@ -780,7 +780,7 @@ function browseHandleListResponse(view, item, command, resp, prevPage, appendIte
     }
 }
 
-function browseReplaceAction(view, id, actions, headerText) {
+function browseReplaceAction(view, id, actions, headerText, key) {
     for (let i=view.currentActions.length-1; i>=0; --i) {
         if (undefined!=view.currentActions[i].id && view.currentActions[i].id==id) {
             insertPos = i;
@@ -789,7 +789,7 @@ function browseReplaceAction(view, id, actions, headerText) {
 
             // Add actions, if applicable
             if (undefined!=actions && actions.length>=1) {
-                view.currentActions.splice(i, 0, {action:GROUP, title:headerText, actions:actions});
+                view.currentActions.splice(i, 0, {action:GROUP, title:headerText, actions:actions, key:key, expanded:getLocalStorageBool(key+"-expanded", false)});
             }
             return;
         }
@@ -869,7 +869,7 @@ function browseGetRoles(view, curitem, currentRoleIds) {
                 actions.sort(titleSort);
             }
         }
-        browseReplaceAction(view, ROLES_PLACEHOLDER, actions, i18n("Browse by"));
+        browseReplaceAction(view, ROLES_PLACEHOLDER, actions, i18n("Browse by"), "browse-by");
     }).catch(err => {
         // Remove placeholder
         console.log(err);

@@ -396,7 +396,7 @@ var lmsQueue = Vue.component("lms-queue", {
                      repeatOff:undefined, randomMix:undefined, shuffleAll:undefined, shuffleAlbums:undefined, shuffleOff:undefined,
                      selectMultiple:undefined, removeAll:undefined, invertSelect:undefined, dstm:undefined, actions:undefined,  },
             menu: { show:false, item: undefined, x:0, y:0, index:0},
-            menuExpanded: false,
+            menuExpanded: getLocalStorageBool('queue-menu-expanded', false),
             playlist: {name: undefined, modified: false},
             selection: new Set(),
             selectionDuration: 0,
@@ -1774,6 +1774,9 @@ var lmsQueue = Vue.component("lms-queue", {
                     this.scrollToCurrent();
                }
             }
+        },
+        'menuExpanded': function(newVal) {
+            setLocalStorageVal('queue-menu-expanded', newVal);
         }
     },
     beforeDestroy() {

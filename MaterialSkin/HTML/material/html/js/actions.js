@@ -88,6 +88,7 @@ const ALL_TRACKS_ACTION       = 68;
 const COPY_DETAILS_ACTION     = 69;
 const NEW_RANDOM_MIX_ACTION   = 70;
 const PQ_REMOVE_TRACK_ACTION  = 71;
+const PQ_REMOVE_ARTIST_ACTION = 72;
 
 const HIDE_FOR_PARTY = new Set([DIVIDER, PLAY_ACTION, PLAY_ALBUM_ACTION, PLAY_ALL_ACTION, INSERT_ACTION, MORE_ACTION, MORE_LIB_ACTION, RENAME_ACTION, REMOVE_ACTION, EDIT_ACTION, ADD_FAV_ACTION, DELETE_ACTION, ADD_TO_FAV_ACTION, REMOVE_FROM_FAV_ACTION, SELECT_ACTION, RATING_ACTION, ADD_FAV_FOLDER_ACTION, DELETE_FAV_FOLDER_ACTION, MOVE_FAV_TO_PARENT_ACTION, UNSUB_PODCAST_ACTION, MOVE_HERE_ACTION, INSERT_ALL_ACTION, ADD_TO_PLAYLIST_ACTION, REMOVE_DUPES_ACTION, ADV_SEARCH_ACTION, SAVE_VLIB_ACTION, DOWNLOAD_ACTION, PLAY_DISC_ACTION, PLAY_PLAYLIST_ACTION, PQ_SORT_ACTION, PLAYLIST_SORT_ACTION, PQ_SAVE_ACTION, PLAY_SHUFFLE_ACTION, PLAY_SHUFFLE_ALL_ACTION]);
 
@@ -171,8 +172,8 @@ var ACTIONS=[
     {cmd:"as",           icon:"music_note"},
     {cmd:"cd",           icon:"content_copy"},
     {cmd:"nrm",          svg:"dice-plus"},
-    {cmd:"pq-rmt",       icon:"music_note"}
-
+    {cmd:"pq-rmt",       icon:"music_note"},
+    {cmd:"pq-rmar",      svg:"artist"}
 ];
 
 var PMGR_EDIT_GROUP_ACTION       = {cmd:"edit",     icon:"edit"};
@@ -237,6 +238,7 @@ function updateActionStrings() {
     ACTIONS[PQ_MOVE_QUEUE_ACTION].stitle=i18n("Transfer queue");
     ACTIONS[PQ_MOVE_QUEUE_ACTION].key=LMS_MOVE_QUEUE_KEYBOARD;
     ACTIONS[PQ_REMOVE_TRACK_ACTION].title=i18n("Track");
+    ACTIONS[PQ_REMOVE_ARTIST_ACTION].title=i18n("Artist");
     ACTIONS[PQ_REMOVE_ALBUM_ACTION].title=lmsOptions.supportReleaseTypes ? i18n("Release") : i18n("Album");
     ACTIONS[PQ_ZAP_ACTION].title=i18n("Zap");
 

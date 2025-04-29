@@ -14,6 +14,7 @@
  9. In queue menu if item is part of an album, or multi-disc, then use sub-menu
     for remove actions.
 10. Move browse sort selection into dialog, to match queue sorting.
+11. Add action to remove artist from queue.
 
 5.9.1
 -----

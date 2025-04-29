@@ -431,7 +431,7 @@ var lmsBrowse = Vue.component("lms-browse", {
    <template v-for="(item, index) in menu.currentActions">
     <v-divider v-if="DIVIDER==item.action"></v-divider>
     <v-subheader v-else-if="HEADER==item.action">{{item.title}}</v-subheader>
-    <v-list-group v-else-if="GROUP==item.action" @click.stop="">
+    <v-list-group v-else-if="GROUP==item.action" v-model="item.subactive" @click.stop="">
      <template v-slot:activator><v-list-tile><v-list-tile-content><v-list-tile-title>{{item.title}}</v-list-tile-title></v-list-tile-content><v-list-tile></template>
      <v-list-tile v-for="(subItem, subIndex) in item.actions" @click="currentAction(subItem, index+subIndex, $event)">
       <v-list-tile-avatar>
@@ -1113,6 +1113,9 @@ var lmsBrowse = Vue.component("lms-browse", {
                      (((loop[i].stdItem==STD_ITEM_MAI && this.wide>=WIDE_HBTNS) || (loop[i].stdItem==STD_ITEM_MIX && this.wide>=WIDE_MIX_BTN)) && this.showDetailedSubtoolbar) ||
                      (loop[i].action==DIVIDER && (0==actions.length || actions[actions.length-1].action==DIVIDER)) ) {
                     continue;
+                }
+                if (loop[i].action==GROUP) {
+                    loop[i].subactive = false;
                 }
                 actions.push(loop[i]);
             }

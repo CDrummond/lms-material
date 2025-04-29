@@ -188,7 +188,7 @@ function parseResp(data, showTrackNum, index, showRatings, queueAlbumStyle, queu
                               isGrpHeader: artistAlbumLinesInfo && artistAlbumLinesInfo[1],
                               image: image,
                               dimcover: undefined!=image && image.endsWith(".png") && (image==DEFAULT_COVER || image==DEFAULT_RADIO_COVER || image==RANDOMPLAY_COVER),
-                              actions: [PQ_PLAY_NOW_ACTION, PQ_PLAY_NEXT_ACTION, DIVIDER, REMOVE_ACTION, PQ_REMOVE_ALBUM_ACTION, PQ_REMOVE_DISC_ACTION, ADD_TO_PLAYLIST_ACTION, PQ_ZAP_ACTION, DOWNLOAD_ACTION, SELECT_ACTION, COPY_DETAILS_ACTION, PQ_COPY_ACTION, MOVE_HERE_ACTION, CUSTOM_ACTIONS, SHOW_IMAGE_ACTION, MORE_ACTION],
+                              actions: [PQ_PLAY_NOW_ACTION, PQ_PLAY_NEXT_ACTION, DIVIDER, REMOVE_ACTION, ADD_TO_PLAYLIST_ACTION, PQ_ZAP_ACTION, DOWNLOAD_ACTION, SELECT_ACTION, COPY_DETAILS_ACTION, PQ_COPY_ACTION, MOVE_HERE_ACTION, CUSTOM_ACTIONS, SHOW_IMAGE_ACTION, MORE_ACTION],
                               duration: duration,
                               durationStr: undefined!=duration && duration>0 ? formatSeconds(duration) : undefined,
                               key: i.id+"."+index,
@@ -336,7 +336,29 @@ var lmsQueue = Vue.component("lms-queue", {
      </v-list-tile-avatar>
      <v-list-tile-title>{{ACTIONS[UNSELECT_ACTION].title}}</v-list-tile-title>
     </v-list-tile>
-    <v-list-tile v-else-if="action==PQ_REMOVE_DISC_ACTION ? undefined!=menu.item.disc && menu.item.disc>0 : action==PQ_REMOVE_ALBUM_ACTION ? undefined!=menu.item.album_id : action==PQ_COPY_ACTION ? browseSelection : action==MOVE_HERE_ACTION ? (selection.size>0 && !menu.item.selected) : action==PQ_ZAP_ACTION ? LMS_P_CS : action==DOWNLOAD_ACTION ? lmsOptions.allowDownload && menu.item.isLocal : (action!=PQ_PLAY_NEXT_ACTION || (menu.index!=currentIndex && menu.index!=currentIndex+1))" @click="itemAction(action, menu.item, menu.index, $event)">
+    <v-list-group v-model="menu.subactive" v-else-if="action==REMOVE_ACTION && ((undefined!=menu.item.disc && menu.item.disc>0) || (undefined!=menu.item.album_id))" @click.stop="">
+     <template v-slot:activator><v-list-tile><v-list-tile-content><v-list-tile-title>{{ACTIONS[REMOVE_ACTION].title}}</v-list-tile-title></v-list-tile-content><v-list-tile></template>
+     <v-list-tile @click="itemAction(REMOVE_ACTION, menu.item, menu.index, $event)">
+      <v-list-tile-avatar><v-icon>music_note</v-icon></v-list-tile-avatar>
+      <v-list-tile-title>{{i18n("Track")}}</v-list-tile-title>
+     </v-list-tile>
+     <v-list-tile @click="itemAction(PQ_REMOVE_ALBUM_ACTION, menu.item, menu.index, $event)">
+      <v-list-tile-avatar>
+       <v-icon v-if="undefined==ACTIONS[PQ_REMOVE_ALBUM_ACTION].svg">{{ACTIONS[PQ_REMOVE_ALBUM_ACTION].icon}}</v-icon>
+       <img v-else class="svg-img" :src="ACTIONS[PQ_REMOVE_ALBUM_ACTION].svg | svgIcon(darkUi)"></img>
+      </v-list-tile-avatar>
+      <v-list-tile-title>{{lmsOptions.supportReleaseTypes ? i18n("Release") : i18n("Album")}}</v-list-tile-title>
+     </v-list-tile>
+     <v-list-tile @click="itemAction(PQ_REMOVE_DISC_ACTION, menu.item, menu.index, $event)">
+      <v-list-tile-avatar>
+       <v-icon v-if="undefined==ACTIONS[PQ_REMOVE_DISC_ACTION].svg">{{ACTIONS[PQ_REMOVE_DISC_ACTION].icon}}</v-icon>
+       <img v-else class="svg-img" :src="ACTIONS[PQ_REMOVE_DISC_ACTION].svg | svgIcon(darkUi)"></img>
+      </v-list-tile-avatar>
+      <v-list-tile-content><v-list-tile-title>{{i18n("Disc")}}</v-list-tile-title>
+     </v-list-tile>
+     <v-divider></v-divider>
+    </v-list-group>
+    <v-list-tile v-else-if="action==PQ_COPY_ACTION ? browseSelection : action==MOVE_HERE_ACTION ? (selection.size>0 && !menu.item.selected) : action==PQ_ZAP_ACTION ? LMS_P_CS : action==DOWNLOAD_ACTION ? lmsOptions.allowDownload && menu.item.isLocal : (action!=PQ_PLAY_NEXT_ACTION || (menu.index!=currentIndex && menu.index!=currentIndex+1))" @click="itemAction(action, menu.item, menu.index, $event)">
      <v-list-tile-avatar>
       <v-icon v-if="undefined==ACTIONS[action].svg">{{ACTIONS[action].icon}}</v-icon>
       <img v-else class="svg-img" :src="ACTIONS[action].svg | svgIcon(darkUi)"></img>

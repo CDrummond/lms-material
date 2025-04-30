@@ -7,7 +7,8 @@
 'use strict';
 
 function replaceNewLines(str) {
-    return str ? str.replace(/\n/g, "<br/>").replace(/\\n/g, "<br/>") : str;
+    try { return str ? str.replace(/\n/g, "<br/>").replace(/\\n/g, "<br/>") : str; }
+    catch (e) { return str; }
 }
 
 function openWindow(page) {

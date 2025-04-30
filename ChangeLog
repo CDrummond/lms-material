@@ -19,6 +19,7 @@
 13. Show total playlists, works, and labels, if supported in LMS's
     serverstatus.
 14. Add initial support for 'Record Labels' browse mode.
+15. Use URL as provided in 'updateinfo.json' for update info page.
 
 5.9.1
 -----

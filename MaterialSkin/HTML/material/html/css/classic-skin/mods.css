@@ -784,6 +784,10 @@ table td input[type=checkbox] {
  border-radius:8px;
 }
 
+#pluginListPanel.pluginListList .pluginItem div:first-of-type div:first-of-type > img:first-of-type {
+ border-radius:4px;
+}
+
 .pluginList ul.thumbWrap li.thumbWrap {
  border:solid 1px var(--border-color);
 }

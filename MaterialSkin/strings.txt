@@ -752,7 +752,7 @@ PLUGIN_MATERIAL_SKIN_USE_GROUPING
 	DE	Titel des Gruppenalbums
 	EN	Group album tracks
 	FR	Regrouper les morceaux des albums multidisques
-	NL	Groepeer album nummers
+	NL	Groepeer nummers op multi-disc albums 
 	HU	Csoportosítsa az album számait
 	ZH_CN	专辑曲目分组
 
@@ -761,7 +761,7 @@ PLUGIN_MATERIAL_SKIN_USE_GROUPING_DESC
 	EN	When an album is both multi-disc and contains work and/or grouping tags, which grouping should take preference when generating subheadings?
 	FR	Choisir le type de regroupement à privilégier lorsque les albums multidisques contiennent des tags WORK (œuvre) ou GROUPING (regroupement / interprétation d'une œuvre).
 	HU	Ha egy album egyszerre többlemezes és tartalmaz munka- és/vagy csoportosítási címkéket, melyik csoportosítás élvezzen elsőbbséget az alcímek generálásakor?
-	NL	Wanneer een album zowel uit meerdere cd's bestaat als werk- en/of groeperingstags bevat, welke groepering moet dan de voorkeur krijgen bij het genereren van onderverdelingen?
+	NL	Wanneer een album zowel uit meerdere cd's bestaat en WORK en/of GROUPING tags bevat, welke gegevens moeten dan de voorkeur krijgen bij het genereren van onderverdelingen?
 	ZH_CN	当一个专辑既包含多张光盘又包含作品和/或分组标签时，在生成副标题时应优先选择哪种分组？
 
 PLUGIN_MATERIAL_SKIN_PREFER_DISC_GROUPS
@@ -769,7 +769,7 @@ PLUGIN_MATERIAL_SKIN_PREFER_DISC_GROUPS
 	EN	Prefer disc number/disc subtitle
 	FR	Préférer le numéro de disque et le sous-titre du disque
 	HU	Lemezszám/lemezfelirat előnyben részesítése
-	NL	Voorkeur disc nummer/disc ondertitel
+	NL	Prefereer disc nummer/disc titel
 	ZH_CN	首选光盘编号/光盘子标题
 
 PLUGIN_MATERIAL_SKIN_PREFER_WORK_GROUPING_GROUPS
@@ -777,7 +777,7 @@ PLUGIN_MATERIAL_SKIN_PREFER_WORK_GROUPING_GROUPS
 	EN	Prefer work and grouping
 	FR	Préférer les tags WORK et GROUPING
 	HU	A munka és a csoportosítás előnyben részesítése
-	NL	Liever werken en groeperen
+	NL	Prefereer de gegevens in de WORK en GROUPING tags
 	ZH_CN	首选作品和分组
 
 PLUGIN_MATERIAL_SKIN_SHOW_WORKS_IN_ARTIST_ALBUM_LIST
@@ -797,9 +797,11 @@ PLUGIN_MATERIAL_SKIN_SHOW_WORKS_IN_ARTIST_ALBUM_LIST_DESC
 PLUGIN_MATERIAL_SKIN_PLAYLIST_IMAGES
 	EN	Playlist images
 	FR	Images des listes de lecture
+	NL	Afspeellijst afbeeldingen
 	ZH_CN	播放列表图像
 
 PLUGIN_MATERIAL_SKIN_PLAYLIST_IMAGES_DESC
 	EN	Display images when listing playlists. This (optionally) requires creating 600x600 JPEG images within a "material-skin/playlists" sub-folder of your Lyrion's preferences folder. Playlist images should all be lowercase letters or numbers, with all other characters removed. e.g. "R&B" is "rb.jpg", "Folk/Rock" is "folkrock.jpg". If no image is found, then the first valid image from the playlist track listing is used. Note, however, that this (using a track image) may have an effect on playlist browsing speed (as each playlist will need to be queried for its track listing, etc).
 	FR	Utiliser des images lors de l'affichage des listes de lecture. Cette fonctionnalité (facultative) nécessite la création d'images JPEG 600x600 dans un sous-dossier "material-skin/playlists" du dossier des préférences de Lyrion. Les noms des fichiers doivent être constitués uniquement de lettres minuscules ou de chiffres. Par exemple : "R&B" devient "rb.jpg", "Folk/Rock" devient "folkrock.jpg". Si aucune image n'est trouvée, la première pochette des morceaux de la liste de lecture est utilisée. Cela peut impacter la vitesse de parcours des listes de lecture car chaque liste de lecture devra être interrogée pour connaître sa liste de morceaux.
+	NL	Afbeeldingen tonen bij het weergeven van afspeellijsten. Hiervoor kan je 600x600 JPEG-afbeeldingen aanmaken in de submap "material-skin/playlists" van jouw voorkeurenmap van Lyrion. Afbeeldingen in afspeellijsten moeten allemaal uit kleine letters of cijfers bestaan. Alle andere tekens moeten worden verwijderd. bijv. "R&B" is "rb.jpg", "Folk/Rock" is "folkrock.jpg". Als er geen afbeelding wordt gevonden, wordt de eerstvolgende gevonden afbeelding van de nummers in de afspeellijst gebruikt. Houd er echter rekening mee dat dit (het gebruik van een afbeelding van een nummer) effect kan hebben op de snelheid waarmee je door de afspeellijst bladert (aangezien voor elke afspeellijst de bijbehorende lijst met nummers moet worden opgevraagd, enz.).
 	ZH_CN	列出播放列表时显示图像。这（可选）需要在LMS首选项文件夹的“material-skin/playlists”子文件夹中创建600x600的JPEG图像。播放列表图像文件名应全部为小写字母或数字，并删除所有其他字符。例如，“R&B”是“rb.jpg”，“Folk/Rock”是“folkrock.jpg”。如果没有找到图像，则使用播放列表曲目列表中的第一个有效图像。但是请注意，这（使用曲目图像）可能会对播放列表浏览速度产生影响（因为需要查询每个播放列表的曲目列表等）。

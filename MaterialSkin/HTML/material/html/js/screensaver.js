@@ -95,6 +95,15 @@ Vue.component('lms-screensaver', {
         controlClock() {
             if (this.clockEnabled) {
                 if (this.playing) {
+                    if ('shown'==this.state) {
+                        if (this.$store.state.desktopLayout) {
+                            if (!this.nowPlayingIsExpanded) {
+                                bus.$emit('expandNowPlaying', true);
+                            }
+                        } else {
+                            this.$store.commit('setPage', 'now-playing');
+                        }
+                    }
                     this.cancelAllClock(true);
                 } else {
                     this.resetClockTimer();

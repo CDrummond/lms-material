@@ -20,6 +20,8 @@
     serverstatus.
 14. Add initial support for 'Record Labels' browse mode.
 15. Use URL as provided in 'updateinfo.json' for update info page.
+16. If clock screensaver is closed due to playback being started then switch
+    to now-playing view.
 
 5.9.1
 -----

@@ -352,7 +352,7 @@
 "Playing %1 by %2":"Afspiller %1 af %2",
 "Playing %1 by %2 from %3":"Afspiller %1 af %2 fra %3",
 "Playlist has no tracks":"Afspilningskøen er tom",
-"Playlists":"Afspilningskøer",
+"Playlists":"Afspilningslister",
 "Please note, the setting here will not affect this control point. To change the library of this control point you need to use the context menu button for 'My Music', or use the 'Change library' button when browsing 'My Music'":"Bemærk at denne indstilling ikke påvirker dette kontrolpunkt. For at ændre biblioteket til dette kontrolpunkt skal du benytte context menu knappen for 'Min muik' eller bruge 'Skift bibliotek' knappen mens du kigger på 'Min musik'",
 "Plugins":"Plugins",
 "Power on all group members when playing to group.":"Tænd alle afspillere i gruppen, når der afspilles i denne",
@@ -555,8 +555,11 @@
 "Total artists: %1":"Total antal kunstnere: %1",
 "Total duration: %1":"Total varighed: %1",
 "Total genres: %1":"Total antal genrer: %1",
+"Total labels: %1":"Total antal mærker: %1",
+"Total playlists: %1":"Total antal afspilningslister: %1",
 "Total releases: %1":"Total antal udgivelser: %1",
 "Total tracks: %1":"Total antal sange : %1",
+"Total works: %1":"Total antal værker: %1",
 "Track":"Nummer",
 "Track Information":"Information om nummeret",
 "Track Number":"Albumsnummer",
@@ -683,8 +686,5 @@
 "1 Year":"1 år",
 "%1 Years":"%1 år",
 "1 day":"1 dag",
-"%1 days":"%1 dage",
-"Total labels: %1":"",
-"Total playlists: %1":"",
-"Total works: %1":""
+"%1 days":"%1 dage"
 }

@@ -82,6 +82,17 @@ Vue.component('lms-savequeue', {
             if (name.length<1) {
                 return;
             }
+            if (name!=this.currentName && this.existing.indexOf(name)>=0) {
+                confirm(i18n("A playlist named '%1' already exists, overwrite?", name), i18n("Overwrite")).then(res => {
+                    if (res) {
+                        this.saveTo(name);
+                    }
+                });
+            } else {
+                this.saveTo(name);
+            }
+        },
+        saveTo(name) {
             this.show=false;
             lmsCommand(this.$store.state.player.id, ["playlist", "save", name]).then(({data})=>{
                 if (data && data.result && data.result.writeError && 1==parseInt(data.result.writeError)) {

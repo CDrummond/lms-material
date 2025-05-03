@@ -22,6 +22,8 @@
 15. Use URL as provided in 'updateinfo.json' for update info page.
 16. If clock screensaver is closed due to playback being started then switch
     to now-playing view.
+17. Add overwrite confirmation when saving queue to an existing, but
+    different, name.
 
 5.9.1
 -----

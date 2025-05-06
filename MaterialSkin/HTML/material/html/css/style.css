@@ -4380,3 +4380,7 @@ div.v-subheader {
 .v-list__group__header div[role="listitem"] .v-list__tile:hover {
  background-color:transparent!important;
 }
+
+.v-list__group__items .v-list__tile {
+ padding-left:28px;
+}

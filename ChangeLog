@@ -24,6 +24,8 @@
     to now-playing view.
 17. Add overwrite confirmation when saving queue to an existing, but
     different, name.
+18. Fix player name highlight on now-playing page when using coloured
+    toolbars.
 
 5.9.1
 -----

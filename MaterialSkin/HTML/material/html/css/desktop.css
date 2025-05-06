@@ -292,7 +292,7 @@
 }
 
 @media (max-width:405px) {
- .maintoolbar-player-power-button, .maintoolbar-player-icon, #pq-pin-1, #pq-pin-2 {
+ .maintoolbar-player-power-button, #pq-pin-1, #pq-pin-2 {
   display:none!important;
  }
  .maintoolbar-title, .maintoolbar-subtitle {

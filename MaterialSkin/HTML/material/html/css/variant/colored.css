@@ -28,7 +28,7 @@
  background:rgba(255, 255, 255, 0.3333)!important;
 }
 
-.lms-toolbar .v-btn__content i.active-btn, .maintoolbar-player-icon, .player-status-icon {
+.lms-toolbar .v-btn__content i.active-btn, .player-status-icon {
  color:var(--light-text-color) !important;
 }
 
@@ -60,5 +60,5 @@
 }
 
 #app:not(.np-full) .v-dialog .v-card__title .v-icon {
-color:var(--light-text-color) !important;
+ color:var(--light-text-color) !important;
 }

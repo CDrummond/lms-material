@@ -368,7 +368,7 @@ var lmsQueue = Vue.component("lms-queue", {
     <div style="height:0px!important" v-else-if="(action==PQ_PIN_ACTION && (pinQueue || !desktopLayout || windowWide<2)) || (action==PQ_UNPIN_ACTION && (!pinQueue || !desktopLayout || windowWide<2))"/>
     <v-list-tile @click="headerAction(action, $event)" v-bind:class="{'disabled':(items.length<1 && PQ_REQUIRE_AT_LEAST_1_ITEM.has(action)) || (items.length<2 && PQ_REQUIRE_MULTIPLE_ITEMS.has(action))}" v-else-if="(!LMS_KIOSK_MODE || !HIDE_FOR_KIOSK.has(action)) && (action==PQ_SAVE_ACTION ? wide<2 : action!=PQ_MOVE_QUEUE_ACTION || showMoveAction)">
      <v-list-tile-avatar>
-      <v-icon v-if="action==PQ_TOGGLE_VIEW_ACTION && !albumStyle">music_note</v-icon>
+      <v-icon v-if="action==PQ_TOGGLE_VIEW_ACTION && albumStyle">music_note</v-icon>
       <v-icon v-else-if="undefined==ACTIONS[action].svg">{{ACTIONS[action].icon}}</v-icon>
       <img v-else class="svg-img" :src="ACTIONS[action].svg | svgIcon(darkUi)"></img>
      </v-list-tile-avatar>

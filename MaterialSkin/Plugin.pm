@@ -47,7 +47,16 @@ my $log = Slim::Utils::Log->addLogCategory({
 my $prefs = preferences('plugin.material-skin');
 my $serverprefs = preferences('server');
 my $skinMgr;
+
 my $listOfTranslations = "";
+my $haveDarkLogic = 0;
+my $osName = "";
+my $pluginVersion = "";
+my $windowTitle = "";
+my $lmsVersion = 0;
+my $hideSettings = "";
+my $kioskMode = 0;
+my $hideForKiosk  = '';
 my @listOfRoles = ();
 
 use constant RANDOM_MIX_EXT => '.mix';
@@ -170,7 +179,7 @@ sub initPlugin {
             allowDownload => 0,
             commentAsDiscTitle => 0,
             showComment => 0,
-            pagedBatchSize => lmsVersion()>=80400 ? 250 : 100,
+            pagedBatchSize => $lmsVersion>=80400 ? 250 : 100,
             noArtistFilter => 1,
             releaseTypeOrder => '',
             genreImages => 0,
@@ -201,7 +210,7 @@ sub initPlugin {
             allowDownload => 0,
             commentAsDiscTitle => 0,
             showComment => 0,
-            pagedBatchSize => lmsVersion()>=80400 ? 250 : 100,
+            pagedBatchSize => $lmsVersion>=80400 ? 250 : 100,
             noArtistFilter => 1,
             releaseTypeOrder => '',
             genreImages => 0,
@@ -286,83 +295,42 @@ sub initPlugin {
     $class->initCLI();
     $class->initTranslationList();
     $class->initRoleList();
+    $class->initOthers();
     if (Slim::Utils::Versions->compareVersions($::VERSION, '8.4.0') < 0) {
         Slim::Utils::Timers::setTimer(undef, Time::HiRes::time() + 15, \&_checkUpdates);
     }
 }
 
-sub pluginVersion {
-    my ($class) = @_;
-    my $version = Slim::Utils::PluginManager->dataForPlugin($class)->{version};
-
-    if ($version eq 'DEVELOPMENT') {
-        # Try to get the git revision from which we're running
-        if (my ($skinDir) = grep /MaterialSkin/, @{Slim::Web::HTTP::getSkinManager()->_getSkinDirs() || []}) {
-            my $revision = `cd $skinDir && git show -s --format=%h\\|%ci 2> /dev/null`;
-            if ($revision =~ /^([0-9a-f]+)\|(\d{4}-\d\d-\d\d.*)/i) {
-                $version = 'GIT-' . $1;
-            }
-        }
-    }
-
-    if ($version eq 'DEVELOPMENT') {
-        use POSIX qw(strftime);
-        my $datestring = strftime("%Y-%m-%d-%H-%M-%S", localtime);
-        $version = "DEV-${datestring}";
-    }
-
-    return $version;
+sub getPluginVersion {
+    return $pluginVersion;
 }
 
-sub lmsVersion {
-    my @parts = split /\./, $::VERSION;
-    my $ver = 0;
-    foreach my $p (@parts) {
-        $ver *= 100;
-        $ver += int($p);
-    }
-    return $ver;
+sub getLmsVersion {
+    return $lmsVersion;
 }
 
-sub windowTitle {
-    my $title = $prefs->get('windowTitle');
-    if (!$title || $title eq '') {
-        return 'Lyrion Music Server';
-    }
-    return $title;
+sub getWindowTitle {
+    return $windowTitle;
 }
 
-sub hideSettings {
-    my $hide = $prefs->get('hideSettings');
-    if (!$hide || $hide eq '') {
-        return '';
-    }
-    return $hide;
+sub getHideSettings {
+    return $hideSettings;
 }
 
-sub kioskMode {
-    my $mode = $prefs->get('kioskMode');
-    if (!$mode || $mode eq '') {
-        return 0;
-    }
-    return int($mode);
+sub getKioskMode {
+    return $kioskMode;
 }
 
-sub hideForKiosk {
-    my $hide = $prefs->get('hideForKiosk');
-    if (!$hide) {
-        return '9, 10, 11, 12, 13, 14, 15, 16, 20, 25, 26, 27, 29, 30, 41, 42, 49, 50, 56, 57';
-    }
-    return $hide;
+sub getHideForKiosk {
+    return $hideForKiosk;
 }
 
-sub skinLanguages {
+sub getSkinLanguages {
     return $listOfTranslations;
 }
 
-sub haveDarkLogic {
-    my %skins = Slim::Web::HTTP::skins();
-    return $skins{DARKLOGIC} ? 1 : 0;
+sub getHaveDarkLogic {
+    return $haveDarkLogic;
 }
 
 sub readIntPref {
@@ -398,8 +366,8 @@ sub readStringPref {
     return $prefval;
 }
 
-sub osName {
-    return Slim::Utils::OSDetect::details()->{'osName'};
+sub getOsName {
+    return $osName;
 }
 
 sub initCLI {
@@ -453,6 +421,61 @@ sub initRoleList() {
     # has text of role - so want largest strings first.
     @listOfRoles = sort { length($a) <=> length($b) } @listOfRoles;
     @listOfRoles = reverse(@listOfRoles);
+}
+
+sub initOthers {
+    my ($class) = @_;
+
+    my %skins = Slim::Web::HTTP::skins();
+    $haveDarkLogic = $skins{DARKLOGIC} ? 1 : 0;
+
+    $osName = Slim::Utils::OSDetect::details()->{'osName'};
+
+    $pluginVersion = Slim::Utils::PluginManager->dataForPlugin($class)->{version};
+
+    if ($pluginVersion eq 'DEVELOPMENT') {
+        # Try to get the git revision from which we're running
+        if (my ($skinDir) = grep /MaterialSkin/, @{Slim::Web::HTTP::getSkinManager()->_getSkinDirs() || []}) {
+            my $revision = `cd $skinDir && git show -s --format=%h\\|%ci 2> /dev/null`;
+            if ($revision =~ /^([0-9a-f]+)\|(\d{4}-\d\d-\d\d.*)/i) {
+                $pluginVersion = 'GIT-' . $1;
+            }
+        }
+    }
+
+    if ($pluginVersion eq 'DEVELOPMENT') {
+        use POSIX qw(strftime);
+        my $datestring = strftime("%Y-%m-%d-%H-%M-%S", localtime);
+        $pluginVersion = "DEV-${datestring}";
+    }
+
+    $windowTitle = $prefs->get('windowTitle');
+    if (!$windowTitle || $windowTitle eq '') {
+        $windowTitle = 'Lyrion Music Server';
+    }
+
+    my @parts = split /\./, $::VERSION;
+    foreach my $p (@parts) {
+        $lmsVersion *= 100;
+        $lmsVersion += int($p);
+    }
+
+    $hideSettings = $prefs->get('hideSettings');
+    if (!$hideSettings) {
+        $hideSettings = '';
+    }
+
+    my $mode = $prefs->get('kioskMode');
+    if (!$mode || $mode eq '') {
+        $kioskMode = 0;
+    } else {
+        $kioskMode = int($mode);
+    }
+
+    $hideForKiosk = $prefs->get('hideForKiosk');
+    if (!$hideForKiosk) {
+        $hideForKiosk = '9, 10, 11, 12, 13, 14, 15, 16, 20, 25, 26, 27, 29, 30, 41, 42, 49, 50, 56, 57';
+    }
 }
 
 sub _getUrlQueryParam {

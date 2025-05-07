@@ -592,8 +592,8 @@ function applyModifications(page, svgCol, darkUi, src) {
             }
         }
 
-        if ('dserver'==page) {
-            let cancelBtn = content.getElementById("cancel");
+        if ('dserver'==page || 'dlserver'==page) {
+            let cancelBtn = content.getElementById('dlserver'==page ? "ext-gen50" : "cancel");
             if (cancelBtn!=undefined) {
                 cancelBtn.onclick = function() {
                     bus.$emit('iframe-close');
@@ -711,7 +711,7 @@ Vue.component('lms-iframe-dialog', {
     template: `
 <div id="iframe-page">
  <v-dialog v-model="show" v-if="show" persistent no-click-animation scrollable fullscreen>
-  <v-card v-bind:class="{'def-server':'dserver'==page}">
+  <v-card v-bind:class="{'def-server':'dserver'==page, 'dark-logic':'dlserver'==page}">
    <v-card-title class="settings-title">
     <v-toolbar app-data class="dialog-toolbar" @mousedown="mouseDown" id="iframe-toolbar">
      <lms-windowcontrols v-if="queryParams.nativeTitlebar && queryParams.tbarBtnsPos=='l'"></lms-windowcontrols>
@@ -792,7 +792,7 @@ Vue.component('lms-iframe-dialog', {
             // Delay setting URL for 50ms - otherwise get two requests, first is cancelled...
             // ...no idea why!
             if (lmsOptions.useDefaultForSettings==1 && window.innerWidth>=MIN_DEF_SETTINGS_WIDTH && page.indexOf("server/basic.html")>0) {
-                page = page.replace("material/settings/server/basic.html", "Default/settings/index.html");
+                page = page.replace("material/settings/server/basic.html", (LMS_DARK_LOGIC==1 && this.$store.state.darkUi ? "DarkLogic" : "Default")+"/settings/index.html");
                 if (this.$store.state.player) {
                     page+="?player="+this.$store.state.player.id;
                 }
@@ -804,13 +804,15 @@ Vue.component('lms-iframe-dialog', {
                                 ? "server"
                                 : page.indexOf("Default/settings/index.html")>0
                                     ? "dserver"
-                                    : page.startsWith("plugins/") && (page.indexOf("?player=")>0 || page.indexOf("&player=")>0)
-                                        ? "extras"
-                                       : page == '/material/html/docs/index.html'
-                                            ? "lms" // tech info, or 'extra' entry
-                                            : page == '/material/html/material-skin/index.html'
-                                                ? "help"
-                                                : "other";
+                                    : page.indexOf("DarkLogic/settings/index.html")
+                                        ? "dlserver"
+                                        : page.startsWith("plugins/") && (page.indexOf("?player=")>0 || page.indexOf("&player=")>0)
+                                            ? "extras"
+                                            : page == '/material/html/docs/index.html'
+                                                ? "lms" // tech info, or 'extra' entry
+                                                : page == '/material/html/material-skin/index.html'
+                                                    ? "help"
+                                                    : "other";
             this.show = true;
             this.showMenu = false;
             this.choiceMenu = {show:false, x:0}
@@ -948,7 +950,7 @@ Vue.component('lms-iframe-dialog', {
             this.src = undefined;
             iframeInfo.content=undefined;
             bus.$emit('iframeClosed', this.page=='player');
-            if (this.page=='server' || this.page=='dserver') {
+            if (this.page=='server' || this.page=='dserver' || this.page=='dlserver') {
                 if (LMS_VERSION>=80400) {
                     bus.$emit('refreshServerStatus');
                 } else {
@@ -975,7 +977,7 @@ Vue.component('lms-iframe-dialog', {
             } else {
                 confirm(act.text, act.confirm).then(res => {
                     if (res) {
-                        lmsCommand("server"==this.page || "dserver"==this.page ? "" : this.$store.state.player.id, act.cmd);
+                        lmsCommand("server"==this.page || "dserver"==this.page || "dlserver"==this.page ? "" : this.$store.state.player.id, act.cmd);
                         this.close();
                     }
                 });

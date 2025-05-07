@@ -385,7 +385,7 @@ function removeDuplicates(playistId, items) {
 
 function openServerSettings(serverName, showHome, path) {
     if (lmsOptions.useDefaultForSettings==2 && window.innerWidth>=MIN_DEF_SETTINGS_WIDTH) {
-        openWindow("/Default/settings/index.html" + (bus.$store.state.player ? "?player=" + bus.$store.state.player.id : ""));
+        openWindow("/"+(LMS_DARK_LOGIC==1 && bus.$store.state.darkUi ? "DarkLogic" : "Default")+"/settings/index.html" + (bus.$store.state.player ? "?player=" + bus.$store.state.player.id : ""));
         return;
     }
     let pathToUse = undefined==path

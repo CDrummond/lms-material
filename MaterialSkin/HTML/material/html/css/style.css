@@ -3000,7 +3000,13 @@ div.v-subheader {
  top:calc(var(--top-pad) + 4px)!important;
  height:calc(var(--100vh) - (var(--all-pad) + 4px))!important;
 }
-.def-server .dialog-toolbar {
+.dark-logic iframe {
+ top:calc(var(--top-pad) - 2px)!important;
+ left:-18px;
+ width:calc(100vw + 32px);
+ height:calc(var(--100vh) + 26px - var(--all-pad))!important;
+}
+.def-server .dialog-toolbar, .dark-logic .dialog-toolbar {
  z-index:2;
 }
 

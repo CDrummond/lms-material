@@ -360,6 +360,11 @@ sub skinLanguages {
     return $listOfTranslations;
 }
 
+sub haveDarkLogic {
+    my %skins = Slim::Web::HTTP::skins();
+    return $skins{DARKLOGIC} ? 1 : 0;
+}
+
 sub readIntPref {
     my $class = shift;
     my $scope = shift;

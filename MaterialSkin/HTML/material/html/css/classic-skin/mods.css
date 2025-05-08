@@ -86,6 +86,12 @@ body {
  margin-right:auto;
 }
 
+@media (max-width: 1599px) {
+ body {
+  margin-right:2px;
+ }
+}
+
 td input { /* Fix entry/combo alignment in additional browse modes */
  margin-bottom:-1px;
  padding-bottom:0px;
@@ -808,25 +814,22 @@ table td input[type=checkbox] {
  margin-left:12px;
 }
 
-.lms-91p #pluginButtonBar > span:first-of-type {
- margin-left:48px;
-}
-
 #pluginButtonBar > span:last-of-type {
  float:right;
  margin-right:13px;
 }
 
 .pluginListList {
- max-width: calc(100vw - 12px)!important;
+ max-width: calc(100vw - 46px)!important;
+ overflow-x:hidden; /* At some zoom levels get scrollbars??? */
 }
 
 #viewToggle {
  height:24px!important;
  width:24px!important;
- position:fixed!important;
- top:52px!important;
- left:16px!important;
+ position:relative!important;
+ top:4px!important;
+ left:12px!important;
  border:none!important;
  border-radius:50%!important;
  padding:4px;
@@ -864,6 +867,14 @@ table td input[type=checkbox] {
  }
  .lms-settings-section-SETUP_PLUGINS_9 div#innerSettingsBlock {
   height:calc((var(--vh, 1vh)*100) - (var(--all-pad) + 281px))!important;
+ }
+ #viewToggle {
+  position:fixed!important;
+  top:52px!important;
+  left:16px!important;
+ }
+ .lms-91p #pluginButtonBar > span:first-of-type {
+  margin-left:48px;
  }
 }
 

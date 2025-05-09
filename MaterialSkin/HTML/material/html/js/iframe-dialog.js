@@ -804,7 +804,7 @@ Vue.component('lms-iframe-dialog', {
                                 ? "server"
                                 : page.indexOf("Default/settings/index.html")>0
                                     ? "dserver"
-                                    : page.indexOf("DarkLogic/settings/index.html")
+                                    : page.indexOf("DarkLogic/settings/index.html")>0
                                         ? "dlserver"
                                         : page.startsWith("plugins/") && (page.indexOf("?player=")>0 || page.indexOf("&player=")>0)
                                             ? "extras"

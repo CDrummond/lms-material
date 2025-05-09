@@ -7,6 +7,7 @@
 'use strict';
 
 const SLOW_PAGES = new Set(['SETUP_PLUGINS']);
+const LMS_PAGES =  new Set(['server', 'player', 'extras', 'lms', 'help']);
 
 let useDefaultSkinForServerSettings = true;
 
@@ -555,8 +556,7 @@ function applyModifications(page, svgCol, darkUi, src) {
             return;
         }
 
-        var isLms = new Set(['server', 'player', 'extras', 'lms', 'help']).has(page);
-        if (isLms) {
+        if (LMS_PAGES.has(page)) {
             copiedVars = copyVars(iframe);
             content.documentElement.getElementsByTagName("body")[0].classList.add(IS_MOBILE ? "msk-is-touch" : "msk-is-non-touch");
             if (darkUi) {
@@ -880,7 +880,7 @@ Vue.component('lms-iframe-dialog', {
             }
         }.bind(this));
         bus.$on('colorChanged', function() {
-            if (this.show) {
+            if (this.show && LMS_PAGES.has(this.page)) {
                 copyVars(document.getElementById("embeddedIframe"));
             }
         }.bind(this));

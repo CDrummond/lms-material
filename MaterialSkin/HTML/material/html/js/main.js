@@ -256,7 +256,7 @@ var app = new Vue({
                     if (keyboardShown != lmsApp.keyboardShown) {
                         if (keyboardShown) {
                             lmsApp.heights = [];
-                            let vars = ['--bottom-toolbar-height', '--desktop-npbar-height', '--mobile-npbar-height-thin', '--mobile-npbar-height-thick', '--mobile-npbar-height'];
+                            let vars = ['--bottom-toolbar-height', '--desktop-npbar-height', '--mobile-npbar-height-thin', '--mobile-npbar-height-thick', '--mobile-npbar-height', '--bottom-pad', '--desktop-np-bottom-pad'];
                             for (let v=0, len=vars.length; v<len; ++v) {
                                 lmsApp.heights.push([vars[v], getComputedStyle(document.documentElement).getPropertyValue(vars[v])]);
                             }
@@ -273,12 +273,6 @@ var app = new Vue({
                         for (let v=0, list=lmsApp.heights, len=list.length; v<len; ++v) {
                             if (undefined!=list[v][1]) {
                                 document.documentElement.style.setProperty(list[v][0], keyboardShown ? '0px' : list[v][1]);
-                            }
-                        }
-                        if (lmsApp.botPad>0) {
-                            document.documentElement.style.setProperty('--bottom-pad', (keyboardShown ? 0 : lmsApp.botPad) + 'px');
-                            if (lmsApp.botPad>6) {
-                                document.documentElement.style.setProperty('--desktop-np-bottom-pad', (keyboardShown ? 0 : (lmsApp.botPad-6)) + 'px');
                             }
                         }
                     }

@@ -30,6 +30,8 @@
     'Default' is configured for server settings.
 20. Add 'Wefunk Radio' to global search.
 21. Sort global search items by title.
+22. Add a modified verison of Classic's prototype.js to not lose focus on text
+    edits when pressing 'Enter'
 
 5.9.1
 -----

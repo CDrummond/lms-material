@@ -6,7 +6,7 @@
  */
 'use strict';
 
-const SEARCH_OTHER = new Set(["band's campout", 'bbc sounds', 'deezer', 'qobuz', 'spotty', 'tidal', 'youtube']);
+const SEARCH_OTHER = new Set(["band's campout", 'bbc sounds', 'deezer', 'qobuz', 'spotty', 'tidal', 'youtube', 'wefunk radio']);
 
 const SEARCH_ARTISTS_CAT = 1;
 const SEARCH_ALBUMS_CAT = 2;
@@ -205,6 +205,7 @@ Vue.component('lms-search-field', {
                             }
                         }
                         if (resp.items.length>0) {
+                            resp.items.sort(titleSort);
                             this.results.push({command:command, params:command.params, resp:resp});
                         }
                         this.doSearch();

@@ -8,6 +8,7 @@
 
 const SLOW_PAGES = new Set(['SETUP_PLUGINS']);
 const LMS_PAGES =  new Set(['server', 'player', 'extras', 'lms', 'help']);
+const LMS_STD_SETTINGS_PAGES =  new Set(['server', 'player']);
 
 let useDefaultSkinForServerSettings = true;
 
@@ -926,21 +927,39 @@ Vue.component('lms-iframe-dialog', {
                 bus.$emit('browse-home');
             }
         },
-        close() {
-            if (iframeInfo.settingModified) {
-                confirm(i18n("Some settings were changed. Do you want to save them?"), i18n('Save'), i18n('Cancel'), i18n('Discard')).then(res => {
-                    if (0==res) { // Cancel
-                        return;
+        confirmClose() {
+            confirm(i18n("Some settings were changed. Do you want to save them?"), i18n('Save'), i18n('Cancel'), i18n('Discard')).then(res => {
+                if (0==res) { // Cancel
+                    return;
+                }
+                if (1==res) { // Save
+                    document.getElementById("embeddedIframe").contentDocument.forms.settingsForm.submit();
+                }
+                setTimeout(function() {
+                    iframeInfo.settingModified = false;
+                    this.close(true);
+                }.bind(this), 100);
+            });
+        },
+        close(forceClose) {
+            if (!forceClose) {
+                if (iframeInfo.settingModified) {
+                    this.confirmClose();
+                    return;
+                } else if (LMS_STD_SETTINGS_PAGES.has(this.page) && undefined!=iframeInfo.content) {
+                    // prototype.js, taken from Classic, has been modified so as to not prevent
+                    // using 'Enter' in textareas. However, this seems to break change detection.
+                    // So, when clsing dialog check if active element is a textarea and if it has
+                    // been modified.
+                    let elem = iframeInfo.content.activeElement;
+                    if (undefined!=elem && 'TEXTAREA'==elem.nodeName) {
+                        iframeInfo.settingModified = elem.value != elem.defaultValue;
+                        if (iframeInfo.settingModified) {
+                            this.confirmClose();
+                            return;
+                        }
                     }
-                    if (1==res) { // Save
-                        document.getElementById("embeddedIframe").contentDocument.forms.settingsForm.submit();
-                    }
-                    setTimeout(function() {
-                        iframeInfo.settingModified = false;
-                        this.close();
-                    }.bind(this), 100);
-                });
-                return;
+                }
             }
 
             this.show = false;

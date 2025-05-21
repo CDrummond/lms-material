@@ -32,6 +32,10 @@
  color:var(--light-text-color) !important;
 }
 
+.np-full .player-status-icon:is(.theme--light) {
+ color:var(--dark-text-color) !important;
+}
+
 @media (hover: hover) and (pointer: fine) {
  .menu-btn:hover {
   background-color:rgba(184, 184, 184, 0.5);
@@ -39,6 +43,9 @@
  .lms-toolbar .link-item:hover {
   color:var(--light-text-color) !important;
   opacity:0.75;
+ }
+.np-full .player-status-icon:is(.theme--light):hover {
+  color:var(--dark-text-color) !important;
  }
  .active-nav:hover, .inactive-nav:hover {
   opacity:0.8!important;

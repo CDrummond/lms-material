@@ -10,7 +10,7 @@
  6. Fix compilation tracks in 'All tracks' when called from release-type
     header.
  7. Fix 'More...', and other actions, when browsing into other roles.
- 8. Combine 'Apps' and 'Radio' perl side, to fix errors when no radio items.
+ 8. Combine 'Apps' and 'Radio' Perl side, to fix errors when no radio items.
  9. In queue menu if item is part of an album, or multi-disc, then use sub-menu
     for remove actions.
 10. Move browse sort selection into dialog, to match queue sorting.
@@ -30,7 +30,7 @@
     'Default' is configured for server settings.
 20. Add 'Wefunk Radio' to global search.
 21. Sort global search items by title.
-22. Add a modified verison of Classic's prototype.js to not lose focus on text
+22. Add a modified version of Classic's prototype.js to not lose focus on text
     edits when pressing 'Enter'
 
 5.9.1
@@ -2096,7 +2096,7 @@
 5. When downloading, if track has no album artist then see if we can use the
    value from the current browse history. If this still fails and the track is
    marked as part of a compilation then use LMS's 'Various Artists' string.
-6. Add support for sending notifications from perl to webapp.
+6. Add support for sending notifications from Perl to webapp.
 
 2.6.1
 -----
@@ -3116,7 +3116,7 @@
  5. Update vue-virtual-scroller, vue-touch-events, vue-lazyload, and vuex.
  6. Update iOS/iPhone/iPad checks.
  7. Take into account safe-area-inset-bottom for iOS.
- 8. Update user-agent checking code in perl code to (hopefully) detect iPadOS
+ 8. Update user-agent checking code in Perl code to (hopefully) detect iPadOS
     and serve correct icon.
  9. If '?ios' is added to URL query, add 12px padding to bottom navigation, to
     work-around issue with non-home button iOS devices.

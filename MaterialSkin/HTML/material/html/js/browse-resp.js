@@ -10,7 +10,7 @@ const MORE_COMMANDS = new Set(["item_add", "item_insert", "itemplay"/*, "item_fa
 const MIXER_APPS = new Set(["musicip", "blissmixer", "musicsimilarity"]);
 const STREAM_SCHEMAS = new Set(["http", "https", "wavin"]);
 const HIDE_APPS_FOR_PARTY = new Set(["apps.accuradio", "apps.ardaudiothek", "apps.bbcsounds", "apps.cplus", "apps.globalplayeruk", "apps.iheartradio", "apps.lastmix", "apps.mixcloud", "apps.planetradio", "apps.podcasts", "apps.radiofrance", "apps.radionet", "apps.radionowplaying", "apps.radioparadise", "apps.squeezecloud", "apps.timesradio", "apps.ukradioplayer", "apps.virginradio", "apps.wefunk", "apps.phishin", "apps.walkwithme"]);
-const RELEASE_TYPES = ["ALBUM", "EP", "BOXSET", "BESTOF", "COMPILATION", "SINGLE"];
+const RELEASE_TYPES = ["ALBUM", "EP", "BOXSET", "BESTOF", "COMPILATION", "SINGLE", "APPEARANCE", "APPEARANCE_BAND", "APPEARANCE_CONDUCTOR", "COMPOSITION"];
 
 function itemText(i) {
     return i.title ? i.title : i.name ? i.name : i.caption ? i.caption : i.credits ? i.credits : undefined;
@@ -26,6 +26,22 @@ function removeDiactrics(key) {
     return key==" " ? "?" : key;
 }
 
+function appearanceSuffix(rel) {
+    let type = undefined!=lmsOptions.releaseAppearances[rel] ? lmsOptions.releaseAppearances[rel] : undefined;
+    if (!type) {
+        if ("APPEARANCE_BAND"==rel) {
+            type = i18n("Band/orchestra");
+        } else if ("APPEARANCE_CONDUCTOR"==rel) {
+            type = i18n("Conductor");
+        }
+    }
+
+    if (type) {
+        return " (" + type + ")";
+    }
+    return "";
+}
+
 function releaseTypeHeader(rel) {
     if (undefined!=lmsOptions.releaseTypes[rel]) {
         return lmsOptions.releaseTypes[rel][1];
@@ -37,6 +53,12 @@ function releaseTypeHeader(rel) {
     }
     if (rel=="COMPILATION") {
         return i18n("Compilations");
+    }
+    if (rel.startsWith("APPEARANCE")) {
+        return i18n("Appearances")+appearanceSuffix(rel);
+    }
+    if (rel=="COMPOSITION") {
+        return i18n("Composer Albums");
     }
     return rel.replace(/\w\S*/g, function(txt){return txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase();});
 }
@@ -1008,7 +1030,7 @@ function parseBrowseResp(data, parent, options, cacheKey) {
                             if (roleId>0) {
                                 resp.currentRoleIds = new Set([roleId]);
                             } else {
-                                resp.currentRoleIds=new Set(splitIntArray(roles));
+                                resp.currentRoleIds = new Set(splitIntArray(roles));
                             }
                         } else if (lower.startsWith("material_skin_role_id:")) {
                             mskRoleId = roleIntValue(lower.split(':')[1]);
@@ -1028,6 +1050,7 @@ function parseBrowseResp(data, parent, options, cacheKey) {
             var albumKeys = [];
             var releaseTypes = new Set();
             var ids = new Set();
+            let artistRoles = new Set([...ARTIST_ROLES, ...resp.currentRoleIds]);
 
             for (var idx=0, loop=data.result.albums_loop, loopLen=loop.length; idx<loopLen; ++idx) {
                 var i = makeHtmlSafe(loop[idx]);
@@ -1098,10 +1121,21 @@ function parseBrowseResp(data, parent, options, cacheKey) {
                     artists = [parent.title];
                 }
                 let group = "ALBUM";
-                let roles = new Set(isEmpty(i.role_ids) ? [] : splitIntArray(i.role_ids));
                 if (lmsOptions.groupByReleaseType>0) {
+                    let roles = new Set(isEmpty(i.role_ids) ? [] : splitIntArray(i.role_ids));
                     let isCompilation = undefined!=i.compilation && 1==parseInt(i.compilation) && (undefined==i.release_type || i.release_type.toUpperCase()=="ALBUM");
                     group = isCompilation ? "COMPILATION" : undefined==i.release_type ? "ALBUM" : i.release_type.toUpperCase();
+                    if (!isCompilation && roles.size>0 && !intersect(artistRoles, roles).size>0) {
+                        if (roles.has(TRACK_ARTIST_ROLE)) {
+                            group = "APPEARANCE";
+                        } else if (roles.has(CONDUCTOR_ARTIST_ROLE)) {
+                            group = "APPEARANCE_CONDUCTOR";
+                        } else if (roles.has(BAND_ARTIST_ROLE)) {
+                            group = "APPEARANCE_BAND";
+                        } else if (roles.has(COMPOSER_ARTIST_ROLE)) {
+                            group = "COMPOSITION";
+                        }
+                    }
                 }
                 releaseTypes.add(group);
 
@@ -1214,6 +1248,10 @@ function parseBrowseResp(data, parent, options, cacheKey) {
                         resp.subtitle=resp.items.length + " " + (lmsTrans[1==resp.items.length ? 0 : 1]);
                     } else if (releaseType=="COMPILATION") {
                         resp.subtitle=i18np("1 Compilation", "%1 Compilations", resp.items.length);
+                    } else if (releaseType && releaseType.startsWith("APPEARANCE")) {
+                        resp.subtitle=i18np("1 Appearance", "%1 Appearances", resp.items.length)+appearanceSuffix(releaseType);
+                    } else if (releaseType=="COMPOSITION") {
+                        resp.subtitle=i18np("1 Composer Album", "%1 Composer Albums", resp.items.length);
                     } else if (lmsOptions.supportReleaseTypes) {
                         resp.subtitle=i18np("1 Release", "%1 Releases", resp.items.length);
                     } else {

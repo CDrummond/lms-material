@@ -2,6 +2,7 @@
 ------
 1. Fix status icn colours in expanded now-playing when using coloured toolbars
    with light themes.
+2. Fix listing of services when no artist items have been favourited.
 
 5.10.0
 ------

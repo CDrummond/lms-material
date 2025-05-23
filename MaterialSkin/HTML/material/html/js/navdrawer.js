@@ -85,7 +85,7 @@ Vue.component('lms-navdrawer', {
      <v-list-tile-content>
       <v-list-tile-title>{{item.name}}</v-list-tile-title>
      </v-list-tile-content>
-      <v-list-tile-action v-if="index<10 && keyboardControl" class="menu-shortcut" v-bind:class="{'menu-shortcut-player':item.canpoweroff,'menu-shortcut-player-apple':IS_APPLE && item.canpoweroff}">{{index|playerShortcut}}</v-list-tile-action>
+      <v-list-tile-action v-if="index<10 && keyboardControl" class="menu-shortcut menu-shortcut-player" v-bind:class="{'menu-shortcut-player-apple':IS_APPLE}">{{index|playerShortcut}}</v-list-tile-action>
       <v-list-tile-action>
        <v-btn v-if="item.canpoweroff" icon style="float:right" v-longpress:nomove="togglePower" :id="index+'-power-btn'" :title="(item.id==player.id && playerStatus.ison) || item.ison ? i18n('Switch off %1', item.name) : i18n('Switch on %1', item.name)"><v-icon v-bind:class="{'dimmed': (item.id==player.id ? !playerStatus.ison : !item.ison)}">power_settings_new</v-icon></v-btn>
       </v-list-tile-action>

@@ -1560,6 +1560,7 @@ function parseBrowseResp(data, parent, options, cacheKey) {
                               id: "track_id:"+i.id,
                               title: title,
                               baseTitle: baseTitle,
+                              plainTitle: isSearchResult ? i.title : undefined,
                               subtitle: subtitle,
                               subtitleContext: subtitleContext,
                               //icon: "music_note",

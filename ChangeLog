@@ -4,6 +4,7 @@
    with light themes.
 2. Fix listing of services when no artist items have been favourited.
 3. Re-add 'Appearances' in artist's release lists.
+4. Sort search track results by title.
 
 5.10.0
 ------

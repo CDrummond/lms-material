@@ -1116,9 +1116,7 @@ function splitMultiples(item, withGenre) {
             if (undefined!=strings) {
                 item[types[i]+"_id"]=ids[0];
                 item[types[i]] = strings[0];
-                if (lmsOptions.showAllArtists || isGenre) {
-                    item[types[i]+"s"] = strings;
-                }
+                item[types[i]+"s"] = strings;
             }
         }
     }

@@ -1,6 +1,6 @@
 5.10.1
 ------
-1. Fix status icn colours in expanded now-playing when using coloured toolbars
+1. Fix status icon colours in expanded now-playing when using coloured toolbars
    with light themes.
 2. Fix listing of services when no artist items have been favourited.
 3. Re-add 'Appearances' in artist's release lists.

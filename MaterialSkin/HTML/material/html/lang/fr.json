@@ -557,8 +557,11 @@
 "Total artists: %1":"Nombre d'artistes : %1",
 "Total duration: %1":"Durée totale : %1",
 "Total genres: %1":"Nombre de genres : %1",
+"Total labels: %1":"Nombre de labels : %1",
+"Total playlists: %1":"Nombre de listes de lecture : %1",
 "Total releases: %1":"Nombre d'albums : %1",
 "Total tracks: %1":"Nombre de morceaux : %1",
+"Total works: %1":"Nombre d'œuvres : %1",
 "Track":"Morceau",
 "Track Information":"Informations du morceau",
 "Track Number":"Numéro de Morceau",
@@ -691,8 +694,5 @@
 "1 day":"1 jour",
 "%1 days":"%1 jours",
 "A playlist named '%1' already exists, overwrite?":"",
-"Overwrite":"",
-"Total labels: %1":"",
-"Total playlists: %1":"",
-"Total works: %1":""
+"Overwrite":""
 }

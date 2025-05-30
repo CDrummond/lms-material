@@ -113,7 +113,6 @@
 "Comment":"Kommentar",
 "Compilations":"Opsamlingsalbums",
 "Composer":"Komponist",
-"Composer Albums":"Komponist Albums",
 "Composers":"Komponister",
 "Compositions":"Kompositioner",
 "Conductor":"Dirigent",
@@ -668,8 +667,6 @@
 "%1 Compilations":"%1 Opsamlingsalbums",
 "1 Composer":"1 komponist",
 "%1 Composers":"%1 komponister",
-"1 Composer Album":"1 komponist album",
-"%1 Composer Albums":"%1 komponist albums",
 "1 Composition":"1 Komposition",
 "%1 Compositions":"%1 Kompositioner",
 "1 Conductor":"1 dirigent",
@@ -695,5 +692,7 @@
 "1 Year":"1 år",
 "%1 Years":"%1 år",
 "1 day":"1 dag",
-"%1 days":"%1 dage"
+"%1 days":"%1 dage",
+"A playlist named '%1' already exists, overwrite?":"",
+"Overwrite":""
 }

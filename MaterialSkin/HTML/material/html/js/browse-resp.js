@@ -1106,7 +1106,7 @@ function parseBrowseResp(data, parent, options, cacheKey) {
                     let roles = new Set(isEmpty(i.role_ids) ? [] : splitIntArray(i.role_ids));
                     let isCompilation = undefined!=i.compilation && 1==parseInt(i.compilation) && (undefined==i.release_type || i.release_type.toUpperCase()=="ALBUM");
                     group = isCompilation ? "COMPILATION" : undefined==i.release_type ? "ALBUM" : i.release_type.toUpperCase();
-                    if (!isCompilation && roles.size>0 && !intersect(artistRoles, roles).size>0 && roles.has(TRACK_ARTIST_ROLE)) {
+                    if (!isCompilation && roles.size>0 && !intersect(artistRoles, roles).size>0/* && roles.has(TRACK_ARTIST_ROLE)*/) {
                         group = "APPEARANCE";
                     }
                 }

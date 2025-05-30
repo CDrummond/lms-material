@@ -1,6 +1,8 @@
 5.10.2
 ------
 1. Re-add 'Compositions' action.
+2. Group all non-artist roles under 'Appearances' when listing an artist's
+   albums.
 
 5.10.1
 ------

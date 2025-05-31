@@ -690,13 +690,13 @@ sub _cliCommand {
             return;
         }
 
-        # Remeber if source was playing, and start dest playing if so
+        # Remember if source was playing, and start dest playing if so
         my $fromWasPlaying = $from->isPlaying();
         my $toWasPlaying = $to->isPlaying();
         my $fromCurrentIndex = Slim::Player::Source::playingSongIndex($from);
         my $toCurrentIndex = Slim::Player::Source::playingSongIndex($to);
 
-        # Get list of playes source is currently synced with
+        # Get list of players source is currently synced with
         my @sourceBuddies;
         if ($from->isSynced()) {
             @sourceBuddies = $from->syncedWith();

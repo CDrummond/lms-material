@@ -176,7 +176,7 @@ var lmsBrowse = Vue.component("lms-browse", {
          <img v-for="(mic, midx) in citem.images" :class="'mi-'+midx" :key="mic" :src="mic|gridImageSize" loading="lazy"></img>
         </div>
        </div>
-       <img v-else-if="citem.image" :key="citem.image" :src="citem.image|gridImageSize" onerror="this.src=DEFAULT_COVER" v-bind:class="{'radio-img': SECTION_RADIO==citem.section || SECTION_APPS==citem.section || citem.isRadio, 'circular':citem.stdItem==STD_ITEM_ARTIST || citem.stdItem==STD_ITEM_ONLINE_ARTIST}" class="image-grid-item-img" loading="lazy"></img>
+       <img v-else-if="citem.image" :key="citem.image" :src="citem.image|gridImageSize" onerror="this.src=DEFAULT_COVER" v-bind:class="{'radio-img': SECTION_RADIO==citem.section || SECTION_APPS==citem.section || citem.isRadio, 'circular':citem.stdItem==STD_ITEM_ARTIST || citem.stdItem==STD_ITEM_ONLINE_ARTIST || citem.stdItem==STD_ITEM_WORK_COMPOSER}" class="image-grid-item-img" loading="lazy"></img>
        <div class="image-grid-item-icon" v-else>
         <v-icon v-if="citem.icon" class="image-grid-item-img image-grid-item-icon">{{citem.icon}}</v-icon>
         <img v-else-if="citem.svg" class="image-grid-item-svg" :src="citem.svg | svgIcon(darkUi)" loading="lazy"></img>
@@ -212,7 +212,7 @@ var lmsBrowse = Vue.component("lms-browse", {
       <img v-for="(mic, midx) in item.images" :class="'mi-'+midx" :key="mic" :src="mic" loading="lazy"></img>
      </v-list-tile-avatar>
      <v-list-tile-avatar v-else-if="item.image" :tile="true" v-bind:class="{'radio-image': SECTION_RADIO==item.section || SECTION_APPS==item.section || item.isRadio}" class="lms-avatar">
-      <img :key="item.image" :src="item.image" onerror="this.src=DEFAULT_COVER" class="allow-drag" v-bind:class="{'circular':item.stdItem==STD_ITEM_ARTIST || item.stdItem==STD_ITEM_ONLINE_ARTIST}" loading="lazy"></img>
+      <img :key="item.image" :src="item.image" onerror="this.src=DEFAULT_COVER" class="allow-drag" v-bind:class="{'circular':item.stdItem==STD_ITEM_ARTIST || item.stdItem==STD_ITEM_ONLINE_ARTIST || item.stdItem==STD_ITEM_WORK_COMPOSER}" loading="lazy"></img>
      </v-list-tile-avatar>
      <v-list-tile-avatar v-else-if="item.icon" :tile="true" class="lms-avatar">
       <v-icon>{{item.icon}}</v-icon>
@@ -299,7 +299,7 @@ var lmsBrowse = Vue.component("lms-browse", {
       <img v-for="(mic, midx) in item.images" :class="'mi-'+midx" :key="mic" :src="mic" loading="lazy"></img>
      </v-list-tile-avatar>
      <v-list-tile-avatar v-else-if="item.image" :tile="true" v-bind:class="{'radio-image': SECTION_RADIO==item.section || SECTION_APPS==item.section || item.isRadio, 'lms-avatar-small': isTop || (current && (current.id==TOP_RADIO_ID || current.id==TOP_APPS_ID)), 'lms-avatar': current && current.id!=TOP_RADIO_ID && current.id!=TOP_APPS_ID}">
-      <img :key="item.image" v-lazy="item.image" class="allow-drag" v-bind:class="{'circular':item.stdItem==STD_ITEM_ARTIST || item.stdItem==STD_ITEM_ONLINE_ARTIST}" onerror="this.src=DEFAULT_COVER"></img>
+      <img :key="item.image" v-lazy="item.image" class="allow-drag" v-bind:class="{'circular':item.stdItem==STD_ITEM_ARTIST || item.stdItem==STD_ITEM_ONLINE_ARTIST || item.stdItem==STD_ITEM_WORK_COMPOSER}" onerror="this.src=DEFAULT_COVER"></img>
      </v-list-tile-avatar>
      <v-list-tile-avatar v-else-if="item.icon" :tile="true" class="lms-avatar">
       <v-icon>{{item.icon}}</v-icon>

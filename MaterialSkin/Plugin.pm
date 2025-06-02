@@ -695,6 +695,8 @@ sub _cliCommand {
         my $toWasPlaying = $to->isPlaying();
         my $fromCurrentIndex = Slim::Player::Source::playingSongIndex($from);
         my $toCurrentIndex = Slim::Player::Source::playingSongIndex($to);
+        my $srcIsGroup = $from->model eq 'group';
+        my $isMoveFromGroupToMember = 0;
 
         # Get list of players source is currently synced with
         my @sourceBuddies;
@@ -703,9 +705,23 @@ sub _cliCommand {
             # Check that we are not already synced with dest player...
             for my $buddy (@sourceBuddies) {
                 if ($buddy->id() eq $toId) {
-                    main::INFOLOG && $log->is_info && $log->info("Tried to move client $fromId to a player its already synced with ($toId)");
-                    $request->setStatusBadParams();
-                    return;
+                    if ($srcIsGroup && $mode eq 'move') {
+                        $isMoveFromGroupToMember = 1;
+                        last;
+                    } else {
+                        main::INFOLOG && $log->is_info && $log->info("Tried to move client $fromId to a player its already synced with ($toId)");
+                        $request->setStatusDone();
+                        if ($mode eq 'move') {
+                            $request->addResult('error', string('PLUGIN_MATERIAL_SKIN_QT_MOVE_ERROR'));
+                        } elsif ($mode eq 'copy') {
+                            $request->addResult('error', string('PLUGIN_MATERIAL_SKIN_QT_COPY_ERROR'));
+                        } elsif ($mode eq 'swap') {
+                            $request->addResult('error', string('PLUGIN_MATERIAL_SKIN_QT_SWAP_ERROR'));
+                        } else {
+                            $request->setStatusBadParams();
+                        }
+                        return;
+                    }
                 }
             }
         }
@@ -754,22 +770,28 @@ sub _cliCommand {
             if ( exists $INC{'Slim/Plugin/RandomPlay/Plugin.pm'} && (my $mix = Slim::Plugin::RandomPlay::Plugin::active($from)) ) {
                 $to->execute(['playlist', 'addtracks', 'listRef', ['randomplay://' . $mix] ]);
             }
-
             # Switch to now playing view?
             $to->execute(['now-playing']);
-
             # Now unsync source from dest
             $from->execute(['sync', '-']);
         }
 
-        # If dest was in a sync group, re-add the buddies...
-        for my $buddy (@destBuddies) {
-            $to->execute(['sync', $buddy->id()]);
-        }
+        if ($isMoveFromGroupToMember) {
+            $to->execute(['sync', '-']);
+            for my $buddy (@destBuddies) {
+                $buddy->execute(['playlist', 'clear']);
+                $buddy->execute(['power', 0]);
+            }
+        } else {
+            # If dest was in a sync group, re-add the buddies...
+            for my $buddy (@destBuddies) {
+                $to->execute(['sync', $buddy->id()]);
+            }
 
-        # Restore any previous synced players
-        for my $buddy (@sourceBuddies) {
-            $from->execute(['sync', $buddy->id()]);
+            # Restore any previous synced players
+            for my $buddy (@sourceBuddies) {
+                $from->execute(['sync', $buddy->id()]);
+            }
         }
 
         # If queue is moved then clear source

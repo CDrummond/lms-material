@@ -1158,9 +1158,13 @@ var lmsQueue = Vue.component("lms-queue", {
                             return;
                         }
                         lmsCommand("", ["material-skin", "transferqueue", "from:"+this.$store.state.player.id, "to:"+choice.item.val, "mode:"+(0==choice.option.val ? 'copy' : 1==choice.option.val ? 'move' : 'swap')]).then(({data}) => {
-                            this.$store.commit('setPlayer', choice.item.val);
-                            if (0==choice.option.val) {
-                                bus.$emit('showMessage', i18n("Queue copied to '%1'", choice.item.title));
+                            if (undefined!=data && undefined!=data.result && undefined!=data.result.error) {
+                                 bus.$emit('showError', undefined, data.result.error);
+                            } else {
+                                this.$store.commit('setPlayer', choice.item.val);
+                                if (0==choice.option.val) {
+                                    bus.$emit('showMessage', i18n("Queue copied to '%1'", choice.item.title));
+                                }
                             }
                         });
                     });

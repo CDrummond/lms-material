@@ -5,6 +5,9 @@
    albums.
 3. Use circular images for works-composers as per other artists.
 4. Add simple 'e' icon for Ever-Solo players.
+5. Allow moving queue from group to a member.
+6. Show error message if attempt to transfer queue to a player it is already
+   synced with.
 
 5.10.1
 ------

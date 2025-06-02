@@ -110,7 +110,7 @@
             "svg":"apple"
         }
     },
-    "http": {
+    "http":{
         "playerid":[
              {
                  "begins":"Alexa-",
@@ -118,6 +118,9 @@
              }
         ],
         "svg":"stream"
+    },
+    "Squeeze connect":{
+        "svg":"eversolo"
     }
 }
 

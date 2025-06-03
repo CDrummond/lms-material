@@ -21,6 +21,7 @@
   {"icon":"bluetooth"},
   {"svg":"stream"},
   {"svg":"raspberry-pi"},
+  {"svg":"cpu-32-bit"},
   {"icon":"android"},
   {"svg":"apple"},
   {"svg":"apple-ios"},

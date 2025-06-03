@@ -8,6 +8,7 @@
 5. Allow moving queue from group to a member.
 6. Show error message if attempt to transfer queue to a player it is already
    synced with.
+7. Update Ubuntu and Fedora icons.
 
 5.10.1
 ------

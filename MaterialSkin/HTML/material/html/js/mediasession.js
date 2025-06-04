@@ -9,7 +9,7 @@
 /*
 Enable auto play in Chrome via:
 
-    Settings / Privaacy and security / Additional content settings (expand) / Sound / Allowed to play sounds / Add
+    Settings / Privacy and security / Additional content settings (expand) / Sound / Allowed to play sounds / Add
     
     chrome://settings/content/siteDetails?site=http://hostname:9000
 */

@@ -4,11 +4,11 @@
     <title lang="EN">Material Skin</title>
   </details>
   <plugins>
-    <plugin name="MaterialSkin" version="5.10.2" minTarget="7.9.0" maxTarget="*">
+    <plugin name="MaterialSkin" version="5.10.1" minTarget="7.9.0" maxTarget="*">
       <title lang="EN">Material Skin</title>
       <desc lang="EN">Material themed skin, suitable for mobile use.</desc>
-      <url>https://github.com/CDrummond/lms-material/releases/download/5.10.2/lms-material-5.10.2.zip</url>
-      <sha>3ac763061c0fb0a6dc8e694752060b9c1f17ef01</sha>
+      <url>https://github.com/CDrummond/lms-material/releases/download/5.10.1/lms-material-5.10.1.zip</url>
+      <sha>0cd4e06413f1c2ad81695ddd3c536af7c73ec4ac</sha>
       <creator>Craig Drummond</creator>
     </plugin>
   </plugins>

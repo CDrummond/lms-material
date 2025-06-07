@@ -2351,6 +2351,8 @@ function browseBuildCommand(view, item, commandName, doReplacements, allowLibId)
                     }
                 }
             }
+        } else {
+            cmd.params.push("tags:AcCKWdeGJKloPqrRStTuEyY4");
         }
     }
 

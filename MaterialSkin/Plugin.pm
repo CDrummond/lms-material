@@ -2235,11 +2235,24 @@ sub _svgHandler {
     # If this is for a release type then fallback to release.svg if it does not exist
     if (rindex($svgName, "release-")==0) {
         if ((! -e $filePath) && (! -e $altFilePath)) {
-            my $end = substr($svgName, -1);
-            if ($end eq "s") {
-                $svgName = substr($svgName, 0, -1);
+            # Remove -, _, and spaces from release name
+            my $type = substr($svgName, 8);
+            $type =~ s/[-_,\s]+//g;
+            my $newSvgName = "release-" . $type;
+            if ($newSvgName ne $svgName) {
+                $svgName = $newSvgName;
                 $filePath = $dir . "/HTML/material/html/images/" . $svgName . ".svg";
                 $altFilePath = Slim::Utils::Prefs::dir() . "/material-skin/images/" . $svgName . ".svg";
+            }
+
+            if ((! -e $filePath) && (! -e $altFilePath)) {
+                # Remove 's' at end...
+                my $end = substr($svgName, -1);
+                if ($end eq "s") {
+                    $svgName = substr($svgName, 0, -1);
+                    $filePath = $dir . "/HTML/material/html/images/" . $svgName . ".svg";
+                    $altFilePath = Slim::Utils::Prefs::dir() . "/material-skin/images/" . $svgName . ".svg";
+                }
             }
             if ((! -e $filePath) && (! -e $altFilePath)) {
                 if (rindex($svgName, "release-live")==0) {

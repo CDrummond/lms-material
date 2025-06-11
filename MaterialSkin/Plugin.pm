@@ -1967,6 +1967,7 @@ sub _cliClientCommand {
             Slim::Player::Playlist::refreshPlaylist($client);
         }
         $request->setStatusDone();
+        Slim::Control::Request::notifyFromArray($client, ['playlist', 'delete', '_index']);
         return;
     }
 

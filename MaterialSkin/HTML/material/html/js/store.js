@@ -216,11 +216,16 @@ function storeCurrentPlayer(state) {
     setLocalStorageVal('player', state.player.id);
     if (1==queryParams.nativePlayer) {
         try {
-            NativeReceiver.updatePlayer(state.player.id, state.player.name);
+            NativeReceiver.updatePlayer(state.player.id, state.player.name, state.player.ip);
         } catch (e) {
+            // Try older version of method...
+            try {
+                NativeReceiver.updatePlayer(state.player.id, state.player.name);
+            } catch (e) {
+            }
         }
     } else if (queryParams.nativePlayer>0) {
-        emitNative("MATERIAL-PLAYER\nID "+state.player.id+"\nNAME "+state.player.name, queryParams.nativePlayer);
+        emitNative("MATERIAL-PLAYER\nID "+state.player.id+"\nNAME "+state.player.name+"\nIP "+state.player.ip, queryParams.nativePlayer);
     }
     if (COLOR_USE_PER_PLAYER==state.colorUsage) {
         state.color = mapPlayerColor(state.player);

@@ -3,6 +3,8 @@
 1. Add AudioDrama, DJMix, Interview, and Spokenword release icons.
 2. When getting release icons remove hyphen, underscore, and spaces from
    release name.
+3. When udating native app of selected player, also send player's IP address -
+   then the Material APK can use this to detect if that player is local.
 
 5.10.2
 ------

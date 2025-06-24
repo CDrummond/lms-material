@@ -77,6 +77,10 @@ const STD_ITEMS=[
     },
     {
         menu: [PLAY_ACTION, DIVIDER, PIN_ACTION, EDIT_ACTION, DELETE_ACTION]
+    },
+    {
+        command: ["playlists"],
+        params: [PLAYLIST_TAGS]
     }
 ];
 

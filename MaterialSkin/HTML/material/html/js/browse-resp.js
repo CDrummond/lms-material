@@ -1851,32 +1851,52 @@ function parseBrowseResp(data, parent, options, cacheKey) {
             resp.subtitle=i18np("1 Genre", "%1 Genres", resp.items.length);
         } else if (data.result.playlists_loop) {
             var haveEmblem = false;
-            for (var idx=0, loop=data.result.playlists_loop, loopLen=loop.length; idx<loopLen; ++idx) {
-                var i = loop[idx];
-                var key = removeDiactrics(i.textkey);
-                var isRemote = 1 == parseInt(i.remote) || undefined!=i.extid;
-                var emblem = getEmblem(i.extid);
-                if (undefined!=emblem) {
-                    haveEmblem = true;
+            var numFolders = 0;
+            for (var type=0; type<2; ++type) {
+                for (var idx=0, loop=data.result.playlists_loop, loopLen=loop.length; idx<loopLen; ++idx) {
+                    var i = loop[idx];
+                    var key = removeDiactrics(i.textkey);
+                    var isRemote = 1 == parseInt(i.remote) || undefined!=i.extid;
+                    var emblem = getEmblem(i.extid);
+                    if (undefined!=emblem) {
+                        haveEmblem = true;
+                    }
+                    if (undefined!=key && (resp.jumplist.length==0 || resp.jumplist[resp.jumplist.length-1].key!=key) && !textKeys.has(key)) {
+                        resp.jumplist.push({key: key, index: resp.items.length});
+                        textKeys.add(key);
+                    }
+                    if (type==0) {
+                        if (undefined!=i.folder) {
+                            resp.items.push({
+                                    id: "folder:"+i.id,
+                                    title: replaceHtmlBrackets(i.folder),
+                                    svg: 'folder-playlist',
+                                    stdItem: STD_ITEM_PLAYLIST_FOLDER,
+                                    type: "group",
+                                    section: SECTION_PLAYLISTS
+                                });
+                            numFolders += 1;
+                        }
+                    } else {
+                        if (undefined!=i.folder) {
+                            break;
+                        }
+                        resp.items.push({
+                                    id: "playlist_id:"+i.id,
+                                    title: replaceHtmlBrackets(i.playlist),
+                                    icon: undefined == emblem ? "list" : undefined,
+                                    svg: undefined == emblem ? undefined : emblem.name,
+                                    image: lmsOptions.playlistImages ? "material/playlists/" + encodeURIComponent(i.playlist) : undefined,
+                                    stdItem: isRemote ? STD_ITEM_REMOTE_PLAYLIST : STD_ITEM_PLAYLIST,
+                                    type: "group",
+                                    section: SECTION_PLAYLISTS,
+                                    url:  i.url,
+                                    remotePlaylist: isRemote
+                                });
+                    }
                 }
-                if (undefined!=key && (resp.jumplist.length==0 || resp.jumplist[resp.jumplist.length-1].key!=key) && !textKeys.has(key)) {
-                    resp.jumplist.push({key: key, index: resp.items.length});
-                    textKeys.add(key);
-                }
-                resp.items.push({
-                              id: "playlist_id:"+i.id,
-                              title: replaceHtmlBrackets(i.playlist),
-                              icon: undefined == emblem ? "list" : undefined,
-                              svg: undefined == emblem ? undefined : emblem.name,
-                              image: lmsOptions.playlistImages ? "material/playlists/" + encodeURIComponent(i.playlist) : undefined,
-                              stdItem: isRemote ? STD_ITEM_REMOTE_PLAYLIST : STD_ITEM_PLAYLIST,
-                              type: "group",
-                              section: SECTION_PLAYLISTS,
-                              url:  i.url,
-                              remotePlaylist: isRemote
-                          });
             }
-            if (!haveEmblem) {
+            if (!haveEmblem && numFolders<1) {
                 // No emblems? Clear icons...
                 for (var i=0, len=resp.items.length; i<len; ++i) {
                     resp.items[i].icon = resp.items[i].svg = undefined;
@@ -1884,7 +1904,15 @@ function parseBrowseResp(data, parent, options, cacheKey) {
             }
             resp.canUseGrid = lmsOptions.playlistImages;
             resp.itemCustomActions = getCustomActions("playlist");
-            resp.subtitle=i18np("1 Playlist", "%1 Playlists", resp.items.length);
+            if (numFolders>0) {
+                if (numFolders==resp.items.length) {
+                    resp.subtitle=i18np("1 Folder", "%1 Folders", resp.items.length);
+                } else {
+                    resp.subtitle=i18np("1 Folder", "%1 Folders", numFolders) + SEPARATOR + i18np("1 Playlist", "%1 Playlists", resp.items.length-numFolders);
+                }
+            } else {
+                resp.subtitle=i18np("1 Playlist", "%1 Playlists", resp.items.length);
+            }
         } else if (data.result.playlisttracks_loop) {
             var totalDuration = 0;
             let browseContext = getLocalStorageBool('browseContext', false);

@@ -805,6 +805,11 @@ function splitString(str) {
     return arr;
 }
 
+const COMMA_REPLACEMENT = "__COMMA__";
+function splitConfigString(str) {
+    return str.split("\r").join("").split("\n").join(",").replace("\\,", COMMA_REPLACEMENT).split(",").map(function(itm) { return itm.trim().replace(COMMA_REPLACEMENT, ",") });
+}
+
 function arrayMove(arr, from, to) {
     if (to >= arr.length) {
         var k = to - arr.length + 1;

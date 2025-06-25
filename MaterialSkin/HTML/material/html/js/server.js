@@ -696,7 +696,7 @@ var lmsServer = Vue.component('lms-server', {
                     if (LMS_VERSION<90001) {
                         for (var t=0, len=SKIN_GENRE_TAGS.length; t<len; ++t ) {
                             if (data[2]==(SKIN_GENRE_TAGS[t]+'genres')) {
-                                var genres = splitString(data[3].split("\r").join("").split("\n").join(","));
+                                var genres = splitConfigString(data[3]);
                                 lmsOptions[SKIN_GENRE_TAGS[t]+'Genres'] = new Set(genres);
                                 setLocalStorageVal(SKIN_GENRE_TAGS[t]+"genres", data[3]);
                                 found=true;
@@ -732,7 +732,7 @@ var lmsServer = Vue.component('lms-server', {
                     }
                     if (!found) {
                         if (data[2]=='releaseTypeOrder') {
-                            let arr = splitString(data[3].split("\r").join("").split("\n").join(","));
+                            let arr = splitConfigString(data[3]);
                             lmsOptions.releaseTypeOrder = arr.length>0 ? arr : undefined;
                         }
                     }

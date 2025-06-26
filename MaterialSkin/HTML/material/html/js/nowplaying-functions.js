@@ -11,6 +11,13 @@ function  nowPlayingHeader(s) {
     return isEmpty(s) ? "" : ("<b>"+s+"</b><br/>");
 }
 
+function nowPlayingMAIHeader(ev, idx) {
+    let elem = document.getElementById("mai-artist-"+idx);
+    if (undefined!=elem) {
+        ensureVisible(elem);
+    }
+}
+
 function formatLyrics(s) {
     let lines = s.split("<br/>")
     if (lines.length>0) {
@@ -755,7 +762,10 @@ function nowplayingFetchArtistInfo(view) {
     let artists = maiComposer ? view.infoTrack.composers : view.infoTrack.artists;
 
     if (undefined!=artists && artists.length>1 && undefined!=artist_ids && artists.length==artist_ids.length) {
-        artist = artists.join(SEPARATOR)
+        artist = "";
+        for (let a=0, len=artists.length; a<len; ++a) {
+            artist+=(a>0 ? SEPARATOR : "")+("<obj class=\"link-item\" onclick=\"nowPlayingMAIHeader(event, "+a+")\">" + artists[a] + "</obj>");
+        }
     }
     if (view.info.tabs[ARTIST_TAB].artist!=artist || view.info.tabs[ARTIST_TAB].artist_id!=artist_id ||
         (undefined!=view.info.tabs[ARTIST_TAB].artist_ids && undefined!=artist_ids && view.info.tabs[ARTIST_TAB].artist_ids.length!=artist_ids.length)) {
@@ -785,7 +795,7 @@ function nowplayingFetchArtistInfo(view) {
                     if (data && view.isCurrent(data, ARTIST_TAB)) {
                         if (data.result && data.result.biography) {
                             if (data.result.artist) {
-                                view.info.tabs[ARTIST_TAB].details.push({weight:i, title:data.result.artist, text:"<b>"+data.result.artist+"</b><br/>" + replaceNewLines(data.result.biography)});
+                                view.info.tabs[ARTIST_TAB].details.push({weight:i, title:data.result.artist, text:"<b id=\"mai-artist-" + i +"\">"+data.result.artist+"</b><br/>" + replaceNewLines(data.result.biography)});
                             }
                         }
                     }

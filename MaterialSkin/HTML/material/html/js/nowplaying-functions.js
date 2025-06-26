@@ -752,6 +752,11 @@ function nowplayingFetchArtistInfo(view) {
     let artist = maiComposer ? view.infoTrack.composer : view.infoTrack.artist;
     let artist_id = maiComposer ? view.infoTrack.composer_id : view.infoTrack.artist_id;
     let artist_ids = maiComposer ? view.infoTrack.composer_ids : view.infoTrack.artist_ids;
+    let artists = maiComposer ? view.infoTrack.composers : view.infoTrack.artists;
+
+    if (undefined!=artists && artists.length>1 && undefined!=artist_ids && artists.length==artist_ids.length) {
+        artist = artists.join(SEPARATOR)
+    }
     if (view.info.tabs[ARTIST_TAB].artist!=artist || view.info.tabs[ARTIST_TAB].artist_id!=artist_id ||
         (undefined!=view.info.tabs[ARTIST_TAB].artist_ids && undefined!=artist_ids && view.info.tabs[ARTIST_TAB].artist_ids.length!=artist_ids.length)) {
         view.info.tabs[ARTIST_TAB].sections[0].items=[];
@@ -772,27 +777,21 @@ function nowplayingFetchArtistInfo(view) {
         }
         let ids = artist_ids;
         if (undefined!=ids && ids.length>1) {
-            view.info.tabs[ARTIST_TAB].first = true;
-            view.info.tabs[ARTIST_TAB].found = false;
             view.info.tabs[ARTIST_TAB].count = ids.length;
+            view.info.tabs[ARTIST_TAB].details = [];
             for (let i=0, len=ids.length; i<len; ++i) {
                 lmsCommand("", ["musicartistinfo", "biography", "artist_id:"+ids[i], "html:1"], view.info.tabs[ARTIST_TAB].reqId).then(({data}) => {
                     logJsonMessage("RESP", data);
                     if (data && view.isCurrent(data, ARTIST_TAB)) {
                         if (data.result && data.result.biography) {
                             if (data.result.artist) {
-                                view.info.tabs[ARTIST_TAB].found = true;
-                                let text = replaceNewLines(data.result.biography);
-                                if (view.info.tabs[ARTIST_TAB].first) {
-                                    view.info.tabs[ARTIST_TAB].text = text;
-                                    view.info.tabs[ARTIST_TAB].first = false;
-                                } else {
-                                    view.info.tabs[ARTIST_TAB].text+="<br/><br/>" + text;
-                                }
+                                view.info.tabs[ARTIST_TAB].details.push({weight:i, title:data.result.artist, text:"<b>"+data.result.artist+"</b><br/>" + replaceNewLines(data.result.biography)});
                             }
                         }
-                        view.info.tabs[ARTIST_TAB].count--;
-                        if (0 == view.info.tabs[ARTIST_TAB].count && !view.info.tabs[ARTIST_TAB].found) {
+                    }
+                    view.info.tabs[ARTIST_TAB].count--;
+                    if (0 == view.info.tabs[ARTIST_TAB].count) {
+                        if (view.info.tabs[ARTIST_TAB].details.length<1) {
                             view.info.tabs[ARTIST_TAB].text = undefined;
                             if (undefined!=data.result.portraitid) {
                                 view.info.tabs[ARTIST_TAB].image=undefined!=data.result.portraitid && ("/contributor/" + data.result.portraitid + "/image" + LMS_IMAGE_SIZE);
@@ -801,6 +800,12 @@ function nowplayingFetchArtistInfo(view) {
                             }
                         } else {
                             view.info.tabs[ARTIST_TAB].isMsg=false;
+                            view.info.tabs[ARTIST_TAB].details.sort(weightSort);
+                            view.info.tabs[ARTIST_TAB].text="";
+                            for (let idx=0, count=view.info.tabs[ARTIST_TAB].details.length; idx<count; ++idx) {
+                                view.info.tabs[ARTIST_TAB].text+=(idx>0 ? "<br/><br/>" : "") + view.info.tabs[ARTIST_TAB].details[idx].text;
+                            }
+                            view.info.tabs[ARTIST_TAB].details = undefined;
                         }
                     }
                 });

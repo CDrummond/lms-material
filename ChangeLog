@@ -1,6 +1,7 @@
 5.10.4
 ------
 1. Support back-slash escaping of commas in release types - e.g. "A\, B".
+2. If showing multiple artist biographies in MAI then add titles for each.
 
 5.10.3
 ------

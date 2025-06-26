@@ -179,7 +179,6 @@ var app = new Vue({
                 }
                 if (undefined!=data.result['releaseTypeOrder']) {
                     let arr = splitConfigString(data.result['releaseTypeOrder']);
-                    console.log(arr);
                     lmsOptions.releaseTypeOrder = arr.length>0 ? arr : undefined;
                 }
                 if (undefined!=data.result['hidePlayers'] && undefined==queryParams.hidePlayers) {

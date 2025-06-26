@@ -785,8 +785,8 @@ function nowplayingFetchArtistInfo(view) {
         if (view.info.tabs[ARTIST_TAB].reqId>65535) {
             view.info.tabs[ARTIST_TAB].reqId = 0;
         }
-        let ids = artist_ids;
-        if (undefined!=ids && ids.length>1) {
+        if (undefined!=artists && artists.length>1 && undefined!=artist_ids && artists.length==artist_ids.length) {
+            let ids = artist_ids;
             view.info.tabs[ARTIST_TAB].count = ids.length;
             view.info.tabs[ARTIST_TAB].details = [];
             for (let i=0, len=ids.length; i<len; ++i) {

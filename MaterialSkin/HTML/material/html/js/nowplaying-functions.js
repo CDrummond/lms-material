@@ -795,7 +795,14 @@ function nowplayingFetchArtistInfo(view) {
                     if (data && view.isCurrent(data, ARTIST_TAB)) {
                         if (data.result && data.result.biography) {
                             if (data.result.artist) {
-                                view.info.tabs[ARTIST_TAB].details.push({weight:i, title:data.result.artist, text:"<b id=\"mai-artist-" + i +"\">"+data.result.artist+"</b><br/>" + replaceNewLines(data.result.biography)});
+                                view.info.tabs[ARTIST_TAB].details.push({weight:i, text:"<b id=\"mai-artist-" + i +"\">"+data.result.artist+"</b><br/>" + replaceNewLines(data.result.biography)});
+                            }
+                            if (0==i) {
+                                if (undefined!=data.result.portraitid) {
+                                    view.info.tabs[ARTIST_TAB].image=undefined!=data.result.portraitid && ("/contributor/" + data.result.portraitid + "/image" + LMS_IMAGE_SIZE);
+                                } else {
+                                    view.info.tabs[ARTIST_TAB].image="/imageproxy/mai/artist/" + ids[0] + "/image" + LMS_IMAGE_SIZE;
+                                }
                             }
                         }
                     }

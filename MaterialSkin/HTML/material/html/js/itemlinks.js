@@ -124,14 +124,7 @@ function buildArtistLine(i, page, plain, existing, useBandTag, useComposerTag, u
         used.add(existing);
     }
     if (lmsOptions.artistFirst) {
-        if (i.trackartist) {
-            line=addArtistLink(i, line, "trackartist", "show_artist", page, used, plain);
-        } else if (i.artist) {
-            line=addArtistLink(i, line, "artist", "show_artist", page, used, plain);
-        } else if (i.albumartist) {
-            line=addArtistLink(i, line, "albumartist", "show_albumartist", page, used, plain);
-        }
-        used.add(artist);
+        [line, used] = buildArtists(i, line, page, used, plain);
     }
 
     if (undefined!=useBandTag ? useBandTag : (i.band && lmsOptions.showBand && useBand(i))) {
@@ -145,13 +138,7 @@ function buildArtistLine(i, page, plain, existing, useBandTag, useComposerTag, u
     }
 
     if (!lmsOptions.artistFirst) {
-        if (i.trackartist) {
-            line=addArtistLink(i, line, "trackartist", "show_artist", page, used, plain);
-        } else if (i.artist) {
-            line=addArtistLink(i, line, "artist", "show_artist", page, used, plain);
-        } else if (i.albumartist) {
-            line=addArtistLink(i, line, "albumartist", "show_albumartist", page, used, plain);
-        }
+        [line, used] = buildArtists(i, line, page, used, plain);
     }
     try {
         return undefined==line ? line : line.replaceAll('|', '\u2022');
@@ -172,12 +159,24 @@ function buildArtistWithContext(i, page, useBand, useComposer, useConductor) {
 
     let artists = undefined;
     let used = new Set();
-    if (i.trackartist) {
-        artists=addArtistLink(i, artists, "trackartist", "show_artist", page, used, false);
-    } else if (i.artist) {
-        artists=addArtistLink(i, artists, "artist", "show_artist", page, used, false);
-    } else if (i.albumartist) {
-        artists=addArtistLink(i, artists, "albumartist", "show_albumartist", page, used, false);
+    if (lmsOptions.showAllArtists) {
+        if (i.artist) {
+            artists=addArtistLink(i, artists, "artist", "show_artist", page, used, false);
+        }
+        if (i.trackartist) {
+            artists=addArtistLink(i, artists, "trackartist", "show_artist", page, used, false);
+        }
+        if (i.albumartist) {
+            artists=addArtistLink(i, artists, "albumartist", "show_albumartist", page, used, false);
+        }
+    } else {
+        if (i.artist) {
+            artists=addArtistLink(i, artists, "artist", "show_artist", page, used, false);
+        } else if (i.trackartist) {
+            artists=addArtistLink(i, artists, "trackartist", "show_artist", page, used, false);
+        } else if (i.albumartist) {
+            artists=addArtistLink(i, artists, "albumartist", "show_albumartist", page, used, false);
+        }
     }
 
     if (undefined==composers && undefined==conductors && undefined==artists) {
@@ -254,4 +253,33 @@ function buildWorkLine(i, page, plain) {
         line=addPart(line, work);
     }
     return line;
+}
+
+function buildArtists(i, line, page, used, plain) {
+    if (lmsOptions.showAllArtists) {
+        if (i.artist) {
+            line=addArtistLink(i, line, "artist", "show_artist", page, used, plain);
+            used.add(i.artist);
+        }
+        if (i.trackartist) {
+            line=addArtistLink(i, line, "trackartist", "show_artist", page, used, plain);
+            used.add(i.trackartist);
+        }
+        if (i.albumartist) {
+            line=addArtistLink(i, line, "albumartist", "show_albumartist", page, used, plain);
+            used.add(i.albumartist);
+        }
+    } else {
+        if (i.artist) {
+            line=addArtistLink(i, line, "artist", "show_artist", page, used, plain);
+            used.add(i.artist);
+        } else if (i.trackartist) {
+            line=addArtistLink(i, line, "trackartist", "show_artist", page, used, plain);
+            used.add(i.trackartist);
+        } else if (i.albumartist) {
+            line=addArtistLink(i, line, "albumartist", "show_albumartist", page, used, plain);
+            used.add(i.albumartist);
+        }
+    }
+    return [line, used];
 }

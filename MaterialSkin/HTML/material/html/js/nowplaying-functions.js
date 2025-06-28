@@ -122,10 +122,14 @@ function nowplayingOnPlayerStatus(view, playerStatus) {
     if (playerStatus.dvc!=view.playerStatus.dvc) {
         view.playerStatus.dvc = playerStatus.dvc;
     }
-    let artist = playerStatus.current.trackartist ? playerStatus.current.trackartist : playerStatus.current.artist;
-    let artists = playerStatus.current.trackartists ? playerStatus.current.trackartists : playerStatus.current.artists;
-    let artist_id = playerStatus.current.trackartist_id ? playerStatus.current.trackartist_id : playerStatus.current.artist_id;
-    let artist_ids = playerStatus.current.trackartist_ids ? playerStatus.current.trackartist_ids : playerStatus.current.artist_ids;
+    let artist = playerStatus.current.artist ? playerStatus.current.artist : playerStatus.current.trackartist;
+    let artists = playerStatus.current.artists && playerStatus.current.trackartists
+        ? playerStatus.current.artists.concat(playerStatus.current.trackartists)
+        : playerStatus.current.artists ? playerStatus.current.artists : playerStatus.current.trackartists;
+    let artist_id = playerStatus.current.artist_id ? playerStatus.current.artist_id : playerStatus.current.trackartist_id;
+    let artist_ids = playerStatus.current.artist_ids && playerStatus.current.trackartist_ids
+        ? playerStatus.current.artist_ids.concat(playerStatus.current.trackartist_ids)
+        : playerStatus.current.artist_ids ? playerStatus.current.artist_ids : playerStatus.current.trackartist_ids;
     if (view.playerStatus.current.artist!=artist ||
         view.playerStatus.current.artists!=artists ||
         view.playerStatus.current.artist_id!=artist_id ||

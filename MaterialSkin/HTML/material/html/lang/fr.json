@@ -21,7 +21,7 @@
 "<obj>conducted by</obj> %1":"<obj>dirigé par</obj> %1",
 "<obj>from</obj> %1":"<obj>dans</obj> %1",
 "<obj>performed by</obj> %1":"<obj>interprété par</obj> %1",
-"A playlist named '%1' already exists, overwrite?":"Une liste de lecture nommée '%1' existe déjà. L'écraser ?",
+"A playlist named '%1' already exists, overwrite?":"Une liste de lecture nommée \"%1\" existe déjà. L'écraser ?",
 "Abort":"Abandonner",
 "Abort all":"Abandonner tout",
 "Abort all downloads?":"Abandonner tous les téléchargements ?",

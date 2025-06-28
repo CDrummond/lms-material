@@ -159,25 +159,26 @@ function buildArtistWithContext(i, page, useBand, useComposer, useConductor) {
 
     let artists = undefined;
     let used = new Set();
-    if (lmsOptions.showAllArtists) {
-        if (i.artist) {
-            artists=addArtistLink(i, artists, "artist", "show_artist", page, used, false);
-        }
-        if (i.trackartist) {
-            artists=addArtistLink(i, artists, "trackartist", "show_artist", page, used, false);
-        }
-        if (i.albumartist) {
-            artists=addArtistLink(i, artists, "albumartist", "show_albumartist", page, used, false);
-        }
-    } else {
-        if (i.artist) {
-            artists=addArtistLink(i, artists, "artist", "show_artist", page, used, false);
-        } else if (i.trackartist) {
-            artists=addArtistLink(i, artists, "trackartist", "show_artist", page, used, false);
-        } else if (i.albumartist) {
-            artists=addArtistLink(i, artists, "albumartist", "show_albumartist", page, used, false);
-        }
-    }
+    [artists, used] = buildArtists(i, artists, page, used, false);
+//    if (lmsOptions.showAllArtists) {
+//        if (i.artist) {
+//            artists=addArtistLink(i, artists, "artist", "show_artist", page, used, false);
+//        }
+//        if (i.trackartist) {
+//            artists=addArtistLink(i, artists, "trackartist", "show_artist", page, used, false);
+//        }
+//        if (i.albumartist) {
+//            artists=addArtistLink(i, artists, "albumartist", "show_albumartist", page, used, false);
+//        }
+//    } else {
+//        if (i.artist) {
+//            artists=addArtistLink(i, artists, "artist", "show_artist", page, used, false);
+//        } else if (i.trackartist) {
+//            artists=addArtistLink(i, artists, "trackartist", "show_artist", page, used, false);
+//        } else if (i.albumartist) {
+//            artists=addArtistLink(i, artists, "albumartist", "show_albumartist", page, used, false);
+//        }
+//    }
 
     if (undefined==composers && undefined==conductors && undefined==artists) {
         return undefined;

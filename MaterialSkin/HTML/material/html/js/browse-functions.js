@@ -1612,7 +1612,7 @@ function browseItemAction(view, act, origItem, index, event) {
             }
         });
     } else if (ADD_ALL_ACTION==act || INSERT_ALL_ACTION==act || PLAY_ALL_ACTION==act || PLAY_DISC_ACTION==act || PLAY_SHUFFLE_ALL_ACTION==act) {
-        if (view.current && item.id == view.current.id) { // Called from subtoolbar => act on all items
+        if (view.current && ((item.id == view.current.id) || (view.current.id.startsWith("currentaction:")))) { // Called from subtoolbar => act on all items
             if (view.allTracksItem) {
                 view.itemAction(ADD_ALL_ACTION==act ? ADD_ACTION : INSERT_ALL_ACTION==act ? INSERT_ACTION : PLAY_SHUFFLE_ALL_ACTION==act ? PLAY_SHUFFLE_ACTION : PLAY_ACTION, view.allTracksItem);
             } else {
@@ -1640,8 +1640,10 @@ function browseItemAction(view, act, origItem, index, event) {
                 }
             }
 
-            view.doList(itemList, act, itemIndex);
-            bus.$emit('showMessage', isFilter || item.id.endsWith("tracks") ? i18n("Adding tracks...") : i18n("Adding albums..."));
+            if (itemList.length>0) {
+                view.doList(itemList, act, itemIndex);
+                bus.$emit('showMessage', isFilter || item.id.endsWith("tracks") ? i18n("Adding tracks...") : i18n("Adding albums..."));
+            }
         }
     } else if (act==GOTO_ARTIST_ACTION) {
         view.fetchItems(view.replaceCommandTerms({command:["albums"], params:["artist_id:"+item.artist_id, ARTIST_ALBUM_TAGS, SORT_KEY+ARTIST_ALBUM_SORT_PLACEHOLDER]}), {cancache:false, id:"artist_id:"+item.artist_id, title:item.id.startsWith("album_id:") ? item.subtitle : item.artist, stdItem:STD_ITEM_ARTIST});

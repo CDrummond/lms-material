@@ -808,9 +808,12 @@ PLUGIN_MATERIAL_SKIN_PLAYLIST_IMAGES_DESC
 
 PLUGIN_MATERIAL_SKIN_QT_MOVE_ERROR
 	EN	Cannot move queue to a player that it is already synced with.
+	FR	Impossible de déplacer une liste de lecture vers une platine déjà synchronisée.
 
 PLUGIN_MATERIAL_SKIN_QT_COPY_ERROR
 	EN	Cannot copy queue to a player that it is already synced with.
+	FR	Impossible de copier une liste de lecture vers une platine déjà synchronisée.
 
 PLUGIN_MATERIAL_SKIN_QT_SWAP_ERROR
 	EN	Cannot swap queue with a player that it is already synced with.
+	FR	Impossible d'échanger une liste de lecture avec une platine déjà synchronisée.

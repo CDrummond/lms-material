@@ -599,9 +599,11 @@ function browseHandleListResponse(view, item, command, resp, prevPage, appendIte
         }
         if (resp.isMusicMix || (("albums"==command.command[0] && view.items.length>0 && command.params.find(elem => elem=="sort:random")))) {
             view.currentActions.push({action:RELOAD_ACTION, weight:-1});
+            /* Remove 'Add to playlist' as its not working
             if (resp.isMusicMix && !queryParams.party) {
                 view.currentActions.push({action:ADD_TO_PLAYLIST_ACTION, weight:50});
             }
+            */
         }
         if (canAddAlbumSort && view.command.command.length>0 && view.command.command[0]=="albums" && view.items.length>0) {
             for (var i=0, len=view.command.params.length; i<len && canAddAlbumSort; ++i) {
@@ -1612,7 +1614,7 @@ function browseItemAction(view, act, origItem, index, event) {
             }
         });
     } else if (ADD_ALL_ACTION==act || INSERT_ALL_ACTION==act || PLAY_ALL_ACTION==act || PLAY_DISC_ACTION==act || PLAY_SHUFFLE_ALL_ACTION==act) {
-        if (view.current && item.id == view.current.id) { // Called from subtoolbar => act on all items
+        if (view.current && ((item.id == view.current.id) || (view.current.id.startsWith("currentaction:")))) { // Called from subtoolbar => act on all items
             if (view.allTracksItem) {
                 view.itemAction(ADD_ALL_ACTION==act ? ADD_ACTION : INSERT_ALL_ACTION==act ? INSERT_ACTION : PLAY_SHUFFLE_ALL_ACTION==act ? PLAY_SHUFFLE_ACTION : PLAY_ACTION, view.allTracksItem);
             } else {
@@ -1640,8 +1642,10 @@ function browseItemAction(view, act, origItem, index, event) {
                 }
             }
 
-            view.doList(itemList, act, itemIndex);
-            bus.$emit('showMessage', isFilter || item.id.endsWith("tracks") ? i18n("Adding tracks...") : i18n("Adding albums..."));
+            if (itemList.length>0) {
+                view.doList(itemList, act, itemIndex);
+                bus.$emit('showMessage', isFilter || item.id.endsWith("tracks") ? i18n("Adding tracks...") : i18n("Adding albums..."));
+            }
         }
     } else if (act==GOTO_ARTIST_ACTION) {
         view.fetchItems(view.replaceCommandTerms({command:["albums"], params:["artist_id:"+item.artist_id, ARTIST_ALBUM_TAGS, SORT_KEY+ARTIST_ALBUM_SORT_PLACEHOLDER]}), {cancache:false, id:"artist_id:"+item.artist_id, title:item.id.startsWith("album_id:") ? item.subtitle : item.artist, stdItem:STD_ITEM_ARTIST});

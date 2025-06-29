@@ -3,6 +3,7 @@
 1. Support back-slash escaping of commas in release types - e.g. "A\, B".
 2. If showing multiple artist biographies in MAI then add titles for each.
 3. Fix adding Bliss mix to queue.
+4. Remove 'Add to playlist' for Bliss and MusicIP mixes, not working.
 
 5.10.3
 ------

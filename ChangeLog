@@ -4,6 +4,8 @@
 2. If showing multiple artist biographies in MAI then add titles for each.
 3. Fix adding Bliss mix to queue.
 4. Remove 'Add to playlist' for Bliss and MusicIP mixes, not working.
+5. If 'Show all artists' is enabled then show all artsts, track-artists, and
+   album-artists - thanks to Darrell.
 
 5.10.3
 ------

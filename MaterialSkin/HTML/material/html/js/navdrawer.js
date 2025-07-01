@@ -499,19 +499,21 @@ Vue.component('lms-navdrawer', {
                 bus.$emit('dlg.open', 'sleep', player);
             } else {
                 let ison = this.$store.state.player.id == player.id ? this.playerStatus.ison : player.ison;
-                if (1==queryParams.nativePlayerPower) {
-                    try {
-                        if (1==NativeReceiver.controlLocalPlayerPower(player.id, player.ip, ison ? 0 : 1)) {
-                            setTimeout(function () {
-                                bus.$emit('refreshServerStatus');
-                                setTimeout(function () { bus.$emit('refreshServerStatus');}.bind(this), 1000);
-                            }.bind(this), 500);
-                            return;
+                if (!player.isgroup) {
+                    if (1==queryParams.nativePlayerPower) {
+                        try {
+                            if (1==NativeReceiver.controlLocalPlayerPower(player.id, player.ip, ison ? 0 : 1)) {
+                                setTimeout(function () {
+                                    bus.$emit('refreshServerStatus');
+                                    setTimeout(function () { bus.$emit('refreshServerStatus');}.bind(this), 1000);
+                                }.bind(this), 500);
+                                return;
+                            }
+                        } catch (e) {
                         }
-                    } catch (e) {
+                    } else if (queryParams.nativePlayerPower>0) {
+                        emitNative("MATERIAL-PLAYERPOWER\nID " + player.id+"\nIP "+player.ip+"\nSTATE "+(ison ? 0 : 1), queryParams.nativePlayerPower);
                     }
-                } else if (queryParams.nativePlayerPower>0) {
-                    emitNative("MATERIAL-PLAYERPOWER\nID " + player.id+"\nIP "+player.ip+"\nSTATE "+(ison ? 0 : 1), queryParams.nativePlayerPower);
                 }
                 lmsCommand(player.id, ["power", ison ? "0" : "1"]).then(({data}) => {
                     bus.$emit('refreshStatus', player.id);

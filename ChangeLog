@@ -6,6 +6,7 @@
 4. Remove 'Add to playlist' for Bliss and MusicIP mixes, not working.
 5. If 'Show all artists' is enabled then show all artsts, track-artists, and
    album-artists - thanks to Darrell.
+6. Add support for LMS9.1 'Playlist Folder' browse mode.
 
 5.10.3
 ------

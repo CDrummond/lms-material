@@ -225,7 +225,10 @@ const STD_ITEM_WORK = 11;
 const STD_ITEM_WORK_COMPOSER = 12;
 const STD_ITEM_WORK_GENRE = 13;
 const STD_ITEM_RANDOM_MIX = 14;
-const STD_ITEM_MAX = 100; /* Only items below this are real standard items... */
+
+const STD_ITEM_PLAYLIST_FOLDER = 15;
+const STD_ITEM_MAX = 14; /* Only items below this value are real standard items, so allow play buttons, menus, etc. */
+
 const STD_ITEM_MIX = 101;
 const STD_ITEM_MAI = 200;
 const STD_ITEM_ALL_TRACKS = 201;

@@ -2270,6 +2270,8 @@ function browseBuildCommand(view, item, commandName, doReplacements, allowLibId)
                         p.push("hasAlbums:1");
                     } else if (mode.startsWith("myMusicWorks")) {
                         mode="works";
+                    } else if (mode=="playlistFolder") {
+                        mode="playlists";
                     } else if (mode!="artists" && mode!="albums" && mode!="genres" && mode!="tracks" && mode!="playlists" && mode!="works") {
                         canReplace = false;
                         break;

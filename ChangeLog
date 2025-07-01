@@ -7,6 +7,8 @@
 5. If 'Show all artists' is enabled then show all artsts, track-artists, and
    album-artists - thanks to Darrell.
 6. Add support for LMS9.1 'Playlist Folder' browse mode.
+7. Fix now-playing navigation bar icon and text colour when using light theme,
+   coloured toolbars, and full-view now-playing.
 
 5.10.3
 ------

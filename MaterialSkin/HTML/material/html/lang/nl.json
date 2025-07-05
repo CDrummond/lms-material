@@ -693,6 +693,6 @@
 "%1 Years":"%1 Jaren",
 "1 day":"1 dag",
 "%1 days":"%1 dagen",
-"A playlist named '%1' already exists, overwrite?":"",
-"Overwrite":""
+"A playlist named '%1' already exists, overwrite?":"De afspeellijst '%1' bestaat al, overschrijven?",
+"Overwrite":"Overschrijven"
 }

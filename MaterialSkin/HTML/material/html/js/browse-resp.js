@@ -124,6 +124,16 @@ function parseBrowseResp(data, parent, options, cacheKey) {
             var numImages = 0;
             var numTracks = 0;
 
+            // LMS 9.1 enhanced meta-data
+            let parentType = LMS_VERSION>=90100 && undefined!=data.result.hasMetadata
+                                ? "album"==data.result.hasMetadata
+                                    ? STD_ITEM_ONLINE_ALBUM
+                                    : "artist"==data.result.hasMetadata
+                                        ? STD_ITEM_ONLINE_ARTIST
+                                        : undefined
+                                : undefined;
+            let totalDuration = 0;
+
             resp.isMusicMix = MIXER_APPS.has(command) && data.params[1].length>0 && (data.params[1][1]=="mix" || data.params[1][1]=="list");
             resp.canUseGrid = maybeAllowGrid && (isRadiosTop || isAppsTop || isBmf || isDisksAndFolders || (data.result.window && data.result.window.windowStyle && (data.result.window.windowStyle=="icon_list" || data.result.window.windowStyle=="home_menu"))) ? true : false;
             resp.canDrop = isFavorites;
@@ -555,7 +565,13 @@ function parseBrowseResp(data, parent, options, cacheKey) {
 
                 let isOnlineTrack = false;
                 // Check for online artist, album, or tracks
-                if (i.presetParams && i.presetParams.favorites_url) {
+                if (undefined!=i.metadata) { // LMS 9.1+
+                    if ("artist"==i.metadata.type) {
+                        i.stdItem = STD_ITEM_ONLINE_ARTIST;
+                    } else if ("album"==i.metadata.type) {
+                        i.stdItem = STD_ITEM_ONLINE_ALBUM;
+                    }
+                } else if (i.presetParams && i.presetParams.favorites_url) {
                     if (i.presetParams.favorites_url.startsWith("spotify:artist:") ||
                         i.presetParams.favorites_url.startsWith("deezer://artist:") ||
                         i.presetParams.favorites_url.startsWith("qobuz://artist:") ||
@@ -578,6 +594,25 @@ function parseBrowseResp(data, parent, options, cacheKey) {
                     }
                 } else if (parent && parent.stdItem==STD_ITEM_ONLINE_ARTIST) {
                     i.stdItem = STD_ITEM_ONLINE_ARTIST_CATEGORY;
+                }
+
+                if (STD_ITEM_ONLINE_ALBUM==parentType) {  // LMS 9.1+
+                    if (undefined!=i.metadata && i.metadata.type=="track") {
+                        i.image = undefined;
+                        let duration = parseFloat(i.metadata.secs || 0);
+                        let tracknum = undefined==i.metadata.tracknum ? 0 : parseInt(i.metadata.tracknum);
+                        totalDuration+=duration;
+                        i.duration = duration>0 ? duration : undefined;
+                        i.durationStr = duration>0 ? formatSeconds(duration) : undefined;
+                        i.title = (tracknum>9 ? tracknum : ("0" + tracknum))+SEPARATOR+i.title;
+                        i.subtitle = i.metadata.artist == data.result.artist ? undefined : i.metadata.artist;
+                    } else {
+                        if (undefined==resp.actionItems) {
+                            resp.actionItems = [];
+                        }
+                        i.isListItemInMenu = true;
+                        i.weight=1500+resp.actionItems.length;
+                    }
                 }
 
                 if (addedPlayAction || isOnlineTrack) {
@@ -675,7 +710,11 @@ function parseBrowseResp(data, parent, options, cacheKey) {
                     haveWithoutIcons = true;
                 }
 
-                resp.items.push(i);
+                if (i.isListItemInMenu) {
+                    resp.actionItems.push(i);
+                } else {
+                    resp.items.push(i);
+                }
                 // If this is a "text" item with an image then treat as a standard actionable item
                 if ("text"==i.type && (undefined!=i.image || undefined!=i.icon || undefined!=i.svg)) {
                     i.type="other"; // ???
@@ -891,6 +930,12 @@ function parseBrowseResp(data, parent, options, cacheKey) {
                     }
                     if (0==resp.items.length) {
                         resp.subtitle=i18n("Empty");
+                    } else if (STD_ITEM_ONLINE_ALBUM==parentType) {
+                        let totalDurationStr=formatSeconds(totalDuration);
+                        // TODO: Update browse-page.js to handle plain/detailed sub title for these albums...
+                        //resp.subtitle=resp.items.length+'<obj class="mat-icon music-note">music_note</obj>'+totalDurationStr;
+                        //resp.plainsubtitle=i18np("1 Track", "%1 Tracks", resp.items.length)+SEPARATOR+totalDurationStr;
+                        resp.subtitle=i18np("1 Track", "%1 Tracks", resp.items.length)+SEPARATOR+totalDurationStr;
                     } else if (numTracks==resp.items.length) {
                         resp.subtitle=i18np("1 Track", "%1 Tracks", resp.items.length);
                         // Check if all tracks have same subtitle, and if so remove

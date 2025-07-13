@@ -1851,32 +1851,56 @@ function parseBrowseResp(data, parent, options, cacheKey) {
             resp.subtitle=i18np("1 Genre", "%1 Genres", resp.items.length);
         } else if (data.result.playlists_loop) {
             var haveEmblem = false;
+            var numFolders = 0;
+            var folderTextKeys = new Set();
+            var prevWasFolder = false;
+            var folderIdIndex = getIndex(data.params[1], "folder_id:");
+            var isBrowsingFolders = folderIdIndex>0;
             for (var idx=0, loop=data.result.playlists_loop, loopLen=loop.length; idx<loopLen; ++idx) {
                 var i = loop[idx];
                 var key = removeDiactrics(i.textkey);
                 var isRemote = 1 == parseInt(i.remote) || undefined!=i.extid;
                 var emblem = getEmblem(i.extid);
+                var isFolder = undefined!=i.id && (""+i.id).startsWith("file:");
                 if (undefined!=emblem) {
                     haveEmblem = true;
                 }
-                if (undefined!=key && (resp.jumplist.length==0 || resp.jumplist[resp.jumplist.length-1].key!=key) && !textKeys.has(key)) {
-                    resp.jumplist.push({key: key, index: resp.items.length});
-                    textKeys.add(key);
+                if (isFolder) {
+                    if (undefined!=key && (resp.jumplist.length==0 || resp.jumplist[resp.jumplist.length-1].key!=key) && !folderTextKeys.has(key)) {
+                        resp.jumplist.push({key: key, index: resp.items.length});
+                        folderTextKeys.add(key);
+                    }
+                    resp.items.push({
+                            id: "folder_id:"+encodeURIComponent(i.id),
+                            title: replaceHtmlBrackets(i.playlist),
+                            svg: 'folder-playlist',
+                            stdItem: STD_ITEM_PLAYLIST_FOLDER,
+                            type: "group",
+                            section: SECTION_PLAYLISTS
+                        });
+                    numFolders += 1;
+                } else {
+                    if (undefined!=key && (prevWasFolder || resp.jumplist.length==0 || resp.jumplist[resp.jumplist.length-1].key!=key) && !textKeys.has(key)) {
+                        resp.jumplist.push({key: key, index: resp.items.length});
+                        textKeys.add(key);
+                    }
+                    resp.items.push({
+                                id: "playlist_id:"+i.id,
+                                title: replaceHtmlBrackets(i.playlist),
+                                icon: undefined == emblem ? "list" : undefined,
+                                svg: undefined == emblem ? undefined : emblem.name,
+                                image: lmsOptions.playlistImages ? "material/playlists/" + encodeURIComponent(i.playlist) : undefined,
+                                stdItem: isRemote ? STD_ITEM_REMOTE_PLAYLIST : STD_ITEM_PLAYLIST,
+                                type: "group",
+                                section: SECTION_PLAYLISTS,
+                                url:  i.url,
+                                remotePlaylist: isRemote
+                            });
                 }
-                resp.items.push({
-                              id: "playlist_id:"+i.id,
-                              title: replaceHtmlBrackets(i.playlist),
-                              icon: undefined == emblem ? "list" : undefined,
-                              svg: undefined == emblem ? undefined : emblem.name,
-                              image: lmsOptions.playlistImages ? "material/playlists/" + encodeURIComponent(i.playlist) : undefined,
-                              stdItem: isRemote ? STD_ITEM_REMOTE_PLAYLIST : STD_ITEM_PLAYLIST,
-                              type: "group",
-                              section: SECTION_PLAYLISTS,
-                              url:  i.url,
-                              remotePlaylist: isRemote
-                          });
+                prevWasFolder = isFolder;
             }
-            if (!haveEmblem) {
+
+            if (!haveEmblem && !isBrowsingFolders) {
                 // No emblems? Clear icons...
                 for (var i=0, len=resp.items.length; i<len; ++i) {
                     resp.items[i].icon = resp.items[i].svg = undefined;
@@ -1884,7 +1908,15 @@ function parseBrowseResp(data, parent, options, cacheKey) {
             }
             resp.canUseGrid = lmsOptions.playlistImages;
             resp.itemCustomActions = getCustomActions("playlist");
-            resp.subtitle=i18np("1 Playlist", "%1 Playlists", resp.items.length);
+            if (numFolders>0) {
+                if (numFolders==resp.items.length) {
+                    resp.subtitle=i18np("1 Folder", "%1 Folders", resp.items.length);
+                } else {
+                    resp.subtitle=i18np("1 Folder", "%1 Folders", numFolders) + SEPARATOR + i18np("1 Playlist", "%1 Playlists", resp.items.length-numFolders);
+                }
+            } else {
+                resp.subtitle=i18np("1 Playlist", "%1 Playlists", resp.items.length);
+            }
         } else if (data.result.playlisttracks_loop) {
             var totalDuration = 0;
             let browseContext = getLocalStorageBool('browseContext', false);
@@ -2269,6 +2301,14 @@ function parseBrowseModes(view, data, genreFilter, yearFilter, altId, excludeWor
                 }
                 item.icon = "list";
                 item.section = SECTION_PLAYLISTS;
+            } else if (c.id == "myMusicPlaylistFolder") {
+                if (undefined!=genreFilter || undefined!=yearFilter) {
+                    continue;
+                }
+                item.svg = "folder-playlist";
+                item.icon = undefined;
+                item.section = SECTION_PLAYLISTS;
+                item.params.push("folder_id:/");
             } else if (c.id.startsWith("myMusicYears")) {
                 if (undefined!=genreFilter || undefined!=yearFilter) {
                     continue;

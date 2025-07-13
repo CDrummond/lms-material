@@ -154,7 +154,7 @@ var app = new Vue({
                 if (LMS_VERSION<90001) {
                     for (var t=0, len=SKIN_GENRE_TAGS.length; t<len; ++t ) {
                         if (data.result[SKIN_GENRE_TAGS[t]+'genres']) {
-                            var genres = splitString(data.result[SKIN_GENRE_TAGS[t]+'genres'].split("\r").join("").split("\n").join(","));
+                            var genres = splitConfigString(data.result[SKIN_GENRE_TAGS[t]+'genres']);
                             if (genres.length>0) {
                                 lmsOptions[SKIN_GENRE_TAGS[t]+'Genres'] = new Set(genres);
                                 logJsonMessage(SKIN_GENRE_TAGS[t].toUpperCase()+"_GENRES", genres);
@@ -178,7 +178,7 @@ var app = new Vue({
                     setLocalStorageVal('allowDownload', false);
                 }
                 if (undefined!=data.result['releaseTypeOrder']) {
-                    let arr = splitString(data.result['releaseTypeOrder'].split("\r").join("").split("\n").join(","));
+                    let arr = splitConfigString(data.result['releaseTypeOrder']);
                     lmsOptions.releaseTypeOrder = arr.length>0 ? arr : undefined;
                 }
                 if (undefined!=data.result['hidePlayers'] && undefined==queryParams.hidePlayers) {

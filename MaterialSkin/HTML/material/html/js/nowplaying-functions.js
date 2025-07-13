@@ -11,6 +11,13 @@ function  nowPlayingHeader(s) {
     return isEmpty(s) ? "" : ("<b>"+s+"</b><br/>");
 }
 
+function nowPlayingMAIHeader(ev, idx) {
+    let elem = document.getElementById("mai-artist-"+idx);
+    if (undefined!=elem) {
+        ensureVisible(elem);
+    }
+}
+
 function formatLyrics(s) {
     let lines = s.split("<br/>")
     if (lines.length>0) {
@@ -115,10 +122,14 @@ function nowplayingOnPlayerStatus(view, playerStatus) {
     if (playerStatus.dvc!=view.playerStatus.dvc) {
         view.playerStatus.dvc = playerStatus.dvc;
     }
-    let artist = playerStatus.current.trackartist ? playerStatus.current.trackartist : playerStatus.current.artist;
-    let artists = playerStatus.current.trackartists ? playerStatus.current.trackartists : playerStatus.current.artists;
-    let artist_id = playerStatus.current.trackartist_id ? playerStatus.current.trackartist_id : playerStatus.current.artist_id;
-    let artist_ids = playerStatus.current.trackartist_ids ? playerStatus.current.trackartist_ids : playerStatus.current.artist_ids;
+    let artist = playerStatus.current.artist ? playerStatus.current.artist : playerStatus.current.trackartist;
+    let artists = playerStatus.current.artists && playerStatus.current.trackartists
+        ? [...new Set([...playerStatus.current.artists, ...playerStatus.current.trackartists])]
+        : playerStatus.current.artists ? playerStatus.current.artists : playerStatus.current.trackartists;
+    let artist_id = playerStatus.current.artist_id ? playerStatus.current.artist_id : playerStatus.current.trackartist_id;
+    let artist_ids = playerStatus.current.artist_ids && playerStatus.current.trackartist_ids
+        ? [...new Set([...playerStatus.current.artist_ids, ...playerStatus.current.trackartist_ids])]
+        : playerStatus.current.artist_ids ? playerStatus.current.artist_ids : playerStatus.current.trackartist_ids;
     if (view.playerStatus.current.artist!=artist ||
         view.playerStatus.current.artists!=artists ||
         view.playerStatus.current.artist_id!=artist_id ||
@@ -752,6 +763,14 @@ function nowplayingFetchArtistInfo(view) {
     let artist = maiComposer ? view.infoTrack.composer : view.infoTrack.artist;
     let artist_id = maiComposer ? view.infoTrack.composer_id : view.infoTrack.artist_id;
     let artist_ids = maiComposer ? view.infoTrack.composer_ids : view.infoTrack.artist_ids;
+    let artists = maiComposer ? view.infoTrack.composers : view.infoTrack.artists;
+
+    if (undefined!=artists && artists.length>1 && undefined!=artist_ids && artists.length==artist_ids.length) {
+        artist = "";
+        for (let a=0, len=artists.length; a<len; ++a) {
+            artist+=(a>0 ? SEPARATOR : "")+("<obj class=\"link-item\" onclick=\"nowPlayingMAIHeader(event, "+a+")\">" + artists[a] + "</obj>");
+        }
+    }
     if (view.info.tabs[ARTIST_TAB].artist!=artist || view.info.tabs[ARTIST_TAB].artist_id!=artist_id ||
         (undefined!=view.info.tabs[ARTIST_TAB].artist_ids && undefined!=artist_ids && view.info.tabs[ARTIST_TAB].artist_ids.length!=artist_ids.length)) {
         view.info.tabs[ARTIST_TAB].sections[0].items=[];
@@ -770,29 +789,30 @@ function nowplayingFetchArtistInfo(view) {
         if (view.info.tabs[ARTIST_TAB].reqId>65535) {
             view.info.tabs[ARTIST_TAB].reqId = 0;
         }
-        let ids = artist_ids;
-        if (undefined!=ids && ids.length>1) {
-            view.info.tabs[ARTIST_TAB].first = true;
-            view.info.tabs[ARTIST_TAB].found = false;
+        if (undefined!=artists && artists.length>1 && undefined!=artist_ids && artists.length==artist_ids.length) {
+            let ids = artist_ids;
             view.info.tabs[ARTIST_TAB].count = ids.length;
+            view.info.tabs[ARTIST_TAB].details = [];
             for (let i=0, len=ids.length; i<len; ++i) {
                 lmsCommand("", ["musicartistinfo", "biography", "artist_id:"+ids[i], "html:1"], view.info.tabs[ARTIST_TAB].reqId).then(({data}) => {
                     logJsonMessage("RESP", data);
                     if (data && view.isCurrent(data, ARTIST_TAB)) {
                         if (data.result && data.result.biography) {
                             if (data.result.artist) {
-                                view.info.tabs[ARTIST_TAB].found = true;
-                                let text = replaceNewLines(data.result.biography);
-                                if (view.info.tabs[ARTIST_TAB].first) {
-                                    view.info.tabs[ARTIST_TAB].text = text;
-                                    view.info.tabs[ARTIST_TAB].first = false;
+                                view.info.tabs[ARTIST_TAB].details.push({weight:i, text:"<b id=\"mai-artist-" + i +"\">"+data.result.artist+"</b><br/>" + replaceNewLines(data.result.biography)});
+                            }
+                            if (0==i) {
+                                if (undefined!=data.result.portraitid) {
+                                    view.info.tabs[ARTIST_TAB].image=undefined!=data.result.portraitid && ("/contributor/" + data.result.portraitid + "/image" + LMS_IMAGE_SIZE);
                                 } else {
-                                    view.info.tabs[ARTIST_TAB].text+="<br/><br/>" + text;
+                                    view.info.tabs[ARTIST_TAB].image="/imageproxy/mai/artist/" + ids[0] + "/image" + LMS_IMAGE_SIZE;
                                 }
                             }
                         }
-                        view.info.tabs[ARTIST_TAB].count--;
-                        if (0 == view.info.tabs[ARTIST_TAB].count && !view.info.tabs[ARTIST_TAB].found) {
+                    }
+                    view.info.tabs[ARTIST_TAB].count--;
+                    if (0 == view.info.tabs[ARTIST_TAB].count) {
+                        if (view.info.tabs[ARTIST_TAB].details.length<1) {
                             view.info.tabs[ARTIST_TAB].text = undefined;
                             if (undefined!=data.result.portraitid) {
                                 view.info.tabs[ARTIST_TAB].image=undefined!=data.result.portraitid && ("/contributor/" + data.result.portraitid + "/image" + LMS_IMAGE_SIZE);
@@ -801,6 +821,12 @@ function nowplayingFetchArtistInfo(view) {
                             }
                         } else {
                             view.info.tabs[ARTIST_TAB].isMsg=false;
+                            view.info.tabs[ARTIST_TAB].details.sort(weightSort);
+                            view.info.tabs[ARTIST_TAB].text="";
+                            for (let idx=0, count=view.info.tabs[ARTIST_TAB].details.length; idx<count; ++idx) {
+                                view.info.tabs[ARTIST_TAB].text+=(idx>0 ? "<br/><br/>" : "") + view.info.tabs[ARTIST_TAB].details[idx].text;
+                            }
+                            view.info.tabs[ARTIST_TAB].details = undefined;
                         }
                     }
                 });

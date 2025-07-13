@@ -24,6 +24,15 @@
  --active-nav-btn-color:var(--light-text-color)!important;
 }
 
+.np-full:is(.theme--light) .active-nav > div > span,
+.np-full:is(.theme--light) .active-nav > div > i {
+ color:var(--dark-text-color)!important;
+}
+
+.np-full:is(.theme--light) .active-nav > div > .pill-ct {
+ background-color:var(--dark-text-color)!important;
+}
+
 .lms-toolbar .v-input--slider .v-slider__track {
  background:rgba(255, 255, 255, 0.3333)!important;
 }

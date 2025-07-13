@@ -599,28 +599,28 @@ function parseBrowseResp(data, parent, options, cacheKey) {
                 }
 
                 // LMS 9.1+
-                if (undefined!=i.metadata) {
-                    if (STD_ITEM_ONLINE_ALBUM==parentType) {
-                        if (i.metadata.type=="track") {
-                            i.image = undefined;
-                            let duration = parseFloat(i.metadata.secs || 0);
-                            let tracknum = undefined==i.metadata.tracknum ? 0 : parseInt(i.metadata.tracknum);
-                            totalDuration+=duration;
-                            i.duration = duration>0 ? duration : undefined;
-                            i.durationStr = duration>0 ? formatSeconds(duration) : undefined;
-                            i.title = (tracknum>9 ? tracknum : ("0" + tracknum))+SEPARATOR+i.title;
-                            i.subtitle = i.metadata.artist == data.result.artist ? undefined : i.metadata.artist;
-                            if (undefined!=i.metadata.discnum) {
-                                i.title = i.metadata.discnum+"."+i.title;
-                            }
-                        } else {
-                            if (undefined==resp.actionItems) {
-                                resp.actionItems = [];
-                            }
-                            i.isListItemInMenu = true;
-                            i.weight=1500+resp.actionItems.length;
+                if (STD_ITEM_ONLINE_ALBUM==parentType) {
+                    if (undefined!=i.metadata && i.metadata.type=="track") {
+                        i.image = undefined;
+                        let duration = parseFloat(i.metadata.secs || 0);
+                        let tracknum = undefined==i.metadata.tracknum ? 0 : parseInt(i.metadata.tracknum);
+                        totalDuration+=duration;
+                        i.duration = duration>0 ? duration : undefined;
+                        i.durationStr = duration>0 ? formatSeconds(duration) : undefined;
+                        i.title = (tracknum>9 ? tracknum : ("0" + tracknum))+SEPARATOR+i.title;
+                        i.subtitle = i.metadata.artist == data.result.artist ? undefined : i.metadata.artist;
+                        if (undefined!=i.metadata.discnum && undefined!=i.metadata.disccount && parseInt(i.metadata.disccount)>1) {
+                            i.title = i.metadata.discnum+"."+i.title;
                         }
-                    } else if (STD_ITEM_ONLINE_ARTIST==parentType && undefined!=i.metadata.year && i.subtitle == data.result.artist) {
+                    } else {
+                        if (undefined==resp.actionItems) {
+                            resp.actionItems = [];
+                        }
+                        i.isListItemInMenu = true;
+                        i.weight=1500+resp.actionItems.length;
+                    }
+                } else if (undefined!=i.metadata) {
+                    if (STD_ITEM_ONLINE_ARTIST==parentType && undefined!=i.metadata.year && i.subtitle == data.result.artist) {
                         // NOTE: This does not work for Qobuz becasue we have ARTIST / <category> / ALBUMs :(
                         i.subtitle = i.metadata.year;
                     } else if (i.metadata.type=="album" && undefined!=i.metadata.year) {

@@ -940,15 +940,14 @@ function parseBrowseResp(data, parent, options, cacheKey) {
                 }
                 let image = undefined!=i.portraitid && "/contributor/" + i.portraitid + "/image" + LMS_LIST_IMAGE_SIZE;
                 image = image || (LMS_P_MAI && lmsOptions.showArtistImages) && "/imageproxy/mai/artist/" + i.id + "/image" + LMS_LIST_IMAGE_SIZE;
-                if (i.artist.match(/ubble/)) console.log(image, i)
-                    var artist = {
-                              id: "artist_id:"+i.id,
-                              title: replaceHtmlBrackets(i.artist),
-                              image: image,
-                              stdItem: stdItem,
-                              type: "group",
-                              textkey: key
-                          };
+                var artist = {
+                            id: "artist_id:"+i.id,
+                            title: replaceHtmlBrackets(i.artist),
+                            image: image,
+                            stdItem: stdItem,
+                            type: "group",
+                            textkey: key
+                        };
                 setFavoritesParams(i, artist);
                 resp.items.push(artist);
             }

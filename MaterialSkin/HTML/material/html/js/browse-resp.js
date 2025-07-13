@@ -133,6 +133,7 @@ function parseBrowseResp(data, parent, options, cacheKey) {
                                         : undefined
                                 : undefined;
             let totalDuration = 0;
+            let metadataTypes = new Set();
 
             resp.isMusicMix = MIXER_APPS.has(command) && data.params[1].length>0 && (data.params[1][1]=="mix" || data.params[1][1]=="list");
             resp.canUseGrid = maybeAllowGrid && (isRadiosTop || isAppsTop || isBmf || isDisksAndFolders || (data.result.window && data.result.window.windowStyle && (data.result.window.windowStyle=="icon_list" || data.result.window.windowStyle=="home_menu"))) ? true : false;
@@ -571,6 +572,7 @@ function parseBrowseResp(data, parent, options, cacheKey) {
                     } else if ("album"==i.metadata.type) {
                         i.stdItem = STD_ITEM_ONLINE_ALBUM;
                     }
+                    metadataTypes.add(i.metadata.type);
                 } else if (i.presetParams && i.presetParams.favorites_url) {
                     if (i.presetParams.favorites_url.startsWith("spotify:artist:") ||
                         i.presetParams.favorites_url.startsWith("deezer://artist:") ||
@@ -936,6 +938,10 @@ function parseBrowseResp(data, parent, options, cacheKey) {
                         //resp.subtitle=resp.items.length+'<obj class="mat-icon music-note">music_note</obj>'+totalDurationStr;
                         //resp.plainsubtitle=i18np("1 Track", "%1 Tracks", resp.items.length)+SEPARATOR+totalDurationStr;
                         resp.subtitle=i18np("1 Track", "%1 Tracks", resp.items.length)+SEPARATOR+totalDurationStr;
+                    } else if (metadataTypes.size==1 && metadataTypes.has("artist")) {
+                        resp.subtitle=i18np("1 Artist", "%1 Artists", resp.items.length);
+                    } else if (metadataTypes.size==1 && metadataTypes.has("album")) {
+                        resp.subtitle=lmsOptions.supportReleaseTypes ? i18np("1 Release", "%1 Releases", resp.items.length) : i18np("1 Album", "%1 Albums", resp.items.length);
                     } else if (numTracks==resp.items.length) {
                         resp.subtitle=i18np("1 Track", "%1 Tracks", resp.items.length);
                         // Check if all tracks have same subtitle, and if so remove

@@ -608,6 +608,9 @@ function parseBrowseResp(data, parent, options, cacheKey) {
                         i.durationStr = duration>0 ? formatSeconds(duration) : undefined;
                         i.title = (tracknum>9 ? tracknum : ("0" + tracknum))+SEPARATOR+i.title;
                         i.subtitle = i.metadata.artist == data.result.artist ? undefined : i.metadata.artist;
+                        if (undefined!=i.metadata.discnum) {
+                            i.title = i.metadata.discnum+"."+i.title;
+                        }
                     } else {
                         if (undefined==resp.actionItems) {
                             resp.actionItems = [];

@@ -10,6 +10,7 @@
 7. Fix now-playing navigation bar icon and text colour when using light theme,
    coloured toolbars, and full-view now-playing.
 8. Don't send player power updates for group players.
+9. Fix 'Play next' action for track lists.
 
 5.10.3
 ------

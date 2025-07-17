@@ -2783,6 +2783,11 @@ function browseDoListAction(view, list, act, index) {
     // Perform an action on a list of items. If these are tracks, then we can use 1 command...
     if (list[0].id.startsWith("track_id:")) {
         var ids="";
+        // for 'insert' the list has been inverted (so that adding one by one works). But
+        // as this command will send an ID list we need to revert to original order.
+        if (INSERT_ACTION==act) {
+            list=list.reverse();
+        }
         for (var i=0, len=list.length; i<len; ++i) {
             if (ids.length<1) {
                 ids+=originalId(list[i].id);

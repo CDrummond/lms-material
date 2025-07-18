@@ -3,7 +3,7 @@
  1. Support back-slash escaping of commas in release types - e.g. "A\, B".
  2. If showing multiple artist biographies in MAI then add titles for each.
  3. Fix adding Bliss mix to queue.
- 4. Remove 'Add to playlist' for Bliss and MusicIP mixes, not working.
+ 4. Fix 'Add to playlist' for Bliss mixes.
  5. If 'Show all artists' is enabled then show all artsts, track-artists, and
     album-artists - thanks to Darrell.
  6. Add support for LMS9.1 'Playlist Folder' browse mode.

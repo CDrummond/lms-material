@@ -599,11 +599,9 @@ function browseHandleListResponse(view, item, command, resp, prevPage, appendIte
         }
         if (resp.isMusicMix || (("albums"==command.command[0] && view.items.length>0 && command.params.find(elem => elem=="sort:random")))) {
             view.currentActions.push({action:RELOAD_ACTION, weight:-1});
-            /* Remove 'Add to playlist' as its not working
             if (resp.isMusicMix && !queryParams.party) {
                 view.currentActions.push({action:ADD_TO_PLAYLIST_ACTION, weight:50});
             }
-            */
         }
         if (canAddAlbumSort && view.command.command.length>0 && view.command.command[0]=="albums" && view.items.length>0) {
             for (var i=0, len=view.command.params.length; i<len && canAddAlbumSort; ++i) {
@@ -1652,7 +1650,11 @@ function browseItemAction(view, act, origItem, index, event) {
     } else if (act==GOTO_ALBUM_ACTION) {
         view.fetchItems({command:["tracks"], params:["album_id:"+item.album_id, trackTags(true), SORT_KEY+"tracknum"]}, {cancache:false, id:"album_id:"+item.album_id, title:item.album, stdItem:STD_ITEM_ALBUM});
     } else if (ADD_TO_PLAYLIST_ACTION==act) {
-        bus.$emit('dlg.open', 'addtoplaylist', [item], [browseBuildCommand(view, item)]);
+        if (STD_ITEM_MIX==view.current.stdItem && !item.id.startsWith("track_id:")) {
+            bus.$emit('dlg.open', 'addtoplaylist', view.items);
+        } else {
+            bus.$emit('dlg.open', 'addtoplaylist', [item], [browseBuildCommand(view, item)]);
+        }
     } else if (REMOVE_DUPES_ACTION==act) {
         confirm(i18n("Remove duplicate tracks?")+addNote(i18n("This will remove tracks with the same artist and title.")), i18n('Remove')).then(res => {
             if (res) {

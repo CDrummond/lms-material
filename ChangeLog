@@ -1,6 +1,10 @@
 5.11.0
 ------
 1. Add support for extended meta-data in SlimBrowse commands.
+2. Move 'Sleep all' and 'Create group player' into menu of 'Manager players'
+   dialog.
+3. Add 'Clear queue', 'Switch off', and 'Switch on' for all players in menu
+   of 'Manager players' dialog.
 
 5.10.4
 ------

@@ -4390,3 +4390,8 @@ div.v-subheader {
 .v-list__group__items .v-list__tile {
  padding-left:28px;
 }
+
+.menu-group-item .v-list__tile__avatar,
+.menu-group-item .v-list__tile__content {
+ padding-left:18px !important;
+}

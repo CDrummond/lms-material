@@ -76,8 +76,33 @@ Vue.component('lms-manage-players', {
     <v-toolbar-title class="ellipsis" style="width:100%; text-align:center" v-if="draggingSyncedPlayer">{{i18n('Drop here to remove from group')}}</v-toolbar-title>
     <v-toolbar-title class="ellipsis" v-else>{{TB_MANAGE_PLAYERS.title}}</v-toolbar-title>
     <v-spacer v-if="!draggingSyncedPlayer" class="drag-area"></v-spacer>
-    <v-btn icon @click="sleepAll($event)" :title="i18n('Set sleep time for all players')" v-if="!draggingSyncedPlayer && players.length>1"><v-icon>hotel</v-icon></v-btn>
-    <v-btn icon @click="createGroup($event)" :title="i18n('Create group player')" v-if="!draggingSyncedPlayer && manageGroups && unlockAll"><img class="svg-img" :src="'speaker-group-add' | svgIcon(darkUi, coloredToolbars)"></img></v-btn>
+    <v-menu v-if="!draggingSyncedPlayer" bottom left v-model="showMenu">
+     <v-btn icon slot="activator"><v-icon>more_vert</v-icon></v-btn>
+     <v-list>
+      <v-subheader>{{i18n("All players")}}</v-subheader>
+      <v-list-tile @click="actionAll($event, 'sleep')" class="menu-group-item">
+       <v-list-tile-avatar><v-icon>hotel</v-icon></v-list-tile-avatar>
+       <v-list-tile-content><v-list-tile-title>{{i18n('Sleep')}}</v-list-tile-title></v-list-tile-content>
+      </v-list-tile>
+      <v-list-tile @click="actionAll($event, 'clear')" class="menu-group-item">
+       <v-list-tile-avatar><img class="svg-img" :src="'queue-clear' | svgIcon(darkUi)"></img></v-list-tile-avatar>
+       <v-list-tile-content><v-list-tile-title>{{i18n('Clear queue')}}</v-list-tile-title></v-list-tile-content>
+      </v-list-tile>
+      <v-list-tile @click="actionAll($event, 'poweroff')" class="menu-group-item">
+       <v-list-tile-avatar><v-icon>power_settings_new</v-icon></v-list-tile-avatar>
+       <v-list-tile-content><v-list-tile-title>{{i18n('Switch off')}}</v-list-tile-title></v-list-tile-content>
+      </v-list-tile>
+      <v-list-tile @click="actionAll($event, 'poweron')" class="menu-group-item">
+       <v-list-tile-avatar><v-icon class="dimmed">power_settings_new</v-icon></v-list-tile-avatar>
+       <v-list-tile-content><v-list-tile-title>{{i18n('Switch on')}}</v-list-tile-title></v-list-tile-content>
+      </v-list-tile>
+      <v-divider v-if="manageGroups && unlockAll"></v-divider>
+      <v-list-tile @click="createGroup($event)" v-if="manageGroups && unlockAll">
+       <v-list-tile-avatar><img class="svg-img" :src="'speaker-group-add' | svgIcon(darkUi)"></img></v-list-tile-avatar>
+       <v-list-tile-content><v-list-tile-title>{{i18n("Create group player")}}</v-list-tile-title></v-list-tile-content>
+      </v-list-tile>
+     </v-list>
+    </v-menu>
     <div class="drag-area-right"></div>
     <lms-windowcontrols v-if="queryParams.nativeTitlebar && queryParams.tbarBtnsPos=='r'"></lms-windowcontrols>
    </v-toolbar>
@@ -189,6 +214,7 @@ Vue.component('lms-manage-players', {
     data() {
         return {
             show: false,
+            showMenu: false,
             showAllButtons: true,
             players: [],
             manageGroups: false,
@@ -252,6 +278,7 @@ Vue.component('lms-manage-players', {
             if (this.menu.show) {
                 this.menu.show = false;
             }
+            this.showMenu = false;
         }.bind(this));
         bus.$on('closeDialog', function(dlg) {
             if (undefined!=this.dragEndTime && ((new Date().getTime()-this.dragEndTime)<=250)) {
@@ -330,9 +357,29 @@ Vue.component('lms-manage-players', {
             storeClickOrTouchPos(event, this.menu);
             bus.$emit('dlg.open', 'group', 'create');
         },
-        sleepAll(event) {
+        actionAll(event, action) {
             storeClickOrTouchPos(event, this.menu);
-            bus.$emit('dlg.open', 'sleep');
+            if (action=='sleep') {
+                bus.$emit('dlg.open', 'sleep');
+            } else if (action=='clear') {
+                confirm(i18n("Clear queues of all players?"), i18n("Clear")).then(res => {
+                    if (res) {
+                        this.sendCommandToAll(["playlist", "clear"]);
+                    }
+                });
+            } else if (action=='poweroff') {
+                confirm(i18n("Switch off all players?"), i18n("Switch off")).then(res => {
+                    if (res) {
+                        this.sendCommandToAll(["power", "0"]);
+                    }
+                });
+            } else if (action=='poweron') {
+                confirm(i18n("Switch on all players?"), i18n("Switch on")).then(res => {
+                    if (res) {
+                        this.sendCommandToAll(["power", "1"]);
+                    }
+                });
+            }
         },
         playerAction(player, cmd, event) {
             storeClickOrTouchPos(event, this.menu);
@@ -820,6 +867,13 @@ Vue.component('lms-manage-players', {
             if (!IS_MOBILE) {
                 bus.$emit('dlg.open', 'playersettings', player, 'alarms', true);
             }
+        },
+        sendCommandToAll(cmd) {
+            this.$store.state.players.forEach(p => {
+                lmsCommand(p.id, cmd).then(({data}) => {
+                    bus.$emit('updatePlayer', p.id);
+                });
+            });
         }
     },
     computed: {

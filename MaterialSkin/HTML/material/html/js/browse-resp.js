@@ -2314,7 +2314,8 @@ function parseBrowseModes(view, data, genreFilter, yearFilter, altId, excludeWor
                 if (undefined!=genreFilter || undefined!=yearFilter) {
                     continue;
                 }
-                item.icon = "edit";
+                item.icon = undefined;
+                item.svg = "role-author";
                 item.cancache = true;
             } else if (c.id.startsWith("myMusicArtists")) {
                 mapArtistIcon(item);

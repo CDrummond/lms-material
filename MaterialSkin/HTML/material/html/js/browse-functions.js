@@ -881,7 +881,7 @@ function browseGetRoles(view, curitem, currentRoleIds) {
         if (haveComposerRole && pos>=0) {
             var params = [SORT_KEY+TRACK_SORT_PLACEHOLDER, PLAYLIST_TRACK_TAGS, curitem.id, 'role_id:2', 'material_skin_artist:'+curitem.title, 'material_skin_compositions:1']; 
             browseAddLibId(view, params);
-            view.currentActions.splice(pos, 0, ({title:i18n('Compositions'), svg:'composer', do:{ command: ['tracks'], params: params}, weight:81, stdItem:STD_ITEM_COMPOSITION_TRACKS, udr:2}));
+            view.currentActions.splice(pos, 0, ({title:i18n('Compositions'), svg:'compositions', do:{ command: ['tracks'], params: params}, weight:81, stdItem:STD_ITEM_COMPOSITION_TRACKS, udr:2}));
         }
     }).catch(err => {
         // Remove placeholder

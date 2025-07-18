@@ -117,7 +117,7 @@ Vue.component('lms-addtoplaylist-dialog', {
                     }
                 }
 
-                if (tracks.length==0 && this.items[0].params && this.items[0].params.track_id) {
+                if (tracks.length==0 && (this.items[0].id.startsWith("track_id:") || (this.items[0].params && this.items[0].params.track_id))) {
                     this.convertTrackIds(this.name);
                 } else {
                     this.saveTracksToPlaylist(this.name, tracks);
@@ -151,6 +151,8 @@ Vue.component('lms-addtoplaylist-dialog', {
             for (var i=0, len=this.items.length; i<len; ++i) {
                 if (this.items[i].params && this.items[i].params.track_id) {
                     trackIds.push(this.items[i].params.track_id);
+                } else if (this.items[i].id.startsWith("track_id:")) {
+                    trackIds.push(originalId(this.items[i].id.split(":")[1]));
                 }
             }
             lmsCommand("", ["material-skin", "urls", "tracks:"+trackIds.join(",")]).then(({data})=>{

@@ -1,16 +1,17 @@
 5.10.4
 ------
-1. Support back-slash escaping of commas in release types - e.g. "A\, B".
-2. If showing multiple artist biographies in MAI then add titles for each.
-3. Fix adding Bliss mix to queue.
-4. Remove 'Add to playlist' for Bliss and MusicIP mixes, not working.
-5. If 'Show all artists' is enabled then show all artsts, track-artists, and
-   album-artists - thanks to Darrell.
-6. Add support for LMS9.1 'Playlist Folder' browse mode.
-7. Fix now-playing navigation bar icon and text colour when using light theme,
-   coloured toolbars, and full-view now-playing.
-8. Don't send player power updates for group players.
-9. Fix 'Play next' action for track lists.
+ 1. Support back-slash escaping of commas in release types - e.g. "A\, B".
+ 2. If showing multiple artist biographies in MAI then add titles for each.
+ 3. Fix adding Bliss mix to queue.
+ 4. Remove 'Add to playlist' for Bliss and MusicIP mixes, not working.
+ 5. If 'Show all artists' is enabled then show all artsts, track-artists, and
+    album-artists - thanks to Darrell.
+ 6. Add support for LMS9.1 'Playlist Folder' browse mode.
+ 7. Fix now-playing navigation bar icon and text colour when using light theme,
+    coloured toolbars, and full-view now-playing.
+ 8. Don't send player power updates for group players.
+ 9. Fix 'Play next' action for track lists.
+10. Keep MAI titles at top and only scroll text.
 
 5.10.3
 ------

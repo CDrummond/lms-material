@@ -62,7 +62,7 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
     <v-tab-item :key="index" :transition="false" :reverse-transition="false">
      <v-card flat class="np-info-card-cover selectable" @touchend="tabTextEnd" @mouseup="tabTextEnd" @contextmenu="event.preventDefault()">
       <v-card-text :class="['np-info-text', TRACK_TAB==index || tab.isMsg ? 'np-info-lyrics' : '', ALBUM_TAB==index ? 'np-info-review' : '']" :id="'np-tab'+index">
-       <div v-if="tab.texttitle" v-html="tab.texttitle" class="np-info-title" :id="'mai-header-'+index"></div>
+       <div v-if="tab.texttitle" v-html="tab.texttitle" class="np-info-title frosted" :id="'mai-header-'+index"></div>
        <div v-if="tab.image"><img :src="tab.image" loading="lazy" class="np-mai-img" @dragstart.prevent="" @dragenter.prevent=""></img></div>
        <div v-if="TRACK_TAB==index && tab.lines">
         <template v-for="(line, lindex) in tab.lines">
@@ -126,7 +126,7 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
      <v-flex xs4>
       <v-card flat class="np-info-card-cover selectable" @touchend="tabTextEnd" @mouseup="tabTextEnd" @contextmenu="event.preventDefault()">
        <v-card-text :class="['np-info-text-full', TRACK_TAB==index || tab.isMsg ? 'np-info-lyrics' : '', ALBUM_TAB==index ? 'np-info-review' : '']" :id="'np-tab'+index">
-        <div v-if="tab.texttitle" v-html="tab.texttitle" class="np-info-title" :id="'mai-header-'+index"></div>
+        <div v-if="tab.texttitle" v-html="tab.texttitle" class="np-info-title frosted" :id="'mai-header-'+index"></div>
         <div v-if="tab.image"><img :src="tab.image" loading="lazy" class="np-mai-img" @dragstart.prevent="" @dragenter.prevent=""></img></div>
         <div v-if="TRACK_TAB==index && tab.lines">
          <template v-for="(line, lindex) in tab.lines">

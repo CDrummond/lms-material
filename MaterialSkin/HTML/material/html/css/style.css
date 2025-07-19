@@ -1727,11 +1727,20 @@ div.v-subheader {
  text-align:center;
  position:sticky;
  top:0px;
- width:100%;
  padding-top:11px;
  padding-bottom:11px;
- background:var(--background-color);
  z-index:1;
+ max-width:1000px;
+}
+
+.v-tabs .np-info-title {
+ width:100%;
+}
+
+.np-info-text-full .np-info-title {
+ margin-left:6px;
+ margin-right:6px;
+ border-radius:8px;
 }
 
 .np-info-text > div:not(.np-info-title),
@@ -2020,6 +2029,7 @@ div.v-rating i.primary--text, div.v-rating i.accent--text {
  margin-left:auto;
  margin-right:auto;
  padding:0px!important;
+ max-width:1000px;
 }
 
 .np-info-text-full {

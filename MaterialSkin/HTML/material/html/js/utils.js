@@ -642,11 +642,15 @@ function isVisible(elem) {
     return !(rect.bottom < 0 || rect.top - viewHeight >= 0);
 }
 
-function ensureVisible(elem, attempt) {
+function ensureVisible(elem, parent, adjust, attempt) {
     elem.scrollIntoView();
-    if (!isVisible(elem) && (undefined==attempt || attempt<15)) {
+    if (isVisible(elem)) {
+        if (undefined!=parent && undefined!=adjust) {
+            setElemScrollTop(parent, parent.scrollTop+adjust);
+        }
+    } else if (undefined==attempt || attempt<15) {
         window.setTimeout(function() {
-            ensureVisible(elem, undefined==attempt ? 1 : attempt+1);
+            ensureVisible(elem, parent, adjust, undefined==attempt ? 1 : attempt+1);
         }, 100);
     }
 }

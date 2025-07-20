@@ -2020,14 +2020,15 @@ div.v-rating i.primary--text, div.v-rating i.accent--text {
 
 .np-info-text {
  overflow:auto;
+ max-width:1000px;
  margin-left:auto;
  margin-right:auto;
  padding:0px!important;
- max-width:1000px;
 }
 
 .np-info-text-full {
  overflow:auto;
+ max-width:1000px;
  margin:auto;
  padding:0px!important;
 }

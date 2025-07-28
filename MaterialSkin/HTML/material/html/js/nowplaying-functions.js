@@ -14,9 +14,16 @@ function  nowPlayingHeader(s) {
 function nowPlayingMAIHeader(ev, idx) {
     let elem = document.getElementById("mai-artist-"+idx);
     if (undefined!=elem) {
-        ensureVisible(elem);
+        let parent = document.getElementById("np-tab"+ARTIST_TAB);
+        let header = document.getElementById("mai-header-"+ARTIST_TAB);
+        let adjust = 0;
+        if (undefined!=header) {
+            adjust = header.getBoundingClientRect().height;
+        }
+        ensureVisible(elem, parent, (-1*adjust)-4);
     }
 }
+
 
 function formatLyrics(s) {
     let lines = s.split("<br/>")

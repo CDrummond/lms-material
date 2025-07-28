@@ -1048,8 +1048,6 @@ div.v-subheader {
  position:unset!important;
  top:unset!important;
  width:unset!important;
- margin:0px -2px 0px -2px;
- padding:0px 2px 0px 2px;
 }
 
 .np-info .lms-list .v-list__tile {
@@ -1363,7 +1361,7 @@ div.v-subheader {
  font-weight:200!important;
 }
 
-.browse-html img, .np-info-text img:not(.svg-img), .np-info-text-full img, .inline-image {
+.browse-html img, .np-info-text img:not(.svg-img), .np-info-text-full img:not(.svg-img), .inline-image {
  max-width:100% !important;
  max-height:300px !important;
  height:auto;
@@ -1494,7 +1492,7 @@ div.v-subheader {
  top:10px!important;
  right:12px!important;
  opacity:0.25;
- z-index:1;
+ z-index:2;
  width:28px!important;
  height:28px!important;
  min-width:28px!important;
@@ -1727,8 +1725,21 @@ div.v-subheader {
 
 .np-info-title {
  text-align:center;
- margin-top:14px;
- margin-bottom:14px;
+ position:sticky;
+ top:0px;
+ padding-top:11px;
+ padding-bottom:11px;
+ z-index:1;
+ max-width:1000px;
+}
+
+.v-tabs .np-info-title {
+ width:100%;
+}
+
+.np-info-text > div:not(.np-info-title),
+.np-info-text-full > div:not(.np-info-title) {
+ padding:12px;
 }
 
 .np-info-tab-cover {
@@ -2012,12 +2023,14 @@ div.v-rating i.primary--text, div.v-rating i.accent--text {
  max-width:1000px;
  margin-left:auto;
  margin-right:auto;
+ padding:0px!important;
 }
 
 .np-info-text-full {
  overflow:auto;
  max-width:1000px;
  margin:auto;
+ padding:0px!important;
 }
 
 .browse-html h1, .browse-html h2, .browse-html h3 {
@@ -3810,7 +3823,7 @@ div.v-subheader {
 }
 
 .np-sect-toggle {
- margin-left:16px;
+ margin:0px 0px 2px 16px;
 }
 
 /* Material Design 2 / 3 changes */

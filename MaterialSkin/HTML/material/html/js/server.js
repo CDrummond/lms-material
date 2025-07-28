@@ -603,6 +603,13 @@ var lmsServer = Vue.component('lms-server', {
             bus.$emit(isCurrent ? 'playerStatus' : 'otherPlayerStatus', player);
             this.$store.commit('updatePlayer', player);
             if (isCurrent) {
+                // If repeat is set to single track and randomplay is active, the
+                // disable repeat. The reepat icon is replaced with a dice when
+                // randomplay is active, so that user cannot do this themselves
+                // and repeating a single track here is silly.
+                if (player.playlist.randomplay && player.playlist.repeat==1) {
+                    bus.$emit('playerCommand', ['playlist', 'repeat', 0]);
+                }
                 updateNative(player);
                 this.scheduleNextPlayerStatusUpdate(data.mode === "play"
                                                         // Playing a track

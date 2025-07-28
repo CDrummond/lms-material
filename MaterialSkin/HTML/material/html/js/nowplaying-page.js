@@ -61,10 +61,9 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
     <v-tab :key="index">{{tab.ctitle && playerStatus.current.maiComposer ? tab.ctitle: tab.title}}</v-tab>
     <v-tab-item :key="index" :transition="false" :reverse-transition="false">
      <v-card flat class="np-info-card-cover selectable" @touchend="tabTextEnd" @mouseup="tabTextEnd" @contextmenu="event.preventDefault()">
-      <div v-if="TRACK_TAB==index && tab.texttitle" v-html="tab.texttitle" class="np-info-title" v-bind:class="{'lyrics-current-line':tab.highlight && undefined!=playerStatus.current.time && tab.lines && tab.lines[0].time>playerStatus.current.time}"></div>
-      <div v-else-if="TRACK_TAB!=index && tab.texttitle" v-html="tab.texttitle" class="np-info-title"></div>
       <v-card-text :class="['np-info-text', TRACK_TAB==index || tab.isMsg ? 'np-info-lyrics' : '', ALBUM_TAB==index ? 'np-info-review' : '']" :id="'np-tab'+index">
-       <img v-if="tab.image" :src="tab.image" loading="lazy" class="np-mai-img" @dragstart.prevent="" @dragenter.prevent=""></img>
+       <div v-if="tab.texttitle" v-html="tab.texttitle" class="np-info-title frosted" :id="'mai-header-'+index"></div>
+       <div v-if="tab.image"><img :src="tab.image" loading="lazy" class="np-mai-img" @dragstart.prevent="" @dragenter.prevent=""></img></div>
        <div v-if="TRACK_TAB==index && tab.lines">
         <template v-for="(line, lindex) in tab.lines">
          <obj :id="'np-lyrics-'+lindex" v-bind:class="{'lyrics-current-line':tab.highlight && undefined!=playerStatus.current.time && playerStatus.current.time>=line.time && playerStatus.current.time<((lindex+1)<tab.lines.length ? tab.lines[lindex+1].time : 86400)}">{{line.text.length<1 ? '&nbsp;' : line.text}}</obj></br/>
@@ -126,10 +125,9 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
     <template v-for="(tab, index) in info.tabs">
      <v-flex xs4>
       <v-card flat class="np-info-card-cover selectable" @touchend="tabTextEnd" @mouseup="tabTextEnd" @contextmenu="event.preventDefault()">
-       <div v-if="TRACK_TAB==index && tab.texttitle" v-html="tab.texttitle" class="np-info-title" v-bind:class="{'lyrics-current-line':tab.highlight && undefined!=playerStatus.current.time && tab.lines && tab.lines[0].time>playerStatus.current.time}"></div>
-       <div v-else-if="TRACK_TAB!=index && tab.texttitle" v-html="tab.texttitle" class="np-info-title"></div>
        <v-card-text :class="['np-info-text-full', TRACK_TAB==index || tab.isMsg ? 'np-info-lyrics' : '', ALBUM_TAB==index ? 'np-info-review' : '']" :id="'np-tab'+index">
-        <img v-if="tab.image" :src="tab.image" loading="lazy" class="np-mai-img" @dragstart.prevent="" @dragenter.prevent=""></img>
+        <div v-if="tab.texttitle" v-html="tab.texttitle" class="np-info-title frosted" :id="'mai-header-'+index"></div>
+        <div v-if="tab.image"><img :src="tab.image" loading="lazy" class="np-mai-img" @dragstart.prevent="" @dragenter.prevent=""></img></div>
         <div v-if="TRACK_TAB==index && tab.lines">
          <template v-for="(line, lindex) in tab.lines">
           <obj :id="'np-lyrics-'+lindex" v-bind:class="{'lyrics-current-line':tab.highlight && undefined!=playerStatus.current.time && playerStatus.current.time>line.time && playerStatus.current.time<((lindex+1)<tab.lines.length ? tab.lines[lindex+1].time : 86400)}">{{line.text.length<1 ? '&nbsp;' : line.text}}</obj></br/>

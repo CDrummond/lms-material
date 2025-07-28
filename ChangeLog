@@ -6,6 +6,14 @@
 3. Add 'Clear queue', 'Switch off', and 'Switch on' for all players in menu
    of 'Manager players' dialog.
 
+5.10.6
+------
+1. Disable repeat it set to repeat single and random mix is active.
+
+5.10.5
+------
+1. Use 'sticky' MAI titles, with background, to fix cropped text.
+
 5.10.4
 ------
  1. Support back-slash escaping of commas in release types - e.g. "A\, B".

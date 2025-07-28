@@ -76,7 +76,8 @@ var app = new Vue({
         } else {
             document.getElementsByTagName("body")[0].classList.add("msk-is-non-touch");
         }
-        lmsApp.botPad = queryParams.botPad>0 ? queryParams.botPad : queryParams.addpad || IS_IOS ? 12 : 0;
+        let sab = IS_ANDROID ? parseInt(window.getComputedStyle(document.documentElement).getPropertyValue('--sab').replace('px', '')) : 0;
+        lmsApp.botPad = queryParams.botPad>0 ? queryParams.botPad : sab>0 ? sab : queryParams.addpad || IS_IOS ? 12 : 0;
         if (lmsApp.botPad>0) {
             document.documentElement.style.setProperty('--bottom-pad', lmsApp.botPad + 'px');
             if (lmsApp.botPad>6) {

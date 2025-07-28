@@ -77,7 +77,7 @@
  --drag-area-height:100%;
  --window-area-left:0px;
  --window-area-right:0px;
- --sab: env(safe-area-inset-bottom);
+ --sab: env(safe-area-inset-bottom, 0px);
  --top-pad:0px;
  --bottom-pad:0px;
  --all-pad:calc(var(--top-pad) + var(--bottom-pad));

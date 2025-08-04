@@ -2709,15 +2709,17 @@ sub _sendImage {
 sub _sendFallbackImage {
     my ( $httpClient, $response, $subdir, $fileName, $notfound ) = @_;
     return unless $httpClient->connected;
-    my $imageDir = Slim::Utils::Prefs::dir() . "/material-skin/" . $subdir;
-    if (! -e $imageDir) {
-        make_path($imageDir);
+    if ( $fileName) {
+        my $imageDir = Slim::Utils::Prefs::dir() . "/material-skin/" . $subdir;
+        if (! -e $imageDir) {
+            make_path($imageDir);
+        }
+        my $filePath = $imageDir . "/" . $fileName;
+        my $placeholder = $filePath . ".missing";
+        File::Slurp::write_file($placeholder, { err_mode => 'carp' }, '' ) unless -f $placeholder;
     }
-    my $filePath = $imageDir . "/" . $fileName;
-    my $placeholder = $filePath . ".missing";
-    File::Slurp::write_file($placeholder, { err_mode => 'carp' }, '' ) unless -f $placeholder;
-    $filePath = dirname(__FILE__) . "/HTML/material/html/images/" . $notfound . ".png";
-    Slim::Web::HTTP::sendStreamingFile( $httpClient, $response, "image/png", $filePath, '', 'noAttachment' );
+    my $fileNotFoundPath = dirname(__FILE__) . "/HTML/material/html/images/" . $notfound . ".png";
+    Slim::Web::HTTP::sendStreamingFile( $httpClient, $response, "image/png", $fileNotFoundPath, '', 'noAttachment' );
 }
 
 sub _sendMaterialImage {
@@ -2774,7 +2776,7 @@ sub _playlistHandler {
                 }
             }
         }
-        _sendFallbackImage($httpClient, $response, "playlists", $fileName, "noplaylist");
+        _sendFallbackImage($httpClient, $response, "playlists", undef, "noplaylist");
     }
 }
 

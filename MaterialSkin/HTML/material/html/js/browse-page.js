@@ -1927,6 +1927,9 @@ var lmsBrowse = Vue.component("lms-browse", {
                     if (sel.length>0) {
                         if (this.current.section!=SECTION_FAVORITES && sel.indexOf(to)<0) {
                             bus.$emit('movePlaylistItems', this.current.id, sel.sort(function(a, b) { return a<b ? -1 : 1; }), to);
+                            if (lmsOptions.playlistImages && this.history.length>0) {
+                                this.history[this.history.length-1].needsRefresh = true;
+                            }
                         }
                     } else if (this.isTop) {
                         this.items = arrayMove(this.top, this.dragIndex, to);
@@ -1969,6 +1972,9 @@ var lmsBrowse = Vue.component("lms-browse", {
                         } else if (this.current.section==SECTION_PLAYLISTS) {
                             lmsCommand(this.playerId(), ["playlists", "edit", "cmd:move", this.current.id, "index:"+this.dragIndex, "toindex:"+to]).then(({data}) => {
                                 this.refreshList();
+                                if (lmsOptions.playlistImages && this.history.length>0) {
+                                    this.history[this.history.length-1].needsRefresh = true;
+                                }
                             });
                         }
                     }

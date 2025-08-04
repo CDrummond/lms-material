@@ -1917,12 +1917,14 @@ function parseBrowseResp(data, parent, options, cacheKey) {
             var prevWasFolder = false;
             var folderIdIndex = getIndex(data.params[1], "folder_id:");
             var isBrowsingFolders = folderIdIndex>0;
+            var imageTs = new Date().getTime();
             for (var idx=0, loop=data.result.playlists_loop, loopLen=loop.length; idx<loopLen; ++idx) {
                 var i = loop[idx];
                 var key = removeDiactrics(i.textkey);
                 var isRemote = 1 == parseInt(i.remote) || undefined!=i.extid;
                 var emblem = getEmblem(i.extid);
                 var isFolder = undefined!=i.id && (""+i.id).startsWith("file:");
+                var imageTs = new Date().getTime();
                 if (undefined!=emblem) {
                     haveEmblem = true;
                 }
@@ -1950,7 +1952,7 @@ function parseBrowseResp(data, parent, options, cacheKey) {
                                 title: replaceHtmlBrackets(i.playlist),
                                 icon: undefined == emblem ? "list" : undefined,
                                 svg: undefined == emblem ? undefined : emblem.name,
-                                image: lmsOptions.playlistImages ? "material/playlists/" + encodeURIComponent(i.playlist) : undefined,
+                                image: lmsOptions.playlistImages ? "material/playlists/" + encodeURIComponent(i.playlist)+"?ts="+imageTs : undefined,
                                 stdItem: isRemote ? STD_ITEM_REMOTE_PLAYLIST : STD_ITEM_PLAYLIST,
                                 type: "group",
                                 section: SECTION_PLAYLISTS,

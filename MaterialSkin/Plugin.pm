@@ -183,7 +183,7 @@ sub initPlugin {
             noArtistFilter => 1,
             releaseTypeOrder => '',
             genreImages => 0,
-            playlistImages => 0,
+            playlistImages => 1,
             touchLinks => 0,
             yearInSub => 1,
             playShuffle => 0,
@@ -214,7 +214,7 @@ sub initPlugin {
             noArtistFilter => 1,
             releaseTypeOrder => '',
             genreImages => 0,
-            playlistImages => 0,
+            playlistImages => 1,
             touchLinks => 0,
             yearInSub => 1,
             playShuffle => 0,
@@ -240,7 +240,7 @@ sub initPlugin {
     $prefs->setChange(sub { $prefs->set($_[0], 0) unless defined $_[1]; }, 'touchLinks');
     $prefs->setChange(sub { $prefs->set($_[0], 0) unless defined $_[1]; }, 'showComment');
     $prefs->setChange(sub { $prefs->set($_[0], 0) unless defined $_[1]; }, 'genreImages');
-    $prefs->setChange(sub { $prefs->set($_[0], 0) unless defined $_[1]; }, 'playlistImages');
+    $prefs->setChange(sub { $prefs->set($_[0], 1) unless defined $_[1]; }, 'playlistImages');
     $prefs->setChange(sub { $prefs->set($_[0], 0) unless defined $_[1]; }, 'allowDownload');
     $prefs->setChange(sub { $prefs->set($_[0], 0) unless defined $_[1]; }, 'useDefaultForSettings');
     $prefs->setChange(sub { $prefs->set($_[0], 0) unless defined $_[1]; }, 'useGrouping');

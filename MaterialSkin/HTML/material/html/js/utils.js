@@ -764,7 +764,7 @@ const USE_LIST_VIEW_BY_DEFAULT=new Set(["podcasts-grid", "youtube-grid", "playhi
 
 function isSetToUseGrid(command, item) {
     var key = commandGridKey(command, item);
-    return getLocalStorageBool(key, lmsOptions.defaultToGrid && !USE_LIST_VIEW_BY_DEFAULT.has(key))
+    return getLocalStorageBool(key, !USE_LIST_VIEW_BY_DEFAULT.has(key))
 }
 
 function setUseGrid(command, use, item) {

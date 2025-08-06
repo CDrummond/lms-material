@@ -371,6 +371,7 @@ function parseBrowseResp(data, parent, options, cacheKey) {
                         } else if (i.presetParams.favorites_url.startsWith("file://") && i.presetParams.icon=="html/images/playlists.png") {
                             if (lmsOptions.playlistImages) {
                                 i.image = "material/playlists/" + encodeURIComponent(i.title);
+                                i.overlay = "overlay-playlist";
                             } else {
                                 i.icon="list";
                                 i.image=undefined;

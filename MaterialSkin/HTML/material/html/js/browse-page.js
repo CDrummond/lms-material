@@ -171,6 +171,7 @@ var lmsBrowse = Vue.component("lms-browse", {
       <div v-else class="image-grid-item" @click="click(citem, isTop ? citem.gidx : (item.rs+col), $event)" :title="citem | itemTooltip" :draggable="citem.draggable || isTop" @dragstart="dragStart(isTop ? citem.gidx : (item.rs+col), $event)" @dragenter.prevent="" @dragend="dragEnd()" @dragover="dragOver(isTop ? citem.gidx : (item.rs+col), $event)" @drop="drop(isTop ? citem.gidx : (item.rs+col), $event)" v-bind:class="{'search-highlight':highlightIndex==(isTop ? citem.gidx : (item.rs+col)), 'list-active': (menu.show && (isTop ? citem.gidx : (item.rs+col))==menu.index) || (fetchingItem==item.id), 'drop-target':dragActive && (isTop ? citem.gidx : (item.rs+col))==dropIndex}">
        <div v-if="selection.size>0 && browseCanSelect(citem)" class="check-btn grid-btn image-grid-select-btn" @click.stop="select(citem, isTop ? citem.gidx : (item.rs+col), $event)" :title="ACTIONS[citem.selected ? UNSELECT_ACTION : SELECT_ACTION].title" v-bind:class="{'check-btn-checked':citem.selected}"></div>
        <img v-else-if="citem.multi" class="multi-disc" :src="(1==citem.multi ? 'group-multi' : 'album-multi') | svgIcon(true)" loading="lazy"></img>
+       <img v-else-if="citem.overlay" class="multi-disc" :src="citem.overlay | svgIcon(true)" loading="lazy"></img>
        <div v-if="citem.images" :tile="true" class="image-grid-item-img">
         <div class="mi" :class="'mi'+citem.images.length">
          <img v-for="(mic, midx) in citem.images" :class="'mi-'+midx" :key="mic" :src="mic|gridImageSize" loading="lazy"></img>

@@ -5,6 +5,8 @@
    dialog.
 3. Add 'Clear queue', 'Switch off', and 'Switch on' for all players in menu
    of 'Manager players' dialog.
+4. If using playlist images, then add an overlay icon top-left for favourited
+   playlists.
 
 5.10.6
 ------

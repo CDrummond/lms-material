@@ -1870,7 +1870,7 @@ function parseBrowseResp(data, parent, options, cacheKey) {
                         folderTextKeys.add(key);
                     }
                     resp.items.push({
-                            id: "folder_id:"+encodeURIComponent(i.id),
+                            id: "folder_id:"+i.id,
                             title: replaceHtmlBrackets(i.playlist),
                             svg: 'folder-playlist',
                             stdItem: STD_ITEM_PLAYLIST_FOLDER,

@@ -2308,7 +2308,7 @@ function parseBrowseModes(view, data, genreFilter, yearFilter, altId, excludeWor
                 item.svg = "folder-playlist";
                 item.icon = undefined;
                 item.section = SECTION_PLAYLISTS;
-                item.params.push("folder_id:/");
+                item.params = ["folder_id:/", PLAYLIST_TAGS];
             } else if (c.id.startsWith("myMusicYears")) {
                 if (undefined!=genreFilter || undefined!=yearFilter) {
                     continue;

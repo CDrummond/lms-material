@@ -1935,7 +1935,7 @@ function parseBrowseResp(data, parent, options, cacheKey) {
                         folderTextKeys.add(key);
                     }
                     resp.items.push({
-                            id: "folder_id:"+encodeURIComponent(i.id),
+                            id: "folder_id:"+i.id,
                             title: replaceHtmlBrackets(i.playlist),
                             svg: 'folder-playlist',
                             stdItem: STD_ITEM_PLAYLIST_FOLDER,
@@ -2373,7 +2373,7 @@ function parseBrowseModes(view, data, genreFilter, yearFilter, altId, excludeWor
                 item.svg = "folder-playlist";
                 item.icon = undefined;
                 item.section = SECTION_PLAYLISTS;
-                item.params.push("folder_id:/");
+                item.params = ["folder_id:/", PLAYLIST_TAGS];
             } else if (c.id.startsWith("myMusicYears")) {
                 if (undefined!=genreFilter || undefined!=yearFilter) {
                     continue;

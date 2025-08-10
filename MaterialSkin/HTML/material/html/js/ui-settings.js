@@ -992,11 +992,6 @@ Vue.component('lms-ui-settings', {
         'showMenu': function(newVal) {
             this.$store.commit('menuVisible', {name:'uisettings', shown:newVal});
         }
-    },
-    filters: {
-        svgIcon: function (name, dark, coloredToolbars) {
-            return "/material/svg/"+name+"?c="+(dark || coloredToolbars ? LMS_DARK_SVG : LMS_LIGHT_SVG)+"&r="+LMS_MATERIAL_REVISION;
-        }
     }
 })
 

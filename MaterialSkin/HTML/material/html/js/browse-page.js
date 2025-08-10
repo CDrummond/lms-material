@@ -2299,16 +2299,6 @@ var lmsBrowse = Vue.component("lms-browse", {
             }
             return stripTags(item.title);
         },
-        displayTime: function (value) {
-            if (!value || value<0.000000000001) {
-                return '';
-            }
-            let str = formatSeconds(Math.floor(value));
-            if (undefined==str || str.length<1) {
-                return '';
-            }
-            return str;
-        },
         displaySelectionCount: function (value) {
             return value ? value : 0;
         },

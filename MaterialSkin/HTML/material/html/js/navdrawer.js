@@ -680,12 +680,6 @@ Vue.component('lms-navdrawer', {
         },
         playerShortcut: function(index) {
             return IS_APPLE ? ("⌥+"+(9==index ? 0 : index+1)) : i18n("Alt+%1", 9==index ? 0 : index+1);
-        },
-        displayTime: function (value) {
-            if (undefined==value) {
-                return '';
-            }
-            return formatSeconds(Math.floor(value));
         }
     },
     watch: {

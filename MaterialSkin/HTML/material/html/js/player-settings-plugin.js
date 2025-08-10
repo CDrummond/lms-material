@@ -264,11 +264,6 @@ Vue.component('lms-player-settings-plugin', {
         mouseDown(ev) {
             toolbarMouseDown(ev);
         }
-     },
-     filters: {
-        svgIcon: function (name, dark) {
-            return "/material/svg/"+name+"?c="+(dark ? LMS_DARK_SVG : LMS_LIGHT_SVG)+"&r="+LMS_MATERIAL_REVISION;
-        }
     },
     watch: {
         'show': function(val) {

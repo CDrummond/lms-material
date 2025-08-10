@@ -129,11 +129,6 @@ Vue.component('lms-choice-dialog', {
             }
         }
     },
-    filters: {
-        svgIcon: function (name, dark) {
-            return "/material/svg/"+name+"?c="+(dark ? LMS_DARK_SVG : LMS_LIGHT_SVG)+"&r="+LMS_MATERIAL_REVISION;
-        }
-    },
     watch: {
         'show': function(val) {
             this.$store.commit('dialogOpen', {name:'choice', shown:val});

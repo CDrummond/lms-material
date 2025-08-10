@@ -849,11 +849,6 @@ Vue.component('lms-manage-players', {
             return this.$store.state.coloredToolbars
         }
     },
-    filters: {
-        svgIcon: function (name, dark, coloredToolbars) {
-            return "/material/svg/"+name+"?c="+(dark || coloredToolbars ? LMS_DARK_SVG : LMS_LIGHT_SVG)+"&r="+LMS_MATERIAL_REVISION;
-        }
-    },
     watch: {
         'show': function(val) {
             this.$store.commit('dialogOpen', {name:'manage', shown:val});

@@ -290,7 +290,7 @@ var lmsQueue = Vue.component("lms-queue", {
     <v-list-tile-action class="queue-action" v-bind:class="{'pq-first-track-menu':item.artistAlbum}" @click.stop="itemMenu(item, index, $event)">
      <div class="grid-btn list-btn hover-btn menu-btn" :title="i18n('%1 (Menu)', item.tooltip)"></div>
     </v-list-tile-action>
-    <img v-if="index==currentIndex" :class="['pqi-'+iRgb, 'pq-current-indicator']" :src="'pq-current' | svgIcon(true, true)"></img>
+    <img v-if="index==currentIndex" :class="['pqi-'+iRgb, 'pq-current-indicator']" :src="'pq-current' | indIcon"></img>
    </v-list-tile>
   </RecycleScroller>
   <RecycleScroller v-else :items="items" :item-size="threeLines ? LMS_LIST_3LINE_ELEMENT_SIZE : LMS_LIST_ELEMENT_SIZE"  page-mode key-field="key" :buffer="LMS_SCROLLER_LIST_BUFFER">
@@ -313,7 +313,7 @@ var lmsQueue = Vue.component("lms-queue", {
       <div class="grid-btn list-btn hover-btn menu-btn" :title="i18n('%1 (Menu)', item.tooltip)"></div>
      </v-list-tile-action>
      <v-rating v-if="undefined!=item.rating" class="pq-rating" v-bind:class="{'pq-rating-3':threeLines}" v-model="item.rating" half-increments readonly></v-rating>
-     <img v-if="index==currentIndex" :class="['pqi-'+iRgb, 'pq-current-indicator']" :src="'pq-current' | svgIcon(true, true)"></img>
+     <img v-if="index==currentIndex" :class="['pqi-'+iRgb, 'pq-current-indicator']" :src="'pq-current' | indIcon"></img>
     </v-list-tile>
    </RecycleScroller>
   </div>
@@ -1706,16 +1706,6 @@ var lmsQueue = Vue.component("lms-queue", {
         },
     },
     filters: {
-        displayTime: function (value, addSep) {
-            if (!value || value<0.000000000001) {
-                return '';
-            }
-            let str = formatSeconds(Math.floor(value));
-            if (undefined==str || str.length<1) {
-                return '';
-            }
-            return str;
-        },
         displayCount: function (value) {
             if (!value) {
                 return '';
@@ -1725,10 +1715,7 @@ var lmsQueue = Vue.component("lms-queue", {
         displaySelectionCount: function (value) {
             return value ? value : 0;
         },
-        svgIcon: function (name, dark, ci, hover) {
-            if (undefined==ci || !ci) {
-                return "/material/svg/"+name+"?c="+(dark ? LMS_DARK_SVG : LMS_LIGHT_SVG) +"&r="+LMS_MATERIAL_REVISION;
-            }
+        indIcon: function (name) {
             return "/material/svg/"+name+"?c="+getComputedStyle(document.documentElement).getPropertyValue("--primary-color").replace("#", "")+"&c2="+LMS_DARK_SVG+"&r="+LMS_MATERIAL_REVISION;
         },
         tooltip: function (str, key, showShortcut) {

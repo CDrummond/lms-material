@@ -226,11 +226,6 @@ Vue.component('lms-search-field', {
     },
     beforeDestroy() {
         this.cancel();
-    },
-    filters: {
-        svgIcon: function (name, dark) {
-            return "/material/svg/"+name+"?c="+(dark ? LMS_DARK_SVG : LMS_LIGHT_SVG)+"&r="+LMS_MATERIAL_REVISION;
-        }
     }
 })
 

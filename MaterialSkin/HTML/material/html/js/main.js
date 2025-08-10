@@ -8,6 +8,21 @@
 
 Vue.use(VueLazyload, {error:DEFAULT_COVER});
 
+Vue.filter("svgIcon", (name, dark, inColoredToolbar) => {
+    return "/material/svg/"+name+"?c="+(dark || inColoredToolbar ? LMS_DARK_SVG : LMS_LIGHT_SVG)+"&r="+LMS_MATERIAL_REVISION;
+} );
+
+Vue.filter("displayTime", (value) => {
+    if (!value || value<0.000000000001) {
+        return '';
+    }
+    let str = formatSeconds(Math.floor(value));
+    if (isEmpty(str)) {
+        return '';
+    }
+    return str;
+});
+
 let prevWindowArea={l:0, r:0, rmin:0};
 let windowAreaTimeout = null;
 function setWindowArea() {

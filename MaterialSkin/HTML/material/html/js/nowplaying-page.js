@@ -1340,12 +1340,6 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
         }
     },
     filters: {
-        displayTime: function (value) {
-            if (undefined==value || value<0) {
-                return '';
-            }
-            return formatSeconds(Math.floor(value));
-        },
         svgIcon: function (name, dark, header) {
             if (undefined!=header) {
                 return "/material/svg/"+name+"?c="+getComputedStyle(document.getElementById("browse-view")).getPropertyValue("--active-color").replace("#", "")+"&r="+LMS_MATERIAL_REVISION;

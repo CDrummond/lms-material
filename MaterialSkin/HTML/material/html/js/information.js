@@ -443,11 +443,6 @@ Vue.component('lms-information-dialog', {
         unlockAll() {
             return this.$store.state.unlockAll
         }
-    },
-    filters: {
-        svgIcon: function (name, dark) {
-            return "/material/svg/"+name+"?c="+(dark ? LMS_DARK_SVG : LMS_LIGHT_SVG)+"&r="+LMS_MATERIAL_REVISION;
-        }
     }
 })
 

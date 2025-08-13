@@ -762,16 +762,6 @@ var lmsServer = Vue.component('lms-server', {
                     if (data[3]=='vlib') {
                         bus.$emit('libraryChanged');
                     }
-                } else if (data[2]=='updateinfo' && data.length>=6) {
-                    let avail = new Set();
-                    if (1==parseInt(data[3])) {
-                        avail.add("server");
-                    }
-                    if (1==parseInt(data[4])) {
-                        avail.add("plugins");
-                    }
-                    this.$store.commit('setUpdatesAvailable', avail);
-                    this.$store.commit('setRestartRequired', 1==parseInt(data[5]));
                 }
             }
         },

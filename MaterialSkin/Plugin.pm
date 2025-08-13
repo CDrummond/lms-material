@@ -614,7 +614,7 @@ sub _cliCommand {
                                                   'pass-check', 'browsemodes', 'geturl', 'command', 'scantypes', 'server', 'themes',
                                                   'playersettings', 'activeplayers', 'urls', 'adv-search', 'adv-search-params', 'protocols',
                                                   'players-extra-info', 'sort-playlist', 'mixer', 'release-types', 'check-for-updates',
-                                                  'similar', 'apps', 'rndmix', 'scan-progress']) ) {
+                                                  'similar', 'apps', 'rndmix', 'scan-progress', 'send-notif']) ) {
         $request->setStatusBadParams();
         return;
     }
@@ -1857,6 +1857,21 @@ sub _cliCommand {
                 $request->addResult( lastscan => Slim::Music::Import->lastScanTime() );
             }
         }
+        $request->setStatusDone();
+        return;
+    }
+
+    if ($cmd eq 'send-notif') {
+        my $msg = $request->getParam('msg');
+        my $type = $request->getParam('type');
+        my $client = $request->getParam('client');
+        my $timeout = $request->getParam('timeout');
+        if (!$msg || !$type || ($type ne 'info' && $type ne 'error')) {
+            $request->setStatusBadParams();
+            return;
+        }
+
+        Slim::Control::Request::notifyFromArray(undef, ['material-skin', 'notification', $type, $msg, undef, $client, $timeout]);
         $request->setStatusDone();
         return;
     }

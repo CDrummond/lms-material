@@ -1954,6 +1954,7 @@ function parseBrowseResp(data, parent, options, cacheKey) {
                                 icon: undefined == emblem ? "list" : undefined,
                                 svg: undefined == emblem ? undefined : emblem.name,
                                 image: lmsOptions.playlistImages ? "material/playlists/" + encodeURIComponent(i.playlist)+"?ts="+imageTs : undefined,
+                                overlay: lmsOptions.playlistImages ? "overlay-playlist" : undefined,
                                 stdItem: isRemote ? STD_ITEM_REMOTE_PLAYLIST : STD_ITEM_PLAYLIST,
                                 type: "group",
                                 section: SECTION_PLAYLISTS,

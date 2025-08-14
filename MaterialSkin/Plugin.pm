@@ -82,6 +82,7 @@ my $DOWNLOAD_PARSER_RE = qr{material/download/.+}i;
 my $BACKDROP_URL_PARSER_RE = qr{material/backdrops/.+}i;
 my $GENRE_URL_PARSER_RE = qr{material/genres/.+}i;
 my $PLAYLIST_URL_PARSER_RE = qr{material/playlists/.+}i;
+my $PLAYLIST_IMAGE_TRACKS = 20;
 
 my $DEFAULT_COMPOSER_GENRES = string('PLUGIN_MATERIAL_SKIN_DEFAULT_COMPOSER_GENRES');
 my $DEFAULT_CONDUCTOR_GENRES = string('PLUGIN_MATERIAL_SKIN_DEFAULT_CONDUCTOR_GENRES');
@@ -614,7 +615,7 @@ sub _cliCommand {
                                                   'pass-check', 'browsemodes', 'geturl', 'command', 'scantypes', 'server', 'themes',
                                                   'playersettings', 'activeplayers', 'urls', 'adv-search', 'adv-search-params', 'protocols',
                                                   'players-extra-info', 'sort-playlist', 'mixer', 'release-types', 'check-for-updates',
-                                                  'similar', 'apps', 'rndmix', 'scan-progress', 'send-notif']) ) {
+                                                  'similar', 'apps', 'rndmix', 'scan-progress', 'send-notif', 'playlists']) ) {
         $request->setStatusBadParams();
         return;
     }
@@ -1876,6 +1877,91 @@ sub _cliCommand {
         return;
     }
 
+    # Proxy for standard playlists command that adds mtime of playlist (so know when image _might_ change)
+    # and adds list of images, if no user image found
+    #
+    # NOTE: returning of image(s) disabled for now - as this would mean partsing playlists
+    #       everytime list is opened...
+    #
+    if ($cmd eq 'playlists') {
+        my $folder = $request->getParam('folder_id');
+        my $tags = $request->getParam('tags');
+        my @plcmd = ("playlists", 0, 25000, "tags:${tags}");
+        if ($folder) {
+            push(@plcmd, "folder_id:${folder}")
+        }
+
+        my @keys = ("id", "playlist", "textkey", "extid", "url");
+        my $plreq = Slim::Control::Request::executeRequest(undef, \@plcmd);
+        my $cnt = 0;
+        #my $imageDir = Slim::Utils::Prefs::dir() . "/material-skin/playlists";
+        #my $imageDirExists = -e $imageDir;
+
+        foreach my $playlist ( @{ $plreq->getResult('playlists_loop') || [] } ) {
+            #my $name = undef;
+            #my $id = undef;
+
+            foreach my $key (@keys) {
+                my $val = $playlist->{$key};
+                if (!defined $val) {
+                    next;
+                }
+                $request->addResultLoop("playlists_loop", $cnt, ${key}, ${val});
+                if ($key eq "url") {
+                    my $path = Slim::Utils::Misc::pathFromFileURL($val);
+                    if (-e $path) {
+                        my $mtime = (stat $path)[9];
+                        $request->addResultLoop("playlists_loop", $cnt, "mtime", ${mtime});
+                    }
+                }
+                #elsif ($key eq "id" && !_startsWith("${val}", "file:")) {
+                #    $id = $val;
+                #} elsif ($key eq "playlist") {
+                #    $name = $val;
+                #}
+            }
+
+            #if (defined $id) { # This is a playlist, not folder, so look for cover
+            #    my $haveUserImage = 0;
+            #    if ($name && $imageDirExists) {
+            #        my $fileName = lc($name);
+            #        $fileName =~ s/[^a-z_0-9]//ig;
+            #        if (-e "${imageDir}/${fileName}.png" || -e "${imageDir}/${fileName}.jpg") {
+            #            $haveUserImage = 1;
+            #        }
+            #    }
+            #    if (!$haveUserImage) {
+            #        my $treq = Slim::Control::Request::executeRequest(undef, ["playlists", "tracks", 0, $PLAYLIST_IMAGE_TRACKS, "tags:cK", "playlist_id:${id}"] );
+            #        #my @images = ();
+            #        foreach my $track ( @{ $treq->getResult('playlisttracks_loop') || [] } ) {
+            #            my $image = undef;
+            #            if ($track->{'artwork_url'}) {
+            #                $image = $track->{'artwork_url'};
+            #                if (_startsWith($image, "http:") || _startsWith($image, "https:")) {
+            #                    $image = "/imageproxy/" . URI::Escape::uri_escape_utf8($image) . "/image_300x300_f";
+            #                }
+            #            } elsif ($track->{'coverid'}) {
+            #                $image = "/music/" . $track->{'coverid'} . "/cover_300x300_f";
+            #            }
+            #            if ($image) {
+            #                $request->addResultLoop("playlists_loop", $cnt, "image", $image);
+            #                last;
+            #                #push(@images, $image);
+            #                #if (scalar(@images)>2) {
+            #                #    last;
+            #                #}
+            #            }
+            #        }
+            #        #if (scalar(@images)>0) {
+            #        #    $request->addResultLoop("playlists_loop", $cnt, "images", \@images);
+            #        #}
+            #    }
+            #}
+            $cnt+=1;
+        }
+        $request->setStatusDone();
+        return;
+    }
     $request->setStatusBadParams();
 }
 
@@ -2769,7 +2855,7 @@ sub _playlistHandler {
     if (0==_sendMaterialImage($httpClient, $response, "playlists", $fileName)) {
         foreach my $playlist ( Slim::Schema->rs('Playlist')->getPlaylists('all')->all ) {
             if ($playlist->title eq $playlistName) {
-                my $request = Slim::Control::Request::executeRequest(undef, ["playlists", "tracks", 0, 10, "tags:cK", "playlist_id:" . $playlist->id] );
+                my $request = Slim::Control::Request::executeRequest(undef, ["playlists", "tracks", 0, $PLAYLIST_IMAGE_TRACKS, "tags:cK", "playlist_id:" . $playlist->id] );
                 foreach my $playlist ( @{ $request->getResult('playlisttracks_loop') || [] } ) {
                     my $image = undef;
                     if ($playlist->{'artwork_url'}) {
@@ -2781,9 +2867,8 @@ sub _playlistHandler {
                         $image = "/music/" . $playlist->{'coverid'} . "/cover_300x300_f";
                     }
                     if ($image) {
-                        $response->code(307);
+                        $response->code(301);
                         $response->header('Location' => $image );
-                        $response->header('Cache-Control' => 'no-cache');
                         $httpClient->send_response($response);
                         Slim::Web::HTTP::closeHTTPSocket($httpClient);
                         return;

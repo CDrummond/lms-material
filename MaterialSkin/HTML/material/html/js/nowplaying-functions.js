@@ -625,8 +625,19 @@ function nowplayingFetchTrackInfo(view) {
                     let parsed = data.result.lyrics ? formatLyrics(replaceNewLines(data.result.lyrics)) : undefined;
                     view.info.tabs[TRACK_TAB].text=undefined==parsed || parsed.timed ? undefined : parsed.data;
                     view.info.tabs[TRACK_TAB].lines=parsed && parsed.timed ? parsed.data : undefined;
-                    if (view.info.tabs[TRACK_TAB].lines && view.info.tabs[TRACK_TAB].lines.length>3) {
-                        setTimeout(function () { view.updateLyricsPosition(); }.bind(view), 100);
+                    if (view.info.tabs[TRACK_TAB].lines && view.info.tabs[TRACK_TAB].lines.length>0) {
+                        // Check if times are valid - e.g. might be playing a radio stream, in which case
+                        // highlight and auto scroll can be wildy off.
+                        //
+                        // If current playback position is more than 15mins beyond last line's timestamp, then
+                        // disable highlight and auto-scroll. This is achieved by setting time of first line
+                        // to less than 0
+                        let lastTime=view.info.tabs[TRACK_TAB].lines[view.info.tabs[TRACK_TAB].lines.length-1].time;
+                        if (undefined==view.playerStatus.current.duration || undefined==view.playerStatus.current.time || view.playerStatus.current.time>(lastTime+900)) {
+                            view.info.tabs[TRACK_TAB].lines[0].time=-1;
+                        } else if (view.info.tabs[TRACK_TAB].lines.length>3) {
+                            setTimeout(function () { view.updateLyricsPosition(); }.bind(view), 100);
+                        }
                     }
                 }
             }).catch(error => {

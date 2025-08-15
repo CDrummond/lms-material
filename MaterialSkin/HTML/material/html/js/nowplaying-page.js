@@ -765,7 +765,7 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
             this.updateLyricsPosition();
         },
         updateLyricsPosition() {
-            if (this.info.show && this.info.tabs[TRACK_TAB].lines && this.lyricsTimesValid() && this.info.tabs[TRACK_TAB].scroll && this.playerStatus.current && undefined!=this.playerStatus.current.time && this.lyricsTimeValid()) {
+            if (this.info.show && this.info.tabs[TRACK_TAB].lines && this.lyricsTimesValid && this.info.tabs[TRACK_TAB].scroll && this.playerStatus.current && undefined!=this.playerStatus.current.time) {
                 let pos = undefined;
                 for (let i=0, loop=this.info.tabs[TRACK_TAB].lines, len=loop.length; i<len; ++i) {
                     if (loop[i].time<=this.playerStatus.current.time) {
@@ -1556,7 +1556,7 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
         lyricsTimesValid() {
             // Lyrics timing positions are only valid if time of first line >= 0
             // ...see comment in nowplayingFetchTrackInfo
-            return this.info.tabs[TRACK_TAB].lines && this.info.tabs[TRACK_TAB].lines[0].time<0;
+            return this.info.tabs[TRACK_TAB].lines && this.info.tabs[TRACK_TAB].lines[0].time>=0;
         }
     },
     beforeDestroy() {

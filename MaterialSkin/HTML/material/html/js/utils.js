@@ -434,9 +434,11 @@ function setElemScrollTop(elem, val) {
     // just do this for all scrolls.
     window.requestAnimationFrame(function () {
         // https://popmotion.io/blog/20170704-manually-set-scroll-while-ios-momentum-scroll-bounces/
-        elem.style['-webkit-overflow-scrolling'] = 'auto';
-        elem.scrollTop=val;
-        elem.style['-webkit-overflow-scrolling'] = 'touch';
+        if (elem) {
+            elem.style['-webkit-overflow-scrolling'] = 'auto';
+            elem.scrollTop=val;
+            elem.style['-webkit-overflow-scrolling'] = 'touch';
+        }
     });
 }
 

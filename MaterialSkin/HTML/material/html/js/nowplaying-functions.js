@@ -12,16 +12,21 @@ function  nowPlayingHeader(s) {
 }
 
 function nowPlayingMAIScroll(ev, tab, id) {
-    let elem = document.getElementById(id);
-    console.log(id);
-    if (undefined!=elem) {
-        let parent = document.getElementById("np-tab"+tab);
-        let header = document.getElementById("mai-header-"+tab);
-        let adjust = 0;
-        if (undefined!=header) {
-            adjust = header.getBoundingClientRect().height;
+    if (id.startsWith("mai-t-")) {
+        setElemScrollTop(document.getElementById("np-tab"+tab), 0);
+    } else if (id.startsWith("mai-b-")) {
+        setElemScrollTop(document.getElementById("np-tab"+tab), -1);
+    } else {
+        let elem = document.getElementById(id);
+        if (undefined!=elem) {
+            let parent = document.getElementById("np-tab"+tab);
+            let header = document.getElementById("mai-header-"+tab);
+            let adjust = 0;
+            if (undefined!=header) {
+                adjust = header.getBoundingClientRect().height;
+            }
+            ensureVisible(elem, parent, (-1*adjust)-4);
         }
-        ensureVisible(elem, parent, (-1*adjust)-4);
     }
     ev.preventDefault();
     ev.stopPropagation();
@@ -1198,23 +1203,15 @@ function nowPlayingClickImage(view, event) {
 function nowplayingMAIMenuClicked(view, ev, tab) {
     let items = [];
 
-    let id = "mai-img-"+tab
-    let elem = document.getElementById(id);
-    if (undefined==elem) {
-        id = "mai-text-"+tab
-        elem = document.getElementById(id);
-    }
-    if (undefined!=elem) {
-        items.push({title:i18n("Top"), id:id});
-    }
+    items.push({title:i18n("Top"), id:"mai-t-"+tab});
     if (tab==ARTIST_TAB) {
         let artists = view.infoTrack.maiComposer ? view.infoTrack.composers : view.infoTrack.artists;
         let artist_ids = view.infoTrack.maiComposer ? view.infoTrack.composer_ids : view.infoTrack.artist_ids;
         if (undefined!=artists && artists.length>1 && undefined!=artist_ids && artists.length==artist_ids.length) {
             artist = "";
             for (let a=0, len=artists.length; a<len; ++a) {
-                id = "mai-artist-"+a;
-                elem = document.getElementById(id);
+                let id = "mai-artist-"+a;
+                let elem = document.getElementById(id);
                 if (undefined!=elem) {
                     items.push({title:artists[a], id:id});
                 }
@@ -1223,8 +1220,8 @@ function nowplayingMAIMenuClicked(view, ev, tab) {
     }
     let lastSect = tab==TRACK_TAB ? 1 : 2;
     for (let i=0; i<=lastSect; ++i) {
-        id = "mai-sect-"+i+"-"+tab;
-        elem = document.getElementById(id);
+        let id = "mai-sect-"+i+"-"+tab;
+        let elem = document.getElementById(id);
         if (undefined!=elem) {
             items.push({title:view.info.tabs[tab].sections[i].title, id:id});
         }
@@ -1238,4 +1235,5 @@ function nowplayingMAIMenuClicked(view, ev, tab) {
             }
         });
     }
+    items.push({title:i18n("Bottom"), id:"mai-b-"+tab});
 }

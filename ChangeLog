@@ -12,6 +12,8 @@
 7. Re-add notification support, removed in 4.0.0, as used by some plugins.
 8. Click on MAI header to show a 'Scroll to' dialog allowing to scroll to
    specific sections.
+9. For touch devices clicking on MAI header always shows 'Scroll to' dialog
+   instead of scrolling to artist under touch.
 
 5.10.7
 ------

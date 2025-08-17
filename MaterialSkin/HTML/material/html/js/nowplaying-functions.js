@@ -793,7 +793,10 @@ function nowplayingFetchArtistInfo(view) {
     if (undefined!=artists && artists.length>1 && undefined!=artist_ids && artists.length==artist_ids.length) {
         artist = "";
         for (let a=0, len=artists.length; a<len; ++a) {
-            artist+=(a>0 ? SEPARATOR : "")+("<obj class=\"link-item\" onclick=\"nowPlayingMAIScroll(event, " + ARTIST_TAB + ", 'mai-artist-"+a+"')\">" + artists[a] + "</obj>");
+            artist+=(a>0 ? SEPARATOR : "")+
+            (IS_MOBILE
+              ? artists[a]
+              : ("<obj class=\"link-item\" onclick=\"nowPlayingMAIScroll(event, " + ARTIST_TAB + ", 'mai-artist-"+a+"')\">" + artists[a] + "</obj>"));
         }
     }
     if (view.info.tabs[ARTIST_TAB].artist!=artist || view.info.tabs[ARTIST_TAB].artist_id!=artist_id ||

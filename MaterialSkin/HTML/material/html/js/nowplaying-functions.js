@@ -1207,6 +1207,20 @@ function nowplayingMAIMenuClicked(view, ev, tab) {
     if (undefined!=elem) {
         items.push({title:i18n("Top"), id:id});
     }
+    if (tab==ARTIST_TAB) {
+        let artists = view.infoTrack.maiComposer ? view.infoTrack.composers : view.infoTrack.artists;
+        let artist_ids = view.infoTrack.maiComposer ? view.infoTrack.composer_ids : view.infoTrack.artist_ids;
+        if (undefined!=artists && artists.length>1 && undefined!=artist_ids && artists.length==artist_ids.length) {
+            artist = "";
+            for (let a=0, len=artists.length; a<len; ++a) {
+                id = "mai-artist-"+a;
+                elem = document.getElementById(id);
+                if (undefined!=elem) {
+                    items.push({title:artists[a], id:id});
+                }
+            }
+        }
+    }
     let lastSect = tab==TRACK_TAB ? 1 : 2;
     for (let i=0; i<=lastSect; ++i) {
         id = "mai-sect-"+i+"-"+tab;

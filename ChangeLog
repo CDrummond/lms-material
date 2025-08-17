@@ -10,6 +10,8 @@
 5. Enable playlist images by default.
 6. Default to grid view.
 7. Re-add notification support, removed in 4.0.0, as used by some plugins.
+8. Click on MAI header to show a 'Scroll to' dialog allowing to scroll to
+   specific sections.
 
 5.10.7
 ------

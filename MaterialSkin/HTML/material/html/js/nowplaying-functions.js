@@ -11,19 +11,21 @@ function  nowPlayingHeader(s) {
     return isEmpty(s) ? "" : ("<b>"+s+"</b><br/>");
 }
 
-function nowPlayingMAIHeader(ev, idx) {
-    let elem = document.getElementById("mai-artist-"+idx);
+function nowPlayingMAIScroll(ev, tab, id) {
+    let elem = document.getElementById(id);
+    console.log(id);
     if (undefined!=elem) {
-        let parent = document.getElementById("np-tab"+ARTIST_TAB);
-        let header = document.getElementById("mai-header-"+ARTIST_TAB);
+        let parent = document.getElementById("np-tab"+tab);
+        let header = document.getElementById("mai-header-"+tab);
         let adjust = 0;
         if (undefined!=header) {
             adjust = header.getBoundingClientRect().height;
         }
         ensureVisible(elem, parent, (-1*adjust)-4);
     }
+    ev.preventDefault();
+    ev.stopPropagation();
 }
-
 
 function formatLyrics(s) {
     let lines = s.split("<br/>")
@@ -786,7 +788,7 @@ function nowplayingFetchArtistInfo(view) {
     if (undefined!=artists && artists.length>1 && undefined!=artist_ids && artists.length==artist_ids.length) {
         artist = "";
         for (let a=0, len=artists.length; a<len; ++a) {
-            artist+=(a>0 ? SEPARATOR : "")+("<obj class=\"link-item\" onclick=\"nowPlayingMAIHeader(event, "+a+")\">" + artists[a] + "</obj>");
+            artist+=(a>0 ? SEPARATOR : "")+("<obj class=\"link-item\" onclick=\"nowPlayingMAIScroll(event, " + ARTIST_TAB + ", 'mai-artist-"+a+"')\">" + artists[a] + "</obj>");
         }
     }
     if (view.info.tabs[ARTIST_TAB].artist!=artist || view.info.tabs[ARTIST_TAB].artist_id!=artist_id ||
@@ -1190,5 +1192,36 @@ function nowPlayingClickImage(view, event) {
     } else {
         view.clearClickTimeout();
         view.showPic();
+    }
+}
+
+function nowplayingMAIMenuClicked(view, ev, tab) {
+    let items = [];
+
+    let id = "mai-img-"+tab
+    let elem = document.getElementById(id);
+    if (undefined==elem) {
+        id = "mai-text-"+tab
+        elem = document.getElementById(id);
+    }
+    if (undefined!=elem) {
+        items.push({title:i18n("Top"), id:id});
+    }
+    let lastSect = tab==TRACK_TAB ? 1 : 2;
+    for (let i=0; i<=lastSect; ++i) {
+        id = "mai-sect-"+i+"-"+tab;
+        elem = document.getElementById(id);
+        if (undefined!=elem) {
+            items.push({title:view.info.tabs[tab].sections[i].title, id:id});
+        }
+    }
+    if (items.length==1) {
+        nowPlayingMAIScroll(ev, tab, items[0].id);
+    } else if (items.length>1) {
+        choose(ACTIONS[SCROLL_TO_ACTION].title, items).then(choice => {
+            if (undefined!=choice) {
+                nowPlayingMAIScroll(ev, tab, choice.id, choice.extraAdjust);
+            }
+        });
     }
 }

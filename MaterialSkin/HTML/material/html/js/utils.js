@@ -436,6 +436,7 @@ function setElemScrollTop(elem, val) {
         // https://popmotion.io/blog/20170704-manually-set-scroll-while-ios-momentum-scroll-bounces/
         if (elem) {
             elem.style['-webkit-overflow-scrolling'] = 'auto';
+            // Use -1 to mean scroll to bottom
             elem.scrollTop=-1==val ? elem.scrollHeight : val;
             elem.style['-webkit-overflow-scrolling'] = 'touch';
         }

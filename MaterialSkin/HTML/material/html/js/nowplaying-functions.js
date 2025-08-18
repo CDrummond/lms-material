@@ -1204,6 +1204,10 @@ function nowPlayingClickImage(view, event) {
 }
 
 function nowplayingMAIMenuClicked(view, ev, tab) {
+    if (view.$store.state.visibleMenus.size>0) {
+        return;
+    }
+
     let items = [];
 
     items.push({title:i18n("Top"), id:"mai-t-"+tab});

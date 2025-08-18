@@ -735,7 +735,7 @@ function dialogPosition(state) {
     if (state && !state.moveDialogs) {
         return;
     }
-    if ((window.innerHeight>768 && window.innerWidth>1024) || (window.innerWidth>768 && window.innerHeight>1024)) {
+    if (window.innerWidth>=MIN_DLG_MOVE_SIZE && window.innerHeight>=MIN_DLG_MOVE_SIZE) {
         document.documentElement.style.setProperty('--dialog-opacity', '0');
 
         setTimeout(function () {

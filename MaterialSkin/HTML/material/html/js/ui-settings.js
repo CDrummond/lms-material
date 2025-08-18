@@ -543,7 +543,7 @@ Vue.component('lms-ui-settings', {
         }.bind(this));
         bus.$on('uisettings.open', function(act) {
             this.showMenu = false;
-            this.showMoveDialogs = (window.innerHeight>768 && window.innerWidth>1024) || (window.innerWidth>768 && window.innerHeight>1024);
+            this.showMoveDialogs = window.innerWidth>=MIN_DLG_MOVE_SIZE && window.innerHeight>=MIN_DLG_MOVE_SIZE;
             this.readStore();
             this.password = getLocalStorageVal('password', '');
             if (this.allowLayoutAdjust) {

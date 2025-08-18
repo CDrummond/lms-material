@@ -1,19 +1,20 @@
 5.11.0
 ------
-1. Add support for extended meta-data in SlimBrowse commands.
-2. Move 'Sleep all' and 'Create group player' into menu of 'Manager players'
-   dialog.
-3. Add 'Clear queue', 'Switch off', and 'Switch on' for all players in menu
-   of 'Manager players' dialog.
-4. If using playlist images, then add an overlay icon top-left for favourited
-   playlists.
-5. Enable playlist images by default.
-6. Default to grid view.
-7. Re-add notification support, removed in 4.0.0, as used by some plugins.
-8. Click on MAI header to show a 'Scroll to' dialog allowing to scroll to
-   specific sections.
-9. For touch devices clicking on MAI header always shows 'Scroll to' dialog
-   instead of scrolling to artist under touch.
+ 1. Add support for extended meta-data in SlimBrowse commands.
+ 2. Move 'Sleep all' and 'Create group player' into menu of 'Manager players'
+    dialog.
+ 3. Add 'Clear queue', 'Switch off', and 'Switch on' for all players in menu
+    of 'Manager players' dialog.
+ 4. If using playlist images, then add an overlay icon top-left for favourited
+    playlists.
+ 5. Enable playlist images by default.
+ 6. Default to grid view.
+ 7. Re-add notification support, removed in 4.0.0, as used by some plugins.
+ 8. Click on MAI header to show a 'Scroll to' dialog allowing to scroll to
+    specific sections.
+ 9. For touch devices clicking on MAI header always shows 'Scroll to' dialog
+    instead of scrolling to artist under touch.
+10. Change dialog re-position minimum size to 600x600px.
 
 5.10.7
 ------

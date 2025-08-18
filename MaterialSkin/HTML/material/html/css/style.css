@@ -1733,6 +1733,10 @@ div.v-subheader {
  max-width:1000px;
 }
 
+ .msk-is-non-touch .np-info-title:hover {
+ background-color:var(--pq-current-color)!important;
+}
+
 .v-tabs .np-info-title {
  width:100%;
 }

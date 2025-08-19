@@ -573,6 +573,7 @@ function parseBrowseResp(data, parent, options, cacheKey) {
                     } else if ("album"==i.metadata.type) {
                         i.stdItem = STD_ITEM_ONLINE_ALBUM;
                     }
+                    i.sbMeta=true;
                     metadataTypes.add(i.metadata.type);
                 } else if (i.presetParams && i.presetParams.favorites_url) {
                     if (i.presetParams.favorites_url.startsWith("spotify:artist:") ||
@@ -942,14 +943,17 @@ function parseBrowseResp(data, parent, options, cacheKey) {
                             }
                         }
                     }
+
                     if (0==resp.items.length) {
                         resp.subtitle=i18n("Empty");
                     } else if (STD_ITEM_ONLINE_ALBUM==parentType) {
                         let totalDurationStr=formatSeconds(totalDuration);
-                        // TODO: Update browse-page.js to handle plain/detailed sub title for these albums...
-                        //resp.subtitle=resp.items.length+'<obj class="mat-icon music-note">music_note</obj>'+totalDurationStr;
-                        //resp.plainsubtitle=i18np("1 Track", "%1 Tracks", resp.items.length)+SEPARATOR+totalDurationStr;
-                        resp.subtitle=i18np("1 Track", "%1 Tracks", resp.items.length)+SEPARATOR+totalDurationStr;
+                        if (undefined!=parentType) {
+                            resp.subtitle=resp.items.length+'<obj class="mat-icon music-note">music_note</obj>'+totalDurationStr;
+                            resp.plainsubtitle=i18np("1 Track", "%1 Tracks", resp.items.length)+SEPARATOR+totalDurationStr;
+                        } else {
+                            resp.subtitle=i18np("1 Track", "%1 Tracks", resp.items.length)+SEPARATOR+totalDurationStr;
+                        }
                     } else if (metadataTypes.size==1 && metadataTypes.has("artist")) {
                         resp.subtitle=i18np("1 Artist", "%1 Artists", resp.items.length);
                     } else if (metadataTypes.size==1 && metadataTypes.has("album")) {

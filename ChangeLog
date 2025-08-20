@@ -15,11 +15,8 @@
  9. For touch devices clicking on MAI header always shows 'Scroll to' dialog
     instead of scrolling to artist under touch.
 10. Change dialog re-position minimum size to 600x600px.
-
-5.10.7
-------
-1. Dont scroll, or highlight, lyrics if current time is 15mins (or more) past
-   time of last line.
+11. Dont scroll, or highlight, lyrics if current time is 15mins (or more) past
+    time of last line.
 
 5.10.6
 ------

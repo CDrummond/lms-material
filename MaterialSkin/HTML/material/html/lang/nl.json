@@ -21,6 +21,7 @@
 "<obj>conducted by</obj> %1":"<obj>gedirigeerd door</obj> %1",
 "<obj>from</obj> %1":"<obj>van</obj> %1",
 "<obj>performed by</obj> %1":"<obj>uitgevoerd door</obj> %1",
+"A playlist named '%1' already exists, overwrite?":"De afspeellijst '%1' bestaat al, overschrijven?",
 "Abort":"Afbreken",
 "Abort all":"Alles afbreken",
 "Abort all downloads?":"Alle downloads afbreken?",
@@ -325,6 +326,7 @@
 "Only showing %1 items":"Geeft maar %1 items weer",
 "Other":"Overig",
 "Other settings":"Overige instellingen",
+"Overwrite":"Overschrijven",
 "Path":"Pad",
 "Pause":"Pause",
 "Per player":"Per muziekspeler",
@@ -693,6 +695,13 @@
 "%1 Years":"%1 Jaren",
 "1 day":"1 dag",
 "%1 days":"%1 dagen",
-"A playlist named '%1' already exists, overwrite?":"De afspeellijst '%1' bestaat al, overschrijven?",
-"Overwrite":"Overschrijven"
+"All players":"",
+"Bottom":"",
+"Clear":"",
+"Clear queues of all players?":"",
+"Switch off all players?":"",
+"Switch on all players?":"",
+"Top":"",
+"1 Folder":"",
+"%1 Folders":""
 }

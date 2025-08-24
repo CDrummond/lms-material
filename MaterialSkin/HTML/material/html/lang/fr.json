@@ -694,5 +694,14 @@
 "1 Year":"1 année",
 "%1 Years":"%1 années",
 "1 day":"1 jour",
-"%1 days":"%1 jours"
+"%1 days":"%1 jours",
+"All players":"",
+"Bottom":"",
+"Clear":"",
+"Clear queues of all players?":"",
+"Switch off all players?":"",
+"Switch on all players?":"",
+"Top":"",
+"1 Folder":"",
+"%1 Folders":""
 }

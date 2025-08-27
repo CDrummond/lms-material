@@ -530,7 +530,6 @@ function copyVars(iframe) {
     return true;
 }
 
-/*
 function addDefaultSkinCss(doc, iframe) {
     let css = doc.createElement("link");
     css.href = "/material/html/css/default-skin/mods.css?r=MATERIAL_VERSION";
@@ -538,7 +537,6 @@ function addDefaultSkinCss(doc, iframe) {
     css.type = "text/css";
     iframe.contentDocument.head.appendChild(css);
 }
-*/
 
 function applyModifications(page, svgCol, darkUi, src) {
     if (!page) {
@@ -600,7 +598,7 @@ function applyModifications(page, svgCol, darkUi, src) {
                     bus.$emit('iframe-close');
                 };
             }
-            /*
+
             addDefaultSkinCss(document, iframe);
             let elems = content.documentElement.getElementsByTagName("iframe");
             if (undefined!=elems && elems.length>0) {
@@ -611,7 +609,6 @@ function applyModifications(page, svgCol, darkUi, src) {
                     };
                 }
             }
-            */
         } else if ('player'==page || 'server'==page) {
             initChangeListeners(content.documentElement);
             // Set --vh as this is used to fix size of main settings frame, so that we can
@@ -712,7 +709,7 @@ Vue.component('lms-iframe-dialog', {
     template: `
 <div id="iframe-page">
  <v-dialog v-model="show" v-if="show" persistent no-click-animation scrollable fullscreen>
-  <v-card v-bind:class="{'def-server':'dserver'==page, 'dark-logic':'dlserver'==page}">
+  <v-card v-bind:class="{'def-server':'dserver'==page && !haveCustomActions, 'dark-logic':'dlserver'==page && !haveCustomActions}">
    <v-card-title class="settings-title">
     <v-toolbar app-data class="dialog-toolbar" @mousedown="mouseDown" id="iframe-toolbar">
      <lms-windowcontrols v-if="queryParams.nativeTitlebar && queryParams.tbarBtnsPos=='l'"></lms-windowcontrols>
@@ -820,7 +817,7 @@ Vue.component('lms-iframe-dialog', {
             this.loaded = false;
             this.startLoadTimer(page.indexOf("plugins/Extensions/settings/basic.html")>=0 ? "SETUP_PLUGINS" : undefined);
             this.actions = undefined==actions ? [] : actions;
-            this.customActions = getCustomActions(this.page+"-dialog", this.$store.state.unlockAll);
+            this.customActions = getCustomActions(( "dserver"==this.page || "dlserver"==this.page ? "server" : this.page)+"-dialog", this.$store.state.unlockAll);
             this.history = [];
             this.showHome = showHome;
             this.svgCol = this.darkUi ? LMS_DARK_SVG : LMS_LIGHT_SVG;
@@ -1062,6 +1059,9 @@ Vue.component('lms-iframe-dialog', {
         },
         'choiceMenu.show': function(val) {
             this.$store.commit('menuVisible', {name:'iframe-choice', shown:val});
+        },
+        'showMenu': function(val) {
+            this.$store.commit('menuVisible', {name:'iframe-main', shown:val});
         }
     }
 })

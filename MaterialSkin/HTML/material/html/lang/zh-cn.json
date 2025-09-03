@@ -240,7 +240,7 @@
 "IP: %1":"IP：%1",
 "Icon":"图标",
 "If background images have been enabled (see options below), then use a default image if there is no current image.":"如果已启用背景图像（请参考下面的选项），则在没有当前图像的情况下使用默认图像",
-"If you store the library when pinning then this library will always be used, regardless of changing the library in 'My Music'. If you elect not to store the library, then changing the library under 'My Music' will effect the items displayed within this pinned item.":"如果您保存固定于首页的媒体库，则“我的音乐”将始终使用该媒体库。如果您选择不保存媒体库，则更改“我的音乐”下的媒体库将影响此固定于首页显示的项目。",
+"If you store the library when pinning then this library will always be used, regardless of changing the library in 'My Music'. If you elect not to store the library, then changing the library under 'My Music' will affect the items displayed within this pinned item.":"如果您保存固定于首页的媒体库，则“我的音乐”将始终使用该媒体库。如果您选择不保存媒体库，则更改“我的音乐”下的媒体库将影响此固定于首页显示的项目。",
 "In progress":"正在进行",
 "Increase volume":"增加音量",
 "Information":"信息",

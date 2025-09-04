@@ -18,6 +18,8 @@
 11. Dont scroll, or highlight, lyrics if current time is 15mins (or more) past
     time of last line.
 12. Use list image size for covers of stream items in queue.
+13. For settings pages (loaded in iframe) set default text colour (dark/light)
+    in CSS and overload when page loaded.
 
 5.10.6
 ------

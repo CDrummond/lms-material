@@ -14,4 +14,5 @@ select:not([multiple]) {
 :root {
  --range-trough-color:#5a5a5a;
  --border-color:#5a5a5a;
+ --text-color:#edece7;
 }

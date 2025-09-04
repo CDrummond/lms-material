@@ -743,6 +743,7 @@ var lmsBrowse = Vue.component("lms-browse", {
 
         if (!IS_MOBILE) {
             bindKey('home');
+            bindKey('del');
             bindKey(LMS_SEARCH_KEYBOARD, 'mod');
             bindKey(LMS_SEARCH_KEYBOARD, 'alt');
             bindKey(LMS_PLAY_KEYBOARD, 'mod+shift');
@@ -796,6 +797,8 @@ var lmsBrowse = Vue.component("lms-browse", {
                         this.scrollElement.scrollBy(0, -1*this.scrollElement.clientHeight);
                     } else if ('pagedown'==key) {
                         this.scrollElement.scrollBy(0, this.scrollElement.clientHeight);
+                    } else if ('delete'==key && this.selection.size>0 && !queryParams.party && !this.queueSelection && this.current && (this.current.section==SECTION_PLAYLISTS || this.current.section==SECTION_FAVORITES)) {
+                        this.deleteSelectedItems();
                     }
                 }
             }.bind(this));
@@ -2272,7 +2275,7 @@ var lmsBrowse = Vue.component("lms-browse", {
                 this.dropIndex = -1;
             }
         }.bind(this));
-        this.browseSelection=false;
+        this.queueSelection=false;
         bus.$on('queueSelection', function(sel) {
             this.queueSelection=sel;
         }.bind(this));

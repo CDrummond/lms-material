@@ -922,6 +922,8 @@ function shortcutStr(key, shift, alt) {
             return i18n("Esc");
         } else if (key=="home") {
             return i18n("Home");
+        } else if (key=="del") {
+            return i18n("Delete");
         }
     }
     if (alt) {

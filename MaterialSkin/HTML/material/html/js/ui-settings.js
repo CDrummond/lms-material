@@ -916,6 +916,7 @@ Vue.component('lms-ui-settings', {
                          shortcutStr("space")+SEPARATOR+i18n("Play/pause"),
                          shortcutStr("home")+SEPARATOR+i18n("Go to homescreen"),
                          shortcutStr("esc")+SEPARATOR+i18n("Go back"),
+                         shortcutStr("del")+SEPARATOR+i18n("Remove selected items"),
                          shortcutStr(ACTIONS[SEARCH_LIB_ACTION].key)+SEPARATOR+ACTIONS[SEARCH_LIB_ACTION].title + " / " + ACTIONS[SEARCH_LIST_ACTION].title,
                          shortcutStr(ACTIONS[SEARCH_LIB_ACTION].key, false, true)+SEPARATOR+ACTIONS[ADV_SEARCH_ACTION].title,
                          shortcutStr(ACTIONS[SEARCH_LIST_ACTION].key, true)+SEPARATOR+ACTIONS[SEARCH_LIST_ACTION].title+" ("+this.i18n("Queue")+")",

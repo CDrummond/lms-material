@@ -22,13 +22,13 @@ function queueMakePlain(str) {
 
 function queueItemCover(item) {
     if (item.artwork_url) {
-        return resolveImageUrl(item.artwork_url);
+        return resolveImageUrl(item.artwork_url, LMS_LIST_IMAGE_SIZE);
     }
     if (undefined!=item.coverid) { // && !(""+item.coverid).startsWith("-")) {
         return "/music/"+item.coverid+"/cover"+LMS_LIST_IMAGE_SIZE;
     }
     if (undefined!=item.portraitid) {
-        return "/contributor/" + item.portraitid + "/image" + LMS_CURRENT_IMAGE_SIZE
+        return "/contributor/" + item.portraitid + "/image" + LMS_LIST_IMAGE_SIZE
     }
     if (LMS_P_MAI) {
         if (item.artist_ids) {
@@ -37,7 +37,7 @@ function queueItemCover(item) {
             return "/imageproxy/mai/artist/" + item.artist_id + "/image" + LMS_LIST_IMAGE_SIZE;
         }
     }
-    return resolveImageUrl(LMS_BLANK_COVER);
+    return resolveImageUrl(LMS_BLANK_COVER, LMS_LIST_IMAGE_SIZE);
 }
 
 var lmsQueueSelectionActive = false;

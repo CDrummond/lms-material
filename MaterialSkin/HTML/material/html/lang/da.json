@@ -397,6 +397,7 @@
 "Remove duplicates":"Fjern dubletter",
 "Remove from favorites":"Fjern fra favoritter",
 "Remove previous tracks":"Fjern numre før dette",
+"Remove selected items":"Fjern valgte punkter",
 "Remove the selected items?":"Fjern de valgte elementer?",
 "Remove upcoming tracks":"Fjern numre efter dette",
 "Rename":"Omdøb",
@@ -703,6 +704,5 @@
 "1 Year":"1 år",
 "%1 Years":"%1 år",
 "1 day":"1 dag",
-"%1 days":"%1 dage",
-"Remove selected items":""
+"%1 days":"%1 dage"
 }

@@ -1322,7 +1322,7 @@ function browseItemAction(view, act, origItem, index, event) {
         // user if we should save the library_id with the pinned item.
         if (RANDOM_MIX_ID!=item.id && undefined!=view.current && view.current.id==TOP_MYMUSIC_ID && view.libraryName && item.params && getField(item, "library_id:")<0) {
             confirm(i18n("Store current library with pinned item?")+
-                    addNote(i18n("If you store the library when pinning then this library will always be used, regardless of changing the library in 'My Music'. If you elect not to store the library, then changing the library under 'My Music' will effect the items displayed within this pinned item.")),
+                    addNote(i18n("If you store the library when pinning then this library will always be used, regardless of changing the library in 'My Music'. If you elect not to store the library, then changing the library under 'My Music' will affect the items displayed within this pinned item.")),
                     i18n("With"), undefined, i18n("Without")).then(res => {
                 if (1==res) {
                     var libId = view.currentLibId ? view.currentLibId : view.$store.state.library ? view.$store.state.library : LMS_DEFAULT_LIBRARY

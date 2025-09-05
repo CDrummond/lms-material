@@ -45,52 +45,13 @@ Vue.component('lms-mediasession', {
             }.bind(this));
             bus.$emit('getCurrentCover');
             this.haveLocalAndroidPlayer = false;
-            this.currentIpAddress = undefined;
-            let mediasession = this;
-            if (IS_ANDROID) { // currently only need to check current IP address to detect SB player, and this is Android only.
-                try {
-                    var RTCPeerConnection = window.RTCPeerConnection || window.webkitRTCPeerConnection || window.mozRTCPeerConnection;
-                    if (RTCPeerConnection)(function() {
-                        var rtc = new RTCPeerConnection({iceServers:[]});
-                        rtc.createDataChannel('', {reliable: false});
-                        rtc.onicecandidate = function(evt) {
-                            if (evt.candidate) {
-                                grepSdp(evt.candidate.candidate);
-                            }
-                        };
-
-                        rtc.createOffer(function(offerDesc) {
-                            rtc.setLocalDescription(offerDesc);
-                        }, function(e) { console.warn("Failed to get IP address", e); });
-
-                        function grepSdp(sdp) {
-                            var ip = /(192\.168\.(0|\d{0,3})\.(0|\d{0,3}))/i;
-                            sdp.split('\r\n').forEach(function(line) {
-                                if (line.match(ip)) {
-                                    mediasession.currentIpAddress = line.match(ip)[0];
-                                }
-                            });
-                        }
-                    })();
-                } catch(e) {
-                }
-                
-                bus.$on('playersAdded', function(players) {
-                    // Check if we have a local SB Player - if so, can't use MediaSession
-                    var localAndroidPlayer = false;
-                    for (var i=0, len=players.length; i<len && !localAndroidPlayer; ++i) {
-                        if (this.currentIpAddress && 'SB Player'===players[i].modelname && players[i].ip.split(':')[0] == this.currentIpAddress) {
-                            localAndroidPlayer = true;
-                        }
+            if (IS_ANDROID) {
+                bus.$on('haveLocalPlayer', function(have) {
+                    if (have != this.haveLocalAndroidPlayer) {
+                        this.haveLocalAndroidPlayer = have;
+                        this.updateMediaSession(true);
                     }
-                    
-                    if (localAndroidPlayer != this.haveLocalAndroidPlayer) {
-                        this.haveLocalAndroidPlayer = localAndroidPlayer;
-                        if (this.haveLocalAndroidPlayer) {
-                            this.updateMediaSession(true);
-                        }
-                    }
-                }.bind(this));       
+                }.bind(this));
             }
             if (this.$store.state.mediaControls) {
                this.addListener();

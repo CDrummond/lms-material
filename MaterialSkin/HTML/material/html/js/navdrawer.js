@@ -104,7 +104,7 @@ Vue.component('lms-navdrawer', {
     <v-list-tile-action v-if="TB_MANAGE_PLAYERS.shortcut && keyboardControl" class="menu-shortcut player-menu-shortcut">{{TB_MANAGE_PLAYERS.shortcut}}</v-list-tile-action>
    </v-list-tile>
 
-   <v-list-tile :href="appLaunchPlayer" v-if="undefined!=appLaunchPlayer" @click="show=false">
+   <v-list-tile :href="appLaunchPlayer" v-if="undefined!=appLaunchPlayer && connected && !haveLocalPlayer" @click="show=false">
     <v-list-tile-avatar><v-icon>{{TB_START_PLAYER.icon}}</v-icon></v-list-tile-avatar>
     <v-list-tile-title>{{TB_START_PLAYER.title}}</v-list-tile-title>
    </v-list-tile>
@@ -650,10 +650,13 @@ Vue.component('lms-navdrawer', {
             return this.customSystemActions && this.customSystemActions.length>0
         },
         playersDivider() {
-            return this.showManagePlayers || undefined!=this.appLaunchPlayer || this.showCustomActions
+            return this.showManagePlayers || (undefined!=this.appLaunchPlayer && !this.haveLocalPlayer) || this.showCustomActions
         },
         playerSectionsDivider() {
             return !this.ndSettingsVisible && !this.noPlayer && this.players && (this.players.length>1 || this.playerStatus.sleepTime || this.playerStatus.alarmStr)
+        },
+        haveLocalPlayer() {
+            return this.$store.state.haveLocalPlayer
         },
         showShortcuts() {
             return this.$store.state.ndShortcuts>0 && this.shortcuts.length>0

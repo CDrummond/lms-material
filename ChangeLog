@@ -22,6 +22,8 @@
     in CSS and overload when page loaded.
 14. Press 'Del' to remove selected items for queue, favourites, or playlists.
 15. Show disc subtitle in queue.
+16. Allow specifying local IP address in URL query, and use this to hide the
+    'Start player' command if local player found.
 
 5.10.6
 ------

@@ -456,6 +456,7 @@ var app = new Vue({
         bus.$on('queueStatus', function(size) {
             this.queueEmpty = size<1;
         }.bind(this));
+        this.$store.commit('setLocalIpAddresses', queryParams.ipAddresses);
     },
     computed: {
         darkUi() {

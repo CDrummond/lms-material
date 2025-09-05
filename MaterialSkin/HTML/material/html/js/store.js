@@ -11,7 +11,7 @@ const FAKE_MENU = new Set(['volume', 'groupvolume'])
 var lmsNumVisibleMenus = 0;
 
 function copyPlayer(p){
-    return {id:p.id, name:p.name, isgroup:p.isgroup, model:p.model, ip:p.ip, icon:p.icon, color:p.color, link:p.link, ison:p.ison, isplaying:p.isplaying, iswaiting:p.iswaiting, isconnected:p.isconnected, canpoweroff:p.canpoweroff};
+    return {id:p.id, name:p.name, isgroup:p.isgroup, model:p.model, ip:p.ip, icon:p.icon, color:p.color, link:p.link, ison:p.ison, isplaying:p.isplaying, iswaiting:p.iswaiting, isconnected:p.isconnected, canpoweroff:p.canpoweroff, islocal:p.islocal};
 }
 
 function setDesktopWideCoverPad(on) {
@@ -233,6 +233,22 @@ function storeCurrentPlayer(state) {
     }
 }
 
+function setHaveLocalPlayer(state) {
+    let prev = state.haveLocalPlayer;
+    state.haveLocalPlayer = false;
+    if (state.localIps.size>0 && undefined!=state.players) {
+        for (var i=0, len=state.players.length; i<len; ++i) {
+            if (undefined!=state.players[i].ip && state.localIps.has(state.players[i].ip.split(':')[0])) {
+                state.haveLocalPlayer = true;
+                state.players[i].local = true;
+            }
+        }
+    }
+    if (prev!=state.haveLocalPlayer) {
+        bus.$emit('haveLocalPlayer', state.haveLocalPlayer);
+    }
+}
+
 function closePrevDialog(state) {
     if (state.openDialogs.length>0) {
         bus.$emit('esc');
@@ -292,6 +308,8 @@ const store = new Vuex.Store({
         pinQueue: false,
         players: null, // List of players
         player: null, // Current player (from list)
+        localIps: new Set(),
+        haveLocalPlayer: false,
         defaultPlayer: null,
         otherPlayers: [], // Players on other servers
         theme: LMS_DEFAULT_THEME,        // Set to dark/light if theme is "auto"
@@ -424,12 +442,18 @@ const store = new Vuex.Store({
             var added = new Set([...update].filter(x => !existing.has(x)));
             if (removed.size>0) {
                 bus.$emit("playersRemoved", [...removed]);
+                changed = true;
             }
             if (added.size>0) {
                 bus.$emit("playersAdded", [...added]);
+                changed = true;
             }
 
             state.players=players;
+            state.playerIds=update;
+            if (changed) {
+                setHaveLocalPlayer(state);
+            }
 
             // If default player re-appears (#387) then switch to this
             var defaultSet = false;
@@ -683,6 +707,10 @@ const store = new Vuex.Store({
                 setLocalStorageVal('library', state.library);
                 bus.$emit('libraryChanged');
             }
+        },
+        setLocalIpAddresses(state, ips) {
+            state.localIps = undefined==ips ? new Set() : new Set(Array.isArray(ips) ? ips : ips.split(","));
+            setHaveLocalPlayer(state);
         },
         setPage(state, val) {
             // 'escPressed' goes to all 3 views, so need to ignore setPage calls

@@ -21,6 +21,7 @@
 13. For settings pages (loaded in iframe) set default text colour (dark/light)
     in CSS and overload when page loaded.
 14. Press 'Del' to remove selected items for queue, favourites, or playlists.
+15. Show disc subtitle in queue.
 
 5.10.6
 ------

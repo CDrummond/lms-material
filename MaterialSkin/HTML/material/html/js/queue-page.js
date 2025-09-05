@@ -88,6 +88,10 @@ function buildArtistAlbumLines(i, queueAlbumStyle, queueContext) {
                     // track has a grouping tag
                     artistAlbum +='<br/><div class="pq-gsub ellipsis">'+i.grouping+'</div>';
                     ws = true;
+                } else if (i.discsubtitle) {
+                    // track has a discsubtitle tag
+                    artistAlbum +='<br/><div class="pq-gsub ellipsis">'+i.discsubtitle+'</div>';
+                    ws = true;
                 }
             } else if (i.discsubtitle) {
                 // track has a discsubtitle tag

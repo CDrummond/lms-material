@@ -1804,10 +1804,15 @@ var lmsBrowse = Vue.component("lms-browse", {
                 for (let r=0, loop=this.grid.rows, len=loop.length-1; r<len && loop[r+1].rs<=index; ++r) {
                     pos += loop[r].size;
                 }
+            } else if (this.grid.allowed && this.grid.use && this.grid.numColumns>0) {
+                pos = Math.floor(index/this.grid.numColumns)*(this.grid.ih-(this.grid.haveSubtitle ? 0 : GRID_SINGLE_LINE_DIFF));
             } else {
-                pos = this.grid.use
-                        ? Math.floor(index/this.grid.numColumns)*(this.grid.ih-(this.grid.haveSubtitle ? 0 : GRID_SINGLE_LINE_DIFF))
-                        : index*LMS_LIST_ELEMENT_SIZE;
+                let elems = getElementsByClassName(this.scrollElement, "div", "lms-list-item");
+                let itemSize = LMS_LIST_ELEMENT_SIZE;
+                if (undefined!=elems && elems.length>0) {
+                    itemSize = elems[0].getBoundingClientRect().height;
+                }
+                pos = index*itemSize;
             }
             setScrollTop(this, pos>0 ? pos : 0);
         },

@@ -1,6 +1,7 @@
 5.11.1
 ------
 1. Improve accuracy of list 'Scroll to'.
+2. Remove 'Del' shortcut, as its breaking A-Z jumplist.
 
 5.11.0
 ------

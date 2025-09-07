@@ -589,7 +589,7 @@ function browseHandleListResponse(view, item, command, resp, prevPage, appendIte
         if (view.current.id==TOP_FAVORITES_ID || (view.current.id!=ADV_SEARCH_ID && view.current.stdItem!=STD_ITEM_MAI && !item.id.startsWith(TOP_ID_PREFIX) && view.items.length>0)) {
             view.currentActions.push({action:SEARCH_LIST_ACTION, weight:5});
         }
-        if (resp.numHeaders>1 && view.items.length>50) { // } && curitem.stdItem!=STD_ITEM_ARTIST && curitem.stdItem!=STD_ITEM_ALBUM) {
+        if (resp.numHeaders>1 && view.items.length>25) { // } && curitem.stdItem!=STD_ITEM_ARTIST && curitem.stdItem!=STD_ITEM_ALBUM) {
             view.currentActions.push({action:SCROLL_TO_ACTION, weight:4});
         }
         let itemHasPlayAction=undefined!=item.menu && item.menu[0]==PLAY_ACTION;

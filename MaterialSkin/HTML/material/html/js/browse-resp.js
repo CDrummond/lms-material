@@ -2063,11 +2063,32 @@ function parseBrowseResp(data, parent, options, cacheKey) {
                 resp.subtitle+=SEPARATOR+formatSeconds(totalDuration);
             }
         } else if (data.result.years_loop) {
-            for (var idx=0, loop=data.result.years_loop, loopLen=loop.length; idx<loopLen; ++idx) {
-                var i = loop[idx];
-                var key = i.textkey;
+            let decades = [];
+            for (let idx=0, loop=data.result.years_loop, loopLen=loop.length; idx<loopLen && decades.length<2; ++idx) {
+                let year = ""+loop[idx].year;
+                let decade = year.length==4 ? parseInt(year.substring(0, 3)+"0") : "0000";
+                if (decades.length==0 || decades[decades.length-1]!=decade) {
+                    decades.push(decade);
+                }
+            }
+            let splitDecades = decades.length>=1;
+            decades = [];
+            for (let idx=0, loop=data.result.years_loop, loopLen=loop.length; idx<loopLen; ++idx) {
+                let i = loop[idx];
+                let key = i.textkey;
+                let addedHeader = false;
+                if (splitDecades) {
+                    let year = ""+i.year;
+                    let decade = year.length==4 ? parseInt(year.substring(0, 3)+"0") : "0000";
+                    if (decades.length==0 || decades[decades.length-1]!=decade) {
+                        decades.push(decade);
+                        addedHeader = true;
+                        resp.items.push({title:decade, id:FILTER_PREFIX+decade, header:true});
+                        resp.numHeaders++;
+                    }
+                }
                 if (undefined!=key && (resp.jumplist.length==0 || resp.jumplist[resp.jumplist.length-1].key!=key) && !textKeys.has(key)) {
-                    resp.jumplist.push({key: key, index: resp.items.length});
+                    resp.jumplist.push({key: key, index: resp.items.length+(addedHeader ? -1 : 0)});
                     textKeys.add(key);
                 }
                 resp.items.push({
@@ -2077,10 +2098,11 @@ function parseBrowseResp(data, parent, options, cacheKey) {
                               stdItem: STD_ITEM_YEAR,
                               type: "group",
                               textkey: key
-                          });
+                           });
             }
             resp.itemCustomActions = getCustomActions("year");
-            resp.subtitle=i18np("1 Year", "%1 Years", resp.items.length);
+            resp.subtitle=i18np("1 Year", "%1 Years", resp.items.length-resp.numHeaders);
+            resp.listSize=resp.items.length;
         } else if (0===data.result.count && data.result.networkerror) {
             resp.items.push({title: i18n("Failed to retrieve listing. (%1)", data.result.networkerror), type: "text"});
         } else if (data.result.data && data.result.data.constructor === Array && data.result.title) { // pictures?

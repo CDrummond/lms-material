@@ -2,6 +2,10 @@ dev
 -----
 1. Split years into decades, if 2 or more.
 
+5.11.1
+------
+1. Improve accuracy of list 'Scroll to'.
+
 5.11.0
 ------
  1. Add support for extended meta-data in SlimBrowse commands.

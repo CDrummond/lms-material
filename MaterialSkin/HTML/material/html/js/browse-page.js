@@ -142,7 +142,28 @@ var lmsBrowse = Vue.component("lms-browse", {
   </div>
   <div class="lms-list" id="browse-list" style="overflow:auto;" v-bind:class="{'lms-image-grid':grid.allowed&&grid.use,'lms-grouped-image-grid':grid.allowed&&grid.use && grid.multiSize,'lms-image-grid-jump':grid.allowed&&grid.use && filteredJumplist.length>1,'lms-list-jump':!(grid.allowed&&grid.use) && filteredJumplist.length>1,'bgnd-blur':drawBgndImage,'backdrop-blur':drawBackdrop}">
 
-   <RecycleScroller :items="grid.rows" :item-size="grid.multiSize ? null : (grid.ih - (grid.haveSubtitle || isTop || current.id.startsWith(TOP_ID_PREFIX) ? 0 : GRID_SINGLE_LINE_DIFF))" page-mode key-field="id" :buffer="LMS_SCROLLER_GRID_BUFFER" v-if="grid.allowed&&grid.use">
+   <RecycleScroller :items="grid.rows" :item-size="grid.multiSize ? null : grid.ih" page-mode key-field="id" :buffer="LMS_SCROLLER_GRID_BUFFER" v-if="grid.allowed&&grid.use&&GRID_TEXT_ONLY==grid.type">
+    <div slot-scope="{item}" :class="[grid.few?'image-grid-few':'image-grid-full-width']">
+     <v-list-tile v-if="item.header && item.item" class="grid-header no-hover">
+      <v-list-tile-avatar v-if="item.item.icon" :tile="true" class="lms-avatar">
+       <v-icon>{{item.item.icon}}</v-icon>
+      </v-list-tile-avatar>
+      <v-list-tile-avatar v-else-if="item.item.svg" :tile="true" class="lms-avatar">
+       <img :class="['hdr-'+hRgb, 'svg-list-img']" :src="item.item.svg | svgIcon(darkUi, undefined, true)" loading="lazy" @dragstart.prevent="" @dragenter.prevent=""></img>
+      </v-list-tile-avatar>
+      <v-list-tile-content>
+       <v-list-tile-title>{{item.item.title}}</v-list-tile-title>
+      </v-list-tile-content>
+     </v-list-tile>
+     <div v-else align="center" style="vertical-align: top" v-for="(citem, col) in item.items" @contextmenu.prevent="contextMenu(citem, isTop ? citem.gidx : (item.rs+col), $event)">
+      <div v-if="undefined==citem" class="text-grid-item defcursor"></div>
+      <div v-else class="text-grid-item" @click="click(citem, isTop ? citem.gidx : (item.rs+col), $event)" :title="citem | itemTooltip" v-bind:class="{'search-highlight':highlightIndex==(isTop ? citem.gidx : (item.rs+col)), 'list-active': (menu.show && (isTop ? citem.gidx : (item.rs+col))==menu.index) || (fetchingItem==item.id)}">
+       <div>{{citem.title}}</div>
+      </div>
+     </div>
+    </div>
+   </RecycleScroller>
+   <RecycleScroller :items="grid.rows" :item-size="grid.multiSize ? null : (grid.ih - (grid.haveSubtitle || isTop || current.id.startsWith(TOP_ID_PREFIX) ? 0 : GRID_SINGLE_LINE_DIFF))" page-mode key-field="id" :buffer="LMS_SCROLLER_GRID_BUFFER" v-else-if="grid.allowed&&grid.use">
     <div slot-scope="{item}" :class="[grid.few?'image-grid-few':'image-grid-full-width', grid.haveSubtitle?'image-grid-with-sub':'']">
 
      <v-list-tile v-if="item.header && item.item" class="grid-header" @click.stop="click(item.item, undefined, $event)" v-bind:class="{'search-highlight':highlightIndex==(item.rs)}">
@@ -1634,10 +1655,11 @@ var lmsBrowse = Vue.component("lms-browse", {
             var listWidth = thisWidth - ((/*scrollbar*/ IS_MOBILE ? 0 : 20) + (/*this.filteredJumplist.length>1 && this.items.length>10 ? */JUMP_LIST_WIDTH/* :0*/) + LEFT_PADDING + RIGHT_PADDING);
             var sz = undefined;
             if (GRID_TEXT_ONLY == this.grid.type) {
-                var width = GRID_MIN_WIDTH;
+                var width = 100;
+                var height = 48;
                 var maxColumns = Math.floor(listWidth / width);
                 var numColumns = Math.max(Math.min(maxColumns, 20), 1);
-                sz = {w: width-16, h: width-50, s:0, mc:maxColumns, nc:numColumns}
+                sz = {w: width, h: height, s:0, mc:maxColumns, nc:numColumns}
             } else {
                 const GRID_MAX_WIDTH = window.innerWidth>3500
                                           ? 283 :
@@ -1684,7 +1706,7 @@ var lmsBrowse = Vue.component("lms-browse", {
                     var rowHasSubtitle = false;
                     if (i<items.length && items[i].header) {
                         this.grid.multiSize=true;
-                        this.grid.rows.push({item: items[i], header:true, size:64, r:row, id:"row.header."+i, rs:rs});
+                        this.grid.rows.push({item: items[i], header:true, size:GRID_TEXT_ONLY == this.grid.type ? 44 : 64, r:row, id:"row.header."+i, rs:rs});
                         i+=1;
                         rs+=1;
                     } else {
@@ -1698,17 +1720,23 @@ var lmsBrowse = Vue.component("lms-browse", {
                                 break;
                             } else {
                                 rowItems.push(idx<items.length ? items[idx] : undefined);
-                                let haveSub = idx<items.length && items[idx].subtitle;
-                                if (!haveSubtitle && haveSub) {
-                                    haveSubtitle = true;
-                                }
-                                if (!rowHasSubtitle && haveSub) {
-                                    rowHasSubtitle = true;
+                                if (GRID_TEXT_ONLY != this.grid.type) {
+                                    let haveSub = idx<items.length && items[idx].subtitle;
+                                    if (!haveSubtitle && haveSub) {
+                                        haveSubtitle = true;
+                                    }
+                                    if (!rowHasSubtitle && haveSub) {
+                                        rowHasSubtitle = true;
+                                    }
                                 }
                                 used++;
                             }
                         }
-                        this.grid.rows.push({id:"row."+row+"."+sz.nc, items:rowItems, r:row, rs:rs, size:this.grid.multiSize ? (rowHasSubtitle ? sz.h : (sz.h - GRID_SINGLE_LINE_DIFF)) : undefined, numStd:used, hasSub:this.grid.multiSize ? rowHasSubtitle : undefined});
+                        if (GRID_TEXT_ONLY == this.grid.type) {
+                            this.grid.rows.push({id:"row."+row+"."+sz.nc, items:rowItems, r:row, rs:rs, size:this.grid.multiSize ? sz.h : undefined, numStd:used, hasSub:undefined});
+                        } else {
+                            this.grid.rows.push({id:"row."+row+"."+sz.nc, items:rowItems, r:row, rs:rs, size:this.grid.multiSize ? (rowHasSubtitle ? sz.h : (sz.h - GRID_SINGLE_LINE_DIFF)) : undefined, numStd:used, hasSub:this.grid.multiSize ? rowHasSubtitle : undefined});
+                        }
                         i+=used;
                         rs+=used;
                     }

@@ -90,6 +90,9 @@
         },
         "WiiM Player":{
             "svg":"wiim"
+        },
+        "LyrPlay":{
+            "svg":"apple"
         }
     },
     "squeezeplay":{

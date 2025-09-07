@@ -488,7 +488,7 @@ var lmsBrowse = Vue.component("lms-browse", {
             detailedSubInfo: undefined,
             detailedSubExtra: undefined,
             items: [],
-            grid: {allowed:true, use:getLocalStorageBool('grid', true), numItems:0, numColumns:0, ih:GRID_MIN_HEIGHT, rows:[], few:false, haveSubtitle:true, multiSize:false},
+            grid: {allowed:true, use:getLocalStorageBool('grid', true), numItems:0, numColumns:0, ih:GRID_MIN_HEIGHT, rows:[], few:false, haveSubtitle:true, multiSize:false, type:GRID_STANDARD},
             fetchingItem:undefined,
             hoverBtns: !IS_MOBILE,
             trans: { ok:undefined, cancel: undefined, close: undefined, selectMultiple:undefined, addall:undefined, playall:undefined,
@@ -737,7 +737,7 @@ var lmsBrowse = Vue.component("lms-browse", {
         this.options={pinned: new Set(),
                       sortFavorites: this.$store.state.sortFavorites};
         this.previousScrollPos=0;
-        this.grid = {allowed:true, use:this.$store.state.gridPerView ? isSetToUseGrid(GRID_OTHER) : getLocalStorageBool('grid', true), numItems:0, numColumns:0, ih:GRID_MIN_HEIGHT, rows:[], few:false, haveSubtitle:true, multiSize:false};
+        this.grid = {allowed:true, use:this.$store.state.gridPerView ? isSetToUseGrid(GRID_OTHER) : getLocalStorageBool('grid', true), numItems:0, numColumns:0, ih:GRID_MIN_HEIGHT, rows:[], few:false, haveSubtitle:true, multiSize:false, type:GRID_STANDARD};
         this.currentActions=[{action:(this.grid.use ? USE_LIST_ACTION : USE_GRID_ACTION)}];
         this.canDrop = true;
 
@@ -1397,7 +1397,7 @@ var lmsBrowse = Vue.component("lms-browse", {
             }
             if (this.current && TOP_MYMUSIC_ID==this.current.id) {
                 this.items = this.myMusic;
-                this.grid = {allowed:true, use:this.$store.state.gridPerView ? isSetToUseGrid(GRID_OTHER) : getLocalStorageBool('grid', true), numItems:0, numColumns:0, ih:GRID_MIN_HEIGHT, rows:[], few:false, haveSubtitle:true, multiSize:false};
+                this.grid = {allowed:true, use:this.$store.state.gridPerView ? isSetToUseGrid(GRID_OTHER) : getLocalStorageBool('grid', true), numItems:0, numColumns:0, ih:GRID_MIN_HEIGHT, rows:[], few:false, haveSubtitle:true, multiSize:false, type:GRID_STANDARD};
                 this.tbarActions=[];
                 this.currentActions=[{action:VLIB_ACTION}, {action:(this.grid.use ? USE_LIST_ACTION : USE_GRID_ACTION)}, {action:SEARCH_LIB_ACTION}];
                 this.layoutGrid(true);
@@ -1631,30 +1631,37 @@ var lmsBrowse = Vue.component("lms-browse", {
 
             const LEFT_PADDING = 4;
             const RIGHT_PADDING = 4;
-            const GRID_MAX_WIDTH = window.innerWidth>3500
-                                       ? 283 :
-                                   window.innerWidth>2500
-                                       ? 233 :
-                                   window.innerWidth>1500
-                                       ? 208
-                                       : 183;
             var changed = false;
             var haveSubtitle = false;
             var thisWidth = this.$store.state.desktopLayout ? this.pageElement.scrollWidth : window.innerWidth;
             var listWidth = thisWidth - ((/*scrollbar*/ IS_MOBILE ? 0 : 20) + (/*this.filteredJumplist.length>1 && this.items.length>10 ? */JUMP_LIST_WIDTH/* :0*/) + LEFT_PADDING + RIGHT_PADDING);
             var sz = undefined;
-            var preferredColumns = 4;
-            for (var i=preferredColumns; i>=1; --i) {
-                sz = this.calcSizes(i, listWidth, GRID_MAX_WIDTH, 0);
-                if (sz.mc>=i) {
-                    break;
+            if (GRID_TEXT_ONLY == this.grid.type) {
+                var width = GRID_MIN_WIDTH;
+                var maxColumns = Math.floor(listWidth / width);
+                var numColumns = Math.max(Math.min(maxColumns, 20), 1);
+                sz = {w: width-16, h: width-50, s:0, mc:maxColumns, nc:numColumns}
+            } else {
+                const GRID_MAX_WIDTH = window.innerWidth>3500
+                                          ? 283 :
+                                       window.innerWidth>2500
+                                          ? 233 :
+                                       window.innerWidth>1500
+                                          ? 208
+                                          : 183;
+                var preferredColumns = 4;
+                for (var i=preferredColumns; i>=1; --i) {
+                    sz = this.calcSizes(i, listWidth, GRID_MAX_WIDTH, 0);
+                    if (sz.mc>=i) {
+                        break;
+                    }
                 }
-            }
 
-            if (sz.nc==1) {
-                var altsz = this.calcSizes(2, listWidth, GRID_MAX_WIDTH, 2*GRID_STEP);
-                if (altsz.nc>sz.nc) {
-                    sz=altsz;
+                if (sz.nc==1) {
+                    var altsz = this.calcSizes(2, listWidth, GRID_MAX_WIDTH, 2*GRID_STEP);
+                    if (altsz.nc>sz.nc) {
+                        sz=altsz;
+                    }
                 }
             }
 

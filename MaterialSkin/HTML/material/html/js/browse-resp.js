@@ -72,7 +72,7 @@ function setFavoritesParams(i, item) {
 
 function parseBrowseResp(data, parent, options, cacheKey) {
     // NOTE: If add key to resp, then update addToCache in utils.js
-    var resp = {items: [], allTracksItem:undefined, baseActions:[], canUseGrid: false, jumplist:[], numAudioItems:0, canDrop:false, itemCustomActions:undefined, extra:undefined, numHeaders:0, currentRoleIds: new Set() };
+    var resp = {items: [], allTracksItem:undefined, baseActions:[], canUseGrid: false, gridType: GRID_STANDARD, jumplist:[], numAudioItems:0, canDrop:false, itemCustomActions:undefined, extra:undefined, numHeaders:0, currentRoleIds: new Set() };
     var allowPinning = !queryParams.party && (!LMS_KIOSK_MODE || !HIDE_FOR_KIOSK.has(PIN_ACTION));
 
     try {
@@ -2073,18 +2073,22 @@ function parseBrowseResp(data, parent, options, cacheKey) {
             }
             let splitDecades = decades.length>=1;
             decades = [];
+            let lastHeader = 0;
             for (let idx=0, loop=data.result.years_loop, loopLen=loop.length; idx<loopLen; ++idx) {
                 let i = loop[idx];
                 let key = i.textkey;
                 let addedHeader = false;
+                let year = ""+i.year;
                 if (splitDecades) {
-                    let year = ""+i.year;
                     let decade = year.length==4 ? parseInt(year.substring(0, 3)+"0") : "0000";
                     if (decades.length==0 || decades[decades.length-1]!=decade) {
                         decades.push(decade);
                         addedHeader = true;
-                        resp.items.push({title:decade, id:FILTER_PREFIX+decade, header:true});
+                        lastHeader = resp.items.length;
+                        resp.items.push({title:decade, id:FILTER_PREFIX+decade, header:true, count:1});
                         resp.numHeaders++;
+                    } else {
+                         resp.items[lastHeader].count++;
                     }
                 }
                 if (undefined!=key && (resp.jumplist.length==0 || resp.jumplist[resp.jumplist.length-1].key!=key) && !textKeys.has(key)) {
@@ -2093,7 +2097,7 @@ function parseBrowseResp(data, parent, options, cacheKey) {
                 }
                 resp.items.push({
                               id: "year:"+i.year,
-                              title: i.year,
+                              title: year,
                               //icon: "date_range",
                               stdItem: STD_ITEM_YEAR,
                               type: "group",
@@ -2103,6 +2107,8 @@ function parseBrowseResp(data, parent, options, cacheKey) {
             resp.itemCustomActions = getCustomActions("year");
             resp.subtitle=i18np("1 Year", "%1 Years", resp.items.length-resp.numHeaders);
             resp.listSize=resp.items.length;
+            resp.canUseGrid = resp.items.length>0;
+            resp.gridType = GRID_TEXT_ONLY;
         } else if (0===data.result.count && data.result.networkerror) {
             resp.items.push({title: i18n("Failed to retrieve listing. (%1)", data.result.networkerror), type: "text"});
         } else if (data.result.data && data.result.data.constructor === Array && data.result.title) { // pictures?

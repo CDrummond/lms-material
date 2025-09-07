@@ -354,7 +354,6 @@ function browseHandleListResponse(view, item, command, resp, prevPage, appendIte
                 view.addHistory();
             }
         }
-        resp.canUseGrid = resp.canUseGrid;
         view.canDrop = resp.canDrop;
         view.searchActive = item.id.startsWith(SEARCH_ID) ? 1 : 0;
         view.command = command;
@@ -393,7 +392,7 @@ function browseHandleListResponse(view, item, command, resp, prevPage, appendIte
               (view.items.length>1 && view.items[0].header && undefined!=view.items[1].id && undefined!=view.items[1].artist_id && view.items[1].id.startsWith("album_id:")));
         view.grid = {allowed:resp.canUseGrid ? true : false,
                      use: resp.forceGrid || (view.$store.state.gridPerView ? isSetToUseGrid(view.current && view.current.id.startsWith(TOP_ID_PREFIX) && view.current.id!=TOP_FAVORITES_ID ? GRID_OTHER : command, view.current) : view.grid.use),
-                     numColumns:0, ih:GRID_MIN_HEIGHT, rows:[], few:false, haveSubtitle:true};
+                     numColumns:0, ih:GRID_MIN_HEIGHT, rows:[], few:false, haveSubtitle:true, multiSize:false, type:resp.gridType};
         view.jumplistActive=0;
         view.prevPage = prevPage;
         view.hoverBtns = !IS_MOBILE && view.items.length>0 &&
@@ -1081,7 +1080,7 @@ function browseClick(view, item, index, event, ignoreOpenMenu) {
         browseSetScroll(view);
         view.isTop = false;
         view.tbarActions=[];
-        view.grid = {allowed:true, use:view.$store.state.gridPerView ? isSetToUseGrid(GRID_OTHER) : view.grid.use, numColumns:0, ih:GRID_MIN_HEIGHT, rows:[], few:false, haveSubtitle:true};
+        view.grid = {allowed:true, use:view.$store.state.gridPerView ? isSetToUseGrid(GRID_OTHER) : view.grid.use, numColumns:0, ih:GRID_MIN_HEIGHT, rows:[], few:false, haveSubtitle:true, multiSize:false, type:GRID_STANDARD};
         view.currentActions=[{action:VLIB_ACTION}, {action:(view.grid.use ? USE_LIST_ACTION : USE_GRID_ACTION)}, {action:SEARCH_LIB_ACTION}];
         view.layoutGrid(true);
     } else if (MUSIC_ID_PREFIX+'myMusicWorks'==item.id) {
@@ -1231,7 +1230,7 @@ function browseAddWorksCategories(view, item) {
     browseSetScroll(view);
     view.isTop = false;
     view.jumplist = view.filteredJumplist = [];
-    view.grid = {allowed:true, use:view.$store.state.gridPerView ? isSetToUseGrid(GRID_OTHER) : view.grid.use, numColumns:0, ih:GRID_MIN_HEIGHT, rows:[], few:false, haveSubtitle:true};
+    view.grid = {allowed:true, use:view.$store.state.gridPerView ? isSetToUseGrid(GRID_OTHER) : view.grid.use, numColumns:0, ih:GRID_MIN_HEIGHT, rows:[], few:false, haveSubtitle:true, multiSize:false, type:GRID_STANDARD};
     view.currentActions=[];
     view.tbarActions=[];
     view.layoutGrid(true);
@@ -1271,7 +1270,7 @@ function browseAddCategories(view, item, isGenre) {
         browseSetScroll(view);
         view.isTop = false;
         view.jumplist = view.filteredJumplist = [];
-        view.grid = {allowed:true, use:view.$store.state.gridPerView ? isSetToUseGrid(GRID_OTHER) : view.grid.use, numColumns:0, ih:GRID_MIN_HEIGHT, rows:[], few:false, haveSubtitle:true};
+        view.grid = {allowed:true, use:view.$store.state.gridPerView ? isSetToUseGrid(GRID_OTHER) : view.grid.use, numColumns:0, ih:GRID_MIN_HEIGHT, rows:[], few:false, haveSubtitle:true, multiSize:false, type:GRID_STANDARD};
         view.currentActions=[];
         view.tbarActions=[];
         view.layoutGrid(true);
@@ -2062,7 +2061,7 @@ function browseGoHome(view) {
     view.currentItemImage=undefined;
     view.tbarActions=[];
     view.isTop = true;
-    view.grid = {allowed:true, use:view.$store.state.gridPerView ? isSetToUseGrid(GRID_OTHER) : view.grid.use, numColumns:0, ih:GRID_MIN_HEIGHT, rows:[], few:false, haveSubtitle:true};
+    view.grid = {allowed:true, use:view.$store.state.gridPerView ? isSetToUseGrid(GRID_OTHER) : view.grid.use, numColumns:0, ih:GRID_MIN_HEIGHT, rows:[], few:false, haveSubtitle:true, multiSize:false, type:GRID_STANDARD};
     view.currentActions=[{action:(view.grid.use ? USE_LIST_ACTION : USE_GRID_ACTION)}];
     view.hoverBtns = !IS_MOBILE;
     view.command = undefined;

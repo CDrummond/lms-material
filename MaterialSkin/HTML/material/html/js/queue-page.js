@@ -732,16 +732,12 @@ var lmsQueue = Vue.component("lms-queue", {
             bindKey('pageup', 'alt', true);
             bindKey('pagedown', 'alt', true);
             bindKey(LMS_SEARCH_KEYBOARD, 'mod+shift');
-            bindKey('del');
             bus.$on('keyboard', function(key, modifier) {
                 if (this.$store.state.openDialogs.length>0 || (this.$store.state.visibleMenus.size>0 && !this.$store.state.visibleMenus.has('queue')) || (!this.$store.state.desktopLayout && this.$store.state.page!="queue")) {
                     return;
                 }
                 this.menu.show = false;
-                if (undefined==modifier && 'delete'==key && this.selection.size>0 && !queryParams.party &&
-                    (this.$store.state.desktopLayout ? !this.browseSelection : this.$store.state.page=="queue")) {
-                    this.removeSelectedItems();
-                } else if ('mod'==modifier) {
+                if ('mod'==modifier) {
                     if (LMS_SAVE_QUEUE_KEYBOARD==key) {
                         this.save();
                     } else if (LMS_CLEAR_QUEUE_KEYBOARD==key) {

@@ -4391,11 +4391,14 @@ div.v-subheader {
 
 .v-snack__wrapper {
  opacity:0.85;
+ background-color:rgba(16, 16, 16, 0.7);
+ backdrop-filter: blur(4px);
  pointer-events: none;
 }
 
 .theme--dark .v-snack__wrapper {
  opacity:0.9;
+ background-color:rgba(96, 96, 96, 0.5);
  border:1px solid var(--tab-border-color);
 }
 

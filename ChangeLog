@@ -9,6 +9,8 @@ dev
 1. Improve accuracy of list 'Scroll to'.
 2. Remove 'Del' shortcut, as its breaking A-Z jumplist.
 3. Use 'apple' icon for 'LyrPlay'.
+4. Fix/work-around issues with using Default for server-settings and having
+   custom actions.
 
 5.11.0
 ------

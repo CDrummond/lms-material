@@ -1,6 +1,7 @@
 5.11.2
 ------
 1. Update icon mapping for 'LyrPlay' due to its 'Model' change.
+2. Fix scan progress page when opening from 'Information' dialog.
 
 5.11.1
 ------

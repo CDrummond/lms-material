@@ -784,7 +784,7 @@ Vue.component('lms-iframe-dialog', {
         }
     },
     mounted() {
-        bus.$on('iframe.open', function(page, title, actions, showHome, playerId) {
+        bus.$on('iframe.open', function(page, title, actions, showHome, playerId, isLmsPage) {
             iframeInitInfo();
             this.title = title;
             // Delay setting URL for 50ms - otherwise get two requests, first is cancelled...
@@ -806,7 +806,7 @@ Vue.component('lms-iframe-dialog', {
                                         ? "dlserver"
                                         : page.startsWith("plugins/") && (page.indexOf("?player=")>0 || page.indexOf("&player=")>0)
                                             ? "extras"
-                                            : page == '/material/html/docs/index.html' || page.startsWith('/material/')
+                                            : page == '/material/html/docs/index.html' || page.startsWith('/material/') || isLmsPage
                                                 ? "lms" // tech info, or 'extra' entry
                                                 : "other";
             this.show = true;

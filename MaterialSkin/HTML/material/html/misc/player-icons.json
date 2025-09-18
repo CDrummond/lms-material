@@ -92,6 +92,16 @@
             "svg":"wiim"
         }
     },
+    "squeezelite-c":{
+        "SqueezeLiteAndroid":{
+            "icon":"android"
+        }
+    },
+    "squeezelite-m":{
+        "SqueezeLiteAndroid":{
+            "icon":"android"
+        }
+    },
     "LyrPlay": {
         "svg":"apple"
     },

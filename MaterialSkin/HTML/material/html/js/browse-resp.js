@@ -2039,10 +2039,11 @@ function parseBrowseResp(data, parent, options, cacheKey) {
                     }
                 }
                 var isRemote = undefined!=parent && parent.remotePlaylist;
+                let rs = undefined!=i.rating ? ratingString(undefined, i.rating) : undefined;
                 resp.items.push({
                               id: uniqueId("track_id:"+i.id, resp.items.length),
                               title: title,
-                              subtitle: subtitle,
+                              subtitle: undefined!=rs ? undefined==subtitle ? rs : subtitle+SEPARATOR+rs : subtitle,
                               subtitleContext: subtitleContext,
                               image: i.artwork_url
                                         ? resolveImageUrl(i.artwork_url, LMS_LIST_IMAGE_SIZE)

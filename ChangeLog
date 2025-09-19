@@ -3,6 +3,7 @@
 1. Update icon mapping for 'LyrPlay' due to its 'Model' change.
 2. Fix scan progress page when opening from 'Information' dialog.
 3. Fix update details page.
+4. Show track ratings in playlists.
 
 5.11.1
 ------

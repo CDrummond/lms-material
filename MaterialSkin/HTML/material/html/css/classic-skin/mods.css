@@ -217,7 +217,7 @@ select, input {
  cursor: pointer;
 }
 
-input[type="text"], input[type="button"], input[type="submit"], input[type=checkbox], input[type=radio], select {
+input[type="text"], input[type="button"], button, input[type="submit"], input[type=checkbox], input[type=radio], select {
  -webkit-appearance: none;
  appearance: none;
 }
@@ -627,26 +627,30 @@ hr.sub-sep {
 }
 
 /* Material Design 2 changes */
-input[type="submit"], input[type="button"] {
+input[type="submit"], input[type="button"], button {
  border-radius: 100px;
  font-weight:var(--bold-weight)!important;
  color:var(--active-color)!important;
  padding:6px 14px 5px 14px;
 }
 
-input[type="submit"]:hover, input[type="button"]:hover, input[type="submit"]:focus, input[type="button"]:focus {
+input[type="submit"]:hover, input[type="button"]:hover, input[type="submit"]:focus, input[type="button"]:focus, button:hover, button:focus {
  background-color: var(--pq-current-color);
+}
+
+button {
+ background-color: var(--background-color);
 }
 
 .msk-dir-btn:hover, .msk-dir-btn:focus, #viewToggle:hover, #viewToggle:focus {
  background-color: var(--border-color);
 }
 
-input[type="submit"]:active, input[type="button"]:active {
+input[type="submit"]:active, input[type="button"]:active, button:active {
  opacity: 0.8;
 }
 
-input[type="submit"], input[type="button"] {
+input[type="submit"], input[type="button"], button {
  border:1px solid var(--active-color);
 }
 

@@ -413,7 +413,8 @@ Vue.component('lms-information-dialog', {
             }
         },
         showUpdateInfo() {
-            bus.$emit('dlg.open', 'iframe', undefined==this.updates.serverUpdateInfoUrl ? '/material/updateinfo.html' : this.updates.serverUpdateInfoUrl, i18n('Update information'), undefined, IFRAME_HOME_CLOSES_DIALOGS);
+            bus.$emit('dlg.open', 'iframe', undefined==this.updates.serverUpdateInfoUrl ? '/material/updateinfo.html' : this.updates.serverUpdateInfoUrl,
+                      i18n('Update information'), undefined, IFRAME_HOME_CLOSES_DIALOGS, undefined, true);
         },
         showScanDetails() {
             openServerSettings(this.serverName, 0, '/material/settings/server/status.html');

@@ -90,10 +90,20 @@
         },
         "WiiM Player":{
             "svg":"wiim"
-        },
-        "LyrPlay":{
-            "svg":"apple"
         }
+    },
+    "squeezelite-c":{
+        "SqueezeLiteAndroid":{
+            "icon":"android"
+        }
+    },
+    "squeezelite-m":{
+        "SqueezeLiteAndroid":{
+            "icon":"android"
+        }
+    },
+    "LyrPlay": {
+        "svg":"apple"
     },
     "squeezeplay":{
         "SB Player":{

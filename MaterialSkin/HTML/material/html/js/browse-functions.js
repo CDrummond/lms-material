@@ -2692,7 +2692,9 @@ function browseReplaceCommandTerms(view, cmd, item) {
                                            .replace(PLAYLIST_TAGS_PLACEHOLDER, PLAYLIST_TAGS);
             }
             if (cmd.params[i].startsWith("tags:")) {
-                if (view.$store.state.showRating && "tracks"==cmd.command[0] && cmd.params[i].indexOf("R")<0) {
+                if (view.$store.state.showRating &&
+                    ("tracks"==cmd.command[0] || ("playlists"==cmd.command[0] && cmd.command.length>1 && "tracks"==cmd.command[1])) &&
+                    cmd.params[i].indexOf("R")<0) {
                     cmd.params[i]+="R";
                 }
                 if (lmsOptions.serviceEmblems && ("tracks"==cmd.command[0] || "albums"==cmd.command[0]) && cmd.params[i].indexOf("E")<0) {

@@ -4,6 +4,13 @@ dev
 2. Allow using grid for years.
 3. Slightly blur-behind popup messages.
 
+5.11.2
+------
+1. Update icon mapping for 'LyrPlay' due to its 'Model' change.
+2. Fix scan progress page when opening from 'Information' dialog.
+3. Fix update details page.
+4. Show track ratings in playlists.
+
 5.11.1
 ------
 1. Improve accuracy of list 'Scroll to'.

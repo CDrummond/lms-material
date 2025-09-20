@@ -7,7 +7,7 @@
 'use strict';
 
 const SLOW_PAGES = new Set(['SETUP_PLUGINS']);
-const LMS_PAGES =  new Set(['server', 'player', 'extras', 'lms', 'help']);
+const LMS_PAGES =  new Set(['server', 'player', 'extras', 'lms']);
 const LMS_STD_SETTINGS_PAGES =  new Set(['server', 'player']);
 
 let useDefaultSkinForServerSettings = true;
@@ -784,7 +784,7 @@ Vue.component('lms-iframe-dialog', {
         }
     },
     mounted() {
-        bus.$on('iframe.open', function(page, title, actions, showHome, playerId) {
+        bus.$on('iframe.open', function(page, title, actions, showHome, playerId, isLmsPage) {
             iframeInitInfo();
             this.title = title;
             // Delay setting URL for 50ms - otherwise get two requests, first is cancelled...
@@ -806,11 +806,9 @@ Vue.component('lms-iframe-dialog', {
                                         ? "dlserver"
                                         : page.startsWith("plugins/") && (page.indexOf("?player=")>0 || page.indexOf("&player=")>0)
                                             ? "extras"
-                                            : page == '/material/html/docs/index.html'
+                                            : page == '/material/html/docs/index.html' || page.startsWith('/material/') || isLmsPage
                                                 ? "lms" // tech info, or 'extra' entry
-                                                : page == '/material/html/material-skin/index.html'
-                                                    ? "help"
-                                                    : "other";
+                                                : "other";
             this.show = true;
             this.showMenu = false;
             this.choiceMenu = {show:false, x:0}

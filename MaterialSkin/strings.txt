@@ -223,6 +223,7 @@ PLUGIN_MATERIAL_SKIN_SHOW_CONDUCTOR_DESC
 
 PLUGIN_MATERIAL_SKIN_SHOW_CONDUCTOR_DESC_LMS9
 	EN	Show song's conductor if its genre is in Lyrion's "%s" setting.
+	FR	Si le tag "genre" du morceau est inclus dans le paramètre "%s" de Lyrion, afficher le chef d'orchestre.
 	NL	Toon de dirigent van het nummer als het genre is geconfigureerd in de "%s"-instelling van Lyrion.
 
 PLUGIN_MATERIAL_SKIN_SHOW_BAND
@@ -251,6 +252,7 @@ PLUGIN_MATERIAL_SKIN_SHOW_BAND_DESC
 
 PLUGIN_MATERIAL_SKIN_SHOW_BAND_DESC_LMS9
 	EN	Show song's band/orchestra if its genre is in Lyrion's "%s" setting.
+	FR	Si le tag "genre" du morceau est inclus dans le paramètre "%s" de Lyrion, afficher le groupe/orchestre.
 	NL	Toon de band van het nummer als het genre is geconfigureerd in de "%s"-instelling van Lyrion.
 
 PLUGIN_MATERIAL_SKIN_PASSWORD

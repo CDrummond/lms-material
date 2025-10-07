@@ -34,7 +34,7 @@ const STD_ITEMS=[
     {
         command: ["playlists", "tracks"],
         params: [PLAYLIST_TRACK_TAGS], // "tags:IRad"] -> Will show rating, not album???
-        menu: [PLAY_ACTION, INSERT_ACTION, ADD_ACTION, DIVIDER, ADD_TO_FAV_ACTION, SELECT_ACTION]
+        menu: [PLAY_ACTION, INSERT_ACTION, PLAY_SHUFFLE_ACTION, ADD_ACTION, DIVIDER, ADD_TO_FAV_ACTION, SELECT_ACTION]
     },
     {
         command: ["albums"],

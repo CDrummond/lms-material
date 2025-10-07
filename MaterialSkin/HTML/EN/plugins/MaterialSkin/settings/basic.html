@@ -9,7 +9,7 @@
     [% END %]
 
     [% WRAPPER setting title="PLUGIN_MATERIAL_SKIN_ALLOW_DOWNLOAD" desc="PLUGIN_MATERIAL_SKIN_ALLOW_DOWNLOAD_DESC" %]
-    <input type="checkbox" name="pref_allowDownload" id="pref_allowDownload" [% IF prefs.pref_allowDownload %] checked [% END %] value="1"/>
+    <input type="checkbox" name="pref_allowDownload" id="allowDownload" [% IF prefs.allowDownload %] checked [% END %] value="1"/>
     [% END %]
 
     [% WRAPPER setting title="PLUGIN_MATERIAL_SKIN_FIXED_VOL" desc="PLUGIN_MATERIAL_SKIN_FIXED_VOL_DESC" %]
@@ -25,7 +25,7 @@
     [% END %]
 
     [% WRAPPER setting title="PLUGIN_MATERIAL_COMBINE_APPS_AND_RADIO" desc="PLUGIN_MATERIAL_COMBINE_APPS_AND_RADIO_DESC" %]
-    <input type="checkbox" name="pref_combineAppsAndRadio" id="pref_combineAppsAndRadio" [% IF prefs.pref_combineAppsAndRadio %] checked [% END %] value="1"/>
+    <input type="checkbox" name="pref_combineAppsAndRadio" id="combineAppsAndRadio" [% IF prefs.combineAppsAndRadio %] checked [% END %] value="1"/>
     [% END %]
 
     [% WRAPPER setting title="PLUGIN_MATERIAL_SKIN_RELEASE_TYPE_ORDER" desc="PLUGIN_MATERIAL_SKIN_RELEASE_TYPE_ORDER_DESC" %]
@@ -37,19 +37,19 @@
     [% END %]
 
     [% WRAPPER setting title="PLUGIN_MATERIAL_SKIN_PLAY_SHUFFLE" desc="PLUGIN_MATERIAL_SKIN_PLAY_SHUFFLE_DESC" %]
-    <input type="checkbox" name="pref_playShuffle" id="pref_playShuffle" [% IF prefs.pref_playShuffle %] checked [% END %] value="1"/>
+    <input type="checkbox" name="pref_playShuffle" id="playShuffle" [% IF prefs.playShuffle %] checked [% END %] value="1"/>
     [% END %]
 
     [% WRAPPER setting title="PLUGIN_MATERIAL_SKIN_TOUCH_LINKS" desc="PLUGIN_MATERIAL_SKIN_TOUCH_LINKS_DESC" %]
-    <input type="checkbox" name="pref_touchLinks" id="pref_touchLinks" [% IF prefs.pref_touchLinks %] checked [% END %] value="1"/>
+    <input type="checkbox" name="pref_touchLinks" id="touchLinks" [% IF prefs.touchLinks %] checked [% END %] value="1"/>
     [% END %]
     
     [% WRAPPER setting title="PLUGIN_MATERIAL_SKIN_SHOW_ALL_ARTISTS" desc="PLUGIN_MATERIAL_SKIN_SHOW_ALL_ARTISTS_DESC" %]
-    <input type="checkbox" name="pref_showAllArtists" id="pref_showAllArtists" [% IF prefs.pref_showAllArtists %] checked [% END %] value="1"/>
+    <input type="checkbox" name="pref_showAllArtists" id="showAllArtists" [% IF prefs.showAllArtists %] checked [% END %] value="1"/>
     [% END %]
 
     [% WRAPPER setting title="PLUGIN_MATERIAL_SKIN_ARTIST_FIRST" desc="PLUGIN_MATERIAL_SKIN_ARTIST_FIRST_DESC" %]
-    <input type="checkbox" name="pref_artistFirst" id="pref_artistFirst" [% IF prefs.pref_artistFirst %] checked [% END %] value="1"/>
+    <input type="checkbox" name="pref_artistFirst" id="artistFirst" [% IF prefs.artistFirst %] checked [% END %] value="1"/>
     [% END %]
 
     [% WRAPPER setting title="PLUGIN_MATERIAL_SKIN_ARTIST_FILTER" desc="PLUGIN_MATERIAL_SKIN_ARTIST_FILTER_DESC" %]
@@ -60,7 +60,7 @@
     [% END %]
 
     [% WRAPPER setting title="PLUGIN_MATERIAL_SKIN_YEAR_IN_SUB" desc="PLUGIN_MATERIAL_SKIN_YEAR_IN_SUB_DESC" %]
-    <input type="checkbox" name="pref_yearInSub" id="pref_yearInSub" [% IF prefs.pref_yearInSub %] checked [% END %] value="1"/>
+    <input type="checkbox" name="pref_yearInSub" id="yearInSub" [% IF prefs.yearInSub %] checked [% END %] value="1"/>
     [% END %]
 
     [% WRAPPER setting title="PLUGIN_MATERIAL_SKIN_COMMENT_AS_DISC_TITLE" desc="PLUGIN_MATERIAL_SKIN_COMMENT_AS_DISC_TITLE_DESC" %]
@@ -76,22 +76,22 @@
     [% END %]
 
     [% WRAPPER setting title="PLUGIN_MATERIAL_SKIN_SHOW_COMMENT" desc="PLUGIN_MATERIAL_SKIN_SHOW_COMMENT_DESC" %]
-    <input type="checkbox" name="pref_showComment" id="pref_showComment" [% IF prefs.pref_showComment %] checked [% END %] value="1"/>
+    <input type="checkbox" name="pref_showComment" id="showComment" [% IF prefs.showComment %] checked [% END %] value="1"/>
     [% END %]
 
     [% WRAPPER setting title="PLUGIN_MATERIAL_SKIN_USE_GROUPING" desc="PLUGIN_MATERIAL_SKIN_USE_GROUPING_DESC" %]
-    <select class="stdedit" name="pref_useGrouping" id="pref_useGrouping">
-        <option [% IF NOT prefs.pref_useGrouping %]selected [% END %]value="0">[% 'PLUGIN_MATERIAL_SKIN_PREFER_DISC_GROUPS' | getstring %]</option>
-        <option [% IF prefs.pref_useGrouping %]selected [% END %]value="1">[% 'PLUGIN_MATERIAL_SKIN_PREFER_WORK_GROUPING_GROUPS' | getstring %]</option>
+    <select class="stdedit" name="pref_useGrouping" id="useGrouping">
+        <option [% IF NOT prefs.useGrouping %]selected [% END %]value="0">[% 'PLUGIN_MATERIAL_SKIN_PREFER_DISC_GROUPS' | getstring %]</option>
+        <option [% IF prefs.useGrouping %]selected [% END %]value="1">[% 'PLUGIN_MATERIAL_SKIN_PREFER_WORK_GROUPING_GROUPS' | getstring %]</option>
     </select>
     [% END %]
 
     [% WRAPPER setting title="PLUGIN_MATERIAL_SKIN_GENRE_IMAGES" desc="PLUGIN_MATERIAL_SKIN_GENRE_IMAGES_DESC" %]
-    <input type="checkbox" name="pref_genreImages" id="pref_genreImages" [% IF prefs.pref_genreImages %] checked [% END %] value="1"/>
+    <input type="checkbox" name="pref_genreImages" id="genreImages" [% IF prefs.genreImages %] checked [% END %] value="1"/>
     [% END %]
 
     [% WRAPPER setting title="PLUGIN_MATERIAL_SKIN_PLAYLIST_IMAGES" desc="PLUGIN_MATERIAL_SKIN_PLAYLIST_IMAGES_DESC" %]
-    <input type="checkbox" name="pref_playlistImages" id="pref_playlistImages" [% IF prefs.pref_playlistImages %] checked [% END %] value="1"/>
+    <input type="checkbox" name="pref_playlistImages" id="playlistImages" [% IF prefs.playlistImages %] checked [% END %] value="1"/>
     [% END %]
 
     [% IF lmsHasClassicalGenreList == 0 %]
@@ -105,10 +105,10 @@
     <textarea class="stdedit" name="pref_composergenres" id="composergenres" cols="45" rows="5">[% prefs.composergenres %]</textarea>
     [% END %]
     [% WRAPPER setting title="PLUGIN_MATERIAL_SKIN_SHOW_COMPOSER" desc="PLUGIN_MATERIAL_SKIN_SHOW_COMPOSER_DESC" %]
-    <input type="checkbox" name="pref_showComposer" id="pref_showComposer" [% IF prefs.pref_showComposer %] checked [% END %] value="1"/>
+    <input type="checkbox" name="pref_showComposer" id="showComposer" [% IF prefs.showComposer %] checked [% END %] value="1"/>
     [% END %]
     [% WRAPPER setting title="PLUGIN_MATERIAL_SKIN_USE_COMPOSER_MAI" desc="PLUGIN_MATERIAL_SKIN_USE_COMPOSER_MAI_DESC" %]
-    <input type="checkbox" name="pref_maiComposer" id="pref_maiComposer" [% IF prefs.maiComposer %] checked [% END %] value="1"/>
+    <input type="checkbox" name="pref_maiComposer" id="maiComposer" [% IF prefs.maiComposer %] checked [% END %] value="1"/>
     [% END %]
     <hr style="opacity:0.4" class="sub-sep"/>
 
@@ -117,7 +117,7 @@
     <textarea class="stdedit" name="pref_conductorgenres" id="conductorgenres" cols="45" rows="5">[% prefs.conductorgenres %]</textarea>
     [% END %]
     [% WRAPPER setting title="PLUGIN_MATERIAL_SKIN_SHOW_CONDUCTOR" desc="PLUGIN_MATERIAL_SKIN_SHOW_CONDUCTOR_DESC" %]
-    <input type="checkbox" name="pref_showConductor" id="pref_showConductor" [% IF prefs.pref_showConductor %] checked [% END %] value="1"/>
+    <input type="checkbox" name="pref_showConductor" id="showConductor" [% IF prefs.showConductor %] checked [% END %] value="1"/>
     [% END %]
     <hr style="opacity:0.4" class="sub-sep"/>
 
@@ -125,7 +125,7 @@
     <textarea class="stdedit" name="pref_bandgenres" id="bandgenres" cols="45" rows="5">[% prefs.bandgenres %]</textarea>
     [% END %]
     [% WRAPPER setting title="PLUGIN_MATERIAL_SKIN_SHOW_BAND" desc="PLUGIN_MATERIAL_SKIN_SHOW_BAND_DESC" %]
-    <input type="checkbox" name="pref_showBand" id="pref_showBand" [% IF prefs.pref_showBand %] checked [% END %] value="1"/>
+    <input type="checkbox" name="pref_showBand" id="showBand" [% IF prefs.showBand %] checked [% END %] value="1"/>
     [% END %]
 
     [% END %]
@@ -142,18 +142,18 @@
     </select>
     [% END %]
     [% WRAPPER setting title="PLUGIN_MATERIAL_SKIN_USE_COMPOSER_MAI" desc="PLUGIN_MATERIAL_SKIN_USE_COMPOSER_MAI_DESC" %]
-    <input type="checkbox" name="pref_maiComposer" id="pref_maiComposer" [% IF prefs.maiComposer %] checked [% END %] value="1"/>
+    <input type="checkbox" name="pref_maiComposer" id="maiComposer" [% IF prefs.maiComposer %] checked [% END %] value="1"/>
     [% END %]
     [% WRAPPER setting title="PLUGIN_MATERIAL_SKIN_SHOW_CONDUCTOR" desc=showConductorDesc %]
-    <input type="checkbox" name="pref_showConductor" id="pref_showConductor" [% IF prefs.pref_showConductor %] checked [% END %] value="1"/>
+    <input type="checkbox" name="pref_showConductor" id="showConductor" [% IF prefs.showConductor %] checked [% END %] value="1"/>
     [% END %]
     [% WRAPPER setting title="PLUGIN_MATERIAL_SKIN_SHOW_BAND" desc=showBandDesc %]
-    <input type="checkbox" name="pref_showBand" id="pref_showBand" [% IF prefs.pref_showBand %] checked [% END %] value="1"/>
+    <input type="checkbox" name="pref_showBand" id="showBand" [% IF prefs.showBand %] checked [% END %] value="1"/>
     [% END %]
     [% END %]
 
     [% WRAPPER setting title="PLUGIN_MATERIAL_SKIN_SHOW_WORKS_IN_ARTIST_ALBUM_LIST" desc="PLUGIN_MATERIAL_SKIN_SHOW_WORKS_IN_ARTIST_ALBUM_LIST_DESC" %]
-    <input type="checkbox" name="pref_showArtistWorks" id="pref_showArtistWorks" [% IF prefs.pref_showArtistWorks %] checked [% END %] value="1"/>
+    <input type="checkbox" name="pref_showArtistWorks" id="showArtistWorks" [% IF prefs.showArtistWorks %] checked [% END %] value="1"/>
     [% END %]
 
     <hr style="opacity:0.4" class="sub-sep"/><br/>

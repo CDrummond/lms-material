@@ -4,6 +4,11 @@ dev
 2. Allow using grid for years.
 3. Slightly blur-behind popup messages.
 
+5.11.3
+------
+1. Add 'Play shuffled' for remote playlists.
+2. Fix disabling of playlist images.
+
 5.11.2
 ------
 1. Update icon mapping for 'LyrPlay' due to its 'Model' change.

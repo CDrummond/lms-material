@@ -107,6 +107,10 @@
         },
         "context":true,
         "extid":"radioparadise"
+    },
+    "ibcst:":{
+        "name":"iBroadcast",
+        "extid":"ibcst"
     }
   },
   "includes":{

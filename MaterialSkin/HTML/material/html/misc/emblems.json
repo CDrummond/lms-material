@@ -53,6 +53,10 @@
     "name":"radioparadise",
     "bgnd":"#963a21",
     "color":"#fff"
+  },
+  "ibcst":{
+    "name":"ibroadcast",
+    "bgnd":"#356dfe",
+    "color":"#fff"
   }
 }
-

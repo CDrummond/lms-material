@@ -4,6 +4,7 @@ dev
 2. Allow using grid for years.
 3. Slightly blur-behind popup messages.
 4. Add 'Newest' to album sorts.
+5. Add, server-side, option to use smaller grid if icon only and narrow width.
 
 5.11.3
 ------

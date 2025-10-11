@@ -135,6 +135,15 @@
  }
 }
 
+@media (max-width: 440px) {
+ :root .icon-only {
+  --min-grid-width:94px;
+  --min-grid-height:141px;
+  --grid-menu-offset:9px;
+  --grid-icon-size:50px;
+ }
+}
+
 @supports not (color: color-mix(in srgb, red, green)) {
  :root {
   --color-mix-supported:0;

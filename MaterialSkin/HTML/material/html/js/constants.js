@@ -106,7 +106,12 @@ const GRID_MIN_WIDTH = 139;
 const GRID_MIN_HEIGHT = 195;
 const GRID_MIN_WIDTH_NARROW = 104;
 const GRID_MIN_HEIGHT_NARROW = 151;
+const NARROW_WIDTH = 350;
+const NARROW_WIDTH_ICON_ONLY = 440;
+const GRID_MIN_WIDTH_NARROW_ICON_ONLY = 94;
+const GRID_MIN_HEIGHT_NARROW_ICON_ONLY = 141;
 const GRID_STEP = 5;
+
 const GRID_OTHER = {command:['other']};
 
 const LMS_TRACK_SORTS = new Set(["title", "tracknum", "albumtrack"]);
@@ -197,7 +202,7 @@ const IFRAME_HOME_NAVIGATES_BROWSE_HOME = 1
 const IFRAME_HOME_CLOSES_DIALOGS = 2
 
 const SKIN_GENRE_TAGS = ['composer', 'conductor', 'band'];
-const SKIN_BOOL_OPTS = ['maiComposer', 'showConductor', 'showBand', 'showArtistWorks', 'showAllArtists', 'artistFirst', IS_IOS ? 'xx' : 'allowDownload', 'showComment', 'noArtistFilter', 'genreImages', 'playlistImages', 'touchLinks', 'yearInSub', 'playShuffle', 'combineAppsAndRadio', 'useGrouping'];
+const SKIN_BOOL_OPTS = ['maiComposer', 'showConductor', 'showBand', 'showArtistWorks', 'showAllArtists', 'artistFirst', IS_IOS ? 'xx' : 'allowDownload', 'showComment', 'noArtistFilter', 'genreImages', 'playlistImages', 'touchLinks', 'yearInSub', 'playShuffle', 'combineAppsAndRadio', 'useGrouping', 'smallIconOnlyGrid'];
 const SKIN_INT_OPTS = ['showComposer', 'respectFixedVol', 'commentAsDiscTitle', 'pagedBatchSize', 'screensaverTimeout', 'npSwitchTimeout', 'useDefaultForSettings'];
 
 const MSK_REV_SORT_OPT = "msk-revsort:1";
@@ -245,6 +250,6 @@ const MULTI_DISC_ALBUM = 2;
 const ALWAYS_GROUP_HEADING = 2;
 
 const MIN_DEF_SETTINGS_WIDTH = 800;
-
 const GRID_STANDARD = 0;
 const GRID_TEXT_ONLY = 1;
+const GRID_ICON_ONLY_ONLY = 2;

@@ -100,7 +100,7 @@ my @ADV_SEARCH_OTHER = ('content_type', 'contributor_namesearch.active1', 'contr
 
 my %IGNORE_PROTOCOLS = map { $_ => 1 } ('mms', 'file', 'tmp', 'http', 'https', 'spdr', 'icy', 'teststream', 'db', 'playlist');
 
-my @BOOL_OPTS = ('allowDownload', 'playShuffle', 'touchLinks', 'showAllArtists', 'artistFirst', 'yearInSub', 'showComment', 'genreImages', 'playlistImages', 'maiComposer', 'showConductor', 'showBand', 'showArtistWorks', 'combineAppsAndRadio', 'useGrouping');
+my @BOOL_OPTS = ('allowDownload', 'playShuffle', 'touchLinks', 'showAllArtists', 'artistFirst', 'yearInSub', 'showComment', 'genreImages', 'playlistImages', 'maiComposer', 'showConductor', 'showBand', 'showArtistWorks', 'combineAppsAndRadio', 'useGrouping', 'smallIconOnlyGrid');
 
 my %ROLE_ICON_MAP = (
     'bass' => 'bassist',
@@ -195,7 +195,8 @@ sub initPlugin {
             screensaverTimeout => 60,
             npSwitchTimeout => 5*60,
             useDefaultForSettings => 0,
-            useGrouping => 1
+            useGrouping => 1,
+            smallIconOnlyGrid => 1
         });
     } else {
         $prefs->init({
@@ -226,7 +227,8 @@ sub initPlugin {
             screensaverTimeout => 60,
             npSwitchTimeout => 5*60,
             useDefaultForSettings => 0,
-            useGrouping => 1
+            useGrouping => 1,
+            smallIconOnlyGrid => 1
         });
     }
     $prefs->setChange(sub { $prefs->set($_[0], 0) unless defined $_[1]; }, 'maiComposer');
@@ -245,6 +247,7 @@ sub initPlugin {
     $prefs->setChange(sub { $prefs->set($_[0], 0) unless defined $_[1]; }, 'allowDownload');
     $prefs->setChange(sub { $prefs->set($_[0], 0) unless defined $_[1]; }, 'useDefaultForSettings');
     $prefs->setChange(sub { $prefs->set($_[0], 0) unless defined $_[1]; }, 'useGrouping');
+    $prefs->setChange(sub { $prefs->set($_[0], 0) unless defined $_[1]; }, 'smallIconOnlyGrid');
 
     if (main::WEBUI) {
         require Plugins::MaterialSkin::Settings;
@@ -651,6 +654,7 @@ sub _cliCommand {
         $request->addResult('npSwitchTimeout', $prefs->get('npSwitchTimeout'));
         $request->addResult('useDefaultForSettings', $prefs->get('useDefaultForSettings'));
         $request->addResult('useGrouping', $prefs->get('useGrouping'));
+        $request->addResult('smallIconOnlyGrid', $prefs->get('smallIconOnlyGrid'));
         $request->setStatusDone();
         return;
     }

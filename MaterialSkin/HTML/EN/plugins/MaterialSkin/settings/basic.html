@@ -93,6 +93,9 @@
     [% WRAPPER setting title="PLUGIN_MATERIAL_SKIN_PLAYLIST_IMAGES" desc="PLUGIN_MATERIAL_SKIN_PLAYLIST_IMAGES_DESC" %]
     <input type="checkbox" name="pref_playlistImages" id="playlistImages" [% IF prefs.playlistImages %] checked [% END %] value="1"/>
     [% END %]
+    [% WRAPPER setting title="PLUGIN_MATERIAL_SKIN_SMALL_ICON_ONLY_GRID" desc="PLUGIN_MATERIAL_SKIN_SMALL_ICON_ONLY_GRID_DESC" %]
+    <input type="checkbox" name="pref_smallIconOnlyGrid" id="smallIconOnlyGrid" [% IF prefs.smallIconOnlyGrid %] checked [% END %] value="1"/>
+    [% END %]
 
     [% IF lmsHasClassicalGenreList == 0 %]
     <br/><hr class="main-sep"/>

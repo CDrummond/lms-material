@@ -143,7 +143,7 @@ var lmsBrowse = Vue.component("lms-browse", {
   <div class="lms-list" id="browse-list" style="overflow:auto;" v-bind:class="{'lms-image-grid':grid.allowed&&grid.use,'lms-grouped-image-grid':grid.allowed&&grid.use && grid.multiSize,'lms-image-grid-jump':grid.allowed&&grid.use && filteredJumplist.length>1,'lms-list-jump':!(grid.allowed&&grid.use) && filteredJumplist.length>1,'bgnd-blur':drawBgndImage,'backdrop-blur':drawBackdrop}">
 
    <RecycleScroller v-if="grid.allowed&&grid.use&&GRID_TEXT_ONLY!=grid.type" :items="grid.rows" :item-size="grid.multiSize ? null : (grid.ih - (grid.haveSubtitle || isTop || current.id.startsWith(TOP_ID_PREFIX) ? 0 : GRID_SINGLE_LINE_DIFF))" page-mode key-field="id" :buffer="LMS_SCROLLER_GRID_BUFFER">
-    <div slot-scope="{item}" :class="[grid.few?'image-grid-few':'image-grid-full-width', grid.haveSubtitle?'image-grid-with-sub':'']">
+    <div slot-scope="{item}" :class="[grid.few?'image-grid-few':'image-grid-full-width', grid.haveSubtitle?'image-grid-with-sub':'',grid.type==GRID_ICON_ONLY_ONLY?'icon-only':'']">
 
      <v-list-tile v-if="item.header && item.item" class="grid-header" @click.stop="click(item.item, undefined, $event)" v-bind:class="{'search-highlight':highlightIndex==(item.rs)}">
       <v-list-tile-avatar v-if="item.item.icon" :tile="true" class="lms-avatar">
@@ -1627,10 +1627,8 @@ var lmsBrowse = Vue.component("lms-browse", {
             msHandleScrollEvent(this);
         },
         calcSizes(quantity, listWidth, maxItemWidth, adjust) {
-            const NARROW_WIDTH = 350;
-
-            var width = (window.innerWidth<=NARROW_WIDTH ? GRID_MIN_WIDTH_NARROW : GRID_MIN_WIDTH)-adjust;
-            var height = (window.innerWidth<=NARROW_WIDTH ? GRID_MIN_HEIGHT_NARROW : GRID_MIN_HEIGHT)-adjust;
+            var width = (this.grid.type == GRID_ICON_ONLY_ONLY ? GRID_MIN_WIDTH_NARROW_ICON_ONLY : window.innerWidth<=NARROW_WIDTH ? GRID_MIN_WIDTH_NARROW : GRID_MIN_WIDTH)-adjust;
+            var height = (this.grid.type == GRID_ICON_ONLY_ONLY ? GRID_MIN_HEIGHT_NARROW_ICON_ONLY : window.innerWidth<=NARROW_WIDTH ? GRID_MIN_HEIGHT_NARROW : GRID_MIN_HEIGHT)-adjust;
             var steps = 0;
             if (0!=quantity) {
                 while (listWidth>=((width+GRID_STEP)*quantity) && (width+GRID_STEP)<=maxItemWidth) {
@@ -1656,6 +1654,7 @@ var lmsBrowse = Vue.component("lms-browse", {
             var thisWidth = this.$store.state.desktopLayout ? this.pageElement.scrollWidth : window.innerWidth;
             var listWidth = thisWidth - ((/*scrollbar*/ IS_MOBILE ? 0 : 20) + (/*this.filteredJumplist.length>1 && this.items.length>10 ? */JUMP_LIST_WIDTH/* :0*/) + LEFT_PADDING + RIGHT_PADDING);
             var sz = undefined;
+            let type = this.grid.type;
             if (GRID_TEXT_ONLY == this.grid.type) {
                 var width = 100;
                 var height = 48;
@@ -1663,21 +1662,31 @@ var lmsBrowse = Vue.component("lms-browse", {
                 var numColumns = Math.max(Math.min(maxColumns, 20), 1);
                 sz = {w: width, h: height, s:0, mc:maxColumns, nc:numColumns}
             } else {
-                const GRID_MAX_WIDTH = window.innerWidth>3500
+                let iconOnly = lmsOptions.smallIconOnlyGrid && this.items.length<=100 && window.innerWidth<=NARROW_WIDTH_ICON_ONLY;
+                if (iconOnly) {
+                    for (let i=0, len=this.items.length; i<len && iconOnly; ++i) {
+                        if (undefined==this.items[i].icon && undefined==this.items[i].svg) {
+                            iconOnly = false;
+                        }
+                    }
+                }
+                const GRID_MAX_WIDTH = iconOnly
+                                          ? 100 :
+                                       window.innerWidth>3500
                                           ? 283 :
                                        window.innerWidth>2500
                                           ? 233 :
                                        window.innerWidth>1500
                                           ? 208
                                           : 183;
-                var preferredColumns = 4;
+                var preferredColumns = iconOnly ? 3 : 4;
+                this.grid.type = iconOnly ? GRID_ICON_ONLY_ONLY : GRID_STANDARD;
                 for (var i=preferredColumns; i>=1; --i) {
                     sz = this.calcSizes(i, listWidth, GRID_MAX_WIDTH, 0);
                     if (sz.mc>=i) {
                         break;
                     }
                 }
-
                 if (sz.nc==1) {
                     var altsz = this.calcSizes(2, listWidth, GRID_MAX_WIDTH, 2*GRID_STEP);
                     if (altsz.nc>sz.nc) {
@@ -1685,8 +1694,7 @@ var lmsBrowse = Vue.component("lms-browse", {
                     }
                 }
             }
-
-            if (force || sz.nc != this.grid.numColumns) { // Need to re-layout...
+            if (force || sz.nc != this.grid.numColumns || type!=this.grid.type) { // Need to re-layout...
                 changed = true;
                 this.grid.rows=[];
                 this.grid.multiSize=false;

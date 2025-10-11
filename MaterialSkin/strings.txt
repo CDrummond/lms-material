@@ -819,3 +819,10 @@ PLUGIN_MATERIAL_SKIN_QT_COPY_ERROR
 PLUGIN_MATERIAL_SKIN_QT_SWAP_ERROR
 	EN	Cannot swap queue with a player that it is already synced with.
 	FR	Impossible d'échanger une liste de lecture avec une platine déjà synchronisée.
+
+PLUGIN_MATERIAL_SKIN_SMALL_ICON_ONLY_GRID
+	EN	Smaller icon-only grid
+
+PLUGIN_MATERIAL_SKIN_SMALL_ICON_ONLY_GRID_DESC
+	EN	On narrower screens, allow usage of smaller grid items if only showing icons, and not images. Note that this may cause text to be truncated more frequently.
+

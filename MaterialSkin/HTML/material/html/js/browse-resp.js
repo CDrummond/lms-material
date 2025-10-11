@@ -2067,7 +2067,7 @@ function parseBrowseResp(data, parent, options, cacheKey) {
             let decades = [];
             for (let idx=0, loop=data.result.years_loop, loopLen=loop.length; idx<loopLen && decades.length<2; ++idx) {
                 let year = ""+loop[idx].year;
-                let decade = year.length==4 ? parseInt(year.substring(0, 3)+"0") : "0000";
+                let decade = (year.length==4 ? parseInt(year.substring(0, 3)+"0") : "0000") + "'s";
                 if (decades.length==0 || decades[decades.length-1]!=decade) {
                     decades.push(decade);
                 }
@@ -2081,7 +2081,7 @@ function parseBrowseResp(data, parent, options, cacheKey) {
                 let addedHeader = false;
                 let year = ""+i.year;
                 if (splitDecades) {
-                    let decade = year.length==4 ? parseInt(year.substring(0, 3)+"0") : "0000";
+                    let decade = (year.length==4 ? parseInt(year.substring(0, 3)+"0") : "0000") + "'s";
                     if (decades.length==0 || decades[decades.length-1]!=decade) {
                         decades.push(decade);
                         addedHeader = true;

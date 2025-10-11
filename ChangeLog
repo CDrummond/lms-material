@@ -3,6 +3,7 @@ dev
 1. Split years into decades, if 2 or more.
 2. Allow using grid for years.
 3. Slightly blur-behind popup messages.
+4. Add 'Newest' to album sorts.
 
 5.11.3
 ------

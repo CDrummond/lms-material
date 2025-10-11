@@ -844,7 +844,8 @@ var lmsBrowse = Vue.component("lms-browse", {
                 { key:"artistalbum",     label:lmsOptions.supportReleaseTypes ? i18n("Artist, Release") : i18n("Artist, Album")},
                 { key:"artflow",         label:lmsOptions.supportReleaseTypes ? i18n("Artist, Year, Release") : i18n("Artist, Year, Album")},
                 { key:"yearalbum",       label:lmsOptions.supportReleaseTypes ? i18n("Year, Release") : i18n("Year, Album")},
-                { key:"yearartistalbum", label:lmsOptions.supportReleaseTypes ? i18n("Year, Artist, Release") : i18n("Year, Artist, Album")} ];
+                { key:"yearartistalbum", label:lmsOptions.supportReleaseTypes ? i18n("Year, Artist, Release") : i18n("Year, Artist, Album")},
+                { key:"new",             label:i18n("Newest")} ];
             B_TRACK_SORTS=[
                 { key:"title",           label:i18n("Title")},
                 { key:"tracknum",        label:i18n("Track Number")},

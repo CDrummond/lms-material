@@ -142,28 +142,7 @@ var lmsBrowse = Vue.component("lms-browse", {
   </div>
   <div class="lms-list" id="browse-list" style="overflow:auto;" v-bind:class="{'lms-image-grid':grid.allowed&&grid.use,'lms-grouped-image-grid':grid.allowed&&grid.use && grid.multiSize,'lms-image-grid-jump':grid.allowed&&grid.use && filteredJumplist.length>1,'lms-list-jump':!(grid.allowed&&grid.use) && filteredJumplist.length>1,'bgnd-blur':drawBgndImage,'backdrop-blur':drawBackdrop}">
 
-   <RecycleScroller :items="grid.rows" :item-size="grid.multiSize ? null : grid.ih" page-mode key-field="id" :buffer="LMS_SCROLLER_GRID_BUFFER" v-if="grid.allowed&&grid.use&&GRID_TEXT_ONLY==grid.type">
-    <div slot-scope="{item}" :class="[grid.few?'image-grid-few':'image-grid-full-width']">
-     <v-list-tile v-if="item.header && item.item" class="grid-header no-hover">
-      <v-list-tile-avatar v-if="item.item.icon" :tile="true" class="lms-avatar">
-       <v-icon>{{item.item.icon}}</v-icon>
-      </v-list-tile-avatar>
-      <v-list-tile-avatar v-else-if="item.item.svg" :tile="true" class="lms-avatar">
-       <img :class="['hdr-'+hRgb, 'svg-list-img']" :src="item.item.svg | svgIcon(darkUi, undefined, true)" loading="lazy" @dragstart.prevent="" @dragenter.prevent=""></img>
-      </v-list-tile-avatar>
-      <v-list-tile-content>
-       <v-list-tile-title>{{item.item.title}}</v-list-tile-title>
-      </v-list-tile-content>
-     </v-list-tile>
-     <div v-else align="center" style="vertical-align: top" v-for="(citem, col) in item.items" @contextmenu.prevent="contextMenu(citem, isTop ? citem.gidx : (item.rs+col), $event)">
-      <div v-if="undefined==citem" class="text-grid-item defcursor"></div>
-      <div v-else class="text-grid-item" @click="click(citem, isTop ? citem.gidx : (item.rs+col), $event)" :title="citem | itemTooltip" v-bind:class="{'search-highlight':highlightIndex==(isTop ? citem.gidx : (item.rs+col)), 'list-active': (menu.show && (isTop ? citem.gidx : (item.rs+col))==menu.index) || (fetchingItem==item.id)}">
-       <div>{{citem.title}}</div>
-      </div>
-     </div>
-    </div>
-   </RecycleScroller>
-   <RecycleScroller :items="grid.rows" :item-size="grid.multiSize ? null : (grid.ih - (grid.haveSubtitle || isTop || current.id.startsWith(TOP_ID_PREFIX) ? 0 : GRID_SINGLE_LINE_DIFF))" page-mode key-field="id" :buffer="LMS_SCROLLER_GRID_BUFFER" v-else-if="grid.allowed&&grid.use">
+   <RecycleScroller v-if="grid.allowed&&grid.use&&GRID_TEXT_ONLY!=grid.type" :items="grid.rows" :item-size="grid.multiSize ? null : (grid.ih - (grid.haveSubtitle || isTop || current.id.startsWith(TOP_ID_PREFIX) ? 0 : GRID_SINGLE_LINE_DIFF))" page-mode key-field="id" :buffer="LMS_SCROLLER_GRID_BUFFER">
     <div slot-scope="{item}" :class="[grid.few?'image-grid-few':'image-grid-full-width', grid.haveSubtitle?'image-grid-with-sub':'']">
 
      <v-list-tile v-if="item.header && item.item" class="grid-header" @click.stop="click(item.item, undefined, $event)" v-bind:class="{'search-highlight':highlightIndex==(item.rs)}">
@@ -220,6 +199,28 @@ var lmsBrowse = Vue.component("lms-browse", {
        </div>
        <div v-if="hoverBtns && selection.size==0 && citem.image && !isTop" class="grid-btns grid-btn-left"><img class="other-btn grid-btn" @click.stop="itemAction(SHOW_IMAGE_ACTION, citem, item.rs+col, $event)" :title="ACTIONS[SHOW_IMAGE_ACTION].title" :src="'hover-expand' | svgIcon(darkUi, true)"></img>
        </div>
+      </div>
+     </div>
+    </div>
+   </RecycleScroller>
+
+   <RecycleScroller v-else-if="grid.allowed&&grid.use" :items="grid.rows" :item-size="grid.multiSize ? null : grid.ih" page-mode key-field="id" :buffer="LMS_SCROLLER_GRID_BUFFER">
+    <div slot-scope="{item}" :class="[grid.few?'image-grid-few':'image-grid-full-width']">
+     <v-list-tile v-if="item.header && item.item" class="grid-header no-hover">
+      <v-list-tile-avatar v-if="item.item.icon" :tile="true" class="lms-avatar">
+       <v-icon>{{item.item.icon}}</v-icon>
+      </v-list-tile-avatar>
+      <v-list-tile-avatar v-else-if="item.item.svg" :tile="true" class="lms-avatar">
+       <img :class="['hdr-'+hRgb, 'svg-list-img']" :src="item.item.svg | svgIcon(darkUi, undefined, true)" loading="lazy" @dragstart.prevent="" @dragenter.prevent=""></img>
+      </v-list-tile-avatar>
+      <v-list-tile-content>
+       <v-list-tile-title>{{item.item.title}}</v-list-tile-title>
+      </v-list-tile-content>
+     </v-list-tile>
+     <div v-else align="center" style="vertical-align: top" v-for="(citem, col) in item.items" @contextmenu.prevent="contextMenu(citem, isTop ? citem.gidx : (item.rs+col), $event)">
+      <div v-if="undefined==citem" class="text-grid-item defcursor"></div>
+      <div v-else class="text-grid-item" @click="click(citem, isTop ? citem.gidx : (item.rs+col), $event)" :title="citem | itemTooltip" v-bind:class="{'search-highlight':highlightIndex==(isTop ? citem.gidx : (item.rs+col)), 'list-active': (menu.show && (isTop ? citem.gidx : (item.rs+col))==menu.index) || (fetchingItem==item.id)}">
+       <div>{{citem.title}}</div>
       </div>
      </div>
     </div>

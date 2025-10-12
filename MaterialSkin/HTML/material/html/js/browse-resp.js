@@ -1418,9 +1418,9 @@ function parseBrowseResp(data, parent, options, cacheKey) {
                 let duration = parseFloat(i.duration || 0);
                 let tracknum = undefined;
                 let highlight = false;
-                if (isSearchResult) {
+                if (showTrackNumbers && (isSearchResult || isAllTracks)) {
                     let tnum = undefined==i.tracknum ? 0 : parseInt(i.tracknum);
-                    if (tnum>0 && showTrackNumbers) {
+                    if (tnum>0) {
                         title = (tnum>9 ? tnum : ("0" + tnum))+SEPARATOR+title;
                         if (undefined!=i.disc) {
                             title = i.disc+"."+title;
@@ -1428,9 +1428,6 @@ function parseBrowseResp(data, parent, options, cacheKey) {
                     }
                 } else if (showTrackNumbers && undefined!=i.tracknum) {
                     tracknum = parseInt(i.tracknum);
-                    if (isSearchResult && undefined!=i.disc) {
-                        tracknum = i.disc+"."+tracknum;
-                    }
                 }
                 splitMultiples(i, true);
 

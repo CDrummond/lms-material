@@ -605,11 +605,12 @@ function parseBrowseResp(data, parent, options, cacheKey) {
                     if (undefined!=i.metadata && i.metadata.type=="track") {
                         i.image = undefined;
                         let duration = parseFloat(i.metadata.secs || 0);
-                        let tracknum = undefined==i.metadata.tracknum ? 0 : parseInt(i.metadata.tracknum);
                         totalDuration+=duration;
                         i.duration = duration>0 ? duration : undefined;
                         i.durationStr = duration>0 ? formatSeconds(duration) : undefined;
-                        i.title = (tracknum>9 ? tracknum : ("0" + tracknum))+SEPARATOR+i.title;
+                        if (i.metadata.tracknum) {
+                            i.tracknum = parseInt(i.metadata.tracknum)
+                        }
                         i.subtitle = i.metadata.artist == data.result.artist ? undefined : i.metadata.artist;
                         if (undefined!=i.metadata.discnum && undefined!=i.metadata.disccount && parseInt(i.metadata.disccount)>1) {
                             i.title = i.metadata.discnum+"."+i.title;
@@ -1415,14 +1416,12 @@ function parseBrowseResp(data, parent, options, cacheKey) {
                 let baseTitle = i.title;
                 let title = trackTitle(i);
                 let duration = parseFloat(i.duration || 0);
-                let tracknum = undefined==i.tracknum ? 0 : parseInt(i.tracknum);
+                let tracknum = undefined;
                 let highlight = false;
-                if (tracknum>0 && showTrackNumbers) {
-                    title = (tracknum>9 ? tracknum : ("0" + tracknum))+SEPARATOR+title;
-                    baseTitle = (tracknum>9 ? tracknum : ("0" + tracknum))+SEPARATOR+baseTitle;
-                    //title = tracknum + ". " + title; // SlimBrowse format
+                if (showTrackNumbers && undefined!=i.tracknum) {
+                    tracknum = parseInt(i.tracknum);
                     if (isSearchResult && undefined!=i.disc) {
-                        title = i.disc+"."+title;
+                        tracknum = i.disc+"."+tracknum;
                     }
                 }
                 splitMultiples(i, true);
@@ -1641,7 +1640,8 @@ function parseBrowseResp(data, parent, options, cacheKey) {
                               filter: i.disc!=undefined ? FILTER_PREFIX+i.disc : undefined,
                               gfilter: groupingTitle!=undefined ? FILTER_PREFIX+groupings.size : undefined,
                               emblem: showAlbumName ? getEmblem(i.extid) : undefined,
-                              tracknum: sortTracks && undefined!=i.tracknum ? tracknum : undefined,
+                              tnum: sortTracks && undefined!=i.tracknum ? tracknum : undefined,
+                              tracknum: tracknum,
                               disc: i.disc ? parseInt(i.disc) : undefined,
                               year: (sortTracks || 1==allTracksGrouping) ? year : undefined,
                               album: sortTracks || isSearchResult || 1==allTracksGrouping ? i.album : undefined,
@@ -2067,7 +2067,7 @@ function parseBrowseResp(data, parent, options, cacheKey) {
             let decades = [];
             for (let idx=0, loop=data.result.years_loop, loopLen=loop.length; idx<loopLen && decades.length<2; ++idx) {
                 let year = ""+loop[idx].year;
-                let decade = (year.length==4 ? parseInt(year.substring(0, 3)+"0") : "0000") + "'s";
+                let decade = year.length==4 ? parseInt(year.substring(0, 3)+"0") : "0000";
                 if (decades.length==0 || decades[decades.length-1]!=decade) {
                     decades.push(decade);
                 }
@@ -2081,7 +2081,7 @@ function parseBrowseResp(data, parent, options, cacheKey) {
                 let addedHeader = false;
                 let year = ""+i.year;
                 if (splitDecades) {
-                    let decade = (year.length==4 ? parseInt(year.substring(0, 3)+"0") : "0000") + "'s";
+                    let decade = year.length==4 ? parseInt(year.substring(0, 3)+"0") : "0000";
                     if (decades.length==0 || decades[decades.length-1]!=decade) {
                         decades.push(decade);
                         addedHeader = true;

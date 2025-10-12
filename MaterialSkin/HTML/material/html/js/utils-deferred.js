@@ -570,8 +570,8 @@ function albumTrackSort(a, b) {
     if (va>vb) {
         return 1;
     }
-    va=a.tracknum ? a.tracknum : 0;
-    vb=b.tracknum ? b.tracknum : 0;
+    va=a.tnum ? a.tnum : a.tracknum ? a.tracknum : 0;
+    vb=b.tnum ? b.tnum : b.tracknum ? b.tracknum : 0;
     if (va<vb) {
         return -1;
     }

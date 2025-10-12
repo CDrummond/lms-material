@@ -4448,3 +4448,24 @@ div.v-subheader {
 .menu-group-item .v-list__tile__content {
  padding-left:18px !important;
 }
+
+.tnum {
+ opacity:0.5;
+ float:left;
+}
+
+#browse-list .tnum {
+ min-width:26px;
+ text-align:right;
+}
+
+.indent-left #browse-list .tnum {
+ min-width:44px;
+ margin-left:-44px;
+}
+
+#browse-list .tnum .v-avatar {
+ width:100%!important;
+ justify-content:right;
+ margin-right:8px;
+}

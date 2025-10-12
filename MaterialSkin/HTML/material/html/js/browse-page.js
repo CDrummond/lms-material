@@ -244,6 +244,8 @@ var lmsBrowse = Vue.component("lms-browse", {
       <img :class="['hdr-'+hRgb, 'svg-list-img']" :src="item.svg | svgIcon(darkUi, undefined, item.header)" loading="lazy" @dragstart.prevent="" @dragenter.prevent=""></img>
      </v-list-tile-avatar>
 
+     <v-list-tile-avatar v-else-if="undefined!=item.tracknum" class="tnum">{{item.tracknum}}</v-list-tile-avatar>
+
      <!-- TODO: Do we have search fields with large lists?? -->
      <v-list-tile-content v-if="item.header" @click.stop="click(item, index, $event)">
       <v-list-tile-title>{{item.title}}</v-list-tile-title>
@@ -333,6 +335,8 @@ var lmsBrowse = Vue.component("lms-browse", {
      <v-list-tile-avatar v-else-if="selection.size>0 && browseCanSelect(item)" :tile="true" class="lms-avatar">
       <v-icon>check_box_outline_blank</v-icon>
      </v-list-tile-avatar>
+
+     <v-list-tile-avatar v-else-if="undefined!=item.tracknum" class="tnum">{{item.tracknum}}</v-list-tile-avatar>
 
      <v-list-tile-content>
       <v-list-tile-title v-html="item.title" v-if="undefined!=item.stdItem && (item.stdItem==STD_ITEM_TRACK || item.stdItem==STD_ITEM_ALBUM_TRACK || item.stdItem==STD_ITEM_PLAYLIST_TRACK)" v-bind:class="{'browse-no-sub':!item.subtitle}"></v-list-tile-title>

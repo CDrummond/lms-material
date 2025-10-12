@@ -720,6 +720,12 @@ function parseBrowseResp(data, parent, options, cacheKey) {
 
                 // Only allow search to have an icon, no image
                 if ((i.type=="search" && i.icon!="search") || i.type=="entry") {
+                    if (undefined!=i.menu && undefined!=i.image) {
+                        let actPos = i.menu.indexOf(SHOW_IMAGE_ACTION);
+                        if (undefined!=actPos) {
+                            i.menu.splice(actPos, 1);
+                        }
+                    }
                     i.image = undefined;
                     i.svg = undefined;
                     i.icon = undefined;

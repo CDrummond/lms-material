@@ -613,7 +613,7 @@ function parseBrowseResp(data, parent, options, cacheKey) {
                         }
                         i.subtitle = i.metadata.artist == data.result.artist ? undefined : i.metadata.artist;
                         if (undefined!=i.metadata.discnum && undefined!=i.metadata.disccount && parseInt(i.metadata.disccount)>1) {
-                            i.title = i.metadata.discnum+"."+i.title;
+                            i.tracknum = i.metadata.discnum+"."+i.tracknum;
                         }
                     } else {
                         if (undefined==resp.actionItems) {

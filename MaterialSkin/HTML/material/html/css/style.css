@@ -4455,8 +4455,9 @@ div.v-subheader {
 }
 
 #browse-list .tnum {
- min-width:26px;
+ min-width:32px;
  text-align:right;
+ margin-left:-2px;
 }
 
 .indent-left #browse-list .tnum {

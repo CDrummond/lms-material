@@ -1418,7 +1418,15 @@ function parseBrowseResp(data, parent, options, cacheKey) {
                 let duration = parseFloat(i.duration || 0);
                 let tracknum = undefined;
                 let highlight = false;
-                if (showTrackNumbers && undefined!=i.tracknum) {
+                if (isSearchResult) {
+                    let tnum = undefined==i.tracknum ? 0 : parseInt(i.tracknum);
+                    if (tnum>0 && showTrackNumbers) {
+                        title = (tnum>9 ? tnum : ("0" + tnum))+SEPARATOR+title;
+                        if (undefined!=i.disc) {
+                            title = i.disc+"."+title;
+                        }
+                    }
+                } else if (showTrackNumbers && undefined!=i.tracknum) {
                     tracknum = parseInt(i.tracknum);
                     if (isSearchResult && undefined!=i.disc) {
                         tracknum = i.disc+"."+tracknum;

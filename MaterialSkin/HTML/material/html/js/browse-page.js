@@ -1667,7 +1667,7 @@ var lmsBrowse = Vue.component("lms-browse", {
                 sz = {w: width, h: height, s:0, mc:maxColumns, nc:numColumns}
             } else {
                 let iconOnly = lmsOptions.smallIconOnlyGrid && this.items.length<=100 && window.innerWidth<=NARROW_WIDTH_ICON_ONLY;
-                if (iconOnly) {
+                if (iconOnly && !this.isTop) {
                     for (let i=0, len=this.items.length; i<len && iconOnly; ++i) {
                         if (undefined==this.items[i].icon && undefined==this.items[i].svg) {
                             iconOnly = false;

@@ -840,6 +840,9 @@ var lmsBrowse = Vue.component("lms-browse", {
         bus.$on('queueStatus', function(size) {
             this.queueEmpty = size<1;
         }.bind(this));
+        bus.$on('customActions', function() {
+            this.loadCustomPinned(this);
+        }.bind(this));
     },
     methods: {
         updateSortStrings() {
@@ -2083,6 +2086,36 @@ var lmsBrowse = Vue.component("lms-browse", {
         },
         allowInsert(item) {
             return undefined==item.stdItem || STD_ITEM_RANDOM_MIX!=item.stdItem;
+        },
+        loadCustomPinned() {
+            let actions = getCustomActions("pinned");
+            if (undefined!=actions) {
+                let customPinned = new Set();
+                let lastPinnedIndex = -1;
+                for (let i=0, len=this.top.length; i<len; ++i) {
+                    if (this.top[i].custom) {
+                        customPinned.add(this.top[i].id);
+                    }
+                    if (!this.top[i].id.startsWith(TOP_ID_PREFIX)) {
+                        lastPinnedIndex = i;
+                    }
+                }
+                for (let i=0, len=actions.length; i<len; ++i) {
+                    if (actions[i].iframe!=undefined || actions[i].weblink!=undefined) {
+                        let id = undefined==actions[i].iframe ? actions[i].weblink : actions[i].iframe;
+                        if (!customPinned.has(id)) {
+                            this.top.splice(lastPinnedIndex+1, 0,
+                                    {id: id, title: actions[i].title, icon: actions[i].icon, svg: actions[i].svg, isPinned: true,
+                                     weblink: actions[i].weblink, iframe: actions[i].iframe, menu: [RENAME_ACTION, UNPIN_ACTION], custom: true});
+                            lastPinnedIndex++;
+                        }
+                    }
+                }
+                if (lastPinnedIndex>=0) {
+                    this.layoutGrid(true);
+                    this.saveTopList();
+                }
+            }
         }
     },
     mounted() {

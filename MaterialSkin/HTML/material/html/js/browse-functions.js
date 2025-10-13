@@ -1021,6 +1021,10 @@ function browseClick(view, item, index, event, ignoreOpenMenu) {
         return;
     }
     if (item.isPinned) {
+        if (item.custom) {
+            performCustomAction(item, view.$store.state.player, null);
+            return;
+        }
         if (undefined!=item.url && "extra"!=item.type) { // Radio
             browseItemMenu(view, item, index, event);
             return;

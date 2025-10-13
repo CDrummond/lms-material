@@ -6,6 +6,7 @@ dev
 4. Add 'Newest' to album sorts.
 5. Add, server-side, option to use smaller grid if icon only and narrow width.
 6. Adjust display of track numbers in browse view.
+7. Allow loading of 'pinned' weblink/iframe items from custom actions.
 
 5.11.3
 ------

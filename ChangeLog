@@ -3,6 +3,8 @@
 1. Add 'Play shuffled' for remote playlists.
 2. Fix disabling of playlist images.
 3. Add emblem for 'iBroadcast'.
+4. Fix/work-around issues with using Default for server-settings when LMS is
+   on piCorePlayer.
 
 5.11.2
 ------

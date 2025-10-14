@@ -1784,7 +1784,7 @@ sub _cliCommand {
         my $folder = Slim::Utils::Prefs::dir() . "/material-skin/random-mix";
         if ($act eq 'list') {
             my $extLen = length(RANDOM_MIX_EXT) * -1;
-            my @files = glob($folder . '/*' . RANDOM_MIX_EXT);
+            my @files = glob('"' . $folder . '/*' . RANDOM_MIX_EXT . '"');
             my $cnt = 0;
             foreach my $file(@files) {
                 main::DEBUGLOG && $log->debug("Mix file:" . $file);

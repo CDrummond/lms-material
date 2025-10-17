@@ -203,9 +203,10 @@ Vue.component('lms-ui-settings', {
      <v-list-tile-content/>
     </v-list-tile>
 
-    <v-checkbox v-if="LMS_VERSION>=90100" v-model="detailedHomeNew" :label="i18n('Newly added')" style="display:flex" class="settings-list-checkbox"></v-checkbox>
+    <v-checkbox v-model="detailedHomeNew" :label="i18n('Newly added')" style="display:flex" class="settings-list-checkbox"></v-checkbox>
     <v-checkbox v-if="LMS_VERSION>=90100" v-model="detailedHomeRecent" :label="i18n('Recently played')" style="display:flex" class="settings-list-checkbox"></v-checkbox>
     <v-checkbox v-if="LMS_VERSION>=90100" v-model="detailedHomeMost" :label="i18n('Most played')" style="display:flex" class="settings-list-checkbox"></v-checkbox>
+    <v-checkbox v-model="detailedHomeRandom" :label="i18n('Random')" style="display:flex" class="settings-list-checkbox"></v-checkbox>
     <template v-for="(item, index) in showItems">
      <div style="display:flex" v-if="item.id!=TOP_RADIO_ID || !lmsOptions.combineAppsAndRadio">
       <v-checkbox v-model="item.show" :label="item.name" class="settings-list-checkbox"></v-checkbox>
@@ -515,9 +516,10 @@ Vue.component('lms-ui-settings', {
             ndShortcutValues: [],
             ndSettingsIcons: false,
             ndSettingsVisible: false,
-            detailedHomeNew:LMS_VERSION>=90100,
+            detailedHomeNew:true,
             detailedHomeRecent:LMS_VERSION>=90100,
             detailedHomeMost:LMS_VERSION>=90100,
+            detailedHomeRandom:false
         }
     },
     computed: {
@@ -700,6 +702,7 @@ Vue.component('lms-ui-settings', {
             this.detailedHomeNew = this.$store.state.detailedHome&DETAILED_HOME_NEW;
             this.detailedHomeMost = this.$store.state.detailedHome&DETAILED_HOME_RECENT;
             this.detailedHomeRecent = this.$store.state.detailedHome&DETAILED_HOME_MOST;
+            this.detailedHomeRandom = this.$store.state.detailedHome&DETAILED_HOME_RANDOM;
             this.showItems=[{id: TOP_MYMUSIC_ID, name:i18n("My Music"), show:!this.hidden.has(TOP_MYMUSIC_ID)},
                             {id: TOP_RADIO_ID, name:i18n("Radio"), show:!this.hidden.has(TOP_RADIO_ID)},
                             {id: TOP_FAVORITES_ID, name:i18n("Favorites"), show:!this.hidden.has(TOP_FAVORITES_ID)},
@@ -819,7 +822,10 @@ Vue.component('lms-ui-settings', {
                       ndShortcuts:this.ndShortcuts,
                       ndSettingsIcons:this.ndSettingsIcons,
                       ndSettingsVisible:this.ndSettingsVisible,
-                      detailedHome:(this.detailedHomeNew ? DETAILED_HOME_NEW : 0)+(this.detailedHomeMost ? DETAILED_HOME_MOST : 0)+(this.detailedHomeRecent ? DETAILED_HOME_RECENT : 0)
+                      detailedHome:(this.detailedHomeNew ? DETAILED_HOME_NEW : 0)+
+                                   (this.detailedHomeMost ? DETAILED_HOME_MOST : 0)+
+                                   (this.detailedHomeRecent ? DETAILED_HOME_RECENT : 0)+
+                                   (this.detailedHomeRandom ? DETAILED_HOME_RANDOM : 0)
                   };
             if (withSorts) {
                 for (var key in window.localStorage) {

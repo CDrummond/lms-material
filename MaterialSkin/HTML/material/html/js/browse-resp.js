@@ -2296,31 +2296,20 @@ function parseBrowseResp(data, parent, options, cacheKey) {
             }
             resp.listSize=resp.items.length;
         } else if (data.result.material_home_new_loop || data.result.material_home_recentlyplayed_loop || data.result.material_home_playcount_loop) {
-            if (data.result.material_home_new_loop) {
-                data.result.albums_loop = data.result.material_home_new_loop;
-                let newResp = parseBrowseResp(data);
-                if (undefined!=newResp && newResp.items.length>0) {
-                    resp.items.push({title:i18n("Newly added"), id:TOP_EXTRA_NEWLY_ADDED_ID, header:true, ihe:1, 
-                        morecmd:parseInt(data.result.material_home_new_loop_len)>10 ? {command:["albums"], params:["sort:new", ALBUM_TAGS_ALL_ARTISTS]} : undefined});
-                    resp.items=resp.items.concat(newResp.items);
-                }
-            }
-            if (data.result.material_home_recentlyplayed_loop) {
-                data.result.albums_loop = data.result.material_home_recentlyplayed_loop;
-                let newResp = parseBrowseResp(data);
-                if (undefined!=newResp && newResp.items.length>0) {
-                    resp.items.push({title:i18n("Recently played"), id:TOP_EXTRA_RECENTLY_PLAYED_ID, header:true, ihe:1,
-                        morecmd:parseInt(data.result.material_home_recentlyplayed_loop_len)>10 ? {command:["albums"], params:["sort:recentlyplayed", ALBUM_TAGS_ALL_ARTISTS]} : undefined});
-                    resp.items=resp.items.concat(newResp.items);
-                }
-            }
-            if (data.result.material_home_playcount_loop) {
-                data.result.albums_loop = data.result.material_home_playcount_loop;
-                let newResp = parseBrowseResp(data);
-                if (undefined!=newResp && newResp.items.length>0) {
-                    resp.items.push({title:i18n("Most played"), id:TOP_EXTRA_MOST_PLAYED_ID, header:true, ihe:1,
-                        morecmd:parseInt(data.result.material_home_playcount_loop_len)>10 ? {command:["albums"], params:["sort:playcount", ALBUM_TAGS_ALL_ARTISTS]} : undefined});
-                    resp.items=resp.items.concat(newResp.items);
+            var sorts = [{key:'new', text:i18n('Newly added'), id:TOP_EXTRA_NEWLY_ADDED_ID},
+                         {key:'recentlyplayed', text:i18n('Recently played'), id:TOP_EXTRA_RECENTLY_PLAYED_ID},
+                         {key:'playcount', text:i18n('Most played'), id:TOP_EXTRA_MOST_PLAYED_ID},
+                         {key:'random', text:i18n('Random'), id:TOP_EXTRA_RANDOM_ID} ];
+            for (let s=0, len=sorts.length; s<len; ++s) {
+                let loop = 'material_home_'+sorts[s].key+'_loop';
+                if (data.result[loop]) {
+                    data.result.albums_loop = data.result[loop];
+                    let newResp = parseBrowseResp(data);
+                    if (undefined!=newResp && newResp.items.length>0) {
+                        resp.items.push({title:sorts[s].text, id:sorts[s].id, header:true, ihe:1,
+                            morecmd:parseInt(data.result[loop+"_len"])>10 ? {command:["albums"], params:["sort:"+sorts[s].key, ALBUM_TAGS_ALL_ARTISTS]} : undefined});
+                        resp.items=resp.items.concat(newResp.items);
+                    }
                 }
             }
             if (resp.items.length>0) {

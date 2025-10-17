@@ -1027,6 +1027,9 @@ var lmsBrowse = Vue.component("lms-browse", {
                 if (this.$store.state.detailedHome&DETAILED_HOME_RECENT) {
                     cmd.push("recent:1");
                 }
+                if (this.$store.state.detailedHome&DETAILED_HOME_RANDOM) {
+                    cmd.push("random:1");
+                }
                 lmsCommand("", cmd).then(({data}) => {
                     if (this.isCurrentReq(data)) {
                         this.handleHomeExtra(data);
@@ -1173,7 +1176,7 @@ var lmsBrowse = Vue.component("lms-browse", {
         },
         showMore(item) {
             if (item.morecmd) {
-                this.fetchItems(item.morecmd, {cancache:false, id:item.id, title: item.title});
+                this.fetchItems(item.morecmd, {cancache:false, id:item.id, title: item.title, limit:100});
             }
         },
         currentActionsMenu(event) {

@@ -709,7 +709,7 @@ Vue.component('lms-iframe-dialog', {
     template: `
 <div id="iframe-page">
  <v-dialog v-model="show" v-if="show" persistent no-click-animation scrollable fullscreen>
-  <v-card v-bind:class="{'def-server':'dserver'==page && !haveCustomActions, 'dark-logic':'dlserver'==page && !haveCustomActions}">
+  <v-card v-bind:class="{'def-server':'dserver'==page && !needActionsMenu, 'dark-logic':'dlserver'==page && !needActionsMenu}">
    <v-card-title class="settings-title">
     <v-toolbar app-data class="dialog-toolbar" @mousedown="mouseDown" id="iframe-toolbar">
      <lms-windowcontrols v-if="queryParams.nativeTitlebar && queryParams.tbarBtnsPos=='l'"></lms-windowcontrols>
@@ -719,7 +719,7 @@ Vue.component('lms-iframe-dialog', {
      <v-toolbar-title v-if="playerId && numPlayers>1 && (page=='player' || page=='extras')" @click="openChoiceMenu" class="pointer">{{title}} <v-icon>arrow_drop_down</v-icon></v-toolbar-title>
      <v-toolbar-title v-else>{{title}}</v-toolbar-title>
      <v-spacer class="drag-area"></v-spacer>
-     <v-menu bottom left v-model="showMenu" v-if="haveCustomActions || (undefined!=actions && actions.length>2)">
+     <v-menu bottom left v-model="showMenu" v-if="needActionsMenu">
       <v-btn icon slot="activator"><v-icon>more_vert</v-icon></v-btn>
       <v-list>
        <template v-for="(item, index) in actions">
@@ -1046,6 +1046,9 @@ Vue.component('lms-iframe-dialog', {
         },
         showLoading() {
             return LMS_VERSION>=90000 && !this.loaded && !this.prompting
+        },
+        needActionsMenu() {
+            return this.haveCustomActions || (undefined!=this.actions && this.actions.length>2);
         },
         haveCustomActions() {
             return undefined!=this.customActions && this.customActions.length>0

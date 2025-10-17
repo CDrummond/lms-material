@@ -8,11 +8,17 @@ dev
 6. Adjust display of track numbers in browse view.
 7. Allow loading of 'pinned' weblink/iframe items from custom actions.
 
+5.11.4
+------
+1. Fix listing random mixes on macOS - thanks to EelcoV.
+
 5.11.3
 ------
 1. Add 'Play shuffled' for remote playlists.
 2. Fix disabling of playlist images.
 3. Add emblem for 'iBroadcast'.
+4. Fix/work-around issues with using Default for server-settings when LMS is
+   on piCorePlayer.
 
 5.11.2
 ------

@@ -1987,7 +1987,7 @@ var lmsBrowse = Vue.component("lms-browse", {
             }
         },
         dragStart(which, ev) {
-            if (queryParams.party || (LMS_KIOSK_MODE && HIDE_FOR_KIOSK.has(ADD_TO_FAV_ACTION)) ||
+            if (undefined==which || queryParams.party || (LMS_KIOSK_MODE && HIDE_FOR_KIOSK.has(ADD_TO_FAV_ACTION)) ||
                 (!this.$store.state.desktopLayout && this.items[0].stdItem==STD_ITEM_PLAYLIST_TRACK && this.listSize>LMS_MAX_PLAYLIST_EDIT_SIZE) ||
                 ((!this.$store.state.desktopLayout || !this.$store.state.showQueue) && !this.canDrop) ||
                 // For some reason drag is accessible in 'My Music'??? The following stops this...
@@ -2026,7 +2026,7 @@ var lmsBrowse = Vue.component("lms-browse", {
             setTimeout(function () { bus.$emit('dragActive', false); }.bind(this), 250);
         },
         dragOver(index, ev) {
-            if (index!=this.dropIndex) {
+            if (index!=this.dropIndex && undefined!=index) {
                 if (this.items[0].stdItem==STD_ITEM_PLAYLIST_TRACK && this.listSize>LMS_MAX_PLAYLIST_EDIT_SIZE) {
                     return;
                 }
@@ -2090,7 +2090,13 @@ var lmsBrowse = Vue.component("lms-browse", {
                             }
                         }
                     } else if (this.isTop) {
-                        this.items = arrayMove(this.top, this.dragIndex, to);
+                        let drgIdx = this.dragIndex;
+                        if (undefined!=this.items[0].ihe) {
+                            to-=this.topExtra.length;
+                            drgIdx-=this.topExtra.length;
+                        }
+                        this.top = arrayMove(this.top, drgIdx, to);
+                        this.items = this.$store.state.detailedHome>0 ? this.topExtra.concat(this.top) : this.top;
                         this.saveTopList();
                         this.layoutGrid(true);
                     } else if (this.current) {

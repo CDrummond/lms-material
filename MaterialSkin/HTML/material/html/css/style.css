@@ -951,6 +951,10 @@ div.v-subheader {
  opacity:1.0;
 }
 
+.browse-more {
+ padding-right:8px;
+}
+
 .image-grid-with-sub .image-grid-item {
  height:calc((var(--min-grid-height) - 5px) + (5px * var(--image-grid-factor))) !important;
 }

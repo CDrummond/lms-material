@@ -618,7 +618,7 @@ sub _cliCommand {
                                                   'pass-check', 'browsemodes', 'geturl', 'command', 'scantypes', 'server', 'themes',
                                                   'playersettings', 'activeplayers', 'urls', 'adv-search', 'adv-search-params', 'protocols',
                                                   'players-extra-info', 'sort-playlist', 'mixer', 'release-types', 'check-for-updates',
-                                                  'similar', 'apps', 'rndmix', 'scan-progress', 'send-notif', 'playlists']) ) {
+                                                  'similar', 'apps', 'rndmix', 'scan-progress', 'send-notif', 'playlists', 'home-extra']) ) {
         $request->setStatusBadParams();
         return;
     }
@@ -1965,6 +1965,46 @@ sub _cliCommand {
         }
         $request->setStatusDone();
         return;
+    }
+
+    if ($cmd eq 'home-extra') {
+        my @sorts = ();
+        
+        if ($request->getParam('new')) {
+            push(@sorts, "new");
+        }
+        if ($request->getParam('most')) {
+            push(@sorts, "playcount");
+        }
+        if ($request->getParam('recent')) {
+            push(@sorts, "recentlyplayed");
+        }
+        if (scalar(@sorts)>0) {
+            my @keys = ("album", "year", "artists", "artist_ids", "artist", "artist_id", "performance", "composer", "work_id", "artwork_track_id", "artwork_url", "artwork", "extid", "compilation", "disccount", "contiguous_groups");
+            my $total = 0;
+            foreach my $srt ( @sorts ) {
+                my @alcmd = ("albums", 0, 10, "tags:aajlqswyKSS24WE", "library_id:-1", "sort:${srt}");
+                my $alreq = Slim::Control::Request::executeRequest(undef, \@alcmd);
+                my $cnt = 0;
+                my $loop_name = "material_home_${srt}_loop";    
+                foreach my $album ( @{ $alreq->getResult('albums_loop') || [] } ) {
+                    $request->addResultLoop($loop_name, $cnt, "id", $album->{id} . "@" . "idx" . $total); # Need unique IDs in case same album in multiple loops!
+                    $request->addResultLoop($loop_name, $cnt, "ihe", 1); # Need unique IDs in case same album in multiple loops!
+                    foreach my $key (@keys) {
+                        my $val = $album->{$key};
+                        if (!defined $val) {
+                            next;
+                        }
+                        $request->addResultLoop($loop_name, $cnt, ${key}, ${val});
+                    }
+                    $cnt+=1;
+                    $total+=1;
+                }
+                $request->addResult("${loop_name}_len", $alreq->getResult('count'));
+            }
+            $request->setStatusDone();
+            return;
+        }
     }
     $request->setStatusBadParams();
 }

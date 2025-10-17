@@ -202,13 +202,17 @@ Vue.component('lms-ui-settings', {
       <v-list-tile-sub-title>{{i18n('Check the standard items which you wish to appear on the home screen.')}}</v-list-tile-sub-title>
      <v-list-tile-content/>
     </v-list-tile>
-   
+
+    <v-checkbox v-if="LMS_VERSION>=90100" v-model="detailedHomeNew" :label="i18n('Newly added')" style="display:flex" class="settings-list-checkbox"></v-checkbox>
+    <v-checkbox v-if="LMS_VERSION>=90100" v-model="detailedHomeRecent" :label="i18n('Recently played')" style="display:flex" class="settings-list-checkbox"></v-checkbox>
+    <v-checkbox v-if="LMS_VERSION>=90100" v-model="detailedHomeMost" :label="i18n('Most played')" style="display:flex" class="settings-list-checkbox"></v-checkbox>
     <template v-for="(item, index) in showItems">
      <div style="display:flex" v-if="item.id!=TOP_RADIO_ID || !lmsOptions.combineAppsAndRadio">
       <v-checkbox v-model="item.show" :label="item.name" class="settings-list-checkbox"></v-checkbox>
       <v-btn v-if="item.id==TOP_MYMUSIC_ID" @click.stop="showBrowseModesDialog($event)" flat icon class="settings-list-checkbox-action"><v-icon>settings</v-icon></v-btn>
      </div>
     </template>
+    
     <div class="dialog-padding"></div>
 
     <div class="dialog-padding"></div>
@@ -510,7 +514,10 @@ Vue.component('lms-ui-settings', {
             ndShortcuts: 0,
             ndShortcutValues: [],
             ndSettingsIcons: false,
-            ndSettingsVisible: false
+            ndSettingsVisible: false,
+            detailedHomeNew:LMS_VERSION>=90100,
+            detailedHomeRecent:LMS_VERSION>=90100,
+            detailedHomeMost:LMS_VERSION>=90100,
         }
     },
     computed: {
@@ -690,6 +697,9 @@ Vue.component('lms-ui-settings', {
             this.ndShortcuts = this.$store.state.ndShortcuts;
             this.ndSettingsIcons = this.$store.state.ndSettingsIcons;
             this.ndSettingsVisible = this.$store.state.ndSettingsVisible;
+            this.detailedHomeNew = this.$store.state.detailedHome&DETAILED_HOME_NEW;
+            this.detailedHomeMost = this.$store.state.detailedHome&DETAILED_HOME_RECENT;
+            this.detailedHomeRecent = this.$store.state.detailedHome&DETAILED_HOME_MOST;
             this.showItems=[{id: TOP_MYMUSIC_ID, name:i18n("My Music"), show:!this.hidden.has(TOP_MYMUSIC_ID)},
                             {id: TOP_RADIO_ID, name:i18n("Radio"), show:!this.hidden.has(TOP_RADIO_ID)},
                             {id: TOP_FAVORITES_ID, name:i18n("Favorites"), show:!this.hidden.has(TOP_FAVORITES_ID)},
@@ -808,7 +818,8 @@ Vue.component('lms-ui-settings', {
                       autoCloseQueue:this.autoCloseQueue,
                       ndShortcuts:this.ndShortcuts,
                       ndSettingsIcons:this.ndSettingsIcons,
-                      ndSettingsVisible:this.ndSettingsVisible
+                      ndSettingsVisible:this.ndSettingsVisible,
+                      detailedHome:(this.detailedHomeNew ? DETAILED_HOME_NEW : 0)+(this.detailedHomeMost ? DETAILED_HOME_MOST : 0)+(this.detailedHomeRecent ? DETAILED_HOME_RECENT : 0)
                   };
             if (withSorts) {
                 for (var key in window.localStorage) {

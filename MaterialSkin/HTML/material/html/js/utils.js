@@ -1280,3 +1280,19 @@ function albumGroupingType(discCount, groupCount, contiguousGroups, parentIsWork
             ? MULTI_DISC_ALBUM
             : 0;
 }
+
+function arraysEqual(a, b) {
+    if (a === b) {
+        return true;
+    }
+    if (a == null || b == null || a.length !== b.length) {
+        return false;
+    }
+
+    for (let i = 0, len=a.lngth; i < len; ++i) {
+        if (a[i] !== b[i]) {
+            return false;
+        }
+    }
+    return true;
+}

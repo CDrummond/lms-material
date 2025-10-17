@@ -3,6 +3,10 @@
  background-color:transparent;
  opacity:50%!important;
 }
+::-webkit-scrollbar:horizontal {
+ height:0px!important;
+}
+
 ::-webkit-scrollbar-thumb {
  background:var(--mobile-scrollbar-thumb-color);
  border-radius:2px!important;

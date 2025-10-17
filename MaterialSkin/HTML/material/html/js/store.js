@@ -40,6 +40,10 @@ function updateUiSettings(state, val) {
             }
         }
     }
+    if (state.detailedHome!=val.detailedHome) {
+        state.detailedHome = val.detailedHome;
+        setLocalStorageVal('detailedHome', state.detailedHome);
+    }
     if (!VALID_SKIP_SECONDS.has(state.skipBSeconds)) {
         state.skipBSeconds = 10;
     }
@@ -369,7 +373,8 @@ const store = new Vuex.Store({
         ndShortcuts: 0,
         ndSettingsIcons: false,
         ndSettingsVisible: false,
-        cMixSupported: 1==parseInt(getComputedStyle(document.documentElement).getPropertyValue('--color-mix-supported'))
+        cMixSupported: 1==parseInt(getComputedStyle(document.documentElement).getPropertyValue('--color-mix-supported')),
+        detailedHome: LMS_VERSION>=90100 ? DETAILED_HOME_NEW+DETAILED_HOME_MOST+DETAILED_HOME_RECENT : 0
     },
     mutations: {
         updatePlayer(state, player) {
@@ -601,7 +606,7 @@ const store = new Vuex.Store({
                 let key = boolItems[i];
                 state[key] = getLocalStorageBool(key, state[key]);
             }
-            let intItems = ['skipBSeconds', 'skipFSeconds', 'mobileBar', 'maxRating', 'volumeStep', 'ndShortcuts'];
+            let intItems = ['skipBSeconds', 'skipFSeconds', 'mobileBar', 'maxRating', 'volumeStep', 'ndShortcuts', 'detailedHome'];
             for (let i=0, len=intItems.length; i<len; ++i) {
                 let key = intItems[i];
                 state[key] = parseInt(getLocalStorageVal(key, state[key]));

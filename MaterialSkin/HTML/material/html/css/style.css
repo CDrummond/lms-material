@@ -844,6 +844,10 @@ div.v-subheader {
  margin-right:8px !important;
 }
 
+.grid-scroll {
+ overflow:auto;
+}
+
 .lms-image-grid table {
  border-spacing:0px !important;
 }

@@ -172,11 +172,11 @@ function isInFavorites(item) {
 }
 
 function uniqueId(id, listSize) {
-    return id+"@index-"+listSize;
+    return id+"@idx"+listSize;
 }
 
 function originalId(id) {
-    return id.split("@index-")[0];
+    return id.split("@idx")[0];
 }
 
 function showMenu(obj, newMenu) {
@@ -870,22 +870,6 @@ function refreshViewItems(view) {
             }
         });
     }
-}
-
-function arraysEqual(a, b) {
-    if (a === b) {
-        return true;
-    }
-    if (a == null || b == null || a.length !== b.length) {
-        return false;
-    }
-
-    for (let i = 0, len=a.lngth; i < len; ++i) {
-        if (a[i] !== b[i]) {
-            return false;
-        }
-    }
-    return true;
 }
 
 function localPath(url) {

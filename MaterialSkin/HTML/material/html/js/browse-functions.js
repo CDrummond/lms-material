@@ -2050,7 +2050,7 @@ function browseGoHome(view) {
     view.next = undefined;
     view.selection = new Set();
     var prev = view.history.length>0 ? view.history[0].pos : 0;
-    view.items = view.top;
+    view.items = view.$store.state.detailedHome ? view.topExtra.concat(view.top) : view .top;
     view.jumplist = [];
     view.filteredJumplist = [];
     view.history=[];
@@ -2072,6 +2072,7 @@ function browseGoHome(view) {
     view.subtitleClickable = false;
     view.inGenre = undefined;
     view.canDrop = true;
+    view.getHomeExtra();
     view.$nextTick(function () {
         view.setBgndCover();
         view.filterJumplist();

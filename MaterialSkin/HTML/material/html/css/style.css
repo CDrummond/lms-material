@@ -943,6 +943,14 @@ div.v-subheader {
  background-color:rgba(var(--highlight-rgb),0.15);
 }
 
+.msk-is-non-touch .browse-more {
+ opacity:0.0;
+}
+.msk-is-non-touch .browse-header:hover .browse-more,
+.msk-is-non-touch .grid-header:hover .browse-more {
+ opacity:1.0;
+}
+
 .image-grid-with-sub .image-grid-item {
  height:calc((var(--min-grid-height) - 5px) + (5px * var(--image-grid-factor))) !important;
 }

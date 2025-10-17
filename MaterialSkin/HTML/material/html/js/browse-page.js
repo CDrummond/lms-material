@@ -158,7 +158,7 @@ var lmsBrowse = Vue.component("lms-browse", {
       <v-list-tile-action class="browse-action" v-if="undefined!=item.item.menu && item.item.menu.length>0">
        <div class="grid-btn list-btn hover-btn menu-btn" @click.stop="itemMenu(item.item, undefined, $event)" :title="i18n('%1 (Menu)', stripLinkTags(item.item.title))"></div>
       </v-list-tile-action>
-      <v-list-tile-action class="browse-action" v-else-if="undefined!=item.item.morecmd">
+      <v-list-tile-action class="browse-action browse-more" v-else-if="undefined!=item.item.morecmd">
        <div class="link-item" :title="i18n('More')" @click="showMore(item.item)">{{i18n('More')}}&nbsp;\u25b8</div>
       </v-list-tile-action>
       <div v-if="hoverBtns && 0==selection.size && (item.item.menu && (item.item.menu[0]==PLAY_ACTION || item.item.menu[0]==PLAY_ALL_ACTION))" class="list-btns">
@@ -267,7 +267,7 @@ var lmsBrowse = Vue.component("lms-browse", {
      <v-list-tile-action class="browse-action" v-if="((undefined!=item.stdItem && item.stdItem<=STD_ITEM_MAX) && item.stdItem<=STD_ITEM_MAX) || (item.menu && item.menu.length>0)">
       <div class="grid-btn list-btn hover-btn menu-btn" @click.stop="itemMenu(item, index, $event)" :title="i18n('%1 (Menu)', stripLinkTags(item.title))"></div>
      </v-list-tile-action>
-     <v-list-tile-action class="browse-action" v-else-if="undefined!=item.morecmd">
+     <v-list-tile-action class="browse-action browse-more" v-else-if="undefined!=item.morecmd">
       <div class="link-item" :title="i18n('More')" @click="showMore(item)">{{i18n('More')}}&nbsp;\u25b8</div>
      </v-list-tile-action>
      <div v-if="hoverBtns && 0==selection.size && ((undefined!=item.stdItem && item.stdItem<=STD_ITEM_MAX) || (item.menu && (item.menu[0]==PLAY_ACTION || item.menu[0]==PLAY_ALL_ACTION)))" class="list-btns" v-bind:class="{'list-btns-track':item.durationStr}">
@@ -309,6 +309,9 @@ var lmsBrowse = Vue.component("lms-browse", {
      <v-list-tile-action v-if="undefined!=item.durationStr" class="browse-time">{{item.durationStr}}</v-list-tile-action>
      <v-list-tile-action class="browse-action" v-if="(undefined!=item.stdItem && item.stdItem<=STD_ITEM_MAX) || (item.menu && item.menu.length>0)">
       <div class="grid-btn list-btn hover-btn menu-btn" @click.stop="itemMenu(item, index, $event)" :title="i18n('%1 (Menu)', stripLinkTags(item.title))"></div>
+     </v-list-tile-action>
+     <v-list-tile-action class="browse-action browse-more" v-else-if="undefined!=item.morecmd">
+      <div class="link-item" :title="i18n('More')" @click="showMore(item)">{{i18n('More')}}&nbsp;\u25b8</div>
      </v-list-tile-action>
      <div v-if="hoverBtns && 0==selection.size && ((undefined!=item.stdItem && item.stdItem<=STD_ITEM_MAX) || (item.menu && (item.menu[0]==PLAY_ACTION || item.menu[0]==PLAY_ALL_ACTION)))" class="list-btns" v-bind:class="{'list-btns-track':item.durationStr}">
       <img v-if="(!LMS_KIOSK_MODE || !HIDE_FOR_KIOSK.has(ADD_ACTION)) && allowAdd(item)" class="other-btn grid-btn" @click.stop="itemAction(ADD_ALL_ACTION, item, index, $event)" :title="ACTIONS[ADD_ACTION].title" :src="'hover-add' | svgIcon(darkUi, false)"></img>
@@ -354,9 +357,6 @@ var lmsBrowse = Vue.component("lms-browse", {
      <v-list-tile-action v-if="undefined!=item.durationStr" class="browse-time">{{item.durationStr}}</v-list-tile-action>
      <v-list-tile-action class="browse-action" v-if="(undefined!=item.stdItem && item.stdItem<=STD_ITEM_MAX) || (item.menu && item.menu.length>0 && (!item.isPinned || (!queryParams.party && (!LMS_KIOSK_MODE || !HIDE_FOR_KIOSK.has(PIN_ACTION))))) || (isTop && libraryName && item.id==TOP_MYMUSIC_ID)">
       <div class="grid-btn list-btn hover-btn menu-btn" @click.stop="itemMenu(item, index, $event)" :title="i18n('%1 (Menu)', stripLinkTags(item.title))"></div>
-     </v-list-tile-action>
-     <v-list-tile-action class="browse-action" v-else-if="undefined!=item.morecmd">
-      <div class="link-item" :title="i18n('More')" @click="showMore(item)">{{i18n('More')}}&nbsp;\u25b8</div>
      </v-list-tile-action>
      <div v-if="hoverBtns && 0==selection.size && ((undefined!=item.stdItem && item.stdItem<=STD_ITEM_MAX) || (item.menu && (item.menu[0]==PLAY_ACTION || item.menu[0]==PLAY_ALL_ACTION)))" class="list-btns" v-bind:class="{'list-btns-track':item.durationStr}">
       <img v-if="(!LMS_KIOSK_MODE || !HIDE_FOR_KIOSK.has(ADD_ACTION)) && allowAdd(item)" class="other-btn grid-btn" @click.stop="itemAction(ADD_ACTION, item, index, $event)" :title="ACTIONS[ADD_ACTION].title" :src="'hover-add' | svgIcon(darkUi, false)"></img>

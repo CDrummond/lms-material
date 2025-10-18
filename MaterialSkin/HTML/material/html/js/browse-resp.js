@@ -2312,7 +2312,7 @@ function parseBrowseResp(data, parent, options, cacheKey) {
             resp.listSize=resp.items.length;
         } else if (data.result.material_home_new_loop || data.result.material_home_recentlyplayed_loop || data.result.material_home_playcount_loop ||
                    data.result.material_home_playlists_loop || data.result.material_home_radios_loop) {
-            var lists = [{key:'new', loop:"albums", text:i18n('Newly Added'), id:TOP_EXTRA_NEWLY_ADDED_ID, icon:"new_releases", command:["albums"], params:["sort:new", ALBUM_TAGS_ALL_ARTISTS]},
+            var lists = [{key:'new', loop:"albums", text:i18n('New Music'), id:TOP_EXTRA_NEWLY_ADDED_ID, icon:"new_releases", command:["albums"], params:["sort:new", ALBUM_TAGS_ALL_ARTISTS]},
                          {key:'recentlyplayed', loop:"albums", text:i18n('Recently Played'), id:TOP_EXTRA_RECENTLY_PLAYED_ID, icon:"history", command:["albums"], params:["sort:recentlyplayed", ALBUM_TAGS_ALL_ARTISTS]},
                          {key:'playcount', loop:"albums", text:i18n('Most Played'), id:TOP_EXTRA_MOST_PLAYED_ID, svg:"trophy", command:["albums"], params:["sort:playcount", ALBUM_TAGS_ALL_ARTISTS]},
                          {key:'random', loop:"albums", text:i18n('Random'), id:TOP_EXTRA_RANDOM_ID, svg:"dice-album", command:["albums"], params:["sort:random", ALBUM_TAGS_ALL_ARTISTS]},

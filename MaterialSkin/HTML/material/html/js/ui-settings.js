@@ -203,7 +203,7 @@ Vue.component('lms-ui-settings', {
      <v-list-tile-content/>
     </v-list-tile>
 
-    <v-checkbox v-model="detailedHomeNew" :label="i18n('Newly Added')" style="display:flex" class="settings-list-checkbox"></v-checkbox>
+    <v-checkbox v-model="detailedHomeNew" :label="i18n('New Music')" style="display:flex" class="settings-list-checkbox"></v-checkbox>
     <v-checkbox v-if="LMS_VERSION>=90100" v-model="detailedHomeRecent" :label="i18n('Recently Played')" style="display:flex" class="settings-list-checkbox"></v-checkbox>
     <v-checkbox v-if="LMS_VERSION>=90100" v-model="detailedHomeMost" :label="i18n('Most Played')" style="display:flex" class="settings-list-checkbox"></v-checkbox>
     <!-- <v-checkbox v-model="detailedHomeRandom" :label="i18n('Random')" style="display:flex" class="settings-list-checkbox"></v-checkbox> -->

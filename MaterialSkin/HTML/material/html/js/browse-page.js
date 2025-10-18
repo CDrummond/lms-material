@@ -1030,6 +1030,12 @@ var lmsBrowse = Vue.component("lms-browse", {
                 if (this.$store.state.detailedHome&DETAILED_HOME_RANDOM) {
                     cmd.push("random:1");
                 }
+                if (this.$store.state.detailedHome&DETAILED_HOME_RADIOS) {
+                    cmd.push("radios:1");
+                }
+                if (this.$store.state.detailedHome&DETAILED_HOME_PLAYLISTS) {
+                    cmd.push("playlists:1");
+                }
                 lmsCommand("", cmd).then(({data}) => {
                     if (this.isCurrentReq(data)) {
                         this.handleHomeExtra(data);
@@ -1801,7 +1807,7 @@ var lmsBrowse = Vue.component("lms-browse", {
                     var rowItems=[]
                     if (i<topExtraItems.length && topExtraItems[i].header) {
                         this.grid.multiSize=true;
-                        this.grid.rows.push({item: topExtraItems[i], header:true, size:44, r:row, id:"row.extra.header."+i, rs:rs, ihe:true});
+                        this.grid.rows.push({item: topExtraItems[i], header:true, size:48, r:row, id:"row.extra.header."+i, rs:rs, ihe:true});
                         i+=1;
                         rs+=1;
                     } else {
@@ -1809,9 +1815,6 @@ var lmsBrowse = Vue.component("lms-browse", {
                         for (var j=0; j<10; ++j) {
                             var idx = i+j;
                             if (idx<topExtraItems.length && topExtraItems[idx].header) {
-                                for (; j<10; ++j) {
-                                    rowItems.push(undefined);
-                                }
                                 break;
                             } else {
                                 rowItems.push(idx<topExtraItems.length ? topExtraItems[idx] : undefined);
@@ -1831,7 +1834,7 @@ var lmsBrowse = Vue.component("lms-browse", {
                     var rowItems=[]
                     if (i<items.length && items[i].header) {
                         this.grid.multiSize=true;
-                        this.grid.rows.push({item: items[i], header:true, size:GRID_TEXT_ONLY == this.grid.type ? 44 : 64, r:row, id:"row.header."+i, rs:rs});
+                        this.grid.rows.push({item: items[i], header:true, size:GRID_TEXT_ONLY == this.grid.type ? 44 : 52, r:row, id:"row.header."+i, rs:rs});
                         i+=1;
                         rs+=1;
                     } else {

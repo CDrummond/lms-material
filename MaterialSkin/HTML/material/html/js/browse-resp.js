@@ -1973,7 +1973,8 @@ function parseBrowseResp(data, parent, options, cacheKey) {
                                 type: "group",
                                 section: SECTION_PLAYLISTS,
                                 url:  i.url,
-                                remotePlaylist: isRemote
+                                remotePlaylist: isRemote,
+                                ihe: i.ihe // home screen extra item
                             };
 
                     /*if (i.image) {
@@ -2295,19 +2296,43 @@ function parseBrowseResp(data, parent, options, cacheKey) {
                 });
             }
             resp.listSize=resp.items.length;
-        } else if (data.result.material_home_new_loop || data.result.material_home_recentlyplayed_loop || data.result.material_home_playcount_loop) {
-            var sorts = [{key:'new', text:i18n('Newly Added'), id:TOP_EXTRA_NEWLY_ADDED_ID, icon:"new_releases"},
-                         {key:'recentlyplayed', text:i18n('Recently Played'), id:TOP_EXTRA_RECENTLY_PLAYED_ID, icon:"history"},
-                         {key:'playcount', text:i18n('Most Played'), id:TOP_EXTRA_MOST_PLAYED_ID, svg:"trophy"},
-                         {key:'random', text:i18n('Random'), id:TOP_EXTRA_RANDOM_ID, svg:"dice-album"} ];
-            for (let s=0, len=sorts.length; s<len; ++s) {
-                let loop = 'material_home_'+sorts[s].key+'_loop';
-                if (data.result[loop]) {
-                    data.result.albums_loop = data.result[loop];
-                    let newResp = parseBrowseResp(data);
+        } else if (data.result.radios_loop) {
+            for (let idx=0, loop=data.result.radios_loop, loopLen=loop.length; idx<loopLen; ++idx) {
+                let item = loop[idx];
+                resp.items.push({
+                    title:item.name,
+                    image:item.image,
+                    url:item.url,
+                    id:"radio."+resp.items.length,
+                    ihe:item.ihe,
+                    menu: [PLAY_ACTION, INSERT_ACTION, ADD_ACTION]
+                });
+            }
+            resp.listSize=resp.items.length;
+        } else if (data.result.material_home_new_loop || data.result.material_home_recentlyplayed_loop || data.result.material_home_playcount_loop ||
+                   data.result.material_home_playlists_loop || data.result.material_home_radios_loop) {
+            var lists = [{key:'new', loop:"albums", text:i18n('Newly Added'), id:TOP_EXTRA_NEWLY_ADDED_ID, icon:"new_releases", command:["albums"], params:["sort:new", ALBUM_TAGS_ALL_ARTISTS]},
+                         {key:'recentlyplayed', loop:"albums", text:i18n('Recently Played'), id:TOP_EXTRA_RECENTLY_PLAYED_ID, icon:"history", command:["albums"], params:["sort:recentlyplayed", ALBUM_TAGS_ALL_ARTISTS]},
+                         {key:'playcount', loop:"albums", text:i18n('Most Played'), id:TOP_EXTRA_MOST_PLAYED_ID, svg:"trophy", command:["albums"], params:["sort:playcount", ALBUM_TAGS_ALL_ARTISTS]},
+                         {key:'random', loop:"albums", text:i18n('Random'), id:TOP_EXTRA_RANDOM_ID, svg:"dice-album", command:["albums"], params:["sort:random", ALBUM_TAGS_ALL_ARTISTS]},
+                         {key:'radios', loop:"radios", text:i18n('Radios'), id:TOP_EXTRA_RADIOS_ID, svg:"radio", command:["material-skin-query","radios"], params:[]},
+                         {key:'playlists', loop:"playlists", text:i18n('Playlists'), id:TOP_EXTRA_PLAYLISTS_ID, icon:"list", command:["material-skin-query","playlists"], params:[PLAYLIST_TAGS, "menu:1"]}
+                        ];
+            for (let s=0, len=lists.length; s<len; ++s) {
+                let loop = 'material_home_'+lists[s].key+'_loop';
+                if (data.result[loop]!=undefined) {
+                    let parent = undefined;
+                    let new_data = {
+                        id:2,
+                        method: data.method,
+                        params: data.params,
+                        result: {}
+                    }
+                    new_data.result[lists[s].loop+"_loop"] = data.result[loop];
+                    let newResp = parseBrowseResp(new_data, parent, undefined, undefined, true);
                     if (undefined!=newResp && newResp.items.length>0) {
-                        resp.items.push({title:sorts[s].text, id:sorts[s].id, header:true, ihe:1, icon:sorts[s].icon, svg: sorts[s].svg,
-                            morecmd:parseInt(data.result[loop+"_len"])>10 ? {command:["albums"], params:["sort:"+sorts[s].key, ALBUM_TAGS_ALL_ARTISTS]} : undefined});
+                        resp.items.push({title:lists[s].text, id:lists[s].id, header:true, ihe:1, icon:lists[s].icon, svg: lists[s].svg,
+                            morecmd:parseInt(data.result[loop+"_len"])>10 ? {command:lists[s].command, params:lists[s].params} : undefined});
                         resp.items=resp.items.concat(newResp.items);
                     }
                 }

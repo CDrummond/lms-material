@@ -60,6 +60,8 @@ my $hideForKiosk  = '';
 my @listOfRoles = ();
 
 use constant RANDOM_MIX_EXT => '.mix';
+use constant NUM_HOME_ITEMS => 10;
+use constant PLAYLIST_IMAGE_TRACKS => 20;
 
 my $LASTFM_API_KEY = '5a854b839b10f8d46e630e8287c2299b';
 my $MAX_CACHE_AGE = 90*24*60*60; # 90 days
@@ -82,7 +84,6 @@ my $DOWNLOAD_PARSER_RE = qr{material/download/.+}i;
 my $BACKDROP_URL_PARSER_RE = qr{material/backdrops/.+}i;
 my $GENRE_URL_PARSER_RE = qr{material/genres/.+}i;
 my $PLAYLIST_URL_PARSER_RE = qr{material/playlists/.+}i;
-my $PLAYLIST_IMAGE_TRACKS = 20;
 
 my $DEFAULT_COMPOSER_GENRES = string('PLUGIN_MATERIAL_SKIN_DEFAULT_COMPOSER_GENRES');
 my $DEFAULT_CONDUCTOR_GENRES = string('PLUGIN_MATERIAL_SKIN_DEFAULT_CONDUCTOR_GENRES');
@@ -383,6 +384,7 @@ sub initCLI {
     Slim::Control::Request::addDispatch(['material-skin', '_cmd'],        [0, 0, 1, \&_cliCommand]);
     Slim::Control::Request::addDispatch(['material-skin-client', '_cmd'], [1, 0, 1, \&_cliClientCommand]);
     Slim::Control::Request::addDispatch(['material-skin-group', '_cmd'],  [1, 0, 1, \&_cliGroupCommand]);
+    Slim::Control::Request::addDispatch(['material-skin-query', '_cmd', '_index', '_quantity'], [0, 1, 1, \&_cliCommandQuery]);
 
     # Notification
     Slim::Control::Request::addDispatch(['material-skin', 'notification', '_type', '_msg'], [0, 0, 0, undef]);
@@ -618,7 +620,7 @@ sub _cliCommand {
                                                   'pass-check', 'browsemodes', 'geturl', 'command', 'scantypes', 'server', 'themes',
                                                   'playersettings', 'activeplayers', 'urls', 'adv-search', 'adv-search-params', 'protocols',
                                                   'players-extra-info', 'sort-playlist', 'mixer', 'release-types', 'check-for-updates',
-                                                  'similar', 'apps', 'rndmix', 'scan-progress', 'send-notif', 'playlists', 'home-extra']) ) {
+                                                  'similar', 'apps', 'rndmix', 'scan-progress', 'send-notif', 'home-extra']) ) {
         $request->setStatusBadParams();
         return;
     }
@@ -1881,6 +1883,123 @@ sub _cliCommand {
         return;
     }
 
+    if ($cmd eq 'home-extra') {
+        my @sorts = ();
+
+        if ($request->getParam('new')) {
+            push(@sorts, "new");
+        }
+        if ($request->getParam('most')) {
+            push(@sorts, "playcount");
+        }
+        if ($request->getParam('recent')) {
+            push(@sorts, "recentlyplayed");
+        }
+        #if ($request->getParam('random')) {
+        #    push(@sorts, "random");
+        #}
+        if (scalar(@sorts)>0) {
+            my @keys = ("album", "year", "artists", "artist_ids", "artist", "artist_id", "performance", "composer", "work_id", "artwork_track_id", "artwork_url", "artwork", "extid", "compilation", "disccount", "contiguous_groups");
+            my $total = 0;
+            foreach my $srt ( @sorts ) {
+                my @cmd = ("albums", 0, NUM_HOME_ITEMS, "tags:aajlqswyKSS24WE", "library_id:-1", "sort:${srt}");
+                my $req = Slim::Control::Request::executeRequest(undef, \@cmd);
+                my $cnt = 0;
+                my $loop_name = "material_home_${srt}_loop";
+                foreach my $item ( @{ $req->getResult('albums_loop') || [] } ) {
+                    $request->addResultLoop($loop_name, $cnt, "id", $item->{id} . "@" . "idx" . $total); # Need unique IDs in case same album in multiple loops!
+                    $request->addResultLoop($loop_name, $cnt, "ihe", 1);
+                    foreach my $key (@keys) {
+                        my $val = $item->{$key};
+                        if (!defined $val) {
+                            next;
+                        }
+                        $request->addResultLoop($loop_name, $cnt, ${key}, ${val});
+                    }
+                    $cnt+=1;
+                    $total+=1;
+                }
+                $request->addResult("${loop_name}_len", $req->getResult('count'));
+            }
+        }
+        if ($request->getParam('radios')) {
+            my @cmd = ("material-skin-query", "radios", 0, NUM_HOME_ITEMS+1);
+            my $req = Slim::Control::Request::executeRequest(undef, \@cmd);
+            my $cnt = 0;
+            foreach my $item ( @{ $req->getResult('radios_loop') || [] } ) {
+                if ($cnt<NUM_HOME_ITEMS) {
+                    foreach my $key (keys(%{$item})) {
+                        my $val = $item->{$key};
+                        $request->addResultLoop("material_home_radios_loop", $cnt, ${key}, ${val});
+                        $request->addResultLoop("material_home_radios_loop", $cnt, "ihe", 1);
+                    }
+                }
+                $cnt+=1;
+            }
+            $request->addResult("material_home_radios_loop_len", $cnt);
+        }
+        if ($request->getParam('playlists')) {
+            my @cmd = ("material-skin-query", "playlists", 0, NUM_HOME_ITEMS+1, "tags:suxE", "menu:1");
+            my $req = Slim::Control::Request::executeRequest(undef, \@cmd);
+            my $cnt = 0;
+            foreach my $item ( @{ $req->getResult('playlists_loop') || [] } ) {
+                if ($cnt<NUM_HOME_ITEMS) {
+                    foreach my $key (keys(%{$item})) {
+                        my $val = $item->{$key};
+                        $request->addResultLoop("material_home_playlists_loop", $cnt, ${key}, ${val});
+                        $request->addResultLoop("material_home_playlists_loop", $cnt, "ihe", 1);
+                    }
+                }
+                $cnt+=1;
+            }
+            $request->addResult("material_home_playlists_loop_len", $cnt);
+        }
+        $request->setStatusDone();
+        return;
+    }
+    $request->setStatusBadParams();
+}
+
+sub _cliCommandQuery {
+    my $request = shift;
+
+    # check this is the correct query.
+    #if ($request->isNotCommand([['material-skin-query']])) {
+    #    $request->setStatusBadDispatch();
+    #    return;
+    #}
+    my $cmd = $request->getParam('_cmd');
+    if ($request->paramUndefinedOrNotOneOf($cmd, ['radios', 'playlists']) ) {
+        $request->setStatusBadParams();
+        return;
+    }
+
+    # List of favourites, but streams only - no artists, albums, folders, etc.
+    if ($cmd eq 'radios') {
+        my $index  = $request->getParam('_index');
+        my $quantity = $request->getParam('_quantity');
+        my @cmd = ("favorites", "items", $index, 2000, "want_url:1");
+        my $req = Slim::Control::Request::executeRequest(undef, \@cmd);
+        my $cnt = 0;
+        foreach my $item ( @{ $req->getResult('loop_loop') || [] } ) {
+            my $isaudio = $item->{isaudio};
+            my $hasitems = $item->{hasitems};
+            my $url = $item->{url};
+            if (defined $isaudio && $isaudio==1 && (!defined $hasitems || $hasitems==0) && defined $url && !_startsWith("${url}", "db:")) {
+                foreach my $key (keys(%{$item})) {
+                    my $val = $item->{$key};
+                    $request->addResultLoop("radios_loop", $cnt, ${key}, ${val});
+                }
+                $cnt+=1;
+                if ($cnt>=$quantity) {
+                    last;
+                }
+            }
+        }
+        $request->setStatusDone();
+        return;
+    }
+
     # Proxy for standard playlists command that adds mtime of playlist (so know when image _might_ change)
     # and adds list of images, if no user image found
     #
@@ -1890,7 +2009,9 @@ sub _cliCommand {
     if ($cmd eq 'playlists') {
         my $folder = $request->getParam('folder_id');
         my $tags = $request->getParam('tags');
-        my @plcmd = ("playlists", 0, 25000, "tags:${tags}");
+        my $index  = $request->getParam('_index');
+        my $quantity = $request->getParam('_quantity');
+        my @plcmd = ("playlists", $index, $quantity, "tags:${tags}");
         if ($folder) {
             push(@plcmd, "folder_id:${folder}")
         }
@@ -1935,7 +2056,7 @@ sub _cliCommand {
             #        }
             #    }
             #    if (!$haveUserImage) {
-            #        my $treq = Slim::Control::Request::executeRequest(undef, ["playlists", "tracks", 0, $PLAYLIST_IMAGE_TRACKS, "tags:cK", "playlist_id:${id}"] );
+            #        my $treq = Slim::Control::Request::executeRequest(undef, ["playlists", "tracks", 0, PLAYLIST_IMAGE_TRACKS, "tags:cK", "playlist_id:${id}"] );
             #        #my @images = ();
             #        foreach my $track ( @{ $treq->getResult('playlisttracks_loop') || [] } ) {
             #            my $image = undef;
@@ -1963,52 +2084,11 @@ sub _cliCommand {
             #}
             $cnt+=1;
         }
+        $request->addResult("count", $plreq->getResult('count'));
         $request->setStatusDone();
         return;
     }
 
-    if ($cmd eq 'home-extra') {
-        my @sorts = ();
-        
-        if ($request->getParam('new')) {
-            push(@sorts, "new");
-        }
-        if ($request->getParam('most')) {
-            push(@sorts, "playcount");
-        }
-        if ($request->getParam('recent')) {
-            push(@sorts, "recentlyplayed");
-        }
-        #if ($request->getParam('random')) {
-        #    push(@sorts, "random");
-        #}
-        if (scalar(@sorts)>0) {
-            my @keys = ("album", "year", "artists", "artist_ids", "artist", "artist_id", "performance", "composer", "work_id", "artwork_track_id", "artwork_url", "artwork", "extid", "compilation", "disccount", "contiguous_groups");
-            my $total = 0;
-            foreach my $srt ( @sorts ) {
-                my @alcmd = ("albums", 0, 10, "tags:aajlqswyKSS24WE", "library_id:-1", "sort:${srt}");
-                my $alreq = Slim::Control::Request::executeRequest(undef, \@alcmd);
-                my $cnt = 0;
-                my $loop_name = "material_home_${srt}_loop";    
-                foreach my $album ( @{ $alreq->getResult('albums_loop') || [] } ) {
-                    $request->addResultLoop($loop_name, $cnt, "id", $album->{id} . "@" . "idx" . $total); # Need unique IDs in case same album in multiple loops!
-                    $request->addResultLoop($loop_name, $cnt, "ihe", 1); # Need unique IDs in case same album in multiple loops!
-                    foreach my $key (@keys) {
-                        my $val = $album->{$key};
-                        if (!defined $val) {
-                            next;
-                        }
-                        $request->addResultLoop($loop_name, $cnt, ${key}, ${val});
-                    }
-                    $cnt+=1;
-                    $total+=1;
-                }
-                $request->addResult("${loop_name}_len", $alreq->getResult('count'));
-            }
-            $request->setStatusDone();
-            return;
-        }
-    }
     $request->setStatusBadParams();
 }
 
@@ -2902,7 +2982,7 @@ sub _playlistHandler {
     if (0==_sendMaterialImage($httpClient, $response, "playlists", $fileName)) {
         foreach my $playlist ( Slim::Schema->rs('Playlist')->getPlaylists('all')->all ) {
             if ($playlist->title eq $playlistName) {
-                my $request = Slim::Control::Request::executeRequest(undef, ["playlists", "tracks", 0, $PLAYLIST_IMAGE_TRACKS, "tags:cK", "playlist_id:" . $playlist->id] );
+                my $request = Slim::Control::Request::executeRequest(undef, ["playlists", "tracks", 0, PLAYLIST_IMAGE_TRACKS, "tags:cK", "playlist_id:" . $playlist->id] );
                 foreach my $playlist ( @{ $request->getResult('playlisttracks_loop') || [] } ) {
                     my $image = undef;
                     if ($playlist->{'artwork_url'}) {

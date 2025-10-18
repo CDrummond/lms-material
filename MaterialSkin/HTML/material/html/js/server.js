@@ -241,7 +241,7 @@ async function lmsList(playerid, command, params, start, batchSize, cancache, co
         });
     } else {
         if (lmsOptions.playlistImages && cmdParams.length>1 && cmdParams[0]=="playlists" && cmdParams[1]!="tracks") {
-            cmdParams.unshift("material-skin");
+            cmdParams.unshift("material-skin-query");
         }
         return lmsCommand(playerid, cmdParams, commandId);
     }

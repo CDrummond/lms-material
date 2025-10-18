@@ -930,21 +930,27 @@ div.v-subheader {
  background-color:transparent !important;
  cursor:pointer;
  width:100px !important;
- height:46px !important;
+ height:54px !important;
  padding-top:2px;
 }
 
 .text-grid-item > div {
- height:44px;
+ height:48px;
  width:96px;
- line-height: 44px;
+ line-height: 48px;
  text-align:center;
  vertical-align:middle;
+ padding:4px;
+}
+
+.text-grid-item > div > div {
+ height:40px;
+ line-height: 40px;
  background-color:rgba(var(--highlight-rgb),0.075);
  border-radius: 8px;
 }
 
-.msk-is-non-touch .text-grid-item > div:hover {
+.msk-is-non-touch .text-grid-item > div > div:hover {
  background-color:rgba(var(--highlight-rgb),0.15);
 }
 

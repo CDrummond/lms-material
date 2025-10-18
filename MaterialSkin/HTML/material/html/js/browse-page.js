@@ -159,7 +159,7 @@ var lmsBrowse = Vue.component("lms-browse", {
        <div class="grid-btn list-btn hover-btn menu-btn" @click.stop="itemMenu(item.item, undefined, $event)" :title="i18n('%1 (Menu)', stripLinkTags(item.item.title))"></div>
       </v-list-tile-action>
       <v-list-tile-action class="browse-action browse-more" v-else-if="undefined!=item.item.morecmd">
-       <div class="link-item" :title="i18n('More')" @click="showMore(item.item)">{{i18n('More')}}&nbsp;\u25b8</div>
+       <div class="link-item" :title="i18n('More')" @click="showMore(item.item)">{{i18n('More')}}</div>
       </v-list-tile-action>
       <div v-if="hoverBtns && 0==selection.size && (item.item.menu && (item.item.menu[0]==PLAY_ACTION || item.item.menu[0]==PLAY_ALL_ACTION))" class="list-btns">
        <img v-if="!LMS_KIOSK_MODE || !HIDE_FOR_KIOSK.has(ADD_ACTION)" class="other-btn grid-btn" @click.stop="itemAction(ADD_ALL_ACTION, item.item, undefined, $event)" :title="ACTIONS[ADD_ACTION].title" :src="'hover-add' | svgIcon(darkUi, false)"></img>
@@ -268,7 +268,7 @@ var lmsBrowse = Vue.component("lms-browse", {
       <div class="grid-btn list-btn hover-btn menu-btn" @click.stop="itemMenu(item, index, $event)" :title="i18n('%1 (Menu)', stripLinkTags(item.title))"></div>
      </v-list-tile-action>
      <v-list-tile-action class="browse-action browse-more" v-else-if="undefined!=item.morecmd">
-      <div class="link-item" :title="i18n('More')" @click="showMore(item)">{{i18n('More')}}&nbsp;\u25b8</div>
+      <div class="link-item" :title="i18n('More')" @click="showMore(item)">{{i18n('More')}}</div>
      </v-list-tile-action>
      <div v-if="hoverBtns && 0==selection.size && ((undefined!=item.stdItem && item.stdItem<=STD_ITEM_MAX) || (item.menu && (item.menu[0]==PLAY_ACTION || item.menu[0]==PLAY_ALL_ACTION)))" class="list-btns" v-bind:class="{'list-btns-track':item.durationStr}">
       <img v-if="(!LMS_KIOSK_MODE || !HIDE_FOR_KIOSK.has(ADD_ACTION)) && allowAdd(item)" class="other-btn grid-btn" @click.stop="itemAction(item.header ? ADD_ALL_ACTION : ADD_ACTION, item, index, $event)" :title="ACTIONS[ADD_ACTION].title" :src="'hover-add' | svgIcon(darkUi, true)"></img>
@@ -311,7 +311,7 @@ var lmsBrowse = Vue.component("lms-browse", {
       <div class="grid-btn list-btn hover-btn menu-btn" @click.stop="itemMenu(item, index, $event)" :title="i18n('%1 (Menu)', stripLinkTags(item.title))"></div>
      </v-list-tile-action>
      <v-list-tile-action class="browse-action browse-more" v-else-if="undefined!=item.morecmd">
-      <div class="link-item" :title="i18n('More')" @click="showMore(item)">{{i18n('More')}}&nbsp;\u25b8</div>
+      <div class="link-item" :title="i18n('More')" @click="showMore(item)">{{i18n('More')}}</div>
      </v-list-tile-action>
      <div v-if="hoverBtns && 0==selection.size && ((undefined!=item.stdItem && item.stdItem<=STD_ITEM_MAX) || (item.menu && (item.menu[0]==PLAY_ACTION || item.menu[0]==PLAY_ALL_ACTION)))" class="list-btns" v-bind:class="{'list-btns-track':item.durationStr}">
       <img v-if="(!LMS_KIOSK_MODE || !HIDE_FOR_KIOSK.has(ADD_ACTION)) && allowAdd(item)" class="other-btn grid-btn" @click.stop="itemAction(ADD_ALL_ACTION, item, index, $event)" :title="ACTIONS[ADD_ACTION].title" :src="'hover-add' | svgIcon(darkUi, false)"></img>

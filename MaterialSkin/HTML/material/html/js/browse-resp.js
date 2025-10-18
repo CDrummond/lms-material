@@ -2305,6 +2305,7 @@ function parseBrowseResp(data, parent, options, cacheKey) {
                     url:item.url,
                     id:"radio."+resp.items.length,
                     ihe:item.ihe,
+                    type: "audio",
                     menu: [PLAY_ACTION, INSERT_ACTION, ADD_ACTION]
                 });
             }

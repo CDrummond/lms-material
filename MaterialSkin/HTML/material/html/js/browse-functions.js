@@ -991,6 +991,7 @@ function browseClick(view, item, index, event, ignoreOpenMenu) {
     }
     if (item.header && !item.slimbrowse) {
         if (item.allItems && item.allItems.length>0) { // Clicking on 'X Artists' / 'X Albums' / 'X Tracks' search header
+            /*
             view.addHistory();
             view.items = item.allItems;
             view.headerSubTitle = item.subtitle;
@@ -1000,6 +1001,9 @@ function browseClick(view, item, index, event, ignoreOpenMenu) {
                 view.tbarActions=[ADD_ALL_ACTION, PLAY_ALL_ACTION];
             }
             browseSetScroll(view);
+            */
+           // Now handled by "(More)" button...
+           return;
         } else if (view.selection.size>0) {
             view.select(item, index, event);
         } else {

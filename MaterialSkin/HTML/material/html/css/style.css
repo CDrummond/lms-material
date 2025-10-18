@@ -948,14 +948,6 @@ div.v-subheader {
  background-color:rgba(var(--highlight-rgb),0.15);
 }
 
-.msk-is-non-touch .browse-more {
- opacity:0.0;
-}
-.msk-is-non-touch .browse-header:hover .browse-more,
-.msk-is-non-touch .grid-header:hover .browse-more {
- opacity:1.0;
-}
-
 .browse-more {
  padding-right:4px;
 }

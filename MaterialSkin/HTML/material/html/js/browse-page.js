@@ -158,7 +158,7 @@ var lmsBrowse = Vue.component("lms-browse", {
       <v-list-tile-action class="browse-action" v-if="undefined!=item.item.menu && item.item.menu.length>0">
        <div class="grid-btn list-btn hover-btn menu-btn" @click.stop="itemMenu(item.item, undefined, $event)" :title="i18n('%1 (Menu)', stripLinkTags(item.item.title))"></div>
       </v-list-tile-action>
-      <v-list-tile-action class="browse-action browse-more" v-else-if="undefined!=item.item.morecmd">
+      <v-list-tile-action class="browse-action browse-more" v-else-if="undefined!=item.item.morecmd || undefined!=item.item.allItems">
        <div class="link-item" :title="i18n('More')" @click="showMore(item.item)">{{i18n('More')}}</div>
       </v-list-tile-action>
       <div v-if="hoverBtns && 0==selection.size && (item.item.menu && (item.item.menu[0]==PLAY_ACTION || item.item.menu[0]==PLAY_ALL_ACTION))" class="list-btns">
@@ -267,7 +267,7 @@ var lmsBrowse = Vue.component("lms-browse", {
      <v-list-tile-action class="browse-action" v-if="((undefined!=item.stdItem && item.stdItem<=STD_ITEM_MAX) && item.stdItem<=STD_ITEM_MAX) || (item.menu && item.menu.length>0)">
       <div class="grid-btn list-btn hover-btn menu-btn" @click.stop="itemMenu(item, index, $event)" :title="i18n('%1 (Menu)', stripLinkTags(item.title))"></div>
      </v-list-tile-action>
-     <v-list-tile-action class="browse-action browse-more" v-else-if="undefined!=item.morecmd">
+     <v-list-tile-action class="browse-action browse-more" v-else-if="undefined!=item.morecmd || undefined!=item.allItems">
       <div class="link-item" :title="i18n('More')" @click="showMore(item)">{{i18n('More')}}</div>
      </v-list-tile-action>
      <div v-if="hoverBtns && 0==selection.size && ((undefined!=item.stdItem && item.stdItem<=STD_ITEM_MAX) || (item.menu && (item.menu[0]==PLAY_ACTION || item.menu[0]==PLAY_ALL_ACTION)))" class="list-btns" v-bind:class="{'list-btns-track':item.durationStr}">
@@ -310,7 +310,7 @@ var lmsBrowse = Vue.component("lms-browse", {
      <v-list-tile-action class="browse-action" v-if="(undefined!=item.stdItem && item.stdItem<=STD_ITEM_MAX) || (item.menu && item.menu.length>0)">
       <div class="grid-btn list-btn hover-btn menu-btn" @click.stop="itemMenu(item, index, $event)" :title="i18n('%1 (Menu)', stripLinkTags(item.title))"></div>
      </v-list-tile-action>
-     <v-list-tile-action class="browse-action browse-more" v-else-if="undefined!=item.morecmd">
+     <v-list-tile-action class="browse-action browse-more" v-else-if="undefined!=item.morecmd || undefined!=item.allItems">
       <div class="link-item" :title="i18n('More')" @click="showMore(item)">{{i18n('More')}}</div>
      </v-list-tile-action>
      <div v-if="hoverBtns && 0==selection.size && ((undefined!=item.stdItem && item.stdItem<=STD_ITEM_MAX) || (item.menu && (item.menu[0]==PLAY_ACTION || item.menu[0]==PLAY_ALL_ACTION)))" class="list-btns" v-bind:class="{'list-btns-track':item.durationStr}">
@@ -1177,6 +1177,16 @@ var lmsBrowse = Vue.component("lms-browse", {
         showMore(item) {
             if (item.morecmd) {
                 this.fetchItems(item.morecmd, {cancache:false, id:item.id, title: item.title, limit:100});
+            } else if (item.allItems) {
+                this.addHistory();
+                this.items = item.allItems;
+                this.headerSubTitle = item.subtitle;
+                this.current = item;
+                this.searchActive = 0;
+                if (item.menu && item.menu.length>0 && item.menu[0]==PLAY_ALL_ACTION) {
+                    this.tbarActions=[ADD_ALL_ACTION, PLAY_ALL_ACTION];
+                }
+                browseSetScroll(this);
             }
         },
         currentActionsMenu(event) {

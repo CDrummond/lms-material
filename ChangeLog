@@ -9,6 +9,7 @@ dev
 7. Allow loading of 'pinned' weblink/iframe items from custom actions.
 8. Add option to show horizontally scollable list of new, recently played, and
    most played albums on home screen.
+9. Add "(More)" button on search results header, if more results than shown.
 
 5.11.4
 ------

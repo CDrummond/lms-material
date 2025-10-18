@@ -955,7 +955,7 @@ div.v-subheader {
 }
 
 .browse-more {
- padding-right:4px;
+ margin-right:4px!important;
 }
 
 .browse-more > div {

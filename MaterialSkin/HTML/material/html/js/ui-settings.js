@@ -208,7 +208,7 @@ Vue.component('lms-ui-settings', {
     <v-checkbox v-if="LMS_VERSION>=90100" v-model="detailedHomeMost" :label="i18n('Most Played')" style="display:flex" class="settings-list-checkbox"></v-checkbox>
     <!-- <v-checkbox v-model="detailedHomeRandom" :label="i18n('Random')" style="display:flex" class="settings-list-checkbox"></v-checkbox> -->
     <v-checkbox v-model="detailedHomeRadios" :label="i18n('Radios')" style="display:flex" class="settings-list-checkbox"></v-checkbox>
-    <v-checkbox v-model="detailedHomePlaylists" :label="i18n('Playlists')" style="display:flex" class="settings-list-checkbox"></v-checkbox>
+    <v-checkbox v-if="lmsOptions.playlistImages" v-model="detailedHomePlaylists" :label="i18n('Playlists')" style="display:flex" class="settings-list-checkbox"></v-checkbox>
     <template v-for="(item, index) in showItems">
      <div style="display:flex" v-if="item.id!=TOP_RADIO_ID || !lmsOptions.combineAppsAndRadio">
       <v-checkbox v-model="item.show" :label="item.name" class="settings-list-checkbox"></v-checkbox>

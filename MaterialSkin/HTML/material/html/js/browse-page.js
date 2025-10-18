@@ -1033,7 +1033,7 @@ var lmsBrowse = Vue.component("lms-browse", {
                 if (this.$store.state.detailedHome&DETAILED_HOME_RADIOS) {
                     cmd.push("radios:1");
                 }
-                if (this.$store.state.detailedHome&DETAILED_HOME_PLAYLISTS) {
+                if (this.$store.state.detailedHome&DETAILED_HOME_PLAYLISTS && lmsOptions.playlistImages) {
                     cmd.push("playlists:1");
                 }
                 lmsCommand("", cmd).then(({data}) => {

@@ -2296,24 +2296,24 @@ function parseBrowseResp(data, parent, options, cacheKey) {
             }
             resp.listSize=resp.items.length;
         } else if (data.result.material_home_new_loop || data.result.material_home_recentlyplayed_loop || data.result.material_home_playcount_loop) {
-            var sorts = [{key:'new', text:i18n('Newly Added'), id:TOP_EXTRA_NEWLY_ADDED_ID},
-                         {key:'recentlyplayed', text:i18n('Recently Played'), id:TOP_EXTRA_RECENTLY_PLAYED_ID},
-                         {key:'playcount', text:i18n('Most Played'), id:TOP_EXTRA_MOST_PLAYED_ID},
-                         {key:'random', text:i18n('Random'), id:TOP_EXTRA_RANDOM_ID} ];
+            var sorts = [{key:'new', text:i18n('Newly Added'), id:TOP_EXTRA_NEWLY_ADDED_ID, icon:"new_releases"},
+                         {key:'recentlyplayed', text:i18n('Recently Played'), id:TOP_EXTRA_RECENTLY_PLAYED_ID, icon:"history"},
+                         {key:'playcount', text:i18n('Most Played'), id:TOP_EXTRA_MOST_PLAYED_ID, svg:"trophy"},
+                         {key:'random', text:i18n('Random'), id:TOP_EXTRA_RANDOM_ID, svg:"dice-album"} ];
             for (let s=0, len=sorts.length; s<len; ++s) {
                 let loop = 'material_home_'+sorts[s].key+'_loop';
                 if (data.result[loop]) {
                     data.result.albums_loop = data.result[loop];
                     let newResp = parseBrowseResp(data);
                     if (undefined!=newResp && newResp.items.length>0) {
-                        resp.items.push({title:sorts[s].text, id:sorts[s].id, header:true, ihe:1,
+                        resp.items.push({title:sorts[s].text, id:sorts[s].id, header:true, ihe:1, icon:sorts[s].icon, svg: sorts[s].svg,
                             morecmd:parseInt(data.result[loop+"_len"])>10 ? {command:["albums"], params:["sort:"+sorts[s].key, ALBUM_TAGS_ALL_ARTISTS]} : undefined});
                         resp.items=resp.items.concat(newResp.items);
                     }
                 }
             }
             if (resp.items.length>0) {
-                resp.items.push({title:i18n("Explore"), id:TOP_EXTRA_MOST_PLAYED_ID, header:true, ihe:1});
+                resp.items.push({title:i18n("Explore"), id:TOP_EXTRA_MOST_PLAYED_ID, header:true, ihe:1, icon:"music_note"});
             }
             resp.listSize=resp.items.length;
         }

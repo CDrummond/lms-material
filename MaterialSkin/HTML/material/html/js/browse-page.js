@@ -1793,9 +1793,9 @@ var lmsBrowse = Vue.component("lms-browse", {
                         if (undefined!=this.items[i].ihe) {
                             topExtraItems.push(this.items[i]);
                         } else if (!this.disabled.has(this.items[i].id) && !(this.hidden.has(this.items[i].id)  || (this.items[i].id==TOP_RADIO_ID && lmsOptions.combineAppsAndRadio)) && (!queryParams.party || !HIDE_TOP_FOR_PARTY.has(this.items[i].id))) {
-                            this.items[i].gidx = i;
                             items.push(this.items[i]);
                         }
+                        this.items[i].gidx = i;
                     }
                 } else {
                     items=this.items;

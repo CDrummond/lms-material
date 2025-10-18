@@ -1895,7 +1895,7 @@ function browseItemMenu(view, item, index, event) {
         if (undefined!=item.stdItem) {
             // Get menu items - if view is an album or track from search then we have a different menu
             let itm = STD_ITEMS[item.stdItem];
-            let menu = undefined!=itm.searchMenu && (view.current.libsearch || view.current.allItems)
+            let menu = undefined!=itm.searchMenu && view.current && (view.current.libsearch || view.current.allItems)
                     ? itm.searchMenu
                     : undefined!=itm.maxBeforeLarge && view.listSize>itm.maxBeforeLarge
                         ? itm.largeListMenu
@@ -2589,6 +2589,7 @@ function browsePin(view, item, add, mapped) {
         if (item.id==START_RANDOM_MIX_ID) {
             lmsOptions.randomMixDialogPinned = true;
         }
+        view.items = view.$store.state.detailedHome>0 ? view.topExtra.concat(view.top) : view.top;
         view.options.pinned.add(item.id);
         browseUpdateItemPinnedState(view, item);
         view.saveTopList();
@@ -2605,6 +2606,7 @@ function browsePin(view, item, add, mapped) {
 
 function browseUnpin(view, item, index) {
     view.top.splice(index, 1);
+    view.items = view.$store.state.detailedHome>0 ? view.topExtra.concat(view.top) : view.top;
     view.options.pinned.delete(item.id);
     browseUpdateItemPinnedState(view, item);
     if (item.id.startsWith(MUSIC_ID_PREFIX)) {
@@ -2730,7 +2732,7 @@ function browseBuildFullCommand(view, item, act) {
         } else if (item.id) {
             command.command = ["playlistcontrol", "cmd:"+(act==PLAY_ACTION ? "load" : INSERT_ACTION==act ? "insert" :ACTIONS[act].cmd)];
             if (item.id.startsWith("album_id:") || item.id.startsWith("artist_id:") || item.id.startsWith("work_id:")) {
-                var params = undefined!=item.stdItem || undefined!=item.altStdItem ? buildStdItemCommand(item, item.id==view.current.id ? view.history.length>0 ? view.history[view.history.length-1].command : undefined : view.command).params : item.params;
+                var params = undefined!=item.stdItem || undefined!=item.altStdItem ? buildStdItemCommand(item, view.current && item.id==view.current.id ? view.history.length>0 ? view.history[view.history.length-1].command : undefined : view.command).params : item.params;
                 for (var i=0, loop = params, len=loop.length; i<len; ++i) {
                     if ( (!lmsOptions.noRoleFilter && (loop[i].startsWith("role_id:"))) ||
                          (!lmsOptions.noGenreFilter && loop[i].startsWith("genre_id:")) ||

@@ -203,9 +203,9 @@ Vue.component('lms-ui-settings', {
      <v-list-tile-content/>
     </v-list-tile>
 
-    <v-checkbox v-model="detailedHomeNew" :label="i18n('Newly added')" style="display:flex" class="settings-list-checkbox"></v-checkbox>
-    <v-checkbox v-if="LMS_VERSION>=90100" v-model="detailedHomeRecent" :label="i18n('Recently played')" style="display:flex" class="settings-list-checkbox"></v-checkbox>
-    <v-checkbox v-if="LMS_VERSION>=90100" v-model="detailedHomeMost" :label="i18n('Most played')" style="display:flex" class="settings-list-checkbox"></v-checkbox>
+    <v-checkbox v-model="detailedHomeNew" :label="i18n('Newly Added')" style="display:flex" class="settings-list-checkbox"></v-checkbox>
+    <v-checkbox v-if="LMS_VERSION>=90100" v-model="detailedHomeRecent" :label="i18n('Recently Played')" style="display:flex" class="settings-list-checkbox"></v-checkbox>
+    <v-checkbox v-if="LMS_VERSION>=90100" v-model="detailedHomeMost" :label="i18n('Most Played')" style="display:flex" class="settings-list-checkbox"></v-checkbox>
     <!-- <v-checkbox v-model="detailedHomeRandom" :label="i18n('Random')" style="display:flex" class="settings-list-checkbox"></v-checkbox> -->
     <template v-for="(item, index) in showItems">
      <div style="display:flex" v-if="item.id!=TOP_RADIO_ID || !lmsOptions.combineAppsAndRadio">
@@ -517,8 +517,8 @@ Vue.component('lms-ui-settings', {
             ndSettingsIcons: false,
             ndSettingsVisible: false,
             detailedHomeNew:true,
-            detailedHomeRecent:LMS_VERSION>=90100,
-            detailedHomeMost:LMS_VERSION>=90100,
+            detailedHomeRecent:false,
+            detailedHomeMost:false,
             detailedHomeRandom:false
         }
     },

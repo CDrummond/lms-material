@@ -2296,9 +2296,9 @@ function parseBrowseResp(data, parent, options, cacheKey) {
             }
             resp.listSize=resp.items.length;
         } else if (data.result.material_home_new_loop || data.result.material_home_recentlyplayed_loop || data.result.material_home_playcount_loop) {
-            var sorts = [{key:'new', text:i18n('Newly added'), id:TOP_EXTRA_NEWLY_ADDED_ID},
-                         {key:'recentlyplayed', text:i18n('Recently played'), id:TOP_EXTRA_RECENTLY_PLAYED_ID},
-                         {key:'playcount', text:i18n('Most played'), id:TOP_EXTRA_MOST_PLAYED_ID},
+            var sorts = [{key:'new', text:i18n('Newly Added'), id:TOP_EXTRA_NEWLY_ADDED_ID},
+                         {key:'recentlyplayed', text:i18n('Recently Played'), id:TOP_EXTRA_RECENTLY_PLAYED_ID},
+                         {key:'playcount', text:i18n('Most Played'), id:TOP_EXTRA_MOST_PLAYED_ID},
                          {key:'random', text:i18n('Random'), id:TOP_EXTRA_RANDOM_ID} ];
             for (let s=0, len=sorts.length; s<len; ++s) {
                 let loop = 'material_home_'+sorts[s].key+'_loop';

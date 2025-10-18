@@ -374,7 +374,7 @@ const store = new Vuex.Store({
         ndSettingsIcons: false,
         ndSettingsVisible: false,
         cMixSupported: 1==parseInt(getComputedStyle(document.documentElement).getPropertyValue('--color-mix-supported')),
-        detailedHome: LMS_VERSION>=90100 ? DETAILED_HOME_NEW+DETAILED_HOME_MOST+DETAILED_HOME_RECENT : 0
+        detailedHome: DETAILED_HOME_NEW
     },
     mutations: {
         updatePlayer(state, player) {

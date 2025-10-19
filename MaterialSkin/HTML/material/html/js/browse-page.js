@@ -369,6 +369,7 @@ var lmsBrowse = Vue.component("lms-browse", {
      </div>
     </v-list-tile>
    </template>
+   <div style="height:20px; background:transparent"></div> <!-- add padding -->
   </div>
  </div>
 

@@ -848,6 +848,7 @@ div.v-subheader {
  overflow-x:auto;
  overflow-y:hidden;
  justify-content:start;
+ padding-top:4px;
 }
 
 .grid-scroll > div {

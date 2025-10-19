@@ -1828,7 +1828,7 @@ var lmsBrowse = Vue.component("lms-browse", {
                                 used++;
                             }
                         }
-                        this.grid.rows.push({id:"row."+row+"."+sz.nc, items:rowItems, r:row, rs:rs, size:(rowHasSubtitle ? sz.h : (sz.h - GRID_SINGLE_LINE_DIFF))+(IS_MOBILE ? 0 : 10), numStd:used, hasSub:rowHasSubtitle, ihe:true});
+                        this.grid.rows.push({id:"row."+row+"."+sz.nc, items:rowItems, r:row, rs:rs, size:(rowHasSubtitle ? sz.h : (sz.h - GRID_SINGLE_LINE_DIFF))+(IS_MOBILE ? 0 : 10)+8, numStd:used, hasSub:rowHasSubtitle, ihe:true});
                         i+=used;
                         rs+=used;
                     }

@@ -19,6 +19,7 @@ function setDesktopWideCoverPad(on) {
 }
 
 function updateUiSettings(state, val) {
+    var browseDisplayChanged = false;
     var queueDisplayChanged = false;
     var themeChanged = false;
     let stdItems = ['autoScrollQueue', 'browseBackdrop', 'queueBackdrop', 'nowPlayingBackdrop', 'infoBackdrop',
@@ -43,6 +44,7 @@ function updateUiSettings(state, val) {
     if (state.detailedHome!=val.detailedHome) {
         state.detailedHome = val.detailedHome;
         setLocalStorageVal('detailedHome', state.detailedHome);
+        browseDisplayChanged = true;
     }
     if (!VALID_SKIP_SECONDS.has(state.skipBSeconds)) {
         state.skipBSeconds = 10;
@@ -51,7 +53,6 @@ function updateUiSettings(state, val) {
         state.skipFSeconds = 30;
     }
 
-    var browseDisplayChanged = false;
     var relayoutGrid = false;
     if (undefined!=val.theme) {
         val.theme=val.theme.replace("darker", "dark");

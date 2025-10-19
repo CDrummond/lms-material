@@ -2435,7 +2435,12 @@ var lmsBrowse = Vue.component("lms-browse", {
             }
             this.options.sortFavorites=this.$store.state.sortFavorites;
             this.goHome();
-            this.layoutGrid(true);
+            if (this.topExtraCfg!=this.$store.state.detailedHome && this.$store.state.detailedHome>0) {
+                this.getHomeExtra();
+            } else {
+                this.items = this.$store.state.detailedHome>0 ? this.topExtra.concat(this.top) : this.top;
+                this.layoutGrid(true);
+            }
         }.bind(this));
         bus.$on('setBgndCover', function() {
            this.setBgndCover();
@@ -2565,17 +2570,6 @@ var lmsBrowse = Vue.component("lms-browse", {
         'searchActive': function(newVal) {
             if (2!=newVal) {
                 this.highlightIndex = -1;
-            }
-        },
-        '$store.state.detailedHome': function(newVal) {
-            if (this.isTop) {
-                if (this.topExtraCfg!=newVal && newVal>0) {
-                    this.getHomeExtra();
-                } else {
-                    this.items = newVal>0 ? this.topExtra.concat(this.top) : this.top;
-                    this.layoutGrid(true);
-                }
-                this.topExtraCfg = newVal;
             }
         }
     },

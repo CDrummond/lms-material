@@ -1698,55 +1698,57 @@ function parseBrowseResp(data, parent, options, cacheKey) {
                 }
             }
 
-            if (sortTracks==1) {
-                resp.items.sort(reverse ? revYearAlbumTrackSort : yearAlbumTrackSort);
-            } else if (sortTracks>=2 && sortTracks<=4) {
-                resp.items.sort(sortTracks==2 ? artistTitleSort : sortTracks==3 ? yearTitleSort : titleArtistSort);
-                if (reverse) {
+            if (undefined==options || !options.isSearch) {
+                if (sortTracks==1) {
+                    resp.items.sort(reverse ? revYearAlbumTrackSort : yearAlbumTrackSort);
+                } else if (sortTracks>=2 && sortTracks<=4) {
+                    resp.items.sort(sortTracks==2 ? artistTitleSort : sortTracks==3 ? yearTitleSort : titleArtistSort);
+                    if (reverse) {
+                        resp.items = resp.items.reverse();
+                    }
+                } else if (reverse) {
                     resp.items = resp.items.reverse();
                 }
-            } else if (reverse) {
-                resp.items = resp.items.reverse();
-            }
 
-            let groups=[];
-            if (allTracksGrouping>0 && resp.items.length>1) {
-                let field = 1==allTracksGrouping ? 'album' : 2==allTracksGrouping ? 'title' : 'artist';
-                // Groups is array of "<start index>, <title>"
-                groups=[[0, resp.items[0][field] + (1==allTracksGrouping && resp.items[0].year ? " ("+resp.items[0].year+")" : "")]];
-                for (let i=1, loop=resp.items, len=loop.length; i<len; ++i) {
-                    if (loop[i-1][field]!=loop[i][field]) {
-                        groups.push([i, loop[i][field] + (1==allTracksGrouping && loop[i].year ? " ("+loop[i].year+")" : "")]);
-                    }
-                }
-                if (groups.length>1 && ((groups.length*100)/resp.items.length)<=25) {
-                    for (let i=0, len=groups.length; i<len; ++i) {
-                        let count = 0;
-                        let duration = 0;
-                        // We add 'i' below so as to skip inserted headers!
-                        for (let j=groups[i][0]+i, jl=resp.items, jlen=jl.length; j<jlen; ++j) {
-                            if ((i+1)<len && j>=groups[i+1][0]+i) {
-                                break;
-                            }
-                            count++;
-                            duration+=jl[j].duration;
-                            jl[j].filter=FILTER_PREFIX+i;
-                        }
-                        resp.items.splice(groups[i][0]+i, 0,
-                                          {title: groups[i][1], id:FILTER_PREFIX+i, header:true,
-                                           subtitle: isCompositions ? i18np("1 Composition", "%1 Compositions", count) : i18np("1 Track", "%1 Tracks", count), durationStr:formatSeconds(duration),
-                                           menu:[PLAY_ALL_ACTION, INSERT_ALL_ACTION, PLAY_SHUFFLE_ALL_ACTION, ADD_ALL_ACTION]});
-                        resp.numHeaders++;
-                    }
-                    if (1==allTracksGrouping) { // Grouped into albums, so remove from subtitle
-                        for (let i=0, loop=resp.items, len=loop.length; i<len; ++i) {
-                            if (!loop[i].header) {
-                                loop[i].subtitle = loop[i].subtitleContext = undefined;
-                            }
+                let groups=[];
+                if (allTracksGrouping>0 && resp.items.length>1) {
+                    let field = 1==allTracksGrouping ? 'album' : 2==allTracksGrouping ? 'title' : 'artist';
+                    // Groups is array of "<start index>, <title>"
+                    groups=[[0, resp.items[0][field] + (1==allTracksGrouping && resp.items[0].year ? " ("+resp.items[0].year+")" : "")]];
+                    for (let i=1, loop=resp.items, len=loop.length; i<len; ++i) {
+                        if (loop[i-1][field]!=loop[i][field]) {
+                            groups.push([i, loop[i][field] + (1==allTracksGrouping && loop[i].year ? " ("+loop[i].year+")" : "")]);
                         }
                     }
-                } else {
-                    groups = [];
+                    if (groups.length>1 && ((groups.length*100)/resp.items.length)<=25) {
+                        for (let i=0, len=groups.length; i<len; ++i) {
+                            let count = 0;
+                            let duration = 0;
+                            // We add 'i' below so as to skip inserted headers!
+                            for (let j=groups[i][0]+i, jl=resp.items, jlen=jl.length; j<jlen; ++j) {
+                                if ((i+1)<len && j>=groups[i+1][0]+i) {
+                                    break;
+                                }
+                                count++;
+                                duration+=jl[j].duration;
+                                jl[j].filter=FILTER_PREFIX+i;
+                            }
+                            resp.items.splice(groups[i][0]+i, 0,
+                                            {title: groups[i][1], id:FILTER_PREFIX+i, header:true,
+                                            subtitle: isCompositions ? i18np("1 Composition", "%1 Compositions", count) : i18np("1 Track", "%1 Tracks", count), durationStr:formatSeconds(duration),
+                                            menu:[PLAY_ALL_ACTION, INSERT_ALL_ACTION, PLAY_SHUFFLE_ALL_ACTION, ADD_ALL_ACTION]});
+                            resp.numHeaders++;
+                        }
+                        if (1==allTracksGrouping) { // Grouped into albums, so remove from subtitle
+                            for (let i=0, loop=resp.items, len=loop.length; i<len; ++i) {
+                                if (!loop[i].header) {
+                                    loop[i].subtitle = loop[i].subtitleContext = undefined;
+                                }
+                            }
+                        }
+                    } else {
+                        groups = [];
+                    }
                 }
             }
 

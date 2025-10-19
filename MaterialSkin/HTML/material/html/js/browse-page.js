@@ -1399,11 +1399,17 @@ var lmsBrowse = Vue.component("lms-browse", {
             }
         },
         refreshList(restorePosition) {
+            if (this.isTop) {
+                if (this.$store.state.detailedHome>0) {
+                    this.getHomeExtra();
+                }
+                return;
+            }
             this.clearSelection();
             // Only need to reload   list if we had one already...
             var refreshWorks = this.items.length>0 && this.items[0].isWorksCat;
             var pos = undefined==restorePosition || restorePosition ? this.scrollElement.scrollTop : 0;
-            var stdItem = this.current.stdItem ? this.current.stdItem : this.current.altStdItem;
+            var stdItem = this.current ? (this.current.stdItem ? this.current.stdItem : this.current.altStdItem) : undefined;
             var count = stdItem==STD_ITEM_PLAYLIST ? this.items.length : LMS_BATCH_SIZE;
             this.fetchingItem = this.current.id;
             // Slow to load large playlists, so limit refresh length for these...

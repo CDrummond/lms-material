@@ -143,7 +143,7 @@ var lmsBrowse = Vue.component("lms-browse", {
   <div class="lms-list" id="browse-list" style="overflow:auto;" v-bind:class="{'lms-image-grid':grid.allowed&&grid.use,'lms-grouped-image-grid':grid.allowed&&grid.use && variableGridHeight,'lms-image-grid-jump':grid.allowed&&grid.use && filteredJumplist.length>1,'lms-list-jump':!(grid.allowed&&grid.use) && filteredJumplist.length>1,'bgnd-blur':drawBgndImage,'backdrop-blur':drawBackdrop}">
 
    <RecycleScroller v-if="grid.allowed&&grid.use&&GRID_TEXT_ONLY!=grid.type" :items="grid.rows" :item-size="variableGridHeight ? null : (grid.ih - (grid.haveSubtitle || isTop || current.id.startsWith(TOP_ID_PREFIX) ? 0 : GRID_SINGLE_LINE_DIFF))" page-mode key-field="id" :buffer="LMS_SCROLLER_GRID_BUFFER">
-    <div slot-scope="{item}" :class="[grid.few?'image-grid-few':'image-grid-full-width', grid.haveSubtitle?'image-grid-with-sub':'',grid.type==GRID_ICON_ONLY_ONLY?'icon-only':'',item.ihe&&!item.header?'grid-scroll':'']">
+    <div slot-scope="{item}" :class="[grid.few?'image-grid-few':'image-grid-full-width', (variableGridHeight ? item.hasSub : grid.haveSubtitle)?'image-grid-with-sub':'',grid.type==GRID_ICON_ONLY_ONLY?'icon-only':'',item.ihe&&!item.header?'grid-scroll':'']">
 
      <v-list-tile v-if="item.header && item.item" class="grid-header" @click.stop="click(item.item, undefined, $event)" v-bind:class="{'search-highlight':highlightIndex==(item.rs)}">
       <v-list-tile-avatar v-if="item.item.icon" :tile="true" class="lms-avatar">
@@ -1804,7 +1804,8 @@ var lmsBrowse = Vue.component("lms-browse", {
                 let rs = 0;
                 let row = 0;
                 for (var i=0, len=topExtraItems.length; i<len; ++row) {
-                    var rowItems=[]
+                    var rowHasSubtitle = false;
+                    var rowItems=[];
                     if (i<topExtraItems.length && topExtraItems[i].header) {
                         this.grid.multiSize=true;
                         this.grid.rows.push({item: topExtraItems[i], header:true, size:48, r:row, id:"row.extra.header."+i, rs:rs, ihe:true});
@@ -1819,19 +1820,21 @@ var lmsBrowse = Vue.component("lms-browse", {
                             } else {
                                 rowItems.push(idx<topExtraItems.length ? topExtraItems[idx] : undefined);
                                 let haveSub = idx<topExtraItems.length && topExtraItems[idx].subtitle;
-                                if (!haveSubtitle && haveSub) {
+                                if (haveSub) {
                                     haveSubtitle = true;
+                                    rowHasSubtitle = true;
                                 }
                                 used++;
                             }
                         }
-                        this.grid.rows.push({id:"row."+row+"."+sz.nc, items:rowItems, r:row, rs:rs, size:(haveSubtitle ? sz.h : (sz.h - GRID_SINGLE_LINE_DIFF))+(IS_MOBILE ? 0 : 10), numStd:used, hasSub:haveSubtitle, ihe:true});
+                        this.grid.rows.push({id:"row."+row+"."+sz.nc, items:rowItems, r:row, rs:rs, size:(rowHasSubtitle ? sz.h : (sz.h - GRID_SINGLE_LINE_DIFF))+(IS_MOBILE ? 0 : 10), numStd:used, hasSub:rowHasSubtitle, ihe:true});
                         i+=used;
                         rs+=used;
                     }
                 }
                 for (var i=0, len=items.length; i<len; ++row) {
-                    var rowItems=[]
+                    var rowHasSubtitle = this.isTop; // Always allow for subtitle with home items to make space for virtual library name
+                    var rowItems=[];
                     if (i<items.length && items[i].header) {
                         this.grid.multiSize=true;
                         this.grid.rows.push({item: items[i], header:true, size:GRID_TEXT_ONLY == this.grid.type ? 44 : 52, r:row, id:"row.header."+i, rs:rs});
@@ -1850,8 +1853,9 @@ var lmsBrowse = Vue.component("lms-browse", {
                                 rowItems.push(idx<items.length ? items[idx] : undefined);
                                 if (GRID_TEXT_ONLY != this.grid.type) {
                                     let haveSub = idx<items.length && items[idx].subtitle;
-                                    if (!haveSubtitle && haveSub) {
+                                    if (haveSub) {
                                         haveSubtitle = true;
+                                        rowHasSubtitle = true;
                                     }
                                 }
                                 used++;
@@ -1860,7 +1864,7 @@ var lmsBrowse = Vue.component("lms-browse", {
                         if (GRID_TEXT_ONLY == this.grid.type) {
                             this.grid.rows.push({id:"row."+row+"."+sz.nc, items:rowItems, r:row, rs:rs, size:this.grid.multiSize ? sz.h : undefined, numStd:used, hasSub:undefined});
                         } else {
-                            this.grid.rows.push({id:"row."+row+"."+sz.nc, items:rowItems, r:row, rs:rs, size:this.grid.multiSize ? (haveSubtitle ? sz.h : (sz.h - GRID_SINGLE_LINE_DIFF)) : undefined, numStd:used, hasSub:this.grid.multiSize ? haveSubtitle : undefined});
+                            this.grid.rows.push({id:"row."+row+"."+sz.nc, items:rowItems, r:row, rs:rs, size:this.grid.multiSize ? (rowHasSubtitle ? sz.h : (sz.h - GRID_SINGLE_LINE_DIFF)) : undefined, numStd:used, hasSub:this.grid.multiSize ? rowHasSubtitle : undefined});
                         }
                         i+=used;
                         rs+=used;

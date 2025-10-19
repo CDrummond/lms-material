@@ -1037,7 +1037,7 @@ var lmsBrowse = Vue.component("lms-browse", {
                 if (this.$store.state.detailedHome&DETAILED_HOME_PLAYLISTS && lmsOptions.playlistImages) {
                     cmd.push("playlists:1");
                 }
-                lmsCommand("", cmd).then(({data}) => {
+                lmsCommand("", cmd, this.nextReqId()).then(({data}) => {
                     if (this.isCurrentReq(data)) {
                         this.handleHomeExtra(data);
                     }
@@ -2125,12 +2125,12 @@ var lmsBrowse = Vue.component("lms-browse", {
                             if (this.$store.state.sortFavorites && !this.items[to].isFavFolder) {
                                 return;
                             }
-                            var fromId = this.items[this.dragIndex].id.startsWith("item_id:")
+                            var fromId = originalId(this.items[this.dragIndex].id.startsWith("item_id:")
                                             ? this.items[this.dragIndex].id.replace("item_id:", "from_id:")
-                                            : "from_id:"+this.items[this.dragIndex].params.item_id;
-                            var toId = this.items[to].id.startsWith("item_id:")
+                                            : "from_id:"+this.items[this.dragIndex].params.item_id);
+                            var toId =originalId( this.items[to].id.startsWith("item_id:")
                                             ? this.items[to].id.replace("item_id:", "to_id:")
-                                            : "to_id:"+this.items[to].params.item_id;
+                                            : "to_id:"+this.items[to].params.item_id);
                             if (this.items[to].isFavFolder) {
                                 if (this.$store.state.sortFavorites) {
                                     lmsCommand(this.playerId(), ["favorites", "move", fromId, toId+".0"]).then(({data}) => {
@@ -2155,7 +2155,7 @@ var lmsBrowse = Vue.component("lms-browse", {
                                 });
                             }
                         } else if (this.current.section==SECTION_PLAYLISTS) {
-                            lmsCommand(this.playerId(), ["playlists", "edit", "cmd:move", this.current.id, "index:"+this.dragIndex, "toindex:"+to]).then(({data}) => {
+                            lmsCommand(this.playerId(), ["playlists", "edit", "cmd:move", originalId(this.current.id), "index:"+this.dragIndex, "toindex:"+to]).then(({data}) => {
                                 this.refreshList();
                                 if (lmsOptions.playlistImages && this.history.length>0) {
                                     this.history[this.history.length-1].needsRefresh = true;
@@ -2167,9 +2167,9 @@ var lmsBrowse = Vue.component("lms-browse", {
             } else if (ev.dataTransfer) {
                 if (undefined!=window.mskQueueDrag && this.current.section==SECTION_PLAYLISTS) {
                     if (this.current.id.startsWith("playlist_id")) {
-                        browseAddToPlaylist(this, window.mskQueueDrag, this.current.id, to, this.items.length);
+                        browseAddToPlaylist(this, window.mskQueueDrag, originalId(this.current.id), to, this.items.length);
                     } else {
-                        browseAddToPlaylist(this, window.mskQueueDrag, this.items[to].id);
+                        browseAddToPlaylist(this, window.mskQueueDrag, originalId(this.items[to].id));
                     }
                 }
             }

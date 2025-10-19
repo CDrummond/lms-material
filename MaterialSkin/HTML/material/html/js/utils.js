@@ -1289,7 +1289,7 @@ function arraysEqual(a, b) {
         return false;
     }
 
-    for (let i = 0, len=a.lngth; i < len; ++i) {
+    for (let i = 0, len=a.length; i < len; ++i) {
         if (a[i] !== b[i]) {
             return false;
         }

@@ -171,8 +171,8 @@ function isInFavorites(item) {
     return lmsFavorites.has(item.presetParams && item.presetParams.favorites_url ? item.presetParams.favorites_url : item.favUrl);
 }
 
-function uniqueId(id, listSize) {
-    return id+"@idx"+listSize;
+function uniqueId(id, val) {
+    return id+"@idx"+val;
 }
 
 function originalId(id) {

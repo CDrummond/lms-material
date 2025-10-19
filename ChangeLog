@@ -7,7 +7,7 @@ dev
 5. Add, server-side, option to use smaller grid if icon only and narrow width.
 6. Adjust display of track numbers in browse view.
 7. Allow loading of 'pinned' weblink/iframe items from custom actions.
-8. Add option to show horizontally scollable list of new, recently played,
+8. Add option to show horizontally scrollable list of new, recently played,
    most played, radios, and playlists on home screen.
 9. Add "(More)" button on search results header, if more results than shown.
 

@@ -522,7 +522,7 @@ Vue.component('lms-ui-settings', {
             detailedHomeRecent:false,
             detailedHomeMost:false,
             detailedHomeRandom:false,
-            detailedHomeRadios:false,
+            detailedHomeRadios:true,
             detailedHomePlaylists:false
         }
     },

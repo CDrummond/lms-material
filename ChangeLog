@@ -2,6 +2,7 @@
 ------
 1. Fix listing random mixes on macOS - thanks to EelcoV.
 2. Don't sort search results, use order as supplied from LMS.
+3. Fix other apps showing in 'TuneIn' when set to combine radio and apps.
 
 5.11.3
 ------

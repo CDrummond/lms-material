@@ -107,8 +107,8 @@ function parseBrowseResp(data, parent, options, cacheKey) {
             var isApps = parent && parent.section == SECTION_APPS;
             var isAppsTop = parent && parent.id == TOP_APPS_ID;
             var isRadios = parent && parent.section == SECTION_RADIO;
-            var isRadiosTop = (isRadios && parent.id == TOP_RADIO_ID) || (isApps && lmsOptions.combineAppsAndRadio && command=="radios" && 4==data.params[1].length && data.params[1][3]=="menu:radio");
-            var isPodcastList = parent && parent.id == "apps.podcasts" && command == "podcasts" && 5==data.params[1].length && "items" == data.params[1][1] && "menu:podcasts"==data.params[1][4];
+            var isRadiosTop = (isRadios && parent.id == TOP_RADIO_ID) || (isApps && lmsOptions.combineAppsAndRadio && command=="radios" && data.params[1].length>=4 && data.params[1][3]=="menu:radio");
+            var isPodcastList = parent && parent.id == "apps.podcasts" && command == "podcasts" && data.params[1].length>=5 && "items" == data.params[1][1] && "menu:podcasts"==data.params[1][4];
             var isPodcastSearch = command == "podcasts" && getIndex(data.params[1], "search:")>0;
             var isBmf = command == "browselibrary" && data.params[1].length>0 && data.params[1].indexOf("mode:bmf")>=0;
             var isDisksAndFolders = command == "browselibrary" && data.params[1].length>0 && data.params[1].indexOf("mode:filesystem")>=0;

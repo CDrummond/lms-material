@@ -1021,10 +1021,10 @@ var lmsBrowse = Vue.component("lms-browse", {
                 if (this.$store.state.detailedHome&DETAILED_HOME_NEW) {
                     cmd.push("new:1");
                 }
-                if (this.$store.state.detailedHome&DETAILED_HOME_MOST) {
+                if (this.$store.state.detailedHome&DETAILED_HOME_MOST && LMS_VERSION>=90100 && LMS_STATS_ENABLED) {
                     cmd.push("most:1");
                 }
-                if (this.$store.state.detailedHome&DETAILED_HOME_RECENT) {
+                if (this.$store.state.detailedHome&DETAILED_HOME_RECENT && LMS_VERSION>=90100 && LMS_STATS_ENABLED) {
                     cmd.push("recent:1");
                 }
                 if (this.$store.state.detailedHome&DETAILED_HOME_RANDOM) {

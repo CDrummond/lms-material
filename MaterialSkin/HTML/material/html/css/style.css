@@ -2776,12 +2776,6 @@ div.v-subheader {
  margin-left:0px!important;
 }
 
-.lms-avatar-small .v-avatar {
- width:32px !important;
- height:32px !important;
- margin-left:4px;
-}
-
 .lms-list3 .lms-avatar .v-avatar, .lms-list3 .v-list__tile__avatar {
  width:calc(var(--list-elem-3line-height) - 3px) !important;
  height:calc(var(--list-elem-3line-height) - 3px) !important;

@@ -2301,7 +2301,6 @@ function parseBrowseResp(data, parent, options, cacheKey) {
         } else if (data.result.radios_loop) {
             for (let idx=0, loop=data.result.radios_loop, loopLen=loop.length; idx<loopLen; ++idx) {
                 let item = loop[idx];
-                item.icon = item.image;
                 mapIcon(item);
                 if (item.svg=="radio") {
                     item.svg = "radio-station";

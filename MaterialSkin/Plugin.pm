@@ -101,6 +101,8 @@ my @ADV_SEARCH_OTHER = ('content_type', 'contributor_namesearch.active1', 'contr
 
 my %IGNORE_PROTOCOLS = map { $_ => 1 } ('mms', 'file', 'tmp', 'http', 'https', 'spdr', 'icy', 'teststream', 'db', 'playlist');
 
+my %RADIO_PROTOCOLS = map { $_ => 1 } ('http', 'https', 'radioparadise', 'times', 'globalplayer', 'newsuk', 'sounds');
+
 my @BOOL_OPTS = ('allowDownload', 'playShuffle', 'touchLinks', 'showAllArtists', 'artistFirst', 'yearInSub', 'showComment', 'genreImages', 'playlistImages', 'maiComposer', 'showConductor', 'showBand', 'showArtistWorks', 'combineAppsAndRadio', 'useGrouping', 'smallIconOnlyGrid');
 
 my %ROLE_ICON_MAP = (
@@ -1931,8 +1933,8 @@ sub _cliCommand {
                     foreach my $key (keys(%{$item})) {
                         my $val = $item->{$key};
                         $request->addResultLoop("material_home_radios_loop", $cnt, ${key}, ${val});
-                        $request->addResultLoop("material_home_radios_loop", $cnt, "ihe", 1);
                     }
+                    $request->addResultLoop("material_home_radios_loop", $cnt, "ihe", 1);
                 }
                 $cnt+=1;
             }
@@ -1947,8 +1949,8 @@ sub _cliCommand {
                     foreach my $key (keys(%{$item})) {
                         my $val = $item->{$key};
                         $request->addResultLoop("material_home_playlists_loop", $cnt, ${key}, ${val});
-                        $request->addResultLoop("material_home_playlists_loop", $cnt, "ihe", 1);
                     }
+                    $request->addResultLoop("material_home_playlists_loop", $cnt, "ihe", 1);
                 }
                 $cnt+=1;
             }
@@ -1958,6 +1960,18 @@ sub _cliCommand {
         return;
     }
     $request->setStatusBadParams();
+}
+
+sub _isRadio {
+    my $url = shift;
+    if (defined $url) {
+        my @parts = split(/:/, $url);
+        my $protocol = shift(@parts);
+        if (exists($RADIO_PROTOCOLS{$protocol})) {
+            return 1;
+        }
+    }
+    return 0;
 }
 
 sub _cliCommandQuery {
@@ -1978,22 +1992,32 @@ sub _cliCommandQuery {
     if ($cmd eq 'radios') {
         my $index  = $request->getParam('_index');
         my $quantity = $request->getParam('_quantity');
-        my @cmd = ("favorites", "items", $index, 2000, "want_url:1");
+        my @cmd = ("favorites", "items", $index, $quantity, "want_url:1", "feedMode:1");
         my $req = Slim::Control::Request::executeRequest(undef, \@cmd);
         my $cnt = 0;
-        foreach my $item ( @{ $req->getResult('loop_loop') || [] } ) {
-            my $isaudio = $item->{isaudio};
-            my $hasitems = $item->{hasitems};
-            my $url = $item->{url};
-            if (defined $isaudio && $isaudio==1 && (!defined $hasitems || $hasitems==0) && defined $url && !_startsWith("${url}", "db:")) {
-                foreach my $key (keys(%{$item})) {
-                    my $val = $item->{$key};
-                    $request->addResultLoop("radios_loop", $cnt, ${key}, ${val});
-                }
+        foreach my $item ( @{ $req->getResult('items') || [] } ) {
+            if (_isRadio($item->{'url'})==1) {
+                $request->addResultLoop("radios_loop", $cnt, "url", $item->{'url'});
+                $request->addResultLoop("radios_loop", $cnt, "name", $item->{'name'});
+                $request->addResultLoop("radios_loop", $cnt, "icon", $item->{'icon'});
                 $cnt+=1;
                 if ($cnt>=$quantity) {
                     last;
                 }
+            }
+            foreach my $child ( @{ $item->{'items'} || [] } ) {
+                if (_isRadio($child->{'url'})==1) {
+                    $request->addResultLoop("radios_loop", $cnt, "url", $child->{'url'});
+                    $request->addResultLoop("radios_loop", $cnt, "name", $child->{'name'});
+                    $request->addResultLoop("radios_loop", $cnt, "icon", $child->{'icon'});
+                    $cnt+=1;
+                    if ($cnt>=$quantity) {
+                        last;
+                    }
+                }
+            }
+            if ($cnt>=$quantity) {
+                last;
             }
         }
         $request->setStatusDone();

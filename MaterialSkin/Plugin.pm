@@ -2056,7 +2056,7 @@ sub _cliCommandQuery {
                     next;
                 }
                 $request->addResultLoop("playlists_loop", $cnt, ${key}, ${val});
-                if ($key eq "url") {
+                if ($key eq "url" && _startsWith("${val}", "file:")) {
                     my $path = Slim::Utils::Misc::pathFromFileURL($val);
                     if (-e $path) {
                         my $mtime = (stat $path)[9];

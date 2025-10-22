@@ -1757,7 +1757,7 @@ var lmsBrowse = Vue.component("lms-browse", {
                 var numColumns = Math.max(Math.min(maxColumns, 20), 1);
                 sz = {w: width, h: height, s:0, mc:maxColumns, nc:numColumns}
             } else {
-                let iconOnly = lmsOptions.smallIconOnlyGrid && this.items.length<=100 && window.innerWidth<=NARROW_WIDTH_ICON_ONLY;
+                let iconOnly = lmsOptions.smallIconOnlyGrid && this.items.length<=100 && window.innerWidth<=440;
                 if (iconOnly && !this.isTop) {
                     for (let i=0, len=this.items.length; i<len && iconOnly; ++i) {
                         // ihe == is home extra item (e.g recentply layed list, etc...)
@@ -1766,15 +1766,15 @@ var lmsBrowse = Vue.component("lms-browse", {
                         }
                     }
                 }
-                const GRID_MAX_WIDTH = iconOnly
+                var GRID_MAX_WIDTH = iconOnly
                                           ? 100 :
                                        window.innerWidth>3500
-                                          ? 283 :
+                                          ? 255 :
                                        window.innerWidth>2500
-                                          ? 233 :
-                                       window.innerWidth>1500
-                                          ? 208
-                                          : 183;
+                                          ? 210 :
+                                       window.innerWidth>2000
+                                          ? 190 :
+                                            165;
                 var preferredColumns = iconOnly ? 3 : 4;
                 this.grid.type = iconOnly ? GRID_ICON_ONLY_ONLY : GRID_STANDARD;
                 for (var i=preferredColumns; i>=1; --i) {
@@ -1909,7 +1909,7 @@ var lmsBrowse = Vue.component("lms-browse", {
             var count = 0==this.grid.numItems ? this.items.length : this.grid.numItems;
             var few = 1==this.grid.rows.length && (1==count || ((count*sz.w)*1.3333)<listWidth);
             // For multi, we need to check the count of each section.
-            if (!few && this.grid.multiSize) {
+            if (!few && this.grid.multiSize && (sz.nc*sz.w)<(listWidth*0.6)) {
                 few = true;
                 let startOfItems = 0;
                 if (this.grid.rows[0].header && this.grid.rows[0].ihe) {

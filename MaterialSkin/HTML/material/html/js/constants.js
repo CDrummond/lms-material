@@ -113,6 +113,7 @@ const GRID_MIN_HEIGHT_NARROW_ICON_ONLY = 141;
 const GRID_STEP = 5;
 
 const GRID_OTHER = {command:['other']};
+const GRID_TOP = {command:['top']};
 
 const LMS_TRACK_SORTS = new Set(["title", "tracknum", "albumtrack"]);
 const DONT_GROUP_RELEASE_TYPES = "material-skin-dgrt:1"

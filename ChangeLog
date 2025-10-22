@@ -11,6 +11,7 @@ dev
     most played, radios, and playlists on home screen.
  9. Add "(More)" button on search results header, if more results than shown.
 10. Reduce grid size for home screen and for views with only icons.
+11. Separate list/grid preference for home screen.
 
 5.11.5
 ------

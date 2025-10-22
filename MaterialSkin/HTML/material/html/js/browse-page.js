@@ -1757,7 +1757,7 @@ var lmsBrowse = Vue.component("lms-browse", {
                 var numColumns = Math.max(Math.min(maxColumns, 20), 1);
                 sz = {w: width, h: height, s:0, mc:maxColumns, nc:numColumns}
             } else {
-                let iconOnly = lmsOptions.smallIconOnlyGrid && this.items.length<=100 && window.innerWidth<=440;
+                let iconOnly = this.isTop || this.items.length<=200;
                 if (iconOnly && !this.isTop) {
                     for (let i=0, len=this.items.length; i<len && iconOnly; ++i) {
                         // ihe == is home extra item (e.g recentply layed list, etc...)
@@ -1766,17 +1766,18 @@ var lmsBrowse = Vue.component("lms-browse", {
                         }
                     }
                 }
-                var GRID_MAX_WIDTH = iconOnly
+                let smallIconOnly = iconOnly && lmsOptions.smallIconOnlyGrid && window.innerWidth<=440;
+                var GRID_MAX_WIDTH = smallIconOnly
                                           ? 100 :
                                        window.innerWidth>3500
-                                          ? 255 :
+                                          ? (iconOnly ? 255 : 283) :
                                        window.innerWidth>2500
-                                          ? 210 :
-                                       window.innerWidth>2000
-                                          ? 190 :
-                                            165;
-                var preferredColumns = iconOnly ? 3 : 4;
-                this.grid.type = iconOnly ? GRID_ICON_ONLY_ONLY : GRID_STANDARD;
+                                          ? (iconOnly ? 210 : 233) :
+                                       window.innerWidth>1750
+                                          ? (iconOnly ? 190 : 208) :
+                                            (iconOnly ? 165 : 183) ;
+                var preferredColumns = smallIconOnly ? 3 : 4;
+                this.grid.type = smallIconOnly ? GRID_ICON_ONLY_ONLY : GRID_STANDARD;
                 for (var i=preferredColumns; i>=1; --i) {
                     sz = this.calcSizes(i, listWidth, GRID_MAX_WIDTH, 0);
                     if (sz.mc>=i) {

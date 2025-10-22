@@ -937,7 +937,7 @@ div.v-subheader {
  padding-top:2px;
 }
 
-.text-grid-item > div {
+.text-grid-item > div:not(.image-grid-btn) {
  height:48px;
  width:96px;
  line-height: 48px;
@@ -989,6 +989,13 @@ div.v-subheader {
  position:absolute;
  bottom:calc(9px - var(--grid-menu-offset)) !important;
  right:-10px !important;
+}
+
+.text-grid-item .image-grid-btn, .text-grid-item .image-grid-btn:hover {
+ height:26px!important;
+ width:26px!important;
+ bottom:calc(15px - var(--grid-menu-offset)) !important;
+ right:-6px !important;
 }
 
 .image-grid-with-sub .image-grid-btn, .image-grid-with-sub .image-grid-btn:hover {
@@ -3446,11 +3453,11 @@ div.v-subheader {
  content:"more_vert";
 }
 
-.image-grid-item .grid-btns, .v-list__tile .list-btns, .msk-is-non-touch .image-grid-item .hover-btn, .msk-is-non-touch .v-list__tile .hover-btn, .image-grid-item .grid-btn-left {
+.image-grid-item .grid-btns, .v-list__tile .list-btns, .msk-is-non-touch .image-grid-item .hover-btn, .msk-is-non-touch .text-grid-item .hover-btn, .msk-is-non-touch .v-list__tile .hover-btn, .image-grid-item .grid-btn-left {
  visibility: hidden;
 }
 
-.image-grid-item:hover .grid-btns, .v-list__tile:hover .list-btns, .msk-is-non-touch .image-grid-item:hover .hover-btn, .msk-is-non-touch .v-list__tile:hover .hover-btn, .image-grid-item:hover .grid-btn-left {
+.image-grid-item:hover .grid-btns, .v-list__tile:hover .list-btns, .msk-is-non-touch .image-grid-item:hover .hover-btn, .msk-is-non-touch .text-grid-item:hover .hover-btn, .msk-is-non-touch .v-list__tile:hover .hover-btn, .image-grid-item:hover .grid-btn-left {
  visibility: visible;
 }
 

@@ -101,7 +101,7 @@ my @ADV_SEARCH_OTHER = ('content_type', 'contributor_namesearch.active1', 'contr
 
 my %IGNORE_PROTOCOLS = map { $_ => 1 } ('mms', 'file', 'tmp', 'http', 'https', 'spdr', 'icy', 'teststream', 'db', 'playlist');
 
-my %RADIO_PROTOCOLS = map { $_ => 1 } ('http', 'https', 'radioparadise', 'times', 'globalplayer', 'newsuk', 'sounds');
+my %RADIO_PROTOCOLS = map { $_ => 1 } ('http', 'https', 'accur', 'cplus', 'globalplayer', 'newsuk', 'pr', 'radioparadise', 'rnp', 'sounds', 'times', 'virgin');
 
 my @BOOL_OPTS = ('allowDownload', 'playShuffle', 'touchLinks', 'showAllArtists', 'artistFirst', 'yearInSub', 'showComment', 'genreImages', 'playlistImages', 'maiComposer', 'showConductor', 'showBand', 'showArtistWorks', 'combineAppsAndRadio', 'useGrouping', 'smallIconOnlyGrid');
 

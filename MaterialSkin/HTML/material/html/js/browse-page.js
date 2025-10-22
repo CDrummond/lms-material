@@ -189,7 +189,7 @@ var lmsBrowse = Vue.component("lms-browse", {
        <div v-if="citem.image" class="image-grid-text" @click.stop="itemMenu(citem, isTop ? citem.gidx : (item.rs+col), $event)">{{citem.title}}</div>
        <div v-else class="image-grid-text">{{citem.title}}</div>
        <div class="image-grid-text subtext" v-if="(isTop && libraryName && citem.id==TOP_MYMUSIC_ID) || citem.libname">{{isTop && libraryName && citem.id==TOP_MYMUSIC_ID ? libraryName : citem.libname}}</div>
-       <div class="image-grid-text subtext" v-else v-html="citem.subtitle" v-bind:class="{'link-item':subtitleClickable}" @click.stop="clickSubtitle(citem, isTop ? citem.gidx : (item.rs+col), $event)"></div>
+       <div class="image-grid-text subtext" v-else v-html="citem.subtitle" v-bind:class="{'link-item':subtitlesClickable}" @click.stop="clickSubtitle(citem, isTop ? citem.gidx : (item.rs+col), $event)"></div>
        <div class="grid-btn image-grid-btn hover-btn menu-btn" v-if="(undefined!=citem.stdItem && citem.stdItem<=STD_ITEM_MAX) || (citem.menu && citem.menu.length>0 && (!citem.isPinned || (!queryParams.party && (!LMS_KIOSK_MODE || !HIDE_FOR_KIOSK.has(PIN_ACTION))))) || (isTop && libraryName && citem.id==TOP_MYMUSIC_ID)" @click.stop="itemMenu(citem, isTop ? citem.gidx : (item.rs+col), $event)" :title="i18n('%1 (Menu)', stripLinkTags(citem.title))"></div>
        <div class="emblem" v-if="citem.emblem" :style="{background: citem.emblem.bgnd}">
         <img :src="citem.emblem | emblem()" loading="lazy"></img>
@@ -761,6 +761,9 @@ var lmsBrowse = Vue.component("lms-browse", {
         },
         homeLabel() {
             return this.$store.state.detailedHome>0 ? this.trans.home : this.trans.sources
+        },
+        subtitlesClickable() {
+            return this.subtitleClickable || (this.isTop && this.$store.state.detailedHome>0)
         }
     },
     created() {
@@ -1291,7 +1294,7 @@ var lmsBrowse = Vue.component("lms-browse", {
             }
             if ((IS_MOBILE && !lmsOptions.touchLinks) && this.grid.allowed && this.grid.use) {
                 this.itemMenu(item, index, event);
-            } else if ((!IS_MOBILE || lmsOptions.touchLinks) && this.subtitleClickable && item.id && item.artist_id && item.id.startsWith("album_id:")) {
+            } else if ((!IS_MOBILE || lmsOptions.touchLinks) && this.subtitlesClickable && item.id && item.artist_id && item.id.startsWith("album_id:")) {
                 if (item.subIsYear) {
                     bus.$emit("browse", "year", item.subtitle, item.subtitle, "browse");
                     return;

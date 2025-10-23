@@ -12,6 +12,7 @@ dev
  9. Add "(More)" button on search results header, if more results than shown.
 10. Reduce grid size for home screen and for views with only icons.
 11. Separate list/grid preference for home screen.
+12. Set max width of 1000px for information in browse view.
 
 5.11.5
 ------

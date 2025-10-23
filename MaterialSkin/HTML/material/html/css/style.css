@@ -1499,6 +1499,9 @@ div.v-subheader {
  min-height:var(--list-elem-height)!important;
  height:auto!important;
  padding:12px 16px!important;
+ max-width:var(--dialog-list-max-width);
+ margin-left:auto;
+ margin-right:auto;
 }
 
 .browse-text .v-list__tile {
@@ -1807,7 +1810,7 @@ div.v-subheader {
  padding-top:11px;
  padding-bottom:11px;
  z-index:1;
- max-width:1000px;
+ max-width:var(--dialog-list-max-width);
 }
 
  .msk-is-non-touch .np-info-title:hover {
@@ -2101,7 +2104,7 @@ div.v-rating i.primary--text, div.v-rating i.accent--text {
 
 .np-info-text {
  overflow:auto;
- max-width:1000px;
+ max-width:var(--dialog-list-max-width);
  margin-left:auto;
  margin-right:auto;
  padding:0px!important;
@@ -2109,7 +2112,7 @@ div.v-rating i.primary--text, div.v-rating i.accent--text {
 
 .np-info-text-full {
  overflow:auto;
- max-width:1000px;
+ max-width:var(--dialog-list-max-width);
  margin:auto;
  padding:0px!important;
 }

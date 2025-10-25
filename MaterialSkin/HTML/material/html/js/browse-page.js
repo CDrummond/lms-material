@@ -209,7 +209,7 @@ var lmsBrowse = Vue.component("lms-browse", {
    </RecycleScroller>
 
    <RecycleScroller v-else-if="grid.allowed&&grid.use" :items="grid.rows" :item-size="variableGridHeight ? null : grid.ih" page-mode key-field="id" :buffer="LMS_SCROLLER_GRID_BUFFER">
-    <div slot-scope="{item}" :class="[grid.few?'image-grid-few':'image-grid-full-width']">
+    <div slot-scope="{item}" :class="[grid.few?'image-grid-few':'image-grid-full-width',items.length>0 && items[0].stdItem==STD_ITEM_GENRE ? 'genre-grid' : '']">
      <v-list-tile v-if="item.header && item.item" class="grid-header no-hover">
       <v-list-tile-avatar v-if="item.item.icon" :tile="true" class="lms-avatar">
        <v-icon>{{item.item.icon}}</v-icon>
@@ -1755,11 +1755,12 @@ var lmsBrowse = Vue.component("lms-browse", {
             var sz = undefined;
             let type = this.grid.type;
             if (GRID_TEXT_ONLY == this.grid.type) {
-                var width = 100;
+                var width = this.items.length>0 && this.items[0].stdItem==STD_ITEM_GENRE ? 150 : 100;
                 var height = 64;
                 var maxColumns = Math.floor(listWidth / width);
                 var numColumns = Math.max(Math.min(maxColumns, 20), 1);
-                sz = {w: width, h: height, s:0, mc:maxColumns, nc:numColumns}
+                var extra = Math.floor(((listWidth - (width*numColumns))/numColumns)/5);
+                sz = {w: width+(extra*5), h: height, s:extra, mc:maxColumns, nc:numColumns};
             } else {
                 let iconOnly = this.isTop || this.items.length<=200;
                 if (iconOnly && !this.isTop) {

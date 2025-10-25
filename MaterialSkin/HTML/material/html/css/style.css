@@ -932,26 +932,38 @@ div.v-subheader {
  position:relative;
  background-color:transparent !important;
  cursor:pointer;
- width:100px !important;
- height:64px !important;
- padding-top:2px;
+ width:calc(100px + (5px * var(--image-grid-factor)))!important;
+ height:60px !important;
+ padding-top:4px;
+}
+
+.genre-grid .text-grid-item {
+ width:calc(150px + (5px * var(--image-grid-factor))) !important;
 }
 
 .text-grid-item > div:not(.image-grid-btn) {
- height:60px;
- width:96px;
- padding:4px;
-}
-
-.text-grid-item > div > div {
+ width:calc(100% - 6px);
  height:100%;
- display:grid;
- place-items:center;
+ display: flex;
+ align-items: center;
+ justify-content: center;
+ text-align: center;
+ overflow: hidden;
  background-color:rgba(var(--highlight-rgb),0.075);
  border-radius: 8px;
 }
 
-.msk-is-non-touch .text-grid-item > div > div:hover {
+.text-grid-item > div > div {
+ margin: 0;
+ line-height: var(--std-font-size);
+ display: -webkit-box;
+ -webkit-line-clamp: 2;
+ -webkit-box-orient: vertical;
+ overflow: hidden;
+ text-overflow: ellipsis;
+}
+
+.msk-is-non-touch .text-grid-item > div:hover {
  background-color:rgba(var(--highlight-rgb),0.15);
 }
 
@@ -992,7 +1004,7 @@ div.v-subheader {
 .text-grid-item .image-grid-btn, .text-grid-item .image-grid-btn:hover {
  height:26px!important;
  width:26px!important;
- bottom:calc(19px - var(--grid-menu-offset)) !important;
+ bottom:calc(16px - var(--grid-menu-offset)) !important;
  right:-4px !important;
 }
 

@@ -1968,7 +1968,8 @@ function parseBrowseResp(data, parent, options, cacheKey) {
                               textkey: key
                           });
             }
-            resp.canUseGrid = lmsOptions.genreImages;
+            resp.canUseGrid = true;
+            resp.gridType = lmsOptions.genreImages ? GRID_STANDARD : GRID_TEXT_ONLY;
             resp.itemCustomActions = getCustomActions("genre");
             resp.subtitle=i18np("1 Genre", "%1 Genres", resp.items.length);
         } else if (data.result.playlists_loop) {

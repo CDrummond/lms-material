@@ -13,6 +13,9 @@ dev
 10. Reduce grid size for home screen and for views with only icons.
 11. Separate list/grid preference for home screen.
 12. Set max width of 1000px for information in browse view.
+13. Always use frosted background for queue in desktop layout when not pinned.
+14. In desktop layout, always show queue above now-playing if now-platying is
+    expanded - regardless of whether queue is pinned or not.
 
 5.11.5
 ------

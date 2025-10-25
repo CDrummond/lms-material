@@ -14,7 +14,6 @@
  --np-image-landscape-wide-size:min(var(--np-image-landscape-wide-height) - (var(--np-image-border)*2), var(--np-wide-left) - (var(--np-image-border)*2));
  --np-landscape-item-height:calc(var(--100vh) - (var(--main-toolbar-height) + var(--bottom-pad) + var(--np-controls-height) + 70px));
  --np-icon-size:24px;
- --queue-visibility:initial;
  --queue-minwidth:400px;
  --splitter-width:1px;
  --splitter-hidden:0;
@@ -54,10 +53,6 @@
    --np-image-landscape-wide-size:calc(var(--np-image-landscape-wide-height) - (var(--np-image-border)*2));
   }
  }
-}
-
-.right-pane {
- visibility:var(--queue-visibility);
 }
 
 .list-details {

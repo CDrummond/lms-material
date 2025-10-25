@@ -382,15 +382,7 @@ Vue.component('lms-toolbar', {
             }.bind(this), (next*1000)+25);
         },
         toggleQueue() {
-            if (!this.$store.state.pinQueue) {
-                this.$store.commit('setShowQueue', !this.$store.state.showQueue);
-            } else {
-                let showQ = this.infoOpen || this.nowPlayingExpanded;
-                if (showQ) {
-                    bus.$emit('npclose');
-                }
-                this.$store.commit('setShowQueue', showQ || !this.$store.state.showQueue);
-            }
+            bus.$emit('toggleQueue');
         },
         mouseDown(ev) {
             toolbarMouseDown(ev);
@@ -464,7 +456,7 @@ Vue.component('lms-toolbar', {
             return this.$store.state.desktopLayout
         },
         showQueue() {
-            return this.$store.state.showQueue
+            return this.nowPlayingExpanded ? this.$store.state.showQueueNp : this.$store.state.showQueue
         },
         showVolumeSlider() {
             return VOL_HIDDEN!=this.playerDvc && this.width>=this.windowControlsOverlayRight + (this.$store.state.desktopLayout ? (this.height>=200 ? 800 : 650) : (this.$store.state.nowPlayingClock ? 1300 : (this.$store.state.mobileBar==MBAR_NONE ? 850 : 750)))

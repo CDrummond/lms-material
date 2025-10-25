@@ -283,7 +283,6 @@ function setQueueShown(state, val, force) {
             }
         }
         bus.$emit('showQueue', val);
-        document.documentElement.style.setProperty('--queue-visibility', val ? 'initial' : 'collapse');
         document.documentElement.style.setProperty('--queue-minwidth', val && state.pinQueue ? '275px' : '0px');
         document.documentElement.style.setProperty('--splitter-width', val && state.pinQueue ? '1px' : '0px');
         document.documentElement.style.setProperty('--splitter-hidden', val && state.pinQueue ? '0' : '100');
@@ -310,6 +309,7 @@ const store = new Vuex.Store({
         desktopLayout: false,
         mobileBar: MBAR_THIN,
         showQueue: false,
+        showQueueNp: false,
         pinQueue: false,
         players: null, // List of players
         player: null, // Current player (from list)
@@ -877,6 +877,9 @@ const store = new Vuex.Store({
         setShowQueue(state, val) {
             setQueueShown(state, val);
             addBrowserHistoryItem();
+        },
+        setShowQueueNp(state, val) {
+            state.showQueueNp = val;
         },
         setPinQueue(state, val) {
             setQueuePinned(state, val);

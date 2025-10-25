@@ -277,7 +277,7 @@ var lmsQueue = Vue.component("lms-queue", {
    <v-btn :title="trans.clear | tooltip(LMS_CLEAR_QUEUE_KEYBOARD,keyboardControl)" flat icon v-longpress="clear" class="toolbar-button" v-bind:class="{'disabled':items.length<1}"v-if="!queryParams.party"><img class="svg-list-img" :src="'queue-clear' | svgIcon(darkUi)"></img></v-btn>
   </v-layout>
  </div>
- <div class="lms-list" v-bind:style="{'background-image':'url('+currentBgndUrl+')'}" v-bind:class="{'bgnd-cover':drawBgndImage||drawBackdrop||!desktopLayout||(desktopLayout && pinQueue), 'frosted':desktopLayout &&!drawBgndImage && !drawBackdrop && !pinQueue, 'queue-backdrop-cover':drawBackdrop}">
+ <div class="lms-list" v-bind:style="{'background-image':'url('+currentBackgroundUrl+')'}" v-bind:class="{'bgnd-cover':drawBgndImage||drawBackdrop||!desktopLayout||(desktopLayout && pinQueue), 'frosted':desktopLayout &&!drawBgndImage && !drawBackdrop && !pinQueue, 'queue-backdrop-cover':drawBackdrop}">
   <div class="lms-list" id="queue-list" v-bind:class="{'lms-list3':!albumStyle && threeLines,'lms-list-album':albumStyle,'bgnd-blur':drawBgndImage,'backdrop-blur':drawBackdrop}" @drop="drop(-1, $event)" @dragover="dragOver(-1, $event)">
    <div v-if="items.length<1"></div> <!-- RecycleScroller does not like it if 0 items? -->
    <RecycleScroller v-else-if="albumStyle" :items="items" :item-size="null" page-mode key-field="key" :buffer="LMS_SCROLLER_LIST_BUFFER">
@@ -369,7 +369,7 @@ var lmsQueue = Vue.component("lms-queue", {
   <v-list v-else>
    <template v-for="(action, index) in menu.actions">
     <v-divider v-if="DIVIDER==action"></v-divider>
-    <div style="height:0px!important" v-else-if="(action==PQ_PIN_ACTION && (pinQueue || !desktopLayout || windowWide<2)) || (action==PQ_UNPIN_ACTION && (!pinQueue || !desktopLayout || windowWide<2))"/>
+    <div style="height:0px!important" v-else-if="(action==PQ_PIN_ACTION && (pinQueue || !desktopLayout || windowWide<2 || nowPlayingExpanded)) || (action==PQ_UNPIN_ACTION && (!pinQueue || !desktopLayout || windowWide<2))"/>
     <v-list-tile @click="headerAction(action, $event)" v-bind:class="{'disabled':(items.length<1 && PQ_REQUIRE_AT_LEAST_1_ITEM.has(action)) || (items.length<2 && PQ_REQUIRE_MULTIPLE_ITEMS.has(action))}" v-else-if="(!LMS_KIOSK_MODE || !HIDE_FOR_KIOSK.has(action)) && (action==PQ_SAVE_ACTION ? wide<2 : action!=PQ_MOVE_QUEUE_ACTION || showMoveAction)">
      <v-list-tile-avatar>
       <v-icon v-if="action==PQ_TOGGLE_VIEW_ACTION && albumStyle">music_note</v-icon>
@@ -390,7 +390,6 @@ var lmsQueue = Vue.component("lms-queue", {
             items: [],
             currentIndex: -1,
             currentBgndUrl: "",
-            showBgnd:true,
             pulseCurrent: false,
             listSize:0,
             duration: 0.0,
@@ -441,19 +440,22 @@ var lmsQueue = Vue.component("lms-queue", {
             return this.$store.state.desktopLayout
         },
         showQueue() {
-            return this.$store.state.showQueue
+            return this.nowPlayingExpanded ? this.$store.state.showQueueNp : this.$store.state.showQueue
         },
         pinQueue() {
-            return this.$store.state.pinQueue && this.windowWide>1
+            return this.$store.state.pinQueue && this.windowWide>1 && !this.nowPlayingExpanded
         },
         noPlayer() {
             return !this.$store.state.player
         },
         drawBgndImage() {
-            return this.$store.state.queueBackdrop && undefined!=this.coverUrl && this.showBgnd
+            return this.$store.state.queueBackdrop && undefined!=this.coverUrl && this.pinQueue
         },
         drawBackdrop() {
-            return !this.drawBgndImage && this.$store.state.queueBackdrop && this.$store.state.useDefaultBackdrops && this.showBgnd
+            return !this.drawBgndImage && this.$store.state.queueBackdrop && this.$store.state.useDefaultBackdrops && !this.nowPlayingExpanded
+        },
+        currentBackgroundUrl() {
+            return this.nowPlayingExpanded ? '' : this.currentBgndUrl
         },
         showMoveAction() {
             if (queryParams.party) {
@@ -647,6 +649,9 @@ var lmsQueue = Vue.component("lms-queue", {
 
         this.nowPlayingExpanded = false;
         bus.$on('nowPlayingExpanded', function(val) {
+            if (val && !this.nowPlayingExpanded) {
+                this.$store.commit('setShowQueueNp', false);
+            }
             this.nowPlayingExpanded = val;
         }.bind(this));
         bus.$on('nowPlayingWide', function(val) {
@@ -783,6 +788,13 @@ var lmsQueue = Vue.component("lms-queue", {
         }.bind(this));
         bus.$on('releaseSupportChanged', function() {
             this.initItems();
+        }.bind(this));
+        bus.$on('toggleQueue', function() {
+            if (this.nowPlayingExpanded) {
+                this.$store.commit('setShowQueueNp', !this.$store.state.showQueueNp);
+            } else {
+                this.$store.commit('setShowQueue', !this.$store.state.showQueue);
+            }
         }.bind(this));
     },
     methods: {

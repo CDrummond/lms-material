@@ -1756,7 +1756,7 @@ var lmsBrowse = Vue.component("lms-browse", {
             let type = this.grid.type;
             if (GRID_TEXT_ONLY == this.grid.type) {
                 var width = 100;
-                var height = 48;
+                var height = 64;
                 var maxColumns = Math.floor(listWidth / width);
                 var numColumns = Math.max(Math.min(maxColumns, 20), 1);
                 sz = {w: width, h: height, s:0, mc:maxColumns, nc:numColumns}
@@ -1850,10 +1850,10 @@ var lmsBrowse = Vue.component("lms-browse", {
                     var rowItems=[];
                     if (i<items.length && items[i].header) {
                         this.grid.multiSize=true;
-                        if (this.grid.rows.length>0 && !this.grid.rows[this.grid.rows.length-1].hasSub && !this.grid.rows[this.grid.rows.length-1].ihe) {
+                        if (this.grid.type!=GRID_TEXT_ONLY && this.grid.rows.length>0 && !this.grid.rows[this.grid.rows.length-1].hasSub && !this.grid.rows[this.grid.rows.length-1].ihe) {
                             this.grid.rows.push({spacer:true, size:24, id:"row.extra.spacer."+i, ihe:true});
                         }
-                        this.grid.rows.push({item: items[i], header:true, size:GRID_TEXT_ONLY == this.grid.type ? 44 : 52, r:row, id:"row.header."+i, rs:rs});
+                        this.grid.rows.push({item: items[i], header:true, size:48, r:row, id:"row.header."+i, rs:rs});
                         i+=1;
                         rs+=1;
                     } else {

@@ -933,22 +933,20 @@ div.v-subheader {
  background-color:transparent !important;
  cursor:pointer;
  width:100px !important;
- height:54px !important;
+ height:64px !important;
  padding-top:2px;
 }
 
 .text-grid-item > div:not(.image-grid-btn) {
- height:48px;
+ height:60px;
  width:96px;
- line-height: 48px;
- text-align:center;
- vertical-align:middle;
  padding:4px;
 }
 
 .text-grid-item > div > div {
- height:40px;
- line-height: 40px;
+ height:100%;
+ display:grid;
+ place-items:center;
  background-color:rgba(var(--highlight-rgb),0.075);
  border-radius: 8px;
 }
@@ -994,8 +992,8 @@ div.v-subheader {
 .text-grid-item .image-grid-btn, .text-grid-item .image-grid-btn:hover {
  height:26px!important;
  width:26px!important;
- bottom:calc(15px - var(--grid-menu-offset)) !important;
- right:-6px !important;
+ bottom:calc(19px - var(--grid-menu-offset)) !important;
+ right:-4px !important;
 }
 
 .image-grid-with-sub .image-grid-btn, .image-grid-with-sub .image-grid-btn:hover {

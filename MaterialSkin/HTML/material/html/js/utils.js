@@ -376,6 +376,10 @@ function weightSort(a, b) {
     return a.weight!=b.weight ? a.weight<b.weight ? -1 : 1 : titleSort(a, b);
 }
 
+function categorySort(a, b) {
+    return a.category!=b.category ? a.category<b.category ? -1 : 1 : titleSort(a, b);
+}
+
 function itemSort(a, b) {
     var at = "group"==a.type ? 0 : "track"==a.type ? ("music_note"==a.icon ? 1 : 2) : 3;
     var bt = "group"==b.type ? 0 : "track"==b.type ? ("music_note"==b.icon ? 1 : 2) : 3;

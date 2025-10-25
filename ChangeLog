@@ -17,6 +17,7 @@ dev
 14. In desktop layout, always show queue above now-playing if now-platying is
     expanded - regardless of whether queue is pinned or not.
 15. Add icon map for xPlay.
+16. If set to combine apps and radio then categrise apps.
 
 5.11.5
 ------

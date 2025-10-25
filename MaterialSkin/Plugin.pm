@@ -134,6 +134,37 @@ my %ROLE_ICON_MAP = (
     'themes' => 'theme'
 );
 
+# Taken from https://github.com/LMS-Community/lms-plugin-repository/blob/master/buildrepo.pl
+my $CATEGORIES_MAP = {
+    'Accuradio' => 'radio',
+    'ArchiveOrg' => 'musicservices',
+    'ARDAudiothek' => 'radio',
+    'BBCSounds' => 'radio',
+    'CBCCanadaFrancais' => 'radio',
+    'CPlus' => 'radio',
+    'FranceTV' => 'radio',
+    'GlobalPlayerUK' => 'radio',
+    'iHeartRadio' => 'radio',
+    'LCI' => 'radio',
+    'Live365' => 'radio',
+    'MixCloud' => 'musicservices',
+    'MyQobuz' => 'musicservices',
+    'Pyrrha' => 'musicservices',
+    'PlanetRadio' => 'radio',
+    'PodcastExt' => 'musicservices',
+    'RadioFavourites' => 'radio',
+    'RadioFeedsSBS' => 'radio',
+    'RadioFrance' => 'radio',
+    'RadioNet' => 'radio',
+    'RadioNowPlaying' => 'radio',
+    'SqueezeCloud' => 'musicservices',
+    'TIDAL' => 'musicservices',
+    'TimesRadio' => 'radio',
+    'VirginRadio' => 'radio',
+    'Wefunk' => 'radio',
+    'YouTube' => 'musicservices'
+};
+
 sub initPlugin {
     my $class = shift;
 
@@ -292,7 +323,7 @@ sub initPlugin {
         # make sure scanner does pre-cache artwork in the size the skin is using in browse modesl
         Slim::Control::Request::executeRequest(undef, [ 'artworkspec', 'add', '300x300_f', 'Material Skin (Grid)' ]);
         Slim::Control::Request::executeRequest(undef, [ 'artworkspec', 'add', '150x150_f', 'Material Skin (List)' ]);
-    	if ($serverprefs->get('precacheHiDPIArtwork')) {
+        if ($serverprefs->get('precacheHiDPIArtwork')) {
             Slim::Control::Request::executeRequest(undef, [ 'artworkspec', 'add', '600x600_f', 'Material Skin (Grid, HiDPI)' ]);
         }
 
@@ -1742,11 +1773,13 @@ sub _cliCommand {
     }
 
     if ($cmd eq 'apps') {
+        my $combined = $prefs->get('combineAppsAndRadio');
         my $apps = Slim::Plugin::Base->nonSNApps();
         my $cnt = 0;
         my %hideApps = map { $_ => 1 } split(/,/, $prefs->get('hideApps'));
         for my $app (@$apps) {
             my $tag = $app->can('tag') && $app->tag;
+
             my $name = $app->getDisplayName;
             if ($tag && (not exists($hideApps{$app->tag})) && (not exists($hideApps{$name}))) {
                 my $uiName = Slim::Utils::Strings::getString($name);
@@ -1756,11 +1789,28 @@ sub _cliCommand {
                 $request->addResultLoop('item_loop', $cnt, 'type', 'redirect');
                 my $actions = { go => { cmd => [ $app->tag, 'items' ], params => { menu => $app->tag } } };
                 $request->addResultLoop('item_loop', $cnt, 'actions', $actions);
+                if ($combined) {
+                    my $category = $app->_pluginDataFor('category');
+                    if (!$category) {
+                        my $modeName = $app->modeName;
+                        if (_startsWith($modeName, "Plugins::")) {
+                            my @parts = split(/::/, $modeName);
+                            if (scalar(@parts)>1) {
+                                my $pluginName = $parts[1];
+                                $category = $CATEGORIES_MAP->{$pluginName};
+                            }
+                        }
+                    }
+                    if (!$category) {
+                        $category = "other";
+                    }
+                    $request->addResultLoop('item_loop', $cnt, 'mskcategory', $category);
+                }
                 $cnt++;
             }
         }
 
-        if ($prefs->get('combineAppsAndRadio')) {
+        if ($combined) {
             my $radiosReq = Slim::Control::Request::executeRequest(undef, ['radios', 0, 1000, 'menu:radio'] );
             my $addTuneIn = 0;
             foreach my $item ( @{ $radiosReq->getResult('item_loop') || [] } ) {
@@ -1768,6 +1818,7 @@ sub _cliCommand {
                     foreach my $key (keys %$item) {
                         $request->addResultLoop('item_loop', $cnt, $key, $item->{$key});
                     }
+                    $request->addResultLoop('item_loop', $cnt, 'mskcategory', 'radio');
                     $cnt++;
                 } else {
                     $addTuneIn = 1;
@@ -1778,6 +1829,7 @@ sub _cliCommand {
                 $request->addResultLoop('item_loop', $cnt, 'type', 'redirect');
                 $request->addResultLoop('item_loop', $cnt, 'text', 'TuneIn');
                 $request->addResultLoop('item_loop', $cnt, 'svg', '/material/svg/tunein');
+                $request->addResultLoop('item_loop', $cnt, 'mskcategory', 'radio');
                 my $actions = { go => { cmd => [ 'radios' ], params => { menu => 'radio' } } };
                 $request->addResultLoop('item_loop', $cnt, 'actions', $actions);
                 $cnt++;

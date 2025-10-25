@@ -120,6 +120,7 @@ function parseBrowseResp(data, parent, options, cacheKey) {
             var menu = undefined;
             var types = new Set();
             var images = new Set();
+            var categories = new Set();
             var maybeAllowGrid = command!="trackstat"; // && !isFavorites; // && command!="playhistory";
             var numImages = 0;
             var numTracks = 0;
@@ -732,6 +733,17 @@ function parseBrowseResp(data, parent, options, cacheKey) {
                     haveWithoutIcons = true;
                 }
 
+                if (isAppsTop) {
+                    if (i.mskcategory=='musicservices') {
+                        i.category = 0;
+                    } else if (i.mskcategory=='radio') {
+                        i.category = 1;
+                    } else {
+                        i.category = 2;
+                    }
+                    categories.add(i.category);
+                }
+
                 if (i.isListItemInMenu) {
                     resp.actionItems.push(i);
                 } else {
@@ -804,8 +816,10 @@ function parseBrowseResp(data, parent, options, cacheKey) {
                         type: "group",
                         id: "cdplayer",
                         title: i18n("CD Player"),
+                        category: 2,
                         menu:[options.pinned.has("cdplayer") ? UNPIN_ACTION : PIN_ACTION]
                     });
+                    categories.add(2);
                 }
                 if (LMS_P_RL) {
                     resp.items.push({
@@ -815,10 +829,36 @@ function parseBrowseResp(data, parent, options, cacheKey) {
                         type: "group",
                         id: "cdplayer",
                         title: i18n("Remote Libraries"),
+                        category: 2,
                         menu:[options.pinned.has("selectRemoteLibrary") ? UNPIN_ACTION : PIN_ACTION]
                     });
+                    categories.add(2);
                 }
-                resp.items.sort(titleSort);
+                if (categories.size>1) {
+                    resp.items.sort(categorySort);
+                    let items = [];
+                    let lastCat = -1;
+                    let lastHeader = 0;
+                    for (let i=0, loop=resp.items, len=resp.items.length; i<len; ++i) {
+                        let cat = loop[i].category;
+                        if (lastCat<0 || cat!=loop[lastCat].category) {
+                            let title = 0==cat ? i18n("Streaming Services") : 1==cat ? i18n("Radio") : i18n("Other");
+                            let svg = 0==cat ? "music" : 1==cat ? "radio" : undefined;
+                            let icon = 2==cat ? "apps" : undefined;
+                            items.push({title:title, id:FILTER_PREFIX+cat, header:true, svg:svg, icon:icon});
+                            if (lastCat>=0) {
+                                items[lastHeader].title = items[lastHeader].title + " (" + (i-lastCat) + ")";
+                            }
+                            lastHeader = items.length-1;
+                            lastCat = i;
+                        }
+                        items.push(loop[i]);
+                    }
+                    items[lastHeader].title = items[lastHeader].title + " (" + (resp.items.length-lastCat) + ")";
+                    resp.items = items;
+                } else {
+                    resp.items.sort(titleSort);
+                }
             } else if (isPodcastList) {
                 /* Only want to sort podcast feeds, and not actions. So create lists for:
                    - actions before feeds
@@ -953,6 +993,8 @@ function parseBrowseResp(data, parent, options, cacheKey) {
 
                     if (0==resp.items.length) {
                         resp.subtitle=i18n("Empty");
+                    } else if (isAppsTop) {
+                        resp.subtitle=i18np("1 App", "%1 Apps", resp.items.length-(categories.size>1 ? categories.size : 0));
                     } else if (STD_ITEM_ONLINE_ALBUM==parentType) {
                         let totalDurationStr=formatSeconds(totalDuration);
                         if (undefined!=parentType) {

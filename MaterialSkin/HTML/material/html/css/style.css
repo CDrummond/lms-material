@@ -1004,8 +1004,8 @@ div.v-subheader {
 .text-grid-item .image-grid-btn, .text-grid-item .image-grid-btn:hover {
  height:26px!important;
  width:26px!important;
- bottom:calc(16px - var(--grid-menu-offset)) !important;
- right:-4px !important;
+ bottom:calc(15px - var(--grid-menu-offset)) !important;
+ right:-6px !important;
 }
 
 .image-grid-with-sub .image-grid-btn, .image-grid-with-sub .image-grid-btn:hover {

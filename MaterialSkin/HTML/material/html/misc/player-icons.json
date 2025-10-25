@@ -102,7 +102,15 @@
             "icon":"android"
         }
     },
+    "squeezelite-mobile":{
+        "SqueezeLiteAndroid":{
+            "icon":"android"
+        }
+    },
     "LyrPlay": {
+        "svg":"apple"
+    },
+    "xPlay": {
         "svg":"apple"
     },
     "squeezeplay":{

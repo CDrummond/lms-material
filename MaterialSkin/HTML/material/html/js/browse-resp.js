@@ -834,7 +834,7 @@ function parseBrowseResp(data, parent, options, cacheKey) {
                     });
                     categories.add(2);
                 }
-                if (categories.size>1) {
+                if (categories.size>1 && LMS_VERSION>=90100) {
                     resp.items.sort(categorySort);
                     let items = [];
                     let lastCat = -1;

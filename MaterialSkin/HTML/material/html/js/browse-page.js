@@ -1798,8 +1798,8 @@ var lmsBrowse = Vue.component("lms-browse", {
             }
             if (force || sz.nc != this.grid.numColumns || type!=this.grid.type) { // Need to re-layout...
                 changed = true;
-                this.grid.rows=[];
-                this.grid.multiSize=false;
+                this.grid.rows = [];
+                this.grid.multiSize = false;
                 var items = [];
                 var topExtraItems = [];
                 if (this.isTop) {
@@ -1991,7 +1991,7 @@ var lmsBrowse = Vue.component("lms-browse", {
                     pos += loop[r].size;
                 }
             } else if (this.grid.allowed && this.grid.use && this.grid.numColumns>0) {
-                pos = Math.floor(index/this.grid.numColumns)*(this.grid.ih-(this.grid.haveSubtitle ? 0 : GRID_SINGLE_LINE_DIFF));
+                pos = Math.floor(index/this.grid.numColumns)*(this.grid.ih-(this.grid.haveSubtitle || GRID_TEXT_ONLY==this.grid.type ? 0 : GRID_SINGLE_LINE_DIFF));
             } else {
                 let elems = getElementsByClassName(this.scrollElement, "div", "lms-list-item");
                 let itemSize = LMS_LIST_ELEMENT_SIZE;

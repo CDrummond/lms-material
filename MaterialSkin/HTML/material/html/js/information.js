@@ -26,11 +26,11 @@ Vue.component('lms-information-dialog', {
 
    <div v-if="server.length>0">
     <p class="about-header">{{i18n('Server')}}</p>
-    <p v-if="updates.server"><b @click="showUpdateInfo" class="link-item">{{i18n('New version available')}}</b></p>
     <ul>
      <template v-for="(info, index) in server"><li>{{info.label}}: {{info.text}}</li></template>
     </ul>
     <v-btn @click="openServerSettings(serverName, 2)" v-if="unlockAll" flat><img class="btn-icon svg-img" :src="TB_SERVER_SETTINGS.svg | svgIcon(darkUi)"></img>{{TB_SERVER_SETTINGS.title}}</v-btn>
+    <v-btn v-if="updates.server" @click="showUpdateInfo"><img class="btn-icon svg-img" :src="'update' | svgIcon(darkUi)"></img>{{i18n('New version available')}}</v-btn>
     <div class="dialog-padding"></div>
    </div>
 

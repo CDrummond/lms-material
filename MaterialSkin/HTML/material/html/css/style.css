@@ -778,6 +778,13 @@ div.v-subheader {
  padding-left:calc(64px - var(--jump-list-adjust)) !important;
 }
 
+.indent-left.detailed-img-track-list .vue-recycle-scroller__item-view a,
+.indent-left.detailed-img-track-list .lms-list-item a,
+.indent-both.detailed-img-track-list .browse-html,
+.indent-right.detailed-img-track-list .browse-html {
+ padding-left:calc(10px - var(--jump-list-adjust)) !important;
+}
+
 .lms-list .v-list__tile,
 .detailed-sub .lms-image-grid .vue-recycle-scroller__item-view a {
  padding:0 12px 0 10px !important;
@@ -792,6 +799,13 @@ div.v-subheader {
 .indent-right .lms-list-item a,
 .indent-right .browse-html {
  padding-right:64px !important;
+}
+
+.indent-both.detailed-img-track-list .vue-recycle-scroller__item-view a,
+.indent-both.detailed-img-track-list .lms-list-item a,
+.indent-both.detailed-img-track-list .browse-html {
+ padding-left:calc(107px - var(--jump-list-adjust)) !important;
+ padding-right:161px !important;
 }
 
 .indent-both .vue-recycle-scroller__item-view a,
@@ -811,7 +825,6 @@ div.v-subheader {
 .indent-right .browse-html a {
  padding-left:0px!important;
 }
-
 
 /* Make action buttons in lists closer together */
 .list__tile__action {
@@ -1112,6 +1125,17 @@ div.v-subheader {
 .indent-right .lms-list .emblem, .indent-right .lms-list-jump .emblem,
 .indent-both .lms-list .emblem, .indent-both .lms-list-jump .emblem {
  left:calc(196px - var(--jump-list-adjust));
+}
+
+.detailed-sub.detailed-img-track-list .lms-list .emblem, .detailed-sub.detailed-img-track-list .lms-list-jump .emblem {
+ left:calc(39px - var(--jump-list-adjust));
+}
+.indent-left.detailed-img-track-list .lms-list .emblem, .indent-left.detailed-img-track-list .lms-list-jump .emblem {
+ left:calc(10px - var(--jump-list-adjust));
+}
+.indent-right.detailed-img-track-list .lms-list .emblem, .indent-right.detailed-img-track-list .lms-list-jump .emblem,
+.indent-both.detailed-img-track-list .lms-list .emblem, .indent-both.detailed-img-track-list .lms-list-jump .emblem {
+ left:calc(114px - var(--jump-list-adjust));
 }
 
 .error-text {

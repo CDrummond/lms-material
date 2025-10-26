@@ -2052,6 +2052,10 @@ function parseBrowseResp(data, parent, options, cacheKey) {
         } else if (data.result.playlisttracks_loop) {
             var totalDuration = 0;
             let browseContext = getLocalStorageBool('browseContext', false);
+            let genres = new Set();
+            if (lmsOptions.playlistImages) {
+                resp.extra={};
+            }
             for (var idx=0, loop=data.result.playlisttracks_loop, loopLen=loop.length; idx<loopLen; ++idx) {
                 var i = makeHtmlSafe(loop[idx]);
                 var title = i.title;
@@ -2113,6 +2117,29 @@ function parseBrowseResp(data, parent, options, cacheKey) {
                               duration: i.duration,
                               durationStr: duration>0 ? formatSeconds(duration) : undefined
                           });
+                if (lmsOptions.playlistImages) {
+                    if (i.genre || i.genres) {
+                        let loop = i.genres ? i.genres : [i.genre];
+                        let ids = i.genre_ids ? i.genre_ids : [i.genre_id];
+                        if (ids.length==loop.length) {
+                            for (let g=0, glen=loop.length; g<glen; ++g) {
+                                if (!genres.has(loop[g])) {
+                                    genres.add(loop[g]);
+                                    if (undefined==resp.extra['genres']) {
+                                        resp.extra['genres']=[];
+                                    }
+                                    resp.extra['genres'].push(buildLink("show_genre", ids[g], loop[g], "browse"));
+                                    if (IS_MOBILE && !lmsOptions.touchLinks) {
+                                        if (undefined==resp.extra['genres.plain']) {
+                                            resp.extra['genres.plain']=[];
+                                        }
+                                        resp.extra['genres.plain'].push(loop[g]);
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
             }
             resp.itemCustomActions = getCustomActions("playlist-track");
             resp.subtitle=i18np("1 Track", "%1 Tracks", resp.listSize);

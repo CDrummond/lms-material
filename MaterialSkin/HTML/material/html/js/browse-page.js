@@ -33,7 +33,7 @@ const WIDE_NONE = 0;
 
 var lmsBrowse = Vue.component("lms-browse", {
     template: `
-<div id="browse-view" v-bind:class="{'detailed-sub':showDetailedSubtoolbar, 'indent-both':showDetailedSubtoolbar && STD_ITEM_ALBUM==current.stdItem && wide>WIDE_COVER_IDENT && (!desktopLayout || !pinQueue), 'indent-right':showDetailedSubtoolbar && STD_ITEM_ALBUM==current.stdItem && wide==WIDE_COVER_IDENT && (!desktopLayout || !pinQueue), 'indent-left':showDetailedSubtoolbar && wide>=WIDE_INDENT_L && (!desktopLayout || !pinQueue)}">
+<div id="browse-view" v-bind:class="{'detailed-sub':showDetailedSubtoolbar, 'indent-both':showDetailedSubtoolbar && isTrackList && wide>WIDE_COVER_IDENT && (!desktopLayout || !pinQueue), 'indent-right':showDetailedSubtoolbar && isTrackList && wide==WIDE_COVER_IDENT && (!desktopLayout || !pinQueue), 'indent-left':showDetailedSubtoolbar && wide>=WIDE_INDENT_L && (!desktopLayout || !pinQueue), 'detailed-img-track-list':showDetailedSubtoolbar&&isImageTrackList}">
  <div class="noselect" v-bind:class="{'subtoolbar-cover':showDetailedSubtoolbar&&drawBgndImage}">
  <div class="subtoolbar" v-bind:class="{'toolbar-blur':showDetailedSubtoolbar&&drawBgndImage}">
   <v-layout v-if="selection.size>0">
@@ -675,7 +675,7 @@ var lmsBrowse = Vue.component("lms-browse", {
             if (this.tall>0 && (undefined!=this.detailedSubExtra || this.detailedSubBot || this.wide>=WIDE_COVER)) {
                 let stdItem = this.current ? this.current.stdItem ? this.current.stdItem : this.current.altStdItem : undefined;
                 return this.wide>WIDE_NONE && this.current && undefined!=stdItem && (this.currentImage || stdItem==STD_ITEM_ONLINE_ARTIST_CATEGORY) &&
-                        (stdItem==STD_ITEM_ARTIST || stdItem==STD_ITEM_WORK_COMPOSER || stdItem==STD_ITEM_ALBUM || stdItem==STD_ITEM_WORK  || stdItem==STD_ITEM_CLASSICAL_WORKS ||
+                        (stdItem==STD_ITEM_ARTIST || stdItem==STD_ITEM_WORK_COMPOSER || stdItem==STD_ITEM_ALBUM || stdItem==STD_ITEM_WORK  || stdItem==STD_ITEM_CLASSICAL_WORKS || (stdItem==STD_ITEM_PLAYLIST && lmsOptions.playlistImages) ||
                             (this.wide>=WIDE_COVER && (stdItem==STD_ITEM_ONLINE_ARTIST || stdItem==STD_ITEM_ONLINE_ALBUM || stdItem==STD_ITEM_ONLINE_ARTIST_CATEGORY)) ||
                             stdItem>=STD_ITEM_MAI);
             }
@@ -685,6 +685,9 @@ var lmsBrowse = Vue.component("lms-browse", {
             let stdItem = this.current.stdItem ? this.current.stdItem : this.current.altStdItem;
             if (stdItem==STD_ITEM_ARTIST || stdItem==STD_ITEM_WORK_COMPOSER) {
                 return this.detailedSubInfo;
+            }
+            if (stdItem==STD_ITEM_PLAYLIST) {
+                return "&nbsp;";
             }
             if (stdItem==STD_ITEM_WORK) {
                 return undefined!=this.current.composer ? this.current.composer : this.current.subtitle;
@@ -713,7 +716,7 @@ var lmsBrowse = Vue.component("lms-browse", {
                 return false;
             }
             let stdItem = this.current.stdItem ? this.current.stdItem : this.current.altStdItem;
-            if (stdItem==STD_ITEM_ARTIST || stdItem==STD_ITEM_WORK_COMPOSER || stdItem==STD_ITEM_WORK || stdItem==STD_ITEM_CLASSICAL_WORKS) {
+            if (stdItem==STD_ITEM_ARTIST || stdItem==STD_ITEM_WORK_COMPOSER || stdItem==STD_ITEM_WORK || stdItem==STD_ITEM_CLASSICAL_WORKS || stdItem==STD_ITEM_PLAYLIST) {
                 return this.headerSubTitle;
             }
             if (stdItem==STD_ITEM_ALBUM || (stdItem==STD_ITEM_ONLINE_ALBUM && this.current.sbMeta) || stdItem==STD_ITEM_MIX || stdItem==STD_ITEM_ALL_TRACKS || stdItem==STD_ITEM_COMPOSITION_TRACKS) {
@@ -767,6 +770,12 @@ var lmsBrowse = Vue.component("lms-browse", {
         },
         subtitlesClickable() {
             return this.subtitleClickable || (this.isTop && this.$store.state.detailedHome>0)
+        },
+        isTrackList() {
+            return undefined!=this.current && (STD_ITEM_ALBUM==this.current.stdItem || STD_ITEM_PLAYLIST==this.current.stdItem || this.current.stdItem==STD_ITEM_ALL_TRACKS)
+        },
+        isImageTrackList() {
+            return undefined!=this.current && (STD_ITEM_PLAYLIST==this.current.stdItem || this.current.stdItem==STD_ITEM_ALL_TRACKS)
         }
     },
     created() {

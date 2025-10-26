@@ -111,7 +111,7 @@ Vue.component('lms-search-list', {
         },
         searchFor(str, start, backwards) {
             for (let idx = start, loop=this.view.items, len=loop.length; backwards ? idx>=0 : idx<len; idx+=(backwards ? -1 : 1)) {
-                if (searchListHasStr(this.view.items[idx], str)) {
+                if (!this.view.items[idx].header && searchListHasStr(this.view.items[idx], str)) {
                     this.currentIndex = idx;
                     this.$emit('scrollTo', idx);
                     this.lastSearch = str;

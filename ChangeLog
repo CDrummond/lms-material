@@ -4,6 +4,7 @@
 2. Don't try to get mtime of playlists imported from streaming services -
    thanks to SamY.
 3. Use a button for server update link in 'Information' dialog.
+4. Ignore headers when searching in lists.
 
 5.11.4
 ------

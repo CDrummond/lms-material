@@ -1852,7 +1852,7 @@ var lmsBrowse = Vue.component("lms-browse", {
                     if (i<items.length && items[i].header) {
                         this.grid.multiSize=true;
                         if (this.grid.type!=GRID_TEXT_ONLY && this.grid.rows.length>0 && !this.grid.rows[this.grid.rows.length-1].hasSub && !this.grid.rows[this.grid.rows.length-1].ihe) {
-                            this.grid.rows.push({spacer:true, size:24, id:"row.extra.spacer."+i, ihe:true});
+                            this.grid.rows.push({spacer:true, size:24, id:"row.extra.spacer."+i, ihe:true, rs:rs});
                         }
                         this.grid.rows.push({item: items[i], header:true, size:48, r:row, id:"row.header."+i, rs:rs});
                         i+=1;
@@ -1986,7 +1986,7 @@ var lmsBrowse = Vue.component("lms-browse", {
         },
         jumpTo(index) {
             let pos = 0;
-            if (this.grid.allowed && this.grid.use && this.items.length>0 && this.items[0].header) {
+            if (this.grid.allowed && this.grid.use && this.items.length>0 && this.grid.multiSize) {
                 for (let r=0, loop=this.grid.rows, len=loop.length-1; r<len && loop[r+1].rs<=index; ++r) {
                     pos += loop[r].size;
                 }

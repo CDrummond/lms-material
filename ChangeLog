@@ -19,6 +19,7 @@ dev
 15. Add icon map for xPlay.
 16. If set to combine apps and radio then categrise apps.
 17. Allow using grid for genres even when genre images are disabled.
+18. Only show detailed sub-toolbar if window is at least 400px tall.
 
 5.11.5
 ------

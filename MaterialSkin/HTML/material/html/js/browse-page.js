@@ -17,6 +17,7 @@ const MIN_WIDTH_FOR_COVER = 650;
 const MIN_WIDTH_FOR_MIX_BTN = 800;
 const MIN_WIDTH_FOR_COVER_INDENT = 1000;
 const MIN_WIDTH_FOR_BOTH_INDENT = 1300;
+const MIN_HEIGHT_FOR_DETAILED_SUB = 400;
 const JUMP_LIST_WIDTH = 32;
 
 const WIDE_BOTH = 7;
@@ -552,7 +553,8 @@ var lmsBrowse = Vue.component("lms-browse", {
             dragActive: false,
             dropIndex: -1,
             highlightIndex: -1,
-            hRgb: "000"
+            hRgb: "000",
+            tall: window.innerHeight>=MIN_HEIGHT_FOR_DETAILED_SUB ? 1 : 0
         }
     },
     computed: {
@@ -670,7 +672,7 @@ var lmsBrowse = Vue.component("lms-browse", {
             return this.headerSubTitle ? this.headerSubTitle : undefined;
         },
         showDetailedSubtoolbar() {
-            if (undefined!=this.detailedSubExtra || this.detailedSubBot || this.wide>=WIDE_COVER) {
+            if (this.tall>0 && (undefined!=this.detailedSubExtra || this.detailedSubBot || this.wide>=WIDE_COVER)) {
                 let stdItem = this.current ? this.current.stdItem ? this.current.stdItem : this.current.altStdItem : undefined;
                 return this.wide>WIDE_NONE && this.current && undefined!=stdItem && (this.currentImage || stdItem==STD_ITEM_ONLINE_ARTIST_CATEGORY) &&
                         (stdItem==STD_ITEM_ARTIST || stdItem==STD_ITEM_WORK_COMPOSER || stdItem==STD_ITEM_ALBUM || stdItem==STD_ITEM_WORK  || stdItem==STD_ITEM_CLASSICAL_WORKS ||
@@ -2488,6 +2490,9 @@ var lmsBrowse = Vue.component("lms-browse", {
         bus.$on('windowWidthChanged', function() {
             this.setWide();
             this.layoutGrid();
+        }.bind(this));
+        bus.$on('windowHeightChanged', function() {
+            this.tall = window.innerHeight>=MIN_HEIGHT_FOR_DETAILED_SUB ? 1 : 0
         }.bind(this));
         bus.$on('themeChanged', function() {
             this.setBgndCover();

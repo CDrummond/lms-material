@@ -3,6 +3,7 @@
 1. Add 'Play shuffled' to genres and years.
 2. Don't try to get mtime of playlists imported from streaming services -
    thanks to SamY.
+3. Use a button for server update link in 'Information' dialog.
 
 5.11.4
 ------

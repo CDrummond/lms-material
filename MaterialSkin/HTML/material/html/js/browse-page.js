@@ -34,8 +34,8 @@ const WIDE_NONE = 0;
 var lmsBrowse = Vue.component("lms-browse", {
     template: `
 <div id="browse-view" v-bind:class="{'detailed-sub':showDetailedSubtoolbar, 'indent-both':showDetailedSubtoolbar && isTrackList && wide>WIDE_COVER_IDENT && (!desktopLayout || !pinQueue), 'indent-right':showDetailedSubtoolbar && isTrackList && wide==WIDE_COVER_IDENT && (!desktopLayout || !pinQueue), 'indent-left':showDetailedSubtoolbar && wide>=WIDE_INDENT_L && (!desktopLayout || !pinQueue), 'detailed-img-track-list':showDetailedSubtoolbar&&isImageTrackList}">
- <div class="noselect" v-bind:class="{'subtoolbar-cover':showDetailedSubtoolbar&&drawBgndImage}">
- <div class="subtoolbar" v-bind:class="{'toolbar-blur':showDetailedSubtoolbar&&drawBgndImage}">
+ <div class="noselect" v-bind:class="{'subtoolbar-cover':showDetailedSubtoolbar&&drawBgndImage&&wide>=WIDE_COVER,'subtoolbar-cover-full':showDetailedSubtoolbar&&drawBgndImage&&wide<WIDE_COVER}">
+ <div class="subtoolbar" v-bind:class="{'toolbar-blur':showDetailedSubtoolbar&&drawBgndImage&&wide>=WIDE_COVER,'toolbar-cover':showDetailedSubtoolbar&&drawBgndImage&&wide<WIDE_COVER}">
   <v-layout v-if="selection.size>0">
    <div class="toolbar-nobtn-pad"></div>
    <v-layout row wrap>
@@ -675,9 +675,9 @@ var lmsBrowse = Vue.component("lms-browse", {
             if (this.tall>0 && (undefined!=this.detailedSubExtra || this.detailedSubBot || this.wide>=WIDE_COVER)) {
                 let stdItem = this.current ? this.current.stdItem ? this.current.stdItem : this.current.altStdItem : undefined;
                 return this.wide>WIDE_NONE && this.current && undefined!=stdItem && (this.currentImage || stdItem==STD_ITEM_ONLINE_ARTIST_CATEGORY) &&
-                        (stdItem==STD_ITEM_ARTIST || stdItem==STD_ITEM_WORK_COMPOSER || stdItem==STD_ITEM_ALBUM || stdItem==STD_ITEM_WORK  || stdItem==STD_ITEM_CLASSICAL_WORKS || (stdItem==STD_ITEM_PLAYLIST && lmsOptions.playlistImages) ||
-                            (this.wide>=WIDE_COVER && (stdItem==STD_ITEM_ONLINE_ARTIST || stdItem==STD_ITEM_ONLINE_ALBUM || stdItem==STD_ITEM_ONLINE_ARTIST_CATEGORY)) ||
-                            stdItem>=STD_ITEM_MAI);
+                        (stdItem==STD_ITEM_ARTIST || stdItem==STD_ITEM_WORK_COMPOSER || stdItem==STD_ITEM_ALBUM || stdItem==STD_ITEM_WORK ||
+                         stdItem==STD_ITEM_CLASSICAL_WORKS || (stdItem==STD_ITEM_PLAYLIST && lmsOptions.playlistImages) || stdItem>=STD_ITEM_MAI ||
+                         (this.wide>=WIDE_COVER && (stdItem==STD_ITEM_ONLINE_ARTIST || stdItem==STD_ITEM_ONLINE_ALBUM || stdItem==STD_ITEM_ONLINE_ARTIST_CATEGORY)));
             }
             return false;
         },
@@ -1963,12 +1963,15 @@ var lmsBrowse = Vue.component("lms-browse", {
             var url = this.bgndUrl;
             if (url) {
                 url=changeImageSizing(url, LMS_IMAGE_SIZE);
+                document.documentElement.style.setProperty('--subtoolbar-image-full-url', 'url(' + url + ')');
                 document.documentElement.style.setProperty('--subtoolbar-image-url', 'url(' + changeImageSizing(url, LMS_TBAR_BGND_IMAGE_SIZE) + ')');
             } else {
                 var img = this.currentImageUrl;
                 if (img) {
+                    document.documentElement.style.setProperty('--subtoolbar-image-full-url', 'url(' + url + ')');
                     document.documentElement.style.setProperty('--subtoolbar-image-url', 'url(' + changeImageSizing(img, LMS_TBAR_BGND_IMAGE_SIZE) + ')');
                 } else {
+                    document.documentElement.style.setProperty('--subtoolbar-image-full-url', 'url()');
                     document.documentElement.style.setProperty('--subtoolbar-image-url', 'url()');
                 }
                 if (this.drawBackdrop) {
@@ -2203,7 +2206,7 @@ var lmsBrowse = Vue.component("lms-browse", {
             this.dragIndex = undefined;
         },
         setWide() {
-            let viewWidth = (this.$store.state.desktopLayout ? this.pageElement.scrollWidth : window.innerWidth) - (this.$store.state.homeButton ? 48 : 0);
+            let viewWidth = this.$store.state.desktopLayout ? this.pageElement.scrollWidth : window.innerWidth;
             this.wide = viewWidth>=MIN_WIDTH_FOR_BOTH_INDENT
                             ? WIDE_BOTH
                             : viewWidth>=MIN_WIDTH_FOR_COVER_INDENT
@@ -2495,6 +2498,7 @@ var lmsBrowse = Vue.component("lms-browse", {
         this.setWide();
         setTimeout(function () {
             this.setWide();
+            this.tall = window.innerHeight>=MIN_HEIGHT_FOR_DETAILED_SUB ? 1 : 0
         }.bind(this), 1000);
         bus.$on('windowWidthChanged', function() {
             this.setWide();

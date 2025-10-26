@@ -69,6 +69,7 @@
  --npbar-border-color:var(--bottom-toolbar-border-color);
  --album-separator-color:rgba(2, 2, 2, 0.2);
  --subtoolbar-image-url:url();
+ --subtoolbar-image-full-url:url();
  --pq-current-color:rgba(var(--highlight-rgb),0.2);
  --pq-current-album-color:rgba(var(--highlight-rgb),0.075);
  --drop-target-color:rgba(var(--highlight-rgb),0.5);
@@ -2192,6 +2193,15 @@ div.v-rating i.primary--text, div.v-rating i.accent--text {
  box-shadow:inset 100vw 100vh var(--subtoolbar-shadow-color);
  background:var(--subtoolbar-image-url);
 }
+.subtoolbar-cover-full {
+ background-color:var(--background-color);
+ background-size:cover !important;
+ background-repeat:no-repeat !important;
+ background-position:center center !important;
+ box-shadow:inset 100vw 100vh var(--subtoolbar-shadow-color);
+ background:var(--subtoolbar-image-full-url);
+}
+
 .browse-backdrop-cover {
  background-position:right center !important;
 }
@@ -2212,6 +2222,11 @@ div.v-rating i.primary--text, div.v-rating i.accent--text {
 .toolbar-blur {
  backdrop-filter:var(--toolbar-filter);
  -webkit-backdrop-filter:var(--toolbar-filter);
+ background:none!important;
+ overflow:hidden;
+}
+
+.toolbar-cover {
  background:none!important;
  overflow:hidden;
 }

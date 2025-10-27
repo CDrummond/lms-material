@@ -22,9 +22,7 @@ dev
 18. Only show detailed sub-toolbar if window is at least 400px tall.
 19. Allow using detailed sub-toolbar for playlists, if playlist image support
     is enabled.
-20. If showing detailed sub-toolbar and view is too narrow for image then show
-    unblurred image as toolbar background.
-21. Add text play/add/shuffle buttons for track lists if in width range.
+20. Add text play/add/shuffle buttons for track lists if in width range.
 
 5.11.5
 ------

@@ -42,8 +42,8 @@ const TRACK_WIDE_ONE = 0
 var lmsBrowse = Vue.component("lms-browse", {
     template: `
 <div id="browse-view" v-bind:class="{'detailed-sub':showDetailedSubtoolbar, 'indent-both':showDetailedSubtoolbar && isTrackList && wide>WIDE_COVER_IDENT && (!desktopLayout || !pinQueue), 'indent-right':showDetailedSubtoolbar && isTrackList && wide==WIDE_COVER_IDENT && (!desktopLayout || !pinQueue), 'indent-left':showDetailedSubtoolbar && wide>=WIDE_INDENT_L && (!desktopLayout || !pinQueue), 'detailed-img-track-list':showDetailedSubtoolbar&&isImageTrackList}">
- <div class="noselect" v-bind:class="{'subtoolbar-cover':showDetailedSubtoolbar&&drawBgndImage&&wide>=WIDE_COVER,'subtoolbar-cover-full':showDetailedSubtoolbar&&drawBgndImage&&wide<WIDE_COVER,'subtoolbar-tracklist':showTrackListCommands}">
- <div class="subtoolbar" v-bind:class="{'toolbar-blur':showDetailedSubtoolbar&&drawBgndImage&&wide>=WIDE_COVER,'toolbar-cover':showDetailedSubtoolbar&&drawBgndImage&&wide<WIDE_COVER}">
+ <div class="noselect" v-bind:class="{'subtoolbar-cover':showDetailedSubtoolbar&&drawBgndImage,'subtoolbar-tracklist':showTrackListCommands}">
+ <div class="subtoolbar" v-bind:class="{'toolbar-blur':showDetailedSubtoolbar&&drawBgndImage}">
   <v-layout v-if="selection.size>0">
    <div class="toolbar-nobtn-pad"></div>
    <v-layout row wrap>
@@ -1987,15 +1987,12 @@ var lmsBrowse = Vue.component("lms-browse", {
             var url = this.bgndUrl;
             if (url) {
                 url=changeImageSizing(url, LMS_IMAGE_SIZE);
-                document.documentElement.style.setProperty('--subtoolbar-image-full-url', 'url(' + url + ')');
                 document.documentElement.style.setProperty('--subtoolbar-image-url', 'url(' + changeImageSizing(url, LMS_TBAR_BGND_IMAGE_SIZE) + ')');
             } else {
                 var img = this.currentImageUrl;
                 if (img) {
-                    document.documentElement.style.setProperty('--subtoolbar-image-full-url', 'url(' + url + ')');
                     document.documentElement.style.setProperty('--subtoolbar-image-url', 'url(' + changeImageSizing(img, LMS_TBAR_BGND_IMAGE_SIZE) + ')');
                 } else {
-                    document.documentElement.style.setProperty('--subtoolbar-image-full-url', 'url()');
                     document.documentElement.style.setProperty('--subtoolbar-image-url', 'url()');
                 }
                 if (this.drawBackdrop) {

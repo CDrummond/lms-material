@@ -66,16 +66,14 @@
  float:left;
 }
 
-.subtoolbar-cover,
-.subtoolbar-cover-full {
+.subtoolbar-cover {
  position:fixed;
  top:var(--main-toolbar-height);
  width:100vw;
  height:calc(var(--sub-toolbar-height)*2) !important;
 }
 
-.subtoolbar-cover.subtoolbar-tracklist,
-.subtoolbar-cover-full.subtoolbar-tracklist {
+.subtoolbar-cover.subtoolbar-tracklist {
  height:calc(var(--sub-toolbar-height)*3) !important;
 }
 

@@ -74,6 +74,11 @@
  height:calc(var(--sub-toolbar-height)*2) !important;
 }
 
+.subtoolbar-cover.subtoolbar-tracklist,
+.subtoolbar-cover-full.subtoolbar-tracklist {
+ height:calc(var(--sub-toolbar-height)*3) !important;
+}
+
 .lms-footer {
  position:fixed;
  bottom:0;
@@ -179,6 +184,15 @@
 .detailed-sub .lms-image-grid,
 .detailed-sub .lms-jumplist {
  height:calc(var(--100vh) - (var(--main-toolbar-height) + (var(--sub-toolbar-height)*2) + var(--bottom-toolbar-height) + var(--mobile-npbar-height)))!important;
+}
+
+.detailed-sub .lms-list.browse-track-list {
+ top:calc(var(--main-toolbar-height) + (var(--sub-toolbar-height)*3))!important;
+ height:calc(var(--100vh) - (var(--main-toolbar-height) + (var(--sub-toolbar-height)*3) + var(--bottom-toolbar-height) + var(--mobile-npbar-height)))!important;
+}
+
+.detailed-sub .lms-list.browse-track-list {
+ height:calc(var(--100vh) - (var(--main-toolbar-height) + (var(--sub-toolbar-height)*3) + var(--bottom-toolbar-height) + var(--mobile-npbar-height)))!important;
 }
 
 .browse-progress {

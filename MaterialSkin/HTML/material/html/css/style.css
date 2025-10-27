@@ -1229,6 +1229,10 @@ div.v-subheader {
  height:calc(var(--sub-toolbar-height)*2) !important;
 }
 
+.detailed-sub .subtoolbar-tracklist .subtoolbar {
+ height:calc(var(--sub-toolbar-height)*3) !important;
+}
+
 .subtoolbar-title {
  margin-top:calc(16px - var(--std-font-size)) !important;
  margin-left:1px;
@@ -2899,14 +2903,9 @@ div.v-subheader {
 }
 
 .dst-home, .dst-home:hover {
- position:fixed;
+ position:absolute;
  left:7px;
- bottom:2px;
-}
-
-.dst-home-nobgnd, .dst-home-nobgnd:hover {
- position:fixed;
- top:calc(var(--top-pad) + (var(--sub-toolbar-height) *2 ));
+ top:calc(var(--top-pad) + var(--sub-toolbar-height) );
  bottom:unset!important;
 }
 
@@ -4231,12 +4230,30 @@ div.v-subheader {
  background-color: green;
 }
 
-.browse-commands {
+.browse-commands, .browse-tracklist-commands {
  border-spacing:0px !important;
 }
 
-.browse-commands tr {
- height:48px;
+.browse-commands tr, .browse-tracklist-commands tr {
+ height:var(--sub-toolbar-height);
+}
+
+.browse-tracklist-commands {
+ position:relative;
+ width:100%;
+ height:var(--sub-toolbar-height);
+ top:calc(var(--sub-toolbar-height) * 2);
+ z-index:1;
+ padding-left:8px;
+ padding-right:8px;
+}
+/*.browse-tracklist-commands .context-button:first-of-type {
+ background-color:var(--std-background-color);
+ filter:invert(100%);
+ -webkit-filter:invert(100%);
+}*/
+.browse-tracklist-commands .context-button {
+ margin-right:8px!important;
 }
 
 .browse-no-sub {
@@ -4245,8 +4262,10 @@ div.v-subheader {
 
 .context-button {
  margin-left:0px;
+ margin-top:2px;
  padding:0 10px;
  min-width:78px!important;
+ border:1px solid var(--sub-toolbar-border-color);
 }
 
 .context-button:not(:last-of-type) {

@@ -704,6 +704,9 @@ var lmsBrowse = Vue.component("lms-browse", {
                 return this.detailedSubInfo;
             }
             if (stdItem==STD_ITEM_PLAYLIST) {
+                if (undefined!=this.current.url) {
+                    return this.current.url.startsWith("file:") ? i18n("Local Playlist") : i18n("Remote Playlist");
+                }
                 return "&nbsp;";
             }
             if (stdItem==STD_ITEM_WORK) {

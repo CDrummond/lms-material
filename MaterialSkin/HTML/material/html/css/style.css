@@ -4115,6 +4115,28 @@ div.v-subheader {
  height:calc((var(--sub-toolbar-height)*2) - 5px);
 }
 
+.detailed-sub .sub-cover-track {
+ width:calc((var(--sub-toolbar-height)*3));
+ height:calc((var(--sub-toolbar-height)*3));
+}
+
+.detailed-sub .sub-cover-right {
+ width:calc((var(--sub-toolbar-height)*2));
+ height:calc((var(--sub-toolbar-height)*2));
+}
+
+.sub-cover-fade {
+ object-fit:cover;
+ object-position:50% 0%;
+ position:fixed;
+ display:block;
+ right:0px;
+ top:0px;
+ -webkit-mask-image: linear-gradient(to right, transparent 0px, black 50%, black 100%);
+ mask-image: linear-gradient(to right, transparent 0px, black 50%, black 100%);
+ opacity:0.25;
+}
+
 .wc {
  padding-left:var(--window-controls-padr);
  min-width:var(--window-controls-space);

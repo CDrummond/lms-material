@@ -4247,13 +4247,10 @@ div.v-subheader {
 }
 
 .browse-tracklist-commands {
- position:relative;
  width:100%;
  height:var(--sub-toolbar-height);
- top:calc(var(--sub-toolbar-height) * 2);
- z-index:1;
- padding-left:8px;
- padding-right:8px;
+ padding-left:1px;
+ padding-right:1px;
 }
 /*.browse-tracklist-commands .context-button:first-of-type {
  background-color:var(--std-background-color);

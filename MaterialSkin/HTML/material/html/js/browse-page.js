@@ -695,10 +695,13 @@ var lmsBrowse = Vue.component("lms-browse", {
         showDetailedSubtoolbar() {
             if (this.tall>0) { //} && (undefined!=this.detailedSubExtra || this.detailedSubBot || this.wide>=WIDE_COVER)) {
                 let stdItem = this.current ? this.current.stdItem ? this.current.stdItem : this.current.altStdItem : undefined;
-                return this.wide>WIDE_NONE && this.current && undefined!=stdItem && (this.currentImage || stdItem==STD_ITEM_ONLINE_ARTIST_CATEGORY) &&
-                        (stdItem==STD_ITEM_ARTIST || stdItem==STD_ITEM_WORK_COMPOSER || stdItem==STD_ITEM_ALBUM || stdItem==STD_ITEM_WORK ||
-                         stdItem==STD_ITEM_CLASSICAL_WORKS || (stdItem==STD_ITEM_PLAYLIST && lmsOptions.playlistImages) || stdItem>=STD_ITEM_MAI ||
-                         (this.wide>=WIDE_COVER && (stdItem==STD_ITEM_ONLINE_ARTIST || stdItem==STD_ITEM_ONLINE_ALBUM || stdItem==STD_ITEM_ONLINE_ARTIST_CATEGORY)));
+                return this.wide>WIDE_NONE && this.current && undefined!=stdItem &&
+                       (this.currentImage || stdItem==STD_ITEM_ONLINE_ARTIST_CATEGORY) &&
+                       ( stdItem==STD_ITEM_ARTIST || stdItem==STD_ITEM_WORK_COMPOSER || stdItem==STD_ITEM_ALBUM ||
+                         stdItem==STD_ITEM_WORK || stdItem==STD_ITEM_CLASSICAL_WORKS || stdItem>=STD_ITEM_MAI ||
+                         ((stdItem==STD_ITEM_PLAYLIST || stdItem==STD_ITEM_REMOTE_PLAYLIST) && lmsOptions.playlistImages) ||
+                         (this.wide>=WIDE_COVER && (stdItem==STD_ITEM_ONLINE_ARTIST || stdItem==STD_ITEM_ONLINE_ALBUM ||
+                            stdItem==STD_ITEM_ONLINE_ARTIST_CATEGORY)));
             }
             return false;
         },
@@ -708,15 +711,17 @@ var lmsBrowse = Vue.component("lms-browse", {
                 return this.detailedSubInfo;
             }
             if (stdItem==STD_ITEM_PLAYLIST) {
-                if (undefined!=this.current.url) {
-                    return this.current.url.startsWith("file:") ? i18n("Local Playlist") : i18n("Remote Playlist");
-                }
-                return "&nbsp;";
+                return i18n("Local Playlist");
+            }
+            if (stdItem==STD_ITEM_REMOTE_PLAYLIST) {
+                return i18n("Remote Playlist");
             }
             if (stdItem==STD_ITEM_WORK) {
                 return undefined!=this.current.composer ? this.current.composer : this.current.subtitle;
             }
-            if (stdItem==STD_ITEM_ALBUM || (stdItem==STD_ITEM_ONLINE_ALBUM && this.current.sbMeta) || stdItem==STD_ITEM_ALL_TRACKS || stdItem==STD_ITEM_COMPOSITION_TRACKS || stdItem==STD_ITEM_MIX || stdItem==STD_ITEM_CLASSICAL_WORKS) {
+            if (stdItem==STD_ITEM_ALBUM || (stdItem==STD_ITEM_ONLINE_ALBUM && this.current.sbMeta) ||
+                stdItem==STD_ITEM_ALL_TRACKS || stdItem==STD_ITEM_COMPOSITION_TRACKS || stdItem==STD_ITEM_MIX ||
+                stdItem==STD_ITEM_CLASSICAL_WORKS) {
                 let albumArtst = this.current.subIsYear ? undefined : this.current.subtitle;
                 if (lmsOptions.noArtistFilter && this.current.compilation && this.items.length>0 && undefined!=this.items[0].compilationAlbumArtist) {
                     albumArtst = this.items[0].compilationAlbumArtist;
@@ -796,10 +801,10 @@ var lmsBrowse = Vue.component("lms-browse", {
             return this.subtitleClickable || (this.isTop && this.$store.state.detailedHome>0)
         },
         isTrackList() {
-            return undefined!=this.current && (STD_ITEM_ALBUM==this.current.stdItem || STD_ITEM_PLAYLIST==this.current.stdItem || this.current.stdItem==STD_ITEM_ALL_TRACKS)
+            return undefined!=this.current && (STD_ITEM_ALBUM==this.current.stdItem || STD_ITEM_PLAYLIST==this.current.stdItem || this.current.stdItem==STD_ITEM_ALL_TRACKS || STD_ITEM_ONLINE_ALBUM==this.current.stdItem || STD_ITEM_REMOTE_PLAYLIST==this.current.stdItem)
         },
         isImageTrackList() {
-            return undefined!=this.current && (STD_ITEM_PLAYLIST==this.current.stdItem || this.current.stdItem==STD_ITEM_ALL_TRACKS)
+            return undefined!=this.current && (STD_ITEM_PLAYLIST==this.current.stdItem || this.current.stdItem==STD_ITEM_ALL_TRACKS || this.current.stdItem==STD_ITEM_REMOTE_PLAYLIST)
         },
         showTrackListCommands() {
             return this.wide<WIDE_MIX_BTN && this.isTrackList && this.showDetailedSubtoolbar

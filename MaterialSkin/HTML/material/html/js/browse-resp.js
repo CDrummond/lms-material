@@ -1958,14 +1958,16 @@ function parseBrowseResp(data, parent, options, cacheKey) {
                     textKeys.add(key);
                 }
                 let genre = i.genre.toLowerCase().replace(/[^0-9a-z]/gi, '');
+                let title = replaceHtmlBrackets(i.genre);
                 resp.items.push({
                               id: "genre_id:"+i.id,
-                              title: replaceHtmlBrackets(i.genre),
+                              title: title,
                               //icon: "label",
                               image: lmsOptions.genreImages ? "material/genres/" + genre : undefined,
                               stdItem: stdItem,
                               type: "group",
-                              textkey: key
+                              textkey: key,
+                              color:lmsOptions.genreImages ? undefined : stringToColor(title)
                           });
             }
             resp.canUseGrid = true;
@@ -2187,7 +2189,8 @@ function parseBrowseResp(data, parent, options, cacheKey) {
                               //icon: "date_range",
                               stdItem: STD_ITEM_YEAR,
                               type: "group",
-                              textkey: key
+                              textkey: key,
+                              color: stringToColor(""+year)
                            });
             }
             resp.itemCustomActions = getCustomActions("year");

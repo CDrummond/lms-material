@@ -921,3 +921,41 @@ function logNoPlayerError(obj) {
         bus.$emit('showError', undefined, i18n('No Player'));
     }
 }
+
+const TEXT_COLORS = [
+    "#c62828", "#d84141",
+    "#c2185b", "#fa5788",
+    "#9c27b0", "#d05ce3",
+    "#512da8", "#8559da",
+    "#303f9f", "#666ad1",
+    "#1976d2", "#82b1ff",
+    "#039be5", "#63ccff",
+    "#0097a7", "#56c8d8",
+    "#00796b", "#48a999",
+    "#43a047", "#76d275",
+    "#7cb342", "#8ec157",
+    "#afb42b", "#c8cd32",
+    "#e6b800", "#fbc02d",
+    "#ff8f00", "#ffb24d",
+    "#ef6c00", "#ff9d3f",
+    "#f4511e", "#ff844c",
+    "#8d6e63", "#be9c91",
+    "#455a64", "#718792"
+];
+
+function stringToColor(str) {
+    if (isEmpty(str)) {
+        return "#000000";
+    }
+
+    let hash = 0;
+    for (let i = 0, len=str.length; i < len; i++) {
+        let ch = str.charCodeAt(i);
+        if (ch!=' ') {
+            hash = ch + ((hash << 5) - hash);
+            hash = hash & hash;
+        }
+    }
+    hash = ((hash % TEXT_COLORS.length) + TEXT_COLORS.length) % TEXT_COLORS.length;
+    return TEXT_COLORS[hash];
+}

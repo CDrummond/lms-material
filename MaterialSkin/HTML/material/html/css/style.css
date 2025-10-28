@@ -950,6 +950,17 @@ div.v-subheader {
  padding-top:4px;
 }
 
+.stripe {
+ position:absolute;
+ top:4px;
+ left:4px;
+ height:56px !important;
+ width:6px!important;
+ padding:0px!important;
+ border-radius: 8px 0px 0px 8px;
+ opacity:0.5;
+}
+
 .genre-grid .text-grid-item {
  width:calc(150px + (5px * var(--image-grid-factor))) !important;
 }

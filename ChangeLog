@@ -25,6 +25,8 @@ dev
 20. Add text play/add/shuffle buttons for track lists if in width range.
 21. If showing detailed sub-toolbar and view is too narrow for image then show
     a semi-transparent (and fading) version on right.
+22. If clear queue with 'Play shuffled' enabled then reset queue to not
+    shuffled.
 
 5.11.5
 ------

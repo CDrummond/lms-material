@@ -337,7 +337,13 @@ sub initPlugin {
     if (Slim::Utils::Versions->compareVersions($::VERSION, '8.4.0') < 0) {
         Slim::Utils::Timers::setTimer(undef, Time::HiRes::time() + 15, \&_checkUpdates);
     }
+
+    #Slim::Control::Request::subscribe(\&_checkPlayQueue, [['playlist']]);
 }
+
+#sub shutdownPlugin {
+#    Slim::Control::Request::unsubscribe(\&_playQueueCleared);
+#}
 
 sub getPluginVersion {
     return $pluginVersion;
@@ -516,6 +522,23 @@ sub initOthers {
         $hideForKiosk = '9, 10, 11, 12, 13, 14, 15, 16, 20, 25, 26, 27, 29, 30, 41, 42, 49, 50, 56, 57';
     }
 }
+
+#sub _checkPlayQueue {
+#    my $request = shift;
+#    if (!$prefs->get('playShuffle')) {
+#        return;
+#    }
+#    main::INFOLOG && $log->is_info && $log->info("Check queue");
+#    my $client = $request->client();
+#    if (0==Slim::Player::Playlist::count($client) && 0!=Slim::Player::Playlist::shuffle($client)) {
+#        Slim::Utils::Timers::setTimer($client, Time::HiRes::time() + 2.00, sub {
+#            if (0==Slim::Player::Playlist::count($client) && 0!=Slim::Player::Playlist::shuffle($client)) {
+#                main::INFOLOG && $log->is_info && $log->info("Set queue to not shuffled");
+#                $client->execute(['playlist', 'shuffle', 0]);
+#            }
+#        });
+#    }
+#}
 
 sub _getUrlQueryParam {
     my $uri = shift;

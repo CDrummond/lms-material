@@ -934,6 +934,9 @@ var lmsQueue = Vue.component("lms-queue", {
             }
             if (longPress) {
                 bus.$emit('playerCommand', ["playlist", "clear"]);
+                if (lmsOptions.playShuffle && this.playerStatus.shuffle==1) {
+                    bus.$emit('playerCommand', ["playlist", "shuffle", 0]);
+                }
                 return;
             }
             // Delay showing dialog by 5ms to prevent initial 'pulse' effect on mobile
@@ -947,6 +950,9 @@ var lmsQueue = Vue.component("lms-queue", {
                         this.resetCloseTimer();
                         if (0==choice.id) {
                             bus.$emit('playerCommand', ["playlist", "clear"]);
+                            if (lmsOptions.playShuffle && this.playerStatus.shuffle==1) {
+                                bus.$emit('playerCommand', ["playlist", "shuffle", 0]);
+                            }
                             if (!(this.$store.state.pinQueue && this.windowWide>1)) {
                                 this.$store.commit('setShowQueue', false);
                             }

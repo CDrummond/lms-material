@@ -297,7 +297,6 @@
 "Move the queue to":"Verplaats de afspeellijst naar",
 "Move to next in queue":"Verplaats naar volgende in afspeellijst",
 "Move to parent folder":"Verplaatsen naar bovenliggende map",
-"Music sources":"Muziekbronnen",
 "Mute":"Dempen",
 "My Music":"Mijn Muziek",
 "NOTE: 'Application layout' is not saved, as this is a per-device setting.":"Let op: Layout is niet opgeslagen, aangezien dit een instelling per apparaat is.",
@@ -703,5 +702,17 @@
 "1 Year":"1 Jaar",
 "%1 Years":"%1 Jaren",
 "1 day":"1 dag",
-"%1 days":"%1 dagen"
+"%1 days":"%1 dagen",
+"Explore":"",
+"Local Playlist":"",
+"Most Played":"",
+"New Music":"",
+"Newest":"",
+"Radios":"",
+"Recently Played":"",
+"Remote Playlist":"",
+"Streaming Services":"",
+"Use cover of current track as background (when queue is pinned).":"",
+"1 App":"",
+"%1 Apps":""
 }

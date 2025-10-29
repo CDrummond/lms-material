@@ -297,7 +297,6 @@
 "Move the queue to":"Déplacer la liste de lecture vers",
 "Move to next in queue":"Déplacer après le morceau en cours",
 "Move to parent folder":"Déplacer dans le dossier parent",
-"Music sources":"Sources de musique",
 "Mute":"Couper le son",
 "My Music":"Ma Musique",
 "NOTE: 'Application layout' is not saved, as this is a per-device setting.":"REMARQUE : La mise en page de l'application n'est pas enregistrée car il s'agit d'un paramètre propre à chaque périphérique de contrôle.",
@@ -703,5 +702,17 @@
 "1 Year":"1 année",
 "%1 Years":"%1 années",
 "1 day":"1 jour",
-"%1 days":"%1 jours"
+"%1 days":"%1 jours",
+"Explore":"",
+"Local Playlist":"",
+"Most Played":"",
+"New Music":"",
+"Newest":"",
+"Radios":"",
+"Recently Played":"",
+"Remote Playlist":"",
+"Streaming Services":"",
+"Use cover of current track as background (when queue is pinned).":"",
+"1 App":"",
+"%1 Apps":""
 }

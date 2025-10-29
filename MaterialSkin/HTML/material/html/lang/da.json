@@ -297,7 +297,6 @@
 "Move the queue to":"Flyt afspilningskøen til",
 "Move to next in queue":"Gør til den næste i køen",
 "Move to parent folder":"Gå til forrige folder",
-"Music sources":"Musik",
 "Mute":"Sluk lyden",
 "My Music":"Min musik",
 "NOTE: 'Application layout' is not saved, as this is a per-device setting.":"NB: Sidens udseende gemmes ikke, da dette gemmes per enhed.",
@@ -703,5 +702,17 @@
 "1 Year":"1 år",
 "%1 Years":"%1 år",
 "1 day":"1 dag",
-"%1 days":"%1 dage"
+"%1 days":"%1 dage",
+"Explore":"",
+"Local Playlist":"",
+"Most Played":"",
+"New Music":"",
+"Newest":"",
+"Radios":"",
+"Recently Played":"",
+"Remote Playlist":"",
+"Streaming Services":"",
+"Use cover of current track as background (when queue is pinned).":"",
+"1 App":"",
+"%1 Apps":""
 }

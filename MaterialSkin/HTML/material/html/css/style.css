@@ -4257,6 +4257,10 @@ div.v-subheader {
  height:var(--sub-toolbar-height);
 }
 
+.browse-commands tr:nth-of-type(2) .context-button {
+  margin-top:2px;
+}
+
 .browse-tracklist-commands {
  width:100%;
  height:var(--sub-toolbar-height);
@@ -4268,6 +4272,9 @@ div.v-subheader {
  filter:invert(100%);
  -webkit-filter:invert(100%);
 }*/
+.browse-commands .context-button {
+ margin-left:8px!important;
+}
 .browse-tracklist-commands .context-button {
  margin-right:8px!important;
 }
@@ -4278,7 +4285,6 @@ div.v-subheader {
 
 .context-button {
  margin-left:0px;
- margin-top:2px;
  padding:0 10px;
  min-width:78px!important;
  border:1px solid var(--sub-toolbar-border-color);

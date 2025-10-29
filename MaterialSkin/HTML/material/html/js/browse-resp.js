@@ -1957,13 +1957,12 @@ function parseBrowseResp(data, parent, options, cacheKey) {
                     resp.jumplist.push({key: key, index: resp.items.length});
                     textKeys.add(key);
                 }
-                let genre = i.genre.toLowerCase().replace(/[^0-9a-z]/gi, '');
                 let title = replaceHtmlBrackets(i.genre);
                 resp.items.push({
                               id: "genre_id:"+i.id,
                               title: title,
                               //icon: "label",
-                              image: lmsOptions.genreImages ? "material/genres/" + genre : undefined,
+                              image: lmsOptions.genreImages && !isEmpty(i.genre) ? "material/genres/" + i.genre.toLowerCase().replace(/[^0-9a-z]/gi, '') : undefined,
                               stdItem: stdItem,
                               type: "group",
                               textkey: key,

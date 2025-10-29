@@ -126,7 +126,7 @@ var lmsBrowse = Vue.component("lms-browse", {
   </v-layout>
   <v-layout v-else class="pointer link-item">
    <div class="toolbar-nobtn-pad"></div>
-   <div @click="sourcesClicked" class="ellipsis subtoolbar-title subtoolbar-title-single">{{homeLabel}}</div>
+   <div @click="sourcesClicked" class="ellipsis subtoolbar-title subtoolbar-title-single">{{trans.home}}</div>
    <v-spacer @click="itemAction(SEARCH_LIB_ACTION, undefined, undefined, $event)" class="pointer"></v-spacer>
 
    <v-btn @click.stop="currentAction(currentActions[0], 0, $event)" flat icon class="toolbar-button" :title="undefined==currentActions[0].action ? currentActions[0].title : ACTIONS[currentActions[0].action].title" id="tbar-actions" v-if="currentActions.length==1 && allowListOnHome">
@@ -794,9 +794,6 @@ var lmsBrowse = Vue.component("lms-browse", {
         variableGridHeight() {
             return (this.isTop && this.$store.state.detailedHome>0) || this.grid.multiSize
         },
-        homeLabel() {
-            return this.$store.state.detailedHome>0 ? this.trans.home : this.trans.sources
-        },
         allowListOnHome() {
             return this.$store.state.detailedHome<=0
         },
@@ -937,7 +934,7 @@ var lmsBrowse = Vue.component("lms-browse", {
             this.trans= { ok:i18n('OK'), cancel: i18n('Cancel'), close: i18n('Close'), selectMultiple:i18n("Select multiple items"),
                           addall:i18n("Add selection to queue"),  playall:i18n("Play selection"), deleteall:i18n("Delete all selected items"),
                           invertSelect:i18n("Invert selection"), removeall:i18n("Remove all selected items"), choosepos:i18n("Choose position"), 
-                          goHome:i18n("Go home"), goBack:i18n("Go back"), sources:i18n("Music sources"), home:i18n("Home"), desc:i18n("Descending"),
+                          goHome:i18n("Go home"), goBack:i18n("Go back"),  home:i18n("Home"), desc:i18n("Descending"),
                           actions:i18n("Actions")
             };
 

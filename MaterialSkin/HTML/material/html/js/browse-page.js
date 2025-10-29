@@ -93,7 +93,7 @@ var lmsBrowse = Vue.component("lms-browse", {
    <v-spacer style="flex-grow: 10!important"></v-spacer>
    <table class="browse-commands" v-if="!showDetailedSubtoolbar || !isTrackList || wide>=WIDE_MIX_BTN">
     <tr align="right">
-     <v-btn @click.stop="currentActionsMenu($event)" flat icon class="toolbar-button" :title="trans.actions" id="tbar-actions" v-if="currentActions.length>0 && numCurrentActionsInToolbar<currentActions.length && (!showDetailedSubtoolbar || wide>=WIDE_HBTNS)"><v-icon>more_horiz</v-icon></v-btn>
+     <v-btn @click.stop="currentActionsMenu($event)" flat icon class="toolbar-button" :title="trans.actions" id="tbar-actions" v-if="currentActions.length>0 && numCurrentActionsInToolbar<currentActions.length && (!showDetailedSubtoolbar || wide>=WIDE_HBTNS)"><v-icon>more_vert</v-icon></v-btn>
      <template v-for="(action, index) in currentActions" v-if="numCurrentActionsInToolbar>0">
       <v-btn @click.stop="currentAction(action, index, $event)" flat icon class="toolbar-button" :title="undefined==action.action ? action.title : ACTIONS[action.action].title" :id="'tbar-actions'+action.action" v-if="index<numCurrentActionsInToolbar && (action.action!=VLIB_ACTION || libraryName)">
        <img v-if="undefined!=action.action && ACTIONS[action.action].svg" class="svg-img" :src="ACTIONS[action.action].svg | svgIcon(darkUi)"></img>
@@ -117,7 +117,7 @@ var lmsBrowse = Vue.component("lms-browse", {
      </template>
     </tr>
     <tr v-if="showMixButton || showMaiButton || (showDetailedSubtoolbar && wide<WIDE_HBTNS)" align="right">
-     <v-btn @click.stop="currentActionsMenu($event)" flat icon class="toolbar-button" :title="trans.actions" id="tbar-actions" v-if="wide<WIDE_HBTNS && currentActions.length>0 && numCurrentActionsInToolbar<currentActions.length"><v-icon>more_horiz</v-icon></v-btn>
+     <v-btn @click.stop="currentActionsMenu($event)" flat icon class="toolbar-button" :title="trans.actions" id="tbar-actions" v-if="wide<WIDE_HBTNS && currentActions.length>0 && numCurrentActionsInToolbar<currentActions.length"><v-icon>more_vert</v-icon></v-btn>
      <v-btn flat v-if="showMixButton" class="context-button" @click="doContext(STD_ITEM_MIX)"><img class="svg-img" :src="'music-mix' | svgIcon(darkUi)"></img>&nbsp;{{i18n('Create mix')}}</v-btn>
      <v-btn flat v-if="showMaiButton" class="context-button" @click="doContext(STD_ITEM_MAI)"><v-icon v-if="current.stdItem==STD_ITEM_ALBUM">album</v-icon><img v-else class="svg-img" :src="'artist' | svgIcon(darkUi)"></img>&nbsp;{{i18n('Information')}}</v-btn>
     </tr>
@@ -141,11 +141,11 @@ var lmsBrowse = Vue.component("lms-browse", {
    <v-btn flat @click.stop="headerAction(INSERT_ALL_ACTION, $event)" v-if="trackWide>=(allowShuffle(current) ? TRACK_WIDE_THREE : TRACK_WIDE_TWO)" class="context-button" :title="INSERT_ACTION | tooltip(keyboardControl)" :id="'tbar-actions'+INSERT_ACTION""><img class="svg-img" :src="ACTIONS[INSERT_ACTION].svg | svgIcon(darkUi)"></img>&nbsp;{{ACTIONS[INSERT_ACTION].short}}</v-btn>
    <v-spacer></v-spacer>
    <v-btn flat v-if="showMaiButton && current.stdItem==STD_ITEM_ALBUM" class="context-button" @click="doContext(STD_ITEM_MAI)"><v-icon>album</v-icon>&nbsp;{{i18n('Information')}}</v-btn>
-   <v-btn @click.stop="currentActionsMenu($event)" flat icon class="toolbar-button" :title="trans.actions" id="tbar-actions"><v-icon>more_horiz</v-icon></v-btn>
+   <v-btn @click.stop="currentActionsMenu($event)" flat icon class="toolbar-button" :title="trans.actions" id="tbar-actions"><v-icon>more_vert</v-icon></v-btn>
   </v-layout>
  </div>
  </div>
- <v-icon class="browse-progress" v-if="fetchingItem!=undefined" color="primary">more_horiz</v-icon>
+ <v-icon class="browse-progress" v-if="fetchingItem!=undefined" color="primary">more_vert</v-icon>
  <div class="lms-list bgnd-cover" v-bind:style="{'background-image':'url('+currentBgndUrl+')'}" v-bind:class="{'browse-backdrop-cover':drawBackdrop, 'tint-bgnd-cover':tint&&!drawBgndImage, 'browse-track-list':showTrackListCommands}">
   <div class="noselect lms-jumplist" v-bind:class="{'bgnd-blur':drawBgndImage,'backdrop-blur':drawBackdrop, 'lms-jumplist-h':filteredJumplist[0].header}" v-if="filteredJumplist.length>1">
    <div class="jl-inner" v-bind:style="{'max-height':(filteredJumplist.length*50)+'px'}">

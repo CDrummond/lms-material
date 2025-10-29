@@ -27,6 +27,7 @@ dev
     a semi-transparent (and fading) version on right.
 22. If clear queue with 'Play shuffled' enabled then reset queue to not
     shuffled.
+23. Always use three vertical dots for menu icon.
 
 5.11.5
 ------

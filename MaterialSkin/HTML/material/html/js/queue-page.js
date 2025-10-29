@@ -263,7 +263,7 @@ var lmsQueue = Vue.component("lms-queue", {
     <v-flex xs12 v-if="undefined!=duration && duration>0" class="ellipsis subtoolbar-subtitle subtext">{{remaining.show ? "-" :""}}{{(remaining.show ? remaining.duration : duration) | displayTime}}{{name}}</v-flex>
    </v-layout>
    <v-spacer></v-spacer>
-   <v-btn @click.stop="actionsMenu($event)" flat icon class="toolbar-button" :title="trans.actions" v-if="otherActions.length>0"><v-icon>more_horiz</v-icon></v-btn>
+   <v-btn @click.stop="actionsMenu($event)" flat icon class="toolbar-button" :title="trans.actions" v-if="otherActions.length>0"><v-icon>more_vert</v-icon></v-btn>
    <v-btn :title="trans.randomMix" flat icon v-if="(desktopLayout || wide>0) && playerStatus.randomplay===1" class="toolbar-button" v-bind:class="{'disabled':noPlayer}" v-longpress="repeatClicked"><img class="svg-img media-icon" :src="'dice-multiple' | svgIcon(darkUi)"></img></v-btn>
    <v-btn :title="trans.repeatOne" flat icon v-else-if="(desktopLayout || wide>0) && playerStatus.repeat===1" class="toolbar-button" v-bind:class="{'disabled':noPlayer}" v-longpress="repeatClicked"><v-icon>repeat_one</v-icon></v-btn>
    <v-btn :title="trans.repeatAll" flat icon v-else-if="(desktopLayout || wide>0) && playerStatus.repeat===2" class="toolbar-button" v-bind:class="{'disabled':noPlayer}" v-longpress="repeatClicked"><v-icon>repeat</v-icon></v-btn>

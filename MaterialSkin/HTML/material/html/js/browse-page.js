@@ -129,7 +129,7 @@ var lmsBrowse = Vue.component("lms-browse", {
    <div @click="sourcesClicked" class="ellipsis subtoolbar-title subtoolbar-title-single">{{homeLabel}}</div>
    <v-spacer @click="itemAction(SEARCH_LIB_ACTION, undefined, undefined, $event)" class="pointer"></v-spacer>
 
-   <v-btn @click.stop="currentAction(currentActions[0], 0, $event)" flat icon class="toolbar-button" :title="undefined==currentActions[0].action ? currentActions[0].title : ACTIONS[currentActions[0].action].title" id="tbar-actions" v-if="currentActions.length==1">
+   <v-btn @click.stop="currentAction(currentActions[0], 0, $event)" flat icon class="toolbar-button" :title="undefined==currentActions[0].action ? currentActions[0].title : ACTIONS[currentActions[0].action].title" id="tbar-actions" v-if="currentActions.length==1 && allowListOnHome">
     <img v-if="undefined!=currentActions[0].action && ACTIONS[currentActions[0].action].svg" class="svg-img" :src="ACTIONS[currentActions[0].action].svg | svgIcon(darkUi)"></img>
     <v-icon v-else-if="undefined!=currentActions[0].action">{{ACTIONS[currentActions[0].action].icon}}</v-icon>
    </v-btn>
@@ -797,6 +797,9 @@ var lmsBrowse = Vue.component("lms-browse", {
         homeLabel() {
             return this.$store.state.detailedHome>0 ? this.trans.home : this.trans.sources
         },
+        allowListOnHome() {
+            return this.$store.state.detailedHome<=0
+        },
         subtitlesClickable() {
             return this.subtitleClickable || (this.isTop && this.$store.state.detailedHome>0)
         },
@@ -829,7 +832,7 @@ var lmsBrowse = Vue.component("lms-browse", {
         this.options={pinned: new Set(),
                       sortFavorites: this.$store.state.sortFavorites};
         this.previousScrollPos=0;
-        this.grid = {allowed:true, use:this.$store.state.gridPerView ? isSetToUseGrid(GRID_TOP) : getLocalStorageBool('grid', true), numItems:0, numColumns:0, ih:GRID_MIN_HEIGHT, rows:[], few:false, haveSubtitle:true, multiSize:false, type:GRID_STANDARD};
+        this.grid = {allowed:true, use:this.$store.state.detailedHome || (this.$store.state.gridPerView ? isSetToUseGrid(GRID_TOP) : getLocalStorageBool('grid', true)), numItems:0, numColumns:0, ih:GRID_MIN_HEIGHT, rows:[], few:false, haveSubtitle:true, multiSize:false, type:GRID_STANDARD};
         this.currentActions=[{action:(this.grid.use ? USE_LIST_ACTION : USE_GRID_ACTION)}];
         this.canDrop = true;
 
@@ -1102,6 +1105,8 @@ var lmsBrowse = Vue.component("lms-browse", {
                     if (undefined==this.topExtra || !arraysEqual(this.topExtra, resp.items)) {
                         this.topExtra = resp.items;
                         if (this.isTop && this.$store.state.detailedHome>0) {
+                            this.grid.use = true;
+                            this.setLayoutAction();
                             this.items = this.topExtra.concat(this.top);
                             this.layoutGrid(true);
                         }
@@ -2502,6 +2507,10 @@ var lmsBrowse = Vue.component("lms-browse", {
             }
             this.options.sortFavorites=this.$store.state.sortFavorites;
             this.goHome();
+            if (this.$store.state.detailedHome>0 && this.isTop) {
+                this.grid.use = true;
+                this.setLayoutAction();
+            }
             if (this.topExtraCfg!=this.$store.state.detailedHome && this.$store.state.detailedHome>0) {
                 this.getHomeExtra();
             } else {

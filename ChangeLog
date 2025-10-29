@@ -1,4 +1,4 @@
-dev
+6.0.0
 -----
  1. Split years into decades, if 2 or more.
  2. Allow using grid for years.
@@ -28,14 +28,11 @@ dev
 22. If clear queue with 'Play shuffled' enabled then reset queue to not
     shuffled.
 23. Always use three vertical dots for menu icon.
-
-5.11.5
-------
-1. Add 'Play shuffled' to genres and years.
-2. Don't try to get mtime of playlists imported from streaming services -
+24. Add 'Play shuffled' to genres and years.
+25. Don't try to get mtime of playlists imported from streaming services -
    thanks to SamY.
-3. Use a button for server update link in 'Information' dialog.
-4. Ignore headers when searching in lists.
+26. Use a button for server update link in 'Information' dialog.
+27. Ignore headers when searching in lists.
 
 5.11.4
 ------

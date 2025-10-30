@@ -3977,7 +3977,7 @@ div.v-subheader {
  border-radius:100px;
 }
 
-.v-dialog--fullscreen .v-btn:not(.v-btn--icon) {
+.v-dialog .v-btn:not(.v-btn--icon) {
   border:1px solid var(--border-color);
 }
 

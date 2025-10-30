@@ -33,6 +33,7 @@
    thanks to SamY.
 26. Use a button for server update link in 'Information' dialog.
 27. Ignore headers when searching in lists.
+28. Draw border around all dialog buttons.
 
 5.11.4
 ------

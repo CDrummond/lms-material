@@ -254,6 +254,7 @@ var lmsBrowse = Vue.component("lms-browse", {
 
    <RecycleScroller v-else-if="useRecyclerForLists" :items="items" :item-size="LMS_LIST_ELEMENT_SIZE" page-mode key-field="id" :buffer="LMS_SCROLLER_LIST_BUFFER">
     <v-list-tile avatar @click="click(item, index, $event)" slot-scope="{item, index}" @dragstart="dragStart(index, $event)" @dragenter.prevent="" @dragend="dragEnd()" @dragover="dragOver(index, $event)" @drop="drop(index, $event)" :draggable="item.draggable && (current.section!=SECTION_FAVORITES || 0==selection.size)" v-bind:class="{'browse-header':item.header, 'search-highlight':highlightIndex==index, 'highlight':item.highlight, 'list-active': (menu.show && index==menu.index) || (fetchingItem==item.id), 'drop-target':dragActive && index==dropIndex}" @contextmenu.prevent="contextMenu(item, index, $event)">
+     <img v-if="!item.selected && item.id==currentTrack" class="browse-current-indicator" :src="'pq-current' | indIcon"></img>
      <v-list-tile-avatar v-if="item.selected" :tile="true" class="lms-avatar">
       <v-icon>check_box</v-icon>
      </v-list-tile-avatar>
@@ -349,6 +350,7 @@ var lmsBrowse = Vue.component("lms-browse", {
      </v-list-tile-content>
     </v-list-tile>
     <v-list-tile v-else-if="!(isTop && (disabled.has(item.id) || hidden.has(item.id) || (item.id==TOP_RADIO_ID && lmsOptions.combineAppsAndRadio)) || (queryParams.party && HIDE_TOP_FOR_PARTY.has(item.id)))" avatar @click="click(item, index, $event)" :key="item.id" class="lms-avatar lms-list-item" :id="'item'+index" @dragstart="dragStart(index, $event)" @dragenter.prevent="" @dragend="dragEnd()" @dragover="dragOver(index, $event)" @drop="drop(index, $event)" :draggable="isTop || (item.draggable && (current.section!=SECTION_FAVORITES || 0==selection.size))" @contextmenu.prevent="contextMenu(item, index, $event)" v-bind:class="{'drop-target': dragActive && index==dropIndex, 'search-highlight':highlightIndex==index, 'highlight':item.highlight, 'list-active': (menu.show && index==menu.index) || (fetchingItem==item.id)}">
+     <img v-if="!item.selected && item.id==currentTrack" class="browse-current-indicator" :src="'pq-current' | indIcon"></img>
      <v-list-tile-avatar v-if="item.selected" :tile="true" class="lms-avatar">
       <v-icon>check_box</v-icon>
      </v-list-tile-avatar>
@@ -575,7 +577,8 @@ var lmsBrowse = Vue.component("lms-browse", {
             dropIndex: -1,
             highlightIndex: -1,
             hRgb: "000",
-            tall: window.innerHeight>=MIN_HEIGHT_FOR_DETAILED_SUB ? 1 : 0
+            tall: window.innerHeight>=MIN_HEIGHT_FOR_DETAILED_SUB ? 1 : 0,
+            currentTrack: undefined
         }
     },
     computed: {
@@ -2344,7 +2347,9 @@ var lmsBrowse = Vue.component("lms-browse", {
         bus.$on('playerChanged', function() {
             try { browsePlayerChanged(this); } catch (e) {}
         }.bind(this));
-
+        bus.$on('playerStatus', function(playerStatus) {
+            this.currentTrack = playerStatus && playerStatus.current ? "track_id:"+playerStatus.current.id : undefined;
+        }.bind(this));
         var savedItems = JSON.parse(getLocalStorageVal("topItems", "[]"));
         if (savedItems.length==0) {
             savedItems = JSON.parse(getLocalStorageVal("pinned", "[]"));
@@ -2615,6 +2620,9 @@ var lmsBrowse = Vue.component("lms-browse", {
                 return "/material/svg/"+name+"?c="+getComputedStyle(document.getElementById("browse-view")).getPropertyValue("--active-color").replace("#", "")+"&r="+LMS_MATERIAL_REVISION;
             }
             return "/material/svg/"+name+"?c="+(dark ? LMS_DARK_SVG : LMS_LIGHT_SVG)+"&r="+LMS_MATERIAL_REVISION;
+        },
+        indIcon: function (name) {
+            return "/material/svg/"+name+"?c="+getComputedStyle(document.documentElement).getPropertyValue("--primary-color").replace("#", "")+"&c2="+LMS_DARK_SVG+"&r="+LMS_MATERIAL_REVISION;
         },
         emblem: function (e) {
             return "/material/svg/"+e.name+"?c="+e.color.substr(1)+"&r="+LMS_MATERIAL_REVISION;

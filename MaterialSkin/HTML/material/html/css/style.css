@@ -2366,6 +2366,7 @@ div.v-rating i.primary--text, div.v-rating i.accent--text {
  margin-bottom:-11px;
 }
 
+.browse-current-indicator,
 .pq-current-indicator {
  position:absolute;
  top:7.5px !important;
@@ -2374,6 +2375,17 @@ div.v-rating i.primary--text, div.v-rating i.accent--text {
  height:16px !important;
  vertical-align:middle !important;
  border-radius:unset !important;
+}
+
+#browse-list .browse-current-indicator {
+ top:unset!important;
+ left:1px!important;
+}
+.indent-left #browse-list .browse-current-indicator {
+ left:22px!important;
+}
+.indent-both #browse-list .browse-current-indicator {
+ left:114px!important;
 }
 
 .lms-list3 .pq-current-indicator {

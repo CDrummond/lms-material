@@ -945,7 +945,7 @@ const TEXT_COLORS = [
 
 function stringToColor(str) {
     if (isEmpty(str)) {
-        return "#000000";
+        return TEXT_COLORS[0];
     }
 
     let hash = 0;

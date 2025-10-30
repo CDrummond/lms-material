@@ -1147,7 +1147,10 @@ function browseClick(view, item, index, event, ignoreOpenMenu) {
                         browseDoClick(view, {id:"work_id:"+data.result.work_id, composer_id:data.result.composer_id, title:item.title, image:item.image, images:item.images, stdItem:STD_ITEM_WORK}, index, event);
                     } else if (isFavouritePlaylist) {
                         if (data.result.playlist_id) {
-                            browseDoClick(view, {id:"playlist_id:"+data.result.playlist_id, title:item.title, stdItem:STD_ITEM_PLAYLIST, section:item.section}, index, event);
+                            browseDoClick(view, {id:"playlist_id:"+data.result.playlist_id, title:item.title,
+                                                 stdItem:STD_ITEM_PLAYLIST, section:item.section,
+                                                 image: lmsOptions.playlistImages ? "material/playlists/" + encodeURIComponent(item.title)+"?ts="+new Date().getTime() : undefined},
+                                                 index, event);
                         } else {
                             browseItemMenu(view, item, index, event);
                         }

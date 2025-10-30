@@ -347,7 +347,6 @@ Vue.component('lms-navdrawer', {
             bindKey(LMS_SERVER_SETTINGS_KEYBOARD, 'mod');
             bindKey(LMS_INFORMATION_KEYBOARD, 'mod');
             bindKey(LMS_MANAGEPLAYERS_KEYBOARD, 'mod');
-            bindKey(LMS_TOGGLE_QUEUE_KEYBOARD, 'mod+shift');
             for (var i=0; i<=9; ++i) {
                 bindKey(''+i, 'alt');
             }
@@ -377,8 +376,6 @@ Vue.component('lms-navdrawer', {
                             this.setPlayer(id);
                         }
                     }
-                } else if ('mod+shift'==modifier && LMS_TOGGLE_QUEUE_KEYBOARD==key && this.$store.state.desktopLayout) {
-                    this.toggleQueue();
                 }
             }.bind(this));
         }

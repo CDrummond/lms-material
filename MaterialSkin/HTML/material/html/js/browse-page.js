@@ -2291,7 +2291,10 @@ var lmsBrowse = Vue.component("lms-browse", {
                     return true;
                 }
                 let itm = item.header ? this.current : item;
-                return undefined!=itm && undefined!=itm.stdItem && (itm.stdItem==STD_ITEM_ARTIST || itm.stdItem==STD_ITEM_ALBUM || itm.stdItem==STD_ITEM_PLAYLIST || itm.stdItem==STD_ITEM_WORK);
+                return undefined!=itm && undefined!=itm.stdItem &&
+                        (itm.stdItem==STD_ITEM_ARTIST || itm.stdItem==STD_ITEM_ALBUM ||
+                         itm.stdItem==STD_ITEM_PLAYLIST || itm.stdItem==STD_ITEM_WORK ||
+                         itm.stdItem==STD_ITEM_GENRE || itm.stdItem==STD_ITEM_YEAR);
             }
             return false;
         },

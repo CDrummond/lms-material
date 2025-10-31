@@ -372,12 +372,12 @@ Vue.component('lms-ui-settings', {
     <div class="dialog-padding"></div>
     <v-header class="dialog-section-header">{{i18n('Screensaver')}}</v-header>
     <v-list-tile>
-     <v-list-tile-content @click="screensaver = !screensaver" class="switch-label">
-      <v-list-tile-title>{{i18n('Show clock')}}</v-list-tile-title>
-      <v-list-tile-sub-title>{{i18n('When no track is playing on current player, darken screen (and show date & time) after 1 minute of inactivity.')}}</v-list-tile-sub-title>
-     </v-list-tile-content>
-     <v-list-tile-action><m3-switch v-model="screensaver"></m3-switch></v-list-tile-action>
+     <v-select :items="screensavers" :label="i18n('Type')" v-model="screensaver" item-text="label" item-value="key"></v-select>
     </v-list-tile>
+    <v-list-tile-sub-title v-if="screensaver==0" style="padding-bottom:16px">{{i18n('No screensaver.')}}</v-list-tile-sub-title>
+    <v-list-tile-sub-title v-else-if="screensaver==1" style="padding-bottom:16px">{{i18n('When no track is playing on current player, darken screen (and show date & time) after a period of inactivity. Clock is moved every few minutes.')}}</v-list-tile-sub-title>
+    <v-list-tile-sub-title v-else-if="screensaver==2" style="padding-bottom:16px">{{i18n('When no track is playing on current player, darken screen (and show date & time) after a period  of inactivity. Clock is fixed to center of screen.')}}</v-list-tile-sub-title>
+    <v-list-tile-sub-title v-else-if="screensaver==3" style="padding-bottom:16px">{{i18n('When no track is playing on current player, darken screen after a period of inactivity.')}}</v-list-tile-sub-title>
     <v-divider></v-divider>
     <v-list-tile>
      <v-list-tile-content @click="screensaverNp = !screensaverNp" class="switch-label">
@@ -502,7 +502,8 @@ Vue.component('lms-ui-settings', {
                 modes: [],
                 halfLen: 0
             },
-            screensaver: false,
+            screensaver: 0,
+            screensavers:[],
             screensaverNp: false,
             serverName: "",
             showRating: false,
@@ -756,6 +757,12 @@ Vue.component('lms-ui-settings', {
                 { key:1, label:i18n("Show all")},
                 { key:2, label:i18n("Single line only")},
                 ];
+            this.screensavers=[
+                { key:0, label:i18n("Disabled")},
+                { key:1, label:i18n("Moving clock")},
+                { key:2, label:i18n("Fixed clock")},
+                { key:3, label:i18n("Blank screen")}
+            ]
         },
         close() {
             this.show=false;

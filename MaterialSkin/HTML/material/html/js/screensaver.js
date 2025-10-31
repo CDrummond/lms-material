@@ -17,7 +17,7 @@ Vue.component('lms-screensaver', {
     template: `
 <v-dialog v-model="showClock" v-if="showClock" scrollable fullscreen>
  <v-card class="screensaver-bgnd" v-on:mousemove="resetTimers()" v-on:touchstart="resetTimers()" id="screensaver">
-  <div :style="{ marginLeft: marginLeft + 'px', marginTop: marginTop + 'px' }" id="screensaver-contents">
+  <div :style="{ marginLeft: marginLeft + 'px', marginTop: marginTop + 'px' }" id="screensaver-contents" v-if="screensaverType!=3">
    <p class="screensaver-time ellipsis">{{time}}</p>
    <p class="screensaver-date ellipsis">{{date}}</p>
    <p v-if="undefined!=alarm" class="screensaver-alarm ellipsis"><v-icon>alarm</v-icon> {{alarm}}</p>
@@ -29,7 +29,7 @@ Vue.component('lms-screensaver', {
 `,
     props: [],
     data () {
-        return { clockEnabled: false,
+        return { screensaverType: 0,
                  npSwitchEnabled: false,
                  showClock: false,
                  npSwitched: false,
@@ -48,9 +48,9 @@ Vue.component('lms-screensaver', {
     mounted() {
         screensaver = this;
         this.playing = false;
-        this.clockEnabled = this.$store.state.screensaver;
+        this.screensaverType = this.$store.state.screensaver;
         this.npSwitchEnabled = this.$store.state.screensaverNp;
-        this.controlClock();
+        this.controlScreensaver();
         this.controlNp();
         this.toggleHandlers();
         this.state = 'hidden';
@@ -61,15 +61,13 @@ Vue.component('lms-screensaver', {
             this.nowPlayingIsExpanded = val;
         }.bind(this));
         bus.$on('screensaverDisplayChanged', function() {
-            let enabled = this.clockEnabled || this.npSwitchEnabled;
-            let enable = this.$store.state.screensaver || this.$store.state.screensaverNp;
-            if (enable != enabled) {
-                this.clockEnabled = this.$store.state.screensaver;
+            if (this.screensaverType!=this.$store.state.screensaver || this.npSwitchEnabled!=this.$store.state.screensaverNp) {
+                this.screensaverType = this.$store.state.screensaver;
                 this.npSwitchEnabled = this.$store.state.screensaverNp;
                 this.toggleHandlers();
-                if (this.clockEnabled) {
+                if (this.screensaverType>0) {
                     if (!this.playing) {
-                        this.controlClock();
+                        this.controlScreensaver();
                     }
                 } else {
                     this.cancelAllClock(false);
@@ -87,13 +85,13 @@ Vue.component('lms-screensaver', {
                 // Player state changed
                 this.playing = playerStatus.isplaying;
                 this.updateAlarm(playerStatus);
-                this.controlClock();
+                this.controlScreensaver();
             }
         }.bind(this));
     },
     methods: {
-        controlClock() {
-            if (this.clockEnabled) {
+        controlScreensaver() {
+            if (this.screensaverType>0) {
                 if (this.playing) {
                     if ('shown'==this.state) {
                         if (this.$store.state.desktopLayout) {
@@ -116,7 +114,7 @@ Vue.component('lms-screensaver', {
             }
         },
         updateDateAndTime() {
-            if (!this.clockEnabled) {
+            if (this.screensaverType<=0 || this.screensaverType==3) {
                 return;
             }
             let date = new Date();
@@ -155,7 +153,7 @@ Vue.component('lms-screensaver', {
             }
         },
         updateAlarm(status) {
-            if (!this.clockEnabled) {
+            if (this.screensaverType<=0 || this.screensaverType==3) {
                 return;
             }
             if (this.alarmTime!=status.alarm) {
@@ -279,25 +277,27 @@ Vue.component('lms-screensaver', {
         },
         startMoving() {
             clearInterval(this.moveClockTimer);
-            this.moveClockTimer = setInterval(function () {
-                let factors = [-1, -0.75, -0.5, -0.25, 0, 0.25, 0.5, 0.75, 1.0];
-                let newPos = [0, 0];
-                for (let i=0; i<500; ++i) {
-                    newPos=[ factors[Math.floor(Math.random() * factors.length)],
-                             factors[Math.floor(Math.random() * factors.length)] ];
-                    if ( (newPos[0]!=this.currentPos[0] || newPos[1]!=this.currentPos[1]) &&
-                         (newPos[0]!=this.prevPos[0] || newPos[1]!=this.prevPos[1]) ) {
-                        this.prevPos = this.currentPos;
-                        this.currentPos = newPos;
+            if (this.screensaverType==2) {
+                this.moveClockTimer = setInterval(function () {
+                    let factors = [-1, -0.75, -0.5, -0.25, 0, 0.25, 0.5, 0.75, 1.0];
+                    let newPos = [0, 0];
+                    for (let i=0; i<500; ++i) {
+                        newPos=[ factors[Math.floor(Math.random() * factors.length)],
+                                 factors[Math.floor(Math.random() * factors.length)] ];
+                        if ( (newPos[0]!=this.currentPos[0] || newPos[1]!=this.currentPos[1]) &&
+                             (newPos[0]!=this.prevPos[0] || newPos[1]!=this.prevPos[1]) ) {
+                            this.prevPos = this.currentPos;
+                            this.currentPos = newPos;
+                        }
                     }
-                }
-                this.changePos(document.getElementById('screensaver-contents'),
-                               (this.diffs[0] * this.currentPos[0]) + (this.currentPos[0]>0 ? -32 : this.currentPos[0]<0 ? 32 : 0),
-                               (this.diffs[1] * this.currentPos[1]) + (this.currentPos[1]>0 ? -32 : this.currentPos[1]<0 ? 32 : 0));
-            }.bind(this), 5*60*1000); // Move every Xminutes
+                    this.changePos(document.getElementById('screensaver-contents'),
+                                   (this.diffs[0] * this.currentPos[0]) + (this.currentPos[0]>0 ? -32 : this.currentPos[0]<0 ? 32 : 0),
+                                   (this.diffs[1] * this.currentPos[1]) + (this.currentPos[1]>0 ? -32 : this.currentPos[1]<0 ? 32 : 0));
+                }.bind(this), 5*60*1000); // Move every Xminutes
+            }
         },
         toggleHandlers() {
-            if (this.clockEnabled || this.npSwitchEnabled) {
+            if (this.screensaverType>0 || this.npSwitchEnabled) {
                 if (!this.installedHandlers) {
                     window.addEventListener('touchstart', resetScreensaver);
                     window.addEventListener('mousedown', resetScreensaver);
@@ -323,7 +323,7 @@ Vue.component('lms-screensaver', {
         },
         resetClockTimer() {
             this.cancelAllClock(true);
-            if (this.clockEnabled && lmsOptions.screensaverTimeout>0) {
+            if (this.screensaverType>0 && lmsOptions.screensaverTimeout>0) {
                 if (!this.playing) {
                     this.showClockTimer = setTimeout(function () {
                         this.showClock = true;

@@ -36,6 +36,8 @@
 28. Draw border around all dialog buttons.
 29. Indicate current track in browse view.
 30. Use current accent colour for screensaver.
+31. Update screensaver options; disabled, moving clock, fixed clock, blank
+    screen.
 
 5.11.4
 ------

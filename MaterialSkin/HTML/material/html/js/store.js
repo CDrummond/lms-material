@@ -132,8 +132,14 @@ function updateUiSettings(state, val) {
         }
     }
     var screensaverChanged = false
-    if (undefined!=val.screensaver && state.screensaver!=val.screensaver) {
-        state.screensaver = val.screensaver;
+    var screensaverVal = undefined==val.screensaver
+        ? undefined
+        : isNaN(val.screensaver)
+            ? val.screensaver ? 1 : 0
+            : parseInt(val.screensaver);
+    console.log("SS", screensaverVal)
+    if (undefined!=screensaverVal && state.screensaver!=screensaverVal) {
+        state.screensaver = screensaverVal;
         setLocalStorageVal('screensaver', state.screensaver);
         screensaverChanged = true;
     }
@@ -359,7 +365,7 @@ const store = new Vuex.Store({
         unlockAll: false,
         skipBSeconds: 10,
         skipFSeconds: 30,
-        screensaver: false,
+        screensaver: 0,
         screensaverNp: false,
         homeButton: false,
         gridPerView: true,
@@ -600,17 +606,18 @@ const store = new Vuex.Store({
 
             let boolItems = ['roundCovers', 'autoScrollQueue', 'sortFavorites', 'browseBackdrop', 'queueBackdrop', 'nowPlayingBackdrop',
                              'infoBackdrop', 'useDefaultBackdrops', 'browseTechInfo', 'techInfo', 'queueShowTrackNum', 'nowPlayingTrackNum',
-                             'nowPlayingClock', 'swipeVolume', 'swipeChangeTrack', 'keyboardControl', 'screensaver', 'screensaverNp', 'homeButton',
+                             'nowPlayingClock', 'swipeVolume', 'swipeChangeTrack', 'keyboardControl', 'screensaverNp', 'homeButton',
                              'mediaControls', 'queueAlbumStyle', 'queueThreeLines', 'browseContext', 'nowPlayingContext', 'queueContext',
                              'moveDialogs', 'autoCloseQueue', 'nowPlayingFull', 'tinted', 'ndSettingsIcons', 'ndSettingsVisible', 'gridPerView'];
             for (let i=0, len=boolItems.length; i<len; ++i) {
                 let key = boolItems[i];
                 state[key] = getLocalStorageBool(key, state[key]);
             }
-            let intItems = ['skipBSeconds', 'skipFSeconds', 'mobileBar', 'maxRating', 'volumeStep', 'ndShortcuts', 'detailedHome'];
+            let intItems = ['skipBSeconds', 'skipFSeconds', 'mobileBar', 'maxRating', 'volumeStep', 'ndShortcuts', 'detailedHome', 'screensaver'];
             for (let i=0, len=intItems.length; i<len; ++i) {
                 let key = intItems[i];
-                state[key] = parseInt(getLocalStorageVal(key, state[key]));
+                let value = getLocalStorageVal(key, state[key]);
+                state[key] = isNaN(value) ? ("true"==value ? 1 : 0) : parseInt(value);
             }
             if (!VALID_SKIP_SECONDS.has(state.skipBSeconds)) {
                 state.skipBSeconds = 10;

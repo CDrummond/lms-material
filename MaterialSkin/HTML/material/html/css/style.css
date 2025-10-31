@@ -4158,6 +4158,7 @@ div.v-subheader {
  -webkit-mask-image: linear-gradient(to right, transparent 0px, black 50%, black 100%);
  mask-image: linear-gradient(to right, transparent 0px, black 50%, black 100%);
  opacity:0.5;
+ z-index:-1; /* otherwise toolbar title fades? */
 }
 
 .wc {

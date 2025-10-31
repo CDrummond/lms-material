@@ -109,7 +109,13 @@ var lmsBrowse = Vue.component("lms-browse", {
       <v-btn flat :icon="wide<WIDE_MIX_BTN" v-if="showDetailedSubtoolbar && wide>=WIDE_MIX_BTN && (action==PLAY_ACTION || action==PLAY_ALL_ACTION) && allowShuffle(current)" @click.stop="headerAction(action==PLAY_ACTION ? PLAY_SHUFFLE_ACTION : PLAY_SHUFFLE_ALL_ACTION, $event)" v-bind:class="{'context-button':wide>=WIDE_MIX_BTN, 'toolbar-button':wide<WIDE_MIX_BTN}" :title="PLAY_SHUFFLE_ACTION | tooltip(keyboardControl)" :id="'tbar-actions'+action">
        <img class="svg-img" :src="ACTIONS[PLAY_SHUFFLE_ACTION].svg | svgIcon(darkUi)"></img><obj v-if="wide>=WIDE_MIX_BTN">&nbsp;{{ACTIONS[PLAY_SHUFFLE_ACTION].short}}</obj>
       </v-btn>
-      <v-btn flat :icon="wide<WIDE_MIX_BTN || !ACTIONS[action].short || !showDetailedSubtoolbar" @click.stop="headerAction(action, $event)" v-bind:class="{'context-button':wide>=WIDE_MIX_BTN && undefined!=ACTIONS[action].short && showDetailedSubtoolbar, 'toolbar-button':wide<WIDE_MIX_BTN || !ACTIONS[action].short || !showDetailedSubtoolbar}" :title="action | tooltip(keyboardControl)" :id="'tbar-actions'+action" v-if="(!queryParams.party || !HIDE_FOR_PARTY.has(action)) && (!LMS_KIOSK_MODE || !HIDE_FOR_KIOSK.has(action))">
+
+      <!-- for non-text buttons, if 'play shuffled' enabled then show its button instead of append -->
+      <v-btn flat v-if="(wide<WIDE_MIX_BTN || !showDetailedSubtoolbar) && (action==ADD_ACTION || action==ADD_ALL_ACTION) && allowShuffle(current) && (!queryParams.party || !HIDE_FOR_PARTY.has(PLAY_SHUFFLE_ACTION)) && (!LMS_KIOSK_MODE || !HIDE_FOR_KIOSK.has(PLAY_SHUFFLE_ACTION))" flat icon @click.stop="headerAction(action==ADD_ACTION ? PLAY_SHUFFLE_ACTION : PLAY_SHUFFLE_ALL_ACTION, $event)" class="toolbar-button" :title="(action==ADD_ACTION ? PLAY_SHUFFLE_ACTION : PLAY_SHUFFLE_ALL_ACTION) | tooltip(keyboardControl)" :id="'tbar-actions'+PLAY_SHUFFLE_ACTION">
+       <img class="svg-img" :src="ACTIONS[PLAY_SHUFFLE_ACTION].svg | svgIcon(darkUi)"></img>
+      </v-btn>
+
+      <v-btn flat :icon="wide<WIDE_MIX_BTN || !ACTIONS[action].short || !showDetailedSubtoolbar" @click.stop="headerAction(action, $event)" v-bind:class="{'context-button':wide>=WIDE_MIX_BTN && undefined!=ACTIONS[action].short && showDetailedSubtoolbar, 'toolbar-button':wide<WIDE_MIX_BTN || !ACTIONS[action].short || !showDetailedSubtoolbar}" :title="action | tooltip(keyboardControl)" :id="'tbar-actions'+action" v-else-if="(!queryParams.party || !HIDE_FOR_PARTY.has(action)) && (!LMS_KIOSK_MODE || !HIDE_FOR_KIOSK.has(action))">
        <img v-if="ACTIONS[action].svg" class="svg-img" :src="ACTIONS[action].svg | svgIcon(darkUi)"></img>
        <v-icon v-else>{{ACTIONS[action].icon}}</v-icon>
        <obj v-if="wide>=WIDE_MIX_BTN && ACTIONS[action].short && showDetailedSubtoolbar">&nbsp;{{ACTIONS[action].short}}</obj>

@@ -54,11 +54,12 @@ var lmsBrowse = Vue.component("lms-browse", {
    </v-layout>
    <v-spacer></v-spacer>
    <v-btn v-if="current && current.section==SECTION_PLAYLISTS && current.id.startsWith('playlist_id:')" :title="trans.removeall" flat icon class="toolbar-button" @click="deleteSelectedItems(REMOVE_ACTION, $event)"><v-icon>{{ACTIONS[REMOVE_ACTION].icon}}</v-icon></v-btn>
-   <v-btn v-else-if="current && current.section==SECTION_PLAYLISTS" :title="trans.deleteall" flat icon class="toolbar-button" @click="deleteSelectedItems(DELETE_ACTION, $event)"><v-icon>delete</v-icon></v-btn>
+   <v-btn v-else-if="current && current.section==SECTION_PLAYLISTS" :title="trans.deletesel" flat icon class="toolbar-button" @click="deleteSelectedItems(DELETE_ACTION, $event)"><v-icon>delete</v-icon></v-btn>
    <v-btn v-else-if="current && current.section==SECTION_FAVORITES" :title="trans.removeall" flat icon class="toolbar-button" @click="deleteSelectedItems(REMOVE_FROM_FAV_ACTION, $event)"><v-icon>delete_outline</v-icon></v-btn>
    <v-btn v-if="items[0].stdItem==STD_ITEM_TRACK || items[0].stdItem==STD_ITEM_ALBUM_TRACK || items[0].saveableTrack || (items[0].header && items.length>1 && items[1].stdItem==STD_ITEM_ALBUM_TRACK)" :title="ACTIONS[ADD_TO_PLAYLIST_ACTION].title" flat icon class="toolbar-button" @click="actionSelectedItems(ADD_TO_PLAYLIST_ACTION, $event)"><v-icon>{{ACTIONS[ADD_TO_PLAYLIST_ACTION].icon}}</v-icon></v-btn>
-   <v-btn :title="trans.playall" flat icon class="toolbar-button" @click="actionSelectedItems(PLAY_ACTION, $event)"><v-icon>play_circle_outline</v-icon></v-btn>
-   <v-btn :title="trans.addall" flat icon class="toolbar-button" @click="actionSelectedItems(ADD_ACTION, $event)"><v-icon>add_circle_outline</v-icon></v-btn>
+   <v-btn :title="trans.addsel" flat icon class="toolbar-button" @click="actionSelectedItems(ADD_ACTION, $event)"><v-icon>add_circle_outline</v-icon></v-btn>
+   <v-btn :title="trans.shufflesel" v-if="allowShuffle(items[items.length>1 && items[0].header ? 1 : 0])" flat icon class="toolbar-button" @click="actionSelectedItems(PLAY_SHUFFLE_ACTION, $event)"><img class="svg-img" :src="ACTIONS[PLAY_SHUFFLE_ACTION].svg | svgIcon(darkUi)"></img></v-btn>
+   <v-btn :title="trans.playsel" flat icon class="toolbar-button" @click="actionSelectedItems(PLAY_ACTION, $event)"><v-icon>play_circle_outline</v-icon></v-btn>
    <v-divider vertical></v-divider>
    <v-btn :title="trans.invertSelect" flat icon class="toolbar-button" @click="invertSelection()"><img :src="'invert-select' | svgIcon(darkUi)"></img></v-btn>
    <v-btn :title="trans.cancel" flat icon class="toolbar-button" @click="clearSelection()"><v-icon>cancel</v-icon></v-btn>
@@ -560,8 +561,8 @@ var lmsBrowse = Vue.component("lms-browse", {
             grid: {allowed:true, use:getLocalStorageBool('grid', true), numItems:0, numColumns:0, ih:GRID_MIN_HEIGHT, rows:[], few:false, haveSubtitle:true, multiSize:false, type:GRID_STANDARD},
             fetchingItem:undefined,
             hoverBtns: !IS_MOBILE,
-            trans: { ok:undefined, cancel: undefined, close: undefined, selectMultiple:undefined, addall:undefined, playall:undefined,
-                     deleteall:undefined, removeall:undefined, invertSelect:undefined, choosepos:undefined, goHome:undefined, goBack:undefined,
+            trans: { ok:undefined, cancel: undefined, close: undefined, selectMultiple:undefined, addsel:undefined, playsel:undefined,shufflesel:undefined,
+                     deletesel:undefined, removeall:undefined, invertSelect:undefined, choosepos:undefined, goHome:undefined, goBack:undefined,
                      select:undefined, unselect:undefined, sources: undefined, desc: undefined, actions:undefined },
             menu: { show:false, item: undefined, x:0, y:0, index:-1},
             isTop: true,
@@ -941,10 +942,10 @@ var lmsBrowse = Vue.component("lms-browse", {
             this.updateSortStrings();
 
             this.trans= { ok:i18n('OK'), cancel: i18n('Cancel'), close: i18n('Close'), selectMultiple:i18n("Select multiple items"),
-                          addall:i18n("Add selection to queue"),  playall:i18n("Play selection"), deleteall:i18n("Delete all selected items"),
-                          invertSelect:i18n("Invert selection"), removeall:i18n("Remove all selected items"), choosepos:i18n("Choose position"), 
-                          goHome:i18n("Go home"), goBack:i18n("Go back"),  home:i18n("Home"), desc:i18n("Descending"),
-                          actions:i18n("Actions")
+                          addsel:i18n("Add selection to queue"),  playsel:i18n("Play selection"), shufflesel:i18n("Play selection shuffled"),
+                          deletesel:i18n("Delete all selected items"), invertSelect:i18n("Invert selection"),
+                          removeall:i18n("Remove all selected items"), choosepos:i18n("Choose position"), goHome:i18n("Go home"),
+                          goBack:i18n("Go back"),  home:i18n("Home"), desc:i18n("Descending"), actions:i18n("Actions")
             };
 
             if (undefined==this.top || this.top.length==0) {

@@ -3244,27 +3244,27 @@ div.v-subheader {
 }
 
 .screensaver-time {
- color:white!important;
+ color:var(--active-color)!important;
  text-align:center;
  font-weight:var(--bold-weight);
  font-size:96px;
- opacity:0.65;
+ opacity:0.8;
 }
 
 .screensaver-date {
- color:white!important;
+ color:var(--active-color)!important;
  text-align:center;
  font-weight:var(--std-weight);
  font-size:48px;
- opacity:0.45;
+ opacity:0.6;
 }
 
 .screensaver-alarm {
- color:white!important;
+ color:var(--active-color)!important;
  text-align:center;
  font-weight:var(--std-weight);
  font-size:var(--std-font-size);
- opacity:0.45;
+ opacity:0.6;
 }
 
 .screensaver-alarm .v-icon {
@@ -3272,11 +3272,11 @@ div.v-subheader {
 }
 
 .screensaver-name {
- color:white!important;
+ color:var(--active-color)!important;
  text-align:center;
  font-weight:var(--std-weight);
  font-size:var(--std-font-size);
- opacity:0.45;
+ opacity:0.6;
 }
 
 @media (max-height: 450px) {

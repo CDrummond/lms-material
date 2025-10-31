@@ -137,7 +137,6 @@ function updateUiSettings(state, val) {
         : isNaN(val.screensaver)
             ? val.screensaver ? 1 : 0
             : parseInt(val.screensaver);
-    console.log("SS", screensaverVal)
     if (undefined!=screensaverVal && state.screensaver!=screensaverVal) {
         state.screensaver = screensaverVal;
         setLocalStorageVal('screensaver', state.screensaver);

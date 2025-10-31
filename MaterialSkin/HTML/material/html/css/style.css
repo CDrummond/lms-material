@@ -4157,7 +4157,7 @@ div.v-subheader {
  top:0px;
  -webkit-mask-image: linear-gradient(to right, transparent 0px, black 50%, black 100%);
  mask-image: linear-gradient(to right, transparent 0px, black 50%, black 100%);
- opacity:0.25;
+ opacity:0.5;
 }
 
 .wc {

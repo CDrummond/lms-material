@@ -501,6 +501,7 @@ var lmsBrowse = Vue.component("lms-browse", {
      </v-list-group>
      <v-divider></v-divider>
     </div>
+    <div v-else-if="GOTO_ARTIST_ACTION==item.action && history.length>1 && history[history.length-1].current.stdItem==STD_ITEM_ARTIST"></div>
     <v-list-tile v-else-if="!item.isListItemInMenu && item.action==ADD_TO_FAV_ACTION && isInFavorites(current)" @click="menuItemAction(REMOVE_FROM_FAV_ACTION, current, undefined, $event)">
      <v-list-tile-avatar>
       <v-icon v-if="undefined==ACTIONS[REMOVE_FROM_FAV_ACTION].svg">{{ACTIONS[REMOVE_FROM_FAV_ACTION].icon}}</v-icon>
@@ -1366,21 +1367,7 @@ var lmsBrowse = Vue.component("lms-browse", {
                     bus.$emit("browse", "year", item.subtitle, item.subtitle, "browse");
                     return;
                 }
-                let id = "artist_id:"+item.artist_id;
-                if (undefined!=item.artist_ids && item.artist_ids.length>1) {
-                    var entries = [];
-                    for (var i=0, len=item.artist_ids.length; i<len; ++i) {
-                        entries.push({id:"artist_id:"+item.artist_ids[i], title:item.artists[i], stdItem:STD_ITEM_ARTIST});
-                    }
-                    if (entries.length>1) {
-                        showMenu(this, {show:true, x:event.clientX, y:event.clientY, item:{moremenu:entries}});
-                        return;
-                    } else {
-                        id = entries[0].id;
-                    }
-                }
-                this.fetchItems(this.replaceCommandTerms({command:["albums"], params:[id, ARTIST_ALBUM_TAGS, SORT_KEY+ARTIST_ALBUM_SORT_PLACEHOLDER]}),
-                                {cancache:false, id:"artist_id:"+item.artist_id, title: item.work_id ? item.artists[0] : item.subtitle, stdItem:STD_ITEM_ARTIST});
+                browseItemAction(this, GOTO_ARTIST_ACTION, item, null, event);
             } else {
                 this.click(item, index, event);
             }

@@ -1653,7 +1653,19 @@ function browseItemAction(view, act, origItem, index, event) {
             }
         }
     } else if (act==GOTO_ARTIST_ACTION) {
-        view.fetchItems(view.replaceCommandTerms({command:["albums"], params:["artist_id:"+item.artist_id, ARTIST_ALBUM_TAGS, SORT_KEY+ARTIST_ALBUM_SORT_PLACEHOLDER]}), {cancache:false, id:"artist_id:"+item.artist_id, title:item.id.startsWith("album_id:") ? item.subtitle : item.artist, stdItem:STD_ITEM_ARTIST});
+        if (undefined!=item.artist_ids && item.artist_ids.length>1) {
+            var choices = [];
+            for (var i=0, len=item.artist_ids.length; i<len; ++i) {
+                choices.push({title:item.artists[i], id:item.artist_ids[i]});
+            }
+            choose(ACTIONS[GOTO_ARTIST_ACTION].title, choices).then(choice => {
+                if (undefined!=choice) {
+                    view.fetchItems(view.replaceCommandTerms({command:["albums"], params:["artist_id:"+choice.id, ARTIST_ALBUM_TAGS, SORT_KEY+ARTIST_ALBUM_SORT_PLACEHOLDER]}), {cancache:false, id:"artist_id:"+choice.id, title:choice.title, stdItem:STD_ITEM_ARTIST});
+                }
+            });
+        } else {
+            view.fetchItems(view.replaceCommandTerms({command:["albums"], params:["artist_id:"+item.artist_id, ARTIST_ALBUM_TAGS, SORT_KEY+ARTIST_ALBUM_SORT_PLACEHOLDER]}), {cancache:false, id:"artist_id:"+item.artist_id, title:item.id.startsWith("album_id:") ? item.subtitle : item.artist, stdItem:STD_ITEM_ARTIST});
+        }
     } else if (act==GOTO_ALBUM_ACTION) {
         view.fetchItems({command:["tracks"], params:["album_id:"+item.album_id, trackTags(true), SORT_KEY+"tracknum"]}, {cancache:false, id:"album_id:"+item.album_id, title:item.album, stdItem:STD_ITEM_ALBUM});
     } else if (ADD_TO_PLAYLIST_ACTION==act) {

@@ -1523,8 +1523,19 @@ function browseItemAction(view, act, origItem, index, event) {
             logAndShowError(err, i18n("Failed to move favorite!"), command);
         });
     } else if (act===ADD_RANDOM_ALBUM_ACTION) {
-        var params = [];
-        buildStdItemCommand(item, view.command).params.forEach(p => { if (!p.startsWith("sort:") && !p.startsWith("tags:")) { params.push(p); } });
+        let params = [];
+        let itm = item;
+        if (item.header) {
+            let items = [];
+            for (var i=index+1, len=view.items.length; i<len; ++i) {
+                if (view.items[i].header) {
+                    break;
+                }
+                items.push(view.items[i]);
+            }
+            itm = items[1==items.length ? 0 : Math.floor(Math.random()*items.length)];
+        }
+        buildStdItemCommand(itm, view.command).params.forEach(p => { if (!p.startsWith("sort:") && !p.startsWith("tags:")) { params.push(p); } });
         params=browseReplaceCommandTerms(view, {command:[], params:params}).params;
         params.push(SORT_KEY+"random");
         params.push(ALBUM_TAGS);

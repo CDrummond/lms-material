@@ -41,6 +41,7 @@
 32. If 'Play shuffled' is enabled then give this button priority over
     'Append'.
 33. Add 'Go to artist' to album menu if not browsed from artist.
+34. Add action to add random album from decade.
 
 5.11.4
 ------

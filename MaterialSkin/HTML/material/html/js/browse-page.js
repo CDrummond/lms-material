@@ -246,6 +246,9 @@ var lmsBrowse = Vue.component("lms-browse", {
       <v-list-tile-content>
        <v-list-tile-title>{{item.item.title}}</v-list-tile-title>
       </v-list-tile-content>
+      <v-list-tile-action class="browse-action" v-if="undefined!=item.item.menu && item.item.menu.length>0">
+       <div class="grid-btn list-btn hover-btn menu-btn" @click.stop="itemMenu(item.item, item.rs, $event)" :title="i18n('%1 (Menu)', stripLinkTags(item.item.title))"></div>
+      </v-list-tile-action>
      </v-list-tile>
      <div v-else align="center" style="vertical-align: top" v-for="(citem, col) in item.items" @contextmenu.prevent="contextMenu(citem, isTop ? citem.gidx : (item.rs+col), $event)">
       <div v-if="undefined==citem" class="text-grid-item defcursor"></div>

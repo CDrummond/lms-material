@@ -2278,7 +2278,7 @@ var lmsBrowse = Vue.component("lms-browse", {
             }
         },
         allowShuffle(item) {
-            if (lmsOptions.playShuffle && !queryParams.party && (!LMS_KIOSK_MODE || !HIDE_FOR_KIOSK.has(PLAY_SHUFFLE_ACTION))) {
+            if (lmsOptions.playShuffle) {
                 if (item.header && undefined!=item.menu && item.menu.length>2 && item.menu[2]==PLAY_SHUFFLE_ALL_ACTION) {
                     return true;
                 }
@@ -2286,7 +2286,8 @@ var lmsBrowse = Vue.component("lms-browse", {
                 return undefined!=itm && undefined!=itm.stdItem &&
                         (itm.stdItem==STD_ITEM_ARTIST || itm.stdItem==STD_ITEM_ALBUM ||
                          itm.stdItem==STD_ITEM_PLAYLIST || itm.stdItem==STD_ITEM_WORK ||
-                         itm.stdItem==STD_ITEM_GENRE || itm.stdItem==STD_ITEM_YEAR);
+                         itm.stdItem==STD_ITEM_GENRE || itm.stdItem==STD_ITEM_YEAR ||
+                         itm.stdItem==STD_ITEM_ONLINE_ARTIST || itm.stdItem==STD_ITEM_ONLINE_ALBUM);
             }
             return false;
         },

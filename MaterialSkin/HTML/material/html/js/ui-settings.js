@@ -203,12 +203,11 @@ Vue.component('lms-ui-settings', {
      <v-list-tile-content/>
     </v-list-tile>
 
-    <v-checkbox v-model="detailedHomeNew" :label="i18n('New Music')" style="display:flex" class="settings-list-checkbox"></v-checkbox>
-    <v-checkbox v-if="LMS_VERSION>=90100 && LMS_STATS_ENABLED" v-model="detailedHomeRecent" :label="i18n('Recently Played')" style="display:flex" class="settings-list-checkbox"></v-checkbox>
-    <v-checkbox v-if="LMS_VERSION>=90100 && LMS_STATS_ENABLED" v-model="detailedHomeMost" :label="i18n('Most Played')" style="display:flex" class="settings-list-checkbox"></v-checkbox>
-    <!-- <v-checkbox v-model="detailedHomeRandom" :label="i18n('Random')" style="display:flex" class="settings-list-checkbox"></v-checkbox> -->
-    <v-checkbox v-model="detailedHomeRadios" :label="i18n('Radios')" style="display:flex" class="settings-list-checkbox"></v-checkbox>
-    <v-checkbox v-if="lmsOptions.playlistImages" v-model="detailedHomePlaylists" :label="i18n('Playlists')" style="display:flex" class="settings-list-checkbox"></v-checkbox>
+    <div class="settings-list-checkboxes-title">{{i18n('Scrollable lists')}}</div>
+    <template v-for="(item, index) in detailedHomeItems">
+     <v-checkbox v-model="item.checked" :label="item.title" style="display:flex" class="settings-list-checkbox"></v-checkbox>
+    </template>
+    <div class="settings-list-checkboxes-title">{{i18n('Categories')}}</div>
     <template v-for="(item, index) in showItems">
      <div style="display:flex" v-if="item.id!=TOP_RADIO_ID || !lmsOptions.combineAppsAndRadio">
       <v-checkbox v-model="item.show" :label="item.name" class="settings-list-checkbox"></v-checkbox>
@@ -519,12 +518,8 @@ Vue.component('lms-ui-settings', {
             ndShortcutValues: [],
             ndSettingsIcons: false,
             ndSettingsVisible: false,
-            detailedHomeNew:true,
-            detailedHomeRecent:false,
-            detailedHomeMost:false,
-            detailedHomeRandom:false,
-            detailedHomeRadios:true,
-            detailedHomePlaylists:false
+            detailedHomeItems:[
+            ]
         }
     },
     computed: {
@@ -707,12 +702,6 @@ Vue.component('lms-ui-settings', {
             this.ndShortcuts = this.$store.state.ndShortcuts;
             this.ndSettingsIcons = this.$store.state.ndSettingsIcons;
             this.ndSettingsVisible = this.$store.state.ndSettingsVisible;
-            this.detailedHomeNew = this.$store.state.detailedHome&DETAILED_HOME_NEW;
-            this.detailedHomeMost = this.$store.state.detailedHome&DETAILED_HOME_RECENT;
-            this.detailedHomeRecent = this.$store.state.detailedHome&DETAILED_HOME_MOST;
-            this.detailedHomeRandom = this.$store.state.detailedHome&DETAILED_HOME_RANDOM;
-            this.detailedHomeRadios = this.$store.state.detailedHome&DETAILED_HOME_RADIOS;
-            this.detailedHomePlaylists = this.$store.state.detailedHome&DETAILED_HOME_PLAYLISTS;
             this.showItems=[{id: TOP_MYMUSIC_ID, name:i18n("My Music"), show:!this.hidden.has(TOP_MYMUSIC_ID)},
                             {id: TOP_RADIO_ID, name:i18n("Radio"), show:!this.hidden.has(TOP_RADIO_ID)},
                             {id: TOP_FAVORITES_ID, name:i18n("Favorites"), show:!this.hidden.has(TOP_FAVORITES_ID)},
@@ -763,6 +752,25 @@ Vue.component('lms-ui-settings', {
                 { key:2, label:i18n("Fixed clock")},
                 { key:3, label:i18n("Blank screen")}
             ]
+
+            this.detailedHomeItems = [{id:DETAILED_HOME_NEW, title:i18n('New Music'), checked:DETAILED_HOME_NEW&&this.$store.state.detailedHome}];
+            if (LMS_VERSION>=90100 && LMS_STATS_ENABLED) {
+                this.detailedHomeItems.push(
+                    { id:DETAILED_HOME_RECENT, title:i18n('Recently Played'), checked:DETAILED_HOME_RECENT&&this.$store.state.detailedHome}
+                );
+                this.detailedHomeItems.push(
+                    { id:DETAILED_HOME_MOST, title:i18n('Most Played'), checked:DETAILED_HOME_MOST&&this.$store.state.detailedHome}
+                );
+            }
+            //this.detailedHomeItems.push(
+            //    { id:DETAILED_HOME_RANDOM, title:i18n('Random'), checked:DETAILED_HOME_RANDOM&&this.$store.state.detailedHome}
+            //);
+            this.detailedHomeItems.push(
+                { id:DETAILED_HOME_RADIOS, title:i18n('Radios'), checked:DETAILED_HOME_RADIOS&&this.$store.state.detailedHome}
+            );
+            this.detailedHomeItems.push(
+                { id:DETAILED_HOME_PLAYLISTS, title:i18n('Playlists'), checked:DETAILED_HOME_PLAYLISTS&&this.$store.state.detailedHome}
+            );
         },
         close() {
             this.show=false;
@@ -794,6 +802,12 @@ Vue.component('lms-ui-settings', {
             }
         },
         settings(arrays, withSorts) {
+            let detailedHome = 0;
+            for (let i=0, loop=this.detailedHomeItems, len=loop.length; i<len; ++i) {
+                if (loop[i].checked) {
+                    detailedHome+=loop[i].id;
+                }
+            }
             let settings = {
                       theme:this.theme+(this.colorToolbars ? '-colored' : ''),
                       color:this.color,
@@ -838,12 +852,7 @@ Vue.component('lms-ui-settings', {
                       ndShortcuts:this.ndShortcuts,
                       ndSettingsIcons:this.ndSettingsIcons,
                       ndSettingsVisible:this.ndSettingsVisible,
-                      detailedHome:(this.detailedHomeNew ? DETAILED_HOME_NEW : 0)+
-                                   (this.detailedHomeMost ? DETAILED_HOME_MOST : 0)+
-                                   (this.detailedHomeRecent ? DETAILED_HOME_RECENT : 0)+
-                                   (this.detailedHomeRandom ? DETAILED_HOME_RANDOM : 0)+
-                                   (this.detailedHomeRadios ? DETAILED_HOME_RADIOS : 0)+
-                                   (this.detailedHomePlaylists ? DETAILED_HOME_PLAYLISTS : 0)
+                      detailedHome:detailedHome
                   };
             if (withSorts) {
                 for (var key in window.localStorage) {

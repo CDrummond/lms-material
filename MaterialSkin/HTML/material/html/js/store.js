@@ -41,7 +41,7 @@ function updateUiSettings(state, val) {
             }
         }
     }
-    if (state.detailedHome!=val.detailedHome) {
+    if (undefined!=val.detailedHome && state.detailedHome!=val.detailedHome) {
         state.detailedHome = val.detailedHome;
         setLocalStorageVal('detailedHome', state.detailedHome);
         browseDisplayChanged = true;

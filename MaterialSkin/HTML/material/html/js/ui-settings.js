@@ -712,6 +712,7 @@ Vue.component('lms-ui-settings', {
             for (let s=0, loop=this.detailedHomeItems, len=loop.length; s<len; ++s) {
                 let idx = this.$store.state.detailedHomeOrder.indexOf(loop[s].id);
                 loop[s].val = undefined==idx || idx<0 ? loop[s].val*100 : idx;
+                loop[s].checked = this.$store.state.detailedHome & loop[s].id;
             }
             this.detailedHomeItems.sort((a, b) => { return a.val<b.val ? -1 : 1});
         },

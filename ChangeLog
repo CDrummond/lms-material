@@ -14,10 +14,10 @@
 11. Separate list/grid preference for home screen.
 12. Set max width of 1000px for information in browse view.
 13. Always use frosted background for queue in desktop layout when not pinned.
-14. In desktop layout, always show queue above now-playing if now-platying is
+14. In desktop layout, always show queue above now-playing if now-playing is
     expanded - regardless of whether queue is pinned or not.
 15. Add icon map for xPlay.
-16. If set to combine apps and radio then categrise apps.
+16. If set to combine apps and radio then categorise apps.
 17. Allow using grid for genres even when genre images are disabled.
 18. Only show detailed sub-toolbar if window is at least 400px tall.
 19. Allow using detailed sub-toolbar for playlists, if playlist image support

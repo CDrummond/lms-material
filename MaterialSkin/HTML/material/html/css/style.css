@@ -2522,11 +2522,10 @@ div.v-rating i.primary--text, div.v-rating i.accent--text {
 }
 
 .settings-list-checkbox {
- height:24px;
- flex: 0 1 auto;
+ height:36px;
+ flex:0 1 auto;
  padding-left:10px;
  margin-top:0px;
- margin-bottom:12px;
 }
 
 .settings-list-checkboxes-title {

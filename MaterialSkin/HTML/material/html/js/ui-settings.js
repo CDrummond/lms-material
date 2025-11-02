@@ -199,13 +199,13 @@ Vue.component('lms-ui-settings', {
     <v-list-tile>
      <v-list-tile-content class="switch-label">
       <v-list-tile-title>{{i18n('Home screen items')}}</v-list-tile-title>
-      <v-list-tile-sub-title>{{i18n('Check the standard items which you wish to appear on the home screen.')}}</v-list-tile-sub-title>
+      <v-list-tile-sub-title>{{i18n("Check the standard items which you wish to appear on the home screen.")}} {{i18n("The order of 'Scrollable list' items can be changed, here, by drag and drop.")}}</v-list-tile-sub-title>
      <v-list-tile-content/>
     </v-list-tile>
 
     <div class="settings-list-checkboxes-title">{{i18n('Scrollable lists')}}</div>
     <template v-for="(item, index) in detailedHomeItems">
-     <v-checkbox v-model="item.checked" :label="item.title" style="display:flex" class="settings-list-checkbox"></v-checkbox>
+     <v-checkbox v-model="item.checked" :label="item.title" style="display:flex" class="settings-list-checkbox" @dragstart.native="dragStart(index, $event)" @dragenter.prevent="" @dragend.native="dragEnd()" @dragover.native="dragOver(index, $event)" @drop.native="drop(index, $event)" draggable v-bind:class="{'highlight-drop':dropIndex==index, 'highlight-drag':dragIndex==index}"></v-checkbox>
     </template>
     <div class="settings-list-checkboxes-title">{{i18n('Categories')}}</div>
     <template v-for="(item, index) in showItems">
@@ -519,7 +519,9 @@ Vue.component('lms-ui-settings', {
             ndSettingsIcons: false,
             ndSettingsVisible: false,
             detailedHomeItems:[
-            ]
+            ],
+            dragIndex: undefined,
+            dropIndex: undefined
         }
     },
     computed: {
@@ -707,6 +709,11 @@ Vue.component('lms-ui-settings', {
                             {id: TOP_FAVORITES_ID, name:i18n("Favorites"), show:!this.hidden.has(TOP_FAVORITES_ID)},
                             {id: TOP_APPS_ID, name:i18n("Apps"), show:!this.hidden.has(TOP_APPS_ID)},
                             {id: TOP_EXTRAS_ID, name:i18n("Extras"), show:!this.hidden.has(TOP_EXTRAS_ID)}];
+            for (let s=0, loop=this.detailedHomeItems, len=loop.length; s<len; ++s) {
+                let idx = this.$store.state.detailedHomeOrder.indexOf(loop[s].id);
+                loop[s].val = undefined==idx || idx<0 ? loop[s].val*100 : idx;
+            }
+            this.detailedHomeItems.sort((a, b) => { return a.val<b.val ? -1 : 1});
         },
         initItems() {
             this.themes=[
@@ -803,7 +810,9 @@ Vue.component('lms-ui-settings', {
         },
         settings(arrays, withSorts) {
             let detailedHome = 0;
+            let detailedHomeOrder = [];
             for (let i=0, loop=this.detailedHomeItems, len=loop.length; i<len; ++i) {
+                detailedHomeOrder.push(loop[i].id);
                 if (loop[i].checked) {
                     detailedHome+=loop[i].id;
                 }
@@ -852,7 +861,8 @@ Vue.component('lms-ui-settings', {
                       ndShortcuts:this.ndShortcuts,
                       ndSettingsIcons:this.ndSettingsIcons,
                       ndSettingsVisible:this.ndSettingsVisible,
-                      detailedHome:detailedHome
+                      detailedHome:detailedHome,
+                      detailedHomeOrder:detailedHomeOrder
                   };
             if (withSorts) {
                 for (var key in window.localStorage) {
@@ -1024,6 +1034,30 @@ Vue.component('lms-ui-settings', {
         },
         mouseDown(ev) {
             toolbarMouseDown(ev);
+        },
+        dragStart(which, ev) {
+            ev.dataTransfer.dropEffect = 'move';
+            ev.dataTransfer.setData('text/plain', "dth:"+which);
+            this.dragIndex = which;
+            this.dropIndex = undefined;
+        },
+        dragEnd() {
+            this.dragIndex = undefined;
+            this.dropIndex = undefined;
+        },
+        dragOver(index, ev) {
+            if (index!=this.dragIndex) {
+                this.dropIndex = index;
+            }
+            ev.preventDefault(); // Otherwise drop is never called!
+        },
+        drop(to, ev) {
+            ev.preventDefault();
+            if (to!=this.dragIndex) {
+                this.detailedHomeItems = arrayMove(this.detailedHomeItems, this.dragIndex, to);
+            }
+            this.dragIndex = undefined;
+            this.dropIndex = undefined;
         }
     },
     watch: {

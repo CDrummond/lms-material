@@ -2392,13 +2392,18 @@ function parseBrowseResp(data, parent, options, cacheKey) {
             resp.listSize=resp.items.length;
         } else if (data.result.material_home_new_loop || data.result.material_home_recentlyplayed_loop || data.result.material_home_playcount_loop ||
                    data.result.material_home_playlists_loop || data.result.material_home_radios_loop) {
-            var lists = [{key:'new', loop:"albums", text:i18n('New Music'), id:TOP_EXTRA_NEWLY_ADDED_ID, icon:"new_releases", command:["albums"], params:["sort:new", ALBUM_TAGS_ALL_ARTISTS]},
-                         {key:'recentlyplayed', loop:"albums", text:i18n('Recently Played'), id:TOP_EXTRA_RECENTLY_PLAYED_ID, icon:"history", command:["albums"], params:["sort:recentlyplayed", ALBUM_TAGS_ALL_ARTISTS]},
-                         {key:'playcount', loop:"albums", text:i18n('Most Played'), id:TOP_EXTRA_MOST_PLAYED_ID, svg:"trophy", command:["albums"], params:["sort:playcount", ALBUM_TAGS_ALL_ARTISTS]},
-                         {key:'random', loop:"albums", text:i18n('Random'), id:TOP_EXTRA_RANDOM_ID, svg:"dice-album", command:["albums"], params:["sort:random", ALBUM_TAGS_ALL_ARTISTS]},
-                         {key:'radios', loop:"radios", text:i18n('Radios'), id:TOP_EXTRA_RADIOS_ID, svg:"radio", command:["material-skin-query","radios"], params:[]},
-                         {key:'playlists', loop:"playlists", text:i18n('Playlists'), id:TOP_EXTRA_PLAYLISTS_ID, icon:"list", command:["material-skin-query","playlists"], params:[PLAYLIST_TAGS, "menu:1"]}
+            var lists = [{val: DETAILED_HOME_NEW, key:'new', loop:"albums", text:i18n('New Music'), id:TOP_EXTRA_NEWLY_ADDED_ID, icon:"new_releases", command:["albums"], params:["sort:new", ALBUM_TAGS_ALL_ARTISTS]},
+                         {val: DETAILED_HOME_RECENT, key:'recentlyplayed', loop:"albums", text:i18n('Recently Played'), id:TOP_EXTRA_RECENTLY_PLAYED_ID, icon:"history", command:["albums"], params:["sort:recentlyplayed", ALBUM_TAGS_ALL_ARTISTS]},
+                         {val: DETAILED_HOME_MOST, key:'playcount', loop:"albums", text:i18n('Most Played'), id:TOP_EXTRA_MOST_PLAYED_ID, svg:"trophy", command:["albums"], params:["sort:playcount", ALBUM_TAGS_ALL_ARTISTS]},
+                         {val: DETAILED_HOME_RANDOM, key:'random', loop:"albums", text:i18n('Random'), id:TOP_EXTRA_RANDOM_ID, svg:"dice-album", command:["albums"], params:["sort:random", ALBUM_TAGS_ALL_ARTISTS]},
+                         {val: DETAILED_HOME_RADIOS, key:'radios', loop:"radios", text:i18n('Radios'), id:TOP_EXTRA_RADIOS_ID, svg:"radio", command:["material-skin-query","radios"], params:[]},
+                         {val: DETAILED_HOME_PLAYLISTS, key:'playlists', loop:"playlists", text:i18n('Playlists'), id:TOP_EXTRA_PLAYLISTS_ID, icon:"list", command:["material-skin-query","playlists"], params:[PLAYLIST_TAGS, "menu:1"]}
                         ];
+            for (let s=0, len=lists.length; s<len; ++s) {
+                let idx = undefined!=options && undefined!=options.order ? options.order.indexOf(lists[s].val) : undefined;
+                lists[s].val = undefined==idx || idx<0 ? lists[s].val*100 : idx;
+            }
+            lists.sort((a, b) => { return a.val<b.val ? -1 : 1});
             for (let s=0, len=lists.length; s<len; ++s) {
                 let loop = 'material_home_'+lists[s].key+'_loop';
                 if (data.result[loop]!=undefined) {

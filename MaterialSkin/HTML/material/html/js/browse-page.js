@@ -562,7 +562,7 @@ var lmsBrowse = Vue.component("lms-browse", {
             detailedSubExtra: undefined,
             items: [],
             topExtra: [],
-            topExtraCfg: undefined,
+            topExtraCfg: {val:0, order:[]},
             grid: {allowed:true, use:getLocalStorageBool('grid', true), numItems:0, numColumns:0, ih:GRID_MIN_HEIGHT, rows:[], few:false, haveSubtitle:true, multiSize:false, type:GRID_STANDARD},
             fetchingItem:undefined,
             hoverBtns: !IS_MOBILE,
@@ -1079,7 +1079,7 @@ var lmsBrowse = Vue.component("lms-browse", {
             });
         },
         getHomeExtra() {
-            this.topExtraCfg = this.$store.state.detailedHome;
+            this.topExtraCfg={val: this.$store.state.detailedHome, order: this.$store.state.detailedHomeOrder};
             if (this.$store.state.detailedHome>0) {
                 let cmd = ["material-skin", "home-extra"];
                 if (this.$store.state.detailedHome&DETAILED_HOME_NEW) {
@@ -1111,7 +1111,7 @@ var lmsBrowse = Vue.component("lms-browse", {
         },
         handleHomeExtra(data) {
             try {
-                let resp = parseBrowseResp(data);
+                let resp = parseBrowseResp(data, undefined, {order:this.$store.state.detailedHomeOrder});
                 this.fetchingItem = undefined;
                 if (undefined!=resp && undefined!=resp.items) {
                     if (undefined==this.topExtra || !arraysEqual(this.topExtra, resp.items)) {
@@ -2524,7 +2524,7 @@ var lmsBrowse = Vue.component("lms-browse", {
                 this.grid.use = true;
                 this.setLayoutAction();
             }
-            if (this.topExtraCfg!=this.$store.state.detailedHome && this.$store.state.detailedHome>0) {
+            if (this.$store.state.detailedHome>0 && (this.topExtraCfg.val!=this.$store.state.detailedHome || !arraysEqual(this.topExtraCfg.order, this.$store.state.detailedHomeOrder))) {
                 this.getHomeExtra();
             } else {
                 this.items = this.$store.state.detailedHome>0 ? this.topExtra.concat(this.top) : this.top;

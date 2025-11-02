@@ -46,6 +46,11 @@ function updateUiSettings(state, val) {
         setLocalStorageVal('detailedHome', state.detailedHome);
         browseDisplayChanged = true;
     }
+    if (undefined!=val.detailedHomeOrder && !arraysEqual(state.detailedHomeOrder, val.detailedHomeOrder)) {
+        state.detailedHomeOrder = val.detailedHomeOrder;
+        setLocalStorageVal('detailedHomeOrder', JSON.stringify(state.detailedHomeOrder));
+        browseDisplayChanged = true;
+    }
     if (!VALID_SKIP_SECONDS.has(state.skipBSeconds)) {
         state.skipBSeconds = 10;
     }
@@ -380,7 +385,8 @@ const store = new Vuex.Store({
         ndSettingsIcons: false,
         ndSettingsVisible: false,
         cMixSupported: 1==parseInt(getComputedStyle(document.documentElement).getPropertyValue('--color-mix-supported')),
-        detailedHome: DETAILED_HOME_NEW+DETAILED_HOME_RADIOS
+        detailedHome: DETAILED_HOME_NEW+DETAILED_HOME_RADIOS,
+        detailedHomeOrder:[DETAILED_HOME_NEW, DETAILED_HOME_MOST, DETAILED_HOME_RECENT, DETAILED_HOME_RANDOM, DETAILED_HOME_RADIOS, DETAILED_HOME_PLAYLISTS]
     },
     mutations: {
         updatePlayer(state, player) {
@@ -624,6 +630,9 @@ const store = new Vuex.Store({
             if (!VALID_SKIP_SECONDS.has(state.skipFSeconds)) {
                 state.skipFSeconds = 30;
             }
+            try {
+                state.detailedHomeOrder = JSON.parse(getLocalStorageVal('detailedHomeOrder', JSON.stringify(state.detailedHomeOrder)));
+            } catch (e) { }
             setQueuePinned(state, getLocalStorageBool('pinQueue', state.pinQueue), true);
             setQueueShown(state, getLocalStorageBool('showQueue', state.showQueue), true);
 

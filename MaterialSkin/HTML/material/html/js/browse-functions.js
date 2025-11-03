@@ -603,13 +603,24 @@ function browseHandleListResponse(view, item, command, resp, prevPage, appendIte
             }
         }
         if (canAddAlbumSort && view.command.command.length>0 && view.command.command[0]=="albums" && view.items.length>0) {
+            var isNewSort = false; // is sort:new?
+            var mskAllowAlbumSortsMenu = false; // is this albums, artist, albums, etc, but NOT "New Music"?
+            // We want to allow sorts-menu for most places but not new, changed, and random.
             for (var i=0, len=view.command.params.length; i<len && canAddAlbumSort; ++i) {
                 if (view.command.params[i].startsWith(SORT_KEY)) {
                     var sort=view.command.params[i].split(":")[1];
-                    canAddAlbumSort=sort!="new" && sort!="changed" && sort!="random";
+                    canAddAlbumSort=sort!="changed" && sort!="random";
+                    if (sort=="new") {
+                        isNewSort = true;
+                    }
                 } else if (view.command.params[i].startsWith("search:")) {
                     canAddAlbumSort=false;
+                } else if (view.command.params[i]==MSK_ALLOW_ALBUM_SORTS_MENU) {
+                    mskAllowAlbumSortsMenu = true;
                 }
+            }
+            if (canAddAlbumSort && isNewSort && !mskAllowAlbumSortsMenu) {
+                canAddAlbumSort = false;
             }
             if (canAddAlbumSort) {
                 view.currentActions.push({action:ALBUM_SORTS_ACTION, weight:undefined==curitem.stdItem ? -1 : 10});
@@ -2715,6 +2726,11 @@ function browseReplaceCommandTerms(view, cmd, item) {
                                            .replace(SORT_KEY+ARTIST_ALBUM_SORT_PLACEHOLDER, SORT_KEY+sort.by);
                 if (sort.rev) {
                     cmd.params.push(MSK_REV_SORT_OPT);
+                }
+                if (sort.by=="new") {
+                    // As this is "sort:new" we need to tell list processing that even though this is "sort:new" its
+                    // not from "New Music", so allow sort menu entry.
+                    cmd.params.push(MSK_ALLOW_ALBUM_SORTS_MENU);
                 }
             } else if (cmd.params[i].startsWith(ALBUM_TAGS_PLACEHOLDER)) {
                 cmd.params[i]=cmd.params[i].replace(ALBUM_TAGS_PLACEHOLDER, (lmsOptions.showAllArtists ? ALBUM_TAGS_ALL_ARTISTS : ALBUM_TAGS)+(lmsOptions.groupByReleaseType>0 ? 'W' : ''));

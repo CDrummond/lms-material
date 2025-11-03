@@ -214,6 +214,7 @@ const SKIN_BOOL_OPTS = ['maiComposer', 'showConductor', 'showBand', 'showArtistW
 const SKIN_INT_OPTS = ['showComposer', 'respectFixedVol', 'commentAsDiscTitle', 'pagedBatchSize', 'screensaverTimeout', 'npSwitchTimeout', 'useDefaultForSettings'];
 
 const MSK_REV_SORT_OPT = "msk-revsort:1";
+const MSK_ALLOW_ALBUM_SORTS_MENU = "msk-aasm:1";
 
 const MIN_TIME_BETWEEN_VOL_UPDATES = 150;
 

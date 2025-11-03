@@ -769,7 +769,7 @@ Vue.component('lms-ui-settings', {
                 );
             }
             this.detailedHomeItems.push(
-                { id:DETAILED_HOME_RANDOM, title:i18n('Random'), checked:DETAILED_HOME_RANDOM&&this.$store.state.detailedHome}
+                { id:DETAILED_HOME_RANDOM, title:lmsOptions.supportReleaseTypes ? i18n("Random Releases") : i18n("Random Albums"), checked:DETAILED_HOME_RANDOM&&this.$store.state.detailedHome}
             );
             this.detailedHomeItems.push(
                 { id:DETAILED_HOME_RADIOS, title:i18n('Radios'), checked:DETAILED_HOME_RADIOS&&this.$store.state.detailedHome}

@@ -2065,36 +2065,9 @@ sub _cliCommandQuery {
 
     # List of favourites, but streams only - no artists, albums, folders, etc.
     if ($cmd eq 'radios') {
-        my $index  = $request->getParam('_index');
-        my $quantity = $request->getParam('_quantity');
-        my @cmd = ("favorites", "items", $index, $quantity, "want_url:1", "feedMode:1");
-        my $req = Slim::Control::Request::executeRequest(undef, \@cmd);
-        my $cnt = 0;
-        foreach my $item ( @{ $req->getResult('items') || [] } ) {
-            if (_isRadio($item->{'url'})==1) {
-                $request->addResultLoop("radios_loop", $cnt, "url", $item->{'url'});
-                $request->addResultLoop("radios_loop", $cnt, "name", $item->{'name'});
-                $request->addResultLoop("radios_loop", $cnt, "icon", $item->{'icon'});
-                $cnt+=1;
-                if ($cnt>=$quantity) {
-                    last;
-                }
-            }
-            foreach my $child ( @{ $item->{'items'} || [] } ) {
-                if (_isRadio($child->{'url'})==1) {
-                    $request->addResultLoop("radios_loop", $cnt, "url", $child->{'url'});
-                    $request->addResultLoop("radios_loop", $cnt, "name", $child->{'name'});
-                    $request->addResultLoop("radios_loop", $cnt, "icon", $child->{'icon'});
-                    $cnt+=1;
-                    if ($cnt>=$quantity) {
-                        last;
-                    }
-                }
-            }
-            if ($cnt>=$quantity) {
-                last;
-            }
-        }
+        my $feed = Slim::Plugin::Favorites::OpmlFavorites->new($request->client)->xmlbrowser(0);
+        _traverseFavoritesTree($request, $feed, 0);
+
         $request->setStatusDone();
         return;
     }
@@ -2189,6 +2162,33 @@ sub _cliCommandQuery {
     }
 
     $request->setStatusBadParams();
+}
+
+sub _traverseFavoritesTree {
+    my ($request, $data, $cnt) = @_;
+    $cnt //= 0;
+
+    my $quantity = $request->getParam('_quantity');
+
+    foreach my $item (@{$data->{items} || []}) {
+        if (ref($item) eq 'HASH') {
+            if (_isRadio($item->{url})) {
+                $request->addResultLoop("radios_loop", $cnt, "url", $item->{'url'});
+                $request->addResultLoop("radios_loop", $cnt, "name", $item->{'name'});
+                $request->addResultLoop("radios_loop", $cnt, "icon", $item->{'icon'});
+
+                $cnt++;
+            }
+            elsif (ref($item->{items}) eq 'ARRAY' && scalar(@{$item->{items}}) > 0) {
+                # Dive into child items
+                $cnt = _traverseFavoritesTree->($request, $item, $cnt);
+            }
+        }
+
+        last if $cnt >= $quantity;
+    }
+
+    return $cnt;
 }
 
 sub _handleSimilarArtists {

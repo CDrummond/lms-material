@@ -2169,7 +2169,7 @@ function parseBrowseResp(data, parent, options, cacheKey) {
                         decades.push(decade);
                         addedHeader = true;
                         lastHeader = resp.items.length;
-                        resp.items.push({title:decade, id:FILTER_PREFIX+decade, header:true, count:1, menu:[ADD_RANDOM_ALBUM_ACTION]});
+                        resp.items.push({title:decade+"s", id:FILTER_PREFIX+decade, header:true, count:1, menu:[ADD_RANDOM_ALBUM_ACTION]});
                         resp.numHeaders++;
                     } else {
                          resp.items[lastHeader].count++;

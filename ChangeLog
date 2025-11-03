@@ -6,6 +6,7 @@
 4. Fix persistence of "Newest" album sort.
 5. Fix home screen if library is empty.
 6. Fix error logged when only 1 grid row.
+7. Append "s" to decades.
 
 6.0.0
 -----

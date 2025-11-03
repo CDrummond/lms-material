@@ -807,13 +807,13 @@ var lmsBrowse = Vue.component("lms-browse", {
             return this.$store.state.tinted && this.$store.state.cMixSupported
         },
         variableGridHeight() {
-            return (this.isTop && this.$store.state.detailedHome>0) || this.grid.multiSize
+            return (this.isTop && this.$store.state.detailedHome>0 && undefined!=this.topExtra && this.topExtra.length>0) || this.grid.multiSize
         },
         allowListOnHome() {
             return this.$store.state.detailedHome<=0
         },
         subtitlesClickable() {
-            return this.subtitleClickable || (this.isTop && this.$store.state.detailedHome>0)
+            return this.subtitleClickable || (this.isTop && this.$store.state.detailedHome>0 && undefined!=this.topExtra && this.topExtra.length>0)
         },
         isTrackList() {
             return undefined!=this.current && (STD_ITEM_ALBUM==this.current.stdItem || STD_ITEM_PLAYLIST==this.current.stdItem || this.current.stdItem==STD_ITEM_ALL_TRACKS || STD_ITEM_ONLINE_ALBUM==this.current.stdItem || STD_ITEM_REMOTE_PLAYLIST==this.current.stdItem)

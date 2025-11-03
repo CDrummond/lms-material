@@ -4,6 +4,7 @@
 2. Fix storing of grid/list for home screen.
 3. Fix issue with press of back button navigating home.
 4. Fix persistence of "Newest" album sort.
+5. Fix home screen if library is empty.
 
 6.0.0
 -----

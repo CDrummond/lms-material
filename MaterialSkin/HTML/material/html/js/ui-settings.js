@@ -214,8 +214,6 @@ Vue.component('lms-ui-settings', {
       <v-btn v-if="item.id==TOP_MYMUSIC_ID" @click.stop="showBrowseModesDialog($event)" flat icon class="settings-list-checkbox-action"><v-icon>settings</v-icon></v-btn>
      </div>
     </template>
-    
-    <div class="dialog-padding"></div>
 
     <div class="dialog-padding"></div>
     <v-header class="dialog-section-header">{{i18n('Now Playing')}}</v-header>

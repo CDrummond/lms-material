@@ -277,7 +277,7 @@ Vue.component('lms-screensaver', {
         },
         startMoving() {
             clearInterval(this.moveClockTimer);
-            if (this.screensaverType==2) {
+            if (this.screensaverType==1) {
                 this.moveClockTimer = setInterval(function () {
                     let factors = [-1, -0.75, -0.5, -0.25, 0, 0.25, 0.5, 0.75, 1.0];
                     let newPos = [0, 0];

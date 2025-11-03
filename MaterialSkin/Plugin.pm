@@ -1972,9 +1972,9 @@ sub _cliCommand {
         if ($request->getParam('recent')) {
             push(@sorts, "recentlyplayed");
         }
-        #if ($request->getParam('random')) {
-        #    push(@sorts, "random");
-        #}
+        if ($request->getParam('random')) {
+            push(@sorts, "random");
+        }
         if (scalar(@sorts)>0) {
             my @keys = ("album", "year", "artists", "artist_ids", "artist", "artist_id", "performance", "composer", "work_id", "artwork_track_id", "artwork_url", "artwork", "extid", "compilation", "disccount", "contiguous_groups");
             my $total = 0;

@@ -7,6 +7,7 @@
 5. Fix home screen if library is empty.
 6. Fix error logged when only 1 grid row.
 7. Append "s" to decades.
+8. Add 'Random Albums/Releases' to scrolled lists.
 
 6.0.0
 -----

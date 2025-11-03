@@ -770,9 +770,9 @@ Vue.component('lms-ui-settings', {
                     { id:DETAILED_HOME_MOST, title:i18n('Most Played'), checked:DETAILED_HOME_MOST&&this.$store.state.detailedHome}
                 );
             }
-            //this.detailedHomeItems.push(
-            //    { id:DETAILED_HOME_RANDOM, title:i18n('Random'), checked:DETAILED_HOME_RANDOM&&this.$store.state.detailedHome}
-            //);
+            this.detailedHomeItems.push(
+                { id:DETAILED_HOME_RANDOM, title:i18n('Random'), checked:DETAILED_HOME_RANDOM&&this.$store.state.detailedHome}
+            );
             this.detailedHomeItems.push(
                 { id:DETAILED_HOME_RADIOS, title:i18n('Radios'), checked:DETAILED_HOME_RADIOS&&this.$store.state.detailedHome}
             );

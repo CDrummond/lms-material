@@ -1223,7 +1223,25 @@ var lmsBrowse = Vue.component("lms-browse", {
             if (act==ALBUM_SORTS_ACTION || act==TRACK_SORTS_ACTION || act==USE_GRID_ACTION || act==USE_LIST_ACTION) {
                 browseHeaderAction(this, act, event, true);
             } else {
-                browseItemAction(this, act, item, index, event);
+                // If this is from 'Radios' scrolled list, try to convert from URL to favourite ID
+                if (item.ihe && item.id.startsWith("radio.")) {
+                    lmsCommand("", ["favorites", "exists", item.url]).then(({data}) => {
+                        if (data && data.result && 1==parseInt(data.result.exists)) {
+                            let copy = JSON.parse(JSON.stringify(item));
+                            copy.id = "item_id:"+data.result.index;
+                            copy.params = {id: data.result.index};
+                            this.baseActions = RADIOS_BASE_ACTIONS;
+                            browsePerformAction(this, copy, act);
+                            this.baseActions=undefined;
+                        } else {
+                            browseItemAction(this, act, item, index, event);
+                        }
+                    }).catch(err => {
+                        browseItemAction(this, act, item, index, event);
+                    });
+                } else {
+                    browseItemAction(this, act, item, index, event);
+                }
             }
         },
         menuItemAction(act, item, index, event) {

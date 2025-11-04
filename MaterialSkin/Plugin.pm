@@ -341,6 +341,31 @@ sub initPlugin {
         Slim::Utils::Timers::setTimer(undef, Time::HiRes::time() + 15, \&_checkUpdates);
     }
 
+    # FOR DEMO PURPOSES ONLY - REMOVE FOR PRODUCTION
+    Plugins::MaterialSkin::Plugin->registerHomeExtra(
+        'presets',
+        'Presets',
+        sub {
+            my ($client, $cb) = @_;
+
+            $client ||= (Slim::Player::Client::clients())[0];
+
+            my $presets = [ map {
+                {
+                    name => $_->{text},
+                    url  => $_->{URL},
+                    icon => Slim::Player::ProtocolHandlers->iconForURL($_->{URL}, $client),
+                }
+            } grep {
+                $_->{type} eq 'audio' || $_->{type} eq 'playlist'
+            } @{ preferences('server')->client($client || (Slim::Player::Client::clients())[0])->get('presets') || [] } ];
+
+            $cb->($presets);
+        },
+        0,
+    );
+
+
     #Slim::Control::Request::subscribe(\&_checkPlayQueue, [['playlist']]);
 }
 
@@ -2079,7 +2104,7 @@ sub _cliCommand {
                     }
 
                     foreach my $id (map { $_->{id} } sort { $a->{weight} <=> $b->{weight} } @$others) {
-                    my $cnt = 0;
+                        my $cnt = 0;
 
                         next unless $results->{$id};
 

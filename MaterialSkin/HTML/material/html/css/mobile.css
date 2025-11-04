@@ -189,10 +189,6 @@
  height:calc(var(--100vh) - (var(--main-toolbar-height) + (var(--sub-toolbar-height)*3) + var(--bottom-toolbar-height) + var(--mobile-npbar-height)))!important;
 }
 
-.detailed-sub .lms-list.browse-track-list {
- height:calc(var(--100vh) - (var(--main-toolbar-height) + (var(--sub-toolbar-height)*3) + var(--bottom-toolbar-height) + var(--mobile-npbar-height)))!important;
-}
-
 .browse-progress {
  position:absolute;
  top:0;

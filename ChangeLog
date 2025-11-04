@@ -8,6 +8,7 @@
 6. Fix error logged when only 1 grid row.
 7. Append "s" to decades.
 8. Add 'Random Albums/Releases' to scrolled lists.
+9. Recurse favourites folders for 'Radios' - thanks to Michael Herger.
 
 6.0.0
 -----

@@ -2067,7 +2067,6 @@ sub _cliCommandQuery {
     if ($cmd eq 'radios') {
         my $feed = Slim::Plugin::Favorites::OpmlFavorites->new($request->client)->xmlbrowser(0);
         _traverseFavoritesTree($request, $feed, 0);
-
         $request->setStatusDone();
         return;
     }
@@ -2178,8 +2177,7 @@ sub _traverseFavoritesTree {
                 $request->addResultLoop("radios_loop", $cnt, "icon", $item->{'icon'});
 
                 $cnt++;
-            }
-            elsif (ref($item->{items}) eq 'ARRAY' && scalar(@{$item->{items}}) > 0) {
+            } elsif (ref($item->{items}) eq 'ARRAY' && scalar(@{$item->{items}}) > 0) {
                 # Dive into child items
                 $cnt = _traverseFavoritesTree->($request, $item, $cnt);
             }

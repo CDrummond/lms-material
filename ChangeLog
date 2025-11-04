@@ -3,14 +3,14 @@
  1. Fix static clock screensaver.
  2. Fix storing of grid/list for home screen.
  3. Fix issue with press of back button navigating home.
- 4. Fix persistence of "Newest" album sort.
+ 4. Fix persistence of 'Newest' album sort.
  5. Fix home screen if library is empty.
  6. Fix error logged when only 1 grid row.
- 7. Append "s" to decades.
+ 7. Append 's' to decades.
  8. Add 'Random Albums/Releases', and 'Recently Updated Albums/Releases', to
     scrolled lists.
  9. Recurse favourites folders for 'Radios' - thanks to Michael Herger.
-10. Fix list corruption when pinnng items.
+10. Fix list corruption when pinning items.
 11. Enable 'Show image' hover button for home screen items.
 
 6.0.0

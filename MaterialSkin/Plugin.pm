@@ -1975,6 +1975,9 @@ sub _cliCommand {
         if ($request->getParam('random')) {
             push(@sorts, "random");
         }
+        if ($request->getParam('changed')) {
+            push(@sorts, "changed");
+        }
         if (scalar(@sorts)>0) {
             my @keys = ("album", "year", "artists", "artist_ids", "artist", "artist_id", "performance", "composer", "work_id", "artwork_track_id", "artwork_url", "artwork", "extid", "compilation", "disccount", "contiguous_groups");
             my $total = 0;

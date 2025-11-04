@@ -1100,6 +1100,9 @@ var lmsBrowse = Vue.component("lms-browse", {
                 if (this.$store.state.detailedHome&DETAILED_HOME_PLAYLISTS && lmsOptions.playlistImages) {
                     cmd.push("playlists:1");
                 }
+                if (this.$store.state.detailedHome&DETAILED_HOME_UPDATED) {
+                    cmd.push("changed:1");
+                }
                 lmsCommand("", cmd, this.nextReqId()).then(({data}) => {
                     if (this.isCurrentReq(data)) {
                         this.handleHomeExtra(data);

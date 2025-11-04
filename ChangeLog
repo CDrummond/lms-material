@@ -7,7 +7,8 @@
  5. Fix home screen if library is empty.
  6. Fix error logged when only 1 grid row.
  7. Append "s" to decades.
- 8. Add 'Random Albums/Releases' to scrolled lists.
+ 8. Add 'Random Albums/Releases', and 'Recently Updated Albums/Releases', to
+    scrolled lists.
  9. Recurse favourites folders for 'Radios' - thanks to Michael Herger.
 10. Fix list corruption when pinnng items.
 11. Enable 'Show image' hover button for home screen items.
@@ -44,7 +45,7 @@
 23. Always use three vertical dots for menu icon.
 24. Add 'Play shuffled' to genres and years.
 25. Don't try to get mtime of playlists imported from streaming services -
-   thanks to SamY.
+    thanks to SamY.
 26. Use a button for server update link in 'Information' dialog.
 27. Ignore headers when searching in lists.
 28. Draw border around all dialog buttons.

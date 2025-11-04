@@ -777,6 +777,11 @@ Vue.component('lms-ui-settings', {
             this.detailedHomeItems.push(
                 { id:DETAILED_HOME_PLAYLISTS, title:i18n('Playlists'), checked:DETAILED_HOME_PLAYLISTS&&this.$store.state.detailedHome}
             );
+            if (LMS_VERSION>=90000) {
+                this.detailedHomeItems.push(
+                    {id:DETAILED_HOME_UPDATED, title:lmsOptions.supportReleaseTypes ? i18n("Recently Updated Releases") : i18n("Recently Updated Albums"), checked:DETAILED_HOME_UPDATED&&this.$store.state.detailedHome}
+                );
+            }
         },
         close() {
             this.show=false;

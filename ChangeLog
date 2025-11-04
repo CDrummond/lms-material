@@ -2,6 +2,7 @@
 -----
 1. Fix track list being cut short in desktop layout.
 2. Fix storing of genre grid/list setting.
+3. Fix toggling grid/list for genres with more than 100 items.
 
 6.0.1
 -----

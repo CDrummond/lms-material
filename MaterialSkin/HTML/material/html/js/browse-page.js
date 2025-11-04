@@ -168,10 +168,36 @@ var lmsBrowse = Vue.component("lms-browse", {
   </div>
   <div class="lms-list" id="browse-list" style="overflow:auto;" v-bind:class="{'lms-image-grid':grid.allowed&&grid.use,'lms-grouped-image-grid':grid.allowed&&grid.use && variableGridHeight,'lms-image-grid-jump':grid.allowed&&grid.use && filteredJumplist.length>1,'lms-list-jump':!(grid.allowed&&grid.use) && filteredJumplist.length>1,'bgnd-blur':drawBgndImage,'backdrop-blur':drawBackdrop, 'browse-track-list':showTrackListCommands}">
 
-   <RecycleScroller v-if="grid.allowed&&grid.use&&GRID_TEXT_ONLY!=grid.type" :items="grid.rows" :item-size="variableGridHeight ? null : (grid.ih - (grid.haveSubtitle || isTop || current.id.startsWith(TOP_ID_PREFIX) ? 0 : GRID_SINGLE_LINE_DIFF))" page-mode key-field="id" :buffer="LMS_SCROLLER_GRID_BUFFER">
-    <div slot-scope="{item}" :class="[grid.few?'image-grid-few':'image-grid-full-width', (variableGridHeight ? item.hasSub : grid.haveSubtitle)?'image-grid-with-sub':'',grid.type==GRID_ICON_ONLY_ONLY?'icon-only':'',item.ihe&&!item.header&&!item.spacer?'grid-scroll':'']">
+   <RecycleScroller v-if="grid.allowed&&grid.use" :items="grid.rows" :item-size="variableGridHeight ? null : GRID_TEXT_ONLY==grid.type ? grid.ih : (grid.ih - (grid.haveSubtitle || isTop || current.id.startsWith(TOP_ID_PREFIX) ? 0 : GRID_SINGLE_LINE_DIFF))" page-mode key-field="id" :buffer="LMS_SCROLLER_GRID_BUFFER">
+    <div slot-scope="{item}" :class="[grid.few?'image-grid-few':'image-grid-full-width', GRID_TEXT_ONLY==grid.type && items.length>0 && items[0].stdItem==STD_ITEM_GENRE ? 'genre-grid' : '', GRID_TEXT_ONLY!=grid.type && (variableGridHeight ? item.hasSub : grid.haveSubtitle)?'image-grid-with-sub':'',grid.type==GRID_ICON_ONLY_ONLY?'icon-only':'',item.ihe&&!item.header&&!item.spacer?'grid-scroll':'']">
 
      <div v-if="item.spacer"></div>
+
+     <v-list-tile v-if="GRID_TEXT_ONLY==grid.type && item.header && item.item" class="grid-header no-hover">
+      <v-list-tile-avatar v-if="item.item.icon" :tile="true" class="lms-avatar">
+       <v-icon>{{item.item.icon}}</v-icon>
+      </v-list-tile-avatar>
+      <v-list-tile-avatar v-else-if="item.item.svg" :tile="true" class="lms-avatar">
+       <img :class="['hdr-'+hRgb, 'svg-list-img']" :src="item.item.svg | svgIcon(darkUi, undefined, true)" loading="lazy" @dragstart.prevent="" @dragenter.prevent=""></img>
+      </v-list-tile-avatar>
+      <v-list-tile-content>
+       <v-list-tile-title>{{item.item.title}}</v-list-tile-title>
+      </v-list-tile-content>
+      <v-list-tile-action class="browse-action" v-if="undefined!=item.item.menu && item.item.menu.length>0">
+       <div class="grid-btn list-btn hover-btn menu-btn" @click.stop="itemMenu(item.item, item.rs, $event)" :title="i18n('%1 (Menu)', stripLinkTags(item.item.title))"></div>
+      </v-list-tile-action>
+     </v-list-tile>
+     <div v-else-if="GRID_TEXT_ONLY==grid.type" align="center" style="vertical-align: top" v-for="(citem, col) in item.items" @contextmenu.prevent="contextMenu(citem, isTop ? citem.gidx : (item.rs+col), $event)">
+      <div v-if="undefined==citem" class="text-grid-item defcursor"></div>
+      <div v-else class="text-grid-item" @click="click(citem, isTop ? citem.gidx : (item.rs+col), $event)" :title="citem | itemTooltip">
+       <div v-if="selection.size>0 && browseCanSelect(citem)" class="check-btn grid-btn image-grid-select-btn" @click.stop="select(citem, isTop ? citem.gidx : (item.rs+col), $event)" :title="ACTIONS[citem.selected ? UNSELECT_ACTION : SELECT_ACTION].title" v-bind:class="{'check-btn-checked':citem.selected}"></div>
+       <div v-bind:class="{'search-highlight':highlightIndex==(isTop ? citem.gidx : (item.rs+col)), 'list-active': (menu.show && (isTop ? citem.gidx : (item.rs+col))==menu.index) || (fetchingItem==item.id)}">
+         <div class="stripe" :style="{background: citem.color}"></div>
+         <div>{{citem.title}}</div></div>
+        <div class="grid-btn image-grid-btn hover-btn menu-btn" v-if="(undefined!=citem.stdItem && citem.stdItem<=STD_ITEM_MAX) || (citem.menu && citem.menu.length>0 && (!citem.isPinned || (!queryParams.party && (!LMS_KIOSK_MODE || !HIDE_FOR_KIOSK.has(PIN_ACTION))))) || (isTop && libraryName && citem.id==TOP_MYMUSIC_ID)" @click.stop="itemMenu(citem, isTop ? citem.gidx : (item.rs+col), $event)" :title="i18n('%1 (Menu)', stripLinkTags(citem.title))"></div>
+      </div>
+     </div>
+
      <v-list-tile v-else-if="item.header && item.item" class="grid-header" @click.stop="click(item.item, undefined, $event)" v-bind:class="{'search-highlight':highlightIndex==(item.rs)}">
       <v-list-tile-avatar v-if="item.item.icon" :tile="true" class="lms-avatar">
        <v-icon>{{item.item.icon}}</v-icon>
@@ -229,35 +255,6 @@ var lmsBrowse = Vue.component("lms-browse", {
        </div>
        <div v-if="hoverBtns && selection.size==0 && citem.image" class="grid-btns grid-btn-left"><img class="other-btn grid-btn" @click.stop="itemAction(SHOW_IMAGE_ACTION, citem, item.rs+col, $event)" :title="ACTIONS[SHOW_IMAGE_ACTION].title" :src="'hover-expand' | svgIcon(darkUi, true)"></img>
        </div>
-      </div>
-     </div>
-    </div>
-   </RecycleScroller>
-
-   <RecycleScroller v-else-if="grid.allowed&&grid.use" :items="grid.rows" :item-size="variableGridHeight ? null : grid.ih" page-mode key-field="id" :buffer="LMS_SCROLLER_GRID_BUFFER">
-    <div slot-scope="{item}" :class="[grid.few?'image-grid-few':'image-grid-full-width',items.length>0 && items[0].stdItem==STD_ITEM_GENRE ? 'genre-grid' : '']">
-     <v-list-tile v-if="item.header && item.item" class="grid-header no-hover">
-      <v-list-tile-avatar v-if="item.item.icon" :tile="true" class="lms-avatar">
-       <v-icon>{{item.item.icon}}</v-icon>
-      </v-list-tile-avatar>
-      <v-list-tile-avatar v-else-if="item.item.svg" :tile="true" class="lms-avatar">
-       <img :class="['hdr-'+hRgb, 'svg-list-img']" :src="item.item.svg | svgIcon(darkUi, undefined, true)" loading="lazy" @dragstart.prevent="" @dragenter.prevent=""></img>
-      </v-list-tile-avatar>
-      <v-list-tile-content>
-       <v-list-tile-title>{{item.item.title}}</v-list-tile-title>
-      </v-list-tile-content>
-      <v-list-tile-action class="browse-action" v-if="undefined!=item.item.menu && item.item.menu.length>0">
-       <div class="grid-btn list-btn hover-btn menu-btn" @click.stop="itemMenu(item.item, item.rs, $event)" :title="i18n('%1 (Menu)', stripLinkTags(item.item.title))"></div>
-      </v-list-tile-action>
-     </v-list-tile>
-     <div v-else align="center" style="vertical-align: top" v-for="(citem, col) in item.items" @contextmenu.prevent="contextMenu(citem, isTop ? citem.gidx : (item.rs+col), $event)">
-      <div v-if="undefined==citem" class="text-grid-item defcursor"></div>
-      <div v-else class="text-grid-item" @click="click(citem, isTop ? citem.gidx : (item.rs+col), $event)" :title="citem | itemTooltip">
-       <div v-if="selection.size>0 && browseCanSelect(citem)" class="check-btn grid-btn image-grid-select-btn" @click.stop="select(citem, isTop ? citem.gidx : (item.rs+col), $event)" :title="ACTIONS[citem.selected ? UNSELECT_ACTION : SELECT_ACTION].title" v-bind:class="{'check-btn-checked':citem.selected}"></div>
-       <div v-bind:class="{'search-highlight':highlightIndex==(isTop ? citem.gidx : (item.rs+col)), 'list-active': (menu.show && (isTop ? citem.gidx : (item.rs+col))==menu.index) || (fetchingItem==item.id)}">
-         <div class="stripe" :style="{background: citem.color}"></div>
-         <div>{{citem.title}}</div></div>
-        <div class="grid-btn image-grid-btn hover-btn menu-btn" v-if="(undefined!=citem.stdItem && citem.stdItem<=STD_ITEM_MAX) || (citem.menu && citem.menu.length>0 && (!citem.isPinned || (!queryParams.party && (!LMS_KIOSK_MODE || !HIDE_FOR_KIOSK.has(PIN_ACTION))))) || (isTop && libraryName && citem.id==TOP_MYMUSIC_ID)" @click.stop="itemMenu(citem, isTop ? citem.gidx : (item.rs+col), $event)" :title="i18n('%1 (Menu)', stripLinkTags(citem.title))"></div>
       </div>
      </div>
     </div>

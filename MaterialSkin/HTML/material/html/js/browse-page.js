@@ -384,7 +384,7 @@ var lmsBrowse = Vue.component("lms-browse", {
      <v-list-tile-avatar v-else-if="undefined!=item.tracknum" class="tnum">{{item.tracknum}}</v-list-tile-avatar>
 
      <v-list-tile-content>
-      <v-list-tile-title v-html="item.title" v-if="undefined!=item.stdItem && (item.stdItem==STD_ITEM_TRACK || item.stdItem==STD_ITEM_ALBUM_TRACK || item.stdItem==STD_ITEM_PLAYLIST_TRACK)" v-bind:class="{'browse-no-sub':!item.subtitle}"></v-list-tile-title>
+      <v-list-tile-title v-html="item.title" v-if="undefined!=item.stdItem && (item.stdItem==STD_ITEM_TRACK || item.stdItem==STD_ITEM_ALBUM_TRACK || item.stdItem==STD_ITEM_PLAYLIST_TRACK || item.stdItem==STD_ITEM_REMOTE_PLAYLIST_TRACK)" v-bind:class="{'browse-no-sub':!item.subtitle}"></v-list-tile-title>
       <v-list-tile-title v-else>{{item.title}}<b class="vlib-name" v-if="isTop && (item.libname || (libraryName && item.id==TOP_MYMUSIC_ID))" v-bind:class="{'browse-no-sub':!item.subtitle}">{{SEPARATOR+(item.libname ? item.libname : libraryName)}}</b></v-list-tile-title>
       <v-list-tile-sub-title v-if="wide>WIDE_NONE && item.subtitleContext" v-html="item.subtitleContext"></v-list-tile-sub-title>
       <v-list-tile-sub-title v-else v-html="item.subtitleLinks ? item.subtitleLinks : item.subtitle"></v-list-tile-sub-title>
@@ -760,7 +760,7 @@ var lmsBrowse = Vue.component("lms-browse", {
                 return false;
             }
             let stdItem = this.current.stdItem ? this.current.stdItem : this.current.altStdItem;
-            if (stdItem==STD_ITEM_ARTIST || stdItem==STD_ITEM_WORK_COMPOSER || stdItem==STD_ITEM_WORK || stdItem==STD_ITEM_CLASSICAL_WORKS || stdItem==STD_ITEM_PLAYLIST) {
+            if (stdItem==STD_ITEM_ARTIST || stdItem==STD_ITEM_WORK_COMPOSER || stdItem==STD_ITEM_WORK || stdItem==STD_ITEM_CLASSICAL_WORKS || stdItem==STD_ITEM_PLAYLIST || stdItem==STD_ITEM_REMOTE_PLAYLIST) {
                 return this.headerSubTitle;
             }
             if (stdItem==STD_ITEM_ALBUM || (stdItem==STD_ITEM_ONLINE_ALBUM && this.current.sbMeta) || stdItem==STD_ITEM_MIX || stdItem==STD_ITEM_ALL_TRACKS || stdItem==STD_ITEM_COMPOSITION_TRACKS) {
@@ -816,10 +816,10 @@ var lmsBrowse = Vue.component("lms-browse", {
             return this.subtitleClickable || (this.isTop && this.$store.state.detailedHome>0 && undefined!=this.topExtra && this.topExtra.length>0)
         },
         isTrackList() {
-            return undefined!=this.current && (STD_ITEM_ALBUM==this.current.stdItem || STD_ITEM_PLAYLIST==this.current.stdItem || this.current.stdItem==STD_ITEM_ALL_TRACKS || STD_ITEM_ONLINE_ALBUM==this.current.stdItem || STD_ITEM_REMOTE_PLAYLIST==this.current.stdItem)
+            return undefined!=this.current && (STD_ITEM_ALBUM==this.current.stdItem || STD_ITEM_PLAYLIST==this.current.stdItem || STD_ITEM_REMOTE_PLAYLIST==this.current.stdItem || this.current.stdItem==STD_ITEM_ALL_TRACKS || STD_ITEM_ONLINE_ALBUM==this.current.stdItem || STD_ITEM_REMOTE_PLAYLIST==this.current.stdItem)
         },
         isImageTrackList() {
-            return undefined!=this.current && (STD_ITEM_PLAYLIST==this.current.stdItem || this.current.stdItem==STD_ITEM_ALL_TRACKS || this.current.stdItem==STD_ITEM_REMOTE_PLAYLIST)
+            return undefined!=this.current && (STD_ITEM_PLAYLIST==this.current.stdItem || STD_ITEM_REMOTE_PLAYLIST==this.current.stdItem || this.current.stdItem==STD_ITEM_ALL_TRACKS || this.current.stdItem==STD_ITEM_REMOTE_PLAYLIST)
         },
         showTrackListCommands() {
             return this.wide<WIDE_MIX_BTN && this.isTrackList && this.showDetailedSubtoolbar
@@ -2288,7 +2288,7 @@ var lmsBrowse = Vue.component("lms-browse", {
                 let itm = item.header ? this.current : item;
                 return undefined!=itm && undefined!=itm.stdItem &&
                         (itm.stdItem==STD_ITEM_ARTIST || itm.stdItem==STD_ITEM_ALBUM ||
-                         itm.stdItem==STD_ITEM_PLAYLIST || itm.stdItem==STD_ITEM_WORK ||
+                         itm.stdItem==STD_ITEM_PLAYLIST || itm.stdItem==STD_ITEM_WORK || itm.stdItem==STD_ITEM_REMOTE_PLAYLIST ||
                          itm.stdItem==STD_ITEM_GENRE || itm.stdItem==STD_ITEM_YEAR ||
                          itm.stdItem==STD_ITEM_ONLINE_ARTIST || itm.stdItem==STD_ITEM_ONLINE_ALBUM);
             }

@@ -2627,7 +2627,9 @@ function browsePin(view, item, add, mapped) {
         if (item.id==START_RANDOM_MIX_ID) {
             lmsOptions.randomMixDialogPinned = true;
         }
-        view.items = view.$store.state.detailedHome>0 ? view.topExtra.concat(view.top) : view.top;
+        if (view.isTop) {
+            view.items = view.$store.state.detailedHome>0 ? view.topExtra.concat(view.top) : view.top;
+        }
         view.options.pinned.add(item.id);
         browseUpdateItemPinnedState(view, item);
         view.saveTopList();

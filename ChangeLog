@@ -1,6 +1,7 @@
 6.0.2
 -----
 1. Fix track list being cut short in desktop layout.
+2. Fix storing of genre grid/list setting.
 
 6.0.1
 -----

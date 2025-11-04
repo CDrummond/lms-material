@@ -784,6 +784,10 @@ function setUseGrid(command, use, item) {
     setLocalStorageVal(commandGridKey(command, item), use);
 }
 
+function gridCommand(view) {
+    return view.isTop ? GRID_TOP : undefined==view.command || (view.current && view.current.id!=TOP_FAVORITES_ID && view.current.id!=GENRES_ID && view.current.id.startsWith(TOP_ID_PREFIX)) ? GRID_OTHER : view.command;
+}
+
 function forceItemUpdate(vm, item) {
     var prev = item.title;
     item.title = "XX"+item.title;

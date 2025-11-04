@@ -391,7 +391,7 @@ function browseHandleListResponse(view, item, command, resp, prevPage, appendIte
             ( (view.items.length>0 && undefined!=view.items[0].id && undefined!=view.items[0].artist_id && view.items[0].id.startsWith("album_id:")) ||
               (view.items.length>1 && view.items[0].header && undefined!=view.items[1].id && undefined!=view.items[1].artist_id && view.items[1].id.startsWith("album_id:")));
         view.grid = {allowed:resp.canUseGrid ? true : false,
-                     use: resp.forceGrid || (view.$store.state.gridPerView ? isSetToUseGrid(view.current && view.current.id.startsWith(TOP_ID_PREFIX) && view.current.id!=TOP_FAVORITES_ID ? GRID_OTHER : command, view.current) : view.grid.use),
+                     use: resp.forceGrid || (view.$store.state.gridPerView ? isSetToUseGrid(gridCommand(view), view.current) : view.grid.use),
                      numColumns:0, ih:GRID_MIN_HEIGHT, rows:[], few:false, haveSubtitle:true, multiSize:false, type:resp.gridType};
         view.jumplistActive=0;
         view.prevPage = prevPage;

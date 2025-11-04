@@ -1440,7 +1440,7 @@ var lmsBrowse = Vue.component("lms-browse", {
                     this.setBgndCover();
                     this.layoutGrid(true);
                     if (this.$store.state.gridPerView) {
-                        setUseGrid(this.isTop ? GRID_TOP : undefined==this.command || (this.current && this.current.id!=TOP_FAVORITES_ID && (this.current.id.startsWith(TOP_ID_PREFIX) || this.current.id==GENRES_ID)) ? GRID_OTHER : this.command, this.grid.use, this.current);
+                        setUseGrid(gridCommand(this), this.grid.use, this.current);
                     } else {
                         setLocalStorageVal('grid', useGrid);
                     }

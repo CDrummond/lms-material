@@ -9,6 +9,7 @@ package Plugins::MaterialSkin::Plugin;
 #
 
 use strict;
+use Async::Util;
 use Config;
 use Encode;
 use Scalar::Util qw(blessed);
@@ -164,6 +165,8 @@ my $CATEGORIES_MAP = {
     'Wefunk' => 'radio',
     'YouTube' => 'musicservices'
 };
+
+my $HOME_EXTRAS = {};
 
 sub initPlugin {
     my $class = shift;
@@ -521,6 +524,30 @@ sub initOthers {
     if (!$hideForKiosk) {
         $hideForKiosk = '9, 10, 11, 12, 13, 14, 15, 16, 20, 25, 26, 27, 29, 30, 41, 42, 49, 50, 56, 57';
     }
+}
+
+sub registerHomeExtra {
+    my ($class, $id, $title, $handler, $weight) = @_;
+
+    return unless $id && $title && $handler;
+
+    $log->warn("Home Extra with id '$id' is already registered - overwriting") if $HOME_EXTRAS->{$id};
+
+    $HOME_EXTRAS->{'3rdparty_' . $id} = {
+        id      => $id,
+        title   => $title,
+        handler => $handler,
+        weight  => $weight || 50
+    };
+}
+
+sub getHomeExtra {
+    # prefix identifiers to not conflict with built-in extras
+    return $HOME_EXTRAS->{'3rdparty_' . $_[0]};
+}
+
+sub getHomExtrasIDs {
+    return map { s/^3rdparty_//; $_ } keys %$HOME_EXTRAS;
 }
 
 #sub _checkPlayQueue {
@@ -2008,11 +2035,7 @@ sub _cliCommand {
             my $cnt = 0;
             foreach my $item ( @{ $req->getResult('radios_loop') || [] } ) {
                 if ($cnt<NUM_HOME_ITEMS) {
-                    foreach my $key (keys(%{$item})) {
-                        my $val = $item->{$key};
-                        $request->addResultLoop("material_home_radios_loop", $cnt, ${key}, ${val});
-                    }
-                    $request->addResultLoop("material_home_radios_loop", $cnt, "ihe", 1);
+                    _addExtraHomeItem($request, "radios", $item, $cnt);
                 }
                 $cnt+=1;
             }
@@ -2024,20 +2047,75 @@ sub _cliCommand {
             my $cnt = 0;
             foreach my $item ( @{ $req->getResult('playlists_loop') || [] } ) {
                 if ($cnt<NUM_HOME_ITEMS) {
-                    foreach my $key (keys(%{$item})) {
-                        my $val = $item->{$key};
-                        $request->addResultLoop("material_home_playlists_loop", $cnt, ${key}, ${val});
-                    }
-                    $request->addResultLoop("material_home_playlists_loop", $cnt, "ihe", 1);
+                    _addExtraHomeItem($request, "playlists", $item, $cnt);
                 }
                 $cnt+=1;
             }
             $request->addResult("material_home_playlists_loop_len", $cnt);
         }
+
+        my $others = [ grep { $_ } map { getHomeExtra($_) } keys %{$request->getParamsCopy()} ];
+        if (scalar @$others) {
+            $request->setStatusProcessing();
+
+            # process other home items asynchronously and in parallel - they might be doing online lookups
+            Async::Util::amap(
+                inputs => $others,
+                action => sub {
+                    my ($extra, $acb) = @_;
+                    my $id = $extra->{id};
+
+                    $extra->{handler}->($request->client, sub {
+                        $acb->({ $id => (shift || []) });
+                    });
+                },
+                at_a_time => 4,
+                cb => sub {
+                    my $results = {};
+
+                    foreach my $result (@{$_[0]}) {
+                        my ($id, $res) = each %{$result};
+                        $results->{$id} = $res;
+                    }
+
+                    foreach my $id (map { $_->{id} } sort { $a->{weight} <=> $b->{weight} } @$others) {
+                    my $cnt = 0;
+
+                        next unless $results->{$id};
+
+                        foreach my $item ( @{$results->{$id}} ) {
+                            last if $cnt >= NUM_HOME_ITEMS;
+
+                            _addExtraHomeItem($request, $id, $item, $cnt);
+                            $cnt++;
+                        }
+
+                        $request->addResult("material_home_${id}_loop_len", scalar @{$results->{$id}});
+                    }
+
+                    $request->setStatusDone();
+                }
+            );
+
+            # we have to wait for the async processing to finish
+            return;
+        }
+
         $request->setStatusDone();
         return;
     }
     $request->setStatusBadParams();
+}
+
+sub _addExtraHomeItem {
+    my ($request, $id, $item, $cnt) = @_;
+
+    foreach my $key (keys(%{$item})) {
+        my $val = $item->{$key};
+        $request->addResultLoop("material_home_${id}_loop", $cnt, ${key}, ${val});
+    }
+
+    $request->addResultLoop("material_home_${id}_loop", $cnt, "ihe", 1);
 }
 
 sub _isRadio {

@@ -342,10 +342,9 @@ sub initPlugin {
     }
 
     # FOR DEMO PURPOSES ONLY - REMOVE FOR PRODUCTION
-    Plugins::MaterialSkin::Plugin->registerHomeExtra(
-        'presets',
-        'Presets',
-        sub {
+    Plugins::MaterialSkin::Plugin->registerHomeExtra('presets', {
+        title => 'Presets',
+        handler => sub {
             my ($client, $cb) = @_;
 
             $client ||= (Slim::Player::Client::clients())[0];
@@ -362,8 +361,9 @@ sub initPlugin {
 
             $cb->($presets);
         },
-        0,
-    );
+        weight => 0,
+        icon => '/material/html/images/preset_MTL_icon_looks_one.png'
+    });
 
 
     #Slim::Control::Request::subscribe(\&_checkPlayQueue, [['playlist']]);
@@ -552,17 +552,19 @@ sub initOthers {
 }
 
 sub registerHomeExtra {
-    my ($class, $id, $title, $handler, $weight) = @_;
+    my ($class, $id, $args) = @_;
 
-    return unless $id && $title && $handler;
+    return unless $id && $args->{title} && $args->{handler};
 
     $log->warn("Home Extra with id '$id' is already registered - overwriting") if $HOME_EXTRAS->{$id};
 
     $HOME_EXTRAS->{'3rdparty_' . $id} = {
         id      => $id,
-        title   => $title,
-        handler => $handler,
-        weight  => $weight || 50
+        title   => $args->{title},
+        icon    => $args->{icon} || '',
+        handler => $args->{handler},
+        # if we didn't get a weight, convert the id to a numeric "hash-like" value (bytes as big integer)
+        weight  => $args->{weight} || unpack("Q<", substr($id . "\0"x8, 0, 8)),
     };
 }
 
@@ -2137,7 +2139,7 @@ sub _addExtraHomeItem {
 
     foreach my $key (keys(%{$item})) {
         my $val = $item->{$key};
-        $request->addResultLoop("material_home_${id}_loop", $cnt, ${key}, ${val});
+        $request->addResultLoop("material_home_${id}_loop", $cnt, $key, $val);
     }
 
     $request->addResultLoop("material_home_${id}_loop", $cnt, "ihe", 1);

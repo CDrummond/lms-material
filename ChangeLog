@@ -10,6 +10,7 @@
  8. Add 'Random Albums/Releases' to scrolled lists.
  9. Recurse favourites folders for 'Radios' - thanks to Michael Herger.
 10. Fix list corruption when pinnng items.
+11. Enable 'Show image' hover button for home screen items.
 
 6.0.0
 -----

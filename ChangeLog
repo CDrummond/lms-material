@@ -1,16 +1,17 @@
 6.0.2
 -----
-1. Fix track list being cut short in desktop layout.
-2. Fix storing of genre grid/list setting.
-3. Fix toggling grid/list for genres with more than 100 items.
-4. Check album/track sort is valid.
-5. When starting a stream from 'Radios' section first try to convert to
-   favorites ID.
-6. Use virtual library ID when populating scrolled lists.
-7. Add toolbar button to change virtual library on home screen.
-8. Only display virtual library name if its not default library.
-9. Use LMS's 'New Music Limit' for album scrolled lists, and 200 for radios
-   and playlists.
+ 1. Fix track list being cut short in desktop layout.
+ 2. Fix storing of genre grid/list setting.
+ 3. Fix toggling grid/list for genres with more than 100 items.
+ 4. Check album/track sort is valid.
+ 5. When starting a stream from 'Radios' section first try to convert to
+    favorites ID.
+ 6. Use virtual library ID when populating scrolled lists.
+ 7. Add toolbar button to change virtual library on home screen.
+ 8. Only display virtual library name if its not default library.
+ 9. Use LMS's 'New Music Limit' for album scrolled lists, and 200 for radios
+    and playlists.
+10. Re-layout home grid if size-hint changes.
 
 6.0.1
 -----

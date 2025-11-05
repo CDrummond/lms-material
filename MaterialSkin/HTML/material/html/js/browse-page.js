@@ -1894,7 +1894,7 @@ var lmsBrowse = Vue.component("lms-browse", {
                     }
                 }
             }
-            if (force || sz.nc != this.grid.numColumns || type!=this.grid.type) { // Need to re-layout...
+            if (force || sz.nc != this.grid.numColumns || (this.isTop && sz.h != this.grid.szh) || type!=this.grid.type) { // Need to re-layout...
                 changed = true;
                 this.grid.rows = [];
                 this.grid.multiSize = false;
@@ -1939,7 +1939,7 @@ var lmsBrowse = Vue.component("lms-browse", {
                                 used++;
                             }
                         }
-                        this.grid.rows.push({id:"row."+row+"."+sz.nc, items:rowItems, r:row, rs:rs, size:(rowHasSubtitle ? sz.h : (sz.h - GRID_SINGLE_LINE_DIFF))+(IS_MOBILE ? 0 : 10)+8, numStd:used, hasSub:rowHasSubtitle, ihe:true});
+                        this.grid.rows.push({id:"row."+row+"."+sz.nc, items:rowItems, r:row, rs:rs, size:(rowHasSubtitle ? sz.h - (rowItems[0].ihe ? 4 : 0) : (sz.h - GRID_SINGLE_LINE_DIFF))+(IS_MOBILE ? 0 : 10)+8, numStd:used, hasSub:rowHasSubtitle, ihe:true});
                         i+=used;
                         rs+=used;
                     }
@@ -1986,6 +1986,7 @@ var lmsBrowse = Vue.component("lms-browse", {
                     }
                 }
                 this.grid.numColumns = sz.nc;
+                this.grid.szh = sz.h;
             } else { // Need to check if have subtitles...
                 for (var i=0; i<this.items.length && !haveSubtitle; ++i) {
                     if (this.items[i].subtitle) {

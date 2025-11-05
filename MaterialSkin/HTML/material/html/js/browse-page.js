@@ -1232,7 +1232,7 @@ var lmsBrowse = Vue.component("lms-browse", {
                 browseHeaderAction(this, act, event, true);
             } else {
                 // If this is from 'Radios' scrolled list, try to convert from URL to favourite ID
-                if (item.ihe && item.id.startsWith("radio.")) {
+                if (undefined!=item && item.ihe && item.id.startsWith("radio.")) {
                     lmsCommand("", ["favorites", "exists", item.url]).then(({data}) => {
                         if (data && data.result && 1==parseInt(data.result.exists)) {
                             let copy = JSON.parse(JSON.stringify(item));

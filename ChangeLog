@@ -12,6 +12,8 @@
  9. Use LMS's 'New Music Limit' for album scrolled lists, and 200 for radios
     and playlists.
 10. Re-layout home grid if size-hint changes.
+11. Fix 'Random Albums/Releases' and 'Recently Updated Albums/Releases'
+    scrollable lists not showing if they are the only one.
 
 6.0.1
 -----

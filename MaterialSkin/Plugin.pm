@@ -2038,6 +2038,7 @@ sub _cliCommand {
             }
             $request->addResult("material_home_playlists_loop_len", $cnt);
         }
+        $request->addResult("material_home", 1);
         $request->setStatusDone();
         return;
     }

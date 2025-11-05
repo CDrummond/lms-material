@@ -2387,8 +2387,7 @@ function parseBrowseResp(data, parent, options, cacheKey) {
                 });
             }
             resp.listSize=resp.items.length;
-        } else if (data.result.material_home_new_loop || data.result.material_home_recentlyplayed_loop || data.result.material_home_playcount_loop ||
-                   data.result.material_home_playlists_loop || data.result.material_home_radios_loop) {
+        } else if (data.result.material_home) {
             var lists = [{val: DETAILED_HOME_NEW, key:'new', loop:"albums", text:i18n('New Music'), id:TOP_DETAILED_EXTRA+DETAILED_HOME_NEW, icon:"new_releases", command:["albums"], params:["sort:new", ALBUM_TAGS_ALL_ARTISTS]},
                          {val: DETAILED_HOME_RECENT, key:'recentlyplayed', loop:"albums", text:i18n('Recently Played'), id:TOP_DETAILED_EXTRA+DETAILED_HOME_RECENT, icon:"history", command:["albums"], params:["sort:recentlyplayed", ALBUM_TAGS_ALL_ARTISTS]},
                          {val: DETAILED_HOME_MOST, key:'playcount', loop:"albums", text:i18n('Most Played'), id:TOP_DETAILED_EXTRA+DETAILED_HOME_MOST, svg:"trophy", command:["albums"], params:["sort:playcount", ALBUM_TAGS_ALL_ARTISTS]},

@@ -7,8 +7,7 @@
 5. When starting a stream from 'Radios' section first try to convert to
    favorites ID.
 6. Use virtual library ID when populating scrolled lists.
-7. If using scrolled lists then allow to change virtual library on home
-   screen.
+7. Add toolbar button to change virtual library on home screen.
 8. Only display virtual library name if its not default library.
 
 6.0.1

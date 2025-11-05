@@ -5,7 +5,7 @@
  3. Fix toggling grid/list for genres with more than 100 items.
  4. Check album/track sort is valid.
  5. When starting a stream from 'Radios' section first try to convert to
-    favorites ID.
+    favourites ID.
  6. Use virtual library ID when populating scrolled lists.
  7. Add toolbar button to change virtual library on home screen.
  8. Only display virtual library name if its not default library.

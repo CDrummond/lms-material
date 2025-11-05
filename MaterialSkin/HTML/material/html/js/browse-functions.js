@@ -2104,7 +2104,7 @@ function browseGoHome(view) {
     view.tbarActions=[];
     view.isTop = true;
     view.grid = {allowed:true, use:view.$store.state.detailedHome>0 || (view.$store.state.gridPerView ? isSetToUseGrid(GRID_TOP) : view.grid.use), numColumns:0, ih:GRID_MIN_HEIGHT, rows:[], few:false, haveSubtitle:true, multiSize:false, type:GRID_STANDARD};
-    view.currentActions=[{action:(view.grid.use ? USE_LIST_ACTION : USE_GRID_ACTION)}];
+    view.currentActions=[{action:VLIB_ACTION}, {action:(view.grid.use ? USE_LIST_ACTION : USE_GRID_ACTION)}];
     view.hoverBtns = !IS_MOBILE;
     view.command = undefined;
     view.subtitleClickable = false;

@@ -2393,8 +2393,8 @@ function parseBrowseResp(data, parent, options, cacheKey) {
                          {val: DETAILED_HOME_RECENT, key:'recentlyplayed', loop:"albums", text:i18n('Recently Played'), id:TOP_DETAILED_EXTRA+DETAILED_HOME_RECENT, icon:"history", command:["albums"], params:["sort:recentlyplayed", ALBUM_TAGS_ALL_ARTISTS]},
                          {val: DETAILED_HOME_MOST, key:'playcount', loop:"albums", text:i18n('Most Played'), id:TOP_DETAILED_EXTRA+DETAILED_HOME_MOST, svg:"trophy", command:["albums"], params:["sort:playcount", ALBUM_TAGS_ALL_ARTISTS]},
                          {val: DETAILED_HOME_RANDOM, key:'random', loop:"albums", text:lmsOptions.supportReleaseTypes ? i18n('Random Releases') : i18n('Random Albums'), id:TOP_DETAILED_EXTRA+DETAILED_HOME_RANDOM, svg:"dice-album", command:["albums"], params:["sort:random", ALBUM_TAGS_ALL_ARTISTS]},
-                         {val: DETAILED_HOME_RADIOS, key:'radios', loop:"radios", text:i18n('Radios'), id:TOP_DETAILED_EXTRA+DETAILED_HOME_RADIOS, svg:"radio", command:["material-skin-query","radios"], params:[]},
-                         {val: DETAILED_HOME_PLAYLISTS, key:'playlists', loop:"playlists", text:i18n('Playlists'), id:TOP_DETAILED_EXTRA+DETAILED_HOME_PLAYLISTS, icon:"list", command:["material-skin-query","playlists"], params:[PLAYLIST_TAGS, "menu:1"]},
+                         {val: DETAILED_HOME_RADIOS, key:'radios', loop:"radios", text:i18n('Radios'), id:TOP_DETAILED_EXTRA+DETAILED_HOME_RADIOS, svg:"radio", command:["material-skin-query","radios"], params:[], limit:200},
+                         {val: DETAILED_HOME_PLAYLISTS, key:'playlists', loop:"playlists", text:i18n('Playlists'), id:TOP_DETAILED_EXTRA+DETAILED_HOME_PLAYLISTS, icon:"list", command:["material-skin-query","playlists"], params:[PLAYLIST_TAGS, "menu:1"], limit:200},
                          {val: DETAILED_HOME_UPDATED, key:'changed', loop:"albums", text:lmsOptions.supportReleaseTypes ? i18n("Recently Updated Releases") : i18n("Recently Updated Albums"), id:TOP_DETAILED_EXTRA+DETAILED_HOME_UPDATED, svg:"updated-music", command:["albums"], params:["sort:changed", ALBUM_TAGS_ALL_ARTISTS]}
                         ];
             for (let s=0, len=lists.length; s<len; ++s) {
@@ -2415,7 +2415,7 @@ function parseBrowseResp(data, parent, options, cacheKey) {
                     new_data.result[lists[s].loop+"_loop"] = data.result[loop];
                     let newResp = parseBrowseResp(new_data, parent, undefined, undefined, true);
                     if (undefined!=newResp && newResp.items.length>0) {
-                        resp.items.push({title:lists[s].text, id:lists[s].id, header:true, ihe:1, icon:lists[s].icon, svg: lists[s].svg,
+                        resp.items.push({title:lists[s].text, id:lists[s].id, header:true, ihe:1, icon:lists[s].icon, svg: lists[s].svg, limit: lists[s].limit,
                             morecmd:parseInt(data.result[loop+"_len"])>10 ? {command:lists[s].command, params:lists[s].params} : undefined});
                         resp.items=resp.items.concat(newResp.items);
                     }

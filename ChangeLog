@@ -6,6 +6,9 @@
 4. Check album/track sort is valid.
 5. When starting a stream from 'Radios' section first try to convert to
    favorites ID.
+6. Use virtual library ID when populating scrolled lists.
+7. If using scrolled lists then allow to change virtual library on home
+   screen.
 
 6.0.1
 -----

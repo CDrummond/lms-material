@@ -136,10 +136,14 @@ var lmsBrowse = Vue.component("lms-browse", {
    <div @click="sourcesClicked" class="ellipsis subtoolbar-title subtoolbar-title-single">{{trans.home}}</div>
    <v-spacer @click="itemAction(SEARCH_LIB_ACTION, undefined, undefined, $event)" class="pointer"></v-spacer>
 
-   <v-btn @click.stop="currentAction(currentActions[0], 0, $event)" flat icon class="toolbar-button" :title="undefined==currentActions[0].action ? currentActions[0].title : ACTIONS[currentActions[0].action].title" id="tbar-actions" v-if="currentActions.length==1 && allowListOnHome">
-    <img v-if="undefined!=currentActions[0].action && ACTIONS[currentActions[0].action].svg" class="svg-img" :src="ACTIONS[currentActions[0].action].svg | svgIcon(darkUi)"></img>
-    <v-icon v-else-if="undefined!=currentActions[0].action">{{ACTIONS[currentActions[0].action].icon}}</v-icon>
-   </v-btn>
+   <template v-for="(item, index) in currentActions">
+    <v-btn @click.stop="currentAction(item, index, $event)" flat icon class="toolbar-button" :title="undefined==item.action ? item.title : ACTIONS[item.action].title" id="tbar-actions"
+           v-if="undefined==item.action || (VLIB_ACTION==item.action ? allowVLibOnHome : (USE_GRID_ACTION==item.action || USE_LIST_ACTION==item.action) ? allowListOnHome : true)">
+     <img v-if="undefined!=item.action && ACTIONS[item.action].svg" class="svg-img" :src="ACTIONS[item.action].svg | svgIcon(darkUi)"></img>
+     <v-icon v-else-if="undefined!=item.action">{{ACTIONS[item.action].icon}}</v-icon>
+    </v-btn>
+   </template>
+
    <v-btn :title="SEARCH_LIB_ACTION | tooltip(keyboardControl)" flat icon class="toolbar-button" @click.stop="itemAction(SEARCH_LIB_ACTION, undefined, undefined, $event)"><img class="svg-img" :src="ACTIONS[SEARCH_LIB_ACTION].svg | svgIcon(darkUi)"></img></v-btn>
   </v-layout>
   <v-layout class="browse-tracklist-commands" v-if="isTrackList && showDetailedSubtoolbar && wide<WIDE_MIX_BTN">
@@ -809,6 +813,9 @@ var lmsBrowse = Vue.component("lms-browse", {
         allowListOnHome() {
             return this.$store.state.detailedHome<=0
         },
+        allowVLibOnHome() {
+            return this.$store.state.detailedHome>0 && undefined!=this.libraryName
+        },
         subtitlesClickable() {
             return this.subtitleClickable || (this.isTop && this.$store.state.detailedHome>0 && undefined!=this.topExtra && this.topExtra.length>0)
         },
@@ -842,7 +849,7 @@ var lmsBrowse = Vue.component("lms-browse", {
                       sortFavorites: this.$store.state.sortFavorites};
         this.previousScrollPos=0;
         this.grid = {allowed:true, use:this.$store.state.detailedHome || (this.$store.state.gridPerView ? isSetToUseGrid(GRID_TOP) : getLocalStorageBool('grid', true)), numItems:0, numColumns:0, ih:GRID_MIN_HEIGHT, rows:[], few:false, haveSubtitle:true, multiSize:false, type:GRID_STANDARD};
-        this.currentActions=[{action:(this.grid.use ? USE_LIST_ACTION : USE_GRID_ACTION)}];
+        this.currentActions=[{action:VLIB_ACTION}, {action:(this.grid.use ? USE_LIST_ACTION : USE_GRID_ACTION)}];
         this.canDrop = true;
 
         if (!IS_MOBILE) {
@@ -1100,6 +1107,7 @@ var lmsBrowse = Vue.component("lms-browse", {
                 if (this.$store.state.detailedHome&DETAILED_HOME_UPDATED) {
                     cmd.push("changed:1");
                 }
+                cmd.push("library_id:"+this.$store.state.library);
                 lmsCommand("", cmd, this.nextReqId()).then(({data}) => {
                     if (this.isCurrentReq(data)) {
                         this.handleHomeExtra(data);
@@ -1266,7 +1274,9 @@ var lmsBrowse = Vue.component("lms-browse", {
         },
         showMore(item) {
             if (item.morecmd) {
-                this.fetchItems(item.morecmd, {cancache:false, id:item.id, title: item.title, limit:100});
+                let command = JSON.parse(JSON.stringify(item.morecmd));
+                browseReplaceCommandTerms(this, command, item);
+                this.fetchItems(command, {cancache:false, id:item.id, title: item.title, limit:100});
             } else if (item.allItems) {
                 this.addHistory();
                 this.items = item.allItems;
@@ -1429,6 +1439,9 @@ var lmsBrowse = Vue.component("lms-browse", {
         },
         selectLibrary(id) {
             this.$store.commit('setLibrary', id);
+            if (this.isTop) {
+                this.getHomeExtra();
+            }
         },
         deleteLibrary(lib) {
             confirm(i18n("Delete '%1'?", lib.name)+addNote(i18n("This will remove the 'virtual library', but will not delete the actual music files contained within.")), i18n('Delete')).then(res => {
@@ -1436,6 +1449,9 @@ var lmsBrowse = Vue.component("lms-browse", {
                     lmsCommand("", ["material-skin", "delete-vlib", "id:"+lib.id]).then(({data}) => {
                         if (this.$store.state.library==lib.id) {
                             this.$store.commit('setLibrary', LMS_DEFAULT_LIBRARY);
+                            if (this.isTop) {
+                               this.getHomeExtra();
+                            }
                         }
                     });
                 }

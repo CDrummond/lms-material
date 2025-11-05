@@ -2107,17 +2107,16 @@ sub _cliCommand {
 
                     foreach my $id (map { $_->{id} } sort { $a->{weight} <=> $b->{weight} } @$others) {
                         my $cnt = 0;
+                        my $result = $results->{$id};
 
-                        next unless $results->{$id};
+                        next unless $result;
 
-                        foreach my $item ( @{$results->{$id}} ) {
-                            last if $cnt >= NUM_HOME_ITEMS;
-
-                            _addExtraHomeItem($request, $id, $item, $cnt);
-                            $cnt++;
+                        # shorten results list if needed.
+                        if (ref $result->{item_loop} && scalar @{$result->{item_loop}} > NUM_HOME_ITEMS) {
+                            splice @{$result->{item_loop}}, NUM_HOME_ITEMS;
                         }
 
-                        $request->addResult("material_home_${id}_loop_len", scalar @{$results->{$id}});
+                        $request->addResult("material_home_${id}_obj", $result);
                     }
 
                     $request->setStatusDone();

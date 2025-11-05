@@ -1244,11 +1244,8 @@ var lmsBrowse = Vue.component("lms-browse", {
                     lmsCommand("", ["favorites", "exists", item.url]).then(({data}) => {
                         if (data && data.result && 1==parseInt(data.result.exists)) {
                             let copy = JSON.parse(JSON.stringify(item));
-                            copy.id = "item_id:"+data.result.index;
-                            copy.params = {id: data.result.index};
-                            this.baseActions = RADIOS_BASE_ACTIONS;
-                            browsePerformAction(this, copy, act);
-                            this.baseActions=undefined;
+                            copy.params = {item_id: "aabbccdd."+data.result.index};
+                            browseItemAction(this, act, copy, index, event, RADIOS_BASE_ACTIONS);
                         } else {
                             browseItemAction(this, act, item, index, event);
                         }

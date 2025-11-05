@@ -1311,7 +1311,7 @@ function browseAddCategories(view, item, isGenre) {
     });
 }
 
-function browseItemAction(view, act, origItem, index, event) {
+function browseItemAction(view, act, origItem, index, event, slimBrowseBaseActions) {
     let item = undefined!=origItem && origItem.id.startsWith("currentaction:") ? browseGetCurrent(view) : origItem;
 
     if (act==SEARCH_LIST_ACTION) {
@@ -1886,16 +1886,16 @@ function browseItemAction(view, act, origItem, index, event) {
 
         if (lmsOptions.playShuffle && (PLAY_ACTION==act || PLAY_SHUFFLE_ACTION==act)) {
             lmsCommand(view.playerId(), ['playlist', 'shuffle', PLAY_ACTION==act ? 0 : 1]).then(({data}) => {
-                browsePerformAction(view, item, PLAY_ACTION);
+                browsePerformAction(view, item, PLAY_ACTION, slimBrowseBaseActions);
             });
         } else {
-            browsePerformAction(view, item, act);
+            browsePerformAction(view, item, act, slimBrowseBaseActions);
         }
     }
 }
 
-function browsePerformAction(view, item, act) {
-    var command = browseBuildFullCommand(view, item, act);
+function browsePerformAction(view, item, act, slimBrowseBaseActions) {
+    var command = browseBuildFullCommand(view, item, act, slimBrowseBaseActions);
     if (command.command.length===0) {
         bus.$emit('showError', undefined, i18n("Don't know how to handle this!"));
         return;
@@ -2212,7 +2212,7 @@ function browseGoBack(view, refresh) {
     }
 }
 
-function browseBuildCommand(view, item, commandName, doReplacements, allowLibId) {
+function browseBuildCommand(view, item, commandName, doReplacements, allowLibId, slimBrowseBaseActions) {
     var cmd = {command: [], params: [] };
 
     if (undefined===item || null===item) {
@@ -2233,7 +2233,7 @@ function browseBuildCommand(view, item, commandName, doReplacements, allowLibId)
         if (undefined==commandName || item.mskOnlyGoAction) {
             commandName = "go";
         }
-        var baseActions = view.current == item ? view.currentBaseActions : view.baseActions;
+        var baseActions = slimBrowseBaseActions ? slimBrowseBaseActions : view.current == item ? view.currentBaseActions : view.baseActions;
         var command = item.actions && item.actions[commandName]
                     ? item.actions[commandName]
                     : "go" == commandName && item.actions && item.actions["do"]
@@ -2763,8 +2763,8 @@ function browseReplaceCommandTerms(view, cmd, item) {
     return cmd;
 }
 
-function browseBuildFullCommand(view, item, act) {
-    var command = browseBuildCommand(view, item, ACTIONS[act].cmd);
+function browseBuildFullCommand(view, item, act, slimBrowseBaseActions) {
+    var command = browseBuildCommand(view, item, ACTIONS[act].cmd, undefined, undefined, slimBrowseBaseActions);
     if (command.command.length<1) { // Non slim-browse command
         if (item.stdItem==STD_ITEM_RANDOM_MIX) { // Should no longer actually occur...
             command.command = ["material-skin-client", "rndmix", "name:"+item.title, "act:"+(INSERT_ACTION==act ? "insert" : ACTIONS[act].cmd)];

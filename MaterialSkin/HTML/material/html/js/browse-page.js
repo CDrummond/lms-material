@@ -1284,7 +1284,7 @@ var lmsBrowse = Vue.component("lms-browse", {
             if (item.morecmd) {
                 let command = JSON.parse(JSON.stringify(item.morecmd));
                 browseReplaceCommandTerms(this, command, item);
-                this.fetchItems(command, {cancache:false, id:item.id, title: item.title, limit:100});
+                this.fetchItems(command, {cancache:false, id:item.id, title: item.title, limit:item.limit});
             } else if (item.allItems) {
                 this.addHistory();
                 this.items = item.allItems;

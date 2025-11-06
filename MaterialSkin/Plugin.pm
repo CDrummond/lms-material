@@ -345,7 +345,7 @@ sub initPlugin {
     Plugins::MaterialSkin::Plugin->registerHomeExtra('presets', {
         title => 'Presets',
         handler => sub {
-            my ($client, $cb) = @_;
+            my ($client, $cb, $maxItems) = @_;
 
             $client ||= (Slim::Player::Client::clients())[0];
 
@@ -361,7 +361,6 @@ sub initPlugin {
 
             $cb->($presets);
         },
-        weight => 0,
         icon => '/material/html/images/preset_MTL_icon_looks_one.png'
     });
 
@@ -563,8 +562,6 @@ sub registerHomeExtra {
         title   => $args->{title},
         icon    => $args->{icon} || '',
         handler => $args->{handler},
-        # if we didn't get a weight, convert the id to a numeric "hash-like" value (bytes as big integer)
-        weight  => $args->{weight} || unpack("Q<", substr($id . "\0"x8, 0, 8)),
     };
 }
 
@@ -2094,7 +2091,7 @@ sub _cliCommand {
 
                     $extra->{handler}->($request->client, sub {
                         $acb->({ $id => (shift || []) });
-                    });
+                    }, NUM_HOME_ITEMS);
                 },
                 at_a_time => 4,
                 cb => sub {
@@ -2105,7 +2102,7 @@ sub _cliCommand {
                         $results->{$id} = $res;
                     }
 
-                    foreach my $id (map { $_->{id} } sort { $a->{weight} <=> $b->{weight} } @$others) {
+                    foreach my $id (map { $_->{id} } @$others) {
                         my $cnt = 0;
                         my $result = $results->{$id};
 

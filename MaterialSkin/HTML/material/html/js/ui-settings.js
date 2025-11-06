@@ -716,7 +716,7 @@ Vue.component('lms-ui-settings', {
         },
         initItems() {
             this.themes=[
-                { key: AUTO_THEME, label:this.i18n('Automatic')},
+                { key: AUTO_THEME,   label:i18n('Automatic')},
                 { key:'light',       label:i18n('Light')},
                 { key:'dark',        label:i18n('Dark')},
                 { key:'black',       label:i18n('Black')},
@@ -734,9 +734,9 @@ Vue.component('lms-ui-settings', {
                 { key:MBAR_REP_NAV, label:i18n("Replace navigation bar")},
                 ];
             this.colorUsages=[
-                { key:COLOR_USE_STANDARD,   label:this.i18n("For all players ") },
-                { key:COLOR_USE_FROM_COVER, label:this.i18n("From current cover (all players)") },
-                { key:COLOR_USE_PER_PLAYER, label:this.i18n("Per player") }
+                { key:COLOR_USE_STANDARD,   label:i18n("For all players ") },
+                { key:COLOR_USE_FROM_COVER, label:i18n("From current cover (all players)") },
+                { key:COLOR_USE_PER_PLAYER, label:i18n("Per player") }
             ]
             this.skipSecondsOptions = [ ];
             for (let s=0, len=SKIP_SECONDS_VALS.length; s<len; ++s) {
@@ -963,7 +963,7 @@ Vue.component('lms-ui-settings', {
                          shortcutStr("esc")+SEPARATOR+i18n("Go back"),
                          shortcutStr(ACTIONS[SEARCH_LIB_ACTION].key)+SEPARATOR+ACTIONS[SEARCH_LIB_ACTION].title + " / " + ACTIONS[SEARCH_LIST_ACTION].title,
                          shortcutStr(ACTIONS[SEARCH_LIB_ACTION].key, false, true)+SEPARATOR+ACTIONS[ADV_SEARCH_ACTION].title,
-                         shortcutStr(ACTIONS[SEARCH_LIST_ACTION].key, true)+SEPARATOR+ACTIONS[SEARCH_LIST_ACTION].title+" ("+this.i18n("Queue")+")",
+                         shortcutStr(ACTIONS[SEARCH_LIST_ACTION].key, true)+SEPARATOR+ACTIONS[SEARCH_LIST_ACTION].title+" ("+i18n("Queue")+")",
                          shortcutStr(ACTIONS[ADD_ACTION].skey, true)+SEPARATOR+ACTIONS[ADD_ACTION].title,
                          shortcutStr(LMS_TRACK_INFO_KEYBOARD)+SEPARATOR+i18n("Show current track information")
                        ]
@@ -976,7 +976,7 @@ Vue.component('lms-ui-settings', {
                          shortcutStr("esc")+SEPARATOR+i18n("Go back"),
                          shortcutStr(ACTIONS[SEARCH_LIB_ACTION].key)+SEPARATOR+ACTIONS[SEARCH_LIB_ACTION].title + " / " + ACTIONS[SEARCH_LIST_ACTION].title,
                          shortcutStr(ACTIONS[SEARCH_LIB_ACTION].key, false, true)+SEPARATOR+ACTIONS[ADV_SEARCH_ACTION].title,
-                         shortcutStr(ACTIONS[SEARCH_LIST_ACTION].key, true)+SEPARATOR+ACTIONS[SEARCH_LIST_ACTION].title+" ("+this.i18n("Queue")+")",
+                         shortcutStr(ACTIONS[SEARCH_LIST_ACTION].key, true)+SEPARATOR+ACTIONS[SEARCH_LIST_ACTION].title+" ("+i18n("Queue")+")",
                          shortcutStr(ACTIONS[PLAY_ACTION].skey, true)+SEPARATOR+ACTIONS[PLAY_ACTION].title,
                          shortcutStr(ACTIONS[ADD_ACTION].skey, true)+SEPARATOR+ACTIONS[ADD_ACTION].title,
                          shortcutStr(LMS_ADD_ITEM_ACTION_KEYBOARD, true)+SEPARATOR+i18n("Add favorite or podcast"),

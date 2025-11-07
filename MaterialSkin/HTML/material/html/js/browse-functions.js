@@ -1982,7 +1982,7 @@ function browseHeaderAction(view, act, event, ignoreOpenMenus) {
     let item = undefined!=view.current && view.current.stdItem==STD_ITEM_MAI ? view.history[view.history.length-1].current : view.current;
     if (USE_LIST_ACTION==act) {
         view.changeLayout(false);
-    } else if (USE_GRID_ACTION==act) {
+    } else if (USE_GRID_ACTION==act || USE_ALT_GRID_ACTION==act) {
         view.changeLayout(true);
     } else if (ALBUM_SORTS_ACTION==act || TRACK_SORTS_ACTION==act) {
         var currentSort=ALBUM_SORTS_ACTION==act ? getAlbumSort(view.command, view.inGenre) : getTrackSort(item.stdItem);
@@ -2088,7 +2088,6 @@ function browseGoHome(view) {
     view.next = undefined;
     view.selection = new Set();
     var prev = view.history.length>0 ? view.history[0].pos : 0;
-    view.items = view.$store.state.detailedHome ? view.topExtra.concat(view.top) : view .top;
     view.jumplist = [];
     view.filteredJumplist = [];
     view.history=[];
@@ -2103,8 +2102,9 @@ function browseGoHome(view) {
     view.currentItemImage=undefined;
     view.tbarActions=[];
     view.isTop = true;
-    view.grid = {allowed:true, use:view.$store.state.detailedHome>0 || (view.$store.state.gridPerView ? isSetToUseGrid(GRID_TOP) : view.grid.use), numColumns:0, ih:GRID_MIN_HEIGHT, rows:[], few:false, haveSubtitle:true, multiSize:false, type:GRID_STANDARD};
-    view.currentActions=[{action:VLIB_ACTION}, {action:(view.grid.use ? USE_LIST_ACTION : USE_GRID_ACTION)}];
+    view.grid = {allowed:true, use:view.$store.state.gridPerView ? isSetToUseGrid(GRID_TOP) : view.grid.use, numColumns:0, ih:GRID_MIN_HEIGHT, rows:[], few:false, haveSubtitle:true, multiSize:false, type:GRID_STANDARD};
+    view.items = view.$store.state.detailedHome && view.grid.use ? view.topExtra.concat(view.top) : view .top;
+    view.currentActions=[{action:VLIB_ACTION}, {action:(view.grid.use ? USE_LIST_ACTION : view.$store.state.detailedHome ? USE_ALT_GRID_ACTION : USE_GRID_ACTION)}];
     view.hoverBtns = !IS_MOBILE;
     view.command = undefined;
     view.subtitleClickable = false;
@@ -2628,7 +2628,7 @@ function browsePin(view, item, add, mapped) {
             lmsOptions.randomMixDialogPinned = true;
         }
         if (view.isTop) {
-            view.items = view.$store.state.detailedHome>0 ? view.topExtra.concat(view.top) : view.top;
+            view.items = view.grid.use && view.$store.state.detailedHome>0 ? view.topExtra.concat(view.top) : view.top;
         }
         view.options.pinned.add(item.id);
         browseUpdateItemPinnedState(view, item);
@@ -2646,7 +2646,7 @@ function browsePin(view, item, add, mapped) {
 
 function browseUnpin(view, item, index) {
     view.top.splice(index, 1);
-    view.items = view.$store.state.detailedHome>0 ? view.topExtra.concat(view.top) : view.top;
+    view.items = view.grid.use && view.$store.state.detailedHome>0 ? view.topExtra.concat(view.top) : view.top;
     view.options.pinned.delete(item.id);
     browseUpdateItemPinnedState(view, item);
     if (item.id.startsWith(MUSIC_ID_PREFIX)) {

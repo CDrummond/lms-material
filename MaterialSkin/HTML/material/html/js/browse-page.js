@@ -143,7 +143,7 @@ var lmsBrowse = Vue.component("lms-browse", {
 
    <template v-for="(item, index) in currentActions">
     <v-btn @click.stop="currentAction(item, index, $event)" flat icon class="toolbar-button" :title="undefined==item.action ? item.title : ACTIONS[item.action].title" id="tbar-actions"
-           v-if="undefined==item.action || (VLIB_ACTION==item.action ? allowVLibOnHome : (USE_GRID_ACTION==item.action || USE_LIST_ACTION==item.action) ? allowListOnHome : true)">
+           v-if="undefined==item.action || (VLIB_ACTION==item.action ? allowVLibOnHome : true)">
      <img v-if="undefined!=item.action && ACTIONS[item.action].svg" class="svg-img" :src="ACTIONS[item.action].svg | svgIcon(darkUi)"></img>
      <v-icon v-else-if="undefined!=item.action">{{ACTIONS[item.action].icon}}</v-icon>
     </v-btn>
@@ -815,9 +815,6 @@ var lmsBrowse = Vue.component("lms-browse", {
         variableGridHeight() {
             return (this.isTop && this.$store.state.detailedHome>0 && undefined!=this.topExtra && this.topExtra.length>0) || this.grid.multiSize
         },
-        allowListOnHome() {
-            return this.$store.state.detailedHome<=0
-        },
         allowVLibOnHome() {
             return undefined!=this.libraryName
         },
@@ -856,8 +853,8 @@ var lmsBrowse = Vue.component("lms-browse", {
         this.options={pinned: new Set(),
                       sortFavorites: this.$store.state.sortFavorites};
         this.previousScrollPos=0;
-        this.grid = {allowed:true, use:this.$store.state.detailedHome || (this.$store.state.gridPerView ? isSetToUseGrid(GRID_TOP) : getLocalStorageBool('grid', true)), numItems:0, numColumns:0, ih:GRID_MIN_HEIGHT, rows:[], few:false, haveSubtitle:true, multiSize:false, type:GRID_STANDARD};
-        this.currentActions=[{action:VLIB_ACTION}, {action:(this.grid.use ? USE_LIST_ACTION : USE_GRID_ACTION)}];
+        this.grid = {allowed:true, use:this.$store.state.gridPerView ? isSetToUseGrid(GRID_TOP) : getLocalStorageBool('grid', true), numItems:0, numColumns:0, ih:GRID_MIN_HEIGHT, rows:[], few:false, haveSubtitle:true, multiSize:false, type:GRID_STANDARD};
+        this.currentActions=[{action:VLIB_ACTION}, {action:(this.grid.use ? USE_LIST_ACTION : this.$store.state.detailedHome ? USE_ALT_GRID_ACTION : USE_GRID_ACTION)}];
         this.canDrop = true;
 
         if (!IS_MOBILE) {
@@ -1132,9 +1129,7 @@ var lmsBrowse = Vue.component("lms-browse", {
                 if (undefined!=resp && undefined!=resp.items) {
                     if (undefined==this.topExtra || !arraysEqual(this.topExtra, resp.items)) {
                         this.topExtra = resp.items;
-                        if (this.isTop && this.$store.state.detailedHome>0) {
-                            this.grid.use = true;
-                            this.setLayoutAction();
+                        if (this.isTop && this.$store.state.detailedHome>0 && this.grid.use) {
                             this.items = this.topExtra.concat(this.top);
                             this.layoutGrid(true);
                         }
@@ -1236,7 +1231,7 @@ var lmsBrowse = Vue.component("lms-browse", {
         },
         itemAction(act, item, index, event) {
             storeClickOrTouchPos(event, this.menu);
-            if (act==ALBUM_SORTS_ACTION || act==TRACK_SORTS_ACTION || act==USE_GRID_ACTION || act==USE_LIST_ACTION) {
+            if (act==ALBUM_SORTS_ACTION || act==TRACK_SORTS_ACTION || act==USE_GRID_ACTION || act==USE_ALT_GRID_ACTION || act==USE_LIST_ACTION) {
                 browseHeaderAction(this, act, event, true);
             } else {
                 // If this is from 'Radios' scrolled list, try to convert from URL to favourite ID
@@ -1474,6 +1469,9 @@ var lmsBrowse = Vue.component("lms-browse", {
                 this.grid.use=useGrid;
                 this.$nextTick(function () {
                     this.setBgndCover();
+                    if (this.isTop) {
+                        this.items = this.grid.use && this.$store.state.detailedHome>0 ? this.topExtra.concat(this.top) : this.top;
+                    }
                     this.layoutGrid(true);
                     if (this.$store.state.gridPerView) {
                         setUseGrid(gridCommand(this), this.grid.use, this.current);
@@ -1490,11 +1488,22 @@ var lmsBrowse = Vue.component("lms-browse", {
         },
         setLayoutAction() {
             var af = this.grid.use ? USE_GRID_ACTION : USE_LIST_ACTION;
-            var at = this.grid.use ? USE_LIST_ACTION : USE_GRID_ACTION;
+            var af2 = this.grid.use ? USE_ALT_GRID_ACTION : USE_LIST_ACTION;
+            var at = this.grid.use ? USE_LIST_ACTION : this.isTop && this.$store.state.detailedHome ? USE_ALT_GRID_ACTION : USE_GRID_ACTION;
             for (var i=0, loop=this.currentActions, len=loop.length; i<len; ++i) {
-                if (loop[i].action == af) {
+                if (loop[i].action == af || loop[i].action == af2) {
                     loop[i].action = at;
                     break;
+                }
+            }
+            if (this.isTop) {
+                var af = this.$store.state.detailedHome ? USE_GRID_ACTION : USE_ALT_GRID_ACTION;
+                var at = this.$store.state.detailedHome ? USE_ALT_GRID_ACTION : USE_GRID_ACTION;
+                for (var i=0, loop=this.currentActions, len=loop.length; i<len; ++i) {
+                    if (loop[i].action == af) {
+                        loop[i].action = at;
+                        break;
+                    }
                 }
             }
         },
@@ -2229,7 +2238,7 @@ var lmsBrowse = Vue.component("lms-browse", {
                             drgIdx-=this.topExtra.length;
                         }
                         this.top = arrayMove(this.top, drgIdx, to);
-                        this.items = this.$store.state.detailedHome>0 ? this.topExtra.concat(this.top) : this.top;
+                        this.items = this.grid.use && this.$store.state.detailedHome>0 ? this.topExtra.concat(this.top) : this.top;
                         this.saveTopList();
                         this.layoutGrid(true);
                     } else if (this.current) {
@@ -2560,14 +2569,13 @@ var lmsBrowse = Vue.component("lms-browse", {
             }
             this.options.sortFavorites=this.$store.state.sortFavorites;
             this.goHome();
-            if (this.$store.state.detailedHome>0 && this.isTop) {
-                this.grid.use = true;
+            if (this.isTop) {
                 this.setLayoutAction();
             }
             if (this.$store.state.detailedHome>0 && (this.topExtraCfg.val!=this.$store.state.detailedHome || !arraysEqual(this.topExtraCfg.order, this.$store.state.detailedHomeOrder))) {
                 this.getHomeExtra();
             } else {
-                this.items = this.$store.state.detailedHome>0 ? this.topExtra.concat(this.top) : this.top;
+                this.items = this.isTop && this.grid.use && this.$store.state.detailedHome>0 ? this.topExtra.concat(this.top) : this.top;
                 this.layoutGrid(true);
             }
         }.bind(this));

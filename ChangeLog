@@ -2,6 +2,8 @@
 -----
 1. Fix position of home button on detailed sub-toolbar when using top padding.
 2. Fix some untranslated strings in 'Interface' dialog.
+3. Add list/grid toggle back to home screen - but use a different icon for
+   grid view (if showing scrollable lists).
 
 6.0.2
 -----

@@ -1837,7 +1837,7 @@ function browseItemAction(view, act, origItem, index, event, slimBrowseBaseActio
         bus.$emit('showMessage', i18n('Reloading'));
     } else {
         // If we are acting on a multi-disc album, prompt which disc we should act on
-        if (item.multi && !view.current.id.startsWith("album_id:") && (PLAY_ACTION==act || ADD_ACTION==act || INSERT_ACTION==act || PLAY_SHUFFLE_ACTION==act)) {
+        if (item.multi && (view.isTop || !view.current.id.startsWith("album_id:")) && (PLAY_ACTION==act || ADD_ACTION==act || INSERT_ACTION==act || PLAY_SHUFFLE_ACTION==act)) {
             var command = view.buildCommand(item);
             view.clearSelection();
             lmsList(view.playerId(), command.command, command.params, 0, LMS_BATCH_SIZE, false, view.nextReqId()).then(({data}) => {

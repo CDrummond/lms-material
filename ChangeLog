@@ -6,6 +6,7 @@
    grid view (if showing scrollable lists).
 4. Add 'sxm' to list of radio protocols.
 5. Reduce grid size.
+6. Fix playing multi-disc/group items from scrollable lists.
 
 6.0.2
 -----

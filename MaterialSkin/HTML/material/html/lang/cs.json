@@ -640,6 +640,7 @@
 "1 day":"1 den",
 "%1 days":"%1 dní",
 "%1 %2":"",
+"(NOTE: These lists are only shown when using the grid view)":"",
 "1 %1":"",
 "A playlist named '%1' already exists, overwrite?":"",
 "All Works":"",

@@ -391,6 +391,7 @@
 "Random mix":"Tilfældig miks",
 "Rating":"Bedømmelse",
 "Recently Played":"Afspillet for nylig",
+"Recently Updated Albums":"Nyligt opdaterede albums",
 "Recently Updated Releases":"Nyligt opdaterede udgivelser",
 "Regular":"Mellem",
 "Release":"Udgivelse",
@@ -727,5 +728,5 @@
 "%1 Years":"%1 år",
 "1 day":"1 dag",
 "%1 days":"%1 dage",
-"Recently Updated Albums":"Nyligt opdaterede albums"
+"(NOTE: These lists are only shown when using the grid view)":""
 }

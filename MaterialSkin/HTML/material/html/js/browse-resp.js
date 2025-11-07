@@ -23,7 +23,7 @@ function removeDiactrics(key) {
             key=key.normalize("NFD").replace(/[\u0300-\u036f]/g, "");
         }
     }
-    return key==" " ? "?" : key;
+    return isEmpty(key) || key==" " ? "?" : key;
 }
 
 function releaseTypeHeader(rel) {
@@ -1962,7 +1962,7 @@ function parseBrowseResp(data, parent, options, cacheKey) {
                               id: "genre_id:"+i.id,
                               title: title,
                               //icon: "label",
-                              image: lmsOptions.genreImages && !isEmpty(i.genre) ? "material/genres/" + i.genre.toLowerCase().replace(/[^0-9a-z]/gi, '') : undefined,
+                              image: lmsOptions.genreImages && !isEmpty(title) ? "material/genres/" + title.toLowerCase().replace(/[^0-9a-z]/gi, '') : undefined,
                               stdItem: stdItem,
                               type: "group",
                               textkey: key,

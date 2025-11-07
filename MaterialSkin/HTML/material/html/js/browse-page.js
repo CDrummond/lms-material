@@ -1879,12 +1879,12 @@ var lmsBrowse = Vue.component("lms-browse", {
                 var GRID_MAX_WIDTH = smallIconOnly
                                           ? 100 :
                                        window.innerWidth>3500
-                                          ? (iconOnly ? 255 : 283) :
+                                          ? (iconOnly ? 230 : 268) :
                                        window.innerWidth>2500
-                                          ? (iconOnly ? 210 : 233) :
+                                          ? (iconOnly ? 185 : 218) :
                                        window.innerWidth>1750
-                                          ? (iconOnly ? 190 : 208) :
-                                            (iconOnly ? 165 : 183) ;
+                                          ? (iconOnly ? 165 : 188) :
+                                            (iconOnly ? 140 : 163) ;
                 var preferredColumns = smallIconOnly ? 3 : 4;
                 this.grid.type = smallIconOnly ? GRID_ICON_ONLY_ONLY : GRID_STANDARD;
                 for (var i=preferredColumns; i>=1; --i) {

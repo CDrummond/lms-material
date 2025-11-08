@@ -1229,21 +1229,21 @@ function browseAddWorksCategories(view, item) {
         params: ['include_online_only_artists:1', "tags:s"],
         svg: "release-work",
         type: "group",
-        id: "mmw:aw"});
+        id: MYMUSIC_WORKS_PREFIX+"aw"});
     view.items.push({
         title: i18n("Composers"),
         command: ["artists"],
         params: ["role_id:2", "work_id:-1", ARTIST_TAGS],
         svg: "composer",
         type: "group",
-        id: "mmw:ac"});
+        id: MYMUSIC_WORKS_PREFIX+"ac"});
     view.items.push({
         title: i18n("Genres"),
         command: ["genres"],
         params: ["work_id:-1", "tags:s"],
         svg: "genre",
         type: "group",
-        id: "mmw:ag"});
+        id: MYMUSIC_WORKS_PREFIX+"ag"});
     view.headerTitle = stripLinkTags(item.title);
     view.headerSubTitle = i18n("Select category");
     browseSetScroll(view);

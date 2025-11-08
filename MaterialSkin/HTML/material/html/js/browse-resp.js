@@ -1028,7 +1028,7 @@ function parseBrowseResp(data, parent, options, cacheKey) {
             }
         } else if (data.result.artists_loop) {
             var type = 0;
-            var stdItem = parent && parent.id.startsWith("mmw") ? STD_ITEM_WORK_COMPOSER : STD_ITEM_ARTIST;
+            var stdItem = parent && parent.id.startsWith(MYMUSIC_WORKS_PREFIX) ? STD_ITEM_WORK_COMPOSER : STD_ITEM_ARTIST;
 
             if (data.params && data.params.length>1) {
                 for (var i=3, len=data.params[1].length; i<len; ++i) {
@@ -1949,7 +1949,7 @@ function parseBrowseResp(data, parent, options, cacheKey) {
                 }
             }
         } else if (data.result.genres_loop) {
-            let stdItem = parent && parent.id.startsWith("mmw") ? STD_ITEM_WORK_GENRE : STD_ITEM_GENRE;
+            let stdItem = parent && parent.id.startsWith(MYMUSIC_WORKS_PREFIX) ? STD_ITEM_WORK_GENRE : STD_ITEM_GENRE;
             for (var idx=0, loop=data.result.genres_loop, loopLen=loop.length; idx<loopLen; ++idx) {
                 var i = loop[idx];
                 var key = removeDiactrics(i.textkey);

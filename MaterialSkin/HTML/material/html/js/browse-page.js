@@ -1852,10 +1852,11 @@ var lmsBrowse = Vue.component("lms-browse", {
             }
             const LEFT_PADDING = 4;
             const RIGHT_PADDING = 4;
+            var sbarSize = IS_MOBILE ? 0 : getScrollBarSize();
             var changed = false;
             var haveSubtitle = false;
             var thisWidth = this.$store.state.desktopLayout ? this.pageElement.scrollWidth : window.innerWidth;
-            var listWidth = thisWidth - ((/*scrollbar*/ IS_MOBILE ? 0 : 20) + (/*this.filteredJumplist.length>1 && this.items.length>10 ? */JUMP_LIST_WIDTH/* :0*/) + LEFT_PADDING + RIGHT_PADDING);
+            var listWidth = thisWidth - (sbarSize + (/*this.filteredJumplist.length>1 && this.items.length>10 ? */JUMP_LIST_WIDTH/* :0*/) + LEFT_PADDING + RIGHT_PADDING);
             var sz = undefined;
             let type = this.grid.type;
             if (GRID_TEXT_ONLY == this.grid.type) {
@@ -1945,7 +1946,7 @@ var lmsBrowse = Vue.component("lms-browse", {
                                 used++;
                             }
                         }
-                        this.grid.rows.push({id:"row."+row+"."+sz.nc, items:rowItems, r:row, rs:rs, size:(rowHasSubtitle ? sz.h - (rowItems[0].ihe ? 4 : 0) : (sz.h - GRID_SINGLE_LINE_DIFF))+(IS_MOBILE ? 0 : 10)+8, numStd:used, hasSub:rowHasSubtitle, ihe:true});
+                        this.grid.rows.push({id:"row."+row+"."+sz.nc, items:rowItems, r:row, rs:rs, size:(rowHasSubtitle ? sz.h - (rowItems[0].ihe ? 4 : 0) : (sz.h - GRID_SINGLE_LINE_DIFF))+sbarSize+8, numStd:used, hasSub:rowHasSubtitle, ihe:true});
                         i+=used;
                         rs+=used;
                     }

@@ -1311,3 +1311,17 @@ function isAudioTrack(item) {
                 ( ("itemplay"==item.style || "item_play"==item.style) && item.menu && item.menu.length>0) || // itemplay for dynamic playlists
                 (item.goAction && (item.goAction == "playControl" || item.goAction == "play"));
 }
+
+let mskSbarSize = undefined;
+function getScrollBarSize() {
+    if (mskSbarSize!=undefined) {
+        return mskSbarSize;
+    }
+    let el = document.createElement("div");
+    el.style.cssText = "overflow:scroll; visibility:hidden; position:absolute;";
+    document.body.appendChild(el);
+    let width = el.offsetWidth - el.clientWidth;
+    el.remove();
+    mskSbarSize = width;
+    return mskSbarSize;
+}

@@ -7,6 +7,7 @@
 4. Add 'sxm' to list of radio protocols.
 5. Reduce grid size.
 6. Fix playing multi-disc/group items from scrollable lists.
+7. Determine scrollbar thickness via Javascript, rather than hard-coding.
 
 6.0.2
 -----

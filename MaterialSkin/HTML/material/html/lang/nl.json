@@ -383,7 +383,7 @@
 "Queue copied to '%1'":"Afspeellijst gekopieerd naar",
 "Quit":"Afsluiten",
 "Radio":"Radio",
-"Radios":"Radios",
+"Radios":"Radio",
 "Random":"Willekeurig",
 "Random Albums":"Willekeurige Albums",
 "Random Mix":"Willekeurige Mix",
@@ -728,5 +728,5 @@
 "%1 Years":"%1 Jaren",
 "1 day":"1 dag",
 "%1 days":"%1 dagen",
-"(NOTE: These lists are only shown when using the grid view)":""
+"(NOTE: These lists are only shown when using the grid view)":"Opmerking: deze worden alleen getoond bij de rasterweergave."
 }

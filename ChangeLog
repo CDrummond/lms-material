@@ -1,3 +1,7 @@
+6.0.4
+-----
+1. Fix error with 'Go to artist' and no player connected.
+
 6.0.3
 -----
 1. Fix position of home button on detailed sub-toolbar when using top padding.

@@ -1360,8 +1360,6 @@ function browseItemAction(view, act, origItem, index, event, slimBrowseBaseActio
         }
     } else if (act===UNPIN_ACTION) {
         view.pin(item, false);
-    } else if (!view.playerId()) {  // *************** NO PLAYER ***************
-        bus.$emit('showError', undefined, i18n("No Player"));
     } else if (act===RENAME_ACTION) {
         promptForText(i18n("Rename"), item.title, item.title, i18n("Rename")).then(resp => {
             if (resp.ok && resp.value && resp.value.length>0 && resp.value!=item.title) {

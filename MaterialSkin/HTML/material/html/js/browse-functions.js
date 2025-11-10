@@ -1571,6 +1571,15 @@ function browseItemAction(view, act, origItem, index, event, slimBrowseBaseActio
             logAndShowError(err, undefined, ["albums"], params, 0, 1);
         });
     } else if (SELECT_ACTION===act) {
+        if (item.header) {
+            for (var i=index+1, len=view.items.length; i<len; ++i) {
+                if (view.items[i].header) {
+                    break;
+                }
+                browseItemAction(view, act, view.items[i], i);
+            }
+            return;
+        }
         if (!view.selection.has(index)) {
             if (!browseCanSelect(view.items[index])) {
                 return;

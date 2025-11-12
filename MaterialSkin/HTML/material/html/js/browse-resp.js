@@ -1778,7 +1778,7 @@ function parseBrowseResp(data, parent, options, cacheKey) {
                             resp.items.splice(groups[i][0]+i, 0,
                                             {title: groups[i][1], id:FILTER_PREFIX+i, header:true,
                                             subtitle: isCompositions ? i18np("1 Composition", "%1 Compositions", count) : i18np("1 Track", "%1 Tracks", count), durationStr:formatSeconds(duration),
-                                            menu:[PLAY_ALL_ACTION, INSERT_ALL_ACTION, PLAY_SHUFFLE_ALL_ACTION, ADD_ALL_ACTION]});
+                                            menu:[PLAY_ALL_ACTION, INSERT_ALL_ACTION, PLAY_SHUFFLE_ALL_ACTION, ADD_ALL_ACTION, DIVIDER, SELECT_ACTION]});
                             resp.numHeaders++;
                         }
                         if (1==allTracksGrouping) { // Grouped into albums, so remove from subtitle
@@ -1879,7 +1879,7 @@ function parseBrowseResp(data, parent, options, cacheKey) {
                         resp.items.splice(grouping.pos+d, 0,
                                            {title:title, jump:grouping.pos+d,
                                             subtitle: i18np("1 Track", "%1 Tracks", grouping.total), durationStr:formatSeconds(grouping.duration),
-                                            id:FILTER_PREFIX+grouping.id, header:true, menu:[PLAY_ALL_ACTION, INSERT_ALL_ACTION, PLAY_SHUFFLE_ALL_ACTION, ADD_ALL_ACTION]});
+                                            id:FILTER_PREFIX+grouping.id, header:true, menu:[PLAY_ALL_ACTION, INSERT_ALL_ACTION, PLAY_SHUFFLE_ALL_ACTION, ADD_ALL_ACTION, DIVIDER, SELECT_ACTION]});
                         resp.numHeaders++;
                         d++;
                     }
@@ -1902,7 +1902,7 @@ function parseBrowseResp(data, parent, options, cacheKey) {
                         resp.items.splice(disc.pos+d, 0,
                                            {title: title ? title : i18n("Disc %1", k), jump:disc.pos+d,
                                             subtitle: isCompositions ? i18np("1 Composition", "%1 Compositions", disc.total) : i18np("1 Track", "%1 Tracks", disc.total), durationStr:formatSeconds(disc.duration),
-                                            id:FILTER_PREFIX+k, header:true, menu:[PLAY_ALL_ACTION, INSERT_ALL_ACTION, PLAY_SHUFFLE_ALL_ACTION, ADD_ALL_ACTION]});
+                                            id:FILTER_PREFIX+k, header:true, menu:[PLAY_ALL_ACTION, INSERT_ALL_ACTION, PLAY_SHUFFLE_ALL_ACTION, ADD_ALL_ACTION, DIVIDER, SELECT_ACTION]});
                         resp.numHeaders++;
                         d++;
                     }

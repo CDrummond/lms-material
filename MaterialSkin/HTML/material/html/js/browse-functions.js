@@ -1360,8 +1360,6 @@ function browseItemAction(view, act, origItem, index, event, slimBrowseBaseActio
         }
     } else if (act===UNPIN_ACTION) {
         view.pin(item, false);
-    } else if (!view.playerId()) {  // *************** NO PLAYER ***************
-        bus.$emit('showError', undefined, i18n("No Player"));
     } else if (act===RENAME_ACTION) {
         promptForText(i18n("Rename"), item.title, item.title, i18n("Rename")).then(resp => {
             if (resp.ok && resp.value && resp.value.length>0 && resp.value!=item.title) {
@@ -1573,6 +1571,15 @@ function browseItemAction(view, act, origItem, index, event, slimBrowseBaseActio
             logAndShowError(err, undefined, ["albums"], params, 0, 1);
         });
     } else if (SELECT_ACTION===act) {
+        if (item.header) {
+            for (var i=index+1, len=view.items.length; i<len; ++i) {
+                if (view.items[i].header) {
+                    break;
+                }
+                browseItemAction(view, act, view.items[i], i);
+            }
+            return;
+        }
         if (!view.selection.has(index)) {
             if (!browseCanSelect(view.items[index])) {
                 return;

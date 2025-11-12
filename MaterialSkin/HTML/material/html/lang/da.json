@@ -9,6 +9,7 @@
 "%1dB":"%1dB",
 "'%1' failed":"'%1' fejlede",
 "(+%1 others)":"(+%1 andre)",
+"(NOTE: These lists are only shown when using the grid view)":"(NB: Disse lister vises kun ved gittervisning)",
 "+ %1 more":"+ %1 mere",
 "...then album artist, album, disc no., track no.":"... dernæst albumkunstner, album, CD nummer, albumsnummer",
 "...then album artist, disc no., track no.":"... dernæst albumkunstner, CD nummer, albumsnummer",
@@ -727,6 +728,5 @@
 "1 Year":"1 år",
 "%1 Years":"%1 år",
 "1 day":"1 dag",
-"%1 days":"%1 dage",
-"(NOTE: These lists are only shown when using the grid view)":""
+"%1 days":"%1 dage"
 }

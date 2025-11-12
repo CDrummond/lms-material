@@ -9,6 +9,7 @@ package Plugins::MaterialSkin::Plugin;
 #
 
 use strict;
+use Async::Util;
 use Config;
 use Encode;
 use Scalar::Util qw(blessed);
@@ -164,6 +165,8 @@ my $CATEGORIES_MAP = {
     'Wefunk' => 'radio',
     'YouTube' => 'musicservices'
 };
+
+my $HOME_EXTRAS = {};
 
 sub initPlugin {
     my $class = shift;
@@ -337,6 +340,30 @@ sub initPlugin {
     if (Slim::Utils::Versions->compareVersions($::VERSION, '8.4.0') < 0) {
         Slim::Utils::Timers::setTimer(undef, Time::HiRes::time() + 15, \&_checkUpdates);
     }
+
+    # FOR DEMO PURPOSES ONLY - REMOVE FOR PRODUCTION
+    Plugins::MaterialSkin::Plugin->registerHomeExtra('presets', {
+        title => 'Presets',
+        handler => sub {
+            my ($client, $cb, $maxItems) = @_;
+
+            $client ||= (Slim::Player::Client::clients())[0];
+
+            my $presets = [ map {
+                {
+                    name => $_->{text},
+                    url  => $_->{URL},
+                    icon => Slim::Player::ProtocolHandlers->iconForURL($_->{URL}, $client),
+                }
+            } grep {
+                $_->{type} eq 'audio' || $_->{type} eq 'playlist'
+            } @{ preferences('server')->client($client || (Slim::Player::Client::clients())[0])->get('presets') || [] } ];
+
+            $cb->($presets);
+        },
+        icon => '/material/html/images/preset_MTL_icon_looks_one.png'
+    });
+
 
     #Slim::Control::Request::subscribe(\&_checkPlayQueue, [['playlist']]);
 }
@@ -521,6 +548,30 @@ sub initOthers {
     if (!$hideForKiosk) {
         $hideForKiosk = '9, 10, 11, 12, 13, 14, 15, 16, 20, 25, 26, 27, 29, 30, 41, 42, 49, 50, 56, 57';
     }
+}
+
+sub registerHomeExtra {
+    my ($class, $id, $args) = @_;
+
+    return unless $id && $args->{title} && $args->{handler};
+
+    $log->warn("Home Extra with id '$id' is already registered - overwriting") if $HOME_EXTRAS->{$id};
+
+    $HOME_EXTRAS->{'3rdparty_' . $id} = {
+        id      => $id,
+        title   => $args->{title},
+        icon    => $args->{icon} || '',
+        handler => $args->{handler},
+    };
+}
+
+sub getHomeExtra {
+    # prefix identifiers to not conflict with built-in extras
+    return $HOME_EXTRAS->{'3rdparty_' . $_[0]};
+}
+
+sub getHomExtrasIDs {
+    return map { s/^3rdparty_//; $_ } keys %$HOME_EXTRAS;
 }
 
 #sub _checkPlayQueue {
@@ -2012,11 +2063,7 @@ sub _cliCommand {
             my $cnt = 0;
             foreach my $item ( @{ $req->getResult('radios_loop') || [] } ) {
                 if ($cnt<NUM_HOME_ITEMS) {
-                    foreach my $key (keys(%{$item})) {
-                        my $val = $item->{$key};
-                        $request->addResultLoop("material_home_radios_loop", $cnt, ${key}, ${val});
-                    }
-                    $request->addResultLoop("material_home_radios_loop", $cnt, "ihe", 1);
+                    _addExtraHomeItem($request, "radios", $item, $cnt);
                 }
                 $cnt+=1;
             }
@@ -2028,21 +2075,75 @@ sub _cliCommand {
             my $cnt = 0;
             foreach my $item ( @{ $req->getResult('playlists_loop') || [] } ) {
                 if ($cnt<NUM_HOME_ITEMS) {
-                    foreach my $key (keys(%{$item})) {
-                        my $val = $item->{$key};
-                        $request->addResultLoop("material_home_playlists_loop", $cnt, ${key}, ${val});
-                    }
-                    $request->addResultLoop("material_home_playlists_loop", $cnt, "ihe", 1);
+                    _addExtraHomeItem($request, "playlists", $item, $cnt);
                 }
                 $cnt+=1;
             }
             $request->addResult("material_home_playlists_loop_len", $cnt);
         }
+
+        my $others = [ grep { $_ } map { getHomeExtra($_) } keys %{$request->getParamsCopy()} ];
+        if (scalar @$others) {
+            $request->setStatusProcessing();
+
+            # process other home items asynchronously and in parallel - they might be doing online lookups
+            Async::Util::amap(
+                inputs => $others,
+                action => sub {
+                    my ($extra, $acb) = @_;
+                    my $id = $extra->{id};
+
+                    $extra->{handler}->($request->client, sub {
+                        $acb->({ $id => (shift || []) });
+                    }, NUM_HOME_ITEMS);
+                },
+                at_a_time => 4,
+                cb => sub {
+                    my $results = {};
+
+                    foreach my $result (@{$_[0]}) {
+                        my ($id, $res) = each %{$result};
+                        $results->{$id} = $res;
+                    }
+
+                    foreach my $id (map { $_->{id} } @$others) {
+                        my $cnt = 0;
+                        my $result = $results->{$id};
+
+                        next unless $result;
+
+                        # shorten results list if needed.
+                        if (ref $result->{item_loop} && scalar @{$result->{item_loop}} > NUM_HOME_ITEMS) {
+                            splice @{$result->{item_loop}}, NUM_HOME_ITEMS;
+                        }
+
+                        $request->addResult("material_home_${id}_obj", $result);
+                    }
+
+                    $request->setStatusDone();
+                }
+            );
+
+            # we have to wait for the async processing to finish
+            return;
+        }
+
         $request->addResult("material_home", 1);
         $request->setStatusDone();
         return;
     }
     $request->setStatusBadParams();
+}
+
+sub _addExtraHomeItem {
+    my ($request, $id, $item, $cnt) = @_;
+
+    foreach my $key (keys(%{$item})) {
+        my $val = $item->{$key};
+        $request->addResultLoop("material_home_${id}_loop", $cnt, $key, $val);
+    }
+
+    $request->addResultLoop("material_home_${id}_loop", $cnt, "ihe", 1);
 }
 
 sub _isRadio {

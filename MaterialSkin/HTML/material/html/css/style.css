@@ -2921,7 +2921,7 @@ div.v-subheader {
 .dst-home, .dst-home:hover {
  position:absolute;
  left:7px;
- top:calc(var(--top-pad) + var(--sub-toolbar-height) );
+ top:var(--sub-toolbar-height);
  bottom:unset!important;
 }
 

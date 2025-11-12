@@ -102,7 +102,7 @@ my @ADV_SEARCH_OTHER = ('content_type', 'contributor_namesearch.active1', 'contr
 
 my %IGNORE_PROTOCOLS = map { $_ => 1 } ('mms', 'file', 'tmp', 'http', 'https', 'spdr', 'icy', 'teststream', 'db', 'playlist');
 
-my %RADIO_PROTOCOLS = map { $_ => 1 } ('http', 'https', 'accur', 'cplus', 'globalplayer', 'newsuk', 'pr', 'radioparadise', 'rnp', 'sounds', 'times', 'virgin');
+my %RADIO_PROTOCOLS = map { $_ => 1 } ('http', 'https', 'accur', 'cplus', 'globalplayer', 'newsuk', 'pr', 'radioparadise', 'rnp', 'sounds', 'times', 'virgin', 'sxm');
 
 my @BOOL_OPTS = ('allowDownload', 'playShuffle', 'touchLinks', 'showAllArtists', 'artistFirst', 'yearInSub', 'showComment', 'genreImages', 'playlistImages', 'maiComposer', 'showConductor', 'showBand', 'showArtistWorks', 'combineAppsAndRadio', 'useGrouping', 'smallIconOnlyGrid');
 
@@ -2032,8 +2032,12 @@ sub _cliCommand {
         if (scalar(@sorts)>0) {
             my @keys = ("album", "year", "artists", "artist_ids", "artist", "artist_id", "performance", "composer", "work_id", "artwork_track_id", "artwork_url", "artwork", "extid", "compilation", "disccount", "contiguous_groups");
             my $total = 0;
+            my $libId = $request->getParam('library_id');
             foreach my $srt ( @sorts ) {
-                my @cmd = ("albums", 0, NUM_HOME_ITEMS, "tags:aajlqswyKSS24WE", "library_id:-1", "sort:${srt}");
+                my @cmd = ("albums", 0, NUM_HOME_ITEMS, "tags:aajlqswyKSS24WE", "sort:${srt}");
+                if ($libId) {
+                    push(@cmd, "library_id:${libId}");
+                }
                 my $req = Slim::Control::Request::executeRequest(undef, \@cmd);
                 my $cnt = 0;
                 my $loop_name = "material_home_${srt}_loop";
@@ -2124,6 +2128,7 @@ sub _cliCommand {
             return;
         }
 
+        $request->addResult("material_home", 1);
         $request->setStatusDone();
         return;
     }

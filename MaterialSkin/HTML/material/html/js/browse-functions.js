@@ -391,7 +391,7 @@ function browseHandleListResponse(view, item, command, resp, prevPage, appendIte
             ( (view.items.length>0 && undefined!=view.items[0].id && undefined!=view.items[0].artist_id && view.items[0].id.startsWith("album_id:")) ||
               (view.items.length>1 && view.items[0].header && undefined!=view.items[1].id && undefined!=view.items[1].artist_id && view.items[1].id.startsWith("album_id:")));
         view.grid = {allowed:resp.canUseGrid ? true : false,
-                     use: resp.forceGrid || (view.$store.state.gridPerView ? isSetToUseGrid(view.current && view.current.id.startsWith(TOP_ID_PREFIX) && view.current.id!=TOP_FAVORITES_ID ? GRID_OTHER : command, view.current) : view.grid.use),
+                     use: resp.forceGrid || (view.$store.state.gridPerView ? isSetToUseGrid(gridCommand(view), view.current) : view.grid.use),
                      numColumns:0, ih:GRID_MIN_HEIGHT, rows:[], few:false, haveSubtitle:true, multiSize:false, type:resp.gridType};
         view.jumplistActive=0;
         view.prevPage = prevPage;
@@ -1229,21 +1229,21 @@ function browseAddWorksCategories(view, item) {
         params: ['include_online_only_artists:1', "tags:s"],
         svg: "release-work",
         type: "group",
-        id: "mmw:aw"});
+        id: MYMUSIC_WORKS_PREFIX+"aw"});
     view.items.push({
         title: i18n("Composers"),
         command: ["artists"],
         params: ["role_id:2", "work_id:-1", ARTIST_TAGS],
         svg: "composer",
         type: "group",
-        id: "mmw:ac"});
+        id: MYMUSIC_WORKS_PREFIX+"ac"});
     view.items.push({
         title: i18n("Genres"),
         command: ["genres"],
         params: ["work_id:-1", "tags:s"],
         svg: "genre",
         type: "group",
-        id: "mmw:ag"});
+        id: MYMUSIC_WORKS_PREFIX+"ag"});
     view.headerTitle = stripLinkTags(item.title);
     view.headerSubTitle = i18n("Select category");
     browseSetScroll(view);
@@ -1311,7 +1311,7 @@ function browseAddCategories(view, item, isGenre) {
     });
 }
 
-function browseItemAction(view, act, origItem, index, event) {
+function browseItemAction(view, act, origItem, index, event, slimBrowseBaseActions) {
     let item = undefined!=origItem && origItem.id.startsWith("currentaction:") ? browseGetCurrent(view) : origItem;
 
     if (act==SEARCH_LIST_ACTION) {
@@ -1837,7 +1837,7 @@ function browseItemAction(view, act, origItem, index, event) {
         bus.$emit('showMessage', i18n('Reloading'));
     } else {
         // If we are acting on a multi-disc album, prompt which disc we should act on
-        if (item.multi && !view.current.id.startsWith("album_id:") && (PLAY_ACTION==act || ADD_ACTION==act || INSERT_ACTION==act || PLAY_SHUFFLE_ACTION==act)) {
+        if (item.multi && (view.isTop || !view.current.id.startsWith("album_id:")) && (PLAY_ACTION==act || ADD_ACTION==act || INSERT_ACTION==act || PLAY_SHUFFLE_ACTION==act)) {
             var command = view.buildCommand(item);
             view.clearSelection();
             lmsList(view.playerId(), command.command, command.params, 0, LMS_BATCH_SIZE, false, view.nextReqId()).then(({data}) => {
@@ -1886,16 +1886,16 @@ function browseItemAction(view, act, origItem, index, event) {
 
         if (lmsOptions.playShuffle && (PLAY_ACTION==act || PLAY_SHUFFLE_ACTION==act)) {
             lmsCommand(view.playerId(), ['playlist', 'shuffle', PLAY_ACTION==act ? 0 : 1]).then(({data}) => {
-                browsePerformAction(view, item, PLAY_ACTION);
+                browsePerformAction(view, item, PLAY_ACTION, slimBrowseBaseActions);
             });
         } else {
-            browsePerformAction(view, item, act);
+            browsePerformAction(view, item, act, slimBrowseBaseActions);
         }
     }
 }
 
-function browsePerformAction(view, item, act) {
-    var command = browseBuildFullCommand(view, item, act);
+function browsePerformAction(view, item, act, slimBrowseBaseActions) {
+    var command = browseBuildFullCommand(view, item, act, slimBrowseBaseActions);
     if (command.command.length===0) {
         bus.$emit('showError', undefined, i18n("Don't know how to handle this!"));
         return;
@@ -1982,7 +1982,7 @@ function browseHeaderAction(view, act, event, ignoreOpenMenus) {
     let item = undefined!=view.current && view.current.stdItem==STD_ITEM_MAI ? view.history[view.history.length-1].current : view.current;
     if (USE_LIST_ACTION==act) {
         view.changeLayout(false);
-    } else if (USE_GRID_ACTION==act) {
+    } else if (USE_GRID_ACTION==act || USE_ALT_GRID_ACTION==act) {
         view.changeLayout(true);
     } else if (ALBUM_SORTS_ACTION==act || TRACK_SORTS_ACTION==act) {
         var currentSort=ALBUM_SORTS_ACTION==act ? getAlbumSort(view.command, view.inGenre) : getTrackSort(item.stdItem);
@@ -2088,7 +2088,6 @@ function browseGoHome(view) {
     view.next = undefined;
     view.selection = new Set();
     var prev = view.history.length>0 ? view.history[0].pos : 0;
-    view.items = view.$store.state.detailedHome ? view.topExtra.concat(view.top) : view .top;
     view.jumplist = [];
     view.filteredJumplist = [];
     view.history=[];
@@ -2103,8 +2102,9 @@ function browseGoHome(view) {
     view.currentItemImage=undefined;
     view.tbarActions=[];
     view.isTop = true;
-    view.grid = {allowed:true, use:view.$store.state.detailedHome>0 || (view.$store.state.gridPerView ? isSetToUseGrid(GRID_TOP) : view.grid.use), numColumns:0, ih:GRID_MIN_HEIGHT, rows:[], few:false, haveSubtitle:true, multiSize:false, type:GRID_STANDARD};
-    view.currentActions=[{action:(view.grid.use ? USE_LIST_ACTION : USE_GRID_ACTION)}];
+    view.grid = {allowed:true, use:view.$store.state.gridPerView ? isSetToUseGrid(GRID_TOP) : view.grid.use, numColumns:0, ih:GRID_MIN_HEIGHT, rows:[], few:false, haveSubtitle:true, multiSize:false, type:GRID_STANDARD};
+    view.items = view.$store.state.detailedHome && view.grid.use ? view.topExtra.concat(view.top) : view .top;
+    view.currentActions=[{action:VLIB_ACTION}, {action:(view.grid.use ? USE_LIST_ACTION : view.$store.state.detailedHome ? USE_ALT_GRID_ACTION : USE_GRID_ACTION)}];
     view.hoverBtns = !IS_MOBILE;
     view.command = undefined;
     view.subtitleClickable = false;
@@ -2212,7 +2212,7 @@ function browseGoBack(view, refresh) {
     }
 }
 
-function browseBuildCommand(view, item, commandName, doReplacements, allowLibId) {
+function browseBuildCommand(view, item, commandName, doReplacements, allowLibId, slimBrowseBaseActions) {
     var cmd = {command: [], params: [] };
 
     if (undefined===item || null===item) {
@@ -2233,7 +2233,7 @@ function browseBuildCommand(view, item, commandName, doReplacements, allowLibId)
         if (undefined==commandName || item.mskOnlyGoAction) {
             commandName = "go";
         }
-        var baseActions = view.current == item ? view.currentBaseActions : view.baseActions;
+        var baseActions = slimBrowseBaseActions ? slimBrowseBaseActions : view.current == item ? view.currentBaseActions : view.baseActions;
         var command = item.actions && item.actions[commandName]
                     ? item.actions[commandName]
                     : "go" == commandName && item.actions && item.actions["do"]
@@ -2628,7 +2628,7 @@ function browsePin(view, item, add, mapped) {
             lmsOptions.randomMixDialogPinned = true;
         }
         if (view.isTop) {
-            view.items = view.$store.state.detailedHome>0 ? view.topExtra.concat(view.top) : view.top;
+            view.items = view.grid.use && view.$store.state.detailedHome>0 ? view.topExtra.concat(view.top) : view.top;
         }
         view.options.pinned.add(item.id);
         browseUpdateItemPinnedState(view, item);
@@ -2646,7 +2646,7 @@ function browsePin(view, item, add, mapped) {
 
 function browseUnpin(view, item, index) {
     view.top.splice(index, 1);
-    view.items = view.$store.state.detailedHome>0 ? view.topExtra.concat(view.top) : view.top;
+    view.items = view.grid.use && view.$store.state.detailedHome>0 ? view.topExtra.concat(view.top) : view.top;
     view.options.pinned.delete(item.id);
     browseUpdateItemPinnedState(view, item);
     if (item.id.startsWith(MUSIC_ID_PREFIX)) {
@@ -2763,8 +2763,8 @@ function browseReplaceCommandTerms(view, cmd, item) {
     return cmd;
 }
 
-function browseBuildFullCommand(view, item, act) {
-    var command = browseBuildCommand(view, item, ACTIONS[act].cmd);
+function browseBuildFullCommand(view, item, act, slimBrowseBaseActions) {
+    var command = browseBuildCommand(view, item, ACTIONS[act].cmd, undefined, undefined, slimBrowseBaseActions);
     if (command.command.length<1) { // Non slim-browse command
         if (item.stdItem==STD_ITEM_RANDOM_MIX) { // Should no longer actually occur...
             command.command = ["material-skin-client", "rndmix", "name:"+item.title, "act:"+(INSERT_ACTION==act ? "insert" : ACTIONS[act].cmd)];

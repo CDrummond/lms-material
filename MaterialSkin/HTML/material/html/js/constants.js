@@ -138,6 +138,7 @@ const TOP_CDPLAYER_ID = TOP_ID_PREFIX+"cdda";
 const HIDE_TOP_FOR_PARTY = new Set([TOP_EXTRAS_ID, TOP_RADIO_ID, TOP_REMOTE_ID, TOP_FAVORITES_ID]);
 const TOP_DETAILED_EXTRA = TOP_ID_PREFIX+"dth";
 const MUSIC_ID_PREFIX = "mm:/";
+const MYMUSIC_WORKS_PREFIX = "mmw:";
 const COMPILATIONS_ID = MUSIC_ID_PREFIX+"myMusicAlbumsVariousArtists";
 const SEARCH_ID = MUSIC_ID_PREFIX+"lms-local-search";
 const ADV_SEARCH_ID = MUSIC_ID_PREFIX+"lms-adv-search";
@@ -264,3 +265,7 @@ const DETAILED_HOME_RANDOM = 8;
 const DETAILED_HOME_RADIOS = 16;
 const DETAILED_HOME_PLAYLISTS = 32;
 const DETAILED_HOME_UPDATED = 64;
+
+const RADIOS_BASE_ACTIONS = { "add-hold": { "cmd": ["favorites", "playlist", "insert"], "params": {"menu": "favorites"}, "itemsParams": "params"},
+                              "play": { "cmd": ["favorites", "playlist", "play"], "params": {"menu": "favorites"}, "itemsParams": "params"},
+                              "add": { "cmd": ["favorites", "playlist", "add"], "params": {"menu": "favorites"}, "itemsParams": "params"}};

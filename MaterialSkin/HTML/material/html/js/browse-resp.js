@@ -23,7 +23,7 @@ function removeDiactrics(key) {
             key=key.normalize("NFD").replace(/[\u0300-\u036f]/g, "");
         }
     }
-    return key==" " ? "?" : key;
+    return isEmpty(key) || key==" " ? "?" : key;
 }
 
 function releaseTypeHeader(rel) {
@@ -1028,7 +1028,7 @@ function parseBrowseResp(data, parent, options, cacheKey) {
             }
         } else if (data.result.artists_loop) {
             var type = 0;
-            var stdItem = parent && parent.id.startsWith("mmw") ? STD_ITEM_WORK_COMPOSER : STD_ITEM_ARTIST;
+            var stdItem = parent && parent.id.startsWith(MYMUSIC_WORKS_PREFIX) ? STD_ITEM_WORK_COMPOSER : STD_ITEM_ARTIST;
 
             if (data.params && data.params.length>1) {
                 for (var i=3, len=data.params[1].length; i<len; ++i) {
@@ -1949,7 +1949,7 @@ function parseBrowseResp(data, parent, options, cacheKey) {
                 }
             }
         } else if (data.result.genres_loop) {
-            let stdItem = parent && parent.id.startsWith("mmw") ? STD_ITEM_WORK_GENRE : STD_ITEM_GENRE;
+            let stdItem = parent && parent.id.startsWith(MYMUSIC_WORKS_PREFIX) ? STD_ITEM_WORK_GENRE : STD_ITEM_GENRE;
             for (var idx=0, loop=data.result.genres_loop, loopLen=loop.length; idx<loopLen; ++idx) {
                 var i = loop[idx];
                 var key = removeDiactrics(i.textkey);
@@ -1962,7 +1962,7 @@ function parseBrowseResp(data, parent, options, cacheKey) {
                               id: "genre_id:"+i.id,
                               title: title,
                               //icon: "label",
-                              image: lmsOptions.genreImages && !isEmpty(i.genre) ? "material/genres/" + i.genre.toLowerCase().replace(/[^0-9a-z]/gi, '') : undefined,
+                              image: lmsOptions.genreImages && !isEmpty(title) ? "material/genres/" + title.toLowerCase().replace(/[^0-9a-z]/gi, '') : undefined,
                               stdItem: stdItem,
                               type: "group",
                               textkey: key,
@@ -2387,14 +2387,13 @@ function parseBrowseResp(data, parent, options, cacheKey) {
                 });
             }
             resp.listSize=resp.items.length;
-        } else if (data.result.material_home_new_loop || data.result.material_home_recentlyplayed_loop || data.result.material_home_playcount_loop ||
-                   data.result.material_home_playlists_loop || data.result.material_home_radios_loop) {
+        } else if (data.result.material_home) {
             var lists = [{val: DETAILED_HOME_NEW, key:'new', loop:"albums", text:i18n('New Music'), id:TOP_DETAILED_EXTRA+DETAILED_HOME_NEW, icon:"new_releases", command:["albums"], params:["sort:new", ALBUM_TAGS_ALL_ARTISTS]},
                          {val: DETAILED_HOME_RECENT, key:'recentlyplayed', loop:"albums", text:i18n('Recently Played'), id:TOP_DETAILED_EXTRA+DETAILED_HOME_RECENT, icon:"history", command:["albums"], params:["sort:recentlyplayed", ALBUM_TAGS_ALL_ARTISTS]},
                          {val: DETAILED_HOME_MOST, key:'playcount', loop:"albums", text:i18n('Most Played'), id:TOP_DETAILED_EXTRA+DETAILED_HOME_MOST, svg:"trophy", command:["albums"], params:["sort:playcount", ALBUM_TAGS_ALL_ARTISTS]},
                          {val: DETAILED_HOME_RANDOM, key:'random', loop:"albums", text:lmsOptions.supportReleaseTypes ? i18n('Random Releases') : i18n('Random Albums'), id:TOP_DETAILED_EXTRA+DETAILED_HOME_RANDOM, svg:"dice-album", command:["albums"], params:["sort:random", ALBUM_TAGS_ALL_ARTISTS]},
-                         {val: DETAILED_HOME_RADIOS, key:'radios', loop:"radios", text:i18n('Radios'), id:TOP_DETAILED_EXTRA+DETAILED_HOME_RADIOS, svg:"radio", command:["material-skin-query","radios"], params:[]},
-                         {val: DETAILED_HOME_PLAYLISTS, key:'playlists', loop:"playlists", text:i18n('Playlists'), id:TOP_DETAILED_EXTRA+DETAILED_HOME_PLAYLISTS, icon:"list", command:["material-skin-query","playlists"], params:[PLAYLIST_TAGS, "menu:1"]},
+                         {val: DETAILED_HOME_RADIOS, key:'radios', loop:"radios", text:i18n('Radios'), id:TOP_DETAILED_EXTRA+DETAILED_HOME_RADIOS, svg:"radio", command:["material-skin-query","radios"], params:[], limit:200},
+                         {val: DETAILED_HOME_PLAYLISTS, key:'playlists', loop:"playlists", text:i18n('Playlists'), id:TOP_DETAILED_EXTRA+DETAILED_HOME_PLAYLISTS, icon:"list", command:["material-skin-query","playlists"], params:[PLAYLIST_TAGS, "menu:1"], limit:200},
                          {val: DETAILED_HOME_UPDATED, key:'changed', loop:"albums", text:lmsOptions.supportReleaseTypes ? i18n("Recently Updated Releases") : i18n("Recently Updated Albums"), id:TOP_DETAILED_EXTRA+DETAILED_HOME_UPDATED, svg:"updated-music", command:["albums"], params:["sort:changed", ALBUM_TAGS_ALL_ARTISTS]}
                         ];
             for (let s=0, len=lists.length; s<len; ++s) {
@@ -2415,7 +2414,7 @@ function parseBrowseResp(data, parent, options, cacheKey) {
                     new_data.result[lists[s].loop+"_loop"] = data.result[loop];
                     let newResp = parseBrowseResp(new_data, parent, undefined, undefined, true);
                     if (undefined!=newResp && newResp.items.length>0) {
-                        resp.items.push({title:lists[s].text, id:lists[s].id, header:true, ihe:1, icon:lists[s].icon, svg: lists[s].svg,
+                        resp.items.push({title:lists[s].text, id:lists[s].id, header:true, ihe:1, icon:lists[s].icon, svg: lists[s].svg, limit: lists[s].limit,
                             morecmd:parseInt(data.result[loop+"_len"])>10 ? {command:lists[s].command, params:lists[s].params} : undefined});
                         resp.items=resp.items.concat(newResp.items);
                     }

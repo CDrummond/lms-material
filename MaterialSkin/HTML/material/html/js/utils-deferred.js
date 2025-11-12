@@ -495,11 +495,18 @@ function commandAlbumSortKey(command, genre) {
     return baseSort;
 }
 
+const VALID_ALBUM_SORTS = new Set(["album", "artistalbum", "artflow", "yearalbum", "yearartistalbum", "new"]);
+const VALID_TRACK_SORTS = new Set(["title", "tracknum", "albumtrack", "yearalbumtrack", "artisttitle", "yeartitle"]);
+
 function getAlbumSort(command, genre) {
     let key = commandAlbumSortKey(command, genre);
     let def = ALBUM_SORT_KEY==key || (ALBUM_SORT_KEY+"C")==key ? "album" : "yearalbum";
     let parts = getLocalStorageVal(key, def).split(".");
-    return {by:parts[0], rev:parts.length>1};
+    let val = {by:parts[0], rev:parts.length>1};
+    if (!VALID_ALBUM_SORTS.has(val.by)) {
+        val.by = def;
+    }
+    return val;
 }
 
 function setAlbumSort(command, genre, sort, reverse) {
@@ -510,7 +517,11 @@ function getTrackSort(stdItem) {
     let key = stdItem==STD_ITEM_COMPOSITION_TRACKS ? "compositionTrackSort" : stdItem==STD_ITEM_WORK ? "workTrackSort" : "trackSort";
     let def = "yearalbumtrack";
     let parts = getLocalStorageVal(key, def).split(".");
-    return {by:parts[0], rev:parts.length>1};
+    let val = {by:parts[0], rev:parts.length>1};
+    if (!VALID_TRACK_SORTS.has(val.by)) {
+        val.by = def;
+    }
+    return val;
 }
 
 function setTrackSort(sort, reverse, stdItem) {

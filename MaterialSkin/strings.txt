@@ -811,18 +811,25 @@ PLUGIN_MATERIAL_SKIN_PLAYLIST_IMAGES_DESC
 PLUGIN_MATERIAL_SKIN_QT_MOVE_ERROR
 	EN	Cannot move queue to a player that it is already synced with.
 	FR	Impossible de déplacer une liste de lecture vers une platine déjà synchronisée.
+	NL	Het is niet mogelijk om de afspeellijst te verplaatsen naar een muziekspeler die al gesynchroniseerd is. 
 
 PLUGIN_MATERIAL_SKIN_QT_COPY_ERROR
 	EN	Cannot copy queue to a player that it is already synced with.
 	FR	Impossible de copier une liste de lecture vers une platine déjà synchronisée.
+	NL	Het is niet mogelijk om de afspeellijst te kopiëren naar een muziekspeler die al gesynchroniseerd is. 
 
 PLUGIN_MATERIAL_SKIN_QT_SWAP_ERROR
 	EN	Cannot swap queue with a player that it is already synced with.
 	FR	Impossible d'échanger une liste de lecture avec une platine déjà synchronisée.
+	NL	Het is niet mogelijk om de afspeellijst te wisselen met een muziekspeler die al gesynchroniseerd is. 
 
 PLUGIN_MATERIAL_SKIN_SMALL_ICON_ONLY_GRID
 	EN	Smaller icon-only grid
+	FR	Icônes de grille plus petits
+	NL	Kleiner icon-only raster
 
 PLUGIN_MATERIAL_SKIN_SMALL_ICON_ONLY_GRID_DESC
 	EN	On narrower screens, allow usage of smaller grid items if only showing icons, and not images. Note that this may cause text to be truncated more frequently.
+	FR	Sur les petits écrans, autoriser l'utilisation d'éléments de grille plus petits, s'il y a seulement des icônes et pas d'images. (Le texte peut être tronqué plus fréquemment.)
+	NL	Sta op kleinere schermen het gebruik van kleinere rasteritems toe als alleen icons worden weergegeven en geen afbeeldingen. Houd er rekening mee dat dit ertoe kan leiden dat tekst vaker wordt afgekapt.
 

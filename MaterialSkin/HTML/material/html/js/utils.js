@@ -784,6 +784,10 @@ function setUseGrid(command, use, item) {
     setLocalStorageVal(commandGridKey(command, item), use);
 }
 
+function gridCommand(view) {
+    return view.isTop ? GRID_TOP : undefined==view.command || (view.current && view.current.id!=TOP_FAVORITES_ID && view.current.id!=GENRES_ID && view.current.id.startsWith(TOP_ID_PREFIX)) ? GRID_OTHER : view.command;
+}
+
 function forceItemUpdate(vm, item) {
     var prev = item.title;
     item.title = "XX"+item.title;
@@ -1306,4 +1310,18 @@ function isAudioTrack(item) {
            "audio"==item.type || "track"==item.type ||
                 ( ("itemplay"==item.style || "item_play"==item.style) && item.menu && item.menu.length>0) || // itemplay for dynamic playlists
                 (item.goAction && (item.goAction == "playControl" || item.goAction == "play"));
+}
+
+let mskSbarSize = undefined;
+function getScrollBarSize() {
+    if (mskSbarSize!=undefined) {
+        return mskSbarSize;
+    }
+    let el = document.createElement("div");
+    el.style.cssText = "overflow:scroll; visibility:hidden; position:absolute;";
+    document.body.appendChild(el);
+    let width = el.offsetWidth - el.clientWidth;
+    el.remove();
+    mskSbarSize = width;
+    return mskSbarSize;
 }

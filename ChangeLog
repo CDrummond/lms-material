@@ -1,17 +1,46 @@
+6.0.3
+-----
+1. Fix position of home button on detailed sub-toolbar when using top padding.
+2. Fix some untranslated strings in 'Interface' dialog.
+3. Add list/grid toggle back to home screen - but use a different icon for
+   grid view (if showing scrollable lists).
+4. Add 'sxm' to list of radio protocols.
+5. Reduce grid size.
+6. Fix playing multi-disc/group items from scrollable lists.
+7. Determine scrollbar thickness via Javascript, rather than hard-coding.
+
+6.0.2
+-----
+ 1. Fix track list being cut short in desktop layout.
+ 2. Fix storing of genre grid/list setting.
+ 3. Fix toggling grid/list for genres with more than 100 items.
+ 4. Check album/track sort is valid.
+ 5. When starting a stream from 'Radios' section first try to convert to
+    favourites ID.
+ 6. Use virtual library ID when populating scrolled lists.
+ 7. Add toolbar button to change virtual library on home screen.
+ 8. Only display virtual library name if its not default library.
+ 9. Use LMS's 'New Music Limit' for album scrolled lists, and 200 for radios
+    and playlists.
+10. Re-layout home grid if size-hint changes.
+11. Fix 'Random Albums/Releases' and 'Recently Updated Albums/Releases'
+    scrollable lists not showing if they are the only one.
+
 6.0.1
 -----
  1. Fix static clock screensaver.
  2. Fix storing of grid/list for home screen.
  3. Fix issue with press of back button navigating home.
- 4. Fix persistence of "Newest" album sort.
+ 4. Fix persistence of 'Newest' album sort.
  5. Fix home screen if library is empty.
  6. Fix error logged when only 1 grid row.
- 7. Append "s" to decades.
+ 7. Append 's' to decades.
  8. Add 'Random Albums/Releases', and 'Recently Updated Albums/Releases', to
     scrolled lists.
  9. Recurse favourites folders for 'Radios' - thanks to Michael Herger.
-10. Fix list corruption when pinnng items.
+10. Fix list corruption when pinning items.
 11. Enable 'Show image' hover button for home screen items.
+12. Fix 'Play shuffled' not appearing for remote playlists.
 
 6.0.0
 -----

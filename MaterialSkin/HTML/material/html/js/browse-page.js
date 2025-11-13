@@ -1127,12 +1127,12 @@ var lmsBrowse = Vue.component("lms-browse", {
                 let resp = parseBrowseResp(data, undefined, {order:this.$store.state.detailedHomeOrder});
                 this.fetchingItem = undefined;
                 if (undefined!=resp && undefined!=resp.items) {
-                    if (undefined==this.topExtra || !arraysEqual(this.topExtra, resp.items)) {
-                        this.topExtra = resp.items;
-                        if (this.isTop && this.$store.state.detailedHome>0 && this.grid.use) {
-                            this.items = this.topExtra.concat(this.top);
-                            this.layoutGrid(true);
-                        }
+                    // NOTE: No point checking for changes, as the layoutGrid code adds 'gidx' to items
+                    // so will always be different!
+                    this.topExtra = resp.items;
+                    if (this.isTop && this.$store.state.detailedHome>0 && this.grid.use) {
+                        this.items = this.topExtra.concat(this.top);
+                        this.layoutGrid(true);
                     }
                 }
             } catch (e) {

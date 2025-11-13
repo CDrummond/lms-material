@@ -1979,7 +1979,6 @@ sub _cliCommand {
             push(@sorts, "changed");
         }
         if (scalar(@sorts)>0) {
-            my @keys = ("album", "year", "artists", "artist_ids", "artist", "artist_id", "performance", "composer", "work_id", "artwork_track_id", "artwork_url", "artwork", "extid", "compilation", "disccount", "contiguous_groups");
             my $total = 0;
             my $libId = $request->getParam('library_id');
             foreach my $srt ( @sorts ) {
@@ -1993,12 +1992,10 @@ sub _cliCommand {
                 foreach my $item ( @{ $req->getResult('albums_loop') || [] } ) {
                     $request->addResultLoop($loop_name, $cnt, "id", $item->{id} . "@" . "idx" . $total); # Need unique IDs in case same album in multiple loops!
                     $request->addResultLoop($loop_name, $cnt, "ihe", 1);
-                    foreach my $key (@keys) {
-                        my $val = $item->{$key};
-                        if (!defined $val) {
-                            next;
+                    foreach my $key (keys(%{$item})) {
+                        if ($key ne "id") {
+                            $request->addResultLoop($loop_name, $cnt, ${key}, $item->{$key});
                         }
-                        $request->addResultLoop($loop_name, $cnt, ${key}, ${val});
                     }
                     $cnt+=1;
                     $total+=1;
@@ -2013,8 +2010,7 @@ sub _cliCommand {
             foreach my $item ( @{ $req->getResult('radios_loop') || [] } ) {
                 if ($cnt<NUM_HOME_ITEMS) {
                     foreach my $key (keys(%{$item})) {
-                        my $val = $item->{$key};
-                        $request->addResultLoop("material_home_radios_loop", $cnt, ${key}, ${val});
+                        $request->addResultLoop("material_home_radios_loop", $cnt, ${key}, $item->{$key});
                     }
                     $request->addResultLoop("material_home_radios_loop", $cnt, "ihe", 1);
                 }
@@ -2029,8 +2025,7 @@ sub _cliCommand {
             foreach my $item ( @{ $req->getResult('playlists_loop') || [] } ) {
                 if ($cnt<NUM_HOME_ITEMS) {
                     foreach my $key (keys(%{$item})) {
-                        my $val = $item->{$key};
-                        $request->addResultLoop("material_home_playlists_loop", $cnt, ${key}, ${val});
+                        $request->addResultLoop("material_home_playlists_loop", $cnt, ${key}, $item->{$key});
                     }
                     $request->addResultLoop("material_home_playlists_loop", $cnt, "ihe", 1);
                 }

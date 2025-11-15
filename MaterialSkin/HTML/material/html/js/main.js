@@ -144,6 +144,7 @@ var app = new Vue({
         initEmblems();
         initCustomActions();
         initTrackSources();
+        initLmsOptions();
 
         this.setLanguage(LMS_LANG);
         bus.$on('lmsLangChanged', function(lang) {

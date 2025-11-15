@@ -568,7 +568,7 @@ var lmsBrowse = Vue.component("lms-browse", {
             detailedSubExtra: undefined,
             items: [],
             topExtra: [],
-            topExtraCfg: {items: [], have3rdparty:false},
+            topExtraCfg: {items: [], needsPlayer:false},
             grid: {allowed:true, use:getLocalStorageBool('grid', true), numItems:0, numColumns:0, ih:GRID_MIN_HEIGHT, rows:[], few:false, haveSubtitle:true, multiSize:false, type:GRID_STANDARD},
             fetchingItem:undefined,
             hoverBtns: !IS_MOBILE,
@@ -1092,14 +1092,14 @@ var lmsBrowse = Vue.component("lms-browse", {
             this.topExtraCfg.items=JSON.parse(JSON.stringify(this.$store.state.detailedHomeItems));
             if (this.$store.state.detailedHomeItems.length>0) {
                 let cmd = ["material-skin", "home-extra"];
-                this.topExtraCfg.have3rdparty = false;
+                this.topExtraCfg.needsPlayer = false;
                 for (let i=0, loop=this.$store.state.detailedHomeItems, len=loop.length; i<len; ++i) {
                     cmd.push(loop[i].split('_').slice(1).join('_')+":1");
-                    if (!this.topExtraCfg.have3rdparty && !loop[i].startsWith(DETAILED_HOME_STD_PREFIX)) {
-                        this.topExtraCfg.have3rdparty = true;
+                    if (!this.topExtraCfg.needsPlayer && !loop[i].startsWith(DETAILED_HOME_STD_PREFIX) && lmsOptions.homeExtraNeedsPlayer.has(loop[i])) {
+                        this.topExtraCfg.needsPlayer = true;
                     }
                 }
-                if (this.topExtraCfg.have3rdparty) {
+                if (this.topExtraCfg.needsPlayer) {
                     cmd[0]="material-skin-client";
                 }
                 if (this.$store.state.library!=undefined && this.$store.state.library!=null) {
@@ -1113,7 +1113,7 @@ var lmsBrowse = Vue.component("lms-browse", {
                     numItems = MAX_HOME_EXTRA_ROW;
                 }
                 cmd.push("count:"+numItems);
-                if (!this.topExtraCfg.have3rdparty || this.playerId().length>1) {
+                if (!this.topExtraCfg.needsPlayer || this.playerId().length>1) {
                     lmsCommand(this.playerId(), cmd, this.nextReqId()).then(({data}) => {
                         if (this.isCurrentReq(data)) {
                             this.handleHomeExtra(data);
@@ -2720,7 +2720,7 @@ var lmsBrowse = Vue.component("lms-browse", {
             }
         },
         '$store.state.player': function() {
-            if (this.topExtraCfg.have3rdparty && this.isTop) {
+            if (this.topExtraCfg.needsPlayer && this.isTop) {
                 this.getHomeExtra();
             }
         },

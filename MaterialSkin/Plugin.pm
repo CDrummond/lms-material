@@ -2039,19 +2039,14 @@ sub _cliCommand {
                 }
                 my $req = Slim::Control::Request::executeRequest(undef, \@cmd);
                 my $cnt = 0;
-                my $loop_name = "material_home_${srt}_loop";
                 foreach my $item ( @{ $req->getResult('albums_loop') || [] } ) {
-                    $request->addResultLoop($loop_name, $cnt, "id", $item->{id} . "@" . "idx" . $total); # Need unique IDs in case same album in multiple loops!
-                    $request->addResultLoop($loop_name, $cnt, "ihe", 1);
-                    foreach my $key (keys(%{$item})) {
-                        if ($key ne "id") {
-                            $request->addResultLoop($loop_name, $cnt, ${key}, $item->{$key});
-                        }
+                    if ($cnt<NUM_HOME_ITEMS) {
+                        _addExtraHomeItem($request, ${srt}, $item, $cnt, $total);
+                        $cnt+=1;
+                        $total+=1;
                     }
-                    $cnt+=1;
-                    $total+=1;
                 }
-                $request->addResult("${loop_name}_len", $req->getResult('count'));
+                $request->addResult("material_home_${srt}_loop_len", $req->getResult('count'));
             }
         }
         if ($request->getParam('radios')) {
@@ -2060,11 +2055,11 @@ sub _cliCommand {
             my $cnt = 0;
             foreach my $item ( @{ $req->getResult('radios_loop') || [] } ) {
                 if ($cnt<NUM_HOME_ITEMS) {
-                    _addExtraHomeItem($request, "radios", $item, $cnt);
+                    _addExtraHomeItem($request, "radios", $item, $cnt, undef);
+                    $cnt+=1;
                 }
-                $cnt+=1;
             }
-            $request->addResult("material_home_radios_loop_len", $cnt);
+            $request->addResult("material_home_radios_loop_len", $req->getResult('count'));
         }
         if ($request->getParam('playlists')) {
             my @cmd = ("material-skin-query", "playlists", 0, NUM_HOME_ITEMS+1, "tags:suxE", "menu:1");
@@ -2072,11 +2067,11 @@ sub _cliCommand {
             my $cnt = 0;
             foreach my $item ( @{ $req->getResult('playlists_loop') || [] } ) {
                 if ($cnt<NUM_HOME_ITEMS) {
-                    _addExtraHomeItem($request, "playlists", $item, $cnt);
+                    _addExtraHomeItem($request, "playlists", $item, $cnt, undef);
+                    $cnt+=1;
                 }
-                $cnt+=1;
             }
-            $request->addResult("material_home_playlists_loop_len", $cnt);
+            $request->addResult("material_home_playlists_loop_len", $req->getResult('count'));
         }
 
         my $others = [ grep { $_ } map { getHomeExtra($_) } keys %{$request->getParamsCopy()} ];
@@ -2133,11 +2128,15 @@ sub _cliCommand {
 }
 
 sub _addExtraHomeItem {
-    my ($request, $id, $item, $cnt) = @_;
-
+    my ($request, $id, $item, $cnt, $idmod) = @_;
+    my $loop_name = "material_home_${id}_loop";
     foreach my $key (keys(%{$item})) {
-        my $val = $item->{$key};
-        $request->addResultLoop("material_home_${id}_loop", $cnt, $key, $val);
+        if (defined $idmod) {
+            $request->addResultLoop($loop_name, $cnt, "id", $item->{id} . "@" . "idx" . $idmod); # Need unique IDs in case same album in multiple loops!
+        }
+        if ((!defined $idmod) || $key ne "id") {
+            $request->addResultLoop($loop_name, $cnt, ${key}, $item->{$key});
+        }
     }
 
     $request->addResultLoop("material_home_${id}_loop", $cnt, "ihe", 1);

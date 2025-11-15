@@ -516,8 +516,7 @@ Vue.component('lms-ui-settings', {
             ndShortcutValues: [],
             ndSettingsIcons: false,
             ndSettingsVisible: false,
-            detailedHomeItems:[
-            ],
+            detailedHomeItems:[],
             dragIndex: undefined,
             dropIndex: undefined
         }

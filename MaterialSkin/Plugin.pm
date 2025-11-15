@@ -2017,119 +2017,124 @@ sub _cliCommand {
     }
 
     if ($cmd eq 'home-extra') {
-        my @sorts = ();
-
-        if ($request->getParam('std_new')) {
-            push(@sorts, "new");
-        }
-        if ($request->getParam('std_playcount')) {
-            push(@sorts, "std_playcount");
-        }
-        if ($request->getParam('std_recentlyplayed')) {
-            push(@sorts, "std_recentlyplayed");
-        }
-        if ($request->getParam('std_random')) {
-            push(@sorts, "std_random");
-        }
-        if ($request->getParam('std_changed')) {
-            push(@sorts, "std_changed");
-        }
-        if (scalar(@sorts)>0) {
-            my $total = 0;
-            my $libId = $request->getParam('library_id');
-            foreach my $srt ( @sorts ) {
-                my @cmd = ("albums", 0, NUM_HOME_ITEMS, "tags:aajlqswyKSS24WE", "sort:${srt}");
-                if ($libId) {
-                    push(@cmd, "library_id:${libId}");
-                }
-                my $req = Slim::Control::Request::executeRequest(undef, \@cmd);
-                my $cnt = 0;
-                foreach my $item ( @{ $req->getResult('albums_loop') || [] } ) {
-                    if ($cnt<NUM_HOME_ITEMS) {
-                        _addExtraHomeItem($request, ${srt}, $item, $cnt, $total);
-                        $cnt+=1;
-                        $total+=1;
-                    }
-                }
-                $request->addResult("material_home_${srt}_loop_len", $req->getResult('count'));
-            }
-        }
-        if ($request->getParam('std_radios')) {
-            my @cmd = ("material-skin-query", "radios", 0, NUM_HOME_ITEMS+1);
-            my $req = Slim::Control::Request::executeRequest(undef, \@cmd);
-            my $cnt = 0;
-            foreach my $item ( @{ $req->getResult('radios_loop') || [] } ) {
-                if ($cnt<NUM_HOME_ITEMS) {
-                    _addExtraHomeItem($request, "radios", $item, $cnt, undef);
-                    $cnt+=1;
-                }
-            }
-            $request->addResult("material_home_radios_loop_len", $req->getResult('count'));
-        }
-        if ($request->getParam('std_playlists')) {
-            my @cmd = ("material-skin-query", "playlists", 0, NUM_HOME_ITEMS+1, "tags:suxE", "menu:1");
-            my $req = Slim::Control::Request::executeRequest(undef, \@cmd);
-            my $cnt = 0;
-            foreach my $item ( @{ $req->getResult('playlists_loop') || [] } ) {
-                if ($cnt<NUM_HOME_ITEMS) {
-                    _addExtraHomeItem($request, "playlists", $item, $cnt, undef);
-                    $cnt+=1;
-                }
-            }
-            $request->addResult("material_home_playlists_loop_len", $req->getResult('count'));
-        }
-
-        my $others = [ grep { $_ } map { getHomeExtra($_) } keys %{$request->getParamsCopy()} ];
-        if (scalar @$others) {
-            $request->setStatusProcessing();
-
-            # process other home items asynchronously and in parallel - they might be doing online lookups
-            Async::Util::amap(
-                inputs => $others,
-                action => sub {
-                    my ($extra, $acb) = @_;
-                    my $id = $extra->{id};
-
-                    $extra->{handler}->($request->client, sub {
-                        $acb->({ $id => (shift || []) });
-                    }, NUM_HOME_ITEMS);
-                },
-                at_a_time => 4,
-                cb => sub {
-                    my $results = {};
-
-                    foreach my $result (@{$_[0]}) {
-                        my ($id, $res) = each %{$result};
-                        $results->{$id} = $res;
-                    }
-
-                    foreach my $id (map { $_->{id} } @$others) {
-                        my $cnt = 0;
-                        my $result = $results->{$id};
-
-                        next unless $result;
-
-                        # shorten results list if needed.
-                        if (ref $result->{item_loop} && scalar @{$result->{item_loop}} > NUM_HOME_ITEMS) {
-                            splice @{$result->{item_loop}}, NUM_HOME_ITEMS;
-                        }
-
-                        $request->addResult("material_home_${id}_obj", $result);
-                    }
-
-                    $request->setStatusDone();
-                }
-            );
-
-            # we have to wait for the async processing to finish
-            return;
-        }
-
-        $request->addResult("material_home", 1);
-        $request->setStatusDone();
+        _handleHomeExtraCmd($request);
         return;
     }
     $request->setStatusBadParams();
+}
+
+sub _handleHomeExtraCmd {
+    my $request = shift;
+    my @sorts = ();
+
+    if ($request->getParam('std_new')) {
+        push(@sorts, "new");
+    }
+    if ($request->getParam('std_playcount')) {
+        push(@sorts, "std_playcount");
+    }
+    if ($request->getParam('std_recentlyplayed')) {
+        push(@sorts, "std_recentlyplayed");
+    }
+    if ($request->getParam('std_random')) {
+        push(@sorts, "std_random");
+    }
+    if ($request->getParam('std_changed')) {
+        push(@sorts, "std_changed");
+    }
+    if (scalar(@sorts)>0) {
+        my $total = 0;
+        my $libId = $request->getParam('library_id');
+        foreach my $srt ( @sorts ) {
+            my @cmd = ("albums", 0, NUM_HOME_ITEMS, "tags:aajlqswyKSS24WE", "sort:${srt}");
+            if ($libId) {
+                push(@cmd, "library_id:${libId}");
+            }
+            my $req = Slim::Control::Request::executeRequest(undef, \@cmd);
+            my $cnt = 0;
+            foreach my $item ( @{ $req->getResult('albums_loop') || [] } ) {
+                if ($cnt<NUM_HOME_ITEMS) {
+                    _addExtraHomeItem($request, ${srt}, $item, $cnt, $total);
+                    $cnt+=1;
+                    $total+=1;
+                }
+            }
+            $request->addResult("material_home_${srt}_loop_len", $req->getResult('count'));
+        }
+    }
+    if ($request->getParam('std_radios')) {
+        my @cmd = ("material-skin-query", "radios", 0, NUM_HOME_ITEMS+1);
+        my $req = Slim::Control::Request::executeRequest(undef, \@cmd);
+        my $cnt = 0;
+        foreach my $item ( @{ $req->getResult('radios_loop') || [] } ) {
+            if ($cnt<NUM_HOME_ITEMS) {
+                _addExtraHomeItem($request, "radios", $item, $cnt, undef);
+                $cnt+=1;
+            }
+        }
+        $request->addResult("material_home_radios_loop_len", $req->getResult('count'));
+    }
+    if ($request->getParam('std_playlists')) {
+        my @cmd = ("material-skin-query", "playlists", 0, NUM_HOME_ITEMS+1, "tags:suxE", "menu:1");
+        my $req = Slim::Control::Request::executeRequest(undef, \@cmd);
+        my $cnt = 0;
+        foreach my $item ( @{ $req->getResult('playlists_loop') || [] } ) {
+            if ($cnt<NUM_HOME_ITEMS) {
+                _addExtraHomeItem($request, "playlists", $item, $cnt, undef);
+                $cnt+=1;
+            }
+        }
+        $request->addResult("material_home_playlists_loop_len", $req->getResult('count'));
+    }
+
+    my $others = [ grep { $_ } map { getHomeExtra($_) } keys %{$request->getParamsCopy()} ];
+    if (scalar @$others) {
+        $request->setStatusProcessing();
+
+        # process other home items asynchronously and in parallel - they might be doing online lookups
+        Async::Util::amap(
+            inputs => $others,
+            action => sub {
+                my ($extra, $acb) = @_;
+                my $id = $extra->{id};
+
+                $extra->{handler}->($request->client, sub {
+                    $acb->({ $id => (shift || []) });
+                }, NUM_HOME_ITEMS);
+            },
+            at_a_time => 4,
+            cb => sub {
+                my $results = {};
+
+                foreach my $result (@{$_[0]}) {
+                    my ($id, $res) = each %{$result};
+                    $results->{$id} = $res;
+                }
+
+                foreach my $id (map { $_->{id} } @$others) {
+                    my $cnt = 0;
+                    my $result = $results->{$id};
+
+                    next unless $result;
+
+                    # shorten results list if needed.
+                    if (ref $result->{item_loop} && scalar @{$result->{item_loop}} > NUM_HOME_ITEMS) {
+                        splice @{$result->{item_loop}}, NUM_HOME_ITEMS;
+                    }
+
+                    $request->addResult("material_home_${id}_obj", $result);
+                }
+
+                $request->setStatusDone();
+            }
+        );
+
+        # we have to wait for the async processing to finish
+        return;
+    }
+
+    $request->addResult("material_home", 1);
+    $request->setStatusDone();
 }
 
 sub _addExtraHomeItem {
@@ -2355,7 +2360,7 @@ sub _cliClientCommand {
     }
     my $cmd = $request->getParam('_cmd');
     my $client = $request->client();
-    if ($request->paramUndefinedOrNotOneOf($cmd, ['set-lib', 'get-alarm', 'get-dstm', 'save-dstm', 'sort-queue', 'remove-queue', 'command-list', 'rndmix']) ) {
+    if ($request->paramUndefinedOrNotOneOf($cmd, ['set-lib', 'get-alarm', 'get-dstm', 'save-dstm', 'sort-queue', 'remove-queue', 'command-list', 'rndmix', 'home-extra']) ) {
         $request->setStatusBadParams();
         return;
     }
@@ -2491,6 +2496,11 @@ sub _cliClientCommand {
                 return;
             }
         }
+    }
+
+    if ($cmd eq 'home-extra') {
+        _handleHomeExtraCmd($request);
+        return;
     }
 
     $request->setStatusBadParams();

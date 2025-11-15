@@ -568,7 +568,7 @@ var lmsBrowse = Vue.component("lms-browse", {
             detailedSubExtra: undefined,
             items: [],
             topExtra: [],
-            topExtraCfg: [],
+            topExtraCfg: {items: [], have3rdparty:false},
             grid: {allowed:true, use:getLocalStorageBool('grid', true), numItems:0, numColumns:0, ih:GRID_MIN_HEIGHT, rows:[], few:false, haveSubtitle:true, multiSize:false, type:GRID_STANDARD},
             fetchingItem:undefined,
             hoverBtns: !IS_MOBILE,
@@ -841,6 +841,7 @@ var lmsBrowse = Vue.component("lms-browse", {
                 try { browseHandleKey(browse, event); } catch(e) { }
             };
         }
+        this.needToRefresh3rdParty = false;
         this.reqId = 0;
         this.myMusic=[];
         this.history=[];
@@ -1088,20 +1089,31 @@ var lmsBrowse = Vue.component("lms-browse", {
             });
         },
         getHomeExtra() {
-            this.topExtraCfg=JSON.parse(JSON.stringify(this.$store.state.detailedHomeItems));
+            this.topExtraCfg.items=JSON.parse(JSON.stringify(this.$store.state.detailedHomeItems));
             if (this.$store.state.detailedHomeItems.length>0) {
                 let cmd = ["material-skin", "home-extra"];
+                this.topExtraCfg.have3rdparty = false;
                 for (let i=0, loop=this.$store.state.detailedHomeItems, len=loop.length; i<len; ++i) {
                     cmd.push(loop[i]+":1");
-                }
-                cmd.push("library_id:"+this.$store.state.library);
-                lmsCommand("", cmd, this.nextReqId()).then(({data}) => {
-                    if (this.isCurrentReq(data)) {
-                        this.handleHomeExtra(data);
+                    if (!this.topExtraCfg.have3rdparty && !loop[i].startsWith(DETAILED_HOME_STD_PREFIX)) {
+                        this.topExtraCfg.have3rdparty = true;
                     }
-                }).catch(err => {
-                    logError(err);
-                });
+                }
+                if (this.topExtraCfg.have3rdparty) {
+                    cmd[0]="material-skin-client";
+                }
+                if (this.$store.state.library!=undefined && this.$store.state.library!=null) {
+                    cmd.push("library_id:"+this.$store.state.library);
+                }
+                if (!this.topExtraCfg.have3rdparty || this.playerId().length>1) {
+                    lmsCommand(this.playerId(), cmd, this.nextReqId()).then(({data}) => {
+                        if (this.isCurrentReq(data)) {
+                            this.handleHomeExtra(data);
+                        }
+                    }).catch(err => {
+                        logError(err);
+                    });
+                }
             }
         },
         handleHomeExtra(data) {
@@ -2555,7 +2567,7 @@ var lmsBrowse = Vue.component("lms-browse", {
             if (this.isTop) {
                 this.setLayoutAction();
             }
-            if (this.$store.state.detailedHomeItems.length>0 && !arraysEqual(this.topExtraCfg, this.$store.state.detailedHomeItems)) {
+            if (this.$store.state.detailedHomeItems.length>0 && !arraysEqual(this.topExtraCfg.items, this.$store.state.detailedHomeItems)) {
                 this.getHomeExtra();
             } else {
                 this.items = this.isTop && this.grid.use && this.$store.state.detailedHomeItems.length>0 ? this.topExtra.concat(this.top) : this.top;
@@ -2698,7 +2710,12 @@ var lmsBrowse = Vue.component("lms-browse", {
             if (2!=newVal) {
                 this.highlightIndex = -1;
             }
-        }
+        },
+        '$store.state.player': function() {
+            if (this.topExtraCfg.have3rdparty) {
+                this.getHomeExtra();
+            }
+        },
     },
     beforeDestroy() {
         if (undefined!==this.updateTimer) {

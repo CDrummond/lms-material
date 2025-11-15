@@ -359,7 +359,7 @@ sub initPlugin {
                 $_->{type} eq 'audio' || $_->{type} eq 'playlist'
             } @{ preferences('server')->client($client || (Slim::Player::Client::clients())[0])->get('presets') || [] } ];
 
-            $cb->($presets);
+            $cb->({ item_loop => $presets });
         },
         icon => '/material/html/images/preset_MTL_icon_looks_one.png',
         needsPlayer => 1,
@@ -2060,6 +2060,7 @@ sub _handleHomeExtraCmd {
     if ($request->getParam('changed')) {
         push(@sorts, "changed");
     }
+    $request->addResult("material_home", 1);
     if (scalar(@sorts)>0) {
         my $total = 0;
         my $libId = $request->getParam('library_id');
@@ -2087,10 +2088,10 @@ sub _handleHomeExtraCmd {
         foreach my $item ( @{ $req->getResult('radios_loop') || [] } ) {
             if ($cnt<$count) {
                 _addExtraHomeItem($request, "radios", $item, $cnt, undef);
-                $cnt+=1;
             }
+            $cnt+=1;
         }
-        $request->addResult("material_home_radios_loop_len", $req->getResult('count'));
+        $request->addResult("material_home_radios_loop_len", $cnt);
     }
     if ($request->getParam('playlists')) {
         my @cmd = ("material-skin-query", "playlists", 0, $count+1, "tags:suxE", "menu:1");
@@ -2151,7 +2152,6 @@ sub _handleHomeExtraCmd {
         return;
     }
 
-    $request->addResult("material_home", 1);
     $request->setStatusDone();
 }
 

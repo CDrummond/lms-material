@@ -2,6 +2,7 @@
 -----
 1. Fix error with 'Go to artist' and no player connected.
 2. Add 'Select' action to headers in track lists.
+3. Copy all album attributes when creating scrolled lists.
 
 6.0.3
 -----

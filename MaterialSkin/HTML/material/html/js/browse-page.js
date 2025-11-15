@@ -1094,7 +1094,7 @@ var lmsBrowse = Vue.component("lms-browse", {
                 let cmd = ["material-skin", "home-extra"];
                 this.topExtraCfg.have3rdparty = false;
                 for (let i=0, loop=this.$store.state.detailedHomeItems, len=loop.length; i<len; ++i) {
-                    cmd.push(loop[i]+":1");
+                    cmd.push(loop[i].split('_').slice(1).join('_')+":1");
                     if (!this.topExtraCfg.have3rdparty && !loop[i].startsWith(DETAILED_HOME_STD_PREFIX)) {
                         this.topExtraCfg.have3rdparty = true;
                     }

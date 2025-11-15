@@ -2027,20 +2027,20 @@ sub _handleHomeExtraCmd {
     my $request = shift;
     my @sorts = ();
 
-    if ($request->getParam('std_new')) {
+    if ($request->getParam('new')) {
         push(@sorts, "new");
     }
-    if ($request->getParam('std_playcount')) {
-        push(@sorts, "std_playcount");
+    if ($request->getParam('playcount')) {
+        push(@sorts, "playcount");
     }
-    if ($request->getParam('std_recentlyplayed')) {
-        push(@sorts, "std_recentlyplayed");
+    if ($request->getParam('recentlyplayed')) {
+        push(@sorts, "recentlyplayed");
     }
-    if ($request->getParam('std_random')) {
-        push(@sorts, "std_random");
+    if ($request->getParam('random')) {
+        push(@sorts, "random");
     }
-    if ($request->getParam('std_changed')) {
-        push(@sorts, "std_changed");
+    if ($request->getParam('changed')) {
+        push(@sorts, "changed");
     }
     if (scalar(@sorts)>0) {
         my $total = 0;
@@ -2062,7 +2062,7 @@ sub _handleHomeExtraCmd {
             $request->addResult("material_home_${srt}_loop_len", $req->getResult('count'));
         }
     }
-    if ($request->getParam('std_radios')) {
+    if ($request->getParam('radios')) {
         my @cmd = ("material-skin-query", "radios", 0, NUM_HOME_ITEMS+1);
         my $req = Slim::Control::Request::executeRequest(undef, \@cmd);
         my $cnt = 0;
@@ -2074,7 +2074,7 @@ sub _handleHomeExtraCmd {
         }
         $request->addResult("material_home_radios_loop_len", $req->getResult('count'));
     }
-    if ($request->getParam('std_playlists')) {
+    if ($request->getParam('playlists')) {
         my @cmd = ("material-skin-query", "playlists", 0, NUM_HOME_ITEMS+1, "tags:suxE", "menu:1");
         my $req = Slim::Control::Request::executeRequest(undef, \@cmd);
         my $cnt = 0;

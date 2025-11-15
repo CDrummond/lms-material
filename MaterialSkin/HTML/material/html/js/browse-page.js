@@ -2712,7 +2712,7 @@ var lmsBrowse = Vue.component("lms-browse", {
             }
         },
         '$store.state.player': function() {
-            if (this.topExtraCfg.have3rdparty) {
+            if (this.topExtraCfg.have3rdparty && this.isTop) {
                 this.getHomeExtra();
             }
         },

@@ -579,23 +579,18 @@ sub getHomExtrasIDs {
 }
 
 sub getHomeExtra3rdPartyItems {
-    my ($client) = @_;
-
-    return [ map {
+    return to_json([ map {
         my $item = $HOME_EXTRAS->{$_};
 
         # get translation in case we received a string token
         my $title = Slim::Utils::Strings::getString($item->{title});
-        # get the title in the client's language if it was a string token and we have a client object
-        $title = cstring($client, $item->{title}) if $client && $title ne $item->{title};
-
         {
             id          => $_,
             title       => $title,
             icon        => $item->{icon},
             needsPlayer => $item->{needsPlayer}
         }
-    } keys %$HOME_EXTRAS ]
+    } keys %$HOME_EXTRAS ]);
 }
 
 #sub _checkPlayQueue {

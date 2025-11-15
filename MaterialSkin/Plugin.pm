@@ -574,6 +574,11 @@ sub getHomExtrasIDs {
     return map { s/^3rdparty_//; $_ } keys %$HOME_EXTRAS;
 }
 
+sub getHomeExtra3rdPartyItems {
+    # TODO!!!!
+    return "[{id:\"3rdparty_presets\",title:\"Presets\"}]";
+}
+
 #sub _checkPlayQueue {
 #    my $request = shift;
 #    if (!$prefs->get('playShuffle')) {

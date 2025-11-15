@@ -137,6 +137,7 @@
   my $kioskMode=Plugins::MaterialSkin::Plugin->getKioskMode();
   my $hideForKiosk=Plugins::MaterialSkin::Plugin->getHideForKiosk();
   my $skinLanguages=Plugins::MaterialSkin::Plugin->getSkinLanguages();
+  my $homeExtra=Plugins::MaterialSkin::Plugin->getHomeExtra3rdPartyItems();
   my $maxPlaylistEditSize=$lmsVersion>=80400 ? 1000 : 250;
 
   # Query some LMS settingsnow to save JavaScript needing to make calls at start-up.
@@ -203,6 +204,7 @@
   print("const LMS_DEF_12HR=$h12;");
   print("const LMS_DARK_LOGIC=$haveDarkLogic;");
   print("const LMS_OS_NAME=\"$osName\";");
+  print("const LMS_3RDPARTY_HOME_EXTRA=$homeExtra;");
   print("</script>\n");
   [% END %]
   <!--JS start-->

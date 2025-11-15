@@ -360,8 +360,12 @@ function homeConvert(list) {
 
 function checkHomeItems(list) {
     let valid = [];
+    let extra = new Set();
+    for (let i=0, len=LMS_3RDPARTY_HOME_EXTRA.length; i<len; ++i) {
+        extra.add(LMS_3RDPARTY_HOME_EXTRA[i].id);
+    }
     for (let i=0, len=list.length; i<len; ++i) {
-        if (list[i].startsWith(DETAILED_HOME_STD_PREFIX)) { // TODO: or is 3rdparty and exists!
+        if (list[i].startsWith(DETAILED_HOME_STD_PREFIX) || extra.has(list[i])) {
             valid.push(list[i]);
         }
     }

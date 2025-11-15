@@ -712,7 +712,7 @@ Vue.component('lms-ui-settings', {
 
             for (let s=0, loop=this.detailedHomeItems, len=loop.length; s<len; ++s) {
                 let idx = this.$store.state.detailedHomeItems.indexOf(loop[s].id);
-                loop[s].val = undefined==idx || idx<0 ? this.$store.state.detailedHomeItems.length+s : idx;
+                loop[s].val = undefined==idx || idx<0 ? this.detailedHomeItems.length+s : idx;
                 loop[s].checked = checkedHomeItems.has(loop[s].id);
             }
             this.detailedHomeItems.sort((a, b) => { return a.val<b.val ? -1 : 1});
@@ -784,6 +784,9 @@ Vue.component('lms-ui-settings', {
                 this.detailedHomeItems.push(
                     {id:DETAILED_HOME_STD_PREFIX+"nchangedew", title:lmsOptions.supportReleaseTypes ? i18n("Recently Updated Releases") : i18n("Recently Updated Albums"), checked:false}
                 );
+            }
+            for (let i=0, len=LMS_3RDPARTY_HOME_EXTRA.length; i<len; ++i) {
+                this.detailedHomeItems.push(LMS_3RDPARTY_HOME_EXTRA[i]);
             }
         },
         close() {

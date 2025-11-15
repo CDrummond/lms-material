@@ -1105,6 +1105,15 @@ var lmsBrowse = Vue.component("lms-browse", {
                 if (this.$store.state.library!=undefined && this.$store.state.library!=null) {
                     cmd.push("library_id:"+this.$store.state.library);
                 }
+                let listWidth = this.$store.state.desktopLayout ? this.pageElement.scrollWidth : window.innerWidth;
+                let numItems = Math.ceil((Math.floor(listWidth/145))/5) * 5;
+                if (numItems<10) {
+                    numItems = 10;
+                } else if (numItems>MAX_HOME_EXTRA_ROW) {
+                    numItems = MAX_HOME_EXTRA_ROW;
+                }
+                cmd.push("count:"+numItems);
+                console.log(numItems, screen.width/145);
                 if (!this.topExtraCfg.have3rdparty || this.playerId().length>1) {
                     lmsCommand(this.playerId(), cmd, this.nextReqId()).then(({data}) => {
                         if (this.isCurrentReq(data)) {
@@ -1926,7 +1935,7 @@ var lmsBrowse = Vue.component("lms-browse", {
                         rs+=1;
                     } else {
                         let used = 0;
-                        for (var j=0; j<10; ++j) {
+                        for (var j=0; j<MAX_HOME_EXTRA_ROW; ++j) {
                             var idx = i+j;
                             if (idx<topExtraItems.length && topExtraItems[idx].header) {
                                 break;

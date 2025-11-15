@@ -267,6 +267,8 @@ const DETAILED_HOME_RADIOS = 16;
 const DETAILED_HOME_PLAYLISTS = 32;
 const DETAILED_HOME_UPDATED = 64;
 
+const MAX_HOME_EXTRA_ROW = 30;
+
 const RADIOS_BASE_ACTIONS = { "add-hold": { "cmd": ["favorites", "playlist", "insert"], "params": {"menu": "favorites"}, "itemsParams": "params"},
                               "play": { "cmd": ["favorites", "playlist", "play"], "params": {"menu": "favorites"}, "itemsParams": "params"},
                               "add": { "cmd": ["favorites", "playlist", "add"], "params": {"menu": "favorites"}, "itemsParams": "params"}};

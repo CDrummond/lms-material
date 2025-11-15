@@ -2,6 +2,7 @@
 -----
 1. Add ability for other plugins to provide scrolled lists - thanks to Michael
    Herger.
+2. Allow for more items in scrolled window if view is wider.
 
 6.0.4
 -----

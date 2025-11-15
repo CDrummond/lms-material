@@ -2026,7 +2026,11 @@ sub _cliCommand {
 sub _handleHomeExtraCmd {
     my $request = shift;
     my @sorts = ();
+    my $count = $request->getParam('count');
 
+    if (!$count || $count<NUM_HOME_ITEMS) {
+        $count = NUM_HOME_ITEMS;
+    }
     if ($request->getParam('new')) {
         push(@sorts, "new");
     }
@@ -2046,14 +2050,14 @@ sub _handleHomeExtraCmd {
         my $total = 0;
         my $libId = $request->getParam('library_id');
         foreach my $srt ( @sorts ) {
-            my @cmd = ("albums", 0, NUM_HOME_ITEMS, "tags:aajlqswyKSS24WE", "sort:${srt}");
+            my @cmd = ("albums", 0, $count, "tags:aajlqswyKSS24WE", "sort:${srt}");
             if ($libId) {
                 push(@cmd, "library_id:${libId}");
             }
             my $req = Slim::Control::Request::executeRequest(undef, \@cmd);
             my $cnt = 0;
             foreach my $item ( @{ $req->getResult('albums_loop') || [] } ) {
-                if ($cnt<NUM_HOME_ITEMS) {
+                if ($cnt<$count) {
                     _addExtraHomeItem($request, ${srt}, $item, $cnt, $total);
                     $cnt+=1;
                     $total+=1;
@@ -2063,11 +2067,11 @@ sub _handleHomeExtraCmd {
         }
     }
     if ($request->getParam('radios')) {
-        my @cmd = ("material-skin-query", "radios", 0, NUM_HOME_ITEMS+1);
+        my @cmd = ("material-skin-query", "radios", 0, $count+1);
         my $req = Slim::Control::Request::executeRequest(undef, \@cmd);
         my $cnt = 0;
         foreach my $item ( @{ $req->getResult('radios_loop') || [] } ) {
-            if ($cnt<NUM_HOME_ITEMS) {
+            if ($cnt<$count) {
                 _addExtraHomeItem($request, "radios", $item, $cnt, undef);
                 $cnt+=1;
             }
@@ -2075,11 +2079,11 @@ sub _handleHomeExtraCmd {
         $request->addResult("material_home_radios_loop_len", $req->getResult('count'));
     }
     if ($request->getParam('playlists')) {
-        my @cmd = ("material-skin-query", "playlists", 0, NUM_HOME_ITEMS+1, "tags:suxE", "menu:1");
+        my @cmd = ("material-skin-query", "playlists", 0, $count+1, "tags:suxE", "menu:1");
         my $req = Slim::Control::Request::executeRequest(undef, \@cmd);
         my $cnt = 0;
         foreach my $item ( @{ $req->getResult('playlists_loop') || [] } ) {
-            if ($cnt<NUM_HOME_ITEMS) {
+            if ($cnt<$count) {
                 _addExtraHomeItem($request, "playlists", $item, $cnt, undef);
                 $cnt+=1;
             }
@@ -2100,7 +2104,7 @@ sub _handleHomeExtraCmd {
 
                 $extra->{handler}->($request->client, sub {
                     $acb->({ $id => (shift || []) });
-                }, NUM_HOME_ITEMS);
+                }, $count);
             },
             at_a_time => 4,
             cb => sub {
@@ -2118,8 +2122,8 @@ sub _handleHomeExtraCmd {
                     next unless $result;
 
                     # shorten results list if needed.
-                    if (ref $result->{item_loop} && scalar @{$result->{item_loop}} > NUM_HOME_ITEMS) {
-                        splice @{$result->{item_loop}}, NUM_HOME_ITEMS;
+                    if (ref $result->{item_loop} && scalar @{$result->{item_loop}} > $count) {
+                        splice @{$result->{item_loop}}, $count;
                     }
 
                     $request->addResult("material_home_${id}_obj", $result);

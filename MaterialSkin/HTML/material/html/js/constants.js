@@ -136,7 +136,6 @@ const TOP_RADIO_ID = TOP_ID_PREFIX+"ra";
 const TOP_REMOTE_ID = TOP_ID_PREFIX+"rml";
 const TOP_CDPLAYER_ID = TOP_ID_PREFIX+"cdda";
 const HIDE_TOP_FOR_PARTY = new Set([TOP_EXTRAS_ID, TOP_RADIO_ID, TOP_REMOTE_ID, TOP_FAVORITES_ID]);
-const TOP_DETAILED_EXTRA = TOP_ID_PREFIX+"dth";
 const MUSIC_ID_PREFIX = "mm:/";
 const MYMUSIC_WORKS_PREFIX = "mmw:";
 const COMPILATIONS_ID = MUSIC_ID_PREFIX+"myMusicAlbumsVariousArtists";
@@ -258,6 +257,8 @@ const GRID_STANDARD = 0;
 const GRID_TEXT_ONLY = 1;
 const GRID_ICON_ONLY_ONLY = 2;
 
+const DETAILED_HOME_STD_PREFIX = "std_";
+// Old 6.0.x values
 const DETAILED_HOME_NEW = 1;
 const DETAILED_HOME_MOST = 2;
 const DETAILED_HOME_RECENT = 4;

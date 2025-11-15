@@ -2388,17 +2388,19 @@ function parseBrowseResp(data, parent, options, cacheKey) {
             }
             resp.listSize=resp.items.length;
         } else if (data.result.material_home) {
-            var lists = [{val: DETAILED_HOME_NEW, key:'new', loop:"albums", text:i18n('New Music'), id:TOP_DETAILED_EXTRA+DETAILED_HOME_NEW, icon:"new_releases", command:["albums"], params:["sort:new", ALBUM_TAGS_ALL_ARTISTS]},
-                         {val: DETAILED_HOME_RECENT, key:'recentlyplayed', loop:"albums", text:i18n('Recently Played'), id:TOP_DETAILED_EXTRA+DETAILED_HOME_RECENT, icon:"history", command:["albums"], params:["sort:recentlyplayed", ALBUM_TAGS_ALL_ARTISTS]},
-                         {val: DETAILED_HOME_MOST, key:'playcount', loop:"albums", text:i18n('Most Played'), id:TOP_DETAILED_EXTRA+DETAILED_HOME_MOST, svg:"trophy", command:["albums"], params:["sort:playcount", ALBUM_TAGS_ALL_ARTISTS]},
-                         {val: DETAILED_HOME_RANDOM, key:'random', loop:"albums", text:lmsOptions.supportReleaseTypes ? i18n('Random Releases') : i18n('Random Albums'), id:TOP_DETAILED_EXTRA+DETAILED_HOME_RANDOM, svg:"dice-album", command:["albums"], params:["sort:random", ALBUM_TAGS_ALL_ARTISTS]},
-                         {val: DETAILED_HOME_RADIOS, key:'radios', loop:"radios", text:i18n('Radios'), id:TOP_DETAILED_EXTRA+DETAILED_HOME_RADIOS, svg:"radio", command:["material-skin-query","radios"], params:[], limit:200},
-                         {val: DETAILED_HOME_PLAYLISTS, key:'playlists', loop:"playlists", text:i18n('Playlists'), id:TOP_DETAILED_EXTRA+DETAILED_HOME_PLAYLISTS, icon:"list", command:["material-skin-query","playlists"], params:[PLAYLIST_TAGS, "menu:1"], limit:200},
-                         {val: DETAILED_HOME_UPDATED, key:'changed', loop:"albums", text:lmsOptions.supportReleaseTypes ? i18n("Recently Updated Releases") : i18n("Recently Updated Albums"), id:TOP_DETAILED_EXTRA+DETAILED_HOME_UPDATED, svg:"updated-music", command:["albums"], params:["sort:changed", ALBUM_TAGS_ALL_ARTISTS]}
+            var lists = [{key:'new', loop:"albums", text:i18n('New Music'), icon:"new_releases", command:["albums"], params:["sort:new", ALBUM_TAGS_ALL_ARTISTS]},
+                         {key:'recentlyplayed', loop:"albums", text:i18n('Recently Played'), icon:"history", command:["albums"], params:["sort:recentlyplayed", ALBUM_TAGS_ALL_ARTISTS]},
+                         {key:'playcount', loop:"albums", text:i18n('Most Played'), svg:"trophy", command:["albums"], params:["sort:playcount", ALBUM_TAGS_ALL_ARTISTS]},
+                         {key:'random', loop:"albums", text:lmsOptions.supportReleaseTypes ? i18n('Random Releases') : i18n('Random Albums'), svg:"dice-album", command:["albums"], params:["sort:random", ALBUM_TAGS_ALL_ARTISTS]},
+                         {key:'radios', loop:"radios", text:i18n('Radios'), svg:"radio", command:["material-skin-query","radios"], params:[], limit:200},
+                         {key:'playlists', loop:"playlists", text:i18n('Playlists'), icon:"list", command:["material-skin-query","playlists"], params:[PLAYLIST_TAGS, "menu:1"], limit:200},
+                         {key:'changed', loop:"albums", text:lmsOptions.supportReleaseTypes ? i18n("Recently Updated Releases") : i18n("Recently Updated Albums"), svg:"updated-music", command:["albums"], params:["sort:changed", ALBUM_TAGS_ALL_ARTISTS]}
                         ];
             for (let s=0, len=lists.length; s<len; ++s) {
-                let idx = undefined!=options && undefined!=options.order ? options.order.indexOf(lists[s].val) : undefined;
-                lists[s].val = undefined==idx || idx<0 ? lists[s].val*100 : idx;
+                lists[s].id = DETAILED_HOME_STD_PREFIX+lists[s].key;
+            }
+            for (let s=0, len=lists.length; s<len; ++s) {
+                lists[s].val = undefined!=options && undefined!=options.order ? options.order.indexOf(lists[s].id) : (lists.length+10);
             }
             lists.sort((a, b) => { return a.val<b.val ? -1 : 1});
             for (let s=0, len=lists.length; s<len; ++s) {
@@ -2421,7 +2423,7 @@ function parseBrowseResp(data, parent, options, cacheKey) {
                 }
             }
             if (resp.items.length>0) {
-                resp.items.push({title:i18n("Explore"), id:TOP_DETAILED_EXTRA+"explore", header:true, ihe:1, icon:"music_note"});
+                resp.items.push({title:i18n("Explore"), id:DETAILED_HOME_STD_PREFIX+"explore", header:true, ihe:1, icon:"music_note"});
             }
             resp.listSize=resp.items.length;
         }

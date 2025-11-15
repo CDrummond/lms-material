@@ -707,10 +707,13 @@ Vue.component('lms-ui-settings', {
                             {id: TOP_FAVORITES_ID, name:i18n("Favorites"), show:!this.hidden.has(TOP_FAVORITES_ID)},
                             {id: TOP_APPS_ID, name:i18n("Apps"), show:!this.hidden.has(TOP_APPS_ID)},
                             {id: TOP_EXTRAS_ID, name:i18n("Extras"), show:!this.hidden.has(TOP_EXTRAS_ID)}];
+
+            let checkedHomeItems = new Set(this.$store.state.detailedHomeItems);
+
             for (let s=0, loop=this.detailedHomeItems, len=loop.length; s<len; ++s) {
-                let idx = this.$store.state.detailedHomeOrder.indexOf(loop[s].id);
-                loop[s].val = undefined==idx || idx<0 ? loop[s].val*100 : idx;
-                loop[s].checked = this.$store.state.detailedHome & loop[s].id;
+                let idx = this.$store.state.detailedHomeItems.indexOf(loop[s].id);
+                loop[s].val = undefined==idx || idx<0 ? this.$store.state.detailedHomeItems.length+s : idx;
+                loop[s].checked = checkedHomeItems.has(loop[s].id);
             }
             this.detailedHomeItems.sort((a, b) => { return a.val<b.val ? -1 : 1});
         },
@@ -759,27 +762,27 @@ Vue.component('lms-ui-settings', {
                 { key:3, label:i18n("Blank screen")}
             ]
 
-            this.detailedHomeItems = [{id:DETAILED_HOME_NEW, title:i18n('New Music'), checked:DETAILED_HOME_NEW&&this.$store.state.detailedHome}];
+            this.detailedHomeItems = [{id:DETAILED_HOME_STD_PREFIX+"new", title:i18n('New Music'), checked:false}];
             if (LMS_VERSION>=90100 && LMS_STATS_ENABLED) {
                 this.detailedHomeItems.push(
-                    { id:DETAILED_HOME_RECENT, title:i18n('Recently Played'), checked:DETAILED_HOME_RECENT&&this.$store.state.detailedHome}
+                    {id:DETAILED_HOME_STD_PREFIX+"recentlyplayed", title:i18n('Recently Played'), checked:false}
                 );
                 this.detailedHomeItems.push(
-                    { id:DETAILED_HOME_MOST, title:i18n('Most Played'), checked:DETAILED_HOME_MOST&&this.$store.state.detailedHome}
+                    {id:DETAILED_HOME_STD_PREFIX+"playcount", title:i18n('Most Played'), checked:false}
                 );
             }
             this.detailedHomeItems.push(
-                { id:DETAILED_HOME_RANDOM, title:lmsOptions.supportReleaseTypes ? i18n("Random Releases") : i18n("Random Albums"), checked:DETAILED_HOME_RANDOM&&this.$store.state.detailedHome}
+                {id:DETAILED_HOME_STD_PREFIX+"random", title:lmsOptions.supportReleaseTypes ? i18n("Random Releases") : i18n("Random Albums"), checked:false}
             );
             this.detailedHomeItems.push(
-                { id:DETAILED_HOME_RADIOS, title:i18n('Radios'), checked:DETAILED_HOME_RADIOS&&this.$store.state.detailedHome}
+                {id:DETAILED_HOME_STD_PREFIX+"radios", title:i18n('Radios'), checked:false}
             );
             this.detailedHomeItems.push(
-                { id:DETAILED_HOME_PLAYLISTS, title:i18n('Playlists'), checked:DETAILED_HOME_PLAYLISTS&&this.$store.state.detailedHome}
+                {id:DETAILED_HOME_STD_PREFIX+"playlists", title:i18n('Playlists'), checked:false}
             );
             if (LMS_VERSION>=90000) {
                 this.detailedHomeItems.push(
-                    {id:DETAILED_HOME_UPDATED, title:lmsOptions.supportReleaseTypes ? i18n("Recently Updated Releases") : i18n("Recently Updated Albums"), checked:DETAILED_HOME_UPDATED&&this.$store.state.detailedHome}
+                    {id:DETAILED_HOME_STD_PREFIX+"nchangedew", title:lmsOptions.supportReleaseTypes ? i18n("Recently Updated Releases") : i18n("Recently Updated Albums"), checked:false}
                 );
             }
         },
@@ -813,12 +816,10 @@ Vue.component('lms-ui-settings', {
             }
         },
         settings(arrays, withSorts) {
-            let detailedHome = 0;
-            let detailedHomeOrder = [];
+            let detailedHomeItems = [];
             for (let i=0, loop=this.detailedHomeItems, len=loop.length; i<len; ++i) {
-                detailedHomeOrder.push(loop[i].id);
                 if (loop[i].checked) {
-                    detailedHome+=loop[i].id;
+                    detailedHomeItems.push(loop[i].id);
                 }
             }
             let settings = {
@@ -865,8 +866,7 @@ Vue.component('lms-ui-settings', {
                       ndShortcuts:this.ndShortcuts,
                       ndSettingsIcons:this.ndSettingsIcons,
                       ndSettingsVisible:this.ndSettingsVisible,
-                      detailedHome:detailedHome,
-                      detailedHomeOrder:detailedHomeOrder
+                      detailedHomeItems:detailedHomeItems
                   };
             if (withSorts) {
                 for (var key in window.localStorage) {

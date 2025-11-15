@@ -1113,7 +1113,6 @@ var lmsBrowse = Vue.component("lms-browse", {
                     numItems = MAX_HOME_EXTRA_ROW;
                 }
                 cmd.push("count:"+numItems);
-                console.log(numItems, screen.width/145);
                 if (!this.topExtraCfg.have3rdparty || this.playerId().length>1) {
                     lmsCommand(this.playerId(), cmd, this.nextReqId()).then(({data}) => {
                         if (this.isCurrentReq(data)) {

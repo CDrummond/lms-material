@@ -361,9 +361,12 @@ sub initPlugin {
 
             $cb->($presets);
         },
-        icon => '/material/html/images/preset_MTL_icon_looks_one.png'
+        icon => '/material/html/images/preset_MTL_icon_looks_one.png',
+        needsPlayer => 1,
     });
-
+Slim::Utils::Timers::setTimer(undef, Time::HiRes::time() + 2, sub {
+    warn Data::Dump::dump(getHomeExtra3rdPartyItems());
+});
 
     #Slim::Control::Request::subscribe(\&_checkPlayQueue, [['playlist']]);
 }
@@ -562,6 +565,7 @@ sub registerHomeExtra {
         title   => $args->{title},
         icon    => $args->{icon} || '',
         handler => $args->{handler},
+        needsPlayer => $args->{needsPlayer},
     };
 }
 
@@ -575,8 +579,23 @@ sub getHomExtrasIDs {
 }
 
 sub getHomeExtra3rdPartyItems {
-    # TODO!!!!
-    return "[{id:\"3rdparty_presets\",title:\"Presets\"}]";
+    my ($client) = @_;
+
+    return [ map {
+        my $item = $HOME_EXTRAS->{$_};
+
+        # get translation in case we received a string token
+        my $title = Slim::Utils::Strings::getString($item->{title});
+        # get the title in the client's language if it was a string token and we have a client object
+        $title = cstring($client, $item->{title}) if $client && $title ne $item->{title};
+
+        {
+            id          => $_,
+            title       => $title,
+            icon        => $item->{icon},
+            needsPlayer => $item->{needsPlayer}
+        }
+    } keys %$HOME_EXTRAS ]
 }
 
 #sub _checkPlayQueue {

@@ -1,3 +1,7 @@
+6.0.5
+-----
+1. Work-around desktop splitter showing in now-playing if queue is pinned.
+
 6.0.4
 -----
 1. Fix error with 'Go to artist' and no player connected.

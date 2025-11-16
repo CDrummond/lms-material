@@ -340,15 +340,18 @@ function parseBrowseResp(data, parent, options, cacheKey) {
                         i.svg="folder-favorite";
                         i.image=undefined;
                     } else if (!i.isFavFolder && undefined!=i.presetParams && undefined!=i.presetParams.favorites_url) {
-                        if (i.presetParams.favorites_url.startsWith("db:album.title") && i.presetParams.icon=="html/images/albums.png") {
-                            if (i.presetParams.favorites_url.indexOf("work.title")>0) {
-                                i.svg = "release-work"
-                            } else if (lmsOptions.supportReleaseTypes) {
-                                i.svg = "release";
-                            } else {
-                                i.icon = "album";
+                        if (i.presetParams.favorites_url.startsWith("db:album.title")) {
+                            i.stdItem=STD_ITEM_ALBUM;
+                            if (i.presetParams.icon=="html/images/albums.png") {
+                                if (i.presetParams.favorites_url.indexOf("work.title")>0) {
+                                    i.svg = "release-work"
+                                } else if (lmsOptions.supportReleaseTypes) {
+                                    i.svg = "release";
+                                } else {
+                                    i.icon = "album";
+                                }
+                                i.image=undefined;
                             }
-                            i.image=undefined;
                         } else if (i.presetParams.favorites_url.startsWith("db:contributor.name")) {
                             i.stdItem=STD_ITEM_ARTIST;
                             if (i.presetParams.icon=="html/images/artists.png" || !(LMS_P_MAI && lmsOptions.showArtistImages)) {
@@ -356,6 +359,7 @@ function parseBrowseResp(data, parent, options, cacheKey) {
                                 i.image=undefined;
                             }
                         } else if (i.presetParams.favorites_url.startsWith("db:genre.name") && i.presetParams.icon=="html/images/genres.png") {
+                            i.stdItem=STD_ITEM_GENRE;
                             if (lmsOptions.genreImages) {
                                 i.image = "material/genres/" + i.title.toLowerCase().replace(/[^0-9a-z]/gi, '');
                             } else {
@@ -363,13 +367,16 @@ function parseBrowseResp(data, parent, options, cacheKey) {
                                 i.image=undefined;
                             }
                         } else if (i.presetParams.favorites_url.startsWith("db:year.id") && i.presetParams.icon=="html/images/years.png") {
+                            i.stdItem=STD_ITEM_YEAR;
                             i.icon="date_range";
                             i.image=undefined;
                         } else if (i.presetParams.favorites_url.startsWith("db:work.title") && undefined==i.presetParams.icon) {
+                            i.stdItem=STD_ITEM_WORK;
                             i.icon=undefined;
                             i.svg="classical-work";
                             i.image=undefined;
                         } else if (i.presetParams.favorites_url.startsWith("file://") && i.presetParams.icon=="html/images/playlists.png") {
+                            i.stdItem=STD_ITEM_PLAYLIST;
                             if (lmsOptions.playlistImages) {
                                 i.image = "material/playlists/" + encodeURIComponent(i.title);
                                 i.overlay = "overlay-playlist";

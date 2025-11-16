@@ -364,9 +364,6 @@ sub initPlugin {
         icon => '/material/html/images/preset_MTL_icon_looks_one.png',
         needsPlayer => 1,
     });
-Slim::Utils::Timers::setTimer(undef, Time::HiRes::time() + 2, sub {
-    warn Data::Dump::dump(getHomeExtra3rdPartyItems());
-});
 
     #Slim::Control::Request::subscribe(\&_checkPlayQueue, [['playlist']]);
 }

@@ -178,6 +178,9 @@ function parseBrowseResp(data, parent, options, cacheKey) {
             for (var idx=0, loop=data.result.item_loop, loopLen=loop.length; idx<loopLen; ++idx) {
                 var i = loop[idx];
                 i.slimbrowse = true;
+                if (!i.text && i.name) {
+                    i.text = i.name;
+                }
                 if (!i.text || i.showBigArtwork==1) {
                     if (i.url && "musicartistinfo"==command) { // Artist images...
                         resp.items.push({id: "image:"+resp.items.length,
@@ -2388,24 +2391,40 @@ function parseBrowseResp(data, parent, options, cacheKey) {
             }
             resp.listSize=resp.items.length;
         } else if (data.result.material_home) {
-            var lists = [{key:'new', loop:"albums", text:i18n('New Music'), icon:"new_releases", command:["albums"], params:["sort:new", ALBUM_TAGS_ALL_ARTISTS]},
-                         {key:'recentlyplayed', loop:"albums", text:i18n('Recently Played'), icon:"history", command:["albums"], params:["sort:recentlyplayed", ALBUM_TAGS_ALL_ARTISTS]},
-                         {key:'playcount', loop:"albums", text:i18n('Most Played'), svg:"trophy", command:["albums"], params:["sort:playcount", ALBUM_TAGS_ALL_ARTISTS]},
-                         {key:'random', loop:"albums", text:lmsOptions.supportReleaseTypes ? i18n('Random Releases') : i18n('Random Albums'), svg:"dice-album", command:["albums"], params:["sort:random", ALBUM_TAGS_ALL_ARTISTS]},
-                         {key:'radios', loop:"radios", text:i18n('Radios'), svg:"radio", command:["material-skin-query","radios"], params:[], limit:200},
-                         {key:'playlists', loop:"playlists", text:i18n('Playlists'), icon:"list", command:["material-skin-query","playlists"], params:[PLAYLIST_TAGS, "menu:1"], limit:200},
-                         {key:'changed', loop:"albums", text:lmsOptions.supportReleaseTypes ? i18n("Recently Updated Releases") : i18n("Recently Updated Albums"), svg:"updated-music", command:["albums"], params:["sort:changed", ALBUM_TAGS_ALL_ARTISTS]}
+            var lists = [{key:'new', loop:"albums", title:i18n('New Music'), icon:"new_releases", command:["albums"], params:["sort:new", ALBUM_TAGS_ALL_ARTISTS]},
+                         {key:'recentlyplayed', loop:"albums", title:i18n('Recently Played'), icon:"history", command:["albums"], params:["sort:recentlyplayed", ALBUM_TAGS_ALL_ARTISTS]},
+                         {key:'playcount', loop:"albums", title:i18n('Most Played'), svg:"trophy", command:["albums"], params:["sort:playcount", ALBUM_TAGS_ALL_ARTISTS]},
+                         {key:'random', loop:"albums", title:lmsOptions.supportReleaseTypes ? i18n('Random Releases') : i18n('Random Albums'), svg:"dice-album", command:["albums"], params:["sort:random", ALBUM_TAGS_ALL_ARTISTS]},
+                         {key:'radios', loop:"radios", title:i18n('Radios'), svg:"radio", command:["material-skin-query","radios"], params:[], limit:200},
+                         {key:'playlists', loop:"playlists", title:i18n('Playlists'), icon:"list", command:["material-skin-query","playlists"], params:[PLAYLIST_TAGS, "menu:1"], limit:200},
+                         {key:'changed', loop:"albums", title:lmsOptions.supportReleaseTypes ? i18n("Recently Updated Releases") : i18n("Recently Updated Albums"), svg:"updated-music", command:["albums"], params:["sort:changed", ALBUM_TAGS_ALL_ARTISTS]}
                         ];
             for (let s=0, len=lists.length; s<len; ++s) {
                 lists[s].id = DETAILED_HOME_STD_PREFIX+lists[s].key;
             }
+            lists = lists.concat(LMS_3RDPARTY_HOME_EXTRA);
             for (let s=0, len=lists.length; s<len; ++s) {
-                lists[s].val = undefined!=options && undefined!=options.order ? options.order.indexOf(lists[s].id) : (lists.length+10);
+                lists[s].val = options.order.indexOf(lists[s].id);
+                if (lists[s].val<0) {
+                     lists[s].val = lists.length+s+500;
+                }
             }
             lists.sort((a, b) => { return a.val<b.val ? -1 : 1});
             for (let s=0, len=lists.length; s<len; ++s) {
-                let loop = 'material_home_'+lists[s].key+'_loop';
-                if (data.result[loop]!=undefined) {
+                let id = lists[s].id.split('_').slice(1).join('_');
+                let obj_name = 'material_home_'+id+'_obj';
+                let obj = undefined;
+                let loop_name = 'material_home_'+id+'_loop';
+                let loop = data.result[loop_name];
+                let parse_loop_name = lists[s].loop;
+                if (undefined==loop) {
+                    obj = data.result[obj_name];
+                    if (undefined!=obj) {
+                        loop = obj['item_loop'];
+                        parse_loop_name = 'item'
+                    }
+                }
+                if (loop!=undefined) {
                     let parent = undefined;
                     let new_data = {
                         id:2,
@@ -2413,11 +2432,26 @@ function parseBrowseResp(data, parent, options, cacheKey) {
                         params: data.params,
                         result: {}
                     }
-                    new_data.result[lists[s].loop+"_loop"] = data.result[loop];
-                    let newResp = parseBrowseResp(new_data, parent, undefined, undefined, true);
+                    new_data.result[parse_loop_name+"_loop"] = loop;
+                    if (undefined!=obj) {
+                        new_data.result['base']=obj['base'];
+                        new_data.result['count']=2500;
+                    }
+                    let newResp = parseBrowseResp(new_data, parent, {}, undefined);
                     if (undefined!=newResp && newResp.items.length>0) {
-                        resp.items.push({title:lists[s].text, id:lists[s].id, header:true, ihe:1, icon:lists[s].icon, svg: lists[s].svg, limit: lists[s].limit,
-                            morecmd:parseInt(data.result[loop+"_len"])>10 ? {command:lists[s].command, params:lists[s].params} : undefined});
+                        if (undefined!=obj) { // 3rd party => slimbrowse...
+                            let header = {title:lists[s].title, id:lists[s].id, header:true, ihe:1, icon:lists[s].icon, svg: lists[s].svg, limit: lists[s].limit,
+                                          morecmd:undefined} // TODO!!!
+                            mapIcon(header);
+                            resp.items.push(header);
+                            console.log(obj, newResp.items);
+                            for (let i=0, loop=newResp.items, len=loop.length; i<len; ++i) {
+                                loop[i].ihe = true;
+                            }
+                        } else {
+                            resp.items.push({title:lists[s].title, id:lists[s].id, header:true, ihe:1, icon:lists[s].icon, svg: lists[s].svg, limit: lists[s].limit,
+                                morecmd:parseInt(data.result[loop+"_len"])>10 ? {command:lists[s].command, params:lists[s].params} : undefined});
+                        }
                         resp.items=resp.items.concat(newResp.items);
                     }
                 }

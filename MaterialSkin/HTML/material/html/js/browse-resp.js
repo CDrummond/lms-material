@@ -304,7 +304,7 @@ function parseBrowseResp(data, parent, options, cacheKey) {
                             i.menu.push(INSERT_ACTION);
                             addedPlayAction = true;
                         }
-                        if (addedPlayAction && !onlyHasGoAction && lmsOptions.playShuffle) {
+                        if (addedPlayAction && !onlyHasGoAction && lmsOptions.playShuffle && (i.type=="artist" || i.type=="album" || i.type=="playlist")) {
                             i.menu.push(PLAY_SHUFFLE_ACTION);
                         }
                         if (addAction && !onlyHasGoAction) {

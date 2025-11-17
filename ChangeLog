@@ -1,7 +1,7 @@
 6.0.5
 -----
 1. Work-around desktop splitter showing in now-playing if queue is pinned.
-2. Fix 'Play shuffled' for album favourites.
+2. Fix 'Play shuffled' not showing in more places.
 
 6.0.4
 -----

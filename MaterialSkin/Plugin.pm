@@ -342,43 +342,8 @@ sub initPlugin {
     }
 
     # FOR DEMO PURPOSES ONLY - REMOVE FOR PRODUCTION
-    Slim::Control::Request::addDispatch(['material-skin-presets', 'items', '_index', '_quantity'], [1, 1, 1, sub {
-        my $request = shift;
-        my $client = $request->client || (Slim::Player::Client::clients())[0];
-
-        my $presets = [ map {
-            {
-                type => $_->{type},
-                name => $_->{text},
-                url  => $_->{URL},
-                play => $_->{URL},
-                favorites_url  => $_->{URL},
-                image => Slim::Player::ProtocolHandlers->iconForURL($_->{URL}, $client),
-            }
-        } grep {
-            $_->{type} eq 'audio' || $_->{type} eq 'playlist'
-        } @{ preferences('server')->client($client || (Slim::Player::Client::clients())[0])->get('presets') || [] } ];
-
-        Slim::Control::XMLBrowser::cliQuery( 'material-skin-presets', sub {$_[1]->({ items => $presets }) }, $request );
-    }]);
-
-    Plugins::MaterialSkin::Plugin->registerHomeExtra('presets', {
-        title => 'Presets',
-        handler => sub {
-            my ($client, $cb, $maxItems) = @_;
-
-            my @cmd = ("material-skin-presets", "items", 0, $maxItems);
-            Slim::Control::Request::executeRequest($client, \@cmd, sub {
-                my $response = shift;
-                my $results = $response->getResults() || {};
-                $results->{item_loop} = delete $results->{loop_loop} unless $results->{item_loop};
-
-                $cb->($results);
-            });
-        },
-        icon => '/material/html/images/preset_MTL_icon_looks_one.png',
-        needsPlayer => 1,
-    });
+    require Plugins::MaterialSkin::PresetsExtra;
+    Plugins::MaterialSkin::PresetsExtra->initPlugin();
 }
 
 #sub shutdownPlugin {
@@ -566,7 +531,10 @@ sub initOthers {
 sub registerHomeExtra {
     my ($class, $id, $args) = @_;
 
-    return unless $id && $args->{title} && $args->{handler};
+    if (!($id && $args->{title} && $args->{handler})) {
+        $log->error("Missing details for Home Extra with id '$id': " . Data::Dump::dump($args));
+        return;
+    }
 
     $log->warn("Home Extra with id '$id' is already registered - overwriting") if $HOME_EXTRAS->{$id};
 

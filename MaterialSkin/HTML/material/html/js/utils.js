@@ -312,6 +312,9 @@ function changeImageSizing(path, newSize) {
             if (path.endsWith(specs[s]+".png")) {
                 return path.replace(specs[s]+".png", (newSize ? newSize : "")+".png");
             }
+            if (path.endsWith(specs[s]+".jpg")) {
+                return path.replace(specs[s]+".jpg", (newSize ? newSize : "")+".jpg");
+            }
             if (path.endsWith(specs[s])) {
                 return path.substring(0, path.length - specs[s].length)+(newSize ? newSize : "");
             }

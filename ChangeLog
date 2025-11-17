@@ -3,6 +3,7 @@
 1. Work-around desktop splitter showing in now-playing if queue is pinned.
 2. Fix 'Play shuffled' not showing in more places.
 3. Add SVG icon for 'SiriusXM'
+4. Fix showing full size JPG from imageproxy.
 
 6.0.4
 -----

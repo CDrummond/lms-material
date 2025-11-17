@@ -2441,12 +2441,14 @@ function parseBrowseResp(data, parent, options, cacheKey) {
                     if (undefined!=newResp && newResp.items.length>0) {
                         if (undefined!=obj) { // 3rd party => slimbrowse...
                             let header = {title:lists[s].title, id:lists[s].id, header:true, ihe:1, icon:lists[s].icon, svg: lists[s].svg, limit: lists[s].limit,
-                                          morecmd:undefined} // TODO!!!
+                                          morecmd:parseInt(data.result[loop+"_len"])>10 ? {command:["material-skin", "home-extra"], params:[lists[s].id+":1", "ismore:1"]} : undefined,
+                                          baseActions:undefined!=obj['base'] ? obj['base']['actions'] : undefined}
                             mapIcon(header);
+                            let iheHdr = resp.items.length;
                             resp.items.push(header);
-                            console.log(obj, newResp.items);
                             for (let i=0, loop=newResp.items, len=loop.length; i<len; ++i) {
                                 loop[i].ihe = true;
+                                loop[i].iheHdr = iheHdr;
                             }
                         } else {
                             resp.items.push({title:lists[s].title, id:lists[s].id, header:true, ihe:1, icon:lists[s].icon, svg: lists[s].svg, limit: lists[s].limit,

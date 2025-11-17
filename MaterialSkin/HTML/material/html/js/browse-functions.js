@@ -2240,7 +2240,9 @@ function browseBuildCommand(view, item, commandName, doReplacements, allowLibId,
         if (undefined==commandName || item.mskOnlyGoAction) {
             commandName = "go";
         }
-        var baseActions = slimBrowseBaseActions ? slimBrowseBaseActions : view.current == item ? view.currentBaseActions : view.baseActions;
+        var baseActions = undefined!=item.iheHdr && undefined!=view.topExtra[item.iheHdr].baseActions
+            ? view.topExtra[item.iheHdr].baseActions
+            : slimBrowseBaseActions ? slimBrowseBaseActions : view.current == item ? view.currentBaseActions : view.baseActions;
         var command = item.actions && item.actions[commandName]
                     ? item.actions[commandName]
                     : "go" == commandName && item.actions && item.actions["do"]

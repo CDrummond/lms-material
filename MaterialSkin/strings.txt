@@ -10,7 +10,7 @@ MATERIAL_SKIN
 	HU	Material Skin
 
 PLUGIN_MATERIAL_SKIN
-	CS	Vzhled "Material Skin", vhodný pro mobilní použití.
+	CS	Vzhled „Material Skin“, vhodný pro mobilní použití.
 	DA	Web-skin i Material stil, optimeret for mobiltelefonbrug. 
 	DE	Web-Skin im Material-Stil, für mobile Nutzung optimiert.
 	EN	Material themed skin, suitable for mobile use.
@@ -22,7 +22,7 @@ PLUGIN_MATERIAL_SKIN
 	HU	Material Skin, mobil felhasználásra alkalmas.
 
 PLUGIN_MATERIAL_SKIN_GENRES_LIST_NOTE
-	CS	POZNÁMKA: V níže uvedených seznamech žánrů použijte pro všechny žánry jednu hvězdičku (*). Pokud nechcete použít žádný žánr, použijte libovolný řetězec (např. "N/A"), který neodpovídá žádnému z vašich žánrů.
+	CS	POZNÁMKA: V níže uvedených seznamech žánrů použijte pro všechny žánry jednu hvězdičku (*). Pokud nechcete použít žádný žánr, použijte libovolný řetězec (např. „N/A“), který neodpovídá žádnému z vašich žánrů.
 	DA	Bemærk: For at vælge alle genrer i listen herunder, brug en enkelt stjerne (*). For ikke at vælge nogen genre, brug en vilkårling tekst (f.eks. 'N/A') som ikke matcher nogen af dine genrer.
 	DE	ANMERKUNG: Ein Sternchen (*) benutzen, um in der Genre-Liste alle Genres auszuwählen. Eine beliebige Zeichenkette, die keinem Genre entspricht (bspw. 'N/A') benutzen, um kein Genre auszuwählen.
 	EN	NOTE: In the genre lists, below, to apply to all genres use a single asterisk (*). To apply to no genres use any string (e.g. 'N/A') that does not match any of your genres.
@@ -165,22 +165,25 @@ PLUGIN_MATERIAL_SKIN_SHOW_COMPOSER_DESC
 	HU	Zeneszerző megjelenítése, ha egy dal műfaja megegyezik a fenti listában szereplő műfajjal, és van zeneszerző adat.
 
 PLUGIN_MATERIAL_SKIN_SHOW_COMPOSER_DESC_LMS9
+	CS	Zobrazit skladatele skladby, pokud je její žánr v nastavení „%s“ Lyrionu, nebo pro všechny žánry.
 	EN	Show song's composer if its genre is in Lyrion's "%s" setting, or for all genres.
 	FR	Afficher le compositeur du morceau systématiquement ou uniquement si le genre est mentionné dans le réglage "%s" de Lyrion.
 	NL	Toon de componist van het nummer voor alle genres of alleen als het genre is geconfigureerd in de "%s"-instelling van Lyrion.
 
 PLUGIN_MATERIAL_SKIN_SHOW_COMPOSER_CLASSICAL
+	CS	Pouze pro nakonfigurované žánry
 	EN	For configured genres only
 	FR	Pour les genres configurés seulement
 	NL	Alleen voor geconfigureerde genres
 
 PLUGIN_MATERIAL_SKIN_SHOW_COMPOSER_ALL
+	CS	Pro všechny žánry
 	EN	For all genres
 	FR	Pour tous les genres
 	NL	Voor alle genres
 
 PLUGIN_MATERIAL_SKIN_USE_COMPOSER_MAI
-	CS	Zobrazení skladatele v zobrazení "Informace"
+	CS	Zobrazení skladatele v zobrazení „Informace“
 	DA	Vis komponist i "Information" visningen
 	EN	Display composer in 'Information' view
 	FR	Afficher le compositeur dans la vue "Informations"
@@ -189,7 +192,7 @@ PLUGIN_MATERIAL_SKIN_USE_COMPOSER_MAI
 	HU	Zeneszerző megjelenítése az információ nézetben
 
 PLUGIN_MATERIAL_SKIN_USE_COMPOSER_MAI_DESC
-	CS	U vhodných skladeb zobrazit v zobrazení "Informace" informace o skladateli, nikoli o interpretovi.
+	CS	U vhodných skladeb zobrazit v zobrazení „Informace“ informace o skladateli, nikoli o interpretovi.
 	DA	Afhængigt af genren for nummeret, bliver komponisten i stedet for kunstneren vist i "Information" visningen.
 	EN	For suitable tracks show composer, and not artist, information in the 'Information' view.
 	FR	Selon le genre du morceau, afficher le compositeur plutôt que l'artiste  dans la vue "Informations".
@@ -222,12 +225,13 @@ PLUGIN_MATERIAL_SKIN_SHOW_CONDUCTOR_DESC
 	HU	A karmester megjelenítése, ha egy dal műfaja megegyezik a fenti listában szereplő műfajjal, és van karmester adat.
 
 PLUGIN_MATERIAL_SKIN_SHOW_CONDUCTOR_DESC_LMS9
+	CS	Zobrazit dirigenta skladby, pokud je její žánr v nastavení „%s“ Lyrionu.
 	EN	Show song's conductor if its genre is in Lyrion's "%s" setting.
 	FR	Si le tag "genre" du morceau est inclus dans le paramètre "%s" de Lyrion, afficher le chef d'orchestre.
 	NL	Toon de dirigent van het nummer als het genre is geconfigureerd in de "%s"-instelling van Lyrion.
 
 PLUGIN_MATERIAL_SKIN_SHOW_BAND
-	CS	Zobrazení skupina/orchestr
+	CS	Zobrazení skupiny/orchestru
 	DA	Vis band/orkester
 	DE	Band/Orchester anzeigen
 	EN	Show band/orchestra
@@ -251,6 +255,7 @@ PLUGIN_MATERIAL_SKIN_SHOW_BAND_DESC
 	HU	A zenekar megjelenítése, ha egy dal műfaja megegyezik a fenti listában szereplő műfajjal, és van zenekar adat.
 
 PLUGIN_MATERIAL_SKIN_SHOW_BAND_DESC_LMS9
+	CS	Zobrazit skupinu/orchestr skladby, pokud je její žánr v nastavení „%s“ Lyrionu.
 	EN	Show song's band/orchestra if its genre is in Lyrion's "%s" setting.
 	FR	Si le tag "genre" du morceau est inclus dans le paramètre "%s" de Lyrion, afficher le groupe/orchestre.
 	NL	Toon de band van het nummer als het genre is geconfigureerd in de "%s"-instelling van Lyrion.
@@ -426,7 +431,7 @@ PLUGIN_MATERIAL_SKIN_COMMENT_AS_DISC_TITLE
 	HU	Használja a megjegyzést a lemez címéhez
 
 PLUGIN_MATERIAL_SKIN_COMMENT_AS_DISC_TITLE_DESC
-	CS	U alb s více disky použít jako název disku komentář z první stopy každého disku. Pokud používáte "Oddělen středníkem", pak musí názvu disku předcházet buď "TITLE=", "DISCTITLE=", "TITLE:" nebo "DISCTITLE:" - např. "TITLE=Disk s doplňky;OTHER=Další informace".
+	CS	U alb s více disky použít jako název disku komentář z první stopy každého disku. Pokud používáte „Oddělen středníkem“, pak musí názvu disku předcházet buď „TITLE=“, „DISCTITLE=“, „TITLE:“ nebo „DISCTITLE:“ - např. „TITLE=Disk s doplňky;OTHER=Další informace“.
 	DA	Ved multi-disk albums, benyt kommentarmærke feltet fra det første nummer på hver disk som albumtitel. Hvis der bruges "Semikolon separeret" må albumtitlen nødvendigvis komme efter enten "TITLE=", "DISCTITLE=", "TITLE:", eller "DISCTITLE:" - f.eks. "TITLE=Extras disc;OTHER=En anden kommentar"
 	DE	Benutze bei Multi-Disk-Alben den 'Comment'-Tag des jeweils ersten Titels als Albumtitel
 	EN	For multi-disc albums use comment from first track of each disc as disc title. If using "Semi-colon separated" then the disc-title needs to be preceeded by either "TITLE=", "DISCTITLE=", "TITLE:", or "DISCTITLE:" - e.g. "TITLE=Extras disc;OTHER=Some other comment info"
@@ -486,7 +491,7 @@ PLUGIN_MATERIAL_SKIN_SHOW_COMMENT
 	HU	Megjegyzés megjelenítése az információ nézetben
 
 PLUGIN_MATERIAL_SKIN_SHOW_COMMENT_DESC
-	CS	Zobrazit tag komentáře skladby v části "Skladba" v zobrazení informací o skladbě, pod textem skladby.
+	CS	Zobrazit tag komentáře skladby v části „Skladba“ v zobrazení informací o skladbě, pod textem skladby.
 	DA	Vis kommentarmærke indholdet i nummerafsnittet for "Information" visningen, nede under sangteksterne.
 	DE	Zeige den 'comment' tag in der 'Track'-Sektion der Track-Informationsansicht.
 	EN	Show a track's comment tag in the 'Track' section of the track information view, below the lyrics.
@@ -586,7 +591,7 @@ PLUGIN_MATERIAL_SKIN_RELEASE_TYPE_ORDER
 	HU	Kiadás típus sorrend
 
 PLUGIN_MATERIAL_SKIN_RELEASE_TYPE_ORDER_DESC
-	CS	Zadejte pořadí, v jakém se mají zobrazovat typy vydání (jedná se o seznam názvů typů vydání oddělený čárkou) - např. "Album, EP, Single".
+	CS	Zadejte pořadí, v jakém se mají zobrazovat typy vydání (jedná se o seznam názvů typů vydání oddělený čárkou) - např. „Album, EP, Single“.
 	DA	Specificér den rækkefølge, som udgivelsestyper skal vises (dette er en kommasepareret liste af navne for udgivelsestyper) - f.eks. "Album, EP, Single"
 	DE	Geben Sie die Reihenfolge an, in der die Veröffentlichungsarten angezeigt werden sollen (dies ist eine durch Kommas getrennte Liste von Veröffentlichungsarten) - z.B. "Album, EP, Single".
 	EN	Specify order to display release types (this is a comma separated list of release type names) - e.g. "Album, EP, Single"
@@ -608,7 +613,7 @@ PLUGIN_MATERIAL_SKIN_GENRE_IMAGES
 	HU	Műfaj képek
 
 PLUGIN_MATERIAL_SKIN_GENRE_IMAGES_DESC
-	CS	Zobrazit obrázky při výpisu žánrů. To vyžaduje vytvoření obrázků JPEG 600x600 v podsložce "material-skin/genres" ve Složce předvoleb vašeho Lyrion. Všechny obrázky žánrů by měly být malými písmeny nebo číslicemi a všechny ostatní znaky by měly být odstraněny. Např. "R&B" je "rb.jpg", "Folk/Rock" je "folkrock.jpg".
+	CS	Zobrazit obrázky při výpisu žánrů. To vyžaduje vytvoření obrázků JPEG 600x600 v podsložce „material-skin/genres“ ve Složce předvoleb vašeho Lyrionu. Všechny obrázky žánrů by měly být malými písmeny nebo číslicemi a všechny ostatní znaky by měly být odstraněny. Např. „R&B“ je „rb.jpg“, „Folk/Rock“ je „folkrock.jpg“.
 	DA	Vis billeder når du angiver genrer. Dette kræver frembringelse af 600x600 JPEG billeder i et "Material-skin/genrer" underkatalog til Lyrion indstillinger kataloget. Filnavnet for genre-billeder må kun bruge små bogstaver eller tal, hvor alle andre tegn er fjernet. For eksempel "R&B" er "rb.jpg", "Folk/Rock" er "folkrock.jpg".
 	DE	Anzeige von Bildern bei der Auflistung von Genres. Dazu müssen 600x600 JPEG-Bilder in einem Unterordner "material-skin/genres" im Einstellungsordner Ihres Lyrion erstellt werden. Genre-Bilder sollten alle Kleinbuchstaben oder Zahlen sein ([a-z0-9]), wobei alle anderen Zeichen entfernt werden. z.B. "R&B" ist "rb.jpg", "Folk/Rock" ist "folkrock.jpg".
 	EN	Display images when listing genres. This requires creating 600x600 JPEG images within a "material-skin/genres" sub-folder of your Lyrion's preferences folder. Genre images should all be lowercase letters or numbers, with all other characters removed. e.g. "R&B" is "rb.jpg", "Folk/Rock" is "folkrock.jpg".
@@ -674,7 +679,7 @@ PLUGIN_MATERIAL_SKIN_PLAY_SHUFFLE
 	HU	Átfedő lejátszás
 
 PLUGIN_MATERIAL_SKIN_PLAY_SHUFFLE_DESC
-	CS	Přidat akce pro spuštění alb nebo seznamů skladeb v náhodném režimu. Pokud je tato funkce povolena a je použita volba "Přehrát náhodně", přehrávač bude před přehráváním položek nastaven na "Náhodné skladby". Stejně tak, pokud je tato funkce povolena a je použita funkce "Přehrát nyní", bude náhodné přehrávání před přehráním položek vypnuto. Vezměte prosím na vědomí, že režim náhodného přehrávání přehrávače se nevrátí po vymazání fronty atd.
+	CS	Přidat akce pro spuštění alb nebo seznamů skladeb v náhodném režimu. Pokud je tato funkce povolena a je použita volba „Přehrát náhodně“, přehrávač bude před přehráváním položek nastaven na „Náhodné skladby“. Stejně tak, pokud je tato funkce povolena a je použita funkce „Přehrát nyní“, bude náhodné přehrávání před přehráním položek vypnuto. Vezměte prosím na vědomí, že režim náhodného přehrávání přehrávače se nevrátí po vymazání fronty atd.
 	DA	Albums eller afspillelister bliver afspillet i tilfældig rækkefølge. Når funktionen er tilvalgt og "Tilfældig afspilning" anvendes, indstilles afspilleren til at blande numrene før afspilning. Når funktionen er valgt og "Afspil nu" vælges, blandes afspilningen ikke. Bemærk at afspillerens tilstand ikke nulstilles efter at afspillelisten er slettet, osv.
 	DE	Alben oder Wiedergabelisten werden zufällig wiedergegeben. Wenn diese Funktion aktiviert ist und "Zufällig abspielen" verwendet wird, wird der Player auf "Zufällige Wiedergabe" eingestellt, bevor die Elemente abgespielt werden. Wenn diese Option aktiviert ist und "Jetzt abspielen" verwendet wird, wird die Zufallswiedergabe vor der Wiedergabe der Elemente deaktiviert. Bitte beachten Sie, dass der Zufallswiedergabemodus des Players nicht wiederhergestellt wird, wenn die Warteschlange gelöscht wird usw.
 	EN	Add action to start albums, or playlists, in shuffled mode. When this is enabled and 'Play shuffled' is used, the player will be set to 'shuffle tracks' before the items are played. Likewise, if this is enabled and 'Play now' is used, then shuffle will be disabled before the items are played. Please note that the player's shuffle mode is not reverted after queue is cleared, etc.
@@ -685,7 +690,7 @@ PLUGIN_MATERIAL_SKIN_PLAY_SHUFFLE_DESC
 	HU	Adjon hozzá akciót az albumok vagy lejátszási listák indításához shuffled módban. Amikor ez engedélyezve van, és a „Play Shuffled” -et használják, a lejátszót a tételek lejátszása előtt „Shuffle pályákra” állítják be. Hasonlóképpen, ha ez engedélyezve van, és a 'Play Now' használata, akkor a Shuffle le van tiltva az elemek lejátszása előtt. Felhívjuk figyelmét, hogy a lejátszó vékony üzemmódját a sor törlése után nem térítik vissza, stb.
 
 PLUGIN_MATERIAL_SKIN_LOAD_DEFAULT_GENRES_DESC
-	CS	Tyto seznamy žánrů jsou uloženy v souboru nastavení a při změně jazyka se automaticky neaktualizují. Tlačítkem "Nastavit žánry na výchozí" (níže) můžete u každého seznamu obnovit výchozí hodnoty přeložené do aktuálního jazyka.
+	CS	Tyto seznamy žánrů jsou uloženy v souboru nastavení a při změně jazyka se automaticky neaktualizují. Tlačítkem „Nastavit žánry na výchozí“ (níže) můžete u každého seznamu obnovit výchozí hodnoty přeložené do aktuálního jazyka.
 	DA	Disse genrelister gemmes i din fil for indstillinger og bliver ikke automatisk opdateret ved ændring af sprog. Du kan bruge "Sæt genrer til standard" knappen (herunder) for at nulstille hver liste til standard værdierne, oversat i det nuværende sprog.
 	DE	Diese Genre-Listen werden in der Konfigurationsdatei gesichert und nicht automatisch aktualisiert, sollte die Sprache gewechselt werden. Die Funktion 'Genres auf Default setzen' setzt jede Liste zurück.
 	EN	These genre lists are saved in your settings file, and will not automatically be updated should you change language. You may use the "Set Genres To Default" button (below) to reset each list to the default values, translated into the current language.
@@ -707,6 +712,7 @@ PLUGIN_MATERIAL_SKIN_LOAD_DEFAULT_GENRES
 	HU	Alapértelmezett műfajok beállítása
 
 PLUGIN_MATERIAL_COMBINE_APPS_AND_RADIO
+	CS	Sloučení „Aplikace“ a „Rádio“
 	DA	Kombinér 'Apps' og 'Radio'
 	EN	Combine 'Apps' and 'Radio'
 	FR	Combiner "Applications" et "Radio"
@@ -715,6 +721,7 @@ PLUGIN_MATERIAL_COMBINE_APPS_AND_RADIO
 	HU	'Apps' és 'Radio' összekapcsolása
 
 PLUGIN_MATERIAL_COMBINE_APPS_AND_RADIO_DESC
+	CS	Sloučit nabídky „Aplikace“ a „Rádio“ do jedné nabídky „Aplikace“, s přidanou aplikací „TuneIn“ pro „Rádio“ (pokud je povoleno).
 	EN	Combine the 'Apps' and 'Radio' menus into a single 'Apps' menu, with a 'TuneIn' app added for 'Radio' (if enabled).
 	DA	Læg 'Apps' og 'Radio' menuerne sammen til en 'Apps' menu, med en 'TuneIn' app for 'Radio' (hvis det er aktiveret).
 	FR	Fusionner les menus "Applications" et "Radio" en un seul menu "Applications" dans lequel est ajoutée une application "TuneIn" regroupant les éléments associés au plugin "Radio" (si ce plugin est activé).
@@ -723,6 +730,7 @@ PLUGIN_MATERIAL_COMBINE_APPS_AND_RADIO_DESC
 	HU	Kapcsolja össze az 'Apps' és a 'Radio' menüket egyetlen 'Apps' menübe, a 'Radio' (ha engedélyezve) hozzáadott 'Tunein' alkalmazással.
 
 PLUGIN_MATERIAL_SKIN_USE_DEFAULT_FOR_SETTINGS
+	CS	Použítí vzhledu „Výchozí“ pro nastavení serveru
 	EN	Use 'Default' skin for server settings
 	FR	Utiliser le thème "Défaut" du serveur pour son paramétrage
 	NL	Gebruik 'Standaard' skin voor server instellingen
@@ -730,6 +738,7 @@ PLUGIN_MATERIAL_SKIN_USE_DEFAULT_FOR_SETTINGS
 	ZH_CN	使用“默认”主题的服务器设置页面
 
 PLUGIN_MATERIAL_SKIN_USE_DEFAULT_FOR_SETTINGS_DEC
+	CS	Při zobrazení nastavení serveru použít stránky ze vzhledu „Výchozí“ a nikoli přestylizované stránky ze vzhledu „Classic“. Bude použito pouze pokud je okno dostatečně velké.
 	EN	When showing server settings use pages from the 'Default' skin and not re-themed pages from the 'Classic' skin. This will only be used if window is large enough.
 	FR	Pour l'affichage des paramètres du serveur, utiliser l'interface du thème "Défaut" au lieu d'une interface adaptée à l'écran, basée sur le thème "Classic". Ce ne sera possible que si la fenêtre est suffisamment grande.
 	NL	Kies welke skin wordt getoond voor de server instellingen. Indien de 'Standaard' skin wordt gekozen, werkt deze alleen als het scherm groot genoeg is.
@@ -737,6 +746,7 @@ PLUGIN_MATERIAL_SKIN_USE_DEFAULT_FOR_SETTINGS_DEC
 	ZH_CN	在显示服务器设置时，使用“默认”主题中的页面，而非基于“经典”主题修改的主题（例如Material Skin）页面。此设置仅在窗口足够大时可用。
 
 PLUGIN_MATERIAL_SKIN_USE_DEFAULT_FOR_SETTINGS_EMBEDDED
+	CS	Ano (vložené)
 	EN	Yes (embedded)
 	FR	Oui (intégré)
 	NL	Ja (ingebed)
@@ -744,6 +754,7 @@ PLUGIN_MATERIAL_SKIN_USE_DEFAULT_FOR_SETTINGS_EMBEDDED
 	ZH_CN	是（嵌入页面）
 
 PLUGIN_MATERIAL_SKIN_USE_DEFAULT_FOR_SETTINGS_NEW_TAB
+	CS	Ano (nová záložka/okno)
 	EN	Yes (new tab/window)
 	FR	Oui (nouvel onglet/fenêtre)
 	NL	Ja (nieuw tabblad)
@@ -751,6 +762,7 @@ PLUGIN_MATERIAL_SKIN_USE_DEFAULT_FOR_SETTINGS_NEW_TAB
 	ZH_CN	是（新建窗口）
 
 PLUGIN_MATERIAL_SKIN_USE_GROUPING
+	CS	Seskupení skladeb alba
 	DE	Titel des Gruppenalbums
 	EN	Group album tracks
 	FR	Regrouper les morceaux des albums multidisques
@@ -759,6 +771,7 @@ PLUGIN_MATERIAL_SKIN_USE_GROUPING
 	ZH_CN	专辑曲目分组
 
 PLUGIN_MATERIAL_SKIN_USE_GROUPING_DESC
+	CS	Pokud je album vícediskové a obsahuje tagy díla a/nebo seskupení, které seskupení by mělo mít přednost při generování podnadpisů?
 	DE	Wenn ein Album aus mehreren Discs besteht und Werk- und/oder Gruppierungs-Tags enthält, welche Gruppierung sollte bei der Erstellung von Zwischenüberschriften bevorzugt werden?
 	EN	When an album is both multi-disc and contains work and/or grouping tags, which grouping should take preference when generating subheadings?
 	FR	Choisir le type de regroupement à privilégier lorsque les albums multidisques contiennent des tags WORK (œuvre) ou GROUPING (regroupement / interprétation d'une œuvre).
@@ -767,6 +780,7 @@ PLUGIN_MATERIAL_SKIN_USE_GROUPING_DESC
 	ZH_CN	当一个专辑既包含多张光盘又包含作品和/或分组标签时，在生成副标题时应优先选择哪种分组？
 
 PLUGIN_MATERIAL_SKIN_PREFER_DISC_GROUPS
+	CS	Preferovat číslo disku/podnadpis disku
 	DE	Bevorzugte Disc-Nummer/Disc-Untertitel
 	EN	Prefer disc number/disc subtitle
 	FR	Préférer le numéro de disque et le sous-titre du disque
@@ -775,6 +789,7 @@ PLUGIN_MATERIAL_SKIN_PREFER_DISC_GROUPS
 	ZH_CN	首选光盘编号/光盘子标题
 
 PLUGIN_MATERIAL_SKIN_PREFER_WORK_GROUPING_GROUPS
+	CS	Preferovat dílo a seskupení
 	DE	Liever werken en groeperen
 	EN	Prefer work and grouping
 	FR	Préférer les tags WORK et GROUPING
@@ -783,6 +798,7 @@ PLUGIN_MATERIAL_SKIN_PREFER_WORK_GROUPING_GROUPS
 	ZH_CN	首选作品和分组
 
 PLUGIN_MATERIAL_SKIN_SHOW_WORKS_IN_ARTIST_ALBUM_LIST
+	CS	Zobrazení díla interpreta
 	EN	Show artist works
 	FR	Afficher les œuvres des artistes
 	NL	Toon artiest composities
@@ -790,6 +806,7 @@ PLUGIN_MATERIAL_SKIN_SHOW_WORKS_IN_ARTIST_ALBUM_LIST
 	ZH_CN	显示艺术家作品
 
 PLUGIN_MATERIAL_SKIN_SHOW_WORKS_IN_ARTIST_ALBUM_LIST_DESC
+	CS	Zobrazit seznam děl interpreta při výpisu vydání interpreta.
 	EN	Show list of an artist's works when listing the artist's releases.
 	FR	Inclure les œuvres d'un artiste dans la liste des albums de l'artiste.
 	NL	Toon lijst van composities bij de lijst van de releases van de artiest. 
@@ -797,39 +814,45 @@ PLUGIN_MATERIAL_SKIN_SHOW_WORKS_IN_ARTIST_ALBUM_LIST_DESC
 	ZH_CN	列出艺术家发行版时列出艺术家的作品
 
 PLUGIN_MATERIAL_SKIN_PLAYLIST_IMAGES
+	CS	Obrázky seznamů skladeb
 	EN	Playlist images
 	FR	Images des listes de lecture
 	NL	Afspeellijst afbeeldingen
 	ZH_CN	播放列表图像
 
 PLUGIN_MATERIAL_SKIN_PLAYLIST_IMAGES_DESC
+	CS	Zobrazit obrázky při výpisu seznamů skladeb. To (volitelně) vyžaduje vytvoření obrázků JPEG 600x600 v podsložce „material-skin/playlists“ ve složce předvoleb vašeho Lyrionu. Obrázky seznamů skladeb by měly být všechny malými písmeny nebo číslicemi, s odstraněnými všemi ostatními znaky. Např. „R&B“ je „rb.jpg“, „Folk/Rock“ je „folkrock.jpg“. Pokud není nalezen žádný obrázek, použije se první platný obrázek ze seznamu skladeb playlistu. Vezměte však na vědomí, že toto (použití obrázku skladby) může mít vliv na rychlost procházení playlistu (protože každý playlist bude muset být dotazován na jeho seznam skladeb atd.).
 	EN	Display images when listing playlists. This (optionally) requires creating 600x600 JPEG images within a "material-skin/playlists" sub-folder of your Lyrion's preferences folder. Playlist images should all be lowercase letters or numbers, with all other characters removed. e.g. "R&B" is "rb.jpg", "Folk/Rock" is "folkrock.jpg". If no image is found, then the first valid image from the playlist track listing is used. Note, however, that this (using a track image) may have an effect on playlist browsing speed (as each playlist will need to be queried for its track listing, etc).
 	FR	Utiliser des images lors de l'affichage des listes de lecture. Cette fonctionnalité (facultative) nécessite la création d'images JPEG 600x600 dans un sous-dossier "material-skin/playlists" du dossier des préférences de Lyrion. Les noms des fichiers doivent être constitués uniquement de lettres minuscules ou de chiffres. Par exemple : "R&B" devient "rb.jpg", "Folk/Rock" devient "folkrock.jpg". Si aucune image n'est trouvée, la première pochette des morceaux de la liste de lecture est utilisée. Cela peut impacter la vitesse de parcours des listes de lecture car chaque liste de lecture devra être interrogée pour connaître sa liste de morceaux.
 	NL	Afbeeldingen tonen bij het weergeven van afspeellijsten. Hiervoor kan je 600x600 JPEG-afbeeldingen aanmaken in de submap "material-skin/playlists" van jouw voorkeurenmap van Lyrion. Afbeeldingen in afspeellijsten moeten allemaal uit kleine letters of cijfers bestaan. Alle andere tekens moeten worden verwijderd. bijv. "R&B" is "rb.jpg", "Folk/Rock" is "folkrock.jpg". Als er geen afbeelding wordt gevonden, wordt de eerstvolgende gevonden afbeelding van de nummers in de afspeellijst gebruikt. Houd er echter rekening mee dat dit (het gebruik van een afbeelding van een nummer) effect kan hebben op de snelheid waarmee je door de afspeellijst bladert (aangezien voor elke afspeellijst de bijbehorende lijst met nummers moet worden opgevraagd, enz.).
 	ZH_CN	列出播放列表时显示图像。这（可选）需要在LMS首选项文件夹的“material-skin/playlists”子文件夹中创建600x600的JPEG图像。播放列表图像文件名应全部为小写字母或数字，并删除所有其他字符。例如，“R&B”是“rb.jpg”，“Folk/Rock”是“folkrock.jpg”。如果没有找到图像，则使用播放列表曲目列表中的第一个有效图像。但是请注意，这（使用曲目图像）可能会对播放列表浏览速度产生影响（因为需要查询每个播放列表的曲目列表等）。
 
 PLUGIN_MATERIAL_SKIN_QT_MOVE_ERROR
+	CS	Nelze přesunout frontu do přehrávače, se kterým je již synchronizována.
 	EN	Cannot move queue to a player that it is already synced with.
 	FR	Impossible de déplacer une liste de lecture vers une platine déjà synchronisée.
 	NL	Het is niet mogelijk om de afspeellijst te verplaatsen naar een muziekspeler die al gesynchroniseerd is. 
 
 PLUGIN_MATERIAL_SKIN_QT_COPY_ERROR
+	CS	Nelze zkopírovat frontu do přehrávače, se kterým je již synchronizována.
 	EN	Cannot copy queue to a player that it is already synced with.
 	FR	Impossible de copier une liste de lecture vers une platine déjà synchronisée.
 	NL	Het is niet mogelijk om de afspeellijst te kopiëren naar een muziekspeler die al gesynchroniseerd is. 
 
 PLUGIN_MATERIAL_SKIN_QT_SWAP_ERROR
+	CS	Nelze zaměnit frontu s přehrávačem, se kterým je již synchronizována.
 	EN	Cannot swap queue with a player that it is already synced with.
 	FR	Impossible d'échanger une liste de lecture avec une platine déjà synchronisée.
 	NL	Het is niet mogelijk om de afspeellijst te wisselen met een muziekspeler die al gesynchroniseerd is. 
 
 PLUGIN_MATERIAL_SKIN_SMALL_ICON_ONLY_GRID
+	CS	Menší mřížka pouze s ikonami
 	EN	Smaller icon-only grid
 	FR	Icônes de grille plus petits
 	NL	Kleiner icon-only raster
 
 PLUGIN_MATERIAL_SKIN_SMALL_ICON_ONLY_GRID_DESC
+	CS	Na užších obrazovkách povolit použití menších položek mřížky, pokud jsou zobrazeny pouze ikony a nikoli obrázky. Mějte na paměti, že to může způsobit častější zkrácení textu.
 	EN	On narrower screens, allow usage of smaller grid items if only showing icons, and not images. Note that this may cause text to be truncated more frequently.
 	FR	Sur les petits écrans, autoriser l'utilisation d'éléments de grille plus petits, s'il y a seulement des icônes et pas d'images. (Le texte peut être tronqué plus fréquemment.)
 	NL	Sta op kleinere schermen het gebruik van kleinere rasteritems toe als alleen icons worden weergegeven en geen afbeeldingen. Houd er rekening mee dat dit ertoe kan leiden dat tekst vaker wordt afgekapt.
-

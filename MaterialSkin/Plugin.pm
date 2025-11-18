@@ -342,30 +342,8 @@ sub initPlugin {
     }
 
     # FOR DEMO PURPOSES ONLY - REMOVE FOR PRODUCTION
-    Plugins::MaterialSkin::Plugin->registerHomeExtra('presets', {
-        title => 'Presets',
-        handler => sub {
-            my ($client, $cb, $maxItems) = @_;
-
-            $client ||= (Slim::Player::Client::clients())[0];
-
-            my $presets = [ map {
-                {
-                    name => $_->{text},
-                    url  => $_->{URL},
-                    icon => Slim::Player::ProtocolHandlers->iconForURL($_->{URL}, $client),
-                }
-            } grep {
-                $_->{type} eq 'audio' || $_->{type} eq 'playlist'
-            } @{ preferences('server')->client($client || (Slim::Player::Client::clients())[0])->get('presets') || [] } ];
-
-            $cb->({ item_loop => $presets });
-        },
-        icon => '/material/html/images/preset_MTL_icon_looks_one.png',
-        needsPlayer => 1,
-    });
-
-    #Slim::Control::Request::subscribe(\&_checkPlayQueue, [['playlist']]);
+    require Plugins::MaterialSkin::PresetsExtra;
+    Plugins::MaterialSkin::PresetsExtra->initPlugin();
 }
 
 #sub shutdownPlugin {
@@ -553,7 +531,10 @@ sub initOthers {
 sub registerHomeExtra {
     my ($class, $id, $args) = @_;
 
-    return unless $id && $args->{title} && $args->{handler};
+    if (!($id && $args->{title} && $args->{handler})) {
+        $log->error("Missing details for Home Extra with id '$id': " . Data::Dump::dump($args));
+        return;
+    }
 
     $log->warn("Home Extra with id '$id' is already registered - overwriting") if $HOME_EXTRAS->{$id};
 
@@ -578,12 +559,9 @@ sub getHomExtrasIDs {
 sub getHomeExtra3rdPartyItems {
     return to_json([ map {
         my $item = $HOME_EXTRAS->{$_};
-
-        # get translation in case we received a string token
-        my $title = Slim::Utils::Strings::getString($item->{title});
         {
             id          => $_,
-            title       => $title,
+            title       => Slim::Utils::Strings::getString($item->{title}),
             icon        => $item->{icon},
             needsPlayer => $item->{needsPlayer}
         }
@@ -2036,6 +2014,8 @@ sub _cliCommand {
 
 sub _handleHomeExtraCmd {
     my $request = shift;
+    $request->setStatusProcessing();
+
     my @sorts = ();
     my $count = $request->getParam('count');
 
@@ -2105,8 +2085,6 @@ sub _handleHomeExtraCmd {
 
     my $others = [ grep { $_ } map { getHomeExtra($_) } keys %{$request->getParamsCopy()} ];
     if (scalar @$others) {
-        $request->setStatusProcessing();
-
         # process other home items asynchronously and in parallel - they might be doing online lookups
         Async::Util::amap(
             inputs => $others,
@@ -2118,27 +2096,20 @@ sub _handleHomeExtraCmd {
                     $acb->({ $id => (shift || []) });
                 }, $count);
             },
-            at_a_time => 4,
             cb => sub {
+                my ($resultsList, $err) = @_;
                 my $results = {};
 
-                foreach my $result (@{$_[0]}) {
+                $log->error($err) if $err;
+
+                my $otherExists = { map { $_->{id} => 1 } @$others };
+
+                foreach my $result (@$resultsList) {
                     my ($id, $res) = each %{$result};
-                    $results->{$id} = $res;
-                }
 
-                foreach my $id (map { $_->{id} } @$others) {
-                    my $cnt = 0;
-                    my $result = $results->{$id};
-
-                    next unless $result;
-
-                    # shorten results list if needed.
-                    if (ref $result->{item_loop} && scalar @{$result->{item_loop}} > $count) {
-                        splice @{$result->{item_loop}}, $count;
+                    if ($otherExists->{$id}) {
+                        $request->addResult("material_home_${id}_obj", $res);
                     }
-
-                    $request->addResult("material_home_${id}_obj", $result);
                 }
 
                 $request->setStatusDone();

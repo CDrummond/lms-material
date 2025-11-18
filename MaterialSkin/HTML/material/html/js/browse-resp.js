@@ -775,7 +775,7 @@ function parseBrowseResp(data, parent, options, cacheKey) {
                 resp.allTracksItem={id:resp.baseActions['playControl'].params.item_id, params:resp.baseActions['playControl'].params};
             }
             // If listing a radio app's entries and all images are the same, then hide images. e.g. iHeartRadio and RadioNet
-            if (!isRadiosTop && !isAppsTop && !isFromFavorites && !isBmf && !isDisksAndFolders && (!isApps || (isApps && parent.id.split('.').length==2)) && resp.items.length>1 && resp.items.length<=100) {
+            if ((undefined==options || !options.ihe) && !isRadiosTop && !isAppsTop && !isFromFavorites && !isBmf && !isDisksAndFolders && (!isApps || (isApps && parent.id.split('.').length==2)) && resp.items.length>1 && resp.items.length<=100) {
                 if (images.size == 1 && undefined!=images.values().next().value) {
                     for (var i=0, loop=resp.items, len=loop.length; i<len; ++i) {
                         loop[i].image = loop[i].icon = loop[i].svg = undefined;
@@ -2437,7 +2437,7 @@ function parseBrowseResp(data, parent, options, cacheKey) {
                         new_data.result['base']=obj['base'];
                         new_data.result['count']=2500;
                     }
-                    let newResp = parseBrowseResp(new_data, parent, {}, undefined);
+                    let newResp = parseBrowseResp(new_data, parent, {ihe:true}, undefined);
                     if (undefined!=newResp && newResp.items.length>0) {
                         if (undefined!=obj) { // 3rd party => slimbrowse...
                             let header = {title:lists[s].title, id:lists[s].id, header:true, ihe:1, icon:lists[s].icon, svg: lists[s].svg, limit: lists[s].limit,

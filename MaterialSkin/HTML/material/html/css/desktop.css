@@ -146,6 +146,15 @@
  background-color:var(--primary-color)!important;
 }
 
+.hide-splitter, .msk-is-non-touch .hide-splitter .splitter:hover {
+ pointer-events: none!important;
+ background-color:transparent!important;
+}
+
+.hide-splitter .splitter:before {
+ z-index: -4 !important;
+}
+
 .no-control-adjust { /* Adjust pos for iPad */
  margin-top:-8px;
 }

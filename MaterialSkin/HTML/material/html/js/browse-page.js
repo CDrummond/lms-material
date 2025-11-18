@@ -1580,7 +1580,7 @@ var lmsBrowse = Vue.component("lms-browse", {
         backBtnPressed(longPress) {
             if (this.$store.state.visibleMenus.size<1) {
                 this.backBtnPressTime = new Date().getTime(); // See sourcesClicked
-                if (longPress || (undefined!=this.lastBackBtnPress && (this.backBtnPressTime-this.lastBackBtnPress)<=LMS_DOUBLE_CLICK_TIMEOUT)) {
+                if (longPress) {
                     this.goHome();
                 } else {
                     this.goBack();
@@ -2335,6 +2335,9 @@ var lmsBrowse = Vue.component("lms-browse", {
                     return true;
                 }
                 let itm = item.header ? this.current : item;
+                if (undefined==itm || undefined==itm.stdItem) {
+                    return undefined!=itm.menu && itm.menu.length>=3 && itm.menu[2]==PLAY_SHUFFLE_ACTION;
+                }
                 return undefined!=itm && undefined!=itm.stdItem &&
                         (itm.stdItem==STD_ITEM_ARTIST || itm.stdItem==STD_ITEM_ALBUM ||
                          itm.stdItem==STD_ITEM_PLAYLIST || itm.stdItem==STD_ITEM_WORK || itm.stdItem==STD_ITEM_REMOTE_PLAYLIST ||

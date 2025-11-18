@@ -2398,6 +2398,17 @@ function parseBrowseResp(data, parent, options, cacheKey) {
             }
             resp.listSize=resp.items.length;
         } else if (data.result.material_home) {
+            let ismore = false;
+            let count = 10;
+            if (data.params && data.params.length>1) {
+                for (var i=4, loop=data.params[1], len=loop.length; i<len; ++i) {
+                    if ((""+loop[i]).startsWith("count:")) {
+                        count = parseInt(loop[i].split(":")[1]);
+                    } else if ((""+loop[i]).startsWith("ismore:1")) {
+                        ismore = true;
+                    }
+                }
+            }
             var lists = [{key:'new', loop:"albums", title:i18n('New Music'), icon:"new_releases", command:["albums"], params:["sort:new", ALBUM_TAGS_ALL_ARTISTS]},
                          {key:'recentlyplayed', loop:"albums", title:i18n('Recently Played'), icon:"history", command:["albums"], params:["sort:recentlyplayed", ALBUM_TAGS_ALL_ARTISTS]},
                          {key:'playcount', loop:"albums", title:i18n('Most Played'), svg:"trophy", command:["albums"], params:["sort:playcount", ALBUM_TAGS_ALL_ARTISTS]},
@@ -2410,10 +2421,12 @@ function parseBrowseResp(data, parent, options, cacheKey) {
                 lists[s].id = DETAILED_HOME_STD_PREFIX+lists[s].key;
             }
             lists = lists.concat(LMS_3RDPARTY_HOME_EXTRA);
-            for (let s=0, len=lists.length; s<len; ++s) {
-                lists[s].val = options.order.indexOf(lists[s].id);
-                if (lists[s].val<0) {
-                     lists[s].val = lists.length+s+500;
+            if (undefined!=options && undefined!=options.order) {
+                for (let s=0, len=lists.length; s<len; ++s) {
+                    lists[s].val = options.order.indexOf(lists[s].id);
+                    if (lists[s].val<0) {
+                        lists[s].val = lists.length+s+500;
+                    }
                 }
             }
             lists.sort((a, b) => { return a.val<b.val ? -1 : 1});
@@ -2445,10 +2458,16 @@ function parseBrowseResp(data, parent, options, cacheKey) {
                         new_data.result['count']=2500;
                     }
                     let newResp = parseBrowseResp(new_data, parent, {ihe:true}, undefined);
+                    if (ismore) {
+                        if (newResp.items.length>0) {
+                            newResp.canUseGrid = true;
+                        }
+                        return newResp;
+                    }
                     if (undefined!=newResp && newResp.items.length>0) {
                         if (undefined!=obj) { // 3rd party => slimbrowse...
                             let header = {title:lists[s].title, id:lists[s].id, header:true, ihe:1, icon:lists[s].icon, svg: lists[s].svg, limit: lists[s].limit,
-                                          morecmd:parseInt(data.result[loop+"_len"])>10 ? {command:["material-skin", "home-extra"], params:[lists[s].id+":1", "ismore:1"]} : undefined,
+                                          morecmd:parseInt(obj['count'])>count ? {command:["material-skin", "home-extra"], params:[lists[s].id.split('_').slice(1).join('_')+":1", "ismore:1", "count:200"]} : undefined,
                                           baseActions:undefined!=obj['base'] ? obj['base']['actions'] : undefined}
                             mapIcon(header);
                             let iheHdr = resp.items.length;
@@ -2459,7 +2478,7 @@ function parseBrowseResp(data, parent, options, cacheKey) {
                             }
                         } else {
                             resp.items.push({title:lists[s].title, id:lists[s].id, header:true, ihe:1, icon:lists[s].icon, svg: lists[s].svg, limit: lists[s].limit,
-                                morecmd:parseInt(data.result[loop+"_len"])>10 ? {command:lists[s].command, params:lists[s].params} : undefined});
+                                morecmd:parseInt(data.result[loop_name+"_len"])>count ? {command:lists[s].command, params:lists[s].params} : undefined});
                         }
                         resp.items=resp.items.concat(newResp.items);
                     }

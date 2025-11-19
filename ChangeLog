@@ -5,6 +5,7 @@
 3. Add SVG icon for 'SiriusXM'
 4. Fix showing full size JPG from imageproxy.
 5. Remove double-click on back button for 'go home'.
+6. Hide 'Playlists' scrollable list option unless playlist images are enabled.
 
 6.0.4
 -----

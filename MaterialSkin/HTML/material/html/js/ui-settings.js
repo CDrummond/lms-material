@@ -776,9 +776,11 @@ Vue.component('lms-ui-settings', {
             this.detailedHomeItems.push(
                 {id:DETAILED_HOME_STD_PREFIX+"radios", title:i18n('Radios'), checked:false}
             );
-            this.detailedHomeItems.push(
-                {id:DETAILED_HOME_STD_PREFIX+"playlists", title:i18n('Playlists'), checked:false}
-            );
+            if (lmsOptions.playlistImages) {
+                this.detailedHomeItems.push(
+                    {id:DETAILED_HOME_STD_PREFIX+"playlists", title:i18n('Playlists'), checked:false}
+                );
+            }
             if (LMS_VERSION>=90000) {
                 this.detailedHomeItems.push(
                     {id:DETAILED_HOME_STD_PREFIX+"nchangedew", title:lmsOptions.supportReleaseTypes ? i18n("Recently Updated Releases") : i18n("Recently Updated Albums"), checked:false}

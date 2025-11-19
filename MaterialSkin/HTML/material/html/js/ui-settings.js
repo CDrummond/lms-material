@@ -783,7 +783,7 @@ Vue.component('lms-ui-settings', {
             }
             if (LMS_VERSION>=90000) {
                 this.detailedHomeItems.push(
-                    {id:DETAILED_HOME_STD_PREFIX+"nchangedew", title:lmsOptions.supportReleaseTypes ? i18n("Recently Updated Releases") : i18n("Recently Updated Albums"), checked:false}
+                    {id:DETAILED_HOME_STD_PREFIX+"changed", title:lmsOptions.supportReleaseTypes ? i18n("Recently Updated Releases") : i18n("Recently Updated Albums"), checked:false}
                 );
             }
             for (let i=0, len=LMS_3RDPARTY_HOME_EXTRA.length; i<len; ++i) {

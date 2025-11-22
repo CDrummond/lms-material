@@ -204,8 +204,8 @@ Vue.component('lms-ui-settings', {
     </v-list-tile>
 
     <div class="settings-list-checkboxes-title">{{i18n('Scrollable lists')}}</div>
-    <template v-for="(item, index) in detailedHomeItems">
-     <v-checkbox v-model="item.checked" style="display:flex" class="settings-list-checkbox" @dragstart.native="dragStart(index, $event)" @dragenter.prevent="" @dragend.native="dragEnd()" @dragover.native="dragOver(index, $event)" @drop.native="drop(index, $event)" draggable v-bind:class="{'highlight-drop':dropIndex==index, 'highlight-drag':dragIndex==index}">
+    <template v-for="(item, index) in detailedHomeItems" :key="item.id">
+     <v-checkbox v-model="item.checked" style="display:flex" class="settings-list-checkbox" @dragstart.native="dragStart(index, $event)" @dragenter.prevent="" @dragend.native="dragEnd()" @dragover.native="dragOver(index, $event)" @drop.native="drop(index, $event)" draggable v-bind:class="{'highlight-drop':dropIndex==index, 'highlight-drag':dragIndex==index}" @change="sortDetailedHome" :id="item.id">
       <template v-slot:label>
        <v-avatar size="24">
         <v-icon v-if="undefined!=item.icon">{{item.icon}}</v-icon>
@@ -724,6 +724,7 @@ Vue.component('lms-ui-settings', {
                 loop[s].checked = checkedHomeItems.has(loop[s].id);
             }
             this.detailedHomeItems.sort((a, b) => { return a.val<b.val ? -1 : 1});
+            this.sortDetailedHome();
         },
         initItems() {
             this.themes=[
@@ -1054,7 +1055,29 @@ Vue.component('lms-ui-settings', {
         mouseDown(ev) {
             toolbarMouseDown(ev);
         },
+        sortDetailedHome() {
+            this.$nextTick(function () {
+                let checked = [];
+                let unchecked = [];
+                for (let i=0, loop=this.detailedHomeItems, len=loop.length; i<len; ++i) {
+                    if (loop[i].checked) {
+                        checked.push(loop[i]);
+                    } else {
+                        unchecked.push(loop[i]);
+                    }
+                }
+                unchecked.sort(titleSort);
+                this.detailedHomeItems = [];
+                this.$nextTick(function () {
+                    this.detailedHomeItems = checked.concat(unchecked);
+                });
+            });
+        },
         dragStart(which, ev) {
+            if (!this.detailedHomeItems[which].checked) {
+                ev.preventDefault();
+                return;
+            }
             ev.dataTransfer.dropEffect = 'move';
             ev.dataTransfer.setData('text/plain', "dth:"+which);
             this.dragIndex = which;
@@ -1065,14 +1088,14 @@ Vue.component('lms-ui-settings', {
             this.dropIndex = undefined;
         },
         dragOver(index, ev) {
-            if (index!=this.dragIndex) {
+            if (this.detailedHomeItems[index].checked && index!=this.dragIndex) {
                 this.dropIndex = index;
             }
             ev.preventDefault(); // Otherwise drop is never called!
         },
         drop(to, ev) {
             ev.preventDefault();
-            if (to!=this.dragIndex) {
+            if (this.detailedHomeItems[to].checked && to!=this.dragIndex) {
                 this.detailedHomeItems = arrayMove(this.detailedHomeItems, this.dragIndex, to);
             }
             this.dragIndex = undefined;

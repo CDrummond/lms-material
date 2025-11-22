@@ -205,8 +205,17 @@ Vue.component('lms-ui-settings', {
 
     <div class="settings-list-checkboxes-title">{{i18n('Scrollable lists')}}</div>
     <template v-for="(item, index) in detailedHomeItems">
-     <v-checkbox v-model="item.checked" :label="item.title" style="display:flex" class="settings-list-checkbox" @dragstart.native="dragStart(index, $event)" @dragenter.prevent="" @dragend.native="dragEnd()" @dragover.native="dragOver(index, $event)" @drop.native="drop(index, $event)" draggable v-bind:class="{'highlight-drop':dropIndex==index, 'highlight-drag':dragIndex==index}"></v-checkbox>
+     <v-checkbox v-model="item.checked" style="display:flex" class="settings-list-checkbox" @dragstart.native="dragStart(index, $event)" @dragenter.prevent="" @dragend.native="dragEnd()" @dragover.native="dragOver(index, $event)" @drop.native="drop(index, $event)" draggable v-bind:class="{'highlight-drop':dropIndex==index, 'highlight-drag':dragIndex==index}">
+      <template v-slot:label>
+       <v-avatar size="24">
+        <v-icon v-if="undefined!=item.icon">{{item.icon}}</v-icon>
+        <img v-else-if="item.svg" class="svg-img" :src="item.svg | svgIcon(darkUi)"></img>
+       </v-avatar>
+       <div style="padding-left:8px">{{item.title}}</div>
+      </template>
+     </v-checkbox>
     </template>
+    <div class="dialog-padding"></div>
     <div class="settings-list-checkboxes-title">{{i18n('Categories')}}</div>
     <template v-for="(item, index) in showItems">
      <div style="display:flex" v-if="item.id!=TOP_RADIO_ID || !lmsOptions.combineAppsAndRadio">
@@ -761,33 +770,35 @@ Vue.component('lms-ui-settings', {
                 { key:3, label:i18n("Blank screen")}
             ]
 
-            this.detailedHomeItems = [{id:DETAILED_HOME_STD_PREFIX+"new", title:i18n('New Music'), checked:false}];
+            this.detailedHomeItems = [{id:DETAILED_HOME_STD_PREFIX+"new", title:i18n('New Music'), checked:false, icon:"new_releases"}];
             if (LMS_VERSION>=90100 && LMS_STATS_ENABLED) {
                 this.detailedHomeItems.push(
-                    {id:DETAILED_HOME_STD_PREFIX+"recentlyplayed", title:i18n('Recently Played'), checked:false}
+                    {id:DETAILED_HOME_STD_PREFIX+"recentlyplayed", title:i18n('Recently Played'), checked:false, icon:"history"}
                 );
                 this.detailedHomeItems.push(
-                    {id:DETAILED_HOME_STD_PREFIX+"playcount", title:i18n('Most Played'), checked:false}
+                    {id:DETAILED_HOME_STD_PREFIX+"playcount", title:i18n('Most Played'), checked:false, svg:"trophy"}
                 );
             }
             this.detailedHomeItems.push(
-                {id:DETAILED_HOME_STD_PREFIX+"random", title:lmsOptions.supportReleaseTypes ? i18n("Random Releases") : i18n("Random Albums"), checked:false}
+                {id:DETAILED_HOME_STD_PREFIX+"random", title:lmsOptions.supportReleaseTypes ? i18n("Random Releases") : i18n("Random Albums"), checked:false, svg:"dice-album"}
             );
             this.detailedHomeItems.push(
-                {id:DETAILED_HOME_STD_PREFIX+"radios", title:i18n('Radios'), checked:false}
+                {id:DETAILED_HOME_STD_PREFIX+"radios", title:i18n('Radios'), checked:false, svg:"radio"}
             );
             if (lmsOptions.playlistImages) {
                 this.detailedHomeItems.push(
-                    {id:DETAILED_HOME_STD_PREFIX+"playlists", title:i18n('Playlists'), checked:false}
+                    {id:DETAILED_HOME_STD_PREFIX+"playlists", title:i18n('Playlists'), checked:false, icon:"list"}
                 );
             }
             if (LMS_VERSION>=90000) {
                 this.detailedHomeItems.push(
-                    {id:DETAILED_HOME_STD_PREFIX+"changed", title:lmsOptions.supportReleaseTypes ? i18n("Recently Updated Releases") : i18n("Recently Updated Albums"), checked:false}
+                    {id:DETAILED_HOME_STD_PREFIX+"changed", title:lmsOptions.supportReleaseTypes ? i18n("Recently Updated Releases") : i18n("Recently Updated Albums"), checked:false, svg:"updated-music"}
                 );
             }
             for (let i=0, len=LMS_3RDPARTY_HOME_EXTRA.length; i<len; ++i) {
-                this.detailedHomeItems.push(LMS_3RDPARTY_HOME_EXTRA[i]);
+                let entry = LMS_3RDPARTY_HOME_EXTRA[i];
+                mapIcon(entry);
+                this.detailedHomeItems.push(entry);
             }
         },
         close() {

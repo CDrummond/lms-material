@@ -15,7 +15,7 @@ sub initPlugin {
         feed => \&handleFeed,
         tag  => 'PresetsExtra',
         extra => {
-            title => 'Presets',
+            title => 'PLUGIN_MATERIAL_SKIN_PRESETS',
             icon => '/material/html/images/preset_MTL_icon_looks_one.png',
             needsPlayer => 1,
         }

@@ -856,3 +856,9 @@ PLUGIN_MATERIAL_SKIN_SMALL_ICON_ONLY_GRID_DESC
 	EN	On narrower screens, allow usage of smaller grid items if only showing icons, and not images. Note that this may cause text to be truncated more frequently.
 	FR	Sur les petits écrans, autoriser l'utilisation d'éléments de grille plus petits, s'il y a seulement des icônes et pas d'images. (Le texte peut être tronqué plus fréquemment.)
 	NL	Sta op kleinere schermen het gebruik van kleinere rasteritems toe als alleen icons worden weergegeven en geen afbeeldingen. Houd er rekening mee dat dit ertoe kan leiden dat tekst vaker wordt afgekapt.
+
+PLUGIN_MATERIAL_SKIN_PRESETS
+	DE	Voreinstellungen
+	EN	Presets
+	FR	Présélections
+	NL	Voorinstellingen

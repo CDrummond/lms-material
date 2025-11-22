@@ -199,7 +199,7 @@ Vue.component('lms-ui-settings', {
     <v-list-tile>
      <v-list-tile-content class="switch-label">
       <v-list-tile-title>{{i18n('Home screen items')}}</v-list-tile-title>
-      <v-list-tile-sub-title>{{i18n("Check the standard items which you wish to appear on the home screen.")}} {{i18n("The order of 'Scrollable list' items can be changed, here, by drag and drop.")}} {{i18n("(NOTE: These lists are only shown when using the grid view)")}}</v-list-tile-sub-title>
+      <v-list-tile-sub-title>{{i18n("Check the standard items which you wish to appear on the home screen.")}} {{i18n("The order of 'Scrollable list' items can be changed, here, by drag and drop.")}} {{i18n("(NOTE: These lists are only shown when using the grid view. If 'Explore' is not selected, then it will appear as a standard grid at the end. 'Categories' configures the standard items shown in 'Explore'.)")}}</v-list-tile-sub-title>
      <v-list-tile-content/>
     </v-list-tile>
 

@@ -1941,11 +1941,9 @@ var lmsBrowse = Vue.component("lms-browse", {
                         rs+=1;
                         if (isExplore) {
                             row++;
-                            let haveSub = false;
-                            for (let t=0, len=items.length; t<len && !haveSub; ++t) {
-                                haveSub = undefined!=items[t].subtitle;
-                            }
-                            this.grid.rows.push({id:"row."+row+"."+sz.nc, items:items, r:row, rs:this.topExtra.length, size:(haveSub ? sz.h - 4 : (sz.h - GRID_SINGLE_LINE_DIFF))+sbarSize+8, numStd:items.length, hasSub:haveSub, ihe:true});
+                            haveSubtitle = true;
+                            rowHasSubtitle = true;
+                            this.grid.rows.push({id:"row."+row+"."+sz.nc, items:items, r:row, rs:this.topExtra.length, size:(rowHasSubtitle ? sz.h - 4 : (sz.h - GRID_SINGLE_LINE_DIFF))+sbarSize+8, numStd:items.length, hasSub:rowHasSubtitle, ihe:true});
                         }
                     } else {
                         let used = 0;

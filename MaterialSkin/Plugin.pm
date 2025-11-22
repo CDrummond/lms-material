@@ -341,10 +341,6 @@ sub initPlugin {
     if (Slim::Utils::Versions->compareVersions($::VERSION, '8.4.0') < 0) {
         Slim::Utils::Timers::setTimer(undef, Time::HiRes::time() + 15, \&_checkUpdates);
     }
-
-    # FOR DEMO PURPOSES ONLY - REMOVE FOR PRODUCTION
-    require Plugins::MaterialSkin::PresetsExtra;
-    Plugins::MaterialSkin::PresetsExtra->initPlugin();
 }
 
 #sub shutdownPlugin {

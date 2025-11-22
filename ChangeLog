@@ -13,6 +13,7 @@
 4. Fix showing full size JPG from imageproxy.
 5. Remove double-click on back button for 'go home'.
 6. Hide 'Playlists' scrollable list option unless playlist images are enabled.
+7. Show full image when using 'Show image' on playlist image.
 
 6.0.4
 -----

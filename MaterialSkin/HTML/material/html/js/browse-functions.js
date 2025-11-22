@@ -1771,7 +1771,7 @@ function browseItemAction(view, act, origItem, index, event, slimBrowseBaseActio
                 let isStdItem = itm.stdItem==STD_ITEM_ALBUM || itm.stdItem==STD_ITEM_ARTIST || itm.stdItem==STD_ITEM_WORK || itm.stdItem==STD_ITEM_WORK_COMPOSER;
                 let playAction = !queryParams.party && !LMS_KIOSK_MODE && (isStdItem || (undefined!=itm.menu && itm.menu[0]==PLAY_ACTION));
                 let otherAction = playAction && (isStdItem || (undefined!=itm.menu && itm.menu.length>1 && itm.menu[1]==INSERT_ACTION));
-                let image = {url:itm.image,
+                let image = {url:itm.image + (itm.image.startsWith("material/playlists/") ? "&full=1" : ""),
                              title:itm.title+(undefined==itm.subtitle ? "" : (SEPARATOR+itm.subtitle)),
                              index:playAction ? i : undefined
                              };

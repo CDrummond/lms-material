@@ -3080,6 +3080,10 @@ sub _playlistHandler {
     $fileName =~ s/[^a-z_0-9]//ig;
 
     if (0==_sendMaterialImage($httpClient, $response, "playlists", $fileName)) {
+        my $size = "/image_300x300_f";
+        if ("1" eq $response->request->uri->query_param('full')) {
+            $size = "/cover";
+        }
         foreach my $playlist ( Slim::Schema->rs('Playlist')->getPlaylists('all')->all ) {
             if ($playlist->title eq $playlistName) {
                 my $request = Slim::Control::Request::executeRequest(undef, ["playlists", "tracks", 0, PLAYLIST_IMAGE_TRACKS, "tags:cK", "playlist_id:" . $playlist->id] );
@@ -3088,10 +3092,10 @@ sub _playlistHandler {
                     if ($playlist->{'artwork_url'}) {
                         $image = $playlist->{'artwork_url'};
                         if (_startsWith($image, "http:") || _startsWith($image, "https:")) {
-                            $image = "/imageproxy/" . URI::Escape::uri_escape_utf8($image) . "/image_300x300_f";
+                            $image = "/imageproxy/" . URI::Escape::uri_escape_utf8($image) . $size;
                         }
                     } elsif ($playlist->{'coverid'}) {
-                        $image = "/music/" . $playlist->{'coverid'} . "/cover_300x300_f";
+                        $image = "/music/" . $playlist->{'coverid'} . $size;
                     }
                     if ($image) {
                         $response->code(301);

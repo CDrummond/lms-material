@@ -2494,7 +2494,7 @@ function parseBrowseResp(data, parent, options, cacheKey) {
             }
             if (resp.items.length>0) {
                 if (!haveExplore) {
-                    resp.items.push({title:i18n("Explore"), id:DETAILED_HOME_EXPLORE, header:true, ihe:1, icon:"music_note"});
+                    resp.items.push({title:i18n("Explore"), id:DETAILED_HOME_EXPLORE+"_std", header:true, ihe:1, icon:"music_note"});
                 }
             }
             resp.listSize=resp.items.length;

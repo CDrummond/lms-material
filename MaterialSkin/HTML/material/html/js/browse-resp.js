@@ -2400,6 +2400,7 @@ function parseBrowseResp(data, parent, options, cacheKey) {
         } else if (data.result.material_home) {
             let ismore = false;
             let count = 10;
+            let haveExplore = undefined!=options && undefined!=options.order && options.order.indexOf(DETAILED_HOME_EXPLORE)>=0;
             if (data.params && data.params.length>1) {
                 for (var i=4, loop=data.params[1], len=loop.length; i<len; ++i) {
                     if ((""+loop[i]).startsWith("count:")) {
@@ -2415,9 +2416,10 @@ function parseBrowseResp(data, parent, options, cacheKey) {
                          {key:'random', loop:"albums", title:lmsOptions.supportReleaseTypes ? i18n('Random Releases') : i18n('Random Albums'), svg:"dice-album", command:["albums"], params:["sort:random", ALBUM_TAGS_ALL_ARTISTS]},
                          {key:'radios', loop:"radios", title:i18n('Radios'), svg:"radio", command:["material-skin-query","radios"], params:[], limit:200},
                          {key:'playlists', loop:"playlists", title:i18n('Playlists'), icon:"list", command:["material-skin-query","playlists"], params:[PLAYLIST_TAGS, "menu:1"], limit:200},
-                         {key:'changed', loop:"albums", title:lmsOptions.supportReleaseTypes ? i18n("Recently Updated Releases") : i18n("Recently Updated Albums"), svg:"updated-music", command:["albums"], params:["sort:changed", ALBUM_TAGS_ALL_ARTISTS]}
+                         {key:'changed', loop:"albums", title:lmsOptions.supportReleaseTypes ? i18n("Recently Updated Releases") : i18n("Recently Updated Albums"), svg:"updated-music", command:["albums"], params:["sort:changed", ALBUM_TAGS_ALL_ARTISTS]},
+                         {id:DETAILED_HOME_EXPLORE}
                         ];
-            for (let s=0, len=lists.length; s<len; ++s) {
+            for (let s=0, len=lists.length-1; s<len; ++s) { // Ignore 'Explore'
                 lists[s].id = DETAILED_HOME_STD_PREFIX+lists[s].key;
             }
             lists = lists.concat(LMS_3RDPARTY_HOME_EXTRA);
@@ -2431,6 +2433,12 @@ function parseBrowseResp(data, parent, options, cacheKey) {
             }
             lists.sort((a, b) => { return a.val<b.val ? -1 : 1});
             for (let s=0, len=lists.length; s<len; ++s) {
+                if (lists[s].id==DETAILED_HOME_EXPLORE) {
+                    if (haveExplore) {
+                        resp.items.push({title:i18n("Explore"), id:DETAILED_HOME_EXPLORE, header:true, ihe:1, icon:"music_note"});
+                    }
+                    continue;
+                }
                 let id = lists[s].id.split('_').slice(1).join('_');
                 let obj_name = 'material_home_'+id+'_obj';
                 let obj = undefined;
@@ -2485,7 +2493,9 @@ function parseBrowseResp(data, parent, options, cacheKey) {
                 }
             }
             if (resp.items.length>0) {
-                resp.items.push({title:i18n("Explore"), id:DETAILED_HOME_STD_PREFIX+"explore", header:true, ihe:1, icon:"music_note"});
+                if (!haveExplore) {
+                    resp.items.push({title:i18n("Explore"), id:DETAILED_HOME_EXPLORE, header:true, ihe:1, icon:"music_note"});
+                }
             }
             resp.listSize=resp.items.length;
         }

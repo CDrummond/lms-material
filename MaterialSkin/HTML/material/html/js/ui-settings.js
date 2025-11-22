@@ -801,6 +801,9 @@ Vue.component('lms-ui-settings', {
                 mapIcon(entry);
                 this.detailedHomeItems.push(entry);
             }
+            this.detailedHomeItems.push(
+                {id:DETAILED_HOME_EXPLORE, title:i18n("Explore"), checked:false, icon:"music_note"}
+            );
         },
         close() {
             this.show=false;

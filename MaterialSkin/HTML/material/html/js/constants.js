@@ -258,6 +258,8 @@ const GRID_TEXT_ONLY = 1;
 const GRID_ICON_ONLY_ONLY = 2;
 
 const DETAILED_HOME_STD_PREFIX = "std_";
+const DETAILED_HOME_EXPLORE = DETAILED_HOME_STD_PREFIX+"explore";
+
 // Old 6.0.x values
 const DETAILED_HOME_NEW = 1;
 const DETAILED_HOME_MOST = 2;

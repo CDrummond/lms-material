@@ -1094,9 +1094,11 @@ var lmsBrowse = Vue.component("lms-browse", {
                 let cmd = ["material-skin", "home-extra"];
                 this.topExtraCfg.needsPlayer = false;
                 for (let i=0, loop=this.$store.state.detailedHomeItems, len=loop.length; i<len; ++i) {
-                    cmd.push(loop[i].split('_').slice(1).join('_')+":1");
-                    if (!this.topExtraCfg.needsPlayer && !loop[i].startsWith(DETAILED_HOME_STD_PREFIX) && lmsOptions.homeExtraNeedsPlayer.has(loop[i])) {
-                        this.topExtraCfg.needsPlayer = true;
+                    if (DETAILED_HOME_EXPLORE!=loop[i]) {
+                        cmd.push(loop[i].split('_').slice(1).join('_')+":1");
+                        if (!this.topExtraCfg.needsPlayer && !loop[i].startsWith(DETAILED_HOME_STD_PREFIX) && lmsOptions.homeExtraNeedsPlayer.has(loop[i])) {
+                            this.topExtraCfg.needsPlayer = true;
+                        }
                     }
                 }
                 if (this.topExtraCfg.needsPlayer) {
@@ -1491,7 +1493,7 @@ var lmsBrowse = Vue.component("lms-browse", {
         setLayoutAction() {
             var af = this.grid.use ? USE_GRID_ACTION : USE_LIST_ACTION;
             var af2 = this.grid.use ? USE_ALT_GRID_ACTION : USE_LIST_ACTION;
-            var at = this.grid.use ? USE_LIST_ACTION : this.isTop && this.$store.state.detailedHomeItems.length ? USE_ALT_GRID_ACTION : USE_GRID_ACTION;
+            var at = this.grid.use ? USE_LIST_ACTION : this.isTop && this.$store.state.detailedHomeItems.length>0 ? USE_ALT_GRID_ACTION : USE_GRID_ACTION;
             for (var i=0, loop=this.currentActions, len=loop.length; i<len; ++i) {
                 if (loop[i].action == af || loop[i].action == af2) {
                     loop[i].action = at;
@@ -1907,10 +1909,11 @@ var lmsBrowse = Vue.component("lms-browse", {
                 changed = true;
                 this.grid.rows = [];
                 this.grid.multiSize = false;
-                var items = [];
-                var topExtraItems = [];
+                let items = [];
+                let topExtraItems = [];
+                let haveExploreInScrolledList = false;
                 if (this.isTop) {
-                    for (var i=0, len=this.items.length; i<len; ++i) {
+                    for (let i=0, len=this.items.length; i<len; ++i) {
                         if (undefined!=this.items[i].ihe) {
                             topExtraItems.push(this.items[i]);
                         } else if (!this.disabled.has(this.items[i].id) && !(this.hidden.has(this.items[i].id)  || (this.items[i].id==TOP_RADIO_ID && lmsOptions.combineAppsAndRadio)) && (!queryParams.party || !HIDE_TOP_FOR_PARTY.has(this.items[i].id))) {
@@ -1924,18 +1927,30 @@ var lmsBrowse = Vue.component("lms-browse", {
                 this.grid.numItems=items.length+topExtraItems.length;
                 let rs = 0;
                 let row = 0;
-                for (var i=0, len=topExtraItems.length; i<len; ++row) {
-                    var rowHasSubtitle = false;
-                    var rowItems=[];
+                for (let i=0, len=topExtraItems.length; i<len; ++row) {
+                    let rowHasSubtitle = false;
+                    let rowItems=[];
                     if (i<topExtraItems.length && topExtraItems[i].header) {
+                        let isExplore = topExtraItems[i].id==DETAILED_HOME_EXPLORE;
+                        if (isExplore) {
+                            haveExploreInScrolledList = true;
+                        }
                         this.grid.multiSize=true;
                         this.grid.rows.push({item: topExtraItems[i], header:true, size:48, r:row, id:"row.extra.header."+i, rs:rs, ihe:true});
                         i+=1;
                         rs+=1;
+                        if (isExplore) {
+                            row++;
+                            let haveSub = false;
+                            for (let t=0, len=items.length; t<len && !haveSub; ++t) {
+                                haveSub = undefined!=items[t].subtitle;
+                            }
+                            this.grid.rows.push({id:"row."+row+"."+sz.nc, items:items, r:row, rs:this.topExtra.length, size:(haveSub ? sz.h - 4 : (sz.h - GRID_SINGLE_LINE_DIFF))+sbarSize+8, numStd:items.length, hasSub:haveSub, ihe:true});
+                        }
                     } else {
                         let used = 0;
-                        for (var j=0; j<MAX_HOME_EXTRA_ROW; ++j) {
-                            var idx = i+j;
+                        for (let j=0; j<MAX_HOME_EXTRA_ROW; ++j) {
+                            let idx = i+j;
                             if (idx<topExtraItems.length && topExtraItems[idx].header) {
                                 break;
                             } else {
@@ -1953,45 +1968,47 @@ var lmsBrowse = Vue.component("lms-browse", {
                         rs+=used;
                     }
                 }
-                for (var i=0, len=items.length; i<len; ++row) {
-                    var rowHasSubtitle = this.isTop; // Always allow for subtitle with home items to make space for virtual library name
-                    var rowItems=[];
-                    if (i<items.length && items[i].header) {
-                        this.grid.multiSize=true;
-                        if (this.grid.type!=GRID_TEXT_ONLY && this.grid.rows.length>0 && !this.grid.rows[this.grid.rows.length-1].hasSub && !this.grid.rows[this.grid.rows.length-1].ihe) {
-                            this.grid.rows.push({spacer:true, size:24, id:"row.extra.spacer."+i, ihe:true, rs:rs});
-                        }
-                        this.grid.rows.push({item: items[i], header:true, size:48, r:row, id:"row.header."+i, rs:rs});
-                        i+=1;
-                        rs+=1;
-                    } else {
-                        let used = 0;
-                        for (var j=0; j<sz.nc; ++j) {
-                            var idx = i+j;
-                            if (idx<items.length && items[idx].header) {
-                                for (; j<sz.nc; ++j) {
-                                    rowItems.push(undefined);
-                                }
-                                break;
-                            } else {
-                                rowItems.push(idx<items.length ? items[idx] : undefined);
-                                if (GRID_TEXT_ONLY != this.grid.type) {
-                                    let haveSub = idx<items.length && items[idx].subtitle;
-                                    if (haveSub) {
-                                        haveSubtitle = true;
-                                        rowHasSubtitle = true;
-                                    }
-                                }
-                                used++;
+                if (!this.top || !haveExploreInScrolledList) {
+                    for (var i=0, len=items.length; i<len; ++row) {
+                        var rowHasSubtitle = this.isTop; // Always allow for subtitle with home items to make space for virtual library name
+                        var rowItems=[];
+                        if (i<items.length && items[i].header) {
+                            this.grid.multiSize=true;
+                            if (this.grid.type!=GRID_TEXT_ONLY && this.grid.rows.length>0 && !this.grid.rows[this.grid.rows.length-1].hasSub && !this.grid.rows[this.grid.rows.length-1].ihe) {
+                                this.grid.rows.push({spacer:true, size:24, id:"row.extra.spacer."+i, ihe:true, rs:rs});
                             }
-                        }
-                        if (GRID_TEXT_ONLY == this.grid.type) {
-                            this.grid.rows.push({id:"row."+row+"."+sz.nc, items:rowItems, r:row, rs:rs, size:this.grid.multiSize ? sz.h : undefined, numStd:used, hasSub:undefined});
+                            this.grid.rows.push({item: items[i], header:true, size:48, r:row, id:"row.header."+i, rs:rs});
+                            i+=1;
+                            rs+=1;
                         } else {
-                            this.grid.rows.push({id:"row."+row+"."+sz.nc, items:rowItems, r:row, rs:rs, size:this.grid.multiSize ? (rowHasSubtitle ? sz.h : (sz.h - GRID_SINGLE_LINE_DIFF)) : undefined, numStd:used, hasSub:this.grid.multiSize ? rowHasSubtitle : undefined});
+                            let used = 0;
+                            for (var j=0; j<sz.nc; ++j) {
+                                var idx = i+j;
+                                if (idx<items.length && items[idx].header) {
+                                    for (; j<sz.nc; ++j) {
+                                        rowItems.push(undefined);
+                                    }
+                                    break;
+                                } else {
+                                    rowItems.push(idx<items.length ? items[idx] : undefined);
+                                    if (GRID_TEXT_ONLY != this.grid.type) {
+                                        let haveSub = idx<items.length && items[idx].subtitle;
+                                        if (haveSub) {
+                                            haveSubtitle = true;
+                                            rowHasSubtitle = true;
+                                        }
+                                    }
+                                    used++;
+                                }
+                            }
+                            if (GRID_TEXT_ONLY == this.grid.type) {
+                                this.grid.rows.push({id:"row."+row+"."+sz.nc, items:rowItems, r:row, rs:rs, size:this.grid.multiSize ? sz.h : undefined, numStd:used, hasSub:undefined});
+                            } else {
+                                this.grid.rows.push({id:"row."+row+"."+sz.nc, items:rowItems, r:row, rs:rs, size:this.grid.multiSize ? (rowHasSubtitle ? sz.h : (sz.h - GRID_SINGLE_LINE_DIFF)) : undefined, numStd:used, hasSub:this.grid.multiSize ? rowHasSubtitle : undefined});
+                            }
+                            i+=used;
+                            rs+=used;
                         }
-                        i+=used;
-                        rs+=used;
                     }
                 }
                 this.grid.numColumns = sz.nc;

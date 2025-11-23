@@ -23,6 +23,8 @@ Vue.filter("displayTime", (value) => {
     return str;
 });
 
+const IGNORE_SWIPE_START_ON = new Set(["image-grid-item", "image-grid-text", "v-avatar"]);
+
 let prevWindowArea={l:0, r:0, rmin:0};
 let windowAreaTimeout = null;
 function setWindowArea() {
@@ -553,6 +555,11 @@ var app = new Vue({
             }
         },
         touchStart(ev) {
+            // For some reason scrolling the 'Explore' list can cause the view to change?
+            if (!this.$store.state.desktopLayout && this.$store.state.page=='browse' && this.$store.state.detailedHomeItems.length>0 &&
+                intersect(new Set(ev.target.classList), IGNORE_SWIPE_START_ON).size>0) {
+                return;
+            }
             this.touch = getTouchPos(ev);
         },
         touchEnd(ev) {

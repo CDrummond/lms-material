@@ -626,7 +626,7 @@ var lmsBrowse = Vue.component("lms-browse", {
             return this.$store.state.unlockAll
         },
         homeButton() {
-            return this.$store.state.homeButton
+            return this.$store.state.homeButton==1 || (this.$store.state.homeButton==2 && this.$store.state.autoShowHomeButton)
         },
         useRecyclerForLists() {
             return !this.isTop && this.items.length>LMS_MAX_NON_SCROLLER_ITEMS

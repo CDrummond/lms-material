@@ -261,6 +261,10 @@ var app = new Vue({
                     widthChange = lastWinWidth - window.innerWidth;
                     lastWinWidth = window.innerWidth;
                     lmsApp.checkLayout();
+                    let autoShowHome = window.innerWidth>=LMS_AUTO_SHOW_HOME_BUTTON_MIN_WIDTH;
+                    if (autoShowHome!=lmsApp.$store.state.autoShowHomeButton) {
+                        lmsApp.$store.commit('setAutoShowHomeButton', autoShowHome);
+                    }
                     bus.$emit('windowWidthChanged');
                 }
                 if (Math.abs(lastReportedHeight-window.innerHeight)>=3) {

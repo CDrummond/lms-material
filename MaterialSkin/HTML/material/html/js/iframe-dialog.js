@@ -1032,7 +1032,7 @@ Vue.component('lms-iframe-dialog', {
             return this.$store.state.coloredToolbars
         },
         homeButton() {
-            return this.$store.state.homeButton
+            return this.$store.state.homeButton==1 || (this.$store.state.homeButton==2 && this.$store.state.autoShowHomeButton)
         },
         players() {
             return this.$store.state.players

@@ -429,7 +429,8 @@ const store = new Vuex.Store({
         skipFSeconds: 30,
         screensaver: 0,
         screensaverNp: false,
-        homeButton: false,
+        homeButton: 0,
+        autoShowHomeButton: window.innerWidth>=LMS_AUTO_SHOW_HOME_BUTTON_MIN_WIDTH,
         gridPerView: true,
         lang: 'en-US',
         twentyFourHour: false,
@@ -637,6 +638,9 @@ const store = new Vuex.Store({
         setLang(state, val) {
             updateLang(state, val);
         },
+        setAutoShowHomeButton(state, val) {
+            state.autoShowHomeButton = val;
+        },
         initUiSettings(state) {
             let pinQueueInSettings = undefined!=getLocalStorageVal('pinQueue', undefined);
             updateLang(state, window.navigator.userLanguage || window.navigator.language);
@@ -668,14 +672,14 @@ const store = new Vuex.Store({
 
             let boolItems = ['roundCovers', 'autoScrollQueue', 'sortFavorites', 'browseBackdrop', 'queueBackdrop', 'nowPlayingBackdrop',
                              'infoBackdrop', 'useDefaultBackdrops', 'browseTechInfo', 'techInfo', 'queueShowTrackNum', 'nowPlayingTrackNum',
-                             'nowPlayingClock', 'swipeVolume', 'swipeChangeTrack', 'keyboardControl', 'screensaverNp', 'homeButton',
-                             'mediaControls', 'queueAlbumStyle', 'queueThreeLines', 'browseContext', 'nowPlayingContext', 'queueContext',
+                             'nowPlayingClock', 'swipeVolume', 'swipeChangeTrack', 'keyboardControl', 'screensaverNp', 'mediaControls',
+                             'queueAlbumStyle', 'queueThreeLines', 'browseContext', 'nowPlayingContext', 'queueContext',
                              'moveDialogs', 'autoCloseQueue', 'nowPlayingFull', 'tinted', 'ndSettingsIcons', 'ndSettingsVisible', 'gridPerView'];
             for (let i=0, len=boolItems.length; i<len; ++i) {
                 let key = boolItems[i];
                 state[key] = getLocalStorageBool(key, state[key]);
             }
-            let intItems = ['skipBSeconds', 'skipFSeconds', 'mobileBar', 'maxRating', 'volumeStep', 'ndShortcuts', 'screensaver'];
+            let intItems = ['skipBSeconds', 'skipFSeconds', 'mobileBar', 'maxRating', 'volumeStep', 'ndShortcuts', 'screensaver', 'homeButton'];
             for (let i=0, len=intItems.length; i<len; ++i) {
                 let key = intItems[i];
                 let value = getLocalStorageVal(key, state[key]);

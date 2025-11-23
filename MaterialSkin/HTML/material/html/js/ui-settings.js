@@ -127,12 +127,10 @@ Vue.component('lms-ui-settings', {
 
     <v-divider v-if="LMS_STATS_ENABLED"></v-divider>
     <v-list-tile>
-     <v-list-tile-content @click="homeButton = !homeButton" class="switch-label">
-      <v-list-tile-title>{{i18n('Show home button')}}</v-list-tile-title>
-      <v-list-tile-sub-title>{{i18n('When navigating into lists, show a home button to quickly navigate to the main (home) screen. Otherwise navigating home can be achieved via a long-press on the back button.')}}</v-list-tile-sub-title>
-     </v-list-tile-content>
-     <v-list-tile-action><m3-switch v-model="homeButton"></m3-switch></v-list-tile-action>
+     <v-select :items="homeButtonValues" :label="i18n('Show home button')" v-model="homeButton" item-text="label" item-value="key"></v-select>
     </v-list-tile>
+    <v-list-tile-sub-title style="padding-bottom:16px">{{i18n("When navigating into lists, show a home button to quickly navigate to the main (home) screen. Otherwise you can click on the title to show a menu that contains 'Home'.")}}</v-list-tile-sub-title>
+    <v-divider></v-divider>
 
     <v-divider v-if="showMoveDialogs"></v-divider>
     <v-list-tile v-if="showMoveDialogs">
@@ -513,7 +511,8 @@ Vue.component('lms-ui-settings', {
             screensaverNp: false,
             serverName: "",
             showRating: false,
-            homeButton: false,
+            homeButton: 0,
+            homeButtonValues: [],
             gridPerView: true,
             width: 500,
             mediaControls: false,
@@ -804,6 +803,11 @@ Vue.component('lms-ui-settings', {
             this.detailedHomeItems.push(
                 {id:DETAILED_HOME_EXPLORE, title:i18n("Explore"), checked:false, icon:"music_note"}
             );
+            this.homeButtonValues=[
+                { key:0, label:i18n("Don't show")},
+                { key:1, label:i18n("Show always")},
+                { key:2, label:i18n("Single when wide enough")},
+                ];
         },
         close() {
             this.show=false;

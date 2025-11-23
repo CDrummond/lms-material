@@ -443,7 +443,7 @@ const store = new Vuex.Store({
         ndSettingsIcons: false,
         ndSettingsVisible: false,
         cMixSupported: 1==parseInt(getComputedStyle(document.documentElement).getPropertyValue('--color-mix-supported')),
-        detailedHomeItems: [DETAILED_HOME_STD_PREFIX+"new", DETAILED_HOME_STD_PREFIX+"radios"]
+        detailedHomeItems: [DETAILED_HOME_STD_PREFIX+"new", DETAILED_HOME_STD_PREFIX+"radios", DETAILED_HOME_EXPLORE]
     },
     mutations: {
         updatePlayer(state, player) {

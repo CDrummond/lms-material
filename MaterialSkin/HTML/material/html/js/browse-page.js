@@ -70,7 +70,8 @@ var lmsBrowse = Vue.component("lms-browse", {
    <lms-search-list v-else @scrollTo="highlightItem" :view="this" :msearch="true" :title="toolbarTitle"></lms-search-list>
   </v-layout>
   <v-layout v-else-if="history.length>0">
-   <v-btn flat icon @click="backBtnPressed" class="toolbar-button" v-bind:class="{'back-button':!homeButton || history.length<2}" id="back-button" :title="trans.goBack | tooltipStr('esc', keyboardControl)"><v-icon>arrow_back</v-icon></v-btn>
+   <v-btn v-if="IS_IOS" flat icon @click="backBtnPressed(false)" class="toolbar-button" v-bind:class="{'back-button':!homeButton || history.length<2}" id="back-button" :title="trans.goBack | tooltipStr('esc', keyboardControl)"><v-icon>arrow_back</v-icon></v-btn>
+   <v-btn v-else flat icon v-longpress:stop="backBtnPressed" class="toolbar-button" v-bind:class="{'back-button':!homeButton || history.length<2}" id="back-button" :title="trans.goBack | tooltipStr('esc', keyboardControl)"><v-icon>arrow_back</v-icon></v-btn>
    <v-btn v-if="history.length>1 && homeButton" flat icon @click="homeBtnPressed()" class="toolbar-button" id="home-button" v-bind:class="{'dst-home':showDetailedSubtoolbar}" :title="trans.goHome | tooltipStr('home', keyboardControl)"><v-icon>home</v-icon></v-btn>
    <div v-if="wide>=WIDE_COVER && currentImages" @click="showHistory($event)" class="sub-cover pointer">
     <div class="mi" :class="'mi'+currentImages.length">
@@ -1579,10 +1580,14 @@ var lmsBrowse = Vue.component("lms-browse", {
         closeSearch() {
             this.goBack();
         },
-        backBtnPressed() {
+        backBtnPressed(longPress) {
             if (this.$store.state.visibleMenus.size<1) {
                 this.backBtnPressTime = new Date().getTime(); // See sourcesClicked
-                this.goBack();
+                if (longPress) {
+                    this.goHome();
+                } else {
+                    this.goBack();
+                }
                 this.lastBackBtnPress = this.backBtnPressTime;
             }
         },

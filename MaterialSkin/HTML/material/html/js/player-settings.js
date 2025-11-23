@@ -18,7 +18,7 @@ Vue.component('lms-player-settings', {
     <v-toolbar app-data class="dialog-toolbar" @mousedown="mouseDown" id="playersettings-toolbar">
      <lms-windowcontrols v-if="queryParams.nativeTitlebar && queryParams.tbarBtnsPos=='l'"></lms-windowcontrols>
      <div class="drag-area-left"></div>
-     <v-btn flat icon v-longpress:stop="close" :title="ttShortcutStr(i18n('Go back'), 'esc')"><v-icon>arrow_back</v-icon></v-btn>
+     <v-btn flat icon @click="close" :title="ttShortcutStr(i18n('Go back'), 'esc')"><v-icon>arrow_back</v-icon></v-btn>
      <v-btn v-if="showHome && homeButton" flat icon @click="goHome" :title="ttShortcutStr(i18n('Go home'), 'home')"><v-icon>home</v-icon></v-btn>
      <v-toolbar-title v-if="numPlayers>1" @click="openPlayerMenu" class="pointer">{{TB_PLAYER_SETTINGS.title+SEPARATOR+playerName}} <v-icon>arrow_drop_down</v-icon></v-toolbar-title>
      <v-toolbar-title v-else>{{TB_PLAYER_SETTINGS.title+SEPARATOR+playerName}}</v-toolbar-title>
@@ -633,11 +633,7 @@ Vue.component('lms-player-settings', {
             this.close();
             this.$store.commit('closeAllDialogs', true);
         },
-        close(longpress) {
-            if (longpress && this.showHome) {
-                this.goHome();
-                return;
-            }
+        close() {
             this.show=false;
             this.showMenu = false;
             this.playerMenu.show = false;

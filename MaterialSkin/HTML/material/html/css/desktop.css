@@ -200,6 +200,10 @@
  min-width:600px;
 }
 
+.np-bar:hover .pbar, .np-bar:hover .pbar .value, .np-bar:hover .pbar .buffer {
+ height:12px!important;
+}
+
 .np-bar-queue {
  margin:-8px -8px -10px -3px!important;
  height:38px;

@@ -7,6 +7,7 @@
 4. Remove long-press on back button on iOS.
 5. Update home button option to be; don't show, always show, show if wide
    enough.
+6. For non-touch devices, increase height of song progressbar on hover.
 
 6.0.5
 -----

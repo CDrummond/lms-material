@@ -4490,6 +4490,14 @@ div.v-subheader {
  border-radius:4px;
 }
 
+.msk-is-non-touch .pbar:hover, .msk-is-non-touch .pbar:hover .value, .msk-is-non-touch .pbar:hover .buffer {
+ height:9px;
+}
+
+.msk-is-non-touch .np-slider:not(.np-bar-slider):hover {
+ top:-2px;
+}
+
 .pbar .value, .pbar .buffer {
  background-color: var(--primary-color);
  position:absolute;

@@ -277,6 +277,14 @@
  height:3px !important;
 }
 
+.msk-is-non-touch .np-bar:hover, .msk-is-non-touch .np-bar:hover .pbar,  .msk-is-non-touch .np-bar:hover .pbar .value,  .msk-is-non-touch .np-bar:hover .pbar .buffer {
+ height:5px!important;
+}
+
+.msk-is-non-touch .np-bar:hover .np-bar-slider {
+ bottom: calc((var(--bottom-toolbar-height) + var(--mobile-npbar-height)) - 4px);
+}
+
 .np-bar-details-mobile {
  position:fixed;
  left:8px;

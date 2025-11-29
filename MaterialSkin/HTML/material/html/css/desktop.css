@@ -200,6 +200,11 @@
  min-width:600px;
 }
 
+.msk-is-non-touch .np-bar:hover .pbar,  .msk-is-non-touch .np-bar:hover .pbar .value,  .msk-is-non-touch .np-bar:hover .pbar .buffer {
+ bottom: calc(var(--bottom-toolbar-height) - 7px);
+ height:9px!important;
+}
+
 .np-bar-queue {
  margin:-8px -8px -10px -3px!important;
  height:38px;

@@ -70,7 +70,8 @@ var lmsBrowse = Vue.component("lms-browse", {
    <lms-search-list v-else @scrollTo="highlightItem" :view="this" :msearch="true" :title="toolbarTitle"></lms-search-list>
   </v-layout>
   <v-layout v-else-if="history.length>0">
-   <v-btn flat icon v-longpress:stop="backBtnPressed" class="toolbar-button" v-bind:class="{'back-button':!homeButton || history.length<2}" id="back-button" :title="trans.goBack | tooltipStr('esc', keyboardControl)"><v-icon>arrow_back</v-icon></v-btn>
+   <v-btn v-if="IS_IOS" flat icon @click="backBtnPressed(false)" class="toolbar-button" v-bind:class="{'back-button':!homeButton || history.length<2}" id="back-button" :title="trans.goBack | tooltipStr('esc', keyboardControl)"><v-icon>arrow_back</v-icon></v-btn>
+   <v-btn v-else flat icon v-longpress:stop="backBtnPressed" class="toolbar-button" v-bind:class="{'back-button':!homeButton || history.length<2}" id="back-button" :title="trans.goBack | tooltipStr('esc', keyboardControl)"><v-icon>arrow_back</v-icon></v-btn>
    <v-btn v-if="history.length>1 && homeButton" flat icon @click="homeBtnPressed()" class="toolbar-button" id="home-button" v-bind:class="{'dst-home':showDetailedSubtoolbar}" :title="trans.goHome | tooltipStr('home', keyboardControl)"><v-icon>home</v-icon></v-btn>
    <div v-if="wide>=WIDE_COVER && currentImages" @click="showHistory($event)" class="sub-cover pointer">
     <div class="mi" :class="'mi'+currentImages.length">
@@ -568,7 +569,7 @@ var lmsBrowse = Vue.component("lms-browse", {
             detailedSubExtra: undefined,
             items: [],
             topExtra: [],
-            topExtraCfg: {val:0, order:[]},
+            topExtraCfg: {items: [], needsPlayer:false},
             grid: {allowed:true, use:getLocalStorageBool('grid', true), numItems:0, numColumns:0, ih:GRID_MIN_HEIGHT, rows:[], few:false, haveSubtitle:true, multiSize:false, type:GRID_STANDARD},
             fetchingItem:undefined,
             hoverBtns: !IS_MOBILE,
@@ -626,7 +627,7 @@ var lmsBrowse = Vue.component("lms-browse", {
             return this.$store.state.unlockAll
         },
         homeButton() {
-            return this.$store.state.homeButton
+            return this.$store.state.homeButton==1 || (this.$store.state.homeButton==2 && this.$store.state.autoShowHomeButton)
         },
         useRecyclerForLists() {
             return !this.isTop && this.items.length>LMS_MAX_NON_SCROLLER_ITEMS
@@ -813,7 +814,7 @@ var lmsBrowse = Vue.component("lms-browse", {
             return this.$store.state.tinted && this.$store.state.cMixSupported
         },
         variableGridHeight() {
-            return (this.isTop && this.$store.state.detailedHome>0 && undefined!=this.topExtra && this.topExtra.length>0) || this.grid.multiSize
+            return (this.isTop && this.$store.state.detailedHomeItems.length>0 && undefined!=this.topExtra && this.topExtra.length>0) || this.grid.multiSize
         },
         allowVLibOnHome() {
             return undefined!=this.libraryName
@@ -822,7 +823,7 @@ var lmsBrowse = Vue.component("lms-browse", {
             return undefined!=this.libraryName && undefined!=this.$store.state.library && !LMS_DEFAULT_LIBRARIES.has(this.$store.state.library)
         },
         subtitlesClickable() {
-            return this.subtitleClickable || (this.isTop && this.$store.state.detailedHome>0 && undefined!=this.topExtra && this.topExtra.length>0)
+            return this.subtitleClickable || (this.isTop && this.$store.state.detailedHomeItems.length>0 && undefined!=this.topExtra && this.topExtra.length>0)
         },
         isTrackList() {
             return undefined!=this.current && (STD_ITEM_ALBUM==this.current.stdItem || STD_ITEM_PLAYLIST==this.current.stdItem || STD_ITEM_REMOTE_PLAYLIST==this.current.stdItem || this.current.stdItem==STD_ITEM_ALL_TRACKS || STD_ITEM_ONLINE_ALBUM==this.current.stdItem || STD_ITEM_REMOTE_PLAYLIST==this.current.stdItem)
@@ -841,6 +842,7 @@ var lmsBrowse = Vue.component("lms-browse", {
                 try { browseHandleKey(browse, event); } catch(e) { }
             };
         }
+        this.needToRefresh3rdParty = false;
         this.reqId = 0;
         this.myMusic=[];
         this.history=[];
@@ -854,7 +856,7 @@ var lmsBrowse = Vue.component("lms-browse", {
                       sortFavorites: this.$store.state.sortFavorites};
         this.previousScrollPos=0;
         this.grid = {allowed:true, use:this.$store.state.gridPerView ? isSetToUseGrid(GRID_TOP) : getLocalStorageBool('grid', true), numItems:0, numColumns:0, ih:GRID_MIN_HEIGHT, rows:[], few:false, haveSubtitle:true, multiSize:false, type:GRID_STANDARD};
-        this.currentActions=[{action:VLIB_ACTION}, {action:(this.grid.use ? USE_LIST_ACTION : this.$store.state.detailedHome ? USE_ALT_GRID_ACTION : USE_GRID_ACTION)}];
+        this.currentActions=[{action:VLIB_ACTION}, {action:(this.grid.use ? USE_LIST_ACTION : this.$store.state.detailedHomeItems.length ? USE_ALT_GRID_ACTION : USE_GRID_ACTION)}];
         this.canDrop = true;
 
         if (!IS_MOBILE) {
@@ -1088,49 +1090,52 @@ var lmsBrowse = Vue.component("lms-browse", {
             });
         },
         getHomeExtra() {
-            this.topExtraCfg={val: this.$store.state.detailedHome, order: this.$store.state.detailedHomeOrder};
-            if (this.$store.state.detailedHome>0) {
+            this.topExtraCfg.items=JSON.parse(JSON.stringify(this.$store.state.detailedHomeItems));
+            if (this.$store.state.detailedHomeItems.length>0) {
                 let cmd = ["material-skin", "home-extra"];
-                if (this.$store.state.detailedHome&DETAILED_HOME_NEW) {
-                    cmd.push("new:1");
-                }
-                if (this.$store.state.detailedHome&DETAILED_HOME_MOST && LMS_VERSION>=90100 && LMS_STATS_ENABLED) {
-                    cmd.push("most:1");
-                }
-                if (this.$store.state.detailedHome&DETAILED_HOME_RECENT && LMS_VERSION>=90100 && LMS_STATS_ENABLED) {
-                    cmd.push("recent:1");
-                }
-                if (this.$store.state.detailedHome&DETAILED_HOME_RANDOM) {
-                    cmd.push("random:1");
-                }
-                if (this.$store.state.detailedHome&DETAILED_HOME_RADIOS) {
-                    cmd.push("radios:1");
-                }
-                if (this.$store.state.detailedHome&DETAILED_HOME_PLAYLISTS && lmsOptions.playlistImages) {
-                    cmd.push("playlists:1");
-                }
-                if (this.$store.state.detailedHome&DETAILED_HOME_UPDATED) {
-                    cmd.push("changed:1");
-                }
-                cmd.push("library_id:"+this.$store.state.library);
-                lmsCommand("", cmd, this.nextReqId()).then(({data}) => {
-                    if (this.isCurrentReq(data)) {
-                        this.handleHomeExtra(data);
+                this.topExtraCfg.needsPlayer = false;
+                for (let i=0, loop=this.$store.state.detailedHomeItems, len=loop.length; i<len; ++i) {
+                    if (DETAILED_HOME_EXPLORE!=loop[i]) {
+                        cmd.push(loop[i].split('_').slice(1).join('_')+":1");
+                        if (!this.topExtraCfg.needsPlayer && !loop[i].startsWith(DETAILED_HOME_STD_PREFIX) && lmsOptions.homeExtraNeedsPlayer.has(loop[i])) {
+                            this.topExtraCfg.needsPlayer = true;
+                        }
                     }
-                }).catch(err => {
-                    logError(err);
-                });
+                }
+                if (this.topExtraCfg.needsPlayer) {
+                    cmd[0]="material-skin-client";
+                }
+                if (this.$store.state.library!=undefined && this.$store.state.library!=null) {
+                    cmd.push("library_id:"+this.$store.state.library);
+                }
+                let listWidth = this.$store.state.desktopLayout ? this.pageElement.scrollWidth : window.innerWidth;
+                let numItems = Math.ceil((Math.floor(listWidth/145))/5) * 5;
+                if (numItems<10) {
+                    numItems = 10;
+                } else if (numItems>MAX_HOME_EXTRA_ROW) {
+                    numItems = MAX_HOME_EXTRA_ROW;
+                }
+                cmd.push("count:"+numItems);
+                if (!this.topExtraCfg.needsPlayer || this.playerId().length>1) {
+                    lmsCommand(this.playerId(), cmd, this.nextReqId()).then(({data}) => {
+                        if (this.isCurrentReq(data)) {
+                            this.handleHomeExtra(data);
+                        }
+                    }).catch(err => {
+                        logError(err);
+                    });
+                }
             }
         },
         handleHomeExtra(data) {
             try {
-                let resp = parseBrowseResp(data, undefined, {order:this.$store.state.detailedHomeOrder});
+                let resp = parseBrowseResp(data, undefined, {order:this.$store.state.detailedHomeItems});
                 this.fetchingItem = undefined;
                 if (undefined!=resp && undefined!=resp.items) {
                     // NOTE: No point checking for changes, as the layoutGrid code adds 'gidx' to items
                     // so will always be different!
                     this.topExtra = resp.items;
-                    if (this.isTop && this.$store.state.detailedHome>0 && this.grid.use) {
+                    if (this.isTop && this.$store.state.detailedHomeItems.length>0 && this.grid.use) {
                         this.items = this.topExtra.concat(this.top);
                         this.layoutGrid(true);
                     }
@@ -1470,7 +1475,7 @@ var lmsBrowse = Vue.component("lms-browse", {
                 this.$nextTick(function () {
                     this.setBgndCover();
                     if (this.isTop) {
-                        this.items = this.grid.use && this.$store.state.detailedHome>0 ? this.topExtra.concat(this.top) : this.top;
+                        this.items = this.grid.use && this.$store.state.detailedHomeItems.length>0 ? this.topExtra.concat(this.top) : this.top;
                     }
                     this.layoutGrid(true);
                     if (this.$store.state.gridPerView) {
@@ -1489,7 +1494,7 @@ var lmsBrowse = Vue.component("lms-browse", {
         setLayoutAction() {
             var af = this.grid.use ? USE_GRID_ACTION : USE_LIST_ACTION;
             var af2 = this.grid.use ? USE_ALT_GRID_ACTION : USE_LIST_ACTION;
-            var at = this.grid.use ? USE_LIST_ACTION : this.isTop && this.$store.state.detailedHome ? USE_ALT_GRID_ACTION : USE_GRID_ACTION;
+            var at = this.grid.use ? USE_LIST_ACTION : this.isTop && this.$store.state.detailedHomeItems.length>0 ? USE_ALT_GRID_ACTION : USE_GRID_ACTION;
             for (var i=0, loop=this.currentActions, len=loop.length; i<len; ++i) {
                 if (loop[i].action == af || loop[i].action == af2) {
                     loop[i].action = at;
@@ -1497,8 +1502,8 @@ var lmsBrowse = Vue.component("lms-browse", {
                 }
             }
             if (this.isTop) {
-                var af = this.$store.state.detailedHome ? USE_GRID_ACTION : USE_ALT_GRID_ACTION;
-                var at = this.$store.state.detailedHome ? USE_ALT_GRID_ACTION : USE_GRID_ACTION;
+                var af = this.$store.state.detailedHomeItems.length ? USE_GRID_ACTION : USE_ALT_GRID_ACTION;
+                var at = this.$store.state.detailedHomeItems.length ? USE_ALT_GRID_ACTION : USE_GRID_ACTION;
                 for (var i=0, loop=this.currentActions, len=loop.length; i<len; ++i) {
                     if (loop[i].action == af) {
                         loop[i].action = at;
@@ -1509,7 +1514,7 @@ var lmsBrowse = Vue.component("lms-browse", {
         },
         refreshList(restorePosition) {
             if (this.isTop) {
-                if (this.$store.state.detailedHome>0) {
+                if (this.$store.state.detailedHomeItems.length>0) {
                     this.getHomeExtra();
                 }
                 return;
@@ -1905,10 +1910,11 @@ var lmsBrowse = Vue.component("lms-browse", {
                 changed = true;
                 this.grid.rows = [];
                 this.grid.multiSize = false;
-                var items = [];
-                var topExtraItems = [];
+                let items = [];
+                let topExtraItems = [];
+                let haveExploreInScrolledList = false;
                 if (this.isTop) {
-                    for (var i=0, len=this.items.length; i<len; ++i) {
+                    for (let i=0, len=this.items.length; i<len; ++i) {
                         if (undefined!=this.items[i].ihe) {
                             topExtraItems.push(this.items[i]);
                         } else if (!this.disabled.has(this.items[i].id) && !(this.hidden.has(this.items[i].id)  || (this.items[i].id==TOP_RADIO_ID && lmsOptions.combineAppsAndRadio)) && (!queryParams.party || !HIDE_TOP_FOR_PARTY.has(this.items[i].id))) {
@@ -1922,18 +1928,28 @@ var lmsBrowse = Vue.component("lms-browse", {
                 this.grid.numItems=items.length+topExtraItems.length;
                 let rs = 0;
                 let row = 0;
-                for (var i=0, len=topExtraItems.length; i<len; ++row) {
-                    var rowHasSubtitle = false;
-                    var rowItems=[];
+                for (let i=0, len=topExtraItems.length; i<len; ++row) {
+                    let rowHasSubtitle = false;
+                    let rowItems=[];
                     if (i<topExtraItems.length && topExtraItems[i].header) {
+                        let isExplore = topExtraItems[i].id==DETAILED_HOME_EXPLORE;
+                        if (isExplore) {
+                            haveExploreInScrolledList = true;
+                        }
                         this.grid.multiSize=true;
                         this.grid.rows.push({item: topExtraItems[i], header:true, size:48, r:row, id:"row.extra.header."+i, rs:rs, ihe:true});
                         i+=1;
                         rs+=1;
+                        if (isExplore) {
+                            row++;
+                            haveSubtitle = true;
+                            rowHasSubtitle = true;
+                            this.grid.rows.push({id:"row."+row+"."+sz.nc, items:items, r:row, rs:this.topExtra.length, size:(rowHasSubtitle ? sz.h - 4 : (sz.h - GRID_SINGLE_LINE_DIFF))+sbarSize+8, numStd:items.length, hasSub:rowHasSubtitle, ihe:true});
+                        }
                     } else {
                         let used = 0;
-                        for (var j=0; j<10; ++j) {
-                            var idx = i+j;
+                        for (let j=0; j<MAX_HOME_EXTRA_ROW; ++j) {
+                            let idx = i+j;
                             if (idx<topExtraItems.length && topExtraItems[idx].header) {
                                 break;
                             } else {
@@ -1951,45 +1967,47 @@ var lmsBrowse = Vue.component("lms-browse", {
                         rs+=used;
                     }
                 }
-                for (var i=0, len=items.length; i<len; ++row) {
-                    var rowHasSubtitle = this.isTop; // Always allow for subtitle with home items to make space for virtual library name
-                    var rowItems=[];
-                    if (i<items.length && items[i].header) {
-                        this.grid.multiSize=true;
-                        if (this.grid.type!=GRID_TEXT_ONLY && this.grid.rows.length>0 && !this.grid.rows[this.grid.rows.length-1].hasSub && !this.grid.rows[this.grid.rows.length-1].ihe) {
-                            this.grid.rows.push({spacer:true, size:24, id:"row.extra.spacer."+i, ihe:true, rs:rs});
-                        }
-                        this.grid.rows.push({item: items[i], header:true, size:48, r:row, id:"row.header."+i, rs:rs});
-                        i+=1;
-                        rs+=1;
-                    } else {
-                        let used = 0;
-                        for (var j=0; j<sz.nc; ++j) {
-                            var idx = i+j;
-                            if (idx<items.length && items[idx].header) {
-                                for (; j<sz.nc; ++j) {
-                                    rowItems.push(undefined);
-                                }
-                                break;
-                            } else {
-                                rowItems.push(idx<items.length ? items[idx] : undefined);
-                                if (GRID_TEXT_ONLY != this.grid.type) {
-                                    let haveSub = idx<items.length && items[idx].subtitle;
-                                    if (haveSub) {
-                                        haveSubtitle = true;
-                                        rowHasSubtitle = true;
-                                    }
-                                }
-                                used++;
+                if (!this.top || !haveExploreInScrolledList) {
+                    for (var i=0, len=items.length; i<len; ++row) {
+                        var rowHasSubtitle = this.isTop; // Always allow for subtitle with home items to make space for virtual library name
+                        var rowItems=[];
+                        if (i<items.length && items[i].header) {
+                            this.grid.multiSize=true;
+                            if (this.grid.type!=GRID_TEXT_ONLY && this.grid.rows.length>0 && !this.grid.rows[this.grid.rows.length-1].hasSub && !this.grid.rows[this.grid.rows.length-1].ihe) {
+                                this.grid.rows.push({spacer:true, size:24, id:"row.extra.spacer."+i, ihe:true, rs:rs});
                             }
-                        }
-                        if (GRID_TEXT_ONLY == this.grid.type) {
-                            this.grid.rows.push({id:"row."+row+"."+sz.nc, items:rowItems, r:row, rs:rs, size:this.grid.multiSize ? sz.h : undefined, numStd:used, hasSub:undefined});
+                            this.grid.rows.push({item: items[i], header:true, size:48, r:row, id:"row.header."+i, rs:rs});
+                            i+=1;
+                            rs+=1;
                         } else {
-                            this.grid.rows.push({id:"row."+row+"."+sz.nc, items:rowItems, r:row, rs:rs, size:this.grid.multiSize ? (rowHasSubtitle ? sz.h : (sz.h - GRID_SINGLE_LINE_DIFF)) : undefined, numStd:used, hasSub:this.grid.multiSize ? rowHasSubtitle : undefined});
+                            let used = 0;
+                            for (var j=0; j<sz.nc; ++j) {
+                                var idx = i+j;
+                                if (idx<items.length && items[idx].header) {
+                                    for (; j<sz.nc; ++j) {
+                                        rowItems.push(undefined);
+                                    }
+                                    break;
+                                } else {
+                                    rowItems.push(idx<items.length ? items[idx] : undefined);
+                                    if (GRID_TEXT_ONLY != this.grid.type) {
+                                        let haveSub = idx<items.length && items[idx].subtitle;
+                                        if (haveSub) {
+                                            haveSubtitle = true;
+                                            rowHasSubtitle = true;
+                                        }
+                                    }
+                                    used++;
+                                }
+                            }
+                            if (GRID_TEXT_ONLY == this.grid.type) {
+                                this.grid.rows.push({id:"row."+row+"."+sz.nc, items:rowItems, r:row, rs:rs, size:this.grid.multiSize ? sz.h : undefined, numStd:used, hasSub:undefined});
+                            } else {
+                                this.grid.rows.push({id:"row."+row+"."+sz.nc, items:rowItems, r:row, rs:rs, size:this.grid.multiSize ? (rowHasSubtitle ? sz.h : (sz.h - GRID_SINGLE_LINE_DIFF)) : undefined, numStd:used, hasSub:this.grid.multiSize ? rowHasSubtitle : undefined});
+                            }
+                            i+=used;
+                            rs+=used;
                         }
-                        i+=used;
-                        rs+=used;
                     }
                 }
                 this.grid.numColumns = sz.nc;
@@ -2239,7 +2257,7 @@ var lmsBrowse = Vue.component("lms-browse", {
                             drgIdx-=this.topExtra.length;
                         }
                         this.top = arrayMove(this.top, drgIdx, to);
-                        this.items = this.grid.use && this.$store.state.detailedHome>0 ? this.topExtra.concat(this.top) : this.top;
+                        this.items = this.grid.use && this.$store.state.detailedHomeItems.length>0 ? this.topExtra.concat(this.top) : this.top;
                         this.saveTopList();
                         this.layoutGrid(true);
                     } else if (this.current) {
@@ -2576,10 +2594,10 @@ var lmsBrowse = Vue.component("lms-browse", {
             if (this.isTop) {
                 this.setLayoutAction();
             }
-            if (this.$store.state.detailedHome>0 && (this.topExtraCfg.val!=this.$store.state.detailedHome || !arraysEqual(this.topExtraCfg.order, this.$store.state.detailedHomeOrder))) {
+            if (this.$store.state.detailedHomeItems.length>0 && !arraysEqual(this.topExtraCfg.items, this.$store.state.detailedHomeItems)) {
                 this.getHomeExtra();
             } else {
-                this.items = this.isTop && this.grid.use && this.$store.state.detailedHome>0 ? this.topExtra.concat(this.top) : this.top;
+                this.items = this.isTop && this.grid.use && this.$store.state.detailedHomeItems.length>0 ? this.topExtra.concat(this.top) : this.top;
                 this.layoutGrid(true);
             }
         }.bind(this));
@@ -2719,7 +2737,12 @@ var lmsBrowse = Vue.component("lms-browse", {
             if (2!=newVal) {
                 this.highlightIndex = -1;
             }
-        }
+        },
+        '$store.state.player': function() {
+            if (this.topExtraCfg.needsPlayer && this.isTop) {
+                this.getHomeExtra();
+            }
+        },
     },
     beforeDestroy() {
         if (undefined!==this.updateTimer) {

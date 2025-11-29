@@ -9,6 +9,7 @@ package Plugins::MaterialSkin::Plugin;
 #
 
 use strict;
+use Async::Util;
 use Config;
 use Encode;
 use Scalar::Util qw(blessed);
@@ -165,6 +166,8 @@ my $CATEGORIES_MAP = {
     'YouTube' => 'musicservices'
 };
 
+my $HOME_EXTRAS = {};
+
 sub initPlugin {
     my $class = shift;
 
@@ -267,21 +270,22 @@ sub initPlugin {
     }
     $prefs->setChange(sub { $prefs->set($_[0], 0) unless defined $_[1]; }, 'maiComposer');
     $prefs->setChange(sub { $prefs->set($_[0], 0) unless defined $_[1]; }, 'showBand');
-    $prefs->setChange(sub { $prefs->set($_[0], 0) unless defined $_[1]; }, 'showComposer');
+    $prefs->setChange(sub { $prefs->set($_[0], 0) unless $_[1]; }, 'showComposer');
     $prefs->setChange(sub { $prefs->set($_[0], 0) unless defined $_[1]; }, 'showConductor');
-    $prefs->setChange(sub { $prefs->set($_[0], 0) unless defined $_[1]; }, 'showArtistWorks');
-    $prefs->setChange(sub { $prefs->set($_[0], 0) unless defined $_[1]; }, 'showAllArtists');
-    $prefs->setChange(sub { $prefs->set($_[0], 0) unless defined $_[1]; }, 'artistFirst');
-    $prefs->setChange(sub { $prefs->set($_[0], 0) unless defined $_[1]; }, 'noArtistFilter');
-    $prefs->setChange(sub { $prefs->set($_[0], 0) unless defined $_[1]; }, 'yearInSub');
+    $prefs->setChange(sub { $prefs->set($_[0], 0) unless $_[1]; }, 'showArtistWorks');
+    $prefs->setChange(sub { $prefs->set($_[0], 0) unless $_[1]; }, 'respectFixedVol');
+    $prefs->setChange(sub { $prefs->set($_[0], 0) unless $_[1]; }, 'showAllArtists');
+    $prefs->setChange(sub { $prefs->set($_[0], 0) unless $_[1]; }, 'artistFirst');
+    $prefs->setChange(sub { $prefs->set($_[0], 0) unless $_[1]; }, 'noArtistFilter');
+    $prefs->setChange(sub { $prefs->set($_[0], 0) unless $_[1]; }, 'yearInSub');
     $prefs->setChange(sub { $prefs->set($_[0], 0) unless defined $_[1]; }, 'touchLinks');
     $prefs->setChange(sub { $prefs->set($_[0], 0) unless defined $_[1]; }, 'showComment');
     $prefs->setChange(sub { $prefs->set($_[0], 0) unless defined $_[1]; }, 'genreImages');
-    $prefs->setChange(sub { $prefs->set($_[0], 0) unless defined $_[1]; }, 'playlistImages');
+    $prefs->setChange(sub { $prefs->set($_[0], 0) unless $_[1]; }, 'playlistImages');
     $prefs->setChange(sub { $prefs->set($_[0], 0) unless defined $_[1]; }, 'allowDownload');
     $prefs->setChange(sub { $prefs->set($_[0], 0) unless defined $_[1]; }, 'useDefaultForSettings');
     $prefs->setChange(sub { $prefs->set($_[0], 0) unless defined $_[1]; }, 'useGrouping');
-    $prefs->setChange(sub { $prefs->set($_[0], 0) unless defined $_[1]; }, 'smallIconOnlyGrid');
+    $prefs->setChange(sub { $prefs->set($_[0], 0) unless $_[1]; }, 'smallIconOnlyGrid');
 
     if (main::WEBUI) {
         require Plugins::MaterialSkin::Settings;
@@ -337,8 +341,6 @@ sub initPlugin {
     if (Slim::Utils::Versions->compareVersions($::VERSION, '8.4.0') < 0) {
         Slim::Utils::Timers::setTimer(undef, Time::HiRes::time() + 15, \&_checkUpdates);
     }
-
-    #Slim::Control::Request::subscribe(\&_checkPlayQueue, [['playlist']]);
 }
 
 #sub shutdownPlugin {
@@ -521,6 +523,46 @@ sub initOthers {
     if (!$hideForKiosk) {
         $hideForKiosk = '9, 10, 11, 12, 13, 14, 15, 16, 20, 25, 26, 27, 29, 30, 41, 42, 49, 50, 56, 57';
     }
+}
+
+sub registerHomeExtra {
+    my ($class, $id, $args) = @_;
+
+    if (!($id && $args->{title} && $args->{handler})) {
+        $log->error("Missing details for Home Extra with id '$id': " . Data::Dump::dump($args));
+        return;
+    }
+
+    $log->warn("Home Extra with id '$id' is already registered - overwriting") if $HOME_EXTRAS->{$id};
+
+    $HOME_EXTRAS->{'3rdparty_' . $id} = {
+        id      => $id,
+        title   => $args->{title},
+        icon    => $args->{icon} || '',
+        handler => $args->{handler},
+        needsPlayer => $args->{needsPlayer},
+    };
+}
+
+sub getHomeExtra {
+    # prefix identifiers to not conflict with built-in extras
+    return $HOME_EXTRAS->{'3rdparty_' . $_[0]};
+}
+
+sub getHomExtrasIDs {
+    return map { s/^3rdparty_//; $_ } keys %$HOME_EXTRAS;
+}
+
+sub getHomeExtra3rdPartyItems {
+    return to_json([ map {
+        my $item = $HOME_EXTRAS->{$_};
+        {
+            id          => $_,
+            title       => Slim::Utils::Strings::getString($item->{title}),
+            icon        => $item->{icon},
+            needsPlayer => $item->{needsPlayer}
+        }
+    } keys %$HOME_EXTRAS ]);
 }
 
 #sub _checkPlayQueue {
@@ -1961,83 +2003,136 @@ sub _cliCommand {
     }
 
     if ($cmd eq 'home-extra') {
-        my @sorts = ();
-
-        if ($request->getParam('new')) {
-            push(@sorts, "new");
-        }
-        if ($request->getParam('most')) {
-            push(@sorts, "playcount");
-        }
-        if ($request->getParam('recent')) {
-            push(@sorts, "recentlyplayed");
-        }
-        if ($request->getParam('random')) {
-            push(@sorts, "random");
-        }
-        if ($request->getParam('changed')) {
-            push(@sorts, "changed");
-        }
-        if (scalar(@sorts)>0) {
-            my $total = 0;
-            my $libId = $request->getParam('library_id');
-            foreach my $srt ( @sorts ) {
-                my @cmd = ("albums", 0, NUM_HOME_ITEMS, "tags:aajlqswyKSS24WE", "sort:${srt}");
-                if ($libId) {
-                    push(@cmd, "library_id:${libId}");
-                }
-                my $req = Slim::Control::Request::executeRequest(undef, \@cmd);
-                my $cnt = 0;
-                my $loop_name = "material_home_${srt}_loop";
-                foreach my $item ( @{ $req->getResult('albums_loop') || [] } ) {
-                    $request->addResultLoop($loop_name, $cnt, "id", $item->{id} . "@" . "idx" . $total); # Need unique IDs in case same album in multiple loops!
-                    $request->addResultLoop($loop_name, $cnt, "ihe", 1);
-                    foreach my $key (keys(%{$item})) {
-                        if ($key ne "id") {
-                            $request->addResultLoop($loop_name, $cnt, ${key}, $item->{$key});
-                        }
-                    }
-                    $cnt+=1;
-                    $total+=1;
-                }
-                $request->addResult("${loop_name}_len", $req->getResult('count'));
-            }
-        }
-        if ($request->getParam('radios')) {
-            my @cmd = ("material-skin-query", "radios", 0, NUM_HOME_ITEMS+1);
-            my $req = Slim::Control::Request::executeRequest(undef, \@cmd);
-            my $cnt = 0;
-            foreach my $item ( @{ $req->getResult('radios_loop') || [] } ) {
-                if ($cnt<NUM_HOME_ITEMS) {
-                    foreach my $key (keys(%{$item})) {
-                        $request->addResultLoop("material_home_radios_loop", $cnt, ${key}, $item->{$key});
-                    }
-                    $request->addResultLoop("material_home_radios_loop", $cnt, "ihe", 1);
-                }
-                $cnt+=1;
-            }
-            $request->addResult("material_home_radios_loop_len", $cnt);
-        }
-        if ($request->getParam('playlists')) {
-            my @cmd = ("material-skin-query", "playlists", 0, NUM_HOME_ITEMS+1, "tags:suxE", "menu:1");
-            my $req = Slim::Control::Request::executeRequest(undef, \@cmd);
-            my $cnt = 0;
-            foreach my $item ( @{ $req->getResult('playlists_loop') || [] } ) {
-                if ($cnt<NUM_HOME_ITEMS) {
-                    foreach my $key (keys(%{$item})) {
-                        $request->addResultLoop("material_home_playlists_loop", $cnt, ${key}, $item->{$key});
-                    }
-                    $request->addResultLoop("material_home_playlists_loop", $cnt, "ihe", 1);
-                }
-                $cnt+=1;
-            }
-            $request->addResult("material_home_playlists_loop_len", $cnt);
-        }
-        $request->addResult("material_home", 1);
-        $request->setStatusDone();
+        _handleHomeExtraCmd($request);
         return;
     }
     $request->setStatusBadParams();
+}
+
+sub _handleHomeExtraCmd {
+    my $request = shift;
+    $request->setStatusProcessing();
+
+    my @sorts = ();
+    my $count = $request->getParam('count');
+
+    if (!$count || $count<NUM_HOME_ITEMS) {
+        $count = NUM_HOME_ITEMS;
+    }
+    if ($request->getParam('new')) {
+        push(@sorts, "new");
+    }
+    if ($request->getParam('playcount')) {
+        push(@sorts, "playcount");
+    }
+    if ($request->getParam('recentlyplayed')) {
+        push(@sorts, "recentlyplayed");
+    }
+    if ($request->getParam('random')) {
+        push(@sorts, "random");
+    }
+    if ($request->getParam('changed')) {
+        push(@sorts, "changed");
+    }
+    $request->addResult("material_home", 1);
+    if (scalar(@sorts)>0) {
+        my $total = 0;
+        my $libId = $request->getParam('library_id');
+        foreach my $srt ( @sorts ) {
+            my @cmd = ("albums", 0, $count, "tags:aajlqswyKSS24WE", "sort:${srt}");
+            if ($libId) {
+                push(@cmd, "library_id:${libId}");
+            }
+            my $req = Slim::Control::Request::executeRequest(undef, \@cmd);
+            my $cnt = 0;
+            foreach my $item ( @{ $req->getResult('albums_loop') || [] } ) {
+                if ($cnt<$count) {
+                    _addExtraHomeItem($request, ${srt}, $item, $cnt, $total);
+                    $cnt+=1;
+                    $total+=1;
+                }
+            }
+            $request->addResult("material_home_${srt}_loop_len", $req->getResult('count'));
+        }
+    }
+    if ($request->getParam('radios')) {
+        my @cmd = ("material-skin-query", "radios", 0, $count+1);
+        my $req = Slim::Control::Request::executeRequest(undef, \@cmd);
+        my $cnt = 0;
+        foreach my $item ( @{ $req->getResult('radios_loop') || [] } ) {
+            if ($cnt<$count) {
+                _addExtraHomeItem($request, "radios", $item, $cnt, undef);
+            }
+            $cnt+=1;
+        }
+        $request->addResult("material_home_radios_loop_len", $cnt);
+    }
+    if ($request->getParam('playlists')) {
+        my @cmd = ("material-skin-query", "playlists", 0, $count+1, "tags:suxE", "menu:1");
+        my $req = Slim::Control::Request::executeRequest(undef, \@cmd);
+        my $cnt = 0;
+        foreach my $item ( @{ $req->getResult('playlists_loop') || [] } ) {
+            if ($cnt<$count) {
+                _addExtraHomeItem($request, "playlists", $item, $cnt, undef);
+                $cnt+=1;
+            }
+        }
+        $request->addResult("material_home_playlists_loop_len", $req->getResult('count'));
+    }
+
+    my $others = [ grep { $_ } map { getHomeExtra($_) } keys %{$request->getParamsCopy()} ];
+    if (scalar @$others) {
+        # process other home items asynchronously and in parallel - they might be doing online lookups
+        Async::Util::amap(
+            inputs => $others,
+            action => sub {
+                my ($extra, $acb) = @_;
+                my $id = $extra->{id};
+
+                $extra->{handler}->($request->client, sub {
+                    $acb->({ $id => (shift || []) });
+                }, $count);
+            },
+            cb => sub {
+                my ($resultsList, $err) = @_;
+                my $results = {};
+
+                $log->error($err) if $err;
+
+                my $otherExists = { map { $_->{id} => 1 } @$others };
+
+                foreach my $result (@$resultsList) {
+                    my ($id, $res) = each %{$result};
+
+                    if ($otherExists->{$id}) {
+                        $request->addResult("material_home_${id}_obj", $res);
+                    }
+                }
+
+                $request->setStatusDone();
+            }
+        );
+
+        # we have to wait for the async processing to finish
+        return;
+    }
+
+    $request->setStatusDone();
+}
+
+sub _addExtraHomeItem {
+    my ($request, $id, $item, $cnt, $idmod) = @_;
+    my $loop_name = "material_home_${id}_loop";
+    foreach my $key (keys(%{$item})) {
+        if (defined $idmod) {
+            $request->addResultLoop($loop_name, $cnt, "id", $item->{id} . "@" . "idx" . $idmod); # Need unique IDs in case same album in multiple loops!
+        }
+        if ((!defined $idmod) || $key ne "id") {
+            $request->addResultLoop($loop_name, $cnt, ${key}, $item->{$key});
+        }
+    }
+
+    $request->addResultLoop("material_home_${id}_loop", $cnt, "ihe", 1);
 }
 
 sub _isRadio {
@@ -2248,7 +2343,7 @@ sub _cliClientCommand {
     }
     my $cmd = $request->getParam('_cmd');
     my $client = $request->client();
-    if ($request->paramUndefinedOrNotOneOf($cmd, ['set-lib', 'get-alarm', 'get-dstm', 'save-dstm', 'sort-queue', 'remove-queue', 'command-list', 'rndmix']) ) {
+    if ($request->paramUndefinedOrNotOneOf($cmd, ['set-lib', 'get-alarm', 'get-dstm', 'save-dstm', 'sort-queue', 'remove-queue', 'command-list', 'rndmix', 'home-extra']) ) {
         $request->setStatusBadParams();
         return;
     }
@@ -2384,6 +2479,11 @@ sub _cliClientCommand {
                 return;
             }
         }
+    }
+
+    if ($cmd eq 'home-extra') {
+        _handleHomeExtraCmd($request);
+        return;
     }
 
     $request->setStatusBadParams();

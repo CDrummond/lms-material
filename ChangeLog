@@ -1,3 +1,14 @@
+6.1.0
+-----
+1. Add ability for other plugins to provide scrolled lists - thanks to Michael
+   Herger.
+2. Allow for more items in scrolled window if view is wider.
+3. Allow placing 'Explore' into a scrolled list.
+4. Remove long-press on back button on iOS.
+5. Update home button option to be; don't show, always show, show if wide
+   enough.
+6. For non-touch devices, increase height of song progressbar on hover.
+
 6.0.5
 -----
 1. Work-around desktop splitter showing in now-playing if queue is pinned.

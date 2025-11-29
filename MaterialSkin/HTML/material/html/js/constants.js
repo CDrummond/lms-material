@@ -78,6 +78,7 @@ const LMS_SEARCH_LIMIT = 500;
 const LMS_INITIAL_SEARCH_RESULTS = 10;
 const LMS_MIN_DESKTOP_WIDTH = 750;
 const LMS_MIN_NP_LARGE_INFO_HEIGHT = 250;
+const LMS_AUTO_SHOW_HOME_BUTTON_MIN_WIDTH = 600;
 
 const LMS_SAVE_QUEUE_KEYBOARD = "S";
 const LMS_CLEAR_QUEUE_KEYBOARD = "X";
@@ -136,7 +137,6 @@ const TOP_RADIO_ID = TOP_ID_PREFIX+"ra";
 const TOP_REMOTE_ID = TOP_ID_PREFIX+"rml";
 const TOP_CDPLAYER_ID = TOP_ID_PREFIX+"cdda";
 const HIDE_TOP_FOR_PARTY = new Set([TOP_EXTRAS_ID, TOP_RADIO_ID, TOP_REMOTE_ID, TOP_FAVORITES_ID]);
-const TOP_DETAILED_EXTRA = TOP_ID_PREFIX+"dth";
 const MUSIC_ID_PREFIX = "mm:/";
 const MYMUSIC_WORKS_PREFIX = "mmw:";
 const COMPILATIONS_ID = MUSIC_ID_PREFIX+"myMusicAlbumsVariousArtists";
@@ -258,6 +258,10 @@ const GRID_STANDARD = 0;
 const GRID_TEXT_ONLY = 1;
 const GRID_ICON_ONLY_ONLY = 2;
 
+const DETAILED_HOME_STD_PREFIX = "std_";
+const DETAILED_HOME_EXPLORE = DETAILED_HOME_STD_PREFIX+"explore";
+
+// Old 6.0.x values
 const DETAILED_HOME_NEW = 1;
 const DETAILED_HOME_MOST = 2;
 const DETAILED_HOME_RECENT = 4;
@@ -265,6 +269,8 @@ const DETAILED_HOME_RANDOM = 8;
 const DETAILED_HOME_RADIOS = 16;
 const DETAILED_HOME_PLAYLISTS = 32;
 const DETAILED_HOME_UPDATED = 64;
+
+const MAX_HOME_EXTRA_ROW = 30;
 
 const RADIOS_BASE_ACTIONS = { "add-hold": { "cmd": ["favorites", "playlist", "insert"], "params": {"menu": "favorites"}, "itemsParams": "params"},
                               "play": { "cmd": ["favorites", "playlist", "play"], "params": {"menu": "favorites"}, "itemsParams": "params"},

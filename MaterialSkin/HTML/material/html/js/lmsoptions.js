@@ -57,4 +57,14 @@ var lmsOptions = {techInfo: getLocalStorageBool('techInfo', false),
                   variousArtistsString: LMS_DEF_VA_STRING,
                   classicalGenres: new Set(["Classical"]),
                   smallIconOnlyGrid: getLocalStorageBool('smallIconOnlyGrid', true),
+                  homeExtraNeedsPlayer: new Set()
                 };
+
+function initLmsOptions() {
+    lmsOptions.homeExtraNeedsPlayer = new Set();
+    for (let i=0, len=LMS_3RDPARTY_HOME_EXTRA.length; i<len; ++i) {
+        if (LMS_3RDPARTY_HOME_EXTRA[i].needsPlayer) {
+            lmsOptions.homeExtraNeedsPlayer.add(LMS_3RDPARTY_HOME_EXTRA[i].id);
+        }
+    }
+}

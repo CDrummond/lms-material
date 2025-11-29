@@ -2110,8 +2110,8 @@ function browseGoHome(view) {
     view.tbarActions=[];
     view.isTop = true;
     view.grid = {allowed:true, use:view.$store.state.gridPerView ? isSetToUseGrid(GRID_TOP) : view.grid.use, numColumns:0, ih:GRID_MIN_HEIGHT, rows:[], few:false, haveSubtitle:true, multiSize:false, type:GRID_STANDARD};
-    view.items = view.$store.state.detailedHome && view.grid.use ? view.topExtra.concat(view.top) : view .top;
-    view.currentActions=[{action:VLIB_ACTION}, {action:(view.grid.use ? USE_LIST_ACTION : view.$store.state.detailedHome ? USE_ALT_GRID_ACTION : USE_GRID_ACTION)}];
+    view.items = view.$store.state.detailedHomeItems.length>0 && view.grid.use ? view.topExtra.concat(view.top) : view .top;
+    view.currentActions=[{action:VLIB_ACTION}, {action:(view.grid.use ? USE_LIST_ACTION : view.$store.state.detailedHomeItems.length>0 ? USE_ALT_GRID_ACTION : USE_GRID_ACTION)}];
     view.hoverBtns = !IS_MOBILE;
     view.command = undefined;
     view.subtitleClickable = false;
@@ -2240,7 +2240,9 @@ function browseBuildCommand(view, item, commandName, doReplacements, allowLibId,
         if (undefined==commandName || item.mskOnlyGoAction) {
             commandName = "go";
         }
-        var baseActions = slimBrowseBaseActions ? slimBrowseBaseActions : view.current == item ? view.currentBaseActions : view.baseActions;
+        var baseActions = undefined!=item.iheHdr && undefined!=view.topExtra[item.iheHdr].baseActions
+            ? view.topExtra[item.iheHdr].baseActions
+            : slimBrowseBaseActions ? slimBrowseBaseActions : view.current == item ? view.currentBaseActions : view.baseActions;
         var command = item.actions && item.actions[commandName]
                     ? item.actions[commandName]
                     : "go" == commandName && item.actions && item.actions["do"]
@@ -2635,7 +2637,7 @@ function browsePin(view, item, add, mapped) {
             lmsOptions.randomMixDialogPinned = true;
         }
         if (view.isTop) {
-            view.items = view.grid.use && view.$store.state.detailedHome>0 ? view.topExtra.concat(view.top) : view.top;
+            view.items = view.grid.use && view.$store.state.detailedHomeItems.length>0 ? view.topExtra.concat(view.top) : view.top;
         }
         view.options.pinned.add(item.id);
         browseUpdateItemPinnedState(view, item);
@@ -2653,7 +2655,7 @@ function browsePin(view, item, add, mapped) {
 
 function browseUnpin(view, item, index) {
     view.top.splice(index, 1);
-    view.items = view.grid.use && view.$store.state.detailedHome>0 ? view.topExtra.concat(view.top) : view.top;
+    view.items = view.grid.use && view.$store.state.detailedHomeItems.length>0 ? view.topExtra.concat(view.top) : view.top;
     view.options.pinned.delete(item.id);
     browseUpdateItemPinnedState(view, item);
     if (item.id.startsWith(MUSIC_ID_PREFIX)) {

@@ -178,6 +178,9 @@ function parseBrowseResp(data, parent, options, cacheKey) {
             for (var idx=0, loop=data.result.item_loop, loopLen=loop.length; idx<loopLen; ++idx) {
                 var i = loop[idx];
                 i.slimbrowse = true;
+                if (!i.text && i.name) {
+                    i.text = i.name;
+                }
                 if (!i.text || i.showBigArtwork==1) {
                     if (i.url && "musicartistinfo"==command) { // Artist images...
                         resp.items.push({id: "image:"+resp.items.length,
@@ -779,7 +782,7 @@ function parseBrowseResp(data, parent, options, cacheKey) {
                 resp.allTracksItem={id:resp.baseActions['playControl'].params.item_id, params:resp.baseActions['playControl'].params};
             }
             // If listing a radio app's entries and all images are the same, then hide images. e.g. iHeartRadio and RadioNet
-            if (!isRadiosTop && !isAppsTop && !isFromFavorites && !isBmf && !isDisksAndFolders && (!isApps || (isApps && parent.id.split('.').length==2)) && resp.items.length>1 && resp.items.length<=100) {
+            if ((undefined==options || !options.ihe) && !isRadiosTop && !isAppsTop && !isFromFavorites && !isBmf && !isDisksAndFolders && (!isApps || (isApps && parent.id.split('.').length==2)) && resp.items.length>1 && resp.items.length<=100) {
                 if (images.size == 1 && undefined!=images.values().next().value) {
                     for (var i=0, loop=resp.items, len=loop.length; i<len; ++i) {
                         loop[i].image = loop[i].icon = loop[i].svg = undefined;
@@ -2395,22 +2398,61 @@ function parseBrowseResp(data, parent, options, cacheKey) {
             }
             resp.listSize=resp.items.length;
         } else if (data.result.material_home) {
-            var lists = [{val: DETAILED_HOME_NEW, key:'new', loop:"albums", text:i18n('New Music'), id:TOP_DETAILED_EXTRA+DETAILED_HOME_NEW, icon:"new_releases", command:["albums"], params:["sort:new", ALBUM_TAGS_ALL_ARTISTS]},
-                         {val: DETAILED_HOME_RECENT, key:'recentlyplayed', loop:"albums", text:i18n('Recently Played'), id:TOP_DETAILED_EXTRA+DETAILED_HOME_RECENT, icon:"history", command:["albums"], params:["sort:recentlyplayed", ALBUM_TAGS_ALL_ARTISTS]},
-                         {val: DETAILED_HOME_MOST, key:'playcount', loop:"albums", text:i18n('Most Played'), id:TOP_DETAILED_EXTRA+DETAILED_HOME_MOST, svg:"trophy", command:["albums"], params:["sort:playcount", ALBUM_TAGS_ALL_ARTISTS]},
-                         {val: DETAILED_HOME_RANDOM, key:'random', loop:"albums", text:lmsOptions.supportReleaseTypes ? i18n('Random Releases') : i18n('Random Albums'), id:TOP_DETAILED_EXTRA+DETAILED_HOME_RANDOM, svg:"dice-album", command:["albums"], params:["sort:random", ALBUM_TAGS_ALL_ARTISTS]},
-                         {val: DETAILED_HOME_RADIOS, key:'radios', loop:"radios", text:i18n('Radios'), id:TOP_DETAILED_EXTRA+DETAILED_HOME_RADIOS, svg:"radio", command:["material-skin-query","radios"], params:[], limit:200},
-                         {val: DETAILED_HOME_PLAYLISTS, key:'playlists', loop:"playlists", text:i18n('Playlists'), id:TOP_DETAILED_EXTRA+DETAILED_HOME_PLAYLISTS, icon:"list", command:["material-skin-query","playlists"], params:[PLAYLIST_TAGS, "menu:1"], limit:200},
-                         {val: DETAILED_HOME_UPDATED, key:'changed', loop:"albums", text:lmsOptions.supportReleaseTypes ? i18n("Recently Updated Releases") : i18n("Recently Updated Albums"), id:TOP_DETAILED_EXTRA+DETAILED_HOME_UPDATED, svg:"updated-music", command:["albums"], params:["sort:changed", ALBUM_TAGS_ALL_ARTISTS]}
+            let ismore = false;
+            let count = 10;
+            let haveExplore = undefined!=options && undefined!=options.order && options.order.indexOf(DETAILED_HOME_EXPLORE)>=0;
+            if (data.params && data.params.length>1) {
+                for (var i=4, loop=data.params[1], len=loop.length; i<len; ++i) {
+                    if ((""+loop[i]).startsWith("count:")) {
+                        count = parseInt(loop[i].split(":")[1]);
+                    } else if ((""+loop[i]).startsWith("ismore:1")) {
+                        ismore = true;
+                    }
+                }
+            }
+            var lists = [{key:'new', loop:"albums", title:i18n('New Music'), icon:"new_releases", command:["albums"], params:["sort:new", ALBUM_TAGS_ALL_ARTISTS]},
+                         {key:'recentlyplayed', loop:"albums", title:i18n('Recently Played'), icon:"history", command:["albums"], params:["sort:recentlyplayed", ALBUM_TAGS_ALL_ARTISTS]},
+                         {key:'playcount', loop:"albums", title:i18n('Most Played'), svg:"trophy", command:["albums"], params:["sort:playcount", ALBUM_TAGS_ALL_ARTISTS]},
+                         {key:'random', loop:"albums", title:lmsOptions.supportReleaseTypes ? i18n('Random Releases') : i18n('Random Albums'), svg:"dice-album", command:["albums"], params:["sort:random", ALBUM_TAGS_ALL_ARTISTS]},
+                         {key:'radios', loop:"radios", title:i18n('Radios'), svg:"radio", command:["material-skin-query","radios"], params:[], limit:200},
+                         {key:'playlists', loop:"playlists", title:i18n('Playlists'), icon:"list", command:["material-skin-query","playlists"], params:[PLAYLIST_TAGS, "menu:1"], limit:200},
+                         {key:'changed', loop:"albums", title:lmsOptions.supportReleaseTypes ? i18n("Recently Updated Releases") : i18n("Recently Updated Albums"), svg:"updated-music", command:["albums"], params:["sort:changed", ALBUM_TAGS_ALL_ARTISTS]},
+                         {id:DETAILED_HOME_EXPLORE}
                         ];
-            for (let s=0, len=lists.length; s<len; ++s) {
-                let idx = undefined!=options && undefined!=options.order ? options.order.indexOf(lists[s].val) : undefined;
-                lists[s].val = undefined==idx || idx<0 ? lists[s].val*100 : idx;
+            for (let s=0, len=lists.length-1; s<len; ++s) { // Ignore 'Explore'
+                lists[s].id = DETAILED_HOME_STD_PREFIX+lists[s].key;
+            }
+            lists = lists.concat(LMS_3RDPARTY_HOME_EXTRA);
+            if (undefined!=options && undefined!=options.order) {
+                for (let s=0, len=lists.length; s<len; ++s) {
+                    lists[s].val = options.order.indexOf(lists[s].id);
+                    if (lists[s].val<0) {
+                        lists[s].val = lists.length+s+500;
+                    }
+                }
             }
             lists.sort((a, b) => { return a.val<b.val ? -1 : 1});
             for (let s=0, len=lists.length; s<len; ++s) {
-                let loop = 'material_home_'+lists[s].key+'_loop';
-                if (data.result[loop]!=undefined) {
+                if (lists[s].id==DETAILED_HOME_EXPLORE) {
+                    if (haveExplore) {
+                        resp.items.push({title:i18n("Explore"), id:DETAILED_HOME_EXPLORE, header:true, ihe:1, icon:"music_note"});
+                    }
+                    continue;
+                }
+                let id = lists[s].id.split('_').slice(1).join('_');
+                let obj_name = 'material_home_'+id+'_obj';
+                let obj = undefined;
+                let loop_name = 'material_home_'+id+'_loop';
+                let loop = data.result[loop_name];
+                let parse_loop_name = lists[s].loop;
+                if (undefined==loop) {
+                    obj = data.result[obj_name];
+                    if (undefined!=obj) {
+                        loop = obj['item_loop'];
+                        parse_loop_name = 'item'
+                    }
+                }
+                if (loop!=undefined) {
                     let parent = undefined;
                     let new_data = {
                         id:2,
@@ -2418,17 +2460,42 @@ function parseBrowseResp(data, parent, options, cacheKey) {
                         params: data.params,
                         result: {}
                     }
-                    new_data.result[lists[s].loop+"_loop"] = data.result[loop];
-                    let newResp = parseBrowseResp(new_data, parent, undefined, undefined, true);
+                    new_data.result[parse_loop_name+"_loop"] = loop;
+                    if (undefined!=obj) {
+                        new_data.result['base']=obj['base'];
+                        new_data.result['count']=2500;
+                    }
+                    let newResp = parseBrowseResp(new_data, parent, {ihe:true}, undefined);
+                    if (ismore) {
+                        if (newResp.items.length>0) {
+                            newResp.canUseGrid = true;
+                        }
+                        return newResp;
+                    }
                     if (undefined!=newResp && newResp.items.length>0) {
-                        resp.items.push({title:lists[s].text, id:lists[s].id, header:true, ihe:1, icon:lists[s].icon, svg: lists[s].svg, limit: lists[s].limit,
-                            morecmd:parseInt(data.result[loop+"_len"])>10 ? {command:lists[s].command, params:lists[s].params} : undefined});
+                        if (undefined!=obj) { // 3rd party => slimbrowse...
+                            let header = {title:lists[s].title, id:lists[s].id, header:true, ihe:1, icon:lists[s].icon, svg: lists[s].svg, limit: lists[s].limit,
+                                          morecmd:parseInt(obj['count'])>count ? {command:["material-skin", "home-extra"], params:[lists[s].id.split('_').slice(1).join('_')+":1", "ismore:1", "count:200"]} : undefined,
+                                          baseActions:undefined!=obj['base'] ? obj['base']['actions'] : undefined}
+                            mapIcon(header);
+                            let iheHdr = resp.items.length;
+                            resp.items.push(header);
+                            for (let i=0, loop=newResp.items, len=loop.length; i<len; ++i) {
+                                loop[i].ihe = true;
+                                loop[i].iheHdr = iheHdr;
+                            }
+                        } else {
+                            resp.items.push({title:lists[s].title, id:lists[s].id, header:true, ihe:1, icon:lists[s].icon, svg: lists[s].svg, limit: lists[s].limit,
+                                morecmd:parseInt(data.result[loop_name+"_len"])>count ? {command:lists[s].command, params:lists[s].params} : undefined});
+                        }
                         resp.items=resp.items.concat(newResp.items);
                     }
                 }
             }
             if (resp.items.length>0) {
-                resp.items.push({title:i18n("Explore"), id:TOP_DETAILED_EXTRA+"explore", header:true, ihe:1, icon:"music_note"});
+                if (!haveExplore) {
+                    resp.items.push({title:i18n("Explore"), id:DETAILED_HOME_EXPLORE+"_std", header:true, ihe:1, icon:"music_note"});
+                }
             }
             resp.listSize=resp.items.length;
         }

@@ -127,12 +127,10 @@ Vue.component('lms-ui-settings', {
 
     <v-divider v-if="LMS_STATS_ENABLED"></v-divider>
     <v-list-tile>
-     <v-list-tile-content @click="homeButton = !homeButton" class="switch-label">
-      <v-list-tile-title>{{i18n('Show home button')}}</v-list-tile-title>
-      <v-list-tile-sub-title>{{i18n('When navigating into lists, show a home button to quickly navigate to the main (home) screen. Otherwise navigating home can be achieved via a long-press on the back button.')}}</v-list-tile-sub-title>
-     </v-list-tile-content>
-     <v-list-tile-action><m3-switch v-model="homeButton"></m3-switch></v-list-tile-action>
+     <v-select :items="homeButtonValues" :label="i18n('Show home button')" v-model="homeButton" item-text="label" item-value="key"></v-select>
     </v-list-tile>
+    <v-list-tile-sub-title style="padding-bottom:16px">{{i18n("When navigating into lists, show a home button to quickly navigate to the main (home) screen. Otherwise you can click on the title to show a menu that contains 'Home'.")}}</v-list-tile-sub-title>
+    <v-divider></v-divider>
 
     <v-divider v-if="showMoveDialogs"></v-divider>
     <v-list-tile v-if="showMoveDialogs">
@@ -199,14 +197,23 @@ Vue.component('lms-ui-settings', {
     <v-list-tile>
      <v-list-tile-content class="switch-label">
       <v-list-tile-title>{{i18n('Home screen items')}}</v-list-tile-title>
-      <v-list-tile-sub-title>{{i18n("Check the standard items which you wish to appear on the home screen.")}} {{i18n("The order of 'Scrollable list' items can be changed, here, by drag and drop.")}} {{i18n("(NOTE: These lists are only shown when using the grid view)")}}</v-list-tile-sub-title>
+      <v-list-tile-sub-title>{{i18n("Check the standard items which you wish to appear on the home screen.")}} {{i18n("The order of 'Scrollable list' items can be changed, here, by drag and drop.")}} {{i18n("(NOTE: These lists are only shown when using the grid view. If 'Explore' is not selected, then it will appear as a standard grid at the end. 'Categories' configures the standard items shown in 'Explore'.)")}}</v-list-tile-sub-title>
      <v-list-tile-content/>
     </v-list-tile>
 
     <div class="settings-list-checkboxes-title">{{i18n('Scrollable lists')}}</div>
-    <template v-for="(item, index) in detailedHomeItems">
-     <v-checkbox v-model="item.checked" :label="item.title" style="display:flex" class="settings-list-checkbox" @dragstart.native="dragStart(index, $event)" @dragenter.prevent="" @dragend.native="dragEnd()" @dragover.native="dragOver(index, $event)" @drop.native="drop(index, $event)" draggable v-bind:class="{'highlight-drop':dropIndex==index, 'highlight-drag':dragIndex==index}"></v-checkbox>
+    <template v-for="(item, index) in detailedHomeItems" :key="item.id">
+     <v-checkbox v-model="item.checked" style="display:flex" class="settings-list-checkbox" @dragstart.native="dragStart(index, $event)" @dragenter.prevent="" @dragend.native="dragEnd()" @dragover.native="dragOver(index, $event)" @drop.native="drop(index, $event)" draggable v-bind:class="{'highlight-drop':dropIndex==index, 'highlight-drag':dragIndex==index}" @change="sortDetailedHome" :id="item.id">
+      <template v-slot:label>
+       <v-avatar size="24">
+        <v-icon v-if="undefined!=item.icon">{{item.icon}}</v-icon>
+        <img v-else-if="item.svg" class="svg-img" :src="item.svg | svgIcon(darkUi)"></img>
+       </v-avatar>
+       <div style="padding-left:8px">{{item.title}}</div>
+      </template>
+     </v-checkbox>
     </template>
+    <div class="dialog-padding"></div>
     <div class="settings-list-checkboxes-title">{{i18n('Categories')}}</div>
     <template v-for="(item, index) in showItems">
      <div style="display:flex" v-if="item.id!=TOP_RADIO_ID || !lmsOptions.combineAppsAndRadio">
@@ -504,7 +511,8 @@ Vue.component('lms-ui-settings', {
             screensaverNp: false,
             serverName: "",
             showRating: false,
-            homeButton: false,
+            homeButton: 0,
+            homeButtonValues: [],
             gridPerView: true,
             width: 500,
             mediaControls: false,
@@ -516,8 +524,7 @@ Vue.component('lms-ui-settings', {
             ndShortcutValues: [],
             ndSettingsIcons: false,
             ndSettingsVisible: false,
-            detailedHomeItems:[
-            ],
+            detailedHomeItems:[],
             dragIndex: undefined,
             dropIndex: undefined
         }
@@ -707,12 +714,16 @@ Vue.component('lms-ui-settings', {
                             {id: TOP_FAVORITES_ID, name:i18n("Favorites"), show:!this.hidden.has(TOP_FAVORITES_ID)},
                             {id: TOP_APPS_ID, name:i18n("Apps"), show:!this.hidden.has(TOP_APPS_ID)},
                             {id: TOP_EXTRAS_ID, name:i18n("Extras"), show:!this.hidden.has(TOP_EXTRAS_ID)}];
+
+            let checkedHomeItems = new Set(this.$store.state.detailedHomeItems);
+
             for (let s=0, loop=this.detailedHomeItems, len=loop.length; s<len; ++s) {
-                let idx = this.$store.state.detailedHomeOrder.indexOf(loop[s].id);
-                loop[s].val = undefined==idx || idx<0 ? loop[s].val*100 : idx;
-                loop[s].checked = this.$store.state.detailedHome & loop[s].id;
+                let idx = this.$store.state.detailedHomeItems.indexOf(loop[s].id);
+                loop[s].val = undefined==idx || idx<0 ? this.detailedHomeItems.length+s : idx;
+                loop[s].checked = checkedHomeItems.has(loop[s].id);
             }
             this.detailedHomeItems.sort((a, b) => { return a.val<b.val ? -1 : 1});
+            this.sortDetailedHome();
         },
         initItems() {
             this.themes=[
@@ -759,31 +770,44 @@ Vue.component('lms-ui-settings', {
                 { key:3, label:i18n("Blank screen")}
             ]
 
-            this.detailedHomeItems = [{id:DETAILED_HOME_NEW, title:i18n('New Music'), checked:DETAILED_HOME_NEW&&this.$store.state.detailedHome}];
+            this.detailedHomeItems = [{id:DETAILED_HOME_STD_PREFIX+"new", title:i18n('New Music'), checked:false, icon:"new_releases"}];
             if (LMS_VERSION>=90100 && LMS_STATS_ENABLED) {
                 this.detailedHomeItems.push(
-                    { id:DETAILED_HOME_RECENT, title:i18n('Recently Played'), checked:DETAILED_HOME_RECENT&&this.$store.state.detailedHome}
+                    {id:DETAILED_HOME_STD_PREFIX+"recentlyplayed", title:i18n('Recently Played'), checked:false, icon:"history"}
                 );
                 this.detailedHomeItems.push(
-                    { id:DETAILED_HOME_MOST, title:i18n('Most Played'), checked:DETAILED_HOME_MOST&&this.$store.state.detailedHome}
+                    {id:DETAILED_HOME_STD_PREFIX+"playcount", title:i18n('Most Played'), checked:false, svg:"trophy"}
                 );
             }
             this.detailedHomeItems.push(
-                { id:DETAILED_HOME_RANDOM, title:lmsOptions.supportReleaseTypes ? i18n("Random Releases") : i18n("Random Albums"), checked:DETAILED_HOME_RANDOM&&this.$store.state.detailedHome}
+                {id:DETAILED_HOME_STD_PREFIX+"random", title:lmsOptions.supportReleaseTypes ? i18n("Random Releases") : i18n("Random Albums"), checked:false, svg:"dice-album"}
             );
             this.detailedHomeItems.push(
-                { id:DETAILED_HOME_RADIOS, title:i18n('Radios'), checked:DETAILED_HOME_RADIOS&&this.$store.state.detailedHome}
+                {id:DETAILED_HOME_STD_PREFIX+"radios", title:i18n('Radios'), checked:false, svg:"radio"}
             );
             if (lmsOptions.playlistImages) {
                 this.detailedHomeItems.push(
-                    { id:DETAILED_HOME_PLAYLISTS, title:i18n('Playlists'), checked:DETAILED_HOME_PLAYLISTS&&this.$store.state.detailedHome}
+                    {id:DETAILED_HOME_STD_PREFIX+"playlists", title:i18n('Playlists'), checked:false, icon:"list"}
                 );
             }
             if (LMS_VERSION>=90000) {
                 this.detailedHomeItems.push(
-                    {id:DETAILED_HOME_UPDATED, title:lmsOptions.supportReleaseTypes ? i18n("Recently Updated Releases") : i18n("Recently Updated Albums"), checked:DETAILED_HOME_UPDATED&&this.$store.state.detailedHome}
+                    {id:DETAILED_HOME_STD_PREFIX+"changed", title:lmsOptions.supportReleaseTypes ? i18n("Recently Updated Releases") : i18n("Recently Updated Albums"), checked:false, svg:"updated-music"}
                 );
             }
+            for (let i=0, len=LMS_3RDPARTY_HOME_EXTRA.length; i<len; ++i) {
+                let entry = LMS_3RDPARTY_HOME_EXTRA[i];
+                mapIcon(entry);
+                this.detailedHomeItems.push(entry);
+            }
+            this.detailedHomeItems.push(
+                {id:DETAILED_HOME_EXPLORE, title:i18n("Explore"), checked:false, icon:"music_note"}
+            );
+            this.homeButtonValues=[
+                { key:0, label:i18n("Don't show")},
+                { key:1, label:i18n("Show always")},
+                { key:2, label:i18n("Single when wide enough")},
+                ];
         },
         close() {
             this.show=false;
@@ -815,12 +839,10 @@ Vue.component('lms-ui-settings', {
             }
         },
         settings(arrays, withSorts) {
-            let detailedHome = 0;
-            let detailedHomeOrder = [];
+            let detailedHomeItems = [];
             for (let i=0, loop=this.detailedHomeItems, len=loop.length; i<len; ++i) {
-                detailedHomeOrder.push(loop[i].id);
                 if (loop[i].checked) {
-                    detailedHome+=loop[i].id;
+                    detailedHomeItems.push(loop[i].id);
                 }
             }
             let settings = {
@@ -867,8 +889,7 @@ Vue.component('lms-ui-settings', {
                       ndShortcuts:this.ndShortcuts,
                       ndSettingsIcons:this.ndSettingsIcons,
                       ndSettingsVisible:this.ndSettingsVisible,
-                      detailedHome:detailedHome,
-                      detailedHomeOrder:detailedHomeOrder
+                      detailedHomeItems:detailedHomeItems
                   };
             if (withSorts) {
                 for (var key in window.localStorage) {
@@ -1041,7 +1062,29 @@ Vue.component('lms-ui-settings', {
         mouseDown(ev) {
             toolbarMouseDown(ev);
         },
+        sortDetailedHome() {
+            this.$nextTick(function () {
+                let checked = [];
+                let unchecked = [];
+                for (let i=0, loop=this.detailedHomeItems, len=loop.length; i<len; ++i) {
+                    if (loop[i].checked) {
+                        checked.push(loop[i]);
+                    } else {
+                        unchecked.push(loop[i]);
+                    }
+                }
+                unchecked.sort(titleSort);
+                this.detailedHomeItems = [];
+                this.$nextTick(function () {
+                    this.detailedHomeItems = checked.concat(unchecked);
+                });
+            });
+        },
         dragStart(which, ev) {
+            if (!this.detailedHomeItems[which].checked) {
+                ev.preventDefault();
+                return;
+            }
             ev.dataTransfer.dropEffect = 'move';
             ev.dataTransfer.setData('text/plain', "dth:"+which);
             this.dragIndex = which;
@@ -1052,14 +1095,14 @@ Vue.component('lms-ui-settings', {
             this.dropIndex = undefined;
         },
         dragOver(index, ev) {
-            if (index!=this.dragIndex) {
+            if (this.detailedHomeItems[index].checked && index!=this.dragIndex) {
                 this.dropIndex = index;
             }
             ev.preventDefault(); // Otherwise drop is never called!
         },
         drop(to, ev) {
             ev.preventDefault();
-            if (to!=this.dragIndex) {
+            if (this.detailedHomeItems[to].checked && to!=this.dragIndex) {
                 this.detailedHomeItems = arrayMove(this.detailedHomeItems, this.dragIndex, to);
             }
             this.dragIndex = undefined;

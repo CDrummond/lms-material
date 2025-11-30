@@ -13,7 +13,7 @@ Par défaut l'application tente d'utiliser l'interface adaptée à votre matéri
 <br/>
 
 <h1>Interface pour smartphone/tablette</h1>
-<p>Cette interface est destinée à être utilisée avec des téléphones ou des petites tablettes. Elle propose dans le bas de l'écran des onglets permettant de basculer entre plusieurs vues :
+<p>Cette interface est destinée à être utilisée avec des téléphones ou des petites tablettes. Par défaut, elle propose dans le bas de l'écran des onglets permettant de basculer entre plusieurs vues :
   <ul>
     <li>Bibliothèque - permet de parcourir votre collection de musique locale, vos applications, vos radios, etc.</li>
     <li>En cours - affiche des informations (par exemple la pochette) sur le morceau en cours de lecture.</li>
@@ -30,7 +30,7 @@ Si vous êtes déjà sur une vue et que vous appuyez à nouveau sur son bouton, 
 <br/>
 
 <h1>Interface pour ordinateur</h1>
-<p>Cette interface est destinée aux appareils dotés d'écrans larges, tels que les ordinateurs portables et les ordinateurs de bureau. Elle affiche la vue "Bibliothèque" à gauche, la vue "Liste de lecture" à droite et les détails sur le morceau en cours en bas (s'il y a des morceaux dans la liste de lecture). En appuyant sur le bouton "Accéder à la vue lecture en cours" dans la barre d'outils principale, les vues "Bibliothèque" et "Liste de lecture" seront remplacées par une vue unique affichant une grande pochette et des détails sur le morceau en cours. De même, cliquer sur "Afficher les informations du morceau en cours" (si le plugin "Informations sur la musique et les artistes" est installé) affichera une vue contenant les informations sur l'artiste, l'album et le morceau en cours (les paroles d'une chanson par exemple).
+<p>Cette interface est destinée aux appareils dotés d'écrans larges, tels que les ordinateurs portables et les ordinateurs de bureau. Elle affiche la vue "Bibliothèque" à gauche, la vue "Liste de lecture" à droite et les détails sur le morceau en cours en bas (s'il y a des morceaux dans la liste de lecture). <br/><br/>Par défaut, la "Liste de lecture" n'est pas "épinglée" (affichée en permanence). Cliquer sur l'icône "Afficher ou pas la liste de lecture" dans la barre d'outils principale fera apparaître temporairement la liste de lecture sur la droite. Pour afficher la liste de lecture en permanence, cliquer alors sur l'icône de menu de la vue "Liste de lecture" et sélectionner "Épingler". <br/><br/>En appuyant sur le bouton "Accéder à la vue lecture en cours" dans la barre d'outils principale, les vues "Bibliothèque" et "Liste de lecture" seront remplacées par une vue unique affichant une grande pochette et des détails sur le morceau en cours. De même, cliquer sur "Afficher les informations du morceau en cours" (si le plugin "Informations sur la musique et les artistes" est installé) affichera une vue contenant les informations sur l'artiste, l'album et le morceau en cours (les paroles d'une chanson par exemple).
 </p>
 <br/>
 
@@ -39,9 +39,9 @@ Si vous êtes déjà sur une vue et que vous appuyez à nouveau sur son bouton, 
   <ul>
     <li>Onglet "Bibliothèque" dans l'interface pour smartphone/tablette - si la vue "Bibliothèque" est déjà affichée, permet un retour à l'écran d'accueil.</li>
     <li>Onglet "En cours" dans l'interface pour smartphone/tablette - si la vue "En cours" est déjà affichée, affiche la fenêtre de mise en veille.</li>
-    <li>Bouton "Retourner" dans la vue "Bibliothèque" - déclenche un retour à l'écran d'accueil.</li>
-    <li>Bouton "Retourner" dans les entêtes des fenêtres (telles que "Configuration de platine") - ferme les fenêtres.</li>
-    <li>Bouton ou étiquette de volume - active/désactive le son.</li>
+    <li>Bouton "Retourner" dans la vue "Bibliothèque" - déclenche un retour à l'écran d'accueil (sauf sur iOS). </li>
+    <li>Bouton "Retourner" dans les entêtes des fenêtres (telles que "Configuration de platine") - ferme les fenêtres (sauf sur iOS).</li>
+    <li>Bouton ou valeur de volume - active/désactive le son.</li>
     <li>Bouton "Lecture/Pause" - arrête la lecture en agissant comme une bouton "Stop".</li>
     <li>Icône de "répétition" ou DSTM - affiche les options "Don't Stop the Music".</li>
     <li>Étiquette de durée dans la file d'attente - affiche la fenêtre "Transférer la liste de lecture", si vous avez au moins 2 platines.</li>

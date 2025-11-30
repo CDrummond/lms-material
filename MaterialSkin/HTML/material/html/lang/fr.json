@@ -9,6 +9,7 @@
 "%1dB":"%1dB",
 "'%1' failed":"\"%1\" a échoué",
 "(+%1 others)":"(+%1 autres)",
+"(NOTE: These lists are only shown when using the grid view. If 'Explore' is not selected, then it will appear as a standard grid at the end. 'Categories' configures the standard items shown in 'Explore'.)":"(Les listes déroulantes n'apparaissent qu'en mode d'affichage \"grille\". Si aucune liste déroulante n'est sélectionnée, une grille standard s'affiche avec uniquement les éléments cochés de la section \"Catégories\".)",
 "+ %1 more":"+ %1 de plus",
 "...then album artist, album, disc no., track no.":"... puis artiste de l'album, album, n° de disque, n° de morceau",
 "...then album artist, disc no., track no.":"... puis artiste de l'album, n° de disque, n° de morceau",
@@ -487,6 +488,7 @@
 "Should alarms repeat":"Réactivation automatique (alarme périodique)",
 "Show 'performed by', 'from', etc. when listing track details (e.g. Title by Artist from Album).":"Inclure \"interprété par\", \"dans\", etc. quand les détails du morceau sont affichés.",
 "Show all":"Tout afficher",
+"Show always":"Afficher toujours",
 "Show artist context, etc.":"Expliciter le contexte du morceau",
 "Show current date and time":"Afficher la date et l'heure actuelles",
 "Show current date and time in main toolbar if there is sufficient space.":"Afficher la date et l'heure actuelles dans la barre d'outils principale s'il y a suffisamment de place.",
@@ -513,6 +515,7 @@
 "Similar artists":"Artistes similaires",
 "Single field only":"Sur un seul critère",
 "Single line only":"Sur une seule ligne",
+"Single when wide enough":"Si assez de place",
 "Skip backward":"Saut arrière",
 "Skip forward":"Saut avant",
 "Sleep":"Mise en veille",
@@ -643,6 +646,7 @@
 "Volume step":"Palier de volume",
 "Wednesday":"Mercredi",
 "Weds":"Me",
+"When navigating into lists, show a home button to quickly navigate to the main (home) screen. Otherwise you can click on the title to show a menu that contains 'Home'.":"Lors du parcours des listes, afficher un bouton \"Maison\" permettant un accès rapide à l'écran d'accueil. Par défaut, un clic sur le nom de la liste affiche un menu qui permet de revenir à l'écran d'accueil.",
 "When no track is playing on current player, darken screen (and show date & time) after a period  of inactivity. Clock is fixed to center of screen.":"Lorsqu'aucun morceau n'est joué sur la platine, l'écran s'assombrit, et affiche la date et l'heure, après une période d'inactivité. L'horloge est placée au centre de l'écran.",
 "When no track is playing on current player, darken screen (and show date & time) after a period of inactivity. Clock is moved every few minutes.":"Lorsqu'aucun morceau n'est joué sur la platine, l'écran s'assombrit, et affiche la date et l'heure, après une période d'inactivité. L'horloge est déplacée régulièrement sur l'écran.",
 "When no track is playing on current player, darken screen after a period of inactivity.":"Lorsqu'aucun morceau n'est joué sur la platine, l'écran s'assombrit après une période d'inactivité",
@@ -726,9 +730,5 @@
 "1 Year":"1 année",
 "%1 Years":"%1 années",
 "1 day":"1 jour",
-"%1 days":"%1 jours",
-"(NOTE: These lists are only shown when using the grid view. If 'Explore' is not selected, then it will appear as a standard grid at the end. 'Categories' configures the standard items shown in 'Explore'.)":"",
-"Show always":"",
-"Single when wide enough":"",
-"When navigating into lists, show a home button to quickly navigate to the main (home) screen. Otherwise you can click on the title to show a menu that contains 'Home'.":""
+"%1 days":"%1 jours"
 }

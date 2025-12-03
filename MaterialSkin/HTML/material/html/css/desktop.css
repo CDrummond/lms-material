@@ -494,6 +494,7 @@
  animation: pqSlideIn 0.2s forwards;
  -webkit-animation: pqSlideIn 0.2s forwards;
  display:unset!important; /* ? something is setting this to none? */
+ pointer-events:bounding-box;
 }
 
 @keyframes pqSlideIn {

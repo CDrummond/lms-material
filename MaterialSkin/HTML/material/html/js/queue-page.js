@@ -839,7 +839,9 @@ var lmsQueue = Vue.component("lms-queue", {
             msHandleScrollEvent(this);
         },
         clickListener(e) {
-            if (!this.$store.state.desktopLayout || (this.$store.state.pinQueue && this.windowWide>1) || !this.$store.state.showQueue || resizerActive ||
+            console.log("CLICK LISTENER");
+            if (!this.$store.state.desktopLayout || (this.$store.state.pinQueue && this.windowWide>1) ||
+                (!this.$store.state.showQueue && !this.$store.state.showQueueNp) || resizerActive ||
                 (this.$store.state.openDialogs.length>0 && ('info-dialog'!=this.$store.state.openDialogs[0] || this.$store.state.openDialogs.length>1)) ||
                 this.menu.show) {
                 return;
@@ -860,6 +862,7 @@ var lmsQueue = Vue.component("lms-queue", {
                 return;
             }
             this.$store.commit('setShowQueue', false);
+            this.$store.commit('setShowQueueNp', false);
         },
         togglePin() {
             if (!this.$store.state.pinQueue) {

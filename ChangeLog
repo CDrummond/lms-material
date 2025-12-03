@@ -9,6 +9,7 @@
    enough.
 6. For non-touch devices, increase height of song progressbar on hover.
 7. Add Korean translation - thanks to Zerglrisk
+8. Fix not being able to interact with queue when its shown over now-playing.
 
 6.0.5
 -----

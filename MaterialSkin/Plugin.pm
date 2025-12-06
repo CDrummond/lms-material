@@ -1747,12 +1747,6 @@ sub _cliCommand {
                     $cnt++;
                 }
             }
-            my $cnt = 0;
-            $request->addResultLoop("app_loop", $cnt, "type", "APPEARANCE_BAND");
-            $request->addResultLoop("app_loop", $cnt, "val", string('BAND'));
-            $cnt++;
-            $request->addResultLoop("app_loop", $cnt, "type", "APPEARANCE_CONDUCTOR");
-            $request->addResultLoop("app_loop", $cnt, "val", string('CONDUCTOR'));
         }
         $request->setStatusDone();
         return;

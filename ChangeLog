@@ -10,6 +10,8 @@
 6. For non-touch devices, increase height of song progressbar on hover.
 7. Add Korean translation - thanks to Zerglrisk
 8. Fix not being able to interact with queue when its shown over now-playing.
+9. With release types, if only have one of singular/plural then use the
+   defined value for the missing value.
 
 6.0.5
 -----

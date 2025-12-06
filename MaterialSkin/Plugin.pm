@@ -1740,6 +1740,14 @@ sub _cliCommand {
             foreach my $rt (@{$relTypes}) {
                 my $singular = _releaseTypeName($rt, '');
                 my $plural = _releaseTypeName($rt, 'S');
+
+                # If only have one of singular/plural then use the defined value for the missing value.
+                if ($singular && !$plural) {
+                    $plural = $singular;
+                } elsif (!$singular && $plural) {
+                    $singular = $plural;
+                }
+
                 if ($singular && $plural) {
                     $request->addResultLoop("rt_loop", $cnt, "type", $rt);
                     $request->addResultLoop("rt_loop", $cnt, "singular", $singular);

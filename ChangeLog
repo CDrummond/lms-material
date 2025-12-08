@@ -1,17 +1,18 @@
 6.1.0
 -----
-1. Add ability for other plugins to provide scrolled lists - thanks to Michael
-   Herger.
-2. Allow for more items in scrolled window if view is wider.
-3. Allow placing 'Explore' into a scrolled list.
-4. Remove long-press on back button on iOS.
-5. Update home button option to be; don't show, always show, show if wide
-   enough.
-6. For non-touch devices, increase height of song progressbar on hover.
-7. Add Korean translation - thanks to Zerglrisk
-8. Fix not being able to interact with queue when its shown over now-playing.
-9. With release types, if only have one of singular/plural then use the
-   defined value for the missing value.
+ 1. Add ability for other plugins to provide scrolled lists - thanks to Michael
+    Herger.
+ 2. Allow for more items in scrolled window if view is wider.
+ 3. Allow placing 'Explore' into a scrolled list.
+ 4. Remove long-press on back button on iOS.
+ 5. Update home button option to be; don't show, always show, show if wide
+    enough.
+ 6. For non-touch devices, increase height of song progressbar on hover.
+ 7. Add Korean translation - thanks to Zerglrisk
+ 8. Fix not being able to interact with queue when its shown over now-playing.
+ 9. With release types, if only have one of singular/plural then use the
+    defined value for the missing value.
+10. When removing multiple playlists, remove in reverse order.
 
 6.0.5
 -----

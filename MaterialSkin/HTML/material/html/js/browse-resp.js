@@ -2030,7 +2030,8 @@ function parseBrowseResp(data, parent, options, cacheKey) {
                                 section: SECTION_PLAYLISTS,
                                 url:  i.url,
                                 remotePlaylist: isRemote,
-                                ihe: i.ihe // home screen extra item
+                                ihe: i.ihe, // home screen extra item
+                                realIndex: resp.items.length // So playlists are deleted in correct order
                             };
 
                     /*if (i.image) {

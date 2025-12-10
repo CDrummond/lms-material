@@ -13,6 +13,8 @@
  9. With release types, if only have one of singular/plural then use the
     defined value for the missing value.
 10. When removing multiple playlists, remove in reverse order.
+11. Remove 'Create mix' entries and replace with 'Start artist mix' that will
+    use either BlissMixer or LastMix to start a mix of artist related tracks.
 
 6.0.5
 -----

@@ -173,10 +173,13 @@ function browseActions(view, item, args, count, showWorks, addRoleAndServices, i
                 actions.push({localfiles:true, title:i18n('Local files'), icon:'insert_drive_file', do:{ command:['musicartistinfo', 'localfiles', 'folder:'+args['path']], params:[]}, weight:102});
             }
         }
-        if (LMS_P_BMIX && !queryParams.party && (undefined!=args['artist_id'] || undefined!=args['album_id'])) {
-            actions.push({title:i18n('Create mix'), svg:'music-mix', stdItem:STD_ITEM_MIX,
-                          do:{ command:["blissmixer", "mix"],
-                               params:["menu:1", "useContextMenu:1", undefined!=args['album_id'] ? "album_id:"+args['album_id'] : "artist_id:"+args['artist_id']]}, weight:103});
+        if ((LMS_P_BMIX || LMS_P_LMIX) && !queryParams.party && undefined!=args['artist']) {
+            actions.push({title:i18n('Start artist mix'), svg:'music-mix', stdItem:STD_ITEM_MIX,
+                           command:["playlist", "play",
+                                     LMS_P_BMIX
+                                         ? "blissmixer://?count=10&dstm=1&artist="+encodeURIComponent(args['artist'])
+                                         : "lastmix://play?artist="+encodeURIComponent(args['artist'])
+                                   ], weight:103});
         }
 
         if (undefined!=args['artist_id'] && undefined==args['album_id'] && undefined!=args['count'] && args['count']>1) {

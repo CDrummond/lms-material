@@ -126,7 +126,7 @@ var lmsBrowse = Vue.component("lms-browse", {
     </tr>
     <tr v-if="showMixButton || showMaiButton || (showDetailedSubtoolbar && wide<WIDE_HBTNS)" align="right">
      <v-btn @click.stop="currentActionsMenu($event)" flat icon class="toolbar-button" :title="trans.actions" id="tbar-actions" v-if="wide<WIDE_HBTNS && currentActions.length>0 && numCurrentActionsInToolbar<currentActions.length"><v-icon>more_vert</v-icon></v-btn>
-     <v-btn flat v-if="showMixButton" class="context-button" @click="doContext(STD_ITEM_MIX)"><img class="svg-img" :src="'music-mix' | svgIcon(darkUi)"></img>&nbsp;{{i18n('Create mix')}}</v-btn>
+     <v-btn flat v-if="showMixButton" class="context-button" @click="doContext(STD_ITEM_MIX)"><img class="svg-img" :src="'music-mix' | svgIcon(darkUi)"></img>&nbsp;{{i18n('Start artist mix')}}</v-btn>
      <v-btn flat v-if="showMaiButton" class="context-button" @click="doContext(STD_ITEM_MAI)"><v-icon v-if="current.stdItem==STD_ITEM_ALBUM">album</v-icon><img v-else class="svg-img" :src="'artist' | svgIcon(darkUi)"></img>&nbsp;{{i18n('Information')}}</v-btn>
     </tr>
     <tr v-else><obj>&nbsp;</obj></tr>
@@ -795,7 +795,7 @@ var lmsBrowse = Vue.component("lms-browse", {
             return false;
         },
         showMixButton() {
-            if (LMS_P_BMIX && this.wide>=WIDE_MIX_BTN && this.showDetailedSubtoolbar && (this.current.stdItem==STD_ITEM_ARTIST || this.current.stdItem==STD_ITEM_WORK_COMPOSER ||this.current.stdItem==STD_ITEM_ALBUM)) {
+            if ((LMS_P_BMIX || LMS_P_LMIX) && this.wide>=WIDE_MIX_BTN && this.showDetailedSubtoolbar && (this.current.stdItem==STD_ITEM_ARTIST || this.current.stdItem==STD_ITEM_WORK_COMPOSER)) {
                 for (let i=0, loop=this.currentActions, len=loop.length; i<len; ++i) {
                     if (loop[i].stdItem==STD_ITEM_MIX) {
                         return true;
@@ -1342,6 +1342,8 @@ var lmsBrowse = Vue.component("lms-browse", {
             let item = undefined!=this.current && stdItem==STD_ITEM_MAI ? this.history[this.history.length-1].current : this.current;
             if (undefined!=act.action) {
                 browseHeaderAction(this, act.action, event)
+            } else if (undefined!=act.command) {
+                lmsCommand(this.playerId(), act.command);
             } else if (act.isListItemInMenu) {
                 this.click(act);
             } else if (act.albumRating) {

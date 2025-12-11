@@ -410,6 +410,7 @@ function browseHandleListResponse(view, item, command, resp, prevPage, appendIte
         let listingAlbumTracks = curitem.id.startsWith("album_id:");
         let listingWorkAlbums = curitem.id.startsWith("work_id:");
         let listingAlbums = view.command.command[0]=="albums";
+        let listingWorks = view.command.command[0]=="works";
         let listingTracks = view.command.command[0]=="tracks";
         let title = curitem.noReleaseGrouping ? curitem.title.split(SEPARATOR)[0] : curitem.title;
         let artist_id = listingArtistAlbums ? curitem.id.split(":")[1] : undefined;
@@ -442,7 +443,7 @@ function browseHandleListResponse(view, item, command, resp, prevPage, appendIte
             }
         }
         var canAddAlbumSort=true;
-        if (((listingArtistAlbums || listingWorkAlbums) && listingAlbums) || (listingAlbumTracks && listingTracks)) {
+        if (((listingArtistAlbums || listingWorkAlbums) && (listingAlbums || listingWorks)) || (listingAlbumTracks && listingTracks)) {
             var actParams = new Map();
             var showWorksInMenu = false;
             var currentId = curitem.id.split(':');

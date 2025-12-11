@@ -15,6 +15,7 @@
 10. When removing multiple playlists, remove in reverse order.
 11. Remove 'Create mix' entries and replace with 'Start artist mix' that will
     use either BlissMixer or LastMix to start a mix of artist related tracks.
+12. Update copy of Material Icons font.
 
 6.0.5
 -----

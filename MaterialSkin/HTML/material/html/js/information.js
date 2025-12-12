@@ -86,7 +86,7 @@ Vue.component('lms-information-dialog', {
    <p>{{i18n('Material Skin is a HTML5 WebApp for Lyrion. For support, to report bugs, or ask for new features, please visit one of the following links:')}}
     <ul>
      <li><a class="lms-link" href="https://forums.lyrion.org/showthread.php?109624-Announce-Material-Skin" target="_blank">{{i18n('Lyrion support forums')}}</a></li>
-     <li><div class="lms-link cursor" @click="openTechInfo">{{i18n('Lyrion technical information')}}</div></li>
+     <li><a class="lms-link" href="/Default/html/docs/index.html" target="_blank">{{i18n('Lyrion technical information')}}</a></li>
      <li><a class="lms-link" href="https://github.com/CDrummond/lms-material" target="_blank">{{i18n('GitHub development page')}}</a></li>
      <li><div class="lms-link cursor" @click="openHelp">{{i18n('Help page')}}</div></li>
     </ul>
@@ -397,9 +397,6 @@ Vue.component('lms-information-dialog', {
         openPluginSettings() {
             openServerSettings(this.serverName, 0, '/material/plugins/Extensions/settings/basic.html');
             this.close();
-        },
-        openTechInfo() {
-            bus.$emit('dlg.open', 'iframe', '/material/html/docs/index.html', i18n('Lyrion technical information'), undefined, IFRAME_HOME_CLOSES_DIALOGS);
         },
         openHelp() {
             bus.$emit('dlg.open', 'iframe', '/material/html/material-skin/index.html', i18n('Help'), undefined, IFRAME_HOME_CLOSES_DIALOGS);

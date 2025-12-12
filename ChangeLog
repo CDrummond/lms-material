@@ -17,8 +17,9 @@
     use either BlissMixer or LastMix to start a mix of artist related tracks.
 12. Update copy of Material Icons font.
 13. Add 'Information' and 'Start artist mix' when listing composer works.
-14. Open 'Lytion technical information' link in new window/tab using 'Default'
+14. Open 'Lyrion technical information' link in new window/tab using 'Default'
     skin.
+15. Add link to lyrion.org in 'Information' dialog.
 
 6.0.5
 -----

@@ -85,6 +85,7 @@ Vue.component('lms-information-dialog', {
    <p class="about-header">{{i18n('About')}}</p>
    <p>{{i18n('Material Skin is a HTML5 WebApp for Lyrion. For support, to report bugs, or ask for new features, please visit one of the following links:')}}
     <ul>
+     <li><a class="lms-link" href="https://lyrion.org/" target="_blank">{{i18n('Lyrion website')}}</a></li>
      <li><a class="lms-link" href="https://forums.lyrion.org/showthread.php?109624-Announce-Material-Skin" target="_blank">{{i18n('Lyrion support forums')}}</a></li>
      <li><a class="lms-link" href="/Default/html/docs/index.html" target="_blank">{{i18n('Lyrion technical information')}}</a></li>
      <li><a class="lms-link" href="https://github.com/CDrummond/lms-material" target="_blank">{{i18n('GitHub development page')}}</a></li>

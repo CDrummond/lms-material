@@ -134,7 +134,6 @@
 "Create":"Erstellen",
 "Create folder":"Ordner erstellen",
 "Create group player":"Erstelle Gerätegruppe",
-"Create mix":"Mix erstellen",
 "Creator":"Ersteller",
 "Crossfade":"Überblenden",
 "Ctrl+%1":"Strg+%1",
@@ -728,7 +727,9 @@
 "%1 %2":"",
 "(NOTE: These lists are only shown when using the grid view. If 'Explore' is not selected, then it will appear as a standard grid at the end. 'Categories' configures the standard items shown in 'Explore'.)":"",
 "1 %1":"",
+"Lyrion website":"",
 "Show always":"",
 "Single when wide enough":"",
+"Start artist mix":"",
 "When navigating into lists, show a home button to quickly navigate to the main (home) screen. Otherwise you can click on the title to show a menu that contains 'Home'.":""
 }

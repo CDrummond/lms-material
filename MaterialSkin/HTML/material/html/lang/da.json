@@ -137,7 +137,6 @@
 "Create":"Opret",
 "Create folder":"Opret folder",
 "Create group player":"Opret gruppeafspiller",
-"Create mix":"Opret miks",
 "Creator":"Lavet af",
 "Crossfade":"Samtidig glidende overgang (crossfade)",
 "Ctrl+%1":"Ctrl+%1",
@@ -730,5 +729,7 @@
 "1 Year":"1 år",
 "%1 Years":"%1 år",
 "1 day":"1 dag",
-"%1 days":"%1 dage"
+"%1 days":"%1 dage",
+"Lyrion website":"",
+"Start artist mix":""
 }

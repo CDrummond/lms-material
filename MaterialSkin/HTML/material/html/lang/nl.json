@@ -136,7 +136,6 @@
 "Create":"Aanmaken",
 "Create folder":"Map aanmaken",
 "Create group player":"Aanmaken Groep muziekspelers",
-"Create mix":"Mix maken",
 "Creator":"Producent",
 "Crossfade":"Crossfade",
 "Ctrl+%1":"Ctrl+%1",
@@ -728,7 +727,9 @@
 "1 day":"1 dag",
 "%1 days":"%1 dagen",
 "(NOTE: These lists are only shown when using the grid view. If 'Explore' is not selected, then it will appear as a standard grid at the end. 'Categories' configures the standard items shown in 'Explore'.)":"",
+"Lyrion website":"",
 "Show always":"",
 "Single when wide enough":"",
+"Start artist mix":"",
 "When navigating into lists, show a home button to quickly navigate to the main (home) screen. Otherwise you can click on the title to show a menu that contains 'Home'.":""
 }

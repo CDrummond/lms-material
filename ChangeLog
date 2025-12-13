@@ -23,6 +23,8 @@
 16. For LMS 9.1+ add 'Popular Albums/Releases', 'New Artists', 'Recently
     Played Artists', and 'Popular Artists' to standard horizontal lists.
 17. Fix browsing from favourited genre.
+18. Use a dialog to enable scrolled lists, as there can now be quite a few to
+    chose from.
 
 6.0.5
 -----

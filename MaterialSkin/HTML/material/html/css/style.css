@@ -2528,13 +2528,8 @@ div.v-rating i.primary--text, div.v-rating i.accent--text {
  margin-top:0px;
 }
 
-.settings-list-checkboxes-title {
- font-size:75%;
- opacity:0.7;
-}
-
 .settings-list-checkbox-action {
- margin:0px 0px 0px 32px; /* t, r, b, l */
+ margin:0px 0px 0px 24px; /* t, r, b, l */
 }
 
 .player-settings-list-checkbox {
@@ -2576,6 +2571,20 @@ div.v-rating i.primary--text, div.v-rating i.accent--text {
  margin-bottom:8px;
  min-height:58px;
  height:auto;
+}
+
+.v-dialog .v-card .v-card__text .v-list--two-line .settings-list-thin-item .v-list__tile {
+ margin-top:0px;
+ margin-bottom:0px;
+ min-height:32px;
+ height:32px;
+}
+
+.settings-list-thin-item .v-avatar {
+ width:24px!important;
+ height:24px!important;
+ margin-left: 12px;
+ margin-right: 6px;
 }
 
 .v-dialog .v-list__tile__sub-title {

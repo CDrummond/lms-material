@@ -201,20 +201,18 @@ Vue.component('lms-ui-settings', {
      <v-list-tile-content/>
     </v-list-tile>
 
-    <div class="settings-list-checkboxes-title">{{i18n('Scrollable lists')}}</div>
+    <div style="padding-left:12px">{{i18n('Scrollable lists')}} <v-btn @click.stop="showDetailedHomeDialog($event)" flat icon class="settings-list-checkbox-action"><v-icon>settings</v-icon></v-btn></div>
     <template v-for="(item, index) in detailedHomeItems" :key="item.id">
-     <v-checkbox v-model="item.checked" style="display:flex" class="settings-list-checkbox" @dragstart.native="dragStart(index, $event)" @dragenter.prevent="" @dragend.native="dragEnd()" @dragover.native="dragOver(index, $event)" @drop.native="drop(index, $event)" draggable v-bind:class="{'highlight-drop':dropIndex==index, 'highlight-drag':dragIndex==index}" @change="sortDetailedHome" :id="item.id">
-      <template v-slot:label>
-       <v-avatar size="24">
-        <v-icon v-if="undefined!=item.icon">{{item.icon}}</v-icon>
-        <img v-else-if="item.svg" class="svg-img" :src="item.svg | svgIcon(darkUi)"></img>
-       </v-avatar>
-       <div style="padding-left:8px">{{item.title}}</div>
-      </template>
-     </v-checkbox>
+     <v-list-tile v-if="item.checked" class="settings-list-thin-item" @dragstart.native="dragStart(index, $event)" @dragenter.prevent="" @dragend.native="dragEnd()" @dragover.native="dragOver(index, $event)" @drop.native="drop(index, $event)" draggable v-bind:class="{'highlight-drop':dropIndex==index, 'highlight-drag':dragIndex==index}" @change="sortDetailedHome" :id="item.id">
+      <v-avatar>
+       <v-icon v-if="undefined!=item.icon">{{item.icon}}</v-icon>
+       <img v-else-if="item.svg" class="svg-img" :src="item.svg | svgIcon(darkUi)"></img>
+      </v-avatar>
+      <div>{{item.title}}</div>
+     </v-list-tile>
     </template>
     <div class="dialog-padding"></div>
-    <div class="settings-list-checkboxes-title">{{i18n('Categories')}}</div>
+    <div style="padding-left:12px">{{i18n('Categories')}}</div>
     <template v-for="(item, index) in showItems">
      <div style="display:flex" v-if="item.id!=TOP_RADIO_ID || !lmsOptions.combineAppsAndRadio">
       <v-checkbox v-model="item.show" :label="item.name" class="settings-list-checkbox"></v-checkbox>
@@ -444,6 +442,30 @@ Vue.component('lms-ui-settings', {
   </v-card>
  </v-dialog>
 
+  <v-dialog v-model="detailedHomeDialog.show" :width="detailedHomeDialog.wide ? 750 : 500" persistent style="overflow:hidden" v-if="detailedHomeDialog.show">
+  <v-card>
+   <v-card-title>{{i18n("Scrollable lists")}}</v-card-title>
+   <div class="browse-modes-table dialog-main-list">
+    <template v-for="(item, index) in detailedHomeItems" :key="item.id">
+     <v-checkbox v-model="item.checked" style="display:flex" :id="item.id">
+      <template v-slot:label>
+       <v-avatar size="24">
+        <v-icon v-if="undefined!=item.icon">{{item.icon}}</v-icon>
+        <img v-else-if="item.svg" class="svg-img" :src="item.svg | svgIcon(darkUi)"></img>
+       </v-avatar>
+       <div style="padding-left:8px">{{item.title}}</div>
+      </template>
+     </v-checkbox>
+    </template>
+   </div>
+   <div class="dialog-padding"></div>
+   <v-card-actions>
+    <v-spacer></v-spacer>
+    <v-btn flat @click="sortDetailedHome(); detailedHomeDialog.show = false">{{i18n('Close')}}</v-btn>
+   </v-card-actions>
+  </v-card>
+ </v-dialog>
+
 </div>
 `,
     data() {
@@ -525,6 +547,11 @@ Vue.component('lms-ui-settings', {
             ndSettingsIcons: false,
             ndSettingsVisible: false,
             detailedHomeItems:[],
+            detailedHomeDialog: {
+                show: false,
+                wide: false,
+                halfLen: 0
+            },
             dragIndex: undefined,
             dropIndex: undefined
         }
@@ -653,6 +680,8 @@ Vue.component('lms-ui-settings', {
         bus.$on('closeDialog', function(dlg) {
             if (dlg == 'browsemodes') {
                 this.browseModesDialog.show=false;
+            } else if (dlg == 'detailedhome') {
+                this.detailedHomeDialog.show=false;
             } else if (dlg == 'uisettings') {
                 this.close();
             }
@@ -1071,6 +1100,11 @@ Vue.component('lms-ui-settings', {
             this.browseModesDialog.wide = window.innerWidth >= 700;
             this.browseModesDialog.show=true;
         },
+        showDetailedHomeDialog(event) {
+            storeClickOrTouchPos(event);
+            this.detailedHomeDialog.wide = window.innerWidth >= 700;
+            this.detailedHomeDialog.show=true;
+        },
         mouseDown(ev) {
             toolbarMouseDown(ev);
         },
@@ -1127,6 +1161,9 @@ Vue.component('lms-ui-settings', {
         },
         'browseModesDialog.show': function(val) {
             this.$store.commit('dialogOpen', {name:'browsemodes', shown:val});
+        },
+        'detailedHomeDialog.show': function(val) {
+            this.$store.commit('dialogOpen', {name:'detailedhome', shown:val});
         },
         'showMenu': function(newVal) {
             this.$store.commit('menuVisible', {name:'uisettings', shown:newVal});

@@ -311,6 +311,7 @@
 "NOTE: Changing ratings requires an additional plugin.":"REMARQUE : la modification des notes nécessite un plugin supplémentaire.",
 "NOTE: Only some of these settings apply to 'Material Skin'. However these settings will affect other skins and hardware players.":"REMARQUE : seuls certains de ces paramètres s'appliquent à \"Material Skin\". Les autres servent à d'autres skins ou platines physiques.",
 "Name":"Nom",
+"New Artists":"Nouveaux Artistes",
 "New Music":"Nouveautés",
 "New version available":"Nouvelle version disponible",
 "Newest":"Les plus récents",
@@ -731,5 +732,9 @@
 "1 day":"1 jour",
 "%1 days":"%1 jours",
 "Lyrion website":"",
+"Popular Albums":"",
+"Popular Artists":"",
+"Popular Releases":"",
+"Recently Played Artists":"",
 "Start artist mix":""
 }

@@ -725,11 +725,11 @@
 "1 day":"1 Tag",
 "%1 days":"%1 Tage",
 "%1 %2":"",
-"(NOTE: These lists are only shown when using the grid view. If 'Explore' is not selected, then it will appear as a standard grid at the end. 'Categories' configures the standard items shown in 'Explore'.)":"",
+"(NOTE: These lists are only shown when using the grid view. If 'Explore' is not selected, then it will appear as a standard grid at the end. 'Categories' configures the standard items shown in 'Explore'.)":"Hinweis: diese Listen werden nur angezeigt, wenn die Rasteransicht verwendet wird. Falls 'Entdecken' nicht aktiv ist, so wird wird es als normales Raster am Ende angezeigt. 'Kategorien' definiert die Einträge, die im 'Entdecken' Bereich angezeigt werden.",
 "1 %1":"",
-"Lyrion website":"",
-"Show always":"",
-"Single when wide enough":"",
-"Start artist mix":"",
-"When navigating into lists, show a home button to quickly navigate to the main (home) screen. Otherwise you can click on the title to show a menu that contains 'Home'.":""
+"Lyrion website":"Lyrion Website",
+"Show always":"Immer anzeigen",
+"Single when wide enough":"Nur anzeigen, wenn genügend Platz da ist",
+"Start artist mix":"Interpretenmix starten",
+"When navigating into lists, show a home button to quickly navigate to the main (home) screen. Otherwise you can click on the title to show a menu that contains 'Home'.":"Zeige beim Navigieren in Untermenüs einen 'Hauptmenü' Knopf, um schnell zum Startbildschirm zurück zu springen. Ansonsten kannst du auf den Titel klicken, um ein Menü anzuzeigen, das zum Hauptmenü führt."
 }

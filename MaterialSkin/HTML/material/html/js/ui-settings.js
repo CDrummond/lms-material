@@ -442,22 +442,27 @@ Vue.component('lms-ui-settings', {
   </v-card>
  </v-dialog>
 
-  <v-dialog v-model="detailedHomeDialog.show" :width="detailedHomeDialog.wide ? 750 : 500" persistent style="overflow:hidden" v-if="detailedHomeDialog.show">
+  <v-dialog v-model="detailedHomeDialog.show" :width="500" persistent style="overflow:hidden" v-if="detailedHomeDialog.show">
   <v-card>
    <v-card-title>{{i18n("Scrollable lists")}}</v-card-title>
-   <div class="browse-modes-table dialog-main-list">
+   <v-list>
     <template v-for="(item, index) in detailedHomeItems" :key="item.id">
+    <v-list-tile class="settings-list-thin-item">
      <v-checkbox v-model="item.checked" style="display:flex" :id="item.id">
       <template v-slot:label>
-       <v-avatar size="24">
+       <v-list-tile-avatar>
         <v-icon v-if="undefined!=item.icon">{{item.icon}}</v-icon>
         <img v-else-if="item.svg" class="svg-img" :src="item.svg | svgIcon(darkUi)"></img>
-       </v-avatar>
-       <div style="padding-left:8px">{{item.title}}</div>
+       </v-list-tile-avatar>
+       <v-list-tile-content>
+        <v-list-tile-title>{{item.title}}</v-list-tile-title>
+        <v-list-tile-sub-title>{{item.subtitle}}</v-list-tile-sub-title>
+       </v-list-tile-content>
       </template>
      </v-checkbox>
+     </v-list-tile>
     </template>
-   </div>
+   </v-list>
    <div class="dialog-padding"></div>
    <v-card-actions>
     <v-spacer></v-spacer>
@@ -805,10 +810,10 @@ Vue.component('lms-ui-settings', {
                     {id:DETAILED_HOME_STD_PREFIX+"recentlyplayed", title:i18n('Recently Played'), checked:false, icon:"history"}
                 );
                 this.detailedHomeItems.push(
-                    {id:DETAILED_HOME_STD_PREFIX+"playcount", title:i18n('Most Played'), checked:false, svg:"staralbum"}
+                    {id:DETAILED_HOME_STD_PREFIX+"playcount", title:i18n('Most Played'), subtitle:this.i18n('Based upon total play count.'), checked:false, svg:"staralbum"}
                 );
                 this.detailedHomeItems.push(
-                    {id:DETAILED_HOME_STD_PREFIX+"popular", title:lmsOptions.supportReleaseTypes ? i18n('Popular Releases') : i18n('Popular Albums'), checked:false, svg:"popularalbum"}
+                    {id:DETAILED_HOME_STD_PREFIX+"popular", title:lmsOptions.supportReleaseTypes ? i18n('Popular Releases') : i18n('Popular Albums'), subtitle:this.i18n('Based upon play count for the past 6 months only.'), checked:false, svg:"popularalbum"}
                 );
                 this.detailedHomeItems.push(
                     {id:DETAILED_HOME_STD_PREFIX+"artists_new", title:i18n('New Artists'), checked:false, svg:"artistnew"}
@@ -817,7 +822,7 @@ Vue.component('lms-ui-settings', {
                     {id:DETAILED_HOME_STD_PREFIX+"artists_recentlyplayed", title:i18n('Recently Played Artists'), checked:false, svg:"artistrecent"}
                 );
                 this.detailedHomeItems.push(
-                    {id:DETAILED_HOME_STD_PREFIX+"artists_popular", title:i18n('Popular Artists'), checked:false, icon:"diversity_1"}
+                    {id:DETAILED_HOME_STD_PREFIX+"artists_popular", title:i18n('Popular Artists'), subtitle:this.i18n('Based upon play count for the past 6 months only.'), checked:false, icon:"diversity_1"}
                 );
             }
             this.detailedHomeItems.push(

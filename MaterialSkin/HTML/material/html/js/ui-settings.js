@@ -778,6 +778,18 @@ Vue.component('lms-ui-settings', {
                 this.detailedHomeItems.push(
                     {id:DETAILED_HOME_STD_PREFIX+"playcount", title:i18n('Most Played'), checked:false, svg:"trophy"}
                 );
+                this.detailedHomeItems.push(
+                    {id:DETAILED_HOME_STD_PREFIX+"popular", title:lmsOptions.supportReleaseTypes ? i18n('Popular Releases') : i18n('Popular Albums'), checked:false, svg:"popularalbum"}
+                );
+                this.detailedHomeItems.push(
+                    {id:DETAILED_HOME_STD_PREFIX+"artists_new", title:i18n('New Artists'), checked:false, svg:"artistnew"}
+                );
+                this.detailedHomeItems.push(
+                    {id:DETAILED_HOME_STD_PREFIX+"artists_recentlyplayed", title:i18n('Recently Played Artists'), checked:false, svg:"artistrecent"}
+                );
+                this.detailedHomeItems.push(
+                    {id:DETAILED_HOME_STD_PREFIX+"artists_popular", title:i18n('Popular Artists'), checked:false, icon:"diversity_1"}
+                );
             }
             this.detailedHomeItems.push(
                 {id:DETAILED_HOME_STD_PREFIX+"random", title:lmsOptions.supportReleaseTypes ? i18n("Random Releases") : i18n("Random Albums"), checked:false, svg:"dice-album"}

@@ -2014,33 +2014,47 @@ sub _cliCommand {
 sub _handleHomeExtraCmd {
     my $request = shift;
     $request->setStatusProcessing();
-
-    my @sorts = ();
     my $count = $request->getParam('count');
 
+    my @albumsorts = ();
     if (!$count || $count<NUM_HOME_ITEMS) {
         $count = NUM_HOME_ITEMS;
     }
     if ($request->getParam('new')) {
-        push(@sorts, "new");
+        push(@albumsorts, "new");
     }
     if ($request->getParam('playcount')) {
-        push(@sorts, "playcount");
+        push(@albumsorts, "playcount");
     }
     if ($request->getParam('recentlyplayed')) {
-        push(@sorts, "recentlyplayed");
+        push(@albumsorts, "recentlyplayed");
     }
     if ($request->getParam('random')) {
-        push(@sorts, "random");
+        push(@albumsorts, "random");
     }
     if ($request->getParam('changed')) {
-        push(@sorts, "changed");
+        push(@albumsorts, "changed");
     }
+    if ($request->getParam('popular')) {
+        push(@albumsorts, "popular");
+    }
+
+    my @artistsorts = ();
+    if ($request->getParam('artists_new')) {
+        push(@artistsorts, "new");
+    }
+    if ($request->getParam('artists_playcount')) {
+        push(@artistsorts, "playcount");
+    }
+    if ($request->getParam('artists_popular')) {
+        push(@artistsorts, "popular");
+    }
+
     $request->addResult("material_home", 1);
-    if (scalar(@sorts)>0) {
+    if (scalar(@albumsorts)>0) {
         my $total = 0;
         my $libId = $request->getParam('library_id');
-        foreach my $srt ( @sorts ) {
+        foreach my $srt ( @albumsorts ) {
             my @cmd = ("albums", 0, $count, "tags:aajlqswyKSS24WE", "sort:${srt}");
             if ($libId) {
                 push(@cmd, "library_id:${libId}");
@@ -2055,6 +2069,26 @@ sub _handleHomeExtraCmd {
                 }
             }
             $request->addResult("material_home_${srt}_loop_len", $req->getResult('count'));
+        }
+    }
+    if (scalar(@artistsorts)>0) {
+        my $total = 0;
+        my $libId = $request->getParam('library_id');
+        foreach my $srt ( @artistsorts ) {
+            my @cmd = ("artists", 0, $count, "tags:4s", "sort:${srt}", "include_online_only_artists:1");
+            if ($libId) {
+                push(@cmd, "library_id:${libId}");
+            }
+            my $req = Slim::Control::Request::executeRequest(undef, \@cmd);
+            my $cnt = 0;
+            foreach my $item ( @{ $req->getResult('artists_loop') || [] } ) {
+                if ($cnt<$count) {
+                    _addExtraHomeItem($request, "artists_${srt}", $item, $cnt, $total);
+                    $cnt+=1;
+                    $total+=1;
+                }
+            }
+            $request->addResult("material_home_artists_${srt}_loop_len", $req->getResult('count'));
         }
     }
     if ($request->getParam('radios')) {
@@ -2134,7 +2168,7 @@ sub _addExtraHomeItem {
         }
     }
 
-    $request->addResultLoop("material_home_${id}_loop", $cnt, "ihe", 1);
+    $request->addResultLoop($loop_name, $cnt, "ihe", 1);
 }
 
 sub _isRadio {

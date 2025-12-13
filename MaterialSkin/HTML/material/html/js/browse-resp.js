@@ -1072,7 +1072,8 @@ function parseBrowseResp(data, parent, options, cacheKey) {
                             image: image,
                             stdItem: stdItem,
                             type: "group",
-                            textkey: key
+                            textkey: key,
+                            ihe: i.ihe // home screen extra item
                         };
                 setFavoritesParams(i, artist);
                 resp.items.push(artist);
@@ -2415,6 +2416,10 @@ function parseBrowseResp(data, parent, options, cacheKey) {
                          {key:'recentlyplayed', loop:"albums", title:i18n('Recently Played'), icon:"history", command:["albums"], params:["sort:recentlyplayed", ALBUM_TAGS_ALL_ARTISTS]},
                          {key:'playcount', loop:"albums", title:i18n('Most Played'), svg:"trophy", command:["albums"], params:["sort:playcount", ALBUM_TAGS_ALL_ARTISTS]},
                          {key:'random', loop:"albums", title:lmsOptions.supportReleaseTypes ? i18n('Random Releases') : i18n('Random Albums'), svg:"dice-album", command:["albums"], params:["sort:random", ALBUM_TAGS_ALL_ARTISTS]},
+                         {key:'popular', loop:"albums", title:lmsOptions.supportReleaseTypes ? i18n('Popular Releases') : i18n('Popular Albums'), svg:"popularalbum", command:["albums"], params:["sort:popular", ALBUM_TAGS_ALL_ARTISTS]},
+                         {key:'artists_new', loop:"artists", title:i18n('New Artists'), svg:"artistnew", command:["artists"], params:["sort:new", ARTIST_TAGS_PLACEHOLDER]},
+                         {key:'artists_recentlyplayed', loop:"artists", title:i18n('Recently Played Artists'), svg:"artistrecent", command:["artists"], params:["sort:recentlyplayed", ARTIST_TAGS_PLACEHOLDER]},
+                         {key:'artists_popular', loop:"artists", title:i18n('Popular Artists'), icon:"diversity_1", command:["artists"], params:["sort:popular", ARTIST_TAGS_PLACEHOLDER]},
                          {key:'radios', loop:"radios", title:i18n('Radios'), svg:"radio", command:["material-skin-query","radios"], params:[], limit:200},
                          {key:'playlists', loop:"playlists", title:i18n('Playlists'), icon:"list", command:["material-skin-query","playlists"], params:[PLAYLIST_TAGS, "menu:1"], limit:200},
                          {key:'changed', loop:"albums", title:lmsOptions.supportReleaseTypes ? i18n("Recently Updated Releases") : i18n("Recently Updated Albums"), svg:"updated-music", command:["albums"], params:["sort:changed", ALBUM_TAGS_ALL_ARTISTS]},

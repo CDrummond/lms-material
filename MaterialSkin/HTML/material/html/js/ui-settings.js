@@ -825,7 +825,7 @@ Vue.component('lms-ui-settings', {
                     {id:DETAILED_HOME_STD_PREFIX+"artists_playcount", title:i18n('Most Played Artists'), checked:false, svg:"artiststar"}
                 );
                 this.detailedHomeItems.push(
-                    {id:DETAILED_HOME_STD_PREFIX+"artists_popular", title:i18n('Popular Artists'), subtitle:this.i18n('Based upon play count for the past 6 months only.'), checked:false, icon:"diversity_1"}
+                    {id:DETAILED_HOME_STD_PREFIX+"artists_popular", title:i18n('Popular Artists'), subtitle:this.i18n('Based upon play count for the past 6 months only.'), checked:false, svg:"artistpopular"}
                 );
             }
             this.detailedHomeItems.push(

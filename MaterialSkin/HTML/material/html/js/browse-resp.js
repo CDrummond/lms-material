@@ -2420,7 +2420,7 @@ function parseBrowseResp(data, parent, options, cacheKey) {
                          {key:'artists_new', loop:"artists", title:i18n('New Artists'), svg:"artistnew", command:["artists"], params:["sort:new", ARTIST_TAGS_PLACEHOLDER]},
                          {key:'artists_recentlyplayed', loop:"artists", title:i18n('Recently Played Artists'), svg:"artistrecent", command:["artists"], params:["sort:recentlyplayed", ARTIST_TAGS_PLACEHOLDER]},
                          {key:'artists_playcount', loop:"artists", title:i18n('Most Played Artists'), svg:"artiststar", command:["artists"], params:["sort:playcount", ARTIST_TAGS_PLACEHOLDER]},
-                         {key:'artists_popular', loop:"artists", title:i18n('Popular Artists'), icon:"diversity_1", command:["artists"], params:["sort:popular", ARTIST_TAGS_PLACEHOLDER]},
+                         {key:'artists_popular', loop:"artists", title:i18n('Popular Artists'), svg:"artistpopular", command:["artists"], params:["sort:popular", ARTIST_TAGS_PLACEHOLDER]},
                          {key:'radios', loop:"radios", title:i18n('Radios'), svg:"radio", command:["material-skin-query","radios"], params:[], limit:200},
                          {key:'playlists', loop:"playlists", title:i18n('Playlists'), icon:"list", command:["material-skin-query","playlists"], params:[PLAYLIST_TAGS, "menu:1"], limit:200},
                          {key:'changed', loop:"albums", title:lmsOptions.supportReleaseTypes ? i18n("Recently Updated Releases") : i18n("Recently Updated Albums"), svg:"updated-music", command:["albums"], params:["sort:changed", ALBUM_TAGS_ALL_ARTISTS]},

@@ -2574,8 +2574,8 @@ div.v-rating i.primary--text, div.v-rating i.accent--text {
 }
 
 .v-dialog .v-card .v-card__text .v-list--two-line .settings-list-thin-item .v-list__tile {
- margin-top:0px;
- margin-bottom:0px;
+ margin-top:4px;
+ margin-bottom:4px;
  min-height:32px;
  height:32px;
 }

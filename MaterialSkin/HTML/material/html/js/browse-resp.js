@@ -2414,7 +2414,7 @@ function parseBrowseResp(data, parent, options, cacheKey) {
             }
             var lists = [{key:'new', loop:"albums", title:i18n('New Music'), icon:"new_releases", command:["albums"], params:["sort:new", ALBUM_TAGS_ALL_ARTISTS]},
                          {key:'recentlyplayed', loop:"albums", title:i18n('Recently Played'), icon:"history", command:["albums"], params:["sort:recentlyplayed", ALBUM_TAGS_ALL_ARTISTS]},
-                         {key:'playcount', loop:"albums", title:i18n('Most Played'), svg:"trophy", command:["albums"], params:["sort:playcount", ALBUM_TAGS_ALL_ARTISTS]},
+                         {key:'playcount', loop:"albums", title:i18n('Most Played'), svg:"staralbum", command:["albums"], params:["sort:playcount", ALBUM_TAGS_ALL_ARTISTS]},
                          {key:'random', loop:"albums", title:lmsOptions.supportReleaseTypes ? i18n('Random Releases') : i18n('Random Albums'), svg:"dice-album", command:["albums"], params:["sort:random", ALBUM_TAGS_ALL_ARTISTS]},
                          {key:'popular', loop:"albums", title:lmsOptions.supportReleaseTypes ? i18n('Popular Releases') : i18n('Popular Albums'), svg:"popularalbum", command:["albums"], params:["sort:popular", ALBUM_TAGS_ALL_ARTISTS]},
                          {key:'artists_new', loop:"artists", title:i18n('New Artists'), svg:"artistnew", command:["artists"], params:["sort:new", ARTIST_TAGS_PLACEHOLDER]},

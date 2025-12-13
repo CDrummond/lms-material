@@ -805,7 +805,7 @@ Vue.component('lms-ui-settings', {
                     {id:DETAILED_HOME_STD_PREFIX+"recentlyplayed", title:i18n('Recently Played'), checked:false, icon:"history"}
                 );
                 this.detailedHomeItems.push(
-                    {id:DETAILED_HOME_STD_PREFIX+"playcount", title:i18n('Most Played'), checked:false, svg:"trophy"}
+                    {id:DETAILED_HOME_STD_PREFIX+"playcount", title:i18n('Most Played'), checked:false, svg:"staralbum"}
                 );
                 this.detailedHomeItems.push(
                     {id:DETAILED_HOME_STD_PREFIX+"popular", title:lmsOptions.supportReleaseTypes ? i18n('Popular Releases') : i18n('Popular Albums'), checked:false, svg:"popularalbum"}

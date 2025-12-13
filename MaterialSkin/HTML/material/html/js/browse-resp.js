@@ -362,7 +362,7 @@ function parseBrowseResp(data, parent, options, cacheKey) {
                                 i.image=undefined;
                             }
                         } else if (i.presetParams.favorites_url.startsWith("db:genre.name") && i.presetParams.icon=="html/images/genres.png") {
-                            i.stdItem=STD_ITEM_GENRE;
+                            //i.stdItem=STD_ITEM_GENRE; // Don't set this here, as it actually breaks browsing!!!
                             if (lmsOptions.genreImages) {
                                 i.image = "material/genres/" + i.title.toLowerCase().replace(/[^0-9a-z]/gi, '');
                             } else {
@@ -370,7 +370,7 @@ function parseBrowseResp(data, parent, options, cacheKey) {
                                 i.image=undefined;
                             }
                         } else if (i.presetParams.favorites_url.startsWith("db:year.id") && i.presetParams.icon=="html/images/years.png") {
-                            i.stdItem=STD_ITEM_YEAR;
+                            //i.stdItem=STD_ITEM_YEAR;  // Don't set this here, as it actually breaks browsing!!!
                             i.icon="date_range";
                             i.image=undefined;
                         } else if (i.presetParams.favorites_url.startsWith("db:work.title") && undefined==i.presetParams.icon) {

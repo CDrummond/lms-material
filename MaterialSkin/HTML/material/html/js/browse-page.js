@@ -1952,12 +1952,11 @@ var lmsBrowse = Vue.component("lms-browse", {
                         let used = 0;
                         for (let j=0; j<MAX_HOME_EXTRA_ROW; ++j) {
                             let idx = i+j;
-                            if (idx<topExtraItems.length && topExtraItems[idx].header) {
+                            if (idx>=topExtraItems.length || topExtraItems[idx].header) {
                                 break;
                             } else {
-                                rowItems.push(idx<topExtraItems.length ? topExtraItems[idx] : undefined);
-                                let haveSub = idx<topExtraItems.length && topExtraItems[idx].subtitle;
-                                if (haveSub) {
+                                rowItems.push(topExtraItems[idx]);
+                                if (topExtraItems[idx].subtitle) {
                                     haveSubtitle = true;
                                     rowHasSubtitle = true;
                                 }

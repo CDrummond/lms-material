@@ -2046,6 +2046,9 @@ sub _handleHomeExtraCmd {
     if ($request->getParam('artists_playcount')) {
         push(@artistsorts, "playcount");
     }
+    if ($request->getParam('artists_recentlyplayed')) {
+        push(@artistsorts, "recentlyplayed");
+    }
     if ($request->getParam('artists_popular')) {
         push(@artistsorts, "popular");
     }

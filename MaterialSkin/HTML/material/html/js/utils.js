@@ -455,7 +455,7 @@ function uniqueId(id, val) {
 }
 
 function originalId(id) {
-    return id.split("@idx")[0];
+    return (""+id).split("@idx")[0];
 }
 
 function setScrollTop(view, val) {

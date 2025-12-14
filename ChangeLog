@@ -1,3 +1,8 @@
+6.1.1
+-----
+1. If navigating from clicked item (e.g. year) don't refresh home before
+   showing relevant list.
+
 6.1.0
 -----
  1. Add ability for other plugins to provide scrolled lists - thanks to Michael

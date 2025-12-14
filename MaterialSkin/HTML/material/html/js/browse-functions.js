@@ -2087,7 +2087,17 @@ function browseHeaderAction(view, act, event, ignoreOpenMenus) {
     }
 }
 
-function browseGoHome(view) {
+function browseFetchHome(view, prev) {
+    view.getHomeExtra();
+    view.$nextTick(function () {
+        view.setBgndCover();
+        view.filterJumplist();
+        view.layoutGrid(true);
+        setScrollTop(view, prev.pos>0 ? prev.pos : 0);
+    });
+}
+
+function browseGoHome(view, refresh) {
     view.searchActive = 0;
     if (view.history.length==0) {
         return;
@@ -2114,20 +2124,33 @@ function browseGoHome(view) {
     view.tbarActions=[];
     view.isTop = true;
     view.grid = {allowed:true, use:view.$store.state.gridPerView ? isSetToUseGrid(GRID_TOP) : view.grid.use, numColumns:0, ih:GRID_MIN_HEIGHT, rows:[], few:false, haveSubtitle:true, multiSize:false, type:GRID_STANDARD};
-    view.items = view.$store.state.detailedHomeItems.length>0 && view.grid.use ? view.topExtra.concat(view.top) : view .top;
+    view.items = view.$store.state.detailedHomeItems.length>0 && view.grid.use ? view.topExtra.concat(view.top) : view.top;
     view.currentActions=[{action:VLIB_ACTION}, {action:(view.grid.use ? USE_LIST_ACTION : view.$store.state.detailedHomeItems.length>0 ? USE_ALT_GRID_ACTION : USE_GRID_ACTION)}];
     view.hoverBtns = !IS_MOBILE;
     view.command = undefined;
     view.subtitleClickable = false;
     view.inGenre = undefined;
     view.canDrop = true;
-    view.getHomeExtra();
-    view.$nextTick(function () {
-        view.setBgndCover();
-        view.filterJumplist();
-        view.layoutGrid(true);
-        setScrollTop(view, prev.pos>0 ? prev.pos : 0);
-    });
+
+    if (undefined!=view.homeTimeout) {
+        clearTimeout(view.homeTimeout);
+        view.homeTimeout = null;
+    }
+
+    if (undefined==refresh || refresh) {
+        browseFetchHome(view, prev);
+    } else {
+        // If called does not want us to refresh home, then we do this after 0.75s incase
+        // call that was to fill view fails.
+        view.homeTimeout = setTimeout(function() {
+            console.log(view.history.length);
+            if (view.history.length==0) {
+                browseFetchHome(view, prev);
+            } else {
+                console.log("COMMAND OK");
+            }
+        }, 750);
+    }
 }
 
 function browseGoBack(view, refresh) {
@@ -3174,7 +3197,7 @@ function browseGoToItem(view, cmd, params, title, page, clearHistory, subtitle) 
         view.$store.commit('setPage', 'browse');
     }
     if (undefined==clearHistory || clearHistory) {
-        browseGoHome(view);
+        browseGoHome(view, false);
     }
     if ('genre'==cmd || 'year'==cmd) {
         let item = {id:'click.'+cmd+'.'+params,

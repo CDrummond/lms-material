@@ -2078,7 +2078,7 @@ sub _handleHomeExtraCmd {
         my $total = 0;
         my $libId = $request->getParam('library_id');
         foreach my $srt ( @artistsorts ) {
-            my @cmd = ("artists", 0, $count, "tags:4s", "sort:${srt}", "include_online_only_artists:1");
+            my @cmd = ("artists", 0, $count, "tags:4s", "sort:${srt}", "include_online_only_artists:1", "role_id:1,2,3,4,5,6");
             if ($libId) {
                 push(@cmd, "library_id:${libId}");
             }

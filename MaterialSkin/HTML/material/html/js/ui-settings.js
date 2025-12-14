@@ -202,15 +202,18 @@ Vue.component('lms-ui-settings', {
     </v-list-tile>
 
     <div style="padding-left:12px">{{i18n('Scrollable lists')}} <v-btn @click.stop="showDetailedHomeDialog($event)" flat icon class="settings-list-checkbox-action"><v-icon>settings</v-icon></v-btn></div>
-    <template v-for="(item, index) in detailedHomeItems" :key="item.id">
-     <v-list-tile v-if="item.checked" class="settings-list-thin-item" @dragstart.native="dragStart(index, $event)" @dragenter.prevent="" @dragend.native="dragEnd()" @dragover.native="dragOver(index, $event)" @drop.native="drop(index, $event)" draggable v-bind:class="{'highlight-drop':dropIndex==index, 'highlight-drag':dragIndex==index}" @change="sortDetailedHome" :id="item.id">
-      <v-avatar>
-       <v-icon v-if="undefined!=item.icon">{{item.icon}}</v-icon>
-       <img v-else-if="item.svg" class="svg-img" :src="item.svg | svgIcon(darkUi)"></img>
-      </v-avatar>
-      <div>{{item.title}}</div>
-     </v-list-tile>
-    </template>
+    <div v-if="haveScrollableLists">
+     <template v-for="(item, index) in detailedHomeItems" :key="item.id">
+      <v-list-tile v-if="item.checked" class="settings-list-thin-item" @dragstart.native="dragStart(index, $event)" @dragenter.prevent="" @dragend.native="dragEnd()" @dragover.native="dragOver(index, $event)" @drop.native="drop(index, $event)" draggable v-bind:class="{'highlight-drop':dropIndex==index, 'highlight-drag':dragIndex==index}" @change="sortDetailedHome" :id="item.id">
+       <v-avatar>
+        <v-icon v-if="undefined!=item.icon">{{item.icon}}</v-icon>
+        <img v-else-if="item.svg" class="svg-img" :src="item.svg | svgIcon(darkUi)"></img>
+       </v-avatar>
+       <div>{{item.title}}</div>
+      </v-list-tile>
+     </template>
+    </div>
+    <v-list-tile-sub-title v-else style="padding-left:12px">{{i18n("No scrollable lists have been enabled. Use the 'cog' icon (above) to select the lists you would like to appear on the home screen.")}}</v-list-tile-sub-title>
     <div class="dialog-padding"></div>
     <div style="padding-left:12px">{{i18n('Categories')}}</div>
     <template v-for="(item, index) in showItems">
@@ -582,6 +585,9 @@ Vue.component('lms-ui-settings', {
         },
         desktopLayout() {
             return this.$store.state.desktopLayout
+        },
+        haveScrollableLists() {
+            return this.detailedHomeItems.length>0 && this.detailedHomeItems[0].checked
         }
     },
     mounted() {

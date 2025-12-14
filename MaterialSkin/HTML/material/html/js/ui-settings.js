@@ -813,7 +813,7 @@ Vue.component('lms-ui-settings', {
                     {id:DETAILED_HOME_STD_PREFIX+"playcount", title:i18n('Most Played'), subtitle:this.i18n('Based upon total play count.'), checked:false, svg:"staralbum"}
                 );
                 this.detailedHomeItems.push(
-                    {id:DETAILED_HOME_STD_PREFIX+"popular", title:lmsOptions.supportReleaseTypes ? i18n('Popular Releases') : i18n('Popular Albums'), subtitle:this.i18n('Based upon play count for the past 6 months only.'), checked:false, svg:"popularalbum"}
+                    {id:DETAILED_HOME_STD_PREFIX+"popular", title:lmsOptions.supportReleaseTypes ? i18n('Popular Releases') : i18n('Popular Albums'), subtitle:this.i18n('Based upon play count for the past few months only.'), checked:false, svg:"popularalbum"}
                 );
                 this.detailedHomeItems.push(
                     {id:DETAILED_HOME_STD_PREFIX+"artists_new", title:i18n('New Artists'), checked:false, svg:"artistnew"}
@@ -825,7 +825,7 @@ Vue.component('lms-ui-settings', {
                     {id:DETAILED_HOME_STD_PREFIX+"artists_playcount", title:i18n('Most Played Artists'), subtitle:this.i18n('Based upon total play count.'), checked:false, svg:"artiststar"}
                 );
                 this.detailedHomeItems.push(
-                    {id:DETAILED_HOME_STD_PREFIX+"artists_popular", title:i18n('Popular Artists'), subtitle:this.i18n('Based upon play count for the past 6 months only.'), checked:false, svg:"artistpopular"}
+                    {id:DETAILED_HOME_STD_PREFIX+"artists_popular", title:i18n('Popular Artists'), subtitle:this.i18n('Based upon play count for the past few months only.'), checked:false, svg:"artistpopular"}
                 );
             }
             this.detailedHomeItems.push(

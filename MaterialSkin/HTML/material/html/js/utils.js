@@ -1325,6 +1325,6 @@ function getScrollBarSize() {
     document.body.appendChild(el);
     let width = el.offsetWidth - el.clientWidth;
     el.remove();
-    mskSbarSize = width;
+    mskSbarSize = Math.max(10, width);
     return mskSbarSize;
 }

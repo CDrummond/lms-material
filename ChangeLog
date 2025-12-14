@@ -3,6 +3,8 @@
 1. If navigating from clicked item (e.g. year) don't refresh home before
    showing relevant list.
 2. Allow 3rd party scrollable lists to provide subtitle for settings UI.
+3. Ensure title and 'Close' button remain visible in 'Scrollable lists'
+   dialog.
 
 6.1.0
 -----

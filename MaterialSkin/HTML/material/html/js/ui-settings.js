@@ -448,7 +448,7 @@ Vue.component('lms-ui-settings', {
   <v-dialog v-model="detailedHomeDialog" :width="500" persistent style="overflow:hidden" v-if="detailedHomeDialog">
   <v-card>
    <v-card-title>{{i18n("Scrollable lists")}}</v-card-title>
-   <v-list>
+   <v-list class="dialog-main-list">
     <template v-for="(item, index) in detailedHomeItems" :key="item.id">
     <v-list-tile class="settings-list-thin-item">
      <v-checkbox v-model="item.checked" style="display:flex" :id="item.id">

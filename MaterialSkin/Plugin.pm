@@ -2077,8 +2077,15 @@ sub _handleHomeExtraCmd {
     if (scalar(@artistsorts)>0) {
         my $total = 0;
         my $libId = $request->getParam('library_id');
+        my @roles;
+        if ($serverprefs->get('useUnifiedArtistsList')) {
+            @roles = Slim::Schema::Contributor->activeContributorRoles(1);
+        } else {
+            @roles = Slim::Schema::Contributor->contributorRoles();
+        }
+        my $rolesParam = "role_id:" . join(',', @roles);
         foreach my $srt ( @artistsorts ) {
-            my @cmd = ("artists", 0, $count, "tags:4s", "sort:${srt}", "include_online_only_artists:1", "role_id:1,2,3,4,5,6");
+            my @cmd = ("artists", 0, $count, "tags:4s", "sort:${srt}", "include_online_only_artists:1", $rolesParam);
             if ($libId) {
                 push(@cmd, "library_id:${libId}");
             }

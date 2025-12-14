@@ -445,7 +445,7 @@ Vue.component('lms-ui-settings', {
   </v-card>
  </v-dialog>
 
-  <v-dialog v-model="detailedHomeDialog.show" :width="500" persistent style="overflow:hidden" v-if="detailedHomeDialog.show">
+  <v-dialog v-model="detailedHomeDialog" :width="500" persistent style="overflow:hidden" v-if="detailedHomeDialog">
   <v-card>
    <v-card-title>{{i18n("Scrollable lists")}}</v-card-title>
    <v-list>
@@ -469,7 +469,7 @@ Vue.component('lms-ui-settings', {
    <div class="dialog-padding"></div>
    <v-card-actions>
     <v-spacer></v-spacer>
-    <v-btn flat @click="sortDetailedHome(); detailedHomeDialog.show = false">{{i18n('Close')}}</v-btn>
+    <v-btn flat @click="sortDetailedHome(); detailedHomeDialog = false">{{i18n('Close')}}</v-btn>
    </v-card-actions>
   </v-card>
  </v-dialog>
@@ -533,8 +533,7 @@ Vue.component('lms-ui-settings', {
             browseModesDialog: {
                 show: false,
                 wide: false,
-                modes: [],
-                halfLen: 0
+                modes: []
             },
             screensaver: 0,
             screensavers:[],
@@ -555,11 +554,7 @@ Vue.component('lms-ui-settings', {
             ndSettingsIcons: false,
             ndSettingsVisible: false,
             detailedHomeItems:[],
-            detailedHomeDialog: {
-                show: false,
-                wide: false,
-                halfLen: 0
-            },
+            detailedHomeDialog: false,
             dragIndex: undefined,
             dropIndex: undefined
         }
@@ -634,7 +629,6 @@ Vue.component('lms-ui-settings', {
                         }
                     }
                     this.browseModesDialog.modes.sort(function(a, b) { return a.weight!=b.weight ? a.weight<b.weight ? -1 : 1 : 0});
-                    this.browseModesDialog.halfLen=Math.ceil(this.browseModesDialog.modes.length/2);
                 }
             }).catch(err => {
             });
@@ -692,7 +686,7 @@ Vue.component('lms-ui-settings', {
             if (dlg == 'browsemodes') {
                 this.browseModesDialog.show=false;
             } else if (dlg == 'detailedhome') {
-                this.detailedHomeDialog.show=false;
+                this.detailedHomeDialog=false;
             } else if (dlg == 'uisettings') {
                 this.close();
             }
@@ -1116,8 +1110,7 @@ Vue.component('lms-ui-settings', {
         },
         showDetailedHomeDialog(event) {
             storeClickOrTouchPos(event);
-            this.detailedHomeDialog.wide = window.innerWidth >= 700;
-            this.detailedHomeDialog.show=true;
+            this.detailedHomeDialog=true;
         },
         mouseDown(ev) {
             toolbarMouseDown(ev);
@@ -1176,7 +1169,7 @@ Vue.component('lms-ui-settings', {
         'browseModesDialog.show': function(val) {
             this.$store.commit('dialogOpen', {name:'browsemodes', shown:val});
         },
-        'detailedHomeDialog.show': function(val) {
+        'detailedHomeDialog': function(val) {
             this.$store.commit('dialogOpen', {name:'detailedhome', shown:val});
         },
         'showMenu': function(newVal) {

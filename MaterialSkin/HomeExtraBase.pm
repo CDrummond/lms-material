@@ -14,6 +14,7 @@ sub initPlugin {
 
 	Plugins::MaterialSkin::Plugin->registerHomeExtra($args{tag}, {
 		title => $extra->{title},
+		subtitle => $extra->{subtitle},
 		icon  => $extra->{icon},
 		needsPlayer => $extra->{needsPlayer},
 

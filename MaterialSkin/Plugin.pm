@@ -536,10 +536,11 @@ sub registerHomeExtra {
     $log->warn("Home Extra with id '$id' is already registered - overwriting") if $HOME_EXTRAS->{$id};
 
     $HOME_EXTRAS->{'3rdparty_' . $id} = {
-        id      => $id,
-        title   => $args->{title},
-        icon    => $args->{icon} || '',
-        handler => $args->{handler},
+        id          => $id,
+        title       => $args->{title},
+        subtitle    => $args->{subtitle},
+        icon        => $args->{icon} || '',
+        handler     => $args->{handler},
         needsPlayer => $args->{needsPlayer},
     };
 }
@@ -559,6 +560,7 @@ sub getHomeExtra3rdPartyItems {
         {
             id          => $_,
             title       => Slim::Utils::Strings::getString($item->{title}),
+            subtitle    => Slim::Utils::Strings::getString($item->{subtitle}),
             icon        => $item->{icon},
             needsPlayer => $item->{needsPlayer}
         }

@@ -755,8 +755,7 @@ Vue.component('lms-ui-settings', {
                 let idx = this.$store.state.detailedHomeItems.indexOf(loop[s].id);
                 loop[s].val = undefined==idx || idx<0 ? this.detailedHomeItems.length+s : idx;
                 loop[s].checked = checkedHomeItems.has(loop[s].id);
-            }
-            this.detailedHomeItems.sort((a, b) => { return a.val<b.val ? -1 : 1});
+            };
             this.sortDetailedHome();
         },
         initItems() {
@@ -1126,7 +1125,16 @@ Vue.component('lms-ui-settings', {
                         unchecked.push(loop[i]);
                     }
                 }
-                unchecked.sort(titleSort);
+                unchecked.sort((a, b) => {
+                    let at = a.id.split("_")[0];
+                    let bt = b.id.split("_")[0];
+                    if (at!=bt) {
+                        let aid = a.id.startsWith("std") ? "0"+a.id : a.id;
+                        let bid = b.id.startsWith("std") ? "0"+b.id : b.id;
+                        return aid<bid ? -1 : 1
+                    }
+                    return titleSort(a, b);
+                });
                 this.detailedHomeItems = [];
                 this.$nextTick(function () {
                     this.detailedHomeItems = checked.concat(unchecked);

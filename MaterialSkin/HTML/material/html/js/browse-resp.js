@@ -1065,7 +1065,7 @@ function parseBrowseResp(data, parent, options, cacheKey) {
                     textKeys.add(key);
                 }
                 let image = undefined!=i.portraitid && "/contributor/" + i.portraitid + "/image" + LMS_LIST_IMAGE_SIZE;
-                image = image || (LMS_P_MAI && lmsOptions.showArtistImages) && "/imageproxy/mai/artist/" + i.id + "/image" + LMS_LIST_IMAGE_SIZE;
+                image = image || (LMS_P_MAI && lmsOptions.showArtistImages) && "/imageproxy/mai/artist/" + originalId(i.id) + "/image" + LMS_LIST_IMAGE_SIZE;
                 var artist = {
                             id: "artist_id:"+i.id,
                             title: replaceHtmlBrackets(i.artist),

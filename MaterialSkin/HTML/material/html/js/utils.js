@@ -450,6 +450,14 @@ function setElemScrollTop(elem, val) {
     });
 }
 
+function uniqueId(id, val) {
+    return id+"@idx"+val;
+}
+
+function originalId(id) {
+    return id.split("@idx")[0];
+}
+
 function setScrollTop(view, val) {
     setElemScrollTop(view.scrollElement, val);
 }

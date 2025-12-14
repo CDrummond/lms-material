@@ -26,6 +26,7 @@
 17. Fix browsing from favourited genre.
 18. Use a dialog to enable scrolled lists, as there can now be quite a few to
     chose from.
+19. Use 16px as scrollbar size for macOS.
 
 6.0.5
 -----

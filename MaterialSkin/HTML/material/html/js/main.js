@@ -228,6 +228,9 @@ var app = new Vue({
             document.documentElement.style.setProperty('--vh', `${window.innerHeight * 0.01}px`);
         }
 
+        if (!IS_MOBILE && IS_APPLE) {
+            document.documentElement.style.setProperty('--scrollbar-size', MACOS_SCROLLBAR_SIZE+'px');
+        }
         // Try to detect if we are on Firefox with overlay scrollbars - if so need to add padding
         if (undefined!=navigator && undefined!=navigator.userAgent && navigator.userAgent.indexOf(" Gecko/")>0) {
             let div = document.createElement('div');

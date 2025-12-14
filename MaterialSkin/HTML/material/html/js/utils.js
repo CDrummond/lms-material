@@ -1325,6 +1325,10 @@ function getScrollBarSize() {
     document.body.appendChild(el);
     let width = el.offsetWidth - el.clientWidth;
     el.remove();
-    mskSbarSize = Math.max(10, width);
+    if (!IS_MOBILE && IS_APPLE) {
+        mskSbarSize = Math.max(MACOS_SCROLLBAR_SIZE, width);
+    } else {
+        mskSbarSize = Math.max(10, width);
+    }
     return mskSbarSize;
 }

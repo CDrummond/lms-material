@@ -113,6 +113,7 @@
  --color-mix-supported:1;
  --scrollbar-thumb-color:var(--std-scrollbar-thumb-color);
  --scrollbar-thumb-hover-color:var(--std-scrollbar-thumb-hover-color);
+ --scrollbar-size:10px;
  --tinted-background-shadow-color:var(--background-shadow-color);
  --popup-background-color:var(--std-popup-background-color);
  --tint-color:var(--primary-color);
@@ -338,11 +339,11 @@
 }
 
 ::-webkit-scrollbar:vertical {
- max-width:10px;
+ max-width:var(--scrollbar-size);
 }
 
 ::-webkit-scrollbar:horizontal {
- max-height:10px;
+ max-height:var(--scrollbar-size);
 }
 
 ::-webkit-scrollbar-thumb {

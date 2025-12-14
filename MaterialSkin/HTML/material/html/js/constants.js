@@ -31,6 +31,7 @@ const IS_HIGH_DPI = matchMedia( "(-webkit-min-device-pixel-ratio: 2), (min-devic
 const IS_WINDOWS  = !IS_ANDROID && !IS_APPLE && checkPlatform('Win');
 const IS_LINUX    = !IS_ANDROID && !IS_APPLE && !IS_WINDOWS && checkPlatform('Linux');
 const SUPPORTS_TOUCH = (('ontouchstart' in window) || (navigator.maxTouchPoints > 0) ||(navigator.msMaxTouchPoints > 0));
+const MACOS_SCROLLBAR_SIZE = 16;
 const COLOR_USE_STANDARD = 0;
 const COLOR_USE_FROM_COVER = 1;
 const COLOR_USE_PER_PLAYER = 2;

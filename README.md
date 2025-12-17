@@ -8,9 +8,6 @@ suitable for mobile and desktop usage.
 The [Screenshots wiki page](https://github.com/CDrummond/lms-material/wiki/Screenshots)
 has more screenshots.
 
-For more information, please refer to the [User Guide](https://cdn.statically.io/gh/d6jg/material-documentation/master/html/Material%20Skin.html).
-This guide is on a separate github page, and is authored by Jim Gooch.
-
 ## Features
 
 1. Mobile and desktop layouts

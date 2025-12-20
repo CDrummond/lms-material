@@ -5,7 +5,7 @@
 2. Allow 3rd party scrollable lists to provide subtitle for settings UI.
 3. Ensure title and 'Close' button remain visible in 'Scrollable lists'
    dialog.
-4. Add 'Subtitle' to advanced search for LMS 9.1+ - thanks to Michael Herger.
+4. Add 'Subtitle' to advanced search for LMS 9.0+ - thanks to Michael Herger.
 
 6.1.0
 -----

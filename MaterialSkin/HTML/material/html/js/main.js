@@ -467,6 +467,15 @@ var app = new Vue({
             this.queueEmpty = size<1;
         }.bind(this));
         this.$store.commit('setLocalIpAddresses', queryParams.ipAddresses);
+        if (!IS_MOBILE) {
+            window.addEventListener('focus', () => {
+                document.body.classList.remove('window-no-focus');
+            });
+
+            window.addEventListener('blur', () => {
+                document.body.classList.add('window-no-focus');
+            });
+        }
     },
     computed: {
         darkUi() {

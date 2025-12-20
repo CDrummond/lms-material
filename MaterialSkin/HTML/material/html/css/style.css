@@ -303,6 +303,10 @@
  }
 }
 
+.window-no-focus .lms-toolbar {
+ opacity:0.5;
+}
+
 .lms-toolbar .v-slider .primary {
  background-color:var(--toolbar-volume-color)!important;
  border-color:var(--toolbar-volume-color)!important;

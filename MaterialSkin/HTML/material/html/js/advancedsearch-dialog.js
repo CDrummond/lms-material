@@ -34,7 +34,7 @@ Vue.component('lms-advancedsearch-dialog', {
     </v-flex>
    </v-layout>
 
-   <v-layout class="avs-section" wrap :disabled="searching" v-if="LMS_VERSION>=90000">
+   <v-layout class="avs-section" wrap :disabled="searching" v-if="LMS_VERSION>=90100">
     <v-flex xs12 sm3><div class="avs-title">{{i18n('Subtitle')}}</div></v-flex>
     <v-flex xs12 sm4><v-select :items="textOps" v-model="params.me_subtitle.op" item-text="label" item-value="key"></v-select></v-flex>
     <v-flex xs12 sm5><v-text-field clearable autocorrect="off" v-model="params.me_subtitle.val" class="lms-search"></v-text-field></v-flex>

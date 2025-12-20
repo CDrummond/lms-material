@@ -6,7 +6,7 @@
 3. Ensure title and 'Close' button remain visible in 'Scrollable lists'
    dialog.
 4. Add 'Subtitle' to advanced search for LMS 9.0+ - thanks to Michael Herger.
-5. For non-mobile dim main toolbar when windows does not have focus.
+5. On desktop browsers dim main toolbar when window does not have focus.
 
 6.1.0
 -----

@@ -729,6 +729,7 @@
 "Lyrion website":"",
 "Most Played Artists":"",
 "New Artists":"",
+"No scrollable lists have been enabled. Use the 'cog' icon (above) to select the lists you would like to appear on the home screen.":"",
 "Popular Albums":"",
 "Popular Artists":"",
 "Popular Releases":"",
@@ -737,6 +738,7 @@
 "Single when wide enough":"",
 "Spacebar":"",
 "Start artist mix":"",
+"Subtitle":"",
 "When navigating into lists, show a home button to quickly navigate to the main (home) screen. Otherwise you can click on the title to show a menu that contains 'Home'.":"",
 "⌘+%1":"",
 "⌘+Shift+%1":""

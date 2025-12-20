@@ -334,8 +334,8 @@ function nowplayingOnPlayerStatus(view, playerStatus) {
         view.repAltBtn.show=false;
     }
     view.disableBtns=0==view.playerStatus.playlist.count;
-    view.disablePrev=(btns && undefined!=btns.rew && 0==parseInt(btns.rew)) || view.disableBtns;
-    view.disableNext=(btns && undefined!=btns.fwd && 0==parseInt(btns.fwd)) || view.disableBtns;
+    view.disablePrev=(btns && undefined!=btns.rew && 0==parseInt(btns.rew)) || view.disableBtns || queryParams.party;
+    view.disableNext=(btns && undefined!=btns.fwd && 0==parseInt(btns.fwd)) || view.disableBtns || queryParams.party;
     if (queryParams.npAutoClose && 0==view.playerStatus.playlist.count && !view.info.show) {
         if (view.$store.state.desktopLayout && view.largeView) {
             view.largeView = false;

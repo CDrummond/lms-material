@@ -497,6 +497,18 @@
  pointer-events:bounding-box;
 }
 
+.unpinned-queue-visible .list-btns,
+.unpinned-queue-visible .grid-header .list-btns,
+.unpinned-queue-visible .indent-both .grid-header .list-btns,
+.unpinned-queue-visible .indent-right .grid-header .list-btns {
+ right:calc(var(--pq-unpinned-width) + 28px) !important;
+}
+
+.unpinned-queue-visible .menu-btn,
+.unpinned-queue-visible .menu-btn:hover {
+ margin-right:var(--pq-unpinned-width)!important;
+}
+
 @keyframes pqSlideIn {
  100% { transform: translate3d(0%, 0, 0); }
 }

@@ -683,8 +683,9 @@ function nowplayingFetchTrackInfo(view) {
             }
         }
     }
-    if (undefined!=lmsOptions.userDefinedRoles) {
-        for (const [key, value] of Object.entries(lmsOptions.userDefinedRoles)) {
+    if (undefined!=lmsOptions.userDefinedRoles && undefined!=lmsOptions.userDefinedRolesOrder) {
+        for (let k=0, loop=lmsOptions.userDefinedRolesOrder, len=loop.length; k<len; ++k) {
+            let value = lmsOptions.userDefinedRoles[loop[k]];
             if (undefined!=trk[value.lrole]) {
                 let entry = nowplayingArtistEntry(trk, value.lrole, value.role);
                 if (entry.length>1) {

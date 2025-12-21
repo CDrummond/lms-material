@@ -117,6 +117,7 @@ function parseUserDefinedRoles(data) {
     ARTIST_TYPES = [].concat(BASE_ARTIST_TYPES);
     ARTIST_TYPE_IDS = [].concat(ARTIST_TYPE_IDS);
     let excluded = [];
+    lmsOptions.userDefinedRolesOrder=[];
     for (let i=0, len=keys.length; i<len; ++i) {
         let key = keys[i];
         if (undefined!=data[key]['id'] && undefined!=data[key]['name']) {
@@ -126,6 +127,7 @@ function parseUserDefinedRoles(data) {
             let name = data[key]['name'];
             let plural = data[key]['namePlural'];
             lmsOptions.userDefinedRoles[id] = {role:key, lrole:lkey, name:name, plural:plural, include:include};
+            lmsOptions.userDefinedRolesOrder.push(id);
             if (!include) {
                 excluded.push(lkey);
             }

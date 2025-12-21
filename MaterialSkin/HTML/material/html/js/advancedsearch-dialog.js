@@ -40,6 +40,12 @@ Vue.component('lms-advancedsearch-dialog', {
     <v-flex xs12 sm5><v-text-field clearable autocorrect="off" v-model="params.me_subtitle.val" class="lms-search"></v-text-field></v-flex>
    </v-layout>
 
+   <v-layout class="avs-section" wrap :disabled="searching" v-if="LMS_VERSION>=90000">
+    <v-flex xs12 sm3><div class="avs-title">{{i18n('Set/Disc Subtitle')}}</div></v-flex>
+    <v-flex xs12 sm4><v-select :items="textOps" v-model="params.me_discsubtitle.op" item-text="label" item-value="key"></v-select></v-flex>
+    <v-flex xs12 sm5><v-text-field clearable autocorrect="off" v-model="params.me_discsubtitle.val" class="lms-search"></v-text-field></v-flex>
+   </v-layout>
+
    <v-layout class="avs-section" wrap :disabled="searching">
     <v-flex xs12 sm3><div class="avs-title">{{lmsOptions.supportReleaseTypes ? i18n('Release') : i18n('Album')}}</div></v-flex>
     <v-flex xs12 sm4><v-select :items="textOps" v-model="params.album_titlesearch.op" item-text="label" item-value="key"></v-select></v-flex>
@@ -207,6 +213,7 @@ Vue.component('lms-advancedsearch-dialog', {
                 me_titlesearch: {val:undefined, op:"LIKE"},
                 contributor_namesearch: {val:undefined, op:"LIKE", types:[1, 5]},
                 me_subtitle: {val:undefined, op:"LIKE"},
+                mb_discsubtitle: {val:undefined, op:"LIKE"},
                 album_titlesearch: {val:undefined, op:"LIKE"},
                 work_titlesearch: {val:undefined, op:"LIKE"},
                 album_release_type: {val:undefined, op:"LIKE"},
@@ -287,6 +294,7 @@ Vue.component('lms-advancedsearch-dialog', {
                 this.params.contributor_namesearch= {val:undefined, op:"LIKE", types:[1, 5]};
                 this.params.album_titlesearch= {val:undefined, op:"LIKE"};
                 this.params.me_subtitle= {val:undefined, op:"LIKE"};
+                this.params.me_discsubtitle= {val:undefined, op:"LIKE"};
                 this.params.work_titlesearch= {val:undefined, op:"LIKE"};
                 this.params.album_release_type= {val:undefined, op:"LIKE"};
                 this.params.genre= ADVS_ANY_GENRE;
@@ -377,7 +385,7 @@ Vue.component('lms-advancedsearch-dialog', {
         },
         search() {
             this.searching = true;
-            var ops = ['me_titlesearch', 'contributor_namesearch', 'album_titlesearch', 'me_subtitle', 'work_titlesearch', 'album_release_type', 'secs', 'tracknum', 'year', 'persistent_playcount', 'persistent_rating', 'timestamp', 'url', 'filesize', 'comments_value', 'lyrics'];
+            var ops = ['me_titlesearch', 'contributor_namesearch', 'album_titlesearch', 'me_discsubtitle', 'me_subtitle', 'work_titlesearch', 'album_release_type', 'secs', 'tracknum', 'year', 'persistent_playcount', 'persistent_rating', 'timestamp', 'url', 'filesize', 'comments_value', 'lyrics'];
             var intOps = ['bitrate', 'samplerate', 'samplesize'];
             var command = ["material-skin", "adv-search"];
 

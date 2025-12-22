@@ -117,9 +117,8 @@ function parseQueryParams() {
                 resp[kv[0]]=val;
                 document.documentElement.style.setProperty('--window-area-'+kv[0].substr(4), val+'px');
             }
-        } else if ("px"==kv[0]) {
+        } else if ("extraParams"==kv[0]) {
             resp.extraParams=kv[1].split(",")
-                        console.log(kv[0], kv[1], resp.extraParams)
         }
     }
     if (resp.single && !resp.player) {

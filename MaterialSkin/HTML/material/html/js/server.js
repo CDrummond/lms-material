@@ -179,6 +179,10 @@ function lmsCommand(playerid, command, commandId, timeout) {
     const URL = "/jsonrpc.js";
     var data = { id: undefined==commandId ? 0 : commandId, method: "slim.request", params: [playerid, command]};
 
+    if (undefined!=queryParams.extraParams && queryParams.extraParams.length>0) {
+        data.params[1] = [].concat(data.params[1], queryParams.extraParams);
+    }
+
     logJsonMessage("REQ", data.params);
     if (undefined!=timeout) {
         return axios.post(URL, data, { timeout: timeout});

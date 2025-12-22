@@ -41,7 +41,7 @@ Vue.component('lms-advancedsearch-dialog', {
    </v-layout>
 
    <v-layout class="avs-section" wrap :disabled="searching" v-if="LMS_VERSION>=90000">
-    <v-flex xs12 sm3><div class="avs-title">{{i18n('Set/Disc Subtitle')}}</div></v-flex>
+    <v-flex xs12 sm3><div class="avs-title">{{i18n('Set/Disc subtitle')}}</div></v-flex>
     <v-flex xs12 sm4><v-select :items="textOps" v-model="params.me_discsubtitle.op" item-text="label" item-value="key"></v-select></v-flex>
     <v-flex xs12 sm5><v-text-field clearable autocorrect="off" v-model="params.me_discsubtitle.val" class="lms-search"></v-text-field></v-flex>
    </v-layout>

@@ -494,6 +494,7 @@
 "Set rating for all tracks":"",
 "Set sleep time for '%1'":"",
 "Set sleep time for all players":"",
+"Set/Disc subtitle":"",
 "Settings":"",
 "Settings (and home screen items) are stored locally in your browser. However, some browser extensions can remove these. The 'Save as default' button can be used to store your current settings (and home screen items) on the Lyrion server. These will then be used for any settings that are not found in your browser. Likewise, 'Revert to default' can be used to manually revert to the settings stored on your Lyrion server.":"",
 "Settings (and shortcuts) always visible":"",

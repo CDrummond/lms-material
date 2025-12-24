@@ -94,7 +94,7 @@
  --inverted-text-color:#edece7;
  --np-bgnd-full-shadow-color:rgba(216, 216, 216, 0.8);
  --trans-bottom-toolbar-color:rgba(216, 216, 216, 0.25);
- --mobile-np-view-control-size:0px;
+ --mobile-np-view-control-size:16px;
  --desktop-np-wide-pad:0px;
  --bottom-toolbar-border-color:rgba(51, 51, 51, 0.1);
  --top-toolbar-border-color:rgba(51, 51, 51, 0.1);
@@ -1803,9 +1803,13 @@ div.v-subheader {
  position:fixed;
  top:calc(var(--np-portrait-image-size) + (var(--np-image-border) * 2) + var(--top-pad) + 32px);
  width:100vw;
- height:calc(var(--100vh) - (var(--np-portrait-image-size) + 187px + var(--top-pad) + var(--bottom-pad) + (var(--thin-portrait-adjust) * 3) + (var(--np-image-border) * 2)));
+ height:calc(var(--100vh) - (var(--mobile-np-view-control-size) + var(--np-portrait-image-size) + 187px + var(--top-pad) + var(--bottom-pad) + (var(--thin-portrait-adjust) * 3) + (var(--np-image-border) * 2)));
  padding-left:16px;
  padding-right:16px;
+}
+
+.np-mob-nonav .np-portrait-track-info {
+ height:calc(var(--100vh) - (var(--np-portrait-image-size) + 187px + var(--top-pad) + var(--bottom-pad) + (var(--thin-portrait-adjust) * 3) + (var(--np-image-border) * 2)));
 }
 
 .hide-scrollbar::-webkit-scrollbar {

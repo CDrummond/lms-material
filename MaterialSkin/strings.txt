@@ -421,7 +421,7 @@ PLUGIN_MATERIAL_SKIN_SHOW_ALL_ARTISTS_DESC
 	DA	Hvis et nummer har flere kunstnere, albumkunstnere, komponister m.v., så vis dem alle når der kigges på albums, hvad der afspilles nu og i køen. I modsat fald vis kun den første af hver slags.
 	DE	Wenn ein Titel mehrere Interpreten, Albuminterpreten, Komponisten etc. hat, zeige alle beim Durchsuchen von Alben, in 'Aktueller Titel' und der Warteschlange an. Andernfalls zeige nur den jeweils ersten an.
 	EN	If a track has multiple artists, album-artists, composers, etc. then show all when browsing albums, in now-playing and the queue. Otherwise just show the first of each.
-	ES 	Si una pista tiene varios artistas, artistas de álbum, compositores, etc., entonces muéstralos todos al navegar por álbumes, en reproducción actual y en cola. De lo contrario, muestra solo el primero de cada tipo.
+	ES	Si una pista tiene varios artistas, artistas de álbum, compositores, etc., entonces muéstralos todos al navegar por álbumes, en reproducción actual y en cola. De lo contrario, muestra solo el primero de cada tipo.
 	IT	Se un brano ha più artisti, artisti per album, compositori ecc mostra tutti quando si sfogliano gli album, in In Riproduzione e nella coda di riproduzione. Altrimenti mostra solo il primo.
 	FR	Si un morceau a plusieurs artistes ou artistes d'album, compositeurs, etc., choisir de les afficher tous (lors de la navigation dans les albums, dans la vue "lecture en cours" et dans la liste de lecture) ou de n'afficher que le premier de chaque type.
 	NL	Als een nummer meerdere artiesten, albumartiesten, componisten, etc. heeft, laat ze dan allemaal zien bij het bladeren door albums, bij het afspelen en in de afspeellijst. Laat anders gewoon de eerste van elk zien.
@@ -539,7 +539,7 @@ PLUGIN_MATERIAL_SKIN_SHOW_COMMENT_DESC
 	DA	Vis kommentarmærke indholdet i nummerafsnittet for "Information" visningen, nede under sangteksterne.
 	DE	Zeige den 'comment' tag in der 'Track'-Sektion der Track-Informationsansicht.
 	EN	Show a track's comment tag in the 'Track' section of the track information view, below the lyrics.
-	ES 	Mostrar el comentario de una pista en la sección de 'Pista' en la vista de información de la pista, debajo de la letra.
+	ES	Mostrar el comentario de una pista en la sección de 'Pista' en la vista de información de la pista, debajo de la letra.
 	IT	Mostra il commento di una traccia nella sezione "Traccia" delle informazioni di ogni traccia, sotto il testo del brano.
 	FR	Afficher le contenu du tag "comment" (commentaire) dans la section "Morceau" de la vue "Informations", sous les paroles.
 	NL	Toon de 'comment' tag, onder de songtekst in het nummer gedeelte, op de info weergave.
@@ -577,7 +577,7 @@ PLUGIN_MATERIAL_SKIN_PAGED_BATCH_SIZE_DESC
 	DA	Antal indledende elementer, der skal hentes og vises, når indholdet af nogle lister vises (såsom en afspilleliste). Rulning af listen henter derefter yderligere elementer osv.
 	DE	Anzahl der anfänglichen Elemente, die beim Auflisten des Inhalts einiger Listen (wie beispielsweise der Inhalte einer Wiedergabeliste) abgerufen und angezeigt werden sollen. Durch das Scrollen in der Liste werden dann weitere Elemente abgerufen, usw.
 	EN	Number of initial items to fetch (and display) when listing contents of some lists (such as playlist contents). Scrolling list will then cause another batch of items to be fetched, etc.
-	ES 	Número de elementos iniciales que se obtendrán (y mostrarán) al listar el contenido de algunas listas (como el contenido de una lista de reproducción). Desplazar la lista hará que se obtenga otro lote de elementos, etc.
+	ES	Número de elementos iniciales que se obtendrán (y mostrarán) al listar el contenido de algunas listas (como el contenido de una lista de reproducción). Desplazar la lista hará que se obtenga otro lote de elementos, etc.
 	IT	Numero delle voci da precaricare (e mostrare) durante la visualizzazione delle liste (come il contenuto delle playlist). Lo scorrimento della lista provocherà il caricamento di un altro blocco di voci e così via.
 	FR	Nombre d'éléments initiaux récupérés (et affichés) lors de l'affichage de certaines listes (telles que les listes de lecture). Faire défiler la liste permettra de récupérer un nouvel ensemble d’éléments si nécessaire.
 	NL	Aantal initiële items dat wordt opgehaald (en getoond) bij het weergeven van de inhoud van sommige lijsten (zoals afspeellijsten). Als je door de lijst bladert, wordt er vervolgens een nieuwe reeks items opgehaald, enz.
@@ -600,7 +600,7 @@ PLUGIN_MATERIAL_SKIN_ARTIST_FILTER_DESC
 	DA	Når du gennemser en kunstners albums, benyt alle numre fra opsamlingsalbums, albums som denne kunstner optræder på osv., ellers vises kun numre fra den aktuelle kunstner.
 	DE	Zeige beim Durchsuchen der Alben eines Interpreten die Titel auf Kompilationen, Alben etc. mit seiner Beteiligung oder alle Titel auf diesen Kompilationen, Alben etc.
 	EN	When browsing an artist's albums use all tracks from compilation albums, albums this artist appears on, etc., or only show tracks from the current artist.
-	ES 	Cuando navega por los álbumes de un artista, use todas las pistas de los álbumes de compilación, álbumes en los que aparece este artista, etc., o solo muestre las pistas del artista actual.
+	ES	Cuando navega por los álbumes de un artista, use todas las pistas de los álbumes de compilación, álbumes en los que aparece este artista, etc., o solo muestre las pistas del artista actual.
 	IT	Durante lo scorrimento degli album di un artista utilizzare tutte i brani delle compilation e degli album in cui l'artista compare, oppure mostrare solo i brani dell'artista corrente.
 	FR	Lors du parcours des albums d'un artiste (ceux dans lesquels l'artiste apparaît), pour chaque album, afficher tous les morceaux de l'album ou afficher uniquement les morceaux de l'artiste.
 	NL	Wanneer je door de albums van een artiest bladert, geef dan voor elk album alle nummers in het album weer, of geef alleen de nummers van de huidige artiest weer.
@@ -648,7 +648,7 @@ PLUGIN_MATERIAL_SKIN_RELEASE_TYPE_ORDER_DESC
 	DA	Specificér den rækkefølge, som udgivelsestyper skal vises (dette er en kommasepareret liste af navne for udgivelsestyper) - f.eks. "Album, EP, Single"
 	DE	Geben Sie die Reihenfolge an, in der die Veröffentlichungsarten angezeigt werden sollen (dies ist eine durch Kommas getrennte Liste von Veröffentlichungsarten) - z.B. "Album, EP, Single".
 	EN	Specify order to display release types (this is a comma separated list of release type names) - e.g. "Album, EP, Single"
-	ES 	Especifique el orden para mostrar los tipos de lanzamiento (lista separada por comas de nombres de tipos de lanzamiento) - p. ej. "Album, EP, Single"
+	ES	Especifique el orden para mostrar los tipos de lanzamiento (lista separada por comas de nombres de tipos de lanzamiento) - p. ej. "Album, EP, Single"
 	IT	Specificare l'ordine in cui mostrare i tipi di release (lista separata da virgole dei tipi di release) - Es. "Album, EP, Single"
 	FR	Spécifier l'ordre d'affichage des types de sorties (par une liste de types de sorties séparés par des virgules) - par ex. "Album, EP, Single"
 	NL	Bepaal de volgorde hoe releasetypes worden getoond (dit is een door komma's gescheiden lijst van releasetypes) - bijv. "Album, EP, Single."

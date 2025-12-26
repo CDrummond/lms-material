@@ -180,6 +180,7 @@ PLUGIN_MATERIAL_SKIN_SHOW_COMPOSER_DESC
 
 PLUGIN_MATERIAL_SKIN_SHOW_COMPOSER_DESC_LMS9
 	CS	Zobrazit skladatele skladby, pokud je její žánr v nastavení „%s“ Lyrionu, nebo pro všechny žánry.
+	DE	Zeige den Komponisten des Songs an, wenn sein Genre in Lyrions Einstellung „%s“ enthalten ist, oder für alle Genres.
 	EN	Show song's composer if its genre is in Lyrion's "%s" setting, or for all genres.
 	ES	Muestra el compositor de la canción si su género está en la configuración "%s" de Lyrion, o para todos los géneros.
 	FR	Afficher le compositeur du morceau systématiquement ou uniquement si le genre est mentionné dans le réglage "%s" de Lyrion.
@@ -187,6 +188,7 @@ PLUGIN_MATERIAL_SKIN_SHOW_COMPOSER_DESC_LMS9
 
 PLUGIN_MATERIAL_SKIN_SHOW_COMPOSER_CLASSICAL
 	CS	Pouze pro nakonfigurované žánry
+	DE	Nur für konfigurierte Genres
 	EN	For configured genres only
 	ES	Solo para géneros configurados
 	FR	Pour les genres configurés seulement
@@ -194,6 +196,7 @@ PLUGIN_MATERIAL_SKIN_SHOW_COMPOSER_CLASSICAL
 
 PLUGIN_MATERIAL_SKIN_SHOW_COMPOSER_ALL
 	CS	Pro všechny žánry
+	DE	Für alle Genres
 	EN	For all genres
 	ES	Para todos los géneros
 	FR	Pour tous les genres
@@ -202,6 +205,7 @@ PLUGIN_MATERIAL_SKIN_SHOW_COMPOSER_ALL
 PLUGIN_MATERIAL_SKIN_USE_COMPOSER_MAI
 	CS	Zobrazení skladatele v zobrazení „Informace“
 	DA	Vis komponist i "Information" visningen
+	DE	Komponist in der Ansicht 'Informationen' anzeigen
 	EN	Display composer in 'Information' view
 	ES	Mostrar compositor en vista de 'Información'
 	FR	Afficher le compositeur dans la vue "Informations"
@@ -212,6 +216,7 @@ PLUGIN_MATERIAL_SKIN_USE_COMPOSER_MAI
 PLUGIN_MATERIAL_SKIN_USE_COMPOSER_MAI_DESC
 	CS	U vhodných skladeb zobrazit v zobrazení „Informace“ informace o skladateli, nikoli o interpretovi.
 	DA	Afhængigt af genren for nummeret, bliver komponisten i stedet for kunstneren vist i "Information" visningen.
+	DE	Zeigen Sie für geeignete Titel in der Ansicht 'Informationen' die Informationen zum Komponisten und nicht zum Interpreten an.
 	EN	For suitable tracks show composer, and not artist, information in the 'Information' view.
 	ES	Para pistas adecuadas mostrar información del compositor, y no del artista, en la vista de 'Información'.
 	FR	Selon le genre du morceau, afficher le compositeur plutôt que l'artiste  dans la vue "Informations".
@@ -247,6 +252,7 @@ PLUGIN_MATERIAL_SKIN_SHOW_CONDUCTOR_DESC
 
 PLUGIN_MATERIAL_SKIN_SHOW_CONDUCTOR_DESC_LMS9
 	CS	Zobrazit dirigenta skladby, pokud je její žánr v nastavení „%s“ Lyrionu.
+	DE	Zeige den Dirigenten des Songs an, wenn sein Genre in Lyrions Einstellung „%s“ enthalten ist.
 	EN	Show song's conductor if its genre is in Lyrion's "%s" setting.
 	ES	Mostrar director de la canción si su género está en la configuración "%s" de Lyrion.
 	FR	Si le tag "genre" du morceau est inclus dans le paramètre "%s" de Lyrion, afficher le chef d'orchestre.
@@ -280,6 +286,7 @@ PLUGIN_MATERIAL_SKIN_SHOW_BAND_DESC
 
 PLUGIN_MATERIAL_SKIN_SHOW_BAND_DESC_LMS9
 	CS	Zobrazit skupinu/orchestr skladby, pokud je její žánr v nastavení „%s“ Lyrionu.
+	DE	Zeige die Band/das Orchester des Songs an, wenn sein Genre in Lyrions Einstellung „%s“ enthalten ist.
 	EN	Show song's band/orchestra if its genre is in Lyrion's "%s" setting.
 	ES	Mostrar banda/orquesta de la canción si su género está en la configuración "%s" de Lyrion.
 	FR	Si le tag "genre" du morceau est inclus dans le paramètre "%s" de Lyrion, afficher le groupe/orchestre.
@@ -459,7 +466,7 @@ PLUGIN_MATERIAL_SKIN_ALLOW_DOWNLOAD_DESC
 PLUGIN_MATERIAL_SKIN_COMMENT_AS_DISC_TITLE
 	CS	Použití komentáře pro název disku
 	DA	Benyt kommentarmærke for titler på fysiske medier (diske)
-	DE	Benutze den 'Comment'-Tag für Albumtitel.
+	DE	Benutze den Kommentar für Albumtitel.
 	EN	Use comment for disc title
 	ES	Usar comentario para título de disco
 	IT	Utilizza i commenti per il titolo del disco
@@ -472,7 +479,7 @@ PLUGIN_MATERIAL_SKIN_COMMENT_AS_DISC_TITLE
 PLUGIN_MATERIAL_SKIN_COMMENT_AS_DISC_TITLE_DESC
 	CS	U alb s více disky použít jako název disku komentář z první stopy každého disku. Pokud používáte „Oddělen středníkem“, pak musí názvu disku předcházet buď „TITLE=“, „DISCTITLE=“, „TITLE:“ nebo „DISCTITLE:“ - např. „TITLE=Disk s doplňky;OTHER=Další informace“.
 	DA	Ved multi-disk albums, benyt kommentarmærke feltet fra det første nummer på hver disk som albumtitel. Hvis der bruges "Semikolon separeret" må albumtitlen nødvendigvis komme efter enten "TITLE=", "DISCTITLE=", "TITLE:", eller "DISCTITLE:" - f.eks. "TITLE=Extras disc;OTHER=En anden kommentar"
-	DE	Benutze bei Multi-Disk-Alben den 'Comment'-Tag des jeweils ersten Titels als Albumtitel
+	DE	Bei Multi-Disc-Alben verwende den Kommentar aus dem ersten Titel jeder Disc als Disc-Titel. Bei Verwendung von "Semikolon getrennt" muss dem Disc-Titel entweder "TITLE=", "DISCTITLE=", "TITLE:" oder "DISCTITLE:" vorangestellt werden – z. B. "TITLE=Extras disc;OTHER=Weitere Kommentare“
 	EN	For multi-disc albums use comment from first track of each disc as disc title. If using "Semi-colon separated" then the disc-title needs to be preceeded by either "TITLE=", "DISCTITLE=", "TITLE:", or "DISCTITLE:" - e.g. "TITLE=Extras disc;OTHER=Some other comment info"
 	ES	Para álbumes de múltiples discos, usar el comentario de la primera pista de cada disco como título del disco. Si se usa "Separado por punto y coma", entonces el título del disco debe estar precedido por "TITLE=", "DISCTITLE=", "TITLE:", o "DISCTITLE:" - ej. "TITLE=Disco de extras;OTHER=Otra información de comentario"
 	IT	Utilizzare il commento della prima traccia di ogni disco come titolo del disco per gli album su più dischi. Se presente un commento separato da ":" il dics-title deve essere preceduto da una di queste keyword "TITLE=", "DISCTITLE=", "TITLE:", o "DISCTITLE:" (es. "TITLE=Extras disc;OTHER=Some other comment info").
@@ -524,7 +531,7 @@ PLUGIN_MATERIAL_SKIN_COMMENT_C_SEMI_SEP
 PLUGIN_MATERIAL_SKIN_SHOW_COMMENT
 	CS	Zobrazení komentáře v zobrazení informací
 	DA	Vis indholdet i kommentarmærket i "Information" visning
-	DE	Zeige den 'comment' tag in der Informationsansicht
+	DE	Zeige den Kommentar in der Informationsansicht
 	EN	Show comment in info view
 	ES	Mostrar comentario en vista de información
 	IT	Mostra il commento nelle informazioni
@@ -537,7 +544,7 @@ PLUGIN_MATERIAL_SKIN_SHOW_COMMENT
 PLUGIN_MATERIAL_SKIN_SHOW_COMMENT_DESC
 	CS	Zobrazit tag komentáře skladby v části „Skladba“ v zobrazení informací o skladbě, pod textem skladby.
 	DA	Vis kommentarmærke indholdet i nummerafsnittet for "Information" visningen, nede under sangteksterne.
-	DE	Zeige den 'comment' tag in der 'Track'-Sektion der Track-Informationsansicht.
+	DE	Zeige den Kommentar eines Titels im Abschnitt "Titel“ der Titelinformationsansicht unterhalb des Liedtextes an.
 	EN	Show a track's comment tag in the 'Track' section of the track information view, below the lyrics.
 	ES	Mostrar el comentario de una pista en la sección de 'Pista' en la vista de información de la pista, debajo de la letra.
 	IT	Mostra il commento di una traccia nella sezione "Traccia" delle informazioni di ogni traccia, sotto il testo del brano.
@@ -766,7 +773,7 @@ PLUGIN_MATERIAL_SKIN_LOAD_DEFAULT_GENRES_DESC
 PLUGIN_MATERIAL_SKIN_LOAD_DEFAULT_GENRES
 	CS	Nastavit žánry na výchozí
 	DA	Sæt genrer til standard
-	DE	Genres auf Default setzen
+	DE	Genres auf Standard setzen
 	EN	Set Genres To Default
 	ES	Establecer Géneros por Defecto
 	IT	Imposta generi ai valori predefiniti
@@ -778,6 +785,7 @@ PLUGIN_MATERIAL_SKIN_LOAD_DEFAULT_GENRES
 PLUGIN_MATERIAL_COMBINE_APPS_AND_RADIO
 	CS	Sloučení „Aplikace“ a „Rádio“
 	DA	Kombinér 'Apps' og 'Radio'
+	DE	'Apps' und 'Radio' kombinieren
 	EN	Combine 'Apps' and 'Radio'
 	ES	Combinar 'Aplicaciones' y 'Radio'
 	FR	Combiner "Applications" et "Radio"
@@ -787,6 +795,7 @@ PLUGIN_MATERIAL_COMBINE_APPS_AND_RADIO
 
 PLUGIN_MATERIAL_COMBINE_APPS_AND_RADIO_DESC
 	CS	Sloučit nabídky „Aplikace“ a „Rádio“ do jedné nabídky „Aplikace“, s přidanou aplikací „TuneIn“ pro „Rádio“ (pokud je povoleno).
+	DE	Kombinieren Sie die Menüs 'Apps' und 'Radio' zu einem einzigen Menü 'Apps', wobei für 'Radio' eine 'TuneIn'-App hinzugefügt wird (sofern aktiviert).
 	EN	Combine the 'Apps' and 'Radio' menus into a single 'Apps' menu, with a 'TuneIn' app added for 'Radio' (if enabled).
 	ES	Combinar los menús 'Aplicaciones' y 'Radio' en un solo menú 'Aplicaciones', con una aplicación 'TuneIn' añadida para 'Radio' (si está habilitada).
 	DA	Læg 'Apps' og 'Radio' menuerne sammen til en 'Apps' menu, med en 'TuneIn' app for 'Radio' (hvis det er aktiveret).
@@ -797,6 +806,7 @@ PLUGIN_MATERIAL_COMBINE_APPS_AND_RADIO_DESC
 
 PLUGIN_MATERIAL_SKIN_USE_DEFAULT_FOR_SETTINGS
 	CS	Použítí vzhledu „Výchozí“ pro nastavení serveru
+	DE	Verwenden Sie den Skin 'Default' für die Server-Einstellungen.
 	EN	Use 'Default' skin for server settings
 	ES	Usar tema 'Predeterminado' para configuración del servidor
 	FR	Utiliser le thème "Défaut" du serveur pour son paramétrage
@@ -806,6 +816,7 @@ PLUGIN_MATERIAL_SKIN_USE_DEFAULT_FOR_SETTINGS
 
 PLUGIN_MATERIAL_SKIN_USE_DEFAULT_FOR_SETTINGS_DEC
 	CS	Při zobrazení nastavení serveru použít stránky ze vzhledu „Výchozí“ a nikoli přestylizované stránky ze vzhledu „Classic“. Bude použito pouze pokud je okno dostatečně velké.
+	DE	Bei der Anzeige der Servereinstellungen sollten Seiten aus dem Skin „Default“ verwendet werden und keine neu gestalteten Seiten aus dem Skin „Classic“. Dies wird nur verwendet, wenn das Fenster groß genug ist.
 	EN	When showing server settings use pages from the 'Default' skin and not re-themed pages from the 'Classic' skin. This will only be used if window is large enough.
 	ES	Al mostrar la configuración del servidor usar páginas del tema 'Predeterminado' y no páginas re-tematizadas del tema 'Clásico'. Esto solo se usará si la ventana es lo suficientemente grande.
 	FR	Pour l'affichage des paramètres du serveur, utiliser l'interface du thème "Défaut" au lieu d'une interface adaptée à l'écran, basée sur le thème "Classic". Ce ne sera possible que si la fenêtre est suffisamment grande.
@@ -815,6 +826,7 @@ PLUGIN_MATERIAL_SKIN_USE_DEFAULT_FOR_SETTINGS_DEC
 
 PLUGIN_MATERIAL_SKIN_USE_DEFAULT_FOR_SETTINGS_EMBEDDED
 	CS	Ano (vložené)
+	DE	Ja (eingebettet)
 	EN	Yes (embedded)
 	ES	Sí (integrado)
 	FR	Oui (intégré)
@@ -824,6 +836,7 @@ PLUGIN_MATERIAL_SKIN_USE_DEFAULT_FOR_SETTINGS_EMBEDDED
 
 PLUGIN_MATERIAL_SKIN_USE_DEFAULT_FOR_SETTINGS_NEW_TAB
 	CS	Ano (nová záložka/okno)
+	DE	Ja (neues Tab/Fenster)
 	EN	Yes (new tab/window)
 	ES	Sí (nueva pestaña/ventana)
 	FR	Oui (nouvel onglet/fenêtre)
@@ -853,7 +866,7 @@ PLUGIN_MATERIAL_SKIN_USE_GROUPING_DESC
 
 PLUGIN_MATERIAL_SKIN_PREFER_DISC_GROUPS
 	CS	Preferovat číslo disku/podnadpis disku
-	DE	Bevorzugte Disc-Nummer/Disc-Untertitel
+	DE	Bevorzuge Disc-Nummer/Disc-Untertitel
 	EN	Prefer disc number/disc subtitle
 	ES	Preferir número de disco/subtítulo de disco
 	FR	Préférer le numéro de disque et le sous-titre du disque
@@ -863,7 +876,7 @@ PLUGIN_MATERIAL_SKIN_PREFER_DISC_GROUPS
 
 PLUGIN_MATERIAL_SKIN_PREFER_WORK_GROUPING_GROUPS
 	CS	Preferovat dílo a seskupení
-	DE	Liever werken en groeperen
+	DE	Bevorzuge Werk und Gruppierung
 	EN	Prefer work and grouping
 	ES	Preferir obra y agrupación
 	FR	Préférer les tags WORK et GROUPING
@@ -873,6 +886,7 @@ PLUGIN_MATERIAL_SKIN_PREFER_WORK_GROUPING_GROUPS
 
 PLUGIN_MATERIAL_SKIN_SHOW_WORKS_IN_ARTIST_ALBUM_LIST
 	CS	Zobrazení díla interpreta
+	DE	Werke des Künstlers anzeigen
 	EN	Show artist works
 	ES	Mostrar obras del artista
 	FR	Afficher les œuvres des artistes
@@ -882,6 +896,7 @@ PLUGIN_MATERIAL_SKIN_SHOW_WORKS_IN_ARTIST_ALBUM_LIST
 
 PLUGIN_MATERIAL_SKIN_SHOW_WORKS_IN_ARTIST_ALBUM_LIST_DESC
 	CS	Zobrazit seznam děl interpreta při výpisu vydání interpreta.
+	DE	Zeige eine Liste der Werke eines Künstlers an, wenn die Veröffentlichungen des Künstlers aufgelistet werden.
 	EN	Show list of an artist's works when listing the artist's releases.
 	ES	Mostrar lista de obras de un artista al listar los lanzamientos del artista.
 	FR	Inclure les œuvres d'un artiste dans la liste des albums de l'artiste.
@@ -891,6 +906,7 @@ PLUGIN_MATERIAL_SKIN_SHOW_WORKS_IN_ARTIST_ALBUM_LIST_DESC
 
 PLUGIN_MATERIAL_SKIN_PLAYLIST_IMAGES
 	CS	Obrázky seznamů skladeb
+	DE	Playlist-Bilder
 	EN	Playlist images
 	ES	Imágenes de listas de reproducción
 	FR	Images des listes de lecture
@@ -899,6 +915,7 @@ PLUGIN_MATERIAL_SKIN_PLAYLIST_IMAGES
 
 PLUGIN_MATERIAL_SKIN_PLAYLIST_IMAGES_DESC
 	CS	Zobrazit obrázky při výpisu seznamů skladeb. To (volitelně) vyžaduje vytvoření obrázků JPEG 600x600 v podsložce „material-skin/playlists“ ve složce předvoleb vašeho Lyrionu. Obrázky seznamů skladeb by měly být všechny malými písmeny nebo číslicemi, s odstraněnými všemi ostatními znaky. Např. „R&B“ je „rb.jpg“, „Folk/Rock“ je „folkrock.jpg“. Pokud není nalezen žádný obrázek, použije se první platný obrázek ze seznamu skladeb playlistu. Vezměte však na vědomí, že toto (použití obrázku skladby) může mít vliv na rychlost procházení playlistu (protože každý playlist bude muset být dotazován na jeho seznam skladeb atd.).
+	DE	Zeigen Sie Bilder an, wenn Sie Wiedergabelisten auflisten. Dazu müssen Sie (optional) 600x600 JPEG-Bilder in einem Unterordner „material-skin/playlists” Ihres Lyrion-Einstellungsordners erstellen. Wiedergabelistenbilder sollten ausschließlich aus Kleinbuchstaben oder Zahlen bestehen, alle anderen Zeichen müssen entfernt werden. Beispiel: „R&B” wird zu „rb.jpg”, „Folk/Rock” zu „folkrock.jpg”. Wenn kein Bild gefunden wird, wird das erste gültige Bild aus der Titelliste der Wiedergabeliste verwendet. Beachten Sie jedoch, dass dies (die Verwendung eines Titelbildes) Auswirkungen auf die Geschwindigkeit beim Durchsuchen der Wiedergabelisten haben kann (da jede Wiedergabeliste nach ihrer Titelliste usw. abgefragt werden muss).
 	EN	Display images when listing playlists. This (optionally) requires creating 600x600 JPEG images within a "material-skin/playlists" sub-folder of your Lyrion's preferences folder. Playlist images should all be lowercase letters or numbers, with all other characters removed. e.g. "R&B" is "rb.jpg", "Folk/Rock" is "folkrock.jpg". If no image is found, then the first valid image from the playlist track listing is used. Note, however, that this (using a track image) may have an effect on playlist browsing speed (as each playlist will need to be queried for its track listing, etc).
 	ES	Mostrar imágenes al listar listas de reproducción. Esto (opcionalmente) requiere crear imágenes JPEG de 600x600 dentro de una subcarpeta "material-skin/playlists" en la carpeta de preferencias de su Lyrion. Los nombres de las imágenes de listas de reproducción deben ser solo letras minúsculas o números, eliminando todos los demás caracteres. ej. "R&B" es "rb.jpg", "Folk/Rock" es "folkrock.jpg". Si no se encuentra ninguna imagen, se usa la primera imagen válida de la lista de pistas de la lista de reproducción. Note, sin embargo, que esto (usar una imagen de pista) puede tener un efecto en la velocidad de navegación de listas de reproducción (ya que cada lista de reproducción necesitará ser consultada por su lista de pistas, etc).
 	FR	Utiliser des images lors de l'affichage des listes de lecture. Cette fonctionnalité (facultative) nécessite la création d'images JPEG 600x600 dans un sous-dossier "material-skin/playlists" du dossier des préférences de Lyrion. Les noms des fichiers doivent être constitués uniquement de lettres minuscules ou de chiffres. Par exemple : "R&B" devient "rb.jpg", "Folk/Rock" devient "folkrock.jpg". Si aucune image n'est trouvée, la première pochette des morceaux de la liste de lecture est utilisée. Cela peut impacter la vitesse de parcours des listes de lecture car chaque liste de lecture devra être interrogée pour connaître sa liste de morceaux.
@@ -907,6 +924,7 @@ PLUGIN_MATERIAL_SKIN_PLAYLIST_IMAGES_DESC
 
 PLUGIN_MATERIAL_SKIN_QT_MOVE_ERROR
 	CS	Nelze přesunout frontu do přehrávače, se kterým je již synchronizována.
+	DE	Die Warteschlange kann nicht zu einem Player verschoben werden, mit dem sie bereits synchronisiert ist.
 	EN	Cannot move queue to a player that it is already synced with.
 	ES	No se puede mover la cola a un reproductor con el que ya está sincronizada.
 	FR	Impossible de déplacer une liste de lecture vers une platine déjà synchronisée.
@@ -914,6 +932,7 @@ PLUGIN_MATERIAL_SKIN_QT_MOVE_ERROR
 
 PLUGIN_MATERIAL_SKIN_QT_COPY_ERROR
 	CS	Nelze zkopírovat frontu do přehrávače, se kterým je již synchronizována.
+	DE	Die Warteschlange kann nicht auf einen Player kopiert werden, mit dem sie bereits synchronisiert ist.
 	EN	Cannot copy queue to a player that it is already synced with.
 	ES	No se puede copiar la cola a un reproductor con el que ya está sincronizada.
 	FR	Impossible de copier une liste de lecture vers une platine déjà synchronisée.
@@ -921,6 +940,7 @@ PLUGIN_MATERIAL_SKIN_QT_COPY_ERROR
 
 PLUGIN_MATERIAL_SKIN_QT_SWAP_ERROR
 	CS	Nelze zaměnit frontu s přehrávačem, se kterým je již synchronizována.
+	DE	Die Warteschlange kann nicht mit einem Spieler getauscht werden, mit dem sie bereits synchronisiert ist.
 	EN	Cannot swap queue with a player that it is already synced with.
 	ES	No se puede intercambiar la cola con un reproductor con el que ya está sincronizada.
 	FR	Impossible d'échanger une liste de lecture avec une platine déjà synchronisée.
@@ -928,6 +948,7 @@ PLUGIN_MATERIAL_SKIN_QT_SWAP_ERROR
 
 PLUGIN_MATERIAL_SKIN_SMALL_ICON_ONLY_GRID
 	CS	Menší mřížka pouze s ikonami
+	DE	Kleineres Nur-Symbole-Raster
 	EN	Smaller icon-only grid
 	ES	Cuadrícula más pequeña solo de iconos
 	FR	Icônes de grille plus petits
@@ -935,6 +956,7 @@ PLUGIN_MATERIAL_SKIN_SMALL_ICON_ONLY_GRID
 
 PLUGIN_MATERIAL_SKIN_SMALL_ICON_ONLY_GRID_DESC
 	CS	Na užších obrazovkách povolit použití menších položek mřížky, pokud jsou zobrazeny pouze ikony a nikoli obrázky. Mějte na paměti, že to může způsobit častější zkrácení textu.
+	DE	Auf schmaleren Bildschirmen sollten kleinere Rasterelemente verwendet werden, wenn nur Symbole und keine Bilder angezeigt werden. Beachten Sie, dass dies dazu führen kann, dass Text häufiger abgeschnitten wird.
 	EN	On narrower screens, allow usage of smaller grid items if only showing icons, and not images. Note that this may cause text to be truncated more frequently.
 	ES	En pantallas más estrechas, permitir el uso de elementos de cuadrícula más pequeños si solo se muestran iconos, y no imágenes. Note que esto puede causar que el texto se trunque más frecuentemente.
 	FR	Sur les petits écrans, autoriser l'utilisation d'éléments de grille plus petits, s'il y a seulement des icônes et pas d'images. (Le texte peut être tronqué plus fréquemment.)

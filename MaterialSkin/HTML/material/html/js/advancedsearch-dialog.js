@@ -213,7 +213,7 @@ Vue.component('lms-advancedsearch-dialog', {
                 me_titlesearch: {val:undefined, op:"LIKE"},
                 contributor_namesearch: {val:undefined, op:"LIKE", types:[1, 5]},
                 me_subtitle: {val:undefined, op:"LIKE"},
-                mb_discsubtitle: {val:undefined, op:"LIKE"},
+                me_discsubtitle: {val:undefined, op:"LIKE"},
                 album_titlesearch: {val:undefined, op:"LIKE"},
                 work_titlesearch: {val:undefined, op:"LIKE"},
                 album_release_type: {val:undefined, op:"LIKE"},

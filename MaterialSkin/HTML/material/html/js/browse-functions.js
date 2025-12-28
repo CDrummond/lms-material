@@ -982,6 +982,10 @@ function browseSetScroll(view) {
 }
 
 function browseClick(view, item, index, event, ignoreOpenMenu) {
+    if (view.$store.state.desktopLayout && !view.$store.state.pinQueue && view.$store.state.showQueue) {
+        view.$store.commit('showQueue', false);
+        return;
+    }
     if (view.fetchingItem!=undefined || "html"==item.type) {
          return;
     }
@@ -1304,6 +1308,10 @@ function browseAddCategories(view, item, isGenre) {
 }
 
 function browseItemAction(view, act, origItem, index, event, slimBrowseBaseActions) {
+    if (view.$store.state.desktopLayout && !view.$store.state.pinQueue && view.$store.state.showQueue) {
+        view.$store.commit('showQueue', false);
+        return;
+    }
     let item = undefined!=origItem && origItem.id.startsWith("currentaction:") ? browseGetCurrent(view) : origItem;
 
     if (act==SEARCH_LIST_ACTION) {

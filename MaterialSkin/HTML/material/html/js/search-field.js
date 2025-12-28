@@ -15,6 +15,9 @@ const SEARCH_TRACKS_CAT = 4;
 const SEARCH_PLAYLISTS_CAT = 5;
 const SEARCH_OTHER_CAT = 6;
 
+const SEARCH_CLAMPED_MENU = [PLAY_ALL_ACTION, INSERT_ALL_ACTION, ADD_ALL_ACTION, DIVIDER, MORE_ACTION];
+const SEARCH_MENU = [PLAY_ALL_ACTION, INSERT_ALL_ACTION, ADD_ALL_ACTION];
+
 function buildSearchResp(results) {
     let items=[];
     let total=0;
@@ -37,26 +40,26 @@ function buildSearchResp(results) {
                         id:filter, header:true, hidesub:true, svg: lmsOptions.supportReleaseTypes ? "release" : undefined,
                         icon: lmsOptions.supportReleaseTypes ? undefined : "album",
                         allItems: clamped ? all : undefined, subtitle:lmsOptions.supportReleaseTypes ? i18np("1 Release", "%1 Releases", numItems) : i18np("1 Album", "%1 Albums", numItems),
-                        menu:queryParams.party || clamped ? undefined : [PLAY_ALL_ACTION, INSERT_ALL_ACTION, ADD_ALL_ACTION]});
+                        menu:queryParams.party ? undefined : clamped ? SEARCH_CLAMPED_MENU : SEARCH_MENU});
         } else if (SEARCH_WORKS_CAT==results[i].command.cat) {
             if (numItems>0) {
                 filter = FILTER_PREFIX+"work";
                 items.push({title: i18n("Works") + " ("+titleParam+")",
                             id:filter, header:true, hidesub:true, svg: "classical-work",
                             allItems: clamped ? all : undefined, subtitle:i18np("1 Work", "%1 Works", numItems),
-                            menu:queryParams.party || clamped ? undefined : [PLAY_ALL_ACTION, INSERT_ALL_ACTION, ADD_ALL_ACTION]});
+                            menu:queryParams.party ? undefined : clamped ? SEARCH_CLAMPED_MENU : SEARCH_MENU});
             }
         } else if (SEARCH_TRACKS_CAT==results[i].command.cat) {
             filter = FILTER_PREFIX+"track";
             items.push({title: i18n("Tracks", titleParam) + " ("+titleParam+")", id:filter, header:true, hidesub:true,
                         allItems: clamped ? all : undefined, subtitle: i18np("1 Track", "%1 Tracks", numItems),
                         icon: "music_note",
-                        menu:queryParams.party || clamped ? undefined : [PLAY_ALL_ACTION, INSERT_ALL_ACTION, ADD_ALL_ACTION]});
+                        menu:queryParams.party ? undefined : clamped ? SEARCH_CLAMPED_MENU : SEARCH_MENU});
         } else if (SEARCH_PLAYLISTS_CAT==results[i].command.cat) {
             filter = FILTER_PREFIX+"playlist";
             items.push({title: i18n("Playlists") + " ("+titleParam+")", id:filter, header:true, hidesub:true, icon:"list",
                         allItems: clamped ? all : undefined, subtitle: i18np("1 Playlist", "%1 Playlists", numItems),
-                        menu:queryParams.party || clamped ? undefined : [PLAY_ALL_ACTION, INSERT_ALL_ACTION, ADD_ALL_ACTION]});
+                        menu:queryParams.party ? undefined : clamped ? SEARCH_CLAMPED_MENU : SEARCH_MENU});
         } else if (SEARCH_OTHER_CAT==results[i].command.cat) {
             items.push({title: i18n("Search on..."), id:"search.other", header:true, icon:"search"});
         }

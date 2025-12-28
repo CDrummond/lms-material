@@ -1034,6 +1034,10 @@ div.v-subheader {
  opacity:1;
 }
 
+.hover-more {
+ margin-right:56px!important;
+}
+
 .image-grid-with-sub .image-grid-item {
  height:calc((var(--min-grid-height) - 5px) + (5px * var(--image-grid-factor))) !important;
 }

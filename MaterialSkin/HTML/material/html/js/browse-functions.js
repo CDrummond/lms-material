@@ -1006,19 +1006,7 @@ function browseClick(view, item, index, event, ignoreOpenMenu) {
     }
     if (item.header && !item.slimbrowse) {
         if (item.allItems && item.allItems.length>0) { // Clicking on 'X Artists' / 'X Albums' / 'X Tracks' search header
-            /*
-            view.addHistory();
-            view.items = item.allItems;
-            view.headerSubTitle = item.subtitle;
-            view.current = item;
-            view.searchActive = 0;
-            if (item.menu && item.menu.length>0 && item.menu[0]==PLAY_ALL_ACTION) {
-                view.tbarActions=[ADD_ALL_ACTION, PLAY_ALL_ACTION];
-            }
-            browseSetScroll(view);
-            */
-           // Now handled by "(More)" button...
-           return;
+            browseItemMenu(view, item, index, event);
         } else if (view.selection.size>0) {
             view.select(item, index, event);
         } else {
@@ -1330,7 +1318,17 @@ function browseItemAction(view, act, origItem, index, event, slimBrowseBaseActio
             view.searchActive = 1;
         }
     } else if (act===MORE_ACTION) {
-        if (item.isPodcast) {
+        if (item.allItems && item.allItems.length>0) { // Clicking on 'X Artists' / 'X Albums' / 'X Tracks' search header
+            view.addHistory();
+            view.items = item.allItems;
+            view.headerSubTitle = item.subtitle;
+            view.current = item;
+            view.searchActive = 0;
+            if (item.menu && item.menu.length>0 && item.menu[0]==PLAY_ALL_ACTION) {
+                view.tbarActions=[ADD_ALL_ACTION, PLAY_ALL_ACTION];
+            }
+            browseSetScroll(view);
+        } else if (item.isPodcast) {
             bus.$emit('dlg.open', 'iteminfo', item);
         } else {
             let cmd = view.buildCommand(item, ACTIONS[act].cmd);

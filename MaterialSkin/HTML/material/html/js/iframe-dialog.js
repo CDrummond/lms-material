@@ -1011,7 +1011,12 @@ Vue.component('lms-iframe-dialog', {
             let parts = this.title.split(SEPARATOR);
             parts[1]=player.name;
             this.title=parts.join(SEPARATOR);
-            this.src = this.src.replace(this.playerId, player.id);
+            if (undefined!=iframeInfo && undefined!=iframeInfo.content && undefined!=iframeInfo.content.URL) {
+                this.src = iframeInfo.content.URL.replaceAll("%3A", ":").replaceAll(this.playerId, player.id);
+            } else {
+                this.src = this.src.replaceAll(this.playerId, player.id);
+            }
+
             this.show = true;
             this.choiceMenu = {show:false, x:this.choiceMenu.x};
             this.loaded = false;

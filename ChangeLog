@@ -10,6 +10,7 @@
 6. If unpinned queue is shown then close when click on browse view.
 7. Fix not being able to interact with queue when its shown over now-playing
    when using Firefox.
+8. When switching players in 'Extra player settings' try to preserve section.
 
 6.1.1
 -----

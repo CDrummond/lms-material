@@ -86,7 +86,7 @@
             "svg":"apple"
         },
         "SqueezeLiteAndroid":{
-            "icon":"android"
+            "svg":"squeezelite-android"
         },
         "WiiM Player":{
             "svg":"wiim"
@@ -94,17 +94,17 @@
     },
     "squeezelite-c":{
         "SqueezeLiteAndroid":{
-            "icon":"android"
+            "svg":"squeezelite-android"
         }
     },
     "squeezelite-m":{
         "SqueezeLiteAndroid":{
-            "icon":"android"
+            "svg":"squeezelite-android"
         }
     },
     "squeezelite-mobile":{
         "SqueezeLiteAndroid":{
-            "icon":"android"
+            "svg":"squeezelite-android"
         }
     },
     "LyrPlay": {

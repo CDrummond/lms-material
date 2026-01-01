@@ -417,6 +417,13 @@ Vue.component('lms-ui-settings', {
      <v-list-tile-action><m3-switch v-model="ndSettingsVisible"></m3-switch></v-list-tile-action>
     </v-list-tile>
 
+    <div class="dialog-padding"></div>
+    <v-header class="dialog-section-header">{{i18n('User')}}</v-header>
+    <v-list-tile>
+     <v-select :items="userids" :label="i18n('User-ID')" v-model="userid" item-text="label" item-value="key"></v-select>
+    </v-list-tile>
+    <v-list-tile-sub-title style="padding-bottom:16px">{{i18n('User ID that is sent with every request to Lyrion. It must be assigned to the desired account in plugins that support this function.')}}</v-list-tile-sub-title>
+
     <div class="dialog-padding" v-if="unlockAll" ></div>
     <v-header class="dialog-section-header" v-if="unlockAll" >{{i18n('Defaults')}}</v-header>
     <v-list-tile class="settings-note" v-if="unlockAll"><p>{{i18n("Settings (and home screen items) are stored locally in your browser. However, some browser extensions can remove these. The 'Save as default' button can be used to store your current settings (and home screen items) on the Lyrion server. These will then be used for any settings that are not found in your browser. Likewise, 'Revert to default' can be used to manually revert to the settings stored on your Lyrion server.")}}</p></v-list-tile>
@@ -553,6 +560,8 @@ Vue.component('lms-ui-settings', {
             ndShortcutValues: [],
             ndSettingsIcons: false,
             ndSettingsVisible: false,
+            userid: '',   
+            userids: [],
             detailedHomeItems:[],
             detailedHomeDialog: false,
             dragIndex: undefined,
@@ -743,11 +752,13 @@ Vue.component('lms-ui-settings', {
             this.ndShortcuts = this.$store.state.ndShortcuts;
             this.ndSettingsIcons = this.$store.state.ndSettingsIcons;
             this.ndSettingsVisible = this.$store.state.ndSettingsVisible;
+            this.userid = this.$store.state.userid;
             this.showItems=[{id: TOP_MYMUSIC_ID, name:i18n("My Music"), show:!this.hidden.has(TOP_MYMUSIC_ID)},
                             {id: TOP_RADIO_ID, name:i18n("Radio"), show:!this.hidden.has(TOP_RADIO_ID)},
                             {id: TOP_FAVORITES_ID, name:i18n("Favorites"), show:!this.hidden.has(TOP_FAVORITES_ID)},
                             {id: TOP_APPS_ID, name:i18n("Apps"), show:!this.hidden.has(TOP_APPS_ID)},
                             {id: TOP_EXTRAS_ID, name:i18n("Extras"), show:!this.hidden.has(TOP_EXTRAS_ID)}];
+            
 
             let checkedHomeItems = new Set(this.$store.state.detailedHomeItems);
 
@@ -801,7 +812,15 @@ Vue.component('lms-ui-settings', {
                 { key:1, label:i18n("Moving clock")},
                 { key:2, label:i18n("Fixed clock")},
                 { key:3, label:i18n("Blank screen")}
-            ]
+                ];
+            this.userids=[
+                { key:'', label:i18n("None")},
+                { key:'001', label:'001'},
+                { key:'002', label:'002'},
+                { key:'003', label:'003'},
+                { key:'004', label:'004'},
+                { key:'005', label:'005'}
+                ];  
 
             this.detailedHomeItems = [{id:DETAILED_HOME_STD_PREFIX+"new", title:i18n('New Music'), checked:false, icon:"new_releases"}];
             if (LMS_VERSION>=90100 && LMS_STATS_ENABLED) {
@@ -937,6 +956,7 @@ Vue.component('lms-ui-settings', {
                       ndShortcuts:this.ndShortcuts,
                       ndSettingsIcons:this.ndSettingsIcons,
                       ndSettingsVisible:this.ndSettingsVisible,
+                      userid:this.userid,
                       detailedHomeItems:detailedHomeItems
                   };
             if (withSorts) {

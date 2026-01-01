@@ -26,7 +26,7 @@ function updateUiSettings(state, val) {
                     'browseTechInfo', 'techInfo', 'nowPlayingTrackNum', 'swipeVolume', 'swipeChangeTrack',
                     'keyboardControl', 'skipBSeconds', 'skipFSeconds', 'mediaControls', 'showRating', 'browseContext',
                     'nowPlayingContext', 'queueContext', 'moveDialogs', 'autoCloseQueue', 'nowPlayingFull', 'tinted',
-                    'ndShortcuts', 'ndSettingsIcons', 'ndSettingsVisible', 'gridPerView'];
+                    'ndShortcuts', 'ndSettingsIcons', 'ndSettingsVisible', 'gridPerView', 'userid'];
     for (let i=0, len=stdItems.length; i<len; ++i) {
         let key=stdItems[i];
         if (undefined!=val[key] && state[key]!=val[key]) {
@@ -443,6 +443,7 @@ const store = new Vuex.Store({
         ndShortcuts: 0,
         ndSettingsIcons: false,
         ndSettingsVisible: false,
+        userid: '---',
         cMixSupported: 1==parseInt(getComputedStyle(document.documentElement).getPropertyValue('--color-mix-supported')),
         detailedHomeItems: [DETAILED_HOME_STD_PREFIX+"new", DETAILED_HOME_STD_PREFIX+"radios", DETAILED_HOME_EXPLORE]
     },
@@ -653,6 +654,7 @@ const store = new Vuex.Store({
             state.theme = state.chosenTheme.startsWith(AUTO_THEME) ? autoTheme()+(state.coloredToolbars ? "-colored" : "") : state.chosenTheme;
             state.theme=state.theme.replace("darker", "dark");
             state.darkUi = !state.theme.startsWith('light') && state.theme.indexOf("/light/")<0;
+            state.userid = getLocalStorageVal('userid', state.userid);
             state.color = getLocalStorageVal('color', state.color);
             if ('from-cover'==state.color) {
                 state.colorUsage = COLOR_USE_FROM_COVER;

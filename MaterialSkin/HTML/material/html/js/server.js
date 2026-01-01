@@ -179,7 +179,10 @@ function lmsCommand(playerid, command, commandId, timeout) {
     const URL = "/jsonrpc.js";
     var data = { id: undefined==commandId ? 0 : commandId, method: "slim.request", params: [playerid, command]};
 
-    if (undefined!=queryParams.extraParams && queryParams.extraParams.length>0) {
+    let userid = getLocalStorageVal('userid', '');
+    if (userid.length > 0) {
+        data.params[1] = [].concat(data.params[1], 'user_id:' + userid);
+    } else if (undefined!=queryParams.extraParams && queryParams.extraParams.length>0) {
         data.params[1] = [].concat(data.params[1], queryParams.extraParams);
     }
 

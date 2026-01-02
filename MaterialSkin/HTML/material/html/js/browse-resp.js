@@ -1643,20 +1643,20 @@ function parseBrowseResp(data, parent, options, cacheKey) {
                 prevGroupingTitle = groupingTitle;
                 totalDuration += duration>0 ? duration : 0;
                 //var subtitle = duration>0 ? formatSeconds(duration) : undefined;
-                let extraSub = undefined;
+                let subs = [];
                 let techInfo = lmsOptions.techInfo ? formatTechInfo(i) : undefined;
                 if (techInfo) {
-                    extraSub=techInfo;
+                    subs.push(techInfo);
                 }
                 let rs = undefined!=i.rating ? ratingString(undefined, i.rating) : undefined;
                 if (rs) {
-                    if (extraSub) {
-                        extraSub+=SEPARATOR+rs;
-                    } else {
-                        extraSub=rs;
-                    }
+                    subs.push(rs);
                 }
-                extraSubs.push(extraSub);
+                let sub = lmsOptions.showSubtitle ? i.subtitle : undefined;
+                if (sub) {
+                    subs.push(sub);
+                }
+                extraSubs.push(subs.length<1 ? undefined : subs.join(SEPARATOR));
                 if (i.genre || i.genres) {
                     let loop = i.genres ? i.genres : [i.genre];
                     let ids = i.genre_ids ? i.genre_ids : [i.genre_id];
@@ -1683,12 +1683,6 @@ function parseBrowseResp(data, parent, options, cacheKey) {
                 if (undefined!=year && !yearSet.has(year)) {
                     yearSet.add(year);
                     years.push(year);
-                }
-                if (lmsOptions.showSubtitle && i.subtitle) {
-                    subtitle = undefined==subtitle ? i.subtitle : (i.subtitle + SEPARATOR + subtitle);
-                    if (undefined!=subtitleContext) {
-                        subtitleContext = SEPARATOR + subtitleContext;
-                    }
                 }
                 resp.items.push({
                               id: "track_id:"+i.id,

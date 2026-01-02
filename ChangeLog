@@ -1,17 +1,18 @@
 6.1.2
 -----
-1. Alphabetically order user-defined roles in MAI track info.
-2. Add 'Set/Disc subtitle' to advanced search for LMS 9.0+ - thanks to Michael
-   Herger.
-3. Add Spanish translation - thanks to arpena.
-4. In mobile layout with bottom navigation add more padding between this and
-   controls.
-5. Re-add 'Play all' and 'Add all' actions to clamped search results.
-6. If unpinned queue is shown then close when click on browse view.
-7. Fix not being able to interact with queue when its shown over now-playing
-   when using Firefox.
-8. When switching players in 'Extra player settings' try to preserve section.
-9. Only draw current indicator in browse view if track has a number.
+ 1. Alphabetically order user-defined roles in MAI track info.
+ 2. Add 'Set/Disc subtitle' to advanced search for LMS 9.0+ - thanks to Michael
+    Herger.
+ 3. Add Spanish translation - thanks to arpena.
+ 4. In mobile layout with bottom navigation add more padding between this and
+    controls.
+ 5. Re-add 'Play all' and 'Add all' actions to clamped search results.
+ 6. If unpinned queue is shown then close when click on browse view.
+ 7. Fix not being able to interact with queue when its shown over now-playing
+    when using Firefox.
+ 8. When switching players in 'Extra player settings' try to preserve section.
+ 9. Only draw current indicator in browse view if track has a number.
+10. Fix showing subtitles in browse lists.
 
 6.1.1
 -----

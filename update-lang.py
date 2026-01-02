@@ -3,7 +3,7 @@
 #
 # LMS-Material
 #
-# Copyright (c) 2018-2024 Craig Drummond <craig.p.drummond@gmail.com>
+# Copyright (c) 2018-2026 Craig Drummond <craig.p.drummond@gmail.com>
 # MIT license.
 #
 

@@ -1,7 +1,7 @@
 /**
  * LMS-Material
  *
- * Copyright (c) 2018-2024 Craig Drummond <craig.p.drummond@gmail.com>
+ * Copyright (c) 2018-2026 Craig Drummond <craig.p.drummond@gmail.com>
  * MIT license.
  */
 const NP_MAX_ALBUMS = 50;
@@ -181,10 +181,10 @@ function nowplayingOnPlayerStatus(view, playerStatus) {
         view.playerStatus.current.albumLine = buildAlbumLine(playerStatus.current, 'now-playing');
         trackChanged = true;
     }
-    let rv = undefined==playerStatus.current.rating ? 0 : (Math.ceil(playerStatus.current.rating/10.0)/2.0);
-    if (playerStatus.current.rating!=view.rating.setting || view.rating.value!=rv) {
-        view.rating.setting = playerStatus.current.rating;
-        view.rating.value = rv;
+    let rating = undefined==playerStatus.current.rating ? 0 : playerStatus.current.rating;
+    if (rating!=view.rating.setting) {
+        view.rating.setting = rating;
+        view.rating.value = Math.ceil(rating/10.0)/2.0;
         trackChanged = true;
     }
     let source = getTrackSource(playerStatus.current);

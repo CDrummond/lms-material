@@ -11,6 +11,7 @@
 7. Fix not being able to interact with queue when its shown over now-playing
    when using Firefox.
 8. When switching players in 'Extra player settings' try to preserve section.
+9. Only draw current indicator in browse view if track has a number.
 
 6.1.1
 -----

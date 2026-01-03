@@ -6,16 +6,19 @@
  */
 'use strict';
 
+const GROUP_PLAYER_INDEX_OFFSET = 20000;
+
 Vue.component('lms-sync-dialog', {
     template: `
 <v-dialog v-model="show" v-if="show" persistent width="600" class="lms-dialog">
  <v-card v-if="player" v-clickoutside="outsideClick">
-  <v-card-text>
+  <v-card-text class="sync-dialog">
    <v-container grid-list-md style="padding: 4px">
     <v-layout wrap>
      <v-flex xs12 class="dlgtitle">{{i18n("Select which players you would like to synchronize with '%1'", player.name)}}</v-flex>
      <v-flex xs12>
       <v-list class="sleep-list dialog-main-list">
+       <v-subheader v-if="groups.length>0">{{i18n("Standard Players")}}</v-subheader>
        <v-list-tile @click="toggleAll" @mousedown="toggleAllDown" @touchstart="toggleAllDown" v-if="players.length>1">
         <v-list-tile-avatar :tile="true" class="lms-avatar"><v-icon>{{selectAllIcon}}</v-icon></v-list-tile-avatar>
         <v-list-tile-title class="sleep-item">{{i18n('Select All')}}</v-list-tile-title>
@@ -28,19 +31,30 @@ Vue.component('lms-sync-dialog', {
         </v-list-tile>
         <v-divider></v-divider>
        </template>
+       <div class="dialog-padding" v-if="groups.length>0"></div>
+       <v-subheader v-if="groups.length>0">{{i18n("Group Players")}}</v-subheader>
+        <template v-for="(p, index) in groups">
+        <v-list-tile @click="togglePlayer(index+GROUP_PLAYER_INDEX_OFFSET)" @mousedown="togglePlayerDown(index+GROUP_PLAYER_INDEX_OFFSET)" @touchstart="togglePlayerDown(index+GROUP_PLAYER_INDEX_OFFSET)">
+         <v-list-tile-avatar :tile="true" class="lms-avatar"><v-icon>{{p.synced ? 'check_box' : 'check_box_outline_blank'}}</v-icon></v-list-tile-avatar>
+         <v-list-tile-title class="sleep-item">{{p.name}}</v-list-tile-title>
+        </v-list-tile>
+        <v-divider></v-divider>
+       </template>
       </v-list>
      </v-flex>
     </v-layout>
    </v-container>
   </v-card-text>
   <v-card-actions v-if="queryParams.altBtnLayout">
-   <p style="margin-left:10px" class="dimmed">{{i18np("1 Player", "%1 Players", numSync)}}</p>
+   <p style="margin-left:10px" class="dimmed">{{i18np("1 Player", "%1 Players", numPlayerSync)}}</p>
+   <p v-if="numGroupSync>0" class="dimmed">&nbsp;\u2022&nbsp;{{i18np("1 Group", "%1 Groups", numGroupSync)}}</p>
    <v-spacer></v-spacer>
    <v-btn flat @click.native="sync()">{{i18n('Sync')}}</v-btn>
    <v-btn flat @click.native="close()">{{i18n('Cancel')}}</v-btn>
   </v-card-actions>
   <v-card-actions v-else>
-   <p style="margin-left:10px" class="dimmed">{{i18np("1 Player", "%1 Players", numSync)}}</p>
+   <p style="margin-left:10px" class="dimmed">{{i18np("1 Player", "%1 Players", numPlayerSync)}}</p>
+   <p v-if="numGroupSync>0" class="dimmed">&nbsp;\u2022&nbsp;{{i18np("1 Group", "%1 Groups", numGroupSync)}}</p>
    <v-spacer></v-spacer>
    <v-btn flat @click.native="close()">{{i18n('Cancel')}}</v-btn>
    <v-btn flat @click.native="sync()">{{i18n('Sync')}}</v-btn>
@@ -54,15 +68,17 @@ Vue.component('lms-sync-dialog', {
             show: false,
             player: undefined,
             players: [],
-            numSync:0
+            groups: [],
+            numPlayerSync:0,
+            numGroupSync:0
         }
     },
     computed: {
         selectAllIcon () {
-            if (this.numSync==this.players.length) {
+            if (this.numPlayerSync==this.players.length) {
                 return "check_box";
             }
-            if (this.numSync>0) {
+            if (this.numPlayerSync>0) {
                 return "indeterminate_check_box";
             }
             return "check_box_outline_blank";
@@ -74,26 +90,32 @@ Vue.component('lms-sync-dialog', {
                 return;
             }
             this.player = player;
-            this.numSync = 0;
+            this.numPlayerSync = 0;
+            this.numGroupSync = 0;
             this.lastIndex = undefined;
             lmsCommand(this.player.id, ["sync", "?"]).then(({data}) => {
                 if (data && data.result && undefined!=data.result._sync) {
                     let sync = data.result._sync.split(",");
                     this.origSync = sync.length>0 && sync[0]!="-" ? new Set(sync) : new Set();
                     this.players=[];
-                    let numOtherStdPlayers = 0;
                     this.$store.state.players.forEach(p => {
-                        if (p.id!==this.player.id && !p.isgroup) {
+                        if (p.id!==this.player.id) {
                             let synced = this.origSync.has(p.id);
                             let play = {id:p.id, name:p.name, synced:synced};
-                            this.players.push(play);
-                            numOtherStdPlayers++;
-                            if (synced) {
-                                this.numSync++;
+                            if (p.isgroup) {
+                                this.groups.push(play);
+                                if (synced) {
+                                    this.numGroupSync++;
+                                }
+                            } else {
+                                this.players.push(play);
+                                if (synced) {
+                                    this.numPlayerSync++;
+                                }
                             }
                         }
                     });
-                    if (numOtherStdPlayers>0) {
+                    if (this.players.length>0) {
                         this.show = true;
                     }
                 }
@@ -122,10 +144,15 @@ Vue.component('lms-sync-dialog', {
                     newSync.add(this.players[i].id);
                 }
             }
+            for (let i=0, len=this.groups.length; i<len; ++i) {
+                if (this.groups[i].synced) {
+                    newSync.add(this.groups[i].id);
+                }
+            }
 
             // Build list of commands to execute...
             var commands = [];
-            // ...first remove any previosuly synced players that will no longer be synced
+            // ...first remove any previously synced players that will no longer be synced
             this.origSync.forEach(p => {
                 if (!newSync.has(p)) {
                     commands.push({player:p, command:["sync", "-"]});
@@ -169,12 +196,18 @@ Vue.component('lms-sync-dialog', {
                 return;
             }
             this.lastIndex = undefined;
-            if (index<0 || index>this.players.length) {
+            let isgroup = index>=GROUP_PLAYER_INDEX_OFFSET;
+            let idx = isgroup ? index-GROUP_PLAYER_INDEX_OFFSET : index;
+            if (idx<0 || idx>this.players.length) {
                 return;
             }
-            let player = this.players[index];
+            let player = isgroup ? this.groups[idx] : this.players[idx];
             player.synced=!player.synced;
-            this.numSync+=(player.synced ? 1 : -1);
+            if (isgroup) {
+                this.numGroupSync+=(player.synced ? 1 : -1);
+            } else {
+                this.numPlayerSync+=(player.synced ? 1 : -1);
+            }
         },
         toggleAllDown() {
             this.lastIndex=-1;
@@ -185,11 +218,11 @@ Vue.component('lms-sync-dialog', {
                 return;
             }
             this.lastIndex = undefined;
-            let sel = this.numSync!=this.players.length;
+            let sel = this.numPlayerSync!=this.players.length;
             for (let i=0, len=this.players.length; i<len; ++i) {
                 this.players[i].synced = sel;
             }
-            this.numSync = sel ? this.players.length : 0;
+            this.numPlayerSync = sel ? this.players.length : 0;
         },
         i18n(str, arg) {
             if (this.show) {

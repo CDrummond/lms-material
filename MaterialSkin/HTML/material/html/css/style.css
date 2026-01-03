@@ -2987,7 +2987,8 @@ div.v-subheader {
 }
 
 .v-menu__content .v-subheader,
-.v-navigation-drawer .v-subheader {
+.v-navigation-drawer .v-subheader,
+.sync-dialog .v-subheader {
  height:36px;
  opacity:var(--sub-opacity);
 }

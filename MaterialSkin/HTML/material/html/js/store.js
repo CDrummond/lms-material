@@ -938,6 +938,7 @@ const store = new Vuex.Store({
         setHome3rdPartyExtraLists(state, val) {
             lmsOptions.home3rdPartyExtraLists = val;
             state.detailedHomeItems = checkHomeItems(state.detailedHomeItems);
+            bus.$emit('refresh-home');
         }
     }
 })

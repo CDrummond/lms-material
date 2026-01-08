@@ -2486,7 +2486,9 @@ var lmsBrowse = Vue.component("lms-browse", {
             this.goHome();
         }.bind(this));
         bus.$on('refresh-home', function() {
-            this.getHomeExtra();
+            if (this.isTop) {
+                this.getHomeExtra();
+            }
         }.bind(this));
         bus.$on('browse-action', function(act, idx) {
             if (idx>=0 && idx<this.items.length) {

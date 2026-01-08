@@ -56,14 +56,15 @@ var lmsOptions = {techInfo: getLocalStorageBool('techInfo', false),
                   variousArtistsString: LMS_DEF_VA_STRING,
                   classicalGenres: new Set(["Classical"]),
                   smallIconOnlyGrid: getLocalStorageBool('smallIconOnlyGrid', true),
-                  homeExtraNeedsPlayer: new Set()
+                  homeExtraNeedsPlayer: new Set(),
+                  home3rdPartyExtraLists: LMS_3RDPARTY_HOME_EXTRA
                 };
 
 function initLmsOptions() {
     lmsOptions.homeExtraNeedsPlayer = new Set();
-    for (let i=0, len=LMS_3RDPARTY_HOME_EXTRA.length; i<len; ++i) {
-        if (LMS_3RDPARTY_HOME_EXTRA[i].needsPlayer) {
-            lmsOptions.homeExtraNeedsPlayer.add(LMS_3RDPARTY_HOME_EXTRA[i].id);
+    for (let i=0, len=lmsOptions.home3rdPartyExtraLists.length; i<len; ++i) {
+        if (lmsOptions.home3rdPartyExtraLists[i].needsPlayer) {
+            lmsOptions.homeExtraNeedsPlayer.add(lmsOptions.home3rdPartyExtraLists[i].id);
         }
     }
 }

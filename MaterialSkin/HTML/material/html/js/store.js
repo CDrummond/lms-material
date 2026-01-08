@@ -312,8 +312,8 @@ function setQueuePinned(state, val, force) {
 function checkHomeItems(list) {
     let valid = [];
     let extra = new Set();
-    for (let i=0, len=LMS_3RDPARTY_HOME_EXTRA.length; i<len; ++i) {
-        extra.add(LMS_3RDPARTY_HOME_EXTRA[i].id);
+    for (let i=0, len=lmsOptions.home3rdPartyExtraLists.length; i<len; ++i) {
+        extra.add(lmsOptions.home3rdPartyExtraLists[i].id);
     }
     for (let i=0, len=list.length; i<len; ++i) {
         if (list[i].startsWith(DETAILED_HOME_STD_PREFIX) || extra.has(list[i])) {
@@ -934,6 +934,10 @@ const store = new Vuex.Store({
             state.queueAlbumStyle = val;
             setLocalStorageVal('queueAlbumStyle', state.queueAlbumStyle);
             bus.$emit('queueDisplayChanged');
+        },
+        setHome3rdPartyExtraLists(state, val) {
+            lmsOptions.home3rdPartyExtraLists = val;
+            state.detailedHomeItems = checkHomeItems(state.detailedHomeItems);
         }
     }
 })

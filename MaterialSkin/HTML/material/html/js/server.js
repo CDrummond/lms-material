@@ -770,6 +770,8 @@ var lmsServer = Vue.component('lms-server', {
                 } else if (data[2]=='internal') {
                     if (data[3]=='vlib') {
                         bus.$emit('libraryChanged');
+                    } else if (data[3]=='refresh-home') {
+                        this.refreshHome();
                     }
                 }
             }
@@ -813,6 +815,19 @@ var lmsServer = Vue.component('lms-server', {
             this.cancelFavoritesTimer();
             this.favoritesTimer = setTimeout(function () {
                 this.updateFavorites();
+            }.bind(this), 500);
+        },
+        refreshHome() {
+            logCometdDebug("HOME EXTRA");
+            // 'Debounce' home-refresh updates...
+            this.cancelHomeRefreshTimer();
+            this.homeRefreshTimer = setTimeout(function () {
+                lmsCommand("", ["material-skin", "home-extra-3rdparty"]).then(({data}) => {
+                    if (data && data.result && data.result.items) {
+                        this.$store.commit('setHome3rdPartyExtraLists', JSON.parse(data.result.items));
+                    }
+                }).catch(err => {
+                });
             }.bind(this), 500);
         },
         parseFavouritesLoop(loop, favs, changed) {
@@ -991,6 +1006,12 @@ var lmsServer = Vue.component('lms-server', {
             if (undefined!==this.favoritesTimer) {
                 clearTimeout(this.favoritesTimer);
                 this.favoritesTimer = undefined;
+            }
+        },
+        cancelHomeRefreshTimer() {
+            if (undefined!==this.homeRefreshTimer) {
+                clearTimeout(this.homeRefreshTimer);
+                this.homeRefreshTimer = undefined;
             }
         },
         cancelMoveTimer() {
@@ -1242,6 +1263,7 @@ var lmsServer = Vue.component('lms-server', {
         this.cancelServerScanProgressTimer();
         this.cancelFavoritesTimer();
         this.cancelMoveTimer();
+        this.cancelHomeRefreshTimer();
     },
     watch: {
         '$store.state.player': function (newVal) {

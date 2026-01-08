@@ -843,8 +843,8 @@ Vue.component('lms-ui-settings', {
                     {id:DETAILED_HOME_STD_PREFIX+"changed", title:lmsOptions.supportReleaseTypes ? i18n("Recently Updated Releases") : i18n("Recently Updated Albums"), checked:false, svg:"updated-music"}
                 );
             }
-            for (let i=0, len=LMS_3RDPARTY_HOME_EXTRA.length; i<len; ++i) {
-                let entry = LMS_3RDPARTY_HOME_EXTRA[i];
+            for (let i=0, len=lmsOptions.home3rdPartyExtraLists.length; i<len; ++i) {
+                let entry = lmsOptions.home3rdPartyExtraLists[i];
                 mapIcon(entry);
                 this.detailedHomeItems.push(entry);
             }

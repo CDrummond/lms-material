@@ -823,6 +823,7 @@ var lmsServer = Vue.component('lms-server', {
             this.cancelHomeRefreshTimer();
             this.homeRefreshTimer = setTimeout(function () {
                 lmsCommand("", ["material-skin", "home-extra-3rdparty"]).then(({data}) => {
+                    bus.$emit('refresh-home');
                     if (data && data.result && data.result.items) {
                         this.$store.commit('setHome3rdPartyExtraLists', JSON.parse(data.result.items));
                     }

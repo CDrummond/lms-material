@@ -567,6 +567,10 @@ sub getHomeExtra3rdPartyItems {
     } keys %$HOME_EXTRAS ]);
 }
 
+sub signalHomeExtraUpdate {
+    Slim::Control::Request::notifyFromArray(undef, ['material-skin', 'notification', 'internal', 'refresh-home']);
+}
+
 #sub _checkPlayQueue {
 #    my $request = shift;
 #    if (!$prefs->get('playShuffle')) {

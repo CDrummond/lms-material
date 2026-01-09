@@ -887,13 +887,7 @@ var lmsQueue = Vue.component("lms-queue", {
                             }
                         }
                         if (toAdd.length>0) {
-                            if (ev.shiftKey && this.items.length > 0) {
-                                lmsCommand(this.$store.state.player.id, ["playlist", "clear"]).then(({data}) => {
-                                    this.addFiles(toAdd, 'play');
-                                });
-                            } else {
-                                this.addFiles(toAdd, 'play');
-                            }
+                            this.addFiles(toAdd, this.items.length > 0 ? 'add' : 'play');
                         }
                     }
                 });

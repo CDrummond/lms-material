@@ -1139,8 +1139,12 @@ var lmsBrowse = Vue.component("lms-browse", {
                     // so will always be different!
                     this.topExtra = resp.items;
                     if (this.isTop && this.$store.state.detailedHomeItems.length>0 && this.grid.use) {
+                        let scrollTop = this.scrollElement.scrollTop;
                         this.items = this.topExtra.concat(this.top);
                         this.layoutGrid(true);
+                        if (undefined!=scrollTop && scrollTop>0) {
+                            setScrollTop(this, scrollTop);
+                        }
                     }
                 }
             } catch (e) {

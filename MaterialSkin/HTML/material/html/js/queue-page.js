@@ -135,6 +135,7 @@ function parseResp(data, showTrackNum, index, showRatings, queueAlbumStyle, queu
                 if ( !('disccount' in i) ) {
                     i.disccount = 1; // might not exist for single disc album
                 }
+                i.title = addSubtitle(i.title, i);
                 pqGroupingMap.set(parseInt(i['playlist index']), [parseInt(i.disccount), parseInt(i.contiguous_groups), parseInt(i.added_from_work)]);
                 i.isClassical = undefined!=i.isClassical && 1==parseInt(i.isClassical);
                 splitMultiples(i, true);

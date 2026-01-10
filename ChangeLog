@@ -5,6 +5,7 @@
 3. Allow list of 3rd party scrolled lists to be updated.
 4. When dropping external files onto queue don't clear any existing tracks.
 5. Allow downloads on iOS.
+6. If set to show track subtitle then append this to title.
 
 6.1.2
 -----

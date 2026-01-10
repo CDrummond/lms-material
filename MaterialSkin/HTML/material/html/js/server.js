@@ -583,6 +583,7 @@ var lmsServer = Vue.component('lms-server', {
             if (data.playlist_loop && data.playlist_loop.length>0) {
                 player.current = makeHtmlSafe(data.playlist_loop[0]);
                 splitMultiples(player.current, true);
+                player.current.title = addSubtitle(player.current.title, player.current);
                 player.current.isClassical = undefined!=player.current.isClassical && 1==parseInt(player.current.isClassical);
                 player.current.time = undefined==data.time ? undefined : "stop"==data.mode ? 0 : parseFloat(data.time);
                 player.current.live_edge = data.remoteMeta && data.remoteMeta.live_edge ? parseFloat(data.remoteMeta.live_edge) : undefined;

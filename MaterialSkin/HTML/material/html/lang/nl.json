@@ -332,6 +332,7 @@
 "No repeat":"Geen herhaling",
 "No results found":"Geen resultaten gevonden",
 "No screensaver.":"Geen screensaver",
+"No scrollable lists have been enabled. Use the 'cog' icon (above) to select the lists you would like to appear on the home screen.":"Er zijn geen scrollbare lijsten ingeschakeld. Gebruik het tandwielpictogram (hierboven) om de lijsten te selecteren die je op het startscherm wilt tonen.",
 "No shuffle":"Niet willekeurig",
 "None":"Geen",
 "Not currently synchronized with any other player.":"Momenteel niet gesynchroniseerd met andere muziekspelers",
@@ -487,6 +488,7 @@
 "Set rating for all tracks":"Bepaal rating voor alle nummers",
 "Set sleep time for '%1'":"Instellen slaap tijd voor '%1'",
 "Set sleep time for all players":"Instellen slaap tijd voor alle muziekspelers",
+"Set/Disc subtitle":"Set/Disc titel",
 "Settings":"Instellingen",
 "Settings (and home screen items) are stored locally in your browser. However, some browser extensions can remove these. The 'Save as default' button can be used to store your current settings (and home screen items) on the Lyrion server. These will then be used for any settings that are not found in your browser. Likewise, 'Revert to default' can be used to manually revert to the settings stored on your Lyrion server.":"Instellingen (en items op het startscherm) worden lokaal in jouw browser opgeslagen. Sommige browserextensies kunnen deze echter verwijderen. De knop 'Opslaan als standaard' kan worden gebruikt om jouw huidige instellingen (en items op het startscherm) op te slaan op de Lyrion-server. Deze worden vervolgens gebruikt voor alle instellingen die niet in jouw browser worden gevonden. Op dezelfde manier kan 'Terugkeren naar standaard' worden gebruikt om handmatig terug te keren naar de instellingen die op jouw Lyrion-server zijn opgeslagen.",
 "Settings (and shortcuts) always visible":"Instellingen (en snelkoppelingen) altijd zichtbaar",
@@ -741,6 +743,6 @@
 "%1 Years":"%1 Jaren",
 "1 day":"1 dag",
 "%1 days":"%1 dagen",
-"No scrollable lists have been enabled. Use the 'cog' icon (above) to select the lists you would like to appear on the home screen.":"Er zijn geen scrollbare lijsten ingeschakeld. Gebruik het tandwielpictogram (hierboven) om de lijsten te selecteren die je op het startscherm wilt tonen.",
-"Set/Disc subtitle":"Set/Disc titel"
+"1 Group":"",
+"%1 Groups":""
 }

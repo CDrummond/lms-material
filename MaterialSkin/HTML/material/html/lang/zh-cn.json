@@ -742,5 +742,7 @@
 "When navigating into lists, show a home button to quickly navigate to the main (home) screen. Otherwise you can click on the title to show a menu that contains 'Home'.":"",
 "When no track is playing on current player, darken screen (and show date & time) after a period  of inactivity. Clock is fixed to center of screen.":"",
 "When no track is playing on current player, darken screen (and show date & time) after a period of inactivity. Clock is moved every few minutes.":"",
-"When no track is playing on current player, darken screen after a period of inactivity.":""
+"When no track is playing on current player, darken screen after a period of inactivity.":"",
+"1 Group":"",
+"%1 Groups":""
 }

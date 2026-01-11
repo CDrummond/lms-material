@@ -62,7 +62,7 @@ Vue.component('lms-information-dialog', {
    <p v-if="updates.details.length>0 && 'idle'==pluginStatus && unlockAll" style="padding-top:16px" class="subtext cursor link-item" @click='openPluginSettings'>{{i18n("For more fine-grained control over plugins please visit the 'Manage Plugins' section of 'Server settings'")}}</p>
 
    <p v-if="'downloading'==pluginStatus"><v-icon>cloud_download</v-icon> {{i18n('Downloading plugin updates')}}</p>
-   <v-btn v-if="'needs_restart'==pluginStatus && unlockAll" @click="restartServer" flat><img class="svg-img btn-icon" :src="'restart' | svgIcon(darkUi)">{{i18n('Restart server')}}</v-btn>
+   <v-btn @click="restartServer" flat><img class="svg-img btn-icon" :src="'restart' | svgIcon(darkUi)">{{i18n('Restart server')}}</v-btn>
    <p v-if="'downloading'!=pluginStatus && updates.details.length>0" style="padding-top:16px">{{i18n('The following plugins are up to date:')}}</p>
    <ul>
     <template v-for="(plug, index) in plugins.details"><li v-if="'downloading'==pluginStatus || !updates.names.has(plug.name)"><object class="link-item" @click="pluginInfo(plug)">{{plug.title}} {{plug.version}}</object></li></template>

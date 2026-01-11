@@ -1,3 +1,8 @@
+6.1.4
+-----
+1. Don't show group player's in sycn dialog, instead allow showing sync dialog
+   from group player (but only if group is playing).
+
 6.1.3
 -----
 1. Add group players to sync dialog.

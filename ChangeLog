@@ -2,6 +2,7 @@
 -----
 1. Don't show group player's in sycn dialog, instead allow showing sync dialog
    from group player (but only if group is playing).
+2. Fix reading 'Show ratings' from default settings.
 
 6.1.3
 -----

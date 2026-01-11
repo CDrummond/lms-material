@@ -624,7 +624,7 @@ const store = new Vuex.Store({
             let boolItems = ['roundCovers', 'autoScrollQueue', 'sortFavorites', 'browseBackdrop', 'queueBackdrop', 'nowPlayingBackdrop',
                              'infoBackdrop', 'useDefaultBackdrops', 'browseTechInfo', 'techInfo', 'queueShowTrackNum', 'nowPlayingTrackNum',
                              'nowPlayingClock', 'swipeVolume', 'swipeChangeTrack', 'keyboardControl', 'screensaverNp', 'mediaControls',
-                             'queueAlbumStyle', 'queueThreeLines', 'browseContext', 'nowPlayingContext', 'queueContext',
+                             'queueAlbumStyle', 'queueThreeLines', 'browseContext', 'nowPlayingContext', 'queueContext', 'showRating',
                              'moveDialogs', 'autoCloseQueue', 'nowPlayingFull', 'tinted', 'ndSettingsIcons', 'ndSettingsVisible', 'gridPerView'];
             for (let i=0, len=boolItems.length; i<len; ++i) {
                 let key = boolItems[i];
@@ -655,7 +655,6 @@ const store = new Vuex.Store({
 
             state.disabledBrowseModes = new Set(JSON.parse(getLocalStorageVal('disabledBrowseModes', '["myMusicFlopTracks", "myMusicTopTracks", "myMusicMusicFolder", "myMusicFileSystem", "myMusicArtistsComposers", "myMusicArtistsConductors", "myMusicArtistsJazzComposers", "myMusicAlbumsAudiobooks", "myMusicRecentlyChangeAlbums"]')));
             state.hidden = new Set(JSON.parse(getLocalStorageVal('hidden', JSON.stringify([TOP_EXTRAS_ID]))));
-            state.showRating = LMS_STATS_ENABLED && getLocalStorageBool('showRating', state.showRating);
             state.library = getLocalStorageVal('library', state.library);
             setTheme(state.theme, state.color);
             emitToolbarColorsFromState(state, true);

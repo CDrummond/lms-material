@@ -808,7 +808,7 @@ var lmsBrowse = Vue.component("lms-browse", {
             return this.$store.state.pinQueue
         },
         showRating() {
-            return undefined!=LMS_P_RP && this.$store.state.showRating
+            return undefined!=LMS_P_RP && LMS_STATS_ENABLED && this.$store.state.showRating
         },
         tint() {
             return this.$store.state.tinted && this.$store.state.cMixSupported

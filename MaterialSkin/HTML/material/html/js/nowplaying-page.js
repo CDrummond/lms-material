@@ -682,7 +682,7 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
                     if (LMS_EXPAND_NP_KEYBOARD==key && this.$store.state.desktopLayout && (window.innerHeight>=LMS_MIN_NP_LARGE_INFO_HEIGHT || this.largeView)) {
                         this.info.show = false;
                         this.largeView = !this.largeView;
-                    } else if (1==key.length && !isNaN(key) && undefined!=LMS_P_RP && this.$store.state.showRating) {
+                    } else if (1==key.length && !isNaN(key) && undefined!=LMS_P_RP && LMS_STATS_ENABLED && this.$store.state.showRating) {
                         this.rating.value = parseInt(key);
                         this.setRating();
                     }
@@ -1475,7 +1475,7 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
             return this.showRatings;
         },
         showRatings() {
-            return this.$store.state.showRating && this.playerStatus && this.playerStatus.current &&
+            return LMS_STATS_ENABLED && this.$store.state.showRating && this.playerStatus && this.playerStatus.current &&
                    this.playerStatus.current.duration && this.playerStatus.current.duration>0 && undefined!=this.playerStatus.current.id &&
                    !(""+this.playerStatus.current.id).startsWith("-");
         },

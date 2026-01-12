@@ -1,9 +1,9 @@
 6.1.4
 -----
-1. Don't show group player's in sycn dialog, instead allow showing sync dialog
+1. Don't show group player's in sync dialog, instead allow showing sync dialog
    from group player (but only if group is playing).
 2. Fix reading 'Show ratings' from default settings.
-3. If track has a grouping, or disc-subtitle, then show these after album in
+3. If track has a grouping, or disc-subtitle, then show this after album in
    now-playing.
 
 6.1.3

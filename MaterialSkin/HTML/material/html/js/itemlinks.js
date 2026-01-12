@@ -199,7 +199,7 @@ function buildArtistWithContext(i, page, useBand, useComposer, useConductor) {
     return details.length>0 ? details.replaceAll("<obj>", "<obj class=\"ext-details\">") : undefined;
 }
 
-function buildAlbumLine(i, page, plain) {
+function buildAlbumLine(i, page, plain, addSubtitle) {
     var line = undefined;
     var remoteTitle = checkRemoteTitle(i);
     if (i.album) {
@@ -210,6 +210,13 @@ function buildAlbumLine(i, page, plain) {
         if (i.album_id && (!IS_MOBILE || lmsOptions.touchLinks) && !plain) {
             let artist = i.albumartist ? i.albumartist : i.artist;
             album="<obj class=\"link-item\" onclick=\"showAlbum(event, "+i.album_id+",\'"+escape(album)+"\',\'"+page+"\',\'"+escape(artist)+"\')\">" + album + "</obj>";
+        }
+        if (addSubtitle) {
+            if (undefined!=i.grouping) {
+                album+=SEPARATOR + i.grouping;
+            } else if (undefined!=i.discsubtitle) {
+                album+=SEPARATOR + i.discsubtitle;
+            }
         }
         line=addPart(line, album);
     } else if (remoteTitle && remoteTitle!=i.title) {

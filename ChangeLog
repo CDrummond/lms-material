@@ -3,6 +3,8 @@
 1. Don't show group player's in sycn dialog, instead allow showing sync dialog
    from group player (but only if group is playing).
 2. Fix reading 'Show ratings' from default settings.
+3. If track has a grouping, or disc-subtitle, then show these after album in
+   now-playing.
 
 6.1.3
 -----

@@ -401,7 +401,7 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
                     current: { canseek:1, duration:0, time:undefined, title:undefined, liveEdge:undefined, artist:undefined, artistAndComposer: undefined, artistAndComposerWithContext:undefined,
                                album:undefined, albumName:undefined, albumLine:undefined, technicalInfo:undefined, pospc:0.0, bufpc:100.0, tracknum:undefined,
                                disc:0, year:0, url:undefined, comment:undefined, source: {local:true, text:undefined},
-                               emblem: undefined, maiComposer:undefined },
+                               emblem: undefined, maiComposer:undefined, discsubtitle:undefined, grouping:undefined },
                     playlist: { shuffle:0, repeat: 0, randomplay:0, current:0, count:0 },
                  },
                  mobileBarText: undefined,

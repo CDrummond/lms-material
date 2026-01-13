@@ -808,7 +808,7 @@ var lmsBrowse = Vue.component("lms-browse", {
             return this.$store.state.pinQueue
         },
         showRating() {
-            return undefined!=LMS_P_RP && this.$store.state.showRating
+            return undefined!=LMS_P_RP && LMS_STATS_ENABLED && this.$store.state.showRating
         },
         tint() {
             return this.$store.state.tinted && this.$store.state.cMixSupported
@@ -1139,8 +1139,12 @@ var lmsBrowse = Vue.component("lms-browse", {
                     // so will always be different!
                     this.topExtra = resp.items;
                     if (this.isTop && this.$store.state.detailedHomeItems.length>0 && this.grid.use) {
+                        let scrollTop = this.scrollElement.scrollTop;
                         this.items = this.topExtra.concat(this.top);
                         this.layoutGrid(true);
+                        if (undefined!=scrollTop && scrollTop>0) {
+                            setScrollTop(this, scrollTop);
+                        }
                     }
                 }
             } catch (e) {
@@ -2484,6 +2488,11 @@ var lmsBrowse = Vue.component("lms-browse", {
 
         bus.$on('browse-home', function() {
             this.goHome();
+        }.bind(this));
+        bus.$on('refresh-home', function() {
+            if (this.isTop) {
+                this.getHomeExtra();
+            }
         }.bind(this));
         bus.$on('browse-action', function(act, idx) {
             if (idx>=0 && idx<this.items.length) {

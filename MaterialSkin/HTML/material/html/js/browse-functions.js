@@ -2149,11 +2149,8 @@ function browseGoHome(view, refresh) {
         // If called does not want us to refresh home, then we do this after 0.75s incase
         // call that was to fill view fails.
         view.homeTimeout = setTimeout(function() {
-            console.log(view.history.length);
             if (view.history.length==0) {
                 browseFetchHome(view, prev);
-            } else {
-                console.log("COMMAND OK");
             }
         }, 750);
     }

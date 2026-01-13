@@ -206,7 +206,7 @@ const IFRAME_HOME_NAVIGATES_BROWSE_HOME = 1
 const IFRAME_HOME_CLOSES_DIALOGS = 2
 
 const SKIN_GENRE_TAGS = ['composer', 'conductor', 'band'];
-const SKIN_BOOL_OPTS = ['maiComposer', 'showConductor', 'showBand', 'showArtistWorks', 'showAllArtists', 'artistFirst', IS_IOS ? 'xx' : 'allowDownload', 'showComment', 'noArtistFilter', 'genreImages', 'playlistImages', 'touchLinks', 'yearInSub', 'playShuffle', 'combineAppsAndRadio', 'useGrouping', 'smallIconOnlyGrid'];
+const SKIN_BOOL_OPTS = ['maiComposer', 'showConductor', 'showBand', 'showArtistWorks', 'showAllArtists', 'artistFirst', 'allowDownload', 'showComment', 'noArtistFilter', 'genreImages', 'playlistImages', 'touchLinks', 'yearInSub', 'playShuffle', 'combineAppsAndRadio', 'useGrouping', 'smallIconOnlyGrid'];
 const SKIN_INT_OPTS = ['showComposer', 'respectFixedVol', 'commentAsDiscTitle', 'pagedBatchSize', 'screensaverTimeout', 'npSwitchTimeout', 'useDefaultForSettings'];
 
 const MSK_REV_SORT_OPT = "msk-revsort:1";

@@ -135,6 +135,7 @@ function parseResp(data, showTrackNum, index, showRatings, queueAlbumStyle, queu
                 if ( !('disccount' in i) ) {
                     i.disccount = 1; // might not exist for single disc album
                 }
+                i.title = addSubtitle(i.title, i);
                 pqGroupingMap.set(parseInt(i['playlist index']), [parseInt(i.disccount), parseInt(i.contiguous_groups), parseInt(i.added_from_work)]);
                 i.isClassical = undefined!=i.isClassical && 1==parseInt(i.isClassical);
                 splitMultiples(i, true);
@@ -466,6 +467,9 @@ var lmsQueue = Vue.component("lms-queue", {
         name() {
             return this.listSize>0 && undefined!=this.playlist.name && this.playlist.name.length>0
                     ? (" (" + this.playlist.name + (this.playlist.modified ? ' *' : '') +")") : ""
+        },
+        showRatings() {
+            return LMS_STATS_ENABLED && this.$store.state.showRating
         }
     },
     created() {
@@ -552,7 +556,7 @@ var lmsQueue = Vue.component("lms-queue", {
                     var contiguousGroups = pqGroupingMap.get(parseInt(index))[1];
                     var addedFromWork = pqGroupingMap.get(parseInt(index))[2];
                     var title = this.$store.state.queueAlbumStyle && albumGroupingType(discCount, ALWAYS_GROUP_HEADING, contiguousGroups, addedFromWork)==MULTI_GROUP_ALBUM ? i.title : trackTitle(i);
-                    var rating = this.$store.state.showRating && undefined!=i.rating ? Math.ceil(i.rating/10.0)/2.0 : undefined;
+                    var rating = this.showRatings && undefined!=i.rating ? Math.ceil(i.rating/10.0)/2.0 : undefined;
                     if (this.$store.state.queueShowTrackNum && i.tracknum>0) {
                         title = formatTrackNum(i)+SEPARATOR+title;
                     }
@@ -564,7 +568,7 @@ var lmsQueue = Vue.component("lms-queue", {
                             addedClass = true;
                             title+='<obj class="subtext">'+SEPARATOR+extra+'</obj>';
                         }
-                        if (this.$store.state.showRating && undefined!=i.rating) {
+                        if (this.showRatings && undefined!=i.rating) {
                             title += (!addedClass ? '<obj class="subtext">' : '') + SEPARATOR+ratingString(undefined, i.rating) + '</obj>';
                         } else if (addedClass) {
                             title+='</obj>';
@@ -887,13 +891,7 @@ var lmsQueue = Vue.component("lms-queue", {
                             }
                         }
                         if (toAdd.length>0) {
-                            if (ev.shiftKey && this.items.length > 0) {
-                                lmsCommand(this.$store.state.player.id, ["playlist", "clear"]).then(({data}) => {
-                                    this.addFiles(toAdd, 'play');
-                                });
-                            } else {
-                                this.addFiles(toAdd, 'play');
-                            }
+                            this.addFiles(toAdd, this.items.length > 0 ? 'add' : 'play');
                         }
                     }
                 });
@@ -1363,8 +1361,8 @@ var lmsQueue = Vue.component("lms-queue", {
             this.fetchingItems = true;
             var prevTimestamp = this.timestamp;
             var fetchCount = this.currentIndex > this.items.length + LMS_QUEUE_BATCH_SIZE ? this.currentIndex + 50 : LMS_QUEUE_BATCH_SIZE;
-            lmsList(this.$store.state.player.id, ["status"], [PQ_STATUS_TAGS + ((!IS_MOBILE || lmsOptions.touchLinks) ? "s" : "") + (this.$store.state.showRating ? "R" : "")], this.items.length, fetchCount).then(({data}) => {
-                var resp = parseResp(data, this.$store.state.queueShowTrackNum, this.items.length, this.$store.state.showRating, this.$store.state.queueAlbumStyle,
+            lmsList(this.$store.state.player.id, ["status"], [PQ_STATUS_TAGS + ((!IS_MOBILE || lmsOptions.touchLinks) ? "s" : "") + (this.showRatings ? "R" : "")], this.items.length, fetchCount).then(({data}) => {
+                var resp = parseResp(data, this.$store.state.queueShowTrackNum, this.items.length, this.showRatings, this.$store.state.queueAlbumStyle,
                                      this.$store.state.queueContext, this.items.length>0 ? this.items[this.items.length-1] : undefined);
                 this.items.push.apply(this.items, resp.items);
                 // Check if a 'playlistTimestamp' was received whilst we were updating, if so need
@@ -1402,9 +1400,9 @@ var lmsQueue = Vue.component("lms-queue", {
                 var prevIndex = this.currentIndex;
                 this.fetchingItems = true;
                 var prevTimestamp = this.timestamp;
-                lmsList(this.$store.state.player.id, ["status"], [PQ_STATUS_TAGS + (this.$store.state.showRating ? "R" : "")], 0,
+                lmsList(this.$store.state.player.id, ["status"], [PQ_STATUS_TAGS + (this.showRatings ? "R" : "")], 0,
                         this.items.length < LMS_QUEUE_BATCH_SIZE ? LMS_QUEUE_BATCH_SIZE : this.items.length).then(({data}) => {
-                    var resp = parseResp(data, this.$store.state.queueShowTrackNum, 0, this.$store.state.showRating, this.$store.state.queueAlbumStyle, this.$store.state.queueContext);
+                    var resp = parseResp(data, this.$store.state.queueShowTrackNum, 0, this.showRatings, this.$store.state.queueAlbumStyle, this.$store.state.queueContext);
                     this.items = resp.items;
                     var needUpdate = this.timestamp!==prevTimestamp && this.timestamp!==resp.timestamp;
                     this.timestamp = resp.timestamp;

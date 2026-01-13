@@ -41,18 +41,10 @@ function updateUiSettings(state, val) {
             }
         }
     }
-    if (undefined!=val.detailedHomeItems) {
-        if (undefined!=val.detailedHomeItems && !arraysEqual(state.detailedHomeItems, val.detailedHomeItems)) {
-            state.detailedHomeItems = checkHomeItems(val.detailedHomeItems);
-            setLocalStorageVal('detailedHomeItems', JSON.stringify(state.detailedHomeItems));
-            browseDisplayChanged = true;
-        }
-    } else {
-        if (undefined!=val.detailedHome) {
-            state.detailedHomeItems = homeItemsIntToList(val.detailedHome);
-            setLocalStorageVal('detailedHomeItems', JSON.stringify(state.detailedHomeItems));
-            browseDisplayChanged = true;
-        }
+    if (undefined!=val.detailedHomeItems && !arraysEqual(state.detailedHomeItems, val.detailedHomeItems)) {
+        state.detailedHomeItems = checkHomeItems(val.detailedHomeItems);
+        setLocalStorageVal('detailedHomeItems', JSON.stringify(state.detailedHomeItems));
+        browseDisplayChanged = true;
     }
     if (!VALID_SKIP_SECONDS.has(state.skipBSeconds)) {
         state.skipBSeconds = 10;
@@ -317,52 +309,11 @@ function setQueuePinned(state, val, force) {
     }
 }
 
-function homeItemsIntToList(val) {
-    let list = []
-    if (val&DETAILED_HOME_NEW) {
-        list.push(DETAILED_HOME_STD_PREFIX+"new");
-    }
-    if (val&DETAILED_HOME_MOST) {
-        list.push(DETAILED_HOME_STD_PREFIX+"playcount");
-    }
-    if (val&DETAILED_HOME_RECENT) {
-        list.push(DETAILED_HOME_STD_PREFIX+"recentlyplayed");
-    }
-    if (val&DETAILED_HOME_RANDOM) {
-        list.push(DETAILED_HOME_STD_PREFIX+"random");
-    }
-    if (val&DETAILED_HOME_RADIOS) {
-        list.push(DETAILED_HOME_STD_PREFIX+"radios");
-    }
-    if (val&DETAILED_HOME_PLAYLISTS) {
-        list.push(DETAILED_HOME_STD_PREFIX+"playlists");
-    }
-    if (val&DETAILED_HOME_UPDATED) {
-        list.push(DETAILED_HOME_STD_PREFIX+"changed");
-    }
-    return list;
-}
-
-function homeConvert(list) {
-    let conv = [];
-    for (let i=0, len=list.length; i<len; ++i) {
-        if (isNaN(list[i])) {
-            conv.push(list[i]);
-        } else {
-            let c = homeItemsIntToList(list[i]);
-            if (undefined!=c && c.length==1) {
-                conv.push(c[0]);
-            }
-        }
-    }
-    return conv;
-}
-
 function checkHomeItems(list) {
     let valid = [];
     let extra = new Set();
-    for (let i=0, len=LMS_3RDPARTY_HOME_EXTRA.length; i<len; ++i) {
-        extra.add(LMS_3RDPARTY_HOME_EXTRA[i].id);
+    for (let i=0, len=lmsOptions.home3rdPartyExtraLists.length; i<len; ++i) {
+        extra.add(lmsOptions.home3rdPartyExtraLists[i].id);
     }
     for (let i=0, len=list.length; i<len; ++i) {
         if (list[i].startsWith(DETAILED_HOME_STD_PREFIX) || extra.has(list[i])) {
@@ -675,7 +626,7 @@ const store = new Vuex.Store({
             let boolItems = ['roundCovers', 'autoScrollQueue', 'sortFavorites', 'browseBackdrop', 'queueBackdrop', 'nowPlayingBackdrop',
                              'infoBackdrop', 'useDefaultBackdrops', 'browseTechInfo', 'techInfo', 'queueShowTrackNum', 'nowPlayingTrackNum',
                              'nowPlayingClock', 'swipeVolume', 'swipeChangeTrack', 'keyboardControl', 'screensaverNp', 'mediaControls',
-                             'queueAlbumStyle', 'queueThreeLines', 'browseContext', 'nowPlayingContext', 'queueContext',
+                             'queueAlbumStyle', 'queueThreeLines', 'browseContext', 'nowPlayingContext', 'queueContext', 'showRating',
                              'moveDialogs', 'autoCloseQueue', 'nowPlayingFull', 'tinted', 'ndSettingsIcons', 'ndSettingsVisible', 'gridPerView'];
             for (let i=0, len=boolItems.length; i<len; ++i) {
                 let key = boolItems[i];
@@ -700,20 +651,12 @@ const store = new Vuex.Store({
                 try {
                     state.detailedHomeItems = checkHomeItems(JSON.parse(dhi));
                 } catch (e) { }
-            } else {
-                // 6.0.x format...
-                let dth = getLocalStorageVal('detailedHome', undefined);
-                if (!isNaN(dth)) {
-                    state.detailedHomeItems = homeItemsIntToList(dth);
-                }
-                setLocalStorageVal('detailedHomeItems', JSON.stringify(state.detailedHomeItems));
             }
             setQueuePinned(state, getLocalStorageBool('pinQueue', state.pinQueue), true);
             setQueueShown(state, getLocalStorageBool('showQueue', state.showQueue), true);
 
             state.disabledBrowseModes = new Set(JSON.parse(getLocalStorageVal('disabledBrowseModes', '["myMusicFlopTracks", "myMusicTopTracks", "myMusicMusicFolder", "myMusicFileSystem", "myMusicArtistsComposers", "myMusicArtistsConductors", "myMusicArtistsJazzComposers", "myMusicAlbumsAudiobooks", "myMusicRecentlyChangeAlbums"]')));
             state.hidden = new Set(JSON.parse(getLocalStorageVal('hidden', JSON.stringify([TOP_EXTRAS_ID]))));
-            state.showRating = LMS_STATS_ENABLED && getLocalStorageBool('showRating', state.showRating);
             state.library = getLocalStorageVal('library', state.library);
             setTheme(state.theme, state.color);
             emitToolbarColorsFromState(state, true);
@@ -992,6 +935,11 @@ const store = new Vuex.Store({
             state.queueAlbumStyle = val;
             setLocalStorageVal('queueAlbumStyle', state.queueAlbumStyle);
             bus.$emit('queueDisplayChanged');
+        },
+        setHome3rdPartyExtraLists(state, val) {
+            lmsOptions.home3rdPartyExtraLists = val;
+            state.detailedHomeItems = checkHomeItems(state.detailedHomeItems);
+            bus.$emit('refresh-home');
         }
     }
 })

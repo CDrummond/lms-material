@@ -567,6 +567,10 @@ sub getHomeExtra3rdPartyItems {
     } keys %$HOME_EXTRAS ]);
 }
 
+sub signalHomeExtraUpdate {
+    Slim::Control::Request::notifyFromArray(undef, ['material-skin', 'notification', 'internal', 'refresh-home']);
+}
+
 #sub _checkPlayQueue {
 #    my $request = shift;
 #    if (!$prefs->get('playShuffle')) {
@@ -720,7 +724,7 @@ sub _cliCommand {
                                                   'pass-check', 'browsemodes', 'geturl', 'command', 'scantypes', 'server', 'themes',
                                                   'playersettings', 'activeplayers', 'urls', 'adv-search', 'adv-search-params', 'protocols',
                                                   'players-extra-info', 'sort-playlist', 'mixer', 'release-types', 'check-for-updates',
-                                                  'similar', 'apps', 'rndmix', 'scan-progress', 'send-notif', 'home-extra']) ) {
+                                                  'similar', 'apps', 'rndmix', 'scan-progress', 'send-notif', 'home-extra', 'home-extra-3rdparty']) ) {
         $request->setStatusBadParams();
         return;
     }
@@ -2008,6 +2012,12 @@ sub _cliCommand {
 
     if ($cmd eq 'home-extra') {
         _handleHomeExtraCmd($request);
+        return;
+    }
+
+    if ($cmd eq 'home-extra-3rdparty') {
+        $request->addResult("items", getHomeExtra3rdPartyItems());
+        $request->setStatusDone();
         return;
     }
     $request->setStatusBadParams();

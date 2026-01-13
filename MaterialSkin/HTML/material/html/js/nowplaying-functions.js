@@ -168,17 +168,26 @@ function nowplayingOnPlayerStatus(view, playerStatus) {
     if (playerStatus.current.album!=view.playerStatus.current.albumName ||
         playerStatus.current.year!=view.playerStatus.current.year ||
         playerStatus.current.album_id!=view.playerStatus.current.album_id ||
-        playerStatus.current.remote_title!=view.playerStatus.current.remote_title) {
+        playerStatus.current.remote_title!=view.playerStatus.current.remote_title ||
+        playerStatus.current.discsubtitle!=view.playerStatus.current.discsubtitle ||
+        playerStatus.current.grouping!=view.playerStatus.current.grouping) {
         view.playerStatus.current.albumName = playerStatus.current.album;
         view.playerStatus.current.album_id = playerStatus.current.album_id;
         view.playerStatus.current.year = playerStatus.current.year;
         view.playerStatus.current.remote_title = playerStatus.current.remote_title;
+        view.playerStatus.current.discsubtitle = playerStatus.current.discsubtitle;
+        view.playerStatus.current.grouping = playerStatus.current.grouping;
         if (playerStatus.current.year && playerStatus.current.year>0) {
             view.playerStatus.current.album = view.playerStatus.current.albumName+" ("+ playerStatus.current.year+")";
         } else {
             view.playerStatus.current.album = view.playerStatus.current.albumName;
         }
-        view.playerStatus.current.albumLine = buildAlbumLine(playerStatus.current, 'now-playing');
+        if (undefined!=playerStatus.current.grouping) {
+            view.playerStatus.current.album+=SEPARATOR + playerStatus.current.grouping;
+        } else if (undefined!=playerStatus.current.discsubtitle) {
+            view.playerStatus.current.album+=SEPARATOR + playerStatus.current.discsubtitle;
+        }
+        view.playerStatus.current.albumLine = buildAlbumLine(playerStatus.current, 'now-playing', false, true);
         trackChanged = true;
     }
     let rating = undefined==playerStatus.current.rating ? 0 : playerStatus.current.rating;

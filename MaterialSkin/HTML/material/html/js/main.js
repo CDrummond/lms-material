@@ -361,7 +361,7 @@ var app = new Vue({
         window.addEventListener( 'touchmove', function() {}, {passive: false});
 
         window.addEventListener('keyup', function(event) {
-            if (event.keyCode === 27) {
+            if (event.keyCode === 27 && bus.$store.state.keyboardControl) {
                 bus.$emit('esc');
             }
         });

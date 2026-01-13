@@ -1652,10 +1652,6 @@ function parseBrowseResp(data, parent, options, cacheKey) {
                 if (rs) {
                     subs.push(rs);
                 }
-                let sub = lmsOptions.showSubtitle ? i.subtitle : undefined;
-                if (sub) {
-                    subs.push(sub);
-                }
                 extraSubs.push(subs.length<1 ? undefined : subs.join(SEPARATOR));
                 if (i.genre || i.genres) {
                     let loop = i.genres ? i.genres : [i.genre];
@@ -1686,7 +1682,7 @@ function parseBrowseResp(data, parent, options, cacheKey) {
                 }
                 resp.items.push({
                               id: "track_id:"+i.id,
-                              title: title,
+                              title: addSubtitle(title, i),
                               baseTitle: baseTitle,
                               plainTitle: isSearchResult ? i.title : undefined,
                               subtitle: subtitle,
@@ -2101,17 +2097,11 @@ function parseBrowseResp(data, parent, options, cacheKey) {
                         subtitleContext+=SEPARATOR+techInfo;
                     }
                 }
-                if (i.subtitle) {
-                    subtitle = undefined==subtitle ? i.subtitle : (i.subtitle + SEPARATOR + subtitle);
-                    if (undefined!=subtitleContext) {
-                        subtitleContext = SEPARATOR + subtitleContext;
-                    }
-                }
                 var isRemote = undefined!=parent && parent.remotePlaylist;
                 let rs = undefined!=i.rating ? ratingString(undefined, i.rating) : undefined;
                 resp.items.push({
                               id: uniqueId("track_id:"+i.id, resp.items.length),
-                              title: title,
+                              title: addSubtitle(title, i),
                               subtitle: undefined!=rs ? undefined==subtitle ? rs : subtitle+SEPARATOR+rs : subtitle,
                               subtitleContext: subtitleContext,
                               image: i.artwork_url

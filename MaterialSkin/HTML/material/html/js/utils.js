@@ -1342,3 +1342,14 @@ function getScrollBarSize() {
     }
     return mskSbarSize;
 }
+
+function addSubtitle(title, item) {
+    if (lmsOptions.showSubtitle && item.subtitle) {
+        if (item.subtitle[0]=='[' || item.subtitle[0]=='(') {
+            return title + " " + item.subtitle;
+        } else {
+            return title + SEPARATOR + item.subtitle;
+        }
+    }
+    return title;
+}

@@ -401,7 +401,7 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
                     current: { canseek:1, duration:0, time:undefined, title:undefined, liveEdge:undefined, artist:undefined, artistAndComposer: undefined, artistAndComposerWithContext:undefined,
                                album:undefined, albumName:undefined, albumLine:undefined, technicalInfo:undefined, pospc:0.0, bufpc:100.0, tracknum:undefined,
                                disc:0, year:0, url:undefined, comment:undefined, source: {local:true, text:undefined},
-                               emblem: undefined, maiComposer:undefined },
+                               emblem: undefined, maiComposer:undefined, discsubtitle:undefined, grouping:undefined },
                     playlist: { shuffle:0, repeat: 0, randomplay:0, current:0, count:0 },
                  },
                  mobileBarText: undefined,
@@ -682,7 +682,7 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
                     if (LMS_EXPAND_NP_KEYBOARD==key && this.$store.state.desktopLayout && (window.innerHeight>=LMS_MIN_NP_LARGE_INFO_HEIGHT || this.largeView)) {
                         this.info.show = false;
                         this.largeView = !this.largeView;
-                    } else if (1==key.length && !isNaN(key) && undefined!=LMS_P_RP && this.$store.state.showRating) {
+                    } else if (1==key.length && !isNaN(key) && undefined!=LMS_P_RP && LMS_STATS_ENABLED && this.$store.state.showRating) {
                         this.rating.value = parseInt(key);
                         this.setRating();
                     }
@@ -1475,7 +1475,7 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
             return this.showRatings;
         },
         showRatings() {
-            return this.$store.state.showRating && this.playerStatus && this.playerStatus.current &&
+            return LMS_STATS_ENABLED && this.$store.state.showRating && this.playerStatus && this.playerStatus.current &&
                    this.playerStatus.current.duration && this.playerStatus.current.duration>0 && undefined!=this.playerStatus.current.id &&
                    !(""+this.playerStatus.current.id).startsWith("-");
         },

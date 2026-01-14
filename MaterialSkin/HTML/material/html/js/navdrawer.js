@@ -56,7 +56,7 @@ Vue.component('lms-navdrawer', {
 <v-navigation-drawer v-model="show" app temporary :width="maxWidth" style="display:flex;flex-direction:column">
  <div class="nd-top"></div>
  <div class="nd-header">
-  <v-menu v-if="multipleStandardPlayers" bottom left v-model="showMenu" style="position:fixed; right:40px; z-index:5">
+  <v-menu v-if="multipleStandardPlayers" bottom left v-model="showMenu" style="position:absolute; right:40px; z-index:5">
    <v-btn icon slot="activator"><v-icon>more_vert</v-icon></v-btn>
    <v-list>
     <v-subheader>{{i18n("All players")}}</v-subheader>

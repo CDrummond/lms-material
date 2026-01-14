@@ -5,6 +5,8 @@
 2. Fix reading 'Show ratings' from default settings.
 3. If track has a grouping, or disc-subtitle, then show this after album in
    now-playing.
+4. Don't prompt for confirmation when power on/off all players from 'Manage
+   players' dialog.
 
 6.1.3
 -----

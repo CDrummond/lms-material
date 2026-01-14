@@ -368,17 +368,17 @@ Vue.component('lms-manage-players', {
                     }
                 });
             } else if (action=='poweroff') {
-                confirm(i18n("Switch off all players?"), i18n("Switch off")).then(res => {
-                    if (res) {
+                //confirm(i18n("Switch off all players?"), i18n("Switch off")).then(res => {
+                //    if (res) {
                         this.sendCommandToAll(["power", "0"]);
-                    }
-                });
+                //    }
+                //});
             } else if (action=='poweron') {
-                confirm(i18n("Switch on all players?"), i18n("Switch on")).then(res => {
-                    if (res) {
+                //confirm(i18n("Switch on all players?"), i18n("Switch on")).then(res => {
+                //    if (res) {
                         this.sendCommandToAll(["power", "1"]);
-                    }
-                });
+                //    }
+                //});
             }
         },
         playerAction(player, cmd, event) {

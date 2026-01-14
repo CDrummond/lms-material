@@ -89,11 +89,11 @@ Vue.component('lms-manage-players', {
        <v-list-tile-content><v-list-tile-title>{{i18n('Clear queue')}}</v-list-tile-title></v-list-tile-content>
       </v-list-tile>
       <v-list-tile @click="actionAll($event, 'poweroff')" class="menu-group-item">
-       <v-list-tile-avatar><v-icon>power_settings_new</v-icon></v-list-tile-avatar>
+       <v-list-tile-avatar><v-icon class="dimmed">power_settings_new</v-icon></v-list-tile-avatar>
        <v-list-tile-content><v-list-tile-title>{{i18n('Switch off')}}</v-list-tile-title></v-list-tile-content>
       </v-list-tile>
       <v-list-tile @click="actionAll($event, 'poweron')" class="menu-group-item">
-       <v-list-tile-avatar><v-icon class="dimmed">power_settings_new</v-icon></v-list-tile-avatar>
+       <v-list-tile-avatar><v-icon>power_settings_new</v-icon></v-list-tile-avatar>
        <v-list-tile-content><v-list-tile-title>{{i18n('Switch on')}}</v-list-tile-title></v-list-tile-content>
       </v-list-tile>
       <v-divider v-if="manageGroups && unlockAll"></v-divider>

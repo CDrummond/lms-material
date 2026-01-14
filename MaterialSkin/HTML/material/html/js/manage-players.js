@@ -358,7 +358,7 @@ Vue.component('lms-manage-players', {
             bus.$emit('dlg.open', 'group', 'create');
         },
         actionAll(event, action) {
-            storeClickOrTouchPos(event, this.menu);
+            storeClickOrTouchPos(event);
             if (action=='sleep') {
                 bus.$emit('dlg.open', 'sleep');
             } else if (action=='clear') {

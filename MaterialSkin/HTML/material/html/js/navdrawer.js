@@ -60,6 +60,10 @@ Vue.component('lms-navdrawer', {
    <v-btn icon slot="activator"><v-icon>more_vert</v-icon></v-btn>
    <v-list>
     <v-subheader>{{i18n("All players")}}</v-subheader>
+    <v-list-tile @click="sleepAll()" class="menu-group-item">
+     <v-list-tile-avatar><v-icon>hotel</v-icon></v-list-tile-avatar>
+     <v-list-tile-content><v-list-tile-title>{{i18n('Sleep')}}</v-list-tile-title></v-list-tile-content>
+    </v-list-tile>
     <v-list-tile @click="powerAll(0)" class="menu-group-item">
      <v-list-tile-avatar><v-icon class="dimmed">power_settings_new</v-icon></v-list-tile-avatar>
      <v-list-tile-content><v-list-tile-title>{{i18n('Switch off')}}</v-list-tile-title></v-list-tile-content>
@@ -462,6 +466,10 @@ Vue.component('lms-navdrawer', {
             } else {
                 this.show=false;
             }
+        },
+        sleepAll(event) {
+            storeClickOrTouchPos(event);
+            bus.$emit('dlg.open', 'sleep');
         },
         powerAll(state) {
             this.$store.state.players.forEach(p => {

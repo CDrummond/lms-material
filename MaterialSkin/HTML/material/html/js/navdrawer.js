@@ -470,6 +470,7 @@ Vue.component('lms-navdrawer', {
         sleepAll(event) {
             storeClickOrTouchPos(event);
             bus.$emit('dlg.open', 'sleep');
+            this.show=false;
         },
         powerAll(state) {
             this.$store.state.players.forEach(p => {

@@ -909,6 +909,9 @@ Vue.component('lms-manage-players', {
             bus.$emit('subscribeAll', val);
             this.cancelUpdateTimer();
         },
+        'showMenu': function(val) {
+            this.$store.commit('menuVisible', {name:'manage', shown:val});
+        },
         'menu.show': function(val) {
             this.$store.commit('menuVisible', {name:'manage', shown:val});
             if (!val) {

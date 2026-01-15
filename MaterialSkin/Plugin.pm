@@ -567,6 +567,14 @@ sub getHomeExtra3rdPartyItems {
     } keys %$HOME_EXTRAS ]);
 }
 
+sub setHomeExtraTitle {
+    my ($class, $id, $title) = @_;
+    if (my $extra = $HOME_EXTRAS->{'3rdparty_' . $id}) {
+        $extra->{title} = $title;
+        signalHomeExtraUpdate();
+    }
+}
+
 sub signalHomeExtraUpdate {
     Slim::Control::Request::notifyFromArray(undef, ['material-skin', 'notification', 'internal', 'refresh-home']);
 }

@@ -2413,7 +2413,9 @@ function parseBrowseResp(data, parent, options, cacheKey) {
             for (let s=0, len=lists.length-1; s<len; ++s) { // Ignore 'Explore'
                 lists[s].id = DETAILED_HOME_STD_PREFIX+lists[s].key;
             }
-            lists = lists.concat(LMS_3RDPARTY_HOME_EXTRA);
+            if (undefined!=lmsOptions.home3rdPartyExtraLists && lmsOptions.home3rdPartyExtraLists.length>0) {
+                lists = lists.concat(lmsOptions.home3rdPartyExtraLists);
+            }
             if (undefined!=options && undefined!=options.order) {
                 for (let s=0, len=lists.length; s<len; ++s) {
                     lists[s].val = options.order.indexOf(lists[s].id);

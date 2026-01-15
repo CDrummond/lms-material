@@ -2025,7 +2025,6 @@ sub _cliCommand {
 
     if ($cmd eq 'home-extra-3rdparty') {
         $request->addResult("items", getHomeExtra3rdPartyItems());
-        # $request->addResult("items", __PACKAGE__->getHomeExtra3rdPartyItems());
         $request->setStatusDone();
         return;
     }

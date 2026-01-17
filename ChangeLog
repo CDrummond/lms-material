@@ -8,6 +8,7 @@
 4. Don't prompt for confirmation when power on/off all players from 'Manage
    players' dialog.
 5. Add menu to navigation drawer to sleep or power on/off all players.
+6. Allow 3rd party scrolled lists to update titles - thanks to Michael Herger.
 
 6.1.3
 -----

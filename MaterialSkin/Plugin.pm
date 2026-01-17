@@ -2078,14 +2078,16 @@ sub _handleHomeExtraCmd {
         my $total = 0;
         my $libId = $request->getParam('library_id');
         foreach my $srt ( @albumsorts ) {
-            my @cmd = ("albums", 0, $count, "tags:aajlqswyKSS24WE", "sort:${srt}");
+            my $isRandom = $srt eq "random" ? 1 : 0;
+            my $reqCount = $isRandom ? 300 : $count;
+            my @cmd = ("albums", 0, $reqCount, "tags:aajlqswyKSS24WE", "sort:${srt}");
             if ($libId) {
                 push(@cmd, "library_id:${libId}");
             }
             my $req = Slim::Control::Request::executeRequest(undef, \@cmd);
             my $cnt = 0;
             foreach my $item ( @{ $req->getResult('albums_loop') || [] } ) {
-                if ($cnt<$count) {
+                if ($cnt<$reqCount) {
                     _addExtraHomeItem($request, ${srt}, $item, $cnt, $total);
                     $cnt+=1;
                     $total+=1;

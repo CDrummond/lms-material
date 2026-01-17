@@ -1286,9 +1286,14 @@ var lmsBrowse = Vue.component("lms-browse", {
         },
         showMore(item) {
             if (item.morecmd) {
-                let command = JSON.parse(JSON.stringify(item.morecmd));
-                browseReplaceCommandTerms(this, command, item);
-                this.fetchItems(command, {cancache:false, id:item.id, title: item.title, limit:item.limit});
+                if (item.all) { // Random Releases
+                    let resp = {items:item.all.items, title:item.title, subtitle:item.all.subtitle, canUseGrid: true, gridType: GRID_STANDARD};
+                    browseHandleListResponse(this, item, item.all.command, resp, undefined, false);
+                } else {
+                    let command = JSON.parse(JSON.stringify(item.morecmd));
+                    browseReplaceCommandTerms(this, command, item);
+                    this.fetchItems(command, {cancache:false, id:item.id, title: item.title, limit:item.limit});
+                }
             } else if (item.allItems) {
                 this.addHistory();
                 this.items = item.allItems;

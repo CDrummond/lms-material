@@ -2477,6 +2477,11 @@ function parseBrowseResp(data, parent, options, cacheKey) {
                                 loop[i].ihe = true;
                                 loop[i].iheHdr = iheHdr;
                             }
+                        } else if (lists[s].key=="random" && newResp.items.length>count) {
+                            let all = JSON.parse(JSON.stringify(newResp.items))
+                            newResp.items = newResp.items.splice(0, count);
+                            resp.items.push({title:lists[s].title, id:lists[s].id, header:true, ihe:1, icon:lists[s].icon, svg: lists[s].svg, limit: lists[s].limit,
+                                morecmd:"-", all:{items:all, subtitle:newResp.subtitle, command:{ismore:false, command:["albums"], params:["sort:random", ALBUM_TAGS_ALL_ARTISTS]}}});
                         } else {
                             resp.items.push({title:lists[s].title, id:lists[s].id, header:true, ihe:1, icon:lists[s].icon, svg: lists[s].svg, limit: lists[s].limit,
                                 morecmd:parseInt(data.result[loop_name+"_len"])>count ? {command:lists[s].command, params:lists[s].params} : undefined});

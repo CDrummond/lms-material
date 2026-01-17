@@ -1,3 +1,8 @@
+6.1.5
+-----
+1. When requesting 'Random albums/releases' for scrolled lists obtain complete
+   list, but initially only show N items - use stored list for 'More'.
+
 6.1.4
 -----
 1. Don't show group player's in sync dialog, instead allow showing sync dialog

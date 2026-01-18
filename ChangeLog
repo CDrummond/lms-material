@@ -4,6 +4,7 @@
    list, but initially only show N items - use stored list for 'More'.
 2. Fix invoking 'Download' from scrolled list.
 3. Add note about popups to download confirmation dialog.
+4. Disable downloads on iOS once more.
 
 6.1.4
 -----

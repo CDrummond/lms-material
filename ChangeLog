@@ -3,6 +3,7 @@
 1. When requesting 'Random albums/releases' for scrolled lists obtain complete
    list, but initially only show N items - use stored list for 'More'.
 2. Fix invoking 'Download' from scrolled list.
+3. Add note about popups to download confirmation dialog.
 
 6.1.4
 -----

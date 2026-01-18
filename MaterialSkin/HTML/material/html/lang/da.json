@@ -723,8 +723,6 @@
 "%1 Folders":"%1 foldere",
 "1 Genre":"1 genre",
 "%1 Genres":"%1 genrer",
-"1 Group":"1 gruppe",
-"%1 Groups":"%1 grupper",
 "1 Image":"1 billede",
 "%1 Images":"%1 billeder",
 "1 Item":"1 underpunkt",
@@ -744,5 +742,6 @@
 "1 Year":"1 år",
 "%1 Years":"%1 år",
 "1 day":"1 dag",
-"%1 days":"%1 dage"
+"%1 days":"%1 dage",
+"NOTE: Please ensure popups are not blocked in your browser, as this might prevent downloading multiple tracks.":""
 }

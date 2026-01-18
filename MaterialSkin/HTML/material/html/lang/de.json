@@ -738,11 +738,10 @@
 "Based upon play count for the past few months only.":"",
 "Based upon total play count.":"",
 "Most Played Artists":"",
+"NOTE: Please ensure popups are not blocked in your browser, as this might prevent downloading multiple tracks.":"",
 "No scrollable lists have been enabled. Use the 'cog' icon (above) to select the lists you would like to appear on the home screen.":"",
 "Popular Albums":"",
 "Popular Artists":"",
 "Popular Releases":"",
-"Recently Played Artists":"",
-"1 Group":"",
-"%1 Groups":""
+"Recently Played Artists":""
 }

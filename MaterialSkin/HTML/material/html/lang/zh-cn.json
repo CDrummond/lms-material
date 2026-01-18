@@ -722,6 +722,7 @@
 "Lyrion website":"",
 "Most Played Artists":"",
 "Moving clock":"",
+"NOTE: Please ensure popups are not blocked in your browser, as this might prevent downloading multiple tracks.":"",
 "New Artists":"",
 "No screensaver.":"",
 "No scrollable lists have been enabled. Use the 'cog' icon (above) to select the lists you would like to appear on the home screen.":"",
@@ -742,7 +743,5 @@
 "When navigating into lists, show a home button to quickly navigate to the main (home) screen. Otherwise you can click on the title to show a menu that contains 'Home'.":"",
 "When no track is playing on current player, darken screen (and show date & time) after a period  of inactivity. Clock is fixed to center of screen.":"",
 "When no track is playing on current player, darken screen (and show date & time) after a period of inactivity. Clock is moved every few minutes.":"",
-"When no track is playing on current player, darken screen after a period of inactivity.":"",
-"1 Group":"",
-"%1 Groups":""
+"When no track is playing on current player, darken screen after a period of inactivity.":""
 }

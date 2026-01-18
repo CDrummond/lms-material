@@ -116,8 +116,11 @@ function download(item, command, albumartist) {
                     bus.$emit('showError', undefined, i18n("No downloadable tracks."));
                 }
             } else if (tracks.length>1) {
-                confirm(i18n('Download %1 tracks?'+'<br/><br/><small>'+
-                        i18n('NOTE: Please ensure popups are not blocked in your browser, as this might prevent downloading multiple tracks.')+'</small>',
+                confirm(i18n('Download %1 tracks?'+
+                        (queryParams.download=='native'
+                            ? ''
+                            : '<br/><br/><small>'+
+                               i18n('NOTE: Please ensure popups are not blocked in your browser, as this might prevent downloading multiple tracks.')+'</small>'),
                         tracks.length), i18n('Download')).then(res => {
                     if (1==res) {
                         if (queryParams.download=='native') {

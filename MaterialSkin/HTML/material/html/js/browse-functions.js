@@ -1738,7 +1738,7 @@ function browseItemAction(view, act, origItem, index, event, slimBrowseBaseActio
         bus.$emit('queueGetSelectedUrls', index, originalId(item.id));
     } else if (DOWNLOAD_ACTION==act) {
         // See if we can get album-artist from current view / history
-        let aa = view.current.id.startsWith("artist_id:") ? view.current.title : undefined;
+        let aa = view.current && view.current.id && view.current.id.startsWith("artist_id:") ? view.current.title : undefined;
         if (aa == undefined) {
             let alb = item.id.startsWith("album_id:") ? item : view.current.id.startsWith("album_id:") ? view.current : undefined;
             if (undefined!=alb) {

@@ -203,15 +203,13 @@ Vue.component('lms-ui-settings', {
 
     <div style="padding-left:12px">{{i18n('Scrollable lists')}} <v-btn @click.stop="showDetailedHomeDialog($event)" flat icon class="settings-list-checkbox-action"><v-icon>settings</v-icon></v-btn></div>
     <div v-if="haveScrollableLists">
-     <template v-for="(item, index) in detailedHomeItems" :key="item.id">
-      <v-list-tile v-if="item.checked" class="settings-list-thin-item" @dragstart.native="dragStart(index, $event)" @dragenter.prevent="" @dragend.native="dragEnd()" @dragover.native="dragOver(index, $event)" @drop.native="drop(index, $event)" draggable v-bind:class="{'highlight-drop':dropIndex==index, 'highlight-drag':dragIndex==index}" @change="sortDetailedHome" :id="item.id">
-       <v-avatar>
-        <v-icon v-if="undefined!=item.icon">{{item.icon}}</v-icon>
-        <img v-else-if="item.svg" class="svg-img" :src="item.svg | svgIcon(darkUi)"></img>
-       </v-avatar>
-       <div>{{item.title}}</div>
-      </v-list-tile>
-     </template>
+     <v-list-tile v-for="(item, index) in detailedHomeItems" class="settings-list-thin-item" @dragstart.native="dragStart(index, $event)" @dragenter.prevent="" @dragend.native="dragEnd()" @dragover.native="dragOver(index, $event)" @drop.native="drop(index, $event)" draggable v-bind:class="{'highlight-drop':dropIndex==index, 'highlight-drag':dragIndex==index}">
+      <v-avatar>
+       <v-icon v-if="undefined!=detailedHomeValues[item].icon">{{detailedHomeValues[item].icon}}</v-icon>
+       <img v-else-if="detailedHomeValues[item].svg" class="svg-img" :src="detailedHomeValues[item].svg | svgIcon(darkUi)"></img>
+      </v-avatar>
+      <div>{{detailedHomeValues[item].title}}</div>
+     </v-list-tile>
     </div>
     <v-list-tile-sub-title v-else style="padding-left:12px">{{i18n("No scrollable lists have been enabled. Use the 'cog' icon (above) to select the lists you would like to appear on the home screen.")}}</v-list-tile-sub-title>
     <div class="dialog-padding"></div>
@@ -445,11 +443,11 @@ Vue.component('lms-ui-settings', {
   </v-card>
  </v-dialog>
 
-  <v-dialog v-model="detailedHomeDialog" :width="500" persistent style="overflow:hidden" v-if="detailedHomeDialog">
+  <v-dialog v-model="detailedHomeDialog.show" :width="500" persistent style="overflow:hidden" v-if="detailedHomeDialog.show">
   <v-card>
    <v-card-title>{{i18n("Scrollable lists")}}</v-card-title>
    <v-list class="dialog-main-list">
-    <template v-for="(item, index) in detailedHomeItems" :key="item.id">
+    <template v-for="(item, index) in detailedHomeDialog.items" :key="item.id">
     <v-list-tile class="settings-list-thin-item">
      <v-checkbox v-model="item.checked" style="display:flex" :id="item.id">
       <template v-slot:label>
@@ -469,7 +467,7 @@ Vue.component('lms-ui-settings', {
    <div class="dialog-padding"></div>
    <v-card-actions>
     <v-spacer></v-spacer>
-    <v-btn flat @click="sortDetailedHome(); detailedHomeDialog = false">{{i18n('Close')}}</v-btn>
+    <v-btn flat @click="setDetailedHome">{{i18n('Close')}}</v-btn>
    </v-card-actions>
   </v-card>
  </v-dialog>
@@ -553,8 +551,9 @@ Vue.component('lms-ui-settings', {
             ndShortcutValues: [],
             ndSettingsIcons: false,
             ndSettingsVisible: false,
+            detailedHomeValues:{},
             detailedHomeItems:[],
-            detailedHomeDialog: false,
+            detailedHomeDialog: {show:false, items:[]},
             dragIndex: undefined,
             dropIndex: undefined
         }
@@ -582,7 +581,7 @@ Vue.component('lms-ui-settings', {
             return this.$store.state.desktopLayout
         },
         haveScrollableLists() {
-            return this.detailedHomeItems.length>0 && this.detailedHomeItems[0].checked
+            return this.detailedHomeItems.length>0
         }
     },
     mounted() {
@@ -596,6 +595,7 @@ Vue.component('lms-ui-settings', {
         bus.$on('uisettings.open', function(act) {
             this.showMenu = false;
             this.showMoveDialogs = window.innerWidth>=MIN_DLG_MOVE_SIZE && window.innerHeight>=MIN_DLG_MOVE_SIZE;
+            this.initHomeItems();
             this.readStore();
             this.password = getLocalStorageVal('password', '');
             if (this.allowLayoutAdjust) {
@@ -686,7 +686,8 @@ Vue.component('lms-ui-settings', {
             if (dlg == 'browsemodes') {
                 this.browseModesDialog.show=false;
             } else if (dlg == 'detailedhome') {
-                this.detailedHomeDialog=false;
+                this.detailedHomeDialog.show=false;
+                this.detailedHomeDialog.items=[];
             } else if (dlg == 'uisettings') {
                 this.close();
             }
@@ -748,15 +749,10 @@ Vue.component('lms-ui-settings', {
                             {id: TOP_FAVORITES_ID, name:i18n("Favorites"), show:!this.hidden.has(TOP_FAVORITES_ID)},
                             {id: TOP_APPS_ID, name:i18n("Apps"), show:!this.hidden.has(TOP_APPS_ID)},
                             {id: TOP_EXTRAS_ID, name:i18n("Extras"), show:!this.hidden.has(TOP_EXTRAS_ID)}];
-
-            let checkedHomeItems = new Set(this.$store.state.detailedHomeItems);
-
-            for (let s=0, loop=this.detailedHomeItems, len=loop.length; s<len; ++s) {
-                let idx = this.$store.state.detailedHomeItems.indexOf(loop[s].id);
-                loop[s].val = undefined==idx || idx<0 ? this.detailedHomeItems.length+s : idx;
-                loop[s].checked = checkedHomeItems.has(loop[s].id);
-            };
-            this.sortDetailedHome();
+            this.detailedHomeItems=[];
+            for (let i=0, loop=this.$store.state.detailedHomeItems, len=loop.length; i<len; ++i) {
+                this.detailedHomeItems.push(loop[i]);
+            }
         },
         initItems() {
             this.themes=[
@@ -803,59 +799,40 @@ Vue.component('lms-ui-settings', {
                 { key:3, label:i18n("Blank screen")}
             ]
 
-            this.detailedHomeItems = [{id:DETAILED_HOME_STD_PREFIX+"new", title:i18n('New Music'), checked:false, icon:"new_releases"}];
-            if (LMS_VERSION>=90100 && LMS_STATS_ENABLED) {
-                this.detailedHomeItems.push(
-                    {id:DETAILED_HOME_STD_PREFIX+"recentlyplayed", title:i18n('Recently Played'), checked:false, icon:"history"}
-                );
-                this.detailedHomeItems.push(
-                    {id:DETAILED_HOME_STD_PREFIX+"playcount", title:i18n('Most Played'), subtitle:this.i18n('Based upon total play count.'), checked:false, svg:"staralbum"}
-                );
-                this.detailedHomeItems.push(
-                    {id:DETAILED_HOME_STD_PREFIX+"popular", title:lmsOptions.supportReleaseTypes ? i18n('Popular Releases') : i18n('Popular Albums'), subtitle:this.i18n('Based upon play count for the past few months only.'), checked:false, svg:"popularalbum"}
-                );
-                this.detailedHomeItems.push(
-                    {id:DETAILED_HOME_STD_PREFIX+"artists_new", title:i18n('New Artists'), checked:false, svg:"artistnew"}
-                );
-                this.detailedHomeItems.push(
-                    {id:DETAILED_HOME_STD_PREFIX+"artists_recentlyplayed", title:i18n('Recently Played Artists'), checked:false, svg:"artistrecent"}
-                );
-                this.detailedHomeItems.push(
-                    {id:DETAILED_HOME_STD_PREFIX+"artists_playcount", title:i18n('Most Played Artists'), subtitle:this.i18n('Based upon total play count.'), checked:false, svg:"artiststar"}
-                );
-                this.detailedHomeItems.push(
-                    {id:DETAILED_HOME_STD_PREFIX+"artists_popular", title:i18n('Popular Artists'), subtitle:this.i18n('Based upon play count for the past few months only.'), checked:false, svg:"artistpopular"}
-                );
-            }
-            this.detailedHomeItems.push(
-                {id:DETAILED_HOME_STD_PREFIX+"random", title:lmsOptions.supportReleaseTypes ? i18n("Random Releases") : i18n("Random Albums"), checked:false, svg:"dice-album"}
-            );
-            this.detailedHomeItems.push(
-                {id:DETAILED_HOME_STD_PREFIX+"radios", title:i18n('Radios'), checked:false, svg:"radio"}
-            );
-            if (lmsOptions.playlistImages) {
-                this.detailedHomeItems.push(
-                    {id:DETAILED_HOME_STD_PREFIX+"playlists", title:i18n('Playlists'), checked:false, icon:"list"}
-                );
-            }
-            if (LMS_VERSION>=90000) {
-                this.detailedHomeItems.push(
-                    {id:DETAILED_HOME_STD_PREFIX+"changed", title:lmsOptions.supportReleaseTypes ? i18n("Recently Updated Releases") : i18n("Recently Updated Albums"), checked:false, svg:"updated-music"}
-                );
-            }
-            for (let i=0, len=lmsOptions.home3rdPartyExtraLists.length; i<len; ++i) {
-                let entry = lmsOptions.home3rdPartyExtraLists[i];
-                mapIcon(entry);
-                this.detailedHomeItems.push(entry);
-            }
-            this.detailedHomeItems.push(
-                {id:DETAILED_HOME_EXPLORE, title:i18n("Explore"), checked:false, icon:"music_note"}
-            );
+            this.initHomeItems();
+
             this.homeButtonValues=[
                 { key:0, label:i18n("Don't show")},
                 { key:1, label:i18n("Show always")},
                 { key:2, label:i18n("Single when wide enough")},
                 ];
+        },
+        initHomeItems() {
+            this.detailedHomeValues={};
+            this.detailedHomeValues[DETAILED_HOME_STD_PREFIX+"new"] = {title:i18n('New Music'), icon:"new_releases"};
+            if (LMS_VERSION>=90100 && LMS_STATS_ENABLED) {
+                this.detailedHomeValues[DETAILED_HOME_STD_PREFIX+"recentlyplayed"] = {title:i18n('Recently Played'), icon:"history"};
+                this.detailedHomeValues[DETAILED_HOME_STD_PREFIX+"playcount"] = { title:i18n('Most Played'), subtitle:this.i18n('Based upon total play count.'), svg:"staralbum"};
+                this.detailedHomeValues[DETAILED_HOME_STD_PREFIX+"popular"] = { title:lmsOptions.supportReleaseTypes ? i18n('Popular Releases') : i18n('Popular Albums'), subtitle:this.i18n('Based upon play count for the past few months only.'), svg:"popularalbum"};
+                this.detailedHomeValues[DETAILED_HOME_STD_PREFIX+"artists_new"] = { title:i18n('New Artists'), svg:"artistnew"};
+                this.detailedHomeValues[DETAILED_HOME_STD_PREFIX+"artists_recentlyplayed"] = { title:i18n('Recently Played Artists'), svg:"artistrecent"};
+                this.detailedHomeValues[DETAILED_HOME_STD_PREFIX+"artists_playcount"] = { title:i18n('Most Played Artists'), subtitle:this.i18n('Based upon total play count.'), svg:"artiststar"};
+                this.detailedHomeValues[DETAILED_HOME_STD_PREFIX+"artists_popular"] = { title:i18n('Popular Artists'), subtitle:this.i18n('Based upon play count for the past few months only.'), svg:"artistpopular"};
+            }
+            this.detailedHomeValues[DETAILED_HOME_STD_PREFIX+"random"] = { title:lmsOptions.supportReleaseTypes ? i18n("Random Releases") : i18n("Random Albums"), svg:"dice-album"};
+            this.detailedHomeValues[DETAILED_HOME_STD_PREFIX+"radios"] = { title:i18n('Radios'), svg:"radio"}
+            if (lmsOptions.playlistImages) {
+                this.detailedHomeValues[DETAILED_HOME_STD_PREFIX+"playlists"] = { title:i18n('Playlists'), icon:"list"};
+            }
+            if (LMS_VERSION>=90000) {
+                this.detailedHomeValues[DETAILED_HOME_STD_PREFIX+"changed"] = { title:lmsOptions.supportReleaseTypes ? i18n("Recently Updated Releases") : i18n("Recently Updated Albums"), svg:"updated-music"};
+            }
+            for (let i=0, len=lmsOptions.home3rdPartyExtraLists.length; i<len; ++i) {
+                let entry = lmsOptions.home3rdPartyExtraLists[i];
+                mapIcon(entry);
+                this.detailedHomeValues[entry.id]=entry;
+            }
+            this.detailedHomeValues[DETAILED_HOME_EXPLORE] = {title:i18n("Explore"), icon:"music_note"};
         },
         close() {
             this.show=false;
@@ -887,12 +864,6 @@ Vue.component('lms-ui-settings', {
             }
         },
         settings(arrays, withSorts) {
-            let detailedHomeItems = [];
-            for (let i=0, loop=this.detailedHomeItems, len=loop.length; i<len; ++i) {
-                if (loop[i].checked) {
-                    detailedHomeItems.push(loop[i].id);
-                }
-            }
             let settings = {
                       theme:this.theme+(this.colorToolbars ? '-colored' : ''),
                       color:this.color,
@@ -937,7 +908,7 @@ Vue.component('lms-ui-settings', {
                       ndShortcuts:this.ndShortcuts,
                       ndSettingsIcons:this.ndSettingsIcons,
                       ndSettingsVisible:this.ndSettingsVisible,
-                      detailedHomeItems:detailedHomeItems
+                      detailedHomeItems:this.detailedHomeItems
                   };
             if (withSorts) {
                 for (var key in window.localStorage) {
@@ -1109,43 +1080,52 @@ Vue.component('lms-ui-settings', {
         },
         showDetailedHomeDialog(event) {
             storeClickOrTouchPos(event);
-            this.detailedHomeDialog=true;
+            let keys = Object.keys(this.detailedHomeValues);
+            let items = [];
+            for (let i=0, len=keys.length; i<len; ++i) {
+                let key = keys[i];
+                let val = this.detailedHomeValues[key];
+                items.push({id:key, title:val.title, subtitle:val.subtitle, icon:val.icon, svg:val.svg, checked:this.detailedHomeItems.indexOf(key)>=0});
+            }
+            items.sort((a, b) => {
+                let at = a.id.split("_")[0];
+                let bt = b.id.split("_")[0];
+                if (at!=bt) {
+                    let aid = a.id.startsWith("std") ? "0"+a.id : a.id;
+                    let bid = b.id.startsWith("std") ? "0"+b.id : b.id;
+                    return aid<bid ? -1 : 1
+                }
+                return titleSort(a, b);
+            });
+            this.detailedHomeDialog.items=items;
+            this.detailedHomeDialog.show=true;
+        },
+        setDetailedHome() {
+            let checked = [];
+            for (let i=0, loop=this.detailedHomeDialog.items, len=loop.length; i<len; ++i) {
+                if (loop[i].checked) {
+                    checked.push(loop[i].id);
+                }
+            }
+            // Remove unchecked items
+            for (let loop=this.detailedHomeItems, len=loop.length, i=len-1; i>=0; --i) {
+                if (checked.indexOf(loop[i])<0) {
+                    loop.splice(i, 1);
+                }
+            }
+            // Add newly checked items (to end)
+            for (let i=0, loop=checked, len=loop.length; i<len; ++i) {
+                if (this.detailedHomeItems.indexOf(loop[i])<0) {
+                    this.detailedHomeItems.push(loop[i]);
+                }
+            }
+            this.detailedHomeDialog.items=[];
+            this.detailedHomeDialog.show=false;
         },
         mouseDown(ev) {
             toolbarMouseDown(ev);
         },
-        sortDetailedHome() {
-            this.$nextTick(function () {
-                let checked = [];
-                let unchecked = [];
-                for (let i=0, loop=this.detailedHomeItems, len=loop.length; i<len; ++i) {
-                    if (loop[i].checked) {
-                        checked.push(loop[i]);
-                    } else {
-                        unchecked.push(loop[i]);
-                    }
-                }
-                unchecked.sort((a, b) => {
-                    let at = a.id.split("_")[0];
-                    let bt = b.id.split("_")[0];
-                    if (at!=bt) {
-                        let aid = a.id.startsWith("std") ? "0"+a.id : a.id;
-                        let bid = b.id.startsWith("std") ? "0"+b.id : b.id;
-                        return aid<bid ? -1 : 1
-                    }
-                    return titleSort(a, b);
-                });
-                this.detailedHomeItems = [];
-                this.$nextTick(function () {
-                    this.detailedHomeItems = checked.concat(unchecked);
-                });
-            });
-        },
         dragStart(which, ev) {
-            if (!this.detailedHomeItems[which].checked) {
-                ev.preventDefault();
-                return;
-            }
             ev.dataTransfer.dropEffect = 'move';
             ev.dataTransfer.setData('text/plain', "dth:"+which);
             this.dragIndex = which;
@@ -1156,14 +1136,14 @@ Vue.component('lms-ui-settings', {
             this.dropIndex = undefined;
         },
         dragOver(index, ev) {
-            if (this.detailedHomeItems[index].checked && index!=this.dragIndex) {
+            if (index!=this.dragIndex) {
                 this.dropIndex = index;
             }
             ev.preventDefault(); // Otherwise drop is never called!
         },
         drop(to, ev) {
             ev.preventDefault();
-            if (this.detailedHomeItems[to].checked && to!=this.dragIndex) {
+            if (to!=this.dragIndex) {
                 this.detailedHomeItems = arrayMove(this.detailedHomeItems, this.dragIndex, to);
             }
             this.dragIndex = undefined;
@@ -1177,7 +1157,7 @@ Vue.component('lms-ui-settings', {
         'browseModesDialog.show': function(val) {
             this.$store.commit('dialogOpen', {name:'browsemodes', shown:val});
         },
-        'detailedHomeDialog': function(val) {
+        'detailedHomeDialog.show': function(val) {
             this.$store.commit('dialogOpen', {name:'detailedhome', shown:val});
         },
         'showMenu': function(newVal) {

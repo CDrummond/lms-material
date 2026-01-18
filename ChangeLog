@@ -5,6 +5,7 @@
 2. Fix invoking 'Download' from scrolled list.
 3. Add note about popups to download confirmation dialog.
 4. Disable downloads on iOS once more.
+5. Fix scrolled list order being reset.
 
 6.1.4
 -----

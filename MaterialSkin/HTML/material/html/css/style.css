@@ -2616,6 +2616,19 @@ div.v-rating i.primary--text, div.v-rating i.accent--text {
  margin-right: 6px;
 }
 
+.settings-list-thin-item .v-list__tile {
+ height:auto;
+}
+.settings-list-thin-item .v-input--selection-controls {
+ margin-top:0px;
+ padding-top:0px;
+}
+
+.subtext {
+ opacity:var(--sub-opacity);
+ font-size:var(--small-font-size);
+}
+
 .v-dialog .v-list__tile__sub-title {
  white-space:normal; /* Allow sub-titles in dialogs to span multiple lines */
 }

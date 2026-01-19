@@ -456,8 +456,8 @@ Vue.component('lms-ui-settings', {
         <img v-else-if="item.svg" class="svg-img" :src="item.svg | svgIcon(darkUi)"></img>
        </v-list-tile-avatar>
        <v-list-tile-content>
-        <v-list-tile-title>{{item.title}}</v-list-tile-title>
-        <v-list-tile-sub-title>{{item.subtitle}}</v-list-tile-sub-title>
+        <div>{{item.title}}</div>
+        <div class="subtext">{{item.subtitle}}</div>
        </v-list-tile-content>
       </template>
      </v-checkbox>

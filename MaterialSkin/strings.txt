@@ -9,6 +9,7 @@ MATERIAL_SKIN
 	ZH_TW	Material Skin
 	ZH_CN	Material主题
 	HU	Material Skin
+	SV	Material Skin
 
 PLUGIN_MATERIAL_SKIN
 	CS	Vzhled „Material Skin“, vhodný pro mobilní použití.
@@ -22,6 +23,7 @@ PLUGIN_MATERIAL_SKIN
 	ZH_TW	Material 風格的外觀套件，更適合行動裝置使用。
 	ZH_CN	Material 主题皮肤，适合移动设备使用。
 	HU	Material Skin, mobil felhasználásra alkalmas.
+	SV	Web-skin i Material stil, optimerat för mobil användning.
 
 PLUGIN_MATERIAL_SKIN_GENRES_LIST_NOTE
 	CS	POZNÁMKA: V níže uvedených seznamech žánrů použijte pro všechny žánry jednu hvězdičku (*). Pokud nechcete použít žádný žánr, použijte libovolný řetězec (např. „N/A“), který neodpovídá žádnému z vašich žánrů.
@@ -35,6 +37,7 @@ PLUGIN_MATERIAL_SKIN_GENRES_LIST_NOTE
 	ZH_TW	注意：在下面的音樂風格列表中，如要應用所有音樂風格，請使用星號 (*)。要應用於任何音樂風格，請使用與您的任何音樂風格都不匹配的任何字串（例如"N/A"）。
 	ZH_CN	注意：在下列流派列表中，如要应用于所有流派，请使用星号(*)。要应用于未知流派，请使用与您的所有流派均不匹配的任意字符（例如"N/A"）。
 	HU	MEGJEGYZÉS: Az alábbi műfajlistába az összes műfajra szűrhet egyetlen csillagal (*). A műfajok nélküli lekéréshez használjon olyan karakterláncokat (például 'n/a'), amely nem felel meg egyik műfajnak sem.
+	SV	Observera: För att välja alla genrer i listan här nedanför, använd en enda asterisk (*). För att inte välja någon genre alls, använd en slumpmässigt vald textsträng (t.ex. 'N/A') som inte matchar någon genre.
 
 PLUGIN_MATERIAL_SKIN_BAND_GENRES
 	CS	Žánry skupin
@@ -48,6 +51,7 @@ PLUGIN_MATERIAL_SKIN_BAND_GENRES
 	ZH_TW	樂團音樂風格
 	ZH_CN	乐团流派
 	HU	Zenekar műfajok
+	SV	Orkestergenrer
 
 PLUGIN_MATERIAL_SKIN_BAND_GENRES_DESC
 	CS	Seznam žánrů podporujících skupinu oddělený čárkami.
@@ -61,6 +65,7 @@ PLUGIN_MATERIAL_SKIN_BAND_GENRES_DESC
 	ZH_TW	以逗號來將支援的樂團音樂風格作分隔。
 	ZH_CN	支持乐团流派列表，以逗号分隔。
 	HU	Vesszővel elválasztott lista a műfajt támogató zenekarnak.
+	SV	Kommaseparerad lista av genrer för orkestrar.
 
 PLUGIN_MATERIAL_SKIN_COMPOSER_GENRES
 	CS	Žánry skladatelů
@@ -74,6 +79,7 @@ PLUGIN_MATERIAL_SKIN_COMPOSER_GENRES
 	ZH_TW	作曲家音樂風格
 	ZH_CN	作曲家流派
 	HU	Zeneszerző műfajok
+	SV	Kompositörsgenrer
 
 PLUGIN_MATERIAL_SKIN_COMPOSER_GENRES_DESC
 	CS	Seznam žánrů podporujících skladatele oddělený čárkami.
@@ -87,6 +93,7 @@ PLUGIN_MATERIAL_SKIN_COMPOSER_GENRES_DESC
 	ZH_TW	以逗號來將支援的作曲家音樂風格作分隔。
 	ZH_CN	支持作曲家流派列表，以逗号分隔。
 	HU	Vesszővel elválasztott lista a műfajt támogató zeneszerzőhöz.
+	SV	Kommaseparerad lista av genrer för kompositörer.
 
 PLUGIN_MATERIAL_SKIN_CONDUCTOR_GENRES
 	CS	Žánry dirigentů
@@ -100,6 +107,7 @@ PLUGIN_MATERIAL_SKIN_CONDUCTOR_GENRES
 	ZH_TW	指揮家音樂風格
 	ZH_CN	指挥家流派
 	HU	Karmester műfajok
+	SV	Dirigentgenrer
 
 PLUGIN_MATERIAL_SKIN_CONDUCTOR_GENRES_DESC
 	CS	Seznam žánrů podporujících dirigenta oddělený čárkami.
@@ -113,6 +121,7 @@ PLUGIN_MATERIAL_SKIN_CONDUCTOR_GENRES_DESC
 	ZH_TW	以逗號來將支援的指揮家音樂風格作分隔。
 	ZH_CN	支持指挥家流派列表，以逗号分隔。
 	HU	Vesszővel elválasztott lista a műfajt támogató karmesterhez.
+	SV	Kommaseparerad lista av genrer för dirigenter.
 
 PLUGIN_MATERIAL_SKIN_DEFAULT_COMPOSER_GENRES
 	CS	Klasika, Avantgarda, Baroko, Komorní hudba, Zpěv, Sbor, Klasický crossover, Raná hudba, Vrcholná klasika, Impresionismus, Jazz, Středověk, Minimalismus, Moderní kompozice, Opera, Orchestr, Renesance, Romantika, Symfonie, Svatební hudba, Classical, Avant-Garde, Baroque, Chamber Music, Chant, Choral, Classical Crossover, Early Music, High Classical, Impressionist, Jazz, Medieval, Minimalism, Modern Composition, Opera, Orchestral, Renaissance, Romantic, Symphony, Wedding Music, Symphonies
@@ -126,6 +135,7 @@ PLUGIN_MATERIAL_SKIN_DEFAULT_COMPOSER_GENRES
 	ZH_TW	古典、前衛、巴洛克、室內樂、聖歌、合唱、古典跨界、早期音樂、高級古典、印象派、爵士樂、中世紀、極簡主義、現代作曲、歌劇、管弦樂、文藝復興、浪漫主義、交響樂、婚禮音樂、交響樂
 	ZH_CN	古典、前卫、巴洛克、室内乐、圣歌、合唱、古典跨界、早期音乐、高级古典、印象派、爵士乐、中世纪、极简主义、现代作曲、歌剧、管弦乐、文艺复兴、浪漫主义、交响乐、婚礼音乐、交响乐
 	HU	Klasszikus, Avantgard, Barokk, Kamarazene, Ének, Kórus, Klasszikus imoesszionista, Korai zene, Magas klasszikus, Impresszionista, Jazz, Középkori, Minimalista, Modern, Opera, Zenekar, Reneszánsz, Romantikus, Szimfónia, Esküvői zene, Szimfóniák
+	SV	Klassisk, Avantgarde, Barock, Kammarensemble, Körsång, Klassisk inspirerat, Impressionism, Jazz, Medelåldersmusik, Minimalism, Opera, Orkester, Renässans, Romantik, Symfoni, Bröllopsmusik, Symfonier
 
 PLUGIN_MATERIAL_SKIN_DEFAULT_CONDUCTOR_GENRES
 	CS	Klasika, Avantgarda, Baroko, Komorní hudba, Zpěv, Sbor, Klasický crossover, Raná hudba, Vrcholná klasika, Impresionismus, Středověk, Minimalismus, Moderní kompozice, Opera, Orchestr, Renesance, Romantika, Symfonie, Svatební hudba, Classical, Avant-Garde, Baroque, Chamber Music, Chant, Choral, Classical Crossover, Early Music, High Classical, Impressionist, Medieval, Minimalism, Modern Composition, Opera, Orchestral, Renaissance, Romantic, Symphony, Wedding Music, Symphonies
@@ -138,6 +148,7 @@ PLUGIN_MATERIAL_SKIN_DEFAULT_CONDUCTOR_GENRES
 	ZH_TW	古典、前衛、巴洛克、室內樂、聖歌、合唱、古典跨界、早期音樂、高級古典、印象派、中世紀、極簡主義、現代作曲、歌劇、管弦樂、文藝復興、浪漫、交響樂、婚禮音樂、交響樂
 	ZH_CN	古典、前卫、巴洛克、室内乐、圣歌、合唱、古典跨界、早期音乐、高级古典、印象派、中世纪、极简主义、现代作曲、歌剧、管弦乐、文艺复兴、浪漫、交响乐、婚礼音乐、交响乐
 	HU	Klasszikus, Avantgard, Barokk, Kamarazene, Ének, Kórus, Klasszikus imoesszionista, Korai zene, Magas klasszikus, Impresszionista, Jazz, Középkori, Minimalista, Modern, Opera, Zenekar, Reneszánsz, Romantikus, Szimfónia, Esküvői zene, Szimfóniák
+	SV	Klassisk, Avantgarde, Barock, Kammarensemble, Körsång, Klassisk inspirerat, Impressionism, Medelåldersmusik, Minimalism, Opera, Orkester, Renässans, Romantik, Symfoni, Bröllopsmusik, Symfonier
 
 PLUGIN_MATERIAL_SKIN_DEFAULT_BAND_GENRES
 	CS	N/A
@@ -151,6 +162,7 @@ PLUGIN_MATERIAL_SKIN_DEFAULT_BAND_GENRES
 	ZH_TW	N/A
 	ZH_CN	N/A
 	HU	N/A
+	SV	N/A
 
 PLUGIN_MATERIAL_SKIN_SHOW_COMPOSER
 	CS	Zobrazení skladatele
@@ -164,6 +176,7 @@ PLUGIN_MATERIAL_SKIN_SHOW_COMPOSER
 	ZH_TW	顯示作曲家
 	ZH_CN	显示作曲家
 	HU	Zeneszerző megjelenítése
+	SV	Visa kompositör
 
 PLUGIN_MATERIAL_SKIN_SHOW_COMPOSER_DESC
 	CS	Zobrazit skladatele, pokud se žánr skladby shoduje s položkou ve výše uvedeném seznamu a skladba má tag skladatele.
@@ -177,6 +190,7 @@ PLUGIN_MATERIAL_SKIN_SHOW_COMPOSER_DESC
 	ZH_TW	如果歌曲的音樂風格與上面列表中的項目匹配並且具有作曲家標籤，則顯示作曲家。
 	ZH_CN	如果曲目的流派与上面列表中的项目匹配并具有作曲家标识，则显示作曲家。
 	HU	Zeneszerző megjelenítése, ha egy dal műfaja megegyezik a fenti listában szereplő műfajjal, és van zeneszerző adat.
+	SV	Visa kompositören, om genren matchar en av de listade genrerna här ovanför och spåret har en tag för kompositör.
 
 PLUGIN_MATERIAL_SKIN_SHOW_COMPOSER_DESC_LMS9
 	CS	Zobrazit skladatele skladby, pokud je její žánr v nastavení „%s“ Lyrionu, nebo pro všechny žánry.
@@ -185,6 +199,7 @@ PLUGIN_MATERIAL_SKIN_SHOW_COMPOSER_DESC_LMS9
 	ES	Muestra el compositor de la canción si su género está en la configuración "%s" de Lyrion, o para todos los géneros.
 	FR	Afficher le compositeur du morceau systématiquement ou uniquement si le genre est mentionné dans le réglage "%s" de Lyrion.
 	NL	Toon de componist van het nummer voor alle genres of alleen als het genre is geconfigureerd in de "%s"-instelling van Lyrion.
+	SV	Visa spårets kompositör om dess genre är i Lyrions "%s" inställning, eller för alla genrer.
 
 PLUGIN_MATERIAL_SKIN_SHOW_COMPOSER_CLASSICAL
 	CS	Pouze pro nakonfigurované žánry
@@ -193,6 +208,7 @@ PLUGIN_MATERIAL_SKIN_SHOW_COMPOSER_CLASSICAL
 	ES	Solo para géneros configurados
 	FR	Pour les genres configurés seulement
 	NL	Alleen voor geconfigureerde genres
+	SV	Bara för konfigurerade genrer
 
 PLUGIN_MATERIAL_SKIN_SHOW_COMPOSER_ALL
 	CS	Pro všechny žánry
@@ -201,6 +217,7 @@ PLUGIN_MATERIAL_SKIN_SHOW_COMPOSER_ALL
 	ES	Para todos los géneros
 	FR	Pour tous les genres
 	NL	Voor alle genres
+	SV	För alla genrer
 
 PLUGIN_MATERIAL_SKIN_USE_COMPOSER_MAI
 	CS	Zobrazení skladatele v zobrazení „Informace“
@@ -212,6 +229,7 @@ PLUGIN_MATERIAL_SKIN_USE_COMPOSER_MAI
 	NL	Toon componist in 'Informatie' weergave
 	ZH_CN	在“信息”视图显示作曲家
 	HU	Zeneszerző megjelenítése az információ nézetben
+	SV	Visa kompositören i vyn 'Information".
 
 PLUGIN_MATERIAL_SKIN_USE_COMPOSER_MAI_DESC
 	CS	U vhodných skladeb zobrazit v zobrazení „Informace“ informace o skladateli, nikoli o interpretovi.
@@ -223,6 +241,7 @@ PLUGIN_MATERIAL_SKIN_USE_COMPOSER_MAI_DESC
 	NL	Afhankelijk van het genre van het nummer, wordt de componist in plaats van de artiest getoond in de "Informatie" weergave.
 	HU	A megfelelő műsorszámokhoz a zeneszerző, és nem az előadó megjelenítése az „Információ” nézetben.
 	ZH_CN	对于合适的曲目，在“信息”视图中显示作曲家而非艺术家的信息。
+	SV	Beroende på spårets genre visa kompositören istället för artisten i informationsvyn.
 
 PLUGIN_MATERIAL_SKIN_SHOW_CONDUCTOR
 	CS	Zobrazení dirigenta
@@ -236,6 +255,7 @@ PLUGIN_MATERIAL_SKIN_SHOW_CONDUCTOR
 	ZH_TW	顯示指揮家
 	ZH_CN	显示指挥家
 	HU	Karmester megjelenítése
+	SV	Visa dirigenten
 
 PLUGIN_MATERIAL_SKIN_SHOW_CONDUCTOR_DESC
 	CS	Zobrazit dirigenta, pokud se žánr skladby shoduje s položkou ve výše uvedeném seznamu a skladba má tag dirigenta.
@@ -249,6 +269,7 @@ PLUGIN_MATERIAL_SKIN_SHOW_CONDUCTOR_DESC
 	ZH_TW	如果歌曲的音樂風格與上面列表中的項目匹配並且具有指揮家標籤，則顯示指揮家。
 	ZH_CN	如果曲目的流派与上面列表中的项目匹配并具有指挥家标识，则显示指挥家。
 	HU	A karmester megjelenítése, ha egy dal műfaja megegyezik a fenti listában szereplő műfajjal, és van karmester adat.
+	SV	Visa dirigenten, om genren matchar en av de listade genrerna här ovanför och spåret har en tag för dirigenten (CONDUCTOR).
 
 PLUGIN_MATERIAL_SKIN_SHOW_CONDUCTOR_DESC_LMS9
 	CS	Zobrazit dirigenta skladby, pokud je její žánr v nastavení „%s“ Lyrionu.
@@ -257,6 +278,7 @@ PLUGIN_MATERIAL_SKIN_SHOW_CONDUCTOR_DESC_LMS9
 	ES	Mostrar director de la canción si su género está en la configuración "%s" de Lyrion.
 	FR	Si le tag "genre" du morceau est inclus dans le paramètre "%s" de Lyrion, afficher le chef d'orchestre.
 	NL	Toon de dirigent van het nummer als het genre is geconfigureerd in de "%s"-instelling van Lyrion.
+	SV	Visa spårets dirigent om dess genre är i Lyrions "%s" inställning, eller för alla genrer.
 
 PLUGIN_MATERIAL_SKIN_SHOW_BAND
 	CS	Zobrazení skupiny/orchestru
@@ -270,6 +292,7 @@ PLUGIN_MATERIAL_SKIN_SHOW_BAND
 	ZH_TW	顯示樂團
 	ZH_CN	显示乐团
 	HU	Együttes/Zenekar megjelenítése
+	SV	Visa band/orkester
 
 PLUGIN_MATERIAL_SKIN_SHOW_BAND_DESC
 	CS	Zobrazit skupinu, pokud se žánr skladby shoduje s položkou ve výše uvedeném seznamu a skladba má tag skupiny.
@@ -283,6 +306,7 @@ PLUGIN_MATERIAL_SKIN_SHOW_BAND_DESC
 	ZH_TW	如果歌曲的音樂風格與上面列表中的項目匹配並且具有樂團標籤，則顯示樂團。
 	ZH_CN	如果曲目的流派与上面列表中的项目匹配并具有乐团标识，则显示乐团。
 	HU	A zenekar megjelenítése, ha egy dal műfaja megegyezik a fenti listában szereplő műfajjal, és van zenekar adat.
+	SV	Visa orkestern, om genren matchar en av de listade genrerna här ovanför och spåret har en tag för orkester (BAND).
 
 PLUGIN_MATERIAL_SKIN_SHOW_BAND_DESC_LMS9
 	CS	Zobrazit skupinu/orchestr skladby, pokud je její žánr v nastavení „%s“ Lyrionu.
@@ -291,6 +315,7 @@ PLUGIN_MATERIAL_SKIN_SHOW_BAND_DESC_LMS9
 	ES	Mostrar banda/orquesta de la canción si su género está en la configuración "%s" de Lyrion.
 	FR	Si le tag "genre" du morceau est inclus dans le paramètre "%s" de Lyrion, afficher le groupe/orchestre.
 	NL	Toon de band van het nummer als het genre is geconfigureerd in de "%s"-instelling van Lyrion.
+	SV	Visa spårets orkester om dess genre är i Lyrions "%s" inställning, eller för alla genrer.
 
 PLUGIN_MATERIAL_SKIN_PASSWORD
 	CS	Heslo
@@ -304,6 +329,7 @@ PLUGIN_MATERIAL_SKIN_PASSWORD
 	ZH_TW	密碼
 	ZH_CN	密码
 	HU	Jelszó
+	SV	Lösenord
 
 PLUGIN_MATERIAL_SKIN_PASSWORD_DESC
 	CS	Nastavte heslo pro kontrolu přístupu k alarmům a nastavení serveru.
@@ -317,6 +343,7 @@ PLUGIN_MATERIAL_SKIN_PASSWORD_DESC
 	ZH_TW	設定密碼來控制鬧鐘或是調整伺服器設定。
 	ZH_CN	设置密码以控制对闹钟和服务器设置的访问。
 	HU	Állítson be egy jelszót a riasztásokhoz és a szerver beállításaihoz való hozzáféréshez.
+	SV	Sätt ett lösenord för att skydda alarm- och serverinställningar.
 
 PLUGIN_MATERIAL_SKIN_FIXED_VOL
 	CS	Přehrávače s pevnou hlasitostí
@@ -330,6 +357,7 @@ PLUGIN_MATERIAL_SKIN_FIXED_VOL
 	ZH_TW	固定音量播放器
 	ZH_CN	固定音量播放器
 	HU	Rögzített hangerejű lejátszók
+	SV	Spelare med fast inställd volym
 
 PLUGIN_MATERIAL_SKIN_FIXED_VOL_DESC
 	CS	Jak by se měly ovládat přehrávače s pevnou hlasitostí?
@@ -343,6 +371,7 @@ PLUGIN_MATERIAL_SKIN_FIXED_VOL_DESC
 	ZH_TW	該如何控制固定音量的播放器？
 	ZH_CN	如何控制固定音量的播放器？
 	HU	Hogyan kell irányítani a rögzített hangerővel rendelkező lejátszókt?
+	SV	Hur skall spelare med fast volym kontrolleras?
 
 PLUGIN_MATERIAL_SKIN_FIXED_VOL_A_NORMAL
 	CS	Zobrazit standardní ovládání hlasitosti
@@ -356,6 +385,7 @@ PLUGIN_MATERIAL_SKIN_FIXED_VOL_A_NORMAL
 	ZH_TW	顯示標準音量
 	ZH_CN	显示标准音量控制
 	HU	Megjeleníti a szabványos hangerőszabályozást
+	SV	Visa standardvolymreglaget
 
 PLUGIN_MATERIAL_SKIN_FIXED_VOL_B_SPECIAL
 	CS	Zakázat posuvník hlasitosti a skrýt úroveň hlasitosti
@@ -369,6 +399,8 @@ PLUGIN_MATERIAL_SKIN_FIXED_VOL_B_SPECIAL
 	ZH_TW	關閉音量調節欄且將音量隱藏
 	ZH_CN	关闭音量调节栏，隐藏音量
 	HU	A hangerő csúszka letiltása és a hangerő érték elrejtése
+	SV	Avaktivera volymreglaget och dölj ljudnivån
+	SV	Avaktivera volymreglaget och dölj ljudnivån
 
 PLUGIN_MATERIAL_SKIN_FIXED_VOL_C_HIDE
 	CS	Skrýt ovládání hlasitosti
@@ -382,6 +414,7 @@ PLUGIN_MATERIAL_SKIN_FIXED_VOL_C_HIDE
 	ZH_TW	隱藏音量控制
 	ZH_CN	隐藏音量控制
 	HU	A hangerő csúszka elrejtése
+	SV	Dölj volymreglaget
 
 PLUGIN_MATERIAL_SKIN_ARTIST_FIRST
 	CS	Zobrazení interpreta jako prvního v Právě hraje a ve frontě
@@ -395,6 +428,7 @@ PLUGIN_MATERIAL_SKIN_ARTIST_FIRST
 	ZH_TW	在目前播放和佇列中首先顯示演出者
 	ZH_CN	在正在播放和队列中优先显示艺术家
 	HU	Elsőnek jelenjen meg a most játszott előadó a lejátszási listában
+	SV	Visa artisten först i "Nu spelas" vyn och i spellistan
 
 PLUGIN_MATERIAL_SKIN_ARTIST_FIRST_DESC
 	CS	Pokud má skladba skladatele, dirigenta nebo skupinu a jsou nakonfigurovány tak, aby se zobrazovaly, zobrazí se interpret před nimi, jinak až za nimi.
@@ -408,6 +442,7 @@ PLUGIN_MATERIAL_SKIN_ARTIST_FIRST_DESC
 	ZH_TW	如果曲目有作曲家、指揮家或樂團，並且都被設定為顯示，則在這些之前顯示演出者，否則在之後顯示。
 	ZH_CN	如果曲目有作曲家、指挥家或乐团标签，并且这些都设置为显示，则在这些之前显示艺术家，否则在之后显示。
 	HU	Ha egy zeneszámnak van zeneszerzője, karmestere vagy zenekara, és ezek be vanak állítva, hogy megjelenjenek, akkor elsőnek az előadó jelenjen meg, utána a többi.
+	SV	Om ett spår har en tag för kompositör, dirigent eller orkester, och dessa skall visas, då visas artisten först, annars visas artisten sist.
 
 PLUGIN_MATERIAL_SKIN_SHOW_ALL_ARTISTS
 	CS	Zobrazení všech interpretů
@@ -422,6 +457,7 @@ PLUGIN_MATERIAL_SKIN_SHOW_ALL_ARTISTS
 	ZH_TW	顯示所有演出者
 	ZH_CN	显示所有艺术家
 	HU	Minden előadó megjelenítése
+	SV	Visa alla artister
 
 PLUGIN_MATERIAL_SKIN_SHOW_ALL_ARTISTS_DESC
 	CS	Pokud má skladba více interpretů, autorů alb, skladatelů atd., zobrazí se všechny při procházení alb, v Právě hraje a ve frontě. V opačném případě zobrazí pouze prvního z nich.
@@ -436,6 +472,7 @@ PLUGIN_MATERIAL_SKIN_SHOW_ALL_ARTISTS_DESC
 	ZH_TW	如果一首曲目有多個演出者、專輯演出者、作曲家等，則在瀏覽專輯、目前播放和佇列時顯示所有演出者。 否則只顯示每首曲目的第一位演出者。
 	ZH_CN	如果一首曲目有多个艺术家、专辑艺术家、作曲家等，则在浏览专辑、当前播放和队列时显示所有艺术家。否则只显示每首曲目的第一位艺术家
 	HU	Ha egy zeneszámnak több előadója, albumm előadója, zeneszerzője stb. van, Akkor mutassa meg mind, amikor albumokat böngész, most játszik és a lejátszási listában. Ellenkező esetben csak az elsőt.
+	SV	Om ett spår har flera artister, albumartister, kompositörer etc. visa då all vid bläddring av album, i "Nu spelas" och i spellistan. Visa annars bara den först av varje.
 
 PLUGIN_MATERIAL_SKIN_ALLOW_DOWNLOAD
 	CS	Povolení stahování
@@ -449,6 +486,7 @@ PLUGIN_MATERIAL_SKIN_ALLOW_DOWNLOAD
 	ZH_TW	允許下載
 	ZH_CN	允许下载
 	HU	Letöltés engedélyezése
+	SV	Tillåt nerladdning
 
 PLUGIN_MATERIAL_SKIN_ALLOW_DOWNLOAD_DESC
 	CS	Přidejte akce stahování ke skladbám, albům a seznamům skladeb a umožněte uživatelům stahovat skladby.
@@ -462,6 +500,7 @@ PLUGIN_MATERIAL_SKIN_ALLOW_DOWNLOAD_DESC
 	ZH_TW	在曲目、專輯和播放清單新增下載動作，以允許用戶下載曲目。
 	ZH_CN	为曲目、专辑和播放列表添加下载动作，允许用户下载。
 	HU	Adja hozzá letöltési lehetőséget a zeneszámokhoz, az albumokhoz és a lejátszási listákhoz, hogy a felhasználók letölthessék a számokat.
+	SV	Lägg till ett val för att ladda ner spår, album och spellistor. för att göra det möjligt för användaren att ladda ner spår.
 
 PLUGIN_MATERIAL_SKIN_COMMENT_AS_DISC_TITLE
 	CS	Použití komentáře pro název disku
@@ -475,6 +514,7 @@ PLUGIN_MATERIAL_SKIN_COMMENT_AS_DISC_TITLE
 	ZH_TW	使用標籤"評論"來註記光碟標題
 	ZH_CN	使用“注释”标签作为光盘标题
 	HU	Használja a megjegyzést a lemez címéhez
+	SV	Använd kommentartaggen för att ge en disk en titel
 
 PLUGIN_MATERIAL_SKIN_COMMENT_AS_DISC_TITLE_DESC
 	CS	U alb s více disky použít jako název disku komentář z první stopy každého disku. Pokud používáte „Oddělen středníkem“, pak musí názvu disku předcházet buď „TITLE=“, „DISCTITLE=“, „TITLE:“ nebo „DISCTITLE:“ - např. „TITLE=Disk s doplňky;OTHER=Další informace“.
@@ -488,6 +528,7 @@ PLUGIN_MATERIAL_SKIN_COMMENT_AS_DISC_TITLE_DESC
 	ZH_TW	對於多張光碟合輯，使用每張光碟的第一首曲目評論作為光碟標題。如果使用"分號分隔"選項，則光碟標題前面需要帶有"TITLE="、"DISCTITLE="、"TITLE:"或"DISCTITLE:" - 例如 "TITLE=額外光碟；OTHER=其他評論資訊"
 	ZH_CN	对于多光盘专辑，使用每张光盘第一首曲目的“注释”标签作为光盘标题。如果使用“分号分隔”选项，则光盘标题前面需要带有“TITLE=”、“DISCTITLE=”、“TITLE:”或“DISCTITLE:” - 例如 “TITLE=额外光盘；OTHER=其它注释信息”
 	HU	A többlemezes albumokhoz használja az egyes lemezek első számának megjegyzését. Ha a pontosvesszőt használta, akkor a lemezcímet a "cím =", "lemezcím =", "cím:", ​​vagy a "lemezcím:"-pl. "Cím = Extras Disc; Egyéb = más megjegyzés"
+	SV	För album som består av flera diskar, använd kommentar-taggen för det första spåret på varje disk som disktitel (DISKSUBTITLE). Om värdet i kommentar-taggen är delat av semi-kolon, måste disktiteln komma efter antingen "TITLE=", "DISCTITLE=", "TITLE:" eller "DICTITLE:" - t.ex. "TITLE=Bonus disk;OTHER=Annan info i kommentaren."
 
 PLUGIN_MATERIAL_SKIN_COMMENT_A_DONT_USE
 	CS	Nepoužívat
@@ -501,6 +542,7 @@ PLUGIN_MATERIAL_SKIN_COMMENT_A_DONT_USE
 	ZH_TW	不要使用
 	ZH_CN	不要使用
 	HU	Ne használd
+	SV	Använd inte
 
 PLUGIN_MATERIAL_SKIN_COMMENT_B_PLAIN
 	CS	Obsahuje pouze název
@@ -514,6 +556,7 @@ PLUGIN_MATERIAL_SKIN_COMMENT_B_PLAIN
 	ZH_TW	僅包含標題
 	ZH_CN	仅包含标题
 	HU	Csak a címet tartalmazza
+	SV	Innehåller bara disktiteln
 
 PLUGIN_MATERIAL_SKIN_COMMENT_C_SEMI_SEP
 	CS	Oddělen středníkem
@@ -527,6 +570,7 @@ PLUGIN_MATERIAL_SKIN_COMMENT_C_SEMI_SEP
 	ZH_TW	以分號分隔
 	ZH_CN	分号分隔
 	HU	Pontosvesszővel elválasztott
+	SV	Semi-kolon separerad
 
 PLUGIN_MATERIAL_SKIN_SHOW_COMMENT
 	CS	Zobrazení komentáře v zobrazení informací
@@ -540,6 +584,7 @@ PLUGIN_MATERIAL_SKIN_SHOW_COMMENT
 	ZH_TW	在資訊瀏覽中顯示評論
 	ZH_CN	在信息页显示“注释”标签
 	HU	Megjegyzés megjelenítése az információ nézetben
+	SV	Visa innehållet i kommentar-taggen i Informationsvyn
 
 PLUGIN_MATERIAL_SKIN_SHOW_COMMENT_DESC
 	CS	Zobrazit tag komentáře skladby v části „Skladba“ v zobrazení informací o skladbě, pod textem skladby.
@@ -553,6 +598,7 @@ PLUGIN_MATERIAL_SKIN_SHOW_COMMENT_DESC
 	ZH_TW	在瀏覽曲目資訊中的"曲目"部分中歌詞下方顯示曲目的評論標籤。
 	ZH_CN	在曲目信息页的“曲目”部分中的歌词下方显示曲目“注释”标签
 	HU	Jelenítse meg a megjegyzést a dalszövegek „Track” szakaszában, a dalszövegek alatt.
+	SV	Visa spårets kommentar under sångtexten i kolumnen för "Spår" i informationsvyn. 
 
 PLUGIN_MATERIAL_SKIN_RELOAD_NOTE
 	CS	POZNÁMKA: Pokud změníte některé z níže uvedených nastavení, může být nutné obnovit webovou stránku, aby se změny projevily.
@@ -566,6 +612,7 @@ PLUGIN_MATERIAL_SKIN_RELOAD_NOTE
 	ZH_TW	注意：如果您更改以下任何設定，則可能需要重新整理網頁才能使更改生效。
 	ZH_CN	注意：如果您更改以下任何设置，则可能需要刷新网页才能使更改生效。
 	HU	Megjegyzés: Ha megváltoztatja az alábbi beállításokat, akkor lehet, hogy frissítenie kell a weboldalt, hogy a változások hatályba lépjenek.
+	SV	OBSERVERA: Efter att inställningarna har ändrats, kan det var nödvändigt att ladda om websidan för att ändringarna skall visas.
 
 PLUGIN_MATERIAL_SKIN_PAGED_BATCH_SIZE
 	CS	Velikost dávky stránkování
@@ -578,6 +625,7 @@ PLUGIN_MATERIAL_SKIN_PAGED_BATCH_SIZE
 	NL	Batchgrootte van pagina's
 	ZH_CN	每页显示数量
 	HU	Oldala tartalom mérete
+	SV	Längden av innehållet på en sida
 
 PLUGIN_MATERIAL_SKIN_PAGED_BATCH_SIZE_DESC
 	CS	Počet počátečních položek, které se načtou (a zobrazí) při výpisu obsahu některých seznamů (například obsahu seznamu skladeb). Posouvání seznamu pak způsobí načtení další dávky položek atd.
@@ -590,6 +638,7 @@ PLUGIN_MATERIAL_SKIN_PAGED_BATCH_SIZE_DESC
 	NL	Aantal initiële items dat wordt opgehaald (en getoond) bij het weergeven van de inhoud van sommige lijsten (zoals afspeellijsten). Als je door de lijst bladert, wordt er vervolgens een nieuwe reeks items opgehaald, enz.
 	ZH_CN	列出某些列表的内容（例如播放列表）时要获取（和显示）的初始项目数。滚动列表将导致获取另一批项目，等等。
 	HU	Egyes lista tartalmának (például a lejátszási lista) felsorolásakor a beolvasandó (és a megjelenítendő) elemek száma. A görgetési lista ezután újabb tételek letöltését eredményezi stb.
+	SV	Antal objekt som skall hämtas och visas när somliga listor visas (t.ex. spellistor). Rullning av listan gör att fler objekt hämtas och visas.
 
 PLUGIN_MATERIAL_SKIN_ARTIST_FILTER
 	CS	Filtrování skladeb alba
@@ -601,6 +650,7 @@ PLUGIN_MATERIAL_SKIN_ARTIST_FILTER
 	NL	Filter nummers van album
 	ZH_CN	过滤专辑曲目
 	HU	Album szűrés
+	SV	Filtrera albumspår
 
 PLUGIN_MATERIAL_SKIN_ARTIST_FILTER_DESC
 	CS	Při procházení alb interpreta můžete použít všechny skladby ze sbírkových alb, alb, na kterých se tento interpret objevuje atd., nebo zobrazit pouze skladby aktuálního interpreta.
@@ -613,6 +663,7 @@ PLUGIN_MATERIAL_SKIN_ARTIST_FILTER_DESC
 	NL	Wanneer je door de albums van een artiest bladert, geef dan voor elk album alle nummers in het album weer, of geef alleen de nummers van de huidige artiest weer.
 	ZH_CN	浏览艺术家专辑时，列出与该艺术家相关专辑中的所有曲目，或仅显示当前艺术家的相关曲目。
 	HU	Amikor egy előadó albumának böngészése az összes zeneszámot használja a gyűjteményes albumoknál, az albumok, amelyekben ez a művész jelenik meg stb., Vagy csak az aktuális előadó műsorszámát jeleníti meg.
+	SV	När du bläddrar igenom en artists album, visa då för samlingsalbum, album som artisten deltar på etc. alla spår från de albumen, eller visa bara spår av den aktuella artisten.
 
 PLUGIN_MATERIAL_SKIN_ARTIST_FILTER_ARTIST_ONLY
 	CS	Zobrazit pouze skladby aktuálního interpreta
@@ -625,6 +676,7 @@ PLUGIN_MATERIAL_SKIN_ARTIST_FILTER_ARTIST_ONLY
 	NL	Toon alleen nummers van de huidige artiest
 	ZH_CN	仅显示当前艺术家的曲目
 	HU	Csak az aktuális előadó zeneszámait jelenítse meg
+	SV	Visa bara spår av den aktuella artisten
 
 PLUGIN_MATERIAL_SKIN_ARTIST_FILTER_ALL_TRACKS
 	CS	Zobrazit všechny skladby alba
@@ -637,6 +689,7 @@ PLUGIN_MATERIAL_SKIN_ARTIST_FILTER_ALL_TRACKS
 	NL	Toon alle nummers van het album
 	ZH_CN	显示专辑所有曲目
 	HU	Az album összes zeneszámlát mutassa
+	SV	Visa alla spår från albumet
 
 PLUGIN_MATERIAL_SKIN_RELEASE_TYPE_ORDER
 	CS	Pořadí typu vydání
@@ -649,6 +702,7 @@ PLUGIN_MATERIAL_SKIN_RELEASE_TYPE_ORDER
 	NL	Releasetype volgorde
 	ZH_CN	发行类型顺序
 	HU	Kiadás típus sorrend
+	SV	Ordning av utgåvetyper
 
 PLUGIN_MATERIAL_SKIN_RELEASE_TYPE_ORDER_DESC
 	CS	Zadejte pořadí, v jakém se mají zobrazovat typy vydání (jedná se o seznam názvů typů vydání oddělený čárkou) - např. „Album, EP, Single“.
@@ -661,6 +715,7 @@ PLUGIN_MATERIAL_SKIN_RELEASE_TYPE_ORDER_DESC
 	NL	Bepaal de volgorde hoe releasetypes worden getoond (dit is een door komma's gescheiden lijst van releasetypes) - bijv. "Album, EP, Single."
 	ZH_CN	指定显示发行类型的顺序（以逗号分隔的发布类型名称列表） - 例如 “专辑、EP、单曲”
 	HU	Adja meg a kiadási típusok megjelenítéséhez a sorrendet (a vesszővel elválasztott listában a kiadás típusneveivel) - pl. "Album, EP, Single"
+	SV	Bestäm i vilken ordning utgåvetyper skall visas (en komma-separerad lista av utgåvetyper) - t.ex. "Album, EP, Single"
 
 PLUGIN_MATERIAL_SKIN_GENRE_IMAGES
 	CS	Obrázky žánrů
@@ -673,6 +728,7 @@ PLUGIN_MATERIAL_SKIN_GENRE_IMAGES
 	NL	Genre afbeeldingen
 	ZH_CN	流派图像
 	HU	Műfaj képek
+	SV	Genrebilder
 
 PLUGIN_MATERIAL_SKIN_GENRE_IMAGES_DESC
 	CS	Zobrazit obrázky při výpisu žánrů. To vyžaduje vytvoření obrázků JPEG 600x600 v podsložce „material-skin/genres“ ve Složce předvoleb vašeho Lyrionu. Všechny obrázky žánrů by měly být malými písmeny nebo číslicemi a všechny ostatní znaky by měly být odstraněny. Např. „R&B“ je „rb.jpg“, „Folk/Rock“ je „folkrock.jpg“.
@@ -685,6 +741,7 @@ PLUGIN_MATERIAL_SKIN_GENRE_IMAGES_DESC
 	NL	Toon afbeeldingen bij het weergeven van genres. Dit vereist JPEG afbeeldingen van 600x600 pixels in de submap 'material-skin/genres' van de voorkeurenmap van jouw Lyrion. Genre afbeeldingen dienen allemaal uit kleine letters of cijfers te bestaan ​​en mogen geen andere tekens bevatten. Bijv. "R&B" is "rb.jpg", "Folk/Rock" is "folkrock.jpg".
 	ZH_CN	列出流派时显示图像。这需要在Lyrion Preferences文件夹的“material-skin/genres”子文件夹中创建 600x600 分辨率的JPEG图像。流派图像应全部为小写字母或数字，并删除所有其它类型字符。例如 “R&B”为“rb.jpg”，“folk/rock”为“folkrock.jpg”。
 	HU	Kép megjelenítése a műfajok felsorolásakor. Ehhez 600x600 JPEG kép létrehozása szükséges az Lyrion Preferenciák mappájának "materialskin/genres" almappáján. A műfajképeknek mindegyiknek kisbetűnek vagy számnak kell lennie, az összes többi karakter eltávolításával. például. Az "R&B" "RB.JPG", a "Folk/Rock" a "Folkrock.jpg".
+	SV	Visa bilder när du listar genrer. För detta måste 600x600 stora JPEG bilder skapas i en undermapp material-skin/genres i Lyrions inställningsmapp. Filnamnen kan bara använda små bokstäver eller siffror ([a-z0-9]) alla andra tecken i ett genrenamn tas bort, t.ex. för R&B -> rb.jpg, Folk/Rock -> folkrock.jpg.
 
 PLUGIN_MATERIAL_SKIN_TOUCH_LINKS
 	CS	Odkazy na položky v dotykových zařízeních
@@ -697,6 +754,7 @@ PLUGIN_MATERIAL_SKIN_TOUCH_LINKS
 	NL	Hyperlinks op apparaten met een touchscreen
 	ZH_CN	触摸设备上的项目链接
 	HU	Linkek az érintőképernyős eszközökön
+	SV	Länkar på apparater med touchskärmar.
 
 PLUGIN_MATERIAL_SKIN_TOUCH_LINKS_DESC
 	CS	Udělat z textových položek interpret, album, skladatel atd. klikací odkazy na dotykových zařízeních (např. mobilních telefonech).
@@ -709,6 +767,7 @@ PLUGIN_MATERIAL_SKIN_TOUCH_LINKS_DESC
 	NL	Maak artiesten, albums, componisten, etc. items waar je op kan klikken op apparaten met een touchscreen (bijv. tablets en mobiele telefoons).
 	ZH_CN	将艺术家、专辑、作曲家等文本项在触摸设备（例如手机）上转换成可点击的链接。
 	HU	Legyen az előadóhoz, albumhoz, zeneszerzőhöz stb szöveges elemű kattintható link az érintőképes eszközökön (például mobiltelefonok).
+	SV	Gör textsträngar för artist, kompositör etc. till länkar på apparater med touchskärmar.
 
 PLUGIN_MATERIAL_SKIN_YEAR_IN_SUB
 	CS	Zobrazení roku v podnázvu alba
@@ -721,6 +780,7 @@ PLUGIN_MATERIAL_SKIN_YEAR_IN_SUB
 	NL	Toon jaar onder het album
 	ZH_CN	在专辑副标题中显示年份
 	HU	Jelenjen meg az év az album feliratában
+	SV	Visa året i albumundertitel.
 
 PLUGIN_MATERIAL_SKIN_YEAR_IN_SUB_DESC
 	CS	Při procházení alb zobrazovat rok v podnázvu, pokud se nezobrazuje také interpret (v takovém případě se rok zobrazí v závorce za názvem alba).
@@ -733,6 +793,7 @@ PLUGIN_MATERIAL_SKIN_YEAR_IN_SUB_DESC
 	NL	Bij het bladeren door albums wordt het jaar onder het album weergegeven, behalve als artiest ook wordt weergegeven. Dan wordt het jaar achter het album weergegeven.
 	ZH_CN	浏览专辑时，在副标题中显示年份，除非还显示艺术家（在这种情况下，年份显示在专辑名称后面的括号中）
 	HU	Az albumok böngészésekor a feliratban jelenjen meg, kivéve, ha az előadót is megmutatja (ebben az esetben a zárójelben, az album neve után jelenik meg)
+	SV	Vid bläddring av album, visa året i undertiteln såvida inte även artisten visas (då visas nämligen året inom parantes efter albumets namn)
 
 PLUGIN_MATERIAL_SKIN_PLAY_SHUFFLE
 	CS	Akce přehrát náhodně
@@ -745,6 +806,7 @@ PLUGIN_MATERIAL_SKIN_PLAY_SHUFFLE
 	NL	Shuffle modus toevoegen
 	ZH_CN	随机播放动作
 	HU	Átfedő lejátszás
+	SV	Blanda spellistan
 
 PLUGIN_MATERIAL_SKIN_PLAY_SHUFFLE_DESC
 	CS	Přidat akce pro spuštění alb nebo seznamů skladeb v náhodném režimu. Pokud je tato funkce povolena a je použita volba „Přehrát náhodně“, přehrávač bude před přehráváním položek nastaven na „Náhodné skladby“. Stejně tak, pokud je tato funkce povolena a je použita funkce „Přehrát nyní“, bude náhodné přehrávání před přehráním položek vypnuto. Vezměte prosím na vědomí, že režim náhodného přehrávání přehrávače se nevrátí po vymazání fronty atd.
@@ -757,6 +819,7 @@ PLUGIN_MATERIAL_SKIN_PLAY_SHUFFLE_DESC
 	NL	Voeg actie toe om albums of afspeellijsten in shuffle modus af te spelen. Wanneer dit is ingeschakeld en 'Shuffle modus' wordt gebruikt, wordt de speler ingesteld op shuffle voordat de nummers worden afgespeeld. Als dit is ingeschakeld en 'Speel Nu' wordt gebruikt, wordt shuffle uitgeschakeld voordat de nummers worden afgespeeld. Houd er rekening mee dat de shuffle modus niet wordt teruggezet als de afspeellijst leeg is. 
 	ZH_CN	添加专辑或播放列表并开启随机播放模式。启用此功能并使用“随机播放”时，播放器将在播放项目之前设置为“随机播放曲目”。同样，如果启用此选项并使用“立即播放”，则在播放项目之前禁用随机播放。请注意，播放队列被清除后，播放器的随机播放模式不会恢复。
 	HU	Adjon hozzá akciót az albumok vagy lejátszási listák indításához shuffled módban. Amikor ez engedélyezve van, és a „Play Shuffled” -et használják, a lejátszót a tételek lejátszása előtt „Shuffle pályákra” állítják be. Hasonlóképpen, ha ez engedélyezve van, és a 'Play Now' használata, akkor a Shuffle le van tiltva az elemek lejátszása előtt. Felhívjuk figyelmét, hogy a lejátszó vékony üzemmódját a sor törlése után nem térítik vissza, stb.
+	SV	När den här funktionen är aktiverad läggs ett val "Blanda spellistan" till för att starta uppspelning. När "Blanda spellistan" används, ställs spelaren in så att spåren blandas före uppspelning påbörjas. När funktionen är aktiverad och "Spela nu" väljs blandas spellistan inte. Observera att spelarens inställning inte återställs när spellistan är klar.
 
 PLUGIN_MATERIAL_SKIN_LOAD_DEFAULT_GENRES_DESC
 	CS	Tyto seznamy žánrů jsou uloženy v souboru nastavení a při změně jazyka se automaticky neaktualizují. Tlačítkem „Nastavit žánry na výchozí“ (níže) můžete u každého seznamu obnovit výchozí hodnoty přeložené do aktuálního jazyka.
@@ -769,6 +832,7 @@ PLUGIN_MATERIAL_SKIN_LOAD_DEFAULT_GENRES_DESC
 	NL	Deze genres worden opgeslagen in jouw instellingen en worden niet automatisch bijgewerkt als je van taal verandert. Je kan de knop "Herstel standaard genres" (hieronder) gebruiken om elke lijst terug te zetten naar de standaardwaarden, vertaald in de huidige taal.
 	ZH_CN	这些流派列表保存在您的设置文件中，且不会随着您更改语言自动更新。您可以使用“将流派设为默认值”按钮（如下）将每个列表重置为默认值（翻译成当前语言）。
 	HU	Ezeket a műfajlistákat a beállítások fájljába menti, és nem frissíti automatikusan, ha a nyelvet megváltoztatja. Használhatja a "Műfajok beállítása alapértelmezett" gombot (alább), hogy az egyes listákat az alapértelmezett értékekre állítsa vissza, az aktuális nyelvre lefordítva.
+	SV	Dessa genrelistor sparas i dina inställningar och ändras inte automatiskt om språkinställningen ändras. Du kan använda "Återställ genrer till standard" knappen här nedanför för att återställa varje lista till standardlistan för det aktuellt valda språket.
 
 PLUGIN_MATERIAL_SKIN_LOAD_DEFAULT_GENRES
 	CS	Nastavit žánry na výchozí
@@ -781,6 +845,7 @@ PLUGIN_MATERIAL_SKIN_LOAD_DEFAULT_GENRES
 	NL	Herstel standaard genres
 	ZH_CN	将流派设为默认值
 	HU	Alapértelmezett műfajok beállítása
+	SV	Återställ genrer till standard
 
 PLUGIN_MATERIAL_COMBINE_APPS_AND_RADIO
 	CS	Sloučení „Aplikace“ a „Rádio“
@@ -792,6 +857,7 @@ PLUGIN_MATERIAL_COMBINE_APPS_AND_RADIO
 	NL	Combineer 'Applicaties' en 'Radio'
 	ZH_CN	合并“程序”和“电台”
 	HU	'Apps' és 'Radio' összekapcsolása
+	SV	Kombinera 'Appar' och 'Radio'
 
 PLUGIN_MATERIAL_COMBINE_APPS_AND_RADIO_DESC
 	CS	Sloučit nabídky „Aplikace“ a „Rádio“ do jedné nabídky „Aplikace“, s přidanou aplikací „TuneIn“ pro „Rádio“ (pokud je povoleno).
@@ -803,6 +869,7 @@ PLUGIN_MATERIAL_COMBINE_APPS_AND_RADIO_DESC
 	NL	Combineer de 'Applicaties' en 'Radio' in een enkel 'Applicaties' menu, waarbij de 'TuneIn' applicatie, indien ingeschakeld, wordt gebruikt als vervanging voor de 'Radio' applicatie.
 	ZH_CN	将“程序”和“电台”菜单合并成单个“程序”菜单。“电台”作为“TuneIn”程序添加到合并后的菜单里（如果已启用）。
 	HU	Kapcsolja össze az 'Apps' és a 'Radio' menüket egyetlen 'Apps' menübe, a 'Radio' (ha engedélyezve) hozzáadott 'Tunein' alkalmazással.
+	SV	Slå ihop 'Appar' och 'Radio' menyerna till en 'Appar' meny med en 'TuneIn' app för 'Radio' (om 'TuneIn' är aktiverad).
 
 PLUGIN_MATERIAL_SKIN_USE_DEFAULT_FOR_SETTINGS
 	CS	Použítí vzhledu „Výchozí“ pro nastavení serveru
@@ -813,6 +880,7 @@ PLUGIN_MATERIAL_SKIN_USE_DEFAULT_FOR_SETTINGS
 	NL	Gebruik 'Standaard' skin voor server instellingen
 	HU	Használja az „Alapértelmezett” felületet a szerverbeállításokhoz
 	ZH_CN	使用“默认”主题的服务器设置页面
+	SV	Använd "Default" skin för serverinställningarna
 
 PLUGIN_MATERIAL_SKIN_USE_DEFAULT_FOR_SETTINGS_DEC
 	CS	Při zobrazení nastavení serveru použít stránky ze vzhledu „Výchozí“ a nikoli přestylizované stránky ze vzhledu „Classic“. Bude použito pouze pokud je okno dostatečně velké.
@@ -823,6 +891,7 @@ PLUGIN_MATERIAL_SKIN_USE_DEFAULT_FOR_SETTINGS_DEC
 	NL	Kies welke skin wordt getoond voor de server instellingen. Indien de 'Standaard' skin wordt gekozen, werkt deze alleen als het scherm groot genoeg is.
 	HU	A szerverbeállítások megjelenítésekor az „Alapértelmezett” felület oldalait használja, és ne a „Classic” felületből származó új-témájú oldalakat. Ez csak akkor használható, ha az ablak elég nagy.
 	ZH_CN	在显示服务器设置时，使用“默认”主题中的页面，而非基于“经典”主题修改的主题（例如Material Skin）页面。此设置仅在窗口足够大时可用。
+	SV	Använd 'Default" skin när serverinställningar visas och inte omarbetade sidor från 'Classic' skin. Detta används bara när fönstret är tillräckligt stort.
 
 PLUGIN_MATERIAL_SKIN_USE_DEFAULT_FOR_SETTINGS_EMBEDDED
 	CS	Ano (vložené)
@@ -833,6 +902,7 @@ PLUGIN_MATERIAL_SKIN_USE_DEFAULT_FOR_SETTINGS_EMBEDDED
 	NL	Ja (ingebed)
 	HU	Igen (beágyazott)
 	ZH_CN	是（嵌入页面）
+	SV	Ja (i samma tab)
 
 PLUGIN_MATERIAL_SKIN_USE_DEFAULT_FOR_SETTINGS_NEW_TAB
 	CS	Ano (nová záložka/okno)
@@ -843,6 +913,7 @@ PLUGIN_MATERIAL_SKIN_USE_DEFAULT_FOR_SETTINGS_NEW_TAB
 	NL	Ja (nieuw tabblad)
 	HU	Igen (új lap/ablak)
 	ZH_CN	是（新建窗口）
+	SV	Ja (i en ny tab)
 
 PLUGIN_MATERIAL_SKIN_USE_GROUPING
 	CS	Seskupení skladeb alba
@@ -853,6 +924,7 @@ PLUGIN_MATERIAL_SKIN_USE_GROUPING
 	NL	Groepeer nummers op multi-disc albums 
 	HU	Csoportosítsa az album számait
 	ZH_CN	专辑曲目分组
+	SV	Gruppera albumspår
 
 PLUGIN_MATERIAL_SKIN_USE_GROUPING_DESC
 	CS	Pokud je album vícediskové a obsahuje tagy díla a/nebo seskupení, které seskupení by mělo mít přednost při generování podnadpisů?
@@ -863,6 +935,7 @@ PLUGIN_MATERIAL_SKIN_USE_GROUPING_DESC
 	HU	Ha egy album egyszerre többlemezes és tartalmaz munka- és/vagy csoportosítási címkéket, melyik csoportosítás élvezzen elsőbbséget az alcímek generálásakor?
 	NL	Wanneer een album zowel uit meerdere cd's bestaat en WORK en/of GROUPING tags bevat, welke gegevens moeten dan de voorkeur krijgen bij het genereren van onderverdelingen?
 	ZH_CN	当一个专辑既包含多张光盘又包含作品和/或分组标签时，在生成副标题时应优先选择哪种分组？
+	SV	Om ett album både består av flera diskar och innehåller verk- och/eller grupperingstaggar, vilken sorts grupperingstyp skall då föredras när undertitlar skapas?
 
 PLUGIN_MATERIAL_SKIN_PREFER_DISC_GROUPS
 	CS	Preferovat číslo disku/podnadpis disku
@@ -873,6 +946,7 @@ PLUGIN_MATERIAL_SKIN_PREFER_DISC_GROUPS
 	HU	Lemezszám/lemezfelirat előnyben részesítése
 	NL	Prefereer disc nummer/disc titel
 	ZH_CN	首选光盘编号/光盘子标题
+	SV	Föredra disk nummer / disktitel
 
 PLUGIN_MATERIAL_SKIN_PREFER_WORK_GROUPING_GROUPS
 	CS	Preferovat dílo a seskupení
@@ -883,6 +957,7 @@ PLUGIN_MATERIAL_SKIN_PREFER_WORK_GROUPING_GROUPS
 	HU	A munka és a csoportosítás előnyben részesítése
 	NL	Prefereer de gegevens in de WORK en GROUPING tags
 	ZH_CN	首选作品和分组
+	SV	Föredra verk och gruppering (GROUPING).
 
 PLUGIN_MATERIAL_SKIN_SHOW_WORKS_IN_ARTIST_ALBUM_LIST
 	CS	Zobrazení díla interpreta
@@ -893,6 +968,7 @@ PLUGIN_MATERIAL_SKIN_SHOW_WORKS_IN_ARTIST_ALBUM_LIST
 	NL	Toon artiest composities
 	HU	Mutassa a művész munkáit
 	ZH_CN	显示艺术家作品
+	SV	Visa artistens verk
 
 PLUGIN_MATERIAL_SKIN_SHOW_WORKS_IN_ARTIST_ALBUM_LIST_DESC
 	CS	Zobrazit seznam děl interpreta při výpisu vydání interpreta.
@@ -903,6 +979,7 @@ PLUGIN_MATERIAL_SKIN_SHOW_WORKS_IN_ARTIST_ALBUM_LIST_DESC
 	NL	Toon lijst van composities bij de lijst van de releases van de artiest. 
 	HU	Egy művész munkáinak listájának megjelenítése az előadó kiadványainak felsorolásakor
 	ZH_CN	列出艺术家发行版时列出艺术家的作品
+	SV	Visa en lista med artistens verk, när artistens utgåvor listas.
 
 PLUGIN_MATERIAL_SKIN_PLAYLIST_IMAGES
 	CS	Obrázky seznamů skladeb
@@ -912,6 +989,7 @@ PLUGIN_MATERIAL_SKIN_PLAYLIST_IMAGES
 	FR	Images des listes de lecture
 	NL	Afspeellijst afbeeldingen
 	ZH_CN	播放列表图像
+	SV	Spellistebilder
 
 PLUGIN_MATERIAL_SKIN_PLAYLIST_IMAGES_DESC
 	CS	Zobrazit obrázky při výpisu seznamů skladeb. To (volitelně) vyžaduje vytvoření obrázků JPEG 600x600 v podsložce „material-skin/playlists“ ve složce předvoleb vašeho Lyrionu. Obrázky seznamů skladeb by měly být všechny malými písmeny nebo číslicemi, s odstraněnými všemi ostatními znaky. Např. „R&B“ je „rb.jpg“, „Folk/Rock“ je „folkrock.jpg“. Pokud není nalezen žádný obrázek, použije se první platný obrázek ze seznamu skladeb playlistu. Vezměte však na vědomí, že toto (použití obrázku skladby) může mít vliv na rychlost procházení playlistu (protože každý playlist bude muset být dotazován na jeho seznam skladeb atd.).
@@ -921,6 +999,7 @@ PLUGIN_MATERIAL_SKIN_PLAYLIST_IMAGES_DESC
 	FR	Utiliser des images lors de l'affichage des listes de lecture. Cette fonctionnalité (facultative) nécessite la création d'images JPEG 600x600 dans un sous-dossier "material-skin/playlists" du dossier des préférences de Lyrion. Les noms des fichiers doivent être constitués uniquement de lettres minuscules ou de chiffres. Par exemple : "R&B" devient "rb.jpg", "Folk/Rock" devient "folkrock.jpg". Si aucune image n'est trouvée, la première pochette des morceaux de la liste de lecture est utilisée. Cela peut impacter la vitesse de parcours des listes de lecture car chaque liste de lecture devra être interrogée pour connaître sa liste de morceaux.
 	NL	Afbeeldingen tonen bij het weergeven van afspeellijsten. Hiervoor kan je 600x600 JPEG-afbeeldingen aanmaken in de submap "material-skin/playlists" van jouw voorkeurenmap van Lyrion. Afbeeldingen in afspeellijsten moeten allemaal uit kleine letters of cijfers bestaan. Alle andere tekens moeten worden verwijderd. bijv. "R&B" is "rb.jpg", "Folk/Rock" is "folkrock.jpg". Als er geen afbeelding wordt gevonden, wordt de eerstvolgende gevonden afbeelding van de nummers in de afspeellijst gebruikt. Houd er echter rekening mee dat dit (het gebruik van een afbeelding van een nummer) effect kan hebben op de snelheid waarmee je door de afspeellijst bladert (aangezien voor elke afspeellijst de bijbehorende lijst met nummers moet worden opgevraagd, enz.).
 	ZH_CN	列出播放列表时显示图像。这（可选）需要在LMS首选项文件夹的“material-skin/playlists”子文件夹中创建600x600的JPEG图像。播放列表图像文件名应全部为小写字母或数字，并删除所有其他字符。例如，“R&B”是“rb.jpg”，“Folk/Rock”是“folkrock.jpg”。如果没有找到图像，则使用播放列表曲目列表中的第一个有效图像。但是请注意，这（使用曲目图像）可能会对播放列表浏览速度产生影响（因为需要查询每个播放列表的曲目列表等）。
+	SV	Visa bilder när du listar spellistor. För detta måste 600x600 stora JPEG bilder skapas i en undermapp material-skin/playlists i Lyrions inställningsmapp. Filnamnen kan bara använda små bokstäver eller siffror ([a-z0-9]) alla andra tecken i ett genrenamn tas bort, t.ex. för R&B -> rb.jpg, Folk/Rock -> folkrock.jpg. Om ingen bild hittas används den första giltiga bilden från spellistan. Observera att om du använder spellistebilder kan bläddringshastigheten av spellistor påverkas.
 
 PLUGIN_MATERIAL_SKIN_QT_MOVE_ERROR
 	CS	Nelze přesunout frontu do přehrávače, se kterým je již synchronizována.
@@ -929,6 +1008,7 @@ PLUGIN_MATERIAL_SKIN_QT_MOVE_ERROR
 	ES	No se puede mover la cola a un reproductor con el que ya está sincronizada.
 	FR	Impossible de déplacer une liste de lecture vers une platine déjà synchronisée.
 	NL	Het is niet mogelijk om de afspeellijst te verplaatsen naar een muziekspeler die al gesynchroniseerd is. 
+	SV	Spelkön kan inte flyttas till en spelare som den nuvarande spelaren redan är synkroniserad med.
 
 PLUGIN_MATERIAL_SKIN_QT_COPY_ERROR
 	CS	Nelze zkopírovat frontu do přehrávače, se kterým je již synchronizována.
@@ -937,6 +1017,7 @@ PLUGIN_MATERIAL_SKIN_QT_COPY_ERROR
 	ES	No se puede copiar la cola a un reproductor con el que ya está sincronizada.
 	FR	Impossible de copier une liste de lecture vers une platine déjà synchronisée.
 	NL	Het is niet mogelijk om de afspeellijst te kopiëren naar een muziekspeler die al gesynchroniseerd is. 
+	SV	Spelkön kan inte kopieras till en spelare som den nuvarande spelaren redan är synkroniserad med.
 
 PLUGIN_MATERIAL_SKIN_QT_SWAP_ERROR
 	CS	Nelze zaměnit frontu s přehrávačem, se kterým je již synchronizována.
@@ -945,6 +1026,7 @@ PLUGIN_MATERIAL_SKIN_QT_SWAP_ERROR
 	ES	No se puede intercambiar la cola con un reproductor con el que ya está sincronizada.
 	FR	Impossible d'échanger une liste de lecture avec une platine déjà synchronisée.
 	NL	Het is niet mogelijk om de afspeellijst te wisselen met een muziekspeler die al gesynchroniseerd is. 
+	SV	Spelkön kan inte bytas med en spelare som den nuvarande spelaren redan är synkroniserad med.
 
 PLUGIN_MATERIAL_SKIN_SMALL_ICON_ONLY_GRID
 	CS	Menší mřížka pouze s ikonami
@@ -953,6 +1035,7 @@ PLUGIN_MATERIAL_SKIN_SMALL_ICON_ONLY_GRID
 	ES	Cuadrícula más pequeña solo de iconos
 	FR	Icônes de grille plus petits
 	NL	Kleiner icon-only raster
+	SV	Litet rutnät
 
 PLUGIN_MATERIAL_SKIN_SMALL_ICON_ONLY_GRID_DESC
 	CS	Na užších obrazovkách povolit použití menších položek mřížky, pokud jsou zobrazeny pouze ikony a nikoli obrázky. Mějte na paměti, že to může způsobit častější zkrácení textu.
@@ -961,3 +1044,4 @@ PLUGIN_MATERIAL_SKIN_SMALL_ICON_ONLY_GRID_DESC
 	ES	En pantallas más estrechas, permitir el uso de elementos de cuadrícula más pequeños si solo se muestran iconos, y no imágenes. Note que esto puede causar que el texto se trunque más frecuentemente.
 	FR	Sur les petits écrans, autoriser l'utilisation d'éléments de grille plus petits, s'il y a seulement des icônes et pas d'images. (Le texte peut être tronqué plus fréquemment.)
 	NL	Sta op kleinere schermen het gebruik van kleinere rasteritems toe als alleen icons worden weergegeven en geen afbeeldingen. Houd er rekening mee dat dit ertoe kan leiden dat tekst vaker wordt afgekapt.
+	SV	Tillåt mindre rutnätselement om bara ikoner och inte bilder visas. Observera att detta kan leda till att textsträngar inte visas helt.

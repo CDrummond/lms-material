@@ -3586,6 +3586,9 @@ div.v-subheader {
  position:absolute;
  top:11.5px !important;
  right:28px !important;
+ min-width:132px;
+ display:flex;
+ justify-content:end;
 }
 
 .list-btns-track {

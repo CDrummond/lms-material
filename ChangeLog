@@ -6,7 +6,7 @@
 3. Add note about popups to download confirmation dialog.
 4. Disable downloads on iOS once more.
 5. Fix scrolled list order being reset.
-6. Fix scrolled list selection dialog when items have mulit-line sub-text.
+6. Fix scrolled list selection dialog when items have multi-line sub-text.
 7. Add Swedish translation - thanks to Johan Saaw.
 
 6.1.4

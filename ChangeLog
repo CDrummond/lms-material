@@ -1,3 +1,7 @@
+6.1.6
+-----
+1. Fix tiny sub-text for in exapnded nowplaying at certain sizes.
+
 6.1.5
 -----
 1. When requesting 'Random albums/releases' for scrolled lists obtain complete

@@ -1,6 +1,7 @@
 6.1.6
 -----
-1. Fix tiny sub-text for in exapnded nowplaying at certain sizes.
+1. Fix tiny sub-text for in expanded now-playing at certain sizes.
+2. Check if can use 'query_param'
 
 6.1.5
 -----

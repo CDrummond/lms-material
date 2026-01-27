@@ -3249,9 +3249,18 @@ sub _playlistHandler {
 
     if (0==_sendMaterialImage($httpClient, $response, "playlists", $fileName)) {
         my $size = "/image_300x300_f";
-        if ("1" eq $response->request->uri->query_param('full')) {
-            $size = "/cover";
+        my $req = $response->request;
+
+        if ($req->uri->can('query_param')) {
+            if ("1" eq $req->uri->query_param('full')) {
+                $size = "/cover";
+            }
+        } else { # Manually extract "full=1" query parameter...
+            if (index($req->uri->as_string, "full=1") > 0) {
+                $size = "/cover";
+            }
         }
+
         foreach my $playlist ( Slim::Schema->rs('Playlist')->getPlaylists('all')->all ) {
             if ($playlist->title eq $playlistName) {
                 my $request = Slim::Control::Request::executeRequest(undef, ["playlists", "tracks", 0, PLAYLIST_IMAGE_TRACKS, "tags:cK", "playlist_id:" . $playlist->id] );

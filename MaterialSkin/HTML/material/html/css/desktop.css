@@ -506,7 +506,8 @@
 
 .unpinned-queue-visible .menu-btn,
 .unpinned-queue-visible .menu-btn:hover {
- margin-right:var(--pq-unpinned-width)!important;
+ position:absolute;
+ right:calc(var(--pq-unpinned-width) + 8px)!important;
 }
 
 @keyframes pqSlideIn {

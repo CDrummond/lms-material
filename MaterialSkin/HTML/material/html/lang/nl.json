@@ -311,9 +311,9 @@
 "Moving clock":"Bewegende klok",
 "Mute":"Dempen",
 "My Music":"Mijn Muziek",
-"NOTE: 'Application layout' is not saved, as this is a per-device setting.":"Let op: Layout is niet opgeslagen, aangezien dit een instelling per apparaat is.",
+"NOTE: 'Application layout' is not saved, as this is a per-device setting.":"Opmerking: Layout is niet opgeslagen, aangezien dit een instelling per apparaat is.",
 "NOTE: Changing ratings requires an additional plugin.":"Opmerking: Het wijzigen van ratings vereist een additionele plug-in.",
-"NOTE: Only some of these settings apply to 'Material Skin'. However these settings will affect other skins and hardware players.":"OPMERKING: Slechts enkele van deze instellingen zijn van toepassing op 'Material Skin'. Deze instellingen hebben invloed op andere skins en hardwarespelers.",
+"NOTE: Only some of these settings apply to 'Material Skin'. However these settings will affect other skins and hardware players.":"Opmerking: Slechts enkele van deze instellingen zijn van toepassing op 'Material Skin'. Deze instellingen hebben invloed op andere skins en hardwarespelers.",
 "Name":"Naam",
 "New Artists":"Nieuwe Artiesten",
 "New Music":"Nieuwe Muziek",
@@ -743,5 +743,5 @@
 "%1 Years":"%1 Jaren",
 "1 day":"1 dag",
 "%1 days":"%1 dagen",
-"NOTE: Please ensure popups are not blocked in your browser, as this might prevent downloading multiple tracks.":""
+"NOTE: Please ensure popups are not blocked in your browser, as this might prevent downloading multiple tracks.":"Opmerking: Zorg ervoor dat popups niet worden geblokkeerd door jouw browser, want dat kan het downloaden van meerdere nummers verhinderen."
 }

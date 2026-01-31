@@ -567,6 +567,14 @@ sub getHomeExtra3rdPartyItems {
     } keys %$HOME_EXTRAS ]);
 }
 
+sub setHomeExtraTitle {
+    my ($class, $id, $title) = @_;
+    if (my $extra = $HOME_EXTRAS->{'3rdparty_' . $id}) {
+        $extra->{title} = $title;
+        signalHomeExtraUpdate();
+    }
+}
+
 sub signalHomeExtraUpdate {
     Slim::Control::Request::notifyFromArray(undef, ['material-skin', 'notification', 'internal', 'refresh-home']);
 }
@@ -2070,14 +2078,16 @@ sub _handleHomeExtraCmd {
         my $total = 0;
         my $libId = $request->getParam('library_id');
         foreach my $srt ( @albumsorts ) {
-            my @cmd = ("albums", 0, $count, "tags:aajlqswyKSS24WE", "sort:${srt}");
+            my $isRandom = $srt eq "random" ? 1 : 0;
+            my $reqCount = $isRandom ? 300 : $count;
+            my @cmd = ("albums", 0, $reqCount, "tags:aajlqswyKSS24WE", "sort:${srt}");
             if ($libId) {
                 push(@cmd, "library_id:${libId}");
             }
             my $req = Slim::Control::Request::executeRequest(undef, \@cmd);
             my $cnt = 0;
             foreach my $item ( @{ $req->getResult('albums_loop') || [] } ) {
-                if ($cnt<$count) {
+                if ($cnt<$reqCount) {
                     _addExtraHomeItem($request, ${srt}, $item, $cnt, $total);
                     $cnt+=1;
                     $total+=1;
@@ -3239,9 +3249,18 @@ sub _playlistHandler {
 
     if (0==_sendMaterialImage($httpClient, $response, "playlists", $fileName)) {
         my $size = "/image_300x300_f";
-        if ("1" eq $response->request->uri->query_param('full')) {
-            $size = "/cover";
+        my $req = $response->request;
+
+        if ($req->uri->can('query_param')) {
+            if ("1" eq $req->uri->query_param('full')) {
+                $size = "/cover";
+            }
+        } else { # Manually extract "full=1" query parameter...
+            if (index($req->uri->as_string, "full=1") > 0) {
+                $size = "/cover";
+            }
         }
+
         foreach my $playlist ( Slim::Schema->rs('Playlist')->getPlaylists('all')->all ) {
             if ($playlist->title eq $playlistName) {
                 my $request = Slim::Control::Request::executeRequest(undef, ["playlists", "tracks", 0, PLAYLIST_IMAGE_TRACKS, "tags:cK", "playlist_id:" . $playlist->id] );

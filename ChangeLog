@@ -1,3 +1,19 @@
+6.1.6
+-----
+1. Fix tiny sub-text for in expanded now-playing at certain sizes.
+2. Check if can use 'query_param'
+
+6.1.5
+-----
+1. When requesting 'Random albums/releases' for scrolled lists obtain complete
+   list, but initially only show N items - use stored list for 'More'.
+2. Fix invoking 'Download' from scrolled list.
+3. Add note about popups to download confirmation dialog.
+4. Disable downloads on iOS once more.
+5. Fix scrolled list order being reset.
+6. Fix scrolled list selection dialog when items have multi-line sub-text.
+7. Add Swedish translation - thanks to Johan Saaw.
+
 6.1.4
 -----
 1. Don't show group player's in sync dialog, instead allow showing sync dialog
@@ -5,6 +21,10 @@
 2. Fix reading 'Show ratings' from default settings.
 3. If track has a grouping, or disc-subtitle, then show this after album in
    now-playing.
+4. Don't prompt for confirmation when power on/off all players from 'Manage
+   players' dialog.
+5. Add menu to navigation drawer to sleep or power on/off all players.
+6. Allow 3rd party scrolled lists to update titles - thanks to Michael Herger.
 
 6.1.3
 -----

@@ -2413,7 +2413,9 @@ function parseBrowseResp(data, parent, options, cacheKey) {
             for (let s=0, len=lists.length-1; s<len; ++s) { // Ignore 'Explore'
                 lists[s].id = DETAILED_HOME_STD_PREFIX+lists[s].key;
             }
-            lists = lists.concat(LMS_3RDPARTY_HOME_EXTRA);
+            if (undefined!=lmsOptions.home3rdPartyExtraLists && lmsOptions.home3rdPartyExtraLists.length>0) {
+                lists = lists.concat(lmsOptions.home3rdPartyExtraLists);
+            }
             if (undefined!=options && undefined!=options.order) {
                 for (let s=0, len=lists.length; s<len; ++s) {
                     lists[s].val = options.order.indexOf(lists[s].id);
@@ -2475,6 +2477,11 @@ function parseBrowseResp(data, parent, options, cacheKey) {
                                 loop[i].ihe = true;
                                 loop[i].iheHdr = iheHdr;
                             }
+                        } else if (lists[s].key=="random" && newResp.items.length>count) {
+                            let all = JSON.parse(JSON.stringify(newResp.items))
+                            newResp.items = newResp.items.splice(0, count);
+                            resp.items.push({title:lists[s].title, id:lists[s].id, header:true, ihe:1, icon:lists[s].icon, svg: lists[s].svg, limit: lists[s].limit,
+                                morecmd:"-", all:{items:all, subtitle:newResp.subtitle, command:{ismore:false, command:["albums"], params:["sort:random", ALBUM_TAGS_ALL_ARTISTS]}}});
                         } else {
                             resp.items.push({title:lists[s].title, id:lists[s].id, header:true, ihe:1, icon:lists[s].icon, svg: lists[s].svg, limit: lists[s].limit,
                                 morecmd:parseInt(data.result[loop_name+"_len"])>count ? {command:lists[s].command, params:lists[s].params} : undefined});

@@ -89,11 +89,11 @@ Vue.component('lms-manage-players', {
        <v-list-tile-content><v-list-tile-title>{{i18n('Clear queue')}}</v-list-tile-title></v-list-tile-content>
       </v-list-tile>
       <v-list-tile @click="actionAll($event, 'poweroff')" class="menu-group-item">
-       <v-list-tile-avatar><v-icon>power_settings_new</v-icon></v-list-tile-avatar>
+       <v-list-tile-avatar><v-icon class="dimmed">power_settings_new</v-icon></v-list-tile-avatar>
        <v-list-tile-content><v-list-tile-title>{{i18n('Switch off')}}</v-list-tile-title></v-list-tile-content>
       </v-list-tile>
       <v-list-tile @click="actionAll($event, 'poweron')" class="menu-group-item">
-       <v-list-tile-avatar><v-icon class="dimmed">power_settings_new</v-icon></v-list-tile-avatar>
+       <v-list-tile-avatar><v-icon>power_settings_new</v-icon></v-list-tile-avatar>
        <v-list-tile-content><v-list-tile-title>{{i18n('Switch on')}}</v-list-tile-title></v-list-tile-content>
       </v-list-tile>
       <v-divider v-if="manageGroups && unlockAll"></v-divider>
@@ -358,7 +358,7 @@ Vue.component('lms-manage-players', {
             bus.$emit('dlg.open', 'group', 'create');
         },
         actionAll(event, action) {
-            storeClickOrTouchPos(event, this.menu);
+            storeClickOrTouchPos(event);
             if (action=='sleep') {
                 bus.$emit('dlg.open', 'sleep');
             } else if (action=='clear') {
@@ -368,17 +368,17 @@ Vue.component('lms-manage-players', {
                     }
                 });
             } else if (action=='poweroff') {
-                confirm(i18n("Switch off all players?"), i18n("Switch off")).then(res => {
-                    if (res) {
+                //confirm(i18n("Switch off all players?"), i18n("Switch off")).then(res => {
+                //    if (res) {
                         this.sendCommandToAll(["power", "0"]);
-                    }
-                });
+                //    }
+                //});
             } else if (action=='poweron') {
-                confirm(i18n("Switch on all players?"), i18n("Switch on")).then(res => {
-                    if (res) {
+                //confirm(i18n("Switch on all players?"), i18n("Switch on")).then(res => {
+                //    if (res) {
                         this.sendCommandToAll(["power", "1"]);
-                    }
-                });
+                //    }
+                //});
             }
         },
         playerAction(player, cmd, event) {
@@ -908,6 +908,9 @@ Vue.component('lms-manage-players', {
             this.$store.commit('dialogOpen', {name:'manage', shown:val});
             bus.$emit('subscribeAll', val);
             this.cancelUpdateTimer();
+        },
+        'showMenu': function(val) {
+            this.$store.commit('menuVisible', {name:'manage', shown:val});
         },
         'menu.show': function(val) {
             this.$store.commit('menuVisible', {name:'manage', shown:val});

@@ -56,7 +56,25 @@ Vue.component('lms-navdrawer', {
 <v-navigation-drawer v-model="show" app temporary :width="maxWidth" style="display:flex;flex-direction:column">
  <div class="nd-top"></div>
  <div class="nd-header">
-  <v-list-tile @click.prevent="show=false">
+  <v-menu v-if="multipleStandardPlayers" bottom left v-model="showMenu" style="position:absolute; right:40px; z-index:5">
+   <v-btn icon slot="activator"><v-icon>more_vert</v-icon></v-btn>
+   <v-list>
+    <v-subheader>{{i18n("All players")}}</v-subheader>
+    <v-list-tile @click="sleepAll()" class="menu-group-item">
+     <v-list-tile-avatar><v-icon>hotel</v-icon></v-list-tile-avatar>
+     <v-list-tile-content><v-list-tile-title>{{i18n('Sleep')}}</v-list-tile-title></v-list-tile-content>
+    </v-list-tile>
+    <v-list-tile @click="powerAll(0)" class="menu-group-item">
+     <v-list-tile-avatar><v-icon class="dimmed">power_settings_new</v-icon></v-list-tile-avatar>
+     <v-list-tile-content><v-list-tile-title>{{i18n('Switch off')}}</v-list-tile-title></v-list-tile-content>
+    </v-list-tile>
+    <v-list-tile @click="powerAll(1)" class="menu-group-item">
+     <v-list-tile-avatar><v-icon>power_settings_new</v-icon></v-list-tile-avatar>
+     <v-list-tile-content><v-list-tile-title>{{i18n('Switch on')}}</v-list-tile-title></v-list-tile-content>
+    </v-list-tile>
+   </v-list>
+  </v-menu>
+  <v-list-tile @click.prevent="close">
    <v-list-tile-avatar v-if="(undefined==queryParams.dragleft || queryParams.dragleft<=48) && ('l'!=queryParams.tbarBtnsPos)"><v-btn icon flat @click="show=false"><v-icon>arrow_back<v-icon></v-btn></v-list-tile-avatar>
    <div class="lyrion-logo" v-longpress:nomove="clickLogo"><img :src="'lyrion' | svgIcon(darkUi)"></img></div>
    <v-list-tile-action>
@@ -248,6 +266,7 @@ Vue.component('lms-navdrawer', {
     data() {
         return {
             show: false,
+            showMenu: false,
             trans:{groupPlayers:undefined, standardPlayers:undefined, connectionLost:undefined, updatesAvailable:undefined, restartRequired:undefined, shortcuts:undefined },
             menuItems: [],
             shortcuts: [],
@@ -311,7 +330,7 @@ Vue.component('lms-navdrawer', {
             this.updateCustomActions();
         }.bind(this));
         bus.$on('closeMenu', function() {
-            this.show = false;
+            this.close();
         }.bind(this));
         bus.$on('networkStatus', function(connected) {
             this.connected=connected;
@@ -441,6 +460,25 @@ Vue.component('lms-navdrawer', {
             }
             this.show = false;
         },
+        close() {
+            if (this.showMenu) {
+                this.showMenu = false;
+            } else {
+                this.show=false;
+            }
+        },
+        sleepAll(event) {
+            storeClickOrTouchPos(event);
+            bus.$emit('dlg.open', 'sleep');
+            this.show=false;
+        },
+        powerAll(state) {
+            this.$store.state.players.forEach(p => {
+                lmsCommand(p.id, ['power', state]).then(({d}) => { 
+                    bus.$emit('updatePlayer', p.id);
+                })
+            });
+        },
         managePlayers(longPress, el, event) {
             if (event) {
                 event.preventDefault();
@@ -549,10 +587,18 @@ Vue.component('lms-navdrawer', {
                 this.togglePlayerPower(this.$store.state.players[idx], longPress);
             }
         },
-        clickLogo(longPress) {
-            this.show = false;
-            if (longPress) {
-                window.open("https://lyrion.org", "_blank").focus();
+        clickLogo(longPress, el, event) {
+            if (event) {
+                event.preventDefault();
+                event.stopPropagation();
+            }
+            if (this.showMenu) {
+                this.showMenu = false;
+            } else {
+                this.show=false;
+                if (longPress) {
+                    window.open("https://lyrion.org", "_blank").focus();
+                }
             }
         },
         doCustomAction(action) {
@@ -692,6 +738,9 @@ Vue.component('lms-navdrawer', {
             } else {
                 this.cancelStatusTimer();
             }
+        },
+        'showMenu': function(val) {
+            this.$store.commit('menuVisible', {name:'navdrawer-title', shown:val});
         }
     },
     beforeDestroy() {

@@ -24,6 +24,7 @@ sub initPlugin {
 
 #  we don't want these menus to be shown anywhere but as Home Extras
 sub initJive {[]}
+sub modeName {}
 
 sub handleExtra {
 	my ($class, $client, $cb, $count) = @_;

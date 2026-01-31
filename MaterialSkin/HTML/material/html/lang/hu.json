@@ -689,6 +689,7 @@
 "Move position":"",
 "Moving clock":"",
 "NOTE: Only some of these settings apply to 'Material Skin'. However these settings will affect other skins and hardware players.":"",
+"NOTE: Please ensure popups are not blocked in your browser, as this might prevent downloading multiple tracks.":"",
 "New Artists":"",
 "New Music":"",
 "Newest":"",
@@ -742,7 +743,5 @@
 "1 App":"",
 "%1 Apps":"",
 "1 Folder":"",
-"%1 Folders":"",
-"1 Group":"",
-"%1 Groups":""
+"%1 Folders":""
 }

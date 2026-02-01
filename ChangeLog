@@ -2,6 +2,8 @@
 -----
 1. Fix tiny sub-text for in expanded now-playing at certain sizes.
 2. Check if can use 'query_param'
+3. When virtual keyboard is show, check if item is in list for mobile as well
+   as dekstop view.
 
 6.1.5
 -----

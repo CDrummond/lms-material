@@ -1,3 +1,7 @@
+6.1.7
+-----
+1. Fix dialog list sizing on iOS.
+
 6.1.6
 -----
 1. Fix tiny sub-text in expanded now-playing at certain sizes.

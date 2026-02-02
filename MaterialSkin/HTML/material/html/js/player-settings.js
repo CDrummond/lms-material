@@ -342,7 +342,7 @@ Vue.component('lms-player-settings', {
             return this.$store.state.twentyFourHour
         },
         homeButton() {
-            return this.$store.state.homeButton
+            return true // this.$store.state.homeButton==1 || (this.$store.state.homeButton==2 && this.$store.state.autoShowHomeButton)
         },
         showSync() {
             if (!this.isGroup && this.$store.state.players) {

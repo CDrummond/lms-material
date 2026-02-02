@@ -2,6 +2,7 @@
 -----
 1. Fix dialog list sizing on iOS.
 2. Fix home button in iframe dialogs.
+3. Fix 'Show when wide enough' string.
 
 6.1.6
 -----

@@ -804,7 +804,7 @@ Vue.component('lms-ui-settings', {
             this.homeButtonValues=[
                 { key:0, label:i18n("Don't show")},
                 { key:1, label:i18n("Show always")},
-                { key:2, label:i18n("Single when wide enough")},
+                { key:2, label:i18n("Show when wide enough")},
                 ];
         },
         initHomeItems() {

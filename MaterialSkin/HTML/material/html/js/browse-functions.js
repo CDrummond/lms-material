@@ -1008,15 +1008,21 @@ function browseClick(view, item, index, event, ignoreOpenMenu) {
         }
         return;
     }
-    if (item.header && !item.slimbrowse) {
-        if (item.allItems && item.allItems.length>0) { // Clicking on 'X Artists' / 'X Albums' / 'X Tracks' search header
-            browseItemMenu(view, item, index, event);
-        } else if (view.selection.size>0) {
-            view.select(item, index, event);
+    if (item.header) {
+        if (item.slimbrowse) {
+            if (!item.actions && !item.addAction) {
+                return;
+            }
         } else {
-            browseItemMenu(view, item, index, event);
+            if (item.allItems && item.allItems.length>0) { // Clicking on 'X Artists' / 'X Albums' / 'X Tracks' search header
+                browseItemMenu(view, item, index, event);
+            } else if (view.selection.size>0) {
+                view.select(item, index, event);
+            } else {
+                browseItemMenu(view, item, index, event);
+            }
+            return;
         }
-        return;
     }
     if (view.selection.size>0) {
         let clickX = event['pageX'] || event.clientX;

@@ -319,7 +319,7 @@ var app = new Vue({
                         }
                         if (makeVisible) {
                             window.requestAnimationFrame(function () {
-                                if (lmsApp.$store.state.desktopLayout && foundListItem) {
+                                if (foundListItem) {
                                     if (isVisible(elem)) {
                                         return;
                                     }

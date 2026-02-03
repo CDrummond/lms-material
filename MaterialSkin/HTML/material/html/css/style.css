@@ -2222,18 +2222,18 @@ div.v-rating i.primary--text, div.v-rating i.accent--text {
  background-size:cover !important;
  background-repeat:no-repeat !important;
  background-position:center top !important;
- box-shadow:inset 100vw 100vh var(--background-shadow-color);
+ box-shadow:inset 100vw var(--100vh) var(--background-shadow-color);
  transition:background 0.05s!important;
 }
 
 .tint-bgnd-cover {
- box-shadow:inset 100vw 100vh var(--tinted-background-shadow-color);
+ box-shadow:inset 100vw var(--100vh) var(--tinted-background-shadow-color);
 }
 
 .subtoolbar-cover {
  background-color:var(--background-color);
  background-size:100% 100% !important;
- box-shadow:inset 100vw 100vh var(--subtoolbar-shadow-color);
+ box-shadow:inset 100vw var(--100vh) var(--subtoolbar-shadow-color);
  background:var(--subtoolbar-image-url);
 }
 
@@ -2287,14 +2287,14 @@ div.v-rating i.primary--text, div.v-rating i.accent--text {
  background-position:center top !important;
  filter:var(--np-bgnd-filter);
  -webkit-filter:var(--np-bgnd-filter);
- box-shadow:inset 100vw 100vh var(--background-shadow-color);
+ box-shadow:inset 100vw var(--100vh) var(--background-shadow-color);
  overflow:hidden;
 }
 
 .np-full .np-bgnd-cover {
  filter:var(--np-full-bgnd-filter);
  -webkit-filter:var(--np-full-bgnd-filter);
- box-shadow:inset 100vw 100vh var(--np-bgnd-full-shadow-color);
+ box-shadow:inset 100vw var(--100vh) var(--np-bgnd-full-shadow-color);
  transform:scale(1.35);
 }
 
@@ -3281,7 +3281,7 @@ div.v-subheader {
 }
 
 .dialog-main-list {
- max-height:calc(100vh - 220px);
+ max-height:calc(var(--100vh) - 240px);
  overflow-y:auto;
  overflow-x:hidden;
  display:block;

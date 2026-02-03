@@ -1,7 +1,18 @@
+6.1.7
+-----
+1. Fix dialog list sizing on iOS.
+2. Fix home button in iframe dialogs.
+3. Fix 'Show when wide enough' string.
+4. Show home button in certain diaogs, if requested by caller, regardless of
+   setting.
+5. If a SlimBrowse header has no actions then ignore clicks.
+
 6.1.6
 -----
-1. Fix tiny sub-text for in expanded now-playing at certain sizes.
-2. Check if can use 'query_param'
+1. Fix tiny sub-text in expanded now-playing at certain sizes.
+2. Check if can use 'query_param' in Perl code.
+3. When virtual keyboard is show, check if item is in list for mobile as well
+   as desktop view.
 
 6.1.5
 -----

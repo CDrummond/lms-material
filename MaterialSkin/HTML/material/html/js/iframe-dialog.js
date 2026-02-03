@@ -913,17 +913,18 @@ Vue.component('lms-iframe-dialog', {
                 this.src = this.history.pop();
             }
         },
-        goHome() {
-            if (!this.close()) {
+        goHome(forceClose) {
+            if (!forceClose && !this.canClose()) {
                 return;
             }
+            this.close(true);
             if (IFRAME_HOME_CLOSES_DIALOGS==this.showHome) {
                 this.$store.commit('closeAllDialogs', true);
             } else {
                 bus.$emit('browse-home');
             }
         },
-        confirmClose() {
+        confirmClose(isGoHome) {
             confirm(i18n("Some settings were changed. Do you want to save them?"), i18n('Save'), i18n('Cancel'), i18n('Discard')).then(res => {
                 if (0==res) { // Cancel
                     return;
@@ -933,29 +934,37 @@ Vue.component('lms-iframe-dialog', {
                 }
                 setTimeout(function() {
                     iframeInfo.settingModified = false;
-                    this.close(true);
+                    if (isGoHome) {
+                        this.goHome(true);
+                    } else {
+                        this.close(true);
+                    }
                 }.bind(this), 100);
             });
         },
-        close(forceClose) {
-            if (!forceClose) {
-                if (iframeInfo.settingModified) {
-                    this.confirmClose();
-                    return;
-                } else if (LMS_STD_SETTINGS_PAGES.has(this.page) && undefined!=iframeInfo.content) {
-                    // prototype.js, taken from Classic, has been modified so as to not prevent
-                    // using 'Enter' in textareas. However, this seems to break change detection.
-                    // So, when clsing dialog check if active element is a textarea and if it has
-                    // been modified.
-                    let elem = iframeInfo.content.activeElement;
-                    if (undefined!=elem && 'TEXTAREA'==elem.nodeName) {
-                        iframeInfo.settingModified = elem.value != elem.defaultValue;
-                        if (iframeInfo.settingModified) {
-                            this.confirmClose();
-                            return;
-                        }
+        canClose(isGoHome) {
+            if (iframeInfo.settingModified) {
+                this.confirmClose(isGoHome);
+                return false;
+            } else if (LMS_STD_SETTINGS_PAGES.has(this.page) && undefined!=iframeInfo.content) {
+                // prototype.js, taken from Classic, has been modified so as to not prevent
+                // using 'Enter' in textareas. However, this seems to break change detection.
+                // So, when clsing dialog check if active element is a textarea and if it has
+                // been modified.
+                let elem = iframeInfo.content.activeElement;
+                if (undefined!=elem && 'TEXTAREA'==elem.nodeName) {
+                    iframeInfo.settingModified = elem.value != elem.defaultValue;
+                    if (iframeInfo.settingModified) {
+                        this.confirmClose(isGoHome);
+                        return false;
                     }
                 }
+            }
+            return true;
+        },
+        close(forceClose) {
+            if (!forceClose && !this.canClose()) {
+                return;
             }
 
             this.show = false;
@@ -1042,7 +1051,7 @@ Vue.component('lms-iframe-dialog', {
             return this.$store.state.coloredToolbars
         },
         homeButton() {
-            return this.$store.state.homeButton==1 || (this.$store.state.homeButton==2 && this.$store.state.autoShowHomeButton)
+            return true // this.$store.state.homeButton==1 || (this.$store.state.homeButton==2 && this.$store.state.autoShowHomeButton)
         },
         players() {
             return this.$store.state.players

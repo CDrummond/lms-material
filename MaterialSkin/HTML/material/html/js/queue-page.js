@@ -489,6 +489,7 @@ var lmsQueue = Vue.component("lms-queue", {
                 this.searchActive = false;
             } else {
                 this.$store.commit('setShowQueue', false);
+                this.$store.commit('setShowQueueNp', false);
             }
         }.bind(this));
         bus.$on('queueDisplayChanged', function() {
@@ -648,6 +649,7 @@ var lmsQueue = Vue.component("lms-queue", {
         bus.$on('linkClicked', function() {
             if (this.$store.state.desktopLayout && this.windowWide<2 && !this.$store.state.pinQueue && this.$store.state.showQueue) {
                 this.$store.commit('setShowQueue', false);
+                this.$store.commit('setShowQueueNp', false);
             }
         }.bind(this));
 
@@ -762,7 +764,7 @@ var lmsQueue = Vue.component("lms-queue", {
                     }
                 } else if ('mod+shift'==modifier) {
                     if (LMS_SEARCH_KEYBOARD==key) {
-                        if (this.$store.state.desktopLayout ? this.$store.state.showQueue : this.$store.state.page=="queue") {
+                        if (this.$store.state.desktopLayout ? this.showQueue : this.$store.state.page=="queue") {
                             this.headerAction(SEARCH_LIST_ACTION);
                         }
                     }
@@ -1445,7 +1447,7 @@ var lmsQueue = Vue.component("lms-queue", {
         scrollToCurrent(pulse) {
             if (this.searchActive ||
                 (!this.$store.state.desktopLayout && this.$store.state.page!='queue') ||
-                (this.$store.state.desktopLayout && !this.$store.state.showQueue)) {
+                (this.$store.state.desktopLayout && !this.showQueue)) {
                 this.autoScrollRequired = true;
                 return;
             }
@@ -1718,15 +1720,27 @@ var lmsQueue = Vue.component("lms-queue", {
         },
         resetCloseTimer() {
             this.cancelCloseTimer();
-            if (this.$store.state.desktopLayout && !this.$store.state.pinQueue && this.$store.state.showQueue && this.$store.state.autoCloseQueue) {
+            if (this.$store.state.desktopLayout && !this.$store.state.pinQueue && this.showQueue && this.$store.state.autoCloseQueue) {
                 this.closeTimer = setTimeout(function () {
-                    if (this.$store.state.desktopLayout && !this.$store.state.pinQueue && this.$store.state.showQueue && this.$store.state.autoCloseQueue) {
+                    if (this.$store.state.desktopLayout && !this.$store.state.pinQueue && this.showQueue && this.$store.state.autoCloseQueue) {
                         this.$store.commit('setShowQueue', false);
+                        this.$store.commit('setShowQueueNp', false);
                     }
                     this.closeTimer = undefined;
                 }.bind(this), LMS_QUEUE_CLOSE_TIMEOUT);
             }
         },
+        visibilityToggled(shown) {
+            if (shown) {
+                if (this.$store.state.autoScrollQueue) {
+                    this.scrollToCurrent();
+                }
+                this.resetCloseTimer();
+                this.updateWidth();
+            } else {
+                this.cancelCloseTimer();
+            }
+        }
     },
     filters: {
         displayCount: function (value) {
@@ -1758,15 +1772,10 @@ var lmsQueue = Vue.component("lms-queue", {
             }
         },
         '$store.state.showQueue': function(shown) {
-            if (shown) {
-                if (this.$store.state.autoScrollQueue) {
-                    this.scrollToCurrent();
-                }
-                this.resetCloseTimer();
-                this.updateWidth();
-            } else {
-                this.cancelCloseTimer();
-            }
+            this.visibilityToggled(shown);
+        },
+        '$store.state.showQueueNp': function(shown) {
+            this.visibilityToggled(shown);
         },
         '$store.state.pinQueue': function(pinned) {
             if (pinned) {

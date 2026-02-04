@@ -7,6 +7,8 @@
    setting.
 5. If a SlimBrowse header has no actions then ignore clicks.
 6. Ignore swipes when non-pinned queue is shown.
+7. Fix various actions (such as scrolling) when non-pinned queue shown over
+   now-playing.
 
 6.1.6
 -----

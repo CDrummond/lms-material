@@ -647,6 +647,9 @@ var app = new Vue({
                 return;
             }
             if (this.$store.state.desktopLayout) {
+                if (this.$store.state.showQueueNp) {
+                    return;
+                }
                 if ('up'==direction) {
                     bus.$emit('swipeUp');
                 } else if ('down'==direction) {

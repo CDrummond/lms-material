@@ -6,6 +6,7 @@
 4. Show home button in certain diaogs, if requested by caller, regardless of
    setting.
 5. If a SlimBrowse header has no actions then ignore clicks.
+6. Ignore swipes when non-pinned queue is shown.
 
 6.1.6
 -----

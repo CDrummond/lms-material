@@ -9,6 +9,7 @@
 6. Ignore swipes when non-pinned queue is shown.
 7. Fix various actions (such as scrolling) when non-pinned queue shown over
    now-playing.
+8. Show 'More' on far left for SlimBrowse headers with an action.
 
 6.1.6
 -----

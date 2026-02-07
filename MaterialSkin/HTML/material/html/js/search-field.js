@@ -6,7 +6,16 @@
  */
 'use strict';
 
-const SEARCH_OTHER = new Set(["band's campout", 'bbc sounds', 'deezer', 'qobuz', 'spotty', 'tidal', 'youtube', 'wefunk radio']);
+const SEARCH_OTHER = {
+    "band's campout":"bandcamp",
+    "bbc sounds":"bbc-sounds",
+    "deezer":"deezer",
+    "qobuz":"qobuz",
+    "spotty":"spotify",
+    "tidal":"tidal",
+    "youtube":"youtube",
+    "wefunk radio":"radio-station"
+}
 
 const SEARCH_ARTISTS_CAT = 1;
 const SEARCH_ALBUMS_CAT = 2;
@@ -202,7 +211,10 @@ Vue.component('lms-search-field', {
                             let items = resp.items;
                             resp.items = [];
                             for (let i=0, len=items.length; i<len; ++i) {
-                                if (SEARCH_OTHER.has(items[i].title.toLowerCase())) {
+                                let icon = SEARCH_OTHER[items[i].title.toLowerCase()];
+                                if (undefined!=icon) {
+                                    items[i].icon = undefined;
+                                    items[i].svg = icon;
                                     resp.items.push(items[i]);
                                 }
                             }

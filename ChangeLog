@@ -3,7 +3,7 @@
 1. Fix dialog list sizing on iOS.
 2. Fix home button in iframe dialogs.
 3. Fix 'Show when wide enough' string.
-4. Show home button in certain diaogs, if requested by caller, regardless of
+4. Show home button in certain dialogs, if requested by caller, regardless of
    setting.
 5. If a SlimBrowse header has no actions then ignore clicks.
 6. Ignore swipes when non-pinned queue is shown.

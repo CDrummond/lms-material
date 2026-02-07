@@ -88,6 +88,7 @@
     "/tidal.png":{"svg":"tidal"},
     "/youtube.png":{"svg":"youtube"},
     "/deezer.png":{"svg":"deezer"},
+    "plugins/Pyrrha/html/images/icon.png":{"svg":"pandora"},
 
     "PLUGIN_MULTILIBRARY":{"icon":"library_music"},
     "PLUGIN_SQLPLAYLIST":{"icon":"list"},

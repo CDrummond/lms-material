@@ -514,6 +514,7 @@
 "Show track number":"Vis albumsnummer",
 "Show track number next to title.":"Vis albumsnummer ved siden af titlen",
 "Show volume":"Vis lydstyrke",
+"Show when wide enough":"Vis når den er bred nok",
 "Shuffle":"Bland",
 "Shuffle albums":"Bland albums i tilfældig rækkefølge",
 "Shuffle by album":"Bland efter album",
@@ -526,7 +527,6 @@
 "Similar artists":"Lignende kunstnere",
 "Single field only":"Kun enkeltfelt",
 "Single line only":"Kun enkeltlinje",
-"Show when wide enough":"Vis når den er bred nok",
 "Skip backward":"Hop bagud",
 "Skip forward":"Hop fremad",
 "Sleep":"Dvale",
@@ -743,5 +743,6 @@
 "1 Year":"1 år",
 "%1 Years":"%1 år",
 "1 day":"1 dag",
-"%1 days":"%1 dage"
+"%1 days":"%1 dage",
+"List radio stations from favorites.":""
 }

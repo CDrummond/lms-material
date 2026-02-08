@@ -7,14 +7,14 @@
 'use strict';
 
 const SEARCH_OTHER = {
-    "band's campout":"bandcamp",
-    "bbc sounds":"bbc-sounds",
-    "deezer":"deezer",
-    "qobuz":"qobuz",
-    "spotty":"spotify",
-    "tidal":"tidal",
-    "youtube":"youtube",
-    "wefunk radio":"radio-station"
+    "band's campout":{svg:"bandcamp"},
+    "bbc sounds":{svg:"bbc-sounds"},
+    "deezer":{svg:"deezer"},
+    "qobuz":{svg:"qobuz"},
+    "spotty":{svg:"spotify"},
+    "tidal":{svg:"tidal"},
+    "youtube":{svg:"youtube"},
+    "wefunk radio":{svg:"radio-station"}
 }
 
 const SEARCH_ARTISTS_CAT = 1;
@@ -213,8 +213,8 @@ Vue.component('lms-search-field', {
                             for (let i=0, len=items.length; i<len; ++i) {
                                 let icon = SEARCH_OTHER[items[i].title.toLowerCase()];
                                 if (undefined!=icon) {
-                                    items[i].icon = undefined;
-                                    items[i].svg = icon;
+                                    items[i].icon = icon.icon;
+                                    items[i].svg = icon.svg;
                                     resp.items.push(items[i]);
                                 }
                             }

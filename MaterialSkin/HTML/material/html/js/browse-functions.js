@@ -3247,4 +3247,95 @@ function browseGoToItem(view, cmd, params, title, page, clearHistory, subtitle) 
     }
 }
 
+function getFavItemId(item, repl) {
+    if (item.id.startsWith("item_id:")) {
+        return item.id.replace("item_id:", repl);
+    }
+    if (item.params && item.params.item_id) {
+        return repl+item.params.item_id;
+    }
+    if (item.actions && item.actions.go && item.actions.go.params && item.actions.go.params.item_id) {
+        return repl+item.actions.go.params.item_id;
+    }
+    return undefined;
+}
+
+function browseHandleDrop(view, to, ev) {
+    view.stopScrolling = true;
+    ev.preventDefault();
+    bus.$emit('dragActive', false);
+    if (view.dragIndex!=undefined && to!=view.dragIndex) {
+        var item = view.items[view.dragIndex];
+        if (view.isTop || (view.current && (view.current.section==SECTION_FAVORITES || (view.current.section==SECTION_PLAYLISTS && item.stdItem==STD_ITEM_PLAYLIST_TRACK)))) {
+            var sel = Array.from(view.selection);
+            view.clearSelection();
+            if (sel.length>0) {
+                if (view.current.section!=SECTION_FAVORITES && sel.indexOf(to)<0) {
+                    bus.$emit('movePlaylistItems', view.current.id, sel.sort(function(a, b) { return a<b ? -1 : 1; }), to);
+                    if (lmsOptions.playlistImages && view.history.length>0) {
+                        view.history[view.history.length-1].needsRefresh = true;
+                    }
+                }
+            } else if (view.isTop) {
+                let drgIdx = view.dragIndex;
+                if (undefined!=view.items[0].ihe) {
+                    to-=view.topExtra.length;
+                    drgIdx-=view.topExtra.length;
+                }
+                view.top = arrayMove(view.top, drgIdx, to);
+                view.items = view.grid.use && view.$store.state.detailedHomeItems.length>0 ? view.topExtra.concat(view.top) : view.top;
+                view.saveTopList();
+                view.layoutGrid(true);
+            } else if (view.current) {
+                if (view.current.section==SECTION_FAVORITES) {
+                    if (view.$store.state.sortFavorites && !view.items[to].isFavFolder) {
+                        return;
+                    }
+                    var fromId = originalId(getFavItemId(view.items[view.dragIndex], "from_id:"))
+                    var toId = originalId(getFavItemId(view.items[to], "to_id:"));
+                    if (view.items[to].isFavFolder) {
+                        if (view.$store.state.sortFavorites) {
+                            lmsCommand(view.playerId(), ["favorites", "move", fromId, toId+".0"]).then(({data}) => {
+                                view.refreshList();
+                            });
+                        } else {
+                            let choices = [
+                                {val:1, title:i18n("Move into '%1'", view.items[to].title), svg:"folder-favorite"},
+                                {val:2, title:i18n("Move position"), icon:ACTIONS[SCROLL_TO_ACTION].icon, svg:ACTIONS[SCROLL_TO_ACTION].svg}
+                            ]
+                            choose(i18n("Move '%1'", view.items[view.dragIndex].title), choices).then(choice => {
+                                if (undefined!=choice && choice.val>0) {
+                                    lmsCommand(view.playerId(), ["favorites", "move", fromId, toId+(1==choice.val ? ".0" : "")]).then(({data}) => {
+                                        view.refreshList();
+                                    });
+                                }
+                            });
+                        }
+                    } else {
+                        lmsCommand(view.playerId(), ["favorites", "move", fromId, toId]).then(({data}) => {
+                            view.refreshList();
+                        });
+                    }
+                } else if (view.current.section==SECTION_PLAYLISTS) {
+                    lmsCommand(view.playerId(), ["playlists", "edit", "cmd:move", originalId(view.current.id), "index:"+view.dragIndex, "toindex:"+to]).then(({data}) => {
+                        view.refreshList();
+                        if (lmsOptions.playlistImages && view.history.length>0) {
+                            view.history[view.history.length-1].needsRefresh = true;
+                        }
+                    });
+                }
+            }
+        }
+    } else if (ev.dataTransfer) {
+        if (undefined!=window.mskQueueDrag && view.current.section==SECTION_PLAYLISTS) {
+            if (view.current.id.startsWith("playlist_id")) {
+                browseAddToPlaylist(view, window.mskQueueDrag, originalId(view.current.id), to, view.items.length);
+            } else {
+                browseAddToPlaylist(view, window.mskQueueDrag, originalId(view.items[to].id));
+            }
+        }
+    }
+    view.dragIndex = undefined;
+}
+
 const DEFERRED_LOADED = true;

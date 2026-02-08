@@ -2135,6 +2135,11 @@ sub _handleHomeExtraCmd {
         }
         $request->addResult("material_home_radios_loop_len", $cnt);
     }
+    if ($request->getParam('favorites')) {
+        my @cmd = ("favorites", "items", 0, $count, "menu:favorites", "menu:1");
+        my $req = Slim::Control::Request::executeRequest(undef, \@cmd);
+        $request->addResult("material_home_favorites_obj", $req->getResults());
+    }
     if ($request->getParam('playlists')) {
         my @cmd = ("material-skin-query", "playlists", 0, $count+1, "tags:suxE", "menu:1");
         my $req = Slim::Control::Request::executeRequest(undef, \@cmd);

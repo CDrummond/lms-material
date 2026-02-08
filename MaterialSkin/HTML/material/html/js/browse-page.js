@@ -1295,7 +1295,7 @@ var lmsBrowse = Vue.component("lms-browse", {
                 } else {
                     let command = JSON.parse(JSON.stringify(item.morecmd));
                     browseReplaceCommandTerms(this, command, item);
-                    this.fetchItems(command, {cancache:false, id:item.id, title: item.title, limit:item.limit});
+                    this.fetchItems(command, {cancache:false, id:item.id, title: item.title, limit:item.limit, section:item.section, isFavFolder:item.isFavFolder});
                 }
             } else if (item.allItems) {
                 this.addHistory();
@@ -2253,85 +2253,7 @@ var lmsBrowse = Vue.component("lms-browse", {
             }
         },
         drop(to, ev) {
-            this.stopScrolling = true;
-            ev.preventDefault();
-            bus.$emit('dragActive', false);
-            if (this.dragIndex!=undefined && to!=this.dragIndex) {
-                var item = this.items[this.dragIndex];
-                if (this.isTop || (this.current && (this.current.section==SECTION_FAVORITES || (this.current.section==SECTION_PLAYLISTS && item.stdItem==STD_ITEM_PLAYLIST_TRACK)))) {
-                    var sel = Array.from(this.selection);
-                    this.clearSelection();
-                    if (sel.length>0) {
-                        if (this.current.section!=SECTION_FAVORITES && sel.indexOf(to)<0) {
-                            bus.$emit('movePlaylistItems', this.current.id, sel.sort(function(a, b) { return a<b ? -1 : 1; }), to);
-                            if (lmsOptions.playlistImages && this.history.length>0) {
-                                this.history[this.history.length-1].needsRefresh = true;
-                            }
-                        }
-                    } else if (this.isTop) {
-                        let drgIdx = this.dragIndex;
-                        if (undefined!=this.items[0].ihe) {
-                            to-=this.topExtra.length;
-                            drgIdx-=this.topExtra.length;
-                        }
-                        this.top = arrayMove(this.top, drgIdx, to);
-                        this.items = this.grid.use && this.$store.state.detailedHomeItems.length>0 ? this.topExtra.concat(this.top) : this.top;
-                        this.saveTopList();
-                        this.layoutGrid(true);
-                    } else if (this.current) {
-                        if (this.current.section==SECTION_FAVORITES) {
-                            if (this.$store.state.sortFavorites && !this.items[to].isFavFolder) {
-                                return;
-                            }
-                            var fromId = originalId(this.items[this.dragIndex].id.startsWith("item_id:")
-                                            ? this.items[this.dragIndex].id.replace("item_id:", "from_id:")
-                                            : "from_id:"+this.items[this.dragIndex].params.item_id);
-                            var toId =originalId( this.items[to].id.startsWith("item_id:")
-                                            ? this.items[to].id.replace("item_id:", "to_id:")
-                                            : "to_id:"+this.items[to].params.item_id);
-                            if (this.items[to].isFavFolder) {
-                                if (this.$store.state.sortFavorites) {
-                                    lmsCommand(this.playerId(), ["favorites", "move", fromId, toId+".0"]).then(({data}) => {
-                                        this.refreshList();
-                                    });
-                                } else {
-                                    let choices = [
-                                        {val:1, title:i18n("Move into '%1'", this.items[to].title), svg:"folder-favorite"},
-                                        {val:2, title:i18n("Move position"), icon:ACTIONS[SCROLL_TO_ACTION].icon, svg:ACTIONS[SCROLL_TO_ACTION].svg}
-                                    ]
-                                    choose(i18n("Move '%1'", this.items[this.dragIndex].title), choices).then(choice => {
-                                        if (undefined!=choice && choice.val>0) {
-                                            lmsCommand(this.playerId(), ["favorites", "move", fromId, toId+(1==choice.val ? ".0" : "")]).then(({data}) => {
-                                                this.refreshList();
-                                            });
-                                        }
-                                    });
-                                }
-                            } else {
-                                lmsCommand(this.playerId(), ["favorites", "move", fromId, toId]).then(({data}) => {
-                                    this.refreshList();
-                                });
-                            }
-                        } else if (this.current.section==SECTION_PLAYLISTS) {
-                            lmsCommand(this.playerId(), ["playlists", "edit", "cmd:move", originalId(this.current.id), "index:"+this.dragIndex, "toindex:"+to]).then(({data}) => {
-                                this.refreshList();
-                                if (lmsOptions.playlistImages && this.history.length>0) {
-                                    this.history[this.history.length-1].needsRefresh = true;
-                                }
-                            });
-                        }
-                    }
-                }
-            } else if (ev.dataTransfer) {
-                if (undefined!=window.mskQueueDrag && this.current.section==SECTION_PLAYLISTS) {
-                    if (this.current.id.startsWith("playlist_id")) {
-                        browseAddToPlaylist(this, window.mskQueueDrag, originalId(this.current.id), to, this.items.length);
-                    } else {
-                        browseAddToPlaylist(this, window.mskQueueDrag, originalId(this.items[to].id));
-                    }
-                }
-            }
-            this.dragIndex = undefined;
+            browseHandleDrop(this, to, ev);
         },
         setWide() {
             let viewWidth = this.$store.state.desktopLayout ? this.pageElement.scrollWidth : window.innerWidth;

@@ -101,7 +101,7 @@ function parseBrowseResp(data, parent, options, cacheKey) {
             var addAction = false;
             var insertAction = false;
             var moreAction = false;
-            var isFavorites = parent && parent.isFavFolder
+            var isFavorites = parent && parent.isFavFolder;
             var isFromFavorites = isFavorites || (data.params[1].length>=1 && data.params[1][0]=="favorites") ? true : false;
             var isPlaylists = parent && parent.section == SECTION_PLAYLISTS;
             var isApps = parent && parent.section == SECTION_APPS;
@@ -2410,6 +2410,7 @@ function parseBrowseResp(data, parent, options, cacheKey) {
                          {key:'radios', loop:"radios", title:i18n('Radios'), svg:"radio", command:["material-skin-query","radios"], params:[], limit:200},
                          {key:'playlists', loop:"playlists", title:i18n('Playlists'), icon:"list", command:["material-skin-query","playlists"], params:[PLAYLIST_TAGS, "menu:1"], limit:200},
                          {key:'changed', loop:"albums", title:lmsOptions.supportReleaseTypes ? i18n("Recently Updated Releases") : i18n("Recently Updated Albums"), svg:"updated-music", command:["albums"], params:["sort:changed", ALBUM_TAGS_ALL_ARTISTS]},
+                         {key:'favorites', loop:"item", title:i18n("Favorites"), icon:"favorite", command:["favorites", "items"], params:["menu:favorites", "menu:1"], section:SECTION_FAVORITES, isFavFolder:true},
                          {id:DETAILED_HOME_EXPLORE}
                         ];
             for (let s=0, len=lists.length-1; s<len; ++s) { // Ignore 'Explore'
@@ -2448,7 +2449,8 @@ function parseBrowseResp(data, parent, options, cacheKey) {
                     }
                 }
                 if (loop!=undefined) {
-                    let parent = undefined;
+                    let isFav = lists[s].section==SECTION_FAVORITES;
+                    let parent = isFav ? {section:SECTION_FAVORITES, isFavFolder:true} : undefined;
                     let new_data = {
                         id:2,
                         method: data.method,
@@ -2470,9 +2472,22 @@ function parseBrowseResp(data, parent, options, cacheKey) {
                     if (undefined!=newResp && newResp.items.length>0) {
                         if (undefined!=obj) { // 3rd party => slimbrowse...
                             let header = {title:lists[s].title, id:lists[s].id, header:true, ihe:1, icon:lists[s].icon, svg: lists[s].svg, limit: lists[s].limit,
-                                          morecmd:parseInt(obj['count'])>count ? {command:["material-skin", "home-extra"], params:[lists[s].id.split('_').slice(1).join('_')+":1", "ismore:1", "count:200"]} : undefined,
-                                          baseActions:undefined!=obj['base'] ? obj['base']['actions'] : undefined}
+                                          morecmd:undefined, baseActions:undefined!=obj['base'] ? obj['base']['actions'] : undefined,
+                                          section:lists[s].section, isFavFolder:lists[s].isFavFolder}
                             mapIcon(header);
+                            if (undefined==header.icon && undefined!=lists[s].icon) {
+                                header.icon = lists[s].icon;
+                            }
+                            if (undefined==header.svg && undefined!=lists[s].svg) {
+                                header.svg = lists[s].svg;
+                            }
+                            if (parseInt(obj['count'])>count) {
+                                if (isFav) {
+                                    header.morecmd = {command:lists[s].command, params:lists[s].params};
+                                } else {
+                                    header.morecmd = {command:["material-skin", "home-extra"], params:[lists[s].id.split('_').slice(1).join('_')+":1", "ismore:1", "count:200"]};
+                                }
+                            }
                             let iheHdr = resp.items.length;
                             resp.items.push(header);
                             for (let i=0, loop=newResp.items, len=loop.length; i<len; ++i) {

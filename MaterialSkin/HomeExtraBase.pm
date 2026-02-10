@@ -9,28 +9,26 @@ sub initPlugin {
 	my ($class, %args) = @_;
 
 	my $extra = delete $args{extra};
-
+	
 	$class->SUPER::initPlugin(%args);
 
-	Plugins::MaterialSkin::Plugin->registerHomeExtra($args{tag}, {
-		title => $extra->{title},
-		subtitle => $extra->{subtitle},
-		icon  => $extra->{icon},
-		needsPlayer => $extra->{needsPlayer},
+	$extra->{handler} = sub { $class->handleExtra(@_) }; #Sven 2026-02-10
 
-		handler => sub { $class->handleExtra(@_) },
-	});
+	Plugins::MaterialSkin::Plugin->registerHomeExtra($args{tag}, $extra); #Sven 2026-02-10
 }
 
 #  we don't want these menus to be shown anywhere but as Home Extras
 sub initJive {[]}
 sub modeName {}
 
-sub handleExtra {
-	my ($class, $client, $cb, $count) = @_;
+sub handleExtra { #Sven 2026-02-05
+	my ($class, $client, $cb, $count, $userId) = @_;
 
-	Slim::Control::Request::executeRequest($client,
-		[ $class->tag, 'items', 0, $count || Plugins::MaterialSkin::Plugin::NUM_HOME_ITEMS(), 'menu:1' ],
+	my $params = [ $class->tag, 'items', 0, $count || Plugins::MaterialSkin::Plugin::NUM_HOME_ITEMS(), 'menu:1' ];
+	push @$params, 'user_id:' . $userId if $userId;
+	Slim::Control::Request::executeRequest(
+		$client,
+		$params,
 		sub {
 			my $response = shift;
 			my $results = $response->getResults() || {};

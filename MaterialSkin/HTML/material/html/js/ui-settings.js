@@ -808,17 +808,12 @@ Vue.component('lms-ui-settings', {
                 { key:2, label:i18n("Fixed clock")},
                 { key:3, label:i18n("Blank screen")}
                 ];
-            this.userids=[
-                { key:'', label:i18n("None")},
-                { key:'001', label:'001'},
-                { key:'002', label:'002'},
-                { key:'003', label:'003'},
-                { key:'004', label:'004'},
-                { key:'005', label:'005'}
-                ];  
-
+            this.userids = [{ key: '', label: i18n('None') }];
+                for (let i = 1; i <= 9; i++) {
+                    const v = String(i).padStart(3, '0')
+                    this.userids.push({ key: v, label: v })
+                } 
             this.initHomeItems();
-
             this.homeButtonValues=[
                 { key:0, label:i18n("Don't show")},
                 { key:1, label:i18n("Show always")},

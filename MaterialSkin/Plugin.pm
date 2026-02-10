@@ -535,14 +535,10 @@ sub registerHomeExtra {
 
     $log->warn("Home Extra with id '$id' is already registered - overwriting") if $HOME_EXTRAS->{$id};
 
-    $HOME_EXTRAS->{'3rdparty_' . $id} = {
-        id          => $id,
-        title       => $args->{title},
-        subtitle    => $args->{subtitle},
-        icon        => $args->{icon} || '',
-        handler     => $args->{handler},
-        needsPlayer => $args->{needsPlayer},
-    };
+    my $extras = { id => $id };
+    foreach (keys %$args) { $extras->{$_} = $args->{$_} }
+
+    $HOME_EXTRAS->{'3rdparty_' . $id} = $extras;
 }
 
 sub getHomeExtra {
@@ -2151,15 +2147,17 @@ sub _handleHomeExtraCmd {
     my $others = [ grep { $_ } map { getHomeExtra($_) } keys %{$request->getParamsCopy()} ];
     if (scalar @$others) {
         # process other home items asynchronously and in parallel - they might be doing online lookups
+        my $userId = $request->getParam('user_id'); #Sven 2026-02-05
         Async::Util::amap(
             inputs => $others,
             action => sub {
                 my ($extra, $acb) = @_;
                 my $id = $extra->{id};
+                my $ct = $extra->{count} && $extra->{count} > $count ? $extra->{count} : $count; #Sven 2026-02-10
 
                 $extra->{handler}->($request->client, sub {
                     $acb->({ $id => (shift || []) });
-                }, $count);
+                }, $ct, $userId); #Sven 2026-02-05
             },
             cb => sub {
                 my ($resultsList, $err) = @_;

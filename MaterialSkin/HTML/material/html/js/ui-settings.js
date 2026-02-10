@@ -820,7 +820,7 @@ Vue.component('lms-ui-settings', {
                 this.detailedHomeValues[DETAILED_HOME_STD_PREFIX+"artists_popular"] = { title:i18n('Popular Artists'), subtitle:i18n('Based upon play count for the past few months only.'), svg:"artistpopular"};
             }
             this.detailedHomeValues[DETAILED_HOME_STD_PREFIX+"random"] = { title:lmsOptions.supportReleaseTypes ? i18n("Random Releases") : i18n("Random Albums"), svg:"dice-album"};
-            this.detailedHomeValues[DETAILED_HOME_STD_PREFIX+"radios"] = { title:i18n('Radios'), subtitle:this.i18n("List radio stations from favorites."), svg:"radio"}
+            this.detailedHomeValues[DETAILED_HOME_STD_PREFIX+"radios"] = { title:i18n('Radios'), subtitle:i18n("List radio stations from favorites."), svg:"radio"}
             if (lmsOptions.playlistImages) {
                 this.detailedHomeValues[DETAILED_HOME_STD_PREFIX+"playlists"] = { title:i18n('Playlists'), icon:"list"};
             }
@@ -1090,10 +1090,19 @@ Vue.component('lms-ui-settings', {
             items.sort((a, b) => {
                 let at = a.id.split("_")[0];
                 let bt = b.id.split("_")[0];
+                let astd = a.id.startsWith("std");
+                let bstd = b.id.startsWith("std");
                 if (at!=bt) {
-                    let aid = a.id.startsWith("std") ? "0"+a.id : a.id;
-                    let bid = b.id.startsWith("std") ? "0"+b.id : b.id;
+                    let aid = astd ? "0"+a.id : a.id;
+                    let bid = bstd ? "0"+b.id : b.id;
                     return aid<bid ? -1 : 1
+                }
+                if (!astd && !bstd) {
+                    at = a.id.split("_")[1].substring(0, 4);
+                    bt = b.id.split("_")[1].substring(0, 4);
+                    if (at!=bt) {
+                        return at<bt ? -1 : 1
+                    }
                 }
                 return titleSort(a, b);
             });

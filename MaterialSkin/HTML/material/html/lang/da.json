@@ -272,6 +272,7 @@
 "Leave individual player's volume.":"Undlad at ændre lydstyrken på de enkelte afspillere",
 "Library":"Bibliotek",
 "Light":"Lys",
+"List radio stations from favorites.":"Vis radiostationer fra favoritter",
 "Loading...":"Indlæser...",
 "Local":"Lokal",
 "Local Playlist":"Lokal afspilningsliste",
@@ -743,6 +744,5 @@
 "1 Year":"1 år",
 "%1 Years":"%1 år",
 "1 day":"1 dag",
-"%1 days":"%1 dage",
-"List radio stations from favorites.":""
+"%1 days":"%1 dage"
 }

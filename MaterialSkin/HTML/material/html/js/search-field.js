@@ -92,14 +92,16 @@ Vue.component('lms-search-field', {
 <v-layout>
  <v-text-field :label="ACTIONS[SEARCH_LIB_ACTION].title" clearable autocorrect="off" v-model.lazy="term" class="lms-search lib-search" @input="textChanged($event)" @blur="stopDebounce" v-on:keyup.enter="searchNow" ref="entry"></v-text-field>
  <v-icon v-if="searching" class="toolbar-button pulse">search</v-icon>
- <v-btn v-else-if="!queryParams.party" :title="ACTIONS[ADV_SEARCH_ACTION].title" flat icon class="toolbar-button" @click="advanced()"><img :src="ACTIONS[ADV_SEARCH_ACTION].svg | svgIcon(darkUi)"></img></v-btn>
+ <v-btn v-if="!searching && !queryParams.party && history.length>0 && (history.length>1 || history[0]!=term)" flat icon class="toolbar-button" @click="showHistory()"><v-icon>history</v-icon></v-btn>
+ <v-btn v-if="!searching && !queryParams.party" :title="ACTIONS[ADV_SEARCH_ACTION].title" flat icon class="toolbar-button" @click="advanced()"><img :src="ACTIONS[ADV_SEARCH_ACTION].svg | svgIcon(darkUi)"></img></v-btn>
 </v-layout>
 `,
     props: [],
     data() {
         return {
             term: "",
-            searching: false
+            searching: false,
+            history: []
         }
     },
     computed: {
@@ -109,6 +111,7 @@ Vue.component('lms-search-field', {
     },
     mounted() {
         this.term = getLocalStorageVal('search', '');
+        this.history = JSON.parse(getLocalStorageVal('searchHistory', '[]'));
         this.commands=[];
         this.results=[];
         this.searching=false;
@@ -161,6 +164,7 @@ Vue.component('lms-search-field', {
             if (str.length>1 && str!=this.str) {
                 this.str = str;
                 setLocalStorageVal('search', this.str);
+                this.addToHistory(str);
                 this.commands=[];
                 if (!queryParams.party) {
                     this.commands.push({cat:SEARCH_ARTISTS_CAT, command:["artists"], params:["tags:s", "search:"+this.str]});
@@ -185,6 +189,19 @@ Vue.component('lms-search-field', {
                 seachReqId++;
                 this.doSearch();
             }
+        },
+        addToHistory(str) {
+            for (let i=0, len=this.history.length; i<len; ++i) {
+                if (str==this.history[i]) {
+                    this.history.splice(i, 1);
+                    break;
+                }
+            }
+            this.history.unshift(str);
+            if (this.history.length>20) {
+                this.history = this.history.slice(0, 20);
+            }
+            setLocalStorageVal('searchHistory', JSON.stringify(this.history));
         },
         doSearch() {
             if (!this.searching) {
@@ -231,6 +248,27 @@ Vue.component('lms-search-field', {
         },
         i18n(str) {
             return i18n(str);
+        },
+        showHistory() {
+            let items = [];
+            for (let i=0, len=this.history.length; i<len; ++i) {
+                items.push({id:i, title:this.history[i], canremove:true});
+            }
+            choose("Select previous search term", items).then(resp => {
+                if (undefined!=resp) {
+                    if (this.history.length!=resp.items.length) {
+                        this.history = [];
+                        for (let i=0, len=resp.items.length; i<len; ++i) {
+                            this.history.push(resp.items[i].title);
+                        }
+                        setLocalStorageVal('searchHistory', JSON.stringify(this.history));
+                    }
+                    if (undefined!=resp.item) {
+                        this.term = resp.item.title;
+                        this.searchNow();
+                    }
+                }
+            });
         }
     },
     beforeDestroy() {

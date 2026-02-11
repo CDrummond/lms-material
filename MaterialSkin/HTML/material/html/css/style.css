@@ -3666,12 +3666,7 @@ div.v-subheader {
  content:"\e834";
 }
 
-.vlib-menu > div {
- white-space:normal!important;
-}
-
-.nd-list .v-list__tile__title,
-.vlib-menu .v-list__tile__title {
+.nd-list .v-list__tile__title {
  white-space:normal!important;
  overflow: hidden;
  display: -webkit-box;
@@ -3682,11 +3677,6 @@ div.v-subheader {
 .nd-list .v-list__tile__title {
  height:unset!important;
  line-height:calc(var(--std-font-size) + 3px);
-}
-
-.vlib-menu .v-list__tile__title {
- height:unset!important;
- min-height:24px;
 }
 
 .ellipsis3 {

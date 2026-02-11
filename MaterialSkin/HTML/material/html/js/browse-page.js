@@ -477,15 +477,6 @@ var lmsBrowse = Vue.component("lms-browse", {
     </v-list-tile>
    </template>
   </v-list>
-  <v-list class="vlib-menu" v-else-if="menu.libraries">
-   <template v-for="(item, index) in menu.libraries">
-    <v-list-tile @click="selectLibrary(item.id)">
-     <v-list-tile-avatar><v-icon small>{{item.name==libraryName ? 'radio_button_checked' :'radio_button_unchecked'}}</v-icon></v-list-tile-avatar>
-     <v-list-tile-content><v-list-tile-title>{{item.name}}</v-list-tile-title></v-list-tile-content>
-     <v-list-tile-action @click="deleteLibrary(item)" v-if="index>0 && unlockAll" :title="i18n('Delete %1', item.name)"><v-btn icon><v-icon>delete_outline</v-icon></v-btn></v-list-tile-action>
-    </v-list-tile>
-   </template>
-  </v-list>
   <v-list v-else-if="menu.items">
    <template v-for="(item, index) in menu.items">
     <v-list-tile @click="menuItemAction(item, undefined, undefined, $event)" v-if="undefined==item.title">
@@ -1446,40 +1437,6 @@ var lmsBrowse = Vue.component("lms-browse", {
                 }
                 showMenu(this, {show:true, x:event.clientX, y:event.clientY, history:history});
             }
-        },
-        showLibMenu(event, index) {
-            lmsList("", ["libraries"]).then(({data}) => {
-                if (data && data.result && data.result.folder_loop && data.result.folder_loop.length>0) {
-                    var libraries = [];
-                    for (var i=0, len=data.result.folder_loop.length; i<len; ++i) {
-                        data.result.folder_loop[i].name = data.result.folder_loop[i].name.replace(SIMPLE_LIB_VIEWS, "");
-                        libraries.push(data.result.folder_loop[i]);
-                    }
-                    libraries.sort(nameSort);
-                    libraries.unshift({name: i18n("All"), id:LMS_DEFAULT_LIBRARY});
-                    showMenu(this, {show:true, x:event.clientX, y:event.clientY, libraries:libraries, index:index});
-                }
-            });
-        },
-        selectLibrary(id) {
-            this.$store.commit('setLibrary', id);
-            if (this.isTop) {
-                this.getHomeExtra();
-            }
-        },
-        deleteLibrary(lib) {
-            confirm(i18n("Delete '%1'?", lib.name)+addNote(i18n("This will remove the 'virtual library', but will not delete the actual music files contained within.")), i18n('Delete')).then(res => {
-                if (res) {
-                    lmsCommand("", ["material-skin", "delete-vlib", "id:"+lib.id]).then(({data}) => {
-                        if (this.$store.state.library==lib.id) {
-                            this.$store.commit('setLibrary', LMS_DEFAULT_LIBRARY);
-                            if (this.isTop) {
-                               this.getHomeExtra();
-                            }
-                        }
-                    });
-                }
-            });
         },
         headerAction(act, event) {
             storeClickOrTouchPos(event, this.menu);

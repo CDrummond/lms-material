@@ -252,15 +252,17 @@ Vue.component('lms-search-field', {
         showHistory() {
             let items = [];
             for (let i=0, len=this.history.length; i<len; ++i) {
-                items.push({id:i, title:this.history[i], canremove:true});
+                items.push({id:i, title:this.history[i], canremove:1});
             }
+            let numItems = items.length;
             choose("Select previous search term", items).then(resp => {
                 if (undefined!=resp) {
-                    if (this.history.length!=resp.items.length) {
-                        this.history = [];
+                    if (numItems!=resp.items.length) {
+                        let history = [];
                         for (let i=0, len=resp.items.length; i<len; ++i) {
-                            this.history.push(resp.items[i].title);
+                            history.push(resp.items[i].title);
                         }
+                        this.history = history;
                         setLocalStorageVal('searchHistory', JSON.stringify(this.history));
                     }
                     if (undefined!=resp.item) {

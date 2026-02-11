@@ -1974,7 +1974,7 @@ function browseItemMenu(view, item, index, event) {
             showMenu(view, {show:true, item:item, x:event.clientX, y:event.clientY, index:index,
                             itemMenu:menu});
         } else if (TOP_MYMUSIC_ID==item.id) {
-            view.showLibMenu(event, index);
+            browseSelectVLib(view);
         }
         return;
     }
@@ -2058,7 +2058,8 @@ function browseHeaderAction(view, act, event, ignoreOpenMenus) {
             }
         });
     } else if (VLIB_ACTION==act) {
-        view.showLibMenu(event);
+        storeClickOrTouchPos(event);
+        browseSelectVLib(view);
     } else if (undefined!=item.allid && (ADD_ACTION==act || PLAY_ACTION==act)) {
         view.itemAction(act, {swapid:item.allid, id:view.items[0].id, title:item.title,
                               goAction:view.items[0].goAction, params:view.items[0].params, section:view.items[0].section});
@@ -3336,6 +3337,51 @@ function browseHandleDrop(view, to, ev) {
         }
     }
     view.dragIndex = undefined;
+}
+
+function browseSelectVLib(view) {
+    lmsList("", ["libraries"]).then(({data}) => {
+        if (data && data.result && data.result.folder_loop && data.result.folder_loop.length>0) {
+            let libraries = [];
+            let ids = new Set();
+            for (let i=0, len=data.result.folder_loop.length; i<len; ++i) {
+                let item = data.result.folder_loop[i];
+                item.name = item.name.replace(SIMPLE_LIB_VIEWS, "");
+                libraries.push({title:item.name, id:item.id, canremove:2, icon:item.id==view.$store.state.library ? 'radio_button_checked' : 'radio_button_unchecked'});
+                ids.add(item.id);
+            }
+            libraries.sort(titleSort);
+            libraries.unshift({title: i18n("All"), id:LMS_DEFAULT_LIBRARY, icon:LMS_DEFAULT_LIBRARY==view.$store.state.library ? 'radio_button_checked' : 'radio_button_unchecked'});
+            choose("Select virtual library to use", libraries).then(resp => {
+                if (undefined!=resp) {
+                    let currentLibId = view.$store.state.library;
+                    if (undefined!=resp.item && resp.item.id!=currentLibId) {
+                        view.$store.commit('setLibrary', resp.item.id);
+                        currentLibId = resp.item.id;
+                        if (view.isTop) {
+                            view.getHomeExtra();
+                        }
+                    }
+                    if (ids.size!=(resp.items.length-1)) {
+                        let currentIds = new Set();
+                        for (let i=1, len=resp.items.length; i<len; ++i) {
+                            currentIds.add(resp.items[i].id);
+                        }
+                        let removed = new Set([...ids].filter(x => !currentIds.has(x)));
+                        removed.forEach(id => {
+                            lmsCommand("", ["material-skin", "delete-vlib", "id:"+id]);
+                        });
+                        if (removed.has(currentLibId)) {
+                            view.$store.commit('setLibrary', LMS_DEFAULT_LIBRARY);
+                            if (view.isTop) {
+                               view.getHomeExtra();
+                            }
+                        }
+                    }
+                }
+            });
+        }
+    });
 }
 
 const DEFERRED_LOADED = true;

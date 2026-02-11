@@ -39,7 +39,7 @@ Vue.component('lms-choice-dialog', {
   </v-card-text>
   <v-card-actions>
    <v-spacer></v-spacer>
-   <v-btn flat @click.native="cancel()">{{i18n('Cancel')}}</v-btn>
+   <v-btn flat @click.native="cancel()">{{canRemoveItems ? i18n('Close') : i18n('Cancel')}}</v-btn>
   </v-card-actions>
  </v-card>
 </v-dialog>
@@ -53,7 +53,8 @@ Vue.component('lms-choice-dialog', {
             options:[],
             option:0,
             boundKeys: false,
-            firstIsZero: false
+            firstIsZero: false,
+            canRemoveItems: false
         }
     },
     computed: {
@@ -73,8 +74,14 @@ Vue.component('lms-choice-dialog', {
                 this.option = parseInt(getLocalStorageVal('choice-'+this.key, undefined==extra.def ? 0 : extra.def));
             }
             this.show = true;
-            this.canRemoveItems = this.items.length>0 && this.items[0].canremove;
-            if (1==this.items.length && !this.items[0].canremove && (undefined==this.options || this.options.length<1)) {
+            this.canRemoveItems = false;
+            for (let i=0, len=items.length; i<len; ++i) {
+                if (items[i].canremove) {
+                    this.canRemoveItems = true;
+                    break;
+                }
+            }
+            if (1==this.items.length && !this.canRemoveItems && (undefined==this.options || this.options.length<1)) {
                 this.choose(this.items[0]);
             } else {
                 bindNumeric(this);
@@ -124,8 +131,18 @@ Vue.component('lms-choice-dialog', {
             unbindNumeric(this);
         },
         remove(index) {
+            if (2==this.items[index].canremove) {
+                confirm(i18n("Remove '%1'?", this.items[index].title), i18n('Remove')).then(res => {
+                    if (res) {
+                        this.removeItem(index);
+                    }
+                });
+            } else {
+                this.removeItem(index);
+            }
+        },
+        removeItem(index) {
             this.items.splice(index, 1);
-            console.log(JSON.stringify(this.items));
             if (this.items.length==0) {
                 this.cancel();
             }

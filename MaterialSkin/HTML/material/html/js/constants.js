@@ -276,3 +276,10 @@ const MAX_HOME_EXTRA_ROW = 30;
 const RADIOS_BASE_ACTIONS = { "add-hold": { "cmd": ["favorites", "playlist", "insert"], "params": {"menu": "favorites"}, "itemsParams": "params"},
                               "play": { "cmd": ["favorites", "playlist", "play"], "params": {"menu": "favorites"}, "itemsParams": "params"},
                               "add": { "cmd": ["favorites", "playlist", "add"], "params": {"menu": "favorites"}, "itemsParams": "params"}};
+
+const SEARCH_ARTISTS_CAT = 1;
+const SEARCH_ALBUMS_CAT = 2;
+const SEARCH_WORKS_CAT = 3;
+const SEARCH_TRACKS_CAT = 4;
+const SEARCH_PLAYLISTS_CAT = 5;
+const SEARCH_OTHER_CAT = 6;

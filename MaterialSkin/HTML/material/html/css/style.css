@@ -890,6 +890,10 @@ div.v-subheader {
  margin-right:4px;
 }
 
+.lms-list .grid-scroll .v-list__tile, .lms-list .grid-scroll .v-list__tile .image-grid-item {
+ height:250px !important;
+}
+
 .lms-image-grid table {
  border-spacing:0px !important;
 }

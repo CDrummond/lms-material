@@ -17,13 +17,6 @@ const SEARCH_OTHER = {
     "wefunk radio":{svg:"radio-station"}
 }
 
-const SEARCH_ARTISTS_CAT = 1;
-const SEARCH_ALBUMS_CAT = 2;
-const SEARCH_WORKS_CAT = 3;
-const SEARCH_TRACKS_CAT = 4;
-const SEARCH_PLAYLISTS_CAT = 5;
-const SEARCH_OTHER_CAT = 6;
-
 const SEARCH_CLAMPED_MENU = [PLAY_ALL_ACTION, INSERT_ALL_ACTION, ADD_ALL_ACTION, DIVIDER, MORE_ACTION];
 const SEARCH_MENU = [PLAY_ALL_ACTION, INSERT_ALL_ACTION, ADD_ALL_ACTION];
 
@@ -32,55 +25,61 @@ function buildSearchResp(results) {
     let total=0;
     for (let i=0, len=results.length; i<len; ++i) {
         let all = [];
+        let cat = results[i].command.cat;
         let numItems = results[i].resp.items.length;
-        let clamped = SEARCH_OTHER_CAT!=results[i].command.cat && numItems>LMS_INITIAL_SEARCH_RESULTS
+        let clamped = SEARCH_OTHER_CAT!=cat && numItems>LMS_INITIAL_SEARCH_RESULTS
         let limit = clamped ? LMS_INITIAL_SEARCH_RESULTS : numItems;
         let titleParam = clamped ? limit+" / "+numItems : numItems;
         let filter = undefined;
 
         total+=numItems;
-        if (SEARCH_ARTISTS_CAT==results[i].command.cat) {
+        if (SEARCH_ARTISTS_CAT==cat) {
             filter = FILTER_PREFIX+"artist";
             items.push({title: i18n("Artists") + " ("+titleParam+")", id:filter, header:true, hidesub:true, svg:"artist",
-                        allItems: clamped ? all : undefined, subtitle: i18np("1 Artist", "%1 Artists", numItems)});
-        } else if (SEARCH_ALBUMS_CAT==results[i].command.cat) {
+                        allItems: clamped ? all : undefined, subtitle: i18np("1 Artist", "%1 Artists", numItems), searchcat:cat});
+        } else if (SEARCH_ALBUMS_CAT==cat) {
             filter = FILTER_PREFIX+"album";
             items.push({title: (lmsOptions.supportReleaseTypes ? i18n("Releases") : i18n("Albums")) + " ("+titleParam+")",
                         id:filter, header:true, hidesub:true, svg: lmsOptions.supportReleaseTypes ? "release" : undefined,
                         icon: lmsOptions.supportReleaseTypes ? undefined : "album",
                         allItems: clamped ? all : undefined, subtitle:lmsOptions.supportReleaseTypes ? i18np("1 Release", "%1 Releases", numItems) : i18np("1 Album", "%1 Albums", numItems),
-                        menu:queryParams.party ? undefined : clamped ? SEARCH_CLAMPED_MENU : SEARCH_MENU});
-        } else if (SEARCH_WORKS_CAT==results[i].command.cat) {
+                        menu:queryParams.party ? undefined : clamped ? SEARCH_CLAMPED_MENU : SEARCH_MENU, searchcat:cat});
+        } else if (SEARCH_WORKS_CAT==cat) {
             if (numItems>0) {
                 filter = FILTER_PREFIX+"work";
                 items.push({title: i18n("Works") + " ("+titleParam+")",
                             id:filter, header:true, hidesub:true, svg: "classical-work",
                             allItems: clamped ? all : undefined, subtitle:i18np("1 Work", "%1 Works", numItems),
-                            menu:queryParams.party ? undefined : clamped ? SEARCH_CLAMPED_MENU : SEARCH_MENU});
+                            menu:queryParams.party ? undefined : clamped ? SEARCH_CLAMPED_MENU : SEARCH_MENU, searchcat:cat});
             }
-        } else if (SEARCH_TRACKS_CAT==results[i].command.cat) {
+        } else if (SEARCH_TRACKS_CAT==cat) {
             filter = FILTER_PREFIX+"track";
             items.push({title: i18n("Tracks", titleParam) + " ("+titleParam+")", id:filter, header:true, hidesub:true,
                         allItems: clamped ? all : undefined, subtitle: i18np("1 Track", "%1 Tracks", numItems),
                         icon: "music_note",
-                        menu:queryParams.party ? undefined : clamped ? SEARCH_CLAMPED_MENU : SEARCH_MENU});
-        } else if (SEARCH_PLAYLISTS_CAT==results[i].command.cat) {
+                        menu:queryParams.party ? undefined : clamped ? SEARCH_CLAMPED_MENU : SEARCH_MENU, searchcat:cat});
+        } else if (SEARCH_PLAYLISTS_CAT==cat) {
             filter = FILTER_PREFIX+"playlist";
             items.push({title: i18n("Playlists") + " ("+titleParam+")", id:filter, header:true, hidesub:true, icon:"list",
                         allItems: clamped ? all : undefined, subtitle: i18np("1 Playlist", "%1 Playlists", numItems),
-                        menu:queryParams.party ? undefined : clamped ? SEARCH_CLAMPED_MENU : SEARCH_MENU});
-        } else if (SEARCH_OTHER_CAT==results[i].command.cat) {
-            items.push({title: i18n("Search on..."), id:"search.other", header:true, icon:"search"});
+                        menu:queryParams.party ? undefined : clamped ? SEARCH_CLAMPED_MENU : SEARCH_MENU, searchcat:cat});
+        } else if (SEARCH_OTHER_CAT==cat) {
+            items.push({title: i18n("Search on..."), id:"search.other", header:true, icon:"search", searchcat:cat});
         }
+        let useItems = SEARCH_TRACKS_CAT==cat || (SEARCH_PLAYLISTS_CAT==cat && !lmsOptions.playlistImages);
+        let list = useItems ? items : [];
         for (let idx=0, loop=results[i].resp.items; idx<numItems; ++idx) {
             let itm = loop[idx];
             itm.filter=filter;
             if (idx<limit) {
-                items.push(itm);
+                list.push(itm);
             }
             if (clamped) {
                 all.push(itm);
             }
+        }
+        if (!useItems) {
+            items.push({items: list, searchcat:cat});
         }
     }
     return items;

@@ -23,7 +23,7 @@ const SEARCH_MENU = [PLAY_ALL_ACTION, INSERT_ALL_ACTION, ADD_ALL_ACTION];
 function buildSearchResp(results) {
     let items=[];
     let total=0;
-    let otherList = !getLocalStorageBool('other-grid', true);
+    let otherList = !isSetToUseGrid(GRID_TOP);
     for (let i=0, len=results.length; i<len; ++i) {
         let all = [];
         let cat = results[i].command.cat;

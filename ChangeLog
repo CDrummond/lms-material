@@ -5,6 +5,7 @@
 3. If using grid for 'My Music', etc, then show artist, album, works,
    playlists (if image support enabled), and 'Search on' in scrollable lists.
 4. Use dialog for virtual library selection.
+5. Remove small icon-only grid option, and default to always set.
 
 6.1.8
 -----

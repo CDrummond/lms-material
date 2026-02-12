@@ -55,7 +55,6 @@ var lmsOptions = {techInfo: getLocalStorageBool('techInfo', false),
                   groupdiscs: LMS_DEF_GROUP_DISCS,
                   variousArtistsString: LMS_DEF_VA_STRING,
                   classicalGenres: new Set(["Classical"]),
-                  smallIconOnlyGrid: getLocalStorageBool('smallIconOnlyGrid', true),
                   homeExtraNeedsPlayer: new Set(),
                   home3rdPartyExtraLists: LMS_3RDPARTY_HOME_EXTRA
                 };

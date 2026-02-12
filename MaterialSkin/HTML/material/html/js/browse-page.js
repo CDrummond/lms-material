@@ -1901,7 +1901,7 @@ var lmsBrowse = Vue.component("lms-browse", {
                         }
                     }
                 }
-                let smallIconOnly = iconOnly && lmsOptions.smallIconOnlyGrid && window.innerWidth<=440;
+                let smallIconOnly = iconOnly && window.innerWidth<=440;
                 var GRID_MAX_WIDTH = smallIconOnly
                                           ? 100 :
                                        window.innerWidth>3500

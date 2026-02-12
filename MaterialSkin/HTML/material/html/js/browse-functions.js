@@ -1778,29 +1778,41 @@ function browseItemAction(view, act, origItem, index, event, slimBrowseBaseActio
         let allowShuffle = -1;
         let allowPlayAction = -1;
         let allowOtherActions = -1;
+        let items = [];
         for (let i=0, loop=view.items, len=loop.length; i<len; ++i) {
             let itm = loop[i];
             if (itm.image) {
-                if (itm.id==item.id) {
-                    idx = images.length;
+                items.push(itm);
+            } else if (itm.items) { // Search results!
+               for (let j=0, jloop=itm.items, jlen=jloop.length; j<jlen; ++j) {
+                    let itm = jloop[j];
+                    if (itm.image) {
+                        items.push(itm);
+                    }
                 }
-                let isStdItem = itm.stdItem==STD_ITEM_ALBUM || itm.stdItem==STD_ITEM_ARTIST || itm.stdItem==STD_ITEM_WORK || itm.stdItem==STD_ITEM_WORK_COMPOSER;
-                let playAction = !queryParams.party && !LMS_KIOSK_MODE && (isStdItem || (undefined!=itm.menu && itm.menu[0]==PLAY_ACTION));
-                let otherAction = playAction && (isStdItem || (undefined!=itm.menu && itm.menu.length>1 && itm.menu[1]==INSERT_ACTION));
-                let image = {url:itm.image + (itm.image.startsWith("material/playlists/") ? "&full=1" : ""),
-                             title:itm.title+(undefined==itm.subtitle ? "" : (SEPARATOR+itm.subtitle)),
-                             index:playAction ? i : undefined
-                             };
-                images.push(image);
-                if (allowPlayAction!=0) {
-                    allowPlayAction = playAction ? 1 : 0;
-                }
-                if (allowOtherActions!=0) {
-                    allowOtherActions = otherAction ? 1 : 0;
-                }
-                if (allowOtherActions==1 && allowShuffle!=0 && lmsOptions.playShuffle && !queryParams.party && (!LMS_KIOSK_MODE || !HIDE_FOR_KIOSK.has(PLAY_SHUFFLE_ACTION))) {
-                    allowShuffle = undefined!=itm && undefined!=itm.stdItem && (itm.stdItem==STD_ITEM_ARTIST || itm.stdItem==STD_ITEM_ALBUM || itm.stdItem==STD_ITEM_PLAYLIST || itm.stdItem==STD_ITEM_WORK) ? 1 : 0
-                }
+            }
+        }
+        for (let i=0, len=items.length; i<len; ++i) {
+            let itm = items[i];
+            if (itm.id==item.id) {
+                idx = images.length;
+            }
+            let isStdItem = itm.stdItem==STD_ITEM_ALBUM || itm.stdItem==STD_ITEM_ARTIST || itm.stdItem==STD_ITEM_WORK || itm.stdItem==STD_ITEM_WORK_COMPOSER;
+            let playAction = !queryParams.party && !LMS_KIOSK_MODE && (isStdItem || (undefined!=itm.menu && itm.menu[0]==PLAY_ACTION));
+            let otherAction = playAction && (isStdItem || (undefined!=itm.menu && itm.menu.length>1 && itm.menu[1]==INSERT_ACTION));
+            let image = {url:itm.image + (itm.image.startsWith("material/playlists/") ? "&full=1" : ""),
+                         title:itm.title+(undefined==itm.subtitle ? "" : (SEPARATOR+itm.subtitle)),
+                         index:playAction ? i : undefined
+                         };
+            images.push(image);
+            if (allowPlayAction!=0) {
+                allowPlayAction = playAction ? 1 : 0;
+            }
+            if (allowOtherActions!=0) {
+                allowOtherActions = otherAction ? 1 : 0;
+            }
+            if (allowOtherActions==1 && allowShuffle!=0 && lmsOptions.playShuffle && !queryParams.party && (!LMS_KIOSK_MODE || !HIDE_FOR_KIOSK.has(PLAY_SHUFFLE_ACTION))) {
+                allowShuffle = undefined!=itm && undefined!=itm.stdItem && (itm.stdItem==STD_ITEM_ARTIST || itm.stdItem==STD_ITEM_ALBUM || itm.stdItem==STD_ITEM_PLAYLIST || itm.stdItem==STD_ITEM_WORK) ? 1 : 0
             }
         }
         bus.$emit('dlg.open', 'gallery', images, idx, false, undefined, allowShuffle==1 && allowOtherActions==1 ? 3 : (allowPlayAction==1 ? (allowOtherActions==1 ? 2 : 1) : 0) );

@@ -2,7 +2,9 @@
 -----
 1. Allow add 'Favourites' as scrolled list.
 2. Add search history.
-3. Use dialog for virtual library selection.
+3. If using grid for 'My Music', etc, then show artist, album, works,
+   playlists (if image support enabled), and 'Search on' in scrollable lists.
+4. Use dialog for virtual library selection.
 
 6.1.8
 -----

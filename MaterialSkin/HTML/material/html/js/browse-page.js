@@ -339,38 +339,36 @@ var lmsBrowse = Vue.component("lms-browse", {
     </v-list-tile>
     <v-list-tile v-else-if="undefined!=item.searchcat && undefined!=item.items" class="grid-scroll">
 
-    <div align="center" style="vertical-align: top" v-for="(citem, col) in item.items" @contextmenu.prevent="contextMenu(citem, isTop ? citem.gidx : (item.rs+col), $event)">
+    <div align="center" style="vertical-align: top" v-for="(citem, col) in item.items" @contextmenu.prevent="contextMenu(citem, undefined, $event)">
       <div v-if="undefined==citem" class="image-grid-item defcursor"></div>
-      <div v-else class="image-grid-item" @click="click(citem, isTop ? citem.gidx : (item.rs+col), $event)" :title="citem | itemTooltip" :draggable="citem.draggable || isTop" @dragstart="dragStart(isTop ? citem.gidx : (item.rs+col), $event)" @dragenter.prevent="" @dragend="dragEnd()" @dragover="dragOver(isTop ? citem.gidx : (item.rs+col), $event)" @drop="drop(isTop ? citem.gidx : (item.rs+col), $event)" v-bind:class="{'search-highlight':highlightIndex==(isTop ? citem.gidx : (item.rs+col)), 'list-active': (menu.show && (isTop ? citem.gidx : (item.rs+col))==menu.index) || (fetchingItem==item.id), 'drop-target':dragActive && (isTop ? citem.gidx : (item.rs+col))==dropIndex}">
-       <div v-if="selection.size>0 && browseCanSelect(citem)" class="check-btn grid-btn image-grid-select-btn" @click.stop="select(citem, isTop ? citem.gidx : (item.rs+col), $event)" :title="ACTIONS[citem.selected ? UNSELECT_ACTION : SELECT_ACTION].title" v-bind:class="{'check-btn-checked':citem.selected}"></div>
-       <img v-else-if="citem.multi" class="multi-disc" :src="(1==citem.multi ? 'group-multi' : 'album-multi') | svgIcon(true)" loading="lazy"></img>
+      <div v-else class="image-grid-item" @click="click(citem, undefined, $event)" :title="citem | itemTooltip" v-bind:class="{'list-active': menu.show && index==menu.index}">
+       <img v-if="citem.multi" class="multi-disc" :src="(1==citem.multi ? 'group-multi' : 'album-multi') | svgIcon(true)" loading="lazy"></img>
        <img v-else-if="citem.overlay" class="multi-disc" :src="citem.overlay | svgIcon(true)" loading="lazy"></img>
        <div v-if="citem.images" :tile="true" class="image-grid-item-img">
         <div class="mi" :class="'mi'+citem.images.length">
          <img v-for="(mic, midx) in citem.images" :class="'mi-'+midx" :key="mic" :src="mic|gridImageSize" loading="lazy"></img>
         </div>
        </div>
-       <img v-else-if="citem.image" :key="citem.image" :src="citem.image|gridImageSize" onerror="this.src=DEFAULT_COVER" v-bind:class="{'radio-img': SECTION_RADIO==citem.section || SECTION_APPS==citem.section || citem.isRadio, 'circular':citem.stdItem==STD_ITEM_ARTIST || citem.stdItem==STD_ITEM_ONLINE_ARTIST || citem.stdItem==STD_ITEM_WORK_COMPOSER}" class="image-grid-item-img" loading="lazy"></img>
+       <img v-else-if="citem.image" :key="citem.image" :src="citem.image|gridImageSize" onerror="this.src=DEFAULT_COVER" v-bind:class="{'circular':citem.stdItem==STD_ITEM_ARTIST || citem.stdItem==STD_ITEM_ONLINE_ARTIST || citem.stdItem==STD_ITEM_WORK_COMPOSER}" class="image-grid-item-img" loading="lazy"></img>
        <div class="image-grid-item-icon" v-else>
         <v-icon v-if="citem.icon" class="image-grid-item-img image-grid-item-icon">{{citem.icon}}</v-icon>
         <img v-else-if="citem.svg" class="image-grid-item-svg" :src="citem.svg | svgIcon(darkUi)" loading="lazy"></img>
         <img v-else class="image-grid-item-svg" :src="'image' | svgIcon(darkUi)" loading="lazy"></img>
        </div>
-       <div v-if="citem.image" class="image-grid-text" @click.stop="itemMenu(citem, isTop ? citem.gidx : (item.rs+col), $event)">{{citem.title}}</div>
+       <div v-if="citem.image" class="image-grid-text" @click.stop="itemMenu(citem, undefined, $event)">{{citem.title}}</div>
        <div v-else class="image-grid-text">{{citem.title}}</div>
-       <div class="image-grid-text subtext" v-if="citem.libname">{{citem.libname}}</div>
-       <div class="image-grid-text subtext" v-else v-html="citem.subtitle" v-bind:class="{'link-item':subtitlesClickable}" @click.stop="clickSubtitle(citem, isTop ? citem.gidx : (item.rs+col), $event)"></div>
-       <div class="grid-btn image-grid-btn hover-btn menu-btn" v-if="(undefined!=citem.stdItem && citem.stdItem<=STD_ITEM_MAX) || (citem.menu && citem.menu.length>0 && (!citem.isPinned || (!queryParams.party && (!LMS_KIOSK_MODE || !HIDE_FOR_KIOSK.has(PIN_ACTION)))))" @click.stop="itemMenu(citem, isTop ? citem.gidx : (item.rs+col), $event)" :title="i18n('%1 (Menu)', stripLinkTags(citem.title))"></div>
+       <div class="image-grid-text subtext" v-html="citem.subtitle" v-bind:class="{'link-item':subtitlesClickable}" @click.stop="clickSubtitle(citem, undefined, $event)"></div>
+       <div class="grid-btn image-grid-btn hover-btn menu-btn" v-if="(undefined!=citem.stdItem && citem.stdItem<=STD_ITEM_MAX) || (citem.menu && citem.menu.length>0)" @click.stop="itemMenu(citem, undefined, $event)" :title="i18n('%1 (Menu)', stripLinkTags(citem.title))"></div>
        <div class="emblem" v-if="citem.emblem" :style="{background: citem.emblem.bgnd}">
         <img :src="citem.emblem | emblem()" loading="lazy"></img>
        </div>
-       <div v-if="hoverBtns && selection.size==0 && ((undefined!=citem.stdItem && citem.stdItem<=STD_ITEM_MAX) || (citem.menu && citem.menu.length>0 && (citem.menu[0]==PLAY_ACTION || citem.menu[0]==PLAY_ALL_ACTION)))" class="grid-btns">
-        <img v-if="(!LMS_KIOSK_MODE || !HIDE_FOR_KIOSK.has(ADD_ACTION)) && allowAdd(citem)" class="other-btn grid-btn" @click.stop="itemAction(ADD_ACTION, citem, isTop ? citem.gidx : (item.rs+col), $event)" :title="ACTIONS[ADD_ACTION].title" :src="'hover-add' | svgIcon(darkUi, true)"></img>
-        <img v-if="!queryParams.party && (!LMS_KIOSK_MODE || !HIDE_FOR_KIOSK.has(INSERT_ACTION)) && allowInsert(citem)" class="other-btn grid-btn" @click.stop="itemAction(INSERT_ACTION, citem, isTop ? citem.gidx : (item.rs+col), $event)" :title="ACTIONS[INSERT_ACTION].title" :src="'hover-playnext' | svgIcon(darkUi, true)"></img>
-        <img v-if="allowShuffle(citem) && grid.ih>=180" class="other-btn grid-btn" @click.stop="itemAction(PLAY_SHUFFLE_ACTION, citem, isTop ? citem.gidx : (item.rs+col), $event)" :title="ACTIONS[PLAY_SHUFFLE_ACTION].title" :src="'hover-shuffle' | svgIcon(darkUi, true)"></img>
-        <img v-if="!queryParams.party && (!LMS_KIOSK_MODE || !HIDE_FOR_KIOSK.has(PLAY_ACTION))" class="main-btn grid-btn" @click.stop="itemAction(PLAY_ACTION, citem, isTop ? citem.gidx : (item.rs+col), $event)" :title="ACTIONS[PLAY_ACTION].title" :src="'hover-play' | svgIcon(darkUi, true)"></img>
+       <div v-if="(undefined!=citem.stdItem && citem.stdItem<=STD_ITEM_MAX) || (citem.menu && citem.menu.length>0 && (citem.menu[0]==PLAY_ACTION || citem.menu[0]==PLAY_ALL_ACTION))" class="grid-btns">
+        <img v-if="(!LMS_KIOSK_MODE || !HIDE_FOR_KIOSK.has(ADD_ACTION)) && allowAdd(citem)" class="other-btn grid-btn" @click.stop="itemAction(ADD_ACTION, citem, undefined, $event)" :title="ACTIONS[ADD_ACTION].title" :src="'hover-add' | svgIcon(darkUi, true)"></img>
+        <img v-if="!queryParams.party && (!LMS_KIOSK_MODE || !HIDE_FOR_KIOSK.has(INSERT_ACTION)) && allowInsert(citem)" class="other-btn grid-btn" @click.stop="itemAction(INSERT_ACTION, citem, undefined, $event)" :title="ACTIONS[INSERT_ACTION].title" :src="'hover-playnext' | svgIcon(darkUi, true)"></img>
+        <img v-if="allowShuffle(citem) && grid.ih>=180" class="other-btn grid-btn" @click.stop="itemAction(PLAY_SHUFFLE_ACTION, citem, undefined, $event)" :title="ACTIONS[PLAY_SHUFFLE_ACTION].title" :src="'hover-shuffle' | svgIcon(darkUi, true)"></img>
+        <img v-if="!queryParams.party && (!LMS_KIOSK_MODE || !HIDE_FOR_KIOSK.has(PLAY_ACTION))" class="main-btn grid-btn" @click.stop="itemAction(PLAY_ACTION, citem, undefined, $event)" :title="ACTIONS[PLAY_ACTION].title" :src="'hover-play' | svgIcon(darkUi, true)"></img>
        </div>
-       <div v-if="hoverBtns && selection.size==0 && citem.image" class="grid-btns grid-btn-left"><img class="other-btn grid-btn" @click.stop="itemAction(SHOW_IMAGE_ACTION, citem, item.rs+col, $event)" :title="ACTIONS[SHOW_IMAGE_ACTION].title" :src="'hover-expand' | svgIcon(darkUi, true)"></img>
+       <div v-if="citem.image" class="grid-btns grid-btn-left"><img class="other-btn grid-btn" @click.stop="itemAction(SHOW_IMAGE_ACTION, citem, undefined, $event)" :title="ACTIONS[SHOW_IMAGE_ACTION].title" :src="'hover-expand' | svgIcon(darkUi, true)"></img>
        </div>
       </div>
      </div>
@@ -465,7 +463,7 @@ var lmsBrowse = Vue.component("lms-browse", {
   </v-list>
   <v-list v-else-if="menu.item">
    <template v-for="(action, index) in menu.itemMenu">
-    <div style="height:0px!important" v-if="(queryParams.party && HIDE_FOR_PARTY.has(action)) || (isTop && action==SELECT_ACTION) || (LMS_KIOSK_MODE && HIDE_FOR_KIOSK.has(action)) || ((PLAY_SHUFFLE_ACTION==action || PLAY_SHUFFLE_ALL_ACTION==action) && !allowShuffle(menu.item))"></div>
+    <div style="height:0px!important" v-if="(queryParams.party && HIDE_FOR_PARTY.has(action)) || (isTop && action==SELECT_ACTION) || (LMS_KIOSK_MODE && HIDE_FOR_KIOSK.has(action)) || ((PLAY_SHUFFLE_ACTION==action || PLAY_SHUFFLE_ALL_ACTION==action) && !allowShuffle(menu.item)) || (SELECT_ACTION==action && searchActive)"></div>
     <v-divider v-else-if="DIVIDER==action"></v-divider>
     <template v-for="(cact, cindex) in itemCustomActions" v-else-if="CUSTOM_ACTIONS==action">
      <v-list-tile @click="itemCustomAction(cact, menu.item, menu.index)">
@@ -1333,6 +1331,11 @@ var lmsBrowse = Vue.component("lms-browse", {
                 this.headerSubTitle = item.subtitle;
                 this.current = item;
                 this.searchActive = 0;
+                if (undefined!=item.searchcat && item.searchcat!=SEARCH_TRACKS_CAT && (item.searchcat!=SEARCH_PLAYLISTS_CAT || lmsOptions.playlistImages)) {
+                    this.grid = {allowed:true, use:!item.useList, type:GRID_STANDARD};
+                    this.layoutGrid(true);
+                    this.currentActions=[{action:SEARCH_LIST_ACTION}, {action:item.useList ? USE_GRID_ACTION : USE_LIST_ACTION}];
+                }
                 if (item.menu && item.menu.length>0 && item.menu[0]==PLAY_ALL_ACTION) {
                     this.tbarActions=[ADD_ALL_ACTION, PLAY_ALL_ACTION];
                 }

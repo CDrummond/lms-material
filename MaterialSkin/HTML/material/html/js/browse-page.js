@@ -1140,14 +1140,7 @@ var lmsBrowse = Vue.component("lms-browse", {
                 if (this.$store.state.library!=undefined && this.$store.state.library!=null) {
                     cmd.push("library_id:"+this.$store.state.library);
                 }
-                let listWidth = this.$store.state.desktopLayout ? this.pageElement.scrollWidth : window.innerWidth;
-                let numItems = Math.ceil((Math.floor(listWidth/145))/5) * 5;
-                if (numItems<10) {
-                    numItems = 10;
-                } else if (numItems>MAX_HOME_EXTRA_ROW) {
-                    numItems = MAX_HOME_EXTRA_ROW;
-                }
-                cmd.push("count:"+numItems);
+                cmd.push("count:"+numScrollItems(this, this.pageElement));
                 if (!this.topExtraCfg.needsPlayer || this.playerId().length>1) {
                     lmsCommand(this.playerId(), cmd, this.nextReqId()).then(({data}) => {
                         if (this.isCurrentReq(data)) {

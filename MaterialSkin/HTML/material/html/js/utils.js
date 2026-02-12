@@ -1362,3 +1362,14 @@ function addSubtitle(title, item) {
     }
     return title;
 }
+
+function numScrollItems(view, elem) {
+    let listWidth = view.$store.state.desktopLayout ? elem.scrollWidth : window.innerWidth;
+    let numItems = Math.ceil((Math.floor(listWidth/145))/5) * 5;
+    if (numItems<10) {
+        numItems = 10;
+    } else if (numItems>MAX_HOME_EXTRA_ROW) {
+        numItems = MAX_HOME_EXTRA_ROW;
+    }
+    return numItems;
+}

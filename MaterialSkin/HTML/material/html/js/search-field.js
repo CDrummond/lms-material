@@ -20,19 +20,22 @@ const SEARCH_OTHER = {
 const SEARCH_CLAMPED_MENU = [PLAY_ALL_ACTION, INSERT_ALL_ACTION, ADD_ALL_ACTION, DIVIDER, MORE_ACTION];
 const SEARCH_MENU = [PLAY_ALL_ACTION, INSERT_ALL_ACTION, ADD_ALL_ACTION];
 
-function buildSearchResp(results) {
+function buildSearchResp(view) {
+    let results = view.results;
     let items=[];
     let total=0;
     let otherList = !isSetToUseGrid(GRID_TOP);
+    let gridClamp = numScrollItems(view, document.getElementById("browse-search-field"));
     for (let i=0, len=results.length; i<len; ++i) {
         let all = [];
         let cat = results[i].command.cat;
+        let useList = SEARCH_TRACKS_CAT==cat || (SEARCH_PLAYLISTS_CAT==cat && !lmsOptions.playlistImages) || otherList;
+        let maxItems = useList ? LMS_INITIAL_SEARCH_RESULTS : gridClamp;
         let numItems = results[i].resp.items.length;
-        let clamped = SEARCH_OTHER_CAT!=cat && numItems>LMS_INITIAL_SEARCH_RESULTS
-        let limit = clamped ? LMS_INITIAL_SEARCH_RESULTS : numItems;
+        let clamped = SEARCH_OTHER_CAT!=cat && numItems>maxItems
+        let limit = clamped ? maxItems : numItems;
         let titleParam = clamped ? limit+" / "+numItems : numItems;
         let filter = undefined;
-        let useList = SEARCH_TRACKS_CAT==cat || (SEARCH_PLAYLISTS_CAT==cat && !lmsOptions.playlistImages) || otherList;
 
         total+=numItems;
         if (SEARCH_ARTISTS_CAT==cat) {
@@ -95,7 +98,7 @@ let seachReqId = 0;
 Vue.component('lms-search-field', {
     template: `
 <v-layout>
- <v-text-field :label="ACTIONS[SEARCH_LIB_ACTION].title" clearable autocorrect="off" v-model.lazy="term" class="lms-search lib-search" @input="textChanged($event)" @blur="stopDebounce" v-on:keyup.enter="searchNow" ref="entry"></v-text-field>
+ <v-text-field :label="ACTIONS[SEARCH_LIB_ACTION].title" clearable autocorrect="off" v-model.lazy="term" class="lms-search lib-search" @input="textChanged($event)" @blur="stopDebounce" v-on:keyup.enter="searchNow" ref="entry" id="browse-search-field"></v-text-field>
  <v-icon v-if="searching" class="toolbar-button pulse">search</v-icon>
  <v-btn v-if="!searching && !queryParams.party && history.length>0 && (history.length>1 || history[0]!=term)" flat icon class="toolbar-button" @click="showHistory()"><v-icon>history</v-icon></v-btn>
  <v-btn v-if="!searching && !queryParams.party" :title="ACTIONS[ADV_SEARCH_ACTION].title" flat icon class="toolbar-button" @click="advanced()"><img :src="ACTIONS[ADV_SEARCH_ACTION].svg | svgIcon(darkUi)"></img></v-btn>
@@ -218,7 +221,7 @@ Vue.component('lms-search-field', {
                     bus.$emit('showMessage', i18n('No results found'));
                 } else {
                     this.results.sort(function(a, b) { return a.command.cat<b.command.cat ? -1 : 1; });
-                    this.$emit('results', item, {command:[], params:[]}, { items:buildSearchResp(this.results), baseActions:[], canUseGrid: false, jumplist:[]}, this.prevPage);
+                    this.$emit('results', item, {command:[], params:[]}, { items:buildSearchResp(this), baseActions:[], canUseGrid: false, jumplist:[]}, this.prevPage);
                 }
                 this.commands=[];
                 this.results=[];

@@ -811,6 +811,9 @@ div.v-subheader {
  padding:0 12px 0 10px !important;
 }
 
+.lms-list .list-grid, .lms-list .list-grid > div {
+ padding:0px !important;
+}
 .indent-both .lms-list-item a .v-avatar,
 .indent-right .lms-list-item a .v-avatar {
  margin-left:-2px;
@@ -885,18 +888,18 @@ div.v-subheader {
  padding-top:4px;
 }
 
-.grid-scroll > div {
+.lms-list .list-grid .v-list__tile > div,
+.grid-scroll:not(.list-grid) > div {
  margin-left:4px;
  margin-right:4px;
 }
 
 .lms-list .grid-scroll .v-list__tile  {
- height:calc((var(--min-grid-width) - 5px) + 46px + var(--scrollbar-size) + (5px * var(--image-grid-factor))) !important;
+ height:calc((var(--min-grid-width) - 5px) + 56px + var(--scrollbar-size) + (5px * var(--image-grid-factor))) !important;
 }
 
-.lms-list .grid-scroll .v-list__tile .image-grid-item {
- height:calc((var(--min-grid-width) - 5px) + 46px + (5px * var(--image-grid-factor))) !important;
- margin-right:8px!important;
+.lms-list .list-grid .v-list__tile .image-grid-item {
+ height:calc((var(--min-grid-width) - 5px) + 56px + (5px * var(--image-grid-factor))) !important;
 }
 
 .lms-image-grid table {
@@ -1062,7 +1065,7 @@ div.v-subheader {
 }
 
 .lms-list .list-grid .image-grid-btn, .lms-list .list-grid .image-grid-btn:hover {
- bottom:calc(13px - var(--grid-menu-offset)) !important;
+ bottom:calc(25px - var(--grid-menu-offset)) !important;
 }
 
 @media (max-width: 440px) {
@@ -3589,11 +3592,19 @@ div.v-subheader {
 }
 
 .image-grid-item .grid-btns, .v-list__tile .list-btns, .msk-is-non-touch .image-grid-item .hover-btn, .msk-is-non-touch .text-grid-item .hover-btn, .msk-is-non-touch .v-list__tile .hover-btn, .image-grid-item .grid-btn-left {
- visibility: hidden;
+ visibility:hidden;
 }
 
 .image-grid-item:hover .grid-btns, .v-list__tile:hover .list-btns, .msk-is-non-touch .image-grid-item:hover .hover-btn, .msk-is-non-touch .text-grid-item:hover .hover-btn, .msk-is-non-touch .v-list__tile:hover .hover-btn, .image-grid-item:hover .grid-btn-left {
- visibility: visible;
+ visibility:visible;
+}
+
+.msk-is-non-touch .list-grid:hover .hover-btn {
+ visibility:hidden;
+}
+
+.msk-is-non-touch .list-grid .image-grid-item:hover .hover-btn {
+ visibility:visible;
 }
 
 .list-btns {
@@ -3914,6 +3925,7 @@ div.v-subheader {
 .msk-is-non-touch .v-list__group__header:hover {
  background-color:var(--list-hover-color)!important;
 }
+.msk-is-non-touch .lms-list .list-grid .v-list__tile:hover,
 .msk-is-non-touch .lms-list .no-hover .v-list__tile:hover {
  background-color:unset!important; 
 }

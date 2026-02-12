@@ -964,9 +964,9 @@ function browseHandleTextClickResponse(view, item, command, data, isMoreMenu) {
     }
     if (command.command.length>3 && command.command[1]=="playlist" && command.command[2]=="play") {
         bus.$emit('showMessage', item.title);
-        view.goBack(true);
+        browseGoBack(view, true);
     } else if (resp.items && (resp.items.length>0 || (command.command.length>1 && command.command[0]=="favorites" && command.command[1]=="items"))) {
-        view.handleListResponse(item, command, resp);
+        browseHandleListResponse(view, item, command, resp);
     } else if (command && command.command && command.command[0]=='globalsearch') {
         bus.$emit('showMessage', i18n('No results found'));
     }

@@ -337,11 +337,11 @@ var lmsBrowse = Vue.component("lms-browse", {
       <v-list-tile-title v-html="item.title" @touchend="textSelectEnd" @mouseup="textSelectEnd" @contextmenu="event.preventDefault()"></v-list-tile-title>
      </v-list-tile-content>
     </v-list-tile>
-    <v-list-tile v-else-if="undefined!=item.searchcat && undefined!=item.items" class="grid-scroll">
+    <v-list-tile v-else-if="undefined!=item.searchcat && undefined!=item.items" class="grid-scroll" :id="'gridscroll-'+index">
 
-    <div align="center" style="vertical-align: top" v-for="(citem, col) in item.items" @contextmenu.prevent="contextMenu(citem, undefined, $event)">
+     <div align="center" style="vertical-align: top" v-for="(citem, col) in item.items" @contextmenu.prevent="contextMenu(citem, undefined, $event)"  :id="'gridscroll-'+index+'.'+col">
       <div v-if="undefined==citem" class="image-grid-item defcursor"></div>
-      <div v-else class="image-grid-item" @click="click(citem, undefined, $event)" :title="citem | itemTooltip" v-bind:class="{'list-active': menu.show && index==menu.index}">
+      <div v-else class="image-grid-item" @click="click(citem, undefined, $event)" :title="citem | itemTooltip" v-bind:class="{'search-highlight':highlightIndex==index&&highlightSubIndex==col,'list-active': menu.show && index==menu.index}">
        <img v-if="citem.multi" class="multi-disc" :src="(1==citem.multi ? 'group-multi' : 'album-multi') | svgIcon(true)" loading="lazy"></img>
        <img v-else-if="citem.overlay" class="multi-disc" :src="citem.overlay | svgIcon(true)" loading="lazy"></img>
        <div v-if="citem.images" :tile="true" class="image-grid-item-img">
@@ -623,6 +623,7 @@ var lmsBrowse = Vue.component("lms-browse", {
             dragActive: false,
             dropIndex: -1,
             highlightIndex: -1,
+            highlightSubIndex: -1,
             hRgb: "000",
             tall: window.innerHeight>=MIN_HEIGHT_FOR_DETAILED_SUB ? 1 : 0,
             currentTrack: undefined
@@ -1299,6 +1300,7 @@ var lmsBrowse = Vue.component("lms-browse", {
             if (act==SELECT_ACTION && this.searchActive) {
                 this.searchActive = 0;
                 this.highlightIndex = -1;
+                this.highlightSubIndex = -1;
             }
             storeClickOrTouchPos(event, this.menu);
             let itm = undefined!=this.current && item.id==this.current.id && item.stdItem==STD_ITEM_MAI ? this.history[this.history.length-1].current : item;
@@ -2143,10 +2145,17 @@ var lmsBrowse = Vue.component("lms-browse", {
             }
             setScrollTop(this, pos>0 ? pos : 0);
         },
-        highlightItem(index) {
+        highlightItem(index, subIndex) {
             this.highlightIndex = index;
+            this.highlightSubIndex = subIndex;
             if (index>=0 && index<this.items.length) {
                 this.jumpTo(index);
+                if (subIndex>=0 && undefined!=this.items[index].items && subIndex<this.items[index].items.length) {
+                    let elem = document.getElementById("gridscroll-"+index+"."+subIndex);
+                    if (undefined!=elem) {
+                        elem.scrollIntoView();
+                    }
+                }
             }
         },
         filterJumplist() {
@@ -2680,6 +2689,7 @@ var lmsBrowse = Vue.component("lms-browse", {
         'searchActive': function(newVal) {
             if (2!=newVal) {
                 this.highlightIndex = -1;
+                this.highlightSubIndex = -1;
             }
         },
         '$store.state.player': function() {

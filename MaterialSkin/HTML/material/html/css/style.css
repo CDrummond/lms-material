@@ -1061,8 +1061,14 @@ div.v-subheader {
  right:-10px !important;
 }
 
-.lms-list .grid-scroll .image-grid-btn, .image-grid-btn:hover {
+.lms-list .list-grid .image-grid-btn, .lms-list .list-grid .image-grid-btn:hover {
  bottom:calc(13px - var(--grid-menu-offset)) !important;
+}
+
+@media (max-width: 440px) {
+ .lms-list .list-grid .image-grid-btn, .lms-list .list-grid .image-grid-btn:hover {
+  bottom:calc(23px - var(--grid-menu-offset)) !important;
+ }
 }
 
 .text-grid-item .image-grid-btn, .text-grid-item .image-grid-btn:hover {

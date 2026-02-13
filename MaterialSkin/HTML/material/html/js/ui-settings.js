@@ -825,15 +825,15 @@ Vue.component('lms-ui-settings', {
             this.detailedHomeValues[DETAILED_HOME_STD_PREFIX+"new"] = {title:i18n('New Music'), icon:"new_releases"};
             if (LMS_VERSION>=90100 && LMS_STATS_ENABLED) {
                 this.detailedHomeValues[DETAILED_HOME_STD_PREFIX+"recentlyplayed"] = {title:i18n('Recently Played'), icon:"history"};
-                this.detailedHomeValues[DETAILED_HOME_STD_PREFIX+"playcount"] = { title:i18n('Most Played'), subtitle:this.i18n('Based upon total play count.'), svg:"staralbum"};
-                this.detailedHomeValues[DETAILED_HOME_STD_PREFIX+"popular"] = { title:lmsOptions.supportReleaseTypes ? i18n('Popular Releases') : i18n('Popular Albums'), subtitle:this.i18n('Based upon play count for the past few months only.'), svg:"popularalbum"};
+                this.detailedHomeValues[DETAILED_HOME_STD_PREFIX+"playcount"] = { title:i18n('Most Played'), subtitle:i18n('Based upon total play count.'), svg:"staralbum"};
+                this.detailedHomeValues[DETAILED_HOME_STD_PREFIX+"popular"] = { title:lmsOptions.supportReleaseTypes ? i18n('Popular Releases') : i18n('Popular Albums'), subtitle:i18n('Based upon play count for the past few months only.'), svg:"popularalbum"};
                 this.detailedHomeValues[DETAILED_HOME_STD_PREFIX+"artists_new"] = { title:i18n('New Artists'), svg:"artistnew"};
                 this.detailedHomeValues[DETAILED_HOME_STD_PREFIX+"artists_recentlyplayed"] = { title:i18n('Recently Played Artists'), svg:"artistrecent"};
-                this.detailedHomeValues[DETAILED_HOME_STD_PREFIX+"artists_playcount"] = { title:i18n('Most Played Artists'), subtitle:this.i18n('Based upon total play count.'), svg:"artiststar"};
-                this.detailedHomeValues[DETAILED_HOME_STD_PREFIX+"artists_popular"] = { title:i18n('Popular Artists'), subtitle:this.i18n('Based upon play count for the past few months only.'), svg:"artistpopular"};
+                this.detailedHomeValues[DETAILED_HOME_STD_PREFIX+"artists_playcount"] = { title:i18n('Most Played Artists'), subtitle:i18n('Based upon total play count.'), svg:"artiststar"};
+                this.detailedHomeValues[DETAILED_HOME_STD_PREFIX+"artists_popular"] = { title:i18n('Popular Artists'), subtitle:i18n('Based upon play count for the past few months only.'), svg:"artistpopular"};
             }
             this.detailedHomeValues[DETAILED_HOME_STD_PREFIX+"random"] = { title:lmsOptions.supportReleaseTypes ? i18n("Random Releases") : i18n("Random Albums"), svg:"dice-album"};
-            this.detailedHomeValues[DETAILED_HOME_STD_PREFIX+"radios"] = { title:i18n('Radios'), svg:"radio"}
+            this.detailedHomeValues[DETAILED_HOME_STD_PREFIX+"radios"] = { title:i18n('Radios'), subtitle:this.i18n("List radio stations from favorites."), svg:"radio"}
             if (lmsOptions.playlistImages) {
                 this.detailedHomeValues[DETAILED_HOME_STD_PREFIX+"playlists"] = { title:i18n('Playlists'), icon:"list"};
             }

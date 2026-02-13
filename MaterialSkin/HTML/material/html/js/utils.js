@@ -666,7 +666,7 @@ function ensureVisible(elem, parent, adjust, attempt) {
     elem.scrollIntoView();
     if (isVisible(elem)) {
         if (undefined!=parent && undefined!=adjust) {
-            // Only apply ajust if required - this is for MAI scroll, which has a
+            // Only apply adjust if required - this is for MAI scroll, which has a
             // 'frosted' header
             let parentTop = parent.getBoundingClientRect().top;
             let elemTop = elem.getBoundingClientRect().top;

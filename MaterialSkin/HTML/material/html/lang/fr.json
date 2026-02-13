@@ -511,6 +511,7 @@
 "Show track number":"Afficher le numéro du morceau",
 "Show track number next to title.":"Afficher le numéro du morceau à côté du titre.",
 "Show volume":"Afficher le volume",
+"Show when wide enough":"Si assez de place",
 "Shuffle":"Mélange aléatoire",
 "Shuffle albums":"Mélanger les albums",
 "Shuffle by album":"Mélange aléatoire par album",
@@ -523,7 +524,6 @@
 "Similar artists":"Artistes similaires",
 "Single field only":"Sur un seul critère",
 "Single line only":"Sur une seule ligne",
-"Show when wide enough":"Si assez de place",
 "Skip backward":"Saut arrière",
 "Skip forward":"Saut avant",
 "Sleep":"Mise en veille",
@@ -741,6 +741,7 @@
 "%1 Years":"%1 années",
 "1 day":"1 jour",
 "%1 days":"%1 jours",
+"List radio stations from favorites.":"",
 "NOTE: Please ensure popups are not blocked in your browser, as this might prevent downloading multiple tracks.":"",
 "No scrollable lists have been enabled. Use the 'cog' icon (above) to select the lists you would like to appear on the home screen.":"",
 "Set/Disc subtitle":""

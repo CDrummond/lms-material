@@ -1,5 +1,4 @@
 {
-"%1 %2":"",
 "%1 (Menu)":"%1 (Meny)",
 "%1 minutes":"%1 minuter",
 "%1 of %2":"%1 av %2",
@@ -11,7 +10,6 @@
 "(+%1 others)":"+%1 andra",
 "(NOTE: These lists are only shown when using the grid view. If 'Explore' is not selected, then it will appear as a standard grid at the end. 'Categories' configures the standard items shown in 'Explore'.)":"(OBS: De rullbara listorna visas bara i rutnätsvyn. 'Kategorier' bestämmer vilka standardelement skall vara en del av rull-listan 'Utforska'. Om rull-listan 'Utforska' inte är vald, visas de valda kategorierna i en rutnätsvy under de rullbara listorna.",
 "+ %1 more":"+ %1 till",
-"...then album artist, album, disc no., track no.":"(OBS: De rullbara listorna visas bara i rutnätsvyn. 'Kategorier' bestämmer vilka standardelement skall vara en del av rull-listan 'Utforska'. Om rull-listan 'Utforska' inte är vald, visas de valda kategorierna i en rutnätsvy under de rullbara listorna.",
 "...then album artist, album, disc no., track no.":"... därefter albumartister, album, disknummer, spårnummer",
 "...then album artist, disc no., track no.":"... därefter albumartister, disknummer, spårnummer",
 "...then album artist, release, disc no., track no.":"... därefter albumartister, utgåva, disknummer, spårnummer",
@@ -515,6 +513,7 @@
 "Show track number":"Visa spårnummer",
 "Show track number next to title.":"Visa spårnummer intill spårnamnet.",
 "Show volume":"Visa volymen",
+"Show when wide enough":"Visa bara om det finns plats",
 "Shuffle":"Blanda",
 "Shuffle albums":"Blanda album",
 "Shuffle by album":"Blanda efter album",
@@ -527,7 +526,6 @@
 "Similar artists":"Liknande artister",
 "Single field only":"Bara ett fält",
 "Single line only":"Bara en rad",
-"Show when wide enough":"Visa bara om det finns plats",
 "Skip backward":"Hoppa tillbaka",
 "Skip forward":"Hoppa framåt",
 "Sleep":"Viloläge",
@@ -744,5 +742,7 @@
 "1 Year":"1 år",
 "%1 Years":"%1 år",
 "1 day":"1 dag",
-"%1 days":"%1 dagar"
+"%1 days":"%1 dagar",
+"%1 %2":"",
+"List radio stations from favorites.":""
 }

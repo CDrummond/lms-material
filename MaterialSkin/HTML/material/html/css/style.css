@@ -1680,10 +1680,6 @@ div.v-subheader {
  font-size:var(--small-icon-size);
 }
 
-.np-close {
- visibility:hidden;
-}
-
 .np-emblem {
  opacity:var(--sub-opacity);
 }
@@ -3516,6 +3512,10 @@ div.v-subheader {
  padding-top:3px;
 }
 .np-menu, .np-close {
+ width:calc(var(--icon-size) + 8px);
+ height:calc(var(--icon-size) + 8px);
+ font-size:var(--icon-size);
+ line-height:var(--icon-size);
  padding-top:4px;
 }
 .np-emblem {
@@ -3655,13 +3655,6 @@ div.v-subheader {
  margin-right:4px;
 }
 
-.np-menu, .np-close {
- float:left;
- color:var(--light-text-color);
- background-color:rgba(110, 110, 110, 0.45);
- opacity:0.7;
-}
-
 .list-btns .other-btn {
  margin-right:8px;
 }
@@ -3669,12 +3662,6 @@ div.v-subheader {
 /*@media (hover: hover) and (pointer: fine) {*/
 .msk-is-non-touch .other-btn:hover, .msk-is-non-touch .main-btn:hover,
 .msk-is-non-touch .np-emblem:hover {
- opacity:1.0;
-}
-
-.msk-is-non-touch .np-menu:hover,
-.msk-is-non-touch .np-close:hover {
- background-color:rgba(110, 110, 110);
  opacity:1.0;
 }
 

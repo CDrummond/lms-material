@@ -421,6 +421,10 @@
  max-width:0px!important;
 }
 
+.np-close {
+ visibility:hidden;
+}
+
 @media (max-width:375px) {
 .np-grid-sect {
   grid-template-columns:repeat(auto-fill, 150px);

@@ -7,6 +7,9 @@
 4. Use dialog for virtual library selection.
 5. Remove small icon-only grid option, and default to always set.
 6. Remove play/add/etc menu from search result headers.
+7. Change now-playing expand/collapse icons.
+8. If sufficient space, place now-plying collapse button bottom left in
+   desktop layout. If insufficient space, add to cover overlay.
 
 6.1.8
 -----

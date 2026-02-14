@@ -418,15 +418,6 @@ function nowplayingShowMenu(view, event) {
                 view.menu.items.push({title:loop[i].title, act:NP_CUSTOM+i, icon:loop[i].icon, svg:loop[i].svg});
             }
         }
-        if (view.$store.state.desktopLayout) {
-            if (view.largeView) {
-                view.menu.items.push({title:view.trans.collapseNp, icon:'fullscreen_exit', act:NP_TOGGLE_ACT});
-            } else {
-                view.menu.items.push({title:view.trans.expandNp, icon:'fullscreen', act:NP_TOGGLE_ACT});
-            }
-        } else if (!view.info.show && view.mobileBar==MBAR_REP_NAV) {
-            view.menu.items.push({title:view.trans.collapseNp, icon:'fullscreen_exit', act:NP_TOGGLE_ACT});
-        }
         view.menu.items.push({title:ACTIONS[MORE_ACTION].title, svg:ACTIONS[MORE_ACTION].svg, act:NP_INFO_ACT});
         view.menu.x = event.clientX;
         view.menu.y = event.clientY;
@@ -488,12 +479,6 @@ function nowplayingMenuAction(view, item) {
     } else if (SEARCH_TEXT_ACTION==item.act) {
         bus.$emit('browse-search', item.text, NP_INFO);
         view.close();
-    } else if (NP_TOGGLE_ACT==item.act) {
-        if (view.$store.state.desktopLayout) {
-            view.largeView=!view.largeView;
-        } else {
-            view.$store.commit('setPage', view.$store.state.prevPage);
-        }
     }  else if (NP_SHOW_IN_TABS_ACT==item.act) {
         view.info.showTabs = !view.info.showTabs;
     } else if (NP_SYNC_ACT==item.act) {

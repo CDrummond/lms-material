@@ -14,14 +14,13 @@ const NP_PIC_ACT = 1;
 const NP_INFO_ACT = 2;
 const NP_BROWSE_CMD = 3;
 const NP_COPY_DETAILS_CMD = 4;
-const NP_TOGGLE_ACT = 5;
-const NP_SHOW_IN_TABS_ACT = 6;
-const NP_SYNC_ACT = 7;
-const NP_LYRICS_SCROLL_ACT = 8;
-const NP_LYRICS_HIGHLIGHT_ACT = 9;
-const NP_COPY_ACT = 10;
-const NP_SEARCH_ACT = 11;
-const NP_ZOOM_ACT = 12;
+const NP_SHOW_IN_TABS_ACT = 5;
+const NP_SYNC_ACT = 6;
+const NP_LYRICS_SCROLL_ACT = 7;
+const NP_LYRICS_HIGHLIGHT_ACT = 8;
+const NP_COPY_ACT = 9;
+const NP_SEARCH_ACT = 10;
+const NP_ZOOM_ACT = 11;
 const NP_CUSTOM = 100;
 const NP_ITEM_ACT = 200;
 const NP_MIN_WIDTH_FOR_FULL = 780;
@@ -383,7 +382,8 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
    </v-layout>
   </div>
  </div>
- <v-layout text-xs-center v-if="!desktopLayout && mobileBar==MBAR_REP_NAV && !info.show && page=='now-playing'" class="mobile-np-view-controls">
+ <v-btn icon v-if="desktopLayout && largeView" class="np-close-alt" id="nc" :title="trans.collapseNp" @click="largeView=false"><v-icon>keyboard_arrow_down</v-icon></v-btn>
+ <v-layout text-xs-center v-else-if="!desktopLayout && mobileBar==MBAR_REP_NAV && !info.show && page=='now-playing'" class="mobile-np-view-controls">
   <v-flex xs4><v-btn icon @click.stop="$store.commit('setPage', 'browse')" class="np-std-button" id="nb" :title="trans.browse"><img class="svg-img" :src="'library-music-outline' | svgIcon(darkUi)"></v-btn></v-flex>
   <v-flex xs4><v-btn icon @click.stop="$store.commit('setPage', $store.state.prevPage)" class="np-std-button" id="nc" :title="trans.collapseNp"><v-icon>keyboard_arrow_down</v-icon></v-btn></v-flex>
   <v-flex xs4><v-btn icon @click.stop="$store.commit('setPage', 'queue')" class="np-std-button" id="nq" :title="trans.queue"><img class="svg-img" :src="'queue_music_outline' | svgIcon(darkUi)"></v-btn></v-flex>

@@ -781,6 +781,9 @@ function addPart(str, part) {
 }
 
 function commandGridKey(command, item) {
+    if (undefined==command || undefined==command.command || command.command.length<1) {
+        return undefined;
+    }
     return command.command[command.command[0]=="material-skin" && command.command.length>1 ? 1 : 0]+
            (undefined==item || undefined==item.type || undefined!=item.stdItem || item.id.startsWith(MUSIC_ID_PREFIX) || item.id.startsWith(TOP_ID_PREFIX) ? "" : ("-"+item.type))+
            "-grid";
@@ -790,11 +793,17 @@ const USE_LIST_VIEW_BY_DEFAULT=new Set(["podcasts-grid", "youtube-grid", "playhi
 
 function isSetToUseGrid(command, item) {
     var key = commandGridKey(command, item);
+    if (undefined==key) {
+        return true;
+    }
     return getLocalStorageBool(key, !USE_LIST_VIEW_BY_DEFAULT.has(key))
 }
 
 function setUseGrid(command, use, item) {
-    setLocalStorageVal(commandGridKey(command, item), use);
+    let key = commandGridKey(command, item);
+    if (undefined!=key) {
+        setLocalStorageVal(key, use);
+    }
 }
 
 function gridCommand(view) {
@@ -1352,4 +1361,15 @@ function addSubtitle(title, item) {
         }
     }
     return title;
+}
+
+function numScrollItems(view, elem) {
+    let listWidth = view.$store.state.desktopLayout ? elem.scrollWidth : window.innerWidth;
+    let numItems = Math.ceil((Math.floor(listWidth/145))/5) * 5;
+    if (numItems<10) {
+        numItems = 10;
+    } else if (numItems>MAX_HOME_EXTRA_ROW) {
+        numItems = MAX_HOME_EXTRA_ROW;
+    }
+    return numItems;
 }

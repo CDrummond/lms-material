@@ -52,7 +52,8 @@ Vue.component('lms-toolbar', {
   <img class="svg-img" :src="(infoOpen ? 'mai-filled' : 'mai') | svgIcon(darkUi, coloredToolbars&&!nowPlayingFull)"></img>
  </v-btn>
  <v-btn icon :title="(nowPlayingExpanded ? trans.hideLarge : trans.showLarge) | tooltip(LMS_EXPAND_NP_KEYBOARD,keyboardControl,true)" v-if="desktopLayout" @click.native="expandNowPlaying()" class="toolbar-button hide-for-mini" v-bind:class="{'disabled':playerStatus.count<1 && !nowPlayingExpanded}" id="np-expand">
-  <v-icon>{{nowPlayingExpanded ? 'fullscreen_exit' : 'fullscreen'}}</v-icon>
+  <v-icon v-if="nowPlayingExpanded">keyboard_arrow_down</v-icon>
+  <img class="svg-img" v-else :src="'expand-np' | svgIcon(darkUi, coloredToolbars)" oncontextmenu="return false;"></img>
  </v-btn>
  <v-btn icon :title="trans.toggleQueue | tooltip(LMS_TOGGLE_QUEUE_KEYBOARD,keyboardControl,true)" v-if="desktopLayout" @click.native.stop="toggleQueue()" class="toolbar-button hide-for-mini">
   <v-icon v-if="showQueue">queue_music</v-icon>

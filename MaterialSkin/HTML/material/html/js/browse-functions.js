@@ -155,6 +155,10 @@ function browseActions(view, item, args, count, showWorks, addRoleAndServices, i
                                                     : ['musicartistinfo', 'albumreview', 'html:1', 'album:'+args['album'], 'artist:'+args['artist']],
                                    params:[]},
                               weight:100});
+            } else if (undefined!=args['work_id']) {
+                actions.push({title:i18n('Information'), svg:'classical-work', stdItem:STD_ITEM_MAI,
+                              do:{ command: ['musicartistinfo', 'workreview', 'html:1', 'work_id:'+args['work_id']], params:[]},
+                              weight:100});
             } else if (undefined!=args['artist_id'] || undefined!=args['artist']) {
                 actions.push({title:i18n('Information'), svg:'artist', stdItem:STD_ITEM_MAI,
                               do:{ command: undefined!=args['artist_id']
@@ -964,9 +968,9 @@ function browseHandleTextClickResponse(view, item, command, data, isMoreMenu) {
     }
     if (command.command.length>3 && command.command[1]=="playlist" && command.command[2]=="play") {
         bus.$emit('showMessage', item.title);
-        view.goBack(true);
+        browseGoBack(view, true);
     } else if (resp.items && (resp.items.length>0 || (command.command.length>1 && command.command[0]=="favorites" && command.command[1]=="items"))) {
-        view.handleListResponse(item, command, resp);
+        browseHandleListResponse(view, item, command, resp);
     } else if (command && command.command && command.command[0]=='globalsearch') {
         bus.$emit('showMessage', i18n('No results found'));
     }
@@ -1778,29 +1782,41 @@ function browseItemAction(view, act, origItem, index, event, slimBrowseBaseActio
         let allowShuffle = -1;
         let allowPlayAction = -1;
         let allowOtherActions = -1;
+        let items = [];
         for (let i=0, loop=view.items, len=loop.length; i<len; ++i) {
             let itm = loop[i];
             if (itm.image) {
-                if (itm.id==item.id) {
-                    idx = images.length;
+                items.push(itm);
+            } else if (itm.items) { // Search results!
+               for (let j=0, jloop=itm.items, jlen=jloop.length; j<jlen; ++j) {
+                    let itm = jloop[j];
+                    if (itm.image) {
+                        items.push(itm);
+                    }
                 }
-                let isStdItem = itm.stdItem==STD_ITEM_ALBUM || itm.stdItem==STD_ITEM_ARTIST || itm.stdItem==STD_ITEM_WORK || itm.stdItem==STD_ITEM_WORK_COMPOSER;
-                let playAction = !queryParams.party && !LMS_KIOSK_MODE && (isStdItem || (undefined!=itm.menu && itm.menu[0]==PLAY_ACTION));
-                let otherAction = playAction && (isStdItem || (undefined!=itm.menu && itm.menu.length>1 && itm.menu[1]==INSERT_ACTION));
-                let image = {url:itm.image + (itm.image.startsWith("material/playlists/") ? "&full=1" : ""),
-                             title:itm.title+(undefined==itm.subtitle ? "" : (SEPARATOR+itm.subtitle)),
-                             index:playAction ? i : undefined
-                             };
-                images.push(image);
-                if (allowPlayAction!=0) {
-                    allowPlayAction = playAction ? 1 : 0;
-                }
-                if (allowOtherActions!=0) {
-                    allowOtherActions = otherAction ? 1 : 0;
-                }
-                if (allowOtherActions==1 && allowShuffle!=0 && lmsOptions.playShuffle && !queryParams.party && (!LMS_KIOSK_MODE || !HIDE_FOR_KIOSK.has(PLAY_SHUFFLE_ACTION))) {
-                    allowShuffle = undefined!=itm && undefined!=itm.stdItem && (itm.stdItem==STD_ITEM_ARTIST || itm.stdItem==STD_ITEM_ALBUM || itm.stdItem==STD_ITEM_PLAYLIST || itm.stdItem==STD_ITEM_WORK) ? 1 : 0
-                }
+            }
+        }
+        for (let i=0, len=items.length; i<len; ++i) {
+            let itm = items[i];
+            if (itm.id==item.id) {
+                idx = images.length;
+            }
+            let isStdItem = itm.stdItem==STD_ITEM_ALBUM || itm.stdItem==STD_ITEM_ARTIST || itm.stdItem==STD_ITEM_WORK || itm.stdItem==STD_ITEM_WORK_COMPOSER;
+            let playAction = !queryParams.party && !LMS_KIOSK_MODE && (isStdItem || (undefined!=itm.menu && itm.menu[0]==PLAY_ACTION));
+            let otherAction = playAction && (isStdItem || (undefined!=itm.menu && itm.menu.length>1 && itm.menu[1]==INSERT_ACTION));
+            let image = {url:itm.image + (itm.image.startsWith("material/playlists/") ? "&full=1" : ""),
+                         title:itm.title+(undefined==itm.subtitle ? "" : (SEPARATOR+itm.subtitle)),
+                         index:playAction ? i : undefined
+                         };
+            images.push(image);
+            if (allowPlayAction!=0) {
+                allowPlayAction = playAction ? 1 : 0;
+            }
+            if (allowOtherActions!=0) {
+                allowOtherActions = otherAction ? 1 : 0;
+            }
+            if (allowOtherActions==1 && allowShuffle!=0 && lmsOptions.playShuffle && !queryParams.party && (!LMS_KIOSK_MODE || !HIDE_FOR_KIOSK.has(PLAY_SHUFFLE_ACTION))) {
+                allowShuffle = undefined!=itm && undefined!=itm.stdItem && (itm.stdItem==STD_ITEM_ARTIST || itm.stdItem==STD_ITEM_ALBUM || itm.stdItem==STD_ITEM_PLAYLIST || itm.stdItem==STD_ITEM_WORK) ? 1 : 0
             }
         }
         bus.$emit('dlg.open', 'gallery', images, idx, false, undefined, allowShuffle==1 && allowOtherActions==1 ? 3 : (allowPlayAction==1 ? (allowOtherActions==1 ? 2 : 1) : 0) );
@@ -1974,7 +1990,7 @@ function browseItemMenu(view, item, index, event) {
             showMenu(view, {show:true, item:item, x:event.clientX, y:event.clientY, index:index,
                             itemMenu:menu});
         } else if (TOP_MYMUSIC_ID==item.id) {
-            view.showLibMenu(event, index);
+            browseSelectVLib(view);
         }
         return;
     }
@@ -2058,7 +2074,8 @@ function browseHeaderAction(view, act, event, ignoreOpenMenus) {
             }
         });
     } else if (VLIB_ACTION==act) {
-        view.showLibMenu(event);
+        storeClickOrTouchPos(event);
+        browseSelectVLib(view);
     } else if (undefined!=item.allid && (ADD_ACTION==act || PLAY_ACTION==act)) {
         view.itemAction(act, {swapid:item.allid, id:view.items[0].id, title:item.title,
                               goAction:view.items[0].goAction, params:view.items[0].params, section:view.items[0].section});
@@ -3245,6 +3262,142 @@ function browseGoToItem(view, cmd, params, title, page, clearHistory, subtitle) 
     } else {
         view.fetchItems(view.replaceCommandTerms({command:cmd, params:params}), {cancache:false, id:params[0], title:title, subtitle:subtitle, stdItem:params[0].startsWith("artist_id:") ? STD_ITEM_ARTIST : STD_ITEM_ALBUM}, page);
     }
+}
+
+function getFavItemId(item, repl) {
+    if (item.id.startsWith("item_id:")) {
+        return item.id.replace("item_id:", repl);
+    }
+    if (item.params && item.params.item_id) {
+        return repl+item.params.item_id;
+    }
+    if (item.actions && item.actions.go && item.actions.go.params && item.actions.go.params.item_id) {
+        return repl+item.actions.go.params.item_id;
+    }
+    return undefined;
+}
+
+function browseHandleDrop(view, to, ev) {
+    view.stopScrolling = true;
+    ev.preventDefault();
+    bus.$emit('dragActive', false);
+    if (view.dragIndex!=undefined && to!=view.dragIndex) {
+        var item = view.items[view.dragIndex];
+        if (view.isTop || (view.current && (view.current.section==SECTION_FAVORITES || (view.current.section==SECTION_PLAYLISTS && item.stdItem==STD_ITEM_PLAYLIST_TRACK)))) {
+            var sel = Array.from(view.selection);
+            view.clearSelection();
+            if (sel.length>0) {
+                if (view.current.section!=SECTION_FAVORITES && sel.indexOf(to)<0) {
+                    bus.$emit('movePlaylistItems', view.current.id, sel.sort(function(a, b) { return a<b ? -1 : 1; }), to);
+                    if (lmsOptions.playlistImages && view.history.length>0) {
+                        view.history[view.history.length-1].needsRefresh = true;
+                    }
+                }
+            } else if (view.isTop) {
+                let drgIdx = view.dragIndex;
+                if (undefined!=view.items[0].ihe) {
+                    to-=view.topExtra.length;
+                    drgIdx-=view.topExtra.length;
+                }
+                view.top = arrayMove(view.top, drgIdx, to);
+                view.items = view.grid.use && view.$store.state.detailedHomeItems.length>0 ? view.topExtra.concat(view.top) : view.top;
+                view.saveTopList();
+                view.layoutGrid(true);
+            } else if (view.current) {
+                if (view.current.section==SECTION_FAVORITES) {
+                    if (view.$store.state.sortFavorites && !view.items[to].isFavFolder) {
+                        return;
+                    }
+                    var fromId = originalId(getFavItemId(view.items[view.dragIndex], "from_id:"))
+                    var toId = originalId(getFavItemId(view.items[to], "to_id:"));
+                    if (view.items[to].isFavFolder) {
+                        if (view.$store.state.sortFavorites) {
+                            lmsCommand(view.playerId(), ["favorites", "move", fromId, toId+".0"]).then(({data}) => {
+                                view.refreshList();
+                            });
+                        } else {
+                            let choices = [
+                                {val:1, title:i18n("Move into '%1'", view.items[to].title), svg:"folder-favorite"},
+                                {val:2, title:i18n("Move position"), icon:ACTIONS[SCROLL_TO_ACTION].icon, svg:ACTIONS[SCROLL_TO_ACTION].svg}
+                            ]
+                            choose(i18n("Move '%1'", view.items[view.dragIndex].title), choices).then(choice => {
+                                if (undefined!=choice && choice.val>0) {
+                                    lmsCommand(view.playerId(), ["favorites", "move", fromId, toId+(1==choice.val ? ".0" : "")]).then(({data}) => {
+                                        view.refreshList();
+                                    });
+                                }
+                            });
+                        }
+                    } else {
+                        lmsCommand(view.playerId(), ["favorites", "move", fromId, toId]).then(({data}) => {
+                            view.refreshList();
+                        });
+                    }
+                } else if (view.current.section==SECTION_PLAYLISTS) {
+                    lmsCommand(view.playerId(), ["playlists", "edit", "cmd:move", originalId(view.current.id), "index:"+view.dragIndex, "toindex:"+to]).then(({data}) => {
+                        view.refreshList();
+                        if (lmsOptions.playlistImages && view.history.length>0) {
+                            view.history[view.history.length-1].needsRefresh = true;
+                        }
+                    });
+                }
+            }
+        }
+    } else if (ev.dataTransfer) {
+        if (undefined!=window.mskQueueDrag && view.current.section==SECTION_PLAYLISTS) {
+            if (view.current.id.startsWith("playlist_id")) {
+                browseAddToPlaylist(view, window.mskQueueDrag, originalId(view.current.id), to, view.items.length);
+            } else {
+                browseAddToPlaylist(view, window.mskQueueDrag, originalId(view.items[to].id));
+            }
+        }
+    }
+    view.dragIndex = undefined;
+}
+
+function browseSelectVLib(view) {
+    lmsList("", ["libraries"]).then(({data}) => {
+        if (data && data.result && data.result.folder_loop && data.result.folder_loop.length>0) {
+            let libraries = [];
+            let ids = new Set();
+            for (let i=0, len=data.result.folder_loop.length; i<len; ++i) {
+                let item = data.result.folder_loop[i];
+                item.name = item.name.replace(SIMPLE_LIB_VIEWS, "");
+                libraries.push({title:item.name, id:item.id, canremove:2, icon:item.id==view.$store.state.library ? 'radio_button_checked' : 'radio_button_unchecked'});
+                ids.add(item.id);
+            }
+            libraries.sort(titleSort);
+            libraries.unshift({title: i18n("All"), id:LMS_DEFAULT_LIBRARY, icon:LMS_DEFAULT_LIBRARY==view.$store.state.library ? 'radio_button_checked' : 'radio_button_unchecked'});
+            choose("Select virtual library to use", libraries).then(resp => {
+                if (undefined!=resp) {
+                    let currentLibId = view.$store.state.library;
+                    if (undefined!=resp.item && resp.item.id!=currentLibId) {
+                        view.$store.commit('setLibrary', resp.item.id);
+                        currentLibId = resp.item.id;
+                        if (view.isTop) {
+                            view.getHomeExtra();
+                        }
+                    }
+                    if (ids.size!=(resp.items.length-1)) {
+                        let currentIds = new Set();
+                        for (let i=1, len=resp.items.length; i<len; ++i) {
+                            currentIds.add(resp.items[i].id);
+                        }
+                        let removed = new Set([...ids].filter(x => !currentIds.has(x)));
+                        removed.forEach(id => {
+                            lmsCommand("", ["material-skin", "delete-vlib", "id:"+id]);
+                        });
+                        if (removed.has(currentLibId)) {
+                            view.$store.commit('setLibrary', LMS_DEFAULT_LIBRARY);
+                            if (view.isTop) {
+                               view.getHomeExtra();
+                            }
+                        }
+                    }
+                }
+            });
+        }
+    });
 }
 
 const DEFERRED_LOADED = true;

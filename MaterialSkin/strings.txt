@@ -1027,21 +1027,3 @@ PLUGIN_MATERIAL_SKIN_QT_SWAP_ERROR
 	FR	Impossible d'échanger une liste de lecture avec une platine déjà synchronisée.
 	NL	Het is niet mogelijk om de afspeellijst te wisselen met een muziekspeler die al gesynchroniseerd is. 
 	SV	Spelkön kan inte bytas med en spelare som den nuvarande spelaren redan är synkroniserad med.
-
-PLUGIN_MATERIAL_SKIN_SMALL_ICON_ONLY_GRID
-	CS	Menší mřížka pouze s ikonami
-	DE	Kleineres Nur-Symbole-Raster
-	EN	Smaller icon-only grid
-	ES	Cuadrícula más pequeña solo de iconos
-	FR	Icônes de grille plus petits
-	NL	Kleiner icon-only raster
-	SV	Litet rutnät
-
-PLUGIN_MATERIAL_SKIN_SMALL_ICON_ONLY_GRID_DESC
-	CS	Na užších obrazovkách povolit použití menších položek mřížky, pokud jsou zobrazeny pouze ikony a nikoli obrázky. Mějte na paměti, že to může způsobit častější zkrácení textu.
-	DE	Auf schmaleren Bildschirmen sollten kleinere Rasterelemente verwendet werden, wenn nur Symbole und keine Bilder angezeigt werden. Beachten Sie, dass dies dazu führen kann, dass Text häufiger abgeschnitten wird.
-	EN	On narrower screens, allow usage of smaller grid items if only showing icons, and not images. Note that this may cause text to be truncated more frequently.
-	ES	En pantallas más estrechas, permitir el uso de elementos de cuadrícula más pequeños si solo se muestran iconos, y no imágenes. Note que esto puede causar que el texto se trunque más frecuentemente.
-	FR	Sur les petits écrans, autoriser l'utilisation d'éléments de grille plus petits, s'il y a seulement des icônes et pas d'images. (Le texte peut être tronqué plus fréquemment.)
-	NL	Sta op kleinere schermen het gebruik van kleinere rasteritems toe als alleen icons worden weergegeven en geen afbeeldingen. Houd er rekening mee dat dit ertoe kan leiden dat tekst vaker wordt afgekapt.
-	SV	Tillåt mindre rutnätselement om bara ikoner och inte bilder visas. Observera att detta kan leda till att textsträngar inte visas helt.

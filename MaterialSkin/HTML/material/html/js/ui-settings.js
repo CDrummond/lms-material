@@ -810,6 +810,7 @@ Vue.component('lms-ui-settings', {
         initHomeItems() {
             this.detailedHomeValues={};
             this.detailedHomeValues[DETAILED_HOME_STD_PREFIX+"new"] = {title:i18n('New Music'), icon:"new_releases"};
+            this.detailedHomeValues[DETAILED_HOME_STD_PREFIX+"favorites"] = {title:i18n('Favorites'), icon:"favorite"};
             if (LMS_VERSION>=90100 && LMS_STATS_ENABLED) {
                 this.detailedHomeValues[DETAILED_HOME_STD_PREFIX+"recentlyplayed"] = {title:i18n('Recently Played'), icon:"history"};
                 this.detailedHomeValues[DETAILED_HOME_STD_PREFIX+"playcount"] = { title:i18n('Most Played'), subtitle:i18n('Based upon total play count.'), svg:"staralbum"};

@@ -17,70 +17,74 @@ const SEARCH_OTHER = {
     "wefunk radio":{svg:"radio-station"}
 }
 
-const SEARCH_ARTISTS_CAT = 1;
-const SEARCH_ALBUMS_CAT = 2;
-const SEARCH_WORKS_CAT = 3;
-const SEARCH_TRACKS_CAT = 4;
-const SEARCH_PLAYLISTS_CAT = 5;
-const SEARCH_OTHER_CAT = 6;
-
-const SEARCH_CLAMPED_MENU = [PLAY_ALL_ACTION, INSERT_ALL_ACTION, ADD_ALL_ACTION, DIVIDER, MORE_ACTION];
-const SEARCH_MENU = [PLAY_ALL_ACTION, INSERT_ALL_ACTION, ADD_ALL_ACTION];
-
-function buildSearchResp(results) {
+function buildSearchResp(view) {
+    let results = view.results;
     let items=[];
     let total=0;
+    let otherList = !isSetToUseGrid(GRID_TOP);
+    let gridClamp = numScrollItems(view, document.getElementById("browse-search-field"));
     for (let i=0, len=results.length; i<len; ++i) {
         let all = [];
+        let cat = results[i].command.cat;
+        let useList = SEARCH_TRACKS_CAT==cat || (SEARCH_PLAYLISTS_CAT==cat && !lmsOptions.playlistImages) || otherList;
+        let maxItems = useList ? LMS_INITIAL_SEARCH_RESULTS : gridClamp;
         let numItems = results[i].resp.items.length;
-        let clamped = SEARCH_OTHER_CAT!=results[i].command.cat && numItems>LMS_INITIAL_SEARCH_RESULTS
-        let limit = clamped ? LMS_INITIAL_SEARCH_RESULTS : numItems;
+        let clamped = SEARCH_OTHER_CAT!=cat && numItems>maxItems
+        let limit = clamped ? maxItems : numItems;
         let titleParam = clamped ? limit+" / "+numItems : numItems;
         let filter = undefined;
 
         total+=numItems;
-        if (SEARCH_ARTISTS_CAT==results[i].command.cat) {
+        if (SEARCH_ARTISTS_CAT==cat) {
+            //useList = !getLocalStorageBool('artists-grid', true);
             filter = FILTER_PREFIX+"artist";
             items.push({title: i18n("Artists") + " ("+titleParam+")", id:filter, header:true, hidesub:true, svg:"artist",
-                        allItems: clamped ? all : undefined, subtitle: i18np("1 Artist", "%1 Artists", numItems)});
-        } else if (SEARCH_ALBUMS_CAT==results[i].command.cat) {
+                        allItems: clamped ? all : undefined, subtitle: i18np("1 Artist", "%1 Artists", numItems), searchcat:cat, useList:useList});
+        } else if (SEARCH_ALBUMS_CAT==cat) {
+            //useList = !getLocalStorageBool('albums-grid', true);
             filter = FILTER_PREFIX+"album";
             items.push({title: (lmsOptions.supportReleaseTypes ? i18n("Releases") : i18n("Albums")) + " ("+titleParam+")",
                         id:filter, header:true, hidesub:true, svg: lmsOptions.supportReleaseTypes ? "release" : undefined,
                         icon: lmsOptions.supportReleaseTypes ? undefined : "album",
                         allItems: clamped ? all : undefined, subtitle:lmsOptions.supportReleaseTypes ? i18np("1 Release", "%1 Releases", numItems) : i18np("1 Album", "%1 Albums", numItems),
-                        menu:queryParams.party ? undefined : clamped ? SEARCH_CLAMPED_MENU : SEARCH_MENU});
-        } else if (SEARCH_WORKS_CAT==results[i].command.cat) {
+                        searchcat:cat, useList:useList});
+        } else if (SEARCH_WORKS_CAT==cat) {
             if (numItems>0) {
+                //useList = !getLocalStorageBool('works-grid', true);
                 filter = FILTER_PREFIX+"work";
                 items.push({title: i18n("Works") + " ("+titleParam+")",
                             id:filter, header:true, hidesub:true, svg: "classical-work",
                             allItems: clamped ? all : undefined, subtitle:i18np("1 Work", "%1 Works", numItems),
-                            menu:queryParams.party ? undefined : clamped ? SEARCH_CLAMPED_MENU : SEARCH_MENU});
+                            searchcat:cat, useList:useList});
             }
-        } else if (SEARCH_TRACKS_CAT==results[i].command.cat) {
+        } else if (SEARCH_TRACKS_CAT==cat) {
             filter = FILTER_PREFIX+"track";
             items.push({title: i18n("Tracks", titleParam) + " ("+titleParam+")", id:filter, header:true, hidesub:true,
                         allItems: clamped ? all : undefined, subtitle: i18np("1 Track", "%1 Tracks", numItems),
-                        icon: "music_note",
-                        menu:queryParams.party ? undefined : clamped ? SEARCH_CLAMPED_MENU : SEARCH_MENU});
-        } else if (SEARCH_PLAYLISTS_CAT==results[i].command.cat) {
+                        icon: "music_note", searchcat:cat, useList:useList});
+        } else if (SEARCH_PLAYLISTS_CAT==cat) {
+            //useList = !lmsOptions.playlistImages || !getLocalStorageBool('playlists-grid', true);
             filter = FILTER_PREFIX+"playlist";
             items.push({title: i18n("Playlists") + " ("+titleParam+")", id:filter, header:true, hidesub:true, icon:"list",
                         allItems: clamped ? all : undefined, subtitle: i18np("1 Playlist", "%1 Playlists", numItems),
-                        menu:queryParams.party ? undefined : clamped ? SEARCH_CLAMPED_MENU : SEARCH_MENU});
-        } else if (SEARCH_OTHER_CAT==results[i].command.cat) {
-            items.push({title: i18n("Search on..."), id:"search.other", header:true, icon:"search"});
+                        searchcat:cat, useList:useList});
+        } else if (SEARCH_OTHER_CAT==cat) {
+            //useList = !getLocalStorageBool('other-grid', true);
+            items.push({title: i18n("Search on..."), id:"search.other", header:true, icon:"search", searchcat:cat, useList:useList});
         }
+        let list = useList ? items : [];
         for (let idx=0, loop=results[i].resp.items; idx<numItems; ++idx) {
             let itm = loop[idx];
             itm.filter=filter;
             if (idx<limit) {
-                items.push(itm);
+                list.push(itm);
             }
             if (clamped) {
                 all.push(itm);
             }
+        }
+        if (!useList) {
+            items.push({items: list, searchcat:cat});
         }
     }
     return items;
@@ -90,16 +94,18 @@ let seachReqId = 0;
 Vue.component('lms-search-field', {
     template: `
 <v-layout>
- <v-text-field :label="ACTIONS[SEARCH_LIB_ACTION].title" clearable autocorrect="off" v-model.lazy="term" class="lms-search lib-search" @input="textChanged($event)" @blur="stopDebounce" v-on:keyup.enter="searchNow" ref="entry"></v-text-field>
+ <v-text-field :label="ACTIONS[SEARCH_LIB_ACTION].title" clearable autocorrect="off" v-model.lazy="term" class="lms-search lib-search" @input="textChanged($event)" @blur="stopDebounce" v-on:keyup.enter="searchNow" ref="entry" id="browse-search-field"></v-text-field>
  <v-icon v-if="searching" class="toolbar-button pulse">search</v-icon>
- <v-btn v-else-if="!queryParams.party" :title="ACTIONS[ADV_SEARCH_ACTION].title" flat icon class="toolbar-button" @click="advanced()"><img :src="ACTIONS[ADV_SEARCH_ACTION].svg | svgIcon(darkUi)"></img></v-btn>
+ <v-btn v-if="!searching && !queryParams.party && history.length>0 && (history.length>1 || history[0]!=term)" flat icon class="toolbar-button" @click="showHistory()"><v-icon>history</v-icon></v-btn>
+ <v-btn v-if="!searching && !queryParams.party" :title="ACTIONS[ADV_SEARCH_ACTION].title" flat icon class="toolbar-button" @click="advanced()"><img :src="ACTIONS[ADV_SEARCH_ACTION].svg | svgIcon(darkUi)"></img></v-btn>
 </v-layout>
 `,
     props: [],
     data() {
         return {
             term: "",
-            searching: false
+            searching: false,
+            history: []
         }
     },
     computed: {
@@ -109,6 +115,7 @@ Vue.component('lms-search-field', {
     },
     mounted() {
         this.term = getLocalStorageVal('search', '');
+        this.history = JSON.parse(getLocalStorageVal('searchHistory', '[]'));
         this.commands=[];
         this.results=[];
         this.searching=false;
@@ -161,6 +168,7 @@ Vue.component('lms-search-field', {
             if (str.length>1 && str!=this.str) {
                 this.str = str;
                 setLocalStorageVal('search', this.str);
+                this.addToHistory(str);
                 this.commands=[];
                 if (!queryParams.party) {
                     this.commands.push({cat:SEARCH_ARTISTS_CAT, command:["artists"], params:["tags:s", "search:"+this.str]});
@@ -186,6 +194,19 @@ Vue.component('lms-search-field', {
                 this.doSearch();
             }
         },
+        addToHistory(str) {
+            for (let i=0, len=this.history.length; i<len; ++i) {
+                if (str==this.history[i]) {
+                    this.history.splice(i, 1);
+                    break;
+                }
+            }
+            this.history.unshift(str);
+            if (this.history.length>20) {
+                this.history = this.history.slice(0, 20);
+            }
+            setLocalStorageVal('searchHistory', JSON.stringify(this.history));
+        },
         doSearch() {
             if (!this.searching) {
                 return;
@@ -196,7 +217,7 @@ Vue.component('lms-search-field', {
                     bus.$emit('showMessage', i18n('No results found'));
                 } else {
                     this.results.sort(function(a, b) { return a.command.cat<b.command.cat ? -1 : 1; });
-                    this.$emit('results', item, {command:[], params:[]}, { items:buildSearchResp(this.results), baseActions:[], canUseGrid: false, jumplist:[]}, this.prevPage);
+                    this.$emit('results', item, {command:[], params:[]}, { items:buildSearchResp(this), baseActions:[], canUseGrid: false, jumplist:[]}, this.prevPage);
                 }
                 this.commands=[];
                 this.results=[];
@@ -231,6 +252,29 @@ Vue.component('lms-search-field', {
         },
         i18n(str) {
             return i18n(str);
+        },
+        showHistory() {
+            let items = [];
+            for (let i=0, len=this.history.length; i<len; ++i) {
+                items.push({id:i, title:this.history[i], canremove:1});
+            }
+            let numItems = items.length;
+            choose("Select previous search term", items).then(resp => {
+                if (undefined!=resp) {
+                    if (numItems!=resp.items.length) {
+                        let history = [];
+                        for (let i=0, len=resp.items.length; i<len; ++i) {
+                            history.push(resp.items[i].title);
+                        }
+                        this.history = history;
+                        setLocalStorageVal('searchHistory', JSON.stringify(this.history));
+                    }
+                    if (undefined!=resp.item) {
+                        this.term = resp.item.title;
+                        this.searchNow();
+                    }
+                }
+            });
         }
     },
     beforeDestroy() {

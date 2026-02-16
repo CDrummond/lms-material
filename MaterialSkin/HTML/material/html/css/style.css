@@ -811,6 +811,9 @@ div.v-subheader {
  padding:0 12px 0 10px !important;
 }
 
+.lms-list .list-grid, .lms-list .list-grid > div {
+ padding:0px !important;
+}
 .indent-both .lms-list-item a .v-avatar,
 .indent-right .lms-list-item a .v-avatar {
  margin-left:-2px;
@@ -885,9 +888,18 @@ div.v-subheader {
  padding-top:4px;
 }
 
-.grid-scroll > div {
+.lms-list .list-grid .v-list__tile > div,
+.grid-scroll:not(.list-grid) > div {
  margin-left:4px;
  margin-right:4px;
+}
+
+.lms-list .grid-scroll .v-list__tile  {
+ height:calc((var(--min-grid-width) - 5px) + 56px + var(--scrollbar-size) + (5px * var(--image-grid-factor))) !important;
+}
+
+.lms-list .list-grid .v-list__tile .image-grid-item {
+ height:calc((var(--min-grid-width) - 5px) + 56px + (5px * var(--image-grid-factor))) !important;
 }
 
 .lms-image-grid table {
@@ -1050,6 +1062,16 @@ div.v-subheader {
  position:absolute;
  bottom:calc(9px - var(--grid-menu-offset)) !important;
  right:-10px !important;
+}
+
+.lms-list .list-grid .image-grid-btn, .lms-list .list-grid .image-grid-btn:hover {
+ bottom:calc(25px - var(--grid-menu-offset)) !important;
+}
+
+@media (max-width: 440px) {
+ .lms-list .list-grid .image-grid-btn, .lms-list .list-grid .image-grid-btn:hover {
+  bottom:calc(23px - var(--grid-menu-offset)) !important;
+ }
 }
 
 .text-grid-item .image-grid-btn, .text-grid-item .image-grid-btn:hover {
@@ -1656,10 +1678,6 @@ div.v-subheader {
 
 .np-menu-fab .v-icon {
  font-size:var(--small-icon-size);
-}
-
-.np-close {
- visibility:hidden;
 }
 
 .np-emblem {
@@ -3494,6 +3512,10 @@ div.v-subheader {
  padding-top:3px;
 }
 .np-menu, .np-close {
+ width:calc(var(--icon-size) + 8px);
+ height:calc(var(--icon-size) + 8px);
+ font-size:var(--icon-size);
+ line-height:var(--icon-size);
  padding-top:4px;
 }
 .np-emblem {
@@ -3570,11 +3592,19 @@ div.v-subheader {
 }
 
 .image-grid-item .grid-btns, .v-list__tile .list-btns, .msk-is-non-touch .image-grid-item .hover-btn, .msk-is-non-touch .text-grid-item .hover-btn, .msk-is-non-touch .v-list__tile .hover-btn, .image-grid-item .grid-btn-left {
- visibility: hidden;
+ visibility:hidden;
 }
 
 .image-grid-item:hover .grid-btns, .v-list__tile:hover .list-btns, .msk-is-non-touch .image-grid-item:hover .hover-btn, .msk-is-non-touch .text-grid-item:hover .hover-btn, .msk-is-non-touch .v-list__tile:hover .hover-btn, .image-grid-item:hover .grid-btn-left {
- visibility: visible;
+ visibility:visible;
+}
+
+.msk-is-non-touch .list-grid:hover .hover-btn {
+ visibility:hidden;
+}
+
+.msk-is-non-touch .list-grid .image-grid-item:hover .hover-btn {
+ visibility:visible;
 }
 
 .list-btns {
@@ -3625,13 +3655,6 @@ div.v-subheader {
  margin-right:4px;
 }
 
-.np-menu, .np-close {
- float:left;
- color:var(--light-text-color);
- background-color:rgba(110, 110, 110, 0.45);
- opacity:0.7;
-}
-
 .list-btns .other-btn {
  margin-right:8px;
 }
@@ -3639,12 +3662,6 @@ div.v-subheader {
 /*@media (hover: hover) and (pointer: fine) {*/
 .msk-is-non-touch .other-btn:hover, .msk-is-non-touch .main-btn:hover,
 .msk-is-non-touch .np-emblem:hover {
- opacity:1.0;
-}
-
-.msk-is-non-touch .np-menu:hover,
-.msk-is-non-touch .np-close:hover {
- background-color:rgba(110, 110, 110);
  opacity:1.0;
 }
 
@@ -3666,12 +3683,7 @@ div.v-subheader {
  content:"\e834";
 }
 
-.vlib-menu > div {
- white-space:normal!important;
-}
-
-.nd-list .v-list__tile__title,
-.vlib-menu .v-list__tile__title {
+.nd-list .v-list__tile__title {
  white-space:normal!important;
  overflow: hidden;
  display: -webkit-box;
@@ -3682,11 +3694,6 @@ div.v-subheader {
 .nd-list .v-list__tile__title {
  height:unset!important;
  line-height:calc(var(--std-font-size) + 3px);
-}
-
-.vlib-menu .v-list__tile__title {
- height:unset!important;
- min-height:24px;
 }
 
 .ellipsis3 {
@@ -3905,6 +3912,7 @@ div.v-subheader {
 .msk-is-non-touch .v-list__group__header:hover {
  background-color:var(--list-hover-color)!important;
 }
+.msk-is-non-touch .lms-list .list-grid .v-list__tile:hover,
 .msk-is-non-touch .lms-list .no-hover .v-list__tile:hover {
  background-color:unset!important; 
 }
@@ -4469,27 +4477,27 @@ div.v-subheader {
  box-shadow: -3px 0px 8px 0px black;
 }
 
-.v-list__tile .mi .mi-0 {
+.mi:is(.v-list__tile__avatar) .mi-0 {
  transform: translateX(0%);
 }
 
-.v-list__tile .mi .mi-1 {
+.mi:is(.v-list__tile__avatar) .mi-1 {
   transform: translateX(20%);
 }
 
-.v-list__tile .mi .mi-2 {
+.mi:is(.v-list__tile__avatar) .mi-2 {
  transform: translateX(40%);
 }
 
-.v-list__tile .mi4 .mi-1 {
+.mi4:is(.v-list__tile__avatar) .mi-1 {
  transform: translateX(13.3%);
 }
 
-.v-list__tile .mi4 .mi-2 {
+.mi4:is(.v-list__tile__avatar) .mi-2 {
  transform: translateX(26.7%);
 }
 
-.v-list__tile .mi4 .mi-3 {
+.mi4:is(.v-list__tile__avatar) .mi-3 {
  transform: translateX(40%);
 }
 

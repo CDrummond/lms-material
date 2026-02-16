@@ -1025,10 +1025,7 @@ function nowplayingFetchAlbumInfo(view) {
             lmsCommand("", ["musicartistinfo", "workreview", "html:1", "work_id:"+view.info.tabs[ALBUM_TAB].work_id], view.info.tabs[ALBUM_TAB].reqId).then(({data}) => {
                 logJsonMessage("RESP", data);
                 if (data && data.result && view.isCurrent(data, ALBUM_TAB)) {
-                    let text = data.result.workreview
-                                ? replaceNewLines(data.result.workreview)
-                                : data.result.review && data.result.review[0].name
-                                    ? replaceNewLines(data.result.review[0].name) : undefined;
+                    let text = data.result.workreview ? replaceNewLines(data.result.workreview) : undefined;
                     if (undefined!=text) {
                         view.info.tabs[ALBUM_TAB].sections[1].title = i18n("Work review");
                         view.info.tabs[ALBUM_TAB].sections[1].html = text;

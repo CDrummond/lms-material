@@ -2223,8 +2223,8 @@ function parseBrowseResp(data, parent, options, cacheKey) {
                                 type: "html",
                                 id: parent.id+".0"
                             });
-        } else if (data.result.workreview || data.result.review) {
-            resp.items.push({   title: replaceNewLines(data.result.workreview ? data.result.workreview : data.result.review[0].name),
+        } else if (data.result.workreview) {
+            resp.items.push({   title: replaceNewLines(data.result.workreview),
                                 type: "html",
                                 id: parent.id+".0"
                             });

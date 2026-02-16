@@ -151,7 +151,6 @@
 "Default player":"Standardspelare",
 "Defaults":"Standardinställningar",
 "Delete":"Ta bort",
-"Delete %1":"Ta bort %1",
 "Delete '%1'?":"Ta bort'%1'?",
 "Delete alarm?":"Ta bort alarm",
 "Delete all selected items":"Ta bort alla valda punkter",
@@ -581,7 +580,6 @@
 "Theme":"Tema",
 "Thick (two lines of text)":"Tjockt (två rader med text)",
 "Thin (single line of text)":"Tunt (en rad med text)",
-"This will remove the 'virtual library', but will not delete the actual music files contained within.":"Detta tar bort delbiblioteket, men lämnar kvar innehållet",
 "This will remove the folder, and any favorites contained within.":"Detta tar bort mappen, och de favoriter som finns i mappen.",
 "This will remove tracks with the same artist and title.":"Detta tar bort spåren med samma artist och namn.",
 "Three lines for track view":"Tre rader för spårvyn",
@@ -744,5 +742,8 @@
 "1 day":"1 dag",
 "%1 days":"%1 dagar",
 "%1 %2":"",
-"List radio stations from favorites.":""
+"Album review":"",
+"List radio stations from favorites.":"",
+"Release review":"",
+"Work review":""
 }

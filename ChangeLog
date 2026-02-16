@@ -1,24 +1,21 @@
 6.2.0
 -----
-1. Allow 'Favourites' as scrolled list.
-2. Add search history.
-3. If using grid for 'Home',  then show artist, album, works, playlists (if
-   image support enabled), and 'Search on' search results in scrollable lists.
-4. Use dialog for virtual library selection.
-5. Remove small icon-only grid option, and default to always set.
-6. Remove play/add/etc menu from search result headers.
-7. Change now-playing expand/collapse icons.
-8. If sufficient space, place now-plying collapse button bottom left in
-   desktop layout. If insufficient space, add to cover overlay.
-9. Show classical work reviews in MAI and browse.
-
-6.1.8
------
-1. Add icons to global search entries.
-2. When showing 'N Items' in subtitle, adjust for number of headers.
-3. Fix sorting of scrollable list items in 'Interface' settings dialog.
-4. Fix colours in logging view.
-5. Fix '(More)' showing on list items when not applicable.
+ 1. Allow 'Favourites' as scrolled list.
+ 2. Add search history.
+ 3. If using grid for 'Home',  then show artist, album, works, playlists (if
+    image support enabled), and 'Search on' search results in scrollable lists.
+ 4. Use dialog for virtual library selection.
+ 5. Remove small icon-only grid option, and default to always set.
+ 6. Remove play/add/etc menu from search result headers.
+ 7. Change now-playing expand/collapse icons.
+ 8. If sufficient space, place now-plying collapse button bottom left in
+    desktop layout. If insufficient space, add to cover overlay.
+ 9. Show classical work reviews in MAI and browse.
+10. Add icons to global search entries.
+11. When showing 'N Items' in subtitle, adjust for number of headers.
+12. Fix sorting of scrollable list items in 'Interface' settings dialog.
+13. Fix colours in logging view.
+14. Fix '(More)' showing on list items when not applicable.
 
 6.1.7
 -----

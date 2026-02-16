@@ -127,7 +127,7 @@ var lmsBrowse = Vue.component("lms-browse", {
     <tr v-if="showMixButton || showMaiButton || (showDetailedSubtoolbar && wide<WIDE_HBTNS)" align="right">
      <v-btn @click.stop="currentActionsMenu($event)" flat icon class="toolbar-button" :title="trans.actions" id="tbar-actions" v-if="wide<WIDE_HBTNS && currentActions.length>0 && numCurrentActionsInToolbar<currentActions.length"><v-icon>more_vert</v-icon></v-btn>
      <v-btn flat v-if="showMixButton" class="context-button" @click="doContext(STD_ITEM_MIX)"><img class="svg-img" :src="'music-mix' | svgIcon(darkUi)"></img>&nbsp;{{i18n('Start artist mix')}}</v-btn>
-     <v-btn flat v-if="showMaiButton" class="context-button" @click="doContext(STD_ITEM_MAI)"><v-icon v-if="current.stdItem==STD_ITEM_ALBUM">album</v-icon><img v-else class="svg-img" :src="'artist' | svgIcon(darkUi)"></img>&nbsp;{{i18n('Information')}}</v-btn>
+     <v-btn flat v-if="showMaiButton" class="context-button" @click="doContext(STD_ITEM_MAI)"><v-icon v-if="current.stdItem==STD_ITEM_ALBUM">album</v-icon><img v-else class="svg-img" :src="current.stdItem==STD_ITEM_WORK ? 'classical-work' : 'artist' | svgIcon(darkUi)"></img>&nbsp;{{i18n('Information')}}</v-btn>
     </tr>
     <tr v-else><obj>&nbsp;</obj></tr>
    </table>
@@ -808,7 +808,7 @@ var lmsBrowse = Vue.component("lms-browse", {
                 return false;
             }
             let stdItem = this.current.stdItem ? this.current.stdItem : this.current.altStdItem;
-            if (LMS_P_MAI && this.showDetailedSubtoolbar && (stdItem==STD_ITEM_ARTIST || stdItem==STD_ITEM_WORK_COMPOSER || stdItem==STD_ITEM_ALBUM)) {
+            if (LMS_P_MAI && this.showDetailedSubtoolbar && (stdItem==STD_ITEM_ARTIST || stdItem==STD_ITEM_WORK_COMPOSER || stdItem==STD_ITEM_WORK || stdItem==STD_ITEM_ALBUM)) {
                 if (stdItem==STD_ITEM_ARTIST || stdItem==STD_ITEM_WORK_COMPOSER) {
                     // 'Various Artists' will not have biography entry in its menu. So, if
                     // this item is not found then we don't show toolbar button...

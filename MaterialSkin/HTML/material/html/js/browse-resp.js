@@ -2223,6 +2223,11 @@ function parseBrowseResp(data, parent, options, cacheKey) {
                                 type: "html",
                                 id: parent.id+".0"
                             });
+        } else if (data.result.review) {
+            resp.items.push({   title: replaceNewLines(data.result.review[0].name),
+                                type: "html",
+                                id: parent.id+".0"
+                            });
         } else if (data.result.loop_loop) {
             var numImages = 0;
             for (var idx=0, loop=data.result.loop_loop, loopLen=loop.length; idx<loopLen; ++idx) {

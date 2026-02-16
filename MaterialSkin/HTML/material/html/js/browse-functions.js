@@ -155,6 +155,10 @@ function browseActions(view, item, args, count, showWorks, addRoleAndServices, i
                                                     : ['musicartistinfo', 'albumreview', 'html:1', 'album:'+args['album'], 'artist:'+args['artist']],
                                    params:[]},
                               weight:100});
+            } else if (undefined!=args['work_id']) {
+                actions.push({title:i18n('Information'), svg:'classical-work', stdItem:STD_ITEM_MAI,
+                              do:{ command: ['musicartistinfo', 'workreview', 'html:1', 'work_id:'+args['work_id']], params:[]},
+                              weight:100});
             } else if (undefined!=args['artist_id'] || undefined!=args['artist']) {
                 actions.push({title:i18n('Information'), svg:'artist', stdItem:STD_ITEM_MAI,
                               do:{ command: undefined!=args['artist_id']

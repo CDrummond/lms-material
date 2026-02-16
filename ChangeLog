@@ -1,9 +1,9 @@
 6.2.0
 -----
-1. Allow add 'Favourites' as scrolled list.
+1. Allow 'Favourites' as scrolled list.
 2. Add search history.
 3. If using grid for 'Home',  then show artist, album, works, playlists (if
-   image support enabled), and 'Search on' in scrollable lists.
+   image support enabled), and 'Search on' search results in scrollable lists.
 4. Use dialog for virtual library selection.
 5. Remove small icon-only grid option, and default to always set.
 6. Remove play/add/etc menu from search result headers.

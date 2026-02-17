@@ -18,6 +18,8 @@
 14. Show classical work reviews in MAI and browse.
 15. Fix menus sokmtimes having separator as first item.
 16. Indicate current track when browsing saved playlists.
+17. When showing '...' menu button next to 'Information', show to left for
+    consistency.
 
 6.1.7
 -----

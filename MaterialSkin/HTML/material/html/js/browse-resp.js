@@ -2081,6 +2081,7 @@ function parseBrowseResp(data, parent, options, cacheKey) {
                 let rs = undefined!=i.rating ? ratingString(undefined, i.rating) : undefined;
                 resp.items.push({
                               id: uniqueId("track_id:"+i.id, resp.items.length),
+                              playlist_track_id: "track_id:"+i.id,
                               title: addSubtitle(title, i),
                               subtitle: undefined!=rs ? undefined==subtitle ? rs : subtitle+SEPARATOR+rs : subtitle,
                               subtitleContext: subtitleContext,

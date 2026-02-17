@@ -2414,6 +2414,7 @@ div.v-rating i.primary--text, div.v-rating i.accent--text {
 }
 
 .browse-current-indicator,
+.browse-current-indicator-playlist,
 .pq-current-indicator {
  position:absolute;
  top:7.5px !important;
@@ -2433,6 +2434,11 @@ div.v-rating i.primary--text, div.v-rating i.accent--text {
 }
 .indent-both #browse-list .browse-current-indicator {
  left:114px!important;
+}
+
+#browse-list .browse-current-indicator-playlist {
+ top:8px!important;
+ left:32px !important;
 }
 
 .lms-list3 .pq-current-indicator {

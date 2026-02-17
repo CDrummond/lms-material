@@ -70,6 +70,14 @@ function setFavoritesParams(i, item) {
     }
 }
 
+function addDivider(item, addedDivider) {
+    if (!addedDivider && item.menu.length>0) {
+        item.menu.push(DIVIDER);
+        return true;
+    }
+    return addedDivider;
+}
+
 function parseBrowseResp(data, parent, options, cacheKey) {
     // NOTE: If add key to resp, then update addToCache in utils.js
     var resp = {items: [], allTracksItem:undefined, baseActions:[], canUseGrid: false, gridType: GRID_STANDARD, jumplist:[], numAudioItems:0, canDrop:false, itemCustomActions:undefined, extra:undefined, numHeaders:0, currentRoleIds: new Set() };
@@ -324,10 +332,7 @@ function parseBrowseResp(data, parent, options, cacheKey) {
                 var addedDivider = false;
                 if (isFavorites) {
                     i.pos = resp.items.length;
-                    if (i.menu.length>0) {
-                        i.menu.push(DIVIDER);
-                        addedDivider = true;
-                    }
+                    addedDivider = addDivider(i, addedDivider);
                     if (!i.type) {
                         i.isFavFolder = true;
                         resp.allowHoverBtns = true;
@@ -409,10 +414,7 @@ function parseBrowseResp(data, parent, options, cacheKey) {
                         }
                         if (STREAM_SCHEMAS.has(i.presetParams.favorites_url.split(":")[0]) && allowPinning && !i.header) {
                             i.isRadio = true;
-                            if (!addedDivider && i.menu.length>0) {
-                                i.menu.push(DIVIDER);
-                                addedDivider = true;
-                            }
+                            addedDivider = addDivider(i, addedDivider);
                             i.menu.push(options.pinned.has(i.presetParams.favorites_url) ? UNPIN_ACTION : PIN_ACTION);
                         }
                     } else if (i['icon-id']=="html/images/favorites.png") {
@@ -422,10 +424,7 @@ function parseBrowseResp(data, parent, options, cacheKey) {
                         mapIcon(i);
                     }
                 } else if (i.presetParams && allowPinning) {
-                    if (i.menu.length>0) {
-                        i.menu.push(DIVIDER);
-                        addedDivider = true;
-                    }
+                    addedDivider = addDivider(i, addedDivider);
                     i.menu.push(ADD_TO_FAV_ACTION);
                 } else if (isDynamicPlaylist && i.params && i.params.playlistid && addedPlayAction && allowPinning) {
                     i.presetParams = {favorites_url: "dynamicplaylist://"+i.params.playlistid};
@@ -433,20 +432,14 @@ function parseBrowseResp(data, parent, options, cacheKey) {
                 }
 
                 if (isPlaylists && i.type=="playlist" && allowPinning) {
-                    if (!addedDivider && i.menu.length>0) {
-                        i.menu.push(DIVIDER);
-                        addedDivider = true;
-                    }
+                    addedDivider = addDivider(i, addedDivider);
                     i.menu.push(RENAME_ACTION);
                     i.menu.push(REMOVE_DUPES_ACTION);
                     i.menu.push(DELETE_ACTION);
                 }
 
                 if (isPodcastList) {
-                    if (!addedDivider && i.menu.length>0) {
-                        i.menu.push(DIVIDER);
-                        addedDivider = true;
-                    }
+                    addedDivider = addDivider(i, addedDivider);
                     if (i.type==undefined) {
                         i.menu.push(UNSUB_PODCAST_ACTION);
                         i.section=SECTION_PODCASTS;
@@ -480,10 +473,7 @@ function parseBrowseResp(data, parent, options, cacheKey) {
                         continue;
                     }
                     if (allowPinning && !i.header) {
-                        if (!addedDivider && i.menu.length>0) {
-                            i.menu.push(DIVIDER);
-                            addedDivider = true;
-                        }
+                        addedDivider = addDivider(i, addedDivider);
                         i.menu.push(options.pinned.has(i.id) ? UNPIN_ACTION : PIN_ACTION);
                     }
                     mapIcon(i, command);
@@ -507,10 +497,7 @@ function parseBrowseResp(data, parent, options, cacheKey) {
                         if (allowPinning && !i.header) {
                             if (i.menu.length>0 && i.menu[0]==PLAY_ACTION && (i.icon || i.image) && i.type!="entry" && i.presetParams && i.presetParams.favorites_url) {
                                 // Only allow to pin if we can play!
-                                if (!addedDivider && i.menu.length>0) {
-                                    i.menu.push(DIVIDER);
-                                    addedDivider = true;
-                                }
+                                addedDivider = addDivider(i, addedDivider);
                                 i.isRadio = true;
                                 i.menu.push(options.pinned.has(i.presetParams.favorites_url) ? UNPIN_ACTION : PIN_ACTION);
                             } else if (data.params[1][0]=='radios' && i.type!='entry' && i.actions && i.actions.go && i.actions.go.params && i.actions.go.params.menu) {
@@ -645,10 +632,7 @@ function parseBrowseResp(data, parent, options, cacheKey) {
                 }
 
                 if (addedPlayAction || isOnlineTrack) {
-                    if (!addedDivider) {
-                        i.menu.push(DIVIDER);
-                        addedDivider = true;
-                    }
+                    addedDivider = addDivider(i, addedDivider);
                     if ((resp.isMusicMix && i.trackType && i.trackType == "local") || isOnlineTrack /*||
                         (!isPlaylists && !isFavorites && isAudioTrack(i) && (i.url || (i.presetParams && i.presetParams.favorites_url)))*/) {
                         i.saveableTrack = true; // Can save track list to playlist...
@@ -662,10 +646,7 @@ function parseBrowseResp(data, parent, options, cacheKey) {
                         i.menu.push(SHOW_IMAGE_ACTION);
                     }
                 } else if (undefined!=i.image) {
-                    if (!addedDivider) {
-                        i.menu.push(DIVIDER);
-                        addedDivider = true;
-                    }
+                    addedDivider = addDivider(i, addedDivider);
                     i.menu.push(COPY_DETAILS_ACTION);
                     i.menu.push(SHOW_IMAGE_ACTION);
                 }
@@ -677,10 +658,7 @@ function parseBrowseResp(data, parent, options, cacheKey) {
                 if ( !isFavorites &&
                      ( (i.commonParams && (i.commonParams.artist_id || i.commonParams.album_id || i.commonParams.track_id)) ||
                        ( ((moreAction && i.menu.length>0 && i.params && i.params.item_id) || (i.actions && i.actions.more && i.actions.more.cmd)))) ) {
-                    if (!addedDivider && i.menu.length>0) {
-                        i.menu.push(DIVIDER);
-                        addedDivider = true;
-                    }
+                    addedDivider = addDivider(i, addedDivider);
                     i.menu.push(MORE_ACTION);
                 }
 

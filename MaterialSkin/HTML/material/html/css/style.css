@@ -1082,7 +1082,7 @@ div.v-subheader {
 
 @media (max-width: 440px) {
  .lms-list .list-grid .image-grid-btn, .lms-list .list-grid .image-grid-btn:hover {
-  bottom:calc(23px - var(--grid-menu-offset)) !important;
+  bottom:calc(33px - var(--grid-menu-offset)) !important;
  }
  .lms-list .grid-scroll-s .image-grid-btn, .lms-list .list-grid .image-grid-btn:hover {
   bottom:calc(9px - var(--grid-menu-offset)) !important;

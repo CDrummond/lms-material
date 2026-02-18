@@ -22,7 +22,7 @@ function buildSearchResp(view) {
     let items=[];
     let total=0;
     let otherList = !isSetToUseGrid(GRID_TOP);
-    let gridClamp = numScrollItems(view, document.getElementById("browse-search-field"));
+    let gridClamp = numScrollItems(view, document.getElementById("browse-view"));
     for (let i=0, len=results.length; i<len; ++i) {
         let all = [];
         let cat = results[i].command.cat;

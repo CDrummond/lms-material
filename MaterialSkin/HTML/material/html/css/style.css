@@ -899,7 +899,7 @@ div.v-subheader {
 }
 
 .lms-list .grid-scroll-s .v-list__tile  {
- height:calc((var(--min-grid-width) - 5px) + 40px + var(--scrollbar-size) + (5px * var(--image-grid-factor))) !important;
+ height:calc((var(--min-grid-width) - 5px) + 32px + var(--scrollbar-size) + (5px * var(--image-grid-factor))) !important;
 }
 
 .lms-list .list-grid .v-list__tile .image-grid-item {
@@ -907,7 +907,7 @@ div.v-subheader {
 }
 
 .lms-list .grid-scroll-s .v-list__tile .image-grid-item {
- height:calc((var(--min-grid-width) - 5px) + 40px + (5px * var(--image-grid-factor))) !important;
+ height:calc((var(--min-grid-width) - 5px) + 32px + (5px * var(--image-grid-factor))) !important;
 }
 
 .lms-image-grid table {
@@ -1077,7 +1077,7 @@ div.v-subheader {
 }
 
 .lms-list .grid-scroll-s .image-grid-btn, .lms-list .grid-scroll-s .image-grid-btn:hover {
- bottom:calc(8px - var(--grid-menu-offset)) !important;
+ bottom:var(--grid-menu-offset) !important;
 }
 
 @media (max-width: 440px) {
@@ -1085,7 +1085,7 @@ div.v-subheader {
   bottom:calc(23px - var(--grid-menu-offset)) !important;
  }
  .lms-list .grid-scroll-s .image-grid-btn, .lms-list .list-grid .image-grid-btn:hover {
-  bottom:calc(18px - var(--grid-menu-offset)) !important;
+  bottom:calc(9px - var(--grid-menu-offset)) !important;
  }
 }
 

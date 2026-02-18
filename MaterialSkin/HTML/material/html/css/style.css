@@ -1072,19 +1072,19 @@ div.v-subheader {
  right:-10px !important;
 }
 
-.lms-list .list-grid .image-grid-btn, .lms-list .list-grid .image-grid-btn:hover {
+.lms-list .list-grid .image-grid-btn, .msk-is-non-touch .lms-list .list-grid .image-grid-btn:hover {
  bottom:calc(25px - var(--grid-menu-offset)) !important;
 }
 
-.lms-list .grid-scroll-s .image-grid-btn, .lms-list .grid-scroll-s .image-grid-btn:hover {
+.lms-list .grid-scroll-s .image-grid-btn, .msk-is-non-touch .lms-list .grid-scroll-s .image-grid-btn:hover {
  bottom:var(--grid-menu-offset) !important;
 }
 
 @media (max-width: 440px) {
- .lms-list .list-grid .image-grid-btn, .lms-list .list-grid .image-grid-btn:hover {
+ .lms-list .list-grid .image-grid-btn, .msk-is-non-touch .lms-list .list-grid .image-grid-btn:hover {
   bottom:calc(33px - var(--grid-menu-offset)) !important;
  }
- .lms-list .grid-scroll-s .image-grid-btn, .lms-list .list-grid .image-grid-btn:hover {
+ .lms-list .grid-scroll-s .image-grid-btn, .msk-is-non-touch .lms-list .list-grid .image-grid-btn:hover {
   bottom:calc(9px - var(--grid-menu-offset)) !important;
  }
 }

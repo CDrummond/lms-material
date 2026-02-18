@@ -49,6 +49,7 @@
 "Album":"Album",
 "Album artist":"Albumkunstner",
 "Album gain":"Album",
+"Album review":"Albumanmeldelse",
 "Album, Track Number":"Album, albumsnummer",
 "Albums":"Albums",
 "All":"Alle",
@@ -406,6 +407,7 @@
 "Recently Updated Releases":"Nyligt opdaterede udgivelser",
 "Regular":"Mellem",
 "Release":"Udgivelse",
+"Release review":"Udgivelsesanmeldelse",
 "Release type":"Udgivelsestype",
 "Release, Track Number":"Udgivelse, albumsnummer",
 "Releases":"Udgivelser",
@@ -665,6 +667,7 @@
 "With":"Med",
 "Without":"Uden",
 "Work":"Værk",
+"Work review":"Værksanmeldelse",
 "Works":"Værker",
 "Year":"År",
 "Year, Album":"År, album",
@@ -742,8 +745,5 @@
 "1 Year":"1 år",
 "%1 Years":"%1 år",
 "1 day":"1 dag",
-"%1 days":"%1 dage",
-"Album review":"",
-"Release review":"",
-"Work review":""
+"%1 days":"%1 dage"
 }

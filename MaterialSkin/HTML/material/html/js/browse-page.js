@@ -339,7 +339,7 @@ var lmsBrowse = Vue.component("lms-browse", {
       <v-list-tile-title v-html="item.title" @touchend="textSelectEnd" @mouseup="textSelectEnd" @contextmenu="event.preventDefault()"></v-list-tile-title>
      </v-list-tile-content>
     </v-list-tile>
-    <v-list-tile v-else-if="undefined!=item.searchcat && undefined!=item.items" class="grid-scroll list-grid icon-only" :id="'gridscroll-'+index">
+    <v-list-tile v-else-if="undefined!=item.searchcat && undefined!=item.items" class="grid-scroll list-grid icon-only" v-bind:class="{'grid-scroll-s':undefined==item.items[0].subtitle}" :id="'gridscroll-'+index">
 
      <div align="center" style="vertical-align: top" v-for="(citem, col) in item.items" @contextmenu.prevent="contextMenu(citem, undefined, $event)"  :id="'gridscroll-'+index+'.'+col">
       <div v-if="undefined==citem" class="image-grid-item defcursor"></div>

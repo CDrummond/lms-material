@@ -7,7 +7,7 @@
  5. Fix '(More)' showing on list items when not applicable.
  6. Allow 'Favourites' as scrolled list.
  7. Add search history.
- 8. If using grid for 'Home',  then show artist, album, works, playlists (if
+ 8. If using grid for 'Home', then show artist, album, works, playlists (if
     image support enabled), and 'Search on' search results in scrollable lists.
  9. Use dialog for virtual library selection.
 10. Remove small icon-only grid option, and default to always set.

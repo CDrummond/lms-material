@@ -172,7 +172,7 @@ Vue.component('lms-groupplayers-dialog', {
                        'powerMaster:'+(this.options.powerMaster ? 1 : 0),
                        'powerPlay:'+(this.options.powerPlay ? 1 : 0),
                        'greedy:'+(this.options.greedy ? 1 : 0),
-                       'weakVolume:'+(this.options.greedy ? 1 : 0)
+                       'weakVolume:'+(this.options.weakVolume ? 1 : 0)
                       ];
 
             if (this.prevName != name) {

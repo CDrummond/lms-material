@@ -20,6 +20,7 @@
 16. Indicate current track when browsing saved playlists.
 17. When showing '...' menu button next to 'Information', show to left for
     consistency.
+18. Fix 'Do not set volume' in 'Group player' update dialog - thanks to SamY.
 
 6.1.7
 -----

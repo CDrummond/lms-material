@@ -2459,12 +2459,14 @@ function parseBrowseResp(data, parent, options, cacheKey) {
                                           morecmd:undefined, baseActions:undefined!=obj['base'] ? obj['base']['actions'] : undefined,
                                           section:lists[s].section, isFavFolder:lists[s].isFavFolder}
                             mapIcon(header);
-                            if (undefined==header.icon && undefined!=lists[s].icon) {
-                                header.icon = lists[s].icon;
+                            if (undefined==header.icon && undefined==header.svg) {
+                                if (undefined!=lists[s].svg) {
+                                    header.svg = lists[s].svg;
+                                } else if (undefined!=lists[s].icon) {
+                                    header.icon = lists[s].icon;
+                                }
                             }
-                            if (undefined==header.svg && undefined!=lists[s].svg) {
-                                header.svg = lists[s].svg;
-                            }
+
                             if (parseInt(obj['count'])>count) {
                                 if (isFav) {
                                     header.morecmd = {command:lists[s].command, params:lists[s].params};
@@ -2472,6 +2474,7 @@ function parseBrowseResp(data, parent, options, cacheKey) {
                                     header.morecmd = {command:["material-skin", "home-extra"], params:[lists[s].id.split('_').slice(1).join('_')+":1", "ismore:1", "count:200"]};
                                 }
                             }
+
                             let iheHdr = resp.items.length;
                             resp.items.push(header);
                             for (let i=0, loop=newResp.items, len=loop.length; i<len; ++i) {

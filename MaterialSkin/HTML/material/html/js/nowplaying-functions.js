@@ -959,9 +959,9 @@ function nowplayingFetchAlbumInfo(view) {
             : (view.info.tabs[ALBUM_TAB].albumartist!=albumartist || view.info.tabs[ALBUM_TAB].albumartist_id!=albumartist_id ||
         view.info.tabs[ALBUM_TAB].album!=view.infoTrack.album || view.info.tabs[ALBUM_TAB].album_id!=view.infoTrack.album_id)) ||
         view.info.tabs[ALBUM_TAB].work_id!=work_id) {
-        view.info.tabs[ALBUM_TAB].sections[0].items=[];
-        view.info.tabs[ALBUM_TAB].sections[0].more=undefined;
-        view.info.tabs[ALBUM_TAB].sections[1].items=[];
+        view.info.tabs[ALBUM_TAB].sections[2].items=[];
+        view.info.tabs[ALBUM_TAB].sections[2].more=undefined;
+        view.info.tabs[ALBUM_TAB].sections[3].items=[];
         view.info.tabs[ALBUM_TAB].texttitle=nowPlayingHeader(view.infoTrack.album);
         view.info.tabs[ALBUM_TAB].text=i18n("Fetching...");
         view.info.tabs[ALBUM_TAB].image=undefined;
@@ -1110,7 +1110,7 @@ function nowplayingMoreClicked(view, tab, section) {
     if (ARTIST_TAB==tab && 0==section) {
         bus.$emit("browse", ["albums"], ["artist_id:"+view.infoTrack.artist_id, ARTIST_ALBUM_TAGS, SORT_KEY+"yearalbum"], unescape(view.infoTrack.artist), NP_INFO);
         view.info.show=false;
-    } else if (ALBUM_TAB==tab && 0==section) {
+    } else if (ALBUM_TAB==tab && 2==section) {
         bus.$emit("browse", ["tracks"], ["album_id:"+view.infoTrack.album_id, trackTags(true), SORT_KEY+"tracknum"], unescape(view.infoTrack.album), NP_INFO,
                    undefined, unescape(view.infoTrack.albumartist ? view.infoTrack.albumartist : view.infoTrack.artist));
         view.info.show=false;

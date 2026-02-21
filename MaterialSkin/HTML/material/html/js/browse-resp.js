@@ -1675,7 +1675,7 @@ function parseBrowseResp(data, parent, options, cacheKey) {
                               filter: i.disc!=undefined ? FILTER_PREFIX+i.disc : undefined,
                               gfilter: groupingTitle!=undefined ? FILTER_PREFIX+groupings.size : undefined,
                               emblem: showAlbumName ? getEmblem(i.extid) : undefined,
-                              tnum: sortTracks && undefined!=i.tracknum ? tracknum : undefined,
+                              tnum: sortTracks && undefined!=i.tracknum ? parseInt(i.tracknum) : undefined,
                               tracknum: tracknum,
                               disc: i.disc ? parseInt(i.disc) : undefined,
                               year: (sortTracks || 1==allTracksGrouping) ? year : undefined,

@@ -3,6 +3,7 @@
 1. Fix 3rd party scollable lists headers.
 2. Fix clicking on '+ N more' in MAI album view.
 3. Fix displaying of advanced search results.
+4. Require at least 1000x800px for 'Reposition dialogs' option.
 
 6.2.0
 -----

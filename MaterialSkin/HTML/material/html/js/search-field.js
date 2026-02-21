@@ -21,12 +21,15 @@ function buildSearchResp(view) {
     let results = view.results;
     let items=[];
     let total=0;
-    let otherList = !isSetToUseGrid(GRID_TOP);
+    let forceList = !isSetToUseGrid(GRID_TOP);
     let gridClamp = numScrollItems(view, document.getElementById("browse-view"));
     for (let i=0, len=results.length; i<len; ++i) {
         let all = [];
         let cat = results[i].command.cat;
-        let useList = SEARCH_TRACKS_CAT==cat || (SEARCH_PLAYLISTS_CAT==cat && !lmsOptions.playlistImages) || otherList;
+        let useList = forceList ||
+                      SEARCH_TRACKS_CAT==cat ||
+                      (SEARCH_ARTISTS_CAT==cat && (!LMS_P_MAI || !lmsOptions.showArtistImages)) ||
+                      (SEARCH_PLAYLISTS_CAT==cat && !lmsOptions.playlistImages)
         let maxItems = useList ? LMS_INITIAL_SEARCH_RESULTS : gridClamp;
         let numItems = results[i].resp.items.length;
         let clamped = SEARCH_OTHER_CAT!=cat && numItems>maxItems

@@ -28,8 +28,9 @@ function buildSearchResp(view) {
         let cat = results[i].command.cat;
         let useList = forceList ||
                       SEARCH_TRACKS_CAT==cat ||
-                      (SEARCH_ARTISTS_CAT==cat && (!LMS_P_MAI || !lmsOptions.showArtistImages)) ||
-                      (SEARCH_PLAYLISTS_CAT==cat && !lmsOptions.playlistImages)
+                      (SEARCH_ARTISTS_CAT==cat && (!isSetToUseGrid({command:['artists']}) || !LMS_P_MAI || !lmsOptions.showArtistImages)) ||
+                      (SEARCH_ALBUMS_CAT==cat && !isSetToUseGrid({command:['albums']})) ||
+                      (SEARCH_PLAYLISTS_CAT==cat && (!lmsOptions.playlistImages || !isSetToUseGrid({command:['playlists']})))
         let maxItems = useList ? LMS_INITIAL_SEARCH_RESULTS : gridClamp;
         let numItems = results[i].resp.items.length;
         let clamped = SEARCH_OTHER_CAT!=cat && numItems>maxItems

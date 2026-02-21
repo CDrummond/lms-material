@@ -959,6 +959,8 @@ function nowplayingFetchAlbumInfo(view) {
             : (view.info.tabs[ALBUM_TAB].albumartist!=albumartist || view.info.tabs[ALBUM_TAB].albumartist_id!=albumartist_id ||
         view.info.tabs[ALBUM_TAB].album!=view.infoTrack.album || view.info.tabs[ALBUM_TAB].album_id!=view.infoTrack.album_id)) ||
         view.info.tabs[ALBUM_TAB].work_id!=work_id) {
+        view.info.tabs[ALBUM_TAB].sections[0].html=undefined;
+        view.info.tabs[ALBUM_TAB].sections[1].html=undefined;
         view.info.tabs[ALBUM_TAB].sections[2].items=[];
         view.info.tabs[ALBUM_TAB].sections[2].more=undefined;
         view.info.tabs[ALBUM_TAB].sections[3].items=[];

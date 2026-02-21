@@ -1668,7 +1668,7 @@ function browseItemAction(view, act, origItem, index, event, slimBrowseBaseActio
             }
         });
     } else if (ADD_ALL_ACTION==act || INSERT_ALL_ACTION==act || PLAY_ALL_ACTION==act || PLAY_DISC_ACTION==act || PLAY_SHUFFLE_ALL_ACTION==act) {
-        if (view.current && ((item.id == view.current.id) || (view.current.id.startsWith("currentaction:")))) { // Called from subtoolbar => act on all items
+        if (view.current && ((item.id == view.current.id) || (view.current.id.startsWith("currentaction:") && !item.id.startsWith(FILTER_PREFIX)))) { // Called from subtoolbar => act on all items
             if (view.allTracksItem) {
                 view.itemAction(ADD_ALL_ACTION==act ? ADD_ACTION : INSERT_ALL_ACTION==act ? INSERT_ACTION : PLAY_SHUFFLE_ALL_ACTION==act ? PLAY_SHUFFLE_ACTION : PLAY_ACTION, view.allTracksItem);
             } else {

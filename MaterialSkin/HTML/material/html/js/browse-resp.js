@@ -1757,9 +1757,9 @@ function parseBrowseResp(data, parent, options, cacheKey) {
                                 jl[j].filter=FILTER_PREFIX+i;
                             }
                             resp.items.splice(groups[i][0]+i, 0,
-                                            {title: groups[i][1], id:FILTER_PREFIX+i, header:true,
-                                            subtitle: isCompositions ? i18np("1 Composition", "%1 Compositions", count) : i18np("1 Track", "%1 Tracks", count), durationStr:formatSeconds(duration),
-                                            menu:[PLAY_ALL_ACTION, INSERT_ALL_ACTION, PLAY_SHUFFLE_ALL_ACTION, ADD_ALL_ACTION, DIVIDER, SELECT_ACTION]});
+                                              { title: groups[i][1], id:FILTER_PREFIX+i, header:true,
+                                                subtitle: isCompositions ? i18np("1 Composition", "%1 Compositions", count) : i18np("1 Track", "%1 Tracks", count), durationStr:formatSeconds(duration),
+                                                menu:[PLAY_ALL_ACTION, INSERT_ALL_ACTION, PLAY_SHUFFLE_ALL_ACTION, ADD_ALL_ACTION, DIVIDER, SELECT_ACTION]});
                             resp.numHeaders++;
                         }
                         if (1==allTracksGrouping) { // Grouped into albums, so remove from subtitle

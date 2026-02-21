@@ -1,6 +1,7 @@
 6.2.2
 -----
 1. Fix 'All tracks' track ordering.
+2. Fix add/next/append/shuffle actions from headers of 'All tracks'.
 
 6.2.1
 -----

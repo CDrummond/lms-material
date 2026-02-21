@@ -1131,7 +1131,7 @@ var lmsBrowse = Vue.component("lms-browse", {
                 let cmd = ["material-skin", "home-extra"];
                 this.topExtraCfg.needsPlayer = false;
                 for (let i=0, loop=this.$store.state.detailedHomeItems, len=loop.length; i<len; ++i) {
-                    if (DETAILED_HOME_EXPLORE!=loop[i]) {
+                    if (DETAILED_HOME_EXPLORE!=loop[i] && (DETAILED_HOME_STD_PREFIX+"favorites"!=loop[i] || !this.$store.state.sortFavorites)) {
                         cmd.push(loop[i].split('_').slice(1).join('_')+":1");
                         if (!this.topExtraCfg.needsPlayer && !loop[i].startsWith(DETAILED_HOME_STD_PREFIX) && lmsOptions.homeExtraNeedsPlayer.has(loop[i])) {
                             this.topExtraCfg.needsPlayer = true;

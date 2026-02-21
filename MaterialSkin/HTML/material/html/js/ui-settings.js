@@ -203,13 +203,15 @@ Vue.component('lms-ui-settings', {
 
     <div style="padding-left:12px">{{i18n('Scrollable lists')}} <v-btn @click.stop="showDetailedHomeDialog($event)" flat icon class="settings-list-checkbox-action"><v-icon>settings</v-icon></v-btn></div>
     <div v-if="haveScrollableLists">
-     <v-list-tile v-for="(item, index) in detailedHomeItems" class="settings-list-thin-item" @dragstart.native="dragStart(index, $event)" @dragenter.prevent="" @dragend.native="dragEnd()" @dragover.native="dragOver(index, $event)" @drop.native="drop(index, $event)" draggable v-bind:class="{'highlight-drop':dropIndex==index, 'highlight-drag':dragIndex==index}">
-      <v-avatar>
-       <v-icon v-if="undefined!=detailedHomeValues[item].icon">{{detailedHomeValues[item].icon}}</v-icon>
-       <img v-else-if="detailedHomeValues[item].svg" class="svg-img" :src="detailedHomeValues[item].svg | svgIcon(darkUi)"></img>
-      </v-avatar>
-      <div>{{detailedHomeValues[item].title}}</div>
-     </v-list-tile>
+     <v-template v-for="(item, index) in detailedHomeItems">
+      <v-list-tile v-if="'std_favorites'!=item || !sortFavorites" class="settings-list-thin-item" @dragstart.native="dragStart(index, $event)" @dragenter.prevent="" @dragend.native="dragEnd()" @dragover.native="dragOver(index, $event)" @drop.native="drop(index, $event)" draggable v-bind:class="{'highlight-drop':dropIndex==index, 'highlight-drag':dragIndex==index}">
+       <v-avatar>
+        <v-icon v-if="undefined!=detailedHomeValues[item].icon">{{detailedHomeValues[item].icon}}</v-icon>
+        <img v-else-if="detailedHomeValues[item].svg" class="svg-img" :src="detailedHomeValues[item].svg | svgIcon(darkUi)"></img>
+       </v-avatar>
+       <div>{{detailedHomeValues[item].title}}</div>
+      </v-list-tile>
+     </v-template>
     </div>
     <v-list-tile-sub-title v-else style="padding-left:12px">{{i18n("No scrollable lists have been enabled. Use the 'cog' icon (above) to select the lists you would like to appear on the home screen.")}}</v-list-tile-sub-title>
     <div class="dialog-padding"></div>
@@ -448,7 +450,7 @@ Vue.component('lms-ui-settings', {
    <v-card-title>{{i18n("Scrollable lists")}}</v-card-title>
    <v-list class="dialog-main-list">
     <template v-for="(item, index) in detailedHomeDialog.items" :key="item.id">
-    <v-list-tile class="settings-list-thin-item">
+    <v-list-tile class="settings-list-thin-item" v-if="'std_favorites'!=item.id || !sortFavorites">
      <v-checkbox v-model="item.checked" style="display:flex" :id="item.id">
       <template v-slot:label>
        <v-list-tile-avatar>

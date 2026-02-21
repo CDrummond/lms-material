@@ -1059,6 +1059,7 @@ function nowplayingFetchAlbumInfo(view) {
             });
         }
         if (LMS_P_MAI && view.infoTrack.path!=undefined) {
+            console.log("GET LOCAL", view.infoTrack.path);
             lmsCommand('', ['musicartistinfo', 'localfiles', 'folder:'+view.infoTrack.path]).then(({data}) => {
                 if (data && data.result && data.result.item_loop && data.result.item_loop.length>0) {
                     let resp = parseBrowseResp(data);
@@ -1075,7 +1076,8 @@ function nowplayingFetchAlbumInfo(view) {
         view.info.tabs[ALBUM_TAB].isMsg=true;
         view.info.tabs[ALBUM_TAB].text=undefined;
         view.info.tabs[ALBUM_TAB].image=/*view.infoTrack.empty ? undefined :*/ view.coverUrl;
-        view.info.tabs[ALBUM_TAB].sections[0].items=[];
+        view.info.tabs[ALBUM_TAB].sections[2].items=[];
+        view.info.tabs[ALBUM_TAB].sections[3].items=[];
     }
 }
 

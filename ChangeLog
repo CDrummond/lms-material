@@ -4,6 +4,7 @@
 2. Fix add/next/append/shuffle actions from headers of 'All tracks'.
 3. If artists, albums, or playlists commands are not set to use grids then use
    standard lists for respective search result.
+4. Fix issue with undefined 'pinned' when favourites scrolled list used.
 
 6.2.1
 -----

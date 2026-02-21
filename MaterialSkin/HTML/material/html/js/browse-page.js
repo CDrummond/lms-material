@@ -1158,7 +1158,7 @@ var lmsBrowse = Vue.component("lms-browse", {
         },
         handleHomeExtra(data) {
             try {
-                let resp = parseBrowseResp(data, undefined, {order:this.$store.state.detailedHomeItems});
+                let resp = parseBrowseResp(data, undefined, {order:this.$store.state.detailedHomeItems, pinned:this.options.pinned, sortFavorites:this.options.sortFavorites});
                 this.fetchingItem = undefined;
                 if (undefined!=resp && undefined!=resp.items) {
                     // NOTE: No point checking for changes, as the layoutGrid code adds 'gidx' to items

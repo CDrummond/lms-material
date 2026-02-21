@@ -2382,7 +2382,7 @@ function parseBrowseResp(data, parent, options, cacheKey) {
                     }
                 }
             }
-            var lists = [{key:'new', loop:"albums", title:i18n('New Music'), icon:"new_releases", command:["albums"], params:["sort:new", ALBUM_TAGS_ALL_ARTISTS]},
+            let lists = [{key:'new', loop:"albums", title:i18n('New Music'), icon:"new_releases", command:["albums"], params:["sort:new", ALBUM_TAGS_ALL_ARTISTS]},
                          {key:'recentlyplayed', loop:"albums", title:i18n('Recently Played'), icon:"history", command:["albums"], params:["sort:recentlyplayed", ALBUM_TAGS_ALL_ARTISTS]},
                          {key:'playcount', loop:"albums", title:i18n('Most Played'), svg:"staralbum", command:["albums"], params:["sort:playcount", ALBUM_TAGS_ALL_ARTISTS]},
                          {key:'random', loop:"albums", title:lmsOptions.supportReleaseTypes ? i18n('Random Releases') : i18n('Random Albums'), svg:"dice-album", command:["albums"], params:["sort:random", ALBUM_TAGS_ALL_ARTISTS]},
@@ -2412,6 +2412,7 @@ function parseBrowseResp(data, parent, options, cacheKey) {
                 }
             }
             lists.sort((a, b) => { return a.val<b.val ? -1 : 1});
+            let opts = {ihe:true, pinned:options.pinned, sortFavorites:false}; // Cannot sort as might not have all!!!
             for (let s=0, len=lists.length; s<len; ++s) {
                 if (lists[s].id==DETAILED_HOME_EXPLORE) {
                     if (haveExplore) {
@@ -2446,7 +2447,7 @@ function parseBrowseResp(data, parent, options, cacheKey) {
                         new_data.result['base']=obj['base'];
                         new_data.result['count']=2500;
                     }
-                    let newResp = parseBrowseResp(new_data, parent, {ihe:true}, undefined);
+                    let newResp = parseBrowseResp(new_data, parent, opts, undefined);
                     if (ismore) {
                         if (newResp.items.length>0) {
                             newResp.canUseGrid = true;

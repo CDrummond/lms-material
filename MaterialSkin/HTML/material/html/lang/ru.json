@@ -152,7 +152,6 @@
 "Default player":"Проигрыватель по умолчанию",
 "Defaults":"По умолчанию",
 "Delete":"Удалить",
-"Delete %1":"Удалить %1",
 "Delete '%1'?":"Удалить '%1'",
 "Delete alarm?":"Удалить оповещение",
 "Delete all selected items":"Удалить все выбранное",
@@ -582,7 +581,6 @@
 "Theme":"Тема",
 "Thick (two lines of text)":"Средн (две строки текста)",
 "Thin (single line of text)":"Мин (одна строка текста)",
-"This will remove the 'virtual library', but will not delete the actual music files contained within.":"Это удалит «виртуальную библиотеку», но не удалит фактические содержащиеся музыкальные файлы.",
 "This will remove the folder, and any favorites contained within.":"Это удалит папку и все содержимое избранного.",
 "This will remove tracks with the same artist and title.":"Это приведет к удалению треков с тем же исполнителем и названием.",
 "Three lines for track view":"Три строки для трека",
@@ -744,5 +742,8 @@
 "%1 Years":"%1 Лет",
 "1 day":"1 день",
 "%1 days":"%1 дней(я)",
-"List radio stations from favorites.":""
+"Album review":"",
+"List radio stations from favorites.":"",
+"Release review":"",
+"Work review":""
 }

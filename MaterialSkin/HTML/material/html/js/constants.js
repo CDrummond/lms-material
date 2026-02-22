@@ -200,13 +200,14 @@ const VOL_STD    = 0;
 const VOL_FIXED  = 1;
 const VOL_HIDDEN = 2;
 
-const MIN_DLG_MOVE_SIZE = 600;
+const MIN_DLG_MOVE_WIDTH = 1000;
+const MIN_DLG_MOVE_HEIGHT = 800;
 
 const IFRAME_HOME_NAVIGATES_BROWSE_HOME = 1
 const IFRAME_HOME_CLOSES_DIALOGS = 2
 
 const SKIN_GENRE_TAGS = ['composer', 'conductor', 'band'];
-const SKIN_BOOL_OPTS = ['maiComposer', 'showConductor', 'showBand', 'showArtistWorks', 'showAllArtists', 'artistFirst', IS_IOS ? 'xx' : 'allowDownload', 'showComment', 'noArtistFilter', 'genreImages', 'playlistImages', 'touchLinks', 'yearInSub', 'playShuffle', 'combineAppsAndRadio', 'useGrouping', 'smallIconOnlyGrid'];
+const SKIN_BOOL_OPTS = ['maiComposer', 'showConductor', 'showBand', 'showArtistWorks', 'showAllArtists', 'artistFirst', IS_IOS ? 'xx' : 'allowDownload', 'showComment', 'noArtistFilter', 'genreImages', 'playlistImages', 'touchLinks', 'yearInSub', 'playShuffle', 'combineAppsAndRadio', 'useGrouping'];
 const SKIN_INT_OPTS = ['showComposer', 'respectFixedVol', 'commentAsDiscTitle', 'pagedBatchSize', 'screensaverTimeout', 'npSwitchTimeout', 'useDefaultForSettings'];
 
 const MSK_REV_SORT_OPT = "msk-revsort:1";
@@ -276,3 +277,10 @@ const MAX_HOME_EXTRA_ROW = 30;
 const RADIOS_BASE_ACTIONS = { "add-hold": { "cmd": ["favorites", "playlist", "insert"], "params": {"menu": "favorites"}, "itemsParams": "params"},
                               "play": { "cmd": ["favorites", "playlist", "play"], "params": {"menu": "favorites"}, "itemsParams": "params"},
                               "add": { "cmd": ["favorites", "playlist", "add"], "params": {"menu": "favorites"}, "itemsParams": "params"}};
+
+const SEARCH_ARTISTS_CAT = 1;
+const SEARCH_ALBUMS_CAT = 2;
+const SEARCH_WORKS_CAT = 3;
+const SEARCH_TRACKS_CAT = 4;
+const SEARCH_PLAYLISTS_CAT = 5;
+const SEARCH_OTHER_CAT = 6;

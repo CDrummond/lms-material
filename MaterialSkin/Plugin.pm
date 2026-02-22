@@ -104,7 +104,7 @@ my %IGNORE_PROTOCOLS = map { $_ => 1 } ('mms', 'file', 'tmp', 'http', 'https', '
 
 my %RADIO_PROTOCOLS = map { $_ => 1 } ('http', 'https', 'accur', 'cplus', 'globalplayer', 'newsuk', 'pr', 'radioparadise', 'rnp', 'sounds', 'times', 'virgin', 'sxm');
 
-my @BOOL_OPTS = ('allowDownload', 'playShuffle', 'touchLinks', 'showAllArtists', 'artistFirst', 'yearInSub', 'showComment', 'genreImages', 'playlistImages', 'maiComposer', 'showConductor', 'showBand', 'showArtistWorks', 'combineAppsAndRadio', 'useGrouping', 'smallIconOnlyGrid');
+my @BOOL_OPTS = ('allowDownload', 'playShuffle', 'touchLinks', 'showAllArtists', 'artistFirst', 'yearInSub', 'showComment', 'genreImages', 'playlistImages', 'maiComposer', 'showConductor', 'showBand', 'showArtistWorks', 'combineAppsAndRadio', 'useGrouping');
 
 my %ROLE_ICON_MAP = (
     'bass' => 'bassist',
@@ -232,8 +232,7 @@ sub initPlugin {
             screensaverTimeout => 60,
             npSwitchTimeout => 5*60,
             useDefaultForSettings => 0,
-            useGrouping => 1,
-            smallIconOnlyGrid => 1
+            useGrouping => 1
         });
     } else {
         $prefs->init({
@@ -264,8 +263,7 @@ sub initPlugin {
             screensaverTimeout => 60,
             npSwitchTimeout => 5*60,
             useDefaultForSettings => 0,
-            useGrouping => 1,
-            smallIconOnlyGrid => 1
+            useGrouping => 1
         });
     }
     $prefs->setChange(sub { $prefs->set($_[0], 0) unless defined $_[1]; }, 'maiComposer');
@@ -285,7 +283,6 @@ sub initPlugin {
     $prefs->setChange(sub { $prefs->set($_[0], 0) unless defined $_[1]; }, 'allowDownload');
     $prefs->setChange(sub { $prefs->set($_[0], 0) unless defined $_[1]; }, 'useDefaultForSettings');
     $prefs->setChange(sub { $prefs->set($_[0], 0) unless defined $_[1]; }, 'useGrouping');
-    $prefs->setChange(sub { $prefs->set($_[0], 0) unless $_[1]; }, 'smallIconOnlyGrid');
 
     if (main::WEBUI) {
         require Plugins::MaterialSkin::Settings;
@@ -764,7 +761,6 @@ sub _cliCommand {
         $request->addResult('npSwitchTimeout', $prefs->get('npSwitchTimeout'));
         $request->addResult('useDefaultForSettings', $prefs->get('useDefaultForSettings'));
         $request->addResult('useGrouping', $prefs->get('useGrouping'));
-        $request->addResult('smallIconOnlyGrid', $prefs->get('smallIconOnlyGrid'));
         $request->setStatusDone();
         return;
     }
@@ -2130,6 +2126,11 @@ sub _handleHomeExtraCmd {
             $cnt+=1;
         }
         $request->addResult("material_home_radios_loop_len", $cnt);
+    }
+    if ($request->getParam('favorites')) {
+        my @cmd = ("favorites", "items", 0, $count, "menu:favorites", "menu:1");
+        my $req = Slim::Control::Request::executeRequest(undef, \@cmd);
+        $request->addResult("material_home_favorites_obj", $req->getResults());
     }
     if ($request->getParam('playlists')) {
         my @cmd = ("material-skin-query", "playlists", 0, $count+1, "tags:suxE", "menu:1");

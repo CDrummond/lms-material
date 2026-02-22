@@ -152,7 +152,6 @@
 "Default player":"Standaard muziekspeler",
 "Defaults":"Standaardinstellingen",
 "Delete":"Wissen",
-"Delete %1":"Verwijder %1",
 "Delete '%1'?":"'%1' wissen?",
 "Delete alarm?":"Wekker wissen?",
 "Delete all selected items":"Verwijder alle geselecteerde items",
@@ -272,6 +271,7 @@
 "Leave individual player's volume.":"Laat het volume van de individuele muziekspeler staan.",
 "Library":"Mediabibliotheek",
 "Light":"Licht",
+"List radio stations from favorites.":"Toon radiostations van favorieten.",
 "Loading...":"Laden...",
 "Local":"Lokaal",
 "Local Playlist":"Lokale Afspeellijst",
@@ -582,7 +582,6 @@
 "Theme":"Thema",
 "Thick (two lines of text)":"Dik (twee regels tekst)",
 "Thin (single line of text)":"Dun (één regel tekst)",
-"This will remove the 'virtual library', but will not delete the actual music files contained within.":"Hiermee wordt de deelcollectie verwijderd. De daadwerkelijke muziekbestanden worden niet verwijderd.",
 "This will remove the folder, and any favorites contained within.":"Hiermee worden de map en alle daarin opgenomen favorieten verwijderd.",
 "This will remove tracks with the same artist and title.":"Hiermee worden nummers met dezelfde artist en titel verwijderd.",
 "Three lines for track view":"Drie regels voor nummer weergave",
@@ -744,5 +743,7 @@
 "%1 Years":"%1 Jaren",
 "1 day":"1 dag",
 "%1 days":"%1 dagen",
-"List radio stations from favorites.":""
+"Album review":"Album review",
+"Release review":"Release review",
+"Work review":"Compositie review"
 }

@@ -152,7 +152,6 @@
 "Default player":"Reproductor predeterminado",
 "Defaults":"Predeterminados",
 "Delete":"Eliminar",
-"Delete %1":"Eliminar %1",
 "Delete '%1'?":"¿Eliminar '%1'?",
 "Delete alarm?":"¿Eliminar alarma?",
 "Delete all selected items":"Eliminar todos los elementos seleccionados",
@@ -581,7 +580,6 @@
 "Theme":"Tema",
 "Thick (two lines of text)":"Grueso (dos líneas de texto)",
 "Thin (single line of text)":"Delgado (línea única de texto)",
-"This will remove the 'virtual library', but will not delete the actual music files contained within.":"Esto eliminará la 'biblioteca virtual', pero no eliminará los archivos de música reales contenidos dentro.",
 "This will remove the folder, and any favorites contained within.":"Esto eliminará la carpeta, y cualquier favorito contenido dentro.",
 "This will remove tracks with the same artist and title.":"Esto eliminará pistas con el mismo artista y título.",
 "Three lines for track view":"Tres líneas para vista de pista",
@@ -743,6 +741,9 @@
 "%1 Years":"%1 Años",
 "1 day":"1 día",
 "%1 days":"%1 días",
+"Album review":"",
 "List radio stations from favorites.":"",
-"NOTE: Please ensure popups are not blocked in your browser, as this might prevent downloading multiple tracks.":""
+"NOTE: Please ensure popups are not blocked in your browser, as this might prevent downloading multiple tracks.":"",
+"Release review":"",
+"Work review":""
 }

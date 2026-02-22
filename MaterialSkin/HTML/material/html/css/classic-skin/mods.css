@@ -1,6 +1,26 @@
 :root {
  --bold-weight:500;
  --std-font-size:15px;
+ --pq-current-color:#1976d2;
+ --text-color:#edece7;
+ --background-color:#212121;
+ --std-popup-background-color:#303030;
+ --highlight-rgb:25,118,210;
+ --primary-color:#1976d2;
+ --accent-color:#82b1ff;
+ --active-color:var(--accent-color);
+}
+
+body,
+body pre {
+ font-size:var(--std-font-size)!important;
+ background:var(--background-color);
+ color:var(--text-color);
+}
+
+#log-header {
+ background:var(--std-popup-background-color);
+ color:var(--text-color);
 }
 
 @supports not selector(::-webkit-scrollbar) {

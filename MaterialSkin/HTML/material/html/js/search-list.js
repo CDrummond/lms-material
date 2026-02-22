@@ -79,6 +79,20 @@ Vue.component('lms-search-list', {
         this.commands = [];
         this.searching = false;
         this.currentIndex = -1;
+
+        this.indexes = [];
+        if (this.view.items.length>0 && undefined!=this.view.items[0].searchcat) {
+            for (let i=0, loop=this.view.items, len=loop.length; i<len; ++i) {
+                if (undefined!=loop[i].items) {
+                    for (let j=0, jlen=loop[i].items.length; j<jlen; ++j) {
+                        this.indexes.push([i, j]);
+                    }
+                } else {
+                    this.indexes.push([i, -1]);
+                }
+            }
+        }
+
         // On mobile devices delay focus in case invoked from menu
         if (IS_MOBILE) {
             setTimeout(function() { focusEntry(this) }.bind(this), 150);
@@ -109,13 +123,31 @@ Vue.component('lms-search-list', {
                 this.searchNow(false);
             }.bind(this), 500);
         },
+        getItem(idx) {
+            let item = this.view.items[idx[0]];
+            if (undefined==item.items || idx[1]<0) {
+                return item;
+            }
+            return item.items[idx[1]];
+        },
         searchFor(str, start, backwards) {
-            for (let idx = start, loop=this.view.items, len=loop.length; backwards ? idx>=0 : idx<len; idx+=(backwards ? -1 : 1)) {
-                if (!this.view.items[idx].header && searchListHasStr(this.view.items[idx], str)) {
-                    this.currentIndex = idx;
-                    this.$emit('scrollTo', idx);
-                    this.lastSearch = str;
-                    return true;
+            if (this.indexes.length>0) {
+                for (let idx = start, loop=this.indexes, len=loop.length; backwards ? idx>=0 : idx<len; idx+=(backwards ? -1 : 1)) {
+                    if (!this.view.items[this.indexes[idx][0]].header && searchListHasStr(this.getItem(this.indexes[idx]), str)) {
+                        this.currentIndex = idx;
+                        this.$emit('scrollTo', this.indexes[idx][0], this.indexes[idx][1]);
+                        this.lastSearch = str;
+                        return true;
+                    }
+                }
+            } else {
+                for (let idx = start, loop=this.view.items, len=loop.length; backwards ? idx>=0 : idx<len; idx+=(backwards ? -1 : 1)) {
+                    if (!this.view.items[idx].header && searchListHasStr(this.view.items[idx], str)) {
+                        this.currentIndex = idx;
+                        this.$emit('scrollTo', this.currentIndex, -1);
+                        this.lastSearch = str;
+                        return true;
+                    }
                 }
             }
             return false;
@@ -123,7 +155,7 @@ Vue.component('lms-search-list', {
         cleared() {
             this.lastSearch = undefined;
             this.currentIndex = -1;
-            this.$emit('scrollTo', this.currentIndex);
+            this.$emit('scrollTo', -1, -1);
         },
         searchNow(backwards) {
             this.cancel();
@@ -133,8 +165,9 @@ Vue.component('lms-search-list', {
             let str = this.term.trim().replace(/\s+/g, " ");
             if (!isEmpty(str)) {
                 str = str.toLowerCase();
-                let len = this.view.items.length;
-                let start = -1==this.currentIndex || this.currentIndex>=this.view.items.length ? backwards ? len-1 : 0 : (backwards ? (this.currentIndex-1) : (this.currentIndex+1));
+                let loop = this.indexes.length>0 ? this.indexes : this.view.items;
+                let len = loop.length;
+                let start = -1==this.currentIndex || this.currentIndex>=len ? backwards ? len-1 : 0 : (backwards ? (this.currentIndex-1) : (this.currentIndex+1));
                 if (this.searchFor(str, start, backwards)) {
                     return;
                 }
@@ -161,6 +194,13 @@ Vue.component('lms-search-list', {
         for (let idx = 0, loop=this.view.items, len=loop.length; idx<len; idx++) {
             if (undefined!=loop[idx].string_search_cache) {
                 delete loop[idx].string_search_cache;
+            }
+            if (undefined!=loop[idx].items) {
+                for (let j = 0, jloop=loop[idx].items, jlen=jloop.length; j<jlen; j++) {
+                    if (undefined!=jloop[j].string_search_cache) {
+                        delete jloop[j].string_search_cache;
+                    }
+                }
             }
         }
     }

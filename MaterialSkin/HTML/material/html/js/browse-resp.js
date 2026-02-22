@@ -70,6 +70,14 @@ function setFavoritesParams(i, item) {
     }
 }
 
+function addDivider(item, addedDivider) {
+    if (!addedDivider && item.menu.length>0) {
+        item.menu.push(DIVIDER);
+        return true;
+    }
+    return addedDivider;
+}
+
 function parseBrowseResp(data, parent, options, cacheKey) {
     // NOTE: If add key to resp, then update addToCache in utils.js
     var resp = {items: [], allTracksItem:undefined, baseActions:[], canUseGrid: false, gridType: GRID_STANDARD, jumplist:[], numAudioItems:0, canDrop:false, itemCustomActions:undefined, extra:undefined, numHeaders:0, currentRoleIds: new Set() };
@@ -101,7 +109,7 @@ function parseBrowseResp(data, parent, options, cacheKey) {
             var addAction = false;
             var insertAction = false;
             var moreAction = false;
-            var isFavorites = parent && parent.isFavFolder
+            var isFavorites = parent && parent.isFavFolder;
             var isFromFavorites = isFavorites || (data.params[1].length>=1 && data.params[1][0]=="favorites") ? true : false;
             var isPlaylists = parent && parent.section == SECTION_PLAYLISTS;
             var isApps = parent && parent.section == SECTION_APPS;
@@ -324,10 +332,7 @@ function parseBrowseResp(data, parent, options, cacheKey) {
                 var addedDivider = false;
                 if (isFavorites) {
                     i.pos = resp.items.length;
-                    if (i.menu.length>0) {
-                        i.menu.push(DIVIDER);
-                        addedDivider = true;
-                    }
+                    addedDivider = addDivider(i, addedDivider);
                     if (!i.type) {
                         i.isFavFolder = true;
                         resp.allowHoverBtns = true;
@@ -409,10 +414,7 @@ function parseBrowseResp(data, parent, options, cacheKey) {
                         }
                         if (STREAM_SCHEMAS.has(i.presetParams.favorites_url.split(":")[0]) && allowPinning && !i.header) {
                             i.isRadio = true;
-                            if (!addedDivider && i.menu.length>0) {
-                                i.menu.push(DIVIDER);
-                                addedDivider = true;
-                            }
+                            addedDivider = addDivider(i, addedDivider);
                             i.menu.push(options.pinned.has(i.presetParams.favorites_url) ? UNPIN_ACTION : PIN_ACTION);
                         }
                     } else if (i['icon-id']=="html/images/favorites.png") {
@@ -422,10 +424,7 @@ function parseBrowseResp(data, parent, options, cacheKey) {
                         mapIcon(i);
                     }
                 } else if (i.presetParams && allowPinning) {
-                    if (i.menu.length>0) {
-                        i.menu.push(DIVIDER);
-                        addedDivider = true;
-                    }
+                    addedDivider = addDivider(i, addedDivider);
                     i.menu.push(ADD_TO_FAV_ACTION);
                 } else if (isDynamicPlaylist && i.params && i.params.playlistid && addedPlayAction && allowPinning) {
                     i.presetParams = {favorites_url: "dynamicplaylist://"+i.params.playlistid};
@@ -433,20 +432,14 @@ function parseBrowseResp(data, parent, options, cacheKey) {
                 }
 
                 if (isPlaylists && i.type=="playlist" && allowPinning) {
-                    if (!addedDivider && i.menu.length>0) {
-                        i.menu.push(DIVIDER);
-                        addedDivider = true;
-                    }
+                    addedDivider = addDivider(i, addedDivider);
                     i.menu.push(RENAME_ACTION);
                     i.menu.push(REMOVE_DUPES_ACTION);
                     i.menu.push(DELETE_ACTION);
                 }
 
                 if (isPodcastList) {
-                    if (!addedDivider && i.menu.length>0) {
-                        i.menu.push(DIVIDER);
-                        addedDivider = true;
-                    }
+                    addedDivider = addDivider(i, addedDivider);
                     if (i.type==undefined) {
                         i.menu.push(UNSUB_PODCAST_ACTION);
                         i.section=SECTION_PODCASTS;
@@ -480,10 +473,7 @@ function parseBrowseResp(data, parent, options, cacheKey) {
                         continue;
                     }
                     if (allowPinning && !i.header) {
-                        if (!addedDivider && i.menu.length>0) {
-                            i.menu.push(DIVIDER);
-                            addedDivider = true;
-                        }
+                        addedDivider = addDivider(i, addedDivider);
                         i.menu.push(options.pinned.has(i.id) ? UNPIN_ACTION : PIN_ACTION);
                     }
                     mapIcon(i, command);
@@ -507,10 +497,7 @@ function parseBrowseResp(data, parent, options, cacheKey) {
                         if (allowPinning && !i.header) {
                             if (i.menu.length>0 && i.menu[0]==PLAY_ACTION && (i.icon || i.image) && i.type!="entry" && i.presetParams && i.presetParams.favorites_url) {
                                 // Only allow to pin if we can play!
-                                if (!addedDivider && i.menu.length>0) {
-                                    i.menu.push(DIVIDER);
-                                    addedDivider = true;
-                                }
+                                addedDivider = addDivider(i, addedDivider);
                                 i.isRadio = true;
                                 i.menu.push(options.pinned.has(i.presetParams.favorites_url) ? UNPIN_ACTION : PIN_ACTION);
                             } else if (data.params[1][0]=='radios' && i.type!='entry' && i.actions && i.actions.go && i.actions.go.params && i.actions.go.params.menu) {
@@ -645,10 +632,7 @@ function parseBrowseResp(data, parent, options, cacheKey) {
                 }
 
                 if (addedPlayAction || isOnlineTrack) {
-                    if (!addedDivider) {
-                        i.menu.push(DIVIDER);
-                        addedDivider = true;
-                    }
+                    addedDivider = addDivider(i, addedDivider);
                     if ((resp.isMusicMix && i.trackType && i.trackType == "local") || isOnlineTrack /*||
                         (!isPlaylists && !isFavorites && isAudioTrack(i) && (i.url || (i.presetParams && i.presetParams.favorites_url)))*/) {
                         i.saveableTrack = true; // Can save track list to playlist...
@@ -662,10 +646,7 @@ function parseBrowseResp(data, parent, options, cacheKey) {
                         i.menu.push(SHOW_IMAGE_ACTION);
                     }
                 } else if (undefined!=i.image) {
-                    if (!addedDivider) {
-                        i.menu.push(DIVIDER);
-                        addedDivider = true;
-                    }
+                    addedDivider = addDivider(i, addedDivider);
                     i.menu.push(COPY_DETAILS_ACTION);
                     i.menu.push(SHOW_IMAGE_ACTION);
                 }
@@ -677,10 +658,7 @@ function parseBrowseResp(data, parent, options, cacheKey) {
                 if ( !isFavorites &&
                      ( (i.commonParams && (i.commonParams.artist_id || i.commonParams.album_id || i.commonParams.track_id)) ||
                        ( ((moreAction && i.menu.length>0 && i.params && i.params.item_id) || (i.actions && i.actions.more && i.actions.more.cmd)))) ) {
-                    if (!addedDivider && i.menu.length>0) {
-                        i.menu.push(DIVIDER);
-                        addedDivider = true;
-                    }
+                    addedDivider = addDivider(i, addedDivider);
                     i.menu.push(MORE_ACTION);
                 }
 
@@ -1697,7 +1675,7 @@ function parseBrowseResp(data, parent, options, cacheKey) {
                               filter: i.disc!=undefined ? FILTER_PREFIX+i.disc : undefined,
                               gfilter: groupingTitle!=undefined ? FILTER_PREFIX+groupings.size : undefined,
                               emblem: showAlbumName ? getEmblem(i.extid) : undefined,
-                              tnum: sortTracks && undefined!=i.tracknum ? tracknum : undefined,
+                              tnum: sortTracks && undefined!=i.tracknum ? parseInt(i.tracknum) : undefined,
                               tracknum: tracknum,
                               disc: i.disc ? parseInt(i.disc) : undefined,
                               year: (sortTracks || 1==allTracksGrouping) ? year : undefined,
@@ -1779,9 +1757,9 @@ function parseBrowseResp(data, parent, options, cacheKey) {
                                 jl[j].filter=FILTER_PREFIX+i;
                             }
                             resp.items.splice(groups[i][0]+i, 0,
-                                            {title: groups[i][1], id:FILTER_PREFIX+i, header:true,
-                                            subtitle: isCompositions ? i18np("1 Composition", "%1 Compositions", count) : i18np("1 Track", "%1 Tracks", count), durationStr:formatSeconds(duration),
-                                            menu:[PLAY_ALL_ACTION, INSERT_ALL_ACTION, PLAY_SHUFFLE_ALL_ACTION, ADD_ALL_ACTION, DIVIDER, SELECT_ACTION]});
+                                              { title: groups[i][1], id:FILTER_PREFIX+i, header:true,
+                                                subtitle: isCompositions ? i18np("1 Composition", "%1 Compositions", count) : i18np("1 Track", "%1 Tracks", count), durationStr:formatSeconds(duration),
+                                                menu:[PLAY_ALL_ACTION, INSERT_ALL_ACTION, PLAY_SHUFFLE_ALL_ACTION, ADD_ALL_ACTION, DIVIDER, SELECT_ACTION]});
                             resp.numHeaders++;
                         }
                         if (1==allTracksGrouping) { // Grouped into albums, so remove from subtitle
@@ -2103,6 +2081,7 @@ function parseBrowseResp(data, parent, options, cacheKey) {
                 let rs = undefined!=i.rating ? ratingString(undefined, i.rating) : undefined;
                 resp.items.push({
                               id: uniqueId("track_id:"+i.id, resp.items.length),
+                              playlist_track_id: "track_id:"+i.id,
                               title: addSubtitle(title, i),
                               subtitle: undefined!=rs ? undefined==subtitle ? rs : subtitle+SEPARATOR+rs : subtitle,
                               subtitleContext: subtitleContext,
@@ -2220,6 +2199,11 @@ function parseBrowseResp(data, parent, options, cacheKey) {
                             });
         } else if (data.result.albumreview) {
             resp.items.push({   title: replaceNewLines(data.result.albumreview),
+                                type: "html",
+                                id: parent.id+".0"
+                            });
+        } else if (data.result.workreview) {
+            resp.items.push({   title: replaceNewLines(data.result.workreview),
                                 type: "html",
                                 id: parent.id+".0"
                             });
@@ -2398,7 +2382,7 @@ function parseBrowseResp(data, parent, options, cacheKey) {
                     }
                 }
             }
-            var lists = [{key:'new', loop:"albums", title:i18n('New Music'), icon:"new_releases", command:["albums"], params:["sort:new", ALBUM_TAGS_ALL_ARTISTS]},
+            let lists = [{key:'new', loop:"albums", title:i18n('New Music'), icon:"new_releases", command:["albums"], params:["sort:new", ALBUM_TAGS_ALL_ARTISTS]},
                          {key:'recentlyplayed', loop:"albums", title:i18n('Recently Played'), icon:"history", command:["albums"], params:["sort:recentlyplayed", ALBUM_TAGS_ALL_ARTISTS]},
                          {key:'playcount', loop:"albums", title:i18n('Most Played'), svg:"staralbum", command:["albums"], params:["sort:playcount", ALBUM_TAGS_ALL_ARTISTS]},
                          {key:'random', loop:"albums", title:lmsOptions.supportReleaseTypes ? i18n('Random Releases') : i18n('Random Albums'), svg:"dice-album", command:["albums"], params:["sort:random", ALBUM_TAGS_ALL_ARTISTS]},
@@ -2410,6 +2394,7 @@ function parseBrowseResp(data, parent, options, cacheKey) {
                          {key:'radios', loop:"radios", title:i18n('Radios'), svg:"radio", command:["material-skin-query","radios"], params:[], limit:200},
                          {key:'playlists', loop:"playlists", title:i18n('Playlists'), icon:"list", command:["material-skin-query","playlists"], params:[PLAYLIST_TAGS, "menu:1"], limit:200},
                          {key:'changed', loop:"albums", title:lmsOptions.supportReleaseTypes ? i18n("Recently Updated Releases") : i18n("Recently Updated Albums"), svg:"updated-music", command:["albums"], params:["sort:changed", ALBUM_TAGS_ALL_ARTISTS]},
+                         {key:'favorites', loop:"item", title:i18n("Favorites"), icon:"favorite", command:["favorites", "items"], params:["menu:favorites", "menu:1"], section:SECTION_FAVORITES, isFavFolder:true},
                          {id:DETAILED_HOME_EXPLORE}
                         ];
             for (let s=0, len=lists.length-1; s<len; ++s) { // Ignore 'Explore'
@@ -2427,6 +2412,7 @@ function parseBrowseResp(data, parent, options, cacheKey) {
                 }
             }
             lists.sort((a, b) => { return a.val<b.val ? -1 : 1});
+            let opts = {ihe:true, pinned:options.pinned, sortFavorites:false}; // Cannot sort as might not have all!!!
             for (let s=0, len=lists.length; s<len; ++s) {
                 if (lists[s].id==DETAILED_HOME_EXPLORE) {
                     if (haveExplore) {
@@ -2448,7 +2434,8 @@ function parseBrowseResp(data, parent, options, cacheKey) {
                     }
                 }
                 if (loop!=undefined) {
-                    let parent = undefined;
+                    let isFav = lists[s].section==SECTION_FAVORITES;
+                    let parent = isFav ? {section:SECTION_FAVORITES, isFavFolder:true} : undefined;
                     let new_data = {
                         id:2,
                         method: data.method,
@@ -2460,7 +2447,7 @@ function parseBrowseResp(data, parent, options, cacheKey) {
                         new_data.result['base']=obj['base'];
                         new_data.result['count']=2500;
                     }
-                    let newResp = parseBrowseResp(new_data, parent, {ihe:true}, undefined);
+                    let newResp = parseBrowseResp(new_data, parent, opts, undefined);
                     if (ismore) {
                         if (newResp.items.length>0) {
                             newResp.canUseGrid = true;
@@ -2470,9 +2457,25 @@ function parseBrowseResp(data, parent, options, cacheKey) {
                     if (undefined!=newResp && newResp.items.length>0) {
                         if (undefined!=obj) { // 3rd party => slimbrowse...
                             let header = {title:lists[s].title, id:lists[s].id, header:true, ihe:1, icon:lists[s].icon, svg: lists[s].svg, limit: lists[s].limit,
-                                          morecmd:parseInt(obj['count'])>count ? {command:["material-skin", "home-extra"], params:[lists[s].id.split('_').slice(1).join('_')+":1", "ismore:1", "count:200"]} : undefined,
-                                          baseActions:undefined!=obj['base'] ? obj['base']['actions'] : undefined}
+                                          morecmd:undefined, baseActions:undefined!=obj['base'] ? obj['base']['actions'] : undefined,
+                                          section:lists[s].section, isFavFolder:lists[s].isFavFolder}
                             mapIcon(header);
+                            if (undefined==header.icon && undefined==header.svg) {
+                                if (undefined!=lists[s].svg) {
+                                    header.svg = lists[s].svg;
+                                } else if (undefined!=lists[s].icon) {
+                                    header.icon = lists[s].icon;
+                                }
+                            }
+
+                            if (parseInt(obj['count'])>count) {
+                                if (isFav) {
+                                    header.morecmd = {command:lists[s].command, params:lists[s].params};
+                                } else {
+                                    header.morecmd = {command:["material-skin", "home-extra"], params:[lists[s].id.split('_').slice(1).join('_')+":1", "ismore:1", "count:200"]};
+                                }
+                            }
+
                             let iheHdr = resp.items.length;
                             resp.items.push(header);
                             for (let i=0, loop=newResp.items, len=loop.length; i<len; ++i) {

@@ -203,13 +203,15 @@ Vue.component('lms-ui-settings', {
 
     <div style="padding-left:12px">{{i18n('Scrollable lists')}} <v-btn @click.stop="showDetailedHomeDialog($event)" flat icon class="settings-list-checkbox-action"><v-icon>settings</v-icon></v-btn></div>
     <div v-if="haveScrollableLists">
-     <v-list-tile v-for="(item, index) in detailedHomeItems" class="settings-list-thin-item" @dragstart.native="dragStart(index, $event)" @dragenter.prevent="" @dragend.native="dragEnd()" @dragover.native="dragOver(index, $event)" @drop.native="drop(index, $event)" draggable v-bind:class="{'highlight-drop':dropIndex==index, 'highlight-drag':dragIndex==index}">
-      <v-avatar>
-       <v-icon v-if="undefined!=detailedHomeValues[item].icon">{{detailedHomeValues[item].icon}}</v-icon>
-       <img v-else-if="detailedHomeValues[item].svg" class="svg-img" :src="detailedHomeValues[item].svg | svgIcon(darkUi)"></img>
-      </v-avatar>
-      <div>{{detailedHomeValues[item].title}}</div>
-     </v-list-tile>
+     <v-template v-for="(item, index) in detailedHomeItems">
+      <v-list-tile v-if="'std_favorites'!=item || !sortFavorites" class="settings-list-thin-item" @dragstart.native="dragStart(index, $event)" @dragenter.prevent="" @dragend.native="dragEnd()" @dragover.native="dragOver(index, $event)" @drop.native="drop(index, $event)" draggable v-bind:class="{'highlight-drop':dropIndex==index, 'highlight-drag':dragIndex==index}">
+       <v-avatar>
+        <v-icon v-if="undefined!=detailedHomeValues[item].icon">{{detailedHomeValues[item].icon}}</v-icon>
+        <img v-else-if="detailedHomeValues[item].svg" class="svg-img" :src="detailedHomeValues[item].svg | svgIcon(darkUi)"></img>
+       </v-avatar>
+       <div>{{detailedHomeValues[item].title}}</div>
+      </v-list-tile>
+     </v-template>
     </div>
     <v-list-tile-sub-title v-else style="padding-left:12px">{{i18n("No scrollable lists have been enabled. Use the 'cog' icon (above) to select the lists you would like to appear on the home screen.")}}</v-list-tile-sub-title>
     <div class="dialog-padding"></div>
@@ -455,7 +457,7 @@ Vue.component('lms-ui-settings', {
    <v-card-title>{{i18n("Scrollable lists")}}</v-card-title>
    <v-list class="dialog-main-list">
     <template v-for="(item, index) in detailedHomeDialog.items" :key="item.id">
-    <v-list-tile class="settings-list-thin-item">
+    <v-list-tile class="settings-list-thin-item" v-if="'std_favorites'!=item.id || !sortFavorites">
      <v-checkbox v-model="item.checked" style="display:flex" :id="item.id">
       <template v-slot:label>
        <v-list-tile-avatar>
@@ -603,7 +605,7 @@ Vue.component('lms-ui-settings', {
         }.bind(this));
         bus.$on('uisettings.open', function(act) {
             this.showMenu = false;
-            this.showMoveDialogs = window.innerWidth>=MIN_DLG_MOVE_SIZE && window.innerHeight>=MIN_DLG_MOVE_SIZE;
+            this.showMoveDialogs = window.innerWidth>=MIN_DLG_MOVE_WIDTH && window.innerHeight>=MIN_DLG_MOVE_HEIGHT;
             this.initHomeItems();
             this.readStore();
             this.password = getLocalStorageVal('password', '');
@@ -823,6 +825,7 @@ Vue.component('lms-ui-settings', {
         initHomeItems() {
             this.detailedHomeValues={};
             this.detailedHomeValues[DETAILED_HOME_STD_PREFIX+"new"] = {title:i18n('New Music'), icon:"new_releases"};
+            this.detailedHomeValues[DETAILED_HOME_STD_PREFIX+"favorites"] = {title:i18n('Favorites'), icon:"favorite"};
             if (LMS_VERSION>=90100 && LMS_STATS_ENABLED) {
                 this.detailedHomeValues[DETAILED_HOME_STD_PREFIX+"recentlyplayed"] = {title:i18n('Recently Played'), icon:"history"};
                 this.detailedHomeValues[DETAILED_HOME_STD_PREFIX+"playcount"] = { title:i18n('Most Played'), subtitle:i18n('Based upon total play count.'), svg:"staralbum"};
@@ -833,7 +836,7 @@ Vue.component('lms-ui-settings', {
                 this.detailedHomeValues[DETAILED_HOME_STD_PREFIX+"artists_popular"] = { title:i18n('Popular Artists'), subtitle:i18n('Based upon play count for the past few months only.'), svg:"artistpopular"};
             }
             this.detailedHomeValues[DETAILED_HOME_STD_PREFIX+"random"] = { title:lmsOptions.supportReleaseTypes ? i18n("Random Releases") : i18n("Random Albums"), svg:"dice-album"};
-            this.detailedHomeValues[DETAILED_HOME_STD_PREFIX+"radios"] = { title:i18n('Radios'), subtitle:this.i18n("List radio stations from favorites."), svg:"radio"}
+            this.detailedHomeValues[DETAILED_HOME_STD_PREFIX+"radios"] = { title:i18n('Radios'), subtitle:i18n("List radio stations from favorites."), svg:"radio"}
             if (lmsOptions.playlistImages) {
                 this.detailedHomeValues[DETAILED_HOME_STD_PREFIX+"playlists"] = { title:i18n('Playlists'), icon:"list"};
             }
@@ -1104,10 +1107,19 @@ Vue.component('lms-ui-settings', {
             items.sort((a, b) => {
                 let at = a.id.split("_")[0];
                 let bt = b.id.split("_")[0];
+                let astd = a.id.startsWith("std");
+                let bstd = b.id.startsWith("std");
                 if (at!=bt) {
-                    let aid = a.id.startsWith("std") ? "0"+a.id : a.id;
-                    let bid = b.id.startsWith("std") ? "0"+b.id : b.id;
+                    let aid = astd ? "0"+a.id : a.id;
+                    let bid = bstd ? "0"+b.id : b.id;
                     return aid<bid ? -1 : 1
+                }
+                if (!astd && !bstd) {
+                    at = a.id.split("_")[1].substring(0, 4);
+                    bt = b.id.split("_")[1].substring(0, 4);
+                    if (at!=bt) {
+                        return at<bt ? -1 : 1
+                    }
                 }
                 return titleSort(a, b);
             });

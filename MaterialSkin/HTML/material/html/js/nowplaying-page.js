@@ -14,14 +14,13 @@ const NP_PIC_ACT = 1;
 const NP_INFO_ACT = 2;
 const NP_BROWSE_CMD = 3;
 const NP_COPY_DETAILS_CMD = 4;
-const NP_TOGGLE_ACT = 5;
-const NP_SHOW_IN_TABS_ACT = 6;
-const NP_SYNC_ACT = 7;
-const NP_LYRICS_SCROLL_ACT = 8;
-const NP_LYRICS_HIGHLIGHT_ACT = 9;
-const NP_COPY_ACT = 10;
-const NP_SEARCH_ACT = 11;
-const NP_ZOOM_ACT = 12;
+const NP_SHOW_IN_TABS_ACT = 5;
+const NP_SYNC_ACT = 6;
+const NP_LYRICS_SCROLL_ACT = 7;
+const NP_LYRICS_HIGHLIGHT_ACT = 8;
+const NP_COPY_ACT = 9;
+const NP_SEARCH_ACT = 10;
+const NP_ZOOM_ACT = 11;
 const NP_CUSTOM = 100;
 const NP_ITEM_ACT = 200;
 const NP_MIN_WIDTH_FOR_FULL = 780;
@@ -383,7 +382,8 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
    </v-layout>
   </div>
  </div>
- <v-layout text-xs-center v-if="!desktopLayout && mobileBar==MBAR_REP_NAV && !info.show && page=='now-playing'" class="mobile-np-view-controls">
+ <v-btn icon v-if="desktopLayout && largeView" class="np-close-alt" id="nc" :title="trans.collapseNp" @click="largeView=false"><v-icon>keyboard_arrow_down</v-icon></v-btn>
+ <v-layout text-xs-center v-else-if="!desktopLayout && mobileBar==MBAR_REP_NAV && !info.show && page=='now-playing'" class="mobile-np-view-controls">
   <v-flex xs4><v-btn icon @click.stop="$store.commit('setPage', 'browse')" class="np-std-button" id="nb" :title="trans.browse"><img class="svg-img" :src="'library-music-outline' | svgIcon(darkUi)"></v-btn></v-flex>
   <v-flex xs4><v-btn icon @click.stop="$store.commit('setPage', $store.state.prevPage)" class="np-std-button" id="nc" :title="trans.collapseNp"><v-icon>keyboard_arrow_down</v-icon></v-btn></v-flex>
   <v-flex xs4><v-btn icon @click.stop="$store.commit('setPage', 'queue')" class="np-std-button" id="nq" :title="trans.queue"><img class="svg-img" :src="'queue_music_outline' | svgIcon(darkUi)"></v-btn></v-flex>
@@ -410,11 +410,13 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
                                    sections:[ { title:undefined, items:[], min:1, more:undefined, grid:getLocalStorageBool("np-tabs-"+ARTIST_TAB+"-0-grid", false) },
                                               { title:undefined, html:undefined } ] },
                                  { value:ALBUM_TAB, title:undefined, ctitle:undefined, text:undefined, reqId:0, image: undefined,
-                                   sections:[ { title:undefined, items:[], min:2, more:undefined },
+                                   sections:[ { title:undefined, html:undefined },
+                                              { title:undefined, html:undefined },
+                                              { title:undefined, items:[], min:2, more:undefined },
                                               { title:undefined, items:[], min:1, more:undefined } ] },
                                  { value: TRACK_TAB, title:undefined, ctitle:undefined, text:undefined, lines:undefined, scroll:false, highlight:false, reqId:0, image: undefined,
                                    sections:[ { title:undefined, html:undefined } ] } ] },
-                 infoTrack: {album_id:undefined, track_id:undefined, path:undefined},
+                 infoTrack: {album_id:undefined, track_id:undefined, work_id:undefined, path:undefined},
                  trans: { expand:undefined, collapse:undefined, sync:undefined, unsync:undefined, more:undefined, dstm:undefined, randomMix:undefined,
                           repeatAll:undefined, repeatOne:undefined, repeatOff:undefined, shuffleAll:undefined, shuffleAlbums:undefined, shuffleOff:undefined,
                           play:undefined, pause:undefined, prev:undefined, next:undefined, collapseNp:undefined, expandNp:undefined, menu:undefined, browse:undefined, queue:undefined },
@@ -882,6 +884,8 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
                              albumartist_ids: this.playerStatus.current.albumartist_ids,
                              album: this.playerStatus.current.albumName,
                              album_id: this.playerStatus.current.album_id,
+                             work_id: this.playerStatus.current.work_id,
+                             isClassical: this.playerStatus.current.isClassical,
                              url: this.playerStatus.current.url,
                              path: localPath(this.playerStatus.current.url)};
             this.infoTrack.empty=undefined==this.infoTrack.title &&

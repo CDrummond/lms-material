@@ -295,13 +295,49 @@
  #np-expand {
   display:none!important;
  }
+}
+
+.np-close {
+ bottom:calc(var(--np-image-border) + var(--np-image-btn-pad) + 8px);
+ left:calc(var(--np-image-border) + var(--np-image-btn-pad));
+}
+.np-close:after {
+ content:"keyboard_arrow_down";
+}
+
+.np-close-alt, .np-close-alt:hover {
+ position:fixed;
+ bottom:12px;
+ left:12px;
+}
+
+@media (min-width:600px) {
+ .np-close {
+  visibility:hidden;
+ }
+ .np-close-alt {
+  visibility:visible;
+ }
+}
+
+@media (max-width:599px) {
  .np-close {
   visibility:visible;
-  bottom:calc(var(--np-image-border) + var(--np-image-btn-pad) + 8px);
-  left:calc(var(--np-image-border) + var(--np-image-btn-pad));
  }
- .np-close:after {
-  content:"fullscreen_exit";
+ .np-close-alt {
+  visibility:hidden;
+ }
+}
+
+@media (max-width:950px) {
+ .np-playback {
+  max-width:550px;
+ }
+}
+
+@media (max-width:700px) {
+ .np-playback {
+  max-width:400px;
  }
 }
 

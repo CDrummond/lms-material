@@ -1,7 +1,42 @@
-6.1.8
+6.2.2
 -----
-1. Add icons to global search entries.
-2. When showing 'N Items' in subtitle, adjust for number of headers.
+1. Fix 'All tracks' track ordering.
+2. Fix add/next/append/shuffle actions from headers of 'All tracks'.
+3. If artists, albums, or playlists commands are not set to use grids then use
+   standard lists for respective search result.
+4. Fix issue with undefined 'pinned' when favourites scrolled list used.
+5. Ony allow 'Favourites' scrolled list if not set to sort favourites.
+
+6.2.1
+-----
+1. Fix 3rd party scollable lists headers.
+2. Fix clicking on '+ N more' in MAI album view.
+3. Fix displaying of advanced search results.
+4. Require at least 1000x800px for 'Reposition dialogs' option.
+
+6.2.0
+-----
+ 1. Add icons to global search entries.
+ 2. When showing 'N Items' in subtitle, adjust for number of headers.
+ 3. Fix sorting of scrollable list items in 'Interface' settings dialog.
+ 4. Fix colours in logging view.
+ 5. Fix '(More)' showing on list items when not applicable.
+ 6. Allow 'Favourites' as scrolled list.
+ 7. Add search history.
+ 8. If using grid for 'Home', then show artist, album, works, playlists (if
+    image support enabled), and 'Search on' search results in scrollable lists.
+ 9. Use dialog for virtual library selection.
+10. Remove small icon-only grid option, and default to always set.
+11. Remove play/add/etc menu from search result headers.
+12. Change now-playing expand/collapse icons.
+13. If sufficient space, place now-plying collapse button bottom left in
+    desktop layout. If insufficient space, add to cover overlay.
+14. Show classical work reviews in MAI and browse.
+15. Fix menus sometimes having separator as first item.
+16. Indicate current track when browsing saved playlists.
+17. When showing '...' menu button next to 'Information', show to left for
+    consistency.
+18. Fix 'Do not set volume' in 'Group player' update dialog - thanks to SamY.
 
 6.1.7
 -----

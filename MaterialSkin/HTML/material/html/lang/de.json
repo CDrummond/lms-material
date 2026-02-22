@@ -148,7 +148,6 @@
 "Default player":"Standard-Player",
 "Defaults":"Standardwerte",
 "Delete":"Löschen",
-"Delete %1":"Lösche %1",
 "Delete '%1'?":"'%1' löschen?",
 "Delete alarm?":"Wecker löschen?",
 "Delete all selected items":"Alle ausgewählten Einträge löschen",
@@ -571,7 +570,6 @@
 "Theme":"Erscheinungsbild",
 "Thick (two lines of text)":"Dick (zwei Textzeilen)",
 "Thin (single line of text)":"Dünn (einzelne Textzeile)",
-"This will remove the 'virtual library', but will not delete the actual music files contained within.":"Die Musiksammlungsansicht wird entfernt, die darin enthaltenen Musikdateien aber nicht gelöscht.",
 "This will remove the folder, and any favorites contained within.":"Der Ordner und alle darin enthaltenen Favoriten werden entfernt.",
 "This will remove tracks with the same artist and title.":"Einträge mit demselben Interpreten und Titel entfernen",
 "Three lines for track view":"Drei Zeilen für die Titelansicht",
@@ -738,6 +736,7 @@
 "%1 days":"%1 Tage",
 "%1 %2":"",
 "1 %1":"",
+"Album review":"",
 "Based upon play count for the past few months only.":"",
 "Based upon total play count.":"",
 "List radio stations from favorites.":"",
@@ -747,5 +746,7 @@
 "Popular Albums":"",
 "Popular Artists":"",
 "Popular Releases":"",
-"Recently Played Artists":""
+"Recently Played Artists":"",
+"Release review":"",
+"Work review":""
 }

@@ -297,6 +297,9 @@ function nowplayingOnPlayerStatus(view, playerStatus) {
     if (playerStatus.current.work_id!=view.playerStatus.current.work_id) {
         view.playerStatus.current.work_id = playerStatus.current.work_id;
     }
+    if (playerStatus.current.isClassical!=view.playerStatus.current.isClassical) {
+        view.playerStatus.current.isClassical = playerStatus.current.isClassical;
+    }
     if (playerStatus.current.performance!=view.playerStatus.current.performance) {
         view.playerStatus.current.performance = playerStatus.current.performance;
     }
@@ -418,15 +421,6 @@ function nowplayingShowMenu(view, event) {
                 view.menu.items.push({title:loop[i].title, act:NP_CUSTOM+i, icon:loop[i].icon, svg:loop[i].svg});
             }
         }
-        if (view.$store.state.desktopLayout) {
-            if (view.largeView) {
-                view.menu.items.push({title:view.trans.collapseNp, icon:'fullscreen_exit', act:NP_TOGGLE_ACT});
-            } else {
-                view.menu.items.push({title:view.trans.expandNp, icon:'fullscreen', act:NP_TOGGLE_ACT});
-            }
-        } else if (!view.info.show && view.mobileBar==MBAR_REP_NAV) {
-            view.menu.items.push({title:view.trans.collapseNp, icon:'fullscreen_exit', act:NP_TOGGLE_ACT});
-        }
         view.menu.items.push({title:ACTIONS[MORE_ACTION].title, svg:ACTIONS[MORE_ACTION].svg, act:NP_INFO_ACT});
         view.menu.x = event.clientX;
         view.menu.y = event.clientY;
@@ -488,12 +482,6 @@ function nowplayingMenuAction(view, item) {
     } else if (SEARCH_TEXT_ACTION==item.act) {
         bus.$emit('browse-search', item.text, NP_INFO);
         view.close();
-    } else if (NP_TOGGLE_ACT==item.act) {
-        if (view.$store.state.desktopLayout) {
-            view.largeView=!view.largeView;
-        } else {
-            view.$store.commit('setPage', view.$store.state.prevPage);
-        }
     }  else if (NP_SHOW_IN_TABS_ACT==item.act) {
         view.info.showTabs = !view.info.showTabs;
     } else if (NP_SYNC_ACT==item.act) {
@@ -965,13 +953,17 @@ function nowplayingFetchArtistInfo(view) {
 function nowplayingFetchAlbumInfo(view) {
     let albumartist = view.infoTrack.albumartist!=undefined ? view.infoTrack.albumartist : view.infoTrack.artist;
     let albumartist_id = view.infoTrack.albumartist_id!=undefined ? view.infoTrack.albumartist_id : view.infoTrack.artist_id;
-    if (undefined!=view.infoTrack.album_id
+    let work_id = view.infoTrack.isClassical ? view.infoTrack.work_id : undefined;
+    if ((undefined!=view.infoTrack.album_id
             ? view.info.tabs[ALBUM_TAB].album_id!=view.infoTrack.album_id
             : (view.info.tabs[ALBUM_TAB].albumartist!=albumartist || view.info.tabs[ALBUM_TAB].albumartist_id!=albumartist_id ||
-        view.info.tabs[ALBUM_TAB].album!=view.infoTrack.album || view.info.tabs[ALBUM_TAB].album_id!=view.infoTrack.album_id)) {
-        view.info.tabs[ALBUM_TAB].sections[0].items=[];
-        view.info.tabs[ALBUM_TAB].sections[0].more=undefined;
-        view.info.tabs[ALBUM_TAB].sections[1].items=[];
+        view.info.tabs[ALBUM_TAB].album!=view.infoTrack.album || view.info.tabs[ALBUM_TAB].album_id!=view.infoTrack.album_id)) ||
+        view.info.tabs[ALBUM_TAB].work_id!=work_id) {
+        view.info.tabs[ALBUM_TAB].sections[0].html=undefined;
+        view.info.tabs[ALBUM_TAB].sections[1].html=undefined;
+        view.info.tabs[ALBUM_TAB].sections[2].items=[];
+        view.info.tabs[ALBUM_TAB].sections[2].more=undefined;
+        view.info.tabs[ALBUM_TAB].sections[3].items=[];
         view.info.tabs[ALBUM_TAB].texttitle=nowPlayingHeader(view.infoTrack.album);
         view.info.tabs[ALBUM_TAB].text=i18n("Fetching...");
         view.info.tabs[ALBUM_TAB].image=undefined;
@@ -980,7 +972,10 @@ function nowplayingFetchAlbumInfo(view) {
         view.info.tabs[ALBUM_TAB].albumartist_id=albumartist_id;
         view.info.tabs[ALBUM_TAB].album=view.infoTrack.album;
         view.info.tabs[ALBUM_TAB].album_id=view.infoTrack.album_id;
+        view.info.tabs[ALBUM_TAB].work_id=work_id;
         view.info.tabs[ALBUM_TAB].reqId++;
+        view.info.tabs[ALBUM_TAB].haveAlbumReview=0;
+        view.info.tabs[ALBUM_TAB].haveWorkReview=0;
         if (view.info.tabs[ALBUM_TAB].reqId>65535) {
             view.info.tabs[ALBUM_TAB].reqId = 0;
         }
@@ -1006,30 +1001,61 @@ function nowplayingFetchAlbumInfo(view) {
             lmsCommand("", command, view.info.tabs[ALBUM_TAB].reqId).then(({data}) => {
                 logJsonMessage("RESP", data);
                 if (data && data.result && view.isCurrent(data, ALBUM_TAB)) {
-                    view.info.tabs[ALBUM_TAB].text=data.result.albumreview ? replaceNewLines(data.result.albumreview) : undefined;
+                    let text = data.result.albumreview ? replaceNewLines(data.result.albumreview) : undefined;
+                    if (view.info.tabs[ALBUM_TAB].work_id!=undefined) {
+                        view.info.tabs[ALBUM_TAB].text=undefined;
+                        if (undefined!=text) {
+                            view.info.tabs[ALBUM_TAB].sections[0].title = lmsOptions.supportReleaseTypes ? i18n("Release review") : i18n("Album review");
+                            view.info.tabs[ALBUM_TAB].sections[0].html = text;
+                        }
+                    } else {
+                        view.info.tabs[ALBUM_TAB].text=text;
+                    }
+                    view.info.tabs[ALBUM_TAB].haveAlbumReview = 1;
                     view.info.tabs[ALBUM_TAB].image=/*data.result.albumreview ? undefined :*/ view.coverUrl;
                     view.info.tabs[ALBUM_TAB].isMsg=undefined==data.result.albumreview;
                 }
             }).catch(error => {
-                view.info.tabs[ALBUM_TAB].text=undefined;
+                view.info.tabs[ALBUM_TAB].haveAlbumReview = -1;
+                if (undefined==view.info.tabs[ALBUM_TAB].work_id || view.info.tabs[ALBUM_TAB].haveWorkReview==-1) {
+                    view.info.tabs[ALBUM_TAB].text=undefined;
+                }
                 view.info.tabs[ALBUM_TAB].image=/*data.result.albumreview ? undefined :*/ view.coverUrl;
             });
         }
-        if (view.infoTrack.album_id!=undefined && view.infoTrack.album_id>=0) {
+        if (view.info.tabs[ALBUM_TAB].work_id!=undefined) {
+            lmsCommand("", ["musicartistinfo", "workreview", "html:1", "work_id:"+view.info.tabs[ALBUM_TAB].work_id], view.info.tabs[ALBUM_TAB].reqId).then(({data}) => {
+                logJsonMessage("RESP", data);
+                if (data && data.result && view.isCurrent(data, ALBUM_TAB)) {
+                    let text = data.result.workreview ? replaceNewLines(data.result.workreview) : undefined;
+                    if (undefined!=text) {
+                        view.info.tabs[ALBUM_TAB].sections[1].title = i18n("Work review");
+                        view.info.tabs[ALBUM_TAB].sections[1].html = text;
+                    }
+                    view.info.tabs[ALBUM_TAB].haveWorkReview = 1;
+                }
+            }).catch(error => {
+                view.info.tabs[ALBUM_TAB].haveWorkReview = -1;
+                if (view.info.tabs[ALBUM_TAB].haveAlbumReview==-1) {
+                    view.info.tabs[ALBUM_TAB].text=undefined;
+                }
+            });
+        }
+        if (view.infoTrack.album_id!=undefined) {
             lmsList("", ["tracks"], ["album_id:"+view.infoTrack.album_id, trackTags(true)+(view.$store.state.showRating ? "R" : ""), "sort:tracknum"], 0, 1000, false, view.info.tabs[ALBUM_TAB].reqId).then(({data}) => {
                 logJsonMessage("RESP", data);
                 if (data && data.result && view.isCurrent(data, ALBUM_TAB)) {
                     let resp = parseBrowseResp(data);
-                    view.info.tabs[ALBUM_TAB].sections[0].items = resp.items.slice(0, NP_MAX_TRACKS);
-                    view.info.tabs[ALBUM_TAB].sections[0].title = resp.plainsubtitle;
-                    let count = view.info.tabs[ALBUM_TAB].sections[0].items.length;
+                    view.info.tabs[ALBUM_TAB].sections[2].items = resp.items.slice(0, NP_MAX_TRACKS);
+                    view.info.tabs[ALBUM_TAB].sections[2].title = resp.plainsubtitle;
+                    let count = view.info.tabs[ALBUM_TAB].sections[2].items.length;
                     // If last shown is a header, remove
-                    if (view.info.tabs[ALBUM_TAB].sections[0].items[count-1].header) {
-                        view.info.tabs[ALBUM_TAB].sections[0].items.pop();
+                    if (view.info.tabs[ALBUM_TAB].sections[2].items[count-1].header) {
+                        view.info.tabs[ALBUM_TAB].sections[2].items.pop();
                         count--;
                     }
                     if (data.result.count>count) {
-                        view.info.tabs[ALBUM_TAB].sections[0].more=i18n("+ %1 more", data.result.count-count);
+                        view.info.tabs[ALBUM_TAB].sections[2].more=i18n("+ %1 more", data.result.count-count);
                     }
                 }
             });
@@ -1041,17 +1067,18 @@ function nowplayingFetchAlbumInfo(view) {
                     if (undefined==resp || undefined==resp.items || resp.items.length<1) {
                         return;
                     }
-                    view.info.tabs[ALBUM_TAB].sections[1].items=resp.items;
+                    view.info.tabs[ALBUM_TAB].sections[3].items=resp.items;
                 }
             }).catch(err => {
             });
         }
-    } else if (undefined==view.infoTrack.albumartist && undefined==view.infoTrack.artist_id &&
-               undefined==view.infoTrack.album && undefined==view.infoTrack.album) {
+    } else if (undefined==albumartist && undefined==view.infoTrack.artist_id &&
+               undefined==view.infoTrack.album && undefined==view.infoTrack.album && undefined==work_id) {
         view.info.tabs[ALBUM_TAB].isMsg=true;
         view.info.tabs[ALBUM_TAB].text=undefined;
         view.info.tabs[ALBUM_TAB].image=/*view.infoTrack.empty ? undefined :*/ view.coverUrl;
-        view.info.tabs[ALBUM_TAB].sections[0].items=[];
+        view.info.tabs[ALBUM_TAB].sections[2].items=[];
+        view.info.tabs[ALBUM_TAB].sections[3].items=[];
     }
 }
 
@@ -1086,7 +1113,7 @@ function nowplayingMoreClicked(view, tab, section) {
     if (ARTIST_TAB==tab && 0==section) {
         bus.$emit("browse", ["albums"], ["artist_id:"+view.infoTrack.artist_id, ARTIST_ALBUM_TAGS, SORT_KEY+"yearalbum"], unescape(view.infoTrack.artist), NP_INFO);
         view.info.show=false;
-    } else if (ALBUM_TAB==tab && 0==section) {
+    } else if (ALBUM_TAB==tab && 2==section) {
         bus.$emit("browse", ["tracks"], ["album_id:"+view.infoTrack.album_id, trackTags(true), SORT_KEY+"tracknum"], unescape(view.infoTrack.album), NP_INFO,
                    undefined, unescape(view.infoTrack.albumartist ? view.infoTrack.albumartist : view.infoTrack.artist));
         view.info.show=false;

@@ -28,6 +28,7 @@ Vue.component('lms-choice-dialog', {
           <!-- todo allow options to also have sub-titles -->
           <v-list-tile-sub-title v-if="(undefined==options || options.length<1 || 0==option) && item.subtitle">{{item.subtitle}}{{item.durationStr ? SEPARATOR+item.durationStr : ""}}</v-list-tile-sub-title>
          </v-list-tile-content>
+         <v-icon small v-if="item.canremove" @click.stop="remove(index)">delete</v-icon>
         </v-list-tile>
         <v-divider></v-divider>
         </template>
@@ -38,7 +39,7 @@ Vue.component('lms-choice-dialog', {
   </v-card-text>
   <v-card-actions>
    <v-spacer></v-spacer>
-   <v-btn flat @click.native="cancel()">{{i18n('Cancel')}}</v-btn>
+   <v-btn flat @click.native="cancel()">{{canRemoveItems ? i18n('Close') : i18n('Cancel')}}</v-btn>
   </v-card-actions>
  </v-card>
 </v-dialog>
@@ -52,7 +53,8 @@ Vue.component('lms-choice-dialog', {
             options:[],
             option:0,
             boundKeys: false,
-            firstIsZero: false
+            firstIsZero: false,
+            canRemoveItems: false
         }
     },
     computed: {
@@ -72,7 +74,14 @@ Vue.component('lms-choice-dialog', {
                 this.option = parseInt(getLocalStorageVal('choice-'+this.key, undefined==extra.def ? 0 : extra.def));
             }
             this.show = true;
-            if (1==this.items.length && (undefined==this.options || this.options.length<1)) {
+            this.canRemoveItems = false;
+            for (let i=0, len=items.length; i<len; ++i) {
+                if (items[i].canremove) {
+                    this.canRemoveItems = true;
+                    break;
+                }
+            }
+            if (1==this.items.length && !this.canRemoveItems && (undefined==this.options || this.options.length<1)) {
                 this.choose(this.items[0]);
             } else {
                 bindNumeric(this);
@@ -108,7 +117,7 @@ Vue.component('lms-choice-dialog', {
         cancel() {
             this.show=false;
             unbindNumeric(this);
-            bus.$emit('choice.resp', undefined);
+            bus.$emit('choice.resp', undefined, undefined, this.items, this.canRemoveItems);
         },
         choose(item) {
             if (item.disabled) {
@@ -118,8 +127,25 @@ Vue.component('lms-choice-dialog', {
             if (undefined!=this.key) {
                 setLocalStorageVal('choice-'+this.key, this.option);
             }
-            bus.$emit('choice.resp', item, this.options.length<1 ? undefined : this.options[this.option]);
+            bus.$emit('choice.resp', item, this.options.length<1 ? undefined : this.options[this.option], this.items, this.canRemoveItems);
             unbindNumeric(this);
+        },
+        remove(index) {
+            if (2==this.items[index].canremove) {
+                confirm(i18n("Remove '%1'?", this.items[index].title), i18n('Remove')).then(res => {
+                    if (res) {
+                        this.removeItem(index);
+                    }
+                });
+            } else {
+                this.removeItem(index);
+            }
+        },
+        removeItem(index) {
+            this.items.splice(index, 1);
+            if (this.items.length==0) {
+                this.cancel();
+            }
         },
         i18n(str, arg) {
             if (this.show) {
@@ -139,8 +165,8 @@ Vue.component('lms-choice-dialog', {
 function choose(title, items, extra, firstIsZero) {
     return new Promise(function(response) {
         bus.$emit('dlg.open', 'choice', title, items, extra, firstIsZero);
-        bus.$once('choice.resp', function(resp, option) {
-            response(undefined==option ? resp : {item:resp, option:option});
+        bus.$once('choice.resp', function(resp, option, items, canRemoveItems) {
+            response(undefined==option && !canRemoveItems ? resp : {item:resp, option:option, items:items});
         });
     });
 }

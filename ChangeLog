@@ -5,7 +5,7 @@
 3. If artists, albums, or playlists commands are not set to use grids then use
    standard lists for respective search result.
 4. Fix issue with undefined 'pinned' when favourites scrolled list used.
-5. Ony allow 'Favourites' scrolled list if not set to sort favourites.
+5. Only allow 'Favourites' scrolled list if not set to sort favourites.
 
 6.2.1
 -----

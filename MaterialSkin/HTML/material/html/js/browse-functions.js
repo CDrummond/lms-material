@@ -3299,10 +3299,12 @@ function browseHandleDrop(view, to, ev) {
                     to-=view.topExtra.length;
                     drgIdx-=view.topExtra.length;
                 }
-                view.top = arrayMove(view.top, drgIdx, to);
-                view.items = view.grid.use && view.$store.state.detailedHomeItems.length>0 ? view.topExtra.concat(view.top) : view.top;
-                view.saveTopList();
-                view.layoutGrid(true);
+                if (to>=0 && drgIdx>=0) {
+                    view.top = arrayMove(view.top, drgIdx, to);
+                    view.items = view.grid.use && view.$store.state.detailedHomeItems.length>0 ? view.topExtra.concat(view.top) : view.top;
+                    view.saveTopList();
+                    view.layoutGrid(true);
+                }
             } else if (view.current) {
                 if (view.current.section==SECTION_FAVORITES) {
                     if (view.$store.state.sortFavorites && !view.items[to].isFavFolder) {

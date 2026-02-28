@@ -53,7 +53,7 @@ function parseQueryParams() {
     var query = queryString.split('&');
     var resp = { actions:[], debug:new Set(), hide:new Set(), dontEmbed:new Set(), layout:undefined, player:undefined, single:false,
         css:undefined, download:'browser', addpad:false, party:false, setTitle:false, expand:[], npRatio:1.33333333, topPad:0, botPad:0, dlgPad:0, tbarBtns:undefined, tbarBtnsPos:'r', tbarBtnsStyle:'gnome',
-        nativeStatus:0, nativeColors:0, nativePlayer:0, nativeUiChanges:0, nativeTheme:0, nativeCover:0, nativePlayerPower:0, nativeAccent:0, extraParams:[],
+        nativeStatus:0, nativeColors:0, nativePlayer:0, nativeUiChanges:0, nativeTheme:0, nativeCover:0, nativePlayerPower:0, nativeAccent:0,
         nativeTitlebar:0, nativeTextColor:0, nativeConnectionStatus:0, appSettings:undefined, appQuit:undefined, appLaunchPlayer:undefined, altBtnLayout:IS_WINDOWS, dontTrapBack:false, npAutoClose:true};
 
     for (var i = query.length - 1; i >= 0; i--) {
@@ -117,8 +117,6 @@ function parseQueryParams() {
                 resp[kv[0]]=val;
                 document.documentElement.style.setProperty('--window-area-'+kv[0].substr(4), val+'px');
             }
-        } else if ("extraParams"==kv[0]) {
-            resp.extraParams=kv[1].split(",")
         }
     }
     if (resp.single && !resp.player) {

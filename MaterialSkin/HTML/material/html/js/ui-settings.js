@@ -25,6 +25,23 @@ Vue.component('lms-ui-settings', {
    <v-list two-line subheader class="settings-list">
     <v-header class="dialog-section-header">{{i18n('General')}}</v-header>
 
+    <v-list-tile v-if="users.length>0">
+     <v-select :items="users" :label="i18n('User')" v-model="userId" item-text="name" item-value="id">
+      <template v-slot:item="{ item }">
+       <v-list-item-content>
+        <v-list-item-title>{{ item.name }}</v-list-item-title>
+       </v-list-item-content>
+       <v-btn icon v-if="item.id!=-1" style="margin-left:32px" @click="editUser(item, $event)"><v-icon>edit</v-icon></v-btn>
+       <v-btn icon v-if="item.id!=-1" @click="deleteUser(item, $event)"><v-icon>delete</v-icon></v-btn>
+      </template>
+     </v-select>
+     <v-list-tile-action style="padding-left:16px; min-width:32px!important">
+      <v-btn icon @click="addUser($event)"><v-icon>person_add</v-icon></v-btn>
+     </v-list-tile-action>
+    </v-list-tile>
+    <v-list-tile-sub-title  v-if="users.length>0" style="padding-bottom:16px">{{i18n("Username to be used for linking to streaming service accounts etc.")}}</v-list-tile-sub-title>
+    <v-divider v-if="users.length>0"></v-divider>
+
     <v-list-tile>
      <v-select menu-props="auto" :items="themes" :label="i18n('Theme')" v-model="theme" item-text="label" item-value="key"></v-select>
     </v-list-tile>
@@ -124,8 +141,8 @@ Vue.component('lms-ui-settings', {
      </v-list-tile-content>
      <v-list-tile-action><m3-switch v-model="showRating"></m3-switch></v-list-tile-action>
     </v-list-tile>
-
     <v-divider v-if="LMS_STATS_ENABLED"></v-divider>
+
     <v-list-tile>
      <v-select :items="homeButtonValues" :label="i18n('Show home button')" v-model="homeButton" item-text="label" item-value="key"></v-select>
     </v-list-tile>
@@ -557,7 +574,9 @@ Vue.component('lms-ui-settings', {
             detailedHomeItems:[],
             detailedHomeDialog: {show:false, items:[]},
             dragIndex: undefined,
-            dropIndex: undefined
+            dropIndex: undefined,
+            users:[],
+            userId:-1
         }
     },
     computed: {
@@ -677,6 +696,10 @@ Vue.component('lms-ui-settings', {
                 }
             }).catch(err => {
             });
+
+            this.userId = lmsOptions.userId;
+            this.users = [];
+            this.updateUsers();
             this.show = true;
         }.bind(this));
         bus.$on('closeMenu', function() {
@@ -849,6 +872,11 @@ Vue.component('lms-ui-settings', {
 
             if (this.password != getLocalStorageVal('password', '-')) {
                 this.$store.commit('setPassword', this.password);
+            }
+
+            if (this.userId != getLocalStorageVal('userId', -1)) {
+                setLocalStorageVal('userId', this.userId);
+                lmsOptions.userId = this.userId;
             }
 
             if (0!=queryParams.nativeUiChanges) {
@@ -1160,6 +1188,70 @@ Vue.component('lms-ui-settings', {
             }
             this.dragIndex = undefined;
             this.dropIndex = undefined;
+        },
+        addUser(ev) {
+            storeClickOrTouchPos(ev);
+            promptForText(i18n("Create new user"), "Enter username", "", i18n("Create")).then(resp => {
+                if (resp.ok) {
+                    let val = resp.value.trim();
+                    if (val.length>0) {
+                        lmsCommand("", ["users", "add", "name:"+val]).then(({data}) => {
+                            if (data && data.result && data.result.id) {
+                                this.userId = data.result.id;
+                            }
+                            this.updateUsers();
+                        }).catch(err => {
+                            this.updateUsers();
+                        });
+                    }
+                }
+            });
+        },
+        editUser(user, ev) {
+            storeClickOrTouchPos(ev);
+            promptForText(i18n("Edit username"), user.name, user.name, i18n("Update")).then(resp => {
+                if (resp.ok) {
+                    let val = resp.value.trim();
+                    if (val!=user.name) {
+                        lmsCommand("", ["users", "update", "id:"+user.id, "name:"+val]).then(({data}) => {
+                            this.updateUsers();
+                        }).catch(err => {
+                            this.updateUsers();
+                        });
+                    }
+                }
+            });
+        },
+        deleteUser(user, ev) {
+            storeClickOrTouchPos(ev);
+            confirm(i18n("Delete '%1'?", user.name), i18n('Delete')).then(res => {
+                if (res) {
+                    lmsCommand("", ["users", "delete", "id:"+user.id]).then(({data}) => {
+                        this.updateUsers();
+                    }).catch(err => {
+                        this.updateUsers();
+                    });
+                }
+            });
+        },
+        updateUsers() {
+            lmsCommand("", ["users", "list"]).then(({data}) => {
+                this.users = [{id:-1, name:i18n("No username")}];
+                let foundCurrent = false;
+                if (data && data.result && data.result.users_loop) {
+                    for (let i=0, list=data.result.users_loop, len=list.length; i<len; ++i) {
+                        let id = parseInt(list[i].id);
+                        this.users.push({id:id, name:list[i].name});
+                        if (id==this.userId) {
+                            foundCurrent = true;
+                        }
+                    }
+                }
+                if (!foundCurrent) {
+                    this.userId = -1;
+                }
+            }).catch(err => {
+            });
         }
     },
     watch: {

@@ -56,7 +56,8 @@ var lmsOptions = {techInfo: getLocalStorageBool('techInfo', false),
                   variousArtistsString: LMS_DEF_VA_STRING,
                   classicalGenres: new Set(["Classical"]),
                   homeExtraNeedsPlayer: new Set(),
-                  home3rdPartyExtraLists: LMS_3RDPARTY_HOME_EXTRA
+                  home3rdPartyExtraLists: LMS_3RDPARTY_HOME_EXTRA,
+                  userId: getLocalStorageVal('userId', -1),
                 };
 
 function initLmsOptions() {

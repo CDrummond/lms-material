@@ -179,8 +179,8 @@ function lmsCommand(playerid, command, commandId, timeout) {
     const URL = "/jsonrpc.js";
     var data = { id: undefined==commandId ? 0 : commandId, method: "slim.request", params: [playerid, command]};
 
-    if (undefined!=queryParams.extraParams && queryParams.extraParams.length>0) {
-        data.params[1] = [].concat(data.params[1], queryParams.extraParams);
+    if (undefined!=lmsOptions.userId && lmsOptions.userId!=-1) {
+        data.params[1].push("user_id:"+lmsOptions.userId);
     }
 
     logJsonMessage("REQ", data.params);

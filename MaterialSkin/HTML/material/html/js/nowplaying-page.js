@@ -1344,6 +1344,9 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
         },
         headerClicked(ev, tab) {
             nowplayingMAIMenuClicked(this, ev, tab);
+        },
+        playerId() {
+            return this.$store.state.player ? this.$store.state.player.id : ""
         }
     },
     filters: {

@@ -2,6 +2,7 @@
 -----
 1. Only allw drag'n'drop of 'Explore' items in scrolled lists.
 2. Allow 'Play shuffled' for 'All tracks'.
+3. Send player ID with all MAI commands.
 
 6.2.2
 -----

@@ -502,19 +502,19 @@ function nowplayingMenuAction(view, item) {
         if (ADD_TO_FAV_ACTION==act || REMOVE_FROM_FAV_ACTION==act) {
             let add = ADD_TO_FAV_ACTION==act;
             let litem = view.playerStatus.current;
-            lmsCommand(view.$store.state.player.id, ["favorites", "exists", litem.favUrl]).then(({data})=> {
+            lmsCommand(view.playerId(), ["favorites", "exists", litem.favUrl]).then(({data})=> {
                 logJsonMessage("RESP", data);
                 if (data && data.result && data.result.exists==(add ? 0 : 1)) {
                     if (!add) {
                         confirm(i18n("Remove '%1' from favorites?", litem.title), i18n('Remove')).then(res => {
-                            lmsCommand(view.$store.state.player.id, ["material-skin", "delete-favorite", "url:"+litem.favUrl]).then(({data})=> {
+                            lmsCommand(view.playerId(), ["material-skin", "delete-favorite", "url:"+litem.favUrl]).then(({data})=> {
                                 logJsonMessage("RESP", data);
                                 bus.$emit('refreshFavorites');
                             }).catch(err => {
                             });
                         });
                     } else {
-                        lmsCommand(view.$store.state.player.id, ["favorites", "add", "url:"+litem.favUrl, "title:"+litem.title, "icon:"+litem.favIcon]).then(({data})=> {
+                        lmsCommand(view.playerId(), ["favorites", "add", "url:"+litem.favUrl, "title:"+litem.title, "icon:"+litem.favIcon]).then(({data})=> {
                             logJsonMessage("RESP", data);
                             bus.$emit('showMessage', i18n("Added to favorites"));
                             bus.$emit('refreshFavorites');
@@ -534,7 +534,7 @@ function nowplayingMenuAction(view, item) {
                 view.close();
             } else {
                 let command = ["playlistcontrol", "cmd:"+(act==PLAY_ACTION ? "load" : INSERT_ACTION==act ? "insert" : ACTIONS[act].cmd), litem.id];
-                lmsCommand(view.$store.state.player.id, command).then(({data}) => {
+                lmsCommand(view.playerId(), command).then(({data}) => {
                     logJsonMessage("RESP", data);
                     bus.$emit('refreshStatus');
                     if (act===ADD_ACTION) {
@@ -623,7 +623,7 @@ function nowplayingFetchTrackInfo(view) {
         if (3==command.length) { // No details?
             view.info.tabs[TRACK_TAB].text=undefined;
         } else {
-            lmsCommand("", command, view.info.tabs[TRACK_TAB].reqId).then(({data}) => {
+            lmsCommand(view.playerId(), command, view.info.tabs[TRACK_TAB].reqId).then(({data}) => {
                 logJsonMessage("RESP", data);
                 if (data && data.result && view.isCurrent(data, TRACK_TAB)) {
                     let parsed = data.result.lyrics ? formatLyrics(replaceNewLines(data.result.lyrics)) : undefined;
@@ -820,7 +820,7 @@ function nowplayingFetchArtistInfo(view) {
             view.info.tabs[ARTIST_TAB].count = ids.length;
             view.info.tabs[ARTIST_TAB].details = [];
             for (let i=0, len=ids.length; i<len; ++i) {
-                lmsCommand("", ["musicartistinfo", "biography", "artist_id:"+ids[i], "html:1"], view.info.tabs[ARTIST_TAB].reqId).then(({data}) => {
+                lmsCommand(view.playerId(), ["musicartistinfo", "biography", "artist_id:"+ids[i], "html:1"], view.info.tabs[ARTIST_TAB].reqId).then(({data}) => {
                     logJsonMessage("RESP", data);
                     if (data && view.isCurrent(data, ARTIST_TAB)) {
                         if (data.result && data.result.biography) {
@@ -867,7 +867,7 @@ function nowplayingFetchArtistInfo(view) {
             if (3==command.length) { // No details?
                 view.info.tabs[ARTIST_TAB].text=undefined;
             } else {
-                lmsCommand("", command, view.info.tabs[ARTIST_TAB].reqId).then(({data}) => {
+                lmsCommand(view.playerId(), command, view.info.tabs[ARTIST_TAB].reqId).then(({data}) => {
                     logJsonMessage("RESP", data);
                     if (data && data.result && view.isCurrent(data, ARTIST_TAB) && (data.result.biography || data.result.error)) {
                         // If failed with artist, try albumartist (if view is within artist)
@@ -885,7 +885,7 @@ function nowplayingFetchArtistInfo(view) {
                                 view.info.tabs[ARTIST_TAB].text=undefined;
                                 view.info.tabs[ARTIST_TAB].isMsg=true;
                             } else {
-                                lmsCommand("", command, view.info.tabs[ARTIST_TAB].reqId).then(({data}) => {
+                                lmsCommand(view.playerId(), command, view.info.tabs[ARTIST_TAB].reqId).then(({data}) => {
                                     logJsonMessage("RESP", data);
                                     if (data && data.result && view.isCurrent(data, ARTIST_TAB)) {
                                         view.info.tabs[ARTIST_TAB].text=data.result.biography ? replaceNewLines(data.result.biography) : undefined;
@@ -998,7 +998,7 @@ function nowplayingFetchAlbumInfo(view) {
             view.info.tabs[ALBUM_TAB].text=undefined;
             view.info.tabs[ALBUM_TAB].image=view.infoTrack.empty ? undefined : view.coverUrl;
         } else {
-            lmsCommand("", command, view.info.tabs[ALBUM_TAB].reqId).then(({data}) => {
+            lmsCommand(view.playerId(), command, view.info.tabs[ALBUM_TAB].reqId).then(({data}) => {
                 logJsonMessage("RESP", data);
                 if (data && data.result && view.isCurrent(data, ALBUM_TAB)) {
                     let text = data.result.albumreview ? replaceNewLines(data.result.albumreview) : undefined;
@@ -1024,7 +1024,7 @@ function nowplayingFetchAlbumInfo(view) {
             });
         }
         if (view.info.tabs[ALBUM_TAB].work_id!=undefined) {
-            lmsCommand("", ["musicartistinfo", "workreview", "html:1", "work_id:"+view.info.tabs[ALBUM_TAB].work_id], view.info.tabs[ALBUM_TAB].reqId).then(({data}) => {
+            lmsCommand(view.playerId(), ["musicartistinfo", "workreview", "html:1", "work_id:"+view.info.tabs[ALBUM_TAB].work_id], view.info.tabs[ALBUM_TAB].reqId).then(({data}) => {
                 logJsonMessage("RESP", data);
                 if (data && data.result && view.isCurrent(data, ALBUM_TAB)) {
                     let text = data.result.workreview ? replaceNewLines(data.result.workreview) : undefined;
@@ -1061,7 +1061,7 @@ function nowplayingFetchAlbumInfo(view) {
             });
         }
         if (LMS_P_MAI && view.infoTrack.path!=undefined) {
-            lmsCommand('', ['musicartistinfo', 'localfiles', 'folder:'+view.infoTrack.path]).then(({data}) => {
+            lmsCommand(view.playerId(), ['musicartistinfo', 'localfiles', 'folder:'+view.infoTrack.path]).then(({data}) => {
                 if (data && data.result && data.result.item_loop && data.result.item_loop.length>0) {
                     let resp = parseBrowseResp(data);
                     if (undefined==resp || undefined==resp.items || resp.items.length<1) {

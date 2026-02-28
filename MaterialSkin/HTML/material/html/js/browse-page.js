@@ -2303,7 +2303,7 @@ var lmsBrowse = Vue.component("lms-browse", {
                         (itm.stdItem==STD_ITEM_ARTIST || itm.stdItem==STD_ITEM_ALBUM ||
                          itm.stdItem==STD_ITEM_PLAYLIST || itm.stdItem==STD_ITEM_WORK || itm.stdItem==STD_ITEM_REMOTE_PLAYLIST ||
                          itm.stdItem==STD_ITEM_GENRE || itm.stdItem==STD_ITEM_YEAR ||
-                         itm.stdItem==STD_ITEM_ONLINE_ARTIST || itm.stdItem==STD_ITEM_ONLINE_ALBUM);
+                         itm.stdItem==STD_ITEM_ONLINE_ARTIST || itm.stdItem==STD_ITEM_ONLINE_ALBUM || item.stdItem==STD_ITEM_ALL_TRACKS);
             }
             return false;
         },

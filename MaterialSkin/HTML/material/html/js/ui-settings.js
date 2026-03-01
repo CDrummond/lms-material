@@ -697,7 +697,7 @@ Vue.component('lms-ui-settings', {
             }).catch(err => {
             });
 
-            this.userId = lmsOptions.userId;
+            this.userId = ""+lmsOptions.userId;
             this.users = [];
             this.updateUsers();
             this.show = true;
@@ -874,9 +874,10 @@ Vue.component('lms-ui-settings', {
                 this.$store.commit('setPassword', this.password);
             }
 
-            if (this.userId != getLocalStorageVal('userId', -1)) {
-                setLocalStorageVal('userId', this.userId);
-                lmsOptions.userId = this.userId;
+            let uid = parseInt(this.userId);
+            if (uid != getLocalStorageVal('userId', -1)) {
+                lmsOptions.userId = uid;
+                setLocalStorageVal('userId', uid);
             }
 
             if (0!=queryParams.nativeUiChanges) {
@@ -1235,21 +1236,22 @@ Vue.component('lms-ui-settings', {
             });
         },
         updateUsers() {
+            console.log("Update users", this.userId);
             lmsCommand("", ["users", "list"]).then(({data}) => {
-                this.users = [{id:-1, name:i18n("No username")}];
+                this.users = [{id:"-1", name:i18n("No username")}];
                 let foundCurrent = false;
                 if (data && data.result && data.result.users_loop) {
                     for (let i=0, list=data.result.users_loop, len=list.length; i<len; ++i) {
-                        let id = parseInt(list[i].id);
-                        this.users.push({id:id, name:list[i].name});
+                        this.users.push({id:""+list[i].id, name:list[i].name});
                         if (id==this.userId) {
                             foundCurrent = true;
                         }
                     }
                 }
                 if (!foundCurrent) {
-                    this.userId = -1;
+                    this.userId = "-1";
                 }
+                console.log("Updted", foundCurrent, this.userId, this.users);
             }).catch(err => {
             });
         }

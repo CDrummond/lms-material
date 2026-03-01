@@ -1198,7 +1198,7 @@ Vue.component('lms-ui-settings', {
                     if (val.length>0) {
                         lmsCommand("", ["users", "add", "name:"+val]).then(({data}) => {
                             if (data && data.result && data.result.id) {
-                                this.userId = data.result.id;
+                                this.userId = ""+data.result.id;
                             }
                             this.updateUsers();
                         }).catch(err => {
@@ -1236,13 +1236,13 @@ Vue.component('lms-ui-settings', {
             });
         },
         updateUsers() {
-            console.log("Update users", this.userId);
             lmsCommand("", ["users", "list"]).then(({data}) => {
                 this.users = [{id:"-1", name:i18n("No username")}];
                 let foundCurrent = false;
                 if (data && data.result && data.result.users_loop) {
                     for (let i=0, list=data.result.users_loop, len=list.length; i<len; ++i) {
-                        this.users.push({id:""+list[i].id, name:list[i].name});
+                        let id = ""+list[i].id
+                        this.users.push({id:id, name:list[i].name});
                         if (id==this.userId) {
                             foundCurrent = true;
                         }
@@ -1251,7 +1251,6 @@ Vue.component('lms-ui-settings', {
                 if (!foundCurrent) {
                     this.userId = "-1";
                 }
-                console.log("Updted", foundCurrent, this.userId, this.users);
             }).catch(err => {
             });
         }

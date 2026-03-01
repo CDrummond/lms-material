@@ -1197,7 +1197,7 @@ Vue.component('lms-ui-settings', {
                     let val = resp.value.trim();
                     if (val.length>0) {
                         lmsCommand("", ["users", "add", "name:"+val]).then(({data}) => {
-                            if (data && data.result && data.result.id) {
+                            if (data && data.result && data.result.id && this.userId=="-1") {
                                 this.userId = ""+data.result.id;
                             }
                             this.updateUsers();

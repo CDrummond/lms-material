@@ -4,13 +4,3 @@
 .np-image-landscape, .np-image-landscape .np-cover, .np-bar-image, .np-bar-image .np-cover {
  border-radius:0px!important;
 }
-
-.np-cover {
- background-color:transparent!important;
-}
-
-.np-image .np-cover,
-.np-no-meta-img,
-.np-image-landscape .np-cover {
- box-shadow:none!important;
-}

@@ -40,10 +40,6 @@
  }
 }
 
-.np-cover {
- background-color:var(--image-background-color);
-}
-
 .np-info .lms-list-item {
  border-radius: 4px;
 }

@@ -1821,6 +1821,7 @@ div.v-subheader {
  object-position:50% 50%;
  margin:auto;
  cursor:pointer;
+ background-color:var(--image-background-color);
 }
 
 .np-mai-img {

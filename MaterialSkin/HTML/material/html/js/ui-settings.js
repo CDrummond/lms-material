@@ -31,8 +31,8 @@ Vue.component('lms-ui-settings', {
        <v-list-item-content>
         <v-list-item-title>{{ item.name }}</v-list-item-title>
        </v-list-item-content>
-       <v-btn icon v-if="item.id!=-1" style="margin-left:32px" @click="editUser(item, $event)"><v-icon>edit</v-icon></v-btn>
-       <v-btn icon v-if="item.id!=-1" @click="deleteUser(item, $event)"><v-icon>delete</v-icon></v-btn>
+       <v-btn icon v-if="item.id!=-1" style="margin-left:32px" @click.stop="editUser(item, $event)"><v-icon>edit</v-icon></v-btn>
+       <v-btn icon v-if="item.id!=-1" @click.stop="deleteUser(item, $event)"><v-icon>delete</v-icon></v-btn>
       </template>
      </v-select>
      <v-list-tile-action style="padding-left:16px; min-width:32px!important">

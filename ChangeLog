@@ -5,6 +5,7 @@
 3. Send player ID with all MAI commands.
 4. Draw cover background for now-playing even if not rounded.
 5. Fix reading scrolled lists settings from defaults.
+6. Fix selecting header text in MAI view.
 
 6.2.2
 -----

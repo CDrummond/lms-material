@@ -1343,6 +1343,9 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
             document.documentElement.style.setProperty('--np-zoom-list', Math.min(this.zoom, 1.4));
         },
         headerClicked(ev, tab) {
+            if (undefined!=this.menu.selection) {
+                return;
+            }
             nowplayingMAIMenuClicked(this, ev, tab);
         },
         playerId() {

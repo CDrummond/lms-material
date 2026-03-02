@@ -645,7 +645,6 @@ const store = new Vuex.Store({
 
             let dhi = getLocalStorageVal('detailedHomeItems', undefined);
             if (undefined!=dhi) {
-                // New format
                 try {
                     state.detailedHomeItems = checkHomeItems(JSON.parse(dhi));
                 } catch (e) { }
@@ -727,6 +726,9 @@ const store = new Vuex.Store({
                         }
                         if (!pinQueueInSettings && undefined!=prefs.pinQueue) {
                             opts.pinQueue=prefs.pinQueue;
+                        }
+                        if (undefined!=prefs.detailedHomeItems && undefined==getLocalStorageVal('detailedHomeItems', undefined)) {
+                            opts.detailedHomeItems=prefs.detailedHomeItems;
                         }
                         updateUiSettings(state, opts);
                     } catch(e) {

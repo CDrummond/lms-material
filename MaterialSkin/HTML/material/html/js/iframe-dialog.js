@@ -162,12 +162,7 @@ function otherClickHandler(e) {
 
 function lmsClickHandler(e) {
     var target = e.target || e.srcElement;
-    var href = undefined;
-    if (target.tagName === 'A') {
-        href = target.getAttribute('href');
-    } else if (target.tagName === 'SPAN' || target.tagName === 'IMG') {
-        href = target.parentElement.getAttribute('href');
-    }
+    var href = target.tagName === 'A' ? target.getAttribute('href') : undefined;
     if (href!=null && (href.startsWith("/material/scanner.log") || href.startsWith("/material/server.log"))) {
         e.preventDefault();
         e.stopPropagation();

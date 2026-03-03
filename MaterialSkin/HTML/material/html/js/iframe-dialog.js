@@ -160,6 +160,21 @@ function otherClickHandler(e) {
     }
 }
 
+function lmsClickHandler(e) {
+    var target = e.target || e.srcElement;
+    var href = undefined;
+    if (target.tagName === 'A') {
+        href = target.getAttribute('href');
+    } else if (target.tagName === 'SPAN' || target.tagName === 'IMG') {
+        href = target.parentElement.getAttribute('href');
+    }
+    if (href!=null && (href.startsWith("/material/scanner.log") || href.startsWith("/material/server.log"))) {
+        e.preventDefault();
+        e.stopPropagation();
+        bus.$emit('iframe-href', href, true, undefined, "/material/settings/server/debugging.html");
+    }
+}
+
 function clickDirSelect(elem) {
     var id = elem.srcElement.id.split('.')[1];
     bus.$emit('dlg.open', 'file', elem.srcElement.ownerDocument.getElementById(id), true);
@@ -581,6 +596,11 @@ function applyModifications(page, svgCol, darkUi, src) {
                     content.documentElement.classList.add("lms-91p");
                 }
             }
+            if (content.addEventListener) {
+                content.addEventListener('click', lmsClickHandler);
+            } else if (content.attachEvent) {
+                content.attachEvent('onclick', lmsClickHandler);
+            }
         }
 
         if (content && ('other'==page || 'extras'==page || 'lms'==page)) {
@@ -840,7 +860,7 @@ Vue.component('lms-iframe-dialog', {
         bus.$on('iframe-prompting', function(val) {
             this.prompting = val;
         }.bind(this));
-        bus.$on('iframe-href', function(ref, addToHistory, clearHistoryOf) {
+        bus.$on('iframe-href', function(ref, addToHistory, clearHistoryOf, urlToAdd) {
             if (ref.startsWith("javascript:")) {
                 return;
             }
@@ -855,7 +875,7 @@ Vue.component('lms-iframe-dialog', {
                     this.history.pop();
                 }
             } else if (undefined==addToHistory || addToHistory) {
-                this.history.push(this.src);
+                this.history.push(undefined==urlToAdd ? this.src : urlToAdd);
             }
             this.src = ref;
         }.bind(this));

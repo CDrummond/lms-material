@@ -557,14 +557,15 @@ var lmsQueue = Vue.component("lms-queue", {
                     var discCount = pqGroupingMap.get(parseInt(index))[0];
                     var contiguousGroups = pqGroupingMap.get(parseInt(index))[1];
                     var addedFromWork = pqGroupingMap.get(parseInt(index))[2];
-                    var title = this.$store.state.queueAlbumStyle && albumGroupingType(discCount, ALWAYS_GROUP_HEADING, contiguousGroups, addedFromWork)==MULTI_GROUP_ALBUM ? i.title : trackTitle(i);
+                    var isMultiGroup = this.$store.state.queueAlbumStyle && albumGroupingType(discCount, ALWAYS_GROUP_HEADING, contiguousGroups, addedFromWork)==MULTI_GROUP_ALBUM;
+                    var title = isMultiGroup ? i.title : trackTitle(i);
                     var rating = this.showRatings && undefined!=i.rating ? Math.ceil(i.rating/10.0)/2.0 : undefined;
                     if (this.$store.state.queueShowTrackNum && i.tracknum>0) {
                         title = formatTrackNum(i)+SEPARATOR+title;
                     }
                     if (this.albumStyle) {
                         let artist = i.albumartist ? i.albumartist : i.artist ? i.artist : i.trackartist;
-                        let extra = buildArtistLine(i, 'queue', false, artist);
+                        let extra = buildArtistLine(i, 'queue', false, artist, undefined, isMultiGroup && i.composer && i.work ? false : undefined);
                         let addedClass = false;
                         if (!isEmpty(extra)) {
                             addedClass = true;

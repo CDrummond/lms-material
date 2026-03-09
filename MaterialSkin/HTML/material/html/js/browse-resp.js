@@ -1439,7 +1439,9 @@ function parseBrowseResp(data, parent, options, cacheKey) {
             resp.itemCustomActions = getCustomActions("album-track");
             let stdItem = allowPlayAlbum && data.result.count>1 ? STD_ITEM_ALBUM_TRACK : STD_ITEM_TRACK;
             let artists = [];
+            let artistsNoComposer = [];
             let artistsWithContext = [];
+            let artistsWithContextNoComposer = [];
             let numCompilationTracks = 0;
             let compilationAlbumArtists = new Set();
             let compilationArtists = new Set();
@@ -1532,8 +1534,15 @@ function parseBrowseResp(data, parent, options, cacheKey) {
                 let useConductorTag = i.conductor && lmsOptions.showConductor && useConductor(i);
                 let useBandTag = i.band && lmsOptions.showBand && useBand(i);
                 artists.push(buildArtistLine(i, "browse", false, undefined, useBandTag, useComposerTag, useConductorTag));
+                let suppressComposer = useComposerTag && splitIntoGroupings && i.composer && i.work;
+                artistsNoComposer.push(suppressComposer
+                    ? buildArtistLine(i, "browse", false, undefined, useBandTag, false, useConductorTag)
+                    : artists[artists.length-1]);
                 if (browseContext) {
                     artistsWithContext.push(replaceBr(buildArtistWithContext(i, "browse", useBandTag, useComposerTag, useConductorTag), " "));
+                    artistsWithContextNoComposer.push(suppressComposer
+                        ? replaceBr(buildArtistWithContext(i, "browse", useBandTag, false, useConductorTag), " ")
+                        : artistsWithContext[artistsWithContext.length-1]);
                 }
                 let subtitle = undefined;
                 let subtitleContext = undefined;
@@ -1784,6 +1793,7 @@ function parseBrowseResp(data, parent, options, cacheKey) {
                                          ? parent.subtitle
                                          : undefined;
 
+            let willShowGroupHeaders = allTracksGrouping==0 && (groupings.size>1 || isWork) && splitIntoGroups;
             if (resp.items.length>1) {
                 let showArtists = (new Set(artists)).size>1;
                 if (!showArtists && undefined!=albumArtist) {
@@ -1800,10 +1810,12 @@ function parseBrowseResp(data, parent, options, cacheKey) {
                         if (item.header) {
                             lastHeader = i;
                         } else {
-                            if (undefined!=artists[item.idx] && (3!=allTracksGrouping || stripLinkTags(artists[item.idx])!=loop[lastHeader].title)) {
-                                item.subtitle = undefined==item.subtitle ? artists[item.idx] : (artists[item.idx] + SEPARATOR + item.subtitle);
+                            let artistLine = willShowGroupHeaders && item.gfilter ? artistsNoComposer[item.idx] : artists[item.idx];
+                            if (undefined!=artistLine && (3!=allTracksGrouping || stripLinkTags(artistLine)!=loop[lastHeader].title)) {
+                                item.subtitle = undefined==item.subtitle ? artistLine : (artistLine + SEPARATOR + item.subtitle);
                                 if (browseContext) {
-                                    item.subtitleContext = undefined==item.subtitleContext ? artistsWithContext[item.idx] : (artistsWithContext[item.idx] + " " + item.subtitleContext);
+                                    let artistCtx = willShowGroupHeaders && item.gfilter ? artistsWithContextNoComposer[item.idx] : artistsWithContext[item.idx];
+                                    item.subtitleContext = undefined==item.subtitleContext ? artistCtx : (artistCtx + " " + item.subtitleContext);
                                 }
                             }
                         }
@@ -1811,10 +1823,12 @@ function parseBrowseResp(data, parent, options, cacheKey) {
                 }
             } else if (1==resp.items.length && undefined!=albumArtist) {
                 // Only one? Check that this tracks artist line does not match parent item's artist details...
-                if (stripLinkTags(artists[0])!=albumArtist) {
-                    resp.items[0].subtitle = undefined==resp.items[0].subtitle ? artists[0] : (artists[0] + SEPARATOR + resp.items[0].subtitle);
+                let artistLine = willShowGroupHeaders && resp.items[0].gfilter ? artistsNoComposer[0] : artists[0];
+                if (stripLinkTags(artistLine)!=albumArtist) {
+                    resp.items[0].subtitle = undefined==resp.items[0].subtitle ? artistLine : (artistLine + SEPARATOR + resp.items[0].subtitle);
                     if (browseContext) {
-                        resp.items[0].subtitleContext = undefined==resp.items[0].subtitleContext ? artistsWithContext[0] : (artistsWithContext[0] + " " + resp.items[0].subtitleContext);
+                        let artistCtx = willShowGroupHeaders && resp.items[0].gfilter ? artistsWithContextNoComposer[0] : artistsWithContext[0];
+                        resp.items[0].subtitleContext = undefined==resp.items[0].subtitleContext ? artistCtx : (artistCtx + " " + resp.items[0].subtitleContext);
                     }
                 }
             }

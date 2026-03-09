@@ -139,7 +139,8 @@ function parseResp(data, showTrackNum, index, showRatings, queueAlbumStyle, queu
                 pqGroupingMap.set(parseInt(i['playlist index']), [parseInt(i.disccount), parseInt(i.contiguous_groups), parseInt(i.added_from_work)]);
                 i.isClassical = undefined!=i.isClassical && 1==parseInt(i.isClassical);
                 splitMultiples(i, true);
-                let title = queueAlbumStyle && albumGroupingType(i.disccount, ALWAYS_GROUP_HEADING, i.contiguous_groups, i.added_from_work)==MULTI_GROUP_ALBUM ? i.title : trackTitle(i);
+                let isMultiGroup = queueAlbumStyle && albumGroupingType(i.disccount, ALWAYS_GROUP_HEADING, i.contiguous_groups, i.added_from_work)==MULTI_GROUP_ALBUM;
+                let title = isMultiGroup ? i.title : trackTitle(i);
                 let artist = i.albumartist ? i.albumartist : i.artist ? i.artist : i.trackartist;
                 if (i.remote && undefined==title && undefined==artist && undefined==i.album) {
                     title = artist = i.album = i.artist = i18n('Unknown');
@@ -149,7 +150,7 @@ function parseResp(data, showTrackNum, index, showRatings, queueAlbumStyle, queu
                 }
                 let haveRating = showRatings && undefined!=i.rating;
                 if (queueAlbumStyle) {
-                    let extra = buildArtistLine(i, 'queue', false, artist);
+                    let extra = buildArtistLine(i, 'queue', false, artist, undefined, isMultiGroup && i.composer && i.work ? false : undefined);
                     let addedClass = false;
                     if (!isEmpty(extra)) {
                         addedClass = true;
@@ -164,7 +165,7 @@ function parseResp(data, showTrackNum, index, showRatings, queueAlbumStyle, queu
                 let duration = undefined==i.duration ? undefined : parseFloat(i.duration);
                 let prevItem = 0==idx ? lastInCurrent : resp.items[idx-1];
                 let image = queueItemCover(i);
-                let groupId = albumGroupingType(i.disccount, ALWAYS_GROUP_HEADING, i.contiguous_groups, i.added_from_work)==MULTI_GROUP_ALBUM ? (i.composer && i.work ? i.composer+"-"+i.work+(i.performance ? "-"+i.performance : "")+(i.grouping ? "-"+i.grouping : "")+(i.added_from_work ? "-"+i.added_from_work : "") : i.grouping ? i.grouping : undefined) : undefined;
+                let groupId = isMultiGroup ? (i.composer && i.work ? i.composer+"-"+i.work+(i.performance ? "-"+i.performance : "")+(i.grouping ? "-"+i.grouping : "")+(i.added_from_work ? "-"+i.added_from_work : "") : i.grouping ? i.grouping : undefined) : undefined;
                 let isAlbumHeader = queueAlbumStyle &&
                                      ( undefined==prevItem ||
                                        i.album_id!=prevItem.album_id ||

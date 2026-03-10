@@ -123,7 +123,7 @@ var ACTIONS=[
     {cmd:"add-favdir",   icon:"create_new_folder"},
     {cmd:"del-favdir",   icon:"delete_outline"},
     {cmd:"move-fav-parent", svg:"folder-up"},
-    {cmd:"vlib",         icon:"library_music"},
+    {cmd:"vlib",         svg:"virtual-library"},
     {cmd:"unsub-podcast",icon:"remove_circle_outline"},
     {cmd:"move-here",    icon:"format_indent_increase"},
 

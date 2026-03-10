@@ -183,6 +183,15 @@ function lmsCommand(playerid, command, commandId, timeout) {
         data.params[1] = [].concat(data.params[1], queryParams.extraParams);
     }
 
+    // Set player's library to current vlib
+    if (lmsOptions.setPlayerLibrary && undefined!=playerid && bus && bus.$store && bus.$store.state && bus.$store.state.player && bus.$store.state.player.id==playerid && undefined!=bus.$store.state.library && command.length>=2) {
+        if (command[0]=="playlistcontrol" && (command[1]=="cmd:load" || bus.$store.state.player.trkcount==0)) {
+            axios.post(URL, { id:0, method: "slim.request", params: [playerid, ["material-skin-client", "set-lib", "id:"+bus.$store.state.library]]});
+        } else if (command[0]=="playlist" && command[1]=="clear") {
+            axios.post(URL, { id:0, method: "slim.request", params: [playerid, ["material-skin-client", "set-lib"]]});
+        }
+    }
+
     logJsonMessage("REQ", data.params);
     if (undefined!=timeout) {
         return axios.post(URL, data, { timeout: timeout});

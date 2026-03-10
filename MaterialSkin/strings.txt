@@ -1027,3 +1027,10 @@ PLUGIN_MATERIAL_SKIN_QT_SWAP_ERROR
 	FR	Impossible d'échanger une liste de lecture avec une platine déjà synchronisée.
 	NL	Het is niet mogelijk om de afspeellijst te wisselen met een muziekspeler die al gesynchroniseerd is. 
 	SV	Spelkön kan inte bytas med en spelare som den nuvarande spelaren redan är synkroniserad med.
+
+PLUGIN_MATERIAL_SKIN_SET_PLAYER_LIB
+	EN	Set player's library
+
+PLUGIN_MATERIAL_SKIN_SET_PLAYER_LIB_DESC
+	EN	When adding track's to an empty player queue first set player's library to match that currently browsing with. When clearing queue reset player's library to 'All'.
+

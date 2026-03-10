@@ -285,7 +285,7 @@ sub initPlugin {
     $prefs->setChange(sub { $prefs->set($_[0], 0) unless defined $_[1]; }, 'allowDownload');
     $prefs->setChange(sub { $prefs->set($_[0], 0) unless defined $_[1]; }, 'useDefaultForSettings');
     $prefs->setChange(sub { $prefs->set($_[0], 0) unless defined $_[1]; }, 'useGrouping');
-    $prefs->setChange(sub { $prefs->set($_[0], 0) unless defined $_[1]; }, 'setPlayerLibrary');
+    $prefs->setChange(sub { $prefs->set($_[0], 0) unless $_[1]; }, 'setPlayerLibrary');
 
     if (main::WEBUI) {
         require Plugins::MaterialSkin::Settings;
@@ -2423,6 +2423,20 @@ sub _cliClientCommand {
 
     if ($cmd eq 'set-lib') {
         my $id = $request->getParam('id');
+        if ($request->getParam('store')) {
+            my $prev = $serverprefs->client($client)->get('libraryId');
+            if ($prev) {
+                main::DEBUGLOG && $log->debug("Save prev lib id of ${prev}");
+                $prefs->client($client)->set('libraryId', $prev);
+            }
+        }
+
+        if (!$id && $request->getParam('restore')) {
+            $id = $prefs->client($client)->get('libraryId');
+            main::DEBUGLOG && $log->debug("Read prev lib id ${id}");
+        }
+
+        main::DEBUGLOG && $log->debug("Set lib id ${id}");
         $serverprefs->client($client)->set('libraryId', $id);
         $serverprefs->client($client)->remove('libraryId') unless $id;
         Slim::Utils::Timers::setTimer($client, Time::HiRes::time() + 0.1, sub {Slim::Schema->totals($client);});

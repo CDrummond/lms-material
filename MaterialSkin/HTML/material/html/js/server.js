@@ -184,8 +184,9 @@ function lmsCommand(playerid, command, commandId, timeout) {
     }
 
     // Set player's library to current vlib
-    if (lmsOptions.setPlayerLibrary && undefined!=playerid && bus && bus.$store && bus.$store.state && bus.$store.state.player && bus.$store.state.player.id==playerid && undefined!=bus.$store.state.library && command.length>=2) {
-        if (command[0]=="playlistcontrol" && (command[1]=="cmd:load" || bus.$store.state.player.trkcount==0)) {
+    if (lmsOptions.setPlayerLibrary && undefined!=playerid && bus && bus.$store && bus.$store.state && bus.$store.state.player && bus.$store.state.player.id==playerid && undefined!=bus.$store.state.library && command.length>=3) {
+        if ( (command[0]=="playlistcontrol" && (command[1]=="cmd:load" || bus.$store.state.player.trkcount==0)) ||
+           ( (command[0]=="favorites" && command[1]=="playlist" && (command[2]=="play" || bus.$store.state.player.trkcount==0))) ) {
             setTimeout(function () {
                 axios.post(URL, { id:0, method: "slim.request", params: [playerid, ["material-skin-client", "set-lib", "id:"+bus.$store.state.library, "store:1"]]});
             }, 500);

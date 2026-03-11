@@ -232,14 +232,24 @@ function buildAlbumLine(i, page, plain, addSubtitle) {
 function buildWorkLine(i, page, plain) {
     var line = undefined;
     if (i.work && i.composer) {
-        var work = i.composer + SEPARATOR + i.work;
-        if (i.performance) {
-            work += SEPARATOR + i.performance;
-        }
         if (i.work_id && (!IS_MOBILE || lmsOptions.touchLinks) && !plain) {
-            work="<obj class=\"link-item\" onclick=\"showWork(event, "+i.work_id+",\'"+escape(i.work)+"\',\'"+(i.performance ? escape(i.performance) : "")+"\',\'"+escape(i.composer)+"\',\'"+page+"\')\">" + work + "</obj>";
+            var composerId = i.composer_id || (i.composer_ids && i.composer_ids[0]);
+            var composerPart = composerId
+                ? buildLink('show_composer', composerId, i.composer, page)
+                : i.composer;
+            var workText = i.work;
+            if (i.performance) {
+                workText += SEPARATOR + i.performance;
+            }
+            var workPart = "<obj class=\"link-item\" onclick=\"showWork(event, "+i.work_id+",\'"+escape(i.work)+"\',\'"+(i.performance ? escape(i.performance) : "")+"\',\'"+escape(i.composer)+"\',\'"+page+"\')\">"+workText+"</obj>";
+            line = addPart(line, composerPart + SEPARATOR + workPart);
+        } else {
+            var work = i.composer + SEPARATOR + i.work;
+            if (i.performance) {
+                work += SEPARATOR + i.performance;
+            }
+            line = addPart(line, work);
         }
-        line=addPart(line, work);
     }
     return line;
 }

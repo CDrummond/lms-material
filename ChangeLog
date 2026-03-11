@@ -4,6 +4,7 @@
 2. Add server-side option to set player's library when playing.
 3. Allow using 'None' for library in random mix, in which case mix will use
    player's library.
+4. Only sync lyrics if have valid time and duration.
 
 6.2.3
 -----

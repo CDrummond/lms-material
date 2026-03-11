@@ -25,6 +25,8 @@ const NP_CUSTOM = 100;
 const NP_ITEM_ACT = 200;
 const NP_MIN_WIDTH_FOR_FULL = 780;
 
+const MAX_LYRICS_DURATION = 60 * 60; // 1hr?
+
 var currentPlayingTrackPosition = 0;
 
 var lmsNowPlaying = Vue.component("lms-now-playing", {
@@ -65,7 +67,7 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
        <div v-if="tab.image"><img :src="tab.image" loading="lazy" class="np-mai-img" @dragstart.prevent="" @dragenter.prevent=""></img></div>
        <div v-if="TRACK_TAB==index && tab.lines">
         <template v-for="(line, lindex) in tab.lines">
-         <obj :id="'np-lyrics-'+lindex" v-bind:class="{'lyrics-current-line':tab.highlight && undefined!=playerStatus.current.time && lyricsTimesValid && playerStatus.current.time>=line.time && playerStatus.current.time<((lindex+1)<tab.lines.length ? tab.lines[lindex+1].time : 86400)}">{{line.text.length<1 ? '&nbsp;' : line.text}}</obj></br/>
+         <obj :id="'np-lyrics-'+lindex" v-bind:class="{'lyrics-current-line':tab.highlight && lyricsTimesValid && playerStatus.current.time>=line.time && playerStatus.current.time<((lindex+1)<tab.lines.length ? tab.lines[lindex+1].time : MAX_LYRICS_DURATION)}">{{line.text.length<1 ? '&nbsp;' : line.text}}</obj></br/>
         </template>
        </div>
        <div v-else-if="tab.text" v-bind:class="{'text':TRACK_TAB!=index}" v-html="tab.text"></div>
@@ -129,7 +131,7 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
         <div v-if="tab.image"><img :src="tab.image" loading="lazy" class="np-mai-img" @dragstart.prevent="" @dragenter.prevent=""></img></div>
         <div v-if="TRACK_TAB==index && tab.lines">
          <template v-for="(line, lindex) in tab.lines">
-          <obj :id="'np-lyrics-'+lindex" v-bind:class="{'lyrics-current-line':tab.highlight && undefined!=playerStatus.current.time && lyricsTimesValid && playerStatus.current.time>line.time && playerStatus.current.time<((lindex+1)<tab.lines.length ? tab.lines[lindex+1].time : 86400)}">{{line.text.length<1 ? '&nbsp;' : line.text}}</obj></br/>
+          <obj :id="'np-lyrics-'+lindex" v-bind:class="{'lyrics-current-line':tab.highlight && lyricsTimesValid && playerStatus.current.time>line.time && playerStatus.current.time<((lindex+1)<tab.lines.length ? tab.lines[lindex+1].time : MAX_LYRICS_DURATION)}">{{line.text.length<1 ? '&nbsp;' : line.text}}</obj></br/>
          </template>
         </div>
         <div v-else-if="tab.text" v-bind:class="{'text':TRACK_TAB!=index}" v-html="tab.text"></div>
@@ -767,7 +769,7 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
             this.updateLyricsPosition();
         },
         updateLyricsPosition() {
-            if (this.info.show && this.info.tabs[TRACK_TAB].lines && this.lyricsTimesValid && this.info.tabs[TRACK_TAB].scroll && this.playerStatus.current && undefined!=this.playerStatus.current.time) {
+            if (this.info.show && this.info.tabs[TRACK_TAB].lines && this.lyricsTimesValid && this.info.tabs[TRACK_TAB].scroll) {
                 let pos = undefined;
                 for (let i=0, loop=this.info.tabs[TRACK_TAB].lines, len=loop.length; i<len; ++i) {
                     if (loop[i].time<=this.playerStatus.current.time) {
@@ -1563,7 +1565,9 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
         lyricsTimesValid() {
             // Lyrics timing positions are only valid if time of first line >= 0
             // ...see comment in nowplayingFetchTrackInfo
-            return this.info.tabs[TRACK_TAB].lines && this.info.tabs[TRACK_TAB].lines[0].time>=0;
+            return this.info.tabs[TRACK_TAB].lines && this.info.tabs[TRACK_TAB].lines[0].time>=0 &&
+                   undefined!=this.playerStatus.current && undefined!=this.playerStatus.current.time && undefined!=this.playerStatus.current.duration &&
+                   this.playerStatus.current.duration<=MAX_LYRICS_DURATION
         }
     },
     beforeDestroy() {

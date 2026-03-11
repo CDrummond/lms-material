@@ -3369,7 +3369,7 @@ function browseSelectVLib(view) {
                 ids.add(item.id);
             }
             libraries.sort(titleSort);
-            libraries.unshift({title: i18n("All"), id:LMS_DEFAULT_LIBRARY, icon:LMS_DEFAULT_LIBRARY==view.$store.state.library ? 'radio_button_checked' : 'radio_button_unchecked'});
+            libraries.unshift({title: i18n("All tracks"), id:LMS_DEFAULT_LIBRARY, icon:LMS_DEFAULT_LIBRARY==view.$store.state.library ? 'radio_button_checked' : 'radio_button_unchecked'});
             choose("Select virtual library to use", libraries).then(resp => {
                 if (undefined!=resp) {
                     let currentLibId = view.$store.state.library;

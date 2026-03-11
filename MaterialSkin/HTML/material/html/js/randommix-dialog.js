@@ -6,6 +6,8 @@
  */
 'use strict';
 
+const LMS_NO_LIB = "";
+
 Vue.component('lms-randommix', {
     template: `
 <v-dialog v-model="show" v-if="show" scrollable width="600">
@@ -235,18 +237,16 @@ Vue.component('lms-randommix', {
             lmsList(this.playerId, ["randomplaylibrarylist"], undefined, 0, 500).then(({data}) => {
                 if (data && data.result && data.result.item_loop && data.result.item_loop.length>0) {
                     this.libraries = [];
-                    this.library = undefined;
+                    this.library = LMS_NO_LIB;
                     for (var i=0, len=data.result.item_loop.length; i<len; ++i) {
                         var id = data.result.item_loop[i].actions.do.cmd[1];
                         if (undefined!=id && (""+id).length>2) {
                             this.libraries.push({name:data.result.item_loop[i].text.replace(SIMPLE_LIB_VIEWS, ""), id:""+id});
-                            if (parseInt(data.result.item_loop[i].radio)==1) {
-                                this.library = ""+id;
-                            }
                         }
                     }
                     this.libraries.sort(nameSort);
-                    this.libraries.unshift({name: i18n("All"), id:LMS_DEFAULT_LIBRARY});
+                    this.libraries.unshift({name: i18n("All tracks"), id:LMS_DEFAULT_LIBRARY});
+                    this.libraries.unshift({name: i18n("None"), id:LMS_NO_LIB});
                     if (undefined==this.library || LMS_DEFAULT_LIBRARIES.has(this.library)) {
                         this.library = LMS_DEFAULT_LIBRARY;
                     }
@@ -276,7 +276,7 @@ Vue.component('lms-randommix', {
             this.oldTracks = this.newTracks = 10;
             this.continuous = true;
             this.chosenMix = "tracks";
-            this.library = LMS_DEFAULT_LIBRARY;
+            this.library = LMS_NO_LIB;
             this.libraries = [];
 
             let loaded = 0;
@@ -298,7 +298,8 @@ Vue.component('lms-randommix', {
                         this.libraries.push(list[i]);
                     }
                     this.libraries.sort(nameSort);
-                    this.libraries.unshift({name: i18n("All"), id:LMS_DEFAULT_LIBRARY});
+                    this.libraries.unshift({name: i18n("All tracks"), id:LMS_DEFAULT_LIBRARY});
+                    this.libraries.unshift({name: i18n("None"), id:LMS_NO_LIB});
                 }
                 loaded++;
                 if (andPlay && 3==loaded) {
@@ -332,9 +333,7 @@ Vue.component('lms-randommix', {
                             this.newTracks = 10;
                         }
                     }
-                    if (undefined!=data.result.library) {
-                        this.library = data.result.library;
-                    }
+                    this.library = data.result.library ? data.result.library : LMS_NO_LIB;
                     if (undefined==this.library || LMS_DEFAULT_LIBRARIES.has(this.library)) {
                         this.library = LMS_DEFAULT_LIBRARY;
                     }
@@ -362,6 +361,9 @@ Vue.component('lms-randommix', {
             lmsCommand("", ["pref", "plugin.randomplay:newtracks", this.newTracks]);
             lmsCommand("", ["pref", "plugin.randomplay:oldtracks", this.oldTracks]);
             let libId = this.library;
+            if (libId==LMS_NO_LIB && lmsOptions.setPlayerLibrary) {
+                libId = this.$store.state.library;
+            }
             if (libId==LMS_DEFAULT_LIBRARY && LMS_VERSION<80502) {
                 libId=LMS_DEFAULT_LIBRARY_PREV;
             }

@@ -1623,12 +1623,12 @@ var lmsBrowse = Vue.component("lms-browse", {
                 if (data && data.result && data.result.folder_loop && data.result.folder_loop.length>0) {
                     for (var i=0, loop=data.result.folder_loop, len=loop.length; i<len; ++i) {
                         if (loop[i].id == this.$store.state.library) {
-                            this.libraryName=LMS_DEFAULT_LIBRARIES.has(""+loop[i]) ? i18n("All") : loop[i].name.replace(SIMPLE_LIB_VIEWS, "");
+                            this.libraryName=LMS_DEFAULT_LIBRARIES.has(""+loop[i]) ? i18n("All tracks") : loop[i].name.replace(SIMPLE_LIB_VIEWS, "");
                             break;
                         }
                     }
                     if (undefined==this.libraryName) {
-                        this.libraryName=i18n("All");
+                        this.libraryName=i18n("All tracks");
                     }
                 }
             });

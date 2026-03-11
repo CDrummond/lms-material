@@ -185,11 +185,15 @@ function lmsCommand(playerid, command, commandId, timeout) {
 
     // Set player's library to current vlib
     if (lmsOptions.setPlayerLibrary && undefined!=playerid && bus && bus.$store && bus.$store.state && bus.$store.state.player && bus.$store.state.player.id==playerid && undefined!=bus.$store.state.library && command.length>=2) {
+        console.log(command[0], command[1], bus.$store.state.player.trkcount);
         if (command[0]=="playlistcontrol" && (command[1]=="cmd:load" || bus.$store.state.player.trkcount==0)) {
-            axios.post(URL, { id:0, method: "slim.request", params: [playerid, ["material-skin-client", "set-lib", "id:"+bus.$store.state.library, "store:1"]]});
-        } else if (command[0]=="playlist" && command[1]=="clear") {
+            setTimeout(function () {
+                axios.post(URL, { id:0, method: "slim.request", params: [playerid, ["material-skin-client", "set-lib", "id:"+bus.$store.state.library, "store:1"]]});
+            }, 500);
+        }/* Restore happens in Plugin.pm, it monitors for changes.
+            else if (command[0]=="playlist" && command[1]=="clear") {
             axios.post(URL, { id:0, method: "slim.request", params: [playerid, ["material-skin-client", "set-lib", "restore:1"]]});
-        }
+        }*/
     }
 
     logJsonMessage("REQ", data.params);

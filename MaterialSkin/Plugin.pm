@@ -341,11 +341,12 @@ sub initPlugin {
     if (Slim::Utils::Versions->compareVersions($::VERSION, '8.4.0') < 0) {
         Slim::Utils::Timers::setTimer(undef, Time::HiRes::time() + 15, \&_checkUpdates);
     }
+    Slim::Control::Request::subscribe(\&_playQueueCleared, [['playlist'], ['clear']]);
 }
 
-#sub shutdownPlugin {
-#    Slim::Control::Request::unsubscribe(\&_playQueueCleared);
-#}
+sub shutdownPlugin {
+    Slim::Control::Request::unsubscribe(\&_playQueueCleared);
+}
 
 sub getPluginVersion {
     return $pluginVersion;
@@ -595,6 +596,26 @@ sub signalHomeExtraUpdate {
 #        });
 #    }
 #}
+
+sub _playQueueCleared {
+    my $request = shift;
+    my $client  = $request->client();
+    if (!$client || !$prefs->get('setPlayerLibrary')) {
+        return;
+    }
+
+    my $prevLib = $prefs->client($client)->get('libraryId');
+    if ($prevLib) {
+        my $currentLib = $serverprefs->client($client)->get('libraryId');
+        if ($currentLib ne $prevLib) {
+            main::DEBUGLOG && $log->debug("Restore lib id ${prevLib}");
+            $serverprefs->client($client)->set('libraryId', $prevLib);
+            $serverprefs->client($client)->remove('libraryId') unless $prevLib;
+            Slim::Utils::Timers::setTimer($client, Time::HiRes::time() + 0.1, sub {Slim::Schema->totals($client);});
+        }
+        $prefs->client($client)->remove('libraryId');
+    }
+}
 
 sub _getUrlQueryParam {
     my $uri = shift;

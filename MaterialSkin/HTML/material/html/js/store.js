@@ -408,7 +408,7 @@ const store = new Vuex.Store({
                     state.players[i].isgroup = player.isgroup;
                     state.players[i].icon = player.icon;
                     state.players[i].color = player.color;
-                    state.players[i].trkcount = player.playlist.count;
+                    state.players[i].trkcount = player.playlist ? player.playlist.count : 0;
                     if (state.player!=undefined && player.id == state.player.id) {
                         state.player.name = player.name;
                         state.player.ison = player.ison;
@@ -417,6 +417,7 @@ const store = new Vuex.Store({
                         state.player.isgroup = player.isgroup;
                         state.player.icon = player.icon;
                         state.player.color = player.color;
+                        state.player.trkcount = player.playlist ? player.playlist.count : 0;
                     }
                     break;
                 }
@@ -447,7 +448,6 @@ const store = new Vuex.Store({
                     state.players[i].icon = players[i].icon;
                     state.players[i].color = players[i].color;
                     state.players[i].link = players[i].link;
-                    state.players[i].trkcount = players[i].trkcount;
                 }
                 return;
             }

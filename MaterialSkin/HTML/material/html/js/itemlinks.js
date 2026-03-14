@@ -43,6 +43,10 @@ function show_composer(event, id, title, page) {
     showArtistRole(event, id, title, page, "COMPOSER");
 }
 
+function show_composer_works(event, id, title, page) {
+    browseItem(event, ["works"], ["artist_id:"+id, "include_online_only_artists:1"], unescape(title), page);
+}
+
 function show_conductor(event, id, title, page) {
     showArtistRole(event, id, title, page, "CONDUCTOR");
 }
@@ -235,7 +239,7 @@ function buildWorkLine(i, page, plain) {
         if (i.work_id && (!IS_MOBILE || lmsOptions.touchLinks) && !plain) {
             var composerId = i.composer_id || (i.composer_ids && i.composer_ids[0]);
             var composerPart = composerId
-                ? buildLink('show_composer', composerId, i.composer, page)
+                ? buildLink('show_composer_works', composerId, i.composer, page)
                 : i.composer;
             var workText = i.work;
             if (i.performance) {

@@ -1624,7 +1624,9 @@ function parseBrowseResp(data, parent, options, cacheKey) {
                                     splitIntoGroups = false; // Group is split?
                                 }
                             } else {
-                                groupings.set(groupingTitle, {pos: resp.items.length, total:1, duration:duration, title:groupingTitle, id:(groupings.size+1)});
+                                groupings.set(groupingTitle, {pos: resp.items.length, total:1, duration:duration, title:groupingTitle, id:(groupings.size+1),
+                                                                  composer:i.composer, composer_id:i.composer_id, composer_ids:i.composer_ids,
+                                                                  work:i.work, work_id:i.work_id, performance:i.performance});
                             }
                         }
                     }
@@ -1870,9 +1872,10 @@ function parseBrowseResp(data, parent, options, cacheKey) {
                     for (let k of groupings.keys()) {
                         let grouping = groupings.get(k);
                         let title = grouping.title;
+                        let htmlTitle = buildWorkLine(grouping, 'browse');
 
                         resp.items.splice(grouping.pos+d, 0,
-                                           {title:title, jump:grouping.pos+d,
+                                           {title:title, htmlTitle:htmlTitle, jump:grouping.pos+d,
                                             subtitle: i18np("1 Track", "%1 Tracks", grouping.total), durationStr:formatSeconds(grouping.duration),
                                             id:FILTER_PREFIX+grouping.id, header:true, menu:[PLAY_ALL_ACTION, INSERT_ALL_ACTION, PLAY_SHUFFLE_ALL_ACTION, ADD_ALL_ACTION, DIVIDER, SELECT_ACTION]});
                         resp.numHeaders++;

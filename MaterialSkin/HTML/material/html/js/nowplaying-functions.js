@@ -820,7 +820,7 @@ function nowplayingFetchArtistInfo(view) {
             view.info.tabs[ARTIST_TAB].count = ids.length;
             view.info.tabs[ARTIST_TAB].details = [];
             for (let i=0, len=ids.length; i<len; ++i) {
-                lmsCommand(view.playerId(), ["musicartistinfo", "biography", "artist_id:"+ids[i], "html:1"], view.info.tabs[ARTIST_TAB].reqId).then(({data}) => {
+                lmsCommand(view.playerId(), ["musicartistinfo", "biography", "artist_id:"+ids[i], "html:1", "album:"+view.infoTrack.album], view.info.tabs[ARTIST_TAB].reqId).then(({data}) => {
                     logJsonMessage("RESP", data);
                     if (data && view.isCurrent(data, ARTIST_TAB)) {
                         if (data.result && data.result.biography) {
@@ -858,13 +858,13 @@ function nowplayingFetchArtistInfo(view) {
                 });
             }
         } else if (undefined!=artist_id || undefined!=artist) {
-            let command = ["musicartistinfo", "biography", "html:1"];
+            let command = ["musicartistinfo", "biography", "html:1", "album:"+view.infoTrack.album];
             if (undefined!=artist_id) {
                 command.push("artist_id:"+artist_id);
             } else {
                 command.push("artist:"+revertHtmlBrackets(artist));
             }
-            if (3==command.length) { // No details?
+            if (4==command.length) { // No details?
                 view.info.tabs[ARTIST_TAB].text=undefined;
             } else {
                 lmsCommand(view.playerId(), command, view.info.tabs[ARTIST_TAB].reqId).then(({data}) => {

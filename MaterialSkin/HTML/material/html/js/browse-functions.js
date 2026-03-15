@@ -800,7 +800,7 @@ function browseHandleListResponse(view, item, command, resp, prevPage, appendIte
 function browseReplaceAction(view, id, actions, singleText, multiText, key) {
     for (let i=view.currentActions.length-1; i>=0; --i) {
         if (undefined!=view.currentActions[i].id && view.currentActions[i].id==id) {
-            insertPos = i;
+            let insertPos = i;
             // Remove current entry
             view.currentActions.splice(i, 1);
 
@@ -931,10 +931,10 @@ function browseAddWorks(view, curitem) {
                     if (isEmpty(key)) {
                         key = 'ALBUM';
                     }
-                    icon = releaseTypeIcon(key);
+                    let icon = releaseTypeIcon(key);
                     jumplist.push({key:SECTION_JUMP, index:items.length, header:true, icon:icon});
                     items.push({title:releaseTypeHeader(key)+" ("+existing+")", id:FILTER_PREFIX+key, header:true,
-                                icon: icon.icon, svg: icon.svg,
+                                icon:icon.icon, svg:icon.svg,
                                 menu:[PLAY_ALL_ACTION, INSERT_ALL_ACTION, PLAY_SHUFFLE_ALL_ACTION, ADD_ALL_ACTION], count:existing});
                 }
                 let offset = items.length;

@@ -3124,11 +3124,11 @@ div.v-subheader {
 }
 
 .browse-header .v-list__tile__title .link-item {
- color:var(--text-color) !important;
+ color:var(--active-color) !important;
 }
 
 .msk-is-non-touch .browse-header .v-list__tile__title .link-item:hover {
- color:var(--active-color) !important;
+ color:var(--text-color) !important;
 }
 
 .browse-header .v-list__tile__sub-title, .browse-header .browse-time, .browse-header .np-list-time,

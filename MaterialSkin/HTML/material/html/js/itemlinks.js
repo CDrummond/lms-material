@@ -250,11 +250,10 @@ function buildWorkLine(i, page, plain) {
                     ? buildLink('show_composer_works', composerId, i.composer, page)
                     : i.composer;
             }
-            var workText = i.work;
+            var workPart = "<obj class=\"link-item\" onclick=\"showWork(event, "+i.work_id+",\'"+escape(i.work)+"\',\'"+(i.performance ? escape(i.performance) : "")+"\',\'"+escape(i.composer)+"\',\'"+page+"\')\">"+i.work+"</obj>";
             if (i.performance) {
-                workText += SEPARATOR + i.performance;
+                workPart += SEPARATOR + i.performance;
             }
-            var workPart = "<obj class=\"link-item\" onclick=\"showWork(event, "+i.work_id+",\'"+escape(i.work)+"\',\'"+(i.performance ? escape(i.performance) : "")+"\',\'"+escape(i.composer)+"\',\'"+page+"\')\">"+workText+"</obj>";
             line = addPart(line, composerPart + SEPARATOR + workPart);
         } else {
             var work = (i.composers && i.composers.length > 1 ? i.composers.join(SEPARATOR) : i.composer) + SEPARATOR + i.work;

@@ -3260,7 +3260,7 @@ function browseGoToItem(view, cmd, params, title, page, clearHistory, subtitle) 
             });
         }
     } else {
-        view.fetchItems(view.replaceCommandTerms({command:cmd, params:params}), {cancache:false, id:params[0], title:title, subtitle:subtitle, stdItem:params[0].startsWith("artist_id:") ? STD_ITEM_ARTIST : STD_ITEM_ALBUM}, page);
+        view.fetchItems(view.replaceCommandTerms({command:cmd, params:params}), {cancache:false, id:params[0], title:title, subtitle:subtitle, stdItem:cmd[0]=="works" ? STD_ITEM_WORK_COMPOSER : (params[0].startsWith("artist_id:") ? STD_ITEM_ARTIST : STD_ITEM_ALBUM)}, page);
     }
 }
 

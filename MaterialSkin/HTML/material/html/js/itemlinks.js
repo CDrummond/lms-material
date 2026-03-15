@@ -241,7 +241,7 @@ function buildWorkLine(i, page, plain) {
             if (i.composers && i.composers.length > 1 && i.composer_ids && i.composer_ids.length == i.composers.length) {
                 let parts = [];
                 for (let c = 0; c < i.composers.length; ++c) {
-                    parts.push(buildLink('show_composer', i.composer_ids[c], i.composers[c], page));
+                    parts.push(buildLink('show_composer_works', i.composer_ids[c], i.composers[c], page));
                 }
                 composerPart = parts.join(SEPARATOR);
             } else {

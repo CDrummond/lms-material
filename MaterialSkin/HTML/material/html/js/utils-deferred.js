@@ -464,7 +464,18 @@ const ALBUM_SORT_KEY = "albumSort";
 const ARTIST_ALBUM_SORT_KEY = "artistAlbumSort";
 const WORK_ALBUM_SORT_KEY = "workAlbumSort";
 
-function commandAlbumSortKey(command, genre) {
+function commandAlbumSortKey(command, genre, item) {
+    // Allow category specific sort for myMusicXXX entries
+    if (undefined!=item) {
+        let cat = item.mmcat ? item.mmcat : undefined;
+        if (undefined==cat && item.id.startsWith(MUSIC_ID_PREFIX+"myMusic")) {
+            cat = item.id.substring(MUSIC_ID_PREFIX.length);
+        }
+        if (undefined!=cat) {
+            return cat+"_Sort";
+        }
+    }
+
     var isArtist = false;
     var isCompilation = false;
     var isWorks = false;
@@ -490,8 +501,8 @@ function commandAlbumSortKey(command, genre) {
 const VALID_ALBUM_SORTS = new Set(["album", "artistalbum", "artflow", "yearalbum", "yearartistalbum", "new"]);
 const VALID_TRACK_SORTS = new Set(["title", "tracknum", "albumtrack", "yearalbumtrack", "artisttitle", "yeartitle"]);
 
-function getAlbumSort(command, genre) {
-    let key = commandAlbumSortKey(command, genre);
+function getAlbumSort(command, genre, item) {
+    let key = commandAlbumSortKey(command, genre, item);
     let def = ALBUM_SORT_KEY==key || (ALBUM_SORT_KEY+"C")==key ? "album" : "yearalbum";
     let parts = getLocalStorageVal(key, def).split(".");
     let val = {by:parts[0], rev:parts.length>1};
@@ -501,8 +512,8 @@ function getAlbumSort(command, genre) {
     return val;
 }
 
-function setAlbumSort(command, genre, sort, reverse) {
-    setLocalStorageVal(commandAlbumSortKey(command, genre), sort+(reverse ? ".r" : ""));
+function setAlbumSort(command, genre, sort, reverse, item) {
+    setLocalStorageVal(commandAlbumSortKey(command, genre, item), sort+(reverse ? ".r" : ""));
 }
 
 function getTrackSort(stdItem) {

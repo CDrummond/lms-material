@@ -2563,6 +2563,7 @@ function parseBrowseModes(view, data, genreFilter, yearFilter, altId, excludeWor
                          params: command.params,
                          weight: c.weight ? parseFloat(c.weight) : 100,
                          id: undefined!=genreFilter || undefined!=yearFilter ? uniqueId(undefined!=genreFilter ? genreFilter : yearFilter, resp.items.length) : (MUSIC_ID_PREFIX+c.id),
+                         mmcat: c.id, // Save original category type for album sorts
                          type: "group",
                          icon: "music_note"
                         };

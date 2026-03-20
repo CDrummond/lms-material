@@ -2024,7 +2024,7 @@ function browseHeaderAction(view, act, event, ignoreOpenMenus) {
     } else if (USE_GRID_ACTION==act || USE_ALT_GRID_ACTION==act) {
         view.changeLayout(true);
     } else if (ALBUM_SORTS_ACTION==act || TRACK_SORTS_ACTION==act) {
-        var currentSort=ALBUM_SORTS_ACTION==act ? getAlbumSort(view.command, view.inGenre) : getTrackSort(item.stdItem);
+        var currentSort=ALBUM_SORTS_ACTION==act ? getAlbumSort(view.command, view.inGenre, undefined!=item ? item : undefined) : getTrackSort(item.stdItem);
         var menuItems=[];
         var sorts=ALBUM_SORTS_ACTION==act ? B_ALBUM_SORTS : B_TRACK_SORTS;
         for (var i=0,len=sorts.length; i<len; ++i) {
@@ -2051,7 +2051,7 @@ function browseHeaderAction(view, act, event, ignoreOpenMenus) {
                         view.command.params.push(MSK_REV_SORT_OPT);
                     }
                     if (ALBUM_SORTS_ACTION==act) {
-                        setAlbumSort(view.command, view.inGenre, sort, reverseSort);
+                        setAlbumSort(view.command, view.inGenre, sort, reverseSort, undefined!=item ? item : undefined);
                     } else {
                         let stdItem = view.current.stdItem ? view.current.stdItem : view.current.altStdItem;
                         setTrackSort(getTrackSort(stdItem).by, reverseSort, stdItem);
@@ -2065,7 +2065,7 @@ function browseHeaderAction(view, act, event, ignoreOpenMenus) {
                         }
                     }
                     if (ALBUM_SORTS_ACTION==act) {
-                        setAlbumSort(view.command, view.inGenre, sort.key, currentSort.rev);
+                        setAlbumSort(view.command, view.inGenre, sort.key, currentSort.rev, undefined!=item ? item : undefined);
                     } else {
                         setTrackSort(sort.key, currentSort.rev, view.current.stdItem ? view.current.stdItem : view.current.altStdItem);
                     }
@@ -2778,7 +2778,7 @@ function browseReplaceCommandTerms(view, cmd, item) {
                 }
             } else if (cmd.params[i].startsWith(SORT_KEY+ALBUM_SORT_PLACEHOLDER) ||
                        cmd.params[i].startsWith(SORT_KEY+ARTIST_ALBUM_SORT_PLACEHOLDER)) {
-                var sort=getAlbumSort(cmd, view.inGenre);
+                var sort=getAlbumSort(cmd, view.inGenre, undefined!=item ? item : undefined);
                 // Remove "sort:album" from "playlistcontrol" - LMS fails on this.
                 if (LMS_VERSION<80500 && 'album'==sort.by && isPlayListControl) {
                     cmd.params.splice(i, 1);

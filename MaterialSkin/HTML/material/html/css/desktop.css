@@ -540,8 +540,8 @@
  right:calc(var(--pq-unpinned-width) + 28px) !important;
 }
 
-.unpinned-queue-visible .menu-btn,
-.unpinned-queue-visible .menu-btn:hover {
+.unpinned-queue-visible div[role=listitem] .menu-btn,
+.unpinned-queue-visible div[role=listitem] .menu-btn:hover {
  position:absolute;
  right:calc(var(--pq-unpinned-width) + 8px)!important;
 }

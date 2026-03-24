@@ -10,6 +10,7 @@
 7. Store album sort order per main 'My Music' view.
 8. Remove 'Set rating for all tracks' and 'Information' from MAI album context
    menu.
+9. Fix grid hover buttons in desktop layout when unpinned queue is shown.
 
 6.2.3
 -----

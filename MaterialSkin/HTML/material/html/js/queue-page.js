@@ -82,7 +82,7 @@ function buildArtistAlbumLines(i, queueAlbumStyle, queueContext) {
             if (albumGroupingType(i.disccount, ALWAYS_GROUP_HEADING, i.contiguous_groups, i.added_from_work)==MULTI_GROUP_ALBUM) {
                 if (work) {
                     // track has a work tag
-                    artistAlbum = addPart(work, i.work!=i.grouping ? i.grouping : undefined)+'<br/><div class="pq-gsub ellipsis">'+artistAlbum+'</div>';
+                    artistAlbum = work+'<br/><div class="pq-gsub ellipsis">'+artistAlbum+'</div>';
                     ws = true;
                 } else if (i.grouping) {
                     // track has a grouping tag

@@ -251,12 +251,18 @@ function buildWorkLine(i, page, plain) {
                     : i.composer;
             }
             var workPart = "<obj class=\"link-item\" onclick=\"showWork(event, "+i.work_id+",\'"+escape(i.work)+"\',\'"+(i.performance ? escape(i.performance) : "")+"\',\'"+escape(i.composer)+"\',\'"+page+"\')\">"+i.work+"</obj>";
+            if (i.grouping && i.grouping != i.work) {
+                workPart += SEPARATOR + i.grouping;
+            }
             if (i.performance) {
                 workPart += SEPARATOR + i.performance;
             }
             line = addPart(line, composerPart + SEPARATOR + workPart);
         } else {
             var work = (i.composers && i.composers.length > 1 ? i.composers.join(SEPARATOR) : i.composer) + SEPARATOR + i.work;
+            if (i.grouping && i.grouping != i.work) {
+                work += SEPARATOR + i.grouping;
+            }
             if (i.performance) {
                 work += SEPARATOR + i.performance;
             }

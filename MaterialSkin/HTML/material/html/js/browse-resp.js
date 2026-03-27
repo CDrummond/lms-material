@@ -2549,7 +2549,7 @@ function parseBrowseResp(data, parent, options, cacheKey) {
 }
 
 function parseBrowseModes(view, data, genreFilter, yearFilter, altId, excludeWorks) {
-    let resp={stdItems:new Set(), items:[], listWorks:false};
+    let resp={stdItems:new Set(), items:[], listWorks:false, artist:[], release:[], other:[]};
     if (data && data.result && data.result.modes_loop) {
         for (var idx=0, loop=data.result.modes_loop, loopLen=loop.length; idx<loopLen; ++idx) {
             var c = loop[idx];
@@ -2725,6 +2725,13 @@ function parseBrowseModes(view, data, genreFilter, yearFilter, altId, excludeWor
                 item.params.push(altId);
             }
             resp.items.push(item);
+            if (c.id.endsWith("Albums") || c.id.endsWith("Works") || c.id.endsWith("myMusicAlbumsVariousArtists") || c.id.endsWith("myMusicNewMusic")) {
+                resp.release.push(item);
+            } else if (c.id.endsWith("Artists")) {
+                resp.artist.push(item);
+            } else {
+                resp.other.push(item);
+            }
         }
     }
     return resp;

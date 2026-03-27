@@ -57,7 +57,8 @@ var lmsOptions = {techInfo: getLocalStorageBool('techInfo', false),
                   classicalGenres: new Set(["Classical"]),
                   homeExtraNeedsPlayer: new Set(),
                   home3rdPartyExtraLists: LMS_3RDPARTY_HOME_EXTRA,
-                  setPlayerLibrary: getLocalStorageBool('setPlayerLibrary', false)
+                  setPlayerLibrary: getLocalStorageBool('setPlayerLibrary', false),
+                  groupCategories: getLocalStorageBool('groupCategories', true)
                 };
 
 function initLmsOptions() {

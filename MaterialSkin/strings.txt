@@ -1034,8 +1034,3 @@ PLUGIN_MATERIAL_SKIN_SET_PLAYER_LIB
 PLUGIN_MATERIAL_SKIN_SET_PLAYER_LIB_DESC
 	EN	When adding track's to an empty player queue first set player's library to match that currently browsing with. When clearing queue reset player's library to its previous setting.
 
-PLUGIN_MATERIAL_GROUP_CATEGORIES
-	EN	Group 'My Music' items
-
-PLUGIN_MATERIAL_GROUP_CATEGORIES_DESC
-	EN	Group entries within 'My Music' into 'By Artist', 'By Album/Release', and 'Other'.

@@ -451,10 +451,17 @@ Vue.component('lms-ui-settings', {
  <v-dialog v-model="browseModesDialog.show" :width="browseModesDialog.wide ? 750 : 500" persistent style="overflow:hidden" v-if="browseModesDialog.show">
   <v-card>
    <v-card-title>{{i18n("Browse modes")}}</v-card-title>
-   <div class="browse-modes-table dialog-main-list">
+   <div class="dialog-main-list browse-modes-table">
     <v-checkbox v-for="(item, i) in browseModesDialog.modes" v-model="browseModesDialog.modes[i].enabled" :label="browseModesDialog.modes[i].text" error-count="0" hide-details></v-checkbox>
    </div>
-   <div class="dialog-padding"></div>
+   <v-divider></v-divider>
+   <v-list-tile style="margin-top:8px">
+    <v-list-tile-content @click="browseModesDialog.categorize=!browseModesDialog.categorize" class="switch-label">
+     <v-list-tile-title>{{i18n('Split into categories')}}</v-list-tile-title>
+     <v-list-tile-sub-title>{{i18n("Categorise the enabled modes into 'By Artist', 'By Album/Release', or 'Other'.")}}</v-list-tile-sub-title>
+    </v-list-tile-content>
+    <v-list-tile-action><m3-switch v-model="browseModesDialog.categorize"></m3-switch></v-list-tile-action>
+   </v-list-tile>
    <v-card-actions>
     <v-spacer></v-spacer>
     <v-btn flat @click="browseModesDialog.show = false">{{i18n('Close')}}</v-btn>
@@ -550,7 +557,8 @@ Vue.component('lms-ui-settings', {
             browseModesDialog: {
                 show: false,
                 wide: false,
-                modes: []
+                modes: [],
+                categorize: true,
             },
             screensaver: 0,
             screensavers:[],
@@ -619,6 +627,7 @@ Vue.component('lms-ui-settings', {
             this.initHomeItems();
             this.readStore();
             this.password = getLocalStorageVal('password', '');
+            this.browseModesDialog.categorize = getLocalStorageBool('groupMyMusicCategories', this.browseModesDialog.categorize);
             if (this.allowLayoutAdjust) {
                 this.layout = getLocalStorageVal("layout", "auto");
                 this.layoutOrig = this.layout;
@@ -864,6 +873,11 @@ Vue.component('lms-ui-settings', {
             this.show=false;
             this.showMenu = false;
             this.$store.commit('setUiSettings', this.settings(false, false) );
+            if (lmsOptions.groupMyMusicCategories != this.browseModesDialog.categorize) {
+                lmsOptions.groupMyMusicCategories = this.browseModesDialog.categorize;
+                setLocalStorageVal('groupMyMusicCategories', lmsOptions.groupMyMusicCategories);
+                bus.$emit('groupMyMusicCategoriesChanged');
+            }
 
             if (this.allowLayoutAdjust && (this.layout != this.layoutOrig)) {
                 setLocalStorageVal("layout", this.layout);
@@ -961,6 +975,7 @@ Vue.component('lms-ui-settings', {
                     i18n('Set Defaults')).then(res => {
                 if (res) {
                     var settings = this.settings(true, true);
+                    settings.groupMyMusicCategories = this.browseModesDialog.categorize;
                     settings.pinQueue = this.$store.state.pinQueue;
                     settings.mai = {showTabs: getLocalStorageBool("showTabs", false),
                                     npScrollLyrics: getLocalStorageBool("npScrollLyrics", true),
@@ -995,6 +1010,10 @@ Vue.component('lms-ui-settings', {
                                 this.readStore();
                                 for (var idx=0, loop=this.browseModesDialog.modes, loopLen=loop.length; idx<loopLen; ++idx) {
                                     loop[idx].enabled=!this.$store.state.disabledBrowseModes.has(loop[idx].id);
+                                }
+                                if (undefined!=prefs['groupMyMusicCategories']) {
+                                    lmsOptions.groupMyMusicCategories = prefs['groupMyMusicCategories'];
+                                    setLocalStorageVal('groupMyMusicCategories', lmsOptions.groupMyMusicCategories);
                                 }
                             } catch(e) {
                             }

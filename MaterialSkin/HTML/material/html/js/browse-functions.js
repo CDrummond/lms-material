@@ -2485,7 +2485,8 @@ function browseMyMusicMenu(view) {
             logJsonMessage("RESP", data);
             // Get basic, configurable, browse modes...
             var resp = parseBrowseModes(view, data);
-            view.myMusic = resp.items;
+            view.myMusicAll = resp.items;
+            view.myMusic = view.myMusicAll;
             view.myMusicArtist = resp.artist;
             view.myMusicRelease = resp.release;
             view.myMusicOther = resp.other;
@@ -3426,7 +3427,7 @@ function browseSelectVLib(view) {
 }
 
 function browseSortCategories(all, artist, release, other) {
-    if (lmsOptions.groupCategories && (artist.length>1 || release.length>1)) {
+    if (lmsOptions.groupMyMusicCategories && (artist.length>1 || release.length>1)) {
         let items = [];
         if (artist.length>0) {
             items.push({title:i18n("By Artist"), id:"car", header:true, svg:"artist"});

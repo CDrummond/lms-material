@@ -233,8 +233,7 @@ sub initPlugin {
             npSwitchTimeout => 5*60,
             useDefaultForSettings => 0,
             useGrouping => 1,
-            setPlayerLibrary => 0,
-            groupCategories => 1
+            setPlayerLibrary => 0
         });
     } else {
         $prefs->init({
@@ -266,8 +265,7 @@ sub initPlugin {
             npSwitchTimeout => 5*60,
             useDefaultForSettings => 0,
             useGrouping => 1,
-            setPlayerLibrary => 0,
-            groupCategories => 1
+            setPlayerLibrary => 0
         });
     }
     $prefs->setChange(sub { $prefs->set($_[0], 0) unless defined $_[1]; }, 'maiComposer');
@@ -288,7 +286,6 @@ sub initPlugin {
     $prefs->setChange(sub { $prefs->set($_[0], 0) unless defined $_[1]; }, 'useDefaultForSettings');
     $prefs->setChange(sub { $prefs->set($_[0], 0) unless defined $_[1]; }, 'useGrouping');
     $prefs->setChange(sub { $prefs->set($_[0], 0) unless $_[1]; }, 'setPlayerLibrary');
-    $prefs->setChange(sub { $prefs->set($_[0], 0) unless $_[1]; }, 'groupCategories');
 
 
     if (main::WEBUI) {
@@ -794,7 +791,6 @@ sub _cliCommand {
         $request->addResult('useDefaultForSettings', $prefs->get('useDefaultForSettings'));
         $request->addResult('useGrouping', $prefs->get('useGrouping'));
         $request->addResult('setPlayerLibrary', $prefs->get('setPlayerLibrary'));
-        $request->addResult('groupCategories', $prefs->get('groupCategories'));
         $request->setStatusDone();
         return;
     }

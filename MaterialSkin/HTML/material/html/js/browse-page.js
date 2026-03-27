@@ -971,6 +971,9 @@ var lmsBrowse = Vue.component("lms-browse", {
         bus.$on('customActions', function() {
             this.loadCustomPinned(this);
         }.bind(this));
+        bus.$on('groupMyMusicCategoriesChanged', function() {
+            this.myMusic=browseSortCategories(this.myMusicAll, this.myMusicArtist, this.myMusicRelease, this.myMusicOther);
+        }.bind(this));
     },
     methods: {
         updateSortStrings() {
@@ -1638,7 +1641,7 @@ var lmsBrowse = Vue.component("lms-browse", {
             browseMyMusicMenu(this);
         },
         processMyMusicMenu() {
-            this.myMusic=browseSortCategories(this.myMusic, this.myMusicArtist, this.myMusicRelease, this.myMusicOther);
+            this.myMusic=browseSortCategories(this.myMusicAll, this.myMusicArtist, this.myMusicRelease, this.myMusicOther);
             for (var i=0, len=this.myMusic.length; i<len; ++i) {
                 if (!this.myMusic[i].header) {
                     this.myMusic[i].menu=[this.options.pinned.has(this.myMusic[i].id) ? UNPIN_ACTION : PIN_ACTION];

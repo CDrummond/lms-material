@@ -59,7 +59,7 @@ var lmsOptions = {techInfo: getLocalStorageBool('techInfo', false),
                   home3rdPartyExtraLists: LMS_3RDPARTY_HOME_EXTRA,
                   userId: getLocalStorageVal('userId', -1),
                   setPlayerLibrary: getLocalStorageBool('setPlayerLibrary', false),
-                  groupCategories: getLocalStorageBool('groupCategories', true)
+                  groupMyMusicCategories: getLocalStorageBool('groupMyMusicCategories', true)
                 };
 
 function initLmsOptions() {

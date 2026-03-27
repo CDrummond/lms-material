@@ -28,6 +28,10 @@
     <input type="checkbox" name="pref_combineAppsAndRadio" id="combineAppsAndRadio" [% IF prefs.combineAppsAndRadio %] checked [% END %] value="1"/>
     [% END %]
 
+    [% WRAPPER setting title="PLUGIN_MATERIAL_GROUP_CATEGORIES" desc="PLUGIN_MATERIAL_GROUP_CATEGORIES_DESC" %]
+    <input type="checkbox" name="pref_cgroupCategories" id="groupCategories" [% IF prefs.groupCategories %] checked [% END %] value="1"/>
+    [% END %]
+
     [% WRAPPER setting title="PLUGIN_MATERIAL_SKIN_RELEASE_TYPE_ORDER" desc="PLUGIN_MATERIAL_SKIN_RELEASE_TYPE_ORDER_DESC" %]
     <textarea class="stdedit" name="pref_releaseTypeOrder" id="releaseTypeOrder" cols="45" rows="5">[% prefs.releaseTypeOrder %]</textarea>
     [% END %]

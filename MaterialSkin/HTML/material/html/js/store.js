@@ -11,7 +11,7 @@ const FAKE_MENU = new Set(['volume', 'groupvolume'])
 var lmsNumVisibleMenus = 0;
 
 function copyPlayer(p){
-    return {id:p.id, name:p.name, isgroup:p.isgroup, model:p.model, ip:p.ip, icon:p.icon, color:p.color, link:p.link, ison:p.ison, isplaying:p.isplaying, iswaiting:p.iswaiting, isconnected:p.isconnected, canpoweroff:p.canpoweroff, islocal:p.islocal};
+    return {id:p.id, name:p.name, isgroup:p.isgroup, model:p.model, ip:p.ip, icon:p.icon, color:p.color, link:p.link, ison:p.ison, isplaying:p.isplaying, iswaiting:p.iswaiting, isconnected:p.isconnected, canpoweroff:p.canpoweroff, islocal:p.islocal, trkcount:p.trkcount};
 }
 
 function setDesktopWideCoverPad(on) {
@@ -408,6 +408,7 @@ const store = new Vuex.Store({
                     state.players[i].isgroup = player.isgroup;
                     state.players[i].icon = player.icon;
                     state.players[i].color = player.color;
+                    state.players[i].trkcount = player.playlist ? player.playlist.count : 0;
                     if (state.player!=undefined && player.id == state.player.id) {
                         state.player.name = player.name;
                         state.player.ison = player.ison;
@@ -416,6 +417,7 @@ const store = new Vuex.Store({
                         state.player.isgroup = player.isgroup;
                         state.player.icon = player.icon;
                         state.player.color = player.color;
+                        state.player.trkcount = player.playlist ? player.playlist.count : 0;
                     }
                     break;
                 }
@@ -645,7 +647,6 @@ const store = new Vuex.Store({
 
             let dhi = getLocalStorageVal('detailedHomeItems', undefined);
             if (undefined!=dhi) {
-                // New format
                 try {
                     state.detailedHomeItems = checkHomeItems(JSON.parse(dhi));
                 } catch (e) { }
@@ -727,6 +728,9 @@ const store = new Vuex.Store({
                         }
                         if (!pinQueueInSettings && undefined!=prefs.pinQueue) {
                             opts.pinQueue=prefs.pinQueue;
+                        }
+                        if (undefined!=prefs.detailedHomeItems && undefined==getLocalStorageVal('detailedHomeItems', undefined)) {
+                            opts.detailedHomeItems=prefs.detailedHomeItems;
                         }
                         updateUiSettings(state, opts);
                     } catch(e) {

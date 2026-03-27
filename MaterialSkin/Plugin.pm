@@ -104,7 +104,7 @@ my %IGNORE_PROTOCOLS = map { $_ => 1 } ('mms', 'file', 'tmp', 'http', 'https', '
 
 my %RADIO_PROTOCOLS = map { $_ => 1 } ('http', 'https', 'accur', 'cplus', 'globalplayer', 'newsuk', 'pr', 'radioparadise', 'rnp', 'sounds', 'times', 'virgin', 'sxm');
 
-my @BOOL_OPTS = ('allowDownload', 'playShuffle', 'touchLinks', 'showAllArtists', 'artistFirst', 'yearInSub', 'showComment', 'genreImages', 'playlistImages', 'maiComposer', 'showConductor', 'showBand', 'showArtistWorks', 'combineAppsAndRadio', 'useGrouping');
+my @BOOL_OPTS = ('allowDownload', 'playShuffle', 'touchLinks', 'showAllArtists', 'artistFirst', 'yearInSub', 'showComment', 'genreImages', 'playlistImages', 'maiComposer', 'showConductor', 'showBand', 'showArtistWorks', 'combineAppsAndRadio', 'useGrouping', 'setPlayerLibrary');
 
 my %ROLE_ICON_MAP = (
     'bass' => 'bassist',
@@ -232,7 +232,8 @@ sub initPlugin {
             screensaverTimeout => 60,
             npSwitchTimeout => 5*60,
             useDefaultForSettings => 0,
-            useGrouping => 1
+            useGrouping => 1,
+            setPlayerLibrary => 0
         });
     } else {
         $prefs->init({
@@ -263,7 +264,8 @@ sub initPlugin {
             screensaverTimeout => 60,
             npSwitchTimeout => 5*60,
             useDefaultForSettings => 0,
-            useGrouping => 1
+            useGrouping => 1,
+            setPlayerLibrary => 0
         });
     }
     $prefs->setChange(sub { $prefs->set($_[0], 0) unless defined $_[1]; }, 'maiComposer');
@@ -283,6 +285,7 @@ sub initPlugin {
     $prefs->setChange(sub { $prefs->set($_[0], 0) unless defined $_[1]; }, 'allowDownload');
     $prefs->setChange(sub { $prefs->set($_[0], 0) unless defined $_[1]; }, 'useDefaultForSettings');
     $prefs->setChange(sub { $prefs->set($_[0], 0) unless defined $_[1]; }, 'useGrouping');
+    $prefs->setChange(sub { $prefs->set($_[0], 0) unless $_[1]; }, 'setPlayerLibrary');
 
     if (main::WEBUI) {
         require Plugins::MaterialSkin::Settings;
@@ -338,11 +341,12 @@ sub initPlugin {
     if (Slim::Utils::Versions->compareVersions($::VERSION, '8.4.0') < 0) {
         Slim::Utils::Timers::setTimer(undef, Time::HiRes::time() + 15, \&_checkUpdates);
     }
+    Slim::Control::Request::subscribe(\&_playQueueCleared, [['playlist'], ['clear']]);
 }
 
-#sub shutdownPlugin {
-#    Slim::Control::Request::unsubscribe(\&_playQueueCleared);
-#}
+sub shutdownPlugin {
+    Slim::Control::Request::unsubscribe(\&_playQueueCleared);
+}
 
 sub getPluginVersion {
     return $pluginVersion;
@@ -593,6 +597,26 @@ sub signalHomeExtraUpdate {
 #    }
 #}
 
+sub _playQueueCleared {
+    my $request = shift;
+    my $client  = $request->client();
+    if (!$client || !$prefs->get('setPlayerLibrary')) {
+        return;
+    }
+
+    my $prevLib = $prefs->client($client)->get('libraryId');
+    if ($prevLib) {
+        my $currentLib = $serverprefs->client($client)->get('libraryId');
+        if ($currentLib ne $prevLib) {
+            main::DEBUGLOG && $log->debug("Restore lib id ${prevLib}");
+            $serverprefs->client($client)->set('libraryId', $prevLib);
+            $serverprefs->client($client)->remove('libraryId') unless $prevLib;
+            Slim::Utils::Timers::setTimer($client, Time::HiRes::time() + 0.1, sub {Slim::Schema->totals($client);});
+        }
+        $prefs->client($client)->remove('libraryId');
+    }
+}
+
 sub _getUrlQueryParam {
     my $uri = shift;
     my $key = shift;
@@ -765,6 +789,7 @@ sub _cliCommand {
         $request->addResult('npSwitchTimeout', $prefs->get('npSwitchTimeout'));
         $request->addResult('useDefaultForSettings', $prefs->get('useDefaultForSettings'));
         $request->addResult('useGrouping', $prefs->get('useGrouping'));
+        $request->addResult('setPlayerLibrary', $prefs->get('setPlayerLibrary'));
         $request->setStatusDone();
         return;
     }
@@ -2419,6 +2444,20 @@ sub _cliClientCommand {
 
     if ($cmd eq 'set-lib') {
         my $id = $request->getParam('id');
+        if ($request->getParam('store')) {
+            my $prev = $serverprefs->client($client)->get('libraryId');
+            if ($prev) {
+                main::DEBUGLOG && $log->debug("Save prev lib id of ${prev}");
+                $prefs->client($client)->set('libraryId', $prev);
+            }
+        }
+
+        if (!$id && $request->getParam('restore')) {
+            $id = $prefs->client($client)->get('libraryId');
+            main::DEBUGLOG && $log->debug("Read prev lib id ${id}");
+        }
+
+        main::DEBUGLOG && $log->debug("Set lib id ${id}");
         $serverprefs->client($client)->set('libraryId', $id);
         $serverprefs->client($client)->remove('libraryId') unless $id;
         Slim::Utils::Timers::setTimer($client, Time::HiRes::time() + 0.1, sub {Slim::Schema->totals($client);});

@@ -2,10 +2,29 @@
 -----
 1. Add support for 'Users' plugin.
 
+6.2.4
+-----
+1. Use different icon for virtual library.
+2. Add server-side option to set player's library when playing.
+3. Allow using 'None' for library in random mix, in which case mix will use
+   player's library.
+4. Only sync lyrics if have valid time and duration.
+5. Pass album name to MAI when asking for biography - thanks to Michael Herger.
+6. Remove 'All tracks' for 'Appearances' header context menu.
+7. Store album sort order per main 'My Music' view.
+8. Remove 'Set rating for all tracks' and 'Information' from MAI album context
+   menu.
+9. Fix grid hover buttons in desktop layout when unpinned queue is shown.
+
 6.2.3
 -----
-1. Only allw drag'n'drop of 'Explore' items in scrolled lists.
+1. Only allow drag'n'drop of 'Explore' items in scrolled lists.
 2. Allow 'Play shuffled' for 'All tracks'.
+3. Send player ID with all MAI commands.
+4. Draw cover background for now-playing even if not rounded.
+5. Fix reading scrolled lists settings from defaults.
+6. Fix selecting header text in MAI view.
+7. Embed logging view into iframe.
 
 6.2.2
 -----

@@ -1360,7 +1360,8 @@ var lmsBrowse = Vue.component("lms-browse", {
                         (!this.items[0].id.startsWith(FILTER_PREFIX) ||
                          (this.items.length < (this.grid.allowed && this.grid.use ? (this.grid.numColumns*10) : 50) ) ) ) ||
                      (((loop[i].stdItem==STD_ITEM_MAI && this.showMaiButton) || (loop[i].stdItem==STD_ITEM_MIX && this.wide>=WIDE_MIX_BTN)) && this.showDetailedSubtoolbar) ||
-                     (loop[i].action==DIVIDER && (0==actions.length || actions[actions.length-1].action==DIVIDER))) {
+                     (loop[i].action==DIVIDER && (0==actions.length || actions[actions.length-1].action==DIVIDER)) ||
+                     ((loop[i].albumRating || loop[i].stdItem==STD_ITEM_MAI) && this.current && this.current.stdItem==STD_ITEM_MAI)) {
                     continue;
                 }
                 if (loop[i].action>-0 && undefined!=document.getElementById("tbar-actions"+loop[i].action)) {
@@ -1623,12 +1624,12 @@ var lmsBrowse = Vue.component("lms-browse", {
                 if (data && data.result && data.result.folder_loop && data.result.folder_loop.length>0) {
                     for (var i=0, loop=data.result.folder_loop, len=loop.length; i<len; ++i) {
                         if (loop[i].id == this.$store.state.library) {
-                            this.libraryName=LMS_DEFAULT_LIBRARIES.has(""+loop[i]) ? i18n("All") : loop[i].name.replace(SIMPLE_LIB_VIEWS, "");
+                            this.libraryName=LMS_DEFAULT_LIBRARIES.has(""+loop[i]) ? i18n("All tracks") : loop[i].name.replace(SIMPLE_LIB_VIEWS, "");
                             break;
                         }
                     }
                     if (undefined==this.libraryName) {
-                        this.libraryName=i18n("All");
+                        this.libraryName=i18n("All tracks");
                     }
                 }
             });

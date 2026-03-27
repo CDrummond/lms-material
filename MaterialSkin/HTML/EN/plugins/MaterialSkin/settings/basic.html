@@ -40,6 +40,10 @@
     <input type="checkbox" name="pref_playShuffle" id="playShuffle" [% IF prefs.playShuffle %] checked [% END %] value="1"/>
     [% END %]
 
+    [% WRAPPER setting title="PLUGIN_MATERIAL_SKIN_SET_PLAYER_LIB" desc="PLUGIN_MATERIAL_SKIN_SET_PLAYER_LIB_DESC" %]
+    <input type="checkbox" name="pref_setPlayerLibrary" id="setPlayerLibrary" [% IF prefs.setPlayerLibrary %] checked [% END %] value="1"/>
+    [% END %]
+
     [% WRAPPER setting title="PLUGIN_MATERIAL_SKIN_TOUCH_LINKS" desc="PLUGIN_MATERIAL_SKIN_TOUCH_LINKS_DESC" %]
     <input type="checkbox" name="pref_touchLinks" id="touchLinks" [% IF prefs.touchLinks %] checked [% END %] value="1"/>
     [% END %]

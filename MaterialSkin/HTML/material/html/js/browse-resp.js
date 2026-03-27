@@ -1299,7 +1299,7 @@ function parseBrowseResp(data, parent, options, cacheKey) {
                         let icon = releaseTypeIcon(key);
                         resp.items.push({title:releaseTypeHeader(key)+" ("+alist.length+")", id:FILTER_PREFIX+key, header:true,
                                         svg: icon.svg, icon: icon.icon,
-                                        menu:alist.length>1
+                                        menu:alist.length>1 && "APPEARANCE" !=key
                                             ? [PLAY_ALL_ACTION, INSERT_ALL_ACTION, PLAY_SHUFFLE_ALL_ACTION, ADD_ALL_ACTION, DIVIDER, ALL_TRACKS_ACTION]
                                             : [PLAY_ALL_ACTION, INSERT_ALL_ACTION, PLAY_SHUFFLE_ALL_ACTION, ADD_ALL_ACTION],
                                         count:alist.length});
@@ -2563,6 +2563,7 @@ function parseBrowseModes(view, data, genreFilter, yearFilter, altId, excludeWor
                          params: command.params,
                          weight: c.weight ? parseFloat(c.weight) : 100,
                          id: undefined!=genreFilter || undefined!=yearFilter ? uniqueId(undefined!=genreFilter ? genreFilter : yearFilter, resp.items.length) : (MUSIC_ID_PREFIX+c.id),
+                         mmcat: c.id, // Save original category type for album sorts
                          type: "group",
                          icon: "music_note"
                         };

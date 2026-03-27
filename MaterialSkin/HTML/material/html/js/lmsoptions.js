@@ -58,6 +58,7 @@ var lmsOptions = {techInfo: getLocalStorageBool('techInfo', false),
                   homeExtraNeedsPlayer: new Set(),
                   home3rdPartyExtraLists: LMS_3RDPARTY_HOME_EXTRA,
                   userId: getLocalStorageVal('userId', -1),
+                  setPlayerLibrary: getLocalStorageBool('setPlayerLibrary', false)
                 };
 
 function initLmsOptions() {

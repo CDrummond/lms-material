@@ -76,7 +76,8 @@ Vue.component('lms-navdrawer', {
   </v-menu>
   <v-list-tile @click.prevent="close">
    <v-list-tile-avatar v-if="(undefined==queryParams.dragleft || queryParams.dragleft<=48) && ('l'!=queryParams.tbarBtnsPos)"><v-btn icon flat @click="show=false"><v-icon>arrow_back<v-icon></v-btn></v-list-tile-avatar>
-   <div class="lyrion-logo" v-longpress:nomove="clickLogo"><img :src="'lyrion' | svgIcon(darkUi)"></img></div>
+   <div v-if="LMS_P_USERS" class="nd-user"><div v-longpress:nomove="switchUser" class="ellipsis">{{userName}}</div></div>
+   <div v-else class="lyrion-logo" v-longpress:nomove="clickLogo"><img :src="'lyrion' | svgIcon(darkUi)"></img></div>
    <v-list-tile-action>
     <v-btn icon @click="menuAction(TB_INFO.id)" style="position:absolute;right:16px" :title="updatesAvailable ? trans.updatesAvailable : restartRequired ? trans.restartRequired : TB_INFO.title">
      <img v-if="updatesAvailable" class="svg-img" :src="'update' | infoIcon(darkUi, true)"></img>
@@ -267,7 +268,8 @@ Vue.component('lms-navdrawer', {
         return {
             show: false,
             showMenu: false,
-            trans:{groupPlayers:undefined, standardPlayers:undefined, connectionLost:undefined, updatesAvailable:undefined, restartRequired:undefined, shortcuts:undefined },
+            trans:{groupPlayers:undefined, standardPlayers:undefined, connectionLost:undefined, updatesAvailable:undefined, restartRequired:undefined,
+                   shortcuts:undefined, generalUser: undefined, unknownUser:undefined },
             menuItems: [],
             shortcuts: [],
             customSystemActions:undefined,
@@ -420,7 +422,8 @@ Vue.component('lms-navdrawer', {
             TB_START_PLAYER.title=i18n('Start player');
             TB_APP_QUIT.title=i18n('Quit');
             this.trans = { groupPlayers:i18n("Group Players"), standardPlayers:i18n("Standard Players"), connectionLost:i18n('Server connection lost!'),
-                           updatesAvailable:i18n('Updates available'), restartRequired:i18n('Restart required'), shortcuts:i18n('Shortcuts') };
+                           updatesAvailable:i18n('Updates available'), restartRequired:i18n('Restart required'), shortcuts:i18n('Shortcuts'),
+                           generalUser:"LYRION", unknownUser:i18n("Unknown") };
             if (LMS_KIOSK_MODE) {
                 this.menuItems = []
             } else {
@@ -651,6 +654,22 @@ Vue.component('lms-navdrawer', {
                 this.statusTimer = undefined;
             }
         },
+        switchUser() {
+            lmsCommand("", ["users", "list"]).then(({data}) => {
+                if (data && data.result && data.result.users_loop) {
+                    let users = [{id:-1, title:this.trans.generalUser}];
+                    for (let i=0, list=data.result.users_loop, len=list.length; i<len; ++i) {
+                        users.push({id:parseInt(list[i].id), title:list[i].name});
+                    }
+                    choose(i18n("Select user profile"), users).then(choice => {
+                        if (undefined!=choice && choice.id!=this.$store.state.user.id) {
+                            this.$store.commit('setUser', {id:choice.id, name:choice.title});
+                        }
+                    });
+                }
+            }).catch(err => {
+            });
+        }
     },
     computed: {
         darkUi () {
@@ -715,6 +734,9 @@ Vue.component('lms-navdrawer', {
         },
         homeButton() {
             return this.$store.state.homeButton
+        },
+        userName() {
+            return this.$store.state.user.id==-1 ? this.trans.generalUser : undefined==this.$store.state.user.name ? this.trans.unknownUser : this.$store.state.user.name
         }
     },
     filters: {

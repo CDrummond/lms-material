@@ -179,8 +179,8 @@ function lmsCommand(playerid, command, commandId, timeout) {
     const URL = "/jsonrpc.js";
     var data = { id: undefined==commandId ? 0 : commandId, method: "slim.request", params: [playerid, command]};
 
-    if (undefined!=lmsOptions.userId && lmsOptions.userId!=-1) {
-        data.params[1].push("user_id:"+lmsOptions.userId);
+    if (bus && bus.$store && bus.$store.state && bus.$store.state.user && bus.$store.state.user.id!=-1) {
+        data.params[1].push("user_id:"+bus.$store.state.user.id);
     }
 
     // Set player's library to current vlib

@@ -395,7 +395,8 @@ const store = new Vuex.Store({
         ndSettingsIcons: false,
         ndSettingsVisible: false,
         cMixSupported: 1==parseInt(getComputedStyle(document.documentElement).getPropertyValue('--color-mix-supported')),
-        detailedHomeItems: [DETAILED_HOME_STD_PREFIX+"new", DETAILED_HOME_STD_PREFIX+"radios", DETAILED_HOME_EXPLORE]
+        detailedHomeItems: [DETAILED_HOME_STD_PREFIX+"new", DETAILED_HOME_STD_PREFIX+"radios", DETAILED_HOME_EXPLORE],
+        user: {id:-1, name:undefined, avatar:undefined}
     },
     mutations: {
         updatePlayer(state, player) {
@@ -685,6 +686,17 @@ const store = new Vuex.Store({
                 });
             }
 
+            if (LMS_P_USERS && !queryParams.party && lmsOptions.userId!=-1) {
+                lmsCommand("", ["users", "details", "id:"+lmsOptions.userId]).then(({data}) => {
+                    if (data && data.result && parseInt(data.result.id)==lmsOptions.userId) {
+                        state.user.id = lmsOptions.userId;
+                        state.user.name = data.result.name;
+                        state.user.avatar = data.result.avatar;
+                    }
+                }).catch(err => {
+                });
+            }
+
             setDesktopWideCoverPad(state.nowPlayingFull);
             // Read defaults, stored on server
             lmsCommand("", ["pref", LMS_MATERIAL_UI_DEFAULT_PREF, "?"]).then(({data}) => {
@@ -946,6 +958,13 @@ const store = new Vuex.Store({
             lmsOptions.home3rdPartyExtraLists = val;
             state.detailedHomeItems = checkHomeItems(state.detailedHomeItems);
             bus.$emit('refresh-home');
+        },
+        setUser(state, user) {
+            state.user.id = user.id;
+            state.user.name = user.name;
+            state.user.avatar = user.avatar;
+            lmsOptions.userId = user.id;
+            setLocalStorageVal('userId', user.id);
         }
     }
 })

@@ -4717,3 +4717,13 @@ div.v-subheader {
  justify-content:right;
  margin-right:8px;
 }
+
+.nd-user {
+ width:100%;
+ display:flex;
+ justify-content:center;
+ border:1px solid var(--text-color);
+ border-radius:22px;
+ margin-left:12px;
+ margin-right:12px;
+}

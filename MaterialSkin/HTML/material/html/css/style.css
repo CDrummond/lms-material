@@ -291,7 +291,7 @@
 .drag-area-right {
  width:var(--window-area-right)!important;
 }
-/* If using window controls, then we need are under navdrawer to not be drag-active whendraer open */
+/* If using window controls, then we need are under navdrawer to not be drag-active when drawer open */
 @media (min-width:501px) {
  .nd-title-fix {
   min-width:calc(400px - (var(--window-area-left) + 70px));
@@ -4719,11 +4719,25 @@ div.v-subheader {
 }
 
 .nd-user {
- width:100%;
+ max-width:228px;
+ min-width:100px;
  display:flex;
  justify-content:center;
- border:1px solid var(--text-color);
+ border:1.5px solid var(--text-color);
  border-radius:22px;
- margin-left:12px;
- margin-right:12px;
+ margin-left:auto;
+ margin-right:auto;
+ padding:0px 12px 0px 12px;
+}
+
+.nd-user div {
+ line-height:32px;
+ height:32px;
+ vertical-align: middle;
+}
+
+@media (max-width:500px) {
+ .nd-user {
+  max-width:130px
+ }
 }

@@ -76,6 +76,9 @@ function buildArtistAlbumLines(i, queueAlbumStyle, queueContext) {
         artistAlbumContext = undefined;
     }
     if (!queueAlbumStyle || !artistIsRemoteTitle) {
+        if (queueAlbumStyle && i.conductor && lmsOptions.showConductor && useConductor(i)) {
+            artistAlbum = addPart(artistAlbum, addArtistLink(i, undefined, "conductor", "show_conductor", "queue", new Set(), (IS_MOBILE && !lmsOptions.touchLinks)));
+        }
         artistAlbum = addPart(artistAlbum, buildAlbumLine(i, 'queue'));
         let work = buildWorkLine(i, 'queue');
         if (queueAlbumStyle) {
@@ -150,7 +153,7 @@ function parseResp(data, showTrackNum, index, showRatings, queueAlbumStyle, queu
                 }
                 let haveRating = showRatings && undefined!=i.rating;
                 if (queueAlbumStyle) {
-                    let extra = buildArtistLine(i, 'queue', false, artist, undefined, isMultiGroup && i.composer && i.work ? false : undefined);
+                    let extra = buildArtistLine(i, 'queue', false, artist, undefined, isMultiGroup && i.composer && i.work ? false : undefined, isMultiGroup ? false : undefined);
                     let addedClass = false;
                     if (!isEmpty(extra)) {
                         addedClass = true;
@@ -565,7 +568,7 @@ var lmsQueue = Vue.component("lms-queue", {
                     }
                     if (this.albumStyle) {
                         let artist = i.albumartist ? i.albumartist : i.artist ? i.artist : i.trackartist;
-                        let extra = buildArtistLine(i, 'queue', false, artist, undefined, isMultiGroup && i.composer && i.work ? false : undefined);
+                        let extra = buildArtistLine(i, 'queue', false, artist, undefined, isMultiGroup && i.composer && i.work ? false : undefined, isMultiGroup ? false : undefined);
                         let addedClass = false;
                         if (!isEmpty(extra)) {
                             addedClass = true;

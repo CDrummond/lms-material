@@ -3326,7 +3326,7 @@ div.v-subheader {
 }
 
 .dialog-main-list {
- max-height:calc(var(--100vh) - 240px);
+ max-height:calc(var(--100vh) - 300px);
  overflow-y:auto;
  overflow-x:hidden;
  display:block;

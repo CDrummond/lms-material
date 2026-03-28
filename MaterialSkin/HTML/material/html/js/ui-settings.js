@@ -455,10 +455,11 @@ Vue.component('lms-ui-settings', {
     <v-checkbox v-for="(item, i) in browseModesDialog.modes" v-model="browseModesDialog.modes[i].enabled" :label="browseModesDialog.modes[i].text" error-count="0" hide-details></v-checkbox>
    </div>
    <v-divider></v-divider>
-   <v-list-tile style="margin-top:8px">
+   <div style="height:8px"></div>
+   <v-list-tile>
     <v-list-tile-content @click="browseModesDialog.categorize=!browseModesDialog.categorize" class="switch-label">
-     <v-list-tile-title>{{i18n('Split into categories')}}</v-list-tile-title>
-     <v-list-tile-sub-title>{{i18n("Categorise the enabled modes into 'By Artist', 'By Album/Release', or 'Other'.")}}</v-list-tile-sub-title>
+     <v-list-tile-title class="ellipsis">{{i18n('Split into categories')}}</v-list-tile-title>
+     <v-list-tile-sub-title class="ellipsis">{{i18n("Categorise enabled modes into 'By Artist', etc.")}}</v-list-tile-sub-title>
     </v-list-tile-content>
     <v-list-tile-action><m3-switch v-model="browseModesDialog.categorize"></m3-switch></v-list-tile-action>
    </v-list-tile>

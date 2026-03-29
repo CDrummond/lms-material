@@ -2107,7 +2107,7 @@ var lmsBrowse = Vue.component("lms-browse", {
                     document.documentElement.style.setProperty('--subtoolbar-image-url', 'url()');
                 }
                 if (this.drawBackdrop) {
-                    url='material/backdrops/browse.jpg';
+                    url=this.searchActive==1 ? 'material/backdrops/search.jpg' : 'material/backdrops/browse.jpg';
                 }
             }
             if (undefined==url || url.endsWith(DEFAULT_COVER) || url.endsWith("/music/undefined/cover")) {

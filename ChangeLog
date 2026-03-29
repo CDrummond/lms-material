@@ -2,6 +2,7 @@
 -----
 1. Add support for 'Users' plugin.
 2. Add option to group 'My Music' categories.
+3. Clear current view when start search.
 
 6.2.4
 -----

@@ -1334,6 +1334,7 @@ function browseItemAction(view, act, origItem, index, event, slimBrowseBaseActio
         if (view.$store.state.visibleMenus.size<1) {
             setLocalStorageVal('search', '');
             view.searchActive = 1;
+            setTimeout(function() {bus.$emit('search-initial')}, 50);
         }
     } else if (act===MORE_ACTION) {
         if (item.allItems && item.allItems.length>0) { // Clicking on 'X Artists' / 'X Albums' / 'X Tracks' search header
@@ -2194,9 +2195,6 @@ function browseGoBack(view, refresh) {
         return;
     } else if (view.searchActive) {
         view.searchActive = 0;
-        if (view.items.length<1 || (undefined==view.items[0].allItems && SEARCH_OTHER_ID!=view.items[0].id)) {
-            return; // Search results not being shown, so '<-' button just closes search field
-        }
     }
     if (view.prevPage) {
         var nextPage = ""+view.prevPage;

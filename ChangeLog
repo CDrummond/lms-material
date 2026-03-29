@@ -5,17 +5,19 @@
 
 6.2.4
 -----
-1. Use different icon for virtual library.
-2. Add server-side option to set player's library when playing.
-3. Allow using 'None' for library in random mix, in which case mix will use
-   player's library.
-4. Only sync lyrics if have valid time and duration.
-5. Pass album name to MAI when asking for biography - thanks to Michael Herger.
-6. Remove 'All tracks' for 'Appearances' header context menu.
-7. Store album sort order per main 'My Music' view.
-8. Remove 'Set rating for all tracks' and 'Information' from MAI album context
-   menu.
-9. Fix grid hover buttons in desktop layout when unpinned queue is shown.
+ 1. Use different icon for virtual library.
+ 2. Add server-side option to set player's library when playing.
+ 3. Allow using 'None' for library in random mix, in which case mix will use
+    player's library.
+ 4. Only sync lyrics if have valid time and duration.
+ 5. Pass album name to MAI when asking for biography - thanks to Michael Herger.
+ 6. Remove 'All tracks' for 'Appearances' header context menu.
+ 7. Store album sort order per main 'My Music' view.
+ 8. Remove 'Set rating for all tracks' and 'Information' from MAI album context
+    menu.
+ 9. Fix grid hover buttons in desktop layout when unpinned queue is shown.
+10. Hide play/add buttons in track list toolbar when search is active.
+11. Fix playlist search results.
 
 6.2.3
 -----

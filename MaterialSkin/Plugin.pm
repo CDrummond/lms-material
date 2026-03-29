@@ -2272,12 +2272,16 @@ sub _cliCommandQuery {
     #
     if ($cmd eq 'playlists') {
         my $folder = $request->getParam('folder_id');
+        my $search = $request->getParam('search');
         my $tags = $request->getParam('tags');
         my $index  = $request->getParam('_index');
         my $quantity = $request->getParam('_quantity');
         my @plcmd = ("playlists", $index, $quantity, "tags:${tags}");
         if ($folder) {
             push(@plcmd, "folder_id:${folder}")
+        }
+        if ($search) {
+            push(@plcmd, "search:${search}")
         }
 
         my @keys = ("id", "playlist", "textkey", "extid", "url");

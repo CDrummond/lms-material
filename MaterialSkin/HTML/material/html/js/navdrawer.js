@@ -135,74 +135,16 @@ Vue.component('lms-navdrawer', {
     </v-list-tile>
    </template>
 
-   <v-divider v-if="playerSectionsDivider"></v-divider>
   </v-list>
   <v-spacer></v-spacer>
-
-  <div v-if="showShortcuts && !ndSettingsVisible">
-   <v-subheader>{{trans.shortcuts}}</v-subheader>
-   <ul class="nd-shortuts" v-bind:class="{'nd-shortuts-wide':maxWidth>320, 'nd-shortuts-1':2==ndShortcuts}">
-    <li v-for="(item, index) in shortcuts">
-     <v-btn icon class="toolbar-button" @click="show=false; bus.$emit('browse-shortcut', item.id)" v-if="!homeButton || item.id!='-'">
-      <v-icon v-if="undefined!=item.icon">{{item.icon}}</v-icon>
-      <img v-else class="svg-img" :src="item.svg | svgIcon(darkUi)"></img>
-     </v-btn>
-    </li>
-   </ul>
-  </div>
-
-  <div v-if="ndSettingsIcons && !ndSettingsVisible">
-   <v-subheader>{{TB_SETTINGS.title}}</v-subheader>
-   <ul class="nd-shortuts" v-bind:class="{'nd-shortuts-wide':maxWidth>320}">
-    <template v-for="(item, index) in menuItems">
-     <li :title="item.title" v-if="item!=DIVIDER && !item.hdr && (TB_PLAYER_SETTINGS.id==item.id ? (player && connected) : (TB_SERVER_SETTINGS.id!=item.id || (unlockAll && connected)))">
-      <v-btn v-if="TB_APP_SETTINGS.id==item.id" :href="queryParams.appSettings" @click="show=false" icon class="toolbar-button">
-       <img class="svg-img" :src="TB_APP_SETTINGS.svg | svgIcon(darkUi)"></img>
-      </v-btn>
-      <v-btn v-else-if="TB_CUSTOM_SETTINGS_ACTIONS.id!=item.id" icon class="toolbar-button" @click="menuAction(item.id)">
-       <v-icon v-if="undefined!=item.icon">{{item.icon}}</v-icon>
-       <img v-else class="svg-img" :src="item.svg | svgIcon(darkUi)"></img>
-      </v-btn>
-     </li>
-     <template v-if="TB_CUSTOM_SETTINGS_ACTIONS.id==item.id && undefined!=customSettingsActions && customSettingsActions.length>0" v-for="(action, actIndex) in customSettingsActions">
-      <li><v-btn icon class="toolbar-button" @click="doCustomAction(action)" :title="action.title" v-if="action.icon || action.svg">
-       <v-icon v-if="action.icon">{{action.icon}}</v-icon><img v-else class="svg-img" :src="action.svg | svgIcon(darkUi)"></img>
-      </v-btn></li>
-     </template>
-    </template>
-   </ul>
-   <lms-navdrawer-system-entries :view="this" v-if="queryParams.appQuit || showCustomSystemActions" @quit="show=false"></lms-navdrawer-system-entries>
-   <div class="nd-bottom"></div>
-  </div>
-  <v-list class="nd-list py-0" v-else-if="!ndSettingsVisible">
-   <template v-for="(item, index) in menuItems">
-    <v-divider v-if="item===DIVIDER"></v-divider>
-    <v-subheader v-else-if="item.hdr">{{item.title}}</v-subheader>
-    <v-list-tile @click="menuAction(item.id)" v-else-if="(TB_UI_SETTINGS.id==item.id) || (TB_PLAYER_SETTINGS.id==item.id && player && connected) || (TB_SERVER_SETTINGS.id==item.id && unlockAll && connected)">
-     <v-list-tile-avatar><img v-if="item.svg" class="svg-img" :src="item.svg | svgIcon(darkUi)"><v-icon v-else>{{item.icon}}</v-icon></v-list-tile-avatar>
-     <v-list-tile-content>
-      <v-list-tile-title>{{item.stitle ? item.stitle : item.title}}</v-list-tile-title>
-     </v-list-tile-content>
-     <v-list-tile-action v-if="item.shortcut && keyboardControl" class="menu-shortcut">{{item.shortcut}}</v-list-tile-action>
-    </v-list-tile>
-    <v-list-tile v-else-if="TB_APP_SETTINGS.id==item.id" :href="queryParams.appSettings" @click="show=false">
-     <v-list-tile-avatar><img class="svg-img" :src="TB_APP_SETTINGS.svg | svgIcon(darkUi)"></img></v-list-tile-avatar>
-     <v-list-tile-content><v-list-tile-title>{{TB_APP_SETTINGS.stitle}}</v-list-tile-title></v-list-tile-content>
-    </v-list-tile>
-    <template v-else-if="TB_CUSTOM_SETTINGS_ACTIONS.id==item.id && undefined!=customSettingsActions && customSettingsActions.length>0" v-for="(action, actIndex) in customSettingsActions">
-     <v-list-tile @click="doCustomAction(action)">
-      <v-list-tile-avatar><v-icon v-if="action.icon">{{action.icon}}</v-icon><img v-else-if="action.svg" class="svg-img" :src="action.svg | svgIcon(darkUi)"></img></v-list-tile-avatar>
-      <v-list-tile-content><v-list-tile-title>{{action.title}}</v-list-tile-title></v-list-tile-content>
-     </v-list-tile>
-    </template>
-   </template>
-   <lms-navdrawer-system-entries :view="this" v-if="queryParams.appQuit || showCustomSystemActions" @quit="show=false"></lms-navdrawer-system-entries>
-   <div class="nd-bottom"></div>
-  </v-list>
  </div>
 
- <div v-if="ndSettingsVisible" style="height:1px; width:100%; border-top:1px solid var(--list-item-border-color)!important;"></div>
- <div v-if="showShortcuts && ndSettingsVisible">
+ <div style="height:1px; width:100%; border-top:1px solid var(--list-item-border-color)!important;"></div>
+ <div v-if="showSearch">
+  <v-subheader>{{ACTIONS[SEARCH_LIB_ACTION].title}}</v-subheader>
+  <v-text-field autocorrect="off" v-model.lazy="searchTerm" class="nd-search" @input="searchTextChanged($event)" @blur="searchStopDebounce" v-on:keyup.enter="searchNow" ref="entry"></v-text-field>
+ </div>
+ <div v-if="showShortcuts">
   <v-subheader>{{trans.shortcuts}}</v-subheader>
   <ul class="nd-shortuts" v-bind:class="{'nd-shortuts-wide':maxWidth>320, 'nd-shortuts-1':2==ndShortcuts}">
    <li v-for="(item, index) in shortcuts">
@@ -213,7 +155,7 @@ Vue.component('lms-navdrawer', {
    </li>
   </ul>
  </div>
- <div v-if="ndSettingsIcons && ndSettingsVisible">
+ <div v-if="ndSettingsIcons">
   <v-subheader>{{TB_SETTINGS.title}}</v-subheader>
   <ul class="nd-shortuts" v-bind:class="{'nd-shortuts-wide':maxWidth>320}">
    <template v-for="(item, index) in menuItems">
@@ -236,7 +178,7 @@ Vue.component('lms-navdrawer', {
   <lms-navdrawer-system-entries :view="this" v-if="queryParams.appQuit || showCustomSystemActions" @quit="show=false"></lms-navdrawer-system-entries>
   <div class="nd-bottom"></div>
  </div>
- <v-list class="nd-list py-0" v-else-if="ndSettingsVisible">
+ <v-list class="nd-list py-0" v-else>
   <template v-for="(item, index) in menuItems">
    <v-divider v-if="item===DIVIDER"></v-divider>
    <v-subheader v-else-if="item.hdr">{{item.title}}</v-subheader>
@@ -279,7 +221,8 @@ Vue.component('lms-navdrawer', {
             appLaunchPlayer: queryParams.appLaunchPlayer,
             maxWidth: 300,
             connected: true,
-            windowControlsOnLeft: false
+            windowControlsOnLeft: false,
+            searchTerm: undefined
         }
     },
     created() {
@@ -296,6 +239,8 @@ Vue.component('lms-navdrawer', {
         this.initItems();
         bus.$on('navDrawer', function() {
             this.show = true;
+            this.searchTerm = undefined;
+            this.searchDebounceTimer = undefined;
             addBrowserHistoryItem();
             if (this.$store.state.player) {
                 for (let i=0, loop=this.$store.state.players, len=loop.length; i<len; ++i) {
@@ -669,6 +614,29 @@ Vue.component('lms-navdrawer', {
                 }
             }).catch(err => {
             });
+        },
+                searchStopDebounce() {
+            if (undefined!=this.searchDebounceTimer) {
+                clearTimeout(this.searchDebounceTimer);
+                this.searchDebounceTimer = undefined;
+            }
+        },
+        searchTextChanged(event) {
+            this.searchStopDebounce();
+            this.searchDebounceTimer = setTimeout(function () {
+                this.searchNow(false);
+            }.bind(this), 500);
+        },
+        searchNow() {
+            if (undefined==this.searchTerm) {
+                return;
+            }
+            let str = this.searchTerm.trim().replace(/\s+/g, " ");
+            if (!isEmpty(str)) {
+                bus.$emit('browse-search', str);
+                setTimeout(function() {bus.$emit('search-initial')}, 5);
+                this.close();
+            }
         }
     },
     computed: {
@@ -714,11 +682,11 @@ Vue.component('lms-navdrawer', {
         playersDivider() {
             return this.showManagePlayers || (undefined!=this.appLaunchPlayer && !this.haveLocalPlayer) || this.showCustomActions
         },
-        playerSectionsDivider() {
-            return !this.ndSettingsVisible && !this.noPlayer && this.players && (this.players.length>1 || this.playerStatus.sleepTime || this.playerStatus.alarmStr)
-        },
         haveLocalPlayer() {
             return this.$store.state.haveLocalPlayer
+        },
+        showSearch() {
+            return this.$store.state.ndSearch
         },
         showShortcuts() {
             return this.$store.state.ndShortcuts>0 && this.shortcuts.length>0
@@ -728,9 +696,6 @@ Vue.component('lms-navdrawer', {
         },
         ndSettingsIcons() {
             return this.$store.state.ndSettingsIcons
-        },
-        ndSettingsVisible() {
-            return this.$store.state.ndSettingsVisible
         },
         homeButton() {
             return this.$store.state.homeButton
@@ -759,9 +724,11 @@ Vue.component('lms-navdrawer', {
                 this.startStatusTimer();
             } else {
                 this.cancelStatusTimer();
+                this.searchStopDebounce();
             }
         },
         'showMenu': function(val) {
+            this.searchStopDebounce();
             this.$store.commit('menuVisible', {name:'navdrawer-title', shown:val});
         }
     },

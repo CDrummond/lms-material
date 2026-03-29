@@ -3,6 +3,8 @@
 1. Add support for 'Users' plugin.
 2. Add option to group 'My Music' categories.
 3. Clear current view when start search.
+4. Always show setting section in navigation drawer.
+5. Add search field to navigation drawer.
 
 6.2.4
 -----

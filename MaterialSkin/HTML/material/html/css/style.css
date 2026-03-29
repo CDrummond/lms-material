@@ -4741,3 +4741,8 @@ div.v-subheader {
   max-width:130px
  }
 }
+
+.nd-search {
+ margin:-20px 24px 20px 24px;
+ max-height:32px!important;
+}

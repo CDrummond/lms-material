@@ -613,3 +613,7 @@
 .notracks #browse-list {
  padding-bottom:var(--bottom-pad);
 }
+
+.browse-search-btn, .browse-search-btn:hover {
+ bottom:calc(8px + var(--bottom-toolbar-height));
+}

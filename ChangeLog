@@ -4,8 +4,9 @@
 2. Add option to group 'My Music' categories.
 3. Clear current view when start search.
 4. Always show setting section in navigation drawer.
-5. Add search field to navigation drawer.
-6. Hide some interface settings behind an 'Show advanced settings' option.
+5. Add option to show search field to navigation drawer.
+6. Add option to show floating search button in browse view.
+7. Hide some interface settings behind an 'Show advanced settings' option.
 
 6.2.4
 -----

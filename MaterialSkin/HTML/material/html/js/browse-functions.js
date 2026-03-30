@@ -1106,7 +1106,10 @@ function browseClick(view, item, index, event, ignoreOpenMenu) {
         view.isTop = false;
         view.tbarActions=[];
         view.grid = {allowed:true, use:view.$store.state.gridPerView ? isSetToUseGrid(GRID_OTHER) : view.grid.use, numColumns:0, ih:GRID_MIN_HEIGHT, rows:[], few:false, haveSubtitle:true, multiSize:false, type:GRID_STANDARD};
-        view.currentActions=[{action:VLIB_ACTION}, {action:(view.grid.use ? USE_LIST_ACTION : USE_GRID_ACTION)}, {action:SEARCH_LIB_ACTION}];
+        view.currentActions=[{action:VLIB_ACTION}, {action:(view.grid.use ? USE_LIST_ACTION : USE_GRID_ACTION)}];
+        if (!view.$store.state.browseSearch) {
+            view.currentActions.push({action:SEARCH_LIB_ACTION});
+        }
         view.layoutGrid(true);
     } else if (MUSIC_ID_PREFIX+'myMusicWorks'==item.id) {
         browseAddWorksCategories(view, item);

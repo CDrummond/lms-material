@@ -150,7 +150,7 @@ var lmsBrowse = Vue.component("lms-browse", {
     </v-btn>
    </template>
 
-   <v-btn :title="SEARCH_LIB_ACTION | tooltip(keyboardControl)" flat icon class="toolbar-button" @click.stop="itemAction(SEARCH_LIB_ACTION, undefined, undefined, $event)"><img class="svg-img" :src="ACTIONS[SEARCH_LIB_ACTION].svg | svgIcon(darkUi)"></img></v-btn>
+   <v-btn v-if="!browseSearch" :title="SEARCH_LIB_ACTION | tooltip(keyboardControl)" flat icon class="toolbar-button" @click.stop="itemAction(SEARCH_LIB_ACTION, undefined, undefined, $event)"><img class="svg-img" :src="ACTIONS[SEARCH_LIB_ACTION].svg | svgIcon(darkUi)"></img></v-btn>
   </v-layout>
   <v-layout class="browse-tracklist-commands" v-if="isTrackList && showDetailedSubtoolbar && wide<WIDE_MIX_BTN && !searchActive">
    <v-btn flat @click.stop="headerAction(PLAY_ALL_ACTION, $event)" class="context-button" :title="PLAY_ACTION | tooltip(keyboardControl)" :id="'tbar-actions'+PLAY_ACTION"><v-icon>{{ACTIONS[PLAY_ACTION].icon}}</v-icon>&nbsp;{{ACTIONS[PLAY_ACTION].short}}</v-btn>
@@ -453,8 +453,10 @@ var lmsBrowse = Vue.component("lms-browse", {
      </div>
     </v-list-tile>
    </template>
-   <div style="height:20px; background:transparent"></div> <!-- add padding -->
+   <div style="height:64px; background:transparent" v-if="browseSearch"></div>
+   <div style="height:20px; background:transparent" v-else></div> <!-- add padding -->
   </div>
+  <v-btn icon class="browse-search-btn" v-if="browseSearch && !searchActive" :title="SEARCH_LIB_ACTION | tooltip(keyboardControl)" @click="itemAction(SEARCH_LIB_ACTION, undefined, undefined, $event)"><img class="svg-img" :src="ACTIONS[SEARCH_LIB_ACTION].svg | svgIcon(true)"></img></v-btn>
  </div>
 
  <v-menu v-model="menu.show" :position-x="menu.x" :position-y="menu.y">
@@ -870,6 +872,9 @@ var lmsBrowse = Vue.component("lms-browse", {
         unpinnedQueueVisible() {
             return this.$store.state.desktopLayout && !this.$store.state.pinQueue && !this.nowPlayingExpanded && this.$store.state.showQueue
         },
+        browseSearch() {
+            return this.$store.state.browseSearch
+        }
     },
     created() {
         if (!IS_MOBILE) {
@@ -1651,7 +1656,10 @@ var lmsBrowse = Vue.component("lms-browse", {
                 this.items = this.myMusic;
                 this.grid = {allowed:true, use:this.$store.state.gridPerView ? isSetToUseGrid(GRID_OTHER) : getLocalStorageBool('grid', true), numItems:0, numColumns:0, ih:GRID_MIN_HEIGHT, rows:[], few:false, haveSubtitle:true, multiSize:false, type:GRID_STANDARD};
                 this.tbarActions=[];
-                this.currentActions=[{action:VLIB_ACTION}, {action:(this.grid.use ? USE_LIST_ACTION : USE_GRID_ACTION)}, {action:SEARCH_LIB_ACTION}];
+                this.currentActions=[{action:VLIB_ACTION}, {action:(this.grid.use ? USE_LIST_ACTION : USE_GRID_ACTION)}];
+                if (!this.$store.state.browseSearch) {
+                    this.currentActions.push({action:SEARCH_LIB_ACTION});
+                }
                 this.layoutGrid(true);
             } else if (this.history.length>1 && this.history[1].current && this.history[1].current.id==TOP_MYMUSIC_ID) {
                 this.history[1].items = this.myMusic;

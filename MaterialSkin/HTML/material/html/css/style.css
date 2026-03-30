@@ -4752,3 +4752,10 @@ div.v-subheader {
  margin-top:18px!important;
  margin-right:-8px!important;
 }
+
+.browse-search-btn, .browse-search-btn:hover {
+ position:fixed;
+ right:8px;
+ bottom:calc(8px + var(--bottom-toolbar-height) + var(--mobile-npbar-height));
+ background:var(--active-color)!important;
+}

@@ -204,6 +204,15 @@ Vue.component('lms-ui-settings', {
     <v-divider v-if="advanced"></v-divider>
 
     <v-list-tile>
+     <v-list-tile-content @click="browseSearch = !browseSearch" class="switch-label">
+      <v-list-tile-title>{{i18n('Show search button')}}</v-list-tile-title>
+      <v-list-tile-sub-title>{{i18n('Show floating search button bottom right.')}}</v-list-tile-sub-title>
+     </v-list-tile-content>
+     <v-list-tile-action><m3-switch v-model="browseSearch"></m3-switch></v-list-tile-action>
+    </v-list-tile>
+    <v-divider></v-divider>
+
+    <v-list-tile>
      <v-list-tile-content class="switch-label">
       <v-list-tile-title>{{i18n('Home screen items')}}</v-list-tile-title>
       <v-list-tile-sub-title>{{i18n("Check the standard items which you wish to appear on the home screen.")}} {{i18n("The order of 'Scrollable list' items can be changed, here, by drag and drop.")}} {{i18n("(NOTE: These lists are only shown when using the grid view. If 'Explore' is not selected, then it will appear as a standard grid at the end. 'Categories' configures the standard items shown in 'Explore'.)")}}</v-list-tile-sub-title>
@@ -561,6 +570,7 @@ Vue.component('lms-ui-settings', {
             homeButton: 0,
             homeButtonValues: [],
             gridPerView: true,
+            browseSearch: true,
             width: 500,
             mediaControls: false,
             mediaControlsSupported: !queryParams.hide.has('mediaControls') && ('mediaSession' in navigator),
@@ -764,6 +774,7 @@ Vue.component('lms-ui-settings', {
             this.screensaverNp = this.$store.state.screensaverNp;
             this.homeButton = this.$store.state.homeButton;
             this.gridPerView = this.$store.state.gridPerView;
+            this.browseSearch = this.$store.state.browseSearch;
             this.mediaControls = this.$store.state.mediaControls;
             this.moveDialogs = this.$store.state.moveDialogs;
             this.autoCloseQueue = this.$store.state.autoCloseQueue;
@@ -934,6 +945,7 @@ Vue.component('lms-ui-settings', {
                       screensaverNp:this.screensaverNp,
                       homeButton:this.homeButton,
                       gridPerView:this.gridPerView,
+                      browseSearch:this.browseSearch,
                       showRating:this.showRating,
                       mediaControls:this.mediaControls,
                       moveDialogs:this.moveDialogs,

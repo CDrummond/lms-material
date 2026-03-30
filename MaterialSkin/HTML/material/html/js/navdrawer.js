@@ -142,7 +142,13 @@ Vue.component('lms-navdrawer', {
  <div style="height:1px; width:100%; border-top:1px solid var(--list-item-border-color)!important;"></div>
  <div v-if="showSearch">
   <v-subheader>{{ACTIONS[SEARCH_LIB_ACTION].title}}</v-subheader>
-  <v-text-field autocorrect="off" v-model.lazy="searchTerm" class="nd-search" @input="searchTextChanged($event)" @blur="searchStopDebounce" v-on:keyup.enter="searchNow" ref="entry"></v-text-field>
+  <div class="nd-search">
+   <v-text-field autocorrect="off" v-model.lazy="searchTerm" ref="entry" v-on:keyup.enter="searchNow"></v-text-field>
+   <v-btn v-if="!isEmpty(searchTerm)" icon class="toolbar-button" @click="searchNow">
+    <v-icon>search</v-icon>
+    <!-- <img class="svg-img" :src="ACTIONS[SEARCH_LIB_ACTION].svg | svgIcon(darkUi)"></img> -->
+   </v-btn>
+  </div>
  </div>
  <div v-if="showShortcuts">
   <v-subheader>{{trans.shortcuts}}</v-subheader>
@@ -615,18 +621,6 @@ Vue.component('lms-navdrawer', {
             }).catch(err => {
             });
         },
-                searchStopDebounce() {
-            if (undefined!=this.searchDebounceTimer) {
-                clearTimeout(this.searchDebounceTimer);
-                this.searchDebounceTimer = undefined;
-            }
-        },
-        searchTextChanged(event) {
-            this.searchStopDebounce();
-            this.searchDebounceTimer = setTimeout(function () {
-                this.searchNow(false);
-            }.bind(this), 500);
-        },
         searchNow() {
             if (undefined==this.searchTerm) {
                 return;
@@ -724,11 +718,9 @@ Vue.component('lms-navdrawer', {
                 this.startStatusTimer();
             } else {
                 this.cancelStatusTimer();
-                this.searchStopDebounce();
             }
         },
         'showMenu': function(val) {
-            this.searchStopDebounce();
             this.$store.commit('menuVisible', {name:'navdrawer-title', shown:val});
         }
     },

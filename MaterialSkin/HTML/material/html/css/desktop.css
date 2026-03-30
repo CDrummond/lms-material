@@ -617,3 +617,11 @@
 .browse-search-btn, .browse-search-btn:hover {
  bottom:calc(8px + var(--bottom-toolbar-height));
 }
+
+.pinned-queue .browse-search-btn, .pinned-queue .browse-search-btn:hover {
+ right:calc(8px + (100vw - (1vw * var(--splitter-pc))));
+}
+
+.unpinned-queue-visible .browse-search-btn, .unpinned-queue-visible .browse-search-btn:hover {
+ right:calc(8px + var(--pq-unpinned-width));
+}

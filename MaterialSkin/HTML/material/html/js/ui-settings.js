@@ -289,14 +289,14 @@ Vue.component('lms-ui-settings', {
     </v-list-tile>
     <v-divider v-if="advanced"></v-divider>
 
-    <v-list-tile>
+    <v-list-tile v-if="advanced">
      <v-list-tile-content @click="nowPlayingFull = !nowPlayingFull" class="switch-label">
       <v-list-tile-title>{{i18n('Use full screen for background')}}</v-list-tile-title>
       <v-list-tile-sub-title>{{i18n('Cover whole view (including toolbars, etc.) with background image.')}}</v-list-tile-sub-title>
      </v-list-tile-content>
      <v-list-tile-action><m3-switch v-model="nowPlayingFull"></m3-switch></v-list-tile-action>
     </v-list-tile>
-    <v-divider></v-divider>
+    <v-divider v-if="advanced"></v-divider>
 
     <v-list-tile v-if="advanced">
      <v-list-tile-content @click="techInfo = !techInfo" class="switch-label">
@@ -401,22 +401,22 @@ Vue.component('lms-ui-settings', {
      <v-list-tile-action><m3-switch v-model="screensaverNp"></m3-switch></v-list-tile-action>
     </v-list-tile>
 
-    <div class="dialog-padding" v-if="advanced"></div>
-    <v-header class="dialog-section-header" v-if="advanced">{{i18n('Main Menu')}}</v-header>
+    <div class="dialog-padding"></div>
+    <v-header class="dialog-section-header">{{i18n('Main Menu')}}</v-header>
     <v-list-tile v-if="advanced">
      <v-select :items="ndShortcutValues" :label="i18n('Shortcuts in main menu')" v-model="ndShortcuts" item-text="label" item-value="key"></v-select>
     </v-list-tile>
     <v-list-tile-sub-title v-if="advanced" style="padding-bottom:16px">{{i18n('Show shortcuts to pinned home screen items in main menu. (NOTE: Radio streams and random mixes are excluded.)')}}</v-list-tile-sub-title>
     <v-divider v-if="advanced"></v-divider>
 
-    <v-list-tile v-if="advanced">
+    <v-list-tile>
      <v-list-tile-content @click="ndSettingsIcons = !ndSettingsIcons" class="switch-label">
       <v-list-tile-title>{{i18n('Use icons for settings')}}</v-list-tile-title>
       <v-list-tile-sub-title>{{i18n('Use a row of icons, and not a list of text, for settings entries.')}}</v-list-tile-sub-title>
      </v-list-tile-content>
      <v-list-tile-action><m3-switch v-model="ndSettingsIcons"></m3-switch></v-list-tile-action>
     </v-list-tile>
-    <v-divider v-if="advanced"></v-divider>
+    <v-divider></v-divider>
 
     <v-list-tile v-if="advanced">
      <v-list-tile-content @click="ndSearch = !ndSearch" class="switch-label">

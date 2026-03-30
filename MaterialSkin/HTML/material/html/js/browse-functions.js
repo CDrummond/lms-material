@@ -2733,7 +2733,6 @@ function browsePin(view, item, add, mapped) {
 
 function browseUnpin(view, item, index) {
     view.top.splice(index, 1);
-    view.items = view.grid.use && view.$store.state.detailedHomeItems.length>0 ? view.topExtra.concat(view.top) : view.top;
     view.options.pinned.delete(item.id);
     browseUpdateItemPinnedState(view, item);
     if (item.id.startsWith(MUSIC_ID_PREFIX)) {
@@ -2746,7 +2745,10 @@ function browseUnpin(view, item, index) {
     }
     view.saveTopList();
     bus.$emit('pinnedChanged', item, false);
-    view.layoutGrid(true);
+    if (view.isTop) {
+        view.items = view.grid.use && view.$store.state.detailedHomeItems.length>0 ? view.topExtra.concat(view.top) : view.top;
+        view.layoutGrid(true);
+    }
 }
 
 function browseUpdateItemPinnedState(view, item) {

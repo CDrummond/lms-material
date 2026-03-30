@@ -13,6 +13,7 @@
  9. Fix grid hover buttons in desktop layout when unpinned queue is shown.
 10. Hide play/add buttons in track list toolbar when search is active.
 11. Fix playlist search results.
+12. When un-pinning items, only refresh list if on home screen.
 
 6.2.3
 -----

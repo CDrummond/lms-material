@@ -43,6 +43,10 @@ function show_composer(event, id, title, page) {
     showArtistRole(event, id, title, page, "COMPOSER");
 }
 
+function show_composer_works(event, id, title, page) {
+    browseItem(event, ["works"], ["artist_id:"+id, "include_online_only_artists:1"], unescape(title), page);
+}
+
 function show_conductor(event, id, title, page) {
     showArtistRole(event, id, title, page, "CONDUCTOR");
 }
@@ -232,14 +236,38 @@ function buildAlbumLine(i, page, plain, addSubtitle) {
 function buildWorkLine(i, page, plain) {
     var line = undefined;
     if (i.work && i.composer) {
-        var work = i.composer + SEPARATOR + i.work;
-        if (i.performance) {
-            work += SEPARATOR + i.performance;
-        }
         if (i.work_id && (!IS_MOBILE || lmsOptions.touchLinks) && !plain) {
-            work="<obj class=\"link-item\" onclick=\"showWork(event, "+i.work_id+",\'"+escape(i.work)+"\',\'"+(i.performance ? escape(i.performance) : "")+"\',\'"+escape(i.composer)+"\',\'"+page+"\')\">" + work + "</obj>";
+            var composerPart;
+            if (i.composers && i.composers.length > 1 && i.composer_ids && i.composer_ids.length == i.composers.length) {
+                let parts = [];
+                for (let c = 0; c < i.composers.length; ++c) {
+                    parts.push(buildLink('show_composer_works', i.composer_ids[c], i.composers[c], page));
+                }
+                composerPart = parts.join(SEPARATOR);
+            } else {
+                var composerId = i.composer_id || (i.composer_ids && i.composer_ids[0]);
+                composerPart = composerId
+                    ? buildLink('show_composer_works', composerId, i.composer, page)
+                    : i.composer;
+            }
+            var workPart = "<obj class=\"link-item\" onclick=\"showWork(event, "+i.work_id+",\'"+escape(i.work)+"\',\'"+(i.performance ? escape(i.performance) : "")+"\',\'"+escape(i.composer)+"\',\'"+page+"\')\">"+i.work+"</obj>";
+            if (i.grouping && i.grouping != i.work) {
+                workPart += SEPARATOR + i.grouping;
+            }
+            if (i.performance) {
+                workPart += SEPARATOR + i.performance;
+            }
+            line = addPart(line, composerPart + SEPARATOR + workPart);
+        } else {
+            var work = (i.composers && i.composers.length > 1 ? i.composers.join(SEPARATOR) : i.composer) + SEPARATOR + i.work;
+            if (i.grouping && i.grouping != i.work) {
+                work += SEPARATOR + i.grouping;
+            }
+            if (i.performance) {
+                work += SEPARATOR + i.performance;
+            }
+            line = addPart(line, work);
         }
-        line=addPart(line, work);
     }
     return line;
 }

@@ -76,13 +76,27 @@ function buildArtistAlbumLines(i, queueAlbumStyle, queueContext) {
         artistAlbumContext = undefined;
     }
     if (!queueAlbumStyle || !artistIsRemoteTitle) {
+        if (queueAlbumStyle) {
+            let used = new Set();
+            let plain = (IS_MOBILE && !lmsOptions.touchLinks);
+            let artistStr = i.albumartist ? i.albumartist : i.artist ? i.artist : i.trackartist;
+            if (artistStr) {
+                used.add(artistStr);
+            }
+            if (i.band && lmsOptions.showBand && useBand(i)) {
+                artistAlbum = addPart(artistAlbum, addArtistLink(i, undefined, "band", "show_band", "queue", used, plain));
+            }
+            if (i.conductor && lmsOptions.showConductor && useConductor(i)) {
+                artistAlbum = addPart(artistAlbum, addArtistLink(i, undefined, "conductor", "show_conductor", "queue", used, plain));
+            }
+        }
         artistAlbum = addPart(artistAlbum, buildAlbumLine(i, 'queue'));
         let work = buildWorkLine(i, 'queue');
         if (queueAlbumStyle) {
             if (albumGroupingType(i.disccount, ALWAYS_GROUP_HEADING, i.contiguous_groups, i.added_from_work)==MULTI_GROUP_ALBUM) {
                 if (work) {
                     // track has a work tag
-                    artistAlbum = addPart(work, i.work!=i.grouping ? i.grouping : undefined)+'<br/><div class="pq-gsub ellipsis">'+artistAlbum+'</div>';
+                    artistAlbum = work+'<br/><div class="pq-gsub ellipsis">'+artistAlbum+'</div>';
                     ws = true;
                 } else if (i.grouping) {
                     // track has a grouping tag
@@ -139,7 +153,8 @@ function parseResp(data, showTrackNum, index, showRatings, queueAlbumStyle, queu
                 pqGroupingMap.set(parseInt(i['playlist index']), [parseInt(i.disccount), parseInt(i.contiguous_groups), parseInt(i.added_from_work)]);
                 i.isClassical = undefined!=i.isClassical && 1==parseInt(i.isClassical);
                 splitMultiples(i, true);
-                let title = queueAlbumStyle && albumGroupingType(i.disccount, ALWAYS_GROUP_HEADING, i.contiguous_groups, i.added_from_work)==MULTI_GROUP_ALBUM ? i.title : trackTitle(i);
+                let isMultiGroup = queueAlbumStyle && albumGroupingType(i.disccount, ALWAYS_GROUP_HEADING, i.contiguous_groups, i.added_from_work)==MULTI_GROUP_ALBUM;
+                let title = isMultiGroup ? i.title : trackTitle(i);
                 let artist = i.albumartist ? i.albumartist : i.artist ? i.artist : i.trackartist;
                 if (i.remote && undefined==title && undefined==artist && undefined==i.album) {
                     title = artist = i.album = i.artist = i18n('Unknown');
@@ -149,7 +164,7 @@ function parseResp(data, showTrackNum, index, showRatings, queueAlbumStyle, queu
                 }
                 let haveRating = showRatings && undefined!=i.rating;
                 if (queueAlbumStyle) {
-                    let extra = buildArtistLine(i, 'queue', false, artist);
+                    let extra = buildArtistLine(i, 'queue', false, artist, isMultiGroup ? false : undefined, isMultiGroup && i.composer && i.work ? false : undefined, isMultiGroup ? false : undefined);
                     let addedClass = false;
                     if (!isEmpty(extra)) {
                         addedClass = true;
@@ -164,7 +179,7 @@ function parseResp(data, showTrackNum, index, showRatings, queueAlbumStyle, queu
                 let duration = undefined==i.duration ? undefined : parseFloat(i.duration);
                 let prevItem = 0==idx ? lastInCurrent : resp.items[idx-1];
                 let image = queueItemCover(i);
-                let groupId = albumGroupingType(i.disccount, ALWAYS_GROUP_HEADING, i.contiguous_groups, i.added_from_work)==MULTI_GROUP_ALBUM ? (i.composer && i.work ? i.composer+"-"+i.work+(i.performance ? "-"+i.performance : "")+(i.grouping ? "-"+i.grouping : "")+(i.added_from_work ? "-"+i.added_from_work : "") : i.grouping ? i.grouping : undefined) : undefined;
+                let groupId = isMultiGroup ? (i.composer && i.work ? i.composer+"-"+i.work+(i.performance ? "-"+i.performance : "")+(i.grouping ? "-"+i.grouping : "")+(i.added_from_work ? "-"+i.added_from_work : "") : i.grouping ? i.grouping : undefined) : undefined;
                 let isAlbumHeader = queueAlbumStyle &&
                                      ( undefined==prevItem ||
                                        i.album_id!=prevItem.album_id ||
@@ -556,14 +571,15 @@ var lmsQueue = Vue.component("lms-queue", {
                     var discCount = pqGroupingMap.get(parseInt(index))[0];
                     var contiguousGroups = pqGroupingMap.get(parseInt(index))[1];
                     var addedFromWork = pqGroupingMap.get(parseInt(index))[2];
-                    var title = this.$store.state.queueAlbumStyle && albumGroupingType(discCount, ALWAYS_GROUP_HEADING, contiguousGroups, addedFromWork)==MULTI_GROUP_ALBUM ? i.title : trackTitle(i);
+                    var isMultiGroup = this.$store.state.queueAlbumStyle && albumGroupingType(discCount, ALWAYS_GROUP_HEADING, contiguousGroups, addedFromWork)==MULTI_GROUP_ALBUM;
+                    var title = isMultiGroup ? i.title : trackTitle(i);
                     var rating = this.showRatings && undefined!=i.rating ? Math.ceil(i.rating/10.0)/2.0 : undefined;
                     if (this.$store.state.queueShowTrackNum && i.tracknum>0) {
                         title = formatTrackNum(i)+SEPARATOR+title;
                     }
                     if (this.albumStyle) {
                         let artist = i.albumartist ? i.albumartist : i.artist ? i.artist : i.trackartist;
-                        let extra = buildArtistLine(i, 'queue', false, artist);
+                        let extra = buildArtistLine(i, 'queue', false, artist, isMultiGroup ? false : undefined, isMultiGroup && i.composer && i.work ? false : undefined, isMultiGroup ? false : undefined);
                         let addedClass = false;
                         if (!isEmpty(extra)) {
                             addedClass = true;

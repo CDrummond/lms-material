@@ -4744,10 +4744,11 @@ div.v-subheader {
 
 .nd-search {
  display:flex;
- margin:-20px 16px 32px 24px;
+ margin:-20px 16px 32px 16px;
  max-height:32px!important;
 }
 
 .nd-search button {
  margin-top:18px!important;
+ margin-right:-8px!important;
 }

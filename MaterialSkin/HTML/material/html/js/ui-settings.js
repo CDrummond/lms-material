@@ -18,6 +18,15 @@ Vue.component('lms-ui-settings', {
     <v-btn flat icon @click="close" :title="ttShortcutStr(i18n('Go back'), 'esc')"><v-icon>arrow_back</v-icon></v-btn>
     <v-toolbar-title>{{width>=450 ? TB_UI_SETTINGS.title+serverName : TB_UI_SETTINGS.title}}</v-toolbar-title>
     <v-spacer class="drag-area"></v-spacer>
+    <v-menu bottom left v-model="showMenu">
+     <v-btn icon slot="activator"><v-icon>more_vert</v-icon></v-btn>
+     <v-list>
+      <v-list-tile @click="advanced=!advanced" class="menu-group-item">
+      <v-list-tile-avatar><v-icon>{{advanced ? 'check_box' : 'check_box_outline_blank'}}</v-icon></v-list-tile-avatar>
+       <v-list-tile-content><v-list-tile-title>{{i18n('Show advanced settings')}}</v-list-tile-title></v-list-tile-content>
+      </v-list-tile>
+    </v-menu>
+    <div class="drag-area-right"></div>
     <lms-windowcontrols v-if="queryParams.nativeTitlebar && queryParams.tbarBtnsPos=='r'"></lms-windowcontrols>
    </v-toolbar>
   </v-card-title>
@@ -61,43 +70,43 @@ Vue.component('lms-ui-settings', {
    </v-list-tile>
    <v-divider v-if="cMixSupported && allowTint"></v-divider>
 
-    <v-list-tile v-if="allowLayoutAdjust">
+    <v-list-tile v-if="allowLayoutSettings">
      <v-select :items="layoutItems" :label="i18n('Application layout')" v-model="layout" item-text="label" item-value="key"></v-select>
     </v-list-tile>
-    <v-divider v-if="allowLayoutAdjust"></v-divider>
+    <v-divider v-if="allowLayoutSettings"></v-divider>
 
-    <v-list-tile>
+    <v-list-tile v-if="advanced">
      <v-select :items="mobileBars" :label="i18n('Mobile layout now-playing bar')" v-model="mobileBar" item-text="label" item-value="key"></v-select>
     </v-list-tile>
-    <v-divider></v-divider>
+    <v-divider v-if="advanced"></v-divider>
 
-    <v-list-tile>
+    <v-list-tile v-if="advanced">
      <v-select :items="fontSizes" :label="i18n('Font size')" v-model="fontSize" item-text="label" item-value="key"></v-select>
     </v-list-tile>
-    <v-divider></v-divider>
+    <v-divider v-if="advanced"></v-divider>
 
-    <v-list-tile>
+    <v-list-tile v-if="advanced">
      <v-select :items="volumeSteps" :label="i18n('Volume step')" v-model="volumeStep" item-text="label" item-value="value"></v-select>
     </v-list-tile>
-    <v-divider></v-divider>
+    <v-divider v-if="advanced"></v-divider>
 
-    <v-list-tile v-if="mediaControlsSupported">
+    <v-list-tile v-if="mediaControlsSupported && advanced">
      <v-list-tile-content @click="mediaControls = !mediaControls" class="switch-label">
       <v-list-tile-title>{{IS_MOBILE ? i18n('Lock screen and notifications') : i18n('Media keys and notifications')}}</v-list-tile-title>
       <v-list-tile-sub-title>{{IS_MOBILE ? i18n('Show playback controls on lock screen and in notification area.') : i18n('Allow control via media keys.')}} <v-btn flat icon style="margin-top:4px;height:18px;width:18px; opacity:var(--sub-opacity)" @click.stop="mediaControlsInfo($event)"><v-icon small>help_outline</v-icon></v-btn</v-list-tile-sub-title>
      </v-list-tile-content>
      <v-list-tile-action><m3-switch v-model="mediaControls"></m3-switch></v-list-tile-action>
     </v-list-tile>
-    <v-divider v-if="mediaControlsSupported"></v-divider>
+    <v-divider v-if="mediaControlsSupported && advanced"></v-divider>
 
-    <v-list-tile v-if="!IS_MOBILE">
+    <v-list-tile v-if="!IS_MOBILE && advanced">
      <v-list-tile-content @click="keyboardControl = !keyboardControl" class="switch-label">
       <v-list-tile-title>{{i18n('Keyboard shortcuts')}}</v-list-tile-title>
       <v-list-tile-sub-title>{{i18n("Enable keyboard shortcuts.")}} <v-btn flat icon style="margin-top:4px;height:18px;width:18px; opacity:var(--sub-opacity)" @click.stop="keyboardInfo($event)"><v-icon small>help_outline</v-icon></v-btn</v-list-tile-sub-title>
      </v-list-tile-content>
      <v-list-tile-action><m3-switch v-model="keyboardControl"></m3-switch></v-list-tile-action>
     </v-list-tile>
-    <v-divider v-if="!IS_MOBILE"></v-divider>
+    <v-divider v-if="!IS_MOBILE && advanced"></v-divider>
 
     <v-list-tile>
      <v-list-tile-content @click="roundCovers = !roundCovers" class="switch-label">
@@ -108,23 +117,23 @@ Vue.component('lms-ui-settings', {
     </v-list-tile>
     <v-divider></v-divider>
 
-    <v-list-tile>
+    <v-list-tile v-if="advanced">
      <v-list-tile-content @click="useDefaultBackdrops = !useDefaultBackdrops" class="switch-label">
       <v-list-tile-title>{{i18n('Use default backgrounds')}}</v-list-tile-title>
       <v-list-tile-sub-title>{{i18n('If background images have been enabled (see options below), then use a default image if there is no current image.')}}</v-list-tile-sub-title>
      </v-list-tile-content>
      <v-list-tile-action><m3-switch v-model="useDefaultBackdrops"></m3-switch></v-list-tile-action>
     </v-list-tile>
-    <v-divider></v-divider>
+    <v-divider v-if="advanced"></v-divider>
 
-    <v-list-tile v-if="LMS_STATS_ENABLED">
+    <v-list-tile v-if="LMS_STATS_ENABLED && advanced">
      <v-list-tile-content @click="showRating = !showRating" class="switch-label">
       <v-list-tile-title>{{i18n('Show rating')}}</v-list-tile-title>
       <v-list-tile-sub-title>{{i18n('Display rating stars.')}}{{undefined==LMS_P_RP  ? (" "+i18n("NOTE: Changing ratings requires an additional plugin.")) : ""}}</v-list-tile-sub-title>
      </v-list-tile-content>
      <v-list-tile-action><m3-switch v-model="showRating"></m3-switch></v-list-tile-action>
     </v-list-tile>
-    <v-divider v-if="LMS_STATS_ENABLED"></v-divider>
+    <v-divider v-if="LMS_STATS_ENABLED && advanced"></v-divider>
 
     <v-list-tile>
      <v-select :items="homeButtonValues" :label="i18n('Show home button')" v-model="homeButton" item-text="label" item-value="key"></v-select>
@@ -132,8 +141,8 @@ Vue.component('lms-ui-settings', {
     <v-list-tile-sub-title style="padding-bottom:16px">{{i18n("When navigating into lists, show a home button to quickly navigate to the main (home) screen. Otherwise you can click on the title to show a menu that contains 'Home'.")}}</v-list-tile-sub-title>
     <v-divider></v-divider>
 
-    <v-divider v-if="showMoveDialogs"></v-divider>
-    <v-list-tile v-if="showMoveDialogs">
+    <v-divider v-if="showMoveDialogs && advanced"></v-divider>
+    <v-list-tile v-if="showMoveDialogs && advanced">
      <v-list-tile-content @click="moveDialogs = !moveDialogs" class="switch-label">
       <v-list-tile-title>{{i18n('Reposition dialogs')}}</v-list-tile-title>
       <v-list-tile-sub-title>{{i18n('On larger displays, attempt to move dialogs closer to the associated item.')}}</v-list-tile-sub-title>
@@ -141,40 +150,40 @@ Vue.component('lms-ui-settings', {
      <v-list-tile-action><m3-switch v-model="moveDialogs"></m3-switch></v-list-tile-action>
     </v-list-tile>
 
-    <v-divider v-if="hasPassword"></v-divider>
-    <v-list-tile v-if="hasPassword">
+    <v-divider v-if="hasPassword && advanced"></v-divider>
+    <v-list-tile v-if="hasPassword && advanced">
      <v-text-field :label="i18n('Settings password')" clearable autocorrect="off" v-model="password" class="lms-search" :append-icon="showPassword ? 'visibility_off' : 'visibility'" @click:append="() => (showPassword = !showPassword)" :type="showPassword ? 'text' : 'password'"></v-text-field>
     </v-list-tile>
 
     <div class="dialog-padding"></div>
     <v-header class="dialog-section-header">{{i18n('Browse')}}</v-header>
 
-    <v-list-tile>
+    <v-list-tile v-if="advanced">
      <v-list-tile-content @click="sortFavorites = !sortFavorites" class="switch-label">
       <v-list-tile-title>{{i18n('Sort favorites list')}}</v-list-tile-title>
       <v-list-tile-sub-title>{{i18n('Alphabetically sort favorites, rather than server supplied order.')}}</v-list-tile-sub-title>
      </v-list-tile-content>
      <v-list-tile-action><m3-switch v-model="sortFavorites"></m3-switch></v-list-tile-action>
     </v-list-tile>
-    <v-divider></v-divider>
+    <v-divider v-if="advanced"></v-divider>
 
-    <v-list-tile>
+    <v-list-tile v-if="advanced">
      <v-list-tile-content @click="browseBackdrop = !browseBackdrop" class="switch-label">
       <v-list-tile-title>{{i18n('Draw background')}}</v-list-tile-title>
       <v-list-tile-sub-title>{{i18n('Use artist or cover images as background.')}}</v-list-tile-sub-title>
      </v-list-tile-content>
      <v-list-tile-action><m3-switch v-model="browseBackdrop"></m3-switch></v-list-tile-action>
     </v-list-tile>
-    <v-divider></v-divider>
+    <v-divider v-if="advanced"></v-divider>
 
-    <v-list-tile>
+    <v-list-tile v-if="advanced">
      <v-list-tile-content @click="browseTechInfo = !browseTechInfo" class="switch-label">
       <v-list-tile-title>{{i18n('Display technical info')}}</v-list-tile-title>
       <v-list-tile-sub-title>{{i18n('Show file type, bitrate, etc.')}}</v-list-tile-sub-title>
      </v-list-tile-content>
      <v-list-tile-action><m3-switch v-model="browseTechInfo"></m3-switch></v-list-tile-action>
     </v-list-tile>
-    <v-divider></v-divider>
+    <v-divider v-if="advanced"></v-divider>
 
     <v-list-tile>
      <v-list-tile-content @click="browseContext = !browseContext" class="switch-label">
@@ -185,14 +194,14 @@ Vue.component('lms-ui-settings', {
     </v-list-tile>
     <v-divider></v-divider>
 
-    <v-list-tile>
+    <v-list-tile v-if="advanced">
      <v-list-tile-content @click="gridPerView = !gridPerView" class="switch-label">
       <v-list-tile-title>{{i18n('Save list/grid per view')}}</v-list-tile-title>
       <v-list-tile-sub-title>{{i18n('Save the choice of list or grid separately per view type (home screen, artists, etc.), otherwise the same setting will be used for all applicable views.')}}</v-list-tile-sub-title>
      </v-list-tile-content>
      <v-list-tile-action><m3-switch v-model="gridPerView"></m3-switch></v-list-tile-action>
     </v-list-tile>
-    <v-divider></v-divider>
+    <v-divider v-if="advanced"></v-divider>
 
     <v-list-tile>
      <v-list-tile-content class="switch-label">
@@ -262,23 +271,23 @@ Vue.component('lms-ui-settings', {
     </v-list-tile>
     <v-divider></v-divider>
 
-    <v-list-tile>
+    <v-list-tile v-if="advanced">
      <v-list-tile-content @click="nowPlayingClock = !nowPlayingClock" class="switch-label">
       <v-list-tile-title>{{i18n('Show current date and time')}}</v-list-tile-title>
       <v-list-tile-sub-title>{{i18n("Show current date and time in main toolbar if there is sufficient space.")}}</v-list-tile-sub-title>
      </v-list-tile-content>
      <v-list-tile-action><m3-switch v-model="nowPlayingClock"></m3-switch></v-list-tile-action>
     </v-list-tile>
-    <v-divider></v-divider>
+    <v-divider v-if="advanced"></v-divider>
 
-    <v-list-tile>
+    <v-list-tile v-if="advanced">
      <v-list-tile-content @click="nowPlayingBackdrop = !nowPlayingBackdrop" class="switch-label">
       <v-list-tile-title>{{i18n('Draw background')}}</v-list-tile-title>
       <v-list-tile-sub-title>{{i18n('Use cover of current track as background.')}}</v-list-tile-sub-title>
      </v-list-tile-content>
      <v-list-tile-action><m3-switch v-model="nowPlayingBackdrop"></m3-switch></v-list-tile-action>
     </v-list-tile>
-    <v-divider></v-divider>
+    <v-divider v-if="advanced"></v-divider>
 
     <v-list-tile>
      <v-list-tile-content @click="nowPlayingFull = !nowPlayingFull" class="switch-label">
@@ -289,14 +298,14 @@ Vue.component('lms-ui-settings', {
     </v-list-tile>
     <v-divider></v-divider>
 
-    <v-list-tile>
+    <v-list-tile v-if="advanced">
      <v-list-tile-content @click="techInfo = !techInfo" class="switch-label">
       <v-list-tile-title>{{i18n('Display technical info')}}</v-list-tile-title>
       <v-list-tile-sub-title>{{i18n('Show file type, bitrate, etc.')}}</v-list-tile-sub-title>
      </v-list-tile-content>
      <v-list-tile-action><m3-switch v-model="techInfo"></m3-switch></v-list-tile-action>
     </v-list-tile>
-    <v-divider></v-divider>
+    <v-divider v-if="advanced"></v-divider>
 
     <v-list-tile>
      <v-list-tile-content @click="nowPlayingContext = !nowPlayingContext" class="switch-label">
@@ -328,23 +337,23 @@ Vue.component('lms-ui-settings', {
     </v-list-tile>
     <v-divider></v-divider>
 
-    <v-list-tile>
+    <v-list-tile v-if="advanced">
      <v-list-tile-content @click="queueThreeLines = !queueThreeLines" class="switch-label">
       <v-list-tile-title>{{i18n('Three lines for track view')}}</v-list-tile-title>
       <v-list-tile-sub-title>{{lmsOptions.supportReleaseTypes ? i18n("Use three lines (title, artist, release) to show track details.") : i18n("Use three lines (title, artist, album) to show track details.")}}</v-list-tile-sub-title>
      </v-list-tile-content>
      <v-list-tile-action><m3-switch v-model="queueThreeLines"></m3-switch></v-list-tile-action>
     </v-list-tile>
-    <v-divider></v-divider>
+    <v-divider v-if="advanced"></v-divider>
 
-    <v-list-tile>
+    <v-list-tile v-if="advanced">
      <v-list-tile-content @click="queueBackdrop = !queueBackdrop" class="switch-label">
       <v-list-tile-title>{{i18n('Draw background')}}</v-list-tile-title>
       <v-list-tile-sub-title>{{desktopLayout ? i18n('Use cover of current track as background (when queue is pinned).') : i18n('Use cover of current track as background.')}}</v-list-tile-sub-title>
      </v-list-tile-content>
      <v-list-tile-action><m3-switch v-model="queueBackdrop"></m3-switch></v-list-tile-action>
     </v-list-tile>
-    <v-divider></v-divider>
+    <v-divider v-if="advanced"></v-divider>
 
     <v-list-tile>
      <v-list-tile-content @click="queueContext = !queueContext" class="switch-label">
@@ -355,18 +364,18 @@ Vue.component('lms-ui-settings', {
     </v-list-tile>
     <v-divider></v-divider>
 
-    <v-list-tile>
+    <v-list-tile v-if="advanced">
      <v-list-tile-content @click="autoCloseQueue = !autoCloseQueue" class="switch-label">
       <v-list-tile-title>{{i18n('Auto-close')}}</v-list-tile-title>
       <v-list-tile-sub-title>{{i18n("Automatically close queue, in desktop layout and not pinned, a few seconds after last interaction.")}}</v-list-tile-sub-title>
      </v-list-tile-content>
     <v-list-tile-action><m3-switch v-model="autoCloseQueue"></m3-switch></v-list-tile-action>
-    </v-list-tile>
+    </v-list-tile v-if="advanced">
 
-    <div class="dialog-padding" v-if="LMS_P_MAI"></div>
-    <v-header class="dialog-section-header" v-if="LMS_P_MAI">{{i18n('Track Information')}}</v-header>
+    <div class="dialog-padding" v-if="LMS_P_MAI && advanced"></div>
+    <v-header class="dialog-section-header" v-if="LMS_P_MAI && advanced">{{i18n('Track Information')}}</v-header>
 
-    <v-list-tile v-if="LMS_P_MAI">
+    <v-list-tile v-if="LMS_P_MAI && advanced">
      <v-list-tile-content @click="infoBackdrop = !infoBackdrop" class="switch-label">
       <v-list-tile-title>{{i18n('Draw background')}}</v-list-tile-title>
       <v-list-tile-sub-title>{{i18n('Use cover of current track as background.')}}</v-list-tile-sub-title>
@@ -374,17 +383,17 @@ Vue.component('lms-ui-settings', {
      <v-list-tile-action><m3-switch v-model="infoBackdrop"></m3-switch></v-list-tile-action>
     </v-list-tile>
 
-    <div class="dialog-padding"></div>
-    <v-header class="dialog-section-header">{{i18n('Screensaver')}}</v-header>
-    <v-list-tile>
+    <div class="dialog-padding" v-if="advanced"></div>
+    <v-header class="dialog-section-header" v-if="advanced">{{i18n('Screensaver')}}</v-header>
+    <v-list-tile v-if="advanced">
      <v-select :items="screensavers" :label="i18n('Type')" v-model="screensaver" item-text="label" item-value="key"></v-select>
     </v-list-tile>
-    <v-list-tile-sub-title v-if="screensaver==0" style="padding-bottom:16px">{{i18n('No screensaver.')}}</v-list-tile-sub-title>
-    <v-list-tile-sub-title v-else-if="screensaver==1" style="padding-bottom:16px">{{i18n('When no track is playing on current player, darken screen (and show date & time) after a period of inactivity. Clock is moved every few minutes.')}}</v-list-tile-sub-title>
-    <v-list-tile-sub-title v-else-if="screensaver==2" style="padding-bottom:16px">{{i18n('When no track is playing on current player, darken screen (and show date & time) after a period  of inactivity. Clock is fixed to center of screen.')}}</v-list-tile-sub-title>
-    <v-list-tile-sub-title v-else-if="screensaver==3" style="padding-bottom:16px">{{i18n('When no track is playing on current player, darken screen after a period of inactivity.')}}</v-list-tile-sub-title>
-    <v-divider></v-divider>
-    <v-list-tile>
+    <v-list-tile-sub-title v-if="advanced && screensaver==0" style="padding-bottom:16px">{{i18n('No screensaver.')}}</v-list-tile-sub-title>
+    <v-list-tile-sub-title v-else-if="advanced && screensaver==1" style="padding-bottom:16px">{{i18n('When no track is playing on current player, darken screen (and show date & time) after a period of inactivity. Clock is moved every few minutes.')}}</v-list-tile-sub-title>
+    <v-list-tile-sub-title v-else-if="advanced && screensaver==2" style="padding-bottom:16px">{{i18n('When no track is playing on current player, darken screen (and show date & time) after a period  of inactivity. Clock is fixed to center of screen.')}}</v-list-tile-sub-title>
+    <v-list-tile-sub-title v-else-if="advanced && screensaver==3" style="padding-bottom:16px">{{i18n('When no track is playing on current player, darken screen after a period of inactivity.')}}</v-list-tile-sub-title>
+    <v-divider v-if="advanced"></v-divider>
+    <v-list-tile v-if="advanced">
      <v-list-tile-content @click="screensaverNp = !screensaverNp" class="switch-label">
       <v-list-tile-title>{{i18n('Switch to now-playing')}}</v-list-tile-title>
       <v-list-tile-sub-title>{{i18n('Switch to basic now-playing view (cover, details, and progress) after 5 minutes of inactivity. Helps to prevent burn-in on OLED screens.')}}</v-list-tile-sub-title>
@@ -392,24 +401,24 @@ Vue.component('lms-ui-settings', {
      <v-list-tile-action><m3-switch v-model="screensaverNp"></m3-switch></v-list-tile-action>
     </v-list-tile>
 
-    <div class="dialog-padding"></div>
-    <v-header class="dialog-section-header">{{i18n('Main Menu')}}</v-header>
-    <v-list-tile>
+    <div class="dialog-padding" v-if="advanced"></div>
+    <v-header class="dialog-section-header" v-if="advanced">{{i18n('Main Menu')}}</v-header>
+    <v-list-tile v-if="advanced">
      <v-select :items="ndShortcutValues" :label="i18n('Shortcuts in main menu')" v-model="ndShortcuts" item-text="label" item-value="key"></v-select>
     </v-list-tile>
-    <v-list-tile-sub-title style="padding-bottom:16px">{{i18n('Show shortcuts to pinned home screen items in main menu. (NOTE: Radio streams and random mixes are excluded.)')}}</v-list-tile-sub-title>
-    <v-divider></v-divider>
+    <v-list-tile-sub-title v-if="advanced" style="padding-bottom:16px">{{i18n('Show shortcuts to pinned home screen items in main menu. (NOTE: Radio streams and random mixes are excluded.)')}}</v-list-tile-sub-title>
+    <v-divider v-if="advanced"></v-divider>
 
-    <v-list-tile>
+    <v-list-tile v-if="advanced">
      <v-list-tile-content @click="ndSettingsIcons = !ndSettingsIcons" class="switch-label">
       <v-list-tile-title>{{i18n('Use icons for settings')}}</v-list-tile-title>
       <v-list-tile-sub-title>{{i18n('Use a row of icons, and not a list of text, for settings entries.')}}</v-list-tile-sub-title>
      </v-list-tile-content>
      <v-list-tile-action><m3-switch v-model="ndSettingsIcons"></m3-switch></v-list-tile-action>
     </v-list-tile>
-    <v-divider></v-divider>
+    <v-divider v-if="advanced"></v-divider>
 
-    <v-list-tile>
+    <v-list-tile v-if="advanced">
      <v-list-tile-content @click="ndSearch = !ndSearch" class="switch-label">
       <v-list-tile-title>{{i18n('Search')}}</v-list-tile-title>
       <v-list-tile-sub-title>{{i18n('Add search field.')}}</v-list-tile-sub-title>
@@ -566,7 +575,8 @@ Vue.component('lms-ui-settings', {
             detailedHomeItems:[],
             detailedHomeDialog: {show:false, items:[]},
             dragIndex: undefined,
-            dropIndex: undefined
+            dropIndex: undefined,
+            advanced: false
         }
     },
     computed: {
@@ -593,6 +603,9 @@ Vue.component('lms-ui-settings', {
         },
         haveScrollableLists() {
             return this.detailedHomeItems.length>0
+        },
+        allowLayoutSettings() {
+            return this.allowLayoutAdjust && this.advanced
         }
     },
     mounted() {
@@ -614,6 +627,7 @@ Vue.component('lms-ui-settings', {
                 this.layout = getLocalStorageVal("layout", "auto");
                 this.layoutOrig = this.layout;
             }
+            this.advanced = getLocalStorageBool("advancedSettings", this.advanced);
             this.hasPassword = false;
             lmsCommand("", ["material-skin", "pass-isset"]).then(({data}) => {
                 if (1==parseInt(data.result['set'])) {
@@ -857,7 +871,7 @@ Vue.component('lms-ui-settings', {
                 bus.$emit('groupMyMusicCategoriesChanged');
             }
 
-            if (this.allowLayoutAdjust && (this.layout != this.layoutOrig)) {
+            if (this.allowLayoutSettings && (this.layout != this.layoutOrig)) {
                 setLocalStorageVal("layout", this.layout);
                 bus.$emit('changeLayout', "desktop"==this.layout ? true : "mobile"==this.layout ? false : undefined);
             }
@@ -880,6 +894,7 @@ Vue.component('lms-ui-settings', {
                 }
                 this.currentSettings = undefined;
             }
+            setLocalStorageVal("advancedSettings", this.advanced);
         },
         settings(arrays, withSorts) {
             let settings = {
@@ -943,7 +958,7 @@ Vue.component('lms-ui-settings', {
         saveAsDefault(event) {
             storeClickOrTouchPos(event);
             confirm(i18n("Save the current settings as default for new users?")+
-                         (this.allowLayoutAdjust ? addNote(i18n("NOTE: 'Application layout' is not saved, as this is a per-device setting.")) : ""),
+                         (this.allowLayoutSettings ? addNote(i18n("NOTE: 'Application layout' is not saved, as this is a per-device setting.")) : ""),
                     i18n('Set Defaults')).then(res => {
                 if (res) {
                     var settings = this.settings(true, true);

@@ -5,6 +5,7 @@
 3. Clear current view when start search.
 4. Always show setting section in navigation drawer.
 5. Add search field to navigation drawer.
+6. Hide some interface settings behind an 'Show advanced settings' option.
 
 6.2.4
 -----

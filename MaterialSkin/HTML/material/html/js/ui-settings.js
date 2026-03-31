@@ -428,7 +428,7 @@ Vue.component('lms-ui-settings', {
     <v-list-tile>
      <v-list-tile-content @click="ndSearch = !ndSearch" class="switch-label">
       <v-list-tile-title>{{i18n('Search')}}</v-list-tile-title>
-      <v-list-tile-sub-title>{{i18n('Add search field.')}}</v-list-tile-sub-title>
+      <v-list-tile-sub-title>{{i18n('Show search field.')}}</v-list-tile-sub-title>
      </v-list-tile-content>
      <v-list-tile-action><m3-switch v-model="ndSearch"></m3-switch></v-list-tile-action>
     </v-list-tile>

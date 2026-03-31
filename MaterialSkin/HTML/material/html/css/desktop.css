@@ -622,6 +622,6 @@
  right:calc(18px + (100vw - (1vw * var(--splitter-pc))));
 }
 
-.unpinned-queue-visible .browse-search-btn, .unpinned-queue-visible .browse-search-btn:hover {
+/*.unpinned-queue-visible .browse-search-btn, .unpinned-queue-visible .browse-search-btn:hover {
  right:calc(18px + var(--pq-unpinned-width));
-}
+}*/

@@ -4757,4 +4757,7 @@ div.v-subheader {
  position:fixed;
  right:8px;
  background:var(--primary-color)!important;
+ border-radius:8px;
+ width:44px;
+ height:44px;
 }

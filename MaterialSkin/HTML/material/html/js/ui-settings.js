@@ -23,7 +23,7 @@ Vue.component('lms-ui-settings', {
      <v-list>
       <v-list-tile @click="advanced=!advanced" class="menu-group-item">
       <v-list-tile-avatar><v-icon>{{advanced ? 'check_box' : 'check_box_outline_blank'}}</v-icon></v-list-tile-avatar>
-       <v-list-tile-content><v-list-tile-title>{{i18n('Show advanced settings')}}</v-list-tile-title></v-list-tile-content>
+       <v-list-tile-content><v-list-tile-title>{{i18n('All options')}}</v-list-tile-title></v-list-tile-content>
       </v-list-tile>
     </v-menu>
     <div class="drag-area-right"></div>

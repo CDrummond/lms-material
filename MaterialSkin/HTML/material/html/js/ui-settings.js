@@ -271,14 +271,14 @@ Vue.component('lms-ui-settings', {
     </v-list-tile>
     <v-divider v-if="SUPPORTS_TOUCH"></v-divider>
 
-    <v-list-tile>
+    <v-list-tile v-if="advanced">
      <v-select :items="skipSecondsOptions" :label="i18n('Skip backward')" v-model="skipBSeconds" item-text="label" item-value="value"></v-select>
     </v-list-tile>
-    <v-divider></v-divider>
-    <v-list-tile>
+    <v-divider v-if="advanced"></v-divider>
+    <v-list-tile v-if="advanced">
      <v-select :items="skipSecondsOptions" :label="i18n('Skip forward')" v-model="skipFSeconds" item-text="label" item-value="value"></v-select>
     </v-list-tile>
-    <v-divider></v-divider>
+    <v-divider v-if="advanced"></v-divider>
 
     <v-list-tile v-if="advanced">
      <v-list-tile-content @click="nowPlayingClock = !nowPlayingClock" class="switch-label">

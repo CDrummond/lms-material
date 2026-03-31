@@ -125,7 +125,11 @@ function buildArtistLine(i, page, plain, existing, useBandTag, useComposerTag, u
     var artist = i.trackartist ? i.trackartist : i.artist ? i.artist : i.albumartist;
 
     if (undefined!=existing) {
-        used.add(existing);
+        if (existing instanceof Set) {
+            existing.forEach(function(v) { used.add(v); });
+        } else {
+            used.add(existing);
+        }
     }
     if (lmsOptions.artistFirst) {
         [line, used] = buildArtists(i, line, page, used, plain);

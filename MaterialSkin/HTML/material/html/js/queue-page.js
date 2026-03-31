@@ -141,6 +141,7 @@ function parseResp(data, showTrackNum, index, showRatings, queueAlbumStyle, queu
             let albumDuration = 0;
             let calcDurations = queueAlbumStyle && resp.size == data.result.playlist_loop.length;
             pqGroupingMap.clear();
+            let grpHeaderNames = undefined;
             for (var idx=0, loop=data.result.playlist_loop, loopLen=loop.length; idx<loopLen; ++idx) {
                 let i = makeHtmlSafe(loop[idx]);
                 if ( !('contiguous_groups' in i) ) {
@@ -162,20 +163,6 @@ function parseResp(data, showTrackNum, index, showRatings, queueAlbumStyle, queu
                 if (showTrackNum && i.tracknum>0) {
                     title = formatTrackNum(i)+SEPARATOR+title;
                 }
-                let haveRating = showRatings && undefined!=i.rating;
-                if (queueAlbumStyle) {
-                    let extra = buildArtistLine(i, 'queue', false, artist, isMultiGroup ? false : undefined, isMultiGroup && i.composer && i.work ? false : undefined, isMultiGroup ? false : undefined);
-                    let addedClass = false;
-                    if (!isEmpty(extra)) {
-                        addedClass = true;
-                        title+='<obj class="subtext">'+SEPARATOR+extra;
-                    }
-                    if (haveRating) {
-                        title += (!addedClass ? '<obj class="subtext">' : '') + SEPARATOR+ratingString(undefined, i.rating) + '</obj>';
-                    } else if (addedClass) {
-                        title+='</obj>';
-                    }
-                }
                 let duration = undefined==i.duration ? undefined : parseFloat(i.duration);
                 let prevItem = 0==idx ? lastInCurrent : resp.items[idx-1];
                 let image = queueItemCover(i);
@@ -187,6 +174,34 @@ function parseResp(data, showTrackNum, index, showRatings, queueAlbumStyle, queu
                                        groupId!=prevItem.groupId ||
                                        (undefined==i.album_id && ( (undefined!=image && image!=prevItem.image) ||
                                                                    (i.album!=prevItem.album) ) ) );
+                if (isAlbumHeader && isMultiGroup) {
+                    grpHeaderNames = new Set();
+                    if (artist) grpHeaderNames.add(artist);
+                    if (i.band && lmsOptions.showBand && useBand(i)) {
+                        if (i.bands) i.bands.forEach(function(b) { grpHeaderNames.add(b); });
+                        else grpHeaderNames.add(i.band);
+                    }
+                    if (i.conductor && lmsOptions.showConductor && useConductor(i)) {
+                        if (i.conductors) i.conductors.forEach(function(c) { grpHeaderNames.add(c); });
+                        else grpHeaderNames.add(i.conductor);
+                    }
+                } else if (isAlbumHeader) {
+                    grpHeaderNames = undefined;
+                }
+                let haveRating = showRatings && undefined!=i.rating;
+                if (queueAlbumStyle) {
+                    let extra = buildArtistLine(i, 'queue', false, isMultiGroup && grpHeaderNames ? grpHeaderNames : artist, undefined, isMultiGroup && i.composer && i.work ? false : undefined, undefined);
+                    let addedClass = false;
+                    if (!isEmpty(extra)) {
+                        addedClass = true;
+                        title+='<obj class="subtext">'+SEPARATOR+extra;
+                    }
+                    if (haveRating) {
+                        title += (!addedClass ? '<obj class="subtext">' : '') + SEPARATOR+ratingString(undefined, i.rating) + '</obj>';
+                    } else if (addedClass) {
+                        title+='</obj>';
+                    }
+                }
                 let grpKey = isAlbumHeader || undefined==prevItem ? index+resp.items.length : prevItem.grpKey;
                 let artistAlbumLinesInfo = !queueAlbumStyle || isAlbumHeader ? buildArtistAlbumLines(i, queueAlbumStyle, queueContext && !isAlbumHeader) : undefined;
                 if (calcDurations) {
@@ -225,7 +240,8 @@ function parseResp(data, showTrackNum, index, showRatings, queueAlbumStyle, queu
                                       ? isAlbumHeader ? (artistAlbumLinesInfo && artistAlbumLinesInfo[1] ? LMS_GROUP_QUEUE_HEADER : LMS_ALBUM_QUEUE_HEADER) : LMS_ALBUM_QUEUE_TRACK
                                       : undefined,
                               grpKey:grpKey,
-                              rating: !queueAlbumStyle && haveRating ? Math.ceil(i.rating/10.0)/2.0 : undefined
+                              rating: !queueAlbumStyle && haveRating ? Math.ceil(i.rating/10.0)/2.0 : undefined,
+                              headerNames: grpHeaderNames
                           });
                 index++;
             }
@@ -579,7 +595,8 @@ var lmsQueue = Vue.component("lms-queue", {
                     }
                     if (this.albumStyle) {
                         let artist = i.albumartist ? i.albumartist : i.artist ? i.artist : i.trackartist;
-                        let extra = buildArtistLine(i, 'queue', false, artist, isMultiGroup ? false : undefined, isMultiGroup && i.composer && i.work ? false : undefined, isMultiGroup ? false : undefined);
+                        let headerNames = isMultiGroup ? this.items[index].headerNames : undefined;
+                        let extra = buildArtistLine(i, 'queue', false, headerNames ? headerNames : artist, undefined, isMultiGroup && i.composer && i.work ? false : undefined, undefined);
                         let addedClass = false;
                         if (!isEmpty(extra)) {
                             addedClass = true;

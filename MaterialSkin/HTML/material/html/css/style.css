@@ -4753,11 +4753,16 @@ div.v-subheader {
  margin-right:-8px!important;
 }
 
-.browse-search-btn, .browse-search-btn:hover {
+.browse-search-btn {
  position:fixed;
- right:8px;
+ right:18px;
  background:var(--primary-color)!important;
  border-radius:8px;
  width:44px;
  height:44px;
+ padding:10px;
+}
+
+.msk-is-non-touch .browse-search-btn:hover {
+ opacity:0.9;
 }

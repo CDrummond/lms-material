@@ -488,5 +488,5 @@
 }
 
 .browse-search-btn, .browse-search-btn:hover {
- bottom:calc(8px + var(--bottom-toolbar-height) + var(--mobile-npbar-height));
+ bottom:calc(18px + var(--bottom-toolbar-height) + var(--mobile-npbar-height));
 }

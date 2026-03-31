@@ -194,7 +194,7 @@ var lmsBrowse = Vue.component("lms-browse", {
        <v-list-tile-title>{{item.item.title}}</v-list-tile-title>
       </v-list-tile-content>
       <v-list-tile-action class="browse-action" v-if="undefined!=item.item.menu && item.item.menu.length>0">
-       <div class="grid-btn list-btn hover-btn menu-btn" @click.stop="itemMenu(item.item, item.rs, $event)" :title="i18n('%1 (Menu)', stripLinkTags(item.item.title))"></div>
+       <div class="grid-btn list-btn hover-btn menu-btn" @click.stop="itemMenu(item.item, item.rs, $event)" :aria-label="i18n('%1 (Menu)', stripLinkTags(item.item.title))"></div>
       </v-list-tile-action>
      </v-list-tile>
      <div v-else-if="GRID_TEXT_ONLY==grid.type" align="center" style="vertical-align: top" v-for="(citem, col) in item.items" @contextmenu.prevent="contextMenu(citem, isTop ? citem.gidx : (item.rs+col), $event)">
@@ -204,7 +204,7 @@ var lmsBrowse = Vue.component("lms-browse", {
        <div v-bind:class="{'search-highlight':highlightIndex==(isTop ? citem.gidx : (item.rs+col)), 'list-active': (menu.show && (isTop ? citem.gidx : (item.rs+col))==menu.index) || (fetchingItem==item.id)}">
          <div class="stripe" :style="{background: citem.color}"></div>
          <div>{{citem.title}}</div></div>
-        <div class="grid-btn image-grid-btn hover-btn menu-btn" v-if="(undefined!=citem.stdItem && citem.stdItem<=STD_ITEM_MAX) || (citem.menu && citem.menu.length>0)" @click.stop="itemMenu(citem, isTop ? citem.gidx : (item.rs+col), $event)" :title="i18n('%1 (Menu)', stripLinkTags(citem.title))"></div>
+        <div class="grid-btn image-grid-btn hover-btn menu-btn" v-if="(undefined!=citem.stdItem && citem.stdItem<=STD_ITEM_MAX) || (citem.menu && citem.menu.length>0)" @click.stop="itemMenu(citem, isTop ? citem.gidx : (item.rs+col), $event)" :aria-label="i18n('%1 (Menu)', stripLinkTags(citem.title))"></div>
       </div>
      </div>
 
@@ -219,10 +219,10 @@ var lmsBrowse = Vue.component("lms-browse", {
        <v-list-tile-title>{{item.item.title}}</v-list-tile-title>
       </v-list-tile-content>
       <v-list-tile-action class="browse-action browse-more" v-if="undefined!=item.item.morecmd || undefined!=item.item.allItems || (item.item.slimbrowse && item.item.header && item.item.actions)">
-       <div class="link-item" :title="i18n('More')" @click.stop="showMore(item.item)">{{i18n('More')}}</div>
+       <div class="link-item" :aria-label="i18n('%1 (More)', stripLinkTags(item.item.title))" @click.stop="showMore(item.item)">{{i18n('More')}}</div>
       </v-list-tile-action>
       <v-list-tile-action class="browse-action" v-else-if="undefined!=item.item.menu && item.item.menu.length>0">
-       <div class="grid-btn list-btn hover-btn menu-btn" @click.stop="itemMenu(item.item, undefined, $event)" :title="i18n('%1 (Menu)', stripLinkTags(item.item.title))"></div>
+       <div class="grid-btn list-btn hover-btn menu-btn" @click.stop="itemMenu(item.item, undefined, $event)" :aria-label="i18n('%1 (Menu)', stripLinkTags(item.item.title))"></div>
       </v-list-tile-action>
       <div v-if="hoverBtns && 0==selection.size && (item.item.menu && (item.item.menu[0]==PLAY_ACTION || item.item.menu[0]==PLAY_ALL_ACTION))" class="list-btns" v-bind:class="{'hover-more':undefined!=item.item.morecmd||undefined!=item.item.allItems||(item.item.slimbrowse && item.item.header && item.item.actions)}">
        <img v-if="!LMS_KIOSK_MODE || !HIDE_FOR_KIOSK.has(ADD_ACTION)" class="other-btn grid-btn" @click.stop="itemAction(ADD_ALL_ACTION, item.item, undefined, $event)" :title="ACTIONS[ADD_ACTION].title" :src="'hover-add' | svgIcon(darkUi, false)"></img>
@@ -253,7 +253,7 @@ var lmsBrowse = Vue.component("lms-browse", {
        <div v-else class="image-grid-text">{{citem.title}}</div>
        <div class="image-grid-text subtext" v-if="citem.libname">{{citem.libname}}</div>
        <div class="image-grid-text subtext" v-else v-html="citem.subtitle" v-bind:class="{'link-item':subtitlesClickable}" @click.stop="clickSubtitle(citem, isTop ? citem.gidx : (item.rs+col), $event)"></div>
-       <div class="grid-btn image-grid-btn hover-btn menu-btn" v-if="(undefined!=citem.stdItem && citem.stdItem<=STD_ITEM_MAX) || (citem.menu && citem.menu.length>0 && (!citem.isPinned || (!queryParams.party && (!LMS_KIOSK_MODE || !HIDE_FOR_KIOSK.has(PIN_ACTION)))))" @click.stop="itemMenu(citem, isTop ? citem.gidx : (item.rs+col), $event)" :title="i18n('%1 (Menu)', stripLinkTags(citem.title))"></div>
+       <div class="grid-btn image-grid-btn hover-btn menu-btn" v-if="(undefined!=citem.stdItem && citem.stdItem<=STD_ITEM_MAX) || (citem.menu && citem.menu.length>0 && (!citem.isPinned || (!queryParams.party && (!LMS_KIOSK_MODE || !HIDE_FOR_KIOSK.has(PIN_ACTION)))))" @click.stop="itemMenu(citem, isTop ? citem.gidx : (item.rs+col), $event)" :aria-label="i18n('%1 (Menu)', stripLinkTags(citem.title))"></div>
        <div class="emblem" v-if="citem.emblem" :style="{background: citem.emblem.bgnd}">
         <img :src="citem.emblem | emblem()" loading="lazy"></img>
        </div>
@@ -309,10 +309,10 @@ var lmsBrowse = Vue.component("lms-browse", {
 
      <v-list-tile-action v-if="undefined!=item.durationStr" class="browse-time">{{item.durationStr}}</v-list-tile-action>
      <v-list-tile-action class="browse-action browse-more" v-if="undefined!=item.morecmd || undefined!=item.allItems || (item.slimbrowse && item.header && item.actions)">
-      <div class="link-item" :title="i18n('More')" @click.stop="showMore(item)">{{i18n('More')}}</div>
+      <div class="link-item" :aria-label="i18n('%1 (More)', stripLinkTags(item.title))" @click.stop="showMore(item)">{{i18n('More')}}</div>
      </v-list-tile-action>
      <v-list-tile-action class="browse-action" v-else-if="((undefined!=item.stdItem && item.stdItem<=STD_ITEM_MAX) && item.stdItem<=STD_ITEM_MAX) || (item.menu && item.menu.length>0)">
-      <div class="grid-btn list-btn hover-btn menu-btn" @click.stop="itemMenu(item, index, $event)" :title="i18n('%1 (Menu)', stripLinkTags(item.title))"></div>
+      <div class="grid-btn list-btn hover-btn menu-btn" @click.stop="itemMenu(item, index, $event)" :aria-label="i18n('%1 (Menu)', stripLinkTags(item.title))"></div>
      </v-list-tile-action>
      <div v-if="hoverBtns && 0==selection.size && ((undefined!=item.stdItem && item.stdItem<=STD_ITEM_MAX) || (item.menu && (item.menu[0]==PLAY_ACTION || item.menu[0]==PLAY_ALL_ACTION)))" class="list-btns" v-bind:class="{'list-btns-track':item.durationStr,'hover-more':undefined!=item.morecmd||undefined!=item.allItems||(item.slimbrowse && item.header && item.actions)}">
       <img v-if="(!LMS_KIOSK_MODE || !HIDE_FOR_KIOSK.has(ADD_ACTION)) && allowAdd(item)" class="other-btn grid-btn" @click.stop="itemAction(item.header ? ADD_ALL_ACTION : ADD_ACTION, item, index, $event)" :title="ACTIONS[ADD_ACTION].title" :src="'hover-add' | svgIcon(darkUi, true)"></img>
@@ -360,7 +360,7 @@ var lmsBrowse = Vue.component("lms-browse", {
        <div v-if="citem.image" class="image-grid-text" @click.stop="itemMenu(citem, undefined, $event)">{{citem.title}}</div>
        <div v-else class="image-grid-text">{{citem.title}}</div>
        <div class="image-grid-text subtext" v-html="citem.subtitle" v-bind:class="{'link-item':subtitlesClickable}" @click.stop="clickSubtitle(citem, undefined, $event)"></div>
-       <div class="grid-btn image-grid-btn hover-btn menu-btn" v-if="(undefined!=citem.stdItem && citem.stdItem<=STD_ITEM_MAX) || (citem.menu && citem.menu.length>0)" @click.stop="itemMenu(citem, undefined, $event)" :title="i18n('%1 (Menu)', stripLinkTags(citem.title))"></div>
+       <div class="grid-btn image-grid-btn hover-btn menu-btn" v-if="(undefined!=citem.stdItem && citem.stdItem<=STD_ITEM_MAX) || (citem.menu && citem.menu.length>0)" @click.stop="itemMenu(citem, undefined, $event)" :aria-label="i18n('%1 (Menu)', stripLinkTags(citem.title))"></div>
        <div class="emblem" v-if="citem.emblem" :style="{background: citem.emblem.bgnd}">
         <img :src="citem.emblem | emblem()" loading="lazy"></img>
        </div>
@@ -389,10 +389,10 @@ var lmsBrowse = Vue.component("lms-browse", {
      </v-list-tile-content>
      <v-list-tile-action v-if="undefined!=item.durationStr" class="browse-time">{{item.durationStr}}</v-list-tile-action>
      <v-list-tile-action class="browse-action browse-more" v-if="undefined!=item.morecmd || undefined!=item.allItems || (item.slimbrowse && item.header && item.actions)">
-      <div class="link-item" :title="i18n('More')" @click.stop="showMore(item)">{{i18n('More')}}</div>
+      <div class="link-item" :aria-label="i18n('%1 (More)', stripLinkTags(item.title))" @click.stop="showMore(item)">{{i18n('More')}}</div>
      </v-list-tile-action>
      <v-list-tile-action class="browse-action" v-else-if="(undefined!=item.stdItem && item.stdItem<=STD_ITEM_MAX) || (item.menu && item.menu.length>0)">
-      <div class="grid-btn list-btn hover-btn menu-btn" @click.stop="itemMenu(item, index, $event)" :title="i18n('%1 (Menu)', stripLinkTags(item.title))"></div>
+      <div class="grid-btn list-btn hover-btn menu-btn" @click.stop="itemMenu(item, index, $event)" :aria-label="i18n('%1 (Menu)', stripLinkTags(item.title))"></div>
      </v-list-tile-action>
      <div v-if="hoverBtns && 0==selection.size && ((undefined!=item.stdItem && item.stdItem<=STD_ITEM_MAX) || (item.menu && (item.menu[0]==PLAY_ACTION || item.menu[0]==PLAY_ALL_ACTION)))" class="list-btns" v-bind:class="{'list-btns-track':item.durationStr,'hover-more':undefined!=item.morecmd||undefined!=item.allItems||(item.slimbrowse && item.header && item.actions)}">
       <img v-if="(!LMS_KIOSK_MODE || !HIDE_FOR_KIOSK.has(ADD_ACTION)) && allowAdd(item)" class="other-btn grid-btn" @click.stop="itemAction(ADD_ALL_ACTION, item, index, $event)" :title="ACTIONS[ADD_ACTION].title" :src="'hover-add' | svgIcon(darkUi, false)"></img>
@@ -440,7 +440,7 @@ var lmsBrowse = Vue.component("lms-browse", {
 
      <v-list-tile-action v-if="undefined!=item.durationStr" class="browse-time">{{item.durationStr}}</v-list-tile-action>
      <v-list-tile-action class="browse-action" v-if="(undefined!=item.stdItem && item.stdItem<=STD_ITEM_MAX) || (item.menu && item.menu.length>0 && (!item.isPinned || (!queryParams.party && (!LMS_KIOSK_MODE || !HIDE_FOR_KIOSK.has(PIN_ACTION)))))">
-      <div class="grid-btn list-btn hover-btn menu-btn" @click.stop="itemMenu(item, index, $event)" :title="i18n('%1 (Menu)', stripLinkTags(item.title))"></div>
+      <div class="grid-btn list-btn hover-btn menu-btn" @click.stop="itemMenu(item, index, $event)" :aria-label="i18n('%1 (Menu)', stripLinkTags(item.title))"></div>
      </v-list-tile-action>
      <div v-if="hoverBtns && 0==selection.size && ((undefined!=item.stdItem && item.stdItem<=STD_ITEM_MAX) || (item.menu && (item.menu[0]==PLAY_ACTION || item.menu[0]==PLAY_ALL_ACTION)))" class="list-btns" v-bind:class="{'list-btns-track':item.durationStr,'hover-more':undefined!=item.morecmd||undefined!=item.allItems||(item.slimbrowse && item.header && item.actions)}">
       <img v-if="(!LMS_KIOSK_MODE || !HIDE_FOR_KIOSK.has(ADD_ACTION)) && allowAdd(item)" class="other-btn grid-btn" @click.stop="itemAction(ADD_ACTION, item, index, $event)" :title="ACTIONS[ADD_ACTION].title" :src="'hover-add' | svgIcon(darkUi, false)"></img>
@@ -456,7 +456,7 @@ var lmsBrowse = Vue.component("lms-browse", {
    <div style="height:64px; background:transparent" v-if="browseSearch"></div>
    <div style="height:20px; background:transparent" v-else></div> <!-- add padding -->
   </div>
-  <div class="browse-search-btn" v-if="browseSearch && !searchActive" :title="SEARCH_LIB_ACTION | tooltip(keyboardControl)" @click="itemAction(SEARCH_LIB_ACTION, undefined, undefined, $event)"><img class="svg-img" :src="ACTIONS[SEARCH_LIB_ACTION].svg | svgIcon(true)"></img></div>
+  <div class="browse-search-btn" v-if="browseSearch && !searchActive" role="button" :title="SEARCH_LIB_ACTION | tooltip(keyboardControl)" @click="itemAction(SEARCH_LIB_ACTION, undefined, undefined, $event)"><img class="svg-img" :src="ACTIONS[SEARCH_LIB_ACTION].svg | svgIcon(true)"></img></div>
  </div>
 
  <v-menu v-model="menu.show" :position-x="menu.x" :position-y="menu.y">

@@ -17,7 +17,7 @@ Vue.component('lms-toolbar', {
  <div class="maintoolbar-subtitle subtext">{{date}}</div>
 </div>
 <v-layout @click.stop="openNavDrawer" @contextmenu.prevent="playerContextMenu" v-bind:class="{'navdrawer-selector':!mobileNoNowPlaying, 'link-item':!coloredToolbars, 'link-item-ct': coloredToolbars}">
- <v-btn icon class="toolbar-button" @click.stop="openNavDrawer">
+ <v-btn icon class="toolbar-button" @click.stop="openNavDrawer" :aria-label="i18n('Main Menu')">
   <v-icon v-if="!connected" class="red">error</v-icon>
   <img v-else-if="updatesAvailable" class="svg-img" :src="'update' | menuIcon(darkUi, coloredToolbars&&!nowPlayingFull)"></img>
   <img v-else-if="restartRequired" class="svg-img" :src="'restart' | menuIcon(darkUi, coloredToolbars&&!nowPlayingFull)"></img>

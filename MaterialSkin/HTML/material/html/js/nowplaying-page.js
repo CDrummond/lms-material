@@ -221,8 +221,8 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
      <div v-if="techInfo" class="np-bar-tech ellipsis">{{technicalInfo}}</div>
      <div v-else-if="npBarRatings && (repAltBtn.show || shuffAltBtn.show)" class="np-bar-rating np-thumbs-desktop"><v-btn v-if="repAltBtn.show" :title="repAltBtn.tooltip" flat icon v-longpress="repeatClicked" class="np-std-button" v-bind:class="{'disabled':noPlayer}"><v-icon v-if="repAltBtn.icon" class="media-icon">{{repAltBtn.icon}}</v-icon><img v-else :src="repAltBtn.image" class="btn-img"></img></v-btn><v-btn v-if="shuffAltBtn.show" :title="shuffAltBtn.tooltip" flat icon @click="shuffleClicked" class="np-std-button"><v-icon v-if="shuffAltBtn.icon" class="media-icon">{{shuffAltBtn.icon}}</v-icon><img v-else :src="shuffAltBtn.image" class="btn-img"></img></v-btn></div>
      <v-rating v-else-if="showRatings" class="np-bar-rating" v-model="rating.value" :halfIncrements="maxRating>5" hover clearable @click.native="setRating(true)" :readonly="undefined==LMS_P_RP"></v-rating>
-     <div v-else-if="playerStatus.playlist.count>1" class="np-bar-tech" v-bind:class="{'link-item':totalTogglesQueue && !coloredToolbars, 'link-item-ct':totalTogglesQueue && coloredToolbars}" @click.stop="trackCountClicked">{{playerStatus.playlist.current | trackCount(playerStatus.playlist.count)}} <v-btn class="np-bar-queue" flat icon v-if="!pinQueue"><v-icon v-if="showQueue">queue_music</v-icon><img v-else class="svg-img" :src="'queue_music_outline' | svgIcon(darkUi||coloredToolbars)"></img></v-btn></div>
-     <div v-else-if="!pinQueue" class="np-bar-tech"><v-btn class="np-bar-queue" flat icon @click.stop="trackCountClicked"><v-icon v-if="showQueue">queue_music</v-icon><img v-else class="svg-img" :src="'queue_music_outline' | svgIcon(darkUi||coloredToolbars)"></img></v-btn></div>
+     <div v-else-if="playerStatus.playlist.count>1" class="np-bar-tech" v-bind:class="{'link-item':totalTogglesQueue && !coloredToolbars, 'link-item-ct':totalTogglesQueue && coloredToolbars}" @click.stop="trackCountClicked">{{playerStatus.playlist.current | trackCount(playerStatus.playlist.count)}} <v-btn class="np-bar-queue" flat icon v-if="!pinQueue" :title="trans.toggleQueue | tooltip(LMS_TOGGLE_QUEUE_KEYBOARD,keyboardControl,true,false)"><v-icon v-if="showQueue">queue_music</v-icon><img v-else class="svg-img" :src="'queue_music_outline' | svgIcon(darkUi||coloredToolbars)"></img></v-btn></div>
+     <div v-else-if="!pinQueue" class="np-bar-tech"><v-btn class="np-bar-queue" flat icon :title="trans.toggleQueue | tooltip(LMS_TOGGLE_QUEUE_KEYBOARD,keyboardControl,true,false)" @click.stop="trackCountClicked"><v-icon v-if="showQueue">queue_music</v-icon><img v-else class="svg-img" :src="'queue_music_outline' | svgIcon(darkUi||coloredToolbars)"></img></v-btn></div>
      <div v-else class="np-bar-tech">&nbsp;</div>
     </v-list-tile-action>
    </v-list-tile>
@@ -421,7 +421,8 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
                  infoTrack: {album_id:undefined, track_id:undefined, work_id:undefined, path:undefined},
                  trans: { expand:undefined, collapse:undefined, sync:undefined, unsync:undefined, more:undefined, dstm:undefined, randomMix:undefined,
                           repeatAll:undefined, repeatOne:undefined, repeatOff:undefined, shuffleAll:undefined, shuffleAlbums:undefined, shuffleOff:undefined,
-                          play:undefined, pause:undefined, prev:undefined, next:undefined, collapseNp:undefined, expandNp:undefined, menu:undefined, browse:undefined, queue:undefined },
+                          play:undefined, pause:undefined, prev:undefined, next:undefined, collapseNp:undefined, expandNp:undefined, menu:undefined, browse:undefined,
+                          queue:undefined, toggleQueue:undefined },
                  showTotal: true,
                  landscape: false,
                  wide: 0,
@@ -704,7 +705,7 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
                            shuffleAlbums:lmsOptions.supportReleaseTypes ? i18n("Shuffle releases") : i18n("Shuffle albums"),
                            shuffleOff:i18n("No shuffle"), play:i18n("Play"), pause:i18n("Pause"), prev:i18n("Previous track"),
                            next:i18n("Next track"), collapseNp:i18n("Collapse now playing"), expandNp:i18n("Expand now playing"),
-                           menu:i18n("Menu"), browse:i18n('Browse'), queue:i18n('Queue') };
+                           menu:i18n("Menu"), browse:i18n('Browse'), queue:i18n('Queue'), toggleQueue:i18n('Toggle queue') };
             this.info.tabs[TRACK_TAB].title=i18n("Track");
             this.info.tabs[ARTIST_TAB].title=i18n("Artist");
             this.info.tabs[ARTIST_TAB].ctitle=i18n("Composer");
@@ -1376,8 +1377,8 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
             }
             return (undefined==sep ? "" : sep)+i18n("%1 of %2", (current+1), total);
         },
-        tooltip: function (str, key, showShortcut) {
-            return showShortcut && undefined!=key ? ttShortcutStr(str, key, false, true) : str;
+        tooltip: function (str, shortcut, showShortcut, shift, alt) {
+            return showShortcut ? ttShortcutStr(str, shortcut, shift, undefined==alt || alt) : str;
         }
     },
     watch: {

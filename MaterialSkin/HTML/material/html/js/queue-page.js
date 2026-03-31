@@ -293,7 +293,7 @@ var lmsQueue = Vue.component("lms-queue", {
     </v-list-tile-content>
     <v-list-tile-action class="pq-time">{{item.durationStr}}</v-list-tile-action>
     <v-list-tile-action class="queue-action" v-bind:class="{'pq-first-track-menu':item.artistAlbum}" @click.stop="itemMenu(item, index, $event)">
-     <div class="grid-btn list-btn hover-btn menu-btn" :title="i18n('%1 (Menu)', item.tooltip)"></div>
+     <div class="grid-btn list-btn hover-btn menu-btn" :aria-label="i18n('%1 (Menu)', item.tooltip)"></div>
     </v-list-tile-action>
     <img v-if="index==currentIndex" :class="['pqi-'+iRgb, 'pq-current-indicator']" :src="'pq-current' | indIcon"></img>
    </v-list-tile>
@@ -315,7 +315,7 @@ var lmsQueue = Vue.component("lms-queue", {
      </v-list-tile-content>
      <v-list-tile-action class="pq-time">{{item.durationStr}}</v-list-tile-action>
      <v-list-tile-action class="queue-action" @click.stop="itemMenu(item, index, $event)">
-      <div class="grid-btn list-btn hover-btn menu-btn" :title="i18n('%1 (Menu)', item.tooltip)"></div>
+      <div class="grid-btn list-btn hover-btn menu-btn" :aria-label="i18n('%1 (Menu)', item.tooltip)"></div>
      </v-list-tile-action>
      <v-rating v-if="undefined!=item.rating" class="pq-rating" v-bind:class="{'pq-rating-3':threeLines}" v-model="item.rating" half-increments readonly></v-rating>
      <img v-if="index==currentIndex" :class="['pqi-'+iRgb, 'pq-current-indicator']" :src="'pq-current' | indIcon"></img>

@@ -75,7 +75,7 @@ Vue.component('lms-navdrawer', {
    </v-list>
   </v-menu>
   <v-list-tile @click.prevent="close">
-   <v-list-tile-avatar v-if="(undefined==queryParams.dragleft || queryParams.dragleft<=48) && ('l'!=queryParams.tbarBtnsPos)"><v-btn icon flat @click="show=false"><v-icon>arrow_back<v-icon></v-btn></v-list-tile-avatar>
+   <v-list-tile-avatar v-if="(undefined==queryParams.dragleft || queryParams.dragleft<=48) && ('l'!=queryParams.tbarBtnsPos)" :title="i18n('Close')"><v-btn icon flat @click="show=false"><v-icon>arrow_back<v-icon></v-btn></v-list-tile-avatar>
    <div v-if="LMS_P_USERS" class="nd-user"><div v-longpress:nomove="switchUser" class="ellipsis">{{userName}}</div></div>
    <div v-else class="lyrion-logo" v-longpress:nomove="clickLogo"><img :src="'lyrion' | svgIcon(darkUi)"></img></div>
    <v-list-tile-action>

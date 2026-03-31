@@ -393,8 +393,8 @@ const store = new Vuex.Store({
         autoCloseQueue: false,
         ndShortcuts: 0,
         ndSettingsIcons: false,
-        ndSearch: false,
-        browseSearch: true,
+        ndSearch: true,
+        browseSearch: false,
         cMixSupported: 1==parseInt(getComputedStyle(document.documentElement).getPropertyValue('--color-mix-supported')),
         detailedHomeItems: [DETAILED_HOME_STD_PREFIX+"new", DETAILED_HOME_STD_PREFIX+"radios", DETAILED_HOME_EXPLORE],
         user: {id:-1, name:undefined, avatar:undefined}

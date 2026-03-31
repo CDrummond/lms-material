@@ -163,7 +163,7 @@ var lmsBrowse = Vue.component("lms-browse", {
  </div>
  </div>
  <v-icon class="browse-progress" v-if="fetchingItem!=undefined" color="primary">more_horiz</v-icon>
- <div class="lms-list bgnd-cover" v-bind:style="{'background-image':'url('+currentBgndUrl+')'}" v-bind:class="{'browse-backdrop-cover':drawBackdrop, 'tint-bgnd-cover':tint&&!drawBgndImage, 'browse-track-list':showTrackListCommands, 'unpinned-queue-visible':unpinnedQueueVisible, 'pinned-queue':pinnedQueue}">
+ <div class="lms-list bgnd-cover" v-bind:style="{'background-image':'url('+currentBgndUrl+')'}" v-bind:class="{'browse-backdrop-cover':drawBackdrop&&1!=searchActive, 'tint-bgnd-cover':tint&&!drawBgndImage, 'browse-track-list':showTrackListCommands, 'unpinned-queue-visible':unpinnedQueueVisible, 'pinned-queue':pinnedQueue}">
   <div class="noselect lms-jumplist" v-bind:class="{'bgnd-blur':drawBgndImage,'backdrop-blur':drawBackdrop, 'lms-jumplist-h':filteredJumplist[0].header}" v-if="filteredJumplist.length>1">
    <div class="jl-inner" v-bind:style="{'max-height':(filteredJumplist.length*50)+'px'}">
     <template v-for="(item, index) in filteredJumplist">

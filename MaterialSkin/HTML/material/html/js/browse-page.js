@@ -458,7 +458,7 @@ var lmsBrowse = Vue.component("lms-browse", {
    <div style="height:68px; background:transparent" v-if="browseSearch"></div>
    <div style="height:20px; background:transparent" v-else></div> <!-- add padding -->
   </div>
-  <div class="browse-search-btn" v-if="browseSearch && !searchActive" role="button" :title="SEARCH_LIB_ACTION | tooltip(keyboardControl)" @click="itemAction(SEARCH_LIB_ACTION, undefined, undefined, $event)"><img class="svg-img" :src="ACTIONS[SEARCH_LIB_ACTION].svg | svgIcon(true)"></img></div>
+  <div class="browse-search-btn" v-if="browseSearch && !searchActive" role="button" :title="SEARCH_LIB_ACTION | tooltip(keyboardControl)" @click="itemAction(SEARCH_LIB_ACTION, undefined, undefined, $event)"><img class="svg-img" :src="ACTIONS[SEARCH_LIB_ACTION].svg | svgIcon(!darkSearchIcon)"></img></div>
  </div>
 
  <v-menu v-model="menu.show" :position-x="menu.x" :position-y="menu.y">
@@ -650,6 +650,9 @@ var lmsBrowse = Vue.component("lms-browse", {
         },
         darkUi() {
             return this.$store.state.darkUi
+        },
+        darkSearchIcon() {
+            return this.$store.state.colorUsage==COLOR_USE_STANDARD && 'lyrion'==this.$store.state.color
         },
         hidden() {
             return this.$store.state.hidden

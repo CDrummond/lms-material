@@ -453,7 +453,7 @@ var lmsBrowse = Vue.component("lms-browse", {
      </div>
     </v-list-tile>
    </template>
-   <div style="height:64px; background:transparent" v-if="browseSearch"></div>
+   <div style="height:68px; background:transparent" v-if="browseSearch"></div>
    <div style="height:20px; background:transparent" v-else></div> <!-- add padding -->
   </div>
   <div class="browse-search-btn" v-if="browseSearch && !searchActive" role="button" :title="SEARCH_LIB_ACTION | tooltip(keyboardControl)" @click="itemAction(SEARCH_LIB_ACTION, undefined, undefined, $event)"><img class="svg-img" :src="ACTIONS[SEARCH_LIB_ACTION].svg | svgIcon(true)"></img></div>

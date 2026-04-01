@@ -4755,12 +4755,12 @@ div.v-subheader {
 
 .browse-search-btn {
  position:fixed;
- right:18px;
+ right:14px;
  background:var(--primary-color)!important;
- border-radius:8px;
- width:44px;
- height:44px;
- padding:10px;
+ border-radius:12px;
+ width:52px;
+ height:52px;
+ padding:13px 14px 14px 14px;
 }
 
 .msk-is-non-touch .browse-search-btn:hover {

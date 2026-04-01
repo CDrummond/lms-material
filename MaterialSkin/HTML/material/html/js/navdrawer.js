@@ -161,7 +161,7 @@ Vue.component('lms-navdrawer', {
    </li>
   </ul>
  </div>
- <div v-if="ndSettingsIcons">
+ <div v-if="settingsIcons">
   <v-subheader>{{TB_SETTINGS.title}}</v-subheader>
   <ul class="nd-shortuts" v-bind:class="{'nd-shortuts-wide':maxWidth>320}">
    <template v-for="(item, index) in menuItems">
@@ -226,6 +226,7 @@ Vue.component('lms-navdrawer', {
             playerStatus: { ison: 1, isplaying: false, volume: 0, synced: false, sleepTime: undefined, count:0, alarm: undefined, alarmStr: undefined },
             appLaunchPlayer: queryParams.appLaunchPlayer,
             maxWidth: 300,
+            height: 50,
             connected: true,
             windowControlsOnLeft: false,
             searchTerm: undefined
@@ -273,6 +274,10 @@ Vue.component('lms-navdrawer', {
         this.maxWidth = window.innerWidth>500 ? 400 : 300;
         bus.$on('windowWidthChanged', function() {
             this.maxWidth = window.innerWidth>500 ? 400 : 300;
+        }.bind(this));
+        this.height = Math.floor(window.innerHeight/20)*20;
+        bus.$on('windowHeightChanged', function() {
+            this.height = Math.floor(window.innerHeight/20)*20;
         }.bind(this));
         bus.$on('customActions', function() {
             if (undefined==this.customSettingsActions) {
@@ -680,7 +685,7 @@ Vue.component('lms-navdrawer', {
             return this.$store.state.haveLocalPlayer
         },
         showSearch() {
-            return this.$store.state.ndSearch
+            return this.$store.state.ndSearch && this.height>350
         },
         showShortcuts() {
             return this.$store.state.ndShortcuts>0 && this.shortcuts.length>0
@@ -688,8 +693,15 @@ Vue.component('lms-navdrawer', {
         ndShortcuts() {
             return this.$store.state.ndShortcuts
         },
-        ndSettingsIcons() {
-            return this.$store.state.ndSettingsIcons
+        settingsIcons() {
+            let haveGroup = this.players && this.players.length>0 && this.players[this.players.length-1].isgroup;
+            let settingsCount = this.menuItems.length+(this.customSettingsActions ? this.customSettingsActions.length : 0);
+            let settingsHeight = (settingsCount + 1) * 48;
+            let numPlayers = (this.players ? this.players.length : 0);
+            let playerheight = ((numPlayers + (this.showManagePlayers ? 1 : 0)) * 48) + (haveGroup ? 72 : 0) /*titles*/;
+            let searchHeight = this.showSearch ? 80 : 0;
+            let minPlayerHeight = Math.max(5*48, playerheight) + 24 /*padding*/;
+            return (this.height-(queryParams.topPad+queryParams.botPad+settingsHeight+searchHeight))<minPlayerHeight;
         },
         homeButton() {
             return this.$store.state.homeButton

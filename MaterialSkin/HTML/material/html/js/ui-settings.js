@@ -416,15 +416,6 @@ Vue.component('lms-ui-settings', {
     <v-divider v-if="advanced"></v-divider>
 
     <v-list-tile>
-     <v-list-tile-content @click="ndSettingsIcons = !ndSettingsIcons" class="switch-label">
-      <v-list-tile-title>{{i18n('Use icons for settings')}}</v-list-tile-title>
-      <v-list-tile-sub-title>{{i18n('Use a row of icons, and not a list of text, for settings entries.')}}</v-list-tile-sub-title>
-     </v-list-tile-content>
-     <v-list-tile-action><m3-switch v-model="ndSettingsIcons"></m3-switch></v-list-tile-action>
-    </v-list-tile>
-    <v-divider></v-divider>
-
-    <v-list-tile>
      <v-list-tile-content @click="ndSearch = !ndSearch" class="switch-label">
       <v-list-tile-title>{{i18n('Search')}}</v-list-tile-title>
       <v-list-tile-sub-title>{{i18n('Show search field.')}}</v-list-tile-sub-title>
@@ -575,7 +566,6 @@ Vue.component('lms-ui-settings', {
             autoCloseQueue: false,
             ndShortcuts: 0,
             ndShortcutValues: [],
-            ndSettingsIcons: false,
             ndSearch: true,
             detailedHomeValues:{},
             detailedHomeItems:[],
@@ -778,7 +768,6 @@ Vue.component('lms-ui-settings', {
             this.moveDialogs = this.$store.state.moveDialogs;
             this.autoCloseQueue = this.$store.state.autoCloseQueue;
             this.ndShortcuts = this.$store.state.ndShortcuts;
-            this.ndSettingsIcons = this.$store.state.ndSettingsIcons;
             this.ndSearch = this.$store.state.ndSearch;
             this.showItems=[{id: TOP_MYMUSIC_ID, name:i18n("My Music"), show:!this.hidden.has(TOP_MYMUSIC_ID)},
                             {id: TOP_RADIO_ID, name:i18n("Radio"), show:!this.hidden.has(TOP_RADIO_ID)},
@@ -950,7 +939,6 @@ Vue.component('lms-ui-settings', {
                       moveDialogs:this.moveDialogs,
                       autoCloseQueue:this.autoCloseQueue,
                       ndShortcuts:this.ndShortcuts,
-                      ndSettingsIcons:this.ndSettingsIcons,
                       ndSearch:this.ndSearch,
                       detailedHomeItems:this.detailedHomeItems
                   };

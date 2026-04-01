@@ -1718,7 +1718,7 @@ function browseItemAction(view, act, origItem, index, event, slimBrowseBaseActio
     } else if (act==GOTO_ALBUM_ACTION) {
         view.fetchItems({command:["tracks"], params:["album_id:"+item.album_id, trackTags(true), SORT_KEY+"tracknum"]}, {cancache:false, id:"album_id:"+item.album_id, title:item.album, stdItem:STD_ITEM_ALBUM});
     } else if (ADD_TO_PLAYLIST_ACTION==act) {
-        if (STD_ITEM_MIX==view.current.stdItem && !item.id.startsWith("track_id:")) {
+        if (view.current && STD_ITEM_MIX==view.current.stdItem && !item.id.startsWith("track_id:")) {
             bus.$emit('dlg.open', 'addtoplaylist', view.items);
         } else {
             bus.$emit('dlg.open', 'addtoplaylist', [item], [browseBuildCommand(view, item)]);

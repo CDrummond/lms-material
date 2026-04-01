@@ -462,7 +462,7 @@ var lmsBrowse = Vue.component("lms-browse", {
  <v-menu v-model="menu.show" :position-x="menu.x" :position-y="menu.y">
   <v-list v-if="menu.item && menu.item.moremenu">
    <template v-for="(entry, index) in menu.item.moremenu">
-    <v-list-tile @click="itemMoreAction(menu.item, index)">
+    <v-list-tile role="menuitem" @click="itemMoreAction(menu.item, index)">
      <v-list-tile-title>{{entry.title}}</v-list-tile-title>
     </v-list-tile>
    </template>
@@ -472,7 +472,7 @@ var lmsBrowse = Vue.component("lms-browse", {
     <div style="height:0px!important" v-if="(queryParams.party && HIDE_FOR_PARTY.has(action)) || (isTop && action==SELECT_ACTION) || (LMS_KIOSK_MODE && HIDE_FOR_KIOSK.has(action)) || ((PLAY_SHUFFLE_ACTION==action || PLAY_SHUFFLE_ALL_ACTION==action) && !allowShuffle(menu.item)) || (SELECT_ACTION==action && searchActive)"></div>
     <v-divider v-else-if="DIVIDER==action"></v-divider>
     <template v-for="(cact, cindex) in itemCustomActions" v-else-if="CUSTOM_ACTIONS==action">
-     <v-list-tile @click="itemCustomAction(cact, menu.item, menu.index)">
+     <v-list-tile role="menuitem" @click="itemCustomAction(cact, menu.item, menu.index)">
       <v-list-tile-avatar>
        <v-icon v-if="undefined==cact.svg">{{cact.icon}}</v-icon>
        <img v-else class="svg-img" :src="cact.svg | svgIcon(darkUi)"></img>
@@ -480,27 +480,27 @@ var lmsBrowse = Vue.component("lms-browse", {
       <v-list-tile-title>{{cact.title}}</v-list-tile-title>
      </v-list-tile>
     </template>
-    <v-list-tile v-else-if="action==ADD_TO_FAV_ACTION && isInFavorites(menu.item)" @click="menuItemAction(REMOVE_FROM_FAV_ACTION, menu.item, menu.index, $event)">
+    <v-list-tile role="menuitem" v-else-if="action==ADD_TO_FAV_ACTION && isInFavorites(menu.item)" @click="menuItemAction(REMOVE_FROM_FAV_ACTION, menu.item, menu.index, $event)">
      <v-list-tile-avatar>
       <v-icon v-if="undefined==ACTIONS[REMOVE_FROM_FAV_ACTION].svg">{{ACTIONS[REMOVE_FROM_FAV_ACTION].icon}}</v-icon>
       <img v-else class="svg-img" :src="ACTIONS[REMOVE_FROM_FAV_ACTION].svg | svgIcon(darkUi)"></img>
      </v-list-tile-avatar>
      <v-list-tile-title>{{ACTIONS[REMOVE_FROM_FAV_ACTION].title}}</v-list-tile-title>
     </v-list-tile>
-    <v-list-tile v-else-if="action==SELECT_ACTION && menu.item.selected" @click="menuItemAction(UNSELECT_ACTION, menu.item, menu.index, $event)">
+    <v-list-tile role="menuitem" v-else-if="action==SELECT_ACTION && menu.item.selected" @click="menuItemAction(UNSELECT_ACTION, menu.item, menu.index, $event)">
      <v-list-tile-avatar>
       <v-icon>{{ACTIONS[UNSELECT_ACTION].icon}}</v-icon>
      </v-list-tile-avatar>
      <v-list-tile-title>{{ACTIONS[UNSELECT_ACTION].title}}</v-list-tile-title>
     </v-list-tile>
-    <v-list-tile v-else-if="action==BR_COPY_ACTION ? queueSelection : action==MOVE_HERE_ACTION ? (selection.size>0 && !menu.item.selected) : action==DOWNLOAD_ACTION ? lmsOptions.allowDownload && undefined==menu.item.emblem : action==PLAY_DISC_ACTION ? undefined!=menu.item.disc : (action!=RATING_ACTION || showRating)" @click="menuItemAction(action, menu.item, menu.index, $event)">
+    <v-list-tile role="menuitem" v-else-if="action==BR_COPY_ACTION ? queueSelection : action==MOVE_HERE_ACTION ? (selection.size>0 && !menu.item.selected) : action==DOWNLOAD_ACTION ? lmsOptions.allowDownload && undefined==menu.item.emblem : action==PLAY_DISC_ACTION ? undefined!=menu.item.disc : (action!=RATING_ACTION || showRating)" @click="menuItemAction(action, menu.item, menu.index, $event)">
      <v-list-tile-avatar>
       <v-icon v-if="undefined==ACTIONS[action].svg">{{ACTIONS[action].icon}}</v-icon>
       <img v-else class="svg-img" :src="ACTIONS[action].svg | svgIcon(darkUi)"></img>
      </v-list-tile-avatar>
      <v-list-tile-title>{{ACTIONS[action].title}}</v-list-tile-title>
     </v-list-tile>
-    <v-list-tile v-if="action==COPY_DETAILS_ACTION && undefined!=menu.item.image && (index==menu.itemMenu.length-1 || menu.itemMenu[index+1]!=SHOW_IMAGE_ACTION)" @click="menuItemAction(SHOW_IMAGE_ACTION, menu.item, menu.index, $event)">
+    <v-list-tile role="menuitem" v-if="action==COPY_DETAILS_ACTION && undefined!=menu.item.image && (index==menu.itemMenu.length-1 || menu.itemMenu[index+1]!=SHOW_IMAGE_ACTION)" @click="menuItemAction(SHOW_IMAGE_ACTION, menu.item, menu.index, $event)">
      <v-list-tile-avatar>
       <img class="svg-img" :src="ACTIONS[SHOW_IMAGE_ACTION].svg | svgIcon(darkUi)"></img>
      </v-list-tile-avatar>
@@ -510,7 +510,7 @@ var lmsBrowse = Vue.component("lms-browse", {
   </v-list>
   <v-list v-else-if="menu.history">
    <template v-for="(item, index) in menu.history">
-    <v-list-tile @click="goTo(index)">
+    <v-list-tile role="menuitem" @click="goTo(index)">
      <v-list-tile-avatar>
       <v-icon v-if="undefined!=item.icon">{{item.icon}}</v-icon>
       <img v-else-if="undefined!=item.svg" class="svg-img" :src="item.svg | svgIcon(darkUi)"></img>
@@ -522,7 +522,7 @@ var lmsBrowse = Vue.component("lms-browse", {
   </v-list>
   <v-list v-else-if="menu.items">
    <template v-for="(item, index) in menu.items">
-    <v-list-tile @click="menuItemAction(item, undefined, undefined, $event)" v-if="undefined==item.title">
+    <v-list-tile role="menuitem" @click="menuItemAction(item, undefined, undefined, $event)" v-if="undefined==item.title">
      <v-list-tile-avatar :tile="true" class="lms-avatar"><v-icon v-if="ACTIONS[item].icon">{{ACTIONS[item].icon}}</v-icon><img v-else-if="ACTIONS[item].svg" class="svg-img" :src="ACTIONS[item].svg | svgIcon(darkUi)"></img></v-list-tile-avatar>
      <v-list-tile-title>{{ACTIONS[item].title}}</v-list-tile-title>
     </v-list-tile>
@@ -535,7 +535,7 @@ var lmsBrowse = Vue.component("lms-browse", {
     <div v-else-if="GROUP==item.action">
      <v-list-group v-model="item.expanded" @click.stop="">
       <template v-slot:activator><v-list-tile><v-list-tile-content><v-list-tile-title>{{item.title}}</v-list-tile-title></v-list-tile-content><v-list-tile></template>
-      <v-list-tile v-for="(subItem, subIndex) in item.actions" @click="currentAction(subItem, index+subIndex, $event)">
+      <v-list-tile role="menuitem" v-for="(subItem, subIndex) in item.actions" @click="currentAction(subItem, index+subIndex, $event)">
        <v-list-tile-avatar>
         <v-icon v-if="undefined==subItem.svg">{{subItem.icon}}</v-icon>
         <img v-else class="svg-img" :src="subItem.svg | svgIcon(darkUi)"></img>
@@ -546,28 +546,28 @@ var lmsBrowse = Vue.component("lms-browse", {
      <v-divider></v-divider>
     </div>
     <div v-else-if="GOTO_ARTIST_ACTION==item.action && history.length>1 && history[history.length-1].current.stdItem==STD_ITEM_ARTIST"></div>
-    <v-list-tile v-else-if="!item.isListItemInMenu && item.action==ADD_TO_FAV_ACTION && isInFavorites(current)" @click="menuItemAction(REMOVE_FROM_FAV_ACTION, current, undefined, $event)">
+    <v-list-tile role="menuitem" v-else-if="!item.isListItemInMenu && item.action==ADD_TO_FAV_ACTION && isInFavorites(current)" @click="menuItemAction(REMOVE_FROM_FAV_ACTION, current, undefined, $event)">
      <v-list-tile-avatar>
       <v-icon v-if="undefined==ACTIONS[REMOVE_FROM_FAV_ACTION].svg">{{ACTIONS[REMOVE_FROM_FAV_ACTION].icon}}</v-icon>
       <img v-else class="svg-img" :src="ACTIONS[REMOVE_FROM_FAV_ACTION].svg | svgIcon(darkUi)"></img>
      </v-list-tile-avatar>
      <v-list-tile-title>{{ACTIONS[REMOVE_FROM_FAV_ACTION].title}}</v-list-tile-title>
     </v-list-tile>
-    <v-list-tile v-else-if="!item.isListItemInMenu && undefined!=item.action" @click="menuItemAction(item.action, current, undefined, $event)">
+    <v-list-tile role="menuitem" v-else-if="!item.isListItemInMenu && undefined!=item.action" @click="menuItemAction(item.action, current, undefined, $event)">
      <v-list-tile-avatar>
       <v-icon v-if="undefined==ACTIONS[item.action].svg">{{ACTIONS[item.action].icon}}</v-icon>
       <img v-else class="svg-img" :src="ACTIONS[item.action].svg | svgIcon(darkUi)"></img>
      </v-list-tile-avatar>
      <v-list-tile-content><v-list-tile-title>{{ACTIONS[item.action].title}}</v-list-tile-title></v-list-tile-content>
     </v-list-tile>
-    <v-list-tile v-else-if="item.isListItemInMenu && 'itemNoAction'==item.style" class="nonclick-menu-item">
+    <v-list-tile role="menuitem" v-else-if="item.isListItemInMenu && 'itemNoAction'==item.style" class="nonclick-menu-item">
      <v-list-tile-avatar>
       <v-icon v-if="undefined==item.svg">{{item.icon}}</v-icon>
       <img v-else class="svg-img" :src="item.svg | svgIcon(darkUi)"></img>
      </v-list-tile-avatar>
      <v-list-tile-content><v-list-tile-title>{{item.title}}</v-list-tile-title></v-list-tile-content>
     </v-list-tile>
-    <v-list-tile v-else @click="currentAction(item, index, $event)">
+    <v-list-tile role="menuitem" v-else @click="currentAction(item, index, $event)">
      <v-list-tile-avatar>
       <v-icon v-if="undefined==item.svg">{{item.icon}}</v-icon>
       <img v-else class="svg-img" :src="item.svg | svgIcon(darkUi)"></img>
@@ -578,7 +578,7 @@ var lmsBrowse = Vue.component("lms-browse", {
   </v-list>
   <v-list v-else-if="menu.linkItems">
    <template v-for="(item, index) in menu.linkItems">
-    <v-list-tile @click="linkAction(item)">
+    <v-list-tile role="menuitem" @click="linkAction(item)">
      <v-list-tile-avatar>
       <v-icon v-if="undefined==item.svg">{{item.icon}}</v-icon>
       <img v-else class="svg-img" :src="item.svg | svgIcon(darkUi)"></img>

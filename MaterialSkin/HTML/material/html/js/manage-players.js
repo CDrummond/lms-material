@@ -80,24 +80,24 @@ Vue.component('lms-manage-players', {
      <v-btn icon slot="activator"><v-icon>more_vert</v-icon></v-btn>
      <v-list>
       <v-subheader>{{i18n("All players")}}</v-subheader>
-      <v-list-tile @click="actionAll($event, 'sleep')" class="menu-group-item">
+      <v-list-tile role="menuitem" @click="actionAll($event, 'sleep')" class="menu-group-item">
        <v-list-tile-avatar><v-icon>hotel</v-icon></v-list-tile-avatar>
        <v-list-tile-content><v-list-tile-title>{{i18n('Sleep')}}</v-list-tile-title></v-list-tile-content>
       </v-list-tile>
-      <v-list-tile @click="actionAll($event, 'clear')" class="menu-group-item">
+      <v-list-tile role="menuitem" @click="actionAll($event, 'clear')" class="menu-group-item">
        <v-list-tile-avatar><img class="svg-img" :src="'queue-clear' | svgIcon(darkUi)"></img></v-list-tile-avatar>
        <v-list-tile-content><v-list-tile-title>{{i18n('Clear queue')}}</v-list-tile-title></v-list-tile-content>
       </v-list-tile>
-      <v-list-tile @click="actionAll($event, 'poweroff')" class="menu-group-item">
+      <v-list-tile role="menuitem" @click="actionAll($event, 'poweroff')" class="menu-group-item">
        <v-list-tile-avatar><v-icon class="dimmed">power_settings_new</v-icon></v-list-tile-avatar>
        <v-list-tile-content><v-list-tile-title>{{i18n('Switch off')}}</v-list-tile-title></v-list-tile-content>
       </v-list-tile>
-      <v-list-tile @click="actionAll($event, 'poweron')" class="menu-group-item">
+      <v-list-tile role="menuitem" @click="actionAll($event, 'poweron')" class="menu-group-item">
        <v-list-tile-avatar><v-icon>power_settings_new</v-icon></v-list-tile-avatar>
        <v-list-tile-content><v-list-tile-title>{{i18n('Switch on')}}</v-list-tile-title></v-list-tile-content>
       </v-list-tile>
       <v-divider v-if="manageGroups && unlockAll"></v-divider>
-      <v-list-tile @click="createGroup($event)" v-if="manageGroups && unlockAll">
+      <v-list-tile role="menuitem" @click="createGroup($event)" v-if="manageGroups && unlockAll">
        <v-list-tile-avatar><img class="svg-img" :src="'speaker-group-add' | svgIcon(darkUi)"></img></v-list-tile-avatar>
        <v-list-tile-content><v-list-tile-title>{{i18n("Create group player")}}</v-list-tile-title></v-list-tile-content>
       </v-list-tile>

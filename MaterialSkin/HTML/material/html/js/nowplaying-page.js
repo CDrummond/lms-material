@@ -41,11 +41,11 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
    <template v-for="(item, index) in menu.items">
     <v-divider v-if="item.divider"></v-divider>
     <v-subheader v-else-if="item.header" style="padding-top:16px">{{item.title}}</v-subheader>
-    <v-list-tile v-else-if="undefined==item.title" @click="menuStdAction(item)" >
+    <v-list-tile role="menuitem" v-else-if="undefined==item.title" @click="menuStdAction(item)" >
      <v-list-tile-avatar :tile="true" class="lms-avatar"><v-icon v-if="ACTIONS[item].icon">{{ACTIONS[item].icon}}</v-icon><img v-else-if="ACTIONS[item].svg" class="svg-img" :src="ACTIONS[item].svg | svgIcon(darkUi)"></img></v-list-tile-avatar>
      <v-list-tile-title>{{ACTIONS[item].title}}</v-list-tile-title>
     </v-list-tile>
-    <v-list-tile v-else @click="menuAction(item)">
+    <v-list-tile role="menuitem" v-else @click="menuAction(item)">
      <v-list-tile-avatar v-if="undefined!=item.check"><v-icon>{{item.check ? 'check_box' : 'check_box_outline_blank'}}</v-icon></v-list-tile-avatar>
      <v-list-tile-avatar v-if="undefined!=item.radio"><v-icon>{{item.radio ? 'radio_button_checked' : 'radio_button_unchecked'}}</v-icon></v-list-tile-avatar>
      <v-list-tile-avatar v-else-if="menu.icons" :tile="true" class="lms-avatar"><v-icon v-if="item.icon">{{item.icon}}</v-icon><img v-else-if="item.svg" class="svg-img" :src="item.svg | svgIcon(darkUi)"></img></v-list-tile-avatar>

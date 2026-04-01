@@ -28,7 +28,7 @@ Vue.component('lms-player-settings', {
       <v-btn icon slot="activator"><v-icon>more_vert</v-icon></v-btn>
       <v-list>
        <template v-for="(action, index) in customActions">
-        <v-list-tile @click="doCustomAction(action, {id:playerId, name:playerName})">
+        <v-list-tile role="menuitem" @click="doCustomAction(action, {id:playerId, name:playerName})">
          <v-list-tile-avatar><v-icon v-if="action.icon">{{action.icon}}</v-icon><img v-else-if="action.svg" class="svg-img" :src="action.svg | svgIcon(darkUi)"></img></v-list-tile-avatar>
          <v-list-tile-content><v-list-tile-title>{{action.title}}</v-list-tile-title></v-list-tile-content>
         </v-list-tile>

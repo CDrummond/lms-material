@@ -494,30 +494,26 @@ html, .mini-player {
  height:calc(8px + var(--bottom-pad))!important;
 }
 
-.nd-shortuts {
+.nd-shortcuts {
  margin:0px;
  list-style-type:none;
  list-style-image:none;
  padding-left:12px;
- overflow-y:auto;
-}
-
-.nd-shortuts-1 {
  max-height:44px;
  overflow-y:hidden;
 }
 
-.nd-shortuts-wide {
+.nd-shortcuts-wide {
  padding-left:14px;
 }
 
-.nd-shortuts li {
+.nd-shortcuts li {
  float:left;
  margin-left:0px;
  margin-right:8px;
 }
 
-.nd-shortuts-wide li {
+.nd-shortcuts-wide li {
  margin-right:16px;
 }
 

@@ -410,9 +410,12 @@ Vue.component('lms-ui-settings', {
     <div class="dialog-padding"></div>
     <v-header class="dialog-section-header">{{i18n('Main Menu')}}</v-header>
     <v-list-tile v-if="advanced">
-     <v-select :items="ndShortcutValues" :label="i18n('Shortcuts in main menu')" v-model="ndShortcuts" item-text="label" item-value="key"></v-select>
+     <v-list-tile-content @click="ndShortcuts = !ndShortcuts" class="switch-label">
+      <v-list-tile-title>{{i18n('Shortcuts')}}</v-list-tile-title>
+      <v-list-tile-sub-title>{{i18n('Show shortcuts to pinned home screen items in main menu. (NOTE: Radio streams and random mixes are excluded.)')}}</v-list-tile-sub-title>
+     </v-list-tile-content>
+     <v-list-tile-action><m3-switch v-model="ndShortcuts"></m3-switch></v-list-tile-action>
     </v-list-tile>
-    <v-list-tile-sub-title v-if="advanced" style="padding-bottom:16px">{{i18n('Show shortcuts to pinned home screen items in main menu. (NOTE: Radio streams and random mixes are excluded.)')}}</v-list-tile-sub-title>
     <v-divider v-if="advanced"></v-divider>
 
     <v-list-tile>
@@ -564,7 +567,7 @@ Vue.component('lms-ui-settings', {
             moveDialogs: false,
             showMoveDialogs: false,
             autoCloseQueue: false,
-            ndShortcuts: 0,
+            ndShortcuts: false,
             ndShortcutValues: [],
             ndSearch: true,
             detailedHomeValues:{},
@@ -811,11 +814,6 @@ Vue.component('lms-ui-settings', {
                 { key: 's',  label: i18n("Small") },
                 { key: 'r',  label: i18n("Regular") },
                 { key: 'l',  label: i18n("Large") }
-                ];
-            this.ndShortcutValues=[
-                { key:0, label:i18n("Don't show")},
-                { key:1, label:i18n("Show all")},
-                { key:2, label:i18n("Single line only")},
                 ];
             this.screensavers=[
                 { key:0, label:i18n("Disabled")},

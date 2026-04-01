@@ -391,7 +391,7 @@ const store = new Vuex.Store({
         tinted: true,
         moveDialogs: false,
         autoCloseQueue: false,
-        ndShortcuts: 0,
+        ndShortcuts: false,
         ndSearch: true,
         browseSearch: false,
         cMixSupported: 1==parseInt(getComputedStyle(document.documentElement).getPropertyValue('--color-mix-supported')),
@@ -628,13 +628,13 @@ const store = new Vuex.Store({
                              'infoBackdrop', 'useDefaultBackdrops', 'browseTechInfo', 'techInfo', 'queueShowTrackNum', 'nowPlayingTrackNum',
                              'nowPlayingClock', 'swipeVolume', 'swipeChangeTrack', 'keyboardControl', 'screensaverNp', 'mediaControls',
                              'queueAlbumStyle', 'queueThreeLines', 'browseContext', 'nowPlayingContext', 'queueContext', 'showRating',
-                             'moveDialogs', 'autoCloseQueue', 'nowPlayingFull', 'tinted', 'ndSearch', 'gridPerView',
+                             'moveDialogs', 'autoCloseQueue', 'nowPlayingFull', 'tinted', 'ndShortcuts', 'ndSearch', 'gridPerView',
                              'browseSearch'];
             for (let i=0, len=boolItems.length; i<len; ++i) {
                 let key = boolItems[i];
                 state[key] = getLocalStorageBool(key, state[key]);
             }
-            let intItems = ['skipBSeconds', 'skipFSeconds', 'mobileBar', 'maxRating', 'volumeStep', 'ndShortcuts', 'screensaver', 'homeButton'];
+            let intItems = ['skipBSeconds', 'skipFSeconds', 'mobileBar', 'maxRating', 'volumeStep', 'screensaver', 'homeButton'];
             for (let i=0, len=intItems.length; i<len; ++i) {
                 let key = intItems[i];
                 let value = getLocalStorageVal(key, state[key]);

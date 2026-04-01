@@ -152,7 +152,7 @@ Vue.component('lms-navdrawer', {
  </div>
  <div v-if="showShortcuts">
   <v-subheader>{{trans.shortcuts}}</v-subheader>
-  <ul class="nd-shortuts" v-bind:class="{'nd-shortuts-wide':maxWidth>320, 'nd-shortuts-1':2==ndShortcuts}">
+  <ul class="nd-shortcuts" v-bind:class="{'nd-shortcuts-wide':maxWidth>320}">
    <li v-for="(item, index) in shortcuts">
     <v-btn icon class="toolbar-button" @click="show=false; bus.$emit('browse-shortcut', item.id)" v-if="!homeButton || item.id!='-'">
      <v-icon v-if="undefined!=item.icon">{{item.icon}}</v-icon>
@@ -163,7 +163,7 @@ Vue.component('lms-navdrawer', {
  </div>
  <div v-if="settingsIcons">
   <v-subheader>{{TB_SETTINGS.title}}</v-subheader>
-  <ul class="nd-shortuts" v-bind:class="{'nd-shortuts-wide':maxWidth>320}">
+  <ul class="nd-shortcuts" v-bind:class="{'nd-shortcuts-wide':maxWidth>320}">
    <template v-for="(item, index) in menuItems">
     <li :title="item.title" v-if="item!=DIVIDER && !item.hdr && (TB_PLAYER_SETTINGS.id==item.id ? (player && connected) : (TB_SERVER_SETTINGS.id!=item.id || (unlockAll && connected)))">
      <v-btn v-if="TB_APP_SETTINGS.id==item.id" :href="queryParams.appSettings" @click="show=false" icon class="toolbar-button">
@@ -700,8 +700,9 @@ Vue.component('lms-navdrawer', {
             let numPlayers = (this.players ? this.players.length : 0);
             let playerheight = ((numPlayers + (this.showManagePlayers ? 1 : 0)) * 48) + (haveGroup ? 72 : 0) /*titles*/;
             let searchHeight = this.showSearch ? 80 : 0;
+            let shortcutHeight = this.showShortcuts ? 80 : 0;
             let minPlayerHeight = Math.max(5*48, playerheight) + 24 /*padding*/;
-            return (this.height-(queryParams.topPad+queryParams.botPad+settingsHeight+searchHeight))<minPlayerHeight;
+            return (this.height-(queryParams.topPad+queryParams.botPad+settingsHeight+searchHeight+shortcutHeight))<minPlayerHeight;
         },
         homeButton() {
             return this.$store.state.homeButton

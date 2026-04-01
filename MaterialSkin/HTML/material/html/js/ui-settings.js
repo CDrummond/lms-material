@@ -16,16 +16,15 @@ Vue.component('lms-ui-settings', {
     <lms-windowcontrols v-if="queryParams.nativeTitlebar && queryParams.tbarBtnsPos=='l'"></lms-windowcontrols>
     <div class="drag-area-left"></div>
     <v-btn flat icon @click="close" :title="ttShortcutStr(i18n('Go back'), 'esc')"><v-icon>arrow_back</v-icon></v-btn>
-    <v-toolbar-title>{{width>=450 ? TB_UI_SETTINGS.title+serverName : TB_UI_SETTINGS.title}}</v-toolbar-title>
+    <v-toolbar-title>{{width>=600 ? TB_UI_SETTINGS.title+serverName : TB_UI_SETTINGS.title}}</v-toolbar-title>
     <v-spacer class="drag-area"></v-spacer>
-    <v-menu bottom left v-model="showMenu">
-     <v-btn icon slot="activator"><v-icon>more_vert</v-icon></v-btn>
-     <v-list>
-      <v-list-tile role="menuitem" @click="advanced=!advanced" class="menu-group-item">
-      <v-list-tile-avatar><v-icon>{{advanced ? 'check_box' : 'check_box_outline_blank'}}</v-icon></v-list-tile-avatar>
-       <v-list-tile-content><v-list-tile-title>{{i18n('All options')}}</v-list-tile-title></v-list-tile-content>
-      </v-list-tile>
-    </v-menu>
+    <v-list-tile style="margin-right:-5px!important">
+     <v-list-tile-content @click="advanced = !advanced" class="switch-label">
+      <v-list-tile-title v-if="width>=380">{{i18n('All options')}}</v-list-tile-title>
+      <v-list-tile-title v-else-if="width>=340">{{i18n('All')}}</v-list-tile-title>
+     </v-list-tile-content>
+     <v-list-tile-action style="padding-top:8px; min-width:40px!important"><m3-switch v-model="advanced"></m3-switch></v-list-tile-action>
+    </v-list-tile>
     <div class="drag-area-right"></div>
     <lms-windowcontrols v-if="queryParams.nativeTitlebar && queryParams.tbarBtnsPos=='r'"></lms-windowcontrols>
    </v-toolbar>

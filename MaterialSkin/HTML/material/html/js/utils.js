@@ -1303,8 +1303,8 @@ function updateBgndImage(view, url) {
 
 function albumGroupingType(discCount, groupCount, contiguousGroups, parentIsWork) {
     let multiDisc = lmsOptions.groupdiscs && undefined!=discCount && parseInt(discCount)>1;
-    let multiGroup = undefined!=groupCount && parseInt(groupCount)>1 && (undefined==contiguousGroups || 1==parseInt(contiguousGroups));
-    return multiGroup && (lmsOptions.useGrouping || !multiDisc || parentIsWork)
+    let multiGroup = parentIsWork || (undefined!=groupCount && parseInt(groupCount)>1 && (undefined==contiguousGroups || 1==parseInt(contiguousGroups)));
+    return multiGroup && (lmsOptions.useGrouping || !multiDisc)
         ? MULTI_GROUP_ALBUM
         : multiDisc
             ? MULTI_DISC_ALBUM

@@ -446,7 +446,7 @@ Vue.component('lms-ui-settings', {
  </v-card>
 </v-dialog>
 
- <v-dialog v-model="browseModesDialog.show" :width="browseModesDialog.wide ? 750 : 500" persistent style="overflow:hidden" v-if="browseModesDialog.show">
+ <v-dialog v-model="browseModesDialog.show" :width="dialogWidth" persistent style="overflow:hidden" v-if="browseModesDialog.show">
   <v-card>
    <v-card-title>{{i18n("Browse modes")}}</v-card-title>
    <div class="dialog-main-list browse-modes-table">
@@ -468,7 +468,7 @@ Vue.component('lms-ui-settings', {
   </v-card>
  </v-dialog>
 
-  <v-dialog v-model="detailedHomeDialog.show" :width="500" persistent style="overflow:hidden" v-if="detailedHomeDialog.show">
+  <v-dialog v-model="detailedHomeDialog.show" :width="dialogWidth" persistent style="overflow:hidden" v-if="detailedHomeDialog.show">
   <v-card>
    <v-card-title>{{i18n("Scrollable lists")}}</v-card-title>
    <v-list class="dialog-main-list">
@@ -555,7 +555,6 @@ Vue.component('lms-ui-settings', {
             showPassword: false,
             browseModesDialog: {
                 show: false,
-                wide: false,
                 modes: [],
                 categorize: true,
             },
@@ -613,15 +612,18 @@ Vue.component('lms-ui-settings', {
         },
         allowLayoutSettings() {
             return this.allowLayoutAdjust && this.advanced
+        },
+        dialogWidth() {
+            return this.width>=800 ? 750 : this.width-(this.width>=380 ? 50 : 10)
         }
     },
     mounted() {
-        this.width = Math.floor(window.innerWidth/25)*25;
+        this.width = Math.floor(window.innerWidth/10)*10;
         setTimeout(function () {
-            this.width = Math.floor(window.innerWidth/25)*25;
+            this.width = Math.floor(window.innerWidth/10)*10;
         }.bind(this), 1000);
         bus.$on('windowWidthChanged', function() {
-            this.width = Math.floor(window.innerWidth/25)*25;
+            this.width = Math.floor(window.innerWidth/10)*10;
         }.bind(this));
         bus.$on('uisettings.open', function(act) {
             this.showMenu = false;
@@ -1122,7 +1124,6 @@ Vue.component('lms-ui-settings', {
         },
         showBrowseModesDialog(event) {
             storeClickOrTouchPos(event);
-            this.browseModesDialog.wide = window.innerWidth >= 700;
             this.browseModesDialog.show=true;
         },
         showDetailedHomeDialog(event) {

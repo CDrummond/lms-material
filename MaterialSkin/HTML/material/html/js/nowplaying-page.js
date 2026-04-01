@@ -63,7 +63,7 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
     <v-tab-item :key="index" :transition="false" :reverse-transition="false">
      <v-card flat class="np-info-card-cover selectable" @touchend="tabTextEnd" @mouseup="tabTextEnd" @contextmenu="event.preventDefault()">
       <v-card-text :class="['np-info-text', TRACK_TAB==index || tab.isMsg ? 'np-info-lyrics' : '', ALBUM_TAB==index ? 'np-info-review' : '']" :id="'np-tab'+index">
-       <div v-if="tab.texttitle" v-html="tab.texttitle" class="np-info-title frosted" :id="'mai-header-'+index" @click="headerClicked($event, index)"></div>
+       <div v-if="tab.texttitle" v-html="tab.texttitle" class="np-info-title frosted" :id="'mai-header-'+index" role="button" @click="headerClicked($event, index)"></div>
        <div v-if="tab.image"><img :src="tab.image" loading="lazy" class="np-mai-img" @dragstart.prevent="" @dragenter.prevent=""></img></div>
        <div v-if="TRACK_TAB==index && tab.lines">
         <template v-for="(line, lindex) in tab.lines">
@@ -98,7 +98,7 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
            </div>
           </v-list-tile>
          </template>
-         <v-list-tile v-if="undefined!=sect.more" @click="moreClicked(index, sindex)"><v-list-tile-content><v-list-tile-title>{{sect.more}}</v-list-tile-title></v-list-tile-content></v-list-tile>
+         <v-list-tile v-if="undefined!=sect.more" role="button" @click="moreClicked(index, sindex)"><v-list-tile-content><v-list-tile-title>{{sect.more}}</v-list-tile-title></v-list-tile-content></v-list-tile>
         </v-list>
         <div class="np-grid-sect" v-else-if="undefined!=sect.items && sect.grid && sect.items.length>=sect.min">
          <template v-for="(item, iindex) in sect.items">
@@ -111,7 +111,7 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
            </div>
           </div>
          </template>
-         <div v-if="undefined!=sect.more && undefined!=sect.items && sect.grid && sect.items.length>=sect.min" class="np-grid-more link-item" @click="moreClicked(index, sindex)">{{sect.more}}</div>
+         <div v-if="undefined!=sect.more && undefined!=sect.items && sect.grid && sect.items.length>=sect.min" class="np-grid-more link-item" role="button" @click="moreClicked(index, sindex)">{{sect.more}}</div>
         </div>
         <div v-else-if="undefined!=sect.html" v-html="sect.html"></div>
        </template>
@@ -127,7 +127,7 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
      <v-flex xs4>
       <v-card flat class="np-info-card-cover selectable" @touchend="tabTextEnd" @mouseup="tabTextEnd" @contextmenu="event.preventDefault()">
        <v-card-text :class="['np-info-text-full', TRACK_TAB==index || tab.isMsg ? 'np-info-lyrics' : '', ALBUM_TAB==index ? 'np-info-review' : '']" :id="'np-tab'+index">
-        <div v-if="tab.texttitle" v-html="tab.texttitle" class="np-info-title frosted" :id="'mai-header-'+index" @click="headerClicked($event, index)"></div>
+        <div v-if="tab.texttitle" v-html="tab.texttitle" class="np-info-title frosted" :id="'mai-header-'+index" role="button" @click="headerClicked($event, index)"></div>
         <div v-if="tab.image"><img :src="tab.image" loading="lazy" class="np-mai-img" @dragstart.prevent="" @dragenter.prevent=""></img></div>
         <div v-if="TRACK_TAB==index && tab.lines">
          <template v-for="(line, lindex) in tab.lines">
@@ -136,7 +136,7 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
         </div>
         <div v-else-if="tab.text" v-bind:class="{'text':TRACK_TAB!=index}" v-html="tab.text"></div>
         <template v-for="(sect, sindex) in tab.sections">
-         <div class="np-sect-title" v-if="(undefined!=sect.items && sect.items.length>=sect.min) || undefined!=sect.html" :id="'mai-sect-'+sindex+'-'+index">{{sect.title}}<v-btn flat icon class="np-sect-toggle" v-if="undefined!=sect.grid" @click="toggleGrid(index, sindex)">
+         <div class="np-sect-title" v-if="(undefined!=sect.items && sect.items.length>=sect.min) || undefined!=sect.html" :id="'mai-sect-'+sindex+'-'+index">{{sect.title}}<v-btn flat icon class="np-sect-toggle" v-if="undefined!=sect.grid" role="button" @click="toggleGrid(index, sindex)">
           <img class="svg-img" :src="ACTIONS[sect.grid ? USE_LIST_ACTION : USE_GRID_ACTION].svg | svgIcon(darkUi)" loading="lazy" @dragstart.prevent="" @dragenter.prevent=""></img></v-btn></div>
          <v-list v-if="undefined!=sect.items && !sect.grid && sect.items.length>=sect.min" class="lms-list np-info-list">
           <template v-for="(item, iindex) in sect.items">
@@ -162,7 +162,7 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
             </div>
            </v-list-tile>
           </template>
-          <v-list-tile v-if="undefined!=sect.more" @click="moreClicked(index, sindex)"><v-list-tile-content><v-list-tile-title>{{sect.more}}</v-list-tile-title></v-list-tile-content></v-list-tile>
+          <v-list-tile v-if="undefined!=sect.more" role="button" @click="moreClicked(index, sindex)"><v-list-tile-content><v-list-tile-title>{{sect.more}}</v-list-tile-title></v-list-tile-content></v-list-tile>
          </v-list>
          <div class="np-grid-sect" v-else-if="undefined!=sect.items && sect.grid && sect.items.length>=sect.min">
           <template v-for="(item, iindex) in sect.items">
@@ -175,7 +175,7 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
             </div>
            </div>
           </template>
-          <div v-if="undefined!=sect.more && undefined!=sect.items && sect.grid && sect.items.length>=sect.min" class="np-grid-more link-item" @click="moreClicked(index, sindex)">{{sect.more}}</div>
+          <div v-if="undefined!=sect.more && undefined!=sect.items && sect.grid && sect.items.length>=sect.min" class="np-grid-more link-item" role="button" @click="moreClicked(index, sindex)">{{sect.more}}</div>
          </div>
          <div v-else-if="undefined!=sect.html" v-html="sect.html"></div>
         </template>
@@ -314,7 +314,7 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
      <div class="np-emblem" v-if="playerStatus.current.emblem" @click="emblemClicked" :style="{background: playerStatus.current.emblem.bgnd}" v-bind:class="{'np-cover-dim':showOverlay}">
       <img :src="playerStatus.current.emblem | emblem()" loading="lazy" @dragstart.prevent="" @dragenter.prevent=""></img>
      </div>
-     <div class="np-menu" :title="trans.menu" @click="showMenu" id="overlay-menu" v-if="showOverlay && playerStatus.playlist.count>0" v-bind:class="{'np-skip-elevate':showOverlay}"></div>
+     <div class="np-menu" :title="trans.menu" role="button" @click="showMenu" id="overlay-menu" v-if="showOverlay && playerStatus.playlist.count>0" v-bind:class="{'np-skip-elevate':showOverlay}"></div>
      <div class="np-close" :title="trans.collapseNp" @click="largeView=false" id="overlay-close" v-if="showOverlay" v-bind:class="{'np-skip-elevate':showOverlay}"></div>
      <table class="np-skip" v-if="showOverlay" @contextmenu="showMenu" @click="clickImage(event)">
       <tr>

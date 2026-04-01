@@ -4788,5 +4788,5 @@ div.v-subheader {
 }
 
 .msk-is-non-touch .browse-search-btn:hover {
- opacity:0.9;
+ filter:saturate(150%);
 }

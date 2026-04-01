@@ -86,7 +86,7 @@ function buildArtistAlbumLines(i, queueAlbumStyle, queueContext) {
             if (i.band && lmsOptions.showBand && useBand(i)) {
                 artistAlbum = addPart(artistAlbum, addArtistLink(i, undefined, "band", "show_band", "queue", used, plain));
             }
-            if (i.conductor && lmsOptions.showConductor && useConductor(i)) {
+            if (i.conductor && (i.work || (lmsOptions.showConductor && useConductor(i)))) {
                 artistAlbum = addPart(artistAlbum, addArtistLink(i, undefined, "conductor", "show_conductor", "queue", used, plain));
             }
         }
@@ -181,7 +181,7 @@ function parseResp(data, showTrackNum, index, showRatings, queueAlbumStyle, queu
                         if (i.bands) i.bands.forEach(function(b) { grpHeaderNames.add(b); });
                         else grpHeaderNames.add(i.band);
                     }
-                    if (i.conductor && lmsOptions.showConductor && useConductor(i)) {
+                    if (i.conductor && (i.work || (lmsOptions.showConductor && useConductor(i)))) {
                         if (i.conductors) i.conductors.forEach(function(c) { grpHeaderNames.add(c); });
                         else grpHeaderNames.add(i.conductor);
                     }

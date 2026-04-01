@@ -720,9 +720,10 @@ function getTouchOrClickPos(event) {
 }
 
 function resetDialogPos() {
-    if ('unset'!=getComputedStyle(document.documentElement).getPropertyValue('--dialog-top')) {
-        document.documentElement.style.setProperty('--dialog-top', 'unset');
-        document.documentElement.style.setProperty('--dialog-left', 'unset');
+    let val = getComputedStyle(document.documentElement).getPropertyValue('--dialog-top');
+    if (undefined!=val && null!=val && 'unset'!=val) {
+        document.documentElement.style.setProperty('--dialog-top', null);
+        document.documentElement.style.setProperty('--dialog-left', null);
     }
 }
 

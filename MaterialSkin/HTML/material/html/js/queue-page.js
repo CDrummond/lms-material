@@ -48,15 +48,12 @@ function buildArtistAlbumLines(i, queueAlbumStyle, queueContext) {
     let ws = false;
     //let artistStr = i.albumartist ? i.albumartist : i.artist ? i.artist : i.trackartist; - moved into queueAlbumStyle block
     if (queueAlbumStyle) {
-        let artistStr = i.albumartist ? i.albumartist : i.artist ? i.artist : i.trackartist;
-        let id = i.albumartist ? i.albumartist_id : i.artist_id ? i.artist_id : i.trackartist_id;
-        if (!artistStr && i.remote) {
+        let artistType = i.albumartist ? "albumartist" : i.artist ? "artist" : i.trackartist ? "trackartist" : undefined;
+        if (!artistType && i.remote) {
             artistAlbum = i.remote_title ? i.remote_title : i.title;
             artistIsRemoteTitle = true;
-        } else if ((IS_MOBILE && !lmsOptions.touchLinks) || undefined==id) {
-            artistAlbum = artistStr;
-        } else {
-            artistAlbum = buildLink(i.albumartist ? 'show_albumartist' : 'show_artist', id, artistStr, 'queue');
+        } else if (artistType) {
+            artistAlbum = addArtistLink(i, undefined, artistType, artistType=="albumartist" ? "show_albumartist" : "show_artist", "queue", new Set(), (IS_MOBILE && !lmsOptions.touchLinks));
         }
     } else {
         let useComposerTag = i.composer && lmsOptions.showComposer && useComposer(i);
@@ -79,9 +76,10 @@ function buildArtistAlbumLines(i, queueAlbumStyle, queueContext) {
         if (queueAlbumStyle) {
             let used = new Set();
             let plain = (IS_MOBILE && !lmsOptions.touchLinks);
-            let artistStr = i.albumartist ? i.albumartist : i.artist ? i.artist : i.trackartist;
-            if (artistStr) {
-                used.add(artistStr);
+            let artistType = i.albumartist ? "albumartist" : i.artist ? "artist" : i.trackartist ? "trackartist" : undefined;
+            if (artistType) {
+                let names = i[artistType+"s"] || [i[artistType]];
+                names.forEach(function(n) { if (n) used.add(n); });
             }
             if (i.band && lmsOptions.showBand && useBand(i)) {
                 artistAlbum = addPart(artistAlbum, addArtistLink(i, undefined, "band", "show_band", "queue", used, plain));
@@ -176,7 +174,13 @@ function parseResp(data, showTrackNum, index, showRatings, queueAlbumStyle, queu
                                                                    (i.album!=prevItem.album) ) ) );
                 if (isAlbumHeader && isMultiGroup) {
                     grpHeaderNames = new Set();
-                    if (artist) grpHeaderNames.add(artist);
+                    let artistType = i.albumartist ? "albumartist" : i.artist ? "artist" : i.trackartist ? "trackartist" : undefined;
+                    if (artistType) {
+                        let names = i[artistType+"s"] || [i[artistType]];
+                        names.forEach(function(n) { if (n) grpHeaderNames.add(n); });
+                    } else if (artist) {
+                        grpHeaderNames.add(artist);
+                    }
                     if (i.band && lmsOptions.showBand && useBand(i)) {
                         if (i.bands) i.bands.forEach(function(b) { grpHeaderNames.add(b); });
                         else grpHeaderNames.add(i.band);

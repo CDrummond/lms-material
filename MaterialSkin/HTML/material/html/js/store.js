@@ -10,8 +10,11 @@ const VALID_SKIP_SECONDS = new Set(SKIP_SECONDS_VALS);
 const FAKE_MENU = new Set(['volume', 'groupvolume'])
 var lmsNumVisibleMenus = 0;
 
-function copyPlayer(p){
-    return {id:p.id, name:p.name, isgroup:p.isgroup, model:p.model, ip:p.ip, icon:p.icon, color:p.color, link:p.link, ison:p.ison, isplaying:p.isplaying, iswaiting:p.iswaiting, isconnected:p.isconnected, canpoweroff:p.canpoweroff, islocal:p.islocal, trkcount:p.trkcount};
+function copyPlayer(p) {
+    return {id:p.id, name:p.name, isgroup:p.isgroup, model:p.model, ip:p.ip, icon:p.icon, color:p.color,
+            enabled:p.enabled, weight:p.weight, link:p.link, ison:p.ison, isplaying:p.isplaying,
+            iswaiting:p.iswaiting, isconnected:p.isconnected, canpoweroff:p.canpoweroff, islocal:p.islocal,
+            trkcount:p.trkcount};
 }
 
 function setDesktopWideCoverPad(on) {
@@ -409,6 +412,8 @@ const store = new Vuex.Store({
                     state.players[i].isgroup = player.isgroup;
                     state.players[i].icon = player.icon;
                     state.players[i].color = player.color;
+                    state.players[i].enabled = player.enabled;
+                    state.players[i].weight = player.weight;
                     state.players[i].trkcount = player.playlist ? player.playlist.count : 0;
                     if (state.player!=undefined && player.id == state.player.id) {
                         state.player.name = player.name;
@@ -418,6 +423,8 @@ const store = new Vuex.Store({
                         state.player.isgroup = player.isgroup;
                         state.player.icon = player.icon;
                         state.player.color = player.color;
+                        state.player.enabled = player.enabled;
+                        state.player.weight = player.weight;
                         state.player.trkcount = player.playlist ? player.playlist.count : 0;
                     }
                     break;
@@ -448,6 +455,8 @@ const store = new Vuex.Store({
                     state.players[i].isgroup = players[i].isgroup;
                     state.players[i].icon = players[i].icon;
                     state.players[i].color = players[i].color;
+                    state.players[i].enabled = players[i].enabled;
+                    state.players[i].weight = players[i].weight;
                     state.players[i].link = players[i].link;
                 }
                 return;

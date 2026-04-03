@@ -94,9 +94,10 @@ Vue.component('lms-navdrawer', {
     <v-list-tile-content><v-list-tile-title>{{trans.connectionLost}}</v-list-tile-title></v-list-tile-content>
    </v-list-tile>
    <template v-for="(item, index) in players" v-if="connected">
-    <v-subheader v-if="index==0 && !item.isgroup && players[players.length-1].isgroup">{{trans.standardPlayers}}</v-subheader>
+    <div v-if="!item.enabled" style="height:0px"></div>
+    <v-subheader v-else-if="index==0 && !item.isgroup && players[players.length-1].isgroup">{{trans.standardPlayers}}</v-subheader>
     <v-subheader v-else-if="index>0 && item.isgroup && !players[index-1].isgroup">{{trans.groupPlayers}}</v-subheader>
-    <v-list-tile @click="setPlayer(item.id)" v-bind:class="{'nd-active-player':player && item.id === player.id}" :id="'nd-player-'+index">
+    <v-list-tile v-if="item.enabled" @click="setPlayer(item.id)" v-bind:class="{'nd-active-player':player && item.id === player.id}" :id="'nd-player-'+index">
      <v-list-tile-avatar v-longpress:nomove="syncPlayer" :id="index+'-icon'">
       <v-icon v-if="item.isplaying" class="playing-badge">play_arrow</v-icon>
       <v-icon v-if="item.icon.icon">{{item.icon.icon}}</v-icon><img v-else class="svg-img" :src="item.icon.svg | svgIcon(darkUi)"></img>
@@ -109,7 +110,7 @@ Vue.component('lms-navdrawer', {
        <v-btn v-if="item.canpoweroff" icon style="float:right" v-longpress:nomove="togglePower" :id="index+'-power-btn'" :title="(item.id==player.id && playerStatus.ison) || item.ison ? i18n('Switch off %1', item.name) : i18n('Switch on %1', item.name)"><v-icon v-bind:class="{'dimmed': (item.id==player.id ? !playerStatus.ison : !item.ison)}">power_settings_new</v-icon></v-btn>
       </v-list-tile-action>
     </v-list-tile>
-    <v-list-tile v-if="connected && player && item.id === player.id && (playerStatus.sleepTime || playerStatus.alarmStr)" class="hide-for-mini status">
+    <v-list-tile v-if="connected && player && item.enabled && item.id === player.id && (playerStatus.sleepTime || playerStatus.alarmStr)" class="hide-for-mini status">
      <div v-if="playerStatus.sleepTime" class="link-item" @click="show=false; bus.$emit('dlg.open', 'sleep', player)"><v-icon class="player-status-icon">hotel</v-icon> {{playerStatus.sleepTime | displayTime}}</div>
      <div v-if="playerStatus.alarmStr" class="link-item" @click="show=false; bus.$emit('dlg.open', 'playersettings', undefined, 'alarms')"><v-icon class="player-status-icon">alarm</v-icon> {{playerStatus.alarmStr}}</div>
     </v-list-tile>

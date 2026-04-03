@@ -405,6 +405,13 @@ function playerSort(a, b) {
     if (a.isgroup!=b.isgroup) {
         return a.isgroup ? 1 : -1;
     }
+
+    var weightA = undefined==a.weight ? 0 : a.weight;
+    var weightB = undefined==b.weight ? 0 : b.weight;
+    if (weightA!=weightB) {
+        return weightA<weightB ? -1 : 1;
+    }
+
     var nameA = a.name.toLowerCase();
     var nameB = b.name.toLowerCase();
     if (nameA < nameB) {

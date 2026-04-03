@@ -425,6 +425,13 @@ Vue.component('lms-ui-settings', {
      </v-list-tile-content>
      <v-list-tile-action><m3-switch v-model="ndSearch"></m3-switch></v-list-tile-action>
     </v-list-tile>
+    <v-divider v-if="advanced && havePlayer"></v-divider>
+    <v-list-tile v-if="advanced && havePlayer" class="other-setting">
+     <v-list-tile-content>
+      <v-list-tile-title><v-btn flat @click="configurePlayers"><v-icon>speaker</v-icon>{{i18n('Configure player list')}}</v-btn></v-list-tile-title>
+      <v-list-tile-sub-title>{{i18n('Set player order, and hide/unhide players.')}}</v-list-tile-sub-title>
+     </v-list-tile-content>
+    </v-list-tile>
 
     <div class="dialog-padding" v-if="unlockAll" ></div>
     <v-header class="dialog-section-header" v-if="unlockAll" >{{i18n('Defaults')}}</v-header>
@@ -462,24 +469,24 @@ Vue.component('lms-ui-settings', {
   </v-card>
  </v-dialog>
 
-  <v-dialog v-model="detailedHomeDialog.show" :width="dialogWidth" persistent style="overflow:hidden" v-if="detailedHomeDialog.show">
+ <v-dialog v-model="detailedHomeDialog.show" :width="dialogWidth" persistent style="overflow:hidden" v-if="detailedHomeDialog.show">
   <v-card>
    <v-card-title>{{i18n("Scrollable lists")}}</v-card-title>
    <v-list class="dialog-main-list">
     <template v-for="(item, index) in detailedHomeDialog.items" :key="item.id">
-    <v-list-tile class="settings-list-thin-item" v-if="'std_favorites'!=item.id || !sortFavorites">
-     <v-checkbox v-model="item.checked" style="display:flex" :id="item.id">
-      <template v-slot:label>
-       <v-list-tile-avatar>
-        <v-icon v-if="undefined!=item.icon">{{item.icon}}</v-icon>
-        <img v-else-if="item.svg" class="svg-img" :src="item.svg | svgIcon(darkUi)"></img>
-       </v-list-tile-avatar>
-       <v-list-tile-content>
-        <div>{{item.title}}</div>
-        <div class="subtext">{{item.subtitle}}</div>
-       </v-list-tile-content>
-      </template>
-     </v-checkbox>
+     <v-list-tile class="settings-list-thin-item" v-if="'std_favorites'!=item.id || !sortFavorites">
+      <v-checkbox v-model="item.checked" style="display:flex" :id="item.id">
+       <template v-slot:label>
+        <v-list-tile-avatar>
+         <v-icon v-if="undefined!=item.icon">{{item.icon}}</v-icon>
+         <img v-else-if="item.svg" class="svg-img" :src="item.svg | svgIcon(darkUi)"></img>
+        </v-list-tile-avatar>
+        <v-list-tile-content>
+         <div>{{item.title}}</div>
+         <div class="subtext">{{item.subtitle}}</div>
+        </v-list-tile-content>
+       </template>
+      </v-checkbox>
      </v-list-tile>
     </template>
    </v-list>
@@ -487,6 +494,33 @@ Vue.component('lms-ui-settings', {
    <v-card-actions>
     <v-spacer></v-spacer>
     <v-btn flat @click="setDetailedHome">{{i18n('Close')}}</v-btn>
+   </v-card-actions>
+  </v-card>
+ </v-dialog>
+
+  <v-dialog v-model="playerListDialog.show" :width="dialogWidth" persistent style="overflow:hidden" v-if="playerListDialog.show">
+  <v-card>
+   <v-card-title>{{i18n("Player list")}}</v-card-title>
+   <v-list-tile-sub-title style="padding-left:16px;padding-right:16px">{{i18n("Check which payer's you want visible in the main menu. The order of player's can also be changed via drag and drop. Note, however, that 'Group players' will always be placed after 'Standard players'.")}}</v-list-tile-sub-title>
+   <v-list class="dialog-main-list">
+    <template v-for="(item, index) in playerListDialog.players" :key="item.id">
+     <v-list-tile class="settings-list-thin-item" @dragstart.native="dragStart(index, $event)" @dragenter.prevent="" @dragend.native="dragEnd()" @dragover.native="dragOver(index, $event)" @drop.native="drop(index, $event)" draggable v-bind:class="{'highlight-drop':dropIndex==index, 'highlight-drag':dragIndex==index}">
+      <v-checkbox v-model="item.enabled" style="display:flex" :id="item.id">
+       <template v-slot:label>
+        <v-list-tile-avatar>
+         <v-icon v-if="undefined!=item.icon.icon">{{item.icon.icon}}</v-icon>
+         <img v-else-if="item.icon.svg" class="svg-img" :src="item.icon.svg | svgIcon(darkUi)"></img>
+        </v-list-tile-avatar>
+        <v-list-tile-content>{{item.name}}</v-list-tile-content>
+       </template>
+      </v-checkbox>
+     </v-list-tile>
+    </template>
+   </v-list>
+   <div class="dialog-padding"></div>
+   <v-card-actions>
+    <v-spacer></v-spacer>
+    <v-btn flat @click="setPlayerList">{{i18n('Close')}}</v-btn>
    </v-card-actions>
   </v-card>
  </v-dialog>
@@ -552,6 +586,10 @@ Vue.component('lms-ui-settings', {
                 modes: [],
                 categorize: true,
             },
+            playerListDialog: {
+                show: false,
+                players: []
+            },
             screensaver: 0,
             screensavers:[],
             screensaverNp: false,
@@ -587,6 +625,9 @@ Vue.component('lms-ui-settings', {
         },
         player() {
             return this.$store.state.player
+        },
+        havePlayer() {
+            return this.$store.state.players && this.$store.state.players.length>0
         },
         usingColoredToolbars() {
             return this.$store.state.coloredToolbars
@@ -1187,10 +1228,40 @@ Vue.component('lms-ui-settings', {
         drop(to, ev) {
             ev.preventDefault();
             if (to!=this.dragIndex) {
-                this.detailedHomeItems = arrayMove(this.detailedHomeItems, this.dragIndex, to);
+                if (this.playerListDialog.show) {
+                    this.playerListDialog.players = arrayMove(this.playerListDialog.players, this.dragIndex, to);
+                } else {
+                    this.detailedHomeItems = arrayMove(this.detailedHomeItems, this.dragIndex, to);
+                }
             }
             this.dragIndex = undefined;
             this.dropIndex = undefined;
+        },
+        configurePlayers() {
+            this.playerListDialog.players = [];
+            for (let p=0, loop=this.$store.state.players, len=loop.length; p<len; ++p) {
+                this.playerListDialog.players.push(loop[p]);
+            }
+            this.playerListDialog.show=true;
+        },
+        setPlayerList() {
+            lmsOptions.playerWeightMap = {};
+            let disabled = []
+            for (let p=0, loop=this.playerListDialog.players, len=loop.length; p<len; ++p) {
+                loop[p].weight = p;
+                lmsOptions.playerWeightMap[loop[p].id] = p;
+                if (!loop[p].enabled) {
+                    disabled.push(loop[p].id);
+                }
+            }
+            setLocalStorageVal('playerWeightMap', JSON.stringify(lmsOptions.playerWeightMap));
+            setLocalStorageVal('disabledPlayers', disabled.join(','));
+            lmsOptions.disabledPlayers = new Set(disabled);
+
+            this.$store.commit('setPlayers', this.playerListDialog.players.sort(playerSort));
+            this.playerListDialog.players = [];
+            this.playerListDialog.show=false;
+            bus.$emit('refreshServerStatus');
         }
     },
     watch: {

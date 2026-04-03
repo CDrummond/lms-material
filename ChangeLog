@@ -11,6 +11,8 @@
  9. Always use icons for settings in navigation drawer if there is insufficient
     height for full items.
 10. Limit navigation drawer shortcuts to single line.
+11. Allow sorting and disabling players in navigation drawer, accessible from
+    'Interface settings' dialog.
 
 6.2.4
 -----

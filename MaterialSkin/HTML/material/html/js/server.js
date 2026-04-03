@@ -483,6 +483,7 @@ var lmsServer = Vue.component('lms-server', {
                     if (1==parseInt(i.connected) && // Only list/use connected players...
                         !lmsOptions.hidePlayers.has(i.playerid) &&
                         (undefined==checkPlayer || (checkPlayer==i.playerid || checkPlayer==i.name))) {
+                        let weight = lmsOptions.playerWeightMap[i.playerid];
                         players.push({ id: i.playerid,
                                        name: i.name,
                                        canpoweroff: 1==parseInt(i.canpoweroff),
@@ -493,7 +494,7 @@ var lmsServer = Vue.component('lms-server', {
                                        ip: i.ip,
                                        icon: mapPlayerIcon(i),
                                        color: mapPlayerColor(i),
-                                       weight: lmsOptions.playerWeightMap[i.playerid],
+                                       weight: undefined==weight ? -1 : weight,
                                        enabled: !lmsOptions.disabledPlayers.has(i.playerid),
                                        link: ("squeezelite"==i.model && i.firmware && i.firmware.endsWith("-pCP")) || "squeezeesp32"==i.model
                                              ? "http://"+i.ip.split(':')[0] : undefined

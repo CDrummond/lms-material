@@ -434,9 +434,11 @@ Vue.component('lms-navdrawer', {
         },
         powerAll(state) {
             this.$store.state.players.forEach(p => {
-                lmsCommand(p.id, ['power', state]).then(({d}) => { 
-                    bus.$emit('updatePlayer', p.id);
-                })
+                if (p.enabled) {
+                    lmsCommand(p.id, ['power', state]).then(({d}) => { 
+                        bus.$emit('updatePlayer', p.id);
+                    })
+                }
             });
         },
         managePlayers(longPress, el, event) {
@@ -649,11 +651,20 @@ Vue.component('lms-navdrawer', {
         players () {
             return this.$store.state.players
         },
+        enabledPlayers () {
+            if (!this.$store.state.players) {
+                return this.$store.state.players;
+            }
+            return this.$store.state.players.filter((item) => {
+                return item.enabled;
+            });
+        },
         otherPlayers () {
             return this.$store.state.otherPlayers
         },
         multipleStandardPlayers () {
-            return this.$store.state.players && this.$store.state.players.length>1 && !this.$store.state.players[1].isgroup
+            let playerList = this.enabledPlayers
+            return playerList && playerList.length>1 && !playerList[1].isgroup
         },
         noPlayer () {
             return !this.$store.state.players || this.$store.state.players.length<1
@@ -695,10 +706,11 @@ Vue.component('lms-navdrawer', {
             return this.$store.state.ndShortcuts
         },
         settingsIcons() {
-            let haveGroup = this.players && this.players.length>0 && this.players[this.players.length-1].isgroup;
+            let playerList = this.enabledPlayers
+            let haveGroup = playerList && playerList.length>0 && playerList[playerList.length-1].isgroup;
             let settingsCount = this.menuItems.length+(this.customSettingsActions ? this.customSettingsActions.length : 0);
             let settingsHeight = (settingsCount + 1) * 48;
-            let numPlayers = (this.players ? this.players.length : 0);
+            let numPlayers = (playerList ? playerList.length : 0);
             let playerheight = ((numPlayers + (this.showManagePlayers ? 1 : 0)) * 48) + (haveGroup ? 72 : 0) /*titles*/;
             let searchHeight = this.showSearch ? 80 : 0;
             let shortcutHeight = this.showShortcuts ? 80 : 0;

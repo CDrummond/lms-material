@@ -123,7 +123,7 @@ Vue.component('lms-sleep-dialog', {
             this.lastClickedDuration=undefined;
             if (undefined==this.player) {
                 this.$store.state.players.forEach(p => {
-                    if (!p.isgroup) {
+                    if (!p.isgroup && p.enabled) {
                         lmsCommand(p.id, -1==duration ? ["jiveendoftracksleep"] : ["sleep", duration]).then(({data}) => {
                             bus.$emit('updatePlayer', p.id);
                         });

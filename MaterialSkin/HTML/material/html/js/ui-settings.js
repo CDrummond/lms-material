@@ -1006,6 +1006,7 @@ Vue.component('lms-ui-settings', {
                                     npScrollLyrics: getLocalStorageBool("npScrollLyrics", true),
                                     npHighlightLyrics: getLocalStorageBool("npHighlightLyrics", true),
                                     npInfoZoom: parseFloat(getLocalStorageVal("npInfoZoom", 1.0))};
+                    settings.navDrawer = {disabled:Array.from(lmsOptions.disabledPlayers).join(','), weights:lmsOptions.playerWeightMap};
 
                     lmsCommand("", ["pref", LMS_MATERIAL_UI_DEFAULT_PREF, JSON.stringify(settings)]);
                     lmsCommand("", ["pref", LMS_MATERIAL_DEFAULT_ITEMS_PREF, getLocalStorageVal("topItems", "[]")]);

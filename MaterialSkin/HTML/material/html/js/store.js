@@ -754,6 +754,16 @@ const store = new Vuex.Store({
                         if (undefined!=prefs.detailedHomeItems && undefined==getLocalStorageVal('detailedHomeItems', undefined)) {
                             opts.detailedHomeItems=prefs.detailedHomeItems;
                         }
+                        if (undefined!=prefs.navDrawer) {
+                            if (undefined!=prefs.navDrawer.disabled) {
+                                setLocalStorageVal('disabledPlayers', prefs.navDrawer.disabled);
+                                lmsOptions.disabledPlayers = new Set(prefs.navDrawer.disabled.split(','));
+                            }
+                            if (undefined!=prefs.weights) {
+                                lmsOptions.playerWeightMap = prefs.weights;
+                                setLocalStorageVal('playerWeightMap', JSON.stringify(lmsOptions.playerWeightMap));
+                            }
+                        }
                         updateUiSettings(state, opts);
                     } catch(e) {
                     }

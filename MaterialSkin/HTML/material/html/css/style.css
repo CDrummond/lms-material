@@ -3329,10 +3329,6 @@ div.v-subheader {
  display:block;
 }
 
-.dialog-main-list-toggle {
- max-height:calc(var(--100vh) - 340px);
-}
-
 .v-dialog__content .v-dialog .screensaver-bgnd {
  background-color:black!important;
  width:100%;

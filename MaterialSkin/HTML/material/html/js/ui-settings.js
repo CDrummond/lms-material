@@ -450,7 +450,7 @@ Vue.component('lms-ui-settings', {
  <v-dialog v-model="browseModesDialog.show" :width="dialogWidth" persistent style="overflow:hidden" v-if="browseModesDialog.show">
   <v-card>
    <v-card-title>{{i18n("Browse modes")}}</v-card-title>
-   <div class="dialog-main-list dialog-main-list-toggle browse-modes-table">
+   <div class="dialog-main-list browse-modes-table">
     <v-checkbox v-for="(item, i) in browseModesDialog.modes" v-model="browseModesDialog.modes[i].enabled" :label="browseModesDialog.modes[i].text" error-count="0" hide-details></v-checkbox>
    </div>
    <v-divider></v-divider>
@@ -501,8 +501,8 @@ Vue.component('lms-ui-settings', {
   <v-dialog v-model="playerListDialog.show" :width="dialogWidth" persistent style="overflow:hidden" v-if="playerListDialog.show">
   <v-card>
    <v-card-title>{{i18n("Player list")}}</v-card-title>
-   <v-list-tile-sub-title style="padding-left:16px;padding-right:16px">{{i18n("Check which players you want visible in the main menu. The order of players can also be changed via drag and drop (disable 'Sort alphabetically' first). Players that are currently disconnected, but were seen in the last 2 weeks are shown dimmed.")}}</v-list-tile-sub-title>
-   <v-list class="dialog-main-list dialog-main-list-toggle">
+   <v-list-tile-sub-title style="padding-left:16px;padding-right:16px">{{i18n("Check which players you want visible in the main menu.")}}</v-list-tile-sub-title>
+   <v-list class="dialog-main-list">
     <template v-for="(item, index) in playerListDialog.players" :key="item.id">
      <v-subheader v-if="index==0 && playerListDialog.players.length>1 && playerListDialog.players[playerListDialog.players.length-1].isgroup">
       {{i18n("Standard Players")}}
@@ -517,7 +517,10 @@ Vue.component('lms-ui-settings', {
          <v-icon v-if="undefined!=item.icon.icon">{{item.icon.icon}}</v-icon>
          <img v-else-if="item.icon.svg" class="svg-img" :src="item.icon.svg | svgIcon(darkUi)"></img>
         </v-list-tile-avatar>
-        <v-list-tile-content v-bind:class="{'dimmed':item.disconnected}">{{item.name}}</v-list-tile-content>
+        <v-list-tile-content v-bind:class="{'dimmed':item.disconnected}">
+         <div v-if="item.disconnected">{{item.name}} ({{i18n("Disconnected")}})</div>
+         <div v-else>{{item.name}}</div>
+        </v-list-tile-content>
        </template>
       </v-checkbox>
      </v-list-tile>

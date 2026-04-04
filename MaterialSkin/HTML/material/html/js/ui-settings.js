@@ -1294,12 +1294,13 @@ Vue.component('lms-ui-settings', {
                         if (1==loop[p].connected && ids.has(loop[p].id)) {
                             continue;
                         }
+                        loop[p].playerid = loop[p].id;
                         this.playerListDialog.players.push({
                             id:loop[p].id,
                             name:loop[p].name,
                             isgroup:'group'==loop[p].model,
                             disconnected:true,
-                            icon:{icon:'volume_off'}
+                            icon:mapPlayerIcon(loop[p])
                         });
                     }
                     this.playerListDialog.players.sort(playerSort);

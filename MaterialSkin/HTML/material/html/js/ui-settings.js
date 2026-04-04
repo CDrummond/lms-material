@@ -1280,15 +1280,20 @@ Vue.component('lms-ui-settings', {
             this.dropIndex = undefined;
         },
         configurePlayers() {
+            let ids = new Set();
             this.playerListDialog.players = [];
             for (let p=0, loop=this.$store.state.players, len=loop.length; p<len; ++p) {
                 this.playerListDialog.players.push(loop[p]);
+                ids.add(loop[p].id);
             }
             this.playerListDialog.alpha=lmsOptions.playersAlphaSort;
             this.playerListDialog.show=true;
-            lmsCommand("", ["material-skin", "other-players"]).then(({data}) => {
+            lmsCommand("", ["material-skin", "player-list"]).then(({data}) => {
                 if (data.result && data.result.players_loop && this.playerListDialog.show) {
                     for (let p=0, loop=data.result.players_loop, len=loop.length; p<len; ++p) {
+                        if (1==loop[p].connected && ids.has(loop[p].id)) {
+                            continue;
+                        }
                         this.playerListDialog.players.push({
                             id:loop[p].id,
                             name:loop[p].name,

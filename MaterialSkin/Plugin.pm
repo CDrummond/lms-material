@@ -756,7 +756,7 @@ sub _cliCommand {
                                                   'playersettings', 'activeplayers', 'urls', 'adv-search', 'adv-search-params', 'protocols',
                                                   'players-extra-info', 'sort-playlist', 'mixer', 'release-types', 'check-for-updates',
                                                   'similar', 'apps', 'rndmix', 'scan-progress', 'send-notif', 'home-extra',
-                                                  'home-extra-3rdparty', 'other-players']) ) {
+                                                  'home-extra-3rdparty', 'player-list']) ) {
         $request->setStatusBadParams();
         return;
     }
@@ -2053,7 +2053,7 @@ sub _cliCommand {
         return;
     }
 
-    if ($cmd eq 'other-players') {
+    if ($cmd eq 'player-list') {
         my $now = time();
         my $cnt = 0;
 
@@ -2072,12 +2072,9 @@ sub _cliCommand {
         foreach my $clientPrefs ($serverprefs->allClients) {
             my $id = $clientPrefs->{clientid};
             my $client = Slim::Player::Client::getClient($id);
-            if ($client) {
-                next;
-            }
             my $clientPrefs = Slim::Utils::Prefs::Client->new($serverprefs, $id, 'nomigrate');
             my $name = $clientPrefs->get('playername');
-            my $model = $clientPrefs->get('model');
+            my $model = $client ? $client->model : $clientPrefs->get('model');
 
             my $ts = 0;
             foreach (keys %{ $clientPrefs->{prefs} }) {
@@ -2092,7 +2089,7 @@ sub _cliCommand {
             my @stat = stat $playlistPath;
             $ts = max($ts, $stat[9]) if scalar @stat;
 
-            if (($now - $ts) > MAX_PLAYER_AGE) {
+            if (!$client && ($now - $ts) > MAX_PLAYER_AGE) {
                 next;
             }
 
@@ -2100,6 +2097,7 @@ sub _cliCommand {
             $request->addResultLoop("players_loop", $cnt, "name", $name);
             $request->addResultLoop("players_loop", $cnt, "model", $model);
             $request->addResultLoop("players_loop", $cnt, "ts", $ts);
+            $request->addResultLoop("players_loop", $cnt, "connected", $client ? 1 : 0);
             $cnt+=1;
         }
         $request->setStatusDone();

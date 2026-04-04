@@ -750,6 +750,7 @@ sub _cliCommand {
     }
 
     my $cmd = $request->getParam('_cmd');
+    main::DEBUGLOG && $log->debug("command:${cmd}");
     if ($request->paramUndefinedOrNotOneOf($cmd, ['prefs', 'info', 'transferqueue', 'delete-favorite', 'map', 'resolve', 'delete-podcast',
                                                   'plugins', 'plugins-status', 'plugins-update', 'extras', 'delete-vlib', 'pass-isset',
                                                   'pass-check', 'browsemodes', 'geturl', 'command', 'scantypes', 'server', 'themes',
@@ -2054,6 +2055,7 @@ sub _cliCommand {
     }
 
     if ($cmd eq 'player-list') {
+        main::DEBUGLOG && $log->debug("Get player list");
         my $now = time();
         my $cnt = 0;
 
@@ -2100,6 +2102,7 @@ sub _cliCommand {
             $request->addResultLoop("players_loop", $cnt, "connected", $client ? 1 : 0);
             $cnt+=1;
         }
+        main::DEBUGLOG && $log->debug("Player list finished");
         $request->setStatusDone();
         return;
     }

@@ -406,10 +406,12 @@ function playerSort(a, b) {
         return a.isgroup ? 1 : -1;
     }
 
-    var weightA = undefined==a.weight ? -1 : a.weight;
-    var weightB = undefined==b.weight ? -1 : b.weight;
-    if (weightA!=weightB) {
-        return weightA<weightB ? -1 : 1;
+    if (!lmsOptions.playersAlphaSort) {
+        var weightA = undefined==a.weight ? -1 : a.weight;
+        var weightB = undefined==b.weight ? -1 : b.weight;
+        if (weightA!=weightB) {
+            return weightA<weightB ? -1 : 1;
+        }
     }
 
     var nameA = a.name.toLowerCase();

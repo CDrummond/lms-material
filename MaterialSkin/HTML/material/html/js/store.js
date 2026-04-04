@@ -759,9 +759,13 @@ const store = new Vuex.Store({
                                 setLocalStorageVal('disabledPlayers', prefs.navDrawer.disabled);
                                 lmsOptions.disabledPlayers = new Set(prefs.navDrawer.disabled.split(','));
                             }
-                            if (undefined!=prefs.weights) {
-                                lmsOptions.playerWeightMap = prefs.weights;
+                            if (undefined!=prefs.navDrawer.weights) {
+                                lmsOptions.playerWeightMap = prefs.navDrawer.weights;
                                 setLocalStorageVal('playerWeightMap', JSON.stringify(lmsOptions.playerWeightMap));
+                            }
+                            if (undefined!=prefs.navDrawer.alpha) {
+                                lmsOptions.playersAlphaSort = prefs.navDrawer.alpha;
+                                setLocalStorageVal('playersAlphaSort', lmsOptions.playersAlphaSort);
                             }
                         }
                         updateUiSettings(state, opts);

@@ -501,7 +501,7 @@ Vue.component('lms-ui-settings', {
   <v-dialog v-model="playerListDialog.show" :width="dialogWidth" persistent style="overflow:hidden" v-if="playerListDialog.show">
   <v-card>
    <v-card-title>{{i18n("Player list")}}</v-card-title>
-   <v-list-tile-sub-title style="padding-left:16px;padding-right:16px">{{i18n("Check which payer's you want visible in the main menu. The order of player's can also be changed via drag and drop.")}}</v-list-tile-sub-title>
+   <v-list-tile-sub-title style="padding-left:16px;padding-right:16px">{{i18n("Check which players you want visible in the main menu. The order of players can also be changed via drag and drop (disable 'Sort alphabetically' first).")}}</v-list-tile-sub-title>
    <v-list class="dialog-main-list">
     <template v-for="(item, index) in playerListDialog.players" :key="item.id">
      <v-subheader v-if="index==0 && playerListDialog.players.length>1 && playerListDialog.players[playerListDialog.players.length-1].isgroup">
@@ -523,6 +523,15 @@ Vue.component('lms-ui-settings', {
      </v-list-tile>
     </template>
    </v-list>
+   <v-divider></v-divider>
+   <div style="height:8px"></div>
+   <v-list-tile>
+    <v-list-tile-content @click="playerListDialog.alpha=!playerListDialog.alpha" class="switch-label">
+     <v-list-tile-title class="ellipsis">{{i18n('Sort alphabetically')}}</v-list-tile-title>
+     <v-list-tile-sub-title class="ellipsis">{{i18n("Always sort players by name.")}}</v-list-tile-sub-title>
+    </v-list-tile-content>
+    <v-list-tile-action><m3-switch v-model="playerListDialog.alpha"></m3-switch></v-list-tile-action>
+   </v-list-tile>
    <div class="dialog-padding"></div>
    <v-card-actions>
     <v-spacer></v-spacer>
@@ -594,7 +603,8 @@ Vue.component('lms-ui-settings', {
             },
             playerListDialog: {
                 show: false,
-                players: []
+                players: [],
+                alpha: true
             },
             screensaver: 0,
             screensavers:[],
@@ -758,9 +768,11 @@ Vue.component('lms-ui-settings', {
             }
         }.bind(this));
         bus.$on('closeDialog', function(dlg) {
-            if (dlg == 'browsemodes') {
+            if (dlg == 'ui-browsemodes') {
                 this.browseModesDialog.show=false;
-            } else if (dlg == 'detailedhome') {
+            } else if (dlg == 'ui-playerlist') {
+                this.playerListDialog.show=false;
+            } else if (dlg == 'ui-detailedhome') {
                 this.detailedHomeDialog.show=false;
                 this.detailedHomeDialog.items=[];
             } else if (dlg == 'uisettings') {
@@ -1012,7 +1024,9 @@ Vue.component('lms-ui-settings', {
                                     npScrollLyrics: getLocalStorageBool("npScrollLyrics", true),
                                     npHighlightLyrics: getLocalStorageBool("npHighlightLyrics", true),
                                     npInfoZoom: parseFloat(getLocalStorageVal("npInfoZoom", 1.0))};
-                    settings.navDrawer = {disabled:Array.from(lmsOptions.disabledPlayers).join(','), weights:lmsOptions.playerWeightMap};
+                    settings.navDrawer = {disabled: Array.from(lmsOptions.disabledPlayers).join(','),
+                                          weights:  lmsOptions.playerWeightMap,
+                                          alpha:    lmsOptions.playersAlphaSort};
 
                     lmsCommand("", ["pref", LMS_MATERIAL_UI_DEFAULT_PREF, JSON.stringify(settings)]);
                     lmsCommand("", ["pref", LMS_MATERIAL_DEFAULT_ITEMS_PREF, getLocalStorageVal("topItems", "[]")]);
@@ -1217,6 +1231,9 @@ Vue.component('lms-ui-settings', {
             toolbarMouseDown(ev);
         },
         dragStart(which, ev) {
+            if (this.playerListDialog.show && this.playerListDialog.alpha) {
+                return;
+            }
             ev.dataTransfer.dropEffect = 'move';
             ev.dataTransfer.setData('text/plain', "dth:"+which);
             this.dragIndex = which;
@@ -1227,6 +1244,9 @@ Vue.component('lms-ui-settings', {
             this.dropIndex = undefined;
         },
         dragOver(index, ev) {
+            if (this.playerListDialog.show && this.playerListDialog.alpha) {
+                return;
+            }
             if (this.playerListDialog.show) {
                 if (this.playerListDialog.players[this.dragIndex].isgroup!=this.playerListDialog.players[index].isgroup) {
                     ev.preventDefault(); // Otherwise drop is never called!
@@ -1239,6 +1259,9 @@ Vue.component('lms-ui-settings', {
             ev.preventDefault(); // Otherwise drop is never called!
         },
         drop(to, ev) {
+            if (this.playerListDialog.show && this.playerListDialog.alpha) {
+                return;
+            }
             ev.preventDefault();
             if (to!=this.dragIndex &&
                 (!this.playerListDialog.show ||
@@ -1258,6 +1281,7 @@ Vue.component('lms-ui-settings', {
             for (let p=0, loop=this.$store.state.players, len=loop.length; p<len; ++p) {
                 this.playerListDialog.players.push(loop[p]);
             }
+            this.playerListDialog.alpha=lmsOptions.playersAlphaSort;
             this.playerListDialog.show=true;
         },
         setPlayerList() {
@@ -1270,7 +1294,11 @@ Vue.component('lms-ui-settings', {
                     disabled.push(loop[p].id);
                 }
             }
-            setLocalStorageVal('playerWeightMap', JSON.stringify(lmsOptions.playerWeightMap));
+            lmsOptions.playersAlphaSort=this.playerListDialog.alpha;
+            setLocalStorageVal('playersAlphaSort', lmsOptions.playersAlphaSort);
+            if (!this.playerListDialog.alpha) {
+                setLocalStorageVal('playerWeightMap', JSON.stringify(lmsOptions.playerWeightMap));
+            }
             setLocalStorageVal('disabledPlayers', disabled.join(','));
             lmsOptions.disabledPlayers = new Set(disabled);
 
@@ -1285,10 +1313,17 @@ Vue.component('lms-ui-settings', {
             this.$store.commit('dialogOpen', {name:'uisettings', shown:val});
         },
         'browseModesDialog.show': function(val) {
-            this.$store.commit('dialogOpen', {name:'browsemodes', shown:val});
+            this.$store.commit('dialogOpen', {name:'ui-browsemodes', shown:val});
         },
         'detailedHomeDialog.show': function(val) {
-            this.$store.commit('dialogOpen', {name:'detailedhome', shown:val});
+            this.$store.commit('dialogOpen', {name:'ui-detailedhome', shown:val});
+        },
+        'playerListDialog.show': function(val) {
+            this.$store.commit('dialogOpen', {name:'ui-playerlist', shown:val});
+        },
+        'playerListDialog.alpha': function(val) {
+            lmsOptions.playersAlphaSort = this.playerListDialog.alpha;
+            this.playerListDialog.players.sort(playerSort);
         },
         'showMenu': function(newVal) {
             this.$store.commit('menuVisible', {name:'uisettings', shown:newVal});

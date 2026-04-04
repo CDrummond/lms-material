@@ -62,6 +62,7 @@ var lmsOptions = {techInfo: getLocalStorageBool('techInfo', false),
                   groupMyMusicCategories: getLocalStorageBool('groupMyMusicCategories', true),
                   disabledPlayers: new Set(getLocalStorageVal('disabledPlayers', '').split(',')),
                   playerWeightMap: JSON.parse(getLocalStorageVal('playerWeightMap', '{}')),
+                  playersAlphaSort: getLocalStorageVal('playersAlphaSort', true)
                 };
 
 function initLmsOptions() {

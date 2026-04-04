@@ -501,9 +501,15 @@ Vue.component('lms-ui-settings', {
   <v-dialog v-model="playerListDialog.show" :width="dialogWidth" persistent style="overflow:hidden" v-if="playerListDialog.show">
   <v-card>
    <v-card-title>{{i18n("Player list")}}</v-card-title>
-   <v-list-tile-sub-title style="padding-left:16px;padding-right:16px">{{i18n("Check which payer's you want visible in the main menu. The order of player's can also be changed via drag and drop. Note, however, that 'Group players' will always be placed after 'Standard players'.")}}</v-list-tile-sub-title>
+   <v-list-tile-sub-title style="padding-left:16px;padding-right:16px">{{i18n("Check which payer's you want visible in the main menu. The order of player's can also be changed via drag and drop.")}}</v-list-tile-sub-title>
    <v-list class="dialog-main-list">
     <template v-for="(item, index) in playerListDialog.players" :key="item.id">
+     <v-subheader v-if="index==0 && playerListDialog.players.length>1 && playerListDialog.players[playerListDialog.players.length-1].isgroup">
+      {{i18n("Standard Players")}}
+     </v-subheader>
+     <v-subheader v-else-if="index>0 && item.isgroup && !playerListDialog.players[index-1].isgroup">
+      {{i18n("Group Players")}}
+     </v-subheader>
      <v-list-tile class="settings-list-thin-item" @dragstart.native="dragStart(index, $event)" @dragenter.prevent="" @dragend.native="dragEnd()" @dragover.native="dragOver(index, $event)" @drop.native="drop(index, $event)" draggable v-bind:class="{'highlight-drop':dropIndex==index, 'highlight-drag':dragIndex==index}">
       <v-checkbox v-model="item.enabled" style="display:flex" :id="item.id">
        <template v-slot:label>
@@ -1221,6 +1227,12 @@ Vue.component('lms-ui-settings', {
             this.dropIndex = undefined;
         },
         dragOver(index, ev) {
+            if (this.playerListDialog.show) {
+                if (this.playerListDialog.players[this.dragIndex].isgroup!=this.playerListDialog.players[index].isgroup) {
+                    ev.preventDefault(); // Otherwise drop is never called!
+                    return;
+                }
+            }
             if (index!=this.dragIndex) {
                 this.dropIndex = index;
             }
@@ -1228,7 +1240,10 @@ Vue.component('lms-ui-settings', {
         },
         drop(to, ev) {
             ev.preventDefault();
-            if (to!=this.dragIndex) {
+            if (to!=this.dragIndex &&
+                (!this.playerListDialog.show ||
+                    (this.playerListDialog.players[this.dragIndex].isgroup==this.playerListDialog.players[to].isgroup)
+                )) {
                 if (this.playerListDialog.show) {
                     this.playerListDialog.players = arrayMove(this.playerListDialog.players, this.dragIndex, to);
                 } else {

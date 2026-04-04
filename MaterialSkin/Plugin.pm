@@ -25,8 +25,8 @@ use Slim::Utils::Strings qw(string cstring);
 use HTTP::Status qw(RC_NOT_FOUND RC_OK);
 use File::Basename;
 use File::Slurp qw(read_file);
-use List::Util qw(shuffle);
-use File::Spec::Functions qw(catdir);
+use List::Util qw(shuffle max);
+use File::Spec::Functions qw(catdir catfile);
 use File::Path qw(make_path);
 use Scalar::Util qw(looks_like_number);
 use URI::Escape qw(uri_unescape);
@@ -63,6 +63,7 @@ my @listOfRoles = ();
 use constant RANDOM_MIX_EXT => '.mix';
 use constant NUM_HOME_ITEMS => 10;
 use constant PLAYLIST_IMAGE_TRACKS => 20;
+use constant MAX_PLAYER_AGE => 14 * 24 * 60 * 60;
 
 my $LASTFM_API_KEY = '5a854b839b10f8d46e630e8287c2299b';
 my $MAX_CACHE_AGE = 90*24*60*60; # 90 days
@@ -754,7 +755,8 @@ sub _cliCommand {
                                                   'pass-check', 'browsemodes', 'geturl', 'command', 'scantypes', 'server', 'themes',
                                                   'playersettings', 'activeplayers', 'urls', 'adv-search', 'adv-search-params', 'protocols',
                                                   'players-extra-info', 'sort-playlist', 'mixer', 'release-types', 'check-for-updates',
-                                                  'similar', 'apps', 'rndmix', 'scan-progress', 'send-notif', 'home-extra', 'home-extra-3rdparty']) ) {
+                                                  'similar', 'apps', 'rndmix', 'scan-progress', 'send-notif', 'home-extra',
+                                                  'home-extra-3rdparty', 'other-players']) ) {
         $request->setStatusBadParams();
         return;
     }
@@ -2050,6 +2052,60 @@ sub _cliCommand {
         $request->setStatusDone();
         return;
     }
+
+    if ($cmd eq 'other-players') {
+        my $now = time();
+        my $cnt = 0;
+
+        my %eventTimeStamps = (
+            _ts_currentSong => 1,
+            _ts_maxBitrate => 1,
+            _ts_model => 1,
+            _ts_modelName => 1,
+            _ts_playername => 1,
+            _ts_power => 1,
+            _ts_repeat => 1,
+            _ts_shuffle => 1,
+            _ts_volume => 1,
+        );
+
+        foreach my $clientPrefs ($serverprefs->allClients) {
+            my $id = $clientPrefs->{clientid};
+            my $client = Slim::Player::Client::getClient($id);
+            if ($client) {
+                next;
+            }
+            my $clientPrefs = Slim::Utils::Prefs::Client->new($serverprefs, $id, 'nomigrate');
+            my $name = $clientPrefs->get('playername');
+            my $model = $clientPrefs->get('model');
+
+            my $ts = 0;
+            foreach (keys %{ $clientPrefs->{prefs} }) {
+                next unless $eventTimeStamps{$_};
+                $ts = max($ts, $clientPrefs->{prefs}->{$_});
+            }
+
+            # check potential saved queue/playlist
+            my $playlistId = $id;
+            $playlistId =~ s/://g;
+            my $playlistPath = catfile(scalar Slim::Utils::OSDetect::dirsFor('prefs'), "clientplaylist_$playlistId.m3u");
+            my @stat = stat $playlistPath;
+            $ts = max($ts, $stat[9]) if scalar @stat;
+
+            if (($now - $ts) > MAX_PLAYER_AGE) {
+                next;
+            }
+
+            $request->addResultLoop("players_loop", $cnt, "id", $id);
+            $request->addResultLoop("players_loop", $cnt, "name", $name);
+            $request->addResultLoop("players_loop", $cnt, "model", $model);
+            $request->addResultLoop("players_loop", $cnt, "ts", $ts);
+            $cnt+=1;
+        }
+        $request->setStatusDone();
+        return;
+    }
+
     $request->setStatusBadParams();
 }
 

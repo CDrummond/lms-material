@@ -501,7 +501,7 @@ Vue.component('lms-ui-settings', {
   <v-dialog v-model="playerListDialog.show" :width="dialogWidth" persistent style="overflow:hidden" v-if="playerListDialog.show">
   <v-card>
    <v-card-title>{{i18n("Player list")}}</v-card-title>
-   <v-list-tile-sub-title style="padding-left:16px;padding-right:16px">{{i18n("Check which players you want visible in the main menu. The order of players can also be changed via drag and drop (disable 'Sort alphabetically' first).")}}</v-list-tile-sub-title>
+   <v-list-tile-sub-title style="padding-left:16px;padding-right:16px">{{i18n("Check which players you want visible in the main menu. The order of players can also be changed via drag and drop (disable 'Sort alphabetically' first). Players that are currently disconnected, but were seen in the last 2 weeks are shown dimmed.")}}</v-list-tile-sub-title>
    <v-list class="dialog-main-list">
     <template v-for="(item, index) in playerListDialog.players" :key="item.id">
      <v-subheader v-if="index==0 && playerListDialog.players.length>1 && playerListDialog.players[playerListDialog.players.length-1].isgroup">
@@ -513,11 +513,11 @@ Vue.component('lms-ui-settings', {
      <v-list-tile class="settings-list-thin-item" @dragstart.native="dragStart(index, $event)" @dragenter.prevent="" @dragend.native="dragEnd()" @dragover.native="dragOver(index, $event)" @drop.native="drop(index, $event)" draggable v-bind:class="{'highlight-drop':dropIndex==index, 'highlight-drag':dragIndex==index}">
       <v-checkbox v-model="item.enabled" style="display:flex" :id="item.id">
        <template v-slot:label>
-        <v-list-tile-avatar>
+        <v-list-tile-avatar v-bind:class="{'dimmed':item.disconnected}">
          <v-icon v-if="undefined!=item.icon.icon">{{item.icon.icon}}</v-icon>
          <img v-else-if="item.icon.svg" class="svg-img" :src="item.icon.svg | svgIcon(darkUi)"></img>
         </v-list-tile-avatar>
-        <v-list-tile-content>{{item.name}}</v-list-tile-content>
+        <v-list-tile-content v-bind:class="{'dimmed':item.disconnected}">{{item.name}}</v-list-tile-content>
        </template>
       </v-checkbox>
      </v-list-tile>
@@ -1283,15 +1283,34 @@ Vue.component('lms-ui-settings', {
             }
             this.playerListDialog.alpha=lmsOptions.playersAlphaSort;
             this.playerListDialog.show=true;
+            lmsCommand("", ["material-skin", "other-players"]).then(({data}) => {
+                if (data.result && data.result.players_loop && this.playerListDialog.show) {
+                    for (let p=0, loop=data.result.players_loop, len=loop.length; p<len; ++p) {
+                        this.playerListDialog.players.push({
+                            id:loop[p].id,
+                            name:loop[p].name,
+                            isgroup:'group'==loop[p].model,
+                            disconnected:true,
+                            icon:{icon:'volume_off'}
+                        });
+                    }
+                    this.playerListDialog.players.sort(playerSort);
+                }
+            }).catch(err => {
+            });
         },
         setPlayerList() {
             lmsOptions.playerWeightMap = {};
             let disabled = []
+            let connectedPlayers = [];
             for (let p=0, loop=this.playerListDialog.players, len=loop.length; p<len; ++p) {
                 loop[p].weight = p;
                 lmsOptions.playerWeightMap[loop[p].id] = p;
                 if (!loop[p].enabled) {
                     disabled.push(loop[p].id);
+                }
+                if (!loop[p].disconnected) {
+                    connectedPlayers.push(loop[p]);
                 }
             }
             lmsOptions.playersAlphaSort=this.playerListDialog.alpha;
@@ -1302,7 +1321,7 @@ Vue.component('lms-ui-settings', {
             setLocalStorageVal('disabledPlayers', disabled.join(','));
             lmsOptions.disabledPlayers = new Set(disabled);
 
-            this.$store.commit('setPlayers', this.playerListDialog.players.sort(playerSort));
+            this.$store.commit('setPlayers', connectedPlayers.sort(playerSort));
             this.playerListDialog.players = [];
             this.playerListDialog.show=false;
             bus.$emit('refreshServerStatus');

@@ -1295,12 +1295,14 @@ Vue.component('lms-ui-settings', {
                             continue;
                         }
                         loop[p].playerid = loop[p].id; // For icon mapping
+                        let weight = lmsOptions.playerWeightMap[loop[p].id];
                         this.playerListDialog.players.push({
                             id:loop[p].id,
                             name:loop[p].name,
                             isgroup:'group'==loop[p].model,
                             disconnected:true,
                             icon:mapPlayerIcon(loop[p]),
+                            weight:undefined==weight ? -1 : weight,
                             enabled:!lmsOptions.disabledPlayers.has(loop[p].id)
                         });
                     }

@@ -48,12 +48,12 @@ function buildArtistAlbumLines(i, queueAlbumStyle, queueContext) {
     let ws = false;
     //let artistStr = i.albumartist ? i.albumartist : i.artist ? i.artist : i.trackartist; - moved into queueAlbumStyle block
     if (queueAlbumStyle) {
-        let artistType = i.albumartist ? "albumartist" : i.artist ? "artist" : i.trackartist ? "trackartist" : undefined;
+        let artistType = i.albumartist ? 'albumartist' : i.artist ? 'artist' : i.trackartist ? 'trackartist' : undefined;
         if (!artistType && i.remote) {
             artistAlbum = i.remote_title ? i.remote_title : i.title;
             artistIsRemoteTitle = true;
         } else if (artistType) {
-            artistAlbum = addArtistLink(i, undefined, artistType, artistType=="albumartist" ? "show_albumartist" : "show_artist", "queue", new Set(), (IS_MOBILE && !lmsOptions.touchLinks));
+            artistAlbum = addArtistLink(i, undefined, artistType, artistType=='albumartist' ? 'show_albumartist' : 'show_artist', 'queue', new Set(), (IS_MOBILE && !lmsOptions.touchLinks));
         }
     } else {
         let useComposerTag = i.composer && lmsOptions.showComposer && useComposer(i);
@@ -76,16 +76,16 @@ function buildArtistAlbumLines(i, queueAlbumStyle, queueContext) {
         if (queueAlbumStyle) {
             let used = new Set();
             let plain = (IS_MOBILE && !lmsOptions.touchLinks);
-            let artistType = i.albumartist ? "albumartist" : i.artist ? "artist" : i.trackartist ? "trackartist" : undefined;
+            let artistType = i.albumartist ? 'albumartist' : i.artist ? 'artist' : i.trackartist ? 'trackartist' : undefined;
             if (artistType) {
-                let names = i[artistType+"s"] || [i[artistType]];
+                let names = i[artistType+'s'] || [i[artistType]];
                 names.forEach(function(n) { if (n) used.add(n); });
             }
             if (i.band && lmsOptions.showBand && useBand(i)) {
-                artistAlbum = addPart(artistAlbum, addArtistLink(i, undefined, "band", "show_band", "queue", used, plain));
+                artistAlbum = addPart(artistAlbum, addArtistLink(i, undefined, 'band', 'show_band', 'queue', used, plain));
             }
             if (i.conductor && (i.work || (lmsOptions.showConductor && useConductor(i)))) {
-                artistAlbum = addPart(artistAlbum, addArtistLink(i, undefined, "conductor", "show_conductor", "queue", used, plain));
+                artistAlbum = addPart(artistAlbum, addArtistLink(i, undefined, 'conductor', 'show_conductor', 'queue', used, plain));
             }
         }
         artistAlbum = addPart(artistAlbum, buildAlbumLine(i, 'queue'));
@@ -174,9 +174,9 @@ function parseResp(data, showTrackNum, index, showRatings, queueAlbumStyle, queu
                                                                    (i.album!=prevItem.album) ) ) );
                 if (isAlbumHeader && isMultiGroup) {
                     grpHeaderNames = new Set();
-                    let artistType = i.albumartist ? "albumartist" : i.artist ? "artist" : i.trackartist ? "trackartist" : undefined;
+                    let artistType = i.albumartist ? 'albumartist' : i.artist ? 'artist' : i.trackartist ? 'trackartist' : undefined;
                     if (artistType) {
-                        let names = i[artistType+"s"] || [i[artistType]];
+                        let names = i[artistType+'s'] || [i[artistType]];
                         names.forEach(function(n) { if (n) grpHeaderNames.add(n); });
                     } else if (artist) {
                         grpHeaderNames.add(artist);

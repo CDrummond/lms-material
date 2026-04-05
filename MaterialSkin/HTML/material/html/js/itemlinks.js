@@ -242,20 +242,18 @@ function buildWorkLine(i, page, plain) {
     if (i.work && i.composer) {
         if (i.work_id && (!IS_MOBILE || lmsOptions.touchLinks) && !plain) {
             var composerPart;
-            if (i.composers && i.composers.length > 1 && i.composer_ids && i.composer_ids.length == i.composers.length) {
+            if (i.composers && i.composers.length>1 && i.composer_ids && i.composer_ids.length==i.composers.length) {
                 let parts = [];
-                for (let c = 0; c < i.composers.length; ++c) {
+                for (let c=0; c<i.composers.length; ++c) {
                     parts.push(buildLink('show_composer_works', i.composer_ids[c], i.composers[c], page));
                 }
                 composerPart = parts.join(SEPARATOR);
             } else {
                 var composerId = i.composer_id || (i.composer_ids && i.composer_ids[0]);
-                composerPart = composerId
-                    ? buildLink('show_composer_works', composerId, i.composer, page)
-                    : i.composer;
+                composerPart = composerId ? buildLink('show_composer_works', composerId, i.composer, page) : i.composer;
             }
             var workPart = "<obj class=\"link-item\" onclick=\"showWork(event, "+i.work_id+",\'"+escape(i.work)+"\',\'"+(i.performance ? escape(i.performance) : "")+"\',\'"+escape(i.composer)+"\',\'"+page+"\')\">"+i.work+"</obj>";
-            if (i.grouping && i.grouping != i.work) {
+            if (i.grouping && i.grouping!=i.work) {
                 workPart += SEPARATOR + i.grouping;
             }
             if (i.performance) {
@@ -263,8 +261,8 @@ function buildWorkLine(i, page, plain) {
             }
             line = addPart(line, composerPart + SEPARATOR + workPart);
         } else {
-            var work = (i.composers && i.composers.length > 1 ? i.composers.join(SEPARATOR) : i.composer) + SEPARATOR + i.work;
-            if (i.grouping && i.grouping != i.work) {
+            var work = (i.composers && i.composers.length>1 ? i.composers.join(SEPARATOR) : i.composer) + SEPARATOR + i.work;
+            if (i.grouping && i.grouping!=i.work) {
                 work += SEPARATOR + i.grouping;
             }
             if (i.performance) {

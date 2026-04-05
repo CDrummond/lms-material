@@ -182,12 +182,18 @@ function parseResp(data, showTrackNum, index, showRatings, queueAlbumStyle, queu
                         grpHeaderNames.add(artist);
                     }
                     if (i.band && lmsOptions.showBand && useBand(i)) {
-                        if (i.bands) i.bands.forEach(function(b) { grpHeaderNames.add(b); });
-                        else grpHeaderNames.add(i.band);
+                        if (i.bands) {
+                            i.bands.forEach(function(b) { grpHeaderNames.add(b); });
+                        } else {
+                            grpHeaderNames.add(i.band);
+                        }
                     }
                     if (i.conductor && (i.work || (lmsOptions.showConductor && useConductor(i)))) {
-                        if (i.conductors) i.conductors.forEach(function(c) { grpHeaderNames.add(c); });
-                        else grpHeaderNames.add(i.conductor);
+                        if (i.conductors) {
+                            i.conductors.forEach(function(c) { grpHeaderNames.add(c); });
+                        } else {
+                            grpHeaderNames.add(i.conductor);
+                        }
                     }
                 } else if (isAlbumHeader) {
                     grpHeaderNames = undefined;

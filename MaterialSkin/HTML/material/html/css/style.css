@@ -4729,12 +4729,23 @@ div.v-subheader {
  max-height:30px;
  display:flex;
  justify-content:center;
- border:1.5px solid var(--text-color);
+ border:2px solid var(--text-color);
  border-radius:22px;
  margin-left:auto;
  margin-right:auto;
- padding:0px 12px 0px 12px;
+ padding:0px 8px 0px 8px;
  opacity:var(--sub-opacity);
+}
+
+.nd-avatar {
+ margin-top:-1px;
+ padding-right:8px;
+}
+
+.nd-avatar .svg-img {
+ margin-top:-2px;
+ height:30px!important;
+ min-width:30px!important;
 }
 
 .nd-user div {

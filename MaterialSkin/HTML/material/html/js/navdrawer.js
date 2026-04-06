@@ -82,7 +82,7 @@ Vue.component('lms-navdrawer', {
   <v-list-tile @click.prevent="close">
    <v-list-tile-avatar v-if="(undefined==queryParams.dragleft || queryParams.dragleft<=48) && ('l'!=queryParams.tbarBtnsPos)" :title="i18n('Close')"><v-btn icon flat @click="show=false"><v-icon>arrow_back<v-icon></v-btn></v-list-tile-avatar>
    <div v-if="LMS_P_USERS" class="nd-user">
-    <div style="margin-top:-1px; padding-right:8px" v-if="undefined!=userAvatar.svg || maxWidth>300">
+    <div class="nd-avatar" v-if="undefined!=userAvatar.svg || maxWidth>300">
      <img v-if="undefined!=userAvatar.img" class="user-img" :src="userAvatar.img"></img>
      <img v-else-if="undefined!=userAvatar.svg" class="svg-img" :src="userAvatar.svg | svgIcon(darkUi)"></img>
      <v-icon v-else>{{userAvatar.icon}}</v-icon>

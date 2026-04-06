@@ -4781,10 +4781,18 @@ div.v-subheader {
  position:fixed;
  right:14px;
  background:var(--primary-color)!important;
- border-radius:10px;
- width:44px;
- height:44px;
- padding:9px 10px 10px 10px;
+  border-radius:10px;
+ width:48px;
+ height:48px;
+ padding:11px 12px 12px 12px;
+}
+
+@media (max-width:600px) {
+ .browse-search-btn {
+  width:44px;
+  height:44px;
+  padding:9px 10px 10px 10px;
+ }
 }
 
 .msk-is-non-touch .browse-search-btn:hover {

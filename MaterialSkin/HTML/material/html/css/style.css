@@ -264,6 +264,14 @@
 
 .browse-title div:first-of-type {
  padding-bottom:1px!important;
+ font-weight:bold;
+ font-size:125%;
+ margin-bottom:-4px!important;
+ margin-top:-1px!important;
+}
+
+.browse-title div:only-of-type {
+ font-size:150%;
 }
 
 .browse-html a, .np-info-text a, .np-info-text-full a,

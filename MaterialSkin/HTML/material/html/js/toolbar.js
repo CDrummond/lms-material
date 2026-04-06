@@ -17,7 +17,7 @@ Vue.component('lms-toolbar', {
  <div class="maintoolbar-subtitle subtext">{{date}}</div>
 </div>
 <v-layout @click.stop="openNavDrawer" @contextmenu.prevent="playerContextMenu" v-bind:class="{'navdrawer-selector':!mobileNoNowPlaying, 'link-item':!coloredToolbars, 'link-item-ct': coloredToolbars}">
- <v-btn icon class="toolbar-button" @click.stop="openNavDrawer">
+ <v-btn icon class="toolbar-button" @click.stop="openNavDrawer" :aria-label="i18n('Main Menu')">
   <v-icon v-if="!connected" class="red">error</v-icon>
   <img v-else-if="updatesAvailable" class="svg-img" :src="'update' | menuIcon(darkUi, coloredToolbars&&!nowPlayingFull)"></img>
   <img v-else-if="restartRequired" class="svg-img" :src="'restart' | menuIcon(darkUi, coloredToolbars&&!nowPlayingFull)"></img>
@@ -65,7 +65,7 @@ Vue.component('lms-toolbar', {
 <v-menu v-model="menu.show" :position-x="menu.x" :position-y="menu.y">
  <v-list>
   <template v-for="(entry, index) in menu.items">
-   <v-list-tile @click="menuAction(entry.cmd, $event)">
+   <v-list-tile role="menuitem" @click="menuAction(entry.cmd, $event)">
     <v-list-tile-avatar>
      <v-icon v-if="undefined==entry.svg" v-bind:class="{'dimmed': entry.dimmed}">{{entry.icon}}</v-icon>
      <img v-else class="svg-img" :src="entry.svg | svgIcon(darkUi)"></img>

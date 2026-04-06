@@ -1,6 +1,22 @@
-6.2.5
+6.3.0
 -----
-1. Fix 'Add to playlist' for item in home screen scrolled list.
+ 1. Add support for 'Users' plugin.
+ 2. Add option to group 'My Music' categories.
+ 3. Clear current view when start search.
+ 4. Always show setting section in navigation drawer.
+ 5. Add option to show search field in navigation drawer.
+ 6. Add option to show floating search button in browse view.
+ 7. Hide some interface settings behind an 'All options' toggle.
+ 8. Add 'role' to elements to aid accessibility.
+ 9. Always use icons for settings in navigation drawer if there is insufficient
+    height for full items.
+10. Limit navigation drawer shortcuts to single line.
+11. Allow sorting and disabling players in navigation drawer, accessible from
+    'Interface settings' dialog.
+12. Fix 'Popular Albums' listing.
+13. Fix 'Add to playlist' for item in home screen scrolled list.
+14. Suppress duplicate composer in work-grouped track listings - thanks to
+    mspertus.
 
 6.2.4
 -----

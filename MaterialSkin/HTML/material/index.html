@@ -158,6 +158,7 @@
   my $lastMix=Slim::Utils::PluginManager->isEnabled('Plugins::LastMix::Plugin') ? 1 : 0;
   my $artistPics=$mai && Plugins::MaterialSkin::Plugin->readIntPref('plugin.musicartistinfo', 'browseArtistPictures', 1);
   my $srvEmblem=Plugins::MaterialSkin::Plugin->readIntPref('plugin.onlinelibrary', 'enableServiceEmblem', 1);
+  my $users=Slim::Utils::PluginManager->isEnabled('Plugins::Users::Plugin') ? 1 : 0;
 
   my $supportReleaseTypes=Plugins::MaterialSkin::Plugin->readIntPref('server', 'ignoreReleaseTypes', 0) ? "false" : "true";
   my $groupArtistAlbumsByReleaseType=Plugins::MaterialSkin::Plugin->readIntPref('server', 'groupArtistAlbumsByReleaseType', 1);
@@ -193,6 +194,7 @@
   print("const LMS_P_BMIX=$blissMixer;");
   print("const LMS_P_LMIX=$lastMix;");
   print("const LMS_P_RMIX=$rndMix;");
+  print("const LMS_P_USERS=$users;");
   print("const LMS_DEF_ARTIST_PICS=$artistPics;");
   print("const LMS_DEF_SRV_EMBLEM=$srvEmblem;");
   print("const LMS_DEF_NO_GENRE_FILTER=$noGenreFilter;");

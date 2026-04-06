@@ -10,8 +10,11 @@ const VALID_SKIP_SECONDS = new Set(SKIP_SECONDS_VALS);
 const FAKE_MENU = new Set(['volume', 'groupvolume'])
 var lmsNumVisibleMenus = 0;
 
-function copyPlayer(p){
-    return {id:p.id, name:p.name, isgroup:p.isgroup, model:p.model, ip:p.ip, icon:p.icon, color:p.color, link:p.link, ison:p.ison, isplaying:p.isplaying, iswaiting:p.iswaiting, isconnected:p.isconnected, canpoweroff:p.canpoweroff, islocal:p.islocal, trkcount:p.trkcount};
+function copyPlayer(p) {
+    return {id:p.id, name:p.name, isgroup:p.isgroup, model:p.model, ip:p.ip, icon:p.icon, color:p.color,
+            enabled:p.enabled, weight:p.weight, link:p.link, ison:p.ison, isplaying:p.isplaying,
+            iswaiting:p.iswaiting, isconnected:p.isconnected, canpoweroff:p.canpoweroff, islocal:p.islocal,
+            trkcount:p.trkcount};
 }
 
 function setDesktopWideCoverPad(on) {
@@ -26,7 +29,7 @@ function updateUiSettings(state, val) {
                     'browseTechInfo', 'techInfo', 'nowPlayingTrackNum', 'swipeVolume', 'swipeChangeTrack',
                     'keyboardControl', 'skipBSeconds', 'skipFSeconds', 'mediaControls', 'showRating', 'browseContext',
                     'nowPlayingContext', 'queueContext', 'moveDialogs', 'autoCloseQueue', 'nowPlayingFull', 'tinted',
-                    'ndShortcuts', 'ndSettingsIcons', 'ndSettingsVisible', 'gridPerView'];
+                    'ndShortcuts', 'ndSearch', 'gridPerView', 'browseSearch'];
     for (let i=0, len=stdItems.length; i<len; ++i) {
         let key=stdItems[i];
         if (undefined!=val[key] && state[key]!=val[key]) {
@@ -391,11 +394,12 @@ const store = new Vuex.Store({
         tinted: true,
         moveDialogs: false,
         autoCloseQueue: false,
-        ndShortcuts: 0,
-        ndSettingsIcons: false,
-        ndSettingsVisible: false,
+        ndShortcuts: false,
+        ndSearch: true,
+        browseSearch: false,
         cMixSupported: 1==parseInt(getComputedStyle(document.documentElement).getPropertyValue('--color-mix-supported')),
-        detailedHomeItems: [DETAILED_HOME_STD_PREFIX+"new", DETAILED_HOME_STD_PREFIX+"radios", DETAILED_HOME_EXPLORE]
+        detailedHomeItems: [DETAILED_HOME_STD_PREFIX+"new", DETAILED_HOME_STD_PREFIX+"radios", DETAILED_HOME_EXPLORE],
+        user: {id:-1, name:undefined, avatar:undefined}
     },
     mutations: {
         updatePlayer(state, player) {
@@ -408,6 +412,8 @@ const store = new Vuex.Store({
                     state.players[i].isgroup = player.isgroup;
                     state.players[i].icon = player.icon;
                     state.players[i].color = player.color;
+                    state.players[i].enabled = player.enabled;
+                    state.players[i].weight = player.weight;
                     state.players[i].trkcount = player.playlist ? player.playlist.count : 0;
                     if (state.player!=undefined && player.id == state.player.id) {
                         state.player.name = player.name;
@@ -417,6 +423,8 @@ const store = new Vuex.Store({
                         state.player.isgroup = player.isgroup;
                         state.player.icon = player.icon;
                         state.player.color = player.color;
+                        state.player.enabled = player.enabled;
+                        state.player.weight = player.weight;
                         state.player.trkcount = player.playlist ? player.playlist.count : 0;
                     }
                     break;
@@ -447,6 +455,8 @@ const store = new Vuex.Store({
                     state.players[i].isgroup = players[i].isgroup;
                     state.players[i].icon = players[i].icon;
                     state.players[i].color = players[i].color;
+                    state.players[i].enabled = players[i].enabled;
+                    state.players[i].weight = players[i].weight;
                     state.players[i].link = players[i].link;
                 }
                 return;
@@ -627,12 +637,13 @@ const store = new Vuex.Store({
                              'infoBackdrop', 'useDefaultBackdrops', 'browseTechInfo', 'techInfo', 'queueShowTrackNum', 'nowPlayingTrackNum',
                              'nowPlayingClock', 'swipeVolume', 'swipeChangeTrack', 'keyboardControl', 'screensaverNp', 'mediaControls',
                              'queueAlbumStyle', 'queueThreeLines', 'browseContext', 'nowPlayingContext', 'queueContext', 'showRating',
-                             'moveDialogs', 'autoCloseQueue', 'nowPlayingFull', 'tinted', 'ndSettingsIcons', 'ndSettingsVisible', 'gridPerView'];
+                             'moveDialogs', 'autoCloseQueue', 'nowPlayingFull', 'tinted', 'ndShortcuts', 'ndSearch', 'gridPerView',
+                             'browseSearch'];
             for (let i=0, len=boolItems.length; i<len; ++i) {
                 let key = boolItems[i];
                 state[key] = getLocalStorageBool(key, state[key]);
             }
-            let intItems = ['skipBSeconds', 'skipFSeconds', 'mobileBar', 'maxRating', 'volumeStep', 'ndShortcuts', 'screensaver', 'homeButton'];
+            let intItems = ['skipBSeconds', 'skipFSeconds', 'mobileBar', 'maxRating', 'volumeStep', 'screensaver', 'homeButton'];
             for (let i=0, len=intItems.length; i<len; ++i) {
                 let key = intItems[i];
                 let value = getLocalStorageVal(key, state[key]);
@@ -685,6 +696,17 @@ const store = new Vuex.Store({
                 });
             }
 
+            if (LMS_P_USERS && !queryParams.party && lmsOptions.userId!=-1) {
+                lmsCommand("", ["users", "details", "id:"+lmsOptions.userId]).then(({data}) => {
+                    if (data && data.result && parseInt(data.result.id)==lmsOptions.userId) {
+                        state.user.id = lmsOptions.userId;
+                        state.user.name = data.result.name;
+                        state.user.avatar = data.result.avatar;
+                    }
+                }).catch(err => {
+                });
+            }
+
             setDesktopWideCoverPad(state.nowPlayingFull);
             // Read defaults, stored on server
             lmsCommand("", ["pref", LMS_MATERIAL_UI_DEFAULT_PREF, "?"]).then(({data}) => {
@@ -731,6 +753,20 @@ const store = new Vuex.Store({
                         }
                         if (undefined!=prefs.detailedHomeItems && undefined==getLocalStorageVal('detailedHomeItems', undefined)) {
                             opts.detailedHomeItems=prefs.detailedHomeItems;
+                        }
+                        if (undefined!=prefs.navDrawer) {
+                            if (undefined!=prefs.navDrawer.disabled) {
+                                setLocalStorageVal('disabledPlayers', prefs.navDrawer.disabled);
+                                lmsOptions.disabledPlayers = new Set(prefs.navDrawer.disabled.split(','));
+                            }
+                            if (undefined!=prefs.navDrawer.weights) {
+                                lmsOptions.playerWeightMap = prefs.navDrawer.weights;
+                                setLocalStorageVal('playerWeightMap', JSON.stringify(lmsOptions.playerWeightMap));
+                            }
+                            if (undefined!=prefs.navDrawer.alpha) {
+                                lmsOptions.playersAlphaSort = prefs.navDrawer.alpha;
+                                setLocalStorageVal('playersAlphaSort', lmsOptions.playersAlphaSort);
+                            }
                         }
                         updateUiSettings(state, opts);
                     } catch(e) {
@@ -946,6 +982,13 @@ const store = new Vuex.Store({
             lmsOptions.home3rdPartyExtraLists = val;
             state.detailedHomeItems = checkHomeItems(state.detailedHomeItems);
             bus.$emit('refresh-home');
+        },
+        setUser(state, user) {
+            state.user.id = user.id;
+            state.user.name = user.name;
+            state.user.avatar = user.avatar;
+            lmsOptions.userId = user.id;
+            setLocalStorageVal('userId', user.id);
         }
     }
 })

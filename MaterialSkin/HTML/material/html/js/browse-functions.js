@@ -1106,7 +1106,10 @@ function browseClick(view, item, index, event, ignoreOpenMenu) {
         view.isTop = false;
         view.tbarActions=[];
         view.grid = {allowed:true, use:view.$store.state.gridPerView ? isSetToUseGrid(GRID_OTHER) : view.grid.use, numColumns:0, ih:GRID_MIN_HEIGHT, rows:[], few:false, haveSubtitle:true, multiSize:false, type:GRID_STANDARD};
-        view.currentActions=[{action:VLIB_ACTION}, {action:(view.grid.use ? USE_LIST_ACTION : USE_GRID_ACTION)}, {action:SEARCH_LIB_ACTION}];
+        view.currentActions=[{action:VLIB_ACTION}, {action:(view.grid.use ? USE_LIST_ACTION : USE_GRID_ACTION)}];
+        if (!view.$store.state.browseSearch) {
+            view.currentActions.push({action:SEARCH_LIB_ACTION});
+        }
         view.layoutGrid(true);
     } else if (MUSIC_ID_PREFIX+'myMusicWorks'==item.id) {
         browseAddWorksCategories(view, item);
@@ -1280,16 +1283,16 @@ function browseAddCategories(view, item, isGenre) {
         view.fetchingItem = undefined;
         logJsonMessage("RESP", data);
         var resp = parseBrowseModes(view, data, isGenre ? item.id : undefined, isGenre ? undefined : item.id, alt_id, isGenre && undefined!=lmsOptions.classicalGenres && !lmsOptions.classicalGenres.has(item.title));
-        view.items = resp.items;
-        view.items.sort(weightSort);
         var allTracks = { title: i18n("All Tracks"),
             command: ["tracks"],
             params: [item.id, trackTags(true)+"ely", SORT_KEY+TRACK_SORT_PLACEHOLDER],
             icon: "music_note",
             type: "group",
-            id: ALL_TRACKS_ID};
+            id: ALL_TRACKS_ID,
+            weight:100000000000};
         if (undefined!=alt_id) { allTracks.params.push(alt_id); }
-        view.items.push(allTracks);
+        resp.other.push(allTracks);
+        view.items = browseSortCategories(resp.items, resp.artist, resp.release, resp.other);
         view.headerTitle = stripLinkTags(item.title);
         view.headerSubTitle = i18n("Select category");
         browseSetScroll(view);
@@ -1334,6 +1337,7 @@ function browseItemAction(view, act, origItem, index, event, slimBrowseBaseActio
         if (view.$store.state.visibleMenus.size<1) {
             setLocalStorageVal('search', '');
             view.searchActive = 1;
+            setTimeout(function() {bus.$emit('search-initial')}, 50);
         }
     } else if (act===MORE_ACTION) {
         if (item.allItems && item.allItems.length>0) { // Clicking on 'X Artists' / 'X Albums' / 'X Tracks' search header
@@ -2194,9 +2198,6 @@ function browseGoBack(view, refresh) {
         return;
     } else if (view.searchActive) {
         view.searchActive = 0;
-        if (view.items.length<1 || (undefined==view.items[0].allItems && SEARCH_OTHER_ID!=view.items[0].id)) {
-            return; // Search results not being shown, so '<-' button just closes search field
-        }
     }
     if (view.prevPage) {
         var nextPage = ""+view.prevPage;
@@ -2370,7 +2371,7 @@ function browseBuildCommand(view, item, commandName, doReplacements, allowLibId,
                     mode = params[i].split(":")[1];
                     if (mode.startsWith("myMusicArtists")) {
                         mode="artists";
-                    } else if (mode.startsWith("myMusicAlbums") || mode=="randomalbums" || mode=="vaalbums" || mode=="recentlychanged") {
+                    } else if (mode.startsWith("myMusicAlbums") || mode=="randomalbums" || mode=="vaalbums" || mode=="recentlychanged" || mode=="albumsmyMusicAlbumsPopular") {
                         mode="albums";
                     } else if (mode=="years") {
                         p.push("hasAlbums:1");
@@ -2485,7 +2486,11 @@ function browseMyMusicMenu(view) {
             logJsonMessage("RESP", data);
             // Get basic, configurable, browse modes...
             var resp = parseBrowseModes(view, data);
-            view.myMusic = resp.items;
+            view.myMusicAll = resp.items;
+            view.myMusic = view.myMusicAll;
+            view.myMusicArtist = resp.artist;
+            view.myMusicRelease = resp.release;
+            view.myMusicOther = resp.other;
             view.stdItems = resp.stdItems;
 
             if (resp.listWorks!=lmsOptions.listWorks) {
@@ -2506,11 +2511,13 @@ function browseMyMusicMenu(view) {
                             if (c.node=="myMusic" && c.id) {
                                 if (c.id=="randomplay") {
                                     if (!queryParams.party) {
-                                        view.myMusic.push({ title: i18n("Random Mix"),
+                                        let item = { title: i18n("Random Mix"),
                                                             svg: "dice-multiple",
                                                             id: RANDOM_MIX_ID,
                                                             type: "app",
-                                                            weight: c.weight ? parseFloat(c.weight) : 100 });
+                                                            weight: c.weight ? parseFloat(c.weight) : 100 };
+                                        view.myMusic.push(item);
+                                        view.myMusicOther.push(item);
                                     }
                                 } else if (!c.id.startsWith("myMusicSearch") && !c.id.startsWith("opmlselect") && !view.stdItems.has(c.id)) {
                                     var command = view.buildCommand(c, "go", false);
@@ -2522,6 +2529,7 @@ function browseMyMusicMenu(view) {
                                                  type: "group",
                                                  icon: undefined
                                                 };
+                                    var type = 2;
 
                                     if (c.id == "dynamicplaylist") {
                                         item.svg = "dice-list";
@@ -2531,6 +2539,7 @@ function browseMyMusicMenu(view) {
                                     } else if (c.id.startsWith("artist")) {
                                         item.svg = "artist";
                                         item.icon = undefined;
+                                        type = 0;
                                     } else if (c.id.startsWith("playlists")) {
                                         item.icon = "list";
                                         item.section = SECTION_PLAYLISTS;
@@ -2544,10 +2553,17 @@ function browseMyMusicMenu(view) {
                                         if (c.id.startsWith("artist")) {
                                             item.svg = "artist";
                                             item.icon = undefined;
+                                            type = 0;
                                         } else if (c.id.startsWith("genre")) {
                                             item.svg = "genre";
                                             item.icon = undefined;
                                         } else {
+                                            type = c.id.startsWith("artist")
+                                                    ? 0
+                                                    : c.id.startsWith("new") || c.id.startsWith("album")
+                                                    ? 1
+                                                    : 2;
+
                                             item.icon = c.id.startsWith("new") ? "new_releases" :
                                                         c.id.startsWith("album") ? "album" :
                                                         c.id.startsWith("artist") ? "group" :
@@ -2558,9 +2574,11 @@ function browseMyMusicMenu(view) {
                                     } else if (c.icon) {
                                         if (c.icon.endsWith("/albums.png")) {
                                             item.icon = "album";
+                                            type = 1;
                                         } else if (c.icon.endsWith("/artists.png")) {
                                             item.svg = "artist";
                                             item.icon = undefined;
+                                            type = 0;
                                         } else if (c.icon.endsWith("/genres.png")) {
                                             item.svg = "genre";
                                             item.icon = undefined;
@@ -2578,6 +2596,13 @@ function browseMyMusicMenu(view) {
                                         item['mapgenre']=true;
                                     }
                                     view.myMusic.push(item);
+                                    if (type==0) {
+                                        view.myMusicArtist.push(item);
+                                    } else if (type==1) {
+                                        view.myMusicRelease.push(item);
+                                    } else {
+                                        view.myMusicOther.push(item);
+                                    }
                                 }
                             }
                         }
@@ -3402,6 +3427,34 @@ function browseSelectVLib(view) {
             });
         }
     });
+}
+
+function browseSortCategories(all, artist, release, other) {
+    if (undefined==all) {
+        return all;
+    }
+    if (lmsOptions.groupMyMusicCategories && undefined!=artist && undefined!=release && undefined!=other && (artist.length>1 || release.length>1)) {
+        let items = [];
+        if (artist.length>0) {
+            items.push({title:i18n("By Artist"), id:"car", header:true, svg:"artist"});
+            artist.sort(weightSort);
+            items.push(...artist);
+        }
+        if (release.length>0) {
+            items.push({title:lmsOptions.supportReleaseTypes ? i18n("By Release") :  i18n("By Album"), id:"cal", header:true, svg:"release"});
+            release.sort(weightSort);
+            items.push(...release);
+        }
+        if (other.length>0) {
+            items.push({title:i18n("Other"), id:"co", header:true, icon:"music_note"});
+            other.sort(weightSort);
+            items.push(...other);
+        }
+        return items;
+    } else {
+        all.sort(weightSort);
+        return all;
+    }
 }
 
 const DEFERRED_LOADED = true;

@@ -161,7 +161,7 @@ Vue.component('lms-advancedsearch-dialog', {
    <v-btn icon slot="activator"><v-icon>more_vert</v-icon></v-btn>
    <v-list>
     <template v-for="(sect, index) in sections">
-     <v-list-tile @click="sect.visible=!sect.visible" v-if="stats || !sect.isstats">
+     <v-list-tile role="menuitem" @click="sect.visible=!sect.visible" v-if="stats || !sect.isstats">
       <v-list-tile-avatar><v-icon>{{sect.visible ? 'check_box' : 'check_box_outline_blank'}}</v-icon></v-list-tile-avatar>
       <v-list-tile-content><v-list-tile-title>{{sect.label}}</v-list-tile-title></v-list-tile-content>
      </v-list-tile>
@@ -178,7 +178,7 @@ Vue.component('lms-advancedsearch-dialog', {
    <v-btn icon slot="activator"><v-icon>more_vert</v-icon></v-btn>
    <v-list>
     <template v-for="(sect, index) in sections">
-     <v-list-tile @click="sect.visible=!sect.visible" v-if="stats || !sect.isstats">
+     <v-list-tile role="menuitem" @click="sect.visible=!sect.visible" v-if="stats || !sect.isstats">
       <v-list-tile-avatar><v-icon>{{sect.visible ? 'check_box' : 'check_box_outline_blank'}}</v-icon></v-list-tile-avatar>
       <v-list-tile-content><v-list-tile-title>{{sect.label}}</v-list-tile-title></v-list-tile-content>
      </v-list-tile>

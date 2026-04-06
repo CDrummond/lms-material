@@ -150,7 +150,7 @@ var lmsBrowse = Vue.component("lms-browse", {
     </v-btn>
    </template>
 
-   <v-btn :title="SEARCH_LIB_ACTION | tooltip(keyboardControl)" flat icon class="toolbar-button" @click.stop="itemAction(SEARCH_LIB_ACTION, undefined, undefined, $event)"><img class="svg-img" :src="ACTIONS[SEARCH_LIB_ACTION].svg | svgIcon(darkUi)"></img></v-btn>
+   <v-btn v-if="!browseSearch" :title="SEARCH_LIB_ACTION | tooltip(keyboardControl)" flat icon class="toolbar-button" @click.stop="itemAction(SEARCH_LIB_ACTION, undefined, undefined, $event)"><img class="svg-img" :src="ACTIONS[SEARCH_LIB_ACTION].svg | svgIcon(darkUi)"></img></v-btn>
   </v-layout>
   <v-layout class="browse-tracklist-commands" v-if="isTrackList && showDetailedSubtoolbar && wide<WIDE_MIX_BTN && !searchActive">
    <v-btn flat @click.stop="headerAction(PLAY_ALL_ACTION, $event)" class="context-button" :title="PLAY_ACTION | tooltip(keyboardControl)" :id="'tbar-actions'+PLAY_ACTION"><v-icon>{{ACTIONS[PLAY_ACTION].icon}}</v-icon>&nbsp;{{ACTIONS[PLAY_ACTION].short}}</v-btn>
@@ -163,7 +163,7 @@ var lmsBrowse = Vue.component("lms-browse", {
  </div>
  </div>
  <v-icon class="browse-progress" v-if="fetchingItem!=undefined" color="primary">more_horiz</v-icon>
- <div class="lms-list bgnd-cover" v-bind:style="{'background-image':'url('+currentBgndUrl+')'}" v-bind:class="{'browse-backdrop-cover':drawBackdrop, 'tint-bgnd-cover':tint&&!drawBgndImage, 'browse-track-list':showTrackListCommands}">
+ <div class="lms-list bgnd-cover" v-bind:style="{'background-image':'url('+currentBgndUrl+')'}" v-bind:class="{'browse-backdrop-cover':drawBackdrop&&1!=searchActive, 'tint-bgnd-cover':tint&&!drawBgndImage, 'browse-track-list':showTrackListCommands, 'unpinned-queue-visible':unpinnedQueueVisible, 'pinned-queue':pinnedQueue}">
   <div class="noselect lms-jumplist" v-bind:class="{'bgnd-blur':drawBgndImage,'backdrop-blur':drawBackdrop, 'lms-jumplist-h':filteredJumplist[0].header}" v-if="filteredJumplist.length>1">
    <div class="jl-inner" v-bind:style="{'max-height':(filteredJumplist.length*50)+'px'}">
     <template v-for="(item, index) in filteredJumplist">
@@ -176,7 +176,7 @@ var lmsBrowse = Vue.component("lms-browse", {
     </template>
    </div>
   </div>
-  <div class="lms-list" id="browse-list" style="overflow:auto;" v-bind:class="{'lms-image-grid':grid.allowed&&grid.use,'lms-grouped-image-grid':grid.allowed&&grid.use && variableGridHeight,'lms-image-grid-jump':grid.allowed&&grid.use && filteredJumplist.length>1,'lms-list-jump':!(grid.allowed&&grid.use) && filteredJumplist.length>1,'bgnd-blur':drawBgndImage,'backdrop-blur':drawBackdrop, 'browse-track-list':showTrackListCommands, 'unpinned-queue-visible':unpinnedQueueVisible}">
+  <div class="lms-list" id="browse-list" style="overflow:auto;" v-bind:class="{'lms-image-grid':grid.allowed&&grid.use,'lms-grouped-image-grid':grid.allowed&&grid.use && variableGridHeight,'lms-image-grid-jump':grid.allowed&&grid.use && filteredJumplist.length>1,'lms-list-jump':!(grid.allowed&&grid.use) && filteredJumplist.length>1,'bgnd-blur':drawBgndImage,'backdrop-blur':drawBackdrop, 'browse-track-list':showTrackListCommands}">
 
    <RecycleScroller v-if="grid.allowed&&grid.use" :items="grid.rows" :item-size="variableGridHeight ? null : GRID_TEXT_ONLY==grid.type ? grid.ih : (grid.ih - (grid.haveSubtitle || isTop || current.id.startsWith(TOP_ID_PREFIX) ? 0 : GRID_SINGLE_LINE_DIFF))" page-mode key-field="id" :buffer="LMS_SCROLLER_GRID_BUFFER">
     <div slot-scope="{item}" :class="[grid.few?'image-grid-few':'image-grid-full-width', GRID_TEXT_ONLY==grid.type && items.length>0 && items[0].stdItem==STD_ITEM_GENRE ? 'genre-grid' : '', GRID_TEXT_ONLY!=grid.type && (variableGridHeight ? item.hasSub : grid.haveSubtitle)?'image-grid-with-sub':'',grid.type==GRID_ICON_ONLY_ONLY?'icon-only':'',item.ihe&&!item.header&&!item.spacer?'grid-scroll':'']">
@@ -194,7 +194,7 @@ var lmsBrowse = Vue.component("lms-browse", {
        <v-list-tile-title>{{item.item.title}}</v-list-tile-title>
       </v-list-tile-content>
       <v-list-tile-action class="browse-action" v-if="undefined!=item.item.menu && item.item.menu.length>0">
-       <div class="grid-btn list-btn hover-btn menu-btn" @click.stop="itemMenu(item.item, item.rs, $event)" :title="i18n('%1 (Menu)', stripLinkTags(item.item.title))"></div>
+       <div class="grid-btn list-btn hover-btn menu-btn" role="button" @click.stop="itemMenu(item.item, item.rs, $event)" :aria-label="i18n('%1 (Menu)', stripLinkTags(item.item.title))"></div>
       </v-list-tile-action>
      </v-list-tile>
      <div v-else-if="GRID_TEXT_ONLY==grid.type" align="center" style="vertical-align: top" v-for="(citem, col) in item.items" @contextmenu.prevent="contextMenu(citem, isTop ? citem.gidx : (item.rs+col), $event)">
@@ -204,7 +204,7 @@ var lmsBrowse = Vue.component("lms-browse", {
        <div v-bind:class="{'search-highlight':highlightIndex==(isTop ? citem.gidx : (item.rs+col)), 'list-active': (menu.show && (isTop ? citem.gidx : (item.rs+col))==menu.index) || (fetchingItem==item.id)}">
          <div class="stripe" :style="{background: citem.color}"></div>
          <div>{{citem.title}}</div></div>
-        <div class="grid-btn image-grid-btn hover-btn menu-btn" v-if="(undefined!=citem.stdItem && citem.stdItem<=STD_ITEM_MAX) || (citem.menu && citem.menu.length>0)" @click.stop="itemMenu(citem, isTop ? citem.gidx : (item.rs+col), $event)" :title="i18n('%1 (Menu)', stripLinkTags(citem.title))"></div>
+        <div class="grid-btn image-grid-btn hover-btn menu-btn" v-if="(undefined!=citem.stdItem && citem.stdItem<=STD_ITEM_MAX) || (citem.menu && citem.menu.length>0)" role="button" @click.stop="itemMenu(citem, isTop ? citem.gidx : (item.rs+col), $event)" :aria-label="i18n('%1 (Menu)', stripLinkTags(citem.title))"></div>
       </div>
      </div>
 
@@ -219,10 +219,10 @@ var lmsBrowse = Vue.component("lms-browse", {
        <v-list-tile-title>{{item.item.title}}</v-list-tile-title>
       </v-list-tile-content>
       <v-list-tile-action class="browse-action browse-more" v-if="undefined!=item.item.morecmd || undefined!=item.item.allItems || (item.item.slimbrowse && item.item.header && item.item.actions)">
-       <div class="link-item" :title="i18n('More')" @click.stop="showMore(item.item)">{{i18n('More')}}</div>
+       <div class="link-item" role="button" :aria-label="i18n('%1 (More)', stripLinkTags(item.item.title))" @click.stop="showMore(item.item)">{{i18n('More')}}</div>
       </v-list-tile-action>
       <v-list-tile-action class="browse-action" v-else-if="undefined!=item.item.menu && item.item.menu.length>0">
-       <div class="grid-btn list-btn hover-btn menu-btn" @click.stop="itemMenu(item.item, undefined, $event)" :title="i18n('%1 (Menu)', stripLinkTags(item.item.title))"></div>
+       <div class="grid-btn list-btn hover-btn menu-btn" @click.stop="itemMenu(item.item, undefined, $event)" role="button" :aria-label="i18n('%1 (Menu)', stripLinkTags(item.item.title))"></div>
       </v-list-tile-action>
       <div v-if="hoverBtns && 0==selection.size && (item.item.menu && (item.item.menu[0]==PLAY_ACTION || item.item.menu[0]==PLAY_ALL_ACTION))" class="list-btns" v-bind:class="{'hover-more':undefined!=item.item.morecmd||undefined!=item.item.allItems||(item.item.slimbrowse && item.item.header && item.item.actions)}">
        <img v-if="!LMS_KIOSK_MODE || !HIDE_FOR_KIOSK.has(ADD_ACTION)" class="other-btn grid-btn" @click.stop="itemAction(ADD_ALL_ACTION, item.item, undefined, $event)" :title="ACTIONS[ADD_ACTION].title" :src="'hover-add' | svgIcon(darkUi, false)"></img>
@@ -253,7 +253,7 @@ var lmsBrowse = Vue.component("lms-browse", {
        <div v-else class="image-grid-text">{{citem.title}}</div>
        <div class="image-grid-text subtext" v-if="citem.libname">{{citem.libname}}</div>
        <div class="image-grid-text subtext" v-else v-html="citem.subtitle" v-bind:class="{'link-item':subtitlesClickable}" @click.stop="clickSubtitle(citem, isTop ? citem.gidx : (item.rs+col), $event)"></div>
-       <div class="grid-btn image-grid-btn hover-btn menu-btn" v-if="(undefined!=citem.stdItem && citem.stdItem<=STD_ITEM_MAX) || (citem.menu && citem.menu.length>0 && (!citem.isPinned || (!queryParams.party && (!LMS_KIOSK_MODE || !HIDE_FOR_KIOSK.has(PIN_ACTION)))))" @click.stop="itemMenu(citem, isTop ? citem.gidx : (item.rs+col), $event)" :title="i18n('%1 (Menu)', stripLinkTags(citem.title))"></div>
+       <div class="grid-btn image-grid-btn hover-btn menu-btn" v-if="(undefined!=citem.stdItem && citem.stdItem<=STD_ITEM_MAX) || (citem.menu && citem.menu.length>0 && (!citem.isPinned || (!queryParams.party && (!LMS_KIOSK_MODE || !HIDE_FOR_KIOSK.has(PIN_ACTION)))))" role="button" @click.stop="itemMenu(citem, isTop ? citem.gidx : (item.rs+col), $event)" :aria-label="i18n('%1 (Menu)', stripLinkTags(citem.title))"></div>
        <div class="emblem" v-if="citem.emblem" :style="{background: citem.emblem.bgnd}">
         <img :src="citem.emblem | emblem()" loading="lazy"></img>
        </div>
@@ -310,10 +310,10 @@ var lmsBrowse = Vue.component("lms-browse", {
 
      <v-list-tile-action v-if="undefined!=item.durationStr" class="browse-time">{{item.durationStr}}</v-list-tile-action>
      <v-list-tile-action class="browse-action browse-more" v-if="undefined!=item.morecmd || undefined!=item.allItems || (item.slimbrowse && item.header && item.actions)">
-      <div class="link-item" :title="i18n('More')" @click.stop="showMore(item)">{{i18n('More')}}</div>
+      <div class="link-item" role="button" :aria-label="i18n('%1 (More)', stripLinkTags(item.title))" @click.stop="showMore(item)">{{i18n('More')}}</div>
      </v-list-tile-action>
      <v-list-tile-action class="browse-action" v-else-if="((undefined!=item.stdItem && item.stdItem<=STD_ITEM_MAX) && item.stdItem<=STD_ITEM_MAX) || (item.menu && item.menu.length>0)">
-      <div class="grid-btn list-btn hover-btn menu-btn" @click.stop="itemMenu(item, index, $event)" :title="i18n('%1 (Menu)', stripLinkTags(item.title))"></div>
+      <div class="grid-btn list-btn hover-btn menu-btn" @click.stop="itemMenu(item, index, $event)" role="button" :aria-label="i18n('%1 (Menu)', stripLinkTags(item.title))"></div>
      </v-list-tile-action>
      <div v-if="hoverBtns && 0==selection.size && ((undefined!=item.stdItem && item.stdItem<=STD_ITEM_MAX) || (item.menu && (item.menu[0]==PLAY_ACTION || item.menu[0]==PLAY_ALL_ACTION)))" class="list-btns" v-bind:class="{'list-btns-track':item.durationStr,'hover-more':undefined!=item.morecmd||undefined!=item.allItems||(item.slimbrowse && item.header && item.actions)}">
       <img v-if="(!LMS_KIOSK_MODE || !HIDE_FOR_KIOSK.has(ADD_ACTION)) && allowAdd(item)" class="other-btn grid-btn" @click.stop="itemAction(item.header ? ADD_ALL_ACTION : ADD_ACTION, item, index, $event)" :title="ACTIONS[ADD_ACTION].title" :src="'hover-add' | svgIcon(darkUi, true)"></img>
@@ -361,7 +361,7 @@ var lmsBrowse = Vue.component("lms-browse", {
        <div v-if="citem.image" class="image-grid-text" @click.stop="itemMenu(citem, undefined, $event)">{{citem.title}}</div>
        <div v-else class="image-grid-text">{{citem.title}}</div>
        <div class="image-grid-text subtext" v-html="citem.subtitle" v-bind:class="{'link-item':subtitlesClickable}" @click.stop="clickSubtitle(citem, undefined, $event)"></div>
-       <div class="grid-btn image-grid-btn hover-btn menu-btn" v-if="(undefined!=citem.stdItem && citem.stdItem<=STD_ITEM_MAX) || (citem.menu && citem.menu.length>0)" @click.stop="itemMenu(citem, undefined, $event)" :title="i18n('%1 (Menu)', stripLinkTags(citem.title))"></div>
+       <div class="grid-btn image-grid-btn hover-btn menu-btn" v-if="(undefined!=citem.stdItem && citem.stdItem<=STD_ITEM_MAX) || (citem.menu && citem.menu.length>0)" role="button" @click.stop="itemMenu(citem, undefined, $event)" :aria-label="i18n('%1 (Menu)', stripLinkTags(citem.title))"></div>
        <div class="emblem" v-if="citem.emblem" :style="{background: citem.emblem.bgnd}">
         <img :src="citem.emblem | emblem()" loading="lazy"></img>
        </div>
@@ -391,10 +391,10 @@ var lmsBrowse = Vue.component("lms-browse", {
      </v-list-tile-content>
      <v-list-tile-action v-if="undefined!=item.durationStr" class="browse-time">{{item.durationStr}}</v-list-tile-action>
      <v-list-tile-action class="browse-action browse-more" v-if="undefined!=item.morecmd || undefined!=item.allItems || (item.slimbrowse && item.header && item.actions)">
-      <div class="link-item" :title="i18n('More')" @click.stop="showMore(item)">{{i18n('More')}}</div>
+      <div class="link-item" role="button" :aria-label="i18n('%1 (More)', stripLinkTags(item.title))" @click.stop="showMore(item)">{{i18n('More')}}</div>
      </v-list-tile-action>
      <v-list-tile-action class="browse-action" v-else-if="(undefined!=item.stdItem && item.stdItem<=STD_ITEM_MAX) || (item.menu && item.menu.length>0)">
-      <div class="grid-btn list-btn hover-btn menu-btn" @click.stop="itemMenu(item, index, $event)" :title="i18n('%1 (Menu)', stripLinkTags(item.title))"></div>
+      <div class="grid-btn list-btn hover-btn menu-btn" @click.stop="itemMenu(item, index, $event)" role="button" :aria-label="i18n('%1 (Menu)', stripLinkTags(item.title))"></div>
      </v-list-tile-action>
      <div v-if="hoverBtns && 0==selection.size && ((undefined!=item.stdItem && item.stdItem<=STD_ITEM_MAX) || (item.menu && (item.menu[0]==PLAY_ACTION || item.menu[0]==PLAY_ALL_ACTION)))" class="list-btns" v-bind:class="{'list-btns-track':item.durationStr,'hover-more':undefined!=item.morecmd||undefined!=item.allItems||(item.slimbrowse && item.header && item.actions)}">
       <img v-if="(!LMS_KIOSK_MODE || !HIDE_FOR_KIOSK.has(ADD_ACTION)) && allowAdd(item)" class="other-btn grid-btn" @click.stop="itemAction(ADD_ALL_ACTION, item, index, $event)" :title="ACTIONS[ADD_ACTION].title" :src="'hover-add' | svgIcon(darkUi, false)"></img>
@@ -442,7 +442,7 @@ var lmsBrowse = Vue.component("lms-browse", {
 
      <v-list-tile-action v-if="undefined!=item.durationStr" class="browse-time">{{item.durationStr}}</v-list-tile-action>
      <v-list-tile-action class="browse-action" v-if="(undefined!=item.stdItem && item.stdItem<=STD_ITEM_MAX) || (item.menu && item.menu.length>0 && (!item.isPinned || (!queryParams.party && (!LMS_KIOSK_MODE || !HIDE_FOR_KIOSK.has(PIN_ACTION)))))">
-      <div class="grid-btn list-btn hover-btn menu-btn" @click.stop="itemMenu(item, index, $event)" :title="i18n('%1 (Menu)', stripLinkTags(item.title))"></div>
+      <div class="grid-btn list-btn hover-btn menu-btn" @click.stop="itemMenu(item, index, $event)" role="button" :aria-label="i18n('%1 (Menu)', stripLinkTags(item.title))"></div>
      </v-list-tile-action>
      <div v-if="hoverBtns && 0==selection.size && ((undefined!=item.stdItem && item.stdItem<=STD_ITEM_MAX) || (item.menu && (item.menu[0]==PLAY_ACTION || item.menu[0]==PLAY_ALL_ACTION)))" class="list-btns" v-bind:class="{'list-btns-track':item.durationStr,'hover-more':undefined!=item.morecmd||undefined!=item.allItems||(item.slimbrowse && item.header && item.actions)}">
       <img v-if="(!LMS_KIOSK_MODE || !HIDE_FOR_KIOSK.has(ADD_ACTION)) && allowAdd(item)" class="other-btn grid-btn" @click.stop="itemAction(ADD_ACTION, item, index, $event)" :title="ACTIONS[ADD_ACTION].title" :src="'hover-add' | svgIcon(darkUi, false)"></img>
@@ -455,14 +455,16 @@ var lmsBrowse = Vue.component("lms-browse", {
      </div>
     </v-list-tile>
    </template>
-   <div style="height:20px; background:transparent"></div> <!-- add padding -->
+   <div style="height:68px; background:transparent" v-if="browseSearch"></div>
+   <div style="height:20px; background:transparent" v-else></div> <!-- add padding -->
   </div>
+  <div class="browse-search-btn" v-if="browseSearch && !searchActive" role="button" :title="SEARCH_LIB_ACTION | tooltip(keyboardControl)" @click="itemAction(SEARCH_LIB_ACTION, undefined, undefined, $event)"><img class="svg-img" :src="ACTIONS[SEARCH_LIB_ACTION].svg | svgIcon(true)"></img></div>
  </div>
 
  <v-menu v-model="menu.show" :position-x="menu.x" :position-y="menu.y">
   <v-list v-if="menu.item && menu.item.moremenu">
    <template v-for="(entry, index) in menu.item.moremenu">
-    <v-list-tile @click="itemMoreAction(menu.item, index)">
+    <v-list-tile role="menuitem" @click="itemMoreAction(menu.item, index)">
      <v-list-tile-title>{{entry.title}}</v-list-tile-title>
     </v-list-tile>
    </template>
@@ -472,7 +474,7 @@ var lmsBrowse = Vue.component("lms-browse", {
     <div style="height:0px!important" v-if="(queryParams.party && HIDE_FOR_PARTY.has(action)) || (isTop && action==SELECT_ACTION) || (LMS_KIOSK_MODE && HIDE_FOR_KIOSK.has(action)) || ((PLAY_SHUFFLE_ACTION==action || PLAY_SHUFFLE_ALL_ACTION==action) && !allowShuffle(menu.item)) || (SELECT_ACTION==action && searchActive)"></div>
     <v-divider v-else-if="DIVIDER==action"></v-divider>
     <template v-for="(cact, cindex) in itemCustomActions" v-else-if="CUSTOM_ACTIONS==action">
-     <v-list-tile @click="itemCustomAction(cact, menu.item, menu.index)">
+     <v-list-tile role="menuitem" @click="itemCustomAction(cact, menu.item, menu.index)">
       <v-list-tile-avatar>
        <v-icon v-if="undefined==cact.svg">{{cact.icon}}</v-icon>
        <img v-else class="svg-img" :src="cact.svg | svgIcon(darkUi)"></img>
@@ -480,27 +482,27 @@ var lmsBrowse = Vue.component("lms-browse", {
       <v-list-tile-title>{{cact.title}}</v-list-tile-title>
      </v-list-tile>
     </template>
-    <v-list-tile v-else-if="action==ADD_TO_FAV_ACTION && isInFavorites(menu.item)" @click="menuItemAction(REMOVE_FROM_FAV_ACTION, menu.item, menu.index, $event)">
+    <v-list-tile role="menuitem" v-else-if="action==ADD_TO_FAV_ACTION && isInFavorites(menu.item)" @click="menuItemAction(REMOVE_FROM_FAV_ACTION, menu.item, menu.index, $event)">
      <v-list-tile-avatar>
       <v-icon v-if="undefined==ACTIONS[REMOVE_FROM_FAV_ACTION].svg">{{ACTIONS[REMOVE_FROM_FAV_ACTION].icon}}</v-icon>
       <img v-else class="svg-img" :src="ACTIONS[REMOVE_FROM_FAV_ACTION].svg | svgIcon(darkUi)"></img>
      </v-list-tile-avatar>
      <v-list-tile-title>{{ACTIONS[REMOVE_FROM_FAV_ACTION].title}}</v-list-tile-title>
     </v-list-tile>
-    <v-list-tile v-else-if="action==SELECT_ACTION && menu.item.selected" @click="menuItemAction(UNSELECT_ACTION, menu.item, menu.index, $event)">
+    <v-list-tile role="menuitem" v-else-if="action==SELECT_ACTION && menu.item.selected" @click="menuItemAction(UNSELECT_ACTION, menu.item, menu.index, $event)">
      <v-list-tile-avatar>
       <v-icon>{{ACTIONS[UNSELECT_ACTION].icon}}</v-icon>
      </v-list-tile-avatar>
      <v-list-tile-title>{{ACTIONS[UNSELECT_ACTION].title}}</v-list-tile-title>
     </v-list-tile>
-    <v-list-tile v-else-if="action==BR_COPY_ACTION ? queueSelection : action==MOVE_HERE_ACTION ? (selection.size>0 && !menu.item.selected) : action==DOWNLOAD_ACTION ? lmsOptions.allowDownload && undefined==menu.item.emblem : action==PLAY_DISC_ACTION ? undefined!=menu.item.disc : (action!=RATING_ACTION || showRating)" @click="menuItemAction(action, menu.item, menu.index, $event)">
+    <v-list-tile role="menuitem" v-else-if="action==BR_COPY_ACTION ? queueSelection : action==MOVE_HERE_ACTION ? (selection.size>0 && !menu.item.selected) : action==DOWNLOAD_ACTION ? lmsOptions.allowDownload && undefined==menu.item.emblem : action==PLAY_DISC_ACTION ? undefined!=menu.item.disc : (action!=RATING_ACTION || showRating)" @click="menuItemAction(action, menu.item, menu.index, $event)">
      <v-list-tile-avatar>
       <v-icon v-if="undefined==ACTIONS[action].svg">{{ACTIONS[action].icon}}</v-icon>
       <img v-else class="svg-img" :src="ACTIONS[action].svg | svgIcon(darkUi)"></img>
      </v-list-tile-avatar>
      <v-list-tile-title>{{ACTIONS[action].title}}</v-list-tile-title>
     </v-list-tile>
-    <v-list-tile v-if="action==COPY_DETAILS_ACTION && undefined!=menu.item.image && (index==menu.itemMenu.length-1 || menu.itemMenu[index+1]!=SHOW_IMAGE_ACTION)" @click="menuItemAction(SHOW_IMAGE_ACTION, menu.item, menu.index, $event)">
+    <v-list-tile role="menuitem" v-if="action==COPY_DETAILS_ACTION && undefined!=menu.item.image && (index==menu.itemMenu.length-1 || menu.itemMenu[index+1]!=SHOW_IMAGE_ACTION)" @click="menuItemAction(SHOW_IMAGE_ACTION, menu.item, menu.index, $event)">
      <v-list-tile-avatar>
       <img class="svg-img" :src="ACTIONS[SHOW_IMAGE_ACTION].svg | svgIcon(darkUi)"></img>
      </v-list-tile-avatar>
@@ -510,7 +512,7 @@ var lmsBrowse = Vue.component("lms-browse", {
   </v-list>
   <v-list v-else-if="menu.history">
    <template v-for="(item, index) in menu.history">
-    <v-list-tile @click="goTo(index)">
+    <v-list-tile role="menuitem" @click="goTo(index)">
      <v-list-tile-avatar>
       <v-icon v-if="undefined!=item.icon">{{item.icon}}</v-icon>
       <img v-else-if="undefined!=item.svg" class="svg-img" :src="item.svg | svgIcon(darkUi)"></img>
@@ -522,7 +524,7 @@ var lmsBrowse = Vue.component("lms-browse", {
   </v-list>
   <v-list v-else-if="menu.items">
    <template v-for="(item, index) in menu.items">
-    <v-list-tile @click="menuItemAction(item, undefined, undefined, $event)" v-if="undefined==item.title">
+    <v-list-tile role="menuitem" @click="menuItemAction(item, undefined, undefined, $event)" v-if="undefined==item.title">
      <v-list-tile-avatar :tile="true" class="lms-avatar"><v-icon v-if="ACTIONS[item].icon">{{ACTIONS[item].icon}}</v-icon><img v-else-if="ACTIONS[item].svg" class="svg-img" :src="ACTIONS[item].svg | svgIcon(darkUi)"></img></v-list-tile-avatar>
      <v-list-tile-title>{{ACTIONS[item].title}}</v-list-tile-title>
     </v-list-tile>
@@ -535,7 +537,7 @@ var lmsBrowse = Vue.component("lms-browse", {
     <div v-else-if="GROUP==item.action">
      <v-list-group v-model="item.expanded" @click.stop="">
       <template v-slot:activator><v-list-tile><v-list-tile-content><v-list-tile-title>{{item.title}}</v-list-tile-title></v-list-tile-content><v-list-tile></template>
-      <v-list-tile v-for="(subItem, subIndex) in item.actions" @click="currentAction(subItem, index+subIndex, $event)">
+      <v-list-tile role="menuitem" v-for="(subItem, subIndex) in item.actions" @click="currentAction(subItem, index+subIndex, $event)">
        <v-list-tile-avatar>
         <v-icon v-if="undefined==subItem.svg">{{subItem.icon}}</v-icon>
         <img v-else class="svg-img" :src="subItem.svg | svgIcon(darkUi)"></img>
@@ -546,28 +548,28 @@ var lmsBrowse = Vue.component("lms-browse", {
      <v-divider></v-divider>
     </div>
     <div v-else-if="GOTO_ARTIST_ACTION==item.action && history.length>1 && history[history.length-1].current.stdItem==STD_ITEM_ARTIST"></div>
-    <v-list-tile v-else-if="!item.isListItemInMenu && item.action==ADD_TO_FAV_ACTION && isInFavorites(current)" @click="menuItemAction(REMOVE_FROM_FAV_ACTION, current, undefined, $event)">
+    <v-list-tile role="menuitem" v-else-if="!item.isListItemInMenu && item.action==ADD_TO_FAV_ACTION && isInFavorites(current)" @click="menuItemAction(REMOVE_FROM_FAV_ACTION, current, undefined, $event)">
      <v-list-tile-avatar>
       <v-icon v-if="undefined==ACTIONS[REMOVE_FROM_FAV_ACTION].svg">{{ACTIONS[REMOVE_FROM_FAV_ACTION].icon}}</v-icon>
       <img v-else class="svg-img" :src="ACTIONS[REMOVE_FROM_FAV_ACTION].svg | svgIcon(darkUi)"></img>
      </v-list-tile-avatar>
      <v-list-tile-title>{{ACTIONS[REMOVE_FROM_FAV_ACTION].title}}</v-list-tile-title>
     </v-list-tile>
-    <v-list-tile v-else-if="!item.isListItemInMenu && undefined!=item.action" @click="menuItemAction(item.action, current, undefined, $event)">
+    <v-list-tile role="menuitem" v-else-if="!item.isListItemInMenu && undefined!=item.action" @click="menuItemAction(item.action, current, undefined, $event)">
      <v-list-tile-avatar>
       <v-icon v-if="undefined==ACTIONS[item.action].svg">{{ACTIONS[item.action].icon}}</v-icon>
       <img v-else class="svg-img" :src="ACTIONS[item.action].svg | svgIcon(darkUi)"></img>
      </v-list-tile-avatar>
      <v-list-tile-content><v-list-tile-title>{{ACTIONS[item.action].title}}</v-list-tile-title></v-list-tile-content>
     </v-list-tile>
-    <v-list-tile v-else-if="item.isListItemInMenu && 'itemNoAction'==item.style" class="nonclick-menu-item">
+    <v-list-tile role="menuitem" v-else-if="item.isListItemInMenu && 'itemNoAction'==item.style" class="nonclick-menu-item">
      <v-list-tile-avatar>
       <v-icon v-if="undefined==item.svg">{{item.icon}}</v-icon>
       <img v-else class="svg-img" :src="item.svg | svgIcon(darkUi)"></img>
      </v-list-tile-avatar>
      <v-list-tile-content><v-list-tile-title>{{item.title}}</v-list-tile-title></v-list-tile-content>
     </v-list-tile>
-    <v-list-tile v-else @click="currentAction(item, index, $event)">
+    <v-list-tile role="menuitem" v-else @click="currentAction(item, index, $event)">
      <v-list-tile-avatar>
       <v-icon v-if="undefined==item.svg">{{item.icon}}</v-icon>
       <img v-else class="svg-img" :src="item.svg | svgIcon(darkUi)"></img>
@@ -578,7 +580,7 @@ var lmsBrowse = Vue.component("lms-browse", {
   </v-list>
   <v-list v-else-if="menu.linkItems">
    <template v-for="(item, index) in menu.linkItems">
-    <v-list-tile @click="linkAction(item)">
+    <v-list-tile role="menuitem" @click="linkAction(item)">
      <v-list-tile-avatar>
       <v-icon v-if="undefined==item.svg">{{item.icon}}</v-icon>
       <img v-else class="svg-img" :src="item.svg | svgIcon(darkUi)"></img>
@@ -872,6 +874,12 @@ var lmsBrowse = Vue.component("lms-browse", {
         unpinnedQueueVisible() {
             return this.$store.state.desktopLayout && !this.$store.state.pinQueue && !this.nowPlayingExpanded && this.$store.state.showQueue
         },
+        pinnedQueue() {
+            return this.$store.state.desktopLayout && this.$store.state.pinQueue
+        },
+        browseSearch() {
+            return this.$store.state.browseSearch
+        }
     },
     created() {
         if (!IS_MOBILE) {
@@ -972,6 +980,9 @@ var lmsBrowse = Vue.component("lms-browse", {
         }.bind(this));
         bus.$on('customActions', function() {
             this.loadCustomPinned(this);
+        }.bind(this));
+        bus.$on('groupMyMusicCategoriesChanged', function() {
+            this.myMusic=browseSortCategories(this.myMusicAll, this.myMusicArtist, this.myMusicRelease, this.myMusicOther);
         }.bind(this));
     },
     methods: {
@@ -1640,15 +1651,20 @@ var lmsBrowse = Vue.component("lms-browse", {
             browseMyMusicMenu(this);
         },
         processMyMusicMenu() {
-            this.myMusic.sort(weightSort);
+            this.myMusic=browseSortCategories(this.myMusicAll, this.myMusicArtist, this.myMusicRelease, this.myMusicOther);
             for (var i=0, len=this.myMusic.length; i<len; ++i) {
-                this.myMusic[i].menu=[this.options.pinned.has(this.myMusic[i].id) ? UNPIN_ACTION : PIN_ACTION];
+                if (!this.myMusic[i].header) {
+                    this.myMusic[i].menu=[this.options.pinned.has(this.myMusic[i].id) ? UNPIN_ACTION : PIN_ACTION];
+                }
             }
             if (this.current && TOP_MYMUSIC_ID==this.current.id) {
                 this.items = this.myMusic;
                 this.grid = {allowed:true, use:this.$store.state.gridPerView ? isSetToUseGrid(GRID_OTHER) : getLocalStorageBool('grid', true), numItems:0, numColumns:0, ih:GRID_MIN_HEIGHT, rows:[], few:false, haveSubtitle:true, multiSize:false, type:GRID_STANDARD};
                 this.tbarActions=[];
-                this.currentActions=[{action:VLIB_ACTION}, {action:(this.grid.use ? USE_LIST_ACTION : USE_GRID_ACTION)}, {action:SEARCH_LIB_ACTION}];
+                this.currentActions=[{action:VLIB_ACTION}, {action:(this.grid.use ? USE_LIST_ACTION : USE_GRID_ACTION)}];
+                if (!this.$store.state.browseSearch) {
+                    this.currentActions.push({action:SEARCH_LIB_ACTION});
+                }
                 this.layoutGrid(true);
             } else if (this.history.length>1 && this.history[1].current && this.history[1].current.id==TOP_MYMUSIC_ID) {
                 this.history[1].items = this.myMusic;
@@ -2104,7 +2120,7 @@ var lmsBrowse = Vue.component("lms-browse", {
                     document.documentElement.style.setProperty('--subtoolbar-image-url', 'url()');
                 }
                 if (this.drawBackdrop) {
-                    url='material/backdrops/browse.jpg';
+                    url=this.searchActive==1 ? 'material/backdrops/search.jpg' : 'material/backdrops/browse.jpg';
                 }
             }
             if (undefined==url || url.endsWith(DEFAULT_COVER) || url.endsWith("/music/undefined/cover")) {

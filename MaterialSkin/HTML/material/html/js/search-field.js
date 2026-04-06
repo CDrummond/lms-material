@@ -136,6 +136,10 @@ Vue.component('lms-search-field', {
             this.prevPage = prevPage;
             this.searchNow();
         }.bind(this));
+        bus.$on('search-initial', function() {
+            let item = {cancache:false, title:i18n("Search"), id:SEARCH_ID, type:"search", libsearch:true};
+            this.$emit('results', item, {command:[], params:[]}, { items:[], baseActions:[], canUseGrid: false, jumplist:[]}, this.prevPage);
+        }.bind(this));
     },
     methods: {
         cancel() {

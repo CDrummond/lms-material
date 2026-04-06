@@ -44,7 +44,7 @@ Vue.component('lms-information-dialog', {
     <v-btn slot="activator" flat><v-icon class="btn-icon">refresh</v-icon>{{i18n('Rescan')}} <v-icon>arrow_drop_down</v-icon></v-btn>
     <v-list>
      <template v-for="(item, index) in rescans">
-      <v-list-tile @click="rescan(item)">
+      <v-list-tile role="menuitem" @click="rescan(item)">
        <v-list-tile-title>{{item.name}}</v-list-tile-title>
       </v-list-tile>
      </template>

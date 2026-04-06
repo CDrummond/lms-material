@@ -39,11 +39,11 @@ Vue.component('lms-randommix', {
    <v-menu top v-model="showMenu">
     <v-btn icon slot="activator" style="position:absolute; bottom:8px"><v-icon>more_vert</v-icon></v-btn>
     <v-list>
-     <v-list-tile @click.native="showAll=!showAll">
+     <v-list-tile role="menuitem" @click.native="showAll=!showAll">
       <v-list-tile-avatar><v-icon>{{showAll ? 'check_box' : 'check_box_outline_blank'}}</v-icon></v-list-tile-avatar>
       <v-list-tile-content><v-list-tile-title>{{i18n('All options')}}</v-list-tile-title></v-list-tile-content>
      </v-list-tile>
-     <v-list-tile @click.native="togglePin">
+     <v-list-tile role="menuitem" @click.native="togglePin">
       <v-list-tile-avatar><img class="svg-img" :src="ACTIONS[pinned ? UNPIN_ACTION : PIN_ACTION].svg | svgIcon(darkUi)"></img></v-list-tile-avatar>
       <v-list-tile-content><v-list-tile-title>{{ACTIONS[pinned ? UNPIN_ACTION : PIN_ACTION].title}}</v-list-tile-title></v-list-tile-content>
      </v-list-tile>

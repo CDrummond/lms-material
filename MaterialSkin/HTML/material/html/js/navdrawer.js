@@ -56,19 +56,24 @@ Vue.component('lms-navdrawer', {
 <v-navigation-drawer v-model="show" app temporary :width="maxWidth" style="display:flex;flex-direction:column">
  <div class="nd-top"></div>
  <div class="nd-header">
-  <v-menu v-if="multipleStandardPlayers" bottom left v-model="showMenu" style="position:absolute; right:40px; z-index:5">
+  <v-menu v-if="multipleStandardPlayers || LMS_P_USERS" bottom left v-model="showMenu" style="position:absolute; right:40px; z-index:5">
    <v-btn icon slot="activator"><v-icon>more_vert</v-icon></v-btn>
    <v-list>
-    <v-subheader>{{i18n("All players")}}</v-subheader>
-    <v-list-tile role="menuitem" @click="sleepAll()" class="menu-group-item">
+    <v-list-tile v-if="LMS_P_USERS" role="menuitem" @click="switchUser">
+     <v-list-tile-avatar><img class="svg-img" :src="'user-switch' | svgIcon(darkUi)"></img></v-list-tile-avatar>
+     <v-list-tile-content><v-list-tile-title>{{i18n('Switch user')}}</v-list-tile-title></v-list-tile-content>
+    </v-list-tile>
+    <v-divider v-if="LMS_P_USERS && multipleStandardPlayers"></v-divider>
+    <v-subheader v-if="multipleStandardPlayers">{{i18n("All players")}}</v-subheader>
+    <v-list-tile v-if="multipleStandardPlayers" role="menuitem" @click="sleepAll()" class="menu-group-item">
      <v-list-tile-avatar><v-icon>hotel</v-icon></v-list-tile-avatar>
      <v-list-tile-content><v-list-tile-title>{{i18n('Sleep')}}</v-list-tile-title></v-list-tile-content>
     </v-list-tile>
-    <v-list-tile role="menuitem" @click="powerAll(0)" class="menu-group-item">
+    <v-list-tile v-if="multipleStandardPlayers" role="menuitem" @click="powerAll(0)" class="menu-group-item">
      <v-list-tile-avatar><v-icon class="dimmed">power_settings_new</v-icon></v-list-tile-avatar>
      <v-list-tile-content><v-list-tile-title>{{i18n('Switch off')}}</v-list-tile-title></v-list-tile-content>
     </v-list-tile>
-    <v-list-tile role="menuitem" @click="powerAll(1)" class="menu-group-item">
+    <v-list-tile v-if="multipleStandardPlayers" role="menuitem" @click="powerAll(1)" class="menu-group-item">
      <v-list-tile-avatar><v-icon>power_settings_new</v-icon></v-list-tile-avatar>
      <v-list-tile-content><v-list-tile-title>{{i18n('Switch on')}}</v-list-tile-title></v-list-tile-content>
     </v-list-tile>
@@ -76,7 +81,14 @@ Vue.component('lms-navdrawer', {
   </v-menu>
   <v-list-tile @click.prevent="close">
    <v-list-tile-avatar v-if="(undefined==queryParams.dragleft || queryParams.dragleft<=48) && ('l'!=queryParams.tbarBtnsPos)" :title="i18n('Close')"><v-btn icon flat @click="show=false"><v-icon>arrow_back<v-icon></v-btn></v-list-tile-avatar>
-   <div v-if="LMS_P_USERS" class="nd-user"><div v-longpress:nomove="switchUser" class="ellipsis">{{userName}}</div></div>
+   <div v-if="LMS_P_USERS" class="nd-user">
+    <div style="margin-top:-1px; padding-right:8px" v-if="undefined!=userAvatar.svg || maxWidth>300">
+     <img v-if="undefined!=userAvatar.img" class="user-img" :src="userAvatar.img"></img>
+     <img v-else-if="undefined!=userAvatar.svg" class="svg-img" :src="userAvatar.svg | svgIcon(darkUi)"></img>
+     <v-icon v-else>{{userAvatar.icon}}</v-icon>
+    </div>
+    <div class="ellipsis">{{userName}}</div>
+   </div>
    <div v-else class="lyrion-logo" v-longpress:nomove="clickLogo"><img :src="'lyrion' | svgIcon(darkUi)"></img></div>
    <v-list-tile-action>
     <v-btn icon @click="menuAction(TB_INFO.id)" style="position:absolute;right:16px" :title="updatesAvailable ? trans.updatesAvailable : restartRequired ? trans.restartRequired : TB_INFO.title">
@@ -722,6 +734,13 @@ Vue.component('lms-navdrawer', {
         },
         userName() {
             return this.$store.state.user.id==-1 ? this.trans.generalUser : undefined==this.$store.state.user.name ? this.trans.unknownUser : this.$store.state.user.name
+        },
+        userAvatar() {
+            return this.$store.state.user.id==-1
+                       ? {svg:'lyrion-icon'}
+                       : this.$store.state.user.avatar
+                          ? {img:this.$store.state.user.avatar}
+                          : {icon:'person'}
         }
     },
     filters: {

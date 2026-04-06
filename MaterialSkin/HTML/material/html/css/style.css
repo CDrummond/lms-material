@@ -4741,7 +4741,12 @@ div.v-subheader {
  line-height:30px;
  height:30px;
  vertical-align:middle;
- font-size:90%;
+}
+
+.nd-user .user-img {
+ height:28px;
+ width:28px;
+ border-radius:14px;
 }
 
 @media (max-width:500px) {

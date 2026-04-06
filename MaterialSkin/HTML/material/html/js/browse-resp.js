@@ -2725,9 +2725,10 @@ function parseBrowseModes(view, data, genreFilter, yearFilter, altId, excludeWor
                 item.params.push(altId);
             }
             resp.items.push(item);
-            if (c.id.endsWith("Albums") || c.id.endsWith("Works") || c.id.endsWith("myMusicAlbumsVariousArtists") || c.id.endsWith("myMusicNewMusic")) {
+
+            if (item.command[0]=="albums" || item.command[0]=="works") { //c.id.endsWith("Albums") || c.id.endsWith("Works") || c.id.endsWith("myMusicAlbumsVariousArtists") || c.id.endsWith("myMusicNewMusic")) {
                 resp.release.push(item);
-            } else if (c.id.endsWith("Artists")) {
+            } else if (item.command[0]=="artists") { // c.id.endsWith("Artists")) {
                 resp.artist.push(item);
             } else {
                 resp.other.push(item);

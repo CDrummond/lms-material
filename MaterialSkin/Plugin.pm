@@ -750,7 +750,7 @@ sub _cliCommand {
     }
 
     my $cmd = $request->getParam('_cmd');
-    main::DEBUGLOG && $log->debug("command: ${cmd}");
+    #main::DEBUGLOG && $log->debug("command: ${cmd}");
     if ($request->paramUndefinedOrNotOneOf($cmd, ['prefs', 'info', 'transferqueue', 'delete-favorite', 'map', 'resolve', 'delete-podcast',
                                                   'plugins', 'plugins-status', 'plugins-update', 'extras', 'delete-vlib', 'pass-isset',
                                                   'pass-check', 'browsemodes', 'geturl', 'command', 'scantypes', 'server', 'themes',

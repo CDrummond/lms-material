@@ -989,6 +989,7 @@ const store = new Vuex.Store({
             state.user.avatar = user.avatar;
             lmsOptions.userId = user.id;
             setLocalStorageVal('userId', user.id);
+            bus.$emit('refresh-home');
         }
     }
 })

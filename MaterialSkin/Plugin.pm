@@ -2114,6 +2114,8 @@ sub _handleHomeExtraCmd {
     my $request = shift;
     $request->setStatusProcessing();
     my $count = $request->getParam('count');
+    my $libId = $request->getParam('library_id');
+    my $userId = $request->getParam('user_id');
 
     my @albumsorts = ();
     if (!$count || $count<NUM_HOME_ITEMS) {
@@ -2155,13 +2157,15 @@ sub _handleHomeExtraCmd {
     $request->addResult("material_home", 1);
     if (scalar(@albumsorts)>0) {
         my $total = 0;
-        my $libId = $request->getParam('library_id');
         foreach my $srt ( @albumsorts ) {
             my $isRandom = $srt eq "random" ? 1 : 0;
             my $reqCount = $isRandom ? 300 : $count;
             my @cmd = ("albums", 0, $reqCount, "tags:aajlqswyKSS24WE", "sort:${srt}");
             if ($libId) {
                 push(@cmd, "library_id:${libId}");
+            }
+            if ($userId) {
+                push(@cmd, "user_id:${userId}");
             }
             my $req = Slim::Control::Request::executeRequest(undef, \@cmd);
             my $cnt = 0;
@@ -2177,7 +2181,6 @@ sub _handleHomeExtraCmd {
     }
     if (scalar(@artistsorts)>0) {
         my $total = 0;
-        my $libId = $request->getParam('library_id');
         my @roles;
         if ($serverprefs->get('useUnifiedArtistsList')) {
             @roles = Slim::Schema::Contributor->activeContributorRoles(1);
@@ -2189,6 +2192,9 @@ sub _handleHomeExtraCmd {
             my @cmd = ("artists", 0, $count, "tags:4s", "sort:${srt}", "include_online_only_artists:1", $rolesParam);
             if ($libId) {
                 push(@cmd, "library_id:${libId}");
+            }
+            if ($userId) {
+                push(@cmd, "user_id:${userId}");
             }
             my $req = Slim::Control::Request::executeRequest(undef, \@cmd);
             my $cnt = 0;
@@ -2204,6 +2210,9 @@ sub _handleHomeExtraCmd {
     }
     if ($request->getParam('radios')) {
         my @cmd = ("material-skin-query", "radios", 0, $count+1);
+        if ($userId) {
+            push(@cmd, "user_id:${userId}");
+        }
         my $req = Slim::Control::Request::executeRequest(undef, \@cmd);
         my $cnt = 0;
         foreach my $item ( @{ $req->getResult('radios_loop') || [] } ) {
@@ -2216,11 +2225,17 @@ sub _handleHomeExtraCmd {
     }
     if ($request->getParam('favorites')) {
         my @cmd = ("favorites", "items", 0, $count, "menu:favorites", "menu:1");
+        if ($userId) {
+            push(@cmd, "user_id:${userId}");
+        }
         my $req = Slim::Control::Request::executeRequest(undef, \@cmd);
         $request->addResult("material_home_favorites_obj", $req->getResults());
     }
     if ($request->getParam('playlists')) {
         my @cmd = ("material-skin-query", "playlists", 0, $count+1, "tags:suxE", "menu:1");
+        if ($userId) {
+            push(@cmd, "user_id:${userId}");
+        }
         my $req = Slim::Control::Request::executeRequest(undef, \@cmd);
         my $cnt = 0;
         foreach my $item ( @{ $req->getResult('playlists_loop') || [] } ) {
@@ -2243,7 +2258,7 @@ sub _handleHomeExtraCmd {
 
                 $extra->{handler}->($request->client, sub {
                     $acb->({ $id => (shift || []) });
-                }, $count);
+                }, $count, $userId);
             },
             cb => sub {
                 my ($resultsList, $err) = @_;
@@ -2316,6 +2331,7 @@ sub _cliCommandQuery {
     # List of favourites, but streams only - no artists, albums, folders, etc.
     if ($cmd eq 'radios') {
         my $feed = Slim::Plugin::Favorites::OpmlFavorites->new($request->client)->xmlbrowser(0);
+        # TODO: user_id
         _traverseFavoritesTree($request, $feed, 0);
         $request->setStatusDone();
         return;
@@ -2329,6 +2345,7 @@ sub _cliCommandQuery {
     #
     if ($cmd eq 'playlists') {
         my $folder = $request->getParam('folder_id');
+        my $userId = $request->getParam('user_id');
         my $search = $request->getParam('search');
         my $tags = $request->getParam('tags');
         my $index  = $request->getParam('_index');
@@ -2339,6 +2356,9 @@ sub _cliCommandQuery {
         }
         if ($search) {
             push(@plcmd, "search:${search}")
+        }
+        if ($userId) {
+            push(@plcmd, "user_id:${userId}");
         }
 
         my @keys = ("id", "playlist", "textkey", "extid", "url");

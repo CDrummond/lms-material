@@ -1157,6 +1157,7 @@ var lmsBrowse = Vue.component("lms-browse", {
                 if (this.$store.state.library!=undefined && this.$store.state.library!=null) {
                     cmd.push("library_id:"+this.$store.state.library);
                 }
+
                 cmd.push("count:"+numScrollItems(this, this.pageElement));
                 if (!this.topExtraCfg.needsPlayer || this.playerId().length>1) {
                     lmsCommand(this.playerId(), cmd, this.nextReqId()).then(({data}) => {

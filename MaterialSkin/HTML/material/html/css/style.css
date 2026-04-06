@@ -4725,7 +4725,8 @@ div.v-subheader {
 
 .nd-user {
  max-width:228px;
- min-width:100px;
+ min-width:120px;
+ max-height:30px;
  display:flex;
  justify-content:center;
  border:1.5px solid var(--text-color);
@@ -4733,12 +4734,14 @@ div.v-subheader {
  margin-left:auto;
  margin-right:auto;
  padding:0px 12px 0px 12px;
+ opacity:var(--sub-opacity);
 }
 
 .nd-user div {
- line-height:32px;
- height:32px;
- vertical-align: middle;
+ line-height:30px;
+ height:30px;
+ vertical-align:middle;
+ font-size:90%;
 }
 
 @media (max-width:500px) {

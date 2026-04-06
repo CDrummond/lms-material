@@ -2371,7 +2371,7 @@ function browseBuildCommand(view, item, commandName, doReplacements, allowLibId,
                     mode = params[i].split(":")[1];
                     if (mode.startsWith("myMusicArtists")) {
                         mode="artists";
-                    } else if (mode.startsWith("myMusicAlbums") || mode=="randomalbums" || mode=="vaalbums" || mode=="recentlychanged") {
+                    } else if (mode.startsWith("myMusicAlbums") || mode=="randomalbums" || mode=="vaalbums" || mode=="recentlychanged" || mode=="albumsmyMusicAlbumsPopular") {
                         mode="albums";
                     } else if (mode=="years") {
                         p.push("hasAlbums:1");
@@ -3430,7 +3430,10 @@ function browseSelectVLib(view) {
 }
 
 function browseSortCategories(all, artist, release, other) {
-    if (lmsOptions.groupMyMusicCategories && (artist.length>1 || release.length>1)) {
+    if (undefined==all) {
+        return all;
+    }
+    if (lmsOptions.groupMyMusicCategories && undefined!=artist && undefined!=release && undefined!=other && (artist.length>1 || release.length>1)) {
         let items = [];
         if (artist.length>0) {
             items.push({title:i18n("By Artist"), id:"car", header:true, svg:"artist"});

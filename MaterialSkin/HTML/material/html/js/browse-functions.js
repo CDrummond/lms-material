@@ -344,7 +344,7 @@ function browseHandleListResponse(view, item, command, resp, prevPage, appendIte
                 // from the history, and don't ad dto history.
                 // Basically dont want "My Music / Album / More / Track Info / More / More / etc...
                 if (addToHistory && view.command && view.command.ismore) {
-                    // Curent view is "More..." so dont at that to history
+                    // Curent view is "More..." so dont add that to history
                     addToHistory = false;
                 } else {
                     for (let i=0, len=view.history.length; i<len; ++i) {
@@ -356,9 +356,18 @@ function browseHandleListResponse(view, item, command, resp, prevPage, appendIte
                         }
                     }
                 }
+            } else if (view.current && view.current.id.startsWith(SEARCH_ID_PREFIX) ) {
+                // Try to ensure there is only one "Search - XXX" entry in history.
+                for (let i=0, len=view.history.length; i<len; ++i) {
+                    if (view.history[i].current && view.history[i].current.id.startsWith(SEARCH_ID_PREFIX)) {
+                        // Found "Search..." in history stack, so remove
+                        view.history.splice(i, len-i);
+                        break;
+                    }
+                }
             }
             if (addToHistory) {
-                view.addHistory();
+                browseAddHistory(view);
             }
         }
         view.canDrop = resp.canDrop;
@@ -1096,7 +1105,7 @@ function browseClick(view, item, index, event, ignoreOpenMenu) {
         return;
     }
     if (TOP_MYMUSIC_ID==item.id) {
-        view.addHistory();
+        browseAddHistory(view);
         view.items = view.myMusic;
         view.myMusicMenu();
         view.headerTitle = stripLinkTags(item.title);
@@ -1230,7 +1239,7 @@ function browseDoClick(view, item, index, event) {
 }
 
 function browseAddWorksCategories(view, item) {
-    view.addHistory();
+    browseAddHistory(view);
     view.items=[];
     view.items.push({
         title: i18n("All Works"),
@@ -1269,7 +1278,7 @@ function browseAddWorksCategories(view, item) {
 }
 
 function browseAddCategories(view, item, isGenre) {
-    view.addHistory();
+    browseAddHistory(view);
     view.items=[];
 
     // check if there is a grandparent ID we should use.
@@ -1341,7 +1350,7 @@ function browseItemAction(view, act, origItem, index, event, slimBrowseBaseActio
         }
     } else if (act===MORE_ACTION) {
         if (item.allItems && item.allItems.length>0) { // Clicking on 'X Artists' / 'X Albums' / 'X Tracks' search header
-            view.addHistory();
+            browseAddHistory(view);
             view.items = item.allItems;
             view.headerSubTitle = item.subtitle;
             view.current = item;

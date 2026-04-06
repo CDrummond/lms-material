@@ -1108,9 +1108,6 @@ var lmsBrowse = Vue.component("lms-browse", {
         playerName() {
             return this.$store.state.player ? this.$store.state.player.name : "";
         },
-        addHistory() {
-            browseAddHistory(this);
-        },
         nextReqId() {
             this.reqId++;
             if (this.reqId>65535) {
@@ -1342,7 +1339,7 @@ var lmsBrowse = Vue.component("lms-browse", {
                     this.fetchItems(command, {cancache:false, id:item.id, title: item.title, limit:item.limit, section:item.section, isFavFolder:item.isFavFolder});
                 }
             } else if (item.allItems) {
-                this.addHistory();
+                browseAddHistory(this);
                 this.items = item.allItems;
                 this.headerSubTitle = item.subtitle;
                 this.current = item;

@@ -17,6 +17,8 @@
 13. Fix 'Add to playlist' for item in home screen scrolled list.
 14. Suppress duplicate composer in work-grouped track listings - thanks to
     mspertus.
+15. Set 'Replace navigation bar' as the default for mobile layout now-playing
+    bar.
 
 6.2.4
 -----

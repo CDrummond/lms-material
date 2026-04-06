@@ -329,7 +329,7 @@ function checkHomeItems(list) {
 const store = new Vuex.Store({
     state: {
         desktopLayout: false,
-        mobileBar: MBAR_THIN,
+        mobileBar: MBAR_REP_NAV,
         showQueue: false,
         showQueueNp: false,
         pinQueue: false,
@@ -395,8 +395,8 @@ const store = new Vuex.Store({
         moveDialogs: false,
         autoCloseQueue: false,
         ndShortcuts: false,
-        ndSearch: true,
-        browseSearch: false,
+        ndSearch: false,
+        browseSearch: true,
         cMixSupported: 1==parseInt(getComputedStyle(document.documentElement).getPropertyValue('--color-mix-supported')),
         detailedHomeItems: [DETAILED_HOME_STD_PREFIX+"new", DETAILED_HOME_STD_PREFIX+"radios", DETAILED_HOME_EXPLORE],
         user: {id:-1, name:undefined, avatar:undefined}

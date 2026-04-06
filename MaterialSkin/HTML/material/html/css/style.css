@@ -3123,6 +3123,14 @@ div.v-subheader {
  font-size:var(--std-font-size) !important;
 }
 
+.browse-header .v-list__tile__title .link-item {
+ color:var(--active-color) !important;
+}
+
+.msk-is-non-touch .browse-header .v-list__tile__title .link-item:hover {
+ color:var(--text-color) !important;
+}
+
 .browse-header .v-list__tile__sub-title, .browse-header .browse-time, .browse-header .np-list-time,
 .msk-is-touch .browse-header .menu-btn,
 .msk-is-touch .grid-header .menu-btn {

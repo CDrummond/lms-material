@@ -295,7 +295,8 @@ var lmsBrowse = Vue.component("lms-browse", {
 
      <!-- TODO: Do we have search fields with large lists?? -->
      <v-list-tile-content v-if="item.header" @click.stop="click(item, index, $event)">
-      <v-list-tile-title>{{item.title}}</v-list-tile-title>
+      <v-list-tile-title v-if="item.titleLinks" v-html="item.titleLinks"></v-list-tile-title>
+      <v-list-tile-title v-else>{{item.title}}</v-list-tile-title>
       <v-list-tile-sub-title v-if="item.subtitle && !item.hidesub">{{item.subtitle}}</v-list-tile-sub-title>
      </v-list-tile-content>
      <v-list-tile-content v-else-if="item.type=='html' || item.type=='text'" class="browse-text-inrecycler">
@@ -376,7 +377,7 @@ var lmsBrowse = Vue.component("lms-browse", {
      </div>
 
     </v-list-tile>
-    <v-list-tile v-else-if="item.header" class="lms-list-item" v-bind:class="{'browse-header':item.header,'search-highlight':highlightIndex==index}" @click="click(item, index, $event)">
+    <v-list-tile v-else-if="item.header" class="lms-list-item" v-bind:class="{'browse-header':item.header,'search-highlight':highlightIndex==index}" @click="click(item, index, $event)" @contextmenu.prevent="contextMenu(item, index, $event)">
      <v-list-tile-avatar v-if="item.icon" :tile="true" class="lms-avatar">
       <v-icon>{{item.icon}}</v-icon>
      </v-list-tile-avatar>
@@ -384,7 +385,8 @@ var lmsBrowse = Vue.component("lms-browse", {
       <img :class="['hdr-'+hRgb, 'svg-list-img']" :src="item.svg | svgIcon(darkUi, undefined, true)" loading="lazy" @dragstart.prevent="" @dragenter.prevent=""></img>
      </v-list-tile-avatar>
      <v-list-tile-content>
-      <v-list-tile-title>{{item.title}}</v-list-tile-title>
+      <v-list-tile-title v-if="item.titleLinks" v-html="item.titleLinks"></v-list-tile-title>
+      <v-list-tile-title v-else>{{item.title}}</v-list-tile-title>
       <v-list-tile-sub-title v-if="item.subtitle && !item.hidesub">{{item.subtitle}}</v-list-tile-sub-title>
      </v-list-tile-content>
      <v-list-tile-action v-if="undefined!=item.durationStr" class="browse-time">{{item.durationStr}}</v-list-tile-action>

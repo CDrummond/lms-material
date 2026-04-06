@@ -89,7 +89,7 @@ Vue.component('lms-navdrawer', {
     </div>
     <div class="ellipsis">{{userName}}</div>
    </div>
-   <div v-else class="lyrion-logo" v-longpress:nomove="clickLogo"><img :src="'lyrion' | svgIcon(darkUi)"></img></div>
+   <div v-else class="lyrion-logo" v-longpress:nomove="clickLogo"><img :src="'lyrion-logo' | svgIcon(darkUi)"></img></div>
    <v-list-tile-action>
     <v-btn icon @click="menuAction(TB_INFO.id)" style="position:absolute;right:16px" :title="updatesAvailable ? trans.updatesAvailable : restartRequired ? trans.restartRequired : TB_INFO.title">
      <img v-if="updatesAvailable" class="svg-img" :src="'update' | infoIcon(darkUi, true)"></img>

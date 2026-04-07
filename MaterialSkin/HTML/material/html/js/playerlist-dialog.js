@@ -131,6 +131,7 @@ Vue.component('lms-playerlist-dialog', {
             lmsOptions.disabledPlayers = new Set(disabled);
 
             this.$store.commit('setPlayers', connectedPlayers.sort(playerSort));
+            this.$store.commit('setPlayer', this.$store.state.player.id);
             this.players = [];
             this.show=false;
             bus.$emit('refreshServerStatus');

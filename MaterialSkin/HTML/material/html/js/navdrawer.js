@@ -56,7 +56,7 @@ Vue.component('lms-navdrawer', {
 <v-navigation-drawer v-model="show" app temporary :width="maxWidth" style="display:flex;flex-direction:column">
  <div class="nd-top"></div>
  <div class="nd-header">
-  <v-menu v-if="multipleStandardPlayers || LMS_P_USERS" bottom left v-model="showMenu" style="position:absolute; right:40px; z-index:5">
+  <v-menu v-if="enableMenuButton" bottom left v-model="showMenu" style="position:absolute; right:40px; z-index:5">
    <v-btn icon slot="activator"><v-icon>more_vert</v-icon></v-btn>
    <v-list>
     <v-subheader v-if="haveUsers">{{i18n("Users")}}</v-subheader>
@@ -70,7 +70,11 @@ Vue.component('lms-navdrawer', {
       <v-list-tile-content><v-list-tile-title>{{user.name}}</v-list-tile-title></v-list-tile-content>
      </v-list-tile>
     </template>
-    <v-divider v-if="haveUsers && multipleStandardPlayers"></v-divider>
+    <v-divider v-if="haveUsers && (multipleStandardPlayers || numPlayers!=numEnabledPlayers)"></v-divider>
+    <v-list-tile v-if="numPlayers!=numEnabledPlayers" role="menuitem" @click="toggleShowAllPlayers">
+     <v-list-tile-avatar><v-icon>{{showAllPlayers ? 'check_box' : 'check_box_outline_blank'}}</v-icon></v-list-tile-avatar>
+     <v-list-tile-content><v-list-tile-title>{{i18n('Show all players')}}</v-list-tile-title></v-list-tile-content>
+    </v-list-tile>
     <v-subheader v-if="multipleStandardPlayers || !haveUsers">{{i18n("All players")}}</v-subheader>
     <v-list-tile v-if="multipleStandardPlayers || !haveUsers" role="menuitem" @click="sleepAll()" class="menu-group-item">
      <v-list-tile-avatar><v-icon>hotel</v-icon></v-list-tile-avatar>
@@ -112,11 +116,10 @@ Vue.component('lms-navdrawer', {
     <v-list-tile-avatar><v-icon class="red">error</v-icon></v-list-tile-avatar>
     <v-list-tile-content><v-list-tile-title>{{trans.connectionLost}}</v-list-tile-title></v-list-tile-content>
    </v-list-tile>
-   <template v-for="(item, index) in players" v-if="connected">
-    <div v-if="!item.enabled" style="height:0px"></div>
-    <v-subheader v-else-if="index==0 && !item.isgroup && players[players.length-1].isgroup">{{trans.standardPlayers}}</v-subheader>
+   <template v-for="(item, index) in visiblePlayers" v-if="connected">
+    <v-subheader v-if="index==0 && !item.isgroup && players[players.length-1].isgroup">{{trans.standardPlayers}}</v-subheader>
     <v-subheader v-else-if="index>0 && item.isgroup && !players[index-1].isgroup">{{trans.groupPlayers}}</v-subheader>
-    <v-list-tile v-if="item.enabled" @click="setPlayer(item.id)" v-bind:class="{'nd-active-player':player && item.id === player.id}" :id="'nd-player-'+index">
+    <v-list-tile @click="setPlayer(item.id)" v-bind:class="{'nd-active-player':player && item.id === player.id}" :id="'nd-player-'+index">
      <v-list-tile-avatar v-longpress:nomove="syncPlayer" :id="index+'-icon'">
       <v-icon v-if="item.isplaying" class="playing-badge">play_arrow</v-icon>
       <v-icon v-if="item.icon.icon">{{item.icon.icon}}</v-icon><img v-else class="svg-img" :src="item.icon.svg | svgIcon(darkUi)"></img>
@@ -129,7 +132,7 @@ Vue.component('lms-navdrawer', {
        <v-btn v-if="item.canpoweroff" icon style="float:right" v-longpress:nomove="togglePower" :id="index+'-power-btn'" :title="(item.id==player.id && playerStatus.ison) || item.ison ? i18n('Switch off %1', item.name) : i18n('Switch on %1', item.name)"><v-icon v-bind:class="{'dimmed': (item.id==player.id ? !playerStatus.ison : !item.ison)}">power_settings_new</v-icon></v-btn>
       </v-list-tile-action>
     </v-list-tile>
-    <v-list-tile v-if="connected && player && item.enabled && item.id === player.id && (playerStatus.sleepTime || playerStatus.alarmStr)" class="hide-for-mini status">
+    <v-list-tile v-if="connected && player && item.id === player.id && (playerStatus.sleepTime || playerStatus.alarmStr)" class="hide-for-mini status">
      <div v-if="playerStatus.sleepTime" class="link-item" @click="show=false; bus.$emit('dlg.open', 'sleep', player)"><v-icon class="player-status-icon">hotel</v-icon> {{playerStatus.sleepTime | displayTime}}</div>
      <div v-if="playerStatus.alarmStr" class="link-item" @click="show=false; bus.$emit('dlg.open', 'playersettings', undefined, 'alarms')"><v-icon class="player-status-icon">alarm</v-icon> {{playerStatus.alarmStr}}</div>
     </v-list-tile>
@@ -239,7 +242,8 @@ Vue.component('lms-navdrawer', {
             maxWidth: 300,
             height: 50,
             connected: true,
-            windowControlsOnLeft: false
+            windowControlsOnLeft: false,
+            showAllPlayers: false
         }
     },
     created() {
@@ -254,7 +258,7 @@ Vue.component('lms-navdrawer', {
             this.updateShortcuts(view);
         }.bind(this));
         this.initItems();
-        this.first = false;
+        this.showAllPlayers = getLocalStorageBool('showAllPlayers', this.showAllPlayers);
         bus.$on('navDrawer', function() {
             this.show = true;
             addBrowserHistoryItem();
@@ -539,12 +543,12 @@ Vue.component('lms-navdrawer', {
             event.preventDefault();
             event.stopPropagation();
             let idx = parseInt(el.id.split("-")[0]);
-            if (idx>=0 && idx<=this.$store.state.players.length) {
+            if (idx>=0 && idx<=this.visiblePlayers.length) {
                 if (longPress) {
                     this.show = false;
-                    bus.$emit('dlg.open', 'sync', this.$store.state.players[idx]);
+                    bus.$emit('dlg.open', 'sync', this.visiblePlayers[idx]);
                 } else {
-                    this.setPlayer(this.$store.state.players[idx].id);
+                    this.setPlayer(this.visiblePlayers[idx].id);
                 }
             }
         },
@@ -556,8 +560,8 @@ Vue.component('lms-navdrawer', {
                 return;
             }
             let idx = parseInt(el.id.split("-")[0]);
-            if (idx>=0 && idx<=this.$store.state.players.length) {
-                this.togglePlayerPower(this.$store.state.players[idx], longPress);
+            if (idx>=0 && idx<=this.visiblePlayers.length) {
+                this.togglePlayerPower(this.visiblePlayers[idx], longPress);
             }
         },
         clickLogo(longPress, el, event) {
@@ -628,6 +632,10 @@ Vue.component('lms-navdrawer', {
             if (user.id!=this.$store.state.user.id) {
                 this.$store.commit('setUser', user);
             }
+        },
+        toggleShowAllPlayers() {
+            this.showAllPlayers=!this.showAllPlayers;
+            setLocalStorageVal("showAllPlayers", this.showAllPlayers);
         }
     },
     computed: {
@@ -639,6 +647,9 @@ Vue.component('lms-navdrawer', {
         },
         players () {
             return this.$store.state.players
+        },
+        visiblePlayers () {
+            return this.showAllPlayers ? this.players : this.enabledPlayers
         },
         enabledPlayers () {
             if (!this.$store.state.players) {
@@ -654,6 +665,15 @@ Vue.component('lms-navdrawer', {
         multipleStandardPlayers () {
             let playerList = this.enabledPlayers
             return playerList && playerList.length>1 && !playerList[1].isgroup
+        },
+        numPlayers() {
+            return this.$store.state.players ? this.$store.state.players.length : 0
+        },
+        numEnabledPlayers() {
+            return this.enabledPlayers ? this.enabledPlayers.length : 0
+        },
+        enableMenuButton() {
+            return this.multipleStandardPlayers || LMS_P_USERS || this.numPlayers!=this.numEnabledPlayers
         },
         noPlayer () {
             return !this.$store.state.players || this.$store.state.players.length<1
@@ -692,7 +712,7 @@ Vue.component('lms-navdrawer', {
             return this.$store.state.ndShortcuts
         },
         settingsIcons() {
-            let playerList = this.enabledPlayers
+            let playerList = this.visiblePlayers
             let haveGroup = playerList && playerList.length>0 && playerList[playerList.length-1].isgroup;
             let settingsCount = this.menuItems.length+(this.customSettingsActions ? this.customSettingsActions.length : 0);
             let settingsHeight = (settingsCount + 1) * 48;

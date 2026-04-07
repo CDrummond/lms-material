@@ -493,7 +493,7 @@ Vue.component('lms-ui-settings', {
   <v-dialog v-model="playerListDialog.show" :width="dialogWidth" persistent style="overflow:hidden" v-if="playerListDialog.show">
   <v-card>
    <v-card-title>{{i18n("Player list")}}</v-card-title>
-   <v-list-tile-sub-title style="padding-left:16px;padding-right:16px">{{i18n("Check which players you want visible in the main menu.")}}</v-list-tile-sub-title>
+   <v-list-tile-sub-title style="padding-left:16px;padding-right:16px">{{i18n("Select favourite players, these will always be visible in the main menu.")}}</v-list-tile-sub-title>
    <v-list class="dialog-main-list">
     <template v-for="(item, index) in playerListDialog.players" :key="item.id">
      <v-subheader v-if="index==0 && playerListDialog.players.length>1 && playerListDialog.players[playerListDialog.players.length-1].isgroup">

@@ -158,14 +158,14 @@ Vue.component('lms-playerlist-dialog', {
             this.dropIndex = undefined;
         },
         dragOver(index, ev) {
-            if (index!=this.dragIndex) {
+            if (index!=this.dragIndex && this.players[this.dragIndex].isgroup==this.players[index].isgroup) {
                 this.dropIndex = index;
             }
             ev.preventDefault(); // Otherwise drop is never called!
         },
         drop(to, ev) {
             ev.preventDefault();
-            if (to!=this.dragIndex) {
+            if (to!=this.dragIndex && this.players[this.dragIndex].isgroup==this.players[index].isgroup) {
                 this.players = arrayMove(this.players, this.dragIndex, to);
             }
             this.dragIndex = undefined;

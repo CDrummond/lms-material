@@ -501,6 +501,9 @@ var app = new Vue({
         },
         tinted() {
             return this.$store.state.tinted && this.$store.state.cMixSupported && (!this.queueEmpty || this.$store.state.colorUsage!=COLOR_USE_FROM_COVER)
+        },
+        lyrionColors() {
+            return COLOR_USE_STANDARD==this.$store.state.colorUsage && this.$store.state.color=='lyrion'
         }
     },
     methods: {

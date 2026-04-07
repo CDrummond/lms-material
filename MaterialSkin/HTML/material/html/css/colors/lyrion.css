@@ -11,7 +11,7 @@
  --accent-color:#6cac92;
 }
 
-.theme--dark {
+.lms-lyrion.theme--dark {
  --highlight-rgb:227,253,196;
  --primary-color:#e3fdc4;
  --accent-color:#e3fdc4;
@@ -21,6 +21,6 @@
  --active-nav-btn-color:#e3fdc4;
 }
 
-.theme--dark .m3-switch--active:after {
+.lms-lyrion.theme--dark .m3-switch--active:after {
  background-color:#333!important;
 }

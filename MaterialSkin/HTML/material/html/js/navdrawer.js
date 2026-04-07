@@ -59,21 +59,28 @@ Vue.component('lms-navdrawer', {
   <v-menu v-if="multipleStandardPlayers || LMS_P_USERS" bottom left v-model="showMenu" style="position:absolute; right:40px; z-index:5">
    <v-btn icon slot="activator"><v-icon>more_vert</v-icon></v-btn>
    <v-list>
-    <v-list-tile v-if="LMS_P_USERS" role="menuitem" @click="switchUser">
-     <v-list-tile-avatar><img class="svg-img" :src="'user-switch' | svgIcon(darkUi)"></img></v-list-tile-avatar>
-     <v-list-tile-content><v-list-tile-title>{{i18n('Switch user')}}</v-list-tile-title></v-list-tile-content>
-    </v-list-tile>
-    <v-divider v-if="LMS_P_USERS && multipleStandardPlayers"></v-divider>
-    <v-subheader v-if="multipleStandardPlayers">{{i18n("All players")}}</v-subheader>
-    <v-list-tile v-if="multipleStandardPlayers" role="menuitem" @click="sleepAll()" class="menu-group-item">
+    <v-subheader v-if="haveUsers">{{i18n("Users")}}</v-subheader>
+    <template v-for="(user, index) in users" v-if="haveUsers">
+     <v-list-tile role="menuitem" @click="switchUser(user)" class="menu-group-item">
+      <v-list-tile-avatar>
+       <img v-if="undefined!=user.avatar" class="user-img" :src="user.avatar"></img>
+       <img v-else-if="undefined!=user.svg" class="svg-img" :src="user.svg | svgIcon(darkUi)"></img>
+       <v-icon v-else>{{user.icon}}</v-icon>
+      </v-list-tile-avatar>
+      <v-list-tile-content><v-list-tile-title>{{user.name}}</v-list-tile-title></v-list-tile-content>
+     </v-list-tile>
+    </template>
+    <v-divider v-if="haveUsers && multipleStandardPlayers"></v-divider>
+    <v-subheader v-if="multipleStandardPlayers || !haveUsers">{{i18n("All players")}}</v-subheader>
+    <v-list-tile v-if="multipleStandardPlayers || !haveUsers" role="menuitem" @click="sleepAll()" class="menu-group-item">
      <v-list-tile-avatar><v-icon>hotel</v-icon></v-list-tile-avatar>
      <v-list-tile-content><v-list-tile-title>{{i18n('Sleep')}}</v-list-tile-title></v-list-tile-content>
     </v-list-tile>
-    <v-list-tile v-if="multipleStandardPlayers" role="menuitem" @click="powerAll(0)" class="menu-group-item">
+    <v-list-tile v-if="multipleStandardPlayers || !haveUsers" role="menuitem" @click="powerAll(0)" class="menu-group-item">
      <v-list-tile-avatar><v-icon class="dimmed">power_settings_new</v-icon></v-list-tile-avatar>
      <v-list-tile-content><v-list-tile-title>{{i18n('Switch off')}}</v-list-tile-title></v-list-tile-content>
     </v-list-tile>
-    <v-list-tile v-if="multipleStandardPlayers" role="menuitem" @click="powerAll(1)" class="menu-group-item">
+    <v-list-tile v-if="multipleStandardPlayers || !haveUsers" role="menuitem" @click="powerAll(1)" class="menu-group-item">
      <v-list-tile-avatar><v-icon>power_settings_new</v-icon></v-list-tile-avatar>
      <v-list-tile-content><v-list-tile-title>{{i18n('Switch on')}}</v-list-tile-title></v-list-tile-content>
     </v-list-tile>
@@ -153,21 +160,11 @@ Vue.component('lms-navdrawer', {
  </div>
 
  <div style="height:1px; width:100%; border-top:1px solid var(--list-item-border-color)!important;"></div>
- <div v-if="showSearch">
-  <v-subheader>{{ACTIONS[SEARCH_LIB_ACTION].title}}</v-subheader>
-  <div class="nd-search">
-   <v-text-field autocorrect="off" v-model.lazy="searchTerm" ref="entry" v-on:keyup.enter="searchNow"></v-text-field>
-   <v-btn v-if="!isEmpty(searchTerm)" icon class="toolbar-button" @click="searchNow">
-    <v-icon>search</v-icon>
-    <!-- <img class="svg-img" :src="ACTIONS[SEARCH_LIB_ACTION].svg | svgIcon(darkUi)"></img> -->
-   </v-btn>
-  </div>
- </div>
  <div v-if="showShortcuts">
   <v-subheader>{{trans.shortcuts}}</v-subheader>
   <ul class="nd-shortcuts" v-bind:class="{'nd-shortcuts-wide':maxWidth>320}">
    <li v-for="(item, index) in shortcuts">
-    <v-btn icon class="toolbar-button" @click="show=false; bus.$emit('browse-shortcut', item.id)" v-if="!homeButton || item.id!='-'">
+    <v-btn icon class="toolbar-button" @click="show=false; bus.$emit('browse-shortcut', item.id)" v-if="!homeButton || item.id!=HOME_SHORTCUT">
      <v-icon v-if="undefined!=item.icon">{{item.icon}}</v-icon>
      <img v-else class="svg-img" :src="item.svg | svgIcon(darkUi)"></img>
     </v-btn>
@@ -233,6 +230,7 @@ Vue.component('lms-navdrawer', {
                    shortcuts:undefined, generalUser: undefined, unknownUser:undefined },
             menuItems: [],
             shortcuts: [],
+            users: [],
             customSystemActions:undefined,
             customSettingsActions:undefined,
             customPlayerActions:undefined,
@@ -241,8 +239,7 @@ Vue.component('lms-navdrawer', {
             maxWidth: 300,
             height: 50,
             connected: true,
-            windowControlsOnLeft: false,
-            searchTerm: undefined
+            windowControlsOnLeft: false
         }
     },
     created() {
@@ -257,10 +254,9 @@ Vue.component('lms-navdrawer', {
             this.updateShortcuts(view);
         }.bind(this));
         this.initItems();
+        this.first = false;
         bus.$on('navDrawer', function() {
             this.show = true;
-            this.searchTerm = undefined;
-            this.searchDebounceTimer = undefined;
             addBrowserHistoryItem();
             if (this.$store.state.player) {
                 for (let i=0, loop=this.$store.state.players, len=loop.length; i<len; ++i) {
@@ -419,8 +415,11 @@ Vue.component('lms-navdrawer', {
                         this.shortcuts.push({id:item.id, icon:item.icon, svg:item.svg});
                     }
                 }
+                if (!this.$store.state.browseSearch) {
+                    this.shortcuts.unshift({id:SEARCH_SHORTCUT, svg:ACTIONS[SEARCH_LIB_ACTION].svg});
+                }
                 if (this.shortcuts.length>0) {
-                    this.shortcuts.unshift({id:'-', icon:'home'});
+                    this.shortcuts.unshift({id:HOME_SHORTCUT, icon:'home'});
                 }
             }
         },
@@ -625,31 +624,9 @@ Vue.component('lms-navdrawer', {
                 this.statusTimer = undefined;
             }
         },
-        switchUser() {
-            lmsCommand("", ["users", "list"]).then(({data}) => {
-                if (data && data.result && data.result.users_loop) {
-                    let users = [{id:-1, title:this.trans.generalUser}];
-                    for (let i=0, list=data.result.users_loop, len=list.length; i<len; ++i) {
-                        users.push({id:parseInt(list[i].id), title:list[i].name});
-                    }
-                    choose(i18n("Select user profile"), users).then(choice => {
-                        if (undefined!=choice && choice.id!=this.$store.state.user.id) {
-                            this.$store.commit('setUser', {id:choice.id, name:choice.title});
-                        }
-                    });
-                }
-            }).catch(err => {
-            });
-        },
-        searchNow() {
-            if (undefined==this.searchTerm) {
-                return;
-            }
-            let str = this.searchTerm.trim().replace(/\s+/g, " ");
-            if (!isEmpty(str)) {
-                bus.$emit('browse-search', str);
-                setTimeout(function() {bus.$emit('search-initial')}, 5);
-                this.close();
+        switchUser(user) {
+            if (user.id!=this.$store.state.user.id) {
+                this.$store.commit('setUser', user);
             }
         }
     },
@@ -708,9 +685,6 @@ Vue.component('lms-navdrawer', {
         haveLocalPlayer() {
             return this.$store.state.haveLocalPlayer
         },
-        showSearch() {
-            return this.$store.state.ndSearch && this.height>350
-        },
         showShortcuts() {
             return this.$store.state.ndShortcuts>0 && this.shortcuts.length>0
         },
@@ -724,10 +698,9 @@ Vue.component('lms-navdrawer', {
             let settingsHeight = (settingsCount + 1) * 48;
             let numPlayers = (playerList ? playerList.length : 0);
             let playerheight = ((numPlayers + (this.showManagePlayers ? 1 : 0)) * 48) + (haveGroup ? 72 : 0) /*titles*/;
-            let searchHeight = this.showSearch ? 80 : 0;
-            let shortcutHeight = this.showShortcuts ? 80 : 0;
-            let minPlayerHeight = Math.max(5*48, playerheight) + 24 /*padding*/;
-            return (this.height-(queryParams.topPad+queryParams.botPad+settingsHeight+searchHeight+shortcutHeight))<minPlayerHeight;
+            let shortcutHeight = this.showShortcuts ? 100 : 0;
+            let minPlayerHeight = Math.max(4*48, playerheight) + 24 /*padding*/;
+            return (this.height-(queryParams.topPad+queryParams.botPad+settingsHeight+shortcutHeight))<minPlayerHeight;
         },
         homeButton() {
             return this.$store.state.homeButton
@@ -741,6 +714,9 @@ Vue.component('lms-navdrawer', {
                        : this.$store.state.user.avatar
                           ? {img:this.$store.state.user.avatar}
                           : {icon:'person'}
+        },
+        haveUsers() {
+            return LMS_P_USERS && this.users.length>0
         }
     },
     filters: {
@@ -767,6 +743,19 @@ Vue.component('lms-navdrawer', {
         },
         'showMenu': function(val) {
             this.$store.commit('menuVisible', {name:'navdrawer-title', shown:val});
+            if (val) {
+                lmsCommand("", ["users", "list"]).then(({data}) => {
+                    this.users = [];
+                    if (data && data.result && data.result.users_loop && data.result.users_loop.length>0) {
+                        for (let i=0, list=data.result.users_loop, len=list.length; i<len; ++i) {
+                            this.users.push({id:parseInt(list[i].id), name:list[i].name, avatar:list[i].avatar, icon:'person'});
+                        }
+                        this.users.sort(nameSort);
+                        this.users.unshift({id:-1, name:this.trans.generalUser, svg:'lyrion-icon'});
+                    }
+                }).catch(err => {
+                });
+            }
         }
     },
     beforeDestroy() {

@@ -416,15 +416,7 @@ Vue.component('lms-ui-settings', {
      </v-list-tile-content>
      <v-list-tile-action><m3-switch v-model="ndShortcuts"></m3-switch></v-list-tile-action>
     </v-list-tile>
-    <v-divider v-if="advanced"></v-divider>
 
-    <v-list-tile>
-     <v-list-tile-content @click="ndSearch = !ndSearch" class="switch-label">
-      <v-list-tile-title>{{i18n('Search')}}</v-list-tile-title>
-      <v-list-tile-sub-title>{{i18n('Show search field.')}}</v-list-tile-sub-title>
-     </v-list-tile-content>
-     <v-list-tile-action><m3-switch v-model="ndSearch"></m3-switch></v-list-tile-action>
-    </v-list-tile>
     <v-divider v-if="advanced && havePlayer"></v-divider>
     <v-list-tile v-if="advanced && havePlayer" class="other-setting">
      <v-list-tile-content>
@@ -626,7 +618,6 @@ Vue.component('lms-ui-settings', {
             autoCloseQueue: false,
             ndShortcuts: false,
             ndShortcutValues: [],
-            ndSearch: false,
             detailedHomeValues:{},
             detailedHomeItems:[],
             detailedHomeDialog: {show:false, items:[]},
@@ -833,7 +824,6 @@ Vue.component('lms-ui-settings', {
             this.moveDialogs = this.$store.state.moveDialogs;
             this.autoCloseQueue = this.$store.state.autoCloseQueue;
             this.ndShortcuts = this.$store.state.ndShortcuts;
-            this.ndSearch = this.$store.state.ndSearch;
             this.showItems=[{id: TOP_MYMUSIC_ID, name:i18n("My Music"), show:!this.hidden.has(TOP_MYMUSIC_ID)},
                             {id: TOP_RADIO_ID, name:i18n("Radio"), show:!this.hidden.has(TOP_RADIO_ID)},
                             {id: TOP_FAVORITES_ID, name:i18n("Favorites"), show:!this.hidden.has(TOP_FAVORITES_ID)},
@@ -999,7 +989,6 @@ Vue.component('lms-ui-settings', {
                       moveDialogs:this.moveDialogs,
                       autoCloseQueue:this.autoCloseQueue,
                       ndShortcuts:this.ndShortcuts,
-                      ndSearch:this.ndSearch,
                       detailedHomeItems:this.detailedHomeItems
                   };
             if (withSorts) {

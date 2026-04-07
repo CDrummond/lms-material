@@ -2465,8 +2465,12 @@ var lmsBrowse = Vue.component("lms-browse", {
             if (this.current && id==this.current.id) {
                 return;
             }
-            this.goHome();
-            if (id!='-') {
+            if (id==HOME_SHORTCUT) {
+                this.goHome();
+            } else if (id==SEARCH_SHORTCUT) {
+                browseItemAction(this, SEARCH_LIB_ACTION, {id:SEARCH_SHORTCUT});
+            } else {
+                this.goHome();
                 for (let i=0, len=this.items.length; i<len; ++i) {
                     if (this.items[i].id==id) {
                         this.$nextTick(function () { this.$nextTick(function () { browseClick(this, this.items[i], i, undefined, true); }) });

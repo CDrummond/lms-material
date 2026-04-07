@@ -4,8 +4,9 @@
  2. Add option to group 'My Music' categories.
  3. Clear current view when start search.
  4. Always show setting section in navigation drawer.
- 5. Add option to show search field in navigation drawer.
- 6. Add option to show floating search button in browse view.
+ 5. Add option to show floating search button in browse view.
+ 6. If not showing floating search button, and shortcuts enabled in navigation
+    drawer then show search button in shortcuts.
  7. Hide some interface settings behind an 'All options' toggle.
  8. Add 'role' to elements to aid accessibility.
  9. Always use icons for settings in navigation drawer if there is insufficient

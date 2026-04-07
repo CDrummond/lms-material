@@ -285,3 +285,6 @@ const SEARCH_WORKS_CAT = 3;
 const SEARCH_TRACKS_CAT = 4;
 const SEARCH_PLAYLISTS_CAT = 5;
 const SEARCH_OTHER_CAT = 6;
+
+const HOME_SHORTCUT = "-h";
+const SEARCH_SHORTCUT = "-s";

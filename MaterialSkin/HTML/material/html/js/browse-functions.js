@@ -1332,7 +1332,9 @@ function browseAddCategories(view, item, isGenre) {
 function browseItemAction(view, act, origItem, index, event, slimBrowseBaseActions) {
     if (view.$store.state.desktopLayout && !view.$store.state.pinQueue && view.$store.state.showQueue) {
         view.$store.commit('setShowQueue', false);
-        return;
+        if (SEARCH_LIB_ACTION!=act || !origItem || origItem.id!=SEARCH_SHORTCUT) {
+            return;
+        }
     }
     let item = undefined!=origItem && origItem.id.startsWith("currentaction:") ? browseGetCurrent(view) : origItem;
 
@@ -1343,7 +1345,7 @@ function browseItemAction(view, act, origItem, index, event, slimBrowseBaseActio
     } else if (act==COPY_ACTION) {
         copyTextToClipboard(view.menu.selection);
     } else if (act==SEARCH_LIB_ACTION) {
-        if (view.$store.state.visibleMenus.size<1) {
+        if (view.$store.state.visibleMenus.size<1 || (origItem && origItem.id==SEARCH_SHORTCUT)) {
             setLocalStorageVal('search', '');
             view.searchActive = 1;
             setTimeout(function() {bus.$emit('search-initial')}, 50);

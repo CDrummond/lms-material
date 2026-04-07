@@ -11,7 +11,7 @@ Vue.component('lms-playerlist-dialog', {
 <v-dialog v-model="show" :width="550" persistent style="overflow:hidden" v-if="show">
  <v-card>
   <v-card-title>{{i18n("Player list")}}</v-card-title>
-  <v-list-tile-sub-title style="padding-left:16px;padding-right:16px">{{i18n("Select favourite players, these will always be visible.")}}</v-list-tile-sub-title>
+  <v-list-tile-sub-title style="padding-left:16px;padding-right:16px">{{i18n("Select favorite players, these will always be visible.")}}</v-list-tile-sub-title>
   <v-list class="dialog-main-list">
    <template v-for="(item, index) in players" :key="item.id">
     <v-subheader v-if="index==0 && players.length>1 && players[players.length-1].isgroup">
@@ -21,7 +21,7 @@ Vue.component('lms-playerlist-dialog', {
      {{i18n("Group Players")}}
     </v-subheader>
     <v-list-tile class="settings-list-thin-item" @dragstart.native="dragStart(index, $event)" @dragenter.prevent="" @dragend.native="dragEnd()" @dragover.native="dragOver(index, $event)" @drop.native="drop(index, $event)" draggable v-bind:class="{'highlight-drop':dropIndex==index, 'highlight-drag':dragIndex==index&&!show}">
-     <v-checkbox v-model="item.enabled" style="display:flex" :id="item.id">
+     <v-checkbox v-model="item.enabled" style="display:flex" :id="item.id" :disabled="item.id==currentPlayer&&item.enabled">
       <template v-slot:label>
        <v-list-tile-avatar v-bind:class="{'dimmed':item.disconnected}">
         <v-icon v-if="undefined!=item.icon.icon">{{item.icon.icon}}</v-icon>
@@ -66,6 +66,9 @@ Vue.component('lms-playerlist-dialog', {
     computed: {
         darkUi () {
             return this.$store.state.darkUi
+        },
+        currentPlayer () {
+            return this.$store.state.player ? this.$store.state.player.id : undefined
         }
     },
     mounted() {

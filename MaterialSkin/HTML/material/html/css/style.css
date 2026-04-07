@@ -342,8 +342,11 @@
 }
 
 /* Checkbox label */
-.v-input--selection-controls.v-input .v-label {
- color:var(--text-color);
+.v-input--selection-controls.v-input .v-label,
+/* ...player icon in 'Player list' dialog, don't want disabled */
+.theme--dark.v-input--selection-controls.v-input--is-disabled .v-avatar .v-icon,
+.theme--light.v-input--selection-controls.v-input--is-disabled .v-avatar .v-icon {
+ color:var(--text-color) !important;
 }
 
 ::-webkit-scrollbar {

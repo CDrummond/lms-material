@@ -263,7 +263,7 @@ Vue.component('lms-navdrawer', {
             this.show = true;
             addBrowserHistoryItem();
             if (this.$store.state.player) {
-                for (let i=0, loop=this.$store.state.players, len=loop.length; i<len; ++i) {
+                for (let i=0, loop=this.visiblePlayers, len=loop.length; i<len; ++i) {
                     if (loop[i].id==this.$store.state.player.id) {
                         let list = document.getElementById('nd-list', 0);
                         if (i<2) {

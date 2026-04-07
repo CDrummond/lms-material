@@ -403,6 +403,7 @@ Vue.component('lms-manage-players', {
         },
         close() {
             this.menu.show=false;
+            this.showMenu=false;
             this.show=false;
             this.scrollElement = undefined;
             this.stopScrolling = true;

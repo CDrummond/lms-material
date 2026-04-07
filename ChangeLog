@@ -26,6 +26,8 @@
 19. Fix 'Podcasts' icon mapping.
 20. Fix colours when 'Lyrion' colours were used, but usage changed to not be
     'For all players'.
+21. Fix not being able to open navigation drawer if 'Manage players' dialog
+    was closed with its main menu open.
 
 6.2.4
 -----

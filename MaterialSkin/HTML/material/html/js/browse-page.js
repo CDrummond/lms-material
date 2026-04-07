@@ -652,7 +652,7 @@ var lmsBrowse = Vue.component("lms-browse", {
             return this.$store.state.darkUi
         },
         darkSearchIcon() {
-            return this.$store.state.colorUsage==COLOR_USE_STANDARD && 'lyrion'==this.$store.state.color
+            return this.$store.state.colorUsage==COLOR_USE_STANDARD && 'lyrion'==this.$store.state.color && this.darkUi
         },
         hidden() {
             return this.$store.state.hidden

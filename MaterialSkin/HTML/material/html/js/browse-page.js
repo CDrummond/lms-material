@@ -2718,6 +2718,9 @@ var lmsBrowse = Vue.component("lms-browse", {
                 this.getHomeExtra();
             }
         },
+        '$store.state.browseSearch': function() {
+            bus.$emit('homeScreenItems', this);
+        },
     },
     beforeDestroy() {
         if (undefined!==this.updateTimer) {

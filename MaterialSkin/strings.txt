@@ -1008,6 +1008,7 @@ PLUGIN_MATERIAL_SKIN_QT_MOVE_ERROR
 	ES	No se puede mover la cola a un reproductor con el que ya está sincronizada.
 	FR	Impossible de déplacer une liste de lecture vers une platine déjà synchronisée.
 	NL	Het is niet mogelijk om de afspeellijst te verplaatsen naar een muziekspeler die al gesynchroniseerd is. 
+	ZH_CN	不能将队列移动到已与之同步的播放器。
 	SV	Spelkön kan inte flyttas till en spelare som den nuvarande spelaren redan är synkroniserad med.
 
 PLUGIN_MATERIAL_SKIN_QT_COPY_ERROR
@@ -1017,6 +1018,7 @@ PLUGIN_MATERIAL_SKIN_QT_COPY_ERROR
 	ES	No se puede copiar la cola a un reproductor con el que ya está sincronizada.
 	FR	Impossible de copier une liste de lecture vers une platine déjà synchronisée.
 	NL	Het is niet mogelijk om de afspeellijst te kopiëren naar een muziekspeler die al gesynchroniseerd is. 
+	ZH_CN	不能将队列复制到已与之同步的播放器。
 	SV	Spelkön kan inte kopieras till en spelare som den nuvarande spelaren redan är synkroniserad med.
 
 PLUGIN_MATERIAL_SKIN_QT_SWAP_ERROR
@@ -1026,6 +1028,7 @@ PLUGIN_MATERIAL_SKIN_QT_SWAP_ERROR
 	ES	No se puede intercambiar la cola con un reproductor con el que ya está sincronizada.
 	FR	Impossible d'échanger une liste de lecture avec une platine déjà synchronisée.
 	NL	Het is niet mogelijk om de afspeellijst te wisselen met een muziekspeler die al gesynchroniseerd is. 
+	ZH_CN	不能和已与之同步的播放器交换队列。
 	SV	Spelkön kan inte bytas med en spelare som den nuvarande spelaren redan är synkroniserad med.
 
 PLUGIN_MATERIAL_SKIN_SET_PLAYER_LIB

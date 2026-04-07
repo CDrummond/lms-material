@@ -487,7 +487,6 @@ const store = new Vuex.Store({
             }
 
             state.players=players;
-            state.playerIds=update;
             if (changed) {
                 setHaveLocalPlayer(state);
             }

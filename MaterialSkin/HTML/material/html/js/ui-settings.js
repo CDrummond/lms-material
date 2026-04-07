@@ -407,22 +407,14 @@ Vue.component('lms-ui-settings', {
      <v-list-tile-action><m3-switch v-model="screensaverNp"></m3-switch></v-list-tile-action>
     </v-list-tile>
 
-    <div class="dialog-padding"></div>
-    <v-header class="dialog-section-header">{{i18n('Main Menu')}}</v-header>
+    <div class="dialog-padding" v-if="advanced"></div>
+    <v-header v-if="advanced" class="dialog-section-header">{{i18n('Main Menu')}}</v-header>
     <v-list-tile v-if="advanced">
      <v-list-tile-content @click="ndShortcuts = !ndShortcuts" class="switch-label">
       <v-list-tile-title>{{i18n('Shortcuts')}}</v-list-tile-title>
       <v-list-tile-sub-title>{{i18n('Show shortcuts to pinned home screen items in main menu. (NOTE: Radio streams and random mixes are excluded.)')}}</v-list-tile-sub-title>
      </v-list-tile-content>
      <v-list-tile-action><m3-switch v-model="ndShortcuts"></m3-switch></v-list-tile-action>
-    </v-list-tile>
-
-    <v-divider v-if="advanced && havePlayer"></v-divider>
-    <v-list-tile v-if="advanced && havePlayer" class="other-setting">
-     <v-list-tile-content>
-      <v-list-tile-title><v-btn flat @click="configurePlayers"><v-icon>speaker</v-icon>{{i18n('Configure player list')}}</v-btn></v-list-tile-title>
-      <v-list-tile-sub-title>{{i18n('Set player order, and hide/unhide players.')}}</v-list-tile-sub-title>
-     </v-list-tile-content>
     </v-list-tile>
 
     <div class="dialog-padding" v-if="unlockAll" ></div>
@@ -490,51 +482,6 @@ Vue.component('lms-ui-settings', {
   </v-card>
  </v-dialog>
 
-  <v-dialog v-model="playerListDialog.show" :width="dialogWidth" persistent style="overflow:hidden" v-if="playerListDialog.show">
-  <v-card>
-   <v-card-title>{{i18n("Player list")}}</v-card-title>
-   <v-list-tile-sub-title style="padding-left:16px;padding-right:16px">{{i18n("Select favourite players, these will always be visible in the main menu.")}}</v-list-tile-sub-title>
-   <v-list class="dialog-main-list">
-    <template v-for="(item, index) in playerListDialog.players" :key="item.id">
-     <v-subheader v-if="index==0 && playerListDialog.players.length>1 && playerListDialog.players[playerListDialog.players.length-1].isgroup">
-      {{i18n("Standard Players")}}
-     </v-subheader>
-     <v-subheader v-else-if="index>0 && item.isgroup && !playerListDialog.players[index-1].isgroup">
-      {{i18n("Group Players")}}
-     </v-subheader>
-     <v-list-tile class="settings-list-thin-item" @dragstart.native="dragStart(index, $event)" @dragenter.prevent="" @dragend.native="dragEnd()" @dragover.native="dragOver(index, $event)" @drop.native="drop(index, $event)" draggable v-bind:class="{'highlight-drop':dropIndex==index, 'highlight-drag':dragIndex==index}">
-      <v-checkbox v-model="item.enabled" style="display:flex" :id="item.id">
-       <template v-slot:label>
-        <v-list-tile-avatar v-bind:class="{'dimmed':item.disconnected}">
-         <v-icon v-if="undefined!=item.icon.icon">{{item.icon.icon}}</v-icon>
-         <img v-else-if="item.icon.svg" class="svg-img" :src="item.icon.svg | svgIcon(darkUi)"></img>
-        </v-list-tile-avatar>
-        <v-list-tile-content v-bind:class="{'dimmed':item.disconnected}">
-         <div v-if="item.disconnected">{{item.name}} ({{i18n("Disconnected")}})</div>
-         <div v-else>{{item.name}}</div>
-        </v-list-tile-content>
-       </template>
-      </v-checkbox>
-     </v-list-tile>
-    </template>
-   </v-list>
-   <v-divider></v-divider>
-   <div style="height:8px"></div>
-   <v-list-tile>
-    <v-list-tile-content @click="playerListDialog.alpha=!playerListDialog.alpha" class="switch-label">
-     <v-list-tile-title class="ellipsis">{{i18n('Sort alphabetically')}}</v-list-tile-title>
-     <v-list-tile-sub-title class="ellipsis">{{i18n("Always sort players by name.")}}</v-list-tile-sub-title>
-    </v-list-tile-content>
-    <v-list-tile-action><m3-switch v-model="playerListDialog.alpha"></m3-switch></v-list-tile-action>
-   </v-list-tile>
-   <div class="dialog-padding"></div>
-   <v-card-actions>
-    <v-spacer></v-spacer>
-    <v-btn flat @click="setPlayerList">{{i18n('Close')}}</v-btn>
-   </v-card-actions>
-  </v-card>
- </v-dialog>
-
 </div>
 `,
     data() {
@@ -595,11 +542,6 @@ Vue.component('lms-ui-settings', {
                 show: false,
                 modes: [],
                 categorize: true,
-            },
-            playerListDialog: {
-                show: false,
-                players: [],
-                alpha: true
             },
             screensaver: 0,
             screensavers:[],
@@ -764,8 +706,6 @@ Vue.component('lms-ui-settings', {
         bus.$on('closeDialog', function(dlg) {
             if (dlg == 'ui-browsemodes') {
                 this.browseModesDialog.show=false;
-            } else if (dlg == 'ui-playerlist') {
-                this.playerListDialog.show=false;
             } else if (dlg == 'ui-detailedhome') {
                 this.detailedHomeDialog.show=false;
                 this.detailedHomeDialog.items=[];
@@ -1223,9 +1163,6 @@ Vue.component('lms-ui-settings', {
             toolbarMouseDown(ev);
         },
         dragStart(which, ev) {
-            if (this.playerListDialog.show && this.playerListDialog.alpha) {
-                return;
-            }
             ev.dataTransfer.dropEffect = 'move';
             ev.dataTransfer.setData('text/plain', "dth:"+which);
             this.dragIndex = which;
@@ -1236,96 +1173,18 @@ Vue.component('lms-ui-settings', {
             this.dropIndex = undefined;
         },
         dragOver(index, ev) {
-            if (this.playerListDialog.show && this.playerListDialog.alpha) {
-                return;
-            }
-            if (this.playerListDialog.show) {
-                if (this.playerListDialog.players[this.dragIndex].isgroup!=this.playerListDialog.players[index].isgroup) {
-                    ev.preventDefault(); // Otherwise drop is never called!
-                    return;
-                }
-            }
             if (index!=this.dragIndex) {
                 this.dropIndex = index;
             }
             ev.preventDefault(); // Otherwise drop is never called!
         },
         drop(to, ev) {
-            if (this.playerListDialog.show && this.playerListDialog.alpha) {
-                return;
-            }
             ev.preventDefault();
-            if (to!=this.dragIndex &&
-                (!this.playerListDialog.show ||
-                    (this.playerListDialog.players[this.dragIndex].isgroup==this.playerListDialog.players[to].isgroup)
-                )) {
-                if (this.playerListDialog.show) {
-                    this.playerListDialog.players = arrayMove(this.playerListDialog.players, this.dragIndex, to);
-                } else {
-                    this.detailedHomeItems = arrayMove(this.detailedHomeItems, this.dragIndex, to);
-                }
+            if (to!=this.dragIndex) {
+                this.detailedHomeItems = arrayMove(this.detailedHomeItems, this.dragIndex, to);
             }
             this.dragIndex = undefined;
             this.dropIndex = undefined;
-        },
-        configurePlayers() {
-            let ids = new Set();
-            this.playerListDialog.players = [];
-            for (let p=0, loop=this.$store.state.players, len=loop.length; p<len; ++p) {
-                this.playerListDialog.players.push(loop[p]);
-                ids.add(loop[p].id);
-            }
-            this.playerListDialog.alpha=lmsOptions.playersAlphaSort;
-            this.playerListDialog.show=true;
-            lmsCommand("", ["material-skin", "player-list"]).then(({data}) => {
-                if (data.result && data.result.players_loop && this.playerListDialog.show) {
-                    for (let p=0, loop=data.result.players_loop, len=loop.length; p<len; ++p) {
-                        if (1==loop[p].connected && ids.has(loop[p].id)) {
-                            continue;
-                        }
-                        loop[p].playerid = loop[p].id; // For icon mapping
-                        let weight = lmsOptions.playerWeightMap[loop[p].id];
-                        this.playerListDialog.players.push({
-                            id:loop[p].id,
-                            name:loop[p].name,
-                            isgroup:'group'==loop[p].model,
-                            disconnected:true,
-                            icon:mapPlayerIcon(loop[p]),
-                            weight:undefined==weight ? -1 : weight,
-                            enabled:!lmsOptions.disabledPlayers.has(loop[p].id)
-                        });
-                    }
-                    this.playerListDialog.players.sort(playerSort);
-                }
-            }).catch(err => {
-            });
-        },
-        setPlayerList() {
-            lmsOptions.playerWeightMap = {};
-            let disabled = []
-            let connectedPlayers = [];
-            for (let p=0, loop=this.playerListDialog.players, len=loop.length; p<len; ++p) {
-                loop[p].weight = p;
-                lmsOptions.playerWeightMap[loop[p].id] = p;
-                if (!loop[p].enabled) {
-                    disabled.push(loop[p].id);
-                }
-                if (!loop[p].disconnected) {
-                    connectedPlayers.push(loop[p]);
-                }
-            }
-            lmsOptions.playersAlphaSort=this.playerListDialog.alpha;
-            setLocalStorageVal('playersAlphaSort', lmsOptions.playersAlphaSort);
-            if (!this.playerListDialog.alpha) {
-                setLocalStorageVal('playerWeightMap', JSON.stringify(lmsOptions.playerWeightMap));
-            }
-            setLocalStorageVal('disabledPlayers', disabled.join(','));
-            lmsOptions.disabledPlayers = new Set(disabled);
-
-            this.$store.commit('setPlayers', connectedPlayers.sort(playerSort));
-            this.playerListDialog.players = [];
-            this.playerListDialog.show=false;
-            bus.$emit('refreshServerStatus');
         }
     },
     watch: {
@@ -1337,13 +1196,6 @@ Vue.component('lms-ui-settings', {
         },
         'detailedHomeDialog.show': function(val) {
             this.$store.commit('dialogOpen', {name:'ui-detailedhome', shown:val});
-        },
-        'playerListDialog.show': function(val) {
-            this.$store.commit('dialogOpen', {name:'ui-playerlist', shown:val});
-        },
-        'playerListDialog.alpha': function(val) {
-            lmsOptions.playersAlphaSort = this.playerListDialog.alpha;
-            this.playerListDialog.players.sort(playerSort);
         },
         'showMenu': function(newVal) {
             this.$store.commit('menuVisible', {name:'uisettings', shown:newVal});

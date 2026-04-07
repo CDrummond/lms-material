@@ -12,10 +12,10 @@ var playerMap = {};
 
 function getSyncMaster(player) {
     if (undefined==player.syncmaster || player.syncmaster.length<1) {
-        return {name:player.name.toLowerCase(), isgroup:player.isgroup};
+        return {name:player.name.toLowerCase(), isgroup:player.isgroup, weight:player.weight, id:player.id, isplayer:true};
     }
     let master = playerMap[player.syncmaster];
-    return undefined==master ? {name:"", isgroup:false} : {name:master.name.toLowerCase(), isgroup:master.isgroup};
+    return undefined==master ? {name:"", isgroup:false} : {name:master.name.toLowerCase(), isgroup:master.isgroup, weight:master.weight, id:player.syncmaster};
 }
 
 function playerSyncSort(a, b) {
@@ -25,6 +25,15 @@ function playerSyncSort(a, b) {
     if (masterA.isgroup!=masterB.isgroup) {
         return masterA.isgroup ? 1 : -1;
     }
+
+    if (!lmsOptions.playersAlphaSort) {
+        var weightA = undefined==masterA.weight ? -1 : masterA.weight;
+        var weightB = undefined==masterB.weight ? -1 : masterB.weight;
+        if (weightA!=weightB) {
+            return weightA<weightB ? -1 : 1;
+        }
+    }
+
     if (masterA.name < masterB.name) {
         return -1;
     }
@@ -39,6 +48,15 @@ function playerSyncSort(a, b) {
             return 1;
         }
     }
+
+    if (!lmsOptions.playersAlphaSort) {
+        var weightA = undefined==a.weight ? -1 : a.weight;
+        var weightB = undefined==b.weight ? -1 : b.weight;
+        if (weightA!=weightB) {
+            return weightA<weightB ? -1 : 1;
+        }
+    }
+
     var nameA = a.name.toLowerCase();
     var nameB = b.name.toLowerCase();
     if (nameA < nameB) {
@@ -51,6 +69,14 @@ function playerSyncSort(a, b) {
 }
 
 function playerIdSort(a, b) {
+    if (!lmsOptions.playersAlphaSort) {
+        var weightA = undefined==a.weight ? -1 : a.weight;
+        var weightB = undefined==b.weight ? -1 : b.weight;
+        if (weightA!=weightB) {
+            return weightA<weightB ? -1 : 1;
+        }
+    }
+
     var mapA = playerMap[a];
     var mapB = playerMap[b];
     var nameA = mapA ? mapA.name.toLowerCase() : a;
@@ -96,7 +122,15 @@ Vue.component('lms-manage-players', {
        <v-list-tile-avatar><v-icon>power_settings_new</v-icon></v-list-tile-avatar>
        <v-list-tile-content><v-list-tile-title>{{i18n('Switch on')}}</v-list-tile-title></v-list-tile-content>
       </v-list-tile>
-      <v-divider v-if="manageGroups && unlockAll"></v-divider>
+      <v-divider v-if="unlockAll"></v-divider>
+      <v-list-tile v-if="unlockAll" role="menuitem" @click="configurePlayerList">
+       <v-list-tile-avatar><img class="svg-img" :src="'list-configure' | svgIcon(darkUi)"></img></v-list-tile-avatar>
+       <v-list-tile-content><v-list-tile-title>{{i18n('Configure player list')}}</v-list-tile-title></v-list-tile-content>
+      </v-list-tile>
+      <v-list-tile v-if="numPlayers!=numEnabledPlayers && unlockAll" role="menuitem" @click="toggleShowAllPlayers">
+       <v-list-tile-avatar><v-icon>{{showAllPlayers ? 'check_box' : 'check_box_outline_blank'}}</v-icon></v-list-tile-avatar>
+       <v-list-tile-content><v-list-tile-title>{{i18n('Show all players')}}</v-list-tile-title></v-list-tile-content>
+      </v-list-tile>
       <v-list-tile role="menuitem" @click="createGroup($event)" v-if="manageGroups && unlockAll">
        <v-list-tile-avatar><img class="svg-img" :src="'speaker-group-add' | svgIcon(darkUi)"></img></v-list-tile-avatar>
        <v-list-tile-content><v-list-tile-title>{{i18n("Create group player")}}</v-list-tile-title></v-list-tile-content>
@@ -109,12 +143,12 @@ Vue.component('lms-manage-players', {
   </v-card-title>
 
   <div class="ios-vcard-text-workaround">
-   <v-container v-if="players.length<1 && otherPlayers.length<1">
+   <v-container v-if="visiblePlayers.length<1 && otherPlayers.length<1">
     <b>{{trans.noplayer}}</b>
    </v-container>
    <v-container v-else grid-list-md class="pmgr-container" id="player-manager-list">
     <v-layout row wrap>
-     <div v-for="(player, index) in players" :key="player.id" style="width:100%">
+     <div v-for="(player, index) in visiblePlayers" :key="player.id" style="width:100%">
       <v-flex xs12 v-if="0==index && !player.isgroup && manageGroups && firstGroupIndex>=0" class="pmgr-title ellipsis">{{i18n('Standard Players')}}</v-flex>
       <v-flex xs12 v-else-if="player.isgroup && index==firstGroupIndex" class="pmgr-title ellipsis">{{i18n('Group Players')}}</v-flex>
       <v-flex xs12 v-bind:class="{'pmgr-sync':!isMainPlayer(player), 'active-player':currentPlayer && currentPlayer.id === player.id}">
@@ -208,6 +242,7 @@ Vue.component('lms-manage-players', {
    </template>
   </v-list>
  </v-menu>
+
 </v-dialog>
 `,
     props: [],
@@ -224,17 +259,19 @@ Vue.component('lms-manage-players', {
             draggingSyncedPlayer: false,
             dropId: undefined,
             dragIndex: undefined,
+            showAllPlayers: true
         }
     },
     mounted() {
         bus.$on('manage.open', function(act) {
+            this.showAllPlayers = getLocalStorageBool('pmgr-showAllPlayers', this.showAllPlayers);
             this.players = [];
             this.show = true;
             this.openDialogs = 0;
 
             if (this.$store.state.players) {
                 for (let i=0, loop=this.$store.state.players, len=loop.length; i<len; ++i) {
-                    playerMap[loop[i].id]={name:loop[i].name, isgroup:loop[i].isgroup};
+                    playerMap[loop[i].id]={name:loop[i].name, isgroup:loop[i].isgroup, weight:loop[i].weight};
                 }
             }
 
@@ -256,6 +293,9 @@ Vue.component('lms-manage-players', {
             });
         }.bind(this));
 
+        bus.$on('playerlistChanged', function() {
+            this.updateAll();
+        }.bind(this));
         bus.$on('syncChanged', function() {
             this.updateAll();
         }.bind(this));
@@ -590,7 +630,7 @@ Vue.component('lms-manage-players', {
             if (!this.show) {
                 return;
             }
-            playerMap[player.id]={name:player.name, isgroup:player.isgroup, dvc:player.dvc};
+            playerMap[player.id]={name:player.name, isgroup:player.isgroup, dvc:player.dvc, weight:player.weight};
 
             player.playIcon = player.isplaying ? "pause_circle_filled" : "play_circle_filled";
             player.hasTrack = true;
@@ -875,6 +915,14 @@ Vue.component('lms-manage-players', {
                     bus.$emit('updatePlayer', p.id);
                 });
             });
+        },
+        toggleShowAllPlayers() {
+            this.showAllPlayers=!this.showAllPlayers;
+            setLocalStorageVal("pmgr-showAllPlayers", this.showAllPlayers);
+        },
+        configurePlayerList(event) {
+            storeClickOrTouchPos(event, this.menu);
+            bus.$emit('dlg.open', 'playerlist');
         }
     },
     computed: {
@@ -886,6 +934,23 @@ Vue.component('lms-manage-players', {
         },
         otherPlayers () {
             return this.$store.state.otherPlayers
+        },
+        visiblePlayers() {
+            return this.showAllPlayers ? this.players : this.enabledPlayers
+        },
+        enabledPlayers () {
+            if (!this.players) {
+                return this.players;
+            }
+            return this.players.filter((item) => {
+                return item.enabled || !this.isMainPlayer(item);
+            });
+        },
+        numPlayers() {
+            return this.players ? this.players.length : 0
+        },
+        numEnabledPlayers() {
+            return this.enabledPlayers ? this.enabledPlayers.length : 0
         },
         multipleStandardPlayers () {
             if (this.$store.state.players) {

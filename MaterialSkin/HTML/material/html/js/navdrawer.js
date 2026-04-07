@@ -258,7 +258,7 @@ Vue.component('lms-navdrawer', {
             this.updateShortcuts(view);
         }.bind(this));
         this.initItems();
-        this.showAllPlayers = getLocalStorageBool('showAllPlayers', this.showAllPlayers);
+        this.showAllPlayers = getLocalStorageBool('nd-showAllPlayers', this.showAllPlayers);
         bus.$on('navDrawer', function() {
             this.show = true;
             addBrowserHistoryItem();
@@ -635,7 +635,7 @@ Vue.component('lms-navdrawer', {
         },
         toggleShowAllPlayers() {
             this.showAllPlayers=!this.showAllPlayers;
-            setLocalStorageVal("showAllPlayers", this.showAllPlayers);
+            setLocalStorageVal("nd-showAllPlayers", this.showAllPlayers);
         }
     },
     computed: {

@@ -128,11 +128,13 @@ function mapIconType(item, app, type) {
     if (lmsIcon.includes("MTL_icon_")) {       
         item.image=item.svg=undefined; 
         item.icon=lmsIcon.split("MTL_icon_").pop().split(".")[0];
+        item.imapped=true;
         return true;
     }
     if (lmsIcon.includes("MTL_svg_")) {
         item.image=item.icon=undefined; 
         item.svg=lmsIcon.split("MTL_svg_").pop().split(".")[0];
+        item.imapped=true;
         return true;
     }
     let name=lmsIcon.split('/').pop();
@@ -140,11 +142,13 @@ function mapIconType(item, app, type) {
         if (lmsIcon.endsWith("_svg.png")) {
             item.image=item.icon=undefined;
             item.svg=lmsIcon.replace("_svg.png", ".svg").replace(/^\/+/, '');
+            item.imapped=true;
             return true;
         }
         if (lmsIcon.endsWith("_svg.jpg")) {
             item.image=item.icon=undefined;
             item.svg=lmsIcon.replace("_svg.jpg", ".svg").replace(/^\/+/, '');
+            item.imapped=true;
             return true;
         }
     }
@@ -157,9 +161,11 @@ function mapIconType(item, app, type) {
                 let entry = undefined!=app && undefined!=value[app] ? value[app] : value;
                 if (entry['icon']) {
                     item.image=item[value]=item.svg=undefined; item.icon=entry['icon'];
+                    item.imapped=true;
                     return true;
                 } else if (entry['svg']) {
                     item.image=item[value]=item.icon=undefined; item.svg=entry['svg'];
+                    item.imapped=true;
                     return true;
                 }
             }
@@ -169,9 +175,11 @@ function mapIconType(item, app, type) {
                 let entry = undefined!=app && undefined!=value[app] ? value[app] : value;
                 if (entry['icon']) {
                     item.image=item[value]=item.svg=undefined; item.icon=entry['icon'];
+                    item.imapped=true;
                     return true;
                 } else if (entry['svg']) {
                     item.image=item[value]=item.icon=undefined; item.svg=entry['svg'];
+                    item.imapped=true;
                     return true;
                 }
             }
@@ -183,6 +191,9 @@ function mapIconType(item, app, type) {
 }
 
 function mapIcon(item, app, fallback) {
+    if (item.imapped) {
+        return true;
+    }
     if (undefined==iconMap) {
         return false;
     }
@@ -209,6 +220,7 @@ function mapIcon(item, app, fallback) {
     }
     if (undefined!=fallback) {
         item.icon=fallback.icon; item.svg=fallback.svg; item.image=undefined;
+        item.imapped=true;
         return true;
     }
     if (item.menuIcon) {

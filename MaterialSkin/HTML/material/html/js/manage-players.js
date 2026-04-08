@@ -149,8 +149,8 @@ Vue.component('lms-manage-players', {
    <v-container v-else grid-list-md class="pmgr-container" id="player-manager-list">
     <v-layout row wrap>
      <div v-for="(player, index) in visiblePlayers" :key="player.id" style="width:100%">
-      <v-flex xs12 v-if="0==index && !player.isgroup && manageGroups && firstGroupIndex>=0" class="pmgr-title ellipsis">{{i18n('Standard Players')}}</v-flex>
-      <v-flex xs12 v-else-if="player.isgroup && index==firstGroupIndex" class="pmgr-title ellipsis">{{i18n('Group Players')}}</v-flex>
+      <v-flex xs12 v-if="0==index && !player.isgroup && manageGroups && visiblePlayers.length>1 && visiblePlayers[visiblePlayers.length-1].isgroup" class="pmgr-title ellipsis">{{i18n('Standard Players')}}</v-flex>
+      <v-flex xs12 v-else-if="player.isgroup && index>0 && !visiblePlayers[index-1].isgroup" class="pmgr-title ellipsis">{{i18n('Group Players')}}</v-flex>
       <v-flex xs12 v-bind:class="{'pmgr-sync':!isMainPlayer(player), 'active-player':currentPlayer && currentPlayer.id === player.id}">
        <v-flex xs12>
         <v-list class="pmgr-playerlist">
@@ -253,7 +253,6 @@ Vue.component('lms-manage-players', {
             showAllButtons: true,
             players: [],
             manageGroups: false,
-            firstGroupIndex: -1,
             menu: { show:false, player:undefined, actions:[], x:0, y:0, customActions:undefined },
             trans: { play:undefined, pause:undefined, stop:undefined, prev:undefined, next:undefined, menu:undefined, drop:undefined, noplayer:undefined },
             draggingSyncedPlayer: false,
@@ -684,14 +683,6 @@ Vue.component('lms-manage-players', {
                 this.players.push(player);
             }
             this.players.sort(playerSyncSort);
-
-            this.firstGroupIndex=-1;
-            for (var i=0, len=this.players.length; i<len; ++i) {
-                if (this.players[i].isgroup) {
-                    this.firstGroupIndex = i;
-                    break;
-                }
-            }
 
             // Group changed? Update slaves...
             if (found && ( (prevSlaves && player.syncslaves && player.syncslaves.length!=prevSlaves.length) || (!prevSlaves && player.syncslaves) || (prevSlaves && !player.syncslaves))) {

@@ -70,15 +70,7 @@ Vue.component('lms-navdrawer', {
       <v-list-tile-content><v-list-tile-title>{{user.name}}</v-list-tile-title></v-list-tile-content>
      </v-list-tile>
     </template>
-    <v-divider v-if="haveUsers && numPlayers>1"></v-divider>
-    <v-list-tile v-if="numPlayers>1" role="menuitem" @click="configurePlayerList">
-     <v-list-tile-avatar><img class="svg-img" :src="'list-configure' | svgIcon(darkUi)"></img></v-list-tile-avatar>
-     <v-list-tile-content><v-list-tile-title>{{i18n('Configure player list')}}</v-list-tile-title></v-list-tile-content>
-    </v-list-tile>
-    <v-list-tile v-if="numPlayers!=numEnabledPlayers" role="menuitem" @click="toggleShowAllPlayers">
-     <v-list-tile-avatar><v-icon>{{showAllPlayers ? 'check_box' : 'check_box_outline_blank'}}</v-icon></v-list-tile-avatar>
-     <v-list-tile-content><v-list-tile-title>{{i18n('Show all players')}}</v-list-tile-title></v-list-tile-content>
-    </v-list-tile>
+    <v-divider v-if="haveUsers && multipleStandardPlayers"></v-divider>
     <v-subheader v-if="multipleStandardPlayers || !haveUsers">{{i18n("All players")}}</v-subheader>
     <v-list-tile v-if="multipleStandardPlayers || !haveUsers" role="menuitem" @click="sleepAll()" class="menu-group-item">
      <v-list-tile-avatar><v-icon>hotel</v-icon></v-list-tile-avatar>
@@ -91,6 +83,15 @@ Vue.component('lms-navdrawer', {
     <v-list-tile v-if="multipleStandardPlayers || !haveUsers" role="menuitem" @click="powerAll(1)" class="menu-group-item">
      <v-list-tile-avatar><v-icon>power_settings_new</v-icon></v-list-tile-avatar>
      <v-list-tile-content><v-list-tile-title>{{i18n('Switch on')}}</v-list-tile-title></v-list-tile-content>
+    </v-list-tile>
+    <v-divider v-if="numPlayers>1"></v-divider>
+    <v-list-tile v-if="numPlayers>1" role="menuitem" @click="configurePlayerList">
+     <v-list-tile-avatar><img class="svg-img" :src="'list-configure' | svgIcon(darkUi)"></img></v-list-tile-avatar>
+     <v-list-tile-content><v-list-tile-title>{{i18n('Configure player list')}}</v-list-tile-title></v-list-tile-content>
+    </v-list-tile>
+    <v-list-tile v-if="numPlayers!=numEnabledPlayers" role="menuitem" @click="toggleShowAllPlayers">
+     <v-list-tile-avatar><v-icon>{{showAllPlayers ? 'check_box' : 'check_box_outline_blank'}}</v-icon></v-list-tile-avatar>
+     <v-list-tile-content><v-list-tile-title>{{i18n('Show all players')}}</v-list-tile-title></v-list-tile-content>
     </v-list-tile>
    </v-list>
   </v-menu>

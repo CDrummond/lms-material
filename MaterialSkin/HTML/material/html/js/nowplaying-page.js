@@ -645,8 +645,16 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
             }
             addBrowserHistoryItem();
             if ((window.innerHeight>=LMS_MIN_NP_LARGE_INFO_HEIGHT && this.playerStatus.playlist.count>0) || this.info.show) {
+                if (!this.$store.state.desktopLayout && !this.info.show && MBAR_REP_NAV==this.$store.state.mobileBar) {
+                    // Store current page so that can revert
+                    this.prevPage = this.$store.state.page;
+                }
                 this.largeView = false;
                 this.info.show = !this.info.show;
+                if (!this.$store.state.desktopLayout) {
+                    // Set mobile page
+                    this.$store.commit('setPage', !this.info.show && 'now-playing'!=this.prevPage && MBAR_REP_NAV==this.$store.state.mobileBar ? this.$store.state.prevPage : 'now-playing');
+                }
             }
         }.bind(this));
         bus.$on('npclose', function() {

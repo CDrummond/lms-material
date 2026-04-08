@@ -242,9 +242,6 @@ Vue.component('lms-toolbar', {
             }
             if (LMS_P_MAI) {
                 bus.$emit('info');
-                if (!this.$store.state.desktopLayout && this.playerStatus.count>=1) {
-                    this.$store.commit('setPage', 'now-playing');
-                }
             }
         },
         expandNowPlaying() {

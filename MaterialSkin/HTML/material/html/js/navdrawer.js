@@ -70,7 +70,11 @@ Vue.component('lms-navdrawer', {
       <v-list-tile-content><v-list-tile-title>{{user.name}}</v-list-tile-title></v-list-tile-content>
      </v-list-tile>
     </template>
-    <v-divider v-if="haveUsers && (multipleStandardPlayers || numPlayers!=numEnabledPlayers)"></v-divider>
+    <v-divider v-if="haveUsers && numPlayers>1"></v-divider>
+    <v-list-tile v-if="numPlayers>1" role="menuitem" @click="configurePlayerList">
+     <v-list-tile-avatar><img class="svg-img" :src="'list-configure' | svgIcon(darkUi)"></img></v-list-tile-avatar>
+     <v-list-tile-content><v-list-tile-title>{{i18n('Configure player list')}}</v-list-tile-title></v-list-tile-content>
+    </v-list-tile>
     <v-list-tile v-if="numPlayers!=numEnabledPlayers" role="menuitem" @click="toggleShowAllPlayers">
      <v-list-tile-avatar><v-icon>{{showAllPlayers ? 'check_box' : 'check_box_outline_blank'}}</v-icon></v-list-tile-avatar>
      <v-list-tile-content><v-list-tile-title>{{i18n('Show all players')}}</v-list-tile-title></v-list-tile-content>
@@ -636,6 +640,11 @@ Vue.component('lms-navdrawer', {
         toggleShowAllPlayers() {
             this.showAllPlayers=!this.showAllPlayers;
             setLocalStorageVal("nd-showAllPlayers", this.showAllPlayers);
+        },
+        configurePlayerList(event) {
+            this.show=false;
+            storeClickOrTouchPos(event, this.menu);
+            bus.$emit('dlg.open', 'playerlist');
         }
     },
     computed: {
@@ -673,7 +682,7 @@ Vue.component('lms-navdrawer', {
             return this.enabledPlayers ? this.enabledPlayers.length : 0
         },
         enableMenuButton() {
-            return this.multipleStandardPlayers || LMS_P_USERS || this.numPlayers!=this.numEnabledPlayers
+            return this.numPlayers>1 || LMS_P_USERS
         },
         noPlayer () {
             return !this.$store.state.players || this.$store.state.players.length<1

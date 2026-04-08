@@ -12,7 +12,8 @@
  9. Always use icons for settings in navigation drawer if there is insufficient
     height for full items.
 10. Limit navigation drawer shortcuts to single line.
-11. Allow sorting and hiding players, accessible from 'Manage players' dialog.
+11. Allow sorting and hiding players, accessible from navigation draweer or
+    'Manage players' dialog.
 12. Fix 'Popular Albums' listing.
 13. Fix 'Add to playlist' for item in home screen scrolled list.
 14. Suppress duplicate composer in work-grouped track listings - thanks to

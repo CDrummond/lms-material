@@ -196,6 +196,9 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
    </v-flex>
    <v-flex xs4>
     <v-btn flat icon v-if="playerStatus.playlist.count>0" v-longpress="playPauseButton" @click.middle="showSleep" id="playPauseB" class="np-playpause" :title="(playerStatus.isplaying ? trans.pause : trans.play) | tooltip('space', keyboardControl)" v-bind:class="{'disabled':disableBtns}"><v-icon x-large class="media-icon">{{playerStatus.iswaiting ? 'pause_circle_outline' : playerStatus.isplaying ? 'pause_circle_filled' : 'play_circle_filled'}}</v-icon></v-btn>
+    <v-btn flat icon v-if="!desktopLayout && MBAR_REP_NAV==mobileBar && playerStatus.playlist.count>0" @click="changePage" class="np-changepage" id="cpage" :title="nextPage=='browse' ? trans.queue : trans.browse">
+     <img class="svg-img" :src="(nextPage=='queue' ? 'queue_music_outline' : 'library-music-outline') | svgIcon(darkUi)" oncontextmenu="return false;"></img>
+    </v-btn>
    </v-flex>
    <v-flex xs4>
     <v-btn flat icon id="np-bar-next" v-bind:class="{'disabled':disableNext}" v-longpress:repeat="nextButton" class="np-std-button" :title="trans.next | tooltip('right', keyboardControl)"><v-icon large class="media-icon">skip_next</v-icon></v-btn>
@@ -1153,7 +1156,7 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
                 if (!this.desktopLayout) {
                     let touch = getTouchPos(ev);
                     let x = undefined==touch ? ev.x : touch.x;
-                    if ((MBAR_THICK==this.mobileBar || MBAR_REP_NAV==this.mobileBar) && x<(window.innerWidth-50)) {
+                    if ((MBAR_THICK==this.mobileBar || MBAR_REP_NAV==this.mobileBar) && x<(window.innerWidth-(MBAR_REP_NAV==this.mobileBar ? 88 : 50))) {
                         this.$store.commit('setPage', 'now-playing');
                         this.info.show = false;
                     }
@@ -1353,6 +1356,10 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
         },
         playerId() {
             return this.$store.state.player ? this.$store.state.player.id : ""
+        },
+        changePage() {
+            this.$store.commit('setPage', this.nextPage);
+            this.info.show = false;
         }
     },
     filters: {
@@ -1452,6 +1459,9 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
         },
         page() {
             return this.$store.state.page;
+        },
+        nextPage() {
+            return this.info.show ? this.$store.state.prevPage : (this.$store.state.page=='queue' ? 'browse' : 'queue')
         },
         techInfo() {
             return this.$store.state.techInfo &&

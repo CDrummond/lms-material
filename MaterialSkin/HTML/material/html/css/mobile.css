@@ -300,13 +300,21 @@
 }
 
 .np-bar .np-playpause,
-.np-bar-mob-thick .np-playpause {
+.np-bar-mob-thick .np-playpause,
+.np-changepage,
+.np-changepage:hover {
  position:fixed;
  bottom:calc(var(--bottom-toolbar-height) + var(--bottom-np-pad) + 7px);
  right:-50px;
  width:32px!important;
  height:32px!important;
  margin:0px!important;
+}
+
+.np-changepage,
+.np-changepage:hover {
+ right:52px;
+ visibility:visible!important;
 }
 
 .np-bar-mob-thick .np-playpause {
@@ -339,7 +347,7 @@
 
 .np-bar-mob-nav .np-bar-details {
  left:35px!important;
- width:calc(100vw - 71px);
+ width:calc(100vw - 125px);
 }
 
 /* Adjust link/more/close buttons in now-playing page up a little */

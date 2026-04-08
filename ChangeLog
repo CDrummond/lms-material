@@ -28,6 +28,8 @@
     'For all players'.
 21. Fix not being able to open navigation drawer if 'Manage players' dialog
     was closed with its main menu open.
+22. When 'Replace navigation bar' is used for mobile layout, add browse/queue
+    switch to now-playing bar.
 
 6.2.4
 -----

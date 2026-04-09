@@ -11,7 +11,7 @@ Vue.component('lms-playerlist-dialog', {
 <v-dialog v-model="show" :width="550" persistent style="overflow:hidden" v-if="show">
  <v-card>
   <v-card-title>{{i18n("Player list")}}</v-card-title>
-  <v-list-tile-sub-title style="padding-left:16px;padding-right:16px">{{i18n("Select favorite players, these will always be visible.")}}</v-list-tile-sub-title>
+  <v-list-tile-sub-title style="padding-left:16px;padding-right:16px">{{i18n("Select favorite players, these will always be visible (if connected). Use drag'n'drop to change order.")}}</v-list-tile-sub-title>
   <v-list class="dialog-main-list">
    <template v-for="(item, index) in players" :key="item.id">
     <v-subheader v-if="index==0 && players.length>1 && players[players.length-1].isgroup">

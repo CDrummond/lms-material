@@ -59,28 +59,22 @@ Vue.component('lms-navdrawer', {
   <v-menu v-if="enableMenuButton" bottom left v-model="showMenu" style="position:absolute; right:40px; z-index:5">
    <v-btn icon slot="activator"><v-icon>more_vert</v-icon></v-btn>
    <v-list>
-    <v-subheader v-if="haveUsers">{{i18n("Users")}}</v-subheader>
-    <template v-for="(user, index) in users" v-if="haveUsers">
-     <v-list-tile role="menuitem" @click="switchUser(user)" class="menu-group-item">
-      <v-list-tile-avatar>
-       <img v-if="undefined!=user.avatar" class="user-img" :src="user.avatar"></img>
-       <img v-else-if="undefined!=user.svg" class="svg-img" :src="user.svg | svgIcon(darkUi)"></img>
-       <v-icon v-else>{{user.icon}}</v-icon>
-      </v-list-tile-avatar>
-      <v-list-tile-content><v-list-tile-title>{{user.name}}</v-list-tile-title></v-list-tile-content>
-     </v-list-tile>
-    </template>
-    <v-divider v-if="haveUsers && multipleStandardPlayers"></v-divider>
-    <v-subheader v-if="multipleStandardPlayers || !haveUsers">{{i18n("All players")}}</v-subheader>
-    <v-list-tile v-if="multipleStandardPlayers || !haveUsers" role="menuitem" @click="sleepAll()" class="menu-group-item">
+    <v-list-tile role="menuitem" @click="switchUser" v-if="LMS_P_USERS">
+     <v-list-tile-avatar><img class="svg-img" :src="'user-switch' | svgIcon(darkUi)"></img>
+     </v-list-tile-avatar>
+     <v-list-tile-content><v-list-tile-title>{{i18n('Switch user')}}</v-list-tile-title></v-list-tile-content>
+    </v-list-tile>
+    <v-divider v-if="LMS_P_USERS && multipleStandardPlayers"></v-divider>
+    <v-subheader v-if="multipleStandardPlayers || !LMS_P_USERS">{{i18n("All players")}}</v-subheader>
+    <v-list-tile v-if="multipleStandardPlayers || !LMS_P_USERS" role="menuitem" @click="sleepAll()" class="menu-group-item">
      <v-list-tile-avatar><v-icon>hotel</v-icon></v-list-tile-avatar>
      <v-list-tile-content><v-list-tile-title>{{i18n('Sleep')}}</v-list-tile-title></v-list-tile-content>
     </v-list-tile>
-    <v-list-tile v-if="multipleStandardPlayers || !haveUsers" role="menuitem" @click="powerAll(0)" class="menu-group-item">
+    <v-list-tile v-if="multipleStandardPlayers || !LMS_P_USERS" role="menuitem" @click="powerAll(0)" class="menu-group-item">
      <v-list-tile-avatar><v-icon class="dimmed">power_settings_new</v-icon></v-list-tile-avatar>
      <v-list-tile-content><v-list-tile-title>{{i18n('Switch off')}}</v-list-tile-title></v-list-tile-content>
     </v-list-tile>
-    <v-list-tile v-if="multipleStandardPlayers || !haveUsers" role="menuitem" @click="powerAll(1)" class="menu-group-item">
+    <v-list-tile v-if="multipleStandardPlayers || !LMS_P_USERS" role="menuitem" @click="powerAll(1)" class="menu-group-item">
      <v-list-tile-avatar><v-icon>power_settings_new</v-icon></v-list-tile-avatar>
      <v-list-tile-content><v-list-tile-title>{{i18n('Switch on')}}</v-list-tile-title></v-list-tile-content>
     </v-list-tile>
@@ -633,11 +627,6 @@ Vue.component('lms-navdrawer', {
                 this.statusTimer = undefined;
             }
         },
-        switchUser(user) {
-            if (user.id!=this.$store.state.user.id) {
-                this.$store.commit('setUser', user);
-            }
-        },
         toggleShowAllPlayers() {
             this.showAllPlayers=!this.showAllPlayers;
             setLocalStorageVal("nd-showAllPlayers", this.showAllPlayers);
@@ -646,6 +635,22 @@ Vue.component('lms-navdrawer', {
             this.show=false;
             storeClickOrTouchPos(event, this.menu);
             bus.$emit('dlg.open', 'playerlist');
+        },
+        switchUser() {
+            lmsCommand("", ["users", "list"]).then(({data}) => {
+                if (data && data.result && data.result.users_loop) {
+                    let users = [{id:-1, title:this.trans.generalUser, svg:'lyrion-icon'}];
+                    for (let i=0, list=data.result.users_loop, len=list.length; i<len; ++i) {
+                        users.push({id:parseInt(list[i].id), title:list[i].name, icon:'person', img:list[i].avatar});
+                    }
+                    choose(i18n("Select user profile"), users).then(choice => {
+                        if (undefined!=choice && choice.id!=this.$store.state.user.id) {
+                            this.$store.commit('setUser', {id:choice.id, name:choice.title});
+                        }
+                    });
+                }
+            }).catch(err => {
+            });
         }
     },
     computed: {
@@ -744,9 +749,6 @@ Vue.component('lms-navdrawer', {
                        : this.$store.state.user.avatar
                           ? {img:this.$store.state.user.avatar}
                           : {icon:'person'}
-        },
-        haveUsers() {
-            return LMS_P_USERS && this.users.length>0
         }
     },
     filters: {

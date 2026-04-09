@@ -20,7 +20,8 @@ Vue.component('lms-choice-dialog', {
        <template v-for="(item, index) in items">
         <v-list-tile @click="choose(item)" :disabled="item.disabled" v-bind:class="{'dimmed':item.disabled}">
          <div :tile="true" v-if="boundKeys" class="choice-key">{{firstIsZero ? index : 9==index ? 0 : index+1}}</div>
-         <v-list-tile-avatar :tile="true" class="lms-avatar" v-if="item.icon || item.svg"><v-icon v-if="item.icon">{{item.icon}}</v-icon><img v-else class="svg-img" :src="item.svg | svgIcon(darkUi)"></img></v-list-tile-avatar>
+         <v-list-tile-avatar :tile="true" class="lms-avatar" v-if="item.img"><img v-else class="svg-img" :src="item.img"></img></v-list-tile-avatar>
+         <v-list-tile-avatar :tile="true" class="lms-avatar" v-else-if="item.icon || item.svg"><v-icon v-if="item.icon">{{item.icon}}</v-icon><img v-else class="svg-img" :src="item.svg | svgIcon(darkUi)"></img></v-list-tile-avatar>
          <v-list-tile-avatar :tile="true" class="lms-avatar" v-else-if="undefined!=item.selected"><v-icon small>{{item.selected ? 'radio_button_checked' :'radio_button_unchecked'}}</v-icon></v-list-tile-avatar>
          <v-list-tile-avatar :tile="true" class="lms-avatar" v-else-if="undefined!=item.checked"><v-icon small>{{item.checked ? 'check_box' :'check_box_outline_blank'}}</v-icon></v-list-tile-avatar>
          <v-list-tile-content>

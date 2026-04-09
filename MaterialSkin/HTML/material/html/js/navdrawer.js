@@ -678,7 +678,7 @@ Vue.component('lms-navdrawer', {
             return this.$store.state.otherPlayers
         },
         multipleStandardPlayers () {
-            let playerList = this.enabledPlayers
+            let playerList = this.visiblePlayers
             return playerList && playerList.length>1 && !playerList[1].isgroup
         },
         numPlayers() {

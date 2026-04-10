@@ -390,6 +390,7 @@ function parseBrowseResp(data, parent, options, cacheKey) {
                             if (lmsOptions.playlistImages) {
                                 i.image = "material/playlists/" + encodeURIComponent(i.title);
                                 i.overlay = "overlay-playlist";
+                                i.icon = i.svg = undefined;
                             } else {
                                 i.icon="list";
                                 i.image=undefined;
@@ -2026,6 +2027,7 @@ function parseBrowseResp(data, parent, options, cacheKey) {
                         playlist.image = i.image;
                     } else*/ if (lmsOptions.playlistImages) {
                         playlist.image = "material/playlists/" + encodeURIComponent(i.playlist)+"?ts="+(i.mtime ? i.mtime : currentTs);
+                        playlist.icon = playlist.svg = undefined;
                     }
                     resp.items.push(playlist);
                 }

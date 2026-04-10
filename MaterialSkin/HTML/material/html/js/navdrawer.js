@@ -18,39 +18,6 @@ var TB_APP_QUIT        = {id:8, svg:  "close" }
 
 const TB_CUSTOM_SETTINGS_ACTIONS = {id:20};
 
-Vue.component('lms-navdrawer-system-entries', {
-    template: `
-<v-list class="nd-list py-0">
- <div style="height:8px"></div>
- <v-divider></v-divider>
- <template v-if="view.showCustomSystemActions" v-for="(action, index) in view.customSystemActions">
-  <v-list-tile @click="view.doCustomAction(action)" v-if="undefined==action.players || action.players.indexOf(player.id)>=0">
-   <v-list-tile-avatar><v-icon v-if="action.icon">{{action.icon}}</v-icon><img v-else-if="action.svg" class="svg-img" :src="action.svg | svgIcon(view.darkUi)"></img></v-list-tile-avatar>
-   <v-list-tile-content><v-list-tile-title>{{action.title}}</v-list-tile-title></v-list-tile-content>
-  </v-list-tile>
- </template>
-  <v-list-tile :href="queryParams.appQuit" @click="$emit('quit')" v-if="queryParams.appQuit">
-  <v-list-tile-avatar><img class="svg-img" :src="TB_APP_QUIT.svg | svgIcon(view.darkUi)"></img></v-list-tile-avatar>
-  <v-list-tile-title>{{TB_APP_QUIT.title}}</v-list-tile-title>
- </v-list-tile>
-</v-list>
-    `,
-    props: {
-        view: {
-            type: Object,
-            required: true
-        }
-    },
-    data() {
-        return { }
-    },
-    filters: {
-        svgIcon: function (name, dark, updateIcon) {
-            return "/material/svg/"+name+"?c="+(updateIcon ? LMS_UPDATE_SVG : dark ? LMS_DARK_SVG : LMS_LIGHT_SVG)+"&r="+LMS_MATERIAL_REVISION;
-        }
-    }
-})
-
 Vue.component('lms-navdrawer', {
     template: `
 <v-navigation-drawer v-model="show" app temporary :width="maxWidth" style="display:flex;flex-direction:column">
@@ -59,26 +26,20 @@ Vue.component('lms-navdrawer', {
   <v-menu v-if="enableMenuButton" bottom left v-model="showMenu" style="position:absolute; right:40px; z-index:5">
    <v-btn icon slot="activator"><v-icon>more_vert</v-icon></v-btn>
    <v-list>
-    <v-list-tile role="menuitem" @click="switchUser" v-if="LMS_P_USERS">
-     <v-list-tile-avatar><img class="svg-img" :src="'user-switch' | svgIcon(darkUi)"></img>
-     </v-list-tile-avatar>
-     <v-list-tile-content><v-list-tile-title>{{i18n('Switch user')}}</v-list-tile-title></v-list-tile-content>
-    </v-list-tile>
-    <v-divider v-if="LMS_P_USERS && multipleStandardPlayers"></v-divider>
-    <v-subheader v-if="multipleStandardPlayers || !LMS_P_USERS">{{i18n("All players")}}</v-subheader>
-    <v-list-tile v-if="multipleStandardPlayers || !LMS_P_USERS" role="menuitem" @click="sleepAll()" class="menu-group-item">
+    <v-subheader v-if="multipleStandardPlayers">{{i18n("All players")}}</v-subheader>
+    <v-list-tile v-if="multipleStandardPlayers" role="menuitem" @click="sleepAll()" class="menu-group-item">
      <v-list-tile-avatar><v-icon>hotel</v-icon></v-list-tile-avatar>
      <v-list-tile-content><v-list-tile-title>{{i18n('Sleep')}}</v-list-tile-title></v-list-tile-content>
     </v-list-tile>
-    <v-list-tile v-if="multipleStandardPlayers || !LMS_P_USERS" role="menuitem" @click="powerAll(0)" class="menu-group-item">
+    <v-list-tile v-if="multipleStandardPlayers" role="menuitem" @click="powerAll(0)" class="menu-group-item">
      <v-list-tile-avatar><v-icon class="dimmed">power_settings_new</v-icon></v-list-tile-avatar>
      <v-list-tile-content><v-list-tile-title>{{i18n('Switch off')}}</v-list-tile-title></v-list-tile-content>
     </v-list-tile>
-    <v-list-tile v-if="multipleStandardPlayers || !LMS_P_USERS" role="menuitem" @click="powerAll(1)" class="menu-group-item">
+    <v-list-tile v-if="multipleStandardPlayers" role="menuitem" @click="powerAll(1)" class="menu-group-item">
      <v-list-tile-avatar><v-icon>power_settings_new</v-icon></v-list-tile-avatar>
      <v-list-tile-content><v-list-tile-title>{{i18n('Switch on')}}</v-list-tile-title></v-list-tile-content>
     </v-list-tile>
-    <v-divider v-if="numPlayers>1"></v-divider>
+    <v-divider v-if="multipleStandardPlayers"></v-divider>
     <v-list-tile v-if="numPlayers>1" role="menuitem" @click="configurePlayerList">
      <v-list-tile-avatar><img class="svg-img" :src="'list-configure' | svgIcon(darkUi)"></img></v-list-tile-avatar>
      <v-list-tile-content><v-list-tile-title>{{i18n('Configure player list')}}</v-list-tile-title></v-list-tile-content>
@@ -87,6 +48,18 @@ Vue.component('lms-navdrawer', {
      <v-list-tile-avatar><v-icon>{{showAllPlayers ? 'check_box' : 'check_box_outline_blank'}}</v-icon></v-list-tile-avatar>
      <v-list-tile-content><v-list-tile-title>{{i18n('Show all players')}}</v-list-tile-title></v-list-tile-content>
     </v-list-tile>
+    <v-divider v-if="LMS_P_USERS || showCustomSystemActions"></v-divider>
+    <v-list-tile role="menuitem" @click="switchUser" v-if="LMS_P_USERS">
+     <v-list-tile-avatar><img class="svg-img" :src="'user-switch' | svgIcon(darkUi)"></img>
+     </v-list-tile-avatar>
+     <v-list-tile-content><v-list-tile-title>{{i18n('Switch user')}}</v-list-tile-title></v-list-tile-content>
+    </v-list-tile>
+    <template v-if="showCustomSystemActions" v-for="(action, index) in customSystemActions">
+     <v-list-tile role="menuitem" @click="doCustomAction(action)" v-if="undefined==action.players || action.players.indexOf(player.id)>=0">
+      <v-list-tile-avatar><v-icon v-if="action.icon">{{action.icon}}</v-icon><img v-else-if="action.svg" class="svg-img" :src="action.svg | svgIcon(darkUi)"></img></v-list-tile-avatar>
+      <v-list-tile-content><v-list-tile-title>{{action.title}}</v-list-tile-title></v-list-tile-content>
+     </v-list-tile>
+    </template>
    </v-list>
   </v-menu>
   <v-list-tile @click.prevent="close">
@@ -193,8 +166,11 @@ Vue.component('lms-navdrawer', {
     </template>
    </template>
   </ul>
-  <lms-navdrawer-system-entries :view="this" v-if="queryParams.appQuit || showCustomSystemActions" @quit="show=false"></lms-navdrawer-system-entries>
-  <div class="nd-bottom"></div>
+  <v-divider v-if="queryParams.appQuit" style="margin-top:8px"></v-divider>
+   <v-list-tile :href="queryParams.appQuit" @click="$emit('quit')" v-if="queryParams.appQuit">
+   <v-list-tile-avatar><img class="svg-img" :src="TB_APP_QUIT.svg | svgIcon(darkUi)"></img></v-list-tile-avatar>
+   <v-list-tile-title>{{TB_APP_QUIT.title}}</v-list-tile-title>
+  </v-list-tile>
  </div>
  <v-list class="nd-list py-0" v-else>
   <template v-for="(item, index) in menuItems">
@@ -218,9 +194,13 @@ Vue.component('lms-navdrawer', {
     </v-list-tile>
    </template>
   </template>
-  <lms-navdrawer-system-entries :view="this" v-if="queryParams.appQuit || showCustomSystemActions" @quit="show=false"></lms-navdrawer-system-entries>
-  <div class="nd-bottom"></div>
+  <v-divider v-if="queryParams.appQuit"></v-divider>
+  <v-list-tile :href="queryParams.appQuit" @click="$emit('quit')" v-if="queryParams.appQuit">
+   <v-list-tile-avatar><img class="svg-img" :src="TB_APP_QUIT.svg | svgIcon(darkUi)"></img></v-list-tile-avatar>
+   <v-list-tile-title>{{TB_APP_QUIT.title}}</v-list-tile-title>
+  </v-list-tile>
  </v-list>
+ <div class="nd-bottom"></div>
 </v-navigation-drawer>
 `,
     props: [],
@@ -393,14 +373,17 @@ Vue.component('lms-navdrawer', {
                            updatesAvailable:i18n('Updates available'), restartRequired:i18n('Restart required'), shortcuts:i18n('Shortcuts'),
                            generalUser:"LYRION", unknownUser:i18n("Unknown") };
             if (LMS_KIOSK_MODE) {
-                this.menuItems = []
+                this.menuItems = [];
+                this.menuLength = this.menuItems.length;
             } else {
                 if (queryParams.party) {
                     this.menuItems = queryParams.appSettings ? [TB_SETTINGS, TB_APP_SETTINGS, TB_UI_SETTINGS] : [TB_SETTINGS, TB_UI_SETTINGS];
+                    this.menuLength = this.menuItems.length;
                 } else {
                     this.menuItems = queryParams.appSettings
                         ? [TB_SETTINGS, TB_APP_SETTINGS, TB_UI_SETTINGS, TB_PLAYER_SETTINGS, TB_SERVER_SETTINGS, TB_CUSTOM_SETTINGS_ACTIONS]
                         : [TB_SETTINGS, TB_UI_SETTINGS, TB_PLAYER_SETTINGS, TB_SERVER_SETTINGS, TB_CUSTOM_SETTINGS_ACTIONS]
+                    this.menuLength = this.menuItems.length - 1;
                 }
             }
         },
@@ -688,7 +671,7 @@ Vue.component('lms-navdrawer', {
             return this.enabledPlayers ? this.enabledPlayers.length : 0
         },
         enableMenuButton() {
-            return this.numPlayers>1 || LMS_P_USERS
+            return this.numPlayers>1 || LMS_P_USERS || this.showCustomSystemActions
         },
         noPlayer () {
             return !this.$store.state.players || this.$store.state.players.length<1
@@ -727,15 +710,16 @@ Vue.component('lms-navdrawer', {
             return this.$store.state.ndShortcuts
         },
         settingsIcons() {
+            const itemHeight = 46;
+            const titleHeight = 36;
             let playerList = this.visiblePlayers
             let haveGroup = playerList && playerList.length>0 && playerList[playerList.length-1].isgroup;
-            let settingsCount = this.menuItems.length+(this.customSettingsActions ? this.customSettingsActions.length : 0);
-            let settingsHeight = (settingsCount + 1) * 48;
+            let settingsHeight = ((this.menuLength  + (queryParams.appQuit ? 1 : 0) + (this.customSettingsActions ? this.customSettingsActions.length : 0)) * itemHeight) + titleHeight;
             let numPlayers = (playerList ? playerList.length : 0);
-            let playerheight = ((numPlayers + (this.showManagePlayers ? 1 : 0)) * 48) + (haveGroup ? 72 : 0) /*titles*/;
+            let playerheight = ((numPlayers + (this.showManagePlayers ? 1 : 0) + (this.customPlayerActions ? this.customPlayerActions.length : 0)) * itemHeight) + (haveGroup ? titleHeight*2 : 0) /*titles*/;
             let shortcutHeight = this.showShortcuts ? 100 : 0;
-            let minPlayerHeight = Math.max(4*48, playerheight) + 24 /*padding*/;
-            return (this.height-(queryParams.topPad+queryParams.botPad+settingsHeight+shortcutHeight))<minPlayerHeight;
+            let minPlayerHeight = Math.max(4*48, playerheight);
+            return (this.height-(queryParams.topPad+queryParams.botPad+settingsHeight+shortcutHeight+ itemHeight/*top bar*/))<minPlayerHeight;
         },
         homeButton() {
             return this.$store.state.homeButton

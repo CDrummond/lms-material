@@ -2042,8 +2042,11 @@ function browseHeaderAction(view, act, event, ignoreOpenMenus) {
         var currentSort=ALBUM_SORTS_ACTION==act ? getAlbumSort(view.command, view.inGenre, undefined!=item ? item : undefined) : getTrackSort(item.stdItem);
         var menuItems=[];
         var sorts=ALBUM_SORTS_ACTION==act ? B_ALBUM_SORTS : B_TRACK_SORTS;
+        var allowNew = ALBUM_SORTS_ACTION!=act || (view.current && view.current.id.startsWith("artist_id:"));
         for (var i=0,len=sorts.length; i<len; ++i) {
-            menuItems.push({key:sorts[i].key, title:sorts[i].label, selected:currentSort.by==sorts[i].key});
+            if (allowNew || "new"!=sorts[i].key) {
+                menuItems.push({key:sorts[i].key, title:sorts[i].label, selected:currentSort.by==sorts[i].key});
+            }
         }
         menuItems.push({title:i18n("Descending"), checked:currentSort.rev});
         choose(ACTIONS[act].title, menuItems).then(sort => {

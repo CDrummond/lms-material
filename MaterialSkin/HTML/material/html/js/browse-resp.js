@@ -1130,7 +1130,7 @@ function parseBrowseResp(data, parent, options, cacheKey) {
                 if (!roleId) {
                     roleId=mskRoleId;
                 }
-                if (reverse && !isNewMusic) {
+                if (reverse) {
                     data.result.albums_loop = data.result.albums_loop.reverse();
                 }
             }

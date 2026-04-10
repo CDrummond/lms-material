@@ -31,6 +31,8 @@
     switch to now-playing bar.
 22. Fix MAI track actions.
 23. Min 600x425 for auto switch to desktop layout.
+24. Fix reverse sort when 'Newset' selected.
+25. Only allow 'Newset' sort if sorting artist's albums.
 
 6.2.4
 -----

@@ -982,24 +982,24 @@ function parseBrowseResp(data, parent, options, cacheKey) {
                         }
                     }
 
-                    if (0==resp.items.length) {
+                    if (0==resp.listSize) {
                         resp.subtitle=i18n("Empty");
                     } else if (isAppsTop) {
-                        resp.subtitle=i18np("1 App", "%1 Apps", resp.items.length-(categories.size>1 ? categories.size : 0));
+                        resp.subtitle=i18np("1 App", "%1 Apps", resp.listSize-(categories.size>1 ? categories.size : 0));
                     } else if (STD_ITEM_ONLINE_ALBUM==parentType) {
                         let totalDurationStr=formatSeconds(totalDuration);
                         if (undefined!=parentType) {
-                            resp.subtitle=resp.items.length+'<obj class="mat-icon music-note">music_note</obj>'+totalDurationStr;
-                            resp.plainsubtitle=i18np("1 Track", "%1 Tracks", resp.items.length-numHeaders)+SEPARATOR+totalDurationStr;
+                            resp.subtitle=resp.listSize+'<obj class="mat-icon music-note">music_note</obj>'+totalDurationStr;
+                            resp.plainsubtitle=i18np("1 Track", "%1 Tracks", resp.listSize-numHeaders)+SEPARATOR+totalDurationStr;
                         } else {
-                            resp.subtitle=i18np("1 Track", "%1 Tracks", resp.items.length-numHeaders)+SEPARATOR+totalDurationStr;
+                            resp.subtitle=i18np("1 Track", "%1 Tracks", resp.listSize-numHeaders)+SEPARATOR+totalDurationStr;
                         }
                     } else if (metadataTypes.size==1 && metadataTypes.has("artist")) {
-                        resp.subtitle=i18np("1 Artist", "%1 Artists", resp.items.length-numHeaders);
+                        resp.subtitle=i18np("1 Artist", "%1 Artists", resp.listSize-numHeaders);
                     } else if (metadataTypes.size==1 && metadataTypes.has("album")) {
-                        resp.subtitle=lmsOptions.supportReleaseTypes ? i18np("1 Release", "%1 Releases", resp.items.length-numHeaders) : i18np("1 Album", "%1 Albums", resp.items.length);
-                    } else if (numTracks==resp.items.length) {
-                        resp.subtitle=i18np("1 Track", "%1 Tracks", resp.items.length-numHeaders);
+                        resp.subtitle=lmsOptions.supportReleaseTypes ? i18np("1 Release", "%1 Releases", resp.listSize-numHeaders) : i18np("1 Album", "%1 Albums", resp.listSize);
+                    } else if (numTracks==resp.listSize) {
+                        resp.subtitle=i18np("1 Track", "%1 Tracks", resp.listSize-numHeaders);
                         // Check if all tracks have same subtitle, and if so remove
                         if (numTracks>1 && numTracks<500) {
                             let subs = new Set();
@@ -1013,7 +1013,7 @@ function parseBrowseResp(data, parent, options, cacheKey) {
                             }
                         }
                     } else {
-                        resp.subtitle=i18np("1 Item", "%1 Items", resp.items.length-numHeaders);
+                        resp.subtitle=i18np("1 Item", "%1 Items", resp.listSize-numHeaders);
                     }
                 }
             }

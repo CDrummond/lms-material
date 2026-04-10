@@ -1124,7 +1124,7 @@ var lmsBrowse = Vue.component("lms-browse", {
             }
 
             this.fetchingItem = item.id;
-            var count = item.stdItem==STD_ITEM_PLAYLIST ? lmsOptions.pagedBatchSize : (item.limit ? item.limit : LMS_BATCH_SIZE);
+            var count = item.slimbrowse ? LMS_SLIMBROWSE_BATCH_SIZE : item.stdItem==STD_ITEM_PLAYLIST ? lmsOptions.pagedBatchSize : (item.limit ? item.limit : LMS_BATCH_SIZE);
             lmsList(this.playerId(), command.command, command.params, undefined==startIndex ? 0 : startIndex, count, item.cancache, this.nextReqId()).then(({data}) => {
                 if (this.isCurrentReq(data)) {
                     var resp = parseBrowseResp(data, item, this.options, item.cancache && browseCanUseCache(this) ? cacheKey(command.command, command.params, 0, count) : undefined);
@@ -1853,7 +1853,7 @@ var lmsBrowse = Vue.component("lms-browse", {
             if (undefined==this.scrollAnim) {
                 this.scrollAnim = requestAnimationFrame(() => {
                     this.scrollAnim = undefined;
-                    if (undefined!=this.current && STD_ITEM_PLAYLIST==(this.current.stdItem ? this.current.stdItem : this.current.altStdItem)) {
+                    if (undefined!=this.current && (this.current.slimbrowse || STD_ITEM_PLAYLIST==(this.current.stdItem ? this.current.stdItem : this.current.altStdItem))) {
                         // Fetch more items?
                         if (undefined!=this.fetchingItem || this.listSize<=this.items.length) {
                             return;

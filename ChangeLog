@@ -33,6 +33,7 @@
 23. Min 600x425 for auto switch to desktop layout.
 24. Fix reverse sort when 'Newset' selected.
 25. Only allow 'Newset' sort if sorting artist's albums.
+26. Load SlimBrowse responses in chunks of 250.
 
 6.2.4
 -----

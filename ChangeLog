@@ -30,6 +30,7 @@
 21. When 'Replace navigation bar' is used for mobile layout, add browse/queue
     switch to now-playing bar.
 22. Fix MAI track actions.
+23. Min 600x425 for auto switch to desktop layout.
 
 6.2.4
 -----

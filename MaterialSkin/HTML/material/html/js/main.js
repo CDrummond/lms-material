@@ -252,6 +252,7 @@ var app = new Vue({
             timeout = setTimeout(function () {
                 let heightChange = 0;
                 let widthChange = 0;
+                let adjustLayout = false;
                 // Only update if changed
                 if (lastWinHeight!=window.innerHeight) {
                     if (!appMode) {
@@ -259,20 +260,24 @@ var app = new Vue({
                     }
                     heightChange = lastWinHeight - window.innerHeight;
                     lastWinHeight = window.innerHeight;
+                    adjustLayout = true;
                 }
                 if (Math.abs(lastWinWidth-window.innerWidth)>=3) {
                     widthChange = lastWinWidth - window.innerWidth;
                     lastWinWidth = window.innerWidth;
-                    lmsApp.checkLayout();
                     let autoShowHome = window.innerWidth>=LMS_AUTO_SHOW_HOME_BUTTON_MIN_WIDTH;
                     if (autoShowHome!=lmsApp.$store.state.autoShowHomeButton) {
                         lmsApp.$store.commit('setAutoShowHomeButton', autoShowHome);
                     }
                     bus.$emit('windowWidthChanged');
+                    adjustLayout = true;
                 }
                 if (Math.abs(lastReportedHeight-window.innerHeight)>=3) {
                     lastReportedHeight = window.innerHeight;
                     bus.$emit('windowHeightChanged');
+                }
+                if (adjustLayout) {
+                    lmsApp.checkLayout();
                 }
 
                 // Check entries are visible
@@ -714,14 +719,14 @@ var app = new Vue({
         },
         checkLayout() {
             if (this.autoLayout &&
-                 ( (window.innerWidth<LMS_MIN_DESKTOP_WIDTH && this.$store.state.desktopLayout && window.innerHeight>180 /*Don't swap to mobile if mini*/) ||
-                     (window.innerWidth>=LMS_MIN_DESKTOP_WIDTH && !this.$store.state.desktopLayout)) ) {
+                 ( ((window.innerWidth<LMS_MIN_DESKTOP_WIDTH || window.innerHeight<LMS_MIN_DESKTOP_HEIGHT) && this.$store.state.desktopLayout && window.innerHeight>180 /*Don't swap to mobile if mini*/) ||
+                     (window.innerWidth>=LMS_MIN_DESKTOP_WIDTH && window.innerHeight>=LMS_MIN_DESKTOP_HEIGHT && !this.$store.state.desktopLayout)) ) {
                 this.setLayout();
             }
         },
         setLayout(forceDesktop) {
             this.autoLayout = undefined==forceDesktop;
-            this.$store.commit('setDesktopLayout', undefined==forceDesktop ? window.innerWidth>=LMS_MIN_DESKTOP_WIDTH : forceDesktop);
+            this.$store.commit('setDesktopLayout', undefined==forceDesktop ? window.innerWidth>=LMS_MIN_DESKTOP_WIDTH && window.innerHeight>=LMS_MIN_DESKTOP_HEIGHT: forceDesktop);
         },
         clickListener(event) {
             try { storeClickOrTouchPos(event); } catch (e) { }

@@ -116,8 +116,8 @@ Vue.component('lms-navdrawer', {
     <v-list-tile-content><v-list-tile-title>{{trans.connectionLost}}</v-list-tile-title></v-list-tile-content>
    </v-list-tile>
    <template v-for="(item, index) in visiblePlayers" v-if="connected">
-    <v-subheader v-if="index==0 && !item.isgroup && players[players.length-1].isgroup">{{trans.standardPlayers}}</v-subheader>
-    <v-subheader v-else-if="index>0 && item.isgroup && !players[index-1].isgroup">{{trans.groupPlayers}}</v-subheader>
+    <v-subheader v-if="index==0 && !item.isgroup && visiblePlayers[visiblePlayers.length-1].isgroup">{{trans.standardPlayers}}</v-subheader>
+    <v-subheader v-else-if="index>0 && item.isgroup && !visiblePlayers[index-1].isgroup">{{trans.groupPlayers}}</v-subheader>
     <v-list-tile @click="setPlayer(item.id)" v-bind:class="{'nd-active-player':player && item.id === player.id}" :id="'nd-player-'+index">
      <v-list-tile-avatar v-longpress:nomove="syncPlayer" :id="index+'-icon'">
       <v-icon v-if="item.isplaying" class="playing-badge">play_arrow</v-icon>

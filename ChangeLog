@@ -29,6 +29,7 @@
     was closed with its main menu open.
 21. When 'Replace navigation bar' is used for mobile layout, add browse/queue
     switch to now-playing bar.
+22. Fix MAI track actions.
 
 6.2.4
 -----

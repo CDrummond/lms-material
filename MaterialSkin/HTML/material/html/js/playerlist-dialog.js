@@ -12,7 +12,7 @@ Vue.component('lms-playerlist-dialog', {
  <v-card>
   <v-card-title>{{i18n("Player list")}}</v-card-title>
   <v-list-tile-sub-title style="padding-left:16px;padding-right:16px">{{i18n("Select favorite players, these will always be visible (if connected). Use drag'n'drop to change order.")}}</v-list-tile-sub-title>
-  <v-list class="dialog-main-list">
+  <v-list class="dialog-main-list" id="playerlist-dialog-list">
    <template v-for="(item, index) in players" :key="item.id">
     <v-subheader v-if="index==0 && players.length>1 && players[players.length-1].isgroup">
      {{i18n("Standard Players")}}
@@ -150,7 +150,11 @@ Vue.component('lms-playerlist-dialog', {
         dragStart(which, ev) {
             ev.dataTransfer.dropEffect = 'move';
             ev.dataTransfer.setData('text/plain', "dth:"+which);
-            ev.srcElement.scrollIntoView();
+            let er = ev.srcElement.getBoundingClientRect();
+            let lr = document.getElementById("playerlist-dialog-list").getBoundingClientRect();
+            if (er.y<lr.y || (er.y+er.height)>(lr.y+lr.height)) {
+                ev.srcElement.scrollIntoView();
+            }
             ev.dataTransfer.setDragImage(ev.srcElement.querySelectorAll(".v-input__slot")[0], 0, 0);
             this.dragIndex = which;
             this.dropIndex = undefined;

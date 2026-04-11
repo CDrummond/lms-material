@@ -21,7 +21,7 @@ Vue.component('lms-playerlist-dialog', {
      {{i18n("Group Players")}}
     </v-subheader>
     <v-list-tile class="settings-list-thin-item" @dragstart.native="dragStart(index, $event)" @dragenter.prevent="" @dragend.native="dragEnd()" @dragover.native="dragOver(index, $event)" @drop.native="drop(index, $event)" draggable v-bind:class="{'highlight-drop':dropIndex==index, 'highlight-drag':dragIndex==index&&!show}">
-     <v-checkbox v-model="item.enabled" style="display:flex" :id="item.id" :disabled="item.id==currentPlayer&&item.enabled">
+     <v-checkbox v-model="item.enabled" style="display:flex" :id="'pld-'+item.id" :disabled="item.id==currentPlayer&&item.enabled">
       <template v-slot:label>
        <v-list-tile-avatar v-bind:class="{'dimmed':item.disconnected}">
         <v-icon v-if="undefined!=item.icon.icon">{{item.icon.icon}}</v-icon>
@@ -150,6 +150,8 @@ Vue.component('lms-playerlist-dialog', {
         dragStart(which, ev) {
             ev.dataTransfer.dropEffect = 'move';
             ev.dataTransfer.setData('text/plain', "dth:"+which);
+            ev.srcElement.scrollIntoView();
+            ev.dataTransfer.setDragImage(ev.srcElement.querySelectorAll(".v-input__slot")[0], 0, 0);
             this.dragIndex = which;
             this.dropIndex = undefined;
         },

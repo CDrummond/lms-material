@@ -234,6 +234,10 @@
  height:48px!important;
 }
 
+.np-bar-mob-thick .np-bar-details:is(.v-list--two-line) .v-list__tile {
+ height:44px!important;
+}
+
 .np-bar-image {
  visibility:hidden;
 }
@@ -241,17 +245,27 @@
 .np-bar-mob-thick .np-bar-image {
  visibility:visible;
  position:fixed;
- left:4px;
+ left:2px;
  padding:1px;
- height:55px;
- width:55px;
+ height:43px;
+ width:43px;
  bottom:calc(var(--bottom-toolbar-height) + var(--bottom-np-pad) + 2px);
 }
 
+.np-bar-mob-nav .np-bar-image {
+ height:55px;
+ width:55px;
+}
+
 .np-bar-mob-thick .np-bar-image .np-cover {
+ height:42px;
+ width:42px;
+ cursor:unset;
+}
+
+.np-bar-mob-nav .np-bar-image .np-cover {
  height:54px;
  width:54px;
- cursor:unset;
 }
 
 .np-bar-mob-thick .v-list__tile__title {
@@ -296,21 +310,24 @@
 .np-bar-mob-thick .np-changepage:hover {
  position:fixed;
  bottom:calc(var(--bottom-toolbar-height) + var(--bottom-np-pad) + 8px);
- right:8px;
+ right:6px;
+ width:32px!important;
+ height:32px!important;
+ margin:0px!important;
+ visibility:visible!important;
+}
+
+.np-bar-mob-nav .np-playpause,
+.np-bar-mob-nav .np-changepage,
+.np-bar-mob-nav .np-changepage:hover {
  width:40px!important;
  height:40px!important;
  margin:0px!important;
- visibility:visible!important;
 }
 
 .np-bar-mob-thick .np-changepage,
 .np-bar-mob-thick .np-changepage:hover {
  right:60px;
-}
-
-.np-bar-mob-thick .np-playpause {
- right:6px;
- visibility:visible!important;
 }
 
 .np-bar-mob-thick .np-playpause div i {
@@ -325,26 +342,26 @@
  background:transparent!important;
 }
 
-.np-bar-mob-thick .np-bar-details {
- left:34px!important;
- width:calc(100vw - 70px);
- height:48px!important;
- bottom:calc(var(--bottom-toolbar-height) + var(--bottom-np-pad));
-}
-
 .np-bar-mob-thick .np-bar-details .v-list__tile {
  padding-right:4px!important;
 }
 
 .np-bar-mob-thick .np-bar-details {
- left:64px!important;
+ left:50px!important;
+ height:44px!important;
+ width:calc(100vw - 92px);
+ bottom:calc(var(--bottom-toolbar-height) + var(--bottom-np-pad) + 2px);
+}
+
+.np-bar-mob-nav .np-bar-details {
+ left:62px!important;
  height:48px!important;
- width:calc(100vw - 116px);
+ width:calc(100vw - 114px);
  bottom:calc(var(--bottom-toolbar-height) + var(--bottom-np-pad) + 6px);
 }
 
 .np-bar-mob-nav .np-bar-details {
- width:calc(100vw - 164px)!important;
+ width:calc(100vw - 162px)!important;
 }
 
 .np-bar-mob-thick .np-bar-details .v-list__tile {

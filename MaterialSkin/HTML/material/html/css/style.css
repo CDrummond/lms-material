@@ -24,7 +24,8 @@
  --desktop-npbar-height:calc(var(--desktop-np-bottom-pad) +  72px);
  --mobile-npbar-height:0px;
  --mobile-npbar-height-thin:22px;
- --mobile-npbar-height-thick:60px;
+ --mobile-npbar-height-thick:48px;
+ --mobile-npbar-height-rnav:60px;
  --tab-bar-height:48px;
  --list-elem-height:48px;
  --list-elem-3line-height:70px;

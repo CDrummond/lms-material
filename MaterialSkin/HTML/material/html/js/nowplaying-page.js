@@ -453,7 +453,8 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
         this.showNpBar = undefined;
         this.desktopBarHeight = getComputedStyle(document.documentElement).getPropertyValue('--desktop-npbar-height');
         this.mobileBarThinHeight = getComputedStyle(document.documentElement).getPropertyValue('--mobile-npbar-height-thin');
-        this.mobileBarThickHeight = parseInt(getComputedStyle(document.documentElement).getPropertyValue('--mobile-npbar-height-thick').replace("px", ""));
+        this.mobileBarThickHeight = getComputedStyle(document.documentElement).getPropertyValue('--mobile-npbar-height-thick');
+        this.mobileBarRepNavHeight = parseInt(getComputedStyle(document.documentElement).getPropertyValue('--mobile-npbar-height-rnav').replace("px", ""));
         this.bottomPad = parseInt(getComputedStyle(document.documentElement).getPropertyValue('--bottom-pad').replace("px", ""));
         if (isNaN(this.bottomPad)) {
             this.bottomPad = 0;
@@ -1309,7 +1310,9 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
                         ? '0px'
                         : (MBAR_THIN==mbar
                             ? this.mobileBarThinHeight
-                            : (this.mobileBarThickHeight + (MBAR_REP_NAV==mbar ? this.bottomPad : 0) + "px")));
+                            : MBAR_THICK==mbar
+                                ? this.mobileBarThickHeight
+                                : (this.mobileBarRepNavHeight + this.bottomPad + "px")));
                 document.documentElement.style.setProperty('--npbar-border-color', !showNpBar ? 'transparent' : 'var(--bottom-toolbar-border-color)');
             }
         },

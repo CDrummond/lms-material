@@ -34,7 +34,7 @@
 24. Fix reverse sort when 'Newset' selected.
 25. Only allow 'Newset' sort if sorting artist's albums.
 26. Load SlimBrowse responses in chunks of 250.
-27. Slightly thicker mobile now-playing bar.
+27. Slightly thicker now-playing bar when replacing mobile bottom navigation.
 
 6.2.4
 -----

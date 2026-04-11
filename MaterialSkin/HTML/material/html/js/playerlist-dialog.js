@@ -76,7 +76,7 @@ Vue.component('lms-playerlist-dialog', {
             let ids = new Set();
             this.players = [];
             for (let p=0, loop=this.$store.state.players, len=loop.length; p<len; ++p) {
-                this.players.push(loop[p]);
+                this.players.push(JSON.parse(JSON.stringify(loop[p])));
                 ids.add(loop[p].id);
             }
             this.alpha=lmsOptions.playersAlphaSort;

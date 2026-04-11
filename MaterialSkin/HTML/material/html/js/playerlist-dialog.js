@@ -165,7 +165,7 @@ Vue.component('lms-playerlist-dialog', {
         },
         drop(to, ev) {
             ev.preventDefault();
-            if (to!=this.dragIndex && this.players[this.dragIndex].isgroup==this.players[index].isgroup) {
+            if (to!=this.dragIndex && this.players[this.dragIndex].isgroup==this.players[to].isgroup) {
                 this.players = arrayMove(this.players, this.dragIndex, to);
             }
             this.dragIndex = undefined;

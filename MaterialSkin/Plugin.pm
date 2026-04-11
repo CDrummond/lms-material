@@ -646,7 +646,11 @@ sub _fetchDbVal {
     $key = [split(/,/,$key)] if !ref $key;
     if ($key) {
         my $sql = $dbh->prepare_cached( $query );
-        $sql->execute(uri_unescape(@{$key}));
+        my $dkey = uri_unescape(@{$key});
+        if ($dkey) {
+            utf8::decode($dkey);
+        }
+        $sql->execute($dkey);
         if ( my $result = $sql->fetchall_arrayref({}) ) {
             return $result->[0]->{$col} if ref $result && scalar @$result;
         }
@@ -3366,6 +3370,9 @@ sub _genreHandler {
 sub _playlistHandler {
     my ( $httpClient, $response ) = @_;
     my $playlistName = uri_unescape(basename($response->request->uri->path));
+    if ($playlistName) {
+        utf8::decode($playlistName);
+    }
     my $fileName = lc($playlistName);
     $fileName =~ s/[^a-z_0-9]//ig;
 

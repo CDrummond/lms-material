@@ -155,7 +155,7 @@ Vue.component('lms-playerlist-dialog', {
             if (er.y<lr.y || (er.y+er.height)>(lr.y+lr.height)) {
                 ev.srcElement.scrollIntoView();
             }
-            ev.dataTransfer.setDragImage(ev.srcElement.querySelectorAll(".v-input__slot")[0], 0, 0);
+            ev.dataTransfer.setDragImage(ev.srcElement, 0, 0);
             this.dragIndex = which;
             this.dropIndex = undefined;
         },

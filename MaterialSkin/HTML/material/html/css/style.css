@@ -2657,6 +2657,10 @@ div.v-rating i.primary--text, div.v-rating i.accent--text {
  height:32px;
 }
 
+#playerlist-dialog-list .settings-list-thin-item {
+ padding-top:6px!important;
+ padding-bottom:6px!important;
+}
 .settings-list-thin-item .v-avatar {
  width:24px!important;
  height:24px!important;
@@ -2670,6 +2674,10 @@ div.v-rating i.primary--text, div.v-rating i.accent--text {
 .settings-list-thin-item .v-input--selection-controls {
  margin-top:0px;
  padding-top:0px;
+}
+
+.settings-list-thin-item .v-input__slot { /* Hide padding below checkbox */
+ margin-bottom:0px!important;
 }
 
 .v-dialog .v-list__tile__sub-title {

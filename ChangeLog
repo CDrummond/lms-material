@@ -11,7 +11,7 @@
  8. Always use icons for settings in navigation drawer if there is insufficient
     height for full items.
  9. Limit navigation drawer shortcuts to single line.
-10. Allow sorting and hiding players, accessible from navigation draweer or
+10. Allow sorting and hiding players, accessible from navigation drawer or
     'Manage players' dialog.
 11. Fix 'Popular Albums' listing.
 12. Fix 'Add to playlist' for item in home screen scrolled list.
@@ -31,8 +31,8 @@
     switch to now-playing bar.
 22. Fix MAI track actions.
 23. Min 600x425 for auto switch to desktop layout.
-24. Fix reverse sort when 'Newset' selected.
-25. Only allow 'Newset' sort if sorting artist's albums.
+24. Fix reverse sort when 'Newest' selected.
+25. Only allow 'Newest' sort if sorting artist's albums.
 26. Load SlimBrowse responses in chunks of 250.
 27. Slightly thicker now-playing bar when replacing mobile bottom navigation.
 

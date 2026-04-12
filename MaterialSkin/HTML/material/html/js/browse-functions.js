@@ -324,6 +324,7 @@ function browseHandleListResponse(view, item, command, resp, prevPage, appendIte
     if (resp && resp.items) {
         if (appendItems) {
             view.items.push.apply(view.items, resp.items);
+            view.listSize=resp.listSize;
             if (view.grid.use) {
                 view.$nextTick(function () {
                     view.setBgndCover();

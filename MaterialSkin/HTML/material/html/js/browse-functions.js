@@ -324,9 +324,18 @@ function browseHandleListResponse(view, item, command, resp, prevPage, appendIte
     if (resp && resp.items) {
         if (appendItems) {
             view.items.push.apply(view.items, resp.items);
-            // Following should not be required. But first 'more' fetch seems to result in
-            // list scrolling to position 0???
-            setScrollTop(view, view.scrollElement.scrollTop);
+            if (view.grid.use) {
+                view.$nextTick(function () {
+                    view.setBgndCover();
+                    view.filterJumplist();
+                    view.layoutGrid(true);
+                    setScrollTop(view, view.scrollElement.scrollTop);
+                });
+            } else {
+                // Following should not be required. But first 'more' fetch seems to result in
+                // list scrolling to position 0???
+                setScrollTop(view, view.scrollElement.scrollTop);
+            }
             return;
         }
         if (0==resp.items.length && command.command.length>1 && "podcasts"==command.command[0] && ("addshow"==command.command[1] || "delshow"==command.command[1])) {

@@ -24,7 +24,7 @@ Vue.component('lms-navdrawer', {
  <div class="nd-top"></div>
  <div class="nd-header">
   <v-menu v-if="enableMenuButton" bottom left v-model="showMenu" style="position:absolute; right:40px; z-index:5">
-   <v-btn icon slot="activator"><v-icon>more_vert</v-icon></v-btn>
+   <v-btn icon slot="activator" :title="i18n('Menu')"><v-icon>more_vert</v-icon></v-btn>
    <v-list>
     <v-subheader v-if="multipleStandardPlayers">{{i18n("All players")}}</v-subheader>
     <v-list-tile v-if="multipleStandardPlayers" role="menuitem" @click="sleepAll()" class="menu-group-item">

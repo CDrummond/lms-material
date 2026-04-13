@@ -1,3 +1,8 @@
+6.3.1
+-----
+1. Fix play button appearing when 'Thin' is chosen as mobile now-playing bar
+   style.
+
 6.3.0
 -----
  1. Add option to group 'My Music' categories.
@@ -10,7 +15,7 @@
  7. Add 'role' to elements to aid accessibility.
  8. Always use icons for settings in navigation drawer if there is insufficient
     height for full items.
- 9. Limit navigation drawer shortcuts to single line.
+ 9. Limit navigation drawer shortcuts to 2 lines.
 10. Allow sorting and hiding players, accessible from navigation drawer or
     'Manage players' dialog.
 11. Fix 'Popular Albums' listing.

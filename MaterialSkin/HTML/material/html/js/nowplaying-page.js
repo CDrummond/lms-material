@@ -195,7 +195,7 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
     <v-btn flat icon id="np-bar-prev" v-bind:class="{'disabled':disablePrev}" v-longpress:repeat="prevButton" class="np-std-button" :title="trans.prev | tooltip('left', keyboardControl)"><v-icon large class="media-icon">skip_previous</v-icon></v-btn>
    </v-flex>
    <v-flex xs4>
-    <v-btn flat icon v-if="playerStatus.playlist.count>0" v-longpress="playPauseButton" @click.middle="showSleep" id="playPauseB" class="np-playpause" :title="(playerStatus.isplaying ? trans.pause : trans.play) | tooltip('space', keyboardControl)" v-bind:class="{'disabled':disableBtns}"><v-icon x-large class="media-icon">{{playerStatus.iswaiting ? 'pause_circle_outline' : playerStatus.isplaying ? 'pause_circle_filled' : 'play_circle_filled'}}</v-icon></v-btn>
+    <v-btn flat icon v-if="playerStatus.playlist.count>0 && (desktopLayout || MBAR_THIN!=mobileBar)" v-longpress="playPauseButton" @click.middle="showSleep" id="playPauseB" class="np-playpause" :title="(playerStatus.isplaying ? trans.pause : trans.play) | tooltip('space', keyboardControl)" v-bind:class="{'disabled':disableBtns}"><v-icon x-large class="media-icon">{{playerStatus.iswaiting ? 'pause_circle_outline' : playerStatus.isplaying ? 'pause_circle_filled' : 'play_circle_filled'}}</v-icon></v-btn>
     <v-btn flat icon v-if="!desktopLayout && MBAR_REP_NAV==mobileBar && playerStatus.playlist.count>0" @click="changePage" class="np-changepage" id="cpage" :title="nextPage=='browse' ? trans.queue : trans.browse">
      <img class="svg-img" :src="(nextPage=='queue' ? 'queue_music_outline' : 'library-music-outline') | svgIcon(darkUi)" oncontextmenu="return false;"></img>
     </v-btn>

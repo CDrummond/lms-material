@@ -1165,7 +1165,7 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
                 if (!this.desktopLayout) {
                     let touch = getTouchPos(ev);
                     let x = undefined==touch ? ev.x : touch.x;
-                    if ((MBAR_THICK==this.mobileBar || MBAR_REP_NAV==this.mobileBar) && x<(window.innerWidth-(MBAR_REP_NAV==this.mobileBar ? 88 : 50))) {
+                    if ((MBAR_THICK==this.mobileBar || MBAR_REP_NAV==this.mobileBar) && x<(window.innerWidth-(MBAR_REP_NAV==this.mobileBar ? 124 : 60))) {
                         this.$store.commit('setPage', 'now-playing');
                         this.info.show = false;
                     }

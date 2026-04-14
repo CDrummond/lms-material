@@ -3,6 +3,7 @@
 1. Fix play button appearing when 'Thin' is chosen as mobile now-playing bar
    style.
 2. Reduce hit area of 'expand now-playing' when using 'Replace navigation bar'.
+3. Fix browsing artist, or album, from favourites.
 
 6.3.0
 -----

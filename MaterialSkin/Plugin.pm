@@ -646,11 +646,7 @@ sub _fetchDbVal {
     $key = [split(/,/,$key)] if !ref $key;
     if ($key) {
         my $sql = $dbh->prepare_cached( $query );
-        my $dkey = uri_unescape(@{$key});
-        if ($dkey) {
-            utf8::decode($dkey);
-        }
-        $sql->execute($dkey);
+        $sql->execute(uri_unescape(@{$key}));
         if ( my $result = $sql->fetchall_arrayref({}) ) {
             return $result->[0]->{$col} if ref $result && scalar @$result;
         }

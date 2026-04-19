@@ -4,6 +4,7 @@
 2. Fix 'NaN Apps'
 3. Fix jumplist for 'Music Folder' browsing.
 4. Add 'Work' to queue remove options.
+5. Fix detailed sub-toolbar cover when not drawing browse background.
 
 6.3.1
 -----

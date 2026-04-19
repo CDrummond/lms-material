@@ -655,6 +655,7 @@
 "%1 %2":"",
 "%1 (More)":"",
 "(NOTE: These lists are only shown when using the grid view. If 'Explore' is not selected, then it will appear as a standard grid at the end. 'Categories' configures the standard items shown in 'Explore'.)":"",
+"(Scroll for more)":"",
 "1 %1":"",
 "A playlist named '%1' already exists, overwrite?":"",
 "Album review":"",

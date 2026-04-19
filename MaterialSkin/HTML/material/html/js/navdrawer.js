@@ -139,7 +139,7 @@ Vue.component('lms-navdrawer', {
   <v-subheader>{{trans.shortcuts}}</v-subheader>
   <ul class="nd-shortcuts" v-bind:class="{'nd-shortcuts-wide':maxWidth>320}">
    <li v-for="(item, index) in shortcuts">
-    <v-btn icon class="toolbar-button" @click="show=false; bus.$emit('browse-shortcut', item.id)" v-if="!homeButton || item.id!=HOME_SHORTCUT">
+    <v-btn icon class="toolbar-button" @click="show=false; bus.$emit('browse-shortcut', item.id)" v-if="!homeButton || item.id!=HOME_SHORTCUT" :title="item.title">
      <v-icon v-if="undefined!=item.icon">{{item.icon}}</v-icon>
      <img v-else class="svg-img" :src="item.svg | svgIcon(darkUi)"></img>
     </v-btn>
@@ -398,14 +398,14 @@ Vue.component('lms-navdrawer', {
                 for (let i=0, items=view.top, len=items.length; i<len; ++i) {
                     let item = items[i];
                     if ((undefined==item.menu || item.menu.length<1 || item.menu[0]!=PLAY_ACTION) && item.stdItem!=STD_ITEM_RANDOM_MIX && !view.hidden.has(item.id) && item.id!=START_RANDOM_MIX_ID && (item.id!=TOP_RADIO_ID || !lmsOptions.combineAppsAndRadio)) {
-                        this.shortcuts.push({id:item.id, icon:item.icon, svg:item.svg});
+                        this.shortcuts.push({id:item.id, icon:item.icon, svg:item.svg, title:item.title});
                     }
                 }
                 if (!this.$store.state.browseSearch) {
-                    this.shortcuts.unshift({id:SEARCH_SHORTCUT, svg:ACTIONS[SEARCH_LIB_ACTION].svg});
+                    this.shortcuts.unshift({id:SEARCH_SHORTCUT, svg:ACTIONS[SEARCH_LIB_ACTION].svg, title:ACTIONS[SEARCH_LIB_ACTION].title});
                 }
                 if (this.shortcuts.length>0) {
-                    this.shortcuts.unshift({id:HOME_SHORTCUT, icon:'home'});
+                    this.shortcuts.unshift({id:HOME_SHORTCUT, icon:'home', title:i18n('Home')});
                 }
             }
         },

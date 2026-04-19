@@ -324,7 +324,22 @@ function browseHandleListResponse(view, item, command, resp, prevPage, appendIte
     if (resp && resp.items) {
         if (appendItems) {
             view.items.push.apply(view.items, resp.items);
-            view.jumplist.push.apply(view.jumplist, resp.jumplist);
+            try {
+                let existingJump = new Set();
+                if (view.jumplist) {
+                    for (let j=0, list=view.jumplist, len=list.length; j<len; ++j) {
+                        existingJump.add(list[j].key);
+                    }
+                    for (let j=0, list=resp.jumplist, len=list.length; j<len; ++j) {
+                        if (!existingJump.has(list[j].key)) {
+                            existingJump.add(list[j].key);
+                            view.jumplist.append(list[j]);
+                        }
+                    }
+                } else{
+                    view.jumplist = resp.jumplist;
+                }
+            } catch(e) { }
             if (resp.subtitle) {
                 view.headerSubTitle=resp.subtitle;
             } else if (view.listSize!=resp.listSize) {

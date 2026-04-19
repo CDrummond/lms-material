@@ -246,7 +246,7 @@ function parseResp(data, showTrackNum, index, showRatings, queueAlbumStyle, queu
                               isLocal: i.url && i.url.startsWith("file:"),
                               artist: i.artist ? i.artist : i.trackartist ? i.trackartist : i.albumartist,
                               album: i.album,
-                              work: i.work,
+                              work_id: i.work_id,
                               size: queueAlbumStyle
                                       ? isAlbumHeader ? (artistAlbumLinesInfo && artistAlbumLinesInfo[1] ? LMS_GROUP_QUEUE_HEADER : LMS_ALBUM_QUEUE_HEADER) : LMS_ALBUM_QUEUE_TRACK
                                       : undefined,
@@ -389,7 +389,7 @@ var lmsQueue = Vue.component("lms-queue", {
      <v-list-group v-model="menuExpanded" @click.stop="">
       <template v-slot:activator><v-list-tile role="menuitem"><v-list-tile-content><v-list-tile-title>{{ACTIONS[REMOVE_ACTION].title}}</v-list-tile-title></v-list-tile-content><v-list-tile></template>
       <template v-for="subAction in PQ_REMOVE_ACTIONS">
-       <v-list-tile role="menuitem" @click="itemAction(subAction, menu.item, menu.index, $event)" v-if="(PQ_REMOVE_DISC_ACTION==subAction && undefined!=menu.item.disc && menu.item.disc>0) || (PQ_REMOVE_ALBUM_ACTION==subAction && undefined!=menu.item.album_id) || (PQ_REMOVE_ARTIST_ACTION==subAction && undefined!=menu.item.artist_id) || (PQ_REMOVE_WORK_ACTION==subAction && undefined!=menu.item.work) || PQ_REMOVE_TRACK_ACTION==subAction">
+       <v-list-tile role="menuitem" @click="itemAction(subAction, menu.item, menu.index, $event)" v-if="(PQ_REMOVE_DISC_ACTION==subAction && undefined!=menu.item.disc && menu.item.disc>0) || (PQ_REMOVE_ALBUM_ACTION==subAction && undefined!=menu.item.album_id) || (PQ_REMOVE_ARTIST_ACTION==subAction && undefined!=menu.item.artist_id) || (PQ_REMOVE_WORK_ACTION==subAction && undefined!=menu.item.work_id) || PQ_REMOVE_TRACK_ACTION==subAction">
         <v-list-tile-avatar>
          <v-icon v-if="undefined==ACTIONS[subAction].svg">{{ACTIONS[subAction].icon}}</v-icon>
          <img v-else class="svg-img" :src="ACTIONS[subAction].svg | svgIcon(darkUi)"></img>
@@ -1100,7 +1100,7 @@ var lmsQueue = Vue.component("lms-queue", {
             } else if (PQ_REMOVE_WORK_ACTION==act) {
                 var indexes = [];
                 for (var i=0, len=this.items.length; i<len; ++i) {
-                    if (this.items[i].work == item.work) {
+                    if (this.items[i].work_id == item.work_id) {
                         indexes.push(i);
                     }
                 }

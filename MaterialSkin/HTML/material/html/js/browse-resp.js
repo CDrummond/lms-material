@@ -91,6 +91,10 @@ function parseBrowseResp(data, parent, options, cacheKey) {
         var command = data && data.params && data.params.length>1 && data.params[1] && data.params[1].length>1 ? data.params[1][0] : undefined;
         var isMusicIpMoods = command == "musicip" && data.params[1].length>0 && data.params[1][1]=="moods";
         var textKeys = new Set();
+        var startIndex = 0;
+        try {
+            startIndex = parseInt(data.result.offset);
+        } catch(e) { }
 
         if (isMusicIpMoods && data.result.item_loop) {
             for (var idx=0, loop=data.result.item_loop, loopLen=loop.length; idx<loopLen; ++idx) {
@@ -666,7 +670,7 @@ function parseBrowseResp(data, parent, options, cacheKey) {
                 if (!isFavorites && !isAppsTop && !isPodcastList && !isRadiosTop) {
                     var key = removeDiactrics(i.textkey);
                     if (undefined!=key && (resp.jumplist.length==0 || resp.jumplist[resp.jumplist.length-1].key!=key) && !textKeys.has(key)) {
-                        resp.jumplist.push({key: key, index: resp.items.length});
+                        resp.jumplist.push({key: key, index: startIndex+resp.items.length});
                         textKeys.add(key);
                     }
                 }
@@ -1042,7 +1046,7 @@ function parseBrowseResp(data, parent, options, cacheKey) {
                 var i = loop[idx];
                 var key = removeDiactrics(i.textkey);
                 if (undefined!=key && (resp.jumplist.length==0 || resp.jumplist[resp.jumplist.length-1].key!=key) && !textKeys.has(key)) {
-                    resp.jumplist.push({key: key, index: resp.items.length});
+                    resp.jumplist.push({key: key, index: startIndex+resp.items.length});
                     textKeys.add(key);
                 }
                 let image = undefined!=i.portraitid && "/contributor/" + i.portraitid + "/image" + LMS_LIST_IMAGE_SIZE;
@@ -1311,7 +1315,7 @@ function parseBrowseResp(data, parent, options, cacheKey) {
                         resp.jumplist.push({key:SECTION_JUMP, index:start-1, header:true, icon:icon});
                         for (let a=0, alen=alist.length; a<alen; ++a) {
                             if (undefined!=alist[a].textkey && (jl.length==0 || jl[jl.length-1].key!=alist[a].textkey)) {
-                                jl.push({key: alist[a].textkey, index: resp.items.length});
+                                jl.push({key: alist[a].textkey, index: startIndex+resp.items.length});
                                 resp.jumplist.push({key: alist[a].textkey, index:start+a});
                                 headerOnly = false;
                             }
@@ -1953,7 +1957,7 @@ function parseBrowseResp(data, parent, options, cacheKey) {
                 var i = loop[idx];
                 var key = removeDiactrics(i.textkey);
                 if (undefined!=key && (resp.jumplist.length==0 || resp.jumplist[resp.jumplist.length-1].key!=key) && !textKeys.has(key)) {
-                    resp.jumplist.push({key: key, index: resp.items.length});
+                    resp.jumplist.push({key: key, index: startIndex+resp.items.length});
                     textKeys.add(key);
                 }
                 let title = replaceHtmlBrackets(i.genre);
@@ -1991,7 +1995,7 @@ function parseBrowseResp(data, parent, options, cacheKey) {
                 }
                 if (isFolder) {
                     if (undefined!=key && (resp.jumplist.length==0 || resp.jumplist[resp.jumplist.length-1].key!=key) && !folderTextKeys.has(key)) {
-                        resp.jumplist.push({key: key, index: resp.items.length});
+                        resp.jumplist.push({key: key, index: startIndex+resp.items.length});
                         folderTextKeys.add(key);
                     }
                     resp.items.push({
@@ -2005,7 +2009,7 @@ function parseBrowseResp(data, parent, options, cacheKey) {
                     numFolders += 1;
                 } else {
                     if (undefined!=key && (prevWasFolder || resp.jumplist.length==0 || resp.jumplist[resp.jumplist.length-1].key!=key) && !textKeys.has(key)) {
-                        resp.jumplist.push({key: key, index: resp.items.length});
+                        resp.jumplist.push({key: key, index: startIndex+resp.items.length});
                         textKeys.add(key);
                     }
                     let playlist = {
@@ -2020,7 +2024,7 @@ function parseBrowseResp(data, parent, options, cacheKey) {
                                 url:  i.url,
                                 remotePlaylist: isRemote,
                                 ihe: i.ihe, // home screen extra item
-                                realIndex: resp.items.length // So playlists are deleted in correct order
+                                realindex: startIndex+resp.items.length // So playlists are deleted in correct order
                             };
 
                     /*if (i.image) {
@@ -2172,7 +2176,7 @@ function parseBrowseResp(data, parent, options, cacheKey) {
                     }
                 }
                 if (undefined!=key && (resp.jumplist.length==0 || resp.jumplist[resp.jumplist.length-1].key!=key) && !textKeys.has(key)) {
-                    resp.jumplist.push({key: key, index: resp.items.length+(addedHeader ? -1 : 0)});
+                    resp.jumplist.push({key: key, index: startIndex+resp.items.length+(addedHeader ? -1 : 0)});
                     textKeys.add(key);
                 }
                 resp.items.push({
@@ -2295,7 +2299,7 @@ function parseBrowseResp(data, parent, options, cacheKey) {
                 let i = makeHtmlSafe(loop[idx]);
                 var key = removeDiactrics(i.textkey);
                 if (undefined!=key && (resp.jumplist.length==0 || resp.jumplist[resp.jumplist.length-1].key!=key) && !textKeys.has(key)) {
-                    resp.jumplist.push({key: key, index: resp.items.length});
+                    resp.jumplist.push({key: key, index: startIndex+resp.items.length});
                     textKeys.add(key);
                 }
                 if (useHeaders && lastComposer!=i.composer) {

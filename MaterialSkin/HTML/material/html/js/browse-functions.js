@@ -324,26 +324,18 @@ function browseHandleListResponse(view, item, command, resp, prevPage, appendIte
     if (resp && resp.items) {
         if (appendItems) {
             view.items.push.apply(view.items, resp.items);
-            if (view.listSize!=resp.listSize) {
-                view.listSize=resp.listSize;
-                if (resp.subtitle) {
-                    view.headerSubTitle=resp.subtitle;
-                } else {
-                    view.headerSubTitle=0==view.listSize ? i18n("Empty") : i18np("1 Item", "%1 Items", view.listSize);
-                }
+            view.jumplist.push.apply(view.jumplist, resp.jumplist);
+            if (resp.subtitle) {
+                view.headerSubTitle=resp.subtitle;
+            } else if (view.listSize!=resp.listSize) {
+                view.headerSubTitle=0==view.listSize ? i18n("Empty") : i18np("1 Item", "%1 Items", view.listSize);
             }
-            if (view.grid.use) {
-                view.$nextTick(function () {
-                    view.setBgndCover();
-                    view.filterJumplist();
-                    view.layoutGrid(true);
-                    setScrollTop(view, view.scrollElement.scrollTop);
-                });
-            } else {
-                // Following should not be required. But first 'more' fetch seems to result in
-                // list scrolling to position 0???
+            view.listSize=resp.listSize;
+            view.$nextTick(function () {
+                view.filterJumplist();
+                view.layoutGrid(true);
                 setScrollTop(view, view.scrollElement.scrollTop);
-            }
+            });
             return;
         }
         if (0==resp.items.length && command.command.length>1 && "podcasts"==command.command[0] && ("addshow"==command.command[1] || "delshow"==command.command[1])) {

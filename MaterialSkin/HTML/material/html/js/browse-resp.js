@@ -1024,6 +1024,10 @@ function parseBrowseResp(data, parent, options, cacheKey) {
                     } else {
                         resp.subtitle=i18np("1 Item", "%1 Items", itemCount);
                     }
+                    // IF we receive -1 as count, then pretend its a really high number...
+                    if (resp.listSize==-1) {
+                        resp.listSize = LMS_BATCH_SIZE + 1000;
+                    }
                     if (0!=itemCount && (itemCount+numHeaders)<resp.listSize) {
                         resp.subtitle+='<obj style="opacity:0.7">&nbsp;' + i18n("(Scroll for more)")+"</obj>";
                     }

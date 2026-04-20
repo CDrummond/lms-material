@@ -225,7 +225,7 @@ Vue.component('lms-search-field', {
                     bus.$emit('showMessage', i18n('No results found'));
                 } else {
                     this.results.sort(function(a, b) { return a.command.cat<b.command.cat ? -1 : 1; });
-                    this.$emit('results', item, {command:[], params:[]}, { items:buildSearchResp(this), baseActions:[], canUseGrid: false, jumplist:[]}, this.prevPage);
+                    this.$emit('results', item, {command:[], params:[]}, { items:buildSearchResp(this), baseActions:[], canUseGrid: false, jumplist:[], allowHoverBtns:true}, this.prevPage);
                 }
                 this.commands=[];
                 this.results=[];

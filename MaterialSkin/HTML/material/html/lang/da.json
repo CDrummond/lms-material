@@ -11,6 +11,7 @@
 "'%1' failed":"'%1' fejlede",
 "(+%1 others)":"(+%1 andre)",
 "(NOTE: These lists are only shown when using the grid view. If 'Explore' is not selected, then it will appear as a standard grid at the end. 'Categories' configures the standard items shown in 'Explore'.)":"(NB: Disse lister vises kun i gittervisning. Såfremt 'Udforsk' ikke er valgt, da vises det som et standardgitter nederst. 'Kategorier' konfigurerer de standardelementer der vises i 'Udforsk'.)",
+"(Scroll for more)":"(Scroll for at se mere)",
 "+ %1 more":"+ %1 mere",
 "...then album artist, album, disc no., track no.":"... dernæst albumkunstner, album, CD nummer, albumsnummer",
 "...then album artist, disc no., track no.":"... dernæst albumkunstner, CD nummer, albumsnummer",
@@ -755,6 +756,5 @@
 "1 Year":"1 år",
 "%1 Years":"%1 år",
 "1 day":"1 dag",
-"%1 days":"%1 dage",
-"(Scroll for more)":""
+"%1 days":"%1 dage"
 }

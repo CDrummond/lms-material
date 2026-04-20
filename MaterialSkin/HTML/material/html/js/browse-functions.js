@@ -2504,6 +2504,7 @@ function browseBuildCommand(view, item, commandName, doReplacements, allowLibId,
             }
         } else {
             cmd.params.push("tags:aAbcCKWdegGiJkKloPqrRStTuEyY4");
+            cmd.params.push("features:hi");
         }
     }
 

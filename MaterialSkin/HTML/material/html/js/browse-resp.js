@@ -988,8 +988,8 @@ function parseBrowseResp(data, parent, options, cacheKey) {
                             }
                         }
                     }
-                    // TODO: If using paging/infinit-scroll and pervious chunk had headers then itemCount wil be wrong!
-                    //       Likewise if this wias all tracks/albums/artists this will also be broken.
+                    // TODO: If using paging/infinite-scroll and pervious chunk had headers then itemCount wil be wrong!
+                    //       Likewise if this was all tracks/albums/artists this will also be broken.
                     let itemCount = startIndex + (resp.items.length-((categories.size>1 ? categories.size : 0) + numHeaders));
                     if (0==itemCount) {
                         resp.subtitle=i18n("Empty");

@@ -741,7 +741,9 @@ function parseBrowseResp(data, parent, options, cacheKey) {
                     }
                     categories.add(i.category);
                 }
-
+                if (i.header && i.actions && 0==Object.keys(i.actions).length) {
+                    i.actions = undefined;
+                }
                 if (i.isListItemInMenu) {
                     resp.actionItems.push(i);
                 } else {

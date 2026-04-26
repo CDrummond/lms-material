@@ -743,6 +743,7 @@ function parseBrowseResp(data, parent, options, cacheKey) {
                 }
                 if (i.header && i.actions && 0==Object.keys(i.actions).length) {
                     i.actions = undefined;
+                    i.addAction = undefined;
                 }
                 if (i.isListItemInMenu) {
                     resp.actionItems.push(i);

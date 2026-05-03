@@ -3021,7 +3021,7 @@ div.v-subheader {
 }
 
 .dst-home, .dst-home:hover {
- position:absolute;
+ position:fixed;
  left:7px;
  top:var(--sub-toolbar-height);
  bottom:unset!important;

@@ -46,6 +46,7 @@ function buildArtistAlbumLines(i, queueAlbumStyle, queueContext) {
     let artistAlbumContext = undefined;
     let artistIsRemoteTitle = false;
     let ws = false;
+    let isWork = false;
     //let artistStr = i.albumartist ? i.albumartist : i.artist ? i.artist : i.trackartist; - moved into queueAlbumStyle block
     if (queueAlbumStyle) {
         let artistType = i.albumartist ? 'albumartist' : i.artist ? 'artist' : i.trackartist ? 'trackartist' : undefined;
@@ -88,27 +89,32 @@ function buildArtistAlbumLines(i, queueAlbumStyle, queueContext) {
                 artistAlbum = addPart(artistAlbum, addArtistLink(i, undefined, 'conductor', 'show_conductor', 'queue', used, plain));
             }
         }
-        artistAlbum = addPart(artistAlbum, buildAlbumLine(i, 'queue'));
+        let albumLine = buildAlbumLine(i, 'queue');
         let work = buildWorkLine(i, 'queue');
-        if (queueAlbumStyle) {
-            if (albumGroupingType(i.disccount, ALWAYS_GROUP_HEADING, i.contiguous_groups, i.added_from_work)==MULTI_GROUP_ALBUM) {
-                if (work) {
-                    // track has a work tag
-                    artistAlbum = work+'<br/><div class="pq-gsub ellipsis">'+artistAlbum+'</div>';
-                    ws = true;
-                } else if (i.grouping) {
-                    // track has a grouping tag
-                    artistAlbum +='<br/><div class="pq-gsub ellipsis">'+i.grouping+'</div>';
-                    ws = true;
+        if (queueAlbumStyle && work && albumGroupingType(i.disccount, ALWAYS_GROUP_HEADING, i.contiguous_groups, i.added_from_work)==MULTI_GROUP_ALBUM) {
+            // track has a work tag - put release name on its own subheading line
+            artistAlbum = work + '<br/><div class="pq-gsub ellipsis">' + artistAlbum + '</div>'
+                        + (albumLine ? '<div class="pq-gsub ellipsis">' + albumLine + '</div>' : '');
+            ws = true;
+            isWork = true;
+        } else {
+            artistAlbum = addPart(artistAlbum, albumLine);
+            if (queueAlbumStyle) {
+                if (albumGroupingType(i.disccount, ALWAYS_GROUP_HEADING, i.contiguous_groups, i.added_from_work)==MULTI_GROUP_ALBUM) {
+                    if (i.grouping) {
+                        // track has a grouping tag
+                        artistAlbum +='<br/><div class="pq-gsub ellipsis">'+i.grouping+'</div>';
+                        ws = true;
+                    } else if (i.discsubtitle) {
+                        // track has a discsubtitle tag
+                        artistAlbum +='<br/><div class="pq-gsub ellipsis">'+i.discsubtitle+'</div>';
+                        ws = true;
+                    }
                 } else if (i.discsubtitle) {
                     // track has a discsubtitle tag
                     artistAlbum +='<br/><div class="pq-gsub ellipsis">'+i.discsubtitle+'</div>';
                     ws = true;
                 }
-            } else if (i.discsubtitle) {
-                // track has a discsubtitle tag
-                artistAlbum +='<br/><div class="pq-gsub ellipsis">'+i.discsubtitle+'</div>';
-                ws = true;
             }
         }
         if (queueContext) {
@@ -123,7 +129,7 @@ function buildArtistAlbumLines(i, queueAlbumStyle, queueContext) {
             return [lines.concat(linesContext)];
         }
     }
-    return [artistAlbum, ws];
+    return [artistAlbum, ws, isWork];
 }
 
 function parseResp(data, showTrackNum, index, showRatings, queueAlbumStyle, queueContext, lastInCurrent) {
@@ -231,7 +237,8 @@ function parseResp(data, showTrackNum, index, showRatings, queueAlbumStyle, queu
                               title: title,
                               tooltip: i.title,
                               artistAlbum: artistAlbumLinesInfo ? artistAlbumLinesInfo[0] : undefined,
-                              isGrpHeader: artistAlbumLinesInfo && artistAlbumLinesInfo[1],
+                              isGrpHeader: artistAlbumLinesInfo && artistAlbumLinesInfo[1] && !artistAlbumLinesInfo[2],
+                              isWorkHeader: artistAlbumLinesInfo && artistAlbumLinesInfo[2],
                               image: image,
                               dimcover: undefined!=image && image.endsWith(".png") && (image==DEFAULT_COVER || image==DEFAULT_RADIO_COVER || image==RANDOMPLAY_COVER),
                               actions: [PQ_PLAY_NOW_ACTION, PQ_PLAY_NEXT_ACTION, DIVIDER, REMOVE_ACTION, ADD_TO_PLAYLIST_ACTION, PQ_ZAP_ACTION, DOWNLOAD_ACTION, SELECT_ACTION, COPY_DETAILS_ACTION, PQ_COPY_ACTION, MOVE_HERE_ACTION, CUSTOM_ACTIONS, SHOW_IMAGE_ACTION, MORE_ACTION],
@@ -248,7 +255,7 @@ function parseResp(data, showTrackNum, index, showRatings, queueAlbumStyle, queu
                               album: i.album,
                               work_id: i.work_id,
                               size: queueAlbumStyle
-                                      ? isAlbumHeader ? (artistAlbumLinesInfo && artistAlbumLinesInfo[1] ? LMS_GROUP_QUEUE_HEADER : LMS_ALBUM_QUEUE_HEADER) : LMS_ALBUM_QUEUE_TRACK
+                                      ? isAlbumHeader ? (artistAlbumLinesInfo && artistAlbumLinesInfo[2] ? LMS_WORK_QUEUE_HEADER : (artistAlbumLinesInfo && artistAlbumLinesInfo[1] ? LMS_GROUP_QUEUE_HEADER : LMS_ALBUM_QUEUE_HEADER)) : LMS_ALBUM_QUEUE_TRACK
                                       : undefined,
                               grpKey:grpKey,
                               rating: !queueAlbumStyle && haveRating ? Math.ceil(i.rating/10.0)/2.0 : undefined,
@@ -324,7 +331,7 @@ var lmsQueue = Vue.component("lms-queue", {
   <div class="lms-list" id="queue-list" v-bind:class="{'lms-list3':!albumStyle && threeLines,'lms-list-album':albumStyle,'bgnd-blur':drawBgndImage,'backdrop-blur':drawBackdrop}" @drop="drop(-1, $event)" @dragover="dragOver(-1, $event)">
    <div v-if="items.length<1"></div> <!-- RecycleScroller does not like it if 0 items? -->
    <RecycleScroller v-else-if="albumStyle" :items="items" :item-size="null" page-mode key-field="key" :buffer="LMS_SCROLLER_LIST_BUFFER">
-   <v-list-tile avatar class="pq-albumstyle" v-bind:class="{'pq-track':!item.artistAlbum, 'pq-current-album':index!=currentIndex && currentIndex<items.length && item.grpKey==items[currentIndex].grpKey, 'pq-current': index==currentIndex, 'pq-current-first-track': index==currentIndex && item.artistAlbum, 'pq-pulse':index==currentIndex && pulseCurrent, 'list-active': menu.show && index==menu.index, 'drop-target': dragActive && index==dropIndex, 'highlight':index==highlightIndex, 'pq-grp-header':item.isGrpHeader}" @dragstart="dragStart(index, $event)" @dragenter.prevent="" @dragend="dragEnd()" @dragover.stop="dragOver(index, $event)" @drop.stop="drop(index, $event)" draggable @click.prevent.stop="click(item, index, $event)" slot-scope="{item, index}" key-field="key" @contextmenu.prevent="contextMenu(item, index, $event)">
+   <v-list-tile avatar class="pq-albumstyle" v-bind:class="{'pq-track':!item.artistAlbum, 'pq-current-album':index!=currentIndex && currentIndex<items.length && item.grpKey==items[currentIndex].grpKey, 'pq-current': index==currentIndex, 'pq-current-first-track': index==currentIndex && item.artistAlbum, 'pq-pulse':index==currentIndex && pulseCurrent, 'list-active': menu.show && index==menu.index, 'drop-target': dragActive && index==dropIndex, 'highlight':index==highlightIndex, 'pq-grp-header':item.isGrpHeader, 'pq-work-header':item.isWorkHeader}" @dragstart="dragStart(index, $event)" @dragenter.prevent="" @dragend="dragEnd()" @dragover.stop="dragOver(index, $event)" @drop.stop="drop(index, $event)" draggable @click.prevent.stop="click(item, index, $event)" slot-scope="{item, index}" key-field="key" @contextmenu.prevent="contextMenu(item, index, $event)">
     <v-list-tile-avatar :tile="true" v-bind:class="{'radio-image': 0==item.duration}" class="lms-avatar">
      <v-icon v-if="item.selected" v-bind:class="{'pq-first-track-check':item.artistAlbum}">check_box</v-icon>
      <img v-else-if="item.artistAlbum" :key="item.image" :src="item.image" onerror="this.src=DEFAULT_COVER" loading="lazy" v-bind:class="{'dimmed':item.dimcover}" class="radio-img allow-drag"></img>

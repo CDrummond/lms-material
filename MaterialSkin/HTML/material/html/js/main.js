@@ -64,6 +64,13 @@ function setWindowArea() {
     }, 50);
 }
 
+function toggleButtonDueToKeyboard(id, keyboardShown) {
+    let elem = document.getElementById(id);
+    if (elem) {
+        elem.style.display = keyboardShown ? 'none' : 'block';
+    }
+}
+
 var app = new Vue({
     el: '#app',
     data() {
@@ -292,14 +299,9 @@ var app = new Vue({
                             }
                         }
                         lmsApp.keyboardShown = keyboardShown;
-                        var elem = document.getElementById('nav-bar');
-                        if (elem) {
-                            elem.style.display = keyboardShown ? 'none' : 'block';
-                        }
-                        elem = document.getElementById('np-bar');
-                        if (elem) {
-                            elem.style.display = keyboardShown ? 'none' : 'block';
-                        }
+                        toggleButtonDueToKeyboard('nav-bar', keyboardShown);
+                        toggleButtonDueToKeyboard('np-bar', keyboardShown);
+                        toggleButtonDueToKeyboard('browse-search-btn', keyboardShown);
                         for (let v=0, list=lmsApp.heights, len=list.length; v<len; ++v) {
                             if (undefined!=list[v][1]) {
                                 document.documentElement.style.setProperty(list[v][0], keyboardShown ? '0px' : list[v][1]);

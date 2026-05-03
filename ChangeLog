@@ -1,6 +1,7 @@
 6.3.3
 -----
 1. Fix blurred sub-toolbar background.
+2. Hide foating search button when mobile keyboard shown.
 
 6.3.2
 -----

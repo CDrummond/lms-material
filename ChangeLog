@@ -2,6 +2,8 @@
 -----
 1. Fix blurred sub-toolbar background.
 2. Hide foating search button when mobile keyboard shown.
+3. Show release name on separate line in album style queue header  - thanks to
+   mspertus.
 
 6.3.2
 -----

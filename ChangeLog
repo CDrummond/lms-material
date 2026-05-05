@@ -4,6 +4,8 @@
 2. Hide foating search button when mobile keyboard shown.
 3. Show release name on separate line in album style queue header  - thanks to
    mspertus.
+4. Add 'Copy' to now-playing context menu, copies cover and details to
+   clipboard. Thanks to crystalgipsy for the original implementation.
 
 6.3.2
 -----

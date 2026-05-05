@@ -963,3 +963,47 @@ function stringToColor(str) {
     hash = ((hash % TEXT_COLORS.length) + TEXT_COLORS.length) % TEXT_COLORS.length;
     return TEXT_COLORS[hash];
 }
+
+function loadImage(url) {
+    return new Promise(function(resolve) {
+        let img = new Image();
+        img.onload  = function() { resolve(img); };
+        img.onerror = function() { resolve(null); };
+        // Fetch as blob first to avoid CORS tainting the canvas
+        fetch(url, { credentials: 'same-origin' })
+            .then(function(r) { return r.blob(); })
+            .then(function(blob) { img.src = URL.createObjectURL(blob); })
+            .catch(function() { img.src = url; }); // fallback direct
+    });
+}
+
+function roundRect(ctx, x, y, w, h, r) {
+    ctx.beginPath();
+    ctx.moveTo(x + r, y);
+    ctx.lineTo(x + w - r, y);
+    ctx.quadraticCurveTo(x + w, y, x + w, y + r);
+    ctx.lineTo(x + w, y + h - r);
+    ctx.quadraticCurveTo(x + w, y + h, x + w - r, y + h);
+    ctx.lineTo(x + r, y + h);
+    ctx.quadraticCurveTo(x, y + h, x, y + h - r);
+    ctx.lineTo(x, y + r);
+    ctx.quadraticCurveTo(x, y, x + r, y);
+    ctx.closePath();
+}
+
+function wrapText(ctx, text, maxW) {
+    let words = text.split(' ');
+    let lines = [], line = '';
+    words.forEach(function(word) {
+        let test = line ? line + ' ' + word : word;
+        if (ctx.measureText(test).width > maxW && line) {
+            lines.push(line); line = word;
+        } else {
+            line = test;
+        }
+    });
+    if (line) {
+        lines.push(line);
+    }
+    return lines;
+}

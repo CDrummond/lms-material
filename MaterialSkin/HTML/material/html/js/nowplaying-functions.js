@@ -421,6 +421,9 @@ function nowplayingShowMenu(view, event) {
             view.menu.items.push({title:ACTIONS[act].title, act:NP_ITEM_ACT+act, svg:ACTIONS[act].svg});
         }
         if (undefined!=view.playerStatus.current.title) {
+            if (undefined!=view.coverUrl) {
+                view.menu.items.push({title:ACTIONS[COPY_ACTION].title, act:NP_COPY_CMD, icon:"music_video"});
+            }
             view.menu.items.push({title:ACTIONS[COPY_DETAILS_ACTION].title, act:NP_COPY_DETAILS_CMD, icon:ACTIONS[COPY_DETAILS_ACTION].icon});
         }
         view.menu.items.push({title:ACTIONS[SHOW_IMAGE_ACTION].title, svg:ACTIONS[SHOW_IMAGE_ACTION].svg, act:NP_PIC_ACT});
@@ -464,6 +467,15 @@ function nowplayingMenuAction(view, item) {
         }
         bus.$emit("browse", item.cmd.command, item.cmd.params, item.cmd.title, 'now-playing', undefined, item.cmd.subtitle);
         view.close();
+    } else if (NP_COPY_CMD==item.act) {
+        loadImage(view.coverUrl).then(function(artImg) {
+            let canvas = nowPlayingRenderToCanvas(view.playerStatus.current, artImg, view.darkUi);
+            canvas.toBlob(function(blob) {
+                const item = new ClipboardItem({ "image/png": blob });
+                navigator.clipboard.write([item]);
+            });
+            canvas.remove();
+        });
     } else if (NP_COPY_DETAILS_CMD==item.act) {
         let text = undefined;
         if (undefined!=view.playerStatus.current.title && undefined!=view.playerStatus.current.artist && undefined!=view.playerStatus.current.album) {
@@ -1291,4 +1303,170 @@ function nowplayingMAIMenuClicked(view, ev, tab) {
         });
     }
     items.push({title:i18n("Bottom"), id:"mai-b-"+tab});
+}
+
+function nowPlayingRenderToCanvas(track, artImg, isDark) {
+    const W                = 900;
+    const H                = 300;
+    const ART_MARGIN       = 20;
+    const ART_MAX_SIZE     = H - (2 * ART_MARGIN);
+    const TEXT_GAP         = 4;
+    const R                = 16;
+    const OVERLAY_ALPHA    = 0.45;
+    const FONT_SUFFIX      = 'px Roboto, sans-serif';
+    const TEXT_COLOR       = "#" + (isDark ? LMS_DARK_SVG : LMS_LIGHT_SVG); // # fff
+    const CTX_TEXT_COLOR   = 'rgba(' + (isDark ? '255,255,255' : '0,0,0') + ',0.55)';
+    const STD_WEIGHT       = '400 ';
+    const BOLD_WEIGHT      = '500 ';
+    const EXTR_BOLD_WEIGHT = '700 ';
+
+    let canvas = document.createElement('canvas');
+    canvas.width = W; canvas.height = H;
+    let ctx = canvas.getContext('2d');
+
+    // ── Clip to rounded card ──
+    ctx.save();
+    roundRect(ctx, 0, 0, W, H, R);
+    ctx.clip();
+
+    // ── 1. Full card background — blurred artwork ──
+    ctx.fillStyle = isDark ? "#303030" : "#fafafa";
+    ctx.fillRect(0, 0, W, H);
+
+    if (artImg) {
+        // Draw blurred background — use ctx.filter if available (desktop), else multi-pass scale (mobile)
+        let bgScale = Math.max(W / artImg.width, H / artImg.height);
+
+        // Multi-pass scale blur — works on all browsers including mobile
+        // Use square canvases to ensure full coverage
+        let sizes = [4, 8, 20, 60, 160];
+        let prev = document.createElement('canvas');
+        prev.width = sizes[0]; prev.height = sizes[0];
+        prev.getContext('2d').drawImage(artImg, 0, 0, sizes[0], sizes[0]);
+        for (let p = 1; p < sizes.length; p++) {
+            let next = document.createElement('canvas');
+            next.width = sizes[p]; next.height = sizes[p];
+            next.getContext('2d').drawImage(prev, 0, 0, sizes[p], sizes[p]);
+            prev.remove();
+            prev = next;
+        }
+        ctx.save();
+        ctx.globalAlpha = 0.9;
+        ctx.drawImage(prev, 0, 0, W, H);
+        prev.remove();
+        ctx.globalAlpha = 1;
+        ctx.restore();
+    }
+
+    // ── 2. Dark overlay ──
+    ctx.fillStyle = 'rgba(' + (isDark ? '16,16,16,' : '240,240,240,') + OVERLAY_ALPHA + ')';
+    ctx.fillRect(0, 0, W, H);
+
+    // ── 3. Clean artwork — left half, no effects, centred ──
+    let usedArtW = ART_MAX_SIZE;
+    if (artImg) {
+        let artScale = Math.min(ART_MAX_SIZE / artImg.width, ART_MAX_SIZE / artImg.height);
+        let artW = artImg.width  * artScale;
+        let artH = artImg.height * artScale;
+        let ax = ART_MARGIN + (ART_MAX_SIZE - artW) / 2;
+        let ay = (H - artH) / 2;
+
+        // Drop shadow
+        ctx.save();
+        ctx.shadowColor = 'rgba(0,0,0,0.9)';
+        ctx.shadowBlur = 40; ctx.shadowOffsetX = 6; ctx.shadowOffsetY = 6;
+        roundRect(ctx, ax, ay, artW, artH, 8);
+        ctx.fillStyle = 'rgba(0,0,0,0.01)'; ctx.fill();
+        ctx.restore();
+
+        // Clean artwork — no filter
+        ctx.save();
+        roundRect(ctx, ax, ay, artW, artH, 8);
+        ctx.clip();
+        ctx.drawImage(artImg, ax, ay, artW, artH);
+        ctx.restore();
+        usedArtW = artW;
+    }
+
+    // ── 4. Text — right half, directly on background ──
+    let tx    = usedArtW + (ART_MARGIN * 2);
+    let textW = W - (tx + ART_MARGIN);
+
+    // Auto-scale title — start smaller, max 2 lines, scale down to fit
+    let titleFontSize = 36;
+    ctx.font = EXTR_BOLD_WEIGHT + titleFontSize + FONT_SUFFIX;
+    let titleLines = wrapText(ctx, track.title, textW);
+    while (titleLines.length > 2 && titleFontSize > 24) {
+        titleFontSize -= 2;
+        ctx.font = EXTR_BOLD_WEIGHT + titleFontSize + FONT_SUFFIX;
+        titleLines = wrapText(ctx, track.title, textW);
+    }
+    // Also scale down if single line is too wide
+    while (titleLines.length === 1 && ctx.measureText(titleLines[0]).width > textW && titleFontSize > 24) {
+        titleFontSize -= 2;
+        ctx.font = EXTR_BOLD_WEIGHT + titleFontSize + FONT_SUFFIX;
+        titleLines = wrapText(ctx, track.title, textW);
+    }
+    let titleLineH = titleFontSize * 1.15;
+
+    // Calculate total block height for vertical centring
+    let totalTextH = 44
+                     + titleLines.slice(0,2).length * titleLineH + 8
+                     + 26 + 24 + 16;
+    let ty = (H - totalTextH) / 2;
+
+    // NOW PLAYING
+    ctx.fillStyle = TEXT_COLOR; // getComputedStyle(document.documentElement).getPropertyValue("--accent-color");
+    ctx.font = BOLD_WEIGHT + '13px Roboto, sans-serif';
+    ctx.letterSpacing = '0.2em';
+    ctx.fillText(i18n('Now Playing').toUpperCase(), tx, ty + 26);
+    ty += 34;
+
+    // Track title
+    ctx.fillStyle = TEXT_COLOR;
+    ctx.font = BOLD_WEIGHT + titleFontSize + FONT_SUFFIX;
+    ctx.letterSpacing = '-0.01em';
+    titleLines.slice(0, 2).forEach(function(line) {
+        ctx.fillText(line, tx, ty + titleLineH);
+        ty += titleLineH;
+    });
+    ty += 14;
+
+    // by Artist — auto-scale
+    let byText = stripTags(i18n('<obj>by</obj> %1', '')); // Use <obj> version to remove need for new strings
+    let artistFontSize = 24;
+    let artistLine = stripTags(track.artist ? track.artist : track.trackartist);
+    ctx.font = STD_WEIGHT + artistFontSize + FONT_SUFFIX;
+    while (ctx.measureText(byText+artistLine).width+TEXT_GAP > textW && artistFontSize > 14) {
+        artistFontSize -= 1;
+        ctx.font = STD_WEIGHT + artistFontSize + FONT_SUFFIX;
+    }
+    ctx.font = STD_WEIGHT + '14px Roboto, sans-serif';
+    ctx.fillStyle = CTX_TEXT_COLOR;
+    ctx.letterSpacing = '0em';
+    ctx.fillText(byText, tx, ty + artistFontSize);
+    let byWidth = ctx.measureText(byText).width;
+    ctx.font = STD_WEIGHT + artistFontSize + FONT_SUFFIX;
+    ctx.fillStyle = TEXT_COLOR;
+    ctx.fillText(artistLine, tx + TEXT_GAP + byWidth, ty + artistFontSize);
+    ty += artistFontSize + 12;
+
+    // from Album (Year) — auto-scale
+    let fromText = stripTags(i18n('<obj>from</obj> %1', '')); // Use <obj> version to remove need for new strings
+    let albumFontSize = 24;
+    ctx.font = STD_WEIGHT + albumFontSize + FONT_SUFFIX;
+    while (ctx.measureText(fromText+track.album).width+TEXT_GAP > textW && albumFontSize > 11) {
+        albumFontSize -= 1;
+        ctx.font = STD_WEIGHT + albumFontSize + FONT_SUFFIX;
+    }
+    ctx.font = STD_WEIGHT + '14px Roboto, sans-serif';
+    ctx.fillStyle = CTX_TEXT_COLOR;
+    ctx.fillText(fromText, tx, ty + albumFontSize);
+    let fromWidth = ctx.measureText(fromText).width;
+    ctx.font = STD_WEIGHT + albumFontSize + FONT_SUFFIX;
+    ctx.fillStyle = TEXT_COLOR;
+    ctx.fillText(track.album, tx + TEXT_GAP + fromWidth, ty + albumFontSize);
+
+    ctx.restore();
+    return canvas;
 }

@@ -1305,12 +1305,29 @@ function nowplayingMAIMenuClicked(view, ev, tab) {
     items.push({title:i18n("Bottom"), id:"mai-b-"+tab});
 }
 
+function formatLines(ctx, text, maxTextWidth, fontSize, minFontSize, weight, fontSuffix) {
+    ctx.font = weight + fontSize + fontSuffix;
+    let lines = wrapText(ctx, text, maxTextWidth);
+
+    while (lines.length > 2 && fontSize > minFontSize) {
+        fontSize -= 2;
+        ctx.font = weight + fontSize + fontSuffix;
+        lines = wrapText(ctx, text, maxTextWidth);
+    }
+    // Also scale down if single line is too wide
+    while (lines.length === 1 && ctx.measureText(lines[0]).width > maxTextWidth && fontSize > minFontSize) {
+        fontSize -= 2;
+        ctx.font = weight + fontSize + fontSuffix;
+        lines = wrapText(ctx, text, maxTextWidth);
+    }
+    return {lines:lines, fontSize:fontSize};
+}
+
 function nowPlayingRenderToCanvas(track, artImg, isDark) {
     const W                = 750;
     const H                = 250;
     const ART_MARGIN       = 15;
     const ART_MAX_SIZE     = H - (2 * ART_MARGIN);
-    const TEXT_GAP         = 4;
     const R                = 16;
     const OVERLAY_ALPHA    = 0.45;
     const FONT_SUFFIX      = 'px Roboto, sans-serif';
@@ -1392,81 +1409,44 @@ function nowPlayingRenderToCanvas(track, artImg, isDark) {
     let tx    = usedArtW + (ART_MARGIN * 2);
     let textW = W - (tx + ART_MARGIN);
 
+    let entries = [];
+
     // Auto-scale title — start smaller, max 2 lines, scale down to fit
-    let titleFontSize = 30;
-    ctx.font = EXTR_BOLD_WEIGHT + titleFontSize + FONT_SUFFIX;
-    let titleLines = wrapText(ctx, track.title, textW);
-    while (titleLines.length > 2 && titleFontSize > 24) {
-        titleFontSize -= 2;
-        ctx.font = EXTR_BOLD_WEIGHT + titleFontSize + FONT_SUFFIX;
-        titleLines = wrapText(ctx, track.title, textW);
-    }
-    // Also scale down if single line is too wide
-    while (titleLines.length === 1 && ctx.measureText(titleLines[0]).width > textW && titleFontSize > 24) {
-        titleFontSize -= 2;
-        ctx.font = EXTR_BOLD_WEIGHT + titleFontSize + FONT_SUFFIX;
-        titleLines = wrapText(ctx, track.title, textW);
-    }
-    let titleLineH = titleFontSize * 1.15;
+    let formatted = formatLines(ctx, track.title, textW, 30, 24, EXTR_BOLD_WEIGHT, FONT_SUFFIX);
+    entries.push({lines:formatted.lines, fontSize:formatted.fontSize, weight:EXTR_BOLD_WEIGHT, color:TEXT_COLOR});
+
+    formatted = formatLines(ctx, stripTags(track.artist ? track.artist : track.trackartist), textW, 20, 14, STD_WEIGHT, FONT_SUFFIX);
+    entries.push({lines:formatted.lines, fontSize:formatted.fontSize, weight:STD_WEIGHT, color:TEXT_COLOR});
+
+    formatted = formatLines(ctx, stripTags(track.album), textW, 18, 12, STD_WEIGHT, FONT_SUFFIX);
+    entries.push({lines:formatted.lines, fontSize:formatted.fontSize, weight:STD_WEIGHT, color:CTX_TEXT_COLOR});
 
     // Calculate total block height for vertical centring
     let totalTextH = 44
-                     + titleLines.slice(0,2).length * titleLineH + 8
-                     + 26 + 24 + 12;
+                     + (Math.min(entries[0].lines.length, 2) * entries[0].fontSize * 1.15) + 16
+                     + (Math.min(entries[1].lines.length, 2) * entries[1].fontSize * 1.15) + 8
+                     + (Math.min(entries[2].lines.length, 2) * entries[2].fontSize * 1.15);
     let ty = (H - totalTextH) / 2;
 
-    // NOW PLAYING
-    ctx.fillStyle = TEXT_COLOR; // getComputedStyle(document.documentElement).getPropertyValue("--accent-color");
+    ctx.fillStyle = TEXT_COLOR;
     ctx.font = BOLD_WEIGHT + '13px Roboto, sans-serif';
     ctx.letterSpacing = '0.2em';
     ctx.fillText(i18n('Now Playing').toUpperCase(), tx, ty + 26);
     ty += 30;
 
-    // Track title
-    ctx.fillStyle = TEXT_COLOR;
-    ctx.font = BOLD_WEIGHT + titleFontSize + FONT_SUFFIX;
-    ctx.letterSpacing = '-0.01em';
-    titleLines.slice(0, 2).forEach(function(line) {
-        ctx.fillText(line, tx, ty + titleLineH);
-        ty += titleLineH;
-    });
-    ty += 10;
-
-    // by Artist — auto-scale
-    let byText = stripTags(i18n('<obj>by</obj> %1', '')); // Use <obj> version to remove need for new strings
-    let artistFontSize = 24;
-    let artistLine = stripTags(track.artist ? track.artist : track.trackartist);
-    ctx.font = STD_WEIGHT + artistFontSize + FONT_SUFFIX;
-    while (ctx.measureText(byText+artistLine).width+TEXT_GAP > textW && artistFontSize > 14) {
-        artistFontSize -= 1;
-        ctx.font = STD_WEIGHT + artistFontSize + FONT_SUFFIX;
+    ctx.letterSpacing = '0.0em';
+    for (let e=0; e<3; ++e) {
+        let lineH = entries[e].fontSize * 1.15;
+        ctx.font = entries[e].weight + entries[e].fontSize + FONT_SUFFIX;
+        ctx.fillStyle = entries[e].color;
+        ctx.fillText(entries[e].lines[0], tx, ty + lineH);
+        ty += lineH;
+        if (entries[e].lines.length>1) {
+            ctx.fillText(entries[e].lines[1]+(entries[e].lines.length>2 ? "..." : ""), tx, ty + lineH);
+            ty += lineH;
+        }
+        ty += (0==e ? 16 : 8);
     }
-    ctx.font = STD_WEIGHT + '14px Roboto, sans-serif';
-    ctx.fillStyle = CTX_TEXT_COLOR;
-    ctx.letterSpacing = '0em';
-    ctx.fillText(byText, tx, ty + artistFontSize);
-    let byWidth = ctx.measureText(byText).width;
-    ctx.font = STD_WEIGHT + artistFontSize + FONT_SUFFIX;
-    ctx.fillStyle = TEXT_COLOR;
-    ctx.fillText(artistLine, tx + TEXT_GAP + byWidth, ty + artistFontSize);
-    ty += artistFontSize + 8;
-
-    // from Album (Year) — auto-scale
-    let fromText = stripTags(i18n('<obj>from</obj> %1', '')); // Use <obj> version to remove need for new strings
-    let albumFontSize = 24;
-    ctx.font = STD_WEIGHT + albumFontSize + FONT_SUFFIX;
-    while (ctx.measureText(fromText+track.album).width+TEXT_GAP > textW && albumFontSize > 11) {
-        albumFontSize -= 1;
-        ctx.font = STD_WEIGHT + albumFontSize + FONT_SUFFIX;
-    }
-    ctx.font = STD_WEIGHT + '14px Roboto, sans-serif';
-    ctx.fillStyle = CTX_TEXT_COLOR;
-    ctx.fillText(fromText, tx, ty + albumFontSize);
-    let fromWidth = ctx.measureText(fromText).width;
-    ctx.font = STD_WEIGHT + albumFontSize + FONT_SUFFIX;
-    ctx.fillStyle = TEXT_COLOR;
-    ctx.fillText(track.album, tx + TEXT_GAP + fromWidth, ty + albumFontSize);
-
     ctx.restore();
     return canvas;
 }

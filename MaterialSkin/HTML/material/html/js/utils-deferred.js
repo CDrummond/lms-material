@@ -997,7 +997,8 @@ function wrapText(ctx, text, maxW) {
     words.forEach(function(word) {
         let test = line ? line + ' ' + word : word;
         if (ctx.measureText(test).width > maxW && line) {
-            lines.push(line); line = word;
+            lines.push(line);
+            line = word;
         } else {
             line = test;
         }

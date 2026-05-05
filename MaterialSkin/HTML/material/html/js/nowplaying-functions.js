@@ -1306,9 +1306,9 @@ function nowplayingMAIMenuClicked(view, ev, tab) {
 }
 
 function nowPlayingRenderToCanvas(track, artImg, isDark) {
-    const W                = 900;
-    const H                = 300;
-    const ART_MARGIN       = 20;
+    const W                = 750;
+    const H                = 250;
+    const ART_MARGIN       = 15;
     const ART_MAX_SIZE     = H - (2 * ART_MARGIN);
     const TEXT_GAP         = 4;
     const R                = 16;
@@ -1393,7 +1393,7 @@ function nowPlayingRenderToCanvas(track, artImg, isDark) {
     let textW = W - (tx + ART_MARGIN);
 
     // Auto-scale title — start smaller, max 2 lines, scale down to fit
-    let titleFontSize = 36;
+    let titleFontSize = 30;
     ctx.font = EXTR_BOLD_WEIGHT + titleFontSize + FONT_SUFFIX;
     let titleLines = wrapText(ctx, track.title, textW);
     while (titleLines.length > 2 && titleFontSize > 24) {
@@ -1412,7 +1412,7 @@ function nowPlayingRenderToCanvas(track, artImg, isDark) {
     // Calculate total block height for vertical centring
     let totalTextH = 44
                      + titleLines.slice(0,2).length * titleLineH + 8
-                     + 26 + 24 + 16;
+                     + 26 + 24 + 12;
     let ty = (H - totalTextH) / 2;
 
     // NOW PLAYING
@@ -1420,7 +1420,7 @@ function nowPlayingRenderToCanvas(track, artImg, isDark) {
     ctx.font = BOLD_WEIGHT + '13px Roboto, sans-serif';
     ctx.letterSpacing = '0.2em';
     ctx.fillText(i18n('Now Playing').toUpperCase(), tx, ty + 26);
-    ty += 34;
+    ty += 30;
 
     // Track title
     ctx.fillStyle = TEXT_COLOR;
@@ -1430,7 +1430,7 @@ function nowPlayingRenderToCanvas(track, artImg, isDark) {
         ctx.fillText(line, tx, ty + titleLineH);
         ty += titleLineH;
     });
-    ty += 14;
+    ty += 10;
 
     // by Artist — auto-scale
     let byText = stripTags(i18n('<obj>by</obj> %1', '')); // Use <obj> version to remove need for new strings
@@ -1449,7 +1449,7 @@ function nowPlayingRenderToCanvas(track, artImg, isDark) {
     ctx.font = STD_WEIGHT + artistFontSize + FONT_SUFFIX;
     ctx.fillStyle = TEXT_COLOR;
     ctx.fillText(artistLine, tx + TEXT_GAP + byWidth, ty + artistFontSize);
-    ty += artistFontSize + 12;
+    ty += artistFontSize + 8;
 
     // from Album (Year) — auto-scale
     let fromText = stripTags(i18n('<obj>from</obj> %1', '')); // Use <obj> version to remove need for new strings

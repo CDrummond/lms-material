@@ -300,7 +300,7 @@ Vue.component('lms-npshare-dialog', {
                     trackartist:playerStatus.current.trackartist,
                     album:undefined==playerStatus.current.album
                             ? undefined 
-                            : (playerStatus.current.year && playerStatus.current.year>0
+                            : playerStatus.current.album+(playerStatus.current.year && playerStatus.current.year>0
                                 ? " ("+ playerStatus.current.year+")"
                                 : ""),
                     extid: playerStatus.current.extid

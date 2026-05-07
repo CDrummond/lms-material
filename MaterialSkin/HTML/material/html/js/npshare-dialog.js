@@ -211,15 +211,17 @@ async function nowPlayingRenderToCanvas(track, artImg, isDark) {
     }
 
     let svg = new Image();
+    let logoX = canvas.width;
     svg.src = "/material/svg/lyrion-logo?c=" + (isDark ? LMS_DARK_SVG : LMS_LIGHT_SVG);
     try {
         await waitForLoad(svg);
         let h = 16;
         let w = h * (svg.width/svg.height)
         ctx.globalAlpha = 0.75;
-        ctx.drawImage(svg, canvas.width-(w+14), 9, w, h);
+        ctx.drawImage(svg, canvas.width-(w+ART_MARGIN+8), ART_MARGIN+2, w, h);
         ctx.beginPath();
-        ctx.roundRect(canvas.width-(w+22), 5, w+18, h+8, (h+8)/2);
+        logoX = canvas.width-(w+ART_MARGIN+14);
+        ctx.roundRect(logoX, ART_MARGIN, w+14, h+4, (h+ART_MARGIN)/2);
         ctx.strokeStyle = TEXT_COLOR;
         ctx.stroke();
     } catch (e) {
@@ -229,17 +231,12 @@ async function nowPlayingRenderToCanvas(track, artImg, isDark) {
         let emblem = getEmblem(track.extid);
         if (undefined!=emblem) {
             svg = new Image();
-            svg.src = "/material/svg/"+emblem.name+"?c="+emblem.color.substr(1);
+            svg.src = "/material/svg/"+emblem.name+"?c=" + (isDark ? LMS_DARK_SVG : LMS_LIGHT_SVG);;
             try {
                 await waitForLoad(svg);
                 let size = 22;
-                let x = usedArtW + ART_MARGIN;
                 ctx.globalAlpha = 0.5;
-                ctx.fillStyle = emblem.bgnd;
-                ctx.beginPath();
-                ctx.arc(x-18, 18, (size+4)/2, 0, 2*Math.PI);
-                ctx.fill();
-                ctx.drawImage(svg, x-(size+7), 7, size, size);
+                ctx.drawImage(svg, logoX-(size + 4), ART_MARGIN-1, size, size);
             } catch (e) {
             }
         }
@@ -300,9 +297,9 @@ Vue.component('lms-npshare-dialog', {
                     trackartist:playerStatus.current.trackartist,
                     album:undefined==playerStatus.current.album
                             ? undefined 
-                            : playerStatus.current.album+(playerStatus.current.year && playerStatus.current.year>0
+                            : (playerStatus.current.album+(playerStatus.current.year && playerStatus.current.year>0
                                 ? " ("+ playerStatus.current.year+")"
-                                : ""),
+                                : "")),
                     extid: playerStatus.current.extid
                 }
                 if (track.title!=this.track.title ||

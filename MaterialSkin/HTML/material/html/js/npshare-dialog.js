@@ -6,6 +6,9 @@
  */
 'use strict';
 
+const NP_SHARE_H = 180;
+const NP_SHARE_W = NP_SHARE_H * 3;
+
 function loadImage(url) {
     return new Promise(function(resolve) {
         let img = new Image();
@@ -84,10 +87,8 @@ function waitForLoad(element) {
 }
 
 async function nowPlayingRenderToCanvas(track, artImg, isDark) {
-    const H                = 180;
-    const W                = H * 3;
     const ART_MARGIN       = 10;
-    const ART_MAX_SIZE     = H - (2 * ART_MARGIN);
+    const ART_MAX_SIZE     = NP_SHARE_H - (2 * ART_MARGIN);
     const R                = 14;
     const OVERLAY_ALPHA    = 0.45;
     const FONT_SUFFIX      = 'px Roboto, sans-serif';
@@ -98,21 +99,25 @@ async function nowPlayingRenderToCanvas(track, artImg, isDark) {
     const EXTR_BOLD_WEIGHT = '700 ';
 
     let canvas = document.createElement('canvas');
-    canvas.width = W; canvas.height = H;
     let ctx = canvas.getContext('2d');
+    const dpr = window.devicePixelRatio || 1;
+    canvas.width = NP_SHARE_W*dpr; canvas.height = NP_SHARE_H*dpr;
+    ctx.scale(dpr, dpr);
+    canvas.style.width = `${NP_SHARE_W}px`;
+    canvas.style.height = `${NP_SHARE_H}px`;
 
     // ── Clip to rounded card ──
     ctx.save();
-    roundRect(ctx, 0, 0, W, H, R);
+    roundRect(ctx, 0, 0, NP_SHARE_W, NP_SHARE_H, R);
     ctx.clip();
 
     // ── 1. Full card background — blurred artwork ──
     ctx.fillStyle = isDark ? "#303030" : "#fafafa";
-    ctx.fillRect(0, 0, W, H);
+    ctx.fillRect(0, 0, NP_SHARE_W, NP_SHARE_H);
 
     if (artImg) {
         // Draw blurred background — use ctx.filter if available (desktop), else multi-pass scale (mobile)
-        let bgScale = Math.max(W / artImg.width, H / artImg.height);
+        let bgScale = Math.max(NP_SHARE_W / artImg.width, NP_SHARE_H / artImg.height);
 
         // Multi-pass scale blur — works on all browsers including mobile
         // Use square canvases to ensure full coverage
@@ -129,7 +134,7 @@ async function nowPlayingRenderToCanvas(track, artImg, isDark) {
         }
         ctx.save();
         ctx.globalAlpha = 0.9;
-        ctx.drawImage(prev, 0, 0, W, H);
+        ctx.drawImage(prev, 0, 0, NP_SHARE_W, NP_SHARE_H);
         prev.remove();
         ctx.globalAlpha = 1;
         ctx.restore();
@@ -137,7 +142,7 @@ async function nowPlayingRenderToCanvas(track, artImg, isDark) {
 
     // ── 2. Dark overlay ──
     ctx.fillStyle = 'rgba(' + (isDark ? '16,16,16,' : '240,240,240,') + OVERLAY_ALPHA + ')';
-    ctx.fillRect(0, 0, W, H);
+    ctx.fillRect(0, 0, NP_SHARE_W, NP_SHARE_H);
 
     // ── 3. Clean artwork — left half, no effects, centred ──
     let usedArtW = ART_MAX_SIZE;
@@ -146,7 +151,7 @@ async function nowPlayingRenderToCanvas(track, artImg, isDark) {
         let artW = artImg.width  * artScale;
         let artH = artImg.height * artScale;
         let ax = ART_MARGIN + (ART_MAX_SIZE - artW) / 2;
-        let ay = (H - artH) / 2;
+        let ay = (NP_SHARE_H - artH) / 2;
 
         // Drop shadow
         ctx.save();
@@ -167,7 +172,7 @@ async function nowPlayingRenderToCanvas(track, artImg, isDark) {
 
     // ── 4. Text — right half, directly on background ──
     let tx    = usedArtW + (ART_MARGIN * 2);
-    let textW = W - (tx + ART_MARGIN);
+    let textW = NP_SHARE_W - (tx + ART_MARGIN);
 
     let entries = [];
 
@@ -186,7 +191,7 @@ async function nowPlayingRenderToCanvas(track, artImg, isDark) {
                      + (Math.min(entries[0].lines.length, 2) * entries[0].fontSize * 1.15) + 8
                      + (Math.min(entries[1].lines.length, 2) * entries[1].fontSize * 1.15) + 4
                      + (Math.min(entries[2].lines.length, 2) * entries[2].fontSize * 1.15);
-    let ty = (H - totalTextH) / 2;
+    let ty = (NP_SHARE_H - totalTextH) / 2;
 
     ctx.fillStyle = TEXT_COLOR;
     ctx.font = BOLD_WEIGHT + '13px Roboto, sans-serif';
@@ -211,16 +216,16 @@ async function nowPlayingRenderToCanvas(track, artImg, isDark) {
     }
 
     let svg = new Image();
-    let logoX = canvas.width;
+    let logoX = NP_SHARE_W;
     svg.src = "/material/svg/lyrion-logo?c=" + (isDark ? LMS_DARK_SVG : LMS_LIGHT_SVG);
     try {
         await waitForLoad(svg);
         let h = 16;
         let w = h * (svg.width/svg.height)
         ctx.globalAlpha = 0.75;
-        ctx.drawImage(svg, canvas.width-(w+ART_MARGIN+8), ART_MARGIN+2, w, h);
+        ctx.drawImage(svg, NP_SHARE_W-(w+ART_MARGIN+8), ART_MARGIN+2, w, h);
         ctx.beginPath();
-        logoX = canvas.width-(w+ART_MARGIN+14);
+        logoX = NP_SHARE_W-(w+ART_MARGIN+14);
         ctx.roundRect(logoX, ART_MARGIN, w+14, h+4, (h+ART_MARGIN)/2);
         ctx.strokeStyle = TEXT_COLOR;
         ctx.stroke();
@@ -254,7 +259,7 @@ Vue.component('lms-npshare-dialog', {
   <v-list-tile-sub-title style="padding-left:16px;padding-right:16px">{{saveText}}</v-list-tile-sub-title>
   <div style="overflow:auto; margin-left:10px; margin-bottom:10px; margin-top:20px">
    <div :style="{'width':(cw+10)+'px', 'height': (ch+10)+'px'}">
-    <img :src="src"></img>
+    <img :src="src" :style="{'width':cw+'px', 'height': ch+'px', 'object-fit':'cover'}"></img>
    </div>
   </div>
   <v-card-actions>
@@ -270,8 +275,8 @@ Vue.component('lms-npshare-dialog', {
         return {
             show: false,
             src: undefined,
-            cw: 100,
-            ch: 100,
+            cw: NP_SHARE_W,
+            ch: NP_SHARE_H,
             saveText: undefined
         }
     },
@@ -327,8 +332,6 @@ Vue.component('lms-npshare-dialog', {
             let view = this;
             loadImage(view.coverUrl).then(async function(artImg) {
                 let canvas = await nowPlayingRenderToCanvas(view.track, artImg, true /*view.$store.state.darkUi*/);
-                view.cw = canvas.width;
-                view.ch = canvas.height;
                 view.src = canvas.toDataURL('image/png');
                 canvas.remove();
                 view.show = true;

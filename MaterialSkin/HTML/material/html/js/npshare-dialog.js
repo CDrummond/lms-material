@@ -92,7 +92,7 @@ async function nowPlayingRenderToCanvas(track, artImg, isDark) {
     const R                = 14;
     const OVERLAY_ALPHA    = 0.45;
     const FONT_SUFFIX      = 'px Roboto, sans-serif';
-    const TEXT_COLOR       = "#" + (isDark ? LMS_DARK_SVG : LMS_LIGHT_SVG); // # fff
+    const TEXT_COLOR       = "#" + (isDark ? LMS_DARK_SVG : "000"); // # fff
     const CTX_TEXT_COLOR   = 'rgba(' + (isDark ? '255,255,255' : '0,0,0') + ',0.55)';
     const STD_WEIGHT       = '400 ';
     const BOLD_WEIGHT      = '500 ';
@@ -112,7 +112,7 @@ async function nowPlayingRenderToCanvas(track, artImg, isDark) {
     ctx.clip();
 
     // ── 1. Full card background — blurred artwork ──
-    ctx.fillStyle = isDark ? "#303030" : "#fafafa";
+    ctx.fillStyle = isDark ? "#103030" : "#fafafa";
     ctx.fillRect(0, 0, NP_SHARE_W, NP_SHARE_H);
 
     if (artImg) {
@@ -227,7 +227,7 @@ async function nowPlayingRenderToCanvas(track, artImg, isDark) {
         ctx.beginPath();
         logoX = NP_SHARE_W-(w+ART_MARGIN+14);
         ctx.roundRect(logoX, ART_MARGIN, w+14, h+4, (h+ART_MARGIN)/2);
-        ctx.strokeStyle = TEXT_COLOR;
+        ctx.strokeStyle = "#"+(isDark ? LMS_DARK_SVG : LMS_LIGHT_SVG);
         ctx.stroke();
     } catch (e) {
     }
@@ -263,6 +263,18 @@ Vue.component('lms-npshare-dialog', {
    </div>
   </div>
   <v-card-actions>
+   <v-menu top v-model="showMenu">
+    <v-btn icon slot="activator"><v-icon>more_vert</v-icon></v-btn>
+    <v-list>
+    <v-subheader>{{i18n("Theme")}}</v-subheader>
+     <template v-for="(name, index) in styles">
+      <v-list-tile role="menuitem" @click="changeStyle(index)" class="menu-group-item">
+       <v-list-tile-avatar><v-icon>{{index==style ? 'radio_button_checked' : 'radio_button_unchecked'}}</v-icon></v-list-tile-avatar>
+       <v-list-tile-content><v-list-tile-title>{{name}}</v-list-tile-title></v-list-tile-content>
+      </v-list-tile>
+     </template>
+    </v-list>
+   </v-menu>
    <v-spacer></v-spacer>
    <v-btn flat @click="download">{{i18n('Download')}}</v-btn>
    <v-btn flat @click="close">{{i18n('Close')}}</v-btn>
@@ -274,10 +286,18 @@ Vue.component('lms-npshare-dialog', {
     data() {
         return {
             show: false,
+            showMenu: false,
             src: undefined,
             cw: NP_SHARE_W,
             ch: NP_SHARE_H,
-            saveText: undefined
+            saveText: undefined,
+            style: 0,
+            styles: []
+        }
+    },
+    computed: {
+        dark () {
+            return 0==this.style || (2==this.style && this.$store.state.darkUi)
         }
     },
     mounted() {
@@ -288,6 +308,8 @@ Vue.component('lms-npshare-dialog', {
                 ? i18n("Long-press on image and select 'Save image', then share anywhere. Or use the 'Download' button to download.")
                 : i18n("Right-click on the image and select 'Copy image', then paste anywhere. Or use the 'Download' button to download.");
             this.createImage();
+            this.styles = [i18n("Dark"), i18n("Light"), i18n("Automatic")];
+            this.style = parseInt(getLocalStorageVal("nd-share-style", 0));
         }.bind(this));
         bus.$on('closeDialog', function(dlg) {
             if (dlg == 'npshare') {
@@ -328,14 +350,21 @@ Vue.component('lms-npshare-dialog', {
         }.bind(this));
     },
     methods: {
-        createImage(c) {
+        createImage() {
             let view = this;
             loadImage(view.coverUrl).then(async function(artImg) {
-                let canvas = await nowPlayingRenderToCanvas(view.track, artImg, true /*view.$store.state.darkUi*/);
+                let canvas = await nowPlayingRenderToCanvas(view.track, artImg, view.dark);
                 view.src = canvas.toDataURL('image/png');
                 canvas.remove();
                 view.show = true;
             });
+        },
+        changeStyle(idx) {
+            if (idx!=this.style) {
+                this.style = idx;
+                setLocalStorageVal("nd-share-style", idx);
+                this.createImage();
+            }
         },
         close() {
             this.show = false;
@@ -358,6 +387,9 @@ Vue.component('lms-npshare-dialog', {
     watch: {
         'show': function(val) {
             this.$store.commit('dialogOpen', {name:'npshare', shown:val});
+        },
+        'showMenu': function(newVal) {
+            this.$store.commit('menuVisible', {name:'npshare', shown:newVal});
         }
     }
 })

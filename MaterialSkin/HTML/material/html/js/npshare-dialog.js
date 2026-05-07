@@ -326,7 +326,7 @@ Vue.component('lms-npshare-dialog', {
         createImage(c) {
             let view = this;
             loadImage(view.coverUrl).then(async function(artImg) {
-                let canvas = await nowPlayingRenderToCanvas(view.track, artImg, view.$store.state.darkUi);
+                let canvas = await nowPlayingRenderToCanvas(view.track, artImg, true /*view.$store.state.darkUi*/);
                 view.cw = canvas.width;
                 view.ch = canvas.height;
                 view.src = canvas.toDataURL('image/png');

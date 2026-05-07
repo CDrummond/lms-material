@@ -183,7 +183,7 @@ async function nowPlayingRenderToCanvas(track, artImg, isDark) {
 
     // Calculate total block height for vertical centring
     let totalTextH = 44
-                     + (Math.min(entries[0].lines.length, 2) * entries[0].fontSize * 1.15) + 12
+                     + (Math.min(entries[0].lines.length, 2) * entries[0].fontSize * 1.15) + 8
                      + (Math.min(entries[1].lines.length, 2) * entries[1].fontSize * 1.15) + 4
                      + (Math.min(entries[2].lines.length, 2) * entries[2].fontSize * 1.15);
     let ty = (H - totalTextH) / 2;
@@ -206,7 +206,7 @@ async function nowPlayingRenderToCanvas(track, artImg, isDark) {
                 ctx.fillText(entries[e].lines[1]+(entries[e].lines.length>2 ? "..." : ""), tx, ty + lineH);
                 ty += lineH;
             }
-            ty += (0==e ? 12 : 4);
+            ty += (0==e ? 8 : 4);
         }
     }
 

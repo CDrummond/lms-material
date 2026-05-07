@@ -511,6 +511,9 @@ Vue.component('lms-advancedsearch-dialog', {
     watch: {
         'show': function(val) {
             this.$store.commit('dialogOpen', {name:'advancedsearch', shown:val});
+        },
+        'showMenu': function(newVal) {
+            this.$store.commit('menuVisible', {name:'advancedsearch', shown:newVal});
         }
     }
 })

@@ -378,7 +378,7 @@ Vue.component('lms-npshare-dialog', {
                 let native = "nativeNpShare" + action;
                 if (1==queryParams[native]) {
                     try {
-                        NativeReceiver.npShare(this.src, ts, action);
+                        NativeReceiver.npShare(this.src, filename, action);
                     } catch (e) {
                     }
                 } else if (queryParams[native]>0) {

@@ -253,7 +253,7 @@ Vue.component('lms-npshare-dialog', {
 <v-dialog v-model="show" :width="cw+20" persistent v-if="show">
  <v-card>
   <v-card-title>{{i18n("Now Playing")}}</v-card-title>
-  <v-list-tile-sub-title style="padding-left:16px;padding-right:16px">{{saveText}}</v-list-tile-sub-title>
+  <v-list-tile-sub-title style="padding-left:16px;padding-right:16px" v-if="showText">{{saveText}}</v-list-tile-sub-title>
   <div style="overflow:auto; margin:10px">
    <div style="width:100%; height:100%">
     <img :src="src" :style="{'width':cw+'px', 'height': ch+'px', 'object-fit':'cover'}"></img>
@@ -273,7 +273,9 @@ Vue.component('lms-npshare-dialog', {
     </v-list>
    </v-menu>
    <v-spacer></v-spacer>
-   <v-btn flat @click="download">{{i18n('Download')}}</v-btn>
+   <v-btn flat v-if="queryParams.nativeNpShareS>0" @click="download('S')">{{i18n('Share')}}</v-btn>
+   <v-btn flat v-if="queryParams.nativeNpShareC>0" @click="download('C')">{{i18n('Clipboard')}}</v-btn>
+   <v-btn flat @click="download(queryParams.nativeNpShareD>0 ? 'D' : undefined)">{{i18n('Download')}}</v-btn>
    <v-btn flat @click="close">{{i18n('Close')}}</v-btn>
   </v-card-actions>
  </v-card>
@@ -289,7 +291,8 @@ Vue.component('lms-npshare-dialog', {
             ch: NP_SHARE_H,
             saveText: undefined,
             style: 0,
-            styles: []
+            styles: [],
+            showText: !queryParams.hide.has('npShareText')
         }
     },
     computed: {
@@ -368,12 +371,25 @@ Vue.component('lms-npshare-dialog', {
         close() {
             this.show = false;
         },
-        download() {
-            let a = document.createElement('a');
+        download(action) {
             let ts = new Date().toISOString().slice(0, 19).replace(/[T:]/g,'-');
-            a.download = 'lyrion-' + ts + '.png';
-            a.href = this.src;
-            a.click();
+            let filename = 'lyrion-' + ts + '.png';
+            if (undefined!=action) {
+                let native = "nativeNpShare" + action;
+                if (1==queryParams[native]) {
+                    try {
+                        NativeReceiver.npShare(this.src, ts, action);
+                    } catch (e) {
+                    }
+                } else if (queryParams[native]>0) {
+                    emitNative("MATERIAL-NPSHARE\n" + action + " " + this.src+"\nFILENAME " + filename, queryParams[native]);
+                }
+            } else {
+                let a = document.createElement('a');
+                a.download = filename;
+                a.href = this.src;
+                a.click();
+            }
         },
         i18n(str) {
             if (this.show) {

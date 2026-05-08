@@ -40,7 +40,8 @@ var queryParams = parseQueryParams();
 var canUseCache = true;
 
 function parseQueryParams() {
-    const NATIVE_QPARMS = new Set(["nativeStatus", "nativeColors", "nativePlayer", "nativeUiChanges", "nativeTheme", "nativeCover", "nativePlayerPower", "nativeAccent", "nativeTitlebar", "nativeTextColor", "nativeConnectionStatus"]);
+    const NATIVE_QPARMS = new Set(["nativeStatus", "nativeColors", "nativePlayer", "nativeUiChanges", "nativeTheme", "nativeCover", "nativePlayerPower", "nativeAccent",
+                                    "nativeTitlebar", "nativeTextColor", "nativeConnectionStatus", "nativeNpShareS", "nativeNpShareC", "nativeNpShareD"]);
     const BOOL_QPARAMS = new Set(["single", "addpad", "party", "altBtnLayout", "dontTrapBack", "npAutoClose", "setTitle"]);
     const INT_QPARAMS = new Set(["topPad", "botPad", "dlgPad"]);
     const STR_QPARAMS = new Set(["layout", "appSettings", "appQuit", "appLaunchPlayer", "download", "tbarBtns", "tbarBtnsPos", "tbarBtnsStyle", "hidePlayers", "ipAddresses"]);

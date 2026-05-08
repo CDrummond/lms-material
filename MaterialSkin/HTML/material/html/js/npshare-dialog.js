@@ -6,8 +6,9 @@
  */
 'use strict';
 
-const NP_SHARE_H = 180;
-const NP_SHARE_W = NP_SHARE_H * 3;
+const NP_SHARE_H = 220;
+const NP_SHARE_W = 500;
+const NP_MAX_ART_SIZE = 180;
 
 function loadImage(url) {
     return new Promise(function(resolve) {
@@ -88,7 +89,6 @@ function waitForLoad(element) {
 
 async function nowPlayingRenderToCanvas(track, artImg, isDark) {
     const ART_MARGIN       = 10;
-    const ART_MAX_SIZE     = NP_SHARE_H - (2 * ART_MARGIN);
     const R                = 14;
     const OVERLAY_ALPHA    = 0.45;
     const FONT_SUFFIX      = 'px Roboto, sans-serif';
@@ -145,12 +145,12 @@ async function nowPlayingRenderToCanvas(track, artImg, isDark) {
     ctx.fillRect(0, 0, NP_SHARE_W, NP_SHARE_H);
 
     // ── 3. Clean artwork — left half, no effects, centred ──
-    let usedArtW = ART_MAX_SIZE;
+    let usedArtW = NP_MAX_ART_SIZE;
     if (artImg) {
-        let artScale = Math.min(ART_MAX_SIZE / artImg.width, ART_MAX_SIZE / artImg.height);
+        let artScale = Math.min(NP_MAX_ART_SIZE / artImg.width, NP_MAX_ART_SIZE / artImg.height);
         let artW = artImg.width  * artScale;
         let artH = artImg.height * artScale;
-        let ax = ART_MARGIN + (ART_MAX_SIZE - artW) / 2;
+        let ax = ART_MARGIN + (NP_MAX_ART_SIZE - artW) / 2;
         let ay = (NP_SHARE_H - artH) / 2;
 
         // Drop shadow
@@ -171,19 +171,19 @@ async function nowPlayingRenderToCanvas(track, artImg, isDark) {
     }
 
     // ── 4. Text — right half, directly on background ──
-    let tx    = usedArtW + (ART_MARGIN * 2);
-    let textW = NP_SHARE_W - (tx + ART_MARGIN);
+    let tx    = usedArtW + (ART_MARGIN * 3);
+    let textW = NP_SHARE_W - (tx + (ART_MARGIN*2));
 
     let entries = [];
 
     // Auto-scale title — start smaller, max 2 lines, scale down to fit
-    let formatted = formatLines(ctx, track.title, textW, 20, 14, EXTR_BOLD_WEIGHT, FONT_SUFFIX);
+    let formatted = formatLines(ctx, track.title, textW, 16, 12, EXTR_BOLD_WEIGHT, FONT_SUFFIX);
     entries.push({lines:formatted.lines, fontSize:formatted.fontSize, weight:EXTR_BOLD_WEIGHT, color:TEXT_COLOR});
 
-    formatted = formatLines(ctx, stripTags(track.artist ? track.artist : track.trackartist), textW, 14, 10, STD_WEIGHT, FONT_SUFFIX);
+    formatted = formatLines(ctx, stripTags(track.artist ? track.artist : track.trackartist), textW, Math.min(formatted.fontSize, 14), 10, STD_WEIGHT, FONT_SUFFIX);
     entries.push({lines:formatted.lines, fontSize:formatted.fontSize, weight:STD_WEIGHT, color:TEXT_COLOR});
 
-    formatted = formatLines(ctx, stripTags(track.album), textW, Math.min(formatted.fontSize, 12), 8, STD_WEIGHT, FONT_SUFFIX);
+    formatted = formatLines(ctx, stripTags(track.album), textW, Math.min(formatted.fontSize-2, 12), 8, STD_WEIGHT, FONT_SUFFIX);
     entries.push({lines:formatted.lines, fontSize:formatted.fontSize, weight:STD_WEIGHT, color:CTX_TEXT_COLOR});
 
     // Calculate total block height for vertical centring
@@ -193,9 +193,9 @@ async function nowPlayingRenderToCanvas(track, artImg, isDark) {
                      + (Math.min(entries[2].lines.length, 2) * entries[2].fontSize * 1.15);
     let ty = (NP_SHARE_H - totalTextH) / 2;
 
-    ctx.fillStyle = TEXT_COLOR;
-    ctx.font = BOLD_WEIGHT + '13px Roboto, sans-serif';
-    ctx.letterSpacing = '0.2em';
+    ctx.fillStyle = CTX_TEXT_COLOR;
+    ctx.font = STD_WEIGHT + '12px Roboto, sans-serif';
+    ctx.letterSpacing = '0.5em';
     ctx.fillText(i18n('Now Playing').toUpperCase(), tx, ty + 22);
     ty += 34;
 
@@ -220,7 +220,7 @@ async function nowPlayingRenderToCanvas(track, artImg, isDark) {
     svg.src = "/material/svg/lyrion-logo?c=" + (isDark ? LMS_DARK_SVG : LMS_LIGHT_SVG);
     try {
         await waitForLoad(svg);
-        let h = 16;
+        let h = 14;
         let w = h * (svg.width/svg.height)
         ctx.globalAlpha = 0.75;
         ctx.drawImage(svg, NP_SHARE_W-(w+ART_MARGIN+8), ART_MARGIN+2, w, h);
@@ -237,7 +237,7 @@ async function nowPlayingRenderToCanvas(track, artImg, isDark) {
         svg.src = "/material/svg/"+track.emblem.name+"?c=" + (isDark ? LMS_DARK_SVG : LMS_LIGHT_SVG);;
         try {
             await waitForLoad(svg);
-            let size = 22;
+            let size = 21;
             ctx.globalAlpha = 0.65;
             ctx.drawImage(svg, logoX-(size + 4), ART_MARGIN-1, size, size);
         } catch (e) {

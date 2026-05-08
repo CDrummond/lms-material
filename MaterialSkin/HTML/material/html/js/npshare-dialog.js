@@ -358,6 +358,7 @@ Vue.component('lms-npshare-dialog', {
                 view.src = canvas.toDataURL('image/png');
                 canvas.remove();
                 view.show = true;
+                view.date = new Date();
             });
         },
         changeStyle(idx) {
@@ -371,7 +372,7 @@ Vue.component('lms-npshare-dialog', {
             this.show = false;
         },
         download(action) {
-            let ts = new Date().toISOString().slice(0, 19).replace(/[T:]/g,'-');
+            let ts = this.date.toISOString().slice(0, 19).replace(/[T:]/g,'-');
             let filename = 'lyrion-' + ts + '.png';
             if (undefined!=action) {
                 let native = "nativeNpShare" + action;

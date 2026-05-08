@@ -254,10 +254,8 @@ Vue.component('lms-npshare-dialog', {
  <v-card>
   <v-card-title>{{i18n("Now Playing")}}</v-card-title>
   <v-list-tile-sub-title style="padding-left:16px;padding-right:16px" v-if="showText">{{saveText}}</v-list-tile-sub-title>
-  <div style="overflow:auto; margin:10px">
-   <div style="width:100%; height:100%">
-    <img :src="src" :style="{'width':cw+'px', 'height': ch+'px', 'object-fit':'cover'}"></img>
-   </div>
+  <div style="margin:4px">
+   <img :src="src" style="width:100%; height:100%; object-cover">
   </div>
   <v-card-actions>
    <v-menu top v-model="showMenu">

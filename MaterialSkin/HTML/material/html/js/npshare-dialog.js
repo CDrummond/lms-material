@@ -232,18 +232,15 @@ async function nowPlayingRenderToCanvas(track, artImg, isDark) {
     } catch (e) {
     }
 
-    if (undefined!=track.extid) {
-        let emblem = getEmblem(track.extid);
-        if (undefined!=emblem) {
-            svg = new Image();
-            svg.src = "/material/svg/"+emblem.name+"?c=" + (isDark ? LMS_DARK_SVG : LMS_LIGHT_SVG);;
-            try {
-                await waitForLoad(svg);
-                let size = 22;
-                ctx.globalAlpha = 0.5;
-                ctx.drawImage(svg, logoX-(size + 4), ART_MARGIN-1, size, size);
-            } catch (e) {
-            }
+    if (undefined!=track.emblem) {
+        svg = new Image();
+        svg.src = "/material/svg/"+track.emblem.name+"?c=" + (isDark ? LMS_DARK_SVG : LMS_LIGHT_SVG);;
+        try {
+            await waitForLoad(svg);
+            let size = 22;
+            ctx.globalAlpha = 0.65;
+            ctx.drawImage(svg, logoX-(size + 4), ART_MARGIN-1, size, size);
+        } catch (e) {
         }
     }
 
@@ -257,8 +254,8 @@ Vue.component('lms-npshare-dialog', {
  <v-card>
   <v-card-title>{{i18n("Now Playing")}}</v-card-title>
   <v-list-tile-sub-title style="padding-left:16px;padding-right:16px">{{saveText}}</v-list-tile-sub-title>
-  <div style="overflow:auto; margin-left:10px; margin-bottom:10px; margin-top:20px">
-   <div :style="{'width':(cw+10)+'px', 'height': (ch+10)+'px'}">
+  <div style="overflow:auto; margin:10px">
+   <div style="width:100%; height:100%">
     <img :src="src" :style="{'width':cw+'px', 'height': ch+'px', 'object-fit':'cover'}"></img>
    </div>
   </div>
@@ -318,6 +315,8 @@ Vue.component('lms-npshare-dialog', {
         }.bind(this));
         bus.$on('playerStatus', function(playerStatus) {
             if (this.show) {
+                let source = getTrackSource(playerStatus.current);
+                let emblem = getEmblem(playerStatus.current.extid ? playerStatus.current.extid : source ? source.extid : undefined);
                 let track = {
                     title:trackTitle(playerStatus.current),
                     artist:playerStatus.current.artist,
@@ -327,13 +326,13 @@ Vue.component('lms-npshare-dialog', {
                             : (playerStatus.current.album+(playerStatus.current.year && playerStatus.current.year>0
                                 ? " ("+ playerStatus.current.year+")"
                                 : "")),
-                    extid: playerStatus.current.extid
+                    emblem: emblem
                 }
                 if (track.title!=this.track.title ||
                     track.artist!=this.track.artist ||
                     track.trackartist!=this.track.trackartist ||
                     track.album!=this.track.album ||
-                    track.extid!=this.track.extid) {
+                    track.emblem!=this.track.emblem) {
                     this.track = track;
                     this.createImage();
                 }

@@ -271,9 +271,10 @@ Vue.component('lms-npshare-dialog', {
     </v-list>
    </v-menu>
    <v-spacer></v-spacer>
-   <v-btn flat v-if="queryParams.nativeNpShareS>0" @click="download('S')">{{i18n('Share')}}</v-btn>
-   <v-btn flat v-if="queryParams.nativeNpShareC>0" @click="download('C')">{{i18n('Clipboard')}}</v-btn>
-   <v-btn flat @click="download(queryParams.nativeNpShareD>0 ? 'D' : undefined)">{{i18n('Download')}}</v-btn>
+   <v-btn flat icon v-if="queryParams.nativeNpShareS>0" @click="download('S')" :title="i18n('Share')"><v-icon>share</v-icon></v-btn>
+   <v-btn flat icon v-if="queryParams.nativeNpShareC>0" @click="download('C')" :title="i18n('Copy')"><v-icon>content_copy</v-icon></v-btn>
+   <v-btn flat v-if="showText" @click="download(queryParams.nativeNpShareD>0 ? 'D' : undefined)">{{i18n('Download')}}</v-btn>
+   <v-btn flat icon v-else @click="download(queryParams.nativeNpShareD>0 ? 'D' : undefined)" :title="i18n('Download')"><v-icon>download</v-icon></v-btn>
    <v-btn flat @click="close">{{i18n('Close')}}</v-btn>
   </v-card-actions>
  </v-card>
@@ -290,7 +291,7 @@ Vue.component('lms-npshare-dialog', {
             saveText: undefined,
             style: 0,
             styles: [],
-            showText: !queryParams.hide.has('npShareText')
+            showText: queryParams.nativeNpShareS==0 && queryParams.nativeNpShareC==0
         }
     },
     computed: {

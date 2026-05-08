@@ -291,7 +291,8 @@ Vue.component('lms-npshare-dialog', {
             saveText: undefined,
             style: 0,
             styles: [],
-            showText: queryParams.nativeNpShareS==0 && queryParams.nativeNpShareC==0
+            showText: (undefined==queryParams.nativeNpShareS || queryParams.nativeNpShareS==0) &&
+                      (undefined==queryParams.nativeNpShareC || queryParams.nativeNpShareC==0)
         }
     },
     computed: {

@@ -3349,30 +3349,19 @@ function browseHandleDrop(view, to, ev) {
     bus.$emit('dragActive', false);
     if (view.dragIndex!=undefined && to!=view.dragIndex) {
         var item = view.items[view.dragIndex];
-        if (view.isTop || (view.current && (view.current.section==SECTION_FAVORITES || (view.current.section==SECTION_PLAYLISTS && item.stdItem==STD_ITEM_PLAYLIST_TRACK)))) {
+        let section = item.ihe ? item.section : view.current ? view.current.section : undefined;
+        if (view.isTop || (undefined!=section && (section==SECTION_FAVORITES || (section==SECTION_PLAYLISTS && item.stdItem==STD_ITEM_PLAYLIST_TRACK)))) {
             var sel = Array.from(view.selection);
             view.clearSelection();
             if (sel.length>0) {
-                if (view.current.section!=SECTION_FAVORITES && sel.indexOf(to)<0) {
+                if (section!=SECTION_FAVORITES && sel.indexOf(to)<0) {
                     bus.$emit('movePlaylistItems', view.current.id, sel.sort(function(a, b) { return a<b ? -1 : 1; }), to);
                     if (lmsOptions.playlistImages && view.history.length>0) {
                         view.history[view.history.length-1].needsRefresh = true;
                     }
                 }
-            } else if (view.isTop) {
-                let drgIdx = view.dragIndex;
-                if (undefined!=view.items[0].ihe) {
-                    to-=view.topExtra.length;
-                    drgIdx-=view.topExtra.length;
-                }
-                if (to>=0 && drgIdx>=0) {
-                    view.top = arrayMove(view.top, drgIdx, to);
-                    view.items = view.grid.use && view.$store.state.detailedHomeItems.length>0 ? view.topExtra.concat(view.top) : view.top;
-                    view.saveTopList();
-                    view.layoutGrid(true);
-                }
-            } else if (view.current) {
-                if (view.current.section==SECTION_FAVORITES) {
+            } else if (undefined!=section && (section==SECTION_FAVORITES || section==SECTION_PLAYLISTS)) {
+                if (section==SECTION_FAVORITES) {
                     if (view.$store.state.sortFavorites && !view.items[to].isFavFolder) {
                         return;
                     }
@@ -3408,6 +3397,18 @@ function browseHandleDrop(view, to, ev) {
                             view.history[view.history.length-1].needsRefresh = true;
                         }
                     });
+                }
+            } else if (view.isTop) {
+                let drgIdx = view.dragIndex;
+                if (undefined!=view.items[0].ihe) {
+                    to-=view.topExtra.length;
+                    drgIdx-=view.topExtra.length;
+                }
+                if (to>=0 && drgIdx>=0) {
+                    view.top = arrayMove(view.top, drgIdx, to);
+                    view.items = view.grid.use && view.$store.state.detailedHomeItems.length>0 ? view.topExtra.concat(view.top) : view.top;
+                    view.saveTopList();
+                    view.layoutGrid(true);
                 }
             }
         }

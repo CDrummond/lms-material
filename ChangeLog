@@ -7,7 +7,7 @@
 4. Add 'Share' to now-playing context menu, creates an image of current track
    for sharing. Thanks to crystalgipsy for the original implementation.
 5. Don't ask for more when scroll music mixes.
-6. Remove edit actions from favourites in scrolled list, as do not work.
+6. Fix edit actions from favourites in scrolled list.
 7. Fix semi-transparent check button on grid works covers.
 
 6.3.2

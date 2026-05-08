@@ -2514,7 +2514,8 @@ var lmsBrowse = Vue.component("lms-browse", {
         }.bind(this));
 
         bus.$on('refreshList', function(section) {
-            if (undefined==section || section==SECTION_PODCASTS || (this.current && this.current.section==section)) {
+            if (undefined==section || section==SECTION_PODCASTS || (this.current && this.current.section==section) ||
+                (section==SECTION_FAVORITES && this.isTop && this.$store.state.detailedHomeItems.length>0)) {
                 this.refreshList();
             }
         }.bind(this));

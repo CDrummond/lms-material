@@ -110,13 +110,13 @@ Vue.component('lms-favorite', {
                 if (name == this.item.title) {
                     return;
                 }
-                lmsCommand(this.playerId, ["favorites", "rename", this.item.id, "title:"+name]).then(({data})=> {
+                lmsCommand(this.playerId, ["favorites", "rename", originalId(this.item.id), "title:"+name]).then(({data})=> {
                     bus.$emit('refreshFavorites');
                     bus.$emit('refreshList', SECTION_FAVORITES);
                 });
             } else {
-                lmsCommand(this.playerId, ["favorites", "delete", this.item.id]).then(({data})=> {
-                    var command = ["favorites", "add", "url:"+url, "title:"+name, this.item.id];
+                lmsCommand(this.playerId, ["favorites", "delete", originalId(this.item.id)]).then(({data})=> {
+                    var command = ["favorites", "add", "url:"+url, "title:"+name, originalId(this.item.id)];
                     if (this.item.presetParams) {
                         if (icon) {
                             command.push("icon:"+icon);
@@ -151,7 +151,7 @@ Vue.component('lms-favorite', {
                 if (data && data.result && data.result.exists==1) {
                     bus.$emit('showMessage', i18n("Already in favorites"));
                 } else {
-                    lmsCommand(this.playerId, ["favorites", "add", "url:"+url, "title:"+name, this.item.id]).then(({data})=> {
+                    lmsCommand(this.playerId, ["favorites", "add", "url:"+url, "title:"+name, originalId(this.item.id)]).then(({data})=> {
                         bus.$emit('refreshFavorites');
                     });
                 }

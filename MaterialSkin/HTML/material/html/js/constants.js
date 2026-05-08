@@ -169,7 +169,6 @@ const SECTION_RADIO = 3;
 const SECTION_PLAYLISTS = 4;
 const SECTION_PODCASTS = 5; // Not a real 'section' but used to indicate when to refresh...
 const SECTION_NEWMUSIC = 6; // Not a real 'section' but used to indicate when to refresh...
-const SECTION_FAVORITES_SLIST = 7;
 const SIMPLE_LIB_VIEWS = "SimpleLibraryViews ";
 const GRID_SINGLE_LINE_DIFF = 20;
 const NP_INFO = 'now-playing-info';

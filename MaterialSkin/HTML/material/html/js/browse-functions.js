@@ -1551,7 +1551,7 @@ function browseItemAction(view, act, origItem, index, event, slimBrowseBaseActio
             logError(err, command);
         });
     } else if (act===REMOVE_FROM_FAV_ACTION || act==DELETE_FAV_FOLDER_ACTION) {
-        var id = SECTION_FAVORITES==view.current.section ? item.id : "url:"+(item.presetParams && item.presetParams.favorites_url ? item.presetParams.favorites_url : item.favUrl);
+        var id = SECTION_FAVORITES==(item.ihe ? item.section : view.current.section) ? originalId(item.id) : "url:"+(item.presetParams && item.presetParams.favorites_url ? item.presetParams.favorites_url : item.favUrl);
         if (undefined==id) {
             return;
         }
@@ -1564,7 +1564,7 @@ function browseItemAction(view, act, origItem, index, event, slimBrowseBaseActio
                 lmsCommand(view.playerId(), command).then(({data}) => {
                     logJsonMessage("RESP", data);
                     bus.$emit('refreshFavorites');
-                    if (SECTION_FAVORITES==view.current.section) {
+                    if (SECTION_FAVORITES==(item.ihe ? item.section : view.current.section)) {
                         view.refreshList();
                     }
                 }).catch(err => {

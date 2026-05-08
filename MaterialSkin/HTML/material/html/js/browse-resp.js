@@ -344,16 +344,14 @@ function parseBrowseResp(data, parent, options, cacheKey) {
                         i.isFavFolder = true;
                         resp.allowHoverBtns = true;
                     }
-                    if (!parent || parent.section != SECTION_FAVORITES_SLIST) {
-                        if (i.isFavFolder) {
-                            i.menu.push(RENAME_ACTION);
-                        } else if (i.presetParams) {
-                            i.menu.push(EDIT_ACTION);
-                        }
-                        i.menu.push(i.isFavFolder ? DELETE_FAV_FOLDER_ACTION : REMOVE_FROM_FAV_ACTION);
-                        if (undefined!=parent && parent.id!=TOP_FAVORITES_ID) {
-                            i.menu.push(MOVE_FAV_TO_PARENT_ACTION);
-                        }
+                    if (i.isFavFolder) {
+                        i.menu.push(RENAME_ACTION);
+                    } else if (i.presetParams) {
+                        i.menu.push(EDIT_ACTION);
+                    }
+                    i.menu.push(i.isFavFolder ? DELETE_FAV_FOLDER_ACTION : REMOVE_FROM_FAV_ACTION);
+                    if (undefined!=parent && parent.id!=TOP_FAVORITES_ID) {
+                        i.menu.push(MOVE_FAV_TO_PARENT_ACTION);
                     }
                     if (i.isFavFolder && (!i.image || i.image.startsWith("/html/images/favorites"+LMS_LIST_IMAGE_SIZE))) {
                         i.svg="folder-favorite";
@@ -563,6 +561,10 @@ function parseBrowseResp(data, parent, options, cacheKey) {
                 if (!i.id || isFavorites) {
                     if (i.params && i.params.track_id) {
                         i.id = uniqueId("track_id:"+i.params.track_id, resp.items.length); // Incase of duplicates?
+                    } else if (i.params && i.params.item_id) {
+                        i.id = uniqueId("item_id:"+i.params.item_id, resp.items.length); // Incase of duplicates?
+                    } else if (i.actions && i.actions.go && i.actions.go.params && i.actions.go.params.item_id) {
+                        i.id = uniqueId("item_id:"+i.actions.go.params.item_id, resp.items.length); // Incase of duplicates?
                     } else if (parent && parent.id && parent.id.startsWith(TOP_ID_PREFIX)) {
                         i.id="item_id:"+resp.items.length;
                     } else {
@@ -690,7 +692,7 @@ function parseBrowseResp(data, parent, options, cacheKey) {
                 }
 
                 /* Play/add of a track from a favourited album adds all tracks :( this section works-around this... */
-                if (!isFavorites && parent && (parent.section == SECTION_FAVORITES || parent.section == SECTION_FAVORITES_SLIST) && i.commonParams && i.commonParams.track_id) {
+                if (!isFavorites && parent && parent.section == SECTION_FAVORITES && i.commonParams && i.commonParams.track_id) {
                     i.id = "track_id:"+i.commonParams.track_id;
                     i.stdItem = STD_ITEM_TRACK;
                     i.type = i.presetParams = i.commonParams = i.menu = i.playallParams = i.addallParams = i.goAction = i.style = undefined;
@@ -760,7 +762,7 @@ function parseBrowseResp(data, parent, options, cacheKey) {
                 images.add(i.image ? i.image : i.icon ? i.icon : i.svg);
             }
             /* ...continuation of favourited album add/play track issue... */
-            if (!isFavorites && parent && (parent.section == SECTION_FAVORITES || parent.section == SECTION_FAVORITES_SLIST) && resp.items.length>0 && resp.items[0].stdItem == STD_ITEM_TRACK) {
+            if (!isFavorites && parent && parent.section == SECTION_FAVORITES && resp.items.length>0 && resp.items[0].stdItem == STD_ITEM_TRACK) {
                 resp.baseActions = [];
             }
             if (resp.canUseGrid && (types.has("text") /*|| types.has("search") || types.has("entry")*/)) {
@@ -2435,7 +2437,7 @@ function parseBrowseResp(data, parent, options, cacheKey) {
                          {key:'radios', loop:"radios", title:i18n('Radios'), svg:"radio", command:["material-skin-query","radios"], params:[], limit:200},
                          {key:'playlists', loop:"playlists", title:i18n('Playlists'), icon:"list", command:["material-skin-query","playlists"], params:[PLAYLIST_TAGS, "menu:1"], limit:200},
                          {key:'changed', loop:"albums", title:lmsOptions.supportReleaseTypes ? i18n("Recently Updated Releases") : i18n("Recently Updated Albums"), svg:"updated-music", command:["albums"], params:["sort:changed", ALBUM_TAGS_ALL_ARTISTS]},
-                         {key:'favorites', loop:"item", title:i18n("Favorites"), icon:"favorite", command:["favorites", "items"], params:["menu:favorites", "menu:1"], section:SECTION_FAVORITES_SLIST, isFavFolder:true},
+                         {key:'favorites', loop:"item", title:i18n("Favorites"), icon:"favorite", command:["favorites", "items"], params:["menu:favorites", "menu:1"], section:SECTION_FAVORITES, isFavFolder:true},
                          {id:DETAILED_HOME_EXPLORE}
                         ];
             for (let s=0, len=lists.length-1; s<len; ++s) { // Ignore 'Explore'
@@ -2475,8 +2477,8 @@ function parseBrowseResp(data, parent, options, cacheKey) {
                     }
                 }
                 if (loop!=undefined) {
-                    let isFav = lists[s].section==SECTION_FAVORITES_SLIST;
-                    let parent = isFav ? {section:SECTION_FAVORITES_SLIST, isFavFolder:true} : undefined;
+                    let isFav = lists[s].section==SECTION_FAVORITES;
+                    let parent = isFav ? {section:SECTION_FAVORITES, isFavFolder:true} : undefined;
                     let new_data = {
                         id:2,
                         method: data.method,

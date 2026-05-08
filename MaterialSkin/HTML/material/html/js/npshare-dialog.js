@@ -177,18 +177,18 @@ async function nowPlayingRenderToCanvas(track, artImg, isDark) {
     let entries = [];
 
     // Auto-scale title — start smaller, max 2 lines, scale down to fit
-    let formatted = formatLines(ctx, track.title, textW, 24, 18, EXTR_BOLD_WEIGHT, FONT_SUFFIX);
+    let formatted = formatLines(ctx, track.title, textW, 20, 14, EXTR_BOLD_WEIGHT, FONT_SUFFIX);
     entries.push({lines:formatted.lines, fontSize:formatted.fontSize, weight:EXTR_BOLD_WEIGHT, color:TEXT_COLOR});
 
-    formatted = formatLines(ctx, stripTags(track.artist ? track.artist : track.trackartist), textW, 16, 12, STD_WEIGHT, FONT_SUFFIX);
+    formatted = formatLines(ctx, stripTags(track.artist ? track.artist : track.trackartist), textW, 14, 10, STD_WEIGHT, FONT_SUFFIX);
     entries.push({lines:formatted.lines, fontSize:formatted.fontSize, weight:STD_WEIGHT, color:TEXT_COLOR});
 
-    formatted = formatLines(ctx, stripTags(track.album), textW, 14, 10, STD_WEIGHT, FONT_SUFFIX);
+    formatted = formatLines(ctx, stripTags(track.album), textW, Math.min(formatted.fontSize, 12), 8, STD_WEIGHT, FONT_SUFFIX);
     entries.push({lines:formatted.lines, fontSize:formatted.fontSize, weight:STD_WEIGHT, color:CTX_TEXT_COLOR});
 
     // Calculate total block height for vertical centring
-    let totalTextH = 44
-                     + (Math.min(entries[0].lines.length, 2) * entries[0].fontSize * 1.15) + 8
+    let totalTextH = 48
+                     + (Math.min(entries[0].lines.length, 2) * entries[0].fontSize * 1.15) + 12
                      + (Math.min(entries[1].lines.length, 2) * entries[1].fontSize * 1.15) + 4
                      + (Math.min(entries[2].lines.length, 2) * entries[2].fontSize * 1.15);
     let ty = (NP_SHARE_H - totalTextH) / 2;
@@ -196,8 +196,8 @@ async function nowPlayingRenderToCanvas(track, artImg, isDark) {
     ctx.fillStyle = TEXT_COLOR;
     ctx.font = BOLD_WEIGHT + '13px Roboto, sans-serif';
     ctx.letterSpacing = '0.2em';
-    ctx.fillText(i18n('Now Playing').toUpperCase(), tx, ty + 26);
-    ty += 30;
+    ctx.fillText(i18n('Now Playing').toUpperCase(), tx, ty + 22);
+    ty += 34;
 
     ctx.letterSpacing = '0.0em';
     for (let e=0; e<3; ++e) {
@@ -211,7 +211,7 @@ async function nowPlayingRenderToCanvas(track, artImg, isDark) {
                 ctx.fillText(entries[e].lines[1]+(entries[e].lines.length>2 ? "..." : ""), tx, ty + lineH);
                 ty += lineH;
             }
-            ty += (0==e ? 8 : 4);
+            ty += (0==e ? 12 : 4);
         }
     }
 

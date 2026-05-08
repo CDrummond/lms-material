@@ -7,8 +7,8 @@
 'use strict';
 
 const NP_SHARE_H = 220;
-const NP_SHARE_W = 500;
-const NP_MAX_ART_SIZE = 180;
+const NP_SHARE_W = 460;
+const NP_MAX_ART_SIZE = 160;
 
 function loadImage(url) {
     return new Promise(function(resolve) {
@@ -88,7 +88,7 @@ function waitForLoad(element) {
 }
 
 async function nowPlayingRenderToCanvas(track, artImg, isDark) {
-    const ART_MARGIN       = 10;
+    const ART_MARGIN       = 5;
     const R                = 14;
     const OVERLAY_ALPHA    = 0.45;
     const FONT_SUFFIX      = 'px Roboto, sans-serif';

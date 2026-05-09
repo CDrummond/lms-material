@@ -8,7 +8,7 @@
 
 const NP_SHARE_MARGIN = 5;
 const NP_SHARE_H      = 180;
-const NP_SHARE_W      = 500;
+const NP_SHARE_W      = 450;
 const NP_MAX_ART_SIZE = NP_SHARE_H - (2 * NP_SHARE_MARGIN);
 
 function loadImage(url) {
@@ -89,14 +89,14 @@ function waitForLoad(element) {
 }
 
 async function nowPlayingRenderToCanvas(track, artImg, isDark) {
-    const R                = 14;
-    const OVERLAY_ALPHA    = 0.45;
-    const FONT_SUFFIX      = 'px Roboto, sans-serif';
-    const TEXT_COLOR       = "#" + (isDark ? LMS_DARK_SVG : "000");
-    const STD_WEIGHT       = '400 ';
-    const BOLD_WEIGHT      = '500 ';
-    const EXTR_BOLD_WEIGHT = '700 ';
-    const SUB_OPACITY      = 0.7;
+    const CORNER_RADIUS     = 14;
+    const OVERLAY_ALPHA     = 0.45;
+    const FONT_SUFFIX       = 'px Roboto, sans-serif';
+    const TEXT_COLOR        = "#" + (isDark ? LMS_DARK_SVG : "000");
+    const STD_WEIGHT        = '400 ';
+    const BOLD_WEIGHT       = '500 ';
+    const EXTRA_BOLD_WEIGHT = '700 ';
+    const SUB_OPACITY       = 0.7;
 
     let canvas = document.createElement('canvas');
     let ctx = canvas.getContext('2d');
@@ -108,7 +108,7 @@ async function nowPlayingRenderToCanvas(track, artImg, isDark) {
 
     // ── Clip to rounded card ──
     ctx.save();
-    roundRect(ctx, 0, 0, NP_SHARE_W, NP_SHARE_H, R);
+    roundRect(ctx, 0, 0, NP_SHARE_W, NP_SHARE_H, CORNER_RADIUS);
     ctx.clip();
 
     // ── 1. Full card background — blurred artwork ──
@@ -177,13 +177,13 @@ async function nowPlayingRenderToCanvas(track, artImg, isDark) {
     let entries = [];
 
     // Auto-scale title — start smaller, max 2 lines, scale down to fit
-    let formatted = formatLines(ctx, track.title, textW, 16, 12, EXTR_BOLD_WEIGHT, FONT_SUFFIX);
-    entries.push({lines:formatted.lines, fontSize:formatted.fontSize, weight:EXTR_BOLD_WEIGHT, opacity:1.0});
+    let formatted = formatLines(ctx, track.title, textW, 18, 12, EXTRA_BOLD_WEIGHT, FONT_SUFFIX);
+    entries.push({lines:formatted.lines, fontSize:formatted.fontSize, weight:EXTRA_BOLD_WEIGHT, opacity:1.0});
 
-    formatted = formatLines(ctx, stripTags(track.artistAndComposer), textW, Math.min(formatted.fontSize, 14), 10, STD_WEIGHT, FONT_SUFFIX);
+    formatted = formatLines(ctx, stripTags(track.artistAndComposer), textW, Math.min(formatted.fontSize, 16), 12, STD_WEIGHT, FONT_SUFFIX);
     entries.push({lines:formatted.lines, fontSize:formatted.fontSize, weight:STD_WEIGHT, opacity:1.0});
 
-    formatted = formatLines(ctx, stripTags(track.album), textW, Math.min(formatted.fontSize-2, 12), 8, STD_WEIGHT, FONT_SUFFIX);
+    formatted = formatLines(ctx, stripTags(track.album), textW, Math.min(formatted.fontSize, 14), 10, STD_WEIGHT, FONT_SUFFIX);
     entries.push({lines:formatted.lines, fontSize:formatted.fontSize, weight:STD_WEIGHT, opacity:SUB_OPACITY});
 
     // Calculate total block height for vertical centring
@@ -257,7 +257,7 @@ Vue.component('lms-npshare-dialog', {
 <v-dialog v-model="show" :width="cw+20" persistent v-if="show">
  <v-card>
   <v-card-title>{{i18n("Now Playing")}}</v-card-title>
-  <v-list-tile-sub-title style="padding-left:16px;padding-right:16px" v-if="showText">{{saveText}}</v-list-tile-sub-title>
+  <v-list-tile-sub-title style="padding:0px 16px 16px 16px" v-if="showText">{{saveText}}</v-list-tile-sub-title>
   <div style="margin:4px">
    <img :src="src" style="width:100%; height:100%; object-cover">
   </div>

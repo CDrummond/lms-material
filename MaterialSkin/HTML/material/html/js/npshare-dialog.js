@@ -321,29 +321,10 @@ Vue.component('lms-npshare-dialog', {
                 this.show=false;
             }
         }.bind(this));
-        bus.$on('playerStatus', function(playerStatus) {
+        bus.$on('npTrackChanged', function(track) {
             if (this.show) {
-                let source = getTrackSource(playerStatus.current);
-                let emblem = getEmblem(playerStatus.current.extid ? playerStatus.current.extid : source ? source.extid : undefined);
-                let track = {
-                    title:trackTitle(playerStatus.current),
-                    artist:playerStatus.current.artist,
-                    trackartist:playerStatus.current.trackartist,
-                    album:undefined==playerStatus.current.album
-                            ? undefined 
-                            : (playerStatus.current.album+(playerStatus.current.year && playerStatus.current.year>0
-                                ? " ("+ playerStatus.current.year+")"
-                                : "")),
-                    emblem: emblem
-                }
-                if (track.title!=this.track.title ||
-                    track.artist!=this.track.artist ||
-                    track.trackartist!=this.track.trackartist ||
-                    track.album!=this.track.album ||
-                    track.emblem!=this.track.emblem) {
-                    this.track = track;
-                    this.createImage();
-                }
+                this.track = track;
+                this.createImage();
             }
         }.bind(this));
         bus.$on('currentCover', function(coverUrl) {

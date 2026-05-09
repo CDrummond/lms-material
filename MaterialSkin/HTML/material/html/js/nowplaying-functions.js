@@ -314,6 +314,7 @@ function nowplayingOnPlayerStatus(view, playerStatus) {
     if (trackChanged && view.info.sync) {
         view.setInfoTrack();
         view.showInfo();
+        bus.$emit('npTrackChanged', view.playerStatus.current);
         if (!IS_MOBILE && (queryParams.setTitle || queryParams.dontTrapBack)) {
             nowplayingSetWindowTitle(view);
         }

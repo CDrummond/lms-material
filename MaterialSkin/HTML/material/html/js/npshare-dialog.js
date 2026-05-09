@@ -276,7 +276,7 @@ Vue.component('lms-npshare-dialog', {
    </v-menu>
    <v-spacer></v-spacer>
    <v-btn flat icon v-if="queryParams.nativeNpShareS>0" @click="download('S')" :title="i18n('Share')"><v-icon>share</v-icon></v-btn>
-   <v-btn flat icon v-if="queryParams.nativeNpShareC>0" @click="download('C')" :title="i18n('Copy')"><v-icon>content_copy</v-icon></v-btn>
+   <v-btn flat icon v-if="queryParams.nativeNpShareC>0" @click="download('C')" :title="i18n('Add to clipboard')"><img class="svg-img" :src="'clipboard-add' | svgIcon(darkUi)"></img></v-btn>
    <v-btn flat v-if="showText" @click="download(queryParams.nativeNpShareD>0 ? 'D' : undefined)">{{i18n('Download')}}</v-btn>
    <v-btn flat icon v-else @click="download(queryParams.nativeNpShareD>0 ? 'D' : undefined)" :title="i18n('Download')"><v-icon>download</v-icon></v-btn>
    <v-btn flat @click="close">{{i18n('Close')}}</v-btn>
@@ -302,6 +302,9 @@ Vue.component('lms-npshare-dialog', {
     computed: {
         dark () {
             return 0==this.style || (2==this.style && this.$store.state.darkUi)
+        },
+        darkUi() {
+            return this.$store.state.darkUi
         }
     },
     mounted() {

@@ -180,7 +180,7 @@ async function nowPlayingRenderToCanvas(track, artImg, isDark) {
     let formatted = formatLines(ctx, track.title, textW, 16, 12, EXTR_BOLD_WEIGHT, FONT_SUFFIX);
     entries.push({lines:formatted.lines, fontSize:formatted.fontSize, weight:EXTR_BOLD_WEIGHT, color:TEXT_COLOR});
 
-    formatted = formatLines(ctx, stripTags(track.artist ? track.artist : track.trackartist), textW, Math.min(formatted.fontSize, 14), 10, STD_WEIGHT, FONT_SUFFIX);
+    formatted = formatLines(ctx, stripTags(track.artistAndComposer), textW, Math.min(formatted.fontSize, 14), 10, STD_WEIGHT, FONT_SUFFIX);
     entries.push({lines:formatted.lines, fontSize:formatted.fontSize, weight:STD_WEIGHT, color:TEXT_COLOR});
 
     formatted = formatLines(ctx, stripTags(track.album), textW, Math.min(formatted.fontSize-2, 12), 8, STD_WEIGHT, FONT_SUFFIX);

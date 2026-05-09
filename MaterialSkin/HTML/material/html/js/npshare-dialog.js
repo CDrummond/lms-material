@@ -6,9 +6,10 @@
  */
 'use strict';
 
-const NP_SHARE_H = 220;
-const NP_SHARE_W = 460;
-const NP_MAX_ART_SIZE = 160;
+const NP_SHARE_MARGIN = 5;
+const NP_SHARE_H      = 180;
+const NP_SHARE_W      = 500;
+const NP_MAX_ART_SIZE = NP_SHARE_H - (2 * NP_SHARE_MARGIN);
 
 function loadImage(url) {
     return new Promise(function(resolve) {
@@ -88,7 +89,6 @@ function waitForLoad(element) {
 }
 
 async function nowPlayingRenderToCanvas(track, artImg, isDark) {
-    const ART_MARGIN       = 5;
     const R                = 14;
     const OVERLAY_ALPHA    = 0.45;
     const FONT_SUFFIX      = 'px Roboto, sans-serif';
@@ -150,7 +150,7 @@ async function nowPlayingRenderToCanvas(track, artImg, isDark) {
         let artScale = Math.min(NP_MAX_ART_SIZE / artImg.width, NP_MAX_ART_SIZE / artImg.height);
         let artW = artImg.width  * artScale;
         let artH = artImg.height * artScale;
-        let ax = ART_MARGIN + (NP_MAX_ART_SIZE - artW) / 2;
+        let ax = NP_SHARE_MARGIN + (NP_MAX_ART_SIZE - artW) / 2;
         let ay = (NP_SHARE_H - artH) / 2;
 
         // Drop shadow
@@ -171,8 +171,8 @@ async function nowPlayingRenderToCanvas(track, artImg, isDark) {
     }
 
     // ── 4. Text — right half, directly on background ──
-    let tx    = usedArtW + (ART_MARGIN * 3);
-    let textW = NP_SHARE_W - (tx + (ART_MARGIN*2));
+    let tx    = usedArtW + (NP_SHARE_MARGIN * 3);
+    let textW = NP_SHARE_W - (tx + (NP_SHARE_MARGIN*2));
 
     let entries = [];
 
@@ -187,28 +187,33 @@ async function nowPlayingRenderToCanvas(track, artImg, isDark) {
     entries.push({lines:formatted.lines, fontSize:formatted.fontSize, weight:STD_WEIGHT, color:CTX_TEXT_COLOR});
 
     // Calculate total block height for vertical centring
-    let totalTextH = 48
-                     + (Math.min(entries[0].lines.length, 2) * entries[0].fontSize * 1.15) + 12
+    let totalTextH = /*48
+                     +*/ (Math.min(entries[0].lines.length, 2) * entries[0].fontSize * 1.15) + 12
                      + (Math.min(entries[1].lines.length, 2) * entries[1].fontSize * 1.15) + 4
                      + (Math.min(entries[2].lines.length, 2) * entries[2].fontSize * 1.15);
     let ty = (NP_SHARE_H - totalTextH) / 2;
 
     ctx.fillStyle = CTX_TEXT_COLOR;
+    /*
     ctx.font = STD_WEIGHT + '12px Roboto, sans-serif';
     ctx.letterSpacing = '0.5em';
     ctx.fillText(i18n('Now Playing').toUpperCase(), tx, ty + 22);
     ty += 34;
 
     ctx.letterSpacing = '0.0em';
+    */
     for (let e=0; e<3; ++e) {
         if (entries[e].lines.length>0) {
             let lineH = entries[e].fontSize * 1.15;
             ctx.font = entries[e].weight + entries[e].fontSize + FONT_SUFFIX;
             ctx.fillStyle = entries[e].color;
-            ctx.fillText(entries[e].lines[0], tx, ty + lineH);
+            let offset = (textW - ctx.measureText(entries[e].lines[0]).width)/2;
+            ctx.fillText(entries[e].lines[0], tx + offset, ty + lineH);
             ty += lineH;
             if (entries[e].lines.length>1) {
-                ctx.fillText(entries[e].lines[1]+(entries[e].lines.length>2 ? "..." : ""), tx, ty + lineH);
+                let txt = entries[e].lines[1]+(entries[e].lines.length>2 ? "..." : "");
+                offset = (textW - ctx.measureText(txt).width)/2;
+                ctx.fillText(txt, tx + offset, ty + lineH);
                 ty += lineH;
             }
             ty += (0==e ? 12 : 4);
@@ -223,10 +228,10 @@ async function nowPlayingRenderToCanvas(track, artImg, isDark) {
         let h = 14;
         let w = h * (svg.width/svg.height)
         ctx.globalAlpha = 0.75;
-        ctx.drawImage(svg, NP_SHARE_W-(w+ART_MARGIN+8), ART_MARGIN+2, w, h);
+        ctx.drawImage(svg, NP_SHARE_W-(w+NP_SHARE_MARGIN+8), NP_SHARE_MARGIN+2, w, h);
         ctx.beginPath();
-        logoX = NP_SHARE_W-(w+ART_MARGIN+14);
-        ctx.roundRect(logoX, ART_MARGIN, w+14, h+4, (h+ART_MARGIN)/2);
+        logoX = NP_SHARE_W-(w+NP_SHARE_MARGIN+14);
+        ctx.roundRect(logoX, NP_SHARE_MARGIN, w+14, h+4, (h+NP_SHARE_MARGIN)/2);
         ctx.strokeStyle = "#"+(isDark ? LMS_DARK_SVG : LMS_LIGHT_SVG);
         ctx.stroke();
     } catch (e) {
@@ -239,7 +244,7 @@ async function nowPlayingRenderToCanvas(track, artImg, isDark) {
             await waitForLoad(svg);
             let size = 21;
             ctx.globalAlpha = 0.65;
-            ctx.drawImage(svg, logoX-(size + 4), ART_MARGIN-1, size, size);
+            ctx.drawImage(svg, logoX-(size + 4), NP_SHARE_MARGIN-1, size, size);
         } catch (e) {
         }
     }

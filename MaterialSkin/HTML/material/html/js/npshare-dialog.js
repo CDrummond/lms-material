@@ -92,11 +92,11 @@ async function nowPlayingRenderToCanvas(track, artImg, isDark) {
     const R                = 14;
     const OVERLAY_ALPHA    = 0.45;
     const FONT_SUFFIX      = 'px Roboto, sans-serif';
-    const TEXT_COLOR       = "#" + (isDark ? LMS_DARK_SVG : "000"); // # fff
-    const CTX_TEXT_COLOR   = 'rgba(' + (isDark ? '255,255,255' : '0,0,0') + ',0.55)';
+    const TEXT_COLOR       = "#" + (isDark ? LMS_DARK_SVG : "000");
     const STD_WEIGHT       = '400 ';
     const BOLD_WEIGHT      = '500 ';
     const EXTR_BOLD_WEIGHT = '700 ';
+    const SUB_OPACITY      = 0.7;
 
     let canvas = document.createElement('canvas');
     let ctx = canvas.getContext('2d');
@@ -178,13 +178,13 @@ async function nowPlayingRenderToCanvas(track, artImg, isDark) {
 
     // Auto-scale title — start smaller, max 2 lines, scale down to fit
     let formatted = formatLines(ctx, track.title, textW, 16, 12, EXTR_BOLD_WEIGHT, FONT_SUFFIX);
-    entries.push({lines:formatted.lines, fontSize:formatted.fontSize, weight:EXTR_BOLD_WEIGHT, color:TEXT_COLOR});
+    entries.push({lines:formatted.lines, fontSize:formatted.fontSize, weight:EXTR_BOLD_WEIGHT, opacity:1.0});
 
     formatted = formatLines(ctx, stripTags(track.artistAndComposer), textW, Math.min(formatted.fontSize, 14), 10, STD_WEIGHT, FONT_SUFFIX);
-    entries.push({lines:formatted.lines, fontSize:formatted.fontSize, weight:STD_WEIGHT, color:TEXT_COLOR});
+    entries.push({lines:formatted.lines, fontSize:formatted.fontSize, weight:STD_WEIGHT, opacity:1.0});
 
     formatted = formatLines(ctx, stripTags(track.album), textW, Math.min(formatted.fontSize-2, 12), 8, STD_WEIGHT, FONT_SUFFIX);
-    entries.push({lines:formatted.lines, fontSize:formatted.fontSize, weight:STD_WEIGHT, color:CTX_TEXT_COLOR});
+    entries.push({lines:formatted.lines, fontSize:formatted.fontSize, weight:STD_WEIGHT, opacity:SUB_OPACITY});
 
     // Calculate total block height for vertical centring
     let totalTextH = /*48
@@ -193,7 +193,7 @@ async function nowPlayingRenderToCanvas(track, artImg, isDark) {
                      + (Math.min(entries[2].lines.length, 2) * entries[2].fontSize * 1.15);
     let ty = (NP_SHARE_H - totalTextH) / 2;
 
-    ctx.fillStyle = CTX_TEXT_COLOR;
+    ctx.fillStyle = TEXT_COLOR;
     /*
     ctx.font = STD_WEIGHT + '12px Roboto, sans-serif';
     ctx.letterSpacing = '0.5em';
@@ -206,7 +206,7 @@ async function nowPlayingRenderToCanvas(track, artImg, isDark) {
         if (entries[e].lines.length>0) {
             let lineH = entries[e].fontSize * 1.15;
             ctx.font = entries[e].weight + entries[e].fontSize + FONT_SUFFIX;
-            ctx.fillStyle = entries[e].color;
+            ctx.globalAlpha = entries[e].opacity;
             let offset = (textW - ctx.measureText(entries[e].lines[0]).width)/2;
             ctx.fillText(entries[e].lines[0], tx + offset, ty + lineH);
             ty += lineH;
@@ -220,6 +220,7 @@ async function nowPlayingRenderToCanvas(track, artImg, isDark) {
         }
     }
 
+    ctx.globalAlpha = SUB_OPACITY;
     let svg = new Image();
     let logoX = NP_SHARE_W;
     svg.src = "/material/svg/lyrion-logo?c=" + (isDark ? LMS_DARK_SVG : LMS_LIGHT_SVG);
@@ -227,7 +228,6 @@ async function nowPlayingRenderToCanvas(track, artImg, isDark) {
         await waitForLoad(svg);
         let h = 14;
         let w = h * (svg.width/svg.height)
-        ctx.globalAlpha = 0.75;
         ctx.drawImage(svg, NP_SHARE_W-(w+NP_SHARE_MARGIN+8), NP_SHARE_MARGIN+2, w, h);
         ctx.beginPath();
         logoX = NP_SHARE_W-(w+NP_SHARE_MARGIN+14);
@@ -243,7 +243,6 @@ async function nowPlayingRenderToCanvas(track, artImg, isDark) {
         try {
             await waitForLoad(svg);
             let size = 21;
-            ctx.globalAlpha = 0.65;
             ctx.drawImage(svg, logoX-(size + 4), NP_SHARE_MARGIN-1, size, size);
         } catch (e) {
         }

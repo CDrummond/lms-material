@@ -88,7 +88,7 @@ function waitForLoad(element) {
     });
 }
 
-async function nowPlayingRenderToCanvas(track, artImg, isDark) {
+async function nowPlayingRenderToCanvas(track, artImg, isDark, rounded) {
     const CORNER_RADIUS     = 14;
     const OVERLAY_ALPHA     = 0.45;
     const FONT_SUFFIX       = 'px Roboto, sans-serif';
@@ -106,10 +106,11 @@ async function nowPlayingRenderToCanvas(track, artImg, isDark) {
     canvas.style.width = `${NP_SHARE_W}px`;
     canvas.style.height = `${NP_SHARE_H}px`;
 
-    // ── Clip to rounded card ──
-    ctx.save();
-    roundRect(ctx, 0, 0, NP_SHARE_W, NP_SHARE_H, CORNER_RADIUS);
-    ctx.clip();
+    if (rounded) {
+        // ── Clip to rounded card ──
+        roundRect(ctx, 0, 0, NP_SHARE_W, NP_SHARE_H, CORNER_RADIUS);
+        ctx.clip();
+    }
 
     // ── 1. Full card background — blurred artwork ──
     ctx.fillStyle = isDark ? "#103030" : "#fafafa";
@@ -162,11 +163,15 @@ async function nowPlayingRenderToCanvas(track, artImg, isDark) {
         ctx.restore();
 
         // Clean artwork — no filter
-        ctx.save();
-        roundRect(ctx, ax, ay, artW, artH, 8);
-        ctx.clip();
+        if (rounded) {
+            ctx.save();
+            roundRect(ctx, ax, ay, artW, artH, 8);
+            ctx.clip();
+        }
         ctx.drawImage(artImg, ax, ay, artW, artH);
-        ctx.restore();
+        if (rounded) {
+            ctx.restore();
+        }
         usedArtW = artW;
     }
 
@@ -248,7 +253,9 @@ async function nowPlayingRenderToCanvas(track, artImg, isDark) {
         }
     }
 
-    ctx.restore();
+    if (rounded) {
+        ctx.restore();
+    }
     return canvas;
 }
 
@@ -265,7 +272,11 @@ Vue.component('lms-npshare-dialog', {
    <v-menu top v-model="showMenu">
     <v-btn icon slot="activator"><v-icon>more_vert</v-icon></v-btn>
     <v-list>
-    <v-subheader>{{i18n("Theme")}}</v-subheader>
+     <v-list-tile role="menuitem" v-if="allowRounded" @click="toggleRounded">
+      <v-list-tile-avatar><v-icon>{{rounded ? 'check_box' : 'check_box_outline_blank'}}</v-icon></v-list-tile-avatar>
+      <v-list-tile-content><v-list-tile-title>{{i18n("Round corners")}}</v-list-tile-title></v-list-tile-content>
+     </v-list-tile>
+     <v-subheader>{{i18n("Theme")}}</v-subheader>
      <template v-for="(name, index) in styles">
       <v-list-tile role="menuitem" @click="changeStyle(index)" class="menu-group-item">
        <v-list-tile-avatar><v-icon>{{index==style ? 'radio_button_checked' : 'radio_button_unchecked'}}</v-icon></v-list-tile-avatar>
@@ -293,7 +304,8 @@ Vue.component('lms-npshare-dialog', {
             saveText: undefined,
             style: 0,
             styles: [],
-            text: undefined
+            text: undefined,
+            rounded: true
         }
     },
     computed: {
@@ -302,6 +314,9 @@ Vue.component('lms-npshare-dialog', {
         },
         darkUi() {
             return this.$store.state.darkUi
+        },
+        allowRounded() {
+            return this.$store.state.roundCovers
         }
     },
     mounted() {
@@ -332,6 +347,7 @@ Vue.component('lms-npshare-dialog', {
             this.createImage();
             this.styles = [i18n("Dark"), i18n("Light"), i18n("Automatic")];
             this.style = parseInt(getLocalStorageVal("nd-share-style", 0));
+            this.rounded = getLocalStorageBool("nd-share-rounded", this.rounded);
         }.bind(this));
         bus.$on('closeDialog', function(dlg) {
             if (dlg == 'npshare') {
@@ -358,7 +374,7 @@ Vue.component('lms-npshare-dialog', {
         createImage() {
             let view = this;
             loadImage(view.coverUrl).then(async function(artImg) {
-                let canvas = await nowPlayingRenderToCanvas(view.track, artImg, view.dark);
+                let canvas = await nowPlayingRenderToCanvas(view.track, artImg, view.dark, view.allowRounded && view.rounded);
                 view.src = canvas.toDataURL('image/png');
                 canvas.remove();
                 view.show = true;
@@ -371,6 +387,11 @@ Vue.component('lms-npshare-dialog', {
                 setLocalStorageVal("nd-share-style", idx);
                 this.createImage();
             }
+        },
+        toggleRounded() {
+            this.rounded = !this.rounded;
+            setLocalStorageVal("nd-share-rounded", this.rounded);
+            this.createImage();
         },
         close() {
             this.show = false;

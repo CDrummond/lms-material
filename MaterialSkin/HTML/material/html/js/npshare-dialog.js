@@ -88,7 +88,7 @@ function waitForLoad(element) {
     });
 }
 
-async function nowPlayingRenderToCanvas(track, artImg, isDark, rounded) {
+async function nowPlayingRenderToCanvas(track, artImg, isDark, centered, rounded) {
     const CORNER_RADIUS     = 14;
     const OVERLAY_ALPHA     = 0.45;
     const FONT_SUFFIX       = 'px Roboto, sans-serif';
@@ -212,12 +212,12 @@ async function nowPlayingRenderToCanvas(track, artImg, isDark, rounded) {
             let lineH = entries[e].fontSize * 1.15;
             ctx.font = entries[e].weight + entries[e].fontSize + FONT_SUFFIX;
             ctx.globalAlpha = entries[e].opacity;
-            let offset = (textW - ctx.measureText(entries[e].lines[0]).width)/2;
+            let offset = centered ? (textW - ctx.measureText(entries[e].lines[0]).width)/2 : 0;
             ctx.fillText(entries[e].lines[0], tx + offset, ty + lineH);
             ty += lineH;
             if (entries[e].lines.length>1) {
                 let txt = entries[e].lines[1]+(entries[e].lines.length>2 ? "..." : "");
-                offset = (textW - ctx.measureText(txt).width)/2;
+                offset = centered ? (textW - ctx.measureText(txt).width)/2 : 0;
                 ctx.fillText(txt, tx + offset, ty + lineH);
                 ty += lineH;
             }
@@ -272,6 +272,10 @@ Vue.component('lms-npshare-dialog', {
    <v-menu top v-model="showMenu">
     <v-btn icon slot="activator"><v-icon>more_vert</v-icon></v-btn>
     <v-list>
+     <v-list-tile role="menuitem" @click="toggleCentered">
+      <v-list-tile-avatar><v-icon>{{centered ? 'check_box' : 'check_box_outline_blank'}}</v-icon></v-list-tile-avatar>
+      <v-list-tile-content><v-list-tile-title>{{i18n("Center text")}}</v-list-tile-title></v-list-tile-content>
+     </v-list-tile>
      <v-list-tile role="menuitem" v-if="allowRounded" @click="toggleRounded">
       <v-list-tile-avatar><v-icon>{{rounded ? 'check_box' : 'check_box_outline_blank'}}</v-icon></v-list-tile-avatar>
       <v-list-tile-content><v-list-tile-title>{{i18n("Round corners")}}</v-list-tile-title></v-list-tile-content>
@@ -305,7 +309,8 @@ Vue.component('lms-npshare-dialog', {
             style: 0,
             styles: [],
             text: undefined,
-            rounded: true
+            rounded: true,
+            centered: true
         }
     },
     computed: {
@@ -348,6 +353,7 @@ Vue.component('lms-npshare-dialog', {
             this.styles = [i18n("Dark"), i18n("Light"), i18n("Automatic")];
             this.style = parseInt(getLocalStorageVal("nd-share-style", 0));
             this.rounded = getLocalStorageBool("nd-share-rounded", this.rounded);
+            this.centered = getLocalStorageBool("nd-share-centered", this.centered);
         }.bind(this));
         bus.$on('closeDialog', function(dlg) {
             if (dlg == 'npshare') {
@@ -374,7 +380,7 @@ Vue.component('lms-npshare-dialog', {
         createImage() {
             let view = this;
             loadImage(view.coverUrl).then(async function(artImg) {
-                let canvas = await nowPlayingRenderToCanvas(view.track, artImg, view.dark, view.allowRounded && view.rounded);
+                let canvas = await nowPlayingRenderToCanvas(view.track, artImg, view.dark, view.centered, view.allowRounded && view.rounded);
                 view.src = canvas.toDataURL('image/png');
                 canvas.remove();
                 view.show = true;
@@ -387,6 +393,11 @@ Vue.component('lms-npshare-dialog', {
                 setLocalStorageVal("nd-share-style", idx);
                 this.createImage();
             }
+        },
+        toggleCentered() {
+            this.centered = !this.centered;
+            setLocalStorageVal("nd-share-centered", this.centered);
+            this.createImage();
         },
         toggleRounded() {
             this.rounded = !this.rounded;

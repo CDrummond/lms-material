@@ -183,7 +183,7 @@ async function nowPlayingRenderToCanvas(track, artImg, isDark) {
     formatted = formatLines(ctx, stripTags(track.artistAndComposer), textW, Math.min(formatted.fontSize, 16), 12, STD_WEIGHT, FONT_SUFFIX);
     entries.push({lines:formatted.lines, fontSize:formatted.fontSize, weight:STD_WEIGHT, opacity:1.0});
 
-    formatted = formatLines(ctx, stripTags(track.album), textW, Math.min(formatted.fontSize, 14), 10, STD_WEIGHT, FONT_SUFFIX);
+    formatted = formatLines(ctx, stripTags(track.albumLine), textW, Math.min(formatted.fontSize, 14), 10, STD_WEIGHT, FONT_SUFFIX);
     entries.push({lines:formatted.lines, fontSize:formatted.fontSize, weight:STD_WEIGHT, opacity:SUB_OPACITY});
 
     // Calculate total block height for vertical centring

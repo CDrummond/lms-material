@@ -85,7 +85,7 @@ function parseQueryParams() {
             element.src = "/material/customjs/"+kv[1]+"?r=" + LMS_MATERIAL_REVISION;
             document.body.appendChild(element);
         } else if (NATIVE_QPARMS.has(kv[0])) {
-            resp[kv[0]]=kv[1]=="w" ? 3 : kv[1]=="c" ? 2 : 1;
+            resp[kv[0]]=kv.length<2 ? 1 : (kv[1]=="w" ? 3 : kv[1]=="c" ? 2 : 1);
         } else if ("hide"==kv[0]) {
             var parts = kv[1].split(",");
             for (var j=0, len=parts.length; j<len; ++j) {

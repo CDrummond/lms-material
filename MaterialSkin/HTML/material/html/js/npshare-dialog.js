@@ -275,8 +275,8 @@ Vue.component('lms-npshare-dialog', {
     </v-list>
    </v-menu>
    <v-spacer></v-spacer>
-   <v-btn flat v-if="queryParams.nativeNpShareS>0" @click="save('S')" :title="i18n('Share')"><v-icon>share</v-icon>&nbsp;{{i18n('Share')}}</v-btn>
-   <v-btn flat v-if="queryParams.nativeNpShareC>0" @click="save('C')" :title="i18n('Clipboard')"><img class="svg-img" :src="'clipboard-add' | svgIcon(darkUi)"></img>&nbsp;{{i18n('Add to clipboard')}}</v-btn>
+   <v-btn flat v-if="queryParams.nativeNpShareS>0" @click="save('S')" :title="i18n('Share')"><v-icon class="btn-icon">share</v-icon>{{i18n('Share')}}</v-btn>
+   <v-btn flat v-if="queryParams.nativeNpShareC>0" @click="save('C')" :title="i18n('Clipboard')"><img class="svg-img btn-icon" :src="'clipboard-add' | svgIcon(darkUi)"></img>{{i18n('Add to clipboard')}}</v-btn>
    <v-btn flat @click="close">{{i18n('Close')}}</v-btn>
   </v-card-actions>
  </v-card>

@@ -758,7 +758,9 @@
 "1 day":"1 dag",
 "%1 days":"%1 dage",
 "Add to clipboard":"",
-"Long-press on image and select 'Save image', then share anywhere. Or use the 'Download' button to download.":"",
-"Right-click on the image and select 'Copy image', then paste anywhere. Or use the 'Download' button to download.":"",
+"Clipboard":"",
+"Long-press on image and select 'Share image'.":"",
+"Long-press on image, select 'Copy image' (to add to clipboard), switch to another app, and then paste.":"",
+"Right-click on image, select 'Copy image' (to add to clipboard), switch to another app, and then paste.":"",
 "Share":""
 }

@@ -257,7 +257,7 @@ Vue.component('lms-npshare-dialog', {
 <v-dialog v-model="show" :width="cw+20" persistent v-if="show">
  <v-card>
   <v-card-title>{{i18n("Now Playing")}}</v-card-title>
-  <v-list-tile-sub-title style="padding:0px 16px 16px 16px" v-if="showText">{{saveText}}</v-list-tile-sub-title>
+  <v-list-tile-sub-title style="padding:0px 16px 16px 16px">{{text}}</v-list-tile-sub-title>
   <div style="margin:4px">
    <img :src="src" style="width:100%; height:100%; object-cover">
   </div>
@@ -275,10 +275,8 @@ Vue.component('lms-npshare-dialog', {
     </v-list>
    </v-menu>
    <v-spacer></v-spacer>
-   <v-btn flat icon v-if="queryParams.nativeNpShareS>0" @click="download('S')" :title="i18n('Share')"><v-icon>share</v-icon></v-btn>
-   <v-btn flat icon v-if="queryParams.nativeNpShareC>0" @click="download('C')" :title="i18n('Add to clipboard')"><img class="svg-img" :src="'clipboard-add' | svgIcon(darkUi)"></img></v-btn>
-   <v-btn flat v-if="showText" @click="download(queryParams.nativeNpShareD>0 ? 'D' : undefined)">{{i18n('Download')}}</v-btn>
-   <v-btn flat icon v-else @click="download(queryParams.nativeNpShareD>0 ? 'D' : undefined)" :title="i18n('Download')"><v-icon>download</v-icon></v-btn>
+   <v-btn flat v-if="queryParams.nativeNpShareS>0" @click="save('S')" :title="i18n('Share')"><v-icon>share</v-icon>&nbsp;{{i18n('Share')}}</v-btn>
+   <v-btn flat v-if="queryParams.nativeNpShareC>0" @click="save('C')" :title="i18n('Clipboard')"><img class="svg-img" :src="'clipboard-add' | svgIcon(darkUi)"></img>&nbsp;{{i18n('Add to clipboard')}}</v-btn>
    <v-btn flat @click="close">{{i18n('Close')}}</v-btn>
   </v-card-actions>
  </v-card>
@@ -295,8 +293,7 @@ Vue.component('lms-npshare-dialog', {
             saveText: undefined,
             style: 0,
             styles: [],
-            showText: (undefined==queryParams.nativeNpShareS || queryParams.nativeNpShareS==0) &&
-                      (undefined==queryParams.nativeNpShareC || queryParams.nativeNpShareC==0)
+            text: undefined
         }
     },
     computed: {
@@ -311,9 +308,27 @@ Vue.component('lms-npshare-dialog', {
         bus.$on('npshare.open', function(coverUrl, track) {
             this.coverUrl = coverUrl;
             this.track = track;
-            this.saveText = IS_MOBILE
-                ? i18n("Long-press on image and select 'Save image', then share anywhere. Or use the 'Download' button to download.")
-                : i18n("Right-click on the image and select 'Copy image', then paste anywhere. Or use the 'Download' button to download.");
+            this.text = "";
+            if (queryParams.nativeNpShareS>0 || queryParams.nativeNpShareC>0)  {
+                if (queryParams.nativeNpShareS>0) {
+                    this.text = "Use the 'Share' button to share with other apps."
+                    if (queryParams.nativeNpShareC>0) {
+                        this.text += " ";
+                    }
+                }
+                if (queryParams.nativeNpShareC>0) {
+                    this.text += "Use the 'Clipboard' button to add image to clipboard, switch to another app, and then paste."
+                    if (queryParams.nativeNpShareC>0) {
+                        this.text += " ";
+                    }
+                }
+            } else {
+                this.text = IS_MOBILE
+                    ? IS_ANDROID
+                        ? i18n("Long-press on image and select 'Share image'.")
+                        : i18n("Long-press on image, select 'Copy image' (to add to clipboard), switch to another app, and then paste.")
+                    : i18n("Right-click on image, select 'Copy image' (to add to clipboard), switch to another app, and then paste.");
+            }
             this.createImage();
             this.styles = [i18n("Dark"), i18n("Light"), i18n("Automatic")];
             this.style = parseInt(getLocalStorageVal("nd-share-style", 0));
@@ -360,24 +375,17 @@ Vue.component('lms-npshare-dialog', {
         close() {
             this.show = false;
         },
-        download(action) {
+        save(action) {
             let ts = this.date.toISOString().slice(0, 19).replace(/[T:]/g,'-');
             let filename = 'lyrion-' + ts + '.png';
-            if (undefined!=action) {
-                let native = "nativeNpShare" + action;
-                if (1==queryParams[native]) {
-                    try {
-                        NativeReceiver.npShare(this.src, filename, action);
-                    } catch (e) {
-                    }
-                } else if (queryParams[native]>0) {
-                    emitNative("MATERIAL-NPSHARE\n" + action + " " + this.src+"\nFILENAME " + filename, queryParams[native]);
+            let native = "nativeNpShare" + action;
+            if (1==queryParams[native]) {
+                try {
+                    NativeReceiver.npShare(this.src, filename, action);
+                } catch (e) {
                 }
-            } else {
-                let a = document.createElement('a');
-                a.download = filename;
-                a.href = this.src;
-                a.click();
+            } else if (queryParams[native]>0) {
+                emitNative("MATERIAL-NPSHARE\n" + action + " " + this.src+"\nFILENAME " + filename, queryParams[native]);
             }
         },
         i18n(str) {

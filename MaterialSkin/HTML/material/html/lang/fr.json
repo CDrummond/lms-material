@@ -748,11 +748,13 @@
 "(Scroll for more)":"",
 "Add to clipboard":"",
 "Always sort players by name.":"",
+"Center text":"",
 "Clipboard":"",
 "Configure player list":"",
 "Disconnected":"",
 "Long-press on image and select 'Share image'.":"",
 "Long-press on image, select 'Copy image' (to add to clipboard), switch to another app, and then paste.":"",
+"Medium":"",
 "Player list":"",
 "Right-click on image, select 'Copy image' (to add to clipboard), switch to another app, and then paste.":"",
 "Round corners":"",
@@ -762,6 +764,7 @@
 "Show all players":"",
 "Show floating search button bottom right.":"",
 "Show search button":"",
+"Size":"",
 "Sort alphabetically":"",
 "Switch user":""
 }

@@ -125,7 +125,6 @@
 "Clear":"Tøm",
 "Clear queue":"Nulstil køen",
 "Clear queues of all players?":"Tøm køerne på alle afspillere?",
-"Clipboard":"Udklipsholder",
 "Close":"Luk",
 "Collapse now playing":"Vis ikke kun aktuelle nummer",
 "Color":"Farve",
@@ -765,7 +764,6 @@
 "1 day":"1 dag",
 "%1 days":"%1 dage",
 "Center text":"",
-"Clipboard":"",
 "Medium":"",
 "Size":""
 }

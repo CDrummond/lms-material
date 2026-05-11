@@ -118,6 +118,7 @@
 "Cancel":"Afbryd",
 "Categories":"Kategorier",
 "Categorise enabled modes into 'By Artist', etc.":"Kategoriser aktiverede tilstande i 'Efter kunstner', osv.",
+"Center text":"Center tekst",
 "Change library":"Skift bibliotek",
 "Changes":"Ændringer",
 "Check the standard items which you wish to appear on the home screen.":"Afryds de menupunkter du vil have med på forsiden",
@@ -303,6 +304,7 @@
 "Material Skin is a HTML5 WebApp for Lyrion. For support, to report bugs, or ask for new features, please visit one of the following links:":"Material Skin er en HTML5 WebApp for Lyrion. For hjælp, for at raportere fejl eller for at spørge efter nye funktioner kan du besøge et af følgende links:",
 "Material Skin is developed purely for fun, and no donations are required. However, if you wish to make a donation, please use the button below:":"Material Skin er udviklet for sjov skyld, og det er ikke nødvendigt at donere penge. Hvis du alligevel gerne vil lave en donation, kan du bruge ikonet nedenfor:",
 "Media keys and notifications":"Medietaster og beskeder",
+"Medium":"Mellem",
 "Menu":"Menu",
 "Mix Type":"Miks type",
 "Mobile layout now-playing bar":"Vis spiller-nu bar i mobilt layout",
@@ -545,6 +547,7 @@
 "Signal Strength: %1%":"Signalstyrke: %1%",
 "Similar artists":"Lignende kunstnere",
 "Single field only":"Kun enkeltfelt",
+"Size":"Størrelse",
 "Skip backward":"Hop bagud",
 "Skip forward":"Hop fremad",
 "Sleep":"Dvale",
@@ -762,8 +765,5 @@
 "1 Year":"1 år",
 "%1 Years":"%1 år",
 "1 day":"1 dag",
-"%1 days":"%1 dage",
-"Center text":"",
-"Medium":"",
-"Size":""
+"%1 days":"%1 dage"
 }

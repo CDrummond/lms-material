@@ -6,10 +6,13 @@
  */
 'use strict';
 
-const NP_SHARE_MARGIN = 5;
-const NP_SHARE_H      = 180;
-const NP_SHARE_W      = 450;
-const NP_MAX_ART_SIZE = NP_SHARE_H - (2 * NP_SHARE_MARGIN);
+const NP_SHARE_MARGIN   = 5;
+const NP_SHARE_STD_H    = 180;
+const NP_SHARE_STD_W    = 450;
+const NP_SHARE_MED_H    = 300;
+const NP_SHARE_MED_W    = 600;
+const NP_SHARE_LARGE_H  = 400;
+const NP_SHARE_LARGE_W  = 800;
 
 function loadImage(url) {
     return new Promise(function(resolve) {
@@ -88,37 +91,39 @@ function waitForLoad(element) {
     });
 }
 
-async function nowPlayingRenderToCanvas(track, artImg, isDark, rounded) {
+async function nowPlayingRenderToCanvas(track, artImg, isDark, size, centered, rounded) {
     const CORNER_RADIUS     = 14;
     const OVERLAY_ALPHA     = 0.45;
     const FONT_SUFFIX       = 'px Roboto, sans-serif';
     const TEXT_COLOR        = "#" + (isDark ? LMS_DARK_SVG : "000");
     const STD_WEIGHT        = '400 ';
-    const BOLD_WEIGHT       = '500 ';
     const EXTRA_BOLD_WEIGHT = '700 ';
     const SUB_OPACITY       = 0.7;
+    const WIDTH             = 2==size ? NP_SHARE_LARGE_W : 1==size ? NP_SHARE_MED_W : NP_SHARE_STD_W;
+    const HEIGHT            = 2==size ? NP_SHARE_LARGE_H : 1==size ? NP_SHARE_MED_H : NP_SHARE_STD_H;
+    const MAX_ART_SIZE      = HEIGHT - (2 * NP_SHARE_MARGIN);
 
     let canvas = document.createElement('canvas');
     let ctx = canvas.getContext('2d');
     const dpr = window.devicePixelRatio || 1;
-    canvas.width = NP_SHARE_W*dpr; canvas.height = NP_SHARE_H*dpr;
+    canvas.width = WIDTH*dpr; canvas.height = HEIGHT*dpr;
     ctx.scale(dpr, dpr);
-    canvas.style.width = `${NP_SHARE_W}px`;
-    canvas.style.height = `${NP_SHARE_H}px`;
+    canvas.style.width = `${WIDTH}px`;
+    canvas.style.height = `${HEIGHT}px`;
 
     if (rounded) {
         // ── Clip to rounded card ──
-        roundRect(ctx, 0, 0, NP_SHARE_W, NP_SHARE_H, CORNER_RADIUS);
+        roundRect(ctx, 0, 0, WIDTH, HEIGHT, CORNER_RADIUS);
         ctx.clip();
     }
 
     // ── 1. Full card background — blurred artwork ──
     ctx.fillStyle = isDark ? "#103030" : "#fafafa";
-    ctx.fillRect(0, 0, NP_SHARE_W, NP_SHARE_H);
+    ctx.fillRect(0, 0, WIDTH, HEIGHT);
 
     if (artImg) {
         // Draw blurred background — use ctx.filter if available (desktop), else multi-pass scale (mobile)
-        let bgScale = Math.max(NP_SHARE_W / artImg.width, NP_SHARE_H / artImg.height);
+        let bgScale = Math.max(WIDTH / artImg.width, HEIGHT / artImg.height);
 
         // Multi-pass scale blur — works on all browsers including mobile
         // Use square canvases to ensure full coverage
@@ -135,7 +140,7 @@ async function nowPlayingRenderToCanvas(track, artImg, isDark, rounded) {
         }
         ctx.save();
         ctx.globalAlpha = 0.9;
-        ctx.drawImage(prev, 0, 0, NP_SHARE_W, NP_SHARE_H);
+        ctx.drawImage(prev, 0, 0, WIDTH, HEIGHT);
         prev.remove();
         ctx.globalAlpha = 1;
         ctx.restore();
@@ -143,16 +148,16 @@ async function nowPlayingRenderToCanvas(track, artImg, isDark, rounded) {
 
     // ── 2. Dark overlay ──
     ctx.fillStyle = 'rgba(' + (isDark ? '16,16,16,' : '240,240,240,') + OVERLAY_ALPHA + ')';
-    ctx.fillRect(0, 0, NP_SHARE_W, NP_SHARE_H);
+    ctx.fillRect(0, 0, WIDTH, HEIGHT);
 
     // ── 3. Clean artwork — left half, no effects, centred ──
-    let usedArtW = NP_MAX_ART_SIZE;
+    let usedArtW = MAX_ART_SIZE;
     if (artImg) {
-        let artScale = Math.min(NP_MAX_ART_SIZE / artImg.width, NP_MAX_ART_SIZE / artImg.height);
+        let artScale = Math.min(MAX_ART_SIZE / artImg.width, MAX_ART_SIZE / artImg.height);
         let artW = artImg.width  * artScale;
         let artH = artImg.height * artScale;
-        let ax = NP_SHARE_MARGIN + (NP_MAX_ART_SIZE - artW) / 2;
-        let ay = (NP_SHARE_H - artH) / 2;
+        let ax = NP_SHARE_MARGIN + (MAX_ART_SIZE - artW) / 2;
+        let ay = (HEIGHT - artH) / 2;
 
         // Drop shadow
         ctx.save();
@@ -177,7 +182,7 @@ async function nowPlayingRenderToCanvas(track, artImg, isDark, rounded) {
 
     // ── 4. Text — right half, directly on background ──
     let tx    = usedArtW + (NP_SHARE_MARGIN * 3);
-    let textW = NP_SHARE_W - (tx + (NP_SHARE_MARGIN*2));
+    let textW = WIDTH - (tx + (NP_SHARE_MARGIN*2));
 
     let entries = [];
 
@@ -196,7 +201,7 @@ async function nowPlayingRenderToCanvas(track, artImg, isDark, rounded) {
                      +*/ (Math.min(entries[0].lines.length, 2) * entries[0].fontSize * 1.15) + 12
                      + (Math.min(entries[1].lines.length, 2) * entries[1].fontSize * 1.15) + 4
                      + (Math.min(entries[2].lines.length, 2) * entries[2].fontSize * 1.15);
-    let ty = (NP_SHARE_H - totalTextH) / 2;
+    let ty = (HEIGHT - totalTextH) / 2;
 
     ctx.fillStyle = TEXT_COLOR;
     /*
@@ -212,12 +217,12 @@ async function nowPlayingRenderToCanvas(track, artImg, isDark, rounded) {
             let lineH = entries[e].fontSize * 1.15;
             ctx.font = entries[e].weight + entries[e].fontSize + FONT_SUFFIX;
             ctx.globalAlpha = entries[e].opacity;
-            let offset = (textW - ctx.measureText(entries[e].lines[0]).width)/2;
+            let offset = centered ? (textW - ctx.measureText(entries[e].lines[0]).width)/2 : 0;
             ctx.fillText(entries[e].lines[0], tx + offset, ty + lineH);
             ty += lineH;
             if (entries[e].lines.length>1) {
                 let txt = entries[e].lines[1]+(entries[e].lines.length>2 ? "..." : "");
-                offset = (textW - ctx.measureText(txt).width)/2;
+                offset = centered ? (textW - ctx.measureText(txt).width)/2 : 0;
                 ctx.fillText(txt, tx + offset, ty + lineH);
                 ty += lineH;
             }
@@ -227,15 +232,15 @@ async function nowPlayingRenderToCanvas(track, artImg, isDark, rounded) {
 
     ctx.globalAlpha = SUB_OPACITY;
     let svg = new Image();
-    let logoX = NP_SHARE_W;
+    let logoX = WIDTH;
     svg.src = "/material/svg/lyrion-logo?c=" + (isDark ? LMS_DARK_SVG : LMS_LIGHT_SVG);
     try {
         await waitForLoad(svg);
         let h = 14;
         let w = h * (svg.width/svg.height)
-        ctx.drawImage(svg, NP_SHARE_W-(w+NP_SHARE_MARGIN+8), NP_SHARE_MARGIN+2, w, h);
+        ctx.drawImage(svg, WIDTH-(w+NP_SHARE_MARGIN+8), NP_SHARE_MARGIN+2, w, h);
         ctx.beginPath();
-        logoX = NP_SHARE_W-(w+NP_SHARE_MARGIN+14);
+        logoX = WIDTH-(w+NP_SHARE_MARGIN+14);
         ctx.roundRect(logoX, NP_SHARE_MARGIN, w+14, h+4, (h+NP_SHARE_MARGIN)/2);
         ctx.strokeStyle = "#"+(isDark ? LMS_DARK_SVG : LMS_LIGHT_SVG);
         ctx.stroke();
@@ -261,7 +266,7 @@ async function nowPlayingRenderToCanvas(track, artImg, isDark, rounded) {
 
 Vue.component('lms-npshare-dialog', {
     template: `
-<v-dialog v-model="show" :width="cw+20" persistent v-if="show">
+<v-dialog v-model="show" :width="(2==size ? NP_SHARE_LARGE_W : 1==size ? NP_SHARE_MED_W : NP_SHARE_STD_W)+20" persistent v-if="show">
  <v-card>
   <v-card-title>{{i18n("Now Playing")}}</v-card-title>
   <v-list-tile-sub-title style="padding:0px 16px 16px 16px">{{text}}</v-list-tile-sub-title>
@@ -272,10 +277,21 @@ Vue.component('lms-npshare-dialog', {
    <v-menu top v-model="showMenu">
     <v-btn icon slot="activator"><v-icon>more_vert</v-icon></v-btn>
     <v-list>
+     <v-list-tile role="menuitem" @click="toggleCentered">
+      <v-list-tile-avatar><v-icon>{{centered ? 'check_box' : 'check_box_outline_blank'}}</v-icon></v-list-tile-avatar>
+      <v-list-tile-content><v-list-tile-title>{{i18n("Center text")}}</v-list-tile-title></v-list-tile-content>
+     </v-list-tile>
      <v-list-tile role="menuitem" v-if="allowRounded" @click="toggleRounded">
       <v-list-tile-avatar><v-icon>{{rounded ? 'check_box' : 'check_box_outline_blank'}}</v-icon></v-list-tile-avatar>
       <v-list-tile-content><v-list-tile-title>{{i18n("Round corners")}}</v-list-tile-title></v-list-tile-content>
      </v-list-tile>
+     <v-subheader>{{i18n("Size")}}</v-subheader>
+     <template v-for="(name, index) in sizes">
+      <v-list-tile role="menuitem" @click="changeSize(index)" class="menu-group-item">
+       <v-list-tile-avatar><v-icon>{{index==size ? 'radio_button_checked' : 'radio_button_unchecked'}}</v-icon></v-list-tile-avatar>
+       <v-list-tile-content><v-list-tile-title>{{name}}</v-list-tile-title></v-list-tile-content>
+      </v-list-tile>
+     </template>
      <v-subheader>{{i18n("Theme")}}</v-subheader>
      <template v-for="(name, index) in styles">
       <v-list-tile role="menuitem" @click="changeStyle(index)" class="menu-group-item">
@@ -299,13 +315,14 @@ Vue.component('lms-npshare-dialog', {
             show: false,
             showMenu: false,
             src: undefined,
-            cw: NP_SHARE_W,
-            ch: NP_SHARE_H,
             saveText: undefined,
             style: 0,
             styles: [],
             text: undefined,
-            rounded: true
+            rounded: true,
+            centered: true,
+            size: 0,
+            sizes: [],
         }
     },
     computed: {
@@ -346,8 +363,11 @@ Vue.component('lms-npshare-dialog', {
             }
             this.createImage();
             this.styles = [i18n("Dark"), i18n("Light"), i18n("Automatic")];
-            this.style = parseInt(getLocalStorageVal("nd-share-style", 0));
+            this.sizes = [i18n("Small"), i18n("Medium"), i18n("Large")];
+            this.style = parseInt(getLocalStorageVal("nd-share-style", this.style));
             this.rounded = getLocalStorageBool("nd-share-rounded", this.rounded);
+            this.centered = getLocalStorageBool("nd-share-centered", this.centered);
+            this.size = parseInt(getLocalStorageVal("nd-share-size", this.size));
         }.bind(this));
         bus.$on('closeDialog', function(dlg) {
             if (dlg == 'npshare') {
@@ -374,7 +394,7 @@ Vue.component('lms-npshare-dialog', {
         createImage() {
             let view = this;
             loadImage(view.coverUrl).then(async function(artImg) {
-                let canvas = await nowPlayingRenderToCanvas(view.track, artImg, view.dark, view.allowRounded && view.rounded);
+                let canvas = await nowPlayingRenderToCanvas(view.track, artImg, view.dark, view.size, view.centered, view.allowRounded && view.rounded);
                 view.src = canvas.toDataURL('image/png');
                 canvas.remove();
                 view.show = true;
@@ -388,10 +408,22 @@ Vue.component('lms-npshare-dialog', {
                 this.createImage();
             }
         },
+        toggleCentered() {
+            this.centered = !this.centered;
+            setLocalStorageVal("nd-share-centered", this.centered);
+            this.createImage();
+        },
         toggleRounded() {
             this.rounded = !this.rounded;
             setLocalStorageVal("nd-share-rounded", this.rounded);
             this.createImage();
+        },
+        changeSize(idx) {
+            if (idx!=this.size) {
+                this.size = idx;
+                setLocalStorageVal("nd-share-size", idx);
+                this.createImage();
+            }
         },
         close() {
             this.show = false;

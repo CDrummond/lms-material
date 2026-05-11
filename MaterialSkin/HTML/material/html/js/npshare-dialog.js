@@ -319,8 +319,10 @@ Vue.component('lms-npshare-dialog', {
     </v-list>
    </v-menu>
    <v-spacer></v-spacer>
-   <v-btn flat v-if="queryParams.nativeNpShareS>0" @click="save('S')"><v-icon class="btn-icon">share</v-icon>{{i18n('Share')}}</v-btn>
-   <v-btn flat v-if="queryParams.nativeNpShareC>0" @click="save('C')"><img class="svg-img btn-icon" :src="'clipboard-add' | svgIcon(darkUi)"></img>{{i18n('Add to clipboard')}}</v-btn>
+   <v-btn flat icon v-if="showShare && 2==btnStyle" @click="save('S')" :title="i18n('Share')"><v-icon>share</v-icon></v-btn>
+   <v-btn flat v-else-if="showShare" @click="save('S')"><v-icon class="btn-icon">share</v-icon>{{i18n('Share')}}</v-btn>
+   <v-btn flat icon v-if="showClipboard && 2==btnStyle" @click="save('C')" :title="i18n('Add to clipboard')"><img class="svg-img btn-icon" :src="'clipboard-add' | svgIcon(darkUi)"></img></v-btn>
+   <v-btn flat v-else-if="showClipboard" @click="save('C')"><img class="svg-img btn-icon" :src="'clipboard-add' | svgIcon(darkUi)"></img>{{1==btnStyle ?  i18n('Clipboard') : i18n('Add to clipboard')}}</v-btn>
    <v-btn flat @click="close">{{i18n('Close')}}</v-btn>
   </v-card-actions>
  </v-card>
@@ -333,6 +335,9 @@ Vue.component('lms-npshare-dialog', {
             showMenu: false,
             src: undefined,
             saveText: undefined,
+            showShare: undefined!=queryParams.nativeNpShareS && queryParams.nativeNpShareS>0,
+            showClipboard: undefined!=queryParams.nativeNpShareC && queryParams.nativeNpShareC>0,
+            btnStyle: 0,
             style: 0,
             styles: [],
             text: undefined,
@@ -358,18 +363,15 @@ Vue.component('lms-npshare-dialog', {
             this.coverUrl = coverUrl;
             this.track = track;
             this.text = "";
-            if (queryParams.nativeNpShareS>0 || queryParams.nativeNpShareC>0)  {
-                if (queryParams.nativeNpShareS>0) {
+            if (this.showShare || this.showClipboard)  {
+                if (this.showShare) {
                     this.text = "Use the 'Share' button to share with other apps."
-                    if (queryParams.nativeNpShareC>0) {
+                    if (this.showClipboard) {
                         this.text += " ";
                     }
                 }
-                if (queryParams.nativeNpShareC>0) {
+                if (this.showClipboard) {
                     this.text += "Use the 'Clipboard' button to add image to clipboard, switch to another app, and then paste."
-                    if (queryParams.nativeNpShareC>0) {
-                        this.text += " ";
-                    }
                 }
             } else {
                 this.text = IS_MOBILE
@@ -406,8 +408,29 @@ Vue.component('lms-npshare-dialog', {
                 }
             }
         }.bind(this));
+        this.setBtnStyle();
+        bus.$on('windowWidthChanged', function() {
+            this.setBtnStyle();
+        }.bind(this));
     },
     methods: {
+        setBtnStyle() {
+            let count = (this.showShare ? 1 : 0) + (this.showClipboard ? 1 : 0);
+            this.btnStyle = 0;
+            if (1==count) {
+                if (window.innerWidth<330) {
+                    this.btnStyle = 2;
+                } else if (window.innerWidth<410) {
+                    this.btnStyle = 1;
+                }
+            } else if (2==count) {
+                if (window.innerWidth<460) {
+                    this.btnStyle = 2;
+                } else if (window.innerWidth<530) {
+                    this.btnStyle = 1;
+                }
+            }
+        },
         createImage() {
             let view = this;
             loadImage(view.coverUrl).then(async function(artImg) {

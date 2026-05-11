@@ -185,21 +185,30 @@ async function renderNowPlayingToCanvas(track, artImg, isDark, size, centered, r
     let textW = WIDTH - (tx + (MARGIN*2));
 
     let entries = [];
+    let withContext = 0!=size && !centered;
+    let by = withContext ? stripTags(i18n("<obj>by</obj> %1")).replace(" %1", "") : undefined;
+    let from = withContext ? stripTags(i18n("<obj>from</obj> %1")).replace(" %1", "") : undefined;
 
     // Auto-scale title — start smaller, max 2 lines, scale down to fit
     let formatted = formatLines(ctx, track.title, textW, 2==size ? 24 : 18, 12, EXTRA_BOLD_WEIGHT, FONT_SUFFIX);
-    entries.push({lines:formatted.lines, fontSize:formatted.fontSize, weight:EXTRA_BOLD_WEIGHT, opacity:1.0});
+    entries.push({lines:formatted.lines, fontSize:formatted.fontSize, weight:EXTRA_BOLD_WEIGHT, opacity:1.0, spacing:12});
 
     formatted = formatLines(ctx, stripTags(track.artistAndComposer), textW, Math.min(formatted.fontSize, 16), 12, STD_WEIGHT, FONT_SUFFIX);
-    entries.push({lines:formatted.lines, fontSize:formatted.fontSize, weight:STD_WEIGHT, opacity:1.0});
+    entries.push({lines:formatted.lines, fontSize:formatted.fontSize, weight:STD_WEIGHT, opacity:1.0, ctx:by, spacing:withContext ? entries[0].spacing : 4});
 
     formatted = formatLines(ctx, stripTags(track.albumLine), textW, Math.min(formatted.fontSize, 14), 10, STD_WEIGHT, FONT_SUFFIX);
-    entries.push({lines:formatted.lines, fontSize:formatted.fontSize, weight:STD_WEIGHT, opacity:SUB_OPACITY});
+    entries.push({lines:formatted.lines, fontSize:formatted.fontSize, weight:STD_WEIGHT, opacity:withContext ? 1.0 : SUB_OPACITY, ctx:from});
 
     // Calculate total block height for vertical centring
-    let totalTextH = (Math.min(entries[0].lines.length, 2) * entries[0].fontSize * 1.15) + 12
-                     + (Math.min(entries[1].lines.length, 2) * entries[1].fontSize * 1.15) + 4
-                     + (Math.min(entries[2].lines.length, 2) * entries[2].fontSize * 1.15);
+    let artistLen = entries[1].lines.length > 0
+                     ? (Math.min(entries[1].lines.length, 2) + (2==size ? 1 : 0)) * entries[1].fontSize
+                     : 0;
+    let albumLen = entries[2].lines.length > 0
+                     ? (Math.min(entries[2].lines.length, 2) + (2==size ? 1 : 0)) * entries[2].fontSize
+                     : 0;
+    let totalTextH = (Math.min(entries[0].lines.length, 2) * entries[0].fontSize * 1.15) + (artistLen>0 || albumLen> 0 ? entries[0].spacing : 0)
+                     + artistLen + (albumLen>0 ? entries[1].spacing : 0)
+                     + albumLen;
     let ty = (HEIGHT - totalTextH) / 2;
 
     ctx.fillStyle = TEXT_COLOR;
@@ -218,6 +227,12 @@ async function renderNowPlayingToCanvas(track, artImg, isDark, size, centered, r
         if (entries[e].lines.length>0) {
             let lineH = entries[e].fontSize * 1.15;
             ctx.font = entries[e].weight + entries[e].fontSize + FONT_SUFFIX;
+            if (e>0 && withContext) {
+                ctx.globalAlpha = SUB_OPACITY;
+                let offset = centered ? (textW - ctx.measureText(entries[e].ctx).width)/2 : 0;
+                ctx.fillText(entries[e].ctx, tx + offset, ty + lineH);
+                ty += lineH;
+            }
             ctx.globalAlpha = entries[e].opacity;
             let offset = centered ? (textW - ctx.measureText(entries[e].lines[0]).width)/2 : 0;
             ctx.fillText(entries[e].lines[0], tx + offset, ty + lineH);
@@ -228,7 +243,7 @@ async function renderNowPlayingToCanvas(track, artImg, isDark, size, centered, r
                 ctx.fillText(txt, tx + offset, ty + lineH);
                 ty += lineH;
             }
-            ty += (0==e ? 12 : 4);
+            ty += entries[e].spacing;
         }
     }
 

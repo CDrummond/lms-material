@@ -6,7 +6,6 @@
  */
 'use strict';
 
-const NP_SHARE_MARGIN   = 5;
 const NP_SHARE_STD_H    = 180;
 const NP_SHARE_STD_W    = 450;
 const NP_SHARE_MED_H    = 300;
@@ -91,7 +90,7 @@ function waitForLoad(element) {
     });
 }
 
-async function nowPlayingRenderToCanvas(track, artImg, isDark, size, centered, rounded) {
+async function renderNowPlayingToCanvas(track, artImg, isDark, size, centered, rounded) {
     const CORNER_RADIUS     = 14;
     const OVERLAY_ALPHA     = 0.45;
     const FONT_SUFFIX       = 'px Roboto, sans-serif';
@@ -99,9 +98,10 @@ async function nowPlayingRenderToCanvas(track, artImg, isDark, size, centered, r
     const STD_WEIGHT        = '400 ';
     const EXTRA_BOLD_WEIGHT = '700 ';
     const SUB_OPACITY       = 0.7;
+    const MARGIN            = 2==size ? 12 : 1==size ? 8 : 4;
     const WIDTH             = 2==size ? NP_SHARE_LARGE_W : 1==size ? NP_SHARE_MED_W : NP_SHARE_STD_W;
     const HEIGHT            = 2==size ? NP_SHARE_LARGE_H : 1==size ? NP_SHARE_MED_H : NP_SHARE_STD_H;
-    const MAX_ART_SIZE      = HEIGHT - (2 * NP_SHARE_MARGIN);
+    const MAX_ART_SIZE      = HEIGHT - (2 * MARGIN);
 
     let canvas = document.createElement('canvas');
     let ctx = canvas.getContext('2d');
@@ -156,7 +156,7 @@ async function nowPlayingRenderToCanvas(track, artImg, isDark, size, centered, r
         let artScale = Math.min(MAX_ART_SIZE / artImg.width, MAX_ART_SIZE / artImg.height);
         let artW = artImg.width  * artScale;
         let artH = artImg.height * artScale;
-        let ax = NP_SHARE_MARGIN + (MAX_ART_SIZE - artW) / 2;
+        let ax = MARGIN + (MAX_ART_SIZE - artW) / 2;
         let ay = (HEIGHT - artH) / 2;
 
         // Drop shadow
@@ -181,13 +181,13 @@ async function nowPlayingRenderToCanvas(track, artImg, isDark, size, centered, r
     }
 
     // ── 4. Text — right half, directly on background ──
-    let tx    = usedArtW + (NP_SHARE_MARGIN * 3);
-    let textW = WIDTH - (tx + (NP_SHARE_MARGIN*2));
+    let tx    = usedArtW + (MARGIN * 3);
+    let textW = WIDTH - (tx + (MARGIN*2));
 
     let entries = [];
 
     // Auto-scale title — start smaller, max 2 lines, scale down to fit
-    let formatted = formatLines(ctx, track.title, textW, 18, 12, EXTRA_BOLD_WEIGHT, FONT_SUFFIX);
+    let formatted = formatLines(ctx, track.title, textW, 2==size ? 24 : 18, 12, EXTRA_BOLD_WEIGHT, FONT_SUFFIX);
     entries.push({lines:formatted.lines, fontSize:formatted.fontSize, weight:EXTRA_BOLD_WEIGHT, opacity:1.0});
 
     formatted = formatLines(ctx, stripTags(track.artistAndComposer), textW, Math.min(formatted.fontSize, 16), 12, STD_WEIGHT, FONT_SUFFIX);
@@ -197,21 +197,23 @@ async function nowPlayingRenderToCanvas(track, artImg, isDark, size, centered, r
     entries.push({lines:formatted.lines, fontSize:formatted.fontSize, weight:STD_WEIGHT, opacity:SUB_OPACITY});
 
     // Calculate total block height for vertical centring
-    let totalTextH = /*48
-                     +*/ (Math.min(entries[0].lines.length, 2) * entries[0].fontSize * 1.15) + 12
+    let totalTextH = (Math.min(entries[0].lines.length, 2) * entries[0].fontSize * 1.15) + 12
                      + (Math.min(entries[1].lines.length, 2) * entries[1].fontSize * 1.15) + 4
                      + (Math.min(entries[2].lines.length, 2) * entries[2].fontSize * 1.15);
     let ty = (HEIGHT - totalTextH) / 2;
 
     ctx.fillStyle = TEXT_COLOR;
-    /*
-    ctx.font = STD_WEIGHT + '12px Roboto, sans-serif';
-    ctx.letterSpacing = '0.5em';
-    ctx.fillText(i18n('Now Playing').toUpperCase(), tx, ty + 22);
-    ty += 34;
+    if (2==size) {
+        ctx.globalAlpha = SUB_OPACITY;
+        ctx.font = STD_WEIGHT + '12px Roboto, sans-serif';
+        ctx.letterSpacing = '0.5em';
+        let text = i18n('Now Playing').toUpperCase();
+        let offset = centered ? (textW - ctx.measureText(text).width)/2 : 0;
+        ctx.fillText(text, tx + offset, 96);
+        ctx.letterSpacing = '0.0em';
+        ctx.globalAlpha = 1.0;
+    }
 
-    ctx.letterSpacing = '0.0em';
-    */
     for (let e=0; e<3; ++e) {
         if (entries[e].lines.length>0) {
             let lineH = entries[e].fontSize * 1.15;
@@ -238,10 +240,10 @@ async function nowPlayingRenderToCanvas(track, artImg, isDark, size, centered, r
         await waitForLoad(svg);
         let h = 14;
         let w = h * (svg.width/svg.height)
-        ctx.drawImage(svg, WIDTH-(w+NP_SHARE_MARGIN+8), NP_SHARE_MARGIN+2, w, h);
+        ctx.drawImage(svg, WIDTH-(w+MARGIN+8), MARGIN+2, w, h);
         ctx.beginPath();
-        logoX = WIDTH-(w+NP_SHARE_MARGIN+14);
-        ctx.roundRect(logoX, NP_SHARE_MARGIN, w+14, h+4, (h+NP_SHARE_MARGIN)/2);
+        logoX = WIDTH-(w+MARGIN+14);
+        ctx.roundRect(logoX, MARGIN, w+14, h+4, (h+MARGIN)/2);
         ctx.strokeStyle = "#"+(isDark ? LMS_DARK_SVG : LMS_LIGHT_SVG);
         ctx.stroke();
     } catch (e) {
@@ -253,7 +255,7 @@ async function nowPlayingRenderToCanvas(track, artImg, isDark, size, centered, r
         try {
             await waitForLoad(svg);
             let size = 21;
-            ctx.drawImage(svg, logoX-(size + 4), NP_SHARE_MARGIN-1, size, size);
+            ctx.drawImage(svg, logoX-(size + 4), MARGIN-1, size, size);
         } catch (e) {
         }
     }
@@ -302,8 +304,8 @@ Vue.component('lms-npshare-dialog', {
     </v-list>
    </v-menu>
    <v-spacer></v-spacer>
-   <v-btn flat v-if="queryParams.nativeNpShareS>0" @click="save('S')" :title="i18n('Share')"><v-icon class="btn-icon">share</v-icon>{{i18n('Share')}}</v-btn>
-   <v-btn flat v-if="queryParams.nativeNpShareC>0" @click="save('C')" :title="i18n('Clipboard')"><img class="svg-img btn-icon" :src="'clipboard-add' | svgIcon(darkUi)"></img>{{i18n('Add to clipboard')}}</v-btn>
+   <v-btn flat v-if="queryParams.nativeNpShareS>0" @click="save('S')"><v-icon class="btn-icon">share</v-icon>{{i18n('Share')}}</v-btn>
+   <v-btn flat v-if="queryParams.nativeNpShareC>0" @click="save('C')"><img class="svg-img btn-icon" :src="'clipboard-add' | svgIcon(darkUi)"></img>{{i18n('Add to clipboard')}}</v-btn>
    <v-btn flat @click="close">{{i18n('Close')}}</v-btn>
   </v-card-actions>
  </v-card>
@@ -394,7 +396,7 @@ Vue.component('lms-npshare-dialog', {
         createImage() {
             let view = this;
             loadImage(view.coverUrl).then(async function(artImg) {
-                let canvas = await nowPlayingRenderToCanvas(view.track, artImg, view.dark, view.size, view.centered, view.allowRounded && view.rounded);
+                let canvas = await renderNowPlayingToCanvas(view.track, artImg, view.dark, view.size, view.centered, view.allowRounded && view.rounded);
                 view.src = canvas.toDataURL('image/png');
                 canvas.remove();
                 view.show = true;

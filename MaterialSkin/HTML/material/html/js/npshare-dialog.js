@@ -113,17 +113,85 @@ function getList(item, type, used) {
 }
 
 async function renderNowPlayingToCanvas(track, artImg, isDark, size, centered, rounded) {
-    const OVERLAY_ALPHA     = 0.45;
     const FONT_SUFFIX       = 'px Roboto, sans-serif';
-    const TEXT_COLOR        = "#" + (isDark ? LMS_DARK_SVG : "000");
     const STD_WEIGHT        = '400 ';
     const EXTRA_BOLD_WEIGHT = '700 ';
-    const SUB_OPACITY       = 0.7;
-    const CORNER_RADIUS     = 14;
-    const MARGIN            = 2==size ? 12 : 1==size ? 8 : 6;
-    const WIDTH             = 2==size ? NP_SHARE_LARGE_W : 1==size ? NP_SHARE_MED_W : NP_SHARE_STD_W;
-    const HEIGHT            = 2==size ? NP_SHARE_LARGE_H : 1==size ? NP_SHARE_MED_H : NP_SHARE_STD_H;
-    const MAX_ART_SIZE      = HEIGHT - (2 * MARGIN);
+    const MAX_WIDTH             = 2==size ? NP_SHARE_LARGE_W : 1==size ? NP_SHARE_MED_W : NP_SHARE_STD_W;
+    const MAX_HEIGHT            = 2==size ? NP_SHARE_LARGE_H : 1==size ? NP_SHARE_MED_H : NP_SHARE_STD_H;
+
+    let withContext = 0!=size && !centered;
+    let used = new Set();
+    let artists = withContext ? getList(track, "artist", used) : []
+    let composers = withContext && track.composer && lmsOptions.showComposer && useComposer(track) ? getList(track, "composer", used) : [];
+    let conductors = withContext && track.conductor && lmsOptions.showConductor && useConductor(track) ? getList(track, "conductor", used) : [];
+    let artstsCombined = undefined;
+    let composersCombined = undefined;
+    let conductorsCombined = undefined;
+    let albumLine = stripTags(track.albumLine);
+    let artistAndComposer = stripTags(track.artistAndComposer);
+
+    if (withContext && 2==size && (artists.length>0 || composers.length>0 || conductors.length>0)) {
+        artstsCombined = artists.length>0 ? artists.join(SEPARATOR) : undefined;
+        composersCombined = composers.length>0 ? composers.join(SEPARATOR) : undefined;
+        conductorsCombined = conductors.length>0 ? conductors.join(SEPARATOR) : undefined;
+    }
+
+    // Calculate view width based upon strings...
+    let tmpCanvas = document.createElement('canvas');
+    let tmpCtx = tmpCanvas.getContext('2d', { alpha: true, willReadFrequently: false });
+    tmpCanvas.width = MAX_WIDTH;
+    tmpCanvas.height = MAX_HEIGHT;
+
+    let maxWidth = 0;
+    let strings = [albumLine];
+    if (undefined!=artstsCombined) {
+        strings.push(artstsCombined);
+    }
+    if (undefined!=composersCombined) {
+        strings.push(composersCombined);
+    }
+    if (undefined!=conductorsCombined) {
+        strings.push(conductorsCombined);
+    }
+    if (undefined==artstsCombined && undefined==composersCombined && undefined==conductorsCombined) {
+        strings.push(artistAndComposer);
+    }
+
+    tmpCtx.font = STD_WEIGHT + 16 + FONT_SUFFIX;
+    for (let i=0, len=strings.length && maxWidth<=tmpCanvas.height; i<len; ++i) {
+        let width = tmpCtx.measureText(strings[i]).width;
+        if (width>maxWidth) {
+            maxWidth = width;
+        }
+    }
+
+    if (maxWidth<=tmpCanvas.height) {
+        tmpCtx.font = EXTRA_BOLD_WEIGHT + 24 + FONT_SUFFIX;
+        let width = tmpCtx.measureText(track.title).width;
+        if (width>maxWidth) {
+            maxWidth = width;
+        }
+    }
+
+    let useWidth = tmpCanvas.width;
+    if (maxWidth<=tmpCanvas.height) {
+        if (!centered  && maxWidth<=tmpCanvas.height*0.75) {
+            useWidth = tmpCanvas.height*(size>0 ? 1.7 : 1.8);
+        } else {
+            useWidth = tmpCanvas.height*2;
+        }
+    }
+
+    tmpCanvas.remove();
+
+    const OVERLAY_ALPHA = 0.45;
+    const TEXT_COLOR    = "#" + (isDark ? LMS_DARK_SVG : "000");
+    const SUB_OPACITY   = 0.7;
+    const CORNER_RADIUS = 14;
+    const MARGIN        = 2==size ? 12 : 1==size ? 8 : 6;
+    const WIDTH         = useWidth;
+    const HEIGHT        = MAX_HEIGHT;
+    const MAX_ART_SIZE  = HEIGHT - (2 * MARGIN);
 
     let canvas = document.createElement('canvas');
     let ctx = canvas.getContext('2d', { alpha: true, willReadFrequently: false });
@@ -209,11 +277,6 @@ async function renderNowPlayingToCanvas(track, artImg, isDark, size, centered, r
     let textW = WIDTH - (tx + (MARGIN*2));
 
     let entries = [];
-    let withContext = 0!=size && !centered;
-    let used = new Set();
-    let artists = withContext ? getList(track, "artist", used) : []
-    let composers = withContext && track.composer && lmsOptions.showComposer && useComposer(track) ? getList(track, "composer", used) : [];
-    let conductors = withContext && track.conductor && lmsOptions.showConductor && useConductor(track) ? getList(track, "conductor", used) : [];
 
     let by = withContext ? stripTags(i18n("<obj>by</obj> %1")).replace(" %1", "") : undefined;
     let from = withContext ? stripTags(i18n("<obj>from</obj> %1")).replace(" %1", "") : undefined;
@@ -229,9 +292,6 @@ async function renderNowPlayingToCanvas(track, artImg, isDark, size, centered, r
     }
 
     if (withContext && 2==size && (artists.length>0 || composers.length>0 || conductors.length>0)) {
-        let artstsCombined = artists.length>0 ? artists.join(SEPARATOR) : undefined;
-        let composersCombined = composers.length>0 ? composers.join(SEPARATOR) : undefined;
-        let conductorsCombined = conductors.length>0 ? conductors.join(SEPARATOR) : undefined;
         let fontSize = undefined;
         let performedBy = stripTags(i18n("<obj>performed by</obj> %1")).replace(" %1", "");
 
@@ -281,17 +341,17 @@ async function renderNowPlayingToCanvas(track, artImg, isDark, size, centered, r
         //    }
         //}
 
-        formatted = formatLines(ctx, stripTags(track.albumLine), textW, fontSize ? fontSize : Math.min(formatted.fontSize, 14), fontSize ? fontSize : 10, STD_WEIGHT, FONT_SUFFIX);
+        formatted = formatLines(ctx, albumLine, textW, fontSize ? fontSize : Math.min(formatted.fontSize, 14), fontSize ? fontSize : 10, STD_WEIGHT, FONT_SUFFIX);
         if (formatted.lines.length>0) {
             entries.push({lines:formatted.lines, fontSize:formatted.fontSize, weight:STD_WEIGHT, opacity:withContext ? 1.0 : SUB_OPACITY, ctx:from, spacing:4});
         }
     } else {
-        formatted = formatLines(ctx, stripTags(track.artistAndComposer), textW, Math.min(formatted.fontSize, 16), 12, STD_WEIGHT, FONT_SUFFIX);
+        formatted = formatLines(ctx, artistAndComposer, textW, Math.min(formatted.fontSize, 16), 12, STD_WEIGHT, FONT_SUFFIX);
         if (formatted.lines.length>0) {
             entries.push({lines:formatted.lines, fontSize:formatted.fontSize, weight:STD_WEIGHT, opacity:1.0, ctx:by, spacing:withContext ? entries[0].spacing : 4});
         }
 
-        formatted = formatLines(ctx, stripTags(track.albumLine), textW, Math.min(formatted.fontSize, 14), 10, STD_WEIGHT, FONT_SUFFIX);
+        formatted = formatLines(ctx, albumLine, textW, Math.min(formatted.fontSize, 14), 10, STD_WEIGHT, FONT_SUFFIX);
         if (formatted.lines.length>0) {
             entries.push({lines:formatted.lines, fontSize:formatted.fontSize, weight:STD_WEIGHT, opacity:withContext ? 1.0 : SUB_OPACITY, ctx:from, spacing:4});
         }

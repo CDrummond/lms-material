@@ -9,9 +9,9 @@
 const NP_SHARE_STD_H    = 180;
 const NP_SHARE_STD_W    = 450;
 const NP_SHARE_MED_H    = 300;
-const NP_SHARE_MED_W    = 600;
+const NP_SHARE_MED_W    = 700;
 const NP_SHARE_LARGE_H  = 400;
-const NP_SHARE_LARGE_W  = 800;
+const NP_SHARE_LARGE_W  = 900;
 
 function loadImage(url) {
     return new Promise(function(resolve) {
@@ -88,6 +88,28 @@ function waitForLoad(element) {
         element.onload = () => resolve(element);
         element.onerror = (err) => reject(err);
     });
+}
+
+function getList(item, type, used) {
+    let vals = [];
+    if (lmsOptions.showAllArtists && undefined!=item[type+"s"] && item[type+"s"].length>1) {
+        for (let i=0, loop=item[type+"s"], len=loop.length; i<len; ++i) {
+            if (!used.has(loop[i])) {
+                vals.push(loop[i]);
+                used.add(loop[i]);
+            }
+        }
+    } else {
+        let val = item[type];
+        if (undefined!=val) {
+            if (used.has(val)) {
+                return vals;
+            }
+            used.add(val);
+            vals.push(val);
+        }
+    }
+    return vals;
 }
 
 async function renderNowPlayingToCanvas(track, artImg, isDark, size, centered, rounded) {
@@ -186,48 +208,112 @@ async function renderNowPlayingToCanvas(track, artImg, isDark, size, centered, r
 
     let entries = [];
     let withContext = 0!=size && !centered;
+    let used = new Set();
+    let artists = withContext ? getList(track, "artist", used) : []
+    let composers = withContext && track.composer && lmsOptions.showComposer && useComposer(track) ? getList(track, "composer", used) : [];
+    let conductors = withContext && track.conductor && lmsOptions.showConductor && useConductor(track) ? getList(track, "conductor", used) : [];
+
     let by = withContext ? stripTags(i18n("<obj>by</obj> %1")).replace(" %1", "") : undefined;
     let from = withContext ? stripTags(i18n("<obj>from</obj> %1")).replace(" %1", "") : undefined;
 
+    if (2==size) {
+        entries.push({lines:[i18n('Now Playing').toUpperCase()], fontSize:12, weight:STD_WEIGHT, opacity:SUB_OPACITY, ctx:undefined, lspacing:0.5, spacing:16});
+    }
+
     // Auto-scale title — start smaller, max 2 lines, scale down to fit
     let formatted = formatLines(ctx, track.title, textW, 2==size ? 24 : 18, 12, EXTRA_BOLD_WEIGHT, FONT_SUFFIX);
-    entries.push({lines:formatted.lines, fontSize:formatted.fontSize, weight:EXTRA_BOLD_WEIGHT, opacity:1.0, spacing:12});
+    if (formatted.lines.length>0) {
+        entries.push({lines:formatted.lines, fontSize:formatted.fontSize, weight:EXTRA_BOLD_WEIGHT, opacity:1.0, spacing:12});
+    }
 
-    formatted = formatLines(ctx, stripTags(track.artistAndComposer), textW, Math.min(formatted.fontSize, 16), 12, STD_WEIGHT, FONT_SUFFIX);
-    entries.push({lines:formatted.lines, fontSize:formatted.fontSize, weight:STD_WEIGHT, opacity:1.0, ctx:by, spacing:withContext ? entries[0].spacing : 4});
+    if (withContext && 2==size && (artists.length>0 || composers.length>0 || conductors.length>0)) {
+        let artstsCombined = artists.length>0 ? artists.join(SEPARATOR) : undefined;
+        let composersCombined = composers.length>0 ? composers.join(SEPARATOR) : undefined;
+        let conductorsCombined = conductors.length>0 ? conductors.join(SEPARATOR) : undefined;
+        let size = undefined;
+        let performedBy = stripTags(i18n("<obj>performed by</obj> %1")).replace(" %1", "");
 
-    formatted = formatLines(ctx, stripTags(track.albumLine), textW, Math.min(formatted.fontSize, 14), 10, STD_WEIGHT, FONT_SUFFIX);
-    entries.push({lines:formatted.lines, fontSize:formatted.fontSize, weight:STD_WEIGHT, opacity:withContext ? 1.0 : SUB_OPACITY, ctx:from});
+        if (artstsCombined && lmsOptions.artistFirst) {
+            formatted = formatLines(ctx, artstsCombined, textW, Math.min(formatted.fontSize, 16), 12, STD_WEIGHT, FONT_SUFFIX);
+            if (formatted.lines.length>0) {
+                entries.push({lines:formatted.lines, fontSize:formatted.fontSize, weight:STD_WEIGHT, opacity:1.0, ctx:composersCombined || conductorsCombined ? performedBy : by, spacing:8});
+                if (undefined==size) {
+                    size = formatted.fontSize;
+                }
+            }
+        }
+        if (composersCombined) {
+            formatted = formatLines(ctx, composersCombined, textW, size ? size : Math.min(formatted.fontSize, 16), size ? size : 12, STD_WEIGHT, FONT_SUFFIX);
+            if (formatted.lines.length>0) {
+                let composedBy = stripTags(i18n("<obj>composed by</obj> %1")).replace(" %1", "");
+                entries.push({lines:formatted.lines, fontSize:formatted.fontSize, weight:STD_WEIGHT, opacity:1.0, ctx:composedBy, spacing:8});
+                if (undefined==size) {
+                    size = formatted.fontSize;
+                }
+            }
+        }
+        if (conductorsCombined) {
+            formatted = formatLines(ctx, composersCombined, textW, size ? size : Math.min(formatted.fontSize, 16), size ? size : 12, STD_WEIGHT, FONT_SUFFIX);
+            if (formatted.lines.length>0) {
+                let conductedBy = stripTags(i18n("<obj>conducted by</obj> %1")).replace(" %1", "");
+                entries.push({lines:formatted.lines, fontSize:formatted.fontSize, weight:STD_WEIGHT, opacity:1.0, ctx:conductedBy, spacing:8});
+                if (undefined==size) {
+                    size = formatted.fontSize;
+                }
+            }
+        }
+        if (artstsCombined && !lmsOptions.artistFirst) {
+            formatted = formatLines(ctx, artstsCombined, textW, size ? size : Math.min(formatted.fontSize, 16), size ? size : 12, STD_WEIGHT, FONT_SUFFIX);
+            if (formatted.lines.length>0) {
+                entries.push({lines:formatted.lines, fontSize:formatted.fontSize, weight:STD_WEIGHT, opacity:1.0, ctx:composersCombined || conductorsCombined ? performedBy : by, spacing:8});
+                if (undefined==size) {
+                    size = formatted.fontSize;
+                }
+            }
+        }
+        //if (track.work!=undefined) {
+        //    formatted = formatLines(ctx, track.work, textW, size ? size : Math.min(formatted.fontSize, 16), size ? size : 12, STD_WEIGHT, FONT_SUFFIX);
+        //    if (formatted.lines.length>0) {
+        //        let workCtx = stripTags(XXX("<obj>work</obj> %1")).replace(" %1", "");
+        //        entries.push({lines:formatted.lines, fontSize:formatted.fontSize, weight:STD_WEIGHT, opacity:1.0, ctx:workCtx, spacing:4});
+        //    }
+        //}
+
+        formatted = formatLines(ctx, stripTags(track.albumLine), textW, size ? size : Math.min(formatted.fontSize, 14), size ? size : 10, STD_WEIGHT, FONT_SUFFIX);
+        if (formatted.lines.length>0) {
+            entries.push({lines:formatted.lines, fontSize:formatted.fontSize, weight:STD_WEIGHT, opacity:withContext ? 1.0 : SUB_OPACITY, ctx:from, spacing:4});
+        }
+    } else {
+        formatted = formatLines(ctx, stripTags(track.artistAndComposer), textW, Math.min(formatted.fontSize, 16), 12, STD_WEIGHT, FONT_SUFFIX);
+        if (formatted.lines.length>0) {
+            entries.push({lines:formatted.lines, fontSize:formatted.fontSize, weight:STD_WEIGHT, opacity:1.0, ctx:by, spacing:withContext ? entries[0].spacing : 4});
+        }
+
+        formatted = formatLines(ctx, stripTags(track.albumLine), textW, Math.min(formatted.fontSize, 14), 10, STD_WEIGHT, FONT_SUFFIX);
+        if (formatted.lines.length>0) {
+            entries.push({lines:formatted.lines, fontSize:formatted.fontSize, weight:STD_WEIGHT, opacity:withContext ? 1.0 : SUB_OPACITY, ctx:from, spacing:4});
+        }
+    }
 
     // Calculate total block height for vertical centring
-    let artistLen = entries[1].lines.length > 0
-                     ? (Math.min(entries[1].lines.length, 2) + (2==size ? 1 : 0)) * entries[1].fontSize
-                     : 0;
-    let albumLen = entries[2].lines.length > 0
-                     ? (Math.min(entries[2].lines.length, 2) + (2==size ? 1 : 0)) * entries[2].fontSize
-                     : 0;
-    let totalTextH = (Math.min(entries[0].lines.length, 2) * entries[0].fontSize * 1.15) + (artistLen>0 || albumLen> 0 ? entries[0].spacing : 0)
-                     + artistLen + (albumLen>0 ? entries[1].spacing : 0)
-                     + albumLen;
+    let totalTextH = 0;
+    for (let e=0; e<entries.length; ++e) {
+        totalTextH += (Math.min(entries[e].lines.length, 2) + (withContext && undefined!=entries[e].ctx ? 1 : 0)) * entries[e].fontSize * 1.15;
+        if (e<entries.length-1) {
+            totalTextH += entries[e].spacing;
+        }
+    }
+
     let ty = (HEIGHT - totalTextH) / 2;
 
     ctx.fillStyle = TEXT_COLOR;
-    if (2==size) {
-        ctx.globalAlpha = SUB_OPACITY;
-        ctx.font = STD_WEIGHT + '12px Roboto, sans-serif';
-        ctx.letterSpacing = '0.5em';
-        let text = i18n('Now Playing').toUpperCase();
-        let offset = centered ? (textW - ctx.measureText(text).width)/2 : 0;
-        ctx.fillText(text, tx + offset, 96);
-        ctx.letterSpacing = '0.0em';
-        ctx.globalAlpha = 1.0;
-    }
 
-    for (let e=0; e<3; ++e) {
+    for (let e=0; e<entries.length; ++e) {
         if (entries[e].lines.length>0) {
             let lineH = entries[e].fontSize * 1.15;
             ctx.font = entries[e].weight + entries[e].fontSize + FONT_SUFFIX;
-            if (e>0 && withContext) {
+            ctx.letterSpacing = (undefined==entries[e].lspacing ? 0.0 : entries[e].lspacing) + 'em';
+            if (e>0 && withContext && undefined!=entries[e].ctx) {
                 ctx.globalAlpha = SUB_OPACITY;
                 let offset = centered ? (textW - ctx.measureText(entries[e].ctx).width)/2 : 0;
                 ctx.fillText(entries[e].ctx, tx + offset, ty + lineH);

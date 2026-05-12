@@ -301,6 +301,7 @@ function nowplayingOnPlayerStatus(view, playerStatus) {
     }
     if (playerStatus.current.work!=view.playerStatus.current.work) {
         view.playerStatus.current.work = playerStatus.current.work;
+        //view.playerStatus.current.workWithContext = XXX('<obj>work</obj> %1', playerStatus.current.work).replaceAll("<obj>", "<obj class=\"ext-details\">");
     }
     if (playerStatus.current.work_id!=view.playerStatus.current.work_id) {
         view.playerStatus.current.work_id = playerStatus.current.work_id;

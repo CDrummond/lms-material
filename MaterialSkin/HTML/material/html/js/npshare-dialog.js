@@ -6,8 +6,8 @@
  */
 'use strict';
 
-const NP_SHARE_STD_H    = 180;
-const NP_SHARE_STD_W    = 450;
+const NP_SHARE_STD_H    = 200;
+const NP_SHARE_STD_W    = 500;
 const NP_SHARE_MED_H    = 300;
 const NP_SHARE_MED_W    = 700;
 const NP_SHARE_LARGE_H  = 400;
@@ -113,25 +113,22 @@ function getList(item, type, used) {
 }
 
 async function renderNowPlayingToCanvas(track, artImg, isDark, size, centered, rounded) {
-    const CORNER_RADIUS     = 14;
     const OVERLAY_ALPHA     = 0.45;
     const FONT_SUFFIX       = 'px Roboto, sans-serif';
     const TEXT_COLOR        = "#" + (isDark ? LMS_DARK_SVG : "000");
     const STD_WEIGHT        = '400 ';
     const EXTRA_BOLD_WEIGHT = '700 ';
     const SUB_OPACITY       = 0.7;
-    const MARGIN            = 2==size ? 12 : 1==size ? 8 : 4;
+    const CORNER_RADIUS     = 14;
+    const MARGIN            = 2==size ? 12 : 1==size ? 8 : 6;
     const WIDTH             = 2==size ? NP_SHARE_LARGE_W : 1==size ? NP_SHARE_MED_W : NP_SHARE_STD_W;
     const HEIGHT            = 2==size ? NP_SHARE_LARGE_H : 1==size ? NP_SHARE_MED_H : NP_SHARE_STD_H;
     const MAX_ART_SIZE      = HEIGHT - (2 * MARGIN);
 
     let canvas = document.createElement('canvas');
-    let ctx = canvas.getContext('2d');
-    const dpr = window.devicePixelRatio || 1;
-    canvas.width = WIDTH*dpr; canvas.height = HEIGHT*dpr;
-    ctx.scale(dpr, dpr);
-    canvas.style.width = `${WIDTH}px`;
-    canvas.style.height = `${HEIGHT}px`;
+    let ctx = canvas.getContext('2d', { alpha: true, willReadFrequently: false });
+    canvas.width = WIDTH;
+    canvas.height = HEIGHT;
 
     if (rounded) {
         // ── Clip to rounded card ──
@@ -339,14 +336,10 @@ async function renderNowPlayingToCanvas(track, artImg, isDark, size, centered, r
     svg.src = "/material/svg/lyrion-logo?c=" + (isDark ? LMS_DARK_SVG : LMS_LIGHT_SVG);
     try {
         await waitForLoad(svg);
-        let h = 14;
+        let h = size>1 ? 22 : 16;
         let w = h * (svg.width/svg.height)
         ctx.drawImage(svg, WIDTH-(w+MARGIN+8), MARGIN+2, w, h);
-        ctx.beginPath();
         logoX = WIDTH-(w+MARGIN+14);
-        ctx.roundRect(logoX, MARGIN, w+14, h+4, (h+MARGIN)/2);
-        ctx.strokeStyle = "#"+(isDark ? LMS_DARK_SVG : LMS_LIGHT_SVG);
-        ctx.stroke();
     } catch (e) {
     }
 
@@ -355,8 +348,8 @@ async function renderNowPlayingToCanvas(track, artImg, isDark, size, centered, r
         svg.src = "/material/svg/"+track.emblem.name+"?c=" + (isDark ? LMS_DARK_SVG : LMS_LIGHT_SVG);;
         try {
             await waitForLoad(svg);
-            let size = 21;
-            ctx.drawImage(svg, logoX-(size + 4), MARGIN-1, size, size);
+            let sz = size>1 ? 26 : 20;
+            ctx.drawImage(svg, logoX-(sz + 4), MARGIN+(size>1 ? 0 : -1), sz, sz);
         } catch (e) {
         }
     }
@@ -369,7 +362,7 @@ async function renderNowPlayingToCanvas(track, artImg, isDark, size, centered, r
 
 Vue.component('lms-npshare-dialog', {
     template: `
-<v-dialog v-model="show" :width="(2==size ? NP_SHARE_LARGE_W : 1==size ? NP_SHARE_MED_W : NP_SHARE_STD_W)+20" persistent v-if="show">
+<v-dialog v-model="show" :width="((2==size ? NP_SHARE_LARGE_W : 1==size ? NP_SHARE_MED_W: NP_SHARE_STD_W)/dpr)+20" persistent v-if="show">
  <v-card>
   <v-card-title>{{i18n("Now Playing")}}</v-card-title>
   <v-list-tile-sub-title style="padding:0px 16px 16px 16px">{{text}}</v-list-tile-sub-title>
@@ -431,6 +424,7 @@ Vue.component('lms-npshare-dialog', {
             centered: true,
             size: 0,
             sizes: [],
+            dpr:1.0
         }
     },
     computed: {
@@ -445,6 +439,7 @@ Vue.component('lms-npshare-dialog', {
         }
     },
     mounted() {
+        this.dpr = window.devicePixelRatio || 1;
         bus.$on('npshare.open', function(coverUrl, track) {
             this.coverUrl = coverUrl;
             this.track = track;

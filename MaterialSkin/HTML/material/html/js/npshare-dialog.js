@@ -148,11 +148,13 @@ async function renderNowPlayingToCanvas(track, artImg, isDark, size, centered, r
         // Use square canvases to ensure full coverage
         let sizes = [4, 8, 20, 60, 160];
         let prev = document.createElement('canvas');
-        prev.width = sizes[0]; prev.height = sizes[0];
+        prev.width = sizes[0];
+        prev.height = sizes[0];
         prev.getContext('2d').drawImage(artImg, 0, 0, sizes[0], sizes[0]);
         for (let p = 1; p < sizes.length; p++) {
             let next = document.createElement('canvas');
-            next.width = sizes[p]; next.height = sizes[p];
+            next.width = sizes[p];
+            next.height = sizes[p];
             next.getContext('2d').drawImage(prev, 0, 0, sizes[p], sizes[p]);
             prev.remove();
             prev = next;
@@ -180,10 +182,13 @@ async function renderNowPlayingToCanvas(track, artImg, isDark, size, centered, r
 
         // Drop shadow
         ctx.save();
-        ctx.shadowColor = 'rgba(0,0,0,0.9)';
-        ctx.shadowBlur = 40; ctx.shadowOffsetX = 6; ctx.shadowOffsetY = 6;
+        ctx.shadowColor = 'rgba(0,0,0,0.5)';
+        ctx.shadowBlur = 40;
+        ctx.shadowOffsetX = 0;
+        ctx.shadowOffsetY = 0;
         roundRect(ctx, ax, ay, artW, artH, 8);
-        ctx.fillStyle = 'rgba(0,0,0,0.01)'; ctx.fill();
+        ctx.fillStyle = 'rgba(0,0,0,0.5)';
+        ctx.fill();
         ctx.restore();
 
         // Clean artwork — no filter
@@ -227,56 +232,56 @@ async function renderNowPlayingToCanvas(track, artImg, isDark, size, centered, r
         let artstsCombined = artists.length>0 ? artists.join(SEPARATOR) : undefined;
         let composersCombined = composers.length>0 ? composers.join(SEPARATOR) : undefined;
         let conductorsCombined = conductors.length>0 ? conductors.join(SEPARATOR) : undefined;
-        let size = undefined;
+        let fontSize = undefined;
         let performedBy = stripTags(i18n("<obj>performed by</obj> %1")).replace(" %1", "");
 
         if (artstsCombined && lmsOptions.artistFirst) {
             formatted = formatLines(ctx, artstsCombined, textW, Math.min(formatted.fontSize, 16), 12, STD_WEIGHT, FONT_SUFFIX);
             if (formatted.lines.length>0) {
                 entries.push({lines:formatted.lines, fontSize:formatted.fontSize, weight:STD_WEIGHT, opacity:1.0, ctx:composersCombined || conductorsCombined ? performedBy : by, spacing:8});
-                if (undefined==size) {
-                    size = formatted.fontSize;
+                if (undefined==fontSize) {
+                    fontSize = formatted.fontSize;
                 }
             }
         }
         if (composersCombined) {
-            formatted = formatLines(ctx, composersCombined, textW, size ? size : Math.min(formatted.fontSize, 16), size ? size : 12, STD_WEIGHT, FONT_SUFFIX);
+            formatted = formatLines(ctx, composersCombined, textW, fontSize ? fontSize : Math.min(formatted.fontSize, 16), fontSize ? fontSize : 12, STD_WEIGHT, FONT_SUFFIX);
             if (formatted.lines.length>0) {
                 let composedBy = stripTags(i18n("<obj>composed by</obj> %1")).replace(" %1", "");
                 entries.push({lines:formatted.lines, fontSize:formatted.fontSize, weight:STD_WEIGHT, opacity:1.0, ctx:composedBy, spacing:8});
-                if (undefined==size) {
-                    size = formatted.fontSize;
+                if (undefined==fontSize) {
+                    fontSize = formatted.fontSize;
                 }
             }
         }
         if (conductorsCombined) {
-            formatted = formatLines(ctx, composersCombined, textW, size ? size : Math.min(formatted.fontSize, 16), size ? size : 12, STD_WEIGHT, FONT_SUFFIX);
+            formatted = formatLines(ctx, composersCombined, textW, fontSize ? fontSize : Math.min(formatted.fontSize, 16), fontSize ? fontSize : 12, STD_WEIGHT, FONT_SUFFIX);
             if (formatted.lines.length>0) {
                 let conductedBy = stripTags(i18n("<obj>conducted by</obj> %1")).replace(" %1", "");
                 entries.push({lines:formatted.lines, fontSize:formatted.fontSize, weight:STD_WEIGHT, opacity:1.0, ctx:conductedBy, spacing:8});
-                if (undefined==size) {
-                    size = formatted.fontSize;
+                if (undefined==fontSize) {
+                    fontSize = formatted.fontSize;
                 }
             }
         }
         if (artstsCombined && !lmsOptions.artistFirst) {
-            formatted = formatLines(ctx, artstsCombined, textW, size ? size : Math.min(formatted.fontSize, 16), size ? size : 12, STD_WEIGHT, FONT_SUFFIX);
+            formatted = formatLines(ctx, artstsCombined, textW, fontSize ? fontSize : Math.min(formatted.fontSize, 16), fontSize ? fontSize : 12, STD_WEIGHT, FONT_SUFFIX);
             if (formatted.lines.length>0) {
                 entries.push({lines:formatted.lines, fontSize:formatted.fontSize, weight:STD_WEIGHT, opacity:1.0, ctx:composersCombined || conductorsCombined ? performedBy : by, spacing:8});
-                if (undefined==size) {
-                    size = formatted.fontSize;
+                if (undefined==fontSize) {
+                    fontSize = formatted.fontSize;
                 }
             }
         }
         //if (track.work!=undefined) {
-        //    formatted = formatLines(ctx, track.work, textW, size ? size : Math.min(formatted.fontSize, 16), size ? size : 12, STD_WEIGHT, FONT_SUFFIX);
+        //    formatted = formatLines(ctx, track.work, textW, fontSize ? fontSize : Math.min(formatted.fontSize, 16), fontSize ? fontSize : 12, STD_WEIGHT, FONT_SUFFIX);
         //    if (formatted.lines.length>0) {
         //        let workCtx = stripTags(XXX("<obj>work</obj> %1")).replace(" %1", "");
         //        entries.push({lines:formatted.lines, fontSize:formatted.fontSize, weight:STD_WEIGHT, opacity:1.0, ctx:workCtx, spacing:4});
         //    }
         //}
 
-        formatted = formatLines(ctx, stripTags(track.albumLine), textW, size ? size : Math.min(formatted.fontSize, 14), size ? size : 10, STD_WEIGHT, FONT_SUFFIX);
+        formatted = formatLines(ctx, stripTags(track.albumLine), textW, fontSize ? fontSize : Math.min(formatted.fontSize, 14), fontSize ? fontSize : 10, STD_WEIGHT, FONT_SUFFIX);
         if (formatted.lines.length>0) {
             entries.push({lines:formatted.lines, fontSize:formatted.fontSize, weight:STD_WEIGHT, opacity:withContext ? 1.0 : SUB_OPACITY, ctx:from, spacing:4});
         }

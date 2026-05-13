@@ -12,6 +12,7 @@ const NP_SHARE_MED_H    = 300;
 const NP_SHARE_MED_W    = 700;
 const NP_SHARE_LARGE_H  = 400;
 const NP_SHARE_LARGE_W  = 900;
+const NP_SHARE_SCALE    = true; // Scale canvas based upon devicePixelRatio?
 
 function loadImage(url) {
     return new Promise(function(resolve) {
@@ -113,11 +114,12 @@ function getList(item, type, used) {
 }
 
 async function renderNowPlayingToCanvas(track, artImg, isDark, size, centered, rounded) {
-    const FONT_SUFFIX       = 'px Roboto, sans-serif';
-    const STD_WEIGHT        = '400 ';
-    const EXTRA_BOLD_WEIGHT = '700 ';
-    const MAX_WIDTH             = 2==size ? NP_SHARE_LARGE_W : 1==size ? NP_SHARE_MED_W : NP_SHARE_STD_W;
-    const MAX_HEIGHT            = 2==size ? NP_SHARE_LARGE_H : 1==size ? NP_SHARE_MED_H : NP_SHARE_STD_H;
+    const FONT_SUFFIX        = 'px Roboto, sans-serif';
+    const STD_WEIGHT         = '400 ';
+    const EXTRA_BOLD_WEIGHT  = '700 ';
+    const MAX_WIDTH          = 2==size ? NP_SHARE_LARGE_W : 1==size ? NP_SHARE_MED_W : NP_SHARE_STD_W;
+    const MAX_HEIGHT         = 2==size ? NP_SHARE_LARGE_H : 1==size ? NP_SHARE_MED_H : NP_SHARE_STD_H;
+    const DEVICE_PIXEL_RATIO = window.devicePixelRatio || 1;
 
     let withContext = 0!=size && !centered;
     let used = new Set();
@@ -139,8 +141,17 @@ async function renderNowPlayingToCanvas(track, artImg, isDark, size, centered, r
     // Calculate view width based upon strings...
     let tmpCanvas = document.createElement('canvas');
     let tmpCtx = tmpCanvas.getContext('2d', { alpha: true, willReadFrequently: false });
-    tmpCanvas.width = MAX_WIDTH;
-    tmpCanvas.height = MAX_HEIGHT;
+
+    if (NP_SHARE_SCALE) {
+        tmpCanvas.width = MAX_WIDTH*DEVICE_PIXEL_RATIO;
+        tmpCanvas.height = MAX_HEIGHT*DEVICE_PIXEL_RATIO;
+        tmpCtx.scale(DEVICE_PIXEL_RATIO, DEVICE_PIXEL_RATIO);
+        tmpCanvas.style.width = `${MAX_WIDTH}px`;
+        tmpCanvas.style.height = `${MAX_HEIGHT}px`;
+    } else {
+        tmpCanvas.width = MAX_WIDTH;
+        tmpCanvas.height = MAX_HEIGHT;
+    }
 
     let maxWidth = 0;
     let strings = [albumLine];
@@ -175,11 +186,14 @@ async function renderNowPlayingToCanvas(track, artImg, isDark, size, centered, r
 
     let useWidth = tmpCanvas.width;
     if (maxWidth<=tmpCanvas.height) {
-        if (!centered  && maxWidth<=tmpCanvas.height*0.75) {
+        if (!centered && maxWidth<=tmpCanvas.height*0.75) {
             useWidth = tmpCanvas.height*(size>0 ? 1.7 : 1.8);
         } else {
             useWidth = tmpCanvas.height*2;
         }
+    }
+    if (NP_SHARE_SCALE) {
+        useWidth/=DEVICE_PIXEL_RATIO;
     }
 
     tmpCanvas.remove();
@@ -195,8 +209,16 @@ async function renderNowPlayingToCanvas(track, artImg, isDark, size, centered, r
 
     let canvas = document.createElement('canvas');
     let ctx = canvas.getContext('2d', { alpha: true, willReadFrequently: false });
-    canvas.width = WIDTH;
-    canvas.height = HEIGHT;
+    if (NP_SHARE_SCALE) {
+        canvas.width = WIDTH*DEVICE_PIXEL_RATIO;
+        canvas.height = HEIGHT*DEVICE_PIXEL_RATIO;
+        ctx.scale(DEVICE_PIXEL_RATIO, DEVICE_PIXEL_RATIO);
+        canvas.style.width = `${WIDTH}px`;
+        canvas.style.height = `${HEIGHT}px`;
+    } else {
+        canvas.width = WIDTH;
+        canvas.height = HEIGHT;
+    }
 
     if (rounded) {
         // ── Clip to rounded card ──
@@ -427,7 +449,7 @@ async function renderNowPlayingToCanvas(track, artImg, isDark, size, centered, r
 
 Vue.component('lms-npshare-dialog', {
     template: `
-<v-dialog v-model="show" :width="((2==size ? NP_SHARE_LARGE_W : 1==size ? NP_SHARE_MED_W: NP_SHARE_STD_W)/dpr)+20" persistent v-if="show">
+<v-dialog v-model="show" :width="((2==size ? NP_SHARE_LARGE_W : 1==size ? NP_SHARE_MED_W: NP_SHARE_STD_W)*dpr)+20" persistent v-if="show">
  <v-card>
   <v-card-title>{{i18n("Now Playing")}}</v-card-title>
   <v-list-tile-sub-title style="padding:0px 16px 16px 16px">{{text}}</v-list-tile-sub-title>
@@ -488,8 +510,7 @@ Vue.component('lms-npshare-dialog', {
             rounded: true,
             centered: true,
             size: 0,
-            sizes: [],
-            dpr:1.0
+            sizes: []
         }
     },
     computed: {
@@ -501,10 +522,12 @@ Vue.component('lms-npshare-dialog', {
         },
         allowRounded() {
             return this.$store.state.roundCovers
+        },
+        dpr() {
+            return NP_SHARE_SCALE ? 1.0 : window.devicePixelRatio
         }
     },
     mounted() {
-        this.dpr = window.devicePixelRatio || 1;
         bus.$on('npshare.open', function(coverUrl, track) {
             this.coverUrl = coverUrl;
             this.track = track;

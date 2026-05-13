@@ -100,6 +100,8 @@ Vue.component('lms-rating-dialog', {
                         this.toSet.shift();
                         this.setRating();
                     }
+                }).catch(err => {
+                    bus.$emit('showError', undefined, i18n('Failed to set rating!'));
                 });
             }
         },

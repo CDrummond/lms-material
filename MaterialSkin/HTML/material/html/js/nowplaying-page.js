@@ -1149,6 +1149,14 @@ var lmsNowPlaying = Vue.component("lms-now-playing", {
                 logJsonMessage("RESP", data);
                 bus.$emit('refreshStatus');
                 bus.$emit('ratingChanged', this.rating.track_id, this.rating.album_id);
+            }).catch(err => {
+                bus.$emit('showError', undefined, i18n('Failed to set rating!'));
+                if (this.rating.track_id==this.playerStatus.current.id) {
+                    this.rating.value=this.rating.setting;
+                }
+                this.rating.track_id = undefined;
+                this.rating.album_id = undefined;
+                bus.$emit('refreshStatus');
             });
         },
         doCommand(command, msg) {

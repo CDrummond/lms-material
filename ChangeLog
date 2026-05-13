@@ -10,6 +10,8 @@
 6. Fix edit actions from favourites in scrolled list.
 7. Fix semi-transparent check button on grid works covers.
 8. Fix 'Show image' for playlist images.
+9. If an error is received when trying to set rating, then reset display to
+   last value.
 
 6.3.2
 -----

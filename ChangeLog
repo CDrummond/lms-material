@@ -2,7 +2,7 @@
 -----
 1. Fix blurred sub-toolbar background.
 2. Hide floating search button when mobile keyboard shown.
-3. Show release name on separate line in album style queue header  - thanks to
+3. Show release name on separate line in album style queue header - thanks to
    mspertus.
 4. Add 'Share' to now-playing context menu, creates an image of current track
    for sharing. Thanks to crystalgipsy for the original implementation.

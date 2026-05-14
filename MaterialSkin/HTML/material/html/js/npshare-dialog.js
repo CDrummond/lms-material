@@ -172,7 +172,7 @@ async function renderNowPlayingToCanvas(track, artImg, isDark, rounded) {
     let useWidth = tmpCanvas.width;
     if (maxWidth<=tmpCanvas.height) {
         if (maxWidth<=tmpCanvas.height*0.75) {
-            useWidth = tmpCanvas.height*1.7;
+            useWidth = tmpCanvas.height*1.8;
         } else {
             useWidth = tmpCanvas.height*2;
         }
@@ -434,10 +434,12 @@ Vue.component('lms-npshare-dialog', {
     </v-list>
    </v-menu>
    <v-spacer></v-spacer>
+   <v-btn flat icon v-if="showClipboard && 2==btnStyle" @click="save('C')" :title="i18n('Add to clipboard')"><img class="svg-img" :src="'clipboard-add' | svgIcon(darkUi)"></img></v-btn>
+   <v-btn flat v-else-if="showClipboard" @click="save('C')">{{1==btnStyle ?  i18n('Clipboard') : i18n('Add to clipboard')}}</v-btn>
+   <div style="width:32px; height:0px; background:transparent" v-if="2==btnStyle && showClipboard && showShare"></div>
    <v-btn flat icon v-if="showShare && 2==btnStyle" @click="save('S')" :title="i18n('Share')"><v-icon>share</v-icon></v-btn>
    <v-btn flat v-else-if="showShare" @click="save('S')">{{i18n('Share')}}</v-btn>
-   <v-btn flat icon v-if="showClipboard && 2==btnStyle" @click="save('C')" :title="i18n('Add to clipboard')"><img class="svg-img btn-icon" :src="'clipboard-add' | svgIcon(darkUi)"></img></v-btn>
-   <v-btn flat v-else-if="showClipboard" @click="save('C')">{{1==btnStyle ?  i18n('Clipboard') : i18n('Add to clipboard')}}</v-btn>
+   <div style="width:32px; height:0px; background:transparent" v-if="2==btnStyle && (showClipboard || showShare)"></div>
    <v-btn flat @click="close">{{i18n('Close')}}</v-btn>
   </v-card-actions>
  </v-card>

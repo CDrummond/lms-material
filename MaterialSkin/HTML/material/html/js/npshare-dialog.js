@@ -185,7 +185,7 @@ async function renderNowPlayingToCanvas(track, artImg, isDark, rounded) {
 
     const OVERLAY_ALPHA = 0.45;
     const TEXT_COLOR    = "#" + (isDark ? LMS_DARK_SVG : "000");
-    const SUB_OPACITY   = 0.7;
+    const SUB_OPACITY   = 0.5;
     const CORNER_RADIUS = 14;
     const MARGIN        = 12;
     const WIDTH         = useWidth;
@@ -295,7 +295,7 @@ async function renderNowPlayingToCanvas(track, artImg, isDark, rounded) {
     let fontSize = undefined;
 
     if (artstsCombined && lmsOptions.artistFirst) {
-        formatted = formatLines(ctx, artstsCombined, textW, Math.min(formatted.fontSize, 14), 10, STD_WEIGHT, FONT_SUFFIX);
+        formatted = formatLines(ctx, artstsCombined, textW, Math.min(formatted.fontSize-2, 14), 10, STD_WEIGHT, FONT_SUFFIX);
         if (formatted.lines.length>0) {
             let ctx = stripTags(composersCombined || conductorsCombined ? i18n("<obj>performed by</obj> %1") : i18n("<obj>by</obj> %1")).replace(" %1", "");
             entries.push({lines:formatted.lines, fontSize:formatted.fontSize, weight:STD_WEIGHT, opacity:1.0, ctx:ctx, spacing:8});

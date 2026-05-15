@@ -1,3 +1,8 @@
+6.4.1
+-----
+1. When creating 'Share' image allow track title to span up to 3 lines if only
+   showing 3 fields (e.g. title, artist, album).
+
 6.4.0
 -----
 1. Fix blurred sub-toolbar background.

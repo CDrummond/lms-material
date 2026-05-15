@@ -361,6 +361,7 @@ async function renderNowPlayingToCanvas(track, artImg, isDark, rounded) {
 
     for (let e=0; e<entries.length; ++e) {
         if (entries[e].lines.length>0) {
+            let maxLines = e>0 || entries.length > 3 ? 2 : 3;
             let lineH = entries[e].fontSize * 1.15;
             ctx.font = entries[e].weight + entries[e].fontSize + FONT_SUFFIX;
             ctx.letterSpacing = (undefined==entries[e].lspacing ? 0.0 : entries[e].lspacing) + 'em';
@@ -370,10 +371,9 @@ async function renderNowPlayingToCanvas(track, artImg, isDark, rounded) {
                 ty += lineH;
             }
             ctx.globalAlpha = entries[e].opacity;
-            ctx.fillText(entries[e].lines[0], tx, ty + lineH);
-            ty += lineH;
-            if (entries[e].lines.length>1) {
-                let txt = entries[e].lines[1]+(entries[e].lines.length>2 ? "..." : "");
+
+            for (let l=0; l<maxLines && l<entries[e].lines.length; ++l) {
+                let txt = entries[e].lines[l]+((l+1==maxLines) && entries[e].lines.length>maxLines ? "..." : "");
                 ctx.fillText(txt, tx, ty + lineH);
                 ty += lineH;
             }

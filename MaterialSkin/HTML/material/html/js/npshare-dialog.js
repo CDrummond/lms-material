@@ -107,7 +107,7 @@ function getList(item, type, used) {
     return vals;
 }
 
-async function renderNowPlayingToCanvas(track, artImg, isDark, rounded) {
+async function renderNowPlayingToCanvas(track, artImg, isDark, rounded, withContext) {
     const FONT_SUFFIX        = 'px Roboto, sans-serif';
     const STD_WEIGHT         = '400 ';
     const EXTRA_BOLD_WEIGHT  = '700 ';
@@ -171,7 +171,7 @@ async function renderNowPlayingToCanvas(track, artImg, isDark, rounded) {
 
     let useWidth = tmpCanvas.width;
     if (maxWidth<=tmpCanvas.height) {
-        if (maxWidth<=tmpCanvas.height*0.75) {
+        if (withContext && maxWidth<=tmpCanvas.height*0.75) {
             useWidth = tmpCanvas.height*1.8;
         } else {
             useWidth = tmpCanvas.height*2;
@@ -365,7 +365,7 @@ async function renderNowPlayingToCanvas(track, artImg, isDark, rounded) {
             let lineH = entries[e].fontSize * 1.15;
             ctx.font = entries[e].weight + entries[e].fontSize + FONT_SUFFIX;
             ctx.letterSpacing = (undefined==entries[e].lspacing ? 0.0 : entries[e].lspacing) + 'em';
-            if (e>0 && undefined!=entries[e].ctx) {
+            if (withContext && e>0 && undefined!=entries[e].ctx) {
                 ctx.globalAlpha = SUB_OPACITY;
                 ctx.fillText(entries[e].ctx, tx, ty + lineH);
                 ty += lineH;
@@ -374,7 +374,8 @@ async function renderNowPlayingToCanvas(track, artImg, isDark, rounded) {
 
             for (let l=0; l<maxLines && l<entries[e].lines.length; ++l) {
                 let txt = entries[e].lines[l]+((l+1==maxLines) && entries[e].lines.length>maxLines ? "..." : "");
-                ctx.fillText(txt, tx, ty + lineH);
+                let offset = withContext ? 0 : ((textW - ctx.measureText(txt).width)/2);
+                ctx.fillText(txt, tx + offset, ty + lineH);
                 ty += lineH;
             }
             ty += entries[e].spacing;
@@ -542,7 +543,7 @@ Vue.component('lms-npshare-dialog', {
         createImage() {
             let view = this;
             loadImage(view.coverUrl).then(async function(artImg) {
-                let canvas = await renderNowPlayingToCanvas(view.track, artImg, view.dark, view.$store.state.roundCovers);
+                let canvas = await renderNowPlayingToCanvas(view.track, artImg, view.dark, view.$store.state.roundCovers, view.$store.state.nowPlayingContext);
                 view.src = canvas.toDataURL('image/png');
                 view.canvasWidth = Math.min(600, canvas.width);
                 canvas.remove();

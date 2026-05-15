@@ -388,20 +388,21 @@ async function renderNowPlayingToCanvas(track, artImg, isDark, rounded, withCont
     svg.src = "/material/svg/lyrion-logo?c=" + (isDark ? LMS_DARK_SVG : LMS_LIGHT_SVG);
     try {
         await waitForLoad(svg);
-        let h = strings.length>2 ? 22 : 16;
+        let h = HEIGHT>=300 ? 18 : 16;
         let w = h * (svg.width/svg.height)
-        ctx.drawImage(svg, WIDTH-(w+MARGIN+8), MARGIN+2, w, h);
-        logoX = WIDTH-(w+MARGIN+14);
+        ctx.drawImage(svg, WIDTH-(w+MARGIN), MARGIN, w, h);
+        logoX = WIDTH-(w+MARGIN+12);
     } catch (e) {
     }
 
+    track.emblem = {name:'bbc-sounds'};
     if (undefined!=track.emblem) {
         svg = new Image();
         svg.src = "/material/svg/"+track.emblem.name+"?c=" + (isDark ? LMS_DARK_SVG : LMS_LIGHT_SVG);;
         try {
             await waitForLoad(svg);
-            let sz = strings.length>2 ? 26 : 20;
-            ctx.drawImage(svg, logoX-(sz + 4), MARGIN+(strings.length>2 ? 0 : -1), sz, sz);
+            let sz = HEIGHT>=300 ? 20 : 18;
+            ctx.drawImage(svg, logoX-sz, MARGIN-1, sz, sz);
         } catch (e) {
         }
     }

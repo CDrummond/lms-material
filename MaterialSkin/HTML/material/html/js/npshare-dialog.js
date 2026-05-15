@@ -113,6 +113,10 @@ async function renderNowPlayingToCanvas(track, artImg, isDark, rounded, withCont
     const EXTRA_BOLD_WEIGHT  = '700 ';
     const DEVICE_PIXEL_RATIO = window.devicePixelRatio || 1;
 
+    if (withContext && (undefined==track.source || undefined==track.source.context || !track.source.context)) {
+        withContext = false;
+    }
+
     let used = new Set();
     let artists = getList(track, "artist", used)
     let composers = track.composer && lmsOptions.showComposer && useComposer(track) ? getList(track, "composer", used) : [];

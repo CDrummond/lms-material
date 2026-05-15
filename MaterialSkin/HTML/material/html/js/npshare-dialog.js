@@ -349,7 +349,7 @@ async function renderNowPlayingToCanvas(track, artImg, isDark, rounded, withCont
     // Calculate total block height for vertical centring
     let totalTextH = 0;
     for (let e=0; e<entries.length; ++e) {
-        totalTextH += (Math.min(entries[e].lines.length, 2) + (undefined!=entries[e].ctx ? 1 : 0)) * entries[e].fontSize * 1.15;
+        totalTextH += (Math.min(entries[e].lines.length, e>0 || entries.length > 3 ? 2 : 3) + (withContext && undefined!=entries[e].ctx ? 1 : 0)) * entries[e].fontSize * 1.15;
         if (e<entries.length-1) {
             totalTextH += entries[e].spacing;
         }

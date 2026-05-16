@@ -409,7 +409,6 @@ async function renderNowPlayingToCanvas(track, artImg, isDark, rounded, withCont
     } catch (e) {
     }
 
-    track.emblem = {name:'bbc-sounds'};
     if (undefined!=track.emblem) {
         svg = new Image();
         svg.src = "/material/svg/"+track.emblem.name+"?c=" + (isDark ? LMS_DARK_SVG : LMS_LIGHT_SVG);;

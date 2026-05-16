@@ -1031,7 +1031,7 @@ var lmsBrowse = Vue.component("lms-browse", {
                               id: TOP_RADIO_ID,
                               section: SECTION_RADIO },
                             { command: ["favorites", "items"],
-                              params: ["menu:favorites", "menu:1"],
+                              params: ["menu:favorites"],
                               icon: "favorite",
                               type: "favorites",
                               app: "favorites",

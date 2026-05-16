@@ -121,14 +121,14 @@ async function renderNowPlayingToCanvas(track, artImg, isDark, rounded, withCont
     let artists = getList(track, "artist", used)
     let composers = track.composer && lmsOptions.showComposer && useComposer(track) ? getList(track, "composer", used) : [];
     let conductors = track.conductor && lmsOptions.showConductor && useConductor(track) ? getList(track, "conductor", used) : [];
-    let artstsCombined = artists.length>0 ? artists.join(SEPARATOR) : undefined;
+    let artistsCombined = artists.length>0 ? artists.join(SEPARATOR) : undefined;
     let composersCombined = composers.length>0 ? composers.join(SEPARATOR) : undefined;
     let conductorsCombined = conductors.length>0 ? conductors.join(SEPARATOR) : undefined;
     let albumLine = stripTags(track.albumLine);
 
     let strings = [albumLine];
-    if (undefined!=artstsCombined) {
-        strings.push(artstsCombined);
+    if (undefined!=artistsCombined) {
+        strings.push(artistsCombined);
     }
     if (undefined!=composersCombined) {
         strings.push(composersCombined);
@@ -210,12 +210,10 @@ async function renderNowPlayingToCanvas(track, artImg, isDark, rounded, withCont
     }
 
     if (rounded) {
-        // ── Clip to rounded card ──
         roundRect(ctx, 0, 0, WIDTH, HEIGHT, CORNER_RADIUS);
         ctx.clip();
     }
 
-    // ── 1. Full card background — blurred artwork ──
     ctx.fillStyle = isDark ? "#103030" : "#fafafa";
     ctx.fillRect(0, 0, WIDTH, HEIGHT);
 
@@ -246,11 +244,9 @@ async function renderNowPlayingToCanvas(track, artImg, isDark, rounded, withCont
         ctx.restore();
     }
 
-    // ── 2. Dark overlay ──
     ctx.fillStyle = 'rgba(' + (isDark ? '16,16,16,' : '240,240,240,') + OVERLAY_ALPHA + ')';
     ctx.fillRect(0, 0, WIDTH, HEIGHT);
 
-    // ── 3. Clean artwork — left half, no effects, centred ──
     let usedArtW = MAX_ART_SIZE;
     if (artImg) {
         let artScale = Math.min(MAX_ART_SIZE / artImg.width, MAX_ART_SIZE / artImg.height);
@@ -283,80 +279,94 @@ async function renderNowPlayingToCanvas(track, artImg, isDark, rounded, withCont
         usedArtW = artW;
     }
 
-    // ── 4. Text — right half, directly on background ──
     let tx    = usedArtW + (MARGIN * 3);
     let textW = WIDTH - (tx + (MARGIN*2));
     let entries = [];
+    let maxTextH = HEIGHT - 40;
+    let totalTextH = maxTextH + 10;
+    let titleH = 18;
+    let otherH = 14;
+    let maxLines = 5;
+    let attempt = 0;
 
-    //entries.push({lines:[i18n('Now Playing').toUpperCase()], fontSize:12, weight:STD_WEIGHT, opacity:SUB_OPACITY, ctx:undefined, lspacing:0.5, spacing:16});
+    while (totalTextH>maxTextH && titleH>=14 && otherH>=10) {
+        attempt++;
+        //entries.push({lines:[i18n('Now Playing').toUpperCase()], fontSize:12, weight:STD_WEIGHT, opacity:SUB_OPACITY, ctx:undefined, lspacing:0.5, spacing:16});
 
-    // Auto-scale title — start smaller, max 2 lines, scale down to fit
-    let formatted = formatLines(ctx, track.title, textW, 18, 14, EXTRA_BOLD_WEIGHT, FONT_SUFFIX);
-    if (formatted.lines.length>0) {
-        entries.push({lines:formatted.lines, fontSize:formatted.fontSize, weight:EXTRA_BOLD_WEIGHT, opacity:1.0, spacing:12});
-    }
-
-    let fontSize = undefined;
-
-    if (artstsCombined && lmsOptions.artistFirst) {
-        formatted = formatLines(ctx, artstsCombined, textW, Math.min(formatted.fontSize-2, 14), 10, STD_WEIGHT, FONT_SUFFIX);
+        // Auto-scale title — start smaller, max 2 lines, scale down to fit
+        let formatted = formatLines(ctx, track.title, textW, titleH, 14, EXTRA_BOLD_WEIGHT, FONT_SUFFIX);
         if (formatted.lines.length>0) {
-            let ctx = stripTags(composersCombined || conductorsCombined ? i18n("<obj>performed by</obj> %1") : i18n("<obj>by</obj> %1")).replace(" %1", "");
-            entries.push({lines:formatted.lines, fontSize:formatted.fontSize, weight:STD_WEIGHT, opacity:1.0, ctx:ctx, spacing:8});
-            if (undefined==fontSize) {
-                fontSize = formatted.fontSize;
+            entries.push({lines:formatted.lines, fontSize:formatted.fontSize, weight:EXTRA_BOLD_WEIGHT, opacity:1.0, spacing:12});
+        }
+
+        let fontSize = undefined;
+
+        if (artistsCombined && lmsOptions.artistFirst) {
+            formatted = formatLines(ctx, artistsCombined, textW, Math.min(formatted.fontSize-2, 14), 10, STD_WEIGHT, FONT_SUFFIX);
+            if (formatted.lines.length>0) {
+                let ctx = stripTags(composersCombined || conductorsCombined ? i18n("<obj>performed by</obj> %1") : i18n("<obj>by</obj> %1")).replace(" %1", "");
+                entries.push({lines:formatted.lines, fontSize:formatted.fontSize, weight:STD_WEIGHT, opacity:1.0, ctx:ctx, spacing:8});
+                if (undefined==fontSize) {
+                    fontSize = formatted.fontSize;
+                }
             }
         }
-    }
-    if (composersCombined) {
-        formatted = formatLines(ctx, composersCombined, textW, fontSize ? fontSize : Math.min(formatted.fontSize, 14), fontSize ? fontSize : 10, STD_WEIGHT, FONT_SUFFIX);
-        if (formatted.lines.length>0) {
-            let composedBy = stripTags(i18n("<obj>composed by</obj> %1")).replace(" %1", "");
-            entries.push({lines:formatted.lines, fontSize:formatted.fontSize, weight:STD_WEIGHT, opacity:1.0, ctx:composedBy, spacing:8});
-            if (undefined==fontSize) {
-                fontSize = formatted.fontSize;
+        if (composersCombined) {
+            formatted = formatLines(ctx, composersCombined, textW, fontSize ? fontSize : Math.min(formatted.fontSize, otherH), fontSize ? fontSize : 10, STD_WEIGHT, FONT_SUFFIX);
+            if (formatted.lines.length>0) {
+                let composedBy = stripTags(i18n("<obj>composed by</obj> %1")).replace(" %1", "");
+                entries.push({lines:formatted.lines, fontSize:formatted.fontSize, weight:STD_WEIGHT, opacity:1.0, ctx:composedBy, spacing:8});
+                if (undefined==fontSize) {
+                    fontSize = formatted.fontSize;
+                }
             }
         }
-    }
-    if (conductorsCombined) {
-        formatted = formatLines(ctx, composersCombined, textW, fontSize ? fontSize : Math.min(formatted.fontSize, 14), fontSize ? fontSize : 10, STD_WEIGHT, FONT_SUFFIX);
-        if (formatted.lines.length>0) {
-            let conductedBy = stripTags(i18n("<obj>conducted by</obj> %1")).replace(" %1", "");
-            entries.push({lines:formatted.lines, fontSize:formatted.fontSize, weight:STD_WEIGHT, opacity:1.0, ctx:conductedBy, spacing:8});
-            if (undefined==fontSize) {
-                fontSize = formatted.fontSize;
+        if (conductorsCombined) {
+            formatted = formatLines(ctx, conductorsCombined, textW, fontSize ? fontSize : Math.min(formatted.fontSize, otherH), fontSize ? fontSize : 10, STD_WEIGHT, FONT_SUFFIX);
+            if (formatted.lines.length>0) {
+                let conductedBy = stripTags(i18n("<obj>conducted by</obj> %1")).replace(" %1", "");
+                entries.push({lines:formatted.lines, fontSize:formatted.fontSize, weight:STD_WEIGHT, opacity:1.0, ctx:conductedBy, spacing:8});
+                if (undefined==fontSize) {
+                    fontSize = formatted.fontSize;
+                }
             }
         }
-    }
-    if (artstsCombined && !lmsOptions.artistFirst) {
-        formatted = formatLines(ctx, artstsCombined, textW, fontSize ? fontSize : Math.min(formatted.fontSize, 14), fontSize ? fontSize : 10, STD_WEIGHT, FONT_SUFFIX);
-        if (formatted.lines.length>0) {
-            entries.push({lines:formatted.lines, fontSize:formatted.fontSize, weight:STD_WEIGHT, opacity:1.0, ctx:composersCombined || conductorsCombined ? performedBy : by, spacing:8});
-            if (undefined==fontSize) {
-                fontSize = formatted.fontSize;
+        if (artistsCombined && !lmsOptions.artistFirst) {
+            formatted = formatLines(ctx, artistsCombined, textW, fontSize ? fontSize : Math.min(formatted.fontSize, otherH), fontSize ? fontSize : 10, STD_WEIGHT, FONT_SUFFIX);
+            if (formatted.lines.length>0) {
+                entries.push({lines:formatted.lines, fontSize:formatted.fontSize, weight:STD_WEIGHT, opacity:1.0, ctx:composersCombined || conductorsCombined ? performedBy : by, spacing:8});
+                if (undefined==fontSize) {
+                    fontSize = formatted.fontSize;
+                }
             }
         }
-    }
-    //if (track.work!=undefined) {
-    //    formatted = formatLines(ctx, track.work, textW, fontSize ? fontSize : Math.min(formatted.fontSize, 14), fontSize ? fontSize : 10, STD_WEIGHT, FONT_SUFFIX);
-    //    if (formatted.lines.length>0) {
-    //        let workCtx = stripTags(XXX("<obj>work</obj> %1")).replace(" %1", "");
-    //        entries.push({lines:formatted.lines, fontSize:formatted.fontSize, weight:STD_WEIGHT, opacity:1.0, ctx:workCtx, spacing:4});
-    //    }
-    //}
+        //if (track.work!=undefined) {
+        //    formatted = formatLines(ctx, track.work, textW, fontSize ? fontSize : Math.min(formatted.fontSize, 14), fontSize ? fontSize : 10, STD_WEIGHT, FONT_SUFFIX);
+        //    if (formatted.lines.length>0) {
+        //        let workCtx = stripTags(XXX("<obj>work</obj> %1")).replace(" %1", "");
+        //        entries.push({lines:formatted.lines, fontSize:formatted.fontSize, weight:STD_WEIGHT, opacity:1.0, ctx:workCtx, spacing:4});
+        //    }
+        //}
 
-    formatted = formatLines(ctx, albumLine, textW, fontSize ? fontSize : Math.min(formatted.fontSize, 14), fontSize ? fontSize : 10, STD_WEIGHT, FONT_SUFFIX);
-    if (formatted.lines.length>0) {
-        entries.push({lines:formatted.lines, fontSize:formatted.fontSize, weight:STD_WEIGHT, opacity:1.0, ctx:stripTags(i18n("<obj>from</obj> %1")).replace(" %1", ""), spacing:4});
-    }
-
-    // Calculate total block height for vertical centring
-    let totalTextH = 0;
-    for (let e=0; e<entries.length; ++e) {
-        totalTextH += (Math.min(entries[e].lines.length, e>0 || entries.length > 3 ? 2 : 3) + (withContext && undefined!=entries[e].ctx ? 1 : 0)) * entries[e].fontSize * 1.15;
-        if (e<entries.length-1) {
-            totalTextH += entries[e].spacing;
+        formatted = formatLines(ctx, albumLine, textW, fontSize ? fontSize : Math.min(formatted.fontSize, otherH), fontSize ? fontSize : 10, STD_WEIGHT, FONT_SUFFIX);
+        if (formatted.lines.length>0) {
+            entries.push({lines:formatted.lines, fontSize:formatted.fontSize, weight:STD_WEIGHT, opacity:1.0, ctx:stripTags(i18n("<obj>from</obj> %1")).replace(" %1", ""), spacing:4});
         }
+
+        // Calculate total block height for vertical centring
+        totalTextH = 0
+        for (let e=0; e<entries.length; ++e) {
+            let sectionH = ((attempt<3
+                              ? entries[e].lines.length
+                              : (Math.min(entries[e].lines.length, e>0 || entries.length > 3 ? 2 : 4))) +
+                            (withContext && undefined!=entries[e].ctx ? 1 : 0)) * entries[e].fontSize * 1.15;
+            if (e<entries.length-1) {
+                sectionH += entries[e].spacing;
+            }
+            totalTextH += sectionH;
+        }
+        titleH-=2;
+        otherH-=2;
     }
 
     let ty = (HEIGHT - totalTextH) / 2;
@@ -365,7 +375,7 @@ async function renderNowPlayingToCanvas(track, artImg, isDark, rounded, withCont
 
     for (let e=0; e<entries.length; ++e) {
         if (entries[e].lines.length>0) {
-            let maxLines = e>0 || entries.length > 3 ? 2 : 3;
+            let maxLines = attempt<3 ? entries.length : (e>0 || entries.length > 3 ? 2 : 4);
             let lineH = entries[e].fontSize * 1.15;
             ctx.font = entries[e].weight + entries[e].fontSize + FONT_SUFFIX;
             ctx.letterSpacing = (undefined==entries[e].lspacing ? 0.0 : entries[e].lspacing) + 'em';

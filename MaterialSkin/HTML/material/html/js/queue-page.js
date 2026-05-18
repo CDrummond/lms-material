@@ -327,7 +327,7 @@ var lmsQueue = Vue.component("lms-queue", {
    <v-btn :title="trans.clear | tooltip(LMS_CLEAR_QUEUE_KEYBOARD,keyboardControl)" flat icon v-longpress="clear" class="toolbar-button" v-bind:class="{'disabled':items.length<1}"v-if="!queryParams.party"><img class="svg-list-img" :src="'queue-clear' | svgIcon(darkUi)"></img></v-btn>
   </v-layout>
  </div>
- <div class="lms-list" v-bind:style="{'background-image':'url('+currentBackgroundUrl+')'}" v-bind:class="{'bgnd-cover':drawBgndImage||drawBackdrop||!desktopLayout||(desktopLayout && pinQueue), 'frosted':desktopLayout &&!drawBgndImage && !drawBackdrop && !pinQueue, 'queue-backdrop-cover':drawBackdrop}">
+ <div class="lms-list" v-bind:style="{'background-image':'url('+currentBackgroundUrl+')'}" v-bind:class="{'bgnd-cover':drawBgndImage||drawBackdrop||!desktopLayout||(desktopLayout && pinQueue), 'frosted':desktopLayout && !pinQueue, 'queue-backdrop-cover':drawBackdrop}">
   <div class="lms-list" id="queue-list" v-bind:class="{'lms-list3':!albumStyle && threeLines,'lms-list-album':albumStyle,'bgnd-blur':drawBgndImage,'backdrop-blur':drawBackdrop}" @drop="drop(-1, $event)" @dragover="dragOver(-1, $event)">
    <div v-if="items.length<1"></div> <!-- RecycleScroller does not like it if 0 items? -->
    <RecycleScroller v-else-if="albumStyle" :items="items" :item-size="null" page-mode key-field="key" :buffer="LMS_SCROLLER_LIST_BUFFER">
@@ -499,13 +499,13 @@ var lmsQueue = Vue.component("lms-queue", {
             return !this.$store.state.player
         },
         drawBgndImage() {
-            return this.$store.state.queueBackdrop && undefined!=this.coverUrl && this.pinQueue
+            return this.$store.state.queueBackdrop && undefined!=this.coverUrl && (!this.desktopLayout || this.pinQueue)
         },
         drawBackdrop() {
-            return !this.drawBgndImage && this.$store.state.queueBackdrop && this.$store.state.useDefaultBackdrops && !this.nowPlayingExpanded
+            return !this.drawBgndImage && this.$store.state.queueBackdrop && this.$store.state.useDefaultBackdrops && !this.nowPlayingExpanded && (!this.desktopLayout || this.pinQueue);
         },
         currentBackgroundUrl() {
-            return this.nowPlayingExpanded ? '' : this.currentBgndUrl
+            return this.nowPlayingExpanded || (this.desktopLayout && !this.pinQueue) ? '' : this.currentBgndUrl
         },
         showMoveAction() {
             if (queryParams.party) {

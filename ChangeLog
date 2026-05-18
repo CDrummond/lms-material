@@ -7,6 +7,7 @@
 4. Try not to show 'AxiosError' when displaying errors.
 5. If SlimBrowse item_id is 'UUID.ID' then remove 'UUID.'
 6. Don't set a background image in queue if unpinned.
+7. When choosing a player choose one that is enabled.
 
 6.4.0
 -----

@@ -552,13 +552,18 @@ const store = new Vuex.Store({
                     //  4. First powerer off group
                     for (var j=0; j<4 && !state.player; ++j) {
                         for (var i=0, len=state.players.length; i<len; ++i) {
-                            if ((j==1 || j==3 || state.players[i].ison) && (j<2 ? !state.players[i].isgroup : state.players[i].isgroup)) {
+                            if (state.players[i].enabled && (j==1 || j==3 || state.players[i].ison) && (j<2 ? !state.players[i].isgroup : state.players[i].isgroup)) {
                                 state.player = copyPlayer(state.players[i]);
                                 storeCurrentPlayer(state);
                                 break;
                             }
                         }
                     }
+                }
+                if (!state.player) {
+                    // Just choose first...
+                    state.player = copyPlayer(state.players[0]);
+                    storeCurrentPlayer(state);
                 }
             }
             if (state.players.length<1) {

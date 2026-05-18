@@ -180,6 +180,11 @@ function emitNative(msg, dest) {
     }
 }
 
+function replaceNewLines(str) {
+    try { return str ? str.replace(/\n/g, "<br/>").replace(/\\n/g, "<br/>") : str; }
+    catch (e) { return str; }
+}
+
 function formatTechInfo(item, source, isCurrent) {
     let technical = [];
     // Bit rate should be Xkbps, but sometimes LMS returns 0 (as num or string?)

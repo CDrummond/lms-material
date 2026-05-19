@@ -1,7 +1,6 @@
 6.4.1
 -----
-1. When creating 'Share' image allow track title to span up to 3 lines if only
-   showing 3 fields (e.g. title, artist, album).
+1. When creating 'Share' image allow entries to span multiple lines.
 2. Only show context info in 'Share' if enabled for 'Now Playing'.
 3. Center text in 'Share' image if not showing context in 'Now Playing'.
 4. Try not to show 'AxiosError' when displaying errors.

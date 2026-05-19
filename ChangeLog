@@ -2,7 +2,7 @@
 -----
 1. When creating 'Share' image allow entries to span multiple lines.
 2. Only show context info in 'Share' if enabled for 'Now Playing'.
-3. Center text in 'Share' image if not showing context in 'Now Playing'.
+3. Centre text in 'Share' image if not showing context in 'Now Playing'.
 4. Try not to show 'AxiosError' when displaying errors.
 5. If SlimBrowse item_id is 'UUID.ID' then remove 'UUID.'
 6. Don't set a background image in queue if unpinned.

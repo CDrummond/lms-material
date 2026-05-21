@@ -228,6 +228,7 @@
 "Failed to retrieve listing. (%1)":"Kunne ikke hente listen. (%1)",
 "Failed to save play queue!":"Kunne ikke gemme afspilningskøen!",
 "Failed to save virtual library!":"Kunne ikke gemme det virtuelle bibliotek",
+"Failed to set rating!":"Kunne ikke gemme bedømmelsen!",
 "Failed to unsubscribe podcast!":"Kunne ikke afmelde podcast!",
 "Favorites":"Favoritter",
 "Fetching...":"Henter...",
@@ -763,6 +764,5 @@
 "1 Year":"1 år",
 "%1 Years":"%1 år",
 "1 day":"1 dag",
-"%1 days":"%1 dage",
-"Failed to set rating!":""
+"%1 days":"%1 dage"
 }

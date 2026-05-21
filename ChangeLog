@@ -1,3 +1,7 @@
+6.4.3
+-----
+1. Only use 'forsted' queue if brower supports 'backdrop-filter'
+
 6.4.2
 -----
 1. Only apply UUID workaround for favourites.

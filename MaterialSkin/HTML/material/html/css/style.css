@@ -2325,19 +2325,14 @@ div.v-rating i.primary--text, div.v-rating i.accent--text {
 }
 
 .frosted {
- background-color:var(--background-color);
+ background-color:rgba(240, 240, 240, 0.65);
+ backdrop-filter:blur(15px);
+ -webkit-backdrop-filter:blur(15px);
+ background-image:unset!important;
 }
 
-@supports ((-webkit-backdrop-filter: none) or (backdrop-filter: none)) {
- .frosted {
-  background-color:rgba(240, 240, 240, 0.65);
-  backdrop-filter:blur(15px);
-  background-image:unset!important;
- }
-
- .theme--dark .frosted {
-  background-color:rgba(32, 32, 32, 0.65);
- }
+.theme--dark .frosted {
+ background-color:rgba(32, 32, 32, 0.65);
 }
 
 .toolbar-blur {

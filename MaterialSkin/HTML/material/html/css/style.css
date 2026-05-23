@@ -2325,14 +2325,14 @@ div.v-rating i.primary--text, div.v-rating i.accent--text {
 }
 
 .frosted {
- background-color:rgba(240, 240, 240, 0.65);
+ background-color:rgba(240, 240, 240, 0.7);
  backdrop-filter:blur(15px);
  -webkit-backdrop-filter:blur(15px);
  background-image:unset!important;
 }
 
 .theme--dark .frosted {
- background-color:rgba(32, 32, 32, 0.65);
+ background-color:rgba(32, 32, 32, 0.75);
 }
 
 .toolbar-blur {

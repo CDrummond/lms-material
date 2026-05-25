@@ -1484,7 +1484,13 @@ function parseBrowseResp(data, parent, options, cacheKey) {
             let compilationAlbumArtist = undefined;
             let extraSubs = [];
             let browseContext = getLocalStorageBool('browseContext', false);
-            let splitIntoGroupings = undefined==parent || undefined==parent.multi || MULTI_GROUP_ALBUM==parent.multi;
+            // Attempt grouping whenever the album isn't already in multi-disc mode. The per-track
+            // logic produces no groupings for albums without work/grouping tags, and the gates
+            // further down (groupings.size>0) suppress header output in that case. Excluding
+            // MULTI_DISC_ALBUM preserves disc-based headers and the disc-choice prompt for
+            // multi-disc single-work albums (e.g. a 3-CD St Matthew Passion) where disc grouping
+            // is the more useful structure.
+            let splitIntoGroupings = undefined==parent || MULTI_DISC_ALBUM!=parent.multi;
 
             for (let idx=0, loop=data.result.titles_loop, loopLen=loop.length; idx<loopLen; ++idx) {
                 let i = makeHtmlSafe(loop[idx]);
@@ -1831,7 +1837,7 @@ function parseBrowseResp(data, parent, options, cacheKey) {
                                          ? parent.subtitle
                                          : undefined;
 
-            let willShowGroupHeaders = allTracksGrouping==0 && (groupings.size>1 || isWork) && splitIntoGroups;
+            let willShowGroupHeaders = allTracksGrouping==0 && groupings.size>0 && splitIntoGroups;
             if (resp.items.length>1) {
                 let showArtists = (new Set(artists)).size>1;
                 if (!showArtists && undefined!=albumArtist) {
@@ -1897,7 +1903,7 @@ function parseBrowseResp(data, parent, options, cacheKey) {
             let removeDiscNumbers = false;
             let removeGroupFilter = false;
             if (allTracksGrouping==0) {
-                if ( (groupings.size>1 || isWork) && splitIntoGroups ) {
+                if ( groupings.size>0 && splitIntoGroups ) {
                     let d = 0;
                     for (var idx=0, len=resp.items.length; idx<len; ++idx) {
                         resp.items[idx].filter = resp.items[idx].gfilter;

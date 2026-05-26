@@ -233,12 +233,12 @@ function parseBrowseResp(data, parent, options, cacheKey) {
 
                 // Some times get item_id:<hex>,<real id> - if so, remove hex. Mainly favourites.
                 // See https://forums.lyrion.org/forum/user-forums/3rd-party-software/106269-announce-material-skin?p=1822830#post1822830
-                if (isFavorites && i.params && i.params.item_id) {
-                    const pattern = /[A-Fa-f0-9]{8}/i;
-                    let parts = i.params.item_id.split(".");
-                    if (pattern.test(parts[0])) {
-                        parts.shift();
-                        i.params.item_id = parts.join(".");
+                if (isFavorites) {
+                    if (i.params && i.params.item_id) {
+                        i.params.item_id = removeUuid(i.params.item_id);
+                    }
+                    if (i.actions && i.actions.go && i.actions.go.params && i.actions.go.params.item_id) {
+                        i.actions.go.params.item_id = removeUuid(i.actions.go.params.item_id);
                     }
                 }
  

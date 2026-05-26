@@ -230,17 +230,6 @@ function parseBrowseResp(data, parent, options, cacheKey) {
                     continue;
                 }
                 var addedPlayAction = false;
-
-                // Some times get item_id:<hex>,<real id> - if so, remove hex. Mainly favourites.
-                // See https://forums.lyrion.org/forum/user-forums/3rd-party-software/106269-announce-material-skin?p=1822830#post1822830
-                if (isFavorites) {
-                    if (i.params && i.params.item_id) {
-                        i.params.item_id = removeUuid(i.params.item_id);
-                    }
-                    if (i.actions && i.actions.go && i.actions.go.params && i.actions.go.params.item_id) {
-                        i.actions.go.params.item_id = removeUuid(i.actions.go.params.item_id);
-                    }
-                }
  
                 if (undefined!=i.text && undefined!=i.text.name && 'text'==i.text.type) {
                     // BBC Sounds seems to place error message in '"text":{"name":"<sting>, "type":"text"}'

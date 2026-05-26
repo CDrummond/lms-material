@@ -1386,13 +1386,3 @@ function numScrollItems(view, elem) {
     }
     return numItems;
 }
-
-function removeUuid(id) {
-    const pattern = /[A-Fa-f0-9]{8}/i;
-    let parts = id.split(".");
-    if (pattern.test(parts[0])) {
-        parts.shift();
-        return parts.join(".");
-    }
-    return id;
-}

@@ -1,7 +1,7 @@
 6.4.3
 -----
 1. Set `-webkit-backdrop-filter` for 'frosted' queue.
-2. Add UUID workaroud for favourite folders too.
+2. Remove UUID workaround, issues need to be fixed in LMS.
 
 6.4.2
 -----

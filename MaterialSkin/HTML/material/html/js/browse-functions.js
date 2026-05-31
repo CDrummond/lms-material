@@ -270,7 +270,7 @@ function browseHandleNextWindow(view, item, command, resp, isMoreMenu, isBrowse)
         bus.$emit('showMessage', message);
         if (nextWindow=="refresh" || (isMoreMenu && nextWindow=="parent")) {
             if (isBrowse) {
-                view.goBack(true);
+                browseGoBack(view, true);
             } else {
                 view.refreshList();
             }
@@ -281,20 +281,20 @@ function browseHandleNextWindow(view, item, command, resp, isMoreMenu, isBrowse)
                 if (isBrowse) {
                     view.history.pop();
                 }
-                view.goBack(true);
+                browseGoBack(view, true);
             }
         } else if (nextWindow=="grandparent" && view.history.length>1) {
             if (isBrowse) {
                 view.history.pop();
             }
             view.history.pop();
-            view.goBack(true);
+            browseGoBack(view, true);
         }
         if (nextWindow=="nowplaying") {
             if (!view.$store.state.desktopLayout) {
                 view.$store.commit('setPage', 'now-playing');
             }
-            view.goBack(true);
+            browseGoBack(view, true);
         } else if (nextWindow=="home") {
             browseGoHome(view);
         }
@@ -357,7 +357,7 @@ function browseHandleListResponse(view, item, command, resp, prevPage, appendIte
             bus.$emit('showMessage', item.title);
             view.history[view.history.length-2].needsRefresh = true;
             view.fetchingItem = undefined;
-            view.goBack();
+            browseGoBack(view, );
             return;
         }
         // Only add history if view is not a search response replacing a search response...
@@ -1388,7 +1388,7 @@ function browseItemAction(view, act, origItem, index, event, slimBrowseBaseActio
         } else if (item.isPodcast) {
             bus.$emit('dlg.open', 'iteminfo', item);
         } else {
-            let cmd = view.buildCommand(item, ACTIONS[act].cmd);
+            let cmd = browseBuildCommand(view, item, ACTIONS[act].cmd);
             cmd.ismore = true;
             view.fetchItems(cmd, item);
         }
@@ -1409,16 +1409,16 @@ function browseItemAction(view, act, origItem, index, event, slimBrowseBaseActio
                     copy.title=item.title;
                     copy.libname=view.libraryName;
                     copy.params.push("library_id:"+libId);
-                    view.pin(copy, true);
+                    browsePin(view, copy, true);
                 } else if (2==res) {
-                    view.pin(item, true);
+                    browsePin(view, item, true);
                 }
             });
         } else {
-            view.pin(item, true);
+            browsePin(view, item, true);
         }
     } else if (act===UNPIN_ACTION) {
-        view.pin(item, false);
+        browsePin(view, item, false);
     } else if (act===RENAME_ACTION) {
         promptForText(i18n("Rename"), item.title, item.title, i18n("Rename")).then(resp => {
             if (resp.ok && resp.value && resp.value.length>0 && resp.value!=item.title) {
@@ -1586,7 +1586,7 @@ function browseItemAction(view, act, origItem, index, event, slimBrowseBaseActio
         var command = ["favorites", "move", item.id.replace("item_id:", "from_id:"), "to_id:"+parent];
         lmsCommand(view.playerId(), command).then(({data}) => {
             logJsonMessage("RESP", data);
-            view.goBack(true);
+            browseGoBack(view, true);
         }).catch(err => {
             logAndShowError(err, i18n("Failed to move favorite!"), command);
         });
@@ -1748,7 +1748,7 @@ function browseItemAction(view, act, origItem, index, event, slimBrowseBaseActio
             }
             choose(ACTIONS[GOTO_ARTIST_ACTION].title, choices).then(choice => {
                 if (undefined!=choice) {
-                    view.fetchItems(view.replaceCommandTerms({command:["albums"], params:["artist_id:"+choice.id, ARTIST_ALBUM_TAGS, SORT_KEY+ARTIST_ALBUM_SORT_PLACEHOLDER]}), {cancache:false, id:"artist_id:"+choice.id, title:choice.title, stdItem:STD_ITEM_ARTIST});
+                    view.fetchItems(browseReplaceCommandTerms(view, {command:["albums"], params:["artist_id:"+choice.id, ARTIST_ALBUM_TAGS, SORT_KEY+ARTIST_ALBUM_SORT_PLACEHOLDER]}), {cancache:false, id:"artist_id:"+choice.id, title:choice.title, stdItem:STD_ITEM_ARTIST});
                 }
             });
         } else {
@@ -1758,7 +1758,7 @@ function browseItemAction(view, act, origItem, index, event, slimBrowseBaseActio
             if (undefined==artist_id && view.command.params.length>0) {
                 artist_id = getParamVal(view.command, "artist_id", artist_id);
             }
-            view.fetchItems(view.replaceCommandTerms({command:["albums"], params:["artist_id:"+artist_id, ARTIST_ALBUM_TAGS, SORT_KEY+ARTIST_ALBUM_SORT_PLACEHOLDER]}), {cancache:false, id:"artist_id:"+item.artist_id, title:item.id.startsWith("album_id:") ? item.subtitle : item.artist, stdItem:STD_ITEM_ARTIST});
+            view.fetchItems(browseReplaceCommandTerms(view, {command:["albums"], params:["artist_id:"+artist_id, ARTIST_ALBUM_TAGS, SORT_KEY+ARTIST_ALBUM_SORT_PLACEHOLDER]}), {cancache:false, id:"artist_id:"+item.artist_id, title:item.id.startsWith("album_id:") ? item.subtitle : item.artist, stdItem:STD_ITEM_ARTIST});
         }
     } else if (act==GOTO_ALBUM_ACTION) {
         view.fetchItems({command:["tracks"], params:["album_id:"+item.album_id, trackTags(true), SORT_KEY+"tracknum"]}, {cancache:false, id:"album_id:"+item.album_id, title:item.album, stdItem:STD_ITEM_ALBUM});
@@ -1820,7 +1820,7 @@ function browseItemAction(view, act, origItem, index, event, slimBrowseBaseActio
                 }
             }
         }
-        download(item, item.id.startsWith("album_id:") ? view.buildCommand(item) : undefined, aa);
+        download(item, item.id.startsWith("album_id:") ? browseBuildCommand(view, item) : undefined, aa);
     } else if (SHOW_IMAGE_ACTION==act) {
         let images = [];
         let idx = 0;
@@ -1922,7 +1922,7 @@ function browseItemAction(view, act, origItem, index, event, slimBrowseBaseActio
     } else {
         // If we are acting on a multi-disc album, prompt which disc we should act on
         if (item.multi && (view.isTop || !view.current.id.startsWith("album_id:")) && (PLAY_ACTION==act || ADD_ACTION==act || INSERT_ACTION==act || PLAY_SHUFFLE_ACTION==act)) {
-            var command = view.buildCommand(item);
+            var command = browseBuildCommand(view, item);
             view.clearSelection();
             lmsList(view.playerId(), command.command, command.params, 0, LMS_BATCH_SIZE, false, view.nextReqId()).then(({data}) => {
                 view.options.neverColapseDiscs = true;
@@ -2515,7 +2515,7 @@ function browseBuildCommand(view, item, commandName, doReplacements, allowLibId,
     }
 
     if (undefined==doReplacements || doReplacements) {
-        cmd=view.replaceCommandTerms(cmd, item);
+        cmd=browseReplaceCommandTerms(view, cmd, item);
     }
     return cmd;
 }
@@ -2565,7 +2565,7 @@ function browseMyMusicMenu(view) {
                                         view.myMusicOther.push(item);
                                     }
                                 } else if (!c.id.startsWith("myMusicSearch") && !c.id.startsWith("opmlselect") && !view.stdItems.has(c.id)) {
-                                    var command = view.buildCommand(c, "go", false);
+                                    var command = browseBuildCommand(view, c, "go", false);
                                     var item = { title: c.text,
                                                  command: command.command,
                                                  params: command.params,
@@ -2672,7 +2672,7 @@ function browseMyMusicMenu(view) {
 function browseAddPinned(view, pinned) {
     for (var len=pinned.length, i=len-1; i>=0; --i) {
         if (undefined==pinned[i].command && undefined==pinned[i].params && undefined!=pinned[i].item) { // Previous pinned apps
-            var command = view.buildCommand(pinned[i].item);
+            var command = browseBuildCommand(view, pinned[i].item);
             pinned[i].params = command.params;
             pinned[i].command = command.command;
             pinned[i].image = pinned[i].item.image;
@@ -2750,7 +2750,7 @@ function browsePin(view, item, add, mapped) {
                             {id: item.id, title: item.title, image: item.image, icon: item.icon, svg: item.svg, isPinned: true, type:item.type,
                              actions: item.actions, players: item.players, menu: [RENAME_ACTION, UNPIN_ACTION], weight:10000});
         } else {
-            var command = view.buildCommand(item, undefined, false);
+            var command = browseBuildCommand(view, item, undefined, false);
             var pinItem = {id: item.id, title: item.title, libname: item.libname, image: item.image, icon: item.icon, svg: item.svg, mapgenre: item.mapgenre,
                            command: command.command, params: command.params, isPinned: true, menu: [RENAME_ACTION, UNPIN_ACTION],
                            weight: undefined==item.weight ? 10000 : item.weight, section: item.section, cancache: item.cancache};
@@ -3320,19 +3320,19 @@ function browseGoToItem(view, cmd, params, title, page, clearHistory, subtitle) 
         // With LMS9.1+ try to get portraitid to use for artist image in toolbar
         let artist_id = getParamVal({params:params}, 'artist_id:', undefined);
         if (undefined==artist_id) {
-            view.fetchItems(view.replaceCommandTerms({command:cmd, params:params}), {cancache:false, id:params[0], title:title, subtitle:subtitle, stdItem:params[0].startsWith("artist_id:") ? STD_ITEM_ARTIST : STD_ITEM_ALBUM}, page);
+            view.fetchItems(browseReplaceCommandTerms(view, {command:cmd, params:params}), {cancache:false, id:params[0], title:title, subtitle:subtitle, stdItem:params[0].startsWith("artist_id:") ? STD_ITEM_ARTIST : STD_ITEM_ALBUM}, page);
         } else {
             lmsCommand(view.playerId(), ['artists', 0, 1, 'tags:4', 'artist_id:'+artist_id]).then(({data}) => {
                 if (data && data.result && data.result.artists_loop && 1==data.result.artists_loop.length && data.result.artists_loop[0].portraitid) {
                     params.push('material_skin_portraitid:'+data.result.artists_loop[0].portraitid);
                 }
-                view.fetchItems(view.replaceCommandTerms({command:cmd, params:params}), {cancache:false, id:params[0], title:title, subtitle:subtitle, stdItem:params[0].startsWith("artist_id:") ? STD_ITEM_ARTIST : STD_ITEM_ALBUM}, page);
+                view.fetchItems(browseReplaceCommandTerms(view, {command:cmd, params:params}), {cancache:false, id:params[0], title:title, subtitle:subtitle, stdItem:params[0].startsWith("artist_id:") ? STD_ITEM_ARTIST : STD_ITEM_ALBUM}, page);
             }).catch(err => {
-                view.fetchItems(view.replaceCommandTerms({command:cmd, params:params}), {cancache:false, id:params[0], title:title, subtitle:subtitle, stdItem:params[0].startsWith("artist_id:") ? STD_ITEM_ARTIST : STD_ITEM_ALBUM}, page);
+                view.fetchItems(browseReplaceCommandTerms(view, {command:cmd, params:params}), {cancache:false, id:params[0], title:title, subtitle:subtitle, stdItem:params[0].startsWith("artist_id:") ? STD_ITEM_ARTIST : STD_ITEM_ALBUM}, page);
             });
         }
     } else {
-        view.fetchItems(view.replaceCommandTerms({command:cmd, params:params}), {cancache:false, id:params[0], title:title, subtitle:subtitle, stdItem:cmd[0]=="works" ? STD_ITEM_WORK_COMPOSER : (params[0].startsWith("artist_id:") ? STD_ITEM_ARTIST : STD_ITEM_ALBUM)}, page);
+        view.fetchItems(browseReplaceCommandTerms(view, {command:cmd, params:params}), {cancache:false, id:params[0], title:title, subtitle:subtitle, stdItem:cmd[0]=="works" ? STD_ITEM_WORK_COMPOSER : (params[0].startsWith("artist_id:") ? STD_ITEM_ARTIST : STD_ITEM_ALBUM)}, page);
     }
 }
 

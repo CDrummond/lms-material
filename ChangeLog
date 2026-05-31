@@ -2,6 +2,8 @@
 -----
 1. Set `-webkit-backdrop-filter` for 'frosted' queue.
 2. Remove UUID workaround, issues need to be fixed in LMS.
+3. Fix non-working 'Go to artist' if track list created by clicking on album
+   link in queue or now-playing.
 
 6.4.2
 -----

@@ -288,7 +288,7 @@ function parseResp(data, showTrackNum, index, showRatings, queueAlbumStyle, queu
 
 var lmsQueue = Vue.component("lms-queue", {
   template: `
-<div :class="[!pinQueue && showQueue ? nowPlayingExpanded ? 'pq-unpinned-np'+nowPlayingWide : 'pq-unpinned' : '']" id="queue-view">
+<div :class="[showQueue ? nowPlayingExpanded || maiShown ? 'pq-unpinned-np'+nowPlayingWide : (!pinQueue ? 'pq-unpinned' : '') : '']" id="queue-view">
 <lms-resizer v-if="!pinQueue && windowWide>0" varname="pq-unpinned-width"></lms-resizer>
  <div class="subtoolbar noselect" v-bind:class="{'list-details':pinQueue}" v-if="!desktopLayout || showQueue">
   <v-layout v-if="selection.size>0">
@@ -419,7 +419,7 @@ var lmsQueue = Vue.component("lms-queue", {
   <v-list v-else>
    <template v-for="(action, index) in menu.actions">
     <v-divider v-if="DIVIDER==action"></v-divider>
-    <div style="height:0px!important" v-else-if="(action==PQ_PIN_ACTION && (pinQueue || !desktopLayout || windowWide<2 || nowPlayingExpanded)) || (action==PQ_UNPIN_ACTION && (!pinQueue || !desktopLayout || windowWide<2))"/>
+    <div style="height:0px!important" v-else-if="(action==PQ_PIN_ACTION && (pinQueue || !desktopLayout || windowWide<2 || nowPlayingExpanded || maiShown)) || (action==PQ_UNPIN_ACTION && (!pinQueue || !desktopLayout || windowWide<2))"/>
     <v-list-tile role="menuitem" @click="headerAction(action, $event)" v-bind:class="{'disabled':(items.length<1 && PQ_REQUIRE_AT_LEAST_1_ITEM.has(action)) || (items.length<2 && PQ_REQUIRE_MULTIPLE_ITEMS.has(action))}" v-else-if="(!LMS_KIOSK_MODE || !HIDE_FOR_KIOSK.has(action)) && (action==PQ_SAVE_ACTION ? wide<2 : action!=PQ_MOVE_QUEUE_ACTION || showMoveAction)">
      <v-list-tile-avatar>
       <v-icon v-if="action==PQ_TOGGLE_VIEW_ACTION && albumStyle">music_note</v-icon>
@@ -465,6 +465,7 @@ var lmsQueue = Vue.component("lms-queue", {
             coverUrl: undefined,
             queueCustomActions: [],
             nowPlayingExpanded: false,
+            maiShown: false,
             nowPlayingWide:0,
             windowWide:2,
             iRgb: '000'
@@ -490,7 +491,7 @@ var lmsQueue = Vue.component("lms-queue", {
             return this.$store.state.desktopLayout
         },
         showQueue() {
-            return this.nowPlayingExpanded ? this.$store.state.showQueueNp : this.$store.state.showQueue
+            return this.nowPlayingExpanded || this.maiShown ? this.$store.state.showQueueNp : this.$store.state.showQueue
         },
         pinQueue() {
             return this.$store.state.pinQueue && this.windowWide>1 && !this.nowPlayingExpanded
@@ -711,6 +712,10 @@ var lmsQueue = Vue.component("lms-queue", {
             }
             this.nowPlayingExpanded = val;
         }.bind(this));
+        this.maiShown = false;
+        bus.$on('infoDialog', function(val) {
+            this.maiShown = val;
+        }.bind(this));
         bus.$on('nowPlayingWide', function(val) {
             this.nowPlayingWide = val;
         }.bind(this));
@@ -847,7 +852,7 @@ var lmsQueue = Vue.component("lms-queue", {
             this.initItems();
         }.bind(this));
         bus.$on('toggleQueue', function() {
-            if (this.nowPlayingExpanded) {
+            if (this.nowPlayingExpanded || this.maiShown) {
                 this.$store.commit('setShowQueueNp', !this.$store.state.showQueueNp);
             } else {
                 this.$store.commit('setShowQueue', !this.$store.state.showQueue);

@@ -4,6 +4,7 @@
 2. Remove UUID workaround, issues need to be fixed in LMS.
 3. Fix non-working 'Go to artist' if track list created by clicking on album
    link in queue or now-playing.
+4. Fix showing queue over MAI when pinned.
 
 6.4.2
 -----

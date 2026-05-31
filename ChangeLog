@@ -5,6 +5,7 @@
 3. Fix non-working 'Go to artist' if track list created by clicking on album
    link in queue or now-playing.
 4. Fix showing queue over MAI when pinned.
+5. Fix browse search button showin over now-playing and MAI in desktop layout.
 
 6.4.2
 -----

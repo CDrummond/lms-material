@@ -634,7 +634,9 @@ var lmsBrowse = Vue.component("lms-browse", {
             highlightSubIndex: -1,
             hRgb: "000",
             tall: window.innerHeight>=MIN_HEIGHT_FOR_DETAILED_SUB ? 1 : 0,
-            currentTrack: undefined
+            currentTrack: undefined,
+            nowPlayingExpanded: false,
+            maiShown: false,
         }
     },
     computed: {
@@ -881,7 +883,7 @@ var lmsBrowse = Vue.component("lms-browse", {
             return this.$store.state.desktopLayout && this.$store.state.pinQueue
         },
         browseSearch() {
-            return this.$store.state.browseSearch
+            return this.$store.state.browseSearch && (this.$store.state.desktopLayout ? !this.nowPlayingExpanded && !this.maiShown && !this.unpinnedQueueVisible : this.$store.state.page=='browse');
         }
     },
     created() {
@@ -2423,7 +2425,10 @@ var lmsBrowse = Vue.component("lms-browse", {
         bus.$on('nowPlayingExpanded', function(val) {
             this.nowPlayingExpanded = val;
         }.bind(this));
-
+        this.maiShown = false;
+        bus.$on('infoDialog', function(val) {
+            this.maiShown = val;
+        }.bind(this));
         bus.$on('closeMenu', function() {
             this.menu.show = false;
         }.bind(this));
@@ -2432,7 +2437,7 @@ var lmsBrowse = Vue.component("lms-browse", {
             if (this.dragActive) {
                 return;
             }
-            if (this.$store.state.desktopLayout ? !this.nowPlayingExpanded : this.$store.state.page=='browse') {
+            if (this.$store.state.desktopLayout ? !this.nowPlayingExpanded && !this.maiShown : this.$store.state.page=='browse') {
                 if (this.selection.size>0) {
                     this.clearSelection();
                 } else if (this.history.length>0) {

@@ -688,7 +688,7 @@ var lmsQueue = Vue.component("lms-queue", {
             if (this.dragActive) {
                 return;
             }
-            if (this.$store.state.desktopLayout ? !this.nowPlayingExpanded : this.$store.state.page=='queue') {
+            if (this.$store.state.desktopLayout ? !this.nowPlayingExpanded && !this.maiShown : this.$store.state.page=='queue') {
                 if (this.selection.size>0) {
                     this.clearSelection();
                 } else if (!this.$store.state.desktopLayout) {

@@ -1338,6 +1338,7 @@ var lmsBrowse = Vue.component("lms-browse", {
                 } else {
                     let command = JSON.parse(JSON.stringify(item.morecmd));
                     browseReplaceCommandTerms(this, command, item);
+                    command.params.push("features:hi");
                     this.fetchItems(command, {cancache:false, id:item.id, title: item.title, limit:item.limit, section:item.section, isFavFolder:item.isFavFolder});
                 }
             } else if (item.allItems) {

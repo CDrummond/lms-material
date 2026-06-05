@@ -1032,7 +1032,7 @@ function parseBrowseResp(data, parent, options, cacheKey) {
                     } else {
                         resp.subtitle=i18np("1 Item", "%1 Items", itemCount);
                     }
-                    // IF we receive -1 as count, then pretend its a really high number...
+                    // Id we receive -1 as count, then pretend its a really high number...
                     if (resp.listSize==-1) {
                         resp.listSize = LMS_BATCH_SIZE + 1000;
                     }
@@ -2495,7 +2495,7 @@ function parseBrowseResp(data, parent, options, cacheKey) {
                     new_data.result[parse_loop_name+"_loop"] = loop;
                     if (undefined!=obj) {
                         new_data.result['base']=obj['base'];
-                        new_data.result['count']=2500;
+                        new_data.result['count']=obj['count'];
                     }
                     let newResp = parseBrowseResp(new_data, parent, opts, undefined);
                     if (ismore) {
